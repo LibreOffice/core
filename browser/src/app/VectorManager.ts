@@ -66,7 +66,7 @@ class VectorManager extends RenderManagerBase {
 	// Callbacks fired when cached vector data changes: a part's
 	// primitive tree arrived, a deferred bitmap decoded, or the cache
 	// was cleared.
-	private _changeListeners: (() => void)[] = [];
+	private _changeListeners: ((answered?: number[]) => void)[] = [];
 
 	// Ids of the layers this view does not show. Objects on them are
 	// kept in the cache and skipped when drawing.
@@ -91,8 +91,13 @@ class VectorManager extends RenderManagerBase {
 		return true;
 	}
 
-	/// Register a callback fired whenever cached vector data changes.
-	onVectorChanged(callback: () => void): void {
+	/*
+		Register a callback fired whenever cached vector data changes. It is handed the ids of
+		the objects an answer from the engine replaced, an empty list where the change was made
+		here and the engine answered nothing, and nothing at all where everything may have
+		changed, as when a whole part arrives.
+	*/
+	onVectorChanged(callback: (answered?: number[]) => void): void {
 		this._changeListeners.push(callback);
 	}
 
@@ -103,8 +108,8 @@ class VectorManager extends RenderManagerBase {
 		);
 	}
 
-	private _fireChanged(): void {
-		for (const callback of this._changeListeners) callback();
+	private _fireChanged(answered?: number[]): void {
+		for (const callback of this._changeListeners) callback(answered);
 	}
 
 	/*
@@ -113,7 +118,7 @@ class VectorManager extends RenderManagerBase {
 		draws it again, as it does when an update arrives.
 	*/
 	changedHere(): void {
-		this._fireChanged();
+		this._fireChanged([]);
 	}
 
 	/// The id of the page at the given index of the page list on screen, or
@@ -656,7 +661,9 @@ class VectorManager extends RenderManagerBase {
 		this._redrawRenderedPreviews(partId);
 		if (cached.mode === cool.VectorMode.MasterPages)
 			this._onMasterArrived(partId);
-		this._fireChanged();
+		this._fireChanged(
+			carried.flatMap((object) => (object.id === undefined ? [] : [object.id])),
+		);
 	}
 
 	/// Handle a fetched bitmap: cache it and re-render the previews

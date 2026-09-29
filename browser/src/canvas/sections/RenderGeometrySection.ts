@@ -11,6 +11,87 @@
  */
 
 /*
+	A change laid over an object here that the engine has not answered yet: the change itself and
+	where it left the object, as the mapping that places it and the box it takes up. An answer from
+	the engine is held against both.
+*/
+class PendingChange {
+	public readonly change: cool.Matrix2D;
+	private leftAt: cool.Matrix2D;
+	private leftIn: cool.Range2D;
+
+	private constructor(
+		change: cool.Matrix2D,
+		leftAt: cool.Matrix2D,
+		leftIn: cool.Range2D,
+	) {
+		this.change = change;
+		this.leftAt = leftAt;
+		this.leftIn = leftIn;
+	}
+
+	/// The change as it left the object it was just laid over, or null where the object has no
+	/// mapping to hold an answer against.
+	public static leftOn(
+		change: cool.Matrix2D,
+		object: cool.SlideObject,
+	): PendingChange | null {
+		const leftAt = cool.Matrix2D.fromArray(object.transform);
+		return leftAt
+			? new PendingChange(change, leftAt, PendingChange.boxOf(object))
+			: null;
+	}
+
+	/// Takes in where the change leaves the object after it was laid over it again.
+	public laidAgainOn(object: cool.SlideObject): void {
+		this.leftAt = cool.Matrix2D.fromArray(object.transform) ?? this.leftAt;
+		this.leftIn = PendingChange.boxOf(object);
+	}
+
+	/// Whether the engine answered with the mapping this change left the object at. The engine
+	/// rounds what it answers to a small part of a twip.
+	public answeredBy(answer: cool.Matrix2D): boolean {
+		return answer.equals(this.leftAt, 1.5);
+	}
+
+	/*
+		Whether the object stands in the box this change left it in. A mapping and its turned-over
+		twin draw the same box, and an object that cannot hold a mirror answers with the twin, so
+		the box is what such an answer is held against. The box the engine sends is the painted
+		one and carries the line width, which a change laid on here does not scale, so a little is
+		allowed for.
+	*/
+	public answeredInTheBox(object: cool.SlideObject): boolean {
+		if (object.x === undefined || object.y === undefined) return false;
+
+		const box = this.leftIn;
+		const give = 20 + 0.01 * Math.max(box.width, box.height);
+		const near = (value: number, other: number) =>
+			Math.abs(value - other) < give;
+
+		return (
+			near(object.x, box.minX) &&
+			near(object.y, box.minY) &&
+			near(object.width ?? 0, box.width) &&
+			near(object.height ?? 0, box.height)
+		);
+	}
+
+	/// The box the object takes up now.
+	private static boxOf(object: cool.SlideObject): cool.Range2D {
+		const x = object.x ?? 0;
+		const y = object.y ?? 0;
+
+		return new cool.Range2D(
+			x,
+			y,
+			x + (object.width ?? 0),
+			y + (object.height ?? 0),
+		);
+	}
+}
+
+/*
 	Draws two hairline rectangles per object of the part a view shows, each in the object's own
 	color: the upright box the object paints into, and the unit rectangle put through the object's
 	transformation, which shows the rotation and the shear. It is a way to see the geometry the
@@ -84,8 +165,13 @@ class RenderGeometrySection extends CanvasSectionObject {
 		// remembered hit test answer is dropped.
 		if (!RenderGeometrySection._listening) {
 			RenderGeometrySection._listening = true;
-			RenderManager.onVectorChanged(() => {
+			RenderManager.onVectorChanged((answered?: number[]) => {
 				RenderGeometrySection._lastHit = undefined;
+
+				// An answer from the engine is held against what was laid on here first, so
+				// that what is shown is the newest state and not a stale answer.
+				RenderGeometrySection.takeUpTheAnswers(answered);
+
 				// The handles of a selection are worked out from the objects, so they follow
 				// what arrives as well.
 				GraphicSelection.refreshLocalHandles();
@@ -341,9 +427,65 @@ class RenderGeometrySection extends CanvasSectionObject {
 
 		RenderGeometrySection.layOverTheObject(object, matrix);
 
+		const pending = PendingChange.leftOn(matrix, object);
+		if (pending) {
+			const laid = RenderGeometrySection.pending.get(objectId) ?? [];
+			laid.push(pending);
+			RenderGeometrySection.pending.set(objectId, laid);
+		}
+
 		// Whoever keeps a picture of the page drew it before this change, so it is told to draw
 		// it again. The handles are worked out afresh on every draw and need no telling.
 		RenderManager.changedHere();
+	}
+
+	/*
+		The changes laid over each object here that the engine has not answered yet, by object id,
+		oldest first. The engine answers one change at a time and its answers can arrive after
+		further changes were laid on here; an answer taken as it comes would show the object as it
+		was a step or two ago until the next answer.
+	*/
+	private static pending: Map<number, PendingChange[]> = new Map();
+
+	/*
+		Takes up an answer from the engine for the objects it replaced: the ones named, or every
+		object with a change pending where none are named. The answer is held against the
+		mappings the pending changes left the object at, newest first. Where it matches one, the
+		changes up to that one are answered and the ones after it are laid on again over the
+		answer, so the object shows the newest state made here. Where it matches none the engine
+		went its own way, and its answer stands as it is with nothing laid on.
+	*/
+	private static takeUpTheAnswers(answered?: number[]): void {
+		const objectIds = answered ?? [...RenderGeometrySection.pending.keys()];
+
+		for (const objectId of objectIds) {
+			const laid = RenderGeometrySection.pending.get(objectId);
+			if (!laid) continue;
+
+			const object = RenderGeometrySection.objectOf(objectId);
+			const answer = cool.Matrix2D.fromArray(object?.transform);
+			if (!object || !answer) {
+				RenderGeometrySection.pending.delete(objectId);
+				continue;
+			}
+
+			// The mapping is the surer of the two, so it is asked first and the box only where
+			// no mapping matches.
+			let matched = -1;
+			for (let at = laid.length - 1; at >= 0 && matched < 0; --at)
+				if (laid[at].answeredBy(answer)) matched = at;
+			for (let at = laid.length - 1; at >= 0 && matched < 0; --at)
+				if (laid[at].answeredInTheBox(object)) matched = at;
+
+			const rest = matched < 0 ? [] : laid.slice(matched + 1);
+			for (const one of rest) {
+				RenderGeometrySection.layOverTheObject(object, one.change);
+				one.laidAgainOn(object);
+			}
+
+			if (rest.length) RenderGeometrySection.pending.set(objectId, rest);
+			else RenderGeometrySection.pending.delete(objectId);
+		}
 	}
 
 	/// Lays the change over that object, which is what changing one comes down to.
@@ -812,6 +954,28 @@ class RenderGeometrySection extends CanvasSectionObject {
 		for (const objectId of objectIds) takeIn(objectId, 0);
 
 		return drawn;
+	}
+
+	/*
+		Everything a change to these objects touches: the objects themselves and all that lies
+		under them, the groups in between included. A group carries a mapping and a box of its
+		own even though it draws nothing, and a change laid on here has to reach them too, or a
+		second change worked out on the group's square before the engine has answered the first
+		would be worked out on a stale one.
+	*/
+	public static theOnesAChangeTouches(objectIds: number[]): number[] {
+		const touched: number[] = [];
+		const takeIn = (objectId: number, depth: number) => {
+			touched.push(objectId);
+			if (depth >= 100) return;
+
+			for (const held of RenderGeometrySection.heldBy(objectId))
+				takeIn(held, depth + 1);
+		};
+
+		for (const objectId of objectIds) takeIn(objectId, 0);
+
+		return touched;
 	}
 
 	/// The objects that object holds, in the order the page draws them. Empty for anything that

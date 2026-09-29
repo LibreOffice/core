@@ -1178,10 +1178,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (!matrix) return;
 
 		/*
-			A group holds no drawing and no mapping of its own, so the change goes to the objects
-			it holds. Anything else is changed as it stands.
+			The change goes to the objects that draw, and to the groups above them as well: a
+			group's mapping and box are read for the next change before the engine has answered
+			this one, so they are kept current here just as the members are.
 		*/
-		for (const objectId of RenderGeometrySection.theOnesThatDraw(
+		for (const objectId of RenderGeometrySection.theOnesAChangeTouches(
 			this.selectedObjects(),
 		))
 			RenderGeometrySection.changeObject(objectId, matrix);

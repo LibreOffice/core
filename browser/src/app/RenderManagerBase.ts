@@ -245,7 +245,7 @@ class RenderManagerBase {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	onVectorChanged(_callback: () => void): void {}
+	onVectorChanged(_callback: (answered?: number[]) => void): void {}
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	offVectorChanged(_callback: () => void): void {}

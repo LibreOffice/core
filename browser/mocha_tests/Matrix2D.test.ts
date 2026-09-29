@@ -108,6 +108,12 @@ describe('Matrix2D', function () {
 		assert.strictEqual(cool.Matrix2D.IDENTITY.scale(2, 5).rotation(), 0);
 	});
 
+	it('is the same as another to within a difference in each value', function () {
+		const one = new cool.Matrix2D(1, 0, 0, 1, 100, 200);
+		assert.ok(one.equals(new cool.Matrix2D(1, 0, 0, 1, 101, 199), 1.5));
+		assert.ok(!one.equals(new cool.Matrix2D(1, 0, 0, 1, 102, 200), 1.5));
+	});
+
 	it('takes a point back where it came from under the inverse', function () {
 		const there = cool.Matrix2D.IDENTITY.scale(2, 3)
 			.rotateAround(5, 5, 0.7)

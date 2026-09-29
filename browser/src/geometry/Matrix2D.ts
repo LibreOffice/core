@@ -108,6 +108,15 @@ namespace cool {
 			return Math.atan2(this.b, this.a);
 		}
 
+		/// Whether the other one is the same transform, to within the given difference in each of
+		/// the six values.
+		equals(other: Matrix2D, tolerance: number): boolean {
+			const theirs = other.toArray();
+			return this.toArray().every(
+				(value: number, at: number) => Math.abs(value - theirs[at]) < tolerance,
+			);
+		}
+
 		/// The transform that undoes this one, or null where this one cannot be undone, which is
 		/// a transform that flattens everything onto a line or a point.
 		invert(): Matrix2D | null {
