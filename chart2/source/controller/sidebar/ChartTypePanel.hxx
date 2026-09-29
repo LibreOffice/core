@@ -32,6 +32,8 @@ namespace com::sun::star::util
 class XModifyListener;
 }
 
+class ValueSet;
+
 namespace weld
 {
 class CustomWeld;

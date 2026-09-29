@@ -302,7 +302,15 @@ void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, bo
     m_nChangingCalls++;
     if( m_pCurrentMainType && bAlsoResetSubTypeList )
     {
-        m_pCurrentMainType->fillSubTypeList(*m_xSubTypeList, rParameter);
+        m_xSubTypeList->Clear();
+        const std::vector<ChartTypeEntry> aEntries = m_pCurrentMainType->getSubTypes(rParameter);
+        int nIndex = 1;
+        for (const ChartTypeEntry& rEntry : aEntries)
+        {
+            m_xSubTypeList->InsertItem(nIndex, rEntry.aImage);
+            m_xSubTypeList->SetItemText(nIndex, rEntry.sName);
+            nIndex++;
+        }
     }
     m_xSubTypeList->SelectItem( static_cast<sal_uInt16>( rParameter.nSubTypeIndex) );
     m_pDim3DLookResourceGroup->fillControls( rParameter );
