@@ -288,9 +288,11 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._remoteSelectionEnd = undefined;
 	},
 
-	onAccessibilityFocusChanged: function(content, pos, start, end, listPrefixLength, force, before, after) {
+	onAccessibilityFocusChanged: function(content, pos, start, end, listPrefixLength, force, before, after,
+		beforeRects, afterRects) {
 		this._listPrefixLength = listPrefixLength;
-		this._setContextParagraphs(before, after);
+		this._endContextJump();
+		this._setContextParagraphs(before, after, beforeRects, afterRects);
 		if (!this.hasFocus() || (this._isComposing && !force)) {
 			this._log('onAccessibilityFocusChanged: skipped updating: '
 				+ '\n  hasFocus: ' + this.hasFocus()
@@ -305,7 +307,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		}
 	},
 
-	setA11yFocusedParagraph: function(content, pos, start, end, before, after) {
+	setA11yFocusedParagraph: function(content, pos, start, end, before, after, beforeRects, afterRects) {
 		if (this._isComposing) {
 			this._remoteContent = content;
 			this._remotePosition = pos;
@@ -314,7 +316,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		} else {
 			this._setFocusedParagraph(content, pos, start, end);
 		}
-		this._setContextParagraphs(before, after);
+		this._setContextParagraphs(before, after, beforeRects, afterRects);
 	},
 
 	// getPlainTextContent() reads the whole editable, and every caret offset is
@@ -334,6 +336,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 		this._contextBefore = createContextRegion('a11y-context-before');
 		this._contextAfter = createContextRegion('a11y-context-after');
+		window.L.DomEvent.on(this._contextBefore, 'focusin', this._onContextFocus, this);
+		window.L.DomEvent.on(this._contextAfter, 'focusin', this._onContextFocus, this);
 		this._container.insertBefore(this._contextBefore, this._textArea);
 		this._container.insertBefore(this._contextAfter, this._textArea.nextSibling);
 	},
@@ -346,26 +350,54 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._contextRequestTimer = setTimeout(this._requestFocusedParagraph.bind(this), 250);
 	},
 
-	_setContextParagraphs: function(before, after) {
+	_setContextParagraphs: function(before, after, beforeRects, afterRects) {
 		this._initContextRegions();
 		if (!this._contextBefore)
 			return;
 
-		const fillContextRegion = function (region, paragraphs) {
+		const fillContextRegion = function (region, paragraphs, rects) {
 			region.replaceChildren();
 			if (!Array.isArray(paragraphs))
 				return;
-			paragraphs.forEach(function (text) {
+			paragraphs.forEach(function (text, index) {
 				const span = document.createElement('span');
 				span.setAttribute('role', 'paragraph');
 				span.textContent = text;
+				// NVDA and JAWS focus it on leaving browse mode; Orca would focus every one it reads.
+				if (window.L.Browser.win && Array.isArray(rects) && typeof rects[index] === 'string') {
+					span.tabIndex = -1;
+					span.dataset.twips = rects[index];
+				}
 				region.appendChild(span);
 			});
 		};
 
-		fillContextRegion(this._contextBefore, before);
-		fillContextRegion(this._contextAfter, after);
+		fillContextRegion(this._contextBefore, before, beforeRects);
+		fillContextRegion(this._contextAfter, after, afterRects);
 		this._placeContextRegions();
+	},
+
+	_onContextFocus: function(ev) {
+		const twips = ev.target.dataset ? ev.target.dataset.twips : undefined;
+		if (!twips || !this._map._docLayer)
+			return;
+
+		this._contextJump = setTimeout(this._endContextJump.bind(this), 1000);
+		const rect = twips.split(',').map(Number);
+		const x = rect[0] + 1;
+		const y = rect[1] + Math.min(rect[3] / 2, 120);
+		this._map._docLayer._postMouseEvent('buttondown', x, y, 1, app.LOButtons.left, 0);
+		this._map._docLayer._postMouseEvent('buttonup', x, y, 1, app.LOButtons.left, 0);
+	},
+
+	// Given back once the caret is there, and before the regions are refilled: the focused
+	// paragraph going away with them makes the reader announce the page again.
+	_endContextJump: function() {
+		if (!this._contextJump)
+			return;
+		clearTimeout(this._contextJump);
+		this._contextJump = null;
+		this._textArea.focus({ preventScroll: true });
 	},
 
 	// The editable is 1px tall and its text overflows below it: a region drawn over that
