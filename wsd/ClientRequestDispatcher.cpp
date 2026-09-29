@@ -1412,8 +1412,7 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
         }
         else if (requestDetails.equals(RequestDetails::Field::Type, "cool") &&
                  requestDetails.equals(1, "links") &&
-                 (request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST ||
-                  request.getMethod() == Poco::Net::HTTPRequest::HTTP_DELETE))
+                 request.getMethod() == Poco::Net::HTTPRequest::HTTP_POST)
         {
             servedSync = handleLinksRequest(request, message, disposition, socket);
         }
@@ -2251,13 +2250,7 @@ bool ClientRequestDispatcher::handleLinksRequest(
 {
     assert(socket && "Must have a valid socket");
 
-    // A POST registers a remote link and a DELETE drops one. Both are the same request
-    // otherwise: the same address, the same authorization and the same way of naming the
-    // document.
-    const bool drop = request.getMethod() == Poco::Net::HTTPRequest::HTTP_DELETE;
-
-    LOG_DBG_S("Links " << request.getMethod()
-                       << " request: " << Anonymizer::anonymizeUrl(request.getURI()));
+    LOG_DBG_S("Links request: " << Anonymizer::anonymizeUrl(request.getURI()));
 
     if (!RemoteDocumentBroker::isEnabled())
     {
@@ -2313,8 +2306,6 @@ bool ClientRequestDispatcher::handleLinksRequest(
     //               "BaseFileName": "...", "LastModifiedTime": "...",
     //               "PersistentLink": "<the reference the document's pages store for this
     //                                  file>" } }
-    // A DELETE names the link to drop by its WOPISrc alone; the rest of the entry says
-    // nothing about which document that is and is ignored.
     const std::string body(std::istreambuf_iterator<char>(message), {});
     std::string oneTimeToken;
     std::string remoteWopiSrc;
@@ -2348,7 +2339,7 @@ bool ClientRequestDispatcher::handleLinksRequest(
         remotePersistentLink.clear();
     }
 
-    if (oneTimeToken.empty() || remoteWopiSrc.empty() || (!drop && remoteAccessToken.empty()))
+    if (oneTimeToken.empty() || remoteWopiSrc.empty() || remoteAccessToken.empty())
     {
         LOG_ERR_S("Links request rejected: incomplete body (have Nonce: "
                   << !oneTimeToken.empty() << ", Link WOPISrc: " << !remoteWopiSrc.empty()
@@ -2378,7 +2369,7 @@ bool ClientRequestDispatcher::handleLinksRequest(
 
     docBroker->setupTransfer(
         disposition,
-        [docBroker, drop, oneTimeToken = std::move(oneTimeToken),
+        [docBroker, oneTimeToken = std::move(oneTimeToken),
          remoteWopiSrc = std::move(remoteWopiSrc), remoteAccessToken = std::move(remoteAccessToken),
          remoteName = std::move(remoteName),
          remoteLastModifiedTime = std::move(remoteLastModifiedTime),
@@ -2387,47 +2378,19 @@ bool ClientRequestDispatcher::handleLinksRequest(
         {
             auto streamSocket = std::static_pointer_cast<StreamSocket>(moveSocket);
 
-            if (drop)
+            // The remote document's token becomes private to the one view that
+            // holds the one-time token. A request that carries no view's
+            // current token is refused, and the token is consumed on success.
+            if (!docBroker->registerRemoteDocumentToken(oneTimeToken, remoteWopiSrc,
+                                                        remoteAccessToken, remoteName,
+                                                        remoteLastModifiedTime,
+                                                        remotePersistentLink))
             {
-                // The link leaves the list of every view, which is where the one list of
-                // remote links lives. The token is consumed whether the list held that
-                // link or not.
-                const DocumentBroker::LinkRemoval removal =
-                    docBroker->removeRemoteDocumentSource(oneTimeToken, remoteWopiSrc);
-                if (removal == DocumentBroker::LinkRemoval::BadToken)
-                {
-                    LOG_ERR_S("Links DELETE for [" << docBroker->getDocKey()
-                                                   << "] with an invalid one-time token");
-                    HttpHelper::sendErrorAndShutdown(http::StatusCode::Unauthorized, streamSocket,
-                                                     "invalid token");
-                    return;
-                }
-
-                if (removal == DocumentBroker::LinkRemoval::NotFound)
-                {
-                    LOG_ERR_S("Links DELETE for ["
-                              << docBroker->getDocKey() << "] names no remote link of it");
-                    HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, streamSocket,
-                                                     "no such link");
-                    return;
-                }
-            }
-            else
-            {
-                // The remote document's token becomes private to the one view that
-                // holds the one-time token. A request that carries no view's
-                // current token is refused, and the token is consumed on success.
-                if (!docBroker->registerRemoteDocumentToken(oneTimeToken, remoteWopiSrc,
-                                                            remoteAccessToken, remoteName,
-                                                            remoteLastModifiedTime,
-                                                            remotePersistentLink))
-                {
-                    LOG_ERR_S("Links request for ["
-                              << docBroker->getDocKey() << "] with an invalid one-time token");
-                    HttpHelper::sendErrorAndShutdown(http::StatusCode::Unauthorized, streamSocket,
-                                                     "invalid token");
-                    return;
-                }
+                LOG_ERR_S("Links request for ["
+                          << docBroker->getDocKey() << "] with an invalid one-time token");
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::Unauthorized, streamSocket,
+                                                 "invalid token");
+                return;
             }
 
             http::Response httpResponse(http::StatusCode::OK);

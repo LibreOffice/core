@@ -417,6 +417,14 @@ class SlideImportSession {
 		);
 	}
 
+	// Asks the server to drop the remote link bound to a persistent link, for
+	// every view of the document.
+	public static removeRemoteLink(persistentLink: string): void {
+		app.socket.sendMessage(
+			'remotelinkremove source=' + encodeURIComponent(persistentLink),
+		);
+	}
+
 	// Sends a read-only client command to a subscribed remote document. Its
 	// reply arrives as a remotedoccommandresult map event carrying the same
 	// wopiSrc.

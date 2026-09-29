@@ -47,10 +47,10 @@ public:
     /// listed no remote link for, so nothing can reach it. The same for every view.
     void setNamedSources(DocumentBroker& docBroker, std::vector<std::string> names);
 
-    /// Drops one remote link: the record of it, which is the same for every view, and in
-    /// every view the token and the live link that reach it. Reports whether one was recorded
-    /// at that address.
-    bool removeSource(DocumentBroker& docBroker, const std::string& wopiSrc);
+    /// Drops the remote link bound to the given persistent link: the record of it, which is
+    /// the same for every view, and in every view the token, the live link and the link
+    /// access answer that reach it. Reports whether one was bound to it.
+    bool removeSource(DocumentBroker& docBroker, const std::string& persistentLink);
 
     /// Records the access token one view holds for a remote link. Private
     /// to that view.

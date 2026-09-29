@@ -540,20 +540,10 @@ public:
                                      const std::string& lastModifiedTime,
                                      const std::string& persistentLink);
 
-    /// What a request to drop a remote link came to.
-    enum class LinkRemoval
-    {
-        BadToken, ///< No view of this document holds that one-time token, so nothing was done.
-        NotFound, ///< The token was accepted and no remote link is recorded at that address.
-        Removed, ///< The remote link is gone.
-    };
-
-    /// Drops the remote link at the given WOPISrc for the view that holds the given
-    /// one-time token, coming from DELETE /cool/links. The link is dropped for
-    /// every view, since the list of remote links is the same for all of them. A token
-    /// that is a view's own is consumed and rotated, whether a link was dropped or not.
-    LinkRemoval removeRemoteDocumentSource(const std::string& oneTimeToken,
-                                           const std::string& wopiSrc);
+    /// Drops the remote link bound to the given persistent link, at the request of a view. The
+    /// link is dropped for every view, since the list of remote links is the same for all of
+    /// them. Reports whether one was bound to it.
+    bool removeRemoteDocumentSource(const std::string& persistentLink);
 
     /// Opens or drops one view's subscription to a remote document. The view
     /// is named by its tag.

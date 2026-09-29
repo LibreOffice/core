@@ -534,61 +534,43 @@ public:
     }
 };
 
-/// Drops a remote link over DELETE /cool/links: the request is
-/// authorized by the view's own one-time token the way the registering POST
-/// is, a wrong token is refused, and the link leaves the list the views
-/// are sent.
+/// Drops a remote link over the remotelinkremove command: a view drops it for every view
 class UnitLinkDelete : public WopiTestServer
 {
-    STATE_ENUM(Phase, Load, WaitToken, Registering, WaitFreshToken, Dropping, WaitDropped, Done)
+    /// The persistent link the registered remote link is bound to.
+    static constexpr auto SourceLink = "storage:quarter-3";
+
+    STATE_ENUM(Phase, Load, WaitToken, Registering, WaitListed, WaitSyntaxError, WaitNotFound,
+               WaitDropped, Done)
     _phase;
 
     /// The latest one-time token the view was handed.
     std::string _oneTimeToken;
-    /// The token the registering POST consumed.
-    std::string _usedToken;
     bool _documentLoaded = false;
     /// Whether the list the views are sent has named the remote document.
     bool _listed = false;
 
-    /// Guards the start of the POST and the DELETE against the threads they run on.
+    /// Guards the phase against the thread the POST runs on.
     std::mutex _mutex;
     std::thread _postThread;
-    std::thread _deleteThread;
 
     std::string documentWopiSrc() const { return getWopiHostURI() + "/wopi/files/1"; }
 
     std::string remoteWopiSrc() const { return getWopiHostURI() + "/wopi/files/2"; }
 
-    /// Sends the given request body to the endpoint and returns the response status.
-    unsigned sendLink(const std::string& verb, const std::string& body)
+    unsigned postLink(const std::string& oneTimeToken)
     {
         http::Request request("/cool/links?WOPISrc=" + Uri::encode(documentWopiSrc()),
-                              verb);
-        request.setBody(body, "application/json");
+                              http::Request::VERB_POST);
+        request.setBody("{\"Nonce\":\"" + oneTimeToken + "\",\"Link\":{\"WOPISrc\":\"" +
+                            remoteWopiSrc() + "\",\"AccessToken\":\"remotetoken\"," +
+                            "\"PersistentLink\":\"" + std::string(SourceLink) + "\"}}",
+                        "application/json");
 
         auto session = http::Session::create(helpers::getTestServerURI());
         session->setTimeout(std::chrono::seconds(10));
         const std::shared_ptr<const http::Response> response = session->syncRequest(request);
         return response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0;
-    }
-
-    unsigned postLink(const std::string& oneTimeToken)
-    {
-        return sendLink(http::Request::VERB_POST,
-                        "{\"Nonce\":\"" + oneTimeToken +
-                            "\",\"Link\":{\"WOPISrc\":\"" +
-                            remoteWopiSrc() +
-                            "\",\"AccessToken\":\"remotetoken\"}}");
-    }
-
-    /// A drop names the link by its WOPISrc alone.
-    unsigned deleteLink(const std::string& oneTimeToken, const std::string& wopiSrc)
-    {
-        return sendLink(http::Request::VERB_DELETE,
-                        "{\"Nonce\":\"" + oneTimeToken +
-                            "\",\"Link\":{\"WOPISrc\":\"" + wopiSrc +
-                            "\"}}");
     }
 
     /// Registers the document once the view has a token and the document is up.
@@ -601,40 +583,29 @@ class UnitLinkDelete : public WopiTestServer
             return;
 
         TRANSITION_STATE(_phase, Phase::Registering);
-        _usedToken = _oneTimeToken;
         _postThread = std::thread(
             [this, oneTimeToken = _oneTimeToken]
             {
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
                                  postLink(oneTimeToken));
-                TRANSITION_STATE(_phase, Phase::WaitFreshToken);
-                // The fresh token and the list may already have arrived while the POST
-                // was in flight, so nothing else would start the drop.
-                maybeStartDelete();
+                TRANSITION_STATE(_phase, Phase::WaitListed);
+                // The list may already have arrived while the POST was in flight, so
+                // nothing else would start the drop.
+                maybeStartRemove();
             });
     }
 
-    /// Drops the document again, once the accepted POST has rotated the token.
-    void maybeStartDelete()
+    /// Drops the document again, once the accepted POST has put it on the list.
+    void maybeStartRemove()
     {
         std::lock_guard<std::mutex> lock(_mutex);
 
-        if (_phase != Phase::WaitFreshToken || !_listed || _oneTimeToken == _usedToken ||
-            _deleteThread.joinable())
+        if (_phase != Phase::WaitListed || !_listed)
             return;
 
-        TRANSITION_STATE(_phase, Phase::Dropping);
-        _deleteThread = std::thread(
-            [this, oneTimeToken = _oneTimeToken]
-            {
-                // A token no view holds is refused, and the document stays.
-                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized),
-                                 deleteLink("wrongtoken", remoteWopiSrc()));
-
-                TRANSITION_STATE(_phase, Phase::WaitDropped);
-                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
-                                 deleteLink(oneTimeToken, remoteWopiSrc()));
-            });
+        // A command that names no persistent link is refused.
+        TRANSITION_STATE(_phase, Phase::WaitSyntaxError);
+        WSD_CMD("remotelinkremove");
     }
 
 public:
@@ -648,8 +619,6 @@ public:
     {
         if (_postThread.joinable())
             _postThread.join();
-        if (_deleteThread.joinable())
-            _deleteThread.join();
     }
 
     void configure(Poco::Util::LayeredConfiguration& config) override
@@ -675,7 +644,36 @@ public:
             TST_LOG("Got: [" << message << ']');
             _oneTimeToken = std::string(message.substr(message.find(' ') + 1));
             maybeStartPost();
-            maybeStartDelete();
+            return false;
+        }
+
+        if (message.starts_with("error: cmd=remotelinkremove"))
+        {
+            TST_LOG("Got: [" << message << ']');
+            std::lock_guard<std::mutex> lock(_mutex);
+
+            if (_phase == Phase::WaitSyntaxError)
+            {
+                LOK_ASSERT_MESSAGE("Expected a syntax rejection",
+                                   message.find("kind=syntax") != std::string_view::npos);
+
+                // A persistent link no remote link is bound to leaves the list as it is.
+                TRANSITION_STATE(_phase, Phase::WaitNotFound);
+                WSD_CMD("remotelinkremove source=" + Uri::encode("storage:other"));
+            }
+            else if (_phase == Phase::WaitNotFound)
+            {
+                LOK_ASSERT_MESSAGE("Expected a not-found rejection",
+                                   message.find("kind=notfound") != std::string_view::npos);
+
+                TRANSITION_STATE(_phase, Phase::WaitDropped);
+                WSD_CMD("remotelinkremove source=" + Uri::encode(SourceLink));
+            }
+            else
+            {
+                LOK_ASSERT_FAIL("Unexpected remotelinkremove error");
+            }
+
             return false;
         }
 
@@ -687,7 +685,7 @@ public:
             if (names)
             {
                 _listed = true;
-                maybeStartDelete();
+                maybeStartRemove();
                 return false;
             }
 

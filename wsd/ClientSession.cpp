@@ -1554,6 +1554,24 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         docBroker->resolveRemoteDocumentSource(getId(), Uri::decode(encodedSource));
         return true;
     }
+    else if (tokens.equals(0, "remotelinkremove"))
+    {
+        std::string encodedSource;
+        if (tokens.size() < 2 || !COOLProtocol::getTokenString(tokens[1], "source", encodedSource) ||
+            encodedSource.empty())
+        {
+            sendTextFrameAndLogError("error: cmd=remotelinkremove kind=syntax");
+            return false;
+        }
+
+        if (!docBroker->removeRemoteDocumentSource(Uri::decode(encodedSource)))
+        {
+            sendTextFrameAndLogError("error: cmd=remotelinkremove kind=notfound");
+            return false;
+        }
+
+        return true;
+    }
 #endif // !MOBILEAPP && !WASMAPP
     else if (tokens.equals(0, "slidelink"))
     {

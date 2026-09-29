@@ -436,21 +436,19 @@ class SlideImportPane {
     });
   }
 
-  // "Remove from list" asks the integration to drop a file from the remote
-  // links of this one.
+  // "Remove from list" drops a file from the remote links of this one, for
+  // every view. The integration is notified, so a storage that
+  // keeps the list drops the link too.
   private removeFromList(source: SlideImportPaneSource): void {
-    if (!app.linkToken || !source.wopiSrc) return;
+    if (!source.persistentLink) return;
 
+    SlideImportSession.removeRemoteLink(source.persistentLink);
     app.map.fire('postMessage', {
       msgId: 'UI_RemovePermanentLink',
       args: {
-        Nonce: app.linkToken,
         WOPISrc: window.wopiSrc,
-        Endpoint:
-          window.makeHttpUrl('/cool/links') +
-          '?WOPISrc=' +
-          encodeURIComponent(window.wopiSrc),
         Link: {
+          PersistentLink: source.persistentLink,
           WOPISrc: source.wopiSrc,
           BaseFileName: source.name,
         },
@@ -1342,12 +1340,11 @@ class SlideImportPane {
         text: _('Update the slides linked to this file'),
       });
 
-    if (!linked && source.wopiSrc)
+    if (!linked && source.wopiSrc && source.persistentLink)
       entries.push({
         id: 'remove',
         type: 'comboboxentry',
         text: _('Remove from list'),
-        enabled: !!app.linkToken,
       });
 
     this.showSourceMenu(e, entries, source);

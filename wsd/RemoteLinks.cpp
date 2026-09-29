@@ -75,33 +75,28 @@ void RemoteLinks::setSource(DocumentBroker& docBroker, const std::string& wopiSr
     }
 }
 
-bool RemoteLinks::removeSource(DocumentBroker& docBroker, const std::string& wopiSrc)
+bool RemoteLinks::removeSource(DocumentBroker& docBroker, const std::string& persistentLink)
 {
     docBroker.assertCorrectThread();
 
-    std::string docKey;
-    try
+    const std::string linkAnonym = Anonymizer::anonymize(persistentLink);
+    const auto itEntry = persistentLink.empty() ? _entries.end() : findListed(persistentLink);
+    if (itEntry == _entries.end())
     {
-        docKey = RequestDetails::getDocKey(wopiSrc);
-    }
-    catch (const std::exception& exc)
-    {
-        LOG_ERR("Cannot drop the invalid remote link WOPISrc ["
-                << Anonymizer::anonymizeUrl(wopiSrc) << "]: " << exc.what());
+        LOG_INF("No remote link of [" << docBroker.getDocKey() << "] is bound to ["
+                                      << linkAnonym << ']');
         return false;
     }
 
-    if (_entries.erase(docKey) == 0)
-    {
-        LOG_INF("No remote link of [" << docBroker.getDocKey() << "] at ["
-                                      << Anonymizer::anonymizeUrl(wopiSrc) << ']');
-        return false;
-    }
+    const std::string docKey = itEntry->first;
+    const std::string wopiSrc = itEntry->second.wopiSrc;
+    _entries.erase(itEntry);
 
     // The document is gone for every view, so the live links to it go down and the tokens that
     // opened them go with it.
     for (auto& itView : _views)
     {
+        itView.second.linkAccess.erase(persistentLink);
         const auto itSubscription = itView.second.subscriptions.find(docKey);
         if (itSubscription != itView.second.subscriptions.end())
         {
@@ -114,8 +109,9 @@ bool RemoteLinks::removeSource(DocumentBroker& docBroker, const std::string& wop
         itView.second.tokens.erase(docKey);
     }
 
-    LOG_INF("Dropped the remote link [" << Anonymizer::anonymizeUrl(wopiSrc) << "] of ["
-                                        << docBroker.getDocKey() << ']');
+    LOG_INF("Dropped the remote link [" << Anonymizer::anonymizeUrl(wopiSrc) << "] bound to ["
+                                        << linkAnonym << "] of [" << docBroker.getDocKey()
+                                        << ']');
     refreshAllViews(docBroker);
     return true;
 }
