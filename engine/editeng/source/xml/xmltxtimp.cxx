@@ -211,16 +211,18 @@ EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection
 
         //remove the extra para breaks
         EditDoc& pDoc = rEditEngine.GetEditDoc();
-        rEditEngine.ParaAttribsToCharAttribs(pDoc.GetObject(rSel.end.nPara));
-        rEditEngine.ConnectParagraphs(pDoc.GetObject(rSel.end.nPara),
-                                      pDoc.GetObject(rSel.end.nPara + 1), true);
-        rEditEngine.ParaAttribsToCharAttribs( pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.end.nPara - 2 ) );
-        rEditEngine.ConnectParagraphs( pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.end.nPara - 2 ),
-            pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.end.nPara -1 ), true );
+        rEditEngine.ParaAttribsToCharAttribs(&pDoc.GetObject(rSel.end.nPara));
+        rEditEngine.ConnectParagraphs(&pDoc.GetObject(rSel.end.nPara),
+                                      &pDoc.GetObject(rSel.end.nPara + 1), true);
+        rEditEngine.ParaAttribsToCharAttribs( &pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.end.nPara - 2 ) );
+        rEditEngine.ConnectParagraphs(
+            &pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.end.nPara - 2 ),
+            &pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.end.nPara -1 ), true );
 
         // The final join is to be returned.
-        aPaM = rEditEngine.ConnectParagraphs( pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.end.nPara - 2 ),
-            pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.end.nPara -1 ), true );
+        aPaM = rEditEngine.ConnectParagraphs(
+                &pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.end.nPara - 2 ),
+                &pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.end.nPara -1 ), true );
     }
     catch( const cpo::uno::Exception& )
     {

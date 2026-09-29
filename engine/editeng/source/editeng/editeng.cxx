@@ -936,11 +936,8 @@ void EditEngine::RemoveParagraph( sal_Int32 nPara )
 
 sal_Int32 EditEngine::GetTextLen( sal_Int32 nPara ) const
 {
-    ContentNode* pNode = getImpl().GetEditDoc().GetObject(nPara);
-    DBG_ASSERT( pNode, "Paragraph not found: GetTextLen" );
-    if ( pNode )
-        return pNode->Len();
-    return 0;
+    ContentNode& rNode = getImpl().GetEditDoc().GetObject(nPara);
+    return rNode.Len();
 }
 
 OUString EditEngine::GetText( sal_Int32 nPara ) const
@@ -1074,8 +1071,8 @@ vcl::Font EditEngine::GetStandardFont( sal_Int32 nPara )
 
 SvxFont EditEngine::GetStandardSvxFont( sal_Int32 nPara )
 {
-    ContentNode* pNode = getImpl().GetEditDoc().GetObject( nPara );
-    return pNode->GetCharAttribs().GetDefFont();
+    ContentNode& rNode = getImpl().GetEditDoc().GetObject( nPara );
+    return rNode.GetCharAttribs().GetDefFont();
 }
 
 void EditEngine::StripPortions(StripPortionsHelper& rStripPortionsHelper)
@@ -1466,19 +1463,16 @@ bool EditEngine::ShouldCreateBigTextObject() const
 std::vector<EFieldInfo> EditEngine::GetFieldInfo( sal_Int32 nPara ) const
 {
     std::vector<EFieldInfo> aFieldInfos;
-    ContentNode* pNode = getImpl().GetEditDoc().GetObject(nPara);
-    if ( pNode )
+    ContentNode& rNode = getImpl().GetEditDoc().GetObject(nPara);
+    for (auto const& attrib : rNode.GetCharAttribs().GetAttribs())
     {
-        for (auto const& attrib : pNode->GetCharAttribs().GetAttribs())
+        const EditCharAttrib& rAttr = *attrib;
+        if (rAttr.Which() == EE_FEATURE_FIELD)
         {
-            const EditCharAttrib& rAttr = *attrib;
-            if (rAttr.Which() == EE_FEATURE_FIELD)
-            {
-                const SvxFieldItem* p = static_cast<const SvxFieldItem*>(rAttr.GetItem());
-                EFieldInfo aInfo(*p, nPara, rAttr.GetStart());
-                aInfo.aCurrentText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
-                aFieldInfos.push_back(aInfo);
-            }
+            const SvxFieldItem* p = static_cast<const SvxFieldItem*>(rAttr.GetItem());
+            EFieldInfo aInfo(*p, nPara, rAttr.GetStart());
+            aInfo.aCurrentText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
+            aFieldInfos.push_back(aInfo);
         }
     }
     return aFieldInfos;
@@ -1505,8 +1499,8 @@ void EditEngine::RemoveFields( const std::function<bool ( const SvxFieldData* )>
     sal_Int32 nParas = getImpl().GetEditDoc().Count();
     for ( sal_Int32 nPara = 0; nPara < nParas; nPara++  )
     {
-        ContentNode* pNode = getImpl().GetEditDoc().GetObject(nPara);
-        const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
+        ContentNode& rNode = getImpl().GetEditDoc().GetObject(nPara);
+        const CharAttribList::AttribsType& rAttrs = rNode.GetCharAttribs().GetAttribs();
         for (size_t nAttr = rAttrs.size(); nAttr; )
         {
             const EditCharAttrib& rAttr = *rAttrs[--nAttr];
@@ -1516,7 +1510,7 @@ void EditEngine::RemoveFields( const std::function<bool ( const SvxFieldData* )>
                 if ( pFldData && ( isFieldData( pFldData )  ) )
                 {
                     DBG_ASSERT( dynamic_cast<const SvxFieldItem*>(rAttr.GetItem()), "no field item..." );
-                    EditSelection aSel( EditPaM(pNode, rAttr.GetStart()), EditPaM(pNode, rAttr.GetEnd()) );
+                    EditSelection aSel( EditPaM(rNode, rAttr.GetStart()), EditPaM(rNode, rAttr.GetEnd()) );
                     OUString aFieldText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
                     getImpl().ImpInsertText(aSel, aFieldText);
                 }
@@ -1530,8 +1524,8 @@ bool EditEngine::HasOnlineSpellErrors() const
     sal_Int32 nNodes = getImpl().GetEditDoc().Count();
     for ( sal_Int32 n = 0; n < nNodes; n++ )
     {
-        ContentNode* pNode = getImpl().GetEditDoc().GetObject(n);
-        if ( pNode->GetWrongList() && !pNode->GetWrongList()->empty() )
+        ContentNode& rNode = getImpl().GetEditDoc().GetObject(n);
+        if ( rNode.GetWrongList() && !rNode.GetWrongList()->empty() )
             return true;
     }
     return false;
@@ -1566,14 +1560,14 @@ EPaM EditEngine::FindDocPosition(const Point& rDocPos) const
 tools::Rectangle EditEngine::GetCharacterBounds(const EPaM& rPos) const
 {
     tools::Rectangle aBounds;
-    ContentNode* pNode = getImpl().GetEditDoc().GetObject(rPos.nPara);
+    ContentNode& rNode = getImpl().GetEditDoc().GetObject(rPos.nPara);
 
     // Check against index, not paragraph
-    if ( pNode && ( rPos.nIndex < pNode->Len() ) )
+    if ( rPos.nIndex < rNode.Len() )
     {
-        aBounds = getImpl().PaMtoEditCursor(EditPaM(pNode, rPos.nIndex), CursorFlags{.bTextOnly = true});
+        aBounds = getImpl().PaMtoEditCursor(EditPaM(rNode, rPos.nIndex), CursorFlags{.bTextOnly = true});
         CursorFlags aFlags { .bTextOnly = true, .bEndOfLine = true};
-        tools::Rectangle aR2 = getImpl().PaMtoEditCursor(EditPaM(pNode, rPos.nIndex + 1), aFlags);
+        tools::Rectangle aR2 = getImpl().PaMtoEditCursor(EditPaM(rNode, rPos.nIndex + 1), aFlags);
         if ( aR2.Right() > aBounds.Right() )
             aBounds.SetRight( aR2.Right() );
     }

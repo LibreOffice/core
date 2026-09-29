@@ -184,31 +184,28 @@ void EditUndoDelContent::Redo()
 
     // pNode is no longer correct, if the paragraphs where merged
     // in between Undos
-    ContentNode* pNode = pEE->GetEditDoc().GetObject(nNode);
-    DBG_ASSERT(pNode, "EditUndoDelContent::Redo(): Node?!");
+    ContentNode& rNode = pEE->GetEditDoc().GetObject(nNode);
 
     pEE->RemoveParaPortion(nNode);
 
     // Do not delete node, depends on the undo!
     mpContentNode = pEE->GetEditDoc().Release(nNode);
-    assert(mpContentNode.get() == pNode);
+    assert(mpContentNode.get() == &rNode);
 
     if (pEE->IsCallParaInsertedOrDeleted())
         pEE->ParagraphDeleted(nNode);
 
-    DeletedNodeInfo* pDeletedNodeInfo = new DeletedNodeInfo(pNode, nNode);
+    DeletedNodeInfo* pDeletedNodeInfo = new DeletedNodeInfo(&rNode, nNode);
     pEE->AppendDeletedNodeInfo(pDeletedNodeInfo);
     pEE->UpdateSelections();
 
-    ContentNode* pCheckNode = (nNode < pEE->GetEditDoc().Count())
+    ContentNode& rCheckNode = (nNode < pEE->GetEditDoc().Count())
         ? pEE->GetEditDoc().GetObject(nNode)
         : pEE->GetEditDoc().GetObject(nNode - 1);
 
-    assert(pCheckNode);
+    DBG_ASSERT(&rCheckNode != mpContentNode.get(), "?! RemoveContent !? ");
 
-    DBG_ASSERT(pCheckNode != mpContentNode.get(), "?! RemoveContent !? ");
-
-    EditPaM aPaM(pCheckNode, pCheckNode->Len());
+    EditPaM aPaM(rCheckNode, rCheckNode.Len());
 
     pEE->GetActiveView()->getImpl().SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
@@ -545,13 +542,12 @@ void EditUndoSetAttribs::Undo()
         // Then the character attributes ...
         // Remove all attributes including features, are later re-established.
         pEE->RemoveCharAttribs(nPara, 0, true);
-        DBG_ASSERT( pEE->GetEditDoc().GetObject( nPara ), "Undo (SetAttribs): pNode = NULL!" );
-        ContentNode* pNode = pEE->GetEditDoc().GetObject( nPara );
+        ContentNode& rNode = pEE->GetEditDoc().GetObject( nPara );
         for (const auto & nAttr : rInf.GetPrevCharAttribs())
         {
             const EditCharAttrib& rX = *nAttr;
             // is automatically "poolsized"
-            pEE->GetEditDoc().InsertAttrib(pNode, rX.GetStart(), rX.GetEnd(), *rX.GetItem());
+            pEE->GetEditDoc().InsertAttrib(&rNode, rX.GetStart(), rX.GetEnd(), *rX.GetItem());
             if (rX.Which() == EE_FEATURE_FIELD)
                 bFields = true;
         }

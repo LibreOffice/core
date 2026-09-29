@@ -53,11 +53,11 @@ ErrCode MarkdownWriter::Write(SvStream& rOutput, EditSelection aSel) const
 OString MarkdownWriter::GetString() const
 {
     sal_Int32 nEndNode = mrEngine.GetEditDoc().Count() - 1;
-    if (nEndNode == 0 && mrEngine.GetEditDoc().GetObject(0)->Len() == 0)
+    if (nEndNode == 0 && mrEngine.GetEditDoc().GetObject(0).Len() == 0)
         return OString();
 
     OStringBuffer aOutput;
-    sal_Int32 nEndPos = mrEngine.GetEditDoc().GetObject(nEndNode)->Len();
+    sal_Int32 nEndPos = mrEngine.GetEditDoc().GetObject(nEndNode).Len();
 
     WriteContent([&aOutput](std::string_view s) { aOutput.append(s); }, 0, nEndNode, 0, nEndPos);
 
@@ -203,7 +203,7 @@ void MarkdownWriter::WriteContent(const std::function<void(std::string_view)>& r
 
     for (sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++)
     {
-        const ContentNode* pNode = mrEngine.GetEditDoc().GetObject(nNode);
+        const ContentNode& rNode = mrEngine.GetEditDoc().GetObject(nNode);
         const ParaPortion* pParaPortion = mrEngine.GetParaPortions().SafeGetObject(nNode);
         if (!pParaPortion)
             continue;
@@ -248,7 +248,7 @@ void MarkdownWriter::WriteContent(const std::function<void(std::string_view)>& r
 
         // Determine selection range within this paragraph
         sal_Int32 nParaStartPos = 0;
-        sal_Int32 nParaEndPos = pNode->Len();
+        sal_Int32 nParaEndPos = rNode.Len();
         if (nNode == nStartNode)
             nParaStartPos = nStartPos;
         if (nNode == nEndNode)
@@ -285,7 +285,7 @@ void MarkdownWriter::WriteContent(const std::function<void(std::string_view)>& r
         // Short-circuit code block paragraphs: emit raw text, no formatting
         if (bIsCode)
         {
-            OUString aText = EditDoc::GetParaAsString(pNode, nParaStartPos, nParaEndPos);
+            OUString aText = EditDoc::GetParaAsString(&rNode, nParaStartPos, nParaEndPos);
             rOut(std::string_view(OUStringToOString(aText, RTL_TEXTENCODING_UTF8)));
             bPrevIsCode = true;
             continue;
@@ -317,7 +317,7 @@ void MarkdownWriter::WriteContent(const std::function<void(std::string_view)>& r
             const SvxURLField* pURLField = nullptr;
             if (rTextPortion.GetKind() == PortionKind::FIELD)
             {
-                const EditCharAttrib* pAttr = pNode->GetCharAttribs().FindFeature(nPortionStart);
+                const EditCharAttrib* pAttr = rNode.GetCharAttribs().FindFeature(nPortionStart);
                 if (pAttr)
                 {
                     const SvxFieldItem* pFieldItem
@@ -331,7 +331,7 @@ void MarkdownWriter::WriteContent(const std::function<void(std::string_view)>& r
             }
 
             // Get text for this portion
-            OUString aText = EditDoc::GetParaAsString(pNode, nEffStart, nEffEnd);
+            OUString aText = EditDoc::GetParaAsString(&rNode, nEffStart, nEffEnd);
 
             // Check character attributes
             bool bBold = false;

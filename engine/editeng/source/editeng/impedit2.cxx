@@ -237,8 +237,8 @@ void ImpEditEngine::InitDoc(bool bKeepParaAttribs)
     sal_Int32 nParas = maEditDoc.Count();
     for ( sal_Int32 n = bKeepParaAttribs ? 1 : 0; n < nParas; n++ )
     {
-        if (maEditDoc.GetObject(n)->GetStyleSheet())
-            EndListening( *maEditDoc.GetObject(n)->GetStyleSheet() );
+        if (maEditDoc.GetObject(n).GetStyleSheet())
+            EndListening( *maEditDoc.GetObject(n).GetStyleSheet() );
     }
 
     if ( bKeepParaAttribs )
@@ -248,7 +248,7 @@ void ImpEditEngine::InitDoc(bool bKeepParaAttribs)
 
     GetParaPortions().Reset();
 
-    GetParaPortions().Insert(0, std::make_unique<ParaPortion>(maEditDoc.GetObject(0)));
+    GetParaPortions().Insert(0, std::make_unique<ParaPortion>(&maEditDoc.GetObject(0)));
 
     mbFormatted = false;
 
@@ -259,7 +259,7 @@ void ImpEditEngine::InitDoc(bool bKeepParaAttribs)
     }
 
     if ( GetStatus().DoOnlineSpelling() )
-        maEditDoc.GetObject( 0 )->CreateWrongList();
+        maEditDoc.GetObject( 0 ).CreateWrongList();
 }
 
 EditPaM ImpEditEngine::DeleteSelected(const EditSelection& rSel)
@@ -300,13 +300,12 @@ OUString ImpEditEngine::GetSelected( const EditSelection& rSel  ) const
     // iterate over the paragraphs ...
     for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++ )
     {
-        const ContentNode* pNode = maEditDoc.GetObject( nNode );
-        assert(pNode);
+        const ContentNode& rNode = maEditDoc.GetObject( nNode );
 
         const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
-        const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : pNode->Len(); // can also be == nStart!
+        const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : rNode.Len(); // can also be == nStart!
 
-        aText.append(EditDoc::GetParaAsString( pNode, nStartPos, nEndPos ));
+        aText.append(EditDoc::GetParaAsString( &rNode, nStartPos, nEndPos ));
         if ( nNode < nEndNode )
             aText.append(aSep);
     }
@@ -1489,10 +1488,10 @@ EditPaM ImpEditEngine::CursorStartOfDoc()
 
 EditPaM ImpEditEngine::CursorEndOfDoc()
 {
-    ContentNode* pLastNode = maEditDoc.GetObject( maEditDoc.Count()-1 );
+    ContentNode* pLastNode = &maEditDoc.GetObject( maEditDoc.Count()-1 );
     ParaPortion* pLastPortion = GetParaPortions().SafeGetObject( maEditDoc.Count()-1 );
-    OSL_ENSURE( pLastNode && pLastPortion, "CursorEndOfDoc: Node or Portion not found" );
-    if (!(pLastNode && pLastPortion))
+    OSL_ENSURE( pLastPortion, "CursorEndOfDoc: Node or Portion not found" );
+    if (!pLastPortion)
         return EditPaM();
 
     if ( !pLastPortion->IsVisible() )
@@ -1500,7 +1499,7 @@ EditPaM ImpEditEngine::CursorEndOfDoc()
         pLastNode = GetPrevVisNode( pLastPortion->GetNode() );
         OSL_ENSURE( pLastNode, "No visible paragraph?" );
         if ( !pLastNode )
-            pLastNode = maEditDoc.GetObject( maEditDoc.Count()-1 );
+            pLastNode = &maEditDoc.GetObject( maEditDoc.Count()-1 );
     }
 
     EditPaM aPaM( pLastNode, pLastNode->Len() );
@@ -1544,9 +1543,9 @@ EditPaM ImpEditEngine::WordLeft( const EditPaM& rPaM )
         sal_Int32 nPrevPara = maEditDoc.GetPos( aNewPaM.GetNode() ) - 1;
         if (nPrevPara >= 0)
         {
-            ContentNode* pPrevNode = maEditDoc.GetObject( nPrevPara );
-            aNewPaM.SetNode( pPrevNode );
-            aNewPaM.SetIndex( pPrevNode->Len() );
+            ContentNode& rPrevNode = maEditDoc.GetObject( nPrevPara );
+            aNewPaM.SetNode( &rPrevNode );
+            aNewPaM.SetIndex( rPrevNode.Len() );
         }
     }
     else
@@ -1594,8 +1593,8 @@ EditPaM ImpEditEngine::WordRight( const EditPaM& rPaM, sal_Int16 nWordType )
         sal_Int32 nNextPara = maEditDoc.GetPos( aNewPaM.GetNode() ) + 1;
         if (nNextPara < maEditDoc.Count())
         {
-            ContentNode* pNextNode = maEditDoc.GetObject( nNextPara );
-            aNewPaM.SetNode( pNextNode );
+            ContentNode& rNextNode = maEditDoc.GetObject( nNextPara );
+            aNewPaM.SetNode( &rNextNode );
             aNewPaM.SetIndex( 0 );
         }
     }
@@ -2057,8 +2056,8 @@ sal_uInt8 ImpEditEngine::GetRightToLeft( sal_Int32 nPara, sal_Int32 nPos, sal_In
 {
     sal_uInt8 nRightToLeft = 0;
 
-    ContentNode* pNode = maEditDoc.GetObject( nPara );
-    if ( pNode && pNode->Len() )
+    ContentNode& rNode = maEditDoc.GetObject( nPara );
+    if ( rNode.Len() )
     {
         ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
         if (pParaPortion)
@@ -2576,17 +2575,17 @@ void ImpEditEngine::RemoveParagraph( sal_Int32 nPara )
     if (maEditDoc.Count() <= 1)
         return;
 
-    ContentNode* pNode = maEditDoc.GetObject(nPara);
+    ContentNode& rNode = maEditDoc.GetObject(nPara);
     const ParaPortion* pPortion = maParaPortionList.SafeGetObject(nPara);
-    DBG_ASSERT( pPortion && pNode, "Paragraph not found: RemoveParagraph" );
-    if ( pNode && pPortion )
+    DBG_ASSERT( pPortion, "Paragraph not found: RemoveParagraph" );
+    if ( pPortion )
     {
         // No Undo encapsulation needed.
-        auto const len{pNode->Len()};
+        auto const len{rNode.Len()};
         ImpRemoveParagraph(nPara);
         InvalidateFromParagraph(nPara);
         ESelection const deleted{nPara == 0 ? nPara : nPara - 1,
-            nPara == 0 ? 0 : maEditDoc.GetObject(nPara-1)->Len(),
+            nPara == 0 ? 0 : maEditDoc.GetObject(nPara-1).Len(),
             nPara, len};
         UpdateSelectionsDelete(deleted);
         UpdateSelections();
@@ -2597,9 +2596,7 @@ void ImpEditEngine::RemoveParagraph( sal_Int32 nPara )
 
 void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
 {
-    assert(maEditDoc.GetObject(nPara));
-
-    ContentNode* pNextNode = nPara+1 < maEditDoc.Count() ? maEditDoc.GetObject( nPara+1 ) : nullptr;
+    ContentNode* pNextNode = nPara+1 < maEditDoc.Count() ? &maEditDoc.GetObject( nPara+1 ) : nullptr;
 
     std::unique_ptr<ContentNode> pNode = maEditDoc.Release(nPara);
     maDeletedNodes.push_back(std::make_unique<DeletedNodeInfo>(pNode.get(), nPara));
@@ -3116,10 +3113,7 @@ EditPaM ImpEditEngine::ImpFastInsertParagraph( sal_Int32 nPara )
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         if ( nPara )
-        {
-            assert(maEditDoc.GetObject(nPara - 1));
-            InsertUndo(std::make_unique<EditUndoSplitPara>(mpEditEngine, nPara-1, maEditDoc.GetObject(nPara - 1)->Len()));
-        }
+            InsertUndo(std::make_unique<EditUndoSplitPara>(mpEditEngine, nPara-1, maEditDoc.GetObject(nPara - 1).Len()));
         else
             InsertUndo(std::make_unique<EditUndoSplitPara>(mpEditEngine, 0, 0));
     }
@@ -3181,9 +3175,8 @@ bool ImpEditEngine::UpdateFields()
     for ( sal_Int32 nPara = 0; nPara < nParas; nPara++ )
     {
         bool bChangesInPara = false;
-        ContentNode* pNode = GetEditDoc().GetObject( nPara );
-        assert(pNode);
-        CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
+        ContentNode& rNode = GetEditDoc().GetObject( nPara );
+        CharAttribList::AttribsType& rAttribs = rNode.GetCharAttribs().GetAttribs();
         for (std::unique_ptr<EditCharAttrib> & rAttrib : rAttribs)
         {
             EditCharAttrib& rAttr = *rAttrib;
@@ -3954,12 +3947,9 @@ sal_Int32 ImpEditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex
 {
     if (!IsFormatted())
         FormatDoc();
-    const ContentNode* pNode = GetEditDoc().GetObject( nPara );
-    OSL_ENSURE( pNode, "GetLineNumberAtIndex: invalid paragraph index" );
-    if (!pNode)
-        return -1;
+    const ContentNode& rNode = GetEditDoc().GetObject( nPara );
     // we explicitly allow for the index to point at the character right behind the text
-    const bool bValidIndex = /*0 <= nIndex &&*/ nIndex <= pNode->Len();
+    const bool bValidIndex = /*0 <= nIndex &&*/ nIndex <= rNode.Len();
     OSL_ENSURE( bValidIndex, "GetLineNumberAtIndex: invalid index" );
     const ParaPortion* pPPortion = maParaPortionList.SafeGetObject(nPara);
     if (!pPPortion)
@@ -3970,7 +3960,7 @@ sal_Int32 ImpEditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex
     const EditLineList& rLineList = pPPortion->GetLines();
     const sal_Int32 nLineCount = rLineList.Count();
     sal_Int32 nLineNo = -1;
-    if (nIndex == pNode->Len())
+    if (nIndex == rNode.Len())
         nLineNo = nLineCount > 0 ? nLineCount - 1 : 0;
     else if (bValidIndex)   // nIndex < pNode->Len()
     {
@@ -4290,11 +4280,11 @@ EditSelection ImpEditEngine::ConvertSelection(
     EditSelection aNewSelection;
 
     // Start...
-    ContentNode* pNode = nStartPara >= maEditDoc.Count() ? nullptr : maEditDoc.GetObject( nStartPara );
+    ContentNode* pNode = nStartPara >= maEditDoc.Count() ? nullptr : &maEditDoc.GetObject( nStartPara );
     sal_Int32 nIndex = nStartPos;
     if ( !pNode )
     {
-        pNode = maEditDoc.GetObject(maEditDoc.Count() - 1);
+        pNode = &maEditDoc.GetObject(maEditDoc.Count() - 1);
         nIndex = pNode->Len();
     }
     else if ( nIndex > pNode->Len() )
@@ -4304,11 +4294,11 @@ EditSelection ImpEditEngine::ConvertSelection(
     aNewSelection.Min().SetIndex( nIndex );
 
     // End...
-    pNode = nEndPara >= maEditDoc.Count() ? nullptr : maEditDoc.GetObject( nEndPara );
+    pNode = nEndPara >= maEditDoc.Count() ? nullptr : &maEditDoc.GetObject( nEndPara );
     nIndex = nEndPos;
     if ( !pNode )
     {
-        pNode = maEditDoc.GetObject(maEditDoc.Count() - 1);
+        pNode = &maEditDoc.GetObject(maEditDoc.Count() - 1);
         nIndex = pNode->Len();
     }
     else if ( nIndex > pNode->Len() )

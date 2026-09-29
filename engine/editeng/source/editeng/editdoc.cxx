@@ -579,7 +579,7 @@ ParaPortionList::DbgCheck(ParaPortionList const& rParas, EditDoc const& rDoc)
     {
         assert(rParas.SafeGetObject(i) != nullptr);
         assert(rParas.SafeGetObject(i)->GetNode() != nullptr);
-        assert(rParas.SafeGetObject(i)->GetNode() == rDoc.GetObject(i));
+        assert(rParas.SafeGetObject(i)->GetNode() == &rDoc.GetObject(i));
     }
 }
 #endif
@@ -1253,7 +1253,7 @@ void YrsInsertFeature(IYrsTransactionSupplier *const pYrsSupplier, OString const
     uint32_t i{0};
     for (auto paras{index}; paras != 0; --paras)
     {
-        i += rDoc.GetObject(paras-1)->Len() + 1;
+        i += rDoc.GetObject(paras-1).Len() + 1;
     }
     i += pAttr->GetStart();
     char const feature[]{ CH_FEATURE, '\0' };
@@ -1310,9 +1310,9 @@ void YrsAddPara(IYrsTransactionSupplier *const pYrsSupplier,
     // UTF-16 index should be equal to EditDoc one
     for (auto paras{index}; paras != 0; --paras)
     {
-        i += rDoc.GetObject(paras-1)->Len() + 1;
+        i += rDoc.GetObject(paras-1).Len() + 1;
     }
-    ContentAttribs const& rParaAttribs{rDoc.GetObject(index)->GetContentAttribs()};
+    ContentAttribs const& rParaAttribs{rDoc.GetObject(index).GetContentAttribs()};
     auto const pStyle{rParaAttribs.GetStyleSheet()};
     if (pStyle)
     {
@@ -1346,10 +1346,10 @@ void YrsRemovePara(IYrsTransactionSupplier *const pYrsSupplier,
     {
         for (auto paras{index}; paras != 0; --paras)
         {
-            i += rDoc.GetObject(paras-1)->Len() + 1;
+            i += rDoc.GetObject(paras-1).Len() + 1;
         }
     }
-    uint32_t const len(rDoc.GetObject(index)->Len() + 1);
+    uint32_t const len(rDoc.GetObject(index).Len() + 1);
     ytext_remove_range(yw.pText, yw.pTxn, i, len);
 }
 
@@ -1377,10 +1377,10 @@ void YrsInsertParaBreak(IYrsTransactionSupplier *const pYrsSupplier, OString con
     uint32_t i{0};
     for (auto paras{index}; paras != 0; --paras)
     {
-        i += rDoc.GetObject(paras-1)->Len() + 1;
+        i += rDoc.GetObject(paras-1).Len() + 1;
     }
     i += content;
-    ContentAttribs const& rParaAttribs{rDoc.GetObject(index)->GetContentAttribs()};
+    ContentAttribs const& rParaAttribs{rDoc.GetObject(index).GetContentAttribs()};
     OString const styleName{OUStringToOString(rParaAttribs.GetStyleSheet()->GetName(), RTL_TEXTENCODING_UTF8)};
     YInput const style{yinput_string(styleName.getStr())};
     YInput attrArray[]{ style };
@@ -1404,7 +1404,7 @@ void YrsInsertText(IYrsTransactionSupplier *const pYrsSupplier, OString const& r
     uint32_t i{0};
     for (auto paras{index}; paras != 0; --paras)
     {
-        i += rDoc.GetObject(paras-1)->Len() + 1;
+        i += rDoc.GetObject(paras-1).Len() + 1;
     }
     i += content;
     OString const text{::rtl::OUStringToOString(rText, RTL_TEXTENCODING_UTF8)};
@@ -1422,7 +1422,7 @@ void YrsConnectPara(IYrsTransactionSupplier *const pYrsSupplier, OString const& 
     uint32_t i{0};
     for (auto paras{index}; paras != 0; --paras)
     {
-        i += rDoc.GetObject(paras-1)->Len() + 1;
+        i += rDoc.GetObject(paras-1).Len() + 1;
     }
     i += pos;
     ytext_remove_range(yw.pText, yw.pTxn, i, 1);
@@ -1439,7 +1439,7 @@ void YrsRemoveChars(IYrsTransactionSupplier *const pYrsSupplier, OString const& 
     uint32_t i{0};
     for (auto paras{index}; paras != 0; --paras)
     {
-        i += rDoc.GetObject(paras-1)->Len() + 1;
+        i += rDoc.GetObject(paras-1).Len() + 1;
     }
     i += content;
     ytext_remove_range(yw.pText, yw.pTxn, i, length);
@@ -1456,9 +1456,9 @@ void YrsSetStyle(IYrsTransactionSupplier *const pYrsSupplier, OString const& rCo
     uint32_t i{0};
     for (auto paras{index}; paras != 0; --paras)
     {
-        i += rDoc.GetObject(paras-1)->Len() + 1;
+        i += rDoc.GetObject(paras-1).Len() + 1;
     }
-    i += rDoc.GetObject(index)->Len();
+    i += rDoc.GetObject(index).Len();
     OString const styleName{OUStringToOString(rStyle, RTL_TEXTENCODING_UTF8)};
     YInput const style{yinput_string(styleName.getStr())};
     YInput attrArray[]{ style };
@@ -1478,9 +1478,9 @@ void YrsSetParaAttr(IYrsTransactionSupplier *const pYrsSupplier, OString const& 
     uint32_t i{0};
     for (auto paras{index}; paras != 0; --paras)
     {
-        i += rDoc.GetObject(paras-1)->Len() + 1;
+        i += rDoc.GetObject(paras-1).Len() + 1;
     }
-    i += rDoc.GetObject(index)->Len();
+    i += rDoc.GetObject(index).Len();
     YrsInsertAttribImplImpl(yw, rItem, i, 1);
 }
 
@@ -1602,7 +1602,7 @@ void YrsRemoveAttrib(IYrsTransactionSupplier *const pYrsSupplier, OString const&
     uint32_t i{0};
     for (auto paras{index}; paras != 0; --paras)
     {
-        i += rDoc.GetObject(paras-1)->Len() + 1;
+        i += rDoc.GetObject(paras-1).Len() + 1;
     }
     YInput const attr{yinput_null()};
     char const*const attrName{YrsWhichToAttrName(nWhich)};
@@ -1620,7 +1620,7 @@ void YrsInsertAttrib(IYrsTransactionSupplier *const pYrsSupplier, OString const&
     uint32_t i{0};
     for (auto paras{index}; paras != 0; --paras)
     {
-        i += rDoc.GetObject(paras-1)->Len() + 1;
+        i += rDoc.GetObject(paras-1).Len() + 1;
     }
     YrsInsertAttribImpl(yw, i, pAttr);
 }
@@ -2764,7 +2764,7 @@ bool EditDoc::YrsWriteEECursor(YTransaction *const pTxn, Branch const& rArray,
     uint32_t start{0};
     for (auto paras{GetPos(sel.Min().GetNode())}; paras != 0; --paras)
     {
-        start += GetObject(paras-1)->Len() + 1;
+        start += GetObject(paras-1).Len() + 1;
     }
     uint32_t end{start};
     start += sel.Min().GetIndex();
@@ -2774,7 +2774,7 @@ bool EditDoc::YrsWriteEECursor(YTransaction *const pTxn, Branch const& rArray,
         for (auto paras{GetPos(sel.Max().GetNode()) - nStartNode};
             paras != 0; --paras)
         {
-            end += GetObject(nStartNode + paras-1)->Len() + 1;
+            end += GetObject(nStartNode + paras-1).Len() + 1;
         }
         end += sel.Max().GetIndex();
     }
@@ -3346,14 +3346,14 @@ sal_Int32 EditDoc::GetPos(const ContentNode* pContentNode) const
     return FastGetPos(maContents, pContentNode, mnLastCache);
 }
 
-const ContentNode* EditDoc::GetObject(sal_Int32 nPos) const
+const ContentNode& EditDoc::GetObject(sal_Int32 nPos) const
 {
-    return maContents[nPos].get();
+    return *maContents[nPos];
 }
 
-ContentNode* EditDoc::GetObject(sal_Int32 nPos)
+ContentNode& EditDoc::GetObject(sal_Int32 nPos)
 {
-    return maContents[nPos].get();
+    return *maContents[nPos];
 }
 
 void EditDoc::Insert(sal_Int32 nPos, std::unique_ptr<ContentNode> pNode)
@@ -3425,7 +3425,7 @@ OUString EditDoc::GetText( LineEnd eEnd ) const
         {
             aBuffer.append(aSep);
         }
-        aBuffer.append(GetParaAsString( GetObject(nNode) ));
+        aBuffer.append(GetParaAsString( &GetObject(nNode) ));
     }
 
     return aBuffer.makeStringAndClear();
@@ -3433,7 +3433,7 @@ OUString EditDoc::GetText( LineEnd eEnd ) const
 
 OUString EditDoc::GetParaAsString( sal_Int32 nNode ) const
 {
-    return GetParaAsString( GetObject( nNode ) );
+    return GetParaAsString( &GetObject( nNode ) );
 }
 
 OUString EditDoc::GetParaAsString(
@@ -3444,14 +3444,14 @@ OUString EditDoc::GetParaAsString(
 
 EditPaM EditDoc::GetStartPaM() const
 {
-    ContentNode* p = const_cast<ContentNode*>(GetObject(0));
+    ContentNode& p = const_cast<ContentNode&>(GetObject(0));
     return EditPaM(p, 0);
 }
 
 EditPaM EditDoc::GetEndPaM() const
 {
-    ContentNode* pLastNode = const_cast<ContentNode*>(GetObject(Count()-1));
-    return EditPaM( pLastNode, pLastNode->Len() );
+    ContentNode& rLastNode = const_cast<ContentNode&>(GetObject(Count()-1));
+    return EditPaM( rLastNode, rLastNode.Len() );
 }
 
 sal_Int32 EditDoc::GetTextLen() const
@@ -3509,10 +3509,10 @@ void EditDoc::SetModified( bool b )
 EditPaM EditDoc::RemoveText()
 {
     // Keep the old ItemSet, to keep the chart Font.
-    ContentNode* pPrevFirstNode = GetObject(0);
-    SfxStyleSheet* pPrevStyle = pPrevFirstNode->GetStyleSheet();
-    SfxItemSet aPrevSet( pPrevFirstNode->GetContentAttribs().GetItems() );
-    vcl::Font aPrevFont( pPrevFirstNode->GetCharAttribs().GetDefFont() );
+    ContentNode& rPrevFirstNode = GetObject(0);
+    SfxStyleSheet* pPrevStyle = rPrevFirstNode.GetStyleSheet();
+    SfxItemSet aPrevSet( rPrevFirstNode.GetContentAttribs().GetItems() );
+    vcl::Font aPrevFont( rPrevFirstNode.GetCharAttribs().GetDefFont() );
 
     maContents.clear();
 

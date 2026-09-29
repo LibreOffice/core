@@ -207,8 +207,8 @@ public:
     static void     FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nEndPos, SfxItemSet& rCurSet );
 
     sal_Int32 GetPos(const ContentNode* pNode) const;
-    const ContentNode* GetObject(sal_Int32 nPos) const;
-    ContentNode* GetObject(sal_Int32 nPos);
+    const ContentNode& GetObject(sal_Int32 nPos) const;
+    ContentNode& GetObject(sal_Int32 nPos);
     sal_Int32 Count() const;
     void Insert(sal_Int32 nPos, std::unique_ptr<ContentNode> p);
     /// deletes

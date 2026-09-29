@@ -117,10 +117,9 @@ SvParserState EditRTFParser::CallParser()
     {
         ContentNode* pCurNode = aCurSel.Max().GetNode();
         sal_Int32 nPara = mpEditEngine->GetEditDoc().GetPos(pCurNode);
-        ContentNode* pPrevNode = mpEditEngine->GetEditDoc().GetObject(nPara-1);
-        assert(pPrevNode && "Invalid RTF-Document?!");
+        ContentNode& rPrevNode = mpEditEngine->GetEditDoc().GetObject(nPara-1);
         EditSelection aSel;
-        aSel.Min() = EditPaM( pPrevNode, pPrevNode->Len() );
+        aSel.Min() = EditPaM( rPrevNode, rPrevNode.Len() );
         aSel.Max() = EditPaM( pCurNode, 0 );
         aCurSel.Max() = mpEditEngine->DeleteSelection(aSel);
     }
@@ -163,12 +162,11 @@ void EditRTFParser::AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& r
     sal_Int32 nEndPara = mpEditEngine->GetEditDoc().GetPos( rEnd.GetNode() );
     for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
-        ContentNode* pNode = mpEditEngine->GetEditDoc().GetObject( nPara );
-        assert(pNode && "AddRTFDefaultValues - No paragraph?!");
-        if ( !pNode->GetContentAttribs().HasItem( EE_CHAR_FONTINFO ) )
-            pNode->GetContentAttribs().GetItems().Put( aFontItem );
-        if ( !pNode->GetContentAttribs().HasItem( EE_CHAR_FONTHEIGHT ) )
-            pNode->GetContentAttribs().GetItems().Put( aFontHeightItem );
+        ContentNode& rNode = mpEditEngine->GetEditDoc().GetObject( nPara );
+        if ( !rNode.GetContentAttribs().HasItem( EE_CHAR_FONTINFO ) )
+            rNode.GetContentAttribs().GetItems().Put( aFontItem );
+        if ( !rNode.GetContentAttribs().HasItem( EE_CHAR_FONTHEIGHT ) )
+            rNode.GetContentAttribs().GetItems().Put( aFontHeightItem );
     }
 }
 
@@ -285,10 +283,9 @@ void EditRTFParser::SetEndPrevPara( std::optional<EditNodeIdx>& rpNodePos,
     DBG_ASSERT( nCurPara != 0, "Paragraph equal to 0: SetEnfPrevPara" );
     if ( nCurPara )
         nCurPara--;
-    ContentNode* pPrevNode = mpEditEngine->GetEditDoc().GetObject( nCurPara );
-    assert(pPrevNode && "pPrevNode = 0!");
-    rpNodePos = EditNodeIdx(mpEditEngine, pPrevNode);
-    rCntPos = pPrevNode->Len();
+    ContentNode& rPrevNode = mpEditEngine->GetEditDoc().GetObject( nCurPara );
+    rpNodePos = EditNodeIdx(mpEditEngine, &rPrevNode);
+    rCntPos = rPrevNode.Len();
 }
 
 bool EditRTFParser::IsEndPara( EditNodeIdx* pNd, sal_Int32 nCnt ) const
@@ -392,7 +389,6 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     // All Complete paragraphs are paragraph attributes ...
     for ( sal_Int32 z = nStartNode+1; z < nEndNode; z++ )
     {
-        DBG_ASSERT(mpEditEngine->GetEditDoc().GetObject(z), "Node does not exist yet(RTF)");
         mpEditEngine->SetParaAttribsOnly(z, rSet.GetAttrSet());
     }
 
@@ -433,8 +429,8 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     {
         for ( sal_Int32 n = nStartNode; n <= nEndNode; n++ )
         {
-            ContentNode* pNode = mpEditEngine->GetEditDoc().GetObject( n );
-            pNode->GetContentAttribs().GetItems().Put( SfxInt16Item( EE_PARA_OUTLLEVEL, nOutlLevel ) );
+            ContentNode& rNode = mpEditEngine->GetEditDoc().GetObject( n );
+            rNode.GetContentAttribs().GetItems().Put( SfxInt16Item( EE_PARA_OUTLLEVEL, nOutlLevel ) );
         }
     }
 }

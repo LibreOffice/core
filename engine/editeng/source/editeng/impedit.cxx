@@ -1918,8 +1918,8 @@ OUString ImpEditView::SpellIgnoreWord()
             sal_Int32 nNodes = rDoc.Count();
             for ( sal_Int32 n = 0; n < nNodes; n++ )
             {
-                ContentNode* pNode = rDoc.GetObject( n );
-                pNode->GetWrongList()->MarkWrongsInvalid();
+                ContentNode& rNode = rDoc.GetObject( n );
+                rNode.GetWrongList()->MarkWrongsInvalid();
             }
             getImpEditEngine().DoOnlineSpelling( aPaM.GetNode() );
             getImpEditEngine().StartOnlineSpellTimer();
@@ -2402,8 +2402,8 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
         {
             mpDragAndDropInfo.reset(new DragAndDropInfo);
             mpDragAndDropInfo->pField = pField;
-            ContentNode* pNode = getEditEngine().GetEditDoc().GetObject( nPara );
-            aCopySel = EditSelection( EditPaM( pNode, nPos ), EditPaM( pNode, nPos+1 ) );
+            ContentNode& rNode = getEditEngine().GetEditDoc().GetObject( nPara );
+            aCopySel = EditSelection( EditPaM( rNode, nPos ), EditPaM( rNode, nPos+1 ) );
             SetEditSelection(aCopySel);
             DrawSelectionXOR();
             bool bGotoCursor = DoAutoScroll();
@@ -2421,7 +2421,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
                 const SfxInt16Item& rL = getEditEngine().GetParaAttrib( n, EE_PARA_OUTLLEVEL );
                 if ( rL.GetValue() > rLevel.GetValue() )
                 {
-                    aEndPaM.SetNode( getEditEngine().GetEditDoc().GetObject( n ) );
+                    aEndPaM.SetNode( &getEditEngine().GetEditDoc().GetObject( n ) );
                 }
                 else
                 {

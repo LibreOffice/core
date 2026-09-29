@@ -628,9 +628,9 @@ OUString const* EdtAutoCorrDoc::GetPrevPara(bool const)
     for ( sal_Int32 n = nPos; n; )
     {
         n--;
-        ContentNode* pNode = rEditDoc.GetObject(n);
-        if ( pNode->Len() )
-            return & pNode->GetString();
+        ContentNode& rNode = rEditDoc.GetObject(n);
+        if ( rNode.Len() )
+            return & rNode.GetString();
     }
     return nullptr;
 

@@ -40,14 +40,14 @@ void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
 
 const SfxStyleSheet* ImpEditEngine::GetStyleSheet( sal_Int32 nPara ) const
 {
-    const ContentNode* pNode = maEditDoc.GetObject( nPara );
-    return pNode ? pNode->GetContentAttribs().GetStyleSheet() : nullptr;
+    const ContentNode& rNode = maEditDoc.GetObject( nPara );
+    return rNode.GetContentAttribs().GetStyleSheet();
 }
 
 SfxStyleSheet* ImpEditEngine::GetStyleSheet( sal_Int32 nPara )
 {
-    ContentNode* pNode = maEditDoc.GetObject( nPara );
-    return pNode ? pNode->GetContentAttribs().GetStyleSheet() : nullptr;
+    ContentNode& rNode = maEditDoc.GetObject( nPara );
+    return rNode.GetContentAttribs().GetStyleSheet();
 }
 
 void ImpEditEngine::SetStyleSheet( EditSelection aSel, SfxStyleSheet* pStyle )
@@ -68,8 +68,8 @@ void ImpEditEngine::SetStyleSheet( EditSelection aSel, SfxStyleSheet* pStyle )
 void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
 {
     DBG_ASSERT( GetStyleSheetPool() || !pStyle, "SetStyleSheet: No StyleSheetPool registered!" );
-    ContentNode* pNode = maEditDoc.GetObject( nPara );
-    SfxStyleSheet* pCurStyle = pNode->GetStyleSheet();
+    ContentNode& rNode = maEditDoc.GetObject( nPara );
+    SfxStyleSheet* pCurStyle = rNode.GetStyleSheet();
     if ( pStyle != pCurStyle )
     {
         if ( IsUndoEnabled() && !IsInUndo() && maStatus.DoUndoAttribs() )
@@ -83,23 +83,23 @@ void ImpEditEngine::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
                 aNewStyleName = pStyle->GetName();
 
             InsertUndo(
-                std::make_unique<EditUndoSetStyleSheet>(mpEditEngine, maEditDoc.GetPos( pNode ),
+                std::make_unique<EditUndoSetStyleSheet>(mpEditEngine, maEditDoc.GetPos( &rNode ),
                         aPrevStyleName, pCurStyle ? pCurStyle->GetFamily() : SfxStyleFamily::Para,
                         aNewStyleName, pStyle ? pStyle->GetFamily() : SfxStyleFamily::Para,
-                        pNode->GetContentAttribs().GetItems() ) );
+                        rNode.GetContentAttribs().GetItems() ) );
         }
         if ( pCurStyle )
             EndListening( *pCurStyle );
-        pNode->SetStyleSheet( pStyle, maStatus.UseCharAttribs() );
+        rNode.SetStyleSheet( pStyle, maStatus.UseCharAttribs() );
 #if ENABLE_YRS
         maEditDoc.YrsSetStyle(nPara, pStyle ? pStyle->GetName() : OUString());
 #endif
         if ( pStyle )
             StartListening(*pStyle, DuplicateHandling::Allow);
 
-        if (pNode->GetWrongList())
-            pNode->GetWrongList()->ResetInvalidRange(0, pNode->Len());
-        ParaAttribsChanged( pNode );
+        if (rNode.GetWrongList())
+            rNode.GetWrongList()->ResetInvalidRange(0, rNode.Len());
+        ParaAttribsChanged( &rNode );
     }
     if (IsUpdateLayout())
         FormatAndLayout();
@@ -113,18 +113,18 @@ void ImpEditEngine::UpdateParagraphsWithStyleSheet( SfxStyleSheet* pStyle )
     bool bUsed = false;
     for ( sal_Int32 nNode = 0; nNode < maEditDoc.Count(); nNode++ )
     {
-        ContentNode* pNode = maEditDoc.GetObject( nNode );
-        if ( pNode->GetStyleSheet() == pStyle )
+        ContentNode& rNode = maEditDoc.GetObject( nNode );
+        if ( rNode.GetStyleSheet() == pStyle )
         {
             bUsed = true;
             if (maStatus.UseCharAttribs())
-                pNode->SetStyleSheet( pStyle, aFontFromStyle );
+                rNode.SetStyleSheet( pStyle, aFontFromStyle );
             else
-                pNode->SetStyleSheet( pStyle, false );
+                rNode.SetStyleSheet( pStyle, false );
 
-            if (pNode->GetWrongList())
-                pNode->GetWrongList()->ResetInvalidRange(0, pNode->Len());
-            ParaAttribsChanged( pNode );
+            if (rNode.GetWrongList())
+                rNode.GetWrongList()->ResetInvalidRange(0, rNode.Len());
+            ParaAttribsChanged( &rNode );
         }
     }
     if ( bUsed )
@@ -139,11 +139,11 @@ void ImpEditEngine::RemoveStyleFromParagraphs( SfxStyleSheet const * pStyle )
 {
     for ( sal_Int32 nNode = 0; nNode < maEditDoc.Count(); nNode++ )
     {
-        ContentNode* pNode = maEditDoc.GetObject(nNode);
-        if ( pNode->GetStyleSheet() == pStyle )
+        ContentNode& rNode = maEditDoc.GetObject(nNode);
+        if ( rNode.GetStyleSheet() == pStyle )
         {
-            pNode->SetStyleSheet( nullptr );
-            ParaAttribsChanged( pNode );
+            rNode.SetStyleSheet( nullptr );
+            ParaAttribsChanged( &rNode );
         }
     }
     if (IsUpdateLayout())
@@ -212,14 +212,13 @@ std::unique_ptr<EditUndoSetAttribs> ImpEditEngine::CreateAttribUndo( EditSelecti
 
     for ( sal_Int32 nPara = nStartNode; nPara <= nEndNode; nPara++ )
     {
-        ContentNode* pNode = maEditDoc.GetObject( nPara );
-        DBG_ASSERT( maEditDoc.GetObject( nPara ), "Node not found: CreateAttribUndo" );
-        EditUndoContentAttribsInfo* pInf = new EditUndoContentAttribsInfo( pNode->GetContentAttribs().GetItems() );
+        ContentNode& rNode = maEditDoc.GetObject( nPara );
+        EditUndoContentAttribsInfo* pInf = new EditUndoContentAttribsInfo( rNode.GetContentAttribs().GetItems() );
         pUndo->AppendContentInfo(pInf);
 
-        for ( sal_Int32 nAttr = 0; nAttr < pNode->GetCharAttribs().Count(); nAttr++ )
+        for ( sal_Int32 nAttr = 0; nAttr < rNode.GetCharAttribs().Count(); nAttr++ )
         {
-            const EditCharAttrib& rAttr = *pNode->GetCharAttribs().GetAttribs()[nAttr];
+            const EditCharAttrib& rAttr = *rNode.GetCharAttribs().GetAttribs()[nAttr];
             if (rAttr.GetLen())
             {
                 EditCharAttrib* pNew = MakeCharAttrib(*pPool, *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd());
@@ -332,11 +331,10 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
     // iterate over the paragraphs ...
     for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++ )
     {
-        ContentNode* pNode = maEditDoc.GetObject( nNode );
-        assert( pNode && "Node not found: GetAttrib" );
+        ContentNode& rNode = maEditDoc.GetObject( nNode );
 
         const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
-        const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : pNode->Len(); // Can also be == nStart!
+        const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : rNode.Len(); // Can also be == nStart!
 
         // Problem: Templates...
         // =>  Other way:
@@ -344,8 +342,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
         // 2) Examine Style and paragraph attributes only when OFF...
 
         // First the very hard formatting...
-        if (pNode)
-            EditDoc::FindAttribs( pNode, nStartPos, nEndPos, aCurSet );
+        EditDoc::FindAttribs( &rNode, nStartPos, nEndPos, aCurSet );
 
         if( nOnlyHardAttrib != EditEngineAttribs::OnlyHard )
         {
@@ -357,10 +354,10 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
                     const SfxPoolItem* pItem = nullptr;
                     if ( nOnlyHardAttrib == EditEngineAttribs::All )
                     {
-                        const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItem( nWhich );
+                        const SfxPoolItem& rItem = rNode.GetContentAttribs().GetItem( nWhich );
                         aCurSet.Put( rItem );
                     }
-                    else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich, true, &pItem ) == SfxItemState::SET )
+                    else if ( rNode.GetContentAttribs().GetItems().GetItemState( nWhich, true, &pItem ) == SfxItemState::SET )
                     {
                         aCurSet.Put( *pItem );
                     }
@@ -371,9 +368,9 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
                     const SfxPoolItem* pTmpItem = nullptr;
                     if ( nOnlyHardAttrib == EditEngineAttribs::All )
                     {
-                        pItem = &pNode->GetContentAttribs().GetItem( nWhich );
+                        pItem = &rNode.GetContentAttribs().GetItem( nWhich );
                     }
-                    else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich, true, &pTmpItem ) == SfxItemState::SET )
+                    else if ( rNode.GetContentAttribs().GetItems().GetItemState( nWhich, true, &pTmpItem ) == SfxItemState::SET )
                     {
                         pItem = pTmpItem;
                     }
@@ -415,82 +412,78 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int
     // If this works, change GetAttribs( EditSelection ) to use this for each paragraph and merge the results!
 
 
-    ContentNode* pNode = const_cast<ContentNode*>(maEditDoc.GetObject(nPara));
-    DBG_ASSERT( pNode, "GetAttribs - unknown paragraph!" );
+    ContentNode& rNode = const_cast<ContentNode&>(maEditDoc.GetObject(nPara));
     DBG_ASSERT( nStart <= nEnd, "getAttribs: Start > End not supported!" );
 
     SfxItemSet aAttribs(GetEmptyItemSet());
 
-    if ( pNode )
+    if ( nEnd > rNode.Len() )
+        nEnd = rNode.Len();
+
+    if ( nStart > nEnd )
+        nStart = nEnd;
+
+    // StyleSheet / Parattribs...
+
+    if ( rNode.GetStyleSheet() && ( nFlags & GetAttribsFlags::STYLESHEET ) )
+        aAttribs.Set(rNode.GetStyleSheet()->GetItemSet());
+
+    if ( nFlags & GetAttribsFlags::PARAATTRIBS )
+        aAttribs.Put( rNode.GetContentAttribs().GetItems() );
+
+    // CharAttribs...
+
+    if ( nFlags & GetAttribsFlags::CHARATTRIBS )
     {
-        if ( nEnd > pNode->Len() )
-            nEnd = pNode->Len();
+        // Make testing easier...
+        rNode.GetCharAttribs().OptimizeRanges();
 
-        if ( nStart > nEnd )
-            nStart = nEnd;
-
-        // StyleSheet / Parattribs...
-
-        if ( pNode->GetStyleSheet() && ( nFlags & GetAttribsFlags::STYLESHEET ) )
-            aAttribs.Set(pNode->GetStyleSheet()->GetItemSet());
-
-        if ( nFlags & GetAttribsFlags::PARAATTRIBS )
-            aAttribs.Put( pNode->GetContentAttribs().GetItems() );
-
-        // CharAttribs...
-
-        if ( nFlags & GetAttribsFlags::CHARATTRIBS )
+        const CharAttribList::AttribsType& rAttrs = rNode.GetCharAttribs().GetAttribs();
+        for (const auto & nAttr : rAttrs)
         {
-            // Make testing easier...
-            pNode->GetCharAttribs().OptimizeRanges();
+            const EditCharAttrib& rAttr = *nAttr;
 
-            const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
-            for (const auto & nAttr : rAttrs)
+            if ( nStart == nEnd )
             {
-                const EditCharAttrib& rAttr = *nAttr;
-
-                if ( nStart == nEnd )
+                sal_Int32 nCursorPos = nStart;
+                if ( ( rAttr.GetStart() <= nCursorPos ) && ( rAttr.GetEnd() >= nCursorPos ) )
                 {
-                    sal_Int32 nCursorPos = nStart;
-                    if ( ( rAttr.GetStart() <= nCursorPos ) && ( rAttr.GetEnd() >= nCursorPos ) )
+                    // To be used the attribute has to start BEFORE the position, or it must be a
+                    // new empty attr AT the position, or we are on position 0.
+                    if ( ( rAttr.GetStart() < nCursorPos ) || rAttr.IsEmpty() || !nCursorPos )
                     {
-                        // To be used the attribute has to start BEFORE the position, or it must be a
-                        // new empty attr AT the position, or we are on position 0.
-                        if ( ( rAttr.GetStart() < nCursorPos ) || rAttr.IsEmpty() || !nCursorPos )
+                        // maybe this attrib ends here and a new attrib with 0 Len may follow and be valid here,
+                        // but that s no problem, the empty item will come later and win.
+                        aAttribs.Put( *rAttr.GetItem() );
+                    }
+                }
+            }
+            else
+            {
+                // Check every attribute covering the area, partial or full.
+                if ( ( rAttr.GetStart() < nEnd ) && ( rAttr.GetEnd() > nStart ) )
+                {
+                    if ( ( rAttr.GetStart() <= nStart ) && ( rAttr.GetEnd() >= nEnd ) )
+                    {
+                        // full coverage
+                        aAttribs.Put( *rAttr.GetItem() );
+                    }
+                    else
+                    {
+                        // OptimizeRanges() assures that not the same attr can follow for full coverage
+                        // only partial, check with current, when using para/style, otherwise invalid.
+                        if ( !( nFlags & (GetAttribsFlags::PARAATTRIBS|GetAttribsFlags::STYLESHEET) ) ||
+                            ( *rAttr.GetItem() != aAttribs.Get( rAttr.Which() ) ) )
                         {
-                            // maybe this attrib ends here and a new attrib with 0 Len may follow and be valid here,
-                            // but that s no problem, the empty item will come later and win.
-                            aAttribs.Put( *rAttr.GetItem() );
+                            aAttribs.InvalidateItem( rAttr.Which() );
                         }
                     }
                 }
-                else
-                {
-                    // Check every attribute covering the area, partial or full.
-                    if ( ( rAttr.GetStart() < nEnd ) && ( rAttr.GetEnd() > nStart ) )
-                    {
-                        if ( ( rAttr.GetStart() <= nStart ) && ( rAttr.GetEnd() >= nEnd ) )
-                        {
-                            // full coverage
-                            aAttribs.Put( *rAttr.GetItem() );
-                        }
-                        else
-                        {
-                            // OptimizeRanges() assures that not the same attr can follow for full coverage
-                            // only partial, check with current, when using para/style, otherwise invalid.
-                            if ( !( nFlags & (GetAttribsFlags::PARAATTRIBS|GetAttribsFlags::STYLESHEET) ) ||
-                                ( *rAttr.GetItem() != aAttribs.Get( rAttr.Which() ) ) )
-                            {
-                                aAttribs.InvalidateItem( rAttr.Which() );
-                            }
-                        }
-                    }
-                }
+            }
 
-                if ( rAttr.GetStart() > nEnd )
-                {
-                    break;
-                }
+            if ( rAttr.GetStart() > nEnd )
+            {
+                break;
             }
         }
     }
@@ -533,17 +526,16 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
         bool bParaAttribFound = false;
         bool bCharAttribFound = false;
 
-        DBG_ASSERT( maEditDoc.GetObject( nNode ), "Node not found: SetAttribs" );
         DBG_ASSERT(GetParaPortions().exists(nNode), "Portion not found: SetAttribs");
 
         if (!GetParaPortions().exists(nNode))
             continue;
 
-        ContentNode* pNode = maEditDoc.GetObject(nNode);
+        ContentNode& rNode = maEditDoc.GetObject(nNode);
         ParaPortion& rPortion = GetParaPortions().getRef(nNode);
 
         const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
-        const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : pNode->Len(); // can also be == nStart!
+        const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : rNode.Len(); // can also be == nStart!
 
         // Iterate over the Items...
         for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
@@ -553,7 +545,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
                 const SfxPoolItem& rItem = rSet.Get( nWhich );
                 if ( nWhich <= EE_PARA_END )
                 {
-                    pNode->GetContentAttribs().GetItems().Put( rItem );
+                    rNode.GetContentAttribs().GetItems().Put( rItem );
                     bParaAttribFound = true;
 #if ENABLE_YRS
                     maEditDoc.YrsSetParaAttr(nNode, rItem);
@@ -561,11 +553,11 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
                 }
                 else
                 {
-                    maEditDoc.InsertAttrib( pNode, nStartPos, nEndPos, rItem );
+                    maEditDoc.InsertAttrib( &rNode, nStartPos, nEndPos, rItem );
                     bCharAttribFound = true;
                     if ( nSpecial == SetAttribsMode::Edge )
                     {
-                        CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
+                        CharAttribList::AttribsType& rAttribs = rNode.GetCharAttribs().GetAttribs();
                         for (std::unique_ptr<EditCharAttrib> & rAttrib : rAttribs)
                         {
                             EditCharAttrib& rAttr = *rAttrib;
@@ -590,11 +582,11 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
         else if ( bCharAttribFound )
         {
             mbFormatted = false;
-            if ( !pNode->Len() || ( nStartPos != nEndPos  ) )
+            if ( !rNode.Len() || ( nStartPos != nEndPos  ) )
             {
                 rPortion.MarkSelectionInvalid(nStartPos);
                 if ( bCheckLanguage )
-                    pNode->GetWrongList()->SetInvalidRange(nStartPos, nEndPos);
+                    rNode.GetWrongList()->SetInvalidRange(nStartPos, nEndPos);
             }
         }
     }
@@ -635,9 +627,8 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, EERemoveParaAttribsMo
     // iterate over the paragraphs ...
     for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++ )
     {
-        ContentNode* pNode = maEditDoc.GetObject( nNode );
+        ContentNode& rNode = maEditDoc.GetObject( nNode );
 
-        DBG_ASSERT( maEditDoc.GetObject( nNode ), "Node not found: SetAttribs" );
         DBG_ASSERT(GetParaPortions().exists(nNode), "Portion not found: SetAttribs");
 
         if (!GetParaPortions().exists(nNode))
@@ -646,10 +637,10 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, EERemoveParaAttribsMo
         ParaPortion& rPortion = GetParaPortions().getRef(nNode);
 
         const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
-        const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : pNode->Len(); // can also be == nStart!
+        const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : rNode.Len(); // can also be == nStart!
 
         // Optimize: If whole paragraph, then RemoveCharAttribs (nPara)?
-        bool bChanged = maEditDoc.RemoveAttribs( pNode, nStartPos, nEndPos, nWhich );
+        bool bChanged = maEditDoc.RemoveAttribs( &rNode, nStartPos, nEndPos, nWhich );
         if ( bRemoveParaAttribs )
         {
             SetParaAttribs( nNode, *_pEmptyItemSet );   // Invalidated
@@ -681,24 +672,23 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, EERemoveParaAttribsMo
 
 void ImpEditEngine::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich, bool bRemoveFeatures )
 {
-    ContentNode* pNode = maEditDoc.GetObject( nPara );
+    ContentNode& rNode = maEditDoc.GetObject( nPara );
     ParaPortion* pPortion = GetParaPortions().SafeGetObject( nPara );
 
-    DBG_ASSERT( pNode, "Node not found: RemoveCharAttribs" );
     DBG_ASSERT( pPortion, "Portion not found: RemoveCharAttribs" );
 
-    if ( !pNode || !pPortion )
+    if ( !pPortion )
         return;
 
     size_t nAttr = 0;
-    CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
+    CharAttribList::AttribsType& rAttrs = rNode.GetCharAttribs().GetAttribs();
     EditCharAttrib* pAttr = GetAttrib(rAttrs, nAttr);
     while ( pAttr )
     {
         if ( ( !pAttr->IsFeature() || bRemoveFeatures ) &&
              ( !nWhich || ( pAttr->GetItem()->Which() == nWhich ) ) )
         {
-            pNode->GetCharAttribs().Remove(nAttr);
+            rNode.GetCharAttribs().Remove(nAttr);
         }
         else
         {
@@ -708,7 +698,7 @@ void ImpEditEngine::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich, bool 
     }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-    CharAttribList::DbgCheckAttribs(pNode->GetCharAttribs());
+    CharAttribList::DbgCheckAttribs(rNode.GetCharAttribs());
 #endif
 
     pPortion->MarkSelectionInvalid( 0 );
@@ -716,12 +706,9 @@ void ImpEditEngine::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich, bool 
 
 void ImpEditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
 {
-    ContentNode* pNode = maEditDoc.GetObject( nPara );
+    ContentNode& rNode = maEditDoc.GetObject( nPara );
 
-    if ( !pNode )
-        return;
-
-    if ( pNode->GetContentAttribs().GetItems() == rSet )
+    if ( rNode.GetContentAttribs().GetItems() == rSet )
         return;
 
     if (IsUndoEnabled() && !IsInUndo() && maStatus.DoUndoAttribs())
@@ -730,61 +717,56 @@ void ImpEditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
         {
             SfxItemSet aTmpSet( GetEmptyItemSet() );
             aTmpSet.Put( rSet );
-            InsertUndo(std::make_unique<EditUndoSetParaAttribs>(mpEditEngine, nPara, pNode->GetContentAttribs().GetItems(), aTmpSet));
+            InsertUndo(std::make_unique<EditUndoSetParaAttribs>(mpEditEngine, nPara, rNode.GetContentAttribs().GetItems(), aTmpSet));
         }
         else
         {
-            InsertUndo(std::make_unique<EditUndoSetParaAttribs>(mpEditEngine, nPara, pNode->GetContentAttribs().GetItems(), rSet));
+            InsertUndo(std::make_unique<EditUndoSetParaAttribs>(mpEditEngine, nPara, rNode.GetContentAttribs().GetItems(), rSet));
         }
     }
 
-    pNode->GetContentAttribs().GetItems().Set( rSet );
+    rNode.GetContentAttribs().GetItems().Set( rSet );
 
-    if ( auto pWrongList = pNode->GetWrongList() )
+    if ( auto pWrongList = rNode.GetWrongList() )
     {
         bool bCheckLanguage = ( rSet.GetItemState( EE_CHAR_LANGUAGE ) == SfxItemState::SET ) ||
                      ( rSet.GetItemState( EE_CHAR_LANGUAGE_CJK ) == SfxItemState::SET ) ||
                      ( rSet.GetItemState( EE_CHAR_LANGUAGE_CTL ) == SfxItemState::SET );
         if (bCheckLanguage)
-            pWrongList->ResetInvalidRange(0, pNode->Len());
+            pWrongList->ResetInvalidRange(0, rNode.Len());
     }
 
     if (maStatus.UseCharAttribs())
-        pNode->CreateDefFont();
+        rNode.CreateDefFont();
 
-    ParaAttribsChanged( pNode );
+    ParaAttribsChanged( &rNode );
 }
 
 const SfxItemSet& ImpEditEngine::GetParaAttribs( sal_Int32 nPara ) const
 {
-    const ContentNode* pNode = maEditDoc.GetObject( nPara );
-    assert(pNode && "Node not found: GetParaAttribs");
-    return pNode->GetContentAttribs().GetItems();
+    const ContentNode& rNode = maEditDoc.GetObject( nPara );
+    return rNode.GetContentAttribs().GetItems();
 }
 
 bool ImpEditEngine::HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const
 {
-    const ContentNode* pNode = maEditDoc.GetObject( nPara );
-    assert(pNode && "Node not found: HasParaAttrib");
-    return pNode->GetContentAttribs().HasItem( nWhich );
+    const ContentNode& rNode = maEditDoc.GetObject( nPara );
+    return rNode.GetContentAttribs().HasItem( nWhich );
 }
 
 const SfxPoolItem& ImpEditEngine::GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const
 {
-    const ContentNode* pNode = maEditDoc.GetObject(nPara);
-    assert(pNode && "Node not found: GetParaAttrib");
-    return pNode->GetContentAttribs().GetItem(nWhich);
+    const ContentNode& rNode = maEditDoc.GetObject(nPara);
+    return rNode.GetContentAttribs().GetItem(nWhich);
 }
 
 void ImpEditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const
 {
     rLst.clear();
-    const ContentNode* pNode = maEditDoc.GetObject( nPara );
-    if ( !pNode )
-        return;
+    const ContentNode& rNode = maEditDoc.GetObject( nPara );
 
-    rLst.reserve(pNode->GetCharAttribs().Count());
-    const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
+    rLst.reserve(rNode.GetCharAttribs().Count());
+    const CharAttribList::AttribsType& rAttrs = rNode.GetCharAttribs().GetAttribs();
     for (const auto & i : rAttrs)
     {
         const EditCharAttrib& rAttr = *i;
@@ -1376,8 +1358,8 @@ void ImpEditEngine::SetControlWord( EEControlBits nWord )
         sal_Int32 nNodes = maEditDoc.Count();
         for (sal_Int32 nNode = 0; nNode < nNodes; nNode++)
         {
-            ContentNode* pNode = maEditDoc.GetObject(nNode);
-            pNode->CreateWrongList();
+            ContentNode& rNode = maEditDoc.GetObject(nNode);
+            rNode.CreateWrongList();
         }
         if (IsFormatted())
             StartOnlineSpellTimer();
@@ -1388,12 +1370,12 @@ void ImpEditEngine::SetControlWord( EEControlBits nWord )
         sal_Int32 nNodes = maEditDoc.Count();
         for ( sal_Int32 nNode = 0; nNode < nNodes; nNode++)
         {
-            ContentNode* pNode = maEditDoc.GetObject(nNode);
+            ContentNode& rNode = maEditDoc.GetObject(nNode);
             ParaPortion const& rPortion = maParaPortionList.getRef(nNode);
             bool bWrongs = false;
-            if (pNode->GetWrongList() != nullptr)
-                bWrongs = !pNode->GetWrongList()->empty();
-            pNode->DestroyWrongList();
+            if (rNode.GetWrongList() != nullptr)
+                bWrongs = !rNode.GetWrongList()->empty();
+            rNode.DestroyWrongList();
             if ( bWrongs )
             {
                 maInvalidRect.SetLeft(0);

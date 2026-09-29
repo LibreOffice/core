@@ -4482,21 +4482,18 @@ void ImpEditEngine::InsertContent(std::unique_ptr<ContentNode> pNode, sal_Int32 
 
 EditPaM ImpEditEngine::SplitContent( sal_Int32 nNode, sal_Int32 nSepPos )
 {
-    ContentNode* pNode = maEditDoc.GetObject( nNode );
-    assert(pNode && "Invalid Node in SplitContent");
+    ContentNode& rNode = maEditDoc.GetObject( nNode );
     DBG_ASSERT( IsInUndo(), "SplitContent only for Undo()!" );
-    DBG_ASSERT( nSepPos <= pNode->Len(), "Index out of range: SplitContent" );
-    EditPaM aPaM( pNode, nSepPos );
+    DBG_ASSERT( nSepPos <= rNode.Len(), "Index out of range: SplitContent" );
+    EditPaM aPaM( rNode, nSepPos );
     return ImpInsertParaBreak( aPaM );
 }
 
 EditPaM ImpEditEngine::ConnectContents( sal_Int32 nLeftNode, bool bBackward )
 {
-    ContentNode* pLeftNode = maEditDoc.GetObject( nLeftNode );
-    ContentNode* pRightNode = maEditDoc.GetObject( nLeftNode+1 );
-    DBG_ASSERT( pLeftNode, "Invalid left node in ConnectContents ");
-    DBG_ASSERT( pRightNode, "Invalid right node in ConnectContents ");
-    return ImpConnectParagraphs( pLeftNode, pRightNode, bBackward );
+    ContentNode& rLeftNode = maEditDoc.GetObject( nLeftNode );
+    ContentNode& rRightNode = maEditDoc.GetObject( nLeftNode+1 );
+    return ImpConnectParagraphs( &rLeftNode, &rRightNode, bBackward );
 }
 
 bool ImpEditEngine::SetUpdateLayout( bool bUp, EditView* pCurView, bool bForceUpdate )
@@ -4803,16 +4800,13 @@ EditPaM ImpEditEngine::InsertParagraph( sal_Int32 nPara )
     EditPaM aPaM;
     if ( nPara != 0 )
     {
-        ContentNode* pNode = GetEditDoc().GetObject( nPara-1 );
-        if ( !pNode )
-            pNode = GetEditDoc().GetObject( GetEditDoc().Count() - 1 );
-        assert(pNode && "Not a single paragraph in InsertParagraph ?");
-        aPaM = EditPaM( pNode, pNode->Len() );
+        ContentNode& rNode = GetEditDoc().GetObject( nPara-1 );
+        aPaM = EditPaM( rNode, rNode.Len() );
     }
     else
     {
-        ContentNode* pNode = GetEditDoc().GetObject( 0 );
-        aPaM = EditPaM( pNode, 0 );
+        ContentNode& rNode = GetEditDoc().GetObject( 0 );
+        aPaM = EditPaM( rNode, 0 );
     }
 
     return ImpInsertParaBreak( aPaM );
@@ -4821,10 +4815,8 @@ EditPaM ImpEditEngine::InsertParagraph( sal_Int32 nPara )
 std::optional<EditSelection> ImpEditEngine::SelectParagraph( sal_Int32 nPara )
 {
     std::optional<EditSelection> pSel;
-    ContentNode* pNode = GetEditDoc().GetObject( nPara );
-    SAL_WARN_IF( !pNode, "editeng", "Paragraph does not exist: SelectParagraph" );
-    if ( pNode )
-        pSel.emplace( EditPaM( pNode, 0 ), EditPaM( pNode, pNode->Len() ) );
+    ContentNode& rNode = GetEditDoc().GetObject( nPara );
+    pSel.emplace( EditPaM( rNode, 0 ), EditPaM( rNode, rNode.Len() ) );
 
     return pSel;
 }
@@ -4988,8 +4980,8 @@ void ImpEditEngine::ImplInitLayoutMode(OutputDevice& rOutDev, sal_Int32 nPara, s
     }
     else
     {
-        ContentNode* pNode = GetEditDoc().GetObject( nPara );
-        short nScriptType = GetI18NScriptType( EditPaM( pNode, nIndex+1 ) );
+        ContentNode& rNode = GetEditDoc().GetObject( nPara );
+        short nScriptType = GetI18NScriptType( EditPaM( rNode, nIndex+1 ) );
         bCTL = nScriptType == i18n::ScriptType::COMPLEX;
         // this change was discussed in issue 37190
         bR2L = (GetRightToLeft( nPara, nIndex + 1) % 2) != 0;

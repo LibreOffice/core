@@ -1203,7 +1203,7 @@ public:
     EditPaM CreateEditPaM( const EPaM& rEPaM )
     {
         DBG_ASSERT( rEPaM.nPara < maEditDoc.Count(), "CreateEditPaM: invalid paragraph" );
-        DBG_ASSERT(maEditDoc.GetObject(rEPaM.nPara)->Len() >= rEPaM.nIndex, "CreateEditPaM: invalid Index");
+        DBG_ASSERT(maEditDoc.GetObject(rEPaM.nPara).Len() >= rEPaM.nIndex, "CreateEditPaM: invalid Index");
         return EditPaM(maEditDoc.GetObject(rEPaM.nPara), rEPaM.nIndex);
     }
 
