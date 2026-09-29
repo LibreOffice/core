@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:styles/>
+ <office:automatic-styles>
+  <style:page-layout style:name="PM1">
+   <style:page-layout-properties fo:page-width="28cm" fo:page-height="15.75cm" style:print-orientation="landscape"/>
+  </style:page-layout>
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#c2d2e1">
+    <loext:fill-complex-color loext:theme-type="dark1" loext:color-type="theme"/>
+   </style:graphic-properties>
+  </style:style>
+  <style:style style:name="gr2" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#c2d2e1">
+    <loext:fill-complex-color loext:theme-type="light2" loext:color-type="theme">
+     <loext:transformation loext:type="lummod" loext:value="9000"/>
+    </loext:fill-complex-color>
+   </style:graphic-properties>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="PM1">
+   <loext:theme loext:name="Office">
+    <loext:theme-colors loext:name="Test">
+     <loext:color loext:name="dark1" loext:color="#062033"/>
+     <loext:color loext:name="light1" loext:color="#ffffff"/>
+     <loext:color loext:name="dark2" loext:color="#000000"/>
+     <loext:color loext:name="light2" loext:color="#e1e9f0"/>
+     <loext:color loext:name="accent1" loext:color="#20a0ff"/>
+     <loext:color loext:name="accent2" loext:color="#0d4066"/>
+     <loext:color loext:name="accent3" loext:color="#78c5ff"/>
+     <loext:color loext:name="accent4" loext:color="#449cdb"/>
+     <loext:color loext:name="accent5" loext:color="#6995b6"/>
+     <loext:color loext:name="accent6" loext:color="#739fab"/>
+     <loext:color loext:name="hyperlink" loext:color="#21a0ff"/>
+     <loext:color loext:name="followed-hyperlink" loext:color="#367caf"/>
+    </loext:theme-colors>
+   </loext:theme>
+  </style:master-page>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="page1" draw:master-page-name="Default">
+    <draw:custom-shape draw:style-name="gr1" svg:width="5cm" svg:height="1.5cm" svg:x="1cm" svg:y="2cm">
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="gr2" svg:width="5cm" svg:height="1.5cm" svg:x="1cm" svg:y="5cm">
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+    </draw:custom-shape>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>
