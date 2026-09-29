@@ -53,6 +53,14 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
+static bool lcl_ColorsAreBasicallyEqual(const ::Color& rColor1, const ::Color& rColor2)
+{
+    if (rColor1 == COL_AUTO || rColor2 == COL_AUTO)
+        return rColor1 == rColor2;
+
+    return rColor1.IsRGBEqual(rColor2);
+}
+
 // Special case for SvxFontItem: only compare the name
 static bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
 {
@@ -68,7 +76,7 @@ static bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
         if (rBrush1.getComplexColor().isUsed() && rBrush2.getComplexColor().isUsed())
             return rItem1 == rItem2;
 
-        return rBrush1.GetColor().IsRGBEqual(rBrush2.GetColor());
+        return lcl_ColorsAreBasicallyEqual(rBrush1.GetColor(), rBrush2.GetColor());
     }
     case RES_CHRATR_OVERLINE:
     case RES_CHRATR_UNDERLINE:
@@ -78,16 +86,14 @@ static bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
         if (rUnderline1.getComplexColor().isUsed() && rUnderline2.getComplexColor().isUsed())
             return rItem1 == rItem2;
 
-        return rUnderline1.GetColor().IsRGBEqual(rUnderline2.GetColor())
+        return lcl_ColorsAreBasicallyEqual(rUnderline1.GetColor(), rUnderline2.GetColor())
             && rUnderline1.GetLineStyle() == rUnderline2.GetLineStyle();
     }
     case RES_CHRATR_COLOR:
     {
         ::Color Color1 = rItem1.StaticWhichCast(RES_CHRATR_COLOR).GetValue();
         ::Color Color2 = rItem2.StaticWhichCast(RES_CHRATR_COLOR).GetValue();
-        if (Color1 == COL_AUTO || Color2 == COL_AUTO)
-            return Color1 == Color2;
-        return Color1.IsRGBEqual(Color2);
+        return lcl_ColorsAreBasicallyEqual(Color1, Color2);
     }
     case RES_PAGEDESC:
         ::std::optional<sal_uInt16> const oNumOffset1 = rItem1.StaticWhichCast(RES_PAGEDESC).GetNumOffset();
