@@ -426,7 +426,7 @@ window.L.Map.include({
 
 	// Offer the choice between editing locally (changes sync on save) or starting a
 	// collaborative session (all users edit together in real-time).
-	_showWasmEditChoice: function (title, subtitle, onEditLocally, titleAvatar) {
+	_showCollabEditChoiceDialog: function (title, subtitle, onEditLocally, titleAvatar) {
 		var that = this;
 		this._showTwoCardDialog(
 			'wasm-edit-choice-modal',
@@ -629,7 +629,7 @@ window.L.Map.include({
 		// local and collaborative editing.
 		if ((window.ThisIsTheEmscriptenApp || window.mode.isCODesktop())
 			&& window.collabUsers && window.collabUsers.length > 0) {
-			this._showWasmEditChoice(
+			this._showCollabEditChoiceDialog(
 				_('How would you like to edit?'),
 				_('Other users are viewing this document. Choose how you\'d like to continue:'),
 				this._proceedEditMode.bind(this));
