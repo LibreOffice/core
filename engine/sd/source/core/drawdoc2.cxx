@@ -1102,6 +1102,10 @@ bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
             pNotesPage->TRG_SetMasterPage(*GetMasterPage(nMasterPageAfterPagesMasterPage));
         }
 
+        // The page lists sort the pages by their kind, and the kinds changed above.
+        PageListChanged();
+        MasterPageListChanged();
+
         bOK = true;
         StopWorkStartupDelay();
         SetChanged(false);

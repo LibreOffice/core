@@ -3033,6 +3033,23 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testCool16083_contentPlaceholderStaysEmpty)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testEmptyPptHasOneSlide)
+{
+    // Given a PPT file that holds no slides at all:
+    createSdImpressDoc("ppt/empty-deck.ppt");
+
+    // The import gives it one empty slide with its notes page, and the notes page is not listed
+    // as a second slide.
+    SdDrawDocument* pDoc = getSdDocShell()->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDoc->GetSdPageCount(PageKind::Notes));
+
+    // The slide survives a round trip through PPTX.
+    saveAndReload(TestFilter::PPTX);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1),
+                         getSdDocShell()->GetDoc()->GetSdPageCount(PageKind::Standard));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
