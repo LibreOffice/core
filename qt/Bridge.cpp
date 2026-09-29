@@ -1030,10 +1030,18 @@ QVariant Bridge::cool(const QString& messageStr)
         }
         QString serverUrl = QString::fromStdString(
             std::string(tokens[1]));
+        std::string accountId;
+        COOLProtocol::getTokenString(tokens, "account", accountId);
+        // A request that names no account signs in on the profile every window shares.
+        QWebEngineProfile* pickerProfile =
+            accountId.empty() ? Application::getProfile()
+                              : Application::getAccountProfile(QString::fromStdString(accountId));
+        LOG_DBG("openremote: account '" << accountId << "' opens on the "
+                << (pickerProfile == Application::getProfile() ? "shared" : "account's")
+                << " profile");
         auto* webView = _webView;
-        QTimer::singleShot(0, [serverUrl, webView]() {
-            coda::openRemoteFile(serverUrl, webView,
-                                 Application::getProfile(), Application::getProfile());
+        QTimer::singleShot(0, [serverUrl, webView, pickerProfile]() {
+            coda::openRemoteFile(serverUrl, webView, Application::getProfile(), pickerProfile);
         });
     }
     else if (message == "uno .uno:Open")

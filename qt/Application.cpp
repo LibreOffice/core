@@ -34,6 +34,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QProcess>
+#include <QRegularExpression>
 #include <QSslCertificate>
 #include <QSslKey>
 #include <QStandardPaths>
@@ -289,6 +290,34 @@ std::string Desktop::fetchAIModels(const std::string& payload)
 }
 
 QWebEngineProfile* Application::getProfile() { return globalProfile; }
+
+QWebEngineProfile* Application::getAccountProfile(const QString& accountId)
+{
+    // The id names a folder on disk, so it is taken only as one plain path segment.
+    static const QRegularExpression plainId(
+        QRegularExpression::anchoredPattern(QStringLiteral("[A-Za-z0-9_-]{1,64}")));
+    if (!plainId.match(accountId).hasMatch())
+    {
+        LOG_DBG("Application: account id '" << accountId.toStdString()
+                                             << "' is not plain, so it gets the shared profile");
+        return globalProfile;
+    }
+
+    // A profile has to outlive every page built on it, so each one stays until CODA exits.
+    static QMap<QString, QWebEngineProfile*> accountProfiles;
+    auto it = accountProfiles.find(accountId);
+    if (it != accountProfiles.end())
+        return it.value();
+
+    const QString configData = QString::fromStdString(Desktop::getConfigPath().toString());
+    const QString cacheData = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    QWebEngineProfile* profile =
+        createSavedProfile(QStringLiteral("Account-") + accountId,
+                           configData + QStringLiteral("/accounts/") + accountId,
+                           cacheData + QStringLiteral("/accounts/") + accountId);
+    accountProfiles.insert(accountId, profile);
+    return profile;
+}
 
 RecentFiles& Application::getRecentFiles() { return recentFiles; }
 
