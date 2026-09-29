@@ -488,7 +488,7 @@ public:
         assert(!_asyncCb);
         while (!_addressesToResolve.empty())
         {
-            const std::string& addressToCheck = _addressesToResolve.front();
+            const std::string& addressToCheck = _addressesToResolve.back();
 
             try
             {
@@ -547,7 +547,7 @@ public:
             return toState();
         };
 
-        net::AsyncDNS::lookup(_addressesToResolve.front(), std::move(pushHostnameResolvedToPoll),
+        net::AsyncDNS::lookup(_addressesToResolve.back(), std::move(pushHostnameResolvedToPoll),
                               std::move(dumpState));
     }
 
@@ -562,7 +562,7 @@ public:
             _allow = false;
         }
 
-        const std::string& addressToCheck = _addressesToResolve.front();
+        const std::string& addressToCheck = _addressesToResolve.back();
         if (_allow)
             LOG_INF_S("convert-to: Requesting address is allowed: " << addressToCheck);
         else
