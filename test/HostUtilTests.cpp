@@ -17,6 +17,7 @@
 #include <test/lokassert.hpp>
 
 #include <Poco/URI.h>
+#include <Poco/Util/LayeredConfiguration.h>
 #include <Poco/Util/MapConfiguration.h>
 
 #include <cppunit/extensions/HelperMacros.h>
@@ -32,6 +33,7 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testParseAlias);
     CPPUNIT_TEST(testParseHostUri);
     CPPUNIT_TEST(testFirstHostTrustedOnlyInFirstMode);
+    CPPUNIT_TEST(testGroupHostMatchesItsOwnName);
     CPPUNIT_TEST(testGetNewUriBracketsIPv6Host);
     CPPUNIT_TEST(testHostListWithGaps);
     CPPUNIT_TEST(testAliasGroupExtraHosts);
@@ -42,6 +44,7 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     void testParseAlias();
     void testParseHostUri();
     void testFirstHostTrustedOnlyInFirstMode();
+    void testGroupHostMatchesItsOwnName();
     void testGetNewUriBracketsIPv6Host();
     void testHostListWithGaps();
     void testAliasGroupExtraHosts();
@@ -196,6 +199,37 @@ void HostUtilTests::testFirstHostTrustedOnlyInFirstMode()
                        HostUtil::allowedWopiHost(uri.getHost()));
     LOK_ASSERT_MESSAGE("first mode trusts no other host",
                        !HostUtil::allowedWopiHost("wopi-example.com"));
+}
+
+void HostUtilTests::testGroupHostMatchesItsOwnName()
+{
+    constexpr std::string_view testname = __func__;
+
+    Poco::AutoPtr<Poco::Util::MapConfiguration> config(new Poco::Util::MapConfiguration);
+    config->setString("storage.wopi[@allow]", "true");
+    config->setString("storage.wopi.alias_groups", "");
+    config->setString("storage.wopi.alias_groups[@mode]", "groups");
+    config->setString("storage.wopi.alias_groups.group[0]", "");
+    config->setString("storage.wopi.alias_groups.group[0].host", "https://wopi.example.com:443");
+    config->setString("storage.wopi.alias_groups.group[0].host[@allow]", "true");
+    config->setString("storage.wopi.alias_groups.group[1]", "");
+    config->setString("storage.wopi.alias_groups.group[1].host", "https://cloud.*\\.example\\.org");
+    config->setString("storage.wopi.alias_groups.group[1].host[@allow]", "true");
+
+    const ScopedHostConfig scopedConfig(config.get());
+    resetHostState(true);
+
+    Poco::AutoPtr<Poco::Util::LayeredConfiguration> layered(new Poco::Util::LayeredConfiguration);
+    layered->add(Poco::Util::AbstractConfiguration::Ptr(config.get(), true));
+    HostUtil::parseAliases(*layered);
+
+    // A plain host name is trusted as that name only.
+    LOK_ASSERT(HostUtil::allowedWopiHost("wopi.example.com"));
+    LOK_ASSERT(!HostUtil::allowedWopiHost("wopi-example.com"));
+
+    // A host written as a regular expression still matches as one.
+    LOK_ASSERT(HostUtil::allowedWopiHost("cloud1.example.org"));
+    LOK_ASSERT(!HostUtil::allowedWopiHost("cloud1.example.com"));
 }
 
 void HostUtilTests::testGetNewUriBracketsIPv6Host()

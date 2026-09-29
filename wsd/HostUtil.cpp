@@ -213,7 +213,7 @@ void HostUtil::parseAliases(Poco::Util::LayeredConfiguration& conf)
             CommandControl::LockManager::mapUnlockLink(realUri.getHost(), path);
 #endif
             HostUtil::hostList.insert(realUri.getHost());
-            HostUtil::addWopiHost(realUri.getHost(), allow);
+            HostUtil::addWopiHost(parseAlias(realUri.getHost()), allow);
         }
         catch (const Poco::Exception& exc)
         {
