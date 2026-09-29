@@ -247,6 +247,12 @@ void NetUtilWhiteBoxTests::testParseUri()
 
     // Malformed: an unterminated bracket is rejected.
     LOK_ASSERT(!net::parseUri("[::1", scheme, host, port));
+
+    // User information in the authority is rejected, and an '@' in the path is not.
+    LOK_ASSERT(!net::parseUri("https://user@domain.com", scheme, host, port));
+    LOK_ASSERT(!net::parseUri("https://user:secret@domain.com:88/path", scheme, host, port));
+    LOK_ASSERT(net::parseUri("https://domain.com/path/@file", scheme, host, port));
+    LOK_ASSERT_EQUAL_STR("domain.com", host);
 }
 
 void NetUtilWhiteBoxTests::testParseUriUrl()

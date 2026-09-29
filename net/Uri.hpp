@@ -52,6 +52,10 @@ inline bool parseUri(std::string uri, std::string& scheme, std::string& host, st
         pathAndQuery.clear();
     }
 
+    // User information before an '@' in the authority is not supported.
+    if (uri.find('@') != uri.npos)
+        return false;
+
     // Split the authority into host and optional port. An IPv6 literal is
     // bracketed - "[::1]" or "[::1]:9980" - so its own colons are not port
     // separators; return the address itself, without the brackets.
