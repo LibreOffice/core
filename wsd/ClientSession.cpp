@@ -2465,34 +2465,57 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
     LOG_INF("Requesting document load from child.");
     try
     {
-        std::string timestamp;
         std::string loadPart;
-        parseDocOptions(tokens, loadPart, timestamp);
-        overrideDocOption();
-
 #if !MOBILEAPP
-        // A headless session names the docKeys already on its connection
-        // chain, so a subscription that would close a cycle can be refused.
         bool namedDocKeyChain = false;
+#endif
         for (std::size_t i = 1; i < tokens.size(); ++i)
         {
-            std::string docKeyChain;
-            if (!COOLProtocol::getTokenString(tokens[i], "remotechain", docKeyChain) ||
-                docKeyChain.empty())
-                continue;
-
-            if (!_isRemoteDocumentConnection)
+            std::string name;
+            std::string value;
+            if (!COOLProtocol::parseNameValuePair(tokens[i], name, value))
             {
-                LOG_WRN("Ignoring the connection chain named by session ["
-                        << getId()
-                        << "]: the connection is not one a RemoteDocumentBroker made");
+                LOG_WRN("Unexpected load token [" << tokens[i] << "]. Skipping.");
                 continue;
             }
 
-            namedDocKeyChain = true;
-            docBroker->addToIncomingDocKeyChain(docKeyChain);
+            if (name == "timestamp")
+            {
+                // The browser sends the document's timestamp, and nothing reads it.
+                continue;
+            }
+
+#if !MOBILEAPP
+            if (name == "remotechain")
+            {
+                // A headless session names the docKeys already on its connection
+                // chain, so a subscription that would close a cycle can be refused.
+                if (value.empty())
+                    continue;
+
+                if (!_isRemoteDocumentConnection)
+                {
+                    LOG_WRN("Ignoring the connection chain named by session ["
+                            << getId()
+                            << "]: the connection is not one a RemoteDocumentBroker made");
+                    continue;
+                }
+
+                namedDocKeyChain = true;
+                docBroker->addToIncomingDocKeyChain(value);
+                continue;
+            }
+#endif
+
+            if (!applyBrowserLoadOption(name, value, loadPart))
+                LOG_WRN("Ignoring the load option [" << name
+                        << "]: a browser's load message does not carry it");
         }
 
+        disableSpellCheckIfReadOnly();
+        overrideDocOption();
+
+#if !MOBILEAPP
         // A headless connection carries the chain of the document, one naming no chain
         // is refused instead, so that cycle protection is not skipped.
         if (_isRemoteDocumentConnection && !namedDocKeyChain)

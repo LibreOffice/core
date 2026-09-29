@@ -193,6 +193,8 @@ public:
     void downloadAsInForeground();
 
 private:
+    /// Parses the "load" command as coolwsd writes it for the kit.
+    void parseLoadCommand(const StringVector& tokens, std::string& part);
     bool loadDocument(const StringVector& tokens);
     bool saveDocumentBackground(const StringVector &tokens);
 

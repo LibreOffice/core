@@ -399,9 +399,9 @@ protected:
             const std::string& name, const std::string& id, bool readonly);
     virtual ~Session();
 
-    /// Parses the options of the "load" command,
-    /// shared between MasterProcessSession::loadDocument() and ChildProcessSession::loadDocument().
-    void parseDocOptions(const StringVector& tokens, std::string& part, std::string& timestamp);
+    /// Applies one name=value option of a browser's "load" message. Returns false, applying
+    /// nothing, for a name that a browser's load message does not carry.
+    bool applyBrowserLoadOption(const std::string& name, std::string& value, std::string& part);
 
     void updateLastActivityTime()
     {
@@ -423,6 +423,7 @@ private:
 
     virtual bool _handleInput(const char* buffer, int length) = 0;
 
+protected:
     /// A session ID specific to an end-to-end connection (from user to lokit).
     const std::string _id;
 

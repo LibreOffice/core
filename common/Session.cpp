@@ -88,220 +88,78 @@ bool Session::sendBinaryFrame(const char *buffer, int length)
     return _protocol->sendBinaryMessage(std::string_view(buffer, length)) >= length;
 }
 
-void Session::parseDocOptions(const StringVector& tokens, std::string& part,
-                              std::string& timestamp)
+bool Session::applyBrowserLoadOption(const std::string& name, std::string& value,
+                                     std::string& part)
 {
-    for (std::size_t i = 1; i < tokens.size(); ++i)
+    if (name == "part")
     {
-        std::string name;
-        std::string value;
-        if (!COOLProtocol::parseNameValuePair(tokens[i], name, value))
-        {
-            LOG_WRN("Unexpected doc options token [" << tokens[i] << "]. Skipping.");
-            continue;
-        }
-
-        if (name == "part")
-        {
-            if (COOLProtocol::isValidPartId(value))
-                part = std::move(value);
-            else
-                LOG_WRN("Ignoring load option with a malformed part [" << value << ']');
-        }
-        else if (name == "url")
-        {
-            _docURL = std::move(value);
-        }
-        else if (name == "jail")
-        {
-            _jailedFilePath = std::move(value);
-        }
-        else if (name == "xjail")
-        {
-            _jailedFilePathAnonym = std::move(value);
-        }
-        else if (name == "authorid")
-        {
-            _userId = Uri::decode(value);
-        }
-        else if (name == "xauthorid")
-        {
-            _userIdAnonym = Uri::decode(value);
-        }
-        else if (name == "author")
-        {
-            _userName = Uri::decode(value);
-        }
-        else if (name == "xauthor")
-        {
-            _userNameAnonym = Uri::decode(value);
-        }
-        else if (name == "authorextrainfo")
-        {
-            _userExtraInfo = Uri::decode(value);
-        }
-        else if (name == "authorprivateinfo")
-        {
-            _userPrivateInfo = Uri::decode(value);
-        }
-        else if (name == "signatureconfig")
-        {
-            if (_userPrivateInfo.empty())
-            {
-                LOG_WRN(
-                    "signatureconfig: User private info not set, skipping signature configuration");
-                continue;
-            }
-
-            const std::string decodedSignatureData = Uri::decode(value);
-            if (decodedSignatureData == "{}")
-            {
-                LOG_INF("signatureconfig: Empty signature data received, skipping processing");
-                continue;
-            }
-
-            Poco::JSON::Object::Ptr signatureDataObject;
-            if (!JsonUtil::parseJSON(decodedSignatureData, signatureDataObject))
-            {
-                LOG_ERR("signatureconfig: Failed to parse signature data as JSON: "
-                        << decodedSignatureData);
-                continue;
-            }
-
-            Poco::JSON::Object::Ptr userPrivateInfoObject;
-            if (!JsonUtil::parseJSON(_userPrivateInfo, userPrivateInfoObject))
-            {
-                LOG_ERR("signatureconfig: Failed to parse user private info as JSON: "
-                        << _userPrivateInfo);
-                continue;
-            }
-
-            setSignToUserPrivateConfig("SignatureCert", signatureDataObject,
-                                             userPrivateInfoObject);
-            setSignToUserPrivateConfig("SignatureKey", signatureDataObject,
-                                             userPrivateInfoObject);
-            setSignToUserPrivateConfig("SignatureCa", signatureDataObject,
-                                             userPrivateInfoObject);
-
-            _userPrivateInfo = JsonUtil::jsonToString(userPrivateInfoObject);
-            LOG_INF("signatureconfig: Successfully updated user private info with signature data");
-
-        }
-        else if (name == "serverprivateinfo")
-        {
-            _serverPrivateInfo = Uri::decode(value);
-        }
-        else if (name == "readonly")
-        {
-            _isReadOnly = value != "0";
-        }
-        else if (name == "password")
-        {
-            _docPassword = std::move(value);
-            _haveDocPassword = true;
-        }
-        else if (name == "lang")
-        {
-            if (value == "en")
-                _lang = "en-US";
-            else
-                _lang = std::move(value);
-        }
-        else if (name == "timezone")
-        {
-            _timeZone= std::move(value);
-        }
-        else if (name == "watermarkText")
-        {
-            _watermarkText = Uri::decode(value);
-        }
-        else if (name == "watermarkOpacity")
-        {
-            _watermarkOpacity = std::stod(value);
-        }
-        else if (name == "timestamp")
-        {
-            timestamp = std::move(value);
-        }
-        else if (name == "template")
-        {
-            _docTemplate = std::move(value);
-        }
-        else if (name == "deviceFormFactor")
-        {
-            _deviceFormFactor = std::move(value);
-        }
-        else if (name == "spellOnline")
-        {
-            _spellOnline = std::move(value);
-        }
-        else if (name == "formattingMarks")
-        {
-            _formattingMarks = std::move(value);
-        }
-        else if (name == "darkTheme")
-        {
-            _darkTheme = std::move(value);
-        }
-        else if (name == "focusRingColor")
-        {
-            _focusRingColor = std::move(value);
-        }
-        else if (name == "darkBackground")
-        {
-            _darkBackground = std::move(value);
-        }
-        else if (name == "batch")
-        {
-            _batch = std::move(value);
-        }
-        else if (name == "enableMacrosExecution")
-        {
-            _enableMacrosExecution = std::move(value);
-        }
-        else if (name == "macroSecurityLevel")
-        {
-            _macroSecurityLevel = std::move(value);
-        }
-        else if (name == "clientvisiblearea")
-        {
-            _initialClientVisibleArea = std::move(value);
-        }
-        else if (name == "originaldocumenturl")
-        {
-            _originalDocUrl = std::move(value);
-        }
-        else if (name == "accessibilityState")
-        {
-            _accessibilityState = value == "true";
-        }
-        else if (name == "isAllowChangeComments")
-        {
-            _isAllowChangeComments = value == "true";
-        }
-        else if (name == "isAllowManageRedlines")
-        {
-            _isAllowManageRedlines = value == "true";
-        }
-        else if (name == "verifyHost")
-        {
-            _disableVerifyHost = value == "false";
-        }
-        else if (name == "infilterOptions")
-        {
-            _inFilterOptions = std::move(value);
-        }
+        if (COOLProtocol::isValidPartId(value))
+            part = std::move(value);
+        else
+            LOG_WRN("Ignoring load option with a malformed part [" << value << ']');
+    }
+    else if (name == "url")
+    {
+        _docURL = std::move(value);
+    }
+    else if (name == "password")
+    {
+        _docPassword = std::move(value);
+        _haveDocPassword = true;
+    }
+    else if (name == "lang")
+    {
+        if (value == "en")
+            _lang = "en-US";
+        else
+            _lang = std::move(value);
+    }
+    else if (name == "timezone")
+    {
+        _timeZone = std::move(value);
+    }
+    else if (name == "deviceFormFactor")
+    {
+        _deviceFormFactor = std::move(value);
+    }
+    else if (name == "spellOnline")
+    {
+        _spellOnline = std::move(value);
+    }
+    else if (name == "formattingMarks")
+    {
+        _formattingMarks = std::move(value);
+    }
+    else if (name == "darkTheme")
+    {
+        _darkTheme = std::move(value);
+    }
+    else if (name == "focusRingColor")
+    {
+        _focusRingColor = std::move(value);
+    }
+    else if (name == "darkBackground")
+    {
+        _darkBackground = std::move(value);
+    }
+    else if (name == "batch")
+    {
+        _batch = std::move(value);
+    }
+    else if (name == "clientvisiblearea")
+    {
+        _initialClientVisibleArea = std::move(value);
+    }
+    else if (name == "accessibilityState")
+    {
+        _accessibilityState = value == "true";
+    }
+    else
+    {
+        return false;
     }
 
-    if (Anonymizer::enabled())
-    {
-        Anonymizer::mapAnonymized(_userId, _userIdAnonym);
-        Anonymizer::mapAnonymized(_userName, _userNameAnonym);
-        Anonymizer::mapAnonymized(_jailedFilePath, _jailedFilePathAnonym);
-    }
-
-    // Disable spell check if the document is read-only
-    disableSpellCheckIfReadOnly();
+    return true;
 }
 
 void Session::disableSpellCheckIfReadOnly()
