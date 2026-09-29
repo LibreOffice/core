@@ -192,6 +192,8 @@ var _codaWireCollabNotifications = function() {
 			map._onEditorSavedAndSwitching();
 		} else if (msg.type === 'user_left') {
 			map._onCollabUserLeft();
+		} else if (msg.type === 'user_joined' && msg.user) {
+			map._onCollabUserJoined(msg.user.name || msg.user.id, msg.user.avatar);
 		}
 	});
 };

@@ -598,21 +598,35 @@ window.L.Map.include({
 			_('Other users are editing this document. Choose how you\'d like to continue:'));
 	},
 
+	// Someone opened the document we are editing locally.
+	_onCollabUserJoined: function (userName, avatar) {
+		if (!this.isEditMode())
+			return;
+		this._showCollabEditChoiceDialog(
+			avatar
+				? { name: userName, rest: _('opened this document') }
+				: _('{0} opened this document').replace('{0}', userName),
+			_('Choose how you\'d like to continue:'),
+			function () {},
+			avatar);
+	},
+
 	// Another user has just started editing while we were
 	// viewing.  Offer to keep viewing locally or join the
 	// collaborative session.
 	_onOtherUserEditingStarted: function (userName, avatar) {
-		// We are editing ourselves: don't offer to switch (and risk
-		// dropping our in-progress local changes); the conflict gets
-		// resolved at next save.  This is reachable via the /cool/ws
-		// bridge in CollabBroker, since plain-COOL's editing_started
-		// can land here while we are mid-edit.
+		var title = avatar
+			? { name: userName, rest: _('started editing') }
+			: _('{0} started editing').replace('{0}', userName);
+		// Joining from edit mode saves the local changes first.
 		if (this.isEditMode())
+		{
+			this._showCollabEditChoiceDialog(
+				title, _('Choose how you\'d like to continue:'), function () {}, avatar);
 			return;
+		}
 		this._showCollabJoinDialog(
-			avatar
-				? { name: userName, rest: _('started editing') }
-				: _('{0} started editing').replace('{0}', userName),
+			title,
 			_('Someone else is now editing this document. Choose how you\'d like to continue:'),
 			avatar);
 	},
