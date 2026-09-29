@@ -38,6 +38,7 @@
 #include <drawview.hxx>
 #include <sdabstdlg.hxx>
 #include <memory>
+#include <unordered_set>
 
 namespace sd
 {
@@ -187,6 +188,16 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     if (bError)
         return;
 
+    // tdf#111085 - exchanging the master page already updates all slides using the same master,
+    // so it is enough to update one selected slide per master
+    std::vector<sal_uInt16> aPageNumsToChange;
+    std::unordered_set<OUString> aHandledLayouts;
+    for (size_t i = 0; i < aSelectedPages.size(); ++i)
+    {
+        if (!bMasterPage || aHandledLayouts.insert(aSelectedPages[i]->GetLayoutName()).second)
+            aPageNumsToChange.push_back(aSelectedPageNums[i]);
+    }
+
     mpDocSh->SetWaitCursor( true );
 
     /* Here, we only exchange masterpages, therefore the current page
@@ -210,14 +221,14 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         OUString aLayoutName;
         if( pTempDoc )
             aLayoutName = aFile.getToken(0, DOCUMENT_TOKEN, nIdx);
-        for (auto nSelectedPage : aSelectedPageNums)
+        for (auto nSelectedPage : aPageNumsToChange)
             mrDoc.SetMasterPage(nSelectedPage, aLayoutName, pTempDoc, bMasterPage, bCheckMasters);
         mrDoc.CloseBookmarkDoc();
     }
     else
     {
         // use master page with the layout name aFile from current Doc
-        for (auto nSelectedPage : aSelectedPageNums)
+        for (auto nSelectedPage : aPageNumsToChange)
             mrDoc.SetMasterPage(nSelectedPage, aFile, &mrDoc, bMasterPage, bCheckMasters);
     }
 
