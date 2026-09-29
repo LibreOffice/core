@@ -95,7 +95,7 @@ ScopedVclPtr<VirtualDevice> ColorIconView::createIcon(const Color& rColor)
     pDev->SetOutputSizePixel(aSize);
 
     pDev->SetFillColor(rColor);
-    pDev->SetLineColor(rStyleSettings.GetFieldTextColor());
+    pDev->SetLineColor(rStyleSettings.GetShadowColor());
     pDev->DrawRect(pDev->GetOutputRectPixel());
 
     return pDev;
