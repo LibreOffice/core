@@ -659,8 +659,9 @@ static std::string makeIPAddress(const sockaddr& ai_addr)
     char addrstr[INET6_ADDRSTRLEN];
 
     static_assert(INET6_ADDRSTRLEN >= INET_ADDRSTRLEN, "ipv6 addresses are longer than ipv4");
+    int nFamily = ai_addr.sa_family;
     const void* inAddr = nullptr;
-    switch (ai_addr.sa_family)
+    switch (nFamily)
     {
         case AF_INET:
         {
@@ -671,7 +672,14 @@ static std::string makeIPAddress(const sockaddr& ai_addr)
         case AF_INET6:
         {
             auto ipv6 = reinterpret_cast<const sockaddr_in6*>(&ai_addr);
-            inAddr = &(ipv6->sin6_addr);
+            // An IPv4-mapped IPv6 address connects to its IPv4 address.
+            if (IN6_IS_ADDR_V4MAPPED(&ipv6->sin6_addr))
+            {
+                nFamily = AF_INET;
+                inAddr = &(ipv6->sin6_addr.s6_addr[12]);
+            }
+            else
+                inAddr = &(ipv6->sin6_addr);
             break;
         }
     }
@@ -682,7 +690,7 @@ static std::string makeIPAddress(const sockaddr& ai_addr)
         return std::string();
     }
 
-    const char* result = inet_ntop(ai_addr.sa_family, inAddr, addrstr, sizeof(addrstr));
+    const char* result = inet_ntop(nFamily, inAddr, addrstr, sizeof(addrstr));
     if (!result)
     {
         SAL_WARN("ucb.ucp.webdav.curl", "inet_ntop failure");
@@ -697,12 +705,8 @@ static curl_socket_t opensocket_callback(void* /*clientp*/, curlsocktype purpose
 {
     if (purpose == CURLSOCKTYPE_IPCXN)
     {
-        if (address->family == AF_INET && makeIPAddress(address->addr) == "169.254.169.254")
-        {
-            SAL_WARN("ucb.ucp.webdav.curl", "ignoring instance metadata ip");
-            return CURL_SOCKET_BAD;
-        }
-        else if (address->family == AF_INET6 && makeIPAddress(address->addr) == "fd00:ec2::254")
+        const std::string aAddress = makeIPAddress(address->addr);
+        if (aAddress == "169.254.169.254" || aAddress == "fd00:ec2::254")
         {
             SAL_WARN("ucb.ucp.webdav.curl", "ignoring instance metadata ip");
             return CURL_SOCKET_BAD;

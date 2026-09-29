@@ -239,17 +239,28 @@ HostEntry syncResolveDNS(const std::string& addressToCheck)
 bool isInstanceMetadataAddress(const sockaddr* ai_addr)
 {
     char addrstr[INET6_ADDRSTRLEN];
+    int family = ai_addr->sa_family;
     const void* inAddr = nullptr;
 
-    if (ai_addr->sa_family == AF_INET)
+    if (family == AF_INET)
         inAddr = &(reinterpret_cast<const sockaddr_in*>(ai_addr)->sin_addr);
-    else if (ai_addr->sa_family == AF_INET6)
-        inAddr = &(reinterpret_cast<const sockaddr_in6*>(ai_addr)->sin6_addr);
+    else if (family == AF_INET6)
+    {
+        const in6_addr& addr6 = reinterpret_cast<const sockaddr_in6*>(ai_addr)->sin6_addr;
+        // An IPv4-mapped IPv6 address connects to its IPv4 address.
+        if (IN6_IS_ADDR_V4MAPPED(&addr6))
+        {
+            family = AF_INET;
+            inAddr = &addr6.s6_addr[12];
+        }
+        else
+            inAddr = &addr6;
+    }
 
     if (!inAddr)
         return false;
 
-    if (!inet_ntop(ai_addr->sa_family, inAddr, addrstr, sizeof(addrstr)))
+    if (!inet_ntop(family, inAddr, addrstr, sizeof(addrstr)))
         return false;
 
     const std::string_view addr(addrstr);
