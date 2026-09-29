@@ -279,6 +279,14 @@ class RenderManager {
 		);
 	}
 
+	static renderPrimitives(
+		context: CanvasRenderingContext2D,
+		data: cool.VectorPrimitivesData,
+		primitives: cool.Primitive[],
+	): void {
+		RenderManager.ensureInstance().renderPrimitives(context, data, primitives);
+	}
+
 	static renderPlaceholderAids(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,

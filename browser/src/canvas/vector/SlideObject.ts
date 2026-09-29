@@ -191,6 +191,18 @@ namespace cool {
 		/// True while the document is being signed and a certificate has been chosen. The
 		/// document is read-only then, and the object may still be moved and resized.
 		signing?: boolean;
+		/** For a picture: the size the graphic has by its own resolution, and the four amounts
+		 * cropped away from it, left, top, right and bottom, all in twips of that size. The
+		 * object's box is the window onto what is left. Absent for anything but a picture that
+		 * shows a graphic.
+		 */
+		graphicChecksum?: number;
+		graphicWidth?: number;
+		graphicHeight?: number;
+		cropLeft?: number;
+		cropTop?: number;
+		cropRight?: number;
+		cropBottom?: number;
 		/** What may not be done to the object. Absent means it may: most objects allow
 		 * everything, so only the refusals travel. Whether it may be moved and whether it may be
 		 * made larger or smaller are each held against being changed on their own. Whether it may

@@ -395,6 +395,22 @@ class VectorManager extends RenderManagerBase {
 		}
 	}
 
+	/*
+		Draw primitives the client built itself, in document twips, the way the objects of the
+		part are drawn. The caller sets up the context the same way as for a whole part.
+	*/
+	renderPrimitives(
+		context: CanvasRenderingContext2D,
+		data: cool.VectorPrimitivesData,
+		primitives: cool.Primitive[],
+	): void {
+		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
+		this._renderer.setEditViewContentVisible(true);
+
+		for (const primitive of primitives)
+			this._renderer.renderPrimitive(context, primitive);
+	}
+
 	/// Request a thumbnail for a preview of the page at the given index of
 	/// the page list on screen. Nothing is drawn while the list does not name
 	/// the page.

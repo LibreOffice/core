@@ -16,7 +16,8 @@ type HandleKind =
 	| 'shaping'
 	| 'tiePoint'
 	| 'pathPoint'
-	| 'weight';
+	| 'weight'
+	| 'crop';
 
 /*
 	The kinds of band that can be drawn round a selection. A selection takes one where it is a
@@ -45,6 +46,7 @@ class HandleLook {
 		tiePoint: 5 / 6,
 		pathPoint: 2 / 3,
 		weight: 1 / 2,
+		crop: 1,
 	};
 
 	/** Whether each kind is drawn as a square or as a circle.
@@ -63,6 +65,12 @@ class HandleLook {
 		tiePoint: 'circle',
 		pathPoint: 'square',
 		weight: 'circle',
+		/*
+			A crop mark is neither: an L at a corner of the picture and a bar along a side, each
+			a handle long and half a handle thick, laid in the picture's own axes by the group
+			that draws them. The size and the color come from here.
+		*/
+		crop: 'square',
 	};
 
 	/// What each kind is filled with.
@@ -77,6 +85,7 @@ class HandleLook {
 		tiePoint: '#B03A3A',
 		pathPoint: '#1C99E0',
 		weight: '#1C99E0',
+		crop: '#FFFFFF',
 	};
 
 	/*

@@ -247,6 +247,21 @@ public:
          */
         bool mbSigning = false;
 
+        /** For a picture, the size the graphic has by its own resolution and the four amounts
+            cropped away from it, left, top, right and bottom, all in twips of that size. The
+            object's rectangle is the window onto what is left, so the picture as a whole would
+            stretch from the window by these amounts. Zero throughout for anything else, with
+            mbIsPicture false.
+         */
+        bool mbIsPicture = false;
+        sal_Int64 mnGraphicChecksum = 0;
+        double mfGraphicWidth = 0.0;
+        double mfGraphicHeight = 0.0;
+        double mfCropLeft = 0.0;
+        double mfCropTop = 0.0;
+        double mfCropRight = 0.0;
+        double mfCropBottom = 0.0;
+
         /// True for a connector whose first end is tied to an object, and the same for its last
         /// end. A connector runs from where it is tied, so a tied end stays with the object it
         /// holds on to. False for anything that is not a connector.
@@ -332,6 +347,13 @@ public:
                    && mbIsDiagram == rOther.mbIsDiagram
                    && maGraphicExtension == rOther.maGraphicExtension
                    && mbSigning == rOther.mbSigning
+                   && mbIsPicture == rOther.mbIsPicture
+                   && mnGraphicChecksum == rOther.mnGraphicChecksum
+                   && mfGraphicWidth == rOther.mfGraphicWidth
+                   && mfGraphicHeight == rOther.mfGraphicHeight
+                   && mfCropLeft == rOther.mfCropLeft && mfCropTop == rOther.mfCropTop
+                   && mfCropRight == rOther.mfCropRight
+                   && mfCropBottom == rOther.mfCropBottom
                    && mbCanBeMoved == rOther.mbCanBeMoved
                    && mbCanBeResized == rOther.mbCanBeResized
                    && mbCanBeTurned == rOther.mbCanBeTurned

@@ -122,6 +122,7 @@
 #include <svx/svdoedge.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/sdgcpitm.hxx>
 #include <svx/svditer.hxx>
 #include <svx/seclabel/SecLabelStore.hxx>
 #include <svx/unoapi.hxx>
@@ -3572,6 +3573,47 @@ private:
         return false;
     }
 
+    /*
+        What a picture says about the graphic it shows: the size the graphic has by its own
+        resolution, brought into the unit the document keeps its items in the way the crop drag
+        does, and the four amounts cropped away from it, all as twips. A picture that shows no
+        graphic yet says nothing.
+    */
+    static void takeInThePicture(const SdrGrafObj& rPicture,
+                                 SdXImpressDocument::VectorObjectContent& rContent)
+    {
+        if (rPicture.GetGraphicType() == GraphicType::NONE
+            || rPicture.GetGraphicType() == GraphicType::Default)
+            return;
+
+        const GraphicObject& rGraphic(rPicture.GetGraphicObject());
+        const MapMode aPoolMapMode(rPicture.getSdrModelFromSdrObject().GetItemPool().GetMetric(0));
+        Size aGraphicSize(rGraphic.GetPrefSize());
+
+        if (MapUnit::MapPixel == rGraphic.GetPrefMapMode().GetMapUnit())
+            aGraphicSize
+                = Application::GetDefaultDevice()->PixelToLogic(aGraphicSize, aPoolMapMode);
+        else
+            aGraphicSize = OutputDevice::LogicToLogic(aGraphicSize, rGraphic.GetPrefMapMode(),
+                                                      aPoolMapMode);
+
+        if (0 == aGraphicSize.Width() || 0 == aGraphicSize.Height())
+            return;
+
+        const SdrGrafCropItem& rCrop = rPicture.GetMergedItem(SDRATTR_GRAFCROP);
+
+        rContent.mbIsPicture = true;
+        // The checksum the graphic is named by on the wire, so the picture can be drawn from
+        // the same fetched image the primitives draw it from.
+        rContent.mnGraphicChecksum = static_cast<sal_Int64>(rGraphic.GetGraphic().GetChecksum());
+        rContent.mfGraphicWidth = aGraphicSize.Width() * constTwipConversionFactor;
+        rContent.mfGraphicHeight = aGraphicSize.Height() * constTwipConversionFactor;
+        rContent.mfCropLeft = rCrop.GetLeft() * constTwipConversionFactor;
+        rContent.mfCropTop = rCrop.GetTop() * constTwipConversionFactor;
+        rContent.mfCropRight = rCrop.GetRight() * constTwipConversionFactor;
+        rContent.mfCropBottom = rCrop.GetBottom() * constTwipConversionFactor;
+    }
+
     /// True when the object, or any object inside it when it is a group, has a text edit
     /// running on it.
     static bool hasActiveTextEdit(SdrObject* pObject)
@@ -3714,6 +3756,9 @@ private:
         aContent.mbIsDiagram = rObject.isDiagram();
         aContent.maGraphicExtension = rObject.getGraphicExtension();
         aContent.mbSigning = isBeingSigned();
+
+        if (const auto* pPicture = dynamic_cast<const SdrGrafObj*>(&rObject))
+            takeInThePicture(*pPicture, aContent);
 
         SdrObjTransformInfoRec aWhatItAllows;
         rObject.TakeObjInfo(aWhatItAllows);
@@ -4299,6 +4344,16 @@ private:
             rWriter.put("graphicExtension", rContent.maGraphicExtension);
         if (rContent.mbSigning)
             rWriter.put("signing", true);
+        if (rContent.mbIsPicture)
+        {
+            rWriter.put("graphicChecksum", rContent.mnGraphicChecksum);
+            rWriter.put("graphicWidth", rContent.mfGraphicWidth);
+            rWriter.put("graphicHeight", rContent.mfGraphicHeight);
+            rWriter.put("cropLeft", rContent.mfCropLeft);
+            rWriter.put("cropTop", rContent.mfCropTop);
+            rWriter.put("cropRight", rContent.mfCropRight);
+            rWriter.put("cropBottom", rContent.mfCropBottom);
+        }
 
         // Only what it may not have done travels, since most objects allow everything.
         if (!rContent.mbCanBeMoved)

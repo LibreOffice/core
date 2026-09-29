@@ -121,6 +121,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (!this.groupsHeld)
 			this.groupsHeld = [
 				new FramingHandles(this),
+				new CropHandles(this),
 				new TurningHandle(this),
 				new ShapingHandles(this),
 				new TiePointHandles(this),

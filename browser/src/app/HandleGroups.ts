@@ -269,6 +269,205 @@ class FramingHandles extends HandleGroup {
 }
 
 /*
+	The marks a picture is cropped by: an L at each corner and a bar along each side, standing on
+	the picture's own square where the eight stand, but on the edge itself rather than a little
+	outside it. They are laid in the picture's own axes, so they turn and shear with it and lie
+	along its edges whatever it stands like. The eight are what scales the picture; these are
+	what will crop it, once a drag of them is built - for now they are shown and no more, and
+	carry no name, so nothing takes hold of one.
+*/
+class CropHandles extends HandleGroup {
+	public readonly name: string = 'crop';
+
+	/// The picture the selection is, or nothing where it is not one picture.
+	private thePicture(): cool.SlideObject | undefined {
+		const objects = this.selection.selectedObjects();
+		if (objects.length !== 1) return undefined;
+
+		const object = RenderGeometrySection.objectOf(objects[0]);
+		return object?.graphicWidth !== undefined ? object : undefined;
+	}
+
+	public handles(): SelectionHandle[] {
+		if (!this.thePicture()) return [];
+		if (!ObjectHandles.canBeResized(this.selection.selectedObjects()))
+			return [];
+
+		const eight =
+			ObjectHandles.framingOf(
+				this.selection.selectedObjects(),
+				this.selection.squareNow(),
+			) ?? [];
+
+		return eight.map((one: SelectionHandle) => ({
+			name: '',
+			kind: 'crop' + one.kind,
+			pointer: one.pointer,
+			point: one.point.clone(),
+			turnedBy: one.turnedBy,
+		}));
+	}
+
+	/// The four corners of the unit square through that mapping, as an SVG path, in twips.
+	private static quadOf(mapping: cool.Matrix2D): string {
+		return (
+			[
+				[0, 0],
+				[1, 0],
+				[1, 1],
+				[0, 1],
+			]
+				.map(([x, y]: number[], at: number) => {
+					const corner = mapping.apply(x, y);
+					return (at === 0 ? 'M' : 'L') + corner.x + ' ' + corner.y;
+				})
+				.join(' ') + ' Z'
+		);
+	}
+
+	/*
+		Draws the whole graphic faintly round the cropped picture, as the office does while one
+		crops: what the crop took away is shown at a fifth, with a line round the whole, so one
+		sees what a crop could bring back. The visible window is left out of the drawing, since
+		the picture itself is there. The graphic is drawn from the image the picture's own
+		primitives are drawn from, by its checksum, so nothing is fetched for it.
+	*/
+	public paint(section: SelectionSection, _shown: SelectionHandle[]): void {
+		const picture = this.thePicture();
+		const square = section.squareNow();
+		const data = RenderGeometrySection.currentPart();
+		if (!picture || !square || !data) return;
+		if (
+			picture.graphicChecksum === undefined ||
+			!picture.graphicWidth ||
+			!picture.graphicHeight
+		)
+			return;
+
+		const left = picture.cropLeft ?? 0;
+		const top = picture.cropTop ?? 0;
+		const right = picture.cropRight ?? 0;
+		const bottom = picture.cropBottom ?? 0;
+		if (!left && !top && !right && !bottom) return;
+
+		// The visible window is the graphic less the crop, so the whole graphic stands on the
+		// window's square from minus the crop before it to one plus the crop after it.
+		const visibleWidth = picture.graphicWidth - left - right;
+		const visibleHeight = picture.graphicHeight - top - bottom;
+		if (visibleWidth <= 0 || visibleHeight <= 0) return;
+
+		const extent = new cool.Range2D(
+			-left / visibleWidth,
+			-top / visibleHeight,
+			1 + right / visibleWidth,
+			1 + bottom / visibleHeight,
+		);
+		const whole = cool.Matrix2D.fromRange(extent).then(square);
+
+		const preview = {
+			type: cool.UnifiedTransparencePrimitive.type,
+			transparence: 0.8,
+			children: [
+				{
+					type: cool.MaskPrimitive.type,
+					clip: CropHandles.quadOf(whole) + ' ' + CropHandles.quadOf(square),
+					children: [
+						{
+							type: cool.GraphicPrimitive.type,
+							checksum: picture.graphicChecksum,
+							matrix: whole.toArray(),
+						},
+						{
+							type: cool.PolygonHairlinePrimitive.type,
+							path: CropHandles.quadOf(whole),
+							color: HandleLook.outlineOfADrag,
+						},
+					],
+				},
+			],
+		} as unknown as cool.Primitive;
+
+		section.context.save();
+		section.context.setTransform(1, 0, 0, 1, 0, 0);
+
+		// The point at the very start of the document says where the drawing of the part begins
+		// on the canvas, and a twip is that many pixels wide.
+		const origin = new cool.SimplePoint(0, 0);
+		section.context.translate(origin.vX, origin.vY);
+		section.context.scale(app.twipsToPixels, app.twipsToPixels);
+
+		RenderManager.renderPrimitives(section.context, data, [preview]);
+
+		section.context.restore();
+	}
+
+	/*
+		Lays the mark of that handle into the path: at a corner an L whose arms run along the two
+		edges meeting there, into the picture; along a side a bar lying on the edge, inside it. The
+		mark is laid in the picture's own axes, taken from the selection's square, so it turns and
+		shears with the picture.
+	*/
+	public shape(
+		context: CanvasRenderingContext2D,
+		handle: SelectionHandle,
+		at: cool.SimplePoint,
+		grown: number,
+	): string {
+		const place = ObjectHandles.placeOfKind(handle.kind.substring(4));
+		const square = this.selection.squareNow();
+		if (!place || !square) return HandleLook.colourOfTheKind.crop;
+
+		const unit = (axis: cool.Point): cool.Point =>
+			axis.divideBy(axis.length() || 1);
+		const across = unit(new cool.Point(square.a, square.b));
+		const down = unit(new cool.Point(square.c, square.d));
+
+		// Which way is into the picture from this place, along each axis. Nought along an axis
+		// the place lies in the middle of.
+		const inwardAcross = place.x < 0.5 ? 1 : place.x > 0.5 ? -1 : 0;
+		const inwardDown = place.y < 0.5 ? 1 : place.y > 0.5 ? -1 : 0;
+
+		const long = HandleLook.widthOf('crop') + 2 * grown;
+		const thick = long * 0.5;
+
+		context.save();
+
+		if (inwardAcross && inwardDown) {
+			// A corner: x runs along the top or bottom edge into the picture, y along the side.
+			context.setTransform(
+				across.x * inwardAcross,
+				across.y * inwardAcross,
+				down.x * inwardDown,
+				down.y * inwardDown,
+				at.vX,
+				at.vY,
+			);
+			context.moveTo(0, 0);
+			context.lineTo(long, 0);
+			context.lineTo(long, thick);
+			context.lineTo(thick, thick);
+			context.lineTo(thick, long);
+			context.lineTo(0, long);
+		} else {
+			// A side: x runs along the edge, y into the picture.
+			const along = inwardDown ? across : down;
+			const inward = inwardDown
+				? down.multiplyBy(inwardDown)
+				: across.multiplyBy(inwardAcross);
+			context.setTransform(along.x, along.y, inward.x, inward.y, at.vX, at.vY);
+			context.moveTo(-long * 0.5, 0);
+			context.lineTo(long * 0.5, 0);
+			context.lineTo(long * 0.5, thick);
+			context.lineTo(-long * 0.5, thick);
+		}
+
+		context.restore();
+
+		return HandleLook.colourOfTheKind.crop;
+	}
+}
+
+/*
 	The one handle that turns the selection, above the middle of its upper side and away from it
 	by the same distance whatever the zoom. The client makes it: the engine has no handle of the
 	kind, and what it is told at the end of a turn is a transformation.
