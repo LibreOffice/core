@@ -1192,10 +1192,24 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/*
-		Lays what a drag did over the objects the client holds, so that everything reads them as
-		the drag left them. The engine's own version of an object replaces this one when it
-		arrives, so a change it made differently puts itself right then.
+		Moves the objects one step the way an arrow key says, worked out here and sent to the
+		engine as the one change it is, the way a drag is. The step is the key's: a millimetre,
+		ten with Shift, a pixel as seen with Alt. Objects that may not be moved stay where they
+		are.
 	*/
+	public moveByKey(towards: cool.Point, event: KeyboardEvent): void {
+		if (!ObjectHandles.canBeMoved(this.selectedObjects())) return;
+
+		const step = HandleTravel.stepFor(event);
+		const matrix = cool.Matrix2D.IDENTITY.translate(
+			towards.x * step,
+			towards.y * step,
+		);
+
+		SelectionSection.sendTransform(this.selectedObjects(), matrix, 'move');
+		this.layTheChangeOn(matrix);
+	}
+
 	/// Lays a change a key made over the objects, as the end of a drag does with its own.
 	public layTheChangeOn(matrix: cool.Matrix2D | null): void {
 		this.leaveTheChangeOnTheObjects(matrix);
@@ -1234,6 +1248,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.square = null;
 	}
 
+	/*
+		Lays what a drag did over the objects the client holds, so that everything reads them as
+		the drag left them. The engine's own version of an object replaces this one when it
+		arrives, so a change it made differently puts itself right then.
+	*/
 	private leaveTheChangeOnTheObjects(matrix: cool.Matrix2D | null): void {
 		if (!matrix) return;
 		if (!SelectionSection.withinReason(this.selectedObjects(), matrix)) return;

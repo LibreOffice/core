@@ -49,7 +49,9 @@ class HandleTravel {
 		const millimetre = 1440 / 25.4;
 
 		if (event.shiftKey) return 10 * millimetre;
-		if (event.altKey) return app.pixelsToTwips;
+		// One pixel as it is seen: the twips of a core pixel are the twips of a screen pixel
+		// only where the screen is not scaled, so the scale goes in.
+		if (event.altKey) return app.pixelsToTwips * app.dpiScale;
 		return millimetre;
 	}
 

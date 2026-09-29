@@ -265,31 +265,34 @@ class GraphicSelection {
 		return GraphicSelection.selectionSection?.travel;
 	}
 
-	/// The four keys that move what is selected one step across the page.
-	private static readonly theMovingKeys: string[] = [
-		'ArrowUp',
-		'ArrowDown',
-		'ArrowLeft',
-		'ArrowRight',
-	];
+	/// The way each of the four arrow keys moves what is selected.
+	private static readonly theWayOf: { [key: string]: number[] } = {
+		ArrowUp: [0, -1],
+		ArrowDown: [0, 1],
+		ArrowLeft: [-1, 0],
+		ArrowRight: [1, 0],
+	};
 
 	/*
 		What the keyboard does to what is selected, while the client draws the selection itself.
-		A handle takes the key first, where the keyboard is on one. An arrow key moves the
-		objects, so it is used up here and travels no further where they may not be moved: the
-		engine asks only the objects that are marked, and not the ones they hold, so it would
-		move a group whose member is held fast.
+		A handle takes the key first, where the keyboard is on one. An arrow key with the
+		keyboard on no handle moves the objects, and that is done here and sent as the one change
+		it is, never as a key: the engine would move them by a pixel of its own view, which is
+		not the pixel seen here and depends on the zoom, and it asks only the objects that are
+		marked, not the ones they hold, so it would move a group whose member is held fast.
 	*/
 	public static handleKeyboard(event: KeyboardEvent): boolean {
 		if (!this.hasActiveSelection()) return false;
 
 		if (GraphicSelection.travel()?.keyboard(event)) return true;
 
-		return (
-			RenderManager.isVectorRendering() &&
-			GraphicSelection.theMovingKeys.includes(event.key) &&
-			!ObjectHandles.canBeMoved(this.selectedObjectIDs)
-		);
+		if (!RenderManager.isVectorRendering()) return false;
+
+		const way = GraphicSelection.theWayOf[event.key];
+		if (!way) return false;
+
+		this.selectionSection?.moveByKey(new cool.Point(way[0], way[1]), event);
+		return true;
 	}
 
 	/*
