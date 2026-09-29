@@ -53,6 +53,7 @@
 #include <xlname.hxx>
 #include <xllink.hxx>
 #include <xltools.hxx>
+#include <ignorederrors.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -180,6 +181,49 @@ static void lcl_WriteRichDataParts( XclExpXmlStream& rStrm, const std::vector<Gr
         pRelations->singleElement(XML_rel, FSNS(XML_r, XML_id), sRelationId.toUtf8());
     }
     pRelations->endElement(XML_richValueRels);
+}
+
+namespace {
+
+/// The ignoredErrors element of a sheet.
+class XclExpIgnoredErrors : public XclExpRecordBase
+{
+public:
+    explicit XclExpIgnoredErrors( const ScDocument& rDoc,
+                                  std::vector<ScIgnoredErrors> aIgnoredErrors )
+        : mrDoc( rDoc )
+        , maIgnoredErrors( std::move( aIgnoredErrors ) )
+    {
+    }
+
+    virtual void SaveXml( XclExpXmlStream& rStrm ) override;
+
+private:
+    const ScDocument& mrDoc;
+    std::vector<ScIgnoredErrors> maIgnoredErrors;
+};
+
+void XclExpIgnoredErrors::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    rWorksheet->startElement( XML_ignoredErrors );
+    for( const ScIgnoredErrors& rEntry : maIgnoredErrors )
+    {
+        rWorksheet->singleElement( XML_ignoredError,
+            XML_sqref, XclXmlUtils::ToOString( mrDoc, rEntry.maRanges ),
+            XML_evalError, sax_fastparser::UseIf( "1", rEntry.mbEvalError ),
+            XML_twoDigitTextYear, sax_fastparser::UseIf( "1", rEntry.mbTwoDigitTextYear ),
+            XML_numberStoredAsText, sax_fastparser::UseIf( "1", rEntry.mbNumberStoredAsText ),
+            XML_formula, sax_fastparser::UseIf( "1", rEntry.mbFormula ),
+            XML_formulaRange, sax_fastparser::UseIf( "1", rEntry.mbFormulaRange ),
+            XML_unlockedFormula, sax_fastparser::UseIf( "1", rEntry.mbUnlockedFormula ),
+            XML_emptyCellReference, sax_fastparser::UseIf( "1", rEntry.mbEmptyCellReference ),
+            XML_listDataValidation, sax_fastparser::UseIf( "1", rEntry.mbListDataValidation ),
+            XML_calculatedColumn, sax_fastparser::UseIf( "1", rEntry.mbCalculatedColumn ) );
+    }
+    rWorksheet->endElement( XML_ignoredErrors );
+}
+
 }
 
 static OUString lcl_GetVbaTabName( SCTAB n )
@@ -754,6 +798,10 @@ void ExcTable::FillAsTableXml()
     }
 
     aRecList.AppendRecord( xPageSett );
+
+    if( const std::vector<ScIgnoredErrors>* pIgnoredErrors = rDoc.GetIgnoredErrors( mnScTab ) )
+        if( !pIgnoredErrors->empty() )
+            aRecList.AppendNewRecord( new XclExpIgnoredErrors( rDoc, *pIgnoredErrors ) );
 
     std::unique_ptr<XclExpImgData> pImgData(xPageSett->getGraphicExport());
     // all MSODRAWING and OBJ stuff of this sheet goes here

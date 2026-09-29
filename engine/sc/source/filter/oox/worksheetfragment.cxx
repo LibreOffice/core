@@ -44,6 +44,8 @@
 #include <viewsettings.hxx>
 #include <worksheetsettings.hxx>
 #include <NamedSheetViewFragment.hxx>
+#include <document.hxx>
+#include <ignorederrors.hxx>
 
 namespace oox::xls {
 
@@ -390,6 +392,7 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
                 case XLS_TOKEN( cols ):
                 case XLS_TOKEN( mergeCells ):
                 case XLS_TOKEN( hyperlinks ):
+                case XLS_TOKEN( ignoredErrors ):
                 case XLS_TOKEN( rowBreaks ):
                 case XLS_TOKEN( colBreaks ):
                 case XLS_TOKEN( oleObjects ):
@@ -444,6 +447,9 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
         break;
         case XLS_TOKEN( hyperlinks ):
             if( nElement == XLS_TOKEN( hyperlink ) ) importHyperlink( rAttribs );
+        break;
+        case XLS_TOKEN( ignoredErrors ):
+            if( nElement == XLS_TOKEN( ignoredError ) ) importIgnoredError( rAttribs );
         break;
         case XLS_TOKEN( rowBreaks ):
             if( nElement == XLS_TOKEN( brk ) ) importBrk( rAttribs, true );
@@ -710,6 +716,27 @@ void WorksheetFragment::importMergeCell( const AttributeList& rAttribs )
     ScRange aRange;
     if( getAddressConverter().convertToCellRange( aRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex(), true, true ) )
         getSheetData().setMergedRange( aRange );
+}
+
+void WorksheetFragment::importIgnoredError( const AttributeList& rAttribs )
+{
+    ScIgnoredErrors aIgnoredErrors;
+    getAddressConverter().convertToCellRangeList( aIgnoredErrors.maRanges,
+                                                  rAttribs.getString( XML_sqref, OUString() ),
+                                                  getSheetIndex(), true );
+    if( aIgnoredErrors.maRanges.empty() )
+        return;
+
+    aIgnoredErrors.mbEvalError = rAttribs.getBool( XML_evalError, false );
+    aIgnoredErrors.mbTwoDigitTextYear = rAttribs.getBool( XML_twoDigitTextYear, false );
+    aIgnoredErrors.mbNumberStoredAsText = rAttribs.getBool( XML_numberStoredAsText, false );
+    aIgnoredErrors.mbFormula = rAttribs.getBool( XML_formula, false );
+    aIgnoredErrors.mbFormulaRange = rAttribs.getBool( XML_formulaRange, false );
+    aIgnoredErrors.mbUnlockedFormula = rAttribs.getBool( XML_unlockedFormula, false );
+    aIgnoredErrors.mbEmptyCellReference = rAttribs.getBool( XML_emptyCellReference, false );
+    aIgnoredErrors.mbListDataValidation = rAttribs.getBool( XML_listDataValidation, false );
+    aIgnoredErrors.mbCalculatedColumn = rAttribs.getBool( XML_calculatedColumn, false );
+    getScDocument().AddIgnoredErrors( getSheetIndex(), aIgnoredErrors );
 }
 
 void WorksheetFragment::importHyperlink( const AttributeList& rAttribs )

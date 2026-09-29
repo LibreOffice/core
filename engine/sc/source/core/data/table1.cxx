@@ -1999,6 +1999,24 @@ void ScTable::UpdateReference(
     if(mpCondFormatList)
         mpCondFormatList->UpdateReference(rCxt);
 
+    if (!maIgnoredErrors.empty())
+    {
+        for (ScIgnoredErrors& rIgnoredErrors : maIgnoredErrors)
+        {
+            // The ranges carry the current index of the sheet, so that an update of the sheet
+            // applies to them.
+            for (size_t i = 0; i < rIgnoredErrors.maRanges.size(); ++i)
+            {
+                rIgnoredErrors.maRanges[i].aStart.SetTab(nTab);
+                rIgnoredErrors.maRanges[i].aEnd.SetTab(nTab);
+            }
+            rIgnoredErrors.maRanges.UpdateReference(eUpdateRefMode, rDocument, rCxt.maRange, nDx,
+                                                    nDy, nDz);
+        }
+        std::erase_if(maIgnoredErrors, [](const ScIgnoredErrors& rIgnoredErrors)
+                      { return rIgnoredErrors.maRanges.empty(); });
+    }
+
     if (pTabProtection)
         pTabProtection->updateReference( eUpdateRefMode, rDocument, rCxt.maRange, nDx, nDy, nDz);
 }
@@ -2777,6 +2795,11 @@ void ScTable::DeleteConditionalFormat( sal_uLong nIndex )
 void ScTable::SetCondFormList( ScConditionalFormatList* pNew )
 {
     mpCondFormatList.reset( pNew );
+}
+
+void ScTable::AddIgnoredErrors(const ScIgnoredErrors& rIgnoredErrors)
+{
+    maIgnoredErrors.push_back(rIgnoredErrors);
 }
 
 ScConditionalFormatList* ScTable::GetCondFormList()

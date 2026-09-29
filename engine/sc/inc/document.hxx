@@ -156,6 +156,7 @@ class ScClipOptions;
 class ScColumn;
 class ScConditionalFormat;
 class ScConditionalFormatList;
+struct ScIgnoredErrors;
 class ScDBCollection;
 class ScDBData;
 class ScDetOpData;
@@ -2108,6 +2109,10 @@ public:
     SC_DLLPUBLIC const ScValidationData*    GetValidationEntry( sal_uInt32 nIndex ) const;
 
     SC_DLLPUBLIC ScConditionalFormatList*   GetCondFormList( SCTAB nTab ) const;
+
+    SC_DLLPUBLIC void AddIgnoredErrors( SCTAB nTab, const ScIgnoredErrors& rIgnoredErrors );
+    /// Returns null when the sheet does not exist.
+    SC_DLLPUBLIC const std::vector<ScIgnoredErrors>* GetIgnoredErrors( SCTAB nTab ) const;
 
     const ScValidationDataList*             GetValidationList() const { return pValidationList.get();}
     ScValidationDataList*                   GetValidationList() { return pValidationList.get();}

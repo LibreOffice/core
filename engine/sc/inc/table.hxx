@@ -36,6 +36,7 @@
 #include "SolverSettings.hxx"
 #include "markdata.hxx"
 #include "FilterData.hxx"
+#include "ignorederrors.hxx"
 #include <algorithm>
 #include <atomic>
 #include <memory>
@@ -234,6 +235,7 @@ private:
 
     std::unique_ptr<ScConditionalFormatList> mpCondFormatList;
     sc::SparklineList maSparklineList;
+    std::vector<ScIgnoredErrors> maIgnoredErrors;
 
     ScAddress       maKitFreezeCell;
 
@@ -1072,6 +1074,13 @@ public:
     ScConditionalFormatList* GetCondFormList();
     const ScConditionalFormatList* GetCondFormList() const;
     void SetCondFormList( ScConditionalFormatList* pList );
+
+    const std::vector<ScIgnoredErrors>& GetIgnoredErrors() const { return maIgnoredErrors; }
+    /** Replaces the ignored errors inside the area with those that rSource has there, and leaves
+        the ignored errors outside the area alone. */
+    void CopyIgnoredErrors( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                            const ScTable& rSource );
+    void AddIgnoredErrors( const ScIgnoredErrors& rIgnoredErrors );
 
     void DeleteConditionalFormat(sal_uLong nOldIndex);
 

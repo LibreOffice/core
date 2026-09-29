@@ -1272,6 +1272,19 @@ void ScDocument::SetCondFormList( ScConditionalFormatList* pList, SCTAB nTab )
         pTable->SetCondFormList(pList);
 }
 
+void ScDocument::AddIgnoredErrors(SCTAB nTab, const ScIgnoredErrors& rIgnoredErrors)
+{
+    if (ScTable* pTable = FetchTable(nTab))
+        pTable->AddIgnoredErrors(rIgnoredErrors);
+}
+
+const std::vector<ScIgnoredErrors>* ScDocument::GetIgnoredErrors(SCTAB nTab) const
+{
+    if (const ScTable* pTable = FetchTable(nTab))
+        return &pTable->GetIgnoredErrors();
+    return nullptr;
+}
+
 const ScValidationData* ScDocument::GetValidationEntry( sal_uInt32 nIndex ) const
 {
     if ( nIndex && pValidationList )

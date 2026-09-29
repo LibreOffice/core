@@ -679,6 +679,57 @@ bool CheckAndDeduplicateCondFormat(ScDocument& rDocument, ScConditionalFormat* p
 
 }
 
+void ScTable::CopyIgnoredErrors(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                                const ScTable& rSource)
+{
+    const ScRange aArea(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
+
+    // The ranges of both sheets carry this sheet's index, so that they compare with the area.
+    auto aMoveToThisSheet = [this](ScRange aRange) {
+        aRange.aStart.SetTab(nTab);
+        aRange.aEnd.SetTab(nTab);
+        return aRange;
+    };
+
+    for (ScIgnoredErrors& rEntry : maIgnoredErrors)
+    {
+        for (size_t i = 0; i < rEntry.maRanges.size(); ++i)
+            rEntry.maRanges[i] = aMoveToThisSheet(rEntry.maRanges[i]);
+        rEntry.maRanges.DeleteArea(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
+    }
+
+    for (const ScIgnoredErrors& rSourceEntry : rSource.maIgnoredErrors)
+    {
+        ScRangeList aRangesInArea;
+        for (size_t i = 0; i < rSourceEntry.maRanges.size(); ++i)
+        {
+            const ScRange aRange = aMoveToThisSheet(rSourceEntry.maRanges[i]);
+            if (aRange.Intersects(aArea))
+                aRangesInArea.push_back(aRange.Intersection(aArea));
+        }
+        if (aRangesInArea.empty())
+            continue;
+
+        auto it = std::find_if(maIgnoredErrors.begin(), maIgnoredErrors.end(),
+                               [&rSourceEntry](const ScIgnoredErrors& rEntry)
+                               { return rEntry.HasSameKinds(rSourceEntry); });
+        if (it == maIgnoredErrors.end())
+        {
+            ScIgnoredErrors aNewEntry(rSourceEntry);
+            aNewEntry.maRanges = aRangesInArea;
+            maIgnoredErrors.push_back(aNewEntry);
+        }
+        else
+        {
+            for (size_t i = 0; i < aRangesInArea.size(); ++i)
+                it->maRanges.Join(aRangesInArea[i]);
+        }
+    }
+
+    std::erase_if(maIgnoredErrors,
+                  [](const ScIgnoredErrors& rEntry) { return rEntry.maRanges.empty(); });
+}
+
 void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         SCCOL nDx, SCROW nDy, const ScTable* pTable)
 {
@@ -1412,6 +1463,7 @@ void ScTable::CopyToTable(
     if (bToUndoDoc && (nFlags & InsertDeleteFlags::ATTRIB))
     {
         pDestTab->mpCondFormatList.reset(mpCondFormatList->Clone(pDestTab->rDocument));
+        pDestTab->maIgnoredErrors = maIgnoredErrors;
     }
 
     if (pDBDataNoName)
@@ -1506,6 +1558,9 @@ void ScTable::CopyToTable(
     {
         pDestTab->mpCondFormatList->DeleteArea(nCol1, nRow1, nCol2, nRow2);
         pDestTab->CopyConditionalFormat(nCol1, nRow1, nCol2, nRow2, 0, 0, this);
+        // The undo document holds the whole list already.
+        if (!bToUndoDoc)
+            pDestTab->CopyIgnoredErrors(nCol1, nRow1, nCol2, nRow2, *this);
     }
 
     if(nFlags & InsertDeleteFlags::OUTLINE) // also only when bColRowFlags
@@ -1584,7 +1639,10 @@ void ScTable::UndoToTable(
     }
 
     if (nFlags & InsertDeleteFlags::ATTRIB)
+    {
         pDestTab->mpCondFormatList.reset(mpCondFormatList->Clone(pDestTab->rDocument));
+        pDestTab->maIgnoredErrors = maIgnoredErrors;
+    }
 
     if (!(bWidth||bHeight))
         return;

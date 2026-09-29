@@ -141,6 +141,8 @@ private:
     void                importMergeCell( const AttributeList& rAttribs );
     /** Imports the hyperlink element containing a hyperlink for a cell range. */
     void                importHyperlink( const AttributeList& rAttribs );
+    /** Imports the cell ranges and error kinds from an ignoredError element. */
+    void                importIgnoredError( const AttributeList& rAttribs );
     /** Imports individual break that is either within row or column break context. */
     void                importBrk( const AttributeList& rAttribs, bool bRowBreak );
     /** Imports the relation identifier for the DrawingML part. */

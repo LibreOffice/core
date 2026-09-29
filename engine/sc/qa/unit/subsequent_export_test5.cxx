@@ -11,6 +11,9 @@
 
 #include "helper/qahelper.hxx"
 
+#include <docfunc.hxx>
+#include <ignorederrors.hxx>
+#include <undomanager.hxx>
 #include <docsh.hxx>
 #include <dbdata.hxx>
 #include <scitems.hxx>
@@ -1689,6 +1692,88 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testQueryTableExport)
     xmlDocUniquePtr pConn = parseExport(u"xl/connections.xml"_ustr);
     CPPUNIT_ASSERT(pConn);
     assertXPath(pConn, "/x:connections/x:connection[1]/x:textPr", "delimiter", u"_x0000_");
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testIgnoredErrors)
+{
+    // Numbers stored as text are not flagged in B2:B3 and D5, and the formula in C4 is not
+    // flagged as inconsistent or as an error.
+    createScDoc("xlsx/ignored-errors.xlsx");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0
+    // i.e. the ignoredErrors element was not written.
+    assertXPath(pSheet, "/x:worksheet/x:ignoredErrors/x:ignoredError", 2);
+    assertXPath(pSheet, "/x:worksheet/x:ignoredErrors/x:ignoredError[1]", "sqref", u"B2:B3 D5");
+    assertXPath(pSheet, "/x:worksheet/x:ignoredErrors/x:ignoredError[1]", "numberStoredAsText",
+                u"1");
+    assertXPathNoAttribute(pSheet, "/x:worksheet/x:ignoredErrors/x:ignoredError[1]", "formula");
+    assertXPath(pSheet, "/x:worksheet/x:ignoredErrors/x:ignoredError[2]", "sqref", u"C4");
+    assertXPath(pSheet, "/x:worksheet/x:ignoredErrors/x:ignoredError[2]", "formula", u"1");
+    assertXPath(pSheet, "/x:worksheet/x:ignoredErrors/x:ignoredError[2]", "evalError", u"1");
+
+    // The ranges follow the cells when rows are inserted and deleted, and an entry whose cells are
+    // all deleted is dropped.
+    createScDoc("xlsx/ignored-errors.xlsx");
+    ScDocument* pDoc = getScDoc();
+    ScDocFunc& rDocFunc = getScDocShell()->GetDocFunc();
+    CPPUNIT_ASSERT(rDocFunc.InsertCells(ScRange(0, 0, 0, pDoc->MaxCol(), 0, 0), nullptr,
+                                        INS_INSROWS_BEFORE, true, true));
+    CPPUNIT_ASSERT(rDocFunc.DeleteCells(ScRange(0, 4, 0, pDoc->MaxCol(), 4, 0), nullptr,
+                                        DelCellCmd::Rows, true));
+
+    save(TestFilter::XLSX);
+    pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPath(pSheet, "/x:worksheet/x:ignoredErrors/x:ignoredError", 1);
+    assertXPath(pSheet, "/x:worksheet/x:ignoredErrors/x:ignoredError", "sqref", u"B3:B4 D5");
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testIgnoredErrorsUndoAndSheetCopy)
+{
+    // Numbers stored as text are not flagged in B2:B3 and D5, and the formula in C4 is not
+    // flagged as inconsistent or as an error.
+    createScDoc("xlsx/ignored-errors.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // The ranges of each entry, with the entries separated by a semicolon.
+    auto aFormatRanges = [pDoc](SCTAB nTab) {
+        OUStringBuffer aResult;
+        for (const ScIgnoredErrors& rIgnoredErrors : *pDoc->GetIgnoredErrors(nTab))
+        {
+            OUString aRanges;
+            rIgnoredErrors.maRanges.Format(aRanges, ScRefFlags::VALID, *pDoc,
+                                           formula::FormulaGrammar::CONV_XL_A1, ' ');
+            if (!aResult.isEmpty())
+                aResult.append(";");
+            aResult.append(aRanges);
+        }
+        return aResult.makeStringAndClear();
+    };
+    const OUString aOriginal(u"B2:B3 D5;C4"_ustr);
+    CPPUNIT_ASSERT_EQUAL(aOriginal, aFormatRanges(0));
+
+    // Deleting row 4 drops the entry for C4 and moves D5 up.
+    ScDocFunc& rDocFunc = getScDocShell()->GetDocFunc();
+    CPPUNIT_ASSERT(rDocFunc.DeleteCells(ScRange(0, 3, 0, pDoc->MaxCol(), 3, 0), nullptr,
+                                        DelCellCmd::Rows, true));
+    CPPUNIT_ASSERT_EQUAL(u"B2:B3 D4"_ustr, aFormatRanges(0));
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: B2:B3 D5;C4
+    // - Actual  : B2:B3 D5
+    // i.e. undo did not bring back the entry that the deletion dropped.
+    pDoc->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL(aOriginal, aFormatRanges(0));
+
+    // A copy of the sheet has the same entries.
+    CPPUNIT_ASSERT(pDoc->CopyTab(0, 1));
+    CPPUNIT_ASSERT_EQUAL(aOriginal, aFormatRanges(1));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
