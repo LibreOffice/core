@@ -2928,7 +2928,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
         // center vertically
         aEntryPos.AdjustY((nTempEntryHeight - aSize.Height()) / 2 );
 
-        rItem.Paint(aEntryPos, *this, rRenderContext, &rViewDataEntry, rEntry);
+        rItem.Paint(aEntryPos, *this, rRenderContext, rViewDataEntry, rEntry);
 
         // division line between tabs (but not if this is a separator line)
         if (!bSeparator && pNextTab && rItem.GetType() == SvLBoxItemType::String &&

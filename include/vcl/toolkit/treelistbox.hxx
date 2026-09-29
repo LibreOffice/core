@@ -134,7 +134,10 @@ public:
     void Enable(bool bEnabled) { mbDisabled = !bEnabled; }
     bool isEnable() const { return !mbDisabled; }
 
-    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev, vcl::RenderContext& rRenderContext, const SvViewDataEntry* pView, const SvTreeListEntry& rEntry) = 0;
+    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev,
+                       vcl::RenderContext& rRenderContext, const SvViewDataEntry& rView,
+                       const SvTreeListEntry& rEntry)
+        = 0;
 
     virtual void InitViewData(SvTreeListBox& rView, SvTreeListEntry& rEntry,
                               // If != 0: this Pointer must be used!

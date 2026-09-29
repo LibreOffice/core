@@ -93,8 +93,7 @@ public:
     }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev,
-                       vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView,
+                       vcl::RenderContext& rRenderContext, const SvViewDataEntry& rView,
                        const SvTreeListEntry& rEntry) override;
 
     virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;
@@ -112,10 +111,8 @@ public:
     virtual SvLBoxItemType GetType() const override;
     virtual void InitViewData(SvTreeListBox& rView, SvTreeListEntry& rEntry,
                               SvViewDataItem* pViewData = nullptr) override;
-    virtual void Paint(const Point& rPos,
-                       SvTreeListBox& rOutDev,
-                       vcl::RenderContext& rRenderContext,
-                       const SvViewDataEntry* pView,
+    virtual void Paint(const Point& rPos, SvTreeListBox& rOutDev,
+                       vcl::RenderContext& rRenderContext, const SvViewDataEntry& rView,
                        const SvTreeListEntry& rEntry) override;
 
     virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;

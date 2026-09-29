@@ -71,9 +71,8 @@ namespace
     }
 }
 
-void SvLBoxString::Paint(
-    const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-    const SvViewDataEntry* /*pView*/, const SvTreeListEntry& rEntry)
+void SvLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
+                         const SvViewDataEntry& /*rView*/, const SvTreeListEntry& rEntry)
 {
     DrawTextFlags nStyle = (rDev.IsEnabled() && !mbDisabled) ? DrawTextFlags::NONE : DrawTextFlags::Disable;
     if (rEntry.IsSeparator())
@@ -219,13 +218,13 @@ void SvLBoxContextBmp::InitViewData(SvTreeListBox& rView, SvTreeListEntry& rEntr
     pViewData->mnHeight = aSize.Height();
 }
 
-void SvLBoxContextBmp::Paint(
-    const Point& _rPos, SvTreeListBox& _rDev, vcl::RenderContext& rRenderContext,
-    const SvViewDataEntry* pView, const SvTreeListEntry& rEntry)
+void SvLBoxContextBmp::Paint(const Point& _rPos, SvTreeListBox& _rDev,
+                             vcl::RenderContext& rRenderContext, const SvViewDataEntry& rView,
+                             const SvTreeListEntry& rEntry)
 {
 
     // get the image.
-    const Image& rImage = !pView->IsExpanded() ? m_aImage1 : m_aImage2;
+    const Image& rImage = !rView.IsExpanded() ? m_aImage1 : m_aImage2;
 
     bool _bSemiTransparent = bool( SvTLEntryFlags::SEMITRANSPARENT & rEntry.GetFlags( ) );
     // draw
