@@ -85,6 +85,11 @@ window.L.Clipboard = window.L.Class.extend({
 		document.oncopy = function(ev)  { return that.copy(ev); };
 		document.onpaste = function(ev) {
 			if (window.mode.isCODesktop()) {
+				// A text field of our own, such as a dialog's input, takes the paste itself.
+				if (that._isAnyInputFieldSelected() && !that._isFormulabarSelected()) {
+					window.app.console.debug('Paste: the focused text field takes the paste');
+					return;
+				}
 				// The desktop provider apps map the paste event straight to
 				// .uno:Paste; the iOS app handles it in paste() instead.
 				ev.preventDefault();
