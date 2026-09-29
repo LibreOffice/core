@@ -1147,6 +1147,32 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testNotesAuthor)
     pBatch->commit();
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testNoteFirstParagraphFormatting)
+{
+    // The note has a bold blue first paragraph in Tahoma 9pt and a plain black second paragraph.
+    createScDoc("xlsx/cell-note-formatted.xlsx");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/comments1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the first paragraph was written in the default font, not bold.
+    static constexpr OString aFirst
+        = "/x:comments/x:commentList/x:comment/x:text/x:r[starts-with(x:t, 'First')]/x:rPr"_ostr;
+    assertXPath(pXmlDoc, aFirst + "/x:b", 1);
+    assertXPath(pXmlDoc, aFirst + "/x:rFont", "val", u"Tahoma");
+    assertXPath(pXmlDoc, aFirst + "/x:sz", "val", u"9");
+    assertXPath(pXmlDoc, aFirst + "/x:color", "rgb", u"FF0000FF");
+
+    static constexpr OString aSecond
+        = "/x:comments/x:commentList/x:comment/x:text/x:r[starts-with(x:t, 'Second')]/x:rPr"_ostr;
+    assertXPath(pXmlDoc, aSecond + "/x:b", 0);
+    assertXPath(pXmlDoc, aSecond + "/x:rFont", "val", u"Tahoma");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest5, testSheetProtections)
 {
     auto verify = [this]() {

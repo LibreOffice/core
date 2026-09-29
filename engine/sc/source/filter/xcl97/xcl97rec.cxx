@@ -932,7 +932,8 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rTextObj ) :
 }
 
 XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObject* pCaption ) :
-    mpString( XclExpStringHelper::CreateString( rRoot, rEditObj ) ),
+    mpString( XclExpStringHelper::CreateString(
+        rRoot, rEditObj, pCaption ? &pCaption->GetMergedItemSet() : nullptr ) ),
     mnRotation( EXC_OBJ_ORIENT_NONE ),
     mnHorAlign( EXC_OBJ_HOR_LEFT ),
     mnVerAlign( EXC_OBJ_VER_TOP )

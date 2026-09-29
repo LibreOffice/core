@@ -640,12 +640,27 @@ XclExpStringRef XclExpStringHelper::CreateString(
 
 XclExpStringRef XclExpStringHelper::CreateString(
         const XclExpRoot& rRoot, const EditTextObject& rEditObj,
-        XclStrFlags nFlags )
+        const SfxItemSet* pObjectItemSet, XclStrFlags nFlags )
 {
     XclExpStringRef xString;
     EditEngine& rEE = rRoot.GetDrawEditEngine();
     bool bOldUpdateMode = rEE.SetUpdateLayout( true );
     rEE.SetText( rEditObj );
+    if( pObjectItemSet )
+    {
+        // The character attributes of the drawing object go under the attributes of each
+        // paragraph, so that they reach every text portion that does not override them.
+        const sal_Int32 nParaCount = rEE.GetParagraphCount();
+        for( sal_Int32 nPara = 0; nPara < nParaCount; ++nPara )
+        {
+            SfxItemSet aParaSet( rEE.GetEmptyItemSet() );
+            for( sal_uInt16 nWhich = EE_CHAR_START; nWhich <= EE_CHAR_END; ++nWhich )
+                if( pObjectItemSet->GetItemState( nWhich ) == SfxItemState::SET )
+                    aParaSet.Put( pObjectItemSet->Get( nWhich ) );
+            aParaSet.Put( rEE.GetParaAttribs( nPara ) );
+            rEE.SetParaAttribs( nPara, aParaSet );
+        }
+    }
     xString = lclCreateFormattedString( rRoot, rEE, nullptr, nFlags, EXC_STR_MAXLEN );
     rEE.SetUpdateLayout( bOldUpdateMode );
     // limit formats - TODO: BIFF dependent

@@ -206,6 +206,7 @@ private:
 class EditEngine;
 class EditTextObject;
 class SdrTextObj;
+class SfxItemSet;
 class ScPatternAttr;
 
 /** This class provides methods to create an XclExpString.
@@ -315,11 +316,14 @@ public:
 
     /** Creates a new formatted string from an edit text string.
         @param rEditObj  The edittext object.
+        @param pObjectItemSet  The item set of the drawing object that holds the text, or null.
+                Its character attributes apply to all text that does not set them itself.
         @param nFlags  Modifiers for string export.
         @return  The new string object. */
     static XclExpStringRef CreateString(
                             const XclExpRoot& rRoot,
                             const EditTextObject& rEditObj,
+                            const SfxItemSet* pObjectItemSet,
                             XclStrFlags nFlags = XclStrFlags::NONE );
 
     /** Returns the script type first text portion different to WEAK, or the system

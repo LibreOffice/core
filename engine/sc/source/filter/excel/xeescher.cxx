@@ -1951,7 +1951,8 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
             // TODO: additional text
             if( pScNote )
             {
-                if( SdrCaptionObj* pCaption = pScNote->GetOrCreateCaption( maScPos ) )
+                SdrCaptionObj* pCaption = pScNote->GetOrCreateCaption( maScPos );
+                if( pCaption )
                 {
                     lcl_GetFromTo( rRoot, pCaption->GetLogicRect(), maScPos.Tab(), maCommentFrom, maCommentTo );
                     const OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject();
@@ -1991,7 +1992,8 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
                     maAuthor = XclExpString( pScNote->GetAuthor(), XclStrFlags::NONE, 54 );
 
                 if (const EditTextObject *pEditObj = pScNote->GetEditTextObject())
-                    mpNoteContents = XclExpStringHelper::CreateString( rRoot, *pEditObj );
+                    mpNoteContents = XclExpStringHelper::CreateString(
+                        rRoot, *pEditObj, pCaption ? &pCaption->GetMergedItemSet() : nullptr );
 
                 if (const ScThreadedCommentData* pThreadedData = pScNote->GetThreadedCommentData())
                 {
