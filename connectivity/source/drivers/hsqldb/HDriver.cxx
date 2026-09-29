@@ -79,7 +79,9 @@ namespace connectivity
         : ODriverDelegator_BASE(m_aMutex)
         ,m_xContext(_rxContext)
         ,m_bInShutDownConnections(false)
+        ,m_aDatabaseDirectory(nullptr, true)
     {
+        m_aDatabaseDirectory.EnableKillingFile(true);
     }
 
 
@@ -199,8 +201,33 @@ namespace connectivity
 
                 ::comphelper::NamedValueCollection aProperties;
 
+                // The database path keeps the document's file name as its last part, because the
+                // streams in older documents are named after it.
+                OUString sKey = StorageContainer::getRegisteredKey(xStorage);
+                OUString sDatabasePath;
+                if (!sKey.isEmpty())
+                    sDatabasePath = StorageContainer::getRegisteredStorage(sKey).url;
+                else
+                {
+                    OUString sDirectoryPath;
+                    if (m_aDatabaseDirectory.IsValid())
+                    {
+                        const OUString sDirectoryURL
+                            = ::utl::CreateTempURL(&m_aDatabaseDirectory.GetURL(), true);
+                        osl_getSystemPathFromFileURL(sDirectoryURL.pData, &sDirectoryPath.pData);
+                    }
+                    if (sDirectoryPath.isEmpty())
+                    {
+                        ::connectivity::SharedResources aResources;
+                        const OUString sMessage = aResources.getResourceString(STR_NO_STORAGE);
+                        ::dbtools::throwGenericSQLException(sMessage ,*this);
+                    }
+                    sDatabasePath = sDirectoryPath + OUStringChar(SAL_PATHDELIMITER)
+                                    + StorageContainer::removeOldURLPrefix(sSystemPath);
+                    sKey = StorageContainer::registerStorage(xStorage, sDatabasePath);
+                }
+
                 // properties for accessing the embedded storage
-                OUString sKey = StorageContainer::registerStorage( xStorage, sSystemPath );
                 aProperties.put( u"storage_key"_ustr, sKey );
                 aProperties.put( u"storage_class_name"_ustr,
                     u"com.sun.star.sdbcx.comp.hsqldb.StorageAccess"_ustr );
@@ -339,7 +366,7 @@ namespace connectivity
 
                 Sequence< PropertyValue > aConnectionArgs;
                 aProperties >>= aConnectionArgs;
-                OUString sConnectURL = "jdbc:hsqldb:" + sSystemPath;
+                OUString sConnectURL = "jdbc:hsqldb:" + sDatabasePath;
                 Reference<XConnection> xOrig;
                 try
                 {
