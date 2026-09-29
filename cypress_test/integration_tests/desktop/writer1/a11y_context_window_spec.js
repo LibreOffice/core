@@ -339,4 +339,54 @@ describe(['tagdesktop'], 'Writer off-screen context', { testIsolation: false }, 
 			});
 		});
 	});
+
+	// A reader whose position is on a paragraph that goes away looks for another and leaves focus mode.
+	it('moving the caret keeps the paragraphs of the context', function () {
+		let before;
+
+		cy.cGet('#a11y-context-after > span').then(function ($paragraphs) {
+			before = $paragraphs.toArray();
+			expect(before, 'paragraphs after the caret').to.not.be.empty;
+		});
+		helper.typeIntoDocument('{downarrow}');
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+
+		cy.cGet('#a11y-context-after > span').should(function ($paragraphs) {
+			const after = $paragraphs.toArray();
+			const kept = Math.min(before.length, after.length);
+			expect(kept, 'paragraphs in both').to.be.greaterThan(0);
+			for (let index = 0; index < kept; index++)
+				expect(after[index] === before[index], 'paragraph ' + index + ' is the same node').to.equal(true);
+		});
+	});
+
+	// Orca enters focus mode with the focus on the page and the selection where it was reading.
+	it('a key reaching the page from a paragraph of the context moves the caret past it', function () {
+		let next;
+
+		refillContext();
+		cy.cGet('#a11y-context-after > span').then(function ($paragraphs) {
+			expect($paragraphs.length, 'paragraphs after the caret').to.be.at.least(2);
+			next = $paragraphs[1].textContent;
+			win.document.activeElement.blur();
+			win.getSelection().collapse($paragraphs[0].firstChild, 3);
+			expect(win.document.activeElement, 'the focus is on the page').to.equal(win.document.body);
+			win.document.body.dispatchEvent(new win.KeyboardEvent('keydown',
+				{ key: 'ArrowDown', code: 'ArrowDown', keyCode: 40, bubbles: true, cancelable: true }));
+		});
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+
+		cy.then(function () {
+			expect(editableText(), 'the caret is on the paragraph after the one read').to.equal(next);
+			return a11yHelper.getFocusedAXNode().then(function (node) {
+				expect(node, 'something holds the focus').to.not.equal(null);
+				expect(node.properties.editable, 'the focus is back in the editable')
+					.to.not.equal(undefined);
+			});
+		});
+	});
 });
