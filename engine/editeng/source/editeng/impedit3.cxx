@@ -348,7 +348,7 @@ void ImpEditEngine::ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& aRep
         maScalingParameters = maCustomScalingParameters;
 
     tools::Long nHeight = FormatParagraphs(aRepaintParagraphList, true);
-    bool bOverflow = nHeight - GetUncountedSpaceBelowLastLine()
+    bool bOverflow = nHeight - GetUncountedSpaceBelowLastLine(true)
                      > (maMaxAutoPaperSize.Height() * mnColumns);
 
     std::span<const ScalingParameters> aScaleLevels = constScaleLevels;
@@ -373,7 +373,7 @@ void ImpEditEngine::ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& aRep
 
         // Try again with different scaling factor
         nHeight = FormatParagraphs(aRepaintParagraphList, true);
-        bOverflow = nHeight - GetUncountedSpaceBelowLastLine()
+        bOverflow = nHeight - GetUncountedSpaceBelowLastLine(true)
                     > (maMaxAutoPaperSize.Height() * mnColumns);
 
         // Increase scale level
@@ -567,16 +567,17 @@ static tools::Long ImplAboveBaseline(tools::Long nLineHeight, tools::Long nSingl
     return std::max(nShare, nLineHeight - nSingleDescent);
 }
 
-tools::Long ImpEditEngine::GetUncountedSpaceBelowLastLine()
+tools::Long ImpEditEngine::GetUncountedSpaceBelowLastLine(bool bLeaveOutEmptyAtEnd)
 {
     if (meTextFitting == EETextFitting::Legacy || !IsFixedCellHeight()
         || mbLineSpacingBelowBaseline)
         return 0;
 
-    // The last paragraph counted in the fitted height, which leaves out blank ones at the end.
+    // The fitted height leaves out blank paragraphs at the end, the laid out height counts them.
     const ParaPortionList& rPortions = GetParaPortions();
     sal_Int32 nLast = rPortions.lastIndex();
-    while (nLast >= 0 && isInEmptyClusterAtTheEnd(rPortions.getRef(nLast), true))
+    while (bLeaveOutEmptyAtEnd && nLast >= 0
+           && isInEmptyClusterAtTheEnd(rPortions.getRef(nLast), true))
         --nLast;
     if (nLast < 0)
         return 0;

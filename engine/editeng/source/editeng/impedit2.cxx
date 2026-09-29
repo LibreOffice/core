@@ -3818,7 +3818,7 @@ tools::Long ImpEditEngine::CalcTextHeight()
     assert( IsUpdateLayout() && "Should not be used when Update=FALSE: CalcTextHeight" );
 
     if (mnColumns <= 1)
-        return Calc1ColumnTextHeight(); // All text fits into a single column - done!
+        return Calc1ColumnTextHeight() - GetUncountedSpaceBelowLastLine(false);
 
     // The final column height can be smaller than total height divided by number of columns (taking
     // into account first line offset and interline spacing, that aren't considered in positioning

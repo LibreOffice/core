@@ -498,6 +498,28 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testSpaceBelowLastLineLeftOutOfFit)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, pBody->GetSpacingScale(), 1E-4);
 }
 
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testLaidOutHeightLeavesOutSpaceBelowLastLine)
+{
+    // Three lines of 40pt at 150 percent line spacing, anchored at the bottom. The reference
+    // program places the text by the same height it fits against, 208.56pt: two whole lines and
+    // the last line down to the font's share of descent below its baseline, not all 216pt.
+    createSdImpressDoc("pptx/TextFittingAnchoredBottom.pptx");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    auto pTextObject = DynCastSdrTextObj(pViewShell->GetActualPage()->GetObj(0));
+    CPPUNIT_ASSERT(pTextObject);
+
+    SdrView* pView = pViewShell->GetView();
+    Scheduler::ProcessEventsToIdle();
+    pView->SdrBeginTextEdit(pTextObject);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    EditEngine& rEditEngine = pView->GetTextEditOutlinerView()->GetEditView().getEditEngine();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, rEditEngine.getScalingParameters().fFontY, 1E-4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(7357.0, double(rEditEngine.GetTextHeight()), 15.0);
+    pView->SdrEndTextEdit();
+}
+
 CPPUNIT_TEST_FIXTURE(TextFittingTest, testFitsLikeReference)
 {
     // Each slide holds the same text in a box of a different height, and the reference program

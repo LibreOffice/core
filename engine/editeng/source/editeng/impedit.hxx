@@ -1053,7 +1053,7 @@ public:
 
     // Returns the height of the text, excluding empty lines in the end
     tools::Long FormatParagraphs(o3tl::sorted_vector<sal_Int32>& rRepaintParagraphs, bool bIsScaling);
-    tools::Long GetUncountedSpaceBelowLastLine();
+    tools::Long GetUncountedSpaceBelowLastLine(bool bLeaveOutEmptyAtEnd);
     void ScaleContentToFitWindow(o3tl::sorted_vector<sal_Int32>& rRepaintParagraphs);
     void FormatDoc();
     void FormatFullDoc();
