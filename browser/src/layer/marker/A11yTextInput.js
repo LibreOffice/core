@@ -51,6 +51,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._a11yContext = '';
 
 		this._updateA11yEditableStateBound = this._updateA11yEditableState.bind(this);
+		this._onStrayKeyDownBound = this._onStrayKeyDown.bind(this);
 	},
 
 	onAdd: function() {
@@ -61,6 +62,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._map.on('doclayerinit', this._updateA11yEditableState, this);
 		this._map.on('updateparts', this._onA11yPartChanged, this);
 		app.events.on('updatepermission', this._updateA11yEditableStateBound);
+		document.addEventListener('keydown', this._onStrayKeyDownBound, true);
 	},
 
 	onRemove: function() {
@@ -68,6 +70,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._map.off('doclayerinit', this._updateA11yEditableState, this);
 		this._map.off('updateparts', this._onA11yPartChanged, this);
 		app.events.off('updatepermission', this._updateA11yEditableStateBound);
+		document.removeEventListener('keydown', this._onStrayKeyDownBound, true);
 		var canvas = document.getElementById('document-canvas');
 		if (canvas)
 			window.L.DomEvent.off(canvas, 'mousedown', this._keepFocusOnCanvasClick, this);
@@ -368,16 +371,17 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 					span.setAttribute('role', 'paragraph');
 					region.appendChild(span);
 				}
+				// NVDA and JAWS focus it on leaving browse mode; Orca would focus every one it reads.
+				if (window.L.Browser.win)
+					span.tabIndex = -1;
+				else
+					span.removeAttribute('tabindex');
 				if (span.textContent !== text)
 					span.textContent = text;
-				// NVDA and JAWS focus it on leaving browse mode; Orca would focus every one it reads.
-				if (window.L.Browser.win && Array.isArray(rects) && typeof rects[index] === 'string') {
-					span.tabIndex = -1;
+				if (Array.isArray(rects) && typeof rects[index] === 'string')
 					span.dataset.twips = rects[index];
-				} else {
-					span.removeAttribute('tabindex');
+				else
 					delete span.dataset.twips;
-				}
 			});
 		};
 
@@ -387,8 +391,40 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 	},
 
 	_onContextFocus: function(ev) {
-		const twips = ev.target.dataset ? ev.target.dataset.twips : undefined;
-		if (!twips || !this._map._docLayer)
+		if (ev.target.dataset && ev.target.dataset.twips)
+			this._jumpToContextParagraph(ev.target.dataset.twips);
+	},
+
+	// Orca leaves the focus on the page and the selection on the paragraph it was reading when
+	// it enters focus mode, so the first key decides where the caret goes.
+	_onStrayKeyDown: function(ev) {
+		if (document.activeElement !== document.body || !this._contextBefore)
+			return;
+		if (['Tab', 'Shift', 'Control', 'Alt', 'Meta', 'Insert', 'CapsLock'].includes(ev.key))
+			return;
+		const anchor = window.getSelection() ? window.getSelection().anchorNode : null;
+		const element = anchor && anchor.nodeType === Node.TEXT_NODE ? anchor.parentNode : anchor;
+		const paragraph = element && element.closest ? element.closest('.a11y-context > span') : null;
+		if (!paragraph || !paragraph.dataset.twips)
+			return;
+
+		window.L.DomEvent.stop(ev);
+		let target = paragraph;
+		if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+			const down = ev.key === 'ArrowDown';
+			const sibling = down ? paragraph.nextElementSibling : paragraph.previousElementSibling;
+			if (sibling)
+				target = sibling;
+			else if ((paragraph.parentNode === this._contextBefore) === down) {
+				this._textArea.focus({ preventScroll: true });
+				return;
+			}
+		}
+		this._jumpToContextParagraph(target.dataset.twips);
+	},
+
+	_jumpToContextParagraph: function(twips) {
+		if (!this._map._docLayer)
 			return;
 
 		this._contextJump = setTimeout(this._endContextJump.bind(this), 1000);
