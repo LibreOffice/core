@@ -361,7 +361,10 @@ class ObjectHandles implements HandleSource {
 		all, and the whole selection is scaled by it. Nothing where the client holds no geometry
 		for what is selected.
 	*/
-	public static framingOf(objectIds: number[]): SelectionHandle[] | undefined {
+	public static framingOf(
+		objectIds: number[],
+		square?: cool.Matrix2D,
+	): SelectionHandle[] | undefined {
 		/*
 			A connector that is tied to an object runs from where it is tied, so scaling it or
 			turning it leads nowhere: it is offered the points along its way alone, and neither
@@ -370,7 +373,7 @@ class ObjectHandles implements HandleSource {
 		if (objectIds.length === 1 && ObjectHandles.isATiedConnector(objectIds[0]))
 			return undefined;
 
-		return new ObjectHandles(objectIds).framingHandles();
+		return new ObjectHandles(objectIds).framingHandles(square);
 	}
 
 	/// The handles that shape the objects, which only one object on its own has.
@@ -378,8 +381,15 @@ class ObjectHandles implements HandleSource {
 		return new ObjectHandles(objectIds).shapingHandles();
 	}
 
-	private framingHandles(): SelectionHandle[] | undefined {
-		const mapping = this.framingMapping();
+	/*
+		The eight, laid on the square handed in where one is - the selection's own square, which
+		remembers how it has been turned and turned over - and otherwise on the object's mapping
+		for one object, or on the upright box round them all for several.
+	*/
+	private framingHandles(
+		square?: cool.Matrix2D,
+	): SelectionHandle[] | undefined {
+		const mapping = square ?? this.framingMapping();
 		if (!mapping) return undefined;
 
 		// A framing handle sits on each corner of the unit square and halfway along each side,

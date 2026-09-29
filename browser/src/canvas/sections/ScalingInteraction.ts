@@ -187,6 +187,9 @@ class ScalingInteraction extends SelectionInteraction {
 		several objects stands upright, so its mapping only says where it is and how large it is.
 	*/
 	private onTheSquare(): cool.Matrix2D | null {
+		const square = this.selection.squareNow();
+		if (square) return square;
+
 		const objects = this.selection.selectedObjects();
 		if (objects.length === 1)
 			return RenderGeometrySection.transformOf(objects[0]);

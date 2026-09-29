@@ -238,6 +238,24 @@ class GraphicSelection {
 			this.handlesSection.refreshInfo(this.extraInfo);
 	}
 
+	/*
+		Takes in that the engine answered something for that object which was not predicted here
+		- or, given no object, that anything may have changed. Where it touches the selection, the
+		selection's square is dropped, so that the handles are laid on what is really there.
+	*/
+	public static unpredictedAnswer(objectId?: number): void {
+		const section = this.selectionSection;
+		if (!section) return;
+
+		if (
+			objectId === undefined ||
+			RenderGeometrySection.theOnesAChangeTouches(
+				section.selectedObjects(),
+			).includes(objectId)
+		)
+			section.forgetTheSquare();
+	}
+
 	/// The section that draws what is selected while the client draws it itself, null while it
 	/// draws from tiles or while nothing is selected.
 	public static selectionSection: SelectionSection | null = null;

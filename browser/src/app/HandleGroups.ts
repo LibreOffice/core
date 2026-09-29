@@ -187,7 +187,12 @@ class FramingHandles extends HandleGroup {
 	public readonly name: string = 'framing';
 
 	public handles(): SelectionHandle[] {
-		return ObjectHandles.framingOf(this.selection.selectedObjects()) ?? [];
+		return (
+			ObjectHandles.framingOf(
+				this.selection.selectedObjects(),
+				this.selection.squareNow(),
+			) ?? []
+		);
 	}
 
 	/*
@@ -284,7 +289,10 @@ class TurningHandle extends HandleGroup {
 
 	public handles(): SelectionHandle[] {
 		return this.placedAbove(
-			ObjectHandles.framingOf(this.selection.selectedObjects()) ?? [],
+			ObjectHandles.framingOf(
+				this.selection.selectedObjects(),
+				this.selection.squareNow(),
+			) ?? [],
 		);
 	}
 

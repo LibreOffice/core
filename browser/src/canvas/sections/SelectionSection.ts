@@ -1201,9 +1201,46 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.leaveTheChangeOnTheObjects(matrix);
 	}
 
+	/*
+		The selection's own square: the mapping of the unit square onto what is selected, made
+		from the objects when it is first asked for and carried through every change made here
+		since. It remembers what the objects cannot: a group's or a text frame's mapping comes
+		back from the engine upright, since neither can hold a mirror, and the square stays
+		turned over as it was made, so the handle at the edge being moved keeps its name. It is
+		dropped when the selection changes, and when the engine answers something for the
+		selection that was not predicted here, since then it may no longer fit what is drawn.
+	*/
+	private square: cool.Matrix2D | null = null;
+
+	public squareNow(): cool.Matrix2D | undefined {
+		if (this.square) return this.square;
+
+		const objects = this.selectedObjects();
+		if (!objects.length) return undefined;
+
+		if (objects.length === 1) {
+			this.square = RenderGeometrySection.transformOf(objects[0]);
+			return this.square ?? undefined;
+		}
+
+		const box = this.boxAround(RenderGeometrySection.theOnesThatDraw(objects));
+		if (!box || !box.width || !box.height) return undefined;
+
+		this.square = cool.Matrix2D.fromRange(box);
+		return this.square;
+	}
+
+	public forgetTheSquare(): void {
+		this.square = null;
+	}
+
 	private leaveTheChangeOnTheObjects(matrix: cool.Matrix2D | null): void {
 		if (!matrix) return;
 		if (!SelectionSection.withinReason(this.selectedObjects(), matrix)) return;
+
+		// The square goes through the change along with the objects.
+		const square = this.squareNow();
+		if (square) this.square = square.then(matrix);
 
 		/*
 			The change goes to the objects that draw, and to the groups above them as well: a

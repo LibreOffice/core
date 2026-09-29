@@ -458,9 +458,15 @@ class RenderGeometrySection extends CanvasSectionObject {
 	private static takeUpTheAnswers(answered?: number[]): void {
 		const objectIds = answered ?? [...RenderGeometrySection.pending.keys()];
 
+		// A whole part arriving may have changed anything, predicted or not.
+		if (!answered) GraphicSelection.unpredictedAnswer();
+
 		for (const objectId of objectIds) {
 			const laid = RenderGeometrySection.pending.get(objectId);
-			if (!laid) continue;
+			if (!laid) {
+				GraphicSelection.unpredictedAnswer(objectId);
+				continue;
+			}
 
 			const object = RenderGeometrySection.objectOf(objectId);
 			const answer = cool.Matrix2D.fromArray(object?.transform);
@@ -476,6 +482,8 @@ class RenderGeometrySection extends CanvasSectionObject {
 				if (laid[at].answeredBy(answer)) matched = at;
 			for (let at = laid.length - 1; at >= 0 && matched < 0; --at)
 				if (laid[at].answeredInTheBox(object)) matched = at;
+
+			if (matched < 0) GraphicSelection.unpredictedAnswer(objectId);
 
 			const rest = matched < 0 ? [] : laid.slice(matched + 1);
 			for (const one of rest) {

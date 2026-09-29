@@ -30,6 +30,7 @@ class MultiSelectionSection extends SelectionSection {
 	/// Takes the objects the selection now holds and works its handles out again.
 	public setObjects(objectIds: number[]): void {
 		this.objectIds = objectIds.slice();
+		this.forgetTheSquare();
 		this.refresh();
 	}
 
