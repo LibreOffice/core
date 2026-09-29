@@ -3301,6 +3301,55 @@ static void lcl_SelectionToEnd( EditView* pView )
         pView->SetSelection(ESelection::AtEnd());
 }
 
+/// The ranges of plain text between the fields of paragraph nPar, as pairs of start and end
+/// positions. A field takes up one character of the paragraph but its text can be longer, so
+/// only in these ranges is each position of the text the same position in the paragraph.
+static std::vector<std::pair<sal_Int32, sal_Int32>>
+lcl_GetTextRangesBetweenFields(const EditEngine& rEngine, sal_Int32 nPar)
+{
+    std::vector<std::pair<sal_Int32, sal_Int32>> aTextRanges;
+    sal_Int32 nTextStart = 0;
+    for (const EFieldInfo& rFieldInfo : rEngine.GetFieldInfo(nPar))
+    {
+        aTextRanges.emplace_back(nTextStart, rFieldInfo.aPosition.nIndex);
+        nTextStart = rFieldInfo.aPosition.nIndex + 1;
+    }
+    aTextRanges.emplace_back(nTextStart, rEngine.GetTextLen(nPar));
+    return aTextRanges;
+}
+
+/// Whether the cursor of the view is at the start of an address or inside it, in the plain text.
+static bool lcl_IsCursorBeforeURLEnd(const EditView& rView, SvxAutoCorrect& rAutoCorrect)
+{
+    if (rView.HasSelection())
+        return false;
+
+    const EditEngine& rEngine = rView.getEditEngine();
+    const ESelection aSel = rView.GetSelection();
+    const sal_Int32 nPar = aSel.end.nPara;
+    const sal_Int32 nCursor = aSel.end.nIndex;
+    CharClass& rCharClass = rAutoCorrect.GetCharClass(rEngine.GetDefaultLanguage());
+
+    for (const auto& [nRangeStart, nRangeEnd] : lcl_GetTextRangesBetweenFields(rEngine, nPar))
+    {
+        if (nCursor < nRangeStart || nCursor >= nRangeEnd)
+            continue;
+
+        const OUString aText = rEngine.GetText(ESelection(nPar, nRangeStart, nPar, nRangeEnd));
+        sal_Int32 nSearchStart = 0;
+        while (nSearchStart < aText.getLength())
+        {
+            sal_Int32 nUrlStart = nSearchStart, nUrlEnd = aText.getLength();
+            if (URIHelper::FindFirstURLInText(aText, nUrlStart, nUrlEnd, rCharClass).isEmpty())
+                break;
+            if (nRangeStart + nUrlStart <= nCursor && nCursor < nRangeStart + nUrlEnd)
+                return true;
+            nSearchStart = nUrlEnd;
+        }
+    }
+    return false;
+}
+
 void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInKit )
 {
     if (!mbDocumentDisposing && comphelper::COKit::isActive()
@@ -3338,11 +3387,29 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInK
 
         vcl::Window* pFrameWin = pActiveViewSh->GetFrameWin();
 
+        // CompleteAutoCorrect() reads a link from the text up to the end of the word at the
+        // cursor. With the cursor inside an address, that word can end at a dot or a slash in
+        // the middle of the address, so links are not read from the text during this call.
+        SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+        const bool bOldSetINetAttr
+            = pAutoCorrect && pAutoCorrect->IsAutoCorrFlag(ACFlags::SetINetAttr);
+        if (bOldSetINetAttr && lcl_IsCursorBeforeURLEnd(*pActiveView, *pAutoCorrect))
+            pAutoCorrect->SetAutoCorrFlag(ACFlags::SetINetAttr, false);
+
         if (pTopView)
             pTopView->CompleteAutoCorrect(); // CompleteAutoCorrect for both Views
         if (pTableView)
             pTableView->CompleteAutoCorrect(pFrameWin);
+
+        // The SvxAutoCorrect object is shared, so the flag gets its original value back.
+        if (bOldSetINetAttr)
+            pAutoCorrect->SetAutoCorrFlag(ACFlags::SetINetAttr, true);
         aString = GetEditText(mpEditEngine.get());
+
+        // CompleteAutoCorrect() links only the address at the cursor, so an address that was a
+        // link before editing and is now elsewhere in the text gets its link back here.
+        if (!bFormulaMode)
+            RestoreURLFieldsInEditEngine();
     }
     lcl_RemoveTabs(aString);
     lcl_RemoveTabs(aPreAutoCorrectString);
@@ -4806,6 +4873,7 @@ Size ScInputHandler::GetTextSize()
 
 void ScInputHandler::RemoveURLFieldsFromEditEngine()
 {
+    maUnlinkedURLFields.clear();
     if (!mpEditEngine)
         return;
 
@@ -4849,10 +4917,11 @@ void ScInputHandler::RemoveURLFieldsFromEditEngine()
                 continue;
 
             // Only turn the field back into plain text when that text is itself the
-            // recognized address, the same text CompleteAutoCorrect() will read back
-            // into a field on commit. A field whose displayed text differs from its
-            // target, such as one set up through the Hyperlink dialog with a separate
-            // label, cannot be recreated that way, so leave it as a field.
+            // recognized address. On commit, CompleteAutoCorrect() reads the address at
+            // the cursor back into a field, and RestoreURLFieldsInEditEngine() does the
+            // same for an address elsewhere in the text. A field whose displayed text
+            // differs from its target, such as one set up through the Hyperlink dialog
+            // with a separate label, cannot be recreated that way, so leave it as a field.
             const OUString& rRepresentation = pUrlField->GetRepresentation();
             sal_Int32 nUrlStart = 0, nUrlEnd = rRepresentation.getLength();
             OUString aFoundUrl = URIHelper::FindFirstURLInText(
@@ -4861,9 +4930,71 @@ void ScInputHandler::RemoveURLFieldsFromEditEngine()
                 || nUrlEnd != rRepresentation.getLength())
                 continue;
 
+            maUnlinkedURLFields.push_back(*pUrlField);
             mpEditEngine->QuickInsertText( rRepresentation,
                 ESelection( nPar, aRangeIt->first, nPar, aRangeIt->second ) );
         }
+    }
+}
+
+void ScInputHandler::RestoreURLFieldsInEditEngine()
+{
+    std::vector<SvxURLField> aUnlinkedFields;
+    aUnlinkedFields.swap(maUnlinkedURLFields);
+    if (!mpEditEngine || aUnlinkedFields.empty())
+        return;
+
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    if (!pAutoCorrect)
+        return;
+    CharClass& rCharClass = pAutoCorrect->GetCharClass(mpEditEngine->GetDefaultLanguage());
+
+    sal_Int32 nParCnt = mpEditEngine->GetParagraphCount();
+    for (sal_Int32 nPar = 0; nPar < nParCnt; ++nPar)
+    {
+        // Only an address that is still the whole text of one of the links gets its link back,
+        // so an address the user changed stays plain text. Each link goes back to the first
+        // matching address only, so the same address typed again elsewhere stays plain text.
+        std::vector<std::pair<ESelection, SvxURLField>> aFoundFields;
+        for (const auto& [nRangeStart, nRangeEnd] :
+             lcl_GetTextRangesBetweenFields(*mpEditEngine, nPar))
+        {
+            if (nRangeEnd <= nRangeStart)
+                continue;
+
+            const OUString aText
+                = mpEditEngine->GetText(ESelection(nPar, nRangeStart, nPar, nRangeEnd));
+            sal_Int32 nSearchStart = 0;
+            while (nSearchStart < aText.getLength() && !aUnlinkedFields.empty())
+            {
+                sal_Int32 nUrlStart = nSearchStart, nUrlEnd = aText.getLength();
+                OUString aFoundUrl
+                    = URIHelper::FindFirstURLInText(aText, nUrlStart, nUrlEnd, rCharClass);
+                if (aFoundUrl.isEmpty())
+                    break;
+
+                std::u16string_view aFoundText = aText.subView(nUrlStart, nUrlEnd - nUrlStart);
+                auto aFieldIt = std::find_if(aUnlinkedFields.begin(), aUnlinkedFields.end(),
+                    [&aFoundUrl, &aFoundText](const SvxURLField& rField) {
+                        return rField.GetURL() == aFoundUrl
+                               && rField.GetRepresentation() == aFoundText;
+                    });
+                if (aFieldIt != aUnlinkedFields.end())
+                {
+                    aFoundFields.emplace_back(
+                        ESelection(nPar, nRangeStart + nUrlStart, nPar, nRangeStart + nUrlEnd),
+                        std::move(*aFieldIt));
+                    aUnlinkedFields.erase(aFieldIt);
+                }
+                nSearchStart = nUrlEnd;
+            }
+        }
+
+        // Insert from the last address back to the first, so an earlier address keeps its
+        // position when a later one shrinks to a single field character.
+        for (auto aFoundIt = aFoundFields.rbegin(); aFoundIt != aFoundFields.rend(); ++aFoundIt)
+            mpEditEngine->QuickInsertField(SvxFieldItem(aFoundIt->second, EE_FEATURE_FIELD),
+                                           aFoundIt->first);
     }
 }
 

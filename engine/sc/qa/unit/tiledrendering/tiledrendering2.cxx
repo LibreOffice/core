@@ -9,6 +9,7 @@
 
 #include <sctiledrenderingtest.hxx>
 
+#include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 
@@ -812,6 +813,75 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditingHyperlinkCellAllowsCursorI
     ScModule::get()->InputEnterHandler();
     CPPUNIT_ASSERT_EQUAL(u"[foo@example.com](mailto:foo@example.com)"_ustr,
                          lcl_getCellTextWithLinks(*pDoc, aA1));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHyperlinkCellKeepsLinkWhenTextIsTypedBeforeIt)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    const ScAddress aA1(0, 0, 0);
+    typeCharsInCell("https://www.example.com/", aA1.Col(), aA1.Row(), pView, pModelObj,
+                    /*bInEdit*/ false, /*bCommit*/ true);
+    pView->SetCursor(aA1.Col(), aA1.Row());
+
+    lcl_selectInCell(pView, 0, 24);
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr,
+                    lcl_hyperlinkArgs(u"https://www.example.com/"_ustr,
+                                      u"https://www.example.com/"_ustr));
+    ScModule::get()->InputEnterHandler();
+
+    CPPUNIT_ASSERT_EQUAL(u"[https://www.example.com/](https://www.example.com/)"_ustr,
+                         lcl_getCellTextWithLinks(*pDoc, aA1));
+
+    // A word is typed in front of the address, which leaves the cursor before the address when
+    // the edit is committed.
+    lcl_selectInCell(pView, 0, 0);
+    typeCharsInCell("Visit ", aA1.Col(), aA1.Row(), pView, pModelObj, /*bInEdit*/ true,
+                    /*bCommit*/ false);
+    ScModule::get()->InputEnterHandler();
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: Visit [https://www.example.com/](https://www.example.com/)
+    // - Actual  : Visit https://www.example.com/
+    CPPUNIT_ASSERT_EQUAL(u"Visit [https://www.example.com/](https://www.example.com/)"_ustr,
+                         lcl_getCellTextWithLinks(*pDoc, aA1));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHyperlinkCellEditedInsideAddressBecomesPlainText)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    const ScAddress aA1(0, 0, 0);
+    typeCharsInCell("https://www.example.com/", aA1.Col(), aA1.Row(), pView, pModelObj,
+                    /*bInEdit*/ false, /*bCommit*/ true);
+    pView->SetCursor(aA1.Col(), aA1.Row());
+
+    lcl_selectInCell(pView, 0, 24);
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr,
+                    lcl_hyperlinkArgs(u"https://www.example.com/"_ustr,
+                                      u"https://www.example.com/"_ustr));
+    ScModule::get()->InputEnterHandler();
+
+    CPPUNIT_ASSERT_EQUAL(u"[https://www.example.com/](https://www.example.com/)"_ustr,
+                         lcl_getCellTextWithLinks(*pDoc, aA1));
+
+    // The "a" of "example" is deleted, which leaves the cursor in the middle of the address when
+    // the edit is committed. The word at the cursor then ends at the dot before "com".
+    lcl_selectInCell(pView, 15, 15);
+    pModelObj->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::BACKSPACE);
+    pModelObj->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::BACKSPACE);
+    Scheduler::ProcessEventsToIdle();
+    ScModule::get()->InputEnterHandler();
+
+    // Without the fix in place, the part of the address in front of the cursor became a link of
+    // its own, with a target read from that part of the text.
+    CPPUNIT_ASSERT_EQUAL(u"https://www.exmple.com/"_ustr, lcl_getCellTextWithLinks(*pDoc, aA1));
 }
 
 // The automatic font color of a shape being edited has to be resolved against the fill of

@@ -47,6 +47,7 @@ class VirtualDevice;
 struct PasteOrDropInfos;
 class EditView;
 class EditTextObject;
+class SvxURLField;
 class ScInputHdlState;
 class ScRangeFindList;
 class Timer;
@@ -138,6 +139,8 @@ private:
                             pRangeFindList;
     std::optional<ScEnterMode>
                             monPrevBlockMode;
+    /// The address links of the cell that are shown as plain text while the cell is edited.
+    std::vector<SvxURLField> maUnlinkedURLFields;
 
 private:
     void            UpdateActiveView();
@@ -155,6 +158,7 @@ private:
     bool            StartTable(sal_Unicode cTyped, bool bFromCommand, bool bInputActivated,
                                ScEditEngineDefaulter* pTopEngine, const ErrorHdl& errorHdl);
     void            RemoveURLFieldsFromEditEngine();
+    void            RestoreURLFieldsInEditEngine();
     void            RemoveSelection();
     bool            StartsLikeFormula( std::u16string_view rStr ) const;
     void            UpdateFormulaMode();
