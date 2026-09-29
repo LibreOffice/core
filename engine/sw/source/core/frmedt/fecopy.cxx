@@ -1119,10 +1119,12 @@ SwFEShell::Paste(SwDoc& rClpDoc, bool const bNestedTable)
 
                     // copying to the clipboard, the section is inserted
                     // at the start of the nodes, followed by empty text node
-                    bool const isSourceSection(aCpyPam.Start()->GetNode().IsSectionNode()
-                        && aCpyPam.End()->GetNodeIndex() == aCpyPam.Start()->GetNode().EndOfSectionIndex() + 1
-                        && aCpyPam.End()->GetNode().IsTextNode()
-                        && aCpyPam.End()->GetNode().GetTextNode()->Len() == 0);
+                    auto [pCpyStart, pCpyEnd] = aCpyPam.StartEnd(); // SwPosition*
+                    bool const isSourceSection(
+                        pCpyStart->GetNode().IsSectionNode()
+                        && pCpyEnd->GetNodeIndex() == pCpyStart->GetNode().EndOfSectionIndex() + 1
+                        && pCpyEnd->GetNode().IsTextNode()
+                        && pCpyEnd->GetNode().GetTextNode()->Len() == 0);
 
                     rClpDoc.getIDocumentContentOperations().CopyRange(aCpyPam, rInsPos, SwCopyFlags::CheckPosInFly);
                     // Note: aCpyPam is invalid now
@@ -1142,10 +1144,10 @@ SwFEShell::Paste(SwDoc& rClpDoc, bool const bNestedTable)
 
                     // Update the rsid of each pasted text node.
                     SwNodes &rDestNodes = GetDoc()->GetNodes();
-                    SwNodeOffset const nEndIdx = aPaM.End()->GetNodeIndex();
+                    auto [pStart, pEnd] = aPaM.StartEnd(); // SwPosition*
+                    SwNodeOffset const nEndIdx = pEnd->GetNodeIndex();
 
-                    for (SwNodeOffset nIdx = aPaM.Start()->GetNodeIndex();
-                        nIdx <= nEndIdx; ++nIdx)
+                    for (SwNodeOffset nIdx = pStart->GetNodeIndex(); nIdx <= nEndIdx; ++nIdx)
                     {
                         SwTextNode *const pTextNode = rDestNodes[nIdx]->GetTextNode();
                         if ( pTextNode )

@@ -1221,7 +1221,8 @@ bool SwRedlineItr::CheckLine(
             m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ] );
         // collect text of the hidden redlines at the end of the line
         bool isExtendText(false);
-        switch (ComparePosition(*pRedline->Start(), *pRedline->End(), start, end))
+        auto [pStart, pEnd] = pRedline->StartEnd(); // SwPosition*
+        switch (ComparePosition(*pStart, *pEnd, start, end))
         {
             case SwComparePosition::Behind:
                 isBreak = true;
@@ -1251,8 +1252,8 @@ bool SwRedlineItr::CheckLine(
                 }
                 // join the text of the next invisible redlines in the same position
                 // i.e. characters deleted by pressing backspace or delete
-                else if (pPrevRedline && !pRedline->IsVisible() &&
-                    *pRedline->Start() == *pPrevRedline->Start() && *pRedline->End() == *pPrevRedline->End() )
+                else if (pPrevRedline && !pRedline->IsVisible()
+                         && *pStart == *pPrevRedline->Start() && *pEnd == *pPrevRedline->End())
                 {
                     OUString sExtendText(pRedline->GetDescr(/*bSimplified=*/true));
                     if (!sExtendText.isEmpty())

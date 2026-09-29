@@ -332,9 +332,10 @@ static OString getTooltipPayload(const OUString& tooltip, const SwRect& rect,
             writer.put("redlineType",
                        SwRedlineTypeToOUString(pRedline->GetRedlineData().GetType()));
 
-            SwShellCursor aCursor(rSh, *pRedline->Start());
+            auto [pStart, pEnd] = pRedline->StartEnd(); // SwPosition*
+            SwShellCursor aCursor(rSh, *pStart);
             aCursor.SetMark();
-            *aCursor.GetMark() = *pRedline->End();
+            *aCursor.GetMark() = *pEnd;
             aCursor.FillRects();
             auto aArray = writer.startArray("anchorRectangles");
             for (const auto& rRect : aCursor)

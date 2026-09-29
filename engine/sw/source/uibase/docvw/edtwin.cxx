@@ -6184,8 +6184,9 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             SwExtTextInput* pInput = pDoc->GetExtTextInput( rPos.GetNode(), rPos.GetContentIndex() );
             if ( pInput )
             {
-                const SwPosition& rStart = *pInput->Start();
-                const SwPosition& rEnd = *pInput->End();
+                auto [pStart, pEnd] = pInput->StartEnd(); // SwPosition*
+                const SwPosition& rStart = *pStart;
+                const SwPosition& rEnd = *pEnd;
                 sal_Int32 nSize = rEnd.GetContentIndex() - rStart.GetContentIndex();
                 vcl::Window& rWin = rSh.GetView().GetEditWin();
                 if ( nSize == 0 )

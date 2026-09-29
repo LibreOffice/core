@@ -1710,10 +1710,11 @@ void SwTextNode::Update(
         SwRangeRedline* pRedln = rTable[nRedlnPos];
         if (pRedln->HasMark())
         {
-            if (*this == pRedln->End()->GetNode() && *pRedln->GetPoint() != *pRedln->GetMark())
+            if (auto [pStart, pEnd] = pRedln->StartEnd();
+                *this == pEnd->GetNode() && *pRedln->GetPoint() != *pRedln->GetMark())
             {
                 // Redline is changed only when some change occurs before it
-                if (nChangePos <= pRedln->Start()->GetContentIndex())
+                if (nChangePos <= pStart->GetContentIndex())
                 {
                     SwRedlineTable::KitRedlineNotification(RedlineNotification::Modify, pRedln);
                 }

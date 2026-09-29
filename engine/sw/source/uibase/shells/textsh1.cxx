@@ -1894,8 +1894,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     for(SwPaM& rPaM : rWrtSh.GetCursor()->GetRingContainer())
                     {
                         // check each selected paragraph separately
-                        const SwNodeIndex nEnd = rPaM.End()->nNode;
-                        for (SwNodeIndex nPara = rPaM.Start()->nNode; nPara <= nEnd; ++nPara)
+                        auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
+                        const SwNodeIndex nEnd = pEnd->nNode;
+                        for (SwNodeIndex nPara = pStart->nNode; nPara <= nEnd; ++nPara)
                         {
                             SwPaM aPaM(nPara);
                             if (!rWrtSh.IsNumRuleStart(&aPaM))

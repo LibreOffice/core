@@ -427,8 +427,9 @@ namespace {
 void collectUIInformation(SwShellCursor* pCursor)
 {
     EventDescription aDescription;
-    OUString aSelStart = OUString::number(pCursor->Start()->GetContentIndex());
-    OUString aSelEnd = OUString::number(pCursor->End()->GetContentIndex());
+    auto [pStart, pEnd] = pCursor->StartEnd(); // SwPosition*
+    OUString aSelStart = OUString::number(pStart->GetContentIndex());
+    OUString aSelEnd = OUString::number(pEnd->GetContentIndex());
 
     aDescription.aParameters = {{u"START_POS"_ustr, aSelStart}, {u"END_POS"_ustr, aSelEnd}};
     aDescription.aAction = u"SELECT"_ustr;

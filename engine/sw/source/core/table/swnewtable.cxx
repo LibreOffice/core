@@ -333,8 +333,9 @@ std::optional<SwBoxSelection> SwTable::CollectBoxSelection( const SwPaM& rPam ) 
     OSL_ENSURE( m_bNewModel, "Don't call me for old tables" );
     if( m_aLines.empty() )
         return std::nullopt;
-    const SwNode* pStartNd = rPam.Start()->GetNode().FindTableBoxStartNode();
-    const SwNode* pEndNd = rPam.End()->GetNode().FindTableBoxStartNode();
+    auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
+    const SwNode* pStartNd = pStart->GetNode().FindTableBoxStartNode();
+    const SwNode* pEndNd = pEnd->GetNode().FindTableBoxStartNode();
     if( !pStartNd || !pEndNd || pStartNd == pEndNd )
         return std::nullopt;
 

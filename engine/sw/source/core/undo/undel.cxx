@@ -1316,10 +1316,11 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         }
 
         // avoid asserts from ~SwContentIndexReg for deleted nodes
-        SwPaM aTmp(*rPam.End());
+        auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
+        SwPaM aTmp(*pEnd);
         if (!aTmp.Move(fnMoveForward, GoInNode))
         {
-            *aTmp.GetPoint() = *rPam.Start();
+            *aTmp.GetPoint() = *pStart;
             aTmp.Move(fnMoveBackward, GoInNode);
         }
         // coverity[copy_paste_error : FALSE] : GetNode() is intentional on both branches

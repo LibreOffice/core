@@ -2047,8 +2047,11 @@ SwRedlineTable::size_type SwTableLine::GetTableRedline() const
     SwRedlineTable::size_type n = 0;
 
     const SwRangeRedline* pFnd = aRedlineTable.FindAtPosition( aLineStart, n, /*next=*/false );
-    if( pFnd && *pFnd->Start() < aLineStart && *pFnd->End() > aLineEnd )
-        return n;
+    if (pFnd)
+    {
+        if (auto [pStart, pEnd] = pFnd->StartEnd(); *pStart < aLineStart && *pEnd > aLineEnd)
+            return n;
+    }
 
     return SwRedlineTable::npos;
 }

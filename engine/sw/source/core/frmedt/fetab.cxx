@@ -214,9 +214,10 @@ void SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
     {
         // Set the end of the selection to the last paragraph of the last cell of the table.
         SwPaM* pPaM = getShellCursor(false);
-        SwNode* pNode = pPaM->Start()->GetNode().FindTableNode()->EndOfSectionNode();
+        auto [pStart, pEnd] = pPaM->StartEnd(); // SwPosition*
+        SwNode* pNode = pStart->GetNode().FindTableNode()->EndOfSectionNode();
         // pNode is the end node of the table, we want the last node before the end node of the last cell.
-        pPaM->End()->Assign( pNode->GetIndex() - 2 );
+        pEnd->Assign(pNode->GetIndex() - 2);
     }
     GetTableSel( *this, aBoxes, SwTableSearchType::Row );
 

@@ -697,8 +697,9 @@ void SwView::Replace()
     {
         /* check that the selection match the search string */
         //save state
-        SwPosition aStartPos = *m_pWrtShell->GetCursor()->Start();
-        SwPosition aEndPos = *m_pWrtShell->GetCursor()->End();
+        auto [pStart, pEnd] = m_pWrtShell->GetCursor()->StartEnd(); // SwPosition*
+        SwPosition aStartPos = *pStart;
+        SwPosition aEndPos = *pEnd;
         const bool bHasSelection = s_pSrchItem->GetSelection();
         const SvxSearchCmd nOldCmd = s_pSrchItem->GetCommand();
 
@@ -713,15 +714,16 @@ void SwView::Replace()
             // no matching therefore should not replace selection
             // => remove selection
 
+            auto [pCurStart, pCurEnd] = m_pWrtShell->GetCursor()->StartEnd(); // SwPosition*
             if (!s_pSrchItem->GetBackward())
             {
-                (*m_pWrtShell->GetCursor()->Start()) = std::move(aStartPos);
-                (*m_pWrtShell->GetCursor()->End()) = std::move(aEndPos);
+                *pCurStart = std::move(aStartPos);
+                *pCurEnd = std::move(aEndPos);
             }
             else
             {
-                (*m_pWrtShell->GetCursor()->Start()) = std::move(aEndPos);
-                (*m_pWrtShell->GetCursor()->End()) = std::move(aStartPos);
+                *pCurStart = std::move(aEndPos);
+                *pCurEnd = std::move(aStartPos);
             }
             bReqReplace = false;
         }

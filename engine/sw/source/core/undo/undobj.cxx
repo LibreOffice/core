@@ -59,10 +59,9 @@ SwUndRng::SwUndRng( const SwPaM& rPam )
 
 void SwUndRng::SetValues( const SwPaM& rPam )
 {
-    const SwPosition *pStart = rPam.Start();
+    auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
     if( rPam.HasMark() )
     {
-        const SwPosition *pEnd = rPam.End();
         m_nEndNode = pEnd->GetNodeIndex();
         m_nEndContent = pEnd->GetContentIndex();
     }
@@ -1323,8 +1322,9 @@ void SwUndoSaveSection::SaveSection(
 
     {
         // move certain indexes out of deleted range
-        SwNodeIndex aSttIdx( aPam.Start()->GetNode() );
-        SwNodeIndex aEndIdx( aPam.End()->GetNode() );
+        auto [pStart, pEnd] = aPam.StartEnd(); // SwPosition*
+        SwNodeIndex aSttIdx(pStart->GetNode());
+        SwNodeIndex aEndIdx(pEnd->GetNode());
         SwNodeIndex aMvStt( aEndIdx, 1 );
         SwDoc::CorrAbs( aSttIdx, aEndIdx, SwPosition( aMvStt ), true );
     }
@@ -1499,8 +1499,8 @@ bool SwUndo::FillSaveData(
     {
         SwRangeRedline* pRedl = rTable[n];
 
-        const SwComparePosition eCmpPos =
-            ComparePosition( *pStart, *pEnd, *pRedl->Start(), *pRedl->End() );
+        auto [pRStart, pREnd] = pRedl->StartEnd(); // SwPosition*
+        const SwComparePosition eCmpPos = ComparePosition(*pStart, *pEnd, *pRStart, *pREnd);
         if ( eCmpPos != SwComparePosition::Before
              && eCmpPos != SwComparePosition::Behind
              && eCmpPos != SwComparePosition::CollideEnd
@@ -1546,7 +1546,8 @@ bool SwUndo::FillSaveDataForFormat(
         }
         if (bSaveRedline)
         {
-            const SwComparePosition eCmpPos = ComparePosition( *pStart, *pEnd, *pRedl->Start(), *pRedl->End() );
+            auto [pRStart, pREnd] = pRedl->StartEnd(); // SwPosition*
+            const SwComparePosition eCmpPos = ComparePosition(*pStart, *pEnd, *pRStart, *pREnd);
             if ( eCmpPos != SwComparePosition::Before
                  && eCmpPos != SwComparePosition::Behind
                  && eCmpPos != SwComparePosition::CollideEnd

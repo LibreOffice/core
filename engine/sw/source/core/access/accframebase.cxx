@@ -287,9 +287,8 @@ bool SwAccessibleFrameBase::GetSelectedState( )
                 if( pCursor->HasMark() )
                 {
                     // check whether nHere is 'inside' pCursor
-                    SwPosition* pStart = pCursor->Start();
+                    auto [pStart, pEnd] = pCursor->StartEnd(); // SwPosition*
                     SwNodeOffset nStartIndex = pStart->GetNodeIndex();
-                    SwPosition* pEnd = pCursor->End();
                     SwNodeOffset nEndIndex = pEnd->GetNodeIndex();
                     if( ( nHere >= nStartIndex ) && (nHere <= nEndIndex)  )
                     {

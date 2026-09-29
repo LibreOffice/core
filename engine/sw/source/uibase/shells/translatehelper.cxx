@@ -205,7 +205,8 @@ bool TranslateRanges(SwWrtShell& rWrtSh,
     }
     else if (bHasSelection)
     {
-        aRanges.push_back({ *pCurrentPam->Start(), *pCurrentPam->End() });
+        auto [pStart, pEnd] = pCurrentPam->StartEnd(); // SwPosition*
+        aRanges.push_back({ *pStart, *pEnd });
     }
     else
     {
