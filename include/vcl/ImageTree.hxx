@@ -56,9 +56,9 @@ class ImageTree
 private:
     std::unique_ptr<ImplImageTree> mpImplImageTree;
 
-public:
     ImageTree();
 
+public:
     VCL_DLLPUBLIC static ImageTree & get();
 
     VCL_DLLPUBLIC OUString getImageUrl(
