@@ -371,7 +371,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkCopyPaste)
     CPPUNIT_ASSERT_EQUAL(aParaText, rDoc.GetParaAsString(sal_Int32(0)));
 
     // Insert URL 1
-    ContentNode* pNode = rDoc.GetObject(0);
+    ContentNode* pNode = &rDoc.GetObject(0);
     EditSelection aSel1(EditPaM(pNode, 13), EditPaM(pNode, 13));
     aEditEngine.InsertField(aSel1, aField1);
 
@@ -726,7 +726,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTabsCopyPaste)
     CPPUNIT_ASSERT_EQUAL(aParaText, rDoc.GetParaAsString(sal_Int32(0)));
 
     // Insert tab 1 at desired position
-    ContentNode* pNode = rDoc.GetObject(0);
+    ContentNode* pNode = &rDoc.GetObject(0);
     EditSelection aSel1(EditPaM(pNode, 6), EditPaM(pNode, 6));
     aEditEngine.InsertFeature(aSel1, aTab);
 
@@ -782,7 +782,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkSearch)
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("set text", aSampleText, rDoc.GetParaAsString(sal_Int32(0)));
 
-    ContentNode* pNode = rDoc.GetObject(0);
+    ContentNode* pNode = &rDoc.GetObject(0);
     EditSelection aSel(EditPaM(pNode, 22), EditPaM(pNode, 22));
     SvxURLField aURLField(u"mailto:///jim@bob.com"_ustr, u"jim@bob.com"_ustr,
                           SvxURLFormat::Repr);
@@ -1686,7 +1686,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLargeParaCopyPaste)
         = aEditEngine.CreateTransferable(ESelection(5, 8, 7, 14));
 
     // Paste text at the end of 4th Para
-    ContentNode* pLastNode = rDoc.GetObject(3);
+    ContentNode* pLastNode = &rDoc.GetObject(3);
     aEditEngine.InsertText(xData, OUString(), EditPaM(pLastNode, pLastNode->Len()), true);
 
     // Assert changes
@@ -2118,7 +2118,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154248MultilineFieldWrapping)
 
     // Insert URL
     EditDoc& rDoc = aEditEngine.GetEditDoc();
-    ContentNode* pNode = rDoc.GetObject(0);
+    ContentNode* pNode = &rDoc.GetObject(0);
     EditSelection aSel(EditPaM(pNode, 4), EditPaM(pNode, 4));
     aEditEngine.InsertField(aSel, aField);
 
@@ -2443,8 +2443,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEscapementNotPreservedOnParaBreak)
     }
 
     // new para break at the end of the text (cf. pressing enter)
-    ContentNode* pNode = rDoc.GetObject(0);
-    CPPUNIT_ASSERT(pNode);
+    ContentNode* pNode = &rDoc.GetObject(0);
     EditPaM aEndPaM(pNode, pNode->Len());
     rDoc.InsertParaBreak(aEndPaM, true /* bKeepEndingAttribs */);
 
@@ -2453,8 +2452,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEscapementNotPreservedOnParaBreak)
     CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetParaAsString(sal_Int32(1)));
 
     // Check new para's character attributes
-    pNode = rDoc.GetObject(1);
-    CPPUNIT_ASSERT(pNode);
+    pNode = &rDoc.GetObject(1);
 
     const EditCharAttrib* pBoldAttr = pNode->GetCharAttribs().FindEmptyAttrib(EE_CHAR_WEIGHT, 0);
     CPPUNIT_ASSERT_MESSAGE("Bold attribute should be carried over.", pBoldAttr != nullptr);
@@ -2483,7 +2481,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoDirNotPreservedOnParaBreak)
     CPPUNIT_ASSERT_EQUAL(u"ontent"_ustr, rDoc.GetParaAsString(sal_Int32(1)));
 
     // The first paragraph should still have the DF
-    auto* pNode = rDoc.GetObject(0);
+    auto* pNode = &rDoc.GetObject(0);
     CPPUNIT_ASSERT(pNode);
 
     CPPUNIT_ASSERT(pNode->GetContentAttribs().HasItem(EE_PARA_AUTOWRITINGDIR));
@@ -2491,7 +2489,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoDirNotPreservedOnParaBreak)
         = pNode->GetContentAttribs().GetItem(EE_PARA_AUTOWRITINGDIR);
     CPPUNIT_ASSERT(!rAttr.GetValue());
 
-    const auto* pNode2 = rDoc.GetObject(1);
+    const auto* pNode2 = &rDoc.GetObject(1);
     CPPUNIT_ASSERT(pNode2);
     CPPUNIT_ASSERT(!pNode2->GetContentAttribs().HasItem(EE_PARA_AUTOWRITINGDIR));
 }

@@ -36,6 +36,11 @@ public:
         , nIndex(n)
     {
     }
+    EditPaM(ContentNode& p, sal_Int32 n)
+        : pNode(&p)
+        , nIndex(n)
+    {
+    }
 
     const ContentNode* GetNode() const { return pNode; }
     ContentNode* GetNode() { return pNode; }
