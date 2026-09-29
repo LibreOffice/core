@@ -56,6 +56,7 @@
 #include <usrpref.hxx>
 #include <memory>
 
+
 SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(SwRedlineAcceptChild, FN_REDLINE_ACCEPT)
 
 SwRedlineAcceptChild::SwRedlineAcceptChild(vcl::Window* _pParent,
@@ -1148,6 +1149,46 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
                        &aRewriter);
     }
 
+    // collect the SwRedlineData of all redlines that currently exist in the document
+    auto collectExistingRedlineData = [pSh]()
+    {
+        std::unordered_set<const SwRedlineData*> aSet;
+        for (SwRedlineTable::size_type i = 0, n = pSh->GetRedlineCount(); i < n; ++i)
+            aSet.insert(&pSh->GetRedline(i).GetRedlineData());
+        return aSet;
+    };
+
+    // get the SwRedlineData* of a tree entry without dereferencing it
+    auto getRedlineDataOfEntry = [&rTreeView](const weld::TreeIter& rEntry) -> const SwRedlineData*
+    {
+        RedlinData* pRedlinData = weld::fromId<RedlinData*>(rTreeView.get_id(rEntry));
+        if (!pRedlinData || !pRedlinData->pData)
+            return nullptr;
+        return static_cast<SwRedlineDataParent*>(pRedlinData->pData)->pData;
+    };
+
+    std::unordered_set<const SwRedlineData*> aExisting = collectExistingRedlineData();
+
+    // accept/reject one entry if its redline still exists; refresh the set afterwards
+    auto acceptRejectEntry = [&](const weld::TreeIter& rEntry, bool bDirect)
+    {
+        const SwRedlineData* pRedlineData = getRedlineDataOfEntry(rEntry);
+        if (!pRedlineData || aExisting.find(pRedlineData) == aExisting.end())
+        {
+            SAL_INFO("sw.ui",
+                     "CallAcceptReject: redline " << pRedlineData << " already removed, skipping");
+            return;
+        }
+
+        SwRedlineTable::size_type nPosition = pSh->FindRedlineOfData(*pRedlineData);
+        if (nPosition != SwRedlineTable::npos)
+        {
+            (pSh->*FnAccRej)(nPosition, bDirect);
+            // FnAccRej may remove/merge more than one redline
+            aExisting = collectExistingRedlineData();
+        }
+    };
+
     // accept/reject the redlines in aRedlines. The absolute
     // position may change during the process (e.g. when two redlines
     // are merged in result of another one being deleted), so the
@@ -1155,14 +1196,11 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
     // (cf #102547#)
     for (const auto& rRedLine : aRedlines)
     {
-        SwRedlineTable::size_type nPosition = GetRedlinePos( *rRedLine );
-
         // bSelect is false for "accept/reject all", true when only accepting/rejecting one or more
         // selected changes. Only use direct accept/reject for explicitly selected changes.
         bool bDirect = bSelect;
 
-        if( nPosition != SwRedlineTable::npos )
-            (pSh->*FnAccRej)( nPosition, bDirect );
+        acceptRejectEntry(*rRedLine, bDirect);
 
         // handle redlines of table rows, stored as children of the item associated
         // to the deleted/inserted table row(s)
@@ -1171,13 +1209,11 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
         {
             RedlinData *pData = weld::fromId<RedlinData*>(rTreeView.get_id(*xChild));
             // disabled for redline stack, but not for redlines of table rows
-            if ( !pData->bDisabled )
+            if (pData && !pData->bDisabled)
             {
                 do
                 {
-                    nPosition = GetRedlinePos( *xChild );
-                    if( nPosition != SwRedlineTable::npos )
-                        (pSh->*FnAccRej)( nPosition, bDirect );
+                    acceptRejectEntry(*xChild, bDirect);
                 }
                 while ( rTreeView.iter_next_sibling(*xChild) );
             }
