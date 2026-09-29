@@ -105,4 +105,37 @@ describe(['tagdesktop'], 'Writer paragraph swap for the reader', { testIsolation
 			});
 		});
 	});
+
+	it('a scroll leaves alone what an input method is still composing', function () {
+		const uncommitted = ' still composing';
+		let requests = 0;
+		let composed;
+
+		cy.then(function () {
+			const socket = win.app.socket;
+			const send = socket.sendMessage;
+			socket.sendMessage = function (msg) {
+				if (msg === 'geta11yfocusedparagraph')
+					requests++;
+				return send.apply(this, arguments);
+			};
+
+			const editable = win.document.getElementById('clipboard-area');
+			editable.dispatchEvent(new win.CompositionEvent('compositionstart'));
+			win.document.getElementById('readable-content').textContent += uncommitted;
+			composed = editableText();
+
+			win.app.map._textInput.onVisibleAreaChanged();
+		});
+
+		cy.wait(500);
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+
+		cy.then(function () {
+			expect(requests, 'the scroll asked core for the paragraph again').to.equal(1);
+			expect(editableText(), 'the composition is still in the editable').to.equal(composed);
+		});
+	});
 });
