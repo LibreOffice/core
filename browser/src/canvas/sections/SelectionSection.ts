@@ -1115,6 +1115,33 @@ abstract class SelectionSection extends CanvasSectionObject {
 		];
 	}
 
+	/*
+		Whether a change leaves every object it touches somewhere on this side of reason: no
+		place and no side longer than a hundred metres. A change worked out on a state that has
+		gone stale can ask for far more than that, and a mapping like that is worth neither
+		drawing nor sending - the engine cannot even work out what to invalidate for it.
+	*/
+	public static withinReason(
+		objectIds: number[],
+		matrix: cool.Matrix2D,
+	): boolean {
+		const most = 100 * 1440 * 39.37;
+
+		return RenderGeometrySection.theOnesThatDraw(objectIds).every(
+			(objectId: number) => {
+				const mapping = RenderGeometrySection.transformOf(objectId);
+				if (!mapping) return true;
+
+				return mapping
+					.then(matrix)
+					.toArray()
+					.every(
+						(value: number) => Number.isFinite(value) && Math.abs(value) < most,
+					);
+			},
+		);
+	}
+
 	/// The upper left corner of the selection, in core pixels.
 	public selectionCorner(): number[] {
 		const box = RenderGeometrySection.answersPointer()
@@ -1176,6 +1203,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	private leaveTheChangeOnTheObjects(matrix: cool.Matrix2D | null): void {
 		if (!matrix) return;
+		if (!SelectionSection.withinReason(this.selectedObjects(), matrix)) return;
 
 		/*
 			The change goes to the objects that draw, and to the groups above them as well: a
@@ -1219,6 +1247,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 		matrix: cool.Matrix2D,
 		what: string,
 	): void {
+		if (!SelectionSection.withinReason(objectIds, matrix)) return;
+
 		const mappings: string[] = [];
 
 		/*

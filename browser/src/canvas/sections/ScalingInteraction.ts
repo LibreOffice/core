@@ -250,7 +250,15 @@ class ScalingInteraction extends SelectionInteraction {
 			const reached = (askedAt - staysAt) / (handleAt - staysAt);
 			const hair = size ? 10 / size : 0.001;
 
-			return Math.sign(reached || 1) * Math.max(Math.abs(reached), hair);
+			// No one step scales an object a thousandfold. A step worked out on a stale state
+			// that was a hair high could ask for it, and the engine cannot even work out what
+			// to invalidate for a mapping like that.
+			const most = 1000;
+
+			return (
+				Math.sign(reached || 1) *
+				Math.min(Math.max(Math.abs(reached), hair), most)
+			);
 		};
 
 		let across = along(mine.x, stays.x, asked.x, transform.lengthOfXAxis());
