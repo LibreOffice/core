@@ -340,39 +340,21 @@ class SlideImportSession {
 		return this.pendingInsert;
 	}
 
-	// The name of a remote link as the user knows it: the file name at
-	// the end of its address.
-	public static remoteLinkName(wopiSrc: string): string {
-		const path = wopiSrc.split('?')[0];
-		const name = path.substring(path.lastIndexOf('/') + 1);
-		try {
-			return decodeURIComponent(name) || wopiSrc;
-		} catch {
-			return name || wopiSrc;
-		}
-	}
-
 	// The remote link as the user knows it: the name the server gave it, or
-	// the file name at the end of its address when the server gave none.
-	public static documentName(doc: { wopiSrc: string; name?: string }): string {
-		if (doc.name) return doc.name;
-		return doc.wopiSrc ? SlideImportSession.remoteLinkName(doc.wopiSrc) : '';
+	// its persistent link when the server gave none.
+	public static documentName(doc: {
+		name?: string;
+		persistentLink: string;
+	}): string {
+		return doc.name || doc.persistentLink;
 	}
 
 	// Whether a remote link is the one a source names.
 	public static matchesDocument(
-		doc: { wopiSrc: string; name?: string; persistentLink?: string },
+		doc: { persistentLink?: string },
 		source: string,
 	): boolean {
 		return !!doc.persistentLink && doc.persistentLink === source;
-	}
-
-	// The document at the given address as the user knows it
-	public static documentNameOf(wopiSrc: string): string {
-		const doc = SlideImportSession.findRemoteLink(wopiSrc);
-		return doc
-			? SlideImportSession.documentName(doc)
-			: SlideImportSession.remoteLinkName(wopiSrc);
 	}
 
 	// The time the remote link of the given name was last modified now, as
@@ -390,23 +372,12 @@ class SlideImportSession {
 		return '';
 	}
 
-	// The remote link with the given address, or null when the storage
-	// named none of that address.
-	public static findRemoteLink(
-		wopiSrc: string,
-	): { wopiSrc: string; state: string } | null {
-		return (
-			(app.remoteLinks || []).find(
-				(doc: { wopiSrc: string }) => doc.wopiSrc === wopiSrc,
-			) || null
-		);
-	}
-
-	// Asks the server to open a live link to the remote link; the state
-	// in the next remotelinks: message follows the subscription.
-	public static subscribeRemoteLink(wopiSrc: string): void {
+	// Asks the server to open a live link to the remote link bound to a
+	// persistent link; the state in the next remotelinks: message follows the
+	// subscription.
+	public static subscribeRemoteLink(persistentLink: string): void {
 		app.socket.sendMessage(
-			'remotedocsubscribe wopisrc=' + encodeURIComponent(wopiSrc),
+			'remotedocsubscribe source=' + encodeURIComponent(persistentLink),
 		);
 	}
 
@@ -425,12 +396,15 @@ class SlideImportSession {
 		);
 	}
 
-	// Sends a read-only client command to a subscribed remote document. Its
-	// reply arrives as a remotedoccommandresult map event carrying the same
-	// wopiSrc.
-	public static sendRemoteCommand(wopiSrc: string, inner: string): void {
+	// Sends a read-only client command to the subscribed remote document bound
+	// to a persistent link. Its reply arrives as a remotedoccommandresult map
+	// event carrying the same source.
+	public static sendRemoteCommand(persistentLink: string, inner: string): void {
 		app.socket.sendMessage(
-			'remotedoccommand wopisrc=' + encodeURIComponent(wopiSrc) + ' ' + inner,
+			'remotedoccommand source=' +
+				encodeURIComponent(persistentLink) +
+				' ' +
+				inner,
 		);
 	}
 

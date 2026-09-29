@@ -5645,10 +5645,10 @@ bool DocumentBroker::removeRemoteDocumentSource(const std::string& persistentLin
 }
 
 void DocumentBroker::handleRemoteDocumentSubscribe(const std::string& tag,
-                                                   const std::string& encodedWopiSrc,
+                                                   const std::string& persistentLink,
                                                    const bool subscribe)
 {
-    _remoteLinks.handleSubscribe(*this, tag, encodedWopiSrc, subscribe);
+    _remoteLinks.handleSubscribe(*this, tag, persistentLink, subscribe);
 }
 
 void DocumentBroker::sendRemoteDocumentEvent(const std::string& tag,
@@ -5679,10 +5679,10 @@ std::vector<std::string> DocumentBroker::getSessionIds() const
 }
 
 void DocumentBroker::sendRemoteDocumentCommand(const std::string& tag,
-                                               const std::string& wopiSrc,
+                                               const std::string& persistentLink,
                                                const std::string& command)
 {
-    _remoteLinks.sendCommand(*this, tag, wopiSrc, command);
+    _remoteLinks.sendCommand(*this, tag, persistentLink, command);
 }
 
 void DocumentBroker::sendRemoteDocumentCommandResult(const std::string& tag,
@@ -5698,6 +5698,19 @@ void DocumentBroker::sendRemoteDocumentCommandResult(const std::string& tag,
         LOG_DBG("No view [" << tag << "] for a remote document reply on [" << _docKey << ']');
         return;
     }
+
+    // The broker names the remote by its WOPISrc, and the view knows it by the persistent link
+    // of the remote link recorded at that address.
+    const std::string persistentLink =
+        _remoteLinks.persistentLinkOf(Uri::decode(encodedWopiSrc));
+    if (persistentLink.empty())
+    {
+        LOG_DBG("No remote link of [" << _docKey
+                                      << "] stands for the remote document that answered");
+        return;
+    }
+
+    const std::string header = "remotedoccommandresult: source=" + Uri::encode(persistentLink);
 
 #if !MOBILEAPP
     // The pages a source wrote are the one reply the client is not handed as it stands. They
@@ -5726,14 +5739,13 @@ void DocumentBroker::sendRemoteDocumentCommandResult(const std::string& tag,
             status = std::string(body);
         }
 
-        const std::string answer = "remotedoccommandresult: wopisrc=" + encodedWopiSrc +
-                                   "\nexportslides: " + status;
+        const std::string answer = header + "\nexportslides: " + status;
         it->second->sendTextFrame(answer);
         return;
     }
 #endif // !MOBILEAPP
 
-    std::string frame = "remotedoccommandresult: wopisrc=" + encodedWopiSrc + '\n';
+    std::string frame = header + '\n';
     frame.append(payload.begin(), payload.end());
     it->second->sendBinaryFrame(frame.data(), frame.size());
 }

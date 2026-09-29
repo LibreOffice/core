@@ -28,10 +28,7 @@
 
 // What the pane holds of one source presentation.
 interface SlideImportPaneSource {
-  // The source's address, empty for a source the storage listed none for.
-  wopiSrc: string;
-  // Names the source in the pane. A source with no address is known by its
-  // name alone.
+  // Names the source in the pane: its persistent link.
   key: string;
   // Names the source's markup in a data attribute, so a selector finds it
   // whatever its address looks like.
@@ -39,7 +36,7 @@ interface SlideImportPaneSource {
   // The source as the user knows it.
   name: string;
   // The persistent link the pages of this document store for the source,
-  // or the name alone for a source the storage listed no address for.
+  // which is the one name the server knows it by.
   persistentLink: string;
   // State of asking the storage for the persistent link: pending,
   // resolved, notfound, denied or failed. Empty when it was never asked.
@@ -231,9 +228,12 @@ class SlideImportPane {
     return source.key === this.activeKey && this.activeKey !== '';
   }
 
-  private findSource(wopiSrc: string): SlideImportPaneSource | null {
-    if (!wopiSrc) return null;
-    return this.sources.find((source) => source.wopiSrc === wopiSrc) || null;
+  private findSource(persistentLink: string): SlideImportPaneSource | null {
+    if (!persistentLink) return null;
+    return (
+      this.sources.find((source) => source.persistentLink === persistentLink) ||
+      null
+    );
   }
 
   // Takes the remote links the server announced into the source list,
@@ -244,16 +244,16 @@ class SlideImportPane {
     const kept: SlideImportPaneSource[] = [];
 
     for (const doc of documents) {
+      if (!doc.persistentLink) continue;
       const name = SlideImportSession.documentName(doc);
-      const key = doc.wopiSrc || 'name:' + name;
+      const key = doc.persistentLink;
       let source = this.sources.find((known) => known.key === key);
       if (!source) {
         source = {
-          wopiSrc: doc.wopiSrc || '',
           key: key,
           id: this.nextSourceId++,
           name: name,
-          persistentLink: doc.persistentLink || '',
+          persistentLink: doc.persistentLink,
           access: doc.access || '',
           state: doc.state,
           expanded: false,
@@ -269,7 +269,6 @@ class SlideImportPane {
         };
       }
       source.name = name;
-      source.persistentLink = doc.persistentLink || '';
       source.access = doc.access || '';
       source.state = doc.state;
       // The source answered, so it is not opening any more.
@@ -330,7 +329,7 @@ class SlideImportPane {
   // Asks an open source for its slides: a source that is not connected yet is
   // subscribed to first, and the slides follow once it answers.
   private askSource(source: SlideImportPaneSource): void {
-    if (!source.wopiSrc) return;
+    if (!this.canShowSlides(source)) return;
 
     if (source.state === 'connected') {
       if (source.asked) return;
@@ -349,7 +348,7 @@ class SlideImportPane {
 
     if (source.opening) return;
     source.opening = true;
-    SlideImportSession.subscribeRemoteLink(source.wopiSrc);
+    SlideImportSession.subscribeRemoteLink(source.persistentLink);
   }
 
   // One source shows its slides at a time, and the one on show is the one an
@@ -449,7 +448,6 @@ class SlideImportPane {
         WOPISrc: window.wopiSrc,
         Link: {
           PersistentLink: source.persistentLink,
-          WOPISrc: source.wopiSrc,
           BaseFileName: source.name,
         },
       },
@@ -457,22 +455,22 @@ class SlideImportPane {
   }
 
   // Sends a read-only client command to a subscribed source. Its reply
-  // arrives as a remotedoccommandresult map event carrying the same wopiSrc.
+  // arrives as a remotedoccommandresult map event carrying the same source.
   private sendRemoteCommand(
     source: SlideImportPaneSource,
     inner: string,
   ): void {
-    SlideImportSession.sendRemoteCommand(source.wopiSrc, inner);
+    SlideImportSession.sendRemoteCommand(source.persistentLink, inner);
   }
 
   // A reply from one of the sources the pane shows.
   private onRemoteResult(e: {
-    wopiSrc: string;
+    source: string;
     textMsg: string;
     imgBytes?: Uint8Array;
     imgIndex?: number;
   }): void {
-    const source = this.findSource(e.wopiSrc);
+    const source = this.findSource(e.source);
     if (!source) return;
 
     const textMsg = e.textMsg || '';
@@ -666,11 +664,7 @@ class SlideImportPane {
   private linkedSource(source: SlideImportPaneSource): string {
     const links = this.map.slideLinks;
     if (!links) return '';
-    return links.linkedSourceOf({
-      wopiSrc: source.wopiSrc,
-      name: source.name,
-      persistentLink: source.persistentLink,
-    });
+    return links.linkedSourceOf({ persistentLink: source.persistentLink });
   }
 
   // What the pane says of a source: whether pages of this document are
@@ -1205,10 +1199,11 @@ class SlideImportPane {
     );
   }
 
-  // Whether the pane can read the slides of a source. A file the storage
-  // lists no address for cannot be reached at all.
+  // Whether the pane can read the slides of a source. A missing source, one
+  // the storage could not give or one no remote link stands for, cannot be
+  // reached at all.
   private canShowSlides(source: SlideImportPaneSource): boolean {
-    return source.wopiSrc !== '';
+    return source.state !== 'missing';
   }
 
   // One row of the source list: the file, what the pane says of it, and the
@@ -1340,7 +1335,7 @@ class SlideImportPane {
         text: _('Update the slides linked to this file'),
       });
 
-    if (!linked && source.wopiSrc && source.persistentLink)
+    if (!linked && source.persistentLink)
       entries.push({
         id: 'remove',
         type: 'comboboxentry',

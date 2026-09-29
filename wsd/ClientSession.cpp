@@ -1513,31 +1513,30 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     }
     else if (tokens.equals(0, "remotedoccommand"))
     {
-        std::string encodedWopiSrc;
-        if (tokens.size() < 3 || !COOLProtocol::getTokenString(tokens[1], "wopisrc", encodedWopiSrc)
-            || encodedWopiSrc.empty())
+        std::string encodedSource;
+        if (tokens.size() < 3 || !COOLProtocol::getTokenString(tokens[1], "source", encodedSource)
+            || encodedSource.empty())
         {
             sendTextFrameAndLogError("error: cmd=remotedoccommand kind=syntax");
             return false;
         }
 
-        // The inner command is everything after the wopisrc token.
-        docBroker->sendRemoteDocumentCommand(getId(), Uri::decode(encodedWopiSrc),
+        // The inner command is everything after the source token.
+        docBroker->sendRemoteDocumentCommand(getId(), Uri::decode(encodedSource),
                                              tokens.cat(' ', 2));
         return true;
     }
     else if (tokens.equals(0, "remotedocsubscribe") || tokens.equals(0, "remotedocunsubscribe"))
     {
-        std::string encodedWopiSrc;
-        if (tokens.size() < 2 ||
-            !COOLProtocol::getTokenString(tokens[1], "wopisrc", encodedWopiSrc) ||
-            encodedWopiSrc.empty())
+        std::string encodedSource;
+        if (tokens.size() < 2 || !COOLProtocol::getTokenString(tokens[1], "source", encodedSource) ||
+            encodedSource.empty())
         {
             sendTextFrameAndLogError("error: cmd=remotedocsubscribe kind=syntax");
             return false;
         }
 
-        docBroker->handleRemoteDocumentSubscribe(getId(), encodedWopiSrc,
+        docBroker->handleRemoteDocumentSubscribe(getId(), Uri::decode(encodedSource),
                                                  tokens.equals(0, "remotedocsubscribe"));
         return true;
     }

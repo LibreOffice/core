@@ -545,10 +545,10 @@ public:
     /// them. Reports whether one was bound to it.
     bool removeRemoteDocumentSource(const std::string& persistentLink);
 
-    /// Opens or drops one view's subscription to a remote document. The view
-    /// is named by its tag.
+    /// Opens or drops one view's subscription to the remote document bound to the given
+    /// persistent link. The view is named by its tag.
     void handleRemoteDocumentSubscribe(const std::string& tag,
-                                       const std::string& encodedWopiSrc, bool subscribe);
+                                       const std::string& persistentLink, bool subscribe);
 
     /// Returns the live session with the given id, or null when there is none.
     std::shared_ptr<ClientSession> findSession(const std::string& id) const;
@@ -566,9 +566,9 @@ public:
     void sendRemoteDocumentEvent(const std::string& tag, const std::string& encodedWopiSrc,
                                  const std::string& eventArguments);
 
-    /// Routes a read-only client command from one view to the remote document
-    /// with the given WOPISrc. The view is named by its tag.
-    void sendRemoteDocumentCommand(const std::string& tag, const std::string& wopiSrc,
+    /// Routes a read-only client command from one view to the remote document bound to the
+    /// given persistent link. The view is named by its tag.
+    void sendRemoteDocumentCommand(const std::string& tag, const std::string& persistentLink,
                                    const std::string& command);
 
     /// Delivers a wrapped remote document reply to the view that asked for it,

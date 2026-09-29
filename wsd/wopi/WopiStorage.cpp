@@ -189,9 +189,17 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
             JsonUtil::findJSONValue(entry, "BaseFileName", name);
             JsonUtil::findJSONValue(entry, "LastModifiedTime", lastModifiedTime);
             JsonUtil::findJSONValue(entry, "PersistentLink", persistentLink);
-            if (!wopiSrc.empty())
-                _remoteLinks.push_back({ std::move(wopiSrc), std::move(name),
-                                         std::move(lastModifiedTime), std::move(persistentLink) });
+
+            // A view reaches a remote link by its persistent link alone.
+            if (wopiSrc.empty() || persistentLink.empty())
+            {
+                LOG_WRN("Ignoring a RemoteLinks entry of CheckFileInfo that names no WOPISrc or "
+                        "no PersistentLink");
+                continue;
+            }
+
+            _remoteLinks.push_back({ std::move(wopiSrc), std::move(name),
+                                     std::move(lastModifiedTime), std::move(persistentLink) });
         }
     }
 

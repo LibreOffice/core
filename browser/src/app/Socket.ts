@@ -1563,10 +1563,11 @@ class Socket {
 	];
 
 	// A reply from a remote document, wrapped as
-	// "remotedoccommandresult: wopisrc=<enc>\n<inner frame>". Unwraps the
+	// "remotedoccommandresult: source=<enc>\n<inner frame>". Unwraps the
 	// header, then fires a remotedoccommandresult map event carrying the
-	// remote's WOPISrc and the inner frame as an ordinary (textMsg, imgBytes,
-	// imgIndex) triple, so a consumer reads it the way it reads any frame.
+	// persistent link of the remote link and the inner frame as an ordinary
+	// (textMsg, imgBytes, imgIndex) triple, so a consumer reads it the way it
+	// reads any frame.
 	private _onRemoteDocCommandResult(
 		textMsg: string,
 		e: SlurpMessageEvent,
@@ -1578,10 +1579,10 @@ class Socket {
 		const headerEnd = textMsg.indexOf('\n');
 		const header = headerEnd >= 0 ? textMsg.substring(0, headerEnd) : textMsg;
 
-		let wopiSrc = '';
+		let source = '';
 		for (const token of header.split(' ')) {
-			if (token.startsWith('wopisrc=')) {
-				wopiSrc = decodeURIComponent(token.substring('wopisrc='.length));
+			if (token.startsWith('source=')) {
+				source = decodeURIComponent(token.substring('source='.length));
 				break;
 			}
 		}
@@ -1622,7 +1623,7 @@ class Socket {
 		}
 
 		this._map.fire('remotedoccommandresult', {
-			wopiSrc: wopiSrc,
+			source: source,
 			textMsg: innerText,
 			imgBytes: imgBytes,
 			imgIndex: innerImgIndex,

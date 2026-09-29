@@ -46,6 +46,17 @@ void RemoteLinks::setSource(DocumentBroker& docBroker, const std::string& wopiSr
     try
     {
         const std::string docKey = RequestDetails::getDocKey(wopiSrc);
+
+        // A view reaches a remote link by its persistent link alone, so a document that is
+        // not recorded yet is recorded with one.
+        if (persistentLink.empty() && _entries.find(docKey) == _entries.end())
+        {
+            LOG_WRN("Ignoring the remote link [" << Anonymizer::anonymizeUrl(wopiSrc) << "] of ["
+                                                 << docBroker.getDocKey()
+                                                 << "]: it names no persistent link");
+            return;
+        }
+
         Entry& entry = _entries[docKey];
         entry.wopiSrc = wopiSrc.substr(0, wopiSrc.find('?'));
         entry.lastModifiedTime = lastModifiedTime;
@@ -421,45 +432,57 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
 }
 
 void RemoteLinks::handleSubscribe(DocumentBroker& docBroker, const std::string& tag,
-                                       const std::string& encodedWopiSrc, const bool subscribe)
+                                  const std::string& persistentLink, const bool subscribe)
 {
     docBroker.assertCorrectThread();
 
-    const std::string wopiSrc = Uri::decode(encodedWopiSrc);
+    const std::string linkAnonym = Anonymizer::anonymize(persistentLink);
 
     LOG_INF("Remote document " << (subscribe ? "subscribe" : "unsubscribe") << " by view ["
-                               << tag << "] to [" << Anonymizer::anonymizeUrl(wopiSrc)
-                               << ']');
+                               << tag << "] to [" << linkAnonym << ']');
 
     if (!RemoteDocumentBroker::isEnabled() || !RemoteDocumentBroker::isInitialized())
     {
         LOG_ERR("Remote document subscribe by view [" << tag
                                                       << "] rejected: remote_links is disabled");
-        sendError(docBroker, tag, encodedWopiSrc, "disabled");
+        sendError(docBroker, tag, persistentLink, "disabled");
         return;
     }
 
-    // Match subscriptions and tokens on the canonical docKey, so encoded and
-    // decoded spellings of the same WOPISrc refer to one document.
-    std::string remoteDocKey;
-    try
+    // A view names the remote document by its persistent link, and the address it is reached
+    // at is the one the remote link records.
+    const auto itEntry = findListed(persistentLink);
+    if (itEntry == _entries.end())
     {
-        remoteDocKey = RequestDetails::getDocKey(wopiSrc);
+        LOG_WRN("Remote document subscribe by view [" << tag << "] rejected: no remote link of ["
+                                                      << docBroker.getDocKey() << "] is bound to ["
+                                                      << linkAnonym << ']');
+        sendError(docBroker, tag, persistentLink, "notfound");
+        return;
+    }
 
-        const Poco::URI wopiSrcUri(wopiSrc);
-        if (subscribe && !HostUtil::allowedWopiHost(wopiSrcUri.getHost()))
+    const std::string remoteDocKey = itEntry->first;
+    const std::string wopiSrc = itEntry->second.wopiSrc;
+
+    if (subscribe)
+    {
+        try
         {
-            LOG_WRN("Remote document [" << Anonymizer::anonymizeUrl(wopiSrc)
-                                        << "] is not on an allowed WOPI host");
-            sendError(docBroker, tag, encodedWopiSrc, "hostnotallowed");
+            const Poco::URI wopiSrcUri(wopiSrc);
+            if (!HostUtil::allowedWopiHost(wopiSrcUri.getHost()))
+            {
+                LOG_WRN("Remote document [" << Anonymizer::anonymizeUrl(wopiSrc)
+                                            << "] is not on an allowed WOPI host");
+                sendError(docBroker, tag, persistentLink, "hostnotallowed");
+                return;
+            }
+        }
+        catch (const std::exception& exc)
+        {
+            LOG_ERR("Invalid remote document WOPISrc: " << exc.what());
+            sendError(docBroker, tag, persistentLink, "syntax");
             return;
         }
-    }
-    catch (const std::exception& exc)
-    {
-        LOG_ERR("Invalid remote document WOPISrc: " << exc.what());
-        sendError(docBroker, tag, encodedWopiSrc, "syntax");
-        return;
     }
 
     View& view = _views[tag];
@@ -484,7 +507,7 @@ void RemoteLinks::handleSubscribe(DocumentBroker& docBroker, const std::string& 
         LOG_ERR("Remote document subscribe by view ["
                 << tag << "] rejected: the view holds no access token for [" << remoteDocKey
                 << ']');
-        sendError(docBroker, tag, encodedWopiSrc, "notoken");
+        sendError(docBroker, tag, persistentLink, "notoken");
         return;
     }
 
@@ -495,7 +518,7 @@ void RemoteLinks::handleSubscribe(DocumentBroker& docBroker, const std::string& 
                 << tag
                 << "] rejected: no server URL to dial through; set remote_links.server_url "
                    "or server_name in the configuration");
-        sendError(docBroker, tag, encodedWopiSrc, "noserver");
+        sendError(docBroker, tag, persistentLink, "noserver");
         return;
     }
 
@@ -517,7 +540,7 @@ void RemoteLinks::handleSubscribe(DocumentBroker& docBroker, const std::string& 
         LOG_ERR("Remote document subscribe by view ["
                 << tag << "] rejected: the view already holds " << liveLinks
                 << " subscriptions of the maximum " << maxLinks);
-        sendError(docBroker, tag, encodedWopiSrc, "limitreached");
+        sendError(docBroker, tag, persistentLink, "limitreached");
         return;
     }
 
@@ -537,10 +560,34 @@ void RemoteLinks::handleSubscribe(DocumentBroker& docBroker, const std::string& 
 }
 
 void RemoteLinks::onRemoteEvent(DocumentBroker& docBroker, const std::string& tag,
-                                     const std::string& encodedWopiSrc,
-                                     const std::string& eventArguments)
+                                const std::string& encodedWopiSrc,
+                                const std::string& eventArguments)
 {
     docBroker.assertCorrectThread();
+
+    // The broker names the remote document by its WOPISrc, and a view knows it by the
+    // persistent link of the remote link recorded at that address.
+    std::string docKey;
+    try
+    {
+        docKey = RequestDetails::getDocKey(Uri::decode(encodedWopiSrc));
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Cannot mirror the remote document event: " << exc.what());
+        return;
+    }
+
+    const auto itEntry = _entries.find(docKey);
+    if (itEntry == _entries.end())
+    {
+        LOG_DBG("Ignoring an event of [" << docKey << "]: no remote link of ["
+                                         << docBroker.getDocKey() << "] is recorded there");
+        return;
+    }
+
+    const std::string persistentLink = itEntry->second.persistentLink;
+    const std::string wopiSrc = itEntry->second.wopiSrc;
 
     const StringVector arguments = StringVector::tokenize(eventArguments);
     std::string event;
@@ -549,8 +596,8 @@ void RemoteLinks::onRemoteEvent(DocumentBroker& docBroker, const std::string& ta
 
     // Every event reaches the kit, which will drive the shared freshness of
     // linked slides once the engine reads these events.
-    docBroker.sendTextFrameToKit("remotedocevent tag=" + tag + " wopisrc=" + encodedWopiSrc +
-                                 ' ' + eventArguments);
+    docBroker.sendTextFrameToKit("remotedocevent tag=" + tag + " source=" +
+                                 Uri::encode(persistentLink) + ' ' + eventArguments);
 
     // A save on the source uploaded a new file to storage. The new last-modified
     // time is the same for every view, so refresh the shared source record.
@@ -559,8 +606,7 @@ void RemoteLinks::onRemoteEvent(DocumentBroker& docBroker, const std::string& ta
         std::string time;
         if (arguments.size() > 1)
             COOLProtocol::getTokenString(arguments[1], "time", time);
-        setSource(docBroker, Uri::decode(encodedWopiSrc), std::string(), Uri::decode(time),
-                  std::string());
+        setSource(docBroker, wopiSrc, std::string(), Uri::decode(time), std::string());
         return;
     }
 
@@ -569,47 +615,38 @@ void RemoteLinks::onRemoteEvent(DocumentBroker& docBroker, const std::string& ta
         return;
 
     // Connection events belong to the one view that opened the subscription.
-    try
-    {
-        const std::string docKey = RequestDetails::getDocKey(Uri::decode(encodedWopiSrc));
-        const auto itView = _views.find(tag);
-        if (itView == _views.end())
-            return;
+    const auto itView = _views.find(tag);
+    if (itView == _views.end())
+        return;
 
-        const auto itSub = itView->second.subscriptions.find(docKey);
-        if (itSub == itView->second.subscriptions.end())
-            return;
+    const auto itSub = itView->second.subscriptions.find(docKey);
+    if (itSub == itView->second.subscriptions.end())
+        return;
 
-        if (event == "unsubscribed")
-            itView->second.subscriptions.erase(itSub);
-        else if (event == "connected" || event == "disconnected" || event == "failed" ||
-                 event == "missing")
-            itSub->second.state = std::move(event);
+    if (event == "unsubscribed")
+        itView->second.subscriptions.erase(itSub);
+    else if (event == "connected" || event == "disconnected" || event == "failed" ||
+             event == "missing")
+        itSub->second.state = std::move(event);
 
-        refreshView(docBroker, tag);
-    }
-    catch (const std::exception& exc)
-    {
-        LOG_ERR("Cannot mirror the remote document event: " << exc.what());
-    }
+    refreshView(docBroker, tag);
 }
 
 void RemoteLinks::sendCommand(DocumentBroker& docBroker, const std::string& tag,
-                                   const std::string& wopiSrc, const std::string& command)
+                              const std::string& persistentLink, const std::string& command)
 {
     docBroker.assertCorrectThread();
 
     if (!RemoteDocumentBroker::isEnabled() || !RemoteDocumentBroker::isInitialized())
         return;
 
-    std::string remoteDocKey;
-    try
+    const std::string linkAnonym = Anonymizer::anonymize(persistentLink);
+    const auto itEntry = findListed(persistentLink);
+    if (itEntry == _entries.end())
     {
-        remoteDocKey = RequestDetails::getDocKey(wopiSrc);
-    }
-    catch (const std::exception& exc)
-    {
-        LOG_ERR("Invalid remote document WOPISrc for a command: " << exc.what());
+        LOG_DBG("Ignoring a remote document command from view ["
+                << tag << "] for [" << linkAnonym << "]: no remote link of ["
+                << docBroker.getDocKey() << "] is bound to it");
         return;
     }
 
@@ -617,7 +654,7 @@ void RemoteLinks::sendCommand(DocumentBroker& docBroker, const std::string& tag,
     const auto itView = _views.find(tag);
     if (itView != _views.end())
     {
-        const auto itSub = itView->second.subscriptions.find(remoteDocKey);
+        const auto itSub = itView->second.subscriptions.find(itEntry->first);
         if (itSub != itView->second.subscriptions.end())
         {
             RemoteDocumentBroker::instance().sendCommandAsync(itSub->second.wopiSrc,
@@ -628,8 +665,7 @@ void RemoteLinks::sendCommand(DocumentBroker& docBroker, const std::string& tag,
         }
     }
 
-    LOG_DBG("Ignoring a remote document command from view [" << tag << "] for ["
-                                                             << remoteDocKey
+    LOG_DBG("Ignoring a remote document command from view [" << tag << "] for [" << linkAnonym
                                                              << "]: no live subscription");
 }
 
@@ -742,7 +778,10 @@ void RemoteLinks::addToIncomingDocKeyChain(DocumentBroker& docBroker,
                                                                   itSub->second.accessToken,
                                                                   docBroker.getDocKey(),
                                                                   itView.first);
-                sendError(docBroker, itView.first, Uri::encode(itSub->second.wopiSrc),
+                const auto itEntry = _entries.find(docKey);
+                sendError(docBroker, itView.first,
+                          itEntry != _entries.end() ? itEntry->second.persistentLink
+                                                    : std::string(),
                           "cycledetected");
                 itView.second.subscriptions.erase(itSub);
                 refreshView(docBroker, itView.first);
@@ -754,10 +793,25 @@ void RemoteLinks::addToIncomingDocKeyChain(DocumentBroker& docBroker,
 }
 
 void RemoteLinks::sendError(DocumentBroker& docBroker, const std::string& tag,
-                                 const std::string& encodedWopiSrc, const std::string& kind)
+                            const std::string& persistentLink, const std::string& kind)
 {
-    docBroker.sendTextFrameToKit("remotedocevent tag=" + tag + " wopisrc=" + encodedWopiSrc +
-                                 " event=error kind=" + kind);
+    docBroker.sendTextFrameToKit("remotedocevent tag=" + tag + " source=" +
+                                 Uri::encode(persistentLink) + " event=error kind=" + kind);
+}
+
+std::string RemoteLinks::persistentLinkOf(const std::string& wopiSrc) const
+{
+    try
+    {
+        const auto itEntry = _entries.find(RequestDetails::getDocKey(wopiSrc));
+        return itEntry != _entries.end() ? itEntry->second.persistentLink : std::string();
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("No remote link at the invalid WOPISrc [" << Anonymizer::anonymizeUrl(wopiSrc)
+                                                          << "]: " << exc.what());
+        return std::string();
+    }
 }
 
 std::string RemoteLinks::documentName(const std::string& wopiSrc)
@@ -831,7 +885,6 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
         }
 
         Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
-        entry->set("wopiSrc", it.second.wopiSrc);
         entry->set("name", entryName(it.second));
         entry->set("state", state);
         entry->set("lastModifiedTime", it.second.lastModifiedTime);
@@ -841,15 +894,14 @@ std::string RemoteLinks::buildJson(const std::string& tag) const
     }
 
     // A source the document names that no remote link stands for is reported under its name
-    // alone: it says what this document was made from, and there is no address to reach it at
-    // and no token to read it with.
+    // alone: it says what this document was made from, and no remote link is bound to it that
+    // a view could read.
     for (const std::string& name : _namedSources)
     {
         if (isListed(name))
             continue;
 
         Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
-        entry->set("wopiSrc", std::string());
         entry->set("name", name);
         entry->set("state", "missing");
         entry->set("lastModifiedTime", std::string());

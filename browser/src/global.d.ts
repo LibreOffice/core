@@ -245,11 +245,10 @@ interface AppInterface {
 	colorLastSelection: any;
 	serverAudit: any;
 	remoteLinks: Array<{
-		wopiSrc: string;
 		name?: string;
 		state: string;
 		lastModifiedTime?: string;
-		persistentLink?: string;
+		persistentLink: string;
 		access?: string;
 	}>;
 	// One-time token authorizing this view to call a POST to /cool/links

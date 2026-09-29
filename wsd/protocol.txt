@@ -91,17 +91,20 @@ downloadas name=<fileName> id=<id> format=<document format> options=<SkipImages,
     * 'slideshow': When request for download is for showing slideshow
     * 'export': Just a simple download
 
-remotedocsubscribe wopisrc=<encoded-WOPISrc>
-remotedocunsubscribe wopisrc=<encoded-WOPISrc>
+remotedocsubscribe source=<encoded persistent link>
+remotedocunsubscribe source=<encoded persistent link>
 
     Subscribes the sending view to, or unsubscribes it from, live events
-    about the given remote document. The subscription belongs to that one
-    view and is opened with that view's own access token for the remote
-    document; the token comes from that view's UserPrivateInfo in
-    CheckFileInfo, or from a POST to /cool/links. A view without a
-    token for the source is refused. A remotelinkremove of its persistent
-    link drops the document for every view, and the subscriptions to it go
-    down with it. A view holds at most one subscription per source. The command
+    about the remote document bound to the given persistent link. A view
+    names a remote document by its persistent link alone, and the address
+    the server reaches it at stays with the server. The subscription
+    belongs to that one view and is opened with that view's own access
+    token for the remote document; the token comes from that view's
+    UserPrivateInfo in CheckFileInfo, or from a POST to /cool/links. A view
+    without a token for the source is refused, and so is a persistent link
+    no remote link is bound to. A remotelinkremove of the persistent link
+    drops the document for every view, and the subscriptions to it go down
+    with it. A view holds at most one subscription per source. The command
     is handled inside wsd and never given to this document's kit. Requires
     the remote_links feature to be enabled.
 
@@ -125,16 +128,16 @@ remotelinkremove source=<encoded persistent link>
     'notfound' when no remote link is bound to it. Requires the remote_links
     feature to be enabled.
 
-remotedoccommand wopisrc=<encoded-WOPISrc> <inner client command>
+remotedoccommand source=<encoded persistent link> <inner client command>
 
     Routes a read-only client command to the remote document the current
-    document is subscribed to, named by its WOPISrc. The inner command is an
+    document is subscribed to, bound to the given persistent link. The inner command is an
     ordinary client command line, for example "getslidesections" or
     "tilecombine ...". The command is handled inside wsd and sent to the
     remote over the headless session; it is never given to this document's
     kit. Only non-modifying commands are accepted. The remote's replies come
     back as remotedoccommandresult: messages. Requires a live subscription to
-    the WOPISrc.
+    the source.
 
 getchildid
 
@@ -854,9 +857,9 @@ linktoken: <token>
     over POST /cool/links. Sent when the view joins a document with
     remote_links enabled, and again with a fresh token after each accepted
     request, so a token is never accepted twice. Keep only the latest. The
-    Link object of the POST may carry a PersistentLink, the reference the
-    document's pages store for the file, so that the registered link stands
-    for that source.
+    Link object of the POST names in PersistentLink the reference the
+    document's pages store for the file, which is the one name a view knows
+    the registered link by.
 
 contextmenu: <json description of the context menu>
 
@@ -890,16 +893,16 @@ remotelinks: <json>
     and the fresh list goes out to all of them. Built for the receiving
     view: the source list and last-modified times are the same for every
     view, but the state is that view's own. Sent to a view when it joins
-    and again when the shared list
-    or that view's own access or subscription state changes. Access tokens
-    are never included. The JSON carries a documents array of entries:
+    and again when the shared list or that view's own access or
+    subscription state changes. Access tokens and the addresses of the
+    remote documents are never included: a view knows a remote link by its
+    persistent link alone. The JSON carries a documents array of entries:
 
-        { "wopiSrc": "<decoded WOPISrc, no query>",
-          "name": "<the BaseFileName the integrator gave the document, or the
+        { "name": "<the BaseFileName the integrator gave the document, or the
                     file name at the end of its WOPISrc>",
           "lastModifiedTime": "<time or empty>",
           "state": "noaccess|available|subscribed|connected|disconnected|failed|missing",
-          "persistentLink": "<saved in file, can be resolved to WOPISrc, or empty>",
+          "persistentLink": "<the reference the document's pages store for the source>",
           "access": "pending|resolved|notfound|denied|failed, or empty" }
 
     'noaccess' means the view holds no token for the source. 'available'
@@ -907,10 +910,9 @@ remotelinks: <json>
     values follow the remotedocevent states of the view's subscription.
     'missing' means the source cannot be read: either it could not be read
     from storage, or it is a document the open one names as the source of
-    its slides that no remote link stands for. Such an
-    entry carries an empty wopiSrc and its name alone, so it says what the
-    slides were made from while nothing can reach it; its persistentLink is
-    that name.
+    its slides that no remote link stands for. Such an entry carries its
+    name alone, so it says what the slides were made from while nothing can
+    reach it; its persistentLink is that name.
 
     'access' is what asking this view's storage for the persistent link came
     to, and it is empty for a source this view never asked for, which is
@@ -918,13 +920,14 @@ remotelinks: <json>
     'pending' means a question is in flight, 'notfound' that the storage
     knows no document for the link, 'denied' that this view's user may not
     reach it, and 'failed' any other answer or none. A source that is
-    'resolved' carries the address the storage named. See
-    remotelinkresolve for asking again.
+    'resolved' is the remote link the storage named. See remotelinkresolve
+    for asking again.
 
-remotedocevent: tag=<t> wopisrc=<encoded-WOPISrc> event=<event> [part=<p>] [value=<v>] [kind=<k>] [time=<encoded-time>]
+remotedocevent: tag=<t> source=<encoded persistent link> event=<event> [part=<p>] [value=<v>] [kind=<k>] [time=<encoded-time>]
 
     An event about a remote document a view subscribed to with
-    remotedocsubscribe. The tag is the session id of the view that opened the
+    remotedocsubscribe, named by the persistent link its remote link is
+    bound to. The tag is the session id of the view that opened the
     subscription. <event> is one of:
     * 'connected': the remote document is loaded and events are flowing
     * 'modified': the remote document's modified state changed to <value>
@@ -940,16 +943,20 @@ remotedocevent: tag=<t> wopisrc=<encoded-WOPISrc> event=<event> [part=<p>] [valu
     * 'missing': the source could not be read from storage (a missing file
       among the reasons); <kind> names the reason and the links to it are broken
     * 'unsubscribed': the link was dropped on request
-    * 'error': the subscription failed; <kind> names the reason
+    * 'error': the subscription failed; <kind> names the reason, among them
+      'notfound' for a persistent link no remote link is bound to and
+      'notoken' for a source the view holds no token for
 
-remotedoccommandresult: wopisrc=<encoded-WOPISrc>\n<inner server frame>
+remotedoccommandresult: source=<encoded persistent link>\n<inner server frame>
 
     A reply from a remote document to a remotedoccommand. The header line
-    names the remote by its WOPISrc; everything after the first newline is
+    names the remote by the persistent link its remote link is bound to;
+    everything after the first newline is
     the frame the remote node sent, verbatim, text or binary (for example
     slidesections:, status:, tile:, sendthumbnail:). The frame is delivered
     only to the view that issued commands to that remote, so several remote
-    documents can be driven in parallel and told apart by the WOPISrc.
+    documents can be driven in parallel and told apart by the persistent
+    link.
 
 error: cmd=<command> kind=<kind> [code=<error_code>] [params=1,2,3,...,N]
 <freeErrorText>

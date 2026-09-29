@@ -2339,11 +2339,14 @@ bool ClientRequestDispatcher::handleLinksRequest(
         remotePersistentLink.clear();
     }
 
-    if (oneTimeToken.empty() || remoteWopiSrc.empty() || remoteAccessToken.empty())
+    // A view reaches a remote link by its persistent link alone, so the link needs one.
+    if (oneTimeToken.empty() || remoteWopiSrc.empty() || remoteAccessToken.empty() ||
+        remotePersistentLink.empty())
     {
         LOG_ERR_S("Links request rejected: incomplete body (have Nonce: "
                   << !oneTimeToken.empty() << ", Link WOPISrc: " << !remoteWopiSrc.empty()
                   << ", Link AccessToken: " << !remoteAccessToken.empty()
+                  << ", Link PersistentLink: " << !remotePersistentLink.empty()
                   << "): " << Anonymizer::anonymizeUrl(request.getURI()));
         HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket,
                                          "missing Nonce or Link");

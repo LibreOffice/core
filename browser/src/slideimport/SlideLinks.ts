@@ -63,8 +63,6 @@ interface SlideLinkRefresh {
 	// Whether the source was asked for the slides the pages record the
 	// identifiers of, rather than for its whole deck.
 	byIdentifier: boolean;
-	// The address the source was asked at, once it was.
-	wopiSrc?: string;
 	// Whether a subscription this run opened has been recorded by the server.
 	subscribed?: boolean;
 	// Whether the pages the source wrote have been handed to the document, so
@@ -120,11 +118,7 @@ class SlideLinks {
 
 	// The source of this document's links that names the given remote
 	// link, or an empty string when no page is linked to it.
-	public linkedSourceOf(doc: {
-		wopiSrc: string;
-		name?: string;
-		persistentLink?: string;
-	}): string {
+	public linkedSourceOf(doc: { persistentLink?: string }): string {
 		return (
 			this.sources.find((source) =>
 				SlideImportSession.matchesDocument(doc, source),
@@ -411,7 +405,7 @@ class SlideLinks {
 	// The remote link a source names, as the storage announced it, or null when this
 	// document links to no document of that name.
 	private remoteLink(source: string): {
-		wopiSrc: string;
+		persistentLink: string;
 		name?: string;
 		state: string;
 		lastModifiedTime?: string;
@@ -440,28 +434,16 @@ class SlideLinks {
 			return;
 		}
 
-		if (!remoteLink.wopiSrc) {
-			// The slides of this document name the source, and that is all that is known of
-			// it: the storage gave no address to reach it at.
-			this.say(
-				_(
-					'These slides come from {0} which is currently not accessible.',
-				).replace('{0}', () => next.source),
-			);
-			this.sendNext();
-			return;
-		}
-
-		// A source this view holds no token for, or one the storage could not
-		// give, is never asked: a subscription to it would wait for ever.
+		// A source this view holds no token for, one the storage could not give, or one no
+		// remote link stands for, is never asked: a subscription to it would wait for ever.
 		if (!SlideLinks.isReadable(remoteLink.state)) {
 			this.abandonUnreadableSource(next.source, remoteLink.state);
 			return;
 		}
 
 		this.running = next;
-		if (remoteLink.state === 'connected') this.askForPages(remoteLink.wopiSrc);
-		else SlideImportSession.subscribeRemoteLink(remoteLink.wopiSrc);
+		if (remoteLink.state === 'connected') this.askForPages();
+		else SlideImportSession.subscribeRemoteLink(next.source);
 	}
 
 	// A source that cannot be read leaves the run it was asked for. The user is told why the
@@ -476,15 +458,14 @@ class SlideLinks {
 		this.sendNext();
 	}
 
-	// The source is asked for the slides the pages of this document came from.
-	private askForPages(wopiSrc: string): void {
+	// The source in hand is asked for the slides the pages of this document came from.
+	private askForPages(): void {
 		if (this.running === null) return;
 		this.running.accepted = true;
-		this.running.wopiSrc = wopiSrc;
 		const guids = this.sourceGuids(this.running.source, this.running.part);
 		this.running.byIdentifier = guids !== null;
 		SlideImportSession.sendRemoteCommand(
-			wopiSrc,
+			this.running.source,
 			guids === null ? 'exportslides' : 'exportslides guids=' + guids.join(','),
 		);
 	}
@@ -515,7 +496,7 @@ class SlideLinks {
 		const remoteLink = this.remoteLink(this.running.source);
 
 		if (remoteLink && remoteLink.state === 'connected') {
-			if (!this.running.accepted) this.askForPages(remoteLink.wopiSrc);
+			if (!this.running.accepted) this.askForPages();
 			return;
 		}
 
@@ -552,14 +533,14 @@ class SlideLinks {
 		const textMsg = e.textMsg || '';
 		if (textMsg.startsWith('presentationinfo:')) {
 			this.onSourceSlides(
-				e.wopiSrc || '',
+				e.source || '',
 				textMsg.substring('presentationinfo:'.length),
 			);
 			return;
 		}
 
 		if (this.running === null || !this.running.accepted) return;
-		if (e.wopiSrc && e.wopiSrc !== this.running.wopiSrc) return;
+		if (e.source && e.source !== this.running.source) return;
 		if (!textMsg.startsWith('exportslides:')) return;
 
 		const body = textMsg.substring('exportslides:'.length);
@@ -634,25 +615,12 @@ class SlideLinks {
 			if (known && known.time === time) continue;
 
 			this.sourceSlides.set(source, { time: time, guids: null });
-			SlideImportSession.sendRemoteCommand(
-				remoteLink.wopiSrc,
-				'getpresentationinfo',
-			);
+			SlideImportSession.sendRemoteCommand(source, 'getpresentationinfo');
 		}
 	}
 
-	// The source of this document the given address belongs to, or empty when it belongs to none.
-	private sourceOf(wopiSrc: string): string {
-		for (const source of this.sources) {
-			const remoteLink = this.remoteLink(source);
-			if (remoteLink && remoteLink.wopiSrc === wopiSrc) return source;
-		}
-		return '';
-	}
-
-	// The slides a source holds, as it reports them.
-	private onSourceSlides(wopiSrc: string, json: string): void {
-		const source = this.sourceOf(wopiSrc);
+	// The slides a source holds, as it reports them. Only a source that was asked is taken.
+	private onSourceSlides(source: string, json: string): void {
 		const asked = this.sourceSlides.get(source);
 		if (!asked) return;
 

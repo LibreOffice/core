@@ -38,7 +38,9 @@ public:
     /// it, the time it was last modified and the persistent link the open document's pages
     /// store for it. The same for every view. The latest report per WOPISrc wins, and a report
     /// that carries no name or no persistent link keeps the recorded one. A persistent link
-    /// belongs to one remote link, so recording it here takes it off any other.
+    /// belongs to one remote link, so recording it here takes it off any other. A view
+    /// reaches a remote link by its persistent link alone, so a report of an address not
+    /// recorded yet that names none is ignored.
     void setSource(DocumentBroker& docBroker, const std::string& wopiSrc, const std::string& name,
                    const std::string& lastModifiedTime, const std::string& persistentLink);
 
@@ -71,13 +73,13 @@ public:
     void resolveSource(DocumentBroker& docBroker, const std::string& tag,
                        const std::string& persistentLink);
 
-    /// Opens or drops one view's subscription to a remote document. On
-    /// subscribe the view's own token is used; a view without a token for the
-    /// source is refused. A subscription in the failed or missing state holds
-    /// no connection, so subscribing to its source again opens a fresh
-    /// attempt.
+    /// Opens or drops one view's subscription to the remote document bound to the given
+    /// persistent link. On subscribe the view's own token is used; a view without a token for
+    /// the source is refused, and so is a persistent link no remote link is bound to. A
+    /// subscription in the failed or missing state holds no connection, so subscribing to its
+    /// source again opens a fresh attempt.
     void handleSubscribe(DocumentBroker& docBroker, const std::string& tag,
-                         const std::string& encodedWopiSrc, bool subscribe);
+                         const std::string& persistentLink, bool subscribe);
 
     /// Handles a remote document event addressed to one view: updates that
     /// view's connection state and re-sends its remote links list.
@@ -86,10 +88,10 @@ public:
     void onRemoteEvent(DocumentBroker& docBroker, const std::string& tag,
                        const std::string& encodedWopiSrc, const std::string& eventArguments);
 
-    /// Routes a read-only client command from one view to a remote document
-    /// that view is subscribed to.
+    /// Routes a read-only client command from one view to the remote document bound to the
+    /// given persistent link, when that view is subscribed to it.
     void sendCommand(DocumentBroker& docBroker, const std::string& tag,
-                     const std::string& wopiSrc, const std::string& command);
+                     const std::string& persistentLink, const std::string& command);
 
     /// Drops the record of one view's subscription that was not accepted.
     void removeSubscription(DocumentBroker& docBroker, const std::string& tag,
@@ -110,6 +112,10 @@ public:
     /// Sends the given view its own remote links list.
     void sendTo(const std::shared_ptr<ClientSession>& session);
 
+    /// The persistent link the remote link at the given WOPISrc is bound to. Empty when no
+    /// remote link is recorded at that address.
+    std::string persistentLinkOf(const std::string& wopiSrc) const;
+
     /// True when no remote link source is known.
     bool empty() const { return _entries.empty() && _namedSources.empty(); }
 
@@ -127,9 +133,9 @@ private:
         /// The time the remote document was last modified, as the integrator
         /// reported it. Empty when the integrator did not provide one.
         std::string lastModifiedTime;
-        /// The persistent link to the remote document, which is
-        /// the name after vnd.collabora.slide-source:. It is not WOPISrc,
-        /// it is the address which could be resolved to it.
+        /// The persistent link to the remote document, which is the name after
+        /// vnd.collabora.slide-source:. It is not the WOPISrc, it is the reference the
+        /// storage resolves to it, and the one name a view knows the remote link by.
         std::string persistentLink;
     };
 
@@ -209,7 +215,7 @@ private:
 
     /// Answers one view's remote document subscription with an error event.
     static void sendError(DocumentBroker& docBroker, const std::string& tag,
-                          const std::string& encodedWopiSrc, const std::string& kind);
+                          const std::string& persistentLink, const std::string& kind);
 
     /// Builds the remotelinks: list for one view: every known source,
     /// stamped with that view's access and connection state.

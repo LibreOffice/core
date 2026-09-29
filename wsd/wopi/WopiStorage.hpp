@@ -76,7 +76,7 @@ public:
             /// integrator reported it. Empty when none was provided.
             std::string lastModifiedTime;
             /// The persistent link the pages of the document record for the remote document,
-            /// from the PersistentLink of the entry. Empty when the integrator gave none.
+            /// from the PersistentLink of the entry.
             std::string persistentLink;
         };
 

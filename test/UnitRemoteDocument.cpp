@@ -44,8 +44,9 @@
 namespace
 {
 // Adds one remote link to CheckFileInfo, split the way the production
-// code now expects a WOPI host to send it: the public part (WOPISrc and the
-// last-modified time) in the top-level RemoteLinks, and this view's
+// code now expects a WOPI host to send it: the public part (WOPISrc, the
+// last-modified time and the persistent link, which is the WOPISrc itself
+// when the test names none) in the top-level RemoteLinks, and this view's
 // private access token in UserPrivateInfo.RemoteLinks. Calling this
 // again names a second document, so a test can list several.
 void setRemoteLink(Poco::JSON::Object::Ptr& fileInfo, const std::string& wopiSrc,
@@ -60,8 +61,7 @@ void setRemoteLink(Poco::JSON::Object::Ptr& fileInfo, const std::string& wopiSrc
     entry->set("WOPISrc", wopiSrc);
     if (!lastModifiedTime.empty())
         entry->set("LastModifiedTime", lastModifiedTime);
-    if (!persistentLink.empty())
-        entry->set("PersistentLink", persistentLink);
+    entry->set("PersistentLink", persistentLink.empty() ? wopiSrc : persistentLink);
     remoteLinks->add(entry);
     fileInfo->set("RemoteLinks", remoteLinks);
 
@@ -102,7 +102,10 @@ class UnitRemoteDocument : public WopiTestServer
         return getWopiHostURI() + "/wopi/files/2";
     }
 
-    std::string encodedRemoteWopiSrc() const { return Uri::encode(remoteWopiSrc()); }
+    /// The persistent link the remote link is bound to, which is how the view names it.
+    static constexpr auto SourceLink = "storage:quarter-3";
+
+    std::string encodedSourceLink() const { return Uri::encode(SourceLink); }
 
 public:
     UnitRemoteDocument()
@@ -124,7 +127,7 @@ public:
         if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
         {
             setRemoteLink(fileInfo, remoteWopiSrc(), "remotetoken",
-                          "2026-09-01T12:00:00.000000Z", "storage:quarter-3");
+                          "2026-09-01T12:00:00.000000Z", SourceLink);
         }
     }
 
@@ -136,7 +139,7 @@ public:
         {
             // The subscriber document is up; ask for the remote document.
             TRANSITION_STATE(_phase, Phase::WaitConnected);
-            WSD_CMD("remotedocsubscribe wopisrc=" + encodedRemoteWopiSrc());
+            WSD_CMD("remotedocsubscribe source=" + encodedSourceLink());
         }
 
         // The remote document loading through the headless session also
@@ -156,8 +159,8 @@ public:
                                message.find("\"lastModifiedTime\":\"2026-09-01T12:00:00.000000Z\"") !=
                                    std::string_view::npos);
             LOK_ASSERT_MESSAGE("The remote links JSON must carry the persistent link",
-                               message.find("\"persistentLink\":\"storage:quarter-3\"") !=
-                                   std::string_view::npos);
+                               message.find("\"persistentLink\":\"" + std::string(SourceLink) +
+                                            '"') != std::string_view::npos);
             if (message.find("\"state\":\"available\"") != std::string_view::npos)
                 _sawAvailableState = true;
             if (message.find("\"state\":\"connected\"") != std::string_view::npos)
@@ -179,7 +182,7 @@ public:
         {
             LOK_ASSERT_STATE(_phase, Phase::WaitModified);
             TRANSITION_STATE(_phase, Phase::WaitHeadlessGone);
-            WSD_CMD("remotedocunsubscribe wopisrc=" + encodedRemoteWopiSrc());
+            WSD_CMD("remotedocunsubscribe source=" + encodedSourceLink());
         }
         else if (message.find("event=error") != std::string::npos)
         {
@@ -273,11 +276,11 @@ public:
 };
 
 /// Verifies the failure answers: subscribing a document to itself is refused
-/// as a connection cycle, and subscribing to a document without a registered
-/// access token is refused.
+/// as a connection cycle, and subscribing to a source no remote link is bound
+/// to is refused.
 class UnitRemoteDocumentCycle : public WopiTestServer
 {
-    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitCycleError, WaitTokenError, Done) _phase;
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitCycleError, WaitNotFoundError, Done) _phase;
 
     std::string ownWopiSrc() const { return getWopiHostURI() + "/wopi/files/1"; }
 
@@ -310,7 +313,7 @@ public:
         LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
 
         TRANSITION_STATE(_phase, Phase::WaitCycleError);
-        WSD_CMD("remotedocsubscribe wopisrc=" + Uri::encode(ownWopiSrc()));
+        WSD_CMD("remotedocsubscribe source=" + Uri::encode(ownWopiSrc()));
         return true;
     }
 
@@ -328,18 +331,18 @@ public:
                                message.find("event=error kind=cycledetected") !=
                                    std::string::npos);
 
-            // A document the server holds no access token for.
-            TRANSITION_STATE(_phase, Phase::WaitTokenError);
-            WSD_CMD("remotedocsubscribe wopisrc=" +
+            // A source no remote link of the document is bound to.
+            TRANSITION_STATE(_phase, Phase::WaitNotFoundError);
+            WSD_CMD("remotedocsubscribe source=" +
                     Uri::encode(getWopiHostURI() + "/wopi/files/3"));
         }
-        else if (_phase == Phase::WaitTokenError)
+        else if (_phase == Phase::WaitNotFoundError)
         {
-            LOK_ASSERT_MESSAGE("Expected a missing-token rejection",
-                               message.find("event=error kind=notoken") != std::string::npos);
+            LOK_ASSERT_MESSAGE("Expected a not-found rejection",
+                               message.find("event=error kind=notfound") != std::string::npos);
 
             TRANSITION_STATE(_phase, Phase::Done);
-            passTest("Cycle and missing-token subscriptions were both refused");
+            passTest("Cycle and unbound-source subscriptions were both refused");
         }
 
         return false;
@@ -359,7 +362,7 @@ public:
             }
             case Phase::WaitLoadStatus:
             case Phase::WaitCycleError:
-            case Phase::WaitTokenError:
+            case Phase::WaitNotFoundError:
             case Phase::Done:
             {
                 break;
@@ -403,6 +406,7 @@ class UnitLinkPost : public WopiTestServer
         request.setBody("{\"Nonce\":\"" + oneTimeToken +
                             "\",\"Link\":{\"WOPISrc\":\"" + remoteWopiSrc() +
                             "\",\"AccessToken\":\"" + accessToken + "\""
+                            ",\"PersistentLink\":\"" + remoteWopiSrc() + "\""
                             ",\"LastModifiedTime\":\"2026-09-01T12:00:00.000000Z\"}}",
                         "application/json");
 
@@ -443,7 +447,7 @@ class UnitLinkPost : public WopiTestServer
 
                 // The registered token serves this view's subscription.
                 TRANSITION_STATE(_phase, Phase::WaitConnected);
-                WSD_CMD("remotedocsubscribe wopisrc=" + Uri::encode(remoteWopiSrc()));
+                WSD_CMD("remotedocsubscribe source=" + Uri::encode(remoteWopiSrc()));
             });
     }
 
@@ -680,7 +684,7 @@ public:
         if (message.starts_with("remotelinks:"))
         {
             TST_LOG("Got: [" << message << ']');
-            const bool names = message.find(remoteWopiSrc()) != std::string_view::npos;
+            const bool names = message.find(SourceLink) != std::string_view::npos;
 
             if (names)
             {
@@ -770,9 +774,9 @@ public:
             // Both documents subscribe to each other back to back, before
             // either connection chain can have traveled.
             TRANSITION_STATE(_phase, Phase::WaitOutcome);
-            WSD_CMD("remotedocsubscribe wopisrc=" + Uri::encode(fileWopiSrc(2)));
+            WSD_CMD("remotedocsubscribe source=" + Uri::encode(fileWopiSrc(2)));
             helpers::sendTextFrame(_secondWs->getWebSocket(),
-                                   "remotedocsubscribe wopisrc=" + Uri::encode(fileWopiSrc(1)),
+                                   "remotedocsubscribe source=" + Uri::encode(fileWopiSrc(1)),
                                    getTestname());
         }
 
@@ -889,7 +893,7 @@ public:
         if (_phase == Phase::WaitLoadStatus)
         {
             TRANSITION_STATE(_phase, Phase::WaitConnected);
-            WSD_CMD("remotedocsubscribe wopisrc=" + encodedRemoteWopiSrc());
+            WSD_CMD("remotedocsubscribe source=" + encodedRemoteWopiSrc());
         }
 
         return true;
@@ -907,11 +911,11 @@ public:
 
                 // A modifying command must be refused by the read-only filter
                 // and never reach the remote.
-                WSD_CMD("remotedoccommand wopisrc=" + encodedRemoteWopiSrc() +
+                WSD_CMD("remotedoccommand source=" + encodedRemoteWopiSrc() +
                         " key type=input char=97 key=0");
 
                 // A read-only command round-trips to the remote and back.
-                WSD_CMD("remotedoccommand wopisrc=" + encodedRemoteWopiSrc() +
+                WSD_CMD("remotedoccommand source=" + encodedRemoteWopiSrc() +
                         " getslidesections");
             }
             else if (message.find("event=modified value=true") != std::string_view::npos)
@@ -932,7 +936,7 @@ public:
             message.find("slidesections:") != std::string_view::npos)
         {
             TST_LOG("Got: [" << message << ']');
-            LOK_ASSERT_MESSAGE("The reply names the remote by its WOPISrc",
+            LOK_ASSERT_MESSAGE("The reply names the remote by its persistent link",
                                message.find(encodedRemoteWopiSrc()) != std::string_view::npos);
 
             TRANSITION_STATE(_phase, Phase::Done);
@@ -1027,7 +1031,7 @@ public:
         {
             // The subscriber document is up; ask for the missing remote link.
             TRANSITION_STATE(_phase, Phase::WaitMissing);
-            WSD_CMD("remotedocsubscribe wopisrc=" + encodedRemoteWopiSrc());
+            WSD_CMD("remotedocsubscribe source=" + encodedRemoteWopiSrc());
         }
 
         return true;
@@ -1047,7 +1051,7 @@ public:
         {
             TST_LOG("The source that is gone was reported missing, asking for the readable one");
             TRANSITION_STATE(_phase, Phase::WaitReadableSource);
-            WSD_CMD("remotedocsubscribe wopisrc=" + encodedReadableWopiSrc());
+            WSD_CMD("remotedocsubscribe source=" + encodedReadableWopiSrc());
             return false;
         }
 
@@ -1172,7 +1176,7 @@ public:
         {
             // The subscriber document is up; ask for the first source that is gone.
             TRANSITION_STATE(_phase, Phase::WaitMissing);
-            WSD_CMD("remotedocsubscribe wopisrc=" + encodedFileWopiSrc(2));
+            WSD_CMD("remotedocsubscribe source=" + encodedFileWopiSrc(2));
         }
 
         return true;
@@ -1192,7 +1196,7 @@ public:
         {
             TST_LOG("The source that is gone was reported missing, subscribing to it again");
             TRANSITION_STATE(_phase, Phase::WaitRetryMissing);
-            WSD_CMD("remotedocsubscribe wopisrc=" + encodedFileWopiSrc(2));
+            WSD_CMD("remotedocsubscribe source=" + encodedFileWopiSrc(2));
             return false;
         }
 
@@ -1210,7 +1214,7 @@ public:
             TST_LOG("The retried source was read again, filling the link limit with gone sources");
             TRANSITION_STATE(_phase, Phase::WaitAllMissing);
             for (int id = 3; id <= 5; ++id)
-                WSD_CMD("remotedocsubscribe wopisrc=" + encodedFileWopiSrc(id));
+                WSD_CMD("remotedocsubscribe source=" + encodedFileWopiSrc(id));
             return false;
         }
 
@@ -1220,7 +1224,7 @@ public:
         {
             TST_LOG("All the gone sources report missing, asking for the readable one");
             TRANSITION_STATE(_phase, Phase::WaitReadableSource);
-            WSD_CMD("remotedocsubscribe wopisrc=" + encodedFileWopiSrc(6));
+            WSD_CMD("remotedocsubscribe source=" + encodedFileWopiSrc(6));
             return false;
         }
 
@@ -1311,6 +1315,7 @@ public:
             Poco::JSON::Array::Ptr remoteLinks = new Poco::JSON::Array();
             Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
             entry->set("WOPISrc", remoteWopiSrc());
+            entry->set("PersistentLink", remoteWopiSrc());
             remoteLinks->add(entry);
             fileInfo->set("RemoteLinks", remoteLinks);
         }
@@ -1335,11 +1340,11 @@ public:
             TRANSITION_STATE(_phase, Phase::WaitOutcome);
 
             // The first view holds the token and connects.
-            WSD_CMD("remotedocsubscribe wopisrc=" + encodedRemoteWopiSrc());
+            WSD_CMD("remotedocsubscribe source=" + encodedRemoteWopiSrc());
 
             // The second view holds no token for the source and is refused.
             helpers::sendTextFrame(_secondWs->getWebSocket(),
-                                   "remotedocsubscribe wopisrc=" + encodedRemoteWopiSrc(),
+                                   "remotedocsubscribe source=" + encodedRemoteWopiSrc(),
                                    getTestname());
         }
 
@@ -1479,7 +1484,7 @@ public:
         if (_phase == Phase::WaitLoadStatus)
         {
             TRANSITION_STATE(_phase, Phase::WaitConnected);
-            WSD_CMD("remotedocsubscribe wopisrc=" + encodedRemoteWopiSrc());
+            WSD_CMD("remotedocsubscribe source=" + encodedRemoteWopiSrc());
         }
 
         return true;
@@ -1911,11 +1916,9 @@ public:
             if (!missing)
                 return false;
 
-            // A source no remote link stands for is reported under its name, with no address.
+            // A source no remote link stands for is reported under its name alone.
             LOK_ASSERT_MESSAGE("A missing source must carry its name as the persistent link",
                                message.find(linkField) != std::string_view::npos);
-            LOK_ASSERT_MESSAGE("A missing source has no address",
-                               message.find("\"wopiSrc\":\"\"") != std::string_view::npos);
 
             TRANSITION_STATE(_phase, Phase::Posting);
             _postThread = std::thread(
@@ -2215,7 +2218,7 @@ public:
 
             // The token the storage answered with serves this view's subscription.
             TRANSITION_STATE(_phase, Phase::WaitConnected);
-            WSD_CMD("remotedocsubscribe wopisrc=" + Uri::encode(remoteWopiSrc()));
+            WSD_CMD("remotedocsubscribe source=" + Uri::encode(SourceName));
             return false;
         }
 
@@ -2476,8 +2479,7 @@ public:
 
                 TRANSITION_STATE(_phase, Phase::WaitConnected);
                 helpers::sendTextFrame(_secondWs->getWebSocket(),
-                                       "remotedocsubscribe wopisrc=" +
-                                           Uri::encode(remoteWopiSrc()),
+                                       "remotedocsubscribe source=" + Uri::encode(SourceName),
                                        getTestname());
             }
 

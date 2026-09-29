@@ -74,27 +74,21 @@ describe('SlideLinks', function () {
 	}
 
 	function linkOf(source: string, state: string): any {
-		return { wopiSrc: wopiSrcOf(source), persistentLink: source, state: state };
-	}
-
-	function wopiSrcOf(source: string): string {
-		return 'https://host/wopi/files/' + encodeURIComponent(source);
+		return { name: source, persistentLink: source, state: state };
 	}
 
 	// The command that asks one source to write its pages out.
 	function exportOf(source: string): string {
 		return (
-			'remotedoccommand wopisrc=' +
-			encodeURIComponent(wopiSrcOf(source)) +
-			' exportslides'
+			'remotedoccommand source=' + encodeURIComponent(source) + ' exportslides'
 		);
 	}
 
 	// The command that asks one source for the slides it holds.
 	function infoOf(source: string): string {
 		return (
-			'remotedoccommand wopisrc=' +
-			encodeURIComponent(wopiSrcOf(source)) +
+			'remotedoccommand source=' +
+			encodeURIComponent(source) +
 			' getpresentationinfo'
 		);
 	}
@@ -319,8 +313,7 @@ describe('SlideLinks', function () {
 
 		// The source is asked for nothing until the link to it is live.
 		nodeassert.deepEqual(sent, [
-			'remotedocsubscribe wopisrc=' +
-				encodeURIComponent(wopiSrcOf('Sales deck.odp')),
+			'remotedocsubscribe source=' + encodeURIComponent('Sales deck.odp'),
 		]);
 
 		(app as any).remoteLinks = remoteLinks();
@@ -341,8 +334,7 @@ describe('SlideLinks', function () {
 		links.updateAll();
 
 		nodeassert.deepEqual(sent, [
-			'remotedocsubscribe wopisrc=' +
-				encodeURIComponent(wopiSrcOf('Sales deck.odp')),
+			'remotedocsubscribe source=' + encodeURIComponent('Sales deck.odp'),
 		]);
 
 		// The source the refresh waits on could not be opened, so it comes up
@@ -420,12 +412,11 @@ describe('SlideLinks', function () {
 		nodeassert.deepEqual(sent, []);
 	});
 
-	it('marks a page as broken when its source has no address to reach it at', function () {
+	it('marks a page as broken when no remote link stands for its source', function () {
 		// The server reports the source by the persistent link the slides of this document
-		// record, and gives it no address because the storage listed none.
+		// record, as missing, because the storage listed no remote link for it.
 		(app as any).remoteLinks = [
 			{
-				wopiSrc: '',
 				name: 'Sales deck.odp',
 				persistentLink: 'Sales deck.odp',
 				state: 'missing',
@@ -439,17 +430,16 @@ describe('SlideLinks', function () {
 
 		// Such a source is asked for nothing, and the user is told why.
 		links.updateAll();
-		nodeassert.ok(told[0].indexOf('currently not accessible') >= 0);
+		nodeassert.ok(told[0].indexOf('could not be read') >= 0);
 		nodeassert.deepEqual(sent, [exportOf('Support deck.odp')]);
 	});
 
-	it('knows a source by the name the storage gave it rather than by its address', function () {
-		// The address ends in an opaque id, so the persistent link is the only thing that
-		// says which source the slides of this document came from.
+	it('names a source by its persistent link whatever the storage calls it', function () {
+		// The storage may call the file anything, so the persistent link is the only thing
+		// that says which source the slides of this document came from.
 		(app as any).remoteLinks = [
 			{
-				wopiSrc: 'https://host/wopi/files/1234',
-				name: 'Sales deck.odp',
+				name: 'Q3 sales.odp',
 				persistentLink: 'Sales deck.odp',
 				state: 'connected',
 			},
@@ -457,11 +447,7 @@ describe('SlideLinks', function () {
 		documentHoldsLinks();
 		links.updateAll();
 
-		nodeassert.deepEqual(sent, [
-			'remotedoccommand wopisrc=' +
-				encodeURIComponent('https://host/wopi/files/1234') +
-				' exportslides',
-		]);
+		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
 	});
 
 	it('drops a refresh the connection took with it', function () {
@@ -554,7 +540,7 @@ describe('SlideLinks', function () {
 
 		// The import pane may be reading a document of its own at the same time.
 		deliver('remotedoccommandresult', {
-			wopiSrc: wopiSrcOf('Support deck.odp'),
+			source: 'Support deck.odp',
 			textMsg: 'exportslides: {"status":"staged","name":"other.odp"}',
 		});
 		nodeassert.deepEqual(sent, [exportOf('Sales deck.odp')]);
