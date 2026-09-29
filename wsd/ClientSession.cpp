@@ -1325,7 +1325,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     else if (tokens.equals(0, "setviewreadonly"))
     {
         // only if the session has WOPI write permission
-        if (!isWritable())
+        if (!isWritable() || isReadOnly())
             return false;
 
         std::string value;
