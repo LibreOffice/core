@@ -1553,9 +1553,21 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     AddExtLst(pFS, xShapeProps);
     pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
 
-    pFS->singleElementNS(mnXmlNamespace, XML_cNvPicPr
-                         // OOXTODO: XML_preferRelativeSize
-                        );
+    bool bNoChangeAspect = false;
+    if (GetProperty(xShapeProps, u"InteropGrabBag"_ustr))
+    {
+        cpo::uno::Sequence<beans::PropertyValue> aGrabBagProps;
+        mAny >>= aGrabBagProps;
+        for (const auto& rProp : aGrabBagProps)
+            if (rProp.Name == u"mso-pic-noChangeAspect"_ustr)
+                rProp.Value >>= bNoChangeAspect;
+    }
+
+    // OOXTODO: XML_preferRelativeSize
+    pFS->startElementNS(mnXmlNamespace, XML_cNvPicPr);
+    if (bNoChangeAspect)
+        pFS->singleElementNS(XML_a, XML_picLocks, XML_noChangeAspect, "1");
+    pFS->endElementNS(mnXmlNamespace, XML_cNvPicPr);
     if (bHasMediaURL)
         WriteMediaNonVisualProperties(xShape);
     else

@@ -1199,6 +1199,28 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testConnectorStartShape)
     assertXPath(pDrawing, "//xdr:cxnSp/xdr:nvCxnSpPr/xdr:cNvCxnSpPr/a:stCxn", "idx", u"3");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testPictureAspectLock)
+{
+    // The sheet has two pictures. Only the first one keeps its aspect ratio when it is resized.
+    createScDoc("xlsx/picture-aspect-lock.xlsx");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDrawing);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the aspect ratio lock of the picture was lost.
+    assertXPath(pDrawing,
+                "//xdr:pic[xdr:nvPicPr/xdr:cNvPr/@name='Locked']/xdr:nvPicPr/xdr:cNvPicPr/"
+                "a:picLocks",
+                "noChangeAspect", u"1");
+    assertXPath(pDrawing,
+                "//xdr:pic[xdr:nvPicPr/xdr:cNvPr/@name='Free']/xdr:nvPicPr/xdr:cNvPicPr/a:picLocks",
+                0);
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest5, testSheetProtections)
 {
     auto verify = [this]() {

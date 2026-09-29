@@ -1710,6 +1710,10 @@ Reference< XShape > const & Shape::createAndInsert(
         {
             putPropertyToGrabBag(u"mso-sp-fPublished"_ustr, Any(mbFPublished));
         }
+        if (mbNoChangeAspect)
+        {
+            putPropertyToGrabBag(u"mso-pic-noChangeAspect"_ustr, Any(mbNoChangeAspect));
+        }
         if (!msTitle.isEmpty())
         {
             xSet->setPropertyValue(u"Title"_ustr, Any(msTitle));

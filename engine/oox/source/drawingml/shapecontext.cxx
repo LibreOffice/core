@@ -118,7 +118,9 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
     case XML_cNvPicPr:
         break;
     case XML_nvPicPr:
+        break;
     case XML_picLocks:
+        mpShapePtr->setNoChangeAspect(rAttribs.getBool(XML_noChangeAspect, false));
         break;
     case XML_relIds:
         break;

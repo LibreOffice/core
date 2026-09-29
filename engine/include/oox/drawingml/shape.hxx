@@ -198,6 +198,8 @@ public:
     void                            setTextLinkAttr(const OUString& rTextLink) { msTextLink = rTextLink; }
     void                            setFLocksText(bool bFLocksText) { mbFLocksText = bFLocksText; }
     void                            setFPublished(bool bFPublished) { mbFPublished = bFPublished; }
+    void                            setNoChangeAspect(bool bNoChangeAspect)
+                                        { mbNoChangeAspect = bNoChangeAspect; }
     void                            setTitle(const OUString& rTitle) { msTitle = rTitle; }
     void                            setHidden( bool bHidden ) { mbHidden = bHidden; }
     /** Reads what the file says about the shape beside how it is drawn: the identifier it is
@@ -424,6 +426,9 @@ protected:
     /* indicates whether the shape shall be published with the worksheet when sent to the server.
        "fPublished" attribute for <sp> element */
     bool                        mbFPublished = false;
+    /* indicates whether a picture keeps its aspect ratio when it is resized.
+       "noChangeAspect" attribute for <picLocks> element */
+    bool                        mbNoChangeAspect = false;
 
     sal_Int32                   mnSubType;      // if this type is not zero, then the shape is a placeholder
     std::optional< sal_Int32 >  moSubTypeIndex;
