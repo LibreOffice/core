@@ -1890,7 +1890,9 @@ export class CommentSection extends CanvasSectionObject {
 	}
 
 	public showHideComment (annotation: Comment): void {
-		// This manually shows/hides comments
+		// This manually shows/hides comments. A hidden comment is shown again only while comments
+		// as a whole are shown.
+		const commentsShown = this.sectionProperties.show !== false;
 		if (!this.sectionProperties.showResolved && app.map._docLayer._docType === 'text') {
 			const hide = annotation.isContainerVisible() && annotation.sectionProperties.data.resolved === 'true';
 
@@ -1901,7 +1903,8 @@ export class CommentSection extends CanvasSectionObject {
 				annotation.hide();
 				annotation.update();
 			}
-			else if (!hide && !annotation.isContainerVisible() && annotation.sectionProperties.data.resolved === 'false') {
+			else if (!hide && !annotation.isContainerVisible() && annotation.sectionProperties.data.resolved === 'false'
+				&& commentsShown) {
 				annotation.show();
 				annotation.update();
 			}
@@ -1909,7 +1912,7 @@ export class CommentSection extends CanvasSectionObject {
 		}
 		else if (app.map._docLayer._docType === 'presentation' || app.map._docLayer._docType === 'drawing') {
 			if (annotation.sectionProperties.partIndex === app.map._docLayer._selectedPart || app.file.fileBasedView) {
-				if (!annotation.isContainerVisible()) {
+				if (!annotation.isContainerVisible() && commentsShown) {
 					annotation.show();
 					annotation.update();
 					this.update();
@@ -2972,6 +2975,12 @@ export class CommentSection extends CanvasSectionObject {
 				}
 			}
 		}
+
+		// The list records the collapsed layout only while comments are shown, so a list that
+		// was hidden when the layout collapsed takes the collapsed state on here. A click on a
+		// collapsed comment opens it only when the list is collapsed as well.
+		if (state && commentShouldCollapse && !this.isCollapsed)
+			this.setCollapsed();
 
 		CommentSection.showingEveryComment = false;
 		this.update();

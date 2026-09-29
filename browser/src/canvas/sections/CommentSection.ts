@@ -1179,7 +1179,10 @@ export class Comment extends CanvasSectionObject {
 	}
 
 	private hideImpressDraw() {
-		if (!this.isInsideActivePart()) {
+		// While comments as a whole are hidden, a comment on the current slide or page is hidden
+		// along with its marker, the same as a comment on any other slide or page.
+		if (!this.isInsideActivePart()
+			|| this.sectionProperties.commentListSection.sectionProperties.show === false) {
 			this.sectionProperties.container.style.display = 'none';
 			this.hideMarker();
 		}
@@ -2274,9 +2277,12 @@ export class Comment extends CanvasSectionObject {
 		if (!this.isCollapsed)
 			return;
 		this.isCollapsed = false;
-		if (app.map.getDocType() !== 'text' // Comments are resolved only in writer, always show in other apps
+		// While comments as a whole are hidden, the box stays hidden and only the collapsed state
+		// is cleared.
+		if (this.sectionProperties.commentListSection.sectionProperties.show !== false
+		&& (app.map.getDocType() !== 'text' // Comments are resolved only in writer, always show in other apps
 		|| this.sectionProperties.data.resolved === 'false'
-		|| this.sectionProperties.commentListSection.sectionProperties.showResolved) {
+		|| this.sectionProperties.commentListSection.sectionProperties.showResolved)) {
 			this.sectionProperties.container.style.display = '';
 			// For presentations, only expand if the comment is on the active slide.
 			if ((app.map.getDocType() !== 'presentation' && app.map.getDocType() !== 'drawing') || this.isInsideActivePart()) {
