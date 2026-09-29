@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p>Meeting notes for the accessibility review.</text:p>
+   <text:p>The first item is the agenda for Monday.</text:p>
+   <text:p>The second item is the list of open questions.</text:p>
+   <text:p>The third item is the budget for the next quarter.</text:p>
+   <text:p>The fourth item is the schedule for the user tests.</text:p>
+   <text:p>The fifth item is the feedback from the last release.</text:p>
+   <text:p>The sixth item is the plan for the documentation.</text:p>
+   <text:p>The seventh item is the date of the next meeting.</text:p>
+   <text:p>This is the paragraph being edited, where the cursor is.</text:p>
+  </office:text>
+ </office:body>
+</office:document>
