@@ -1033,7 +1033,7 @@ QVariant Bridge::cool(const QString& messageStr)
         auto* webView = _webView;
         QTimer::singleShot(0, [serverUrl, webView]() {
             coda::openRemoteFile(serverUrl, webView,
-                                 Application::getProfile());
+                                 Application::getProfile(), Application::getProfile());
         });
     }
     else if (message == "uno .uno:Open")

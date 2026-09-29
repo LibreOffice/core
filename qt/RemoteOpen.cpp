@@ -26,7 +26,7 @@ namespace coda
 {
 
 void openRemoteFile(const QString& serverUrl, QWidget* parent,
-                    QWebEngineProfile* profile)
+                    QWebEngineProfile* profile, QWebEngineProfile* pickerProfile)
 {
     // Show the integrator's web UI.  In embed mode the picker morphs
     // into the document editor in place; in the non-embed flow it
@@ -35,7 +35,7 @@ void openRemoteFile(const QString& serverUrl, QWidget* parent,
     // separate WebView for the editor.  The /co/collab fetch and
     // download bytes-on-the-wire are handled by the page-JS once
     // cool.html loads.
-    auto* picker = new IntegratorFilePicker(serverUrl, profile, parent);
+    auto* picker = new IntegratorFilePicker(serverUrl, pickerProfile, parent);
     picker->setAttribute(Qt::WA_DeleteOnClose);
     QObject::connect(picker, &IntegratorFilePicker::wopiSelected, picker,
         [picker, profile]() {
