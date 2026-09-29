@@ -1152,6 +1152,21 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPdfExportAsOdg)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testAutoGrowHeightEmptyText)
+{
+    // Given a text frame that grows to fit its text, holds no text, and states a height of
+    // 0.442cm:
+    loadFromFile(u"autogrow-height-empty-text.fodp");
+
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+
+    // Then the height stated in the file survives the import. An empty frame holds no text
+    // to measure, so the file is the only sound source of a height. Before the fix the
+    // frame came out at 937, the height of an empty paragraph at the 24pt document default
+    // font rather than the 10pt the shape itself uses.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(442), xShape->getSize().Height);
+}
+
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testEmptyGraphicShapeOdf)
 {
     // Create a draw document with an empty graphic-object shape:

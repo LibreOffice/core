@@ -140,17 +140,13 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
             nHgt = mpEditingOutliner->GetTextHeight() + 1; // a little tolerance
         }
     }
-    else
+    else if (OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject())
     {
         Outliner& rOutliner = ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aNewSize);
         // TODO: add the optimization with bPortionInfoChecked etc. here
-        OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
-        if (pOutlinerParaObject)
-        {
-            rOutliner.SetFixedCellHeight(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
-            rOutliner.SetText(*pOutlinerParaObject);
-        }
+        rOutliner.SetFixedCellHeight(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
+        rOutliner.SetText(*pOutlinerParaObject);
         rOutliner.SetUpdateLayout(true);
 
         if (bWdtGrow)
@@ -165,6 +161,14 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
             nHgt = rOutliner.GetTextHeight() + 1; // a little tolerance
         }
         rOutliner.Clear();
+    }
+    else
+    {
+        // The object holds no text, so there is no text to fit the frame around and the
+        // frame keeps the size it has. The draw outliner is shared between objects and is
+        // given text only when there is some, so a size read from it here would be the size
+        // of whatever it still holds from the object measured before this one.
+        return false;
     }
 
     if (nWdt < nMinWdt)
