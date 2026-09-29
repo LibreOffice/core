@@ -256,8 +256,6 @@ public:
 
     bool isDocPasswordProtected() const { return _isDocPasswordProtected; }
 
-    const std::string& getDocOptions() const { return _docOptions; }
-
     bool hasWatermark() const { return !_watermarkText.empty() && _watermarkOpacity > 0.0; }
 
     const std::string& getWatermarkText() const { return _watermarkText; }
@@ -441,9 +439,6 @@ private:
 
     /// Password provided, if any, to open the document
     std::string _docPassword;
-
-    /// Document options: a JSON string, containing options (rendering, also possibly load in the future).
-    std::string _docOptions;
 
     /// Id of the user to whom the session belongs to.
     std::string _userId;

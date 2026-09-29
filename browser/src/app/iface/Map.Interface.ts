@@ -77,7 +77,6 @@ interface MapInterface extends Evented {
 			no_auth_header?: string;
 			permission?: 'edit' | 'readonly' | 'view';
 		};
-		renderingOptions: string;
 		tileWidthTwips: number;
 		tileHeightTwips: number;
 		wopiSrc: string;

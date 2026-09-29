@@ -6966,7 +6966,6 @@ bool DocumentBroker::forwardToChild(const std::shared_ptr<ClientSession>& sessio
         {
             LOG_ASSERT_MSG(!_uriJailed.empty(), "Must have valid _uriJailed");
 
-            // The json options must come last.
             msg += "load " + tokens[1];
             msg += " jail=" + _uriJailed;
             msg += " xjail=" + _uriJailedAnonym;

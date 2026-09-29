@@ -99,7 +99,6 @@ all_la_unit_tests = \
 	unit-password-protected.la \
 	unit-password-to-modify.la \
 	unit-calc.la \
-	unit-rendering-options.la \
 	unit-prefork.la \
 	unit-landlock.la \
 	unit-any-input.la \
@@ -445,8 +444,6 @@ unit_bg_download_la_SOURCES = UnitBgDownload.cpp
 unit_bg_download_la_LIBADD = $(CPPUNIT_LIBS)
 unit_synthetic_lok_la_SOURCES = UnitSyntheticLok.cpp
 unit_synthetic_lok_la_LIBADD = $(CPPUNIT_LIBS)
-unit_rendering_options_la_SOURCES = UnitRenderingOptions.cpp
-unit_rendering_options_la_LIBADD = $(CPPUNIT_LIBS)
 unit_invalidation_la_SOURCES = UnitInvalidation.cpp
 unit_invalidation_la_LIBADD = $(CPPUNIT_LIBS)
 unit_password_protected_la_SOURCES = UnitPasswordProtected.cpp

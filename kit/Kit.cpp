@@ -1404,8 +1404,7 @@ void Document::trimAfterInactivity()
 
 /// Load a document (or view) and register callbacks.
 bool Document::onLoad(const std::string& sessionId,
-                      const std::string& uriAnonym,
-                      const std::string& renderOpts)
+                      const std::string& uriAnonym)
 {
     LOG_INF("Loading url [" << uriAnonym << "] for session [" << sessionId <<
             "] which has " << (_sessions.size() - 1) << " sessions.");
@@ -1423,7 +1422,7 @@ bool Document::onLoad(const std::string& sessionId,
     std::shared_ptr<ChildSession> session = it->second;
     try
     {
-        if (load(session, renderOpts))
+        if (load(session))
         {
             if (_legacyUnoApiSeen &&
                 !ConfigUtil::getBool("hide_legacy_script_warning", false))
@@ -2231,8 +2230,7 @@ std::string removeServerLoadOptions(const std::string& filterOptions,
 }
 }
 
-std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession>& session,
-                                              const std::string& renderOpts)
+std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession>& session)
 {
     const std::string sessionId = session->getId();
 
@@ -2435,10 +2433,6 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
             return nullptr;
         }
 
-        // Only save the options on opening the document.
-        // No support for changing them after opening a document.
-        _renderOpts = renderOpts;
-
         // Whether the document carries a separate password required to modify it.
         const std::string hasPasswordToModify(
             _loKitDocument->getCommandValues(".uno:HasPasswordToModify"));
@@ -2511,11 +2505,11 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
 
     // Avoid logging userPrivateInfo till it's not anonymized.
     LOG_INF("Initializing for rendering session [" << sessionId << "] on document url [" <<
-            anonymizeUrl(_url) << "] with: [" << makeRenderParams(_renderOpts, userNameAnonym, spellOnline, formattingMarks, theme, backgroundTheme, focusRingColor, "") << "].");
+            anonymizeUrl(_url) << "] with: [" << makeRenderParams(userNameAnonym, spellOnline, formattingMarks, theme, backgroundTheme, focusRingColor, "") << "].");
 
     // initializeForRendering() should be called before
     // registerCallback(), as the previous creates a new view in Impress.
-    const std::string renderParams = makeRenderParams(_renderOpts, userName, spellOnline, formattingMarks, theme, backgroundTheme, focusRingColor, userPrivateInfo);
+    const std::string renderParams = makeRenderParams(userName, spellOnline, formattingMarks, theme, backgroundTheme, focusRingColor, userPrivateInfo);
 
     _loKitDocument->initializeForRendering(renderParams.c_str());
 
@@ -2687,26 +2681,14 @@ bool Document::forwardToChild(const std::string_view prefix, const std::vector<c
     return false;
 }
 
-/* static */ std::string Document::makeRenderParams(const std::string& renderOpts, const std::string& userName,
+/* static */ std::string Document::makeRenderParams(const std::string& userName,
                                                     const std::string& spellOnline,
                                                     const std::string& formattingMarks, const std::string& theme,
                                                     const std::string& backgroundTheme,
                                                     const std::string& focusRingColor,
                                                     const std::string& userPrivateInfo)
 {
-    Object::Ptr renderOptsObj;
-
-    // Fill the object with renderoptions, if any
-    if (!renderOpts.empty())
-    {
-        Parser parser;
-        Poco::Dynamic::Var var = parser.parse(renderOpts);
-        renderOptsObj = var.extract<Object::Ptr>();
-    }
-    else
-    {
-        renderOptsObj = new Object();
-    }
+    Object::Ptr renderOptsObj = new Object();
 
     Object::Ptr userPrivateInfoObj;
     if (!userPrivateInfo.empty())
@@ -3163,7 +3145,7 @@ void Document::dumpState(std::ostream& oss)
            "\n\tpid: " << ProcUtil::getProcessId() << "\n\tstop: " << _stop
         << "\n\tjailId: " << _jailId << "\n\tdocKey: " << _docKey << "\n\tdocId: " << _docId
         << "\n\turl: " << _url << "\n\tobfuscatedFileId: " << _obfuscatedFileId
-        << "\n\tjailedUrl: " << anonymizeUrl(_jailedUrl) << "\n\trenderOpts: " << _renderOpts
+        << "\n\tjailedUrl: " << anonymizeUrl(_jailedUrl)
         << "\n\thaveDocPassword: " << _haveDocPassword // not the pwd itself
         << "\n\tisDocPasswordProtected: " << _isDocPasswordProtected
         << "\n\tdocPasswordType: " << int(_docPasswordType)

@@ -1122,17 +1122,6 @@ bool ChildSession::loadDocument(const StringVector& tokens)
     std::string timestamp;
     parseDocOptions(tokens, part, timestamp);
 
-    std::string renderOpts;
-    if (!getDocOptions().empty())
-    {
-        Parser parser;
-        Poco::Dynamic::Var var = parser.parse(getDocOptions());
-        const Object::Ptr& object = var.extract<Object::Ptr>();
-        Poco::Dynamic::Var rendering = object->get("rendering");
-        if (!rendering.isEmpty())
-            renderOpts = rendering.toString();
-    }
-
     assert(!getDocURL().empty());
     assert(!getJailedFilePath().empty());
 
@@ -1152,7 +1141,7 @@ bool ChildSession::loadDocument(const StringVector& tokens)
     // Note: _isDocLoaded is set on our return.
     const bool isFirstView = !_docManager->isLoaded();
 
-    const bool loaded = _docManager->onLoad(getId(), getJailedFilePathAnonym(), renderOpts);
+    const bool loaded = _docManager->onLoad(getId(), getJailedFilePathAnonym());
     if (!loaded || _viewId < 0)
     {
         // Failed and communicated with the reason; do not send errors to the client.

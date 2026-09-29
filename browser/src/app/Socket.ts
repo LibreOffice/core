@@ -460,12 +460,6 @@ class Socket {
 
 		msg += ' timezone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-		if (this._map.options.renderingOptions) {
-			const options = {
-				rendering: this._map.options.renderingOptions,
-			};
-			msg += ' options=' + JSON.stringify(options);
-		}
 		const spellOnline = window.prefs.spellOnlineForLoad();
 		if (spellOnline) {
 			msg += ' spellOnline=' + spellOnline;

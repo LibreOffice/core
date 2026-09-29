@@ -2501,7 +2501,6 @@ function showWelcomeSVG() {
 					if (lang) {
 						msg += ' lang=' + lang;
 					}
-					// renderingOptions?
 				}
 
 				if (global.deviceFormFactor) {
