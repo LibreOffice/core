@@ -605,16 +605,36 @@ bool isSiblingParagraph(const uno::Reference<accessibility::XAccessibleContext>&
            && xContext->getAccessibleParent() == xParent;
 }
 
-OUString paragraphText(const uno::Reference<accessibility::XAccessibleContext>& xContext)
+struct ContextParagraph
 {
+    OUString aText;
+    tools::Rectangle aTwips;
+};
+
+ContextParagraph contextParagraph(const uno::Reference<accessibility::XAccessibleContext>& xContext,
+                                  const css::awt::Point& rParentOnScreen)
+{
+    ContextParagraph aParagraph;
     uno::Reference<accessibility::XAccessibleText> xText(xContext, uno::UNO_QUERY);
-    return xText.is() ? xText->getText() : OUString();
+    if (xText.is())
+        aParagraph.aText = xText->getText();
+    uno::Reference<accessibility::XAccessibleComponent> xComponent(xContext, uno::UNO_QUERY);
+    if (xComponent.is())
+    {
+        const css::awt::Point aOnScreen = xComponent->getLocationOnScreen();
+        const css::awt::Size aSize = xComponent->getSize();
+        aParagraph.aTwips = o3tl::convert(tools::Rectangle(Point(aOnScreen.X - rParentOnScreen.X,
+                                                                 aOnScreen.Y - rParentOnScreen.Y),
+                                                           Size(aSize.Width, aSize.Height)),
+                                          o3tl::Length::px, o3tl::Length::twip);
+    }
+    return aParagraph;
 }
 
 void walkParagraphFlow(const uno::Reference<accessibility::XAccessibleContext>& xStart,
                        bool bBackward, const uno::Reference<accessibility::XAccessible>& xParent,
                        const css::awt::Point& rParentOnScreen, bool bByArea, sal_Int32 nTop,
-                       sal_Int32 nBottom, sal_Int32 nRadius, std::vector<OUString>& rOut)
+                       sal_Int32 nBottom, sal_Int32 nRadius, std::vector<ContextParagraph>& rOut)
 {
     const accessibility::AccessibleRelationType eType
         = bBackward ? accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM
@@ -634,7 +654,7 @@ void walkParagraphFlow(const uno::Reference<accessibility::XAccessibleContext>& 
         else if (static_cast<sal_Int32>(rOut.size()) >= nRadius)
             break;
         if (isSiblingParagraph(xContext, xParent))
-            rOut.push_back(paragraphText(xContext));
+            rOut.push_back(contextParagraph(xContext, rParentOnScreen));
     }
     if (bBackward)
         std::reverse(rOut.begin(), rOut.end());
@@ -680,7 +700,8 @@ paragraphInWindow(const uno::Reference<accessibility::XAccessible>& xParent, sal
 
 void collectParagraphWindow(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
                             sal_Int32 nRadius, const tools::Rectangle& rVisibleTwips,
-                            std::vector<OUString>& rBefore, std::vector<OUString>& rAfter)
+                            std::vector<ContextParagraph>& rBefore,
+                            std::vector<ContextParagraph>& rAfter)
 {
     rBefore.clear();
     rAfter.clear();
@@ -697,11 +718,13 @@ void collectParagraphWindow(const uno::Reference<css::accessibility::XAccessible
         xParent->getAccessibleContext(), uno::UNO_QUERY);
     uno::Reference<accessibility::XAccessibleComponent> xComponent(xContext, uno::UNO_QUERY);
 
+    const css::awt::Point aParentOnScreen
+        = xParentComponent.is() ? xParentComponent->getLocationOnScreen() : css::awt::Point();
     const bool bByArea = !rVisibleTwips.IsEmpty() && xParentComponent.is() && xComponent.is();
     if (!bByArea)
     {
-        walkParagraphFlow(xContext, true, xParent, {}, false, 0, 0, nRadius, rBefore);
-        walkParagraphFlow(xContext, false, xParent, {}, false, 0, 0, nRadius, rAfter);
+        walkParagraphFlow(xContext, true, xParent, aParentOnScreen, false, 0, 0, nRadius, rBefore);
+        walkParagraphFlow(xContext, false, xParent, aParentOnScreen, false, 0, 0, nRadius, rAfter);
         return;
     }
 
@@ -710,7 +733,6 @@ void collectParagraphWindow(const uno::Reference<css::accessibility::XAccessible
     const sal_Int32 nMargin = aVisiblePx.GetHeight();
     const sal_Int32 nTop = aVisiblePx.Top() - nMargin;
     const sal_Int32 nBottom = aVisiblePx.Bottom() + nMargin;
-    const css::awt::Point aParentOnScreen = xParentComponent->getLocationOnScreen();
 
     const WindowSide eCaretSide = windowSide(xContext, aParentOnScreen, nTop, nBottom);
     if (eCaretSide != WindowSide::Above && eCaretSide != WindowSide::Below)
@@ -732,11 +754,11 @@ void collectParagraphWindow(const uno::Reference<css::accessibility::XAccessible
         return;
     }
 
-    std::vector<OUString>& rOut = eCaretSide == WindowSide::Below ? rBefore : rAfter;
+    std::vector<ContextParagraph>& rOut = eCaretSide == WindowSide::Below ? rBefore : rAfter;
     walkParagraphFlow(xAnchor, true, xParent, aParentOnScreen, true, nTop, nBottom, 0, rOut);
     if (isSiblingParagraph(xAnchor, xParent))
-        rOut.push_back(paragraphText(xAnchor));
-    std::vector<OUString> aFollowing;
+        rOut.push_back(contextParagraph(xAnchor, aParentOnScreen));
+    std::vector<ContextParagraph> aFollowing;
     walkParagraphFlow(xAnchor, false, xParent, aParentOnScreen, true, nTop, nBottom, 0, aFollowing);
     rOut.insert(rOut.end(), aFollowing.begin(), aFollowing.end());
 }
@@ -965,8 +987,8 @@ class KitDocumentFocusListener :
     sal_Int32 m_nSelectionStart;
     sal_Int32 m_nSelectionEnd;
     sal_Int32 m_nListPrefixLength;
-    mutable std::vector<OUString> m_aParagraphsBefore;
-    mutable std::vector<OUString> m_aParagraphsAfter;
+    mutable std::vector<ContextParagraph> m_aParagraphsBefore;
+    mutable std::vector<ContextParagraph> m_aParagraphsAfter;
     uno::Reference<accessibility::XAccessibleText> m_xFocusedText;
     uno::Reference<accessibility::XAccessibleTable> m_xLastTable;
     OUString m_sSelectedText;
@@ -1083,18 +1105,23 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
         aPayloadTree.put("listPrefixLength", m_nListPrefixLength);
     if (!m_aParagraphsBefore.empty() || !m_aParagraphsAfter.empty())
     {
-        auto toArray = [](const std::vector<OUString>& rParagraphs) {
+        auto toArray = [](const std::vector<ContextParagraph>& rParagraphs, bool bRects) {
             boost::property_tree::ptree aArray;
-            for (const OUString& rText : rParagraphs)
+            for (const ContextParagraph& rParagraph : rParagraphs)
             {
                 boost::property_tree::ptree aNode;
-                aNode.put("", rText.toUtf8().getStr());
+                if (bRects)
+                    aNode.put("", rParagraph.aTwips.toString().getStr());
+                else
+                    aNode.put("", rParagraph.aText.toUtf8().getStr());
                 aArray.push_back(std::make_pair("", aNode));
             }
             return aArray;
         };
-        aPayloadTree.add_child("before", toArray(m_aParagraphsBefore));
-        aPayloadTree.add_child("after", toArray(m_aParagraphsAfter));
+        aPayloadTree.add_child("before", toArray(m_aParagraphsBefore, false));
+        aPayloadTree.add_child("after", toArray(m_aParagraphsAfter, false));
+        aPayloadTree.add_child("beforeRects", toArray(m_aParagraphsBefore, true));
+        aPayloadTree.add_child("afterRects", toArray(m_aParagraphsAfter, true));
     }
     if (force)
         aPayloadTree.put("force", 1);
