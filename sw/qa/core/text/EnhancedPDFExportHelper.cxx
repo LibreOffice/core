@@ -540,6 +540,31 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkEndsInRubyVertical)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(20.7, aRects[0].getWidth(), 0.5);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testLinkEndsInRubyVerticalWrapped)
+{
+    createSwDoc("link-ends-in-ruby-vertical-wrapped.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // an annotation for each of the three lines, all tagged, which the collector asserts
+    std::vector<basegfx::B2DRectangle> aRects(lcl_CollectTaggedLinkRects(aDocument));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aRects.size());
+    // the text runs down the page from the right, so the widest x is the first line
+    std::ranges::sort(aRects,
+                      [](const basegfx::B2DRectangle& rLeft, const basegfx::B2DRectangle& rRight) {
+                          return rLeft.getMinX() > rRight.getMinX();
+                      });
+    // only the third line carries the ruby, and only it is as wide as a ruby makes a line
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(13.8, aRects[0].getWidth(), 0.5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(13.8, aRects[1].getWidth(), 0.5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.7, aRects[2].getWidth(), 0.5);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testLinkPartRubyOneLine)
 {
     createSwDoc("link-part-ruby-one-line.fodt");
