@@ -264,7 +264,10 @@ bool isInstanceMetadataAddress(const sockaddr* ai_addr)
         return false;
 
     const std::string_view addr(addrstr);
-    return addr == "169.254.169.254" || addr == "fd00:ec2::254";
+    return addr.starts_with("169.254.") || // AWS-alike link-local
+           addr == "100.100.100.200" || // Alibaba
+           addr == "fd00:ec2::254" || // AWS IPv6
+           addr == "fd20:ce::254"; // Google IPv6
 }
 
 using sockaddr_ptr = std::unique_ptr<sockaddr, void (*)(void*)>;

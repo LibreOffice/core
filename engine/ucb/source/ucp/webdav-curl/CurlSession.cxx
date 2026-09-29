@@ -706,7 +706,10 @@ static curl_socket_t opensocket_callback(void* /*clientp*/, curlsocktype purpose
     if (purpose == CURLSOCKTYPE_IPCXN)
     {
         const std::string aAddress = makeIPAddress(address->addr);
-        if (aAddress == "169.254.169.254" || aAddress == "fd00:ec2::254")
+        if (aAddress.starts_with("169.254.") // AWS-alike link-local
+            || aAddress == "100.100.100.200" // Alibaba
+            || aAddress == "fd00:ec2::254" // AWS IPv6
+            || aAddress == "fd20:ce::254") // Google IPv6
         {
             SAL_WARN("ucb.ucp.webdav.curl", "ignoring instance metadata ip");
             return CURL_SOCKET_BAD;
