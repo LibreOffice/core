@@ -461,8 +461,8 @@ UnitBase::TestResult UnitSession::testSlideShowMultiDL()
             TST_LOG(testname << ": Download Request: " << id_req << ": count " << dlIter << "/"
                              << dlCount);
             helpers::sendTextFrame(wsdSession,
-                                   "downloadas name=" + id_req + ".svg id=" + id_req +
-                                       " format=svg options=",
+                                   "downloadas name=" + id_req +
+                                       ".svg id=slideshow format=svg options=",
                                    testname);
             response = helpers::getResponseString(wsdSession, "downloadas:", testname, 60s);
             LOK_ASSERT_MESSAGE("did not receive a downloadas: message as expected",
@@ -477,7 +477,7 @@ UnitBase::TestResult UnitSession::testSlideShowMultiDL()
             LOK_ASSERT(!downloadId.empty());
             LOK_ASSERT_EQUAL(static_cast<int>(Poco::URI(helpers::getTestServerURI()).getPort()),
                              port);
-            LOK_ASSERT_EQUAL(id_req, id_has);
+            LOK_ASSERT_EQUAL_STR("slideshow", id_has);
             TST_LOG(testname << ": Download Response: " << id_has << ": count " << dlIter << "/"
                              << dlCount << ": " << downloadId);
             {

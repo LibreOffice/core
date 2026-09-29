@@ -2898,6 +2898,19 @@ bool ClientSession::filterMessage(const std::string& message) const
         if (tokens.size() >= 3)
             getTokenString(tokens[2], "id", id);
         allowed = filterDownloadAs(id);
+
+        // Printing produces a PDF, so a print in any other format is an export.
+        if (allowed && id == "print")
+        {
+            std::string format;
+            if (tokens.size() >= 4)
+                getTokenString(tokens[3], "format", format);
+            if (format != "pdf")
+            {
+                allowed = false;
+                LOG_WRN("Refusing a print to format [" << format << ']');
+            }
+        }
     }
     else if (tokens.equals(0, "gettextselection"))
     {
@@ -2933,6 +2946,11 @@ bool ClientSession::filterDownloadAs(const std::string& id) const
         {
             allowed = false;
             LOG_WRN("WOPI host has disabled slideshow for this session");
+        }
+        else if (id != "print" && id != "export" && id != "slideshow")
+        {
+            allowed = false;
+            LOG_WRN("Unknown downloadas id [" << id << ']');
         }
     }
     else
