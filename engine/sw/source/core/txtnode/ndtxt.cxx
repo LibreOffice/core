@@ -3717,9 +3717,9 @@ OUString SwTextNode::GetExpandText(SwRootFrame const*const pLayout,
     OUStringBuffer aText(aExpandText.subView(nExpandBegin, nExpandEnd-nExpandBegin));
 
     // remove dummy characters of Input Fields
-    comphelper::string::remove(aText, CH_TXT_ATR_INPUTFIELDSTART);
-    comphelper::string::remove(aText, CH_TXT_ATR_INPUTFIELDEND);
-    comphelper::string::remove(aText, CH_TXTATR_BREAKWORD);
+    aText.remove(CH_TXT_ATR_INPUTFIELDSTART);
+    aText.remove(CH_TXT_ATR_INPUTFIELDEND);
+    aText.remove(CH_TXTATR_BREAKWORD);
 
     if( bWithNum )
     {
@@ -3777,8 +3777,8 @@ bool SwTextNode::CopyExpandText(SwTextNode& rDestNd, const SwContentIndex* pDest
     }
     // remove dummy characters of Input Fields
     {
-        comphelper::string::remove(buf, CH_TXT_ATR_INPUTFIELDSTART);
-        comphelper::string::remove(buf, CH_TXT_ATR_INPUTFIELDEND);
+        buf.remove(CH_TXT_ATR_INPUTFIELDSTART);
+        buf.remove(CH_TXT_ATR_INPUTFIELDEND);
     }
     rDestNd.InsertText(buf.makeStringAndClear(), aDestIdx);
     nLen = aDestIdx.GetIndex() - nDestStt;

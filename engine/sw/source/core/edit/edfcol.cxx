@@ -269,9 +269,9 @@ OString lcl_getParagraphBodyText(const uno::Reference<text::XTextContent>& xText
     }
 
     // Cleanup the dummy characters added by fields (which we exclude).
-    comphelper::string::remove(strBuf, CH_TXT_ATR_INPUTFIELDSTART);
-    comphelper::string::remove(strBuf, CH_TXT_ATR_INPUTFIELDEND);
-    comphelper::string::remove(strBuf, CH_TXTATR_BREAKWORD);
+    strBuf.remove(CH_TXT_ATR_INPUTFIELDSTART);
+    strBuf.remove(CH_TXT_ATR_INPUTFIELDEND);
+    strBuf.remove(CH_TXTATR_BREAKWORD);
 
     return strBuf.makeStringAndClear().trim().toUtf8();
 }

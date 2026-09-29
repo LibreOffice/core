@@ -1452,6 +1452,27 @@ public:
         return OUStringBuffer( pNew, count + 16 );
     }
 
+    /** Removes all occurrences of a character.
+
+        @param c        The character to be removed
+
+        @return         this
+     */
+    OUStringBuffer& remove(sal_Unicode c)
+    {
+        sal_Int32 index = 0;
+        while (true)
+        {
+            if (index >= getLength())
+                break;
+            index = indexOf(c, index);
+            if (index == -1)
+                break;
+            remove(index, 1);
+        }
+        return *this;
+    }
+
 private:
     OUStringBuffer( rtl_uString * value, const sal_Int32 capacity )
     {
