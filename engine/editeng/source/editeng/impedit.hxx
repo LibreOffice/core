@@ -749,7 +749,7 @@ private:
 
     bool                ImplHasText() const;
 
-    void ImpFindKashidas(ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd,
+    void ImpFindKashidas(ContentNode& rNode, sal_Int32 nStart, sal_Int32 nEnd,
                          std::vector<sal_Int32>& rArray, sal_Int32 nRemainingSpace);
 
     void                InsertContent(std::unique_ptr<ContentNode> pNode, sal_Int32 nPos);
@@ -786,7 +786,7 @@ private:
     bool                IsScriptChange( const EditPaM& rPaM ) const;
     bool                HasScriptType( sal_Int32 nPara, sal_uInt16 nType ) const;
 
-    bool                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, sal_Int32 nStartPos,
+    bool                ImplCalcAsianCompression( ContentNode& rNode, TextPortion* pTextPortion, sal_Int32 nStartPos,
                                                 double* pDXArray, sal_uInt16 n100thPercentFromMax, bool bManipulateDXArray );
     void                ImplExpandCompressedPortions(EditLine& rLine, ParaPortion& rParaPortion, tools::Long nRemainingWidth);
 
@@ -1288,7 +1288,7 @@ public:
     EESpellState        HasSpellErrors();
     void                ClearSpellErrors();
     /// Bring the WrongList of the input content node up to date synchronously, skipping view invalidation.
-    void EnsureWrongListForPaint(ContentNode* pNode);
+    void EnsureWrongListForPaint(ContentNode& rNode);
     EESpellState        StartThesaurus(EditView* pEditView, weld::Widget* pDialogParent);
     cpo::uno::Reference< css::linguistic2::XSpellAlternatives >
                         ImpSpell( EditView* pEditView );
@@ -1334,13 +1334,13 @@ public:
     bool                    HasText( const SvxSearchItem& rSearchItem );
 
     const SvxNumberFormat * GetNumberFormat( const ContentNode* pNode ) const;
-    sal_Int32               GetSpaceBeforeAndMinLabelWidth( const ContentNode *pNode, sal_Int32 *pnSpaceBefore = nullptr, sal_Int32 *pnMinLabelWidth = nullptr ) const;
+    sal_Int32               GetSpaceBeforeAndMinLabelWidth( const ContentNode& rpNode, sal_Int32 *pnSpaceBefore = nullptr, sal_Int32 *pnMinLabelWidth = nullptr ) const;
 
-    const SvxLRSpaceItem&   GetLRSpaceItem( ContentNode* pNode );
+    const SvxLRSpaceItem&   GetLRSpaceItem( ContentNode& rNode );
     SvxAdjust               GetJustification( sal_Int32 nPara ) const;
     SvxCellJustifyMethod    GetJustifyMethod( sal_Int32 nPara ) const;
     SvxCellVerJustify       GetVerJustification( sal_Int32 nPara ) const;
-    SvxFontUnitMetrics GetFontUnitMetrics(ContentNode* pNode);
+    SvxFontUnitMetrics      GetFontUnitMetrics(ContentNode& rNode);
 
     void setScalingParameters(ScalingParameters const& rScalingParameters);
 

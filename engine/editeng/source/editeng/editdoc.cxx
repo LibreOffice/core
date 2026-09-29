@@ -440,7 +440,7 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_Int32 nLastFormatted
             }
         }
     }
-    DBG_ASSERT(maLineList[maLineList.Count() - 1].GetEnd() == mpNode->Len(), "CorrectLines: The end is not right!");
+    DBG_ASSERT(maLineList[maLineList.Count() - 1].GetEnd() == mrNode.Len(), "CorrectLines: The end is not right!");
 }
 
 // Shared reverse lookup acceleration pieces ...
@@ -578,8 +578,7 @@ ParaPortionList::DbgCheck(ParaPortionList const& rParas, EditDoc const& rDoc)
     for (sal_Int32 i = 0; i < rParas.Count(); ++i)
     {
         assert(rParas.SafeGetObject(i) != nullptr);
-        assert(rParas.SafeGetObject(i)->GetNode() != nullptr);
-        assert(rParas.SafeGetObject(i)->GetNode() == &rDoc.GetObject(i));
+        assert(&rParas.SafeGetObject(i)->GetNode() == &rDoc.GetObject(i));
     }
 }
 #endif

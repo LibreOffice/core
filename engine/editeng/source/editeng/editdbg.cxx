@@ -369,20 +369,20 @@ void ImpEditEngine::DumpData(bool bInfoBox)
     {
         ParaPortion const& rPPortion = GetParaPortions().getRef(nPortion);
         fprintf( fp, "\nParagraph %" SAL_PRIdINT32 ": Length = %" SAL_PRIdINT32 ", Invalid = %i\nText = '%s'",
-                 nPortion, rPPortion.GetNode()->Len(), rPPortion.IsInvalid(),
-                 OUStringToOString(rPPortion.GetNode()->GetString(), RTL_TEXTENCODING_UTF8).getStr() );
+                 nPortion, rPPortion.GetNode().Len(), rPPortion.IsInvalid(),
+                 OUStringToOString(rPPortion.GetNode().GetString(), RTL_TEXTENCODING_UTF8).getStr() );
         fprintf( fp, "\nVorlage:" );
-        SfxStyleSheet* pStyle = rPPortion.GetNode()->GetStyleSheet();
+        SfxStyleSheet* pStyle = rPPortion.GetNode().GetStyleSheet();
         if ( pStyle )
             fprintf( fp, " %s", OUStringToOString( pStyle->GetName(), RTL_TEXTENCODING_UTF8).getStr() );
         fprintf( fp, "\nParagraph attribute:" );
-        DbgOutItemSet( fp, rPPortion.GetNode()->GetContentAttribs().GetItems(), false, false );
+        DbgOutItemSet( fp, rPPortion.GetNode().GetContentAttribs().GetItems(), false, false );
 
         fprintf( fp, "\nCharacter attribute:" );
         bool bZeroAttr = false;
-        for ( sal_Int32 z = 0; z < rPPortion.GetNode()->GetCharAttribs().Count(); ++z )
+        for ( sal_Int32 z = 0; z < rPPortion.GetNode().GetCharAttribs().Count(); ++z )
         {
-            const std::unique_ptr<EditCharAttrib>& rAttr = rPPortion.GetNode()->GetCharAttribs().GetAttribs()[z];
+            const std::unique_ptr<EditCharAttrib>& rAttr = rPPortion.GetNode().GetCharAttribs().GetAttribs()[z];
             OString aCharAttribs =
                 "\nA"
                 + OString::number(nPortion)
@@ -408,7 +408,7 @@ void ImpEditEngine::DumpData(bool bInfoBox)
             + " \nA"
             + OString::number(nPortion)
             + ": Paragraph Length = "
-            + OString::number(rPPortion.GetNode()->Len())
+            + OString::number(rPPortion.GetNode().Len())
             + "\nA"
             + OString::number(nPortion)
             + ": ");
@@ -430,7 +430,7 @@ void ImpEditEngine::DumpData(bool bInfoBox)
             + OString::number(nPortion)
             + ": Total length: "
             + OString::number(n));
-        if ( rPPortion.GetNode()->Len() != n )
+        if ( rPPortion.GetNode().Len() != n )
             aPortionStr.append(" => Error !!!");
         fprintf(fp, "%s", aPortionStr.getStr());
 
@@ -440,7 +440,7 @@ void ImpEditEngine::DumpData(bool bInfoBox)
         {
             EditLine const& rLine = rPPortion.GetLines()[nLine];
 
-            OString aLine(OUStringToOString(rPPortion.GetNode()->Copy(rLine.GetStart(), rLine.GetEnd() - rLine.GetStart()), RTL_TEXTENCODING_ASCII_US));
+            OString aLine(OUStringToOString(rPPortion.GetNode().Copy(rLine.GetStart(), rLine.GetEnd() - rLine.GetStart()), RTL_TEXTENCODING_ASCII_US));
             fprintf( fp, "\nLine %" SAL_PRIdINT32 "\t>%s<", nLine, aLine.getStr() );
         }
         // then the internal data ...
@@ -532,7 +532,7 @@ bool ParaPortion::DbgCheckTextPortions(ParaPortion const& rPara)
     {
         nXLen = nXLen + rPara.maTextPortionList[nPortion].GetLen();
     }
-    return nXLen == rPara.mpNode->Len();
+    return nXLen == rPara.mrNode.Len();
 }
 #endif
 

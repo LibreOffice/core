@@ -287,14 +287,14 @@ void EditView::SetSelection( const ESelection& rESel )
     if ( !pPortion->IsVisible() )
     {
         pPortion = getEditEngine().GetPrevVisPortion( pPortion );
-        ContentNode* pNode = pPortion ? pPortion->GetNode() : &getEditEngine().GetEditDoc().GetObject( 0 );
+        ContentNode* pNode = pPortion ? &pPortion->GetNode() : &getEditEngine().GetEditDoc().GetObject( 0 );
         aNewSelection.Min() = EditPaM( pNode, pNode->Len() );
     }
     pPortion = getEditEngine().FindParaPortion( aNewSelection.Max().GetNode() );
     if ( !pPortion->IsVisible() )
     {
         pPortion = getEditEngine().GetPrevVisPortion( pPortion );
-        ContentNode* pNode = pPortion ? pPortion->GetNode() : &getEditEngine().GetEditDoc().GetObject( 0 );
+        ContentNode* pNode = pPortion ? &pPortion->GetNode() : &getEditEngine().GetEditDoc().GetObject( 0 );
         aNewSelection.Max() = EditPaM( pNode, pNode->Len() );
     }
 

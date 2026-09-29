@@ -577,7 +577,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
 
         if ( bParaAttribFound )
         {
-            ParaAttribsChanged(rPortion.GetNode());
+            ParaAttribsChanged(&rPortion.GetNode());
         }
         else if ( bCharAttribFound )
         {

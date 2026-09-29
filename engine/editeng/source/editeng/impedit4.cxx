@@ -1350,7 +1350,7 @@ EditTextObject ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool*
                 nTPLen += rParaPortion.GetTextPortions()[--nTest].GetLen();
             for (nTest = rParaPortion.GetLines().Count(); nTest; )
                 nTxtLen += rParaPortion.GetLines()[--nTest].GetLen();
-            DBG_ASSERT(nTPLen == rParaPortion.GetNode()->Len() && nTxtLen == rParaPortion.GetNode()->Len(), "CreateBinTextObject: ParaPortion not completely formatted!");
+            DBG_ASSERT(nTPLen == rParaPortion.GetNode().Len() && nTxtLen == rParaPortion.GetNode().Len(), "CreateBinTextObject: ParaPortion not completely formatted!");
 #endif
         }
     }
@@ -1548,7 +1548,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                     nTPLen += pParaPortion->GetTextPortions()[--nTest].GetLen();
                 for ( nTest = pParaPortion->GetLines().Count(); nTest; )
                     nTxtLen += pParaPortion->GetLines()[--nTest].GetLen();
-                DBG_ASSERT( ( nTPLen == pParaPortion->GetNode()->Len() ) && ( nTxtLen == pParaPortion->GetNode()->Len() ), "InsertTextObject: ParaPortion not completely formatted!" );
+                DBG_ASSERT( ( nTPLen == pParaPortion->GetNode().Len() ) && ( nTxtLen == pParaPortion->GetNode().Len() ), "InsertTextObject: ParaPortion not completely formatted!" );
 #endif
             }
         }
@@ -2646,18 +2646,18 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
         maOnlineSpellTimer.Start();
 }
 
-void ImpEditEngine::EnsureWrongListForPaint(ContentNode* pNode)
+void ImpEditEngine::EnsureWrongListForPaint(ContentNode& rNode)
 {
-    if (!pNode || !mxSpeller.is())
+    if (!mxSpeller.is())
         return;
-    pNode->EnsureWrongList();
-    WrongList* pWrongs = pNode->GetWrongList();
+    rNode.EnsureWrongList();
+    WrongList* pWrongs = rNode.GetWrongList();
     if (!pWrongs || pWrongs->IsValid())
         return;
     // Synchronous, non-interruptible spell-check of just this paragraph,
     // with no view invalidation. We are inside Paint() and the squiggles
     // will be drawn from the freshly-updated WrongList in the same pass.
-    DoOnlineSpelling(pNode, /*bSpellAtCursorPos*/true, /*bInterruptible*/false, /*bInvalidate*/false);
+    DoOnlineSpelling(&rNode, /*bSpellAtCursorPos*/true, /*bInterruptible*/false, /*bInvalidate*/false);
 }
 
 

@@ -298,7 +298,7 @@ void Test::testLineSpacing()
 
         // Assert changes
         ParaPortion const& rParaPortion = aEditEngine.GetParaPortions().getRef(0);
-        ContentNode* const pNode = rParaPortion.GetNode();
+        ContentNode* const pNode = &rParaPortion.GetNode();
         const SvxLineSpacingItem& rLSItem = pNode->GetContentAttribs().GetItem(EE_PARA_SBL);
         CPPUNIT_ASSERT_EQUAL(SvxInterLineSpaceRule::Prop, rLSItem.GetInterLineSpaceRule());
         CPPUNIT_ASSERT_EQUAL(nSpace, rLSItem.GetPropLineSpace());

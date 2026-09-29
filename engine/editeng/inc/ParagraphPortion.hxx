@@ -61,7 +61,7 @@ class ParaPortion
 private:
     EditLineList maLineList;
     TextPortionList maTextPortionList;
-    ContentNode* mpNode = nullptr;
+    ContentNode& mrNode;
     tools::Long mnHeight = 0;
 
     ScriptTypePosInfos maScriptInfos;
@@ -80,8 +80,8 @@ private:
     ParaPortion(const ParaPortion&) = delete;
 
 public:
-    ParaPortion(ContentNode* pNode)
-        : mpNode(pNode)
+    ParaPortion(ContentNode& rNode)
+        : mrNode(rNode)
     {
     }
 
@@ -125,7 +125,7 @@ public:
 
     WritingDirectionInfos& getWritingDirectionInfos() { return maWritingDirectionInfos; }
 
-    ContentNode* GetNode() const { return mpNode; }
+    ContentNode& GetNode() const { return mrNode; }
     TextPortionList& GetTextPortions() { return maTextPortionList; }
     const TextPortionList& GetTextPortions() const { return maTextPortionList; }
 
