@@ -29,6 +29,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <connectivity/CommonTools.hxx>
+#include <unotools/tempfile.hxx>
 
 
 namespace connectivity
@@ -66,6 +67,9 @@ namespace connectivity
             css::uno::Reference< css::sdbc::XDriver >                 m_xDriver;
             css::uno::Reference< css::uno::XComponentContext >        m_xContext;
             bool                                                      m_bInShutDownConnections;
+            // Private directory, removed with its contents when the driver goes away. It holds one
+            // subdirectory per registered storage, and that storage's database path lies inside it.
+            ::utl::TempFile                                           m_aDatabaseDirectory;
 
             /** load the driver we want to delegate.
                 The <member>m_xDriver</member> may be <NULL/> if the driver could not be loaded.
