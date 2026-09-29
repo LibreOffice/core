@@ -869,7 +869,8 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
 
         if ((nCloneFlags & ScCloneFlags::AdjustCrossSheetRefs) != ScCloneFlags::Default)
         {
-            pCode->AdjustRelativeTabRefs(rCell.aPos.Tab(), aPos.Tab());
+            SCTAB nDelta = aPos.Tab() - rCell.aPos.Tab();
+            pCode->AdjustRelativeTabRefs(nDelta);
         }
     }
 
@@ -3860,18 +3861,6 @@ void ScFormulaCell::UpdateInsertTabAbs(SCTAB nTable)
         }
         p = aIter.GetNextReferenceRPN();
     }
-}
-
-void ScFormulaCell::AdjustRelativeTabRefs(SCTAB nOldTab, SCTAB nNewTab, sc::TargetTabState eMode)
-{
-    if (rDocument.IsClipOrUndo())
-        return;
-
-    bool bAdjustCode = !mxGroup || mxGroup->mpTopCell == this;
-    if (!bAdjustCode)
-        return;
-
-    pCode->AdjustRelativeTabRefs(nOldTab, nNewTab, eMode);
 }
 
 bool ScFormulaCell::TestTabRefAbs(SCTAB nTable)
