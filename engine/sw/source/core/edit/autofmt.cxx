@@ -1122,37 +1122,39 @@ bool GetRanges(std::vector<std::shared_ptr<SwUnoCursor>> & rRanges,
     {
         return isNoRedline;
     }
-    rIDRA.GetRedline(*rDelPam.Start(), &tmp);
-    SwPosition const* pCurrent(rDelPam.Start());
+    auto [pDelStart, pDelEnd] = rDelPam.StartEnd(); // SwPosition*
+    rIDRA.GetRedline(*pDelStart, &tmp);
+    SwPosition const* pCurrent(pDelStart);
     for ( ; tmp < rIDRA.GetRedlineTable().size(); ++tmp)
     {
         SwRangeRedline const*const pRedline(rIDRA.GetRedlineTable()[tmp]);
-        if (*rDelPam.End() <= *pRedline->Start())
+        auto [pRedlineStart, pRedlineEnd] = pRedline->StartEnd(); // SwPosition*
+        if (*pDelEnd <= *pRedlineStart)
         {
             break;
         }
-        if (*pRedline->End() <= *rDelPam.Start())
+        if (*pRedlineEnd <= *pDelStart)
         {
             continue;
         }
         if (pRedline->GetType() == RedlineType::Delete)
         {
-            assert(*pRedline->Start() != *pRedline->End());
+            assert(*pRedlineStart != *pRedlineEnd);
             isNoRedline = false;
-            if (*pCurrent < *pRedline->Start())
+            if (*pCurrent < *pRedlineStart)
             {
                 rRanges.push_back(rDoc.CreateUnoCursor(*pCurrent));
                 rRanges.back()->SetMark();
-                *rRanges.back()->GetPoint() = *pRedline->Start();
+                *rRanges.back()->GetPoint() = *pRedlineStart;
             }
-            pCurrent = pRedline->End();
+            pCurrent = pRedlineEnd;
         }
     }
-    if (!isNoRedline && *pCurrent < *rDelPam.End())
+    if (!isNoRedline && *pCurrent < *pDelEnd)
     {
         rRanges.push_back(rDoc.CreateUnoCursor(*pCurrent));
         rRanges.back()->SetMark();
-        *rRanges.back()->GetPoint() = *rDelPam.End();
+        *rRanges.back()->GetPoint() = *pDelEnd;
     }
     return isNoRedline;
 }
@@ -2841,8 +2843,8 @@ void SwEditShell::AutoFormat( const SvxSwAutoFormatFlags* pAFlags, bool bCurrent
         {
             if( rPaM.HasMark() )
             {
-                SwAutoFormat( this, aAFFlags, &rPaM.Start()->GetNode(),
-                                     &rPaM.End()->GetNode() );
+                auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
+                SwAutoFormat(this, aAFFlags, &pStart->GetNode(), &pEnd->GetNode());
             }
         }
     }

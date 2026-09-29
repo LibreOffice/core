@@ -254,8 +254,9 @@ void SwEditShell::ReinstateRedlinesInSelection()
         SetRedlineFlags(nMode | RedlineFlags::On, SfxRedlineRecordingMode::ThisView);
     }
 
-    SwPosition aCursorStart(*GetCursor()->Start());
-    SwPosition aCursorEnd(*GetCursor()->End());
+    auto [pCursorStart, pCursorEnd] = GetCursor()->StartEnd(); // SwPosition*
+    SwPosition aCursorStart(*pCursorStart);
+    SwPosition aCursorEnd(*pCursorEnd);
     SwRedlineTable& rTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
 
     // Work on a copy, since reinstate will modify the table, and reinstate of just inserted
@@ -276,20 +277,20 @@ void SwEditShell::ReinstateRedlinesInSelection()
             continue;
         }
 
-        if (*rRedline.End() < aCursorStart)
+        auto [pStart, pEnd] = rRedline.StartEnd(); // SwPosition*
+        if (*pEnd < aCursorStart)
         {
             // Ends before the selection, skip to the next redline.
             continue;
         }
 
-        if (*rRedline.Start() > aCursorEnd)
+        if (*pStart > aCursorEnd)
         {
             // Starts after the selection, can stop.
             break;
         }
 
         // Check if the redline is only partially selected.
-        auto [pStart, pEnd] = rRedline.StartEnd();
         if (*pStart < aCursorStart)
         {
             pStart = &aCursorStart;

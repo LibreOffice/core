@@ -62,8 +62,9 @@ void SwEditShell::DeleteSel(SwPaM& rPam, bool const isArtificialSelection, bool 
             GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
             *pUndo = true;
         }
-        SwPaM aDelPam( *rPam.Start() );
-        const SwPosition* pEndSelPos = rPam.End();
+        auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
+        SwPaM aDelPam(*pStart);
+        const SwPosition* pEndSelPos = pEnd;
         do {
             aDelPam.SetMark();
             SwNode& rNd = aDelPam.GetPointNode();
@@ -231,9 +232,11 @@ bool SwEditShell::Copy( SwEditShell& rDestShell )
             }
             SwPosition *pTmp = IsBlockMode() ? pInsertPos.get() : pPos;
             // Check if a selection would be copied into itself
-            if( rDestShell.GetDoc() == GetDoc() &&
-                *rPaM.Start() <= *pTmp && *pTmp < *rPaM.End() )
-                return false;
+            if (rDestShell.GetDoc() == GetDoc())
+            {
+                if (auto [pStart, pEnd] = rPaM.StartEnd(); *pStart <= *pTmp && *pTmp < *pEnd)
+                    return false;
+            }
         }
     }
 

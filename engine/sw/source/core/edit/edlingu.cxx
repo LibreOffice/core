@@ -500,15 +500,16 @@ void SwHyphIter::Ignore()
     DelSoftHyph( *pCursor );
 
     // and continue
-    pCursor->Start()->SetContent( pCursor->End()->GetContentIndex() );
+    auto [pStart, pEnd] = pCursor->StartEnd(); // SwPosition*
+    pStart->SetContent(pEnd->GetContentIndex());
     pCursor->SetMark();
 }
 
 void SwHyphIter::DelSoftHyph( SwPaM &rPam )
 {
-    const SwPosition* pStart = rPam.Start();
+    auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
     const sal_Int32 nStart = pStart->GetContentIndex();
-    const sal_Int32 nEnd   = rPam.End()->GetContentIndex();
+    const sal_Int32 nEnd = pEnd->GetContentIndex();
     SwTextNode *pNode = pStart->GetNode().GetTextNode();
     pNode->DelSoftHyph( nStart, nEnd );
 }
@@ -1189,7 +1190,8 @@ void SwEditShell::ApplyChangedSentence(const svx::SpellPortions& rNewPortions, b
             mxDoc->getIDocumentContentOperations().InsertString(*pCursor, rCurrentNewPortion.sText);
 
             // set the cursor to the end of the inserted string
-            *pCursor->Start() = *pCursor->End();
+            auto [pStart, pEnd] = pCursor->StartEnd(); // SwPosition*
+            *pStart = *pEnd;
         }
     }
 
@@ -1199,7 +1201,8 @@ void SwEditShell::ApplyChangedSentence(const svx::SpellPortions& rNewPortions, b
     Pop(PopMode::DeleteCurrent);
 
     // collapse cursor to the end of the modified sentence
-    *pCursor->Start() = *pCursor->End();
+    auto [pStart, pEnd] = pCursor->StartEnd(); // SwPosition*
+    *pStart = *pEnd;
     if (bRecheck)
     {
         // in grammar check the current sentence has to be checked again
@@ -1528,8 +1531,9 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > const & xAl
     aPortion.xAlternatives = xAlt;
     SpellContentPosition aPosition;
     SwPaM *pCursor = GetSh()->GetCursor();
-    aPosition.nLeft = pCursor->Start()->GetContentIndex();
-    aPosition.nRight = pCursor->End()->GetContentIndex();
+    auto [pStart, pEnd] = pCursor->StartEnd(); // SwPosition*
+    aPosition.nLeft = pStart->GetContentIndex();
+    aPosition.nRight = pEnd->GetContentIndex();
     m_aLastPortions.push_back(std::move(aPortion));
     m_aLastPositions.push_back(aPosition);
 }
@@ -1663,16 +1667,17 @@ void SwEditShell::IgnoreGrammarErrorAt( SwPaM& rErrorPosition )
 {
     SwTextNode *pNode;
     SwWrongList *pWrong;
-    SwNodeIndex aIdx(rErrorPosition.Start()->GetNode());
-    SwNodeIndex aEndIdx(rErrorPosition.Start()->GetNode());
-    sal_Int32 nStart = rErrorPosition.Start()->GetContentIndex();
+    auto [pStart, pEnd] = rErrorPosition.StartEnd(); // SwPosition*
+    SwNodeIndex aIdx(pStart->GetNode());
+    SwNodeIndex aEndIdx(pStart->GetNode());
+    sal_Int32 nStart = pStart->GetContentIndex();
     sal_Int32 nEnd = COMPLETE_STRING;
     while( aIdx <= aEndIdx )
     {
         pNode = aIdx.GetNode().GetTextNode();
         if( pNode ) {
             if( aIdx == aEndIdx )
-                nEnd = rErrorPosition.End()->GetContentIndex();
+                nEnd = pEnd->GetContentIndex();
             pWrong = pNode->GetGrammarCheck();
             if( pWrong )
                 pWrong->RemoveEntry( nStart, nEnd );

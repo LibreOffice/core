@@ -2241,11 +2241,13 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat, const bool bReset
                                         GetLayout());
 
             // If there are hints on the nodes which cover the whole node, then remove those, too.
-            SwPaM aPaM(*rPaM.Start(), *rPaM.End());
-            if (SwTextNode* pEndTextNode = aPaM.End()->GetNode().GetTextNode())
+            auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
+            SwPaM aPaM(*pStart, *pEnd);
+            auto [pRangeStart, pRangeEnd] = aPaM.StartEnd(); // SwPosition*
+            if (SwTextNode* pEndTextNode = pRangeEnd->GetNode().GetTextNode())
             {
-                aPaM.Start()->SetContent(0);
-                aPaM.End()->SetContent(pEndTextNode->GetText().getLength());
+                pRangeStart->SetContent(0);
+                pRangeEnd->SetContent(pEndTextNode->GetText().getLength());
             }
             GetDoc()->RstTextAttrs(aPaM, /*bInclRefToxMark=*/false, /*bExactRange=*/true, GetLayout());
 
@@ -2255,7 +2257,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat, const bool bReset
                 // haven't supported by AppendRedline(), yet
                 // TODO handle multi-paragraph selections, too,
                 // e.g. by breaking them to single paragraphs
-                aPaM.Start()->GetNode() == aPaM.End()->GetNode() )
+                pRangeStart->GetNode() == pRangeEnd->GetNode())
             {
                 SwRangeRedline * pRedline = new SwRangeRedline( RedlineType::ParagraphFormat, aPaM );
                 auto const result(GetDoc()->getIDocumentRedlineAccess().AppendRedline( pRedline, true));

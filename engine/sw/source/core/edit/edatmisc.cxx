@@ -67,8 +67,9 @@ void SwEditShell::GCAttr()
         }
         else
         {
-            const SwNode& rEnd = rPaM.End()->GetNode();
-            SwNodeIndex aIdx( rPaM.Start()->GetNode() );
+            auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
+            const SwNode& rEnd = pEnd->GetNode();
+            SwNodeIndex aIdx(pStart->GetNode());
             SwNode* pNd = &aIdx.GetNode();
             do {
                 if( pNd->IsTextNode() )

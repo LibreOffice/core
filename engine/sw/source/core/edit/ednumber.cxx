@@ -150,8 +150,9 @@ bool SwEditShell::SelectionHasNumber() const
     bool bResult = false;
     for (SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
-        SwNodeOffset nStt = rPaM.Start()->GetNodeIndex();
-        SwNodeOffset nEnd = rPaM.End()->GetNodeIndex();
+        auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
+        SwNodeOffset nStt = pStart->GetNodeIndex();
+        SwNodeOffset nEnd = pEnd->GetNodeIndex();
         for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
         {
             SwTextNode* pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
@@ -185,8 +186,9 @@ bool SwEditShell::SelectionHasBullet() const
     bool bResult = false;
     for (SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
-        SwNodeOffset nStt = rPaM.Start()->GetNodeIndex();
-        SwNodeOffset nEnd = rPaM.End()->GetNodeIndex();
+        auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
+        SwNodeOffset nStt = pStart->GetNodeIndex();
+        SwNodeOffset nEnd = pEnd->GetNodeIndex();
         for (SwNodeOffset nPos = nStt; nPos<=nEnd; nPos++)
         {
             SwTextNode* pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
@@ -388,10 +390,11 @@ int SwEditShell::GetCurrentParaOutlineLevel( ) const
 void SwEditShell::GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower )
 {
     SwPaM* pCursor = GetCursor();
-    SwPaM aCursor( *pCursor->Start() );
+    auto [pStart, pEnd] = pCursor->StartEnd(); // SwPosition*
+    SwPaM aCursor(*pStart);
     aCursor.SetMark();
     if( pCursor->HasMark() )
-        *aCursor.GetPoint() = *pCursor->End();
+        *aCursor.GetPoint() = *pEnd;
     SwDoc::GotoNextNum(*aCursor.GetPoint(), GetLayout(), false, &rUpper, &rLower);
 }
 
@@ -401,11 +404,12 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
 
     // On all selections?
     SwPaM* pCursor = GetCursor();
-    SwPaM aCursor( *pCursor->Start() );
+    auto [pCursorStart, pCursorEnd] = pCursor->StartEnd(); // SwPosition*
+    SwPaM aCursor(*pCursorStart);
     aCursor.SetMark();
 
     if( pCursor->HasMark() )
-        *aCursor.GetPoint() = *pCursor->End();
+        *aCursor.GetPoint() = *pCursorEnd;
 
     bool bRet = false;
     sal_uInt8 nUpperLevel, nLowerLevel;
@@ -692,9 +696,10 @@ const SwNumRule* SwEditShell::GetNumRuleAtCurrentSelection() const
     bool bDifferentNumRuleFound = false;
     for(const SwPaM& rCurrentCursor : GetCursor()->GetRingContainer())
     {
-        const SwNode& rEndNode(rCurrentCursor.End()->GetNode());
+        auto [pStart, pEnd] = rCurrentCursor.StartEnd(); // SwPosition*
+        const SwNode& rEndNode(pEnd->GetNode());
 
-        for ( SwNodeIndex aNode(rCurrentCursor.Start()->GetNode()); aNode <= rEndNode; ++aNode )
+        for (SwNodeIndex aNode(pStart->GetNode()); aNode <= rEndNode; ++aNode)
         {
             SwPosition pos(aNode);
             const SwNumRule* pNumRule = SwDoc::GetNumRuleAtPos(pos, GetLayout());

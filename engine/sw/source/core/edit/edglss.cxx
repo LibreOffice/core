@@ -227,13 +227,15 @@ bool SwEditShell::CopySelToDoc( SwDoc& rInsDoc )
                         // Selection starts at the first para of the first cell,
                         // but we want to copy the table and the start node before
                         // the first cell as well.
-                        aPaM.Start()->Assign(*oSelectAll->first);
+                        auto [pStart, pEnd] = aPaM.StartEnd(); // SwPosition*
+                        pStart->Assign(*oSelectAll->first);
                         if (SwSectionNode const* pSection = oSelectAll->first->GetSectionNode())
                         {
-                            if (aPaM.End()->GetNodeIndex() < pSection->EndOfSectionIndex())
+                            if (pEnd->GetNodeIndex() < pSection->EndOfSectionIndex())
                             {
                                 // include section end so that section is copied
-                                aPaM.End()->Assign(*oSelectAll->first->GetNodes()[pSection->EndOfSectionIndex() + 1]);
+                                pEnd->Assign(*oSelectAll->first
+                                                  ->GetNodes()[pSection->EndOfSectionIndex() + 1]);
                             }
                         }
                     }
