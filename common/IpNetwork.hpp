@@ -89,7 +89,8 @@ private:
     {
     }
 
-    /// Strict dotted-decimal IPv4: four parts of one to three digits, each at most 255.
+    /// Strict dotted-decimal IPv4: four parts of one to three digits, each at most 255, with no
+    /// leading zero. Which is the same as inet_pton reads it.
     static bool parseIPv4(std::string_view text, unsigned char* out)
     {
         const char* pos = text.data();
@@ -99,7 +100,8 @@ private:
             unsigned value = 0;
             const std::from_chars_result parsed = std::from_chars(pos, end, value);
             const std::ptrdiff_t digits = parsed.ptr - pos;
-            if (parsed.ec != std::errc() || digits > 3 || value > 255)
+            if (parsed.ec != std::errc() || digits > 3 || value > 255 ||
+                (digits > 1 && *pos == '0'))
                 return false;
             out[part] = static_cast<unsigned char>(value);
             pos = parsed.ptr;

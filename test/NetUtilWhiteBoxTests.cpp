@@ -426,6 +426,16 @@ void NetUtilWhiteBoxTests::testIpNetwork()
     LOK_ASSERT(!slash12->contains("172.15.255.255"));
     LOK_ASSERT(!slash12->contains("172.32.0.0"));
 
+    // A part with a leading zero is not dotted decimal.
+    std::optional<Util::IpNetwork> testNet = Util::IpNetwork::parse("192.0.2.0/24");
+    LOK_ASSERT(testNet.has_value());
+    LOK_ASSERT(testNet->contains("192.0.2.1"));
+    LOK_ASSERT(testNet->contains("192.0.2.0"));
+    LOK_ASSERT(!testNet->contains("192.0.02.1"));
+    LOK_ASSERT(!testNet->contains("192.0.2.01"));
+    LOK_ASSERT(!testNet->contains("::ffff:192.0.2.01"));
+    LOK_ASSERT(!Util::IpNetwork::parse("192.0.02.0/24").has_value());
+
     // Single host and match-all.
     std::optional<Util::IpNetwork> single = Util::IpNetwork::parse("203.0.113.7/32");
     LOK_ASSERT(single.has_value());
