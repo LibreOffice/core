@@ -478,13 +478,13 @@ public:
         @param rRef interface reference
         @return interface reference of demanded type (may be null)
     */
-    SAL_WARN_UNUSED_RESULT inline static Reference< interface_type > query( const BaseReference & rRef );
+    [[nodiscard]] inline static Reference< interface_type > query( const BaseReference & rRef );
     /** Queries given interface for type interface_type.
 
         @param pInterface interface pointer
         @return interface reference of demanded type (may be null)
     */
-    SAL_WARN_UNUSED_RESULT inline static Reference< interface_type > query( cpo::uno::XInterface * pInterface );
+    [[nodiscard]] inline static Reference< interface_type > query( cpo::uno::XInterface * pInterface );
     /** Queries this for the required interface, and returns the requested reference, possibly empty.
         A syntactic sugar for 'Reference< other_type > xOther(xThis, UNO_QUERY)' that avoids some
         verbocity.

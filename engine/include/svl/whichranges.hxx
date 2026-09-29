@@ -173,7 +173,7 @@ public:
     bool doesContainWhich(sal_uInt16 nWhich) const;
 
     // Adds a range to which ranges, keeping the ranges in valid state (sorted, non-overlapping)
-    SAL_WARN_UNUSED_RESULT WhichRangesContainer MergeRange(sal_uInt16 nFrom, sal_uInt16 nTo) const;
+    [[nodiscard]] WhichRangesContainer MergeRange(sal_uInt16 nFrom, sal_uInt16 nTo) const;
 
     sal_uInt16 TotalCount() const { return m_TotalCount; }
 };

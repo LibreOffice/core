@@ -1573,72 +1573,72 @@ public:
 
         @return the current offset in pixel
      */
-    SAL_WARN_UNUSED_RESULT Size GetPixelOffset() const { return Size(mnOutOffOrigX, mnOutOffOrigY);}
+    [[nodiscard]] Size GetPixelOffset() const { return Size(mnOutOffOrigX, mnOutOffOrigY);}
 
-    SAL_WARN_UNUSED_RESULT Point LogicToPixel(const Point& rLogicPt) const;
-    SAL_WARN_UNUSED_RESULT Size  LogicToPixel(const Size& rLogicSize) const;
-    SAL_WARN_UNUSED_RESULT tools::Rectangle LogicToPixel(const tools::Rectangle& rLogicRect) const;
-    SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE tools::Polygon LogicToPixel(const tools::Polygon& rLogicPoly) const;
-    SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE tools::PolyPolygon LogicToPixel(const tools::PolyPolygon& rLogicPolyPoly) const;
-    SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE basegfx::B2DPolyPolygon LogicToPixel(const basegfx::B2DPolyPolygon& rLogicPolyPoly) const;
-    SAL_WARN_UNUSED_RESULT vcl::Region LogicToPixel(const vcl::Region& rLogicRegion)const;
-    SAL_WARN_UNUSED_RESULT Point LogicToPixel(const Point& rLogicPt, const MapMode& rMapMode) const;
-    SAL_WARN_UNUSED_RESULT Size LogicToPixel(const Size& rLogicSize, const MapMode& rMapMode) const;
-    SAL_WARN_UNUSED_RESULT tools::Rectangle LogicToPixel(const tools::Rectangle& rLogicRect,
+    [[nodiscard]] Point LogicToPixel(const Point& rLogicPt) const;
+    [[nodiscard]] Size  LogicToPixel(const Size& rLogicSize) const;
+    [[nodiscard]] tools::Rectangle LogicToPixel(const tools::Rectangle& rLogicRect) const;
+    [[nodiscard]] SAL_DLLPRIVATE tools::Polygon LogicToPixel(const tools::Polygon& rLogicPoly) const;
+    [[nodiscard]] SAL_DLLPRIVATE tools::PolyPolygon LogicToPixel(const tools::PolyPolygon& rLogicPolyPoly) const;
+    [[nodiscard]] SAL_DLLPRIVATE basegfx::B2DPolyPolygon LogicToPixel(const basegfx::B2DPolyPolygon& rLogicPolyPoly) const;
+    [[nodiscard]] vcl::Region LogicToPixel(const vcl::Region& rLogicRegion)const;
+    [[nodiscard]] Point LogicToPixel(const Point& rLogicPt, const MapMode& rMapMode) const;
+    [[nodiscard]] Size LogicToPixel(const Size& rLogicSize, const MapMode& rMapMode) const;
+    [[nodiscard]] tools::Rectangle LogicToPixel(const tools::Rectangle& rLogicRect,
                                                          const MapMode& rMapMode) const;
-    SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE tools::Polygon LogicToPixel(const tools::Polygon& rLogicPoly,
+    [[nodiscard]] SAL_DLLPRIVATE tools::Polygon LogicToPixel(const tools::Polygon& rLogicPoly,
                                                        const MapMode& rMapMode) const;
-    SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE basegfx::B2DPolyPolygon LogicToPixel(const basegfx::B2DPolyPolygon& rLogicPolyPoly,
+    [[nodiscard]] SAL_DLLPRIVATE basegfx::B2DPolyPolygon LogicToPixel(const basegfx::B2DPolyPolygon& rLogicPolyPoly,
                                                                 const MapMode& rMapMode) const;
 
-    SAL_WARN_UNUSED_RESULT Point PixelToLogic(const Point& rDevicePt) const;
-    SAL_WARN_UNUSED_RESULT Size PixelToLogic(const Size& rDeviceSize) const;
-    SAL_WARN_UNUSED_RESULT tools::Rectangle PixelToLogic(const tools::Rectangle& rDeviceRect) const;
-    SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE tools::Polygon PixelToLogic(const tools::Polygon& rDevicePoly) const;
-    SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE tools::PolyPolygon PixelToLogic(const tools::PolyPolygon& rDevicePolyPoly) const;
-    SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE basegfx::B2DPolyPolygon PixelToLogic(const basegfx::B2DPolyPolygon& rDevicePolyPoly) const;
-    SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE basegfx::B2DRectangle PixelToLogic(const basegfx::B2DRectangle& rDeviceRect) const;
-    SAL_WARN_UNUSED_RESULT vcl::Region PixelToLogic(const vcl::Region& rDeviceRegion) const;
-    SAL_WARN_UNUSED_RESULT Point PixelToLogic(const Point& rDevicePt, const MapMode& rMapMode) const;
-    SAL_WARN_UNUSED_RESULT Size PixelToLogic(const Size& rDeviceSize, const MapMode& rMapMode) const;
-    SAL_WARN_UNUSED_RESULT tools::Rectangle PixelToLogic(const tools::Rectangle& rDeviceRect,
+    [[nodiscard]] Point PixelToLogic(const Point& rDevicePt) const;
+    [[nodiscard]] Size PixelToLogic(const Size& rDeviceSize) const;
+    [[nodiscard]] tools::Rectangle PixelToLogic(const tools::Rectangle& rDeviceRect) const;
+    [[nodiscard]] SAL_DLLPRIVATE tools::Polygon PixelToLogic(const tools::Polygon& rDevicePoly) const;
+    [[nodiscard]] SAL_DLLPRIVATE tools::PolyPolygon PixelToLogic(const tools::PolyPolygon& rDevicePolyPoly) const;
+    [[nodiscard]] SAL_DLLPRIVATE basegfx::B2DPolyPolygon PixelToLogic(const basegfx::B2DPolyPolygon& rDevicePolyPoly) const;
+    [[nodiscard]] SAL_DLLPRIVATE basegfx::B2DRectangle PixelToLogic(const basegfx::B2DRectangle& rDeviceRect) const;
+    [[nodiscard]] vcl::Region PixelToLogic(const vcl::Region& rDeviceRegion) const;
+    [[nodiscard]] Point PixelToLogic(const Point& rDevicePt, const MapMode& rMapMode) const;
+    [[nodiscard]] Size PixelToLogic(const Size& rDeviceSize, const MapMode& rMapMode) const;
+    [[nodiscard]] tools::Rectangle PixelToLogic(const tools::Rectangle& rDeviceRect,
                                                          const MapMode& rMapMode) const;
-    SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE tools::Polygon PixelToLogic(const tools::Polygon& rDevicePoly,
+    [[nodiscard]] SAL_DLLPRIVATE tools::Polygon PixelToLogic(const tools::Polygon& rDevicePoly,
                                                        const MapMode& rMapMode) const;
-    SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE basegfx::B2DPolygon PixelToLogic(const basegfx::B2DPolygon& rDevicePoly,
+    [[nodiscard]] SAL_DLLPRIVATE basegfx::B2DPolygon PixelToLogic(const basegfx::B2DPolygon& rDevicePoly,
                                                             const MapMode& rMapMode) const;
-    SAL_WARN_UNUSED_RESULT SAL_DLLPRIVATE basegfx::B2DPolyPolygon PixelToLogic(const basegfx::B2DPolyPolygon& rDevicePolyPoly,
+    [[nodiscard]] SAL_DLLPRIVATE basegfx::B2DPolyPolygon PixelToLogic(const basegfx::B2DPolyPolygon& rDevicePolyPoly,
                                                                 const MapMode& rMapMode) const;
 
-    SAL_WARN_UNUSED_RESULT Point LogicToLogic(const Point& rPtSource,
+    [[nodiscard]] Point LogicToLogic(const Point& rPtSource,
                                               const MapMode* pMapModeSource,
                                               const MapMode* pMapModeDest) const;
-    SAL_WARN_UNUSED_RESULT Size LogicToLogic(const Size& rSzSource,
+    [[nodiscard]] Size LogicToLogic(const Size& rSzSource,
                                              const MapMode* pMapModeSource,
                                              const MapMode* pMapModeDest) const;
-    SAL_WARN_UNUSED_RESULT tools::Rectangle LogicToLogic(const tools::Rectangle& rRectSource,
+    [[nodiscard]] tools::Rectangle LogicToLogic(const tools::Rectangle& rRectSource,
                                                          const MapMode* pMapModeSource,
                                                          const MapMode* pMapModeDest) const;
-    SAL_WARN_UNUSED_RESULT static Point LogicToLogic(const Point& rPtSource,
+    [[nodiscard]] static Point LogicToLogic(const Point& rPtSource,
                                                      const MapMode& rMapModeSource,
                                                      const MapMode& rMapModeDest);
-    SAL_WARN_UNUSED_RESULT static Size LogicToLogic(const Size& rSzSource,
+    [[nodiscard]] static Size LogicToLogic(const Size& rSzSource,
                                                     const MapMode& rMapModeSource,
                                                     const MapMode& rMapModeDest);
-    SAL_WARN_UNUSED_RESULT static tools::Rectangle LogicToLogic(const tools::Rectangle& rRectSource,
+    [[nodiscard]] static tools::Rectangle LogicToLogic(const tools::Rectangle& rRectSource,
                                                                 const MapMode& rMapModeSource,
                                                                 const MapMode& rMapModeDest);
-    SAL_WARN_UNUSED_RESULT static tools::Long LogicToLogic(tools::Long nLongSource,
+    [[nodiscard]] static tools::Long LogicToLogic(tools::Long nLongSource,
                                                            MapUnit eUnitSource,
                                                            MapUnit eUnitDest);
 
-    SAL_WARN_UNUSED_RESULT static basegfx::B2DPolygon LogicToLogic(const basegfx::B2DPolygon& rPoly,
+    [[nodiscard]] static basegfx::B2DPolygon LogicToLogic(const basegfx::B2DPolygon& rPoly,
                                                                    const MapMode& rMapModeSource,
                                                                    const MapMode& rMapModeDest);
 
     // create a mapping transformation from rMapModeSource to rMapModeDest (the above methods
     // for B2DPoly/Polygons use this internally anyway to transform the B2DPolygon)
-    SAL_WARN_UNUSED_RESULT static basegfx::B2DHomMatrix LogicToLogic(const MapMode& rMapModeSource,
+    [[nodiscard]] static basegfx::B2DHomMatrix LogicToLogic(const MapMode& rMapModeSource,
                                                                      const MapMode& rMapModeDest);
 
     /** Convert a logical rectangle to a rectangle in physical device pixel units.

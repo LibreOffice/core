@@ -1953,7 +1953,7 @@ public:
       @param     beginIndex   the beginning index, inclusive.
       @return    the specified substring.
     */
-    SAL_WARN_UNUSED_RESULT OUString copy( sal_Int32 beginIndex ) const
+    [[nodiscard]] OUString copy( sal_Int32 beginIndex ) const
     {
         return copy(beginIndex, getLength() - beginIndex);
     }
@@ -1970,7 +1970,7 @@ public:
       @param     count        the number of characters.
       @return    the specified substring.
     */
-    SAL_WARN_UNUSED_RESULT OUString copy( sal_Int32 beginIndex, sal_Int32 count ) const
+    [[nodiscard]] OUString copy( sal_Int32 beginIndex, sal_Int32 count ) const
     {
         rtl_uString *pNew = NULL;
         rtl_uString_newFromSubString( &pNew, pData, beginIndex, count );
@@ -1987,7 +1987,7 @@ public:
       @param     beginIndex   the beginning index, inclusive.
       @return    the specified substring.
     */
-    SAL_WARN_UNUSED_RESULT std::u16string_view subView( sal_Int32 beginIndex ) const
+    [[nodiscard]] std::u16string_view subView( sal_Int32 beginIndex ) const
     {
         assert(beginIndex >= 0);
         assert(beginIndex <= getLength());
@@ -2006,7 +2006,7 @@ public:
       @param     count        the number of characters.
       @return    the specified substring.
     */
-    SAL_WARN_UNUSED_RESULT std::u16string_view subView( sal_Int32 beginIndex, sal_Int32 count ) const
+    [[nodiscard]] std::u16string_view subView( sal_Int32 beginIndex, sal_Int32 count ) const
     {
         assert(beginIndex >= 0);
         assert(count >= 0);
@@ -2028,14 +2028,14 @@ public:
       @param  newStr  the new substring.
       @return the new string.
     */
-    SAL_WARN_UNUSED_RESULT OUString replaceAt( sal_Int32 index, sal_Int32 count, const OUString& newStr ) const
+    [[nodiscard]] OUString replaceAt( sal_Int32 index, sal_Int32 count, const OUString& newStr ) const
     {
         rtl_uString* pNew = NULL;
         rtl_uString_newReplaceStrAt( &pNew, pData, index, count, newStr.pData );
         return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
-    SAL_WARN_UNUSED_RESULT OUString replaceAt( sal_Int32 index, sal_Int32 count, std::u16string_view newStr ) const
+    [[nodiscard]] OUString replaceAt( sal_Int32 index, sal_Int32 count, std::u16string_view newStr ) const
     {
         rtl_uString* pNew = NULL;
         rtl_uString_newReplaceStrAtUtf16L( &pNew, pData, index, count, newStr.data(), newStr.size() );
@@ -2043,12 +2043,12 @@ public:
     }
     // Disambiguation
     template <std::size_t N>
-    SAL_WARN_UNUSED_RESULT OUString replaceAt( sal_Int32 index, sal_Int32 count, const sal_Unicode (&newStr)[N] ) const
+    [[nodiscard]] OUString replaceAt( sal_Int32 index, sal_Int32 count, const sal_Unicode (&newStr)[N] ) const
     {
         return replaceAt(index, count, std::u16string_view(newStr, N - 1));
     }
     template <class T, std::enable_if_t<std::is_convertible_v<T, std::u16string_view>, int> = 0>
-    SAL_WARN_UNUSED_RESULT OUString replaceAt( sal_Int32 index, sal_Int32 count, const T& newStr ) const
+    [[nodiscard]] OUString replaceAt( sal_Int32 index, sal_Int32 count, const T& newStr ) const
     {
         return replaceAt(index, count, std::u16string_view(newStr));
     }
@@ -2066,7 +2066,7 @@ public:
       @return   a string derived from this string by replacing every
                 occurrence of oldChar with newChar.
     */
-    SAL_WARN_UNUSED_RESULT OUString replace( sal_Unicode oldChar, sal_Unicode newChar ) const
+    [[nodiscard]] OUString replace( sal_Unicode oldChar, sal_Unicode newChar ) const
     {
         rtl_uString* pNew = NULL;
         rtl_uString_newReplace( &pNew, pData, oldChar, newChar );
@@ -2177,7 +2177,7 @@ public:
       is null, searching always starts at index 0
     */
     template< typename T1, typename T2 >
-        SAL_WARN_UNUSED_RESULT typename libreoffice_internal::ConstCharArrayDetector< T1, typename libreoffice_internal::ConstCharArrayDetector< T2, OUString >::Type >::Type
+        [[nodiscard]] typename libreoffice_internal::ConstCharArrayDetector< T1, typename libreoffice_internal::ConstCharArrayDetector< T2, OUString >::Type >::Type
         replaceFirst( T1& from, T2& to, sal_Int32 * index = NULL) const
     {
         assert(libreoffice_internal::ConstCharArrayDetector<T1>::isValid(from));
@@ -2275,7 +2275,7 @@ public:
       @param to  ASCII string literal, the substring to be replaced
     */
     template< typename T1, typename T2 >
-    SAL_WARN_UNUSED_RESULT typename libreoffice_internal::ConstCharArrayDetector< T1, typename libreoffice_internal::ConstCharArrayDetector< T2, OUString >::Type >::Type
+    [[nodiscard]] typename libreoffice_internal::ConstCharArrayDetector< T1, typename libreoffice_internal::ConstCharArrayDetector< T2, OUString >::Type >::Type
         replaceAll( T1& from, T2& to ) const
     {
         assert(libreoffice_internal::ConstCharArrayDetector<T1>::isValid(from));
@@ -2300,7 +2300,7 @@ public:
 
       @return   the string, converted to ASCII lowercase.
     */
-    SAL_WARN_UNUSED_RESULT OUString toAsciiLowerCase() const
+    [[nodiscard]] OUString toAsciiLowerCase() const
     {
         rtl_uString* pNew = NULL;
         rtl_uString_newToAsciiLowerCase( &pNew, pData );
@@ -2317,7 +2317,7 @@ public:
 
       @return   the string, converted to ASCII uppercase.
     */
-    SAL_WARN_UNUSED_RESULT OUString toAsciiUpperCase() const
+    [[nodiscard]] OUString toAsciiUpperCase() const
     {
         rtl_uString* pNew = NULL;
         rtl_uString_newToAsciiUpperCase( &pNew, pData );
@@ -2337,7 +2337,7 @@ public:
 
       @return   the string, with white space removed from the front and end.
     */
-    SAL_WARN_UNUSED_RESULT OUString trim() const
+    [[nodiscard]] OUString trim() const
     {
         rtl_uString* pNew = NULL;
         rtl_uString_newTrim( &pNew, pData );

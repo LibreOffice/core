@@ -267,22 +267,6 @@ typedef void *                   sal_Handle;
 #    define SAL_EXCEPTION_DLLPRIVATE
 #endif
 
-/** Use this as markup for functions and methods whose return value must be
-    used.
-
-    Compilers that support a construct of this nature will emit a compile
-    time warning on unused return value.
-*/
-#if defined __cplusplus
-#define SAL_WARN_UNUSED_RESULT [[nodiscard]]
-#elif (defined __GNUC__ \
-     && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1))) \
-    || defined __clang__
-#   define SAL_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
-#else
-#   define SAL_WARN_UNUSED_RESULT
-#endif
-
 /** Use this as markup for functions and methods whose return value may be
     null and should not be dereferenced unconditionally.
 

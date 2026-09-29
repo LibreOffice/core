@@ -1009,7 +1009,7 @@ public:
         @see getPos()
     */
 
-    SAL_WARN_UNUSED_RESULT RC setPos( sal_uInt32 uHow, sal_Int64 uPos )
+    [[nodiscard]] RC setPos( sal_uInt32 uHow, sal_Int64 uPos )
     {
         return static_cast< RC >( osl_setFilePos( _pData, uHow, uPos ) );
     }

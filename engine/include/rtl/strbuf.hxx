@@ -317,7 +317,7 @@ public:
 
         @return the string previously contained in the buffer.
      */
-    SAL_WARN_UNUSED_RESULT OString makeStringAndClear()
+    [[nodiscard]] OString makeStringAndClear()
     {
         OString aRet( pData );
         rtl_string_new(&pData);

@@ -87,11 +87,11 @@ public:
 
     SystemWindow*       GetSystemWindow() const;
 
-    SAL_WARN_UNUSED_RESULT static SfxFrame* GetFirst();
-    SAL_WARN_UNUSED_RESULT static SfxFrame* GetNext( SfxFrame& );
+    [[nodiscard]] static SfxFrame* GetFirst();
+    [[nodiscard]] static SfxFrame* GetNext( SfxFrame& );
 
-    SAL_WARN_UNUSED_RESULT SfxObjectShell* GetCurrentDocument() const;
-    SAL_WARN_UNUSED_RESULT SfxViewFrame* GetCurrentViewFrame() const;
+    [[nodiscard]] SfxObjectShell* GetCurrentDocument() const;
+    [[nodiscard]] SfxViewFrame* GetCurrentViewFrame() const;
 
     bool                GetHasTitle() const;
     static void         GetDefaultTargetList( TargetList& );

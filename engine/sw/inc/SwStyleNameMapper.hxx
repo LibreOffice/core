@@ -91,13 +91,13 @@ class SwStyleNameMapper final
 
 public:
     // This gets the UI Name from the programmatic name
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     static UIName GetUIName(const ProgName& rName, SwGetPoolIdFromName);
     static         void FillUIName(const ProgName& rName, UIName& rFillName,
                             SwGetPoolIdFromName);
 
     // Get the programmatic Name from the UI name
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     static ProgName GetProgName(const UIName& rName,
                                        SwGetPoolIdFromName);
     static         void FillProgName(const UIName& rName, ProgName& rFillName,
@@ -105,23 +105,23 @@ public:
 
     // This gets the UI Name from the Pool ID
     SW_DLLPUBLIC static void FillUIName(SwPoolFormatId nId, UIName& rFillName);
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     SW_DLLPUBLIC static UIName GetUIName(SwPoolFormatId nId,
                                                   const ProgName& rName);
 
     // This gets the programmatic Name from the Pool ID
     static         void FillProgName(SwPoolFormatId nId, ProgName& rFillName);
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     SW_DLLPUBLIC static ProgName GetProgName(SwPoolFormatId nId,
                                                     const UIName& rName);
 
     // This gets the PoolId from the UI Name
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     SW_DLLPUBLIC static SwPoolFormatId GetPoolIdFromUIName(const UIName& rName,
                                                        SwGetPoolIdFromName);
 
     // Get the Pool ID from the programmatic name
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     SW_DLLPUBLIC static SwPoolFormatId GetPoolIdFromProgName(const ProgName& rName,
                                             SwGetPoolIdFromName);
 
@@ -130,10 +130,10 @@ public:
     // SwPoolFormatId::COLL_LABEL_TABLE, SwPoolFormatId::COLL_LABEL_FRAME
     // forth and back.
     // Non-matching names remain unchanged.
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     SW_DLLPUBLIC static ProgName GetSpecialExtraProgName(
                     const UIName& rExtraUIName);
-    SAL_WARN_UNUSED_RESULT
+    [[nodiscard]]
     static UIName GetSpecialExtraUIName(const ProgName& rExtraProgName);
 
     static const std::vector<OUString>& GetTextUINameArray();

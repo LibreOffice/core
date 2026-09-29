@@ -329,7 +329,7 @@ public:
 
         @return the string previously contained in the buffer.
      */
-    SAL_WARN_UNUSED_RESULT OUString makeStringAndClear()
+    [[nodiscard]] OUString makeStringAndClear()
     {
         return OUString(
                   rtl_uStringBuffer_makeStringAndClear( &pData, &nCapacity ),
@@ -1388,7 +1388,7 @@ public:
       @param     beginIndex   the beginning index, inclusive.
       @return    the specified substring.
     */
-    SAL_WARN_UNUSED_RESULT std::u16string_view subView( sal_Int32 beginIndex ) const
+    [[nodiscard]] std::u16string_view subView( sal_Int32 beginIndex ) const
     {
         assert(beginIndex >= 0);
         assert(beginIndex <= getLength());
@@ -1407,7 +1407,7 @@ public:
       @param     count        the number of characters.
       @return    the specified substring.
     */
-    SAL_WARN_UNUSED_RESULT std::u16string_view subView( sal_Int32 beginIndex, sal_Int32 count ) const
+    [[nodiscard]] std::u16string_view subView( sal_Int32 beginIndex, sal_Int32 count ) const
     {
         assert(beginIndex >= 0);
         assert(count >= 0);
