@@ -68,6 +68,7 @@ interface TabControlData {
   noCoreEvents?: boolean;
   tabControlDepth?: number;
   hasEmptyTabPage?: boolean;
+  requestedTabIndex?: number;
 }
 
 // A tabpage child is the content of one tab. The vertical flag asks us to
@@ -129,7 +130,7 @@ JSDialog.tabControlHasEmptyPage = function (widget: WidgetJSON): boolean {
 JSDialog.tabControl = function (
   parentContainer: HTMLElement,
   data: TabControlData,
-  builder: any,
+  builder: JSBuilder,
   tabTooltip: string,
 ): boolean {
   if (tabTooltip === undefined) tabTooltip = '';
@@ -197,6 +198,11 @@ JSDialog.tabControl = function (
   )
     openTabIndex = openTabIndex === 0 ? 1 : 0;
 
+  // Core dumps the dialog with the tab it held before it answered the checkbox, so a
+  // tab asked for since then is the one to open.
+  if (data.requestedTabIndex !== undefined)
+    openTabIndex = data.requestedTabIndex;
+
   function selectPage(control: any, index: number) {
     builder.callback('tabcontrol', 'selecttab', control, index, builder);
   }
@@ -258,6 +264,7 @@ JSDialog.tabControl = function (
           tabIds,
         )();
       selectedTabIdx = openIndex;
+      builder.wizard.rememberOpenTab(builder.windowId, data.id, openIndex);
       selectPage(rootContainer, openIndex);
     });
 
@@ -358,9 +365,9 @@ JSDialog.tabControl = function (
         contentDivs,
         tabIds,
       );
-      tab.addEventListener('click', function (event: Event) {
+      tab.addEventListener('click', function () {
         if (tab.getAttribute('aria-disabled') === 'true') return;
-        selectTab(event);
+        selectTab();
         if (!data.noCoreEvents)
           builder.callback(
             'tabcontrol',
@@ -381,10 +388,10 @@ JSDialog.tabControl = function (
 
   if (isMultiTabJSON) {
     for (let i = 0; i < pages.length && i < contentDivs.length; i++) {
-      builder.build(contentDivs[i], [pages[i]], false, false);
+      builder.build(contentDivs[i], [pages[i]], false);
     }
   } else if (selectedTabIdx != null && pages.length) {
-    builder.build(contentDivs[selectedTabIdx], [pages[0]], false, false);
+    builder.build(contentDivs[selectedTabIdx], [pages[0]], false);
   }
 
   return false;

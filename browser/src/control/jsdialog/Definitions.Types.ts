@@ -60,6 +60,21 @@ interface JSBuilderOptions {
 	suffix: string; // add a suffix to the element ID to make it unique among different builder instances.
 }
 
+// The component a builder belongs to: a dialog, the notebookbar or the mobile wizard.
+interface JSBuilderParent {
+	goLevelDown: (contentToShow: Element) => void;
+	setTabs: (tabs: Element, builder: JSBuilder) => void;
+	rememberOpenTab: (
+		dialogId: WindowId | number,
+		tabControlId: string,
+		index: number,
+	) => void;
+	takeOpenTab: (
+		dialogId: WindowId | number,
+		tabControlId: string,
+	) => number | undefined;
+}
+
 interface JSBuilder {
 	_currentDepth: number; // mobile-wizard only FIXME: encapsulate
 	_responses: any;
@@ -71,7 +86,7 @@ interface JSBuilder {
 	options: JSBuilderOptions; // current state
 	map: MapInterface; // reference to map
 	rendersCache: any; // on demand content cache
-	wizard: any;
+	wizard: JSBuilderParent;
 	windowId?: WindowId | number;
 
 	build: (
@@ -80,6 +95,13 @@ interface JSBuilder {
 		hasVerticalParent: boolean,
 	) => boolean;
 	updateWidget: (parentContainer: Element, updateJSON: WidgetJSON) => void;
+	_createTabClick: (
+		builder: JSBuilder,
+		tabIndex: number,
+		tabs: HTMLButtonElement[],
+		contentDivs: HTMLElement[],
+		tabIds: string[],
+	) => () => void;
 	// parentContainer may be an element, or a function returning one (or
 	// undefined) for a caller whose container can be replaced before this
 	// runs - it is applied on a deferred layouting task, not immediately.

@@ -2638,6 +2638,8 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				// build that has the pages in hand can tell whether one of them is empty.
 				if (childData.tabControlDepth === 0 && childData.children)
 					childData.hasEmptyTabPage = JSDialog.tabControlHasEmptyPage(childData);
+				if (this.wizard && this.wizard.takeOpenTab)
+					childData.requestedTabIndex = this.wizard.takeOpenTab(this.windowId, childData.id);
 				this._tabControlDepth = childData.tabControlDepth + 1;
 			}
 

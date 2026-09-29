@@ -18,6 +18,7 @@
 window.L.Control.JSDialog = window.L.Control.extend({
 	options: {},
 	dialogs: {},
+	openTabRequests: {},
 	draggingObject: null,
 
 	onAdd: function (map) {
@@ -97,6 +98,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			window.L.DomUtil.remove(dialogInfo.overlay);
 
 		delete this.dialogs[id];
+		delete this.openTabRequests[id];
 
 		return builder;
 	},
@@ -300,6 +302,19 @@ window.L.Control.JSDialog = window.L.Control.extend({
 
 	selectedTab: function() {
 		// nothing to do here
+	},
+
+	rememberOpenTab: function(dialogId, tabControlId, index) {
+		this.openTabRequests[dialogId] = { id: tabControlId, index: index };
+	},
+
+	takeOpenTab: function(dialogId, tabControlId) {
+		const request = this.openTabRequests[dialogId];
+		if (!request || request.id !== tabControlId)
+			return undefined;
+
+		delete this.openTabRequests[dialogId];
+		return request.index;
 	},
 
 	_getDefaultButtonId: function(widgets) {

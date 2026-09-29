@@ -208,7 +208,7 @@ JSDialog.rootCommentControl = function (
 				':scope .cool-annotation',
 			) as HTMLDivElement;
 			annotationContainer.onclick = function () {
-				builder.wizard.goLevelDown(mainContainer);
+				builder.wizard.goLevelDown(nonNullMainContainer);
 				nonNullChildContainer.style.display = 'block';
 				if (!nonNullChildContainer.childNodes.length)
 					builder.build(nonNullChildContainer, data.children, false);
