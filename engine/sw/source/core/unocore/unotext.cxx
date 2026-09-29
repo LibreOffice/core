@@ -1455,15 +1455,16 @@ static bool IsAtParaMatch(const SwPaM& rAnchorCheckPam, const SwFormatAnchor& rA
         return false;
     }
 
-    if (rAnchorCheckPam.Start()->GetNode() == *rAnchor.GetAnchorNode())
+    auto [pStart, pEnd] = rAnchorCheckPam.StartEnd(); // SwPosition*
+    if (pStart->GetNode() == *rAnchor.GetAnchorNode())
     {
         return true;
     }
 
-    if (rAnchorCheckPam.End()->GetNode() == *rAnchor.GetAnchorNode())
+    if (pEnd->GetNode() == *rAnchor.GetAnchorNode())
     {
-        SwTextNode* pEndTextNode = rAnchorCheckPam.End()->GetNode().GetTextNode();
-        if (pEndTextNode && rAnchorCheckPam.End()->GetContentIndex() == pEndTextNode->Len())
+        SwTextNode* pEndTextNode = pEnd->GetNode().GetTextNode();
+        if (pEndTextNode && pEnd->GetContentIndex() == pEndTextNode->Len())
         {
             // rAnchorCheckPam covers the entire last text node, rAnchor is at-para, consider this
             // as "inside pam" rather than "at the end of pam".
@@ -1637,10 +1638,11 @@ SwXText::convertToSwTextFrame(
     // If there is no content in the frame the shape is in
     // it gets deleted in the DelFullPara call below,
     // In this case insert a tmp text node ( we delete it later )
-    if (pStartPam->Start()->GetNode() == pEndPam->Start()->GetNode()
-        && pStartPam->End()->GetNode() == pEndPam->End()->GetNode())
+    auto [pStartStt, pStartEnd] = pStartPam->StartEnd(); // SwPosition*
+    auto [pEndStt, pEndEnd] = pEndPam->StartEnd(); // SwPosition*
+    if (pStartStt->GetNode() == pEndStt->GetNode() && pStartEnd->GetNode() == pEndEnd->GetNode())
     {
-        SwPosition aEnd(*pStartPam->End());
+        SwPosition aEnd(*pStartEnd);
         bParaAfterInserted = GetDoc()->getIDocumentContentOperations().AppendTextNode( aEnd );
         pEndPam->DeleteMark();
         *pEndPam->GetPoint() = aEnd;
@@ -1655,6 +1657,7 @@ SwXText::convertToSwTextFrame(
     // tdf#115094: do nothing if we have a graphic node
     o3tl::sorted_vector<const SdrObject*> aAnchoredObjectsByPtr;
     std::set<UIName> aAnchoredObjectsByName;
+    auto [pCheckStart, pCheckEnd] = oAnchorCheckPam->StartEnd(); // SwPosition*
     for (size_t i = 0; i < m_pDoc->GetSpzFrameFormats()->size(); ++i)
     {
         const SwFrameFormat* pFrameFormat = (*m_pDoc->GetSpzFrameFormats())[i];
@@ -1669,8 +1672,8 @@ SwXText::convertToSwTextFrame(
         if (!isGraphicNode(pFrameFormat)
             && (IsAtParaMatch(*oAnchorCheckPam, rAnchor)
                 || (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()
-                    && (    *oAnchorCheckPam->Start() == *rAnchor.GetContentAnchor()
-                        ||  *oAnchorCheckPam->End() == *rAnchor.GetContentAnchor()))))
+                    && (*pCheckStart == *rAnchor.GetContentAnchor()
+                        || *pCheckEnd == *rAnchor.GetContentAnchor()))))
         {
             if (pFrameFormat->GetName().isEmpty())
             {

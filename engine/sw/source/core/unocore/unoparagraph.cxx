@@ -1094,8 +1094,9 @@ SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
         {
             // for paragraph attributes the selection must be extended
             // to paragraph boundaries
-            SwPosition aStart( *aCursor.Start() );
-            SwPosition aEnd  ( *aCursor.End()   );
+            auto [pStart, pEnd] = aCursor.StartEnd(); // SwPosition*
+            SwPosition aStart(*pStart);
+            SwPosition aEnd(*pEnd);
             auto pTemp( aCursor.GetDoc().CreateUnoCursor(aStart) );
             if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
             {

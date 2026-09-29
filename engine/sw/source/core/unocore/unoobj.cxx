@@ -635,8 +635,9 @@ SwUnoCursorHelper::GetCurTextFormatColl(SwPaM & rPaM, const bool bConditional)
     SwPaM *pTmpCursor = &rPaM;
     do
     {
-        const SwNodeOffset nSttNd = pTmpCursor->Start()->GetNodeIndex();
-        const SwNodeOffset nEndNd = pTmpCursor->End()->GetNodeIndex();
+        auto [pStart, pEnd] = pTmpCursor->StartEnd(); // SwPosition*
+        const SwNodeOffset nSttNd = pStart->GetNodeIndex();
+        const SwNodeOffset nEndNd = pEnd->GetNodeIndex();
 
         if( nEndNd - nSttNd >= SwNodeOffset(nMaxLookup) )
         {
@@ -805,17 +806,20 @@ lcl_ForceIntoMeta(SwPaM & rCursor,
             *rCursor.GetPoint() = end;
             break;
         case META_CHECK_BOTH:
-            if (*rCursor.Start() < start)
+        {
+            auto [pStart, pEnd] = rCursor.StartEnd(); // SwPosition*
+            if (*pStart < start)
             {
-                *rCursor.Start() = std::move(start);
+                *pStart = std::move(start);
                 bRet = false;
             }
-            if (*rCursor.End() > end)
+            if (*pEnd > end)
             {
-                *rCursor.End() = std::move(end);
+                *pEnd = std::move(end);
                 bRet = false;
             }
             break;
+        }
     }
     return bRet;
 }
@@ -857,18 +861,21 @@ bool lcl_ForceIntoContentControl(SwPaM& rCursor, const uno::Reference<text::XTex
             break;
 
         case CONTENT_CONTROL_CHECK_BOTH:
-            if (*rCursor.Start() < aStart)
+        {
+            auto [pStart, pEnd] = rCursor.StartEnd(); // SwPosition*
+            if (*pStart < aStart)
             {
-                *rCursor.Start() = std::move(aStart);
+                *pStart = std::move(aStart);
                 bRet = false;
             }
 
-            if (*rCursor.End() > aEnd)
+            if (*pEnd > aEnd)
             {
-                *rCursor.End() = std::move(aEnd);
+                *pEnd = std::move(aEnd);
                 bRet = false;
             }
             break;
+        }
     }
 
     return bRet;
@@ -1262,22 +1269,22 @@ SwXTextCursor::gotoRangeImpl(
     if(bExpand)
     {
         // cursor should include its previous range plus the given range
-        const SwPosition aOwnLeft(*rOwnCursor.Start());
-        const SwPosition aOwnRight(*rOwnCursor.End());
-        SwPosition const& rParamLeft  = *pPam->Start();
-        SwPosition const& rParamRight = *pPam->End();
+        auto [pOwnLeft, pOwnRight] = rOwnCursor.StartEnd(); // SwPosition*
+        const SwPosition aOwnLeft(*pOwnLeft);
+        const SwPosition aOwnRight(*pOwnRight);
+        auto [pParamLeft, pParamRight] = pPam->StartEnd(); // SwPosition*
 
         // now there are four SwPositions,
         // two of them are going to be used, but which ones?
-        if (aOwnRight > rParamRight)
+        if (aOwnRight > *pParamRight)
             *rOwnCursor.GetPoint() = aOwnRight;
         else
-            *rOwnCursor.GetPoint() = rParamRight;
+            *rOwnCursor.GetPoint() = *pParamRight;
         rOwnCursor.SetMark();
-        if (aOwnLeft < rParamLeft)
+        if (aOwnLeft < *pParamLeft)
             *rOwnCursor.GetMark() = aOwnLeft;
         else
-            *rOwnCursor.GetMark() = rParamLeft;
+            *rOwnCursor.GetMark() = *pParamLeft;
     }
     else
     {
@@ -2130,8 +2137,9 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
                         o3tl::sorted_vector<sal_uInt16> const &rWhichIds )
 {
     // if we are resetting paragraph attributes, we need to select the full paragraph first
-    SwPosition aStart = *rPaM.Start();
-    SwPosition aEnd = *rPaM.End();
+    auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
+    SwPosition aStart = *pStart;
+    SwPosition aEnd = *pEnd;
     auto pTemp ( rDoc.CreateUnoCursor(aStart) );
     if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
     {
@@ -3043,8 +3051,9 @@ SwXTextCursor::sort(const cpo::uno::Sequence< beans::PropertyValue >& rDescripto
     }
     UnoActionContext aContext( &rUnoCursor.GetDoc() );
 
-    SwPosition & rStart = *rUnoCursor.Start();
-    SwPosition & rEnd   = *rUnoCursor.End();
+    auto [pStart, pEnd] = rUnoCursor.StartEnd(); // SwPosition*
+    SwPosition& rStart = *pStart;
+    SwPosition& rEnd = *pEnd;
 
     SwNodeIndex aPrevIdx( rStart.GetNode(), -1 );
     const SwNodeOffset nOffset = rEnd.GetNodeIndex() - rStart.GetNodeIndex();

@@ -321,8 +321,9 @@ void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
     SfxItemSet *pSet = &rSet;
     for(SwPaM& rCurrent : rPam.GetRingContainer())
     {
-        SwPosition const & rStart( *rCurrent.Start() );
-        SwPosition const & rEnd( *rCurrent.End() );
+        auto [pStart, pEnd] = rCurrent.StartEnd(); // SwPosition*
+        SwPosition const& rStart(*pStart);
+        SwPosition const& rEnd(*pEnd);
         const SwNodeOffset nSttNd = rStart.GetNodeIndex();
         const SwNodeOffset nEndNd = rEnd  .GetNodeIndex();
 
@@ -531,8 +532,9 @@ lcl_CursorIsInSection(
     if (pUnoCursor && pOwnStartNode)
     {
         const SwEndNode * pOwnEndNode = pOwnStartNode->EndOfSectionNode();
-        bRes = pOwnStartNode->GetIndex() <= pUnoCursor->Start()->GetNodeIndex() &&
-               pUnoCursor->End()->GetNodeIndex() <= pOwnEndNode->GetIndex();
+        auto [pStart, pEnd] = pUnoCursor->StartEnd(); // SwPosition*
+        bRes = pOwnStartNode->GetIndex() <= pStart->GetNodeIndex()
+               && pEnd->GetNodeIndex() <= pOwnEndNode->GetIndex();
     }
     return bRes;
 }
