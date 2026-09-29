@@ -72,4 +72,5 @@
 /// <reference path="./SlideLinkToolbar.test.ts" />
 /// <reference path="./ExportFormats.test.ts" />
 /// <reference path="./Tooltip.test.ts" />
+/// <reference path="./CollabNotices.test.ts" />
 // NOTE: reference new tests here ...
