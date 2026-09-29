@@ -1559,8 +1559,7 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
         nPos < m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++nPos )
     {
         const SwRangeRedline *pRange = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[nPos];
-        const SwPosition* pEnd = pRange->End();
-        const SwPosition* pStart = pRange->Start();
+        auto [pStart, pEnd] = pRange->StartEnd(); // SwPosition*
         bool bBreak = true;
         // In word the paragraph end marker is a real character, in writer it is not.
         // Here we find out if the para end marker we will emit is affected by

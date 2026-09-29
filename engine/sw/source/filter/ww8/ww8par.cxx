@@ -1426,8 +1426,9 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         SvxTextLeftMarginItem const leftMarginEntry(*static_cast<SvxTextLeftMarginItem*>(rEntry.m_pAttr.get()));
                         leftMarginNew.SetTextLeft(leftMarginEntry.GetTextLeft(), leftMarginEntry.GetPropLeft());
                     }
-                    SwNodeOffset nStart = aRegion.Start()->GetNodeIndex();
-                    SwNodeOffset nEnd   = aRegion.End()->GetNodeIndex();
+                    auto [pStart, pEnd] = aRegion.StartEnd(); // SwPosition*
+                    SwNodeOffset nStart = pStart->GetNodeIndex();
+                    SwNodeOffset nEnd = pEnd->GetNodeIndex();
                     for(; nStart <= nEnd; ++nStart)
                     {
                         SwNode* pNode = m_rDoc.GetNodes()[ nStart ];
@@ -4509,8 +4510,9 @@ void wwSectionManager::InsertSegments()
                 SwFormatPageDesc aDesc(SetSwFormatPageDesc(aIter, aStart, true));
                 if (aDesc.GetPageDesc())
                 {
-                    SwNodeOffset nStart = aSectPaM.Start()->GetNodeIndex();
-                    SwNodeOffset nEnd   = aSectPaM.End()->GetNodeIndex();
+                    auto [pStart, pEnd] = aSectPaM.StartEnd(); // SwPosition*
+                    SwNodeOffset nStart = pStart->GetNodeIndex();
+                    SwNodeOffset nEnd = pEnd->GetNodeIndex();
                     for(; nStart <= nEnd; ++nStart)
                     {
                         SwNode* pNode = mrReader.m_rDoc.GetNodes()[nStart];

@@ -191,8 +191,9 @@ public:
             return false;
         }
         SwRangeRedline const*const pRedline(m_rIDRA.GetRedlineTable()[m_nextRedline]);
-        return pRedline->Start()->GetNodeIndex() < m_rNode.GetIndex()
-            && m_rNode.GetIndex() < pRedline->End()->GetNodeIndex();
+        auto [pStart, pEnd] = pRedline->StartEnd(); // SwPosition*
+        return pStart->GetNodeIndex() < m_rNode.GetIndex()
+               && m_rNode.GetIndex() < pEnd->GetNodeIndex();
     }
 
     std::pair<sal_Int32, sal_Int32> GetNextRedlineSkip()

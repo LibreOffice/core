@@ -73,9 +73,10 @@ bool RtfExportFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& aDe
     aPam.SetMark();
     aPam.Move(fnMoveBackward, GoInDoc);
 
-    std::shared_ptr<SwUnoCursor> pCurPam(pDoc->CreateUnoCursor(*aPam.End(), false));
+    auto [pStart, pEnd] = aPam.StartEnd(); // SwPosition*
+    std::shared_ptr<SwUnoCursor> pCurPam(pDoc->CreateUnoCursor(*pEnd, false));
     pCurPam->SetMark();
-    *pCurPam->GetPoint() = *aPam.Start();
+    *pCurPam->GetPoint() = *pStart;
 
     // export the document
     // (in a separate block so that it's destructed before the commit)

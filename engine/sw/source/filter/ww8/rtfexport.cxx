@@ -1626,9 +1626,10 @@ SwRTFWriter::SwRTFWriter(std::u16string_view rFilterName, const OUString& rBaseU
 
 ErrCode SwRTFWriter::WriteStream()
 {
-    std::shared_ptr<SwUnoCursor> pCurPam(m_pDoc->CreateUnoCursor(*m_pCurrentPam->End(), false));
+    auto [pStart, pEnd] = m_pCurrentPam->StartEnd(); // SwPosition*
+    std::shared_ptr<SwUnoCursor> pCurPam(m_pDoc->CreateUnoCursor(*pEnd, false));
     pCurPam->SetMark();
-    *pCurPam->GetPoint() = *m_pCurrentPam->Start();
+    *pCurPam->GetPoint() = *pStart;
     RtfExport aExport(nullptr, *m_pDoc, pCurPam, *m_pCurrentPam, this, m_bOutOutlineOnly);
     aExport.ExportDocument(true);
     return ERRCODE_NONE;

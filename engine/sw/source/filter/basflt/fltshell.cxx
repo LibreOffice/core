@@ -149,8 +149,8 @@ bool SwFltStackEntry::MakeRegion(SwPaM& rRegion, RegionMode const eCheck,
     bool bRet = true;
     if (eCheck & RegionMode::CheckNodes)
     {
-        bRet &= CheckNodesRange(rRegion.Start()->GetNode(),
-                                rRegion.End()->GetNode(), true);
+        auto [pStart, pEnd] = rRegion.StartEnd(); // SwPosition*
+        bRet &= CheckNodesRange(pStart->GetNode(), pEnd->GetNode(), true);
     }
     if (eCheck & RegionMode::CheckFieldmark)
     {

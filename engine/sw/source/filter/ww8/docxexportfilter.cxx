@@ -107,9 +107,10 @@ bool DocxExportFilter::exportDocument()
     aPam.SetMark();
     aPam.Move( fnMoveBackward, GoInDoc );
 
-    std::shared_ptr<SwUnoCursor> pCurPam(pDoc->CreateUnoCursor(*aPam.End(), false));
+    auto [pStart, pEnd] = aPam.StartEnd(); // SwPosition*
+    std::shared_ptr<SwUnoCursor> pCurPam(pDoc->CreateUnoCursor(*pEnd, false));
     pCurPam->SetMark();
-    *pCurPam->GetPoint() = *aPam.Start();
+    *pCurPam->GetPoint() = *pStart;
 
     const uno::Reference<task::XStatusIndicator>& xStatusIndicator = getStatusIndicator();
     if ( xStatusIndicator.is() )

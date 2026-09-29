@@ -3498,10 +3498,11 @@ SwFrameFormat *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion
     RndStdIds::FLY_AS_CHAR and then we can change its anchoring to centered in the line.
     */
     SwFrameFormat *pRet=nullptr;
-    SwNodeIndex aBegin(rRegion.Start()->GetNode());
-    const sal_Int32 nBegin(rRegion.Start()->GetContentIndex());
-    SwNodeIndex aEnd(rRegion.End()->GetNode());
-    const sal_Int32 nEnd(rRegion.End()->GetContentIndex());
+    auto [pStart, pEnd] = rRegion.StartEnd(); // SwPosition*
+    SwNodeIndex aBegin(pStart->GetNode());
+    const sal_Int32 nBegin(pStart->GetContentIndex());
+    SwNodeIndex aEnd(pEnd->GetNode());
+    const sal_Int32 nEnd(pEnd->GetContentIndex());
     const SwTextNode* pTNd;
     const SwTextAttr* pTFlyAttr;
     if (
