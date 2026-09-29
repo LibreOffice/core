@@ -307,6 +307,7 @@
 /// <reference path="../src/core/Util.js" />
 /// <reference path="../src/core/TimerRegistry.ts" />
 /// <reference path="../src/control/Control.Tooltip.js" />
+/// <reference path="../src/control/Permission.js" />
 /// <reference path="../src/control/Ruler.ts" />
 /// <reference path="../src/control/VRuler.ts" />
 /// <reference path="../src/control/HRuler.ts" />

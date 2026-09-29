@@ -161,7 +161,11 @@ globalThis.document = globalThis.window.document;
 	},
 	LOUtil: {},
 	Map: {
-		include(input: any) {},
+		// The objects passed to include, in the order they were passed.
+		included: [] as any[],
+		include(input: any) {
+			(globalThis as any).L.Map.included.push(input);
+		},
 		mergeOptions(input: any) {},
 		addInitHook(i1: any, i2: any, i3: any) {},
 	},
