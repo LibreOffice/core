@@ -716,8 +716,9 @@ static SwStartNode const* FindTextStart(SwPosition const& rPos)
 static SwStartNode const* FindParentText(SwShellCursor const& rCursor)
 {
     // find closest section containing both start and end - ignore Sections
-    SwStartNode const* pStartNode(FindTextStart(*rCursor.Start()));
-    SwEndNode const* pEndNode(FindTextStart(*rCursor.End())->EndOfSectionNode());
+    auto [pStart, pEnd] = rCursor.StartEnd(); // SwPosition*
+    SwStartNode const* pStartNode(FindTextStart(*pStart));
+    SwEndNode const* pEndNode(FindTextStart(*pEnd)->EndOfSectionNode());
     while (pStartNode->EndOfSectionNode()->GetIndex() < pEndNode->GetIndex())
     {
         pStartNode = pStartNode->StartOfSectionNode();
@@ -863,7 +864,8 @@ SwCursorShell::ExtendedSelection SwCursorShell::ExtendedSelectedAll() const
 
     SwPosition aStart(*pStart, 0);
     SwPosition aEnd(*pEnd, pEnd->Len());
-    if (!(aStart == *pShellCursor->Start() && aEnd == *pShellCursor->End()))
+    if (auto [pCursorStart, pCursorEnd] = pShellCursor->StartEnd();
+        !(aStart == *pCursorStart && aEnd == *pCursorEnd))
     {
         return {};
     }
@@ -916,8 +918,9 @@ typename SwCursorShell::StartsWith SwCursorShell::StartsWith_()
     // b) a selection that is extended
     // c) a selection that is invalid and will cause FindParentText to loop
     SwNode const& rEndOfExtras(GetDoc()->GetNodes().GetEndOfExtras());
-    if (pShellCursor->Start()->nNode.GetIndex() <= rEndOfExtras.GetIndex()
-        && rEndOfExtras.GetIndex() < pShellCursor->End()->nNode.GetIndex())
+    if (auto [pStart, pEnd] = pShellCursor->StartEnd();
+        pStart->nNode.GetIndex() <= rEndOfExtras.GetIndex()
+        && rEndOfExtras.GetIndex() < pEnd->nNode.GetIndex())
     {
         return StartsWith::None; // *very* extended, no ExtendedSelectedAll handling!
     }
@@ -1317,8 +1320,11 @@ bool SwCursorShell::TestCurrPam(
     SwShellCursor* pCmp = m_pCurrentCursor; // keep the pointer on cursor
     do
     {
-        if (pCmp->HasMark() && *pCmp->Start() <= aPtPos && *pCmp->End() > aPtPos)
-            return true;               // return without update
+        if (pCmp->HasMark())
+        {
+            if (auto [pStart, pEnd] = pCmp->StartEnd(); *pStart <= aPtPos && *pEnd > aPtPos)
+                return true; // return without update
+        }
         pCmp = pCmp->GetNext();
     } while (m_pCurrentCursor != pCmp);
     return false;
@@ -3121,9 +3127,9 @@ OUString SwCursorShell::GetSelText() const
         SwTextNode* pTextNd = m_pCurrentCursor->GetPointNode().GetTextNode();
         if( pTextNd )
         {
-            const sal_Int32 nStt = m_pCurrentCursor->Start()->GetContentIndex();
-            aText = pTextNd->GetExpandText(GetLayout(), nStt,
-                    m_pCurrentCursor->End()->GetContentIndex() - nStt );
+            auto [pStart, pEnd] = m_pCurrentCursor->StartEnd(); // SwPosition*
+            const sal_Int32 nStt = pStart->GetContentIndex();
+            aText = pTextNd->GetExpandText(GetLayout(), nStt, pEnd->GetContentIndex() - nStt);
         }
     }
     return aText;
@@ -3714,8 +3720,8 @@ bool SwCursorShell::ShouldWait() const
         return true;
 
     SwPaM* pPam = GetCursor();
-    return pPam->Start()->GetNodeIndex() + SwNodeOffset(10) <
-            pPam->End()->GetNodeIndex();
+    auto [pStart, pEnd] = pPam->StartEnd(); // SwPosition*
+    return pStart->GetNodeIndex() + SwNodeOffset(10) < pEnd->GetNodeIndex();
 }
 
 size_t SwCursorShell::UpdateTableSelBoxes()

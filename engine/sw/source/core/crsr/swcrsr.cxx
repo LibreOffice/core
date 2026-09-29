@@ -798,8 +798,9 @@ static sal_Int32 lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
         // if the search area is valid
         SwPosition *pSttPos = aRegion.GetMark(),
                         *pEndPos = aRegion.GetPoint();
-        *pSttPos = *pTmpCursor->Start();
-        *pEndPos = *pTmpCursor->End();
+        auto [pTmpStart, pTmpEnd] = pTmpCursor->StartEnd(); // SwPosition*
+        *pSttPos = *pTmpStart;
+        *pEndPos = *pTmpEnd;
         if( bSrchBkwrd )
             aRegion.Exchange();
 

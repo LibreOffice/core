@@ -1060,9 +1060,9 @@ SwTextField* SwCursorShell::GetTextFieldAtCursor(
     const SwPaM* pCursor,
     ::sw::GetTextAttrMode const eMode)
 {
-    SwTextField* pTextField = GetTextFieldAtPos(pCursor->Start(), eMode);
-    if ( !pTextField
-        || pCursor->Start()->GetNode() != pCursor->End()->GetNode() )
+    auto [pStart, pEnd] = pCursor->StartEnd(); // SwPosition*
+    SwTextField* pTextField = GetTextFieldAtPos(pStart, eMode);
+    if (!pTextField || pStart->GetNode() != pEnd->GetNode())
         return nullptr;
 
     SwTextField* pFieldAtCursor = nullptr;
@@ -1070,7 +1070,7 @@ SwTextField* SwCursorShell::GetTextFieldAtCursor(
         pTextField->End() != nullptr
         ? *(pTextField->End()) - pTextField->GetStart()
         : 1;
-    if ( ( pCursor->End()->GetContentIndex() - pCursor->Start()->GetContentIndex() ) <= nTextFieldLength )
+    if ((pEnd->GetContentIndex() - pStart->GetContentIndex()) <= nTextFieldLength)
     {
         pFieldAtCursor = pTextField;
     }

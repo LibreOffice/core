@@ -425,8 +425,9 @@ static SwRect lcl_getLayoutRect(const Point& rPoint, const SwPosition& rPosition
 void SwShellCursor::FillStartEnd(SwRect& rStart, SwRect& rEnd) const
 {
     const SwShellCursor* pCursor = GetShell()->getShellCursor(false);
-    rStart = lcl_getLayoutRect(pCursor->GetSttPos(), *pCursor->Start());
-    rEnd = lcl_getLayoutRect(pCursor->GetEndPos(), *pCursor->End());
+    auto [pStart, pEnd] = pCursor->StartEnd(); // SwPosition*
+    rStart = lcl_getLayoutRect(pCursor->GetSttPos(), *pStart);
+    rEnd = lcl_getLayoutRect(pCursor->GetEndPos(), *pEnd);
 }
 
 void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)

@@ -747,7 +747,8 @@ OUString SwCursorShell::GetBoxNms() const
 
     if( IsTableMode() )
     {
-        SwContentNode *pCNd = m_pTableCursor->Start()->GetNode().GetContentNode();
+        auto [pStart, pEnd] = m_pTableCursor->StartEnd(); // SwPosition*
+        SwContentNode* pCNd = pStart->GetNode().GetContentNode();
         pFrame = pCNd ? pCNd->getLayoutFrame( GetLayout() ) : nullptr;
         if( !pFrame )
             return sNm;
@@ -762,7 +763,7 @@ OUString SwCursorShell::GetBoxNms() const
             return sNm;
 
         sNm = static_cast<SwCellFrame*>(pFrame)->GetTabBox()->GetName() + ":";
-        pPos = m_pTableCursor->End();
+        pPos = pEnd;
     }
     else
     {

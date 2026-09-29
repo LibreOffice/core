@@ -1116,20 +1116,21 @@ bool ReplaceImpl(
         while (tmp < rIDRA.GetRedlineTable().size())
         {
             SwRangeRedline const*const pRedline(rIDRA.GetRedlineTable()[tmp]);
-            if (*rCursor.End() <= *pRedline->Start())
+            auto [pRedlineStart, pRedlineEnd] = pRedline->StartEnd(); // SwPosition*
+            if (*rCursor.End() <= *pRedlineStart)
             {
                 break;
             }
-            if (*pRedline->End() <= *rCursor.Start())
+            if (*pRedlineEnd <= *rCursor.Start())
             {
                 ++tmp;
                 continue;
             }
             if (pRedline->GetType() == RedlineType::Delete)
             {
-                assert(*pRedline->Start() != *pRedline->End());
+                assert(*pRedlineStart != *pRedlineEnd);
                 // search in hidden layout can't overlap redlines
-                assert(*rCursor.Start() <= *pRedline->Start() && *pRedline->End() <= *rCursor.End());
+                assert(*rCursor.Start() <= *pRedlineStart && *pRedlineEnd <= *rCursor.End());
                 SwPaM pam(*pRedline, nullptr);
                 bReplaced &= rIDCO.DeleteAndJoin(pam);
             }
@@ -1160,26 +1161,28 @@ bool ReplaceImpl(
         {
             // determine the value of oFoundStringIsAllDeletedContent
             SwRedlineTable::size_type tmp;
-            rIDRA.GetRedline(*rCursor.Start(), &tmp);
-            SwPosition aLastPosition = *rCursor.Start();
+            auto [pCursorStart, pCursorEnd] = rCursor.StartEnd(); // SwPosition*
+            rIDRA.GetRedline(*pCursorStart, &tmp);
+            SwPosition aLastPosition = *pCursorStart;
             while (tmp < rIDRA.GetRedlineTable().size())
             {
                 const SwRangeRedline& rRedline(*rIDRA.GetRedlineTable()[tmp]);
+                auto [pRedlineStart, pRedlineEnd] = rRedline.StartEnd(); // SwPosition*
                 ++tmp;
-                if (*rCursor.End() <= *rRedline.Start())
+                if (*pCursorEnd <= *pRedlineStart)
                     break;
-                if (*rRedline.End() <= aLastPosition || rRedline.GetType() != RedlineType::Delete)
+                if (*pRedlineEnd <= aLastPosition || rRedline.GetType() != RedlineType::Delete)
                     continue;
 
-                if (*rRedline.Start() > aLastPosition)
+                if (*pRedlineStart > aLastPosition)
                 {
                     oFoundStringIsAllDeletedContent = false;
                     break;
                 }
                 oFoundStringIsAllDeletedContent = true;
-                aLastPosition = *rRedline.End();
+                aLastPosition = *pRedlineEnd;
             }
-            if (oFoundStringIsAllDeletedContent.has_value() && aLastPosition < *rCursor.End())
+            if (oFoundStringIsAllDeletedContent.has_value() && aLastPosition < *pCursorEnd)
                 oFoundStringIsAllDeletedContent = false;
 
             // Is the 'found string' a mixture of deleted and non-deleted text?
@@ -1255,15 +1258,16 @@ std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rS
             {
                 AmbiguousIndex nStart;
                 AmbiguousIndex nEnd;
+                auto [pStart, pEnd] = pPam->StartEnd(); // SwPosition*
                 if (pLayout)
                 {
-                    nStart.SetFrameIndex(pFrame->MapModelToViewPos(*pPam->Start()));
-                    nEnd.SetFrameIndex(pFrame->MapModelToViewPos(*pPam->End()));
+                    nStart.SetFrameIndex(pFrame->MapModelToViewPos(*pStart));
+                    nEnd.SetFrameIndex(pFrame->MapModelToViewPos(*pEnd));
                 }
                 else
                 {
-                    nStart.SetModelIndex(pPam->Start()->GetContentIndex());
-                    nEnd.SetModelIndex(pPam->End()->GetContentIndex());
+                    nStart.SetModelIndex(pStart->GetContentIndex());
+                    nEnd.SetModelIndex(pEnd->GetContentIndex());
                 }
                 std::vector<AmbiguousIndex> aFltArr;
                 OUString const aStr = lcl_CleanStr(*pTextNode->GetTextNode(), pFrame, pLayout,

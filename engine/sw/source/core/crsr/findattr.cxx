@@ -1129,8 +1129,9 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
             sw::MergedPara const*const pMergedPara(pFrame ? pFrame->GetMergedPara() : nullptr);
             if (pMergedPara)
             {
-                SwPosition const& rStart(*oPam->Start());
-                SwPosition const& rEnd(*oPam->End());
+                auto [pStart, pEnd] = oPam->StartEnd(); // SwPosition*
+                SwPosition const& rStart(*pStart);
+                SwPosition const& rEnd(*pEnd);
                 // no extents? fall back to searching index 0 of propsnode
                 // to find its node items
                 if (pMergedPara->extents.empty())
