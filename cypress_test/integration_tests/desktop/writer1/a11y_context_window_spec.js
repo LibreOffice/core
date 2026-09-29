@@ -258,4 +258,85 @@ describe(['tagdesktop'], 'Writer off-screen context', { testIsolation: false }, 
 			expect($span.text(), 'the text landed at the caret offset').to.equal(expected);
 		});
 	});
+
+	function refillContext() {
+		helper.typeIntoDocument('{uparrow}{downarrow}');
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+	}
+
+	function contextFocusable(region) {
+		return a11yHelper.getAXNodesWithin(region).then(function (nodes) {
+			const paragraphs = nodes.filter(function (node) {
+				return !node.ignored && node.role === 'paragraph';
+			});
+			expect(paragraphs, 'paragraphs of ' + region).to.not.be.empty;
+			return paragraphs.map(function (node) {
+				return node.properties.focusable === true;
+			});
+		});
+	}
+
+	// Readers on Windows focus the object under their cursor on leaving browse mode; Orca
+	// focuses every focusable object it reads.
+	it('the context is focusable only on Windows', function () {
+		let platform;
+		cy.then(function () {
+			platform = win.L.Browser.win;
+		});
+
+		[false, true].forEach(function (onWindows) {
+			cy.then(function () {
+				win.L.Browser.win = onWindows;
+			});
+			refillContext();
+			['#a11y-context-before', '#a11y-context-after'].forEach(function (region) {
+				cy.then(function () {
+					return contextFocusable(region).then(function (focusable) {
+						focusable.forEach(function (one, index) {
+							expect(one, region + ' paragraph ' + index + ' focusable, on Windows: '
+								+ onWindows).to.equal(onWindows);
+						});
+					});
+				});
+			});
+		});
+
+		cy.then(function () {
+			win.L.Browser.win = platform;
+		});
+	});
+
+	['#a11y-context-before', '#a11y-context-after'].forEach(function (region) {
+		it('focusing a paragraph of ' + region + ' puts the caret on it', function () {
+			let platform;
+			let target;
+
+			cy.then(function () {
+				platform = win.L.Browser.win;
+				win.L.Browser.win = true;
+			});
+			refillContext();
+
+			cy.cGet(region + ' > span').first().then(function ($paragraph) {
+				target = $paragraph.text();
+				expect(editableText(), 'the caret starts elsewhere').to.not.equal(target);
+				$paragraph[0].focus();
+			});
+			cy.then(function () {
+				return helper.processToIdle(win);
+			});
+
+			cy.then(function () {
+				win.L.Browser.win = platform;
+				expect(editableText(), 'the editable holds the focused paragraph').to.equal(target);
+				return a11yHelper.getFocusedAXNode().then(function (node) {
+					expect(node, 'something holds the focus').to.not.equal(null);
+					expect(node.properties.editable, 'the focus is back in the editable')
+						.to.not.equal(undefined);
+				});
+			});
+		});
+	});
 });
