@@ -355,20 +355,29 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		if (!this._contextBefore)
 			return;
 
+		// The spans are reused: a reader whose position is on one that goes away looks for
+		// another nearby and leaves focus mode.
 		const fillContextRegion = function (region, paragraphs, rects) {
-			region.replaceChildren();
-			if (!Array.isArray(paragraphs))
-				return;
-			paragraphs.forEach(function (text, index) {
-				const span = document.createElement('span');
-				span.setAttribute('role', 'paragraph');
-				span.textContent = text;
+			const texts = Array.isArray(paragraphs) ? paragraphs : [];
+			while (region.children.length > texts.length)
+				region.lastElementChild.remove();
+			texts.forEach(function (text, index) {
+				let span = region.children[index];
+				if (!span) {
+					span = document.createElement('span');
+					span.setAttribute('role', 'paragraph');
+					region.appendChild(span);
+				}
+				if (span.textContent !== text)
+					span.textContent = text;
 				// NVDA and JAWS focus it on leaving browse mode; Orca would focus every one it reads.
 				if (window.L.Browser.win && Array.isArray(rects) && typeof rects[index] === 'string') {
 					span.tabIndex = -1;
 					span.dataset.twips = rects[index];
+				} else {
+					span.removeAttribute('tabindex');
+					delete span.dataset.twips;
 				}
-				region.appendChild(span);
 			});
 		};
 
