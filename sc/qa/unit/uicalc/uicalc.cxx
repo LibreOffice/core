@@ -2301,6 +2301,32 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138710)
     CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, pDoc->GetString(ScAddress(0, 0, 1)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf173608_relative_references_when_copying_sheets)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    insertStringToCell(u"A1"_ustr, u"1");
+    insertStringToCell(u"A2"_ustr, u"2");
+
+    insertNewSheet(*pDoc);
+
+    insertStringToCell(u"A1"_ustr, u"=$Sheet1.A1+1");
+    insertStringToCell(u"A2"_ustr, u"=Sheet1.A2+1");
+
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, pDoc->GetString(ScAddress(0, 0, 1)));
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, pDoc->GetString(ScAddress(0, 1, 1)));
+
+    dispatchCommand(mxComponent, u".uno:DuplicateSheet"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(3), pDoc->GetTableCount());
+
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, pDoc->GetString(ScAddress(0, 0, 2)));
+    // Without the fix in place, this test would have failed with
+    // - Expected: 4
+    // - Actual  : 3
+    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, pDoc->GetString(ScAddress(0, 1, 2)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf128914)
 {
     createScDoc("tdf128914.ods");
