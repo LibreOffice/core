@@ -1,0 +1,27 @@
+From 80a589cc94dd3c67d7cbf978ca4c4328b84eb856 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Tue, 29 Sep 2026 15:41:04 +0000
+Subject: [PATCH] read textdb.allow_full_path only as a Java system property
+
+HSQLDB 2.x reads it that way since 2.1.0, see svn r3769
+https://github.com/ryenus/hsqldb/commit/909e46eb5aea11a38aad3d1f57f5a656eba8132e
+---
+ src/org/hsqldb/persist/Log.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/org/hsqldb/persist/Log.java b/src/org/hsqldb/persist/Log.java
+index 284d9f4..18c698b 100644
+--- a/src/org/hsqldb/persist/Log.java
++++ b/src/org/hsqldb/persist/Log.java
+@@ -763,7 +763,7 @@ public class Log {
+ 
+         closeTextCache(table);
+ 
+-        if (!properties.isPropertyTrue(
++        if (!Boolean.getBoolean(
+                 HsqlDatabaseProperties.textdb_allow_full_path)) {
+             if (source.indexOf("..") != -1) {
+                 throw (Trace.error(Trace.ACCESS_IS_DENIED, source));
+-- 
+2.55.0
+
