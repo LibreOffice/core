@@ -2084,26 +2084,20 @@ private:
     /// All session of this DocBroker by ID.
     SessionMap<ClientSession> _sessions;
 
-#if !MOBILEAPP && !WASMAPP
     ServerAuditUtil _serverAudit;
-#endif
 
     // Maps download id -> URL
     std::map<std::string, std::string> _registeredDownloadLinks;
 
-#if !MOBILEAPP
     /// The remote links this document may subscribe to, with their
     /// subscriptions and the client-facing view of them.
     RemoteLinks _remoteLinks;
-#endif
 
     /// Embedded media map [id, json].
     std::map<std::string, std::string> _embeddedMedia;
 
-#if !MOBILEAPP
     /// stores timestamps of preset files when they get installed to compare later to check if they are modified
     std::map<std::string, std::chrono::file_clock::time_point> _presetTimestamp;
-#endif
 
     /// If we set the user-requested initial (on load) settings to be forced.
     std::set<std::string> _isInitialStateSet;
@@ -2143,7 +2137,6 @@ private:
 
     std::shared_ptr<ChildProcess> _childProcess;
 
-#if !MOBILEAPP
     /// The current CheckFileInfo request, if any.
     std::shared_ptr<CheckFileInfo> _checkFileInfo;
 
@@ -2173,7 +2166,6 @@ private:
     /// The view that changed the security label last, or null when it has closed.
     std::weak_ptr<ClientSession> _labelSession;
     std::shared_ptr<PresetsInstallTask> _asyncInstallTask;
-#endif
 
     std::shared_ptr<DocumentBrokerPoll> _poll;
 
@@ -2212,10 +2204,6 @@ private:
     Util::UnorderedStringMap<PendingSlideRender> _pendingSlideRenders;
 
     std::unique_ptr<LockContext> _lockCtx;
-
-#if !MOBILEAPP
-    Admin& _admin;
-#endif
 
     std::chrono::steady_clock::time_point _lastNotifiedActivityTime;
 

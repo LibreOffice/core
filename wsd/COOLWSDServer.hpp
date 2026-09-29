@@ -49,10 +49,6 @@ private:
     /// This thread & poll accepts incoming connections.
     AcceptPoll _acceptPoll;
 
-#if !MOBILEAPP
-    Admin& _admin;
-#endif
-
     /// Create the internal only, local socket for forkit / kits prisoners to talk to.
     std::shared_ptr<ServerSocket> findPrisonerServerPort();
 

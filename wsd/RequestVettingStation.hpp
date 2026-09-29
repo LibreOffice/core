@@ -111,9 +111,10 @@ private:
     void launchInstallPresets();
 
     void checkFileInfo(const Poco::URI& uri, int redirectionLimit);
+#endif // !MOBILEAPP
+
     std::shared_ptr<CheckFileInfo> _checkFileInfo;
     std::shared_ptr<PresetsInstallTask> _asyncInstallTask;
-#endif // !MOBILEAPP
 
     RequestDetails _requestDetails;
     std::string _id;

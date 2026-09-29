@@ -277,9 +277,6 @@ DocumentBroker::DocumentBroker(ChildType type, const std::string& uri, const Poc
           std::make_shared<DocumentBrokerPoll>("doc" SHARED_DOC_THREADNAME_SUFFIX + _docId, *this))
     , _slideLayerCache(25)
     , _lockCtx(std::make_unique<LockContext>())
-#if !MOBILEAPP
-    , _admin(Admin::instance())
-#endif
     , _createTime(std::chrono::steady_clock::now())
     , _loadDuration(0)
     , _wopiDownloadDuration(0)
@@ -694,7 +691,7 @@ void DocumentBroker::pollThread()
             LOG_TRC("Doc [" << _docKey << "] added stats sent: +" << deltaSent << ", recv: +" << deltaRecv << " bytes to totals.");
 
             // send change since last notification.
-            _admin.addBytes(getDocKey(), deltaSent, deltaRecv);
+            Admin::instance().addBytes(getDocKey(), deltaSent, deltaRecv);
         }
 
         if (_storage && !_lockStateUpdateRequest && _lockCtx->needsRefresh(now))
@@ -1221,7 +1218,7 @@ DocumentBroker::~DocumentBroker()
 
 #if !MOBILEAPP
     // Remove from the admin last, to avoid racing the next test.
-    _admin.rmDoc(_docKey);
+    Admin::instance().rmDoc(_docKey);
 #endif
 
     UNITWSD_CALL_INSTANCE(_unitWsd, DocBrokerDestroy(_docKey));
@@ -3996,7 +3993,7 @@ void DocumentBroker::handleUploadToStorageSuccessful(const StorageBase::UploadRe
 #if !MOBILEAPP
     WopiStorage* wopiStorage = dynamic_cast<WopiStorage*>(_storage.get());
     if (wopiStorage != nullptr)
-        _admin.setDocWopiUploadDuration(_docKey, wopiStorage->getWopiSaveDuration());
+        Admin::instance().setDocWopiUploadDuration(_docKey, wopiStorage->getWopiSaveDuration());
 #endif
 
     if (!_uploadRequest->isSaveAs() && !_uploadRequest->isRename())
@@ -4203,9 +4200,9 @@ void DocumentBroker::handleUploadToStorageResponse(const StorageBase::UploadResu
         // But only when isModified() == false because it might happen
         // by the time we finish uploading there is further modification
         // to the document.
-        _admin.uploadedAlert(_docKey, getPid(), lastUploadSuccessful);
+        Admin::instance().uploadedAlert(_docKey, getPid(), lastUploadSuccessful);
     }
-    _admin.getModel().sendMigrateMsgAfterSave(lastUploadSuccessful, _docKey);
+    Admin::instance().getModel().sendMigrateMsgAfterSave(lastUploadSuccessful, _docKey);
 #endif
 
     if (uploadResult.getResult() == StorageBase::UploadResult::Result::OK)
@@ -5167,9 +5164,10 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         const Poco::URI& uri = _storage->getUri();
         // Create uri without query parameters
         const std::string wopiSrc(uri.getScheme() + "://" + uri.getAuthority() + uri.getPath());
-        _admin.addDoc(_docKey, getPid(), getFilename(), id, session->getUserName(),
-                      session->getUserId(), _childProcess->getSMapsFp(), wopiSrc, session->isReadOnly());
-        _admin.setDocWopiDownloadDuration(_docKey, _wopiDownloadDuration);
+        Admin::instance().addDoc(_docKey, getPid(), getFilename(), id, session->getUserName(),
+                                 session->getUserId(), _childProcess->getSMapsFp(), wopiSrc,
+                                 session->isReadOnly());
+        Admin::instance().setDocWopiDownloadDuration(_docKey, _wopiDownloadDuration);
 #endif
 
         // Add and attach the session.
@@ -5545,7 +5543,7 @@ void DocumentBroker::disconnectSessionInternal(const std::shared_ptr<ClientSessi
     try
     {
 #if !MOBILEAPP
-        _admin.rmDoc(_docKey, id);
+        Admin::instance().rmDoc(_docKey, id);
         COOLWSD::dumpEndSessionTrace(getJailId(), id, _uriOrig);
         // Drop the tokens and subscriptions this view held for remote links.
         removeRemoteDocumentView(id);
@@ -5796,7 +5794,7 @@ std::shared_ptr<ClientSession> DocumentBroker::createNewClientSession(
 #if !MOBILEAPP
         // fold this document's audit into the admin console's instance view
         if (!_serverAudit.isDisabled())
-            _admin.mergeServerAudit(_serverAudit.getEntries());
+            Admin::instance().mergeServerAudit(_serverAudit.getEntries());
 
 #endif
 
@@ -7299,10 +7297,10 @@ void DocumentBroker::setModified(const bool value)
 {
 #if !MOBILEAPP
     // Flag the document as modified in the admin console.
-    _admin.modificationAlert(_docKey, getPid(), value);
+    Admin::instance().modificationAlert(_docKey, getPid(), value);
 
     // Flag the document as uploaded in the admin console.
-    _admin.uploadedAlert(
+    Admin::instance().uploadedAlert(
         _docKey, getPid(), !isAsyncUploading() && needToUploadToStorage() == NeedToUpload::No);
 #endif
 
@@ -7705,7 +7703,7 @@ void DocumentBroker::processBatchUpdates()
 #if !MOBILEAPP
     if ((_lastActivityTime - _lastNotifiedActivityTime) > 250ms)
     {
-        _admin.updateLastActivityTime(_docKey);
+        Admin::instance().updateLastActivityTime(_docKey);
         _lastNotifiedActivityTime = _lastActivityTime;
     }
 #endif

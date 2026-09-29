@@ -20,16 +20,6 @@
 
 #include <wsd/Process.hpp>
 
-ServerAuditUtil::ServerAuditUtil()
-    : _disabled(false)
-{
-    set("is_admin", "ok");
-    set("certwarning", "ok");
-    set("hardwarewarning", "ok");
-    set("wsurl", "ok");
-    set("wopihost", "ok");
-}
-
 std::string ServerAuditUtil::getResultsJSON() const
 {
     std::lock_guard<std::mutex> lock(_mutex);

@@ -30,13 +30,17 @@ class ServerAuditUtil
     mutable std::mutex _mutex;
 
     // <code, status>
-    std::map<std::string, std::string> _entries;
+    std::map<std::string, std::string> _entries = {
+        { "is_admin", "ok" },
+        { "certwarning", "ok" },
+        { "hardwarewarning", "ok" },
+        { "wsurl", "ok" },
+        { "wopihost", "ok" },
+    };
 
-    bool _disabled;
+    bool _disabled = false;
 
 public:
-    ServerAuditUtil();
-
     std::string getResultsJSON() const;
 
     /// A copy of the current code-to-status entries.

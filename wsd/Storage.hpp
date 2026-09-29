@@ -614,12 +614,10 @@ class LocalStorage final : public StorageBase
 {
 public:
     LocalStorage(const Poco::URI& uri, const std::string& localStorePath,
-                 const std::string& jailPath, [[maybe_unused]] bool isTemporaryFile,
+                 const std::string& jailPath, bool isTemporaryFile,
                  const AdditionalFilePocoUris& additionalFileUrisPublic = {})
         : StorageBase(uri, localStorePath, jailPath, additionalFileUrisPublic)
-#if !MOBILEAPP
         , _isTemporaryFile(isTemporaryFile)
-#endif
         , _isCopy(false)
     {
         LOG_INF("LocalStorage ctor with localStorePath: ["
@@ -681,11 +679,9 @@ public:
                                   const AsyncUploadCallback& asyncUploadCallback) override;
 
 private:
-#if !MOBILEAPP
     /// True if we the source file a temporary that we own.
     /// Typically for convert-to requests.
-    const bool _isTemporaryFile;
-#endif
+    [[maybe_unused]] const bool _isTemporaryFile;
     /// True if the jailed file is not linked but copied.
     bool _isCopy;
     static std::atomic<unsigned> LastLocalStorageId;

@@ -29,6 +29,8 @@
 #include <memory>
 #include <string>
 
+class WopiProxy;
+
 /// Find the DocumentBroker for the given docKey, if one exists.
 /// Otherwise, creates and adds a new one to DocBrokers.
 /// May return null if terminating or MaxDocuments limit is reached.
@@ -213,10 +215,10 @@ private:
     // Used for StreamSocket::parseHeader, net::Defaults::HTTPTimeout acting as max delay
     std::chrono::steady_clock::time_point _lastSeenHTTPHeader;
 
-#if !MOBILEAPP
     /// WASM document request handler. Used only when WASM is enabled.
-    std::unique_ptr<WopiProxy> _wopiProxy;
-#endif // !MOBILEAPP
+    /// WopiProxy is an incomplete type in the mobile build, and a shared_ptr to it can still be
+    /// destroyed there.
+    std::shared_ptr<WopiProxy> _wopiProxy;
 
     /// The private RequestVettingStation. Held privately after the
     /// WS is created and as long as it is connected.
@@ -225,9 +227,7 @@ private:
     /// scratch dir that POSTs are streamed to
     std::unique_ptr<FileUtil::OwnedFile> _postFileDir;
     std::fstream _postStream;
-#if !MOBILEAPP
-    std::streamsize _postContentPending = 0;
-#endif // !MOBILEAPP
+    [[maybe_unused]] std::streamsize _postContentPending = 0;
 
     /// The current position while reading the header.
     std::size_t _headerPos = 0;

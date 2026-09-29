@@ -3814,9 +3814,6 @@ class PrisonerSocketFactory final : public SocketFactory
 
 COOLWSDServer::COOLWSDServer()
     : _acceptPoll("accept_poll")
-#if !MOBILEAPP
-    , _admin(Admin::instance())
-#endif
 {
 }
 
@@ -3854,7 +3851,7 @@ void COOLWSDServer::start(std::shared_ptr<ServerSocket>&& serverSocket)
     WebServerPoll->startThread();
 
 #if !MOBILEAPP
-    _admin.start();
+    Admin::instance().start();
 #endif
 }
 
@@ -3864,7 +3861,7 @@ void COOLWSDServer::stop()
     if (WebServerPoll)
         WebServerPoll->joinThread();
 #if !MOBILEAPP
-    _admin.stop();
+    Admin::instance().stop();
 #endif
 }
 
