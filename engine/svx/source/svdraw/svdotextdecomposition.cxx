@@ -624,15 +624,28 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     }
 
     const double fFreeVerticalSpace(aAnchorTextRange.getHeight() - aOutlinerScale.getY());
-    bool bClipVerticalTextOverflow = fFreeVerticalSpace < 0
+    const bool bClipVerticalTextOverflow = fFreeVerticalSpace < 0
                                      && GetObjectItemSet().Get(SDRATTR_TEXT_CLIPVERTOVERFLOW).GetValue();
+    // Clipped text keeps its vertical anchor and may run into the upper and lower insets, and only
+    // the edges of the shape cut it. Text taller than the whole shape starts at the top, so that its
+    // first lines stay visible.
+    const double fUpperDist(bIsCell ? 0.0 : GetTextUpperDistance());
+    const double fLowerDist(bIsCell ? 0.0 : GetTextLowerDistance());
+    const bool bTextTallerThanShape = bClipVerticalTextOverflow
+                                      && fFreeVerticalSpace + fUpperDist + fLowerDist < 0;
     // correct vertical translation using the now known text size
     if((SDRTEXTVERTADJUST_CENTER == eVAdj || SDRTEXTVERTADJUST_BOTTOM == eVAdj)
-       && !bClipVerticalTextOverflow)
+       && !bTextTallerThanShape)
     {
         if(SDRTEXTVERTADJUST_CENTER == eVAdj)
         {
             aAdjustTranslate.setY(fFreeVerticalSpace / 2.0);
+
+            // Text that reaches past the insets is centred in the shape rather than in the area
+            // inside them, so a line that fits between the edges of the shape stays whole where
+            // the insets above and below differ.
+            if (bClipVerticalTextOverflow)
+                aAdjustTranslate.setY(aAdjustTranslate.getY() + (fLowerDist - fUpperDist) / 2.0);
         }
 
         if(SDRTEXTVERTADJUST_BOTTOM == eVAdj)
@@ -665,7 +678,11 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     // create ClipRange (if needed)
     basegfx::B2DRange aClipRange;
     if(bClipVerticalTextOverflow)
-        aClipRange = {0, 0, std::numeric_limits<double>::max(), aAnchorTextRange.getHeight()};
+    {
+        // the edges of the shape, relative to the laid out text
+        aClipRange = { 0, -fUpperDist - aAdjustTranslate.getY(), std::numeric_limits<double>::max(),
+                       aAnchorTextRange.getHeight() + fLowerDist - aAdjustTranslate.getY() };
+    }
 
     // now break up text primitives.
     TextHierarchyBreakupBlockText aBreakup(

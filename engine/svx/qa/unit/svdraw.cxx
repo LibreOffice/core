@@ -969,6 +969,26 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testClipVerticalTextOverflow)
     assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[3]", "x", u"23932");
 }
 
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testClipVerticalTextOverflowIntoInsets)
+{
+    // The slide has two short rectangles with vertOverflow="clip". Each leaves its single line of
+    // text the same room, which is less than the line needs but more than the rectangle lacks, so
+    // the line is taller than the rectangle minus its insets and shorter than the rectangle. The
+    // first splits that room evenly above and below, the second takes all of it from below.
+    loadFromFile(u"clip-vertical-overflow-insets.pptx");
+
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+    xmlDocUniquePtr pDocument = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0
+    // i.e. both lines were clipped away and the rectangles showed no text at all. Text reaching
+    // past the insets is centred in the rectangle rather than in the room left for it, so the
+    // line of the second one sits between its edges instead of above its top.
+    assertXPathContent(pDocument, "count(//textsimpleportion[@text='One line'])", u"2");
+}
+
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testContourText)
 {
     loadFromFile(u"tdf84507_polygoncontourtext.fodg");
