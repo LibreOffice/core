@@ -424,23 +424,21 @@ window.L.Map.include({
 		setTimeout(wire, 0);
 	},
 
-	// The user wants to start editing while other users are
-	// viewing.  Offer the choice between editing locally
-	// (changes sync on save) or starting a collaborative
-	// session (all users edit together in real-time).
-	_showWasmEditChoice: function () {
+	// Offer the choice between editing locally (changes sync on save) or starting a
+	// collaborative session (all users edit together in real-time).
+	_showWasmEditChoice: function (title, subtitle, onEditLocally, titleAvatar) {
 		var that = this;
 		this._showTwoCardDialog(
 			'wasm-edit-choice-modal',
-			_('How would you like to edit?'),
-			_('Other users are viewing this document. Choose how you\'d like to continue:'),
+			title,
+			subtitle,
 			[
 				{
 					id: 'edit-locally',
 					icon: 'images/coda-collab-local-editing',
 					heading: _('Edit locally'),
 					description: _('Changes sync when you save'),
-					onClick: function () { that._proceedEditMode(); }
+					onClick: onEditLocally
 				},
 				{
 					id: 'start-collaborative',
@@ -449,7 +447,8 @@ window.L.Map.include({
 					description: _('Edit together in real-time'),
 					onClick: function () { that._saveAndSwitchToServerMode(); }
 				}
-			]
+			],
+			titleAvatar
 		);
 	},
 
@@ -630,7 +629,10 @@ window.L.Map.include({
 		// local and collaborative editing.
 		if ((window.ThisIsTheEmscriptenApp || window.mode.isCODesktop())
 			&& window.collabUsers && window.collabUsers.length > 0) {
-			this._showWasmEditChoice();
+			this._showWasmEditChoice(
+				_('How would you like to edit?'),
+				_('Other users are viewing this document. Choose how you\'d like to continue:'),
+				this._proceedEditMode.bind(this));
 			return;
 		}
 
