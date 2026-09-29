@@ -974,7 +974,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         {
             sc::TableContentCopier aHandler(*this, nOldPos, nNewPos);
             aHandler.performCopy(pOnlyMarked, ScCloneFlags::NamesToLocal, nPreviousSourceTabNo);
-            aHandler.updateReferencesAfterTabInsertion(aCxt, nPreviousSourceTabNo);
+            aHandler.updateReferencesAfterTabInsertion(aCxt);
         }
 
         SetNoListening(false);
