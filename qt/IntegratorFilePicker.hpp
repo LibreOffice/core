@@ -22,6 +22,7 @@
 
 class Bridge;
 class QCloseEvent;
+class QWebEngineProfile;
 class QWebEngineView;
 
 /// Shows an integrator's web UI in a QWebEngineView, and (when the
@@ -41,8 +42,8 @@ class IntegratorFilePicker : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit IntegratorFilePicker(const QString& serverUrl,
-                                  QWidget* parent = nullptr);
+    IntegratorFilePicker(const QString& serverUrl, QWebEngineProfile* profile,
+                         QWidget* parent = nullptr);
 
     QString wopiSrc() const { return _wopiSrc; }
     QString accessToken() const { return _accessToken; }

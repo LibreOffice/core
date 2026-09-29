@@ -398,7 +398,7 @@ QString resolveLandingUrl(const QString& serverUrl)
 }
 
 IntegratorFilePicker::IntegratorFilePicker(const QString& serverUrl,
-                                           QWidget* parent)
+                                           QWebEngineProfile* profile, QWidget* parent)
     : QMainWindow(parent)
 {
     setWindowTitle("Open Remote Document");
@@ -406,7 +406,7 @@ IntegratorFilePicker::IntegratorFilePicker(const QString& serverUrl,
 
     _webView = new QWebEngineView;
 
-    auto* page = new InterceptPage(_webView);
+    auto* page = new InterceptPage(profile, _webView);
     page->picker = this;
     _webView->setPage(page);
 
