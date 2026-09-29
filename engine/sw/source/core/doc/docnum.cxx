@@ -2636,6 +2636,7 @@ void SwDoc::AddNumRule(SwNumRule * pRule)
     mpNumRuleTable->push_back(pRule);
     maNumRuleMap[pRule->GetName()] = pRule;
     pRule->SetNumRuleMap(&maNumRuleMap);
+    pRule->SetDoc(this);
 
     getIDocumentListsAccess().createListForListStyle( pRule->GetName() );
 }

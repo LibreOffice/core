@@ -36,6 +36,7 @@
 
 // Needed to load default bullet list configuration
 #include <comphelper/configuration.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <unotools/configitem.hxx>
 
 #include <numrule.hxx>
@@ -417,6 +418,7 @@ SwNumRule::SwNumRule( UIName aNm,
                       const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                       SwNumRuleType eType )
   : mpNumRuleMap(nullptr),
+    mpDoc(nullptr),
     msName( std::move(aNm) ),
     meRuleType( eType ),
     mnPoolFormatId( SwPoolFormatId::UNKNOWN ),
@@ -512,6 +514,7 @@ SwNumRule::SwNumRule( UIName aNm,
 
 SwNumRule::SwNumRule( const SwNumRule& rNumRule )
     : mpNumRuleMap(nullptr),
+      mpDoc(nullptr),
       msName( rNumRule.msName ),
       meRuleType( rNumRule.meRuleType ),
       mnPoolFormatId( rNumRule.GetPoolFormatId() ),
@@ -779,9 +782,38 @@ void SwNumRule::Set( sal_uInt16 i, const SwNumFormat& rNumFormat )
     OSL_ENSURE( i < MAXLEVEL, "Serious defect" );
     if( i < MAXLEVEL )
     {
-        if( !maFormats[ i ] || (rNumFormat != Get( i )) )
+        SwNumFormat aFiltered;
+        if (mpDoc && mpDoc->IsInMergedPaste())
         {
-            maFormats[ i ].reset(new SwNumFormat( rNumFormat ));
+            // Merged paste: only selected list properties are used from the source.
+            aFiltered.SetNumberingType(rNumFormat.GetNumberingType());
+            aFiltered.SetCharFormat(rNumFormat.GetCharFormat());
+            if (aFiltered.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
+            {
+                cpo::uno::Sequence<OUString> aBulletSymbols(
+                    officecfg::Office::Common::BulletsNumbering::DefaultListBullets::get());
+                cpo::uno::Sequence<OUString> aBulletFonts(
+                    officecfg::Office::Common::BulletsNumbering::DefaultListBulletsFonts::get());
+                sal_Int32 nBulletIdx = i % aBulletSymbols.getLength();
+                aFiltered.SetBulletChar(aBulletSymbols[nBulletIdx].toChar());
+                vcl::Font aFont;
+                aFont.SetFamilyName(aBulletFonts[nBulletIdx]);
+                aFiltered.SetBulletFont(&aFont);
+            }
+            else
+            {
+                aFiltered.SetStart(rNumFormat.GetStart());
+                aFiltered.SetListFormat(rNumFormat.GetListFormat());
+            }
+        }
+        else
+        {
+            aFiltered = rNumFormat;
+        }
+
+        if( !maFormats[ i ] || (aFiltered != Get( i )) )
+        {
+            maFormats[ i ].reset(new SwNumFormat( aFiltered ));
             mbInvalidRuleFlag = true;
         }
     }

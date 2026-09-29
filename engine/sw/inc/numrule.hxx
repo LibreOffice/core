@@ -126,6 +126,9 @@ private:
     /** unordered_map containing "name->rule" relation */
     std::unordered_map<UIName, SwNumRule *> * mpNumRuleMap;
 
+    /** owning document, set once the rule joins the doc's rule table */
+    SwDoc* mpDoc;
+
     UIName msName;
     SwNumRuleType meRuleType;
     SwPoolFormatId mnPoolFormatId;      ///< Id-for NumRules created "automatically"
@@ -212,6 +215,8 @@ public:
      */
     void SetNumRuleMap(
                 std::unordered_map<UIName, SwNumRule *>* pNumRuleMap );
+
+    void SetDoc( SwDoc* pDoc ) { mpDoc = pDoc; }
 
     static UIName GetOutlineRuleName();
 
