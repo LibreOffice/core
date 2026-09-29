@@ -138,7 +138,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply font changes.', funct
 	it('Apply style.', function() {
 		helper.setDummyClipboardForCopy();
 
-		cy.cGet('#applystyle').click();
+		cy.cGet('#applystyle > .ui-header').click();
 		cy.cGet('body').contains('#fontstyletoolbox .ui-combobox-text', 'Title').click();
 
 		writerHelper.selectAllTextOfDoc();
@@ -149,7 +149,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Apply font changes.', funct
 		// Clear formatting. The wizard is still open after the style pick.
 		cy.cGet('#toolbar-up #mobile_wizard').should('have.class', 'selected');
 		cy.cGet('#mobile-wizard-content').should('not.be.empty');
-		cy.cGet('#applystyle').click();
+		cy.cGet('#applystyle > .ui-header').click();
 		cy.cGet('body').contains('#fontstyletoolbox .ui-combobox-text', 'Clear formatting').click();
 
 		writerHelper.selectAllTextOfDoc();
