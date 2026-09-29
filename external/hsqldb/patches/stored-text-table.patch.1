@@ -1,0 +1,33 @@
+From 41cf60044df19e42307d025311592f9a1dcb211a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Tue, 29 Sep 2026 18:51:36 +0000
+Subject: [PATCH] no text table files for a database with a custom file access
+
+hsqldb already refuses text tables for a database that is not file based,
+see Table.java DATABASE_IS_MEMORY_ONLY, and hsqldb 2.x refuses text table
+files for a memory database in Logger.getSecurePath since svn r5081
+https://github.com/ryenus/hsqldb/commit/3846b278dfa47e28017bb1c696f0eb1667976f73
+---
+ src/org/hsqldb/persist/Log.java | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/org/hsqldb/persist/Log.java b/src/org/hsqldb/persist/Log.java
+index 18c698b..52e5182 100644
+--- a/src/org/hsqldb/persist/Log.java
++++ b/src/org/hsqldb/persist/Log.java
+@@ -763,6 +763,12 @@ public class Log {
+ 
+         closeTextCache(table);
+ 
++        // A database with a custom file access keeps all its files where that
++        // access puts them, and a text table source is a file outside it.
++        if (database.isStoredFileAccess()) {
++            throw (Trace.error(Trace.ACCESS_IS_DENIED, source));
++        }
++
+         if (!Boolean.getBoolean(
+                 HsqlDatabaseProperties.textdb_allow_full_path)) {
+             if (source.indexOf("..") != -1) {
+-- 
+2.55.0
+
