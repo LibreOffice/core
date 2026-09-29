@@ -23,6 +23,7 @@
 #include "RegexUtil.hpp"
 
 #include <regex>
+#include <string_view>
 
 namespace RegexUtil
 {
@@ -84,6 +85,19 @@ std::string getValue(const std::map<std::string, std::string>& map, const std::s
     }
 
     return std::string();
+}
+
+std::string escapeRegex(const std::string& text)
+{
+    std::string escaped;
+    escaped.reserve(text.size() * 2);
+    for (const char ch : text)
+    {
+        if (std::string_view("\\^$.|?*+()[]{}").find(ch) != std::string_view::npos)
+            escaped += '\\';
+        escaped += ch;
+    }
+    return escaped;
 }
 
 std::string getValue(const std::set<std::string>& set, const std::string& subject)

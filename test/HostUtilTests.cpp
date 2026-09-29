@@ -192,6 +192,8 @@ void HostUtilTests::testFirstHostTrustedOnlyInFirstMode()
     LOK_ASSERT_EQUAL_STR(uri.getAuthority(), HostUtil::FirstHost);
     LOK_ASSERT_MESSAGE("first mode trusts the connecting host",
                        HostUtil::allowedWopiHost(uri.getHost()));
+    LOK_ASSERT_MESSAGE("first mode trusts no other host",
+                       !HostUtil::allowedWopiHost("wopi-example.com"));
 }
 
 void HostUtilTests::testGetNewUriBracketsIPv6Host()

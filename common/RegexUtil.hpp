@@ -36,6 +36,10 @@ std::string getValue(const std::set<std::string>& set, const std::string& subjec
 
 bool isRegexValid(const std::string& regex);
 
+/// Returns the text with every regular expression special character escaped, so that the result
+/// matches the text and nothing else.
+std::string escapeRegex(const std::string& text);
+
 /// Given one or more patterns to allow, and one or more to deny,
 /// the match member will return true if, and only if, the subject
 /// matches the allowed list, but not the deny.

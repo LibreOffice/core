@@ -325,7 +325,8 @@ void HostUtil::setFirstHost(const Poco::URI& uri)
         if (FirstHost.empty())
         {
             FirstHost = uri.getAuthority();
-            addWopiHost(uri.getHost(), true);
+            // The host comes from a request, so it is matched as that name only.
+            addWopiHost(RegexUtil::escapeRegex(uri.getHost()), true);
         }
     }
     else if(!FirstHost.empty() && FirstHost != uri.getAuthority())
