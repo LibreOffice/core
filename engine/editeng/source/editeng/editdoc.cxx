@@ -3348,12 +3348,12 @@ sal_Int32 EditDoc::GetPos(const ContentNode* pContentNode) const
 
 const ContentNode* EditDoc::GetObject(sal_Int32 nPos) const
 {
-    return 0 <= nPos && o3tl::make_unsigned(nPos) < maContents.size() ? maContents[nPos].get() : nullptr;
+    return maContents[nPos].get();
 }
 
 ContentNode* EditDoc::GetObject(sal_Int32 nPos)
 {
-    return 0 <= nPos && o3tl::make_unsigned(nPos) < maContents.size() ? maContents[nPos].get() : nullptr;
+    return maContents[nPos].get();
 }
 
 void EditDoc::Insert(sal_Int32 nPos, std::unique_ptr<ContentNode> pNode)
@@ -3371,11 +3371,6 @@ void EditDoc::Insert(sal_Int32 nPos, std::unique_ptr<ContentNode> pNode)
 
 void EditDoc::Remove(sal_Int32 nPos)
 {
-    if (nPos < 0 || o3tl::make_unsigned(nPos) >= maContents.size())
-    {
-        SAL_WARN( "editeng", "EditDoc::Remove - out of bounds pos " << nPos);
-        return;
-    }
 #if ENABLE_YRS
     YrsRemovePara(m_pYrsSupplier, m_CommentId, *this, nPos);
 #endif
@@ -3384,12 +3379,6 @@ void EditDoc::Remove(sal_Int32 nPos)
 
 std::unique_ptr<ContentNode> EditDoc::Release(sal_Int32 nPos)
 {
-    if (nPos < 0 || o3tl::make_unsigned(nPos) >= maContents.size())
-    {
-        SAL_WARN( "editeng", "EditDoc::Release - out of bounds pos " << nPos);
-        return nullptr;
-    }
-
 #if ENABLE_YRS
     YrsRemovePara(m_pYrsSupplier, m_CommentId, *this, nPos);
 #endif
