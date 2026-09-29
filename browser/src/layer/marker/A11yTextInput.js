@@ -306,7 +306,14 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 	},
 
 	setA11yFocusedParagraph: function(content, pos, start, end, before, after) {
-		this._setFocusedParagraph(content, pos, start, end);
+		if (this._isComposing) {
+			this._remoteContent = content;
+			this._remotePosition = pos;
+			this._remoteSelectionStart = start;
+			this._remoteSelectionEnd = end;
+		} else {
+			this._setFocusedParagraph(content, pos, start, end);
+		}
 		this._setContextParagraphs(before, after);
 	},
 
