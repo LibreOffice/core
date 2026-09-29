@@ -505,7 +505,10 @@ void ClientSession::handleClipboardRequest(DocumentBroker::ClipboardRequest     
                         LOG_ERR("Malformed clipboard download URL [" << url << ']');
                         pathAndQuery.clear();
                     }
-                    if (pathAndQuery.find("/cool/clipboard") != std::string::npos)
+                    // Any service_root may come before it, so only the end of the path is fixed.
+                    const std::string_view clipPath =
+                        std::string_view(pathAndQuery).substr(0, pathAndQuery.find_first_of("?#"));
+                    if (clipPath.ends_with("/cool/clipboard"))
                     {
                         std::shared_ptr<http::Session> httpSession = http::Session::create(url);
                         if (httpSession)
