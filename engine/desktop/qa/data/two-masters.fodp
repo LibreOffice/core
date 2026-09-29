@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:styles>
+  <style:style style:name="Red-background" style:family="presentation">
+   <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#ff0000"/>
+  </style:style>
+  <style:style style:name="Blue-background" style:family="presentation">
+   <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#0000ff"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PM1">
+   <style:page-layout-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:page-width="28cm" fo:page-height="15.75cm" style:print-orientation="landscape"/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties presentation:background-visible="true" presentation:background-objects-visible="true"/>
+  </style:style>
+  <style:style style:name="Mdp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:background-size="border" draw:fill="solid" draw:fill-color="#ff0000"/>
+  </style:style>
+  <style:style style:name="Mdp2" style:family="drawing-page">
+   <style:drawing-page-properties draw:background-size="border" draw:fill="solid" draw:fill-color="#0000ff"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Red" style:page-layout-name="PM1" draw:style-name="Mdp1"/>
+  <style:master-page style:name="Blue" style:page-layout-name="PM1" draw:style-name="Mdp2"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Blue"/>
+  </office:presentation>
+ </office:body>
+</office:document>

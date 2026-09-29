@@ -4669,6 +4669,8 @@ static void doc_paintPartTile(COKitDocument* pThis,
         else
         {
             // If we are here, we couldn't find an alternative view. We need to check the part and mode.
+            nOrigEditMode = pDoc->getEditMode();
+
             if (!isText)
             {
                 nOrigPart = pDoc->getPart();
@@ -4685,7 +4687,7 @@ static void doc_paintPartTile(COKitDocument* pThis,
                     }
                 }
 
-                if (nPartIndex != nOrigPart)
+                if (nPartIndex != nOrigPart || nMode != nOrigEditMode)
                 {
                     if (SdrView* pSaveView = pCurrentViewShell ? pCurrentViewShell->GetDrawView() : nullptr)
                     {
@@ -4693,13 +4695,17 @@ static void doc_paintPartTile(COKitDocument* pThis,
                         for (size_t i = 0; i < rMarks.GetMarkCount(); ++i)
                             aSavedMarkedObjects.push_back(rMarks.GetMark(i)->GetMarkedSdrObj());
                     }
-                    doc_setPartIndexImpl(pThis, nPartIndex, false);
                 }
             }
 
-            nOrigEditMode = pDoc->getEditMode();
+            // The mode comes first: each mode addresses its own page list, so setting it lands the
+            // view on a page of the new list, and the part that follows names a page of that same
+            // list. The restore below takes the two back in the same order.
             if (nOrigEditMode != nMode)
                 KitHelper::setEditMode(nMode, pDoc);
+
+            if (!isText && (nPartIndex != nOrigPart || nMode != nOrigEditMode))
+                doc_setPartIndexImpl(pThis, nPartIndex, false);
         }
 
         if (!isText)
@@ -4724,7 +4730,7 @@ static void doc_paintPartTile(COKitDocument* pThis,
 
             if (!isText)
             {
-                if (nPartIndex != nOrigPart)
+                if (nPartIndex != nOrigPart || nMode != nOrigEditMode)
                 {
                     doc_setPartIndexImpl(pThis, nOrigPart, false);
 

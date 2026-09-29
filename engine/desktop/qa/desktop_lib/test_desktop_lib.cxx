@@ -198,6 +198,7 @@ public:
     void testRedlineWriter();
     void testRedlineCalc();
     void testPaintPartTile();
+    void testPaintPartTileMasterPage();
     void testPaintPartTileHidesGridOnOtherPart();
     void testPaintPartTileHidesGridOnActivePartPreview();
     void testPaintPartTileDifferentSchemes();
@@ -292,6 +293,7 @@ public:
     CPPUNIT_TEST(testRedlineWriter);
     CPPUNIT_TEST(testRedlineCalc);
     CPPUNIT_TEST(testPaintPartTile);
+    CPPUNIT_TEST(testPaintPartTileMasterPage);
     CPPUNIT_TEST(testPaintPartTileHidesGridOnOtherPart);
     CPPUNIT_TEST(testPaintPartTileHidesGridOnActivePartPreview);
     CPPUNIT_TEST(testPaintPartTileDifferentSchemes);
@@ -2536,6 +2538,36 @@ void DesktopKitTest::testPaintPartTile()
     // This failed: paintPartTile() (as a side-effect) ended the text edit of
     // the first view, so there were no invalidations.
     //CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
+}
+
+void DesktopKitTest::testPaintPartTileMasterPage()
+{
+    // Given a view on a slide that uses the second of two master pages:
+    COKitDocumentImpl* pDocument = loadDoc("two-masters.fodp");
+    pDocument->initializeForRendering("{}");
+    const std::string aSlide = pDocument->getPartId(0, 0);
+    CPPUNIT_ASSERT_EQUAL(aSlide, pDocument->getPart());
+
+    // When painting a tile of the first master page:
+    const std::string aFirstMaster = pDocument->getPartId(0, 1);
+    CPPUNIT_ASSERT(!aFirstMaster.empty());
+    constexpr int nCanvasWidth = 256;
+    constexpr int nCanvasHeight = 256;
+    std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPixels;
+    pDocument->paintPartTile(aPixels, aFirstMaster.c_str(), 1, nCanvasWidth, nCanvasHeight, 0, 0,
+                             3840, 3840);
+
+    // Then the tile shows the red background of the first master, not the blue background of the
+    // master the slide uses:
+    constexpr size_t nOffset = (128 * nCanvasWidth + 128) * 4;
+    const bool bRGBA = pDocument->getTileMode() == COKitTileMode::RGBA;
+    const Color aPixel(aPixels[nOffset + (bRGBA ? 0 : 2)], aPixels[nOffset + 1],
+                       aPixels[nOffset + (bRGBA ? 2 : 0)]);
+    CPPUNIT_ASSERT_EQUAL(Color(0xff, 0x00, 0x00), aPixel);
+
+    // And the view is back on the slide:
+    CPPUNIT_ASSERT_EQUAL(0, pDocument->getEditMode());
+    CPPUNIT_ASSERT_EQUAL(aSlide, pDocument->getPart());
 }
 
 void DesktopKitTest::testPaintTileOmitInvalidate()
