@@ -185,6 +185,8 @@ PathFormat()
         formatted_path_unix="$formatted_path"
     fi
     if test -n "$WSL_ONLY_AS_HELPER"; then
+        # tool output (vswhere, reg.exe, ...) can carry a trailing CR
+        formatted_path=$(echo "$formatted_path" | tr -d '\r')
         # the build runs in the Windows realm, so hand back the Windows
         # spelling, and a Unix one the helper shell can reach it by
         case "$formatted_path" in
@@ -254,6 +256,17 @@ add_to_include_env()
         INCLUDE="$INCLUDE;$1"
     fi
     export INCLUDE
+    # wsl passes on to Windows programs only what WSLENV names, and under
+    # WSL_ONLY_AS_HELPER configure runs cl.exe from wsl
+    if test -n "$WSL_ONLY_AS_HELPER"; then
+        case ":$WSLENV:" in
+            *:INCLUDE:*)
+                ;;
+            *)
+                export WSLENV=${WSLENV:+$WSLENV:}INCLUDE
+                ;;
+        esac
+    fi
 }
 
 encode_path()
