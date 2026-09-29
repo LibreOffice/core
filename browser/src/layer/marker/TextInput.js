@@ -392,7 +392,7 @@ window.L.TextInput = window.L.Layer.extend({
 	_wrapContent: function(content) {
 		const escapedContent = app.LOUtil.escapeHtml(content);
 		const wrappedContent = this.hasAccessibilitySupport()
-			? '<span id="readable-content" aria-hidden="false">' + escapedContent + '</span>'
+			? '<span id="readable-content" role="presentation">' + escapedContent + '</span>'
 			: escapedContent;
 		return content.length === 0
 			? this._initialContent

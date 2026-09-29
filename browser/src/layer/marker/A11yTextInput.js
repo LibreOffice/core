@@ -41,6 +41,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._lastSelectionEnd = 0;
 		this._listPrefixLength = 0;
 		this._isLeftRightArrow = 0;
+		this._pendingFocusedParagraph = null;
+		this._lineNavigation = false;
 
 		// pending macOS live region update
 		this._a11yLiveRegionUpdate = 0;
@@ -226,12 +228,48 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 		this._isComposing = false;
 		this._isLeftRightArrow = 0;
-		if (!this._hasFormulaBarFocus()) {
-			this.setHTML(content);
-			this.updateLastContent();
-			this._updateSelection(pos, start, end, true);
+		if (this._hasFormulaBarFocus()) {
+			this._placeContextRegions();
+			return;
 		}
+
+		const current = this.getPlainTextContent();
+		this._pendingFocusedParagraph = null;
+		if (!this._lineNavigation || current === '' || content === '' || content === current) {
+			this._fillFocusedParagraph(content, pos, start, end);
+			return;
+		}
+
+		// Emptied first, so Chrome reports the new paragraph whole, not only what differs from the last.
+		const pending = { content: content, pos: pos, start: start, end: end };
+		this._pendingFocusedParagraph = pending;
+		this.resetContent();
+		requestAnimationFrame(() => requestAnimationFrame(() => {
+			if (this._pendingFocusedParagraph === pending)
+				this._flushFocusedParagraph();
+		}));
+	},
+
+	_fillFocusedParagraph: function(content, pos, start, end) {
+		this.setHTML(content);
+		this.updateLastContent();
+		this._updateSelection(pos, start, end, true);
 		this._placeContextRegions();
+	},
+
+	_flushFocusedParagraph: function() {
+		const pending = this._pendingFocusedParagraph;
+		if (!pending)
+			return;
+		this._pendingFocusedParagraph = null;
+		this._fillFocusedParagraph(pending.content, pending.pos, pending.start, pending.end);
+	},
+
+	_onKeyDown: function(ev) {
+		this._flushFocusedParagraph();
+		this._lineNavigation = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(ev.key)
+			|| ((ev.key === 'Home' || ev.key === 'End') && ev.ctrlKey);
+		window.L.TextInput.prototype._onKeyDown.call(this, ev);
 	},
 
 	_updateFocusedParagraph: function() {
