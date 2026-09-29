@@ -489,6 +489,13 @@ public:
 #endif
 
 private:
+    /// The value of one AI setting: the user's view setting, else their user private info, which is
+    /// then copied into the view settings, else the coolwsd.xml value.
+    std::string resolveAISetting(Poco::JSON::Object::Ptr& viewSettings,
+                                 const Poco::JSON::Object::Ptr& userPrivateInfoObj,
+                                 bool& viewSettingsMutated, const std::string& vsKey,
+                                 const std::string& upiKey, const std::string& cfgKey) const;
+
     std::shared_ptr<ClientSession> client_from_this()
     {
         return std::static_pointer_cast<ClientSession>(shared_from_this());
