@@ -847,25 +847,37 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		if (!y) y = this.sectionProperties.lastDragDistance[1] + this.position[1];
 		else y = this.adjustSnapTransformCoordinate(null, y);
 
-		let yTwips = y * app.pixelsToTwips;
 		const docLayer = app.map._docLayer;
+
+		if (docLayer.isCalcRTL())
+			x = -this.size[0] + this.sectionProperties.lastDragDistance[0] - this.position[0];
+
+		let xTwips = Math.round(x * app.pixelsToTwips);
+		let yTwips = Math.round(y * app.pixelsToTwips);
+
 		const verticalOffset = docLayer.getFiledBasedViewVerticalOffset();
 		if (verticalOffset) {
 			// Transform from canvas twips to core twips.
 			yTwips -= verticalOffset;
 		}
 
-		if (app.map._docLayer.isCalcRTL())
-			x = -this.size[0] + this.sectionProperties.lastDragDistance[0] - this.position[0];
+		if (docLayer._docType === 'spreadsheet' && docLayer.sheetGeometry) {
+			// we keep the shape in tile twips, core reads these as print twips
+			const sign = xTwips < 0 ? -1 : 1;
+			const printTwips = docLayer.sheetGeometry.getPrintTwipsPointFromTile(
+				new cool.Point(Math.abs(xTwips), yTwips));
+			xTwips = sign * Math.round(printTwips.x);
+			yTwips = Math.round(printTwips.y);
+		}
 
 		const parameters = {
 			'TransformPosX': {
 				'type': 'long',
-				'value': Math.round(x * app.pixelsToTwips)
+				'value': xTwips
 			},
 			'TransformPosY': {
 				'type': 'long',
-				'value': Math.round(yTwips)
+				'value': yTwips
 			}
 		};
 
