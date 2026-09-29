@@ -1044,6 +1044,12 @@ QVariant Bridge::cool(const QString& messageStr)
             coda::openRemoteFile(serverUrl, webView, Application::getProfile(), pickerProfile);
         });
     }
+    else if (tokens.equals(0, "removecloudaccount"))
+    {
+        std::string accountId;
+        COOLProtocol::getTokenString(tokens, "account", accountId);
+        Application::deleteAccountProfile(QString::fromStdString(accountId));
+    }
     else if (message == "uno .uno:Open")
     {
         QFileDialog* dialog =

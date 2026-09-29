@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QEventLoop>
 #include <QFile>
+#include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMap>
@@ -41,6 +42,7 @@
 #include <QStringList>
 #include <QTemporaryFile>
 #include <QUrl>
+#include <QWebEngineCookieStore>
 #include <QWebEnginePage>
 #include <QWebEngineProfile>
 #include <QWebEngineSettings>
@@ -90,6 +92,34 @@ QString accountStoragePath(const QString& accountId)
 QString accountCachePath(const QString& accountId)
 {
     return accountCacheRoot() + '/' + accountId;
+}
+
+// A folder goes only when its real path is the accounts folder's own plus the id, so a
+// symbolic link in its place leaves everything where it is.
+void removeAccountFolders(const QString& accountId)
+{
+    for (const QString& accounts : { accountStorageRoot(), accountCacheRoot() })
+    {
+        const QString folder = accounts + '/' + accountId;
+        if (!QFileInfo::exists(folder))
+        {
+            LOG_DBG("Application: '" << folder.toStdString()
+                                      << "' does not exist, so there is nothing to remove");
+            continue;
+        }
+
+        if (QFileInfo(folder).canonicalFilePath() !=
+            QDir(accounts).canonicalPath() + '/' + accountId)
+        {
+            LOG_ERR("Application: refusing to remove '" << folder.toStdString()
+                                                        << "': not an account folder");
+            continue;
+        }
+
+        LOG_DBG("Application: removing '" << folder.toStdString() << "'");
+        if (!QDir(folder).removeRecursively())
+            LOG_DBG("Application: could not remove all of '" << folder.toStdString() << "'");
+    }
 }
 
 // A profile has to outlive every page built on it, so each one stays until CODA exits.
@@ -368,6 +398,29 @@ int Application::countAccountProfileViews(const QString& accountId)
             ++count;
     }
     return count;
+}
+
+void Application::deleteAccountProfile(const QString& accountId)
+{
+    if (!isPlainAccountId(accountId))
+    {
+        LOG_DBG("Application: account id '" << accountId.toStdString()
+                                             << "' is not plain, so nothing is deleted");
+        return;
+    }
+
+    // A profile in use this session holds its files open, so it is emptied through Qt instead.
+    auto it = accountProfiles().find(accountId);
+    if (it != accountProfiles().end())
+    {
+        LOG_DBG("Application: account '" << accountId.toStdString()
+                                        << "' is in use, so only its cookies and cache go");
+        it.value()->cookieStore()->deleteAllCookies();
+        it.value()->clearHttpCache();
+        return;
+    }
+
+    removeAccountFolders(accountId);
 }
 
 RecentFiles& Application::getRecentFiles() { return recentFiles; }

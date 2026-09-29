@@ -685,6 +685,8 @@ class BackstageView extends window.L.Class {
 		} catch (e) {
 			console.error('Failed to remove cloud provider:', e);
 		}
+		window.app.console.debug('Backstage: removing account ' + id);
+		window.postMobileMessage('removecloudaccount account=' + id);
 	}
 
 	private openCloudProvider(provider: CloudProvider): void {

@@ -53,6 +53,8 @@ public:
     /// The number of web views showing a page on the account's saved profile, 0 when the
     /// account has no views on it yet.
     static int countAccountProfileViews(const QString& accountId);
+    /// Delete the cookies and cache that an account's saved profile holds.
+    static void deleteAccountProfile(const QString& accountId);
     static RecentFiles& getRecentFiles();
     static Prefs& getPrefs();
     /// Self-signed cert/key for the embed-mode HTTPS server.  Both
