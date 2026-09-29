@@ -2115,7 +2115,8 @@ static void Add( SwRegionRects& rRegion, const SwRect& rRect )
  *              rectangles are available for highlighting.
  *              In the end the Flys are cut out of the region.
  */
-void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects, RectsMode const eMode)
+void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects& rRects,
+                                 RectsMode const eMode, SwRects* pPieces, SwRects* pHoles)
 {
     auto [pStartPos, pEndPos] = rCursor.StartEnd(); // SwPosition*
 
@@ -2128,6 +2129,11 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
     SwRegionRects aRegion( !bIgnoreVisArea ?
                            pSh->VisArea() :
                            getFrameArea() );
+    if (pPieces)
+        pPieces->clear();
+    if (pHoles)
+        pHoles->clear();
+    aRegion.RecordSubtracted(pPieces);
     if( !pStartPos->GetNode().IsContentNode() ||
         !pStartPos->GetNode().GetContentNode()->getLayoutFrame(this) ||
         ( pStartPos->GetNode() != pEndPos->GetNode() &&
@@ -2658,6 +2664,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects,
     }
 
     aRegion.Invert();
+    aRegion.RecordSubtracted(pHoles); // what follows cuts holes, not pieces
     pSt2Pos.reset();
     pEnd2Pos.reset();
 

@@ -335,7 +335,12 @@ public:
     bool IsBetweenPages(const Point& rPt) const;
 
     enum class RectsMode { Default, NoAnchoredFlys };
-    void CalcFrameRects(SwShellCursor const&, SwRects &, RectsMode eMode = RectsMode::Default);
+    /// pPieces, when given, also receives the rectangles the selection was built from,
+    /// which follow the lines while the region left in the second argument need not, and
+    /// pHoles the ones cut out of it afterwards - a fly, a drop cap. The two account for
+    /// the region only in NoAnchoredFlys mode, where nothing is added back to it.
+    void CalcFrameRects(SwShellCursor const&, SwRects&, RectsMode eMode = RectsMode::Default,
+                        SwRects* pPieces = nullptr, SwRects* pHoles = nullptr);
 
     /**
      * Calculates the cells included from the current selection
