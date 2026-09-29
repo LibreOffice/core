@@ -3532,8 +3532,39 @@ static WindowState& createWelcomeWindow()
     return createAppWindow(Util::string_to_wide_string(APP_NAME), WS_POPUP, x, y, width, height);
 }
 
+// Find out whether the document is already open, and return its tab if it is.
+static DocumentTab* findOpenDocumentTab(const std::string& uri)
+{
+    if (uri.empty())
+        return nullptr;
+
+    const std::string path = Poco::URI(uri).getPath();
+    for (auto& i : documentTabs)
+    {
+        if (Poco::URI(i.second.filenameAndUri.uri).getPath() == path)
+            return &i.second;
+    }
+    return nullptr;
+}
+
 static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mode)
 {
+    // Don't open an already open document in a new tab, switch to its tab instead.
+    if (mode == DocumentMode::EDIT)
+    {
+        if (DocumentTab* openTab = findOpenDocumentTab(filenameAndUri.uri))
+        {
+            if (WindowState* openWindow = findWindow(openTab->hWnd))
+            {
+                SetForegroundWindow(openWindow->hWnd);
+                activateTab(*openWindow, openTab->tabId);
+            }
+            // Go on with the rest when several documents are opened at once.
+            load_next_document();
+            return;
+        }
+    }
+
     // The welcome slideshow and the starter backstage each get a window to
     // themselves: neither is a document the user works in alongside others.
     WindowState* window = nullptr;
