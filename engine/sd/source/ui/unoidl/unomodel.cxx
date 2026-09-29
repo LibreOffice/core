@@ -101,6 +101,7 @@
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svl/cryptosign.hxx>
 #include <vcl/svapp.hxx>
 #include <Outliner.hxx>
 #include <COKit/COKit.hxx>
@@ -3550,6 +3551,27 @@ private:
                            [](const EditingView& rView) { return rView.mpView != nullptr; });
     }
 
+    /*
+        True while the document is being signed and a view of it has chosen the certificate.
+        The document is read-only then, and what is selected may still be moved and resized,
+        since that is how the signature line is placed on the page.
+    */
+    bool isBeingSigned() const
+    {
+        SfxObjectShell* pShell = mpModel->GetDocShell();
+        if (!pShell || !pShell->IsSignPDF())
+            return false;
+
+        for (SfxViewShell* pView = SfxViewShell::GetFirst(false); pView;
+             pView = SfxViewShell::GetNext(*pView, false))
+        {
+            if (pView->GetObjectShell() == pShell && pView->GetSignPDFCertificate().Is())
+                return true;
+        }
+
+        return false;
+    }
+
     /// True when the object, or any object inside it when it is a group, has a text edit
     /// running on it.
     static bool hasActiveTextEdit(SdrObject* pObject)
@@ -3691,6 +3713,7 @@ private:
         */
         aContent.mbIsDiagram = rObject.isDiagram();
         aContent.maGraphicExtension = rObject.getGraphicExtension();
+        aContent.mbSigning = isBeingSigned();
 
         SdrObjTransformInfoRec aWhatItAllows;
         rObject.TakeObjInfo(aWhatItAllows);
@@ -4274,6 +4297,8 @@ private:
             rWriter.put("isDiagram", true);
         if (!rContent.maGraphicExtension.isEmpty())
             rWriter.put("graphicExtension", rContent.maGraphicExtension);
+        if (rContent.mbSigning)
+            rWriter.put("signing", true);
 
         // Only what it may not have done travels, since most objects allow everything.
         if (!rContent.mbCanBeMoved)

@@ -74,6 +74,15 @@ class GraphicSelection {
 		return this.extraInfo?.graphicExtension || undefined;
 	}
 
+	/// Whether the document is being signed, in which case what is selected may be moved and
+	/// resized although the document is read-only. Asked the same two ways.
+	public static isBeingSigned(): boolean {
+		if (RenderManager.isVectorRendering())
+			return this.theOneSelected()?.signing === true;
+
+		return this.extraInfo?.isSignature === true;
+	}
+
 	public static onUpdatePermission() {
 		this.rectangle = null;
 		this.updateGraphicSelection();
@@ -599,7 +608,7 @@ class GraphicSelection {
 			if (!editMode) {
 				// If the just added signature line shape is selected, show the
 				// graphic selection.
-				editMode = this.extraInfo && this.extraInfo.isSignature;
+				editMode = GraphicSelection.isBeingSigned();
 			}
 
 			if (

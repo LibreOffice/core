@@ -188,6 +188,9 @@ namespace cool {
 		isDiagram?: boolean;
 		/// The file name ending of the picture the object holds, absent where it holds none.
 		graphicExtension?: string;
+		/// True while the document is being signed and a certificate has been chosen. The
+		/// document is read-only then, and the object may still be moved and resized.
+		signing?: boolean;
 		/** What may not be done to the object. Absent means it may: most objects allow
 		 * everything, so only the refusals travel. Whether it may be moved and whether it may be
 		 * made larger or smaller are each held against being changed on their own. Whether it may

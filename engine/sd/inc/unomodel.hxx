@@ -241,6 +241,12 @@ public:
         bool mbIsDiagram = false;
         OUString maGraphicExtension;
 
+        /** True while the document is being signed and a certificate has been chosen. The
+            document is read-only then, and the object may still be moved and resized: it is
+            how the signature line is placed.
+         */
+        bool mbSigning = false;
+
         /// True for a connector whose first end is tied to an object, and the same for its last
         /// end. A connector runs from where it is tied, so a tied end stays with the object it
         /// holds on to. False for anything that is not a connector.
@@ -325,6 +331,7 @@ public:
                    && maPath == rOther.maPath && meKind == rOther.meKind
                    && mbIsDiagram == rOther.mbIsDiagram
                    && maGraphicExtension == rOther.maGraphicExtension
+                   && mbSigning == rOther.mbSigning
                    && mbCanBeMoved == rOther.mbCanBeMoved
                    && mbCanBeResized == rOther.mbCanBeResized
                    && mbCanBeTurned == rOther.mbCanBeTurned

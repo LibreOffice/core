@@ -360,8 +360,7 @@ window.L.Map.include({
 				'.uno:ResolveCommentThread', '.uno:ResolveComment', '.uno:EditAnnotation', '.uno:ExportToEPUB', '.uno:ExportToPDF',
 				'.uno:ExportDirectToPDF', '.uno:InsertThreadedComment');
 
-			const graphicInfo = GraphicSelection.extraInfo;
-			if (graphicInfo && graphicInfo.isSignature)
+			if (GraphicSelection.isBeingSigned())
 			{
 				// If the just added signature line shape is selected, allow
 				// moving/resizing it.
