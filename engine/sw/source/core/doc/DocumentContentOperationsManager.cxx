@@ -1295,7 +1295,8 @@ namespace //local functions originally from docfmt.cxx
                         }
                     }
                 }
-            } while( pRStt <= rRg.Start() && ++nRedlPos < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size());
+            } while (*pRStt <= *rRg.End()
+                     && ++nRedlPos < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size());
         }
         if (!xExtra && bExistingFormatRedlineAtRange)
         {
