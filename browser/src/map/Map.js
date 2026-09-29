@@ -191,6 +191,14 @@ window.L.Map = window.L.Evented.extend({
 				this._fireInitComplete('CharFontName');
 			}
 		});
+		this.on('commandstatechanged', function(e) {
+			if (e.commandName === '.uno:CharFontName')
+				this._updateMissingFontMark(e.state);
+		});
+		this.on('updatetoolbarcommandvalues', function(e) {
+			if (e.commandName === '.uno:CharFontName')
+				this._updateMissingFontMark(this._getCurrentFontName());
+		});
 		if (window.ThisIsTheAndroidApp) {
 			this.on('readonlymode', function() {
 				this.setPermission('readonly');

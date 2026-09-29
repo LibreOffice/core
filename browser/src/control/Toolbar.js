@@ -41,6 +41,15 @@ window.L.Map.include({
 		return this['stateChangeHandler'].getItemValue('.uno:CharFontName');
 	},
 
+	// The server font list holds the fonts that are available. Text in any other font is drawn
+	// with a substitute, so the font name boxes show that font with a warning background.
+	_updateMissingFontMark: function(fontName) {
+		const fonts = this.getToolbarCommandValues('.uno:CharFontName');
+		const isMissing = !!fontName && typeof fonts === 'object' &&
+			!Object.prototype.hasOwnProperty.call(fonts, fontName);
+		document.body.classList.toggle('current-font-missing', isMissing);
+	},
+
 	createFontSelector: function(containerId) {
 		var that = this;
 		var container = document.getElementById(containerId);

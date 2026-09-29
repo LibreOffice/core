@@ -222,4 +222,21 @@ describe(['tagdesktop'], 'Top toolbar apply tests.', { testIsolation: false }, f
 		helper.copy();
 		cy.cGet('#copy-paste-container p sub').should('exist');
 	});
+
+	it('Font name box marks a font the server does not have.', function() {
+		const FONT_NAME_INPUT = '#fontnamecombobox.notebookbar .ui-combobox-content';
+		const MISSING_FONT = 'No Such Font Name';
+
+		cy.cGet(FONT_NAME_INPUT).then(function(input) {
+			const availableFontBackground = input.css('background-color');
+
+			cy.cGet(FONT_NAME_INPUT).click().clear();
+			helper.typeText(FONT_NAME_INPUT, MISSING_FONT, 100);
+			cy.cGet(FONT_NAME_INPUT).type('{enter}');
+
+			cy.cGet(FONT_NAME_INPUT).should('have.prop', 'value', MISSING_FONT);
+			cy.cGet(FONT_NAME_INPUT)
+				.should('not.have.css', 'background-color', availableFontBackground);
+		});
+	});
 });

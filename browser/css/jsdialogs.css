@@ -1915,6 +1915,10 @@ img.ui-combobox-value-preview {
 	padding-inline: 5px;
 }
 
+.current-font-missing #fontnamecombobox > .ui-combobox-content {
+	background-color: color-mix(in srgb, var(--color-warning) 40%, var(--color-background-lighter));
+}
+
 /* Similar to .arrowbackground, centers the vector dropdown arrow. */
 .ui-combobox-button {
 	box-sizing: border-box;
