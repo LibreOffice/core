@@ -340,7 +340,7 @@ void applyZoomConfig(std::string& fileContent, const Poco::Util::LayeredConfigur
 }
 
 /// Returns true if the host is allowed, false otherwise.
-bool isAllowedWopiHost(const Poco::URI& uri)
+[[nodiscard]] bool isAllowedWopiHost(const Poco::URI& uri)
 {
     if (!HostUtil::isWopiEnabled())
         return false;

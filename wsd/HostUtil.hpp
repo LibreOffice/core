@@ -63,7 +63,7 @@ public:
     /// is accessed using different aliases
     static std::string getNewUri(const Poco::URI& uri);
 
-    static bool allowedWopiHost(const std::string& host);
+    [[nodiscard]] static bool allowedWopiHost(const std::string& host);
 
     /// Returns what allowedWopiHost returns, without its cache, so several threads may call it at
     /// once.
@@ -78,9 +78,9 @@ public:
 
     static bool isWopiHostsEmpty();
 
-    static bool allowedWSOrigin(const std::string& origin);
+    [[nodiscard]] static bool allowedWSOrigin(const std::string& origin);
 
-    static bool isForbiddenKitHost(const std::string& host);
+    [[nodiscard]] static bool isForbiddenKitHost(const std::string& host);
 
 private:
     /// parse a single alias from groups of alias_groups, return an empty string if the pattern was invalid

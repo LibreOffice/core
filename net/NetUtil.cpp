@@ -245,7 +245,7 @@ HostEntry syncResolveDNS(const std::string& addressToCheck)
 
 /// Returns true if the address is a cloud instance metadata IP,
 /// matching core's opensocket_callback in CurlSession.cxx.
-bool isInstanceMetadataAddress(const sockaddr* ai_addr)
+[[nodiscard]] bool isInstanceMetadataAddress(const sockaddr* ai_addr)
 {
     char addrstr[INET6_ADDRSTRLEN];
     int family = ai_addr->sa_family;

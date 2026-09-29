@@ -523,7 +523,7 @@ public:
 #endif
 
     /// Validates the given URI.
-    static StorageType validate(const Poco::URI& uri, bool takeOwnership);
+    [[nodiscard]] static StorageType validate(const Poco::URI& uri, bool takeOwnership);
 
     /// Storage object creation factory.
     /// @takeOwnership is for local files that are temporary,
