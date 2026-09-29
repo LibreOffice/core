@@ -688,7 +688,10 @@ class BackstageView extends window.L.Class {
 	}
 
 	private openCloudProvider(provider: CloudProvider): void {
-		window.postMobileMessage('openremote ' + provider.url);
+		window.app.console.debug('Backstage: opening account ' + provider.id);
+		window.postMobileMessage(
+			'openremote ' + provider.url + ' account=' + provider.id,
+		);
 	}
 
 	private renderNewView(): void {
