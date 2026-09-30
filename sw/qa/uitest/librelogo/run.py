@@ -7,6 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_by_text
@@ -320,7 +321,7 @@ x 3 ; draw only a few levels
     def test_custom_lock(self):
         self.check_label(True)
 
-    def run_and_get_message(self, program):
+    def run_and_get_messages(self, programLines):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
             xWriterEdit = xWriterDoc.getChild("writer_edit")
@@ -332,27 +333,42 @@ x 3 ; draw only a few levels
             xLastDialogMessage = self.getScript("__last_dialog_message__")
 
             # write the given program in the document
-            type_text(xWriterEdit, program)
+            for progLine in programLines:
+                type_text(xWriterEdit, progLine)
+                xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
 
             # run the written program
             self.logo("run")
 
             # wait for LibreLogo program termination closing every opened dialog
+            dialogMessages = []
             while xIsAlive.invoke((), (), ())[0]:
                 xCurrentTopWindow = self.xUITest.getTopFocusWindow()
                 if get_state_as_dict(xCurrentTopWindow)['WindowType'] == '130':
+                    # save every dialog message to return them
+                    dialogMessages.append(xLastDialogMessage.invoke((), (), ())[0])
                     xDialogOk = xCurrentTopWindow.getChild('ok')
                     xDialogOk.executeAction("CLICK", tuple())
                 time.sleep(self.ui_test.get_default_sleep())
 
-            return xLastDialogMessage.invoke((), (), ())[0]
+            return dialogMessages
 
-    def test_print_log10(self):
-        self.assertEqual(self.run_and_get_message("print log10 1000"), "3.0")
-
-    def test_print_sqrt(self):
-        self.assertEqual(self.run_and_get_message("print sqrt 16"), "4.0")
-
+    def test_print_fixes(self):
+        programLines = [
+            "print log10 1000",
+            "print sqrt 16",
+            "PRINT SUB(“t”, “T”, “text”)",
+            "PRINT SEARCH(“[0-9]”, “word”)",
+            "PRINT COUNT(FINDALL(“[A-Za-z]+”, “Dogs, cats.”))"
+        ]
+        expectedDialogMessages = [
+            "3.0",
+            "4.0",
+            "TexT",
+            "None",
+            "2"
+        ]
+        self.assertEqual(self.run_and_get_messages(programLines), expectedDialogMessages)
 
     def set_document_default_language(self, language):
         with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:

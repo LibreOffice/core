@@ -2193,6 +2193,9 @@ def __compil__(s):
     for i in __comp__[_.lng]:
         s = re.sub(u"(?u)" + i[0], i[1], s)
 
+    # replace the flag added in re.functions with a variable because __l2p__ doesn't expect quotes
+    s = re.sub(r"(')(\(\?u\))'", __encodestring__, s)
+
     indent = 0 # Python indentation level
     result = ""
     func = re.compile(r"(?iu)(def (\w+))(\(.*\):)")
@@ -2200,7 +2203,7 @@ def __compil__(s):
     # compile to Python
     subroutines = re.compile(r"(?iu)(?<!def )(?<![_\w])\b(%s)\b(?![\w(])" % "|".join(subnames + functions + defaultfunc))
     operators = re.compile(r"(?iu)(%s)" % "(?:[ ]*([+*/<>]|//|==|<=|>=|<>|!=)[ ]*|[ ]*-[ ]+|(?<! )-[ ]*|[ ]*[*][*][ ]*)") # operators, eg. " - ", "-", "- "
-    atoms = re.compile(r"(?iu)(%s)" % r"[0-9]+([.,][0-9]+)?|:?\w+([.]\w)?")
+    atoms = re.compile(r"(?iu)(%s)" % r"[0-9]+([.,][0-9]+)?|:?\w+([.]\w+)?")
 
     # store argument numbers of all subroutines in dictionary "names"
     names = {key: 1 for key in functions + defaultfunc}
