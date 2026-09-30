@@ -463,7 +463,10 @@ class Panel {
 
 	async saveToDocument() {
 		const text = $('editor').value;
-		if (!text.trim()) return;
+		if (!text.trim()) {
+			this.log('info', cool._('The editor is empty, so there is no program to write to the document.'));
+			return;
+		}
 		try {
 			await window.cool.callRemote(function (program) {
 				const doc = cool.getActiveDocument();

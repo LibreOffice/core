@@ -170,8 +170,9 @@ function kitDocumentLanguage() {
 // Runs in the kit: the program text - the selection if there is one, else the body.
 function kitProgramText() {
 	const doc = cool.getActiveDocument();
-	const selection = doc.getSelection().getText();
-	if (selection && selection.trim().length > 0) return { text: selection, selection: true };
+	const selection = doc.getSelection();
+	const text = selection ? selection.getText() : '';
+	if (text.trim().length > 0) return { text: text, selection: true };
 	return { text: doc.getBody().getText(), selection: false };
 }
 
