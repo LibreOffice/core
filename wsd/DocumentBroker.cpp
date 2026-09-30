@@ -3587,7 +3587,7 @@ void DocumentBroker::uploadToStorageInternal(const std::shared_ptr<ClientSession
     if (_lastResortUploadFailed && !session->getAuthorization().isValid())
     {
         LOG_WRN("Session [" << sessionId << "] has an expired access token, which already failed "
-                            << "to upload docKey [" << _docKey << "]. Not uploading again");
+                            "to upload docKey [" << _docKey << "]. Not uploading again");
         return;
     }
 
