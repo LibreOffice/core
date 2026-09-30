@@ -258,6 +258,12 @@ function test() {
     console.assert(inserted.getWidth() === 80);
     console.assert(inserted.getHeight() === 40);
 
+    // An inline image in the middle of the text takes up no offset of its own:
+    const withImage = body.appendParagraph('foobar');
+    console.assert(doc.newPosition(withImage.getChild(0), 3).insertInlineImage(blob) !== null);
+    withImage.editAsText().insertText(4, 'X');
+    console.assert(withImage.editAsText().getText() === 'foobXar');
+
     // newPosition takes a character offset into a Text element:
     const text1 = body.getChild(1).getChild(0);
     console.assert(text1.getType() === DocumentApp.ElementType.TEXT);

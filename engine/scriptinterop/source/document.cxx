@@ -106,16 +106,23 @@ template<typename T>
 css::beans::Optional<cpo::uno::Reference<T>> maybe(cpo::uno::Reference<T> const & ref)
 { return {ref.is(), ref}; }
 
-// Moves the cursor right by count characters, in steps that fit the short that goRight takes:
+// Moves the cursor right past count characters of text, in steps that fit the short that goRight
+// takes, plus one step for each anchor character, as of an inline image, which the text lacks:
 void goRight(
     cpo::uno::Reference<css::text::XTextCursor> const & cursor, sal_Int32 count, bool expand)
 {
     assert(count >= 0);
+    auto const passed = cursor->getText()->createTextCursorByRange(cursor->getEnd());
+    sal_Int32 remaining = count;
     do {
-        auto const step = std::min<sal_Int32>(count, SAL_MAX_INT16);
-        cursor->goRight(step, expand);
-        count -= step;
-    } while (count != 0);
+        auto const step = std::min<sal_Int32>(remaining, SAL_MAX_INT16);
+        if (!cursor->goRight(step, expand)) {
+            break;
+        }
+        passed->gotoRange(cursor->getEnd(), true);
+        // A text field's text can be longer than the one step it takes, so this can go negative:
+        remaining = count - passed->getString().getLength();
+    } while (remaining > 0);
 }
 
 sal_Int32 childIndexOf(
