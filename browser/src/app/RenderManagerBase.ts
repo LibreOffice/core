@@ -166,6 +166,8 @@ class RenderManagerBase {
 	// -- message handling --
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	onTileMsg(_textMsg: string, _img: any): void {}
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	onTileGoneMsg(_textMsg: string): void {}
 
 	// -- expiry / touch --
 	getExpiryFactor(_tile: Tile): number {

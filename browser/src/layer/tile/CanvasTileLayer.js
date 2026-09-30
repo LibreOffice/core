@@ -645,6 +645,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (textMsg.startsWith('tile:') || textMsg.startsWith('delta:')) {
 			RenderManager.onTileMsg(textMsg, img);
 		}
+		else if (textMsg.startsWith('tilegone:')) {
+			RenderManager.onTileGoneMsg(textMsg);
+		}
 		else if (textMsg.startsWith('commandvalues:')) {
 			this._onCommandValuesMsg(textMsg);
 		}

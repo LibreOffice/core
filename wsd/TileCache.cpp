@@ -360,6 +360,33 @@ void TileCache::saveTileAndNotify(const TileDesc& desc, const char *data, const 
         LOG_DBG("No subscribers for: " << cacheFileName(desc));
 }
 
+void TileCache::forgetGoneTile(const TileDesc& desc)
+{
+    ASSERT_CORRECT_THREAD_OWNER(_owner);
+
+    std::shared_ptr<TileBeingRendered> tileBeingRendered = findTileBeingRendered(desc);
+    if (!tileBeingRendered)
+    {
+        LOG_DBG("No subscribers for gone tile: " << cacheFileName(desc));
+        return;
+    }
+
+    // A preview is answered with the description of the tile and no pixels. A plain tile of a gone
+    // page gets no answer.
+    if (desc.isPreview())
+    {
+        const std::string message = desc.serialize("tilegone:");
+        for (const auto& subscriber : tileBeingRendered->getSubscribers())
+        {
+            std::shared_ptr<ClientSession> session = subscriber.lock();
+            if (session)
+                session->sendTextFrame(message);
+        }
+    }
+
+    forgetTileBeingRendered(desc, tileBeingRendered);
+}
+
 bool TileCache::getTextStream(StreamType type, const std::string& fileName, std::string& content)
 {
     Blob textStream = lookupCachedStream(type, fileName);

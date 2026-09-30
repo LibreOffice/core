@@ -102,6 +102,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		map.on('updatepart', this._updatePart, this);
 		map.on('invalidateparts', this._invalidateParts, this);
 		map.on('tilepreview', this._updatePreview, this);
+		map.on('tilepreviewgone', this._onPreviewGone, this);
 		map.on('insertpage', this._insertPreview, this);
 		map.on('deletepage', this._deletePreview, this);
 		map.on('scrolllimit', this._invalidateCurrentPart, this);
@@ -1803,14 +1804,15 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 	},
 
+	// No pixels come for a preview of a page that is gone, so the request is answered.
+	_onPreviewGone: function () {
+		if (this._map.isPresentationOrDrawing())
+			this._map._previewRequestAnswered();
+	},
+
 	_updatePreview: function (e) {
 		if (this._map.isPresentationOrDrawing()) {
-			this._map._previewRequestsOnFly--;
-			if (this._map._previewRequestsOnFly < 0) {
-				this._map._previewRequestsOnFly = 0;
-				this._map._timeToEmptyQueue = new Date();
-			}
-			this._map._processPreviewQueue();
+			this._map._previewRequestAnswered();
 			if (!this._previewInitialized)
 				return;
 			if (e.part === undefined)

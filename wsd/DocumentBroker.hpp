@@ -980,6 +980,7 @@ private:
     void handleTileResponse(const std::shared_ptr<Message>& message);
     void handleDialogPaintResponse(const std::vector<char>& payload, bool child);
     void handleTileCombinedResponse(const std::shared_ptr<Message>& message);
+    void handleTileGoneResponse(const std::shared_ptr<Message>& message);
     void handleSlideLayerResponse(const std::shared_ptr<Message>& message);
 
     /// Gives the views that waited for a finished slide rendering what the kit produced for

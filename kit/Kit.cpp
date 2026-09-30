@@ -1128,13 +1128,14 @@ void Document::renderTiles(TileCombined &tileCombined)
     if (tileCombined.getCanonicalViewId() != CanonicalViewId::None)
         _loKitDocument->setView(session->getViewId());
 
-    // In a presentation or drawing document a tile's part is the page's GUID,
-    // and the document resolves it to the index the page holds when it paints.
-    // The identifier of a gone page paints nothing, so there is nothing to
-    // render or send.
+    // In a presentation or drawing document a tile's part is the page's GUID, and the document
+    // resolves it to the index the page holds when it paints. The identifier of a gone page paints
+    // nothing, so each tile is reported back as gone instead of rendered.
     if (_loKitDocument->getPartIndex(tileCombined.getPart().c_str(), tileCombined.getEditMode()) < 0)
     {
         LOG_DBG("Skipping the render of the gone part " << tileCombined.getPart());
+        for (const TileDesc& tile : tileCombined.getTiles())
+            sendTextFrame(tile.serialize("tilegone:"));
         return;
     }
 

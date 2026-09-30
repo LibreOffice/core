@@ -21,6 +21,18 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		cy.cGet('#notespanel-container .ui-editengine').should('exist');
 	}
 
+	// Every preview in the visible part of the slide list shows its thumbnail.
+	function expectThumbnailsInView(win) {
+		var preview = win.app.map._docLayer._preview;
+		var previews = preview._previewTiles.filter(function (img, index) {
+			return preview._isPreviewVisible(index);
+		});
+		expect(previews).to.have.length.greaterThan(0);
+		previews.forEach(function (img) {
+			expect(img.placeholderName).to.equal(null);
+		});
+	}
+
 	// Cypress sees the document iframe as the focused element, so its blur()
 	// refuses to act on the editor; blur the element itself instead.
 	function leaveNotes() {
@@ -204,21 +216,9 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 	});
 
 	// The handout page lists other pages than the slides, so every preview is fetched again
-	// after the switch. The kit sends no reply for a preview of a page the view no longer lists,
-	// and such a request stays counted as under way. The test puts the view in that state at
-	// the moment the new page list arrives.
+	// after the switch. A preview request that gets no reply stays counted as under way. The test
+	// puts the view in that state at the moment the new page list arrives.
 	it('the previews come back after a switch to the handout page', function () {
-		function expectThumbnailsInView(win) {
-			var preview = win.app.map._docLayer._preview;
-			var previews = preview._previewTiles.filter(function (img, index) {
-				return preview._isPreviewVisible(index);
-			});
-			expect(previews).to.have.length.greaterThan(0);
-			previews.forEach(function (img) {
-				expect(img.placeholderName).to.equal(null);
-			});
-		}
-
 		var slideParts;
 		cy.getFrameWindow().should(function (win) {
 			expectThumbnailsInView(win);
@@ -260,6 +260,65 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 				return img._part;
 			})).to.deep.equal(handoutParts);
 			expectThumbnailsInView(win);
+		});
+	});
+
+	// A preview request for a page the view does not list is answered, so it leaves the preview
+	// queue at once. One request names a page that no page holds. The other names a slide, which
+	// the handout view does not list.
+	it('a preview of a page the view does not list is answered', function () {
+		var slideParts;
+		cy.getFrameWindow().then(function (win) {
+			slideParts = win.app.impress.partList.map(function (page) {
+				return page.part;
+			});
+			win.app.dispatcher.dispatch('notespanelhandout');
+		});
+
+		cy.getFrameWindow().its('app.impress.notesMode').should('eq', true);
+		cy.getFrameWindow().should(function (win) {
+			win.app.impress.partList.forEach(function (page) {
+				expect(slideParts).not.to.include(page.part);
+			});
+			expectThumbnailsInView(win);
+			expect(win.app.map._previewRequestsOnFly).to.equal(0);
+		});
+
+		var goneId;
+		var answeredParts = [];
+		function onPreviewGone(e) {
+			answeredParts.push(e.part);
+		}
+
+		cy.getFrameWindow().then(function (win) {
+			// The same identifier as the first slide, with its last hex digit changed.
+			var slideId = slideParts[0];
+			var lastDigit = slideId.search(/[0-9a-fA-F][^0-9a-fA-F]*$/);
+			goneId = slideId.substring(0, lastDigit) +
+				(slideId[lastDigit] === '0' ? '1' : '0') +
+				slideId.substring(lastDigit + 1);
+			expect(slideParts).not.to.include(goneId);
+
+			win.app.map.on('tilepreviewgone', onPreviewGone);
+
+			// The preview queue counts both requests as under way, as it does for the ones it
+			// sends itself.
+			win.app.map._previewRequestsOnFly += 2;
+			win.app.map._timeToEmptyQueue = new Date();
+			[goneId, slideId].forEach(function (part) {
+				win.app.socket.sendMessage('tile nviewid=0 part=' + part + ' mode=0 ' +
+					'width=180 height=135 tileposx=0 tileposy=0 ' +
+					'tilewidth=15875 tileheight=11906 id=0');
+			});
+		});
+
+		cy.getFrameWindow().should(function (win) {
+			expect(answeredParts).to.have.members([goneId, slideParts[0]]);
+			expect(win.app.map._previewRequestsOnFly).to.equal(0);
+		});
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.off('tilepreviewgone', onPreviewGone);
 		});
 	});
 

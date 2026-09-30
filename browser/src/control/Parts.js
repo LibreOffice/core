@@ -189,9 +189,8 @@ window.L.Map.include({
 			var now = new Date();
 			const waited = now - this._timeToEmptyQueue;
 			if (waited < 2000) {
-				// wait until the queue is empty. The kit sends no reply for a
-				// page the view no longer lists, as happens around a view mode
-				// switch, so the queue is looked at again once the wait is over.
+				// wait until the queue is empty. A request may get no reply,
+				// so the queue is looked at again once the wait is over.
 				if (!this._previewQueueTimer) {
 					this._previewQueueTimer = app.timerRegistry.setTimeout(
 						'previewqueue',
@@ -228,6 +227,16 @@ window.L.Map.include({
 
 		if (previewParts.length > 0)
 			window.app.console.debug('PREVIEW: request preview parts : ' + previewParts.join());
+	},
+
+	// A preview request under way has its answer, so the next one in the queue can go.
+	_previewRequestAnswered: function() {
+		this._previewRequestsOnFly--;
+		if (this._previewRequestsOnFly < 0) {
+			this._previewRequestsOnFly = 0;
+			this._timeToEmptyQueue = new Date();
+		}
+		this._processPreviewQueue();
 	},
 
 	_addPreviewToQueue: function(part, id, tileMsg) {

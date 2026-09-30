@@ -263,6 +263,10 @@ public:
 
     void saveTileAndNotify(const TileDesc& tile, const char* data, size_t size);
 
+    /// The kit found no page for this tile, so no pixels come for it. Stop waiting for the render,
+    /// and tell the sessions that asked for a preview that it is gone.
+    void forgetGoneTile(const TileDesc& tile);
+
     enum StreamType : std::uint8_t
     {
         Style,

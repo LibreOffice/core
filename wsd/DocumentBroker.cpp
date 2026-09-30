@@ -6128,6 +6128,10 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
         {
             handleTileCombinedResponse(message);
         }
+        else if (message->firstTokenMatches("tilegone:"))
+        {
+            handleTileGoneResponse(message);
+        }
         else if (message->firstTokenMatches("errortoall:"))
         {
             LOG_CHECK_RET(message->tokens().size() == 3, false);
@@ -6843,6 +6847,23 @@ void DocumentBroker::handleTileCombinedResponse(const std::shared_ptr<Message>& 
     catch (const std::exception& exc)
     {
         LOG_ERR("Failed to process tile response [" << firstLine << "]: " << exc.what() << '.');
+    }
+}
+
+void DocumentBroker::handleTileGoneResponse(const std::shared_ptr<Message>& message)
+{
+    ASSERT_CORRECT_THREAD();
+
+    const std::string firstLine = message->firstLine();
+    LOG_DBG("Handling gone tile: " << firstLine);
+
+    try
+    {
+        tileCache().forgetGoneTile(TileDesc::parse(firstLine));
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_ERR("Failed to process gone tile [" << firstLine << "]: " << exc.what() << '.');
     }
 }
 

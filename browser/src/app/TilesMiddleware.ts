@@ -130,6 +130,10 @@ class RenderManager {
 		RenderManager.ensureInstance().onTileMsg(textMsg, img);
 	}
 
+	static onTileGoneMsg(textMsg: string): void {
+		RenderManager.ensureInstance().onTileGoneMsg(textMsg);
+	}
+
 	static predictTilesToSlurp(): number {
 		return RenderManager.ensureInstance().predictTilesToSlurp();
 	}

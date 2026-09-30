@@ -36,6 +36,7 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <algorithm>
 #include <sstream>
 #include <random>
 
@@ -77,6 +78,7 @@ class TileCacheTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testDisconnectMultiView);
     CPPUNIT_TEST(testUnresponsiveClient);
     CPPUNIT_TEST(testImpressTiles);
+    CPPUNIT_TEST(testImpressGonePreview);
     CPPUNIT_TEST(testClientPartImpress);
     CPPUNIT_TEST(testClientPartCalc);
     // CPPUNIT_TEST(testTilesRenderedJustOnce); // unreliable
@@ -115,6 +117,7 @@ class TileCacheTests : public CPPUNIT_NS::TestFixture
     void testDisconnectMultiView();
     void testUnresponsiveClient();
     void testImpressTiles();
+    void testImpressGonePreview();
     void testClientPartImpress();
     void testClientPartCalc();
     void testTilesRenderedJustOnce();
@@ -632,6 +635,46 @@ void TileCacheTests::testImpressTiles()
                           "tilewidth=15875 tileheight=11906 id=0",
                       testname);
         getTileMessage(socket, testname);
+
+        socket->asyncShutdown();
+        LOK_ASSERT_MESSAGE("Expected successful disconnection of the WebSocket",
+                           socket->waitForDisconnection(5s));
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOK_ASSERT_FAIL(exc.displayText());
+    }
+}
+
+// The preview of a page that no longer exists is answered, so the client stops waiting for it.
+void TileCacheTests::testImpressGonePreview()
+{
+    const std::string testname = "impressGonePreview ";
+    try
+    {
+        std::shared_ptr<http::WebSocketSession> socket
+            = loadDocAndGetSession(_socketPoll, "setclientpart.odp", _uri, testname);
+
+        sendTextFrame(socket, "status", testname);
+        const auto status = assertResponseString(socket, "status:", testname);
+        const std::vector<std::string> partIds = parsePartUniqueIds(status.substr(7));
+        LOK_ASSERT_MESSAGE("expected part unique ids in the status", !partIds.empty());
+
+        // A well-formed page identifier that no page in the document holds.
+        std::string goneId = partIds[0];
+        const std::size_t lastDigit = goneId.find_last_of("0123456789abcdefABCDEF");
+        LOK_ASSERT(lastDigit != std::string::npos);
+        goneId[lastDigit] = goneId[lastDigit] == '0' ? '1' : '0';
+        LOK_ASSERT(std::find(partIds.begin(), partIds.end(), goneId) == partIds.end());
+
+        sendTextFrame(socket,
+                      "tile nviewid=0 part=" + goneId +
+                          " width=180 height=135 tileposx=0 tileposy=0 "
+                          "tilewidth=15875 tileheight=11906 id=7",
+                      testname);
+        const TileDesc gone = TileDesc::parse(assertResponseString(socket, "tilegone:", testname));
+        LOK_ASSERT_EQUAL(goneId, gone.getPart());
+        LOK_ASSERT_EQUAL(7, gone.getId());
 
         socket->asyncShutdown();
         LOK_ASSERT_MESSAGE("Expected successful disconnection of the WebSocket",

@@ -129,6 +129,7 @@ public:
     int getImgSize() const { return _imgSize; }
     void setImgSize(const int imgSize) { _imgSize = imgSize; }
     bool isPreview() const { return _id >= 0; }
+    int getId() const { return _id; }
     void setId(TileWireId id) { _id = id; }
     void setOldWireId(TileWireId id) { _oldWireId = id; }
     void forceKeyframe() { setOldWireId(0); }

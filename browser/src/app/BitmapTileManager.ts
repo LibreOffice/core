@@ -1764,6 +1764,19 @@ class BitmapTileManager extends RenderManagerBase {
 		}
 	}
 
+	// The kit found no page for the tile, so no pixels come for it.
+	public onTileGoneMsg(textMsg: string) {
+		const tileMsgObj: any = app.socket.parseServerCmd(textMsg);
+		if (tileMsgObj.id !== undefined) this.firePreviewGone(tileMsgObj);
+	}
+
+	private firePreviewGone(tileMsgObj: any) {
+		app.map.fire('tilepreviewgone', {
+			id: tileMsgObj.id,
+			part: tileMsgObj.part,
+		});
+	}
+
 	public onTileMsg(textMsg: string, img: any) {
 		const tileMsgObj: any = app.socket.parseServerCmd(textMsg);
 		this.checkTileMsgObject(tileMsgObj);
@@ -1776,7 +1789,7 @@ class BitmapTileManager extends RenderManagerBase {
 		if (tileMsgObj.id !== undefined) {
 			// The response names its part by part number, the way previews
 			// are requested. The event also carries the index the part holds
-			// now. The preview of a gone page fires no event.
+			// now. The preview of a page this view no longer lists is gone.
 			const partIndex = app.map._docLayer.getIndexFromPart(tileMsgObj.part);
 			if (partIndex >= 0)
 				app.map.fire('tilepreview', {
@@ -1789,6 +1802,7 @@ class BitmapTileManager extends RenderManagerBase {
 					mode: tileMsgObj.mode !== undefined ? tileMsgObj.mode : 0,
 					docType: app.map._docLayer._docType,
 				});
+			else this.firePreviewGone(tileMsgObj);
 			this.queueAcknowledgement(tileMsgObj);
 			return;
 		}
