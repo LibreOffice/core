@@ -453,6 +453,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testFillWithStaleThemeColor)
                 u"lt2");
 }
 
+// A run given a plain color keeps that color, even when its style names a theme color.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testCharColorOverThemedStyle)
+{
+    // Given a document with a text box whose graphic style colors its text with the theme color
+    // accent1, and whose first run is colored #ff0000 with no theme color:
+    createSdImpressDoc("odp/char-color-over-theme-style.fodp");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // Without the fix in place, this test would have failed with:
+    // - In <>, XPath '//p:txBody/a:p/a:r[1]/a:rPr/a:solidFill/a:srgbClr' number of nodes is
+    //   incorrect
+    // i.e. the run was written as the theme color accent1.
+    assertXPath(pXmlDoc, "//p:txBody/a:p/a:r[1]/a:rPr/a:solidFill/a:srgbClr", "val", u"FF0000");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

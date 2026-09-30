@@ -23,6 +23,7 @@
 #include <editeng/editengdllapi.h>
 #include <rtl/ref.hxx>
 #include <svl/itemprop.hxx>
+#include <span>
 #include <vector>
 
 class SfxItemSet;
@@ -80,6 +81,16 @@ EDITENG_DLLPUBLIC void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, cpo::uno
 
 /** converts the given any with a metric from 100th/mm to the given metric if needed */
 EDITENG_DLLPUBLIC void SvxUnoConvertFromMM( const MapUnit eDestinationMapUnit, cpo::uno::Any & rMetric ) noexcept;
+
+/** returns the positions in rEntries in the order in which to apply the properties of one call
+
+    rEntries holds the entries of rMap for the properties of the call, or null for a property
+    that rMap lacks. The theme color members of a color item come after the plain color of the
+    same item. The other properties keep their order.
+*/
+EDITENG_DLLPUBLIC std::vector<sal_Int32>
+SvxGetPropertyApplyOrder(const SfxItemPropertyMap& rMap,
+                         std::span<const SfxItemPropertyMapEntry* const> rEntries);
 
 #endif // INCLUDED_EDITENG_UNOIPSET_HXX
 

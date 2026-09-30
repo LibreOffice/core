@@ -19,12 +19,18 @@
 
 #include <svl/itemprop.hxx>
 #include <tools/UnitConversion.hxx>
+#include <editeng/memberids.h>
 #include <editeng/unoipset.hxx>
+#include <com/sun/star/util/XComplexColor.hpp>
 #include <svl/itempool.hxx>
+#include <svl/poolitem.hxx>
 #include <svl/solar.hrc>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+
+#include <algorithm>
+#include <numeric>
 
 using namespace ::com::sun::star;
 
@@ -325,6 +331,64 @@ void SvxItemPropertySetUsrAnys::AddUsrAnyForID(
 void SvxItemPropertySetUsrAnys::ClearAllUsrAny()
 {
     aCombineList.clear();
+}
+
+namespace
+{
+bool isThemeColorMember(sal_uInt8 nMemberId)
+{
+    switch (nMemberId & ~CONVERT_TWIPS)
+    {
+        case MID_COLOR_THEME_INDEX:
+        case MID_COLOR_TINT_OR_SHADE:
+        case MID_COLOR_LUM_MOD:
+        case MID_COLOR_LUM_OFF:
+        case MID_COMPLEX_COLOR_JSON:
+        case MID_COMPLEX_COLOR:
+            return true;
+        default:
+            return false;
+    }
+}
+
+/// An item takes a theme color when the map gives it a complex color member.
+bool hasComplexColor(const SfxItemPropertyMap& rMap, sal_uInt16 nWID)
+{
+    const cpo::uno::Type& rComplexColorType = cppu::UnoType<util::XComplexColor>::get();
+    return std::any_of(rMap.getPropertyEntries().begin(), rMap.getPropertyEntries().end(),
+                       [nWID, &rComplexColorType](const SfxItemPropertyMapEntry* pEntry) {
+                           return pEntry->nWID == nWID
+                                  && (pEntry->nMemberId & ~CONVERT_TWIPS) == MID_COMPLEX_COLOR
+                                  && pEntry->aType == rComplexColorType;
+                       });
+}
+}
+
+std::vector<sal_Int32>
+SvxGetPropertyApplyOrder(const SfxItemPropertyMap& rMap,
+                         std::span<const SfxItemPropertyMapEntry* const> rEntries)
+{
+    // A plain color that differs from the one the item holds clears the theme color of the item,
+    // so the theme color is applied second when one call sets both.
+    auto isAfterPlainColor = [&rMap, &rEntries](sal_Int32 nIndex) {
+        const SfxItemPropertyMapEntry* pEntry = rEntries[nIndex];
+        if (!pEntry || !isThemeColorMember(pEntry->nMemberId))
+            return false;
+        bool bPlainColorInCall
+            = std::any_of(rEntries.begin(), rEntries.end(),
+                          [pEntry](const SfxItemPropertyMapEntry* pOther) {
+                              return pOther && pOther->nWID == pEntry->nWID
+                                     && (pOther->nMemberId & ~CONVERT_TWIPS) == MID_COLOR_RGB;
+                          });
+        return bPlainColorInCall && hasComplexColor(rMap, pEntry->nWID);
+    };
+
+    std::vector<sal_Int32> aOrder(rEntries.size());
+    std::iota(aOrder.begin(), aOrder.end(), 0);
+    std::stable_partition(aOrder.begin(), aOrder.end(), [&isAfterPlainColor](sal_Int32 nIndex) {
+        return !isAfterPlainColor(nIndex);
+    });
+    return aOrder;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

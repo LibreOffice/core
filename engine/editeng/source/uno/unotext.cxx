@@ -787,9 +787,10 @@ void SvxUnoTextRangeBase::_setPropertyValues( const cpo::uno::Sequence< OUString
 
     ESelection aSel( GetSelection() );
 
-    const OUString* pPropertyNames = aPropertyNames.getConstArray();
-    const cpo::uno::Any* pValues = aValues.getConstArray();
-    sal_Int32 nCount = aPropertyNames.getLength();
+    std::vector<const SfxItemPropertyMapEntry*> aEntries;
+    aEntries.reserve(aPropertyNames.getLength());
+    for (const OUString& rPropertyName : aPropertyNames)
+        aEntries.push_back(mpPropSet->getPropertyMapEntry(rPropertyName));
 
     sal_Int32 nEndPara = nPara;
     sal_Int32 nTempPara = nPara;
@@ -808,9 +809,10 @@ void SvxUnoTextRangeBase::_setPropertyValues( const cpo::uno::Sequence< OUString
 
     std::optional<OUString> aStyleName;
 
-    for( ; nCount; nCount--, pPropertyNames++, pValues++ )
+    for (sal_Int32 nIndex : SvxGetPropertyApplyOrder(mpPropSet->getPropertyMap(), aEntries))
     {
-        const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry( *pPropertyNames );
+        const SfxItemPropertyMapEntry* pMap = aEntries[nIndex];
+        const cpo::uno::Any& rValue = aValues[nIndex];
 
         if( pMap )
         {
@@ -818,7 +820,7 @@ void SvxUnoTextRangeBase::_setPropertyValues( const cpo::uno::Sequence< OUString
 
             if (pMap->nWID == WID_PARASTYLENAME)
             {
-                aStyleName.emplace((*pValues).get<OUString>());
+                aStyleName.emplace(rValue.get<OUString>());
             }
             else if( (nPara == -1) && !bParaAttrib )
             {
@@ -828,7 +830,7 @@ void SvxUnoTextRangeBase::_setPropertyValues( const cpo::uno::Sequence< OUString
                     pNewAttrSet.emplace( *pOldAttrSet->GetPool(), pOldAttrSet->GetRanges() );
                 }
 
-                setPropertyValue( pMap, *pValues, GetSelection(), *pOldAttrSet, *pNewAttrSet );
+                setPropertyValue( pMap, rValue, GetSelection(), *pOldAttrSet, *pNewAttrSet );
 
                 if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
                 {
@@ -847,7 +849,7 @@ void SvxUnoTextRangeBase::_setPropertyValues( const cpo::uno::Sequence< OUString
                     pNewParaSet.emplace( *pOldParaSet->GetPool(), pOldParaSet->GetRanges() );
                 }
 
-                setPropertyValue( pMap, *pValues, GetSelection(), *pOldParaSet, *pNewParaSet );
+                setPropertyValue( pMap, rValue, GetSelection(), *pOldParaSet, *pNewParaSet );
 
                 if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
                 {
@@ -2004,9 +2006,16 @@ static void SvxPropertyValuesToItemSet(
         SvxTextForwarder *pForwarder,
         sal_Int32 nPara)
 {
+    const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
+    std::vector<const SfxItemPropertyMapEntry*> aEntries;
+    aEntries.reserve(rPropertyValues.getLength());
     for (const beans::PropertyValue& rProp : rPropertyValues)
+        aEntries.push_back(rMap.getByName(rProp.Name));
+
+    for (sal_Int32 nIndex : SvxGetPropertyApplyOrder(rMap, aEntries))
     {
-        const SfxItemPropertyMapEntry *pEntry = pPropSet->getPropertyMap().getByName( rProp.Name );
+        const beans::PropertyValue& rProp = rPropertyValues[nIndex];
+        const SfxItemPropertyMapEntry *pEntry = aEntries[nIndex];
         if (!pEntry)
             throw beans::UnknownPropertyException( "Unknown property: " + rProp.Name );
         // Note: there is no need to take special care of the properties

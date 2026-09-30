@@ -1750,8 +1750,13 @@ bool SvxColorItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_COLOR_RGB:
         default:
         {
-            if (!(rVal >>= maColor))
+            Color aColor;
+            if (!(rVal >>= aColor))
                 return false;
+            // A different explicit color means the theme color no longer applies.
+            if (aColor.GetRGBColor() != maColor.GetRGBColor())
+                maComplexColor = model::ComplexColor();
+            maColor = aColor;
         }
         break;
     }

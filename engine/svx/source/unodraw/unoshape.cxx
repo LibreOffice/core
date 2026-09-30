@@ -1677,8 +1677,12 @@ void SvxShape::setPropertyValues( const cpo::uno::Sequence< OUString >& aPropert
         throw css::lang::IllegalArgumentException(u"lengths do not match"_ustr,
                                                   getXWeak(), -1);
 
-    const OUString* pNames = aPropertyNames.getConstArray();
-    const cpo::uno::Any* pValues = aValues.getConstArray();
+    std::vector<const SfxItemPropertyMapEntry*> aEntries;
+    aEntries.reserve(nCount);
+    for (const OUString& rPropertyName : aPropertyNames)
+        aEntries.push_back(mpPropSet->getPropertyMapEntry(rPropertyName));
+    const std::vector<sal_Int32> aOrder
+        = SvxGetPropertyApplyOrder(mpPropSet->getPropertyMap(), aEntries);
 
     // make sure mbIsMultiPropertyCall and mpImpl->mpItemSet are
     // reset even when an exception is thrown
@@ -1688,11 +1692,11 @@ void SvxShape::setPropertyValues( const cpo::uno::Sequence< OUString >& aPropert
 
     if( mpImpl->mpMaster )
     {
-        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pNames++, pValues++ )
+        for (sal_Int32 nIndex : aOrder)
         {
             try
             {
-                setPropertyValue( *pNames, *pValues );
+                setPropertyValue(aPropertyNames[nIndex], aValues[nIndex]);
             }
             catch (beans::UnknownPropertyException&)
             {
@@ -1709,11 +1713,11 @@ void SvxShape::setPropertyValues( const cpo::uno::Sequence< OUString >& aPropert
         uno::Reference< beans::XPropertySet > xSet;
         queryInterface( cppu::UnoType<beans::XPropertySet>::get()) >>= xSet;
 
-        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++, pNames++, pValues++ )
+        for (sal_Int32 nIndex : aOrder)
         {
             try
             {
-                xSet->setPropertyValue( *pNames, *pValues );
+                xSet->setPropertyValue(aPropertyNames[nIndex], aValues[nIndex]);
             }
             catch (beans::UnknownPropertyException&)
             {
