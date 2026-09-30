@@ -1240,6 +1240,50 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropCopyCommand)
     CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pDoc->GetString(ScAddress(3, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropCopyPointer)
+{
+    // Given a document with A1:B2 filled and selected:
+    ScModelObj* pModelObj = createDoc("cell_drag.fods");
+    ScTestViewCallback aView;
+    Point aFrom = lcl_cellCenter(mxComponent, aView, u"$A$1"_ustr);
+    Point aTo = lcl_cellCenter(mxComponent, aView, u"$D$1"_ustr);
+    lcl_select(mxComponent, u"$A$1:$B$2"_ustr);
+    ScTabViewShell* pViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pViewShell);
+    vcl::Window* pGridWindow = pViewShell->GetViewData().GetActiveWin();
+    const PointerStyle ePointerBefore = pGridWindow->GetPointer();
+    aView.m_aMousePointers.clear();
+
+    // When Ctrl-dragging the selection to D1:
+    lcl_drag(pModelObj, aFrom, aTo, KEY_MOD1);
+
+    // Then the pointer shows a copy while dragging, and is back as it was after the drop.
+    // Without the fix in place, this test would have failed, as the pointer did not change.
+    CPPUNIT_ASSERT(std::find(aView.m_aMousePointers.begin(), aView.m_aMousePointers.end(), "copy")
+                   != aView.m_aMousePointers.end());
+    CPPUNIT_ASSERT_EQUAL(ePointerBefore, pGridWindow->GetPointer());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropRefusedPointer)
+{
+    // Given a document with A1:B1 filled and selected:
+    ScModelObj* pModelObj = createDoc("cell_drag.fods");
+    ScTestViewCallback aView;
+    Point aFrom = lcl_cellCenter(mxComponent, aView, u"$A$1"_ustr);
+    Point aTo = lcl_cellCenter(mxComponent, aView, u"$B$1"_ustr);
+    lcl_select(mxComponent, u"$A$1:$B$1"_ustr);
+    aView.m_aMousePointers.clear();
+
+    // When Alt-dragging it onto B1, an insert that overlaps its own source, which Calc refuses:
+    lcl_drag(pModelObj, aFrom, aTo, KEY_MOD2);
+
+    // Then the pointer shows that the drop is not allowed.
+    // Without the fix in place, this test would have failed, as the pointer did not change.
+    CPPUNIT_ASSERT(
+        std::find(aView.m_aMousePointers.begin(), aView.m_aMousePointers.end(), "not-allowed")
+        != aView.m_aMousePointers.end());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

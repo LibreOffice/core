@@ -84,13 +84,44 @@ public:
 class GenericDropTargetDragContext
     : public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDragContext>
 {
+    // The DNDConstants action the drop target accepted, or ACTION_NONE when it rejected the drag.
+    sal_Int8 mnAcceptedAction = css::datatransfer::dnd::DNDConstants::ACTION_NONE;
+
 public:
     GenericDropTargetDragContext() {}
 
+    sal_Int8 getAcceptedAction() const { return mnAcceptedAction; }
+
     // XDropTargetDragContext
-    virtual void acceptDrag(sal_Int8 /*dragOperation*/) override {}
-    virtual void rejectDrag() override {}
+    virtual void acceptDrag(sal_Int8 dragOperation) override { mnAcceptedAction = dragOperation; }
+    virtual void rejectDrag() override
+    {
+        mnAcceptedAction = css::datatransfer::dnd::DNDConstants::ACTION_NONE;
+    }
 };
+
+// The pointer that shows what a drop with the accepted DNDConstants action would do.
+PointerStyle ImplKitDragPointer(sal_Int8 nAcceptedAction)
+{
+    if (nAcceptedAction & css::datatransfer::dnd::DNDConstants::ACTION_COPY)
+        return PointerStyle::CopyData;
+    if (nAcceptedAction & css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
+        return PointerStyle::MoveData;
+    if (nAcceptedAction & css::datatransfer::dnd::DNDConstants::ACTION_LINK)
+        return PointerStyle::LinkData;
+    return PointerStyle::NotAllowed;
+}
+
+// Ends a kit drag and gives the mouse-down window back the pointer it had before the drag.
+void ImplEndKitDrag(ImplFrameData* pFrameData)
+{
+    pFrameData->mbStartDragCalled = pFrameData->mbDragging = false;
+    if (!pFrameData->moPointerBeforeKitDrag)
+        return;
+    if (pFrameData->mpMouseDownWin)
+        pFrameData->mpMouseDownWin->SetPointer(*pFrameData->moPointerBeforeKitDrag);
+    pFrameData->moPointerBeforeKitDrag.reset();
+}
 }
 
 bool ImplCallPreNotify( NotifyEvent& rEvt )
@@ -868,7 +899,7 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
         nEvent == NotifyEventType::MOUSEMOVE &&
         pFrameData->mbDragging)
     {
-        cpo::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext> xDropTargetDragContext =
+        rtl::Reference<GenericDropTargetDragContext> xDropTargetDragContext =
             new GenericDropTargetDragContext();
         rtl::Reference<DNDListenerContainer> xDropTarget(
             pDragWin->ImplGetWindowImpl()->mxDNDListenerContainer);
@@ -878,7 +909,7 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
             (nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) !=
             (MouseSettings::GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)))
         {
-            pFrameData->mbStartDragCalled = pFrameData->mbDragging = false;
+            ImplEndKitDrag(pFrameData);
             return false;
         }
 
@@ -886,6 +917,10 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
                                        (css::datatransfer::dnd::DNDConstants::ACTION_COPY
                                         | css::datatransfer::dnd::DNDConstants::ACTION_MOVE
                                         | css::datatransfer::dnd::DNDConstants::ACTION_LINK));
+
+        if (!pFrameData->moPointerBeforeKitDrag)
+            pFrameData->moPointerBeforeKitDrag = pDragWin->GetPointer();
+        pDragWin->SetPointer(ImplKitDragPointer(xDropTargetDragContext->getAcceptedAction()));
 
         return true;
     }
@@ -902,7 +937,7 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
 
         if (!xDropTarget.is() || !xDropTargetDropContext.is())
         {
-            pFrameData->mbStartDragCalled = pFrameData->mbDragging = false;
+            ImplEndKitDrag(pFrameData);
             return false;
         }
 
@@ -914,14 +949,14 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
                                     | css::datatransfer::dnd::DNDConstants::ACTION_LINK),
                                    xTransfer);
 
-        pFrameData->mbStartDragCalled = pFrameData->mbDragging = false;
+        ImplEndKitDrag(pFrameData);
         return true;
     }
 
     if (pFrameData->mbDragging)
     {
         // wrong status, reset
-        pFrameData->mbStartDragCalled = pFrameData->mbDragging = false;
+        ImplEndKitDrag(pFrameData);
         return false;
     }
 

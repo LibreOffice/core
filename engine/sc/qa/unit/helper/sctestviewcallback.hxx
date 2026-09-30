@@ -78,6 +78,8 @@ public:
     OString m_sInvalidateHeader;
     OString m_sInvalidateSheetGeometry;
     OString m_aHyperlinkClicked;
+    /// Every mouse pointer name the view sent, oldest first.
+    std::vector<OString> m_aMousePointers;
     OString m_ShapeSelection;
     std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
     std::string decimalSeparator;

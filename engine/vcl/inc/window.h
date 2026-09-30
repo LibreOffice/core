@@ -178,6 +178,9 @@ struct ImplFrameData
 
     bool                mbInternalDragGestureRecognizer;
     bool                mbDragging;
+    /// The pointer of the mouse-down window before a kit drag set a drag pointer on it, or empty
+    /// while no kit drag pointer is set.
+    std::optional<PointerStyle> moPointerBeforeKitDrag;
     VclPtr<VirtualDevice> mpBuffer; ///< Buffer for the double-buffering
     bool mbInBufferedPaint; ///< PaintHelper is in the process of painting into this buffer.
     tools::Rectangle maBufferedRect; ///< Rectangle in the buffer that has to be painted to the screen.

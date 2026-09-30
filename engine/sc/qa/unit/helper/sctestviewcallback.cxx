@@ -293,6 +293,11 @@ void ScTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_aHyperlinkClicked = OString(pPayload);
         }
         break;
+        case COKitCallbackType::MOUSE_POINTER:
+        {
+            m_aMousePointers.emplace_back(pPayload);
+        }
+        break;
         case COKitCallbackType::TEXT_SELECTION:
         {
             m_aTextSelectionResult.parseMessage(pPayload);
