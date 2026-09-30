@@ -291,6 +291,16 @@ class Util {
 		if (obj === null) throw new Error('Object is null!');
 	}
 
+	// Looks up an element by id, warning instead of throwing if it's missing,
+	// for the (usually document-type-dependent) elements that a caller can't
+	// otherwise be sure are on the page.
+	public static getElementOrWarn(id: string): HTMLElement | null {
+		const el = document.getElementById(id);
+		if (!el)
+			window.app.console.warn('HTML element with ID ' + id + " doesn't exist.");
+		return el;
+	}
+
 	public static humanizeDuration(durationMs: number, maxParts = 2): string {
 		const units = [
 			{
