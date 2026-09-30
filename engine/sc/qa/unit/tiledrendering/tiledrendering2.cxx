@@ -1176,6 +1176,49 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testExportKeepsCondFormatTilesValid)
                            !aView.m_bInvalidateTiles);
 }
 
+// Puts the cell cursor on rAddress and returns the centre of that cell.
+static Point lcl_cellCenter(const cpo::uno::Reference<css::lang::XComponent>& xComponent,
+                            const ScTestViewCallback& rView, const OUString& rAddress)
+{
+    unotest::MacrosTest::dispatchCommand(
+        xComponent, u".uno:GoToCell"_ustr,
+        { comphelper::makePropertyValue(u"ToPoint"_ustr, rAddress) });
+    return rView.m_aCellCursorBounds.Center();
+}
+
+static void lcl_select(const cpo::uno::Reference<css::lang::XComponent>& xComponent,
+                       const OUString& rRange)
+{
+    unotest::MacrosTest::dispatchCommand(
+        xComponent, u".uno:GoToCell"_ustr,
+        { comphelper::makePropertyValue(u"ToPoint"_ustr, rRange) });
+    Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropInsertWholeColumn)
+{
+    // Given a document where row 1 holds A to F, each letter in the column of that name:
+    ScModelObj* pModelObj = createDoc("column_drag.fods");
+    ScTestViewCallback aView;
+    Point aFrom = lcl_cellCenter(mxComponent, aView, u"$B$1"_ustr);
+    Point aTo = lcl_cellCenter(mxComponent, aView, u"$E$1"_ustr);
+    lcl_select(mxComponent, u"$B:$B"_ustr);
+
+    // When Alt-dragging the whole column B from the middle of B1 to the middle of E1, so the
+    // first move already leaves column B:
+    lcl_drag(pModelObj, aFrom, aTo, KEY_MOD2);
+
+    // Then column B moves in front of column E:
+    // Without the fix in place, this test would have failed with:
+    // - Expected: ACDBEF
+    // - Actual  : ABCDEF
+    ScDocument* pDoc = pModelObj->GetDocument();
+    OUString aRow;
+    for (SCCOL nCol = 0; nCol < 6; ++nCol)
+        aRow += pDoc->GetString(ScAddress(nCol, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"ACDBEF"_ustr, aRow);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

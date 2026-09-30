@@ -952,6 +952,11 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
 
                         if (xDragGestureRecognizer.is())
                         {
+                            // The drag starts at the button-down position, so the dragged
+                            // selection is the one under the pointer when the button was pressed.
+                            Point aDownPos = pDownWin->ScreenToOutputPixel(
+                                Point(pFrameData->mnFirstMouseX, pFrameData->mnFirstMouseY));
+
                             // create a UNO mouse event out of the available data
                             css::awt::MouseEvent aEvent(
                                 static_cast < cpo::uno::XInterface * > ( nullptr ),
@@ -973,8 +978,8 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
                                 xDragGestureRecognizer->
                                     fireDragGestureEvent(
                                         0,
-                                        aWinPos.X(),
-                                        aWinPos.Y(),
+                                        aDownPos.X(),
+                                        aDownPos.Y(),
                                         xDragSource,
                                         cpo::uno::Any(aEvent));
                             }

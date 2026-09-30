@@ -1455,7 +1455,8 @@ void DesktopKitTest::testSheetDragDrop()
         rViewFrame.GetBindings().QueryState(rViewFrame.GetBindings().QuerySlotId(aURL), pState);
         pState->QueryValue(aValue);
         aValue >>= sValue;
-        CPPUNIT_ASSERT_EQUAL(u"Sheet5.D1:H1"_ustr, sValue);
+        // The block is grabbed in A1 and released with the pointer in E1, so it lands at E1.
+        CPPUNIT_ASSERT_EQUAL(u"Sheet5.E1:I1"_ustr, sValue);
     }
 
     // Check selection content
