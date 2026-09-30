@@ -443,6 +443,7 @@ class UnitTimeoutInactivity : public UnitTimeoutBase0
         // so each test must establish the values it needs rather than inherit them.
         net::Defaults.inactivityTimeout = 360ms;
         net::Defaults.maxExtConnections = net::DefaultMaxExtConnections;
+        net::Defaults.pongTimeout = net::DefaultPongTimeout;
     }
 
 public:
@@ -632,6 +633,7 @@ class UnitTimeoutConnections : public UnitTimeoutBase1
         // so each test must establish the values it needs rather than inherit them.
         net::Defaults.inactivityTimeout = net::DefaultInactivityTimeout;
         net::Defaults.maxExtConnections = connectionLimit();
+        net::Defaults.pongTimeout = net::DefaultPongTimeout;
     }
 
 public:
@@ -650,6 +652,7 @@ class UnitTimeoutNone : public UnitTimeoutBase1
         // so each test must establish the values it needs rather than inherit them.
         net::Defaults.inactivityTimeout = net::DefaultInactivityTimeout;
         net::Defaults.maxExtConnections = net::DefaultMaxExtConnections;
+        net::Defaults.pongTimeout = net::DefaultPongTimeout;
     }
 
 public:
@@ -659,12 +662,118 @@ public:
     }
 };
 
+/// A document connection that stops answering the server's pings is closed, and the other users
+/// hear that its view is gone.
+class UnitTimeoutPong : public UnitTimeoutBase0
+{
+    /// Above the ping interval of 18 seconds, so a client that answers is never dropped.
+    static constexpr std::chrono::seconds PongTimeout{ 30 };
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        UnitWSD::configure(config);
+
+        // Set every net::Defaults field this suite reads. The fields are global and shared by all
+        // tests.
+        net::Defaults.inactivityTimeout = net::DefaultInactivityTimeout;
+        net::Defaults.maxExtConnections = net::DefaultMaxExtConnections;
+        net::Defaults.pongTimeout = PongTimeout;
+    }
+
+    /// Waits for a viewinfo message listing the given number of views. Returns false when none
+    /// arrives within the timeout.
+    bool waitForViewCount(http::WebSocketSession& session, size_t viewCount,
+                          std::chrono::milliseconds timeout)
+    {
+        const std::vector<char> matched = session.poll(
+            [&](const std::vector<char>& message) -> bool
+            {
+                const std::string_view text(message.begin(), message.end());
+                if (!text.starts_with("viewinfo: "))
+                    return false;
+
+                size_t count = 0;
+                for (size_t pos = text.find("\"id\":"); pos != std::string_view::npos;
+                     pos = text.find("\"id\":", pos + 1))
+                    ++count;
+
+                TST_LOG("viewinfo with " << count << " views: " << text);
+                return count == viewCount;
+            },
+            timeout, testname);
+        return !matched.empty();
+    }
+
+public:
+    UnitTimeoutPong()
+        : UnitTimeoutBase0("UnitTimeoutPong")
+    {
+        // A frozen connection lives for the pong timeout plus up to one ping interval before the
+        // server drops it.
+        setTimeout(std::chrono::minutes(3));
+    }
+
+    void invokeWSDTest() override;
+};
+
+void UnitTimeoutPong::invokeWSDTest()
+{
+    setTestname(__func__);
+    TST_LOG("Starting Test: " << testname);
+
+    std::string documentPath, documentURL;
+    helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
+
+    // Each session polls on its own thread, so freezing one leaves the other running.
+    std::vector<std::shared_ptr<TerminatingPoll>> socketPollers;
+    std::shared_ptr<SocketPoll> pollerA =
+        createPoller(socketPollers, /*useOwnPoller=*/true, /*pollerOnClientThread=*/false);
+    std::shared_ptr<SocketPoll> pollerB =
+        createPoller(socketPollers, /*useOwnPoller=*/true, /*pollerOnClientThread=*/false);
+
+    std::shared_ptr<http::WebSocketSession> sessionA =
+        http::WebSocketSession::create(helpers::getTestServerURI());
+    http::Request requestA(documentURL);
+    sessionA->asyncRequest(requestA, pollerA);
+    sessionA->sendMessage("load url=" + documentURL);
+    LOK_ASSERT(waitForViewCount(*sessionA, 1, std::chrono::seconds(30)));
+
+    std::shared_ptr<http::WebSocketSession> sessionB =
+        http::WebSocketSession::create(helpers::getTestServerURI());
+    http::Request requestB(documentURL);
+    sessionB->asyncRequest(requestB, pollerB);
+    sessionB->sendMessage("load url=" + documentURL);
+    LOK_ASSERT(waitForViewCount(*sessionB, 2, std::chrono::seconds(30)));
+    LOK_ASSERT_EQUAL(true, sessionA->isConnected());
+    LOK_ASSERT_EQUAL(true, sessionB->isConnected());
+
+    // A stops answering pings without closing its connection.
+    TST_LOG("Freezing session A");
+    sessionA->freeze();
+
+    // B keeps answering, stays connected, and hears that A's view is gone. The check runs with each
+    // ping, every 18 seconds, so the drop comes about 36 seconds after the freeze.
+    LOK_ASSERT_MESSAGE("B did not hear that A's view was dropped",
+                       waitForViewCount(*sessionB, 1, std::chrono::seconds(60)));
+    LOK_ASSERT_EQUAL(true, sessionB->isConnected());
+    TST_LOG("Session A connected after the drop: " << sessionA->isConnected());
+
+    sessionB->shutdownWS();
+    sessionA->shutdownWS();
+    for (const std::shared_ptr<TerminatingPoll>& socketPoller : socketPollers)
+        socketPoller->joinThread();
+    socketPollers.clear();
+
+    TST_LOG("Ending Test: " << testname);
+    exitTest(TestResult::Ok);
+}
+
 UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* []
     {
-        new UnitTimeout(), new UnitTimeoutInactivity(), new UnitTimeoutNone(9999, 9),
-            new UnitTimeoutConnections(5, 9), nullptr
+        new UnitTimeout(), new UnitTimeoutInactivity(), new UnitTimeoutPong(),
+            new UnitTimeoutNone(9999, 9), new UnitTimeoutConnections(5, 9), nullptr
     };
 }
 

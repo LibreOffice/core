@@ -89,7 +89,8 @@ std::unique_ptr<Watchdog> SocketPoll::PollWatchdog;
 std::atomic<size_t> StreamSocket::ExternalConnectionCount = 0;
 
 net::DefaultValues net::Defaults = { .inactivityTimeout = net::DefaultInactivityTimeout,
-                                     .maxExtConnections = net::DefaultMaxExtConnections };
+                                     .maxExtConnections = net::DefaultMaxExtConnections,
+                                     .pongTimeout = net::DefaultPongTimeout };
 
 size_t StreamSocket::BufferBloatCloseSize = 100 * 1024 * 1024;
 std::chrono::milliseconds StreamSocket::BufferBloatCloseDuration = std::chrono::minutes(2);
@@ -965,6 +966,12 @@ void WebSocketHandler::dumpState(std::ostream& os, const std::string& indent) co
 {
     os << (_shuttingDown ? "shutd " : "alive ");
     os << std::setw(5) << _pingTimeUs/1000. << "ms ";
+    if (_closeOnPongTimeout)
+        os << "last pong "
+           << std::chrono::duration_cast<std::chrono::milliseconds>(
+                  std::chrono::steady_clock::now() - _lastPongTime)
+           << " ago of "
+           << std::chrono::duration_cast<std::chrono::seconds>(net::Defaults.pongTimeout) << ' ';
     if (_wsPayload.size() > 0)
         HexUtil::dumpHex(os, _wsPayload, "\t\tws queued payload:\n", "\t\t");
     os << '\n';

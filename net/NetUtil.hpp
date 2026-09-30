@@ -41,6 +41,7 @@ namespace net
 /// should reset to these rather than hard-code a literal.
 constexpr std::chrono::seconds DefaultInactivityTimeout(3600);
 constexpr size_t DefaultMaxExtConnections = 200000;
+constexpr std::chrono::seconds DefaultPongTimeout(60);
 
 class DefaultValues
 {
@@ -51,6 +52,10 @@ public:
     /// Maximum number of concurrent external TCP connections. Zero disables instrument,
     /// limiting the maximum number of connections by the available sockets to the system.
     size_t maxExtConnections;
+
+    /// The longest time a WebSocket peer may go without a pong before it counts as gone
+    /// (DefaultPongTimeout default). Zero means no limit.
+    std::chrono::microseconds pongTimeout;
 };
 extern DefaultValues Defaults;
 

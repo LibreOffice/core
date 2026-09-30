@@ -1869,6 +1869,10 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
     LoggableConfigEntries = ossConfig.str();
     LOG_INF(LoggableConfigEntries);
 
+    // Set before the unit-test configure hook, which can then replace it.
+    net::Defaults.pongTimeout = std::chrono::seconds(ConfigUtil::getConfigValue<int>(
+        conf, "net.client_pong_timeout_secs", net::DefaultPongTimeout.count()));
+
     // Initialize the UnitTest subsystem.
     if (!UnitWSD::init(UnitWSD::UnitType::Wsd, UnitTestLibrary))
     {
@@ -2335,7 +2339,9 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
 
     LOG_DBG("net::Defaults: Socket[inactivityTimeout " << net::Defaults.inactivityTimeout
                                                        << ", maxExtConnections "
-                                                       << net::Defaults.maxExtConnections << ']');
+                                                       << net::Defaults.maxExtConnections
+                                                       << ", pongTimeout "
+                                                       << net::Defaults.pongTimeout << ']');
 
 #if !MOBILEAPP
     NoSeccomp =

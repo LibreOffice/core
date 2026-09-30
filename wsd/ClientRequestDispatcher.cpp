@@ -3038,6 +3038,8 @@ bool ClientRequestDispatcher::handleClientWsUpgrade(const Poco::Net::HTTPRequest
 
     auto ws = std::make_shared<WebSocketHandler>(socket, request, allowed);
 
+    ws->closeOnPongTimeout();
+
     // Response to clients beyond this point is done via WebSocket.
     try
     {

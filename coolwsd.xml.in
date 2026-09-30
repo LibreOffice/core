@@ -231,6 +231,7 @@
       </content_security_policy>
       <frame_ancestors desc="OBSOLETE: Use content_security_policy. Specify who is allowed to embed the Collabora Online iframe (coolwsd and WOPI host are always allowed). Separate multiple hosts by space."></frame_ancestors>
       <connection_timeout_secs desc="Specifies the connection, send, recv timeout in seconds for connections initiated by coolwsd (such as WOPI connections)." type="int" default="30">30</connection_timeout_secs>
+      <client_pong_timeout_secs desc="The number of seconds a document connection may go without answering a ping from coolwsd before it is closed. coolwsd sends a ping every 18 seconds, so keep this well above that. A browser that went away without closing its connection is dropped after this long, and its view goes with it. 0 disables the check." type="uint" default="60">60</client_pong_timeout_secs>
 
       <!-- this setting radically changes how online works, it should not be used in a production environment -->
       <proxy_prefix type="bool" default="false" desc="Enable a ProxyPrefix to be passed-in through which to redirect requests">false</proxy_prefix>

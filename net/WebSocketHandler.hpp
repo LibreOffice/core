@@ -50,6 +50,8 @@ private:
     /// The socket that owns us (we can't own it).
     std::weak_ptr<StreamSocket> _socket;
     std::chrono::steady_clock::time_point _lastPingSentTime;
+    /// When the last pong arrived. Starts at the construction time, as if a pong had just come.
+    std::chrono::steady_clock::time_point _lastPongTime;
     [[maybe_unused]] int _pingTimeUs;
     [[maybe_unused]] bool _isMasking;
     bool _inFragmentBlock;
@@ -57,6 +59,8 @@ private:
     std::atomic<bool> _shuttingDown;
     // Consulted only by the !MOBILEAPP paths and by asserts.
     [[maybe_unused]] const bool _isClient;
+    /// True when the peer counts as gone once net::Defaults.pongTimeout passes without a pong.
+    bool _closeOnPongTimeout;
 
     // Last member.
     /// The UnitBase instance. We capture it here since
@@ -85,12 +89,14 @@ public:
         , _lastPingSentTime(std::chrono::steady_clock::now() -
                            PingFrequencyMicroS +
                            InitialPingDelayMicroS)
+        , _lastPongTime(std::chrono::steady_clock::now())
         , _pingTimeUs(0)
         , _isMasking(isClient && isMasking)
         , _inFragmentBlock(false)
         , _lastFlags(0)
         , _shuttingDown(false)
         , _isClient(isClient)
+        , _closeOnPongTimeout(false)
         , _unit(UnitBase::isUnitTesting() ? &UnitBase::get() : nullptr)
     {
     }
@@ -269,6 +275,10 @@ public:
                      std::string_view(), true /* hard async shutdown & close */, false);
     }
 
+    /// Closes the connection once net::Defaults.pongTimeout passes without a pong. Servers only. A
+    /// client never sends pings.
+    void closeOnPongTimeout() { _closeOnPongTimeout = true; }
+
     /// Returns true if the underlying socket is connected.
     bool isConnected() const
     {
@@ -422,8 +432,9 @@ private:
                         if (_isClient)
                             LOG_WRN("Servers should not send pongs, only clients");
 
+                        _lastPongTime = std::chrono::steady_clock::now();
                         _pingTimeUs = std::chrono::duration_cast<std::chrono::microseconds>
-                            (std::chrono::steady_clock::now() - _lastPingSentTime).count();
+                            (_lastPongTime - _lastPingSentTime).count();
                         LOGA_TRC(WebSocket, "Pong received: " << _pingTimeUs << " microseconds");
                         gotPing(code, _pingTimeUs);
                     }
@@ -683,6 +694,24 @@ public:
                 const std::shared_ptr<StreamSocket> socket = _socket.lock();
                 if (socket)
                     sendPing(now, socket);
+            }
+
+            // The poll wakes for every ping, so this runs at least once per ping interval.
+            if (_closeOnPongTimeout &&
+                net::Defaults.pongTimeout > std::chrono::microseconds::zero() &&
+                now - _lastPongTime > net::Defaults.pongTimeout)
+            {
+                const std::shared_ptr<StreamSocket> socket = _socket.lock();
+                if (socket)
+                {
+                    LOG_WRN("WebSocket peer sent no pong for "
+                            << std::chrono::duration_cast<std::chrono::milliseconds>(
+                                   now - _lastPongTime)
+                            << ", closing #" << socket->getFD());
+                    shutdown(StatusCodes::ENDPOINT_GOING_AWAY, "pong timeout",
+                             /*hardShutdown=*/true);
+                    return true;
+                }
             }
         }
         return false;

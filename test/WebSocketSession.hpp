@@ -303,6 +303,27 @@ public:
         }
     }
 
+    /// Stops reading from the connection while keeping it open. The peer's pings then go
+    /// unanswered, as they do for a browser that vanished without closing its socket.
+    void freeze()
+    {
+        const auto poller = _socketPoll.lock();
+        if (poller && poller->isAlive())
+        {
+            std::weak_ptr<WebSocketSession> weakSession
+                = std::static_pointer_cast<WebSocketSession>(shared_from_this());
+            poller->addCallback([weakSession=std::move(weakSession)]() {
+                auto session = weakSession.lock();
+                if (session)
+                    session->ignoreInput();
+            });
+        }
+        else
+        {
+            ignoreInput();
+        }
+    }
+
     /// Flags to shutdown after sending all the data.
     void asyncShutdown()
     {
