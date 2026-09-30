@@ -23,6 +23,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/drawstyleutils.hxx>
 #include <svx/xdef.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -428,6 +429,13 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
             aSet.Put(pItem->CloneSetWhich(SID_ATTR_TEXTCOLUMNS_SPACING));
         }
         rSet.Put(aSet, false);
+
+        if (SfxItemState::UNKNOWN != rSet.GetItemState(XATTR_FILLCOLOR, false)
+            && !svx::canFillColorShowThroughMarked(rMarkList))
+        {
+            rSet.ClearItem(XATTR_FILLCOLOR);
+            rSet.DisableItem(XATTR_FILLCOLOR);
+        }
     }
     else
     {

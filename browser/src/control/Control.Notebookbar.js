@@ -676,6 +676,9 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 											'noLabel': true,
 											'text': _UNO('.uno:FillColor'),
 											'command': '.uno:FillColor',
+											'disabledTooltip': opts.fillColorNeedsTransparency
+												? _('Fill Color (Transparent Pictures Only)')
+												: undefined,
 											'accessibility': { focusBack: true, combination: 'FC', de: null }
 										}
 									]
@@ -794,7 +797,8 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 			panelId: 'picture-properties-panel',
 			weldedToolbarId: 'PictureLineWeldedToolbar',
 			combination: 'PL',
-			includeArrow: false
+			includeArrow: false,
+			fillColorNeedsTransparency: true
 		});
 	},
 

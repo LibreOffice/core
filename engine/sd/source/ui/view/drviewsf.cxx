@@ -35,6 +35,7 @@
 #include <svl/itempool.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/bindings.hxx>
+#include <svx/drawstyleutils.hxx>
 #include <svx/xdef.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdouno.hxx>
@@ -848,6 +849,13 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             }
             nWhich = aNewIter.NextWhich();
         }
+    }
+
+    if (SfxItemState::UNKNOWN != rSet.GetItemState(XATTR_FILLCOLOR, false)
+        && !svx::canFillColorShowThroughMarked(rMarkList))
+    {
+        rSet.ClearItem(XATTR_FILLCOLOR);
+        rSet.DisableItem(XATTR_FILLCOLOR);
     }
 
     SfxItemState eState = pSet->GetItemState( EE_PARA_LRSPACE );

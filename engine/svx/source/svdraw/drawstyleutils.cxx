@@ -18,6 +18,7 @@
 #include <svx/svdmark.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdograf.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svxids.hrc>
@@ -117,6 +118,26 @@ void applyBareLineAttributesToMarked(SdrView& rView, const SfxItemSet& rArgs)
         pObj->SetMergedItem(XLineStyleItem(css::drawing::LineStyle_SOLID));
         pObj->BroadcastObjectChange();
     }
+}
+
+bool canFillColorShowThroughMarked(const SdrMarkList& rMarkList)
+{
+    const size_t nMarkCount(rMarkList.GetMarkCount());
+
+    if (0 == nMarkCount)
+        return true;
+
+    for (size_t a = 0; a < nMarkCount; ++a)
+    {
+        const SdrMark* pMark = rMarkList.GetMark(a);
+        const SdrGrafObj* pGraphicObject
+            = pMark ? dynamic_cast<const SdrGrafObj*>(pMark->GetMarkedSdrObj()) : nullptr;
+
+        if (!pGraphicObject || pGraphicObject->GetGraphic().HasTransparentPixels())
+            return true;
+    }
+
+    return false;
 }
 }
 

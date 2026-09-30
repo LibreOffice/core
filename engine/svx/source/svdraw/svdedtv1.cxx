@@ -69,6 +69,7 @@
 #include <COKit/COKit.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svx/drawstyleutils.hxx>
 #include <comphelper/kit.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/objsh.hxx>
@@ -1029,6 +1030,8 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
 {
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     const size_t nMarkCount(rMarkList.GetMarkCount());
+    const bool bFillColorUseless
+        = comphelper::COKit::isActive() && !svx::canFillColorShowThroughMarked(rMarkList);
 
     for(size_t a = 0; a < nMarkCount; ++a)
     {
@@ -1080,6 +1083,12 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
 
                     case XATTR_FILLCOLOR:
                     {
+                        if (bFillColorUseless)
+                        {
+                            sPayload = u".uno:FillColor=disabled"_ustr;
+                            break;
+                        }
+
                         const XFillColorItem* pItem = rSet.GetItem(XATTR_FILLCOLOR);
                         if (pItem)
                         {
