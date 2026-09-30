@@ -28,6 +28,8 @@ class MouseControl extends CanvasSectionObject {
 	clickCount: number = 0;
 	pendingClickInfo: any | null = null;
 	positionOnMouseDown: cool.SimplePoint | null = null;
+	// The keyboard modifier that was held when the button went down.
+	modifierOnMouseDown: number = 0;
 	localPositionOnMouseDown: cool.SimplePoint | null = null;
 	mouseDownSent: boolean = false;
 
@@ -407,13 +409,16 @@ class MouseControl extends CanvasSectionObject {
 			this.lastDragLocalPoint = point.clone();
 			this.lastDragModifier = modifier;
 
+			// The button-down goes to core only once the drag has started, but with the
+			// modifier held at the press. A key pressed later, such as Ctrl to copy,
+			// reaches core with the moves and the button-up.
 			if (!this.mouseDownSent && this.positionOnMouseDown) {
 				this.postCoreMouseEvent(
 					'buttondown',
 					this.positionOnMouseDown,
 					count,
 					app.LOButtons.left,
-					modifier,
+					this.modifierOnMouseDown,
 				);
 				this.mouseDownSent = true;
 			}
@@ -490,6 +495,7 @@ class MouseControl extends CanvasSectionObject {
 	onMouseDown(point: cool.SimplePoint, e: MouseEvent): void {
 		this.refreshPosition(point);
 		this.positionOnMouseDown = this.currentPosition.clone();
+		this.modifierOnMouseDown = MouseControl.readModifier(e);
 
 		if (e.type === 'touchstart') {
 			// For swipe action.
