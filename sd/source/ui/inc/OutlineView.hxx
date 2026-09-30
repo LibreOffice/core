@@ -105,6 +105,7 @@ public:
     SdOutliner&     GetOutliner() { return mrOutliner; }
 
     Paragraph*      GetPrevTitle(const Paragraph* pPara);
+    sal_Int32       CountTitlesBeforeParagraph(const Paragraph* pPara);
     Paragraph*      GetNextTitle(const Paragraph* pPara);
     SdPage*         GetActualPage();
     SdPage*         GetPageForParagraph( Paragraph* pPara );
