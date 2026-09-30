@@ -435,6 +435,24 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testFormControlExport)
     CPPUNIT_ASSERT_EQUAL(u"CheckBox1"_ustr, aNames[0]);
 }
 
+// A fill whose theme color went out of date keeps the color it shows.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testFillWithStaleThemeColor)
+{
+    // Given a document with two shapes filled with #c2d2e1: the first still carries the theme
+    // color dark1 (#062033), the second carries light2 at 90% brightness, which gives #c2d2e1.
+    createSdImpressDoc("odp/fill-stale-theme-color.fodp");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // Without the fix in place, this test would have failed with:
+    // - In <>, XPath '/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:solidFill/a:srgbClr' number of
+    //   nodes is incorrect
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:solidFill/a:srgbClr", "val",
+                u"C2D2E1");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:solidFill/a:schemeClr", "val",
+                u"lt2");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

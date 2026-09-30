@@ -44,6 +44,16 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
+#include <docmodel/theme/ColorSet.hxx>
+#include <docmodel/theme/Theme.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
+
+#include <algorithm>
+#include <cstdlib>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -406,6 +416,147 @@ void SdXMLImport::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArgume
     }
 }
 
+// Documents saved before a fill or a line kept its plain color and its theme color in step can
+// carry a theme color that no longer gives the color that is shown. The shown color is the one the
+// user chose, so the theme color is dropped.
+namespace
+{
+using ThemeList = std::vector<std::shared_ptr<model::Theme>>;
+
+void addTheme(ThemeList& rThemes, const std::shared_ptr<model::Theme>& pTheme)
+{
+    if (pTheme && pTheme->getColorSet()
+        && std::find(rThemes.begin(), rThemes.end(), pTheme) == rThemes.end())
+        rThemes.push_back(pTheme);
+}
+
+std::shared_ptr<model::Theme> getTheme(const uno::Reference<uno::XInterface>& xObject)
+{
+    uno::Reference<beans::XPropertySet> xSet(xObject, uno::UNO_QUERY);
+    if (!xSet.is() || !xSet->getPropertySetInfo()->hasPropertyByName(u"Theme"_ustr))
+        return nullptr;
+    return model::Theme::FromAny(xSet->getPropertyValue(u"Theme"_ustr));
+}
+
+bool resolvesToColor(const model::ComplexColor& rComplexColor, const ThemeList& rThemes,
+                     Color aColor)
+{
+    // The luminance transformations go through HSL, which can round a channel by a step or two.
+    auto isNearly = [aColor](Color aResolved)
+    {
+        constexpr int ROUNDING_TOLERANCE = 2;
+        return std::abs(aResolved.GetRed() - aColor.GetRed()) <= ROUNDING_TOLERANCE
+               && std::abs(aResolved.GetGreen() - aColor.GetGreen()) <= ROUNDING_TOLERANCE
+               && std::abs(aResolved.GetBlue() - aColor.GetBlue()) <= ROUNDING_TOLERANCE;
+    };
+    return std::any_of(rThemes.begin(), rThemes.end(),
+                       [&](const auto& pTheme)
+                       {
+                           const model::ColorSet& rColorSet = *pTheme->getColorSet();
+                           return isNearly(rColorSet.resolveColor(rComplexColor))
+                                  || isNearly(rColorSet.resolveOOXMLColor(rComplexColor));
+                       });
+}
+
+void dropStaleThemeColor(const uno::Reference<beans::XPropertySet>& xSet,
+                         const OUString& rColorName, const OUString& rComplexColorName,
+                         const ThemeList& rThemes)
+{
+    if (rThemes.empty())
+        return;
+    uno::Reference<beans::XPropertyState> xState(xSet, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySetInfo> xInfo = xSet->getPropertySetInfo();
+    if (!xState.is() || !xInfo->hasPropertyByName(rColorName)
+        || !xInfo->hasPropertyByName(rComplexColorName)
+        || xState->getPropertyState(rColorName) != beans::PropertyState_DIRECT_VALUE)
+        return;
+
+    uno::Reference<util::XComplexColor> xComplexColor;
+    xSet->getPropertyValue(rComplexColorName) >>= xComplexColor;
+    if (!xComplexColor.is())
+        return;
+    model::ComplexColor aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+    Color aColor;
+    if (aComplexColor.getThemeColorType() == model::ThemeColorType::Unknown
+        || !(xSet->getPropertyValue(rColorName) >>= aColor)
+        || resolvesToColor(aComplexColor, rThemes, aColor))
+        return;
+
+    xSet->setPropertyValue(rComplexColorName,
+                           uno::Any(model::color::createXComplexColor(model::ComplexColor())));
+}
+
+void dropStaleThemeColors(const uno::Reference<beans::XPropertySet>& xSet, const ThemeList& rThemes)
+{
+    dropStaleThemeColor(xSet, u"FillColor"_ustr, u"FillComplexColor"_ustr, rThemes);
+    dropStaleThemeColor(xSet, u"LineColor"_ustr, u"LineComplexColor"_ustr, rThemes);
+}
+
+void dropStaleThemeColorsOfShapes(const uno::Reference<drawing::XShapes>& xShapes,
+                                  const ThemeList& rThemes)
+{
+    for (sal_Int32 i = 0; i < xShapes->getCount(); ++i)
+    {
+        uno::Any aShape = xShapes->getByIndex(i);
+        if (uno::Reference<drawing::XShapes> xGroup{ aShape, uno::UNO_QUERY })
+            dropStaleThemeColorsOfShapes(xGroup, rThemes);
+        else if (uno::Reference<beans::XPropertySet> xShapeSet{ aShape, uno::UNO_QUERY })
+            dropStaleThemeColors(xShapeSet, rThemes);
+    }
+}
+
+void dropStaleThemeColorsOfDocument(const uno::Reference<frame::XModel>& xModel)
+{
+    std::shared_ptr<model::Theme> pDocumentTheme = getTheme(xModel);
+
+    uno::Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier(xModel, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xModel, uno::UNO_QUERY);
+    if (!xMasterPagesSupplier.is() || !xDrawPagesSupplier.is())
+        return;
+
+    ThemeList aAllThemes;
+    for (const auto& xPages :
+         { xMasterPagesSupplier->getMasterPages(), xDrawPagesSupplier->getDrawPages() })
+    {
+        for (sal_Int32 i = 0; i < xPages->getCount(); ++i)
+        {
+            uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(i), uno::UNO_QUERY_THROW);
+            // A shape takes the theme of its master page, or else the one of the document. A
+            // master page is not a master page target, and its shapes take its own theme.
+            uno::Reference<drawing::XMasterPageTarget> xTarget(xPage, uno::UNO_QUERY);
+            ThemeList aThemes;
+            addTheme(aThemes, getTheme(xTarget.is() ? xTarget->getMasterPage() : xPage));
+            if (aThemes.empty())
+                addTheme(aThemes, pDocumentTheme);
+            dropStaleThemeColorsOfShapes(xPage, aThemes);
+            for (const auto& pTheme : aThemes)
+                addTheme(aAllThemes, pTheme);
+        }
+    }
+    addTheme(aAllThemes, pDocumentTheme);
+
+    // A style can be used on any page, so its theme color is kept when any theme gives its color.
+    uno::Reference<style::XStyleFamiliesSupplier> xFamiliesSupplier(xModel, uno::UNO_QUERY);
+    if (!xFamiliesSupplier.is())
+        return;
+    uno::Reference<container::XNameAccess> xFamilies = xFamiliesSupplier->getStyleFamilies();
+    for (const OUString& rFamilyName : xFamilies->getElementNames())
+    {
+        uno::Reference<container::XNameAccess> xFamily(xFamilies->getByName(rFamilyName),
+                                                       uno::UNO_QUERY);
+        if (!xFamily.is())
+            continue;
+        for (const OUString& rStyleName : xFamily->getElementNames())
+        {
+            uno::Reference<beans::XPropertySet> xStyle(xFamily->getByName(rStyleName),
+                                                       uno::UNO_QUERY);
+            if (xStyle.is())
+                dropStaleThemeColors(xStyle, aAllThemes);
+        }
+    }
+}
+}
+
 void SdXMLImport::endDocument()
 {
     SvXMLImport::endDocument();
@@ -432,6 +583,10 @@ void SdXMLImport::endDocument()
     }
 
     maPageShapeRefs.clear();
+
+    // The content comes last, so its import sees every page, style and theme of the document.
+    if (mbLoadDoc && (getImportFlags() & SvXMLImportFlags::CONTENT))
+        dropStaleThemeColorsOfDocument(GetModel());
 }
 
 SvXMLImportContext *SdXMLImport::CreateFastContext( sal_Int32 nElement,

@@ -234,7 +234,7 @@
    <style:graphic-properties draw:stroke="none"/>
   </style:style>
   <style:style style:name="Graphic" style:family="graphic">
-   <style:graphic-properties svg:stroke-width="0.3cm" svg:stroke-color="#34b3fb" draw:marker-start-width="0.65cm" draw:marker-end-width="0.65cm" draw:fill="solid" draw:fill-color="#bbe6fe">
+   <style:graphic-properties svg:stroke-width="0.3cm" svg:stroke-color="#fb7e34" draw:marker-start-width="0.65cm" draw:marker-end-width="0.65cm" draw:fill="solid" draw:fill-color="#fda978">
     <loext:stroke-complex-color loext:theme-type="accent3" loext:color-type="theme">
      <loext:transformation loext:type="lummod" loext:value="6000"/>
      <loext:transformation loext:type="lumoff" loext:value="4000"/>
