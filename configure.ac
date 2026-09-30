@@ -218,6 +218,11 @@ AC_ARG_ENABLE([iosapp],
               AS_HELP_STRING([--enable-iosapp],
                              [Use on a Mac where you will build the iOS app.]))
 
+AC_ARG_WITH([iosapp-bundle-version],
+            AS_HELP_STRING([--with-iosapp-bundle-version=23],
+                           [Set the bundle version for the iOS app. If not set, we will count up starting from 1]),
+,)
+
 AC_ARG_ENABLE([macosapp],
               AS_HELP_STRING([--enable-macosapp],
                              [Use on a Mac where you will build the macOS app.]))
@@ -1242,14 +1247,21 @@ IOSAPP_BUNDLE_SHORT_VERSION="$COOLWSD_VERSION_MAJOR$COOLWSD_VERSION_MINOR.$COOLW
 IOSAPP_BUNDLE_VERSION=
 
 if test "$enable_iosapp" = "yes"; then
-   ENABLE_IOSAPP=true
+    ENABLE_IOSAPP=true
 
-   if test -f BUNDLE-VERSION; then
-       IOSAPP_BUNDLE_VERSION=$(cat BUNDLE-VERSION)
-   else
-       IOSAPP_BUNDLE_VERSION=1
-   fi
-   echo $IOSAPP_BUNDLE_VERSION >BUNDLE-VERSION
+    if test -n "$with_iosapp_bundle_version" -a "$with_iosapp_bundle_version" != "no"; then
+        case "$with_iosapp_bundle_version" in
+            ''|*@<:@!0-9@:>@*)
+                AC_MSG_ERROR([--with-iosapp-bundle-version must be a number if provided, got "$with_iosapp_bundle_version"])
+                ;;
+        esac
+        IOSAPP_BUNDLE_VERSION=$with_iosapp_bundle_version
+    elif test -f BUNDLE-VERSION; then
+        IOSAPP_BUNDLE_VERSION=$(cat BUNDLE-VERSION)
+    else
+        IOSAPP_BUNDLE_VERSION=1
+    fi
+    echo $IOSAPP_BUNDLE_VERSION >BUNDLE-VERSION
 fi
 
 AC_SUBST(ENABLE_IOSAPP)
