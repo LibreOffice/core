@@ -170,6 +170,27 @@ void removeContent(cpo::uno::Reference<css::text::XTextContent> const & content)
     host->removeTextContent(content);
 }
 
+// Removes a paragraph, unless it is the last one in its text, which GAS refuses to remove:
+void removeParagraph(cpo::uno::Reference<css::text::XTextContent> const & paragraph)
+{
+    if (paragraph.is()) {
+        auto const anchor = paragraph->getAnchor();
+        cpo::uno::Reference<css::container::XEnumerationAccess> const access(
+            anchor->getText(), cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextContent> last;
+        for (auto const en = access->createEnumeration(); en->hasMoreElements();) {
+            en->nextElement() >>= last;
+        }
+        cpo::uno::Reference<css::text::XTextRangeCompare> const compare(
+            anchor->getText(), cpo::uno::UNO_QUERY_THROW);
+        if (last.is() && compare->compareRegionStarts(last->getAnchor(), anchor) == 0) {
+            throw cpo::uno::RuntimeException(
+                u"removeFromParent: the last paragraph of a section cannot be removed"_ustr);
+        }
+    }
+    removeContent(paragraph);
+}
+
 sal_Int32 hundredthMmToPixels(sal_Int32 hundredthMm) {
     return o3tl::convert(hundredthMm, o3tl::Length::mm100, o3tl::Length::px);
 }
@@ -560,7 +581,7 @@ public:
         return {true, underline != css::awt::FontUnderline::NONE};
     }
 
-    void removeFromParent() override { removeContent(content_); }
+    void removeFromParent() override { removeParagraph(content_); }
 
     cpo::uno::Reference<scriptinterop::XText> setBold(bool value) override {
         setBoldOn(wholeRange(), value);
@@ -1155,7 +1176,7 @@ public:
         return {true, mode != css::text::WritingMode2::RL_TB};
     }
 
-    void removeFromParent() override { removeContent(content_); }
+    void removeFromParent() override { removeParagraph(content_); }
 
 private:
     std::optional<cpo::uno::Any> getParaProp(OUString const & name) {

@@ -270,6 +270,12 @@ function test() {
     console.assert(one.getText() === 'One');
     console.assert(two.getText() === 'Two');
 
+    // The last paragraph of a section cannot be removed:
+    const childCount = body.getNumChildren();
+    console.assert(throws(() => two.removeFromParent()));
+    console.assert(throws(() => two.editAsText().removeFromParent()));
+    console.assert(body.getNumChildren() === childCount);
+
     // newPosition takes a character offset into a Text element:
     const text1 = body.getChild(1).getChild(0);
     console.assert(text1.getType() === DocumentApp.ElementType.TEXT);
