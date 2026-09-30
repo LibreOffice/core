@@ -859,8 +859,10 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
 
     vcl::Window* pDragWin = pFrameData->mpMouseDownWin;
 
-    sal_Int8 nAction = (nCode & KEY_MOD1) ? css::datatransfer::dnd::DNDConstants::ACTION_COPY
-                                          : css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+    // A kit client sends the macOS Command key as KEY_MOD3, and it copies the same as Ctrl.
+    sal_Int8 nAction = (nCode & (KEY_MOD1 | KEY_MOD3))
+                           ? css::datatransfer::dnd::DNDConstants::ACTION_COPY
+                           : css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
 
     if (pDragWin &&
         nEvent == NotifyEventType::MOUSEMOVE &&

@@ -1219,6 +1219,27 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropInsertWholeColumn)
     CPPUNIT_ASSERT_EQUAL(u"ACDBEF"_ustr, aRow);
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropCopyCommand)
+{
+    // Given a document with A1=A and D1=E:
+    ScModelObj* pModelObj = createDoc("cell_drag.fods");
+    ScTestViewCallback aView;
+    Point aFrom = lcl_cellCenter(mxComponent, aView, u"$A$1"_ustr);
+    Point aTo = lcl_cellCenter(mxComponent, aView, u"$D$1"_ustr);
+    lcl_select(mxComponent, u"$A$1:$B$2"_ustr);
+
+    // When dragging A1:B2 to D1 with the macOS Command key, which a kit client sends as KEY_MOD3:
+    lcl_drag(pModelObj, aFrom, aTo, KEY_MOD3);
+
+    // Then A1:B2 is copied, the same as with Ctrl:
+    // Without the fix in place, this test would have failed with:
+    // - Expected: A
+    // - Actual  :
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pDoc->GetString(ScAddress(3, 0, 0)));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
