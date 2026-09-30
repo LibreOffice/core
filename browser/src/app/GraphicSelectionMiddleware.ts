@@ -485,8 +485,16 @@ class GraphicSelection {
 		var videoDesc = JSON.parse(textMsg);
 
 		if (this.hasActiveSelection()) {
-			videoDesc.width = this.rectangle.cWidth;
-			videoDesc.height = this.rectangle.cHeight;
+			// The player takes the size of the selection in CSS pixels. Where the client draws
+			// the selection itself, that is the box round the selected objects.
+			const size = this.selectionSection?.selectionSize();
+			if (size) {
+				videoDesc.width = Math.round(size[0] / app.dpiScale);
+				videoDesc.height = Math.round(size[1] / app.dpiScale);
+			} else {
+				videoDesc.width = this.rectangle.cWidth;
+				videoDesc.height = this.rectangle.cHeight;
+			}
 		}
 
 		// proxy cannot identify RouteToken if it is encoded

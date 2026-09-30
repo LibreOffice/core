@@ -1188,26 +1188,18 @@ abstract class SelectionSection extends CanvasSectionObject {
 		);
 	}
 
-	/// The upper left corner of the selection, in core pixels.
+	/// The upper left corner of the selection, in core pixels: the box round what is drawn of
+	/// the selected objects, or where this section stands while no object is known.
 	public selectionCorner(): number[] {
-		const box = RenderGeometrySection.answersPointer()
-			? this.boxOfTheSelection()
-			: undefined;
-		if (box) return [box[0], box[1]];
-
-		const rectangle = GraphicSelection.rectangle;
-		return rectangle ? [rectangle.pX1, rectangle.pY1] : this.position;
+		const box = this.boxOfTheSelection();
+		return box ? [box[0], box[1]] : this.position;
 	}
 
-	/// How wide and how high the selection is, in core pixels.
+	/// How wide and how high the selection is, in core pixels: the box round what is drawn of
+	/// the selected objects, or the size of this section while no object is known.
 	public selectionSize(): number[] {
-		const box = RenderGeometrySection.answersPointer()
-			? this.boxOfTheSelection()
-			: undefined;
-		if (box) return [box[2], box[3]];
-
-		const rectangle = GraphicSelection.rectangle;
-		return rectangle ? [rectangle.pWidth, rectangle.pHeight] : this.size;
+		const box = this.boxOfTheSelection();
+		return box ? [box[2], box[3]] : this.size;
 	}
 
 	/*
