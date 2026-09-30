@@ -5,8 +5,14 @@ var helper = require('../../common/helper');
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Writer view switch keeps the reading position.', function() {
 
 	beforeEach(function() {
-		helper.setupAndLoadDocument('writer/six_pages.fodt');
+		// The window has its final size at load, so the fit-width zoom is applied then, before
+		// the test scrolls.
 		cy.viewport(1920, 1080);
+		helper.setupAndLoadDocument('writer/six_pages.fodt');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+			return helper.processToIdle(win);
+		});
 	});
 
 	// How far below the top edge of the drawing area the top of the given page
@@ -33,35 +39,35 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Writer view switch keeps t
 	// zoom.
 	it('Switching to multi-page view and back stays on the page being read.', function() {
 		// Read page three: bring it to the top of the view and put the caret on it.
-		cy.getFrameWindow().then(function(win) {
-			win.app.activeDocument.activeLayout.scroll(0, pageTopOffset(win, 3));
-			return helper.processToIdle(win);
+		cy.then(() => {
+			this.win.app.activeDocument.activeLayout.scroll(0, pageTopOffset(this.win, 3));
+			return helper.processToIdle(this.win);
 		});
 
 		cy.cGet('#document-container').click();
-		cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		cy.then(() => helper.processToIdle(this.win));
 
-		cy.getFrameWindow().should(function(win) {
-			expect(pageTopOffset(win, 3), 'page three before the switch')
+		cy.wrap(null).should(() => {
+			expect(pageTopOffset(this.win, 3), 'page three before the switch')
 				.to.be.closeTo(0, 4);
 		});
 
 		// Two round trips, so that a view creeping down the document on every
 		// switch is caught as well as one that jumps back to the start.
 		for (var round = 0; round < 2; round++) {
-			cy.getFrameWindow().then(switchView);
-			cy.getFrameWindow().should(function(win) {
-				expect(win.app.activeDocument.activeLayout.type)
+			cy.then(() => switchView(this.win));
+			cy.wrap(null).should(() => {
+				expect(this.win.app.activeDocument.activeLayout.type)
 					.to.equal('ViewLayoutMultiPage');
-				expect(pageTopOffset(win, 3), 'page three in multi-page view')
+				expect(pageTopOffset(this.win, 3), 'page three in multi-page view')
 					.to.be.closeTo(0, 4);
 			});
 
-			cy.getFrameWindow().then(switchView);
-			cy.getFrameWindow().should(function(win) {
-				expect(win.app.activeDocument.activeLayout.type)
+			cy.then(() => switchView(this.win));
+			cy.wrap(null).should(() => {
+				expect(this.win.app.activeDocument.activeLayout.type)
 					.to.equal('ViewLayoutWriter');
-				expect(pageTopOffset(win, 3), 'page three in normal view')
+				expect(pageTopOffset(this.win, 3), 'page three in normal view')
 					.to.be.closeTo(0, 4);
 			});
 		}
