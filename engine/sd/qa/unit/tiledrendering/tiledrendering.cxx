@@ -67,6 +67,7 @@
 #include <ViewShellBase.hxx>
 #include <ViewShell.hxx>
 #include <DrawViewShell.hxx>
+#include <Window.hxx>
 #include <svx/svdpagv.hxx>
 #include <SlideshowLayerRenderer.hxx>
 #include <sdpage.hxx>
@@ -1441,6 +1442,45 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testReportedTextSelectionFollowsBoldC
     // reported for it was still the one measured before the change.
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSelection.size());
     CPPUNIT_ASSERT_GREATER(aSelectionOfTheRegularText.GetWidth(), m_aSelection[0].GetWidth());
+}
+
+// A click into the text being edited collapses its selection. The collapsed
+// selection is reported, so the client stops drawing the one it had.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testClickReportsCollapsedTextSelection)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    setupCOKitViewCallback(pViewShell->GetViewShellBase());
+
+    uno::Reference<container::XIndexAccess> xDrawPage(
+        pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    xShape->setString(u"Aaa bbb."_ustr);
+
+    SdrView* pView = pViewShell->GetView();
+    pView->SdrBeginTextEdit(pViewShell->GetActualPage()->GetObj(0));
+    CPPUNIT_ASSERT(pView->GetTextEditObject());
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    rEditView.SetSelection(ESelection(0, 4, 0, 7));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"bbb"_ustr, rEditView.GetSelected());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSelection.size());
+
+    // Click into the first word, left of the selection. The click goes straight to the edit
+    // view, and the report is checked before a repaint of the window can report it too.
+    sd::Window* pWindow = pViewShell->GetActiveWindow();
+    CPPUNIT_ASSERT(pWindow);
+    const Point aClickLogic(
+        o3tl::convert(m_aSelection[0].Left() - 500, o3tl::Length::twip, o3tl::Length::mm100),
+        o3tl::convert(m_aSelection[0].Center().Y(), o3tl::Length::twip, o3tl::Length::mm100));
+    const MouseEvent aClick(pWindow->LogicToPixel(aClickLogic), /*nClicks=*/1,
+                            MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+    rEditView.MouseButtonDown(aClick);
+    rEditView.MouseButtonUp(aClick);
+
+    CPPUNIT_ASSERT(!rEditView.HasSelection());
+    // This failed: the last reported selection was still the one of "bbb".
+    CPPUNIT_ASSERT(m_aSelection.empty());
 }
 
 /**

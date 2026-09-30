@@ -2220,6 +2220,11 @@ void ImpEditView::DeselectAll()
     aNewSelection.Min() = aNewSelection.Max();
     SetEditSelection(aNewSelection);
     // const_cast<EditPaM&>(GetEditSelection().Min()) = GetEditSelection().Max();
+    if (comphelper::COKit::isActive())
+    {
+        // Report the collapsed selection: the report above still had the range.
+        DrawSelectionXOR();
+    }
 
     if (comphelper::COKit::isActive() && mpViewShell && mpOutputWindow)
     {
