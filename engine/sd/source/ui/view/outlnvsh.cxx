@@ -1295,13 +1295,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     if( pFirstPara == pLastPara )
     {
         // how many pages are we before the selected page?
-        sal_uLong nPos = 0;
-        while( pFirstPara )
-        {
-            pFirstPara = pOlView->GetPrevTitle( pFirstPara );
-            if( pFirstPara )
-                nPos++;
-        }
+        sal_Int32 nPos = pOlView->CountTitlesBeforeParagraph(pFirstPara);
 
         if( nPos >= GetDoc()->GetSdPageCount( PageKind::Standard ) )
             nPos = 0;

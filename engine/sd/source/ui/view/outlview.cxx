@@ -518,6 +518,18 @@ Paragraph* OutlineView::GetPrevTitle(const Paragraph* pPara)
     return nullptr;
 }
 
+sal_Int32 OutlineView::CountTitlesBeforeParagraph(const Paragraph* pPara)
+{
+    sal_Int32 nCnt = 0;
+    while( pPara )
+    {
+        pPara = GetPrevTitle( pPara );
+        if( pPara )
+            nCnt++;
+    }
+    return nCnt;
+}
+
 /**
  * Return the title after a random paragraph
  */
@@ -572,13 +584,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     mrOutliner.SetParaFlag( pPara, ParaFlag::ISPAGE );
     // how many titles are there before the new title paragraph?
     sal_uLong nExample = 0;            // position of the "example" page
-    sal_uLong nTarget  = 0;            // position of insertion
-    while(pPara)
-    {
-        pPara = GetPrevTitle(pPara);
-        if (pPara)
-            nTarget++;
-    }
+    sal_Int32 nTarget = CountTitlesBeforeParagraph(pPara); // position of insertion
 
     // if a new paragraph is created via RETURN before the first paragraph, the
     // Outliner reports the old paragraph (which was moved down) as a new
@@ -690,12 +696,7 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, aPa
         return;
 
     // how many titles are in front of the title paragraph in question?
-    sal_uLong nPos = 0;
-    while(pPara)
-    {
-        pPara = GetPrevTitle(pPara);
-        if (pPara) nPos++;
-    }
+    sal_Int32 nPos = CountTitlesBeforeParagraph(pPara);
 
     // delete page and notes page
     sal_uInt16 nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
@@ -807,14 +808,8 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
         // the paragraph was a page but now becomes a normal paragraph
 
         // how many titles are before the title paragraph in question?
-        sal_uLong nPos = 0;
-        Paragraph* pParagraph = pPara;
-        while(pParagraph)
-        {
-            pParagraph = GetPrevTitle(pParagraph);
-            if (pParagraph)
-                nPos++;
-        }
+        sal_Int32 nPos = CountTitlesBeforeParagraph(pPara);
+
         // delete page and notes page
 
         sal_uInt16 nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
@@ -852,19 +847,11 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
     else if ( (pOutliner->GetPrevDepth() == 1) && ( pOutliner->GetDepth( pOutliner->GetAbsPos( pPara ) ) == 2 ) )
     {
         // how many titles are in front of the title paragraph in question?
-        sal_Int32 nPos = -1;
+        sal_Int32 nPos = CountTitlesBeforeParagraph(pPara);
 
-        Paragraph* pParagraph = pPara;
-        while(pParagraph)
+        if(nPos > 0)
         {
-            pParagraph = GetPrevTitle(pParagraph);
-            if (pParagraph)
-                nPos++;
-        }
-
-        if(nPos >= 0)
-        {
-            SdPage*pPage = mrDoc.GetSdPage( static_cast<sal_uInt16>(nPos), PageKind::Standard);
+            SdPage*pPage = mrDoc.GetSdPage( static_cast<sal_uInt16>(nPos - 1), PageKind::Standard);
 
             if(pPage && pPage->GetPresObj(PresObjKind::Text))
                 pOutliner->SetDepth( pPara, 0 );
@@ -872,20 +859,12 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
 
     }
     // how many titles are in front of the title paragraph in question?
-    sal_Int32 nPos = -1;
+    sal_Int32 nPos = CountTitlesBeforeParagraph(pPara);
 
-    Paragraph* pTempPara = pPara;
-    while(pTempPara)
-    {
-        pTempPara = GetPrevTitle(pTempPara);
-        if (pTempPara)
-            nPos++;
-    }
-
-    if( nPos < 0 )
+    if( nPos == 0 )
         return;
 
-    SdPage* pPage = mrDoc.GetSdPage( static_cast<sal_uInt16>(nPos), PageKind::Standard );
+    SdPage* pPage = mrDoc.GetSdPage( static_cast<sal_uInt16>(nPos - 1), PageKind::Standard );
 
     if( !pPage )
         return;
@@ -1376,15 +1355,9 @@ SdPage* OutlineView::GetPageForParagraph( Paragraph* pPara )
     if( !::Outliner::HasParaFlag(pPara,ParaFlag::ISPAGE) )
         pPara = GetPrevTitle(pPara);
 
-    sal_uInt32 nPageToSelect = 0;
-    while(pPara)
-    {
-        pPara = GetPrevTitle(pPara);
-        if(pPara)
-            nPageToSelect++;
-    }
+    sal_Int32 nPageToSelect = CountTitlesBeforeParagraph(pPara);
 
-    if( nPageToSelect < static_cast<sal_uInt32>(mrDoc.GetSdPageCount( PageKind::Standard )) )
+    if( nPageToSelect < mrDoc.GetSdPageCount( PageKind::Standard ) )
         return mrDoc.GetSdPage( static_cast<sal_uInt16>(nPageToSelect), PageKind::Standard );
 
     return nullptr;
