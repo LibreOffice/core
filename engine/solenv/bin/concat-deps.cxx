@@ -16,6 +16,7 @@
 #include <iostream>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
@@ -42,10 +43,10 @@ static std::string src_dir;
    build tree. */
 static std::vector<std::string> build_tree_prefixes;
 
-/* The work directory with UnpackedTarball, the work directory, the build directory and the
-   source directory, each with a trailing slash and forward slashes, longest first. cl
-   /sourceDependencies reports its include paths in lower case, and make compares target names as
-   they are spelled, so a path that starts with one of these in any case gets it in this spelling.
+/* The work directory, the build directory and the source directory, each with a trailing slash
+   and forward slashes, longest first. cl /sourceDependencies reports its include paths in lower
+   case, and make compares target names as they are spelled, so a path that starts with one of
+   these in any case gets it in this spelling, and on Windows the rest of it the spelling on disk.
    The .done target of an unpacked tarball, which is made from such a path, then has a rule. */
 static std::vector<std::string> tree_spellings;
 
@@ -482,7 +483,62 @@ static void append_escaped(std::string& w, const std::string& path)
     }
 }
 
-/* Give path the spelling of the tree prefix from tree_spellings that it starts with in any case. */
+#ifdef _WIN32
+static std::string ascii_lower(std::string_view s)
+{
+    std::string result(s);
+    for (char& c : result)
+        c = static_cast<char>(tolower(static_cast<unsigned char>(c)));
+    return result;
+}
+
+/* For every directory listed so far, keyed by its path with a trailing slash, the names of its
+   entries as the filesystem spells them, keyed by their lower-case form. */
+static std::unordered_map<std::string, std::unordered_map<std::string, std::string>> dir_entries;
+
+static const std::unordered_map<std::string, std::string>& entries_of(const std::string& dir)
+{
+    auto [it, inserted] = dir_entries.try_emplace(dir);
+    if (inserted)
+    {
+        /* The paths are UTF-8, and a std::string would be read in the ANSI code page. */
+        std::error_code ec;
+        std::filesystem::directory_iterator iter(
+            std::u8string(reinterpret_cast<const char8_t*>(dir.data()), dir.size()), ec);
+        for (; !ec && iter != std::filesystem::directory_iterator(); iter.increment(ec))
+        {
+            const std::u8string name = iter->path().filename().u8string();
+            std::string spelling(reinterpret_cast<const char*>(name.data()), name.size());
+            it->second.emplace(ascii_lower(spelling), std::move(spelling));
+        }
+    }
+    return it->second;
+}
+
+/* Give the components of path from start on, where start follows a slash, the spelling they have
+   on disk. Stops at the first component that is not found, which keeps its spelling and that of
+   the rest, as for a header that does not exist yet. */
+static void respell_from_disk(std::string& path, size_t start)
+{
+    while (start < path.size())
+    {
+        const size_t slash = path.find('/', start);
+        const size_t len = (slash == std::string::npos ? path.size() : slash) - start;
+        const std::string dir = path.substr(0, start);
+        const std::unordered_map<std::string, std::string>& entries = entries_of(dir);
+        const auto found = entries.find(ascii_lower(std::string_view(path).substr(start, len)));
+        if (found == entries.end() || found->second.size() != len)
+            return;
+        path.replace(start, len, found->second);
+        if (slash == std::string::npos)
+            return;
+        start = slash + 1;
+    }
+}
+#endif
+
+/* Give path the spelling of the tree prefix from tree_spellings that it starts with in any case,
+   and on Windows the rest of it the spelling on disk. */
 static void respell_tree_prefix(std::string& path)
 {
     for (const std::string& prefix : tree_spellings)
@@ -491,16 +547,20 @@ static void respell_tree_prefix(std::string& path)
             && PATHNCMP(path.c_str(), prefix.c_str(), prefix.size()) == 0)
         {
             path.replace(0, prefix.size(), prefix);
+#ifdef _WIN32
+            respell_from_disk(path, prefix.size());
+#endif
             return;
         }
     }
 }
 
-/* cl /sourceDependencies reports the source in lower case too. A missing header only costs a
-   rebuild, since every header also gets a rule of its own, but a generated source that is missing
-   has no rule under a lower-case name, and make stops. The object, workdir/<Class>/<rel>.o, is
-   spelled as its rule has it, and the source is <dir>/<rel>.<ext>, so a tail of source that is
-   /<rel> in any case gets the spelling of the object. */
+/* cl /sourceDependencies reports the source in lower case too, and a generated source that is
+   missing cannot be looked up on disk. A missing header only costs a rebuild, since every header
+   also gets a rule of its own, but the source has no rule under a lower-case name, and make
+   stops. The object, workdir/<Class>/<rel>.o, is spelled as its rule has it, and the source is
+   <dir>/<rel>.<ext>, so a tail of source that is /<rel> in any case gets the spelling of the
+   object. */
 static void respell_source_from_object(std::string& source, const std::string& object)
 {
     const size_t rel_start = object.find('/', work_dir.size() + 1);
@@ -832,9 +892,8 @@ int main(int argc, char** argv)
     add_build_tree_prefix(srcdir);
     add_build_tree_prefix(workdir);
 
-    const std::string work_dir_slashes = dup_forward_slashes(workdir);
-    for (const std::string& dir : { work_dir_slashes + "/UnpackedTarball", work_dir_slashes,
-                                    dup_forward_slashes(getenv("BUILDDIR")), src_dir })
+    for (const std::string& dir :
+         { dup_forward_slashes(workdir), dup_forward_slashes(getenv("BUILDDIR")), src_dir })
     {
         if (!dir.empty())
             tree_spellings.push_back(dir + '/');
