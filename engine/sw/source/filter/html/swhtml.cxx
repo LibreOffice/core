@@ -46,6 +46,7 @@
 #include <svtools/ctrltool.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/wrkwin.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/docfile.hxx>
 
@@ -306,15 +307,13 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_bInFootEndNoteAnchor( false ),
     m_bInFootEndNoteSymbol( false ),
     m_bIgnoreHTMLComments( bNoHTMLComments ),
-    m_bRemoveHidden( false ),
     m_bBodySeen( false ),
     m_bReadingHeaderOrFooter( false ),
     m_bNotifyMacroEventRead( false ),
     m_isInTableStructure(false),
     m_nTableDepth( 0 ),
     m_nFloatingFrames( 0 ),
-    m_nListItems( 0 ),
-    m_pTempViewFrame(nullptr)
+    m_nListItems( 0 )
 {
     // If requested explicitly, then force ignoring of comments (don't create postits for them).
     if (!bFuzzing)
@@ -529,15 +528,12 @@ SwHTMLParser::~SwHTMLParser()
 
     m_xDoc.clear();
 
-    if ( m_pTempViewFrame )
+    if (m_xControlSizeContainer.is())
     {
-        m_pTempViewFrame->DoClose();
-
-        // the temporary view frame is hidden, so the hidden flag might need to be removed
-        SwDocShell* pShell = m_xDoc.is() ? m_xDoc->GetDocShell() : nullptr;
-        if ( m_bRemoveHidden && pShell && pShell->GetMedium() )
-            pShell->GetMedium()->GetItemSet().ClearItem( SID_HIDDEN );
+        uno::Reference<lang::XComponent>(m_xControlSizeContainer, uno::UNO_QUERY_THROW)->dispose();
+        m_xControlSizeContainer.clear();
     }
+    m_xControlSizeWindow.disposeAndClear();
 }
 
 IMPL_LINK_NOARG( SwHTMLParser, AsyncCallback, void*, void )
