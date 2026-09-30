@@ -1,0 +1,23 @@
+--- fontconfig/src/fcint.h.foo	2026-09-30 11:01:43
++++ fontconfig/src/fcint.h	2026-09-30 11:10:23
+@@ -44,6 +44,9 @@
+ #ifdef HAVE_UNISTD_H
+ #  include <unistd.h>
+ #endif
++#if defined(HAVE_XLOCALE_H) || defined(__APPLE__)
++#include <xlocale.h>
++#endif
+ #include <fontconfig/fontconfig.h>
+ #include <fontconfig/fcprivate.h>
+ 
+--- fontconfig/src/fcstr.c.foo	2026-09-30 11:05:33
++++ fontconfig/src/fcstr.c	2026-09-30 11:10:17
+@@ -28,7 +28,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+-#ifdef HAVE_XLOCALE_H
++#if defined(HAVE_XLOCALE_H) || defined(__APPLE__)
+ #include <xlocale.h>
+ #endif
+ 
