@@ -904,6 +904,10 @@ public:
         none. */
     SC_DLLPUBLIC bool HasDataProviderMappings() const;
 
+    /** True when the document holds a database range that imports from a data source again each
+        time its refresh delay runs out. */
+    bool HasRefreshingDBImport() const;
+
     /** True when a pivot table takes its data from a database document named by URL rather than
         from a registered data source. */
     bool HasDataPilotDatabaseLink() const;
