@@ -77,6 +77,9 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwTransferable final : public Transfe
     friend class SwView_Impl;
     SfxObjectShellLock              m_aDocShellRef;
     TransferableObjectDescriptor    m_aObjDesc;
+    /// Visible area of the clipboard document in twips, fitted to its content. Empty means the
+    /// fixed default area.
+    tools::Rectangle m_aOleVisArea;
     tools::SvRef<SwTransferDdeLink>  m_xDdeLink;
 
     SwWrtShell      *m_pWrtShell;
@@ -176,7 +179,8 @@ public:
 
     // set properties on the document, like PageMargin, VisArea.
     // And set real Size
-    static void InitOle( SfxObjectShell* pDoc );
+    static void InitOle(SfxObjectShell* pDoc,
+                        const tools::Rectangle& rVisArea = tools::Rectangle());
 
     // copy - methods and helper methods for the copy
     SW_DLLPUBLIC int  Cut();

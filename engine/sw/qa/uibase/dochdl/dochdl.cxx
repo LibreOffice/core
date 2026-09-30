@@ -24,6 +24,7 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <fmtanchr.hxx>
+#include <fmtfsize.hxx>
 #include <fmtinfmt.hxx>
 #include <ndtxt.hxx>
 #include <txatbase.hxx>
@@ -197,6 +198,40 @@ CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testPasteSvg)
     // - Actual  : 0
     // i.e. the SVG was not pasted as an image.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testCopyTextAndImageObjectSize)
+{
+    // Given a document with a line of text and a 5 cm tall as-char image:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert2(u"text before the image"_ustr);
+    constexpr tools::Long IMAGE_SIZE_MM100 = 5000;
+    constexpr SwTwips IMAGE_SIZE_TWIP
+        = o3tl::convert(IMAGE_SIZE_MM100, o3tl::Length::mm100, o3tl::Length::twip);
+    SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
+    aFrameSet.Put(SwFormatAnchor(RndStdIds::FLY_AS_CHAR));
+    aFrameSet.Put(SwFormatFrameSize(SwFrameSize::Fixed, IMAGE_SIZE_TWIP, IMAGE_SIZE_TWIP));
+    Graphic aGraphic;
+    pWrtShell->SwFEShell::Insert(OUString(), OUString(), &aGraphic, &aFrameSet);
+    pWrtShell->UnSelectFrame();
+
+    // When copying both the text and the image:
+    pWrtShell->SelAll();
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+    pTransfer->Copy();
+
+    // Then the object offered to other applications is tall enough to show the whole image:
+    TransferableDataHelper aHelper(pTransfer);
+    TransferableObjectDescriptor aObjectDescriptor;
+    CPPUNIT_ASSERT(aHelper.GetTransferableObjectDescriptor(SotClipboardFormatId::OBJECTDESCRIPTOR,
+                                                           aObjectDescriptor));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 5000
+    // - Actual  : 3000
+    // i.e. the object was always 3 cm tall, so the lower part of the image was cut off.
+    CPPUNIT_ASSERT_GREATER(IMAGE_SIZE_MM100, aObjectDescriptor.maSize.Height());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
