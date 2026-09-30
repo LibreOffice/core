@@ -496,6 +496,26 @@ static void respell_tree_prefix(std::string& path)
     }
 }
 
+/* cl /sourceDependencies reports the source in lower case too. A missing header only costs a
+   rebuild, since every header also gets a rule of its own, but a generated source that is missing
+   has no rule under a lower-case name, and make stops. The object, workdir/<Class>/<rel>.o, is
+   spelled as its rule has it, and the source is <dir>/<rel>.<ext>, so a tail of source that is
+   /<rel> in any case gets the spelling of the object. */
+static void respell_source_from_object(std::string& source, const std::string& object)
+{
+    const size_t rel_start = object.find('/', work_dir.size() + 1);
+    const size_t dot = object.rfind('.');
+    if (rel_start == std::string::npos || dot == std::string::npos || dot < rel_start)
+        return;
+    const std::string_view rel = std::string_view(object).substr(rel_start, dot - rel_start);
+    const size_t source_dot = source.rfind('.');
+    if (source_dot == std::string::npos || source_dot < rel.size())
+        return;
+    const size_t tail = source_dot - rel.size();
+    if (PATHNCMP(source.c_str() + tail, rel.data(), rel.size()) == 0)
+        source.replace(tail, rel.size(), rel);
+}
+
 /* Walk the "Includes" array in json once. Every header inside the build tree is
    appended to includes, already make-escaped. Returns false when the JSON is
    malformed. */
@@ -570,6 +590,7 @@ static bool convert_source_deps_json(const char* json, size_t json_size, const c
             if (!source.empty())
             {
                 respell_tree_prefix(source);
+                respell_source_from_object(source, object);
                 out += ' ';
                 append_escaped(out, source);
                 out += " \\\n";
