@@ -2593,6 +2593,12 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
                 aArgs[u"InsertMode"_ustr] <<= true;
                 aArgs[u"TextInsertModeRange"_ustr] <<= xInsertPosition;
             }
+            else
+            {
+                // Links stay un-updated during import, as when loading our own format, until
+                // UpdateLinks settles them.
+                GetEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
+            }
 
             // #i119492# During loading, some OLE objects like chart will be set
             // modified flag, so needs to reset the flag to false after loading

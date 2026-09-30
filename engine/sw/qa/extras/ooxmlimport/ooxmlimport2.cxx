@@ -16,9 +16,11 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
@@ -41,6 +43,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <svl/documentlockfile.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <xmloff/odffields.hxx>
 
@@ -1678,6 +1681,21 @@ CPPUNIT_TEST_FIXTURE(Test, testBuiltInTableStyleReference)
     const SwTableBox* pHeaderBox = pTable->GetTabLines()[0]->GetTabBoxes()[0];
     CPPUNIT_ASSERT_EQUAL(Color(0x4472C4),
                          pHeaderBox->GetFrameFormat()->GetAttrSet().GetBackground().GetColor());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkedPictureNotReadOnLoad)
+{
+    // Given a document whose picture is only a link to a file next to it, loaded with link
+    // updates off:
+    loadWithParams(createFileURL(u"linked-picture.docx"),
+                   { comphelper::makePropertyValue(
+                       u"UpdateDocMode"_ustr, sal_Int16(document::UpdateDocMode::NO_UPDATE)) });
+
+    // Then the linked file is not read, so the picture has no pixels:
+    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(getShape(1), u"Graphic"_ustr);
+    // Without the accompanying fix in place, this test would have failed, the import read the
+    // linked file and the picture was a bitmap.
+    CPPUNIT_ASSERT(Graphic(xGraphic).GetType() != GraphicType::Bitmap);
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
