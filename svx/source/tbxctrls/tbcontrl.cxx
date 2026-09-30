@@ -2125,8 +2125,8 @@ ColorWindow::ColorWindow(OUString  rCommand,
 
     // ensure minimum height to also provide space for palettes with
     // more colors when one with few colors is initially selected
-    if (maColorIconView.get_size_request().Height() < 200)
-        maColorIconView.set_size_request(-1, 200);
+    if (maColorIconView.get_size_request().Height() < 250)
+        maColorIconView.set_size_request(-1, 250);
 
     AddStatusListener( u".uno:ColorTableState"_ustr );
     AddStatusListener( maCommand );
