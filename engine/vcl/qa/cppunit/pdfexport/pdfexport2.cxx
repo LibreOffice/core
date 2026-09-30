@@ -7607,6 +7607,37 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testShapeClickLinkContents)
                          ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pContents));
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173709HyperlinkTitle)
+{
+    // A link in shape text with office:title and office:name, and one with office:name only
+    loadFromFile(u"tdf173709-hyperlink-title.fodp");
+    save(TestFilter::PDF_WRITER);
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
+    CPPUNIT_ASSERT(pAnnots);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pAnnots->GetElements().size());
+    std::vector<OUString> aContents;
+    for (auto* pElement : pAnnots->GetElements())
+    {
+        auto pAnnotRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+        CPPUNIT_ASSERT(pAnnotRef);
+        auto pContents = dynamic_cast<vcl::filter::PDFHexStringElement*>(
+            pAnnotRef->LookupObject()->Lookup("Contents"_ostr));
+        CPPUNIT_ASSERT(pContents);
+        aContents.push_back(::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pContents));
+    }
+
+    // Without the fix in place, this was "anchor1", the Name
+    CPPUNIT_ASSERT_EQUAL(u"LibreOffice home page"_ustr, aContents[0]);
+    // a link without a title falls back to its Name
+    CPPUNIT_ASSERT_EQUAL(u"Help pages"_ustr, aContents[1]);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

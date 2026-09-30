@@ -67,7 +67,9 @@ CheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive,
             meValues.emplace_back("URL", pURLField->GetURL());
             meValues.emplace_back("Representation", pURLField->GetRepresentation());
             meValues.emplace_back("TargetFrame", pURLField->GetTargetFrame());
-            meValues.emplace_back("AltText", pURLField->GetName());
+            // The Title is the link's description, the Name serves older documents
+            const OUString& rTitle = pURLField->GetTitle();
+            meValues.emplace_back("AltText", rTitle.isEmpty() ? pURLField->GetName() : rTitle);
             meValues.emplace_back(
                 "SvxURLFormat", OUString::number(static_cast<sal_uInt16>(pURLField->GetFormat())));
             xRet = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(
