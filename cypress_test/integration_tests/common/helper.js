@@ -569,6 +569,18 @@ function assertCursorAndFocus() {
 	cy.log('<< assertCursorAndFocus - end');
 }
 
+// Click into the document and wait until the editable area has the focus and accepts
+// input. The editable area listens for keys only while it has focus, and the load of
+// another frame takes the focus away. The click gives it back.
+function clickIntoDocument() {
+	cy.log('>> clickIntoDocument - start');
+
+	cy.cGet('#document-container').click();
+	assertCursorAndFocus();
+
+	cy.log('<< clickIntoDocument - end');
+}
+
 // Select all text via CTRL+A shortcut.
 // options.isTable: when true, use multiple ctrl+a to select all text beyond current table
 function selectAllText(options) {
@@ -1605,6 +1617,7 @@ module.exports.reloadDocument = reloadDocument;
 module.exports.reloadFrameAndWaitForNewPage = reloadFrameAndWaitForNewPage;
 module.exports.documentChecks = documentChecks;
 module.exports.assertCursorAndFocus = assertCursorAndFocus;
+module.exports.clickIntoDocument = clickIntoDocument;
 module.exports.assertNoKeyboardInput = assertNoKeyboardInput;
 module.exports.assertHaveKeyboardInput = assertHaveKeyboardInput;
 module.exports.selectAllText = selectAllText;

@@ -188,9 +188,11 @@ describe(['tagmultiuser'], 'Keep the view fixed while another view edits', funct
 		// caret at the very start, and the second view sends its caret to the
 		// very end, so the two views look at opposite ends of the document.
 		cy.cSetActiveFrame('#iframe1');
+		helper.clickIntoDocument();
 		helper.typeIntoDocument('{ctrl}{home}');
 
 		cy.cSetActiveFrame('#iframe2');
+		helper.clickIntoDocument();
 		helper.typeIntoDocument('{ctrl}{end}');
 		cy.getFrameWindow().then(function(win) {
 			return helper.processToIdle(win);
@@ -260,11 +262,13 @@ describe(['tagmultiuser'], 'Keep the view fixed while another view edits', funct
 
 		// The first view keeps its caret at the very start.
 		cy.cSetActiveFrame('#iframe1');
+		helper.clickIntoDocument();
 		helper.typeIntoDocument('{ctrl}{home}');
 
 		// The second view sends its caret to the very end and then switches to
 		// the multi-page view, which starts at the first page.
 		cy.cSetActiveFrame('#iframe2');
+		helper.clickIntoDocument();
 		helper.typeIntoDocument('{ctrl}{end}');
 		cy.getFrameWindow().then(function(win) {
 			win.app.dispatcher.dispatch('multipageview');

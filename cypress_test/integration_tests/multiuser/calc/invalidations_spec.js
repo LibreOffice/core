@@ -2,6 +2,7 @@
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
+var calcHelper = require('../../common/calc_helper');
 
 describe(['tagmultiuser'], 'Joining a document should not trigger an invalidation', function() {
 
@@ -21,6 +22,10 @@ describe(['tagmultiuser'], 'Joining a document should not trigger an invalidatio
 			this.win1 = win;
 		}).then(() => {
 			helper.processToIdle(this.win1);
+		}).then(() => {
+			// The editable area listens for keys only while it has focus, and the
+			// load of the second frame takes the focus away. The click gives it back.
+			calcHelper.clickOnFirstCell();
 		}).then(() => {
 			helper.typeIntoDocument('X');
 			helper.typeIntoDocument('{enter}');

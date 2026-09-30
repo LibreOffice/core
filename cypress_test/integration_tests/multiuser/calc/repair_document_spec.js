@@ -11,6 +11,9 @@ describe.skip('Repair Document', function() {
 
 	function repairDoc(frameId1, frameId2) {
 		cy.cSetActiveFrame(frameId1);
+		// The editable area listens for keys only while it has focus, and the
+		// load of the other frame takes the focus away. The click gives it back.
+		calcHelper.clickOnFirstCell();
 		helper.typeIntoDocument('Hello World{enter}');
 		cy.cSetActiveFrame(frameId2);
 		calcHelper.assertSheetContents(['Hello World\n']);
