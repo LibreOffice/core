@@ -868,44 +868,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_hu)
     if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
         return;
 
-    std::vector<std::pair<OUString, OUString>> aCompound = {
-        { u"jogorvoslatért"_ustr, "hy:3" }, { u"valamint"_ustr, "hy:4" },
-        { u"alapfokon"_ustr, "pa:fokon" },  { u"jótéteményekben"_ustr, "hy:2" },
-        { u"elismerésének"_ustr, "hy:2" },
-    };
-
-    // tests supported by the actual spelling dictionary
-    bool aTests[5];
-
-    // check Hunspell-based morphological analysis & hyphenation
-    bool bHunspell = xSpell->isValid("<?xml?>", static_cast<sal_uInt16>(eLang),
-                                     uno::Sequence<beans::PropertyValue>());
-    if (bHunspell)
-    {
-        // check dictionary support of compound splitting
-        for (size_t i = 0; i < aCompound.size(); ++i)
-        {
-            aTests[i] = false;
-            // get morphological analysis of the test word
-            uno::Reference<css::linguistic2::XSpellAlternatives> xTmpRes = xSpell->spell(
-                "<?xml?><query type='analyze'><word>" + aCompound[i].first + "</word></query>",
-                static_cast<sal_uInt16>(eLang), uno::Sequence<beans::PropertyValue>());
-            if (xTmpRes.is())
-            {
-                uno::Sequence<OUString> seq = xTmpRes->getAlternatives();
-                if (seq.hasElements())
-                {
-                    sal_Int32 nEndOfFirstAnalysis = seq[0].indexOf("</a>");
-                    // use only the first analysis, like the lingucomponent implementation
-                    OUString morph(seq[0].copy(0, nEndOfFirstAnalysis));
-
-                    // check compound data
-                    aTests[i] = morph.indexOf(aCompound[i].second) > -1;
-                }
-            }
-        }
-    }
-
     createSwDoc("tdf119908_smart_hyphenation_hu.odt");
     // Ensure that all text portions are calculated before testing.
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -915,7 +877,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_hu)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    // 53 hyphenations on 5 pages using compound-based smart hyphenation
+    // 53 hyphenations on 5 pages using non-compound-based smart hyphenation
     // This was 67 without smart hyphenation and 53 without compound-based smart hyphenation
     // (using only the plain or interoperable smart hyphenation).
 
@@ -1057,12 +1019,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_hu)
     // no compound-based "smart" hyphenation of the compound "jog|orvoslat"
     // This is hyphenated as "jogor-voslat", not "jog-orvoslat"
 
-    if (bHunspell && aTests[0])
-    {
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[2]", "portion",
-                    u"alapvető jogokat sértő eljárások ellen az illetékes hazai bíróságokhoz "
-                    u"tényleges jogor");
-    }
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"alapvető jogokat sértő eljárások ellen az illetékes hazai bíróságokhoz "
+                u"tényleges jogor");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
                 1);
 
@@ -1117,12 +1076,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_hu)
     // no compound-based "smart" hyphenation of the compound "vala|mint"
     // This is hyphenated as "va-lamint" without enabled compound-based "smart" hyphenation
 
-    if (bHunspell && aTests[1])
-    {
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[22]/SwParaPortion/SwLineLayout[1]", "portion",
-                    u"Minden személynek joga van minden országot, ideértve saját hazáját is, "
-                    u"elhagyni, va");
-    }
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[22]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Minden személynek joga van minden országot, ideértve saját hazáját is, "
+                u"elhagyni, va");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[22]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
                 1);
 
@@ -1261,12 +1217,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_hu)
     // no compound-based "smart" hyphenation of the compound "alap|fokon"
     // This is hyphenated as "alapfo-kon", not "alap-fokon"
 
-    if (bHunspell && aTests[2])
-    {
-        assertXPath(
-            pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[1]", "portion",
-            u"Minden személynek joga van az oktatáshoz. Az oktatásnak legalábbis elemi és alapfo");
-    }
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Minden személynek joga van az oktatáshoz. Az oktatásnak legalábbis elemi és alapfo");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
                 1);
 
@@ -1291,14 +1244,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_hu)
     // no compound-based "smart" hyphenation of the compound "jó|téteményekben"
     // This is not hyphenated, when compound-based smart hyphenation is disabled
 
-    if (bHunspell && aTests[3])
-    {
-        assertXPath(
-            pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[2]", "portion",
-            u"a művészetek élvezéséhez, valamint a tudomány haladásában és az abból származó ");
-        assertXPath(pXmlDoc,
-                    "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[2]/SwHyphPortion", 0);
-    }
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"a művészetek élvezéséhez, valamint a tudomány haladásában és az abból származó ");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                0);
 
     assertXPath(
         pXmlDoc, "/root/page[1]/body/txt[18]/SwParaPortion/SwLineLayout[1]", "portion",
@@ -1339,14 +1288,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_hu)
     // no compound-based "smart" hyphenation of the compound "el|ismerésének"
     // This is not hyphenated by the plain, i.e. not compound-based "smart" hyphenation.
 
-    if (bHunspell && aTests[4])
-    {
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[2]", "portion",
-                    u"zásoknak lehet alávetve, amelyeket a törvény kizárólag mások jogai és "
-                    u"szabadságai ");
-        assertXPath(pXmlDoc,
-                    "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[2]/SwHyphPortion", 0);
-    }
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"zásoknak lehet alávetve, amelyeket a törvény kizárólag mások jogai és "
+                u"szabadságai ");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                0);
+
+    // follow-up to the non-compound-based "smart" hyphenation in the previous line
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[3]", "portion",
+        u"elismerésének és tiszteletben tartásának biztosítása, valamint a demokratikus társada");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[3]/SwHyphPortion",
+                1);
+
+    // follow-up to the non-compound-based "smart" hyphenation in the first line of the paragraph
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[4]", "portion",
+        u"lom erkölcse, közrendje és általános jóléte jogos követelményeinek kielégítése érdeké");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[4]/SwHyphPortion",
+                1);
 
     assertXPath(
         pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[1]", "portion",
@@ -1361,8 +1323,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_hu)
         pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]", "portion",
         u"A jelen Nyilatkozat egyetlen rendelkezése sem értelmezhető úgy, hogy az valamely ");
 
-    if (bHunspell && aTests[4])
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 5);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 6);
 }
 
 // check smart hyphenation and compound-based smart hyphenation
@@ -1828,7 +1789,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf173389_smart_hyphenation_hu)
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2766, /*bBasicCall=*/false);
     pWrtShell->Delete();
 
-    // 5 hyphenations on page 5
+    // 6 hyphenations on page 5
 
     pViewShell->Reformat();
     pXmlDoc = parseLayoutDump();
@@ -1893,43 +1854,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_nl)
     if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
         return;
 
-    std::vector<std::pair<OUString, OUString>> aCompound = {
-        { u"arbeidsvoorwaarden"_ustr, "pa:arbeids" },
-        { u"doeleinden"_ustr, "pa:doel" },
-    };
-
-    // tests supported by the actual spelling dictionary
-    bool aTests[2];
-
-    // check Hunspell-based morphological analysis & hyphenation
-    bool bHunspell = xSpell->isValid("<?xml?>", static_cast<sal_uInt16>(eLang),
-                                     uno::Sequence<beans::PropertyValue>());
-    if (bHunspell)
-    {
-        // check dictionary support of compound splitting
-        for (size_t i = 0; i < aCompound.size(); ++i)
-        {
-            aTests[i] = false;
-            // get morphological analysis of the test word
-            uno::Reference<css::linguistic2::XSpellAlternatives> xTmpRes = xSpell->spell(
-                "<?xml?><query type='analyze'><word>" + aCompound[i].first + "</word></query>",
-                static_cast<sal_uInt16>(eLang), uno::Sequence<beans::PropertyValue>());
-            if (xTmpRes.is())
-            {
-                uno::Sequence<OUString> seq = xTmpRes->getAlternatives();
-                if (seq.hasElements())
-                {
-                    sal_Int32 nEndOfFirstAnalysis = seq[0].indexOf("</a>");
-                    // use only the first analysis, like the lingucomponent implementation
-                    OUString morph(seq[0].copy(0, nEndOfFirstAnalysis));
-
-                    // check compound data
-                    aTests[i] = morph.indexOf(aCompound[i].second) > -1;
-                }
-            }
-        }
-    }
-
     createSwDoc("tdf119908_smart_hyphenation_nl.odt");
     // Ensure that all text portions are calculated before testing.
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -1949,14 +1873,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_nl)
     pXmlDoc = parseLayoutDump();
 
     // no compound-based "smart" hyphenation of the compound "arbeids|voorwaarden"
-    // This is hyphenated as "ar-beidsvoorwaarden" previously, not "arbeids-voorwaarden"
+    // This is hyphenated as "ar-beidsvoorwaarden", not "arbeids-voorwaarden"
 
-    if (bHunspell && aTests[0])
-    {
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[25]/SwParaPortion/SwLineLayout[1]", "portion",
-                    u"Een ieder heeft recht op arbeid, op vrije keuze van beroep, op rechtmatige "
-                    u"en gunstige ar");
-    }
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[25]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Een ieder heeft recht op arbeid, op vrije keuze van beroep, op rechtmatige "
+                u"en gunstige ar");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[25]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
                 1);
 
@@ -1969,15 +1890,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_nl)
     pViewShell->Reformat();
     pXmlDoc = parseLayoutDump();
 
-    // compound-based "smart" hyphenation of the compound "doel|einden"
-    // This is hyphenated as "doelein-den" previously, not "doel-einden"
+    // no compound-based "smart" hyphenation of the compound "doel|einden"
+    // This is hyphenated as "doelein-den", not "doel-einden"
 
-    if (bHunspell && aTests[1])
-    {
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
-                    u"Deze rechten en vrijheden mogen in geen geval worden uitgeoefend in strijd "
-                    u"met de doelein");
-    }
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Deze rechten en vrijheden mogen in geen geval worden uitgeoefend in strijd "
+                u"met de doelein");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
                 1);
 }
@@ -2083,6 +2001,862 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf173389_smart_hyphenation_nl)
     }
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
                 1);
+}
+
+// check smart hyphenation and disabled compound-based smart hyphenation
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908_smart_hyphenation_de)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"de"_ustr, u"DE"_ustr, OUString())))
+        return;
+
+    // compound-based hyphenation needs Hunspell morphological analysis
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+    LanguageType eLang
+        = LanguageTag::convertToLanguageType(lang::Locale(u"de"_ustr, u"DE"_ustr, OUString()));
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+        return;
+
+    createSwDoc("tdf119908_smart_hyphenation_de.odt");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // 30 hyphenations on 5 pages using non-compound-based smart hyphenation
+    // This was 35 without smart hyphenation
+
+    // 9 hyphenations on page 1
+
+    // "smart" hyphenation: disabled hyphenation of "geführt" by shrinking
+    // This was "ge-führt"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"da die Nichtanerkennung und Verachtung der Menschenrechte zu Akten der Barbarei "
+                u"geführt ");
+
+    // "smart" hyphenation: disabled hyphenation of "damit" by shrinking
+    // This was "da-mit"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"da es notwendig ist, die Menschenrechte durch die Herrschaft des Rechtes zu "
+                u"schützen, damit ");
+
+    // no compound-based "smart" hyphenation of the compound "Unter|drückung"
+    // This is hyphenated as "Un-terdrückung", not "Unter-drückung"
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"der Mensch nicht gezwungen wird, als letztes Mittel zum Aufstand gegen Tyrannei und Un");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "Nationen" by shrinking
+    // This was "Natio-nen"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"da es notwendig ist, die Entwicklung freundschaftlicher Beziehungen zwischen den "
+                u"Nationen ");
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"da die Völker der Vereinten Nationen in der Charta ihren Glauben an die "
+                u"grundlegenden Men");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // no compound-based "smart" hyphenation of the compound "Gleich|berechtigung"
+    // This is hyphenated as "Gleichberech-tigung", not "Gleichberechti-gung"
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"schenrechte, an die Würde und den Wert der menschlichen Person und an die Gleichberech");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "Nationen" by shrinking
+    // This was "Natio-nen"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"da die Mitgliedstaaten sich verpflichtet haben, in Zusammenarbeit mit den "
+                u"Vereinten Nationen ");
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"auf die allgemeine Achtung und Einhaltung der Menschenrechte und Grundfreiheiten hinzu");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "für", not "für die"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"da ein gemeinsames Verständnis dieser Rechte und Freiheiten von größter "
+                u"Wichtigkeit für die ");
+
+    // "smart" hyphenation: disabled hyphenation of "nationale" by shrinking
+    // This was "natio-nale"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout[4]", "portion",
+                u"die Achtung vor diesen Rechten und Freiheiten zu fördern und durch "
+                u"fortschreitende nationale ");
+
+    // follow-up to the "smart" hyphenation in the previous line
+    // This was "Ein-haltung", now "Einhal-tung"
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout[5]", "portion",
+        u"und internationale Maßnahmen ihre allgemeine und tatsächliche Anerkennung und Einhal");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout[5]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat Anspruch auf die in dieser Erklärung verkündeten Rechte und Freiheiten "
+                u"ohne ir");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"gendeinen Unterschied, etwa nach Rasse, Hautfarbe, Geschlecht, Sprache, "
+                u"Religion, politi");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "Geburt", not "Geburt oder"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[3]", "portion",
+                u"scher oder sonstiger Überzeugung, nationaler oder sozialer Herkunft, Vermögen, "
+                u"Geburt oder ");
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"oder internationalen Stellung des Landes oder Gebiets, dem eine Person angehört, gleich");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "besitzt", not "besitzt oder"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[3]", "portion",
+                u"gültig ob dieses unabhängig ist, unter Treuhandschaft steht, keine "
+                u"Selbstregierung besitzt oder ");
+
+    // no compound-based "smart" hyphenation of the compound "Sklaven|handel"
+    // This is hyphenated as "Sklavenhan-del", not "Sklaven-handel",
+    // 1) like without "smart" hyphenation and 2) with compound-based hyphenation
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[20]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Niemand darf in Sklaverei oder Leibeigenschaft gehalten werden; Sklaverei und "
+                u"Sklavenhan");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[20]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 9);
+
+    // delete page 1 to update hyphenation on the next page
+
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 3170, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // 7 hyphenations on page 2
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Alle Menschen sind vor dem Gesetz gleich und haben ohne Unterschied Anspruch auf glei");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"chen Schutz durch das Gesetz. Alle haben Anspruch auf gleichen Schutz gegen jede Diskri");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "derartigen" by shrinking
+    // This was "derarti-gen"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[3]", "portion",
+                u"minierung, die gegen diese Erklärung verstößt, und gegen jede Aufhetzung zu "
+                u"einer derartigen ");
+
+    // "smart" hyphenation: disabled hyphenation of "Gesetz" by shrinking
+    // This was "Ge-setz"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"Gerichten gegen Handlungen, durch die seine ihm nach der Verfassung oder nach "
+                u"dem Gesetz ");
+
+    // "smart" hyphenation: disabled hyphenation of "erhobenen" by shrinking
+    // This was "erhobe-nen"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat bei der Feststellung seiner Rechte und Pflichten sowie bei einer gegen "
+                u"ihn erhobenen ");
+
+    // follow-up to the "smart" hyphenation in the previous line
+    // This was "öf-fentliches", now "öffentli-ches"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"strafrechtlichen Beschuldigung in voller Gleichheit Anspruch auf ein gerechtes "
+                u"und öffentli");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "für", not "für seine"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[14]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"zu gelten, solange seine Schuld nicht in einem öffentlichen Verfahren, in dem er "
+                u"alle für seine ");
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[3]", "portion",
+        u"keine schwerere Strafe als die zum Zeitpunkt der Begehung der strafbaren Handlung ange");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[3]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "Wohnung", not "Wohnung und"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Niemand darf willkürlichen Eingriffen in sein Privatleben, seine Familie, seine "
+                u"Wohnung und ");
+
+    // follow-up to the "smart" justification in the previous line
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"seinen Schriftverkehr oder Beeinträchtigungen seiner Ehre und seines Rufes "
+                u"ausgesetzt wer");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // follow-up to the "smart" justification in the previous line
+    // This was "Beeinträch-tigungen", not "Beeinträchtigun-gen".
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[3]", "portion",
+                u"den. Jeder hat Anspruch auf rechtlichen Schutz gegen solche Eingriffe oder "
+                u"Beeinträchtigun");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[3]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: enabled hyphenation by shrinking ("wer-den")
+    // This wasn't hyphenated before, resulting in exceeding maximum word spacing
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[26]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Niemandem darf seine Staatsangehörigkeit willkürlich entzogen noch das Recht "
+                u"versagt wer");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[26]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 7);
+
+    // delete page 2 to update hyphenation on the next page
+
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2734, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2734, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // 7 hyphenations on page 3
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    // "smart" hyphenation: enabled hyphenation by shrinking ("Staats-angehörigkeit")
+    // compound-based "smart" hyphenation keeps it (analysis: "Staats|angehörigkeit")
+    // This wasn't hyphenated before
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Heiratsfähige Frauen und Männer haben ohne Beschränkung auf Grund der Rasse, der Staats");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // smart hyphenation: better spacing by shrinking
+    // This was "innezu-haben" (now "innezuha-ben")
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat das Recht, sowohl allein als auch in Gemeinschaft mit anderen Eigentum "
+                u"innezuha");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"die Freiheit ein, seine Religion oder Überzeugung zu wechseln, sowie die "
+                u"Freiheit, seine Re");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "Recht", not "Recht schließt"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat das Recht auf Meinungsfreiheit und freie Meinungsäußerung; dieses "
+                u"Recht schließt ");
+
+    // "smart" hyphenation: better word spacing by shrinking
+    // This was "zu-sammenzuschließen" (now "zusam-menzuschließen").
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[12]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Alle Menschen haben das Recht, sich friedlich zu versammeln und zu Vereinigungen zusam");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat das Recht, an der Gestaltung der öffentlichen Angelegenheiten seines "
+                u"Landes un");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "darauf" by shrinking
+    // This was "dar-auf"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[19]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat als Mitglied der Gesellschaft das Recht auf soziale Sicherheit und "
+                u"Anspruch darauf, ");
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[19]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"durch innerstaatliche Maßnahmen und internationale Zusammenarbeit sowie unter Berück");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[19]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // smart hyphenation: better spacing by shrinking
+    // compound-based hyphenation keeps the same break point (analysis: "Arbeits|bedingungen")
+    // This was "Ar-beitsbedingungen" (now "Arbeits-bedingungen")
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[21]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat das Recht auf Arbeit, auf freie Berufswahl, auf gerechte und "
+                u"befriedigende Arbeits");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[21]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 7);
+
+    // delete page 3 to update hyphenation on the next page
+
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2945, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2945, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // 7 hyphenations on page 4
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    // smart hyphenation: better spacing by shrinking
+    // This was "Be-grenzung" (now "Begren-zung")
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat das Recht auf Erholung und Freizeit und insbesondere auf eine "
+                u"vernünftige Begren");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Jeder hat das Recht auf Bildung. Die Bildung ist unentgeltlich, zum mindesten der Grund");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: enabled hyphenation by shrinking ("Hoch-schulunterricht")
+    // compound-based "smart" hyphenations keeps it (analysis: "Hoch|schul|unterricht")
+    // This wasn't hyphenated before
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[3]", "portion",
+        u"Fach- und Berufsschulunterricht müssen allgemein verfügbar gemacht werden, und der Hoch");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[3]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Die Bildung muß auf die volle Entfaltung der menschlichen Persönlichkeit und auf "
+                u"die Stär");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: better spacing by shrinking
+    // This wasn't hyphenated before (now "teil-zuhaben")
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"Künsten zu erfreuen und am wissenschaftlichen Fortschritt und dessen "
+                u"Errungenschaften teil");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "Erklärung" by shrinking
+    // This was "Erklä-rung"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat Anspruch auf eine soziale und internationale Ordnung, in der die in "
+                u"dieser Erklärung ");
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Jeder ist bei der Ausübung seiner Rechte und Freiheiten nur den Beschränkungen unterwor");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "Achtung", not "Achtung der"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"fen, die das Gesetz ausschließlich zu dem Zweck vorsieht, die Anerkennung und "
+                u"Achtung der ");
+
+    // "smart" hyphenation: enabled hyphenation by shrinking ("Grund-sätzen")
+    // compound-based "smart" hyphenations keeps it (analysis: "Grund|sätzen")
+    // This wasn't hyphenated before
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Diese Rechte und Freiheiten dürfen in keinem Fall im Widerspruch zu den Zielen "
+                u"und Grund");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "oder", not "oder eine"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[19]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"eine Gruppe oder eine Person irgendein Recht begründet, eine Tätigkeit auszuüben "
+                u"oder eine ");
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 7);
+}
+
+// check smart hyphenation and enabled compound-based smart hyphenation
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf173389_smart_hyphenation_de)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"de"_ustr, u"DE"_ustr, OUString())))
+        return;
+
+    // compound-based hyphenation needs Hunspell morphological analysis
+    uno::Reference<linguistic2::XSpellChecker1> xSpell = LinguMgr::GetSpellChecker();
+    LanguageType eLang
+        = LanguageTag::convertToLanguageType(lang::Locale(u"de"_ustr, u"DE"_ustr, OUString()));
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+        return;
+
+    createSwDoc("tdf173389_smart_hyphenation_de.odt");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // 30 hyphenations on 5 pages using non-compound-based smart hyphenation
+    // This was 35 without smart hyphenation
+
+    // 9 hyphenations on page 1
+
+    // "smart" hyphenation: disabled hyphenation of "geführt" by shrinking
+    // This was "ge-führt"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"da die Nichtanerkennung und Verachtung der Menschenrechte zu Akten der Barbarei "
+                u"geführt ");
+
+    // "smart" hyphenation: disabled hyphenation of "damit" by shrinking
+    // This was "da-mit"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"da es notwendig ist, die Menschenrechte durch die Herrschaft des Rechtes zu "
+                u"schützen, damit ");
+
+    // compound-based "smart" hyphenation of the compound "Unter|drückung"
+    // This is hyphenated as "Unter-drückung", not "Un-terdrückung"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"der Mensch nicht gezwungen wird, als letztes Mittel zum Aufstand gegen Tyrannei "
+                u"und Unter");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "Nationen" by shrinking
+    // This was "Natio-nen"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"da es notwendig ist, die Entwicklung freundschaftlicher Beziehungen zwischen den "
+                u"Nationen ");
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"da die Völker der Vereinten Nationen in der Charta ihren Glauben an die "
+                u"grundlegenden Men");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // compound-based "smart" hyphenation of the compound "Gleich|berechtigung"
+    // This is hyphenated as "Gleichberechti-gung", not "Gleichberech-tigung"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"schenrechte, an die Würde und den Wert der menschlichen Person und an die "
+                u"Gleichberechti");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "Nationen" by shrinking
+    // This was "Natio-nen"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"da die Mitgliedstaaten sich verpflichtet haben, in Zusammenarbeit mit den "
+                u"Vereinten Nationen ");
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"auf die allgemeine Achtung und Einhaltung der Menschenrechte und Grundfreiheiten hinzu");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "für", not "für die"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"da ein gemeinsames Verständnis dieser Rechte und Freiheiten von größter "
+                u"Wichtigkeit für die ");
+
+    // "smart" hyphenation: disabled hyphenation of "nationale" by shrinking
+    // This was "natio-nale"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout[4]", "portion",
+                u"die Achtung vor diesen Rechten und Freiheiten zu fördern und durch "
+                u"fortschreitende nationale ");
+
+    // follow-up to the "smart" hyphenation in the previous line
+    // This was "Ein-haltung", now "Einhal-tung"
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout[5]", "portion",
+        u"und internationale Maßnahmen ihre allgemeine und tatsächliche Anerkennung und Einhal");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout[5]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat Anspruch auf die in dieser Erklärung verkündeten Rechte und Freiheiten "
+                u"ohne ir");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"gendeinen Unterschied, etwa nach Rasse, Hautfarbe, Geschlecht, Sprache, "
+                u"Religion, politi");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "Geburt", not "Geburt oder"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[3]", "portion",
+                u"scher oder sonstiger Überzeugung, nationaler oder sozialer Herkunft, Vermögen, "
+                u"Geburt oder ");
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"oder internationalen Stellung des Landes oder Gebiets, dem eine Person angehört, gleich");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "besitzt", not "besitzt oder"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[3]", "portion",
+                u"gültig ob dieses unabhängig ist, unter Treuhandschaft steht, keine "
+                u"Selbstregierung besitzt oder ");
+
+    // compound-based "smart" hyphenation of the compound "Sklaven|handel"
+    // This is hyphenated as "Sklaven-handel" (not "Sklavenhan-del" like with
+    // non-compound-based hyphenation)
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[20]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Niemand darf in Sklaverei oder Leibeigenschaft gehalten werden; Sklaverei und "
+                u"Sklaven");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[20]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 9);
+
+    // delete page 1 to update hyphenation on the next page
+
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 3170, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // 7 hyphenations on page 2
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Alle Menschen sind vor dem Gesetz gleich und haben ohne Unterschied Anspruch auf glei");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"chen Schutz durch das Gesetz. Alle haben Anspruch auf gleichen Schutz gegen jede Diskri");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "derartigen" by shrinking
+    // This was "derarti-gen"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[3]", "portion",
+                u"minierung, die gegen diese Erklärung verstößt, und gegen jede Aufhetzung zu "
+                u"einer derartigen ");
+
+    // "smart" hyphenation: disabled hyphenation of "Gesetz" by shrinking
+    // This was "Ge-setz"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"Gerichten gegen Handlungen, durch die seine ihm nach der Verfassung oder nach "
+                u"dem Gesetz ");
+
+    // "smart" hyphenation: disabled hyphenation of "erhobenen" by shrinking
+    // This was "erhobe-nen"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat bei der Feststellung seiner Rechte und Pflichten sowie bei einer gegen "
+                u"ihn erhobenen ");
+
+    // follow-up to the "smart" hyphenation in the previous line
+    // This was "öf-fentliches", now "öffentli-ches"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"strafrechtlichen Beschuldigung in voller Gleichheit Anspruch auf ein gerechtes "
+                u"und öffentli");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "für", not "für seine"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[14]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"zu gelten, solange seine Schuld nicht in einem öffentlichen Verfahren, in dem er "
+                u"alle für seine ");
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[3]", "portion",
+        u"keine schwerere Strafe als die zum Zeitpunkt der Begehung der strafbaren Handlung ange");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[3]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "Wohnung", not "Wohnung und"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Niemand darf willkürlichen Eingriffen in sein Privatleben, seine Familie, seine "
+                u"Wohnung und ");
+
+    // follow-up to the "smart" justification in the previous line
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"seinen Schriftverkehr oder Beeinträchtigungen seiner Ehre und seines Rufes "
+                u"ausgesetzt wer");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // follow-up to the "smart" justification in the previous line
+    // This was "Beeinträch-tigungen", not "Beeinträchtigun-gen".
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[3]", "portion",
+                u"den. Jeder hat Anspruch auf rechtlichen Schutz gegen solche Eingriffe oder "
+                u"Beeinträchtigun");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[3]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: enabled hyphenation by shrinking ("wer-den")
+    // This wasn't hyphenated before, resulting in exceeding maximum word spacing
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[26]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Niemandem darf seine Staatsangehörigkeit willkürlich entzogen noch das Recht "
+                u"versagt wer");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[26]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 7);
+
+    // delete page 2 to update hyphenation on the next page
+
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2734, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2734, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // 7 hyphenations on page 3
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    // "smart" hyphenation: enabled hyphenation by shrinking ("Staats-angehörigkeit")
+    // compound-based "smart" hyphenation keeps it (analysis: "Staats|angehörigkeit")
+    // This wasn't hyphenated before
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Heiratsfähige Frauen und Männer haben ohne Beschränkung auf Grund der Rasse, der Staats");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // smart hyphenation: better spacing by shrinking
+    // This was "innezu-haben" (now "innezuha-ben")
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat das Recht, sowohl allein als auch in Gemeinschaft mit anderen Eigentum "
+                u"innezuha");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"die Freiheit ein, seine Religion oder Überzeugung zu wechseln, sowie die "
+                u"Freiheit, seine Re");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "Recht", not "Recht schließt"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat das Recht auf Meinungsfreiheit und freie Meinungsäußerung; dieses "
+                u"Recht schließt ");
+
+    // "smart" hyphenation: better word spacing by shrinking
+    // This was "zu-sammenzuschließen" (now "zusam-menzuschließen").
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[12]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Alle Menschen haben das Recht, sich friedlich zu versammeln und zu Vereinigungen zusam");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat das Recht, an der Gestaltung der öffentlichen Angelegenheiten seines "
+                u"Landes un");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[15]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "darauf" by shrinking
+    // This was "dar-auf"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[19]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat als Mitglied der Gesellschaft das Recht auf soziale Sicherheit und "
+                u"Anspruch darauf, ");
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[19]/SwParaPortion/SwLineLayout[2]", "portion",
+        u"durch innerstaatliche Maßnahmen und internationale Zusammenarbeit sowie unter Berück");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[19]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // smart hyphenation: better spacing by shrinking
+    // compound-based hyphenation keeps the same break point (analysis: "Arbeits|bedingungen")
+    // This was "Ar-beitsbedingungen" (now "Arbeits-bedingungen")
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[21]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat das Recht auf Arbeit, auf freie Berufswahl, auf gerechte und "
+                u"befriedigende Arbeits");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[21]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 7);
+
+    // delete page 3 to update hyphenation on the next page
+
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2945, /*bBasicCall=*/false);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2945, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // 7 hyphenations on page 4
+
+    pViewShell->Reformat();
+    pXmlDoc = parseLayoutDump();
+
+    // smart hyphenation: better spacing by shrinking
+    // This was "Be-grenzung" (now "Begren-zung")
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat das Recht auf Erholung und Freizeit und insbesondere auf eine "
+                u"vernünftige Begren");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Jeder hat das Recht auf Bildung. Die Bildung ist unentgeltlich, zum mindesten der Grund");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: enabled hyphenation by shrinking ("Hoch-schulunterricht")
+    // compound-based "smart" hyphenations keeps it (analysis: "Hoch|schul|unterricht")
+    // This wasn't hyphenated before
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[3]", "portion",
+        u"Fach- und Berufsschulunterricht müssen allgemein verfügbar gemacht werden, und der Hoch");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout[3]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Die Bildung muß auf die volle Entfaltung der menschlichen Persönlichkeit und auf "
+                u"die Stär");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: better spacing by shrinking
+    // This wasn't hyphenated before (now "teil-zuhaben")
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"Künsten zu erfreuen und am wissenschaftlichen Fortschritt und dessen "
+                u"Errungenschaften teil");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    // "smart" hyphenation: disabled hyphenation of "Erklärung" by shrinking
+    // This was "Erklä-rung"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Jeder hat Anspruch auf eine soziale und internationale Ordnung, in der die in "
+                u"dieser Erklärung ");
+
+    assertXPath(
+        pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[1]", "portion",
+        u"Jeder ist bei der Ausübung seiner Rechte und Freiheiten nur den Beschränkungen unterwor");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "Achtung", not "Achtung der"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"fen, die das Gesetz ausschließlich zu dem Zweck vorsieht, die Anerkennung und "
+                u"Achtung der ");
+
+    // "smart" hyphenation: enabled hyphenation by shrinking ("Grund-sätzen")
+    // compound-based "smart" hyphenations keeps it (analysis: "Grund|sätzen")
+    // This wasn't hyphenated before
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"Diese Rechte und Freiheiten dürfen in keinem Fall im Widerspruch zu den Zielen "
+                u"und Grund");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[17]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    // "smart" justification: better word spacing by shrinking
+    // This ended with "oder", not "oder eine"
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[19]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"eine Gruppe oder eine Person irgendein Recht begründet, eine Tätigkeit auszuüben "
+                u"oder eine ");
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 7);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158333)
