@@ -545,9 +545,10 @@ void SbTreeListBox::ReloadAllEntries()
     }
 }
 
-std::unique_ptr<weld::TreeIter> SbTreeListBox::ImpFindEntry(std::u16string_view rText)
+std::unique_ptr<weld::TreeIter> SbTreeListBox::ImpFindEntry(const weld::TreeIter& rParentIter,
+                                                            std::u16string_view rText)
 {
-    std::unique_ptr<weld::TreeIter> pIter = m_xControl->make_iterator();
+    std::unique_ptr<weld::TreeIter> pIter = m_xControl->make_iterator(&rParentIter);
     bool bValidIter = m_xControl->iter_children(*pIter);
     while (bValidIter)
     {
@@ -827,7 +828,8 @@ void SbTreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
                 if( !aLibSubName.isEmpty() )
                 {
                     m_xControl->expand_row(*xLibIter);
-                    if (std::unique_ptr<weld::TreeIter> xSubLibIter = ImpFindEntry(aLibSubName))
+                    if (std::unique_ptr<weld::TreeIter> xSubLibIter
+                        = ImpFindEntry(*xLibIter, aLibSubName))
                         m_xControl->copy_iterator(*xSubLibIter, *xCurIter);
                 }
                 const OUString& aName( aDesc.GetName() );
