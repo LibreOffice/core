@@ -1,0 +1,7 @@
+#ifndef CONFIG_MD4C_H
+#define CONFIG_MD4C_H
+
+#undef MD4C_MAJOR
+#undef MD4C_MINOR
+
+#endif

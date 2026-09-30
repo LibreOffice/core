@@ -10141,6 +10141,8 @@ if test "x$with_system_md4c" = "xauto"; then
 fi
 
 AC_MSG_CHECKING([which md4c to use])
+MD4C_MAJOR=0
+MD4C_MINOR=6
 case "$with_system_md4c" in
   yes)
     AC_MSG_RESULT([system])
@@ -10160,6 +10162,10 @@ case "$with_system_md4c" in
     AC_CHECK_LIB([md4c-html], [md_html],
       [ MD4C_LIBS="$MD4C_LIBS -lmd4c-html" ],
       [ AC_MSG_ERROR([system md4c-html library not found or broken.]) ])
+
+    MD4C_VERSION=`$PKG_CONFIG --modversion md4c 2>/dev/null`
+    MD4C_MAJOR=`echo $MD4C_VERSION | cut -d"." -f1`
+    MD4C_MINOR=`echo $MD4C_VERSION | cut -d"." -f2`
     ;;
 
   ""|no)
@@ -10179,6 +10185,9 @@ AC_SUBST(SYSTEM_MD4C)
 AC_SUBST(MD4C_LIBS)
 AC_SUBST(MD4C_CFLAGS)
 AC_SUBST(BUILD_TYPE)
+
+AC_DEFINE_UNQUOTED(MD4C_MAJOR,$MD4C_MAJOR)
+AC_DEFINE_UNQUOTED(MD4C_MINOR,$MD4C_MINOR)
 
 dnl ===================================================================
 dnl Check for system jpeg
@@ -16562,6 +16571,7 @@ AC_CONFIG_HEADERS([config_host/config_lgpl.h])
 AC_CONFIG_HEADERS([config_host/config_libcxx.h])
 AC_CONFIG_HEADERS([config_host/config_liblangtag.h])
 AC_CONFIG_HEADERS([config_host/config_locales.h])
+AC_CONFIG_HEADERS([config_host/config_md4c.h])
 AC_CONFIG_HEADERS([config_host/config_mpl.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
 AC_CONFIG_HEADERS([config_host/config_options.h])
