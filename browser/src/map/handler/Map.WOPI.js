@@ -39,17 +39,20 @@ window.L.Map.WOPI = window.L.Handler.extend({
 	EnableRemoteSlideImport: false,
 	DisableInsertLocalImage: false,
 	EnableInsertRemoteLink: false,
+	EnableRemoteLinkPicker: false,
 	EnableRemoteAIContent: false,
 	DisableAISettings: false,
 	IsAnonymousUser: false,
 	AIConfigured: false,
 	AIModelName: '',
+	AIEthicalRating: 'U',
 	EnableShare: false,
 	HideUserList: null,
 	CallPythonScriptSource: null,
 	SupportsRename: false,
 	UserCanRename: false,
 	UserCanWrite: false,
+	IsOwner: false,
 	DisablePresentation: false,
 	PresentationLeader: '',
 
@@ -144,51 +147,66 @@ window.L.Map.WOPI = window.L.Handler.extend({
 			this.PostMessageOrigin = wopiInfo['PostMessageOrigin'];
 		}
 
-		this.BaseFileName = wopiInfo['BaseFileName'];
-		this.BreadcrumbDocName = wopiInfo['BreadcrumbDocName'];
-		if (this.BreadcrumbDocName === undefined)
-			this.BreadcrumbDocName = this.BaseFileName;
+		// A property that the frame does not carry keeps its current value, which before the first
+		// frame is the default above:
+		const has = (key) => Object.prototype.hasOwnProperty.call(wopiInfo, key);
+		if (has('BaseFileName')) this.BaseFileName = wopiInfo['BaseFileName'];
+		if (has('BreadcrumbDocName'))
+			this.BreadcrumbDocName = wopiInfo['BreadcrumbDocName'];
+		else if (has('BaseFileName')) this.BreadcrumbDocName = this.BaseFileName;
 		this._updateDocumentTitle();
-		this.HidePrintOption = !!wopiInfo['HidePrintOption'];
-		this.HideSaveOption = !!wopiInfo['HideSaveOption'];
-		this.HideExportOption = !!wopiInfo['HideExportOption'];
-		this.HideRepairOption = !!wopiInfo['HideRepairOption'];
-		this.HideChangeTrackingControls = !!wopiInfo['HideChangeTrackingControls'];
-		this.DisablePrint = !!wopiInfo['DisablePrint'];
-		this.DisableExport = !!wopiInfo['DisableExport'];
-		this.DisableCopy = !!wopiInfo['DisableCopy'];
-		this.DisableInactiveMessages = !!wopiInfo['DisableInactiveMessages'];
-		this.DownloadAsPostMessage = Object.prototype.hasOwnProperty.call(overridenFileInfo, 'DownloadAsPostMessage') ?
-			overridenFileInfo.DownloadAsPostMessage : !!wopiInfo['DownloadAsPostMessage'];
-		this.UserCanNotWriteRelative = !!wopiInfo['UserCanNotWriteRelative'];
-		this.EnableInsertRemoteImage = !!wopiInfo['EnableInsertRemoteImage'];
-		this.EnableInsertRemoteFile = !!wopiInfo['EnableInsertRemoteFile'];
-		this.EnableRemoteSlideImport = !!wopiInfo['EnableRemoteSlideImport'];
-		this.DisableInsertLocalImage = !!wopiInfo['DisableInsertLocalImage'];
-		this.EnableRemoteLinkPicker = !!wopiInfo['EnableRemoteLinkPicker'];
-		this.EnableRemoteAIContent = !!wopiInfo['EnableRemoteAIContent'];
-		this.DisableAISettings = !!wopiInfo['DisableAISettings'];
-		this.IsAnonymousUser = !!wopiInfo['IsAnonymousUser'];
-		this.AIConfigured = !!wopiInfo['AIConfigured'];
-		this.AIModelName = wopiInfo['AIModelName'] || '';
-		this.AIEthicalRating = wopiInfo['AIEthicalRating'] || 'U';
+		for (const key of [
+			'HidePrintOption',
+			'HideSaveOption',
+			'HideExportOption',
+			'HideRepairOption',
+			'HideChangeTrackingControls',
+			'DisablePrint',
+			'DisableExport',
+			'DisableCopy',
+			'DisableInactiveMessages',
+			'DownloadAsPostMessage',
+			'UserCanNotWriteRelative',
+			'EnableInsertRemoteImage',
+			'EnableInsertRemoteFile',
+			'EnableRemoteSlideImport',
+			'DisableInsertLocalImage',
+			'EnableRemoteLinkPicker',
+			'EnableRemoteAIContent',
+			'DisableAISettings',
+			'IsAnonymousUser',
+			'AIConfigured',
+			'SupportsRename',
+			'UserCanRename',
+			'EnableShare',
+			'UserCanWrite',
+			'DisablePresentation',
+			'IsOwner',
+		]) {
+			if (has(key)) this[key] = !!wopiInfo[key];
+		}
+		if (
+			Object.prototype.hasOwnProperty.call(
+				overridenFileInfo,
+				'DownloadAsPostMessage',
+			)
+		)
+			this.DownloadAsPostMessage = overridenFileInfo.DownloadAsPostMessage;
+		if (has('AIModelName')) this.AIModelName = wopiInfo['AIModelName'] || '';
+		if (has('AIEthicalRating'))
+			this.AIEthicalRating = wopiInfo['AIEthicalRating'] || 'U';
 		app.serverConnectionService.onWopiProps({
 			AIConfigured: this.AIConfigured,
 			AIModelName: this.AIModelName,
 			AIEthicalRating: this.AIEthicalRating,
 		});
-		this.SupportsRename = !!wopiInfo['SupportsRename'];
-		this.UserCanRename = !!wopiInfo['UserCanRename'];
-		this.EnableShare = !!wopiInfo['EnableShare'];
-		this.UserCanWrite = !!wopiInfo['UserCanWrite'];
-		this.DisablePresentation = !!wopiInfo['DisablePresentation'];
-		this.PresentationLeader = wopiInfo['PresentationLeader'] || '';
-		this.CommentAvatarUrl = wopiInfo['CommentAvatarUrl'];
+		if (has('PresentationLeader'))
+			this.PresentationLeader = wopiInfo['PresentationLeader'] || '';
+		if (has('CommentAvatarUrl'))
+			this.CommentAvatarUrl = wopiInfo['CommentAvatarUrl'];
 
 		if (this.UserCanWrite && !app.isReadOnly()) // There are 2 places that set the file permissions, WOPI and URI. Don't change permission if URI doesn't allow.
 			app.setPermission('edit');
-
-		this.IsOwner = !!wopiInfo['IsOwner'];
 
 		if (wopiInfo['HideUserList'])
 			this.HideUserList = wopiInfo['HideUserList'].split(',');
