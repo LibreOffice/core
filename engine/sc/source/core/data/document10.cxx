@@ -1140,6 +1140,40 @@ bool ScDocument::HasDataProviderMappings() const
     return mpDataMapper && !mpDataMapper->getDataSources().empty();
 }
 
+namespace
+{
+bool isRefreshingImport(const ScDBData* pData)
+{
+    return pData && pData->HasImportParam() && pData->GetRefreshDelaySeconds() > 0;
+}
+}
+
+bool ScDocument::HasRefreshingDBImport() const
+{
+    if (isRefreshingImport(mpAnonymousDBData.get()))
+        return true;
+
+    if (pDBCollection)
+    {
+        for (const auto& rxData : pDBCollection->getNamedDBs())
+            if (isRefreshingImport(rxData.get()))
+                return true;
+        for (const auto& rxData : pDBCollection->getAnonDBs())
+            if (isRefreshingImport(rxData.get()))
+                return true;
+    }
+
+    SCTAB nTabCount = GetTableCount();
+    for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
+    {
+        const ScTable* pTable = FetchTable(nTab);
+        if (pTable && isRefreshingImport(pTable->GetAnonymousDBData()))
+            return true;
+    }
+
+    return false;
+}
+
 bool ScDocument::HasExternalLinks() const
 {
     if (ScExternalRefManager* pRefMgr = GetExternalRefManager(); pRefMgr && pRefMgr->hasExternalData())
@@ -1151,7 +1185,7 @@ bool ScDocument::HasExternalLinks() const
         if (IsLinked(nTab))
             return true;
 
-    if (HasLinkFormulaNeedingCheck() || HasDataProviderMappings()
+    if (HasLinkFormulaNeedingCheck() || HasDataProviderMappings() || HasRefreshingDBImport()
         || GetDocLinkManager().hasUpdatableLinks())
         return true;
 

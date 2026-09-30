@@ -962,6 +962,10 @@ public:
         none. */
     SC_DLLPUBLIC bool HasDataProviderMappings() const;
 
+    /** True when the document holds a database range that imports from a data source again each
+        time its refresh delay runs out. */
+    bool HasRefreshingDBImport() const;
+
     /** True when the document holds anything that fetches content from outside
         the document and so needs the user to agree before it updates. */
     SC_DLLPUBLIC bool HasExternalLinks() const;

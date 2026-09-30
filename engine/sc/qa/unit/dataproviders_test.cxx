@@ -35,6 +35,7 @@ public:
     void testBaseImport();
     void testTdf169541_TwoDataMapping();
     void testLinkUpdateGate();
+    void testDBImportRefreshDeferred();
 
     CPPUNIT_TEST_SUITE(ScDataProvidersTest);
     CPPUNIT_TEST(testCSVImport);
@@ -44,6 +45,7 @@ public:
     CPPUNIT_TEST(testBaseImport);
     CPPUNIT_TEST(testTdf169541_TwoDataMapping);
     CPPUNIT_TEST(testLinkUpdateGate);
+    CPPUNIT_TEST(testDBImportRefreshDeferred);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -265,6 +267,33 @@ void ScDataProvidersTest::testLinkUpdateGate()
     pDocShell->GetEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
     pLinkManager->UpdateAllLinks(false, OUString());
     CPPUNIT_ASSERT_EQUAL(u"changed"_ustr, pDoc->GetString(0, 0, 0));
+}
+
+void ScDataProvidersTest::testDBImportRefreshDeferred()
+{
+    // A database range that imports from a data source on a refresh delay is an external link.
+    // Its refresh must not fetch the data until the user allows link updating.
+    createScDoc("dbimportrefresh.fods");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+    ScDocShell* pDocShell = getScDocShell();
+    CPPUNIT_ASSERT(pDocShell);
+
+    // The document counts as having external links, so the user is asked about updating.
+    CPPUNIT_ASSERT(pDoc->HasExternalLinks());
+
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"MYIMPORT"_ustr);
+    CPPUNIT_ASSERT(pDBData);
+
+    // With updating not allowed, the refresh leaves the saved value.
+    pDocShell->GetEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
+    pDBData->Timer::Invoke();
+    CPPUNIT_ASSERT_EQUAL(u"unchanged"_ustr, pDoc->GetString(0, 0, 0));
+
+    // Once the user allows updating, the next refresh imports the data source.
+    pDocShell->GetEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+    pDBData->Timer::Invoke();
+    CPPUNIT_ASSERT_EQUAL(u"Identifier"_ustr, pDoc->GetString(0, 0, 0));
 }
 
 ScDataProvidersTest::ScDataProvidersTest()

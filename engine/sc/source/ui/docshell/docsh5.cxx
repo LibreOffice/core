@@ -1200,6 +1200,11 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
 
 IMPL_LINK( ScDocShell, RefreshDBDataHdl, Timer*, pRefreshTimer, void )
 {
+    // The timer keeps running, so the import starts at the first refresh after the user allows
+    // link updates.
+    if (!GetEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+        return;
+
     ScDBDocFunc aFunc(*this);
 
     ScDBData* pDBData = static_cast<ScDBData*>(pRefreshTimer);
