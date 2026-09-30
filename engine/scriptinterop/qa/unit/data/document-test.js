@@ -264,6 +264,12 @@ function test() {
     withImage.editAsText().insertText(4, 'X');
     console.assert(withImage.editAsText().getText() === 'foobXar');
 
+    // Each appended paragraph's object stays on its own paragraph:
+    const one = body.appendParagraph('One');
+    const two = body.appendParagraph('Two');
+    console.assert(one.getText() === 'One');
+    console.assert(two.getText() === 'Two');
+
     // newPosition takes a character offset into a Text element:
     const text1 = body.getChild(1).getChild(0);
     console.assert(text1.getType() === DocumentApp.ElementType.TEXT);

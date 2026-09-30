@@ -48,6 +48,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
+#include <com/sun/star/text/XParagraphAppend.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -2154,10 +2155,10 @@ private:
         if (!text_.is()) {
             throw cpo::uno::RuntimeException(u"XBody has no underlying text"_ustr);
         }
-        auto const cursor = text_->createTextCursorByRange(text_->getEnd());
-        text_->insertControlCharacter(
-            cursor, css::text::ControlCharacter::PARAGRAPH_BREAK, false);
-        text_->insertString(cursor, text, false);
+        cpo::uno::Reference<css::text::XParagraphAppend> const append(
+            text_, cpo::uno::UNO_QUERY_THROW);
+        append->finishParagraph({});
+        text_->insertString(text_->getEnd(), text, false);
         cpo::uno::Reference<css::text::XTextContent> lastParagraph;
         if (cpo::uno::Reference<css::container::XEnumerationAccess> const ea{
                 text_, cpo::uno::UNO_QUERY})
@@ -2180,9 +2181,17 @@ private:
         if (!lastParagraph.is()) {
             throw cpo::uno::RuntimeException(u"appending the paragraph failed"_ustr);
         }
-        if (!paraStyle.isEmpty()) {
-            cpo::uno::Reference<css::beans::XPropertySet> const props(
-                lastParagraph, cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<scriptinterop::XParagraph> const paragraph(
+            new ParagraphImpl(this, lastParagraph));
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            lastParagraph, cpo::uno::UNO_QUERY_THROW);
+        if (paraStyle.isEmpty()) {
+            if (auto const heading = paragraph->getHeading();
+                heading.IsPresent && heading.Value != scriptinterop::ParagraphHeading_NORMAL)
+            {
+                props->setPropertyValue(u"ParaStyleName"_ustr, cpo::uno::Any(u"Text body"_ustr));
+            }
+        } else {
             try {
                 props->setPropertyValue(u"ParaStyleName"_ustr, cpo::uno::Any(paraStyle));
             } catch (css::lang::IllegalArgumentException const &) {
@@ -2192,7 +2201,7 @@ private:
                 applyBulletNumbering(props);
             }
         }
-        return new ParagraphImpl(this, lastParagraph);
+        return paragraph;
     }
 
     void applyBulletNumbering(cpo::uno::Reference<css::beans::XPropertySet> const & props) {
