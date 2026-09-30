@@ -1568,6 +1568,35 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testPdfImageAnnots)
     CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getAnnotationCount());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest3, testPdfImageEncryptedStrings)
+{
+    // Given a document with a PDF image whose annotations carry a hyperlink:
+    loadFromFile(u"pdf-image-annots.odg");
+
+    // When saving as encrypted PDF:
+    save(TestFilter::PDF, /*rParams*/ {}, /*pPassword*/ "secret");
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = parsePDFExport(vcl::pdf::PDFiumLibrary::get(), "secret"_ostr);
+
+    // Then make sure the hyperlink copied out of the image reads back through the password,
+    // which a string encrypted against the wrong object would not:
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+    int nLinkIndex = 0;
+    std::unique_ptr<vcl::pdf::PDFiumLink> pLink
+        = pPdfPage->enumerateLink(&nLinkIndex, pPdfDocument.get());
+    CPPUNIT_ASSERT(pLink);
+    // the target the fixture's embedded PDF carries
+    CPPUNIT_ASSERT_EQUAL(u"https://www.example.com/"_ustr, pLink->getURIPath());
+
+    // Without the accompanying fix the copier wrote the string out as it read it, so it
+    // stood in the file unenciphered and came back out of the decryption as noise
+    const std::string_view aFile(static_cast<const char*>(maMemory.GetData()), maMemory.GetSize());
+    CPPUNIT_ASSERT(aFile.find("/Encrypt") != std::string_view::npos);
+    CPPUNIT_ASSERT_EQUAL(std::string_view::npos, aFile.find("www.example.com"));
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testPdfImageEncryption)
 {
     // Given an empty document, with an inserted PDF image:

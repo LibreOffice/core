@@ -11,6 +11,7 @@
 
 #include <sal/config.h>
 
+#include <rtl/strbuf.hxx>
 #include <rtl/stringconcat.hxx>
 #include <sal/types.h>
 #include <string_view>
@@ -42,6 +43,12 @@ public:
     {
         return writeBuffer(rtl::Concat2View(rConcat));
     }
+
+    // aBytes are the string's own bytes, with any escaping of the source resolved; the
+    // implementation escapes them anew and encrypts them where the document has a cipher.
+    virtual void appendStringObject(OStringBuffer& rLine, std::string_view aBytes,
+                                    sal_Int32 nObject)
+        = 0;
 
     virtual void checkAndEnableStreamEncryption(sal_Int32 nObject) = 0;
 

@@ -32,9 +32,10 @@ class PDFObjectCopier
 {
     PDFObjectContainer& m_rContainer;
 
+    /// nObject is the object being written; its strings are encrypted for it.
     void copyRecursively(OStringBuffer& rLine, filter::PDFElement& rInputElement,
                          SvMemoryStream& rDocBuffer,
-                         std::map<sal_Int32, sal_Int32>& rCopiedResources);
+                         std::map<sal_Int32, sal_Int32>& rCopiedResources, sal_Int32 nObject);
 
 public:
     PDFObjectCopier(PDFObjectContainer& rContainer);
