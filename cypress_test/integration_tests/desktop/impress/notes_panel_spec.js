@@ -203,6 +203,66 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		);
 	});
 
+	// The handout page lists other pages than the slides, so every preview is fetched again
+	// after the switch. The kit sends no reply for a preview of a page the view no longer lists,
+	// and such a request stays counted as under way. The test puts the view in that state at
+	// the moment the new page list arrives.
+	it('the previews come back after a switch to the handout page', function () {
+		function expectThumbnailsInView(win) {
+			var preview = win.app.map._docLayer._preview;
+			var previews = preview._previewTiles.filter(function (img, index) {
+				return preview._isPreviewVisible(index);
+			});
+			expect(previews).to.have.length.greaterThan(0);
+			previews.forEach(function (img) {
+				expect(img.placeholderName).to.equal(null);
+			});
+		}
+
+		var slideParts;
+		cy.getFrameWindow().should(function (win) {
+			expectThumbnailsInView(win);
+			slideParts = win.app.impress.partList.map(function (page) {
+				return page.part;
+			});
+		});
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.once('updateparts', function () {
+				// Three preview requests went out just now, and none of them gets a reply.
+				win.app.map._previewRequestsOnFly = 3;
+				win.app.map._timeToEmptyQueue = new Date();
+			});
+			win.app.dispatcher.dispatch('notespanelhandout');
+		});
+
+		cy.getFrameWindow().its('app.impress.notesMode').should('eq', true);
+
+		// The preview queue waits for the requests that get no reply, then goes on by itself.
+		cy.getFrameWindow().then(function (win) {
+			cy.waitUntil(function () {
+				return win.app.timerRegistry.hasActive('previewqueue');
+			}, { interval: 50 });
+			helper.waitForTimers(win, 'previewqueue');
+		});
+
+		// Every preview in view holds a page of the handout list and shows its thumbnail,
+		// without a scroll.
+		cy.getFrameWindow().should(function (win) {
+			var preview = win.app.map._docLayer._preview;
+			var handoutParts = win.app.impress.partList.map(function (page) {
+				return page.part;
+			});
+			handoutParts.forEach(function (part) {
+				expect(slideParts).not.to.include(part);
+			});
+			expect(preview._previewTiles.map(function (img) {
+				return img._part;
+			})).to.deep.equal(handoutParts);
+			expectThumbnailsInView(win);
+		});
+	});
+
 	it('Deleting a selection dragged out of the notes pane removes all of it', function () {
 		openNotesPane();
 

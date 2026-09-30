@@ -187,9 +187,23 @@ window.L.Map.include({
 			// in that case we cannot decrease previewRequestsOnFly counter
 			// we should not wait more than 2 seconds for each 3 requests
 			var now = new Date();
-			if (now - this._timeToEmptyQueue < 2000)
-				// wait until the queue is empty
+			const waited = now - this._timeToEmptyQueue;
+			if (waited < 2000) {
+				// wait until the queue is empty. The kit sends no reply for a
+				// page the view no longer lists, as happens around a view mode
+				// switch, so the queue is looked at again once the wait is over.
+				if (!this._previewQueueTimer) {
+					this._previewQueueTimer = app.timerRegistry.setTimeout(
+						'previewqueue',
+						() => {
+							this._previewQueueTimer = null;
+							this._processPreviewQueue();
+						},
+						2000 - waited,
+					);
+				}
 				return;
+			}
 			else {
 				this._previewRequestsOnFly = 0;
 				this._timeToEmptyQueue = now;
