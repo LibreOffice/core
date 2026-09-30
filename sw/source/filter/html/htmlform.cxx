@@ -32,13 +32,11 @@
 #include <o3tl/string_view.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/wrkwin.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <svl/urihelper.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/sfxsids.hrc>
-#include <sfx2/viewfrm.hxx>
 #include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
 #include <editeng/lrspitem.hxx>
@@ -52,6 +50,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <svx/svdouno.hxx>
+#include <unotools/sharedunocomponent.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/form/ListSourceType.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
@@ -73,7 +72,6 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
 #include <fmtanchr.hxx>
@@ -626,28 +624,6 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     uno::Reference< beans::XPropertySet > xPropSet( rShape, UNO_QUERY );
 
     SwViewShell *pVSh = m_xDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
-    if( !pVSh && !m_nEventId )
-    {
-        // If there is no view shell by now and the doc shell is an internal
-        // one, no view shell will be created. That for, we have to do that of
-        // our own. This happens if a linked section is inserted or refreshed.
-        SwDocShell *pDocSh = m_xDoc->GetDocShell();
-        if( pDocSh )
-        {
-            if ( pDocSh->GetMedium() )
-            {
-                // if there is no hidden property in the MediaDescriptor it should be removed after loading
-                const SfxBoolItem* pHiddenItem = pDocSh->GetMedium()->GetItemSet().GetItem(SID_HIDDEN, false);
-                m_bRemoveHidden = ( pHiddenItem == nullptr || !pHiddenItem->GetValue() );
-            }
-
-            m_pTempViewFrame = SfxViewFrame::LoadHiddenDocument( *pDocSh, SFX_INTERFACE_NONE );
-            CallStartAction();
-            pVSh = m_xDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
-            // this ridiculous hack also enables Undo, so turn it off again
-            m_xDoc->GetIDocumentUndoRedo().DoUndo(false);
-        }
-    }
 
     SwXShape *pSwShape = comphelper::getFromUnoTunnel<SwXShape>(xPropSet);
 
@@ -665,9 +641,21 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     const SdrView* pDrawView = pVSh ? pVSh->GetDrawView() : nullptr;
 
     const SdrUnoObj *pFormObj = dynamic_cast<const SdrUnoObj*>( pObj  );
-    uno::Reference< awt::XControl > xControl;
+    utl::SharedUNOComponent<awt::XControl> xControl;
     if ( pDrawView && pVSh->GetWin() && pFormObj )
-        xControl = pFormObj->GetUnoControl( *pDrawView, *pVSh->GetWin()->GetOutDev() );
+    {
+        xControl.reset(pFormObj->GetUnoControl(*pDrawView, *pVSh->GetWin()->GetOutDev()),
+                       utl::SharedUNOComponent<awt::XControl>::NoTakeOwnership);
+    }
+    else if ( !pVSh && pFormObj )
+    {
+        // With no view, the control is realized in a hidden window of its own to be measured.
+        if (!m_xControlSizeWindow)
+            m_xControlSizeWindow = VclPtr<WorkWindow>::Create(nullptr, WB_STDWORK);
+        xControl.reset(
+            pFormObj->GetTemporaryControlForWindow(*m_xControlSizeWindow, m_xControlSizeContainer),
+            utl::SharedUNOComponent<awt::XControl>::TakeOwnership);
+    }
 
     awt::Size aSz( rShape->getSize() );
     awt::Size aNewSz( 0, 0 );
