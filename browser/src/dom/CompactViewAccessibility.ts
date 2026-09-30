@@ -383,6 +383,12 @@ class CompactViewAccessibility {
 		this.mayShowInfoBoxes = event.key.toUpperCase() === 'ALT';
 	}
 
+	// A mouse press while Alt is held makes it an Alt+mouse action, like Alt-drag,
+	// so releasing Alt afterwards does not show the info boxes.
+	public onDocumentMouseDown(): void {
+		this.mayShowInfoBoxes = false;
+	}
+
 	public onDocumentKeyUp(event: KeyboardEvent): void {
 		if (document.body.dataset.userinterfacemode !== 'classic') return;
 

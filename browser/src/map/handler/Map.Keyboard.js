@@ -315,12 +315,15 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		window.L.DomEvent.on(this._keyEventContainer, 'keydown keyup keypress', this._onKeyDown, this);
 		window.L.DomEvent.on(window.document, 'keydown', this._globalKeyEvent, this);
 		window.document.addEventListener('keyup', this._globalKeyUp.bind(this), true);
+		this._boundGlobalMouseDown = this._globalMouseDown.bind(this);
+		window.document.addEventListener('mousedown', this._boundGlobalMouseDown, true);
 	},
 
 	removeHooks: function () {
 		window.L.DomEvent.off(this._keyEventContainer, 'keydown keyup keypress', this._onKeyDown, this);
 		window.L.DomEvent.off(window.document, 'keydown', this._globalKeyEvent, this);
 		window.document.removeEventListener('keyup', this._globalKeyUp.bind(this));
+		window.document.removeEventListener('mousedown', this._boundGlobalMouseDown, true);
 	},
 
 	_ignoreKeyEvent: function(ev) {
@@ -478,6 +481,18 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 
 		if (app.UI.compactViewAccessibility) {
 			app.UI.compactViewAccessibility.onDocumentKeyDown(ev);
+		}
+	},
+
+	// _globalMouseDown - lets the accessibility helpers of both user interfaces
+	// record that a mouse button went down. The event itself is left untouched.
+	_globalMouseDown: function() {
+		if (app.UI.notebookbarAccessibility) {
+			app.UI.notebookbarAccessibility.onDocumentMouseDown();
+		}
+
+		if (app.UI.compactViewAccessibility) {
+			app.UI.compactViewAccessibility.onDocumentMouseDown();
 		}
 	},
 

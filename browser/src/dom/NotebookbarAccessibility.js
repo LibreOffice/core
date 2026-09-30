@@ -140,6 +140,12 @@ var NotebookbarAccessibility = function() {
 			}
 	};
 
+	// A mouse press while Alt is held makes it an Alt+mouse action, like Alt-drag, so releasing
+	// Alt afterwards does not show the info boxes.
+	this.onDocumentMouseDown = function() {
+		this.mayShowAcceleratorInfoBoxes = false;
+	};
+
 	this.onDocumentKeyUp = function(event) {
 		if (document.body.dataset.userinterfacemode !== 'notebookbar')
 			return;
