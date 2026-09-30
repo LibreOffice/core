@@ -69,8 +69,13 @@ static void GetOldStyleDicsInDir(
     std::vector< SvtLinguConfigDictionaryEntry >& aRes )
 {
     osl::Directory aSystemDicts(aSystemDir);
-    if (aSystemDicts.open() != osl::FileBase::E_None)
-        return;
+    {
+        // The system directory may be missing, or outside the paths a sandboxed process can
+        // read. Either way there are no system dictionaries to add.
+        osl::AcceptableAccessDenial aDenialIsHandled;
+        if (aSystemDicts.open() != osl::FileBase::E_None)
+            return;
+    }
 
     osl::DirectoryItem aItem;
     osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL);
