@@ -28,8 +28,13 @@ gb_DASH := $(shell command -v dash 2>/dev/null)
 # autoconf's configure starts itself again with exec $CONFIG_SHELL, without quotes, so the value
 # must hold no space. $(1) is the Unix pathname of the shell and $(2) its Windows pathname, which is
 # the value unless it holds a space, as that of the shell of Git for Windows under Program Files
-# does. The Unix pathname is the value then, which the shell that runs configure resolves too.
-gb_CONFIG_SHELL_PATHNAME = $(if $(word 2,$(2)),$(1),$(2))
+# does. A make built for Cygwin or MSYS gets the Unix pathname then. A native Windows make, as run
+# from Git Bash, cannot run a Unix pathname given as SHELL in the Makefiles the externals' configure
+# generates, so it gets the 8.3 form of the pathname instead, and stops if there is none. This is a
+# stopgap until the build no longer runs from Git Bash.
+gb_CONFIG_SHELL_PATHNAME = $(if $(word 2,$(2)),$(if $(filter Windows32,$(MAKE_HOST)),$(call gb_CONFIG_SHELL_SHORT_PATHNAME,$(2),$(shell cygpath -ms $(1) 2>/dev/null)),$(1)),$(2))
+# $(1) is the Windows pathname of the shell and $(2) its 8.3 form, empty if there is none.
+gb_CONFIG_SHELL_SHORT_PATHNAME = $(if $(and $(2),$(if $(word 2,$(2)),,true)),$(2),$(error The shell $(1) has a space in its pathname and no 8.3 name to use instead. Install Git for Windows in a directory without spaces))
 gb_RUN_CONFIGURE := CONFIG_SHELL=$(call gb_CONFIG_SHELL_PATHNAME,/bin/sh,$(shell cygpath -m /bin/sh))
 ifneq ($(gb_DASH),)
 ifeq ($(shell printf 'cat <<EOF\n%5000s\nEOF\n' | $(gb_DASH) 2>/dev/null | wc -c | tr -dc 0-9),5001)
