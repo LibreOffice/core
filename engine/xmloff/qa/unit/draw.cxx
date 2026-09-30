@@ -114,6 +114,27 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHyperlinkName)
     CPPUNIT_ASSERT_EQUAL(u"Collabora Office home page"_ustr, getHyperlinkName());
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf173709HyperlinkTitle)
+{
+    // the accessible description of a hyperlink, next to its name
+    loadFromFile(u"tdf173709-hyperlink-title.fodp");
+
+    auto getHyperlinkProperty = [this](const OUString& rName) -> OUString {
+        uno::Reference<beans::XPropertySet> xPortion(getShapeTextPortion(0, getShape(0)));
+        CPPUNIT_ASSERT(xPortion.is());
+        auto xField = xPortion->getPropertyValue(u"TextField"_ustr).queryThrow<text::XTextField>();
+        OUString aValue;
+        xField.queryThrow<beans::XPropertySet>()->getPropertyValue(rName) >>= aValue;
+        return aValue;
+    };
+
+    saveAndReload(TestFilter::ODP);
+
+    // Without the fix in place, office:title was lost
+    CPPUNIT_ASSERT_EQUAL(u"LibreOffice home page"_ustr, getHyperlinkProperty(u"Title"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"anchor1"_ustr, getHyperlinkProperty(u"Name"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextBoxLoss)
 {
     // Load a document that has a shape with a textbox in it. Save it to ODF and reload.

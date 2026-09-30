@@ -1734,6 +1734,8 @@ void XMLTextFieldExport::ExportFieldHelper(
                       true, XML_NAMESPACE_OFFICE);
         ProcessString(XML_NAME, GetStringProperty(u"Name"_ustr, rPropSet),
                       true, XML_NAMESPACE_OFFICE);
+        ProcessString(XML_TITLE, GetStringProperty(u"Title"_ustr, rPropSet),
+                      true, XML_NAMESPACE_OFFICE);
         GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         // Only a link that differs from the LegacyHyperlinksWraps setting has the attribute.
         if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)

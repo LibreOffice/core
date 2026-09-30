@@ -149,7 +149,8 @@ private:
     OUString                aURL;               // URL-Address
     OUString                aRepresentation;    // Text shown in document
     OUString                aTargetFrame;       // Frame to open in
-    OUString                m_Name;             // Alt-text
+    OUString                m_Name;             // Name from the Hyperlink dialog (ODF office:name)
+    OUString                m_Title;            // Accessible description (ODF office:title)
     /// The link was laid out as a placeholder field, before hyperlinks were stored as text.
     bool mbLegacyWrap = false;
 
@@ -168,6 +169,9 @@ public:
 
     OUString const&         GetName() const { return m_Name; }
     void                    SetName(OUString const& rName) { m_Name = rName; }
+
+    OUString const&         GetTitle() const { return m_Title; }
+    void                    SetTitle(OUString const& rTitle) { m_Title = rTitle; }
 
     const OUString&         GetTargetFrame() const { return aTargetFrame; }
     void                    SetTargetFrame( const OUString& rFrm ) { aTargetFrame = rFrm; }

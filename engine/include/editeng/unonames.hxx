@@ -18,6 +18,7 @@ inline constexpr OUString UNO_TC_PROP_TEXTFIELD_TYPE = u"TextFieldType"_ustr;
 inline constexpr OUString UNO_TC_PROP_IS_FIXED = u"IsFixed"_ustr;
 inline constexpr OUString UNO_TC_PROP_CURRENT_PRESENTATION = u"CurrentPresentation"_ustr;
 inline constexpr OUString UNO_TC_PROP_NAME = u"Name"_ustr;
+inline constexpr OUString UNO_TC_PROP_TITLE = u"Title"_ustr;
 inline constexpr OUString UNO_TC_PROP_IS_FIXED_LANGUAGE = u"IsFixedLanguage"_ustr;
 inline constexpr OUString UNO_TC_PROP_NUMFORMAT = u"NumberFormat"_ustr;
 

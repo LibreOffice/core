@@ -59,6 +59,7 @@ using namespace ::cpo;
 #define WID_STRING2 6
 #define WID_STRING3 7
 #define WID_STRING4 8
+#define WID_STRING5 9
 
 class SvxUnoFieldData_Impl
 {
@@ -71,6 +72,7 @@ public:
     OUString    msString2;
     OUString    msString3;
     OUString    msString4;
+    OUString    msString5;
     util::DateTime maDateTime;
 
     OUString    msPresentation;
@@ -101,6 +103,7 @@ static const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
         { UNO_TC_PROP_URL,                WID_STRING3, ::cppu::UnoType<OUString>::get(),  0, 0 },
         { UNO_TC_PROP_NAME,               WID_STRING4, ::cppu::UnoType<OUString>::get(),  0, 0 },
         { UNO_TC_PROP_URL_LEGACY_WRAP,    WID_BOOL1,   cppu::UnoType<bool>::get(),        0, 0 },
+        { UNO_TC_PROP_TITLE,              WID_STRING5, ::cppu::UnoType<OUString>::get(),  0, 0 },
     };
     static const SfxItemPropertySet aUrlFieldPropertySet_Impl(aUrlFieldPropertyMap_Impl);
 
@@ -347,6 +350,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                 mpImpl->msString2 = static_cast<const SvxURLField*>(pData)->GetTargetFrame();
                 mpImpl->msString3 = static_cast<const SvxURLField*>(pData)->GetURL();
                 mpImpl->msString4 = static_cast<const SvxURLField*>(pData)->GetName();
+                mpImpl->msString5 = static_cast<const SvxURLField*>(pData)->GetTitle();
                 mpImpl->mnInt16 = sal::static_int_cast< sal_Int16 >(
                     static_cast<const SvxURLField*>(pData)->GetFormat());
                 mpImpl->mbBoolean1 = static_cast<const SvxURLField*>(pData)->IsLegacyWrap();
@@ -436,6 +440,7 @@ std::unique_ptr<SvxFieldData> SvxUnoTextField::CreateFieldData() const noexcept
         static_cast<SvxURLField*>(pData.get())->SetTargetFrame( mpImpl->msString2 );
         static_cast<SvxURLField*>(pData.get())->SetName( mpImpl->msString4 );
         static_cast<SvxURLField*>(pData.get())->SetLegacyWrap( mpImpl->mbBoolean1 );
+        static_cast<SvxURLField*>(pData.get())->SetTitle( mpImpl->msString5 );
         if( static_cast<SvxURLFormat>(mpImpl->mnInt16) >= SvxURLFormat::AppDefault &&
             static_cast<SvxURLFormat>(mpImpl->mnInt16) <= SvxURLFormat::Repr )
             static_cast<SvxURLField*>(pData.get())->SetFormat( static_cast<SvxURLFormat>(mpImpl->mnInt16) );
@@ -736,6 +741,10 @@ void SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, const cpo
         if(aValue >>= mpImpl->msString4)
             return;
         break;
+    case WID_STRING5:
+        if(aValue >>= mpImpl->msString5)
+            return;
+        break;
     }
 
     throw lang::IllegalArgumentException();
@@ -785,6 +794,9 @@ cpo::uno::Any SvxUnoTextField::getPropertyValue( const OUString& PropertyName )
         break;
     case WID_STRING4:
         aValue <<= mpImpl->msString4;
+        break;
+    case WID_STRING5:
+        aValue <<= mpImpl->msString5;
         break;
     }
 

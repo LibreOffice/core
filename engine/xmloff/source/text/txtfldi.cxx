@@ -2862,7 +2862,8 @@ XMLUrlFieldImportContext::XMLUrlFieldImportContext(
     XMLTextImportHelper& rHlp) :
         XMLTextFieldImportContext(rImport, rHlp, sAPI_url),
         bFrameOK(false),
-        bNameOK(false)
+        bNameOK(false),
+        bTitleOK(false)
 {
 }
 
@@ -2894,6 +2895,10 @@ void XMLUrlFieldImportContext::ProcessAttribute(
                 moWrapAsText = bWrapAsText;
             break;
         }
+        case XML_ELEMENT(OFFICE, XML_TITLE):
+            sTitle = OUString::fromUtf8(sAttrValue);
+            bTitleOK = true;
+            break;
         default:
             // ignore
             XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
@@ -2915,6 +2920,11 @@ void XMLUrlFieldImportContext::PrepareField(
     if (bNameOK && xPropertySet->getPropertySetInfo()->hasPropertyByName(u"Name"_ustr))
     {
         xPropertySet->setPropertyValue(u"Name"_ustr, Any(sName));
+    }
+
+    if (bTitleOK && xPropertySet->getPropertySetInfo()->hasPropertyByName(u"Title"_ustr))
+    {
+        xPropertySet->setPropertyValue(u"Title"_ustr, Any(sTitle));
     }
 
     xPropertySet->setPropertyValue(u"Representation"_ustr, Any(GetContent()));

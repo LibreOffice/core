@@ -118,15 +118,18 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                     xPropSet->getPropertyValue(UNO_TC_PROP_URL) >>= aURL;
                     xPropSet->getPropertyValue(UNO_TC_PROP_URL_FORMAT) >>= nFmt;
                     // Calc's own URL field has no name, and a miss here would drop the field
-                    OUString aName;
+                    OUString aName, aTitle;
                     if (xPropSet->getPropertySetInfo()->hasPropertyByName(UNO_TC_PROP_NAME))
                         xPropSet->getPropertyValue(UNO_TC_PROP_NAME) >>= aName;
                     bool bLegacyWrap = false;
                     if (xPropSet->getPropertySetInfo()->hasPropertyByName(UNO_TC_PROP_URL_LEGACY_WRAP))
                         xPropSet->getPropertyValue(UNO_TC_PROP_URL_LEGACY_WRAP) >>= bLegacyWrap;
+                    if (xPropSet->getPropertySetInfo()->hasPropertyByName(UNO_TC_PROP_TITLE))
+                        xPropSet->getPropertyValue(UNO_TC_PROP_TITLE) >>= aTitle;
                     SvxURLField* pData = new SvxURLField(aURL, aRep, aRep.isEmpty() ? SvxURLFormat::Url : SvxURLFormat::Repr);
                     pData->SetTargetFrame(aTarget);
                     pData->SetName(aName);
+                    pData->SetTitle(aTitle);
                     pData->SetLegacyWrap(bLegacyWrap);
                     if (static_cast<SvxURLFormat>(nFmt) >= SvxURLFormat::AppDefault &&
                         static_cast<SvxURLFormat>(nFmt) <= SvxURLFormat::Repr)

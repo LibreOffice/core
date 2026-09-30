@@ -911,9 +911,11 @@ class XMLUrlFieldImportContext final : public XMLTextFieldImportContext
     OUString sURL;
     OUString sFrame;
     OUString sName;
+    OUString sTitle;
     bool bFrameOK;
     bool bNameOK;
     std::optional<bool> moWrapAsText;
+    bool bTitleOK;
 
 public:
 
