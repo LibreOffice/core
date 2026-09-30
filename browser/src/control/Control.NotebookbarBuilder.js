@@ -591,6 +591,8 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 			tooltip.id = 'save-status';
 			tooltip.className = 'tooltip-label visuallyhidden';
 			tooltip.setAttribute('role', 'tooltip');
+			// Text that changes length ahead of the document shifts NVDA's say all by a character.
+			tooltip.setAttribute('aria-hidden', 'true');
 			control.label = tooltip;
 
 			control.button.parentElement.appendChild(tooltip);
@@ -601,6 +603,7 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 					tooltip.textContent = isModified
 						? _('Unsaved changes.') + ' ' + e.lastSaved
 						: e.lastSaved;
+					control.button.setAttribute('aria-description', tooltip.textContent);
 					control.button.setAttribute('aria-label', isModified ? _('Unsaved changes. Save') : _('Save'));
 				}
 			});
