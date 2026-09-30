@@ -21,7 +21,6 @@
 #define INCLUDED_OOX_EXPORT_DRAWINGML_HXX
 
 #include <map>
-#include <optional>
 #include <stack>
 #include <string_view>
 #include <unordered_map>
@@ -427,9 +426,7 @@ public:
     void WriteConnectorConnections( sal_Int32 nStartGlueId, sal_Int32 nEndGlueId, sal_Int32 nStartID, sal_Int32 nEndID );
 
     bool WriteCharColor(const cpo::uno::Reference<css::beans::XPropertySet>& xPropertySet);
-    /// oExpectedColor is the color that the shape shows. A theme color that no longer resolves to it
-    /// is not written.
-    bool WriteSchemeColor(OUString const& rPropertyName, const cpo::uno::Reference<css::beans::XPropertySet>& xPropertySet, bool bUseTextSchemeColors = false, std::optional<::Color> oExpectedColor = std::nullopt);
+    bool WriteSchemeColor(OUString const& rPropertyName, const cpo::uno::Reference<css::beans::XPropertySet>& xPropertySet, bool bUseTextSchemeColors = false);
 
     void WriteSolidFill( ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteSolidFill( const OUString& sSchemeName, const cpo::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );

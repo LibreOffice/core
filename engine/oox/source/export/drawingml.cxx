@@ -145,9 +145,6 @@
 #include <drawingml/presetgeometrynames.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdmodel.hxx>
-#include <docmodel/theme/ColorSet.hxx>
-#include <docmodel/theme/Theme.hxx>
 #include <svx/diagram/DiagramHelper_svx.hxx>
 
 using namespace ::css;
@@ -187,39 +184,6 @@ sal_Int64 toTextSpacingPoint(sal_Int64 mm100)
     constexpr auto mdToPt = o3tl::getConversionMulDiv(o3tl::Length::mm100, o3tl::Length::pt);
     constexpr o3tl::detail::m_and_d md(mdToPt.first * 100, mdToPt.second);
     return o3tl::convert(mm100, md.m, md.d);
-}
-
-// A theme color can be left behind when only the plain color changes. It is stale when the theme
-// of the shape does not resolve it to the color that the shape shows.
-bool isStaleThemeColor(const model::ComplexColor& rComplexColor,
-                       const Reference<XPropertySet>& xPropertySet, ::Color aShownColor)
-{
-    SdrObject* pObject
-        = SdrObject::getSdrObjectFromXShape(Reference<XShape>(xPropertySet, UNO_QUERY));
-    if (!pObject)
-        return false;
-
-    std::shared_ptr<model::Theme> pTheme;
-    SdrPage* pPage = pObject->getSdrPageFromSdrObject();
-    if (pPage && !pPage->IsMasterPage() && pPage->TRG_HasMasterPage())
-        pPage = &pPage->TRG_GetMasterPage();
-    if (pPage)
-        pTheme = pPage->getSdrPageProperties().getTheme();
-    if (!pTheme)
-        pTheme = pObject->getSdrModelFromSdrObject().getTheme();
-    if (!pTheme || !pTheme->getColorSet())
-        return false;
-
-    // The luminance transformations go through HSL, which can round a channel by a step or two.
-    auto isNearly = [aShownColor](::Color aColor) {
-        constexpr int ROUNDING_TOLERANCE = 2;
-        return std::abs(aColor.GetRed() - aShownColor.GetRed()) <= ROUNDING_TOLERANCE
-               && std::abs(aColor.GetGreen() - aShownColor.GetGreen()) <= ROUNDING_TOLERANCE
-               && std::abs(aColor.GetBlue() - aShownColor.GetBlue()) <= ROUNDING_TOLERANCE;
-    };
-    const model::ColorSet& rColorSet = *pTheme->getColorSet();
-    return !isNearly(rColorSet.resolveColor(rComplexColor))
-           && !isNearly(rColorSet.resolveOOXMLColor(rComplexColor));
 }
 }
 
@@ -567,8 +531,6 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
         }
     }
 
-    const ::Color aFillColor(ColorTransparency, nFillColor & 0xffffff);
-
     // write XML
     if (bNeedGradientFill)
     {
@@ -581,8 +543,10 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     else if ( nFillColor != nOriginalColor )
     {
         // the user has set a different color for the shape
-        if (!WriteSchemeColor(u"FillComplexColor"_ustr, rXPropSet, false, aFillColor))
-            WriteSolidFill(aFillColor, nAlpha);
+        if (!WriteSchemeColor(u"FillComplexColor"_ustr, rXPropSet))
+        {
+            WriteSolidFill(::Color(ColorTransparency, nFillColor & 0xffffff), nAlpha);
+        }
     }
     // tdf#91332 LO doesn't export the actual theme.xml in XLSX.
     else if ( !sColorFillScheme.isEmpty() && GetDocumentType() != DOCUMENT_XLSX )
@@ -595,12 +559,12 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
         // The shape kept the color it was read with. That color may name a theme color, and
         // saying so keeps the shape following the theme.
         // tdf#124013
-        if (!WriteSchemeColor(u"FillComplexColor"_ustr, rXPropSet, false, aFillColor))
-            WriteSolidFill(aFillColor, nAlpha);
+        if (!WriteSchemeColor(u"FillComplexColor"_ustr, rXPropSet))
+            WriteSolidFill( ::Color(ColorTransparency, nFillColor & 0xffffff), nAlpha );
     }
 }
 
-bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Reference<beans::XPropertySet>& xPropertySet, bool bUseTextSchemeColors, std::optional<::Color> oExpectedColor)
+bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Reference<beans::XPropertySet>& xPropertySet, bool bUseTextSchemeColors)
 {
     if (!xPropertySet->getPropertySetInfo()->hasPropertyByName(rPropertyName))
         return false;
@@ -612,9 +576,6 @@ bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Refer
 
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
     if (aComplexColor.getThemeColorType() == model::ThemeColorType::Unknown)
-        return false;
-
-    if (oExpectedColor && isStaleThemeColor(aComplexColor, xPropertySet, *oExpectedColor))
         return false;
 
     auto nThemeColorIndex = sal_Int16(aComplexColor.getThemeColorType());
@@ -1161,7 +1122,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         if( nColor != nOriginalColor )
         {
             // the user has set a different color for the line
-            if (!WriteSchemeColor(u"LineComplexColor"_ustr, rXPropSet, false, nColor))
+            if (!WriteSchemeColor(u"LineComplexColor"_ustr, rXPropSet))
                 WriteSolidFill(nColor, nColorAlpha);
         }
         else if( !sColorFillScheme.isEmpty() )
@@ -1172,7 +1133,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         else
         {
             // The line kept the color it was read with, which may name a theme color.
-            if (!WriteSchemeColor(u"LineComplexColor"_ustr, rXPropSet, false, nColor))
+            if (!WriteSchemeColor(u"LineComplexColor"_ustr, rXPropSet))
                 WriteSolidFill( nColor, nColorAlpha );
         }
     }

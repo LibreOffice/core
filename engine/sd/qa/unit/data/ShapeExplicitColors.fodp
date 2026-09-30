@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.presentation">
- <office:styles/>
  <office:automatic-styles>
   <style:style style:name="grPlain" style:family="graphic" style:parent-style-name="standard">
    <style:graphic-properties draw:fill="solid" draw:fill-color="#7f59ae" draw:stroke="solid" svg:stroke-color="#e54b89"/>
