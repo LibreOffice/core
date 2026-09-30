@@ -182,19 +182,63 @@ void LayoutAtomVisitorBase::visit(ForEachAtom& rAtom)
     if (rIterator.mbHideLastTrans && !rIterator.maAxis.empty()
         && rIterator.maAxis[0] == XML_followSib)
     {
-        // If last transition is hidden and the axis is the follow sibling,
-        // then the last atom should not be visited.
-        if (mnCurrIdx + mnCurrStep >= mnCurrCnt)
+        // hideLastTrans hides the transition after the last node, so it is about loops over
+        // transitions only, and the last node is the one with no node following it among its
+        // siblings. Alternating_Flow walks its nodes two at a time and reaches the second of a
+        // pair by followSib ptType node; counting the passes of the loops made the third node's
+        // pass the last one and dropped the fourth node and every transition after a second.
+        // Where there is no Point to ask, the passes of the loop around say it as before.
+        const bool bOverTransitions(rIterator.mnPtType == XML_sibTrans
+                                    || rIterator.mnPtType == XML_parTrans
+                                    || rIterator.mnPtType == XML_all);
+        const OUString aFrom(
+            !msPassNodeId.isEmpty()
+                ? msPassNodeId
+                : (mxCurrentNode.is() ? mxCurrentNode->getPresentation().msPresentationAssociationId
+                                      : OUString()));
+        if (bOverTransitions && !aFrom.isEmpty())
+        {
+            IteratorAttr aNextNode;
+            aNextNode.maAxis = { XML_followSib };
+            aNextNode.maPtType = { XML_node };
+            aNextNode.maStart = { 0 };
+            aNextNode.maCount = { 0 };
+            aNextNode.mnPtType = XML_node;
+            if (pointsAlongAxis(mrDgm, aNextNode, aFrom, /*bLastStepWhole*/ true).empty())
+                return;
+        }
+        else if (bOverTransitions && mnCurrIdx + mnCurrStep >= mnCurrCnt)
             return;
     }
 
     // cool#15967. Connectors are not independent but siblings of current node.
-    if (rIterator.mnPtType == XML_sibTrans)
+    // Only along the sibling axes: a loop over the transitions of the node's children, "axis ch
+    // ptType sibTrans", walks the data like any other axis, and its passes are those children's
+    // transitions. Pie_Process's negSibTrans stands on the first child's transition, so a node
+    // with children has one and the last node's is not hidden.
+    const bool bAlongSiblings(rIterator.maAxis.empty() || rIterator.maAxis[0] == XML_followSib
+                              || rIterator.maAxis[0] == XML_precedSib
+                              || rIterator.maAxis[0] == XML_self);
+    if (rIterator.mnPtType == XML_sibTrans && bAlongSiblings)
     {
         // What the body draws belongs to the connector and not to the node an enclosing loop
-        // stands on, so the pass of that loop says nothing here.
+        // stands on. Where that loop stands on a node, the connector is the sibTrans of that
+        // node, and the pass stands on it: Alternating_Flow walks its nodes two at a time, and
+        // the connector after the third node is the second presentation of its name, which the
+        // place of the pass, 2, did not find. Without such a node the pass says nothing here.
         const OUString aHeldPassNodeId(msPassNodeId);
-        msPassNodeId.clear();
+        OUString aTransition;
+        if (!aHeldPassNodeId.isEmpty())
+            for (const rtl::Reference<svx::diagram::Connection>& rConnection :
+                 mrDgm.getData()->getConnections())
+                if (rConnection->mnXMLType == svx::diagram::TypeConstant::XML_parOf
+                    && rConnection->msDestId == aHeldPassNodeId
+                    && !rConnection->msSibTransId.isEmpty())
+                {
+                    aTransition = rConnection->msSibTransId;
+                    break;
+                }
+        msPassNodeId = aTransition;
         defaultVisit(rAtom);
         msPassNodeId = aHeldPassNodeId;
         return;
@@ -220,7 +264,12 @@ void LayoutAtomVisitorBase::visit(ForEachAtom& rAtom)
                                   : OUString()));
     std::vector<OUString> aPassNodes(
         pointsAlongAxis(mrDgm, rIterator, aWalkFrom, /*bLastStepWhole*/ true));
-    if (aPassNodes.empty())
+    // Walked from a Point and reaching none, the axis has said its piece: a node without
+    // children makes no pass of a loop over its children, Circle_Accent_Timeline's third event
+    // has no descriptions. Only where there was no Point to walk from does the presentation
+    // below stand in.
+    const bool bAxisSaid(!aWalkFrom.isEmpty());
+    if (aPassNodes.empty() && !bAxisSaid)
         aPassNodes = passNodesBelow(rIterator.mnPtType);
 
     // Every other axis leads from the current data node to a set of data nodes, and the body
@@ -244,20 +293,35 @@ void LayoutAtomVisitorBase::visit(ForEachAtom& rAtom)
     // counted from one, or counted back from the end where it is written negative, -1 being
     // the last of them. Saying nothing starts at the near end, which for a loop that runs
     // backwards is the far one.
+    // A loop over several steps, "axis ch ch st 1 1 cnt 1 0", states a start and a count for
+    // each step; the walk applied those of the earlier steps, and the passes take the last
+    // step's, a 0 meaning all. Nested_Target's oChild stands on the children of the first
+    // child, all three of them, and the first step's count of 1 gave it one.
+    sal_Int32 nStartWanted(rIterator.mnSt);
+    sal_Int32 nCountWanted(rIterator.mnCnt);
+    if (rIterator.maAxis.size() > 1)
+    {
+        if (rIterator.maStart.size() >= rIterator.maAxis.size())
+            nStartWanted = rIterator.maStart.back();
+        if (rIterator.maCount.size() >= rIterator.maAxis.size())
+            nCountWanted = rIterator.maCount.back() == 0 ? -1 : rIterator.maCount.back();
+    }
     sal_Int32 nFirstAlong(nStep < 0 ? nAlong - 1 : 0);
-    if (rIterator.mnSt > 0)
-        nFirstAlong = rIterator.mnSt - 1;
-    else if (rIterator.mnSt < 0)
-        nFirstAlong = nAlong + rIterator.mnSt;
+    if (nStartWanted > 0)
+        nFirstAlong = nStartWanted - 1;
+    else if (nStartWanted < 0)
+        nFirstAlong = nAlong + nStartWanted;
 
     // How many passes there are room for from there, counting the way the loop runs.
     const sal_Int32 nRoom(nStep < 0 ? nFirstAlong + 1 : nAlong - nFirstAlong);
-    const sal_Int32 nChildren(nAlong > 0 ? std::max<sal_Int32>(nRoom, 0)
-                                         : (nFound > 0 ? nFound : 1));
+    const sal_Int32 nChildren(nAlong > 0     ? std::max<sal_Int32>(nRoom, 0)
+                              : bAxisSaid    ? 0
+                              : (nFound > 0) ? nFound
+                                             : 1);
 
     const sal_Int32 nCnt = std::min(
         nChildren,
-        rIterator.mnCnt==-1 ? nChildren : rIterator.mnCnt);
+        nCountWanted==-1 ? nChildren : nCountWanted);
 
     const OUString aOldPassNodeId(msPassNodeId);
 

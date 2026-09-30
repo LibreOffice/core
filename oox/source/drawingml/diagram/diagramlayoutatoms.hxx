@@ -20,6 +20,7 @@
 #ifndef INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_DIAGRAMLAYOUTATOMS_HXX
 #define INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_DIAGRAMLAYOUTATOMS_HXX
 
+#include <limits>
 #include <map>
 #include <memory>
 #include <optional>
@@ -62,6 +63,19 @@ struct IteratorAttr
 /// two across the flow. Runs once all shapes have their place.
 void settleNamedConnectors(const SmartArtDiagram& rDgm);
 
+/// Gives every spacer whose extent is a part of a shape that a hierarchy beside it laid out that
+/// extent now, and moves what follows it in its row along by it. Runs once the hierarchies
+/// have their shapes.
+void settleDeferredSpacers(const SmartArtDiagram& rDgm);
+
+/// Turns the text of every turned shape back upright, or the way autoTxRot of the text
+/// algorithm that styles the shape says. Runs once every shape has its turn.
+void settleUprightText(const SmartArtDiagram& rDgm);
+
+/// Moves the drawn shapes as a whole so that they stand in the middle of the frame, along each
+/// axis the root's algorithm states no alignment for. Runs once all shapes have their place.
+void centreDrawnShapes(const SmartArtDiagram& rDgm, const ShapePtr& pRoot);
+
 /// The Points the axis of rIterator picks out, starting at the Point with rFromId, in the order
 /// the file puts them in. The start and the count each step of the axis carries are applied,
 /// except on the last step when bLastStepWhole says to leave that one whole.
@@ -96,12 +110,22 @@ struct Constraint
     sal_Int32 mnRefType;
     sal_Int32 mnRefPointType;
     sal_Int32 mnOperator;
+    /// The name of the layout node the constraint is stated in. A reference that names no
+    /// shape, refType w with no refFor, is that node's extent.
+    OUString msStatedBy;
 };
 
 /// Rules allow you to specify what to do when constraints can't be fully satisfied.
 struct Rule
 {
     OUString msForName;
+    /// what the rule may change, XML_w and the like, XML_none where it states nothing
+    sal_Int32 mnType = 0;
+    /// how far the rule may take the value: to a factor of what the constraint refers to, to a
+    /// value of its own, and never beyond a limit; NaN for each where the rule states none
+    double mfFactor = std::numeric_limits<double>::quiet_NaN();
+    double mfValue = std::numeric_limits<double>::quiet_NaN();
+    double mfMax = std::numeric_limits<double>::quiet_NaN();
 };
 
 typedef std::map<sal_Int32, sal_Int32> LayoutProperty;
@@ -316,6 +340,8 @@ public:
         { return maIter; }
     void setRef(const OUString& rsRef)
         { msRef = rsRef; }
+    const IteratorAttr& iterator() const
+        { return maIter; }
     const OUString& getRef() const
         { return msRef; }
     virtual void accept( LayoutAtomVisitor& ) override;
@@ -430,6 +456,8 @@ public:
     bool setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape,
                      const rtl::Reference<svx::diagram::Point>& rPresNode,
                      sal_Int32 nCurrIdx ) const;
+
+    const LayoutNode* getParentLayoutNode() const;
 
 private:
     VarMap                       mVariables;

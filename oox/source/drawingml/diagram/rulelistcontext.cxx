@@ -18,6 +18,8 @@
  */
 
 #include "rulelistcontext.hxx"
+
+#include <limits>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
@@ -45,6 +47,17 @@ core::ContextHandlerRef RuleListContext::onCreateContext(sal_Int32 nElement,
 
             Rule& rRule = pNode->getRule();
             rRule.msForName = rAttribs.getStringDefaulted(XML_forName);
+            rRule.mnType = rAttribs.getToken(XML_type, XML_none);
+            // "NaN" stands for a part the rule does not state
+            const auto aNumber = [&rAttribs](sal_Int32 nToken) {
+                const OUString aText(rAttribs.getStringDefaulted(nToken));
+                return aText.isEmpty() || aText.equalsIgnoreAsciiCase(u"NaN")
+                           ? std::numeric_limits<double>::quiet_NaN()
+                           : aText.toDouble();
+            };
+            rRule.mfFactor = aNumber(XML_fact);
+            rRule.mfValue = aNumber(XML_val);
+            rRule.mfMax = aNumber(XML_max);
             break;
         }
         default:

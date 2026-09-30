@@ -166,6 +166,11 @@ public:
     sal_Int32                       getRotation() const { return mnRotation; }
     void                            setDiagramRotation( sal_Int32 nRotation ) { mnDiagramRotation = nRotation; }
     sal_Int32                       getDiagramRotation() const { return mnDiagramRotation; }
+    /// The turn the text inside the shape is given against the shape, in 60000ths of a degree
+    /// clockwise, as a Diagram layout asks for it: the text of a turned shape standing upright
+    /// again. Nothing where the layout asks for none.
+    void                            setDiagramTextPreRotation( sal_Int32 nRotation ) { moDiagramTextPreRotation = nRotation; }
+    const std::optional<sal_Int32>& getDiagramTextPreRotation() const { return moDiagramTextPreRotation; }
     void                            setFlip( bool bFlipH, bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; }
     void                            setFlipH(bool bFlipH) { mbFlipH = bFlipH;}
     void                            setFlipV(bool bFlipV) { mbFlipV = bFlipV;}
@@ -438,6 +443,7 @@ private:
 
     sal_Int32                       mnRotation;
     sal_Int32                       mnDiagramRotation; // rotates shape prior to sizing, does not affect text rotation
+    std::optional<sal_Int32>        moDiagramTextPreRotation;
     bool                            mbFlipH;
     bool                            mbFlipV;
     bool                            mbHidden;

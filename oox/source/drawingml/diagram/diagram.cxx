@@ -180,6 +180,14 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
 
     pParentShape->setChildSize(pParentShape->getSize());
 
+    // The names the layout settles, the statements it keeps for a shape levels down and the
+    // shapes a sideways branch places as a whole all describe the tree this run builds. A run
+    // starts with none of them, so a Diagram laid out a second time is measured afresh.
+    maUserVariables.clear();
+    maDeferredUserVariables.clear();
+    maLaidOutSideways.clear();
+    maDeferredSpacers.clear();
+
     const rtl::Reference<svx::diagram::Point> xRootPoint(mpData->getRootPoint());
     if (bCreate && mpLayout->getNode() && xRootPoint.is())
     {
@@ -192,10 +200,12 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
         ShapeLayoutingVisitor aLayoutingVisitor(*this, xRootPoint);
         mpLayout->getNode()->accept(aLayoutingVisitor);
         settleNamedConnectors(*this);
-
+        settleDeferredSpacers(*this);
         sortChildrenByZOrder(pParentShape);
         unturnRotatedShapes(pParentShape);
         removeUnneededGroupShapes(pParentShape);
+        centreDrawnShapes(*this, pParentShape);
+        settleUprightText(*this);
     }
 
     ShapePtr pBackground = std::make_shared<Shape>("com.sun.star.drawing.CustomShape");

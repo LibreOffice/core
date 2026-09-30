@@ -170,6 +170,24 @@ public:
     /// roots, branches and the shapes in them. Each holds its final place and size already.
     std::set<const Shape*>& getLaidOutSideways() { return maLaidOutSideways; }
 
+    /// A spacer in a row whose extent along the row is a part of a shape that a hierarchy
+    /// beside it lays out, and so is not known while the row is placed: the row, the spacer
+    /// and its place among the row's children when the row was read, the name of that shape
+    /// and which of its sides, the part, whether the row runs along x, and the way the row
+    /// runs, 1 forward and -1 back.
+    struct DeferredSpacer
+    {
+        ShapePtr mpRow;
+        ShapePtr mpSpacer;
+        sal_Int32 mnIndex;
+        OUString maRefName;
+        sal_Int32 mnRefType;
+        double mfFactor;
+        bool mbAlongX;
+        sal_Int32 mnDirection;
+    };
+    std::vector<DeferredSpacer>& getDeferredSpacers() { return maDeferredSpacers; }
+
     void setOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag, const css::uno::Any& rValue);
     css::uno::Any getOOXDomValue(svx::diagram::DomMapFlag aDomMapFlag) const;
     void resetOOXDomValues(svx::diagram::DomMapFlags aDomMapFlags);
@@ -192,6 +210,7 @@ private:
     std::map<sal_Int32, sal_Int32> maUserVariables;
     std::set<const Shape*> maLaidOutSideways;
     std::map<sal_Int32, DeferredUserVariable> maDeferredUserVariables;
+    std::vector<DeferredSpacer> maDeferredSpacers;
 
     OoxDiagramDataPtr              mpData;
     DiagramLayoutPtr               mpLayout;

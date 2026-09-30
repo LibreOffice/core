@@ -435,6 +435,26 @@ void Shape::addShape(
             Reference< XShapes > xShapes( xShape, UNO_QUERY );
             if ( xShapes.is() )
                 addChildren( rFilterBase, *this, pTheme, xShapes, pShapeMap, aMatrix );
+            // A Diagram layout node that draws a shape of its own may hold layout nodes below
+            // it, the text of a callout below the callout's hidden frame; the children hang off
+            // a shape that is no group, and are made beside it, in the group it stands in, with
+            // that group's transformation and each moved by this shape's place, which their
+            // places are relative to. The shape's own transformation would scale them to its
+            // size and turn them as it is turned. A child the layout gave no size, the text of
+            // a connector whose text the connector itself carries, makes no shape.
+            else if (!maChildren.empty() && !msInternalName.isEmpty())
+            {
+                for (auto const& child : maChildren)
+                {
+                    if (child->getSize().Width <= 0 || child->getSize().Height <= 0)
+                        continue;
+                    const awt::Point aHeld(child->getPosition());
+                    child->setPosition(awt::Point(aHeld.X + maPosition.X, aHeld.Y + maPosition.Y));
+                    child->setMasterTextListStyle( mpMasterTextListStyle );
+                    child->addShape( rFilterBase, pTheme, rxShapes, aTransformation, rShapeOrParentShapeFillProps, pShapeMap, pParentGroupShape );
+                    child->setPosition(aHeld);
+                }
+            }
 
             if (isInWordprocessingCanvas() && !isWPGChild())
             {
@@ -2439,7 +2459,9 @@ Reference< XShape > const & Shape::createAndInsert(
                 mpCustomShapePropertiesPtr->setTextCameraZRotateAngle( nTextCameraZRotation / 60000 );
 
                 // TextPreRotateAngle. Text rotates inside the text area. Might be used for diagram layout 'upr' and 'grav'.
-                sal_Int32 nTextPreRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moTextPreRotation.value_or( 0 ) );
+                // A Diagram laid out again has the turn on the shape, its text comes back from the shape it replaces.
+                sal_Int32 nTextPreRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moTextPreRotation.value_or(
+                    moDiagramTextPreRotation.value_or( 0 ) ) );
 
                 nTextPreRotateAngle -= getDiagramRotation(); // Use of mnDiagramRotation is unclear. It seems to be always 0 here.
 
@@ -2474,6 +2496,8 @@ Reference< XShape > const & Shape::createAndInsert(
                 if (XML_ellipsis == getTextBody()->getTextProperties().moVertOverflow)
                     putPropertyToGrabBag(u"vertOverflow"_ustr, uno::Any(u"ellipsis"_ustr));
             }
+            else if (moDiagramTextPreRotation)
+                mpCustomShapePropertiesPtr->setTextPreRotateAngle(-*moDiagramTextPreRotation / 60000);
 
             // Note that the script oox/source/drawingml/customshapes/generatePresetsData.pl looks
             // for these ==cscode== and ==csdata== markers, so don't "clean up" these SAL_INFOs
