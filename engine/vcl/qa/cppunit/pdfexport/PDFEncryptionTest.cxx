@@ -20,12 +20,15 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
+#include <tools/stream.hxx>
+
 #include <vcl/filter/pdfdocument.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/pdf/PDFEncryptionInitialization.hxx>
 #include <vcl/pdfwriter.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -181,6 +184,60 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_7)
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     int nFileVersion = pPdfDocument->getFileVersion();
     CPPUNIT_ASSERT_EQUAL(17, nFileVersion);
+}
+
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptedMetadataStream)
+{
+    // Given a document with a title, exported at a version whose handler is RC4:
+    loadFromURL(u"private:factory/swriter"_ustr);
+    mxComponent.queryThrow<document::XDocumentPropertiesSupplier>()
+        ->getDocumentProperties()
+        ->setTitle(u"Fourth quarter layoffs"_ustr);
+
+    // When saving as encrypted PDF:
+    cpo::uno::Sequence aFilterData{
+        // 1.7 and up take the R6 handler instead
+        comphelper::makePropertyValue(u"SelectPdfVersion"_ustr, sal_Int32(16)),
+        comphelper::makePropertyValue(u"EncryptFile"_ustr, true),
+        comphelper::makePropertyValue(u"DocumentOpenPassword"_ustr, u"secret"_ustr)
+    };
+    mxComponent.queryThrow<frame::XStorable>()->storeToURL(
+        maTempFile.GetURL(),
+        { comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
+          comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport("secret"_ostr);
+
+    // Then make sure the XMP packet went through the cipher, as the AES-256 handler already
+    // puts it:
+    // the handler follows the requested version, so pin the one this covers
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(aFileStream));
+    vcl::filter::PDFObjectElement* pEncryption = findEncryptionObject(aDocument);
+    CPPUNIT_ASSERT(pEncryption);
+    auto* pV = dynamic_cast<vcl::filter::PDFNumberElement*>(pEncryption->Lookup("V"_ostr));
+    CPPUNIT_ASSERT(pV);
+    CPPUNIT_ASSERT_EQUAL(2.0, pV->GetValue());
+    // and that nothing here claims the metadata is exempt, which at V 2 would mean nothing
+    CPPUNIT_ASSERT(!pEncryption->Lookup("EncryptMetadata"_ostr));
+
+    const std::string_view aFile(static_cast<const char*>(maMemory.GetData()), maMemory.GetSize());
+    CPPUNIT_ASSERT(aFile.find("/Encrypt") != std::string_view::npos);
+    // names are not encrypted, so the stream stays findable either way
+    CPPUNIT_ASSERT(aFile.find("/Type/Metadata") != std::string_view::npos);
+    // the header every XMP packet opens with, and the title it holds
+    CPPUNIT_ASSERT_EQUAL(std::string_view::npos, aFile.find("<?xpacket"));
+    CPPUNIT_ASSERT_EQUAL(std::string_view::npos, aFile.find("Fourth quarter layoffs"));
+
+    // and both come back once the password has been applied, which a stream encrypted
+    // against the wrong object would not give
+    SvMemoryStream aDecrypted;
+    CPPUNIT_ASSERT(pPdfDocument->saveWithVersion(aDecrypted, 16, /*bRemoveSecurity=*/true));
+    const std::string_view aPlain(static_cast<const char*>(aDecrypted.GetData()),
+                                  aDecrypted.GetSize());
+    CPPUNIT_ASSERT(aPlain.find("<?xpacket") != std::string_view::npos);
+    CPPUNIT_ASSERT(aPlain.find("Fourth quarter layoffs") != std::string_view::npos);
 }
 
 CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptedButtonUrl)

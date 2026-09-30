@@ -42,7 +42,8 @@ public:
     sal_Int32 getRevision() override { return 3; };
 
     sal_Int32 getAccessPermissions() override { return m_nAccessPermissions; }
-    bool isMetadataEncrypted() override { return false; }
+    // /EncryptMetadata is meaningful only at V 4 or 5, so a V 2 file must encrypt its metadata
+    bool isMetadataEncrypted() override { return true; }
     sal_Int32 getKeyLength() override { return m_nKeyLength; }
     sal_Int32 getRC4KeyLength() { return m_nRC4KeyLength; }
 
