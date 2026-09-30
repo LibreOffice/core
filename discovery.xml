@@ -102,7 +102,7 @@
             <action name="edit" default="true" ext="xlsx"/>
             <action name="view" ext="xlsx"/>
             <action name="editnew" ext="xlsx"/>
-            <action name="interactivepreview" ext="xslx"/>
+            <action name="interactivepreview" ext="xlsx"/>
             <action name="edit" default="true" ext="xlsb"/>
             <action name="view" ext="xlsb"/>
             <action name="edit" default="true" ext="xlsm"/>
