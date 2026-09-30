@@ -20,7 +20,8 @@ function test() {
     console.assert(body.getText().length > 0);
     console.assert(body.getNumChildren() === 6);
 
-    // Paragraph 0 is a bold "Bold", italic "Italic" and plain "Plain" concatenated:
+    // Paragraph 0 is a bold "Bold", italic "Italic" and plain "Plain" concatenated, followed by an
+    // image anchored to a character with text wrap, which is a positioned image and no child:
     const p0 = body.getChild(0);
     console.assert(p0.getType() === DocumentApp.ElementType.PARAGRAPH);
     console.assert(p0.getText() === 'BoldItalicPlain');
