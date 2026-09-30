@@ -1954,6 +1954,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyleLiveRoundTrip)
     CPPUNIT_ASSERT_EQUAL(aAccent1, pHeaderFormat->GetAttrSet().Get(RES_BACKGROUND).GetColor());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf173709HyperlinkTitle)
+{
+    // Two links with office:title, the second one also with office:name
+    createSwDoc("tdf173709-hyperlink-title.fodt");
+    saveAndReload(TestFilter::ODT);
+
+    // Without the fix in place, office:title was lost
+    CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 2), u"HyperLinkTitle"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Another example site"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(2), 2), u"HyperLinkTitle"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"anchor1"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(2), 2), u"HyperLinkName"_ustr));
+
+    auto pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "(//text:a)[1]", "title", u"Example site");
+    assertXPathNoAttribute(pXmlDoc, "(//text:a)[1]", "name");
+    assertXPath(pXmlDoc, "(//text:a)[2]", "title", u"Another example site");
+    assertXPath(pXmlDoc, "(//text:a)[2]", "name", u"anchor1");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

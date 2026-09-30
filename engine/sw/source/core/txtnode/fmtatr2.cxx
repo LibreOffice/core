@@ -196,6 +196,7 @@ SwFormatINetFormat::SwFormatINetFormat()
     , msINetFormatName()
     , msVisitedFormatName()
     , msHyperlinkName()
+    , msHyperlinkTitle()
     , mpTextAttr( nullptr )
     , mnINetFormatId( SwPoolFormatId::ZERO )
     , mnVisitedFormatId( SwPoolFormatId::ZERO )
@@ -210,6 +211,7 @@ SwFormatINetFormat::SwFormatINetFormat( OUString aURL, OUString aTarget )
     , msINetFormatName()
     , msVisitedFormatName()
     , msHyperlinkName()
+    , msHyperlinkTitle()
     , mpTextAttr( nullptr )
     , mnINetFormatId( SwPoolFormatId::CHR_INET_NORMAL )
     , mnVisitedFormatId( SwPoolFormatId::CHR_INET_VISIT )
@@ -227,6 +229,7 @@ SwFormatINetFormat::SwFormatINetFormat( const SwFormatINetFormat& rAttr )
     , msINetFormatName( rAttr.msINetFormatName )
     , msVisitedFormatName( rAttr.msVisitedFormatName )
     , msHyperlinkName( rAttr.msHyperlinkName )
+    , msHyperlinkTitle( rAttr.msHyperlinkTitle )
     , mpTextAttr( nullptr )
     , mnINetFormatId( rAttr.mnINetFormatId )
     , mnVisitedFormatId( rAttr.mnVisitedFormatId )
@@ -246,6 +249,7 @@ bool SwFormatINetFormat::operator==( const SfxPoolItem& rAttr ) const
     bool bRet = SfxPoolItem::operator==( rAttr )
                 && msURL == static_cast<const SwFormatINetFormat&>(rAttr).msURL
                 && msHyperlinkName == static_cast<const SwFormatINetFormat&>(rAttr).msHyperlinkName
+                && msHyperlinkTitle == static_cast<const SwFormatINetFormat&>(rAttr).msHyperlinkTitle
                 && msTargetFrame == static_cast<const SwFormatINetFormat&>(rAttr).msTargetFrame
                 && msINetFormatName == static_cast<const SwFormatINetFormat&>(rAttr).msINetFormatName
                 && msVisitedFormatName == static_cast<const SwFormatINetFormat&>(rAttr).msVisitedFormatName
@@ -316,6 +320,9 @@ bool SwFormatINetFormat::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) 
         break;
         case MID_URL_HYPERLINKNAME:
             rVal <<= msHyperlinkName;
+        break;
+        case MID_URL_HYPERLINKTITLE:
+            rVal <<= msHyperlinkTitle;
         break;
         case MID_URL_VISITED_FMT:
         {
@@ -400,6 +407,9 @@ bool SwFormatINetFormat::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberI
                 break;
             case MID_URL_HYPERLINKNAME:
                 rVal >>= msHyperlinkName;
+                break;
+            case MID_URL_HYPERLINKTITLE:
+                rVal >>= msHyperlinkTitle;
                 break;
             case MID_URL_VISITED_FMT:
             {

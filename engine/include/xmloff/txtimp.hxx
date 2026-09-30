@@ -196,6 +196,7 @@ public:
             const cpo::uno::Reference< css::text::XTextCursor >& rCursor,
             const OUString& rHRef,
             const OUString& rName,
+            const OUString& rTitle,
             const OUString& rTargetFrameName,
             const OUString& rStyleName,
             const OUString& rVisitedStyleName,

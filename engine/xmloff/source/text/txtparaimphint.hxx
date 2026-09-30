@@ -102,6 +102,7 @@ class XMLHyperlinkHint_Impl : public XMLHint_Impl
 {
     OUString                 sHRef;
     OUString                 sName;
+    OUString                 sTitle;
     OUString                 sTargetFrameName;
     OUString                 sStyleName;
     OUString                 sVisitedStyleName;
@@ -118,6 +119,8 @@ public:
     const OUString& GetHRef() const { return sHRef; }
     void SetName( const OUString& s ) { sName = s; }
     const OUString& GetName() const { return sName; }
+    void SetTitle( const OUString& s ) { sTitle = s; }
+    const OUString& GetTitle() const { return sTitle; }
     void SetTargetFrameName( const OUString& s ) { sTargetFrameName = s; }
     const OUString& GetTargetFrameName() const { return sTargetFrameName; }
     void SetStyleName( const OUString& s ) { sStyleName = s; }

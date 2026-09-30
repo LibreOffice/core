@@ -104,6 +104,7 @@
         { UNO_NAME_HYPER_LINK_U_R_L, RES_TXTATR_INETFMT,          cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID ,MID_URL_URL},                \
         { UNO_NAME_HYPER_LINK_TARGET, RES_TXTATR_INETFMT,         cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID ,MID_URL_TARGET},             \
         { UNO_NAME_HYPER_LINK_NAME, RES_TXTATR_INETFMT,           cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID ,MID_URL_HYPERLINKNAME  },    \
+        { UNO_NAME_HYPER_LINK_TITLE, RES_TXTATR_INETFMT,          cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID ,MID_URL_HYPERLINKTITLE },    \
         { UNO_NAME_UNVISITED_CHAR_STYLE_NAME, RES_TXTATR_INETFMT, cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID ,MID_URL_UNVISITED_FMT   },   \
         { UNO_NAME_VISITED_CHAR_STYLE_NAME, RES_TXTATR_INETFMT,   cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID ,MID_URL_VISITED_FMT  },
 

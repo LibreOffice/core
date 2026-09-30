@@ -462,6 +462,13 @@ published service CharacterProperties
      *
      **/
     [optional, property] short CharScriptHint;
+
+    /** This optional property contains the accessible description of the
+     *  hyperlink, e.g. used as its tooltip.
+     *
+     *  @since LibreOffice 27.2
+     **/
+    [optional, property] string HyperLinkTitle;
 };
 
 }; }; }; };

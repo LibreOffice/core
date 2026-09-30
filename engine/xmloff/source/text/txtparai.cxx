@@ -310,6 +310,9 @@ XMLImpHyperlinkContext_Impl::XMLImpHyperlinkContext_Impl(
         case XML_ELEMENT(OFFICE, XML_NAME):
             mpHint->SetName( sValue );
             break;
+        case XML_ELEMENT(OFFICE, XML_TITLE):
+            mpHint->SetTitle( sValue );
+            break;
         case XML_ELEMENT(OFFICE, XML_TARGET_FRAME_NAME):
             mpHint->SetTargetFrameName( sValue );
             break;
@@ -1897,6 +1900,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
                                               xAttrCursor,
                                               pHHint->GetHRef(),
                                               pHHint->GetName(),
+                                              pHHint->GetTitle(),
                                               pHHint->GetTargetFrameName(),
                                               pHHint->GetStyleName(),
                                               pHHint->GetVisitedStyleName(),

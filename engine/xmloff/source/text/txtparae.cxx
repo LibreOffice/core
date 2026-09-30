@@ -143,6 +143,7 @@ constexpr OUString gsHeight(u"Height"_ustr);
 constexpr OUString gsHoriOrient(u"HoriOrient"_ustr);
 constexpr OUString gsHoriOrientPosition(u"HoriOrientPosition"_ustr);
 constexpr OUString gsHyperLinkName(u"HyperLinkName"_ustr);
+constexpr OUString gsHyperLinkTitle(u"HyperLinkTitle"_ustr);
 constexpr OUString gsHyperLinkTarget(u"HyperLinkTarget"_ustr);
 constexpr OUString gsHyperLinkURL(u"HyperLinkURL"_ustr);
 constexpr OUString gsIsAutomaticContour(u"IsAutomaticContour"_ustr);
@@ -284,7 +285,7 @@ namespace
 
     struct HyperlinkData
     {
-        OUString href, name, targetFrame, ustyleName, vstyleName;
+        OUString href, name, title, targetFrame, ustyleName, vstyleName;
         bool serverMap = false;
         cpo::uno::Reference<css::container::XNameReplace> events;
 
@@ -331,6 +332,11 @@ namespace
             rPropSet->getPropertyValue(gsHyperLinkName) >>= name;
         }
 
+        if (hasDirectProperty(gsHyperLinkTitle))
+        {
+            rPropSet->getPropertyValue(gsHyperLinkTitle) >>= title;
+        }
+
         if (hasDirectProperty(gsHyperLinkTarget))
         {
             rPropSet->getPropertyValue(gsHyperLinkTarget) >>= targetFrame;
@@ -362,7 +368,7 @@ namespace
     {
         if (href != rOther.href || name != rOther.name || targetFrame != rOther.targetFrame
             || ustyleName != rOther.ustyleName || vstyleName != rOther.vstyleName
-            || serverMap != rOther.serverMap)
+            || serverMap != rOther.serverMap || title != rOther.title)
             return false;
 
         if (events == rOther.events)
@@ -396,6 +402,9 @@ namespace
 
         if (!name.isEmpty())
             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, name);
+
+        if (!title.isEmpty())
+            rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_TITLE, title);
 
         if (!targetFrame.isEmpty())
         {

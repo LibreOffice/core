@@ -44,6 +44,7 @@ class SW_DLLPUBLIC SwFormatINetFormat final
     UIName msINetFormatName;
     UIName msVisitedFormatName;
     OUString msHyperlinkName;        ///< Name of the link.
+    OUString msHyperlinkTitle;       ///< Accessible description (ODF office:title).
     std::unique_ptr<SvxMacroTableDtor> mpMacroTable;
     SwTextINetFormat* mpTextAttr;         ///< My TextAttribute.
     SwPoolFormatId mnINetFormatId;
@@ -86,6 +87,15 @@ public:
     void SetName( const OUString& rNm )
     {
         msHyperlinkName = rNm;
+    }
+
+    const OUString& GetTitle() const
+    {
+        return msHyperlinkTitle;
+    }
+    void SetTitle( const OUString& rTitle )
+    {
+        msHyperlinkTitle = rTitle;
     }
 
     const OUString& GetTargetFrame() const

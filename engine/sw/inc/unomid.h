@@ -54,6 +54,7 @@
 #define MID_URL_VISITED_FMT                     6
 #define MID_URL_UNVISITED_FMT                   7
 #define MID_URL_HYPERLINKEVENTS                 8
+#define MID_URL_HYPERLINKTITLE                  9
 
 #define MID_CHAIN_PREVNAME                      0
 #define MID_CHAIN_NEXTNAME                      1

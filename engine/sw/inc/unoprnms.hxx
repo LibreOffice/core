@@ -309,6 +309,7 @@ inline constexpr OUString UNO_NAME_HORI_ORIENT_POSITION_EMU = u"HoriOrientPositi
 inline constexpr OUString UNO_NAME_HYPER_LINK_U_R_L = u"HyperLinkURL"_ustr;
 inline constexpr OUString UNO_NAME_HYPER_LINK_TARGET = u"HyperLinkTarget"_ustr;
 inline constexpr OUString UNO_NAME_HYPER_LINK_NAME = u"HyperLinkName"_ustr;
+inline constexpr OUString UNO_NAME_HYPER_LINK_TITLE = u"HyperLinkTitle"_ustr;
 inline constexpr OUString UNO_NAME_HYPER_LINK_EVENTS = u"HyperLinkEvents"_ustr;
 inline constexpr OUString UNO_NAME_INFO_TYPE = u"InfoType"_ustr;
 inline constexpr OUString UNO_NAME_INFO_FORMAT = u"InfoFormat"_ustr;

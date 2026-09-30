@@ -1628,6 +1628,7 @@ void XMLTextImportHelper::SetHyperlink(
     const Reference < XTextCursor >& rCursor,
     const OUString& rHRef,
     const OUString& rName,
+    const OUString& rTitle,
     const OUString& rTargetFrameName,
     const OUString& rStyleName,
     const OUString& rVisitedStyleName,
@@ -1635,6 +1636,7 @@ void XMLTextImportHelper::SetHyperlink(
 {
     static constexpr OUString s_HyperLinkURL = u"HyperLinkURL"_ustr;
     static constexpr OUString s_HyperLinkName = u"HyperLinkName"_ustr;
+    static constexpr OUString s_HyperLinkTitle = u"HyperLinkTitle"_ustr;
     static constexpr OUString s_HyperLinkTarget = u"HyperLinkTarget"_ustr;
     static constexpr OUString s_UnvisitedCharStyleName = u"UnvisitedCharStyleName"_ustr;
     static constexpr OUString s_VisitedCharStyleName = u"VisitedCharStyleName"_ustr;
@@ -1651,6 +1653,11 @@ void XMLTextImportHelper::SetHyperlink(
     if (xPropSetInfo->hasPropertyByName(s_HyperLinkName))
     {
         xPropSet->setPropertyValue(s_HyperLinkName, Any(rName));
+    }
+
+    if (xPropSetInfo->hasPropertyByName(s_HyperLinkTitle))
+    {
+        xPropSet->setPropertyValue(s_HyperLinkTitle, Any(rTitle));
     }
 
     if (xPropSetInfo->hasPropertyByName(s_HyperLinkTarget))
