@@ -81,8 +81,8 @@
 	min-width: 0;
 	align-self: flex-end;
 	pointer-events: none;
-	inset-inline-end: 16px;
-	bottom: 6px;
+	inset-inline-end: 2px;
+	bottom: -9px;
 }
 
 .preview-avatars .avatar-img,
@@ -427,4 +427,5 @@
 
 .parts-preview-grid .preview-avatars {
 	inset-inline-end: 6px;
+	bottom: 6px;
 }
