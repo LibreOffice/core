@@ -133,6 +133,7 @@
                         </child>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="custom_animation_list-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="customanimationspanel|custom_animation_list">Animation List</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="customanimationspanel|extended_tip|custom_animation_list">The animation list displays all animations for the current slide.</property>
                           </object>
                         </child>
@@ -199,7 +200,7 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <child>
-              <!-- n-columns=3 n-rows=13 -->
+              <!-- n-columns=3 n-rows=10 -->
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -427,22 +428,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="effect_label">
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="customanimationspanel|effect_label">Options</property>
-                    <property name="xalign">0</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">4</property>
-                    <property name="width">3</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel" id="start_effect">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -453,7 +438,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">5</property>
+                    <property name="top-attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -474,7 +459,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
-                    <property name="top-attach">5</property>
+                    <property name="top-attach">4</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -488,7 +473,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">6</property>
+                    <property name="top-attach">5</property>
                   </packing>
                 </child>
                 <child>
@@ -502,7 +487,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">7</property>
+                    <property name="top-attach">6</property>
                   </packing>
                 </child>
                 <child>
@@ -521,7 +506,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
-                    <property name="top-attach">7</property>
+                    <property name="top-attach">6</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -535,7 +520,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">8</property>
+                    <property name="top-attach">7</property>
                   </packing>
                 </child>
                 <child>
@@ -554,7 +539,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
-                    <property name="top-attach">8</property>
+                    <property name="top-attach">7</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -565,7 +550,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">9</property>
+                    <property name="top-attach">8</property>
                     <property name="width">3</property>
                   </packing>
                 </child>
@@ -585,7 +570,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">10</property>
+                    <property name="top-attach">9</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -608,32 +593,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
-                    <property name="top-attach">10</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="box1_label">
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="customanimationspanel|box1_label">Animation Deck</property>
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">11</property>
-                    <property name="width">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="custom_animation_list_label">
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="customanimationspanel|custom_animation_list_label">Animation List</property>
-                    <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">custom_animation_list</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">12</property>
-                    <property name="width">3</property>
+                    <property name="top-attach">9</property>
                   </packing>
                 </child>
                 <child>
@@ -679,7 +639,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
-                    <property name="top-attach">6</property>
+                    <property name="top-attach">5</property>
                     <property name="width">2</property>
                   </packing>
                 </child>

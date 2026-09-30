@@ -133,7 +133,6 @@ CustomAnimationPane::CustomAnimationPane( weld::Widget* pParent, ViewShellBase& 
     , mxPBMoveDown(m_xBuilder->weld_button(u"move_down"_ustr))
     , mxFTCategory(m_xBuilder->weld_label(u"categorylabel"_ustr))
     , mxLBCategory(m_xBuilder->weld_combo_box(u"categorylb"_ustr))
-    , mxFTEffect(m_xBuilder->weld_label(u"effect_label"_ustr))
     , mxLBAnimation(m_xBuilder->weld_tree_view(u"effect_list"_ustr))
     , mxFTStart(m_xBuilder->weld_label(u"start_effect"_ustr))
     , mxLBStart(m_xBuilder->weld_combo_box(u"start_effect_list"_ustr))
@@ -191,8 +190,6 @@ void CustomAnimationPane::initialize()
     maIdle.SetPriority(TaskPriority::DEFAULT);
     maIdle.SetInvokeHandler(LINK(this, CustomAnimationPane, SelectionHandler));
 
-    maStrModify = mxFTEffect->get_label();
-
     // get current controller and initialize listeners
     try
     {
@@ -229,7 +226,6 @@ CustomAnimationPane::~CustomAnimationPane()
 
     mxPBAddEffect.reset();
     mxPBRemoveEffect.reset();
-    mxFTEffect.reset();
     mxFTStart.reset();
     mxLBStart.reset();
     mxLBSubControl.reset();
@@ -519,16 +515,6 @@ void CustomAnimationPane::updateControls()
     {
         CustomAnimationEffectPtr pEffect = maListSelection.front();
 
-        OUString aUIName( CustomAnimationPresets::getCustomAnimationPresets().getUINameForPresetId( pEffect->getPresetId() ) );
-
-        OUString aTemp( maStrModify );
-
-        if( !aUIName.isEmpty() )
-        {
-            aTemp += " " + aUIName;
-            mxFTEffect->set_label( aTemp );
-        }
-
         Any aValue;
         CustomAnimationPresetPtr pDescriptor = CustomAnimationPresets::getCustomAnimationPresets().getEffectDescriptor( pEffect->getPresetId() );
         if (pDescriptor)
@@ -683,7 +669,6 @@ void CustomAnimationPane::updateControls()
         mxFTDuration->set_sensitive(false);
         mxCBXDuration->set_sensitive(false);
         mxCBXDuration->set_text(OUString());
-        mxFTEffect->set_label(maStrModify);
     }
 
     bool bEnableUp = true;

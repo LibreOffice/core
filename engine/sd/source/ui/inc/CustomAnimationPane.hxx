@@ -125,7 +125,6 @@ private:
     std::unique_ptr<weld::Button> mxPBMoveDown;
     std::unique_ptr<weld::Label> mxFTCategory;
     std::unique_ptr<weld::ComboBox> mxLBCategory;
-    std::unique_ptr<weld::Label> mxFTEffect;
     std::unique_ptr<weld::TreeView> mxLBAnimation;
     std::unique_ptr<weld::Label> mxFTStart;
     std::unique_ptr<weld::ComboBox> mxLBStart;
@@ -142,7 +141,6 @@ private:
 
     Idle maIdle;
 
-    OUString    maStrModify;
     OUString    maStrProperty;
 
     sal_Int32   mnLastSelectedAnimation;

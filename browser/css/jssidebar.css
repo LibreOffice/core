@@ -402,6 +402,114 @@ button#button2.ui-pushbutton.jsdialog.sidebar {
 	width: 100%;
 }
 
+/* Pass the deck height down to the panel. */
+#SdCustomAnimationDeck,
+#SdCustomAnimationDeck .root-container.jsdialog.sidebar,
+#SdCustomAnimationDeck .vertical.jsdialog.sidebar,
+#SdCustomAnimationDeck .ui-panel-container.jsdialog.sidebar,
+#SdCustomAnimationDeck #CustomAnimationsPanel {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+}
+
+/* Fill the remaining space below the header. */
+#SdCustomAnimationDeck .ui-panel-content.jsdialog.sidebar {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+}
+
+.sidebar#CustomAnimationsPanel {
+	overflow-y: auto;
+}
+
+/* Keep enough space for the settings. */
+.sidebar#CustomAnimationsPanel > .ui-scrollwindow {
+	flex: 0 1 auto;
+	min-height: 150px;
+	max-height: none;
+}
+
+.sidebar#CustomAnimationsPanel > .ui-scrollwindow:has(#bxApplied) {
+	flex: 1 1 0;
+	max-height: none;
+}
+
+.sidebar#CustomAnimationsPanel > .ui-scrollwindow:has(#bxApplied) > .ui-scrollwindow-content,
+.sidebar#CustomAnimationsPanel #bxApplied {
+	height: 100%;
+	min-height: 0;
+}
+
+.sidebar#CustomAnimationsPanel #custom_animation_label_parent {
+	border: 1px solid var(--color-border);
+	border-radius: var(--border-radius);
+	box-sizing: border-box;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+/* Keep the list height fixed so the rows below it don't move when
+   no effect is selected. */
+.sidebar#CustomAnimationsPanel .ui-grid > #effect_list {
+	height: 160px;
+}
+
+.sidebar#CustomAnimationsPanel .ui-grid {
+	row-gap: var(--spacing-s);
+}
+
+.sidebar#CustomAnimationsPanel #EffectFragment > .hidden {
+	width: 0;
+	height: 0;
+	min-width: 0;
+	min-height: 0;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+/* Override the inline grid placement. */
+.sidebar#CustomAnimationsPanel #dirspan {
+	display: contents !important;
+}
+
+.sidebar#CustomAnimationsPanel #start_effect_list {
+	grid-column: 2 / 3 !important;
+}
+
+.sidebar#CustomAnimationsPanel #EffectFragment {
+	grid-area: 6 / 2 / auto / 3;
+}
+
+.sidebar#CustomAnimationsPanel #more_properties {
+	grid-area: 5 / 3 / 7 / 4;
+	align-self: center;
+}
+
+.sidebar#CustomAnimationsPanel #effectlabel {
+	margin-block-start: 0;
+	margin-block-end: auto;
+}
+
+.sidebar#CustomAnimationsPanel .ui-grid > label {
+	text-align: start !important;
+}
+
+.sidebar#CustomAnimationsPanel .ui-grid > .static-label {
+	padding-inline-start: 0;
+}
+
+.sidebar#CustomAnimationsPanel .ui-grid > .hidden {
+	overflow: hidden;
+}
+
 .sidebar#ChartTypePanel #stack:not(.hidden) + #grid6 {
 	display: block !important;
 }
