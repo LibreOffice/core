@@ -130,6 +130,7 @@ public:
         bool getUserCanRename() const { return _userCanRename; }
         bool getUserCanOnlyComment() const { return _userCanOnlyComment; }
         bool getUserCanOnlyManageRedlines() const { return _userCanOnlyManageRedlines; }
+        bool getUserCanChangeSecurityLabel() const { return _userCanChangeSecurityLabel; }
         bool getIsUserRestricted() const { return _isUserRestricted; }
         const std::string& getRestrictedCommands() const { return _restrictedCommands; }
 
@@ -236,6 +237,10 @@ public:
         bool _userCanOnlyComment = false;
         /// If user is limited to only managing redlines (accept/reject)
         bool _userCanOnlyManageRedlines = false;
+        /// If user may apply/change/remove the document's security label. Defaults to
+        /// true (absent host setting keeps today's behaviour); false locks the marking
+        /// while still allowing document editing.
+        bool _userCanChangeSecurityLabel = true;
         /// True when the host reports this user as one whose commands are restricted
         bool _isUserRestricted = false;
         /// Space separated UNO commands the host restricts for this user. A release build leaves

@@ -1888,6 +1888,7 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     wopiInfo->set("HideUserList", wopiFileInfo->getHideUserList());
     wopiInfo->set("SupportsRename", wopiFileInfo->getSupportsRename());
     wopiInfo->set("UserCanRename", wopiFileInfo->getUserCanRename());
+    wopiInfo->set("UserCanChangeSecurityLabel", wopiFileInfo->getUserCanChangeSecurityLabel());
     wopiInfo->set("FileUrl", wopiFileInfo->getFileUrl());
     wopiInfo->set("UserCanWrite", wopiFileInfo->getUserCanWrite() && !session->isReadOnly());
     if (wopiFileInfo->getHideChangeTrackingControls() != WopiStorage::WOPIFileInfo::TriState::Unset)

@@ -53,6 +53,7 @@ window.L.Map.WOPI = window.L.Handler.extend({
 	UserCanRename: false,
 	UserCanWrite: false,
 	IsOwner: false,
+	UserCanChangeSecurityLabel: true,
 	DisablePresentation: false,
 	PresentationLeader: '',
 
@@ -180,6 +181,8 @@ window.L.Map.WOPI = window.L.Handler.extend({
 			'UserCanRename',
 			'EnableShare',
 			'UserCanWrite',
+			// Absent keeps the default (true); only an explicit false locks the marking.
+			'UserCanChangeSecurityLabel',
 			'DisablePresentation',
 			'IsOwner',
 		]) {

@@ -65,6 +65,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testTileData);
     CPPUNIT_TEST(testRectanglesIntersect);
     CPPUNIT_TEST(testJson);
+    CPPUNIT_TEST(testWopiSecurityLabelFlag);
     CPPUNIT_TEST(testAnonymization);
     CPPUNIT_TEST(testStat);
     CPPUNIT_TEST(testReadFile);
@@ -94,6 +95,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testTileData();
     void testRectanglesIntersect();
     void testJson();
+    void testWopiSecurityLabelFlag();
     void testAnonymization();
     void testStat();
     void testReadFile();
@@ -770,6 +772,30 @@ void WhiteBoxTests::testJson()
 
     JsonUtil::findJSONValue(object, "UserId", stringValue);
     LOK_ASSERT_EQUAL_STR("user@user.com", stringValue);
+}
+
+void WhiteBoxTests::testWopiSecurityLabelFlag()
+{
+    constexpr std::string_view testname = __func__;
+
+    // The CheckFileInfo contract WOPIFileInfo relies on for UserCanChangeSecurityLabel:
+    // findJSONValue leaves the caller's default untouched when the key is absent (so the
+    // default-true "can change" holds for an unset host), and parses an explicit value.
+    const auto canChange = [](const char* json) -> bool
+    {
+        Poco::JSON::Object::Ptr object;
+        JsonUtil::parseJSON(json, object);
+        bool value = true; // WOPIFileInfo's default
+        JsonUtil::findJSONValue(object, "UserCanChangeSecurityLabel", value);
+        return value;
+    };
+
+    // Absent => allowed (default): an unset host setting keeps today's behaviour.
+    LOK_ASSERT_EQUAL(true, canChange(R"({"BaseFileName":"test.docx"})"));
+    // Explicit false => the marking is locked.
+    LOK_ASSERT_EQUAL(false, canChange(R"({"UserCanChangeSecurityLabel":false})"));
+    // Explicit true => allowed.
+    LOK_ASSERT_EQUAL(true, canChange(R"({"UserCanChangeSecurityLabel":true})"));
 }
 
 void WhiteBoxTests::testAnonymization()

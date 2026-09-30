@@ -351,7 +351,11 @@ window.L.Map = window.L.Evented.extend({
 				var dt = this.getDocType();
 				if (this.uiManager && e.commandValues &&
 				    (dt === 'text' || dt === 'spreadsheet' || dt === 'presentation')) {
-					var supported = !!e.commandValues.supported;
+					// The host can lock the marking per file/user (UserCanChangeSecurityLabel):
+					// then the command is hidden like an unsupported format -- the banner still
+					// shows the classification. wsd also drops the command, so this is only UX.
+					var canChange = !this['wopi'] || this['wopi'].UserCanChangeSecurityLabel;
+					var supported = !!e.commandValues.supported && canChange;
 					// What the notebookbar was last built with: its builders read
 					// _securityLabelSupported, so this is the layout on screen.
 					var wasSupported = this._securityLabelSupported === true;
