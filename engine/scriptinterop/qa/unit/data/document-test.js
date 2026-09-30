@@ -113,8 +113,16 @@ function test() {
     }
     console.assert(threw);
 
-    // Paragraph 4 anchors a footnote whose only paragraph is "Note":
-    console.assert(body.getChild(4).getText().substring(0, 8) === 'Trailing');
+    // Paragraph 4 anchors a footnote whose only paragraph is "Note", and the reference to it is no
+    // part of the paragraph's text:
+    console.assert(body.getChild(4).getText() === 'Trailing');
+    let pastFootnote = false;
+    try {
+        DocumentApp.getActiveDocument().newPosition(body.getChild(4).getChild(0), 9);
+    } catch (e) {
+        pastFootnote = true;
+    }
+    console.assert(pastFootnote);
     const fns = DocumentApp.getActiveDocument().getFootnotes();
     console.assert(fns.length === 1);
     console.assert(fns[0].getType() === DocumentApp.ElementType.FOOTNOTE);

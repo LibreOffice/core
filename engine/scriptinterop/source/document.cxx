@@ -107,6 +107,40 @@ template<typename T>
 css::beans::Optional<cpo::uno::Reference<T>> maybe(cpo::uno::Reference<T> const & ref)
 { return {ref.is(), ref}; }
 
+// The text of a range, which is its string without the numbers of the footnote references in it,
+// as GAS leaves those out:
+OUString textOf(cpo::uno::Reference<css::text::XTextRange> const & range)
+{
+    OUString text = range->getString();
+    auto const host = range->getText();
+    std::vector<cpo::uno::Reference<css::text::XTextRange>> footnotes;
+    cpo::uno::Reference<css::container::XEnumerationAccess> const paragraphs(
+        host->createTextCursorByRange(range), cpo::uno::UNO_QUERY_THROW);
+    for (auto const en = paragraphs->createEnumeration(); en->hasMoreElements();) {
+        cpo::uno::Reference<css::container::XEnumerationAccess> const portions(
+            en->nextElement(), cpo::uno::UNO_QUERY);
+        if (!portions.is()) {
+            continue;
+        }
+        for (auto const pen = portions->createEnumeration(); pen->hasMoreElements();) {
+            cpo::uno::Reference<css::beans::XPropertySet> const portion(
+                pen->nextElement(), cpo::uno::UNO_QUERY_THROW);
+            OUString type;
+            portion->getPropertyValue(u"TextPortionType"_ustr) >>= type;
+            if (type == u"Footnote") {
+                footnotes.emplace_back(portion, cpo::uno::UNO_QUERY_THROW);
+            }
+        }
+    }
+    for (auto i = footnotes.rbegin(); i != footnotes.rend(); ++i) {
+        auto const before = host->createTextCursorByRange(range->getStart());
+        before->gotoRange((*i)->getStart(), true);
+        text = text.replaceAt(
+            before->getString().getLength(), (*i)->getString().getLength(), u"");
+    }
+    return text;
+}
+
 // Moves the cursor right past count characters of text, in steps that fit the short that goRight
 // takes, plus one step for each anchor character, as of an inline image, which the text lacks:
 void goRight(
@@ -122,7 +156,7 @@ void goRight(
         }
         passed->gotoRange(cursor->getEnd(), true);
         // A text field's text can be longer than the one step it takes, so this can go negative:
-        remaining = count - passed->getString().getLength();
+        remaining = count - textOf(passed).getLength();
     } while (remaining > 0);
 }
 
@@ -265,7 +299,7 @@ public:
             {
                 buf.append('\n');
             }
-            buf.append(range->getString());
+            buf.append(textOf(range));
         }
         return buf.makeStringAndClear();
     }
@@ -488,8 +522,8 @@ public:
     { return {false, {}}; }
 
     OUString getText() override {
-        return cpo::uno::Reference<css::text::XTextRange>(content_, cpo::uno::UNO_QUERY_THROW)
-            ->getString();
+        return textOf(
+            cpo::uno::Reference<css::text::XTextRange>(content_, cpo::uno::UNO_QUERY_THROW));
     }
 
     css::beans::Optional<scriptinterop::TextAlignment> getTextAlignment(sal_Int32 offset) override {
@@ -513,7 +547,7 @@ public:
         sal_Int32 off = 0;
         for (auto const & r: runs_) {
             v.push_back(off);
-            off += r->getString().getLength();
+            off += textOf(r).getLength();
         }
         if (v.empty()) {
             v.push_back(0);
@@ -687,7 +721,7 @@ private:
         }
         sal_Int32 start = 0;
         for (auto const & r: runs_) {
-            auto const len = r->getString().getLength();
+            auto const len = textOf(r).getLength();
             if (offset < start + len) {
                 return r;
             }
@@ -1191,8 +1225,8 @@ public:
 
     OUString SAL_CALL getText() override
     {
-        return cpo::uno::Reference<css::text::XTextRange>(content_, cpo::uno::UNO_QUERY_THROW)
-            ->getString();
+        return textOf(
+            cpo::uno::Reference<css::text::XTextRange>(content_, cpo::uno::UNO_QUERY_THROW));
     }
 
     scriptinterop::ElementType getType() override {
@@ -1365,7 +1399,7 @@ public:
         if (!text_.is()) {
             throw cpo::uno::RuntimeException(u"getText: the table cell has no text"_ustr);
         }
-        return text_->getString();
+        return textOf(text_);
     }
 
     void removeFromParent() override {
@@ -1711,13 +1745,13 @@ public:
     explicit RangeElementImpl(cpo::uno::Reference<css::text::XTextRange> const & range):
         range_(range), paragraph_(findContainingParagraph(range))
     {
-        rangeLen_ = range->getString().getLength();
+        rangeLen_ = textOf(range).getLength();
         if (!paragraph_.is()) {
             return;
         }
         cpo::uno::Reference<css::text::XTextRange> const paraRange(
             paragraph_, cpo::uno::UNO_QUERY_THROW);
-        paragraphLen_ = paraRange->getString().getLength();
+        paragraphLen_ = textOf(paraRange).getLength();
         auto const host = paraRange->getText();
         if (!host.is()) {
             throw cpo::uno::RuntimeException(u"the paragraph is not part of the document"_ustr);
@@ -1727,7 +1761,7 @@ public:
             throw cpo::uno::RuntimeException(u"cannot place a cursor in the paragraph"_ustr);
         }
         probe->gotoRange(range->getStart(), true);
-        startOffset_ = probe->getString().getLength();
+        startOffset_ = textOf(probe).getLength();
     }
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return range_; }
@@ -2005,7 +2039,7 @@ private:
                 u"getOffset: cannot place a cursor in the paragraph"_ustr);
         }
         probe->gotoRange(c->getStart(), true);
-        return probe->getString().getLength();
+        return textOf(probe).getLength();
     }
 
     cpo::uno::Reference<css::frame::XModel> model_;
@@ -2062,7 +2096,7 @@ public:
         if (!text_.is()) {
             throw cpo::uno::RuntimeException(u"getText: the footnote section has no text"_ustr);
         }
-        return text_->getString();
+        return textOf(text_);
     }
 
     scriptinterop::ElementType getType() override {
@@ -2115,8 +2149,7 @@ public:
     { return {false, {}}; }
 
     OUString getText() override {
-        return cpo::uno::Reference<css::text::XText>(footnote_, cpo::uno::UNO_QUERY_THROW)
-            ->getString();
+        return textOf(cpo::uno::Reference<css::text::XText>(footnote_, cpo::uno::UNO_QUERY_THROW));
     }
 
     scriptinterop::ElementType getType() override { return scriptinterop::ElementType_FOOTNOTE; }
@@ -2199,7 +2232,7 @@ public:
         if (!text_.is()) {
             throw cpo::uno::RuntimeException(u"getText: the document body has no text"_ustr);
         }
-        return text_->getString();
+        return textOf(text_);
     }
 
     scriptinterop::ElementType getType() override {
@@ -2385,7 +2418,7 @@ public:
         if (element->getType() == scriptinterop::ElementType_TEXT) {
             cpo::uno::Reference<css::text::XTextRange> const text(
                 element->getuno(), cpo::uno::UNO_QUERY_THROW);
-            if (offset > text->getString().getLength()) {
+            if (offset > textOf(text).getLength()) {
                 throw cpo::uno::RuntimeException(
                     "newPosition: offset " + OUString::number(offset)
                     + " is past the end of the text");
