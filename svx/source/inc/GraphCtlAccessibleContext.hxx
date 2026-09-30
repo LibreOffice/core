@@ -43,11 +43,6 @@ class SdrModel;
 class SdrPage;
 class SdrView;
 
-/** @descr
-        This base class provides an implementation of the
-        <code>AccessibleContext</code> service.
-*/
-
 class SvxGraphCtrlAccessibleContext final
     : public cppu::ImplInheritanceHelper<comphelper::OAccessible,
                                          css::accessibility::XAccessibleSelection>,
