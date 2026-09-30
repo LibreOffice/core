@@ -2857,6 +2857,18 @@ struct COKitDocument
                                  int nPoint, int nAt, int nX, int nY)
         = 0;
 
+    /**
+     * Crops a picture by one of its eight crop handles, which stand where the eight that frame
+     * it stand. The graphic stays where it is on the page and only the window onto it moves,
+     * the way the office crops. Nothing needs to be selected for it.
+     *
+     * @param nObjectId the unique id of the picture
+     * @param nKind which of the eight, as setObjectHandle names a handle's kind
+     * @param nX where the handle goes, on the page, in twips
+     * @param nY where the handle goes, on the page, in twips
+     */
+    virtual void cropObject(unsigned long long nObjectId, int nKind, int nX, int nY) = 0;
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

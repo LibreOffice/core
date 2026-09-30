@@ -12,6 +12,7 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdograf.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdopath.hxx>
 #include <cmath>
@@ -7024,6 +7025,76 @@ void COKitDocumentImpl::setObjectControlPoint(unsigned long long nObjectId,
     pShape->BroadcastObjectChange();
 
     rModel.EndUndo();
+}
+
+/*
+    Crops a picture by naming it: which of the eight marks went where, in twips on the page.
+    The picture works the crop out itself in its graphic's own units, and the window moves with
+    it, so the graphic stays where it was on the page.
+*/
+void COKitDocumentImpl::cropObject(unsigned long long nObjectId, int nKind, int nX,
+                                   int nY)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::cropObject");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
+    SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
+    const SdrPage* pPage = pPageView ? pPageView->GetPage() : nullptr;
+
+    if (!pPage)
+    {
+        SetLastExceptionMsg(u"The view shows no page to crop a picture on"_ustr);
+        return;
+    }
+
+    SdrGrafObj* pPicture = dynamic_cast<SdrGrafObj*>(pPage->FindObjectByUniqueID(nObjectId));
+
+    if (!pPicture)
+    {
+        SetLastExceptionMsg(u"No picture of that id is on the page"_ustr);
+        return;
+    }
+
+    if (pPicture->IsResizeProtect())
+    {
+        SetLastExceptionMsg(u"The picture is held against being changed"_ustr);
+        return;
+    }
+
+    if (nKind < static_cast<int>(SdrHdlKind::UpperLeft)
+        || nKind > static_cast<int>(SdrHdlKind::LowerRight))
+    {
+        SetLastExceptionMsg(u"A picture is cropped by one of the eight handles that frame it"_ustr);
+        return;
+    }
+
+    // The place arrives in twips and the model holds the page in its own unit.
+    const basegfx::B2DPoint aTo(
+        o3tl::convert(tools::Long(nX), o3tl::Length::twip, o3tl::Length::mm100),
+        o3tl::convert(tools::Long(nY), o3tl::Length::twip, o3tl::Length::mm100));
+
+    SdrGrafCropChange aChange;
+    pPicture->cropChangeFor(static_cast<SdrHdlKind>(nKind), aTo, aChange);
+
+    // A crop changes the geometry and the crop values both, so both are put back by an undo.
+    SdrModel& rModel(pPicture->getSdrModelFromSdrObject());
+    rModel.BegUndo(SvxResId(STR_DragMethCrop));
+    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(*pPicture));
+    rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoAttrObject(*pPicture));
+
+    const bool bCropped(pPicture->applyCropChange(aChange));
+
+    rModel.EndUndo();
+
+    if (bCropped)
+    {
+        pPicture->SetChanged();
+        pPicture->BroadcastObjectChange();
+    }
 }
 
 /** Moves one handle of an object to where it was let go, by naming the object and the handle

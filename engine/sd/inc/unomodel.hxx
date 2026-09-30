@@ -255,6 +255,8 @@ public:
          */
         bool mbIsPicture = false;
         sal_Int64 mnGraphicChecksum = 0;
+        /// How the graphic is turned over as it is drawn: bit 0 across, bit 1 down.
+        sal_Int32 mnGraphicMirror = 0;
         double mfGraphicWidth = 0.0;
         double mfGraphicHeight = 0.0;
         double mfCropLeft = 0.0;
@@ -349,6 +351,7 @@ public:
                    && mbSigning == rOther.mbSigning
                    && mbIsPicture == rOther.mbIsPicture
                    && mnGraphicChecksum == rOther.mnGraphicChecksum
+                   && mnGraphicMirror == rOther.mnGraphicMirror
                    && mfGraphicWidth == rOther.mfGraphicWidth
                    && mfGraphicHeight == rOther.mfGraphicHeight
                    && mfCropLeft == rOther.mfCropLeft && mfCropTop == rOther.mfCropTop

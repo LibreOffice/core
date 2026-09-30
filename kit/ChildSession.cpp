@@ -660,6 +660,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "setobjecttransform") ||
                tokens.equals(0, "setobjectcontrolpoint") ||
                tokens.equals(0, "setobjecthandle") ||
+               tokens.equals(0, "cropobject") ||
                tokens.equals(0, "downloadas") ||
                tokens.equals(0, "getchildid") ||
                tokens.equals(0, "gettextselection") ||
@@ -748,6 +749,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "setobjecthandle"))
         {
             return setObjectHandle(tokens);
+        }
+        else if (tokens.equals(0, "cropobject"))
+        {
+            return cropObject(tokens);
         }
         else if (tokens.equals(0, "downloadas"))
         {
@@ -1865,6 +1870,27 @@ bool ChildSession::setObjectHandle(const StringVector& tokens)
 
     getLOKitDocument()->setObjectHandle(std::strtoull(objectId.c_str(), nullptr, 10), nKind,
                                         nPolygon, nPoint, nAt, nX, nY);
+
+    return true;
+}
+
+bool ChildSession::cropObject(const StringVector& tokens)
+{
+    std::string objectId;
+    int nKind = 0;
+    int nX = 0;
+    int nY = 0;
+
+    if (tokens.size() != 5 || !getTokenString(tokens[1], "id", objectId)
+        || !getTokenInteger(tokens[2], "kind", nKind) || !getTokenInteger(tokens[3], "x", nX)
+        || !getTokenInteger(tokens[4], "y", nY))
+    {
+        sendTextFrameAndLogError("error: cmd=cropobject kind=syntax");
+        return false;
+    }
+
+    getLOKitDocument()->setView(_viewId);
+    getLOKitDocument()->cropObject(std::strtoull(objectId.c_str(), nullptr, 10), nKind, nX, nY);
 
     return true;
 }

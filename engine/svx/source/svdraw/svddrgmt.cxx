@@ -3742,109 +3742,12 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         getSdrDragView().AddUndo(getSdrDragView().GetModel().GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
     }
 
-    // get the original objects transformation
-    basegfx::B2DHomMatrix aOriginalMatrix;
-    basegfx::B2DPolyPolygon aPolyPolygon;
-    bool bShearCorrected(false);
-    pObj->TRGetBaseGeometry(aOriginalMatrix, aPolyPolygon);
-
-    {   // correct shear, it comes currently mirrored from TRGetBaseGeometry, can be removed with aw080
-        const basegfx::utils::B2DHomMatrixBufferedDecompose aTmpDecomp(aOriginalMatrix);
-
-        if(!basegfx::fTools::equalZero(aTmpDecomp.getShearX()))
-        {
-            bShearCorrected = true;
-            aOriginalMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-                aTmpDecomp.getScale(),
-                -aTmpDecomp.getShearX(),
-                aTmpDecomp.getRotate(),
-                aTmpDecomp.getTranslate());
-        }
-    }
-
-    // generate start point of original drag vector in unit coordinates (the
-    // vis-a-vis of the drag point)
-    basegfx::B2DPoint aLocalStart(0.0, 0.0);
-    bool bOnAxis(false);
-
-    switch(GetDragHdlKind())
-    {
-        case SdrHdlKind::UpperLeft: aLocalStart.setX(1.0); aLocalStart.setY(1.0); break;
-        case SdrHdlKind::Upper: aLocalStart.setX(0.5); aLocalStart.setY(1.0); bOnAxis = true; break;
-        case SdrHdlKind::UpperRight: aLocalStart.setX(0.0); aLocalStart.setY(1.0); break;
-        case SdrHdlKind::Left : aLocalStart.setX(1.0); aLocalStart.setY(0.5); bOnAxis = true; break;
-        case SdrHdlKind::Right: aLocalStart.setX(0.0); aLocalStart.setY(0.5); bOnAxis = true; break;
-        case SdrHdlKind::LowerLeft: aLocalStart.setX(1.0); aLocalStart.setY(0.0); break;
-        case SdrHdlKind::Lower: aLocalStart.setX(0.5); aLocalStart.setY(0.0); bOnAxis = true; break;
-        case SdrHdlKind::LowerRight: aLocalStart.setX(0.0); aLocalStart.setY(0.0); break;
-        default: break;
-    }
-
-    // create the current drag position in unit coordinates. To get there,
-    // transform back the DragPoint to UnitCoordinates
-    basegfx::B2DHomMatrix aInverse(aOriginalMatrix);
-    aInverse.invert();
-    basegfx::B2DPoint aLocalCurrent(aInverse * basegfx::B2DPoint(DragStat().GetNow().X(), DragStat().GetNow().Y()));
-
-    // if one of the edge handles is used, limit to X or Y drag only
-    if(bOnAxis)
-    {
-        if(basegfx::fTools::equal(aLocalStart.getX(), 0.5))
-        {
-            aLocalCurrent.setX(aLocalStart.getX());
-        }
-        else
-        {
-            aLocalCurrent.setY(aLocalStart.getY());
-        }
-    }
-
-    // create internal change in unit coordinates
-    basegfx::B2DHomMatrix aDiscreteChangeMatrix;
-
-    if(!basegfx::fTools::equal(aLocalCurrent.getX(), aLocalStart.getX()))
-    {
-        if(aLocalStart.getX() < 0.5)
-        {
-            aDiscreteChangeMatrix.scale(aLocalCurrent.getX(), 1.0);
-        }
-        else
-        {
-            aDiscreteChangeMatrix.scale(1.0 - aLocalCurrent.getX(), 1.0);
-            aDiscreteChangeMatrix.translate(aLocalCurrent.getX(), 0.0);
-        }
-    }
-
-    if(!basegfx::fTools::equal(aLocalCurrent.getY(), aLocalStart.getY()))
-    {
-        if(aLocalStart.getY() < 0.5)
-        {
-            aDiscreteChangeMatrix.scale(1.0, aLocalCurrent.getY());
-        }
-        else
-        {
-            aDiscreteChangeMatrix.scale(1.0, 1.0 - aLocalCurrent.getY());
-            aDiscreteChangeMatrix.translate(0.0, aLocalCurrent.getY());
-        }
-    }
-
-    // We now have the whole executed Crop in UnitCoordinates in
-    // aDiscreteChangeMatrix, go to concrete sizes now.
-    // Create the unrotated original rectangle and the unrotated modified
-    // rectangle as Ranges
-    const basegfx::utils::B2DHomMatrixBufferedDecompose aOriginalMatrixDecomp(aOriginalMatrix);
-
-    // prepare unsheared/unrotated versions of the old and new transformation
-    const basegfx::B2DHomMatrix aOriginalMatrixNoShearNoRotate(
-        basegfx::utils::createScaleTranslateB2DHomMatrix(
-            basegfx::absolute(aOriginalMatrixDecomp.getScale()),
-            aOriginalMatrixDecomp.getTranslate()));
-
-    // create the ranges for these
-    basegfx::B2DRange aRangeOriginalNoShearNoRotate(0.0, 0.0, 1.0, 1.0);
-    basegfx::B2DRange aRangeNewNoShearNoRotate(0.0, 0.0, 1.0, 1.0);
-    aRangeOriginalNoShearNoRotate.transform(aOriginalMatrixNoShearNoRotate);
-    aRangeNewNoShearNoRotate.transform(aOriginalMatrixNoShearNoRotate * aDiscreteChangeMatrix);
+    // The change the drag makes, worked out on the picture's unit square from where the handle
+    // was taken to, and what it was worked out from.
+    SdrGrafCropChange aChange;
+    pObj->cropChangeFor(GetDragHdlKind(),
+                        basegfx::B2DPoint(DragStat().GetNow().X(), DragStat().GetNow().Y()),
+                        aChange);
 
     if(bExternal)
     {
@@ -3852,109 +3755,21 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         // we call crop (virtual method) on pSdrObject which calls VirtFlyDrawObj
         // crop. Use aLocalStart unchanged, so being relative to the Crop-Action,
         // the called instance knows best how to use it
-        const double fScaleX(aRangeNewNoShearNoRotate.getWidth() / aRangeOriginalNoShearNoRotate.getWidth());
-        const double fScaleY(aRangeNewNoShearNoRotate.getHeight() / aRangeOriginalNoShearNoRotate.getHeight());
+        basegfx::B2DRange aRangeBefore;
+        basegfx::B2DRange aRangeAfter;
+        SdrGrafObj::cropWindowRanges(aChange, aRangeBefore, aRangeAfter);
+
+        const double fScaleX(aRangeAfter.getWidth() / aRangeBefore.getWidth());
+        const double fScaleY(aRangeAfter.getHeight() / aRangeBefore.getHeight());
 
         pExternalSdrObject->Crop(
-            aLocalStart,
+            aChange.maLocalStart,
             fScaleX,
             fScaleY);
     }
-    else
+    else if (!pObj->applyCropChange(aChange))
     {
-        // prepare matrix to apply to object; evtl. back-correct shear
-        basegfx::B2DHomMatrix aNewObjectMatrix(aOriginalMatrix * aDiscreteChangeMatrix);
-
-        if(bShearCorrected)
-        {
-            // back-correct shear
-            const basegfx::utils::B2DHomMatrixBufferedDecompose aTmpDecomp(aNewObjectMatrix);
-
-            aNewObjectMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-                aTmpDecomp.getScale(),
-                -aTmpDecomp.getShearX(),
-                aTmpDecomp.getRotate(),
-                aTmpDecomp.getTranslate());
-        }
-
-        // apply change to object by applying the unit coordinate change followed
-        // by the original change
-        pObj->TRSetBaseGeometry(aNewObjectMatrix, aPolyPolygon);
-
-        // extract the old Rectangle structures
-        tools::Rectangle aOldRect(
-            basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMinX()),
-            basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMinY()),
-            basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMaxX()),
-            basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMaxY()));
-        tools::Rectangle aNewRect(
-            basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMinX()),
-            basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMinY()),
-            basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMaxX()),
-            basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMaxY()));
-
-        // continue with the old original stuff
-        if (!aOldRect.GetWidth() || !aOldRect.GetHeight())
-        {
-            throw o3tl::divide_by_zero();
-        }
-
-        if((pObj->GetGraphicType() == GraphicType::NONE) || (pObj->GetGraphicType() == GraphicType::Default))
-        {
-            return false;
-        }
-
-        const GraphicObject& rGraphicObject(pObj->GetGraphicObject());
-        // tdf#117145 Usually Writer will go the bExternal path (see above), but more correct for
-        // the future is to use the MapMode from the SdrModel/SfxItemPool if the Writer's current
-        // special handling should be unified to this path in the future. Usually it *should* be
-        // MapUnit::Map100thMM, but better do not mix up Units.
-        // Checked now what SwVirtFlyDrawObj::NbcCrop is doing - it calculates everything forced
-        // to MapUnit::Map100thMM, but extracts/packs Twips to the used SdrGrafCropItem in Writer.
-        const MapMode aMapModePool(pObj->getSdrModelFromSdrObject().GetItemPool().GetMetric(0));
-        Size aGraphicSize(rGraphicObject.GetPrefSize());
-
-        if(MapUnit::MapPixel == rGraphicObject.GetPrefMapMode().GetMapUnit())
-        {
-            aGraphicSize = Application::GetDefaultDevice()->PixelToLogic(aGraphicSize, aMapModePool);
-        }
-        else
-        {
-            aGraphicSize = OutputDevice::LogicToLogic(aGraphicSize, rGraphicObject.GetPrefMapMode(), aMapModePool);
-        }
-
-        if(0 == aGraphicSize.Width() || 0 == aGraphicSize.Height())
-        {
-            return false;
-        }
-
-        const SdrGrafCropItem& rOldCrop = pObj->GetMergedItem(SDRATTR_GRAFCROP);
-        double fScaleX = ( aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight() ) / static_cast<double>(aOldRect.GetWidth());
-        double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / static_cast<double>(aOldRect.GetHeight());
-
-        sal_Int32 nDiffLeft = aNewRect.Left() - aOldRect.Left();
-        sal_Int32 nDiffTop = aNewRect.Top() - aOldRect.Top();
-        sal_Int32 nDiffRight = aNewRect.Right() - aOldRect.Right();
-        sal_Int32 nDiffBottom = aNewRect.Bottom() - aOldRect.Bottom();
-
-        if(pObj->IsMirrored())
-        {
-            // mirrored X or Y, for old stuff, exchange X
-            // check for aw080
-            sal_Int32 nTmp(nDiffLeft);
-            nDiffLeft = -nDiffRight;
-            nDiffRight = -nTmp;
-        }
-
-        sal_Int32 nLeftCrop = static_cast<sal_Int32>( rOldCrop.GetLeft() + nDiffLeft * fScaleX );
-        sal_Int32 nTopCrop = static_cast<sal_Int32>( rOldCrop.GetTop() + nDiffTop * fScaleY );
-        sal_Int32 nRightCrop = static_cast<sal_Int32>( rOldCrop.GetRight() - nDiffRight * fScaleX );
-        sal_Int32 nBottomCrop = static_cast<sal_Int32>( rOldCrop.GetBottom() - nDiffBottom * fScaleY );
-
-        SfxItemPool& rPool = getSdrDragView().GetModel().GetItemPool();
-        SfxItemSetFixed<SDRATTR_GRAFCROP, SDRATTR_GRAFCROP> aSet( rPool );
-        aSet.Put( SdrGrafCropItem( nLeftCrop, nTopCrop, nRightCrop, nBottomCrop ) );
-        getSdrDragView().SetAttributes( aSet, false );
+        return false;
     }
 
     if(bUndo)

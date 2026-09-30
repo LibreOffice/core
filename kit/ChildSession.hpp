@@ -223,6 +223,7 @@ private:
     /// Moves one of the points a custom shape is shaped by.
     bool setObjectControlPoint(const StringVector& tokens);
     bool setObjectHandle(const StringVector& tokens);
+    bool cropObject(const StringVector& tokens);
     bool downloadAs(const StringVector& tokens);
     /// Whether core will put a question to the person while writing the document out in
     /// this format.

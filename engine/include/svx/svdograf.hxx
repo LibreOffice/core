@@ -24,6 +24,8 @@
 #include <com/sun/star/drawing/BarCode.hpp>
 #include <vcl/graph.hxx>
 #include <svx/svdorect.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <svx/svdhdl.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -64,6 +66,19 @@ class SdrGraphicLink;
 /**
  * This class represents an embedded or linked bitmap graphic object.
  */
+/** The change a crop by one handle makes, worked out on the picture's unit square: the
+    picture's mapping with its shear corrected, whether it had to be, the place facing the
+    handle on the square, and the change itself as a mapping of the square onto the part of it
+    that stays.
+ */
+struct SVXCORE_DLLPUBLIC SdrGrafCropChange
+{
+    basegfx::B2DHomMatrix maOriginal;
+    bool mbShearCorrected = false;
+    basegfx::B2DPoint maLocalStart;
+    basegfx::B2DHomMatrix maChange;
+};
+
 class SVXCORE_DLLPUBLIC SdrGrafObj final : public SdrRectObj
 {
     // to allow sdr::properties::GraphicProperties access to SetXPolyDirty()
@@ -192,6 +207,21 @@ public:
    SAL_DLLPRIVATE  virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     bool IsMirrored() const { return m_bMirrored;}
+
+    /** Works out what a crop by that handle, taken to that place in the page's own unit, does
+        on the unit square. */
+    void cropChangeFor(SdrHdlKind eHandle, const basegfx::B2DPoint& rTo,
+                       SdrGrafCropChange& rChange) const;
+
+    /** The box the picture's window takes up before and after such a change, upright and
+        unsheared, in the page's own unit. */
+    static void cropWindowRanges(const SdrGrafCropChange& rChange, basegfx::B2DRange& rBefore,
+                                 basegfx::B2DRange& rAfter);
+
+    /** Applies such a change: moves the window and sets the crop values so that the graphic
+        stays where it was and only the window changes. False where the picture shows no
+        graphic to crop. */
+    bool applyCropChange(const SdrGrafCropChange& rChange);
     SAL_DLLPRIVATE void SetMirrored( bool _bMirrored );
 
     virtual bool shouldKeepAspectRatio() const override { return true; }

@@ -56,6 +56,7 @@
 #include <sdr/properties/graphicproperties.hxx>
 #include <sdr/contact/viewcontactofgraphic.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <o3tl/numeric.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <memory>
@@ -1318,6 +1319,221 @@ void SdrGrafObj::addCropHandles(SdrHdlList& rTarget) const
                 fCropRight, fCropBottom));
         }
     }
+}
+
+void SdrGrafObj::cropChangeFor(SdrHdlKind eHandle, const basegfx::B2DPoint& rTo,
+                               SdrGrafCropChange& rChange) const
+{
+    // get the original objects transformation
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    rChange.mbShearCorrected = false;
+    TRGetBaseGeometry(rChange.maOriginal, aPolyPolygon);
+
+    {   // correct shear, it comes currently mirrored from TRGetBaseGeometry, can be removed with aw080
+        const basegfx::utils::B2DHomMatrixBufferedDecompose aTmpDecomp(rChange.maOriginal);
+
+        if(!basegfx::fTools::equalZero(aTmpDecomp.getShearX()))
+        {
+            rChange.mbShearCorrected = true;
+            rChange.maOriginal = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+                aTmpDecomp.getScale(),
+                -aTmpDecomp.getShearX(),
+                aTmpDecomp.getRotate(),
+                aTmpDecomp.getTranslate());
+        }
+    }
+
+    // generate start point of original drag vector in unit coordinates (the
+    // vis-a-vis of the drag point)
+    basegfx::B2DPoint aLocalStart(0.0, 0.0);
+    bool bOnAxis(false);
+
+    switch(eHandle)
+    {
+        case SdrHdlKind::UpperLeft: aLocalStart.setX(1.0); aLocalStart.setY(1.0); break;
+        case SdrHdlKind::Upper: aLocalStart.setX(0.5); aLocalStart.setY(1.0); bOnAxis = true; break;
+        case SdrHdlKind::UpperRight: aLocalStart.setX(0.0); aLocalStart.setY(1.0); break;
+        case SdrHdlKind::Left : aLocalStart.setX(1.0); aLocalStart.setY(0.5); bOnAxis = true; break;
+        case SdrHdlKind::Right: aLocalStart.setX(0.0); aLocalStart.setY(0.5); bOnAxis = true; break;
+        case SdrHdlKind::LowerLeft: aLocalStart.setX(1.0); aLocalStart.setY(0.0); break;
+        case SdrHdlKind::Lower: aLocalStart.setX(0.5); aLocalStart.setY(0.0); bOnAxis = true; break;
+        case SdrHdlKind::LowerRight: aLocalStart.setX(0.0); aLocalStart.setY(0.0); break;
+        default: break;
+    }
+
+    rChange.maLocalStart = aLocalStart;
+
+    // create the current drag position in unit coordinates. To get there,
+    // transform back the DragPoint to UnitCoordinates
+    basegfx::B2DHomMatrix aInverse(rChange.maOriginal);
+    aInverse.invert();
+    basegfx::B2DPoint aLocalCurrent(aInverse * rTo);
+
+    // if one of the edge handles is used, limit to X or Y drag only
+    if(bOnAxis)
+    {
+        if(basegfx::fTools::equal(aLocalStart.getX(), 0.5))
+        {
+            aLocalCurrent.setX(aLocalStart.getX());
+        }
+        else
+        {
+            aLocalCurrent.setY(aLocalStart.getY());
+        }
+    }
+
+    // create internal change in unit coordinates
+    basegfx::B2DHomMatrix aDiscreteChangeMatrix;
+
+    if(!basegfx::fTools::equal(aLocalCurrent.getX(), aLocalStart.getX()))
+    {
+        if(aLocalStart.getX() < 0.5)
+        {
+            aDiscreteChangeMatrix.scale(aLocalCurrent.getX(), 1.0);
+        }
+        else
+        {
+            aDiscreteChangeMatrix.scale(1.0 - aLocalCurrent.getX(), 1.0);
+            aDiscreteChangeMatrix.translate(aLocalCurrent.getX(), 0.0);
+        }
+    }
+
+    if(!basegfx::fTools::equal(aLocalCurrent.getY(), aLocalStart.getY()))
+    {
+        if(aLocalStart.getY() < 0.5)
+        {
+            aDiscreteChangeMatrix.scale(1.0, aLocalCurrent.getY());
+        }
+        else
+        {
+            aDiscreteChangeMatrix.scale(1.0, 1.0 - aLocalCurrent.getY());
+            aDiscreteChangeMatrix.translate(0.0, aLocalCurrent.getY());
+        }
+    }
+
+    rChange.maChange = aDiscreteChangeMatrix;
+}
+
+void SdrGrafObj::cropWindowRanges(const SdrGrafCropChange& rChange, basegfx::B2DRange& rBefore,
+                                  basegfx::B2DRange& rAfter)
+{
+    // Create the unrotated original rectangle and the unrotated modified
+    // rectangle as Ranges
+    const basegfx::utils::B2DHomMatrixBufferedDecompose aOriginalMatrixDecomp(rChange.maOriginal);
+
+    // prepare unsheared/unrotated versions of the old and new transformation
+    const basegfx::B2DHomMatrix aOriginalMatrixNoShearNoRotate(
+        basegfx::utils::createScaleTranslateB2DHomMatrix(
+            basegfx::absolute(aOriginalMatrixDecomp.getScale()),
+            aOriginalMatrixDecomp.getTranslate()));
+
+    // create the ranges for these
+    rBefore = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
+    rAfter = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
+    rBefore.transform(aOriginalMatrixNoShearNoRotate);
+    rAfter.transform(aOriginalMatrixNoShearNoRotate * rChange.maChange);
+}
+
+bool SdrGrafObj::applyCropChange(const SdrGrafCropChange& rChange)
+{
+    // prepare matrix to apply to object. Evtl. back-correct shear
+    basegfx::B2DHomMatrix aNewObjectMatrix(rChange.maOriginal * rChange.maChange);
+
+    if(rChange.mbShearCorrected)
+    {
+        // back-correct shear
+        const basegfx::utils::B2DHomMatrixBufferedDecompose aTmpDecomp(aNewObjectMatrix);
+
+        aNewObjectMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+            aTmpDecomp.getScale(),
+            -aTmpDecomp.getShearX(),
+            aTmpDecomp.getRotate(),
+            aTmpDecomp.getTranslate());
+    }
+
+    // apply change to object by applying the unit coordinate change followed
+    // by the original change
+    basegfx::B2DPolyPolygon aPolyPolygon;
+    TRSetBaseGeometry(aNewObjectMatrix, aPolyPolygon);
+
+    // extract the old Rectangle structures
+    basegfx::B2DRange aRangeOriginalNoShearNoRotate;
+    basegfx::B2DRange aRangeNewNoShearNoRotate;
+    cropWindowRanges(rChange, aRangeOriginalNoShearNoRotate, aRangeNewNoShearNoRotate);
+
+    tools::Rectangle aOldRect(
+        basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMinX()),
+        basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMinY()),
+        basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMaxX()),
+        basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMaxY()));
+    tools::Rectangle aNewRect(
+        basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMinX()),
+        basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMinY()),
+        basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMaxX()),
+        basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMaxY()));
+
+    // continue with the old original stuff
+    if (!aOldRect.GetWidth() || !aOldRect.GetHeight())
+    {
+        throw o3tl::divide_by_zero();
+    }
+
+    if((GetGraphicType() == GraphicType::NONE) || (GetGraphicType() == GraphicType::Default))
+    {
+        return false;
+    }
+
+    const GraphicObject& rGraphicObject(GetGraphicObject());
+    // tdf#117145 Usually Writer will go the bExternal path (see above), but more correct for
+    // the future is to use the MapMode from the SdrModel/SfxItemPool if the Writer's current
+    // special handling should be unified to this path in the future. Usually it *should* be
+    // MapUnit::Map100thMM, but better do not mix up Units.
+    // Checked now what SwVirtFlyDrawObj::NbcCrop is doing - it calculates everything forced
+    // to MapUnit::Map100thMM, but extracts/packs Twips to the used SdrGrafCropItem in Writer.
+    const MapMode aMapModePool(getSdrModelFromSdrObject().GetItemPool().GetMetric(0));
+    Size aGraphicSize(rGraphicObject.GetPrefSize());
+
+    if(MapUnit::MapPixel == rGraphicObject.GetPrefMapMode().GetMapUnit())
+    {
+        aGraphicSize = Application::GetDefaultDevice()->PixelToLogic(aGraphicSize, aMapModePool);
+    }
+    else
+    {
+        aGraphicSize = OutputDevice::LogicToLogic(aGraphicSize, rGraphicObject.GetPrefMapMode(),
+                                                  aMapModePool);
+    }
+
+    if(0 == aGraphicSize.Width() || 0 == aGraphicSize.Height())
+    {
+        return false;
+    }
+
+    const SdrGrafCropItem& rOldCrop = GetMergedItem(SDRATTR_GRAFCROP);
+    double fScaleX = ( aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight() ) / static_cast<double>(aOldRect.GetWidth());
+    double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / static_cast<double>(aOldRect.GetHeight());
+
+    sal_Int32 nDiffLeft = aNewRect.Left() - aOldRect.Left();
+    sal_Int32 nDiffTop = aNewRect.Top() - aOldRect.Top();
+    sal_Int32 nDiffRight = aNewRect.Right() - aOldRect.Right();
+    sal_Int32 nDiffBottom = aNewRect.Bottom() - aOldRect.Bottom();
+
+    if(IsMirrored())
+    {
+        // mirrored X or Y, for old stuff, exchange X
+        // check for aw080
+        sal_Int32 nTmp(nDiffLeft);
+        nDiffLeft = -nDiffRight;
+        nDiffRight = -nTmp;
+    }
+
+    sal_Int32 nLeftCrop = static_cast<sal_Int32>( rOldCrop.GetLeft() + nDiffLeft * fScaleX );
+    sal_Int32 nTopCrop = static_cast<sal_Int32>( rOldCrop.GetTop() + nDiffTop * fScaleY );
+    sal_Int32 nRightCrop = static_cast<sal_Int32>( rOldCrop.GetRight() - nDiffRight * fScaleX );
+    sal_Int32 nBottomCrop = static_cast<sal_Int32>( rOldCrop.GetBottom() - nDiffBottom * fScaleY );
+
+    SetMergedItem( SdrGrafCropItem( nLeftCrop, nTopCrop, nRightCrop, nBottomCrop ) );
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

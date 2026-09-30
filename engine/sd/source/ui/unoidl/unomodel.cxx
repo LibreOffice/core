@@ -3606,6 +3606,11 @@ private:
         // The checksum the graphic is named by on the wire, so the picture can be drawn from
         // the same fetched image the primitives draw it from.
         rContent.mnGraphicChecksum = static_cast<sal_Int64>(rGraphic.GetGraphic().GetChecksum());
+        // The graphic is turned over as the picture draws it: across where the picture is
+        // mirrored, inside the picture's own mapping, which carries any turn. A picture turned
+        // upside down is a mirrored one turned by half a circle.
+        rContent.mnGraphicMirror = static_cast<sal_Int32>(
+            rPicture.IsMirrored() ? BmpMirrorFlags::Horizontal : BmpMirrorFlags::NONE);
         rContent.mfGraphicWidth = aGraphicSize.Width() * constTwipConversionFactor;
         rContent.mfGraphicHeight = aGraphicSize.Height() * constTwipConversionFactor;
         rContent.mfCropLeft = rCrop.GetLeft() * constTwipConversionFactor;
@@ -4347,6 +4352,8 @@ private:
         if (rContent.mbIsPicture)
         {
             rWriter.put("graphicChecksum", rContent.mnGraphicChecksum);
+            if (rContent.mnGraphicMirror)
+                rWriter.put("graphicMirror", rContent.mnGraphicMirror);
             rWriter.put("graphicWidth", rContent.mfGraphicWidth);
             rWriter.put("graphicHeight", rContent.mfGraphicHeight);
             rWriter.put("cropLeft", rContent.mfCropLeft);
