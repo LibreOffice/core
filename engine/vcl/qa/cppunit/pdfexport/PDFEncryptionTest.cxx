@@ -32,6 +32,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 
 #include <algorithm>
 #include <memory>
@@ -180,6 +181,87 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_7)
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     int nFileVersion = pPdfDocument->getFileVersion();
     CPPUNIT_ASSERT_EQUAL(17, nFileVersion);
+}
+
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptedButtonUrl)
+{
+    // Given a document with a push button whose action opens a URL:
+    loadFromFile(u"button-with-url.fodt");
+
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"ExportFormFields"_ustr, true),
+                                    comphelper::makePropertyValue(u"EncryptFile"_ustr, true),
+                                    comphelper::makePropertyValue(u"DocumentOpenPassword"_ustr,
+                                                                  u"secret"_ustr) };
+    // When saving as encrypted PDF:
+    mxComponent.queryThrow<frame::XStorable>()->storeToURL(
+        maTempFile.GetURL(),
+        { comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
+          comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    parsePDFExport("secret"_ostr);
+
+    // Then make sure the button's target went through the cipher:
+    const std::string_view aFile(static_cast<const char*>(maMemory.GetData()), maMemory.GetSize());
+    CPPUNIT_ASSERT(aFile.find("/Encrypt") != std::string_view::npos);
+    // names are not encrypted, so the action stays findable either way
+    CPPUNIT_ASSERT(aFile.find("/S/URI/URI") != std::string_view::npos);
+    // the host the fixture's button carries, which stood here in the clear
+    CPPUNIT_ASSERT_EQUAL(std::string_view::npos, aFile.find("intranet.example.test"));
+}
+
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptedAnnotationStrings)
+{
+    // Given a document with a comment, whose annotation carries a /M date:
+    loadFromURL(u"private:factory/swriter"_ustr);
+    auto xText = mxComponent.queryThrow<text::XTextDocument>()->getText();
+    xText->setString(u"Commented text"_ustr);
+    auto xFactory = mxComponent.queryThrow<lang::XMultiServiceFactory>();
+    auto xNote = xFactory->createInstance(u"com.sun.star.text.textfield.Annotation"_ustr)
+                     .queryThrow<text::XTextContent>();
+    auto xNoteProps = xNote.queryThrow<beans::XPropertySet>();
+    xNoteProps->setPropertyValue(u"Content"_ustr, cpo::uno::Any(u"a remark"_ustr));
+    // sw aborts on a void date while formatting the comment's title, and a comment made in
+    // the UI always carries a date
+    xNoteProps->setPropertyValue(u"DateTimeValue"_ustr,
+                                 cpo::uno::Any(util::DateTime(0, 0, 30, 12, 30, 9, 2026, false)));
+    xText->insertTextContent(xText->getEnd(), xNote, false);
+
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"ExportNotes"_ustr, true),
+                                    comphelper::makePropertyValue(u"EncryptFile"_ustr, true),
+                                    comphelper::makePropertyValue(u"DocumentOpenPassword"_ustr,
+                                                                  u"secret"_ustr) };
+    // When saving as encrypted PDF:
+    mxComponent.queryThrow<frame::XStorable>()->storeToURL(
+        maTempFile.GetURL(),
+        { comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
+          comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport("secret"_ostr);
+
+    // Then make sure that date went through the cipher: it reads back through the password,
+    // which a string encrypted against the wrong object would not
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    // the comment makes a text annotation and the popup that belongs to it
+    CPPUNIT_ASSERT_EQUAL(2, pPage->getAnnotationCount());
+    int nDates = 0;
+    for (int i = 0; i < pPage->getAnnotationCount(); ++i)
+    {
+        const OUString aDate = pPage->getAnnotation(i)->getString(
+            vcl::pdf::constDictionaryKeyModificationDate);
+        if (aDate.isEmpty())
+            continue;
+        ++nDates;
+        // Writer puts no time into /M, unlike Impress and Draw, so this is the zero one
+        CPPUNIT_ASSERT_EQUAL(u"D:00000000000000Z"_ustr, aDate);
+    }
+    CPPUNIT_ASSERT_EQUAL(1, nDates);
+
+    const std::string_view aFile(static_cast<const char*>(maMemory.GetData()), maMemory.GetSize());
+    CPPUNIT_ASSERT(aFile.find("/Encrypt") != std::string_view::npos);
+    // and it is nowhere in the clear, in either spelling: the old code left a space after the
+    // key here and the encrypting writer does not
+    CPPUNIT_ASSERT_EQUAL(std::string_view::npos, aFile.find("/M (D:"));
+    CPPUNIT_ASSERT_EQUAL(std::string_view::npos, aFile.find("/M(D:"));
 }
 
 // encryption used to cost a tagged file its object streams, and so most of its size

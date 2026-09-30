@@ -423,8 +423,8 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportThreadedComments)
     // Round-trip: re-export the loaded doc to PDF and verify the reply's /IRT, Alice's
     // surviving state-change, and the newly-added state-change from the slot dispatch are
     // all written. Charlie's original state-change was collapsed on import; on export a
-    // fresh one is written for each resolved annotation with /State (Completed)
-    // /StateModel (Review) and /F = Hidden | Print | NoZoom | NoRotate.
+    // fresh one is written for each resolved annotation with /State(Completed)
+    // /StateModel(Review) and /F = Hidden | Print | NoZoom | NoRotate.
     EnvVarGuard DisablePDFCompressionGuard("VCL_DEBUG_DISABLE_PDFCOMPRESSION", "1");
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);

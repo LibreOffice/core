@@ -1246,7 +1246,7 @@ void PDFWriterImpl::emitNamespaces()
         aWriter.startObject(nObject);
         aWriter.startDict();
         aWriter.write("/Type", "/Namespace");
-        aWriter.writeKeyAndLiteral("/NS", sNamespace);
+        aWriter.writeKeyAndLiteralEncrypt("/NS", sNamespace, nObject);
         // the 1.7 namespace needs none: for it the structure tree root's RoleMap is the fallback
         if (sNamespace == constNamespacePDF2 && !m_aRoleMap.empty())
         {
@@ -2903,10 +2903,11 @@ bool PDFWriterImpl::emitScreenAnnotations()
         aLine.append("/C<</Type/MediaClip /S/MCD ");
         if (bEmbed)
         {
-            aLine.append("\n/D << /Type /Filespec /F (<embedded file>) ");
+            aLine.append("\n/D << /Type /Filespec ");
+            aWriter.writeKeyAndLiteralEncrypt("/F", "<embedded file>", rScreen.m_nObject);
             if (PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
             {   // ISO 14289-1:2014, Clause: 7.11
-                aLine.append("/UF (<embedded file>) ");
+                aWriter.writeKeyAndLiteralEncrypt("/UF", "<embedded file>", rScreen.m_nObject);
             }
             aLine.append("/EF << /F "
                 + OString::number(rScreen.m_nTempFileObject)
@@ -2931,13 +2932,17 @@ bool PDFWriterImpl::emitScreenAnnotations()
         }
         aLine.append(" >>\n"); // end of /D
         // Allow playing the video via a tempfile.
-        aLine.append("/P <</TF (TEMPACCESS)>>");
+        aLine.append("/P <<");
+        aWriter.writeKeyAndLiteralEncrypt("/TF", "TEMPACCESS", rScreen.m_nObject);
+        aLine.append(">>");
         // ISO 14289-1:2014, Clause: 7.18.6.2
         aLine.append("/CT ");
         aWriter.writeLiteralEncrypt(rScreen.m_MimeType, rScreen.m_nObject);
         // ISO 14289-1:2014, Clause: 7.18.6.2
         // Alt text is a "Multi-language Text Array"
-        aLine.append(" /Alt [ () ");
+        aLine.append(" /Alt [ ");
+        aWriter.writeLiteralEncrypt("", rScreen.m_nObject);
+        aLine.append(" ");
         aWriter.writeUnicodeEncrypt(rScreen.m_AltText, rScreen.m_nObject);
         aLine.append(" ] "
                      ">>");
@@ -3366,9 +3371,10 @@ void PDFWriterImpl::emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry c
 
     auto & rDateTime = rNote.m_aContents.maModificationDate;
 
-    aLine.append("/M (");
-    appendPdfTimeDate(aLine, rDateTime.Year, rDateTime.Month, rDateTime.Day, rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds, 0);
-    aLine.append(") ");
+    OStringBuffer aDate;
+    appendPdfTimeDate(aDate, rDateTime.Year, rDateTime.Month, rDateTime.Day, rDateTime.Hours,
+                      rDateTime.Minutes, rDateTime.Seconds, 0);
+    aWriter.writeKeyAndLiteralEncrypt("/M", aDate, rNote.m_nObject);
 
     // contents of the note (type text string)
     aLine.append("/Contents ");
@@ -3424,13 +3430,15 @@ void PDFWriterImpl::emitStateChangeAnnotationLine(OStringBuffer& aLine, PDFNoteE
     aLine.append("/IRT ");
     appendObjectReference(rNote.m_nObject, aLine);
 
-    aLine.append(" /State (Completed) /StateModel (Review) ");
+    COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
+    aWriter.writeKeyAndLiteralEncrypt("/State", "Completed", rNote.m_nStateChangeObject);
+    aWriter.writeKeyAndLiteralEncrypt("/StateModel", "Review", rNote.m_nStateChangeObject);
 
     auto const& rDateTime = rNote.m_aContents.maModificationDate;
-    aLine.append("/M (");
-    appendPdfTimeDate(aLine, rDateTime.Year, rDateTime.Month, rDateTime.Day,
-                      rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds, 0);
-    aLine.append(") ");
+    OStringBuffer aDate;
+    appendPdfTimeDate(aDate, rDateTime.Year, rDateTime.Month, rDateTime.Day, rDateTime.Hours,
+                      rDateTime.Minutes, rDateTime.Seconds, 0);
+    aWriter.writeKeyAndLiteralEncrypt("/M", aDate, rNote.m_nStateChangeObject);
 
     aLine.append(">>\n");
     aLine.append("endobj\n\n");
@@ -4362,51 +4370,52 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 {
                     // Get the hexadecimal code
                     sal_UCS4 cChar = rWidget.m_aCurrencySymbol.iterateCodePoints(&o3tl::temporary(sal_Int32(1)), -1);
-                    aHexText = "\\\\u" + OString::number(cChar, 16);
+                    aHexText = "\\u" + OString::number(cChar, 16);
                 }
 
+                const OString aArgs = OString::number(rWidget.m_nDecimalAccuracy) + ", 0, 0, 0, \""
+                                      + aHexText + "\","
+                                      + OString::boolean(rWidget.m_bPrependCurrencySymbol) + ");";
                 aLine.append("/AA<<\n");
-                aLine.append("/F<</JS(AFNumber_Format\\(");
-                aLine.append(OString::number(rWidget.m_nDecimalAccuracy));
-                aLine.append(", 0, 0, 0, \"");
-                aLine.append( aHexText );
-                aLine.append("\",");
-                aLine.append(OString::boolean(rWidget.m_bPrependCurrencySymbol));
-                aLine.append("\\);)");
+                aLine.append("/F<<");
+                const OString aFormatJS = "AFNumber_Format(" + aArgs;
+                aWriter.writeKeyAndLiteralEncrypt("/JS", aFormatJS, rWidget.m_nObject);
                 aLine.append("/S/JavaScript>>\n");
-                aLine.append("/K<</JS(AFNumber_Keystroke\\(");
-                aLine.append(OString::number(rWidget.m_nDecimalAccuracy));
-                aLine.append(", 0, 0, 0, \"");
-                aLine.append( aHexText );
-                aLine.append("\",");
-                aLine.append(OString::boolean(rWidget.m_bPrependCurrencySymbol));
-                aLine.append("\\);)");
+                aLine.append("/K<<");
+                const OString aKeystrokeJS = "AFNumber_Keystroke(" + aArgs;
+                aWriter.writeKeyAndLiteralEncrypt("/JS", aKeystrokeJS, rWidget.m_nObject);
                 aLine.append("/S/JavaScript>>\n");
                 aLine.append(">>\n");
             }
             else if ( rWidget.m_nFormat == PDFWriter::Time )
             {
+                const OString aArg
+                    = "(\"" + OUStringToOString(rWidget.m_aTimeFormat, RTL_TEXTENCODING_ASCII_US)
+                      + "\");";
                 aLine.append("/AA<<\n");
-                aLine.append("/F<</JS(AFTime_FormatEx\\(\"");
-                aLine.append(OUStringToOString(rWidget.m_aTimeFormat, RTL_TEXTENCODING_ASCII_US));
-                aLine.append("\"\\);)");
+                aLine.append("/F<<");
+                const OString aFormatJS = "AFTime_FormatEx" + aArg;
+                aWriter.writeKeyAndLiteralEncrypt("/JS", aFormatJS, rWidget.m_nObject);
                 aLine.append("/S/JavaScript>>\n");
-                aLine.append("/K<</JS(AFTime_KeystrokeEx\\(\"");
-                aLine.append(OUStringToOString(rWidget.m_aTimeFormat, RTL_TEXTENCODING_ASCII_US));
-                aLine.append("\"\\);)");
+                aLine.append("/K<<");
+                const OString aKeystrokeJS = "AFTime_KeystrokeEx" + aArg;
+                aWriter.writeKeyAndLiteralEncrypt("/JS", aKeystrokeJS, rWidget.m_nObject);
                 aLine.append("/S/JavaScript>>\n");
                 aLine.append(">>\n");
             }
             else if ( rWidget.m_nFormat == PDFWriter::Date )
             {
+                const OString aArg
+                    = "(\"" + OUStringToOString(rWidget.m_aDateFormat, RTL_TEXTENCODING_ASCII_US)
+                      + "\");";
                 aLine.append("/AA<<\n");
-                aLine.append("/F<</JS(AFDate_FormatEx\\(\"");
-                aLine.append(OUStringToOString(rWidget.m_aDateFormat, RTL_TEXTENCODING_ASCII_US));
-                aLine.append("\"\\);)");
+                aLine.append("/F<<");
+                const OString aFormatJS = "AFDate_FormatEx" + aArg;
+                aWriter.writeKeyAndLiteralEncrypt("/JS", aFormatJS, rWidget.m_nObject);
                 aLine.append("/S/JavaScript>>\n");
-                aLine.append("/K<</JS(AFDate_KeystrokeEx\\(\"");
-                aLine.append(OUStringToOString(rWidget.m_aDateFormat, RTL_TEXTENCODING_ASCII_US));
-                aLine.append("\"\\);)");
+                aLine.append("/K<<");
+                const OString aKeystrokeJS = "AFDate_KeystrokeEx" + aArg;
+                aWriter.writeKeyAndLiteralEncrypt("/JS", aKeystrokeJS, rWidget.m_nObject);
                 aLine.append("/S/JavaScript>>\n");
                 aLine.append(">>\n");
             }
@@ -4461,9 +4470,10 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 else
                 {
                     // create a URI action
-                    aLine.append( "/AA<</D<</Type/Action/S/URI/URI(" );
-                    aLine.append( OUStringToOString( rWidget.m_aListEntries.front(), RTL_TEXTENCODING_ASCII_US ) );
-                    aLine.append( ")>>>>\n" );
+                    aLine.append("/AA<</D<</Type/Action/S/URI/URI");
+                    aWriter.writeLiteralEncrypt(rWidget.m_aListEntries.front(), rWidget.m_nObject,
+                                                RTL_TEXTENCODING_ASCII_US);
+                    aLine.append(">>>>\n");
                 }
             }
             else
@@ -8995,10 +9005,12 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
     if (m_aContext.UseReferenceXObject && rEmit.m_nEmbeddedObject > 0)
     {
         // Write the reference dictionary.
-        aLine.append("/Ref<< /F << /Type /Filespec /F (<embedded file>) ");
+        COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
+        aLine.append("/Ref<< /F << /Type /Filespec ");
+        aWriter.writeKeyAndLiteralEncrypt("/F", "<embedded file>", rEmit.m_nFormObject);
         if (PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
         {   // ISO 14289-1:2014, Clause: 7.11
-            aLine.append("/UF (<embedded file>) ");
+            aWriter.writeKeyAndLiteralEncrypt("/UF", "<embedded file>", rEmit.m_nFormObject);
         }
         aLine.append("/EF << /F ");
         aLine.append(rEmit.m_nEmbeddedObject);

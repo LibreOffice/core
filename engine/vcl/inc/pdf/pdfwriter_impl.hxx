@@ -1053,7 +1053,7 @@ private:
 
     void emitTextAnnotationLine(OStringBuffer & aLine, pdf::PDFNoteEntry const & rNote,
                                 std::map<sal_uInt64, sal_Int32> const & rAnnotIdToObject);
-    static void emitStateChangeAnnotationLine(OStringBuffer & aLine, pdf::PDFNoteEntry const & rNote);
+    void emitStateChangeAnnotationLine(OStringBuffer& aLine, pdf::PDFNoteEntry const& rNote);
     static void emitPopupAnnotationLine(OStringBuffer & aLine, pdf::PDFPopupAnnotation const & rPopUp);
     // write all notes
     bool emitNoteAnnotations();
