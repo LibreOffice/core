@@ -9,6 +9,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <optional>
@@ -104,6 +105,18 @@ namespace
 template<typename T>
 css::beans::Optional<cpo::uno::Reference<T>> maybe(cpo::uno::Reference<T> const & ref)
 { return {ref.is(), ref}; }
+
+// Moves the cursor right by count characters, in steps that fit the short that goRight takes:
+void goRight(
+    cpo::uno::Reference<css::text::XTextCursor> const & cursor, sal_Int32 count, bool expand)
+{
+    assert(count >= 0);
+    do {
+        auto const step = std::min<sal_Int32>(count, SAL_MAX_INT16);
+        cursor->goRight(step, expand);
+        count -= step;
+    } while (count != 0);
+}
 
 sal_Int32 childIndexOf(
     scriptinterop::XContainerElement & container,
@@ -331,8 +344,8 @@ public:
             throw cpo::uno::RuntimeException(
                 u"addElementRange: cannot place a cursor at the element"_ustr);
         }
-        cursor->goRight(startOffset, false);
-        cursor->goRight(endOffsetInclusive - startOffset + 1, true);
+        goRight(cursor, startOffset, false);
+        goRight(cursor, endOffsetInclusive - startOffset + 1, true);
         extend(cursor->getStart(), cursor->getEnd());
         return this;
     }
@@ -404,7 +417,7 @@ public:
     cpo::uno::Reference<scriptinterop::XText> deleteText(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive) override
     {
-        subRange(startOffset, endOffsetInclusive)->setString(OUString());
+        subRange(u"deleteText", startOffset, endOffsetInclusive)->setString(OUString());
         return this;
     }
 
@@ -482,10 +495,14 @@ public:
     cpo::uno::Reference<scriptinterop::XText> insertText(sal_Int32 offset, OUString const & text)
         override
     {
+        if (offset < 0) {
+            throw cpo::uno::RuntimeException(
+                "insertText: expected a non-negative offset, got " + OUString::number(offset));
+        }
         auto const whole = wholeRange();
         auto const host = whole->getText();
         auto const cursor = host->createTextCursorByRange(whole->getStart());
-        cursor->goRight(offset, false);
+        goRight(cursor, offset, false);
         host->insertString(cursor, text, false);
         return this;
     }
@@ -545,7 +562,7 @@ public:
     cpo::uno::Reference<scriptinterop::XText> setBoldRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
     {
-        setBoldOn(subRange(startOffset, endOffsetInclusive), value);
+        setBoldOn(subRange(u"setBold", startOffset, endOffsetInclusive), value);
         return this;
     }
 
@@ -560,7 +577,8 @@ public:
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive, OUString const & fontFamilyName)
         override
     {
-        setFontFamilyOn(subRange(startOffset, endOffsetInclusive), fontFamilyName);
+        setFontFamilyOn(
+            subRange(u"setFontFamily", startOffset, endOffsetInclusive), fontFamilyName);
         return this;
     }
 
@@ -572,7 +590,7 @@ public:
     cpo::uno::Reference<scriptinterop::XText> setItalicRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
     {
-        setItalicOn(subRange(startOffset, endOffsetInclusive), value);
+        setItalicOn(subRange(u"setItalic", startOffset, endOffsetInclusive), value);
         return this;
     }
 
@@ -584,7 +602,7 @@ public:
     cpo::uno::Reference<scriptinterop::XText> setLinkUrlRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive, OUString const & url) override
     {
-        setLinkUrlOn(subRange(startOffset, endOffsetInclusive), url);
+        setLinkUrlOn(subRange(u"setLinkUrl", startOffset, endOffsetInclusive), url);
         return this;
     }
 
@@ -596,7 +614,7 @@ public:
     cpo::uno::Reference<scriptinterop::XText> setStrikethroughRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
     {
-        setStrikethroughOn(subRange(startOffset, endOffsetInclusive), value);
+        setStrikethroughOn(subRange(u"setStrikethrough", startOffset, endOffsetInclusive), value);
         return this;
     }
 
@@ -616,7 +634,8 @@ public:
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
         scriptinterop::TextAlignment textAlignment) override
     {
-        setTextAlignmentOn(subRange(startOffset, endOffsetInclusive), textAlignment);
+        setTextAlignmentOn(
+            subRange(u"setTextAlignment", startOffset, endOffsetInclusive), textAlignment);
         return this;
     }
 
@@ -628,7 +647,7 @@ public:
     cpo::uno::Reference<scriptinterop::XText> setUnderlineRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
     {
-        setUnderlineOn(subRange(startOffset, endOffsetInclusive), value);
+        setUnderlineOn(subRange(u"setUnderline", startOffset, endOffsetInclusive), value);
         return this;
     }
 
@@ -687,12 +706,19 @@ private:
     }
 
     cpo::uno::Reference<css::text::XTextRange> subRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive)
+        std::u16string_view method, sal_Int32 startOffset, sal_Int32 endOffsetInclusive)
     {
+        if (startOffset < 0 || endOffsetInclusive < startOffset) {
+            throw cpo::uno::RuntimeException(
+                OUString::Concat(method)
+                + ": expected 0 <= startOffset <= endOffsetInclusive, got startOffset="
+                + OUString::number(startOffset) + ", endOffsetInclusive="
+                + OUString::number(endOffsetInclusive));
+        }
         auto const whole = wholeRange();
         auto const cursor = whole->getText()->createTextCursorByRange(whole->getStart());
-        cursor->goRight(startOffset, false);
-        cursor->goRight(endOffsetInclusive - startOffset + 1, true);
+        goRight(cursor, startOffset, false);
+        goRight(cursor, endOffsetInclusive - startOffset + 1, true);
         return cursor;
     }
 
@@ -2287,7 +2313,7 @@ public:
                     + " is past the end of the text");
             }
             auto const cursor = text->getText()->createTextCursorByRange(text->getStart());
-            cursor->goRight(offset, false);
+            goRight(cursor, offset, false);
             return new CursorImpl(model_, cursor->getStart(), element, offset);
         }
         cpo::uno::Reference<scriptinterop::XContainerElement> const container(

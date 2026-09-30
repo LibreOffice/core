@@ -165,6 +165,22 @@ function test() {
     appended.editAsText().setText('');
     console.assert(appended.getText() === '');
 
+    // Offsets beyond what fits in 16 bits reach the right character:
+    appended.editAsText().setText('a'.repeat(70000)).insertText(66000, 'X');
+    console.assert(appended.getText().indexOf('X') === 66000);
+    const far = doc.newPosition(appended.getChild(0), 66001);
+    console.assert(far.getSurroundingTextOffset() === 66001);
+    appended.editAsText().setText('');
+
+    // A negative offset, or a range that ends before it starts, is rejected:
+    const throws = (f) => { try { f(); } catch (e) { return true; } return false; };
+    appended.editAsText().setText('foobar');
+    console.assert(throws(() => appended.editAsText().insertText(-1, 'x')));
+    console.assert(throws(() => appended.editAsText().setBold(5, 3, true)));
+    console.assert(throws(() => appended.editAsText().deleteText(-1, 0)));
+    console.assert(appended.getText() === 'foobar');
+    appended.editAsText().setText('');
+
     const listItem = body.appendListItem('Item');
     console.assert(listItem.getType() === DocumentApp.ElementType.LIST_ITEM);
     console.assert(listItem.getText() === 'Item');
