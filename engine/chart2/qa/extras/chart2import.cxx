@@ -17,6 +17,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XLegend.hpp>
@@ -470,6 +471,40 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSteppedLines)
         xPropSet->getPropertyValue(u"CurveStyle"_ustr) >>= eCurveStyle;
         CPPUNIT_ASSERT_EQUAL(eCurveStyle, curveStyle[nSheet]);
     }
+}
+
+// A template carries its own curve style, and that is the one the chart ends up drawn with, even
+// when the chart type it replaces is of the same kind and was drawn with a different one.
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testCurveStyleFromTemplateWins)
+{
+    loadFromFile(u"ods/stepped_lines.ods");
+
+    // The chart on the first sheet is a scatter chart drawn with straight lines.  Applying a
+    // scatter template puts a chart type of the same kind in its place, which is the case where
+    // the properties of the old one are carried over to the new one.
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0 );
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    uno::Reference< chart2::XDiagram > xDiagram = xChartDoc->getFirstDiagram();
+    CPPUNIT_ASSERT(xDiagram.is());
+
+    uno::Reference< lang::XMultiServiceFactory > xTemplateFactory(
+        xChartDoc->getChartTypeManager(), UNO_QUERY_THROW );
+    uno::Reference< chart2::XChartTypeTemplate > xTemplate(
+        xTemplateFactory->createInstance(u"com.sun.star.chart2.template.ScatterLine"_ustr),
+        UNO_QUERY_THROW );
+
+    uno::Reference< beans::XPropertySet > xTemplateProperties( xTemplate, UNO_QUERY_THROW );
+    xTemplateProperties->setPropertyValue(
+        u"CurveStyle"_ustr, uno::Any( chart2::CurveStyle_CUBIC_SPLINES ));
+
+    xTemplate->changeDiagram( xDiagram );
+
+    uno::Reference< beans::XPropertySet > xChartType(
+        getChartTypeFromDoc( xChartDoc, 0 ), UNO_QUERY_THROW );
+    chart2::CurveStyle eCurveStyle;
+    CPPUNIT_ASSERT(xChartType->getPropertyValue(u"CurveStyle"_ustr) >>= eCurveStyle);
+    CPPUNIT_ASSERT_EQUAL(chart2::CurveStyle_CUBIC_SPLINES, eCurveStyle);
 }
 
 cpo::uno::Sequence < OUString > getChartColumnDescriptions( uno::Reference< chart::XChartDocument > const & xChart1Doc)

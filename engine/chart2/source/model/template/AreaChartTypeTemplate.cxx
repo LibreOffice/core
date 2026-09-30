@@ -167,17 +167,9 @@ void AreaChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram
     }
 }
 
-rtl::Reference< ChartType > AreaChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
+std::vector< rtl::Reference< ChartType > > AreaChartTypeTemplate::createBareChartTypes()
 {
-    return new AreaChartType();
-}
-
-rtl::Reference< ChartType > AreaChartTypeTemplate::getChartTypeForNewSeries2(
-        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
-{
-    rtl::Reference< ChartType > xResult( getChartTypeForIndex( 0 ) );
-    ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
-    return xResult;
+    return { new AreaChartType() };
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( AreaChartTypeTemplate, ChartTypeTemplate, OPropertySet )

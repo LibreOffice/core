@@ -72,7 +72,6 @@ const ::chart::tPropertyValueMap& StaticScatterChartTypeTemplateDefaults()
     return aStaticDefaults;
 }
 
-
 ::cppu::OPropertyArrayHelper& StaticScatterChartTypeTemplateInfoHelper()
 {
     static ::cppu::OPropertyArrayHelper aPropHelper(
@@ -279,53 +278,20 @@ bool ScatterChartTypeTemplate::matchesTemplate2(
     return bResult;
 }
 
-rtl::Reference< ChartType > ScatterChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
+std::vector< rtl::Reference< ChartType > > ScatterChartTypeTemplate::createBareChartTypes()
 {
-    rtl::Reference< ChartType > xResult;
-
-    try
-    {
-        xResult = new ScatterChartType();
-
-        xResult->setPropertyValue(
-            CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
-        xResult->setPropertyValue(
-            CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
-        xResult->setPropertyValue(
-            CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
-    }
-    catch( const cpo::uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return xResult;
+    return { new ScatterChartType() };
 }
 
-rtl::Reference< ChartType > ScatterChartTypeTemplate::getChartTypeForNewSeries2(
-        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
+void ScatterChartTypeTemplate::applyTemplateProperties(
+    sal_Int32 /* nChartTypeIndex */, const rtl::Reference< ChartType >& xChartType )
 {
-    rtl::Reference< ChartType > xResult;
-
-    try
-    {
-        xResult = new ScatterChartType();
-
-        ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
-
-        xResult->setPropertyValue(
-            CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
-        xResult->setPropertyValue(
-            CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
-        xResult->setPropertyValue(
-            CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
-    }
-    catch( const cpo::uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return xResult;
+    xChartType->setPropertyValue(
+        CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_STYLE ));
+    xChartType->setPropertyValue(
+        CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
+    xChartType->setPropertyValue(
+        CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_SCATTERCHARTTYPE_TEMPLATE_SPLINE_ORDER ));
 }
 
 rtl::Reference< DataInterpreter > ScatterChartTypeTemplate::getDataInterpreter2()

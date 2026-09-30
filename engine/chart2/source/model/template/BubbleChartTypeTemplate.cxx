@@ -117,28 +117,9 @@ bool BubbleChartTypeTemplate::supportsCategories()
     return false;
 }
 
-rtl::Reference< ChartType > BubbleChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
+std::vector< rtl::Reference< ChartType > > BubbleChartTypeTemplate::createBareChartTypes()
 {
-    return new BubbleChartType();
-}
-
-rtl::Reference< ChartType > BubbleChartTypeTemplate::getChartTypeForNewSeries2(
-        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
-{
-    rtl::Reference< ChartType > xResult;
-
-    try
-    {
-        xResult = new BubbleChartType();
-
-        ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
-    }
-    catch( const cpo::uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return xResult;
+    return { new BubbleChartType() };
 }
 
 rtl::Reference< DataInterpreter > BubbleChartTypeTemplate::getDataInterpreter2()

@@ -57,9 +57,6 @@ protected:
     virtual bool matchesTemplate2(
         const rtl::Reference< ::chart::Diagram >& xDiagram,
         bool bAdaptProperties ) override;
-    virtual rtl::Reference< ::chart::ChartType >
-        getChartTypeForNewSeries2( const std::vector<
-            rtl::Reference< ::chart::ChartType > >& aFormerlyUsedChartTypes ) override;
     virtual void applyStyle2(
         const rtl::Reference< ::chart::DataSeries >& xSeries,
         ::sal_Int32 nChartTypeGroupIndex,
@@ -79,8 +76,7 @@ protected:
             const std::vector< rtl::Reference< ChartType > > & aOldChartTypesSeq
             ) override;
 
-    virtual rtl::Reference< ::chart::ChartType >
-                getChartTypeForIndex( sal_Int32 nChartTypeIndex ) override;
+    virtual std::vector< rtl::Reference< ::chart::ChartType > > createBareChartTypes() override;
 
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const override;
 

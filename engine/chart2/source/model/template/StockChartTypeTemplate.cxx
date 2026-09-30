@@ -108,7 +108,6 @@ void lcl_AddPropertiesToVector(
     return aPropHelper;
 };
 
-
 uno::Reference< beans::XPropertySetInfo >& GetStaticStockChartTypeTemplateInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
@@ -240,28 +239,13 @@ void StockChartTypeTemplate::resetStyles2(
     xDiagram->setVertical( false );
 }
 
-rtl::Reference< ChartType > StockChartTypeTemplate::getChartTypeForIndex( sal_Int32 nChartTypeIndex )
+std::vector< rtl::Reference< ChartType > > StockChartTypeTemplate::createBareChartTypes()
 {
-    rtl::Reference< ChartType > xCT;
     bool bHasVolume = false;
     getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME ) >>= bHasVolume;
     if( bHasVolume )
-    {
-        if( nChartTypeIndex == 0 )
-            xCT = new ColumnChartType();
-        else if( nChartTypeIndex == 1 )
-            xCT = new CandleStickChartType();
-        else
-            xCT = new LineChartType();
-    }
-    else
-    {
-        if( nChartTypeIndex == 0 )
-            xCT = new CandleStickChartType();
-        else
-            xCT = new LineChartType();
-    }
-    return xCT;
+        return { new ColumnChartType(), new CandleStickChartType(), new LineChartType() };
+    return { new CandleStickChartType(), new LineChartType() };
 }
 
 void StockChartTypeTemplate::createChartTypes(
@@ -397,24 +381,6 @@ bool StockChartTypeTemplate::matchesTemplate2(
     }
 
     return bResult;
-}
-
-rtl::Reference< ChartType > StockChartTypeTemplate::getChartTypeForNewSeries2(
-        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
-{
-    rtl::Reference< ChartType > xResult;
-
-    try
-    {
-        xResult = new LineChartType();
-        ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
-    }
-    catch( const cpo::uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return xResult;
 }
 
 rtl::Reference< DataInterpreter > StockChartTypeTemplate::getDataInterpreter2()

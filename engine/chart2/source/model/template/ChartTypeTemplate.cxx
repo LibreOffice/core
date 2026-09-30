@@ -320,8 +320,7 @@ bool ChartTypeTemplate::matchesTemplate2(
         bResult = !aCooSysSeq.empty();
         if( bResult )
         {
-            std::vector< rtl::Reference< ChartType > > aFormerlyUsedChartTypes;
-            rtl::Reference<ChartType> xOldCT = getChartTypeForNewSeries2(aFormerlyUsedChartTypes);
+            rtl::Reference<ChartType> xOldCT = getChartTypeForNewSeries({});
             if (!xOldCT.is())
                 return false;
 
@@ -390,7 +389,7 @@ void ChartTypeTemplate::applyStyle2(
         //ensure valid label placement
         {
             cpo::uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
-                        getChartTypeForIndex( nChartTypeIndex ), isSwapXAndY(), xSeries ) );
+                        getChartTypeForIndex( nChartTypeIndex, {} ), isSwapXAndY(), xSeries ) );
             lcl_ensureCorrectLabelPlacement( xSeries, aAvailablePlacements );
 
             cpo::uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
@@ -419,7 +418,7 @@ void ChartTypeTemplate::applyStyles( const rtl::Reference< ::chart::Diagram >& x
     }
 
     //ensure valid empty cell handling (for first chart type...)
-    lcl_ensureCorrectMissingValueTreatment( xDiagram, getChartTypeForIndex( 0 ) );
+    lcl_ensureCorrectMissingValueTreatment( xDiagram, getChartTypeForIndex( 0, {} ) );
 }
 
 void ChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram >& xDiagram )
@@ -485,6 +484,64 @@ StackMode ChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ ) con
     return StackMode::NONE;
 }
 
+void ChartTypeTemplate::applyTemplateProperties(
+    sal_Int32 /* nChartTypeIndex */, const rtl::Reference< ChartType >& /* xChartType */ )
+{
+}
+
+std::vector< rtl::Reference< ChartType > > ChartTypeTemplate::getChartTypes(
+    const std::vector< rtl::Reference< ChartType > >& rFormerlyUsedChartTypes )
+{
+    std::vector< rtl::Reference< ChartType > > aChartTypes( createBareChartTypes() );
+    for( std::size_t nIndex = 0; nIndex < aChartTypes.size(); ++nIndex )
+    {
+        copyPropertiesFromOldToNewCoordinateSystem( rFormerlyUsedChartTypes, aChartTypes[nIndex] );
+        applyTemplateProperties( nIndex, aChartTypes[nIndex] );
+    }
+    return aChartTypes;
+}
+
+rtl::Reference< ChartType > ChartTypeTemplate::getChartTypeForIndex(
+    sal_Int32 nChartTypeIndex,
+    const std::vector< rtl::Reference< ChartType > >& rFormerlyUsedChartTypes )
+{
+    // A diagram can carry more chart types than the template builds, so the last chart type
+    // stands in for every index beyond it.
+    try
+    {
+        const std::vector< rtl::Reference< ChartType > > aChartTypes(
+            getChartTypes( rFormerlyUsedChartTypes ));
+
+
+        if( aChartTypes.empty() )
+            return nullptr;
+        if( nChartTypeIndex < 0 )
+            return aChartTypes.front();
+        return aChartTypes[ std::min< std::size_t >( nChartTypeIndex, aChartTypes.size() - 1 ) ];
+    }
+    catch( const cpo::uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+    return nullptr;
+}
+
+rtl::Reference< ChartType > ChartTypeTemplate::getChartTypeForNewSeries(
+    const std::vector< rtl::Reference< ChartType > >& rFormerlyUsedChartTypes )
+{
+    try
+    {
+        const std::vector< rtl::Reference< ChartType > > aChartTypes(
+            getChartTypes( rFormerlyUsedChartTypes ));
+        return aChartTypes.empty() ? nullptr : aChartTypes.back();
+    }
+    catch( const cpo::uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+    return nullptr;
+}
+
 bool ChartTypeTemplate::isSwapXAndY() const
 {
     return false;
@@ -500,8 +557,7 @@ void ChartTypeTemplate::createCoordinateSystems(
 {
     if( ! xDiagram.is())
         return;
-    std::vector< rtl::Reference< ChartType > > aFormerlyUsedChartTypes;
-    rtl::Reference< ChartType > xChartType( getChartTypeForNewSeries2(aFormerlyUsedChartTypes));
+    rtl::Reference< ChartType > xChartType( getChartTypeForNewSeries({}));
     if( ! xChartType.is())
         return;
     rtl::Reference< BaseCoordinateSystem > xCooSys = xChartType->createCoordinateSystem2( getDimension());
@@ -582,7 +638,7 @@ void ChartTypeTemplate::adaptScales(
                         aData.Categories = xCategories;
                         if(bSupportsCategories)
                         {
-                            rtl::Reference< ChartType > xChartType = getChartTypeForNewSeries2({});
+                            rtl::Reference< ChartType > xChartType = getChartTypeForNewSeries({});
                             if( aData.AxisType == AxisType::CATEGORY )
                             {
                                 // Shift for Column, Hi-Lo-Close, and regular
@@ -762,7 +818,7 @@ void ChartTypeTemplate::createChartTypes(
         if( aSeriesSeq.empty() )
         {
             // we need a new chart type
-            xCT = getChartTypeForNewSeries2( aOldChartTypesSeq );
+            xCT = getChartTypeForNewSeries( aOldChartTypesSeq );
             rCoordSys[nCooSysIdx]->setChartTypes(std::vector{ xCT });
         }
         else
@@ -772,7 +828,7 @@ void ChartTypeTemplate::createChartTypes(
                 if( nSeriesIdx == nCooSysIdx )
                 {
                     // we need a new chart type
-                    xCT = getChartTypeForNewSeries2( aOldChartTypesSeq );
+                    xCT = getChartTypeForNewSeries( aOldChartTypesSeq );
                     std::vector< rtl::Reference< ChartType > > aCTSeq( rCoordSys[nCooSysIdx]->getChartTypes2());
                     if( !aCTSeq.empty())
                     {

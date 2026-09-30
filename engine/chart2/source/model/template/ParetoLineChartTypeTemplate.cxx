@@ -97,18 +97,9 @@ bool ParetoLineChartTypeTemplate::matchesTemplate2(const rtl::Reference<::chart:
     return bResult;
 }
 
-rtl::Reference<ChartType>
-    ParetoLineChartTypeTemplate::getChartTypeForIndex(sal_Int32 /*nChartTypeIndex*/)
+std::vector<rtl::Reference<ChartType>> ParetoLineChartTypeTemplate::createBareChartTypes()
 {
-    return new ParetoLineChartType();
-}
-
-rtl::Reference<ChartType> ParetoLineChartTypeTemplate::getChartTypeForNewSeries2(
-    const std::vector<rtl::Reference<ChartType>>& aFormerlyUsedChartTypes)
-{
-    rtl::Reference<ChartType> xResult(getChartTypeForIndex(0));
-    ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(aFormerlyUsedChartTypes, xResult);
-    return xResult;
+    return { new ParetoLineChartType() };
 }
 
 // ____ OPropertySet ____

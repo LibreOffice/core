@@ -151,17 +151,9 @@ bool  BarChartTypeTemplate::matchesTemplate2(
     return bResult;
 }
 
-rtl::Reference< ChartType > BarChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
+std::vector< rtl::Reference< ChartType > > BarChartTypeTemplate::createBareChartTypes()
 {
-    return new ColumnChartType();
-}
-
-rtl::Reference< ChartType > BarChartTypeTemplate::getChartTypeForNewSeries2(
-        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
-{
-    rtl::Reference< ChartType > xResult( getChartTypeForIndex( 0 ) );
-    ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
-    return xResult;
+    return { new ColumnChartType() };
 }
 
 // ____ OPropertySet ____

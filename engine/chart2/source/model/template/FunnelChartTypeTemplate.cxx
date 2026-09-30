@@ -109,18 +109,9 @@ bool FunnelChartTypeTemplate::matchesTemplate2(const rtl::Reference<::chart::Dia
     return bResult;
 }
 
-rtl::Reference<ChartType>
-    FunnelChartTypeTemplate::getChartTypeForIndex(sal_Int32 /*nChartTypeIndex*/)
+std::vector<rtl::Reference<ChartType>> FunnelChartTypeTemplate::createBareChartTypes()
 {
-    return new FunnelChartType();
-}
-
-rtl::Reference<ChartType> FunnelChartTypeTemplate::getChartTypeForNewSeries2(
-    const std::vector<rtl::Reference<ChartType>>& aFormerlyUsedChartTypes)
-{
-    rtl::Reference<ChartType> xResult(getChartTypeForIndex(0));
-    ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(aFormerlyUsedChartTypes, xResult);
-    return xResult;
+    return { new FunnelChartType() };
 }
 
 // ____ OPropertySet ____

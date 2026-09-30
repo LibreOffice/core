@@ -303,30 +303,9 @@ bool ColumnLineChartTypeTemplate::matchesTemplate2(
     return bResult;
 }
 
-rtl::Reference< ChartType > ColumnLineChartTypeTemplate::getChartTypeForIndex( sal_Int32 nChartTypeIndex )
+std::vector< rtl::Reference< ChartType > > ColumnLineChartTypeTemplate::createBareChartTypes()
 {
-    if( nChartTypeIndex == 0 )
-        return new ColumnChartType();
-    else
-        return new LineChartType();
-}
-
-rtl::Reference< ChartType > ColumnLineChartTypeTemplate::getChartTypeForNewSeries2(
-        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
-{
-    rtl::Reference< ChartType > xResult;
-
-    try
-    {
-        xResult = new LineChartType();
-        ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
-    }
-    catch( const cpo::uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return xResult;
+    return { new ColumnChartType(), new LineChartType() };
 }
 
 rtl::Reference< DataInterpreter > ColumnLineChartTypeTemplate::getDataInterpreter2()

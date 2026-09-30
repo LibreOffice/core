@@ -140,18 +140,9 @@ void CorrelationCircleChartTypeTemplate::applyStyle2(const rtl::Reference<DataSe
     }
 }
 
-rtl::Reference<ChartType>
-    CorrelationCircleChartTypeTemplate::getChartTypeForIndex(sal_Int32 /*nChartTypeIndex*/)
+std::vector<rtl::Reference<ChartType>> CorrelationCircleChartTypeTemplate::createBareChartTypes()
 {
-    return new CorrelationCircleChartType();
-}
-
-rtl::Reference<ChartType> CorrelationCircleChartTypeTemplate::getChartTypeForNewSeries2(
-    const std::vector<rtl::Reference<ChartType>>& aFormerlyUsedChartTypes)
-{
-    rtl::Reference<ChartType> xResult(getChartTypeForIndex(0));
-    ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(aFormerlyUsedChartTypes, xResult);
-    return xResult;
+    return { new CorrelationCircleChartType() };
 }
 
 rtl::Reference<DataInterpreter> CorrelationCircleChartTypeTemplate::getDataInterpreter2()

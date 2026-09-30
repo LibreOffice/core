@@ -102,18 +102,9 @@ bool BoxWhiskerChartTypeTemplate::matchesTemplate2(const rtl::Reference<::chart:
     return bResult;
 }
 
-rtl::Reference<ChartType>
-    BoxWhiskerChartTypeTemplate::getChartTypeForIndex(sal_Int32 /*nChartTypeIndex*/)
+std::vector<rtl::Reference<ChartType>> BoxWhiskerChartTypeTemplate::createBareChartTypes()
 {
-    return new BoxWhiskerChartType();
-}
-
-rtl::Reference<ChartType> BoxWhiskerChartTypeTemplate::getChartTypeForNewSeries2(
-    const std::vector<rtl::Reference<ChartType>>& aFormerlyUsedChartTypes)
-{
-    rtl::Reference<ChartType> xResult(getChartTypeForIndex(0));
-    ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(aFormerlyUsedChartTypes, xResult);
-    return xResult;
+    return { new BoxWhiskerChartType() };
 }
 
 // ____ OPropertySet ____

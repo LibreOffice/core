@@ -97,18 +97,9 @@ bool RegionMapChartTypeTemplate::matchesTemplate2(const rtl::Reference<::chart::
     return bResult;
 }
 
-rtl::Reference<ChartType>
-    RegionMapChartTypeTemplate::getChartTypeForIndex(sal_Int32 /*nChartTypeIndex*/)
+std::vector<rtl::Reference<ChartType>> RegionMapChartTypeTemplate::createBareChartTypes()
 {
-    return new RegionMapChartType();
-}
-
-rtl::Reference<ChartType> RegionMapChartTypeTemplate::getChartTypeForNewSeries2(
-    const std::vector<rtl::Reference<ChartType>>& aFormerlyUsedChartTypes)
-{
-    rtl::Reference<ChartType> xResult(getChartTypeForIndex(0));
-    ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(aFormerlyUsedChartTypes, xResult);
-    return xResult;
+    return { new RegionMapChartType() };
 }
 
 // ____ OPropertySet ____

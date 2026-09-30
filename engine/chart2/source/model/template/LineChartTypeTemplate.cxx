@@ -250,53 +250,20 @@ bool LineChartTypeTemplate::matchesTemplate2(
     return bResult;
 }
 
-rtl::Reference< ChartType > LineChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
+std::vector< rtl::Reference< ChartType > > LineChartTypeTemplate::createBareChartTypes()
 {
-    rtl::Reference< ChartType > xResult;
-
-    try
-    {
-        xResult = new LineChartType();
-
-        xResult->setPropertyValue(
-            CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE ));
-        xResult->setPropertyValue(
-            CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
-        xResult->setPropertyValue(
-            CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ));
-    }
-    catch( const cpo::uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return xResult;
+    return { new LineChartType() };
 }
 
-rtl::Reference< ChartType > LineChartTypeTemplate::getChartTypeForNewSeries2(
-        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
+void LineChartTypeTemplate::applyTemplateProperties(
+    sal_Int32 /* nChartTypeIndex */, const rtl::Reference< ChartType >& xChartType )
 {
-    rtl::Reference< ChartType > xResult;
-
-    try
-    {
-        xResult = new LineChartType();
-
-        ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
-
-        xResult->setPropertyValue(
-            CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE ));
-        xResult->setPropertyValue(
-            CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
-        xResult->setPropertyValue(
-            CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ));
-    }
-    catch( const cpo::uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return xResult;
+    xChartType->setPropertyValue(
+        CHART_UNONAME_CURVE_STYLE, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE ));
+    xChartType->setPropertyValue(
+        CHART_UNONAME_CURVE_RESOLUTION, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
+    xChartType->setPropertyValue(
+        CHART_UNONAME_SPLINE_ORDER, getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ));
 }
 
 void LineChartTypeTemplate::applyStyle2(

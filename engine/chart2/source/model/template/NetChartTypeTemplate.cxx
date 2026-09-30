@@ -151,20 +151,11 @@ bool NetChartTypeTemplate::matchesTemplate2(
     return bResult;
 }
 
-rtl::Reference< ChartType > NetChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
+std::vector< rtl::Reference< ChartType > > NetChartTypeTemplate::createBareChartTypes()
 {
     if( m_bHasFilledArea )
-        return new FilledNetChartType();
-    else
-        return new NetChartType();
-}
-
-rtl::Reference< ChartType > NetChartTypeTemplate::getChartTypeForNewSeries2(
-        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
-{
-    rtl::Reference< ChartType > xResult( getChartTypeForIndex( 0 ) );
-    ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
-    return xResult;
+        return { new FilledNetChartType() };
+    return { new NetChartType() };
 }
 
 } //  namespace chart

@@ -37,8 +37,6 @@ protected:
     virtual cpo::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
 
     // ____ ChartTypeTemplate ____
-    virtual rtl::Reference<::chart::ChartType> getChartTypeForNewSeries2(
-        const std::vector<rtl::Reference<::chart::ChartType>>& aFormerlyUsedChartTypes) override;
 
     virtual bool supportsCategories() override { return true; }
 
@@ -48,8 +46,7 @@ protected:
 
     virtual void resetStyles2(const rtl::Reference<::chart::Diagram>& xDiagram) override;
 
-    virtual rtl::Reference<::chart::ChartType>
-    getChartTypeForIndex(sal_Int32 nChartTypeIndex) override;
+    virtual std::vector<rtl::Reference<::chart::ChartType>> createBareChartTypes() override;
 
     virtual sal_Int32 getDimension() const override;
     virtual StackMode getStackMode(sal_Int32 nChartTypeIndex) const override;

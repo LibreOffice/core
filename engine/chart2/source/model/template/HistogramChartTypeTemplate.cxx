@@ -74,18 +74,9 @@ StackMode HistogramChartTypeTemplate::getStackMode(sal_Int32 /* nChartTypeIndex 
     return m_eStackMode;
 }
 
-rtl::Reference<ChartType>
-    HistogramChartTypeTemplate::getChartTypeForIndex(sal_Int32 /*nChartTypeIndex*/)
+std::vector<rtl::Reference<ChartType>> HistogramChartTypeTemplate::createBareChartTypes()
 {
-    return new HistogramChartType();
-}
-
-rtl::Reference<ChartType> HistogramChartTypeTemplate::getChartTypeForNewSeries2(
-    const std::vector<rtl::Reference<ChartType>>& aFormerlyUsedChartTypes)
-{
-    rtl::Reference<ChartType> xResult(getChartTypeForIndex(0));
-    ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(aFormerlyUsedChartTypes, xResult);
-    return xResult;
+    return { new HistogramChartType() };
 }
 
 // ____ OPropertySet ____

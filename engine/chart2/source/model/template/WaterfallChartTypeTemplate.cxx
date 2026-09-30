@@ -97,18 +97,9 @@ bool WaterfallChartTypeTemplate::matchesTemplate2(const rtl::Reference<::chart::
     return bResult;
 }
 
-rtl::Reference<ChartType>
-    WaterfallChartTypeTemplate::getChartTypeForIndex(sal_Int32 /*nChartTypeIndex*/)
+std::vector<rtl::Reference<ChartType>> WaterfallChartTypeTemplate::createBareChartTypes()
 {
-    return new WaterfallChartType();
-}
-
-rtl::Reference<ChartType> WaterfallChartTypeTemplate::getChartTypeForNewSeries2(
-    const std::vector<rtl::Reference<ChartType>>& aFormerlyUsedChartTypes)
-{
-    rtl::Reference<ChartType> xResult(getChartTypeForIndex(0));
-    ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(aFormerlyUsedChartTypes, xResult);
-    return xResult;
+    return { new WaterfallChartType() };
 }
 
 // ____ OPropertySet ____

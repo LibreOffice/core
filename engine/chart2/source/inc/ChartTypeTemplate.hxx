@@ -103,9 +103,9 @@ public:
     virtual bool matchesTemplate2(
         const rtl::Reference< ::chart::Diagram >& xDiagram,
         bool bAdaptProperties );
-    virtual rtl::Reference< ::chart::ChartType >
-        getChartTypeForNewSeries2( const std::vector<
-            rtl::Reference< ::chart::ChartType > >& aFormerlyUsedChartTypes ) = 0;
+    // chart type for a new series is the last type in the template
+    rtl::Reference< ::chart::ChartType > getChartTypeForNewSeries(
+        const std::vector< rtl::Reference< ::chart::ChartType > >& rFormerlyUsedChartTypes );
     virtual rtl::Reference< ::chart::DataInterpreter > getDataInterpreter2();
     virtual void applyStyle2(
         const rtl::Reference< ::chart::DataSeries >& xSeries,
@@ -137,8 +137,20 @@ public:
      */
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
 
-    virtual rtl::Reference< ::chart::ChartType >
-                getChartTypeForIndex( sal_Int32 nChartTypeIndex ) = 0;
+    // Create chart types set to default values
+    virtual std::vector< rtl::Reference< ::chart::ChartType > > createBareChartTypes() = 0;
+
+    virtual void applyTemplateProperties(
+        sal_Int32 nChartTypeIndex,
+        const rtl::Reference< ::chart::ChartType >& xChartType );
+
+    // Combo charts can contain multiple types
+    std::vector< rtl::Reference< ::chart::ChartType > > getChartTypes(
+        const std::vector< rtl::Reference< ::chart::ChartType > >& rFormerlyUsedChartTypes );
+
+    rtl::Reference< ::chart::ChartType > getChartTypeForIndex(
+        sal_Int32 nChartTypeIndex,
+        const std::vector< rtl::Reference< ::chart::ChartType > >& rFormerlyUsedChartTypes );
 
     virtual bool isSwapXAndY() const;
 

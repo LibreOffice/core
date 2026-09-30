@@ -396,46 +396,20 @@ bool PieChartTypeTemplate::matchesTemplate2(
     return bResult;
 }
 
-rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
+std::vector< rtl::Reference< ChartType > > PieChartTypeTemplate::createBareChartTypes()
 {
-    rtl::Reference< ChartType > xResult;
-
-    try
-    {
-        xResult = new PieChartType();
-        xResult->setFastPropertyValue(
-            PROP_PIECHARTTYPE_USE_RINGS, getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS )); // "UseRings"
-        xResult->setFastPropertyValue(
-            PROP_PIECHARTTYPE_SUBTYPE, getFastPropertyValue( PROP_PIE_TEMPLATE_SUB_PIE_TYPE ));
-    }
-    catch( const cpo::uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return xResult;
+    return { new PieChartType() };
 }
 
-rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForNewSeries2(
-        const std::vector< rtl::Reference< ChartType > >& aFormerlyUsedChartTypes )
+void PieChartTypeTemplate::applyTemplateProperties(
+    sal_Int32 /* nChartTypeIndex */, const rtl::Reference< ChartType >& xChartType )
 {
-    rtl::Reference< ChartType > xResult;
-
-    try
-    {
-        xResult = new PieChartType();
-        ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
-        xResult->setFastPropertyValue(
-            PROP_PIECHARTTYPE_USE_RINGS, getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS )); // "UseRings"
-        xResult->setFastPropertyValue(
-            PROP_PIECHARTTYPE_SUBTYPE, getFastPropertyValue( PROP_PIE_TEMPLATE_SUB_PIE_TYPE ));
-    }
-    catch( const cpo::uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return xResult;
+    xChartType->setFastPropertyValue(
+        PROP_PIECHARTTYPE_USE_RINGS, getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS )); // "UseRings"
+    xChartType->setFastPropertyValue(
+        PROP_PIECHARTTYPE_SUBTYPE, getFastPropertyValue( PROP_PIE_TEMPLATE_SUB_PIE_TYPE ));
+    xChartType->setFastPropertyValue(
+        PROP_PIECHARTTYPE_SPLIT_POS, getFastPropertyValue( PROP_PIE_TEMPLATE_SPLIT_POS )); // "CompositeSize"
 }
 
 void PieChartTypeTemplate::applyStyle2(

@@ -97,18 +97,9 @@ bool TreemapChartTypeTemplate::matchesTemplate2(const rtl::Reference<::chart::Di
     return bResult;
 }
 
-rtl::Reference<ChartType>
-    TreemapChartTypeTemplate::getChartTypeForIndex(sal_Int32 /*nChartTypeIndex*/)
+std::vector<rtl::Reference<ChartType>> TreemapChartTypeTemplate::createBareChartTypes()
 {
-    return new TreemapChartType();
-}
-
-rtl::Reference<ChartType> TreemapChartTypeTemplate::getChartTypeForNewSeries2(
-    const std::vector<rtl::Reference<ChartType>>& aFormerlyUsedChartTypes)
-{
-    rtl::Reference<ChartType> xResult(getChartTypeForIndex(0));
-    ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(aFormerlyUsedChartTypes, xResult);
-    return xResult;
+    return { new TreemapChartType() };
 }
 
 // ____ OPropertySet ____

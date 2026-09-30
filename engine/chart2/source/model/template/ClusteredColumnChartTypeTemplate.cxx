@@ -103,18 +103,9 @@ bool ClusteredColumnChartTypeTemplate::matchesTemplate2(
     return bResult;
 }
 
-rtl::Reference<ChartType>
-    ClusteredColumnChartTypeTemplate::getChartTypeForIndex(sal_Int32 /*nChartTypeIndex*/)
+std::vector<rtl::Reference<ChartType>> ClusteredColumnChartTypeTemplate::createBareChartTypes()
 {
-    return new ClusteredColumnChartType();
-}
-
-rtl::Reference<ChartType> ClusteredColumnChartTypeTemplate::getChartTypeForNewSeries2(
-    const std::vector<rtl::Reference<ChartType>>& aFormerlyUsedChartTypes)
-{
-    rtl::Reference<ChartType> xResult(getChartTypeForIndex(0));
-    ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(aFormerlyUsedChartTypes, xResult);
-    return xResult;
+    return { new ClusteredColumnChartType() };
 }
 
 // ____ OPropertySet ____
