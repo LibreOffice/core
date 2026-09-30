@@ -2161,6 +2161,43 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
                                  WEIGHT_NORMAL, aFont.GetWeightMaybeAskConfig());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf57274_paste_special_link_empty_cells)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Source range A1:A3 spans several rows including an empty cell in A2
+    insertStringToCell(u"A1"_ustr, u"1");
+    insertStringToCell(u"A3"_ustr, u"3");
+
+    goToCell(u"A1:A3"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    // Paste Special with paste all and link
+    goToCell(u"B1"_ustr);
+    uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence(
+        { { "Flags", uno::Any(u"A"_ustr) },
+          { "FormulaCommand", uno::Any(sal_uInt16(ScPasteFunc::NONE)) },
+          { "SkipEmptyCells", uno::Any(false) },
+          { "Transpose", uno::Any(false) },
+          { "AsLink", uno::Any(true) },
+          { "MoveMode", uno::Any(sal_uInt16(InsCellCmd::INS_NONE)) } });
+    dispatchCommand(mxComponent, u".uno:InsertContents"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(u"=$Sheet1.$A$1"_ustr, pDoc->GetFormula(1, 0, 0)); // B1
+    // Without the fix in place, this test would have failed with
+    // - Expected: =$Sheet1.$A$2
+    // - Actual  :
+    // i.e. no reference was created for the empty source cell
+    CPPUNIT_ASSERT_EQUAL(u"=$Sheet1.$A$2"_ustr, pDoc->GetFormula(1, 1, 0)); // B2
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(1, 1, 0)); // B2
+    CPPUNIT_ASSERT_EQUAL(u"=$Sheet1.$A$3"_ustr, pDoc->GetFormula(1, 2, 0)); // B3
+
+    // The link to the previously empty cell must follow its source
+    insertStringToCell(u"A2"_ustr, u"2");
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(1, 1, 0)); // B2
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119659)
 {
     createScDoc();

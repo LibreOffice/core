@@ -1556,7 +1556,9 @@ void ScColumn::CopyFromClip(
         return;
 
     ScDocument& rDocument = GetDoc();
-    if (rCxt.isAsLink() && rCxt.getInsertFlag() == InsertDeleteFlags::ALL)
+    // tdf#57274 - ignore objects since ScViewFunc::PasteFromClip removes the objects flag
+    if (rCxt.isAsLink()
+        && (rCxt.getInsertFlag() | InsertDeleteFlags::OBJECTS) == InsertDeleteFlags::ALL)
     {
         // We also reference empty cells for "ALL"
         // InsertDeleteFlags::ALL must always contain more flags when compared to "Insert contents" as
