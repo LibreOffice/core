@@ -54,6 +54,9 @@ namespace
         CPPUNIT_ASSERT(testDecode("=?iso-8859-1?B?QQ==?=", "A"));
         CPPUNIT_ASSERT(testDecode("=?iso-8859-1?B?QUI=?=", "AB"));
         CPPUNIT_ASSERT(testDecode("=?iso-8859-1?B?QUJD?=", "ABC"));
+        // A non-ASCII byte in Base 64 text
+        CPPUNIT_ASSERT_EQUAL(u"=?iso-8859-1?B?\u00C3Q==?="_ustr,
+                             INetMIME::decodeHeaderFieldBody("=?iso-8859-1?B?\xC3Q==?="_ostr));
     }
 
     void Test::test_scanContentType_basic()

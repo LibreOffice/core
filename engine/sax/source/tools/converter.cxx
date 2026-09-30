@@ -136,7 +136,9 @@ template <typename V> bool wordEndsWith(V string, std::string_view expected)
 {
     V substr = string.substr(0, expected.size());
     return std::equal(substr.begin(), substr.end(), expected.begin(), expected.end(),
-                      [](sal_uInt32 c1, sal_uInt32 c2) { return rtl::toAsciiLowerCase(c1) == c2; })
+                      [](auto c1, sal_uInt32 c2) {
+                          return rtl::toAsciiLowerCase(rtl::toCodePointArgument(c1)) == c2;
+                      })
            && (string.size() == expected.size() || string[expected.size()] == ' ');
 }
 
@@ -150,7 +152,7 @@ template <class V> static std::optional<sal_Int16> lcl_parseMeasureUnit(const V&
         return std::nullopt;
     }
 
-    switch (rtl::toAsciiLowerCase<sal_uInt32>(rString[0]))
+    switch (rtl::toAsciiLowerCase(rtl::toCodePointArgument(rString[0])))
     {
         case u'%':
             return MeasureUnit::PERCENT;

@@ -491,6 +491,9 @@ void ConverterTest::testMeasure()
     doTestStringToMeasure(::std::numeric_limits<sal_Int32>::max(), "1234567890mm", MeasureUnit::MM_10TH, 12, ::std::numeric_limits<sal_Int32>::max());
     doTestStringToMeasure(-300, "-300", MeasureUnit::MM, -1000, 555);
     doTestStringToMeasure(::std::numeric_limits<sal_Int32>::min(), "-999999999999999px", MeasureUnit::PIXEL, ::std::numeric_limits<sal_Int32>::min(), 555);   //really crazy numbers...
+    // A non-ASCII byte in the unit of a UTF-8 string
+    sal_Int32 nVal;
+    CPPUNIT_ASSERT(!Converter::convertMeasure(nVal, "1c\xC3\xA9"));
 
     doTestMeasureToString("6mm", 600, MeasureUnit::MM_100TH, MeasureUnit::MM);
     doTestMeasureToString("0.005cm", 000000005, MeasureUnit::MM_100TH, MeasureUnit::CM);    // zeros in the front doesn't count

@@ -50,14 +50,14 @@ bool isWhiteSpace(sal_uInt32 nChar)
 
 /** Get the Base 64 digit weight of a US-ASCII character.
 
-    @param nChar  Some UCS-4 character.
+    @param nChar  A byte of an 8-bit string.
 
     @return  If nChar is a US-ASCII Base 64 digit character (US-ASCII
     'A'--'F', or 'a'--'f', '0'--'9', '+', or '/'), return the
     corresponding weight (0--63); if nChar is the US-ASCII Base 64 padding
     character (US-ASCII '='), return -1; otherwise, return -2.
  */
-int getBase64Weight(sal_uInt32 nChar)
+int getBase64Weight(unsigned char nChar)
 {
     return rtl::isAsciiUpperCase(nChar) ? int(nChar - 'A') :
            rtl::isAsciiLowerCase(nChar) ? int(nChar - 'a' + 26) :
