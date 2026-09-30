@@ -702,6 +702,22 @@ void ScViewFunc::PasteDraw()
     }
 }
 
+/// Whether the HTML on the clipboard holds an image.
+static bool lcl_HtmlHasImage(const TransferableDataHelper& rDataHelper)
+{
+    std::unique_ptr<SvStream> xStream = rDataHelper.GetSotStorageStream(SotClipboardFormatId::HTML);
+    if (!xStream)
+        return false;
+
+    OStringBuffer aLine;
+    while (xStream->ReadLine(aLine))
+    {
+        if (std::string_view(aLine).find("<img") != std::string_view::npos)
+            return true;
+    }
+    return false;
+}
+
 void ScViewFunc::PasteFromSystem(bool useSavedPrefs)
 {
     UpdateInputLine();
@@ -796,7 +812,11 @@ void ScViewFunc::PasteFromSystem(bool useSavedPrefs)
                                      aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
                                    && ( aDataHelper.HasFormat( SotClipboardFormatId::RTF ) || aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) ) );
                     }
-                    if ( bDoRtf )
+                    // The RTF import skips images, the HTML import inserts them.
+                    if (bDoRtf && aDataHelper.HasFormat(SotClipboardFormatId::HTML)
+                        && lcl_HtmlHasImage(aDataHelper))
+                        PasteFromSystem(SotClipboardFormatId::HTML, false, useSavedPrefs);
+                    else if (bDoRtf)
                         PasteFromSystem( aDataHelper.HasFormat( SotClipboardFormatId::RTF ) ? SotClipboardFormatId::RTF : SotClipboardFormatId::RICHTEXT );
                     else if ( aObjDesc.maClassName == SvGlobalName( 0,0,0,0,0,0,0,0,0,0,0 )
                               && aDataHelper.HasFormat( SotClipboardFormatId::SYLK ))

@@ -876,8 +876,9 @@ bool SwTransferable::WriteObject( SvStream& rOStream,
 
     case SWTRANSFER_OBJECTTYPE_HTML:
     {
-        // COKit is interested in getting images embedded for copy/paste support.
-        GetHTMLWriter( comphelper::COKit::isActive() ? u"EmbedImages;NoPrettyPrint"_ustr : OUString(), OUString(), xWrt );
+        GetHTMLWriter(comphelper::COKit::isActive() ? u"EmbedImages;NoPrettyPrint"_ustr
+                                                    : u"EmbedImages"_ustr,
+                      OUString(), xWrt);
         break;
     }
 

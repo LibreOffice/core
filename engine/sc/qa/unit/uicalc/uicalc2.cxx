@@ -2742,6 +2742,32 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf171366)
     CPPUNIT_ASSERT_EQUAL(aFromPageStyle, aFromDialog);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testPasteWriterTextAndImage)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Given a Writer document with a paragraph of text and an image anchored to one of its
+    // characters, all of it copied:
+    mxComponent2 = loadFromDesktop(createFileURL(u"text-and-image.fodt"));
+    dispatchCommand(mxComponent2, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent2, u".uno:Copy"_ustr, {});
+
+    // When pasting it into Calc:
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+
+    // Then the image arrives too:
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT(pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT(pPage);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the image was lost, only the text was pasted.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
