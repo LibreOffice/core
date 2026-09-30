@@ -2148,6 +2148,13 @@ std::vector<PDFObjectElement*> PDFDocument::GetSignatureWidgets()
     return aRet;
 }
 
+void PDFDocument::appendStringObject(OStringBuffer& rLine, std::string_view aBytes,
+                                     sal_Int32 /*nObject*/)
+{
+    pdf::COSWriter aWriter(rLine);
+    aWriter.writeLiteral(aBytes);
+}
+
 std::vector<unsigned char> PDFDocument::DecodeHexString(PDFHexStringElement const* pElement)
 {
     return svl::crypto::DecodeHexString(pElement->GetValue());
@@ -2290,7 +2297,6 @@ const OString& PDFHexStringElement::GetValue() const { return m_aValue; }
 
 bool PDFLiteralStringElement::Read(SvStream& rStream)
 {
-    char nPrevCh = 0;
     char ch = 0;
     rStream.ReadChar(ch);
     if (ch != '(')
@@ -2298,19 +2304,21 @@ bool PDFLiteralStringElement::Read(SvStream& rStream)
         SAL_INFO("vcl.filter", "PDFHexStringElement::Read: expected '(' as first character");
         return false;
     }
-    nPrevCh = ch;
     rStream.ReadChar(ch);
 
     // Start with 1 nesting level as we read a '(' above already.
     int nDepth = 1;
+    bool bEscaped = false;
     OStringBuffer aBuf;
     while (!rStream.eof())
     {
-        if (ch == '(' && nPrevCh != '\\')
-            ++nDepth;
-
-        if (ch == ')' && nPrevCh != '\\')
-            --nDepth;
+        if (!bEscaped)
+        {
+            if (ch == '(')
+                ++nDepth;
+            else if (ch == ')')
+                --nDepth;
+        }
 
         if (nDepth == 0)
         {
@@ -2320,8 +2328,9 @@ bool PDFLiteralStringElement::Read(SvStream& rStream)
                      "PDFLiteralStringElement::Read: m_aValue is '" << m_aValue << "'");
             return true;
         }
+        // a REVERSE SOLIDUS escapes the next character unless it is itself escaped
+        bEscaped = !bEscaped && ch == '\\';
         aBuf.append(ch);
-        nPrevCh = ch;
         rStream.ReadChar(ch);
     }
 

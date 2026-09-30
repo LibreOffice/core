@@ -936,6 +936,9 @@ private:
     /// no standard type and no other alias has taken.
     [[nodiscard]] OString claimRoleName(const OString& rAlias, vcl::pdf::StructElement eType);
 
+    void appendStringObject(OStringBuffer& rLine, std::string_view aBytes,
+                            sal_Int32 nObject) override;
+
     void checkAndEnableStreamEncryption( sal_Int32 nObject ) override;
 
     void finishStreamEncryption() override;

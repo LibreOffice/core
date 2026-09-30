@@ -9,6 +9,7 @@
 
 #include <sal/log.hxx>
 #include <sal/types.h>
+#include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
@@ -19,10 +20,111 @@
 #include <pdf/objectcopier.hxx>
 #include <pdf/pdfwriter_impl.hxx>
 
+#include <o3tl/numeric.hxx>
 #include <o3tl/string_view.hxx>
 
 namespace vcl
 {
+namespace
+{
+// the bytes a literal string stands for, with the escapes of ISO 32000-2 7.3.4.2 resolved
+OString decodeLiteral(std::string_view aValue)
+{
+    OStringBuffer aOut(aValue.size());
+    for (size_t i = 0; i < aValue.size(); ++i)
+    {
+        if (aValue[i] == '\r' || aValue[i] == '\n')
+        {
+            // an end-of-line marker of its own stands for a line feed, whichever form it took
+            if (aValue[i] == '\r' && i + 1 < aValue.size() && aValue[i + 1] == '\n')
+                ++i;
+            aOut.append('\n');
+            continue;
+        }
+        if (aValue[i] != '\\' || i + 1 == aValue.size())
+        {
+            aOut.append(aValue[i]);
+            continue;
+        }
+        const char cNext = aValue[++i];
+        switch (cNext)
+        {
+            case 'n':
+                aOut.append('\n');
+                break;
+            case 'r':
+                aOut.append('\r');
+                break;
+            case 't':
+                aOut.append('\t');
+                break;
+            case 'b':
+                aOut.append('\b');
+                break;
+            case 'f':
+                aOut.append('\f');
+                break;
+            case '\n':
+                break; // a split line, which the string does not carry
+            case '\r':
+                if (i + 1 < aValue.size() && aValue[i + 1] == '\n')
+                    ++i;
+                break;
+            default:
+                if (rtl::isAsciiOctalDigit(static_cast<unsigned char>(cNext)))
+                {
+                    // one to three octal digits stand for a byte
+                    size_t nDigits = 1;
+                    for (unsigned char candidate : aValue.substr(i + 1, 2))
+                    {
+                        if (!rtl::isAsciiOctalDigit(candidate))
+                            break;
+                        ++nDigits;
+                    }
+                    aOut.append(static_cast<char>(o3tl::toInt32(aValue.substr(i, nDigits), 8)));
+                    i += nDigits - 1;
+                }
+                else
+                {
+                    // a backslash before anything else is dropped
+                    aOut.append(cNext);
+                }
+                break;
+        }
+    }
+    return aOut.makeStringAndClear();
+}
+
+// the bytes a hex string stands for, per ISO 32000-2 7.3.4.3
+OString decodeHex(std::string_view aValue)
+{
+    OStringBuffer aOut(aValue.size() / 2 + 1);
+    int nHighNibble = -1;
+    for (const char c : aValue)
+    {
+        const int nNibble = o3tl::convertToHex<int>(c);
+        if (nNibble == -1)
+        {
+            // only whitespace may stand between the digits
+            SAL_WARN_IF(!rtl::isAsciiWhiteSpace(static_cast<unsigned char>(c)) && c != 0,
+                        "vcl.pdfwriter", "PDFObjectCopier: hex string has '" << c << "' in it");
+            continue;
+        }
+        if (nHighNibble == -1)
+        {
+            nHighNibble = nNibble;
+            continue;
+        }
+        aOut.append(static_cast<char>((nHighNibble << 4) | nNibble));
+        nHighNibble = -1;
+    }
+    // an odd count of digits stands for a last byte whose low nibble is zero
+    if (nHighNibble != -1)
+        aOut.append(static_cast<char>(nHighNibble << 4));
+    return aOut.makeStringAndClear();
+}
+}
+
 PDFObjectCopier::PDFObjectCopier(PDFObjectContainer& rContainer)
     : m_rContainer(rContainer)
 {
@@ -30,7 +132,8 @@ PDFObjectCopier::PDFObjectCopier(PDFObjectContainer& rContainer)
 
 void PDFObjectCopier::copyRecursively(OStringBuffer& rLine, filter::PDFElement& rInputElement,
                                       SvMemoryStream& rDocBuffer,
-                                      std::map<sal_Int32, sal_Int32>& rCopiedResources)
+                                      std::map<sal_Int32, sal_Int32>& rCopiedResources,
+                                      sal_Int32 nObject)
 {
     if (auto pReference = dynamic_cast<filter::PDFReferenceElement*>(&rInputElement))
     {
@@ -50,7 +153,7 @@ void PDFObjectCopier::copyRecursively(OStringBuffer& rLine, filter::PDFElement& 
         rLine.append("[ ");
         for (auto const& pElement : pInputArray->GetElements())
         {
-            copyRecursively(rLine, *pElement, rDocBuffer, rCopiedResources);
+            copyRecursively(rLine, *pElement, rDocBuffer, rCopiedResources, nObject);
             rLine.append(" ");
         }
         rLine.append("] ");
@@ -63,10 +166,18 @@ void PDFObjectCopier::copyRecursively(OStringBuffer& rLine, filter::PDFElement& 
             rLine.append("/");
             rLine.append(pPair.first);
             rLine.append(" ");
-            copyRecursively(rLine, *pPair.second, rDocBuffer, rCopiedResources);
+            copyRecursively(rLine, *pPair.second, rDocBuffer, rCopiedResources, nObject);
             rLine.append(" ");
         }
         rLine.append(">> ");
+    }
+    else if (auto pLiteral = dynamic_cast<filter::PDFLiteralStringElement*>(&rInputElement))
+    {
+        m_rContainer.appendStringObject(rLine, decodeLiteral(pLiteral->GetValue()), nObject);
+    }
+    else if (auto pHex = dynamic_cast<filter::PDFHexStringElement*>(&rInputElement))
+    {
+        m_rContainer.appendStringObject(rLine, decodeHex(pHex->GetValue()), nObject);
     }
     else
     {
@@ -118,7 +229,7 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
             }
             else
             {
-                copyRecursively(aLine, *rPair.second, rDocBuffer, rCopiedResources);
+                copyRecursively(aLine, *rPair.second, rDocBuffer, rCopiedResources, nObject);
             }
         }
 
@@ -143,7 +254,7 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
                 bFirst = false;
             else
                 aLine.append(" ");
-            copyRecursively(aLine, *pElement, rDocBuffer, rCopiedResources);
+            copyRecursively(aLine, *pElement, rDocBuffer, rCopiedResources, nObject);
         }
         aLine.append("]\n");
     }

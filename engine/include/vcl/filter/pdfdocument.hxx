@@ -596,6 +596,9 @@ public:
     SAL_DLLPRIVATE bool updateObject(sal_Int32 n) override;
     /// See vcl::PDFObjectContainer::writeBuffer().
     SAL_DLLPRIVATE bool writeBufferBytes(const void* pBuffer, sal_uInt64 nBytes) override;
+    /// See vcl::PDFObjectContainer::appendStringObject(); this container has no cipher.
+    SAL_DLLPRIVATE void appendStringObject(OStringBuffer& rLine, std::string_view aBytes,
+                                           sal_Int32 nObject) override;
     void checkAndEnableStreamEncryption(sal_Int32 /*nObject*/) override {}
     void finishStreamEncryption() override {}
     sal_uInt64 calculateStreamSize(sal_uInt64 const nDataSize) const override { return nDataSize; }
