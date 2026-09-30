@@ -62,6 +62,8 @@ JSDialog.getCurrentColor = function (data, builder) {
 		data.command,
 	);
 
+	if (selectedColor === 'disabled') selectedColor = null;
+
 	if (!selectedColor || selectedColor < 0)
 		selectedColor = builder._getUnoStateForItemId(data.id, builder);
 
@@ -216,6 +218,15 @@ JSDialog.colorPickerButton = function (parentContainer, data, builder) {
 			valueNode.addEventListener('click', applyFunction);
 
 			var updateFunction = function () {
+				if (menubutton.container.hasAttribute('disabled')) {
+					if (data.disabledTooltip)
+						menubutton.container.setAttribute(
+							'data-cooltip',
+							builder._cleanText(data.disabledTooltip),
+						);
+					return;
+				}
+
 				if (app.colorLastSelection[data.command] !== undefined) {
 					var selectedColor = app.colorLastSelection[data.command];
 				} else {

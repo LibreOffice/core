@@ -38,6 +38,7 @@
 #include <svx/svdview.hxx>
 #include <svx/sdangitm.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/graph.hxx>
 #include <sal/log.hxx>
 
 #include <doc.hxx>
@@ -1372,6 +1373,20 @@ void SwFrameShell::GetDrawAttrStateTextFrame(SfxItemSet &rSet)
     if(rSh.IsFrameSelected())
     {
         rSh.GetFlyFrameAttr(rSet);
+
+        if (rSh.GetSelectionType() & SelectionType::Graphic)
+        {
+            const sal_uInt16 nFillColorWhich(
+                rSh.GetAttrPool().GetWhichIDFromSlotID(SID_ATTR_FILL_COLOR));
+
+            if (SfxItemState::UNKNOWN != rSet.GetItemState(nFillColorWhich, false))
+            {
+                const Graphic* pGraphic = rSh.GetGraphic(false);
+
+                if (pGraphic && !pGraphic->HasTransparentPixels())
+                    rSet.DisableItem(nFillColorWhich);
+            }
+        }
     }
     else
     {

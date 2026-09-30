@@ -66,6 +66,8 @@ private:
     bool                         mbDummyContext = false;
     // cache checksum computation
     mutable BitmapChecksum       mnChecksum = 0;
+    // cache the per-pixel alpha scan
+    mutable std::optional<bool>  mbHasTransparentPixels;
 
     std::optional<GraphicID>     mxGraphicID;
     GraphicExternalLink          maGraphicExternalLink;
@@ -123,6 +125,7 @@ private:
 
     bool                isTransparent() const;
     bool                isAlpha() const;
+    bool                hasTransparentPixels() const;
     bool                isAnimated() const;
     bool                isEPS() const;
 

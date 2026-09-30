@@ -1819,7 +1819,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		};
 
 		const hasLabel = !!controls.label;
-		const hasExplicitTooltip = !!data.tooltip;
+		const hasExplicitTooltip = !!data.tooltip || !!data.disabledTooltip;
 		const hasShortcut = JSDialog.ShortcutsUtil.hasShortcut(data.command);
 		var mouseEnterFunction = window.touch.mouseOnly(function () {
 			if (builder.map.tooltip)

@@ -114,6 +114,9 @@ public:
 
     bool            IsTransparent() const;
     bool            IsAlpha() const;
+
+    bool            HasTransparentPixels() const;
+
     bool            IsAnimated() const;
     SAL_DLLPRIVATE bool IsEPS() const;
 

@@ -30,6 +30,7 @@ enum class PayloadType
     StateTableCellPayload,
     BooleanPayload,
     BooleanOrDisabledPayload,
+    ColorOrDisabledPayload,
     PointPayload,
     SizePayload,
     StringOrStrSeqPayload,

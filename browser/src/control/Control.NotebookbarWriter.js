@@ -2962,6 +2962,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'type': 'bigtoolitem',
 				'text': _UNO('.uno:FillColor'),
 				'command': '.uno:FillColor',
+				'disabledTooltip': _('Fill Color (Transparent Pictures Only)'),
 				'accessibility': { focusBack: true, combination: 'FC', de: null }
 			},
 			{ type: 'separator', id: 'picture-fillcolor-break', orientation: 'vertical' },

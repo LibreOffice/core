@@ -1090,6 +1090,17 @@ OString BooleanPayload(sal_uInt16, SfxViewFrame*, const css::frame::FeatureState
     return aBuffer.makeStringAndClear();
 }
 
+OString ColorOrDisabledPayload(sal_uInt16, SfxViewFrame*,
+                               const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem*)
+{
+    if (!aEvent.IsEnabled)
+        return aEvent.FeatureURL.Complete.toUtf8() + "=disabled";
+
+    sal_Int32 nColor = -1;
+    aEvent.State >>= nColor;
+    return aEvent.FeatureURL.Complete.toUtf8() + "=" + OString::number(nColor);
+}
+
 OString BooleanOrDisabledPayload(sal_uInt16, SfxViewFrame*,
                                  const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem*)
 {
@@ -1214,6 +1225,7 @@ constexpr auto enumToPayload = frozen::make_unordered_map<PayloadType, PayloadGe
     { PayloadType::StateTableCellPayload, StateTableCellPayload },
     { PayloadType::BooleanPayload, BooleanPayload },
     { PayloadType::BooleanOrDisabledPayload, BooleanOrDisabledPayload },
+    { PayloadType::ColorOrDisabledPayload, ColorOrDisabledPayload },
     { PayloadType::PointPayload, PointPayload },
     { PayloadType::SizePayload, SizePayload },
     { PayloadType::StringOrStrSeqPayload, StringOrStrSeqPayload },
@@ -1290,6 +1302,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"FontColor", { PayloadType::ColorPayload, true } },
         { u"FrameLineColor", { PayloadType::ColorPayload, true } },
         { u"GlowColor", { PayloadType::ColorPayload, false } },
+        { u"FillColor", { PayloadType::ColorOrDisabledPayload, true } },
 
         { u"Undo", { PayloadType::UndoRedoPayload, true } },
         { u"Redo", { PayloadType::UndoRedoPayload, true } },

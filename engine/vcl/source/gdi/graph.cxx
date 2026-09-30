@@ -317,6 +317,11 @@ bool Graphic::IsAlpha() const
     return mxImpGraphic->isAlpha();
 }
 
+bool Graphic::HasTransparentPixels() const
+{
+    return mxImpGraphic->hasTransparentPixels();
+}
+
 bool Graphic::IsAnimated() const
 {
     return mxImpGraphic->isAnimated();

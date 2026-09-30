@@ -42,6 +42,7 @@
 #include <impgraph.hxx>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/dibtools.hxx>
 #include <map>
 #include <memory>
@@ -209,6 +210,7 @@ ImpGraphic& ImpGraphic::operator=(const ImpGraphic& rImpGraphic)
         maSwapInfo = rImpGraphic.maSwapInfo;
         mbDummyContext = rImpGraphic.mbDummyContext;
         maGraphicExternalLink = rImpGraphic.maGraphicExternalLink;
+        mbHasTransparentPixels = rImpGraphic.mbHasTransparentPixels;
 
         mpAnimationContainer.reset();
         if (rImpGraphic.mpAnimationContainer)
@@ -259,6 +261,7 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
     maVectorGraphicData = std::move(rImpGraphic.maVectorGraphicData);
     maGraphicExternalLink = rImpGraphic.maGraphicExternalLink;
     mbPrepared = rImpGraphic.mbPrepared;
+    mbHasTransparentPixels = rImpGraphic.mbHasTransparentPixels;
 
     rImpGraphic.clear();
     rImpGraphic.mbDummyContext = false;
@@ -532,6 +535,7 @@ void ImpGraphic::clear()
     clearGraphics();
     meType = GraphicType::NONE;
     mnSizeBytes = 0;
+    mbHasTransparentPixels.reset();
 
     changeExisting(mnSizeBytes);
     maGraphicExternalLink.msURL.clear();
@@ -574,6 +578,27 @@ bool ImpGraphic::isAlpha() const
             return mpBitmapContainer->isAlpha();
     }
     return false;
+}
+
+bool ImpGraphic::hasTransparentPixels() const
+{
+    if (!isTransparent())
+        return false;
+
+    if (meType != GraphicType::Bitmap || maVectorGraphicData)
+        return true;
+
+    if (isSwappedOut())
+        return mbHasTransparentPixels.value_or(true);
+
+    if (mpAnimationContainer || !mpBitmapContainer)
+        return true;
+
+    if (!mbHasTransparentPixels.has_value())
+        mbHasTransparentPixels
+            = mpBitmapContainer->getBitmapRef().CreateAlphaMask().hasAlpha();
+
+    return *mbHasTransparentPixels;
 }
 
 bool ImpGraphic::isAnimated() const

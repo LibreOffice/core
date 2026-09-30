@@ -480,10 +480,18 @@ label.notebookbar.ui-checkbox-label {
 	filter: grayscale(100%) brightness(100%);
 }
 
+/* Fill Color (Writer > Picture) button swatch */
+.unotoolbutton.notebookbar.disabled .selected-color,
+.unotoolbutton[disabled] .selected-color {
+	filter: grayscale(100%);
+}
+
 .unotoolbutton.notebookbar.disabled img,
 .unotoolbutton.notebookbar.disabled .unoarrow,
+.unotoolbutton.notebookbar.disabled .selected-color,
 .unotoolbutton[disabled] img,
-.unotoolbutton[disabled] .unoarrow {
+.unotoolbutton[disabled] .unoarrow,
+.unotoolbutton[disabled] .selected-color {
 	opacity: var(--opacity-icon-disabled);
 }
 
