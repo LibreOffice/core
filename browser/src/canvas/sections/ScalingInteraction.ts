@@ -37,7 +37,7 @@ class ScalingInteraction extends SelectionInteraction {
 		step from the keyboard does neither, it goes as far as the key says along the one axis
 		the key names, and Shift is what makes the step a large one.
 	*/
-	private exact: boolean = false;
+	protected exact: boolean = false;
 
 	/// Whether the drag stops a hair short of the opposite side rather than crossing it and
 	/// turning the object over. A crop does: a window cannot be turned inside out.

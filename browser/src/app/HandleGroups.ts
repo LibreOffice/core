@@ -382,6 +382,37 @@ class CropHandles extends HandleGroup {
 		return to;
 	}
 
+	/*
+		Where the whole graphic stands on the picture's square, as the corner it begins at and
+		the corner it ends at: the visible window is the graphic less the crop, so the whole
+		graphic runs from minus the crop before the window to one plus the crop after it. The
+		crop belongs to the graphic before it is turned over, so on a picture that is drawn
+		turned over the two sides of that axis change places. Nothing where the picture shows
+		no graphic or is cropped to nothing.
+	*/
+	public static graphicExtentOf(
+		picture: cool.SlideObject,
+	): cool.Range2D | undefined {
+		if (!picture.graphicWidth || !picture.graphicHeight) return undefined;
+
+		const mirror = picture.graphicMirror ?? 0;
+		const left = (mirror & 1 ? picture.cropRight : picture.cropLeft) ?? 0;
+		const right = (mirror & 1 ? picture.cropLeft : picture.cropRight) ?? 0;
+		const top = (mirror & 2 ? picture.cropBottom : picture.cropTop) ?? 0;
+		const bottom = (mirror & 2 ? picture.cropTop : picture.cropBottom) ?? 0;
+
+		const visibleWidth = picture.graphicWidth - left - right;
+		const visibleHeight = picture.graphicHeight - top - bottom;
+		if (visibleWidth <= 0 || visibleHeight <= 0) return undefined;
+
+		return new cool.Range2D(
+			-left / visibleWidth,
+			-top / visibleHeight,
+			1 + right / visibleWidth,
+			1 + bottom / visibleHeight,
+		);
+	}
+
 	/// The four corners of the unit square through that mapping, as an SVG path, in twips.
 	private static quadOf(mapping: cool.Matrix2D): string {
 		return (
@@ -413,34 +444,14 @@ class CropHandles extends HandleGroup {
 		const square = section.squareNow();
 		const data = RenderGeometrySection.currentPart();
 		if (!picture || !square || !data) return;
-		if (
-			picture.graphicChecksum === undefined ||
-			!picture.graphicWidth ||
-			!picture.graphicHeight
-		)
+		if (picture.graphicChecksum === undefined) return;
+
+		const extent = CropHandles.graphicExtentOf(picture);
+		if (!extent) return;
+
+		if (!extent.minX && !extent.minY && extent.maxX === 1 && extent.maxY === 1)
 			return;
 
-		// The crop belongs to the graphic before it is turned over, so on a picture that is
-		// drawn turned over the two sides of that axis change places.
-		const mirror = picture.graphicMirror ?? 0;
-		const left = (mirror & 1 ? picture.cropRight : picture.cropLeft) ?? 0;
-		const right = (mirror & 1 ? picture.cropLeft : picture.cropRight) ?? 0;
-		const top = (mirror & 2 ? picture.cropBottom : picture.cropTop) ?? 0;
-		const bottom = (mirror & 2 ? picture.cropTop : picture.cropBottom) ?? 0;
-		if (!left && !top && !right && !bottom) return;
-
-		// The visible window is the graphic less the crop, so the whole graphic stands on the
-		// window's square from minus the crop before it to one plus the crop after it.
-		const visibleWidth = picture.graphicWidth - left - right;
-		const visibleHeight = picture.graphicHeight - top - bottom;
-		if (visibleWidth <= 0 || visibleHeight <= 0) return;
-
-		const extent = new cool.Range2D(
-			-left / visibleWidth,
-			-top / visibleHeight,
-			1 + right / visibleWidth,
-			1 + bottom / visibleHeight,
-		);
 		let whole = cool.Matrix2D.fromRange(extent).then(square);
 		let window = square;
 
