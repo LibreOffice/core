@@ -903,6 +903,9 @@ globalThis.__gasKitRunner = function(
         for (const library of libraries) {
             globalThis[library.userSymbol] = loadLibrary(library);
         }
+        // The add-on's sources, eval'ed next, define its functions as globals, so a name that still
+        // has the same value after them names none of the add-on's functions:
+        const beforeEvals = globalThis[fnName];
         // Eval each .gs under its own filename so exception messages name the .gs, not the runner
         // blob:
         for (let i = 0; i < gsSources.length; ++i) {
@@ -922,7 +925,7 @@ globalThis.__gasKitRunner = function(
             value = menuItems;
         } else {
             const fn = globalThis[fnName];
-            if (typeof fn !== 'function') {
+            if (typeof fn !== 'function' || fn === beforeEvals) {
                 throw new Error('Apps Script function not defined: ' + fnName);
             }
             value = fn.apply(null, callArgs || []);

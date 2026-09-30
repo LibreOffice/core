@@ -770,6 +770,20 @@ window.L.Control.Extension = window.L.Control.extend({
 			);
 			return;
 		}
+		// As in GAS, google.script.run cannot call a private function, whose name ends in
+		// "_", and the reserved name __coolGasMenu names none of the add-on's functions:
+		if (
+			typeof msg.functionName !== 'string' ||
+			msg.functionName.endsWith('_') ||
+			msg.functionName === '__coolGasMenu'
+		) {
+			this._postToCaller(msg.callId, {
+				msgId: 'Extension_CallResult',
+				callId: msg.callId,
+				err: 'Apps Script function not defined: ' + msg.functionName,
+			});
+			return;
+		}
 		const seq = this._nextCommandCallId++;
 		const callId = 'gasrun-' + this.options.id + '-' + seq;
 		const proxyId = 'gas-run-proxy-' + this.options.id + '-' + seq;
@@ -1004,6 +1018,19 @@ window.L.Control.Extension = window.L.Control.extend({
 		}
 		if (!msg || typeof msg !== 'object') {
 			console.warn('postMessage is not an object: ' + JSON.stringify(msg));
+			return;
+		}
+		if (
+			(this.options.manifest as ExtensionManifest).isGasExtension &&
+			!gasFrameMessageIds.has(msg.msgId)
+		) {
+			console.warn(
+				'extension ' +
+					this.options.id +
+					': ' +
+					msg.msgId +
+					' is not for GAS add-ons',
+			);
 			return;
 		}
 		if (fromSidebar) {
@@ -1596,6 +1623,17 @@ const gasProxies: {
 	};
 } = {};
 let gasProxyMap: any = null;
+
+// The messages that GAS add-on frames need:
+const gasFrameMessageIds = new Set([
+	'Extension_Close',
+	'Extension_DialogCancel',
+	'Extension_DialogClose',
+	'Extension_GasRun',
+	'Extension_Resize',
+	'Extension_TeardownDone',
+	'Extension_UrlFetchResult',
+]);
 
 function registerGasProxy(
 	map: any,
