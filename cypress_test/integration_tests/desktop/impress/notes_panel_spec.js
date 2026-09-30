@@ -21,6 +21,14 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		cy.cGet('#notespanel-container .ui-editengine').should('exist');
 	}
 
+	// Cypress sees the document iframe as the focused element, so its blur()
+	// refuses to act on the editor; blur the element itself instead.
+	function leaveNotes() {
+		cy.cGet('#notespanel-container .ui-editengine').then(function ($editor) {
+			$editor[0].blur();
+		});
+	}
+
 	it('opens on request and shows an editable notes area', function () {
 		cy.cGet('#notespanel-dock-wrapper').should('not.be.visible');
 
@@ -54,6 +62,25 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		cy.cGet(paragraph).should('not.contain.text', 'Click to add Notes');
 		cy.cGet(editEngine).type('Remember the demo');
 		cy.cGet(paragraph).should('have.text', 'Remember the demo');
+	});
+
+	// Once the slide has notes, a click only places the caret.
+	it('a click into existing notes keeps the text', function () {
+		openNotesPane();
+
+		cy.cGet('#notespanel-container .ui-editengine').click();
+		cy.cGet('#notespanel-container .ui-editengine').type('Remember the demo');
+		leaveNotes();
+		cy.cGet('#notespanel-container .ui-editengine-paragraph').should(
+			'have.text',
+			'Remember the demo'
+		);
+
+		cy.cGet('#notespanel-container .ui-editengine').click();
+		cy.cGet('#notespanel-container .ui-editengine-paragraph').should(
+			'have.text',
+			'Remember the demo'
+		);
 	});
 
 	// Adding a slide moves the pane to the notes of the new slide while the
