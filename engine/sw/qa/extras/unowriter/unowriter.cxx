@@ -33,6 +33,7 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
@@ -1679,6 +1680,26 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRedlineStartEnd)
     }
 
     CPPUNIT_ASSERT(!xEnumeration->hasMoreElements());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRemovedParagraph)
+{
+    // Given a document with two paragraphs, of which the first is removed through its own object...
+    createSwDoc();
+    auto const bodyText = mxComponent.queryThrow<text::XTextDocument>()->getText();
+    bodyText->insertString(bodyText->getEnd(), u"first"_ustr, false);
+    bodyText->insertControlCharacter(
+        bodyText->getEnd(), text::ControlCharacter::PARAGRAPH_BREAK, false);
+    bodyText->insertString(bodyText->getEnd(), u"second"_ustr, false);
+    auto const first = bodyText.queryThrow<container::XEnumerationAccess>()
+                           ->createEnumeration()
+                           ->nextElement()
+                           .queryThrow<text::XTextContent>();
+    bodyText->removeTextContent(first);
+    // ...then that object no longer reaches the removed paragraph, and the document keeps the rest:
+    CPPUNIT_ASSERT_THROW(first.queryThrow<text::XTextRange>()->setString(u"x"_ustr),
+                         uno::RuntimeException);
+    CPPUNIT_ASSERT_EQUAL(u"second"_ustr, bodyText->getString());
 }
 
 } // end of anonymous namespace

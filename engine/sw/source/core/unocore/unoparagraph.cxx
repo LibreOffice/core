@@ -1198,6 +1198,8 @@ void SAL_CALL SwXParagraph::dispose()
                 { rDoc.SetDontCorrectBookmarks(restore); });
             rDoc.getIDocumentContentOperations().DelFullPara(aCursor);
         }
+        moSvtListener->EndListeningAll();
+        m_pTextNode = nullptr;
         lang::EventObject const ev(getXWeak());
         std::unique_lock aGuard2(m_Mutex);
         m_EventListeners.disposeAndClear(aGuard2, ev);
