@@ -12,7 +12,6 @@ MAINTAINERCLEANFILES = Makefile.in
 
 common_fuzzer_sources = \
                        Common.cpp \
-                       ../common/DummyTraceEventEmitter.cpp \
                        ../wsd/COOLWSD.cpp \
                        ../wsd/coolwsd-inproc.cpp \
                        ../wsd/KitWSDGlobals.cpp
@@ -72,12 +71,13 @@ LIBFUZZER_CXXFLAGS_COMMON = $(AM_CXXFLAGS) $(LIBFUZZER_CFI_FLAGS)
 GBUILD_SHARED_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libshared.a
 GBUILD_WSD_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libwsd.a
 GBUILD_FORKIT_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libforkit.a
-GBUILD_WHOLE = -Wl,--whole-archive,$(GBUILD_WSD_LIB),$(GBUILD_FORKIT_LIB),$(GBUILD_SHARED_LIB),--no-whole-archive
+GBUILD_DUMMYTRACEEVENT_LIB = $(ENGINE_BUILDDIR)/workdir/LinkTarget/StaticLibrary/libdummytraceevent.a
+GBUILD_WHOLE = -Wl,--whole-archive,$(GBUILD_WSD_LIB),$(GBUILD_FORKIT_LIB),$(GBUILD_SHARED_LIB),$(GBUILD_DUMMYTRACEEVENT_LIB),--no-whole-archive
 
 LIBFUZZER_LDFLAGS_COMMON = -fsanitize=fuzzer @FUZZER_LDFLAGS@ $(LIBFUZZER_CFI_FLAGS) $(GBUILD_WHOLE)
 
 # Dependency for code produced by gbuild.
-GBUILD_LIBS = $(GBUILD_SHARED_LIB) $(GBUILD_WSD_LIB) $(GBUILD_FORKIT_LIB)
+GBUILD_LIBS = $(GBUILD_SHARED_LIB) $(GBUILD_WSD_LIB) $(GBUILD_FORKIT_LIB) $(GBUILD_DUMMYTRACEEVENT_LIB)
 EXTRA_admin_fuzzer_DEPENDENCIES = $(GBUILD_LIBS)
 EXTRA_clientrequest_fuzzer_DEPENDENCIES = $(GBUILD_LIBS)
 EXTRA_clientsession_fuzzer_DEPENDENCIES = $(GBUILD_LIBS)
