@@ -676,8 +676,7 @@ window.L.Clipboard = window.L.Class.extend({
 		    return true;
 
 		// Editeng JSDialog widgets, e.g. the Impress notes bottom panel.
-		const activeElement = document.activeElement;
-		if (activeElement && activeElement.closest('.ui-editengine'))
+		if (this._activeEditEngine())
 			return true;
 
 		if (forCopy) {
@@ -694,6 +693,30 @@ window.L.Clipboard = window.L.Class.extend({
 		if ($('#sc_input_window').is(':focus'))
 			return true;
 		return false;
+	},
+
+	// The editengine widget the user is "in" for clipboard purposes.
+	_activeEditEngine: function() {
+		const active = document.activeElement;
+		const live = active && active.closest ? active.closest('.ui-editengine') : null;
+		if (live) {
+			return live;
+		}
+		// Ignore a dropdown that steals the real focus temporarily.
+		const jsdialog = this._map.jsdialog;
+		if (jsdialog && jsdialog.dialogs) {
+			for (const id in jsdialog.dialogs) {
+				const dialog = jsdialog.dialogs[id];
+				// A real dialog, not a dropdown?
+				if (!dialog.isDropdown) continue;
+				const prev = dialog.lastFocusedElement;
+				const editengine = prev && prev.closest ? prev.closest('.ui-editengine') : null;
+				if (editengine) {
+					return editengine;
+				}
+			}
+		}
+		return null;
 	},
 
 	// Does the selection of text before an event comes in
@@ -780,6 +803,15 @@ window.L.Clipboard = window.L.Class.extend({
 		var serial = this._clipboardSerial;
 
 		this._unoCommandForCopyCutPaste = cmd;
+
+		if (operation === 'paste') {
+			// Execute the operation on the active editeng widget, not on the document.
+			const editengineForPaste = this._activeEditEngine();
+			if (editengineForPaste && this._navigatorClipboardRead(false)) {
+				this._pendingEditEnginePaste = editengineForPaste;
+				return;
+			}
+		}
 
 		if (operation !== 'paste' && cmd !== undefined && this._navigatorClipboardWrite(params)) {
 			// This is the codepath where an UNO command initiates the clipboard
@@ -1151,6 +1183,10 @@ window.L.Clipboard = window.L.Class.extend({
 				this._afterCopyCutPaste('paste');
 			}
 			return;
+		} finally {
+			// If read() failed, forget about our editeng paste target.
+			if (!clipboardContents)
+				this._pendingEditEnginePaste = null;
 		}
 
 		if (clipboardContents.length < 1) {
@@ -1308,6 +1344,22 @@ window.L.Clipboard = window.L.Class.extend({
 			return;
 
 		window.app.console.log('Paste');
+
+		// Paste to the active editeng widget, not to the document.
+		const editengine = this._pendingEditEnginePaste;
+		this._pendingEditEnginePaste = null;
+		if (editengine && ev.clipboardData) {
+			const text = ev.clipboardData.getData('text/plain');
+			if (text) {
+				const dt = new DataTransfer();
+				dt.setData('text/plain', text);
+				const evt = new ClipboardEvent('paste', {
+					clipboardData: dt, bubbles: false, cancelable: true,
+				});
+				editengine.dispatchEvent(evt);
+			}
+			return;
+		}
 
 		if (this._isAnyInputFieldSelected() && !this._isFormulabarSelected())
 			return;
