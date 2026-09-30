@@ -379,15 +379,18 @@ class SlideLinks {
 	}
 
 	// The command that updates the linked slides is offered by a document
-	// that holds some, and by no other. The record on the uiManager is the
-	// one the notebookbar bars consult when they are built, and the menubar
-	// keeps a record of its own that its rebuilds read.
+	// that holds some, and by no other. Each bar is told on its own, and the
+	// menubar keeps a record of its own that its rebuilds read.
 	private showUpdateCommand(): void {
 		if (window.coolPreview) {
 			return;
 		}
 		const offered = this.hasLinks();
-		this.map.uiManager.showCommand('updateslidelinks', offered);
+		const notebookbar = this.map.uiManager.notebookbar;
+		if (notebookbar) {
+			if (offered) notebookbar.showItem('insert-update-slide-links');
+			else notebookbar.hideItem('insert-update-slide-links');
+		}
 		const menubar = this.map.menubar;
 		if (menubar) {
 			if (offered) menubar.showItem('updateslidelinks');

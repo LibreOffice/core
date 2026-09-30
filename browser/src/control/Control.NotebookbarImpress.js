@@ -1595,6 +1595,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 						'text': _('Update Links'),
 						'command': 'updateslidelinks',
 						'icon': 'lc_updateall.svg',
+						'visible': !!this.map.slideLinks && this.map.slideLinks.hasLinks(),
 						'accessibility': { focusBack: true, combination: 'UL', de: null }
 					}
 				]
