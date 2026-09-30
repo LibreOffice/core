@@ -934,7 +934,7 @@
 	position: absolute;
 	top: calc(var(--ruler-height) + 8px);
 	inset-inline-start: 16px;
-	z-index: 1000;
+	z-index: 13;
 	display: flex;
 	align-items: center;
 	gap: 8px;
