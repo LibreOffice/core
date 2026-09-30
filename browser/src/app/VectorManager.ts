@@ -72,6 +72,9 @@ class VectorManager extends RenderManagerBase {
 	// kept in the cache and skipped when drawing.
 	private _hiddenLayers: Set<number> = new Set();
 
+	/// The objects left out of the drawing of a part because they are drawn elsewhere, by id.
+	private _drawnElsewhere: Set<number> = new Set();
+
 	// The Impress or Draw doc layer, read lazily so the manager can be
 	// created before the layer is registered on the map.
 	private get _docLayer(): cool.CanvasTileLayerInterface {
@@ -205,6 +208,12 @@ class VectorManager extends RenderManagerBase {
 		return !this._hiddenLayers.has(layer);
 	}
 
+	/// The objects to leave out of the drawing of a part from now on, since they are drawn
+	/// elsewhere. An empty list leaves nothing out.
+	drawnElsewhere(objectIds: number[]): void {
+		this._drawnElsewhere = new Set(objectIds);
+	}
+
 	/// The page rectangle carried by the entry that stands for the page, or
 	/// zeroes when there is no such entry among the given objects.
 	static pageBoundsOf(objects: cool.SlideObject[]): [number, number] {
@@ -277,6 +286,7 @@ class VectorManager extends RenderManagerBase {
 			if (obj.layer !== undefined && this._hiddenLayers.has(obj.layer))
 				continue;
 			if (obj.kind === 'texteditoverlay' && !textEdits.has(id)) continue;
+			if (this._drawnElsewhere.has(id)) continue;
 			// The slide's copy of a master placeholder is drawn with the master.
 			if (obj.masterContent) continue;
 			if (obj.primitives) {

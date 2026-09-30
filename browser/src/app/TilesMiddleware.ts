@@ -294,6 +294,10 @@ class RenderManager {
 		RenderManager.ensureInstance().renderPlaceholderAids(context, data);
 	}
 
+	static drawnElsewhere(objectIds: number[]): void {
+		RenderManager.ensureInstance().drawnElsewhere(objectIds);
+	}
+
 	static isPartDrawable(part: number, mode: number): boolean {
 		return RenderManager.ensureInstance().isPartDrawable(part, mode);
 	}

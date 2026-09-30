@@ -341,6 +341,7 @@ class GraphicSelection {
 		if (this.selectionSection && this.selectionSection.name !== wanted) {
 			app.sectionContainer.removeSection(this.selectionSection.name);
 			this.selectionSection = null;
+			RenderManager.drawnElsewhere([]);
 		}
 
 		if (wanted === null) return;

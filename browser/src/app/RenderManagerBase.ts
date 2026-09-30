@@ -232,6 +232,9 @@ class RenderManagerBase {
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	setHiddenLayers(_layers: unknown): void {}
 
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	drawnElsewhere(_objectIds: number[]): void {}
+
 	isPartDrawable(_part: number, _mode: number): boolean {
 		return false;
 	}

@@ -487,88 +487,92 @@ class CropHandles extends HandleGroup {
 			],
 		} as unknown as cool.Primitive;
 
-		const drawn: cool.Primitive[] = [preview];
-
-		/*
-			While a crop runs, the window shows what it would show: the graphic is drawn whole
-			into the new window over the picture, which brings out what an enlarged window
-			uncovers, and what a smaller window leaves outside it is faded towards the page,
-			which is taken as white here - the drawing under it cannot be taken away, only
-			covered.
-		*/
-		if (running?.cropOnly) {
-			const far = 10000000;
-			const beyond =
-				'M' +
-				-far +
-				' ' +
-				-far +
-				' L' +
-				far +
-				' ' +
-				-far +
-				' L' +
-				far +
-				' ' +
-				far +
-				' L' +
-				-far +
-				' ' +
-				far +
-				' Z';
-
-			drawn.push({
-				type: cool.MaskPrimitive.type,
-				clip: CropHandles.quadOf(window),
-				children: [
-					{
-						type: cool.GraphicPrimitive.type,
-						checksum: picture.graphicChecksum,
-						matrix: whole.toArray(),
-						mirror: picture.graphicMirror,
-					},
-				],
-			} as unknown as cool.Primitive);
-
-			drawn.push({
-				type: cool.UnifiedTransparencePrimitive.type,
-				transparence: 0.2,
-				children: [
-					{
-						type: cool.MaskPrimitive.type,
-						clip: CropHandles.quadOf(square),
-						children: [
-							{
-								// Inside the old window and outside the new one at once: the
-								// second mask takes everything but the new window.
-								type: cool.MaskPrimitive.type,
-								clip: beyond + ' ' + CropHandles.quadOf(window),
-								children: [
-									{
-										type: cool.PolyPolygonColorPrimitive.type,
-										color: '#FFFFFF',
-										path: CropHandles.quadOf(square),
-									},
-								],
-							},
-						],
-					},
-				],
-			} as unknown as cool.Primitive);
-		}
-
-		section.context.save();
-		section.context.setTransform(1, 0, 0, 1, 0, 0);
+		const context = section.context;
+		context.save();
+		context.setTransform(1, 0, 0, 1, 0, 0);
 
 		// The point at the very start of the document says where the drawing of the part begins
 		// on the canvas, and a twip is that many pixels wide.
 		const origin = new cool.SimplePoint(0, 0);
-		section.context.translate(origin.vX, origin.vY);
-		section.context.scale(app.twipsToPixels, app.twipsToPixels);
+		context.translate(origin.vX, origin.vY);
+		context.scale(app.twipsToPixels, app.twipsToPixels);
 
-		RenderManager.renderPrimitives(section.context, data, drawn);
+		RenderManager.renderPrimitives(context, data, [preview]);
 
-		section.context.restore();
+		/*
+			While a crop runs, the picture is drawn here in place of the page's own drawing of it,
+			as the crop leaves it: the picture as it is inside the new window, the whole graphic
+			where the new window reaches beyond the old one, and what the new window leaves
+			outside of the old one half see-through, so that what is taken away fades and what
+			lies under it stays as it is.
+		*/
+		if (running?.cropOnly && picture.id !== undefined) {
+			const everything = CropHandles.quadBeyondEverything();
+			const identity = cool.Matrix2D.IDENTITY;
+
+			context.save();
+			context.clip(new Path2D(CropHandles.quadOf(window)));
+			RenderManager.renderObjectsWith(context, data, [picture.id], identity);
+			context.restore();
+
+			RenderManager.renderPrimitives(context, data, [
+				{
+					type: cool.MaskPrimitive.type,
+					clip: CropHandles.quadOf(window),
+					children: [
+						{
+							// Outside the old window: the second mask takes everything but it.
+							type: cool.MaskPrimitive.type,
+							clip: everything + ' ' + CropHandles.quadOf(square),
+							children: [
+								{
+									type: cool.GraphicPrimitive.type,
+									checksum: picture.graphicChecksum,
+									matrix: whole.toArray(),
+									mirror: picture.graphicMirror,
+								},
+							],
+						},
+					],
+				} as unknown as cool.Primitive,
+			]);
+
+			context.save();
+			context.clip(new Path2D(CropHandles.quadOf(square)));
+			context.clip(
+				new Path2D(everything + ' ' + CropHandles.quadOf(window)),
+				'evenodd',
+			);
+			context.globalAlpha = 0.5;
+			RenderManager.renderObjectsWith(context, data, [picture.id], identity);
+			context.restore();
+		}
+
+		context.restore();
+	}
+
+	/// A quad far larger than any page, for a mask that is to take everything but its other path.
+	private static quadBeyondEverything(): string {
+		const far = 10000000;
+		return (
+			'M' +
+			-far +
+			' ' +
+			-far +
+			' L' +
+			far +
+			' ' +
+			-far +
+			' L' +
+			far +
+			' ' +
+			far +
+			' L' +
+			-far +
+			' ' +
+			far +
+			' Z'
+		);
 	}
 
 	/*

@@ -254,6 +254,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	/// Asks for the page to be drawn again, after something moved under an interaction.
 	public redraw(): void {
+		this.tellWhoStandsIn();
+
 		// The button of a diagram is a thing of its own beside the canvas, so it is moved rather
 		// than drawn along with the rest.
 		GraphicSelection.diagramButton?.follow();
@@ -905,8 +907,25 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (
 			this.cropAwaitingAnswer &&
 			(objectId === undefined || objectId === this.cropAwaitingAnswer.objectId)
-		)
+		) {
 			this.cropAwaitingAnswer = null;
+			this.tellWhoStandsIn();
+		}
+	}
+
+	/*
+		Tells the drawing of the page which objects this section draws in its place: the picture
+		while a crop preview shows it as the crop leaves it, and none otherwise. The page is drawn
+		before this section, so it is told whenever the preview comes or goes rather than asked
+		while drawing.
+	*/
+	public tellWhoStandsIn(): void {
+		const standsIn =
+			this.runningChange()?.cropOnly === true && GraphicSelection.cropping;
+		const objectId = this.selectedObjects()[0];
+		RenderManager.drawnElsewhere(
+			standsIn && objectId !== undefined ? [objectId] : [],
+		);
 	}
 
 	/*
@@ -1744,6 +1763,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		const objectId = this.selectedObjects()[0];
 		if (interaction.isACrop() && window && objectId !== undefined) {
 			this.cropAwaitingAnswer = { objectId, matrix: window };
+			this.tellWhoStandsIn();
 			this.containerObject.requestReDraw();
 		}
 	}
@@ -1766,6 +1786,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (carriedOut && this.interaction) this.keepWhatItDid(this.interaction);
 
 		this.interaction = null;
+		this.tellWhoStandsIn();
 		this.lastMoved = null;
 		document.removeEventListener('keydown', this.keysChanged, true);
 		document.removeEventListener('keyup', this.keysChanged, true);
