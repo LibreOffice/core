@@ -72,6 +72,21 @@ abstract class SelectionInteraction {
 		return null;
 	}
 
+	/*
+		The transformation the objects are drawn through while it runs, as a picture of what it
+		would do. The same as the transformation it stands for, unless what it does is not a
+		change of the objects' drawing - a crop moves the window, not the picture - and then
+		nothing, so that the objects are drawn as they are.
+	*/
+	public ghostTransformation(): cool.Matrix2D | null {
+		return this.transformation();
+	}
+
+	/// Whether it crops rather than scales: the window onto a picture moves, the picture stays.
+	public isACrop(): boolean {
+		return false;
+	}
+
 	/// Where the handles stand while it runs, from where they stand when nothing runs.
 	public handles(known: SelectionHandle[]): SelectionHandle[] {
 		return known;

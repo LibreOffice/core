@@ -174,6 +174,7 @@
 /// <reference path="../src/canvas/sections/ShapeHandlesSection.ts" />
 /// <reference path="../src/canvas/sections/SelectionInteraction.ts" />
 /// <reference path="../src/canvas/sections/ScalingInteraction.ts" />
+/// <reference path="../src/canvas/sections/CropInteraction.ts" />
 /// <reference path="../src/canvas/sections/TurningInteraction.ts" />
 /// <reference path="../src/canvas/sections/MovingInteraction.ts" />
 /// <reference path="../src/canvas/sections/ShapingInteraction.ts" />

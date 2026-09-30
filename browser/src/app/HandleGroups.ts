@@ -273,8 +273,7 @@ class FramingHandles extends HandleGroup {
 	the picture's own square where the eight stand, but on the edge itself rather than a little
 	outside it. They are laid in the picture's own axes, so they turn and shear with it and lie
 	along its edges whatever it stands like. The eight are what scales the picture; these are
-	what will crop it, once a drag of them is built - for now they are shown and no more, and
-	carry no name, so nothing takes hold of one.
+	what crops it.
 */
 class CropHandles extends HandleGroup {
 	public readonly name: string = 'crop';
@@ -288,24 +287,99 @@ class CropHandles extends HandleGroup {
 		return object?.graphicWidth !== undefined ? object : undefined;
 	}
 
+	/// Whether the marks are shown at all: the crop switch is on and one picture is selected.
+	private shown(): boolean {
+		return (
+			GraphicSelection.cropping &&
+			this.thePicture() !== undefined &&
+			ObjectHandles.canBeResized(this.selection.selectedObjects())
+		);
+	}
+
 	public handles(): SelectionHandle[] {
-		if (!this.thePicture()) return [];
-		if (!ObjectHandles.canBeResized(this.selection.selectedObjects()))
-			return [];
+		if (!this.shown()) return [];
 
+		const square = this.selection.squareNow();
 		const eight =
-			ObjectHandles.framingOf(
-				this.selection.selectedObjects(),
-				this.selection.squareNow(),
-			) ?? [];
+			ObjectHandles.framingOf(this.selection.selectedObjects(), square) ?? [];
+		if (!square) return [];
 
-		return eight.map((one: SelectionHandle) => ({
-			name: '',
-			kind: 'crop' + one.kind,
-			pointer: one.pointer,
-			point: one.point.clone(),
-			turnedBy: one.turnedBy,
-		}));
+		const [across, down] = CropHandles.axesOf(square);
+
+		/*
+			A mark runs from its place into the picture, so its box is put where the mark is,
+			half a mark in along each axis it runs along; the mark itself is still laid from the
+			place, which is why the drawing takes the same half back.
+		*/
+		return eight.map((one: SelectionHandle) => {
+			const inward = CropHandles.inwardOf(one.kind);
+
+			return {
+				name: 'crop' + one.kind,
+				kind: 'crop' + one.kind,
+				pointer: one.pointer,
+				point: one.point.clone(),
+				turnedBy: one.turnedBy,
+				awayFromItsPlace: across
+					.multiplyBy(inward.x)
+					.add(down.multiplyBy(inward.y)),
+				awayBy: HandleLook.widthOf('crop') * 0.5,
+			};
+		});
+	}
+
+	/// The two axes of that square, each a step of length one.
+	private static axesOf(square: cool.Matrix2D): cool.Point[] {
+		const unit = (axis: cool.Point): cool.Point =>
+			axis.divideBy(axis.length() || 1);
+
+		return [
+			unit(new cool.Point(square.a, square.b)),
+			unit(new cool.Point(square.c, square.d)),
+		];
+	}
+
+	/// Which way is into the picture from the place of that one of the eight, along each axis;
+	/// nought along an axis the place lies in the middle of.
+	private static inwardOf(kind: string): cool.Point {
+		const place = ObjectHandles.placeOfKind(kind) ?? new cool.Point(0.5, 0.5);
+
+		return new cool.Point(
+			place.x < 0.5 ? 1 : place.x > 0.5 ? -1 : 0,
+			place.y < 0.5 ? 1 : place.y > 0.5 ? -1 : 0,
+		);
+	}
+
+	public interactionFor(
+		handle: SelectionHandle,
+		_at: cool.SimplePoint,
+	): SelectionInteraction | null {
+		const shape = this.selection.shapeNow();
+
+		return shape ? new CropInteraction(this.selection, handle, shape) : null;
+	}
+
+	/*
+		A key crops as a drag of the mark to the stepped place would. The engine is told at once,
+		and what the step did is kept here as a drag's end keeps it, so the next step of a key
+		held down goes on from where this one left the handle.
+	*/
+	public moveByKey(
+		handle: SelectionHandle,
+		towards: cool.Point,
+		event: KeyboardEvent,
+	): cool.Point | null {
+		const shape = this.selection.shapeNow();
+		if (!shape) return null;
+
+		const to = HandleGroup.steppedBy(handle, towards, event);
+		const mark = new CropInteraction(this.selection, handle, shape);
+		mark
+			.exactlyAsTold()
+			.finish(new cool.SimplePoint(to.x, to.y), event as unknown as MouseEvent);
+
+		this.selection.keepWhatItDid(mark);
+		return to;
 	}
 
 	/// The four corners of the unit square through that mapping, as an SVG path, in twips.
@@ -333,6 +407,8 @@ class CropHandles extends HandleGroup {
 		primitives are drawn from, by its checksum, so nothing is fetched for it.
 	*/
 	public paint(section: SelectionSection, _shown: SelectionHandle[]): void {
+		if (!this.shown()) return;
+
 		const picture = this.thePicture();
 		const square = section.squareNow();
 		const data = RenderGeometrySection.currentPart();
@@ -344,10 +420,13 @@ class CropHandles extends HandleGroup {
 		)
 			return;
 
-		const left = picture.cropLeft ?? 0;
-		const top = picture.cropTop ?? 0;
-		const right = picture.cropRight ?? 0;
-		const bottom = picture.cropBottom ?? 0;
+		// The crop belongs to the graphic before it is turned over, so on a picture that is
+		// drawn turned over the two sides of that axis change places.
+		const mirror = picture.graphicMirror ?? 0;
+		const left = (mirror & 1 ? picture.cropRight : picture.cropLeft) ?? 0;
+		const right = (mirror & 1 ? picture.cropLeft : picture.cropRight) ?? 0;
+		const top = (mirror & 2 ? picture.cropBottom : picture.cropTop) ?? 0;
+		const bottom = (mirror & 2 ? picture.cropTop : picture.cropBottom) ?? 0;
 		if (!left && !top && !right && !bottom) return;
 
 		// The visible window is the graphic less the crop, so the whole graphic stands on the
@@ -362,7 +441,16 @@ class CropHandles extends HandleGroup {
 			1 + right / visibleWidth,
 			1 + bottom / visibleHeight,
 		);
-		const whole = cool.Matrix2D.fromRange(extent).then(square);
+		let whole = cool.Matrix2D.fromRange(extent).then(square);
+		let window = square;
+
+		// While a drag runs the picture is shown as it would be: a scale takes the whole graphic
+		// and the window with it, a crop moves the window over a graphic that stays.
+		const running = section.runningChange();
+		if (running) {
+			window = window.then(running.matrix);
+			if (!running.cropOnly) whole = whole.then(running.matrix);
+		}
 
 		const preview = {
 			type: cool.UnifiedTransparencePrimitive.type,
@@ -370,12 +458,13 @@ class CropHandles extends HandleGroup {
 			children: [
 				{
 					type: cool.MaskPrimitive.type,
-					clip: CropHandles.quadOf(whole) + ' ' + CropHandles.quadOf(square),
+					clip: CropHandles.quadOf(whole) + ' ' + CropHandles.quadOf(window),
 					children: [
 						{
 							type: cool.GraphicPrimitive.type,
 							checksum: picture.graphicChecksum,
 							matrix: whole.toArray(),
+							mirror: picture.graphicMirror,
 						},
 						{
 							type: cool.PolygonHairlinePrimitive.type,
@@ -387,6 +476,76 @@ class CropHandles extends HandleGroup {
 			],
 		} as unknown as cool.Primitive;
 
+		const drawn: cool.Primitive[] = [preview];
+
+		/*
+			While a crop runs, the window shows what it would show: the graphic is drawn whole
+			into the new window over the picture, which brings out what an enlarged window
+			uncovers, and what a smaller window leaves outside it is faded towards the page,
+			which is taken as white here - the drawing under it cannot be taken away, only
+			covered.
+		*/
+		if (running?.cropOnly) {
+			const far = 10000000;
+			const beyond =
+				'M' +
+				-far +
+				' ' +
+				-far +
+				' L' +
+				far +
+				' ' +
+				-far +
+				' L' +
+				far +
+				' ' +
+				far +
+				' L' +
+				-far +
+				' ' +
+				far +
+				' Z';
+
+			drawn.push({
+				type: cool.MaskPrimitive.type,
+				clip: CropHandles.quadOf(window),
+				children: [
+					{
+						type: cool.GraphicPrimitive.type,
+						checksum: picture.graphicChecksum,
+						matrix: whole.toArray(),
+						mirror: picture.graphicMirror,
+					},
+				],
+			} as unknown as cool.Primitive);
+
+			drawn.push({
+				type: cool.UnifiedTransparencePrimitive.type,
+				transparence: 0.2,
+				children: [
+					{
+						type: cool.MaskPrimitive.type,
+						clip: CropHandles.quadOf(square),
+						children: [
+							{
+								// Inside the old window and outside the new one at once: the
+								// second mask takes everything but the new window.
+								type: cool.MaskPrimitive.type,
+								clip: beyond + ' ' + CropHandles.quadOf(window),
+								children: [
+									{
+										type: cool.PolyPolygonColorPrimitive.type,
+										color: '#FFFFFF',
+										path: CropHandles.quadOf(square),
+									},
+								],
+							},
+						],
+					},
+				],
+			} as unknown as cool.Primitive);
+		}
+
 		section.context.save();
 		section.context.setTransform(1, 0, 0, 1, 0, 0);
 
@@ -396,7 +555,7 @@ class CropHandles extends HandleGroup {
 		section.context.translate(origin.vX, origin.vY);
 		section.context.scale(app.twipsToPixels, app.twipsToPixels);
 
-		RenderManager.renderPrimitives(section.context, data, [preview]);
+		RenderManager.renderPrimitives(section.context, data, drawn);
 
 		section.context.restore();
 	}
@@ -413,22 +572,25 @@ class CropHandles extends HandleGroup {
 		at: cool.SimplePoint,
 		grown: number,
 	): string {
+		const color = HandleLook.blended(
+			HandleLook.colourOfTheKind.framing,
+			-HandleLook.cropMarkShade,
+		);
 		const place = ObjectHandles.placeOfKind(handle.kind.substring(4));
 		const square = this.selection.squareNow();
-		if (!place || !square) return HandleLook.colourOfTheKind.crop;
+		if (!place || !square) return color;
 
-		const unit = (axis: cool.Point): cool.Point =>
-			axis.divideBy(axis.length() || 1);
-		const across = unit(new cool.Point(square.a, square.b));
-		const down = unit(new cool.Point(square.c, square.d));
-
-		// Which way is into the picture from this place, along each axis. Nought along an axis
-		// the place lies in the middle of.
-		const inwardAcross = place.x < 0.5 ? 1 : place.x > 0.5 ? -1 : 0;
-		const inwardDown = place.y < 0.5 ? 1 : place.y > 0.5 ? -1 : 0;
+		const [across, down] = CropHandles.axesOf(square);
+		const inward = CropHandles.inwardOf(handle.kind.substring(4));
+		const inwardAcross = inward.x;
+		const inwardDown = inward.y;
 
 		const long = HandleLook.widthOf('crop') + 2 * grown;
 		const thick = long * 0.5;
+
+		// The point handed in is where the box is, half a mark in. The mark is laid from the
+		// place on the edge, that half back out.
+		const back = HandleLook.widthOf('crop') * 0.5;
 
 		context.save();
 
@@ -442,28 +604,28 @@ class CropHandles extends HandleGroup {
 				at.vX,
 				at.vY,
 			);
-			context.moveTo(0, 0);
-			context.lineTo(long, 0);
-			context.lineTo(long, thick);
-			context.lineTo(thick, thick);
-			context.lineTo(thick, long);
-			context.lineTo(0, long);
+			context.moveTo(-back, -back);
+			context.lineTo(long - back, -back);
+			context.lineTo(long - back, thick - back);
+			context.lineTo(thick - back, thick - back);
+			context.lineTo(thick - back, long - back);
+			context.lineTo(-back, long - back);
 		} else {
 			// A side: x runs along the edge, y into the picture.
 			const along = inwardDown ? across : down;
-			const inward = inwardDown
+			const into = inwardDown
 				? down.multiplyBy(inwardDown)
 				: across.multiplyBy(inwardAcross);
-			context.setTransform(along.x, along.y, inward.x, inward.y, at.vX, at.vY);
-			context.moveTo(-long * 0.5, 0);
-			context.lineTo(long * 0.5, 0);
-			context.lineTo(long * 0.5, thick);
-			context.lineTo(-long * 0.5, thick);
+			context.setTransform(along.x, along.y, into.x, into.y, at.vX, at.vY);
+			context.moveTo(-long * 0.5, -back);
+			context.lineTo(long * 0.5, -back);
+			context.lineTo(long * 0.5, thick - back);
+			context.lineTo(-long * 0.5, thick - back);
 		}
 
 		context.restore();
 
-		return HandleLook.colourOfTheKind.crop;
+		return color;
 	}
 }
 

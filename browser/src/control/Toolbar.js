@@ -382,6 +382,13 @@ window.L.Map.include({
 
 		var map = this;
 
+		// Where the client draws the selection itself, cropping is its own switch and the
+		// engine is not sent into a mode for it.
+		if (command === '.uno:Crop' && GraphicSelection.takesTheCropSwitch()) {
+			GraphicSelection.toggleCropping();
+			return;
+		}
+
 		if (command.startsWith('.uno:SpellOnline')) {
 			var val = map['stateChangeHandler'].getItemValue('.uno:SpellOnline');
 

@@ -74,6 +74,33 @@ class GraphicSelection {
 		return this.extraInfo?.graphicExtension || undefined;
 	}
 
+	/*
+		Whether the crop marks of a picture are shown and may be taken hold of. It is the crop
+		switch of the toolbar, kept here while the client draws the selection itself: the engine
+		is never asked to enter its crop mode, since that would have it send a drag mode of its
+		own that only cropping and turning are offered in.
+	*/
+	public static cropping: boolean = false;
+
+	/// Whether the crop switch is the client's to take: it is while the client draws the
+	/// selection itself.
+	public static takesTheCropSwitch(): boolean {
+		return RenderManager.isVectorRendering();
+	}
+
+	public static toggleCropping(): void {
+		this.cropping = !this.cropping;
+
+		// The switch is shown pressed or not by the state every other command has.
+		app.map.fire('commandstatechanged', {
+			commandName: '.uno:Crop',
+			state: this.cropping ? 'true' : 'false',
+		});
+
+		this.selectionSection?.refresh();
+		app.sectionContainer?.requestReDraw();
+	}
+
 	/// Whether the document is being signed, in which case what is selected may be moved and
 	/// resized although the document is read-only. Asked the same two ways.
 	public static isBeingSigned(): boolean {
@@ -247,6 +274,7 @@ class GraphicSelection {
 		const section = this.selectionSection;
 		if (!section) return;
 
+		section.cropAnswered(objectId);
 		if (
 			objectId === undefined ||
 			RenderGeometrySection.theOnesAChangeTouches(

@@ -50,6 +50,16 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/// The object an end of a connector is being dragged onto, or null while none is aimed at.
 	private aimingAt: number | null = null;
 
+	/*
+		The window change of a crop that was sent and is not answered yet, with the picture it
+		was sent for, or null while none is open. It keeps the picture drawn as the crop will
+		leave it for as long as the engine takes to answer.
+	*/
+	private cropAwaitingAnswer: {
+		objectId: number;
+		matrix: cool.Matrix2D;
+	} | null = null;
+
 	/// The groups of handles this selection has, in the order that says how they are walked,
 	/// drawn and reached by a press. Made again whenever the handles are worked out afresh.
 	private groupsHeld: HandleGroup[] | null = null;
@@ -164,13 +174,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 				? new PolyPolygonEditor(objects[0])
 				: null;
 
-		// Every handle is marked with the group it came from, so that whatever is done to it
-		// afterwards is done by the group that knows it.
-		const worked = this.groups().flatMap((group: HandleGroup) =>
-			group
-				.handles()
-				.map((handle: SelectionHandle) => ({ ...handle, group: group.name })),
-		);
+		const worked = this.handlesOfTheGroups();
 
 		/*
 			The objects are what the handles are worked out from, and a selection can be reported
@@ -308,14 +312,6 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/*
-		Cropping an image is done with a set of handles of its own, drawn and dragged the way a
-		view that draws from tiles does it. This section keeps out of the way while that runs.
-	*/
-	private standsBack(): boolean {
-		return GraphicSelection.extraInfo?.isCropMode === true;
-	}
-
-	/*
 		The four corners of the selection, in the order they go round it, in view pixels. Empty
 		where the client did not work the framing handles out.
 	*/
@@ -400,8 +396,6 @@ abstract class SelectionSection extends CanvasSectionObject {
 		belongs to whatever is drawn there, so only the line itself counts.
 	*/
 	isHit(point: number[]): boolean {
-		if (this.standsBack()) return false;
-
 		if (this.handleAt(point[0], point[1]) !== undefined) return true;
 
 		return this.groups().some((group: HandleGroup) =>
@@ -816,8 +810,6 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	onDraw(): void {
-		if (this.standsBack()) return;
-
 		this.drawTheInteraction();
 		this.drawTheOutline();
 
@@ -893,12 +885,37 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/*
+		The change the running interaction stands for, and whether it moves only the window of a
+		picture. Nothing while nothing runs.
+	*/
+	public runningChange(): { matrix: cool.Matrix2D; cropOnly: boolean } | null {
+		const matrix = this.interaction?.transformation();
+		if (!matrix || !this.interaction) {
+			if (this.cropAwaitingAnswer)
+				return { matrix: this.cropAwaitingAnswer.matrix, cropOnly: true };
+			return null;
+		}
+
+		return { matrix, cropOnly: this.interaction.isACrop() };
+	}
+
+	/// Takes in that the engine answered for that object, or for anything given no object, so a
+	/// crop that waited for it is over.
+	public cropAnswered(objectId?: number): void {
+		if (
+			this.cropAwaitingAnswer &&
+			(objectId === undefined || objectId === this.cropAwaitingAnswer.objectId)
+		)
+			this.cropAwaitingAnswer = null;
+	}
+
+	/*
 		Draws what a running interaction would leave behind: the objects of the selection, as
 		they draw themselves, with the transformation it stands for over them. Half see-through,
 		so that what lies under them stays readable.
 	*/
 	private drawTheInteraction(): void {
-		const matrix = this.interaction?.transformation();
+		const matrix = this.interaction?.ghostTransformation();
 		if (!matrix) return;
 
 		const data = RenderGeometrySection.currentPart();
@@ -932,13 +949,22 @@ abstract class SelectionSection extends CanvasSectionObject {
 		of one that shapes the object, the hand that turns the selection, and the sign that says
 		no over an object that cannot be resized.
 	*/
+	/// The hand that takes hold of the object itself, or of a handle that shapes it.
+	private static grabPointer(): string {
+		return (
+			'url(' + app.LOUtil.getURL('images/cursors/grab.svg') + ') 12 12, grab'
+		);
+	}
+
 	private pointerOver(handle: SelectionHandle): string {
 		if (handle.kind === SelectionSection.turningKind) return 'pointer';
 
-		if (handle.group !== 'framing')
+		if (handle.group === 'crop')
 			return (
-				'url(' + app.LOUtil.getURL('images/cursors/grab.svg') + ') 12 12, grab'
+				'url(' + app.LOUtil.getURL('images/cursors/crop.svg') + ') 8 8, auto'
 			);
+
+		if (handle.group !== 'framing') return SelectionSection.grabPointer();
 
 		if (!ObjectHandles.canBeResized(this.selectedObjects()))
 			return 'not-allowed';
@@ -1512,11 +1538,21 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	onMouseMove(point: cool.SimplePoint, dragDistance: number[], e: MouseEvent) {
 		if (!this.containerObject.isDraggingSomething() || !this.interaction) {
-			const over = this.handleAt(
+			const onCanvas = [
 				this.myTopLeft[0] + point.pX,
 				this.myTopLeft[1] + point.pY,
-			);
-			if (over) this.context.canvas.style.cursor = this.pointerOver(over);
+			];
+			const over = this.handleAt(onCanvas[0], onCanvas[1]);
+
+			// Off a handle but still on the object, the pointer is the object's again, or the
+			// one it left on a handle would stay.
+			this.context.canvas.style.cursor = over
+				? this.pointerOver(over)
+				: this.groups().some((group: HandleGroup) =>
+							group.takesAPress(onCanvas[0], onCanvas[1]),
+					  )
+					? SelectionSection.grabPointer()
+					: 'default';
 
 			// The handle under the mouse is marked, so that it is plain which one a press would
 			// take hold of where several lie close together.
@@ -1677,6 +1713,41 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.endTheInteraction(false);
 	}
 
+	/// The handles the groups work out from the objects as they stand. Every handle is marked
+	/// with the group it came from, so that whatever is done to it afterwards is done by the group
+	/// that knows it.
+	private handlesOfTheGroups(): SelectionHandle[] {
+		return this.groups().flatMap((group: HandleGroup) =>
+			group
+				.handles()
+				.map((handle: SelectionHandle) => ({ ...handle, group: group.name })),
+		);
+	}
+
+	/*
+		Keeps what an interaction that was carried out did, until the engine answers with its own
+		version: the handles stay where it left them, and the objects are drawn as it showed them.
+		For a crop that is the window alone - the picture stays, and the engine answers with both -
+		so the crop's preview stands in for the picture as it will be. The window is named against
+		the picture as the engine last gave it, so a crop that follows before the answer names its
+		whole window again rather than a step on from this one.
+	*/
+	public keepWhatItDid(interaction: SelectionInteraction): void {
+		// A crop is named against the picture as the engine gave it, and so are the handles it
+		// moves: the ones worked out from that picture, not the ones a crop before it moved.
+		this.known = interaction.handles(
+			interaction.isACrop() ? this.handlesOfTheGroups() : this.known,
+		);
+		this.leaveTheChangeOnTheObjects(interaction.ghostTransformation());
+
+		const window = interaction.transformation();
+		const objectId = this.selectedObjects()[0];
+		if (interaction.isACrop() && window && objectId !== undefined) {
+			this.cropAwaitingAnswer = { objectId, matrix: window };
+			this.containerObject.requestReDraw();
+		}
+	}
+
 	/*
 		Lets the interaction go and takes the lines that marked a snap away with it.
 
@@ -1692,10 +1763,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 			come back would mean showing the objects as they were for as long as that takes, and
 			every handle would jump back with them.
 		*/
-		if (carriedOut && this.interaction) {
-			this.known = this.interaction.handles(this.known);
-			this.leaveTheChangeOnTheObjects(this.interaction.transformation());
-		}
+		if (carriedOut && this.interaction) this.keepWhatItDid(this.interaction);
 
 		this.interaction = null;
 		this.lastMoved = null;

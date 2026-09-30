@@ -85,6 +85,8 @@ class HandleLook {
 		tiePoint: '#B03A3A',
 		pathPoint: '#1C99E0',
 		weight: '#1C99E0',
+		// A crop mark is drawn in the handle color darkened by cropMarkShade. This is what it
+		// falls back on where that cannot be worked out.
 		crop: '#FFFFFF',
 	};
 
@@ -149,6 +151,10 @@ class HandleLook {
 	/// square handles.
 	public static turnTheEightWithTheObject: boolean = true;
 
+	/// How much darker than the handle color a crop mark is drawn, as a share of the whole
+	/// range a color has, so that the marks and the eight can be told apart at a glance.
+	public static cropMarkShade: number = 0.12;
+
 	/// The line every handle is drawn round with.
 	public static readonly outlineColour: string = 'black';
 
@@ -184,7 +190,8 @@ class HandleLook {
 	public static drawnAt(handle: SelectionHandle): cool.SimplePoint {
 		const away = handle.awayFromItsPlace;
 		const distance = away
-			? HandleLook.distanceTheEightMoveOut() * app.pixelsToTwips
+			? (handle.awayBy ?? HandleLook.distanceTheEightMoveOut()) *
+				app.pixelsToTwips
 			: 0;
 
 		return new cool.SimplePoint(

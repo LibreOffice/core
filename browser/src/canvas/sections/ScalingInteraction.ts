@@ -17,7 +17,7 @@
 */
 class ScalingInteraction extends SelectionInteraction {
 	/// The handle that was taken hold of.
-	private handle: SelectionHandle;
+	protected handle: SelectionHandle;
 
 	/// The shape the selection had when it began: a middle, a width, a height and an angle.
 	private shapeAtStart: any;
@@ -29,7 +29,7 @@ class ScalingInteraction extends SelectionInteraction {
 	private keepsRatio: boolean = false;
 
 	/// Where the drag has taken the handle, in twips, null until the mouse has moved.
-	private at: cool.SimplePoint | null = null;
+	protected at: cool.SimplePoint | null = null;
 
 	/*
 		Whether the drag goes exactly where it is told. One led by the mouse lines up with other
@@ -38,6 +38,10 @@ class ScalingInteraction extends SelectionInteraction {
 		the key names, and Shift is what makes the step a large one.
 	*/
 	private exact: boolean = false;
+
+	/// Whether the drag stops a hair short of the opposite side rather than crossing it and
+	/// turning the object over. A crop does: a window cannot be turned inside out.
+	protected keepsItsFacing: boolean = false;
 
 	constructor(
 		selection: SelectionSection,
@@ -77,6 +81,15 @@ class ScalingInteraction extends SelectionInteraction {
 		});
 	}
 
+	/*
+		Whether the drag keeps the shape of the object for those keys: the rule a scale has,
+		where a picture keeps its ratio unless Shift says otherwise. A crop asks the other way
+		round, since it is not a change of the picture but of the window onto it.
+	*/
+	protected ratioKept(event: MouseEvent): boolean {
+		return HandleScaling.keepsRatio(event, false);
+	}
+
 	/// Makes the drag one that goes exactly where it is told.
 	public exactlyAsTold(): ScalingInteraction {
 		this.exact = true;
@@ -99,7 +112,7 @@ class ScalingInteraction extends SelectionInteraction {
 		if (!ObjectHandles.canBeResized(this.selection.selectedObjects())) return;
 		if (!this.shapeAtStart) return;
 
-		this.keepsRatio = !this.exact && HandleScaling.keepsRatio(event, false);
+		this.keepsRatio = !this.exact && this.ratioKept(event);
 
 		// The drag leads the handle, so it goes to where the handle stands for this mouse point
 		// and not to the mouse point itself.
@@ -129,7 +142,7 @@ class ScalingInteraction extends SelectionInteraction {
 		object snaps to nothing, since it has only one number to give.
 	*/
 	private applyTheSnap(to: cool.SimplePoint, event: MouseEvent): void {
-		if (HandleScaling.keepsRatio(event, false)) return;
+		if (this.ratioKept(event)) return;
 
 		const snapped = this.selection.snappedTo();
 		if (!snapped || (snapped[0] === null && snapped[1] === null)) return;
@@ -257,6 +270,8 @@ class ScalingInteraction extends SelectionInteraction {
 			// that was a hair high could ask for it, and the engine cannot even work out what
 			// to invalidate for a mapping like that.
 			const most = 1000;
+
+			if (this.keepsItsFacing) return Math.min(Math.max(reached, hair), most);
 
 			return (
 				Math.sign(reached || 1) *

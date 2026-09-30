@@ -197,6 +197,9 @@ namespace cool {
 		 * shows a graphic.
 		 */
 		graphicChecksum?: number;
+		/// How the graphic is turned over as it is drawn: bit 0 across, bit 1 down. Absent
+		/// where it is drawn as it is.
+		graphicMirror?: number;
 		graphicWidth?: number;
 		graphicHeight?: number;
 		cropLeft?: number;

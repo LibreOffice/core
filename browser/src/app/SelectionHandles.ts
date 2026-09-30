@@ -31,6 +31,9 @@ interface SelectionHandle {
 	 * Absent for a handle that is drawn where it stands.
 	 */
 	awayFromItsPlace?: cool.Point;
+	/// How far it is drawn away, in core pixels, where that is not the distance the eight move
+	/// out by. A crop mark moves in by half of itself, so its box lies on the mark.
+	awayBy?: number;
 	/// The angle the selection's own across axis stands at, in radians, for a handle that may be
 	/// drawn turned with the selection. Absent for one that is always drawn upright.
 	turnedBy?: number;
