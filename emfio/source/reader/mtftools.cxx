@@ -940,39 +940,9 @@ namespace emfio
     static tools::PolyPolygon CreateWindingFillPolyPolygon(const tools::PolyPolygon& rPolyPoly)
     {
         basegfx::B2DPolyPolygon aB2D = rPolyPoly.getB2DPolyPolygon();
-
-        if (aB2D.count() == 1)
-        {
-            // Single self-intersecting polygon (e.g. pentagram star): resolve
-            // self-intersections, then union (OR) all resulting sub-regions.
-            // This gives the outer boundary of the filled area, which even-odd
-            // fill renders correctly.  createNonzeroConform() fails here because
-            // solveCrossovers() produces overlapping loops for odd-crossing
-            // polygons, and the center ends up inside an even number of loops.
-            basegfx::B2DPolyPolygon aResolved
-                = basegfx::utils::solveCrossovers(aB2D.getB2DPolygon(0));
-            aResolved = basegfx::utils::stripNeutralPolygons(aResolved);
-
-            if (aResolved.count() > 1)
-            {
-                basegfx::B2DPolyPolygonVector aInput;
-                for (sal_uInt32 i = 0; i < aResolved.count(); ++i)
-                    aInput.push_back(basegfx::B2DPolyPolygon(aResolved.getB2DPolygon(i)));
-                aB2D = basegfx::utils::mergeToSinglePolyPolygon(aInput);
-            }
-            else
-            {
-                aB2D = aResolved;
-            }
-        }
-        else
-        {
-            // Multiple polygons: use createNonzeroConform (handles nested
-            // same-orientation polygons by removing inner duplicates).
-            aB2D = basegfx::utils::createNonzeroConform(aB2D);
-        }
-
-        return tools::PolyPolygon(aB2D);
+        // A filled polygon is closed whether or not its last point repeats its first
+        aB2D.setClosed(true);
+        return tools::PolyPolygon(basegfx::utils::createNonzeroConform(aB2D));
     }
 
     void MtfTools::ImplDrawClippedPolyPolygon( const tools::PolyPolygon& rPolyPoly )
