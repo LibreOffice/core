@@ -1810,6 +1810,12 @@ img.ui-combobox-value-preview {
 	   the text. Setting display here breaks the picker. */
 	.ui-listbox {
 		align-items: center;
+		/* Keep the selected value on one line and cut it off at the end padding, so a long
+		   value stays inside the box and clear of the arrow, as the plain control does. The
+		   option list opens in the top layer, outside this box. */
+		white-space: nowrap;
+		overflow: clip;
+		overflow-clip-margin: content-box;
 	}
 
 	/* Make the picker match the combobox dropdown popup, which is a modalpopup dialog. */
