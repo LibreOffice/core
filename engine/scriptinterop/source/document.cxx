@@ -1096,6 +1096,47 @@ public:
         return {true, scriptinterop::ParagraphHeading_NORMAL};
     }
 
+    cpo::uno::Reference<scriptinterop::XParagraph> setHeading(
+        scriptinterop::ParagraphHeading heading) override
+    {
+        OUString style;
+        switch (heading) {
+        case scriptinterop::ParagraphHeading_NORMAL:
+            style = u"Text body"_ustr;
+            break;
+        case scriptinterop::ParagraphHeading_HEADING1:
+            style = u"Heading 1"_ustr;
+            break;
+        case scriptinterop::ParagraphHeading_HEADING2:
+            style = u"Heading 2"_ustr;
+            break;
+        case scriptinterop::ParagraphHeading_HEADING3:
+            style = u"Heading 3"_ustr;
+            break;
+        case scriptinterop::ParagraphHeading_HEADING4:
+            style = u"Heading 4"_ustr;
+            break;
+        case scriptinterop::ParagraphHeading_HEADING5:
+            style = u"Heading 5"_ustr;
+            break;
+        case scriptinterop::ParagraphHeading_HEADING6:
+            style = u"Heading 6"_ustr;
+            break;
+        case scriptinterop::ParagraphHeading_TITLE:
+            style = u"Title"_ustr;
+            break;
+        case scriptinterop::ParagraphHeading_SUBTITLE:
+            style = u"Subtitle"_ustr;
+            break;
+        default:
+            throw cpo::uno::RuntimeException(u"setHeading: unknown heading"_ustr);
+        }
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            content_, cpo::uno::UNO_QUERY_THROW);
+        props->setPropertyValue(u"ParaStyleName"_ustr, cpo::uno::Any(style));
+        return this;
+    }
+
     css::beans::Optional<double> getIndentStart() override {
         auto const any = getParaProp(u"ParaLeftMargin"_ustr);
         if (!any) {
@@ -2210,7 +2251,7 @@ private:
             if (auto const heading = paragraph->getHeading();
                 heading.IsPresent && heading.Value != scriptinterop::ParagraphHeading_NORMAL)
             {
-                props->setPropertyValue(u"ParaStyleName"_ustr, cpo::uno::Any(u"Text body"_ustr));
+                paragraph->setHeading(scriptinterop::ParagraphHeading_NORMAL);
             }
         } else {
             try {

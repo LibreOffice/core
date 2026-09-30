@@ -276,6 +276,15 @@ function test() {
     console.assert(throws(() => two.editAsText().removeFromParent()));
     console.assert(body.getNumChildren() === childCount);
 
+    // A paragraph takes a heading, and one appended after a heading is a normal one:
+    console.assert(
+        two.setHeading(DocumentApp.ParagraphHeading.HEADING1).getHeading()
+            === DocumentApp.ParagraphHeading.HEADING1);
+    const three = body.appendParagraph('Three');
+    console.assert(three.getHeading() === DocumentApp.ParagraphHeading.NORMAL);
+    two.setHeading(DocumentApp.ParagraphHeading.NORMAL);
+    console.assert(two.getHeading() === DocumentApp.ParagraphHeading.NORMAL);
+
     // newPosition takes a character offset into a Text element:
     const text1 = body.getChild(1).getChild(0);
     console.assert(text1.getType() === DocumentApp.ElementType.TEXT);

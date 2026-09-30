@@ -30,6 +30,8 @@ interface XParagraph: XContainerElement
     long getNestingLevel();
 
     com::sun::star::beans::Optional<boolean> isLeftToRight();
+
+    XParagraph setHeading([in] ParagraphHeading heading);
 };
 
 };
