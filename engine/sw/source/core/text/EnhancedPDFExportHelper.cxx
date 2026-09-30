@@ -2828,7 +2828,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(
                     // be deleted again in JumpToSwMark.
                     SwRects const aTmp(GetCursorRectsContainingText(mrSh));
                     OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
-                    OUString altText(p->rINetAttr.GetINetFormat().GetName());
+                    OUString altText(p->rINetAttr.GetINetFormat().GetTitle());
+                    if (altText.isEmpty())
+                        altText = p->rINetAttr.GetINetFormat().GetName();
                     if (altText.isEmpty())
                         altText = p->sText;
                     if (altText.isEmpty())

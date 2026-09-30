@@ -224,6 +224,37 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159924)
     CPPUNIT_ASSERT_EQUAL(u"This link opens the LibreOffice website"_ustr, sContent);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf173709HyperlinkTitle)
+{
+    // Two links with office:title, the second one also with office:name
+    createSwDoc("tdf173709-hyperlink-title.fodt");
+    save(TestFilter::PDF_WRITER);
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
+    CPPUNIT_ASSERT(pAnnots);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pAnnots->GetElements().size());
+
+    std::vector<OUString> aContents;
+    for (const auto pElement : pAnnots->GetElements())
+    {
+        auto pAnnotRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pElement);
+        CPPUNIT_ASSERT(pAnnotRef);
+        auto pCont = dynamic_cast<vcl::filter::PDFHexStringElement*>(
+            pAnnotRef->LookupObject()->Lookup("Contents"_ostr));
+        CPPUNIT_ASSERT(pCont);
+        aContents.push_back(::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pCont));
+    }
+
+    // Without the fix in place, this was "example" (the link text) and "anchor1" (the name)
+    CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr, aContents[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Another example site"_ustr, aContents[1]);
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLinkNoName)
 {
     createSwDoc("link_no_name.fodt");
