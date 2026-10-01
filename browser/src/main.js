@@ -383,6 +383,9 @@ window.addEventListener('beforeunload', function () {
 	if (map && app.socket) {
 		if (app.map)
 			app.map.acceptPendingCellEdit();
+		// A preference changed in the last few seconds is still waiting in the
+		// batch, so send it before the socket closes below.
+		window.prefs.sendPendingBrowserSettingsUpdate();
 		if (app.socket.setUnloading)
 			app.socket.setUnloading();
 		app.socket.close();
