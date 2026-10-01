@@ -20,7 +20,16 @@
 
 void QtX11Support::setApplicationID(const xcb_window_t nWinId, std::u16string_view rWMClass)
 {
+    xcb_connection_t* pConnection = nullptr;
 #if CHECK_QT5_USING_X11
+    pConnection = QX11Info::connection();
+#else
+    auto* x11Application = qGuiApp->nativeInterface<QNativeInterface::QX11Application>();
+    if (x11Application)
+        pConnection = x11Application->connection();
+#endif
+    if (!pConnection)
+        return;
     OString aResClass = OUStringToOString(rWMClass, RTL_TEXTENCODING_ASCII_US);
     const char* pResClass
         = !aResClass.isEmpty() ? aResClass.getStr() : X11Helper::getFrameClassName();
@@ -32,13 +41,9 @@ void QtX11Support::setApplicationID(const xcb_window_t nWinId, std::u16string_vi
     memcpy(data, aResName.getStr(), aResName.getLength() + 1);
     memcpy(data + aResName.getLength() + 1, pResClass, strlen(pResClass) + 1);
 
-    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, nWinId, XCB_ATOM_WM_CLASS,
+    xcb_change_property(pConnection, XCB_PROP_MODE_REPLACE, nWinId, XCB_ATOM_WM_CLASS,
                         XCB_ATOM_STRING, 8, data_len, data);
     delete[] data;
-#else
-    Q_UNUSED(nWinId);
-    Q_UNUSED(rWMClass);
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
