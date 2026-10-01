@@ -1512,6 +1512,13 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				var buttonImage = window.L.DomUtil.create('div', 'w2ui-icon ' + data.w2icon, button);
 			}
 			else if (hasImage !== false){
+				// The icon is fetched only once the button is rendered, so a button
+				// that starts hidden requests its icon when it is first shown.
+				const createButtonImage = function() {
+					const image = window.L.DomUtil.create('img', '', button);
+					image.loading = 'lazy';
+					return image;
+				};
 				var isIconURL = data.icon && this._isStringCloseToURL(data.icon);
 				// The engine sends the icon theme link name, map it to the icon
 				// we ship under that name, so that we don't request a file that
@@ -1519,12 +1526,12 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				var coreIconName = data.icon && !isIconURL ?
 					app.LOUtil.getIconNameOfIcon(data.icon) : '';
 				if (isIconURL) {
-					buttonImage = window.L.DomUtil.create('img', '', button);
+					buttonImage = createButtonImage();
 					buttonImage.src = data.icon;
 					app.LOUtil.publishIconURL(buttonImage, data.icon);
 				}
 				else if (coreIconName) {
-					buttonImage = window.L.DomUtil.create('img', '', button);
+					buttonImage = createButtonImage();
 					app.LOUtil.setImage(buttonImage, coreIconName, builder.map);
 					// Fall back to base64 PNG if the SVG is not available.
 					// checkIfImageExists sets display:none on error, so
@@ -1538,13 +1545,13 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 					}
 				}
 				else if (data.image) {
-					buttonImage = window.L.DomUtil.create('img', '', button);
+					buttonImage = createButtonImage();
 					buttonImage.src = data.image;
 				}
 				else {
 					var iconName = app.LOUtil.getIconNameOfCommand(data.command);
 					if (iconName) {
-						buttonImage = window.L.DomUtil.create('img', '', button);
+						buttonImage = createButtonImage();
 						app.LOUtil.setImage(buttonImage, iconName, builder.map);
 					} else {
 						buttonImage = false;
