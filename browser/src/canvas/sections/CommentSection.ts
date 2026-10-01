@@ -1171,7 +1171,8 @@ export class Comment extends CanvasSectionObject {
 	}
 
 	private hideCalc() {
-		this.sectionProperties.container.style.visibility = 'hidden';
+		if (!(<any>window).mode.isSmallScreenDevice())
+			this.sectionProperties.container.style.visibility = 'hidden';
 		this.sectionProperties.nodeModify.style.display = 'none';
 		this.sectionProperties.nodeReply.style.display = 'none';
 		this.cachedIsEdit = false;

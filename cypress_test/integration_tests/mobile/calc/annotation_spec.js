@@ -87,4 +87,36 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Annotation Tests',function(
 		cy.cGet('[id^=comment-container-]').should('not.exist');
 		cy.cGet('.wizard-comment-box .cool-annotation-content').should('not.exist');
 	});
+
+	it('Comment stays listed in the wizard after scrolling to it.', function() {
+		// Put the note on a cell far below the visible rows.
+		helper.typeIntoInputField(helper.addressInputSelector, 'A100');
+		mobileHelper.insertComment(false, 'Note');
+
+		// Close the wizard that opened on the new note and move the view back to the top.
+		cy.cGet('#toolbar-up #comment_wizard button').click();
+		cy.cGet('#toolbar-up #comment_wizard').should('not.have.class', 'selected');
+		helper.typeIntoInputField(helper.addressInputSelector, 'A1');
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.activeDocument.activeLayout.viewedRectangle.pY1).to.equal(0);
+		});
+
+		mobileHelper.openCommentWizard();
+		cy.cGet('#comment-container-1').should('be.visible');
+		cy.cGet('#comment-container-1').click();
+
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.activeDocument.activeLayout.viewedRectangle.pY1).to.be.greaterThan(0);
+		});
+
+		// The entry is still on the list.
+		cy.cGet('#comment-container-1').should('be.visible');
+		cy.cGet('#annotation-content-area-1').should('have.text', 'some text');
+	});
 });
