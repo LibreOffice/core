@@ -2020,6 +2020,8 @@ bool SdrTableObj::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool bHeig
 
 void SdrTableObj::NbcReformatText()
 {
+    // The text of a cell may have changed outside text edit, so its row can need a new height.
+    SdrTableObjImpl::InvalidateLayout();
     NbcAdjustTextFrameWidthAndHeight();
 }
 

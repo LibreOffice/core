@@ -1193,7 +1193,7 @@ void SdrUndoObjSetText::Undo()
     // #i124389# if it's a table, also need to relayout TextFrame
     if(dynamic_cast< sdr::table::SdrTableObj* >(pTarget) !=  nullptr)
     {
-        pTarget->NbcAdjustTextFrameWidthAndHeight();
+        pTarget->NbcReformatText();
     }
 
     // #i122410# SetOutlinerParaObject at SdrText does not trigger a
@@ -1226,7 +1226,7 @@ void SdrUndoObjSetText::Redo()
     // #i124389# if it's a table, also need to relayout TextFrame
     if(dynamic_cast< sdr::table::SdrTableObj* >(pTarget) !=  nullptr)
     {
-        pTarget->NbcAdjustTextFrameWidthAndHeight();
+        pTarget->NbcReformatText();
     }
 
     // #i122410# NbcSetOutlinerParaObjectForText at SdrTextObj does not trigger a

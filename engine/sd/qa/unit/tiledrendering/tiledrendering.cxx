@@ -60,6 +60,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
+#include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <svtools/colorcfg.hxx>
@@ -647,6 +648,58 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTableColumnDuringTextEdit)
     pTableObject->getCellBounds(sdr::table::CellPos(0, 0), aCellRect);
     sal_Int32 nTextHeight = pView->GetTextEditOutliner()->GetTextHeight();
     CPPUNIT_ASSERT_GREATEREQUAL(nTextHeight, static_cast<sal_Int32>(aCellRect.GetHeight()));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTableRowFitsTextAfterUndo)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("table.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrObject* pObject = pViewShell->GetActualPage()->GetObj(0);
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
+    CPPUNIT_ASSERT(pTableObject);
+    SdrView* pView = pViewShell->GetView();
+
+    auto typeKey = [pXImpressDocument](int nCharCode, int nKeyCode) {
+        pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, nCharCode, nKeyCode);
+        pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, nCharCode, nKeyCode);
+        Scheduler::ProcessEventsToIdle();
+    };
+
+    // Type six lines into the second cell, so the text is taller than the row was.
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    pTableObject->setActiveCell(sdr::table::CellPos(0, 1));
+    pView->SdrBeginTextEdit(pObject);
+    for (char cLine : std::string_view("abcdef"))
+    {
+        if (cLine != 'a')
+            typeKey(0, KEY_RETURN);
+        typeKey(cLine, 0);
+    }
+    pView->SdrEndTextEdit();
+
+    // Delete the last three lines, then undo that outside text edit.
+    pView->SdrBeginTextEdit(pObject);
+    typeKey(0, KEY_MOD1 | KEY_END);
+    for (int i = 0; i < 6; ++i)
+        typeKey(0, KEY_BACKSPACE);
+    pView->SdrEndTextEdit();
+    pXImpressDocument->GetDocShell()->GetUndoManager()->Undo();
+
+    // The row grows again to hold the six lines.
+    uno::Reference<table::XCellRange> xCells = pTableObject->getTable();
+    uno::Reference<awt::XLayoutConstrains> xCell(xCells->getCellByPosition(0, 1),
+                                                 uno::UNO_QUERY);
+    sal_Int32 nTextHeight = xCell->getMinimumSize().Height;
+    xmlDocUniquePtr pXmlDoc = parseXmlDump();
+    sal_Int32 nRowHeight
+        = getXPath(pXmlDoc,
+                   "/SdDrawDocument/SdrModel/maPages/SdPage/SdrPage/SdrObjList/SdrTableObj/"
+                   "SdrTableObjImpl/TableLayouter/rows/TableLayouter_Layout[2]",
+                   "size")
+              .toInt32();
+    // Without the accompanying fix in place, this test would have failed: the row kept the
+    // height it had for three lines and the restored text ran past the cell.
+    CPPUNIT_ASSERT_GREATEREQUAL(nTextHeight, nRowHeight);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewCursors)
