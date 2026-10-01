@@ -11,6 +11,10 @@
 
 module scriptinterop {
 
+/** A drawing document.
+
+    It has no methods of its own yet.
+ */
 interface XDrawing : XBase
 {
 };

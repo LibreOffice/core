@@ -11,18 +11,65 @@
 
 module scriptinterop {
 
+/** A pivot table on a sheet.
+
+    Source columns are counted from 1, starting at the first column of the table's source
+    range. Every method that changes the table rebuilds its output and returns this table, for
+    chaining. Every method throws once the table has been removed from its sheet, except
+    getName.
+
+    @gas PivotTable
+ */
 interface XPivotTable : XBase
 {
+    /** Returns the name of the pivot table, which is unique in the document.
+     */
     string getName();
 
+    /** Groups the rows of the table by the values of a source column.
+
+        @throws com::sun::star::uno::RuntimeException
+            if the column is outside the source range.
+
+        @gas PivotTable.addRowGroup
+     */
     XPivotTable addRowGroup([in] long sourceColumn);
 
+    /** Groups the columns of the table by the values of a source column.
+
+        @throws com::sun::star::uno::RuntimeException
+            if the column is outside the source range.
+
+        @gas PivotTable.addColumnGroup
+     */
     XPivotTable addColumnGroup([in] long sourceColumn);
 
+    /** Adds a value to the table that summarizes a source column.
+
+        @param summarizeFunction
+            One of "sum", "counta", "count", "average", "max", "min", "product",
+            "stdev", "stdevp", "var" or "varp", in any case. "counta" counts every non-empty
+            value and "count" counts only numbers. "countunique", "median" and custom formulas
+            are not available.
+        @throws com::sun::star::uno::RuntimeException
+            if the column is outside the source range or the function is not one of these.
+
+        @gas PivotTable.addPivotValue
+     */
     XPivotTable addPivotValue([in] long sourceColumn, [in] string summarizeFunction);
 
+    /** Filters the table to the rows whose source column holds the given value.
+
+        Only a single visible value is supported.
+
+        @throws com::sun::star::uno::RuntimeException
+            if the column is outside the source range.
+
+        @gas PivotTable.addFilter
+     */
     XPivotTable addFilter([in] long sourceColumn, [in] string visibleValue);
 
+    /** @gas PivotTable.remove */
     void remove();
 };
 

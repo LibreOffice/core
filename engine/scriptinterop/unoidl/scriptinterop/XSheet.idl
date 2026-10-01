@@ -11,62 +11,246 @@
 
 module scriptinterop {
 
+/** A sheet of a spreadsheet document.
+
+    Rows and columns are counted from 1.
+
+    @gas Sheet
+ */
 interface XSheet : XBase
 {
+    /** @gas Sheet.getName */
     string getName();
 
+    /** Returns the range given in A1 notation, such as "B2" or "A1:C10".
+
+        The notation may name another sheet in front of an exclamation mark, as in
+        "Sheet2!A1:B2". A sheet name with spaces is put in single quotes, as in
+        "'Rate data'!A1", and a single quote inside it is doubled.
+
+        @throws com::sun::star::uno::RuntimeException
+            if the named sheet does not exist or the notation is not a valid range.
+
+        @gas Sheet.getRange
+     */
     [overload getRange] XRange getRange([in] string a1Notation);
 
+    /** Returns the single cell at the given row and column.
+
+        @throws com::sun::star::uno::RuntimeException
+            if an index is less than 1 or the cell is outside the sheet.
+
+        @gas Sheet.getRange
+     */
     [overload getRange] XRange getRangeAtCell([in] long row, [in] long column);
 
+    /** Returns the given number of cells in one column, starting at the given row and column.
+
+        @throws com::sun::star::uno::RuntimeException
+            if an argument is less than 1 or the range does not fit the sheet.
+
+        @gas Sheet.getRange
+     */
     [overload getRange] XRange getRangeAtRows([in] long row, [in] long column,
                                               [in] long numRows);
 
+    /** Returns the range of the given size whose top-left cell is at the given row and column.
+
+        @throws com::sun::star::uno::RuntimeException
+            if an argument is less than 1 or the range does not fit the sheet.
+
+        @gas Sheet.getRange
+     */
     [overload getRange] XRange getRangeAt([in] long row, [in] long column, [in] long numRows,
                                           [in] long numColumns);
 
+    /** Returns the selected range.
+
+        When several ranges are selected, the first one is returned.
+
+        @throws com::sun::star::uno::RuntimeException
+            if no cells are selected, or the selection is on a different sheet.
+
+        @gas Sheet.getActiveRange
+     */
     XRange getActiveRange();
 
+    /** Returns the top-left cell of the selected range.
+
+        @throws com::sun::star::uno::RuntimeException
+            if no cells are selected, or the selection is on a different sheet.
+
+        @gas Sheet.getActiveCell
+     */
     XRange getActiveCell();
 
+    /** Returns the range from A1 to the last row and column with content.
+
+        Formatting or a comment alone does not count as content. On a sheet without content the
+        range is A1.
+
+        @gas Sheet.getDataRange
+     */
     XRange getDataRange();
 
+    /** Sheets here have a fixed grid size, so this is the same large number for every sheet,
+        whatever its content.
+
+        @gas Sheet.getMaxRows
+     */
     long getMaxRows();
 
+    /** Sheets here have a fixed grid size, so this is the same number for every sheet,
+        whatever its content.
+
+        @gas Sheet.getMaxColumns
+     */
     long getMaxColumns();
 
+    /** Returns the number of frozen rows, or 0 when no panes are frozen.
+
+        The value is read from the current view, which shows the active sheet.
+
+        @gas Sheet.getFrozenRows
+     */
     long getFrozenRows();
 
+    /** Returns the number of frozen columns, or 0 when no panes are frozen.
+
+        The value is read from the current view, which shows the active sheet.
+
+        @gas Sheet.getFrozenColumns
+     */
     long getFrozenColumns();
 
+    /** @throws com::sun::star::uno::RuntimeException
+            if the row is less than 1 or the deletion fails.
+
+        @gas Sheet.deleteRow
+     */
     void deleteRow([in] long row);
 
+    /** @throws com::sun::star::uno::RuntimeException
+            if an argument is less than 1 or the deletion fails.
+
+        @gas Sheet.deleteRows
+     */
     void deleteRows([in] long startRow, [in] long numRows);
 
+    /** @throws com::sun::star::uno::RuntimeException
+            if the column is less than 1 or the deletion fails.
+
+        @gas Sheet.deleteColumn
+     */
     void deleteColumn([in] long column);
 
+    /** @throws com::sun::star::uno::RuntimeException
+            if an argument is less than 1 or the deletion fails.
+
+        @gas Sheet.deleteColumns
+     */
     void deleteColumns([in] long startColumn, [in] long numColumns);
 
+    /** Sets the width of a column.
+
+        @param pixels
+            The width in pixels at 96 pixels per inch.
+        @throws com::sun::star::uno::RuntimeException
+            if the column is less than 1, the width is negative, or the column is outside the
+            sheet.
+
+        @gas Sheet.setColumnWidth
+     */
     void setColumnWidth([in] long column, [in] long pixels);
 
+    /** Clears the whole sheet: values, formulas, formatting, styles, comments and drawing
+        objects.
+
+        Column widths and row heights stay as they are.
+
+        @gas Sheet.clear
+     */
     void clear();
 
+    /** Returns the index of the last row that holds content, or 0 on a sheet without content.
+
+        @gas Sheet.getLastRow
+     */
     long getLastRow();
 
+    /** Returns the index of the last column that holds content, or 0 on a sheet without
+        content.
+
+        @gas Sheet.getLastColumn
+     */
     long getLastColumn();
 
+    /** Sets a column to the width that fits its content.
+
+        @throws com::sun::star::uno::RuntimeException
+            if the column is less than 1 or outside the sheet.
+
+        @gas Sheet.autoResizeColumn
+     */
     void autoResizeColumn([in] long column);
 
+    /** Sets the given columns to the width that fits their content.
+
+        @throws com::sun::star::uno::RuntimeException
+            if an argument is less than 1 or a column is outside the sheet.
+
+        @gas Sheet.autoResizeColumns
+     */
     void autoResizeColumns([in] long startColumn, [in] long numColumns);
 
+    /** Sets the given rows to the height that fits their content.
+
+        @throws com::sun::star::uno::RuntimeException
+            if an argument is less than 1 or a row is outside the sheet.
+
+        @gas Sheet.autoResizeRows
+     */
     void autoResizeRows([in] long startRow, [in] long numRows);
 
+    /** Inserts a chart of the given data on this sheet.
+
+        The chart is named "Chart " and the lowest number that no chart in the document uses,
+        such as "Chart 1". It is placed at the top-left corner of the anchor cell as the sheet
+        is laid out at the time of the call.
+
+        @param dataRanges
+            The ranges holding the data, at least one. They may be on other sheets.
+        @param anchorRow
+            The row of the cell at the chart's top-left corner.
+        @param anchorColumn
+            The column of the cell at the chart's top-left corner.
+        @param width
+            The width in points.
+        @param height
+            The height in points.
+        @param firstRowAsHeaders
+            True when the first row of the data holds the series labels.
+        @param firstColumnAsHeaders
+            True when the first column of the data holds the category labels.
+        @throws com::sun::star::uno::RuntimeException
+            if there are no data ranges, the anchor is less than 1, a size is negative, or the
+            installation has no chart support.
+
+        @gas Sheet.insertChart
+     */
     XChart insertChart([in] sequence< XRange > dataRanges, [in] long anchorRow,
                        [in] long anchorColumn, [in] double width, [in] double height,
                        [in] boolean firstRowAsHeaders, [in] boolean firstColumnAsHeaders);
 
+    /** Returns the charts on this sheet.
+
+        The order is not the order the charts were added in, nor their position on the sheet.
+
+        @gas Sheet.getCharts
+     */
     sequence< XChart > getCharts();
 
+    /** @gas Sheet.getPivotTables */
     sequence< XPivotTable > getPivotTables();
 };
 

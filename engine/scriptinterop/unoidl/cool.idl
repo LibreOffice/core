@@ -9,6 +9,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+/** The entry point of the script API, available to every script as the global cool.
+
+    It hands out the active document in the form that matches its type, and creates the helper
+    objects that do not belong to any document.
+ */
 singleton cool : scriptinterop::XFactory;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

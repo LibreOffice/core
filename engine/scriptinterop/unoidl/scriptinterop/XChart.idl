@@ -11,16 +11,46 @@
 
 module scriptinterop {
 
+/** A chart embedded in a sheet.
+
+    Every method throws once the chart has been removed from its sheet, except getName. The
+    setters return this chart, for chaining.
+
+    @gas EmbeddedChart
+ */
 interface XChart : XBase
 {
+    /** Returns the name of the chart, which is unique in the document.
+     */
     string getName();
 
+    /** Changes the kind of chart.
+
+        @param chartType
+            One of "line", "area", "pie", "donut", "scatter", "column" or "bar", in
+            any case. A bar chart has horizontal bars, a column chart vertical ones.
+        @throws com::sun::star::uno::RuntimeException
+            for any other chart type.
+
+        @gas EmbeddedChartBuilder.setChartType
+     */
     XChart setChartType([in] string chartType);
 
+    /** Shows the given title above the chart.
+     */
     XChart setTitle([in] string title);
 
+    /** Places the legend on one side of the chart, or hides it.
+
+        @param position
+            One of "right", "left", "top", "bottom", or "none" to hide the legend, in
+            any case.
+        @throws com::sun::star::uno::RuntimeException
+            for any other position.
+     */
     XChart setLegendPosition([in] string position);
 
+    /** @gas Sheet.removeChart */
     void remove();
 };
 

@@ -11,12 +11,29 @@
 
 module scriptinterop {
 
+/** The response to an HTTP request made with urlFetch.
+
+    @internal
+
+    @gas HTTPResponse
+ */
 struct HttpResponse {
+    /** The HTTP status code, or 0 when the request failed (and error says why) or when a
+        redirect was not followed (and error is empty).
+     */
     long code;
+    /** The names of the response headers, in lower case, in the same order as headerValues.
+     */
     sequence<string> headerNames;
+    /** A header that the server sent more than once comes as one value, the values joined with
+        ", ".
+     */
     sequence<string> headerValues;
-    // The response body, as base64:
+    /** The response body, as base64.
+     */
     string body;
+    /** The error message when the request failed, or '' when it got a response.
+     */
     string error;
 };
 

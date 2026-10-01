@@ -11,36 +11,134 @@
 
 module scriptinterop {
 
+/** The methods of the global cool object: access to the active document and factories for
+    helper objects.
+ */
 interface XFactory
 {
+    /** Returns the raw UNO model of the document open in the current frame.
+
+        This is the way out of this API into the full UNO API.
+
+        @returns
+            The document model, or null when there is no current frame or controller.
+
+        @internal
+     */
     com::sun::star::frame::XModel getActiveUnoModel();
 
+    /** @throws com::sun::star::uno::RuntimeException
+            if the current document is not a text document.
+
+        @gas DocumentApp.getActiveDocument
+     */
     XDocument getActiveDocument();
 
+    /** @throws com::sun::star::uno::RuntimeException
+            if the current document is not a spreadsheet.
+
+        @gas SpreadsheetApp.getActiveSpreadsheet
+     */
     XSpreadsheet getActiveSpreadsheet();
 
+    /** @throws com::sun::star::uno::RuntimeException
+            if the current document is not a presentation.
+
+        @gas SlidesApp.getActivePresentation
+     */
     XPresentation getActivePresentation();
 
+    /** @throws com::sun::star::uno::RuntimeException
+            if the current document is not a drawing. A presentation does not count as one.
+     */
     XDrawing getActiveDrawing();
 
+    /** Returns the language of the current user as a locale string, such as "en_US" or "de".
+
+        Only the language and, when there is one, the region are given, joined with an
+        underscore. Script and variant parts are left out.
+
+        @gas Session.getActiveUserLocale
+     */
     string getActiveUserLocale();
 
+    /** Creates a builder that starts from the identity transform.
+
+        @gas SlidesApp.newAffineTransformBuilder
+     */
     XAffineTransformBuilder newAffineTransformBuilder();
 
+    /** Creates a blob from bytes, with no content type and no name.
+
+        @param data
+            The bytes, each a number from -128 to 255. A number above 127 is stored as that number
+            minus 256.
+
+        @gas Utilities.newBlob
+     */
     [overload newBlob] XBlob newBlobBytes([in] sequence<byte> data);
 
+    /** Creates a blob from bytes, with no name.
+
+        @param data
+            The bytes, each a number from -128 to 255. A number above 127 is stored as that number
+            minus 256.
+        @param contentType
+            The MIME type, or null for none.
+
+        @gas Utilities.newBlob
+     */
     [overload newBlob] XBlob newBlobBytesType(
         [in] sequence<byte> data, [in] com::sun::star::beans::Optional<string> contentType);
 
+    /** Creates a blob from bytes.
+
+        @param data
+            The bytes, each a number from -128 to 255. A number above 127 is stored as that number
+            minus 256.
+        @param contentType
+            The MIME type, or null for none.
+        @param name
+            The file name, or null for none.
+
+        @gas Utilities.newBlob
+     */
     [overload newBlob] XBlob newBlobBytesTypeName(
         [in] sequence<byte> data, [in] com::sun::star::beans::Optional<string> contentType,
         [in] com::sun::star::beans::Optional<string> name);
 
+    /** Creates a blob from a string, with content type "text/plain" and no name.
+
+        The string is stored as UTF-8 bytes.
+
+        @gas Utilities.newBlob
+     */
     [overload newBlob] XBlob newBlobString([in] string data);
 
+    /** Creates a blob from a string, with no name.
+
+        The string is stored as UTF-8 bytes. Unlike the one-argument form, there is no default
+        content type here.
+
+        @param contentType
+            The MIME type, or null for none.
+
+        @gas Utilities.newBlob
+     */
     [overload newBlob] XBlob newBlobStringType(
         [in] string data, [in] com::sun::star::beans::Optional<string> contentType);
 
+    /** Creates a blob from a string.
+
+        The string is stored as UTF-8 bytes.
+
+        @param contentType
+            The MIME type, or null for none.
+        @param name
+            The file name, or null for none.
+
+        @gas Utilities.newBlob
+     */
     [overload newBlob] XBlob newBlobStringTypeName(
         [in] string data, [in] com::sun::star::beans::Optional<string> contentType,
         [in] com::sun::star::beans::Optional<string> name);

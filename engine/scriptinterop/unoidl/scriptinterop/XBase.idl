@@ -11,8 +11,17 @@
 
 module scriptinterop {
 
+/** The base of every wrapper object in this API.
+
+    @internal
+ */
 interface XBase
 {
+    /** The UNO object this wrapper stands for, such as the document model, a sheet or a cell
+        range.
+
+        Use it to reach the full UNO API for what the wrapper itself does not offer.
+     */
     [attribute, readonly] cpo::uno::XInterface uno;
 };
 

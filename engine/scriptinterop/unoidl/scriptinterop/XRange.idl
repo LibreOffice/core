@@ -11,40 +11,192 @@
 
 module scriptinterop {
 
+/** A rectangular block of cells on one sheet.
+
+    Rows and columns are counted from 1. The setters return this range, for chaining.
+
+    A cell reads as a number, a string, or undefined when it is empty. A formula cell reads as
+    its result. A number reads without its number format, so a date or time reads as the serial
+    number it is stored as, and a boolean as 1 or 0.
+
+    A color is given as "#rrggbb" or as a CSS color name such as "yellow". Any other string,
+    null among them, throws.
+
+    @gas Range
+ */
 interface XRange : XBase
 {
+    /** Returns the row of the top-left cell.
+
+        @gas Range.getRow
+     */
     long getRow();
 
+    /** Returns the column of the top-left cell.
+
+        @gas Range.getColumn
+     */
     long getColumn();
 
+    /** @gas Range.getNumRows */
     long getNumRows();
 
+    /** @gas Range.getNumColumns */
     long getNumColumns();
 
+    /** Returns the value of the top-left cell.
+
+        A formula gives its result: a number, or a string when the result is text. A formula
+        error gives its error text, such as "#DIV/0!".
+
+        @returns
+            A number, a string, or undefined when the cell is empty.
+
+        @gas Range.getValue
+     */
     any getValue();
 
+    /** Writes the same value into every cell of the range.
+
+        A string is entered as if typed into the cell: one that starts with = becomes a
+        formula, one that reads as a number becomes a number, and anything else becomes text. A
+        boolean is stored as the number 1 or 0. null clears the cell.
+
+        @param value
+            A number, a string, a boolean or null.
+        @throws com::sun::star::uno::RuntimeException
+            if the value has any other type.
+
+        @gas Range.setValue
+     */
     XRange setValue([in] any value);
 
+    /** Returns the values of all cells, as an array of rows, each an array of cell values.
+
+        Each cell reads the way getValue reads a single cell, with undefined for an empty cell.
+
+        @gas Range.getValues
+     */
     sequence< sequence<any> > getValues();
 
+    /** Writes an array of rows of values into the range.
+
+        Each value is written the way setValue writes it, so a string starting with =
+        becomes a formula. The whole array is checked before any cell is written, so a rejected
+        call leaves the range unchanged.
+
+        @param values
+            An array of rows, each an array of values. It must have exactly as many rows and
+            columns as the range.
+        @throws com::sun::star::uno::RuntimeException
+            if the array does not match the size of the range, or a value is not a number,
+            string, boolean or null. The message names the row and column at fault.
+
+        @gas Range.setValues
+     */
     XRange setValues([in] sequence< sequence<any> > values);
 
+    /** Returns a range of the given size, moved from this one by the given number of rows and
+        columns.
+
+        @param rowOffset
+            The number of rows to move down from the top-left cell. A negative value moves up.
+        @param columnOffset
+            The number of columns to move right from the top-left cell. A negative value moves
+            left.
+        @param numRows
+            The number of rows of the new range, at least 1.
+        @param numColumns
+            The number of columns of the new range, at least 1.
+        @throws com::sun::star::uno::RuntimeException
+            if the new range would start before the first row or column, or not fit the sheet.
+
+        @gas Range.offset
+     */
     XRange offset([in] long rowOffset, [in] long columnOffset, [in] long numRows,
                  [in] long numColumns);
 
+    /** Sets the background color of every cell in the range.
+
+        Unlike in Apps Script, null does not reset the background.
+
+        @throws com::sun::star::uno::RuntimeException
+            if the color is not a valid color.
+
+        @gas Range.setBackground
+     */
     XRange setBackgroundColor([in] string color);
 
+    /** Sets the text of every cell in the range to bold or normal weight.
+
+        @param fontWeight
+            "bold" or "normal", in lower case.
+        @throws com::sun::star::uno::RuntimeException
+            for any other value.
+
+        @gas Range.setFontWeight
+     */
     XRange setFontWeight([in] string fontWeight);
 
+    /** Sets the text of every cell in the range to italic or upright.
+
+        @param fontStyle
+            "italic" or "normal", in lower case.
+        @throws com::sun::star::uno::RuntimeException
+            for any other value.
+
+        @gas Range.setFontStyle
+     */
     XRange setFontStyle([in] string fontStyle);
 
+    /** Sets the text color of every cell in the range.
+
+        @throws com::sun::star::uno::RuntimeException
+            if the color is not a valid color.
+
+        @gas Range.setFontColor
+     */
     XRange setFontColor([in] string color);
 
+    /** Draws a solid line of medium width along the chosen outer edges of the range.
+
+        An edge whose flag is false keeps the border it already has, so this call can add
+        borders but not remove them. The lines between cells inside the range are not changed.
+
+        @throws com::sun::star::uno::RuntimeException
+            if the color is not a valid color.
+
+        @gas Range.setBorder
+     */
     XRange setBorder([in] boolean top, [in] boolean left, [in] boolean bottom,
                      [in] boolean right, [in] string color);
 
+    /** Sets the number format of every cell in the range.
+
+        @param format
+            A format code such as "0.00%" or "#,##0.00". It is read the same way whatever
+            the language of the document.
+        @throws com::sun::star::uno::RuntimeException
+            if the format code is not valid.
+
+        @gas Range.setNumberFormat
+     */
     XRange setNumberFormat([in] string format);
 
+    /** Creates an empty pivot table whose top-left cell is the top-left cell of this range.
+
+        The table is named "Pivot " and the lowest number that no pivot table in the document
+        uses, such as "Pivot 1". Add groups and values to it with the methods of the returned
+        table.
+
+        @param sourceData
+            The range holding the source data, with column headers in its first row. It may be
+            on another sheet.
+        @throws com::sun::star::uno::RuntimeException
+            if sourceData is null or the table cannot be created.
+
+        @gas Range.createPivotTable
+     */
     XPivotTable createPivotTable([in] XRange sourceData);
 };
 

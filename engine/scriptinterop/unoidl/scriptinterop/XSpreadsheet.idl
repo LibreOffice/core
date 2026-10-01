@@ -11,22 +11,83 @@
 
 module scriptinterop {
 
+/** A spreadsheet document.
+
+    @gas Spreadsheet
+ */
 interface XSpreadsheet : XBase
 {
+    /** Returns the sheet the user is looking at.
+
+        @throws com::sun::star::uno::RuntimeException
+            if the view has no active sheet.
+
+        @gas Spreadsheet.getActiveSheet
+     */
     XSheet getActiveSheet();
 
+    /** @returns
+            The sheet, or null when no sheet has that name.
+
+        @gas Spreadsheet.getSheetByName
+     */
     XSheet getSheetByName([in] string name);
 
+    /** Adds a sheet with the given name after the last sheet.
+
+        The new sheet does not become the active sheet.
+
+        @gas Spreadsheet.insertSheet
+     */
     [overload insertSheet] XSheet insertSheet([in] string name);
 
+    /** Adds a sheet after the last sheet, named "Sheet" and the lowest number that no other
+        sheet uses, such as "Sheet2".
+
+        The new sheet does not become the active sheet.
+
+        @gas Spreadsheet.insertSheet
+     */
     [overload insertSheet] XSheet insertSheetWithDefaultName();
 
+    /** Returns the cells of the named range with the given name.
+
+        A plain name is looked up among the document's names first, then among each sheet's
+        own names, from the first sheet to the last. A name written as "Sheet1!Total" is only
+        looked up among the names of that sheet. The sheet name is not quoted.
+
+        @returns
+            The range, or null when no such name exists.
+        @throws com::sun::star::uno::RuntimeException
+            if the name exists but does not refer to a plain cell range.
+
+        @gas Spreadsheet.getRangeByName
+     */
     XRange getRangeByName([in] string name);
 
+    /** Recalculates every formula in the document.
+
+        Changes made by a script take effect immediately, so there is nothing pending to write
+        out. This call does a full recalculation instead, including formulas that the script did
+        not change.
+
+        @gas SpreadsheetApp.flush
+     */
     void flush();
 
+    /** Returns the name of the document.
+
+        For a saved document this is the file name without its folder and extension. A
+        document that has never been saved gives its placeholder title.
+
+        @gas Spreadsheet.getName
+     */
     string getName();
 
+    /** Returns all sheets of the document, in the order of their tabs.
+
+        @gas Spreadsheet.getSheets
+     */
     sequence< XSheet > getSheets();
 };
 

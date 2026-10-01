@@ -11,11 +11,31 @@
 
 module scriptinterop {
 
+/** A block of bytes with an optional content type and name.
+
+    A blob does not change after it has been created.
+
+    @gas Blob
+ */
 interface XBlob {
+    /** Each byte is a number from -128 to 127.
+
+        @gas Blob.getBytes
+     */
     sequence<byte> getBytes();
 
+    /** @returns
+            The MIME type, or null when the blob has none.
+
+        @gas Blob.getContentType
+     */
     com::sun::star::beans::Optional<string> getContentType();
 
+    /** @returns
+            The file name, or null when the blob has none.
+
+        @gas Blob.getName
+     */
     com::sun::star::beans::Optional<string> getName();
 };
 
