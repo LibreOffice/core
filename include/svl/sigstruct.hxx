@@ -85,13 +85,20 @@ struct SignatureInformation
     sal_Int32 nSecurityId;
     css::xml::crypto::SecurityOperationStatus nStatus;
     SignatureReferenceInformations  vSignatureReferenceInfors;
-    struct X509CertInfo
+    /// base class for XAdES SigningCertificate
+    struct X509CertInfoRef
     {
         OUString X509IssuerName;
         OUString X509SerialNumber;
-        OUString X509Certificate;
+        /// from css::xml::crypto::DigestID, 0 = no digest
+        sal_Int32 DigestID{0};
         /// OOXML certificate SHA-256 digest, empty for ODF except when doing XAdES signature.
         OUString CertDigest;
+    };
+    struct X509CertInfo : public X509CertInfoRef
+    {
+        /// Base64 encoded
+        OUString X509Certificate;
         /// The certificate owner (aka subject).
         OUString X509Subject;
     };
@@ -119,6 +126,8 @@ struct SignatureInformation
 
     // XAdES EncapsulatedX509Certificate values
     std::set<OUString> maEncapsulatedX509Certificates;
+    /// XAdES SigningCertificate values
+    std::vector<X509CertInfoRef> SigningCertificates;
 
     OUString ouSignatureId;
     // signature may contain multiple time stamps - check they're consistent
