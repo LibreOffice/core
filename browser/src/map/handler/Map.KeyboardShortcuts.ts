@@ -195,6 +195,26 @@ class ShortcutDescriptor {
     }
 }
 
+// The engine writes a shortcut as its modifiers and key name joined by '+', as in 'Ctrl+Shift+B',
+// 'Ctrl+Shift++' or 'Shift+Return'. Returns the modifier and the key as KeyboardEvent.key names it.
+function parseEngineShortcut(text: string): { modifier: Mod, key: string } | null {
+    const engineKeyNames: Record<string, string> = {
+        Return: 'Enter', Space: ' ', Up: 'ArrowUp', Down: 'ArrowDown', Left: 'ArrowLeft',
+        Right: 'ArrowRight', Esc: 'Escape', Del: 'Delete', Ins: 'Insert',
+    };
+    const parts = text.endsWith('++') ? text.slice(0, -2).split('+').concat(['+']) : text.split('+');
+    const name = parts.pop();
+    if (!name) return null;
+    let modifier = Mod.NONE;
+    for (const part of parts) {
+        if (part === 'Ctrl') modifier |= Mod.CTRL;
+        else if (part === 'Alt') modifier |= Mod.ALT;
+        else if (part === 'Shift') modifier |= Mod.SHIFT;
+        else return null;
+    }
+    return { modifier: modifier, key: engineKeyNames[name] || name };
+}
+
 class KeyboardShortcuts {
     map: any;
     definitions: Map<string, Array<ShortcutDescriptor>>;
@@ -250,17 +270,8 @@ class KeyboardShortcuts {
             (shift ? Mod.SHIFT : Mod.NONE) |
             (alt ? Mod.ALT : Mod.NONE) |
             (macctrl ? Mod.MACCTRL : Mod.NONE);
-        const platform = window.mode.isChromebook() ? Platform.CHROMEOSAPP :
-                         window.ThisIsTheAndroidApp ? Platform.ANDROIDAPP : // Cannot come before window.mode.isChromebook() as all Chromebook app users are necessarily also Android app users
-                         window.ThisIsTheiOSApp ? Platform.IOSAPP :
-                         window.ThisIsTheWindowsApp ? Platform.CODAWINDOWS :
-                         window.ThisIsTheMacOSApp ? Platform.CODAMAC :
-                         window.ThisIsTheQtApp ? Platform.CODAQT :
-                         window.L.Browser.mac ? Platform.MAC :
-                         window.L.Browser.win ? Platform.WINDOWS :
-                         Platform.LINUX;
 
-        const shortcut = this.findShortcut(language, eventType, modifier, keyCode, key, platform);
+        const shortcut = this.findShortcut(language, eventType, modifier, keyCode, key, this.currentPlatform());
 
         if (shortcut) {
             // In read-only mode, block shortcuts that send uno commands to core, or
@@ -302,6 +313,18 @@ class KeyboardShortcuts {
         return false;
     }
 
+    private currentPlatform(): Platform {
+        return window.mode.isChromebook() ? Platform.CHROMEOSAPP :
+               window.ThisIsTheAndroidApp ? Platform.ANDROIDAPP : // Cannot come before window.mode.isChromebook() as all Chromebook app users are necessarily also Android app users
+               window.ThisIsTheiOSApp ? Platform.IOSAPP :
+               window.ThisIsTheWindowsApp ? Platform.CODAWINDOWS :
+               window.ThisIsTheMacOSApp ? Platform.CODAMAC :
+               window.ThisIsTheQtApp ? Platform.CODAQT :
+               window.L.Browser.mac ? Platform.MAC :
+               window.L.Browser.win ? Platform.WINDOWS :
+               Platform.LINUX;
+    }
+
     // has to be called before use
     public initialize(map: any) {
         this.map = map;
@@ -333,20 +356,36 @@ class KeyboardShortcuts {
         return this.processEventImpl('default', event);
     }
 
-    // True if some existing 'default'-language descriptor would already match a
-    // keydown with this exact modifier and key, for this document's own docType or
-    // for every docType. Registering a second, colliding descriptor is not safe to
-    // do at all: findShortcut throws the moment a matching keypress finds more than
-    // one candidate, so a collision has to be caught here, before it is ever added,
-    // rather than left for that check to catch (and crash on) at keypress time.
+    // True if a shortcut the editor already has would match a keydown with this exact modifier and
+    // key, for this document's own docType or for every docType, on this platform. That covers the
+    // descriptors of the 'default' list and of the user's own language, which is tried first, and
+    // the shortcuts of the engine's commands. Each keypress may match one descriptor at most, and a
+    // descriptor that matches a keypress keeps it from reaching the engine.
     private collidesWithExisting(docType: string, modifier: Mod, key: string): boolean {
-        const descriptors = this.definitions.get('default') || [];
-        return descriptors.some((d) => {
+        const candidate = new ShortcutDescriptor({ eventType: 'keydown', modifier: modifier, key: key });
+        const platform = this.currentPlatform();
+        const sameKey = (d: ShortcutDescriptor): boolean => {
+            const keyCodes = Array.isArray(d.keyCode) ? d.keyCode : [d.keyCode];
+            return (d.key !== null && d.key.toLowerCase() === key.toLowerCase()) ||
+                (candidate.keyCode !== null && keyCodes.indexOf(candidate.keyCode) !== -1);
+        };
+        const language = app.UI && app.UI.language ? app.UI.language.fromURL : undefined;
+        const descriptors = (this.definitions.get('default') || []).concat(
+            language && language !== 'default' ? this.definitions.get(language) || [] : []);
+        const inEditor = descriptors.some((d) => {
             const eventTypes = Array.isArray(d.eventType) ? d.eventType : [d.eventType];
             return eventTypes.indexOf('keydown') !== -1 &&
                 d.modifier === modifier &&
-                d.key === key &&
-                (!d.docType || d.docType === docType);
+                sameKey(d) &&
+                (!d.docType || d.docType === docType) &&
+                (!d.platform || (d.platform & platform) !== 0);
+        });
+        if (inEditor) return true;
+        if (typeof unoShortcutsMap === 'undefined') return false;
+        return Object.keys(unoShortcutsMap).some((command) => {
+            const engine = parseEngineShortcut(unoShortcutsMap[command]);
+            return engine !== null && engine.modifier === modifier &&
+                engine.key.toLowerCase() === key.toLowerCase();
         });
     }
 
@@ -380,8 +419,10 @@ class KeyboardShortcuts {
                 if (modifierNames.indexOf('alt') !== -1) modifier |= Mod.ALT;
                 if (modifierNames.indexOf('shift') !== -1) modifier |= Mod.SHIFT;
 
+                // Any key without ctrl or alt belongs to the document: a letter is typed, and Enter,
+                // Tab, Delete or an F key already has a meaning there.
                 const key: string = entry.key;
-                if (key.length === 1 && !(modifier & (Mod.CTRL | Mod.ALT))) {
+                if (!(modifier & (Mod.CTRL | Mod.ALT))) {
                     console.warn('extension ' + extId + ': keybinding for "' + entry.command +
                         '" ("' + key + '") needs ctrl or alt, not shift alone or no modifier');
                     return;

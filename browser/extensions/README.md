@@ -227,20 +227,23 @@ ui.json:
 
   ```json
   "keybindings": [
-    { "command": "insertDate", "key": "d", "modifier": ["ctrl", "alt"] }
+    { "command": "insertDate", "key": "d", "modifier": ["ctrl", "alt", "shift"] }
   ]
   ```
 
   `modifier` is an array drawn from `"ctrl"`/`"alt"`/`"shift"` - `"ctrl"`
-  already means Cmd on macOS, the same as every built-in shortcut. A
-  single printable `key` needs at least `"ctrl"` or `"alt"` in `modifier` -
-  `"shift"` alone, or no modifier at all, would fight with ordinary
-  typing, and is rejected with a console warning. A combination that
-  collides with an existing shortcut - built-in, or from another
-  extension - is also rejected with a console warning rather than
-  registered: two shortcuts sharing the same combination is something the
-  underlying keyboard-shortcut dispatch cannot recover from once the key
-  is actually pressed, so this is caught up front instead. Pressing the
+  already means Cmd on macOS, the same as every built-in shortcut. Every
+  `key` needs at least `"ctrl"` or `"alt"` in `modifier`: without them a
+  letter would fight with ordinary typing, and Enter, Tab, Delete or an F
+  key already means something in the document. Such a binding is
+  rejected with a console warning. A combination that collides with an
+  existing shortcut is also rejected with a console warning rather than
+  registered. That covers the editor's own shortcuts, those of the user's
+  interface language, the document commands' shortcuts that the editor
+  knows about (Ctrl+Alt+D inserts an endnote, for example), and the
+  bindings of other extensions. The engine has further shortcuts that
+  the editor does not know about, so a combination with all three
+  modifiers is the safest choice. Pressing the
   combination in read-only (viewing) mode shows the same "you are in
   view mode" attention animation a built-in shortcut shows, rather than
   running the command.
