@@ -13,18 +13,54 @@ module scriptinterop {
 
 interface XList;
 
+/** The list formatting of a text range.
+
+    @gas ListStyle
+ */
 interface XListStyle : XBase
 {
+    /** Puts every paragraph that overlaps the range into a list with the given glyphs.
+
+        @unimplemented
+        @gas ListStyle.applyListPreset
+     */
     XListStyle applyListPreset([in] ListPreset listPreset);
 
+    /** Returns the bullet or number glyph shown for the text, or null when the text is not in a
+        list or spans more than one paragraph.
+
+        @unimplemented
+        @gas ListStyle.getGlyph
+     */
     com::sun::star::beans::Optional<string> getGlyph();
 
+    /** Returns null when the text is not in a list or is in more than one.
+
+        @unimplemented
+        @gas ListStyle.getList
+     */
     com::sun::star::beans::Optional<XList> getList();
 
+    /** Returns the 0-based nesting level, or null when the text is not in a list or the level
+        differs across it.
+
+        @unimplemented
+        @gas ListStyle.getNestingLevel
+     */
     com::sun::star::beans::Optional<long> getNestingLevel();
 
+    /** Returns null when only part of the text is in a list.
+
+        @unimplemented
+        @gas ListStyle.isInList
+     */
     com::sun::star::beans::Optional<boolean> isInList();
 
+    /** Takes every paragraph that overlaps the range off its list.
+
+        @unimplemented
+        @gas ListStyle.removeFromList
+     */
     XListStyle removeFromList();
 };
 

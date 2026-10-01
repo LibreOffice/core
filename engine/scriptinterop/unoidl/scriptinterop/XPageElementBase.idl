@@ -17,76 +17,210 @@ interface XGroup;
 interface XPage;
 interface XPageElement;
 
+/** The members that every kind of page element shares.
+
+    Positions and sizes are in points. They are stored in whole hundredths of a millimetre, so a
+    value read back can differ from the value set by up to about 0.015 points. The setters return
+    this element.
+
+    @gas PageElement
+ */
 interface XPageElementBase : XBase
 {
+    /** @unimplemented @gas PageElement.alignOnPage */
     XPageElementBase alignOnPage([in] AlignmentPosition alignmentPosition);
 
+    /** @unimplemented @gas PageElement.bringForward */
     XPageElementBase bringForward();
 
+    /** @unimplemented @gas PageElement.bringToFront */
     XPageElementBase bringToFront();
 
+    /** Copies the element onto the same page, at the same position.
+
+        @unimplemented
+        @gas PageElement.duplicate
+     */
     XPageElement duplicate();
 
+    /** Returns an empty array when the element has no connection sites.
+
+        @unimplemented
+        @gas PageElement.getConnectionSites
+     */
     sequence<XConnectionSite> getConnectionSites();
 
+    /** Returns the alternative text description.
+
+        @unimplemented
+        @gas PageElement.getDescription
+     */
     string getDescription();
 
+    /** The result is never null.
+
+        @gas PageElement.getHeight
+     */
     com::sun::star::beans::Optional<double> getHeight();
 
+    /** Returns the height before any transform is applied, or null when the element has none.
+
+        @unimplemented
+        @gas PageElement.getInherentHeight
+     */
     com::sun::star::beans::Optional<double> getInherentHeight();
 
+    /** Returns the width before any transform is applied, or null when the element has none.
+
+        @unimplemented
+        @gas PageElement.getInherentWidth
+     */
     com::sun::star::beans::Optional<double> getInherentWidth();
 
+    /** Measured from the left edge of the page.
+
+        @gas PageElement.getLeft
+     */
     double getLeft();
 
+    /** Unique within the presentation.
+
+        @unimplemented
+        @gas PageElement.getObjectId
+     */
     string getObjectId();
 
+    /** Images, media objects, tables, groups, straight lines and connectors, and word art each
+        report their own kind. Embedded objects, charts, applets, plug-ins, frames and form
+        controls report UNSUPPORTED. Everything else reports SHAPE, including text boxes, custom
+        shapes, and lines that are not straight, such as polylines and freehand lines.
+
+        @gas PageElement.getPageElementType
+     */
     PageElementType getPageElementType();
 
+    /** Returns null when the element is not in a group.
+
+        @unimplemented
+        @gas PageElement.getParentGroup
+     */
     com::sun::star::beans::Optional<XGroup> getParentGroup();
 
+    /** @unimplemented @gas PageElement.getParentPage */
     XPage getParentPage();
 
+    /** Returns the clockwise rotation around the center in degrees, 0 when not rotated.
+
+        @unimplemented
+        @gas PageElement.getRotation
+     */
     double getRotation();
 
+    /** Returns the alternative text title.
+
+        @unimplemented
+        @gas PageElement.getTitle
+     */
     string getTitle();
 
+    /** Measured from the top edge of the page.
+
+        @gas PageElement.getTop
+     */
     double getTop();
 
+    /** @unimplemented @gas PageElement.getTransform */
     XAffineTransform getTransform();
 
+    /** The result is never null.
+
+        @gas PageElement.getWidth
+     */
     com::sun::star::beans::Optional<double> getWidth();
 
+    /** The new transform is the given one times the existing one.
+
+        @unimplemented
+        @gas PageElement.preconcatenateTransform
+     */
     XPageElementBase preconcatenateTransform([in] XAffineTransform transform);
 
+    /** @gas PageElement.remove */
     void remove();
 
+    /** @unimplemented @gas PageElement.scaleHeight */
     XPageElementBase scaleHeight([in] double ratio);
 
+    /** @unimplemented @gas PageElement.scaleWidth */
     XPageElementBase scaleWidth([in] double ratio);
 
+    /** Replaces the current selection.
+
+        @unimplemented
+        @gas PageElement.select
+     */
     [overload select] void select();
 
+    /** @param replace
+            true to replace the current selection, false to add this element to it.
+
+        @unimplemented
+        @gas PageElement.select
+     */
     [overload select] void selectWithReplace([in] boolean replace);
 
+    /** @unimplemented @gas PageElement.sendBackward */
     XPageElementBase sendBackward();
 
+    /** @unimplemented @gas PageElement.sendToBack */
     XPageElementBase sendToBack();
 
+    /** @unimplemented @gas PageElement.setDescription */
     XPageElementBase setDescription([in] string description);
 
+    /** @throws RuntimeException
+            if the value is negative, not a number, or does not fit the page coordinate range.
+
+        @gas PageElement.setHeight
+     */
     XPageElementBase setHeight([in] double points);
 
+    /** Measured from the left edge of the page.
+
+        @throws RuntimeException
+            if the value is not a finite number or does not fit the page coordinate range.
+
+        @gas PageElement.setLeft
+     */
     XPageElementBase setLeft([in] double points);
 
+    /** Sets the clockwise rotation around the center, in degrees.
+
+        @unimplemented
+        @gas PageElement.setRotation
+     */
     XPageElementBase setRotation([in] double angle);
 
+    /** @unimplemented @gas PageElement.setTitle */
     XPageElementBase setTitle([in] string title);
 
+    /** Measured from the top edge of the page.
+
+        @throws RuntimeException
+            if the value is not a finite number or does not fit the page coordinate range.
+
+        @gas PageElement.setTop
+     */
     XPageElementBase setTop([in] double points);
 
+    /** @unimplemented @gas PageElement.setTransform */
     XPageElementBase setTransform([in] XAffineTransform transform);
 
+    /** @throws RuntimeException
+            if the value is negative, not a number, or does not fit the page coordinate range.
+
+        @gas PageElement.setWidth
+     */
     XPageElementBase setWidth([in] double points);
 };
 

@@ -16,73 +16,209 @@ interface XListStyle;
 interface XTextParagraph;
 interface XTextStyle;
 
+/** A stretch of text in a shape or a table cell.
+
+    Indexes and offsets count characters and are 0-based, counted from the start of the whole
+    text for an index and from the start of this range for an offset. An end index or end offset
+    points just past the last character. getText on a shape returns a range over all of its text.
+
+    @gas TextRange
+ */
 interface XTextRange : XBase
 {
+    /** Adds a new paragraph with the given text at the end of the text.
+
+        Only a range over the whole text of a shape can append.
+
+        @returns
+            The new paragraph. When the text is empty, its range is a position at the end of the
+            text.
+        @throws RuntimeException
+            if this range is only part of the text, or the text cannot take new paragraphs.
+
+        @gas TextRange.appendParagraph
+     */
     XTextParagraph appendParagraph([in] string text);
 
+    /** Keeps the formatting of the copied text.
+
+        @unimplemented
+        @gas TextRange.appendRange
+     */
     [overload appendRange] XTextRange appendRange([in] XTextRange range);
 
+    /** @param matchSourceFormatting
+            true to keep the formatting of the copied text, false to use the formatting of the
+            end of this range.
+
+        @unimplemented
+        @gas TextRange.appendRange
+     */
     [overload appendRange] XTextRange appendRangeMatchSourceFormatting(
         [in] XTextRange range, [in] boolean matchSourceFormatting);
 
+    /** Adds text at the end of the text, as a new run.
+
+        Only a range over the whole text of a shape can append. The new run does not take the
+        character formatting of the text before it.
+
+        @returns
+            A range over the appended text.
+        @throws RuntimeException
+            if this range is only part of the text, or the text cannot take new runs.
+
+        @gas TextRange.appendText
+     */
     XTextRange appendText([in] string text);
 
+    /** Returns the text as it is shown, with automatic text such as slide numbers filled in.
+
+        @unimplemented
+        @gas TextRange.asRenderedString
+     */
     string asRenderedString();
 
+    /** The whole text of a shape and the range of a paragraph end with a newline. Other ranges
+        end with their last character.
+
+        @gas TextRange.asString
+     */
     string asString();
 
+    /** @unimplemented @gas TextRange.clear */
     [overload clear] void clear();
 
+    /** @unimplemented @gas TextRange.clear */
     [overload clear] void clearRange([in] long startOffset, [in] long endOffset);
 
+    /** Returns every match of a regular expression, or an empty array.
+
+        @unimplemented
+        @gas TextRange.find
+     */
     [overload find] sequence<XTextRange> find([in] string pattern);
 
+    /** Returns every match of a regular expression from the given offset on, or an empty array.
+
+        @unimplemented
+        @gas TextRange.find
+     */
     [overload find] sequence<XTextRange> findFrom([in] string pattern, [in] long startOffset);
 
+    /** @unimplemented @gas TextRange.getAutoTexts */
     sequence<XAutoText> getAutoTexts();
 
+    /** @unimplemented @gas TextRange.getEndIndex */
     long getEndIndex();
 
+    /** @unimplemented @gas TextRange.getLength */
     long getLength();
 
+    /** Returns a range for each link that overlaps this range.
+
+        @unimplemented
+        @gas TextRange.getLinks
+     */
     sequence<XTextRange> getLinks();
 
+    /** Returns the paragraphs in list items that overlap the range.
+
+        @unimplemented
+        @gas TextRange.getListParagraphs
+     */
     sequence<XTextParagraph> getListParagraphs();
 
+    /** @unimplemented @gas TextRange.getListStyle */
     XListStyle getListStyle();
 
+    /** Returns the paragraphs that overlap the range.
+
+        @unimplemented
+        @gas TextRange.getParagraphs
+     */
     sequence<XTextParagraph> getParagraphs();
 
+    /** @unimplemented @gas TextRange.getParagraphStyle */
     XParagraphStyle getParagraphStyle();
 
+    /** @unimplemented @gas TextRange.getRange */
     XTextRange getRange([in] long startOffset, [in] long endOffset);
 
+    /** Returns the runs of text with the same formatting that overlap the range.
+
+        @unimplemented
+        @gas TextRange.getRuns
+     */
     sequence<XTextRange> getRuns();
 
+    /** @unimplemented @gas TextRange.getStartIndex */
     long getStartIndex();
 
+    /** Returns null when the range holds no text.
+
+        @gas TextRange.getTextStyle
+     */
     com::sun::star::beans::Optional<XTextStyle> getTextStyle();
 
+    /** @unimplemented @gas TextRange.insertParagraph */
     XTextParagraph insertParagraph([in] long startOffset, [in] string text);
 
+    /** Keeps the formatting of the copied text.
+
+        @unimplemented
+        @gas TextRange.insertRange
+     */
     [overload insertRange] XTextRange insertRange([in] long startOffset, [in] XTextRange range);
 
+    /** @param matchSourceFormatting
+            true to keep the formatting of the copied text, false to use the formatting around
+            the insertion point.
+
+        @unimplemented
+        @gas TextRange.insertRange
+     */
     [overload insertRange] XTextRange insertRangeMatchSourceFormatting(
         [in] long startOffset, [in] XTextRange range, [in] boolean matchSourceFormatting);
 
+    /** @unimplemented @gas TextRange.insertText */
     XTextRange insertText([in] long startOffset, [in] string text);
 
+    /** @unimplemented @gas TextRange.isEmpty */
     boolean isEmpty();
 
+    /** Ignores case.
+
+        @unimplemented
+        @gas TextRange.replaceAllText
+     */
     [overload replaceAllText] long replaceAllText([in] string findText, [in] string replaceText);
 
+    /** @unimplemented @gas TextRange.replaceAllText */
     [overload replaceAllText] long replaceAllTextMatchCase(
         [in] string findText, [in] string replaceText, [in] boolean matchCase);
 
+    /** Selects the text of the range in the active presentation.
+
+        @unimplemented
+        @gas TextRange.select
+     */
     void select();
 
+    /** Puts every paragraph that the range reaches into on the bullet list at the given level, or
+        takes them off the list.
+
+        The glyph and the indent of each level come from the document's preset bullet list.
+
+        @param level
+            The list level, from 0 for the top level to 9, or -1 to remove the bullets.
+        @returns
+            This range.
+        @throws RuntimeException
+            if the level is outside -1 to 9.
+     */
     XTextRange setBulletLevel([in] long level);
 
+    /** @gas TextRange.setText */
     XTextRange setText([in] string newText);
 };
 

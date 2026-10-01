@@ -11,8 +11,13 @@
 
 module scriptinterop {
 
+/** A collection of page elements, such as the elements in the current selection.
+
+    @gas PageElementRange
+ */
 interface XPageElementRange : XBase
 {
+    /** @gas PageElementRange.getPageElements */
     sequence<XPageElement> getPageElements();
 };
 

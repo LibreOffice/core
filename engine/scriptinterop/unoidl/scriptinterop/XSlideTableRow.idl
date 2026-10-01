@@ -14,16 +14,27 @@ module scriptinterop {
 interface XSlideTable;
 interface XSlideTableCell;
 
+/** A row of a table on a slide.
+
+    Indexes are 0-based.
+
+    @gas TableRow
+ */
 interface XSlideTableRow : XBase
 {
+    /** @unimplemented @gas TableRow.getCell */
     XSlideTableCell getCell([in] long index);
 
+    /** @unimplemented @gas TableRow.getIndex */
     long getIndex();
 
+    /** @unimplemented @gas TableRow.getNumCells */
     long getNumCells();
 
+    /** @unimplemented @gas TableRow.getParentTable */
     XSlideTable getParentTable();
 
+    /** @unimplemented @gas TableRow.remove */
     void remove();
 };
 

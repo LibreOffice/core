@@ -11,10 +11,16 @@
 
 module scriptinterop {
 
+/** Whether the space between paragraphs is kept inside lists.
+
+    @gas SlidesApp.SpacingMode
+ */
 enum SpacingMode
 {
     UNSUPPORTED,
+    /** The space between paragraphs is always shown. */
     NEVER_COLLAPSE,
+    /** The space between paragraphs is left out between list items. */
     COLLAPSE_LISTS
 };
 

@@ -11,22 +11,45 @@
 
 module scriptinterop {
 
+/** A predefined set of glyphs for the nesting levels of a list.
+
+    Each name lists the glyphs of the first three nesting levels.
+
+    @gas SlidesApp.ListPreset
+ */
 enum ListPreset
 {
     DISC_CIRCLE_SQUARE,
+    /** Diamond with a cross, 3D arrow and square bullets. */
     DIAMONDX_ARROW3D_SQUARE,
+    /** Check box bullets at every level. */
     CHECKBOX,
     ARROW_DIAMOND_DISC,
     STAR_CIRCLE_SQUARE,
     ARROW3D_CIRCLE_SQUARE,
     LEFTTRIANGLE_DIAMOND_DISC,
+    /** Diamond with a cross, hollow diamond and square bullets. */
     DIAMONDX_HOLLOWDIAMOND_SQUARE,
     DIAMOND_CIRCLE_SQUARE,
+    /** Numbers, lowercase letters and lowercase roman numerals, each followed by a period. */
     DIGIT_ALPHA_ROMAN,
+    /** Numbers, lowercase letters and lowercase roman numerals, each followed by a closing
+        parenthesis.
+     */
     DIGIT_ALPHA_ROMAN_PARENS,
+    /** Numbers joined by periods, where each level starts with the number of the level above, as in
+        1., 1.1., 2..
+     */
     DIGIT_NESTED,
+    /** Uppercase letters, lowercase letters and lowercase roman numerals, each followed by a
+        period.
+     */
     UPPERALPHA_ALPHA_ROMAN,
+    /** Uppercase roman numerals, uppercase letters and numbers, each followed by a period. */
     UPPERROMAN_UPPERALPHA_DIGIT,
+    /** Numbers with a leading zero, lowercase letters and lowercase roman numerals, each followed
+        by a period.
+     */
     ZERODIGIT_ALPHA_ROMAN
 };
 

@@ -11,10 +11,16 @@
 
 module scriptinterop {
 
+/** A video on a page.
+
+    @gas Video
+ */
 interface XVideo : XPageElementBase
 {
+    /** @unimplemented @gas Video.getBorder */
     XBorder getBorder();
 
+    /** @unimplemented @gas Video.getSource */
     VideoSourceType getSource();
 };
 

@@ -11,6 +11,10 @@
 
 module scriptinterop {
 
+/** The writing direction of a paragraph.
+
+    @gas SlidesApp.TextDirection
+ */
 enum TextDirection
 {
     UNSUPPORTED,

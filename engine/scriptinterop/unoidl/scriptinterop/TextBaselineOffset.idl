@@ -11,6 +11,10 @@
 
 module scriptinterop {
 
+/** Whether text is raised, lowered or on the baseline.
+
+    @gas SlidesApp.TextBaselineOffset
+ */
 enum TextBaselineOffset
 {
     UNSUPPORTED,

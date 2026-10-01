@@ -11,11 +11,17 @@
 
 module scriptinterop {
 
+/** The horizontal alignment of a paragraph.
+
+    @gas SlidesApp.ParagraphAlignment
+ */
 enum ParagraphAlignment
 {
     UNSUPPORTED,
+    /** Aligned to the start of the line: the left for left to right text. */
     START,
     CENTER,
+    /** Aligned to the end of the line: the right for left to right text. */
     END,
     JUSTIFIED
 };

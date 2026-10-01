@@ -13,10 +13,20 @@ module scriptinterop {
 
 interface XPageElement;
 
+/** A group of page elements that act as one unit.
+
+    @gas Group
+ */
 interface XGroup : XPageElementBase
 {
+    /** @unimplemented @gas Group.getChildren */
     sequence<XPageElement> getChildren();
 
+    /** Dissolves the group and leaves its elements on the page.
+
+        @unimplemented
+        @gas Group.ungroup
+     */
     void ungroup();
 };
 

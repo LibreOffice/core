@@ -13,66 +13,153 @@ module scriptinterop {
 
 interface XLink;
 
+/** The character formatting of a text range.
+
+    Setters apply to all of the text in the range, in Western, Asian and complex scripts alike,
+    and return this style. Getters return null when the value differs across the text.
+
+    @gas TextStyle
+ */
 interface XTextStyle : XBase
 {
+    /** Returns the highlight color.
+
+        @unimplemented
+        @gas TextStyle.getBackgroundColor
+     */
     com::sun::star::beans::Optional<XColor> getBackgroundColor();
 
+    /** @unimplemented @gas TextStyle.getBaselineOffset */
     com::sun::star::beans::Optional<TextBaselineOffset> getBaselineOffset();
 
+    /** @unimplemented @gas TextStyle.getFontFamily */
     com::sun::star::beans::Optional<string> getFontFamily();
 
+    /** Returns the font size in points.
+
+        @unimplemented
+        @gas TextStyle.getFontSize
+     */
     com::sun::star::beans::Optional<double> getFontSize();
 
+    /** @unimplemented @gas TextStyle.getForegroundColor */
     com::sun::star::beans::Optional<XColor> getForegroundColor();
 
+    /** Returns null when the text has no link or has more than one.
+
+        @unimplemented
+        @gas TextStyle.getLink
+     */
     com::sun::star::beans::Optional<XLink> getLink();
 
+    /** @unimplemented @gas TextStyle.hasLink */
     com::sun::star::beans::Optional<boolean> hasLink();
 
+    /** Returns whether the text has no highlight color.
+
+        @unimplemented
+        @gas TextStyle.isBackgroundTransparent
+     */
     com::sun::star::beans::Optional<boolean> isBackgroundTransparent();
 
+    /** @unimplemented @gas TextStyle.isBold */
     com::sun::star::beans::Optional<boolean> isBold();
 
+    /** @unimplemented @gas TextStyle.isItalic */
     com::sun::star::beans::Optional<boolean> isItalic();
 
+    /** @unimplemented @gas TextStyle.isSmallCaps */
     com::sun::star::beans::Optional<boolean> isSmallCaps();
 
+    /** @unimplemented @gas TextStyle.isStrikethrough */
     com::sun::star::beans::Optional<boolean> isStrikethrough();
 
+    /** @unimplemented @gas TextStyle.isUnderline */
     com::sun::star::beans::Optional<boolean> isUnderline();
 
+    /** @unimplemented @gas TextStyle.removeLink */
     XTextStyle removeLink();
 
+    /** Sets the highlight color.
+
+        @unimplemented
+        @gas TextStyle.setBackgroundColor
+     */
     [overload setBackgroundColor] XTextStyle setBackgroundColor([in] any color);
 
+    /** Sets the highlight color from red, green and blue values, each from 0 to 255.
+
+        @unimplemented
+        @gas TextStyle.setBackgroundColor
+     */
     [overload setBackgroundColor] XTextStyle setBackgroundColorRgb(
         [in] long red, [in] long green, [in] long blue);
 
+    /** Removes the highlight color.
+
+        @unimplemented
+        @gas TextStyle.setBackgroundColorTransparent
+     */
     XTextStyle setBackgroundColorTransparent();
 
+    /** @unimplemented @gas TextStyle.setBaselineOffset */
     XTextStyle setBaselineOffset([in] TextBaselineOffset baselineOffset);
 
+    /** @gas TextStyle.setBold */
     XTextStyle setBold([in] boolean bold);
 
+    /** @unimplemented @gas TextStyle.setFontFamily */
     XTextStyle setFontFamily([in] string fontFamily);
 
+    /** @gas TextStyle.setFontSize */
     XTextStyle setFontSize([in] double points);
 
+    /** @param color
+            A "#rrggbb" string or a CSS color name, such as "yellow". A color object or a theme
+            color type is not implemented yet.
+        @throws RuntimeException
+            if the color is not a string, or the string is neither "#rrggbb" nor a CSS color name.
+
+        @gas TextStyle.setForegroundColor
+     */
     [overload setForegroundColor] XTextStyle setForegroundColor([in] any color);
 
+    /** Sets the color from red, green and blue values, each from 0 to 255.
+
+        @unimplemented
+        @gas TextStyle.setForegroundColor
+     */
     [overload setForegroundColor] XTextStyle setForegroundColorRgb(
         [in] long red, [in] long green, [in] long blue);
 
+    /** @param italic
+            true for italic, false for upright.
+
+        @gas TextStyle.setItalic
+     */
     XTextStyle setItalic([in] boolean italic);
 
+    /** @param slide
+            The slide to link to: a slide object, its 0-based index, or a SlidePosition value.
+
+        @unimplemented
+        @gas TextStyle.setLinkSlide
+     */
     XTextStyle setLinkSlide([in] any slide);
 
+    /** @unimplemented @gas TextStyle.setLinkUrl */
     XTextStyle setLinkUrl([in] string url);
 
+    /** @unimplemented @gas TextStyle.setSmallCaps */
     XTextStyle setSmallCaps([in] boolean smallCaps);
 
+    /** Turns a single strikethrough line on or off.
+
+        @gas TextStyle.setStrikethrough
+     */
     XTextStyle setStrikethrough([in] boolean strikethrough);
 
+    /** @unimplemented @gas TextStyle.setUnderline */
     XTextStyle setUnderline([in] boolean underline);
 };
 

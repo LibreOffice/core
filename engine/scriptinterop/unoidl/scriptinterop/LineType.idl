@@ -11,18 +11,31 @@
 
 module scriptinterop {
 
+/** The exact geometry of a line or connector, named after the OOXML preset shapes.
+
+    @gas SlidesApp.LineType
+ */
 enum LineType
 {
     UNSUPPORTED,
     STRAIGHT_CONNECTOR_1,
+    /** A bent connector with one bend. */
     BENT_CONNECTOR_2,
+    /** A bent connector with two bends. */
     BENT_CONNECTOR_3,
+    /** A bent connector with three bends. */
     BENT_CONNECTOR_4,
+    /** A bent connector with four bends. */
     BENT_CONNECTOR_5,
+    /** A curved connector with one bend. */
     CURVED_CONNECTOR_2,
+    /** A curved connector with two bends. */
     CURVED_CONNECTOR_3,
+    /** A curved connector with three bends. */
     CURVED_CONNECTOR_4,
+    /** A curved connector with four bends. */
     CURVED_CONNECTOR_5,
+    /** A straight line that is not a connector. */
     STRAIGHT_LINE
 };
 

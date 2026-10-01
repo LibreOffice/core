@@ -11,6 +11,10 @@
 
 module scriptinterop {
 
+/** The kind of an automatic text.
+
+    @gas SlidesApp.AutoTextType
+ */
 enum AutoTextType
 {
     UNSUPPORTED,

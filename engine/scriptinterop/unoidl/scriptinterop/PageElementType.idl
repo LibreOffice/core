@@ -11,17 +11,32 @@
 
 module scriptinterop {
 
+/** The kind of a page element.
+
+    @gas SlidesApp.PageElementType
+ */
 enum PageElementType
 {
+    /** An element that this API cannot classify, such as an embedded object, a chart, a frame or a
+        form control.
+     */
     UNSUPPORTED,
+    /** A shape with no more specific kind, including text boxes and custom shapes. */
     SHAPE,
     IMAGE,
+    /** A media object. */
     VIDEO,
     TABLE,
     GROUP,
+    /** A straight line or a connector. */
     LINE,
+    /** Word art: a custom shape whose text follows a path. */
     WORD_ART,
+    /** A chart linked from a spreadsheet. No element reports this kind; charts report
+        UNSUPPORTED.
+     */
     SHEETS_CHART,
+    /** A speaker spotlight. No element reports this kind. */
     SPEAKER_SPOTLIGHT
 };
 

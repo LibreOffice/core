@@ -11,10 +11,16 @@
 
 module scriptinterop {
 
+/** Whether a table cell is merged.
+
+    @gas SlidesApp.CellMergeState
+ */
 enum CellMergeState
 {
     NORMAL,
+    /** The cell is the top left cell of a merged block, and holds its content. */
     HEAD,
+    /** The cell is part of a merged block but is not its head. */
     MERGED
 };
 

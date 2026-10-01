@@ -19,20 +19,38 @@ interface XSlideTable;
 interface XVideo;
 interface XWordArt;
 
+/** An element on a page of a presentation, of any kind.
+
+    Use getPageElementType to find the kind, then one of the as methods to get the typed view of
+    the same element.
+
+    @gas PageElement
+ */
 interface XPageElement : XPageElementBase
 {
+    /** @unimplemented @gas PageElement.asGroup */
     XGroup asGroup();
 
+    /** @unimplemented @gas PageElement.asImage */
     XImage asImage();
 
+    /** @unimplemented @gas PageElement.asLine */
     XLine asLine();
 
+    /** @throws RuntimeException
+            if the element is not of the SHAPE kind.
+
+        @gas PageElement.asShape
+     */
     XShape asShape();
 
+    /** @unimplemented @gas PageElement.asTable */
     XSlideTable asTable();
 
+    /** @unimplemented @gas PageElement.asVideo */
     XVideo asVideo();
 
+    /** @unimplemented @gas PageElement.asWordArt */
     XWordArt asWordArt();
 };
 

@@ -11,6 +11,10 @@
 
 module scriptinterop {
 
+/** How to center a page element on its page.
+
+    @gas SlidesApp.AlignmentPosition
+ */
 enum AlignmentPosition
 {
     CENTER,

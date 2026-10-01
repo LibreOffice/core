@@ -14,32 +14,99 @@ module scriptinterop {
 interface XLink;
 interface XPageElement;
 
+/** A picture on a page.
+
+    @gas Image
+ */
 interface XImage : XPageElementBase
 {
+    /** @param contentType
+            The MIME type to convert to, such as "image/png".
+
+        @todo Return an XBlob, as Apps Script does.
+        @unimplemented
+        @gas Image.getAs
+     */
     sequence<byte> getAs([in] string contentType);
 
+    /** @todo Return an XBlob, as Apps Script does.
+        @unimplemented
+        @gas Image.getBlob
+     */
     sequence<byte> getBlob();
 
+    /** @unimplemented @gas Image.getBorder */
     XBorder getBorder();
 
+    /** Returns null when the image has no link.
+
+        @unimplemented
+        @gas Image.getLink
+     */
     com::sun::star::beans::Optional<XLink> getLink();
 
+    /** Returns the placeholder on the layout or master that this image inherits from, or null
+        when the image is not a placeholder or has no parent.
+
+        @unimplemented
+        @gas Image.getParentPlaceholder
+     */
     com::sun::star::beans::Optional<XPageElement> getParentPlaceholder();
 
+    /** Returns the index that tells this placeholder apart from others of the same kind on the
+        page, or null when the image is not a placeholder.
+
+        @unimplemented
+        @gas Image.getPlaceholderIndex
+     */
     com::sun::star::beans::Optional<long> getPlaceholderIndex();
 
+    /** Returns NONE when the image is not a placeholder.
+
+        @unimplemented
+        @gas Image.getPlaceholderType
+     */
     PlaceholderType getPlaceholderType();
 
+    /** Returns the URL the picture was loaded from, or null when it is not known.
+
+        @unimplemented
+        @gas Image.getSourceUrl
+     */
     com::sun::star::beans::Optional<string> getSourceUrl();
 
+    /** @unimplemented @gas Image.removeLink */
     void removeLink();
 
+    /** Replaces the picture, scaled to fit the current image.
+
+        @param image
+            The new picture: a blob, or a URL string to fetch the picture from.
+
+        @unimplemented
+        @gas Image.replace
+     */
     [overload replace] XImage replace([in] any image);
 
+    /** @param image
+            The new picture: a blob, or a URL string to fetch the picture from.
+        @param crop
+            true to crop the picture to the size of the current image, false to scale it to fit.
+
+        @unimplemented
+        @gas Image.replace
+     */
     [overload replace] XImage replaceCropped([in] any image, [in] boolean crop);
 
+    /** @param slide
+            The slide to link to: a slide object, its 0-based index, or a SlidePosition value.
+
+        @unimplemented
+        @gas Image.setLinkSlide
+     */
     XLink setLinkSlide([in] any slide);
 
+    /** @unimplemented @gas Image.setLinkUrl */
     XLink setLinkUrl([in] string url);
 };
 

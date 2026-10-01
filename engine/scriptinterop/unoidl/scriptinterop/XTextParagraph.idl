@@ -13,10 +13,27 @@ module scriptinterop {
 
 interface XTextRange;
 
+/** A paragraph of the text in a shape or table cell.
+
+    @gas Paragraph
+ */
 interface XTextParagraph : XBase
 {
+    /** Returns the index of the newline that ends the paragraph, counted from the start of the
+        whole text, or null when the paragraph has been deleted.
+
+        @unimplemented
+        @gas Paragraph.getIndex
+     */
     com::sun::star::beans::Optional<long> getIndex();
 
+    /** The range covers the text that was passed to appendParagraph, followed by the newline of
+        the paragraph. It does not grow when text is added to the paragraph later. For an empty
+        paragraph the range is a position in it, which stays inside the paragraph as text is
+        inserted there. The result is never null.
+
+        @gas Paragraph.getRange
+     */
     com::sun::star::beans::Optional<XTextRange> getRange();
 };
 

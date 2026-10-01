@@ -15,24 +15,47 @@ interface XSlideTableCell;
 interface XSlideTableColumn;
 interface XSlideTableRow;
 
+/** A table on a page of a presentation.
+
+    Row, column and cell indexes are 0-based.
+
+    @gas Table
+ */
 interface XSlideTable : XPageElementBase
 {
+    /** Adds a column at the right of the table.
+
+        @unimplemented
+        @gas Table.appendColumn
+     */
     XSlideTableColumn appendColumn();
 
+    /** Adds a row at the bottom of the table.
+
+        @unimplemented
+        @gas Table.appendRow
+     */
     XSlideTableRow appendRow();
 
+    /** @unimplemented @gas Table.getCell */
     XSlideTableCell getCell([in] long row, [in] long column);
 
+    /** @unimplemented @gas Table.getColumn */
     XSlideTableColumn getColumn([in] long index);
 
+    /** @unimplemented @gas Table.getNumColumns */
     long getNumColumns();
 
+    /** @unimplemented @gas Table.getNumRows */
     long getNumRows();
 
+    /** @unimplemented @gas Table.getRow */
     XSlideTableRow getRow([in] long index);
 
+    /** @unimplemented @gas Table.insertColumn */
     XSlideTableColumn insertColumn([in] long index);
 
+    /** @unimplemented @gas Table.insertRow */
     XSlideTableRow insertRow([in] long index);
 };
 

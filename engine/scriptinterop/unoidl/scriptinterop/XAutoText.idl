@@ -13,12 +13,32 @@ module scriptinterop {
 
 interface XTextRange;
 
+/** Text that is filled in automatically, such as a slide number.
+
+    @gas AutoText
+ */
 interface XAutoText : XBase
 {
+    /** Returns null when the automatic text has been deleted.
+
+        @unimplemented
+        @gas AutoText.getAutoTextType
+     */
     com::sun::star::beans::Optional<AutoTextType> getAutoTextType();
 
+    /** Counted from the start of the whole text. Returns null when the automatic text has been
+        deleted.
+
+        @unimplemented
+        @gas AutoText.getIndex
+     */
     com::sun::star::beans::Optional<long> getIndex();
 
+    /** Returns null when the automatic text has been deleted.
+
+        @unimplemented
+        @gas AutoText.getRange
+     */
     com::sun::star::beans::Optional<XTextRange> getRange();
 };
 

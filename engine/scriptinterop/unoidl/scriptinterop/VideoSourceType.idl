@@ -11,6 +11,10 @@
 
 module scriptinterop {
 
+/** Where a video comes from.
+
+    @gas SlidesApp.VideoSourceType
+ */
 enum VideoSourceType
 {
     UNSUPPORTED,

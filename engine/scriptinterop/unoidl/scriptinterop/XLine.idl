@@ -14,60 +14,115 @@ module scriptinterop {
 interface XConnectionSite;
 interface XLink;
 
+/** A line or a connector on a page.
+
+    Coordinates and the weight are in points. Points are measured from the top left corner of the
+    page.
+
+    @gas Line
+ */
 interface XLine : XPageElementBase
 {
+    /** @unimplemented @gas Line.getDashStyle */
     DashStyle getDashStyle();
 
+    /** @unimplemented @gas Line.getEnd */
     XPoint getEnd();
 
+    /** @unimplemented @gas Line.getEndArrow */
     ArrowStyle getEndArrow();
 
+    /** Returns null when the end is not attached.
+
+        @unimplemented
+        @gas Line.getEndConnection
+     */
     com::sun::star::beans::Optional<XConnectionSite> getEndConnection();
 
+    /** @unimplemented @gas Line.getLineCategory */
     LineCategory getLineCategory();
 
+    /** @unimplemented @gas Line.getLineFill */
     XLineFill getLineFill();
 
+    /** @unimplemented @gas Line.getLineType */
     LineType getLineType();
 
+    /** Returns null when the line has no link.
+
+        @unimplemented
+        @gas Line.getLink
+     */
     com::sun::star::beans::Optional<XLink> getLink();
 
+    /** @unimplemented @gas Line.getStart */
     XPoint getStart();
 
+    /** @unimplemented @gas Line.getStartArrow */
     ArrowStyle getStartArrow();
 
+    /** Returns null when the start is not attached.
+
+        @unimplemented
+        @gas Line.getStartConnection
+     */
     com::sun::star::beans::Optional<XConnectionSite> getStartConnection();
 
+    /** @unimplemented @gas Line.getWeight */
     double getWeight();
 
+    /** A connector can attach to other elements.
+
+        @unimplemented
+        @gas Line.isConnector
+     */
     boolean isConnector();
 
+    /** @unimplemented @gas Line.removeLink */
     void removeLink();
 
+    /** @unimplemented @gas Line.setDashStyle */
     XLine setDashStyle([in] DashStyle dashStyle);
 
+    /** @unimplemented @gas Line.setEnd */
     [overload setEnd] XLine setEnd([in] double left, [in] double top);
 
+    /** @unimplemented @gas Line.setEnd */
     [overload setEnd] XLine setEndPoint([in] XPoint point);
 
+    /** @unimplemented @gas Line.setEndArrow */
     XLine setEndArrow([in] ArrowStyle arrowStyle);
 
+    /** @unimplemented @gas Line.setEndConnection */
     XLine setEndConnection([in] XConnectionSite connectionSite);
 
+    /** @unimplemented @gas Line.setLineCategory */
     XLine setLineCategory([in] LineCategory lineCategory);
 
+    /** @param slide
+            The slide to link to: a slide object, its 0-based index, or a SlidePosition value.
+
+        @unimplemented
+        @gas Line.setLinkSlide
+     */
     XLink setLinkSlide([in] any slide);
 
+    /** @unimplemented @gas Line.setLinkUrl */
     XLink setLinkUrl([in] string url);
 
+    /** @unimplemented @gas Line.setStart */
     [overload setStart] XLine setStart([in] double left, [in] double top);
 
+    /** @unimplemented @gas Line.setStart */
     [overload setStart] XLine setStartPoint([in] XPoint point);
 
+    /** @unimplemented @gas Line.setStartArrow */
     XLine setStartArrow([in] ArrowStyle arrowStyle);
 
+    /** @unimplemented @gas Line.setStartConnection */
     XLine setStartConnection([in] XConnectionSite connectionSite);
 
+    /** @unimplemented @gas Line.setWeight */
     XLine setWeight([in] double points);
 };
 

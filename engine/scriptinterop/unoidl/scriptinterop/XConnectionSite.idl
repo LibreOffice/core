@@ -13,10 +13,16 @@ module scriptinterop {
 
 interface XPageElement;
 
+/** A point on a page element that a connector line can attach to.
+
+    @gas ConnectionSite
+ */
 interface XConnectionSite : XBase
 {
+    /** @unimplemented @gas ConnectionSite.getIndex */
     long getIndex();
 
+    /** @unimplemented @gas ConnectionSite.getPageElement */
     XPageElement getPageElement();
 };
 

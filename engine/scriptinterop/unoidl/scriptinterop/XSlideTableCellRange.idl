@@ -11,8 +11,17 @@
 
 module scriptinterop {
 
+/** A rectangular block of cells in a table on a slide.
+
+    @gas TableCellRange
+ */
 interface XSlideTableCellRange : XBase
 {
+    /** Returns the cells as an array of rows of cells.
+
+        @unimplemented
+        @gas TableCellRange.getTableCells
+     */
     sequence< sequence<XSlideTableCell> > getTableCells();
 };
 

@@ -11,10 +11,15 @@
 
 module scriptinterop {
 
+/** Whether a line is straight, bent or curved.
+
+    @gas SlidesApp.LineCategory
+ */
 enum LineCategory
 {
     UNSUPPORTED,
     STRAIGHT,
+    /** A connector made of straight segments at right angles. */
     BENT,
     CURVED
 };

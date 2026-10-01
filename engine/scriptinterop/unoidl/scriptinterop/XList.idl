@@ -13,10 +13,16 @@ module scriptinterop {
 
 interface XTextParagraph;
 
+/** A list that paragraphs of a text belong to.
+
+    @gas List
+ */
 interface XList : XBase
 {
+    /** @unimplemented @gas List.getListId */
     string getListId();
 
+    /** @unimplemented @gas List.getListParagraphs */
     sequence<XTextParagraph> getListParagraphs();
 };
 

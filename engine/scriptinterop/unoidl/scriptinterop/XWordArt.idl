@@ -13,16 +13,34 @@ module scriptinterop {
 
 interface XLink;
 
+/** Word art: text drawn along a path as a shape.
+
+    @gas WordArt
+ */
 interface XWordArt : XPageElementBase
 {
+    /** Returns null when the word art has no link.
+
+        @unimplemented
+        @gas WordArt.getLink
+     */
     com::sun::star::beans::Optional<XLink> getLink();
 
+    /** @unimplemented @gas WordArt.getRenderedText */
     string getRenderedText();
 
+    /** @unimplemented @gas WordArt.removeLink */
     void removeLink();
 
+    /** @param slide
+            The slide to link to: a slide object, its 0-based index, or a SlidePosition value.
+
+        @unimplemented
+        @gas WordArt.setLinkSlide
+     */
     XLink setLinkSlide([in] any slide);
 
+    /** @unimplemented @gas WordArt.setLinkUrl */
     XLink setLinkUrl([in] string url);
 };
 

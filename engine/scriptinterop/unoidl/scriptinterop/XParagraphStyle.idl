@@ -11,38 +11,62 @@
 
 module scriptinterop {
 
+/** The paragraph formatting of a text range.
+
+    Indents and spacing are in points, the first line indent measured from the start side. Line
+    spacing is a percentage of normal spacing, where 100 is single spacing. Getters return null
+    when the value differs across the paragraphs of the range.
+
+    @gas ParagraphStyle
+ */
 interface XParagraphStyle : XBase
 {
+    /** @unimplemented @gas ParagraphStyle.getIndentEnd */
     com::sun::star::beans::Optional<double> getIndentEnd();
 
+    /** @unimplemented @gas ParagraphStyle.getIndentFirstLine */
     com::sun::star::beans::Optional<double> getIndentFirstLine();
 
+    /** @unimplemented @gas ParagraphStyle.getIndentStart */
     com::sun::star::beans::Optional<double> getIndentStart();
 
+    /** @unimplemented @gas ParagraphStyle.getLineSpacing */
     com::sun::star::beans::Optional<double> getLineSpacing();
 
+    /** @unimplemented @gas ParagraphStyle.getParagraphAlignment */
     com::sun::star::beans::Optional<ParagraphAlignment> getParagraphAlignment();
 
+    /** @unimplemented @gas ParagraphStyle.getSpaceAbove */
     com::sun::star::beans::Optional<double> getSpaceAbove();
 
+    /** @unimplemented @gas ParagraphStyle.getSpaceBelow */
     com::sun::star::beans::Optional<double> getSpaceBelow();
 
+    /** @unimplemented @gas ParagraphStyle.getTextDirection */
     com::sun::star::beans::Optional<TextDirection> getTextDirection();
 
+    /** @unimplemented @gas ParagraphStyle.setIndentEnd */
     XParagraphStyle setIndentEnd([in] double points);
 
+    /** @unimplemented @gas ParagraphStyle.setIndentFirstLine */
     XParagraphStyle setIndentFirstLine([in] double points);
 
+    /** @unimplemented @gas ParagraphStyle.setIndentStart */
     XParagraphStyle setIndentStart([in] double points);
 
+    /** @unimplemented @gas ParagraphStyle.setLineSpacing */
     XParagraphStyle setLineSpacing([in] double lineSpacing);
 
+    /** @unimplemented @gas ParagraphStyle.setParagraphAlignment */
     XParagraphStyle setParagraphAlignment([in] ParagraphAlignment paragraphAlignment);
 
+    /** @unimplemented @gas ParagraphStyle.setSpaceAbove */
     XParagraphStyle setSpaceAbove([in] double points);
 
+    /** @unimplemented @gas ParagraphStyle.setSpaceBelow */
     XParagraphStyle setSpaceBelow([in] double points);
 
+    /** @unimplemented @gas ParagraphStyle.setTextDirection */
     XParagraphStyle setTextDirection([in] TextDirection textDirection);
 };
 

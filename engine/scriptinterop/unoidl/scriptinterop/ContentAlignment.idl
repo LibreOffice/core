@@ -11,6 +11,10 @@
 
 module scriptinterop {
 
+/** The vertical alignment of text in a shape or table cell.
+
+    @gas SlidesApp.ContentAlignment
+ */
 enum ContentAlignment
 {
     UNSUPPORTED,

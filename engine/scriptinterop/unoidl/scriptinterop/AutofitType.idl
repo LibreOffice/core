@@ -11,11 +11,17 @@
 
 module scriptinterop {
 
+/** How the text of a shape is fitted to the shape.
+
+    @gas SlidesApp.AutofitType
+ */
 enum AutofitType
 {
     UNSUPPORTED,
     NONE,
+    /** The text shrinks when it overflows the shape. */
     TEXT_AUTOFIT,
+    /** The shape grows to hold the text. */
     SHAPE_AUTOFIT
 };
 

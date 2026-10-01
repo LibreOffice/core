@@ -11,10 +11,15 @@
 
 module scriptinterop {
 
+/** The arrowhead at one end of a line.
+
+    @gas SlidesApp.ArrowStyle
+ */
 enum ArrowStyle
 {
     UNSUPPORTED,
     NONE,
+    /** A filled arrow with a notch in its back. */
     STEALTH_ARROW,
     FILL_ARROW,
     FILL_CIRCLE,
