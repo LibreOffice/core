@@ -18,13 +18,18 @@
 #include <string>
 
 #include <common/Clipboard.hpp>
+#include <common/FileUtil.hpp>
 #include <net/HttpRequest.hpp>
+#include <net/HttpServer.hpp>
 
+#include <test/MockStreamSocket.hpp>
 #include <test/lokassert.hpp>
 
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <cstdint>
+#include <fstream>
+#include <memory>
 #include <string>
 
 /// HTTP WhiteBox unit-tests.
@@ -52,6 +57,8 @@ class HttpWhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testInsertFile);
     CPPUNIT_TEST(testGetFavicon);
     CPPUNIT_TEST(testPostWopi);
+    CPPUNIT_TEST(testServedFileClosesConnection);
+    CPPUNIT_TEST(testServedRangeClosesConnection);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -73,6 +80,8 @@ class HttpWhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testInsertFile();
     void testGetFavicon();
     void testPostWopi();
+    void testServedFileClosesConnection();
+    void testServedRangeClosesConnection();
 };
 
 void HttpWhiteBoxTests::testStatusLineParserValidComplete()
@@ -915,6 +924,78 @@ void HttpWhiteBoxTests::testPostWopi()
     LOK_ASSERT_EQUAL_STR("application/octet-stream", req.get("Content-Type"));
     LOK_ASSERT_EQUAL_STR("17", req.get("Content-Length"));
     LOK_ASSERT_EQUAL(false, req.isKeepAlive());
+}
+
+namespace
+{
+/// Serve the file at path through an http::ServerSession on a mock socket, for a few rounds of
+/// the socket being writable. The range is the value of a Range header, or empty for the whole
+/// file.
+std::shared_ptr<MockStreamSocket> serveFile(const std::string& path, const std::string& range)
+{
+    auto session = std::make_shared<http::ServerSession>();
+    http::ServerSession::ResponseHeaders headers;
+    headers.emplace_back("Content-Type", "image/gif");
+    if (range.empty())
+        session->asyncUpload(path, std::move(headers));
+    else
+        session->asyncUpload(path, std::move(headers), range);
+
+    auto socket = std::make_shared<MockStreamSocket>();
+    socket->setHandler(session);
+
+    // performWrites is a private override, so it is called through the base class.
+    std::shared_ptr<ProtocolHandlerInterface> base = session;
+    for (int round = 0; round < 3; ++round)
+        base->performWrites(16384);
+
+    return socket;
+}
+
+/// Write content to a new file in dir and return its path.
+std::string writeTempFile(const std::string& dir, const std::string& content)
+{
+    const std::string path = dir + "/served.gif";
+    std::ofstream(path) << content;
+    return path;
+}
+} // namespace
+
+void HttpWhiteBoxTests::testServedFileClosesConnection()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string dir = FileUtil::createRandomTmpDir();
+    FileUtil::OwnedFile dirCleanup(dir, /*recursive=*/true);
+    const std::string path = writeTempFile(dir, "0123456789");
+
+    const std::shared_ptr<MockStreamSocket> socket = serveFile(path, std::string());
+
+    const std::string output = socket->getOutput();
+    LOK_ASSERT(output.starts_with("HTTP/1.1 200"));
+    LOK_ASSERT(output.ends_with("\r\n\r\n0123456789"));
+
+    // The whole file is sent, so the session asks the socket to shut down.
+    LOK_ASSERT(socket->isShutdownSignalled());
+}
+
+void HttpWhiteBoxTests::testServedRangeClosesConnection()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string dir = FileUtil::createRandomTmpDir();
+    FileUtil::OwnedFile dirCleanup(dir, /*recursive=*/true);
+    const std::string path = writeTempFile(dir, "0123456789");
+
+    // A range that ends before the end of the file.
+    const std::shared_ptr<MockStreamSocket> socket = serveFile(path, "bytes=2-5");
+
+    const std::string output = socket->getOutput();
+    LOK_ASSERT(output.starts_with("HTTP/1.1 206"));
+    LOK_ASSERT(output.find("Content-Range: bytes 2-5/10") != std::string::npos);
+    LOK_ASSERT(output.ends_with("\r\n\r\n2345"));
+
+    LOK_ASSERT(socket->isShutdownSignalled());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HttpWhiteBoxTests);

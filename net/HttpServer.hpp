@@ -335,8 +335,15 @@ private:
 
             while (_fd >= 0)
             {
+                if (_pos >= getEnd())
+                {
+                    LOG_TRC("performWrites finished uploading");
+                    finishUpload(*socket);
+                    break;
+                }
+
                 const auto provisioned = std::min<size_t>(capacity, getEnd() - _pos);
-                if (provisioned <= 0)
+                if (provisioned == 0)
                     break;
 
                 char* buffer = out.provision(provisioned);
@@ -344,11 +351,11 @@ private:
                 while ((n = ::read(_fd, buffer, provisioned)) < 0 && errno == EINTR)
                     LOG_TRC("EINTR reading from " << _filename);
 
-                if (n <= 0 || _pos >= getEnd())
+                if (n <= 0)
                 {
                     out.commit(provisioned, 0); // Rollback, nothing written.
 
-                    if (n >= 0)
+                    if (n == 0)
                     {
                         LOG_TRC("performWrites finished uploading");
                     }
@@ -357,9 +364,7 @@ private:
                         LOG_SYS("Failed to upload file");
                     }
 
-                    close(_fd);
-                    _fd = -1;
-                    socket->asyncShutdown(); // Trigger async shutdown.
+                    finishUpload(*socket);
                     break;
                 }
 
@@ -371,6 +376,14 @@ private:
                 LOG_TRC("performWrites wrote " << n << " bytes, capacity: " << capacity);
             }
         }
+    }
+
+    /// Close the file and shut the socket down once the data still in the output buffer is sent.
+    void finishUpload(StreamSocket& socket)
+    {
+        close(_fd);
+        _fd = -1;
+        socket.asyncShutdown();
     }
 
     void onDisconnect() override
