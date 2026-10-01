@@ -31,8 +31,16 @@ static void filePickerProviderPick(const char* pTitle, const COKitFilePickerFilt
         // "Name (*.png *.jpg)" is the QFileDialog form of one name filter.
         const QString wildcards = QString::fromUtf8(pFilters[i].pWildcards)
                                       .replace(QLatin1Char(';'), QLatin1Char(' '));
-        if (!wildcards.isEmpty())
-            nameFilters << QString::fromUtf8(pFilters[i].pName) + " (" + wildcards + ")";
+        if (wildcards.isEmpty())
+            continue;
+
+        // The flatpak FileChooser portal rejects a nameless filter, and Qt then falls back
+        // to a dialog inside the sandbox.
+        QString name = QString::fromUtf8(pFilters[i].pName).trimmed();
+        if (name.isEmpty())
+            name = QObject::tr("Supported files");
+
+        nameFilters << name + " (" + wildcards + ")";
     }
 
     QMetaObject::invokeMethod(
