@@ -23,7 +23,9 @@ Google Docs, to verify GAS parity of the test.  The single positional
 argument names a stem: "document" runs document-test.js against
 document-test.rtf, "utilities" runs utilities-test.js (no RTF needed),
 and so on for any future <stem>-test.js / <stem>-test.rtf pair.  Every
-such test file names its entry function test.
+such test file names its entry function test.  A stem starting with
+"slides" runs against a Google Slides presentation instead of a Doc,
+one that has a single blank slide at the start of every run.
 
 For a stem that has an .rtf fixture, uploads it to Drive (asking Drive
 to convert it to a Google Doc on the way in), creates a bound Apps
@@ -112,6 +114,30 @@ def upload_rtf(drive, rtf_path):
         body=body, media_body=media, fields="id"
     ).execute()
     return result["id"]
+
+
+PPTX_TYPE = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+
+
+def create_presentation(drive, snapshot_path):
+    """Create a blank presentation, and save its PPTX export at snapshot_path for
+    replace_presentation_content."""
+    result = drive.files().create(
+        body={
+            "name": "gas-test presentation",
+            "mimeType": "application/vnd.google-apps.presentation",
+        },
+        fields="id",
+    ).execute()
+    snapshot_path.write_bytes(
+        drive.files().export(fileId=result["id"], mimeType=PPTX_TYPE).execute()
+    )
+    return result["id"]
+
+
+def replace_presentation_content(drive, presentation_id, snapshot_path):
+    media = MediaFileUpload(str(snapshot_path), mimetype=PPTX_TYPE, resumable=False)
+    drive.files().update(fileId=presentation_id, media_body=media).execute()
 
 
 def replace_doc_content(drive, doc_id, rtf_path):
@@ -216,6 +242,14 @@ def main():
     args.function = "test"
     rtf_candidate = DATA_DIR / (args.stem + "-test.rtf")
     args.rtf = rtf_candidate if rtf_candidate.exists() else None
+    is_presentation = args.stem.startswith("slides")
+    if is_presentation and args.rtf is not None:
+        sys.exit("a presentation test cannot have a fixture: " + str(args.rtf))
+    file_key, script_key = (
+        ("presentation_id", "presentation_script_id") if is_presentation
+        else ("doc_id", "script_id")
+    )
+    snapshot_path = args.state_dir / "test-presentation.pptx"
 
     if not args.js.exists():
         sys.exit("missing fixture: " + str(args.js))
@@ -226,33 +260,43 @@ def main():
 
     state = load_state(state_file)
 
-    if args.reset and state:
-        print("dropping cached Doc + script...", flush=True)
-        delete_quietly(drive, state.get("doc_id", ""))
-        delete_quietly(drive, state.get("script_id", ""))
-        state_file.unlink(missing_ok=True)
-        state = {}
+    if args.reset and (file_key in state or script_key in state):
+        print("dropping cached file + script...", flush=True)
+        delete_quietly(drive, state.pop(file_key, ""))
+        delete_quietly(drive, state.pop(script_key, ""))
+        save_state(state_file, state)
 
-    doc_id = state.get("doc_id")
-    script_id = state.get("script_id")
+    doc_id = state.get(file_key)
+    script_id = state.get(script_key)
 
     if doc_id is None or script_id is None:
-        if args.rtf is None:
-            sys.exit(
-                "first-run bootstrap needs an .rtf fixture at "
-                + str(rtf_candidate)
-                + " to create the Doc; run with a stem that has one first"
-                " (e.g. document)"
+        if is_presentation:
+            print(
+                "first-run bootstrap: creating presentation and bound script...",
+                flush=True,
             )
-        print("first-run bootstrap: creating Doc and bound script...", flush=True)
-        doc_id = upload_rtf(drive, args.rtf)
-        print("  doc id: " + doc_id)
+            doc_id = create_presentation(drive, snapshot_path)
+        else:
+            if args.rtf is None:
+                sys.exit(
+                    "first-run bootstrap needs an .rtf fixture at "
+                    + str(rtf_candidate)
+                    + " to create the Doc; run with a stem that has one first"
+                    " (e.g. document)"
+                )
+            print("first-run bootstrap: creating Doc and bound script...", flush=True)
+            doc_id = upload_rtf(drive, args.rtf)
+        print("  file id: " + doc_id)
         script_id = create_bound_script(script, doc_id, args.js)
         print("  script id: " + script_id)
-        save_state(state_file, {"doc_id": doc_id, "script_id": script_id})
+        save_state(state_file, dict(state, **{file_key: doc_id, script_key: script_id}))
         print()
-        print("Doc:    https://docs.google.com/document/d/" + doc_id + "/edit")
-        print("Script: https://script.google.com/d/" + script_id + "/edit")
+        print(
+            ("Presentation: https://docs.google.com/presentation/d/" if is_presentation
+             else "Doc:          https://docs.google.com/document/d/")
+            + doc_id + "/edit"
+        )
+        print("Script:       https://script.google.com/d/" + script_id + "/edit")
         print()
         print(
             "Now pair the script's GCP project once (see step 2 in the"
@@ -261,6 +305,9 @@ def main():
         return 2
 
     try:
+        if is_presentation:
+            print("resetting the presentation to one blank slide...", flush=True)
+            replace_presentation_content(drive, doc_id, snapshot_path)
         if args.rtf is not None:
             print("refreshing Doc content from " + args.rtf.name + "...", flush=True)
             replace_doc_content(drive, doc_id, args.rtf)
