@@ -48,6 +48,7 @@
 #include <app.hrc>
 
 #include <OutlineView.hxx>
+#include <NotesPanelView.hxx>
 #include <DrawViewShell.hxx>
 #include <DrawDocShell.hxx>
 #include <slideshow.hxx>
@@ -1183,8 +1184,29 @@ void ViewShell::UpdatePreview (SdPage*)
     // useful is still done.
 }
 
+SfxUndoManager* ViewShell::ImpGetNotesPanelUndoManager() const
+{
+    std::shared_ptr<framework::FrameworkHelper> pHelper
+        = framework::FrameworkHelper::Instance(GetViewShellBase());
+    if (!pHelper->IsValid())
+        return nullptr;
+
+    std::shared_ptr<ViewShell> pNotesPaneShell
+        = pHelper->GetViewShell(framework::FrameworkHelper::msBottomImpressPaneURL);
+    NotesPanelView* pNotesPanelView
+        = pNotesPaneShell ? dynamic_cast<NotesPanelView*>(pNotesPaneShell->GetView()) : nullptr;
+    if (!pNotesPanelView || !pNotesPanelView->isInFocus())
+        return nullptr;
+
+    return &pNotesPanelView->GetOutliner().GetUndoManager();
+}
+
 SfxUndoManager* ViewShell::ImpGetUndoManager() const
 {
+    // The notes pane edits its text with an undo history of its own.
+    if (SfxUndoManager* pNotesUndoManager = ImpGetNotesPanelUndoManager())
+        return pNotesUndoManager;
+
     const ViewShell* pMainViewShell = GetViewShellBase().GetMainViewShell().get();
 
     if( pMainViewShell == nullptr )
@@ -1322,7 +1344,9 @@ void ViewShell::ImpSidUndo(SfxRequest& rReq)
         sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
         if(nCount >= nNumber)
         {
-            if (comphelper::COKit::isActive() && !bRepair)
+            // Every action in the notes pane history comes from this view.
+            if (comphelper::COKit::isActive() && !bRepair
+                && pUndoManager != ImpGetNotesPanelUndoManager())
             {
                 // If another view created the first undo action, prevent redoing it from this view.
                 const SfxUndoAction* pAction = pUndoManager->GetUndoAction();
@@ -1392,7 +1416,9 @@ void ViewShell::ImpSidRedo(SfxRequest& rReq)
         sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
         if(nCount >= nNumber)
         {
-            if (comphelper::COKit::isActive() && !bRepair)
+            // Every action in the notes pane history comes from this view.
+            if (comphelper::COKit::isActive() && !bRepair
+                && pUndoManager != ImpGetNotesPanelUndoManager())
             {
                 // If another view created the first undo action, prevent redoing it from this view.
                 const SfxUndoAction* pAction = pUndoManager->GetRedoAction();

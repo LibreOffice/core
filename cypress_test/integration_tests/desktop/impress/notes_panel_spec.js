@@ -1,6 +1,7 @@
 /* global describe it cy beforeEach require expect NodeFilter */
 
 var helper = require('../../common/helper');
+var desktopHelper = require('../../common/desktop_helper');
 
 // The speaker notes pane below the slide renders the notes outliner as an
 // editengine custom widget, so what is typed there ends up on the slide's notes
@@ -366,6 +367,36 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 			'have.length',
 			2
 		);
+	});
+
+	// While the notes have the focus, the Undo and Redo buttons act on what was typed there. The
+	// slide added before stays, although the document can undo adding it.
+	it('the Undo and Redo buttons act on the notes while they have the focus', function () {
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:InsertPage');
+		});
+		cy.cGet('#slide-sorter .preview-img').should('have.length', 3);
+
+		openNotesPane();
+		cy.cGet(editEngine).click();
+		// One word, because each typed word is an undo step of its own.
+		cy.cGet(editEngine).type('Demo');
+		cy.cGet(paragraph).should('have.text', 'Demo');
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+
+		desktopHelper.getNbItem('Undo').should('not.have.attr', 'disabled');
+		desktopHelper.getNbIcon('Undo').click();
+		cy.cGet(paragraph).should('have.text', '');
+		cy.cGet(editEngine).should('have.focus');
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+		cy.cGet('#slide-sorter .preview-img').should('have.length', 3);
+
+		desktopHelper.getNbItem('Redo').should('not.have.attr', 'disabled');
+		desktopHelper.getNbIcon('Redo').click();
+		cy.cGet(paragraph).should('have.text', 'Demo');
 	});
 
 	it('Ctrl+V works while the notes panel has focus', function () {

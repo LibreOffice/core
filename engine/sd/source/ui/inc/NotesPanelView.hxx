@@ -52,6 +52,7 @@ class NotesPanelView final : public ::sd::SimpleOutlinerView
     SdrTextObj* getEditedNotesObj();
     void clearPlaceholder();
     void commitNotes();
+    void invalidateUndoState();
 
 public:
     NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,
@@ -62,6 +63,7 @@ public:
     void onResize();
     void onGrabFocus();
     void onLoseFocus();
+    bool isInFocus() const { return mbInFocus; }
 
     OutlinerView* GetOutlinerView();
     OutlinerView* GetViewByWindow(vcl::Window const* pWin) const override;

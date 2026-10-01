@@ -23,6 +23,9 @@
 #include <drawdoc.hxx>
 #include <sdmod.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svx/svxids.hrc>
 #include <EventMultiplexer.hxx>
 #include <app.hrc>
 #include <strings.hrc>
@@ -78,6 +81,7 @@ void NotesPanelView::FillOutliner()
         commitNotes();
 
     maOutliner.GetUndoManager().Clear();
+    invalidateUndoState();
     maOutliner.EnableUndo(false);
     ResetLinks();
     maOutliner.Clear();
@@ -210,6 +214,7 @@ void NotesPanelView::onGrabFocus()
     mbInFocus = true;
 
     clearPlaceholder();
+    invalidateUndoState();
 }
 
 void NotesPanelView::onLoseFocus()
@@ -223,6 +228,21 @@ void NotesPanelView::onLoseFocus()
     // Notes left empty show the placeholder text again.
     if (!maOutliner.GetEditEngine().HasText())
         FillOutliner();
+
+    invalidateUndoState();
+}
+
+/// While the notes have the focus, the Undo and Redo state comes from the notes history, so it
+/// changes with each edit and with each focus change.
+void NotesPanelView::invalidateUndoState()
+{
+    SfxViewFrame* pViewFrame = mrNotesPanelViewShell.GetViewFrame();
+    if (!pViewFrame)
+        return;
+
+    static const sal_uInt16 aUndoSlots[]
+        = { SID_REDO, SID_UNDO, SID_GETUNDOSTRINGS, SID_GETREDOSTRINGS, 0 };
+    pViewFrame->GetBindings().Invalidate(aUndoSlots);
 }
 
 void NotesPanelView::clearPlaceholder()
@@ -271,6 +291,7 @@ IMPL_LINK_NOARG(NotesPanelView, EditModifiedHdl, LinkParamNone*, void)
     // Debounce the rapid ModifyHdl calls using a timer.
     aModifyIdle.Start();
 
+    invalidateUndoState();
     maContentChangedHdl.Call(nullptr);
     return;
 }

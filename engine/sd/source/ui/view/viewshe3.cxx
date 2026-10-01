@@ -103,8 +103,10 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
             if(pUndoManager->GetUndoActionCount() != 0)
             {
                 // If another view created the first undo action, prevent redoing it from this view.
+                // Every action in the notes pane history comes from this view.
                 const SfxUndoAction* pAction = pUndoManager->GetUndoAction();
-                if (pAction->GetViewShellId() != GetViewShellBase().GetViewShellId())
+                if (pUndoManager != ImpGetNotesPanelUndoManager()
+                    && pAction->GetViewShellId() != GetViewShellBase().GetViewShellId())
                 {
                     rSet.Put(SfxUInt32Item(SID_UNDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
                 }
@@ -134,8 +136,10 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
     if(pUndoManager->GetRedoActionCount() != 0)
     {
         // If another view created the first undo action, prevent redoing it from this view.
+        // Every action in the notes pane history comes from this view.
         const SfxUndoAction* pAction = pUndoManager->GetRedoAction();
-        if (pAction->GetViewShellId() != GetViewShellBase().GetViewShellId())
+        if (pUndoManager != ImpGetNotesPanelUndoManager()
+            && pAction->GetViewShellId() != GetViewShellBase().GetViewShellId())
         {
             rSet.Put(SfxUInt32Item(SID_REDO, static_cast<sal_uInt32>(SID_REPAIRPACKAGE)));
         }
