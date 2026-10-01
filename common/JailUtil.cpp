@@ -26,6 +26,7 @@
 #include <common/Unit.hpp>
 #include <common/Util.hpp>
 
+#include <atomic>
 #include <csignal>
 #include <cstdio>
 #include <cstdlib>
@@ -212,6 +213,12 @@ bool coolmount(const std::string& arg, std::string source, std::string target,
     if (isMountNamespacesEnabled())
         return domount(argc, argv) == EX_OK;
 
+    // Set once the kernel has refused to exec the helper. The refusal comes from the capabilities
+    // of the process, which do not change while it runs, so every later call fails the same way.
+    static std::atomic<bool> helperCannotRun = false;
+    if (helperCannotRun)
+        return false;
+
     // Capabilities mode: exec the setcap'd coolmount helper directly.
     // Do not route this through system()/a shell: the runtime image may not ship
     // one (distroless), and a shell buys us nothing over a plain exec.
@@ -253,10 +260,12 @@ bool coolmount(const std::string& arg, std::string source, std::string target,
         // deployment with capabilities but without CAP_SYS_ADMIN in the bounding
         // set: the kernel refuses to exec coolmount (which needs cap_sys_admin=ep)
         // with EPERM. Point the operator at the fix rather than a bare failure.
+        helperCannotRun = true;
         LOG_ERR("Failed to exec coolmount ["
                 << mountExe
                 << "]. The helper needs CAP_SYS_ADMIN; ensure the runtime grants it, "
-                   "or set mount_jail_tree config entry in coolwsd.xml to false.");
+                   "or set mount_jail_tree config entry in coolwsd.xml to false. "
+                   "Will not try to run it again.");
         return false;
     }
 
@@ -369,11 +378,12 @@ namespace
 
 bool safeRemoveDir(const std::string& path)
 {
-    // Always unmount, just in case.
-    unmount(path, /*silent=*/true);
-
     // Regardless of the bind flag, check if the jail is marked as copied.
     const bool copied = isJailCopied(path);
+
+    // A copied jail has nothing mounted in it. Anything else may still be mounted.
+    if (!copied)
+        unmount(path, /*silent=*/true);
 
     // We must be empty if we had mounted.
     if (!copied && JailUtil::isBindMountingEnabled() && !FileUtil::isEmptyDirectory(path))
@@ -444,7 +454,8 @@ bool tryRemoveJail(const std::string& root)
 
     LOG_TRC("Do remove of jail [" << root << ']');
 
-    if (!emptyJail)
+    // A jail marked as copied has nothing mounted in it.
+    if (!emptyJail && !isJailCopied(root))
     {
         // Unmount the tmp directory. Don't care if we fail.
         const std::string tmpPath = Poco::Path(root, "tmp").toString();
