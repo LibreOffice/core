@@ -78,7 +78,6 @@ static bool readJxl(SvStream& stream, Graphic& graphic)
     }
 
     // Try using partially read image if there is an error.
-    bool success = true;
     for (;;)
     {
         JxlDecoderStatus status = JxlDecoderProcessInput(dec.get());
@@ -86,8 +85,7 @@ static bool readJxl(SvStream& stream, Graphic& graphic)
         if (status == JXL_DEC_ERROR)
         {
             SAL_WARN("vcl.filter.jxl", "Decoder error");
-            success = false;
-            break;
+            return false;
         }
         else if (status == JXL_DEC_NEED_MORE_INPUT || status == JXL_DEC_SUCCESS
                  || status == JXL_DEC_FULL_IMAGE)
@@ -103,8 +101,7 @@ static bool readJxl(SvStream& stream, Graphic& graphic)
                 if (status == JXL_DEC_NEED_MORE_INPUT)
                 {
                     SAL_WARN("vcl.filter.jxl", "Incomplete/truncated file");
-                    success = false;
-                    break;
+                    return false;
                 }
                 else
                 {
@@ -117,8 +114,7 @@ static bool readJxl(SvStream& stream, Graphic& graphic)
             if (JXL_DEC_SUCCESS != JxlDecoderSetInput(dec.get(), data.data(), nBytesRead))
             {
                 SAL_WARN("vcl.filter.jxl", "JxlDecoderSetInput failed");
-                success = false;
-                break;
+                return false;
             }
         }
         else if (status == JXL_DEC_BASIC_INFO)
@@ -126,8 +122,7 @@ static bool readJxl(SvStream& stream, Graphic& graphic)
             if (JXL_DEC_SUCCESS != JxlDecoderGetBasicInfo(dec.get(), &info))
             {
                 SAL_WARN("vcl.filter.jxl", "JxlDecoderGetBasicInfo failed");
-                success = false;
-                break;
+                return false;
             }
             xsize = info.xsize;
             ysize = info.ysize;
@@ -140,30 +135,26 @@ static bool readJxl(SvStream& stream, Graphic& graphic)
             if (JXL_DEC_SUCCESS != JxlDecoderImageOutBufferSize(dec.get(), &format, &buffer_size))
             {
                 SAL_WARN("vcl.filter.jxl", "JxlDecoderImageOutBufferSize failed");
-                success = false;
-                break;
+                return false;
             }
             if (buffer_size != xsize * ysize * 4)
             {
                 SAL_WARN("vcl.filter.jxl", "Invalid out buffer size, expected "
                                                << xsize * ysize * 4 << " but got " << buffer_size);
-                success = false;
-                break;
+                return false;
             }
             pixels.resize(xsize * ysize * 4);
             if (JXL_DEC_SUCCESS
                 != JxlDecoderSetImageOutBuffer(dec.get(), &format, pixels.data(), pixels.size()))
             {
                 SAL_WARN("vcl.filter.jxl", "JxlDecoderSetImageOutBuffer failed");
-                success = false;
-                break;
+                return false;
             }
         }
         else if (status != JXL_DEC_COLOR_ENCODING) // not using color profile
         {
             SAL_WARN("vcl.filter.jxl", "Unknown JxlDecoderStatus");
-            success = false;
-            break;
+            return false;
         }
     }
 
@@ -191,7 +182,7 @@ static bool readJxl(SvStream& stream, Graphic& graphic)
     access.reset(); // Flush BitmapScopedWriteAccess
     graphic = bitmap;
 
-    return success;
+    return true;
 }
 
 bool ImportJxlGraphic(SvStream& rStream, Graphic& rGraphic)
