@@ -31,6 +31,7 @@ interface CtxtCommandEntry {
 	icon?: string;
 	command?: string;
 	items?: Record<string, CtxtValueType>;
+	callback?: () => void;
 }
 
 type CtxtValueType = CtxtCommandEntry | string;
@@ -141,6 +142,9 @@ class ContextMenuControl extends JSControl {
 
 		if (window.mode.isSmallScreenDevice()) {
 			window.contextMenuWizard = true;
+			const insertCommentEntry = contextMenu['.uno:InsertAnnotation'];
+			if (insertCommentEntry && typeof insertCommentEntry !== 'string')
+				insertCommentEntry.callback = () => app.map.insertComment();
 			const menuData =
 				window.L.Control.JSDialogBuilder.getMenuStructureForMobileWizard(
 					contextMenu,
