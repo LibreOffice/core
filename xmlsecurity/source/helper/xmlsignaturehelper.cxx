@@ -553,13 +553,15 @@ void XMLSignatureHelper::CreateAndWriteOOXMLSignature(const uno::Reference<embed
     xSaxWriter->endDocument();
 }
 
+namespace xmlsecurity
+{
 /** check this constraint from xmldsig-core 4.5.4:
 
   All certificates appearing in an X509Data element MUST relate to the
   validation key by either containing it or being part of a certification
   chain that terminates in a certificate containing the validation key.
  */
-static auto CheckX509Data(
+auto CheckX509Data(
     uno::Reference<xml::crypto::XSecurityEnvironment> const& xSecEnv,
     std::vector<SignatureInformation::X509CertInfo> const& rX509CertInfos,
     std::vector<uno::Reference<security::XCertificate>> & rCerts,
@@ -676,6 +678,7 @@ static auto CheckX509Data(
     }
     return true;
 }
+} // namespace xmlsecurity
 
 std::vector<uno::Reference<security::XCertificate>>
 XMLSignatureHelper::CheckAndUpdateSignatureInformation(
@@ -701,7 +704,7 @@ XMLSignatureHelper::CheckAndUpdateSignatureInformation(
             temp.emplace_back(it);
         }
     }
-    if (CheckX509Data(xSecEnv, temp, certs, tempResult))
+    if (xmlsecurity::CheckX509Data(xSecEnv, temp, certs, tempResult))
     {
         if (rInfo.maEncapsulatedX509Certificates.empty()) // optional, XAdES
         {
@@ -722,7 +725,7 @@ XMLSignatureHelper::CheckAndUpdateSignatureInformation(
             }
             std::vector<uno::Reference<security::XCertificate>> encapsulatedCerts;
             SignatureInformation::X509Data encapsulatedResult;
-            if (CheckX509Data(xSecEnv, encapsulatedCertInfos, encapsulatedCerts, encapsulatedResult))
+            if (xmlsecurity::CheckX509Data(xSecEnv, encapsulatedCertInfos, encapsulatedCerts, encapsulatedResult))
             {
                 auto const pXCertificate(dynamic_cast<xmlsecurity::Certificate*>(certs.back().get()));
                 auto const pECertificate(dynamic_cast<xmlsecurity::Certificate*>(encapsulatedCerts.back().get()));
