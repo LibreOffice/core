@@ -29,6 +29,8 @@
 #include <gpg/SEInitializer.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/security/XCertificate.hpp>
+#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/sax/XKeyCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
@@ -39,9 +41,14 @@
 #include <sal/log.hxx>
 #include <unotools/datetime.hxx>
 #include <comphelper/base64.hxx>
+#include <comphelper/hash.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/seqstream.hxx>
+#include <o3tl/safeint.hxx>
+
+#include <algorithm>
+#include <unordered_map>
 
 namespace com::sun::star::graphic { class XGraphic; }
 
@@ -401,7 +408,7 @@ void XSecController::setSignatureBytes(const uno::Sequence<sal_Int8>& rBytes)
 }
 
 void XSecController::setX509CertDigest(
-    OUString const& rCertDigest, sal_Int32 const /*TODO nReferenceDigestID*/,
+    OUString const& rCertDigest, sal_Int32 const nReferenceDigestID,
     std::u16string_view const& rX509IssuerName, std::u16string_view const& rX509SerialNumber)
 {
     if (m_vInternalSignatureInformations.empty())
@@ -415,6 +422,7 @@ void XSecController::setX509CertDigest(
             if (xmlsecurity::EqualDistinguishedNames(it.X509IssuerName, rX509IssuerName, xmlsecurity::EqualMode::CompatBoth)
                 && it.X509SerialNumber == rX509SerialNumber)
             {
+                it.DigestID = nReferenceDigestID;
                 it.CertDigest = rCertDigest;
                 return;
             }
@@ -438,6 +446,7 @@ void XSecController::setX509CertDigest(
                     else if (xmlsecurity::EqualDistinguishedNames(xCert->getIssuerName(), rX509IssuerName, xmlsecurity::EqualMode::Compat2nd)
                         && xmlsecurity::bigIntegerToNumericString(xCert->getSerialNumber()) == rX509SerialNumber)
                     {
+                        it.DigestID = nReferenceDigestID;
                         it.CertDigest = rCertDigest;
                         // note: testInsertCertificate_PEM_DOCX requires these!
                         it.X509SerialNumber = rX509SerialNumber;
@@ -461,6 +470,144 @@ void XSecController::setX509CertDigest(
     {
         SAL_INFO("xmlsecurity.helper", "cannot find X509Data for CertDigest");
     }
+}
+
+void XSecController::setXAdES()
+{
+    if (m_vInternalSignatureInformations.empty())
+        return;
+    m_vInternalSignatureInformations.back().isXAdES = true;
+}
+
+void XSecController::setKeyInfoReferenced()
+{
+    if (m_vInternalSignatureInformations.empty())
+        return;
+    m_vInternalSignatureInformations.back().isKeyInfoReferenced = true;
+}
+
+namespace
+{
+
+bool IsCertificateDigest(std::string const& rCertificate,
+        std::u16string_view const rDigest, sal_Int32 const nDigestID)
+{
+    comphelper::HashType eType;
+    switch (nDigestID)
+    {
+        case css::xml::crypto::DigestID::SHA1:
+            eType = comphelper::HashType::SHA1;
+            break;
+        case css::xml::crypto::DigestID::SHA256:
+            eType = comphelper::HashType::SHA256;
+            break;
+        case css::xml::crypto::DigestID::SHA512:
+            eType = comphelper::HashType::SHA512;
+            break;
+        default:
+            return false;
+    }
+    Sequence<sal_Int8> const certificate{reinterpret_cast<sal_Int8 const*>(rCertificate.data()), static_cast<sal_Int32>(rCertificate.size())};
+    std::vector<unsigned char> const hash(comphelper::Hash::calculateHash(
+        certificate.getConstArray(), certificate.getLength(), eType));
+    Sequence<sal_Int8> digest;
+    comphelper::Base64::decode(digest, rDigest);
+    return !hash.empty() && o3tl::make_unsigned(digest.getLength()) == hash.size()
+        && std::equal(hash.begin(), hash.end(),
+               reinterpret_cast<unsigned char const*>(digest.getConstArray()));
+}
+
+} // namespace
+
+void XSecController::resolveSigningCertificate()
+{
+    if (m_vInternalSignatureInformations.empty())
+        return;
+
+    InternalSignatureInformation & rInformation{m_vInternalSignatureInformations.back()};
+    SignatureInformation const & rInfo{rInformation.signatureInfor};
+    // For an OpenPGP signature, the xades:CertDigest element holds the key ID.
+    if (rInfo.SigningCertificates.empty() || !rInfo.ouGpgKeyID.isEmpty()
+        || !rInfo.ouGpgCertificate.isEmpty())
+    {
+        return;
+    }
+
+    uno::Reference<xml::crypto::XSecurityEnvironment> const xSecEnv{
+        m_xSecurityContext->getSecurityEnvironment()};
+    std::unordered_map<std::string, OUString> candidates;
+    auto const addCandidate = [&candidates](OUString const& rCertificate)
+    {
+        // unfortunately Base64 may contain whitespace so decode to match
+        Sequence<sal_Int8> der;
+        comphelper::Base64::decode(der, rCertificate);
+        std::string temp{reinterpret_cast<char const*>(der.getConstArray()), static_cast<size_t>(der.getLength())};
+        if (!rCertificate.isEmpty() && candidates.find(temp) == candidates.end())
+        {
+            candidates[temp] = rCertificate;
+        }
+    };
+    for (OUString const& rEncapsulated : rInfo.maEncapsulatedX509Certificates)
+    {
+        addCandidate(rEncapsulated);
+    }
+    for (auto const& rData : rInfo.X509Datas)
+    {
+        for (auto const& rCertInfo : rData)
+        {
+            if (!rCertInfo.X509Certificate.isEmpty())
+            {
+                addCandidate(rCertInfo.X509Certificate);
+            }
+            else if (!rCertInfo.X509IssuerName.isEmpty() && xSecEnv.is())
+            {
+                // ds:X509Data element has only a reference, so try to get certificate from store.
+                try
+                {
+                    uno::Reference<security::XCertificate> const xCert{xSecEnv->getCertificate(
+                        rCertInfo.X509IssuerName,
+                        xmlsecurity::numericStringToBigInteger(rCertInfo.X509SerialNumber))};
+                    if (xCert.is())
+                    {
+                        OUStringBuffer buf;
+                        comphelper::Base64::encode(buf, xCert->getEncoded());
+                        addCandidate(buf.makeStringAndClear());
+                    }
+                }
+                catch (css::uno::Exception const&)
+                {
+                    SAL_INFO("xmlsecurity.helper", "cannot find certificate in store");
+                }
+            }
+        }
+    }
+
+    // Naturally the SigningCertificate element doesn't actually contain
+    // the certificate itself, that would be too easy!
+    SignatureInformation::X509Data matches;
+    for (auto const& rCandidate : candidates)
+    {
+        for (auto const& rSigningCertificate : rInfo.SigningCertificates)
+        {
+            if (IsCertificateDigest(rCandidate.first, rSigningCertificate.CertDigest,
+                                    rSigningCertificate.DigestID))
+            {
+                matches.emplace_back();
+                matches.back().X509Certificate = rCandidate.second;
+                break;
+            }
+        }
+    }
+
+    std::vector<uno::Reference<security::XCertificate>> certs;
+    SignatureInformation::X509Data tempResult;
+    // let's assume the same constraints as for KeyInfo hold for SigningCertificate
+    if (!xmlsecurity::CheckX509Data(xSecEnv, matches, certs, tempResult))
+    {
+        return;
+    }
+
+    rInformation.xSigningCertificate = certs.back();
 }
 
 namespace {
