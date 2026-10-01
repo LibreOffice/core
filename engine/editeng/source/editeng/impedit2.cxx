@@ -3283,7 +3283,13 @@ tools::Rectangle ImpEditEngine::GetEditCursor(ParaPortion const& rPortion, EditL
     aEditCursor.SetLeft(nX);
     aEditCursor.SetRight(nX);
 
-    aEditCursor.SetBottom(rLine.GetHeight() - 1 + nYShift);
+    // The text ends at the font's share of descent below the baseline, which leaves part of the
+    // height a line gains from its line spacing below the text.
+    tools::Long nTextBottom = rLine.GetHeight();
+    if (IsFixedCellHeight() && !mbLineSpacingBelowBaseline)
+        nTextBottom = std::min<tools::Long>(nTextBottom,
+                                            rLine.GetMaxAscent() + rLine.GetShareDescent());
+    aEditCursor.SetBottom(nTextBottom - 1 + nYShift);
     if (aFlags.bTextOnly)
         aEditCursor.SetTop(aEditCursor.Bottom() - rLine.GetTxtHeight() + 1);
     else

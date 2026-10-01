@@ -190,6 +190,7 @@ public:
 
     /// Test that a character typed over a selection through an input method is one undo step
     void testExtTextInputOverSelectionIsOneUndoStep();
+    void testCursorReachesTheSameDepthBelowTheBaseline();
 
     // Fills rOutliner's edit engine so that paragraph 0 holds one URL field
     // long enough to wrap onto several sublines, with rTailText supplying
@@ -250,6 +251,7 @@ public:
     CPPUNIT_TEST(testOutlinerUndoParaFlag);
     CPPUNIT_TEST(testOutlinerReadDepth);
     CPPUNIT_TEST(testExtTextInputOverSelectionIsOneUndoStep);
+    CPPUNIT_TEST(testCursorReachesTheSameDepthBelowTheBaseline);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3138,6 +3140,42 @@ void Test::testExtTextInputOverSelectionIsOneUndoStep()
 
     aEditEngine.GetUndoManager().Undo();
     CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, aEditEngine.GetText());
+
+    aEditEngine.RemoveView(&aEditView);
+}
+
+/*
+ * With font independent line spacing, part of the height a line gains from its line spacing sits
+ * below the text. The cursor covers the text, so it reaches as far below the baseline at double
+ * spacing as at single spacing.
+ */
+void Test::testCursorReachesTheSameDepthBelowTheBaseline()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetFixedCellHeight(true);
+    aEditEngine.SetText(u"Line"_ustr);
+
+    ScopedVclPtrInstance<WorkWindow> xWindow(nullptr, WB_APP | WB_STDWORK);
+    EditView aEditView(aEditEngine, xWindow.get());
+    aEditEngine.InsertView(&aEditView);
+    aEditView.SetOutputArea(tools::Rectangle(Point(0, 0), Size(10000, 10000)));
+
+    auto depthBelowBaseline = [&](sal_uInt16 nSpace) {
+        SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
+        SvxLineSpacingItem aLineSpacing(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+        aLineSpacing.SetPropLineSpace(nSpace);
+        aSet.Put(aLineSpacing);
+        aSet.Put(SvxFontHeightItem(706, 100, EE_CHAR_FONTHEIGHT));
+        aEditEngine.QuickSetAttribs(aSet, ESelection(0, 0, 0, 4));
+
+        aEditView.SetSelection(ESelection(0, 4, 0, 4));
+        const tools::Rectangle aCursor = aEditView.GetEditCursor();
+        return aCursor.Bottom() - tools::Long(aEditEngine.GetParagraphInfos(0).nFirstLineMaxAscent);
+    };
+
+    const tools::Long nSingle = depthBelowBaseline(100);
+    CPPUNIT_ASSERT_GREATER(tools::Long(0), nSingle);
+    CPPUNIT_ASSERT_EQUAL(nSingle, depthBelowBaseline(200));
 
     aEditEngine.RemoveView(&aEditView);
 }
