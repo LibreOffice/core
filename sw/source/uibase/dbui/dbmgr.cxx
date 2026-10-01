@@ -25,6 +25,7 @@
 #include <sfx2/app.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
@@ -225,93 +226,11 @@ public:
 
 };
 
-namespace {
-
-/// Listens to removed data sources, and if it's one that's embedded into this document, triggers embedding removal.
-class SwDataSourceRemovedListener : public cppu::WeakImplHelper<sdb::XDatabaseRegistrationsListener>
-{
-    uno::Reference<sdb::XDatabaseContext> m_xDatabaseContext;
-    SwDBManager* m_pDBManager;
-
-public:
-    explicit SwDataSourceRemovedListener(SwDBManager& rDBManager);
-    virtual ~SwDataSourceRemovedListener() override;
-    virtual void SAL_CALL registeredDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) override;
-    virtual void SAL_CALL revokedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) override;
-    virtual void SAL_CALL changedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) override;
-    virtual void SAL_CALL disposing(const lang::EventObject& rObject) override;
-    void Dispose();
-};
-
-}
-
-SwDataSourceRemovedListener::SwDataSourceRemovedListener(SwDBManager& rDBManager)
-    : m_pDBManager(&rDBManager)
-{
-    const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
-    m_xDatabaseContext = sdb::DatabaseContext::create(xComponentContext);
-    m_xDatabaseContext->addDatabaseRegistrationsListener(this);
-}
-
-SwDataSourceRemovedListener::~SwDataSourceRemovedListener()
-{
-    if (m_xDatabaseContext.is())
-        m_xDatabaseContext->removeDatabaseRegistrationsListener(this);
-}
-
-void SAL_CALL SwDataSourceRemovedListener::registeredDatabaseLocation(const sdb::DatabaseRegistrationEvent& /*rEvent*/)
-{
-}
-
-void SAL_CALL SwDataSourceRemovedListener::revokedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent)
-{
-    if (!m_pDBManager || m_pDBManager->getEmbeddedName().isEmpty())
-        return;
-
-    SwDoc* pDoc = m_pDBManager->getDoc();
-    if (!pDoc)
-        return;
-
-    SwDocShell* pDocShell = pDoc->GetDocShell();
-    if (!pDocShell)
-        return;
-
-    const OUString sTmpName = ConstructVndSunStarPkgUrl(
-        pDocShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE),
-        m_pDBManager->getEmbeddedName());
-
-    if (sTmpName != rEvent.OldLocation)
-        return;
-
-    // The revoked database location is inside this document, then remove the
-    // embedding, as otherwise it would be back on the next reload of the
-    // document.
-    pDocShell->GetStorage()->removeElement(m_pDBManager->getEmbeddedName());
-    m_pDBManager->setEmbeddedName(OUString(), *pDocShell);
-}
-
-void SAL_CALL SwDataSourceRemovedListener::changedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent)
-{
-    if (rEvent.OldLocation != rEvent.NewLocation)
-        revokedDatabaseLocation(rEvent);
-}
-
-void SwDataSourceRemovedListener::disposing(const lang::EventObject& /*rObject*/)
-{
-    m_xDatabaseContext.clear();
-}
-
-void SwDataSourceRemovedListener::Dispose()
-{
-    m_pDBManager = nullptr;
-}
-
 struct SwDBManager::SwDBManager_Impl
 {
     std::unique_ptr<SwDSParam> pMergeData;
     VclPtr<AbstractMailMergeDlg>  pMergeDialog;
     rtl::Reference<SwDBManager::ConnectionDisposedListener_Impl> m_xDisposeListener;
-    rtl::Reference<SwDataSourceRemovedListener> m_xDataSourceRemovedListener;
     std::mutex                    m_aAllEmailSendMutex;
     uno::Reference< mail::XMailMessage> m_xLastMessage;
 
@@ -322,8 +241,6 @@ struct SwDBManager::SwDBManager_Impl
     ~SwDBManager_Impl()
     {
         m_xDisposeListener->Dispose();
-        if (m_xDataSourceRemovedListener.is())
-            m_xDataSourceRemovedListener->Dispose();
     }
 };
 
@@ -516,7 +433,8 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
 
     lcl_ToNextRecord(m_pImpl->pMergeData.get(), SwDBNextRecord::FIRST);
 
-    uno::Reference<sdbc::XDataSource> xSource = SwDBManager::getDataSourceAsParent(xConnection,aData.sDataSource);
+    uno::Reference<sdbc::XDataSource> xSource
+        = SwDBManager::getDataSourceAsParent(xConnection, ResolveDataSourceName(aData.sDataSource));
 
     lcl_InitNumberFormatter(*m_pImpl->pMergeData, xSource);
 
@@ -1897,7 +1815,10 @@ uno::Reference< sdbc::XConnection> SwDBManager::GetConnection(const OUString& rD
     const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     try
     {
-        uno::Reference<sdb::XCompletedConnection> xComplConnection(dbtools::getDataSource(rDataSource, xContext), uno::UNO_QUERY);
+        const OUString sDataSource
+            = pView ? pView->GetWrtShell().GetDBManager()->ResolveDataSourceName(rDataSource)
+                    : rDataSource;
+        uno::Reference<sdb::XCompletedConnection> xComplConnection(dbtools::getDataSource(sDataSource, xContext), uno::UNO_QUERY);
         if ( !xComplConnection )
             return xConnection;
         rxSource.set(xComplConnection, uno::UNO_QUERY);
@@ -2375,7 +2296,8 @@ uno::Reference< sdbc::XConnection> const & SwDBManager::RegisterConnection(OUStr
     if(!pFound->xConnection.is())
     {
         SwView* pView = (m_pDoc && m_pDoc->GetDocShell()) ? m_pDoc->GetDocShell()->GetView() : nullptr;
-        pFound->xConnection = SwDBManager::GetConnection(rDataSource, xSource, pView);
+        pFound->xConnection
+            = SwDBManager::GetConnection(ResolveDataSourceName(rDataSource), xSource, pView);
         try
         {
             uno::Reference<lang::XComponent> xComponent(pFound->xConnection, uno::UNO_QUERY);
@@ -2674,7 +2596,7 @@ In case of success it returns the registered name, otherwise an empty string.
 Optionally add a prefix to the registered DB name.
 */
 OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference< beans::XPropertySet > *pSettings,
-    const INetURLObject &rURL, const OUString *pDestDir, SfxObjectShell* pDocShell)
+    const INetURLObject &rURL, const OUString *pDestDir, SwDocShell* pDocShell)
 {
     OUString sExt(rURL.GetFileExtension());
     uno::Any aTableFilterAny;
@@ -2766,6 +2688,10 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
                 // Embed.
                 OUString aStreamRelPath = u"EmbeddedDatabase"_ustr;
                 uno::Reference<embed::XStorage> xStorage = pDocShell->GetStorage();
+                SwDBManager* pDBManager = pDocShell->GetDoc()->GetDBManager();
+
+                // The new data source replaces any embedded one in the same sub-storage.
+                pDBManager->ReleaseEmbeddedDataSource();
 
                 // Refer to the sub-storage name in the document settings, so
                 // we can load it again next time the file is imported.
@@ -2773,8 +2699,14 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
                 uno::Reference<beans::XPropertySet> xPropertySet(xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
                 xPropertySet->setPropertyValue(u"EmbeddedDatabaseName"_ustr, uno::Any(aStreamRelPath));
 
-                // Store it only after setting the above property, so that only one data source gets registered.
+                // Store it only after setting the above property, which would otherwise load the
+                // stored copy a second time.
                 SwDBManager::StoreEmbeddedDataSource(xStore, xStorage, aStreamRelPath, aOwnURL);
+
+                // The embedded data source belongs to the document and is not registered.
+                pDBManager->SetEmbeddedDataSource(
+                    uno::Reference<sdbc::XDataSource>(xNewInstance, uno::UNO_QUERY), sFind);
+                return sFind;
             }
         }
         xDBContext->registerObject(sFind, xNewInstance);
@@ -2843,7 +2775,9 @@ OUString SwDBManager::LoadAndRegisterDataSource(weld::Window* pParent, SwDocShel
         }
         sFind = LoadAndRegisterDataSource_Impl( type, DBConnURIType::FLAT == type ? &aSettings : nullptr, aURL, nullptr, pDocShell );
 
-        s_aUncommittedRegistrations.push_back(std::pair<SwDocShell*, OUString>(pDocShell, sFind));
+        // An embedded data source has no registration to revoke or commit.
+        if (!pDocShell || pDocShell->GetDoc()->GetDBManager()->GetEmbeddedDataSourceName() != sFind)
+            s_aUncommittedRegistrations.push_back(std::pair<SwDocShell*, OUString>(pDocShell, sFind));
     }
     return sFind;
 }
@@ -2877,9 +2811,8 @@ namespace
 {
     // tdf#117824 switch the embedded database away from using its current storage and point it to temporary storage
     // which allows the original storage to be deleted
-    void switchEmbeddedDatabaseStorage(const uno::Reference<sdb::XDatabaseContext>& rDatabaseContext, const OUString& rName)
+    void switchEmbeddedDatabaseStorage(const uno::Reference<sdb::XDocumentDataSource>& xDS)
     {
-        uno::Reference<sdb::XDocumentDataSource> xDS(rDatabaseContext->getByName(rName), uno::UNO_QUERY);
         if (!xDS)
             return;
         uno::Reference<document::XStorageBasedDocument> xStorageDoc(xDS->getDatabaseDocument(), uno::UNO_QUERY);
@@ -2894,22 +2827,15 @@ void SwDBManager::RevokeDataSource(const OUString& rName)
     uno::Reference<sdb::XDatabaseContext> xDatabaseContext = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
     if (xDatabaseContext->hasByName(rName))
     {
-        switchEmbeddedDatabaseStorage(xDatabaseContext, rName);
+        switchEmbeddedDatabaseStorage(
+            uno::Reference<sdb::XDocumentDataSource>(xDatabaseContext->getByName(rName), uno::UNO_QUERY));
         xDatabaseContext->revokeObject(rName);
     }
 }
 
-void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const SwDocShell& rDocShell)
+void SwDBManager::LoadEmbeddedDataSource(const SwDBData& rData, const SwDocShell& rDocShell)
 {
     uno::Reference<sdb::XDatabaseContext> xDatabaseContext = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
-
-    OUString sDataSource = rData.sDataSource;
-
-    // Fallback, just in case the document would contain an embedded data source, but no DB fields.
-    if (sDataSource.isEmpty())
-        sDataSource = u"EmbeddedDatabase"_ustr;
-
-    SwDBManager::RevokeDataSource( sDataSource );
 
     // Encode the stream name and the real path into a single URL.
     const INetURLObject& rURLObject = rDocShell.GetMedium()->GetURLObject();
@@ -2917,12 +2843,51 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
         rURLObject.GetMainURL(INetURLObject::DecodeMechanism::NONE),
         m_sEmbeddedName);
 
-    uno::Reference<uno::XInterface> xDataSource(xDatabaseContext->getByName(aURL), uno::UNO_QUERY);
-    xDatabaseContext->registerObject( sDataSource, xDataSource );
+    // The database context caches the loaded database under its URL, so the document reaches it by
+    // that URL and the user's registered data sources stay as they are.
+    SetEmbeddedDataSource(
+        uno::Reference<sdbc::XDataSource>(xDatabaseContext->getByName(aURL), uno::UNO_QUERY),
+        rData.sDataSource);
+}
 
-    // temp file - don't remember connection
-    if (rData.sDataSource.isEmpty())
-        s_aUncommittedRegistrations.push_back(std::pair<SwDocShell*, OUString>(nullptr, sDataSource));
+void SwDBManager::SetEmbeddedDataSource(const uno::Reference<sdbc::XDataSource>& xDataSource,
+                                        const OUString& rDataSource)
+{
+    m_xEmbeddedDataSource = xDataSource;
+    // Fallback, just in case the document would contain an embedded data source, but no DB fields.
+    m_sEmbeddedDataSourceName = rDataSource.isEmpty() ? u"EmbeddedDatabase"_ustr : rDataSource;
+}
+
+void SwDBManager::ReleaseEmbeddedDataSource()
+{
+    if (!m_xEmbeddedDataSource.is())
+        return;
+
+    switchEmbeddedDatabaseStorage(
+        uno::Reference<sdb::XDocumentDataSource>(m_xEmbeddedDataSource, uno::UNO_QUERY));
+    m_xEmbeddedDataSource.clear();
+    m_sEmbeddedDataSourceName.clear();
+}
+
+OUString SwDBManager::ResolveDataSourceName(const OUString& rDataSource) const
+{
+    if (m_sEmbeddedDataSourceName.isEmpty() || rDataSource != m_sEmbeddedDataSourceName)
+        return rDataSource;
+
+    // The database document follows this document when it is saved under a new name, so its URL is
+    // the one the database context knows it by.
+    uno::Reference<sdb::XDocumentDataSource> xDS(m_xEmbeddedDataSource, uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(xDS.is() ? xDS->getDatabaseDocument() : nullptr,
+                                         uno::UNO_QUERY);
+    return xModel.is() ? xModel->getURL() : rDataSource;
+}
+
+OUString SwDBManager::GetDocumentDataSourceName(const OUString& rDataSource) const
+{
+    if (!m_sEmbeddedDataSourceName.isEmpty()
+        && rDataSource == ResolveDataSourceName(m_sEmbeddedDataSourceName))
+        return m_sEmbeddedDataSourceName;
+    return rDataSource;
 }
 
 void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
@@ -3132,7 +3097,10 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
             uno::Reference<beans::XPropertySet> xRowSetPropSet(xInstance, uno::UNO_QUERY);
             if(xRowSetPropSet.is())
             {
-                xRowSetPropSet->setPropertyValue(u"DataSourceName"_ustr, uno::Any(_sDataSourceName));
+                const OUString sDataSource
+                    = pView ? pView->GetWrtShell().GetDBManager()->ResolveDataSourceName(_sDataSourceName)
+                            : _sDataSourceName;
+                xRowSetPropSet->setPropertyValue(u"DataSourceName"_ustr, uno::Any(sDataSource));
                 xRowSetPropSet->setPropertyValue(u"ActiveConnection"_ustr, uno::Any(_xConnection));
                 xRowSetPropSet->setPropertyValue(u"Command"_ustr, uno::Any(_sCommand));
                 xRowSetPropSet->setPropertyValue(u"CommandType"_ustr, uno::Any(_nCommandType));
@@ -3159,7 +3127,15 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
 void SwDBManager::setEmbeddedName(const OUString& rEmbeddedName, SwDocShell& rDocShell)
 {
     bool bLoad = m_sEmbeddedName != rEmbeddedName && !rEmbeddedName.isEmpty();
-    bool bRegisterListener = m_sEmbeddedName.isEmpty() && !rEmbeddedName.isEmpty();
+
+    if (rEmbeddedName.isEmpty() && !m_sEmbeddedName.isEmpty())
+    {
+        ReleaseEmbeddedDataSource();
+        // Clearing the name removes the embedded database from the document.
+        uno::Reference<embed::XStorage> xStorage = rDocShell.GetStorage();
+        if (xStorage.is() && xStorage->hasByName(m_sEmbeddedName))
+            xStorage->removeElement(m_sEmbeddedName);
+    }
 
     m_sEmbeddedName = rEmbeddedName;
 
@@ -3169,12 +3145,8 @@ void SwDBManager::setEmbeddedName(const OUString& rEmbeddedName, SwDocShell& rDo
         // It's OK that we don't have the named sub-storage yet, in case
         // we're in the process of creating it.
         if (xStorage->hasByName(rEmbeddedName))
-            LoadAndRegisterEmbeddedDataSource(rDocShell.GetDoc()->GetDBData(), rDocShell);
+            LoadEmbeddedDataSource(rDocShell.GetDoc()->GetDBData(), rDocShell);
     }
-
-    if (bRegisterListener)
-        // Register a remove listener, so we know when the embedded data source is removed.
-        m_pImpl->m_xDataSourceRemovedListener = new SwDataSourceRemovedListener(*this);
 }
 
 const OUString& SwDBManager::getEmbeddedName() const
@@ -3185,15 +3157,6 @@ const OUString& SwDBManager::getEmbeddedName() const
 SwDoc* SwDBManager::getDoc() const
 {
     return m_pDoc;
-}
-
-void SwDBManager::releaseRevokeListener()
-{
-    if (m_pImpl->m_xDataSourceRemovedListener.is())
-    {
-        m_pImpl->m_xDataSourceRemovedListener->Dispose();
-        m_pImpl->m_xDataSourceRemovedListener.clear();
-    }
 }
 
 SwDBManager::ConnectionDisposedListener_Impl::ConnectionDisposedListener_Impl(SwDBManager& rManager)
