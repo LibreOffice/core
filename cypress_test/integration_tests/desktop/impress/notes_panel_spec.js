@@ -369,6 +369,26 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		);
 	});
 
+	// The notes are plain paragraphs, so Ctrl+Enter starts the next paragraph at the same level, as
+	// Enter does.
+	it('Ctrl+Enter starts a new paragraph at the same level', function () {
+		openNotesPane();
+
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('first');
+		cy.cGet(editEngine).type('{ctrl}{enter}');
+		cy.cGet(editEngine).type('second');
+
+		cy.cGet(paragraph).should('have.length', 2);
+		cy.cGet(paragraph).eq(1).should('have.text', 'second');
+		cy.cGet(paragraph).eq(1).should('not.have.attr', 'data-bullet');
+		cy.cGet(paragraph).eq(1).should(function (element) {
+			expect(element[0].style.paddingInlineStart).to.equal('');
+		});
+	});
+
 	// Text that has no formatting of its own shows in the font of the notes style, the same font
 	// as text that has.
 	it('the notes show in the font they have in the document', function () {

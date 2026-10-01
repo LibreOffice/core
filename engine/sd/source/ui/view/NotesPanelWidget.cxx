@@ -16,6 +16,7 @@
 #include <ViewShellManager.hxx>
 
 #include <editeng/outliner.hxx>
+#include <vcl/event.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <vcl/svapp.hxx>
 
@@ -63,6 +64,19 @@ public:
 
 protected:
     sal_Int32 GetLockingViewId() override { return mrNotesPanelView.getLockingViewId(); }
+
+    /// The notes are plain paragraphs, so Ctrl+Enter starts a new paragraph at the same level, as
+    /// Enter does.
+    KeyEvent AdjustKeyEvent(const KeyEvent& rKeyEvent) override
+    {
+        const vcl::KeyCode& rKeyCode = rKeyEvent.GetKeyCode();
+        if (rKeyCode.GetCode() != KEY_RETURN || !rKeyCode.IsMod1())
+            return rKeyEvent;
+
+        const vcl::KeyCode aKeyCode(KEY_RETURN, rKeyCode.IsShift(), false, rKeyCode.IsMod2(),
+                                    rKeyCode.IsMod3());
+        return KeyEvent(rKeyEvent.GetCharCode(), aKeyCode, rKeyEvent.GetRepeat());
+    }
 
     bool HandleExtraEvent(const OUString& rCmd, const OUString& /*rData*/) override
     {

@@ -401,7 +401,8 @@ bool EditEngineWidgetController::HandleKey(std::u16string_view rData)
     const sal_uInt16 nCharCode = oTree->get<sal_uInt16>("charCode", 0);
     const sal_uInt16 nRepeat = oTree->get<sal_uInt16>("repeat", 0);
 
-    const KeyEvent aKeyEvent(nCharCode, vcl::KeyCode(nKeyCode), nRepeat);
+    const KeyEvent aKeyEvent
+        = AdjustKeyEvent(KeyEvent(nCharCode, vcl::KeyCode(nKeyCode), nRepeat));
 
     // Select all is an accelerator of the frame and not a key of the edit engine, so the widget
     // selects the whole text itself.
@@ -426,6 +427,8 @@ bool EditEngineWidgetController::HandleKey(std::u16string_view rData)
     QueueUpdate();
     return true;
 }
+
+KeyEvent EditEngineWidgetController::AdjustKeyEvent(const KeyEvent& rKeyEvent) { return rKeyEvent; }
 
 bool EditEngineWidgetController::HandleSelection(std::u16string_view rData)
 {

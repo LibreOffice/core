@@ -19,6 +19,7 @@
 class EditEngine;
 class EditStatus;
 class EditView;
+class KeyEvent;
 class Outliner;
 class SfxItemSet;
 
@@ -87,6 +88,10 @@ protected:
     /// The view shell id of another view that edits the same text, so that this view only shows
     /// it, or -1 when no other view does. Written as "lockedBy" when it is a view.
     virtual sal_Int32 GetLockingViewId() { return -1; }
+
+    /// The keystroke the edit engine gets for a keystroke from the client. The default is the
+    /// keystroke itself.
+    virtual KeyEvent AdjustKeyEvent(const KeyEvent& rKeyEvent);
 
     /// Handles a command outside the generic set. Returns true when the command was consumed.
     virtual bool HandleExtraEvent(const OUString& /*rCmd*/, const OUString& /*rData*/)
