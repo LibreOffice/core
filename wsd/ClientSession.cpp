@@ -1766,50 +1766,10 @@ bool ClientSession::_handleInput(const char *buffer, int length)
 #if !MOBILEAPP
 void ClientSession::uploadBrowserSettingsToWopiHost()
 {
-    const Authorization& auth = getAuthorization();
-    Poco::URI uriObject = DocumentBroker::getPresetUploadBaseUrl(_uriPublic);
-
-    // A relative URI has no host to send the request to.
-    if (uriObject.isRelative())
-    {
-        LOG_WRN("Not uploading browser settings: WOPI base URL ["
-                << uriObject.toString() << "] is relative");
-        return;
-    }
-
-    const std::string filePath = "/settings/userconfig/browsersetting/browsersetting.json";
-    uriObject.addQueryParameter("fileId", filePath);
-    auth.authorizeURI(uriObject);
-
-    const std::string uriAnonym = Anonymizer::anonymizeUrl(uriObject.toString());
-
-    auto httpRequest = StorageConnectionManager::createHttpRequest(uriObject, auth);
-    httpRequest.setVerb(http::Request::VERB_POST);
-    auto httpSession = StorageConnectionManager::getHttpSession(uriObject);
-
     std::ostringstream jsonStream;
     _browserSettingsJSON->stringify(jsonStream, 2);
-    httpRequest.setBody(jsonStream.str(), "application/json; charset=utf-8");
-
-    const std::string logPfx = getLogPrefix();
-    http::Session::FinishedCallback finishedCallback =
-        [uriAnonym, logPfx](const std::shared_ptr<http::Session>& wopiSession)
-    {
-        const std::shared_ptr<const http::Response> httpResponse = wopiSession->response();
-        const http::StatusLine statusLine = httpResponse->statusLine();
-        if (statusLine.statusCode() != http::StatusCode::OK)
-        {
-            LOG_ERR_S(logPfx << "Failed to upload updated browsersetting to wopiHost["
-                    << uriAnonym << "] with status[" << statusLine.reasonPhrase() << ']');
-            return;
-        }
-        LOG_TRC_S(logPfx << "Successfully uploaded browsersetting to wopiHost");
-    };
-
-    LOG_DBG("Uploading browsersetting json [" << jsonStream.str() << "] to wopiHost[" << uriAnonym
-                                              << ']');
-    httpSession->setFinishedHandler(std::move(finishedCallback));
-    httpSession->asyncRequest(httpRequest, COOLWSD::getWebServerPoll());
+    uploadSettingsToWopiHost("/settings/userconfig/browsersetting/browsersetting.json",
+                             jsonStream.str(), "browsersetting");
 }
 
 void ClientSession::uploadSettingsToWopiHost(const std::string& filePath,

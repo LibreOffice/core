@@ -32,8 +32,7 @@ inline constexpr std::string_view OverrideFields[] = {
     "ESignatureSecret",
 };
 
-// The fields that hold a secret. These are never sent to the browser in cleartext and are
-// preserved across a settings save unless the administrator replaces them.
+// The fields whose value is a credential, a subset of Fields.
 inline constexpr std::string_view SecretFields[] = {
     "ESignatureSecret",
 };
