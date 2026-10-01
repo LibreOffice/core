@@ -1354,6 +1354,25 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropRefusedPointer)
         != aView.m_aMousePointers.end());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDragDropMovePointer)
+{
+    // Given a document with A1:B2 filled and selected:
+    ScModelObj* pModelObj = createDoc("cell_drag.fods");
+    ScTestViewCallback aView;
+    Point aFrom = lcl_cellCenter(mxComponent, aView, u"$A$1"_ustr);
+    Point aTo = lcl_cellCenter(mxComponent, aView, u"$D$1"_ustr);
+    lcl_select(mxComponent, u"$A$1:$B$2"_ustr);
+    aView.m_aMousePointers.clear();
+
+    // When dragging the selection to D1 without a modifier:
+    lcl_drag(pModelObj, aFrom, aTo, 0);
+
+    // Then the pointer shows a move while dragging.
+    // Without the fix in place, this test would have failed, as the client got the default pointer.
+    CPPUNIT_ASSERT(std::find(aView.m_aMousePointers.begin(), aView.m_aMousePointers.end(), "move")
+                   != aView.m_aMousePointers.end());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

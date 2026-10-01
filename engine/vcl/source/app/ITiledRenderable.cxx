@@ -51,7 +51,7 @@ const std::map<PointerStyle, OString> gaKitPointerMap{
     // Pen, Magnify, Fill, Rotate
     // HShear, VShear
     // Mirror, Crook, Crop, MovePoint, MoveBezierWeight
-    // MoveData
+    { PointerStyle::MoveData, "move"_ostr },
     { PointerStyle::CopyData, "copy"_ostr },
     { PointerStyle::LinkData, "alias"_ostr },
     // MoveDataLink, CopyDataLink
