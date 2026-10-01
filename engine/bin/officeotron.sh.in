@@ -4,7 +4,7 @@
 # the build was configured with --enable-cofficeotron, the native
 # cofficeotron that the COFFICEOTRON build module produces.
 if test -n "@OFFICEOTRON_JAR@"; then
-    exec @JAVAINTERPRETER@ -Xmx64m -jar "@TARFILE_LOCATION@/@OFFICEOTRON_JAR@" "$@"
+    exec "@JAVAINTERPRETER@" -Xmx64m -jar "@TARFILE_LOCATION@/@OFFICEOTRON_JAR@" "$@"
 fi
 export LD_LIBRARY_PATH="@BUILDDIR@/instdir/program${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 exec "@WORKDIR@/LinkTarget/Executable/cofficeotron" \
