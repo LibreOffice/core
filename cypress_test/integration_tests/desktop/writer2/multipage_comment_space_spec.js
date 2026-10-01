@@ -11,20 +11,25 @@ describe(['tagdesktop'], 'Writer multi-page view leaves room for the comments.',
 		// The document opens with the notebookbar, but the comment helper picks
 		// its menu path from this switch rather than from the document.
 		desktopHelper.switchUIToNotebookbar();
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
 	});
 
 	function switchToMultiPageView() {
-		cy.getFrameWindow().then(function(win) {
-			return helper.processToIdle(win);
+		cy.then(() => {
+			return helper.processToIdle(this.win);
 		});
 
-		cy.getFrameWindow().then(function(win) {
-			win.app.dispatcher.dispatch('multipageview');
-			return helper.processToIdle(win);
+		cy.then(() => {
+			this.win.app.dispatcher.dispatch('multipageview');
+			return helper.processToIdle(this.win);
 		});
 
-		cy.getFrameWindow().its('app.activeDocument.activeLayout.type')
-			.should('equal', 'ViewLayoutMultiPage');
+		cy.then(() => {
+			expect(this.win.app.activeDocument.activeLayout.type)
+				.to.equal('ViewLayoutMultiPage');
+		});
 	}
 
 	// Insert a comment and leave it unselected. A selected comment is pulled out
@@ -33,10 +38,10 @@ describe(['tagdesktop'], 'Writer multi-page view leaves room for the comments.',
 	function insertCommentAndDeselect() {
 		desktopHelper.insertComment();
 
-		cy.getFrameWindow().then(function(win) {
-			win.app.sectionContainer
-				.getSectionWithName(win.app.CSections.CommentList.name).unselect();
-			return helper.processToIdle(win);
+		cy.then(() => {
+			this.win.app.sectionContainer
+				.getSectionWithName(this.win.app.CSections.CommentList.name).unselect();
+			return helper.processToIdle(this.win);
 		});
 	}
 
@@ -80,11 +85,11 @@ describe(['tagdesktop'], 'Writer multi-page view leaves room for the comments.',
 	}
 
 	it('A comment column fits beside the two pages.', function() {
-		switchToMultiPageView();
+		switchToMultiPageView.call(this);
 
 		var before;
-		cy.getFrameWindow().then(function(win) {
-			before = readLayout(win);
+		cy.then(() => {
+			before = readLayout(this.win);
 
 			expect(before.pagesInFirstRow, 'pages side by side').to.equal(2);
 			expect(before.scrollsHorizontally, 'sideways scrolling').to.equal(false);
@@ -92,10 +97,10 @@ describe(['tagdesktop'], 'Writer multi-page view leaves room for the comments.',
 				.to.be.closeTo(before.pagesLeft, 2);
 		});
 
-		insertCommentAndDeselect();
+		insertCommentAndDeselect.call(this);
 
-		cy.getFrameWindow().should(function(win) {
-			var after = readLayout(win);
+		cy.then(() => {
+			var after = readLayout(this.win);
 
 			expect(after.pagesInFirstRow, 'pages still side by side').to.equal(2);
 			expect(after.zoom, 'smaller scale makes room for the column')
@@ -110,17 +115,20 @@ describe(['tagdesktop'], 'Writer multi-page view leaves room for the comments.',
 		});
 
 		// What the user sees: the card is drawn beside the pages, not over them.
-		cy.cGet('.cool-annotation').last().then(function(card) {
-			cy.getFrameWindow().then(function(win) {
-				var layout = win.app.activeDocument.activeLayout;
-				var canvasBounds = win.app.sectionContainer.getCanvasBoundingClientRect();
-				var pagesRight = readLayout(win).pagesRight
-					- layout.scrollProperties.viewX
-					+ win.app.sectionContainer.getDocumentAnchor()[0];
+		cy.cGet('.cool-annotation').last().should((card) => {
+			// The card slides to its place with a CSS transition on left, so
+			// measure it only once no animation runs on it any more.
+			expect(card[0].getAnimations().length, 'card still sliding').to.equal(0);
 
-				expect(card[0].getBoundingClientRect().left, 'card starts right of the pages')
-					.to.be.at.least(canvasBounds.left + pagesRight / win.app.dpiScale);
-			});
+			var win = this.win;
+			var layout = win.app.activeDocument.activeLayout;
+			var canvasBounds = win.app.sectionContainer.getCanvasBoundingClientRect();
+			var pagesRight = readLayout(win).pagesRight
+				- layout.scrollProperties.viewX
+				+ win.app.sectionContainer.getDocumentAnchor()[0];
+
+			expect(card[0].getBoundingClientRect().left, 'card starts right of the pages')
+				.to.be.at.least(canvasBounds.left + pagesRight / win.app.dpiScale);
 		});
 	});
 
@@ -131,20 +139,20 @@ describe(['tagdesktop'], 'Writer multi-page view leaves room for the comments.',
 		cy.viewport(1400, 900);
 		cy.cGet('#sidebar-dock-wrapper').should('be.visible');
 
-		switchToMultiPageView();
+		switchToMultiPageView.call(this);
 
 		var before;
-		cy.getFrameWindow().then(function(win) {
-			before = readLayout(win);
+		cy.then(() => {
+			before = readLayout(this.win);
 
 			expect(before.zoom, 'scale with no comments').to.equal(before.floorZoom);
 			expect(before.scrollsHorizontally, 'sideways scrolling').to.equal(false);
 		});
 
-		insertCommentAndDeselect();
+		insertCommentAndDeselect.call(this);
 
-		cy.getFrameWindow().should(function(win) {
-			var after = readLayout(win);
+		cy.then(() => {
+			var after = readLayout(this.win);
 
 			expect(after.zoom, 'scale stays at the floor').to.equal(after.floorZoom);
 			expect(after.columnLeft, 'column starts after the pages')
