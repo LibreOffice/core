@@ -78,138 +78,14 @@ public:
         test::BootstrapFixture::tearDown();
     }
 
-#if HAVE_MORE_FONTS
-    /// Test text portions position when percentage line spacing is set
-    void testLineSpacing();
-#endif
-
-    void testConstruction();
-
-    /// Test UNO service class that implements text field items.
-    void testUnoTextFields();
-
-    /// Test Copy/Paste with hyperlinks in text using Legacy Format
-    void testHyperlinkCopyPaste();
-
-    /// Test Copy/Paste using Legacy Format
-    void testCopyPaste();
-
-    /// Test Paste using HTML
-    void testHTMLPaste();
-
-    /// Test Paste using an HTML fragment
-    void testHTMLFragmentPaste();
-
-    /// Test Paste using an RTF
-    void testRTFPaste();
-
-    /// Test Paste preference HTML/
-    void testRTFHTMLPaste();
-
-    /// Test Copy/Paste with selective selection over multiple paragraphs
-    void testMultiParaSelCopyPaste();
-
-    /// Test Copy/Paste with Tabs
-    void testTabsCopyPaste();
-
-    /// Test hyperlinks
-    void testHyperlinkSearch();
-
-    /// Test Copy/Paste with Bold/Italic text using Legacy Format
-    void testBoldItalicCopyPaste();
-
-    /// Test Copy/Paste with Underline text using Legacy Format
-    void testUnderlineCopyPaste();
-
-    /// Test Copy/Paste with multiple paragraphs
-    void testMultiParaCopyPaste();
-
-    /// Test Copy/Paste with multiple paragraphs having Bold/Italic text
-    void testParaBoldItalicCopyPaste();
-
-    void testParaStartCopyPaste();
-
-    void testSectionAttributes();
-
-    void testLargeParaCopyPaste();
-
-    void testTransliterate();
-
-    void testTdf147196TitleCaseMultilineTransliteration();
-
-    void testTdf148148CaseWhitespaceOnlyTransliteration();
-
-    void testSingleLine();
-    void testMoveParagraph();
-    void testCreateLines();
-    void testTdf154248MultilineFieldWrapping();
-    void testTdf151748StaleKashidaArray();
-    void testTdf162803StaleKashidaArray();
-    void testTdf157037PasteTextAutoDirection();
-    void testFontVariationsItem();
-    void testFontVariationsScript();
-    void testEscapementNotPreservedOnParaBreak();
-    void testAutoDirNotPreservedOnParaBreak();
-    void testFontTypographicConversion();
-
-    void testOutlinerRemoveTrailingParagraphs();
-    void testOutlinerAddTextNumbering();
-    void testOutlinerLastParagraphIsChild();
-    void testOutlinerUndoParaFlag();
-    void testOutlinerReadDepth();
-
     DECL_STATIC_LINK(Test, CalcFieldValueHdl, EditFieldInfo*, void);
 
-    CPPUNIT_TEST_SUITE(Test);
-#if HAVE_MORE_FONTS
-    CPPUNIT_TEST(testLineSpacing);
-#endif
-    CPPUNIT_TEST(testConstruction);
-    CPPUNIT_TEST(testUnoTextFields);
-    CPPUNIT_TEST(testHyperlinkCopyPaste);
-    CPPUNIT_TEST(testCopyPaste);
-    CPPUNIT_TEST(testHTMLPaste);
-    CPPUNIT_TEST(testHTMLFragmentPaste);
-    CPPUNIT_TEST(testRTFPaste);
-    CPPUNIT_TEST(testRTFHTMLPaste);
-    CPPUNIT_TEST(testMultiParaSelCopyPaste);
-    CPPUNIT_TEST(testTabsCopyPaste);
-    CPPUNIT_TEST(testHyperlinkSearch);
-    CPPUNIT_TEST(testBoldItalicCopyPaste);
-    CPPUNIT_TEST(testUnderlineCopyPaste);
-    CPPUNIT_TEST(testMultiParaCopyPaste);
-    CPPUNIT_TEST(testParaBoldItalicCopyPaste);
-    CPPUNIT_TEST(testParaStartCopyPaste);
-    CPPUNIT_TEST(testSectionAttributes);
-    CPPUNIT_TEST(testLargeParaCopyPaste);
-    CPPUNIT_TEST(testTransliterate);
-    CPPUNIT_TEST(testTdf147196TitleCaseMultilineTransliteration);
-    CPPUNIT_TEST(testTdf148148CaseWhitespaceOnlyTransliteration);
-    CPPUNIT_TEST(testSingleLine);
-    CPPUNIT_TEST(testMoveParagraph);
-    CPPUNIT_TEST(testCreateLines);
-    CPPUNIT_TEST(testTdf154248MultilineFieldWrapping);
-    CPPUNIT_TEST(testTdf151748StaleKashidaArray);
-    CPPUNIT_TEST(testTdf162803StaleKashidaArray);
-    CPPUNIT_TEST(testTdf157037PasteTextAutoDirection);
-    CPPUNIT_TEST(testFontVariationsItem);
-    CPPUNIT_TEST(testFontVariationsScript);
-    CPPUNIT_TEST(testEscapementNotPreservedOnParaBreak);
-    CPPUNIT_TEST(testAutoDirNotPreservedOnParaBreak);
-    CPPUNIT_TEST(testFontTypographicConversion);
-    CPPUNIT_TEST(testOutlinerRemoveTrailingParagraphs);
-    CPPUNIT_TEST(testOutlinerAddTextNumbering);
-    CPPUNIT_TEST(testOutlinerLastParagraphIsChild);
-    CPPUNIT_TEST(testOutlinerUndoParaFlag);
-    CPPUNIT_TEST(testOutlinerReadDepth);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
+protected:
     rtl::Reference<EditEngineItemPool> mpItemPool;
 };
 
 #if HAVE_MORE_FONTS
-void Test::testLineSpacing()
+CPPUNIT_TEST_FIXTURE(Test, testLineSpacing)
 {
     // Create EditEngine's instance
     EditEngine aEditEngine(mpItemPool.get());
@@ -286,7 +162,7 @@ void Test::testLineSpacing()
 }
 #endif
 
-void Test::testConstruction()
+CPPUNIT_TEST_FIXTURE(Test, testConstruction)
 {
     EditEngine aEngine(mpItemPool.get());
 
@@ -302,7 +178,7 @@ bool includes(const uno::Sequence<OUString>& rSeq, std::u16string_view rVal)
     return false;
 }
 
-void Test::testUnoTextFields()
+CPPUNIT_TEST_FIXTURE(Test, testUnoTextFields)
 {
     {
         // DATE
@@ -457,7 +333,7 @@ IMPL_STATIC_LINK(Test, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     }
 }
 
-void Test::testHyperlinkCopyPaste()
+CPPUNIT_TEST_FIXTURE(Test, testHyperlinkCopyPaste)
 {
     // Create Outliner instance
     Outliner aOutliner(mpItemPool.get(), OutlinerMode::TextObject);
@@ -587,7 +463,7 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL(aRepres1, pACPURLField3->GetRepresentation());
 }
 
-void Test::testCopyPaste()
+CPPUNIT_TEST_FIXTURE(Test, testCopyPaste)
 {
     // Create EditEngine's instance
     EditEngine aEditEngine(mpItemPool.get());
@@ -683,7 +559,7 @@ sal_Bool TestTransferable::isDataFlavorSupported(const datatransfer::DataFlavor&
     return false;
 }
 
-void Test::testHTMLPaste()
+CPPUNIT_TEST_FIXTURE(Test, testHTMLPaste)
 {
     // Given an empty editeng document:
     EditEngine aEditEngine(mpItemPool.get());
@@ -704,7 +580,7 @@ void Test::testHTMLPaste()
     CPPUNIT_ASSERT_EQUAL(u"test"_ustr, rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
 }
 
-void Test::testHTMLFragmentPaste()
+CPPUNIT_TEST_FIXTURE(Test, testHTMLFragmentPaste)
 {
     // Given an empty editeng document:
     EditEngine aEditEngine(mpItemPool.get());
@@ -725,7 +601,7 @@ void Test::testHTMLFragmentPaste()
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
 }
 
-void Test::testRTFPaste()
+CPPUNIT_TEST_FIXTURE(Test, testRTFPaste)
 {
     // Given an empty editeng document:
     EditEngine aEditEngine(mpItemPool.get());
@@ -747,7 +623,7 @@ void Test::testRTFPaste()
                          rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
 }
 
-void Test::testRTFHTMLPaste()
+CPPUNIT_TEST_FIXTURE(Test, testRTFHTMLPaste)
 {
     // Given an empty editeng document:
     EditEngine aEditEngine(mpItemPool.get());
@@ -779,7 +655,7 @@ void Test::testRTFHTMLPaste()
     // i.e. HTML is preferred over HTML.
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, rDoc.GetParaAsString(static_cast<sal_Int32>(0)));
 }
-void Test::testMultiParaSelCopyPaste()
+CPPUNIT_TEST_FIXTURE(Test, testMultiParaSelCopyPaste)
 {
     // Create EditEngine's instance
     EditEngine aEditEngine(mpItemPool.get());
@@ -825,7 +701,7 @@ void Test::testMultiParaSelCopyPaste()
     CPPUNIT_ASSERT_EQUAL( u"This is second"_ustr, rDoc.GetParaAsString(sal_Int32(3)) );
 }
 
-void Test::testTabsCopyPaste()
+CPPUNIT_TEST_FIXTURE(Test, testTabsCopyPaste)
 {
     // Create EditEngine's instance
     EditEngine aEditEngine(mpItemPool.get());
@@ -897,7 +773,7 @@ public:
 
 // Odd accounting for hyperlink position & size etc.
 // https://bugzilla.novell.com/show_bug.cgi?id=467459
-void Test::testHyperlinkSearch()
+CPPUNIT_TEST_FIXTURE(Test, testHyperlinkSearch)
 {
     UrlEditEngine aEngine(mpItemPool.get());
     EditDoc& rDoc = aEngine.GetEditDoc();
@@ -977,7 +853,7 @@ bool hasItalic(const editeng::Section& rSecAttr)
         });
 }
 
-void Test::testBoldItalicCopyPaste()
+CPPUNIT_TEST_FIXTURE(Test, testBoldItalicCopyPaste)
 {
     // Create EditEngine's instance
     EditEngine aEditEngine(mpItemPool.get());
@@ -1160,7 +1036,7 @@ bool hasUnderline(const editeng::Section& rSecAttr)
         });
 }
 
-void Test::testUnderlineCopyPaste()
+CPPUNIT_TEST_FIXTURE(Test, testUnderlineCopyPaste)
 {
     // Create EditEngine's instance
     EditEngine aEditEngine(mpItemPool.get());
@@ -1255,7 +1131,7 @@ void Test::testUnderlineCopyPaste()
     CPPUNIT_ASSERT_MESSAGE("This section must be underlined.", hasUnderline(aAttrs2[3]));
 }
 
-void Test::testMultiParaCopyPaste()
+CPPUNIT_TEST_FIXTURE(Test, testMultiParaCopyPaste)
 {
     // Create EditEngine's instance
     EditEngine aEditEngine(mpItemPool.get());
@@ -1298,7 +1174,7 @@ void Test::testMultiParaCopyPaste()
     CPPUNIT_ASSERT_EQUAL(aSecondPara, rDoc.GetParaAsString(sal_Int32(3)));
 }
 
-void Test::testParaBoldItalicCopyPaste()
+CPPUNIT_TEST_FIXTURE(Test, testParaBoldItalicCopyPaste)
 {
     // Create EditEngine's instance
     EditEngine aEditEngine(mpItemPool.get());
@@ -1570,7 +1446,7 @@ void Test::testParaBoldItalicCopyPaste()
     CPPUNIT_ASSERT_MESSAGE("This section must be bold.", hasBold(aAttrs3[14]));
 }
 
-void Test::testParaStartCopyPaste()
+CPPUNIT_TEST_FIXTURE(Test, testParaStartCopyPaste)
 {
     // Create EditEngine's instance
     EditEngine aEditEngine(mpItemPool.get());
@@ -1616,7 +1492,7 @@ void Test::testParaStartCopyPaste()
     CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(3)) );
 }
 
-void Test::testSectionAttributes()
+CPPUNIT_TEST_FIXTURE(Test, testSectionAttributes)
 {
     EditEngine aEngine(mpItemPool.get());
 
@@ -1758,7 +1634,7 @@ void Test::testSectionAttributes()
     }
 }
 
-void Test::testLargeParaCopyPaste()
+CPPUNIT_TEST_FIXTURE(Test, testLargeParaCopyPaste)
 {
     // Create EditEngine's instance
     EditEngine aEditEngine(mpItemPool.get());
@@ -1839,7 +1715,7 @@ OUString lcl_translitTest(EditEngine& aEditEngine, const OUString& text, const E
     return aEditEngine.GetText();
 }
 
-void Test::testTransliterate()
+CPPUNIT_TEST_FIXTURE(Test, testTransliterate)
 {
     // Create EditEngine's instance
     EditEngine editEng(mpItemPool.get());
@@ -1958,7 +1834,7 @@ void Test::testTransliterate()
 
 }
 
-void Test::testTdf147196TitleCaseMultilineTransliteration()
+CPPUNIT_TEST_FIXTURE(Test, testTdf147196TitleCaseMultilineTransliteration)
 {
     EditEngine editEng( mpItemPool.get() );
     editEng.SetText(u"2.2 Publication of information - CAA\nSection 4.2 of a CA\'s Certificate Policy and/or Certification Practice Statement SHALL state the CA\'s policy or practice on processing CAA Records for Fully Qualified Domain Names; that policy shall be consistent with these Requirements. \n\nIt shall clearly specify the set of Issuer Domain Names that the CA recognises in CAA \"issue\" or \"issuewild\" records as permitting it to issue. The CA SHALL log all actions taken, if any, consistent with its processing practice."_ustr);
@@ -1966,7 +1842,7 @@ void Test::testTdf147196TitleCaseMultilineTransliteration()
     CPPUNIT_ASSERT_EQUAL(u"2.2 Publication Of Information - Caa\nSection 4.2 Of A Ca\'s Certificate Policy And/Or Certification Practice Statement Shall State The Ca\'s Policy Or Practice On Processing Caa Records For Fully Qualified Domain Names; That Policy Shall Be Consistent With These Requirements. \n\nIt Shall Clearly Specify The Set Of Issuer Domain Names That The Ca Recognises In Caa \"Issue\" Or \"Issuewild\" Records As Permitting It To Issue. The Ca Shall Log All Actions Taken, If Any, Consistent With Its Processing Practice."_ustr, editEng.GetText());
 }
 
-void Test::testTdf148148CaseWhitespaceOnlyTransliteration()
+CPPUNIT_TEST_FIXTURE(Test, testTdf148148CaseWhitespaceOnlyTransliteration)
 {
     using TF = TransliterationFlags;
     EditEngine editEng(mpItemPool.get());
@@ -2049,7 +1925,7 @@ void Test::testTdf148148CaseWhitespaceOnlyTransliteration()
 
 }
 
-void Test::testSingleLine()
+CPPUNIT_TEST_FIXTURE(Test, testSingleLine)
 {
     EditEngine aEditEngine(mpItemPool.get());
 
@@ -2061,7 +1937,7 @@ void Test::testSingleLine()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetLineCount(0));
 }
 
-void Test::testMoveParagraph()
+CPPUNIT_TEST_FIXTURE(Test, testMoveParagraph)
 {
     EditEngine aEditEngine(mpItemPool.get());
     aEditEngine.SetPaperSize(Size(5000, 5000));
@@ -2150,7 +2026,7 @@ void Test::testMoveParagraph()
     CPPUNIT_ASSERT_EQUAL(u"Paragraph 5"_ustr, aEditEngine.GetText(4));
 }
 
-void Test::testCreateLines()
+CPPUNIT_TEST_FIXTURE(Test, testCreateLines)
 {
     ScopedVclPtrInstance<VirtualDevice> pVirtualDevice(DeviceFormat::WITHOUT_ALPHA);
 
@@ -2221,7 +2097,7 @@ void Test::testCreateLines()
     // CPPUNIT_ASSERT_MESSAGE("INTENTIONALLY FALSE", false);
 }
 
-void Test::testTdf154248MultilineFieldWrapping()
+CPPUNIT_TEST_FIXTURE(Test, testTdf154248MultilineFieldWrapping)
 {
     // If field wrapping changes, this test may need to be updated
 
@@ -2280,7 +2156,7 @@ void Test::testTdf154248MultilineFieldWrapping()
 }
 
 // tdf#151748: Verify that editeng produces an empty kashida array if the line does not have room
-void Test::testTdf151748StaleKashidaArray()
+CPPUNIT_TEST_FIXTURE(Test, testTdf151748StaleKashidaArray)
 {
     ScopedVclPtrInstance<VirtualDevice> pVirtualDevice(DeviceFormat::WITHOUT_ALPHA);
 
@@ -2342,7 +2218,7 @@ void Test::testTdf151748StaleKashidaArray()
 }
 
 // tdf#162803: Verify that editeng clears stale kashida data during layout
-void Test::testTdf162803StaleKashidaArray()
+CPPUNIT_TEST_FIXTURE(Test, testTdf162803StaleKashidaArray)
 {
     ScopedVclPtrInstance<VirtualDevice> pVirtualDevice(DeviceFormat::WITHOUT_ALPHA);
 
@@ -2459,7 +2335,7 @@ public:
     }
 };
 
-void Test::testTdf157037PasteTextAutoDirection()
+CPPUNIT_TEST_FIXTURE(Test, testTdf157037PasteTextAutoDirection)
 {
     // Given an empty editeng document:
     EditEngine aEditEngine(mpItemPool.get());
@@ -2486,7 +2362,7 @@ void Test::testTdf157037PasteTextAutoDirection()
     CPPUNIT_ASSERT(!aEditEngine.IsRightToLeft(4));
 }
 
-void Test::testFontVariationsScript()
+CPPUNIT_TEST_FIXTURE(Test, testFontVariationsScript)
 {
     CPPUNIT_ASSERT(IsScriptItemValid(EE_CHAR_FONTVARIATIONS, i18n::ScriptType::LATIN));
     CPPUNIT_ASSERT(!IsScriptItemValid(EE_CHAR_FONTVARIATIONS, i18n::ScriptType::ASIAN));
@@ -2506,7 +2382,7 @@ void Test::testFontVariationsScript()
                          GetScriptItemId(EE_CHAR_FONTVARIATIONS, SvtScriptType::COMPLEX));
 }
 
-void Test::testFontVariationsItem()
+CPPUNIT_TEST_FIXTURE(Test, testFontVariationsItem)
 {
     // Test default construction (empty variations)
     SvxFontVariationsItem aItem1(EE_CHAR_FONTVARIATIONS);
@@ -2544,7 +2420,7 @@ void Test::testFontVariationsItem()
     CPPUNIT_ASSERT(aItem4.operator==(aItem2));
 }
 
-void Test::testEscapementNotPreservedOnParaBreak()
+CPPUNIT_TEST_FIXTURE(Test, testEscapementNotPreservedOnParaBreak)
 {
     EditEngine aEditEngine(mpItemPool.get());
     EditDoc& rDoc = aEditEngine.GetEditDoc();
@@ -2588,7 +2464,7 @@ void Test::testEscapementNotPreservedOnParaBreak()
     CPPUNIT_ASSERT_MESSAGE("Escapement attribute should NOT be included.", !pEscAttr);
 }
 
-void Test::testAutoDirNotPreservedOnParaBreak()
+CPPUNIT_TEST_FIXTURE(Test, testAutoDirNotPreservedOnParaBreak)
 {
     EditEngine aEditEngine(mpItemPool.get());
     EditDoc& rDoc = aEditEngine.GetEditDoc();
@@ -2621,9 +2497,9 @@ void Test::testAutoDirNotPreservedOnParaBreak()
     CPPUNIT_ASSERT(!pNode2->GetContentAttribs().HasItem(EE_PARA_AUTOWRITINGDIR));
 }
 
-void Test::testFontTypographicConversion()
-{
 #if HAVE_MORE_FONTS
+CPPUNIT_TEST_FIXTURE(Test, testFontTypographicConversion)
+{
     EditEngine aEditEngine(mpItemPool.get());
 
     SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
@@ -2636,10 +2512,10 @@ void Test::testFontTypographicConversion()
     const SvxFontItem& rStored = aStored.Get(EE_CHAR_FONTINFO);
     CPPUNIT_ASSERT_EQUAL(u"DejaVu Sans"_ustr, rStored.GetFamilyName());
     CPPUNIT_ASSERT_EQUAL(u"Condensed"_ustr, rStored.GetStyleName());
-#endif
 }
+#endif
 
-void Test::testOutlinerRemoveTrailingParagraphs()
+CPPUNIT_TEST_FIXTURE(Test, testOutlinerRemoveTrailingParagraphs)
 {
     Outliner aOutliner(mpItemPool.get(), OutlinerMode::OutlineObject);
     aOutliner.SetText(u"a\nb\nc"_ustr, aOutliner.GetParagraph(0));
@@ -2651,7 +2527,7 @@ void Test::testOutlinerRemoveTrailingParagraphs()
     CPPUNIT_ASSERT_EQUAL(u"a"_ustr, aOutliner.GetText(aOutliner.GetParagraph(0)));
 }
 
-void Test::testOutlinerAddTextNumbering()
+CPPUNIT_TEST_FIXTURE(Test, testOutlinerAddTextNumbering)
 {
     Outliner aSource(mpItemPool.get(), OutlinerMode::OutlineObject);
     aSource.SetText(u"x\ny"_ustr, aSource.GetParagraph(0));
@@ -2669,7 +2545,7 @@ void Test::testOutlinerAddTextNumbering()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(5), aOutliner.GetNumberingStartValue(2));
 }
 
-void Test::testOutlinerLastParagraphIsChild()
+CPPUNIT_TEST_FIXTURE(Test, testOutlinerLastParagraphIsChild)
 {
     Outliner aOutliner(mpItemPool.get(), OutlinerMode::OutlineObject);
     aOutliner.SetText(u"a\nb\nc"_ustr, aOutliner.GetParagraph(0));
@@ -2683,7 +2559,7 @@ void Test::testOutlinerLastParagraphIsChild()
     CPPUNIT_ASSERT(!aOutliner.HasChildren(aOutliner.GetParagraph(0)));
 }
 
-void Test::testOutlinerUndoParaFlag()
+CPPUNIT_TEST_FIXTURE(Test, testOutlinerUndoParaFlag)
 {
     Outliner aOutliner(mpItemPool.get(), OutlinerMode::OutlineView);
     ScopedVclPtrInstance<WorkWindow> xWindow(nullptr, WB_APP | WB_STDWORK);
@@ -2701,7 +2577,7 @@ void Test::testOutlinerUndoParaFlag()
     CPPUNIT_ASSERT(!Outliner::HasParaFlag(aOutliner.GetParagraph(0), ParaFlag::ISPAGE));
 }
 
-void Test::testOutlinerReadDepth()
+CPPUNIT_TEST_FIXTURE(Test, testOutlinerReadDepth)
 {
     Outliner aOutliner(mpItemPool.get(), OutlinerMode::OutlineView);
     SvMemoryStream aStream;
@@ -2718,7 +2594,6 @@ void Test::testOutlinerReadDepth()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(-1), aOutliner.GetDepth(1));
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
