@@ -1722,6 +1722,8 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, weld::Toggleable&, void)
     m_xLetterSpacingMinimum->set_sensitive(bJustify);
     m_xLetterSpacingMaximum->set_sensitive(bJustify);
     m_xCompoundBased->set_sensitive(bJustify);
+    if (bJustify && m_xCompoundBased->get_state() == TRISTATE_INDET)
+        m_xCompoundBased->set_active(false);
     m_xLabelGlyphScaling->set_sensitive(bJustify);
     // TODO visualize CharScaleWidth with percentage
     m_xGlyphScalingMinimum->set_sensitive(bJustify);
