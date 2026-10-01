@@ -160,7 +160,7 @@ void NotesPanelViewShell::Construct()
     if (comphelper::COKit::isActive())
     {
         mpNotesPanelWidget
-            = VclPtr<NotesPanelWidget>::Create(GetActiveWindow(), *mpNotesPanelView,
+            = VclPtr<NotesPanelWidget>::Create(GetActiveWindow(), *this, *mpNotesPanelView,
                                                reinterpret_cast<sal_uInt64>(&GetViewShellBase()));
         mpNotesPanelWidget->SendInitialUpdate();
     }

@@ -399,6 +399,35 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		cy.cGet(paragraph).should('have.text', 'Demo');
 	});
 
+	// While the notes have the focus, Select All selects the notes text. After leaving the notes
+	// it selects the slide content again.
+	it('Select All acts on the notes while they have the focus', function () {
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+
+		openNotesPane();
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('Demo');
+		cy.cGet(paragraph).should('have.text', 'Demo');
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:SelectAll');
+			helper.processToIdle(win);
+		});
+		cy.cGet(editEngine).type('X');
+		cy.cGet(paragraph).should('have.text', 'X');
+
+		leaveNotes();
+		cy.cGet(paragraph).should('have.text', 'X');
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:SelectAll');
+			helper.processToIdle(win);
+		});
+		cy.cGet('#document-container svg g.Page g').should('exist');
+		cy.cGet(paragraph).should('have.text', 'X');
+	});
+
 	it('Ctrl+V works while the notes panel has focus', function () {
 		// Given an open notes panel with its editengine widget focused:
 		openNotesPane();

@@ -19,6 +19,7 @@
 namespace sd
 {
 class NotesPanelView;
+class NotesPanelViewShell;
 
 /**
  * Hosts the speaker notes editor as a client-rendered custom widget.
@@ -37,8 +38,8 @@ private:
     DECL_LINK(ContentChangedHdl, LinkParamNone*, void);
 
 public:
-    NotesPanelWidget(vcl::Window* pParent, NotesPanelView& rNotesPanelView,
-                     sal_uInt64 nKitWindowId);
+    NotesPanelWidget(vcl::Window* pParent, NotesPanelViewShell& rNotesPanelViewShell,
+                     NotesPanelView& rNotesPanelView, sal_uInt64 nKitWindowId);
     virtual ~NotesPanelWidget() override;
     virtual void dispose() override;
 

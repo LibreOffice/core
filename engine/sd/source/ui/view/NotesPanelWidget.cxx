@@ -11,6 +11,9 @@
 
 #include <NotesPanelWidget.hxx>
 #include <NotesPanelView.hxx>
+#include <NotesPanelViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <ViewShellManager.hxx>
 
 #include <editeng/outliner.hxx>
 #include <vcl/jsdialog/executor.hxx>
@@ -21,13 +24,25 @@ namespace
 {
 /// The notes editor as seen from the client. Focus moves the panel in and out of editing, which
 /// swaps the "Click to add Notes" placeholder for empty text and back.
+///
+/// Focus also puts the notes shell on top of the shell stack, and blur puts the main view shell
+/// back on top. The client focus is the only focus the kit sees for the notes, so the stack
+/// follows it here, as it follows the window focus on desktop.
 class NotesPanelWidgetController final : public EditEngineWidgetController
 {
+    NotesPanelViewShell& mrNotesPanelViewShell;
     NotesPanelView& mrNotesPanelView;
 
+    void moveToTop(const ViewShell& rViewShell)
+    {
+        mrNotesPanelViewShell.GetViewShellBase().GetViewShellManager()->MoveToTop(rViewShell);
+    }
+
 public:
-    NotesPanelWidgetController(NotesPanelView& rNotesPanelView, OutlinerView& rOutlinerView)
+    NotesPanelWidgetController(NotesPanelViewShell& rNotesPanelViewShell,
+                               NotesPanelView& rNotesPanelView, OutlinerView& rOutlinerView)
         : EditEngineWidgetController(rOutlinerView.GetEditView(), &rNotesPanelView.GetOutliner())
+        , mrNotesPanelViewShell(rNotesPanelViewShell)
         , mrNotesPanelView(rNotesPanelView)
     {
     }
@@ -36,9 +51,17 @@ protected:
     bool HandleExtraEvent(const OUString& rCmd, const OUString& /*rData*/) override
     {
         if (rCmd == u"focus")
+        {
             mrNotesPanelView.onGrabFocus();
+            moveToTop(mrNotesPanelViewShell);
+        }
         else if (rCmd == u"blur")
+        {
             mrNotesPanelView.onLoseFocus();
+            if (std::shared_ptr<ViewShell> pMainViewShell
+                = mrNotesPanelViewShell.GetViewShellBase().GetMainViewShell())
+                moveToTop(*pMainViewShell);
+        }
         else
             return false;
 
@@ -49,8 +72,8 @@ protected:
 };
 }
 
-NotesPanelWidget::NotesPanelWidget(vcl::Window* pParent, NotesPanelView& rNotesPanelView,
-                                   sal_uInt64 nKitWindowId)
+NotesPanelWidget::NotesPanelWidget(vcl::Window* pParent, NotesPanelViewShell& rNotesPanelViewShell,
+                                   NotesPanelView& rNotesPanelView, sal_uInt64 nKitWindowId)
     : InterimItemWindow(pParent, u"modules/simpress/ui/notespanel.ui"_ustr, u"NotesPanel"_ustr,
                         true, nKitWindowId)
     , mrNotesPanelView(rNotesPanelView)
@@ -59,7 +82,8 @@ NotesPanelWidget::NotesPanelWidget(vcl::Window* pParent, NotesPanelView& rNotesP
     if (!pOutlinerView)
         return;
 
-    mxController = std::make_unique<NotesPanelWidgetController>(rNotesPanelView, *pOutlinerView);
+    mxController = std::make_unique<NotesPanelWidgetController>(rNotesPanelViewShell,
+                                                                rNotesPanelView, *pOutlinerView);
     mxWidgetWeld
         = std::make_unique<weld::CustomClientWeld>(*m_xBuilder, u"notesedit"_ustr, *mxController);
 
