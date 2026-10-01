@@ -13,9 +13,32 @@ module scriptinterop {
 
 interface XText;
 
+/** An element that has child elements: the body, a paragraph, a table, a table row, a table cell or
+    a footnote section.
+
+    @gas ContainerElement
+ */
 interface XContainerElement: XElement {
+    /** Removes the contents of the element.
+
+        A paragraph, a table cell and a footnote section lose all their text. The body keeps one
+        empty paragraph, which is neither a list item nor a heading.
+
+        @throws RuntimeException
+            for a table and a table row, which cannot be cleared yet.
+
+        @gas ContainerElement.clear
+     */
     XContainerElement clear();
 
+    /** Returns the text of the element, for reading and editing its characters.
+
+        For a paragraph, unlike a text element from getChild, its getType() is that of the
+        paragraph, and it has the parent and the siblings of the paragraph. For any other element it
+        is the text of the paragraphs in it, as described in XText. This is the same as asText.
+
+        @gas ContainerElement.editAsText
+     */
     XText editAsText();
 
     [overload findText] com::sun::star::beans::Optional<XRangeElement> findText(
@@ -24,10 +47,25 @@ interface XContainerElement: XElement {
     [overload findText] com::sun::star::beans::Optional<XRangeElement> findTextFrom(
         [in] string searchPattern, [in] XRangeElement from);
 
+    /** Returns the child at the given 0-based index, or null if index is out of range.
+
+        The children of a paragraph are its inline images and the runs of text between them, each
+        run an element of type TEXT.
+
+        @gas ContainerElement.getChild
+     */
     XElement getChild([in] long index);
 
+    /** Returns the 0-based index of the given child.
+
+        @throws RuntimeException
+            if child is null or is not a child of this element.
+
+        @gas ContainerElement.getChildIndex
+     */
     long getChildIndex([in] XElement child);
 
+    /** @gas ContainerElement.getNumChildren */
     long getNumChildren();
 };
 

@@ -11,6 +11,13 @@
 
 module scriptinterop {
 
+/** The heading level of a paragraph, given by its paragraph style.
+
+    Each value stands for the paragraph style of that name: HEADING1 for "Heading 1" up to HEADING6,
+    TITLE for "Title" and SUBTITLE for "Subtitle". NORMAL stands for any other style.
+
+    @gas DocumentApp.ParagraphHeading
+ */
 enum ParagraphHeading {
     NORMAL,
     HEADING1,

@@ -11,15 +11,46 @@
 
 module scriptinterop {
 
+/** A selected range of the document: the user's selection from XDocument.getSelection, or a range
+    built with XDocument.newRange.
+
+    It holds text, which can span several ranges and paragraphs, whole tables, table rows or table
+    cells, or a single inline image.
+
+    @gas Range
+ */
 interface XSelection : XBase
 {
+    /** Returns the parts of the selection in document order.
+
+        Text gives one part per paragraph that it touches. A whole table, table row, table cell or
+        inline image gives one part of its own.
+
+        @throws RuntimeException
+            if the selection holds something other than text.
+
+        @gas Range.getRangeElements
+     */
     sequence<XRangeElement> getRangeElements();
 
     /// @deprecated The same as getRangeElements
     sequence<XRangeElement> getSelectedElements();
 
+    /** Returns the selected text.
+
+        When the user has selected several ranges, they are joined with a line break. The numbers
+        of footnote references are left out. A selected image returns ''.
+
+        @throws RuntimeException
+            if the selection holds something other than text or an image.
+     */
     string getText();
 
+    /** Replaces the text of each selected range with the given text.
+
+        @throws RuntimeException
+            if the selection holds an image, a whole table or a table row.
+     */
     void replace([in] string newText);
 };
 

@@ -21,40 +21,112 @@ interface XTableCell;
 interface XTableRow;
 interface XText;
 
-// Common base for the heterogeneous children of a body (paragraphs, tables, etc.):
+/** An element of a text document: the body, a paragraph, a text, a table, a row or cell of it, an
+    inline image, a footnote or a footnote section.
+
+    getType() says which one it is. As in Apps Script, each of the as methods returns this element
+    when it is of that type, and throws for any other type. The text from editAsText also casts
+    back to its paragraph or container.
+
+    @gas Element
+ */
 interface XElement: XBase {
+    /** @gas Element.asBody */
     XBody asBody();
 
+    /** @gas Element.asFootnote */
     XFootnote asFootnote();
 
+    /** @gas Element.asFootnoteSection */
     XContainerElement asFootnoteSection();
 
+    /** @gas Element.asInlineImage */
     XInlineImage asInlineImage();
 
+    /** @gas Element.asListItem */
     XParagraph asListItem();
 
+    /** @gas Element.asParagraph */
     XParagraph asParagraph();
 
+    /** @gas Element.asTable */
     XTable asTable();
 
+    /** @gas Element.asTableCell */
     XTableCell asTableCell();
 
+    /** @gas Element.asTableRow */
     XTableRow asTableRow();
 
+    /** Returns this element as a text.
+
+        For an element that has children this is the same as XContainerElement.editAsText. It
+        throws for an inline image and a footnote.
+
+        @gas Element.asText
+     */
     XText asText();
 
+    /** Returns this element itself, not a copy.
+
+        A change made through the result changes the element in the document.
+
+        @todo Return a detached deep copy, as Apps Script does.
+        @gas Element.copy
+     */
     XElement copy();
 
+    /** Returns the next element with the same parent.
+
+        Returns null for the last child, and always for a table row, a table cell, a footnote and
+        the document.
+
+        @gas Element.getNextSibling
+     */
     com::sun::star::beans::Optional<XElement> getNextSibling();
 
+    /** Returns the element that contains this one, or null.
+
+        The body and the footnote sections have the document as their parent. The document and a
+        footnote have no parent.
+
+        @gas Element.getParent
+     */
     com::sun::star::beans::Optional<XElement> getParent();
 
+    /** Returns the previous element with the same parent.
+
+        Returns null for the first child, and always for a table row, a table cell, a footnote and
+        the document.
+
+        @gas Element.getPreviousSibling
+     */
     com::sun::star::beans::Optional<XElement> getPreviousSibling();
 
+    /** Returns the text of the element as plain text.
+
+        Paragraphs, table cells and table rows within an element are separated by a line break. The
+        numbers of footnote references are left out. An inline image returns its alternative title,
+        or '' if it has none.
+
+        @gas Element.getText
+     */
     string getText();
 
+    /** @gas Element.getType */
     ElementType getType();
 
+    /** Removes the element from the document, and returns it.
+
+        A table row is deleted from its table. Removing a text element removes the whole paragraph
+        that holds it.
+
+        @throws RuntimeException
+            for the last paragraph of the body, of a table cell or of a footnote, and for the body,
+            a table cell and a footnote section, which cannot be removed on their own.
+
+        @gas Element.removeFromParent
+     */
     XElement removeFromParent();
 };
 

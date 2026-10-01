@@ -11,9 +11,21 @@
 
 module scriptinterop {
 
+/** A row of a table. Its children are its cells.
+
+    @gas TableRow
+ */
 interface XTableRow: XContainerElement {
+    /** Returns the cell at the given 0-based index, or null if index is out of range.
+
+        @gas TableRow.getCell
+     */
     com::sun::star::beans::Optional<XTableCell> getCell([in] long index);
 
+    /** This can be less than in other rows when cells of this row are merged horizontally.
+
+        @gas TableRow.getNumCells
+     */
     long getNumCells();
 };
 

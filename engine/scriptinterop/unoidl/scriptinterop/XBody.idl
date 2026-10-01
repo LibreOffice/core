@@ -11,13 +11,46 @@
 
 module scriptinterop {
 
+/** The main body of a text document, which holds its paragraphs and tables.
+
+    @gas Body
+ */
 interface XBody: XContainerElement {
+    /** Appends a new paragraph at the end of the body holding the given image.
+
+        The image keeps its natural size.
+
+        @throws RuntimeException
+            if blob is null or its bytes cannot be read as an image.
+
+        @gas Body.appendImage
+     */
     XInlineImage appendImage([in] XBlob blob);
 
+    /** Appends a new numbered list item at the end of the body.
+
+        The paragraph gets the "List Number" paragraph style, or plain arabic numbering if the
+        document has no such style. Its getType() is LIST_ITEM.
+
+        @gas Body.appendListItem
+     */
     XParagraph appendListItem([in] string text);
 
+    /** Appends a new paragraph at the end of the body.
+
+        The new paragraph is neither a list item nor a heading, even when the paragraph before it
+        is one.
+
+        @gas Body.appendParagraph
+     */
     XParagraph appendParagraph([in] string text);
 
+    /** Returns the paragraphs and tables of the body, in document order.
+
+        Sections are not listed, but the paragraphs inside them are. A table of contents is listed
+        as one element of type TABLE_OF_CONTENTS, and any other index as one element of type
+        UNSUPPORTED.
+     */
     sequence<XElement> getChildren();
 
     double getMarginLeft();

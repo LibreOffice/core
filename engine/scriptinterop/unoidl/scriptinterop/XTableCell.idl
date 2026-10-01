@@ -11,11 +11,23 @@
 
 module scriptinterop {
 
+/** A cell of a table. Its children are the paragraphs and tables in it.
+
+    @gas TableCell
+ */
 interface XTableCell: XContainerElement {
     sequence<XElement> getChildren();
 
+    /** This always returns 1 for now, even for a horizontally merged cell.
+
+        @gas TableCell.getColSpan
+     */
     long getColSpan();
 
+    /** Returns the number of rows the cell spans, at least 1.
+
+        @gas TableCell.getRowSpan
+     */
     long getRowSpan();
 };
 

@@ -11,6 +11,10 @@
 
 module scriptinterop {
 
+/** The horizontal alignment of a paragraph.
+
+    @gas DocumentApp.HorizontalAlignment
+ */
 enum HorizontalAlignment {
     LEFT,
     CENTER,

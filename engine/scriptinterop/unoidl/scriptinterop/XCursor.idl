@@ -11,17 +11,83 @@
 
 module scriptinterop {
 
+/** A position in the document: the user's cursor from XDocument.getCursor, or a position made
+    with XDocument.newPosition.
+
+    The user's cursor is read again each time it is used, so it follows the user. A position from
+    newPosition stays where it was made.
+
+    @gas Position
+ */
 interface XCursor: XBase {
+    /** Returns the element that contains the position.
+
+        For a position from newPosition this is the element that holds it, as placed there. For
+        the user's cursor it is the paragraph the cursor is in.
+
+        @throws RuntimeException
+            if the user's cursor is not inside a paragraph.
+
+        @gas Position.getElement
+     */
     XElement getElement();
 
+    /** Returns the offset of the position within getElement().
+
+        For a position from newPosition this is the offset in its element, as placed there: a
+        character offset in a text element, a child index in any other element. For the user's
+        cursor it is the character offset from the start of its paragraph, counted as in XText.
+
+        @throws RuntimeException
+            if the user's cursor is not inside a paragraph.
+
+        @gas Position.getOffset
+     */
     long getOffset();
 
+    /** Returns the text of the paragraph that contains the position.
+
+        Its getType() is TEXT, and its parent is the paragraph.
+
+        @throws RuntimeException
+            if the position is not inside a paragraph.
+
+        @gas Position.getSurroundingText
+     */
     XText getSurroundingText();
 
+    /** Returns the character offset of the position from the start of its paragraph, counted as
+        in XText.
+
+        @throws RuntimeException
+            if the position is not inside a paragraph.
+
+        @gas Position.getSurroundingTextOffset
+     */
     long getSurroundingTextOffset();
 
+    /** Inserts the given image at the position, anchored as a character.
+
+        The image keeps its natural size, and its parent is the paragraph that holds it. The result
+        is never null.
+
+        @throws RuntimeException
+            if blob is null, its bytes cannot be read as an image, or the position does not
+            accept images.
+
+        @gas Position.insertInlineImage
+     */
     com::sun::star::beans::Optional<XInlineImage> insertInlineImage([in] XBlob blob);
 
+    /** Inserts the given text at the position.
+
+        Unlike in Apps Script, this returns nothing.
+
+        @throws RuntimeException
+            if the position does not accept text.
+
+        @gas Position.insertText
+     */
     void insertText([in] string text);
 
     // The locale of the text at the cursor, which GAS's Position does not have:

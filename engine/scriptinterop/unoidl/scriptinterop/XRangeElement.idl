@@ -11,17 +11,47 @@
 
 module scriptinterop {
 
-// One selection segment, consistent with GAS's Selection.getRangeElements() model.  The element is
-// the Text of the paragraph that a partial text segment lives in, the paragraph or table cell that
-// is selected as a whole, or the inline image that is selected on its own.  Offsets are character
-// positions within that Text, and are -1 for a segment that is not partial:
+/** One part of a selection: the selected stretch of one paragraph, or an element that is selected
+    as a whole, such as a paragraph, a table cell or an inline image.
+
+    @gas RangeElement
+ */
 interface XRangeElement: XBase {
+    /** Returns the element that this part lies in.
+
+        For a partial part this is the run of text that holds it, a child of the paragraph, and the
+        offsets count in that text. Otherwise it is the element that is selected as a whole.
+
+        @throws RuntimeException
+            if the part is not inside a paragraph.
+
+        @gas RangeElement.getElement
+     */
     XElement getElement();
 
+    /** Returns the offset of the last selected character in the text from getElement(), inclusive.
+
+        Offsets count as in XText. An empty part returns its start offset. Returns -1 if the part is
+        not partial.
+
+        @gas RangeElement.getEndOffsetInclusive
+     */
     long getEndOffsetInclusive();
 
+    /** Returns the offset of the first selected character in the text from getElement().
+
+        Offsets count as in XText. Returns -1 if the part is not partial.
+
+        @gas RangeElement.getStartOffset
+     */
     long getStartOffset();
 
+    /** Returns whether only part of a text is selected.
+
+        An element that is selected as a whole, such as an inline image, is never partial.
+
+        @gas RangeElement.isPartial
+     */
     boolean isPartial();
 };
 

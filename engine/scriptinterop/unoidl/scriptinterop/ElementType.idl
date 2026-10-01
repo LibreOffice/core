@@ -11,21 +11,31 @@
 
 module scriptinterop {
 
-// Discriminator for a body-level element, matching the Google Apps Script Document ElementType
-// enum names.  Grow with additional values as the implementation learns to recognise them:
+/** The kind of an element of a text document.
+
+    @gas DocumentApp.ElementType
+ */
 enum ElementType {
+    /** A paragraph that is not numbered. */
     PARAGRAPH,
+    /** A numbered paragraph. */
     LIST_ITEM,
     TABLE,
     TABLE_ROW,
     TABLE_CELL,
+    /** An image anchored as a character. */
     INLINE_IMAGE,
+    /** No element has this type yet. */
     PAGE_BREAK,
+    /** No element has this type yet. */
     HORIZONTAL_RULE,
     BODY_SECTION,
     FOOTNOTE,
+    /** The contents of a footnote. */
     FOOTNOTE_SECTION,
+    /** A run of text in a paragraph, between its ends and its inline images. */
     TEXT,
+    /** An element that has no type of its own, such as an index other than a table of contents. */
     UNSUPPORTED,
     DOCUMENT,
     TABLE_OF_CONTENTS

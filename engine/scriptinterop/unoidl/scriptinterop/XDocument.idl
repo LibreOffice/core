@@ -11,26 +11,106 @@
 
 module scriptinterop {
 
+/** The text document that the script runs against.
+
+    @gas Document
+ */
 interface XDocument : XBase
 {
+    /** Returns the current selection in the document view.
+
+        A selected inline image gives a selection with that image as its only range element, and
+        selected table cells give one range element for each cell. After setSelection, the range
+        passed there is returned for as long as it stays selected. Returns null when the selection
+        is collapsed (only a cursor), when no selected range contains any text, and when something
+        else is selected, such as a shape.
+
+        @gas Document.getSelection
+     */
     com::sun::star::beans::Optional<XSelection> getSelection();
 
+    /** @gas Document.getBody */
     XBody getBody();
 
+    /** Returns the user's cursor.
+
+        Returns null while there is a selection. After setCursor, the position passed there is
+        returned, with its own element and offset, for as long as the user has not moved the cursor
+        away from it. Otherwise the result follows the user and reports the paragraph the cursor is
+        in.
+
+        @gas Document.getCursor
+     */
     com::sun::star::beans::Optional<XCursor> getCursor();
 
+    /** Returns all footnotes of the document, in document order.
+
+        @gas Document.getFootnotes
+     */
     sequence<XFootnote> getFootnotes();
 
     com::sun::star::beans::Optional<string> getLanguage();
 
+    /** Inserts an image at the user's cursor, anchored as a character.
+
+        To add an image at a given place in the document, use XCursor.insertInlineImage or
+        XBody.appendImage.
+
+        @param data
+            The image file contents, in any image format Collabora Online can open.
+        @throws RuntimeException
+            if the data cannot be read as an image.
+     */
     void insertImage([in] sequence<byte> data, [in] ImageOptions opts);
 
+    /** Creates a position inside an element.
+
+        The position is not shown to the user until it is passed to setCursor. A position in the
+        text of a paragraph is placed in the child text at that offset instead. A position at the
+        end of a child text is placed after that text in its paragraph.
+
+        @param element
+            The element that the position is in: an element of type TEXT, such as a child of a
+            paragraph, the text that editAsText returns for a paragraph, or a paragraph, list item,
+            table cell, body or footnote section. The text that editAsText returns for the body is
+            not accepted, and neither are a table and a table row.
+        @param offset
+            For an element of type TEXT, the character offset, from 0 to the length of getText()
+            and counted as in XText. For any other element, the 0-based index of the child that
+            the position is in front of. The number of children means the end of the element.
+        @throws RuntimeException
+            if element is null or of a kind that is not accepted, or offset is negative or past
+            the end.
+
+        @gas Document.newPosition
+     */
     XCursor newPosition([in] XElement element, [in] long offset);
 
+    /** @gas Document.newRange */
     XRangeBuilder newRange();
 
+    /** Moves the user's cursor to the given position.
+
+        This ends any current selection, including a selected image.
+
+        @param position
+            A position from newPosition or getCursor.
+        @throws RuntimeException
+            if position is null or is not somewhere the cursor can be.
+
+        @gas Document.setCursor
+     */
     XDocument setCursor([in] XCursor position);
 
+    /** Selects the given range in the document view.
+
+        @param selection
+            A range from XRangeBuilder.build or getSelection.
+        @throws RuntimeException
+            if selection is null, or the view cannot select exactly the elements of the range.
+
+        @gas Document.setSelection
+     */
     XDocument setSelection([in] XSelection selection);
 };
 

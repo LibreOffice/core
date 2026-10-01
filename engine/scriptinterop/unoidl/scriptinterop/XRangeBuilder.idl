@@ -11,9 +11,37 @@
 
 module scriptinterop {
 
+/** Builds a selection range, to pass to XDocument.setSelection.
+
+    The built range holds the added elements in document order, each one once. An element that lies
+    inside an added table, table row or table cell is left out.
+
+    @gas RangeBuilder
+ */
 interface XRangeBuilder {
+    /** Adds the whole of the given element to the range.
+
+        @param element
+            A text element such as a paragraph or the body, a table, a table row, a table cell or
+            an inline image. The text of a container stands for the container.
+        @throws RuntimeException
+            if element is null or has no text in the document, such as a footnote.
+
+        @gas RangeBuilder.addElement
+     */
     [overload addElement] XRangeBuilder addElement([in] XElement element);
 
+    /** Adds part of the given text to the range.
+
+        The offsets are 0-based and counted as in XText, and endOffsetInclusive is the last
+        character added.
+
+        @throws RuntimeException
+            if text is null, or unless 0 <= startOffset <= endOffsetInclusive < the length of
+            the text.
+
+        @gas RangeBuilder.addElement
+     */
     [overload addElement] XRangeBuilder addElementRange(
         [in] XText text, [in] long startOffset, [in] long endOffsetInclusive);
 
@@ -24,6 +52,13 @@ interface XRangeBuilder {
         [in] XText startTextElement, [in] long startOffset, [in] XText endTextElementInclusive,
         [in] long endOffsetInclusive);
 
+    /** Returns the range built so far.
+
+        @throws RuntimeException
+            if nothing has been added yet.
+
+        @gas RangeBuilder.build
+     */
     XSelection build();
 };
 

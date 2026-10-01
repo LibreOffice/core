@@ -11,7 +11,12 @@
 
 module scriptinterop {
 
+/** The kind of bullet or number of a list item.
+
+    @gas DocumentApp.GlyphType
+ */
 enum GlyphType {
+    /** A filled round bullet, and any bullet or numbering with no better match. */
     BULLET,
     HOLLOW_BULLET,
     SQUARE_BULLET,

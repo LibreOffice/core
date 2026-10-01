@@ -11,6 +11,10 @@
 
 module scriptinterop {
 
+/** The vertical position of characters relative to the baseline.
+
+    @gas DocumentApp.TextAlignment
+ */
 enum TextAlignment {
     NORMAL,
     SUPERSCRIPT,

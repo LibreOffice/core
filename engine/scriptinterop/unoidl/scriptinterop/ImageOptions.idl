@@ -11,6 +11,8 @@
 
 module scriptinterop {
 
+/** The size of an image to insert, in centimetres.
+ */
 struct ImageOptions
 {
     double widthCm;

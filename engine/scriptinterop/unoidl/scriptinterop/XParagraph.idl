@@ -11,30 +11,82 @@
 
 module scriptinterop {
 
+/** A paragraph, which is also a list item when it is numbered.
+
+    getType() returns LIST_ITEM for a numbered paragraph. The getters return null for a property
+    that comes from the paragraph style rather than being set on the paragraph itself, except
+    getGlyphType and getListId, which also read a list that comes from the paragraph style, and
+    isLeftToRight, which also reads a direction that comes from the paragraph style.
+
+    @gas Paragraph
+ */
 interface XParagraph: XContainerElement
 {
     XPositionedImage addPositionedImage([in] XBlob image);
 
+    /** @gas Paragraph.getAlignment */
     com::sun::star::beans::Optional<HorizontalAlignment> getAlignment();
 
+    /** Returns the kind of bullet or number of the list item.
+
+        Numbering formats that have no matching value, and bullets other than hollow or square ones,
+        read as BULLET. Returns null if the paragraph is in no list.
+
+        @gas ListItem.getGlyphType
+     */
     com::sun::star::beans::Optional<GlyphType> getGlyphType();
 
+    /** Returns the heading level of the paragraph, read from its paragraph style name.
+
+        The result is never null.
+
+        @gas Paragraph.getHeading
+     */
     com::sun::star::beans::Optional<ParagraphHeading> getHeading();
 
+    /** Returns the left indent of the paragraph, in points.
+
+        @gas Paragraph.getIndentStart
+     */
     com::sun::star::beans::Optional<double> getIndentStart();
 
+    /** Returns the identifier of the list that the list item belongs to.
+
+        Returns '' if the paragraph is in a list that has no identifier, and null if the paragraph
+        is in no list.
+
+        @gas ListItem.getListId
+     */
     com::sun::star::beans::Optional<string> getListId();
 
+    /** Returns the 0-based list level of the paragraph, which is 0 for a paragraph outside a list.
+
+        @gas ListItem.getNestingLevel
+     */
     long getNestingLevel();
 
     XPositionedImage getPositionedImage([in] string id);
 
     sequence<XPositionedImage> getPositionedImages();
 
+    /** Returns whether the paragraph runs left to right.
+
+        This is false when the writing mode of the paragraph, set on it or by its style, is right
+        to left. A paragraph that takes its direction from the page reads as left to right.
+        The result is never null.
+
+        @gas Paragraph.isLeftToRight
+     */
     com::sun::star::beans::Optional<boolean> isLeftToRight();
 
     boolean removePositionedImage([in] string id);
 
+    /** Sets the paragraph style of the given heading level.
+
+        NORMAL sets the "Text body" style.
+
+        @gas Paragraph.setHeading
+     */
     XParagraph setHeading([in] ParagraphHeading heading);
 };
 

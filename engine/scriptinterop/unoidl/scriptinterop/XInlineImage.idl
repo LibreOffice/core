@@ -11,21 +11,51 @@
 
 module scriptinterop {
 
+/** An image anchored as a character in a paragraph.
+
+    Sizes are in pixels at 96 pixels per inch.
+
+    @gas InlineImage
+ */
 interface XInlineImage: XElement {
+    /** Returns the alternative description, or null if it is empty.
+
+        @gas InlineImage.getAltDescription
+     */
     com::sun::star::beans::Optional<string> getAltDescription();
 
+    /** Returns the alternative title, or null if it is empty.
+
+        @gas InlineImage.getAltTitle
+     */
     com::sun::star::beans::Optional<string> getAltTitle();
 
+    /** @gas InlineImage.getHeight */
     long getHeight();
 
+    /** @gas InlineImage.getWidth */
     long getWidth();
 
+    /** @gas InlineImage.setAltDescription */
     XInlineImage setAltDescription([in] string description);
 
+    /** @gas InlineImage.setAltTitle */
     XInlineImage setAltTitle([in] string title);
 
+    /** Sets the height of the image.
+
+        The width stays as it is, so the aspect ratio can change.
+
+        @gas InlineImage.setHeight
+     */
     XInlineImage setHeight([in] long height);
 
+    /** Sets the width of the image.
+
+        The height stays as it is, so the aspect ratio can change.
+
+        @gas InlineImage.setWidth
+     */
     XInlineImage setWidth([in] long width);
 };
 

@@ -11,7 +11,21 @@
 
 module scriptinterop {
 
+/** A footnote.
+
+    A footnote is found through XDocument.getFootnotes, not among the children of a paragraph, and
+    has no parent or siblings.
+
+    @gas Footnote
+ */
 interface XFootnote: XElement {
+    /** Returns the contents of the footnote, an element of type FOOTNOTE_SECTION whose children
+        are the paragraphs and tables in the footnote.
+
+        The result is never null.
+
+        @gas Footnote.getFootnoteContents
+     */
     com::sun::star::beans::Optional<XContainerElement> getFootnoteContents();
 };
 

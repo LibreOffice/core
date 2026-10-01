@@ -11,11 +11,36 @@
 
 module scriptinterop {
 
+/** The characters of a run of text in a paragraph, of a whole paragraph, or of a container, and
+    their formatting.
+
+    Offsets count the characters of getText(), starting at 0. The anchor of an inline image and the
+    number of a footnote reference are not counted. The getters that take an offset read the
+    formatting of the text run at that offset. They return null when the attribute is not set
+    directly on the run or on the paragraph, for example when it comes from a style.
+
+    The calls that take startOffset and endOffsetInclusive act on the characters from the one to
+    the other, both included. They throw if startOffset is negative or endOffsetInclusive is less
+    than startOffset.
+
+    An offset must point at a character of the text, or the call throws. insertText also accepts
+    the end of the text, and the getters accept offset 0 of an empty text.
+
+    The text of a container, from XContainerElement.editAsText, joins the texts of all the
+    paragraphs in it, also those in nested tables, with a line break after each but the last. A
+    line break counts as one character and has the formatting of the character before it. Here
+    appendText, deleteText, insertText and setText throw as not implemented.
+
+    @gas Text
+ */
 interface XText: XElement {
+    /** @gas Text.appendText */
     XText appendText([in] string text);
 
+    /** @gas Text.deleteText */
     XText deleteText([in] long startOffset, [in] long endOffsetInclusive);
 
+    /** @gas Text.editAsText */
     XText editAsText();
 
     [overload findText] com::sun::star::beans::Optional<XRangeElement> findText(
@@ -24,6 +49,7 @@ interface XText: XElement {
     [overload findText] com::sun::star::beans::Optional<XRangeElement> findTextFrom(
         [in] string searchPattern, [in] XRangeElement from);
 
+    /** @gas Text.getFontFamily */
     com::sun::star::beans::Optional<string> getFontFamily([in] long offset);
 
     [overload getForegroundColor] com::sun::star::beans::Optional<string> getForegroundColor();
@@ -31,33 +57,57 @@ interface XText: XElement {
     [overload getForegroundColor] com::sun::star::beans::Optional<string> getForegroundColorAt(
         [in] long offset);
 
+    /** @gas Text.getLinkUrl */
     com::sun::star::beans::Optional<string> getLinkUrl([in] long offset);
 
+    /** @gas Text.getTextAlignment */
     com::sun::star::beans::Optional<TextAlignment> getTextAlignment([in] long offset);
 
+    /** Returns the offsets at which a new text run starts.
+
+        The first offset is always 0. A new offset follows only where the formatting changes.
+
+        @gas Text.getTextAttributeIndices
+     */
     sequence<long> getTextAttributeIndices();
 
+    /** @throws RuntimeException
+            if offset is negative or past the end of the text.
+
+        @gas Text.insertText
+     */
     XText insertText([in] long offset, [in] string text);
 
+    /** @gas Text.isBold */
     com::sun::star::beans::Optional<boolean> isBold([in] long offset);
 
+    /** Returns whether the text at the given offset is italic or oblique.
+
+        @gas Text.isItalic
+     */
     com::sun::star::beans::Optional<boolean> isItalic([in] long offset);
 
+    /** @gas Text.isStrikethrough */
     com::sun::star::beans::Optional<boolean> isStrikethrough([in] long offset);
 
+    /** @gas Text.isUnderline */
     com::sun::star::beans::Optional<boolean> isUnderline([in] long offset);
 
     XText merge();
 
+    /** @gas Text.setBold */
     [overload setBold] XText setBold([in] com::sun::star::beans::Optional<boolean> value);
 
+    /** @gas Text.setBold */
     [overload setBold] XText setBoldRange(
         [in] long startOffset, [in] long endOffsetInclusive,
         [in] com::sun::star::beans::Optional<boolean> value);
 
+    /** @gas Text.setFontFamily */
     [overload setFontFamily] XText setFontFamily(
         [in] com::sun::star::beans::Optional<string> fontFamilyName);
 
+    /** @gas Text.setFontFamily */
     [overload setFontFamily] XText setFontFamilyRange(
         [in] long startOffset, [in] long endOffsetInclusive,
         [in] com::sun::star::beans::Optional<string> fontFamilyName);
@@ -69,36 +119,47 @@ interface XText: XElement {
         [in] long startOffset, [in] long endOffsetInclusive,
         [in] com::sun::star::beans::Optional<string> color);
 
+    /** @gas Text.setItalic */
     [overload setItalic] XText setItalic([in] com::sun::star::beans::Optional<boolean> value);
 
+    /** @gas Text.setItalic */
     [overload setItalic] XText setItalicRange(
         [in] long startOffset, [in] long endOffsetInclusive,
         [in] com::sun::star::beans::Optional<boolean> value);
 
+    /** @gas Text.setLinkUrl */
     [overload setLinkUrl] XText setLinkUrl([in] com::sun::star::beans::Optional<string> url);
 
+    /** @gas Text.setLinkUrl */
     [overload setLinkUrl] XText setLinkUrlRange(
         [in] long startOffset, [in] long endOffsetInclusive,
         [in] com::sun::star::beans::Optional<string> url);
 
+    /** @gas Text.setStrikethrough */
     [overload setStrikethrough] XText setStrikethrough(
         [in] com::sun::star::beans::Optional<boolean> value);
 
+    /** @gas Text.setStrikethrough */
     [overload setStrikethrough] XText setStrikethroughRange(
         [in] long startOffset, [in] long endOffsetInclusive,
         [in] com::sun::star::beans::Optional<boolean> value);
 
+    /** @gas Text.setText */
     XText setText([in] string text);
 
+    /** @gas Text.setTextAlignment */
     [overload setTextAlignment] XText setTextAlignment(
         [in] com::sun::star::beans::Optional<TextAlignment> textAlignment);
 
+    /** @gas Text.setTextAlignment */
     [overload setTextAlignment] XText setTextAlignmentRange(
         [in] long startOffset, [in] long endOffsetInclusive,
         [in] com::sun::star::beans::Optional<TextAlignment> textAlignment);
 
+    /** @gas Text.setUnderline */
     [overload setUnderline] XText setUnderline([in] com::sun::star::beans::Optional<boolean> value);
 
+    /** @gas Text.setUnderline */
     [overload setUnderline] XText setUnderlineRange(
         [in] long startOffset, [in] long endOffsetInclusive,
         [in] com::sun::star::beans::Optional<boolean> value);

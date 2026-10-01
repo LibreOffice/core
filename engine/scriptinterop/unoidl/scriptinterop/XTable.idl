@@ -11,9 +11,18 @@
 
 module scriptinterop {
 
+/** A table in a text document. Its children are its rows.
+
+    @gas Table
+ */
 interface XTable: XContainerElement {
+    /** @gas Table.getNumRows */
     long getNumRows();
 
+    /** Returns the row at the given 0-based index, or null if index is out of range.
+
+        @gas Table.getRow
+     */
     com::sun::star::beans::Optional<XTableRow> getRow([in] long index);
 };
 
