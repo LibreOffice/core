@@ -74,7 +74,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     sal_uInt16  nItemId = rUDEvt.GetItemId();
 
     tools::Long nRectHeight = aRect.GetHeight();
-    tools::Long nRectWidth = aRect.GetWidth();
+    const tools::Long nRectWidth = aRect.GetWidth();
     Point aBLPos = aRect.TopLeft();
 
     auto popIt = pDev->ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
@@ -85,7 +85,6 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     aFont.SetFontSize( aSize );
 
     Point aLineStart(aBLPos.X() + 5,            aBLPos.Y() + ( nRectHeight - nItemId )/2);
-    Point aLineEnd(aBLPos.X() + nRectWidth * 7 / 9 - 10, aLineStart.Y());
     if (nItemId == 9)
     {
         Point aImgStart(aBLPos.X() + 5,         aBLPos.Y() + ( nRectHeight - 23 ) / 2);
@@ -124,17 +123,14 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         pDev->DrawText(aStart, maStrUnits[ nItemId - 1 ]);  //can't set DrawTextFlags::EndEllipsis here ,or the text will disappear
 
         //draw line
-        if (IsItemSelected(nItemId))
-            pDev->SetLineColor(COL_WHITE);
-        else
-            pDev->SetLineColor(Application::GetSettings().GetStyleSettings().GetFieldTextColor());
-
-        for(sal_uInt16 i = 1; i <= nItemId; i++)
-        {
-            pDev->DrawLine(aLineStart,aLineEnd );
-            aLineStart.setY(aLineStart.getY() + 1);
-            aLineEnd.setY  (aLineEnd.getY() + 1);
-        }
+        const Color aLineColor
+            = IsItemSelected(nItemId)
+                  ? COL_WHITE
+                  : Application::GetSettings().GetStyleSettings().GetFieldTextColor();
+        pDev->SetLineColor(aLineColor);
+        pDev->SetFillColor(aLineColor);
+        const sal_Int32 nLineWidth = nRectWidth * 7 / 9 - 15;
+        pDev->DrawRect(tools::Rectangle(aLineStart, Size(nLineWidth, nItemId)));
     }
 
     Invalidate( aRect );
