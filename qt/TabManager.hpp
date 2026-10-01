@@ -97,6 +97,8 @@ public:
     void emitInitialState();
     void applyTheme(const QString& theme);
 
+    void showTabContextMenu(int tabId, int x, int y);
+
 signals:
     void requestWindowClose();
 

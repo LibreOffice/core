@@ -29,6 +29,7 @@ public slots:
     void requestSync(); // strip is ready; push the initial state
     void tabActivated(int tabId);
     void tabCloseRequested(int tabId);
+    void tabContextMenuRequested(int tabId, int x, int y);
     void newTabRequested();
     void tabReordered(int fromIndex, int toIndex);
     void tabDragStarted(int tabId);

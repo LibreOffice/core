@@ -38,6 +38,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QMenu>
+#include <QAction>
 #include <QStackedWidget>
 #include <QString>
 #include <QTimer>
@@ -709,6 +711,40 @@ void TabManager::applyTheme(const QString& theme)
     currentTheme() =
         (theme == QStringLiteral("dark")) ? QStringLiteral("dark") : QStringLiteral("light");
     emit _shellBridge->themeChanged(currentTheme());
+}
+
+void TabManager::showTabContextMenu(int tabId, int x, int y)
+{
+    auto it = findTab(tabId);
+    if (it == _tabs.end())
+        return;
+
+    QMenu menu(_shellView);
+
+    QAction* closeAction = menu.addAction(tr("Close"));
+    connect(closeAction, &QAction::triggered, this, [this, tabId]() {
+        closeTab(tabId);
+    });
+
+    QAction* closeOthersAction = menu.addAction(tr("Close Others"));
+    connect(closeOthersAction, &QAction::triggered, this, [this, tabId]() {
+        std::vector<int> toClose;
+        for (const auto& e : _tabs) {
+            if (e.id != tabId)
+                toClose.push_back(e.id);
+        }
+        for (int id : toClose) {
+            closeTab(id);
+        }
+    });
+
+    QAction* moveToNewWindowAction = menu.addAction(tr("Move Tab to New Window"));
+    connect(moveToNewWindowAction, &QAction::triggered, this, [this, tabId]() {
+        onSourceDragEnded(tabId, false);
+    });
+
+    QPoint globalPos = _shellView->mapToGlobal(QPoint(x, y));
+    menu.exec(globalPos);
 }
 
 void TabManager::onSourceDragStarted(int tabId)

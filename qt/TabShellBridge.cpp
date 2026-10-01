@@ -26,6 +26,7 @@ TabShellBridge::TabShellBridge(TabManager* manager)
 void TabShellBridge::requestSync() { _manager->emitInitialState(); }
 void TabShellBridge::tabActivated(int tabId) { _manager->activateTab(tabId); }
 void TabShellBridge::tabCloseRequested(int tabId) { _manager->closeTab(tabId); }
+void TabShellBridge::tabContextMenuRequested(int tabId, int x, int y) { _manager->showTabContextMenu(tabId, x, y); }
 void TabShellBridge::newTabRequested() { _manager->addStarterTab(); }
 
 void TabShellBridge::tabReordered(int fromIndex, int toIndex)

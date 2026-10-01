@@ -189,6 +189,11 @@
 			tab.addEventListener('auxclick', (ev) => {
 				if (ev.button === 1 && bridge) bridge.tabCloseRequested(t.id);
 			});
+			tab.addEventListener('contextmenu', (ev) => {
+				ev.preventDefault();
+				if (bridge)
+					bridge.tabContextMenuRequested(t.id, ev.clientX, ev.clientY);
+			});
 
 			tab.addEventListener('dragstart', (ev) => {
 				ev.dataTransfer.effectAllowed = 'move';
