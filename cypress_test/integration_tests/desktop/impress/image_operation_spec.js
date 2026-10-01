@@ -45,6 +45,29 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 		});
 	});
 
+	it('Insert an animated GIF as multimedia', function () {
+		// An image picked through Insert Local Multimedia goes into the slide
+		// as a picture, so an animated GIF shows and keeps its animation.
+		helper.processToIdle(this.win);
+
+		cy.getFrameWindow().then(function (win) {
+			cy.spy(win.app.socket, 'sendMessage').as('sendMessage');
+		});
+
+		cy.cGet('#Insert-tab-label').click();
+		cy.cGet('#Insert-container .inline.insertmultimedia').click();
+		cy.cGet('#insertmultimedia[type=file]').attachFile(
+			'/desktop/impress/animated_to_insert.gif'
+		);
+
+		cy.get('@sendMessage').should('have.been.calledWithMatch',
+			/^insertfile name=\S+ type=graphic$/);
+		helper.processToIdle(this.win);
+
+		cy.cGet('#document-container svg g').should('exist');
+		cy.cGet('#document-container svg foreignObject video').should('not.exist');
+	});
+
 	it('Insert multimedia from WOPI URL shows progress feedback', function () {
 		// Inserting a remote video shows a busy popup while the kit
 		// downloads it, and the popup is cleared once the insert finishes.

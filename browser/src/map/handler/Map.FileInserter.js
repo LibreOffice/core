@@ -56,6 +56,14 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 	},
 
 	_onInsertMultimedia: function (e) {
+		// An image picked as media, such as an animated GIF, goes in as a
+		// picture, the way a pasted or dropped image does. A picture keeps
+		// its animation.
+		if (e.file && e.file.type && e.file.type.startsWith('image/')) {
+			this._onInsertGraphic(e);
+			return;
+		}
+
 		if (!this._childId) {
 			app.socket.sendMessage('getchildid');
 			this._toInsertMultimedia[Date.now()] = e.file;
