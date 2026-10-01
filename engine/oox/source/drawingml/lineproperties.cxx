@@ -514,8 +514,9 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 // Anything the line states of its own follows the reference. Reaching here
                 // means the line resolved to the colour the reference names, so it states
                 // nothing that moves the colour, and this adds nothing in practice.
-                for (auto const& rTransform :
-                     aLineColor.createComplexColor(rGraphicHelper, nPhClrTheme).getTransformations())
+                model::ComplexColor aLineComplex
+                    = aLineColor.createComplexColor(rGraphicHelper, nPhClrTheme);
+                for (auto const& rTransform : aLineComplex.getTransformations())
                     aComplexColor.addTransformation(rTransform);
             }
             else
