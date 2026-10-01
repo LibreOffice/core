@@ -60,3 +60,38 @@ describe('ShortcutsUtil', function () {
 		});
 	});
 });
+
+describe('KeyboardShortcuts', function () {
+	describe('processEvent()', function () {
+		it('reads a region-tagged language from its base language table', function () {
+			const dispatched: string[] = [];
+			(window as any).mode = { isChromebook: () => false };
+			app.dispatcher = {
+				dispatch: (action: string) => dispatched.push(action),
+			};
+			(window as any).KeyboardShortcuts.initialize({
+				_docLayer: { _docType: 'text' },
+				isEditMode: () => true,
+				on: () => {},
+			});
+
+			// Ctrl+Alt+S opens the search bar in a German UI.
+			const event = {
+				type: 'keydown',
+				ctrlKey: true,
+				altKey: true,
+				shiftKey: false,
+				metaKey: false,
+				which: 83,
+				key: 's',
+				preventDefault: () => {},
+			} as unknown as KeyboardEvent;
+
+			nodeassert.strictEqual(
+				(window as any).KeyboardShortcuts.processEvent('de-DE', event),
+				true,
+			);
+			nodeassert.deepStrictEqual(dispatched, ['home-search']);
+		});
+	});
+});

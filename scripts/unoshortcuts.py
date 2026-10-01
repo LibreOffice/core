@@ -102,10 +102,7 @@ EXTRA_NON_UNO_COMMANDS = {
 
 # Commands not present in Accelerators.xcu that must be provided manually.
 MANUAL_FALLBACKS = {
-    '.uno:InsertFootnote': 'Ctrl+Alt+F',
-    '.uno:InsertEndnote': 'Ctrl+Alt+D',
     '.uno:KeyboardShortcuts': 'Ctrl+Shift+?',
-    '.uno:Strikeout': 'Ctrl+Alt+5',
 }
 
 # Groups of UNO commands that share the same shortcut.  When a shortcut is
@@ -390,85 +387,6 @@ def extractModifierL10N(corePath):
     return result
 
 
-# Modifier bitmask values matching the Mod enum in
-# Map.KeyboardShortcuts.ts.
-JS_MOD_CTRL = 1
-JS_MOD_ALT = 2
-JS_MOD_SHIFT = 4
-
-# Mapping from XCU base key identifiers to event.key values used by
-# the browser's KeyboardEvent.  For single letters, lowercase is used
-# when Shift is not held, uppercase when Shift is held.
-SPECIAL_KEY_EVENTKEY = {
-    'RETURN': 'Enter',
-    'ESCAPE': 'Escape',
-    'TAB': 'Tab',
-    'BACKSPACE': 'Backspace',
-    'SPACE': ' ',
-    'INSERT': 'Insert',
-    'DELETE': 'Delete',
-    'PAGEUP': 'PageUp',
-    'PAGEDOWN': 'PageDown',
-    'HOME': 'Home',
-    'END': 'End',
-    'UP': 'ArrowUp',
-    'DOWN': 'ArrowDown',
-    'LEFT': 'ArrowLeft',
-    'RIGHT': 'ArrowRight',
-    'ADD': '+',
-    'SUBTRACT': '-',
-    'MULTIPLY': '*',
-    'DIVIDE': '/',
-    'POINT': '.',
-    'COMMA': ',',
-    'LESS': '<',
-    'GREATER': '>',
-    'EQUAL': '=',
-    'NUMBERSIGN': '#',
-    'COLON': ':',
-    'SEMICOLON': ';',
-    'TILDE': '~',
-    'QUOTELEFT': '`',
-    'QUOTERIGHT': "'",
-    'BRACKETLEFT': '[',
-    'BRACKETRIGHT': ']',
-    'RIGHTCURLYBRACKET': '}',
-    'DECIMAL': '.',
-}
-
-
-def keyNameToEventKey(baseKey, modifiers):
-    """Convert a base key + modifiers to the browser event.key value.
-
-    Returns the string that event.key would be for this key combination,
-    or None if the key cannot be represented.
-    """
-    if baseKey in SPECIAL_KEY_EVENTKEY:
-        return SPECIAL_KEY_EVENTKEY[baseKey]
-    if baseKey.startswith('F') and baseKey[1:].isdigit():
-        return baseKey  # F1, F12, etc.
-    if len(baseKey) == 1 and baseKey.isalpha():
-        # Letters: uppercase when Shift is held, lowercase otherwise.
-        if 'SHIFT' in modifiers:
-            return baseKey.upper()
-        return baseKey.lower()
-    if len(baseKey) == 1 and baseKey.isdigit():
-        return baseKey
-    return None
-
-
-def modifiersToJsBitmask(modifiers):
-    """Convert a set of XCU modifier tokens to a JS Mod bitmask."""
-    bitmask = 0
-    if 'MOD1' in modifiers:
-        bitmask |= JS_MOD_CTRL
-    if 'MOD2' in modifiers:
-        bitmask |= JS_MOD_ALT
-    if 'SHIFT' in modifiers:
-        bitmask |= JS_MOD_SHIFT
-    return bitmask
-
-
 def extractAllLanguageBindings(xcuPath):
     """Parse Accelerators.xcu and extract per-language key->command mappings.
 
@@ -536,67 +454,26 @@ def extractAllLanguageBindings(xcuPath):
 
 
 def buildL10NData(xcuPath, enUSShortcuts):
-    """Build per-language tooltip and key binding overrides.
+    """Build per-language tooltip overrides.
 
-    Returns (l10nShortcuts, l10nKeyBindings) where:
-    - l10nShortcuts: {lang: {command: displayString}} for tooltip display
-    - l10nKeyBindings: {lang: [(eventKey, modBitmask, command), ...]}
-      for keyboard shortcut handling
+    Returns {lang: {command: displayString}} for tooltip display.  The
+    bindings themselves are core's business: the kit dispatches a key
+    through the accelerator configuration of the view's own language.
     """
     allBindings = extractAllLanguageBindings(xcuPath)
-    enUSBindings = allBindings.get('en-US', {})
-
     l10nShortcuts = {}
-    l10nKeyBindings = {}
 
     for lang, langBindings in allBindings.items():
         if lang == 'en-US':
             continue
 
         tooltipOverrides = {}
-        keyBindingOverrides = []
-        seenKeyBindings = set()
+        # display string -> the command this language gives that combo.
+        comboOwners = {}
 
         for keyName, entries in langBindings.items():
             # Use the most common command for this key in this language.
             command = entries[0][0]
-
-            # Get the most common en-US command for this key.
-            enUSEntries = enUSBindings.get(keyName, [])
-            enUSCommand = enUSEntries[0][0] if enUSEntries else None
-
-            # Only emit key binding override if this key does something
-            # different in this language compared to en-US.  Skip non-uno
-            # protocol commands (e.g., vnd.sun.star.findbar:): the JS
-            # dispatcher cannot fire them; tooltip emission below still
-            # picks them up.
-            if (enUSCommand and command != enUSCommand
-                    and command.startswith('.uno:')):
-                baseKey, modifiers, display, modCount = parseKeyName(keyName)
-
-                if isBrowserIntercepted(baseKey, modifiers):
-                    continue
-
-                eventKey = keyNameToEventKey(baseKey, modifiers)
-                if eventKey is None:
-                    continue
-
-                modBitmask = modifiersToJsBitmask(modifiers)
-
-                # Determine docType: only set when the binding comes
-                # from exactly one non-Global module.  Bindings from
-                # Global or spanning multiple modules apply to all
-                # document types.
-                sections = {s for (_cmd, s) in entries if _cmd == command}
-                docType = None
-                if 'Global' not in sections and len(sections) == 1:
-                    docType = MODULE_DOCTYPE.get(next(iter(sections)))
-
-                bindKey = (eventKey, modBitmask)
-                if bindKey not in seenKeyBindings:
-                    keyBindingOverrides.append(
-                        (eventKey, modBitmask, command, docType))
-                    seenKeyBindings.add(bindKey)
 
             # Build tooltip: for this language, find the key combo for
             # each command (reverse map).  Count each module occurrence
@@ -604,6 +481,7 @@ def buildL10NData(xcuPath, enUSShortcuts):
             baseKey, modifiers, display, modCount = parseKeyName(keyName)
             if isBrowserIntercepted(baseKey, modifiers):
                 continue
+            comboOwners.setdefault(display, command)
             enUSDisplay = enUSShortcuts.get(command)
             if enUSDisplay and display != enUSDisplay:
                 if command not in tooltipOverrides:
@@ -614,15 +492,23 @@ def buildL10NData(xcuPath, enUSShortcuts):
                 for _ in entries:
                     tooltipOverrides[command].append((display, modCount))
 
-        if keyBindingOverrides:
-            l10nKeyBindings[lang] = keyBindingOverrides
-        if tooltipOverrides:
-            resolved = {}
-            for cmd, cands in tooltipOverrides.items():
-                resolved[cmd] = pickCanonicalShortcut(cands)
+        resolved = {}
+        for cmd, cands in tooltipOverrides.items():
+            resolved[cmd] = pickCanonicalShortcut(cands)
+
+        # A command keeps its en-US shortcut in the tooltip only while this
+        # language leaves that key combination alone.  German gives
+        # Ctrl+Alt+F to Find and Replace, so the footnote entry must stop
+        # naming it.
+        for cmd, enUSDisplay in enUSShortcuts.items():
+            owner = comboOwners.get(enUSDisplay)
+            if owner is not None and owner != cmd and cmd not in resolved:
+                resolved[cmd] = ''
+
+        if resolved:
             l10nShortcuts[lang] = resolved
 
-    return l10nShortcuts, l10nKeyBindings
+    return l10nShortcuts
 
 
 def applyEquivalentGroups(shortcuts):
@@ -643,7 +529,7 @@ def applyEquivalentGroups(shortcuts):
 def generateShortcuts(onlinePath, corePath):
     """Extract online commands and their shortcuts from core.
 
-    Returns (shortcuts, l10nShortcuts, l10nKeyBindings, modifierL10N).
+    Returns (shortcuts, l10nShortcuts, modifierL10N).
     """
     xcuPath = os.path.join(
         corePath,
@@ -669,11 +555,11 @@ def generateShortcuts(onlinePath, corePath):
     applyEquivalentGroups(shortcuts)
 
     # Extract per-language overrides for both tooltips and key bindings.
-    l10nShortcuts, l10nKeyBindings = buildL10NData(xcuPath, shortcuts)
+    l10nShortcuts = buildL10NData(xcuPath, shortcuts)
 
     modifierL10N = extractModifierL10N(corePath)
 
-    return shortcuts, l10nShortcuts, l10nKeyBindings, modifierL10N
+    return shortcuts, l10nShortcuts, modifierL10N
 
 
 _IDENT_RE = re.compile(r'^[A-Za-z_$][A-Za-z0-9_$]*$')
@@ -715,22 +601,12 @@ def _renderObject(props, indent, trailing=','):
 
 
 def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
-                        l10nKeyBindings, modifierL10N):
+                        modifierL10N):
     """Write the generated unoshortcuts.ts file."""
     outPath = os.path.join(onlinePath, 'browser/src/unoshortcuts.ts')
     with open(outPath, 'w', encoding='utf-8') as f:
         f.write("// Don't modify, generated using scripts/unoshortcuts.py\n")
         f.write("/* eslint-disable no-unused-vars */\n\n")
-
-        # Shape of a per-language manual key binding entry. Mirrors the
-        # subset of ShortcutDescriptor's constructor params that the
-        # generator can derive from Accelerators.xcu.
-        f.write("interface UnoKeyBinding {\n")
-        f.write("\tkey: string;\n")
-        f.write("\tmodifier: number;\n")
-        f.write("\tunoAction: string;\n")
-        f.write("\tdocType?: 'text' | 'presentation' | 'drawing' | 'spreadsheet';\n")
-        f.write("}\n\n")
 
         # en-US command -> display string (for tooltips).
         f.write("var unoShortcutsMap: Record<string, string> = {\n")
@@ -747,40 +623,6 @@ def writeUnoshortcutsJS(onlinePath, shortcuts, l10nShortcuts,
                 f.write("\t\t%s: '%s',\n"
                         % (_jsKey(cmd), l10nShortcuts[lang][cmd]))
             f.write("\t},\n")
-        f.write("};\n\n")
-
-        # Per-language key bindings: key combo -> command where the
-        # command differs from en-US for that key.  Used by
-        # Map.KeyboardShortcuts.ts to register ShortcutDescriptors.
-        f.write("var unoShortcutsL10NKeyBindings: Record<string, UnoKeyBinding[]> = {\n")
-        for lang in sorted(l10nKeyBindings.keys()):
-            # Sort for stable output.
-            entries = sorted(l10nKeyBindings[lang],
-                             key=lambda e: (e[2], e[1], e[0]))
-            renderedEntries = []
-            for eventKey, modBitmask, command, docType in entries:
-                # Escape single quotes in key names.
-                safeKey = eventKey.replace("'", "\\'")
-                props = [('key', "'%s'" % safeKey),
-                         ('modifier', '%d' % modBitmask),
-                         ('unoAction', "'%s'" % command)]
-                if docType:
-                    props.append(('docType', "'%s'" % docType))
-                renderedEntries.append(_renderObject(props, '\t\t'))
-
-            # Single-entry arrays collapse to one line if they fit,
-            # matching prettier's behaviour.
-            if len(renderedEntries) == 1 and '\n' not in renderedEntries[0]:
-                inline = "%s: [%s]" % (_jsKey(lang), renderedEntries[0])
-                width = len('\t'.expandtabs(_TAB_WIDTH)) + len(inline) + 1
-                if width <= _PRINT_WIDTH:
-                    f.write("\t%s,\n" % inline)
-                    continue
-
-            f.write("\t%s: [\n" % _jsKey(lang))
-            for r in renderedEntries:
-                f.write("\t\t%s,\n" % r)
-            f.write("\t],\n")
         f.write("};\n\n")
 
         # Localized modifier key names, extracted from
@@ -839,10 +681,9 @@ if __name__ == "__main__":
                 % sys.argv[3])
             exit(1)
 
-        shortcuts, l10nSC, l10nKB, modL10N = generateShortcuts(
-            onlineDir, coreDir)
+        shortcuts, l10nSC, modL10N = generateShortcuts(onlineDir, coreDir)
 
-        writeUnoshortcutsJS(onlineDir, shortcuts, l10nSC, l10nKB, modL10N)
+        writeUnoshortcutsJS(onlineDir, shortcuts, l10nSC, modL10N)
 
     else:
         usageAndExit()

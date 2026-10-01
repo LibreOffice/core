@@ -1083,18 +1083,9 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			// Ctrl + Alt
 			if (!e.shiftKey) {
 				switch (e.keyCode) {
-				case this.keyCodes.NUM5[DEFAULT]: // 5
-					app.socket.sendMessage('uno .uno:Strikeout');
-					return true;
-				case this.keyCodes.F: // f but according to value it is F so I guess it is not MAC so safe to Give F
-					app.socket.sendMessage('uno .uno:InsertFootnote');
-					return true;
 				case this.keyCodes.C[DEFAULT]: // c
 				case this.keyCodes.M: // m
 					this._map.insertComment();
-					return true;
-				case this.keyCodes.D: // d
-					app.socket.sendMessage('uno .uno:InsertEndnote');
 					return true;
 				case this.keyCodes.pageUp:
 				case this.keyCodes.pageDown :
