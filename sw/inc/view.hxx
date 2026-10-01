@@ -654,7 +654,7 @@ public:
     std::shared_ptr<SwMailMergeConfigItem> EnsureMailMergeConfigItem(const SfxItemSet* pArgs = nullptr);
 
     OUString GetDataSourceName() const;
-    static bool IsDataSourceAvailable(const OUString& sDataSourceName);
+    bool IsDataSourceAvailable(const OUString& sDataSourceName) const;
 
     void ExecFormatPaintbrush(SfxRequest const &);
     void StateFormatPaintbrush(SfxItemSet &);
