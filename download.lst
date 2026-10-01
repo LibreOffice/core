@@ -487,8 +487,8 @@ LZMA_TARBALL := xz-5.8.4.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-MARIADB_CONNECTOR_C_SHA256SUM := 30dcc69a3a2f40092a8352008fdd757d7403b086d6393e2af0d1aea95b2356ba
-MARIADB_CONNECTOR_C_TARBALL := mariadb-connector-c-3.3.19-src.tar.gz
+MARIADB_CONNECTOR_C_SHA256SUM := 720245934c8f2582a1b2d85bfafad6d42f1a07d4d5de8062f5dc2841a8843a39
+MARIADB_CONNECTOR_C_TARBALL := mariadb-connector-c-3.3.21-src.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
