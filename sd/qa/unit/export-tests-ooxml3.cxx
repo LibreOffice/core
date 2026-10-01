@@ -390,6 +390,31 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf115394Zero)
     CPPUNIT_ASSERT_EQUAL(0.01, fTransitionDuration);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testNoTransitionWithoutEffect)
+{
+    createSdImpressDoc();
+    save(TestFilter::PPTX);
+
+    // A slide of an empty presentation has no transition effect.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//p:transition", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testAutoAdvanceWithoutEffect)
+{
+    createSdImpressDoc();
+    uno::Reference<beans::XPropertySet> xPage(getPage(0), uno::UNO_QUERY_THROW);
+    // Advance to the next slide automatically after 3 seconds, without a transition effect
+    xPage->setPropertyValue(u"Change"_ustr, uno::Any(sal_Int32(1)));
+    xPage->setPropertyValue(u"Duration"_ustr, uno::Any(sal_Int32(3)));
+    save(TestFilter::PPTX);
+
+    // PP always seems to write mc:AlternateContent
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:sld/mc:AlternateContent/mc:Choice/p:transition", "advTm", u"3000");
+    assertXPath(pXmlDoc, "/p:sld/mc:AlternateContent/mc:Choice/p:transition", "spd", u"slow");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf115005)
 {
     createSdImpressDoc("odp/tdf115005.odp");

@@ -1533,6 +1533,7 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
 
     sal_Int32 nTransitionDuration = -1;
     bool isTransitionDurationSet = false;
+    bool isNonDefaultTransitionDurationSet = false;
 
     // try to use TransitionDuration instead of old Speed property
     if (ImplGetPropertyValue(mXPagePropSet, u"TransitionDuration"_ustr))
@@ -1558,6 +1559,8 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
                 speed = "med";
             }
 
+            isNonDefaultTransitionDurationSet
+                = fTransitionDuration != SdPage::DEFAULT_TRANSITION_DURATION;
             bool isStandardValue = nTransitionDuration == 500
                 || nTransitionDuration == 750
                 || nTransitionDuration == 1000;
@@ -1584,16 +1587,19 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
         }
     }
 
-    // check if we resolved what transition to export or time is set
-    if (!nPPTTransitionType && !bOOXmlSpecificTransition && !isTransitionDurationSet)
-        return;
-
     if (ImplGetPropertyValue(mXPagePropSet, u"Change"_ustr))
         mAny >>= changeType;
 
     // 1 means automatic, 2 half automatic - not sure what it means - at least I don't see it in UI
     if (changeType == 1 && ImplGetPropertyValue(mXPagePropSet, u"Duration"_ustr))
         mAny >>= advanceTiming;
+
+    // check if we resolved what transition to export, or a time or a sound is set
+    if (!nPPTTransitionType && !bOOXmlSpecificTransition && !isNonDefaultTransitionDurationSet
+        && advanceTiming == -1 && sSoundRelId.isEmpty())
+    {
+        return;
+    }
 
     if (!bOOXmlSpecificTransition)
     {

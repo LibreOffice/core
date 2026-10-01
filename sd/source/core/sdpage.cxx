@@ -130,7 +130,7 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
 ,   mnTransitionSubtype(0)
 ,   mbTransitionDirection(true)
 ,   mnTransitionFadeColor(0)
-,   mfTransitionDuration(2.0)
+,   mfTransitionDuration(DEFAULT_TRANSITION_DURATION)
 ,   mbIsPrecious(true)
 ,   mnPageId(mnLastPageId++)
 {
