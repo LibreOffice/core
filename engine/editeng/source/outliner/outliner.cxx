@@ -227,8 +227,8 @@ void Outliner::SetMaxDepth( sal_Int16 nDepth )
 sal_Int16 Outliner::GetDepth( sal_Int32 nPara ) const
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-    DBG_ASSERT( pPara, "Outliner::GetDepth - Paragraph not found!" );
-    return pPara ? pPara->GetNumberingDepth() : -1;
+    assert(pPara);
+    return pPara->GetNumberingDepth();
 }
 
 void Outliner::SetDepth( Paragraph* pPara, sal_Int16 nNewDepth )
@@ -255,15 +255,15 @@ void Outliner::SetDepth( Paragraph* pPara, sal_Int16 nNewDepth )
 sal_Int16 Outliner::GetNumberingStartValue( sal_Int32 nPara ) const
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-    DBG_ASSERT( pPara, "Outliner::GetNumberingStartValue - Paragraph not found!" );
-    return pPara ? pPara->GetNumberingStartValue() : -1;
+    assert(pPara);
+    return pPara->GetNumberingStartValue();
 }
 
 void Outliner::SetNumberingStartValue( sal_Int32 nPara, sal_Int16 nNumberingStartValue )
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-    DBG_ASSERT( pPara, "Outliner::GetNumberingStartValue - Paragraph not found!" );
-    if( pPara && pPara->GetNumberingStartValue() != nNumberingStartValue )
+    assert(pPara);
+    if( pPara->GetNumberingStartValue() != nNumberingStartValue )
     {
         if( IsUndoEnabled() && !IsInUndo() )
             InsertUndo( std::make_unique<OutlinerUndoChangeParaNumberingRestart>( this, nPara,
@@ -279,15 +279,15 @@ void Outliner::SetNumberingStartValue( sal_Int32 nPara, sal_Int16 nNumberingStar
 bool Outliner::IsParaIsNumberingRestart( sal_Int32 nPara ) const
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-    DBG_ASSERT( pPara, "Outliner::IsParaIsNumberingRestart - Paragraph not found!" );
-    return pPara && pPara->IsNumberingRestart();
+    assert(pPara);
+    return pPara->IsNumberingRestart();
 }
 
 void Outliner::SetParaIsNumberingRestart( sal_Int32 nPara, bool bParaIsNumberingRestart )
 {
     Paragraph* pPara = pParaList->GetParagraph( nPara );
-    DBG_ASSERT( pPara, "Outliner::SetParaIsNumberingRestart - Paragraph not found!" );
-    if( pPara && (pPara->IsNumberingRestart() != bParaIsNumberingRestart) )
+    assert(pPara);
+    if( pPara->IsNumberingRestart() != bParaIsNumberingRestart )
     {
         if( IsUndoEnabled() && !IsInUndo() )
             InsertUndo( std::make_unique<OutlinerUndoChangeParaNumberingRestart>( this, nPara,
@@ -746,7 +746,6 @@ void Outliner::ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUnd
 
 void Outliner::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
 {
-
     pEditEngine->SetParaAttribs( nPara, rSet );
 }
 
@@ -1245,7 +1244,7 @@ void Outliner::DepthChangedHdl(Paragraph* pPara, ParaFlag nPrevFlags)
 
 sal_Int32 Outliner::GetAbsPos( Paragraph const * pPara ) const
 {
-    DBG_ASSERT(pPara,"GetAbsPos:No Para");
+    assert(pPara);
     return pParaList->GetAbsPos( pPara );
 }
 
