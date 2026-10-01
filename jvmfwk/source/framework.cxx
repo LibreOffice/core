@@ -297,7 +297,7 @@ javaFrameworkError jfw_startVM(
         //options dialog
         std::unique_ptr<JavaVMOption[]> sarJOptions(
             new JavaVMOption[
-                arOptions.size() + (sUserClassPath.isEmpty() ? 1 : 2) + vmParams.size()]);
+                arOptions.size() + (sUserClassPath.isEmpty() ? 2 : 3) + vmParams.size()]);
         JavaVMOption * arOpt = sarJOptions.get();
         if (! arOpt)
             return JFW_E_ERROR;
@@ -313,6 +313,11 @@ javaFrameworkError jfw_startVM(
         // (used, for example, by UNO remote bridges to share a common thread pool
         // factory among Java and native bridge implementations):
         arOpt[index].optionString = const_cast<char *>("-Dorg.openoffice.native=");
+        arOpt[index].extraInfo = nullptr;
+        ++index;
+
+        // HSQLDB allows calls only to the Java methods named in this list, which starts empty.
+        arOpt[index].optionString = const_cast<char *>("-Dhsqldb.method_class_names=");
         arOpt[index].extraInfo = nullptr;
         ++index;
 
