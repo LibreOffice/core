@@ -65,8 +65,11 @@ window.L.Control.MobileWizard = window.L.Control.extend({
 
 	_closeWizard: function() {
 		var items = this.contents.length;
-		while (items--)
-			this.removeWindow(this.contents[0]);
+		while (items--) {
+			const content = this.contents[0];
+			this.removeWindow(content);
+			content.notifyPopupDismissed();
+		}
 	},
 
 	_hideWizard: function() {

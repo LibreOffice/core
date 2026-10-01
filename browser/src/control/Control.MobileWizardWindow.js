@@ -300,6 +300,7 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 		if (this._inMainMenu || (this._isTabMode && this._currentDepth == 1
 			&& !this.map.dialog.hasDialogInMobilePanelOpened)) {
 			this.parent.removeWindow(this);
+			this.notifyPopupDismissed();
 			this._currentDepth = 0;
 			if (window.mobileWizard === true) {
 				app.dispatcher.dispatch('mobile_wizard');
@@ -365,6 +366,12 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 				app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).removeHighlighters();
 			}
 		}
+	},
+
+	/// Reports to the owner of a popup that the user dismissed it.
+	notifyPopupDismissed: function() {
+		if (this.isPopup && this._builder)
+			this._builder.callback('popover', 'close', {id: '__POPOVER__'}, null, this._builder);
 	},
 
 	/// for restoring title on windows switching
@@ -523,7 +530,7 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 					if (data.cancellable) {
 						overlay.onclick = function () {
 							that.parent.removeWindow(that);
-							that._builder.callback('popover', 'close', {id: '__POPOVER__'}, null, that._builder);
+							that.notifyPopupDismissed();
 						};
 					}
 				}
