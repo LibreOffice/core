@@ -87,9 +87,6 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     tools::Long nRectWidth = aRect.GetWidth();
     Point aBLPos = aRect.TopLeft();
 
-    //const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    //Color aBackColor(0,0,200);
-    //const Color aTextColor = rStyleSettings.GetFieldTextColor();
     auto popIt = pDev->ScopedPush(vcl::PushFlags::FONT | vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
 
     vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getConfiguredSystemLanguage(), GetDefaultFontFlags::OnlyOne));
