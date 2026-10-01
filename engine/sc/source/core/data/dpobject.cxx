@@ -42,6 +42,7 @@
 #include <tokenarray.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
@@ -3484,6 +3485,24 @@ bool ScDPCollection::DBType::less::operator() (const DBType& left, const DBType&
 
 ScDPCollection::DBCaches::DBCaches(ScDocument& rDoc) : mrDoc(rDoc) {}
 
+bool ScDPCollection::IsRegisteredDatabase(const OUString& rDBName)
+{
+    if (rDBName.isEmpty())
+        return false;
+
+    try
+    {
+        uno::Reference<sdb::XDatabaseContext> xContext
+            = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
+        return xContext->hasRegisteredDatabase(rDBName);
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sc", "ScDPCollection::IsRegisteredDatabase");
+    }
+    return false;
+}
+
 bool ScDPCollection::DBCaches::hasCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) const
 {
     DBType aType(nSdbType, rDBName, rCommand);
@@ -3542,6 +3561,17 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
     sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand)
 {
     uno::Reference<sdbc::XRowSet> xRowSet;
+
+    // A database document named by URL is an external link, so it is opened only once the user
+    // allows link updates.
+    ScDocShell* pDocShell = mrDoc.GetDocumentShell();
+    if (pDocShell && !pDocShell->GetEmbeddedObjectContainer().getUserAllowsLinkUpdate()
+        && !IsRegisteredDatabase(rDBName))
+    {
+        SAL_WARN("sc", "data pilot source " << rDBName << " waits for link updates to be allowed");
+        return xRowSet;
+    }
+
     try
     {
         xRowSet.set(comphelper::getProcessServiceFactory()->createInstance(

@@ -28,6 +28,8 @@
 #include <drwlayer.hxx>
 #include <externalrefmgr.hxx>
 #include <docsh.hxx>
+#include <dpobject.hxx>
+#include <dpsdbtab.hxx>
 #include <tabvwsh.hxx>
 #include <bcaslot.hxx>
 #include <broadcast.hxx>
@@ -1174,6 +1176,20 @@ bool ScDocument::HasRefreshingDBImport() const
     return false;
 }
 
+bool ScDocument::HasDataPilotDatabaseLink() const
+{
+    if (!pDPCollection)
+        return false;
+
+    for (size_t i = 0, nCount = pDPCollection->GetCount(); i < nCount; ++i)
+    {
+        const ScImportSourceDesc* pDesc = (*pDPCollection)[i].GetImportSourceDesc();
+        if (pDesc && !ScDPCollection::IsRegisteredDatabase(pDesc->aDBName))
+            return true;
+    }
+    return false;
+}
+
 bool ScDocument::HasExternalLinks() const
 {
     if (ScExternalRefManager* pRefMgr = GetExternalRefManager(); pRefMgr && pRefMgr->hasExternalData())
@@ -1186,7 +1202,7 @@ bool ScDocument::HasExternalLinks() const
             return true;
 
     if (HasLinkFormulaNeedingCheck() || HasDataProviderMappings() || HasRefreshingDBImport()
-        || GetDocLinkManager().hasUpdatableLinks())
+        || HasDataPilotDatabaseLink() || GetDocLinkManager().hasUpdatableLinks())
         return true;
 
     const ScDrawLayer* pDrawLayer = GetDrawLayer();

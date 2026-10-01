@@ -437,7 +437,7 @@ public:
 
     private:
 
-        static cpo::uno::Reference<css::sdbc::XRowSet> createRowSet(
+        cpo::uno::Reference<css::sdbc::XRowSet> createRowSet(
             sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand);
 
         void updateCache(
@@ -449,6 +449,10 @@ public:
     ScDPCollection(ScDocument& rDocument);
     ScDPCollection(const ScDPCollection& r);
     ~ScDPCollection();
+
+    /** True when rDBName is the name of a data source registered in the user's configuration.
+        Any other name is the URL of a database document. */
+    static bool IsRegisteredDatabase(const OUString& rDBName);
 
     TranslateId ReloadCache(const ScDPObject* pDPObj, o3tl::sorted_vector<ScDPObject*>& rRefs);
     bool ReloadGroupsInCache(const ScDPObject* pDPObj, o3tl::sorted_vector<ScDPObject*>& rRefs);
