@@ -169,6 +169,25 @@
                     <property name="position">2</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkButton" id="removeembedded">
+                    <property name="label" translatable="yes" context="dbregisterpage|removeembedded">_Remove Embedded Database</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="no_show_all">True</property>
+                    <property name="use_underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="removeembedded-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|removeembedded">Removes the database embedded in the current document from that document.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
