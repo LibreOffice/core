@@ -84,6 +84,7 @@ extern "C" {
 }
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static int* gpnInit = nullptr;
 static NSMenu* pDockMenu = nil;

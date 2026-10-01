@@ -27,6 +27,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace css;
+using namespace cpo;
 
 @implementation EventListener;
 
