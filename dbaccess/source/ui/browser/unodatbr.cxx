@@ -952,7 +952,13 @@ void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEv
                     Sequence< PropertyValue > aDescriptor;
                     bool bProperFormat = _rEvent.State >>= aDescriptor;
                     OSL_ENSURE(bProperFormat, "SbaTableQueryBrowser::statusChanged: need a data access descriptor here!");
+                    const OUString sOldDataSource = m_aDocumentDataSource.getDataSource();
                     m_aDocumentDataSource.initializeFrom(aDescriptor);
+
+                    // A data source given by URL is in the tree only because it was the document
+                    // data source, so its entry goes when the document names another one.
+                    if (sOldDataSource != m_aDocumentDataSource.getDataSource())
+                        impl_cleanupURLDataSourceEntry(sOldDataSource);
 
                     OSL_ENSURE( (   m_aDocumentDataSource.has(DataAccessDescriptorProperty::DataSource)
                                 ||  m_aDocumentDataSource.has(DataAccessDescriptorProperty::DatabaseLocation)
@@ -1063,6 +1069,19 @@ namespace
         const DBTreeListUserData* pData = static_cast<const DBTreeListUserData*>(pUserData);
         return ( !pData || ( pData->sAccessor == sId ) );
     }
+}
+
+void SbaTableQueryBrowser::impl_cleanupURLDataSourceEntry(const OUString& rDataSource)
+{
+    OUString sDisplayName, sDataSourceId;
+    if (!m_pTreeView || !getDataSourceDisplayName_isURL(rDataSource, sDisplayName, sDataSourceId))
+        return;
+
+    FilterByEntryDataId aFilter(sDataSourceId);
+    std::unique_ptr<weld::TreeIter> xEntry
+        = m_pTreeView->GetEntryPosByName(sDisplayName, nullptr, &aFilter);
+    if (xEntry)
+        impl_cleanupDataSourceEntry(*xEntry);
 }
 
 OUString SbaTableQueryBrowser::getDataSourceAccessor(const weld::TreeIter& rDataSourceEntry) const
@@ -3772,6 +3791,14 @@ void SbaTableQueryBrowser::impl_cleanupDataSourceEntry(std::u16string_view rData
     OSL_ENSURE( bDataSourceEntry, "SbaTableQueryBrowser::impl_cleanupDataSourceEntry: do not know this data source!" );
     if (!bDataSourceEntry)
         return;
+
+    impl_cleanupDataSourceEntry(*xDataSourceEntry);
+}
+
+void SbaTableQueryBrowser::impl_cleanupDataSourceEntry(const weld::TreeIter& rDataSourceEntry)
+{
+    weld::TreeView& rTreeView = m_pTreeView->GetWidget();
+    std::unique_ptr<weld::TreeIter> xDataSourceEntry(rTreeView.make_iterator(&rDataSourceEntry));
 
     if (isSelected(*xDataSourceEntry))
     {

@@ -37,12 +37,14 @@ private:
     std::unique_ptr<weld::Button> m_xNew;
     std::unique_ptr<weld::Button> m_xEdit;
     std::unique_ptr<weld::Button> m_xDelete;
+    std::unique_ptr<weld::Button> m_xRemoveEmbedded;
     std::unique_ptr<weld::TreeView> m_xPathBox;
     std::unique_ptr<weld::TreeIter> m_xIter;
 
     DECL_LINK(NewHdl, weld::Button&, void);
     DECL_LINK(EditHdl, weld::Button&, void);
     DECL_LINK(DeleteHdl, weld::Button&, void);
+    DECL_LINK(RemoveEmbeddedHdl, weld::Button&, void);
     DECL_LINK(PathBoxDoubleClickHdl, const weld::TreeIter&, bool);
 
     DECL_LINK(PathSelect_Impl, weld::ItemView&, void);
@@ -67,6 +69,10 @@ private:
             The entry to remove if the entry will be changed
     */
     void openLinkDialog(const OUString& sOldName, const OUString& sOldLocation, int nEntry = -1);
+
+    /// Show the remove embedded database button for a document that has the command, and enable
+    /// it when the command is available.
+    void UpdateRemoveEmbedded();
 
 public:
     DbRegistrationOptionsPage(weld::Container* pPage, weld::DialogController* pController,
