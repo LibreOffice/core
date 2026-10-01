@@ -29,6 +29,10 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
 	UIConfig_dbtdata \
 ))
 
+$(eval $(call gb_Module_add_check_targets,dbaccess,\
+    CppunitTest_dbaccess_xmlimport \
+))
+
 ifneq ($(OS),iOS)
 # screenshots
 $(eval $(call gb_Module_add_screenshot_targets,dbaccess,\
