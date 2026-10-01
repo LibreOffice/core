@@ -77,7 +77,7 @@ private:
 
     bool m_bWaitForClose;
     bool m_bAllowClosing;
-    bool m_bDesktopTerminated;
+    bool m_bTerminateListenerRegistered;
 
     sal_Int32 m_nNoBorderResizeReact;
     sal_Int32 m_nNoResizeReact;

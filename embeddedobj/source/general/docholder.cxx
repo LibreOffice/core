@@ -156,7 +156,7 @@ DocumentHolder::DocumentHolder( uno::Reference< uno::XComponentContext > xContex
   m_bReadOnly( false ),
   m_bWaitForClose( false ),
   m_bAllowClosing( false ),
-  m_bDesktopTerminated( false ),
+  m_bTerminateListenerRegistered( false ),
   m_nNoBorderResizeReact( 0 ),
   m_nNoResizeReact( 0 )
 {
@@ -165,6 +165,7 @@ DocumentHolder::DocumentHolder( uno::Reference< uno::XComponentContext > xContex
     try
     {
         xDesktop->addTerminateListener( this );
+        m_bTerminateListenerRegistered = true;
     }
     catch ( const uno::Exception& )
     {
@@ -198,8 +199,7 @@ DocumentHolder::~DocumentHolder()
         m_xInterceptor.clear();
     }
 
-    if ( !m_bDesktopTerminated )
-        FreeOffice();
+    FreeOffice();
 }
 
 
@@ -233,6 +233,10 @@ void DocumentHolder::CloseFrame()
 
 void DocumentHolder::FreeOffice()
 {
+    // tdf#125846 - deregister listener only once since a second removal would check all listeners
+    if (!m_bTerminateListenerRegistered)
+        return;
+    m_bTerminateListenerRegistered = false;
     try {
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
         xDesktop->removeTerminateListener( this );
@@ -1152,8 +1156,8 @@ void SAL_CALL DocumentHolder::notifyTermination( const lang::EventObject& aSourc
 {
     OSL_ENSURE( !m_xComponent.is(), "Just a disaster..." );
 
+    m_bTerminateListenerRegistered = false;
     uno::Reference< frame::XDesktop > xDesktop( aSource.Source, uno::UNO_QUERY );
-    m_bDesktopTerminated = true;
     if ( xDesktop.is() )
         xDesktop->removeTerminateListener( static_cast<frame::XTerminateListener*>(this) );
 }
