@@ -255,7 +255,7 @@ def main():
         print("Script: https://script.google.com/d/" + script_id + "/edit")
         print()
         print(
-            "Now pair the script's GCP project once (see step 7 in the"
+            "Now pair the script's GCP project once (see step 2 in the"
             " header of this script), then rerun."
         )
         return 2
