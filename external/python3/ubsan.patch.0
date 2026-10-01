@@ -61,7 +61,7 @@
      PyObject *key, *value;
 --- Parser/lexer/buffer.c
 +++ Parser/lexer/buffer.c
-@@ -27,8 +27,8 @@
+@@ -29,8 +29,8 @@
  
      for (index = tok->tok_mode_stack_index; index >= 0; --index) {
          mode = &(tok->tok_mode_stack[index]);
@@ -69,6 +69,6 @@
 -        mode->f_string_multi_line_start = mode->f_string_multi_line_start_offset < 0 ? NULL : tok->buf + mode->f_string_multi_line_start_offset;
 +        mode->f_string_start = mode->f_string_start_offset < 0 ? NULL : (char *) (((intptr_t) tok->buf) + mode->f_string_start_offset);
 +        mode->f_string_multi_line_start = mode->f_string_multi_line_start_offset < 0 ? NULL : (char *) (((intptr_t) tok->buf) + mode->f_string_multi_line_start_offset);
+         mode->last_expr_start = mode->last_expr_start_offset < 0
+             ? NULL : tok->buf + mode->last_expr_start_offset;
      }
- }
- 
