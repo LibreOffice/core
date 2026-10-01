@@ -618,7 +618,8 @@ cpo::uno::Any SwXMailMerge::execute(
             {
                 if (xCurConnection.is())
                     xRowSetPropSet->setPropertyValue( u"ActiveConnection"_ustr,  Any( xCurConnection ) );
-                xRowSetPropSet->setPropertyValue( u"DataSourceName"_ustr,    Any( aCurDataSourceName ) );
+                xRowSetPropSet->setPropertyValue( u"DataSourceName"_ustr,
+                    Any( pView->GetWrtShell().GetDBManager()->ResolveDataSourceName( aCurDataSourceName ) ) );
                 xRowSetPropSet->setPropertyValue( u"Command"_ustr,           Any( aCurDataCommand ) );
                 xRowSetPropSet->setPropertyValue( u"CommandType"_ustr,       Any( nCurDataCommandType ) );
                 xRowSetPropSet->setPropertyValue( u"EscapeProcessing"_ustr,  Any( bCurEscapeProcessing ) );

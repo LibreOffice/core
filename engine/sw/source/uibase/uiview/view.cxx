@@ -62,6 +62,7 @@
 #include <tabsh.hxx>
 #include <grfsh.hxx>
 #include <mediash.hxx>
+#include <dbmgr.hxx>
 #include <docsh.hxx>
 #include <frmsh.hxx>
 #include <olesh.hxx>
@@ -2200,8 +2201,11 @@ OUString SwView::GetDataSourceName() const
     return sDataSourceName;
 }
 
-bool SwView::IsDataSourceAvailable(const OUString& sDataSourceName)
+bool SwView::IsDataSourceAvailable(const OUString& sDataSourceName) const
 {
+    if (sDataSourceName == GetWrtShell().GetDBManager()->GetEmbeddedDataSourceName())
+        return true;
+
     const uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     Reference< XDatabaseContext> xDatabaseContext = DatabaseContext::create(xContext);
 

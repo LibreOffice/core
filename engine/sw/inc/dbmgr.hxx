@@ -256,6 +256,11 @@ class SwDBManager
     const SwXMailMerge* m_pMergeEvtSrc;   ///< != 0 if mail merge events are to be send
     /// Name of the embedded database that's included in the current document.
     OUString     m_sEmbeddedName;
+    /// The data source name by which this document refers to its embedded database. Empty when
+    /// the embedded database is not loaded.
+    OUString     m_sEmbeddedDataSourceName;
+    /// The loaded embedded database, private to this document and not registered by name.
+    cpo::uno::Reference<css::sdbc::XDataSource> m_xEmbeddedDataSource;
 
     /// Store last registrations to revoke or commit
     static std::vector<std::pair<SwDocShell*, OUString>> s_aUncommittedRegistrations;
@@ -413,8 +418,25 @@ public:
      */
     SW_DLLPUBLIC static OUString LoadAndRegisterDataSource(std::u16string_view rURI, const OUString *pDestDir);
 
-    /// Load the embedded data source of the document and also register it.
-    void LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const SwDocShell& rDocShell);
+    /// Load the embedded data source of the document, without registering it.
+    void LoadEmbeddedDataSource(const SwDBData& rData, const SwDocShell& rDocShell);
+
+    /// Hold xDataSource as the document's embedded data source, under the name rDataSource.
+    void SetEmbeddedDataSource(const cpo::uno::Reference<css::sdbc::XDataSource>& xDataSource,
+                               const OUString& rDataSource);
+
+    /// Point the loaded embedded data source away from the document storage and drop it.
+    void ReleaseEmbeddedDataSource();
+
+    /** The name to open for the data source rDataSource of this document: the URL of the
+        embedded database for the document's own embedded data source, otherwise rDataSource. */
+    SW_DLLPUBLIC OUString ResolveDataSourceName(const OUString& rDataSource) const;
+
+    /// The document's own name for rDataSource: the reverse of ResolveDataSourceName.
+    SW_DLLPUBLIC OUString GetDocumentDataSourceName(const OUString& rDataSource) const;
+
+    /// The data source name by which this document refers to its embedded database, if any.
+    const OUString& GetEmbeddedDataSourceName() const { return m_sEmbeddedDataSourceName; }
 
     /// Unregister a data source.
     SW_DLLPUBLIC static void RevokeDataSource(const OUString& rName);
@@ -461,8 +483,6 @@ public:
                                         const OUString& rOwnURL, bool bCopyTo = false);
 
     SwDoc* getDoc() const;
-    /// Stop reacting to removed database registrations.
-    void releaseRevokeListener();
 
     /// Revoke not committed registrations in case of mail merge cancel
     SW_DLLPUBLIC void RevokeLastRegistrations();

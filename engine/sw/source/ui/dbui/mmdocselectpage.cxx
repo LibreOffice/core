@@ -93,7 +93,7 @@ IMPL_LINK_NOARG(SwMailMergeDocSelectPage, DocSelectHdl, weld::Toggleable&, void)
 
     if(m_xCurrentDocRB->get_active() &&
        !sDataSourceName.isEmpty() &&
-       !SwView::IsDataSourceAvailable(sDataSourceName))
+       !m_pWizard->GetSwView().IsDataSourceAvailable(sDataSourceName))
     {
         m_xDataSourceWarningFT->show();
         m_pWizard->enableButtons(WizardButtonFlags::NEXT, false);
@@ -178,7 +178,7 @@ IMPL_LINK_NOARG(SwMailMergeDocSelectPage, ExchangeDatabaseHdl, weld::Button&, vo
 
             if(m_xCurrentDocRB->get_active() &&
                !sDataSourceName.isEmpty() &&
-               SwView::IsDataSourceAvailable(sDataSourceName))
+               m_pWizard->GetSwView().IsDataSourceAvailable(sDataSourceName))
             {
                 m_xDataSourceWarningFT->hide();
                 m_pWizard->enableButtons(WizardButtonFlags::NEXT, true);

@@ -196,7 +196,8 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
             if(xD.is()) {
                 Sequence<PropertyValue> aProperties
                 {
-                    comphelper::makePropertyValue(u"DataSourceName"_ustr, rSourceName),
+                    comphelper::makePropertyValue(
+                        u"DataSourceName"_ustr, m_rSh.GetDBManager()->ResolveDataSourceName(rSourceName)),
                     comphelper::makePropertyValue(u"Command"_ustr, rTableName),
                     comphelper::makePropertyValue(u"CommandType"_ustr, nCommandType),
                 };

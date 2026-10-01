@@ -33,6 +33,7 @@ namespace com::sun::star{
         class XColumnsSupplier;
     }
 }
+class SwDBManager;
 class SwMailMergeAddressBlockPage;
 
 struct AddressUserData_Impl;
@@ -64,6 +65,7 @@ class SwAddressListDialog : public SfxDialogController
     std::unique_ptr<weld::TreeIter> m_xIter;
 
     void DetectTablesAndQueries(int Select, bool bWidthDialog);
+    SwDBManager& GetDBManager() const;
 
     DECL_LINK(FilterHdl_Impl, weld::Button&, void);
     DECL_LINK(LoadHdl_Impl, weld::Button&, void);

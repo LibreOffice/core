@@ -568,21 +568,12 @@ SwDoc::~SwDoc()
     mpFrameFormatTable->erase( mpFrameFormatTable->begin() );
 
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
-    // On load, SwDBManager::setEmbeddedName() may register a data source.
-    // If we have an embedded one, then sDataSource points to the registered name, so revoke it here.
-    if (!m_pOwnDBManager->getEmbeddedName().isEmpty() && !maDBData.sDataSource.isEmpty())
+    if (!m_pOwnDBManager->getEmbeddedName().isEmpty())
     {
-        // Remove the revoke listener here first, so that we don't remove the data source from the document.
-        m_pOwnDBManager->releaseRevokeListener();
-        SwDBManager::RevokeDataSource(maDBData.sDataSource);
-        SwDBManager::RevokeDataSource(m_pOwnDBManager->getEmbeddedName());
-    }
-    else if (!m_pOwnDBManager->getEmbeddedName().isEmpty())
-    {
-        // Remove the revoke listener here first, so that we don't remove the data source from the document.
-        m_pOwnDBManager->releaseRevokeListener();
-        // Remove connections which was committed but not used.
-        m_pOwnDBManager->RevokeNotUsedConnections();
+        m_pOwnDBManager->ReleaseEmbeddedDataSource();
+        if (maDBData.sDataSource.isEmpty())
+            // Remove connections which was committed but not used.
+            m_pOwnDBManager->RevokeNotUsedConnections();
     }
 
     m_pOwnDBManager.reset();

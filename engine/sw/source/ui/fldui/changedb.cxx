@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -84,6 +86,10 @@ void SwChangeDBDlg::FillDBPopup()
 
     Sequence< OUString > aDBNames = xDBContext->getElementNames();
     auto aAllDBNames = comphelper::sequenceToContainer<std::vector<OUString>>(aDBNames);
+    const OUString& rEmbeddedName = m_pSh->GetDBManager()->GetEmbeddedDataSourceName();
+    if (!rEmbeddedName.isEmpty()
+        && std::find(aAllDBNames.begin(), aAllDBNames.end(), rEmbeddedName) == aAllDBNames.end())
+        aAllDBNames.push_back(rEmbeddedName);
 
     std::vector<OUString> aDBNameList;
     m_pSh->GetAllUsedDB( aDBNameList, &aAllDBNames );

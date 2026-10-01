@@ -54,6 +54,9 @@
 #include <svl/urihelper.hxx>
 #include <strings.hrc>
 #include <view.hxx>
+#include <wrtsh.hxx>
+#include <comphelper/sequence.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::cpo::uno;
@@ -173,8 +176,14 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
 
     SwDBConfig aDb;
     const OUString sBibliography = aDb.GetBibliographySource().sDataSource;
-    const cpo::uno::Sequence< OUString> aNames = m_xDBContext->getElementNames();
-    for(const OUString& rName : aNames)
+    cpo::uno::Sequence< OUString> aNames = m_xDBContext->getElementNames();
+    const OUString& rEmbeddedName = GetDBManager().GetEmbeddedDataSourceName();
+    if (!rEmbeddedName.isEmpty() && comphelper::findValue(aNames, rEmbeddedName) == -1)
+    {
+        aNames.realloc(aNames.getLength() + 1);
+        aNames.getArray()[aNames.getLength() - 1] = rEmbeddedName;
+    }
+    for(const OUString& rName : std::as_const(aNames))
     {
         if ( rName == sBibliography )
             continue;
@@ -198,7 +207,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
             uno::Reference<beans::XPropertySet> xSourceProperties;
             try
             {
-                m_xDBContext->getByName(rName) >>= xSourceProperties;
+                m_xDBContext->getByName(GetDBManager().ResolveDataSourceName(rName)) >>= xSourceProperties;
                 pUserData->sURL = lcl_getFlatURL( xSourceProperties );
                 bEnableEdit = !pUserData->sURL.isEmpty() &&
                     SWUnoHelper::UCB_IsFile( pUserData->sURL ) && //#i97577#
@@ -480,7 +489,8 @@ void SwAddressListDialog::DetectTablesAndQueries(
         if(!pUserData->xConnection.is())
         {
             m_aDBData.sDataSource = m_xListLB->get_text(nSelect, 0);
-            m_xDBContext->getByName(m_aDBData.sDataSource) >>= xComplConnection;
+            m_xDBContext->getByName(GetDBManager().ResolveDataSourceName(m_aDBData.sDataSource))
+                >>= xComplConnection;
             pUserData->xSource.set(xComplConnection, UNO_QUERY);
 
             const uno::Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
@@ -539,7 +549,8 @@ void SwAddressListDialog::DetectTablesAndQueries(
         if ( !m_aDBData.sCommand.isEmpty() )
         {
             uno::Reference<beans::XPropertySet> xSourceProperties;
-            m_xDBContext->getByName(m_aDBData.sDataSource) >>= xSourceProperties;
+            m_xDBContext->getByName(GetDBManager().ResolveDataSourceName(m_aDBData.sDataSource))
+                >>= xSourceProperties;
             pUserData->sURL = lcl_getFlatURL( xSourceProperties );
 
             pUserData->xColumnsSupplier = SwDBManager::GetColumnSupplier(pUserData->xConnection,
@@ -603,6 +614,11 @@ uno::Reference< XDataSource>  SwAddressListDialog::GetSource() const
     }
     return xRet;
 
+}
+
+SwDBManager& SwAddressListDialog::GetDBManager() const
+{
+    return *m_pAddressPage->GetWizard()->GetSwView().GetWrtShell().GetDBManager();
 }
 
 SharedConnection    SwAddressListDialog::GetConnection() const

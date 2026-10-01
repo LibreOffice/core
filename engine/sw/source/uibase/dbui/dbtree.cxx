@@ -31,6 +31,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <osl/diagnose.h>
 
+#include <comphelper/sequence.hxx>
 #include <dbmgr.hxx>
 #include <wrtsh.hxx>
 #include <dbtree.hxx>
@@ -148,6 +149,13 @@ void SwDBTreeList::InitTreeList()
         return;
 
     Sequence< OUString > aDBNames = m_pImpl->GetContext()->getElementNames();
+    SwDBManager* pDBManager = m_pImpl->GetWrtShell() ? m_pImpl->GetWrtShell()->GetDBManager() : nullptr;
+    if (pDBManager && !pDBManager->GetEmbeddedDataSourceName().isEmpty()
+        && comphelper::findValue(aDBNames, pDBManager->GetEmbeddedDataSourceName()) == -1)
+    {
+        aDBNames.realloc(aDBNames.getLength() + 1);
+        aDBNames.getArray()[aDBNames.getLength() - 1] = pDBManager->GetEmbeddedDataSourceName();
+    }
     auto const sort = comphelper::string::NaturalStringSorter(
         comphelper::getProcessComponentContext(),
         Application::GetSettings().GetUILanguageTag().getLocale());
@@ -163,7 +171,8 @@ void SwDBTreeList::InitTreeList()
         // If this database has a password or a (missing) remote connection,
         // then it might take a long time or spam for unnecessary credentials.
         // Just check that it basically exists to weed out any broken/obsolete registrations.
-        if (SwDBManager::getDataSourceAsParent(Reference<sdbc::XConnection>(), rDBName).is())
+        const OUString sDataSource = pDBManager ? pDBManager->ResolveDataSourceName(rDBName) : rDBName;
+        if (SwDBManager::getDataSourceAsParent(Reference<sdbc::XConnection>(), sDataSource).is())
         {
             m_xTreeView->insert(nullptr, -1, &rDBName, nullptr, nullptr, nullptr, true, m_xScratchIter.get());
             m_xTreeView->set_image(*m_xScratchIter, aImg);

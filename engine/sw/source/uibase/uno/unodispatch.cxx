@@ -185,18 +185,32 @@ SwXDispatch::~SwXDispatch()
 }
 
 void SwXDispatch::dispatch(const util::URL& aURL,
-    const cpo::uno::Sequence< beans::PropertyValue >& aArgs)
+    const cpo::uno::Sequence< beans::PropertyValue >& rArgs)
 {
     if(!m_pView)
         throw cpo::uno::RuntimeException();
 #if !HAVE_FEATURE_DBCONNECTIVITY || ENABLE_FUZZERS
-    (void) aArgs;
+    (void) rArgs;
     if (false)
     {
     }
 #else
     SwWrtShell& rSh = m_pView->GetWrtShell();
     SwDBManager* pDBManager = rSh.GetDBManager();
+
+    // The data source browser names the document's embedded database by its URL.
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(rArgs);
+    {
+        svx::ODataAccessDescriptor aArgsDescriptor(rArgs);
+        const OUString sDataSource = aArgsDescriptor.getDataSource();
+        const OUString sDocumentName = pDBManager->GetDocumentDataSourceName(sDataSource);
+        if (sDocumentName != sDataSource)
+        {
+            aArgsDescriptor.setDataSource(sDocumentName);
+            aArgs = aArgsDescriptor.createPropertyValueSequence();
+        }
+    }
+
     if(aURL.Complete == cURLInsertContent)
     {
         svx::ODataAccessDescriptor aDescriptor(aArgs);
@@ -227,7 +241,10 @@ void SwXDispatch::dispatch(const util::URL& aURL,
 
         const SwDBData& rData = m_pView->GetWrtShell().GetDBData();
         svx::ODataAccessDescriptor aDescriptor;
-        aDescriptor.setDataSource(rData.sDataSource);
+        // The data source browser lists a source it is given by URL, which covers the document's
+        // embedded database.
+        aDescriptor.setDataSource(
+            m_pView->GetWrtShell().GetDBManager()->ResolveDataSourceName(rData.sDataSource));
         aDescriptor[svx::DataAccessDescriptorProperty::Command]       <<= rData.sCommand;
         aDescriptor[svx::DataAccessDescriptorProperty::CommandType]   <<= rData.nCommandType;
 
@@ -274,7 +291,8 @@ void SwXDispatch::addStatusListener(
         const SwDBData& rData = m_pView->GetWrtShell().GetDBData();
 
         svx::ODataAccessDescriptor aDescriptor;
-        aDescriptor.setDataSource(rData.sDataSource);
+        aDescriptor.setDataSource(
+            m_pView->GetWrtShell().GetDBManager()->ResolveDataSourceName(rData.sDataSource));
         aDescriptor[svx::DataAccessDescriptorProperty::Command]       <<= rData.sCommand;
         aDescriptor[svx::DataAccessDescriptorProperty::CommandType]   <<= rData.nCommandType;
 

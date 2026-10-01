@@ -31,6 +31,7 @@
 
 #include <i18nutil/searchopt.hxx>
 #include <txtftn.hxx>
+#include <dbmgr.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -2216,14 +2217,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testEmbeddedDataSource)
         = sdb::DatabaseContext::create(xComponentContext);
     CPPUNIT_ASSERT(!xDatabaseContext->hasByName(u"calc-data-source"_ustr));
 
-    // Load: should have a component and a data source, too.
+    // The document reaches its embedded data source by its own name for it.
+    auto getEmbeddedDataSource = [this, &xDatabaseContext]() {
+        SwDBManager* pDBManager = getSwDoc()->GetDBManager();
+        return uno::Reference<sdbc::XDataSource>(
+            xDatabaseContext->getByName(
+                pDBManager->ResolveDataSourceName(u"calc-data-source"_ustr)),
+            uno::UNO_QUERY);
+    };
+
+    // Load: should have a component and a data source, too, which is private to the document and
+    // not among the registered data sources.
     // Path with "#" must not cause issues
     createSwDoc("hash%23path/embedded-data-source.odt");
-    CPPUNIT_ASSERT(xDatabaseContext->hasByName(u"calc-data-source"_ustr));
+    CPPUNIT_ASSERT(!xDatabaseContext->hasByName(u"calc-data-source"_ustr));
 
     // Data source has a table named Sheet1.
-    uno::Reference<sdbc::XDataSource> xDataSource(
-        xDatabaseContext->getByName(u"calc-data-source"_ustr), uno::UNO_QUERY);
+    uno::Reference<sdbc::XDataSource> xDataSource = getEmbeddedDataSource();
     CPPUNIT_ASSERT(xDataSource.is());
     auto xConnection = xDataSource->getConnection(u""_ustr, u""_ustr);
     uno::Reference<container::XNameAccess> xTables
@@ -2233,12 +2243,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testEmbeddedDataSource)
     CPPUNIT_ASSERT(xTables->hasByName(u"Sheet1"_ustr));
     xConnection->close();
 
-    // Reload: should still have a component and a data source, too.
+    // Reload: should still have a component and a data source, too, still not registered.
     saveAndReload(TestFilter::ODT);
-    CPPUNIT_ASSERT(xDatabaseContext->hasByName(u"calc-data-source"_ustr));
+    CPPUNIT_ASSERT(!xDatabaseContext->hasByName(u"calc-data-source"_ustr));
 
     // Data source has a table named Sheet1 after saving to a different directory.
-    xDataSource.set(xDatabaseContext->getByName(u"calc-data-source"_ustr), uno::UNO_QUERY);
+    xDataSource = getEmbeddedDataSource();
     CPPUNIT_ASSERT(xDataSource.is());
     xConnection = xDataSource->getConnection(u""_ustr, u""_ustr);
     xTables = cpo::uno::Reference<css::sdbcx::XTablesSupplier>(xConnection, uno::UNO_QUERY_THROW)
