@@ -1,0 +1,34 @@
+--- a/hsqldb/src/org/hsqldb/persist/HsqlDatabaseProperties.java
++++ b/hsqldb/src/org/hsqldb/persist/HsqlDatabaseProperties.java
+@@ -57,15 +57,13 @@
+ 
+     private static String hsqldb_method_class_names =
+         "hsqldb.method_class_names";
+-    private static HashSet accessibleJavaMethodNames;
++    private static HashSet accessibleJavaMethodNames = new HashSet();
+ 
+     static {
+         try {
+             String prop = System.getProperty(hsqldb_method_class_names);
+ 
+             if (prop != null) {
+-                accessibleJavaMethodNames = new HashSet();
+-
+                 String[] names = StringUtil.split(prop, ";");
+ 
+                 for (int i = 0; i < names.length; i++) {
+@@ -76,11 +74,9 @@
+     }
+ 
+     /**
+-     * If the system property "hsqldb.method_class_names" is not set, then
+-     * static methods of all available Java classes can be accessed as functions
+-     * in HSQLDB. If the property is set, then only the list of semicolon
+-     * seperated method names becomes accessible. An empty property value means
+-     * no class is accessible.<p>
++     * Only the semicolon seperated method names in the system property
++     * "hsqldb.method_class_names" are accessible. An empty or unset property
++     * means no class is accessible.<p>
+      *
+      * A property value that ends with .* is treated as a wild card and allows
+      * access to all classe or method names formed by substitution of the
