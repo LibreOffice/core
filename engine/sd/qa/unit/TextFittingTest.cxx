@@ -520,6 +520,37 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testLaidOutHeightLeavesOutSpaceBelowLastLi
     pView->SdrEndTextEdit();
 }
 
+CPPUNIT_TEST_FIXTURE(TextFittingTest, testLegacyBaselineKeptInTextEdit)
+{
+    // A document from before the baseline change keeps all the height a line gains from its line
+    // spacing above the baseline. Editing its text leaves the text where it was drawn.
+    createSdImpressDoc("pptx/TextFittingAnchoredBottom.pptx");
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    pDoc->SetCompatibilityFlag(SdrCompatibilityFlag::LineSpacingBelowBaselineLegacy, true);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    auto pTextObject = DynCastSdrTextObj(pViewShell->GetActualPage()->GetObj(0));
+    CPPUNIT_ASSERT(pTextObject);
+
+    SdrOutliner& rDrawOutliner = pDoc->GetDrawOutliner(pTextObject);
+    tools::Rectangle aPaintRect;
+    pTextObject->SetupOutlinerFormatting(rDrawOutliner, aPaintRect);
+    const tools::Rectangle aDrawn = rDrawOutliner.GetEditEngine().GetCharacterBounds(EPaM(0, 0));
+    rDrawOutliner.Clear();
+
+    SdrView* pView = pViewShell->GetView();
+    Scheduler::ProcessEventsToIdle();
+    pView->SdrBeginTextEdit(pTextObject);
+    CPPUNIT_ASSERT(pView->IsTextEdit());
+    EditEngine& rEditEngine = pView->GetTextEditOutlinerView()->GetEditView().getEditEngine();
+    const tools::Rectangle aEdited = rEditEngine.GetCharacterBounds(EPaM(0, 0));
+    pView->SdrEndTextEdit();
+
+    CPPUNIT_ASSERT_EQUAL(aDrawn.Top(), aEdited.Top());
+    CPPUNIT_ASSERT_EQUAL(aDrawn.Bottom(), aEdited.Bottom());
+}
+
 CPPUNIT_TEST_FIXTURE(TextFittingTest, testFitsLikeReference)
 {
     // Each slide holds the same text in a box of a different height, and the reference program

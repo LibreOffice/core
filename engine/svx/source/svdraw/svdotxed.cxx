@@ -19,6 +19,7 @@
 
 
 #include <svx/svdotext.hxx>
+#include <svx/compatflags.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/editdata.hxx>
@@ -78,6 +79,8 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     if(pOutlinerParaObject!=nullptr)
     {
         rOutl.SetFixedCellHeight(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT).GetValue());
+        rOutl.setLineSpacingBelowBaseline(getSdrModelFromSdrObject().GetCompatibilityFlag(
+            SdrCompatibilityFlag::LineSpacingBelowBaselineLegacy));
         rOutl.SetText(*GetOutlinerParaObject());
     }
 
