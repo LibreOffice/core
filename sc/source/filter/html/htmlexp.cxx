@@ -47,6 +47,7 @@
 #include <svtools/htmlout.hxx>
 #include <svtools/parhtml.hxx>
 #include <tools/stream.hxx>
+#include <unotools/datetime.hxx>
 #include <vcl/outdev.hxx>
 #include <stdio.h>
 #include <osl/diagnose.h>
@@ -134,8 +135,6 @@ const char ScHTMLExport::sIndentSource[nIndentMax+1] =
 
 #define OUT_SP_CSTR_ASS( s )    rStrm.WriteChar(' ').WriteOString( s ).WriteChar( '=' )
 
-#define GLOBSTR(id) ScResId( id )
-
 void ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const OUString& rBaseURL, ScDocument* pDoc,
         const ScRange& rRange, const rtl_TextEncoding /*eNach*/, bool bAll,
         const OUString& rStreamPath, OUString& rNonConvertibleChars, const OUString& rFilterOptions )
@@ -163,33 +162,17 @@ static OString lcl_getColGroupString(sal_Int32 nSpan, sal_Int32 nWidth)
     return aByteStr.makeStringAndClear();
 }
 
-static void lcl_AddStamp( OUString& rStr, std::u16string_view rName,
-    const css::util::DateTime& rDateTime,
-    const LocaleDataWrapper& rLoc )
+static void lcl_AddStamp(OUString& rStr, std::u16string_view rName,
+    const css::util::DateTime& rDateTime)
 {
-    Date aD(rDateTime.Day, rDateTime.Month, rDateTime.Year);
-    tools::Time aT(rDateTime.Hours, rDateTime.Minutes, rDateTime.Seconds,
-            rDateTime.NanoSeconds);
-    DateTime aDateTime(aD,aT);
-
-    OUString        aStrDate    = rLoc.getDate( aDateTime );
-    OUString        aStrTime    = rLoc.getTime( aDateTime );
-
-    rStr += GLOBSTR( STR_BY ) + " ";
+    rStr += u"by "_ustr;
     if (!rName.empty())
         rStr += rName;
     else
-        rStr += "???";
-    rStr += " " + GLOBSTR( STR_ON ) + " ";
-    if (!aStrDate.isEmpty())
-        rStr += aStrDate;
-    else
-        rStr += "???";
-    rStr += ", ";
-    if (!aStrTime.isEmpty())
-        rStr += aStrTime;
-    else
-        rStr += "???";
+        rStr += u"???"_ustr;
+
+    rStr += u" on "_ustr;
+    rStr += utl::toISO8601(rDateTime);
 }
 
 static OString lcl_makeHTMLColorTriplet(const Color& rColor)
@@ -336,10 +319,9 @@ void ScHTMLExport::WriteHeader()
 
         if (!xDocProps->getPrintedBy().isEmpty())
         {
-            OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
-            OUString aStrOut = GLOBSTR( STR_DOC_PRINTED ) + ": ";
-            lcl_AddStamp( aStrOut, xDocProps->getPrintedBy(),
-                xDocProps->getPrintDate(), ScGlobal::getLocaleData() );
+            OUT_COMMENT( u"Doc.Information" );
+            OUString aStrOut = u"Printed: "_ustr;
+            lcl_AddStamp( aStrOut, xDocProps->getPrintedBy(), xDocProps->getPrintDate() );
             OUT_COMMENT( aStrOut );
         }
 
