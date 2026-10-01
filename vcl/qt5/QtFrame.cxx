@@ -1177,7 +1177,7 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
 
 void QtFrame::SetApplicationID(const OUString& rWMClass)
 {
-#if CHECK_QT5_USING_X11
+#if CHECK_ANY_QT_USING_X11
     if (GetQtInstance().GetPlatform() != Platform::Xcb || !m_pTopLevel)
         return;
 
