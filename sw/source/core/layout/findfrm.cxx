@@ -87,6 +87,25 @@ SwLayoutFrame* SwPageFrame::GetEndNoteSectionUpper()
     return static_cast<SwLayoutFrame*>(pColumnBody);
 }
 
+void SwPageFrame::InsertEndNoteSection(SwSectionFrame& rSection)
+{
+    SwLayoutFrame* pParent = GetEndNoteSectionUpper();
+    SwFrame* pBefore = FindLastBodyContent();
+    while (pBefore)
+    {
+        // Check if the last content frame is directly under the body frame or there is
+        // something in-between, e.g. a section frame.
+        if (pBefore->GetUpper() == pParent)
+        {
+            break;
+        }
+
+        // If so, insert behind the parent of the content frame, not inside the parent.
+        pBefore = pBefore->GetUpper();
+    }
+    rSection.InsertBehind(pParent, pBefore);
+}
+
 SwSectionFrame* SwPageFrame::GetEndNoteSection()
 {
     SwLayoutFrame* pUpper = GetEndNoteSectionUpper();

@@ -2408,7 +2408,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
                         // It is, then create a new section frame at the end of that previous body
                         // frame.
                         auto pNew = new SwSectionFrame(*pSect, /*bMaster=*/true);
-                        pNew->InsertBehind(pPage->FindBodyCont(), pPage->FindLastBodyContent());
+                        pPage->InsertEndNoteSection(*pNew);
                         pNew->Init();
                         SwFrame* pLower = pNew->GetLower();
                         if (pLower->IsColumnFrame())
