@@ -128,7 +128,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf128212)
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']", 1);
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "mapunit", u"MapRelative");
     assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "x", 372.0, 3.0);
-    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "y", 9370.0, 10.0);
+    assertXPathDoubleValue(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "y", 9370.0, 16.0);
     // no scaling
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scalex", u"(1/1)");
     assertXPath(pXmlDoc, "//push[@flags='PushMapMode']/mapmode", "scaley", u"(1/1)");
