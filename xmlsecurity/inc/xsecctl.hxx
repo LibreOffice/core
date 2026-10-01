@@ -37,6 +37,8 @@ namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::lang { class XInitialization; }
 namespace com::sun::star::uno { class XComponentContext; }
+namespace com::sun::star::security { class XCertificate; }
+namespace com::sun::star::xml::crypto { class XSecurityEnvironment; }
 namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 namespace com::sun::star::xml::crypto { class XXMLSignature; }
 namespace com::sun::star::xml::crypto:: sax { class XReferenceResolvedListener; }
@@ -72,6 +74,11 @@ public:
     css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener;
 
     ::std::vector< sal_Int32 > vKeeperIds;
+    bool isXAdES{false};
+    /// is the KeyInfo element signed?
+    bool isKeyInfoReferenced{false};
+    /// X509 certificate from a signed(!) XAdES SigningCertificate element
+    css::uno::Reference<css::security::XCertificate> xSigningCertificate;
 
     InternalSignatureInformation(
         sal_Int32 nId,
@@ -267,6 +274,11 @@ private:
     void setX509CertDigest(
         OUString const& rCertDigest, sal_Int32 const nReferenceDigestID,
         std::u16string_view const& rX509IssuerName, std::u16string_view const& rX509SerialNumber);
+    void setXAdES();
+    void setKeyInfoReferenced();
+    /// Find cert referenced by XAdES xd:SigningCertificate if available;
+    /// requires entire ds:Signature element to be read.
+    void resolveSigningCertificate();
 
     void setSignatureValue( OUString const & ouSignatureValue );
     void setDigestValue( sal_Int32 nDigestID, OUString const & ouDigestValue );
@@ -403,5 +415,17 @@ public:
     /// Exports an OOXML signature, called by WriteOOXMLSignature().
     void exportOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation);
 };
+
+
+namespace xmlsecurity
+{
+
+auto CheckX509Data(
+    css::uno::Reference<css::xml::crypto::XSecurityEnvironment> const& xSecEnv,
+    std::vector<SignatureInformation::X509CertInfo> const& rX509CertInfos,
+    std::vector<css::uno::Reference<css::security::XCertificate>> & rCerts,
+    std::vector<SignatureInformation::X509CertInfo> & rSorted) -> bool;
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
