@@ -1002,6 +1002,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 		else if (textMsg.startsWith('documentbackgroundcolor:')) {
 			app.sectionContainer.setDocumentBackgroundColor('#' + textMsg.substring('documentbackgroundcolor:'.length + 1).trim());
+			RenderManager.refreshTheme();
 		}
 		else if (textMsg.startsWith('contentcontrol:')) {
 			textMsg = textMsg.substring('contentcontrol:'.length + 1);

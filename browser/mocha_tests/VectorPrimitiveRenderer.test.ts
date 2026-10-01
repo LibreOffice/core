@@ -1702,14 +1702,20 @@ describe('VectorPrimitiveRenderer', function () {
 				for (const primitive of object.primitives)
 					renderer.renderPrimitive(recorder as any, primitive);
 
-			// backgroundcolor fills the whole canvas at the white page color
+			// The page carries a background that names no color, which fills
+			// the whole slide with the document background of the view.
 			const fillRect = recorder.findCall('fillRect');
 			nodeassert.ok(fillRect, 'backgroundcolor primitive should fillRect');
 			nodeassert.deepStrictEqual(fillRect.args, [0, 0, pageWidth, pageHeight]);
+			nodeassert.strictEqual(
+				fillRect.properties.fillStyle,
+				cool.VectorColors.DEFAULT_DOCUMENT_BACKGROUND,
+			);
 
-			// 2x page-fill from polyPolygonColor
+			// The slide has no fill of its own, so the rectangle is the only
+			// path that is filled.
 			const fills = recorder.callsOf('fill');
-			nodeassert.ok(fills.length >= 2, 'expected at least two fills');
+			nodeassert.strictEqual(fills.length, 1, 'expected one fill');
 
 			// The blue rectangle renders with its declared colour.
 			nodeassert.strictEqual(recorder.properties.fillStyle, '#4472c4');
@@ -2055,6 +2061,229 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.strictEqual(
 				recorder.properties.font,
 				'italic 700 400px "Liberation Sans"',
+			);
+		});
+	});
+
+	describe('Automatic colors', function () {
+		const DARK = '#1C1C1C';
+		const LIGHT = '#FFFFFF';
+
+		const textPrimitive = (fontcolor: string): any => ({
+			type: 'textSimplePortion',
+			text: 'Hi',
+			fontSize: 20,
+			matrix: [20, 0, 0, 20, 5, 7],
+			fontcolor: fontcolor,
+			familyname: 'Liberation Sans',
+		});
+
+		// backdrop is the fill right under the text, such as the fill of
+		// its shape or of its table cell.
+		const fillStyleOfText = (
+			renderer: any,
+			fontcolor: string,
+			backdrop?: string,
+		): string => {
+			const recorder = new CanvasRecorder();
+			const text = textPrimitive(fontcolor);
+			text.backdrop = backdrop;
+			renderer.renderPrimitive(recorder as any, text);
+			const fillText = recorder.findCall('fillText');
+			nodeassert.ok(fillText, 'fillText not called');
+			return fillText.properties.fillStyle;
+		};
+
+		it('fills the slide with the document background of a dark view', function () {
+			const recorder = new CanvasRecorder(200, 150);
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setSlideBounds(200, 150);
+			renderer.setDocumentBackground(DARK);
+
+			const background: cool.BackgroundColorPrimitive = {
+				type: cool.BackgroundColorPrimitive.type,
+			};
+			renderer.renderPrimitive(recorder as any, background);
+
+			const fillRect = recorder.findCall('fillRect');
+			nodeassert.ok(fillRect, 'fillRect not called');
+			nodeassert.strictEqual(fillRect?.properties.fillStyle, DARK);
+		});
+
+		it('draws automatic text white on a dark view', function () {
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setDocumentBackground(DARK);
+
+			nodeassert.strictEqual(
+				fillStyleOfText(renderer, cool.VectorColors.AUTOMATIC),
+				'#FFFFFF',
+			);
+		});
+
+		it('draws automatic text black on a dark view over a light shape', function () {
+			// The surface right behind the text decides, so a light
+			// shape fill in a dark view keeps the text dark.
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setDocumentBackground(DARK);
+
+			nodeassert.strictEqual(
+				fillStyleOfText(renderer, cool.VectorColors.AUTOMATIC, '#FFEE99'),
+				'#000000',
+			);
+		});
+
+		it('draws automatic text white over a dark page background', function () {
+			// The slide carries a dark background of its own, so the
+			// text on it is light even in a light view.
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setDocumentBackground(LIGHT);
+			renderer.setPageBackdrop('#102030');
+
+			nodeassert.strictEqual(
+				fillStyleOfText(renderer, cool.VectorColors.AUTOMATIC),
+				'#FFFFFF',
+			);
+		});
+
+		it('mixes a see-through page fill with the background of the view', function () {
+			// A tenth of white over each document background: the page
+			// stays light in a light view and dark in a dark one, so the
+			// automatic text follows the view.
+			const light = new cool.VectorPrimitiveRenderer();
+			light.setDocumentBackground(LIGHT);
+			light.setPageBackdrop('#FFFFFF', 0.9);
+			nodeassert.strictEqual(
+				fillStyleOfText(light, cool.VectorColors.AUTOMATIC),
+				'#000000',
+			);
+
+			const dark = new cool.VectorPrimitiveRenderer();
+			dark.setDocumentBackground(DARK);
+			dark.setPageBackdrop('#FFFFFF', 0.9);
+			nodeassert.strictEqual(
+				fillStyleOfText(dark, cool.VectorColors.AUTOMATIC),
+				'#FFFFFF',
+			);
+		});
+
+		it('takes the fill under the text over the page background', function () {
+			// A light shape on a dark slide: the surface right behind
+			// the text is the shape.
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setDocumentBackground(LIGHT);
+			renderer.setPageBackdrop('#102030');
+
+			nodeassert.strictEqual(
+				fillStyleOfText(renderer, cool.VectorColors.AUTOMATIC, '#FFEE99'),
+				'#000000',
+			);
+		});
+
+		it('mixes a see-through shape fill with the page behind it', function () {
+			// A tenth of white over each document background: the shape
+			// stays light in a light view and dark in a dark one, so the
+			// automatic text on it follows the view.
+			const light = new cool.VectorPrimitiveRenderer();
+			light.setDocumentBackground(LIGHT);
+			const lightText = textPrimitive(cool.VectorColors.AUTOMATIC);
+			lightText.backdrop = '#FFFFFF';
+			lightText.backdropTransparency = 0.9;
+			const lightRecorder = new CanvasRecorder();
+			light.renderPrimitive(lightRecorder as any, lightText);
+			nodeassert.strictEqual(
+				lightRecorder.findCall('fillText')?.properties.fillStyle,
+				'#000000',
+			);
+
+			const dark = new cool.VectorPrimitiveRenderer();
+			dark.setDocumentBackground(DARK);
+			const darkText = textPrimitive(cool.VectorColors.AUTOMATIC);
+			darkText.backdrop = '#FFFFFF';
+			darkText.backdropTransparency = 0.9;
+			const darkRecorder = new CanvasRecorder();
+			dark.renderPrimitive(darkRecorder as any, darkText);
+			nodeassert.strictEqual(
+				darkRecorder.findCall('fillText')?.properties.fillStyle,
+				'#FFFFFF',
+			);
+		});
+
+		it('lightens a dark text color on a dark view', function () {
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setDocumentBackground(DARK);
+
+			const drawn = fillStyleOfText(renderer, '#000080');
+			nodeassert.strictEqual(
+				drawn,
+				cool.VectorColors.getLightVariant('#000080'),
+			);
+			nodeassert.notStrictEqual(drawn, '#000080');
+		});
+
+		it('keeps a text color that sits on a light surface', function () {
+			// A dark view with a light shape fill behind the text: the
+			// color the document carries is readable as it is.
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setDocumentBackground(DARK);
+
+			nodeassert.strictEqual(
+				fillStyleOfText(renderer, '#000080', '#FFEE99'),
+				'#000080',
+			);
+		});
+
+		it('keeps a text color on a light view', function () {
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setDocumentBackground(LIGHT);
+
+			nodeassert.strictEqual(fillStyleOfText(renderer, '#000080'), '#000080');
+		});
+
+		it('takes the character highlight as the surface behind the text', function () {
+			// A dark highlight in a dark view lightens the text even
+			// where the shape around it is light.
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setDocumentBackground(DARK);
+
+			const primitive = textPrimitive('#000080');
+			primitive.fillcolor = '#101010';
+			primitive.backdrop = '#FFEE99';
+
+			const recorder = new CanvasRecorder();
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			const fillText = recorder.findCall('fillText');
+			nodeassert.ok(fillText, 'fillText not called');
+			nodeassert.strictEqual(
+				fillText?.properties.fillStyle,
+				cool.VectorColors.getLightVariant('#000080'),
+			);
+		});
+
+		it('draws automatic text in a slide preview against the shown slide', function () {
+			// A light notes page shows a dark slide. The text on that slide
+			// sits on the dark fill of the slide, not on the notes page.
+			const renderer = new cool.VectorPrimitiveRenderer();
+			renderer.setDocumentBackground(LIGHT);
+			renderer.setPageBackdrop('#FFFFFF');
+
+			const preview: cool.PagePreviewPrimitive = {
+				type: cool.PagePreviewPrimitive.type,
+				backdrop: '#102030',
+				children: [textPrimitive(cool.VectorColors.AUTOMATIC)],
+			};
+			const recorder = new CanvasRecorder();
+			renderer.renderPrimitive(recorder as any, preview);
+			nodeassert.strictEqual(
+				recorder.findCall('fillText')?.properties.fillStyle,
+				'#FFFFFF',
+			);
+
+			// Text of the notes page itself, after the preview, sits on the
+			// notes page again.
+			nodeassert.strictEqual(
+				fillStyleOfText(renderer, cool.VectorColors.AUTOMATIC),
+				'#000000',
 			);
 		});
 	});

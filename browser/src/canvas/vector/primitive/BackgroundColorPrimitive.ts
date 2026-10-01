@@ -11,9 +11,11 @@
 
 namespace cool {
 	/// Fills the slide rectangle with a solid color (the slide background).
+	/// Without a color it is the document background, which is a setting
+	/// of the view and not part of the document.
 	export interface BackgroundColorPrimitive extends Primitive {
 		type: typeof BackgroundColorPrimitive.type;
-		color: string;
+		color?: string;
 		transparency?: number;
 	}
 

@@ -288,11 +288,25 @@ class VectorManager extends RenderManagerBase {
 		return [0, 0];
 	}
 
+	/// Tell the renderer what the automatic colors mean in this view and what
+	/// the page holds behind its objects. The tree carries both unresolved,
+	/// and the renderer keeps what it was last given.
+	private _setUpColors(data: cool.VectorPrimitivesData): void {
+		this._renderer.setDocumentBackground(
+			cool.VectorColors.documentBackground(),
+		);
+		const page = VectorManager._pageEntryOf(data.objects.values());
+		this._renderer.setPageBackdrop(page?.backdrop, page?.backdropTransparency);
+	}
+
 	/// The entry that stands for the page among the given objects, if any.
 	private static _pageEntryOf(
-		objects: cool.SlideObject[],
+		objects: Iterable<cool.SlideObject>,
 	): cool.SlideObject | undefined {
-		return objects.find((object) => object.kind === 'page');
+		for (const object of objects) {
+			if (object.kind === 'page') return object;
+		}
+		return undefined;
 	}
 
 	/// Take the master reference the page entry carries into the cached part
@@ -343,6 +357,7 @@ class VectorManager extends RenderManagerBase {
 	): void {
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
 		this._renderer.setEditViewContentVisible(options?.editView === true);
+		this._setUpColors(data);
 		const textEdits = this._textEditEntriesToDraw(data);
 		for (const id of data.order) {
 			const obj = data.objects.get(id);
@@ -376,6 +391,7 @@ class VectorManager extends RenderManagerBase {
 	): void {
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
 		this._renderer.setEditViewContentVisible(true);
+		this._setUpColors(data);
 
 		for (const id of objectIds) {
 			const object = data.objects.get(id);
@@ -458,6 +474,7 @@ class VectorManager extends RenderManagerBase {
 		data: cool.VectorPrimitivesData,
 	): void {
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
+		this._setUpColors(data);
 		for (const id of data.order) {
 			const obj = data.objects.get(id);
 			if (!obj || !obj.aids) continue;
@@ -480,9 +497,21 @@ class VectorManager extends RenderManagerBase {
 	): void {
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
 		this._renderer.setEditViewContentVisible(true);
+		this._setUpColors(data);
 
 		for (const primitive of primitives)
 			this._renderer.renderPrimitive(context, primitive);
+	}
+
+	/// Redraw what is on screen in the view's current theme. The cached
+	/// trees hold the automatic colors unresolved, so a theme change
+	/// costs a repaint and nothing else.
+	refreshTheme(): void {
+		for (const [id, info] of this._renderedPreviews) {
+			const data = this._cache.get(info.partId);
+			if (data) this._renderAndFire(id, info.maxWidth, info.maxHeight, data);
+		}
+		this._fireChanged();
 	}
 
 	/// Request a thumbnail for a preview of the page at the given index of

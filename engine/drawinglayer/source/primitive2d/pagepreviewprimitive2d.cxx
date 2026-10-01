@@ -106,12 +106,16 @@ namespace drawinglayer::primitive2d
             basegfx::B2DHomMatrix aTransform,
             double fContentWidth,
             double fContentHeight,
-            Primitive2DContainer&& rPageContent)
+            Primitive2DContainer&& rPageContent,
+            std::optional<Color> oPageSurface,
+            double fPageSurfaceTransparency)
         :   mxDrawPage(std::move(xDrawPage)),
             maPageContent(std::move(rPageContent)),
             maTransform(std::move(aTransform)),
             mfContentWidth(fContentWidth),
-            mfContentHeight(fContentHeight)
+            mfContentHeight(fContentHeight),
+            moPageSurface(oPageSurface),
+            mfPageSurfaceTransparency(fPageSurfaceTransparency)
         {
         }
 
@@ -125,7 +129,9 @@ namespace drawinglayer::primitive2d
                     && getPageContent() == rCompare.getPageContent()
                     && getTransform() == rCompare.getTransform()
                     && getContentWidth() == rCompare.getContentWidth()
-                    && getContentHeight() == rCompare.getContentHeight());
+                    && getContentHeight() == rCompare.getContentHeight()
+                    && getPageSurface() == rCompare.getPageSurface()
+                    && getPageSurfaceTransparency() == rCompare.getPageSurfaceTransparency());
             }
 
             return false;

@@ -15,12 +15,15 @@
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/table/XTable.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
@@ -36,7 +39,9 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdlayer.hxx>
+#include <svx/svdotable.hxx>
 #include <svx/svdsob.hxx>
+#include <svx/svdotext.hxx>
 #include <svx/svdview.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -54,6 +59,7 @@
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
 #include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <unomodel.hxx>
 
 #include <osl/file.hxx>
@@ -520,16 +526,16 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSingleRectangle)
     assertJsonPath(aJson, "/type", "vectorprimitives");
     assertJsonPath(aJson, "/partId", firstPartId());
 
-    // The page comes first. Its master page has been cleared, so it
-    // contributes only the page background fill and the page fill itself.
+    // The page comes first. Its master page has been cleared and the slide carries no
+    // background of its own, so the only thing behind the rectangle is the document background.
+    // That is a setting of the view, so the one background primitive names no color.
     CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
     assertJsonPath(aJson, "/objects/0/kind", "page");
     // The page is entry zero, the id an object never has.
     CPPUNIT_ASSERT_EQUAL(sal_Int64(0), aJson.getInt("/objects/0/id").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects/0/primitives").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects/0/primitives").value_or(0));
     assertJsonPath(aJson, "/objects/0/primitives/0/type", "backgroundcolor");
-    assertJsonPath(aJson, "/objects/0/primitives/1/type", "polyPolygonColor");
-    assertJsonPath(aJson, "/objects/0/primitives/1/color", "#ffffff");
+    CPPUNIT_ASSERT(!aJson.has("/objects/0/primitives/0/color"));
 
     // Then the one slide object, our rectangle.
     assertJsonPath(aJson, "/objects/1/primitives/0/type", "svx:9");
@@ -1726,33 +1732,97 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectEntryCarriesLayerAndPlacehol
     CPPUNIT_ASSERT_EQUAL(true, aJson.getBool("/objects/2/emptyPlaceholder").value_or(false));
 }
 
-// Text in the automatic color resolves against the page background, so it
-// comes out light on a dark page and dark on a light one.
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testAutoColorFollowsPageBackground)
 {
+    // Text in the automatic color keeps the marker on a light and on a dark slide. The fill the
+    // slide shows behind it is named by the page entry.
     createBlankDoc();
     addTextBox(tools::Rectangle(Point(1000, 1000), Size(8000, 2000)), u"Hello"_ustr);
 
     getVectorPrimitives(u"testAutoColorLight");
     auto oLight = findTextPortion("Hello"_ostr);
     CPPUNIT_ASSERT(oLight.has_value());
-    assertJsonPath(*oLight, "fontcolor", "#000000");
+    assertJsonPath(*oLight, "fontcolor", "auto");
 
     SdrPageProperties& rProperties = page(1)->getSdrPageProperties();
     rProperties.PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
     rProperties.PutItem(XFillColorItem(OUString(), COL_BLACK));
 
-    getVectorPrimitives(u"testAutoColorDark");
+    auto aDark = getVectorPrimitives(u"testAutoColorDark");
     auto oDark = findTextPortion("Hello"_ostr);
     CPPUNIT_ASSERT(oDark.has_value());
-    assertJsonPath(*oDark, "fontcolor", "#ffffff");
+    assertJsonPath(*oDark, "fontcolor", "auto");
+    assertJsonPath(aDark, "/objects/0/backdrop", "#000000");
 }
 
-CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesAutoColorTextOnBackgroundChange)
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testHiddenBackgroundLayerNamesNoBackdrop)
 {
-    // Text in the automatic color is drawn against the page background, so a background change
-    // changes how the text draws without touching the text object. A delta after the change
-    // carries the object with the color it now resolves to.
+    // A page that hides the background layer of its master paints neither the master's fill nor
+    // its own, so the page entry names no surface and the automatic text is chosen against the
+    // document background. Showing the layer again brings the fill back with the page entry.
+    createBlankDoc();
+    SdPage* pSlide = static_cast<SdPage*>(page(1));
+    SdrPageProperties& rProperties = pSlide->getSdrPageProperties();
+    rProperties.PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    rProperties.PutItem(XFillColorItem(OUString(), COL_BLACK));
+
+    auto aShown = getVectorPrimitives(u"testHiddenBackgroundLayerShown");
+    assertJsonPath(aShown, "/objects/0/backdrop", "#000000");
+    const sal_Int64 nVersion = aShown.getInt("/version").value_or(-1);
+
+    const SdrLayerID nBackgroundLayer
+        = getSdDocShell()->GetDoc()->GetLayerAdmin().GetLayerID(u"background"_ustr);
+    SdrLayerIDSet aVisible = pSlide->TRG_GetMasterPageVisibleLayers();
+    aVisible.Set(nBackgroundLayer, false);
+    pSlide->SetMasterPageVisibleLayers(aVisible);
+
+    auto aDelta = getVectorPrimitives(u"testHiddenBackgroundLayerDelta", nVersion);
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    const auto oPage = findEntryOfKind(aDelta, "page"_ostr);
+    CPPUNIT_ASSERT(oPage.has_value());
+    CPPUNIT_ASSERT(!oPage->has("backdrop"));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTransparentPageFillKeepsItsTransparency)
+{
+    // A page fill that lets the document background show through is mixed with that background
+    // where the view paints. The page entry names the fill and its transparency apart, so the
+    // same tree serves a dark and a light view.
+    createBlankDoc();
+    SdrPageProperties& rProperties = page(1)->getSdrPageProperties();
+    rProperties.PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    rProperties.PutItem(XFillColorItem(OUString(), COL_WHITE));
+    rProperties.PutItem(XFillTransparenceItem(90));
+
+    auto aJson = getVectorPrimitives(u"testTransparentPageFillKeepsItsTransparency");
+    assertJsonPath(aJson, "/objects/0/backdrop", "#ffffff");
+    assertJsonPathDouble(aJson, "/objects/0/backdropTransparency", 0.9, 1e-9);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTransparentShapeFillKeepsItsTransparency)
+{
+    // A shape fill that lets the page show through is mixed with the page where the view
+    // paints. The text names the fill and its transparency apart, so the automatic text color
+    // is chosen against what the view shows under it.
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), u"Hello"_ustr);
+    SdrObject* pShape = page(1)->GetObj(0);
+    pShape->SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    pShape->SetMergedItem(XFillColorItem(OUString(), Color(0x203040)));
+    pShape->SetMergedItem(XFillTransparenceItem(50));
+
+    getVectorPrimitives(u"testTransparentShapeFillKeepsItsTransparency");
+    auto oText = findTextPortion("Hello"_ostr);
+    CPPUNIT_ASSERT(oText.has_value());
+    assertJsonPath(*oText, "backdrop", "#203040");
+    assertJsonPathDouble(*oText, "backdropTransparency", 0.5, 1e-9);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testBackgroundChangeMovesThePageEntryNotTheText)
+{
+    // Text in the automatic color keeps its marker through a background change. What the color
+    // means travels with the page entry, so a delta after the change carries the page with its
+    // new backdrop and leaves the untouched text object out.
     createBlankDoc();
     addTextBox(tools::Rectangle(Point(1000, 1000), Size(8000, 2000)), u"Hello"_ustr);
     const SdrObject* pText = page(1)->GetObj(0);
@@ -1766,10 +1836,10 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesAutoColorTextOnBackgro
 
     auto aDelta = getVectorPrimitives(u"testAutoColorDelta", nVersion);
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    CPPUNIT_ASSERT(carriesObject(aDelta, pText->GetUniqueID()));
-    auto oPortion = findTextPortion("Hello"_ostr);
-    CPPUNIT_ASSERT(oPortion.has_value());
-    assertJsonPath(*oPortion, "fontcolor", "#ffffff");
+    CPPUNIT_ASSERT(!carriesObject(aDelta, pText->GetUniqueID()));
+    const auto oPage = findEntryOfKind(aDelta, "page");
+    CPPUNIT_ASSERT(oPage.has_value());
+    assertJsonPath(*oPage, "backdrop", "#000000");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSameBackgroundAgainSendsNothing)
@@ -2171,6 +2241,152 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testRealBoldFaceNeedsNoThickening)
     CPPUNIT_ASSERT_MESSAGE(aResult.getStr(), oJson->findFirst("fontId").has_value());
     CPPUNIT_ASSERT_MESSAGE("a real bold face was marked as needing thickening",
                            !oJson->findFirst("syntheticBold").has_value());
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testAutomaticTextColorAndBackdrop)
+{
+    // Text that carries no color of its own keeps the automatic marker, and the fill under it
+    // is named next to it. Neither depends on the theme of a view, so one tree serves a dark
+    // view and a light view.
+    createBlankDoc();
+
+    // A slide with a background of its own, holding a shape with a fill of its own.
+    page(1)->getSdrPageProperties().PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    page(1)->getSdrPageProperties().PutItem(XFillColorItem(OUString(), Color(0x102030)));
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), Color(0x203040),
+                 COL_BLACK);
+
+    SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    pView->SdrBeginTextEdit(page(1)->GetObj(0));
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"Hello"_ustr);
+
+    auto aJson = getVectorPrimitives(u"testAutomaticTextColorAndBackdrop");
+
+    pView->SdrEndTextEdit();
+
+    // The page entry names the surface it holds behind its objects. The surface of the shape
+    // travels with its text, so the entry of the shape itself names none.
+    assertJsonPath(aJson, "/objects/0/backdrop", "#102030");
+    CPPUNIT_ASSERT(!aJson.has("/objects/1/backdrop"));
+
+    // The text being typed sits on the fill of the shape.
+    const std::optional<tools::JsonPath> oEdit = findEntryOfKind(aJson, "texteditoverlay"_ostr);
+    CPPUNIT_ASSERT(oEdit.has_value());
+    const std::optional<tools::JsonPath> oEditSurface = oEdit->findFirst("backdrop");
+    CPPUNIT_ASSERT(oEditSurface.has_value());
+    CPPUNIT_ASSERT_EQUAL("#203040"_ostr, oEditSurface->getString().value_or(""_ostr));
+
+    // The text portion carries the automatic color as a marker.
+    const std::optional<tools::JsonPath> oFontColor = oEdit->findFirst("fontcolor");
+    CPPUNIT_ASSERT(oFontColor.has_value());
+    CPPUNIT_ASSERT_EQUAL("auto"_ostr, oFontColor->getString().value_or(""_ostr));
+
+    // Once the edit ends, the text of the shape names the same surface.
+    auto aShown = getVectorPrimitives(u"testAutomaticTextColorAndBackdropShown");
+    const std::optional<tools::JsonPath> oShape = aShown.at("/objects/1");
+    CPPUNIT_ASSERT(oShape.has_value());
+    const std::optional<tools::JsonPath> oShownSurface = oShape->findFirst("backdrop");
+    CPPUNIT_ASSERT(oShownSurface.has_value());
+    CPPUNIT_ASSERT_EQUAL("#203040"_ostr, oShownSurface->getString().value_or(""_ostr));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTableCellTextNamesCellFill)
+{
+    // Automatic text in a table cell takes contrast against the fill of the cell. The table
+    // object has no fill of its own, so the fill of the cell travels with the text.
+    createBlankDoc();
+
+    SdrPage* pPage = page(1);
+    rtl::Reference<sdr::table::SdrTableObj> pTable = new sdr::table::SdrTableObj(
+        pPage->getSdrModelFromSdrPage(), tools::Rectangle(Point(1000, 1000), Size(6000, 3000)),
+        1, 1);
+    pPage->NbcInsertObject(pTable.get());
+
+    uno::Reference<beans::XPropertySet> xCell(pTable->getTable()->getCellByPosition(0, 0),
+                                              uno::UNO_QUERY_THROW);
+    xCell->setPropertyValue(u"FillStyle"_ustr, uno::Any(drawing::FillStyle_SOLID));
+    xCell->setPropertyValue(u"FillColor"_ustr, uno::Any(sal_Int32(0x202020)));
+    uno::Reference<text::XTextRange>(xCell, uno::UNO_QUERY_THROW)->setString(u"Hello"_ustr);
+
+    auto aJson = getVectorPrimitives(u"testTableCellTextNamesCellFill");
+
+    const std::optional<tools::JsonPath> oTable = aJson.at("/objects/1");
+    CPPUNIT_ASSERT(oTable.has_value());
+    const std::optional<tools::JsonPath> oSurface = oTable->findFirst("backdrop");
+    CPPUNIT_ASSERT_MESSAGE(m_aLastVectorJson.getStr(), oSurface.has_value());
+    CPPUNIT_ASSERT_EQUAL("#202020"_ostr, oSurface->getString().value_or(""_ostr));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testBulletKeepsAutomaticColor)
+{
+    // A bullet in the automatic color keeps the marker, the same as the text after it, so a
+    // dark view and a light view both draw it with contrast to the slide.
+    createSdImpressDoc();
+    SdPage* pSlide = static_cast<SdPage*>(page(1));
+    pSlide->SetAutoLayout(AUTOLAYOUT_TITLE_CONTENT, true);
+    auto pBody = static_cast<SdrTextObj*>(pSlide->GetPresObj(PresObjKind::Outline));
+    CPPUNIT_ASSERT(pBody);
+
+    // A paragraph shows the bullet of the outline style only at an outline level, and a plain
+    // text set on the object has none, so the paragraph goes in at the first level.
+    SdrOutliner& rOutliner = getSdDocShell()->GetDoc()->GetDrawOutliner();
+    rOutliner.Init(OutlinerMode::OutlineObject);
+    rOutliner.SetStyleSheet(0, pBody->GetStyleSheet());
+    rOutliner.SetText(u"Point"_ustr, 0);
+    rOutliner.SetDepth(0, 0);
+    pBody->SetOutlinerParaObject(rOutliner.CreateParaObject());
+    rOutliner.Init(OutlinerMode::TextObject);
+    pBody->SetEmptyPresObj(false);
+
+    auto aJson = getVectorPrimitives(u"testBulletKeepsAutomaticColor");
+    const std::optional<tools::JsonPath> oBullet
+        = findNodeOfType(aJson, "textHierarchyBullet"_ostr);
+    CPPUNIT_ASSERT_MESSAGE(m_aLastVectorJson.getStr(), oBullet.has_value());
+    const std::optional<tools::JsonPath> oPortion
+        = findNodeOfType(*oBullet, "textSimplePortion"_ostr);
+    CPPUNIT_ASSERT(oPortion.has_value());
+    assertJsonPath(*oPortion, "fontcolor", "auto");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterViewPaintsAndNamesTheMasterFill)
+{
+    // In master view the master page is the page shown, and it paints its own fill. The page
+    // entry names that fill as the surface its objects sit on.
+    createBlankDoc();
+    SdrPage& rMasterPage = page(1)->TRG_GetMasterPage();
+    SdrPageProperties& rProperties = rMasterPage.getSdrPageProperties();
+    CPPUNIT_ASSERT(rProperties.GetStyleSheet());
+    rProperties.PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    rProperties.PutItem(XFillColorItem(OUString(), Color(0x203040)));
+
+    auto aMaster = getVectorPrimitives(u"testMasterViewPaintsAndNamesTheMasterFill", -1, 1);
+    const auto oPage = findEntryOfKind(aMaster, "page"_ostr);
+    CPPUNIT_ASSERT(oPage.has_value());
+    assertJsonPath(*oPage, "backdrop", "#203040");
+    CPPUNIT_ASSERT_MESSAGE(m_aLastVectorJson.getStr(),
+                           hasNodeWithColor(*oPage, "polyPolygonColor"_ostr, "#203040"_ostr));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testNotesPreviewNamesTheFillOfTheShownSlide)
+{
+    // The objects in the preview of a slide sit on the fill of that slide, not on the fill of
+    // the notes page that holds the preview.
+    createBlankDoc();
+    SdrPageProperties& rProperties = page(1)->getSdrPageProperties();
+    rProperties.PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    rProperties.PutItem(XFillColorItem(OUString(), Color(0x102030)));
+    SdPage* pNotesPage = static_cast<SdPage*>(page(2));
+    const SdrObject* pPreview = pNotesPage->GetPresObj(PresObjKind::Page);
+    CPPUNIT_ASSERT(pPreview);
+
+    auto aNotes = getVectorPrimitives(u"testNotesPreviewNamesTheFillOfTheShownSlide", -1, 2);
+    const auto oEntry = findEntryOfObject(aNotes, pPreview->GetUniqueID());
+    CPPUNIT_ASSERT(oEntry.has_value());
+    const std::optional<tools::JsonPath> oShown = findNodeOfType(*oEntry, "pagePreview"_ostr);
+    CPPUNIT_ASSERT_MESSAGE(m_aLastVectorJson.getStr(), oShown.has_value());
+    assertJsonPath(*oShown, "backdrop", "#102030");
+    CPPUNIT_ASSERT(!aNotes.has("/objects/0/backdrop"));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextPortionCarriesFont)

@@ -16,7 +16,9 @@
 #include <basegfx/range/b2drange.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/color.hxx>
 
+#include <optional>
 #include <unordered_map>
 #include <vector>
 
@@ -143,6 +145,11 @@ private:
     std::unordered_map<OUString, ResolvedFace>* mpFaceByKey = nullptr;
     double mfScaleFactor = 1.0;
     drawinglayer::geometry::ViewInformation2D maViewInformation2D;
+    /// The fill right under the text of the text block being written, and the share of what
+    /// lies behind that fill that shows through. The color is empty outside a text block, and
+    /// inside one that sits on whatever the page shows there.
+    std::optional<Color> moTextSurface;
+    double mfTextSurfaceTransparency = 0.0;
 };
 
 } // namespace drawinglayer

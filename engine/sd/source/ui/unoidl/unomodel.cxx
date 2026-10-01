@@ -155,6 +155,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <editeng/fontitem.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
+#include <svx/svdetc.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdedxv.hxx>
@@ -234,6 +235,7 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
+#include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -2616,28 +2618,6 @@ void forgetSubtree(SdXImpressDocument::VectorPartState& rState, const SdrObject*
     }
 }
 
-/// Marks every object of the page, and of the master it draws under itself, for a fresh look.
-/// Text and lines in the automatic color resolve against the page background, so a change to
-/// the page changes how they draw with no hint naming them, and the comparison finds them.
-void markPageObjectsDirty(SdXImpressDocument::VectorPartState& rState, const SdrPage& rPage)
-{
-    for (size_t i = 0; i < rPage.GetObjCount(); ++i)
-    {
-        if (const SdrObject* pObject = rPage.GetObj(i))
-            markSubtreeDirty(rState, pObject);
-    }
-
-    if (!rPage.TRG_HasMasterPage())
-        return;
-
-    const SdrPage& rMasterPage = rPage.TRG_GetMasterPage();
-    for (size_t i = 0; i < rMasterPage.GetObjCount(); ++i)
-    {
-        if (const SdrObject* pObject = rMasterPage.GetObj(i))
-            markSubtreeDirty(rState, pObject);
-    }
-}
-
 /// Marks the objects a change touched, so the next write looks at them again and counts the
 /// part's version up for those that differ. A hint for a group covers the objects inside it,
 /// and an object that moves marks the groups above it, whose boxes move with it. An insertion
@@ -2758,10 +2738,8 @@ void bumpMasterChangeForUsers(
             else
             {
                 // The master's own properties changed. Its background travels with the page
-                // entry of every page that uses it, and the automatic color resolves against
-                // that background.
+                // entry of every page that uses it.
                 recordMasterChange(rState);
-                markPageObjectsDirty(rState, *pUserPage);
             }
             notifyViewsVectorPartChanged(pDocShell, *pUserPage, nMode);
             if (nMode == constVectorModeSlides)
@@ -2944,19 +2922,16 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         SdXImpressDocument::VectorPartState& rState
                             = maVectorParts[vectorPartKeyOf(*pPage)];
                         recordMasterChange(rState);
-                        markPageObjectsDirty(rState, *pPage);
                         notifyViewsVectorPartChanged(mpDocShell, *pPage,
                                                      constVectorModeMasterPages);
                     }
                 }
                 else if (const auto oPart = partAndModeOfPage(pPage))
                 {
-                    // The background changed, and with it what the automatic color of the
-                    // objects resolves against.
+                    // The background travels with the page entry.
                     SdXImpressDocument::VectorPartState& rState
                         = maVectorParts[vectorPartKeyOf(*pPage)];
                     recordMasterChange(rState);
-                    markPageObjectsDirty(rState, *pPage);
                     notifyViewsVectorPartChanged(mpDocShell, *pPage, oPart->mnMode);
                     if (oPart->mnMode == constVectorModeSlides)
                         recordSlidePreviewChange(*mpDoc, mpDocShell, maVectorParts, oPart->mnPart);
@@ -3176,7 +3151,8 @@ private:
     }
 
     /// The entry that stands for the page itself. It is drawn first and holds what lies
-    /// behind the objects. Its id is zero, which no object takes, and its box is the page.
+    /// behind the objects: the document background of the view and the fill the page or its
+    /// master page carries. Its id is zero, which no object takes, and its box is the page.
     ///
     /// A slide carries its own background and page fill and names the master part it draws
     /// under itself, so the master travels once rather than as a copy on every slide. The
@@ -3193,6 +3169,18 @@ private:
         // a walk up the parents of an entry ends at it.
         rWriter.put("parent", constNoParentId);
         rWriter.put("kind", "page");
+
+        // The surface the page holds behind its objects. Without one, the objects sit on the
+        // document background of the view. A fill that lets the document background show
+        // through keeps its transparency apart from its color, since the document background
+        // is a setting of the view and not part of the document.
+        if (const std::optional<DraftFill> oSurface = pageSurface(pPage))
+        {
+            rWriter.put("backdrop", Concat2View("#" + oSurface->aColor.AsRGBHexString().toUtf8()));
+            if (oSurface->fTransparency != 0.0)
+                rWriter.put("backdropTransparency", oSurface->fTransparency);
+        }
+
         const sal_Int64 nWidth = sal_Int64(pPage->GetWidth() * constTwipConversionFactor);
         const sal_Int64 nHeight = sal_Int64(pPage->GetHeight() * constTwipConversionFactor);
         rWriter.put("x", sal_Int64(0));
@@ -3333,36 +3321,66 @@ private:
         return dynamic_cast<const SdPage*>(&pPage->TRG_GetMasterPage());
     }
 
-    /// The parts of the page that belong to it and lie behind its objects, in paint order: the
-    /// background, the page fill and the background the master defines.
+    /// True for a page that hides the background layer of its master, which "Display Master
+    /// Background" toggles. The page fill, its own or the one of its master, is painted on that
+    /// layer. A page without a master page hides nothing.
+    static bool hidesBackgroundLayer(const SdPage* pPage)
+    {
+        if (!pPage->TRG_HasMasterPage())
+            return false;
+        const SdrLayerID nBackgroundLayer
+            = pPage->getSdrModelFromSdrPage().GetLayerAdmin().GetLayerID(sUNO_LayerName_background);
+        return !pPage->TRG_GetMasterPageVisibleLayers().IsSet(nBackgroundLayer);
+    }
+
+    /// The fill the page holds behind its objects, as one color with its transparency kept
+    /// apart. For a page with a master it is the fill the page carries, or the one of its
+    /// master when the page carries none, and nothing while the page hides the background
+    /// layer of its master. A master page holds its own fill only when it has a style sheet,
+    /// and the handout master, master page 0, holds none. Empty when no fill is painted.
+    static std::optional<DraftFill> pageSurface(const SdPage* pPage)
+    {
+        const SdrPageProperties* pProperties = nullptr;
+        if (pPage->TRG_HasMasterPage())
+        {
+            if (!hidesBackgroundLayer(pPage))
+                pProperties = pPage->getCorrectSdrPageProperties();
+        }
+        else if (pPage->IsMasterPage() && pPage->GetPageNum() != 0
+                 && pPage->getSdrPageProperties().GetStyleSheet())
+            pProperties = &pPage->getSdrPageProperties();
+
+        if (!pProperties)
+            return {};
+        return GetDraftFill(pProperties->GetItemSet());
+    }
+
+    /// What is the page's own behind its objects, in paint order: the document background of the
+    /// view and the fill the page or its master page carries.
     static void pageOwnPrimitives(SdPage* pPage,
                                   drawinglayer::primitive2d::Primitive2DContainer& rContent)
     {
         // ViewContactOfSdrPage fixed child order:
         //   0=Background, 1=Shadow, 2=Fill, 3=MasterPage
 
-        // PageBackground: emits a BackgroundColorPrimitive2D with the
-        // configured DOCCOLOR. Drawn first so the slide fill paints
-        // over it.
-        pPage->GetViewContact().GetViewContact(0).getViewIndependentPrimitive2DContainer(rContent);
+        // Children 0 and 2 both paint the document background color. That color is a setting
+        // of the view and not part of the document, so one background primitive with the
+        // automatic color stands for both. A background the document does carry, from the page
+        // or from its master page, comes after it and paints over it.
+        rContent.push_back(
+            new drawinglayer::primitive2d::BackgroundColorPrimitive2D(COL_AUTO.getBColor()));
 
-        // PageFill: always produces a solid fill for the slide background
-        pPage->GetViewContact().GetViewContact(2).getViewIndependentPrimitive2DContainer(rContent);
-
-        // MasterPageDescriptor: adds a background fill if the master page defines one. The
-        // master background is drawn only while the page shows the background layer of its
-        // master, which "Display Master Background" toggles.
-        const SdrLayerID nBackgroundLayer
-            = pPage->getSdrModelFromSdrPage().GetLayerAdmin().GetLayerID(sUNO_LayerName_background);
-        if (pPage->TRG_HasMasterPage()
-            && pPage->TRG_GetMasterPageVisibleLayers().IsSet(nBackgroundLayer))
+        // Child 3 paints the fill the page or its master page carries, and on a master page
+        // the fill of the master itself. It is drawn only while the page shows the background
+        // layer of its master.
+        if (!hidesBackgroundLayer(pPage))
             pPage->GetViewContact().GetViewContact(3).getViewIndependentPrimitive2DContainer(
                 rContent);
     }
 
-    /// What lies behind the objects of a page, in paint order: the background, the page fill
-    /// and the master page content, with the master placeholders the page does not show left
-    /// out.
+    /// What lies behind the objects of a page, in paint order: the document background of the
+    /// view, the fill the page or its master page carries, and the master page content, with
+    /// the master placeholders the page does not show left out.
     static void pageContentPrimitives(SdPage* pPage,
                                       drawinglayer::primitive2d::Primitive2DContainer& rContent)
     {
@@ -3417,9 +3435,19 @@ private:
         aTransform.set(0, 2, aBox.getMinX());
         aTransform.set(1, 2, aBox.getMinY());
 
+        // The objects of the shown page sit on the fill of that page, not on the fill of the
+        // page that holds the preview.
+        std::optional<Color> oSurface;
+        double fSurfaceTransparency = 0.0;
+        if (const std::optional<DraftFill> oFill = pageSurface(pShown))
+        {
+            oSurface = oFill->aColor;
+            fSurfaceTransparency = oFill->fTransparency;
+        }
         aPreview.push_back(new drawinglayer::primitive2d::PagePreviewPrimitive2D(
             GetXDrawPageForSdrPage(pShown), aTransform, double(pShown->GetWidth()),
-            double(pShown->GetHeight()), std::move(aPageContent)));
+            double(pShown->GetHeight()), std::move(aPageContent), oSurface,
+            fSurfaceTransparency));
 
         // The office frames a page object in the color it draws the boundaries of a document
         // in, so the preview reads as a page.
@@ -3983,11 +4011,6 @@ private:
         aContent.mbTextEdit = hasActiveTextEdit(&rObject);
         const SdrObject* pParent = rObject.getParentSdrObjectFromSdrObject();
         aContent.mnParentId = pParent ? pParent->GetUniqueID() : 0;
-        // The text primitive resolves the automatic color when it is drawn, so the
-        // decomposition above reads the same on a light and on a dark page. An object with
-        // text is compared against the background it was drawn on, and travels when it moves.
-        if (rObject.HasText())
-            aContent.maAutoColor = maViewInformation.getAutoColor();
         return aContent;
     }
 
@@ -7765,6 +7788,14 @@ void SdXImpressDocument::initializeForTiledRendering(const cpo::uno::Sequence<cs
             { u"NewTheme"_ustr, cpo::uno::Any(sBackgroundThemeName) }
         }));
         comphelper::dispatchCommand(u".uno:InvertBackground"_ustr, aPropertyValues);
+    }
+
+    // Tell the view the document background color of its theme.
+    if (DrawViewShell* pViewShell = GetViewShell())
+    {
+        ViewShellBase& rBase = pViewShell->GetViewShellBase();
+        rBase.viewCallback(COKitCallbackType::DOCUMENT_BACKGROUND_COLOR,
+                           rBase.GetViewOptions().mnDocBackgroundColor.AsRGBHexString().toUtf8());
     }
 }
 

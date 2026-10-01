@@ -488,10 +488,6 @@ public:
         /// The id of the group the object sits in, 0 for an object directly on the page. For
         /// the entry of a running text edit, the id of the object the edit runs on.
         sal_uInt64 mnParentId = 0;
-        /// The page background the automatic color of the object's text resolved against when
-        /// it was written, COL_TRANSPARENT when it has no text. The decomposition stops above
-        /// the text and resolves the color only when drawn, so the background is compared too.
-        Color maAutoColor = COL_TRANSPARENT;
 
         bool operator==(const VectorObjectContent& rOther) const
         {
@@ -500,8 +496,8 @@ public:
                    && moMeasurement == rOther.moMeasurement && maName == rOther.maName
                    && moLayer == rOther.moLayer && mbEmptyPlaceholder == rOther.mbEmptyPlaceholder
                    && mbTextEdit == rOther.mbTextEdit && mnParentId == rOther.mnParentId
-                   && maAutoColor == rOther.maAutoColor && maDrawn == rOther.maDrawn
-                   && maAids == rOther.maAids && maHandles == rOther.maHandles
+                   && maDrawn == rOther.maDrawn && maAids == rOther.maAids
+                   && maHandles == rOther.maHandles
                    && maPath == rOther.maPath && meKind == rOther.meKind
                    && mbIsDiagram == rOther.mbIsDiagram
                    && maGraphicExtension == rOther.maGraphicExtension

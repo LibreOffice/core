@@ -86,6 +86,22 @@ class SfxItemSet;
 SVXCORE_DLLPUBLIC std::optional<Color>
 GetDraftFillColor(const SfxItemSet& rSet, std::optional<Color> oBehind = std::nullopt);
 
+/// A fill as one color: the fill color, or an average over a hatch, gradient or bitmap. The
+/// transparency is the share of what lies behind the fill that shows through, 0 for a fill that
+/// covers it fully and 1 for one that shows all of it.
+struct DraftFill
+{
+    Color aColor;
+    double fTransparency = 0.0;
+};
+
+/**
+ * The fill an item set describes as one color, with its transparency kept apart from the color
+ * rather than mixed into it. Empty for no fill, and for a fill whose transparency changes across
+ * its area, which no single share describes.
+ */
+SVXCORE_DLLPUBLIC std::optional<DraftFill> GetDraftFill(const SfxItemSet& rSet);
+
 
 /**
  * Search an ItemSet for Outliner/EditEngine Items

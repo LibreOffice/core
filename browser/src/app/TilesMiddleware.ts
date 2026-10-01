@@ -454,6 +454,10 @@ class RenderManager {
 	static clearAllParts(): void {
 		RenderManager.ensureInstance().clearAllParts();
 	}
+
+	static refreshTheme(): void {
+		RenderManager.ensureInstance().refreshTheme();
+	}
 }
 
 window.RenderManager = RenderManager;

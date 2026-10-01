@@ -23,6 +23,9 @@
 
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/color.hxx>
+
+#include <optional>
 
 
 namespace drawinglayer::primitive2d
@@ -96,9 +99,25 @@ namespace drawinglayer::primitive2d
         class DRAWINGLAYER_DLLPUBLIC TextHierarchyBlockPrimitive2D final : public GroupPrimitive2D
         {
         private:
+            /// The fill right under the text of the block, such as the fill of its shape or of
+            /// its table cell, and the share of what lies behind that fill that shows through,
+            /// from 0 to 1. The color is empty when the block does not carry one, and the text
+            /// then sits on whatever the page shows there.
+            std::optional<Color> moTextSurface;
+            double mfTextSurfaceTransparency;
+
         public:
             /// constructor
-            explicit TextHierarchyBlockPrimitive2D(Primitive2DContainer&& aChildren);
+            explicit TextHierarchyBlockPrimitive2D(Primitive2DContainer&& aChildren,
+                                                   std::optional<Color> oTextSurface = std::nullopt,
+                                                   double fTextSurfaceTransparency = 0.0);
+
+            /// data read access
+            const std::optional<Color>& getTextSurface() const { return moTextSurface; }
+            double getTextSurfaceTransparency() const { return mfTextSurfaceTransparency; }
+
+            /// compare operator
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;

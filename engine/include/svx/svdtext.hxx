@@ -23,6 +23,9 @@
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <svx/svxdllapi.h>
 
+#include <optional>
+
+struct DraftFill;
 class SdrOutliner;
 class SdrTextObj;
 class SfxItemSet;
@@ -50,6 +53,11 @@ public:
     // default uses GetObjectItemSet, but may be overridden to
     // return a text-specific ItemSet
     const SfxItemSet& GetItemSet() const;
+
+    /** The fill right under this text: the fill of its table cell, or of its object for any
+        other text. Empty when there is none, and the text then sits on whatever lies behind it.
+    */
+    std::optional<DraftFill> GetTextSurface() const;
 
     // This class does not need an own SdrModel reference - always
     // has the SdrTextObj working with so can use SdrModel::getSdrModelFromSdrObject()

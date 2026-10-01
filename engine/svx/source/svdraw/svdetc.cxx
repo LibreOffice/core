@@ -41,6 +41,7 @@
 #include <svx/xflgrit.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/xfltrit.hxx>
+#include <svx/xflftrit.hxx>
 #include <svl/itempool.hxx>
 #include <comphelper/configuration.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -241,7 +242,8 @@ bool OLEObjCache::UnloadObj(SdrOle2Obj& rObj)
     return bUnloaded;
 }
 
-std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet, std::optional<Color> oBehind)
+// The fill of the item set as one color, before any transparency is applied to it.
+static std::optional<Color> impGetDraftFillColorUnblended(const SfxItemSet& rSet)
 {
     drawing::FillStyle eFill=rSet.Get(XATTR_FILLSTYLE).GetValue();
     Color aResult;
@@ -322,6 +324,28 @@ std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet, std::optional<Col
             return {};
     }
 
+    return aResult;
+}
+
+std::optional<DraftFill> GetDraftFill(const SfxItemSet& rSet)
+{
+    if (rSet.Get(XATTR_FILLFLOATTRANSPARENCE).IsEnabled())
+        return {};
+
+    const std::optional<Color> oColor = impGetDraftFillColorUnblended(rSet);
+    if (!oColor)
+        return {};
+
+    return DraftFill{ *oColor, rSet.Get(XATTR_FILLTRANSPARENCE).GetValue() / 100.0 };
+}
+
+std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet, std::optional<Color> oBehind)
+{
+    const std::optional<Color> oColor = impGetDraftFillColorUnblended(rSet);
+    if (!oColor)
+        return {};
+
+    Color aResult = *oColor;
     sal_uInt16 nTransparencyPercentage = rSet.Get(XATTR_FILLTRANSPARENCE).GetValue();
     if (!nTransparencyPercentage)
         return aResult;

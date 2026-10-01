@@ -346,6 +346,9 @@ abstract class RenderManagerBase {
 
 	abstract clearAllParts(): void;
 
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	refreshTheme(): void {}
+
 	// -- redraw --
 	redraw(): RenderManagerBase {
 		return this;

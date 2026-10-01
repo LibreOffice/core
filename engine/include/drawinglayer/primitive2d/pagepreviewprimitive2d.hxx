@@ -23,6 +23,9 @@
 
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <tools/color.hxx>
+
+#include <optional>
 
 namespace com::sun::star::drawing { class XDrawPage; }
 
@@ -56,6 +59,12 @@ namespace drawinglayer::primitive2d
             double                                      mfContentWidth;
             double                                      mfContentHeight;
 
+            /// The fill the shown page holds behind its objects, and the share of what lies
+            /// behind that fill that shows through, from 0 to 1. The color is empty when the
+            /// shown page holds no fill there and its objects sit on the document background.
+            std::optional<Color>                        moPageSurface;
+            double                                      mfPageSurfaceTransparency;
+
             /// local decomposition. Implementation will just return children
             virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
@@ -66,7 +75,9 @@ namespace drawinglayer::primitive2d
                 basegfx::B2DHomMatrix aTransform,
                 double fContentWidth,
                 double fContentHeight,
-                Primitive2DContainer&& rPageContent);
+                Primitive2DContainer&& rPageContent,
+                std::optional<Color> oPageSurface = std::nullopt,
+                double fPageSurfaceTransparency = 0.0);
 
             /// data read access
             const cpo::uno::Reference< css::drawing::XDrawPage >& getXDrawPage() const { return mxDrawPage; }
@@ -74,6 +85,8 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             double getContentWidth() const { return mfContentWidth; }
             double getContentHeight() const { return mfContentHeight; }
+            const std::optional<Color>& getPageSurface() const { return moPageSurface; }
+            double getPageSurfaceTransparency() const { return mfPageSurfaceTransparency; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

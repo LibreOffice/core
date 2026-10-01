@@ -469,8 +469,10 @@ void CreateTextPortionPrimitivesFromDrawPortionInfo(
         pNewPrimitive = new drawinglayer::primitive2d::GroupPrimitive2D(std::move(aContainer));
     }
 
+    // The alpha of COL_AUTO is part of the automatic marker and not a transparency of the text,
+    // so text in the automatic color stays opaque.
     const Color aFontColor(rInfo.mrFont.GetColor());
-    if (aFontColor.IsTransparent())
+    if (aFontColor != COL_AUTO && aFontColor.IsTransparent())
     {
         // Handle semi-transparent text for both the decorated and simple case here.
         pNewPrimitive = new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(

@@ -277,6 +277,15 @@ namespace cool {
 		transform?: number[];
 		/// The handles that shape the object, empty for an object that has none of them.
 		handles?: ObjectHandle[];
+		/// For the page entry, the surface the page holds behind its
+		/// objects: the fill the page or its master page carries. Absent
+		/// when nothing covers the document background there, and on
+		/// every other entry.
+		backdrop?: string;
+		/// The share of the document background that shows through the
+		/// page's backdrop, from 0 to 1. Absent for a fill that covers it
+		/// fully.
+		backdropTransparency?: number;
 		/// The path the object is drawn from, as the model holds it. Absent for an object
 		/// that has no path of its own.
 		path?: ObjectPathPolygon[];

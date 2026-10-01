@@ -28,6 +28,7 @@
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <vcl/metric.hxx>
@@ -84,6 +85,16 @@ namespace
 OString colorToHex(const basegfx::BColor& rColor)
 {
     return "#" + Color(rColor).AsRGBHexString().toUtf8();
+}
+
+// The color of text. An automatic text color has no fixed value, it is chosen for contrast
+// against what lies under the text, so it is written as "auto".
+OString textColorToJson(const basegfx::BColor& rColor)
+{
+    if (rColor.isAutomatic())
+        return "auto"_ostr;
+
+    return colorToHex(rColor);
 }
 } // end anonymous namespace
 
@@ -510,10 +521,19 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
     mrWriter.put("text", rPrimitive.getText());
     mrWriter.put("textPosition", rPrimitive.getTextPosition());
     mrWriter.put("textLength", rPrimitive.getTextLength());
-    mrWriter.put("fontcolor", colorToHex(rPrimitive.getFontColor()));
+    mrWriter.put("fontcolor", textColorToJson(rPrimitive.getFontColor()));
 
     if (rPrimitive.getTextFillColor() != COL_TRANSPARENT)
         mrWriter.put("fillcolor", colorToHex(rPrimitive.getTextFillColor().getBColor()));
+
+    // The fill right under the text, which an automatic color of the text is chosen against,
+    // and the share of what lies behind that fill that shows through.
+    if (moTextSurface)
+    {
+        mrWriter.put("backdrop", colorToHex(moTextSurface->getBColor()));
+        if (mfTextSurfaceTransparency != 0.0)
+            mrWriter.put("backdropTransparency", mfTextSurfaceTransparency);
+    }
 
     if (rPrimitive.getLetterSpacing() != 0)
         mrWriter.put("letterSpacing",
@@ -870,7 +890,10 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             if (rPrimitive.getFontUnderline() != TEXT_LINE_NONE)
             {
                 mrWriter.put("underline", sal_Int32(rPrimitive.getFontUnderline()));
-                mrWriter.put("underlineColor", colorToHex(rPrimitive.getTextlineColor()));
+                // An automatic line color is the color of the text, so the line takes the
+                // color the text gets.
+                if (!rPrimitive.getTextlineColor().isAutomatic())
+                    mrWriter.put("underlineColor", colorToHex(rPrimitive.getTextlineColor()));
                 if (rPrimitive.getUnderlineAbove())
                     mrWriter.put("underlineAbove", true);
             }
@@ -878,7 +901,8 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             if (rPrimitive.getFontOverline() != TEXT_LINE_NONE)
             {
                 mrWriter.put("overline", sal_Int32(rPrimitive.getFontOverline()));
-                mrWriter.put("overlineColor", colorToHex(rPrimitive.getOverlineColor()));
+                if (!rPrimitive.getOverlineColor().isAutomatic())
+                    mrWriter.put("overlineColor", colorToHex(rPrimitive.getOverlineColor()));
             }
 
             if (rPrimitive.getTextStrikeout() != TEXT_STRIKEOUT_NONE)
@@ -1326,7 +1350,10 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
         {
             const auto& rPrimitive = static_cast<const BackgroundColorPrimitive2D&>(rBasePrimitive);
             mrWriter.put("type", "backgroundcolor");
-            mrWriter.put("color", colorToHex(rPrimitive.getBColor()));
+            // An automatic background color is the document background of the view, which is
+            // no fixed color, so the primitive then names none.
+            if (!rPrimitive.getBColor().isAutomatic())
+                mrWriter.put("color", colorToHex(rPrimitive.getBColor()));
             if (rPrimitive.getTransparency() > 0.0)
                 mrWriter.put("transparency", rPrimitive.getTransparency());
         }
@@ -1397,6 +1424,9 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                     pTypeName = "textHierarchyEmphasisMark";
                     break;
                 // Other drawinglayer primitives
+                case PRIMITIVE2D_ID_PAGEPREVIEWPRIMITIVE2D:
+                    pTypeName = "pagePreview";
+                    break;
                 case PRIMITIVE2D_ID_EXCLUSIVEEDITVIEWPRIMITIVE2D:
                     pTypeName = "exclusiveEditView";
                     break;
@@ -1432,6 +1462,26 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                     = static_cast<const primitive2d::PagePreviewPrimitive2D&>(rBasePrimitive);
                 oOuterViewInformation = maViewInformation2D;
                 maViewInformation2D.setVisualizedPage(rPreview.getXDrawPage());
+
+                // The objects of the shown page sit on the fill of that page.
+                if (const std::optional<Color>& oSurface = rPreview.getPageSurface())
+                {
+                    mrWriter.put("backdrop", colorToHex(oSurface->getBColor()));
+                    if (rPreview.getPageSurfaceTransparency() != 0.0)
+                        mrWriter.put("backdropTransparency", rPreview.getPageSurfaceTransparency());
+                }
+            }
+
+            // The text of a block sits on the surface the block names, and each text portion
+            // inside it is written with that surface.
+            const std::optional<Color> oOuterTextSurface = moTextSurface;
+            const double fOuterTextSurfaceTransparency = mfTextSurfaceTransparency;
+            if (nId == PRIMITIVE2D_ID_TEXTHIERARCHYBLOCKPRIMITIVE2D)
+            {
+                const auto& rBlock
+                    = static_cast<const TextHierarchyBlockPrimitive2D&>(rBasePrimitive);
+                moTextSurface = rBlock.getTextSurface();
+                mfTextSurfaceTransparency = rBlock.getTextSurfaceTransparency();
             }
 
             Primitive2DContainer aContainer;
@@ -1444,6 +1494,8 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
 
             if (oOuterViewInformation)
                 maViewInformation2D = *oOuterViewInformation;
+            moTextSurface = oOuterTextSurface;
+            mfTextSurfaceTransparency = fOuterTextSurfaceTransparency;
         }
         break;
     }

@@ -6135,12 +6135,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitives)
 
     auto oMasterPrimitives = aJson.at("/objects/0/primitives");
     CPPUNIT_ASSERT(oMasterPrimitives.has_value());
-    // The page carries what lies behind the objects and is its own: the background color, the
-    // white page fill and the gradient the master defines. The master's placeholders this slide
-    // fills in are objects of the slide rather than part of the page.
+    // The page carries what lies behind the objects and is its own: the document background
+    // and the gradient the master defines. The master's placeholders this slide fills in are
+    // objects of the slide rather than part of the page.
     size_t nNumberOfMasterPrimitives = 0;
-    bool bHasBackgroundColor = false;
-    bool bHasWhiteFill = false;
+    bool bHasDocumentBackground = false;
     bool bHasGradient = false;
     for (const auto& rPrimitive : oMasterPrimitives->tree())
     {
@@ -6149,12 +6148,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitives)
         OString sType = aPrimitive.getString("type").value_or(OString());
         if (sType == "backgroundcolor")
         {
-            bHasBackgroundColor = true;
-        }
-        else if (sType == "polyPolygonColor")
-        {
-            if (aPrimitive.getString("color").value_or(OString()) == "#ffffff")
-                bHasWhiteFill = true;
+            // The document background is a setting of the view, so it names no color.
+            bHasDocumentBackground |= !aPrimitive.has("color");
         }
         else if (sType == "polyPolygonGradient")
         {
@@ -6165,9 +6160,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitives)
             CPPUNIT_ASSERT(aPrimitive.has("gradient/colorStops"));
         }
     }
-    CPPUNIT_ASSERT_EQUAL(size_t(3), nNumberOfMasterPrimitives);
-    CPPUNIT_ASSERT_MESSAGE("Expecting page background color", bHasBackgroundColor);
-    CPPUNIT_ASSERT_MESSAGE("Expecting white page fill", bHasWhiteFill);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), nNumberOfMasterPrimitives);
+    CPPUNIT_ASSERT_MESSAGE("Expecting the document background", bHasDocumentBackground);
     CPPUNIT_ASSERT_MESSAGE("Expecting gradient background", bHasGradient);
 
     // Check slide objects

@@ -3314,7 +3314,14 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         const bool bPrinting(OUTDEV_PRINTER == pOut->GetOutDevType());
         const bool bPDFExporting(OUTDEV_PDF == pOut->GetOutDevType());
 
-        if ( IsAutoColorEnabled() && !bPrinting && !bPDFExporting)
+        if (comphelper::COKit::isVectorRendering())
+        {
+            // An automatic color is chosen for contrast against the document background of a
+            // view, and vector rendering makes one result for every view, so the text keeps
+            // the automatic color.
+            rFont.SetColor(COL_AUTO);
+        }
+        else if ( IsAutoColorEnabled() && !bPrinting && !bPDFExporting)
         {
             // Never use WindowTextColor on the printer
             rFont.SetColor(GetAutoColor(&rFont));
@@ -3332,7 +3339,9 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         const bool bPrinting(OUTDEV_PRINTER == pOut->GetOutDevType());
         const bool bPDFExporting(OUTDEV_PDF == pOut->GetOutDevType());
 
-        if (!bPrinting && !bPDFExporting)
+        // The dark mode of a view is a setting of that view, and vector rendering makes one
+        // result for every view, so it keeps the text color as the document gives it.
+        if (!bPrinting && !bPDFExporting && !comphelper::COKit::isVectorRendering())
         {
             // The document background of the view being painted tells whether that view is in dark
             // mode, so a dark and a light view of the same document each get their own answer.

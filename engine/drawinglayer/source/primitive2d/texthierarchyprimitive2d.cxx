@@ -79,9 +79,26 @@ namespace drawinglayer::primitive2d
         }
 
 
-        TextHierarchyBlockPrimitive2D::TextHierarchyBlockPrimitive2D(Primitive2DContainer&& aChildren)
-        :   GroupPrimitive2D(std::move(aChildren))
+        TextHierarchyBlockPrimitive2D::TextHierarchyBlockPrimitive2D(Primitive2DContainer&& aChildren,
+                                                                     std::optional<Color> oTextSurface,
+                                                                     double fTextSurfaceTransparency)
+        :   GroupPrimitive2D(std::move(aChildren)),
+            moTextSurface(oTextSurface),
+            mfTextSurfaceTransparency(fTextSurfaceTransparency)
         {
+        }
+
+        bool TextHierarchyBlockPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        {
+            if(GroupPrimitive2D::operator==(rPrimitive))
+            {
+                const TextHierarchyBlockPrimitive2D& rCompare = static_cast<const TextHierarchyBlockPrimitive2D&>(rPrimitive);
+
+                return moTextSurface == rCompare.moTextSurface
+                    && mfTextSurfaceTransparency == rCompare.mfTextSurfaceTransparency;
+            }
+
+            return false;
         }
 
         // provide unique ID

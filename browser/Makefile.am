@@ -515,6 +515,7 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/ColorModifierAttribute.ts \
 	src/canvas/vector/primitive/ModifiedColorPrimitive.ts \
 	src/canvas/vector/primitive/ObjectInfoPrimitive.ts \
+	src/canvas/vector/primitive/PagePreviewPrimitive.ts \
 	src/canvas/vector/primitive/PointArrayPrimitive.ts \
 	src/canvas/vector/primitive/PolygonHairlinePrimitive.ts \
 	src/canvas/vector/primitive/PolygonStrokePrimitive.ts \
@@ -543,6 +544,7 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/TextSimplePortionPrimitive.ts \
 	src/canvas/vector/primitive/TransformPrimitive.ts \
 	src/canvas/vector/primitive/UnifiedTransparencePrimitive.ts \
+	src/canvas/vector/VectorColors.ts \
 	src/canvas/vector/VectorFillGraphicPrimitiveRenderer.ts \
 	src/canvas/vector/VectorGradientFrame.ts \
 	src/canvas/vector/VectorGradientPrimitiveRenderer.ts \

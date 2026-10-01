@@ -48,6 +48,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/kit.hxx>
+#include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
@@ -937,7 +938,18 @@ drawinglayer::primitive2d::Primitive2DContainer SdrObjEditView::getTextEditPrimi
     if (!IsTextEdit() || !pOutlinerView)
         return drawinglayer::primitive2d::Primitive2DContainer();
 
-    return createTextEditTextPrimitives(*pOutlinerView);
+    drawinglayer::primitive2d::Primitive2DContainer aText(
+        createTextEditTextPrimitives(*pOutlinerView));
+    if (!comphelper::COKit::isVectorRendering() || aText.empty())
+        return aText;
+
+    // The text being edited is wrapped in the same block its object's text gets, which carries
+    // the fill right under the text.
+    const SdrTextObj* pTextObj = GetTextEditObject();
+    return drawinglayer::primitive2d::Primitive2DContainer{
+        drawinglayer::primitive2d::createTextHierarchyBlockPrimitive2D(
+            std::move(aText), pTextObj ? pTextObj->getActiveText() : nullptr)
+    };
 }
 
 OutputDevice& SdrObjEditView::EditViewOutputDevice() const { return *mpTextEditWin->GetOutDev(); }

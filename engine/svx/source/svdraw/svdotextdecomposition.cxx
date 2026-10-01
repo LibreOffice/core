@@ -77,6 +77,11 @@ void impResolveAutomaticOutlinerBg(::Outliner& rOutliner,
     if (COL_AUTO != rOutliner.GetBackgroundColor())
         return;
 
+    // Vector rendering makes one result for every view, and an automatic color depends on the
+    // view. The background stays automatic, and so the automatic font color stays automatic too.
+    if (comphelper::COKit::isVectorRendering())
+        return;
+
     rOutliner.SetBackgroundColor(rViewInformation.getResolvedAutoColor());
 }
 }

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -842,7 +843,10 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
         aColor = pFmt->GetBulletColor();
     }
 
-    if ( ( aColor == COL_AUTO ) || ( IsForceAutoColor() ) )
+    // Vector rendering leaves a bullet in the automatic color, the same as the text.
+    if (comphelper::COKit::isVectorRendering() && (aColor == COL_AUTO || IsForceAutoColor()))
+        aColor = COL_AUTO;
+    else if ( ( aColor == COL_AUTO ) || ( IsForceAutoColor() ) )
         aColor = pEditEngine->GetAutoColor();
 
     aBulletFont.SetColor( aColor );

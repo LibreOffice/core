@@ -23,6 +23,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>
 #include <svl/itemset.hxx>
+#include <svx/svdetc.hxx>
 #include <osl/diagnose.h>
 #include <libxml/xmlwriter.h>
 #include <memory>
@@ -67,6 +68,13 @@ void SdrText::ReformatText()
 const SfxItemSet& SdrText::GetItemSet() const
 {
     return const_cast< SdrText* >(this)->GetObjectItemSet();
+}
+
+std::optional<DraftFill> SdrText::GetTextSurface() const
+{
+    // A table cell answers GetItemSet() with its own items, so the fill found here is the fill
+    // of the cell and not the one of the table.
+    return GetDraftFill(GetItemSet());
 }
 
 void SdrText::SetOutlinerParaObject( std::optional<OutlinerParaObject> pTextObject )

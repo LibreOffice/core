@@ -735,6 +735,101 @@ describe('VectorManager', function () {
 		nodeassert.strictEqual(countCalls(recorder, 'stroke'), 2);
 	});
 
+	// Text that carries the automatic color is drawn with contrast against
+	// the surface behind it. The entry for the page is where the slide's
+	// own background arrives, so text on a dark slide comes out light even
+	// though the view around it is light.
+	it('draws automatic text against the background the page entry carries', function () {
+		const manager = new VectorManager();
+		const text = {
+			type: 'textSimplePortion',
+			text: 'Hi',
+			fontSize: 20,
+			matrix: [20, 0, 0, 20, 5, 7],
+			fontcolor: cool.VectorColors.AUTOMATIC,
+			familyname: 'Liberation Sans',
+		};
+		manager.handleVectorPrimitivesResponse({
+			partId: 'S0',
+			mode: cool.VectorMode.Slides,
+			version: 1,
+			objects: [
+				{
+					id: 0,
+					kind: 'page',
+					width: 200,
+					height: 150,
+					backdrop: '#102030',
+					primitives: [],
+				},
+				{ id: 11, primitives: [text] },
+			],
+		});
+		const data: any = manager.requestPart(0, cool.VectorMode.Slides);
+
+		const recorder = new CanvasRecorder();
+		manager.renderInto(recorder as any, data);
+
+		const fillText = recorder.findCall('fillText');
+		nodeassert.ok(fillText, 'fillText not called');
+		nodeassert.strictEqual(fillText?.properties.fillStyle, '#FFFFFF');
+	});
+
+	// The picture a drag shows of an object takes its colors from the page
+	// the object is on, even when another part was drawn before it.
+	it('draws a drag picture against the background of its own page', function () {
+		const manager = new VectorManager();
+		const text = {
+			type: 'textSimplePortion',
+			text: 'Hi',
+			fontSize: 20,
+			matrix: [20, 0, 0, 20, 5, 7],
+			fontcolor: cool.VectorColors.AUTOMATIC,
+			familyname: 'Liberation Sans',
+		};
+		manager.handleVectorPrimitivesResponse({
+			partId: 'S0',
+			mode: cool.VectorMode.Slides,
+			version: 1,
+			objects: [
+				{
+					id: 0,
+					kind: 'page',
+					width: 200,
+					height: 150,
+					backdrop: '#102030',
+					primitives: [],
+				},
+				{ id: 11, primitives: [text] },
+			],
+		});
+		manager.handleVectorPrimitivesResponse({
+			partId: 'S1',
+			mode: cool.VectorMode.Slides,
+			version: 1,
+			objects: [
+				{ id: 0, kind: 'page', width: 200, height: 150, primitives: [] },
+				{ id: 21, primitives: [text] },
+			],
+		});
+		const dark: any = manager.requestPart(0, cool.VectorMode.Slides);
+		const light: any = manager.requestPart(1, cool.VectorMode.Slides);
+
+		manager.renderInto(new CanvasRecorder() as any, dark);
+
+		const recorder = new CanvasRecorder();
+		manager.renderObjectsWith(
+			recorder as any,
+			light,
+			[21],
+			cool.Matrix2D.IDENTITY,
+		);
+
+		const fillText = recorder.findCall('fillText');
+		nodeassert.ok(fillText, 'fillText not called');
+		nodeassert.strictEqual(fillText?.properties.fillStyle, '#000000');
+	});
+
 	// A slide names the master it draws under itself. The master is painted
 	// between the slide's own background and its objects, in the master's
 	// order. A shared object is drawn as the master carries it. An object

@@ -44,6 +44,14 @@ namespace cool {
 		// entry point sets it from what the render is for, so it never
 		// carries over from an earlier render.
 		private _editViewContentVisible = false;
+		// What an automatic color means in the view being painted.
+		private _documentBackground = VectorColors.DEFAULT_DOCUMENT_BACKGROUND;
+		private _documentBackgroundIsDark = false;
+		// The surface the page holds behind its objects, when it holds
+		// one, and the share of the document background that shows
+		// through it.
+		private _pageBackdrop: string | undefined = undefined;
+		private _pageBackdropTransparency = 0;
 
 		constructor(bitmapLookup?: BitmapLookup, fontLoaded?: FontLoadedLookup) {
 			this._bitmapLookup = bitmapLookup;
@@ -65,6 +73,70 @@ namespace cool {
 		/// picture. A thumbnail and a slideshow leave it out.
 		setEditViewContentVisible(visible: boolean): void {
 			this._editViewContentVisible = visible;
+		}
+
+		setDocumentBackground(color: string): void {
+			this._documentBackground = color;
+			this._documentBackgroundIsDark = VectorColors.isDark(color);
+		}
+
+		setPageBackdrop(color: string | undefined, transparency = 0): void {
+			this._pageBackdrop = color;
+			this._pageBackdropTransparency = transparency;
+		}
+
+		// The color a fill shows over what lies behind it, when it lets
+		// a share of that show through.
+		private _surfaceOver(
+			fill: string,
+			transparency: number | undefined,
+			behind: string,
+		): string {
+			if (!transparency) return fill;
+			return VectorColors.blend(fill, behind, transparency);
+		}
+
+		private _pageSurface(): string {
+			if (this._pageBackdrop === undefined) return this._documentBackground;
+			return this._surfaceOver(
+				this._pageBackdrop,
+				this._pageBackdropTransparency,
+				this._documentBackground,
+			);
+		}
+
+		// The surface right behind a text run: its character highlight,
+		// else the fill of its shape or cell over the page, else the
+		// page. A value with no channels to read names no surface.
+		private _textSurface(
+			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
+		): string {
+			const highlight = primitive.fillcolor;
+			if (highlight !== undefined && VectorColors.parse(highlight))
+				return highlight;
+			const backdrop = primitive.backdrop;
+			if (backdrop !== undefined && VectorColors.parse(backdrop))
+				return this._surfaceOver(
+					backdrop,
+					primitive.backdropTransparency,
+					this._pageSurface(),
+				);
+			return this._pageSurface();
+		}
+
+		private _textColor(
+			primitive: TextSimplePortionPrimitive | TextDecoratedPortionPrimitive,
+		): string {
+			const surface = this._textSurface(primitive);
+			const color = primitive.fontcolor;
+
+			if (color === undefined || color === VectorColors.AUTOMATIC)
+				return VectorColors.isDark(surface) ? '#FFFFFF' : '#000000';
+
+			if (this._documentBackgroundIsDark && VectorColors.isDark(surface))
+				return VectorColors.getLightVariant(color);
+
+			return color;
 		}
 
 		renderPrimitive(
@@ -221,6 +293,9 @@ namespace cool {
 				case MaskPrimitive.type:
 					this._renderMask(context, primitive as MaskPrimitive);
 					return;
+				case PagePreviewPrimitive.type:
+					this._renderPagePreview(context, primitive as PagePreviewPrimitive);
+					return;
 				case HiddenGeometryPrimitive.type:
 					// Non-painting subtree. Return so the recursion
 					// at the end of renderPrimitive does not descend
@@ -237,17 +312,31 @@ namespace cool {
 				this._renderPrimitives(context, primitive.children);
 		}
 
+		// The objects of the shown page sit on the fill of that page, so
+		// the page backdrop is the one of the shown page while its content
+		// draws.
+		private _renderPagePreview(
+			context: CanvasRenderingContext2D,
+			primitive: PagePreviewPrimitive,
+		): void {
+			if (!primitive.children) return;
+			const backdrop = this._pageBackdrop;
+			const transparency = this._pageBackdropTransparency;
+			this.setPageBackdrop(primitive.backdrop, primitive.backdropTransparency);
+			this._renderPrimitives(context, primitive.children);
+			this.setPageBackdrop(backdrop, transparency);
+		}
+
 		private _renderBackgroundColor(
 			context: CanvasRenderingContext2D,
 			primitive: BackgroundColorPrimitive,
 		): void {
-			if (!primitive.color) return;
-
 			// Fill only the slide rectangle, in the current twip transform, so
-			// the workspace color shows around the slide.
+			// the workspace color shows around the slide. A background that
+			// names no color is the document background of the view.
 			context.save();
 			context.globalAlpha = 1 - (primitive.transparency ?? 0);
-			context.fillStyle = primitive.color;
+			context.fillStyle = primitive.color ?? this._documentBackground;
 			context.fillRect(0, 0, this._slideWidth, this._slideHeight);
 			context.restore();
 		}
@@ -515,11 +604,12 @@ namespace cool {
 			context.save();
 			const frame = this._setupTextFrame(context, primitive);
 			if (frame) {
-				context.fillStyle = primitive.fontcolor ?? '#000000';
+				const textColor = this._textColor(primitive);
+				context.fillStyle = textColor;
 				this._drawTextRun(context, primitive, frame, false);
 
 				if (primitive.outline) {
-					context.strokeStyle = primitive.fontcolor ?? '#000000';
+					context.strokeStyle = textColor;
 					// Outline thickness scales with the font size so it stays
 					// visible on large text.
 					context.lineWidth = Math.max(1, frame.fontSize / 20);
@@ -656,7 +746,7 @@ namespace cool {
 					? distances[frame.text.length - 1] * frame.advanceScale
 					: context.measureText(frame.text).width;
 				const lineWidth = Math.max(1, frame.fontSize / 20);
-				const textColor = primitive.fontcolor ?? '#000000';
+				const textColor = this._textColor(primitive);
 
 				const drawLine = (lineY: number, color: string): void => {
 					context.strokeStyle = color;

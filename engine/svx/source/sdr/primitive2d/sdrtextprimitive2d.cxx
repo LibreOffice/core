@@ -29,7 +29,9 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/svdetc.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <comphelper/kit.hxx>
 #include <utility>
 #include <osl/diagnose.h>
 
@@ -90,9 +92,28 @@ namespace drawinglayer::primitive2d
         // support for XTEXT_PAINTSHAPE_BEGIN/XTEXT_PAINTSHAPE_END Metafile comments
         // for slideshow. This uses TextHierarchyBlockPrimitive2D to mark a text block.
         // ATM there is only one text block per SdrObject, this may get more in the future
-        Primitive2DReference SdrTextPrimitive2D::encapsulateWithTextHierarchyBlockPrimitive2D(Primitive2DContainer&& aCandidate)
+        Primitive2DReference createTextHierarchyBlockPrimitive2D(Primitive2DContainer&& aCandidate, const SdrText* pText)
         {
-            return new TextHierarchyBlockPrimitive2D(std::move(aCandidate));
+            // vector rendering keeps the automatic text colors unresolved, and the block
+            // carries the fill right under the text when there is one, which is the surface
+            // an automatic text color contrasts with
+            std::optional<Color> oTextSurface;
+            double fTextSurfaceTransparency(0.0);
+            if(comphelper::COKit::isVectorRendering() && pText)
+            {
+                if(const std::optional<DraftFill> oFill = pText->GetTextSurface())
+                {
+                    oTextSurface = oFill->aColor;
+                    fTextSurfaceTransparency = oFill->fTransparency;
+                }
+            }
+
+            return new TextHierarchyBlockPrimitive2D(std::move(aCandidate), oTextSurface, fTextSurfaceTransparency);
+        }
+
+        Primitive2DReference SdrTextPrimitive2D::encapsulateWithTextHierarchyBlockPrimitive2D(Primitive2DContainer&& aCandidate) const
+        {
+            return createTextHierarchyBlockPrimitive2D(std::move(aCandidate), getSdrText());
         }
 
         SdrTextPrimitive2D::SdrTextPrimitive2D(
@@ -103,6 +124,7 @@ namespace drawinglayer::primitive2d
             mnLastPageNumber(0),
             mnLastPageCount(0),
             maLastAutoColor(COL_AUTO),
+            mbLastVectorRendering(false),
             mbContainsPageField(false),
             mbContainsPageCountField(false),
             mbContainsOtherFields(false)
@@ -145,6 +167,23 @@ namespace drawinglayer::primitive2d
             bool bNewTextBackgroundColorIsSet(false);
             sal_Int16 nCurrentlyValidPageNumber(0);
             sal_Int16 nCurrentlyValidPageCount(0);
+
+            // vector rendering keeps the automatic colors unresolved, so its decomposition
+            // differs from the one a painting target gets, and each is kept apart
+            if(comphelper::COKit::isVectorRendering() != mbLastVectorRendering)
+            {
+                SdrTextPrimitive2D* pThis = const_cast< SdrTextPrimitive2D* >(this);
+                OtherDecomposition& rOther = pThis->maOtherDecomposition;
+                Primitive2DReference xOther(std::move(rOther.mxDecomposition));
+                rOther.mxDecomposition = getBuffered2DDecomposition();
+                pThis->setBuffered2DDecomposition(std::move(xOther));
+                std::swap(pThis->mxLastVisualizingPage, rOther.mxVisualizingPage);
+                std::swap(pThis->mnLastPageNumber, rOther.mnPageNumber);
+                std::swap(pThis->mnLastPageCount, rOther.mnPageCount);
+                std::swap(pThis->maLastTextBackgroundColor, rOther.maTextBackgroundColor);
+                std::swap(pThis->maLastAutoColor, rOther.maAutoColor);
+                pThis->mbLastVectorRendering = !mbLastVectorRendering;
+            }
 
             if(hasBuffered2DDecomposition())
             {
@@ -201,8 +240,11 @@ namespace drawinglayer::primitive2d
 
                     // check change of what an automatic color means: the automatic font color
                     // is chosen for contrast against the document background of the view being
-                    // rendered, and two views of the same document can have different themes
-                    if(rViewInformation.getResolvedAutoColor() != maLastAutoColor)
+                    // rendered, and two views of the same document can have different themes.
+                    // A decomposition for vector rendering holds the automatic colors
+                    // unresolved, so it serves every view
+                    if(!mbLastVectorRendering
+                       && rViewInformation.getResolvedAutoColor() != maLastAutoColor)
                     {
                         bDoDelete = true;
                     }

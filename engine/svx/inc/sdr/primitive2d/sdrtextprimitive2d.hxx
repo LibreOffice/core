@@ -37,6 +37,12 @@ class SdrText;
 
 namespace drawinglayer::primitive2d
     {
+        /// A text hierarchy block around the given text primitives. For vector rendering the
+        /// block carries the fill right under the text, when the text has one: the fill of the
+        /// shape or of the table cell the text belongs to, with its transparency kept apart.
+        Primitive2DReference createTextHierarchyBlockPrimitive2D(Primitive2DContainer&& aCandidate,
+                                                                 const SdrText* pText);
+
         class SdrTextPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
@@ -73,6 +79,24 @@ namespace drawinglayer::primitive2d
             // reused for a target where automatic means another color
             Color                                   maLastAutoColor;
 
+            // the decomposition made for the other kind of target, vector rendering or painting,
+            // with what it was made for. A text that is both painted and rendered as vectors
+            // keeps one decomposition of each kind, and switching swaps them
+            struct OtherDecomposition
+            {
+                Primitive2DReference                            mxDecomposition;
+                cpo::uno::Reference< css::drawing::XDrawPage > mxVisualizingPage;
+                sal_Int16                                       mnPageNumber = 0;
+                sal_Int16                                       mnPageCount = 0;
+                Color                                           maTextBackgroundColor;
+                Color                                           maAutoColor = COL_AUTO;
+            };
+            OtherDecomposition                      maOtherDecomposition;
+
+            // true when the buffered decomposition was made for vector rendering and holds the
+            // automatic colors unresolved, false when it holds them resolved for painting
+            bool                                    mbLastVectorRendering : 1;
+
             // is there a PageNumber, Header, Footer or DateTimeField used? Evaluated at construction
             bool                                    mbContainsPageField : 1;
             bool                                    mbContainsPageCountField : 1;
@@ -80,7 +104,7 @@ namespace drawinglayer::primitive2d
 
         protected:
             // support for XTEXT_PAINTSHAPE_BEGIN/XTEXT_PAINTSHAPE_END Metafile comments
-            static Primitive2DReference encapsulateWithTextHierarchyBlockPrimitive2D(Primitive2DContainer&& aCandidate);
+            Primitive2DReference encapsulateWithTextHierarchyBlockPrimitive2D(Primitive2DContainer&& aCandidate) const;
 
         public:
             SdrTextPrimitive2D(

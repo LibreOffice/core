@@ -48,6 +48,8 @@ void DrawViewShell::ConfigurationChanged( utl::ConfigurationBroadcaster* pCb, Co
         Color aFillColor(pColorConfig->GetColorValue(svtools::APPBACKGROUND).nColor);
         pCurrentShell->viewCallback(COKitCallbackType::APPLICATION_BACKGROUND_COLOR,
                     aFillColor.AsRGBHexString().toUtf8());
+        pCurrentShell->viewCallback(COKitCallbackType::DOCUMENT_BACKGROUND_COLOR,
+                    aViewOptions.mnDocBackgroundColor.AsRGBHexString().toUtf8());
     }
 }
 
