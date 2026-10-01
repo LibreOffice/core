@@ -13,10 +13,19 @@
 #include <editeng/editenginewidget.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <sfx2/app.hxx>
 #include <tools/gen.hxx>
+#include <tools/json_writer.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/wrkwin.hxx>
+
+#include <boost/property_tree/json_parser.hpp>
+
+#include <sstream>
 
 #include <editdoc.hxx>
 
@@ -101,6 +110,47 @@ CPPUNIT_TEST_FIXTURE(EditEngineWidgetTest, testCtrlASelectsAllText)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aSelection.start.nIndex);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aSelection.end.nPara);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aSelection.end.nIndex);
+
+    aEditEngine.RemoveView(&aEditView);
+}
+
+CPPUNIT_TEST_FIXTURE(EditEngineWidgetTest, testParagraphCarriesTheFontInEffect)
+{
+    // Given a paragraph whose font size comes from the paragraph formatting and whose font family
+    // is the default, with no formatting on the text itself.
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetPaperSize(Size(5000, 5000));
+    aEditEngine.SetText(u"hello"_ustr);
+
+    const o3tl::Length eLength = MapToO3tlLength(mpItemPool->GetMetric(EE_CHAR_FONTHEIGHT));
+    SfxItemSet aParagraphSet(aEditEngine.GetEmptyItemSet());
+    aParagraphSet.Put(SvxFontHeightItem(o3tl::convert(20, o3tl::Length::pt, eLength), 100,
+                                        EE_CHAR_FONTHEIGHT));
+    aEditEngine.SetParaAttribs(0, aParagraphSet);
+
+    ScopedVclPtrInstance<WorkWindow> xWin(nullptr, WB_APP | WB_STDWORK);
+    EditView aEditView(aEditEngine, xWin.get());
+    aEditEngine.InsertView(&aEditView);
+
+    EditEngineWidgetController aController(aEditView);
+
+    // When the widget writes its model for the client.
+    tools::JsonWriter aWriter;
+    aController.DumpWidgetData(aWriter);
+    std::stringstream aStream(std::string(aWriter.finishAndGetAsOString()));
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+
+    // Then the paragraph names the size and the family the text is shown in. Without the
+    // accompanying fix in place, both were missing, because only the formatting of the text itself
+    // was written, so the client showed the text in a font of its own.
+    const boost::property_tree::ptree& rParagraph = aTree.get_child("paragraphs").front().second;
+    CPPUNIT_ASSERT_EQUAL(20, rParagraph.get<int>("size", 0));
+    const OUString aDefaultFamily
+        = aEditEngine.GetEmptyItemSet().Get(EE_CHAR_FONTINFO).GetFamilyName();
+    CPPUNIT_ASSERT(!aDefaultFamily.isEmpty());
+    CPPUNIT_ASSERT_EQUAL(aDefaultFamily,
+                         OUString::fromUtf8(rParagraph.get<std::string>("family", std::string())));
 
     aEditEngine.RemoveView(&aEditView);
 }

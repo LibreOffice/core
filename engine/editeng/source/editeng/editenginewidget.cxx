@@ -193,6 +193,16 @@ bool isMisspelled(const std::vector<editeng::MisspellRange>* pMisspells, sal_Int
                                nStart;
                        });
 }
+
+/// The item in effect in rSet, a set of text attributes for a range. It is the item the text, the
+/// paragraph or its style sheet sets, or else the pool default. Null when the range holds more than
+/// one value.
+template <class T> const T* effectiveItem(const SfxItemSet& rSet, TypedWhichId<T> nWhich)
+{
+    if (rSet.GetItemState(nWhich) == SfxItemState::INVALID)
+        return nullptr;
+    return &rSet.Get(nWhich);
+}
 }
 
 EditEngineWidgetController::EditEngineWidgetController(EditView& rEditView, Outliner* pOutliner)
@@ -243,10 +253,9 @@ void EditEngineWidgetController::DumpRuns(tools::JsonWriter& rWriter, sal_Int32 
         if (nStart == nEnd)
             continue;
 
-        // Asking for the effective set rather than only the hard formatting, so that what the
-        // style sheet and the pool defaults contribute is rendered too.
-        const SfxItemSet aSet
-            = m_rEditEngine.GetAttribs(nPara, nStart, nEnd, GetAttribsFlags::CHARATTRIBS);
+        // The formatting in effect: that of the text, of its paragraph, of the paragraph style and
+        // the pool defaults.
+        const SfxItemSet aSet = m_rEditEngine.GetAttribs(nPara, nStart, nEnd);
 
         auto aRunNode = rWriter.startStruct();
         rWriter.put("start", nStart);
@@ -275,22 +284,22 @@ void EditEngineWidgetController::DumpRuns(tools::JsonWriter& rWriter, sal_Int32 
         }
         // The paragraph carries its own family, size and colour, and the client applies them to
         // the whole paragraph, so a run only repeats one of them when it actually differs.
-        if (const SvxColorItem* pItem = aSet.GetItemIfSet(EE_CHAR_COLOR))
+        if (const SvxColorItem* pItem = effectiveItem(aSet, EE_CHAR_COLOR))
         {
-            const SvxColorItem* pBase = rParagraphBaseline.GetItemIfSet(EE_CHAR_COLOR);
+            const SvxColorItem* pBase = effectiveItem(rParagraphBaseline, EE_CHAR_COLOR);
             if (!pItem->GetValue().IsTransparent()
                 && (!pBase || pBase->GetValue() != pItem->GetValue()))
                 rWriter.put("color", toHexColor(pItem->GetValue()));
         }
-        if (const SvxFontItem* pItem = aSet.GetItemIfSet(EE_CHAR_FONTINFO))
+        if (const SvxFontItem* pItem = effectiveItem(aSet, EE_CHAR_FONTINFO))
         {
-            const SvxFontItem* pBase = rParagraphBaseline.GetItemIfSet(EE_CHAR_FONTINFO);
+            const SvxFontItem* pBase = effectiveItem(rParagraphBaseline, EE_CHAR_FONTINFO);
             if (!pBase || pBase->GetFamilyName() != pItem->GetFamilyName())
                 rWriter.put("family", pItem->GetFamilyName());
         }
-        if (const SvxFontHeightItem* pItem = aSet.GetItemIfSet(EE_CHAR_FONTHEIGHT))
+        if (const SvxFontHeightItem* pItem = effectiveItem(aSet, EE_CHAR_FONTHEIGHT))
         {
-            const SvxFontHeightItem* pBase = rParagraphBaseline.GetItemIfSet(EE_CHAR_FONTHEIGHT);
+            const SvxFontHeightItem* pBase = effectiveItem(rParagraphBaseline, EE_CHAR_FONTHEIGHT);
             if (!pBase || pBase->GetHeight() != pItem->GetHeight())
             {
                 if (std::optional<sal_Int32> oPoints
@@ -316,9 +325,8 @@ void EditEngineWidgetController::DumpParagraph(tools::JsonWriter& rWriter, sal_I
 
     rWriter.put("text", m_rEditEngine.GetText(nPara));
 
-    const SfxItemSet& rParaSet = m_rEditEngine.GetParaAttribs(nPara);
-    if (const SvxAdjustItem* pItem = rParaSet.GetItemIfSet(EE_PARA_JUST))
-        rWriter.put("align", adjustName(pItem->GetAdjust()));
+    // The alignment in effect, which can come from the style sheet or the pool default.
+    rWriter.put("align", adjustName(m_rEditEngine.GetParaAttrib(nPara, EE_PARA_JUST).GetAdjust()));
 
     if (m_pOutliner)
     {
@@ -329,19 +337,19 @@ void EditEngineWidgetController::DumpParagraph(tools::JsonWriter& rWriter, sal_I
             rWriter.put("bulletText", sanitizeBulletText(aBullet.aText));
     }
 
-    // The character formatting shared by the whole paragraph. The client applies it to the
+    // The character formatting in effect over the whole paragraph. The client applies it to the
     // paragraph and each run inherits it, so a run only carries the attributes it changes. For a
     // paragraph in more than one font or size the shared item is not set, and the runs carry it.
-    const SfxItemSet aBaseline = m_rEditEngine.GetAttribs(
-        nPara, 0, m_rEditEngine.GetTextLen(nPara), GetAttribsFlags::CHARATTRIBS);
-    if (const SvxFontItem* pItem = aBaseline.GetItemIfSet(EE_CHAR_FONTINFO))
+    const SfxItemSet aBaseline
+        = m_rEditEngine.GetAttribs(nPara, 0, m_rEditEngine.GetTextLen(nPara));
+    if (const SvxFontItem* pItem = effectiveItem(aBaseline, EE_CHAR_FONTINFO))
         rWriter.put("family", pItem->GetFamilyName());
-    if (const SvxFontHeightItem* pItem = aBaseline.GetItemIfSet(EE_CHAR_FONTHEIGHT))
+    if (const SvxFontHeightItem* pItem = effectiveItem(aBaseline, EE_CHAR_FONTHEIGHT))
     {
         if (std::optional<sal_Int32> oPoints = fontSizeInPoints(*pItem, m_rEditEngine.GetItemPool()))
             rWriter.put("size", *oPoints);
     }
-    if (const SvxColorItem* pItem = aBaseline.GetItemIfSet(EE_CHAR_COLOR))
+    if (const SvxColorItem* pItem = effectiveItem(aBaseline, EE_CHAR_COLOR))
     {
         if (!pItem->GetValue().IsTransparent())
             rWriter.put("color", toHexColor(pItem->GetValue()));

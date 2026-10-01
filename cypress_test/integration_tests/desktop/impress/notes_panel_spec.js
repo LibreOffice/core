@@ -369,6 +369,24 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		);
 	});
 
+	// Text that has no formatting of its own shows in the font of the notes style, the same font
+	// as text that has.
+	it('the notes show in the font they have in the document', function () {
+		openNotesPane();
+
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('Remember the demo');
+		cy.cGet(paragraph).should('have.text', 'Remember the demo');
+
+		// The paragraph names the family and the size of the notes style.
+		cy.cGet(paragraph).should(function (element) {
+			expect(element[0].style.fontFamily).to.not.equal('');
+			expect(element[0].style.fontSize).to.match(/^\d+pt$/);
+		});
+	});
+
 	// While the notes have the focus, the Undo and Redo buttons act on what was typed there. The
 	// slide added before stays, although the document can undo adding it.
 	it('the Undo and Redo buttons act on the notes while they have the focus', function () {
