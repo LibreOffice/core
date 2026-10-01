@@ -58,10 +58,8 @@
     const templateValues = templateParam === null ? null : JSON.parse(templateParam);
     const baseUrl = new URL(base, location.href);
     const sidebarUrl = new URL(sidebarName, baseUrl);
-    async function fetchText(url) {
-        const r = await fetch(url);
-        if (!r.ok) throw new Error(url + ' HTTP ' + r.status);
-        return await r.text();
+    function fetchText(url) {
+        return window.cool._postCall({ msgId: 'Extension_GasReadFile', url: String(url) });
     }
     // Serialise script insertion so a later inline script that depends on an external one above it
     // (typical jQuery pattern) sees the library rather than racing against its async load:

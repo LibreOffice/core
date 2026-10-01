@@ -299,6 +299,13 @@ interface ExtensionGasRunMessage {
 	args?: unknown[];
 }
 
+// A GAS add-on frame asks the main window for the text of a file under the add-on's directory:
+interface ExtensionGasReadFileMessage {
+	msgId: 'Extension_GasReadFile';
+	callId: string;
+	url: string;
+}
+
 interface ExtensionProxyReturnMessage {
 	msgId: 'Extension_ProxyReturn';
 	callId: string;
@@ -361,6 +368,7 @@ interface ExtensionDialogCancelMessage {
 type ExtensionSidebarMessage =
 	| ExtensionCallMessage
 	| ExtensionCloseMessage
+	| ExtensionGasReadFileMessage
 	| ExtensionGasRunMessage
 	| ExtensionProxyReturnMessage
 	| ExtensionTeardownDoneMessage
@@ -371,6 +379,7 @@ type ExtensionSidebarMessage =
 
 type ExtensionDialogMessage =
 	| ExtensionCallMessage
+	| ExtensionGasReadFileMessage
 	| ExtensionGasRunMessage
 	| ExtensionProxyReturnMessage
 	| ExtensionShowDialogMessage
@@ -798,6 +807,40 @@ window.L.Control.Extension = window.L.Control.extend({
 		this._sendGasRunner(callId, proxyId, msg.functionName, msg.args || []);
 	},
 
+	_readGasFile: async function (msg: ExtensionGasReadFileMessage) {
+		const frame = this._callerWindow(msg.callId);
+		const reply = (ok: string | undefined, err?: string) => {
+			this._postToWindow(frame, {
+				msgId: 'Extension_CallResult',
+				callId: msg.callId,
+				ok: ok,
+				err: err,
+			});
+		};
+		const base = new URL(this.options.baseUrl, document.baseURI);
+		let url: URL;
+		try {
+			url = new URL(msg.url, base);
+		} catch (e) {
+			reply(undefined, msg.url + ': ' + (e as Error).message);
+			return;
+		}
+		if (!url.href.startsWith(base.href)) {
+			reply(undefined, msg.url + ' is outside the add-on directory');
+			return;
+		}
+		try {
+			const resp = await fetch(url.href);
+			if (!resp.ok) {
+				reply(undefined, msg.url + ' HTTP ' + resp.status);
+				return;
+			}
+			reply(await resp.text());
+		} catch (e) {
+			reply(undefined, msg.url + ': ' + (e as Error).message);
+		}
+	},
+
 	// A `panel: true` command: make sure the sidebar panel is showing, then
 	// hand the command id to the iframe. The iframe may still be loading, in
 	// which case the message goes out once it has loaded.
@@ -1079,6 +1122,9 @@ window.L.Control.Extension = window.L.Control.extend({
 			case 'Extension_ProxyReturn':
 				this._forwardToKit(msg);
 				break;
+			case 'Extension_GasReadFile':
+				this._readGasFile(msg);
+				break;
 			case 'Extension_GasRun':
 				this._runGasFunction(msg);
 				break;
@@ -1170,6 +1216,9 @@ window.L.Control.Extension = window.L.Control.extend({
 			case 'Extension_Call':
 			case 'Extension_ProxyReturn':
 				this._forwardToKit(msg);
+				break;
+			case 'Extension_GasReadFile':
+				this._readGasFile(msg);
 				break;
 			case 'Extension_GasRun':
 				this._runGasFunction(msg);
@@ -1629,6 +1678,7 @@ const gasFrameMessageIds = new Set([
 	'Extension_Close',
 	'Extension_DialogCancel',
 	'Extension_DialogClose',
+	'Extension_GasReadFile',
 	'Extension_GasRun',
 	'Extension_Resize',
 	'Extension_TeardownDone',
