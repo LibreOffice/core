@@ -4872,6 +4872,7 @@ bool INetURLObject::IsExoticProtocol() const
         m_eScheme == INetProtocol::Macro ||
         m_eScheme == INetProtocol::Uno ||
         m_eScheme == INetProtocol::VndSunStarExpand ||
+        m_eScheme == INetProtocol::Javascript ||
         isSchemeEqualTo(u"vnd.sun.star.script") ||
         isSchemeEqualTo(u"service") ||
         // Follina, Microsoft Support Diagnostic Tool
