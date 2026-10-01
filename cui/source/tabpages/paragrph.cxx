@@ -1716,6 +1716,8 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, weld::Toggleable&, void)
     m_xWordSpacingMaximum->set_sensitive(bJustify);
     m_xWordSpacingMaximum->set_sensitive(bJustify);
     m_xParagraphComposer->set_sensitive(bJustify);
+    if (bJustify && m_xParagraphComposer->get_state() == TRISTATE_INDET)
+        m_xParagraphComposer->set_active(false);
     // TODO visualize CharKerning with percentage
     m_xLetterSpacingMinimum->set_sensitive(bJustify);
     m_xLetterSpacingMaximum->set_sensitive(bJustify);
