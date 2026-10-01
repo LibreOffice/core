@@ -813,6 +813,13 @@ window.L.Clipboard = window.L.Class.extend({
 			}
 		}
 
+		if ((operation === 'copy' || operation === 'cut') && this._activeEditEngine()) {
+			// Execute the command on the active editeng widget.
+			document.execCommand(operation);
+			this._unoCommandForCopyCutPaste = null;
+			return;
+		}
+
 		if (operation !== 'paste' && cmd !== undefined && this._navigatorClipboardWrite(params)) {
 			// This is the codepath where an UNO command initiates the clipboard
 			// operation.

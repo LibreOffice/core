@@ -268,6 +268,50 @@ function editEngineOnBeforeInput(
 	}
 }
 
+/// Re-fires the .uno:Copy / .uno:Cut state the server last broadcasted.
+function editEngineRestoreClipboardState(container: EditEngineContainer): void {
+	const map = container.builder.map;
+	const handler = map.stateChangeHandler;
+	if (!handler) return;
+	map.fire('commandstatechanged', {
+		commandName: '.uno:Copy',
+		state: handler.getItemValue('.uno:Copy') || '',
+	});
+	map.fire('commandstatechanged', {
+		commandName: '.uno:Cut',
+		state: handler.getItemValue('.uno:Cut') || '',
+	});
+}
+
+/// Watch selection changes on 'container' and fire 'commandstatechanged' accordingly.
+function editEngineUpdateClipboardState(container: EditEngineContainer): void {
+	if (document.activeElement !== container) return;
+
+	// Update the cut/copy buttons based on if a range is selected.
+	const selection = window.getSelection();
+	let hasSelection = false;
+	if (selection && selection.rangeCount > 0) {
+		const range = selection.getRangeAt(0);
+		if (
+			!range.collapsed &&
+			container.contains(range.startContainer) &&
+			container.contains(range.endContainer)
+		)
+			hasSelection = true;
+	}
+	const state = hasSelection ? 'enabled' : 'disabled';
+	container.builder.map.fire('commandstatechanged', {
+		commandName: '.uno:Copy',
+		state: state,
+		uiOnly: true,
+	});
+	container.builder.map.fire('commandstatechanged', {
+		commandName: '.uno:Cut',
+		state: state,
+		uiOnly: true,
+	});
+}
+
 function editEngineAttachHandlers(container: EditEngineContainer): void {
 	container.addEventListener('keydown', (e: KeyboardEvent) =>
 		editEngineOnKeyDown(container, e),
@@ -283,9 +327,10 @@ function editEngineAttachHandlers(container: EditEngineContainer): void {
 		editEngineSendAction(container, 'focus', {}),
 	);
 
-	container.addEventListener('blur', () =>
-		editEngineSendAction(container, 'blur', {}),
-	);
+	container.addEventListener('blur', () => {
+		editEngineSendAction(container, 'blur', {});
+		editEngineRestoreClipboardState(container);
+	});
 
 	container.addEventListener('compositionend', (e: CompositionEvent) => {
 		if (e.data) editEngineSendAction(container, 'text', { text: e.data });
@@ -324,6 +369,11 @@ function editEngineAttachHandlers(container: EditEngineContainer): void {
 				),
 			{ once: true },
 		),
+	);
+
+	// Keep the notebookbar Copy and Cut button states up to date.
+	document.addEventListener('selectionchange', () =>
+		editEngineUpdateClipboardState(container),
 	);
 }
 

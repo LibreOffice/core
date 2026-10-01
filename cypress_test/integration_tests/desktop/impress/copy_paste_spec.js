@@ -61,6 +61,43 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress clipboard tests.',
 		);
 	});
 
+	it('Notebookbar Copy routes to the notes pane', function() {
+		// Given an open notes panel with 'hello' and selected:
+		helper.setupAndLoadDocument('impress/empty-placeholder.fodp');
+		cy.getFrameWindow().then(function(win) {
+			win.app.dispatcher.dispatch('notespanel');
+		});
+		cy.cGet('#notespanel-dock-wrapper').should('be.visible');
+		cy.cGet('#notespanel-container .ui-editengine').should('exist');
+		cy.cGet('#notespanel-container .ui-editengine').click();
+		cy.cGet('#notespanel-container .ui-editengine').type('{ctrl}a{del}');
+		cy.getFrameWindow().then(function(win) { helper.processToIdle(win); });
+		cy.cGet('#notespanel-container .ui-editengine').type('hello');
+		cy.cGet('#notespanel-container .ui-editengine-paragraph')
+			.should('have.text', 'hello');
+		cy.cGet('#notespanel-container .ui-editengine').type('{ctrl}a');
+		cy.getFrameWindow().then(function(win) { helper.processToIdle(win); });
+
+		// When simulating a notebookbar Copy button click:
+		cy.getFrameWindow().then(function(win) {
+			const clip = win.app.map._clip;
+			clip.setTextSelectionHTML('<p>slide text</p>', 'slide text');
+			const origExecCommand = win.document.execCommand.bind(win.document);
+			win.document.execCommand = function(cmd) {
+				if (cmd === 'copy')
+					clip._dummyPlainDiv.innerText = win.getSelection().toString();
+				return origExecCommand(cmd);
+			};
+			clip.filterExecCopyPaste('.uno:Copy');
+		});
+
+		// Then the notes selection reaches the system clipboard:
+		// Without the accompanying fix in place, this test would have failed with:
+		// assert expected <div#copy-plain-container> to have text hello, but the text was ''
+		// i.e. the slide notes text wasn't copied to the clipboard.
+		cy.cGet('#copy-plain-container').should('have.text', 'hello');
+	});
+
 	it('Paste Special offers Markdown.', function() {
 		// Given an Impress document with a text shape in the center:
 		helper.setupAndLoadDocument('impress/top_toolbar.odp');

@@ -27,6 +27,11 @@ window.L.Map.StateChangeHandler = window.L.Handler.extend({
 	},
 
 	_onStateChanged: function(e) {
+		if (e.uiOnly) {
+			// A UI-only override from our JS code for an editeng widget, ignore that.
+			return;
+		}
+
 		var slideMasterPageItem = this._map['stateChangeHandler'].getItemValue('.uno:SlideMasterPage');
 		var state;
 
