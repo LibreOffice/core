@@ -276,7 +276,7 @@ public:
 
     // especially for Oliver Specht
     Point           GetWindowPosTopLeft( sal_Int32 nParagraph );
-    SAL_DLLPRIVATE void            MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos );
+    void            MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos );
     SAL_DLLPRIVATE void            MoveParagraphs( tools::Long nDiff );
 
     const SfxItemSet& GetEmptyItemSet() const;

@@ -959,9 +959,10 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner, void )
     OutlineViewPageChangesGuard aGuard(this);
 
     // list of selected title paragraphs
-    mpOutlinerViews[0]->CreateSelectionList(maSelectedParas);
+    std::vector<Paragraph*> aSelectedParas;
+    mpOutlinerViews[0]->CreateSelectionList(aSelectedParas);
 
-    std::erase_if(maSelectedParas,
+    std::erase_if(aSelectedParas,
         [](const Paragraph* pPara) { return !Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE); });
 
     // select the pages belonging to the paragraphs on level 0 to select
@@ -974,12 +975,11 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner, void )
     {
         if( ::Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE) )                     // one page?
         {
-            maOldParaOrder.push_back(pPara);
             SdPage* pPage = mrDoc.GetSdPage(nPos, PageKind::Standard);
 
-            fiter = std::find(maSelectedParas.begin(),maSelectedParas.end(),pPara);
+            fiter = std::find(aSelectedParas.begin(),aSelectedParas.end(),pPara);
 
-            pPage->SetSelected(fiter != maSelectedParas.end());
+            pPage->SetSelected(fiter != aSelectedParas.end());
 
             ++nPos;
         }
@@ -990,66 +990,36 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner, void )
 /**
  * Handler for the end of a paragraph movement
  */
-IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner, void )
+IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner::MoveParagraphsHdlParam, aParam, void )
 {
     OutlineViewPageChangesGuard aGuard(this);
 
     DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::EndMovingHdl(), model change without undo?!" );
 
-    // look for insertion position via the first paragraph
-    Paragraph* pSearchIt = maSelectedParas.empty() ? nullptr : *(maSelectedParas.begin());
-
-    // look for the first of the selected paragraphs in the new ordering
-    sal_uInt16 nPosNewOrder = 0;
-    sal_Int32 nParaPos = 0;
-    Paragraph*  pPara = pOutliner->GetParagraph( 0 );
-    Paragraph*  pPrev = nullptr;
-    while (pPara && pPara != pSearchIt)
+    // convert from paragraph position to page position
+    ::Outliner* pOutliner = aParam.pOutliner;
+    sal_Int32 nPagePos = 0;
+    for(sal_Int32 nPara = 0; nPara < pOutliner->GetEditEngine().GetParagraphCount(); ++nPara)
     {
-        if( ::Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE) )
-        {
-            nPosNewOrder++;
-            pPrev = pPara;
-        }
-        pPara = pOutliner->GetParagraph( ++nParaPos );
+        if (nPara == aParam.nDestPara)
+            break;
+        if( ::Outliner::HasParaFlag(pOutliner->GetParagraph(nPara), ParaFlag::ISPAGE) )
+            ++nPagePos;
     }
 
-    sal_uInt16 nPos = nPosNewOrder;     // don't change nPosNewOrder
-    if (nPos == 0)
-    {
-        nPos = sal_uInt16(-1);          // insert before the first page
-    }
-    else
-    {
-        // look for the predecessor in the old ordering
-        std::vector<Paragraph*>::const_iterator it = std::find(maOldParaOrder.begin(),
-                                                               maOldParaOrder.end(),
-                                                               pPrev);
-
-        if (it != maOldParaOrder.end())
-            nPos = static_cast<sal_uInt16>(it-maOldParaOrder.begin());
-        else
-            nPos = 0xffff;
-
-        DBG_ASSERT(nPos != 0xffff, "Paragraph not found");
-    }
-
-    mrDoc.MoveSelectedPages(nPos);
+    sal_Int32 nPosNewOrder = nPagePos - 1;
+    mrDoc.MoveSelectedPages(nPosNewOrder);
 
     // deselect the pages again
-    sal_uInt16 nPageCount = static_cast<sal_uInt16>(maSelectedParas.size());
-    while (nPageCount)
+    sal_uInt16 nNoOfPages = mrDoc.GetSdPageCount(PageKind::Standard);
+    for (sal_uInt16 nPage = 0; nPage < nNoOfPages; nPage++)
     {
-        SdPage* pPage = mrDoc.GetSdPage(nPosNewOrder, PageKind::Standard);
-        pPage->SetSelected(false);
-        nPosNewOrder++;
-        nPageCount--;
+        SdPage* pPage = mrDoc.GetSdPage(nPage, PageKind::Standard);
+        if (pPage->IsSelected())
+            pPage->SetSelected(false);
     }
 
     pOutliner->UpdateFields();
-
-    maSelectedParas.clear();
-    maOldParaOrder.clear();
 }
 
 /**
@@ -1485,7 +1455,7 @@ void OutlineView::ResetLinks() const
     mrOutliner.SetParaRemovingHdl(Link<::Outliner::ParagraphHdlParam,void>());
     mrOutliner.SetDepthChangedHdl(Link<::Outliner::DepthChangeHdlParam,void>());
     mrOutliner.SetBeginMovingHdl(Link<::Outliner*,void>());
-    mrOutliner.SetEndMovingHdl(Link<::Outliner*,void>());
+    mrOutliner.SetEndMovingHdl(Link<::Outliner::MoveParagraphsHdlParam,void>());
     mrOutliner.SetStatusEventHdl(Link<EditStatus&,void>());
     mrOutliner.SetRemovingPagesHdl(Link<OutlinerView*,bool>());
     mrOutliner.SetIndentingPagesHdl(Link<OutlinerView*,bool>());

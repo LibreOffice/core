@@ -546,6 +546,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 public:
     struct ParagraphHdlParam { Outliner* pOutliner; Paragraph* pPara; };
     struct DepthChangeHdlParam { Outliner* pOutliner; Paragraph* pPara; ParaFlag nPrevFlags; };
+    struct MoveParagraphsHdlParam { Outliner* pOutliner; sal_Int32 nStartPara; sal_Int32 nEndPara; sal_Int32 nDestPara; };
 private:
     friend class OutlinerView;
     friend class EditEngine;
@@ -567,7 +568,7 @@ private:
     Link<ParagraphHdlParam,void>   aParaRemovingHdl;
     Link<DepthChangeHdlParam,void> aDepthChangedHdl;
     Link<Outliner*,void>           aBeginMovingHdl;
-    Link<Outliner*,void>           aEndMovingHdl;
+    Link<MoveParagraphsHdlParam,void> aEndMovingHdl;
     Link<OutlinerView*,bool>       aIndentingPagesHdl;
     Link<OutlinerView*,bool>       aRemovingPagesHdl;
     Link<EditFieldInfo*,void>      aCalcFieldValueHdl;
@@ -823,8 +824,8 @@ public:
 
     SAL_DLLPRIVATE const Link<Outliner*,void>& GetBeginMovingHdl() const { return aBeginMovingHdl; }
     SAL_DLLPRIVATE void            SetBeginMovingHdl(const Link<Outliner*,void>& rLink) {aBeginMovingHdl=rLink;}
-    SAL_DLLPRIVATE const Link<Outliner*,void>& GetEndMovingHdl() const {return aEndMovingHdl;}
-    SAL_DLLPRIVATE void            SetEndMovingHdl( const Link<Outliner*,void>& rLink){aEndMovingHdl=rLink;}
+    SAL_DLLPRIVATE const Link<MoveParagraphsHdlParam,void>& GetEndMovingHdl() const {return aEndMovingHdl;}
+    SAL_DLLPRIVATE void            SetEndMovingHdl( const Link<MoveParagraphsHdlParam,void>& rLink){aEndMovingHdl=rLink;}
 
     sal_Int32       GetLineCount( sal_Int32 nParagraph ) const;
     sal_Int32           GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;

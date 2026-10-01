@@ -671,8 +671,8 @@ bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
         rOutliner.SetDepthChangedHdl( Link<::Outliner::DepthChangeHdlParam,void>());
         Link<::Outliner*,void> aOldBeginMovingHdl = rOutliner.GetBeginMovingHdl();
         rOutliner.SetBeginMovingHdl( Link<::Outliner*,void>());
-        Link<::Outliner*,void> aOldEndMovingHdl = rOutliner.GetEndMovingHdl();
-        rOutliner.SetEndMovingHdl( Link<::Outliner*,void>());
+        Link<::Outliner::MoveParagraphsHdlParam,void> aOldEndMovingHdl = rOutliner.GetEndMovingHdl();
+        rOutliner.SetEndMovingHdl( Link<::Outliner::MoveParagraphsHdlParam,void>());
 
         Link<EditStatus&,void> aOldStatusEventHdl = rOutliner.GetStatusEventHdl();
         rOutliner.SetStatusEventHdl(Link<EditStatus&,void>());

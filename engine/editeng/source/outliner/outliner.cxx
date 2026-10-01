@@ -1675,7 +1675,7 @@ IMPL_LINK( Outliner, EndMovingParagraphsHdl, MoveParagraphsInfo&, rInfos, void )
         ImplCalcBulletText( n, false, false );
 
     if( !IsInUndo() )
-        aEndMovingHdl.Call( this );
+        aEndMovingHdl.Call( MoveParagraphsHdlParam{this, rInfos.nStartPara, rInfos.nEndPara, rInfos.nDestPara} );
 }
 
 static bool isSameNumbering( const SvxNumberFormat& rN1, const SvxNumberFormat& rN2 )
