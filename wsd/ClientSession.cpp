@@ -4217,7 +4217,11 @@ void ClientSession::abortConversion(const std::shared_ptr<DocumentBroker>& docBr
 
     LOG_DBG("Conversion request of [" << docBroker->getDocKey() << "] failed: " << errorKind);
     if (!saveAsSocket)
-        LOG_ERR("Error saveas socket missing in isConvertTo mode");
+        LOG_WRN("Conversion of [" << docBroker->getDocKey() << "] failed with [" << errorKind
+                                  << "] after the client disconnected, "
+                                  << std::chrono::duration_cast<std::chrono::milliseconds>(
+                                         std::chrono::steady_clock::now() - _viewLoadStart)
+                                  << " after the load started. Nothing to report back.");
     else if (errorKind == "passwordrequired:to-view" ||
              errorKind == "passwordrequired:to-modify")
     {
@@ -4361,7 +4365,11 @@ bool ClientSession::handleSaveAs(const std::shared_ptr<Message>& payload,
             response.setContentType("application/octet-stream");
 
             if (!saveAsSocket)
-                LOG_ERR("Error saveas socket missing in isConvertTo mode");
+                LOG_WRN("Conversion of [" << docBroker->getDocKey()
+                                          << "] finished after the client disconnected, "
+                                          << std::chrono::duration_cast<std::chrono::milliseconds>(
+                                                 std::chrono::steady_clock::now() - _viewLoadStart)
+                                          << " after the load started. Dropping the result.");
             else
                 HttpHelper::sendFileAndShutdown(saveAsSocket, resultURL.getPath(), response);
         }
