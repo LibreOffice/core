@@ -41,8 +41,10 @@
 #include <QStringList>
 #include <QTemporaryFile>
 #include <QUrl>
+#include <QWebEnginePage>
 #include <QWebEngineProfile>
 #include <QWebEngineSettings>
+#include <QWebEngineView>
 
 namespace
 {
@@ -346,6 +348,26 @@ QWebEngineProfile* Application::getAccountProfile(const QString& accountId)
                            accountStoragePath(accountId), accountCachePath(accountId));
     accountProfiles().insert(accountId, profile);
     return profile;
+}
+
+int Application::countAccountProfileViews(const QString& accountId)
+{
+    auto it = accountProfiles().find(accountId);
+    if (it == accountProfiles().end())
+    {
+        LOG_DBG("Application: account '" << accountId.toStdString()
+                                        << "' has no profile this session, so no views use it");
+        return 0;
+    }
+
+    int count = 0;
+    for (QWidget* widget : QApplication::allWidgets())
+    {
+        auto* view = qobject_cast<QWebEngineView*>(widget);
+        if (view && view->page() && view->page()->profile() == it.value())
+            ++count;
+    }
+    return count;
 }
 
 RecentFiles& Application::getRecentFiles() { return recentFiles; }

@@ -50,6 +50,9 @@ public:
     /// The saved profile of one cloud account, so each account keeps its own sign-in. An id
     /// that is not plain letters, digits, '-' and '_' gets the shared profile instead.
     static QWebEngineProfile* getAccountProfile(const QString& accountId);
+    /// The number of web views showing a page on the account's saved profile, 0 when the
+    /// account has no views on it yet.
+    static int countAccountProfileViews(const QString& accountId);
     static RecentFiles& getRecentFiles();
     static Prefs& getPrefs();
     /// Self-signed cert/key for the embed-mode HTTPS server.  Both
