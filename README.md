@@ -39,7 +39,7 @@ run and compile LibreOffice, also used by the TDF builds:
     * Build: [wsl-as-helper](https://wiki.documentfoundation.org/Development/BuildingOnWSLWindows) + Visual Studio 2022
 * macOS:
     * Runtime: 11
-    * Build: 13 or later + Xcode 14.3 or later (using latest version available for a given version of macOS)
+    * Build: macOS 14 with Xcode 16.2 or later (using latest version available for a given version of macOS)
 * Linux:
     * Runtime: RHEL 9 or CentOS 9 and comparable
     * Build: either GCC 13; or Clang 18 with libstdc++ 11
