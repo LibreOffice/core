@@ -27,7 +27,9 @@
 #include <connectivity/dbcharset.hxx>
 #include <connectivity/dbexception.hxx>
 
+#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
+#include <strings.hrc>
 
 using namespace connectivity::odbc;
 using namespace connectivity;
@@ -167,6 +169,20 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
     return nSQLRETURN;
 }
 
+namespace
+{
+// An attribute value ends at the next ";" unless it is in braces, and a braced value ends at the
+// first "}".
+OUString quoteValue(const OUString& rValue, OConnection& rConnection)
+{
+    if (rValue.indexOf(';') == -1 && !o3tl::starts_with(o3tl::trim(rValue), u"{"))
+        return rValue;
+    if (rValue.indexOf('}') != -1)
+        rConnection.throwGenericSQLException(STR_URI_SYNTAX_ERROR, rConnection);
+    return "{" + rValue + "}";
+}
+}
+
 SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyValue >& info)
 {
     m_aConnectionHandle  = SQL_NULL_HANDLE;
@@ -180,7 +196,7 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+2);
     OUString aDSN(u"DSN="_ustr), aUID, aPWD, aSysDrvSettings;
-    aDSN += url.subView(nLen+1);
+    aDSN += quoteValue(OUString(url.subView(nLen+1)), *this);
 
     sal_Int32 nTimeout = 20;
     bool bSilent = true;
@@ -224,13 +240,13 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
         {
             if (!(rPropertyValue.Value >>= aUID))
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property user");
-            aDSN += ";UID=" + aUID;
+            aDSN += ";UID=" + quoteValue(aUID, *this);
         }
         else if (rPropertyValue.Name == "password")
         {
             if (!(rPropertyValue.Value >>= aPWD))
                 SAL_WARN("connectivity.odbc", "Construct: unable to get property password");
-            aDSN += ";PWD=" + aPWD;
+            aDSN += ";PWD=" + quoteValue(aPWD, *this);
         }
         else if (rPropertyValue.Name == "UseCatalog")
         {
