@@ -11,20 +11,53 @@
 
 module scriptinterop {
 
+/** No call returns this object yet.
+
+    @gas Border
+ */
 interface XBorder : XBase
 {
+    /** @returns
+            The dash style, or null when the border has none, for example because it is
+            not visible.
+
+        @unimplemented
+        @gas Border.getDashStyle
+     */
     com::sun::star::beans::Optional<DashStyle> getDashStyle();
 
+    /** @unimplemented @gas Border.getLineFill */
     XLineFill getLineFill();
 
+    /** Returns the thickness in points.
+
+        @returns
+            The thickness, or null when the border has none, for example because it is
+            not visible.
+
+        @unimplemented
+        @gas Border.getWeight
+     */
     com::sun::star::beans::Optional<double> getWeight();
 
+    /** @unimplemented @gas Border.isVisible */
     boolean isVisible();
 
+    /** @unimplemented @gas Border.setDashStyle */
     XBorder setDashStyle([in] DashStyle dashStyle);
 
+    /** Makes the border invisible.
+
+        @unimplemented
+        @gas Border.setTransparent
+     */
     XBorder setTransparent();
 
+    /** Sets the thickness in points.
+
+        @unimplemented
+        @gas Border.setWeight
+     */
     XBorder setWeight([in] double points);
 };
 

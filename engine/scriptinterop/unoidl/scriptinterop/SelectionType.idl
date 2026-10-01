@@ -11,14 +11,19 @@
 
 module scriptinterop {
 
+/** @gas SelectionType */
 enum SelectionType
 {
     UNSUPPORTED,
+    /** Nothing is selected and no page is shown. */
     NONE,
+    /** Text is highlighted in a shape that is being edited. */
     TEXT,
     TABLE_CELL,
+    /** Pages are selected in the slide sorter. */
     PAGE,
     PAGE_ELEMENT,
+    /** Nothing is selected on the shown page. */
     CURRENT_PAGE
 };
 

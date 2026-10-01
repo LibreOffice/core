@@ -15,12 +15,37 @@ interface XLayout;
 interface XMaster;
 interface XSlide;
 
+/** A page of unknown kind, such as the current page of a selection.
+
+    Convert it to the specific kind with asSlide, asLayout or asMaster, after checking
+    getPageType.
+
+    @gas Page
+ */
 interface XPage : XEditablePageBase
 {
+    /** This succeeds for every master page, since a master page is also a layout, see XLayout.
+
+        @throws RuntimeException
+            when the page is not a master page.
+
+        @gas Page.asLayout
+     */
     XLayout asLayout();
 
+    /** @throws RuntimeException
+            when the page is not a master page.
+
+        @gas Page.asMaster
+     */
     XMaster asMaster();
 
+    /** @throws RuntimeException
+            when the page is not one of the presentation's slides, for example a notes page or a
+            master page.
+
+        @gas Page.asSlide
+     */
     XSlide asSlide();
 };
 

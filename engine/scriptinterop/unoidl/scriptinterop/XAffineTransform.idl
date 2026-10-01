@@ -13,20 +13,36 @@ module scriptinterop {
 
 interface XAffineTransformBuilder;
 
+/** A two-dimensional affine transform, a fixed set of six numbers.
+
+    The transform maps a point (x, y) to the point
+    (scaleX * x + shearX * y + translateX, shearY * x + scaleY * y + translateY). A transform
+    cannot be changed. Make a modified copy with toBuilder. Page elements do not read or apply
+    transforms yet.
+
+    @gas AffineTransform
+ */
 interface XAffineTransform : XBase
 {
+    /** @gas AffineTransform.getScaleX */
     double getScaleX();
 
+    /** @gas AffineTransform.getScaleY */
     double getScaleY();
 
+    /** @gas AffineTransform.getShearX */
     double getShearX();
 
+    /** @gas AffineTransform.getShearY */
     double getShearY();
 
+    /** @gas AffineTransform.getTranslateX */
     double getTranslateX();
 
+    /** @gas AffineTransform.getTranslateY */
     double getTranslateY();
 
+    /** @gas AffineTransform.toBuilder */
     XAffineTransformBuilder toBuilder();
 };
 

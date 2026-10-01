@@ -13,8 +13,13 @@ module scriptinterop {
 
 interface XLayout;
 
+/** @gas Master */
 interface XMaster : XEditablePageBase
 {
+    /** The list always holds one layout, the master page itself, see XLayout.
+
+        @gas Master.getLayouts
+     */
     sequence<XLayout> getLayouts();
 };
 

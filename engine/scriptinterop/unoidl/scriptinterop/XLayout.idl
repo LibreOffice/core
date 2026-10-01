@@ -13,10 +13,26 @@ module scriptinterop {
 
 interface XMaster;
 
+/** A layout that slides are based on.
+
+    Collabora Online presentations have no layout pages of their own: each master page also
+    serves as the only layout based on it. A layout and its master are therefore the same
+    page.
+
+    @gas Layout
+ */
 interface XLayout : XEditablePageBase
 {
+    /** The layout name is the name of its master page.
+
+        @gas Layout.getLayoutName
+     */
     string getLayoutName();
 
+    /** This is the same page as the layout.
+
+        @gas Layout.getMaster
+     */
     XMaster getMaster();
 };
 

@@ -11,10 +11,18 @@
 
 module scriptinterop {
 
+/** A point on a page, such as an end of a line.
+
+    The coordinates are in points. No call returns this object yet.
+
+    @gas Point
+ */
 interface XPoint : XBase
 {
+    /** @unimplemented @gas Point.getX */
     double getX();
 
+    /** @unimplemented @gas Point.getY */
     double getY();
 };
 

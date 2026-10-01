@@ -11,17 +11,26 @@
 
 module scriptinterop {
 
+/** Only BLANK, TITLE, TITLE_AND_BODY, TITLE_AND_TWO_COLUMNS and TITLE_ONLY can be used to add a
+    slide so far. The others are rejected.
+
+    @gas SlidesApp.PredefinedLayout
+ */
 enum PredefinedLayout
 {
     UNSUPPORTED,
     BLANK,
+    /** A caption at the bottom. */
     CAPTION_ONLY,
+    /** A centered title and a subtitle. */
     TITLE,
     TITLE_AND_BODY,
     TITLE_AND_TWO_COLUMNS,
     TITLE_ONLY,
     SECTION_HEADER,
+    /** A section title and subtitle on one side, a description on the other. */
     SECTION_TITLE_AND_DESCRIPTION,
+    /** A title and a body in one narrow column. */
     ONE_COLUMN_TEXT,
     MAIN_POINT,
     BIG_NUMBER

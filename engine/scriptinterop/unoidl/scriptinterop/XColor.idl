@@ -11,12 +11,34 @@
 
 module scriptinterop {
 
+/** A color, either a concrete RGB color or a color from the theme.
+
+    No call returns this object yet.
+
+    @gas Color
+ */
 interface XColor : XBase
 {
+    /** Returns the color in "#rrggbb" form.
+
+        @throws RuntimeException
+            when the color is a theme color.
+
+        @todo Return an RGB color object, as Apps Script does.
+        @unimplemented
+        @gas Color.asRgbColor
+     */
     string asRgbColor();
 
+    /** @throws RuntimeException
+            when the color is not a theme color.
+
+        @unimplemented
+        @gas Color.asThemeColor
+     */
     XThemeColor asThemeColor();
 
+    /** @unimplemented @gas Color.getColorType */
     ColorType getColorType();
 };
 

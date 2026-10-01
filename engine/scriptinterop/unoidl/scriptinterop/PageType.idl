@@ -11,8 +11,10 @@
 
 module scriptinterop {
 
+/** @gas PageType */
 enum PageType
 {
+    /** A page kind that this API does not support, such as a notes page. */
     UNSUPPORTED,
     SLIDE,
     LAYOUT,

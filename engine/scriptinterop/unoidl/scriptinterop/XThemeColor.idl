@@ -11,10 +11,22 @@
 
 module scriptinterop {
 
+/** A color that refers to an entry of the theme instead of a concrete value.
+
+    No call returns this object yet.
+
+    @gas ThemeColor
+ */
 interface XThemeColor : XBase
 {
+    /** Always returns THEME.
+
+        @unimplemented
+        @gas ThemeColor.getColorType
+     */
     ColorType getColorType();
 
+    /** @unimplemented @gas ThemeColor.getThemeColorType */
     ThemeColorType getThemeColorType();
 };
 

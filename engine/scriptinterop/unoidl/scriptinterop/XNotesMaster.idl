@@ -11,6 +11,12 @@
 
 module scriptinterop {
 
+/** The notes master of the presentation, the template for the notes pages.
+
+    It has only the members shared by every page kind.
+
+    @gas NotesMaster
+ */
 interface XNotesMaster : XPageBase
 {
 };

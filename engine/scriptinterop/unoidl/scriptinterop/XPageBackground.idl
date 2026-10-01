@@ -11,27 +11,83 @@
 
 module scriptinterop {
 
+/** The background of a page.
+
+    No call returns a page background yet.
+
+    @gas PageBackground
+ */
 interface XPageBackground : XBase
 {
+    /** @returns
+            The picture fill, or null when the background is not a picture.
+
+        @unimplemented
+        @gas PageBackground.getPictureFill
+     */
     com::sun::star::beans::Optional<XPictureFill> getPictureFill();
 
+    /** @returns
+            The solid fill, or null when the background is not a solid color.
+
+        @unimplemented
+        @gas PageBackground.getSolidFill
+     */
     com::sun::star::beans::Optional<XSolidFill> getSolidFill();
 
+    /** @unimplemented @gas PageBackground.getType */
     PageBackgroundType getType();
 
+    /** @unimplemented @gas PageBackground.isVisible */
     boolean isVisible();
 
+    /** Sets an image as the background, stretched to the page.
+
+        @param image
+            The image, as a blob or an image URL.
+
+        @unimplemented
+        @gas PageBackground.setPictureFill
+     */
     void setPictureFill([in] any image);
 
+    /** @param color
+            A Color, a ThemeColorType value, or a color string.
+
+        @unimplemented
+        @gas PageBackground.setSolidFill
+     */
     [overload setSolidFill] void setSolidFill([in] any color);
 
+    /** @param color
+            A Color, a ThemeColorType value, or a color string.
+        @param alpha
+            Opacity from 0.0, fully transparent, to 1.0, opaque.
+
+        @unimplemented
+        @gas PageBackground.setSolidFill
+     */
     [overload setSolidFill] void setSolidFillWithAlpha([in] any color, [in] double alpha);
 
+    /** Red, green and blue each run from 0 to 255.
+
+        @unimplemented
+        @gas PageBackground.setSolidFill
+     */
     [overload setSolidFill] void setSolidFillRgb([in] long red, [in] long green, [in] long blue);
 
+    /** Red, green and blue each run from 0 to 255.
+
+        @param alpha
+            Opacity from 0.0, fully transparent, to 1.0, opaque.
+
+        @unimplemented
+        @gas PageBackground.setSolidFill
+     */
     [overload setSolidFill] void setSolidFillRgbWithAlpha([in] long red, [in] long green,
                                                        [in] long blue, [in] double alpha);
 
+    /** @unimplemented @gas PageBackground.setTransparent */
     void setTransparent();
 };
 

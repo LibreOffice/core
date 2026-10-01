@@ -14,22 +14,55 @@ module scriptinterop {
 interface XLayout;
 interface XNotesPage;
 
+/** @gas Slide */
 interface XSlide : XEditablePageBase
 {
+    /** Duplicates the slide and inserts the copy directly after it.
+
+        @gas Slide.duplicate
+     */
     XSlide duplicate();
 
+    /** This is the slide's master page as a layout, see XLayout. Every slide has a master page, so
+        the result is never null.
+
+        @gas Slide.getLayout
+     */
     com::sun::star::beans::Optional<XLayout> getLayout();
 
+    /** @gas Slide.getNotesPage */
     XNotesPage getNotesPage();
 
+    /** A slide reports LINKED when it carries a link to the presentation it came from, and
+        NOT_LINKED otherwise.
+
+        @gas Slide.getSlideLinkingMode
+     */
     SlideLinkingMode getSlideLinkingMode();
 
+    /** @gas Slide.isSkipped */
     boolean isSkipped();
 
+    /** @param index
+            0-based position of the slide after the move.
+
+        @unimplemented
+        @gas Slide.move
+     */
     void move([in] long index);
 
+    /** Gives the slide a solid background in the given color.
+
+        The background is stored on the slide itself and replaces what its master page would paint.
+
+        @param hexColor
+            The color as "#rrggbb" or a CSS color name such as "yellow".
+        @throws RuntimeException
+            when hexColor is neither.
+     */
     XSlide setBackgroundColor([in] string hexColor);
 
+    /** @gas Slide.setSkipped */
     void setSkipped([in] boolean skipped);
 };
 

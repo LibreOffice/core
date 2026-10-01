@@ -21,64 +21,195 @@ interface XShape;
 interface XSlideTable;
 interface XWordArt;
 
+/** The members of a page that elements can be added to: slides, layouts and master pages.
+
+    Positions and sizes are in points, measured from the top left corner of the page.
+ */
 interface XEditablePageBase : XPageBase
 {
+    /** @unimplemented @gas Page.getBackground */
     XPageBackground getBackground();
 
+    /** @unimplemented @gas Page.getColorScheme */
     XColorScheme getColorScheme();
 
+    /** A slide reports SLIDE and a master page MASTER. A layout reports LAYOUT when it was
+        obtained as a Layout, and MASTER when the same page is reached as a generic Page, for
+        example from the selection, see XLayout. Other pages, such as notes pages, report
+        UNSUPPORTED.
+
+        @gas Page.getPageType
+     */
     PageType getPageType();
 
+    /** @param pageElements
+            The page elements to group. They must all be on this page.
+
+        @unimplemented
+        @gas Page.group
+     */
     XGroup group([in] sequence<XPageElementBase> pageElements);
 
+    /** Inserts a copy, which may come from another page.
+
+        @unimplemented
+        @gas Page.insertGroup
+     */
     XGroup insertGroup([in] XGroup group);
 
+    /** Inserts an image at the top left corner of the page, at its own size.
+
+        @param image
+            The image, as a blob, an image page element to copy, or an image URL.
+
+        @unimplemented
+        @gas Page.insertImage
+     */
     [overload insertImage] XImage insertImage([in] any image);
 
+    /** @param image
+            The image, as a blob or an image URL.
+
+        @unimplemented
+        @gas Page.insertImage
+     */
     [overload insertImage] XImage insertImageAt([in] any image, [in] double left, [in] double top,
                                                 [in] double width, [in] double height);
 
+    /** Inserts a copy, which may come from another page.
+
+        @unimplemented
+        @gas Page.insertLine
+     */
     [overload insertLine] XLine insertLine([in] XLine line);
 
+    /** @unimplemented @gas Page.insertLine */
     [overload insertLine] XLine insertLineBetween([in] LineCategory lineCategory,
                                                   [in] XConnectionSite startConnectionSite,
                                                   [in] XConnectionSite endConnectionSite);
 
+    /** @unimplemented @gas Page.insertLine */
     [overload insertLine] XLine insertLineAt([in] LineCategory lineCategory, [in] double startLeft,
                                              [in] double startTop, [in] double endLeft,
                                              [in] double endTop);
 
+    /** Inserts a copy, which may come from another page.
+
+        @unimplemented
+        @gas Page.insertPageElement
+     */
     XPageElement insertPageElement([in] XPageElement pageElement);
 
+    /** @param shape
+            A ShapeType value for a new shape with a default size at the top left corner, or
+            a shape to copy.
+
+        @unimplemented
+        @gas Page.insertShape
+     */
     [overload insertShape] XShape insertShape([in] any shape);
 
+    /** @unimplemented @gas Page.insertShape */
     [overload insertShape] XShape insertShapeAt([in] ShapeType shapeType, [in] double left,
                                                 [in] double top, [in] double width,
                                                 [in] double height);
 
+    /** Inserts a table centered on the page.
+
+        @unimplemented
+        @gas Page.insertTable
+     */
     [overload insertTable] XSlideTable insertTable([in] long numRows, [in] long numColumns);
 
+    /** @unimplemented @gas Page.insertTable */
     [overload insertTable] XSlideTable insertTableAt([in] long numRows, [in] long numColumns,
                                                      [in] double left, [in] double top,
                                                      [in] double width, [in] double height);
 
+    /** Inserts a copy, which may come from another page.
+
+        @unimplemented
+        @gas Page.insertTable
+     */
     [overload insertTable] XSlideTable insertTableCopy([in] XSlideTable table);
 
+    /** Inserts a text box at the top left corner of the page.
+
+        The box is a square 3000000 EMU on a side, which is about 236.22 points. Its height stays
+        fixed, so long text overflows the box instead of growing it.
+
+        @gas Page.insertTextBox
+     */
     [overload insertTextBox] XShape insertTextBox([in] string text);
 
+    /** The height stays as given, so long text overflows the box instead of growing it. All values
+        are checked before the page is changed. left and top may be negative.
+
+        @throws RuntimeException
+            when width or height is negative, or when a value is too large for the page
+            coordinates.
+
+        @gas Page.insertTextBox
+     */
     [overload insertTextBox] XShape insertTextBoxAt([in] string text, [in] double left,
                                                     [in] double top, [in] double width,
                                                     [in] double height);
 
+    /** Inserts a copy, which may come from another page.
+
+        @unimplemented
+        @gas Page.insertWordArt
+     */
     XWordArt insertWordArt([in] XWordArt wordArt);
 
+    /** Removes the page from the presentation.
+
+        A slide can be removed unless it is the only slide. A layout or master page can be removed
+        unless it is the only master page or a slide still uses it. On a generic Page, such as one
+        from the selection, this call is not supported yet. Convert it with asSlide or asMaster
+        first.
+
+        @throws RuntimeException
+            when the page is the only slide or the only master page, when a slide still uses the
+            master page, or when called on a generic Page.
+
+        @gas Page.remove
+     */
     void remove();
 
+    /** Replaces every match of findText in the shapes on this page, ignoring case.
+
+        @returns
+            The number of occurrences replaced.
+        @throws RuntimeException
+            when findText is empty.
+
+        @gas Page.replaceAllText
+     */
     [overload replaceAllText] long replaceAllText([in] string findText, [in] string replaceText);
 
+    /** Replaces every match of findText in the shapes on this page.
+
+        @returns
+            The number of occurrences replaced.
+        @throws RuntimeException
+            when findText is empty.
+
+        @gas Page.replaceAllText
+     */
     [overload replaceAllText] long replaceAllTextMatchCase(
         [in] string findText, [in] string replaceText, [in] boolean matchCase);
 
+    /** Makes this page the current page in the view.
+
+        Selecting a layout or master page switches the view to master page editing. Selecting a
+        slide switches back to the normal view.
+
+        @throws RuntimeException
+            when the presentation has no drawing view.
+
+        @gas Page.selectAsCurrentPage
+     */
     void selectAsCurrentPage();
 };
 

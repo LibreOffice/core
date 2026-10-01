@@ -11,13 +11,24 @@
 
 module scriptinterop {
 
+/** CLIP_ART and DIAGRAM are never reported, since Collabora Online presentations have no
+    such placeholders.
+
+    @gas PlaceholderType
+ */
 enum PlaceholderType
 {
+    /** A placeholder kind that this API does not support, such as a handout page
+        placeholder.
+     */
     UNSUPPORTED,
+    /** Not a placeholder. */
     NONE,
+    /** A body text placeholder, including the notes text on a notes page. */
     BODY,
     CHART,
     CLIP_ART,
+    /** The title of a page on the title layout. */
     CENTERED_TITLE,
     DIAGRAM,
     DATE_AND_TIME,
@@ -29,7 +40,9 @@ enum PlaceholderType
     SLIDE_NUMBER,
     SUBTITLE,
     TABLE,
+    /** The title on any layout but the title layout. */
     TITLE,
+    /** The slide image on a notes page. */
     SLIDE_IMAGE
 };
 

@@ -13,20 +13,39 @@ module scriptinterop {
 
 interface XAffineTransform;
 
+/** Builds an affine transform from its six values.
+
+    Get one with newAffineTransformBuilder, which starts from the identity transform: scale 1,
+    shear 0, translation 0. See XAffineTransform for how the values map a point. The setters
+    return this builder, for chaining.
+
+    @gas AffineTransformBuilder
+ */
 interface XAffineTransformBuilder : XBase
 {
+    /** The builder stays usable after this call. Transforms built earlier keep their
+        values.
+
+        @gas AffineTransformBuilder.build
+     */
     XAffineTransform build();
 
+    /** @gas AffineTransformBuilder.setScaleX */
     XAffineTransformBuilder setScaleX([in] double scaleX);
 
+    /** @gas AffineTransformBuilder.setScaleY */
     XAffineTransformBuilder setScaleY([in] double scaleY);
 
+    /** @gas AffineTransformBuilder.setShearX */
     XAffineTransformBuilder setShearX([in] double shearX);
 
+    /** @gas AffineTransformBuilder.setShearY */
     XAffineTransformBuilder setShearY([in] double shearY);
 
+    /** @gas AffineTransformBuilder.setTranslateX */
     XAffineTransformBuilder setTranslateX([in] double translateX);
 
+    /** @gas AffineTransformBuilder.setTranslateY */
     XAffineTransformBuilder setTranslateY([in] double translateY);
 };
 

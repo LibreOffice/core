@@ -11,12 +11,34 @@
 
 module scriptinterop {
 
+/** An image used as a fill, such as a page background picture.
+
+    No call returns this object yet.
+
+    @gas PictureFill
+ */
 interface XPictureFill : XBase
 {
+    /** Returns the bytes of the image converted to the given MIME type, such as "image/png".
+
+        @todo Return an XBlob, as Apps Script does.
+        @unimplemented
+        @gas PictureFill.getAs
+     */
     sequence<byte> getAs([in] string contentType);
 
+    /** @todo Return an XBlob, as Apps Script does.
+        @unimplemented
+        @gas PictureFill.getBlob
+     */
     sequence<byte> getBlob();
 
+    /** @returns
+            The URL the image was taken from, or null when it has none.
+
+        @unimplemented
+        @gas PictureFill.getSourceUrl
+     */
     com::sun::star::beans::Optional<string> getSourceUrl();
 };
 

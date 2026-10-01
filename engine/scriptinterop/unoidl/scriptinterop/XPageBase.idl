@@ -20,34 +20,84 @@ interface XSlideTable;
 interface XVideo;
 interface XWordArt;
 
+/** The members every page kind shares: listing and finding its page elements.
+
+    Slides, layouts, master pages, notes pages and the notes master all have these members.
+    Lists are in drawing order, from back to front.
+ */
 interface XPageBase : XBase
 {
+    /** @unimplemented @gas Page.getGroups */
     sequence<XGroup> getGroups();
 
+    /** @unimplemented @gas Page.getImages */
     sequence<XImage> getImages();
 
+    /** @unimplemented @gas Page.getLines */
     sequence<XLine> getLines();
 
+    /** @unimplemented @gas Page.getObjectId */
     string getObjectId();
 
+    /** @returns
+            The page element, or null when the page has no element with that id.
+
+        @unimplemented
+        @gas Page.getPageElementById
+     */
     com::sun::star::beans::Optional<XPageElement> getPageElementById([in] string id);
 
+    /** Embedded objects, charts, form controls and other elements without a counterpart in this
+        API are included and report PageElementType.UNSUPPORTED.
+
+        @gas Page.getPageElements
+     */
     sequence<XPageElement> getPageElements();
 
+    /** Returns the first placeholder of the given type in drawing order.
+
+        The title of a page on the title layout is a CENTERED_TITLE. On every other layout it is a
+        TITLE.
+
+        @returns
+            The placeholder, or null when the page has none of that type.
+
+        @gas Page.getPlaceholder
+     */
     [overload getPlaceholder] com::sun::star::beans::Optional<XPageElement> getPlaceholder(
         [in] PlaceholderType placeholderType);
 
+    /** @param placeholderIndex
+            0-based position among the placeholders of that type on the page, in drawing order.
+            This is not the placeholder index stored in the file.
+
+        @returns
+            The placeholder, or null when the page has fewer placeholders of that type.
+        @throws RuntimeException
+            when placeholderIndex is negative.
+
+        @gas Page.getPlaceholder
+     */
     [overload getPlaceholder] com::sun::star::beans::Optional<XPageElement> getPlaceholderByIndex(
         [in] PlaceholderType placeholderType, [in] long placeholderIndex);
 
+    /** @gas Page.getPlaceholders */
     sequence<XPageElement> getPlaceholders();
 
+    /** Only elements of type PageElementType.SHAPE are included, such as text boxes, custom
+        shapes and text placeholders. Images, lines, tables, groups and the rest are left out.
+
+        @gas Page.getShapes
+     */
     sequence<XShape> getShapes();
 
+    /** @unimplemented @gas Page.getTables */
     sequence<XSlideTable> getTables();
 
+    /** @unimplemented @gas Page.getVideos */
     sequence<XVideo> getVideos();
 
+    /** @unimplemented @gas Page.getWordArts */
     sequence<XWordArt> getWordArts();
 };
 

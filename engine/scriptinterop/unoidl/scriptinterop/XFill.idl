@@ -11,23 +11,65 @@
 
 module scriptinterop {
 
+/** The fill of a shape's interior.
+
+    No call returns this object yet.
+
+    @gas Fill
+ */
 interface XFill : XBase
 {
+    /** @returns
+            The solid fill, or null when the fill is not a solid color.
+
+        @unimplemented
+        @gas Fill.getSolidFill
+     */
     com::sun::star::beans::Optional<XSolidFill> getSolidFill();
 
+    /** @unimplemented @gas Fill.getType */
     FillType getType();
 
+    /** @unimplemented @gas Fill.isVisible */
     boolean isVisible();
 
+    /** @param color
+            A Color, a ThemeColorType value, or a color string.
+
+        @unimplemented
+        @gas Fill.setSolidFill
+     */
     [overload setSolidFill] void setSolidFill([in] any color);
 
+    /** @param color
+            A Color, a ThemeColorType value, or a color string.
+        @param alpha
+            Opacity from 0.0, fully transparent, to 1.0, opaque.
+
+        @unimplemented
+        @gas Fill.setSolidFill
+     */
     [overload setSolidFill] void setSolidFillWithAlpha([in] any color, [in] double alpha);
 
+    /** Red, green and blue each run from 0 to 255.
+
+        @unimplemented
+        @gas Fill.setSolidFill
+     */
     [overload setSolidFill] void setSolidFillRgb([in] long red, [in] long green, [in] long blue);
 
+    /** Red, green and blue each run from 0 to 255.
+
+        @param alpha
+            Opacity from 0.0, fully transparent, to 1.0, opaque.
+
+        @unimplemented
+        @gas Fill.setSolidFill
+     */
     [overload setSolidFill] void setSolidFillRgbWithAlpha([in] long red, [in] long green,
                                                        [in] long blue, [in] double alpha);
 
+    /** @unimplemented @gas Fill.setTransparent */
     void setTransparent();
 };
 

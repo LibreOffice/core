@@ -11,12 +11,14 @@
 
 module scriptinterop {
 
+/** @gas LinkType */
 enum LinkType
 {
     UNSUPPORTED,
     URL,
     SLIDE_POSITION,
     SLIDE_ID,
+    /** A slide given by its 0-based index. */
     SLIDE_INDEX
 };
 

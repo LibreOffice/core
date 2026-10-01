@@ -11,11 +11,13 @@
 
 module scriptinterop {
 
+/** @gas PageBackgroundType */
 enum PageBackgroundType
 {
     UNSUPPORTED,
     NONE,
     SOLID,
+    /** An image stretched to fill the page. */
     PICTURE
 };
 

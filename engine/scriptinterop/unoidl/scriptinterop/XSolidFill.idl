@@ -11,10 +11,22 @@
 
 module scriptinterop {
 
+/** A solid color fill.
+
+    No call returns this object yet.
+
+    @gas SolidFill
+ */
 interface XSolidFill : XBase
 {
+    /** Returns the opacity, from 0.0, fully transparent, to 1.0, opaque.
+
+        @unimplemented
+        @gas SolidFill.getAlpha
+     */
     double getAlpha();
 
+    /** @unimplemented @gas SolidFill.getColor */
     XColor getColor();
 };
 

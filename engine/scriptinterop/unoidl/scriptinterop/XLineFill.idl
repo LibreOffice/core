@@ -11,18 +11,58 @@
 
 module scriptinterop {
 
+/** The fill of a line or of a shape's border.
+
+    No call returns this object yet.
+
+    @gas LineFill
+ */
 interface XLineFill : XBase
 {
+    /** @unimplemented @gas LineFill.getFillType */
     LineFillType getFillType();
 
+    /** @returns
+            The solid fill, or null when the line fill is not a solid color.
+
+        @unimplemented
+        @gas LineFill.getSolidFill
+     */
     com::sun::star::beans::Optional<XSolidFill> getSolidFill();
 
+    /** @param color
+            A Color, a ThemeColorType value, or a color string.
+
+        @unimplemented
+        @gas LineFill.setSolidFill
+     */
     [overload setSolidFill] void setSolidFill([in] any color);
 
+    /** @param color
+            A Color, a ThemeColorType value, or a color string.
+        @param alpha
+            Opacity from 0.0, fully transparent, to 1.0, opaque.
+
+        @unimplemented
+        @gas LineFill.setSolidFill
+     */
     [overload setSolidFill] void setSolidFillWithAlpha([in] any color, [in] double alpha);
 
+    /** Red, green and blue each run from 0 to 255.
+
+        @unimplemented
+        @gas LineFill.setSolidFill
+     */
     [overload setSolidFill] void setSolidFillRgb([in] long red, [in] long green, [in] long blue);
 
+    /** Red, green and blue each run from 0 to 255.
+
+        @param alpha
+            Opacity from 0.0, fully transparent, to 1.0, opaque.
+
+        @unimplemented
+        @gas LineFill.setSolidFill
+     */
     [overload setSolidFill] void setSolidFillRgbWithAlpha([in] long red, [in] long green,
                                                        [in] long blue, [in] double alpha);
 

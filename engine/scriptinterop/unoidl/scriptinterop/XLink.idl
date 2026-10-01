@@ -13,18 +13,58 @@ module scriptinterop {
 
 interface XSlide;
 
+/** A hyperlink on a shape or text, to a URL or to a slide.
+
+    Which getters return a value depends on getLinkType. The others return null. No call
+    returns this object yet.
+
+    @gas Link
+ */
 interface XLink : XBase
 {
+    /** @unimplemented @gas Link.getLinkType */
     LinkType getLinkType();
 
+    /** @returns
+            The slide, or null when the link is to a URL.
+
+        @unimplemented
+        @gas Link.getLinkedSlide
+     */
     com::sun::star::beans::Optional<XSlide> getLinkedSlide();
 
+    /** @returns
+            The slide id, or null when the link type is not SLIDE_ID.
+
+        @unimplemented
+        @gas Link.getSlideId
+     */
     com::sun::star::beans::Optional<string> getSlideId();
 
+    /** Returns the 0-based index of the linked slide.
+
+        @returns
+            The slide index, or null when the link type is not SLIDE_INDEX.
+
+        @unimplemented
+        @gas Link.getSlideIndex
+     */
     com::sun::star::beans::Optional<long> getSlideIndex();
 
+    /** @returns
+            The slide position, or null when the link type is not SLIDE_POSITION.
+
+        @unimplemented
+        @gas Link.getSlidePosition
+     */
     com::sun::star::beans::Optional<SlidePosition> getSlidePosition();
 
+    /** @returns
+            The URL, or null when the link type is not URL.
+
+        @unimplemented
+        @gas Link.getUrl
+     */
     com::sun::star::beans::Optional<string> getUrl();
 };
 

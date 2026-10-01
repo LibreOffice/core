@@ -11,6 +11,10 @@
 
 module scriptinterop {
 
+/** A slide given by its position relative to the current slide, as the target of a link.
+
+    @gas SlidePosition
+ */
 enum SlidePosition
 {
     NEXT_SLIDE,

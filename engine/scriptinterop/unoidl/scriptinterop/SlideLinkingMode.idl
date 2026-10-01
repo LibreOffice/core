@@ -11,6 +11,10 @@
 
 module scriptinterop {
 
+/** Whether a slide is linked to a slide in another presentation.
+
+    @gas SlideLinkingMode
+ */
 enum SlideLinkingMode
 {
     UNSUPPORTED,

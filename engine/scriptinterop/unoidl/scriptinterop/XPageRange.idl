@@ -11,8 +11,13 @@
 
 module scriptinterop {
 
+/** A collection of pages, such as the pages selected in the slide sorter.
+
+    @gas PageRange
+ */
 interface XPageRange : XBase
 {
+    /** @gas PageRange.getPages */
     sequence<XPage> getPages();
 };
 

@@ -11,48 +11,176 @@
 
 module scriptinterop {
 
+/** An Impress presentation: its slides, layouts, master pages and page size.
+
+    Get the presentation of the current document with getActivePresentation. All lengths are in
+    points. Slide indexes are 0-based.
+
+    @gas Presentation
+ */
 interface XPresentation : XBase
 {
+    /** Adds a blank slide at the end of the presentation.
+
+        The slide uses the master page of the slide it is inserted after and has no placeholders.
+
+        @gas Presentation.appendSlide
+     */
     [overload appendSlide] XSlide appendSlide();
 
+    /** Adds a slide with the given predefined layout at the end of the presentation.
+
+        Only a PredefinedLayout value is accepted, and only BLANK, TITLE, TITLE_AND_BODY,
+        TITLE_AND_TWO_COLUMNS and TITLE_ONLY. The layout creates the matching placeholders on the
+        new slide. A Layout or a Slide argument is not accepted yet.
+
+        @throws RuntimeException
+            when the argument is not a PredefinedLayout, or is one of the predefined layouts that
+            are not supported yet. The presentation is left unchanged.
+
+        @gas Presentation.appendSlide
+     */
     [overload appendSlide] XSlide appendSlideFrom([in] any layoutOrSlide);
 
+    /** @unimplemented @gas Presentation.appendSlide */
     [overload appendSlide] XSlide appendSlideLinked([in] XSlide slide,
                                                     [in] SlideLinkingMode linkingMode);
 
+    /** There is one layout per master page, see XLayout, so the list is as long as getMasters.
+
+        @gas Presentation.getLayouts
+     */
     sequence<XLayout> getLayouts();
 
+    /** @gas Presentation.getMasters */
     sequence<XMaster> getMasters();
 
+    /** This is the document title. Without a title, a saved document gives its file name without
+        the directory and the extension, and an unsaved one gives "Untitled presentation".
+
+        @gas Presentation.getName
+     */
     string getName();
 
+    /** This is the notes page of the first master page.
+
+        @gas Presentation.getNotesMaster
+     */
     XNotesMaster getNotesMaster();
 
+    /** The value is read from the notes page of the first slide.
+
+        @gas Presentation.getNotesPageHeight
+     */
     double getNotesPageHeight();
 
+    /** The value is read from the notes page of the first slide.
+
+        @gas Presentation.getNotesPageWidth
+     */
     double getNotesPageWidth();
 
+    /** Looks in every page of the presentation.
+
+        @returns
+            The page element, or null when no element has that id.
+
+        @unimplemented
+        @gas Presentation.getPageElementById
+     */
     com::sun::star::beans::Optional<XPageElement> getPageElementById([in] string id);
 
+    /** The value is read from the first slide.
+
+        @gas Presentation.getPageHeight
+     */
     double getPageHeight();
 
+    /** The value is read from the first slide.
+
+        @gas Presentation.getPageWidth
+     */
     double getPageWidth();
 
+    /** The result is never null. Its getters read the view at the moment each of them is called.
+
+        @gas Presentation.getSelection
+     */
     com::sun::star::beans::Optional<XSlideSelection> getSelection();
 
+    /** @returns
+            The slide, or null when no slide has that id.
+
+        @unimplemented
+        @gas Presentation.getSlideById
+     */
     com::sun::star::beans::Optional<XSlide> getSlideById([in] string id);
 
+    /** @gas Presentation.getSlides */
     sequence<XSlide> getSlides();
 
+    /** Inserts a blank slide at the given index.
+
+        The new slide uses the master page of the slide before it and has no placeholders.
+
+        @param index
+            0-based position of the new slide, from 1 up to the number of slides. Index 0 is not
+            supported yet.
+
+        @throws RuntimeException
+            when index is negative, greater than the number of slides, or 0.
+
+        @gas Presentation.insertSlide
+     */
     [overload insertSlide] XSlide insertSlide([in] long index);
 
+    /** Inserts a slide with the given predefined layout at the given index.
+
+        Only a PredefinedLayout value is accepted, and only BLANK, TITLE, TITLE_AND_BODY,
+        TITLE_AND_TWO_COLUMNS and TITLE_ONLY. A Layout or a Slide argument is not accepted yet.
+
+        @param index
+            0-based position of the new slide, from 1 up to the number of slides. Index 0 is not
+            supported yet.
+
+        @throws RuntimeException
+            when the argument is not a supported PredefinedLayout, or when index is negative,
+            greater than the number of slides, or 0.
+
+        @gas Presentation.insertSlide
+     */
     [overload insertSlide] XSlide insertSlideFrom([in] long index, [in] any layoutOrSlide);
 
+    /** @unimplemented @gas Presentation.insertSlide */
     [overload insertSlide] XSlide insertSlideLinked([in] long index, [in] XSlide slide,
                                                     [in] SlideLinkingMode linkingMode);
 
+    /** Replaces every match of findText throughout the presentation, ignoring case.
+
+        The search covers the shapes on every slide, on every slide's notes page, and on every
+        master page.
+
+        @returns
+            The number of occurrences replaced.
+        @throws RuntimeException
+            when findText is empty.
+
+        @gas Presentation.replaceAllText
+     */
     [overload replaceAllText] long replaceAllText([in] string findText, [in] string replaceText);
 
+    /** Replaces every match of findText throughout the presentation.
+
+        The search covers the shapes on every slide, on every slide's notes page, and on every
+        master page.
+
+        @returns
+            The number of occurrences replaced.
+        @throws RuntimeException
+            when findText is empty.
+
+        @gas Presentation.replaceAllText
+     */
     [overload replaceAllText] long replaceAllTextMatchCase(
         [in] string findText, [in] string replaceText, [in] boolean matchCase);
 };

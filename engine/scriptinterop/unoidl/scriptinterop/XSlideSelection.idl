@@ -11,18 +11,68 @@
 
 module scriptinterop {
 
+/** The selection in the presentation's view.
+
+    Each getter reads the view at the moment it is called, so the result follows later changes
+    to the selection.
+
+    @gas Selection
+ */
 interface XSlideSelection : XBase
 {
+    /** Returns the page shown in the view.
+
+        In the normal view this is a slide. In the master, notes or handout views it is a page of
+        that kind.
+
+        @returns
+            The current page, or null when there is no drawing view.
+
+        @gas Selection.getCurrentPage
+     */
     com::sun::star::beans::Optional<XPage> getCurrentPage();
 
+    /** @returns
+            The selected page elements, or null when no page element is selected.
+
+        @gas Selection.getPageElementRange
+     */
     com::sun::star::beans::Optional<XPageElementRange> getPageElementRange();
 
+    /** Returns the pages selected in the slide sorter.
+
+        @returns
+            The selected pages, or null when the view does not report selected pages.
+
+        @gas Selection.getPageRange
+     */
     com::sun::star::beans::Optional<XPageRange> getPageRange();
 
+    /** The result is TEXT while text is highlighted in a shape that is being edited,
+        PAGE_ELEMENT when page elements are selected, PAGE when pages are selected in the slide
+        sorter, CURRENT_PAGE when nothing is selected on the shown page, and NONE when there is no
+        current page. A shape that is being edited with nothing highlighted in it reports
+        PAGE_ELEMENT. TABLE_CELL is not reported yet.
+
+        @gas Selection.getSelectionType
+     */
     SelectionType getSelectionType();
 
+    /** @returns
+            The selected cells, or null when no table cells are selected.
+
+        @unimplemented
+        @gas Selection.getTableCellRange
+     */
     com::sun::star::beans::Optional<XSlideTableCellRange> getTableCellRange();
 
+    /** Returns the text that is highlighted in the shape being edited.
+
+        @returns
+            The highlighted text range, or null when no text is highlighted.
+
+        @gas Selection.getTextRange
+     */
     com::sun::star::beans::Optional<XTextRange> getTextRange();
 };
 
