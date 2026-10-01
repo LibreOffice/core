@@ -33,6 +33,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/itemset.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/dispatch.hxx>
 #include "doclinkdialog.hxx"
 #include <dialmgr.hxx>
 #include "dbregisterednamesconfig.hxx"
@@ -91,6 +95,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage(weld::Container* pPage, wel
     , m_xNew(m_xBuilder->weld_button(u"new"_ustr))
     , m_xEdit(m_xBuilder->weld_button(u"edit"_ustr))
     , m_xDelete(m_xBuilder->weld_button(u"delete"_ustr))
+    , m_xRemoveEmbedded(m_xBuilder->weld_button(u"removeembedded"_ustr))
     , m_xPathBox(m_xBuilder->weld_tree_view(u"pathctrl"_ustr))
     , m_xIter(m_xPathBox->make_iterator())
 {
@@ -107,6 +112,8 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage(weld::Container* pPage, wel
     m_xNew->connect_clicked( LINK( this, DbRegistrationOptionsPage, NewHdl ) );
     m_xEdit->connect_clicked( LINK( this, DbRegistrationOptionsPage, EditHdl ) );
     m_xDelete->connect_clicked( LINK( this, DbRegistrationOptionsPage, DeleteHdl ) );
+    m_xRemoveEmbedded->connect_clicked(LINK(this, DbRegistrationOptionsPage, RemoveEmbeddedHdl));
+    UpdateRemoveEmbedded();
 
     m_xPathBox->connect_column_clicked(LINK(this, DbRegistrationOptionsPage, HeaderSelect_Impl));
 
@@ -115,6 +122,42 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage(weld::Container* pPage, wel
     m_xPathBox->connect_selection_changed(LINK(this, DbRegistrationOptionsPage, PathSelect_Impl));
 
     m_xPathBox->set_help_id(HID_DBPATH_CTL_PATH);
+}
+
+namespace
+{
+const SfxSlot* lcl_GetRemoveEmbeddedSlot(SfxViewFrame* pViewFrame)
+{
+    // Only a module whose documents can embed a database defines this command.
+    return pViewFrame
+               ? SfxSlotPool::GetSlotPool(pViewFrame).GetUnoSlot(u"ClearEmbeddedDatabase"_ustr)
+               : nullptr;
+}
+}
+
+void DbRegistrationOptionsPage::UpdateRemoveEmbedded()
+{
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    const SfxSlot* pSlot = lcl_GetRemoveEmbeddedSlot(pViewFrame);
+    if (!pSlot)
+    {
+        m_xRemoveEmbedded->hide();
+        return;
+    }
+
+    SfxPoolItemHolder aState;
+    const SfxItemState eState
+        = pViewFrame->GetDispatcher()->QueryState(pSlot->GetSlotId(), aState);
+    m_xRemoveEmbedded->show();
+    m_xRemoveEmbedded->set_sensitive(eState >= SfxItemState::DEFAULT);
+}
+
+IMPL_LINK_NOARG(DbRegistrationOptionsPage, RemoveEmbeddedHdl, weld::Button&, void)
+{
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if (const SfxSlot* pSlot = lcl_GetRemoveEmbeddedSlot(pViewFrame))
+        pViewFrame->GetDispatcher()->Execute(pSlot->GetSlotId(), SfxCallMode::SYNCHRON);
+    UpdateRemoveEmbedded();
 }
 
 DbRegistrationOptionsPage::~DbRegistrationOptionsPage()

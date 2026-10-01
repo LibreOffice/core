@@ -17,9 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+#include <config_fuzzers.h>
+
 #include <memory>
 
 #include <hintids.hxx>
+#include <dbmgr.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <svl/whiter.hxx>
 #include <svl/cjkoptions.hxx>
@@ -111,6 +115,16 @@ void SwView::GetState(SfxItemSet &rSet)
                     if (!m_pWrtShell->GetNavigationMgr().backEnabled())
                         rSet.DisableItem(FN_SCROLL_PREV);
                 }
+            }
+            break;
+            case FN_CLEAR_EMBEDDED_DATABASE:
+            {
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
+                const SwDBManager* pDBManager = m_pWrtShell->GetDBManager();
+                if (!pDBManager || pDBManager->getEmbeddedName().isEmpty()
+                    || GetDocShell()->IsReadOnly())
+#endif
+                    rSet.DisableItem(nWhich);
             }
             break;
             case FN_EDIT_LINK_DLG:

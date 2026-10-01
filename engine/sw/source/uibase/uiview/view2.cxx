@@ -693,6 +693,17 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_EDIT_LINK_DLG:
             EditLinkDlg();
             break;
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
+        case FN_CLEAR_EMBEDDED_DATABASE:
+            if (SwDBManager* pDBManager = m_pWrtShell->GetDBManager())
+            {
+                pDBManager->setEmbeddedName(OUString(), *GetDocShell());
+                GetDocShell()->SetModified();
+                GetViewFrame().GetBindings().Invalidate(FN_CLEAR_EMBEDDED_DATABASE);
+                NotifyDBChanged();
+            }
+            break;
+#endif
         case SID_REFRESH_VIEW:
             GetEditWin().Invalidate();
             m_pWrtShell->Reformat();

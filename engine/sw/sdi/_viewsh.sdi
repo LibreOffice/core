@@ -394,6 +394,11 @@ interface BaseTextEditView
         StateMethod = GetState ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    FN_CLEAR_EMBEDDED_DATABASE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     FN_SPELL_GRAMMAR_DIALOG
     [
         ExecMethod = Execute ;

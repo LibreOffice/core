@@ -466,6 +466,24 @@ SfxVoidItem ChangeDatabaseField FN_CHANGE_DBFIELD
     GroupId = SfxGroupId::Data;
 ]
 
+SfxVoidItem ClearEmbeddedDatabase FN_CLEAR_EMBEDDED_DATABASE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Data;
+]
+
 SfxVoidItem ChapterNumberingDialog FN_NUMBERING_OUTLINE_DLG
 ()
 [

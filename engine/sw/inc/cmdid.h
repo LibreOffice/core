@@ -218,6 +218,7 @@ class SwUINumRuleItem;
 
 #define FN_INSERT_BREAK_DLG     (FN_INSERT + 4 )  /* Break */
 #define FN_INSERT_COLUMN_BREAK  (FN_INSERT + 5 )  /* Column break */
+#define FN_CLEAR_EMBEDDED_DATABASE (FN_INSERT + 6 )  /* Remove the embedded database */
 #define FN_INSERT_FIELD         TypedWhichId<SfxStringItem>(FN_INSERT + 8 )  /* Textcommand */
 #define FN_CHANGE_DBFIELD       (FN_INSERT + 9 )  /* Change the database field */
 

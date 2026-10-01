@@ -269,6 +269,9 @@ namespace dbaui
 
         /// removes (and cleans up) the entry for the given data source
         void        impl_cleanupDataSourceEntry( std::u16string_view _rDataSourceName );
+        void        impl_cleanupDataSourceEntry(const weld::TreeIter& rDataSourceEntry);
+        /// Remove the entry for a data source that the tree holds by URL, if there is one.
+        void        impl_cleanupURLDataSourceEntry(const OUString& rDataSource);
 
         /// clears the tree list box
         void clearTreeModel();
