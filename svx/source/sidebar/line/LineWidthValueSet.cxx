@@ -31,7 +31,6 @@ namespace svx::sidebar {
 
 LineWidthValueSet::LineWidthValueSet()
     : ValueSet(nullptr)
-    , nSelItem(0)
     , bCusEnable(false)
 {
 }
@@ -54,7 +53,6 @@ void LineWidthValueSet::SetUnit(std::array<OUString,9> const & strUnits)
 
 void LineWidthValueSet::SetSelItem(sal_uInt16 nSel)
 {
-    nSelItem = nSel;
     if(nSel == 0)
     {
         SelectItem(1); // ,false); // 'false' nut supported by AOO
@@ -62,7 +60,7 @@ void LineWidthValueSet::SetSelItem(sal_uInt16 nSel)
     }
     else
     {
-        SelectItem(nSelItem);
+        SelectItem(nSel);
         GrabFocus();
     }
 }
@@ -115,7 +113,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     }
     else
     {
-        if( nSelItem ==  nItemId )
+        if (IsItemSelected(nItemId))
         {
             tools::Rectangle aBackRect = aRect;
             aBackRect.AdjustTop(3 );
@@ -125,7 +123,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         }
 
         //draw text
-        if(nSelItem ==  nItemId )
+        if (IsItemSelected(nItemId))
             aFont.SetColor(COL_WHITE);
         else
             aFont.SetColor(Application::GetSettings().GetStyleSettings().GetFieldTextColor());
@@ -134,7 +132,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         pDev->DrawText(aStart, maStrUnits[ nItemId - 1 ]);  //can't set DrawTextFlags::EndEllipsis here ,or the text will disappear
 
         //draw line
-        if( nSelItem ==  nItemId )
+        if (IsItemSelected(nItemId))
             pDev->SetLineColor(COL_WHITE);
         else
             pDev->SetLineColor(Application::GetSettings().GetStyleSettings().GetFieldTextColor());

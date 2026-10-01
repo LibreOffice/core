@@ -132,7 +132,7 @@ IMPL_LINK_NOARG(LineWidthPopup, VSSelectHdl, ValueSet*, void)
 
 IMPL_LINK_NOARG(LineWidthPopup, MFModifyHdl, weld::MetricSpinButton&, void)
 {
-    if (m_xVSWidth->GetSelItem())
+    if (!m_xVSWidth->IsNoSelection() && m_xVSWidth->GetSelectedItemId() != 0)
     {
         m_xVSWidth->SetSelItem(0);
         m_xVSWidth->SetFormat();
