@@ -4175,6 +4175,9 @@ kbd,
 
 .ui-editengine .ui-editengine-paragraph {
 	min-height: 1.4em;
+	/* Each paragraph keeps the height of its text when the text is taller than the editor, and the
+	   editor scrolls. */
+	flex-shrink: 0;
 }
 
 .ui-editengine .ui-editengine-paragraph[data-bullet]::before {

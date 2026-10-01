@@ -387,6 +387,40 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		});
 	});
 
+	// Notes taller than the pane scroll, and each paragraph stays as tall as its text, so each
+	// paragraph sits below the one before it.
+	it('each paragraph of long notes keeps the height of its text', function () {
+		openNotesPane();
+
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+		var line = 'Testing testing testing testing '.repeat(8);
+		var lines = [];
+		for (var i = 0; i < 6; ++i)
+			lines.push(line);
+
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).then(function (element) {
+			var win = element[0].ownerDocument.defaultView;
+			var data = new win.DataTransfer();
+			data.setData('text/plain', lines.join('\n'));
+			element[0].dispatchEvent(new win.ClipboardEvent('paste', {
+				clipboardData: data, bubbles: true, cancelable: true
+			}));
+		});
+
+		cy.cGet(paragraph).should('have.length', 6);
+		cy.cGet(editEngine).should(function (element) {
+			expect(element[0].scrollHeight).to.be.greaterThan(element[0].clientHeight);
+		});
+		cy.cGet(paragraph).should(function (elements) {
+			elements.each(function (index, element) {
+				expect(element.getBoundingClientRect().height)
+					.to.be.at.least(element.scrollHeight - 1);
+			});
+		});
+	});
+
 	// While the notes have the focus, the Undo and Redo buttons act on what was typed there. The
 	// slide added before stays, although the document can undo adding it.
 	it('the Undo and Redo buttons act on the notes while they have the focus', function () {
