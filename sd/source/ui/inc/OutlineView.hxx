@@ -122,7 +122,7 @@ public:
     DECL_LINK( DepthChangedHdl, ::Outliner::DepthChangeHdlParam, void );
     DECL_LINK( StatusEventHdl, EditStatus&, void );
     DECL_LINK( BeginMovingHdl, ::Outliner *, void );
-    DECL_LINK( EndMovingHdl, ::Outliner *, void );
+    DECL_LINK( EndMovingHdl, ::Outliner::MoveParagraphsHdlParam, void );
     DECL_LINK( RemovingPagesHdl, OutlinerView *, bool );
     DECL_LINK( IndentingPagesHdl, OutlinerView *, bool );
     DECL_LINK( BeginDropHdl, EditView*, void );
@@ -192,9 +192,6 @@ private:
     OutlineViewShell&   mrOutlineViewShell;
     SdOutliner&         mrOutliner;
     std::unique_ptr<OutlinerView> mpOutlinerViews[MAX_OUTLINERVIEWS];
-
-    std::vector<Paragraph*> maOldParaOrder;
-    std::vector<Paragraph*> maSelectedParas;
 
     sal_Int32               mnPagesToProcess;    // for the progress bar
     sal_Int32               mnPagesProcessed;
