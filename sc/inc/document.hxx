@@ -859,6 +859,10 @@ public:
     void                         RefreshDirtyTableColumnNames();
     SC_DLLPUBLIC sc::ExternalDataMapper& GetExternalDataMapper();
 
+    /** True when a pivot table takes its data from a database document named by URL rather than
+        from a registered data source. */
+    bool HasDataPilotDatabaseLink() const;
+
     SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock( const ScRange& rBlock, OUString& rName,
                                                      bool* pSheetLocal = nullptr ) const;
 
