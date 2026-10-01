@@ -34,6 +34,10 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
 	UIConfig_dbtdata \
 ))
 
+$(eval $(call gb_Module_add_check_targets,dbaccess,\
+    CppunitTest_dbaccess_xmlimport \
+))
+
 ifneq ($(OS),iOS)
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
