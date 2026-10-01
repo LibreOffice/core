@@ -153,7 +153,7 @@ ChartTypeTabPage::~ChartTypeTabPage()
     m_xSubTypeList.reset();
 }
 
-ChartTypeParameter ChartTypeTabPage::getCurrentParamter() const
+ChartTypeParameter ChartTypeTabPage::getCurrentParameter() const
 {
     ChartTypeParameter aParameter;
     aParameter.nSubTypeIndex = static_cast<sal_Int32>(m_xSubTypeList->GetSelectedItemId());
@@ -181,7 +181,7 @@ void ChartTypeTabPage::stateChanged()
         return;
     m_nChangingCalls++;
 
-    ChartTypeParameter aParameter( getCurrentParamter() );
+    ChartTypeParameter aParameter(getCurrentParameter());
     if( m_pCurrentMainType )
     {
         m_pCurrentMainType->adjustParameterToSubType( aParameter );
@@ -228,7 +228,7 @@ IMPL_LINK_NOARG(ChartTypeTabPage, SelectSubTypeHdl, ValueSet*, void)
 {
     if( m_pCurrentMainType )
     {
-        ChartTypeParameter aParameter( getCurrentParamter() );
+        ChartTypeParameter aParameter(getCurrentParameter());
         m_pCurrentMainType->adjustParameterToSubType( aParameter );
         fillAllControls( aParameter, false );
         commitToModel( aParameter );
@@ -239,7 +239,7 @@ IMPL_LINK_NOARG(ChartTypeTabPage, SelectMainTypeHdl, weld::ItemView&, void) { se
 
 void ChartTypeTabPage::selectMainType()
 {
-    ChartTypeParameter aParameter( getCurrentParamter() );
+    ChartTypeParameter aParameter(getCurrentParameter());
 
     if( m_pCurrentMainType )
     {
@@ -391,7 +391,7 @@ rtl::Reference< ChartTypeTemplate > ChartTypeTabPage::getCurrentTemplate() const
 {
     if( m_pCurrentMainType && m_xChartModel.is() )
     {
-        ChartTypeParameter aParameter( getCurrentParamter() );
+        ChartTypeParameter aParameter(getCurrentParameter());
         m_pCurrentMainType->adjustParameterToSubType( aParameter );
         rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = m_xChartModel->getTypeManager();
         return m_pCurrentMainType->getCurrentTemplate( aParameter, xChartTypeManager );
