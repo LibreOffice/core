@@ -50,8 +50,8 @@ L10N_ALL_JS_ENTRY = l10n-all.js
 
 $(L10N_ALL_JS) : $(wildcard $(srcdir)/po/ui-*.po) $(wildcard $(srcdir)/po/help-*.po) $(UNO_GENERATED_STAMP) $(shell find $(srcdir)/l10n -name '*.*') $(srcdir)/util/create-l10n-all-js.py
 	@for lang in $(L10N_LANGS); do \
-		$(srcdir)/util/po2json.py --quiet $(srcdir)/po/ui-$$lang.po -o $(srcdir)/po/ui-$$lang.po.json || exit 1; \
-		if test -f $(srcdir)/po/help-$$lang.po; then $(srcdir)/util/po2json.py --quiet $(srcdir)/po/help-$$lang.po -o $(srcdir)/po/help-$$lang.po.json || exit 1; fi; \
+		$(PYTHON) $(srcdir)/util/po2json.py --quiet $(srcdir)/po/ui-$$lang.po -o $(srcdir)/po/ui-$$lang.po.json || exit 1; \
+		if test -f $(srcdir)/po/help-$$lang.po; then $(PYTHON) $(srcdir)/util/po2json.py --quiet $(srcdir)/po/help-$$lang.po -o $(srcdir)/po/help-$$lang.po.json || exit 1; fi; \
 	done
 	@mkdir -p $(dir $@)
 	$(PYTHON) $(srcdir)/util/create-l10n-all-js.py >$@
@@ -1186,7 +1186,7 @@ prettier.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
 # depend on it.
 $(srcdir)/l10n/localizations.json: $(abs_top_srcdir)/scripts/genlangmaps.py $(wildcard $(LANGS_CONF)) \
 		$(wildcard $(srcdir)/po/ui-*.po) $(wildcard $(srcdir)/po/help-*.po)
-	$(QUIET_GENLANGMAPS) test ! -f "$(LANGS_CONF)" || $(abs_top_srcdir)/scripts/genlangmaps.py $(abs_top_srcdir) $(ENGINE_SRCDIR)
+	$(QUIET_GENLANGMAPS) test ! -f "$(LANGS_CONF)" || $(PYTHON) $(abs_top_srcdir)/scripts/genlangmaps.py $(abs_top_srcdir) $(ENGINE_SRCDIR)
 
 # The same run wrote these two, so they are up to date once it has run.
 $(srcdir)/l10n/help-localizations.json $(srcdir)/l10n/uno-localizations.json: $(srcdir)/l10n/localizations.json
@@ -1207,11 +1207,11 @@ $(srcdir)/src/unocommands.js: $(abs_top_srcdir)/scripts/unocommands.py \
 		$(wildcard $(ENGINE_UI_XCU_DIR)/*.xcu) \
 		$(wildcard $(srcdir)/src/control/*.js $(srcdir)/src/control/*.ts \
 			$(srcdir)/src/control/jsdialog/*.js $(srcdir)/src/control/jsdialog/*.ts)
-	$(QUIET_UNOCOMMANDS) test ! -d "$(ENGINE_UI_XCU_DIR)" || $(abs_top_srcdir)/scripts/unocommands.py --update $(abs_top_srcdir) $(ENGINE_SRCDIR)
+	$(QUIET_UNOCOMMANDS) test ! -d "$(ENGINE_UI_XCU_DIR)" || $(PYTHON) $(abs_top_srcdir)/scripts/unocommands.py --update $(abs_top_srcdir) $(ENGINE_SRCDIR)
 
 $(UNO_GENERATED_STAMP): $(abs_top_srcdir)/scripts/unocommands.py $(L10N_MAPS_STAMP) $(srcdir)/src/unocommands.js \
 		$(wildcard $(ENGINE_SRCDIR)/translations/source/*/officecfg/registry/data/org/openoffice/Office/UI.po)
-	$(QUIET_UNOCOMMANDS) test ! -d "$(ENGINE_UI_XCU_DIR)" || $(abs_top_srcdir)/scripts/unocommands.py --translate $(abs_top_srcdir) $(ENGINE_SRCDIR)/translations
+	$(QUIET_UNOCOMMANDS) test ! -d "$(ENGINE_UI_XCU_DIR)" || $(PYTHON) $(abs_top_srcdir)/scripts/unocommands.py --translate $(abs_top_srcdir) $(ENGINE_SRCDIR)/translations
 	@mkdir -p $(dir $@)
 	@touch $@
 
@@ -1229,7 +1229,7 @@ $(UNO_L10N_STAMP): $(UNO_GENERATED_STAMP)
 $(srcdir)/src/unoshortcuts.ts: $(abs_top_srcdir)/scripts/unoshortcuts.py \
 		$(wildcard $(ENGINE_SRCDIR)/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu) \
 		$(wildcard $(ENGINE_SRCDIR)/vcl/unx/generic/app/keysymnames.cxx)
-	$(QUIET_UNOSHORTCUTS) test ! -d "$(ENGINE_UI_XCU_DIR)" || $(abs_top_srcdir)/scripts/unoshortcuts.py --update $(abs_top_srcdir) $(ENGINE_SRCDIR)
+	$(QUIET_UNOSHORTCUTS) test ! -d "$(ENGINE_UI_XCU_DIR)" || $(PYTHON) $(abs_top_srcdir)/scripts/unoshortcuts.py --update $(abs_top_srcdir) $(ENGINE_SRCDIR)
 
 $(INTERMEDIATE_DIR)/cool-src.js: tscompile.done $(call prereq_cool) $(COOL_JS_DST) $(srcdir)/src/unocommands.js $(abs_top_srcdir)/scripts/unocommands.py $(srcdir)/cool-src.js.m4
 	@mkdir -p $(dir $@)
@@ -1431,7 +1431,7 @@ install-demo-extensions:
 				test -f "$$po" || continue; \
 				lang=$$(basename "$$po" .po) && \
 				mkdir -p $(DIST_FOLDER)/extensions/$$id/l10n && \
-				$(srcdir)/util/po2json.py --quiet "$$po" -o $(DIST_FOLDER)/extensions/$$id/l10n/$$lang.json || exit 1; \
+				$(PYTHON) $(srcdir)/util/po2json.py --quiet "$$po" -o $(DIST_FOLDER)/extensions/$$id/l10n/$$lang.json || exit 1; \
 			done && \
 			ids="$$ids$${ids:+,}\"$$id\""; \
 		elif test -f "$$dir/appsscript.json"; then \
@@ -1517,10 +1517,10 @@ $(DIST_FOLDER)/images/%.png: $(JQUERY_MINIFIED_IMAGE_PATH)/%.png
 	@cp $< $@
 
 $(DIST_FOLDER)/l10n/help-%.json: $(srcdir)/po/help-%.po
-	@$(srcdir)/util/po2json.py --quiet $< -o $@
+	@$(PYTHON) $(srcdir)/util/po2json.py --quiet $< -o $@
 
 $(DIST_FOLDER)/l10n/ui-%.json: $(srcdir)/po/ui-%.po
-	@$(srcdir)/util/po2json.py --quiet $< -o $@
+	@$(PYTHON) $(srcdir)/util/po2json.py --quiet $< -o $@
 
 $(DIST_FOLDER)/admin/%: $(srcdir)/admin/%
 	@mkdir -p $(dir $@)
@@ -1759,7 +1759,7 @@ pot:
 		test -f "$$dir/manifest.json" || continue; \
 		$(PYTHON) util/extension-pot.py "$$dir" || exit 1; \
 	done
-	$(srcdir)/util/appendwelcome.py po/templates/welcome.pot po/templates/cool-ui.pot
+	$(PYTHON) $(srcdir)/util/appendwelcome.py po/templates/welcome.pot po/templates/cool-ui.pot
 	rm po/templates/welcome.pot
 	msguniq -w 78 -t UTF-8 po/templates/cool-ui.pot > po/templates/cool-ui.pot.new; mv po/templates/cool-ui.pot.new po/templates/cool-ui.pot
 

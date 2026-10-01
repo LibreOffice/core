@@ -32,14 +32,14 @@ autogen_input_goals = $(filter-out %clean %clean-am am--depfiles,$(or $(MAKECMDG
 include $(top_builddir)/autogen-input.mk
 
 $(top_builddir)/autogen-input.mk: $(if $(autogen_input_goals),$(wildcard $(top_builddir)/autogen.input))
-	$(if $<,$(abs_top_srcdir)/autogen.py)
+	$(if $<,$(PYTHON) $(abs_top_srcdir)/autogen.py)
 	@echo '# Marks the autogen.input that the build tree was configured from.' > $@
 
 DISTCLEANFILES = autogen-input.mk
 
 build-samples:
 	$(QUIET_MKDIRP) mkdir -p $(abs_top_builddir)/test/samples
-	$(QUIET_SAMPLES) $(abs_top_srcdir)/scripts/build-samples.py $(abs_top_srcdir)/test/samples $(abs_top_srcdir)/test/samples
+	$(QUIET_SAMPLES) $(PYTHON) $(abs_top_srcdir)/scripts/build-samples.py $(abs_top_srcdir)/test/samples $(abs_top_srcdir)/test/samples
 
 if ENABLE_MOBILEAPP
 
@@ -520,10 +520,10 @@ dist-hook:
 # engine is present here, in the git checkout where make dist runs). genlangmaps
 # runs first because unocommands.py --translate is driven by the generated
 # uno-localizations.json.
-	$(abs_top_srcdir)/scripts/genlangmaps.py $(distdir) $(abs_top_srcdir)/engine
-	$(abs_top_srcdir)/scripts/unocommands.py --update $(distdir) $(abs_top_srcdir)/engine
-	$(abs_top_srcdir)/scripts/unocommands.py --translate $(distdir) $(abs_top_srcdir)/engine/translations
-	$(abs_top_srcdir)/scripts/unoshortcuts.py --update $(distdir) $(abs_top_srcdir)/engine
+	$(PYTHON) $(abs_top_srcdir)/scripts/genlangmaps.py $(distdir) $(abs_top_srcdir)/engine
+	$(PYTHON) $(abs_top_srcdir)/scripts/unocommands.py --update $(distdir) $(abs_top_srcdir)/engine
+	$(PYTHON) $(abs_top_srcdir)/scripts/unocommands.py --translate $(distdir) $(abs_top_srcdir)/engine/translations
+	$(PYTHON) $(abs_top_srcdir)/scripts/unoshortcuts.py --update $(distdir) $(abs_top_srcdir)/engine
 
 EXTRA_DIST = \
              $(server_mans) \
