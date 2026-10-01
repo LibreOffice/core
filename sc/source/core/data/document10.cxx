@@ -26,6 +26,9 @@
 #include <editeng/colritem.hxx>
 #include <scitems.hxx>
 #include <datamapper.hxx>
+#include <docsh.hxx>
+#include <dpobject.hxx>
+#include <dpsdbtab.hxx>
 
 // Add totally brand-new methods to this source file.
 
@@ -948,6 +951,20 @@ sc::ExternalDataMapper& ScDocument::GetExternalDataMapper()
         mpDataMapper.reset(new sc::ExternalDataMapper(this));
 
     return *mpDataMapper;
+}
+
+bool ScDocument::HasDataPilotDatabaseLink() const
+{
+    if (!pDPCollection)
+        return false;
+
+    for (size_t i = 0, nCount = pDPCollection->GetCount(); i < nCount; ++i)
+    {
+        const ScImportSourceDesc* pDesc = (*pDPCollection)[i].GetImportSourceDesc();
+        if (pDesc && !ScDPCollection::IsRegisteredDatabase(pDesc->aDBName))
+            return true;
+    }
+    return false;
 }
 
 void ScDocument::StoreTabToCache(SCTAB nTab, SvStream& rStrm) const
