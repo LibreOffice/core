@@ -63,6 +63,7 @@
 #include <DrawDocShell.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>
+#include <NotesPanelView.hxx>
 #include <PlaceholderDecoration.hxx>
 #include <sdresid.hxx>
 #include <unokywds.hxx>
@@ -503,10 +504,21 @@ bool View::SdrBeginTextEdit(
         setInteractiveSlideShow(false);
     }
 
+    // A notes pane that holds these notes writes its text back and lets them go, so the edit here
+    // starts from that text.
+    SdPage* pEditedPage = dynamic_cast<SdPage*>(pPage);
+    const bool bNotesObj = pEditedPage && pEditedPage->GetPresObjKind(pObj) == PresObjKind::Notes;
+    if (bNotesObj)
+        NotesPanelView::releaseViews(DynCastSdrTextObj(pObj));
+
     bool bReturn = FmFormView::SdrBeginTextEdit(
         pObj, pPV, pWin, bIsNewObj, pOutl,
         pGivenOutlinerView, bDontDeleteOutliner,
         bOnlyOneView, bGrabFocus);
+
+    // The notes panes show notes that are edited here as held by this view.
+    if (bReturn && bNotesObj)
+        NotesPanelView::refreshViews(DynCastSdrTextObj(pObj), nullptr);
 
     if ( mpViewSh )
     {
@@ -586,6 +598,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
     SdPage* pTextPage = pObj ? dynamic_cast<SdPage*>(pObj->getSdrPageFromSdrObject()) : nullptr;
     const bool bGroupUndo = IsUndoEnabled() && pTextPage
                             && pTextPage->GetPresObjKind(pObj) != PresObjKind::NONE;
+    const bool bNotesObj = pTextPage && pTextPage->GetPresObjKind(pObj) == PresObjKind::Notes;
     std::unique_ptr<SdrUndoObjSetText> pTextUndo;
     if (bGroupUndo)
     {
@@ -682,6 +695,10 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
 
     if (bGroupUndo)
         EndUndo();
+
+    // The notes panes can edit the notes again, and show the text written here.
+    if (bNotesObj)
+        NotesPanelView::refreshViews(pObj, nullptr);
 
     return eKind;
 }

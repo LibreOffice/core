@@ -25,13 +25,37 @@
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svx/svdviter.hxx>
 #include <svx/svxids.hrc>
+#include <tools/lazydelete.hxx>
 #include <EventMultiplexer.hxx>
 #include <app.hrc>
 #include <strings.hrc>
 
+#include <span>
+#include <vector>
+
 namespace sd
 {
+namespace
+{
+/// The notes panes that exist, in any view of any document. Null once VCL has shut down.
+std::vector<NotesPanelView*>* notesPanelViewRegistry()
+{
+    static ::tools::DeleteOnDeinit<std::vector<NotesPanelView*>> aViews;
+    return aViews.get();
+}
+
+/// Every notes pane that exists, in any view of any document.
+std::span<NotesPanelView* const> allNotesPanelViews()
+{
+    std::vector<NotesPanelView*>* pViews = notesPanelViewRegistry();
+    if (!pViews)
+        return {};
+    return *pViews;
+}
+}
+
 NotesPanelView::NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,
                                NotesPanelViewShell& rNotesPanelViewShell)
     : ::sd::SimpleOutlinerView(*rDocSh.GetDoc(), pWindow->GetOutDev(), &rNotesPanelViewShell)
@@ -56,6 +80,9 @@ NotesPanelView::NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,
     // fill Outliner with contents
     FillOutliner();
 
+    if (std::vector<NotesPanelView*>* pViews = notesPanelViewRegistry())
+        pViews->push_back(this);
+
     mrNotesPanelViewShell.GetViewShellBase().GetEventMultiplexer()->AddEventListener(
         LINK(this, NotesPanelView, EventMultiplexerListener));
 
@@ -67,6 +94,17 @@ NotesPanelView::NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,
 
 NotesPanelView::~NotesPanelView()
 {
+    if (std::vector<NotesPanelView*>* pViews = notesPanelViewRegistry())
+        std::erase(*pViews, this);
+
+    // The notes this view was editing keep its last typing and are free for the other views again.
+    if (mbInFocus)
+    {
+        mbInFocus = false;
+        commitNotes();
+        refreshViews(getEditedNotesObj(), this);
+    }
+
     mrNotesPanelViewShell.GetViewShellBase().GetEventMultiplexer()->RemoveEventListener(
         LINK(this, NotesPanelView, EventMultiplexerListener));
 
@@ -77,6 +115,9 @@ NotesPanelView::~NotesPanelView()
 
 void NotesPanelView::FillOutliner()
 {
+    SdrTextObj* pPreviousNotesObj = getEditedNotesObj();
+    const bool bWasInFocus = mbInFocus;
+
     if (mbInFocus)
         commitNotes();
 
@@ -89,16 +130,102 @@ void NotesPanelView::FillOutliner()
 
     SdrTextObj* pNotesTextObj = getNotesTextObj();
     if (!pNotesTextObj)
+    {
+        maOutlinerView.SetReadOnly(false);
+        if (bWasInFocus)
+            refreshViews(pPreviousNotesObj, this);
         return;
+    }
 
     getNotesFromDoc();
     SetLinks();
     maOutliner.EnableUndo(true);
 
+    // Notes that another view is editing are only shown here. A view that comes to them with the
+    // focus, for example on a slide change, stops editing.
+    const bool bLocked = isLocked();
+    if (bLocked)
+        mbInFocus = false;
+    maOutlinerView.SetReadOnly(bLocked);
+
     if (mbInFocus)
         clearPlaceholder();
 
     maContentChangedHdl.Call(nullptr);
+
+    // The other views that show the notes this view left, or the notes it now edits, show who
+    // holds them now.
+    if (bWasInFocus && pPreviousNotesObj != pNotesTextObj)
+        refreshViews(pPreviousNotesObj, this);
+    if (mbInFocus)
+        refreshViews(pNotesTextObj, this);
+}
+
+NotesPanelView* NotesPanelView::getLockingView()
+{
+    SdrTextObj* pNotesTextObj = getEditedNotesObj();
+    if (!pNotesTextObj)
+        return nullptr;
+
+    for (NotesPanelView* pView : allNotesPanelViews())
+    {
+        if (pView != this && pView->mbInFocus && pView->getEditedNotesObj() == pNotesTextObj)
+            return pView;
+    }
+    return nullptr;
+}
+
+/// The notes object is in text edit only when a view edits it directly, as the handout page
+/// does. The notes panes edit a copy of its text.
+bool NotesPanelView::isLocked()
+{
+    if (getLockingView())
+        return true;
+    SdrTextObj* pNotesTextObj = getEditedNotesObj();
+    return pNotesTextObj && pNotesTextObj->IsInEditMode();
+}
+
+sal_Int32 NotesPanelView::getLockingViewId()
+{
+    if (NotesPanelView* pLockingView = getLockingView())
+        return pLockingView->mrNotesPanelViewShell.GetViewShellBase().GetViewShellId().get();
+
+    SdrTextObj* pNotesTextObj = getEditedNotesObj();
+    if (!pNotesTextObj || !pNotesTextObj->IsInEditMode())
+        return -1;
+
+    sal_Int32 nViewShellId = -1;
+    SdrViewIter::ForAllViews(pNotesTextObj, [&nViewShellId, pNotesTextObj](SdrView* pView) {
+        if (nViewShellId >= 0 || pView->GetTextEditObject() != pNotesTextObj)
+            return;
+        if (SfxViewShell* pViewShell = pView->GetSfxViewShell())
+            nViewShellId = pViewShell->GetViewShellId().get();
+    });
+    return nViewShellId;
+}
+
+void NotesPanelView::refreshViews(const SdrTextObj* pNotesTextObj, const NotesPanelView* pExcept)
+{
+    if (!pNotesTextObj)
+        return;
+
+    for (NotesPanelView* pView : allNotesPanelViews())
+    {
+        if (pView != pExcept && !pView->mbInFocus && pView->getEditedNotesObj() == pNotesTextObj)
+            pView->FillOutliner();
+    }
+}
+
+void NotesPanelView::releaseViews(const SdrTextObj* pNotesTextObj)
+{
+    if (!pNotesTextObj)
+        return;
+
+    for (NotesPanelView* pView : allNotesPanelViews())
+    {
+        if (pView->mbInFocus && pView->getEditedNotesObj() == pNotesTextObj)
+            pView->onLoseFocus();
+    }
 }
 
 SdrTextObj* NotesPanelView::getNotesTextObj()
@@ -209,12 +336,24 @@ void NotesPanelView::onResize()
 
 void NotesPanelView::onGrabFocus()
 {
-    if (mbInFocus)
+    // Notes that another view is editing stay as they are until that view leaves them.
+    if (mbInFocus || isLocked())
         return;
+
+    // The notes object can change without this view being told, for example by an undo in
+    // another view, so the copy here is read again when it differs.
+    if (SdrTextObj* pNotesTextObj = getEditedNotesObj())
+    {
+        const OutlinerParaObject* pDocText = pNotesTextObj->GetOutlinerParaObject();
+        const std::optional<OutlinerParaObject> pPaneText = maOutliner.CreateParaObject();
+        if (pDocText && (!pPaneText || *pDocText != *pPaneText))
+            FillOutliner();
+    }
     mbInFocus = true;
 
     clearPlaceholder();
     invalidateUndoState();
+    refreshViews(getEditedNotesObj(), this);
 }
 
 void NotesPanelView::onLoseFocus()
@@ -230,6 +369,7 @@ void NotesPanelView::onLoseFocus()
         FillOutliner();
 
     invalidateUndoState();
+    refreshViews(getEditedNotesObj(), this);
 }
 
 /// While the notes have the focus, the Undo and Redo state comes from the notes history, so it
@@ -300,6 +440,9 @@ IMPL_LINK_NOARG(NotesPanelView, ModifyTimerHdl, Timer*, void)
 {
     setNotesToDoc();
     aModifyIdle.Stop();
+
+    // The other views that show these notes follow the typing.
+    refreshViews(getEditedNotesObj(), this);
 }
 
 IMPL_LINK(NotesPanelView, EventMultiplexerListener, sdtools::EventMultiplexerEvent&, rEvent, void)

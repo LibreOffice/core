@@ -4189,6 +4189,24 @@ kbd,
 	font-family: var(--cool-font);
 }
 
+/* Another user edits the text, so this view only shows it. The name comes first, marked with the
+   color of that user. */
+.ui-editengine[data-locked-by] {
+	cursor: default;
+}
+
+.ui-editengine[data-locked-by]::before {
+	content: attr(data-locked-by);
+	display: block;
+	margin-bottom: 4px;
+	padding-inline-start: 6px;
+	border-inline-start: 3px solid var(--editengine-locked-color, var(--color-primary));
+	color: var(--color-main-text);
+	font-family: var(--cool-font);
+	font-style: italic;
+	user-select: none;
+}
+
 .ui-editengine .ui-editengine-spell-error {
 	text-decoration-line: underline;
 	text-decoration-style: wavy;

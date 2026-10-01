@@ -84,6 +84,10 @@ protected:
     /// Written under an "extra" node, for whatever the concrete widget adds to the payload.
     virtual void DumpExtraData(tools::JsonWriter& /*rWriter*/) {}
 
+    /// The view shell id of another view that edits the same text, so that this view only shows
+    /// it, or -1 when no other view does. Written as "lockedBy" when it is a view.
+    virtual sal_Int32 GetLockingViewId() { return -1; }
+
     /// Handles a command outside the generic set. Returns true when the command was consumed.
     virtual bool HandleExtraEvent(const OUString& /*rCmd*/, const OUString& /*rData*/)
     {

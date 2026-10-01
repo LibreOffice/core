@@ -17,6 +17,7 @@
 
 #include <editeng/outliner.hxx>
 #include <vcl/jsdialog/executor.hxx>
+#include <vcl/svapp.hxx>
 
 namespace sd
 {
@@ -47,7 +48,22 @@ public:
     {
     }
 
+    /// An edit can arrive while the engine does not count the pane as focused, for example when
+    /// the notes were freed while the client still showed them as held. The edit then takes the
+    /// notes when they are free, and the read-only pane drops it when they are not.
+    bool HandleCustomEvent(const OUString& rCmd, const OUString& rData) override
+    {
+        if ((rCmd == u"key" || rCmd == u"text") && !mrNotesPanelView.isInFocus())
+        {
+            SolarMutexGuard aGuard;
+            mrNotesPanelView.onGrabFocus();
+        }
+        return EditEngineWidgetController::HandleCustomEvent(rCmd, rData);
+    }
+
 protected:
+    sal_Int32 GetLockingViewId() override { return mrNotesPanelView.getLockingViewId(); }
+
     bool HandleExtraEvent(const OUString& rCmd, const OUString& /*rData*/) override
     {
         if (rCmd == u"focus")

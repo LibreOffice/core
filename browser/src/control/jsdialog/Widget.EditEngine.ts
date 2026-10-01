@@ -460,6 +460,30 @@ function editEngineRenderParagraph(
 	return element;
 }
 
+/// Names the user of the view that holds the text, in the color that marks that user elsewhere,
+/// or removes the name when no other view holds it.
+function editEngineApplyLock(
+	container: EditEngineContainer,
+	lockedBy: number | undefined,
+): void {
+	if (lockedBy === undefined) {
+		container.removeAttribute('data-locked-by');
+		container.style.removeProperty('--editengine-locked-color');
+		return;
+	}
+
+	const map = container.builder.map as any;
+	const name = map && map.getViewName ? map.getViewName(lockedBy) : null;
+	const notice = name
+		? _('%1 is editing').replace('%1', name)
+		: _('Another user is editing');
+	container.setAttribute('data-locked-by', notice);
+	container.style.setProperty(
+		'--editengine-locked-color',
+		app.LOUtil.rgbToHex(app.LOUtil.getViewIdColor(lockedBy)),
+	);
+}
+
 /// Applies a fresh model to an existing widget without recreating the container. The engine sends
 /// these after the first build, so the contenteditable element that holds focus and the input
 /// method state is kept, and only its paragraphs and caret are replaced.
@@ -468,12 +492,26 @@ function editEngineUpdateInPlace(
 	container: EditEngineContainer,
 	widgetData: EditEngineWidgetJSON,
 ): void {
+	const wasReadOnly = container.getAttribute('contenteditable') === 'false';
 	const readOnly = widgetData.readOnly === true;
 	container.setAttribute('contenteditable', readOnly ? 'false' : 'true');
+	container.setAttribute('aria-readonly', readOnly ? 'true' : 'false');
+	editEngineApplyLock(container, widgetData.lockedBy);
 	if (!readOnly && !container.editEngineHandlersAttached) {
 		editEngineAttachHandlers(container);
 		container.editEngineHandlersAttached = true;
 	}
+
+	// A widget that kept the focus while it was read-only reports the focus once it can be
+	// edited, which is when the engine lets it in. A window in the background reports it when it
+	// gets the focus back.
+	if (
+		wasReadOnly &&
+		!readOnly &&
+		document.activeElement === container &&
+		document.hasFocus()
+	)
+		editEngineSendAction(container, 'focus', {});
 
 	const paragraphs = (widgetData.paragraphs || []).map(
 		editEngineRenderParagraph,
@@ -519,6 +557,8 @@ function _editEngineControl(
 
 	const readOnly = widgetData.readOnly === true;
 	container.setAttribute('contenteditable', readOnly ? 'false' : 'true');
+	container.setAttribute('aria-readonly', readOnly ? 'true' : 'false');
+	editEngineApplyLock(container, widgetData.lockedBy);
 	if (!readOnly) {
 		editEngineAttachHandlers(container);
 		container.editEngineHandlersAttached = true;

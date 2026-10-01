@@ -723,5 +723,6 @@ interface EditEngineWidgetJSON {
 	paragraphs: EditEngineParagraph[];
 	selection: EditEngineSelection;
 	readOnly?: boolean;
+	lockedBy?: number; // view id of another view that edits the same text, so this one only shows it
 	extra?: any; // whatever the concrete engine-side widget adds
 }
