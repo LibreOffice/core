@@ -4349,7 +4349,6 @@ bool ClientSession::handleSaveAs(const std::shared_ptr<Message>& payload,
     else
     {
         // using the convert-to REST API
-        // TODO: Send back error when there is no output.
         if (!resultURL.getPath().empty())
         {
             LOG_TRC("Sending file: " << resultURL.getPath());
@@ -4365,6 +4364,14 @@ bool ClientSession::handleSaveAs(const std::shared_ptr<Message>& payload,
                 LOG_ERR("Error saveas socket missing in isConvertTo mode");
             else
                 HttpHelper::sendFileAndShutdown(saveAsSocket, resultURL.getPath(), response);
+        }
+        else if (saveAsSocket)
+        {
+            // The conversion produced no file, so the client gets an error status.
+            LOG_WRN("Conversion of [" << docBroker->getDocKey() << "] produced no output");
+            http::Response response(http::StatusCode::InternalServerError);
+            response.set("X-ERROR-KIND", "nooutput");
+            saveAsSocket->sendAndShutdown(response);
         }
 
         // Conversion is done, cleanup this fake session.
