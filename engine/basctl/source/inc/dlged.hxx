@@ -41,6 +41,7 @@ class Printer;
 class KeyEvent;
 class MouseEvent;
 class Timer;
+class UnoControlContainer;
 namespace vcl { class Window; }
 
 namespace basctl
@@ -116,7 +117,7 @@ private:
     std::unique_ptr<DlgEdView> pDlgEdView; // never nullptr
     rtl::Reference<DlgEdForm>  pDlgEdForm; // never nullptr
     cpo::uno::Reference< css::container::XNameContainer >     m_xUnoControlDialogModel;
-    cpo::uno::Reference< css::awt::XControlContainer >        m_xControlContainer;
+    rtl::Reference< UnoControlContainer >                     m_xControlContainer;
     cpo::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavors;
     cpo::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavorsResource;
     cpo::uno::Reference< css::util::XNumberFormatsSupplier >  m_xSupplier;
@@ -150,7 +151,7 @@ public:
         @see GetWindow
         @see SetWindow
     */
-    cpo::uno::Reference< css::awt::XControlContainer > const &
+    rtl::Reference< UnoControlContainer > const &
                     GetWindowControlContainer();
 
     void            SetScrollBars(ScrollAdaptor* pHScroll, ScrollAdaptor* pVScroll);

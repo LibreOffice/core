@@ -31,7 +31,7 @@ namespace com::sun::star {
         class XControlContainer;
     }
 }
-
+class UnoControlContainer;
 
 namespace sdr::contact {
 
@@ -54,7 +54,7 @@ namespace sdr::contact {
             @seealso SdrUnoObj::GetTemporaryControlForWindow
         */
         cpo::uno::Reference< css::awt::XControl >
-            getTemporaryControlForWindow( const vcl::Window& _rWindow, cpo::uno::Reference< css::awt::XControlContainer >& _inout_ControlContainer ) const;
+            getTemporaryControlForWindow( const vcl::Window& _rWindow, rtl::Reference< UnoControlContainer >& _inout_ControlContainer ) const;
 
     private:
         virtual ViewObjectContact& CreateObjectSpecificViewObjectContact( ObjectContact& _rObjectContact ) override;

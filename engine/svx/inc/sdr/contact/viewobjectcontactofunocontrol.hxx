@@ -33,7 +33,7 @@ namespace com::sun::star {
         class XControlContainer;
     }
 }
-
+class UnoControlContainer;
 
 namespace sdr::contact {
 
@@ -62,7 +62,7 @@ namespace sdr::contact {
         static cpo::uno::Reference< css::awt::XControl >
             getTemporaryControlForWindow(
                 const vcl::Window& _rWindow,
-                cpo::uno::Reference< css::awt::XControlContainer >& _inout_ControlContainer,
+                rtl::Reference< UnoControlContainer >& _inout_ControlContainer,
                 const SdrUnoObj& _rUnoObject
             );
 

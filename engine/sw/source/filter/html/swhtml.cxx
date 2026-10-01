@@ -118,6 +118,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <toolkit/controls/unocontrolcontainer.hxx>
 
 #include <swerror.h>
 #include <ndole.hxx>
@@ -530,7 +531,7 @@ SwHTMLParser::~SwHTMLParser()
 
     if (m_xControlSizeContainer.is())
     {
-        uno::Reference<lang::XComponent>(m_xControlSizeContainer, uno::UNO_QUERY_THROW)->dispose();
+        m_xControlSizeContainer->dispose();
         m_xControlSizeContainer.clear();
     }
     m_xControlSizeWindow.disposeAndClear();

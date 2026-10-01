@@ -61,6 +61,7 @@ class SwNumRule;
 struct SwPending;
 class SvxCSS1PropertyInfo;
 struct ImplSVEvent;
+class UnoControlContainer;
 
 constexpr tools::Long HTML_CJK_PARSPACE = o3tl::toTwips(25, o3tl::Length::mm10); // 2.5mm
 constexpr tools::Long HTML_CTL_PARSPACE = o3tl::toTwips(25, o3tl::Length::mm10); // 2.5mm
@@ -491,7 +492,7 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     // A hidden window, and the control container on it, in which a form control is realized to
     // measure its size when the document has no view.
     VclPtr<WorkWindow> m_xControlSizeWindow;
-    cpo::uno::Reference<css::awt::XControlContainer> m_xControlSizeContainer;
+    rtl::Reference<UnoControlContainer> m_xControlSizeContainer;
 
     bool m_bXHTML = false;
     bool m_bReqIF = false;

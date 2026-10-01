@@ -30,7 +30,7 @@
 
 // Forward declaration
 class SdrView;
-
+class UnoControlContainer;
 namespace sdr::contact {
     class ViewContactOfUnoControl;
 }
@@ -114,7 +114,7 @@ public:
     cpo::uno::Reference< css::awt::XControl >
         GetTemporaryControlForWindow(
             const vcl::Window& _rWindow,
-            cpo::uno::Reference< css::awt::XControlContainer >& _inout_ControlContainer
+            rtl::Reference< UnoControlContainer >& _inout_ControlContainer
         ) const;
 
     const OUString& GetUnoControlTypeName() const { return m_aUnoControlTypeName; }

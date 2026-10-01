@@ -57,7 +57,7 @@ namespace sdr::contact {
 
 
     Reference< XControl > ViewContactOfUnoControl::getTemporaryControlForWindow(
-        const vcl::Window& _rWindow, Reference< XControlContainer >& _inout_ControlContainer ) const
+        const vcl::Window& _rWindow, rtl::Reference< UnoControlContainer >& _inout_ControlContainer ) const
     {
         SdrUnoObj* pUnoObject = dynamic_cast< SdrUnoObj* >( TryToGetSdrObject() );
         OSL_ENSURE( pUnoObject, "ViewContactOfUnoControl::getTemporaryControlForDevice: no SdrUnoObj!" );

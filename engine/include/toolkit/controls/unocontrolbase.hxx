@@ -28,7 +28,7 @@
 
 
 
-class UnoControlBase : public UnoControl
+class TOOLKIT_DLLPUBLIC UnoControlBase : public UnoControl
 {
 protected:
     UnoControlBase() {}

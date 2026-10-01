@@ -49,6 +49,7 @@
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
+#include <toolkit/controls/unocontrolcontainer.hxx>
 
 namespace basctl
 {
@@ -1635,7 +1636,7 @@ awt::DeviceInfo DlgEdForm::getDeviceInfo() const
         if ( !!mpDeviceInfo )
             return *mpDeviceInfo;
 
-        Reference< awt::XControlContainer > xEditorControlContainer( rEditor.GetWindowControlContainer() );
+        rtl::Reference< UnoControlContainer > xEditorControlContainer( rEditor.GetWindowControlContainer() );
         xDialogControl.reset(
             GetTemporaryControlForWindow(rWindow, xEditorControlContainer),
             utl::SharedUNOComponent< awt::XControl >::TakeOwnership

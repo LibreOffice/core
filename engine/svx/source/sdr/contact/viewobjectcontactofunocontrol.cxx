@@ -352,7 +352,7 @@ namespace sdr::contact {
 
         /** retrieves the control container for a given output device
          */
-        virtual Reference< XControlContainer >
+        virtual rtl::Reference< UnoControlContainer >
                         getControlContainer( const OutputDevice& _rDevice ) const = 0;
 
         /** determines whether a given layer is visible
@@ -374,7 +374,7 @@ namespace sdr::contact {
         virtual ~SdrPageViewAccess() {}
 
         virtual bool    isDesignMode() const override;
-        virtual Reference< XControlContainer >
+        virtual rtl::Reference< UnoControlContainer >
                         getControlContainer( const OutputDevice& _rDevice ) const override;
         virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const override;
     };
@@ -387,9 +387,9 @@ namespace sdr::contact {
     }
 
 
-    Reference< XControlContainer > SdrPageViewAccess::getControlContainer( const OutputDevice& _rDevice ) const
+    rtl::Reference< UnoControlContainer > SdrPageViewAccess::getControlContainer( const OutputDevice& _rDevice ) const
     {
-        Reference< XControlContainer > xControlContainer = m_rPageView.GetControlContainer( _rDevice );
+        rtl::Reference< UnoControlContainer > xControlContainer = m_rPageView.GetControlContainer( _rDevice );
         DBG_ASSERT( xControlContainer.is() || nullptr == m_rPageView.FindPageWindow( _rDevice ),
             "SdrPageViewAccess::getControlContainer: the output device is known, but there is no control container for it?" );
         return xControlContainer;
@@ -409,9 +409,9 @@ namespace sdr::contact {
     class InvisibleControlViewAccess : public IPageViewAccess
     {
     private:
-        Reference< XControlContainer >& m_rControlContainer;
+        rtl::Reference< UnoControlContainer >& m_rControlContainer;
     public:
-        explicit InvisibleControlViewAccess( Reference< XControlContainer >& _inout_ControlContainer )
+        explicit InvisibleControlViewAccess( rtl::Reference< UnoControlContainer >& _inout_ControlContainer )
             :m_rControlContainer( _inout_ControlContainer )
         {
         }
@@ -419,7 +419,7 @@ namespace sdr::contact {
         virtual ~InvisibleControlViewAccess() {}
 
         virtual bool    isDesignMode() const override;
-        virtual Reference< XControlContainer >
+        virtual rtl::Reference< UnoControlContainer >
                         getControlContainer( const OutputDevice& _rDevice ) const override;
         virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const override;
     };
@@ -432,7 +432,7 @@ namespace sdr::contact {
     }
 
 
-    Reference< XControlContainer > InvisibleControlViewAccess::getControlContainer( const OutputDevice& _rDevice ) const
+    rtl::Reference< UnoControlContainer > InvisibleControlViewAccess::getControlContainer( const OutputDevice& _rDevice ) const
     {
         if ( !m_rControlContainer.is() )
         {
@@ -471,7 +471,7 @@ namespace sdr::contact {
         virtual ~DummyPageViewAccess() {}
 
         virtual bool    isDesignMode() const override;
-        virtual Reference< XControlContainer >
+        virtual rtl::Reference< UnoControlContainer >
                         getControlContainer( const OutputDevice& _rDevice ) const override;
         virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const override;
     };
@@ -484,7 +484,7 @@ namespace sdr::contact {
     }
 
 
-    Reference< XControlContainer > DummyPageViewAccess::getControlContainer( const OutputDevice& /*_rDevice*/ ) const
+    rtl::Reference< UnoControlContainer > DummyPageViewAccess::getControlContainer( const OutputDevice& /*_rDevice*/ ) const
     {
         return nullptr;
     }
@@ -521,7 +521,7 @@ namespace sdr::contact {
         ControlHolder                   m_aControl;
 
         /// the ControlContainer where we inserted our control
-        Reference< XContainer >         m_xContainer;
+        rtl::Reference< UnoControlContainer > m_xContainer;
 
         /// the output device for which the control was created
         VclPtr<OutputDevice>            m_pOutputDeviceForWindow;
@@ -1039,7 +1039,7 @@ namespace sdr::contact {
 
         m_pOutputDeviceForWindow = const_cast< OutputDevice * >( &_rDevice );
         m_aControl = std::move(aControl);
-        m_xContainer.set(_rPageView.getControlContainer( _rDevice ), cpo::uno::UNO_QUERY);
+        m_xContainer = _rPageView.getControlContainer( _rDevice );
         DBG_ASSERT( (   m_xContainer.is()                                           // either have a XControlContainer
                     ||  (   ( !_rPageView.getControlContainer( _rDevice ).is() )    // or don't have any container,
                         &&  ( _rDevice.GetOwnerWindow() == nullptr )  // which is allowed for non-Window instances only
@@ -1314,7 +1314,7 @@ namespace sdr::contact {
             return;
         }
 
-        DBG_ASSERT( Source.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::disposing: Who's this?" );
+        DBG_ASSERT( dynamic_cast<UnoControlContainer*>(Source.Source.get()) == m_xContainer.get(), "ViewObjectContactOfUnoControl_Impl::disposing: Who's this?" );
     }
 
 
@@ -1400,7 +1400,7 @@ namespace sdr::contact {
             // SolarMutex. In particular, in our disposal, we remove ourself as listener from the control,
             // which alone needs the SolarMutex. Of course this - a removeFooListener needed the SolarMutex -
             // is the real bug. Toolkit really is infested with solar mutex usage ... :( #i82169#
-        DBG_ASSERT( Event.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::elementRemoved: where did this come from?" );
+        DBG_ASSERT( dynamic_cast<UnoControlContainer*>(Event.Source.get()) == m_xContainer.get(), "ViewObjectContactOfUnoControl_Impl::elementRemoved: where did this come from?" );
 
         if ( m_aControl == Event.Element )
             impl_dispose_nothrow( false );
@@ -1410,7 +1410,7 @@ namespace sdr::contact {
     void ViewObjectContactOfUnoControl_Impl::elementReplaced( const ContainerEvent& Event )
     {
         SolarMutexGuard aSolarGuard;
-        DBG_ASSERT( Event.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::elementReplaced: where did this come from?" );
+        DBG_ASSERT( dynamic_cast<UnoControlContainer*>(Event.Source.get()) == m_xContainer.get(), "ViewObjectContactOfUnoControl_Impl::elementReplaced: where did this come from?" );
 
         if ( ! ( m_aControl == Event.ReplacedElement ) )
             return;
@@ -1600,7 +1600,7 @@ namespace sdr::contact {
 
 
     Reference< XControl > ViewObjectContactOfUnoControl::getTemporaryControlForWindow(
-        const vcl::Window& _rWindow, Reference< XControlContainer >& _inout_ControlContainer, const SdrUnoObj& _rUnoObject )
+        const vcl::Window& _rWindow, rtl::Reference< UnoControlContainer >& _inout_ControlContainer, const SdrUnoObj& _rUnoObject )
     {
         ControlHolder aControl;
 
