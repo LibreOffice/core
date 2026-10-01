@@ -85,7 +85,7 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     aFont.SetFontSize( aSize );
 
     Point aLineStart(aBLPos.X() + 5,            aBLPos.Y() + ( nRectHeight - nItemId )/2);
-    Point aLineEnd(aBLPos.X() + nRectWidth * 7 / 9 - 10, aBLPos.Y() + ( nRectHeight - nItemId )/2);
+    Point aLineEnd(aBLPos.X() + nRectWidth * 7 / 9 - 10, aLineStart.Y());
     if (nItemId == 9)
     {
         Point aImgStart(aBLPos.X() + 5,         aBLPos.Y() + ( nRectHeight - 23 ) / 2);
