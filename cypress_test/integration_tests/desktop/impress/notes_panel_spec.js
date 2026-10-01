@@ -428,6 +428,43 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		cy.cGet(paragraph).should('have.text', 'X');
 	});
 
+	// Bold applies to the notes text while the notes have the focus, and the Bold button shows
+	// the attribute at the caret as the caret moves between a bold and a plain word.
+	it('the Bold button follows the caret in the notes', function () {
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+		var boldButton = '#Home-container .unoBold';
+
+		openNotesPane();
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('Demo');
+		cy.cGet(paragraph).should('have.text', 'Demo');
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:SelectAll');
+			win.app.map.sendUnoCommand('.uno:Bold');
+			helper.processToIdle(win);
+		});
+		cy.cGet(paragraph + ' span').should('have.css', 'font-weight', '700');
+		cy.cGet(boldButton).should('have.class', 'selected');
+
+		// The caret at the end of the bold word, Bold off again, then a plain word.
+		cy.cGet(editEngine).type('{end}');
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:Bold');
+			helper.processToIdle(win);
+		});
+		cy.cGet(editEngine).type(' plain');
+		cy.cGet(paragraph).should('have.text', 'Demo plain');
+		cy.cGet(boldButton).should('not.have.class', 'selected');
+
+		cy.cGet(editEngine).type('{home}');
+		cy.cGet(boldButton).should('have.class', 'selected');
+
+		cy.cGet(editEngine).type('{end}');
+		cy.cGet(boldButton).should('not.have.class', 'selected');
+	});
+
 	it('Ctrl+V works while the notes panel has focus', function () {
 		// Given an open notes panel with its editengine widget focused:
 		openNotesPane();

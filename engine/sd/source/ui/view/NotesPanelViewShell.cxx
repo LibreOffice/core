@@ -1436,11 +1436,8 @@ void NotesPanelViewShell::Execute(SfxRequest& rReq)
     }
 }
 
-void NotesPanelViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
+void NotesPanelViewShell::InvalidateStyleSlots()
 {
-    // first the base classes
-    ViewShell::MouseButtonUp(rMEvt, pWin);
-
     Invalidate(SID_STYLE_EDIT);
     Invalidate(SID_STYLE_NEW);
     Invalidate(SID_STYLE_DELETE);
@@ -1450,6 +1447,19 @@ void NotesPanelViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* p
     Invalidate(SID_STYLE_NEW_BY_EXAMPLE);
     Invalidate(SID_STYLE_WATERCAN);
     Invalidate(SID_STYLE_FAMILY5);
+}
+
+void NotesPanelViewShell::InvalidateTextState()
+{
+    FuSimpleOutlinerText::InvalidateTextPositionSlots(*this);
+    InvalidateStyleSlots();
+}
+
+void NotesPanelViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
+{
+    ViewShell::MouseButtonUp(rMEvt, pWin);
+
+    InvalidateStyleSlots();
 }
 
 void NotesPanelViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
@@ -1491,15 +1501,7 @@ bool NotesPanelViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
         bReturn = ViewShell::KeyInput(rKEvt, pWin);
     }
 
-    Invalidate(SID_STYLE_EDIT);
-    Invalidate(SID_STYLE_NEW);
-    Invalidate(SID_STYLE_DELETE);
-    Invalidate(SID_STYLE_HIDE);
-    Invalidate(SID_STYLE_SHOW);
-    Invalidate(SID_STYLE_UPDATE_BY_EXAMPLE);
-    Invalidate(SID_STYLE_NEW_BY_EXAMPLE);
-    Invalidate(SID_STYLE_WATERCAN);
-    Invalidate(SID_STYLE_FAMILY5);
+    InvalidateStyleSlots();
 
     return bReturn;
 }

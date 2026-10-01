@@ -89,6 +89,9 @@ protected:
     {
         return false;
     }
+
+    /// Called after a key, selection or text command moved the caret or changed the text.
+    virtual void InputHandled() {}
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

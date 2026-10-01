@@ -53,6 +53,8 @@ public:
     */
     virtual void UpdateForKeyPress (const KeyEvent& rEvent);
 
+    static void InvalidateTextPositionSlots(ViewShell& rViewShell);
+
 protected:
     FuSimpleOutlinerText(
         ViewShell& rViewShell,

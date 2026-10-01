@@ -461,18 +461,23 @@ bool EditEngineWidgetController::HandleCustomEvent(const OUString& rCmd, const O
 {
     SolarMutexGuard aGuard;
 
+    bool bHandled = false;
     if (rCmd == u"key")
-        return HandleKey(rData);
-    if (rCmd == u"selection")
-        return HandleSelection(rData);
-    if (rCmd == u"text")
-        return HandleText(rData);
-
-    if (HandleExtraEvent(rCmd, rData))
+        bHandled = HandleKey(rData);
+    else if (rCmd == u"selection")
+        bHandled = HandleSelection(rData);
+    else if (rCmd == u"text")
+        bHandled = HandleText(rData);
+    else if (HandleExtraEvent(rCmd, rData))
         return true;
+    else
+    {
+        SAL_WARN("editeng", "EditEngineWidgetController: unknown custom event '" << rCmd << "'");
+        return false;
+    }
 
-    SAL_WARN("editeng", "EditEngineWidgetController: unknown custom event '" << rCmd << "'");
-    return false;
+    InputHandled();
+    return bHandled;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

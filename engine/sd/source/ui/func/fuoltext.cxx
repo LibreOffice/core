@@ -157,7 +157,7 @@ bool FuSimpleOutlinerText::MouseButtonDown(const MouseEvent& rMEvt)
     if (bReturn)
     {
         // Now the attributes of the current text position can be different
-        mrViewShell.GetViewFrame()->GetBindings().Invalidate( SidArray );
+        InvalidateTextPositionSlots(mrViewShell);
     }
     else
     {
@@ -186,7 +186,7 @@ bool FuSimpleOutlinerText::MouseButtonUp(const MouseEvent& rMEvt)
     if (bReturn)
     {
         // Now the attributes of the current text position can be different
-        mrViewShell.GetViewFrame()->GetBindings().Invalidate( SidArray );
+        InvalidateTextPositionSlots(mrViewShell);
     }
     else
     {
@@ -260,7 +260,12 @@ bool FuSimpleOutlinerText::KeyInput(const KeyEvent& rKEvt)
 void FuSimpleOutlinerText::UpdateForKeyPress (const KeyEvent& /*rEvent*/)
 {
     // Attributes at the current text position may have changed.
-    mrViewShell.GetViewFrame()->GetBindings().Invalidate(SidArray);
+    InvalidateTextPositionSlots(mrViewShell);
+}
+
+void FuSimpleOutlinerText::InvalidateTextPositionSlots(ViewShell& rViewShell)
+{
+    rViewShell.GetViewFrame()->GetBindings().Invalidate(SidArray);
 }
 
 /**

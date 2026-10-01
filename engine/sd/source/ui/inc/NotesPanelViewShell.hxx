@@ -78,6 +78,8 @@ public:
     virtual bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin) override;
     virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin) override;
 
+    void InvalidateTextState();
+
     virtual void SetZoom(::tools::Long nZoom) override;
     virtual void SetZoomRect(const ::tools::Rectangle& rZoomRect) override;
 
@@ -99,6 +101,8 @@ private:
     /** Initiates the shell with it's NotesPanelView instance
     */
     void Construct();
+
+    void InvalidateStyleSlots();
 };
 
 class FuNotesPane final : public FuSimpleOutlinerText

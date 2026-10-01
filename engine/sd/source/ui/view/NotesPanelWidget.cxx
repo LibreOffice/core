@@ -69,6 +69,9 @@ protected:
         QueueUpdate();
         return true;
     }
+
+    /// The attributes at the caret may differ after each key or caret move
+    void InputHandled() override { mrNotesPanelViewShell.InvalidateTextState(); }
 };
 }
 
