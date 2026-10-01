@@ -179,6 +179,54 @@
     // A page's own messages get the same presentation through this:
     window.__gasShowAlert = showAlert;
 
+    // A Storage object with the entries in items, which passes every change to onChange:
+    function makeStorage(items, onChange) {
+        return {
+            get length() { return items.size; },
+            key: function(index) {
+                const keys = Array.from(items.keys());
+                return index >= 0 && index < keys.length ? keys[index] : null;
+            },
+            getItem: function(key) {
+                const value = items.get(String(key));
+                return value === undefined ? null : value;
+            },
+            setItem: function(key, value) {
+                items.set(String(key), String(value));
+                onChange(String(key), String(value));
+            },
+            removeItem: function(key) {
+                items.delete(String(key));
+                onChange(String(key), null);
+            },
+            clear: function() {
+                for (const key of Array.from(items.keys())) {
+                    items.delete(key);
+                    onChange(key, null);
+                }
+            }
+        };
+    }
+    // The frame's localStorage holds the add-on's own entries, which the main window keeps and
+    // hands over before the add-on's HTML goes in, and to which every change is passed back:
+    const storageItems = new Map();
+    function postStorageChange(key, value) {
+        window.parent.postMessage(JSON.stringify({
+            msgId: 'Extension_GasStorageSet', key: key, value: value
+        }), '*');
+    }
+    Object.defineProperty(window, 'localStorage', {
+        configurable: true, value: makeStorage(storageItems, postStorageChange)
+    });
+    // The frame's sessionStorage lasts as long as the frame:
+    Object.defineProperty(window, 'sessionStorage', {
+        configurable: true, value: makeStorage(new Map(), function() {})
+    });
+    window.__gasStorageReady = window.cool._postCall({ msgId: 'Extension_GasStorageLoad' }).then(
+        function(items) {
+            for (const key of Object.keys(items || {})) storageItems.set(key, items[key]);
+        });
+
     window.google = window.google || {};
     window.google.script = window.google.script || {};
     Object.defineProperty(window.google.script, 'run', {

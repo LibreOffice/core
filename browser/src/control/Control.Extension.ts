@@ -306,6 +306,19 @@ interface ExtensionGasReadFileMessage {
 	url: string;
 }
 
+// A GAS add-on frame asks the main window for the add-on's localStorage entries, or changes one
+// of them, with a null value removing it:
+interface ExtensionGasStorageLoadMessage {
+	msgId: 'Extension_GasStorageLoad';
+	callId: string;
+}
+
+interface ExtensionGasStorageSetMessage {
+	msgId: 'Extension_GasStorageSet';
+	key: string;
+	value: string | null;
+}
+
 interface ExtensionProxyReturnMessage {
 	msgId: 'Extension_ProxyReturn';
 	callId: string;
@@ -370,6 +383,8 @@ type ExtensionSidebarMessage =
 	| ExtensionCloseMessage
 	| ExtensionGasReadFileMessage
 	| ExtensionGasRunMessage
+	| ExtensionGasStorageLoadMessage
+	| ExtensionGasStorageSetMessage
 	| ExtensionProxyReturnMessage
 	| ExtensionTeardownDoneMessage
 	| ExtensionUrlFetchResultMessage
@@ -381,6 +396,8 @@ type ExtensionDialogMessage =
 	| ExtensionCallMessage
 	| ExtensionGasReadFileMessage
 	| ExtensionGasRunMessage
+	| ExtensionGasStorageLoadMessage
+	| ExtensionGasStorageSetMessage
 	| ExtensionProxyReturnMessage
 	| ExtensionShowDialogMessage
 	| ExtensionSaveFileMessage
@@ -841,6 +858,37 @@ window.L.Control.Extension = window.L.Control.extend({
 		}
 	},
 
+	_handleGasStorageMessage: function (
+		msg: ExtensionGasStorageLoadMessage | ExtensionGasStorageSetMessage,
+	) {
+		const prefix = 'gas-local-storage:' + this.options.id + ':';
+		if (msg.msgId === 'Extension_GasStorageLoad') {
+			const items: { [key: string]: string } = Object.create(null);
+			for (let i = 0; i < localStorage.length; ++i) {
+				const k = localStorage.key(i);
+				if (k !== null && k.startsWith(prefix)) {
+					items[k.substring(prefix.length)] = localStorage.getItem(k);
+				}
+			}
+			this._postToCaller(msg.callId, {
+				msgId: 'Extension_CallResult',
+				callId: msg.callId,
+				ok: items,
+			});
+		} else if (msg.value === null) {
+			localStorage.removeItem(prefix + msg.key);
+		} else {
+			try {
+				localStorage.setItem(prefix + msg.key, msg.value);
+			} catch (e) {
+				console.warn(
+					'extension ' + this.options.id + ': localStorage write failed:',
+					e,
+				);
+			}
+		}
+	},
+
 	// A `panel: true` command: make sure the sidebar panel is showing, then
 	// hand the command id to the iframe. The iframe may still be loading, in
 	// which case the message goes out once it has loaded.
@@ -1128,6 +1176,10 @@ window.L.Control.Extension = window.L.Control.extend({
 			case 'Extension_GasRun':
 				this._runGasFunction(msg);
 				break;
+			case 'Extension_GasStorageLoad':
+			case 'Extension_GasStorageSet':
+				this._handleGasStorageMessage(msg);
+				break;
 			case 'Extension_Close':
 				this._closeExtension();
 				break;
@@ -1222,6 +1274,10 @@ window.L.Control.Extension = window.L.Control.extend({
 				break;
 			case 'Extension_GasRun':
 				this._runGasFunction(msg);
+				break;
+			case 'Extension_GasStorageLoad':
+			case 'Extension_GasStorageSet':
+				this._handleGasStorageMessage(msg);
 				break;
 			case 'Extension_DialogClose':
 				this._closeDialog({ cancelled: false, value: msg.value });
@@ -1680,6 +1736,8 @@ const gasFrameMessageIds = new Set([
 	'Extension_DialogClose',
 	'Extension_GasReadFile',
 	'Extension_GasRun',
+	'Extension_GasStorageLoad',
+	'Extension_GasStorageSet',
 	'Extension_Resize',
 	'Extension_TeardownDone',
 	'Extension_UrlFetchResult',

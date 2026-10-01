@@ -339,7 +339,9 @@ snackbar.
 `DocumentApp` and `SpreadsheetApp` (documents, sheets, ranges, the active
 selection and cursor), `HtmlService`, `PropertiesService.getUserProperties`
 (stored in the main window's `localStorage`), `LanguageApp.translate`, `Session`,
-`Utilities` and `Logger`.
+`Utilities` and `Logger`. A sidebar or dialog that uses `localStorage` itself gets
+the add-on's own entries, which the main window keeps, through the `Storage`
+methods only, and its `sessionStorage` lasts as long as the frame.
 
 `getUi().alert()` records its message rather than blocking on a modal, and the
 message becomes a dismissible banner in the panel once the call returns. Script

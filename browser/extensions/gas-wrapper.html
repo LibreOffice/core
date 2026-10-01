@@ -650,6 +650,7 @@
             for (const m of src.matchAll(nameRe)) names.add(m[1]);
         }
         window.__gasFunctionNames = Array.from(names);
+        await window.__gasStorageReady;
         const rawHtml = await fetchText(sidebarUrl);
         const expanded = await expandScriptlets(rawHtml);
         const html = templateValues === null
