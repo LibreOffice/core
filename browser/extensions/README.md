@@ -314,6 +314,15 @@ The pieces:
 | `gas-shim.js` | Client half. Exposes `google.script.run` as a Proxy, so a leaf call asks the main window to run the named function in the kit, through the kit half. |
 | `gas-kit-runner.js` | Kit half. Shims a subset of the Apps Script services on top of scriptinterop, then calls the named function. |
 
+The sidebar and dialog frames run in a sandbox without `allow-same-origin`, so
+they have an origin of their own, as HtmlService pages do in GAS, and they reach
+COOL only through the messages that `gas-shim.js` and `cool.js` send. Their
+popups stay in that sandbox, too, so a sign-in popup that an add-on opens has no
+cookies of its own, and a sign-in through it cannot complete. All that holds
+where COOL is served over http(s). The desktop apps load extensions over
+file://, where such a frame could not load its scripts, so there the frames keep
+the sandbox of a native extension's frame for now.
+
 An Apps Script project keeps its server code in `.gs` files in the web editor,
 which clasp writes out as `.js` on disk. Either is picked up; where a directory
 has both, the `.gs` files are taken as the project's and a `.js` is left to the

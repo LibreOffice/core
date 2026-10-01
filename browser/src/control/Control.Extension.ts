@@ -499,9 +499,13 @@ window.L.Control.Extension = window.L.Control.extend({
 	},
 
 	// The extension iframe is our own content from the COOL origin.  The mobile and desktop
-	// apps load over file://, where the iframe's origin is opaque and only '*' reaches it.
+	// apps load over file://, where the iframe's origin is opaque and only '*' reaches it.  A
+	// GAS add-on frame's origin is opaque, too, through its sandbox:
 	_targetOrigin: function (): string {
-		return window.origin.startsWith('http') ? window.origin : '*';
+		return window.origin.startsWith('http') &&
+			!(this.options.manifest as ExtensionManifest).isGasExtension
+			? window.origin
+			: '*';
 	},
 
 	_postToIframe: function (payload: object): boolean {
@@ -538,6 +542,8 @@ window.L.Control.Extension = window.L.Control.extend({
 	_onComment: function (e: { comment?: { action?: string } }) {
 		if (!this._iframe || !this._iframe.contentWindow || !e || !e.comment)
 			return;
+		// GAS has no such document events for an add-on's HTML to handle:
+		if ((this.options.manifest as ExtensionManifest).isGasExtension) return;
 		let name: string;
 		switch (e.comment.action) {
 			case 'Add':
@@ -1026,7 +1032,7 @@ window.L.Control.Extension = window.L.Control.extend({
 		iframe.src = withUiLanguage(entryUrl);
 		iframe.setAttribute(
 			'sandbox',
-			'allow-scripts allow-same-origin allow-forms allow-popups',
+			manifest.isGasExtension ? gasFrameSandbox : nativeFrameSandbox,
 		);
 		shell.content.appendChild(iframe);
 		this._iframe = iframe;
@@ -1353,6 +1359,9 @@ window.L.Control.Extension = window.L.Control.extend({
 			titlebar: true,
 			directSrc: true,
 		};
+		if ((this.options.manifest as ExtensionManifest).isGasExtension) {
+			iframeOptions.sandbox = gasFrameSandbox;
+		}
 		if (msg.title !== undefined) iframeOptions.title = msg.title;
 		const iframeDialog = window.L.iframeDialog(
 			withUiLanguage(url),
@@ -1728,6 +1737,16 @@ const gasProxies: {
 	};
 } = {};
 let gasProxyMap: any = null;
+
+const nativeFrameSandbox =
+	'allow-scripts allow-same-origin allow-forms allow-popups';
+
+// A GAS add-on frame has an origin of its own, as an HtmlService page has in GAS, and so do its
+// popups.  The desktop apps load extensions over file://, where a frame with an origin of its own
+// cannot load its scripts, so there it keeps the sandbox of a native extension's frame:
+const gasFrameSandbox = window.location.protocol.startsWith('http')
+	? 'allow-scripts allow-forms allow-popups allow-modals allow-downloads'
+	: nativeFrameSandbox;
 
 // The messages that GAS add-on frames need:
 const gasFrameMessageIds = new Set([

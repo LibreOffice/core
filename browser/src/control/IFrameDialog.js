@@ -52,6 +52,9 @@ window.L.IFrameDialog = window.L.Class.extend({
 		}
 
 		this._iframe = window.L.DomUtil.create('iframe', this.options.prefix + '-modal', content);
+		if (this.options.sandbox !== undefined) {
+			this._iframe.setAttribute('sandbox', this.options.sandbox);
+		}
 		if (form) {
 			this._iframe.name = form.target;
 		}
@@ -132,13 +135,16 @@ window.L.IFrameDialog = window.L.Class.extend({
 			this.addStyleSheets(this.options.stylesheets);
 		}
 
-		// Listen for Escape inside the iframe for when the iframe has focus.
+		// Listen for Escape inside the iframe for when the iframe has focus, unless the
+		// iframe has an origin of its own and handles Escape itself:
 		var self = this;
-		this._iframe.contentDocument.addEventListener('keydown', function(e) {
-			if (e.key === 'Escape') {
-				self.remove();
-			}
-		});
+		if (this._iframe.contentDocument) {
+			this._iframe.contentDocument.addEventListener('keydown', function(e) {
+				if (e.key === 'Escape') {
+					self.remove();
+				}
+			});
+		}
 	},
 
 	addStyleSheet: function (href) {

@@ -45,6 +45,9 @@
 	}
 
 	async function loadCatalog() {
+		// Over http(s), a sandboxed frame with an opaque origin cannot fetch from COOL:
+		if (window.origin === 'null' && window.location.protocol.startsWith('http'))
+			return null;
 		for (const cand of catalogCandidates(window.cool.lang)) {
 			try {
 				const resp = await fetch(extensionBase() + 'l10n/' + cand + '.json');

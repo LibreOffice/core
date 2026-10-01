@@ -227,6 +227,13 @@
             for (const key of Object.keys(items || {})) storageItems.set(key, items[key]);
         });
 
+    // A dialog closes on Escape, as the main window's other dialogs do:
+    if (window.cool.idPrefix) {
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') window.cool.dialog.cancel();
+        });
+    }
+
     window.google = window.google || {};
     window.google.script = window.google.script || {};
     Object.defineProperty(window.google.script, 'run', {
