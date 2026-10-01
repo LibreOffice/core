@@ -116,7 +116,6 @@
 #include <o3tl/unit_conversion.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
 #include <tools/fontenum.hxx>
