@@ -19,6 +19,7 @@
 
 #include <editsh.hxx>
 #include <dbfld.hxx>
+#include <dbmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <doc.hxx>
@@ -47,7 +48,8 @@ bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) const
         = static_cast<SwDBFieldType*>(vFields.front()->GetField()->GetTyp())->GetDBData();
     try
     {
-        return xDBContext->getByName(rData.sDataSource).hasValue();
+        return xDBContext->getByName(GetDBManager()->ResolveDataSourceName(rData.sDataSource))
+            .hasValue();
     }
     catch (uno::Exception const&)
     {

@@ -150,7 +150,7 @@ void SwMailMergeWizard::enterState( WizardState _nState )
 
             OUString sDataSourceName = GetSwView().GetDataSourceName();
             if(!sDataSourceName.isEmpty() &&
-               !SwView::IsDataSourceAvailable(sDataSourceName))
+               !GetSwView().IsDataSourceAvailable(sDataSourceName))
             {
                 bEnableNext = false;
             }
