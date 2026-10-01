@@ -32,7 +32,7 @@ public:
     virtual ~LineWidthValueSet() override;
 
     void SetUnit(std::array<OUString,9> const & strUnits);
-    void SetSelItem(sal_uInt16 nSel);
+    void UnselectItems();
     void SetImage(const Image& img);
     void SetCusEnable(bool bEnable);
 

@@ -81,7 +81,7 @@ LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rPa
     m_xVSWidth->SetItemData(8, reinterpret_cast<void*>(60));
     m_xVSWidth->SetImage(m_aIMGCusGray);
 
-    m_xVSWidth->SetSelItem(0);
+    m_xVSWidth->UnselectItems();
 
     m_xVSWidth->SetSelectHdl(LINK(this, LineWidthPopup, VSSelectHdl));
     m_xMFWidth->connect_value_changed(LINK(this, LineWidthPopup, MFModifyHdl));
@@ -134,7 +134,7 @@ IMPL_LINK_NOARG(LineWidthPopup, MFModifyHdl, weld::MetricSpinButton&, void)
 {
     if (!m_xVSWidth->IsNoSelection() && m_xVSWidth->GetSelectedItemId() != 0)
     {
-        m_xVSWidth->SetSelItem(0);
+        m_xVSWidth->UnselectItems();
         m_xVSWidth->SetFormat();
         m_xVSWidth->Invalidate();
     }
@@ -148,7 +148,7 @@ IMPL_LINK_NOARG(LineWidthPopup, MFModifyHdl, weld::MetricSpinButton&, void)
 void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit eMapUnit)
 {
     m_bVSFocus = true;
-    m_xVSWidth->SetSelItem(0);
+    m_xVSWidth->UnselectItems();
     m_eMapUnit = eMapUnit;
     SvtViewOptions aWinOpt(EViewType::Window, u"PopupPanel_LineWidth"_ustr);
     if (aWinOpt.Exists())
@@ -192,7 +192,9 @@ void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit 
     {
         if (strCurrValue == maStrUnits[i])
         {
-            m_xVSWidth->SetSelItem(i + 1);
+            m_xVSWidth->SelectItem(i + 1);
+            m_xVSWidth->GrabFocus();
+
             break;
         }
     }
@@ -200,7 +202,7 @@ void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit 
     if (i >= 8)
     {
         m_bVSFocus = false;
-        m_xVSWidth->SetSelItem(0);
+        m_xVSWidth->UnselectItems();
     }
 
     m_xVSWidth->SetFormat();

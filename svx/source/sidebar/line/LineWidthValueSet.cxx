@@ -51,18 +51,10 @@ void LineWidthValueSet::SetUnit(std::array<OUString,9> const & strUnits)
     maStrUnits = strUnits;
 }
 
-void LineWidthValueSet::SetSelItem(sal_uInt16 nSel)
+void LineWidthValueSet::UnselectItems()
 {
-    if(nSel == 0)
-    {
-        SelectItem(1); // ,false); // 'false' nut supported by AOO
-        SetNoSelection();
-    }
-    else
-    {
-        SelectItem(nSel);
-        GrabFocus();
-    }
+    SelectItem(1); // ,false); // 'false' nut supported by AOO
+    SetNoSelection();
 }
 
 void LineWidthValueSet::SetImage(const Image& img)
