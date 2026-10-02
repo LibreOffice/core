@@ -610,7 +610,7 @@ auto CheckX509Data(
                 start = i; // issuer isn't in the list
                 break;
             }
-            if (xmlsecurity::EqualDistinguishedNames(certs[i]->getIssuerName(), certs[j]->getSubjectName(), xmlsecurity::EqualMode::NoCompat))
+            if (xmlsecurity::IsIssuerOf(certs[j], certs[i]))
             {
                 if (i == j) // self signed
                 {
@@ -642,8 +642,7 @@ auto CheckX509Data(
         {
             if (chain[i] != j)
             {
-                if (xmlsecurity::EqualDistinguishedNames(
-                        certs[chain[i]]->getSubjectName(), certs[j]->getIssuerName(), xmlsecurity::EqualMode::NoCompat))
+                if (xmlsecurity::IsIssuerOf(certs[chain[i]], certs[j]))
                 {
                     if (chain.size() != i + 1) // already found issue?
                     {
@@ -772,6 +771,16 @@ XMLSignatureHelper::CheckAndUpdateSignatureInformation(
                 }
             }
         }
+    }
+
+    // The certificate at the end of the chain is the signing certificate, so it
+    // must be the certificate whose public key verified the signature value.
+    if (rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED
+        && (certs.empty() || certs.back()->getEncoded() != rInfo.xVerifiedCertificate->getEncoded()))
+    {
+        SAL_WARN("xmlsecurity.comp", "CheckX509Data did not guess the same certificate that verified the signature");
+        datas.clear();
+        certs.clear();
     }
 
     // rInfo is a copy, update the original

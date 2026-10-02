@@ -23,6 +23,7 @@
 #include <xsecctl.hxx>
 #include <documentsignaturehelper.hxx>
 #include <framework/saxeventkeeperimpl.hxx>
+#include <framework/signatureverifierimpl.hxx>
 #include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
 #if HAVE_FEATURE_GPGME
 # include <gpg/xmlsignature_gpgimpl.hxx>
@@ -983,6 +984,35 @@ void SAL_CALL XSecController::signatureCreated( sal_Int32 securityId, css::xml::
     signatureInfor.nStatus = nResult;
 }
 
+namespace
+{
+/// For XAdES signature, return if the certificate that verified the signature
+/// is covered by the signature, i.e. ds:Reference on either ds:KeyInfo
+/// or xd:SigningCertificate.
+bool IsSigningKeyBound(InternalSignatureInformation const& rInformation)
+{
+    SignatureInformation const& rInfo{rInformation.signatureInfor};
+    if (rInformation.isXAdES && !rInformation.isKeyInfoReferenced
+        && rInfo.SigningCertificates.empty())
+    {
+        SAL_WARN("xmlsecurity.helper",
+                 "signature has XAdES elements, but covers neither ds:KeyInfo nor xades:SigningCertificate");
+        return false;
+    }
+    // For an OpenPGP signature, the xd:CertDigest element holds the key ID.
+    bool const isX509{rInfo.ouGpgKeyID.isEmpty() && rInfo.ouGpgCertificate.isEmpty()};
+    if (isX509 && !rInfo.SigningCertificates.empty()
+        && (!rInformation.xSigningCertificate.is()
+            || rInformation.xSigningCertificate->getEncoded() != rInfo.xVerifiedCertificate->getEncoded()))
+    {
+        SAL_WARN("xmlsecurity.helper",
+                 "signature was not verified with the certificate of xades:SigningCertificate");
+        return false;
+    }
+    return true;
+}
+} // namespace
+
 /*
  * XSignatureVerifyResultListener
  */
@@ -990,8 +1020,19 @@ void SAL_CALL XSecController::signatureVerified( sal_Int32 securityId, css::xml:
 {
     int index = findSignatureInfor(securityId);
     assert(index != -1 && "Signature Not Found!");
-    SignatureInformation& signatureInfor = m_vInternalSignatureInformations.at(index).signatureInfor;
-    signatureInfor.nStatus = nResult;
+    InternalSignatureInformation & rInformation{m_vInternalSignatureInformations.at(index)};
+    SignatureInformation & rSignatureInfor{rInformation.signatureInfor};
+    if (auto const pVerifier
+        = dynamic_cast<SignatureVerifierImpl*>(rInformation.xReferenceResolvedListener.get()))
+    {
+        rSignatureInfor.xVerifiedCertificate = pVerifier->GetVerifiedCertificate();
+    }
+    if (nResult == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED
+        && !IsSigningKeyBound(rInformation))
+    {
+        nResult = css::xml::crypto::SecurityOperationStatus_UNKNOWN;
+    }
+    rSignatureInfor.nStatus = nResult;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
