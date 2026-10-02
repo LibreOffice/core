@@ -12,7 +12,7 @@
  * Feature blocking handler
  */
 
-/* global $ _ app */
+/* global $ _ app UnlockPopup */
 
 window.L.Map.include({
 
@@ -69,23 +69,6 @@ window.L.Map.include({
 	openUnlockPopup: function(cmd) {
 		if ((this.isRestrictedUser() && this.isRestrictedItem(cmd)) || this.uiManager.isAnyDialogOpen())
 			return;
-		var message = [
-			'<div class="container">',
-			'<img id="unlock-image">',
-			'<div class="item">',
-			'<h1>' + this.Locking.unlockTitle + '</h1>',
-			'<p>' + this.Locking.unlockDescription + '</p>',
-			'<ul>',
-		];
-		var highlights = [this.Locking.writerHighlights, this.Locking.calcHighlights, this.Locking.impressHighlights, this.Locking.drawHighlights];
-		highlights.forEach(function(highlight) {
-			if (highlight)
-				message.push('<li>' + highlight + '</li>');
-		});
-		message.push('</ul>', '</div>', '</div>');
-
-		message = message.join('');
-
 		const modalId = 'unlock-features-popup';
                 this.uiManager.showInfoModal(modalId, null, ' ', ' ', _('Unlock'), () => {
                         window.open(this.Locking.unlockLink, '_blank');
@@ -94,21 +77,22 @@ window.L.Map.include({
 
 		app.layoutingService.appendLayoutingTask(() => {
 			let modal = document.getElementById(modalId);
-			let paraTag = modal.querySelectorAll('p')[0];
+			const imageUrl = this.Locking.unlockImageUrlPath
+				? 'remote/static' + this.Locking.unlockImageUrlPath
+				: 'images/lock-illustration.svg';
+			const highlights = [
+				this.Locking.writerHighlights,
+				this.Locking.calcHighlights,
+				this.Locking.impressHighlights,
+				this.Locking.drawHighlights,
+			].filter(Boolean);
+			const content = UnlockPopup.build(imageUrl, this.Locking.unlockTitle,
+				this.Locking.unlockDescription, highlights);
+			const paraTag = modal.querySelector('p');
 			if (paraTag)
-				paraTag.outerHTML = message;
-			else {
-				var el = document.createElement('p');
-				modal.insertBefore(el, modal.firstChild);
-				el.outerHTML = message;
-			}
-
-			let unlockImage = document.getElementById('unlock-image');
-			if (this.Locking.unlockImageUrlPath) {
-				unlockImage.src = 'remote/static' + this.Locking.unlockImageUrlPath;
-			} else {
-				unlockImage.src = 'images/lock-illustration.svg';
-			}
+				paraTag.replaceWith(content);
+			else
+				modal.insertBefore(content, modal.firstChild);
 		});
 	},
 

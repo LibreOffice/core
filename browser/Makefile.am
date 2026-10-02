@@ -759,6 +759,7 @@ COOL_JS_LST =\
 	src/control/Control.BackstageView.ts \
 	src/control/DropFileOverlay.tsx \
 	src/control/AccessibilityNotice.tsx \
+	src/control/UnlockPopup.tsx \
 	src/control/Control.ContextToolbar.ts \
 	src/control/Control.SidebarBase.ts \
 	src/control/Control.Sidebar.ts \
