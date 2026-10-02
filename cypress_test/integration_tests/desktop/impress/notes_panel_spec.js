@@ -465,6 +465,62 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		cy.cGet(boldButton).should('not.have.class', 'selected');
 	});
 
+	// After an undo in the notes, a text command still acts on the notes text.
+	it('Bold acts on the notes after an undo', function () {
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+
+		openNotesPane();
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('Demo');
+		cy.cGet(paragraph).should('have.text', 'Demo');
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+
+		desktopHelper.getNbItem('Undo').should('not.have.attr', 'disabled');
+		desktopHelper.getNbIcon('Undo').click();
+		cy.cGet(paragraph).should('have.text', '');
+		cy.cGet(editEngine).should('have.focus');
+
+		cy.cGet(editEngine).type('Again');
+		cy.cGet(paragraph).should('have.text', 'Again');
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:SelectAll');
+			win.app.map.sendUnoCommand('.uno:Bold');
+			helper.processToIdle(win);
+		});
+		cy.cGet(paragraph + ' span').should('have.css', 'font-weight', '700');
+	});
+
+	// A pointer that passes over the slide leaves the notes in charge of the text commands.
+	it('Bold acts on the notes after the mouse moved over the slide', function () {
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+
+		openNotesPane();
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('Demo');
+		cy.cGet(paragraph).should('have.text', 'Demo');
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:SelectAll');
+			win.app.map.sendUnoCommand('.uno:Bold');
+			helper.processToIdle(win);
+		});
+		cy.cGet(paragraph + ' span').should('have.css', 'font-weight', '700');
+
+		cy.cGet('#document-container').then(function (items) {
+			var rect = items[0].getBoundingClientRect();
+			cy.cGet('body').trigger('mousemove', (rect.left + rect.right) / 2, (rect.top + rect.bottom) / 2);
+		});
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:Bold');
+			helper.processToIdle(win);
+		});
+		cy.cGet(paragraph + ' span').should('have.css', 'font-weight', '400');
+	});
+
 	it('Ctrl+V works while the notes panel has focus', function () {
 		// Given an open notes panel with its editengine widget focused:
 		openNotesPane();

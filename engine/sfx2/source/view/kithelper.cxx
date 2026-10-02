@@ -1315,7 +1315,10 @@ namespace
             KitHelper::setView(pKitEv->mnView);
         }
 
-        if (!pKitEv->mpWindow->HasChildPathFocus(true))
+        // The focus moves with keys and buttons only, so a pointer that passes over the window
+        // leaves the focus where it is.
+        const bool bMoveOnly = pKitEv->mnEvent == VclEventId::WindowMouseMove;
+        if (!bMoveOnly && !pKitEv->mpWindow->HasChildPathFocus(true))
         {
             SAL_INFO("sfx.view", "COKit - focus mismatch, switching focus");
             pKitEv->mpWindow->GrabFocus();
