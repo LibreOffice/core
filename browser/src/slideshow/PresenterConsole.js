@@ -26,7 +26,7 @@ class PresenterConsole {
 		this._map.on('newpresentinconsole', this._onPresentInConsole, this);
 	}
 
-	_generateHtml(title) {
+	_generateHtml() {
 		this.labels = {
 			currentSlide: _('Current Slide'),
 			nextSlide: _('Next Slide'),
@@ -47,17 +47,12 @@ class PresenterConsole {
 			currentSlidePreview: _('Preview of the current slide'),
 			nextSlidePreview: _('Preview of the next slide'),
 		};
-		let sanitizer = document.createElement('div');
-		sanitizer.innerText = title;
-
-		let sanitizedTitle = sanitizer.innerHTML;
 		return `
 			<!DOCTYPE html>
 			<html lang="en">
 			<head>
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1">
-				<title>${sanitizedTitle}</title>
 				<style>
 					/* The notes pane is narrow, so paragraphs and lists sit
 					   closer together than the browser default. */
@@ -297,10 +292,9 @@ class PresenterConsole {
 		}
 
 		this._proxyPresenter.document.open();
-		this._proxyPresenter.document.write(
-			this._generateHtml(_('Presenter Console')),
-		);
+		this._proxyPresenter.document.write(this._generateHtml());
 		this._proxyPresenter.document.close();
+		this._proxyPresenter.document.title = _('Presenter Console');
 
 		this._currentSlideCanvas = this._proxyPresenter.document.querySelector(
 			'#current-presentation',

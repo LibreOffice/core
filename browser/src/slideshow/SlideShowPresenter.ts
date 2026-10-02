@@ -1097,19 +1097,13 @@ class SlideShowPresenter {
 		this._canvasLoader = null;
 	}
 
-	_generateSlideWindowHtml(title: string) {
-		const sanitizer = document.createElement('div');
-		sanitizer.innerText = title;
-
-		const sanitizedTitle = sanitizer.innerHTML;
-
+	_generateSlideWindowHtml() {
 		return `
 			<!DOCTYPE html>
 			<html lang="en">
 			<head>
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1">
-				<title>${sanitizedTitle}</title>
 				<link rel="stylesheet" href="progressbar.css" />
 			</head>
 			<body>
@@ -1172,7 +1166,7 @@ class SlideShowPresenter {
 	_doInWindowPresentation(showSwitchMonitors: boolean) {
 		const popupTitle =
 			_('Windowed Presentation: ') + this._map['wopi'].BaseFileName;
-		const htmlContent = this._generateSlideWindowHtml(popupTitle);
+		const htmlContent = this._generateSlideWindowHtml();
 
 		// On the Qt and macOS shells a full screen show or a presenter-console
 		// show opens its own window with window.origOpen. A plain "Present in
@@ -1209,6 +1203,7 @@ class SlideShowPresenter {
 		this._getProxyDocumentNode().open();
 		this._getProxyDocumentNode().write(htmlContent);
 		this._getProxyDocumentNode().close();
+		this._getProxyDocumentNode().title = popupTitle;
 
 		this._slideShowWindowProxy.focus();
 
