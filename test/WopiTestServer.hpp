@@ -39,6 +39,7 @@
 #include <Poco/Util/LayeredConfiguration.h>
 
 #include <cctype>
+#include <cstdlib>
 #include <functional>
 #include <sstream>
 #include <string_view>
@@ -161,6 +162,7 @@ private:
     static constexpr auto DefaultFilename = "hello.txt";
 
     /// Whether WOPI URLs point at a listener of our own instead of coolwsd.
+    /// COOL_TEST_OWN_WOPI_HOST in the environment turns it on for every test.
     bool _ownWopiHost;
     /// That listener's poll, once started, and the origin it serves.
     std::shared_ptr<SocketPoll> _wopiHostPoll;
@@ -255,7 +257,7 @@ protected:
         , _countGetFile(0)
         , _countPutRelative(0)
         , _countPutFile(0)
-        , _ownWopiHost(false)
+        , _ownWopiHost(std::getenv("COOL_TEST_OWN_WOPI_HOST") != nullptr)
         , _dontSendJSONOnPutFile(false)
     {
         TST_LOG("WopiTestServer created for [" << getTestname() << ']');
