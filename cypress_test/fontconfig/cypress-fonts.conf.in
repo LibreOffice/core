@@ -3,16 +3,14 @@
 <fontconfig>
 	<!-- Draw browser UI text with the DejaVu fonts the engine bundles, so
 	     every machine renders it the same way the snapshot baselines were
-	     captured. The rejectfont rules drop the host font directories so a
-	     different DejaVu release installed on the machine cannot win.
-	     configure fills in the configured engine install path. -->
-	<include ignore_missing="yes">/etc/fonts/fonts.conf</include>
+	     captured. The engine's font directory is the only one listed, so no
+	     font the machine has installed can win. conf.d still supplies the
+	     host's rendering settings. configure fills in the configured engine
+	     install path. -->
+	<include ignore_missing="yes">/etc/fonts/conf.d</include>
+	<cachedir prefix="xdg">fontconfig</cachedir>
 
 	<dir>@LO_PATH@/share/fonts/truetype</dir>
-
-	<selectfont><rejectfont>
-		<glob>/usr/*</glob>
-	</rejectfont></selectfont>
 
 	<alias binding="strong">
 		<family>sans-serif</family>
