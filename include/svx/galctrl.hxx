@@ -91,7 +91,7 @@ class GalleryIconView final : public ValueSet
 private:
     std::unique_ptr<GalleryDragDrop> mxDragDropTargetHelper;
 
-    GalleryBrowser*     mpParent;
+    GalleryBrowser& mrParent;
     GalleryTheme*       mpTheme;
 
     // ValueSet
@@ -105,8 +105,7 @@ private:
     virtual void        SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
 public:
-
-    GalleryIconView(GalleryBrowser* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
+    GalleryIconView(GalleryBrowser& rParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
     void SetTheme(GalleryTheme* pTheme) { mpTheme = pTheme; }
     virtual ~GalleryIconView() override;
 

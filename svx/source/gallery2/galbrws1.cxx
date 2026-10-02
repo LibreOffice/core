@@ -134,7 +134,7 @@ GalleryBrowser::GalleryBrowser(
     aImgReadOnly          ( RID_SVXBMP_THEME_READONLY )
     //maThemeSelectionHandler(std::move(aThemeSelectionHandler))
     , mpCurTheme(nullptr)
-    , mxIconView(new GalleryIconView(this, rBuilder.weld_scrolled_window(u"galleryscroll"_ustr, true)))
+    , mxIconView(new GalleryIconView(*this, rBuilder.weld_scrolled_window(u"galleryscroll"_ustr, true)))
     , mxIconViewWin(new weld::CustomWeld(rBuilder, u"gallery"_ustr, *mxIconView))
     , mxListView(rBuilder.weld_tree_view(u"gallerylist"_ustr))
     , mxPreview(new GalleryPreview(this, rBuilder.weld_scrolled_window(u"previewscroll"_ustr)))

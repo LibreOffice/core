@@ -300,9 +300,10 @@ void GalleryIconView::drawTransparenceBackground(vcl::RenderContext& rOut, const
     rOut.DrawCheckered(rPos, rSize, nLen, aW, aG);
 }
 
-GalleryIconView::GalleryIconView(GalleryBrowser* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
+GalleryIconView::GalleryIconView(GalleryBrowser& rParent,
+                                 std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
     : ValueSet(std::move(xScrolledWindow))
-    , mpParent(pParent)
+    , mrParent(rParent)
     , mpTheme(nullptr)
 {
 }
@@ -322,7 +323,7 @@ void GalleryIconView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetItemWidth( S_THUMB + 6 );
     SetItemHeight( S_THUMB + 6 );
 
-    mxDragDropTargetHelper.reset(new GalleryDragDrop(mpParent, pDrawingArea->get_drop_target()));
+    mxDragDropTargetHelper.reset(new GalleryDragDrop(&mrParent, pDrawingArea->get_drop_target()));
 }
 
 void GalleryIconView::UserDraw(const UserDrawEvent& rUDEvt)
@@ -391,7 +392,7 @@ bool GalleryIconView::MouseButtonDown(const MouseEvent& rMEvt)
     bool bRet = ValueSet::MouseButtonDown(rMEvt);
 
     if (rMEvt.GetClicks() == 2)
-        mpParent->TogglePreview();
+        mrParent.TogglePreview();
 
     return bRet;
 }
@@ -402,7 +403,7 @@ bool GalleryIconView::Command(const CommandEvent& rCEvt)
 
     if (!bRet && rCEvt.GetCommand() == CommandEventId::ContextMenu)
     {
-        bRet = mpParent->ShowContextMenu(rCEvt);
+        bRet = mrParent.ShowContextMenu(rCEvt);
     }
 
     return bRet;
@@ -410,7 +411,7 @@ bool GalleryIconView::Command(const CommandEvent& rCEvt)
 
 bool GalleryIconView::KeyInput(const KeyEvent& rKEvt)
 {
-    if (!mpTheme || !mpParent->KeyInput(rKEvt))
+    if (!mpTheme || !mrParent.KeyInput(rKEvt))
         return ValueSet::KeyInput(rKEvt);
     return true;
 }
@@ -418,7 +419,7 @@ bool GalleryIconView::KeyInput(const KeyEvent& rKEvt)
 bool GalleryIconView::StartDrag()
 {
     Select();
-    return mpParent->StartDrag();
+    return mrParent.StartDrag();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
