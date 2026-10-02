@@ -379,7 +379,7 @@ OUString StringToHTMLString( std::u16string_view rString )
 }
 
 // converts a paragraph of the outliner to html
-OUString ParagraphToHTMLString( SdrOutliner const * pOutliner, sal_Int32 nPara )
+OUString ParagraphToHTMLString( SdrOutliner* pOutliner, sal_Int32 nPara )
 {
     OUStringBuffer aStr;
 
@@ -387,7 +387,7 @@ OUString ParagraphToHTMLString( SdrOutliner const * pOutliner, sal_Int32 nPara )
         return OUString();
 
     // TODO: MALTE!!!
-    EditEngine& rEditEngine = *const_cast<EditEngine*>(&pOutliner->GetEditEngine());
+    EditEngine& rEditEngine = pOutliner->GetEditEngine();
     bool bOldUpdateMode = rEditEngine.SetUpdateLayout(true);
 
     Paragraph* pPara = pOutliner->GetParagraph(nPara);

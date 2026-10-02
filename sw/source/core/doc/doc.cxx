@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <doc.hxx>
+#include <charformats.hxx>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModel3.hpp>
@@ -82,6 +83,7 @@
 #include <scriptinfo.hxx>
 #include <mdiexp.hxx>
 #include <docary.hxx>
+#include <frameformats.hxx>
 #include <printdata.hxx>
 #include <strings.hrc>
 #include <SwUndoTOXChange.hxx>
@@ -743,7 +745,7 @@ void SwDoc::CalculatePagesForPrinting(
         // 0 -> print all pages (default if aPageRange is empty)
         // 1 -> print range according to PageRange
         // 2 -> print selection
-        if (1 == nContent)
+        if (1 == nContent || 3 == nContent)
             aPageRange = rOptions.getStringValue( "PageRange" );
 
         if (2 == nContent)

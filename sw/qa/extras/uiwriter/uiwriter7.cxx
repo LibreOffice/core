@@ -22,6 +22,7 @@
 #include <unotbl.hxx>
 #include <PostItMgr.hxx>
 #include <AnnotationWin.hxx>
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 
 #include <svx/hdft.hxx>
@@ -403,6 +404,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTextSearch)
     // check of the end result
     CPPUNIT_ASSERT_EQUAL(u"mCelqy xWorpqd mThzq mis ma mtasq"_ustr,
                          pCursor->GetPointNode().GetTextNode()->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTextSearchNoResults)
+{
+    // Check searching for a string with no matches. This should check tdf#173585
+
+    // Create a new empty Writer document
+    createSwDoc();
+
+    // Search for “Hello” in italics
+    uno::Reference<util::XSearchable> xSearch(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<util::XPropertyReplace> xSearchDescriptor(xSearch->createSearchDescriptor(),
+                                                             uno::UNO_QUERY_THROW);
+
+    xSearchDescriptor->setSearchString(u"Hello"_ustr);
+
+    uno::Sequence<beans::PropertyValue> aAttributes(comphelper::InitPropertySequence(
+        { { "CharPosture", uno::Any(css::awt::FontSlant_ITALIC) } }));
+    xSearchDescriptor->setSearchAttributes(aAttributes);
+
+    uno::Reference<css::container::XIndexAccess> xIndex = xSearch->findAll(xSearchDescriptor);
+
+    // There should be no matches
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndex->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf131431)

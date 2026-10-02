@@ -140,6 +140,7 @@
 #include <i18nutil/searchopt.hxx>
 
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <fmtcol.hxx>
 #include <istyleaccess.hxx>
 
@@ -2591,6 +2592,11 @@ SwDoc * SwXTextDocument::GetRenderDoc(
 
     uno::Reference< frame::XModel > xModel;
     rSelection >>= xModel;
+    const bool bPrintCurrentPage =  m_pPrintUIOptions  && m_pPrintUIOptions->getIntValue("PrintContent", 0) == 3;
+
+    if (bPrintCurrentPage)
+        return m_pDocShell->GetDoc();
+
     if (xModel == m_pDocShell->GetModel())
         pDoc = m_pDocShell->GetDoc();
     else
@@ -4272,7 +4278,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
         SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
         if(pOutliner)
         {
-            EditEngine& rEditEng = const_cast<EditEngine&>(pOutliner->GetEditEngine());
+            EditEngine& rEditEng = pOutliner->GetEditEngine();
             sal_Int32 nParCount = pOutliner->GetParagraphCount();
             for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
             {

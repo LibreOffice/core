@@ -35,10 +35,8 @@
 #include <editeng/numitem.hxx>
 #include "tox.hxx"
 #include "frmfmt.hxx"
-#include "frameformats.hxx"
 #include "charfmt.hxx"
 #include "docary.hxx"
-#include "charformats.hxx"
 #include "pagedesc.hxx"
 #include "tblenum.hxx"
 #include "ndarr.hxx"
@@ -66,6 +64,7 @@ class SvxMacro;
 class SwAutoCompleteWord;
 class SwAutoCorrExceptWord;
 class SwCellFrame;
+class SwCharFormats;
 class SwCellStyleTable;
 class SwCursorShell;
 class SwCursor;
@@ -147,6 +146,8 @@ namespace sw {
     enum class RedlineMode;
     enum class FieldmarkMode;
     enum class ParagraphBreakMode;
+    template<class T> class FrameFormats;
+    typedef FrameFormats<::SwTableFormat*> TableFrameFormats;
     class MetaFieldManager;
     class UndoManager;
     class IShellCursorSupplier;
@@ -807,8 +808,7 @@ public:
     SW_DLLPUBLIC SwCharFormat *MakeCharFormat(const UIName &rFormatName, SwCharFormat *pDerivedFrom);
     void       DelCharFormat(size_t nFormat, bool bBroadcast = false);
     void       DelCharFormat(SwCharFormat const * pFormat, bool bBroadcast = false);
-    SwCharFormat* FindCharFormatByName( const UIName& rName ) const
-        {   return mpCharFormatTable->FindFormatByName(rName); }
+    SW_DLLPUBLIC SwCharFormat* FindCharFormatByName( const UIName& rName ) const;
 
     // Formatcollections (styles)
     // TXT

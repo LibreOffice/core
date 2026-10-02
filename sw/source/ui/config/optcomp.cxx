@@ -20,6 +20,7 @@
 #include <optcomp.hxx>
 
 #include <cmdid.h>
+#include <doc.hxx>
 #include <docsh.hxx>
 #include <strings.hrc>
 #include <uiitems.hxx>
@@ -33,7 +34,6 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <vector>
 #include <svtools/restartdialog.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Compatibility.hxx>

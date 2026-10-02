@@ -272,12 +272,15 @@ SwPrintUIOptions::SwPrintUIOptions(
     static constexpr OUString aPrintRangeName( u"PrintContent"_ustr );
     uno::Sequence< OUString > aChoices{ SwResId( STR_PRINTOPTUI_PRINTALLPAGES ),
                                         SwResId( STR_PRINTOPTUI_PRINTPAGES ),
-                                        SwResId( STR_PRINTOPTUI_PRINTSELECTION ) };
-    uno::Sequence< sal_Bool > aChoicesDisabled{ false, false, !bHasSelection };
+                                        SwResId( STR_PRINTOPTUI_PRINTSELECTION ),
+                                        SwResId( STR_PRINTOPTUI_PRINTCURRENTPAGE ) };
+    uno::Sequence< sal_Bool > aChoicesDisabled{ false, false, !bHasSelection, false };
     uno::Sequence< OUString > aHelpIds{ u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0"_ustr,
                                         u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1"_ustr,
-                                        u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2"_ustr };
-    uno::Sequence< OUString > aWidgetIds{ u"rbAllPages"_ustr, u"rbRangePages"_ustr, u"rbRangeSelection"_ustr };
+                                        u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2"_ustr,
+                                        u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:3"_ustr
+                                      };
+    uno::Sequence< OUString > aWidgetIds{ u"rbAllPages"_ustr, u"rbRangePages"_ustr, u"rbRangeSelection"_ustr, u"rbCurrentPage"_ustr };
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                         aHelpIds, aPrintRangeName,
                                                         aChoices, 0 /* always default to 'All pages' */,

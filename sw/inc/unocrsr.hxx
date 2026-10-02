@@ -141,7 +141,11 @@ namespace sw
             SwUnoCursor* operator->() const
                 { return get(); }
             SwUnoCursor& operator*() const
-                { return *get(); }
+            {
+                // shared_ptr::operator* is used instead of get() so that it will assert that the
+                // pointer is not null. See tdf#173585
+                return *m_pCursor;
+            }
             UnoCursorPointer& operator=(const UnoCursorPointer& aOther)
             {
                 if (m_pCursor)

@@ -83,6 +83,16 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testShapeMacroExtRef)
                 u"Importieren");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testConditionalFormattingExtRef)
+{
+    createScDoc("xls/tdf171083.xls");
+    save(TestFilter::XLSX);
+
+    //without the fix the externalLink1 wouldn't have been exported to XLSX
+    xmlDocUniquePtr pExtLink = parseExport(u"xl/externalLinks/externalLink1.xml"_ustr);
+    CPPUNIT_ASSERT(pExtLink);
+}
+
 // --- Table Style OOXML Export Tests ---
 
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleDefaultExportXLSX)

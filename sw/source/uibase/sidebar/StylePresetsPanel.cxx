@@ -16,7 +16,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/weld/ScrolledWindow.hxx>
+#include <vcl/weld/Builder.hxx>
+#include <vcl/weld/weldutils.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/StylePreviewRenderer.hxx>
@@ -142,13 +143,9 @@ std::unique_ptr<PanelLayout> StylePresetsPanel::Create(weld::Widget* pParent)
 
 StylePresetsPanel::StylePresetsPanel(weld::Widget* pParent)
     : PanelLayout(pParent, u"StylePresetsPanel"_ustr, u"modules/swriter/ui/sidebarstylepresets.ui"_ustr)
-    , mxValueSet(new ValueSet(nullptr))
-    , mxValueSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *mxValueSet))
+    , m_pIconView(m_xBuilder->weld_icon_view("iconview"))
 {
-    mxValueSet->SetColCount(2);
-
-    mxValueSet->SetColor(Application::GetSettings().GetStyleSettings().GetFaceColor());
-    mxValueSet->SetDoubleClickHdl(LINK(this, StylePresetsPanel, DoubleClickHdl));
+    m_pIconView->connect_item_activated(LINK(this, StylePresetsPanel, ItemActivatedHdl));
 
     RefreshList();
 }
@@ -167,12 +164,12 @@ void StylePresetsPanel::RefreshList()
                 OUString aName = aTemplates.GetName(i,j);
                 OUString aURL = aTemplates.GetPath(i,j);
                 Bitmap aPreview = CreatePreview(aURL, aName);
-                sal_uInt16 nId = j + 1;
-                mxValueSet->InsertItem(nId, Image(aPreview), aName);
+                m_pIconView->insert(j, nullptr, nullptr, &aPreview, nullptr);
+                m_pIconView->set_item_accessible_name(j, aName);
+                m_pIconView->set_item_tooltip_text(j, aName);
                 maTemplateEntries.push_back(std::make_unique<TemplateEntry>(aURL));
-                mxValueSet->SetItemData(nId, maTemplateEntries.back().get());
+                m_pIconView->set_id(j, weld::toId(maTemplateEntries.back().get()));
             }
-            mxValueSet->SetOptimalSize();
         }
     }
 }
@@ -181,10 +178,9 @@ StylePresetsPanel::~StylePresetsPanel()
 {
 }
 
-IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl, ValueSet*, void)
+IMPL_LINK(StylePresetsPanel, ItemActivatedHdl, const weld::TreeIter&, rIter, bool)
 {
-    sal_Int32 nItemId = mxValueSet->GetSelectedItemId();
-    TemplateEntry* pEntry = static_cast<TemplateEntry*>(mxValueSet->GetItemData(nItemId));
+    TemplateEntry* pEntry = weld::fromId<TemplateEntry*>(m_pIconView->get_id(rIter));
 
     if (SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current()))
     {
@@ -193,6 +189,8 @@ IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl, ValueSet*, void)
         aOption.SetNumRules(true);
         pDocSh->LoadStylesFromFile(pEntry->maURL, aOption, false);
     }
+
+    return true;
 }
 
 void StylePresetsPanel::NotifyItemUpdate(const sal_uInt16 /*nSId*/,

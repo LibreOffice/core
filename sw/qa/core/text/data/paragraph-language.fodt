@@ -17,6 +17,9 @@
   <style:style style:name="fr1" style:family="graphic">
    <style:graphic-properties style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="left" style:horizontal-rel="paragraph" fo:padding="0in" fo:border="none"/>
   </style:style>
+  <style:style style:name="fr2" style:family="graphic" style:parent-style-name="Frame">
+   <style:graphic-properties style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="left" style:horizontal-rel="paragraph" fo:padding="0in" fo:border="none"/>
+  </style:style>
   <style:style style:name="T2" style:family="text">
    <style:text-properties fo:language="en" fo:country="US"/>
   </style:style>
@@ -30,7 +33,9 @@
    <text:p text:style-name="P1">Ein Absatz, der ganz und gar deutsch ist.</text:p>
    <text:p text:style-name="Standard">English with <text:span text:style-name="T1">ein paar deutsche Worte</text:span> in it.</text:p>
    <text:p text:style-name="P1">Ein deutscher Absatz mit <text:span text:style-name="T2">a few English words</text:span> darin.</text:p>
-   <text:p text:style-name="P1">Ein deutscher Absatz mit einem Rahmen.<draw:frame draw:style-name="fr1" draw:name="Frame1" text:anchor-type="char" svg:x="3in" svg:y="0in" svg:width="2in" svg:height="0.4in"><draw:text-box><text:p text:style-name="Standard">Text inside the frame.</text:p></draw:text-box></draw:frame></text:p>
+   <text:p text:style-name="P1">Ein deutscher Absatz mit einem Rahmen.<draw:frame draw:style-name="fr1" draw:name="Frame1" text:anchor-type="char" svg:x="3in" svg:y="0in" svg:width="2in" svg:height="0.4in"><draw:text-box><text:p text:style-name="Standard">Text inside the frame.</text:p></draw:text-box><svg:desc>A shape described in the language of the document</svg:desc></draw:frame></text:p>
+   <text:p text:style-name="P1">Ein deutscher Absatz mit einem Textrahmen.<draw:frame draw:style-name="fr2" draw:name="Frame2" text:anchor-type="char" svg:width="2in" draw:z-index="0"><draw:text-box><text:p text:style-name="Standard">Text in a Writer frame.</text:p></draw:text-box><svg:desc>Described in the language of the document</svg:desc></draw:frame></text:p>
+   <text:p text:style-name="P1">Ein deutscher Absatz mit einem Bild.<draw:frame draw:style-name="fr2" draw:name="Image1" text:anchor-type="char" svg:width="0.2in" svg:height="0.2in" draw:z-index="1"><draw:image><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==</office:binary-data></draw:image><svg:desc>A picture described in the language of the document</svg:desc></draw:frame></text:p>
   </office:text>
  </office:body>
 </office:document>

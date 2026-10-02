@@ -466,9 +466,9 @@ namespace sdr::properties
 
                             if(aSet.GetItemState(EE_CHAR_COLOR) == SfxItemState::SET)
                             {
-                                EditEngine* pEditEngine = const_cast<EditEngine*>(&(pOutliner->GetEditEngine()));
+                                EditEngine& rEditEngine = pOutliner->GetEditEngine();
                                 std::vector<EECharAttrib> aAttribs;
-                                pEditEngine->GetCharAttribs(nPara, aAttribs);
+                                rEditEngine.GetCharAttribs(nPara, aAttribs);
 
                                 for(const auto& rAttrib : aAttribs)
                                 {
@@ -503,17 +503,17 @@ namespace sdr::properties
                                             aSel.end.nIndex = rAttrib.nStart;
 
                                             if (aSel.start.nIndex != aSel.end.nIndex)
-                                                pEditEngine->QuickSetAttribs(aColorSet, aSel);
+                                                rEditEngine.QuickSetAttribs(aColorSet, aSel);
 
                                             aSel.start.nIndex = rAttrib.nEnd;
                                         }
                                     }
 
-                                    aSel.end.nIndex = pEditEngine->GetTextLen(nPara);
+                                    aSel.end.nIndex = rEditEngine.GetTextLen(nPara);
 
                                     if (aSel.start.nIndex != aSel.end.nIndex)
                                     {
-                                        pEditEngine->QuickSetAttribs( aColorSet, aSel );
+                                        rEditEngine.QuickSetAttribs( aColorSet, aSel );
                                     }
                                 }
 

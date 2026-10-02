@@ -20,13 +20,13 @@ class tdf157569(UITestCase):
             nHeight = xShape.getSize().Height
             nWidth = xShape.getSize().Width
 
-            # Without the fix in place, this test would have failed with
-            # AssertionError: 1663 != 944
-            self.assertEqual(1663, nHeight)
+            # The formula takes the 11pt of the text around it, which the document defaults
+            # hold, rather than the 12pt default of the formula editor.
+            self.assertEqual(1529, nHeight)
             if platform.system() == "Windows":
-                self.assertEqual(2157, nWidth) # no idea why it's different on Windows
+                self.assertEqual(1976, nWidth) # no idea why it's different on Windows
             else:
-                self.assertEqual(2118, nWidth)
+                self.assertEqual(1940, nWidth)
 
             xDoc = self.xUITest.getTopFocusWindow()
             xEditWin = xDoc.getChild("writer_edit")

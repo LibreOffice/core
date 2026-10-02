@@ -11,6 +11,7 @@
 
 #include <svx/IColorSet.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
 
@@ -53,6 +54,9 @@ public:
     void grab_focus();
 
     void set_sensitive(bool bSensitive);
+
+    void set_size_request(int nWidth, int nHeight);
+    Size get_size_request() const;
 
     void set_help_id(const OUString& rName);
 

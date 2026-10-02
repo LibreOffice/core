@@ -18,6 +18,7 @@
  */
 
 #include <config_wasm_strip.h>
+#include <algorithm>
 
 #include <hintids.hxx>
 #include <utility>
@@ -751,7 +752,10 @@ SwScanner::SwScanner(std::function<LanguageType(sal_Int32, sal_Int32, bool)> aGe
     , m_bClip(bClp)
 {
     m_nStartPos = m_nBegin = nStart;
-    m_nEndPos = nEnd;
+    // The range comes from a selection, which can be stale - e.g. an undo that
+    // rebuilt the text leaves the cursor describing the old, longer text. Keep
+    // the scan inside the string;
+    m_nEndPos = std::min(nEnd, m_aPreDashReplacementText.getLength());
 
     //MSWord f.e has special emdash and endash behaviour in that they break
     //words for the purposes of word counting, while a hyphen etc. doesn't.

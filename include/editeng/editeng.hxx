@@ -113,6 +113,8 @@ class LinkParamNone;
 class DrawPortionInfo;
 class DrawBulletInfo;
 class StripPortionsHelper;
+enum class SdrCompatibilityFlag;
+class Outliner;
 
 /** values for:
        SfxItemSet GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs::All );
@@ -196,6 +198,7 @@ private:
     SAL_DLLPRIVATE void SetInSelectionMode(bool b);
 
 public:
+    EditEngine(Outliner* pEngOwner, SfxItemPool* pItemPool);
     EditEngine(SfxItemPool* pItemPool);
     virtual ~EditEngine();
 
@@ -626,6 +629,16 @@ public:
 
     void SetLOKSpecialPaperSize(const Size& rSize);
     const Size& GetLOKSpecialPaperSize() const;
+
+    // Only useful when this is Outliner capable.
+    sal_Int16       GetNumberingDepth( sal_Int32 nPara ) const;
+
+    // Only useful when this is Outliner capable.
+    /// @returns state of the SdrCompatibilityFlag
+    std::optional<bool> GetCompatFlag(SdrCompatibilityFlag eFlag) const;
+
+    // Only useful when this is Outliner capable.
+    Outliner* GetOwner();
 };
 
 #endif // INCLUDED_EDITENG_EDITENG_HXX

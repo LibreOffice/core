@@ -93,6 +93,8 @@ class SM_DLLPUBLIC SmDocShell final : public SfxObjectShell, public SfxListener
     sal_uInt16          mnModifyCount;
     bool                mbFormulaArranged;
     sal_Int16           mnSmSyntaxVersion;
+    /// Font size in half points that the OOXML markup gave for the formula, 0 when it gave none.
+    sal_Int32           mnOoxmlFontSizeInHalfPoints = 0;
     std::unique_ptr<AbstractSmParser> maParser;
     std::unique_ptr<SmCursor> mpCursor;
     std::set< OUString >    maUsedSymbols;   // to export used symbols only when saving
@@ -215,6 +217,12 @@ public:
             const sal_Int8 nAlign);
     void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
     void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
+    /** The font size in half points that the OOXML markup gave for the formula, or 0 when the
+        markup carried no size of its own. */
+    sal_Int32 GetOoxmlFontSizeInHalfPoints() const { return mnOoxmlFontSizeInHalfPoints; }
+    /** Draw the formula at the given size, in half points. The size becomes the base size and
+        the size of each of the fonts. A size of zero or less leaves the formula as it is. */
+    void SetFontSizeInHalfPoints(sal_Int32 nFontSize);
 
     void UpdateEditEngineDefaultFonts();
 

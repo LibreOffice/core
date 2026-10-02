@@ -113,6 +113,8 @@
 
 #include <svl/numformat.hxx>
 #include <svl/numuno.hxx>
+#include <svx/xdef.hxx>
+#include <svx/xhatch.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 
@@ -3222,18 +3224,41 @@ void ChartExport::exportHatch( const Reference< XPropertySet >& xPropSet )
     if (!xPropSet.is())
         return;
 
-    if (GetProperty(xPropSet, u"FillHatchName"_ustr))
+    css::drawing::Hatch aHatch;
+    bool bHatchFound = false;
+
+    if (OUString aHatchName; GetProperty(xPropSet, u"FillHatchName"_ustr) && (mAny >>= aHatchName)
+                             && !aHatchName.isEmpty())
     {
-        OUString aHatchName;
-        mAny >>= aHatchName;
         uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
         uno::Reference< container::XNameAccess > xHatchTable( xFact->createInstance(u"com.sun.star.drawing.HatchTable"_ustr), uno::UNO_QUERY );
-        uno::Any rValue = xHatchTable->getByName(aHatchName);
-        css::drawing::Hatch aHatch;
-        rValue >>= aHatch;
-        WritePattFill(xPropSet, aHatch);
+        if (xHatchTable.is() && xHatchTable->hasByName(aHatchName))
+            bHatchFound = (xHatchTable->getByName(aHatchName) >>= aHatch);
     }
 
+    // tdf#116148: the fill style is a hatch, but there is no hatch to name: the
+    // drawing layer paints such a series with the item pool's default hatch.
+    // OOXML has no matching default - leaving the fill out makes PowerPoint
+    // apply its own, which is solid - so the effective hatch has to be written
+    // out explicitly.
+    if (!bHatchFound && GetProperty(xPropSet, u"FillHatch"_ustr))
+    {
+        // A property set that resolves the hatch itself knows better than the
+        // default below. chart2 does not expose the struct today, see the
+        // commented out PROP_FILL_HATCH in chart2/source/inc/FillProperties.hxx.
+        bHatchFound = (mAny >>= aHatch);
+    }
+
+    if (!bHatchFound)
+    {
+        // Same default the item pool hands out, see SdrItemPool in svx/source/svdraw/svdattr.cxx.
+        const XHatch aDefaultHatch{ COL_DEFAULT_SHAPE_STROKE };
+        aHatch.Style = aDefaultHatch.GetHatchStyle();
+        aHatch.Color = sal_Int32(aDefaultHatch.GetColor());
+        aHatch.Distance = aDefaultHatch.GetDistance();
+        aHatch.Angle = aDefaultHatch.GetAngle().get();
+    }
+    WritePattFill(xPropSet, aHatch);
 }
 
 void ChartExport::exportBitmapFill( const Reference< XPropertySet >& xPropSet )

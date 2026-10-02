@@ -190,6 +190,7 @@ namespace vcl
         OUString                                maPageStr;
         OUString                                maNoPageStr;
         OUString                                maNoPreviewStr;
+        sal_Int32                               mnInitialPage;
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
 

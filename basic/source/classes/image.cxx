@@ -222,9 +222,21 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     mvStringOffsets[ i ] = static_cast<sal_uInt16>(nOff);
                 }
                 r.ReadUInt32( nLen );
+                if (r.good()
+                    && (nLen > r.remainingSize()
+                        || std::any_of(mvStringOffsets.begin(), mvStringOffsets.end(),
+                                       [nLen](sal_uInt32 nOff) { return nOff >= nLen; })))
+                {
+                    SAL_WARN("basic", "Parsing error: string pool of " << nLen
+                             << " does not fit the record or its string offsets");
+                    MakeStrings(0);
+                    bError = true;
+                    break;
+                }
                 if (r.good())
                 {
-                    pStrings.reset(new sal_Unicode[ nLen ]);
+                    // The element past the pool ends the last string.
+                    pStrings.reset(new sal_Unicode[ nLen + 1 ]());
                     nStringSize = static_cast<sal_uInt16>(nLen);
 
                     if (GetToUnicodePoolData(r, nLen, nNext))
@@ -234,13 +246,16 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     }
                     else
                     {
-                        std::unique_ptr<char[]> pByteStrings(new char[nLen]);
+                        std::unique_ptr<char[]> pByteStrings(new char[nLen]());
                         r.ReadBytes(pByteStrings.get(), nLen);
                         for (size_t j = 0; j < mvStringOffsets.size(); j++)
                         {
                             sal_uInt16 nOff2 = static_cast<sal_uInt16>(mvStringOffsets[j]);
-                            OUString aStr(pByteStrings.get() + nOff2, strlen(pByteStrings.get() + nOff2), eCharSet);
-                            std::copy_n(aStr.getStr(), aStr.getLength() + 1,
+                            const sal_uInt32 nAvail = nLen - nOff2;
+                            const char* pByteString = pByteStrings.get() + nOff2;
+                            OUString aStr(pByteString, strnlen(pByteString, nAvail), eCharSet);
+                            std::copy_n(aStr.getStr(),
+                                        std::min<sal_uInt32>(aStr.getLength() + 1, nAvail),
                                         pStrings.get() + nOff2);
                         }
                     }

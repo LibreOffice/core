@@ -1074,6 +1074,30 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testPicturePlaceholderCustomPromptText)
     assertXPath(pDefault, aPicPlaceholder + "/p:txBody/a:bodyPr", 1);
     assertXPath(pDefault, aPicPlaceholder + "/p:txBody/a:p", 1);
     assertXPath(pDefault, aPicPlaceholder + "/p:txBody/a:p/a:r", 0);
+    // The paragraph still states what text put there would look like
+    assertXPath(pDefault, aPicPlaceholder + "/p:txBody/a:p/a:endParaRPr", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEmptyTitlePlaceholderFormatting)
+{
+    // Given a slide holding a title placeholder nothing was typed into, which its layout formats
+    // 22pt in the light scheme colour, not bold, indented:
+    createSdImpressDoc("pptx/empty-title-placeholder.pptx");
+    save(TestFilter::PPTX);
+
+    static constexpr OString aTitle(
+        "/p:sld/p:cSld/p:spTree/p:sp[p:nvSpPr/p:nvPr/p:ph/@type='title']/p:txBody/a:p"_ostr);
+    xmlDocUniquePtr pSlide = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    // Without the fix the paragraph was written bare, and PowerPoint showed the title
+    // bold black at 17pt, not white at 22pt
+    assertXPath(pSlide, aTitle + "/a:pPr", "marL", u"717480");
+    assertXPath(pSlide, aTitle + "/a:endParaRPr", "sz", u"2200");
+    assertXPath(pSlide, aTitle + "/a:endParaRPr", "b", u"0");
+    assertXPath(pSlide, aTitle + "/a:endParaRPr/a:solidFill/a:schemeClr", "val", u"lt1");
+
+    // The prompt shown in it is Impress's own, and stays out of the file
+    assertXPath(pSlide, aTitle + "/a:r", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testEnhancedPathViewBox)
@@ -1454,6 +1478,38 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf157740_slideMasters)
 
     pXmlDocContent = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
     assertXPath(pXmlDocContent, "/p:sldMaster/p:sldLayoutIdLst/p:sldLayoutId", 7);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testNotesMasterThemeNoAfterDeduplicatedMasters)
+{
+    createSdImpressDoc("n759180.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/presentation.xml"_ustr);
+    assertXPath(pXmlDocContent, "/p:presentation/p:sldMasterIdLst/p:sldMasterId", 1);
+
+    xmlDocUniquePtr pXmlDocRels = parseExport(u"ppt/slideMasters/_rels/slideMaster1.xml.rels"_ustr);
+    assertXPath(pXmlDocRels,
+                "/rels:Relationships/rels:Relationship[@Type='http://schemas.openxmlformats.org/"
+                "officeDocument/2006/relationships/theme']",
+                "Target", u"../theme/theme1.xml");
+
+    // The one slide master of this document has 12 layouts, which are imported as 12 master pages
+    // and written back as one slide master. The notes master theme takes the number after the slide
+    // master theme, as in the original file, without a gap for the master pages that were merged.
+    // Without the change in place, this test would have failed with:
+    // - Expected: ../theme/theme2.xml
+    // - Actual  : ../theme/theme13.xml
+    pXmlDocRels = parseExport(u"ppt/notesMasters/_rels/notesMaster1.xml.rels"_ustr);
+    assertXPath(pXmlDocRels,
+                "/rels:Relationships/rels:Relationship[@Type='http://schemas.openxmlformats.org/"
+                "officeDocument/2006/relationships/theme']",
+                "Target", u"../theme/theme2.xml");
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName(u"ppt/theme/theme2.xml"_ustr)));
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf159931_slideLayouts)
@@ -2593,6 +2649,23 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testCool16079_dateTimeField)
     xmlDocUniquePtr pLayout = parseExportedLayoutNamed(u"Title Slide");
     assertXPath(pLayout, "//p:sp[p:nvSpPr/p:nvPr/p:ph/@type='dt']/p:txBody/a:p/a:fld", "type",
                 u"datetime");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testThemeKeepColorTransforms)
+{
+    createSdImpressDoc("pptx/empty-title-placeholder.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/theme/theme1.xml"_ustr);
+    const OString sBasePath = "/a:theme/a:themeElements/a:fmtScheme/a:bgFillStyleLst/a:gradFill[1]"
+                              "/a:gsLst/a:gs[@pos='40000']/a:schemeClr"_ostr;
+
+    // Without the fix satMod would end up negative
+    assertXPath(pXmlDoc, sBasePath, "val", u"phClr");
+    assertXPathChildren(pXmlDoc, sBasePath, 3);
+    assertXPath(pXmlDoc, sBasePath + "/a:tint", "val", u"45000");
+    assertXPath(pXmlDoc, sBasePath + "/a:shade", "val", u"99000");
+    assertXPath(pXmlDoc, sBasePath + "/a:satMod", "val", u"350000");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf166401_textGivenToAPicturePlaceholder)

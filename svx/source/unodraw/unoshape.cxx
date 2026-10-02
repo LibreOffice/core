@@ -2341,26 +2341,27 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
     }
 
     case OWN_ATTR_TEXTFITTOSIZE_FONT_SCALE:
-    {
-        double fScale = 0.0;
-        if (rValue >>= fScale)
-        {
-            SdrTextFitToSizeTypeItem aItem(pSdrObject->GetMergedItem(SDRATTR_TEXT_FITTOSIZE));
-            aItem.setFontScale(fScale / 100.0);
-            pSdrObject->SetMergedItem(aItem);
-            return true;
-        }
-        break;
-    }
-
     case OWN_ATTR_TEXTFITTOSIZE_SPACING_SCALE:
     {
         double fScale = 0.0;
         if (rValue >>= fScale)
         {
-            SdrTextFitToSizeTypeItem aItem(pSdrObject->GetMergedItem(SDRATTR_TEXT_FITTOSIZE));
-            aItem.setSpacingScale(fScale / 100.0);
-            pSdrObject->SetMergedItem(aItem);
+            // A multi-property call may already hold the fit item to apply at the end.
+            std::optional<SfxItemSet>& rCollected = mpImpl->moItemSet;
+            const bool bCollected = mbIsMultiPropertyCall && rCollected
+                                    && rCollected->GetItemState(SDRATTR_TEXT_FITTOSIZE)
+                                           == SfxItemState::SET;
+            SdrTextFitToSizeTypeItem aItem(
+                bCollected ? rCollected->Get(SDRATTR_TEXT_FITTOSIZE)
+                           : pSdrObject->GetMergedItem(SDRATTR_TEXT_FITTOSIZE));
+            if (pProperty->nWID == OWN_ATTR_TEXTFITTOSIZE_FONT_SCALE)
+                aItem.setFontScale(fScale / 100.0);
+            else
+                aItem.setSpacingScale(fScale / 100.0);
+            if (bCollected)
+                rCollected->Put(aItem);
+            else
+                pSdrObject->SetMergedItem(aItem);
             return true;
         }
         break;

@@ -56,6 +56,7 @@
 #include <UndoCore.hxx>
 #include <IMark.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <strings.hrc>
 #include <bookmark.hxx>
 #include <frameformats.hxx>

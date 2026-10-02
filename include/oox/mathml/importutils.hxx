@@ -205,6 +205,14 @@ public:
      Handle the current (unexpected) tag.
     */
     void handleUnexpectedTag();
+    /**
+     Collects an attribute from every opening tag of the given type that sits inside an
+     element of the given enclosing type, anywhere in the stream and however deeply nested.
+     The position in the stream stays where it is.
+     @return the attribute values, in the order the tags carrying them appear
+    */
+    std::vector<OUString> tagAttributesWithin(int nEnclosingToken, int nTagToken,
+                                              int nAttributeToken) const;
 
 protected:
     Tag checkTag(int token, bool optional);

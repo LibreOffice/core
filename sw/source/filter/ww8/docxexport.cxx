@@ -79,6 +79,7 @@
 #include <fmtline.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
+#include <frameformats.hxx>
 #include <section.hxx>
 #include <ftninfo.hxx>
 #include <pagedesc.hxx>

@@ -292,9 +292,11 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
-    void AddBoxBefore( const SwTableBox& rBox, bool bDelContent );
+    /// bTrackChanges is false for a box that is copied without recording it as a change, even
+    /// though changes are being recorded: see lcl_CpyBox().
+    void AddBoxBefore( const SwTableBox& rBox, bool bDelContent, bool bTrackChanges );
     void AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx,
-                bool bDelContent );
+                bool bDelContent, bool bTrackChanges );
 
     bool IsEmpty() const;
     bool InsertRow( SwTable& rTable, const SwSelBoxes& rBoxes, sal_uInt16 nCnt );

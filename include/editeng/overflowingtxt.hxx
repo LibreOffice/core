@@ -41,7 +41,7 @@ class Outliner;
 class TextChainingUtils
 {
 public:
-    static css::uno::Reference< css::datatransfer::XTransferable> CreateTransferableFromText(Outliner const *);
+    static css::uno::Reference< css::datatransfer::XTransferable> CreateTransferableFromText(Outliner *);
 
     static std::optional<OutlinerParaObject> JuxtaposeParaObject(
             css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
@@ -116,7 +116,7 @@ private:
 class EDITENG_DLLPUBLIC UFlowChainedText
 {
 public:
-    UFlowChainedText(Outliner const *, bool);
+    UFlowChainedText(Outliner *, bool);
     std::optional<OutlinerParaObject> CreateMergedUnderflowParaObject(Outliner *, OutlinerParaObject const *);
 
 private:

@@ -3844,9 +3844,21 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
             uno::Any(sal_Int32(0)));
         xComponentProperties->setPropertyValue(getPropertyName( PROP_BOTTOM_MARGIN ),
             uno::Any(sal_Int32(0)));
+
+        auto* pFormula = dynamic_cast<oox::FormulaImExportBase*>(xInterface.get());
+        // A formula whose own markup carries no font size is drawn at the size of the text
+        // around it, which the styles and the document defaults hold.
+        double fCharHeight = 0;
+        if (pFormula && pFormula->getFormulaFontSizeInHalfPoints() == 0
+            && (GetAnyProperty(PROP_CHAR_HEIGHT, GetTopContextOfType(CONTEXT_CHARACTER))
+                >>= fCharHeight))
+        {
+            pFormula->setFormulaFontSizeInHalfPoints(std::lround(fCharHeight * 2));
+        }
+
         Size size( 1000, 1000 );
-        if( oox::FormulaImExportBase* formulaimport = dynamic_cast< oox::FormulaImExportBase* >( xInterface.get()))
-            size = formulaimport->getFormulaSize();
+        if( pFormula )
+            size = pFormula->getFormulaSize();
         xStarMath->setPropertyValue(getPropertyName( PROP_WIDTH ),
             uno::Any( sal_Int32(size.Width())));
         xStarMath->setPropertyValue(getPropertyName( PROP_HEIGHT ),

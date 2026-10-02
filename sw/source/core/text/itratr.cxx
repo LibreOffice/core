@@ -1606,9 +1606,10 @@ sal_uInt16 SwTextFrame::GetScalingOfSelectedText(
             nProWidth += aIter.GetFnt()->GetTextSize_( aDrawInf ).Width();
             nIdx++;
         }
-        else if ( pHint && ( cChar == CH_TXTATR_BREAKWORD || cChar == CH_TXTATR_INWORD ) )
+        else if (cChar == CH_TXTATR_BREAKWORD || cChar == CH_TXTATR_INWORD)
         {
-            switch( pHint->Which() )
+            const sal_uInt16 nWhich = pHint ? pHint->Which() : 0;
+            switch(nWhich)
             {
             case RES_TXTATR_FTN :
                 {

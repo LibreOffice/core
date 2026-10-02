@@ -58,6 +58,7 @@
 #include <frmatr.hxx>
 #include <rootfrm.hxx>
 #include <doc.hxx>
+#include <charformats.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>

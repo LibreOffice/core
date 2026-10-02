@@ -31,9 +31,8 @@
 #include <i18nlangtag/languagetag.hxx>
 
 #include <editeng/outliner.hxx>
-#include <outleeng.hxx>
-#include "paralist.hxx"
-#include "outlundo.hxx"
+#include <paralist.hxx>
+#include <outlundo.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/eeitem.hxx>
@@ -52,7 +51,7 @@ using namespace ::com::sun::star;
 
 OutlinerView::OutlinerView(Outliner& rOut, vcl::Window* pWin)
     : rOwner(rOut)
-    , pEditView(new EditView(rOut.getOutlinerEditEng(), pWin))
+    , pEditView(new EditView(rOut.GetEditEngine(), pWin))
 {
 }
 

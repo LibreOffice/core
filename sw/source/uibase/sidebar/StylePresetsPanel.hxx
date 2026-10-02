@@ -10,11 +10,11 @@
 
 #pragma once
 
-#include <memory>
-
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
-#include <svtools/valueset.hxx>
+#include <vcl/weld/IconView.hxx>
+
+#include <memory>
 #include <utility>
 
 namespace sw::sidebar {
@@ -49,12 +49,11 @@ private:
 
     void RefreshList();
 
-    std::unique_ptr<ValueSet> mxValueSet;
-    std::unique_ptr<weld::CustomWeld> mxValueSetWin;
+    std::unique_ptr<weld::IconView> m_pIconView;
 
     std::vector<std::unique_ptr<TemplateEntry>> maTemplateEntries;
 
-    DECL_LINK(DoubleClickHdl, ValueSet*, void);
+    DECL_LINK(ItemActivatedHdl, const weld::TreeIter&, bool);
 };
 
 } // end of namespace sw::sidebar

@@ -55,6 +55,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <fmtftn.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <pagedesc.hxx>
 #include <docstyle.hxx>
 #include <ndtxt.hxx>

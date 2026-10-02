@@ -36,6 +36,12 @@ class OOX_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") FormulaImExportBase
 public:
     virtual void readFormulaOoxml( oox::formulaimport::XmlStream& stream ) = 0;
     virtual Size getFormulaSize() const = 0; // Unit is mm100
+    /** The font size in half points that the OOXML markup gave for the formula. It is 0 when
+        the markup carried no size, and the formula then has whatever size the text around it
+        has. */
+    virtual sal_Int32 getFormulaFontSizeInHalfPoints() const = 0;
+    /** Draw the formula at the given size, in half points. */
+    virtual void setFormulaFontSizeInHalfPoints( sal_Int32 nFontSize ) = 0;
 
     virtual void writeFormulaOoxml(::sax_fastparser::FSHelperPtr pSerializer,
             oox::core::OoxmlVersion version,

@@ -61,12 +61,12 @@ template< typename... Ifc >
 ScVbaFormat< Ifc... >::ScVbaFormat( const uno::Reference< XHelperInterface >& xParent,
                                     const uno::Reference< uno::XComponentContext > & xContext,
                                     uno::Reference< beans::XPropertySet >  _xPropertySet,
-                                    uno::Reference< frame::XModel > xModel,
+                                    const rtl::Reference< ScModelObj >& xModel,
                                     bool bCheckAmbiguoity )
     : ScVbaFormat_BASE( xParent, xContext ),
       m_aDefaultLocale( u"en"_ustr, u"US"_ustr, OUString() ),
       mxPropertySet(std::move( _xPropertySet )),
-      mxModel(std::move( xModel )),
+      mxModel( xModel ),
       mbCheckAmbiguoity( bCheckAmbiguoity ),
       mbAddIndent( false )
 {
@@ -773,7 +773,7 @@ ScVbaFormat< Ifc... >::initializeNumberFormats()
 {
     if ( !xNumberFormats.is() )
     {
-        mxNumberFormatsSupplier.set( mxModel, uno::UNO_QUERY_THROW );
+        mxNumberFormatsSupplier.set( cppu::getXWeak(mxModel.get()), uno::UNO_QUERY_THROW );
         xNumberFormats = mxNumberFormatsSupplier->getNumberFormats();
         xNumberFormatTypes.set( xNumberFormats, uno::UNO_QUERY ); // _THROW?
     }

@@ -18,6 +18,7 @@
 #include <fmtcntnt.hxx>
 #include <ndtxt.hxx>
 #include <docsh.hxx>
+#include <frameformats.hxx>
 #include <wrtsh.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>

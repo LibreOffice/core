@@ -129,6 +129,8 @@ private:
     /// Style used for the current operations; switches switch several times during fallback search.
     OUString maCurrentStyle;
 
+    bool mbPreferDark;
+
     IconSet& getCurrentIconSet()
     {
         return maIconSets[maCurrentStyle];
@@ -162,7 +164,7 @@ private:
 
         Must not be cyclic :-)  The last theme in the chain returns an empty string.
     */
-    static OUString fallbackStyle(std::u16string_view rStyle);
+    OUString fallbackStyle(std::u16string_view rStyle);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

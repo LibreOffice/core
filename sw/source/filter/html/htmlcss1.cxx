@@ -45,6 +45,7 @@
 #include <fmtfsize.hxx>
 #include <frmatr.hxx>
 #include <charfmt.hxx>
+#include <charformats.hxx>
 #include <docary.hxx>
 #include <osl/diagnose.h>
 
@@ -1611,6 +1612,9 @@ HTMLAttr **SwHTMLParser::GetAttrTabEntry( sal_uInt16 nWhich )
         break;
     case RES_CHRATR_CTL_FONT_VARIATIONS:
         ppAttr = &m_xAttrTab->pFontVariationsCTL;
+        break;
+    case RES_CHRATR_HIDDEN:
+        ppAttr = &m_xAttrTab->pCharHidden;
         break;
     case RES_CHRATR_BOX:
         ppAttr = &m_xAttrTab->pCharBox;

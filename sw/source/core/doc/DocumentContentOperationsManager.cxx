@@ -1293,7 +1293,8 @@ namespace //local functions originally from docfmt.cxx
                         }
                     }
                 }
-            } while( pRStt <= rRg.Start() && ++nRedlPos < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size());
+            } while (*pRStt <= *rRg.End()
+                     && ++nRedlPos < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size());
         }
         if (!xExtra && bExistingFormatRedlineAtRange)
         {
@@ -4604,6 +4605,14 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam, SwDelet
 
     if (!rPam.HasMark()
         || (*pStart == *pEnd && !IsFlySelectedByCursor(m_rDoc, *pStart, *pEnd)))
+    {
+        return false;
+    }
+
+    // A delete stays within one cell of a table, the same rule that a cursor selection follows
+    const SwStartNode* pStartBox = pStart->GetNode().FindTableBoxStartNode();
+    const SwStartNode* pEndBox = pEnd->GetNode().FindTableBoxStartNode();
+    if (pStartBox != pEndBox)
     {
         return false;
     }

@@ -63,8 +63,6 @@
 
 using namespace css;
 
-static bool bPreferDark; //initialized in ImplImageTree c'tor
-
 bool ImageRequestParameters::convertToDarkTheme()
 {
     static bool bIconsForDarkTheme = !!getenv("VCL_ICONS_FOR_DARK_THEME");
@@ -225,7 +223,7 @@ void loadImageFromStream(std::shared_ptr<SvStream> const & xStream, OUString con
 
 ImplImageTree::ImplImageTree()
 {
-    bPreferDark = ThemeColors::GetThemeColors().GetWindowColor().IsDark();
+    mbPreferDark = ThemeColors::GetThemeColors().GetWindowColor().IsDark();
 }
 
 ImplImageTree::~ImplImageTree()
@@ -353,11 +351,10 @@ OUString ImplImageTree::fallbackStyle(std::u16string_view rsStyle)
         sResult = "breeze_dark";
     else if (rsStyle == u"colibre_dark" )
         sResult = "colibre";
+    else if (mbPreferDark)
+        sResult = "colibre_dark";
     else
-        if (bPreferDark)
-            sResult = "colibre_dark";
-        else
-            sResult = "colibre";
+        sResult = "colibre";
 
     return sResult;
 }

@@ -664,7 +664,7 @@ public:
     // select a table row, column or box (based on the current cursor)
     bool SelTableRow() { return SelTableRowOrCol( true  ); }
     bool SelTableCol() { return SelTableRowOrCol( false ); }
-    bool SelTableBox();
+    SW_DLLPUBLIC bool SelTableBox();
 
     SW_DLLPUBLIC bool SelTable();
 
@@ -870,7 +870,7 @@ public:
     bool CheckTableBoxContent( const SwPosition* pPos = nullptr );
     void SaveTableBoxContent( const SwPosition* pPos = nullptr );
     void ClearTableBoxContent();
-    bool EndAllTableBoxEdit();
+    SW_DLLPUBLIC bool EndAllTableBoxEdit();
 
     void SetSelTableCells( bool bFlag )           { m_bSelTableCells = bFlag; }
     bool IsSelTableCells() const                  { return m_bSelTableCells; }

@@ -33,6 +33,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,hunspell,\
 	UnpackedTarball/hunspell/src/hunspell/hashmgr \
 	UnpackedTarball/hunspell/src/hunspell/suggestmgr \
 	UnpackedTarball/hunspell/src/hunspell/phonet \
+	UnpackedTarball/hunspell/src/hunspell/hunspelltrace \
 	UnpackedTarball/hunspell/src/hunspell/hunzip \
 	UnpackedTarball/hunspell/src/hunspell/filemgr \
 	UnpackedTarball/hunspell/src/hunspell/replist \

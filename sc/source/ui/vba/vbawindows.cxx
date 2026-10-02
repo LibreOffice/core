@@ -41,7 +41,7 @@ using namespace ::ooo::vba;
 typedef  std::unordered_map< OUString,
 sal_Int32 > NameIndexHash;
 
-static uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const uno::Reference< frame::XModel >& xModel, const uno::Reference< uno::XComponentContext >& xContext, const uno::Any& aApplication )
+static uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const rtl::Reference< ScModelObj >& xModel, const uno::Reference< uno::XComponentContext >& xContext, const uno::Any& aApplication )
 {
     return new ScVbaWorkbook( uno::Reference< XHelperInterface >( aApplication, uno::UNO_QUERY_THROW ), xContext,  xModel );
 }
@@ -49,9 +49,10 @@ static uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const uno:
 static uno::Any ComponentToWindow( const uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext, const uno::Any& aApplication )
 {
     uno::Reference< frame::XModel > xModel( aSource, uno::UNO_QUERY_THROW );
+    ScModelObj* pModel = dynamic_cast<ScModelObj*>(xModel.get());
     // !! TODO !! iterate over all controllers
-    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
-    uno::Reference< excel::XWindow > xWin( new ScVbaWindow( lcl_createWorkbookHIParent( xModel, xContext, aApplication ), xContext, xModel, xController ) );
+    uno::Reference< frame::XController > xController( pModel->getCurrentController(), uno::UNO_SET_THROW );
+    uno::Reference< excel::XWindow > xWin( new ScVbaWindow( lcl_createWorkbookHIParent( pModel, xContext, aApplication ), xContext, pModel, xController ) );
     return uno::Any( xWin );
 }
 
@@ -144,7 +145,10 @@ public:
             if ( xNext.is() )
             {
                 m_windows.push_back( xNext );
-                uno::Reference< frame::XModel > xModel( xNext, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
+                // that the spreadsheetdocument is a xmodel is a given
+                rtl::Reference<ScModelObj> xModel = dynamic_cast<ScModelObj*>(xNext.get());
+                if (!xModel)
+                    throw uno::RuntimeException();
 
                 // tdf#126457 - add workbook name to window titles
                 rtl::Reference<ScVbaWorkbook> workbook(new ScVbaWorkbook(

@@ -4431,6 +4431,7 @@ bool SalInstanceTreeView::get_row_expanded(const weld::TreeIter& rIter) const
 bool SalInstanceTreeView::get_children_on_demand(const weld::TreeIter& rIter) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
+    assert(rVclIter.iter && "Invalid iter");
     if (m_aExpandingPlaceHolderParents.contains(rVclIter.iter))
         return true;
     return GetPlaceHolderChild(rVclIter.iter) != nullptr;

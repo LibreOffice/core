@@ -1388,7 +1388,7 @@ endif
 define gb_LinkTarget__use_cairo
 $(call gb_LinkTarget_use_package,$(1),cairo)
 $(call gb_LinkTarget_use_package,$(1),pixman)
-$(call gb_LinkTarget_use_external,$(1),freetype_headers)
+$(call gb_LinkTarget_use_external,$(1),freetype)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(gb_UnpackedTarball_workdir)/cairo \
 	-I$(gb_UnpackedTarball_workdir)/cairo/src \

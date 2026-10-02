@@ -22,7 +22,7 @@ class SmOoxmlExport : public SmWordExportBase
 {
 public:
     SmOoxmlExport(const SmNode* pIn, oox::core::OoxmlVersion version,
-                  oox::drawingml::DocumentType documentType);
+                  oox::drawingml::DocumentType documentType, sal_Int32 nFontSizeInHalfPoints);
     void ConvertFromStarMath(const ::sax_fastparser::FSHelperPtr& m_pSerializer, const sal_Int8);
 
 private:
@@ -37,15 +37,23 @@ private:
     void HandleBrace(const SmBraceNode* pNode, int nLevel) override;
     void HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLevel) override;
     void HandleBlank() override;
-    /// Writes the m:ctrlPr carrying the color of the parts a construct draws itself.
-    void WriteCtrlPrColor(const SmNode* pNode);
-    /// True when the color of the node is written out, which needs a color other than
-    /// the default and a DOCX.
-    bool HasOwnColor(const SmNode* pNode) const;
+    /// True when the run properties are written out, which needs a DOCX.
+    bool WritesRunProperties() const;
+    /// True when the node has a color of its own rather than the default one.
+    static bool HasOwnColor(const SmNode* pNode);
+    /// Writes the w:sz and w:szCs carrying the size the formula is drawn at.
+    void WriteFontSize();
+    /// Writes the m:ctrlPr carrying the size, color, bold and italic of the parts a
+    /// construct draws itself.
+    void WriteCtrlPr(const SmNode* pNode);
+    /// Writes a property element that a construct carries only to hold its control properties.
+    void WritePropertiesElement(sal_Int32 nElement, const SmNode* pNode);
     ::sax_fastparser::FSHelperPtr m_pSerializer;
     oox::core::OoxmlVersion version;
     /// needed to determine markup for nested run properties
     oox::drawingml::DocumentType const m_DocumentType;
+    /// The size the formula is drawn at, in half points.
+    sal_Int32 const m_nFontSizeInHalfPoints;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

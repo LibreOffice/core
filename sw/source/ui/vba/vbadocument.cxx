@@ -221,8 +221,7 @@ SwVbaDocument::CustomDocumentProperties( const uno::Any& index )
 uno::Any SAL_CALL
 SwVbaDocument::Bookmarks( const uno::Any& rIndex )
 {
-    uno::Reference< text::XBookmarksSupplier > xBookmarksSupplier( getModel(),uno::UNO_QUERY_THROW );
-    uno::Reference<container::XIndexAccess > xBookmarks( xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY_THROW );
+    uno::Reference<container::XIndexAccess > xBookmarks( mxTextDocument->getBookmarks(), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xBookmarksVba( new SwVbaBookmarks( this, mxContext, xBookmarks, mxTextDocument ) );
     if (  rIndex.getValueTypeClass() == uno::TypeClass_VOID )
         return uno::Any( xBookmarksVba );
@@ -230,7 +229,7 @@ SwVbaDocument::Bookmarks( const uno::Any& rIndex )
     return xBookmarksVba->Item( rIndex, uno::Any() );
 }
 
-uno::Reference< frame::XModel > SwVbaDocument::getModel() const
+SfxBaseModel* SwVbaDocument::getModel() const
 { return static_cast<SfxBaseModel*>(mxTextDocument.get()); }
 
 uno::Any SwVbaDocument::ContentControls(const uno::Any& index)
@@ -286,8 +285,7 @@ uno::Reference<word::XWindow> SwVbaDocument::getActiveWindow()
 uno::Any SAL_CALL
 SwVbaDocument::Variables( const uno::Any& rIndex )
 {
-    uno::Reference< css::document::XDocumentPropertiesSupplier > xDocumentPropertiesSupplier( getModel(),uno::UNO_QUERY_THROW );
-    uno::Reference< css::document::XDocumentProperties > xDocumentProperties =  xDocumentPropertiesSupplier->getDocumentProperties();
+    uno::Reference< css::document::XDocumentProperties > xDocumentProperties =  mxTextDocument->getDocumentProperties();
     uno::Reference< beans::XPropertyAccess > xUserDefined( xDocumentProperties->getUserDefinedProperties(), uno::UNO_QUERY_THROW );
 
     uno::Reference< XCollection > xVariables( new SwVbaVariables( this, mxContext, xUserDefined ) );
@@ -386,9 +384,7 @@ uno::Any SAL_CALL
 SwVbaDocument::getAttachedTemplate()
 {
     uno::Reference< word::XTemplate > xTemplate;
-    uno::Reference<css::document::XDocumentPropertiesSupplier> const xDocPropSupp(
-            getModel(), uno::UNO_QUERY_THROW);
-    uno::Reference< css::document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_SET_THROW );
+    uno::Reference< css::document::XDocumentProperties > xDocProps( mxTextDocument->getDocumentProperties(), uno::UNO_SET_THROW );
 
     xTemplate = new SwVbaTemplate( this, mxContext, xDocProps->getTemplateURL() );
     return uno::Any( xTemplate );
@@ -411,9 +407,7 @@ SwVbaDocument::setAttachedTemplate( const css::uno::Any& _attachedtemplate )
     else
         osl::FileBase::getFileURLFromSystemPath( sTemplate, aURL );
 
-    uno::Reference<css::document::XDocumentPropertiesSupplier> const xDocPropSupp(
-            getModel(), uno::UNO_QUERY_THROW );
-    uno::Reference< css::document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_SET_THROW );
+    uno::Reference< css::document::XDocumentProperties > xDocProps( mxTextDocument->getDocumentProperties(), uno::UNO_SET_THROW );
     xDocProps->setTemplateURL( aURL );
 }
 
@@ -595,8 +589,7 @@ SwVbaDocument::SaveAs2000( const uno::Any& FileName, const uno::Any& FileFormat,
 
     setFilterPropsFromFormat( nFileFormat, storeProps );
 
-    uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
-    xStor->storeAsURL( sURL, storeProps );
+    mxTextDocument->storeAsURL( sURL, storeProps );
 }
 
 void SAL_CALL
@@ -622,8 +615,7 @@ SwVbaDocument::SavePreviewPngAs( const uno::Any& FileName )
     uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr,
                                                             u"writer_png_Export"_ustr) };
 
-    uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
-    xStor->storeToURL( sURL, storeProps );
+    mxTextDocument->storeToURL( sURL, storeProps );
 }
 
 uno::Any

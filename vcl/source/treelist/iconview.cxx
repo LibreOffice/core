@@ -167,7 +167,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
     Point aEntryPos(nX, nY);
 
     auto popIt = rRenderContext.ScopedPush(vcl::PushFlags::FILLCOLOR | vcl::PushFlags::LINECOLOR
-                                           | vcl::PushFlags::FONT);
+                                           | vcl::PushFlags::FONT | vcl::PushFlags::TEXTCOLOR);
     const Color aBackupColor = rRenderContext.GetFillColor();
 
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
@@ -252,7 +252,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
         auto nItemHeight = SvLBoxItem::GetHeight(rViewDataEntry, nCurItem);
         nLabelYPos += nItemHeight;
 
-        rEntry.GetItem(nCurItem).Paint(aEntryPos, *this, rRenderContext, &rViewDataEntry, rEntry);
+        rEntry.GetItem(nCurItem).Paint(aEntryPos, *this, rRenderContext, rViewDataEntry, rEntry);
     }
 
     if (bFillColorSet)
@@ -277,7 +277,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
         }
         aEntryPos.AdjustY((nImageAreaHeight - nItemHeight) / 2 + m_nSpacing);
 
-        rItem.Paint(aEntryPos, *this, rRenderContext, &rViewDataEntry, rEntry);
+        rItem.Paint(aEntryPos, *this, rRenderContext, rViewDataEntry, rEntry);
     }
 }
 

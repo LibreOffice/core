@@ -22,6 +22,7 @@
 #include <ooo/vba/excel/XWorkbook.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <vbahelper/vbadocumentbase.hxx>
+#include <docuno.hxx>
 
 typedef cppu::ImplInheritanceHelper< VbaDocumentBase, ov::excel::XWorkbook > ScVbaWorkbook_BASE;
 
@@ -31,14 +32,14 @@ class ScVbaWorkbook : public ScVbaWorkbook_BASE
     static bool setFilterPropsFromFormat( sal_Int32 nFormat, css::uno::Sequence< css::beans::PropertyValue >& rProps );
     void init();
 
-    css::uno::Reference< css::frame::XModel > mxModel;
+    rtl::Reference< ScModelObj > mxModel;
 
 protected:
-    virtual css::uno::Reference< css::frame::XModel > getModel() const override { return mxModel; }
+    virtual ScModelObj* getModel() const override { return mxModel.get(); }
 
 public:
     ScVbaWorkbook(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
-            css::uno::Reference< css::frame::XModel > const & xModel );
+            rtl::Reference< ScModelObj > const & xModel );
     ScVbaWorkbook(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
     // Attributes

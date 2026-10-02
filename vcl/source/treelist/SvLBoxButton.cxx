@@ -142,7 +142,7 @@ void SvLBoxButton::ClickHdl(SvTreeListEntry* pEntry)
 }
 
 void SvLBoxButton::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
-                         const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
+                         const SvViewDataEntry& /*rView*/, const SvTreeListEntry& /*rEntry*/)
 {
     SvBmp nIndex = SvLBoxButtonData::GetIndex(m_nItemFlags);
     DrawImageFlags nStyle

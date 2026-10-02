@@ -21,6 +21,7 @@
 #include <basic/sberrors.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <docuno.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -28,17 +29,18 @@ using namespace ::com::sun::star;
 constexpr OUString DISPLAYNAME = u"DisplayName"_ustr;
 
 uno::Reference< container::XNameAccess >
-ScVbaStyle::getStylesNameContainer( const uno::Reference< frame::XModel >& xModel )
+ScVbaStyle::getStylesNameContainer( const rtl::Reference<ScModelObj>& xModel )
 {
-    uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( xModel, uno::UNO_QUERY_THROW);
-    uno::Reference< container::XNameAccess > xStylesAccess( xStyleSupplier->getStyleFamilies()->getByName(u"CellStyles"_ustr), uno::UNO_QUERY_THROW );
+    if (!xModel)
+        throw uno::RuntimeException();
+    uno::Reference< container::XNameAccess > xStylesAccess( xModel->getStyleFamilies()->getByName(u"CellStyles"_ustr), uno::UNO_QUERY_THROW );
     return xStylesAccess;
 }
 
 /// @throws script::BasicErrorException
 /// @throws uno::RuntimeException
 static uno::Reference< beans::XPropertySet >
-lcl_getStyleProps( const OUString& sStyleName, const uno::Reference< frame::XModel >& xModel )
+lcl_getStyleProps( const OUString& sStyleName, const rtl::Reference<ScModelObj>& xModel )
 {
 
     uno::Reference< beans::XPropertySet > xStyleProps( ScVbaStyle::getStylesNameContainer( xModel )->getByName( sStyleName ), uno::UNO_QUERY_THROW );
@@ -56,14 +58,12 @@ void ScVbaStyle::initialise()
     }
     mxStyle.set( mxPropertySet, uno::UNO_QUERY_THROW );
 
-    uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( mxModel, uno::UNO_QUERY_THROW );
     mxStyleFamilyNameContainer.set(  ScVbaStyle::getStylesNameContainer( mxModel ), uno::UNO_QUERY_THROW );
-
 }
 
 ScVbaStyle::ScVbaStyle( const uno::Reference< ov::XHelperInterface >& xParent,
                         const uno::Reference< uno::XComponentContext > & xContext,
-                        const OUString& sStyleName, const uno::Reference< frame::XModel >& _xModel )
+                        const OUString& sStyleName, const rtl::Reference<ScModelObj>& _xModel )
     :  ScVbaStyle_BASE( xParent, xContext, lcl_getStyleProps( sStyleName, _xModel ), _xModel, false )
 {
     try
@@ -79,7 +79,7 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< ov::XHelperInterface >& xParent,
 ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent,
                         const uno::Reference< uno::XComponentContext > & xContext,
                         const uno::Reference< beans::XPropertySet >& _xPropertySet,
-                        const uno::Reference< frame::XModel >& _xModel )
+                        const rtl::Reference<ScModelObj>& _xModel )
     : ScVbaStyle_BASE( xParent, xContext, _xPropertySet, _xModel, false )
 {
     try

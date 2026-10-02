@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <libxml/xmlwriter.h>
 #include <o3tl/any.hxx>
 
 #include <calc.hxx>

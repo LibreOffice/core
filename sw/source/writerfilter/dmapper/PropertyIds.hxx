@@ -22,6 +22,7 @@
 
 namespace writerfilter::dmapper{
 // Ensure that Character Properties are placed between PROP_CHARACTER_STYLES and PROP_CHARACTER_END
+// Ensure that Paragraph Properties are placed between PROP_PARA_ADJUST and PROP_PARA_WIDOWS
 enum PropertyIds
     {
         INVALID = 0
@@ -250,6 +251,7 @@ enum PropertyIds
         ,PROP_PARAGRAPH_STYLES
         ,PROP_PARA_ADJUST
         ,PROP_PARA_BOTTOM_MARGIN
+        ,PROP_PARA_CONTEXT_MARGIN
         ,PROP_PARA_FIRST_LINE_INDENT
         ,PROP_PARA_FIRST_LINE_INDENT_UNIT
         ,PROP_PARA_IS_HANGING_PUNCTUATION
@@ -356,7 +358,6 @@ enum PropertyIds
         ,PROP_WRITING_MODE
         ,PROP_FRM_DIRECTION
         ,PROP_EMBEDDED_OBJECT
-        ,PROP_PARA_CONTEXT_MARGIN
         ,PROP_PAGE_STYLE_LAYOUT
         ,PROP_Z_ORDER
         ,PROP_EMBED_FONTS

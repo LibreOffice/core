@@ -66,6 +66,8 @@
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
+#include <OutlineView.hxx>
+#include <Window.hxx>
 #include <app.hrc>
 #include <sdpage.hxx>
 #include <vcl/bitmap.hxx>
@@ -93,7 +95,53 @@ public:
     sd::slidesorter::SlideSorterViewShell*
     getSlideSorterViewShell(const css::uno::Reference<css::lang::XComponent>& xComp = nullptr);
     void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = false);
+    // Opens a new presentation in Outline view, with one slide per title.
+    OutlinerView* createOutlineView(std::initializer_list<std::u16string_view> aTitles);
+    // Sends keys to the Outline view, where postKeyEvent() does not reach.
+    void typeOutlineKey(sal_uInt16 nKey);
+    void typeOutlineString(std::u16string_view aStr);
 };
+
+void SdUiImpressTest::typeOutlineKey(sal_uInt16 nKey)
+{
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    pViewShell->KeyInput(KeyEvent(0, vcl::KeyCode(nKey)), pViewShell->GetActiveWindow());
+    Scheduler::ProcessEventsToIdle();
+}
+
+void SdUiImpressTest::typeOutlineString(std::u16string_view aStr)
+{
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    for (const char16_t c : aStr)
+        pViewShell->KeyInput(KeyEvent(c, vcl::KeyCode()), pViewShell->GetActiveWindow());
+    Scheduler::ProcessEventsToIdle();
+}
+
+OutlinerView* SdUiImpressTest::createOutlineView(std::initializer_list<std::u16string_view> aTitles)
+{
+    createSdImpressDoc();
+    dispatchCommand(mxComponent, u".uno:OutlineMode"_ustr, {});
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT_EQUAL(sd::ViewShell::ST_OUTLINE, pViewShell->GetShellType());
+    auto pView = static_cast<sd::SimpleOutlinerView*>(pViewShell->GetView());
+    OutlinerView* pOutlinerView = pView->GetViewByWindow(pViewShell->GetActiveWindow());
+    CPPUNIT_ASSERT(pOutlinerView);
+
+    bool bFirst = true;
+    for (const std::u16string_view& aTitle : aTitles)
+    {
+        if (!std::exchange(bFirst, false))
+            typeOutlineKey(KEY_RETURN);
+        typeOutlineString(aTitle);
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(aTitles.size()),
+                         pImpressDocument->GetDoc()->GetSdPageCount(PageKind::Standard));
+    return pOutlinerView;
+}
 
 void SdUiImpressTest::checkCurrentPageNumber(sal_uInt16 nNum)
 {
@@ -2732,6 +2780,91 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf166401_anEditElsewhereIsLeftAlone)
     CPPUNIT_ASSERT_EQUAL(pEdited, pEditedPage->GetObj(0));
     if (pView->IsTextEdit())
         pView->SdrEndTextEdit();
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineDemoteTitle)
+{
+    OutlinerView* pOutlinerView = createOutlineView({ u"A", u"B" });
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+
+    // Tab in front of "B" turns the title of the second slide into a paragraph of the first.
+    pOutlinerView->SetSelection(ESelection(1, 0, 1, 0));
+    typeOutlineKey(KEY_TAB);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1),
+                         pImpressDocument->GetDoc()->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pOutlinerView->GetOutliner().GetParagraphCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineSelectedPages)
+{
+    createOutlineView({ u"A", u"B" });
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    pDoc->GetSdPage(0, PageKind::Standard)->SetSelected(false);
+    pDoc->GetSdPage(1, PageKind::Standard)->SetSelected(false);
+
+    // The state of the summary slide command marks the slide of the cursor as selected.
+    SfxPoolItemHolder aState;
+    pImpressDocument->GetDocShell()->GetViewShell()->GetViewFrame()->GetDispatcher()->QueryState(
+        SID_SUMMARY_PAGE, aState);
+    CPPUNIT_ASSERT(!pDoc->GetSdPage(0, PageKind::Standard)->IsSelected());
+    CPPUNIT_ASSERT(pDoc->GetSdPage(1, PageKind::Standard)->IsSelected());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineDeleteAcrossSlides)
+{
+    // Slides "A" with the body paragraph "x", "B" and "C".
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    auto xDrawPages = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()->getDrawPages();
+    xDrawPages->insertNewByIndex(0);
+    xDrawPages->insertNewByIndex(1);
+    const std::u16string_view aTitles[] = { u"A", u"B", u"C" };
+    for (sal_uInt16 i = 0; i < std::size(aTitles); ++i)
+    {
+        SdPage* pPage = pDoc->GetSdPage(i, PageKind::Standard);
+        pPage->SetAutoLayout(AUTOLAYOUT_TITLE_CONTENT, true);
+        auto pTitle = static_cast<SdrTextObj*>(pPage->GetPresObj(PresObjKind::Title));
+        pTitle->SetText(OUString(aTitles[i]));
+        pTitle->SetEmptyPresObj(false);
+    }
+    auto pBody = static_cast<SdrTextObj*>(
+        pDoc->GetSdPage(0, PageKind::Standard)->GetPresObj(PresObjKind::Outline));
+    pBody->SetText(u"x"_ustr);
+    pBody->SetEmptyPresObj(false);
+
+    dispatchCommand(mxComponent, u".uno:OutlineMode"_ustr, {});
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT_EQUAL(sd::ViewShell::ST_OUTLINE, pViewShell->GetShellType());
+    auto pView = static_cast<sd::SimpleOutlinerView*>(pViewShell->GetView());
+    OutlinerView* pOutlinerView = pView->GetViewByWindow(pViewShell->GetActiveWindow());
+    CPPUNIT_ASSERT(pOutlinerView);
+    Outliner& rOutliner = pOutlinerView->GetOutliner();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rOutliner.GetParagraphCount());
+
+    // Deleting from the end of "A" to the end of "B" removes the second slide only.
+    pOutlinerView->SetSelection(ESelection(0, 1, 2, 1));
+    typeOutlineKey(KEY_DELETE);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rOutliner.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineMoveTitleUp)
+{
+    OutlinerView* pOutlinerView = createOutlineView({ u"A", u"B", u"C" });
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    SdPage* pPageB = pDoc->GetSdPage(1, PageKind::Standard);
+    SdPage* pPageC = pDoc->GetSdPage(2, PageKind::Standard);
+
+    // Moving "C" up moves its slide in front of the slide of "B".
+    pOutlinerView->SetSelection(ESelection(2, 0, 2, 1));
+    dispatchCommand(mxComponent, u".uno:OutlineUp"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"C"_ustr, pOutlinerView->GetOutliner().GetText(
+                                        pOutlinerView->GetOutliner().GetParagraph(1)));
+    CPPUNIT_ASSERT_EQUAL(pPageC, pDoc->GetSdPage(1, PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(pPageB, pDoc->GetSdPage(2, PageKind::Standard));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -114,13 +114,7 @@ void QtWidget::handleMouseButtonEvent(const QMouseEvent* pEvent) const
     m_rFrame.CallCallback(nEventType, &aEvent);
 }
 
-void QtWidget::mousePressEvent(QMouseEvent* pEvent)
-{
-    handleMouseButtonEvent(pEvent);
-    if (m_rFrame.isPopup()
-        && !geometry().translated(geometry().topLeft() * -1).contains(pEvent->pos()))
-        closePopup();
-}
+void QtWidget::mousePressEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(pEvent); }
 
 void QtWidget::mouseReleaseEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(pEvent); }
 
@@ -520,14 +514,15 @@ void QtWidget::closePopup()
     }
 }
 
-void QtWidget::focusOutEvent(QFocusEvent*)
+void QtWidget::focusOutEvent(QFocusEvent* pEvent)
 {
 #if CHECK_ANY_QT_USING_X11
     m_rFrame.m_nKeyModifiers = ModKeyFlags::NONE;
 #endif
     endExtTextInput();
     m_rFrame.CallCallback(SalEvent::LoseFocus, nullptr);
-    closePopup();
+    if (pEvent->reason() != Qt::FocusReason::PopupFocusReason)
+        closePopup();
 }
 
 QtWidget::QtWidget(QtFrame& rFrame, Qt::WindowFlags f)

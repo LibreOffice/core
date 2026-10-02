@@ -1710,6 +1710,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, weld::Toggleable&, void)
     m_xLabelMinimum->set_sensitive(bJustify);
     m_xLabelDesired->set_sensitive(bJustify);
     m_xLabelMaximum->set_sensitive(bJustify);
+    m_xLabelLetterSpacing->set_sensitive(bJustify);
     m_xWordSpacing->set_sensitive(bJustify);
     m_xWordSpacingMinimum->set_sensitive(bJustify);
     m_xWordSpacingMaximum->set_sensitive(bJustify);

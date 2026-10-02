@@ -287,8 +287,8 @@ GRAPHITE_TARBALL := graphite2-minimal-1.3.15.tgz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-HARFBUZZ_SHA256SUM := b7132e148358a45185c9feafd049dbaf243649d3c44414b3534d9c95d18592b9
-HARFBUZZ_TARBALL := harfbuzz-14.5.0.tar.xz
+HARFBUZZ_SHA256SUM := 7e2fa4e8c7c98e8d8140671f5772542afaaa6acccfbd746506886b6d85f7f8d6
+HARFBUZZ_TARBALL := harfbuzz-14.5.1.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -302,8 +302,8 @@ HSQLDB_TARBALL := 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-HUNSPELL_SHA256SUM := 433274dac0619cb00c2e18b43a3dd3a9d50da5b5613fa9b5c21781e35dd76bc1
-HUNSPELL_TARBALL := hunspell-1.7.3.tar.gz
+HUNSPELL_SHA256SUM := 66ec82a577395fe9d471504267e6dd04615c76517c61af7c6b9c19e5e34e73c8
+HUNSPELL_TARBALL := hunspell-1.7.4.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -452,8 +452,8 @@ LZMA_TARBALL := xz-5.8.4.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-MARIADB_CONNECTOR_C_SHA256SUM := a84bba97e59b6a322637a189964d4fd72bd8d92f2d22a9f8d6a5f0657c821e97
-MARIADB_CONNECTOR_C_TARBALL := mariadb-connector-c-3.4.9-src.tar.gz
+MARIADB_CONNECTOR_C_SHA256SUM := 521c0712e9291fa96558df9e2ff431376a3a79329f13751896b694cae12765b4
+MARIADB_CONNECTOR_C_TARBALL := mariadb-connector-c-3.4.11-src.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -524,8 +524,8 @@ OPENLDAP_TARBALL := openldap-2.7.1.tgz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-OPENSSL_SHA256SUM := a8f84a39918ec6415ce765d9b429d313ba97b8143169c172e734b9514464f5b2
-OPENSSL_TARBALL := openssl-3.5.8.tar.gz
+OPENSSL_SHA256SUM := 603f5602e2eef00d77fbd429d34dcd5822bb301757a1bc9cdb24c670f1eb859a
+OPENSSL_TARBALL := openssl-3.5.9.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -539,8 +539,8 @@ PAGEMAKER_TARBALL := libpagemaker-0.0.4.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-PDFIUM_SHA256SUM := 0340b2fca57cecdf6e2e0366129a3340f6764c132cb090f57db96d9f0f349855
-PDFIUM_TARBALL := pdfium-7988.tar.bz2
+PDFIUM_SHA256SUM := a3624f6f0ac46a7e190969d405aa7a07dbc342baf69f81192487575bf64055a5
+PDFIUM_TARBALL := pdfium-8073.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -559,8 +559,8 @@ PIXMAN_TARBALL := pixman-0.46.4.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBPNG_SHA256SUM := 28eb403f51f0f7405249132cecfe82ea5c0ef97f1b32c5a65828814ae0d34775
-LIBPNG_TARBALL := libpng-1.6.58.tar.xz
+LIBPNG_SHA256SUM := d80dd2a38a37f803cb9b6ac7b14bd6e74ddc3b654780a8380bdf93523fdb4389
+LIBPNG_TARBALL := libpng-1.6.59.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -581,8 +581,8 @@ POSTGRESQL_TARBALL := postgresql-15.19.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-PYTHON_SHA256SUM := 1e66a7945a48390ee4c2a4268a0e4185884059a13c4aab6d148aa208deea4a76
-PYTHON_TARBALL := Python-3.13.15.tar.xz
+PYTHON_SHA256SUM := f4b1bfb3c79b5bb11b8d228a12504163b4c0dab4d679828d8f5f26b6cb6ab35d
+PYTHON_TARBALL := Python-3.13.16.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -622,8 +622,8 @@ REVENGE_TARBALL := librevenge-0.0.$(REVENGE_VERSION_MICRO).tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-MD4C_SHA256SUM := 353c346f376b87c954a13f3415ede2d51264cc61dc5abcd38ff1d2aa0d059b9e
-MD4C_TARBALL := md4c-release-0.5.3.tar.gz
+MD4C_SHA256SUM := 4d151298125a81da3b2efa2e0eed8bdb7a9318569804e4fa4d7a2375ab83ef70
+MD4C_TARBALL := md4c-0.6.0.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

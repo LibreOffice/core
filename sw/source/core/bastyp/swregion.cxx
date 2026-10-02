@@ -65,6 +65,8 @@ void SwRegionRects::operator+=( const SwRect &rRect )
 */
 void SwRegionRects::operator-=( const SwRect &rRect )
 {
+    if (m_pSubtracted)
+        m_pSubtracted->push_back(rRect);
     sal_uInt16 nMax = size();
     for ( sal_uInt16 i = 0; i < nMax; ++i )
     {

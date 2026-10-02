@@ -626,6 +626,9 @@ private:
     Timer maStatusTimer;
     Size maLOKSpecialPaperSize;
 
+    // only valid when used from an Outliner
+    Outliner* mpOwner;
+
     Link<EditStatus&,void>         maStatusHdlLink;
     Link<EENotify&,void>           maNotifyHdl;
     Link<HtmlImportInfo&,void>     maHtmlImportHdl;
@@ -875,7 +878,7 @@ private:
     /// Obtains a view shell ID from the active EditView.
     ViewShellId CreateViewShellId();
 
-    ImpEditEngine(EditEngine* pEditEngine, SfxItemPool* pPool);
+    ImpEditEngine(EditEngine* pEditEngine, SfxItemPool* pPool, Outliner* pEngOwner = nullptr);
     void InitDoc(bool bKeepParaAttribs);
     EditDoc&                GetEditDoc()            { return maEditDoc; }
     const EditDoc&          GetEditDoc() const      { return maEditDoc; }
@@ -1370,6 +1373,8 @@ public:
     bool PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, vcl::Window const * pFrameWin );
     static bool IsSimpleCharInput( const KeyEvent& rKeyEvent );
     void RemoveParagraph( sal_Int32 nPara );
+
+    Outliner* GetOwner() { return mpOwner; }
 
 #ifdef DBG_UTIL
     void DumpData(bool bInfoBox);

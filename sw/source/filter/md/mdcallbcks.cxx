@@ -83,6 +83,11 @@ int SwMarkdownParser::enter_block_callback(MD_BLOCKTYPE type, void* detail, void
             parser->StartTable(nRow, nCol);
             break;
         }
+        case MD_BLOCK_ADMONITION:
+        case MD_BLOCK_BLANK:
+        case MD_BLOCK_FOOTNOTE_DEF:
+        case MD_BLOCK_FOOTNOTE_DEF_SECTION:
+            break;
         case MD_BLOCK_THEAD:
         case MD_BLOCK_TBODY:
             break;
@@ -136,6 +141,11 @@ int SwMarkdownParser::leave_block_callback(MD_BLOCKTYPE type, void* /*detail*/, 
             break;
         case MD_BLOCK_TABLE:
             parser->EndTable();
+            break;
+        case MD_BLOCK_ADMONITION:
+        case MD_BLOCK_BLANK:
+        case MD_BLOCK_FOOTNOTE_DEF:
+        case MD_BLOCK_FOOTNOTE_DEF_SECTION:
             break;
         case MD_BLOCK_THEAD:
         case MD_BLOCK_TBODY:
@@ -216,6 +226,13 @@ int SwMarkdownParser::enter_span_callback(MD_SPANTYPE type, void* detail, void* 
         case MD_SPAN_LATEXMATH:
         case MD_SPAN_LATEXMATH_DISPLAY:
             break;
+        case MD_SPAN_FOOTNOTE_REF:
+        case MD_SPAN_INS:
+        case MD_SPAN_MARK:
+        case MD_SPAN_SPOILER:
+        case MD_SPAN_SUPERSCRIPT:
+        case MD_SPAN_SUBSCRIPT:
+            break;
         case MD_SPAN_WIKILINK:
         {
             const MD_SPAN_WIKILINK_DETAIL* pWikilink
@@ -256,6 +273,13 @@ int SwMarkdownParser::leave_span_callback(MD_SPANTYPE type, void* /*detail*/, vo
         case MD_SPAN_LATEXMATH_DISPLAY:
         case MD_SPAN_WIKILINK:
         case MD_SPAN_U:
+            break;
+        case MD_SPAN_FOOTNOTE_REF:
+        case MD_SPAN_INS:
+        case MD_SPAN_MARK:
+        case MD_SPAN_SPOILER:
+        case MD_SPAN_SUBSCRIPT:
+        case MD_SPAN_SUPERSCRIPT:
             break;
     }
     return 0;

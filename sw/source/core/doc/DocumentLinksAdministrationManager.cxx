@@ -36,6 +36,7 @@
 #include <swbaslnk.hxx>
 #include <section.hxx>
 #include <docary.hxx>
+#include <frameformats.hxx>
 #include <frmfmt.hxx>
 #include <numrule.hxx>
 #include <fmtcntnt.hxx>

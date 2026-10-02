@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <rtl/stringconcat.hxx>
 #include <sal/types.h>
 #include <string_view>
 
@@ -33,6 +36,11 @@ public:
     bool writeBuffer(std::string_view aBuffer)
     {
         return writeBufferBytes(aBuffer.data(), aBuffer.size());
+    }
+
+    template <typename T1, typename T2> bool writeBuffer(const rtl::OStringConcat<T1, T2>& rConcat)
+    {
+        return writeBuffer(rtl::Concat2View(rConcat));
     }
 
     virtual void checkAndEnableStreamEncryption(sal_Int32 nObject) = 0;

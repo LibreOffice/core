@@ -362,7 +362,7 @@ private:
     bool ParseDoubleReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
     bool ParsePredetectedReference( const OUString& rSymbol );
     bool ParsePredetectedErrRefReference( const OUString& rName, const OUString* pErrRef );
-    bool ParseMacro( const OUString& );
+    bool ParseMacro( const OUString&, bool bParenFollows );
     bool ParseNamedRange( const OUString&, bool onlyCheck = false );
     bool ParseLocalName( const OUString& );
     bool ParseExternalNamedRange( const OUString& rSymbol, bool& rbInvalidExternalNameRange );

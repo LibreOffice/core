@@ -590,6 +590,9 @@ OUString SfxHelp::GetHelpText(const OUString& aCommandURL)
     // add some debug information?
     if ( bIsDebug )
     {
+        if (sHelpText.isEmpty())
+            sHelpText = vcl::CommandInfoProvider::GetTooltipLabelForCommand(aProperties);
+
         sHelpText += "\n-------------\n" +
             sModuleName + ": " + aCommandURL;
     }

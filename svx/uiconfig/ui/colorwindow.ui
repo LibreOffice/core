@@ -123,20 +123,23 @@
         </child>
         <child>
           <object class="GtkScrolledWindow">
+            <property name="height-request">250</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="vexpand">True</property>
+            <property name="valign">start</property>
             <property name="hscrollbar-policy">never</property>
             <property name="shadow-type">in</property>
+            <property name="min-content-height">250</property>
             <property name="overlay-scrolling">False</property>
+            <property name="max-content-height">250</property>
             <property name="propagate-natural-width">True</property>
             <property name="propagate-natural-height">True</property>
             <child>
               <object class="GtkIconView" id="coloriconview">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="valign">start</property>
                 <property name="margin">6</property>
-                <property name="vexpand">True</property>
                 <property name="model">coloriconview_model</property>
                 <property name="columns">12</property>
                 <property name="pixbuf-column">0</property>

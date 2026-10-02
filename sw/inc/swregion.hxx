@@ -35,6 +35,7 @@ typedef std::vector<SwRect> SwRects;
 class SwRegionRects : public SwRects
 {
     SwRect m_aOrigin; // Origin area, limits the total area e.g. for Invert()
+    SwRects* m_pSubtracted = nullptr;
 
     inline void InsertRect( const SwRect &rRect, const sal_uInt16 nPos, bool &rDel);
 
@@ -44,6 +45,11 @@ public:
     // Empty constructor, does not set elements or origin area. You may
     // most likely want to call ChangeOrigin() afterwards.
     explicit SwRegionRects( sal_uInt16 nInit = 20 );
+
+    // Append every rectangle punched from here on, for a caller that wants the pieces a
+    // selection was built from and not only the region Invert() leaves. Invert() punches
+    // into a region of its own, so its own work is not recorded.
+    void RecordSubtracted(SwRects* pRects) { m_pSubtracted = pRects; }
 
     // For punching from aOrigin.
     void operator-=( const SwRect& rRect );

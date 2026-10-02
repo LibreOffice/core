@@ -263,6 +263,15 @@ bool RTFDocumentImpl::dispatchCharacterAttributeValue(RTFKeyword nKeyword, int n
 
 bool RTFDocumentImpl::dispatchParagraphSprmValue(RTFKeyword nKeyword, int nParam)
 {
+    // far deeper table nesting than any real document uses
+    constexpr int nMaxTableDepth = 1024;
+    if (nKeyword == RTFKeyword::ITAP && nParam > nMaxTableDepth)
+    {
+        SAL_WARN("writerfilter.rtf",
+                 "table nesting depth " << nParam << " limited to " << nMaxTableDepth);
+        nParam = nMaxTableDepth;
+    }
+
     int nSprm = 0;
     tools::SvRef<RTFValue> pIntValue(new RTFValue(nParam));
 
@@ -1022,7 +1031,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (nParam == 2)
                 nParam = 1;
             else if (nParam > 1)
-                nParam = nParam * 2 / 5;
+                nParam = sal_Int64(nParam) * 2 / 5;
             auto pValue = new RTFValue(nParam);
             putBorderProperty(m_aStates, NS_ooxml::LN_CT_Border_sz, pValue);
         }

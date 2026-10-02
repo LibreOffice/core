@@ -26,6 +26,7 @@
 #include <ndole.hxx>
 #include <txttxmrk.hxx>
 #include <fmtpdsc.hxx>
+#include <frameformats.hxx>
 #include <frmatr.hxx>
 #include <pagedesc.hxx>
 #include <doc.hxx>

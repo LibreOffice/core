@@ -32,8 +32,7 @@ public:
     virtual ~LineWidthValueSet() override;
 
     void SetUnit(std::array<OUString,9> const & strUnits);
-    void SetSelItem(sal_uInt16 nSel);
-    sal_uInt16 GetSelItem() const { return nSelItem;}
+    void UnselectItems();
     void SetImage(const Image& img);
     void SetCusEnable(bool bEnable);
 
@@ -42,7 +41,6 @@ public:
     virtual void    SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
 private:
-    sal_uInt16          nSelItem;
     std::array<OUString,9> maStrUnits;
     Image           imgCus;
     bool            bCusEnable;

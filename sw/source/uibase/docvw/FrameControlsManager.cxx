@@ -13,6 +13,7 @@
 #include <HeaderFooterWin.hxx>
 #include <PageBreakWin.hxx>
 #include <UnfloatTableButton.hxx>
+#include <pagedesc.hxx>
 #include <pagefrm.hxx>
 #include <flyfrm.hxx>
 #include <viewopt.hxx>

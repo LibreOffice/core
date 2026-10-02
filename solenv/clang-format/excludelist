@@ -3163,8 +3163,9 @@ editeng/inc/editattr.hxx
 editeng/inc/editdoc.hxx
 editeng/inc/edtspell.hxx
 editeng/inc/eerdll2.hxx
-editeng/inc/outleeng.hxx
+editeng/inc/outlundo.hxx
 editeng/inc/unomodel.hxx
+editeng/inc/paralist.hxx
 editeng/qa/items/borderline_test.cxx
 editeng/qa/lookuptree/lookuptree_test.cxx
 editeng/qa/unit/core-test.cxx
@@ -3248,11 +3249,9 @@ editeng/source/outliner/outlin2.cxx
 editeng/source/outliner/outliner.cxx
 editeng/source/outliner/outlobj.cxx
 editeng/source/outliner/outlundo.cxx
-editeng/source/outliner/outlundo.hxx
 editeng/source/outliner/outlvw.cxx
 editeng/source/outliner/overflowingtxt.cxx
 editeng/source/outliner/paralist.cxx
-editeng/source/outliner/paralist.hxx
 editeng/source/rtf/rtfitem.cxx
 editeng/source/rtf/svxrtf.cxx
 editeng/source/uno/UnoForbiddenCharsTable.cxx

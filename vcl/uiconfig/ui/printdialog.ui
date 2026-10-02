@@ -547,48 +547,6 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkRadioButton" id="rbRangePages">
-                                            <property name="label" translatable="yes" context="printdialog|rbPageRange">_Pages:</property>
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="margin-top">2</property>
-                                            <property name="margin-bottom">2</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="draw-indicator">True</property>
-                                            <property name="group">rbAllPages</property>
-                                            <child internal-child="accessible">
-                                              <object class="AtkObject" id="rbRangePages-atkobject">
-                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|rbRangePages">Prints only the pages or slides that you specify in the Pages box.</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkEntry" id="pagerange">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="hexpand">True</property>
-                                            <property name="activates-default">True</property>
-                                            <property name="truncate-multiline">True</property>
-                                            <property name="placeholder-text" translatable="yes" context="printdialog|pagerange">e.g.: 1, 3-5, 7, 9</property>
-                                            <child internal-child="accessible">
-                                              <object class="AtkObject" id="pagerange-atkobject">
-                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagerange">To print a range of pages, use a format like 3-6. To print single pages, use a format like 7;9;11. You can print a combination of page ranges and single pages, by using a format like 3-6;8;10;12.</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
                                           <object class="GtkRadioButton" id="rbRangeSelection">
                                             <property name="label" translatable="yes" context="printdialog|rbRangeSelection">_Selection</property>
                                             <property name="can-focus">True</property>
@@ -610,6 +568,69 @@
                                           </packing>
                                         </child>
                                         <child>
+                                          <object class="GtkRadioButton" id="rbCurrentPage">
+                                            <property name="label" translatable="yes" context="printdialog|rbCurrentPage">_Current page</property>
+                                            <property name="can-focus">True</property>
+                                            <property name="receives-default">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="margin-bottom">2</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="draw-indicator">True</property>
+                                            <property name="group">rbAllPages</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="rbCurrentPage-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|rbCurrentPage">Prints only the current page.</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="left-attach">0</property>
+                                            <property name="top-attach">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkRadioButton" id="rbRangePages">
+                                            <property name="label" translatable="yes" context="printdialog|rbPageRange">_Pages:</property>
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">True</property>
+                                            <property name="receives-default">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="margin-top">2</property>
+                                            <property name="margin-bottom">2</property>
+                                            <property name="use-underline">True</property>
+                                            <property name="draw-indicator">True</property>
+                                            <property name="group">rbAllPages</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="rbRangePages-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|rbRangePages">Prints only the pages or slides that you specify in the Pages box.</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="left-attach">0</property>
+                                            <property name="top-attach">2</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkEntry" id="pagerange">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">True</property>
+                                            <property name="hexpand">True</property>
+                                            <property name="activates-default">True</property>
+                                            <property name="truncate-multiline">True</property>
+                                            <property name="placeholder-text" translatable="yes" context="printdialog|pagerange">e.g.: 1, 3-5, 7, 9</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="pagerange-atkobject">
+                                                <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|pagerange">To print a range of pages, use a format like 3-6. To print single pages, use a format like 7;9;11. You can print a combination of page ranges and single pages, by using a format like 3-6;8;10;12.</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="left-attach">1</property>
+                                            <property name="top-attach">2</property>
+                                          </packing>
+                                        </child>
+                                        <child>
                                           <object class="GtkLabel" id="labelcopies">
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
@@ -621,7 +642,7 @@
                                           </object>
                                           <packing>
                                             <property name="left-attach">0</property>
-                                            <property name="top-attach">2</property>
+                                            <property name="top-attach">3</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -643,7 +664,7 @@
                                           </object>
                                           <packing>
                                             <property name="left-attach">1</property>
-                                            <property name="top-attach">2</property>
+                                            <property name="top-attach">3</property>
                                           </packing>
                                         </child>
                                       </object>

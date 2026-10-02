@@ -12,11 +12,14 @@
 #include <swmodeltestbase.hxx>
 
 #include <algorithm>
+#include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
+#include <basegfx/range/b2drectangle.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <tools/stream.hxx>
+#include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 
 namespace
@@ -30,6 +33,71 @@ public:
     {
     }
 };
+
+// the text an element's own marked content holds, excluding any nested element's
+OUString lcl_GetOwnText(vcl::pdf::PDFiumStructureElement& rElement,
+                        const std::unordered_map<int, OUString>& rTexts)
+{
+    OUString aText;
+    for (int i = 0; i < rElement.getNumberOfChildren(); ++i)
+    {
+        if (const int nMarkedContentID = rElement.getChildMarkedContentID(i); nMarkedContentID >= 0)
+        {
+            const auto it = rTexts.find(nMarkedContentID);
+            if (it != rTexts.end())
+                aText += it->second;
+        }
+    }
+    return aText.trim();
+}
+
+// every element holding text or a description, in document order, with the language it
+// specifies - one specifying none is listed without a language, and inherits its parent's
+OUString lcl_CollectLanguages(vcl::pdf::PDFiumStructureElement& rElement,
+                              const std::unordered_map<int, OUString>& rTexts)
+{
+    OUString aLanguages;
+    OUString aLabel(lcl_GetOwnText(rElement, rTexts));
+    if (aLabel.isEmpty())
+    {
+        // a frame holds no text of its own, so its description identifies it
+        aLabel = rElement.getAltText();
+    }
+    if (!aLabel.isEmpty())
+    {
+        const OUString aLanguage(rElement.getLang());
+        aLanguages = rElement.getType() + (aLanguage.isEmpty() ? u""_ustr : " " + aLanguage) + ": "
+                     + aLabel + "\n";
+    }
+
+    for (int i = 0; i < rElement.getNumberOfChildren(); ++i)
+    {
+        if (const auto pChild = rElement.getChild(i))
+            aLanguages += lcl_CollectLanguages(*pChild, rTexts);
+    }
+    return aLanguages;
+}
+
+// the kids of every Ruby, in the order they are emitted, each with the text it covers
+OUString lcl_CollectRubies(vcl::pdf::PDFiumStructureElement& rElement,
+                           const std::unordered_map<int, OUString>& rTexts)
+{
+    OUString aRubies;
+    if (rElement.getType() == "Ruby")
+    {
+        for (int i = 0; i < rElement.getNumberOfChildren(); ++i)
+        {
+            if (const auto pKid = rElement.getChild(i))
+                aRubies += pKid->getType() + ": " + lcl_GetOwnText(*pKid, rTexts) + "\n";
+        }
+    }
+    for (int i = 0; i < rElement.getNumberOfChildren(); ++i)
+    {
+        if (const auto pChild = rElement.getChild(i))
+            aRubies += lcl_CollectRubies(*pChild, rTexts);
+    }
+    return aRubies;
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf171022)
 {
@@ -47,11 +115,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf171022)
     // the outline item, the footnote's two links, the shape's link and the citation's
     std::vector<OString> aOutlineTypes;
     std::vector<OString> aLinkTypes;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pAction = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("A"_ostr));
         if (!pAction)
             continue;
@@ -119,11 +184,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFootnoteNoteType)
 
     // the type of the one element a footnote frame opens
     const auto aFootnoteType = [](vcl::filter::PDFDocument& rDocument) -> OString {
-        for (const auto& rDocElement : rDocument.GetElements())
+        for (auto* pObject : rDocument.GetObjects())
         {
-            auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-            if (!pObject)
-                continue;
             auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
             if (pType && (pType->GetValue() == "Note" || pType->GetValue() == "FENote"))
                 return pType->GetValue();
@@ -175,12 +237,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTOCItemRef)
     // name the element its entry reaches
     OStringBuffer aTargets;
     std::unordered_set<sal_Int32> aSeen;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
-
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
         if (!pType || pType->GetValue() != "TOCI")
             continue;
@@ -220,12 +278,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFormulaAltFromSource)
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
 
     OUStringBuffer aAlts;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
-
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
         if (!pType || pType->GetValue() != "Formula")
             continue;
@@ -255,12 +309,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFormulaPlacement)
     OString aInALine;
     OString aInAParagraph;
     OString aOnThePage;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
-
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
         if (!pType || pType->GetValue() != "Formula")
             continue;
@@ -309,12 +359,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLayoutAttributeUnits)
     vcl::filter::PDFDictionaryElement* pIndented = nullptr;
     vcl::filter::PDFDictionaryElement* pHanging = nullptr;
     vcl::filter::PDFDictionaryElement* pCell = nullptr;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
-
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
         auto pAttributes
             = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("A"_ostr));
@@ -364,39 +410,256 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphLanguage)
     save(TestFilter::PDF_WRITER,
          { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
+    // the value the entries below state where they state one, and what the rest inherit
     vcl::filter::PDFDocument aDocument;
-    maTempFile.CloseStream();
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+    auto pCatalog = aDocument.GetCatalog();
+    CPPUNIT_ASSERT(pCatalog);
+    CPPUNIT_ASSERT(pCatalog->GetDictionary());
+    auto pDocumentLanguage = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(
+        pCatalog->GetDictionary()->LookupElement("Lang"_ostr));
+    CPPUNIT_ASSERT(pDocumentLanguage);
+    CPPUNIT_ASSERT_EQUAL("en-US"_ostr, pDocumentLanguage->GetValue());
+
+    auto pPdfDocument = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
+    auto pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+
+    // the text behind each marked content id, to identify the element covering it
+    std::unordered_map<int, OUString> aTexts;
+    for (int i = 0; i < pPdfPage->getObjectCount(); ++i)
+    {
+        auto pObject = pPdfPage->getObject(i);
+        if (const int nMarkedContentID = pObject->getMarkedContentID(); nMarkedContentID >= 0)
+            aTexts[nMarkedContentID] += pObject->getText(pTextPage);
+    }
+
+    auto pTree = pPdfPage->getStructureTree();
+    CPPUNIT_ASSERT(pTree);
+    OUString aLanguages;
+    for (int i = 0; i < pTree->getNumberOfChildren(); ++i)
+    {
+        if (const auto pChild = pTree->getChild(i))
+            aLanguages += lcl_CollectLanguages(*pChild, aTexts);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(
+        // specifies no language, being in the document's, so it inherits
+        u"P: A paragraph in the language of the document.\n"
+        "P de-DE: Ein Absatz, der ganz und gar deutsch ist.\n"
+        // the gap is where the German span took its words out of the paragraph
+        "P: English with  in it.\n"
+        "Span de-DE: ein paar deutsche Worte\n"
+        "P de-DE: Ein deutscher Absatz mit  darin.\n"
+        // the run differs from its paragraph, not from the document
+        "Span en-US: a few English words\n"
+        // a paragraph holding an anchor specified no language before, a Span carrying it
+        "P de-DE: Ein deutscher Absatz mit einem Rahmen.\n"
+        // the shape's own element, so its description does not inherit the paragraph's
+        "Div en-US: A shape described in the language of the document\n"
+        // the shape's text, tagged by drawinglayer since fr1 has no parent style
+        "P en-US: Text inside the frame.\n"
+        "P de-DE: Ein deutscher Absatz mit einem Textrahmen.\n"
+        // a Writer text frame, identified by its description
+        "Div en-US: Described in the language of the document\n"
+        // specifies none: the frame's Div specifies en-US for what it contains
+        "P: Text in a Writer frame.\n"
+        "P de-DE: Ein deutscher Absatz mit einem Bild.\n"
+        "Figure en-US: A picture described in the language of the document\n"_ustr,
+        aLanguages);
+}
+
+// the rectangle of every link annotation, down the page, each annotation carrying the
+// /StructParent that ISO 14289-1 7.18.5 needs to find its Link element
+std::vector<basegfx::B2DRectangle> lcl_CollectTaggedLinkRects(vcl::filter::PDFDocument& rDocument)
+{
+    std::vector<basegfx::B2DRectangle> aRects;
+    for (auto* pObject : rDocument.GetObjects())
+    {
+        auto pSubtype = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+        if (!pSubtype || pSubtype->GetValue() != "Link")
+            continue;
+        CPPUNIT_ASSERT_MESSAGE("a link annotation with no /StructParent",
+                               pObject->Lookup("StructParent"_ostr));
+        auto pRect = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject->Lookup("Rect"_ostr));
+        CPPUNIT_ASSERT(pRect);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), pRect->GetElements().size());
+        const auto aCorner = [pRect](size_t nIndex) {
+            auto pNumber = dynamic_cast<vcl::filter::PDFNumberElement*>(pRect->GetElement(nIndex));
+            CPPUNIT_ASSERT(pNumber);
+            return pNumber->GetValue();
+        };
+        aRects.emplace_back(aCorner(0), aCorner(1), aCorner(2), aCorner(3));
+    }
+    // PDF y coordinates increase upwards, so the highest bottom is the first line
+    std::ranges::sort(aRects,
+                      [](const basegfx::B2DRectangle& rLeft, const basegfx::B2DRectangle& rRight) {
+                          return rLeft.getMinY() > rRight.getMinY();
+                      });
+    return aRects;
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkEndsInRuby)
+{
+    createSwDoc("link-ends-in-ruby.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
 
-    // every structure element that names a language, sorted: they are emitted by object and
-    // not by document order
-    std::vector<OString> aLanguages;
-    for (const auto& rDocElement : aDocument.GetElements())
+    // one rectangle per line the link covers, and no third one over the empty band beside
+    // the ruby, which no structure element could cover
+    const std::vector<basegfx::B2DRectangle> aRects(lcl_CollectTaggedLinkRects(aDocument));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aRects.size());
+    // the first line holds text alone; the second carries the ruby, and its rectangle
+    // stands over the ruby's band so that the phonetic annotation takes the click
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(13.8, aRects[0].getHeight(), 0.5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.7, aRects[1].getHeight(), 0.5);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkEndsInRubyVertical)
+{
+    createSwDoc("link-ends-in-ruby-vertical.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // the region split hands this line back in pieces, one of them holding the ruby and
+    // none of the line's text, which nothing paints in and so nothing tags; the count is
+    // what this pins - the width was already right before the pieces were joined
+    const std::vector<basegfx::B2DRectangle> aRects(lcl_CollectTaggedLinkRects(aDocument));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aRects.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.7, aRects[0].getWidth(), 0.5);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkEndsInRubyVerticalWrapped)
+{
+    createSwDoc("link-ends-in-ruby-vertical-wrapped.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // an annotation for each of the three lines, all tagged, which the collector asserts
+    std::vector<basegfx::B2DRectangle> aRects(lcl_CollectTaggedLinkRects(aDocument));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aRects.size());
+    // the text runs down the page from the right, so the widest x is the first line
+    std::ranges::sort(aRects,
+                      [](const basegfx::B2DRectangle& rLeft, const basegfx::B2DRectangle& rRight) {
+                          return rLeft.getMinX() > rRight.getMinX();
+                      });
+    // only the third line carries the ruby, and only it is as wide as a ruby makes a line
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(13.8, aRects[0].getWidth(), 0.5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(13.8, aRects[1].getWidth(), 0.5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.7, aRects[2].getWidth(), 0.5);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkPartRubyOneLine)
+{
+    createSwDoc("link-part-ruby-one-line.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // an annotation is a plain box, so a ruby over the link's second half raises the whole
+    // rectangle; leaving the first half its own height would need a quadrilateral
+    const std::vector<basegfx::B2DRectangle> aRects(lcl_CollectTaggedLinkRects(aDocument));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aRects.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.7, aRects[0].getHeight(), 0.5);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkStartsAfterRuby)
+{
+    createSwDoc("link-starts-after-ruby.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    const std::vector<basegfx::B2DRectangle> aRects(lcl_CollectTaggedLinkRects(aDocument));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aRects.size());
+    // the ruby raises the line, so the link standing beside it is as tall as the line
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.7, aRects[0].getHeight(), 0.5);
+    // the ruby belongs to no link, so the rectangle starts to the right of it, not at the
+    // left text margin of 56.7pt
+    CPPUNIT_ASSERT_GREATER(65.0, aRects[0].getMinX());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testLinkStartsAtAbuttingRuby)
+{
+    createSwDoc("link-starts-at-abutting-ruby.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    const std::vector<basegfx::B2DRectangle> aRects(lcl_CollectTaggedLinkRects(aDocument));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aRects.size());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(20.7, aRects[0].getHeight(), 0.5);
+    // a hit test at the link's first character lands in the ruby before it, which the link
+    // does not cover, so the rectangle starts at the second ruby
+    CPPUNIT_ASSERT_GREATER(65.0, aRects[0].getMinX());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testRubyStructureOrder)
+{
+    createSwDoc("ruby-positions.fodt");
+
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    auto pPdfDocument = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
+    auto pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+
+    // the text behind each marked content id, to identify the element covering it
+    std::unordered_map<int, OUString> aTexts;
+    for (int i = 0; i < pPdfPage->getObjectCount(); ++i)
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
-
-        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
-        auto pLang
-            = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pObject->Lookup("Lang"_ostr));
-        if (!pType || !pLang)
-            continue;
-
-        aLanguages.push_back(pType->GetValue() + "=" + pLang->GetValue());
+        auto pObject = pPdfPage->getObject(i);
+        if (const int nMarkedContentID = pObject->getMarkedContentID(); nMarkedContentID >= 0)
+            aTexts[nMarkedContentID] += pObject->getText(pTextPage);
     }
-    std::sort(aLanguages.begin(), aLanguages.end());
 
-    CPPUNIT_ASSERT_EQUAL(size_t(5), aLanguages.size());
-    // the German words in an English paragraph, and the text of the paragraph holding a frame,
-    // which says nothing itself because what is anchored there hangs under it
-    CPPUNIT_ASSERT_EQUAL("Span=de-DE"_ostr, aLanguages[0]);
-    CPPUNIT_ASSERT_EQUAL("Span=de-DE"_ostr, aLanguages[1]);
-    // Without the fix this was de-DE: the run differs from its paragraph, not from the document
-    CPPUNIT_ASSERT_EQUAL("Span=en-US"_ostr, aLanguages[2]);
-    // and without it neither German paragraph named a language at all
-    CPPUNIT_ASSERT_EQUAL("Standard=de-DE"_ostr, aLanguages[3]);
-    CPPUNIT_ASSERT_EQUAL("Standard=de-DE"_ostr, aLanguages[4]);
+    auto pTree = pPdfPage->getStructureTree();
+    CPPUNIT_ASSERT(pTree);
+    OUString aRubies;
+    for (int i = 0; i < pTree->getNumberOfChildren(); ++i)
+    {
+        if (const auto pChild = pTree->getChild(i))
+            aRubies += lcl_CollectRubies(*pChild, aTexts);
+    }
+
+    // ISO 32000-2 Table 369 requires RB first. An annotation above its base paints first and
+    // is still the RT; one below paints second and is still the RT
+    CPPUNIT_ASSERT_EQUAL(u"RB: base above\n"
+                         "RT: anno above\n"
+                         "RB: base below\n"
+                         "RT: anno below\n"_ustr,
+                         aRubies);
 }
 }
 

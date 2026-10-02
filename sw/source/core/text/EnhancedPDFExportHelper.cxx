@@ -460,15 +460,24 @@ const SwTextNode* lcl_JumpedToNode(const SwEditShell& rSh, const SwPosition& rBe
     return rPoint == rBeforeJump ? nullptr : rPoint.GetNode().GetTextNode();
 }
 
-// the language a paragraph declares for itself, as against the one a run of text sets
+// the language of a paragraph, as against the one a run of text sets
 LanguageType lcl_GetParagraphLanguage(const SwTextFrame& rFrame,
                                       const TypedWhichId<SvxLanguageItem> nWhich)
 {
-    // what is anchored here is tagged inside the paragraph's element and would inherit a
-    // language put there; the node, not the frame, because a split paragraph is one element
-    if (!rFrame.GetTextNodeFirst()->GetAnchoredFlys().empty())
-        return LANGUAGE_DONTKNOW;
     return rFrame.GetTextNodeForParaProps()->GetSwAttrSet().Get(nWhich).GetLanguage();
+}
+
+// the language an element inherits from the element around it
+LanguageType lcl_GetInheritedLanguage(const SwFrame& rFrame, const SwEnhancedPDFState& rState)
+{
+    // a frame's element sits in its anchor's, and what the frame holds sits in the frame's
+    if (rFrame.IsFlyFrame())
+    {
+        const SwFrame* pAnchor = static_cast<const SwFlyFrame&>(rFrame).GetAnchorFrame();
+        if (auto pAnchorText = pAnchor ? pAnchor->DynCastTextFrame() : nullptr)
+            return lcl_GetParagraphLanguage(*pAnchorText, rState.m_nLanguageWhich);
+    }
+    return rState.m_eLanguageDefault;
 }
 
 // the language a run of text is measured against
@@ -571,40 +580,98 @@ bool lcl_TryMoveToNonHiddenField(SwEditShell& rShell, const SwTextNode& rNd, con
     return true;
 };
 
+// absorb into rRects[rInto] one rectangle that touches it, nSlack twips apart counting as
+// touching, unless their union would reach over one of rHoles
+bool lcl_AbsorbOne(SwRects& rRects, size_t& rInto, tools::Long nSlack, const SwRects& rHoles)
+{
+    const SwRect aGrown(rRects[rInto].Pos() - Point(nSlack, nSlack),
+                        rRects[rInto].SSize() + Size(2 * nSlack, 2 * nSlack));
+    for (size_t i = 0; i < rRects.size(); ++i)
+    {
+        if (i == rInto || !aGrown.Overlaps(rRects[i]))
+            continue;
+        const SwRect aJoined(rRects[rInto].GetUnion(rRects[i]));
+        if (std::ranges::any_of(
+                rHoles, [&aJoined](const SwRect& rHole) { return aJoined.Overlaps(rHole); }))
+        {
+            continue;
+        }
+        rRects[rInto] = aJoined;
+        rRects.erase(rRects.begin() + i);
+        if (i < rInto)
+            --rInto;
+        return true;
+    }
+    return false;
+}
+
+void lcl_JoinTouching(SwRects& rRects, tools::Long nSlack, const SwRects& rHoles)
+{
+    // the union of two rectangles reaches further than either, so one that has just grown is
+    // offered the whole vector again, those already passed included
+    for (size_t i = 0; i < rRects.size(); ++i)
+    {
+        while (lcl_AbsorbOne(rRects, i, nSlack, rHoles))
+        {
+        }
+    }
+}
+
 // tdf#157816: try to check if the rectangle contains actual text
 ::std::vector<SwRect> GetCursorRectsContainingText(SwCursorShell const& rShell)
 {
-    ::std::vector<SwRect> ret;
-    SwRects rects;
-    rShell.GetLayout()->CalcFrameRects(*rShell.GetCursor_(), rects, SwRootFrame::RectsMode::NoAnchoredFlys);
+    SwRects region;
+    SwRects pieces;
+    SwRects holes;
+    // the pieces specify which lines each part of the region belongs to
+    rShell.GetLayout()->CalcFrameRects(*rShell.GetCursor_(), region,
+                                       SwRootFrame::RectsMode::NoAnchoredFlys, &pieces, &holes);
     auto const [pStart, pEnd] = rShell.GetCursor_()->StartEnd();
 
-    for (SwRect const& rRect : rects)
+    // a ruby's band overlaps its line's text band while lines only abut, so this leaves
+    // the pieces not overlapping each other; a piece spans its lines whole, so vetoing on
+    // a hole here would refuse every join
+    lcl_JoinTouching(pieces, 0, {});
+
+    ::std::vector<SwRect> ret;
+    for (const SwRect& rPiece : pieces)
     {
-        Point center(rRect.Center());
-        SwSpecialPos special;
-        SwCursorMoveState cms(CursorMoveState::NONE);
-        cms.m_pSpecialPos = &special;
-        cms.m_bFieldInfo = true;
-        // the centre of a one-glyph rectangle falls in that glyph's second half, so the hit
-        // test below returns the character that contains the point
-        cms.m_bPosMatchesBounds = true;
-        SwPosition pos(rShell.GetDoc()->GetNodes());
-        if (rShell.GetLayout()->GetModelPositionForViewPoint(&pos, center, &cms)
-            && *pStart <= pos && pos <= *pEnd)
+        SwRects parts;
+        for (const SwRect& rRect : region)
         {
-            SwRect charRect;
-            std::pair<Point, bool> const tmp(center, false);
-            SwContentFrame const*const pFrame(
-                pos.nNode.GetNode().GetTextNode()->getLayoutFrame(rShell.GetLayout(), &pos, &tmp));
-            if (pFrame->GetCharRect(charRect, pos, &cms, false)
-                && rRect.Overlaps(charRect))
+            SwRect aPart(rRect);
+            aPart.Intersection(rPiece);
+            if (!aPart.HasArea())
+                continue;
+
+            Point center(aPart.Center());
+            SwSpecialPos special;
+            SwCursorMoveState cms(CursorMoveState::NONE);
+            cms.m_pSpecialPos = &special;
+            cms.m_bFieldInfo = true;
+            // the centre of a one-glyph rectangle falls in that glyph's second half, so the
+            // hit test below returns the character that contains the point
+            cms.m_bPosMatchesBounds = true;
+            SwPosition pos(rShell.GetDoc()->GetNodes());
+            if (rShell.GetLayout()->GetModelPositionForViewPoint(&pos, center, &cms)
+                && *pStart <= pos && pos <= *pEnd)
             {
-                ret.push_back(rRect);
+                SwRect charRect;
+                std::pair<Point, bool> const tmp(center, false);
+                SwContentFrame const* const pFrame(
+                    pos.GetNode().GetTextNode()->getLayoutFrame(rShell.GetLayout(), &pos, &tmp));
+                if (pFrame->GetCharRect(charRect, pos, &cms, false) && aPart.Overlaps(charRect))
+                {
+                    parts.push_back(aPart);
+                }
             }
+            // reset stupid static var that may have gotten set now
+            SwTextCursor::SetRightMargin(false); // WTF is this crap
         }
-        // reset stupid static var that may have gotten set now
-        SwTextCursor::SetRightMargin(false); // WTF is this crap
+        // what holds no text is gone, so joining the rest keeps a line whole, and a hole
+        // stops a join that would cover what the selection excludes on purpose
+        lcl_JoinTouching(parts, 2, holes);
+        ret.insert(ret.end(), parts.begin(), parts.end());
     }
     return ret;
 }
@@ -762,12 +829,33 @@ void SwTaggedPDFHelper::OpenTagImpl(void const*const pKey)
 #endif
 }
 
-sal_Int32 SwTaggedPDFHelper::BeginTagImpl(void const*const pKey,
-    vcl::pdf::StructElement const eType, const OUString& rString)
+std::pair<sal_Int32, sal_Int32> SwTaggedPDFHelper::CreateRubyKids(const OutputDevice& rOut,
+                                                                  const SwFrame& rFrame)
+{
+    auto* pPDFExtOutDevData = dynamic_cast<vcl::PDFExtOutDevData*>(rOut.GetExtOutDevData());
+    // the check BeginInlineStructureElements makes, so no kid is created that nothing enters
+    if (!pPDFExtOutDevData || !pPDFExtOutDevData->GetIsExportTaggedPDF()
+        || lcl_IsInNonStructEnv(rFrame))
+        return { -1, -1 };
+
+    // ISO 32000-2 Table 369 requires RB before RT, and an element is ordered among its
+    // siblings where its type is set, which is here rather than where the sub-line paints
+    const sal_Int32 nRB(pPDFExtOutDevData->EnsureStructureElement(nullptr));
+    pPDFExtOutDevData->InitStructureElement(nRB, vcl::pdf::StructElement::RB, u"RB"_ustr);
+    const sal_Int32 nRT(pPDFExtOutDevData->EnsureStructureElement(nullptr));
+    pPDFExtOutDevData->InitStructureElement(nRT, vcl::pdf::StructElement::RT, u"RT"_ustr);
+    return { nRB, nRT };
+}
+
+sal_Int32 SwTaggedPDFHelper::BeginTagImpl(const void* const pKey,
+                                          const vcl::pdf::StructElement eType,
+                                          const OUString& rString, const sal_Int32 nExistingId)
 {
     // write new tag
-    const sal_Int32 nId = mpPDFExtOutDevData->EnsureStructureElement(pKey);
-    mpPDFExtOutDevData->InitStructureElement(nId, eType, rString);
+    const sal_Int32 nId
+        = nExistingId != -1 ? nExistingId : mpPDFExtOutDevData->EnsureStructureElement(pKey);
+    if (nExistingId == -1)
+        mpPDFExtOutDevData->InitStructureElement(nId, eType, rString);
     mpPDFExtOutDevData->BeginStructureElement(nId);
     m_aOpenedTags.push_back(nId);
 
@@ -806,7 +894,8 @@ void SwTaggedPDFHelper::BeginTag(vcl::pdf::StructElement eType, const OUString& 
         }
     }
 
-    sal_Int32 const nId = BeginTagImpl(pKey, eType, rString);
+    const sal_Int32 nId
+        = BeginTagImpl(pKey, eType, rString, mpPorInfo ? mpPorInfo->m_nExistingId : -1);
 
     // which tag a destination pointing at this node names
     if (mpFrameInfo && mpFrameInfo->mrFrame.IsTextFrame())
@@ -1050,17 +1139,14 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
 
             case vcl::pdf::StructElement::Formula:
             case vcl::pdf::StructElement::Figure:
-                bAltText =
-                bPlacement =
-                bWidth =
-                bHeight =
-                bBox = true;
+                bAltText = bLanguage = bPlacement = bWidth = bHeight = bBox = true;
                 break;
 
             case vcl::pdf::StructElement::Division:
                 if (pFrame->IsFlyFrame()) // this can be something else too
                 {
                     bAltText = true;
+                    bLanguage = true;
                     bBox = true;
                 }
                 break;
@@ -1160,12 +1246,20 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
                 mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::pdf::PDFWriter::TextIndent, nVal );
         }
 
-        if (bLanguage && pFrame->IsTextFrame())
+        if (bLanguage)
         {
             const SwEnhancedPDFState& rState(*mpPDFExtOutDevData->GetSwPDFState());
-            const LanguageType nLanguage(lcl_GetParagraphLanguage(
-                static_cast<const SwTextFrame&>(*pFrame), rState.m_nLanguageWhich));
-            if (LANGUAGE_DONTKNOW != nLanguage && rState.m_eLanguageDefault != nLanguage)
+            LanguageType nLanguage(LANGUAGE_DONTKNOW);
+            if (auto pText = pFrame->DynCastTextFrame())
+                nLanguage = lcl_GetParagraphLanguage(*pText, rState.m_nLanguageWhich);
+            else if (pFrame->IsFlyFrame())
+            {
+                // a frame's contents measure against this
+                nLanguage = rState.m_eLanguageDefault;
+            }
+
+            if (nLanguage != LANGUAGE_DONTKNOW
+                && nLanguage != lcl_GetInheritedLanguage(*pFrame, rState))
             {
                 mpPDFExtOutDevData->SetStructureAttributeNumerical(
                     vcl::pdf::PDFWriter::Language, static_cast<sal_uInt16>(nLanguage));

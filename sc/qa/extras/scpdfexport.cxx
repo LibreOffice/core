@@ -94,10 +94,31 @@ bool ScPDFExportTest::hasTextInPdf(const char* sText, bool& bFound)
     const std::size_t nRead = pStream->ReadBytes(pBuffer, nFileSize);
     if (nRead == nFileSize)
     {
-        const std::string haystack(pBuffer, pBuffer + nFileSize);
-        const std::string needle(sText);
-        const std::size_t n = haystack.find(needle);
-        bFound = (n != std::string::npos);
+        std::string haystack(pBuffer, pBuffer + nFileSize);
+        // what the writer put in an object stream stands in the file as deflated bytes only
+        vcl::filter::PDFDocument aDocument;
+        SvMemoryStream aFile(pBuffer, nFileSize, StreamMode::READ);
+        if (aDocument.Read(aFile))
+        {
+            for (auto* pObject : aDocument.GetObjects())
+            {
+                auto pType
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+                if (!pType || pType->GetValue() != "ObjStm")
+                    continue;
+                vcl::filter::PDFStreamElement* pObjStm = pObject->GetStream();
+                CPPUNIT_ASSERT(pObjStm);
+                SvMemoryStream aDecompressed;
+                ZCodec aCodec;
+                aCodec.BeginCompression();
+                pObjStm->GetMemory().Seek(0);
+                aCodec.Decompress(pObjStm->GetMemory(), aDecompressed);
+                CPPUNIT_ASSERT(aCodec.EndCompression() >= 0);
+                haystack.append(static_cast<const char*>(aDecompressed.GetData()),
+                                aDecompressed.GetSize());
+            }
+        }
+        bFound = haystack.find(std::string(sText)) != std::string::npos;
     }
     delete[] pBuffer;
 
@@ -958,11 +979,10 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testSheetDestinations)
     // ISO 14289-2 8.8: a sheet's outline item names the sheet, not only the page it starts on
     OStringBuffer aTypes;
     std::set<int> aTargets;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
         // an outline item, not the document information dictionary, which also has a title
-        if (!pObject || !pObject->Lookup("Title"_ostr) || !pObject->Lookup("Parent"_ostr))
+        if (!pObject->Lookup("Title"_ostr) || !pObject->Lookup("Parent"_ostr))
             continue;
         auto pAction = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("A"_ostr));
         CPPUNIT_ASSERT(pAction);
@@ -1076,11 +1096,8 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testPageRangeSkipsSheetStart)
 
     int nOutlineItems = 0;
     std::set<int> aWorksheetPages;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         if (pObject->Lookup("Title"_ostr) && pObject->Lookup("Parent"_ostr))
             ++nOutlineItems;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
@@ -1106,11 +1123,8 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testDatabaseRangeHeader)
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
 
     std::vector<vcl::filter::PDFObjectElement*> aTables;
-    for (const auto& rDocElement : aDocument.GetElements())
+    for (auto* pObject : aDocument.GetObjects())
     {
-        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
-        if (!pObject)
-            continue;
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
         if (pType && pType->GetValue() == "Table")
             aTables.push_back(pObject);

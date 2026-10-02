@@ -521,17 +521,13 @@ void SmFontSizeDialog::ReadFrom(const SmFormat &rFormat)
 
 void SmFontSizeDialog::WriteTo(SmFormat &rFormat) const
 {
-    rFormat.SetBaseSize( Size(0, o3tl::convert(m_xBaseSize->get_value(FieldUnit::NONE), o3tl::Length::pt, SmO3tlLengthUnit())) );
+    rFormat.SetBaseSizeAndFonts( Size(0, o3tl::convert(m_xBaseSize->get_value(FieldUnit::NONE), o3tl::Length::pt, SmO3tlLengthUnit())) );
 
     rFormat.SetRelSize(SIZ_TEXT,     sal::static_int_cast<sal_uInt16>(m_xTextSize->get_value(FieldUnit::NONE)));
     rFormat.SetRelSize(SIZ_INDEX,    sal::static_int_cast<sal_uInt16>(m_xIndexSize->get_value(FieldUnit::NONE)));
     rFormat.SetRelSize(SIZ_FUNCTION, sal::static_int_cast<sal_uInt16>(m_xFunctionSize->get_value(FieldUnit::NONE)));
     rFormat.SetRelSize(SIZ_OPERATOR, sal::static_int_cast<sal_uInt16>(m_xOperatorSize->get_value(FieldUnit::NONE)));
     rFormat.SetRelSize(SIZ_LIMITS,   sal::static_int_cast<sal_uInt16>(m_xBorderSize->get_value(FieldUnit::NONE)));
-
-    const Size aTmp (rFormat.GetBaseSize());
-    for (sal_uInt16  i = FNT_BEGIN;  i <= FNT_END;  i++)
-        rFormat.SetFontSize(i, aTmp);
 
     rFormat.RequestApplyChanges();
 }
