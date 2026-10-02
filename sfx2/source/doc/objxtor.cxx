@@ -265,6 +265,7 @@ SfxObjectShell::SfxObjectShell( const SfxModelFlags i_nCreationFlags )
     , mbAvoidRecentDocs(false)
     , bRememberSignature(false)
     , bPendingLinkUpdateInfobar(false)
+    , mbHasExternalDatabaseForms(false)
 {
     if (i_nCreationFlags & SfxModelFlags::EMBEDDED_OBJECT)
         eCreateMode = SfxObjectCreateMode::EMBEDDED;
@@ -296,6 +297,7 @@ SfxObjectShell::SfxObjectShell(SfxObjectCreateMode eMode)
     , mbAvoidRecentDocs(false)
     , bRememberSignature(false)
     , bPendingLinkUpdateInfobar(false)
+    , mbHasExternalDatabaseForms(false)
 {
 }
 

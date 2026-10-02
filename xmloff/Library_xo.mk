@@ -64,6 +64,7 @@ $(eval $(call gb_Library_use_libraries,xo,\
     sal \
     salhelper \
     sax \
+    sfx \
     svl \
     tl \
     utl \
