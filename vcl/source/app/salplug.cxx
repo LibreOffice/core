@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// Th current high-level preprocessor structure is:
+// The current high-level preprocessor structure is:
 //
 // if !HAVE_FEATURE_UI
 //   => STATIC_SAL_INSTANCE

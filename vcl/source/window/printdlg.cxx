@@ -359,13 +359,13 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     // tdf#141761
     // The display quality of the Preview is pretty ugly when
     // FormControls are used. I made a deep-dive why this happens,
-    // and in principle the reason is the Mteafile::Scale used
+    // and in principle the reason is the Metafile::Scale used
     // below. Since Metafile actions are integer, that floating point
     // scale leads to rounding errors that make the lines painting
     // the FormControls disappear in the surrounding ClipRegions.
-    // That Scale cannot be avoided since the Metafile contains it's
+    // That Scale cannot be avoided since the Metafile contains its
     // own SetMapMode commands which *will* be executed on ::Play,
-    // so the ::Scale is the only possibility fr Metafile currently:
+    // so the ::Scale is the only possibility for Metafile currently:
     // Giving a Size as parameter in ::Play will *not* work due to
     // the relativeMapMode that gets created will fail on
     // ::SetMapMode actions in the Metafile - and FormControls DO
@@ -393,7 +393,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
         // memory problems, still limit to a useful factor is
         // necessary, also empirically estimated to
         // avoid the quality from collapsing (using a direct
-        // in-between , ceil'd result)
+        // in-between, ceil'd result)
         static const double fMaximumQualitySquare(1396221.0);
 
         if(fNewNeededPixels > fMaximumQualitySquare)

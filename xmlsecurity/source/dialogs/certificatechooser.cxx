@@ -108,7 +108,7 @@ void CertificateChooser::BeforeRun()
     // We can't check for personal certificates before raising this dialog,
     // because the mozilla implementation throws a NoPassword exception,
     // if the user pressed cancel, and also if the database does not exist!
-    // But in the later case, the is no password query, and the user is confused
+    // But in the later case, there is no password query, and the user is confused
     // that nothing happens when pressing "Add..." in the SignatureDialog.
 
     // PostUserEvent( LINK( this, CertificateChooser, Initialize ) );
