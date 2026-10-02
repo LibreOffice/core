@@ -388,6 +388,10 @@ public:
         Any other name is the URL of a database document. */
     static bool IsRegisteredDatabase(const OUString& rDBName);
 
+    /** True when rDBName is an unregistered source whose URL a document controls and the
+        protocol check rejects it. */
+    static bool IsForbiddenUrlDataSource(const OUString& rDBName);
+
     const char* ReloadCache(const ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
     bool ReloadGroupsInCache(const ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
     SC_DLLPUBLIC bool GetReferenceGroups(const ScDPObject& rDPObj, const ScDPDimensionSaveData** pGroups) const;
