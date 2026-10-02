@@ -658,16 +658,18 @@ div#fontstyletoolbox + div#style.mobile-wizard {
 }
 
 /* Hide non-critical toolbars if height is too small (e.g. landscape mode...) */
-@media screen and (height <= 150px) {
-	#toolbar-down {
-		display: none !important;
-	}
+@media screen and (height <=150px) {
+	html:has(#document-and-notes:focus-within) {
+		#toolbar-down {
+			display: none !important;
+		}
 
-	#toolbar-wrapper:has(#toolbar-up) {
-		display: none !important;
-	}
+		#toolbar-wrapper:has(#toolbar-up) {
+			display: none !important;
+		}
 
-	#spreadsheet-toolbar {
-		display: none !important;
+		#spreadsheet-toolbar {
+			display: none !important;
+		}
 	}
 }

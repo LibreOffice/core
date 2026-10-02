@@ -129,9 +129,16 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Interact with bottom toolba
 		cy.cGet('#toolbar-down').should('be.visible');
 		cy.cGet('#spreadsheet-toolbar').should('be.visible');
 
-		// ...but not if our onscreen keyboard is shown. Here simulated by setting our height just under the limit
-		// ...there's no way to know exactly how big the size will be on different devices - particularly when taking into account browser UI - but 150px is still enough to edit the document so it's kind of OK
+		// ...and even when the keyboard is shown while on a different part of the UI, here simulated by setting our height just under the limit
+		cy.cGet(helper.addressInputSelector).focus();
+		cy.cGet(helper.addressInputSelector).should('have.focus');
 		cy.viewport(667, 149);
+		cy.cGet('#toolbar-down').should('be.visible');
+		cy.cGet('#spreadsheet-toolbar').should('be.visible');
+
+		// ...but when we start editing the document - moving focus into it - the toolbars are hidden to leave space for the keyboard...
+		// ...there's no way to know exactly how big the keyboard will be on different devices - particularly when taking into account browser UI - but 150px is still enough to edit the document so it's kind of OK
+		helper.typeIntoDocument('x');
 		cy.cGet('#toolbar-down').should('not.be.visible');
 		cy.cGet('#spreadsheet-toolbar').should('not.be.visible');
 
