@@ -22,20 +22,108 @@
 #include <common/Unit.hpp>
 #include <common/Util.hpp>
 #include <net/HttpRequest.hpp>
+#include <net/ServerSocket.hpp>
+#include <net/Socket.hpp>
+#if ENABLE_SSL
+#include <net/SslSocket.hpp>
+#endif
 
 #include <test/UnitWSDClient.hpp>
 #include <test/helpers.hpp>
 #include <test/lokassert.hpp>
 
+#include <Poco/MemoryStream.h>
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/SHA2Engine.h>
 #include <Poco/URI.h>
 #include <Poco/Util/LayeredConfiguration.h>
 
 #include <cctype>
+#include <functional>
 #include <sstream>
 #include <string_view>
 #include <vector>
+
+/// Serves the WOPI requests that reach a listener of the test's own.
+///
+/// Without one, the WOPI URLs point back at coolwsd, whose dispatcher hands
+/// /wopi/ paths to the test while standing on the web server's poll; a handler
+/// that waits there stops that poll and every client socket on it. Here the
+/// handler waits on a poll of its own, the way a real WOPI host would.
+class WopiHostHandler final : public SimpleSocketHandler
+{
+public:
+    using Handler = std::function<bool(const Poco::Net::HTTPRequest&, std::istream&,
+                                       const std::shared_ptr<StreamSocket>&)>;
+
+    explicit WopiHostHandler(Handler handler)
+        : _handler(std::move(handler))
+    {
+    }
+
+private:
+    void onConnect(const std::shared_ptr<StreamSocket>& socket) override { _socket = socket; }
+
+    void onDisconnect() override
+    {
+        if (std::shared_ptr<StreamSocket> socket = _socket.lock())
+            socket->asyncShutdown();
+    }
+
+    void handleIncomingMessage(SocketDisposition& /*disposition*/) override
+    {
+        std::shared_ptr<StreamSocket> socket = _socket.lock();
+        if (!socket)
+            return;
+
+        Buffer& data = socket->getInBuffer();
+        static constexpr std::string_view marker("\r\n\r\n");
+        const std::size_t end = data.view().find(marker);
+        if (end == std::string_view::npos)
+            return; // Not the whole header yet.
+
+        const std::size_t headerSize = end + marker.size();
+        Poco::Net::HTTPRequest request;
+        try
+        {
+            Poco::MemoryInputStream header(data.data(), headerSize);
+            request.read(header);
+        }
+        catch (const std::exception& exc)
+        {
+            LOG_ERR("FakeWOPIHost: cannot parse request header: " << exc.what());
+            http::Response response(http::StatusCode::BadRequest);
+            socket->sendAndShutdown(response);
+            return;
+        }
+
+        const std::size_t contentSize =
+            request.hasContentLength() ? request.getContentLength64() : 0;
+        if (data.size() < headerSize + contentSize)
+            return; // Not the whole body yet.
+
+        Poco::MemoryInputStream message(data.data() + headerSize, contentSize);
+        const bool handled = _handler(request, message, socket);
+        data.eraseFirst(headerSize + contentSize);
+
+        if (!handled)
+        {
+            http::Response response(http::StatusCode::NotFound);
+            socket->sendAndShutdown(response);
+        }
+    }
+
+    int getPollEvents(std::chrono::steady_clock::time_point /*now*/,
+                      int64_t& /*timeoutMaxMicroS*/) override
+    {
+        return POLLIN;
+    }
+
+    void performWrites(std::size_t /*capacity*/) override {}
+
+    Handler _handler;
+    std::weak_ptr<StreamSocket> _socket;
+};
 
 /// Simulates a WOPI server for testing purposes.
 /// Currently only serves one file contents.
@@ -71,6 +159,60 @@ private:
 
     /// The default filename when only content is given.
     static constexpr auto DefaultFilename = "hello.txt";
+
+    /// Whether WOPI URLs point at a listener of our own instead of coolwsd.
+    bool _ownWopiHost;
+    /// That listener's poll, once started, and the origin it serves.
+    std::shared_ptr<SocketPoll> _wopiHostPoll;
+    std::string _wopiHostUri;
+
+    void startWopiHost()
+    {
+        const bool ssl = helpers::haveSsl() && ConfigUtil::isSslEnabled();
+        class Factory final : public SocketFactory
+        {
+            WopiHostHandler::Handler _handler;
+            bool _ssl;
+
+        public:
+            Factory(WopiHostHandler::Handler handler, bool ssl)
+                : _handler(std::move(handler))
+                , _ssl(ssl)
+            {
+            }
+
+            std::shared_ptr<Socket> create(const int physicalFd, Socket::Type type) override
+            {
+                auto handler = std::make_shared<WopiHostHandler>(_handler);
+#if ENABLE_SSL
+                if (_ssl)
+                    return StreamSocket::create<SslStreamSocket>(std::string(), physicalFd, type,
+                                                                 false, HostType::Other, handler);
+#endif
+                return StreamSocket::create<StreamSocket>(std::string(), physicalFd, type, false,
+                                                          HostType::Other, handler);
+            }
+        };
+
+        auto factory = std::make_shared<Factory>(
+            [this](const Poco::Net::HTTPRequest& request, std::istream& message,
+                   const std::shared_ptr<StreamSocket>& socket)
+            { return handleHttpRequest(request, message, socket); },
+            ssl);
+
+        _wopiHostPoll = std::make_shared<SocketPoll>("WopiHostPoll");
+        // Port 0: let the kernel pick, as coolwsd does for its own port in tests.
+        std::shared_ptr<ServerSocket> socket =
+            ServerSocket::create(ServerSocket::Type::Local, 0, Socket::Type::IPv4,
+                                 std::chrono::steady_clock::now(), *_wopiHostPoll, factory);
+        LOK_ASSERT_MESSAGE("Failed to listen for WOPI requests", socket);
+
+        const int port = net::boundPort(socket->getFD());
+        _wopiHostUri = std::string(ssl ? "https" : "http") + "://127.0.0.1:" + std::to_string(port);
+        _wopiHostPoll->startThread();
+        _wopiHostPoll->insertNewSocket(socket);
+        TST_LOG("FakeWOPIHost: serving WOPI from a listener of our own at " << _wopiHostUri);
+    }
 
 protected:
 
@@ -113,6 +255,7 @@ protected:
         , _countGetFile(0)
         , _countPutRelative(0)
         , _countPutFile(0)
+        , _ownWopiHost(false)
         , _dontSendJSONOnPutFile(false)
     {
         TST_LOG("WopiTestServer created for [" << getTestname() << ']');
@@ -134,6 +277,37 @@ protected:
                                                    << " bytes from data.");
             setFileContent(filenameOrContents);
         }
+    }
+
+    ~WopiTestServer() override
+    {
+        if (_wopiHostPoll)
+            _wopiHostPoll->joinThread();
+    }
+
+    /// Serve this test's WOPI requests from a listener of our own, on its own
+    /// thread, so that a handler which waits does not stop coolwsd's web
+    /// server poll. Call from the constructor.
+    void useOwnWopiHost() { _ownWopiHost = true; }
+
+    /// Started on first use, which is the first WOPI URL the test builds.
+    std::string getWopiHostURI() const override
+    {
+        if (!_ownWopiHost)
+            return UnitWSDClient::getWopiHostURI();
+
+        if (!_wopiHostPoll)
+            const_cast<WopiTestServer*>(this)->startWopiHost();
+        return _wopiHostUri;
+    }
+
+    void endTest(const std::string& reason) override
+    {
+        // May run on the listener's own thread, when a handler fails an
+        // assertion, so only flag it; the destructor joins.
+        if (_wopiHostPoll)
+            _wopiHostPoll->stop();
+        UnitWSDClient::endTest(reason);
     }
 
     std::size_t getCountCheckFileInfo() const { return _countCheckFileInfo; }
