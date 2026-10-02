@@ -88,9 +88,13 @@ protected:
         socket.reset();
     }
 
+    /// Where the WOPI URLs of this test point. By default that is coolwsd
+    /// itself, which hands /wopi/ paths to the test's handleHttpRequest().
+    virtual std::string getWopiHostURI() const { return helpers::getTestServerURI(); }
+
     std::string initWebsocket(const std::string& wopiName)
     {
-        const Poco::URI wopiURL(helpers::getTestServerURI() + wopiName +
+        const Poco::URI wopiURL(getWopiHostURI() + wopiName +
                                 "&testname=" + getTestname());
 
         _wopiSrc = Uri::encode(wopiURL.toString());
