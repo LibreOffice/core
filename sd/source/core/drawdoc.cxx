@@ -1283,10 +1283,10 @@ void SdDrawDocument::UpdateAllLinks()
         }
     }
 
-    if (m_pLinkManager->GetLinks().empty())
+    if (!pDocShell)
         return;
 
-    if (!pDocShell)
+    if (m_pLinkManager->GetLinks().empty() && !pDocShell->HasExternalDatabaseForms())
         return;
 
     comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer
