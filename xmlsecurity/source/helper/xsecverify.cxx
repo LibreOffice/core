@@ -415,6 +415,13 @@ void XSecController::setX509CertDigest(
         return;
 
     InternalSignatureInformation& rInformation = m_vInternalSignatureInformations.back();
+    SignatureInformation::X509CertInfoRef cert;
+    cert.CertDigest = rCertDigest;
+    cert.DigestID = nReferenceDigestID;
+    cert.X509IssuerName = rX509IssuerName;
+    cert.X509SerialNumber = rX509SerialNumber;
+    rInformation.signatureInfor.SigningCertificates.push_back(cert);
+
     for (auto & rData : rInformation.signatureInfor.X509Datas)
     {
         for (auto & it : rData)
@@ -608,6 +615,12 @@ void XSecController::resolveSigningCertificate()
     }
 
     rInformation.xSigningCertificate = certs.back();
+
+    if (auto const pVerifier
+        = dynamic_cast<SignatureVerifierImpl*>(rInformation.xReferenceResolvedListener.get()))
+    {
+        pVerifier->SetSigningCertificate(rInformation.xSigningCertificate);
+    }
 }
 
 namespace {
