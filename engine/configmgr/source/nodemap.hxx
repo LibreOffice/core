@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 #include "config_map.hxx"
+#include <config_dconf.h>
 #include <rtl/ref.hxx>
 #include "node.hxx"
 
@@ -52,6 +53,9 @@ class NodeMap
     rtl::Reference<Node> &operator[](const OUString &aStr) { clearCache(); return maImpl[aStr]; }
     std::pair<iterator,bool> insert(const value_type &vt) { clearCache(); return maImpl.insert(vt); }
     void erase(const iterator &it) { maImpl.erase(it); clearCache(); }
+#if ENABLE_DCONF
+    void erase(const OUString &aStr) { maImpl.erase(aStr); clearCache(); }
+#endif
 
     rtl::Reference< Node > findNode(int layer, OUString const & name) const;
     void cloneInto(NodeMap * target) const;
