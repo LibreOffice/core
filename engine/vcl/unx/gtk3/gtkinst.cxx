@@ -2501,12 +2501,22 @@ public:
 
     virtual void show() override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        // A widget that asked to be shown takes part in gtk_widget_show_all again.
+        gtk_widget_set_no_show_all(m_pWidget, false);
+#endif
         gtk_widget_set_visible(m_pWidget, true);
     }
 
     virtual void hide() override
     {
         gtk_widget_set_visible(m_pWidget, false);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        // gtk_widget_show_all shows a whole tree, and a popup is put on screen that way, so a
+        // widget hidden while the popup was built would come back with it. Asking to be left
+        // out of show_all keeps the choice made here.
+        gtk_widget_set_no_show_all(m_pWidget, true);
+#endif
     }
 
     virtual void set_size_request(int nWidth, int nHeight) override
@@ -13062,16 +13072,26 @@ public:
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
+        {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+            gtk_widget_set_no_show_all(pParent, false);
+#endif
             gtk_widget_set_visible(pParent, true);
-        gtk_widget_set_visible(m_pWidget, true);
+        }
+        GtkInstanceWidget::show();
     }
 
     virtual void hide() override
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
+        {
             gtk_widget_set_visible(pParent, false);
-        gtk_widget_set_visible(m_pWidget, false);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+            gtk_widget_set_no_show_all(pParent, true);
+#endif
+        }
+        GtkInstanceWidget::hide();
     }
 
     virtual void enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants) override
@@ -13957,16 +13977,26 @@ public:
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
+        {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+            gtk_widget_set_no_show_all(pParent, false);
+#endif
             gtk_widget_set_visible(pParent, true);
-        gtk_widget_set_visible(m_pWidget, true);
+        }
+        GtkInstanceWidget::show();
     }
 
     virtual void hide() override
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
+        {
             gtk_widget_set_visible(pParent, false);
-        gtk_widget_set_visible(m_pWidget, false);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+            gtk_widget_set_no_show_all(pParent, true);
+#endif
+        }
+        GtkInstanceWidget::hide();
     }
 
     virtual OUString get_selected_text() const override
@@ -15011,16 +15041,26 @@ public:
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
+        {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+            gtk_widget_set_no_show_all(pParent, false);
+#endif
             gtk_widget_set_visible(pParent, true);
-        gtk_widget_set_visible(m_pWidget, true);
+        }
+        GtkInstanceWidget::show();
     }
 
     virtual void hide() override
     {
         GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
         if (GTK_IS_SCROLLED_WINDOW(pParent))
+        {
             gtk_widget_set_visible(pParent, false);
-        gtk_widget_set_visible(m_pWidget, false);
+#if !GTK_CHECK_VERSION(4, 0, 0)
+            gtk_widget_set_no_show_all(pParent, true);
+#endif
+        }
+        GtkInstanceWidget::hide();
     }
 
     virtual ~GtkInstanceTextView() override
