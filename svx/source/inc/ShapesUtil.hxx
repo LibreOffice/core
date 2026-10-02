@@ -18,8 +18,9 @@
  */
 #pragma once
 
-#include <map>
 #include <rtl/ustring.hxx>
+
+#include <vector>
 
 namespace svx::sidebar {
 
@@ -27,9 +28,16 @@ class SvxShapeCommandsMap
 {
 public:
     SvxShapeCommandsMap();
-    std::map<sal_uInt16, OUString> m_aLineShapes, m_aCurveShapes, m_aConnectorShapes,
-        m_aBasicShapes, m_aSymbolShapes, m_aBlockArrowShapes, m_aFlowchartShapes, m_aCalloutShapes,
-        m_aStarShapes, m_a3DShapes;
+    std::vector<OUString> m_aLineShapes;
+    std::vector<OUString> m_aCurveShapes;
+    std::vector<OUString> m_aConnectorShapes;
+    std::vector<OUString> m_aBasicShapes;
+    std::vector<OUString> m_aSymbolShapes;
+    std::vector<OUString> m_aBlockArrowShapes;
+    std::vector<OUString> m_aFlowchartShapes;
+    std::vector<OUString> m_aCalloutShapes;
+    std::vector<OUString> m_aStarShapes;
+    std::vector<OUString> m_a3DShapes;
 };
 
 }

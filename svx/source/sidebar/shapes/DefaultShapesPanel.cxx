@@ -126,7 +126,8 @@ IMPL_LINK(DefaultShapesPanel, ShapeSelectHdl, ValueSet*, rValueSet, void)
         if(rValueSet == aSetMap.first)
         {
             sal_uInt16 nSelectionId = aSetMap.first->GetSelectedItemId();
-            comphelper::dispatchCommand(aSetMap.second[nSelectionId - 1], {});
+            if (nSelectionId > 0 && nSelectionId <= aSetMap.second.size())
+                comphelper::dispatchCommand(aSetMap.second.at(nSelectionId - 1), {});
         }
         else
             aSetMap.first->SetNoSelection();
@@ -140,9 +141,9 @@ void DefaultShapesPanel::populateShapes()
     for (auto& aSet : m_aShapesSetMap)
     {
         aSet.first->SetColCount(6);
-        for(std::map<sal_uInt16, OUString>::size_type i = 0; i < aSet.second.size(); i++)
+        for (size_t i = 0; i < aSet.second.size(); i++)
         {
-            sSlotStr = aSet.second[i];
+            sSlotStr = aSet.second.at(i);
             aSlotImage = vcl::CommandInfoProvider::GetImageForCommand(sSlotStr, mxFrame);
             auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sSlotStr,
                 vcl::CommandInfoProvider::GetModuleIdentifier(mxFrame));
