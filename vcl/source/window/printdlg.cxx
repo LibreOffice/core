@@ -586,6 +586,7 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
     , mbShowLayoutFrame( true )
     , mbHasCustomPaperEntry( false )
     , maUpdatePreviewIdle("Print Dialog Update Preview Idle")
+    , maPageRangeUpdateTimer("PageRangeUpdateTimer")
 {
     // Retrieve current page, it'll be used later in updatePageRange method
     PropertyValue* pPageRange = maPController->getValue(u"PageRange"_ustr);
@@ -662,6 +663,10 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
 
     maUpdatePreviewIdle.SetPriority(TaskPriority::POST_PAINT);
     maUpdatePreviewIdle.SetInvokeHandler(LINK( this, PrintDialog, updatePreviewIdle));
+
+    maPageRangeUpdateTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
+    maPageRangeUpdateTimer.SetInvokeHandler(LINK(this, PrintDialog, PageRangeUpdateTimerHdl));
+
 
     initFromMultiPageSetup( maPController->getMultipage() );
 
@@ -1031,6 +1036,12 @@ IMPL_LINK_NOARG(PrintDialog, updatePreviewIdle, Timer*, void)
     preparePreview(std::exchange(mbUseCacheForPreview, true));
 }
 
+IMPL_LINK_NOARG(PrintDialog, PageRangeUpdateTimerHdl, Timer*, void)
+{
+    schedulePreviewUpdate(false);
+}
+
+
 void PrintDialog::preparePreview( bool i_bMayUseCache )
 {
     VclPtr<Printer> aPrt( maPController->getPrinter() );
@@ -1169,17 +1180,7 @@ void PrintDialog::updatePageRange(sal_Int32 nPages)
         pContentVal->Value >>= nContent;
 
     if (nContent == 1)
-    {
-        OUString sRange;
-        if (nPages == 1)
-            sRange = u"1"_ustr;
-        else
-            sRange = u"1-"_ustr + OUString::number(nPages);
-
-        mxPageRangeEdit->set_text(sRange);
-        maPController->setValue(u"PageRange"_ustr, Any(sRange));
-        return;
-    }
+        return; // User-controlled page range
 
     OUString sRange;
 
@@ -1203,7 +1204,6 @@ void PrintDialog::updatePageRange(sal_Int32 nPages)
         return;
     }
 
-    mxPageRangeEdit->set_text(sRange);
     maPController->setValue(u"PageRange"_ustr, Any(sRange));
 }
 
@@ -1899,7 +1899,10 @@ void PrintDialog::setupOptionalUI()
             PropertyValue* pVal = maPController->getValue( aPropertyName );
             if( pVal && pVal->Value.hasValue() )
                 pVal->Value >>= aCurVal;
-            xField->set_text( aCurVal );
+            if (aPropertyName != "PageRange")
+            {
+                xField->set_text( aCurVal );
+            }
             xField->connect_changed( LINK( this, PrintDialog, UIOption_EntryModifyHdl ) );
             xField->show();
 
@@ -2495,8 +2498,11 @@ IMPL_LINK(PrintDialog, UIOption_EntryModifyHdl, weld::TextWidget&, i_rBox, void)
 
         checkOptionalControlDependencies();
 
-        // update preview and page settings
-        schedulePreviewUpdate(false);
+        if (pVal->Name == "PageRange")
+            maPageRangeUpdateTimer.Start();
+        else
+            schedulePreviewUpdate(false);
+
     }
 }
 

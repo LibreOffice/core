@@ -224,6 +224,9 @@ namespace vcl
         Idle maUpdatePreviewIdle;
         DECL_LINK(updatePreviewIdle, Timer*, void);
 
+        Timer maPageRangeUpdateTimer;
+        DECL_LINK(PageRangeUpdateTimerHdl, Timer*, void);
+
         DECL_LINK(ClickOKCancelHdl, weld::Button&, void);
         DECL_LINK(ClickForwardHdl, weld::Button&, void);
         DECL_LINK(ClickBackwardHdl, weld::Button&, void);

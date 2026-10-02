@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, select_by_text
+from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, select_by_text, mkPropertyValues
 
 class printDialog(UITestCase):
     def test_printDialog(self):
@@ -22,11 +22,11 @@ class printDialog(UITestCase):
                 xPortraiTotalNumberPages = xDialog.getChild("totalnumpages")
                 self.assertEqual(get_state_as_dict(xPortraiTotalNumberPages)["Text"], "/ 2")
 
-                xPortraiPageRange = xDialog.getChild("pagerange")
-                self.assertEqual(get_state_as_dict(xPortraiPageRange)["Text"], "1-2")
+                xPageRange = xDialog.getChild("pagerange")
+                self.assertEqual(get_state_as_dict(xPageRange)["Text"], "")
 
-                xpageorientationbox = xDialog.getChild("pageorientationbox")
-                select_by_text(xpageorientationbox, "Landscape")
+                xPageOrientationBox = xDialog.getChild("pageorientationbox")
+                select_by_text(xPageOrientationBox, "Landscape")
 
                 # Without the fix in place, this test would have failed with
                 # Expected: "/ 1"
@@ -34,17 +34,19 @@ class printDialog(UITestCase):
                 xLandscapeTotalNumberPages = xDialog.getChild("totalnumpages")
                 self.assertEqual(get_state_as_dict(xLandscapeTotalNumberPages)["Text"], "/ 1")
 
-                # Without the fix in place, this test would have failed with
-                # Expected: "1"
-                # Actual  : "1-2"
-                xLandscapePageRange = xDialog.getChild("pagerange")
-                self.assertEqual(get_state_as_dict(xLandscapePageRange)["Text"], "1")
+                # Page range is empty by default and must not be populated automatically
+                self.assertEqual(get_state_as_dict(xPageRange)["Text"], "")
 
-                # check that when reselecting Portrait, the range is again 1-2
-                # Expected: "1-2"
-                # Actual  : "1"
-                select_by_text(xpageorientationbox, "Portrait")
-                xPortraitPageRange = xDialog.getChild("pagerange")
-                self.assertEqual(get_state_as_dict(xPortraitPageRange)["Text"], "1-2")
+                select_by_text(xPageOrientationBox, "Portrait")
+                # Page range must remain empty when the number of pages changes.
+                self.assertEqual(get_state_as_dict(xPageRange)["Text"], "")
+
+                # User enters a page range.
+                xPageRange.executeAction("TYPE", mkPropertyValues({"TEXT": "2-3"}))
+
+                select_by_text(xPageOrientationBox, "Landscape")
+                select_by_text(xPageOrientationBox, "Portrait")
+
+                self.assertEqual(get_state_as_dict(xPageRange)["Text"], "2-3")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
