@@ -1832,7 +1832,7 @@ SwChartDataSequence::SwChartDataSequence(
 #if OSL_DEBUG_LEVEL > 0
     // check if it can properly convert into a SwUnoTableCursor
     // which is required for some functions
-    SwUnoTableCursor* pUnoTableCursor = dynamic_cast<SwUnoTableCursor*>(&(*m_pTableCursor));
+    SwUnoTableCursor* pUnoTableCursor = dynamic_cast<SwUnoTableCursor*>(m_pTableCursor.get());
     OSL_ENSURE(pUnoTableCursor, "SwChartDataSequence: cursor not SwUnoTableCursor");
 #endif
 }
@@ -1878,7 +1878,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
 #if OSL_DEBUG_LEVEL > 0
     // check if it can properly convert into a SwUnoTableCursor
     // which is required for some functions
-    SwUnoTableCursor* pUnoTableCursor = dynamic_cast<SwUnoTableCursor*>(&(*m_pTableCursor));
+    SwUnoTableCursor* pUnoTableCursor = dynamic_cast<SwUnoTableCursor*>(m_pTableCursor.get());
     OSL_ENSURE(pUnoTableCursor, "SwChartDataSequence: cursor not SwUnoTableCursor");
 #endif
 }
@@ -2438,7 +2438,7 @@ void SwChartDataSequence::FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const
 void SwChartDataSequence::ExtendTo( bool bExtendCol,
         sal_Int32 nFirstNew, sal_Int32 nCount )
 {
-    SwUnoTableCursor* pUnoTableCursor = dynamic_cast<SwUnoTableCursor*>(&(*m_pTableCursor));
+    SwUnoTableCursor* pUnoTableCursor = dynamic_cast<SwUnoTableCursor*>(m_pTableCursor.get());
     if (!pUnoTableCursor)
         return;
 
