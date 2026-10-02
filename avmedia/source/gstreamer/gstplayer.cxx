@@ -25,6 +25,7 @@
 #include <map>
 #include <mutex>
 #include <set>
+#include <string_view>
 #include <vector>
 #include <math.h>
 
@@ -332,10 +333,13 @@ Player::Player() :
 
     if (mbInitialized)
     {
-        // Drop the "Adaptive" ones to rank none as a crude but simple way to
-        // drop the cases that take a manifest to further resources that it
-        // names. Otherwise an option is to follow more closely what browsers
-        // probably do here and register a handler for fetching data.
+        // Only the demuxers for common self-contained media formats are autoplugged. Others, like
+        // the adaptive streaming and editing ones, can take a manifest that names further
+        // resources and build a pipeline to fetch them.
+        static constexpr std::string_view aAllowedDemuxers[] = {
+            "aiffparse", "asfdemux", "auparse", "avidemux", "dvdemux", "id3demux",
+            "matroskademux", "midiparse", "mpegpsdemux", "oggdemux", "qtdemux", "wavparse"
+        };
         GstRegistry* pRegistry = gst_registry_get();
         GList* pFactories = gst_registry_get_feature_list(pRegistry, GST_TYPE_ELEMENT_FACTORY);
         for (GList* pItem = pFactories; pItem; pItem = pItem->next)
@@ -345,19 +349,25 @@ Player::Player() :
             if (!pKlass)
                 continue;
 
-            OString aKlass(pKlass);
-            bool bAdaptive = false;
+            std::string_view aKlass(pKlass);
+            bool bDemuxer = false;
             for (sal_Int32 nIndex = 0; nIndex >= 0;)
             {
-                if (o3tl::getToken(aKlass, 0, '/', nIndex) == "Adaptive")
+                if (o3tl::starts_with(o3tl::getToken(aKlass, 0, '/', nIndex), "Demux"))
                 {
-                    bAdaptive = true;
+                    bDemuxer = true;
                     break;
                 }
             }
+            if (!bDemuxer)
+                continue;
 
-            if (bAdaptive)
+            std::string_view aName(gst_plugin_feature_get_name(GST_PLUGIN_FEATURE(pFactory)));
+            if (std::find(std::begin(aAllowedDemuxers), std::end(aAllowedDemuxers), aName)
+                == std::end(aAllowedDemuxers))
+            {
                 gst_plugin_feature_set_rank(GST_PLUGIN_FEATURE(pFactory), GST_RANK_NONE);
+            }
         }
         gst_plugin_feature_list_free(pFactories);
     }
