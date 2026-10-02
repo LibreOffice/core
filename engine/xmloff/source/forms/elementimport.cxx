@@ -52,6 +52,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/documentinfo.hxx>
+#include <sfx2/objsh.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <algorithm>
@@ -1970,6 +1971,16 @@ namespace xmloff
     void OFormImport::endFastElement(sal_Int32 nElement)
     {
         OElementImport::endFastElement(nElement);
+
+        // A form whose database is outside the user's configuration is an external link of its
+        // document.
+        if (SfxObjectShell* pShell
+            = SfxObjectShell::GetShellFromComponent(m_rFormImport.getGlobalContext().GetModel()))
+        {
+            if (!pShell->HasExternalDatabaseForms()
+                && SfxObjectShell::IsExternalDatabaseForm(m_xElement))
+                pShell->SetHasExternalDatabaseForms();
+        }
 
         // now that we have all children, attach the events
         cpo::uno::Reference< css::container::XIndexAccess > xIndexContainer(m_xMeAsContainer, cpo::uno::UNO_QUERY);

@@ -40,6 +40,7 @@
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <comphelper/diagnose_ex.hxx>
+#include <com/sun/star/form/XLoadable.hpp>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/whiter.hxx>
@@ -1773,6 +1774,24 @@ void SfxObjectShell::AllowLinkUpdate()
 {
     getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
     PerformLinkUpdate();
+
+    std::vector<cpo::uno::WeakReference<css::form::XLoadable>> aDeferredForms;
+    aDeferredForms.swap(maDeferredDatabaseForms);
+    for (const auto& rxDeferred : aDeferredForms)
+    {
+        cpo::uno::Reference<css::form::XLoadable> xForm(rxDeferred);
+        if (!xForm.is() || xForm->isLoaded())
+            continue;
+        try
+        {
+            xForm->load();
+        }
+        catch (const cpo::uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("sfx.doc", "SfxObjectShell::AllowLinkUpdate: form load");
+        }
+    }
+
     SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(this);
     if (pViewFrame)
         pViewFrame->RemoveInfoBar(u"enablecontent");

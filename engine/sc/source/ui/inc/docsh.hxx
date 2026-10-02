@@ -321,7 +321,7 @@ public:
     void            PerformLinkUpdate() override;
     bool            HasUpdatableLinks() const override;
     /** The document's HasExternalLinks together with the deferred form-control
-        images the shell keeps itself. */
+        images and the external database forms the shell keeps itself. */
     bool            HasExternalLinks() const;
     SC_DLLPUBLIC void SetInitialLinkUpdate( const SfxMedium* pMedium );
     void            AllowLinkUpdate();

@@ -31,6 +31,8 @@
 #include <services.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/guarding.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
@@ -2850,6 +2852,20 @@ bool ODatabaseForm::implEnsureConnection()
                 if ( m_bSharingConnection )
                     // yes -> outta here
                     return true;
+            }
+        }
+
+        // A form whose database is outside the user's configuration connects once its document
+        // allows link updates.
+        if (SfxObjectShell* pShell
+            = SfxObjectShell::GetShellFromComponent(getXModel(static_cast<XWeak*>(this))))
+        {
+            Reference<XPropertySet> xThis(this);
+            if (!pShell->getEmbeddedObjectContainer().getUserAllowsLinkUpdate()
+                && SfxObjectShell::IsExternalDatabaseForm(xThis))
+            {
+                pShell->AddDeferredDatabaseForm(Reference<XLoadable>(xThis, UNO_QUERY));
+                return false;
             }
         }
 

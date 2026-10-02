@@ -220,7 +220,7 @@ void DocumentLinksAdministrationManager::UpdateLinks()
     registerDeferredFormImageLinks(pShell->GetDeferredFormControlImages(), GetLinkManager());
     pShell->ClearDeferredFormControlImages();
 
-    if (GetLinkManager().GetLinks().empty())
+    if (GetLinkManager().GetLinks().empty() && !pShell->HasExternalDatabaseForms())
         return;
     sal_uInt16 nLinkMode = m_rDoc.GetDocumentSettingManager().getLinkUpdateMode(true);
     sal_uInt16 nUpdateDocMode = pShell->GetUpdateDocMode();

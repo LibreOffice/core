@@ -42,6 +42,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -4104,6 +4106,56 @@ void SfxObjectShell::AddDeferredFormControlImage(
     const OUString& rURL)
 {
     maDeferredFormControlImages.emplace_back(rxControl, rURL);
+}
+
+bool SfxObjectShell::IsExternalDatabaseForm(const uno::Reference<beans::XPropertySet>& rxForm)
+{
+    if (!rxForm.is())
+        return false;
+    try
+    {
+        uno::Reference<beans::XPropertySetInfo> xInfo(rxForm->getPropertySetInfo());
+        if (!xInfo.is() || !xInfo->hasPropertyByName(u"DataSourceName"_ustr)
+            || !xInfo->hasPropertyByName(u"URL"_ustr))
+            return false;
+
+        OUString sURL;
+        rxForm->getPropertyValue(u"URL"_ustr) >>= sURL;
+        if (!sURL.isEmpty())
+            return true;
+
+        OUString sDataSourceName;
+        rxForm->getPropertyValue(u"DataSourceName"_ustr) >>= sDataSourceName;
+        if (sDataSourceName.isEmpty())
+            return false;
+
+        uno::Reference<sdb::XDatabaseContext> xDatabaseContext
+            = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
+        return !xDatabaseContext->hasRegisteredDatabase(sDataSourceName);
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sfx.doc", "SfxObjectShell::IsExternalDatabaseForm");
+    }
+    // A form whose database cannot be checked counts as external.
+    return true;
+}
+
+void SfxObjectShell::AddDeferredDatabaseForm(const uno::Reference<form::XLoadable>& rxForm)
+{
+    for (const auto& rxDeferred : maDeferredDatabaseForms)
+        if (uno::Reference<form::XLoadable>(rxDeferred) == rxForm)
+            return;
+
+    const bool bFirst = maDeferredDatabaseForms.empty();
+    maDeferredDatabaseForms.emplace_back(rxForm);
+    if (!bFirst)
+        return;
+
+    if (SfxViewFrame::GetFirst(this))
+        ShowLinkUpdateInfobar();
+    else
+        SetPendingLinkUpdateInfobar();
 }
 
 bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )

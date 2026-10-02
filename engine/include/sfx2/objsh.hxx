@@ -103,6 +103,7 @@ namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::document { struct CmisVersion; }
 namespace com::sun::star::document { class XDocumentProperties; }
 namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::form { class XLoadable; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::io { class XStream; }
 namespace com::sun::star::script { class XStorageBasedLibraryContainer ; }
@@ -200,6 +201,9 @@ private:
     bool                        bPendingLinkUpdateInfobar;
     std::vector<std::pair<cpo::uno::WeakReference<css::beans::XPropertySet>, OUString>>
                                 maDeferredFormControlImages;
+    bool                        mbHasExternalDatabaseForms;
+    std::vector<cpo::uno::WeakReference<css::form::XLoadable>>
+                                maDeferredDatabaseForms;
 
     enum TriState               {undefined, yes, no};
     TriState                    mbContinueImportOnFilterExceptions = undefined; // try to import as much as possible
@@ -354,6 +358,15 @@ public:
                                     { return maDeferredFormControlImages; }
     void                        ClearDeferredFormControlImages()
                                     { maDeferredFormControlImages.clear(); }
+    /// Whether rxForm is a database form whose database is not a data source registered in the
+    /// user's configuration.
+    static bool                 IsExternalDatabaseForm(
+                                    const cpo::uno::Reference<css::beans::XPropertySet>& rxForm);
+    void                        SetHasExternalDatabaseForms() { mbHasExternalDatabaseForms = true; }
+    bool                        HasExternalDatabaseForms() const
+                                    { return mbHasExternalDatabaseForms; }
+    void                        AddDeferredDatabaseForm(
+                                    const cpo::uno::Reference<css::form::XLoadable>& rxForm);
     virtual bool                LoadExternal( SfxMedium& rMedium );
     bool                        IsConfigOptionsChecked() const;
     void                        SetConfigOptionsChecked( bool bChecked );
