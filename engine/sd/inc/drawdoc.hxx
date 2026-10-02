@@ -22,6 +22,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <rtl/string.hxx>
 #include <svl/style.hxx>
+#include <svx/documentbullets.hxx>
 #include <svx/fmmodel.hxx>
 #include <unotools/charclass.hxx>
 #include <vcl/prntypes.hxx>
@@ -397,6 +398,10 @@ private:
     sal_Int32 mnPageLinksKept = 0;
 
     sd::PresentationSettings maPresentationSettings;
+
+    /// The bullets the slides and the master slides use, as the last walk over them found
+    /// them. Empty until something asks for them, and dropped whenever the document changes.
+    mutable std::optional<std::vector<SvxDocumentBullet>> moUsedBullets;
 
     rtl::Reference< sd::SlideShow > mxPresentation;
 
@@ -1235,6 +1240,14 @@ public:
      */
     std::vector<SvxDocumentBullet> GetUsedBullets(const SdrOutliner* pActiveOutliner
                                                   = nullptr) const;
+
+    /** Drops the remembered bullets, so the next caller walks the document again.
+     */
+    SAL_DLLPRIVATE void ForgetUsedBullets() { moUsedBullets.reset(); }
+
+    /** Every bullet the slides and the master slides use, once each.
+     */
+    SAL_DLLPRIVATE std::vector<SvxDocumentBullet> WalkPagesForUsedBullets() const;
 
     SAL_DLLPRIVATE void UpdatePageRelativeURLs(
         std::u16string_view aOldName, std::u16string_view aNewName);

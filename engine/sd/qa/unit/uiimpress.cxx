@@ -6838,6 +6838,23 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletsAreCollected)
     CPPUNIT_ASSERT(bLayoutBulletFound);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletsFollowTheDocument)
+{
+    createSdImpressDoc("document-bullets.odp");
+    SdDrawDocument* pDocument = getSdDocShell()->GetDoc();
+
+    // Asking once lets the document hold on to what the walk found.
+    const size_t nBefore = pDocument->GetUsedBullets().size();
+
+    SdrTextObj* pMasterSlideObject = lcl_MasterSlideTextObject(*pDocument);
+    CPPUNIT_ASSERT(pMasterSlideObject);
+    lcl_SetImageBullet(*pMasterSlideObject);
+
+    // A bullet that arrives after that is offered as well, so the list describes the presentation
+    // as it stands rather than as it stood when a dropdown was first opened.
+    CPPUNIT_ASSERT_EQUAL(nBefore + 1, pDocument->GetUsedBullets().size());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentImageBulletIsCollected)
 {
     createSdImpressDoc("document-bullets.odp");

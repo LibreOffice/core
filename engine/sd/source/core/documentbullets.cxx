@@ -132,7 +132,10 @@ SdDrawDocument::GetUsedBullets(const SdrOutliner* pActiveOutliner) const
     std::set<OUString> aSeenIdentifiers;
 
     // The outline styles of every slide layout live in the style sheet pool, so a bullet that a
-    // master slide defines is found here whether or not a slide goes on to use it.
+    // master slide defines is found here whether or not a slide goes on to use it. A style sheet
+    // reaches the document as changed only through a shape that follows it, so a style no shape
+    // follows would otherwise answer from a list made before it gained its bullet. There are tens
+    // of style sheets where there are thousands of paragraphs, so these are read every time.
     SdStyleSheetPool* pStyleSheetPool = GetSdStyleSheetPool();
     if (pStyleSheetPool)
     {
@@ -143,6 +146,29 @@ SdDrawDocument::GetUsedBullets(const SdrOutliner* pActiveOutliner) const
         for (SfxStyleSheetBase* pStyle = pIterator->First(); pStyle; pStyle = pIterator->Next())
             lcl_AddBulletsOfItemSet(pStyle->GetItemSet(), aBullets, aSeenIdentifiers);
     }
+
+    if (!moUsedBullets)
+        moUsedBullets = WalkPagesForUsedBullets();
+
+    for (const SvxDocumentBullet& rBullet : *moUsedBullets)
+    {
+        if (aSeenIdentifiers.insert(rBullet.GetIdentifier()).second)
+            aBullets.push_back(rBullet);
+    }
+
+    // A shape under edit keeps its text in the outliner rather than on the shape, so a bullet
+    // applied a moment ago is found here and nowhere else. That text changes under the typing,
+    // so it is read afresh every time rather than remembered with the rest.
+    if (pActiveOutliner)
+        lcl_AddBulletsOfOutliner(*pActiveOutliner, aBullets, aSeenIdentifiers);
+
+    return aBullets;
+}
+
+std::vector<SvxDocumentBullet> SdDrawDocument::WalkPagesForUsedBullets() const
+{
+    std::vector<SvxDocumentBullet> aBullets;
+    std::set<OUString> aSeenIdentifiers;
 
     for (sal_uInt16 nPage = 0; nPage < GetPageCount(); ++nPage)
     {
@@ -157,11 +183,6 @@ SdDrawDocument::GetUsedBullets(const SdrOutliner* pActiveOutliner) const
         if (pPage)
             lcl_AddBulletsOfPage(*pPage, aBullets, aSeenIdentifiers);
     }
-
-    // A shape under edit keeps its text in the outliner rather than on the shape, so a bullet
-    // applied a moment ago is found here and nowhere else.
-    if (pActiveOutliner)
-        lcl_AddBulletsOfOutliner(*pActiveOutliner, aBullets, aSeenIdentifiers);
 
     return aBullets;
 }
