@@ -63,7 +63,6 @@ public:
     void onResize();
     void onGrabFocus();
     void onLoseFocus();
-    bool isInFocus() const { return mbInFocus; }
 
     OutlinerView* GetOutlinerView();
     OutlinerView* GetViewByWindow(vcl::Window const* pWin) const override;

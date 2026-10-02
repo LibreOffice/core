@@ -489,9 +489,9 @@ protected:
 
     // Support methods for centralized UNDO/REDO
     virtual SfxUndoManager* ImpGetUndoManager() const;
-    /** The undo manager of the notes pane while the pane has the focus, otherwise null.
-        Each view has a notes pane of its own, so every action in it comes from this view,
-        although the actions carry no view shell id.
+    /** The undo manager of the notes pane while the pane overrides the main view shell,
+        otherwise null. Each view has a notes pane of its own, so every action in it comes
+        from this view, although the actions carry no view shell id.
     */
     SfxUndoManager* ImpGetNotesPanelUndoManager() const;
     void ImpGetUndoStrings(SfxItemSet &rSet) const;

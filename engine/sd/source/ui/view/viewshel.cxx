@@ -1186,16 +1186,14 @@ void ViewShell::UpdatePreview (SdPage*)
 
 SfxUndoManager* ViewShell::ImpGetNotesPanelUndoManager() const
 {
-    std::shared_ptr<framework::FrameworkHelper> pHelper
-        = framework::FrameworkHelper::Instance(GetViewShellBase());
-    if (!pHelper->IsValid())
+    // The notes pane overrides the main view shell while it has the focus.
+    std::shared_ptr<ViewShell> pOverridingShell
+        = GetViewShellBase().GetViewShellManager()->GetOverridingMainShell();
+    if (!pOverridingShell || pOverridingShell->GetShellType() != ST_NOTESPANEL)
         return nullptr;
 
-    std::shared_ptr<ViewShell> pNotesPaneShell
-        = pHelper->GetViewShell(framework::FrameworkHelper::msBottomImpressPaneURL);
-    NotesPanelView* pNotesPanelView
-        = pNotesPaneShell ? dynamic_cast<NotesPanelView*>(pNotesPaneShell->GetView()) : nullptr;
-    if (!pNotesPanelView || !pNotesPanelView->isInFocus())
+    NotesPanelView* pNotesPanelView = dynamic_cast<NotesPanelView*>(pOverridingShell->GetView());
+    if (!pNotesPanelView)
         return nullptr;
 
     return &pNotesPanelView->GetOutliner().GetUndoManager();
