@@ -2149,9 +2149,15 @@ static ::css::beans::Pair<::rtl::OUString, ::rtl::OUString>
         // clang-format on
     };
 
-const ::cpo::uno::Sequence<::css::beans::Pair<OUString, OUString>>
-    starmathdatabase::icustomMathmlHtmlEntities(
+namespace starmathdatabase
+{
+const ::cpo::uno::Sequence<::css::beans::Pair<OUString, OUString>>& getCustomMathmlHtmlEntities()
+{
+    static const ::cpo::uno::Sequence<::css::beans::Pair<OUString, OUString>> gEntities(
         icustomMathmlHtmlEntitiesData, starmathdatabase::STARMATH_MATHMLHTML_ENTITY_NUMBER);
+    return gEntities;
+}
+}
 
 static ::css::beans::Pair<::rtl::OUString, ::rtl::OUString>
     icustomMathmlHtmlEntitiesNamesExportData[2] = {
@@ -2160,7 +2166,15 @@ static ::css::beans::Pair<::rtl::OUString, ::rtl::OUString>
         { u"&infin;"_ustr, u"\u221E"_ustr}
         // clang-format on
     };
-const ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
-    starmathdatabase::icustomMathmlHtmlEntitiesExport(icustomMathmlHtmlEntitiesNamesExportData, 2);
+namespace starmathdatabase
+{
+const ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>&
+getCustomMathmlHtmlEntitiesExport()
+{
+    static const ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
+        gEntities(icustomMathmlHtmlEntitiesNamesExportData, 2);
+    return gEntities;
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
