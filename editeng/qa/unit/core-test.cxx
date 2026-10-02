@@ -54,7 +54,6 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editund2.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <tools/stream.hxx>
 
 using namespace com::sun::star;
 
