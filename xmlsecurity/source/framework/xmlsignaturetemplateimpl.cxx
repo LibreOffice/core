@@ -37,6 +37,16 @@ XMLSignatureTemplateImpl::XMLSignatureTemplateImpl()
 XMLSignatureTemplateImpl::~XMLSignatureTemplateImpl() {
 }
 
+css::uno::Reference<css::security::XCertificate> XMLSignatureTemplateImpl::GetSigningCertificate()
+{
+    return m_xSigningCertificate;
+}
+
+void XMLSignatureTemplateImpl::SetVerifiedCertificate(css::uno::Reference<css::security::XCertificate> const& xCertificate)
+{
+    m_xVerifiedCertificate = xCertificate;
+}
+
 /* XXMLSignatureTemplate */
 void SAL_CALL XMLSignatureTemplateImpl::setTemplate( const Reference< XXMLElementWrapper >& aTemplate )
 {
