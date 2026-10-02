@@ -74,6 +74,7 @@
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <tools/urlobj.hxx>
 
 #include <utility>
 #include <vector>
@@ -3261,6 +3262,18 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
     {
         SAL_WARN("sc", "data pilot source " << rDBName << " waits for link updates to be allowed");
         return xRowSet;
+    }
+
+    // A source named by URL rather than a registered name can point the flat-file driver at a
+    // local file, or at a remote host. Apply the protocol check to it.
+    if (!IsRegisteredDatabase(rDBName))
+    {
+        INetURLObject aURLObject(rDBName);
+        if (aURLObject.IsExoticProtocol())
+        {
+            SAL_WARN("sc", "data pilot source " << rDBName << " is not an allowed source");
+            return xRowSet;
+        }
     }
 
     try
