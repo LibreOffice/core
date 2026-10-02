@@ -150,35 +150,33 @@ bool GalleryPreview::KeyInput(const KeyEvent& rKEvt)
 {
     if(mpTheme)
     {
-        GalleryBrowser* pBrowser = mpParent;
-
         switch( rKEvt.GetKeyCode().GetCode() )
         {
             case KEY_BACKSPACE:
-                pBrowser->TogglePreview();
+                mpParent->TogglePreview();
             break;
 
             case KEY_HOME:
-                pBrowser->Travel( GalleryBrowserTravel::First );
+                mpParent->Travel(GalleryBrowserTravel::First);
             break;
 
             case KEY_END:
-                pBrowser->Travel( GalleryBrowserTravel::Last );
+                mpParent->Travel(GalleryBrowserTravel::Last);
             break;
 
             case KEY_LEFT:
             case KEY_UP:
-                pBrowser->Travel( GalleryBrowserTravel::Previous );
+                mpParent->Travel(GalleryBrowserTravel::Previous);
             break;
 
             case KEY_RIGHT:
             case KEY_DOWN:
-                pBrowser->Travel( GalleryBrowserTravel::Next );
+                mpParent->Travel(GalleryBrowserTravel::Next);
             break;
 
             default:
             {
-                if (!pBrowser->KeyInput(rKEvt))
+                if (!mpParent->KeyInput(rKEvt))
                     return false;
             }
             break;
