@@ -32,7 +32,6 @@ $(eval $(call gb_Library_add_exception_objects,abp,\
 	extensions/source/abpilot/datasourcehandling \
 	extensions/source/abpilot/fieldmappingimpl \
 	extensions/source/abpilot/fieldmappingpage \
-	extensions/source/abpilot/moduleabp \
 	extensions/source/abpilot/tableselectionpage \
 	extensions/source/abpilot/typeselectionpage \
 	extensions/source/abpilot/unodialogabp \

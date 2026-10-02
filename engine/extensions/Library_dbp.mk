@@ -30,7 +30,6 @@ $(eval $(call gb_Library_add_exception_objects,dbp,\
 	extensions/source/dbpilots/gridwizard \
 	extensions/source/dbpilots/groupboxwiz \
 	extensions/source/dbpilots/listcombowizard \
-	extensions/source/dbpilots/moduledbp \
 	extensions/source/dbpilots/optiongrouplayouter \
 	extensions/source/dbpilots/wizardservices \
 ))

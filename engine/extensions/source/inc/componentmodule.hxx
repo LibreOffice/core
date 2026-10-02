@@ -26,7 +26,10 @@ namespace compmodule
 {
 
     // specialized ResId, using the resource locale provided by the global module
-    OUString ModuleRes(TranslateId pId);
+    inline OUString ModuleRes(TranslateId pId)
+    {
+        return Translate::get(pId, Translate::Create("pcr"));
+    }
 
 }   // namespace compmodule
 
