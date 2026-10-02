@@ -30,6 +30,7 @@
 #include <vector>
 
 namespace com::sun::star::graphic { class XGraphic; }
+namespace com::sun::star::security { class XCertificate; }
 
 /*
  * type of reference
@@ -128,6 +129,8 @@ struct SignatureInformation
     std::set<OUString> maEncapsulatedX509Certificates;
     /// XAdES SigningCertificate values
     std::vector<X509CertInfoRef> SigningCertificates;
+    /// X509 certificate whose public key verified the signature
+    css::uno::Reference<css::security::XCertificate> xVerifiedCertificate;
 
     OUString ouSignatureId;
     // signature may contain multiple time stamps - check they're consistent
