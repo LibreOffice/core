@@ -149,7 +149,8 @@ abstract class AnimatedContentRenderer2d extends AnimatedContentRenderer {
 		if (this.isDisposed()) return;
 		if (!this.info) return;
 
-		const ctx = this._context.get2dGl();
+		// The content is drawn into the slide layer canvas, which is an OffscreenCanvas.
+		const ctx = this._context.get2dGl() ?? this._context.get2dOffscreen();
 		if (!ctx) {
 			app.console.error('Canvas 2D context not available');
 			return;
