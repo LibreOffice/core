@@ -125,7 +125,7 @@ public:
     // XSinkCaller
     virtual void SAL_CALL CallSinks( const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments ) override;
 
-    // this should be SwXTextDocument, but the inheritance hierarchy makes that impossoble
+    // this should be SwXTextDocument, but the inheritance hierarchy makes that impossible
     virtual SfxBaseModel* getCurrentDocument() override;
 
     rtl::Reference<SwXTextDocument> getCurrentSwDocument();
