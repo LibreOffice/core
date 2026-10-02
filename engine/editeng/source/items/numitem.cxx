@@ -601,6 +601,21 @@ void SvxNumberFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
                                       BAD_CAST(OString::number(nAbsLSpace).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("listtab-pos"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(OString::number(mnListtabPos).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("first-line-indent"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(OString::number(mnFirstLineIndent).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("indent-at"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(OString::number(mnIndentAt).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
     (void)xmlTextWriterEndElement(pWriter);
 }
 
