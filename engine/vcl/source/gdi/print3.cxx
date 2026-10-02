@@ -291,9 +291,7 @@ static OUString queryFile( Printer const * pPrinter, const OUString & rJobName )
             {
                 xFilePicker->appendFilter( u"Portable Document Format"_ustr, u"*.pdf"_ustr );
 
-                cpo::uno::Reference< css::ui::dialogs::XFilePickerControlAccess > xControlAccess( xFilePicker, cpo::uno::UNO_QUERY );
-                if( xControlAccess.is() )
-                    xControlAccess->setValue( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, cpo::uno::Any( true ) );
+                xFilePicker->setValue( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, cpo::uno::Any( true ) );
             }
         }
 #else
