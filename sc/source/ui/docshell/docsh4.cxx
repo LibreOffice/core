@@ -246,7 +246,8 @@ void ScDocShell::PerformLinkUpdate()
 
 bool ScDocShell::HasExternalLinks() const
 {
-    return GetDocument().HasExternalLinks() || !GetDeferredFormControlImages().empty();
+    return GetDocument().HasExternalLinks() || !GetDeferredFormControlImages().empty()
+           || HasExternalDatabaseForms();
 }
 
 namespace

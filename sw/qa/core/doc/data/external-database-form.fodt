@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles/>
+ <office:body>
+  <office:text>
+   <office:forms form:automatic-focus="false" form:apply-design-mode="false">
+    <form:form form:name="Form" form:command="names" form:command-type="table">
+     <form:connection-resource xlink:href="sdbc:flat:file:///nonexistent/"/>
+    </form:form>
+   </office:forms>
+   <text:p/>
+  </office:text>
+ </office:body>
+</office:document>

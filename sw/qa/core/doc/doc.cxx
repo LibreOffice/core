@@ -9,9 +9,14 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -1485,6 +1490,42 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBrushGraphicLinkProtocols)
                               OUString(), GPOS_TILED, RES_BACKGROUND);
     CPPUNIT_ASSERT(aExpandBrush.QueryValue(aValue, MID_GRAPHIC));
     CPPUNIT_ASSERT(!aValue.get<uno::Reference<graphic::XGraphic>>().is());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testExternalDatabaseFormLoadsOnlyAfterLinkUpdateAllowed)
+{
+    // Given a document whose form names its database by connection URL, loaded without link
+    // updates:
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadFromFile(u"external-database-form.fodt", aParams);
+    SwDocShell* pDocShell = getSwDocShell();
+    CPPUNIT_ASSERT(pDocShell->HasExternalDatabaseForms());
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<form::XFormsSupplier> xFormsSupplier(xDrawPageSupplier->getDrawPage(),
+                                                        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xForm(xFormsSupplier->getForms()->getByName(u"Form"_ustr),
+                                              uno::UNO_QUERY);
+    uno::Reference<form::XLoadable> xLoadable(xForm, uno::UNO_QUERY);
+
+    // The .fodt cannot hold an absolute path, so point the form at the table directory next to
+    // it. A flat-file connection made from a bare URL looks for tables with no file extension.
+    const OUString sTableURL = createFileURL(u"database-form-table/names");
+    const OUString sTableDirectoryURL = sTableURL.copy(0, sTableURL.lastIndexOf('/') + 1);
+    xForm->setPropertyValue(u"URL"_ustr, uno::Any("sdbc:flat:" + sTableDirectoryURL));
+    xForm->setPropertyValue(u"Command"_ustr, uno::Any(u"names"_ustr));
+    xForm->setPropertyValue(u"CommandType"_ustr, uno::Any(sdb::CommandType::TABLE));
+
+    // When the form is loaded while link updates are not allowed, it stays unloaded.
+    xLoadable->load();
+    CPPUNIT_ASSERT(!xLoadable->isLoaded());
+
+    // When the user then allows link updates, the form connects and loads.
+    pDocShell->AllowLinkUpdate();
+    CPPUNIT_ASSERT(xLoadable->isLoaded());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

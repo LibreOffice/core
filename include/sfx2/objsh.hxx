@@ -107,6 +107,7 @@ namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::document { struct CmisVersion; }
 namespace com::sun::star::document { class XDocumentProperties; }
 namespace com::sun::star::embed { class XStorage; }
+namespace com::sun::star::form { class XLoadable; }
 namespace com::sun::star::frame { class XModel3; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::io { class XStream; }
@@ -215,6 +216,9 @@ private:
     bool                        bPendingLinkUpdateInfobar;
     std::vector<std::pair<css::uno::WeakReference<css::beans::XPropertySet>, OUString>>
                                 maDeferredFormControlImages;
+    bool                        mbHasExternalDatabaseForms;
+    std::vector<css::uno::WeakReference<css::form::XLoadable>>
+                                maDeferredDatabaseForms;
 
     enum TriState               {undefined, yes, no};
     TriState                    mbContinueImportOnFilterExceptions = undefined; // try to import as much as possible
@@ -360,6 +364,7 @@ public:
     void                        SetPendingLinkUpdateInfobar() { bPendingLinkUpdateInfobar = true; }
     void                        CheckPendingLinkUpdateInfobar();
     void                        ShowLinkUpdateInfobar();
+    void                        AllowLinkUpdate();
     void                        AddDeferredFormControlImage(
                                     const css::uno::Reference<css::beans::XPropertySet>& rxControl,
                                     const OUString& rURL);
@@ -368,6 +373,15 @@ public:
                                     { return maDeferredFormControlImages; }
     void                        ClearDeferredFormControlImages()
                                     { maDeferredFormControlImages.clear(); }
+    /// Whether rxForm is a database form whose database is not a data source registered in the
+    /// user's configuration.
+    static bool                 IsExternalDatabaseForm(
+                                    const css::uno::Reference<css::beans::XPropertySet>& rxForm);
+    void                        SetHasExternalDatabaseForms() { mbHasExternalDatabaseForms = true; }
+    bool                        HasExternalDatabaseForms() const
+                                    { return mbHasExternalDatabaseForms; }
+    void                        AddDeferredDatabaseForm(
+                                    const css::uno::Reference<css::form::XLoadable>& rxForm);
     virtual bool                LoadExternal( SfxMedium& rMedium );
     bool                        IsConfigOptionsChecked() const;
     void                        SetConfigOptionsChecked( bool bChecked );
