@@ -33,11 +33,11 @@
 
 #include <vector>
 
-struct FilterEntry;
+struct SvtFilterEntry;
 struct ElementEntry_Impl;
 enum class PickerFlags;
 
-typedef ::std::vector< FilterEntry >           FilterList;     // can be maintained more effectively
+typedef ::std::vector< SvtFilterEntry >        FilterList;     // can be maintained more effectively
 typedef ::std::vector< ElementEntry_Impl >     ElementList;
 
 typedef css::beans::StringPair                 UnoFilterEntry;

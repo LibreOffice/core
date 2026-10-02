@@ -47,7 +47,7 @@ using namespace     ::com::sun::star::beans;
 using namespace     ::com::sun::star::awt;
 
 
-struct FilterEntry
+struct SvtFilterEntry
 {
 protected:
     OUString     m_sTitle;
@@ -56,13 +56,13 @@ protected:
     UnoFilterList       m_aSubFilters;
 
 public:
-    FilterEntry( OUString _aTitle, OUString _aFilter )
+    SvtFilterEntry( OUString _aTitle, OUString _aFilter )
         :m_sTitle(std::move( _aTitle ))
         ,m_sFilter(std::move( _aFilter ))
     {
     }
 
-    FilterEntry( OUString _aTitle, const UnoFilterList& _rSubFilters );
+    SvtFilterEntry( OUString _aTitle, const UnoFilterList& _rSubFilters );
 
     const OUString& getTitle() const { return m_sTitle; }
     const OUString& getFilter() const { return m_sFilter; }
@@ -80,20 +80,20 @@ public:
 };
 
 
-FilterEntry::FilterEntry( OUString _aTitle, const UnoFilterList& _rSubFilters )
+SvtFilterEntry::SvtFilterEntry( OUString _aTitle, const UnoFilterList& _rSubFilters )
     :m_sTitle(std::move( _aTitle ))
     ,m_aSubFilters( _rSubFilters )
 {
 }
 
 
-bool FilterEntry::hasSubFilters( ) const
+bool SvtFilterEntry::hasSubFilters( ) const
 {
     return m_aSubFilters.hasElements();
 }
 
 
-void FilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
+void SvtFilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
 {
     _rSubFilterList = m_aSubFilters;
 }
@@ -328,7 +328,7 @@ namespace {
         explicit FilterTitleMatch( const OUString& _rTitle ) : rTitle( _rTitle ) { }
 
 
-        bool operator () ( const FilterEntry& _rEntry )
+        bool operator () ( const SvtFilterEntry& _rEntry )
         {
             bool bMatch;
             if ( !_rEntry.hasSubFilters() )
@@ -827,7 +827,7 @@ void SvtFilePicker::appendFilterGroup( const OUString& sGroupTitle,
     ensureFilterList( sInitialCurrentFilter );
 
     // append the filter
-    m_pFilterList->insert( m_pFilterList->end(), FilterEntry( sGroupTitle, aFilters ) );
+    m_pFilterList->insert( m_pFilterList->end(), SvtFilterEntry( sGroupTitle, aFilters ) );
 }
 
 
@@ -849,7 +849,7 @@ void SvtFilePicker::appendFilter( const OUString& aTitle,
     ensureFilterList( aTitle );
 
     // append the filter
-    m_pFilterList->insert( m_pFilterList->end(), FilterEntry( aTitle, aFilter ) );
+    m_pFilterList->insert( m_pFilterList->end(), SvtFilterEntry( aTitle, aFilter ) );
 }
 
 
