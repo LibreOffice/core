@@ -329,14 +329,15 @@ private:
     /// Based on COOL_TEST_OPTIONS envar, filter the tests.
     static void filter();
 
-    /// Returns true iff there are more valid test instances to dereference.
-    static bool haveMoreTests()
-    {
-        // The last test is the dummy one, used to avoid having a null instance.
-        // Check that we have a valid one after the next one, otherwise it's the dummy.
-        return GlobalArray && GlobalIndex >= 0 && GlobalArray[GlobalIndex + 1] &&
-               GlobalArray[GlobalIndex + 2];
-    }
+    /// Returns true iff a test after the current one matches the filter. The dummy instance at
+    /// the end of GlobalArray is not a test.
+    static bool haveMoreTests();
+
+    /// Returns true iff the test at the given index matches the filter.
+    static bool matchesFilter(std::size_t index);
+
+    /// Returns a new dummy instance of the given type, the last entry of GlobalArray.
+    static UnitBase* createDummy(UnitType type);
 
     /// Self-test.
     static void selfTest();
