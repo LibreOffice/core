@@ -226,6 +226,8 @@ bool SfxStyleSheetBase::SetParent( const OUString& rName )
 
 void SfxStyleSheetBase::SetHidden( bool hidden )
 {
+    if (bHidden == hidden)
+        return;
     bHidden = hidden;
     m_pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
 }
@@ -248,8 +250,8 @@ bool SfxStyleSheetBase::SetFollow( const OUString& rName )
             return false;
         }
         aFollow = rName;
+        m_pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
     }
-    m_pPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetModified, *this ) );
     return true;
 }
 
