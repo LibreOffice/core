@@ -58,7 +58,7 @@ enum class TextRotation { NONE, TOPTOBOTTOM, BOTTOMTOTOP };
 /**
   This object is used to copy document/text info in and out of EditEngine.
   It is not used internally to editeng as storage mechanism, just a means
-  of extracing and inserting data.
+  of extracting and inserting data.
 */
 class EDITENG_DLLPUBLIC EditTextObject final
 {
