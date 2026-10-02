@@ -519,6 +519,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
     }
 
     TranslateId pExceptionMessageId = RID_STR_COULDNOTCONNECT_UNSPECIFIED;
+    const bool bTrustedLocation
+        = SvtSecurityOptions::isTrustedLocationUriForUpdatingLinks(m_pImpl->getDocFileLocation());
     if (xManager.is())
     {
         sal_Int32 nAdditionalArgs(0);
@@ -559,13 +561,18 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             // but acceptance is decided at runtime.
             pExceptionMessageId = RID_STR_COULDNOTCONNECT_NODRIVER;
         }
+        // ADO connections follow the same rule as additional driver options.
+        else if (!bTrustedLocation && m_pImpl->m_sConnectURL.startsWithIgnoreAsciiCase("sdbc:ado:"))
+        {
+            pExceptionMessageId = RID_STR_COULDNOTCONNECT_UNTRUSTED;
+        }
         else
         {
             Sequence< PropertyValue > aDriverInfo = lcl_filterDriverProperties(
                 xDriver,
                 m_pImpl->m_sConnectURL,
                 m_pImpl->m_xSettings->getPropertyValues(),
-                SvtSecurityOptions::isTrustedLocationUriForUpdatingLinks(m_pImpl->getDocFileLocation())
+                bTrustedLocation
             );
 
             if ( m_pImpl->isEmbeddedDatabase() )
