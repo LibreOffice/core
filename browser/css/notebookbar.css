@@ -510,6 +510,11 @@ label.notebookbar.ui-checkbox-label {
 	cursor: not-allowed !important;
 }
 
+/* do not focus on disabled items */
+.unotoolbutton[disabled] .unobutton {
+	pointer-events: none;
+}
+
 .unotoolbutton.notebookbar {
 	text-align: center;
 }
