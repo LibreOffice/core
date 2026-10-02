@@ -90,12 +90,6 @@ bool MoveParam::VisitCXXOperatorCallExpr(const CXXOperatorCallExpr* callExpr)
     if (!loplugin::TypeCheck(parmVarDecl->getType()).LvalueReference().Const())
         return true;
 
-    StringRef aFileName = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(parmVarDecl->getBeginLoc()));
-    if (loplugin::hasPathnamePrefix(aFileName,
-                                    SRCDIR "/svx/source/sidebar/line/LineWidthValueSet.cxx"))
-        return true;
-
     report(DiagnosticsEngine::Warning, "rather use move && param1", callExpr->getBeginLoc());
 
     return true;

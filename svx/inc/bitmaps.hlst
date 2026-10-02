@@ -126,7 +126,6 @@ inline constexpr OUString RID_SVXBMP_GALLERY_SOUND_7 = u"svx/res/galsnd7.png"_us
 
 inline constexpr OUString BMP_NONE_ICON = u"svx/res/symphony/blank.png"_ustr;
 inline constexpr OUString RID_SVXBMP_WIDTH_CUSTOM = u"svx/res/symphony/last_custom_common.png"_ustr;
-inline constexpr OUString RID_SVXBMP_WIDTH_CUSTOM_GRAY = u"svx/res/symphony/last_custom_common_grey.png"_ustr;
 
 inline constexpr OUString BMP_AXIAL = u"svx/res/symphony/axial.png"_ustr;
 inline constexpr OUString BMP_ELLI = u"svx/res/symphony/ellipsoid.png"_ustr;

@@ -22,7 +22,7 @@
 #include <vcl/image.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
-#include <vcl/weld/customweld.hxx>
+#include <vcl/weld/TreeView.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <array>
 
@@ -31,7 +31,6 @@ class ValueSet;
 namespace svx::sidebar
 {
 class LinePropertyPanelBase;
-class LineWidthValueSet;
 
 class LineWidthPopup final : public WeldToolbarPopup
 {
@@ -50,17 +49,18 @@ private:
     std::array<OUString, 9> maStrUnits;
     OUString m_sPt;
     MapUnit m_eMapUnit;
-    bool m_bVSFocus;
+    bool m_bTreeViewFocus;
     bool m_bCustom;
     tools::Long m_nCustomWidth;
     Image m_aIMGCus;
-    Image m_aIMGCusGray;
 
     std::unique_ptr<weld::MetricSpinButton> m_xMFWidth;
-    std::unique_ptr<LineWidthValueSet> m_xVSWidth;
-    std::unique_ptr<weld::CustomWeld> m_xVSWidthWin;
+    std::unique_ptr<weld::TreeView> m_xWidthTreeView;
 
-    DECL_LINK(VSSelectHdl, ValueSet*, void);
+    ScopedVclPtr<VirtualDevice> CreateImage(int nIndex);
+    void UnselectTreeViewItems();
+
+    DECL_LINK(TreeViewItemActivatedHdl, const weld::TreeIter&, bool);
     DECL_LINK(MFModifyHdl, weld::MetricSpinButton&, void);
 };
 

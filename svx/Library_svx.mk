@@ -244,7 +244,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/graphic/GraphicPropertyPanel \
     svx/source/sidebar/line/LinePropertyPanel \
     svx/source/sidebar/line/LinePropertyPanelBase \
-    svx/source/sidebar/line/LineWidthValueSet \
     svx/source/sidebar/line/LineWidthPopup \
     $(call gb_Helper_optional,AVMEDIA,svx/source/sidebar/media/MediaPlaybackPanel) \
     svx/source/sidebar/possize/PosSizePropertyPanel \

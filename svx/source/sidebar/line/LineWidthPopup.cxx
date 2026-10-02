@@ -27,8 +27,9 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/weld/Builder.hxx>
-#include "LineWidthValueSet.hxx"
+#include <vcl/weld/weldutils.hxx>
 #include <bitmaps.hlst>
 
 namespace svx::sidebar
@@ -39,17 +40,13 @@ LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rPa
     , m_rParent(rParent)
     , m_sPt(SvxResId(RID_SVXSTR_PT))
     , m_eMapUnit(MapUnit::MapTwip)
-    , m_bVSFocus(true)
+    , m_bTreeViewFocus(true)
     , m_bCustom(false)
     , m_nCustomWidth(0)
     , m_aIMGCus(StockImage::Yes, RID_SVXBMP_WIDTH_CUSTOM)
-    , m_aIMGCusGray(StockImage::Yes, RID_SVXBMP_WIDTH_CUSTOM_GRAY)
     , m_xMFWidth(m_xBuilder->weld_metric_spin_button(u"spin"_ustr, FieldUnit::POINT))
-    , m_xVSWidth(new LineWidthValueSet())
-    , m_xVSWidthWin(new weld::CustomWeld(*m_xBuilder, u"lineset"_ustr, *m_xVSWidth))
+    , m_xWidthTreeView(m_xBuilder->weld_tree_view("linetreeview"))
 {
-    m_xVSWidth->SetStyle(m_xVSWidth->GetStyle() | WB_3DLOOK | WB_NO_DIRECTSELECT);
-
     maStrUnits = { u"0.5"_ustr, u"0.8"_ustr, u"1.0"_ustr,
                    u"1.5"_ustr, u"2.3"_ustr, u"3.0"_ustr,
                    u"4.5"_ustr, u"6.0"_ustr, SvxResId(RID_SVXSTR_WIDTH_LAST_CUSTOM) };
@@ -64,46 +61,78 @@ LineWidthPopup::LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rPa
         maStrUnits[i] += m_sPt;
     }
 
-    for (sal_uInt16 i = 1; i <= 9; ++i)
+    for (int i = 0; i < 9; ++i)
     {
-        m_xVSWidth->InsertItem(i);
-        m_xVSWidth->SetItemText(i, maStrUnits[i - 1]);
+        m_xWidthTreeView->insert(i);
+        ScopedVclPtr<VirtualDevice> pImage = CreateImage(i);
+        m_xWidthTreeView->set_image(i, *pImage, 0);
+        m_xWidthTreeView->set_text(i, maStrUnits.at(i), 1);
+        m_xWidthTreeView->set_sensitive(i, true);
     }
+    m_xWidthTreeView->columns_autosize();
 
-    m_xVSWidth->SetUnit(maStrUnits);
-    m_xVSWidth->SetItemData(1, reinterpret_cast<void*>(5));
-    m_xVSWidth->SetItemData(2, reinterpret_cast<void*>(8));
-    m_xVSWidth->SetItemData(3, reinterpret_cast<void*>(10));
-    m_xVSWidth->SetItemData(4, reinterpret_cast<void*>(15));
-    m_xVSWidth->SetItemData(5, reinterpret_cast<void*>(23));
-    m_xVSWidth->SetItemData(6, reinterpret_cast<void*>(30));
-    m_xVSWidth->SetItemData(7, reinterpret_cast<void*>(45));
-    m_xVSWidth->SetItemData(8, reinterpret_cast<void*>(60));
-    m_xVSWidth->SetImage(m_aIMGCusGray);
+    m_xWidthTreeView->set_id(0, OUString::number(5));
+    m_xWidthTreeView->set_id(1, OUString::number(8));
+    m_xWidthTreeView->set_id(2, OUString::number(10));
+    m_xWidthTreeView->set_id(3, OUString::number(15));
+    m_xWidthTreeView->set_id(4, OUString::number(23));
+    m_xWidthTreeView->set_id(5, OUString::number(30));
+    m_xWidthTreeView->set_id(6, OUString::number(45));
+    m_xWidthTreeView->set_id(7, OUString::number(60));
 
-    m_xVSWidth->UnselectItems();
+    UnselectTreeViewItems();
 
-    m_xVSWidth->SetSelectHdl(LINK(this, LineWidthPopup, VSSelectHdl));
+    m_xWidthTreeView->connect_item_activated(LINK(this, LineWidthPopup, TreeViewItemActivatedHdl));
     m_xMFWidth->connect_value_changed(LINK(this, LineWidthPopup, MFModifyHdl));
 }
 
 LineWidthPopup::~LineWidthPopup() {}
 
-IMPL_LINK_NOARG(LineWidthPopup, VSSelectHdl, ValueSet*, void)
+ScopedVclPtr<VirtualDevice> LineWidthPopup::CreateImage(int nIndex)
 {
-    sal_uInt16 iPos = m_xVSWidth->GetSelectedItemId();
-    if (iPos >= 1 && iPos <= 8)
+    ScopedVclPtr<VirtualDevice> pDev = m_xWidthTreeView->create_virtual_device();
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    pDev->SetBackground(rStyleSettings.GetFieldColor());
+    pDev->SetLineColor(rStyleSettings.GetFieldTextColor());
+    pDev->SetFillColor(pDev->GetLineColor());
+    pDev->SetOutputSizePixel(Size(50, 26));
+
+    if (nIndex >= 0 && nIndex <= 7)
     {
-        sal_IntPtr nVal = OutputDevice::LogicToLogic(
-            reinterpret_cast<sal_IntPtr>(m_xVSWidth->GetItemData(iPos)), MapUnit::MapPoint,
-            m_eMapUnit);
+        pDev->DrawRect(tools::Rectangle(5, 10, 40, 11 + nIndex));
+    }
+    else
+    {
+        assert(nIndex == 8 && "Invalid index");
+        const Point aStartPoint(
+            (pDev->GetOutputWidthPixel() - m_aIMGCus.GetSizePixel().getWidth()) / 2,
+            (pDev->GetOutputHeightPixel() - m_aIMGCus.GetSizePixel().getHeight()) / 2);
+        pDev->DrawImage(aStartPoint, m_aIMGCus);
+    }
+
+    return pDev;
+}
+
+void LineWidthPopup::UnselectTreeViewItems()
+{
+    m_xWidthTreeView->unselect_all();
+    m_xWidthTreeView->set_cursor(-1);
+}
+
+IMPL_LINK(LineWidthPopup, TreeViewItemActivatedHdl, const weld::TreeIter&, rIter, bool)
+{
+    const int nPos = m_xWidthTreeView->get_iter_index_in_parent(rIter);
+    if (nPos >= 0 && nPos <= 7)
+    {
+        sal_Int64 nVal = OutputDevice::LogicToLogic(m_xWidthTreeView->get_id(rIter).toInt64(),
+                                                    MapUnit::MapPoint, m_eMapUnit);
         nVal = m_xMFWidth->denormalize(nVal);
         XLineWidthItem aWidthItem(nVal);
         m_rParent.setLineWidth(aWidthItem);
-        m_rParent.SetWidthIcon(iPos);
+        m_rParent.SetWidthIcon(nPos + 1);
         m_rParent.SetWidth(nVal);
     }
-    else if (iPos == 9)
+    else if (nPos == 8)
     { //last custom
         //modified
         if (m_bCustom)
@@ -117,27 +146,23 @@ IMPL_LINK_NOARG(LineWidthPopup, VSSelectHdl, ValueSet*, void)
         }
         else
         {
-            m_xVSWidth->SetNoSelection(); // add: set no selection and keep the last selected item
-            m_xVSWidth->SetFormat();
-            m_xVSWidth->Invalidate();
+            // add: set no selection and keep the last selected item
+            m_xWidthTreeView->unselect_all();
         }
         //modify end
     }
 
-    if ((iPos >= 1 && iPos <= 8) || (iPos == 9 && m_bCustom)) //add
+    if ((nPos >= 0 && nPos <= 7) || (nPos == 8 && m_bCustom)) //add
     {
         m_rParent.EndLineWidthPopup();
     }
+
+    return true;
 }
 
 IMPL_LINK_NOARG(LineWidthPopup, MFModifyHdl, weld::MetricSpinButton&, void)
 {
-    if (!m_xVSWidth->IsNoSelection() && m_xVSWidth->GetSelectedItemId() != 0)
-    {
-        m_xVSWidth->UnselectItems();
-        m_xVSWidth->SetFormat();
-        m_xVSWidth->Invalidate();
-    }
+    UnselectTreeViewItems();
     tools::Long nTmp = static_cast<tools::Long>(m_xMFWidth->get_value(FieldUnit::NONE));
     tools::Long nVal = OutputDevice::LogicToLogic(nTmp, MapUnit::MapPoint, m_eMapUnit);
     sal_Int32 nNewWidth = static_cast<short>(m_xMFWidth->denormalize(nVal));
@@ -147,8 +172,8 @@ IMPL_LINK_NOARG(LineWidthPopup, MFModifyHdl, weld::MetricSpinButton&, void)
 
 void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit eMapUnit)
 {
-    m_bVSFocus = true;
-    m_xVSWidth->UnselectItems();
+    m_bTreeViewFocus = true;
+    UnselectTreeViewItems();
     m_eMapUnit = eMapUnit;
     SvtViewOptions aWinOpt(EViewType::Window, u"PopupPanel_LineWidth"_ustr);
     if (aWinOpt.Exists())
@@ -161,18 +186,16 @@ void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit 
         OUString aWinData(aTmp);
         m_nCustomWidth = aWinData.toInt32();
         m_bCustom = true;
-        m_xVSWidth->SetImage(m_aIMGCus);
-        m_xVSWidth->SetCusEnable(true);
+        m_xWidthTreeView->set_sensitive(8, true);
 
         OUString aStrTip = OUString::number(static_cast<double>(m_nCustomWidth) / 10) + m_sPt;
-        m_xVSWidth->SetItemText(9, aStrTip);
+        m_xWidthTreeView->set_text(8, aStrTip);
     }
     else
     {
         m_bCustom = false;
-        m_xVSWidth->SetImage(m_aIMGCusGray);
-        m_xVSWidth->SetCusEnable(false);
-        m_xVSWidth->SetItemText(9, maStrUnits[8]);
+        m_xWidthTreeView->set_sensitive(8, false);
+        m_xWidthTreeView->set_text(8, maStrUnits.at(8));
     }
 
     if (bValuable)
@@ -187,32 +210,28 @@ void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit 
     }
 
     OUString strCurrValue = m_xMFWidth->get_text();
-    sal_uInt16 i = 0;
+    int i = 0;
     for (; i < 8; i++)
     {
         if (strCurrValue == maStrUnits[i])
         {
-            m_xVSWidth->SelectItem(i + 1);
-            m_xVSWidth->GrabFocus();
-
+            m_xWidthTreeView->select(i);
+            m_xWidthTreeView->grab_focus();
             break;
         }
     }
 
     if (i >= 8)
     {
-        m_bVSFocus = false;
-        m_xVSWidth->UnselectItems();
+        m_bTreeViewFocus = false;
+        UnselectTreeViewItems();
     }
-
-    m_xVSWidth->SetFormat();
-    m_xVSWidth->Invalidate();
 }
 
 void LineWidthPopup::GrabFocus()
 {
-    if (m_bVSFocus)
-        m_xVSWidth->GrabFocus();
+    if (m_bTreeViewFocus)
+        m_xWidthTreeView->grab_focus();
     else
         m_xMFWidth->grab_focus();
 }
