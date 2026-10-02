@@ -40,7 +40,7 @@ private:
     std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
     GraphicObject m_aGraphicObj;
     tools::Rectangle m_aPreviewRect;
-    GalleryBrowser* mpParent;
+    GalleryBrowser& mrParent;
     GalleryTheme* mpTheme;
 
     bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const;
@@ -53,8 +53,7 @@ private:
     virtual bool     KeyInput( const KeyEvent& rKEvt ) override;
 
 public:
-
-    GalleryPreview(GalleryBrowser* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
+    GalleryPreview(GalleryBrowser& rParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
     void SetTheme(GalleryTheme* pTheme) { mpTheme = pTheme; }
     virtual ~GalleryPreview() override;
 

@@ -38,9 +38,10 @@
 #include <bitmaps.hlst>
 #include <svl/itemset.hxx>
 
-GalleryPreview::GalleryPreview(GalleryBrowser* pParent, std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
+GalleryPreview::GalleryPreview(GalleryBrowser& rParent,
+                               std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
     : mxScrolledWindow(std::move(xScrolledWindow))
-    , mpParent(pParent)
+    , mrParent(rParent)
     , mpTheme(nullptr)
 {
 }
@@ -68,7 +69,7 @@ void GalleryPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
     SetOutputSizePixel(aSize);
 
-    mxDragDropTargetHelper.reset(new GalleryDragDrop(mpParent, pDrawingArea->get_drop_target()));
+    mxDragDropTargetHelper.reset(new GalleryDragDrop(&mrParent, pDrawingArea->get_drop_target()));
 }
 
 namespace
@@ -132,7 +133,7 @@ void GalleryPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
 bool GalleryPreview::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if (mpTheme && (rMEvt.GetClicks() == 2))
-        mpParent->TogglePreview();
+        mrParent.TogglePreview();
     return true;
 }
 
@@ -140,7 +141,7 @@ bool GalleryPreview::Command(const CommandEvent& rCEvt)
 {
     if (mpTheme && (rCEvt.GetCommand() == CommandEventId::ContextMenu))
     {
-        mpParent->ShowContextMenu(rCEvt);
+        mrParent.ShowContextMenu(rCEvt);
         return true;
     }
     return false;
@@ -153,30 +154,30 @@ bool GalleryPreview::KeyInput(const KeyEvent& rKEvt)
         switch( rKEvt.GetKeyCode().GetCode() )
         {
             case KEY_BACKSPACE:
-                mpParent->TogglePreview();
+                mrParent.TogglePreview();
             break;
 
             case KEY_HOME:
-                mpParent->Travel(GalleryBrowserTravel::First);
+                mrParent.Travel(GalleryBrowserTravel::First);
             break;
 
             case KEY_END:
-                mpParent->Travel(GalleryBrowserTravel::Last);
+                mrParent.Travel(GalleryBrowserTravel::Last);
             break;
 
             case KEY_LEFT:
             case KEY_UP:
-                mpParent->Travel(GalleryBrowserTravel::Previous);
+                mrParent.Travel(GalleryBrowserTravel::Previous);
             break;
 
             case KEY_RIGHT:
             case KEY_DOWN:
-                mpParent->Travel(GalleryBrowserTravel::Next);
+                mrParent.Travel(GalleryBrowserTravel::Next);
             break;
 
             default:
             {
-                if (!mpParent->KeyInput(rKEvt))
+                if (!mrParent.KeyInput(rKEvt))
                     return false;
             }
             break;
@@ -190,7 +191,7 @@ bool GalleryPreview::KeyInput(const KeyEvent& rKEvt)
 bool GalleryPreview::StartDrag()
 {
     if (mpTheme)
-        return mpParent->StartDrag();
+        return mrParent.StartDrag();
     return true;
 }
 

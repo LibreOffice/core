@@ -137,7 +137,7 @@ GalleryBrowser::GalleryBrowser(
     , mxIconView(new GalleryIconView(*this, rBuilder.weld_scrolled_window(u"galleryscroll"_ustr, true)))
     , mxIconViewWin(new weld::CustomWeld(rBuilder, u"gallery"_ustr, *mxIconView))
     , mxListView(rBuilder.weld_tree_view(u"gallerylist"_ustr))
-    , mxPreview(new GalleryPreview(this, rBuilder.weld_scrolled_window(u"previewscroll"_ustr)))
+    , mxPreview(new GalleryPreview(*this, rBuilder.weld_scrolled_window(u"previewscroll"_ustr)))
     , mxPreviewWin(new weld::CustomWeld(rBuilder, u"preview"_ustr, *mxPreview))
     , mxIconButton(rBuilder.weld_toggle_button(u"icon"_ustr))
     , mxListButton(rBuilder.weld_toggle_button(u"list"_ustr))
