@@ -205,6 +205,7 @@ interface AppInterface {
 	file: {
 		editComment: boolean;
 		allowManageRedlines: boolean;
+		reviewMode: boolean;
 		readOnly: boolean;
 		modified: boolean;
 		permission: string;

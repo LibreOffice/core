@@ -35,6 +35,9 @@ class PermissionViewMode extends JSDialogComponent {
 	viewModeDropdown!: HTMLElement;
 	shareAsContainer!: HTMLElement;
 	notebookbarBuilder!: JSBuilder;
+	awaitingRecording: boolean = false; // Set while review mode waits for core to confirm recording is on.
+	reviewTabRequested: boolean = false; // Set when the user selects Review Mode, to open the Review tab.
+	recordingStateKnown: boolean = false; // Set after core reports the recording state the document loaded with.
 
 	constructor(map: MapInterface) {
 		super(map, 'PermissionViewMode', 'permission');
@@ -43,10 +46,8 @@ class PermissionViewMode extends JSDialogComponent {
 	init(): void {
 		this.setupContainer();
 		if (this.viewModeContainer) {
-			app.events.on(
-				'updatepermission',
-				this.updateReadonlyIndicator.bind(this),
-			);
+			app.events.on('updatepermission', this.onUpdatePermission.bind(this));
+			this.map.on('commandstatechanged', this.onCommandStateChanged, this);
 
 			if (!this.map._docLoaded)
 				this.map.on('docloaded', this.updateReadonlyIndicator, this);
@@ -117,6 +118,29 @@ class PermissionViewMode extends JSDialogComponent {
 		text: string,
 		visible: boolean,
 	): MenuButtonWidgetJSON {
+		const isReview = app.file.reviewMode;
+		const menu: Array<MenuDefinition> = [
+			{
+				id: 'view',
+				text: _('Viewing Mode'),
+				type: 'action',
+				selected: !this.map.isEditMode(),
+			},
+			{
+				id: 'edit',
+				text: _('Editing Mode'),
+				type: 'action',
+				selected: this.map.isEditMode() && !isReview,
+			},
+		];
+		if (this.map.getDocType() === 'text')
+			menu.push({
+				id: 'review',
+				text: _('Review Mode'),
+				type: 'action',
+				selected: this.map.isEditMode() && isReview,
+			});
+
 		return {
 			type: 'menubutton',
 			id: 'viewModeDropdownButton',
@@ -124,20 +148,7 @@ class PermissionViewMode extends JSDialogComponent {
 			image: false, // Suppress image generation
 			visible: visible, // JSDialogBuilder checks visible: false
 			accessKey: 'VM',
-			menu: [
-				{
-					id: 'view',
-					text: _('Viewing Mode'),
-					type: 'action',
-					selected: !this.map.isEditMode(),
-				},
-				{
-					id: 'edit',
-					text: _('Editing Mode'),
-					type: 'action',
-					selected: this.map.isEditMode(),
-				},
-			],
+			menu: menu,
 		};
 	}
 
@@ -186,8 +197,10 @@ class PermissionViewMode extends JSDialogComponent {
 
 	handleModeSelection(mode: string): void {
 		const currentPermission = this.map._permission;
+		const isReview = app.file.reviewMode;
 		if (
-			(mode === 'edit' && currentPermission === 'edit') ||
+			(mode === 'edit' && currentPermission === 'edit' && !isReview) ||
+			(mode === 'review' && currentPermission === 'edit' && isReview) ||
 			(mode === 'view' && currentPermission === 'readonly')
 		) {
 			return;
@@ -195,7 +208,24 @@ class PermissionViewMode extends JSDialogComponent {
 
 		this.map.uiManager.closeSnackbar();
 
+		if (mode === 'review') {
+			app.file.reviewMode = true;
+			this.reviewTabRequested = true;
+			// Recording starts in onUpdatePermission once the view is editable.
+			if (currentPermission === 'edit') this.startReview();
+			else if (typeof this.map._switchToEditMode === 'function')
+				this.map._switchToEditMode();
+			else this.map.setPermission('edit');
+			return;
+		}
+
+		if (isReview) this.stopReview();
+
 		if (mode === 'edit') {
+			if (currentPermission === 'edit') {
+				this.updateReadonlyIndicator();
+				return;
+			}
 			if (typeof this.map._switchToEditMode === 'function')
 				this.map._switchToEditMode();
 			else this.map.setPermission('edit');
@@ -209,6 +239,68 @@ class PermissionViewMode extends JSDialogComponent {
 		const isEditMode = this.map.isEditMode ? this.map.isEditMode() : false;
 		const userCanWrite = this.map['wopi'] && this.map['wopi'].UserCanWrite;
 		return !isEditMode && app.file.permission === 'readonly' && !userCanWrite;
+	}
+
+	onUpdatePermission(): void {
+		if (
+			this.map.isEditMode() &&
+			this.map.getDocType() === 'text' &&
+			this.isRecording()
+		)
+			app.file.reviewMode = true;
+
+		if (app.file.reviewMode) {
+			if (this.map.isEditMode()) this.startReview();
+			else this.stopReview();
+		}
+		this.updateReadonlyIndicator();
+	}
+
+	private isRecording(): boolean {
+		const state =
+			this.map['stateChangeHandler'].getItemValue('.uno:TrackChanges');
+		return state === 'true' || state === true;
+	}
+
+	private startReview(): void {
+		if (!this.isRecording()) {
+			this.awaitingRecording = true;
+			this.map.sendUnoCommand('.uno:TrackChangesInThisView');
+		}
+		if (this.reviewTabRequested) {
+			this.reviewTabRequested = false;
+			this.showReviewTab();
+		}
+		this.updateReadonlyIndicator();
+	}
+
+	private showReviewTab(): void {
+		this.map.uiManager.notebookbar?.selectTab('Review');
+	}
+
+	// Leaving review mode stops this user's recording.
+	private stopReview(): void {
+		app.file.reviewMode = false;
+		this.awaitingRecording = false;
+		this.reviewTabRequested = false;
+		if (!this.map.isEditMode()) return;
+		this.map.sendUnoCommand('.uno:TrackChanges?TrackChanges:bool=false');
+	}
+
+	onCommandStateChanged(e: any): void {
+		if (e.commandName !== '.uno:TrackChanges') return;
+		const recording = e.state === 'true';
+		const isLoadState = !this.recordingStateKnown;
+		this.recordingStateKnown = true;
+		if (recording) this.awaitingRecording = false;
+		else if (this.awaitingRecording) return;
+
+		if (!this.map.isEditMode() || this.map.getDocType() !== 'text') return;
+		if (recording === app.file.reviewMode) return;
+
+		app.file.reviewMode = recording;
+		if (recording && !isLoadState) this.showReviewTab();
+		this.updateReadonlyIndicator();
 	}
 
 	updateReadonlyIndicator(): void {
@@ -226,7 +318,7 @@ class PermissionViewMode extends JSDialogComponent {
 
 		if (isEditMode) {
 			showDropdown = true;
-			dropdownText = _('Editing');
+			dropdownText = app.file.reviewMode ? _('Reviewing') : _('Editing');
 		} else if (app.file.permission === 'edit' && shouldStartReadOnly) {
 			showDropdown = true;
 			dropdownText = _('Viewing');

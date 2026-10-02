@@ -192,6 +192,10 @@ class NotebookbarBase extends JSDialogComponent {
 		this.impl?.hideTabs();
 	}
 
+	public selectTab(tabName: string) {
+		this.impl?.selectTab(tabName);
+	}
+
 	public refreshContextTabsVisibility() {
 		this.impl?.refreshContextTabsVisibility();
 	}

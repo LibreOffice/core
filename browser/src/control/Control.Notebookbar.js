@@ -276,6 +276,12 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		return this.HOME_TAB_ID;
 	},
 
+	selectTab: function(tabName) {
+		var tabElement = $('#' + tabName + '-tab-label');
+		if (!tabElement.hasClass('selected'))
+			tabElement.click();
+	},
+
 	isTabSelected: function(tabName) {
 		return this._lastSelectedTabName === tabName;
 	},
