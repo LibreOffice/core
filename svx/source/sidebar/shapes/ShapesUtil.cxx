@@ -24,7 +24,7 @@
 namespace svx::sidebar{
 SvxShapeCommandsMap::SvxShapeCommandsMap()
 {
-    mpLineShapes = decltype(mpLineShapes){
+    m_aLineShapes = decltype(m_aLineShapes){
         {0, ".uno:Line"},
         {1, ".uno:LineArrowEnd"},
         {2, ".uno:LineCircleArrow"},
@@ -37,7 +37,7 @@ SvxShapeCommandsMap::SvxShapeCommandsMap()
         {9, ".uno:Line_Diagonal"}
     };
 
-    mpCurveShapes = decltype(mpCurveShapes){
+    m_aCurveShapes = decltype(m_aCurveShapes){
         {0, ".uno:Freeline_Unfilled"},
         {1, ".uno:Bezier_Unfilled"},
         {2, ".uno:Polygon_Unfilled"},
@@ -48,7 +48,7 @@ SvxShapeCommandsMap::SvxShapeCommandsMap()
         {7, ".uno:Polygon_Diagonal"}
     };
 
-    mpConnectorShapes = decltype(mpConnectorShapes){
+    m_aConnectorShapes = decltype(m_aConnectorShapes){
         {0, ".uno:ConnectorArrowEnd"},
         {1, ".uno:ConnectorLineArrowEnd"},
         {2, ".uno:ConnectorCurveArrowEnd"},
@@ -63,7 +63,7 @@ SvxShapeCommandsMap::SvxShapeCommandsMap()
         {11, ".uno:ConnectorLinesArrows"}
     };
 
-    mpBasicShapes = decltype(mpBasicShapes){
+    m_aBasicShapes = decltype(m_aBasicShapes){
         {0, ".uno:BasicShapes.rectangle"},
         {1, ".uno:BasicShapes.round-rectangle"},
         {2, ".uno:BasicShapes.quadrat"},
@@ -91,7 +91,7 @@ SvxShapeCommandsMap::SvxShapeCommandsMap()
         {24, ".uno:BasicShapes.sinusoid"}
     };
 
-    mpSymbolShapes = decltype(mpSymbolShapes){
+    m_aSymbolShapes = decltype(m_aSymbolShapes){
         {0, ".uno:SymbolShapes.smiley"},
         {1, ".uno:SymbolShapes.sun"},
         {2, ".uno:SymbolShapes.moon"},
@@ -112,7 +112,7 @@ SvxShapeCommandsMap::SvxShapeCommandsMap()
         {17, ".uno:SymbolShapes.diamond-bevel"}
     };
 
-    mpBlockArrowShapes = decltype(mpBlockArrowShapes){
+    m_aBlockArrowShapes = decltype(m_aBlockArrowShapes){
         {0, ".uno:ArrowShapes.left-arrow"},
         {1, ".uno:ArrowShapes.right-arrow"},
         {2, ".uno:ArrowShapes.up-arrow"},
@@ -141,7 +141,7 @@ SvxShapeCommandsMap::SvxShapeCommandsMap()
         {25, ".uno:ArrowShapes.s-sharped-arrow"}
     };
 
-    mpFlowchartShapes = decltype(mpFlowchartShapes){
+    m_aFlowchartShapes = decltype(m_aFlowchartShapes){
         {0, ".uno:FlowChartShapes.flowchart-process"},
         {1, ".uno:FlowChartShapes.flowchart-alternate-process"},
         {2, ".uno:FlowChartShapes.flowchart-decision"},
@@ -172,7 +172,7 @@ SvxShapeCommandsMap::SvxShapeCommandsMap()
         {27, ".uno:FlowChartShapes.flowchart-display"}
     };
 
-    mpCalloutShapes = decltype(mpCalloutShapes){
+    m_aCalloutShapes = decltype(m_aCalloutShapes){
         {0, ".uno:CalloutShapes.rectangular-callout"},
         {1, ".uno:CalloutShapes.round-rectangular-callout"},
         {2, ".uno:CalloutShapes.round-callout"},
@@ -182,7 +182,7 @@ SvxShapeCommandsMap::SvxShapeCommandsMap()
         {6, ".uno:CalloutShapes.line-callout-3"}
     };
 
-    mpStarShapes = decltype(mpStarShapes){
+    m_aStarShapes = decltype(m_aStarShapes){
         {0, ".uno:StarShapes.star4"},
         {1, ".uno:StarShapes.star5"},
         {2, ".uno:StarShapes.star6"},
@@ -197,7 +197,7 @@ SvxShapeCommandsMap::SvxShapeCommandsMap()
         {11, ".uno:StarShapes.concave-star6"}
     };
 
-    mp3DShapes = decltype(mp3DShapes){
+    m_a3DShapes = decltype(m_a3DShapes){
         {0, ".uno:Cube"},
         {1, ".uno:Sphere"},
         {2, ".uno:Cylinder"},

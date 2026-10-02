@@ -74,20 +74,20 @@ std::unique_ptr<PanelLayout> DefaultShapesPanel::Create(
 
 void DefaultShapesPanel::Initialize()
 {
-    mpShapesSetMap = decltype(mpShapesSetMap){
-        { mxLineArrowSet.get(),   mpLineShapes },
-        { mxCurveSet.get(),       mpCurveShapes },
-        { mxConnectorSet.get(),   mpConnectorShapes },
-        { mxBasicShapeSet.get(),  mpBasicShapes },
-        { mxSymbolShapeSet.get(), mpSymbolShapes },
-        { mxBlockArrowSet.get(),  mpBlockArrowShapes },
-        { mxFlowchartSet.get(),   mpFlowchartShapes },
-        { mxCalloutSet.get(),     mpCalloutShapes },
-        { mxStarSet.get(),        mpStarShapes },
-        { mx3DObjectSet.get(),    mp3DShapes }
+    m_aShapesSetMap = decltype(m_aShapesSetMap){
+        { mxLineArrowSet.get(),   m_aLineShapes },
+        { mxCurveSet.get(),       m_aCurveShapes },
+        { mxConnectorSet.get(),   m_aConnectorShapes },
+        { mxBasicShapeSet.get(),  m_aBasicShapes },
+        { mxSymbolShapeSet.get(), m_aSymbolShapes },
+        { mxBlockArrowSet.get(),  m_aBlockArrowShapes },
+        { mxFlowchartSet.get(),   m_aFlowchartShapes },
+        { mxCalloutSet.get(),     m_aCalloutShapes },
+        { mxStarSet.get(),        m_aStarShapes },
+        { mx3DObjectSet.get(),    m_a3DShapes }
     };
     populateShapes();
-    for(auto& aSetMap: mpShapesSetMap)
+    for (auto& aSetMap : m_aShapesSetMap)
     {
         aSetMap.first->SetColor(Application::GetSettings().GetStyleSettings().GetDialogColor());
         aSetMap.first->SetSelectHdl(LINK(this, DefaultShapesPanel, ShapeSelectHdl));
@@ -96,7 +96,7 @@ void DefaultShapesPanel::Initialize()
 
 DefaultShapesPanel::~DefaultShapesPanel()
 {
-    mpShapesSetMap.clear();
+    m_aShapesSetMap.clear();
     mxLineArrowSetWin.reset();
     mxLineArrowSet.reset();
     mxCurveSetWin.reset();
@@ -121,7 +121,7 @@ DefaultShapesPanel::~DefaultShapesPanel()
 
 IMPL_LINK(DefaultShapesPanel, ShapeSelectHdl, ValueSet*, rValueSet, void)
 {
-    for(auto& aSetMap : mpShapesSetMap)
+    for (auto& aSetMap : m_aShapesSetMap)
     {
         if(rValueSet == aSetMap.first)
         {
@@ -137,7 +137,7 @@ void DefaultShapesPanel::populateShapes()
 {
     OUString sSlotStr, sLabel;
     Image aSlotImage;
-    for(auto& aSet : mpShapesSetMap)
+    for (auto& aSet : m_aShapesSetMap)
     {
         aSet.first->SetColCount(6);
         for(std::map<sal_uInt16, OUString>::size_type i = 0; i < aSet.second.size(); i++)

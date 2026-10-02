@@ -68,7 +68,7 @@ private:
     std::unique_ptr<weld::CustomWeld> mx3DObjectSetWin;
 
     Reference< XFrame >       mxFrame;
-    std::map<ValueSet*, std::map<sal_uInt16, OUString>> mpShapesSetMap;
+    std::map<ValueSet*, std::map<sal_uInt16, OUString>> m_aShapesSetMap;
 
     void populateShapes();
     void Initialize();

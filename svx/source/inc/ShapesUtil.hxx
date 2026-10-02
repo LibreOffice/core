@@ -27,10 +27,9 @@ class SvxShapeCommandsMap
 {
 public:
     SvxShapeCommandsMap();
-    std::map<sal_uInt16, OUString> mpLineShapes, mpCurveShapes,
-                    mpConnectorShapes, mpBasicShapes, mpSymbolShapes,
-                    mpBlockArrowShapes, mpFlowchartShapes,
-                    mpCalloutShapes, mpStarShapes, mp3DShapes;
+    std::map<sal_uInt16, OUString> m_aLineShapes, m_aCurveShapes, m_aConnectorShapes,
+        m_aBasicShapes, m_aSymbolShapes, m_aBlockArrowShapes, m_aFlowchartShapes, m_aCalloutShapes,
+        m_aStarShapes, m_a3DShapes;
 };
 
 }
