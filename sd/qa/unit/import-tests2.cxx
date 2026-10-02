@@ -1914,6 +1914,18 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testCool16279_LayoutPlaceholderKeepsMasterAu
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testPlaceholderInheritsNoWrapFromLayout)
+{
+    // The layout's narrow body placeholder has wrap="none", and the slide's placeholder that
+    // refers to it has an empty bodyPr.
+    createSdImpressDoc("pptx/narrow-placeholder-no-wrap.pptx");
+
+    // The slide's text stays on one line, wider than the box.
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"First contact"_ustr, xShape.queryThrow<text::XTextRange>()->getString());
+    CPPUNIT_ASSERT(!xShape->getPropertyValue(u"TextWordWrap"_ustr).get<bool>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

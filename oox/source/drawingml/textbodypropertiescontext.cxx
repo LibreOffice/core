@@ -61,8 +61,14 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
 , mrTextBodyProp( rTextBodyProp )
 {
     // ST_TextWrappingType
-    sal_Int32 nWrappingType = rAttribs.getToken( XML_wrap, XML_square );
-    mrTextBodyProp.maPropertyMap.setProperty( PROP_TextWordWrap, nWrappingType == XML_square );
+    // A placeholder starts with the text body properties of the placeholder it refers to, so a
+    // missing wrap attribute keeps the inherited wrapping type.
+    if (rAttribs.hasAttribute(XML_wrap)
+        || !mrTextBodyProp.maPropertyMap.hasProperty(PROP_TextWordWrap))
+    {
+        sal_Int32 nWrappingType = rAttribs.getToken( XML_wrap, XML_square );
+        mrTextBodyProp.maPropertyMap.setProperty( PROP_TextWordWrap, nWrappingType == XML_square );
+    }
 
     // ST_Coordinate
     OUString sValue;
