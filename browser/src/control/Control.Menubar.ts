@@ -1781,10 +1781,7 @@ class Menubar extends window.L.Control {
 		const entries: MenuItem[] = [];
 		for (const id of Object.keys(exts).sort()) {
 			const manifest = exts[id].options.manifest;
-			// An extension author's name and command titles are not engine-translated UI
-			// text, so they need the same HTML-escaping any other externally-supplied
-			// label would.
-			const name = app.LOUtil.escapeHtml(manifest.name as string);
+			const name = manifest.name as string;
 			// Only an extension with a sidebar `entry` has anything for this toggle to
 			// open. An extension that places its commands in a document menu of its own
 			// choosing reaches the menu through _applyExtensionMenuContributions below
@@ -1819,7 +1816,7 @@ class Menubar extends window.L.Control {
 					continue;
 				}
 				submenu.push({
-					name: app.LOUtil.escapeHtml(command.title),
+					name: command.title,
 					id: 'ext:' + id + ':' + item.command,
 					type: 'action',
 				});
@@ -1895,11 +1892,7 @@ class Menubar extends window.L.Control {
 						continue;
 					}
 					target.menu.push({
-						// A manifest's command title is extension-author content, not
-						// engine-translated UI text, so it needs the same HTML-escaping
-						// any other externally-supplied text would need before landing in
-						// a menu label:
-						name: app.LOUtil.escapeHtml(command.title),
+						name: command.title,
 						id: 'ext:' + extId + ':' + commandId,
 						type: 'action',
 					});
@@ -3070,9 +3063,9 @@ class Menubar extends window.L.Control {
 			var aItem = window.L.DomUtil.create('a', menu[i].disabled ? 'disabled' : '', liItem);
 			aItem.setAttribute('role', 'menuitem');
 			if (menu[i].name !== undefined) {
-				aItem.innerHTML = menu[i].name;
+				aItem.textContent = menu[i].name;
 			} else if (menu[i].uno !== undefined) {
-				aItem.innerHTML = _UNO(menu[i].uno, docType);
+				aItem.textContent = _UNO(menu[i].uno, docType);
 			} else {
 				$(aItem).addClass('disabled');
 				aItem.replaceChildren();
