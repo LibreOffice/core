@@ -483,7 +483,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169024_verticalTopFrame)
     // gets exported as 'bottom' in DOCX, and import maps 'bottom' to top of Line of Text again
 
     auto verify = [this]() {
-        // To Character anchored Line of Text need to be LINE_TOP in order for the GUI to pick it up
+        // To Character anchored Line of Text needs to be LINE_TOP in order for the GUI to pick it up
         CPPUNIT_ASSERT_EQUAL(text::RelOrientation::TEXT_LINE,
                              getProperty<sal_Int16>(getShape(1), u"VertOrientRelation"_ustr));
         CPPUNIT_ASSERT_EQUAL(text::VertOrientation::LINE_TOP,
@@ -508,7 +508,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf169024)
     createSwDoc("tdf90153.docx");
     //saveAndReload(TestFilter::DOCX);
 
-    // To Character anchored Line of Text need to be LINE_BOTTOM in order for the GUI to pick it up
+    // To Character anchored Line of Text needs to be LINE_BOTTOM in order for the GUI to pick it up
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::TEXT_LINE,
                          getProperty<sal_Int16>(getShape(1), u"VertOrientRelation"_ustr));
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::LINE_BOTTOM,

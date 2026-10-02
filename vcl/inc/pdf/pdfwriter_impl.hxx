@@ -857,7 +857,7 @@ private:
         AlphaMask m_aAlphaMask;
     };
 
-    /// Cache some most recent bitmaps we've exported, in case we encounter them again..
+    /// Cache some most recent bitmaps we've exported, in case we encounter them again.
     o3tl::lru_map<BitmapChecksum, std::optional<PDFBmpCacheEntry>> m_aPDFBmpCache;
 
     sal_Int32                           m_nCurrentPage;

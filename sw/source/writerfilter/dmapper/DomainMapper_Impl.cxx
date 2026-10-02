@@ -7517,7 +7517,7 @@ void DomainMapper_Impl::handleToc
     OUString sFigureSequence;
     OUString aBookmarkName;
 
-//                  \a Builds a table of figures but does not include the captions's label and number
+//                  \a Builds a table of figures but does not include the captions' label and number
     if( lcl_FindInCommand( pContext->GetCommand(), 'a', sValue ))
     { //make it a table of figures
         bTableOfFigures = true;

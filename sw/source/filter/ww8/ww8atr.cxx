@@ -3763,7 +3763,7 @@ static bool lcl_IsAtTextEnd(const SwFormatFootnote& rFootnote)
             pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
 
         if (!pSectNd)
-            bRet = false;   // the is ftn/end collected at Page- or Doc-End
+            bRet = false;   // this is ftn/end collected at Page- or Doc-End
     }
     return bRet;
 }

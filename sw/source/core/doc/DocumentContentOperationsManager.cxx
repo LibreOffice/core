@@ -2187,7 +2187,7 @@ void DocumentContentOperationsManager::DeleteDummyChar(
 
 void DocumentContentOperationsManager::DeleteRange( SwPaM & rPam )
 {
-    // Seek all redlines that are in that PaM to be deleted..
+    // Seek all redlines that are in that PaM to be deleted.
     SwRedlineTable::size_type nRedlStart = m_rDoc.getIDocumentRedlineAccess().GetRedlinePos(
         rPam.Start()->GetNode(), RedlineType::Any);
     SwRedlineTable::size_type nRedlEnd = m_rDoc.getIDocumentRedlineAccess().GetRedlineEndPos(

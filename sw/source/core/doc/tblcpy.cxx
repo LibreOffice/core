@@ -509,7 +509,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
     // The text that arrives with the copy will be recalculated based on the formula,
     // and that would eliminate the tracked change from the cell anyway.
     // TODO: if we want tracked changes to work on it, we should create a new type of
-    // tracked change that track the formula changes, not the cell values changes.
+    // tracked change that tracks the formula changes, not the cell value changes.
     const bool bTrackChanges = !pCpyBox
         || SfxItemState::SET
                != pCpyBox->GetFrameFormat()->GetItemState( RES_BOXATR_FORMULA, false );

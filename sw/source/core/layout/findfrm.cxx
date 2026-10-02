@@ -424,7 +424,7 @@ const SwLayoutFrame *SwFrame::ImplGetNextLayoutLeaf( bool bFwd ) const
          if ( !bGoingDown )
          {
              // I cannot go down, because either I'm currently going up or
-             // because the is no lower.
+             // because there is no lower.
              // I'll try to go forward:
              p = lcl_FindLayoutFrame( pFrame, bFwd );
              bGoingFwdOrBwd = nullptr != p;
