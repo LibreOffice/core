@@ -13,8 +13,10 @@ ETAGS=ctags -e
 # number so make does not pile on new jobs while the machine is already busy.
 # On a host shared by several builds each one backs off instead of all running
 # a full set of jobs at once. An explicit -j or -l wins. Without nproc, no
-# change.
-NPROC := $(shell nproc 2>/dev/null)
+# change. Only make 4.4 and later show -j and -l in MAKEFLAGS while parsing,
+# so older makes get no default. 4.4 also added the intcmp function, which
+# expands to y here and to nothing on an older make.
+NPROC := $(and $(intcmp 1,1,,y),$(shell nproc 2>/dev/null))
 MAKEFLAGS := $(MAKEFLAGS) \
 	$(if $(findstring j,$(MAKEFLAGS)),,$(if $(NPROC),-j$(NPROC))) \
 	$(if $(findstring l,$(MAKEFLAGS)),,$(if $(NPROC),-l$(NPROC)))
