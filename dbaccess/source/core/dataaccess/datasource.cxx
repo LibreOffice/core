@@ -337,7 +337,7 @@ void OSharedConnectionManager::addEventListener(const Reference<XConnection>& _r
 namespace
 {
     Sequence< PropertyValue > lcl_filterDriverProperties( const Reference< XDriver >& _xDriver, const OUString& _sUrl,
-        const Sequence< PropertyValue >& _rDataSourceSettings )
+        const Sequence< PropertyValue >& _rDataSourceSettings, bool bTrustedLocation )
     {
         if ( _xDriver.is() )
         {
@@ -347,6 +347,9 @@ namespace
 
             for (auto& dataSourceSetting : _rDataSourceSettings)
             {
+                // Additional driver options follow the same rule as updating links.
+                if (!bTrustedLocation && dataSourceSetting.Name == INFO_ADDITIONALOPTIONS)
+                    continue;
                 auto knownSettings = dbaccess::ODatabaseModelImpl::getDefaultDataSourceSettings();
                 bool isSettingKnown = std::any_of(knownSettings.begin(), knownSettings.end(),
                                                   [name = dataSourceSetting.Name](auto& setting)
@@ -643,7 +646,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
             Sequence< PropertyValue > aDriverInfo = lcl_filterDriverProperties(
                 xDriver,
                 m_pImpl->m_sConnectURL,
-                m_pImpl->m_xSettings->getPropertyValues()
+                m_pImpl->m_xSettings->getPropertyValues(),
+                SvtSecurityOptions::isTrustedLocationUriForUpdatingLinks(m_pImpl->getDocFileLocation())
             );
 
             if ( m_pImpl->isEmbeddedDatabase() )
