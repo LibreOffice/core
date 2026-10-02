@@ -28,6 +28,7 @@
 #define RID_STR_TABLE_IS_FILTERED                   NC_("RID_STR_TABLE_IS_FILTERED", "The table $name$ already exists. It is not visible because it has been filtered out.")
 #define RID_STR_COULDNOTCONNECT_UNSPECIFIED         NC_("RID_STR_COULDNOTCONNECT_UNSPECIFIED", "The connection to the external data source could not be established. An unknown error occurred. The driver is probably defective.")
 #define RID_STR_COULDNOTCONNECT_NODRIVER            NC_("RID_STR_COULDNOTCONNECT_NODRIVER", "The connection to the external data source could not be established. No SDBC driver was found for the URL '$name$'.")
+#define RID_STR_COULDNOTCONNECT_UNTRUSTED           NC_("RID_STR_COULDNOTCONNECT_UNTRUSTED", "The connection to the external data source could not be established. The database document is not in a trusted location.")
 #define RID_STR_COULDNOTLOAD_MANAGER                NC_("RID_STR_COULDNOTLOAD_MANAGER", "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.")
 #define RID_STR_FORM                                NC_("RID_STR_FORM", "Form")
 #define RID_STR_REPORT                              NC_("RID_STR_REPORT", "Report")
