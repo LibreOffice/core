@@ -8464,12 +8464,11 @@ if test "$_os" != "WINNT"; then
     # only.
     if test "$CPP_LIBRARY" = GLIBCXX; then
         dnl gcc#19664, gcc#22482, rhbz#162935
-        AC_MSG_CHECKING([if STL headers are visibility safe (GCC bug 22482)])
         AC_EGREP_HEADER(visibility push, string, stlvisok=yes, stlvisok=no)
-        AC_MSG_RESULT([$stlvisok])
         if test "$stlvisok" = "no"; then
             AC_MSG_ERROR([Your libstdc++ headers are not visibility safe. This is no longer supported.])
         fi
+        AC_MSG_NOTICE([STL headers are visibility safe (GCC bug 22482)])
     fi
 
     # As the below test checks things when linking self-compiled dynamic libraries, it presumably is irrelevant
@@ -9269,128 +9268,118 @@ fi
 dnl ===================================================================
 dnl Export file validation
 dnl ===================================================================
-AC_MSG_CHECKING([whether to enable export file validation])
 if test "$with_export_validation" != "no"; then
-    if ! test -d "${SRC_ROOT}/schema"; then
+    AC_MSG_NOTICE([enable export file validation requested, needs Java])
+    if test -z "$JAVAINTERPRETER"; then
+        dnl Java is disabled but a build-time Java interpreter is still
+        dnl needed to run the export validators.
+        AC_PATH_PROG(JAVAINTERPRETER, java)
+    fi
+    dnl macOS ships a /usr/bin/java stub that exits non-zero with
+    dnl "Unable to locate a Java Runtime" when no JDK is installed,
+    dnl so verify the interpreter actually runs.
+    if test -n "$JAVAINTERPRETER" && ! $JAVAINTERPRETER_LAUNCHER "$JAVAINTERPRETER" -version >/dev/null 2>&1; then
+        JAVAINTERPRETER=
+    fi
+    if test -z "$JAVAINTERPRETER"; then
         if test "$with_export_validation" = "yes"; then
-            AC_MSG_ERROR([requested, but schema directory is missing (it is excluded from tarballs)])
-        else
-            AC_MSG_RESULT([no, schema directory is missing (it is excluded from tarballs)])
+            AC_MSG_ERROR([no working Java interpreter found (--with-export-validation)])
         fi
+        AC_MSG_NOTICE([no working Java interpreter found])
+        with_export_validation=no
     else
-        if test -z "$JAVAINTERPRETER"; then
-            dnl Java is disabled but a build-time Java interpreter is still
-            dnl needed to run the export validators.
-            AC_PATH_PROG(JAVAINTERPRETER, java)
-        fi
-        dnl macOS ships a /usr/bin/java stub that exits non-zero with
-        dnl "Unable to locate a Java Runtime" when no JDK is installed,
-        dnl so verify the interpreter actually runs.
-        if test -n "$JAVAINTERPRETER" && ! $JAVAINTERPRETER_LAUNCHER "$JAVAINTERPRETER" -version >/dev/null 2>&1; then
-            JAVAINTERPRETER=
-        fi
-        if test -z "$JAVAINTERPRETER"; then
-            if test "$with_export_validation" = "yes"; then
-                AC_MSG_ERROR([export validation requires a working Java interpreter, none found (--with-export-validation)])
+        AC_MSG_NOTICE([Java interpreter found])
+        AC_DEFINE(HAVE_EXPORT_VALIDATION)
+
+        AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
+        if test -z "$ODFVALIDATOR"; then
+            # remember to download the ODF toolkit with validator later
+            AC_MSG_NOTICE([no odfvalidator found, will download it])
+            BUILD_TYPE="$BUILD_TYPE ODFVALIDATOR"
+            ODFVALIDATOR="$BUILDDIR/bin/odfvalidator.sh"
+
+            # and fetch name of odfvalidator jar name from download.lst
+            ODFVALIDATOR_JAR=`$SED -n -e "s/^ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
+            AC_SUBST(ODFVALIDATOR_JAR)
+
+            if test -z "$ODFVALIDATOR_JAR"; then
+                AC_MSG_ERROR([cannot determine odfvalidator jar location (--with-export-validation)])
             fi
-            AC_MSG_RESULT([no, no working Java interpreter found])
-            with_export_validation=no
+        fi
+        if test "$build_os" = "cygwin"; then
+            # In case of Cygwin it will be executed from Windows,
+            # so we need to run bash and absolute path to validator
+            # so instead of "odfvalidator" it will be
+            # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+            ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
         else
-            AC_MSG_RESULT([yes])
-            AC_DEFINE(HAVE_EXPORT_VALIDATION)
-
-            AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
-            if test -z "$ODFVALIDATOR"; then
-                # remember to download the ODF toolkit with validator later
-                AC_MSG_NOTICE([no odfvalidator found, will download it])
-                BUILD_TYPE="$BUILD_TYPE ODFVALIDATOR"
-                ODFVALIDATOR="$BUILDDIR/bin/odfvalidator.sh"
-
-                # and fetch name of odfvalidator jar name from download.lst
-                ODFVALIDATOR_JAR=`$SED -n -e "s/^ODFVALIDATOR_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
-                AC_SUBST(ODFVALIDATOR_JAR)
-
-                if test -z "$ODFVALIDATOR_JAR"; then
-                    AC_MSG_ERROR([cannot determine odfvalidator jar location (--with-export-validation)])
-                fi
-            fi
-            if test "$build_os" = "cygwin"; then
-                # In case of Cygwin it will be executed from Windows,
-                # so we need to run bash and absolute path to validator
-                # so instead of "odfvalidator" it will be
-                # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
-                ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
-            else
-                ODFVALIDATOR="sh $ODFVALIDATOR"
-            fi
-            AC_SUBST(ODFVALIDATOR)
+            ODFVALIDATOR="sh $ODFVALIDATOR"
+        fi
+        AC_SUBST(ODFVALIDATOR)
 
 
-            if test "$enable_cofficeotron" = "yes"; then
-                dnl The native cofficeotron validates the OOXML exports; an
-                dnl empty OFFICEOTRON_JAR makes bin/officeotron.sh run it.
+        if test "$enable_cofficeotron" = "yes"; then
+            dnl The native cofficeotron validates the OOXML exports; an
+            dnl empty OFFICEOTRON_JAR makes bin/officeotron.sh run it.
+            OFFICEOTRON="$BUILDDIR/bin/officeotron.sh"
+        else
+            AC_PATH_PROGS(OFFICEOTRON, officeotron)
+            if test -z "$OFFICEOTRON"; then
+                # remember to download the officeotron with validator later
+                AC_MSG_NOTICE([no officeotron found, will download it])
+                BUILD_TYPE="$BUILD_TYPE OFFICEOTRON"
                 OFFICEOTRON="$BUILDDIR/bin/officeotron.sh"
-            else
-                AC_PATH_PROGS(OFFICEOTRON, officeotron)
-                if test -z "$OFFICEOTRON"; then
-                    # remember to download the officeotron with validator later
-                    AC_MSG_NOTICE([no officeotron found, will download it])
-                    BUILD_TYPE="$BUILD_TYPE OFFICEOTRON"
-                    OFFICEOTRON="$BUILDDIR/bin/officeotron.sh"
 
-                    # and fetch name of officeotron jar name from download.lst
-                    OFFICEOTRON_JAR=`$SED -n -e "s/^OFFICEOTRON_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
-                    if test -z "$OFFICEOTRON_JAR"; then
-                        AC_MSG_ERROR([cannot determine officeotron jar location (--with-export-validation)])
-                    fi
-                else
-                    # check version of existing officeotron
-                    OFFICEOTRON_VER=`$OFFICEOTRON --version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-                    if test 0"$OFFICEOTRON_VER" -lt 704; then
-                        AC_MSG_ERROR([officeotron too old])
-                    fi
+                # and fetch name of officeotron jar name from download.lst
+                OFFICEOTRON_JAR=`$SED -n -e "s/^OFFICEOTRON_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
+                if test -z "$OFFICEOTRON_JAR"; then
+                    AC_MSG_ERROR([cannot determine officeotron jar location (--with-export-validation)])
+                fi
+            else
+                # check version of existing officeotron
+                OFFICEOTRON_VER=`$OFFICEOTRON --version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+                if test 0"$OFFICEOTRON_VER" -lt 704; then
+                    AC_MSG_ERROR([officeotron too old])
                 fi
             fi
-            AC_SUBST(OFFICEOTRON_JAR)
-            if test "$build_os" = "cygwin"; then
-                # In case of Cygwin it will be executed from Windows,
-                # so we need to run bash and absolute path to validator
-                # so instead of "odfvalidator" it will be
-                # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
-                OFFICEOTRON="bash.exe `cygpath -m "$OFFICEOTRON"`"
-            else
-                OFFICEOTRON="sh $OFFICEOTRON"
-            fi
+        fi
+        AC_SUBST(OFFICEOTRON_JAR)
+        if test "$build_os" = "cygwin"; then
+            # In case of Cygwin it will be executed from Windows,
+            # so we need to run bash and absolute path to validator
+            # so instead of "odfvalidator" it will be
+            # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+            OFFICEOTRON="bash.exe `cygpath -m "$OFFICEOTRON"`"
+        else
+            OFFICEOTRON="sh $OFFICEOTRON"
+        fi
 
-            AC_PATH_PROGS(VERAPDF, verapdf)
-            if test -z "$VERAPDF"; then
-                # remember to download the verapdf with validator later
-                AC_MSG_NOTICE([no verapdf found, will download it])
-                BUILD_TYPE="$BUILD_TYPE VERAPDF"
-                VERAPDF="$BUILDDIR/bin/verapdf.sh"
+        AC_PATH_PROGS(VERAPDF, verapdf)
+        if test -z "$VERAPDF"; then
+            # remember to download the verapdf with validator later
+            AC_MSG_NOTICE([no verapdf found, will download it])
+            BUILD_TYPE="$BUILD_TYPE VERAPDF"
+            VERAPDF="$BUILDDIR/bin/verapdf.sh"
 
-                # and fetch name of verapdf jar name from download.lst
-                VERAPDF_JAR=`$SED -n -e "s/^VERAPDF_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
-                AC_SUBST(VERAPDF_JAR)
+            # and fetch name of verapdf jar name from download.lst
+            VERAPDF_JAR=`$SED -n -e "s/^VERAPDF_JAR *:= *\(.*\) */\1/p" $SRC_ROOT/download.lst`
+            AC_SUBST(VERAPDF_JAR)
 
-                if test -z "$VERAPDF_JAR"; then
-                    AC_MSG_ERROR([cannot determine verapdf jar location (--with-export-validation)])
-                fi
+            if test -z "$VERAPDF_JAR"; then
+                AC_MSG_ERROR([cannot determine verapdf jar location (--with-export-validation)])
             fi
-            if test "$build_os" = "cygwin"; then
-                # In case of Cygwin it will be executed from Windows,
-                # so we need to run bash and absolute path to validator
-                # so instead of "odfvalidator" it will be
-                # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
-                VERAPDF="bash.exe `cygpath -m "$VERAPDF"`"
-            else
-                VERAPDF="sh $VERAPDF"
-            fi
+        fi
+        if test "$build_os" = "cygwin"; then
+            # In case of Cygwin it will be executed from Windows,
+            # so we need to run bash and absolute path to validator
+            # so instead of "odfvalidator" it will be
+            # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+            VERAPDF="bash.exe `cygpath -m "$VERAPDF"`"
+        else
+            VERAPDF="sh $VERAPDF"
         fi
     fi
     AC_SUBST(OFFICEOTRON)
-else
-    AC_MSG_RESULT([no])
 fi
 
 AC_MSG_CHECKING([for Microsoft Binary File Format Validator])
@@ -10820,7 +10809,6 @@ if test "$with_system_harfbuzz" = "yes"; then
     if test "$with_system_graphite" = "no"; then
         AC_MSG_ERROR([--with-system-graphite must be used when --with-system-harfbuzz is used])
     fi
-    AC_MSG_CHECKING([whether system Harfbuzz is built with Graphite support])
     save_LIBS="$LIBS"
     save_CFLAGS="$CFLAGS"
     LIBS="$LIBS $HARFBUZZ_LIBS"
@@ -11344,11 +11332,13 @@ dnl ***************************************
 if test "$_os" = "Linux"; then
     AC_MSG_CHECKING([whether the libc is recent enough])
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-    #include <features.h>
-    #if defined(__GNU_LIBRARY__) && (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 1))
-    #error glibc >= 2.1 is required
-    #endif
-    ]])],, [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no, upgrade libc])])
+        #include <features.h>
+        #if defined(__GNU_LIBRARY__) && (__GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 1))
+        #error glibc >= 2.1 is required
+        #endif
+    ]])],
+    [AC_MSG_RESULT([yes])],
+    [AC_MSG_ERROR([no, upgrade libc])])
 fi
 
 dnl =========================================
@@ -11373,7 +11363,6 @@ AC_PATH_PROG(BISON, bison)
 if test -z "$BISON"; then
     AC_MSG_ERROR([no bison found in \$PATH, install it])
 else
-    AC_MSG_CHECKING([the bison version])
     _bison_version=`$BISON --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`
     _bison_longver=`echo $_bison_version | $AWK -F. '{ print \$1*1000+\$2}'`
     dnl Accept newer than 2.0; for --enable-compiler-plugins at least 2.3 is known to be bad and
@@ -11403,7 +11392,6 @@ fi
 if test -z "$FLEX"; then
     AC_MSG_ERROR([no flex found in \$PATH, install it])
 else
-    AC_MSG_CHECKING([the flex version])
     _flex_version=$($FLEX --version | $SED -e 's/^.*\([[[:digit:]]]\{1,\}\.[[[:digit:]]]\{1,\}\.[[[:digit:]]]\{1,\}\).*$/\1/')
     if test $(echo $_flex_version | $AWK -F. '{printf("%d%03d%03d", $1, $2, $3)}') -lt 2006000; then
         AC_MSG_ERROR([failed ($FLEX $_flex_version found, but need at least 2.6.0)])
@@ -12609,7 +12597,7 @@ if test "$need_meson" = "yes"; then
                     else
                         AC_MSG_RESULT([yes])
                         AC_MSG_CHECKING([min version of meson required])
-                        AC_MSG_RESULT([$meson_minver])
+                        AC_MSG_RESULT([$_meson_minver])
                     fi
                 else
                     AC_MSG_RESULT([no])
@@ -13061,15 +13049,19 @@ if test "$WITH_LANG" = "no"; then
     WITH_LANG=
 fi
 
+warn_no_translations=
 if test -n "$WITH_LANG" -a "$WITH_LANG" != "en-US"; then
     if test ! -f "$SRC_ROOT/translations/README"; then
-        AC_MSG_WARN([--with-lang is not supported without the translations repo checked out at $SRC_ROOT/translations; falling back to en-US])
+        warn_no_translations=yes
         WITH_LANG=
     fi
 fi
 
 if test -z "$WITH_LANG" -o "$WITH_LANG" = "en-US"; then
     AC_MSG_RESULT([en-US])
+    if test -n "$warn_no_translations"; then
+        AC_MSG_WARN([--with-lang is not supported without the translations repo checked out at $SRC_ROOT/translations; falling back to en-US])
+    fi
 else
     AC_MSG_RESULT([$WITH_LANG])
     if test -z "$MSGFMT"; then
@@ -13770,7 +13762,6 @@ fi
 
 dnl ===================================================================
 
-AC_MSG_CHECKING([for coredumpctl support])
 if test -z "$with_coredumpctl" && test $_os != Linux; then
     with_coredumpctl=no
 fi
@@ -13803,11 +13794,6 @@ else
     else
         WITH_COREDUMPCTL=TRUE
     fi
-fi
-if test -z "$WITH_COREDUMPCTL"; then
-    AC_MSG_RESULT([no])
-else
-    AC_MSG_RESULT([yes])
 fi
 AC_SUBST(COREDUMPCTL)
 AC_SUBST(JQ)
