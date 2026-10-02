@@ -6954,6 +6954,45 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetBulletToDocumentCharacter)
     const SvxNumberFormat& rFormat = pNumbering->GetNumRule().GetLevel(0);
     CPPUNIT_ASSERT_EQUAL(SVX_NUM_CHAR_SPECIAL, rFormat.GetNumberingType());
     CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x2726), rFormat.GetBulletChar());
+
+    // The bullet is drawn in the font it was picked under.
+    CPPUNIT_ASSERT(rFormat.GetBulletFont());
+    CPPUNIT_ASSERT_EQUAL(u"OpenSymbol"_ustr, rFormat.GetBulletFont()->GetFamilyName());
+    CPPUNIT_ASSERT_EQUAL(RTL_TEXTENCODING_SYMBOL, rFormat.GetBulletFont()->GetCharSet());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetBulletToSymbolFontCharacter)
+{
+    createSdImpressDoc("document-bullets.odp");
+    sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    SdrObject* pShape = pViewShell->GetActualPage()->GetObj(0);
+    CPPUNIT_ASSERT(pShape);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pShape, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+
+    // A presentation that came from OOXML carries bullets of a symbol font, whose characters sit
+    // in the private use area and have a glyph in that font alone.
+    dispatchCommand(
+        mxComponent, u".uno:SetBullet"_ustr,
+        comphelper::InitPropertySequence({ { u"BulletChar"_ustr, uno::Any(u"\uF04A"_ustr) },
+                                           { u"BulletFont"_ustr, uno::Any(u"Wingdings"_ustr) } }));
+    Scheduler::ProcessEventsToIdle();
+
+    const SdrTextObj* pTextObject = DynCastSdrTextObj(pShape);
+    CPPUNIT_ASSERT(pTextObject);
+    const SvxNumBulletItem* pNumbering
+        = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItemIfSet(
+            EE_PARA_NUMBULLET, false);
+    CPPUNIT_ASSERT(pNumbering);
+    const SvxNumberFormat& rFormat = pNumbering->GetNumRule().GetLevel(0);
+    CPPUNIT_ASSERT_EQUAL(sal_UCS4(0xF04A), rFormat.GetBulletChar());
+    CPPUNIT_ASSERT(rFormat.GetBulletFont());
+    CPPUNIT_ASSERT_EQUAL(u"Wingdings"_ustr, rFormat.GetBulletFont()->GetFamilyName());
+
+    // The symbol encoding comes with it, so the character keeps the glyph the dropdown showed
+    // instead of falling back to an empty box.
+    CPPUNIT_ASSERT_EQUAL(RTL_TEXTENCODING_SYMBOL, rFormat.GetBulletFont()->GetCharSet());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetBulletToDocumentImage)

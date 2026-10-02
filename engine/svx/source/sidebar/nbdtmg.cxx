@@ -354,7 +354,12 @@ void BulletsTypeMgr::ApplyCustomRule(SvxNumRule& aNum, std::u16string_view sBull
 {
     sal_uInt16 nMask = 1;
     OUString sBulletCharFormatName = GetBulletCharFmtName();
-    const vcl::Font aFont(sFont, Size(1, 1));
+    // A bullet character that comes from a symbol font is addressed by a code point that only that
+    // font maps, so the font keeps the encoding of the default bullet font and carries the family
+    // name the bullet was found under. The preview in the bullet dropdown builds its font the same
+    // way, so a bullet is applied as the one that was shown.
+    vcl::Font aFont(lcl_GetDefaultBulletFont());
+    aFont.SetFamilyName(sFont);
     for (sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
     {
         if (mLevel & nMask)
