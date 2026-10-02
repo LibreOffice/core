@@ -24,13 +24,16 @@
 #include <xmlsec/xmldsig.h>
 #include <xmlsec/xmltree.h> // this MUST precede the mscng/x509.h for some reason
 #include <xmlsec/mscng/x509.h>
+#include <xmlsec/mscng/certkeys.h>
 
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 
 #include "securityenvironment_mscryptimpl.hxx"
+#include "x509certificate_mscryptimpl.hxx"
 
 #include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
+#include <SignatureTemplateInternal.hxx>
 #include <xmlelementwrapper_xmlsecimpl.hxx>
 #include <xmlsec/xmlstreamio.hxx>
 #include <xmlsec/errorcallback.hxx>
@@ -48,6 +51,79 @@ using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 using ::com::sun::star::xml::crypto::XUriBinding ;
 
 namespace {
+
+CERT_CONTEXT const* GetMsCert(
+        css::uno::Reference<css::security::XCertificate> const& xCertificate)
+{
+    X509Certificate_MSCryptImpl *const pCert{dynamic_cast<X509Certificate_MSCryptImpl*>(xCertificate.get())};
+    return pCert ? pCert->getMswcryCert() : nullptr;
+}
+
+/// convert to xmlsec key - the returned value owns the certificate
+xmlSecKeyPtr CreateKeyFromCertificate(css::uno::Reference<css::security::XCertificate> const& xCertificate)
+{
+    PCCERT_CONTEXT pCertificate{GetMsCert(xCertificate)};
+    // in contrast to the NSS one, the MSCNG backend wants one certificate
+    // for the key value, and one for they key's X509 data...
+    pCertificate = CertDuplicateCertificateContext(pCertificate);
+    assert(pCertificate);
+
+    // The key value owns the certificate context that it is created from.
+    PCCERT_CONTEXT pValueCertificate = CertDuplicateCertificateContext(pCertificate);
+    xmlSecKeyDataPtr const pValue{xmlSecMSCngCertAdopt(pValueCertificate, xmlSecKeyDataTypePublic)};
+    if (!pValue)
+    {
+        CertFreeCertificateContext(pValueCertificate);
+    }
+    xmlSecKeyPtr const pKey{pValue ? xmlSecKeyCreate() : nullptr};
+    if (!pKey || xmlSecKeySetValue(pKey, pValue) < 0)
+    {
+        if (pValue)
+        {
+            xmlSecKeyDataDestroy(pValue);
+        }
+        if (pKey)
+        {
+            xmlSecKeyDestroy(pKey);
+        }
+        CertFreeCertificateContext(pCertificate);
+        return nullptr;
+    }
+
+    // The key owns the X.509 data, and the X.509 data owns the certificate once it is adopted.
+    xmlSecKeyDataPtr pX509Data = xmlSecKeyEnsureData(pKey, xmlSecMSCngKeyDataX509GetKlass());
+    if (!pX509Data || xmlSecMSCngKeyDataX509AdoptKeyCert(pX509Data, pCertificate) < 0)
+    {
+        CertFreeCertificateContext(pCertificate);
+        xmlSecKeyDestroy(pKey);
+        return nullptr;
+    }
+    return pKey;
+}
+
+css::uno::Reference<css::security::XCertificate> GetKeyCertificate(xmlSecKeyPtr pKey,
+    css::uno::Reference<css::security::XCertificate> const& xSigningCertificate)
+{
+    if (!pKey)
+        return {};
+    xmlSecKeyDataPtr const pX509Data{xmlSecKeyGetData(pKey, xmlSecMSCngKeyDataX509GetKlass())};
+    if (!pX509Data)
+        return {};
+    PCCERT_CONTEXT const pCertificate{xmlSecMSCngKeyDataX509GetKeyCert(pX509Data)};
+    if (!pCertificate)
+        return {};
+    PCCERT_CONTEXT const pSigningCertificate{GetMsCert(xSigningCertificate)};
+    if (pSigningCertificate == pCertificate)
+    {
+        return xSigningCertificate;
+    }
+    else
+    {
+        rtl::Reference<X509Certificate_MSCryptImpl> const pNew{new X509Certificate_MSCryptImpl()};
+        pNew->setMswcryCert(pCertificate);
+        return pNew;
+    }
+}
 
 class XMLSignature_MSCryptImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XXMLSignature ,
@@ -234,6 +310,28 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
     if (xmlSecPtrListAdd(&(pDsigCtx->keyInfoReadCtx.enabledKeyData), BAD_CAST xmlSecMSCngKeyDataX509GetKlass()) < 0)
         throw RuntimeException("failed to limit allowed key data");
 
+    auto const pInternal{dynamic_cast<xmlsecurity::ISignatureTemplateInternal*>(aTemplate.get())};
+    css::uno::Reference<css::security::XCertificate> const xSigningCertificate{
+        pInternal ? pInternal->GetSigningCertificate() : nullptr};
+
+    // xmlsec reads ds:KeyInfo only when the context has no key yet, so an
+    // expected certificate is the only source of the key.
+    if (xSigningCertificate.is())
+    {
+        pDsigCtx->signKey = CreateKeyFromCertificate(xSigningCertificate);
+        if (!pDsigCtx->signKey)
+        {
+            SAL_WARN("xmlsecurity.xmlsec", "cannot create key from the expected certificate");
+            aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
+            xmlSecDSigCtxDestroy(pDsigCtx);
+            SecurityEnvironment_MSCryptImpl::destroyKeysManager(pMngr);
+            if (xUriBinding.is())
+                xmlUnregisterStreamInputCallbacks();
+            clearErrorRecorder();
+            return aTemplate;
+        }
+    }
+
     //Verify signature
     //The documentation says that the signature is only valid if the return value is 0 (that is, not < 0)
     //AND pDsigCtx->status == xmlSecDSigStatusSucceeded. That is, we must not make any assumptions, if
@@ -261,7 +359,13 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
     if (rs == 0 && nReferenceCount == nReferenceGood)
     {
         if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
+        {
             aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+            if (pInternal)
+            {
+                pInternal->SetVerifiedCertificate(GetKeyCertificate(pDsigCtx->signKey, xSigningCertificate));
+            }
+        }
         else
             aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
     }
