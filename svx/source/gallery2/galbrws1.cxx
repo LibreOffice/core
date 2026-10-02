@@ -119,12 +119,8 @@ public:
 
 }
 
-GalleryBrowser::GalleryBrowser(
-    weld::Builder& rBuilder,
-    Gallery* pGallery)//,
-    //std::function<void ()> aThemeSelectionHandler)
-    :
-    mxNewTheme(rBuilder.weld_button(u"insert"_ustr)),
+GalleryBrowser::GalleryBrowser(weld::Builder& rBuilder, Gallery* pGallery)
+    : mxNewTheme(rBuilder.weld_button(u"insert"_ustr)),
     mxThemes(rBuilder.weld_tree_view(u"themelist"_ustr)),
     mxMoreGalleries(rBuilder.weld_button(u"btnMoreGalleries"_ustr)),
     mpGallery             ( pGallery ),
@@ -132,7 +128,6 @@ GalleryBrowser::GalleryBrowser(
     aImgNormal            ( RID_SVXBMP_THEME_NORMAL ),
     aImgDefault           ( RID_SVXBMP_THEME_DEFAULT ),
     aImgReadOnly          ( RID_SVXBMP_THEME_READONLY )
-    //maThemeSelectionHandler(std::move(aThemeSelectionHandler))
     , mpCurTheme(nullptr)
     , mxIconView(new GalleryIconView(*this, rBuilder.weld_scrolled_window(u"galleryscroll"_ustr, true)))
     , mxIconViewWin(new weld::CustomWeld(rBuilder, u"gallery"_ustr, *mxIconView))
