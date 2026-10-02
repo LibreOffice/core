@@ -252,11 +252,14 @@ BackgroundSaveWatchdog::BackgroundSaveWatchdog(unsigned mobileAppDocId,
                   // It is possible that this process will not exit cleanly after
                   // handling SIGABRT, so instead after some time fall-back to this:
 
-                  // raise(3) will exit the current thread, not the process.
                   // coverity[sleep : SUPPRESS] - don't report sleep with lock held
                   sleep(30); // long enough for a trace ?
                   std::cerr << "BgSave failed to terminate after SIGABRT - will hard self-destroy process " << getpid() << std::endl;
-                  ::kill(0, SIGKILL); // kill(2) is trapped by seccomp.
+
+                  // Exit the whole process, from this thread, without running anything
+                  // that could hang. Not kill(2): seccomp traps it, and without seccomp
+                  // kill(0, ...) would signal the whole process group, our parent included.
+                  std::_Exit(TimeoutExitCode);
               }
           })
 {

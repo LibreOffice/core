@@ -25,6 +25,10 @@ public:
     ~BackgroundSaveWatchdog();
     void complete();
 
+    /// The exit code of a background save child that the watchdog ended. Distinct
+    /// from the sysexits(3) codes, so the parent can tell why the child is gone.
+    static constexpr int TimeoutExitCode = 79;
+
 private:
     std::atomic_bool _saveCompleted; ///< Defend against spurious wakes.
     std::condition_variable _watchdogCV;
