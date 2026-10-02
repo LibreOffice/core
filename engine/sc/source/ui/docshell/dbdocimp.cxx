@@ -47,6 +47,7 @@
 #include <scresid.hxx>
 #include <scerrors.hxx>
 #include <dbdata.hxx>
+#include <dpobject.hxx>
 #include <markdata.hxx>
 #include <undodat.hxx>
 #include <progress.hxx>
@@ -190,6 +191,13 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         bool bDispose = false;
         if ( !xRowSet.is() )
         {
+            if (ScDPCollection::IsForbiddenUrlDataSource(rParam.aDBName))
+            {
+                SAL_WARN("sc", "database range source " << rParam.aDBName
+                                                        << " is not an allowed source");
+                return false;
+            }
+
             bDispose = true;
             xRowSet.set(comphelper::getProcessServiceFactory()->createInstance(
                             u"com.sun.star.sdb.RowSet"_ustr ),

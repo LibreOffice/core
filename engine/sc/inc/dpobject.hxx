@@ -454,6 +454,10 @@ public:
         Any other name is the URL of a database document. */
     static bool IsRegisteredDatabase(const OUString& rDBName);
 
+    /** True when rDBName is an unregistered source whose URL a document controls and the
+        allowed-path, host, or protocol checks reject it. */
+    static bool IsForbiddenUrlDataSource(const OUString& rDBName);
+
     TranslateId ReloadCache(const ScDPObject* pDPObj, o3tl::sorted_vector<ScDPObject*>& rRefs);
     bool ReloadGroupsInCache(const ScDPObject* pDPObj, o3tl::sorted_vector<ScDPObject*>& rRefs);
     SC_DLLPUBLIC bool GetReferenceGroups(const ScDPObject& rDPObj, const ScDPDimensionSaveData** pGroups) const;

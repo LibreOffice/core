@@ -3505,6 +3505,19 @@ bool ScDPCollection::IsRegisteredDatabase(const OUString& rDBName)
     return false;
 }
 
+bool ScDPCollection::IsForbiddenUrlDataSource(const OUString& rDBName)
+{
+    // A registered name is a user data source and is left alone. Any other name is a URL that
+    // the document supplies, and it can point a file-backed driver at a local file or reach a
+    // remote host, so apply the allowed-path, host, and protocol checks to it.
+    if (IsRegisteredDatabase(rDBName))
+        return false;
+
+    INetURLObject aURLObject(rDBName);
+    return aURLObject.IsExoticProtocol() || HostFilter::isForbidden(aURLObject.GetHost())
+           || HostFilter::isFileUrlForbidden(rDBName);
+}
+
 bool ScDPCollection::DBCaches::hasCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) const
 {
     DBType aType(nSdbType, rDBName, rCommand);
@@ -3574,17 +3587,10 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
         return xRowSet;
     }
 
-    // A source named by URL rather than a registered name can point the flat-file driver at a
-    // local file, or at a remote host. Apply the allowed-path, host, and protocol checks to it.
-    if (!IsRegisteredDatabase(rDBName))
+    if (IsForbiddenUrlDataSource(rDBName))
     {
-        INetURLObject aURLObject(rDBName);
-        if (aURLObject.IsExoticProtocol() || HostFilter::isForbidden(aURLObject.GetHost())
-            || HostFilter::isFileUrlForbidden(rDBName))
-        {
-            SAL_WARN("sc", "data pilot source " << rDBName << " is not an allowed source");
-            return xRowSet;
-        }
+        SAL_WARN("sc", "data pilot source " << rDBName << " is not an allowed source");
+        return xRowSet;
     }
 
     try
