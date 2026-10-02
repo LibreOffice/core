@@ -21,6 +21,7 @@
 #include "PropertyMap.hxx"
 #include "ConversionHelper.hxx"
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <algorithm>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
 #include <ooxml/resourceids.hxx>
@@ -57,7 +58,8 @@ void BorderHandler::lcl_attribute(Id rName, const Value & rVal)
     {
         case NS_ooxml::LN_CT_Border_sz:
             //  width of a single line in 1/8 pt, max of 32 pt -> twip * 5 / 2.
-            m_nLineWidth = nIntValue * 5 / 2;
+            m_nLineWidth = std::clamp<sal_Int64>(sal_Int64(nIntValue) * 5 / 2, SAL_MIN_INT32,
+                                                 SAL_MAX_INT32);
             appendGrabBag(u"sz"_ustr, OUString::number(nIntValue));
         break;
         case NS_ooxml::LN_CT_Border_val:
