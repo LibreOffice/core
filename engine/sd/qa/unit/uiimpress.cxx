@@ -6975,7 +6975,72 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetBulletToDocumentCharacter)
     // The bullet is drawn in the font it was picked under.
     CPPUNIT_ASSERT(rFormat.GetBulletFont());
     CPPUNIT_ASSERT_EQUAL(u"OpenSymbol"_ustr, rFormat.GetBulletFont()->GetFamilyName());
-    CPPUNIT_ASSERT_EQUAL(RTL_TEXTENCODING_SYMBOL, rFormat.GetBulletFont()->GetCharSet());
+
+    // U+2726 stands on its own, so the bullet keeps the encoding of the font it names rather than
+    // the symbol encoding, which OpenSymbol is not written with.
+    CPPUNIT_ASSERT_EQUAL(RTL_TEXTENCODING_DONTKNOW, rFormat.GetBulletFont()->GetCharSet());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetBulletToCharacterAboveTheBasicPlane)
+{
+    createSdImpressDoc("document-bullets.odp");
+    sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    SdrObject* pShape = pViewShell->GetActualPage()->GetObj(0);
+    CPPUNIT_ASSERT(pShape);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pShape, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+
+    // U+1F600 takes two units of a string, so a bullet that keeps only the first unit keeps half
+    // of a surrogate pair and names a character that does not exist.
+    dispatchCommand(
+        mxComponent, u".uno:SetBullet"_ustr,
+        comphelper::InitPropertySequence({ { u"BulletChar"_ustr, uno::Any(u"\U0001F600"_ustr) },
+                                           { u"BulletFont"_ustr, uno::Any(u"OpenSymbol"_ustr) } }));
+    Scheduler::ProcessEventsToIdle();
+
+    const SdrTextObj* pTextObject = DynCastSdrTextObj(pShape);
+    CPPUNIT_ASSERT(pTextObject);
+    const SvxNumBulletItem* pNumbering
+        = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItemIfSet(
+            EE_PARA_NUMBULLET, false);
+    CPPUNIT_ASSERT(pNumbering);
+    const SvxNumberFormat& rFormat = pNumbering->GetNumRule().GetLevel(0);
+    CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x1F600), rFormat.GetBulletChar());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetBulletToOrdinaryFontCharacter)
+{
+    createSdImpressDoc("document-bullets.odp");
+    sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    SdrObject* pShape = pViewShell->GetActualPage()->GetObj(0);
+    CPPUNIT_ASSERT(pShape);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pShape, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+
+    // A presentation that came from OOXML can carry a bullet of an ordinary text font, where the
+    // second level is often a small letter o in Courier New.
+    dispatchCommand(mxComponent, u".uno:SetBullet"_ustr,
+                    comphelper::InitPropertySequence(
+                        { { u"BulletChar"_ustr, uno::Any(u"o"_ustr) },
+                          { u"BulletFont"_ustr, uno::Any(u"Courier New"_ustr) } }));
+    Scheduler::ProcessEventsToIdle();
+
+    const SdrTextObj* pTextObject = DynCastSdrTextObj(pShape);
+    CPPUNIT_ASSERT(pTextObject);
+    const SvxNumBulletItem* pNumbering
+        = pTextObject->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItemIfSet(
+            EE_PARA_NUMBULLET, false);
+    CPPUNIT_ASSERT(pNumbering);
+    const SvxNumberFormat& rFormat = pNumbering->GetNumRule().GetLevel(0);
+    CPPUNIT_ASSERT_EQUAL(sal_UCS4('o'), rFormat.GetBulletChar());
+    CPPUNIT_ASSERT(rFormat.GetBulletFont());
+    CPPUNIT_ASSERT_EQUAL(u"Courier New"_ustr, rFormat.GetBulletFont()->GetFamilyName());
+
+    // The character stands on its own, so marking the font as symbol encoded would change which
+    // font is matched and how the bullet is written out.
+    CPPUNIT_ASSERT_EQUAL(RTL_TEXTENCODING_DONTKNOW, rFormat.GetBulletFont()->GetCharSet());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetBulletToSymbolFontCharacter)

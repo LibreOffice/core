@@ -24,6 +24,7 @@
 #include <svl/stritem.hxx>
 #include <svtools/ctrltool.hxx>
 #include <sfx2/objsh.hxx>
+#include <o3tl/string_view.hxx>
 #include <editeng/flstitem.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/outdev.hxx>
@@ -354,12 +355,24 @@ void BulletsTypeMgr::ApplyCustomRule(SvxNumRule& aNum, std::u16string_view sBull
 {
     sal_uInt16 nMask = 1;
     OUString sBulletCharFormatName = GetBulletCharFmtName();
-    // A bullet character that comes from a symbol font is addressed by a code point that only that
-    // font maps, so the font keeps the encoding of the default bullet font and carries the family
-    // name the bullet was found under. The preview in the bullet dropdown builds its font the same
-    // way, so a bullet is applied as the one that was shown.
+    // The font starts from the one the default bullet library draws with and carries the family
+    // name the bullet was found under, which is how the preview in the bullet dropdown builds it
+    // too, so a bullet is applied as the one that was shown.
     vcl::Font aFont(lcl_GetDefaultBulletFont());
     aFont.SetFamilyName(sFont);
+
+    // A bullet outside the Basic Multilingual Plane takes two units of the string, and taking the
+    // first unit alone would leave half of a surrogate pair.
+    sal_Int32 nIndex = 0;
+    const sal_UCS4 cBullet = sBullet.empty() ? 0 : o3tl::iterateCodePoints(sBullet, &nIndex);
+
+    // A character of the private use area is reached through the symbol encoding, because the
+    // font it came from is the only one that maps it. A character that stands on its own keeps
+    // the encoding of the font it names, so a bullet of an ordinary text font is drawn and
+    // written out as the font it belongs to.
+    if (cBullet < 0xE000 || cBullet > 0xF8FF)
+        aFont.SetCharSet(RTL_TEXTENCODING_DONTKNOW);
+
     for (sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
     {
         if (mLevel & nMask)
@@ -367,7 +380,7 @@ void BulletsTypeMgr::ApplyCustomRule(SvxNumRule& aNum, std::u16string_view sBull
             SvxNumberFormat aFmt(aNum.GetLevel(i));
             aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetBulletFont(&aFont);
-            aFmt.SetBulletChar(sBullet[0]);
+            aFmt.SetBulletChar(cBullet);
             aFmt.SetCharFormatName(sBulletCharFormatName);
             aFmt.SetListFormat(u""_ustr);
             aNum.SetLevel(i, aFmt);

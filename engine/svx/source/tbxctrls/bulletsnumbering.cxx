@@ -18,6 +18,7 @@
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/dialmgr.hxx>
+#include <o3tl/string_view.hxx>
 #include <svx/documentbullets.hxx>
 #include <svx/strings.hrc>
 #include <svx/numvset.hxx>
@@ -200,9 +201,17 @@ void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent 
             // The string contains the bullet as first character, and then the font name
             for (const OUString& sBulletFont : aSeq)
             {
+                if (sBulletFont.isEmpty())
+                    continue;
+
+                // A bullet outside the Basic Multilingual Plane takes two units of the string, so
+                // the font name starts after the whole character rather than after the first unit.
+                sal_Int32 nFontNameStart = 0;
+                o3tl::iterateCodePoints(sBulletFont, &nFontNameStart);
+
                 SvxDocumentBullet aBullet;
-                aBullet.aBulletCharacter = sBulletFont.copy(0, 1);
-                aBullet.aFontName = sBulletFont.copy(1, sBulletFont.getLength() - 1);
+                aBullet.aBulletCharacter = sBulletFont.copy(0, nFontNameStart);
+                aBullet.aFontName = sBulletFont.copy(nFontNameStart);
                 if (aBullet.IsInDefaultLibrary())
                     continue;
 
