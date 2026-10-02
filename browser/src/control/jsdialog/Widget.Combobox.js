@@ -670,5 +670,11 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 			JSDialog.CloseDropdown(data.id);
 	};
 
+	// The builder sets the tooltip from the widget data after this returns, so mark the box later.
+	if (data.id === 'fontnamecombobox' && builder.map)
+		app.layoutingService.appendLayoutingTask(function () {
+			builder.map.markFontNameBox(container);
+		});
+
 	return false;
 };

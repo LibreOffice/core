@@ -48,6 +48,32 @@ window.L.Map.include({
 		const isMissing = !!fontName && typeof fonts === 'object' &&
 			!Object.prototype.hasOwnProperty.call(fonts, fontName);
 		document.body.classList.toggle('current-font-missing', isMissing);
+		document.querySelectorAll('.ui-combobox#fontnamecombobox')
+			.forEach((box) => this.markFontNameBox(box));
+	},
+
+	// While the current font is missing, a font name box also says so in its tooltip and in the
+	// accessible description of its input, as the engine font name box does. The warning
+	// background comes from the body class instead, so a new box shows it on its first paint.
+	markFontNameBox: function(box) {
+		const input = box.querySelector('.ui-combobox-content');
+		if (!input)
+			return;
+
+		if (box._availableFontTooltip === undefined) {
+			box._availableFontTooltip = box.dataset.cooltip || '';
+			if (!box._availableFontTooltip)
+				window.L.control.attachTooltipEventListener(box, this);
+		}
+
+		if (document.body.classList.contains('current-font-missing')) {
+			const warning = _('The current font is not available and will be substituted.');
+			box.setAttribute('data-cooltip', warning);
+			input.setAttribute('aria-description', warning);
+		} else {
+			box.setAttribute('data-cooltip', box._availableFontTooltip);
+			input.removeAttribute('aria-description');
+		}
 	},
 
 	createFontSelector: function(containerId) {

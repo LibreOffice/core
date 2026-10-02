@@ -223,9 +223,11 @@ describe(['tagdesktop'], 'Top toolbar apply tests.', { testIsolation: false }, f
 		cy.cGet('#copy-paste-container p sub').should('exist');
 	});
 
-	it('Font name box marks a font the server does not have.', function() {
-		const FONT_NAME_INPUT = '#fontnamecombobox.notebookbar .ui-combobox-content';
+	it('Font name box marks and describes a font the server does not have.', function() {
+		const FONT_NAME_BOX = '#fontnamecombobox.notebookbar';
+		const FONT_NAME_INPUT = FONT_NAME_BOX + ' .ui-combobox-content';
 		const MISSING_FONT = 'No Such Font Name';
+		const WARNING = 'The current font is not available and will be substituted.';
 
 		cy.cGet(FONT_NAME_INPUT).then(function(input) {
 			const availableFontBackground = input.css('background-color');
@@ -237,6 +239,8 @@ describe(['tagdesktop'], 'Top toolbar apply tests.', { testIsolation: false }, f
 			cy.cGet(FONT_NAME_INPUT).should('have.prop', 'value', MISSING_FONT);
 			cy.cGet(FONT_NAME_INPUT)
 				.should('not.have.css', 'background-color', availableFontBackground);
+			cy.cGet(FONT_NAME_INPUT).should('have.attr', 'aria-description', WARNING);
+			cy.cGet(FONT_NAME_BOX).should('have.attr', 'data-cooltip', WARNING);
 		});
 	});
 });
