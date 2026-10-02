@@ -722,7 +722,6 @@ interface EditEngineSelection {
 interface EditEngineWidgetJSON {
 	paragraphs: EditEngineParagraph[];
 	selection: EditEngineSelection;
-	backgroundColor?: string; // #rrggbb
 	readOnly?: boolean;
 	extra?: any; // whatever the concrete engine-side widget adds
 }

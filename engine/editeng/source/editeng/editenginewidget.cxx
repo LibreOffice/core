@@ -30,7 +30,6 @@
 #include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include <svtools/colorcfg.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/event.hxx>
@@ -371,9 +370,6 @@ void EditEngineWidgetController::DumpWidgetData(tools::JsonWriter& rWriter)
         rWriter.put("endIndex", aSelection.end.nIndex);
     }
 
-    svtools::ColorConfig aColorConfig;
-    rWriter.put("backgroundColor",
-                toHexColor(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor));
     rWriter.put("readOnly", m_rEditView.IsReadOnly());
 
     {

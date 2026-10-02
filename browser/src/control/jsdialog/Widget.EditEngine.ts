@@ -468,9 +468,6 @@ function editEngineUpdateInPlace(
 	container: EditEngineContainer,
 	widgetData: EditEngineWidgetJSON,
 ): void {
-	if (widgetData.backgroundColor)
-		container.style.background = widgetData.backgroundColor;
-
 	const readOnly = widgetData.readOnly === true;
 	container.setAttribute('contenteditable', readOnly ? 'false' : 'true');
 	if (!readOnly && !container.editEngineHandlersAttached) {
@@ -516,9 +513,6 @@ function _editEngineControl(
 	container.setAttribute('spellcheck', 'false');
 	container.setAttribute('autocorrect', 'off');
 	container.tabIndex = 0;
-
-	if (widgetData.backgroundColor)
-		container.style.background = widgetData.backgroundColor;
 
 	for (const paragraph of widgetData.paragraphs || [])
 		container.appendChild(editEngineRenderParagraph(paragraph));
