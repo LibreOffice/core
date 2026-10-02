@@ -1595,7 +1595,7 @@ public:
                                 const SfxItemSet* pSet );
     void SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& );
 
-    // Only for SW-textbloxks! Does not pay any attention to layout!
+    // Only for SW text blocks! Does not pay any attention to layout!
     void ClearDoc();        // Deletes all content!
 
     // Query /set data for PagePreview.

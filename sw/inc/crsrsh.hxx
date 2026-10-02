@@ -136,7 +136,7 @@ namespace sw {
 bool ReplaceImpl(SwPaM & rCursor, OUString const& rReplacement,
         bool const bRegExp, SwDoc & rDoc, SwRootFrame const*const pLayout);
 
-/// Helperfunction to resolve backward references in regular expressions
+/// Helper function to resolve backward references in regular expressions
 std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rSearchOpt,
         SwPaM* pPam, SwRootFrame const* pLayout );
 

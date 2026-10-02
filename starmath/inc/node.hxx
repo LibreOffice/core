@@ -463,10 +463,10 @@ private:
 };
 
 
-/** Abstract baseclass for all composite node
+/** Abstract base class for all composite nodes
  *
- * Subclasses of this class can have subnodes. Nodes that doesn't derivate from
- * this class does not have subnodes.
+ * Subclasses of this class can have subnodes. Nodes that don't derive from
+ * this class do not have subnodes.
  */
 class SmStructureNode : public SmNode
 {
@@ -589,9 +589,9 @@ private:
 };
 
 
-/** Abstract base class for all visible node
+/** Abstract base class for all visible nodes
  *
- * Nodes that doesn't derivate from this class doesn't draw anything, but their
+ * Nodes that don't derive from this class don't draw anything, but their
  * children.
  */
 class SmVisibleNode : public SmNode

@@ -2875,7 +2875,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     pSet->ClearItem( SID_VERSION );
     pSet->ClearItem( SID_DOC_BASEURL );
 
-    // copy the version comment and major items for the checkin only
+    // copy the version comment and major items for the check-in only
     if ( pRetrMedium->IsInCheckIn( ) )
     {
         const SfxPoolItem* pMajor = pArgs->GetItem( SID_DOCINFO_MAJOR );

@@ -85,7 +85,7 @@ void SmOoxmlExport::ConvertFromStarMath( const ::sax_fastparser::FSHelperPtr& se
 // part of the ooxml math stuff.
 
 // The w prefix is bound in a DOCX and nowhere else. A formula in a presentation or a
-// spreadsheet goes out inside a slide or a sheet, which never declare it, so run
+// spreadsheet goes out inside a slide or a sheet, which never declares it, so run
 // properties there would leave the prefix unbound.
 bool SmOoxmlExport::WritesRunProperties() const
 {

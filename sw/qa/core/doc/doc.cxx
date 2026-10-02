@@ -264,7 +264,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testShapeZOrderOverTextBox)
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 2
-    // The shape over the text box was put one place too high and ended up over the shape that5
+    // The shape over the text box was put one place too high and ended up over the shape that
     // should have covered it: the import added a place for the text frame of the text box,
     // which the z-order it read back does not count.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nBottom);

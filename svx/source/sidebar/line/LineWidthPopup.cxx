@@ -117,7 +117,7 @@ IMPL_LINK_NOARG(LineWidthPopup, VSSelectHdl, ValueSet*, void)
         }
         else
         {
-            m_xVSWidth->SetNoSelection(); //add , set no selection and keep the last select item
+            m_xVSWidth->SetNoSelection(); // add: set no selection and keep the last selected item
             m_xVSWidth->SetFormat();
             m_xVSWidth->Invalidate();
         }
