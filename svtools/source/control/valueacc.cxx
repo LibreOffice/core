@@ -37,7 +37,6 @@ using namespace ::com::sun::star;
 
 ValueSetItem::ValueSetItem( ValueSet& rParent )
     : mrParent(rParent)
-    , mpData(nullptr)
     , mxAcc()
     , mnId(0)
     , meType(ValueSetItemType::None)

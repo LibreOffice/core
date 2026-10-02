@@ -44,7 +44,6 @@ struct ValueSetItem
 {
     ValueSet&        mrParent;
     OUString            maText;
-    void*               mpData;
     rtl::Reference< ValueItemAcc > mxAcc;
     Image               maImage;
     Color               maColor;

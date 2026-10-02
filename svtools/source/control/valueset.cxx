@@ -1723,38 +1723,6 @@ void ValueSet::SetFormat()
     mbFormat = true;
 }
 
-void ValueSet::SetItemData( sal_uInt16 nItemId, void* pData )
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos == VALUESET_ITEM_NOTFOUND )
-        return;
-
-    ValueSetItem* pItem = mItemList[nPos].get();
-    pItem->mpData = pData;
-
-    if (pItem->meType == ValueSetItemType::UserDraw)
-    {
-        if (!mbFormat && IsReallyVisible())
-        {
-            const tools::Rectangle aRect = ImplGetItemRect(nPos);
-            Invalidate(aRect);
-        }
-        else
-            mbFormat = true;
-    }
-}
-
-void* ValueSet::GetItemData( sal_uInt16 nItemId ) const
-{
-    size_t nPos = GetItemPos( nItemId );
-
-    if ( nPos != VALUESET_ITEM_NOTFOUND )
-        return mItemList[nPos]->mpData;
-    else
-        return nullptr;
-}
-
 void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
 {
     size_t nPos = GetItemPos( nItemId );
