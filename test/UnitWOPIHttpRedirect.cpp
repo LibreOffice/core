@@ -208,7 +208,7 @@ public:
             TRANSITION_STATE(_phase, Phase::Redirected);
 
             http::Response httpResponse(http::StatusCode::Found);
-            std::string location = helpers::getTestServerURI() + "/wopi/files/" +
+            std::string location = getWopiHostURI() + "/wopi/files/" +
                                          std::to_string(redirectionCount) + '?' + params;
             httpResponse.set("Location", std::move(location));
             socket->sendAndShutdown(httpResponse);

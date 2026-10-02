@@ -123,7 +123,7 @@ public:
                 PHASE_TRANSITION(T1_WaitAuth1);
 
                 const Poco::URI wopiURL(
-                    helpers::getTestServerURI() +
+                    getWopiHostURI() +
                     "/wopi/files/0?access_token=anything"
                     "&testname=UnitCollabProtocol");
                 _wopiSrc = Uri::encode(wopiURL.toString());
@@ -209,7 +209,7 @@ public:
                 PHASE_TRANSITION(T2_WaitAuth1);
 
                 const Poco::URI wopiURL(
-                    helpers::getTestServerURI() +
+                    getWopiHostURI() +
                     "/wopi/files/1?access_token=anything"
                     "&testname=UnitCollabProtocol");
                 _wopiSrc = Uri::encode(wopiURL.toString());
@@ -276,7 +276,7 @@ public:
                 PHASE_TRANSITION(T3_WaitAuth1);
 
                 const Poco::URI wopiURL(
-                    helpers::getTestServerURI() +
+                    getWopiHostURI() +
                     "/wopi/files/2?access_token=anything"
                     "&testname=UnitCollabProtocol");
                 _wopiSrc = Uri::encode(wopiURL.toString());
@@ -389,7 +389,7 @@ public:
             {
                 PHASE_TRANSITION(WaitError);
 
-                const Poco::URI wopiURL(helpers::getTestServerURI() +
+                const Poco::URI wopiURL(getWopiHostURI() +
                                         "/wopi/files/0?access_token=anything"
                                         "&testname=UnitCollabCheckFileInfoTransient");
                 _wopiSrc = Uri::encode(wopiURL.toString());

@@ -99,7 +99,7 @@ class UnitRemoteDocument : public WopiTestServer
 
     std::string remoteWopiSrc() const
     {
-        return helpers::getTestServerURI() + "/wopi/files/2";
+        return getWopiHostURI() + "/wopi/files/2";
     }
 
     std::string encodedRemoteWopiSrc() const { return Uri::encode(remoteWopiSrc()); }
@@ -279,7 +279,7 @@ class UnitRemoteDocumentCycle : public WopiTestServer
 {
     STATE_ENUM(Phase, Load, WaitLoadStatus, WaitCycleError, WaitTokenError, Done) _phase;
 
-    std::string ownWopiSrc() const { return helpers::getTestServerURI() + "/wopi/files/1"; }
+    std::string ownWopiSrc() const { return getWopiHostURI() + "/wopi/files/1"; }
 
 public:
     UnitRemoteDocumentCycle()
@@ -331,7 +331,7 @@ public:
             // A document the server holds no access token for.
             TRANSITION_STATE(_phase, Phase::WaitTokenError);
             WSD_CMD("remotedocsubscribe wopisrc=" +
-                    Uri::encode(helpers::getTestServerURI() + "/wopi/files/3"));
+                    Uri::encode(getWopiHostURI() + "/wopi/files/3"));
         }
         else if (_phase == Phase::WaitTokenError)
         {
@@ -385,12 +385,12 @@ class UnitLinkPost : public WopiTestServer
 
     std::string documentWopiSrc() const
     {
-        return helpers::getTestServerURI() + "/wopi/files/1";
+        return getWopiHostURI() + "/wopi/files/1";
     }
 
     std::string remoteWopiSrc() const
     {
-        return helpers::getTestServerURI() + "/wopi/files/2";
+        return getWopiHostURI() + "/wopi/files/2";
     }
 
     /// POSTs the registration authorized by the given one-time token, naming the given access
@@ -556,9 +556,9 @@ class UnitLinkDelete : public WopiTestServer
     std::thread _postThread;
     std::thread _deleteThread;
 
-    std::string documentWopiSrc() const { return helpers::getTestServerURI() + "/wopi/files/1"; }
+    std::string documentWopiSrc() const { return getWopiHostURI() + "/wopi/files/1"; }
 
-    std::string remoteWopiSrc() const { return helpers::getTestServerURI() + "/wopi/files/2"; }
+    std::string remoteWopiSrc() const { return getWopiHostURI() + "/wopi/files/2"; }
 
     /// Sends the given request body to the endpoint and returns the response status.
     unsigned sendLink(const std::string& verb, const std::string& body)
@@ -731,7 +731,7 @@ class UnitRemoteDocumentMutual : public WopiTestServer
 
     std::string fileWopiSrc(int fileId) const
     {
-        return helpers::getTestServerURI() + "/wopi/files/" + std::to_string(fileId);
+        return getWopiHostURI() + "/wopi/files/" + std::to_string(fileId);
     }
 
 public:
@@ -857,7 +857,7 @@ class UnitRemoteDocumentCommand : public WopiTestServer
 
     std::string remoteWopiSrc() const
     {
-        return helpers::getTestServerURI() + "/wopi/files/2";
+        return getWopiHostURI() + "/wopi/files/2";
     }
 
     std::string encodedRemoteWopiSrc() const { return Uri::encode(remoteWopiSrc()); }
@@ -973,12 +973,12 @@ class UnitRemoteDocumentMissing : public WopiTestServer
 {
     STATE_ENUM(Phase, Load, WaitLoadStatus, WaitMissing, WaitReadableSource, Done) _phase;
 
-    std::string remoteWopiSrc() const { return helpers::getTestServerURI() + "/wopi/files/2"; }
+    std::string remoteWopiSrc() const { return getWopiHostURI() + "/wopi/files/2"; }
 
     std::string encodedRemoteWopiSrc() const { return Uri::encode(remoteWopiSrc()); }
 
     /// A second source, whose file the storage serves normally.
-    std::string readableWopiSrc() const { return helpers::getTestServerURI() + "/wopi/files/3"; }
+    std::string readableWopiSrc() const { return getWopiHostURI() + "/wopi/files/3"; }
 
     std::string encodedReadableWopiSrc() const { return Uri::encode(readableWopiSrc()); }
 
@@ -1104,7 +1104,7 @@ class UnitRemoteDocumentRetry : public WopiTestServer
 
     std::string fileWopiSrc(int id) const
     {
-        return helpers::getTestServerURI() + "/wopi/files/" + std::to_string(id);
+        return getWopiHostURI() + "/wopi/files/" + std::to_string(id);
     }
 
     std::string encodedFileWopiSrc(int id) const { return Uri::encode(fileWopiSrc(id)); }
@@ -1278,7 +1278,7 @@ class UnitRemoteDocumentIsolation : public WopiTestServer
 
     std::string remoteWopiSrc() const
     {
-        return helpers::getTestServerURI() + "/wopi/files/2";
+        return getWopiHostURI() + "/wopi/files/2";
     }
 
     std::string encodedRemoteWopiSrc() const { return Uri::encode(remoteWopiSrc()); }
@@ -1388,7 +1388,7 @@ public:
                 TRANSITION_STATE(_phase, Phase::WaitSecondView);
 
                 const std::string secondWopiSrc =
-                    Uri::encode(helpers::getTestServerURI() + "/wopi/files/1?access_token=secondtoken");
+                    Uri::encode(getWopiHostURI() + "/wopi/files/1?access_token=secondtoken");
                 TST_LOG("Connecting a second view: " << secondWopiSrc);
                 _secondWs = std::make_unique<UnitWebSocket>(
                     socketPoll(), "/cool/" + secondWopiSrc + "/ws", getTestname());
@@ -1424,7 +1424,7 @@ class UnitRemoteDocumentSaved : public WopiTestServer
     bool _sawSavedEvent = false;
     bool _sawUpdatedTime = false;
 
-    std::string remoteWopiSrc() const { return helpers::getTestServerURI() + "/wopi/files/2"; }
+    std::string remoteWopiSrc() const { return getWopiHostURI() + "/wopi/files/2"; }
 
     std::string encodedRemoteWopiSrc() const { return Uri::encode(remoteWopiSrc()); }
 
@@ -1610,7 +1610,7 @@ class UnitRemoteDocumentNoChain : public WopiTestServer
 
     std::string fileWopiSrc(int fileId) const
     {
-        return helpers::getTestServerURI() + "/wopi/files/" + std::to_string(fileId);
+        return getWopiHostURI() + "/wopi/files/" + std::to_string(fileId);
     }
 
     /// The status a request carrying the given secret is answered with. The
@@ -1803,12 +1803,12 @@ class UnitLinkPostPersistentLink : public WopiTestServer
 
     std::string documentWopiSrc() const
     {
-        return helpers::getTestServerURI() + "/wopi/files/1";
+        return getWopiHostURI() + "/wopi/files/1";
     }
 
     std::string remoteWopiSrc() const
     {
-        return helpers::getTestServerURI() + "/wopi/files/2";
+        return getWopiHostURI() + "/wopi/files/2";
     }
 
     /// POSTs the registration, naming the source the pages store, and returns the status.
@@ -2001,7 +2001,7 @@ protected:
 
     std::string remoteWopiSrc() const
     {
-        return helpers::getTestServerURI() + "/wopi/files/2";
+        return getWopiHostURI() + "/wopi/files/2";
     }
 
     /// The 200 answer naming file 2 for the source, readable with the given token.
@@ -2460,7 +2460,7 @@ public:
 
                 TRANSITION_STATE(_phase, Phase::WaitSecondResolved);
                 const std::string secondWopiSrc = Uri::encode(
-                    helpers::getTestServerURI() + "/wopi/files/1?access_token=secondtoken");
+                    getWopiHostURI() + "/wopi/files/1?access_token=secondtoken");
                 TST_LOG("Connecting a second view: " << secondWopiSrc);
                 _secondWs = std::make_unique<UnitWebSocket>(
                     socketPoll(), "/cool/" + secondWopiSrc + "/ws", getTestname());

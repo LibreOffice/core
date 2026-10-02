@@ -286,7 +286,7 @@ public:
                             const std::string wopiPath = "/wopi/files/invalid_" +
                                                          std::to_string(_count) +
                                                          "?access_token=anything";
-                            const Poco::URI wopiURL(helpers::getTestServerURI() + wopiPath +
+                            const Poco::URI wopiURL(getWopiHostURI() + wopiPath +
                                                     "&testname=" + getTestname());
 
                             const std::string wopiSrc = Uri::encode(wopiURL.toString());
