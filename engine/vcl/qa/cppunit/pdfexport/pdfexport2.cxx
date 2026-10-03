@@ -7302,19 +7302,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testStyleNamedStructureTypes)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aRoles20.indexOf("H7="));
 }
 
-CPPUNIT_TEST_FIXTURE(PdfExportTest2, testImpressTableSpans)
+/// The cells of each row of the only table, with their spans and scopes.
+OString getImpressTableCells(vcl::filter::PDFDocument& rDocument)
 {
-    // a table with a header row, a cell that spans two columns and one that spans two rows
-    loadFromFile(u"table-span.fodp");
-    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
-
-    vcl::filter::PDFDocument aDocument;
-    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
-
     vcl::filter::PDFObjectElement* pTable = nullptr;
-    for (auto* pObject : aDocument.GetObjects())
+    for (auto* pObject : rDocument.GetObjects())
     {
         auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
         if (pType && pType->GetValue() == "Table")
@@ -7322,7 +7314,6 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testImpressTableSpans)
     }
     CPPUNIT_ASSERT(pTable);
 
-    // the cells of each row, with their spans
     OStringBuffer aCells;
     auto pRows = dynamic_cast<vcl::filter::PDFArrayElement*>(pTable->Lookup("K"_ostr));
     CPPUNIT_ASSERT(pRows);
@@ -7358,16 +7349,50 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testImpressTableSpans)
                     if (auto pValue = dynamic_cast<vcl::filter::PDFNumberElement*>(
                             pAttributes->LookupElement(rSpan)))
                         aCells.append("/" + rSpan + OString::number(pValue->GetValue()));
+                if (auto pScope = dynamic_cast<vcl::filter::PDFNameElement*>(
+                        pAttributes->LookupElement("Scope"_ostr)))
+                    aCells.append("/" + pScope->GetValue());
             }
             aCells.append(" ");
         }
         aCells.append("| ");
     }
+    return aCells.makeStringAndClear();
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testImpressTableSpans)
+{
+    // a table with a header row, a cell that spans two columns and one that spans two rows
+    loadFromFile(u"table-span.fodp");
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
 
     // Without the fix the merged cells had no span and each covered cell was an empty TD:
     // "TH TH TH | TD TD TD | TD TD TD | TD TD TD | ".
-    CPPUNIT_ASSERT_EQUAL("TH TH TH | TD TD/ColSpan2 | TD/RowSpan2 TD TD | TD TD | "_ostr,
-                         aCells.makeStringAndClear());
+    CPPUNIT_ASSERT_EQUAL(
+        "TH/Column TH/Column TH/Column | TD TD/ColSpan2 | TD/RowSpan2 TD TD | TD TD | "_ostr,
+        getImpressTableCells(aDocument));
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testImpressTableFirstColumn)
+{
+    // a table with "Header row" and "First column" set
+    loadFromFile(u"table-first-column.fodp");
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    // Without the fix the first column was not tagged as row headers:
+    // "TH/Column TH/Column TH/Column | TD TD TD | TD TD TD | ".
+    CPPUNIT_ASSERT_EQUAL("TH/Column TH/Column TH/Column | TH/Row TD TD | TH/Row TD TD | "_ostr,
+                         getImpressTableCells(aDocument));
 }
 
 } // end anonymous namespace
