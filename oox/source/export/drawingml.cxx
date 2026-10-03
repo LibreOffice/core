@@ -110,6 +110,8 @@
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <basegfx/units/Length.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -6417,6 +6419,8 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
             mAny >>= rad;
             bHasEffects = rad > 0;
         }
+        if (!bHasEffects && GetProperty(rXPropSet, u"ReflectionEffect"_ustr))
+            mAny >>= bHasEffects;
 
         if (bHasEffects)
         {
@@ -6445,6 +6449,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 
                 WriteShapeEffect( u"outerShdw", aShadowGrabBag );
             }
+            WriteReflectionEffect(rXPropSet, {});
             WriteSoftEdgeEffect(rXPropSet);
             mpFS->endElementNS(XML_a, XML_effectLst);
         }
@@ -6495,6 +6500,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 
         mpFS->startElementNS(XML_a, XML_effectLst);
         bool bGlowWritten = false;
+        bool bReflectionHandled = false;
         for (const auto& rEffect : aEffects)
         {
             if (!bGlowWritten
@@ -6510,6 +6516,13 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
             {
                 WriteShapeEffect( rEffect.Name, aOuterShdwProps );
             }
+            else if (rEffect.Name == "reflection")
+            {
+                Sequence<PropertyValue> aEffectProps;
+                rEffect.Value >>= aEffectProps;
+                WriteReflectionEffect(rXPropSet, aEffectProps);
+                bReflectionHandled = true;
+            }
             else
             {
                 Sequence< PropertyValue > aEffectProps;
@@ -6519,6 +6532,9 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
         }
         if (!bGlowWritten)
             WriteGlowEffect(rXPropSet);
+        // A reflection comes after every stored effect other than the soft edge.
+        if (!bReflectionHandled)
+            WriteReflectionEffect(rXPropSet, {});
         WriteSoftEdgeEffect(rXPropSet); // the last
 
         mpFS->endElementNS(XML_a, XML_effectLst);
@@ -6591,6 +6607,86 @@ void DrawingML::WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPrope
                                                                                         aAttribs) };
 
     WriteShapeEffect(u"softEdge", aProps);
+}
+
+namespace
+{
+// DrawingML has 1/1000 of a percent, the shape property has whole percent.
+sal_Int32 toWholePercent(sal_Int32 nThousandthsOfPercent)
+{
+    return static_cast<sal_Int32>(std::lround(nThousandthsOfPercent / 1000.0));
+}
+}
+
+void DrawingML::WriteReflectionEffect(const Reference<XPropertySet>& rXPropSet,
+                                      const Sequence<PropertyValue>& rStoredEffect)
+{
+    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName(u"ReflectionEffect"_ustr))
+        return;
+
+    bool bReflection = false;
+    rXPropSet->getPropertyValue(u"ReflectionEffect"_ustr) >>= bReflection;
+    if (!bReflection)
+        return;
+
+    sal_Int32 nDistance = 0;
+    sal_Int32 nBlurRadius = 0;
+    sal_Int16 nStartTransparency = 0;
+    sal_Int16 nStartPosition = 0;
+    sal_Int16 nEndTransparency = 100;
+    sal_Int16 nEndPosition = 100;
+    rXPropSet->getPropertyValue(u"ReflectionEffectDistance"_ustr) >>= nDistance;
+    rXPropSet->getPropertyValue(u"ReflectionEffectBlurRadius"_ustr) >>= nBlurRadius;
+    rXPropSet->getPropertyValue(u"ReflectionEffectStartTransparency"_ustr) >>= nStartTransparency;
+    rXPropSet->getPropertyValue(u"ReflectionEffectStartPosition"_ustr) >>= nStartPosition;
+    rXPropSet->getPropertyValue(u"ReflectionEffectEndTransparency"_ustr) >>= nEndTransparency;
+    rXPropSet->getPropertyValue(u"ReflectionEffectEndPosition"_ustr) >>= nEndPosition;
+
+    // The stored attributes keep what has no shape property, like the direction and the scale. A
+    // reflection without them is mirrored straight down below the shape, like the presets.
+    comphelper::SequenceAsHashMap aStoredEffect(rStoredEffect);
+    comphelper::SequenceAsHashMap aAttribs(aStoredEffect.getValue(u"Attribs"_ustr));
+    if (aAttribs.empty())
+    {
+        aAttribs[u"dir"_ustr] <<= sal_Int32(5400000);
+        aAttribs[u"sy"_ustr] <<= sal_Int32(-100000);
+        aAttribs[u"algn"_ustr] <<= u"bl"_ustr;
+        aAttribs[u"rotWithShape"_ustr] <<= sal_Int32(0);
+    }
+
+    // A stored value stays when it still gives the value of the shape property, since the stored
+    // one can be more precise. A value that equals the schema default is left out.
+    auto setLength = [&aAttribs](const OUString& rName, gfx::Length aLength)
+    {
+        sal_Int64 nStored = 0;
+        if ((aAttribs.getValue(rName) >>= nStored)
+            && gfx::Length::emu(nStored).as_hmm<sal_Int32>() == aLength.as_hmm<sal_Int32>())
+            return;
+        if (aLength == gfx::Length())
+            aAttribs.erase(rName);
+        else
+            aAttribs[rName] <<= aLength.as_emu<sal_Int32>();
+    };
+    auto setPercent = [&aAttribs](const OUString& rName, sal_Int32 nPercent, sal_Int32 nDefault)
+    {
+        sal_Int32 nStored = 0;
+        if ((aAttribs.getValue(rName) >>= nStored) && toWholePercent(nStored) == nPercent)
+            return;
+        if (nPercent * PER_PERCENT == nDefault)
+            aAttribs.erase(rName);
+        else
+            aAttribs[rName] <<= nPercent * PER_PERCENT;
+    };
+    setLength(u"dist"_ustr, gfx::Length::hmm(nDistance));
+    setLength(u"blurRad"_ustr, gfx::Length::hmm(nBlurRadius));
+    setPercent(u"stA"_ustr, 100 - nStartTransparency, MAX_PERCENT);
+    setPercent(u"stPos"_ustr, nStartPosition, 0);
+    setPercent(u"endA"_ustr, 100 - nEndTransparency, 0);
+    setPercent(u"endPos"_ustr, nEndPosition, MAX_PERCENT);
+
+    Sequence<PropertyValue> aProps{ comphelper::makePropertyValue(
+        u"Attribs"_ustr, aAttribs.getAsConstPropertyValueList()) };
+    WriteShapeEffect(u"reflection", aProps);
 }
 
 void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool bIsText )

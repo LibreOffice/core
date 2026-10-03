@@ -1371,6 +1371,63 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testAirplaneTransition)
     assertXPath(pXmlDoc, "//mc:AlternateContent/mc:Choice", "Requires", u"p15");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeReflectionEffect)
+{
+    createSdImpressDoc("pptx/shape-reflection-effect.pptx");
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    // An unchanged reflection is written back with the values it was read with, including the
+    // ones that have no shape property.
+    static constexpr OString sTight
+        = "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:effectLst/a:reflection"_ostr;
+    assertXPath(pXmlDoc, sTight, "blurRad", u"6350");
+    assertXPath(pXmlDoc, sTight, "stA", u"50000");
+    assertXPath(pXmlDoc, sTight, "endA", u"300");
+    assertXPath(pXmlDoc, sTight, "endPos", u"35000");
+    assertXPath(pXmlDoc, sTight, "dir", u"5400000");
+    assertXPath(pXmlDoc, sTight, "sy", u"-100000");
+    assertXPath(pXmlDoc, sTight, "algn", u"bl");
+    assertXPathNoAttribute(pXmlDoc, sTight, "dist");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:effectLst/a:reflection", "dist",
+                u"50800");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[4]/p:spPr/a:effectLst/a:reflection", 0);
+
+    // Edit the reflections: turn off the first, fade the second out further down, and give the
+    // shape without a reflection one that stands off from it.
+    getShapeFromPage(0, 0)->setPropertyValue(u"ReflectionEffect"_ustr, uno::Any(false));
+    getShapeFromPage(1, 0)->setPropertyValue(u"ReflectionEffectEndPosition"_ustr,
+                                             uno::Any(sal_Int16(70)));
+    uno::Reference<beans::XPropertySet> xNew(getShapeFromPage(3, 0));
+    xNew->setPropertyValue(u"ReflectionEffect"_ustr, uno::Any(true));
+    xNew->setPropertyValue(u"ReflectionEffectDistance"_ustr, uno::Any(sal_Int32(500)));
+    xNew->setPropertyValue(u"ReflectionEffectStartTransparency"_ustr, uno::Any(sal_Int16(40)));
+    save(TestFilter::PPTX);
+    pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    assertXPath(pXmlDoc, sTight, 0);
+
+    // The changed value is written, and the stored scale stays.
+    static constexpr OString sHalf
+        = "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:effectLst/a:reflection"_ostr;
+    assertXPath(pXmlDoc, sHalf, "endPos", u"70000");
+    assertXPath(pXmlDoc, sHalf, "sy", u"-100000");
+
+    // A new reflection is mirrored straight down, and values that equal the schema defaults are
+    // left out.
+    static constexpr OString sNew
+        = "/p:sld/p:cSld/p:spTree/p:sp[4]/p:spPr/a:effectLst/a:reflection"_ostr;
+    assertXPath(pXmlDoc, sNew, "dist", u"180000");
+    assertXPath(pXmlDoc, sNew, "stA", u"60000");
+    assertXPath(pXmlDoc, sNew, "dir", u"5400000");
+    assertXPath(pXmlDoc, sNew, "sy", u"-100000");
+    assertXPath(pXmlDoc, sNew, "algn", u"bl");
+    assertXPath(pXmlDoc, sNew, "rotWithShape", u"0");
+    assertXPathNoAttribute(pXmlDoc, sNew, "endA");
+    assertXPathNoAttribute(pXmlDoc, sNew, "endPos");
+    assertXPathNoAttribute(pXmlDoc, sNew, "blurRad");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -363,6 +363,10 @@ protected:
     void WriteGlowEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteTextGlowEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+    /** Writes the reflection of the shape. rStoredEffect is the reflection entry of the effects
+        kept from the imported document, or empty. */
+    void WriteReflectionEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+                               const css::uno::Sequence<css::beans::PropertyValue>& rStoredEffect);
     void WriteCustomGeometryPoint(const css::drawing::EnhancedCustomShapeParameterPair& rParamPair,
                                   const EnhancedCustomShape2d& rCustomShape2d,
                                   const bool bReplaceGeoWidth, const bool bReplaceGeoHeight);
