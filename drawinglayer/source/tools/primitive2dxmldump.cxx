@@ -53,6 +53,7 @@
 #include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonAlphaGradientPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/glowprimitive2d.hxx>
+#include <drawinglayer/primitive2d/ReflectionPrimitive2D.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
@@ -1297,6 +1298,26 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.attribute("color",
                                   convertColorToString(rPrimitive2D.getGlowColor().getBColor()));
                 rWriter.attribute("radius", OUString::number(rPrimitive2D.getGlowRadius()));
+                decomposeAndWrite(rPrimitive2D.getChildren(), rWriter);
+                rWriter.endElement();
+                break;
+            }
+
+            case PRIMITIVE2D_ID_REFLECTIONPRIMITIVE2D:
+            {
+                const auto& rPrimitive2D
+                    = dynamic_cast<const ReflectionPrimitive2D&>(*pBasePrimitive);
+                const attribute::ReflectionAttribute& rReflection = rPrimitive2D.getReflection();
+                rWriter.startElement("reflection");
+                rWriter.attribute("distance", OUString::number(rReflection.getDistance()));
+                rWriter.attribute("starttransparency",
+                                  OUString::number(rReflection.getStartTransparency()));
+                rWriter.attribute("startposition",
+                                  OUString::number(rReflection.getStartPosition()));
+                rWriter.attribute("endtransparency",
+                                  OUString::number(rReflection.getEndTransparency()));
+                rWriter.attribute("endposition", OUString::number(rReflection.getEndPosition()));
+                rWriter.attribute("blurradius", OUString::number(rReflection.getBlurRadius()));
                 decomposeAndWrite(rPrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
                 break;

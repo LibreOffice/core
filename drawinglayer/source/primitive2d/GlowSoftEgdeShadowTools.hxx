@@ -43,6 +43,12 @@ AlphaMask ProcessAndBlurAlphaMask(const AlphaMask& rMask, double fErodeDilateRad
 */
 AlphaMask CreateGlowAlphaMask(const AlphaMask& rMask, double fGlowRadius, sal_uInt8 nTransparency);
 
+/* Returns rBitmap with a Gaussian blur of fBlurRadius pixels, with the color and the alpha channel
+   blurred together. The color is weighted by its alpha while it is blurred, so a transparent pixel
+   adds nothing to the color of its neighbours. fBlurRadius can be a fraction of a pixel.
+*/
+Bitmap BlurBitmapWithAlpha(const Bitmap& rBitmap, double fBlurRadius);
+
 drawinglayer::geometry::ViewInformation2D
 expandB2DRangeAtViewInformation2D(const drawinglayer::geometry::ViewInformation2D& rViewInfo,
                                   double nAmount);

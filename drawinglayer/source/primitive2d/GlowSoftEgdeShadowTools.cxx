@@ -216,6 +216,93 @@ AlphaMask CreateGlowAlphaMask(const AlphaMask& rMask, double fGlowRadius, sal_uI
     return AlphaMask(aMask);
 }
 
+Bitmap BlurBitmapWithAlpha(const Bitmap& rBitmap, double fBlurRadius)
+{
+    if (!rBitmap.HasAlpha() || fBlurRadius <= 0.0)
+        return rBitmap;
+
+    Bitmap aColor = rBitmap.CreateColorBitmap();
+    Bitmap aAlpha = rBitmap.CreateAlphaMask().GetBitmap();
+    aAlpha.Convert(BmpConversion::N8BitGreys);
+
+    const tools::Long nWidth = aColor.GetSizePixel().Width();
+    const tools::Long nHeight = aColor.GetSizePixel().Height();
+    if (nWidth <= 0 || nHeight <= 0)
+        return rBitmap;
+
+    // Red, green and blue weighted by the alpha, then the alpha, each in a grid of its own. The
+    // alpha is 0 for a transparent and 1 for an opaque pixel.
+    const size_t nCount = size_t(nWidth) * size_t(nHeight);
+    std::vector<float> aChannels(4 * nCount);
+    float* pRed = aChannels.data();
+    float* pGreen = pRed + nCount;
+    float* pBlue = pGreen + nCount;
+    float* pAlpha = pBlue + nCount;
+
+    {
+        BitmapScopedReadAccess pColorRead(aColor);
+        BitmapScopedReadAccess pAlphaRead(aAlpha);
+        if (!pColorRead || !pAlphaRead)
+            return rBitmap;
+
+        size_t nIndex = 0;
+        for (tools::Long nY = 0; nY < nHeight; ++nY)
+        {
+            Scanline pColorScanline = pColorRead->GetScanline(nY);
+            Scanline pAlphaScanline = pAlphaRead->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; ++nX, ++nIndex)
+            {
+                const float fAlpha = pAlphaRead->GetIndexFromData(pAlphaScanline, nX) / 255.0f;
+                const BitmapColor aPixel = pColorRead->GetColorFromData(pColorScanline, nX);
+                pRed[nIndex] = aPixel.GetRed() * fAlpha;
+                pGreen[nIndex] = aPixel.GetGreen() * fAlpha;
+                pBlue[nIndex] = aPixel.GetBlue() * fAlpha;
+                pAlpha[nIndex] = fAlpha;
+            }
+        }
+    }
+
+    // The blur radius is two standard deviations of the Gaussian, as for a CSS shadow.
+    const GaussianGridBlur aBlur(nWidth, nHeight, fBlurRadius / 2.0);
+    for (float* pChannel : { pRed, pGreen, pBlue, pAlpha })
+        aBlur.execute(pChannel);
+
+    auto toByte = [](float fValue) {
+        return static_cast<sal_uInt8>(std::clamp(std::lround(fValue), 0L, 255L));
+    };
+
+    {
+        BitmapScopedWriteAccess pColorWrite(aColor);
+        BitmapScopedWriteAccess pAlphaWrite(aAlpha);
+        if (!pColorWrite || !pAlphaWrite)
+            return rBitmap;
+
+        size_t nIndex = 0;
+        for (tools::Long nY = 0; nY < nHeight; ++nY)
+        {
+            Scanline pColorScanline = pColorWrite->GetScanline(nY);
+            Scanline pAlphaScanline = pAlphaWrite->GetScanline(nY);
+            for (tools::Long nX = 0; nX < nWidth; ++nX, ++nIndex)
+            {
+                // Dividing by the blurred alpha gives back the plain color.
+                const float fAlpha = pAlpha[nIndex];
+                BitmapColor aPixel(0, 0, 0);
+                if (fAlpha > 0.0f)
+                {
+                    aPixel = BitmapColor(toByte(pRed[nIndex] / fAlpha),
+                                         toByte(pGreen[nIndex] / fAlpha),
+                                         toByte(pBlue[nIndex] / fAlpha));
+                }
+                pColorWrite->SetPixelOnData(pColorScanline, nX, aPixel);
+                pAlphaWrite->SetPixelOnData(pAlphaScanline, nX,
+                                            BitmapColor(toByte(fAlpha * 255.0f)));
+            }
+        }
+    }
+
+    return Bitmap(aColor, AlphaMask(aAlpha));
+}
+
 drawinglayer::geometry::ViewInformation2D
 expandB2DRangeAtViewInformation2D(const drawinglayer::geometry::ViewInformation2D& rViewInfo,
                                   double nAmount)

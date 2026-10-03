@@ -149,6 +149,14 @@ namespace basegfx
                 fTools::equal(mnMaximum, rRange.mnMaximum));
         }
 
+        /// true when both limits differ by fSmallValue or less
+        bool equal(const BasicRange& rRange, T fSmallValue) const
+        {
+            return (
+                fTools::equal(mnMinimum, rRange.mnMinimum, fSmallValue) &&
+                fTools::equal(mnMaximum, rRange.mnMaximum, fSmallValue));
+        }
+
         void expand(T nValue)
         {
             if(isEmpty())

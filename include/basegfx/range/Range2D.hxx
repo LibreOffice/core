@@ -89,6 +89,13 @@ public:
         return maRangeX.equal(rRange.maRangeX) && maRangeY.equal(rRange.maRangeY);
     }
 
+    /// true when every limit differs by fSmallValue or less
+    bool equal(const Range2D& rRange, TYPE fSmallValue) const
+    {
+        return maRangeX.equal(rRange.maRangeX, fSmallValue)
+               && maRangeY.equal(rRange.maRangeY, fSmallValue);
+    }
+
     /// get lower bound of the set. returns arbitrary values for empty sets.
     TYPE getMinX() const { return maRangeX.getMinimum(); }
 
