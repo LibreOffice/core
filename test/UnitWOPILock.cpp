@@ -26,6 +26,8 @@
 
 #include <atomic>
 #include <chrono>
+#include <mutex>
+#include <vector>
 
 /// This is to test that we unlock before unloading the last editor.
 class UnitWopiLock : public WopiTestServer
@@ -982,6 +984,136 @@ public:
     }
 };
 
+/// A host that stops answering must not hold the document open while it
+/// unloads. The Unlock we send then is capped at a few seconds, well short of
+/// the default connection timeout, and as a timeout says nothing about whether
+/// the host would release the lock, we ask again while the retry budget lasts.
+///
+/// The host here never answers an Unlock at all. It does so on a listener of
+/// its own, so holding the request open stops nothing but the request.
+class UnitWopiUnlockTimeout : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoad, WaitUnload, Done) _phase;
+
+    /// How long one unanswered Unlock may take us to give up on, and ask
+    /// again: the cap, the pause between attempts and some slack. Without the
+    /// cap, it is the thirty seconds of the default connection timeout.
+    static constexpr std::chrono::seconds MaxUnlockGap{ 5 };
+
+    /// From the first Unlock to the document being gone. Unloading stops asking
+    /// within its ten second retry budget, and removing the last editable
+    /// session then asks once more, for up to the cap; then slack. Without the
+    /// cap, the first Unlock alone takes thirty.
+    static constexpr std::chrono::seconds MaxUnloadTime{ 15 };
+
+    /// When each Unlock arrived. Written on the host's thread, read on others.
+    std::mutex _mutex;
+    std::vector<std::chrono::steady_clock::time_point> _unlocks;
+
+public:
+    UnitWopiUnlockTimeout()
+        : WopiTestServer("UnitWopiUnlockTimeout")
+        , _phase(Phase::Load)
+    {
+        useOwnWopiHost();
+
+        // Long enough for an uncapped Unlock to time out, so that what fails
+        // is the check on how long it took, not the test as a whole.
+        setTimeout(std::chrono::seconds(60));
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        fileInfo->set("SupportsLocks", "true");
+        fileInfo->set("UserCanWrite", "true");
+        fileInfo->set("BaseFileName", "doc.odt");
+    }
+
+    bool handleHttpPostRequest(const Poco::Net::HTTPRequest& request, std::istream& message,
+                               const std::shared_ptr<StreamSocket>& socket) override
+    {
+        if (request.get("X-WOPI-Override", std::string()) != "UNLOCK")
+            return WopiTestServer::handleHttpPostRequest(request, message, socket);
+
+        const auto now = std::chrono::steady_clock::now();
+        std::lock_guard<std::mutex> lock(_mutex);
+        if (!_unlocks.empty())
+        {
+            const auto gap = now - _unlocks.back();
+            TST_LOG("Unlock #" << _unlocks.size() + 1 << " arrived "
+                               << std::chrono::duration_cast<std::chrono::milliseconds>(gap)
+                               << " after the last one");
+            LOK_ASSERT_MESSAGE("Expected an unanswered unlock to be given up on and retried "
+                               "within the cap",
+                               gap <= MaxUnlockGap);
+        }
+        else
+            TST_LOG("Unlock #1 arrived, leaving it unanswered");
+
+        _unlocks.push_back(now);
+
+        // Handled, but never answered: the connection stays open, without a
+        // status line, until wsd gives up on it.
+        return true;
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoad);
+
+        TRANSITION_STATE(_phase, Phase::WaitUnload);
+
+        // Nothing to save, so this unloads straight into the unlock.
+        WSD_CMD("closedocument");
+
+        return true;
+    }
+
+    void onDocBrokerDestroy(const std::string& /*docKey*/) override
+    {
+        const auto now = std::chrono::steady_clock::now();
+        std::lock_guard<std::mutex> lock(_mutex);
+        LOK_ASSERT_MESSAGE("Expected the unlock to have been sent", !_unlocks.empty());
+
+        const auto took = now - _unlocks.front();
+        TST_LOG("Unloaded " << std::chrono::duration_cast<std::chrono::milliseconds>(took)
+                            << " after the first unlock, having sent " << _unlocks.size());
+        LOK_ASSERT_MESSAGE("Expected a timed-out unlock to be asked again", _unlocks.size() >= 2);
+        LOK_ASSERT_MESSAGE("Expected the unanswered unlocks to stop holding up the unload",
+                           took <= MaxUnloadTime);
+
+        TRANSITION_STATE(_phase, Phase::Done);
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                // Transition first: this runs on a timer, and a second pass
+                // would open another session whose disconnect unlocks again.
+                TRANSITION_STATE(_phase, Phase::WaitLoad);
+
+                TST_LOG("Load: initWebsocket");
+                initWebsocket("/wopi/files/0?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::Done:
+            {
+                passTest("Gave up on an unanswered host within the cap, and asked again");
+                break;
+            }
+            case Phase::WaitLoad:
+            case Phase::WaitUnload:
+                break;
+        }
+    }
+};
+
 /// A host that rejects our token on an Unlock has told us the token is no good.
 /// We used to note it in the log and carry on with it, because the synchronous
 /// path reported every failure the same way. Expiring it stops the attempts
@@ -1355,10 +1487,10 @@ public:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[11]{ new UnitWopiLock(),     new UnitWopiLockReadOnly(),
+    return new UnitBase*[12]{ new UnitWopiLock(),     new UnitWopiLockReadOnly(),
                               new UnitWopiLockFail(), new UnitWopiUnlock(),
                               new UnitWopiLockIdle(), new UnitWopiLockRefreshTransient(),
-                              new UnitWopiUnlockRetry(),
+                              new UnitWopiUnlockRetry(),      new UnitWopiUnlockTimeout(),
                               new UnitWopiUnlockUnauthorized(),
                               new UnitWopiLockRefreshReadOnly(),
                               new UnitWopiLockRefreshOwnerExpired(), nullptr };
