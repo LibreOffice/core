@@ -28,9 +28,11 @@ public:
     virtual void setUp() override { maBasePath = m_directories.getURLFromSrc(u"/tools/qa/data/"); }
 
     void testReadXML();
+    void testNullNames();
 
     CPPUNIT_TEST_SUITE(XmlWalkerTest);
     CPPUNIT_TEST(testReadXML);
+    CPPUNIT_TEST(testNullNames);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -97,6 +99,32 @@ void XmlWalkerTest::testReadXML()
     aWalker.parent();
 
     CPPUNIT_ASSERT_EQUAL(3, nNumberOfChildNodes);
+}
+
+void XmlWalkerTest::testNullNames()
+{
+    // An un-namespaced root, a CDATA child (no name in libxml2) and a default namespace
+    // (no prefix) must not crash the accessors.
+    const OString aXml = "<root><![CDATA[data]]><ns xmlns=\"urn:x\"/></root>"_ostr;
+    SvMemoryStream aStream(const_cast<char*>(aXml.getStr()), aXml.getLength(), StreamMode::READ);
+
+    tools::XmlWalker aWalker;
+    CPPUNIT_ASSERT(aWalker.open(&aStream));
+    CPPUNIT_ASSERT(aWalker.isElement());
+    CPPUNIT_ASSERT_EQUAL(std::string_view(), aWalker.namespaceHref());
+    CPPUNIT_ASSERT_EQUAL(std::string_view(), aWalker.namespacePrefix());
+
+    aWalker.children();
+    CPPUNIT_ASSERT(aWalker.isValid());
+    CPPUNIT_ASSERT(!aWalker.isElement());
+    CPPUNIT_ASSERT_EQUAL(std::string_view(), aWalker.name());
+
+    aWalker.next();
+    CPPUNIT_ASSERT(aWalker.isElement());
+    CPPUNIT_ASSERT_EQUAL(std::string_view("ns"), aWalker.name());
+    CPPUNIT_ASSERT_EQUAL(std::string_view("urn:x"), aWalker.namespaceHref());
+    CPPUNIT_ASSERT_EQUAL(std::string_view(), aWalker.namespacePrefix());
+    aWalker.parent();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(XmlWalkerTest);

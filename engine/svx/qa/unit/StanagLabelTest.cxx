@@ -27,6 +27,7 @@ class StanagLabelTest : public CppUnit::TestFixture
     void testToBindingXml();
     void testItemProps();
     void testParseRoundTrip();
+    void testParseForeignCustomXml();
     void testResolveColor();
     void testSummary();
 
@@ -35,6 +36,7 @@ class StanagLabelTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testToBindingXml);
     CPPUNIT_TEST(testItemProps);
     CPPUNIT_TEST(testParseRoundTrip);
+    CPPUNIT_TEST(testParseForeignCustomXml);
     CPPUNIT_TEST(testResolveColor);
     CPPUNIT_TEST(testSummary);
     CPPUNIT_TEST_SUITE_END();
@@ -153,6 +155,34 @@ void StanagLabelTest::testParseRoundTrip()
     CPPUNIT_ASSERT(aParsed2.parse(aLabelStream));
     CPPUNIT_ASSERT_EQUAL(u"SECRET"_ustr, aParsed2.aClassification);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aParsed2.aCategories[0].aValues.size());
+}
+
+void StanagLabelTest::testParseForeignCustomXml()
+{
+    // Every customXml part is probed for a label. Excel's Power Pivot part carries a
+    // CDATA section, whose libxml2 node has no name; this used to crash.
+    const OString aGemini
+        = "<?xml version=\"1.0\"?>"
+          "<Gemini xmlns=\"http://gemini/pivotcustomization/LinkedTables\">"
+          "<CustomContent><![CDATA[<LinkedTables/>]]></CustomContent><!-- c --></Gemini>"_ostr;
+    SvMemoryStream aStream(const_cast<char*>(aGemini.getStr()), aGemini.getLength(),
+                           StreamMode::READ);
+    svx::seclabel::StanagLabel aParsed;
+    CPPUNIT_ASSERT(!aParsed.parse(aStream));
+
+    // CDATA inside a label is content like any other.
+    const OString aLabel
+        = "<?xml version=\"1.0\"?>"
+          "<OriginatorConfidentialityLabel "
+          "xmlns=\"urn:nato:stanag:4774:confidentialitymetadatalabel:1:0\">"
+          "<![CDATA[x]]><ConfidentialityInformation><![CDATA[y]]>"
+          "<Classification><![CDATA[SECRET]]></Classification>"
+          "</ConfidentialityInformation></OriginatorConfidentialityLabel>"_ostr;
+    SvMemoryStream aLabelStream(const_cast<char*>(aLabel.getStr()), aLabel.getLength(),
+                                StreamMode::READ);
+    svx::seclabel::StanagLabel aParsed2;
+    CPPUNIT_ASSERT(aParsed2.parse(aLabelStream));
+    CPPUNIT_ASSERT_EQUAL(u"SECRET"_ustr, aParsed2.aClassification);
 }
 
 void StanagLabelTest::testResolveColor()

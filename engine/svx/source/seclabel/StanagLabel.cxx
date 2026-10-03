@@ -25,12 +25,20 @@ OUString streamToString(SvMemoryStream& rStream)
 
 OUString toOU(std::string_view rStr) { return OStringToOUString(rStr, RTL_TEXTENCODING_UTF8); }
 
+// The label sits at depth 4 in our 4778 binding
+// (BindingInformation/MetadataBindingContainer/MetadataBinding/Metadata); allow some
+// slack for other writers, but don't walk the whole tree of a foreign customXml part.
+constexpr int MAX_LABEL_DEPTH = 8;
+
 // Position rWalker at the OriginatorConfidentialityLabel element, descending through
 // any wrapper (e.g. a 4778 binding). Returns false if it is not present. Any
 // VisualMarking element met on the way (our 4778-binding cache of the derived marking,
 // written before the label) is captured into rMarking.
-bool descendToLabel(tools::XmlWalker& rWalker, OUString& rMarking)
+bool descendToLabel(tools::XmlWalker& rWalker, OUString& rMarking, int nDepth = 0)
 {
+    // Every customXml part is probed, so expect anything: text, CDATA, comments.
+    if (!rWalker.isElement() || nDepth > MAX_LABEL_DEPTH)
+        return false;
     if (rWalker.name() == "OriginatorConfidentialityLabel")
         return true;
     if (rWalker.name() == "VisualMarking")
@@ -43,7 +51,7 @@ bool descendToLabel(tools::XmlWalker& rWalker, OUString& rMarking)
     rWalker.children();
     while (rWalker.isValid())
     {
-        if (descendToLabel(rWalker, rMarking))
+        if (descendToLabel(rWalker, rMarking, nDepth + 1))
             return true;
         rWalker.next();
     }

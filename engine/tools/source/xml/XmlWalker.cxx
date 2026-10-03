@@ -61,20 +61,31 @@ bool XmlWalker::open(SvStream* pStream)
     return true;
 }
 
-std::string_view XmlWalker::name()
+namespace
 {
-    return reinterpret_cast<const char*>(mpImpl->mpCurrent->name);
+// libxml2 leaves some names NULL: CDATA nodes have no name, an un-namespaced element
+// has no ns, and a default namespace has no prefix.
+std::string_view toStringView(const xmlChar* pStr)
+{
+    return pStr ? std::string_view(reinterpret_cast<const char*>(pStr)) : std::string_view();
 }
+}
+
+std::string_view XmlWalker::name() { return toStringView(mpImpl->mpCurrent->name); }
 
 std::string_view XmlWalker::namespaceHref()
 {
-    return reinterpret_cast<const char*>(mpImpl->mpCurrent->ns->href);
+    const xmlNs* pNs = mpImpl->mpCurrent->ns;
+    return pNs ? toStringView(pNs->href) : std::string_view();
 }
 
 std::string_view XmlWalker::namespacePrefix()
 {
-    return reinterpret_cast<const char*>(mpImpl->mpCurrent->ns->prefix);
+    const xmlNs* pNs = mpImpl->mpCurrent->ns;
+    return pNs ? toStringView(pNs->prefix) : std::string_view();
 }
+
+bool XmlWalker::isElement() const { return mpImpl->mpCurrent->type == XML_ELEMENT_NODE; }
 
 OString XmlWalker::content()
 {

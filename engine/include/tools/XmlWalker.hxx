@@ -49,6 +49,8 @@ public:
     void parent();
     void next();
     bool isValid() const;
+    /// True if the current node is an element (not text, CDATA, a comment, ...).
+    bool isElement() const;
     OString attribute(const OString& sName) const;
 };
 
