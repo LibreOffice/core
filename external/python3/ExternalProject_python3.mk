@@ -92,6 +92,8 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 				ac_cv_func_getentropy=no \
 				ac_cv_func_clock_gettime=no \
 			) \
+			ac_cv_func_dup3=no \
+			ac_cv_func_pipe2=no \
 		) \
 		$(gb_RUN_CONFIGURE) ./configure \
 		$(gb_CONFIGURE_PLATFORMS) \
