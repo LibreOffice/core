@@ -1,0 +1,19 @@
+--- core/fxcodec/icc/icc_transform.cpp
++++ core/fxcodec/icc/icc_transform.cpp
+@@ -66,8 +66,15 @@
+     return nullptr;
+   }
+ 
++  // The color space is copied unchecked from the profile header, so find out
++  // whether lcms knows it before holding it as a cmsColorSpaceSignature.
++  int nChannels = cmsChannelsOfColorSpace(cmsGetColorSpace(srcProfile.get()));
++  if (nChannels < 0) {
++    return nullptr;
++  }
++
+   cmsColorSpaceSignature srcCS = cmsGetColorSpace(srcProfile.get());
+-  uint32_t nSrcComponents = cmsChannelsOf(srcCS);
++  uint32_t nSrcComponents = static_cast<uint32_t>(nChannels);
+ 
+   if (!IsValidIccComponents(nSrcComponents)) {
+     return nullptr;
