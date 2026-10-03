@@ -597,6 +597,14 @@ public:
     /// Called when a new client session is added to a DocumentBroker.
     virtual void onDocBrokerAddSession(const std::string&, const std::shared_ptr<ClientSession>&) {}
 
+    /// Called when a DocumentBroker starts taking a client session out: saving for
+    /// it, unlocking with it and disconnecting it from the Kit. That happens once
+    /// per session; onDocBrokerRemoveSession follows when it is finally dropped.
+    virtual void onDocBrokerRemovingSession(const std::string&,
+                                            const std::shared_ptr<ClientSession>&)
+    {
+    }
+
     /// Called when a client session is removed to a DocumentBroker.
     virtual void onDocBrokerRemoveSession(const std::string&, const std::shared_ptr<ClientSession>&)
     {

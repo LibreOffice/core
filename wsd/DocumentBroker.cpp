@@ -5154,6 +5154,8 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
     const std::string id = session->getId();
     try
     {
+        UNITWSD_CALL_INSTANCE(_unitWsd, onDocBrokerRemovingSession(_docKey, session));
+
         const std::size_t activeSessionCount = countActiveSessions();
 
         const bool lastEditableSession = session->isEditable() && !haveAnotherEditableSession(id);
