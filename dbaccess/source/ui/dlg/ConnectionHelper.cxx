@@ -59,6 +59,11 @@
 
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <com/sun/star/sdbc/DriverManager.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
 #include <comphelper/string.hxx>
 
 namespace dbaui
@@ -332,7 +337,8 @@ namespace dbaui
                     FileDialogFlags::NONE, GetFrameWeld());
                 aFileDlg.AddFilter(sFilterName,u"*.fdb"_ustr);
                 aFileDlg.SetCurrentFilter(sFilterName);
-                askForFileName(aFileDlg);
+                if (askForFileName(aFileDlg))
+                    createDatabase();
                 break;
             }
             default:
@@ -340,6 +346,26 @@ namespace dbaui
         }
 
         checkTestConnection();
+    }
+
+    // Create the database file under the name the user has just chosen.
+    void OConnectionHelper::createDatabase()
+    {
+        const OUString sURL = m_pCollection->getPrefix(m_eType) + getURLNoPrefix();
+        try
+        {
+            Reference<XDriverManager2> xDriverManager = DriverManager::create(m_xORB);
+            Reference<XConnection> xConnection = xDriverManager->getConnectionWithInfo(
+                sURL, { comphelper::makePropertyValue(u"CreateDatabase"_ustr, true) });
+            if (xConnection.is())
+                xConnection->close();
+        }
+        catch (const SQLException& e)
+        {
+            ::dbtools::showError(::dbtools::SQLExceptionInfo(e),
+                                 GetDialogController()->getDialog()->GetXWindow(),
+                                 m_xORB);
+        }
     }
 
     bool OConnectionHelper::checkTestConnection()
@@ -683,19 +709,20 @@ namespace dbaui
         return true;
     }
 
-    void OConnectionHelper::askForFileName(::sfx2::FileDialogHelper& _aFileOpen)
+    bool OConnectionHelper::askForFileName(::sfx2::FileDialogHelper& _aFileOpen)
     {
         OUString sOldPath = getURLNoPrefix();
         if ( !sOldPath.isEmpty() )
             _aFileOpen.SetDisplayDirectory(sOldPath);
         else
             _aFileOpen.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
-        if (ERRCODE_NONE == _aFileOpen.Execute())
-        {
-            setURLNoPrefix(_aFileOpen.GetPath());
-            SetRoadmapStateValue(checkTestConnection());
-            callModifiedHdl();
-        }
+        if (ERRCODE_NONE != _aFileOpen.Execute())
+            return false;
+
+        setURLNoPrefix(_aFileOpen.GetPath());
+        SetRoadmapStateValue(checkTestConnection());
+        callModifiedHdl();
+        return true;
     }
 
 }   // namespace dbaui

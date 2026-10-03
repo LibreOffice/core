@@ -82,7 +82,8 @@ namespace dbaui
             @param  _aFileOpen
                 Executes the file open dialog, which must be filled from caller.
         */
-        void askForFileName(::sfx2::FileDialogHelper& _aFileOpen);
+        bool askForFileName(::sfx2::FileDialogHelper& _aFileOpen);
+        void createDatabase();
 
     protected:
         void            setURL( std::u16string_view _rURL );

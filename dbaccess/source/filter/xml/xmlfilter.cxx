@@ -592,6 +592,8 @@ void ODBFilter::setPropertyInfo()
     ::comphelper::NamedValueCollection aDocumentSettings( aInfo );
     // The Java class path of a driver comes from the driver configuration, not the document.
     aDocumentSettings.remove( u"JavaDriverClassPath"_ustr );
+    // CreateDatabase asks the driver for a new database, which only the user does from the UI.
+    aDocumentSettings.remove( u"CreateDatabase"_ustr );
     aDataSourceSettings.merge( aDocumentSettings, true );
 
     aDataSourceSettings >>= aInfo;
