@@ -65,6 +65,7 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxShapePropertyMap()
         LINKTARGET_PROPERTIES
         GLOW_PROPERTIES
         SOFTEDGE_PROPERTIES
+        REFLECTION_PROPERTIES
         GLOW_TEXT_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
@@ -90,6 +91,7 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxTextShapePropertyMap()
         LINKTARGET_PROPERTIES
         GLOW_PROPERTIES
         SOFTEDGE_PROPERTIES
+        REFLECTION_PROPERTIES
         GLOW_TEXT_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
@@ -116,6 +118,7 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxConnectorPropertyMap()
         LINKTARGET_PROPERTIES
         GLOW_PROPERTIES
         SOFTEDGE_PROPERTIES
+        REFLECTION_PROPERTIES
         GLOW_TEXT_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
@@ -142,6 +145,7 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxDimensioningPropertyMa
         LINKTARGET_PROPERTIES
         GLOW_PROPERTIES
         SOFTEDGE_PROPERTIES
+        REFLECTION_PROPERTIES
         GLOW_TEXT_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
@@ -168,6 +172,7 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxCirclePropertyMap()
         LINKTARGET_PROPERTIES
         GLOW_PROPERTIES
         SOFTEDGE_PROPERTIES
+        REFLECTION_PROPERTIES
         GLOW_TEXT_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
@@ -196,6 +201,7 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxPolyPolygonPropertyMap
         LINKTARGET_PROPERTIES
         GLOW_PROPERTIES
         SOFTEDGE_PROPERTIES
+        REFLECTION_PROPERTIES
         GLOW_TEXT_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
@@ -227,6 +233,7 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxGraphicObjectPropertyM
         LINKTARGET_PROPERTIES
         GLOW_PROPERTIES
         SOFTEDGE_PROPERTIES
+        REFLECTION_PROPERTIES
         GLOW_TEXT_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
@@ -373,6 +380,7 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxAllPropertyMap()
     {
         GLOW_PROPERTIES
         SOFTEDGE_PROPERTIES
+        REFLECTION_PROPERTIES
         GLOW_TEXT_PROPERTIES
         SHADOW_PROPERTIES
         LINE_PROPERTIES
@@ -439,6 +447,7 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxOle2PropertyMap()
         LINKTARGET_PROPERTIES
         GLOW_PROPERTIES
         SOFTEDGE_PROPERTIES
+        REFLECTION_PROPERTIES
         GLOW_TEXT_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
@@ -694,6 +703,7 @@ static std::span<SfxItemPropertyMapEntry const> ImplGetSvxCustomShapePropertyMap
         LINKTARGET_PROPERTIES
         GLOW_PROPERTIES
         SOFTEDGE_PROPERTIES
+        REFLECTION_PROPERTIES
         GLOW_TEXT_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
@@ -777,6 +787,7 @@ static std::span<comphelper::PropertyMapEntry const> ImplGetSvxDrawingDefaultsPr
     {
         GLOW_PROPERTIES
         SOFTEDGE_PROPERTIES
+        REFLECTION_PROPERTIES
         GLOW_TEXT_PROPERTIES
         SHADOW_PROPERTIES
         LINE_PROPERTIES_DEFAULTS

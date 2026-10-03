@@ -218,6 +218,60 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testPngExport)
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(192), aSize.getHeight());
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(192), aSize.getWidth());
 }
+
+uno::Reference<drawing::XShape> insertRectangle(const uno::Reference<lang::XComponent>& xComponent)
+{
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
+    xShape->setPosition(awt::Point(1000, 1000));
+    xShape->setSize(awt::Size(10000, 10000));
+    uno::Reference<drawing::XDrawPagesSupplier> xSupplier(xComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    xDrawPage->add(xShape);
+    return xShape;
+}
+
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testReflectionProperties)
+{
+    loadFromURL(u"private:factory/simpress"_ustr);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+
+    // A new shape has no reflection, and the values it would have fade from opaque at the shape
+    // to invisible at the far end.
+    CPPUNIT_ASSERT(!xShapeProps->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(0),
+        xShapeProps->getPropertyValue(u"ReflectionEffectDistance"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(0),
+        xShapeProps->getPropertyValue(u"ReflectionEffectBlurRadius"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int16(0),
+        xShapeProps->getPropertyValue(u"ReflectionEffectStartTransparency"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int16(0),
+        xShapeProps->getPropertyValue(u"ReflectionEffectStartPosition"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int16(100),
+        xShapeProps->getPropertyValue(u"ReflectionEffectEndTransparency"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int16(100),
+        xShapeProps->getPropertyValue(u"ReflectionEffectEndPosition"_ustr).get<sal_Int16>());
+
+    // Values set on the shape read back unchanged.
+    xShapeProps->setPropertyValue(u"ReflectionEffect"_ustr, uno::Any(true));
+    xShapeProps->setPropertyValue(u"ReflectionEffectDistance"_ustr, uno::Any(sal_Int32(250)));
+    xShapeProps->setPropertyValue(u"ReflectionEffectEndPosition"_ustr, uno::Any(sal_Int16(35)));
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(250),
+        xShapeProps->getPropertyValue(u"ReflectionEffectDistance"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int16(35),
+        xShapeProps->getPropertyValue(u"ReflectionEffectEndPosition"_ustr).get<sal_Int16>());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

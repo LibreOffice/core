@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <extendedprimitive2dxmldump.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -68,6 +69,36 @@ SdrTest::renderPageToPrimitives(const uno::Reference<drawing::XDrawPage>& xDrawP
     drawinglayer::primitive2d::Primitive2DContainer aContainer;
     rDrawPageVOContact.getPrimitive2DSequenceHierarchy(aDisplayInfo, aContainer);
     return aContainer;
+}
+
+/// A filled rectangle on a new drawing, with a reflection that fades out over its first quarter.
+/// It is a custom shape, like the shapes of a PPTX import. The percentages are chosen so that
+/// their fractions print exactly.
+uno::Reference<drawing::XShape>
+insertReflectedRectangle(const uno::Reference<lang::XComponent>& xComponent)
+{
+    auto xFactory = xComponent.queryThrow<lang::XMultiServiceFactory>();
+    auto xShape = xFactory->createInstance(u"com.sun.star.drawing.CustomShape"_ustr)
+                      .queryThrow<drawing::XShape>();
+    xShape->setPosition(awt::Point(1000, 2000));
+    xShape->setSize(awt::Size(5000, 4000));
+    xComponent.queryThrow<drawing::XDrawPagesSupplier>()
+        ->getDrawPages()
+        ->getByIndex(0)
+        .queryThrow<drawing::XShapes>()
+        ->add(xShape);
+
+    auto xProperties = xShape.queryThrow<beans::XPropertySet>();
+    xProperties->setPropertyValue(u"CustomShapeGeometry"_ustr,
+                                  uno::Any(comphelper::InitPropertySequence(
+                                      { { u"Type"_ustr, uno::Any(u"rectangle"_ustr) } })));
+    xProperties->setPropertyValue(u"ReflectionEffect"_ustr, uno::Any(true));
+    xProperties->setPropertyValue(u"ReflectionEffectDistance"_ustr, uno::Any(sal_Int32(100)));
+    xProperties->setPropertyValue(u"ReflectionEffectBlurRadius"_ustr, uno::Any(sal_Int32(50)));
+    xProperties->setPropertyValue(u"ReflectionEffectStartTransparency"_ustr,
+                                  uno::Any(sal_Int16(50)));
+    xProperties->setPropertyValue(u"ReflectionEffectEndPosition"_ustr, uno::Any(sal_Int16(25)));
+    return xShape;
 }
 
 /// The mask a shape is clipped with, wherever it sits in the primitives of a page.
@@ -424,6 +455,53 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testGraphicClipPolyPolygonFollowsAFlip)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6000.0, aRange.getMaxX(), 1.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2000.0, aRange.getMinY(), 1.0);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(6000.0, aRange.getMaxY(), 1.0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdrTest, testReflectionOfShape)
+{
+    loadFromURL(u"private:factory/sdraw"_ustr);
+    uno::Reference<drawing::XShape> xShape = insertReflectedRectangle(mxComponent);
+    auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
+                         ->getDrawPages()
+                         ->getByIndex(0)
+                         .queryThrow<drawing::XDrawPage>();
+
+    svx::ExtendedPrimitive2dXmlDump aDumper;
+    xmlDocUniquePtr pDocument = aDumper.dumpAndParse(renderPageToPrimitives(xDrawPage));
+
+    // The item values arrive in the reflection, and the percentages become fractions.
+    assertXPath(pDocument, "//reflection", 1);
+    assertXPath(pDocument, "//reflection", "distance", u"100");
+    assertXPath(pDocument, "//reflection", "blurradius", u"50");
+    assertXPath(pDocument, "//reflection", "starttransparency", u"0.5");
+    assertXPath(pDocument, "//reflection", "startposition", u"0");
+    assertXPath(pDocument, "//reflection", "endtransparency", u"1");
+    assertXPath(pDocument, "//reflection", "endposition", u"0.25");
+
+    // Turning the reflection off keeps the other values but removes the reflection.
+    xShape.queryThrow<beans::XPropertySet>()->setPropertyValue(u"ReflectionEffect"_ustr,
+                                                               uno::Any(false));
+    pDocument = aDumper.dumpAndParse(renderPageToPrimitives(xDrawPage));
+    assertXPath(pDocument, "//reflection", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdrTest, testReflectionOfShapeHasNoShadow)
+{
+    loadFromURL(u"private:factory/sdraw"_ustr);
+    uno::Reference<drawing::XShape> xShape = insertReflectedRectangle(mxComponent);
+    xShape.queryThrow<beans::XPropertySet>()->setPropertyValue(u"Shadow"_ustr, uno::Any(true));
+    auto xDrawPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
+                         ->getDrawPages()
+                         ->getByIndex(0)
+                         .queryThrow<drawing::XDrawPage>();
+
+    svx::ExtendedPrimitive2dXmlDump aDumper;
+    xmlDocUniquePtr pDocument = aDumper.dumpAndParse(renderPageToPrimitives(xDrawPage));
+
+    // The shape casts a shadow, but its reflection shows the shape without it.
+    assertXPath(pDocument, "//shadow", 1);
+    assertXPath(pDocument, "//reflection", 1);
+    assertXPath(pDocument, "//reflection//shadow", 0);
 }
 }
 
