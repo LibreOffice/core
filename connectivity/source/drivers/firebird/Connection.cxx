@@ -43,6 +43,7 @@
 #include <strings.hrc>
 #include <resource/sharedresources.hxx>
 
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -247,7 +248,18 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
                 uno::Reference< ucb::XSimpleFileAccess > xFileAccess =
                     ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
                 if (!xFileAccess->exists(m_sFirebirdURL))
+                {
+                    // A new external database is created only when the caller asks for one.
+                    if (!::comphelper::NamedValueCollection(info).getOrDefault(
+                            u"CreateDatabase"_ustr, false))
+                    {
+                        ::connectivity::SharedResources aResources;
+                        const OUString sMessage = aResources.getResourceString(STR_COULD_NOT_LOAD_FILE).replaceFirst(
+                            "$filename$", m_sConnectionURL);
+                        ::dbtools::throwGenericSQLException(sMessage, *this);
+                    }
                     bIsNewDatabase = true;
+                }
 
                 osl::FileBase::getSystemPathFromFileURL(m_sFirebirdURL, m_sFirebirdURL);
 
