@@ -40,7 +40,7 @@ class OTableTreeListBox : public TreeListBox
     std::unique_ptr< ImageProvider >
                     m_xImageProvider;   // provider for our images
     bool            m_bVirtualRoot;     // should the first entry be visible
-    bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?
+    bool            m_bNoEmptyFolders;  // should empty catalogs/schemas be prevented from being displayed?
     bool            m_bShowToggles;     // show toggle buttons
 
 public:

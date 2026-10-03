@@ -232,7 +232,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
             if ( bSupportsCatalogs || bSupportsSchemas )
             {
                 // we display empty catalogs if the DB supports catalogs, and they're noted at the beginning of a
-                // composed name. Otherwise, we display empty schematas. (also see the tree structure explained in
+                // composed name. Otherwise, we display empty schemas. (also see the tree structure explained in
                 // implAddEntry)
                 bool bCatalogs = bSupportsCatalogs && xMeta->isCatalogAtStart();
 
