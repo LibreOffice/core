@@ -275,6 +275,7 @@ class Button;
 #define WB_MULTISELECT      (WinBits(0x00400000))
 #define WB_MINSCROLL        (WinBits(0x20000000))
 #define WB_INSERTTAB        (WinBits(0x40000000))
+#define WB_TABSLIST         (WinBits(0x80000000))
 #define WB_STDTABBAR        WB_BORDER
 
 // Page bits
@@ -367,6 +368,7 @@ private:
     DECL_DLLPRIVATE_LINK(ImplClickHdl, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(ImplAddClickHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(ImplListClickHandler, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(ContextMenuHdl, const CommandEvent&, void);
 
     ImplTabBarItem* seek( size_t i );
     ImplTabBarItem* prev();

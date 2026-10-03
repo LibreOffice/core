@@ -779,6 +779,11 @@ sal_uInt16 TabBar::ImplGetLastFirstPos()
     return nLastFirstPos;
 }
 
+IMPL_LINK(TabBar, ContextMenuHdl, const CommandEvent&, rCommandEvent, void)
+{
+    maScrollAreaContextHdl.Call(rCommandEvent);
+}
+
 IMPL_LINK_NOARG( TabBar, ImplListClickHandler, weld::Button&, void )
 {
     maScrollAreaContextHdl.Call( CommandEvent( Point( 0, 0 ), CommandEventId::ContextMenu, true ) );
@@ -801,16 +806,23 @@ void TabBar::ImplInitControls()
 
     mpImpl->mxButtonBox.disposeAndReset(VclPtr<TabButtons>::Create(this, mbSheets));
 
+    Link<const CommandEvent&, void> aContextLink = LINK( this, TabBar, ContextMenuHdl );
+
     if (mnWinStyle & WB_INSERTTAB)
     {
         Link<weld::Button&,void> aLink = LINK(this, TabBar, ImplAddClickHandler);
-        mpImpl->mxButtonBox->m_xAddRepeater = std::make_shared<weld::ButtonPressRepeater>(
+        if (mnWinStyle & WB_TABSLIST)
+        {
+            mpImpl->mxButtonBox->m_xAddRepeater = std::make_shared<weld::ButtonPressRepeater>(
                     *mpImpl->mxButtonBox->m_xAddButton, aLink );
+            aLink = LINK( this, TabBar, ImplListClickHandler );
+            mpImpl->mxButtonBox->m_xListButton->connect_clicked( aLink );
+            mpImpl->mxButtonBox->m_xListButton->show();
+        }
+        else
+            mpImpl->mxButtonBox->m_xAddRepeater = std::make_shared<weld::ButtonPressRepeater>(
+                    *mpImpl->mxButtonBox->m_xAddButton, aLink, aContextLink );
         mpImpl->mxButtonBox->m_xAddButton->show();
-
-        aLink = LINK( this, TabBar, ImplListClickHandler );
-        mpImpl->mxButtonBox->m_xListButton->connect_clicked( aLink );
-        mpImpl->mxButtonBox->m_xListButton->show();
     }
 
     Link<weld::Button&,void> aLink = LINK( this, TabBar, ImplClickHdl );

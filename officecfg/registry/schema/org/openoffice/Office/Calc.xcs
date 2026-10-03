@@ -449,6 +449,13 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="TabbarSheetsListButton" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies if the tabbar should contain a button to show the list of sheets. If false, the list is shown by right-click on Add sheet button.</desc>
+            <label>Tabbar with List of sheets button</label>
+          </info>
+          <value>true</value>
+        </prop>
         <group oor:name="TabStop">
           <!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Tab stops -->
           <info>

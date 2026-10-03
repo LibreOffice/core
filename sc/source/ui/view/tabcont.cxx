@@ -40,6 +40,7 @@
 #include <gridwin.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData& rData )
     : TabBar(pParent, WB_3DLOOK | WB_MINSCROLL | WB_SCROLL | WB_RANGESELECT | WB_MULTISELECT | WB_DRAG, true)
@@ -51,6 +52,9 @@ ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData& rData )
     , bErrorShown(false)
 {
     ScDocument& rDoc = rViewData.GetDocument();
+    // tdf#171207 Add a button to show list of sheets
+    if (officecfg::Office::Calc::Layout::Other::TabbarSheetsListButton::get())
+        SetStyle( GetStyle() | WB_TABSLIST );
 
     OUString aString;
     Color aTabBgColor;
