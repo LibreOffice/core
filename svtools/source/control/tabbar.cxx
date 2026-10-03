@@ -779,18 +779,6 @@ sal_uInt16 TabBar::ImplGetLastFirstPos()
     return nLastFirstPos;
 }
 
-IMPL_LINK(TabBar, ContextMenuHdl, const CommandEvent&, rCommandEvent, void)
-{
-    maScrollAreaContextHdl.Call(rCommandEvent);
-}
-
-IMPL_LINK(TabBar, MousePressHdl, const MouseEvent&, rMouseEvent, bool)
-{
-    if (rMouseEvent.IsRight())
-        ContextMenuHdl(CommandEvent(rMouseEvent.GetPosPixel(), CommandEventId::ContextMenu, true));
-    return false;
-}
-
 IMPL_LINK_NOARG( TabBar, ImplListClickHandler, weld::Button&, void )
 {
     maScrollAreaContextHdl.Call( CommandEvent( Point( 0, 0 ), CommandEventId::ContextMenu, true ) );
@@ -813,9 +801,6 @@ void TabBar::ImplInitControls()
 
     mpImpl->mxButtonBox.disposeAndReset(VclPtr<TabButtons>::Create(this, mbSheets));
 
-    Link<const CommandEvent&, void> aContextLink = LINK( this, TabBar, ContextMenuHdl );
-    Link<const MouseEvent&, bool> aBtnContextLink = LINK(this, TabBar, MousePressHdl);
-
     if (mnWinStyle & WB_INSERTTAB)
     {
         Link<weld::Button&,void> aLink = LINK(this, TabBar, ImplAddClickHandler);
@@ -825,7 +810,6 @@ void TabBar::ImplInitControls()
 
         aLink = LINK( this, TabBar, ImplListClickHandler );
         mpImpl->mxButtonBox->m_xListButton->connect_clicked( aLink );
-        mpImpl->mxButtonBox->m_xListButton->connect_mouse_press( aBtnContextLink );
         mpImpl->mxButtonBox->m_xListButton->show();
     }
 
@@ -834,20 +818,18 @@ void TabBar::ImplInitControls()
     if (mnWinStyle & (WB_MINSCROLL | WB_SCROLL))
     {
         mpImpl->mxButtonBox->m_xPrevRepeater = std::make_shared<weld::ButtonPressRepeater>(
-                    *mpImpl->mxButtonBox->m_xPrevButton, aLink, aContextLink);
+                    *mpImpl->mxButtonBox->m_xPrevButton, aLink );
         mpImpl->mxButtonBox->m_xPrevButton->show();
         mpImpl->mxButtonBox->m_xNextRepeater = std::make_shared<weld::ButtonPressRepeater>(
-                    *mpImpl->mxButtonBox->m_xNextButton, aLink, aContextLink);
+                    *mpImpl->mxButtonBox->m_xNextButton, aLink );
         mpImpl->mxButtonBox->m_xNextButton->show();
     }
 
     if (mnWinStyle & WB_SCROLL)
     {
         mpImpl->mxButtonBox->m_xFirstButton->connect_clicked(aLink);
-        mpImpl->mxButtonBox->m_xFirstButton->connect_mouse_press(aBtnContextLink);
         mpImpl->mxButtonBox->m_xFirstButton->show();
         mpImpl->mxButtonBox->m_xLastButton->connect_clicked(aLink);
-        mpImpl->mxButtonBox->m_xLastButton->connect_mouse_press(aBtnContextLink);
         mpImpl->mxButtonBox->m_xLastButton->show();
     }
 
