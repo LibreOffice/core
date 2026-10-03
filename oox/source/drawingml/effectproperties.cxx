@@ -31,6 +31,16 @@ void EffectSoftEdgeProperties::assignUsed(const EffectSoftEdgeProperties& rSourc
     assignIfUsed(moRad, rSourceProps.moRad);
 }
 
+void EffectReflectionProperties::assignUsed(const EffectReflectionProperties& rSourceProps)
+{
+    assignIfUsed(moDistance, rSourceProps.moDistance);
+    assignIfUsed(moBlurRadius, rSourceProps.moBlurRadius);
+    assignIfUsed(moStartAlpha, rSourceProps.moStartAlpha);
+    assignIfUsed(moStartPosition, rSourceProps.moStartPosition);
+    assignIfUsed(moEndAlpha, rSourceProps.moEndAlpha);
+    assignIfUsed(moEndPosition, rSourceProps.moEndPosition);
+}
+
 void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourceProps)
 {
     assignIfUsed( moShadowDist, rSourceProps.moShadowDist );
@@ -48,6 +58,7 @@ void EffectProperties::assignUsed( const EffectProperties& rSourceProps )
     maShadow.assignUsed(rSourceProps.maShadow);
     maGlow.assignUsed(rSourceProps.maGlow);
     maSoftEdge.assignUsed(rSourceProps.maSoftEdge);
+    maReflection.assignUsed(rSourceProps.maReflection);
     if (!rSourceProps.m_Effects.empty())
     {
         m_Effects.clear();

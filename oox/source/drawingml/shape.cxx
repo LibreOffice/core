@@ -1161,6 +1161,13 @@ void PushMasterTextListStyleToMasterShapeParagraphs(TextListStyle& rMasterTextLi
         xParagraph->setPropertyValue("NumberingRules", uno::Any(xNumberingRules));
     }
 }
+
+// DrawingML has 1/1000 of a percent, the shape property has whole percent from 0 to 100.
+sal_Int16 toWholePercent(sal_Int32 nThousandthsOfPercent)
+{
+    return static_cast<sal_Int16>(
+        std::clamp<double>(std::round(nThousandthsOfPercent / 1000.0), 0, 100));
+}
 }
 
 Reference< XShape > const & Shape::createAndInsert(
@@ -2520,6 +2527,30 @@ Reference< XShape > const & Shape::createAndInsert(
             propertySet->setPropertyValue(u"GlowEffectRadius"_ustr, Any(convertEmuToHmm(aEffectProperties.maGlow.moGlowRad.value())));
             propertySet->setPropertyValue(u"GlowEffectColor"_ustr, Any(aEffectProperties.maGlow.moGlowColor.getColor(rGraphicHelper)));
             propertySet->setPropertyValue(u"GlowEffectTransparency"_ustr, Any(aEffectProperties.maGlow.moGlowColor.getTransparency()));
+        }
+
+        // Set reflection effect properties
+        if (aEffectProperties.maReflection.isUsed()
+            && aServiceName != "com.sun.star.drawing.GroupShape")
+        {
+            const EffectReflectionProperties& rReflection = aEffectProperties.maReflection;
+
+            uno::Reference<beans::XPropertySet> propertySet(mxShape, uno::UNO_QUERY);
+            propertySet->setPropertyValue(u"ReflectionEffect"_ustr, Any(true));
+            propertySet->setPropertyValue(u"ReflectionEffectDistance"_ustr,
+                                          Any(rReflection.moDistance->as_hmm<sal_Int32>()));
+            propertySet->setPropertyValue(u"ReflectionEffectBlurRadius"_ustr,
+                                          Any(rReflection.moBlurRadius->as_hmm<sal_Int32>()));
+            propertySet->setPropertyValue(
+                u"ReflectionEffectStartTransparency"_ustr,
+                Any(sal_Int16(100 - toWholePercent(*rReflection.moStartAlpha))));
+            propertySet->setPropertyValue(u"ReflectionEffectStartPosition"_ustr,
+                                          Any(toWholePercent(*rReflection.moStartPosition)));
+            propertySet->setPropertyValue(
+                u"ReflectionEffectEndTransparency"_ustr,
+                Any(sal_Int16(100 - toWholePercent(*rReflection.moEndAlpha))));
+            propertySet->setPropertyValue(u"ReflectionEffectEndPosition"_ustr,
+                                          Any(toWholePercent(*rReflection.moEndPosition)));
         }
 
         // Set soft edge effect properties

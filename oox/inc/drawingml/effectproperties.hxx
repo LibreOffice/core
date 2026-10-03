@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <basegfx/units/Length.hxx>
 #include <oox/drawingml/color.hxx>
 #include <oox/helper/propertymap.hxx>
 
@@ -39,6 +40,24 @@ struct EffectSoftEdgeProperties
     void assignUsed(const EffectSoftEdgeProperties& rSourceProps);
 };
 
+/** The values of a reflection element. The alpha values and the positions are in 1/1000 of a
+    percent: an alpha of 100000 is opaque, and a position of 100000 is the far end of the
+    reflection. Every value is set when the element is present, to its schema default if the
+    attribute is missing. */
+struct EffectReflectionProperties
+{
+    std::optional<gfx::Length> moDistance;
+    std::optional<gfx::Length> moBlurRadius;
+    std::optional<sal_Int32> moStartAlpha;
+    std::optional<sal_Int32> moStartPosition;
+    std::optional<sal_Int32> moEndAlpha;
+    std::optional<sal_Int32> moEndPosition;
+
+    bool isUsed() const { return moStartAlpha.has_value(); }
+
+    void assignUsed(const EffectReflectionProperties& rSourceProps);
+};
+
 struct EffectShadowProperties
 {
     std::optional<sal_Int64> moShadowDist;
@@ -67,6 +86,7 @@ struct EffectProperties
     EffectShadowProperties maShadow;
     EffectGlowProperties maGlow;
     EffectSoftEdgeProperties maSoftEdge;
+    EffectReflectionProperties maReflection;
 
     /** Stores all effect properties, including those not supported by core yet */
     std::vector<std::unique_ptr<Effect>> m_Effects;

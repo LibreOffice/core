@@ -1165,6 +1165,78 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testPieTextArea)
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(3756, 3169, 12241, 8826), aTextBound);
 }
 
+namespace
+{
+struct ReflectionValues
+{
+    sal_Int32 nDistance;
+    sal_Int32 nBlurRadius;
+    sal_Int16 nStartTransparency;
+    sal_Int16 nStartPosition;
+    sal_Int16 nEndTransparency;
+    sal_Int16 nEndPosition;
+};
+
+void assertReflection(const ReflectionValues& rExpected,
+                      const uno::Reference<beans::XPropertySet>& xShape)
+{
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
+    CPPUNIT_ASSERT_EQUAL(
+        rExpected.nDistance,
+        xShape->getPropertyValue(u"ReflectionEffectDistance"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(
+        rExpected.nBlurRadius,
+        xShape->getPropertyValue(u"ReflectionEffectBlurRadius"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(
+        rExpected.nStartTransparency,
+        xShape->getPropertyValue(u"ReflectionEffectStartTransparency"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(
+        rExpected.nStartPosition,
+        xShape->getPropertyValue(u"ReflectionEffectStartPosition"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(
+        rExpected.nEndTransparency,
+        xShape->getPropertyValue(u"ReflectionEffectEndTransparency"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(
+        rExpected.nEndPosition,
+        xShape->getPropertyValue(u"ReflectionEffectEndPosition"_ustr).get<sal_Int16>());
+}
+}
+
+CPPUNIT_TEST_FIXTURE(OoxShapeTest, testReflectionImport)
+{
+    loadFromFile(u"reflection.pptx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    // The preset with a small blur: 6350 EMU of blur is 18 hundredths of a millimeter, and an end
+    // alpha of 0.3% rounds to a fully transparent end.
+    uno::Reference<beans::XPropertySet> xTight(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    assertReflection({ 0, 18, 50, 0, 100, 35 }, xTight);
+
+    // The same preset with a 4pt gap between the shape and the reflection.
+    uno::Reference<beans::XPropertySet> xOffset(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    assertReflection({ 141, 18, 50, 0, 100, 55 }, xOffset);
+
+    // A reflection element without attributes fades from opaque to invisible over its full
+    // height.
+    uno::Reference<beans::XPropertySet> xDefaults(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    assertReflection({ 0, 0, 0, 0, 100, 100 }, xDefaults);
+
+    uno::Reference<beans::XPropertySet> xNone(xDrawPage->getByIndex(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(!xNone->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
+
+    // The reflection also stays in the stored effects, which keep the attributes that are not
+    // shape properties, such as the vertical scale.
+    comphelper::SequenceAsHashMap aGrabBag(xTight->getPropertyValue(u"InteropGrabBag"_ustr));
+    auto aEffects = aGrabBag[u"EffectProperties"_ustr].get<uno::Sequence<beans::PropertyValue>>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEffects.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"reflection"_ustr, aEffects[0].Name);
+    comphelper::SequenceAsHashMap aReflection(aEffects[0].Value);
+    comphelper::SequenceAsHashMap aAttributes(aReflection[u"Attribs"_ustr]);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-100000), aAttributes[u"sy"_ustr].get<sal_Int32>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

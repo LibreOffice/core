@@ -162,6 +162,15 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
             mrEffectProperties.m_Effects[nPos]->msName = "reflection";
             saveUnsupportedAttribs(*mrEffectProperties.m_Effects[nPos], rAttribs);
 
+            // The defaults are those of CT_ReflectionEffect.
+            EffectReflectionProperties& rReflection = mrEffectProperties.maReflection;
+            rReflection.moDistance = gfx::Length::emu(rAttribs.getInteger(XML_dist, 0));
+            rReflection.moBlurRadius = gfx::Length::emu(rAttribs.getInteger(XML_blurRad, 0));
+            rReflection.moStartAlpha = rAttribs.getInteger(XML_stA, 100000);
+            rReflection.moStartPosition = rAttribs.getInteger(XML_stPos, 0);
+            rReflection.moEndAlpha = rAttribs.getInteger(XML_endA, 0);
+            rReflection.moEndPosition = rAttribs.getInteger(XML_endPos, 100000);
+
             model::ComplexColor* pColor = nullptr;
             if (mpEffectStyle)
             {
