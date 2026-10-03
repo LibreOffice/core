@@ -58,6 +58,8 @@ namespace drawinglayer::primitive2d
             /// for a table cell element, the columns and the rows it spans
             sal_Int32 mnColSpan;
             sal_Int32 mnRowSpan;
+            /// for a table header cell, whether it is the header of a row, rather than a column
+            bool mbRowHeader;
 
         public:
             /// constructor
@@ -70,7 +72,8 @@ namespace drawinglayer::primitive2d
                 void const* pAnchorStructureElementKey = nullptr,
                 ::std::vector<sal_Int32> const* pAnnotIds = nullptr,
                 sal_Int32 nColSpan = 1,
-                sal_Int32 nRowSpan = 1);
+                sal_Int32 nRowSpan = 1,
+                bool bRowHeader = false);
 
             /// data read access
             const vcl::pdf::StructElement& getStructureElement() const { return maStructureElement; }
@@ -83,6 +86,7 @@ namespace drawinglayer::primitive2d
             const ::std::vector<sal_Int32> & GetAnnotIds() const { return m_AnnotIds; }
             sal_Int32 getColSpan() const { return mnColSpan; }
             sal_Int32 getRowSpan() const { return mnRowSpan; }
+            bool isRowHeader() const { return mbRowHeader; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

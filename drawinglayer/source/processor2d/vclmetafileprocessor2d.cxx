@@ -2893,7 +2893,9 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
             if (rTagElement == vcl::pdf::StructElement::TableHeader)
             {
                 mpPDFExtOutDevData->SetStructureAttribute(vcl::pdf::PDFWriter::Scope,
-                                                          vcl::pdf::PDFWriter::Column);
+                                                          rStructureTagCandidate.isRowHeader()
+                                                              ? vcl::pdf::PDFWriter::Row
+                                                              : vcl::pdf::PDFWriter::Column);
             }
         }
         else
