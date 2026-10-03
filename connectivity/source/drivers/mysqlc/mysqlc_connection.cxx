@@ -75,6 +75,8 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
 
     OString charset_name{ "utf8mb4"_ostr };
     mysql_options(&m_mysql, MYSQL_SET_CHARSET_NAME, charset_name.getStr());
+    const unsigned int nLocalInfile = 0;
+    mysql_options(&m_mysql, MYSQL_OPT_LOCAL_INFILE, &nLocalInfile);
 
     sal_Int32 nIndex;
     OUString token;
