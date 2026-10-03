@@ -1129,8 +1129,16 @@ class XFillGradientItem;
 
 #define SID_ATTR_PAGE_NO_FIRST                          ( SID_SVX_START + 1259 )
 
+#define SID_ATTR_REFLECTION                             ( SID_SVX_START + 1260 )
+#define SID_ATTR_REFLECTION_DISTANCE                    ( SID_SVX_START + 1261 )
+#define SID_ATTR_REFLECTION_BLUR_RADIUS                 ( SID_SVX_START + 1262 )
+#define SID_ATTR_REFLECTION_START_TRANSPARENCY          ( SID_SVX_START + 1263 )
+#define SID_ATTR_REFLECTION_START_POSITION              ( SID_SVX_START + 1264 )
+#define SID_ATTR_REFLECTION_END_TRANSPARENCY            ( SID_SVX_START + 1265 )
+#define SID_ATTR_REFLECTION_END_POSITION                ( SID_SVX_START + 1266 )
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1259 + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1266 + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

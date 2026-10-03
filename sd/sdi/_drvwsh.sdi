@@ -3023,6 +3023,41 @@ interface DrawView
         ExecMethod = FuTemporary;
         StateMethod = GetAttrState;
     ]
+    SID_ATTR_REFLECTION
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_REFLECTION_DISTANCE
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_REFLECTION_BLUR_RADIUS
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_REFLECTION_START_TRANSPARENCY
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_REFLECTION_START_POSITION
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_REFLECTION_END_TRANSPARENCY
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
+    SID_ATTR_REFLECTION_END_POSITION
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
     SID_MOVE_SHAPE_HANDLE
     [
         ExecMethod = FuTemporary ;

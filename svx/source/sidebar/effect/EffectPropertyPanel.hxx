@@ -12,6 +12,7 @@
 #include <svx/sidebar/EffectPropertyPanelBase.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
+#include <vcl/weld/Toggleable.hxx>
 
 class ColorListBox;
 
@@ -30,12 +31,50 @@ public:
     void setGlowTransparency(const SdrPercentItem& rGlowTransparency) override;
     void setSoftEdgeRadius(const SdrMetricItem& rSoftEdgeRadius) override;
 
+    void NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
+
 private:
     SfxBindings* mpBindings;
+
+    // The reflection widgets come before the controllers, so they exist when a controller
+    // reports the first state.
+    std::unique_ptr<weld::Frame> mxReflectionFrame;
+    std::unique_ptr<weld::CheckButton> mxReflection;
+    std::unique_ptr<weld::Label> mxReflectionTransparencyLabel;
+    std::unique_ptr<weld::MetricSpinButton> mxReflectionTransparency;
+    std::unique_ptr<weld::Scale> mxReflectionTransparencySlider;
+    std::unique_ptr<weld::Label> mxReflectionSizeLabel;
+    std::unique_ptr<weld::MetricSpinButton> mxReflectionSize;
+    std::unique_ptr<weld::Scale> mxReflectionSizeSlider;
+    std::unique_ptr<weld::Label> mxReflectionDistanceLabel;
+    std::unique_ptr<weld::MetricSpinButton> mxReflectionDistance;
+    std::unique_ptr<weld::Label> mxReflectionBlurLabel;
+    std::unique_ptr<weld::MetricSpinButton> mxReflectionBlur;
+
+    // False while the selection has no reflection items.
+    bool mbReflectionAvailable = true;
+
     sfx2::sidebar::ControllerItem maGlowColorController;
     sfx2::sidebar::ControllerItem maGlowRadiusController;
     sfx2::sidebar::ControllerItem maGlowTransparencyController;
     sfx2::sidebar::ControllerItem maSoftEdgeRadiusController;
+    sfx2::sidebar::ControllerItem maReflectionController;
+    sfx2::sidebar::ControllerItem maReflectionTransparencyController;
+    sfx2::sidebar::ControllerItem maReflectionSizeController;
+    sfx2::sidebar::ControllerItem maReflectionDistanceController;
+    sfx2::sidebar::ControllerItem maReflectionBlurController;
+
+    void UpdateReflectionControls();
+    void SetReflectionTransparency(sal_uInt16 nTransparency);
+    void SetReflectionSize(sal_uInt16 nSize);
+
+    DECL_LINK(ToggleReflectionHdl, weld::Toggleable&, void);
+    DECL_LINK(ModifyReflectionTransparencyHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(ModifyReflectionTransparencySliderHdl, weld::Scale&, void);
+    DECL_LINK(ModifyReflectionSizeHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(ModifyReflectionSizeSliderHdl, weld::Scale&, void);
+    DECL_LINK(ModifyReflectionDistanceHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(ModifyReflectionBlurHdl, weld::MetricSpinButton&, void);
 };
 }
 

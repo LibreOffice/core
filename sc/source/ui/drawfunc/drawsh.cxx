@@ -410,6 +410,13 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
         case SID_ATTR_GLOW_TEXT_RADIUS:
         case SID_ATTR_GLOW_TEXT_TRANSPARENCY:
         case SID_ATTR_SOFTEDGE_RADIUS:
+        case SID_ATTR_REFLECTION:
+        case SID_ATTR_REFLECTION_DISTANCE:
+        case SID_ATTR_REFLECTION_BLUR_RADIUS:
+        case SID_ATTR_REFLECTION_START_TRANSPARENCY:
+        case SID_ATTR_REFLECTION_START_POSITION:
+        case SID_ATTR_REFLECTION_END_TRANSPARENCY:
+        case SID_ATTR_REFLECTION_END_POSITION:
         case SID_ATTR_TEXTCOLUMNS_NUMBER:
         case SID_ATTR_TEXTCOLUMNS_SPACING:
             if (const SfxItemSet* pNewArgs = rReq.GetArgs())

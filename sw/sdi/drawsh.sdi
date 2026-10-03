@@ -217,6 +217,55 @@ interface TextDraw : TextDrawBase
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_ATTR_REFLECTION
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_REFLECTION_DISTANCE
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_REFLECTION_BLUR_RADIUS
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_REFLECTION_START_TRANSPARENCY
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_REFLECTION_START_POSITION
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_REFLECTION_END_TRANSPARENCY
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_REFLECTION_END_POSITION
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_ATTRIBUTES_LINE
     [
         ExecMethod = ExecDrawDlg ;

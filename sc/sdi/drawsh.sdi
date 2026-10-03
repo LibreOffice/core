@@ -232,6 +232,14 @@ interface TableDraw
     SID_ATTR_GLOW_TEXT_TRANSPARENCY [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
 
     SID_ATTR_SOFTEDGE_RADIUS        [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
+
+    SID_ATTR_REFLECTION                     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
+    SID_ATTR_REFLECTION_DISTANCE            [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
+    SID_ATTR_REFLECTION_BLUR_RADIUS         [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
+    SID_ATTR_REFLECTION_START_TRANSPARENCY  [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
+    SID_ATTR_REFLECTION_START_POSITION      [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
+    SID_ATTR_REFLECTION_END_TRANSPARENCY    [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
+    SID_ATTR_REFLECTION_END_POSITION        [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
     SID_MOVE_SHAPE_HANDLE           [ ExecMethod = ExecDrawAttr; ]
     SID_ATTR_TEXTCOLUMNS_NUMBER     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
     SID_ATTR_TEXTCOLUMNS_SPACING    [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]

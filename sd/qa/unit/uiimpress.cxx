@@ -2967,6 +2967,49 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testOutlineDropSlideDownIntoBody)
     CPPUNIT_ASSERT_EQUAL(pPageC, pDoc->GetSdPage(2, PageKind::Standard));
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testReflectionCommands)
+{
+    // The fourth shape has no reflection.
+    createSdImpressDoc("pptx/shape-reflection-effect.pptx");
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pViewShell->GetActualPage()->GetObj(3), pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, u".uno:ReflectionEffect"_ustr,
+                    comphelper::InitPropertySequence({ { "ReflectionEffect", uno::Any(true) } }));
+    dispatchCommand(
+        mxComponent, u".uno:ReflectionDistance"_ustr,
+        comphelper::InitPropertySequence({ { "ReflectionDistance", uno::Any(sal_Int32(500)) } }));
+    dispatchCommand(
+        mxComponent, u".uno:ReflectionEndPosition"_ustr,
+        comphelper::InitPropertySequence({ { "ReflectionEndPosition", uno::Any(sal_Int16(70)) } }));
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(3, 0));
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(500),
+        xShape->getPropertyValue(u"ReflectionEffectDistance"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int16(70),
+        xShape->getPropertyValue(u"ReflectionEffectEndPosition"_ustr).get<sal_Int16>());
+
+    // The state of the selected shape reads back through the same slots, the way the sidebar
+    // sees it.
+    SfxDispatcher* pDispatcher = pViewShell->GetViewFrame()->GetDispatcher();
+    SfxPoolItemHolder aResult;
+    CPPUNIT_ASSERT(pDispatcher->QueryState(SID_ATTR_REFLECTION, aResult) >= SfxItemState::DEFAULT);
+    auto pOnOff = dynamic_cast<const SfxBoolItem*>(aResult.getItem());
+    CPPUNIT_ASSERT(pOnOff);
+    CPPUNIT_ASSERT(pOnOff->GetValue());
+    CPPUNIT_ASSERT(pDispatcher->QueryState(SID_ATTR_REFLECTION_END_POSITION, aResult)
+                   >= SfxItemState::DEFAULT);
+    auto pSize = dynamic_cast<const SfxUInt16Item*>(aResult.getItem());
+    CPPUNIT_ASSERT(pSize);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(70), pSize->GetValue());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
