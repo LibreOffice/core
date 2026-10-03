@@ -418,8 +418,7 @@ void AsyncDNS::dumpQueueState(std::ostream& os) const
 }
 
 AsyncDNS::AsyncDNS()
-    : _unitWsd(UnitWSD::isUnitTesting() ? &UnitWSD::get() : nullptr)
-    , _resolver(std::make_unique<DNSResolver>())
+    : _resolver(std::make_unique<DNSResolver>())
 {
     startThread();
 }
@@ -447,7 +446,10 @@ void AsyncDNS::resolveDNS()
         // Unlock to allow entries to queue up in _lookups while resolving
         _lock.unlock();
 
-        UNITWSD_CALL_INSTANCE(_unitWsd, filterResolveDNS(_activeLookup.query));
+        // The test running now, not the one this thread started under: the
+        // thread serves every test of a suite. It is stopped before they go.
+        UNITWSD_CALL_INSTANCE(UnitWSD::isUnitTesting() ? UnitWSD::getMaybeNull() : nullptr,
+                              filterResolveDNS(_activeLookup.query));
 
         _activeLookup.cb(_resolver->resolveDNS(_activeLookup.query));
 
