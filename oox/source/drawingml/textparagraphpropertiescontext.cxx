@@ -19,7 +19,10 @@
 
 #include <drawingml/textparagraphpropertiescontext.hxx>
 
+#include <algorithm>
+
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -77,12 +80,11 @@ double  lclGetGraphicAspectRatio( const Reference< XGraphic >& rxGraphic )
 TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2Helper const & rParent,
                                                                 const AttributeList& rAttribs,
                                                                 TextParagraphProperties& rTextParagraphProperties,
-                                                                uint16_t* pListNumberingMask)
+                                                                ListNumberingState* pListNumberingState)
 : ContextHandler2( rParent )
 , mrTextParagraphProperties( rTextParagraphProperties )
 , mrBulletList( rTextParagraphProperties.getBulletList() )
-, mpListNumberingMask( pListNumberingMask )
-, mbHaveNum( false )
+, mpListNumberingState( pListNumberingState )
 {
     OUString sValue;
 
@@ -192,8 +194,12 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
         mrBulletList.setBulletAspectRatio( lclGetGraphicAspectRatio(mxBlipProps->mxFillGraphic) );
     }
 
-    if( !mbHaveNum )
-        markListUnnumbered();
+    // The list is tracked only for a:pPr of a paragraph. Not for a:lvl1pPr etc. of a list
+    // style: a restart there would be inherited by every paragraph using the style
+    if (mpListNumberingState
+        && mpListNumberingState->markParagraph(mrTextParagraphProperties.getLevel(), mrBulletList))
+        mrTextParagraphProperties.setRestartNumbering(true);
+
     if( mrBulletList.is() )
         rPropertyMap.setProperty( PROP_IsNumbering, true);
     sal_Int16 nLevel = mrTextParagraphProperties.getLevel();
@@ -204,50 +210,30 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
         rPropertyMap.setProperty( PROP_ParaAdjust, *mrTextParagraphProperties.getParaAdjust());
 }
 
-bool TextParagraphPropertiesContext::markListNumbered()
+bool ListNumberingState::markParagraph(int nLevel, const BulletList& rBullet)
 {
-    sal_Int16 nLevel = mrTextParagraphProperties.getLevel();
-
-    // We only track list state in some situations
-    if (mpListNumberingMask == nullptr)
+    const BulletList& rNumBullet
+        = rBullet.is() ? rBullet : mrListStyle.getListStyle()[nLevel].getBulletList();
+    sal_Int16 nType = NumberingType::NUMBER_NONE;
+    rNumBullet.mnNumberingType >>= nType;
+    if (nType == NumberingType::NUMBER_NONE || nType == NumberingType::CHAR_SPECIAL
+        || nType == NumberingType::BITMAP)
     {
+        // Lists at our level and deeper end
+        std::fill(maLastNum.begin() + nLevel, maLastNum.end(), Num());
         return false;
     }
 
-    uint16_t nOldMask = *mpListNumberingMask;
-    // The bit that represents this level  (..0001000)
-    uint16_t nOurBit = static_cast<uint16_t>(1) << nLevel;
+    // Lists at deeper levels end
+    std::fill(maLastNum.begin() + nLevel + 1, maLastNum.end(), Num());
 
-    uint16_t nTmp = nOldMask;
-    // Clears all bits at our level and lower (..0000xxx)
-    nTmp &= nOurBit - 1;
-    // and put our bit in (..0001xxx)
-    nTmp |= nOurBit;
-
-    *mpListNumberingMask = nTmp;
-
-    return (nOldMask & nOurBit) == 0;
-}
-
-void TextParagraphPropertiesContext::markListUnnumbered()
-{
-    sal_Int16 nLevel = mrTextParagraphProperties.getLevel();
-
-    // We only track list state in some situations
-    if (mpListNumberingMask == nullptr)
-    {
-        return;
-    }
-
-    uint16_t nOldMask = *mpListNumberingMask;
-    // The bit that represents this level  (..0001000)
-    uint16_t nOurBit = static_cast<uint16_t>(1) << nLevel;
-
-    uint16_t nTmp = nOldMask;
-    // Clears all bits at our level and lower (..0000xxx)
-    nTmp &= nOurBit - 1;
-
-    *mpListNumberingMask = nTmp;
+    // A list continues while its numbering stays the same at this level,
+    // a missing startAt being the same as startAt="1"
+    Num aNum{ rNumBullet.mnNumberingType, rNumBullet.msNumberingPrefix,
+              rNumBullet.msNumberingSuffix, rNumBullet.mnStartAt };
+    bool bRestart = maLastNum[nLevel] != aNum;
+    maLastNum[nLevel] = aNum;
+    return bRestart;
 }
 
 ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
@@ -292,16 +278,9 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             break;
         case A_TOKEN( buAutoNum ):      // CT_TextAutonumberBullet
         {
-            bool bStartingNumList = markListNumbered();
-            mbHaveNum = true;
-
             try {
                 sal_Int32 nType = rAttribs.getToken( XML_type, 0 );
                 sal_Int32 nStartAt = rAttribs.getInteger( XML_startAt, -1 );
-                if( nStartAt >= 0 || bStartingNumList )
-                {
-                    mrTextParagraphProperties.setRestartNumbering(true);
-                }
 
                 if( nStartAt > 32767 )
                 {

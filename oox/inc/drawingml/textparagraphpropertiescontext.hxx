@@ -20,14 +20,40 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIESCONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIESCONTEXT_HXX
 
+#include <array>
 #include <vector>
-#include <stdint.h>
 
 #include <com/sun/star/style/TabStop.hpp>
+#include <drawingml/textliststyle.hxx>
 #include <drawingml/textparagraphproperties.hxx>
 #include <oox/core/contexthandler2.hxx>
 
 namespace oox::drawingml {
+
+// Numbered list state of a text body, shared by its paragraphs
+struct ListNumberingState
+{
+    explicit ListNumberingState(const TextListStyle& rListStyle)
+        : mrListStyle(rListStyle)
+    {
+    }
+
+    // Numbering type, prefix, suffix and start value of a numbered paragraph
+    struct Num
+    {
+        css::uno::Any maType, maPrefix, maSuffix, maStartAt;
+        bool operator==(const Num&) const = default;
+    };
+
+    // Numbering of the last numbered paragraph at each level, empty if we're not in a list
+    // there (n=0 is what pptx calls level 1)
+    std::array<Num, NUM_TEXT_LIST_STYLE_ENTRIES> maLastNum;
+    // a:lstStyle of the text body: a paragraph without a bullet of its own takes it from there
+    const TextListStyle& mrListStyle;
+
+    // A paragraph at nLevel with rBullet as its own bullet; returns true if its numbering restarts
+    bool markParagraph(int nLevel, const BulletList& rBullet);
+};
 
 class TextParagraphPropertiesContext final : public ::oox::core::ContextHandler2
 {
@@ -35,26 +61,19 @@ public:
     TextParagraphPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent,
             const ::oox::AttributeList& rAttributes,
             TextParagraphProperties& rTextParagraphProperties,
-            uint16_t* pListNumberingMask = nullptr);
+            ListNumberingState* pListNumberingState = nullptr);
     virtual ~TextParagraphPropertiesContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
-    // Returns True iff we're tracking numbered lists, and we were not already in a numbered list at this level
-    bool markListNumbered();
-    void markListUnnumbered();
-
     TextParagraphProperties& mrTextParagraphProperties;
     BulletList&     mrBulletList;
     std::vector< css::style::TabStop >  maTabList;
     std::shared_ptr< BlipFillProperties > mxBlipProps;
 
-    // A pointer to an integer mask where we track the list status
-    // If bit 'n' is 1 then we're in a numbered list at that level
-    // (n=0 is what pptx calls level 1)
-    uint16_t*              mpListNumberingMask;
-    bool                   mbHaveNum;
+    // Where we track the list status, if we do
+    ListNumberingState*    mpListNumberingState;
 };
 
 }

@@ -49,23 +49,33 @@ namespace {
 class TextParagraphContext : public ContextHandler2
 {
 public:
-    TextParagraphContext( ContextHandler2Helper const & rParent, TextParagraph& rPara, uint16_t& rListNumberingMask );
+    TextParagraphContext( ContextHandler2Helper const & rParent, TextParagraph& rPara, ListNumberingState& rListNumberingState );
 
     virtual ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
+    virtual void onEndElement() override;
 
 protected:
     TextParagraph& mrParagraph;
-    uint16_t& mrListNumberingMask;
+    ListNumberingState& mrListNumberingState;
 };
 
 }
 
-TextParagraphContext::TextParagraphContext( ContextHandler2Helper const & rParent, TextParagraph& rPara, uint16_t& rListNumberingMask )
+TextParagraphContext::TextParagraphContext( ContextHandler2Helper const & rParent, TextParagraph& rPara, ListNumberingState& rListNumberingState )
 : ContextHandler2( rParent )
 , mrParagraph( rPara )
-, mrListNumberingMask( rListNumberingMask )
+, mrListNumberingState( rListNumberingState )
 {
     mbEnableTrimSpace = false;
+}
+
+void TextParagraphContext::onEndElement()
+{
+    // A paragraph without a:pPr is at level 0, with the bullet of the list style
+    TextParagraphProperties& rProps = mrParagraph.getProperties();
+    if (isCurrentElement(A_TOKEN(p)) && !mrParagraph.hasProperties()
+        && mrListNumberingState.markParagraph(0, rProps.getBulletList()))
+        rProps.setRestartNumbering(true);
 }
 
 ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
@@ -96,7 +106,7 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
         case A_TOKEN( pPr ):
         case W_TOKEN( pPr ):
             mrParagraph.setHasProperties();
-            return new TextParagraphPropertiesContext( *this, rAttribs, mrParagraph.getProperties(), &mrListNumberingMask );
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrParagraph.getProperties(), &mrListNumberingState );
         case A_TOKEN( endParaRPr ):
             return new TextCharacterPropertiesContext( *this, rAttribs, mrParagraph.getEndProperties() );
         case W_TOKEN( sdt ):
@@ -180,7 +190,7 @@ ContextHandlerRef RegularTextRunContext::onCreateContext( sal_Int32 aElementToke
 TextBodyContext::TextBodyContext( ContextHandler2Helper const & rParent, TextBody& rTextBody )
 : ContextHandler2( rParent )
 , mrTextBody( rTextBody )
-, mListNumberingMask(0)
+, maListNumberingState( rTextBody.getTextListStyle() )
 {
 }
 
@@ -205,7 +215,7 @@ ContextHandlerRef TextBodyContext::onCreateContext( sal_Int32 aElementToken, con
             return new TextListStyleContext( *this, mrTextBody.getTextListStyle() );
         case A_TOKEN( p ):          // CT_TextParagraph
         case W_TOKEN( p ):
-            return new TextParagraphContext( *this, mrTextBody.addParagraph(), mListNumberingMask );
+            return new TextParagraphContext( *this, mrTextBody.addParagraph(), maListNumberingState );
         case W_TOKEN( sdt ):
         case W_TOKEN( sdtContent ):
             return this;
