@@ -306,6 +306,21 @@ bool isFirebirdRootedAt(const OUString& rDataDirPath)
     return sRootPath == rDataDirPath;
 #endif
 }
+
+// A value in double quotes in databases.conf keeps "#", a single brace and outer spaces as they
+// are. firebird still ends the value at a line break, still reads "{{" and "}}" as one brace
+// and still expands "$(...)", and a quote cannot be escaped inside it.
+bool canQuoteInDatabasesConf(std::u16string_view aValue)
+{
+    for (const sal_Unicode c : aValue)
+    {
+        if (c < 0x20 || c == '"')
+            return false;
+    }
+    return aValue.find(u"{{") == std::u16string_view::npos
+           && aValue.find(u"}}") == std::u16string_view::npos
+           && aValue.find(u"$(") == std::u16string_view::npos;
+}
 };
 
 FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
@@ -391,6 +406,9 @@ FirebirdDriver::~FirebirdDriver() = default;
 
 OUString FirebirdDriver::addExternalDatabaseName(const OUString& rDatabasePath)
 {
+    if (!canQuoteInDatabasesConf(rDatabasePath))
+        return OUString();
+
     MutexGuard aGuard(m_aMutex);
 
     sal_uInt8 aUuid[16];
@@ -424,8 +442,8 @@ void FirebirdDriver::writeExternalDatabaseNames()
     OStringBuffer aContent;
     for (const auto& [rName, rPath] : m_aExternalDatabaseNames)
     {
-        aContent.append(OUStringToOString(rName, RTL_TEXTENCODING_UTF8) + " = "
-                        + OUStringToOString(rPath, RTL_TEXTENCODING_UTF8) + "\n");
+        aContent.append(OUStringToOString(rName, RTL_TEXTENCODING_UTF8) + " = \""
+                        + OUStringToOString(rPath, RTL_TEXTENCODING_UTF8) + "\"\n");
     }
     const OString sContent = aContent.makeStringAndClear();
 

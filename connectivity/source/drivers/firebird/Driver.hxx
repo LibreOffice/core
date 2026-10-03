@@ -83,7 +83,8 @@ namespace connectivity::firebird
         // that name. firebird resolves a name it finds in databases.conf without applying the
         // DatabaseAccess restriction, while every path it is handed elsewhere, a difference file
         // or a shadow, is still checked against that restriction. The name is random so that a
-        // database firebird opens cannot ask for another database by guessing the name.
+        // database firebird opens cannot ask for another database by guessing the name. The
+        // name is empty for a path that databases.conf cannot hold as one literal value.
         OUString addExternalDatabaseName(const OUString& rDatabasePath);
 
         // Take back a name from addExternalDatabaseName. Any database already attached through
