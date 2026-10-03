@@ -176,6 +176,15 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     // soft edge attributes
     GMAPV( PROP_SoftEdgeRadius,                XML_NAMESPACE_LO_EXT, XML_SOFTEDGE_RADIUS,      XML_TYPE_MEASURE          , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
+    // reflection attributes
+    GMAPV( PROP_ReflectionEffect,                   XML_NAMESPACE_LO_EXT, XML_REFLECTION,                    XML_TYPE_BOOL     , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( PROP_ReflectionEffectDistance,           XML_NAMESPACE_LO_EXT, XML_REFLECTION_DISTANCE,           XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( PROP_ReflectionEffectBlurRadius,         XML_NAMESPACE_LO_EXT, XML_REFLECTION_BLUR,               XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( PROP_ReflectionEffectStartTransparency,  XML_NAMESPACE_LO_EXT, XML_REFLECTION_START_TRANSPARENCY, XML_TYPE_PERCENT16, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( PROP_ReflectionEffectStartPosition,      XML_NAMESPACE_LO_EXT, XML_REFLECTION_START_POSITION,     XML_TYPE_PERCENT16, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( PROP_ReflectionEffectEndTransparency,    XML_NAMESPACE_LO_EXT, XML_REFLECTION_END_TRANSPARENCY,   XML_TYPE_PERCENT16, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( PROP_ReflectionEffectEndPosition,        XML_NAMESPACE_LO_EXT, XML_REFLECTION_END_POSITION,       XML_TYPE_PERCENT16, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+
     // glow text attributes
     TMAPV( PROP_GlowTextEffectRadius,           XML_NAMESPACE_LO_EXT, XML_GLOW_TEXT_RADIUS,          XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     TMAPV( PROP_GlowTextEffectColor,            XML_NAMESPACE_LO_EXT, XML_GLOW_TEXT_COLOR,           XML_TYPE_COLOR    , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),

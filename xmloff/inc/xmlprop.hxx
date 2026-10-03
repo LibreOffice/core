@@ -578,6 +578,16 @@ inline constexpr OUString PROP_PrintHeaders = u"PrintHeaders"_ustr;
 inline constexpr OUString PROP_PrintObjects = u"PrintObjects"_ustr;
 inline constexpr OUString PROP_PrintZeroValues = u"PrintZeroValues"_ustr;
 inline constexpr OUString PROP_PrinterPaperTray = u"PrinterPaperTray"_ustr;
+inline constexpr OUString PROP_ReflectionEffect = u"ReflectionEffect"_ustr;
+inline constexpr OUString PROP_ReflectionEffectBlurRadius = u"ReflectionEffectBlurRadius"_ustr;
+inline constexpr OUString PROP_ReflectionEffectDistance = u"ReflectionEffectDistance"_ustr;
+inline constexpr OUString PROP_ReflectionEffectEndPosition = u"ReflectionEffectEndPosition"_ustr;
+inline constexpr OUString PROP_ReflectionEffectEndTransparency
+    = u"ReflectionEffectEndTransparency"_ustr;
+inline constexpr OUString PROP_ReflectionEffectStartPosition
+    = u"ReflectionEffectStartPosition"_ustr;
+inline constexpr OUString PROP_ReflectionEffectStartTransparency
+    = u"ReflectionEffectStartTransparency"_ustr;
 inline constexpr OUString PROP_RegisterModeActive = u"RegisterModeActive"_ustr;
 inline constexpr OUString PROP_RegisterParagraphStyle = u"RegisterParagraphStyle"_ustr;
 inline constexpr OUString PROP_RegressionType = u"RegressionType"_ustr;

@@ -3376,4 +3376,11 @@ layout
 colors
 quickstyle
 horizontal-rule
+reflection
+reflection-distance
+reflection-blur
+reflection-start-transparency
+reflection-start-position
+reflection-end-transparency
+reflection-end-position
 TOKEN_END_DUMMY

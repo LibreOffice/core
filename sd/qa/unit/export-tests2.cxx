@@ -400,6 +400,44 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testAnimationSoundEmbeddedImportPPTX)
     CPPUNIT_ASSERT(!lcl_hasSoundLink(*pDoc));
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest2, testReflection)
+{
+    createSdImpressDoc("pptx/shape-reflection-effect.pptx");
+    saveAndReload(TestFilter::ODP);
+
+    // The first three shapes have a reflection, each with its own values, and they read back the
+    // same.
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(18),
+        xShape->getPropertyValue(u"ReflectionEffectBlurRadius"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int16(50),
+        xShape->getPropertyValue(u"ReflectionEffectStartTransparency"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int16(100),
+        xShape->getPropertyValue(u"ReflectionEffectEndTransparency"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int16(35),
+        xShape->getPropertyValue(u"ReflectionEffectEndPosition"_ustr).get<sal_Int16>());
+    xShape.set(getShapeFromPage(1, 0));
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(141),
+        xShape->getPropertyValue(u"ReflectionEffectDistance"_ustr).get<sal_Int32>());
+    xShape.set(getShapeFromPage(3, 0));
+    CPPUNIT_ASSERT(!xShape->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
+
+    // The reflection is in the loext namespace of the graphic styles.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//style:graphic-properties[@loext:reflection='true']", 3);
+    assertXPath(pXmlDoc, "//style:graphic-properties[@loext:reflection-distance='0.141cm']", 1);
+    assertXPath(pXmlDoc, "//style:graphic-properties[@loext:reflection-blur='0.018cm']", 2);
+    assertXPath(pXmlDoc, "//style:graphic-properties[@loext:reflection-start-transparency='50%']",
+                2);
+    assertXPath(pXmlDoc, "//style:graphic-properties[@loext:reflection-end-position='35%']", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest2, testLegacyAnimationSoundNotFetched)
 {
     // A legacy animation-effect sound, set through the deprecated shape Sound
