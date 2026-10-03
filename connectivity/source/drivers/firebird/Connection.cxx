@@ -266,6 +266,13 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
                 // The user picked this file, so it is outside the directory firebird is
                 // restricted to. Reach it by the name the driver gives us for it.
                 m_sExternalDatabaseName = rDriver.addExternalDatabaseName(m_sFirebirdURL);
+                if (m_sExternalDatabaseName.isEmpty())
+                {
+                    ::connectivity::SharedResources aResources;
+                    const OUString sMessage = aResources.getResourceString(STR_COULD_NOT_LOAD_FILE).replaceFirst(
+                        "$filename$", m_sConnectionURL);
+                    ::dbtools::throwGenericSQLException(sMessage, *this);
+                }
             }
         }
 
