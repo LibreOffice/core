@@ -20,9 +20,8 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TEXTBODYCONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_TEXTBODYCONTEXT_HXX
 
-#include <stdint.h>
-
 #include <drawingml/textbody.hxx>
+#include <drawingml/textparagraphpropertiescontext.hxx>
 #include <drawingml/textrun.hxx>
 #include <oox/core/contexthandler2.hxx>
 
@@ -39,7 +38,7 @@ public:
 private:
     TextBody&           mrTextBody;
     ShapePtr            mpShapePtr;
-    uint16_t            mListNumberingMask;
+    ListNumberingState  maListNumberingState;
 };
 
 // CT_RegularTextRun
