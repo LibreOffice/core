@@ -3884,16 +3884,9 @@ void DocumentBroker::checkAndUploadToStorage(const std::shared_ptr<ClientSession
     }
     else if (!isAsyncUploading())
     {
-        // If session is disconnected, remove.
-        LOG_TRC("Nothing to upload, disconnecting closed sessions");
-        for (const auto& pair : _sessions)
-        {
-            if (pair.second->isCloseFrame() && !pair.second->inWaitDisconnected())
-            {
-                LOG_TRC("Disconnecting session [" << pair.second->getName() << ']');
-                disconnectSessionInternal(pair.second);
-            }
-        }
+        // The removed sessions that waited for the save are disconnected now.
+        LOG_TRC("Nothing to upload, disconnecting removed sessions");
+        disconnectRemovedSessions();
     }
 }
 
@@ -4418,14 +4411,8 @@ void DocumentBroker::handleUploadToStorageSuccessful(const StorageBase::UploadRe
         stop("unloading");
     }
 
-    // After uploading, disconnect the sessions pending disconnection.
-    for (const auto& pair : _sessions)
-    {
-        if (pair.second->isCloseFrame() && !pair.second->inWaitDisconnected())
-        {
-            disconnectSessionInternal(pair.second);
-        }
-    }
+    // After uploading, disconnect the removed sessions that waited for the upload.
+    disconnectRemovedSessions();
 }
 
 void DocumentBroker::handleUploadToStorageResponse(const StorageBase::UploadResult& uploadResult)
@@ -5742,9 +5729,17 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
     const std::string id = session->getId();
     try
     {
-        UNITWSD_CALL_INSTANCE(_unitWsd, onDocBrokerRemovingSession(_docKey, session));
-
         const std::size_t activeSessionCount = countActiveSessions();
+
+        // A session that was removed before has had its save, the upload of its presets and the
+        // rescue of its clipboard. Only its disconnection and the decision whether to destroy
+        // the document are left.
+        const bool alreadyRemoved = session->isRemoved();
+        if (!alreadyRemoved)
+        {
+            session->setRemoved();
+            UNITWSD_CALL_INSTANCE(_unitWsd, onDocBrokerRemovingSession(_docKey, session));
+        }
 
         const bool lastEditableSession = session->isEditable() && !haveAnotherEditableSession(id);
         // Forcing a save when always_save_on_exit=true creates a new
@@ -5756,7 +5751,7 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
 
         // A detached document is losing this view on purpose and will open another, so keep
         // where this one was looking.
-        if (isDetached())
+        if (isDetached() && !alreadyRemoved)
             rememberViewPosition(*session);
 
         LOG_INF("Removing session [" << id << "] on docKey [" << _docKey << "] with appDocId ["
@@ -5771,10 +5766,11 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
                                      << ", MarkToDestroy: " << _docState.isMarkedToDestroy()
                                      << ", LastEditableSession: " << lastEditableSession
                                      << ", DontSaveIfUnmodified: " << dontSaveIfUnmodified
-                                     << ", IsPossiblyModified: " << isPossiblyModified());
+                                     << ", IsPossiblyModified: " << isPossiblyModified()
+                                     << ", AlreadyRemoved: " << alreadyRemoved);
 
 #if !MOBILEAPP
-        if (!isConvertTo())
+        if (!isConvertTo() && !alreadyRemoved)
         {
             try
             {
@@ -5830,10 +5826,20 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
         // A detached document keeps its edits in memory for the view that is coming back,
         // so it writes nothing here. The app writes the user's own file only while the
         // document is marked as edited, and a save would clear that mark.
-        if (isDetached() || !lastEditableSession ||
-            (!_saveManager.isSaving() &&
-             !autoSave(/*force=*/_alwaysSaveOnExit || isPossiblyModified(),
-                       dontSaveIfUnmodified, /*finalWrite=*/true)))
+        if (alreadyRemoved)
+        {
+            // A session that waits for the Kit to confirm its disconnection is dropped now. One
+            // that waits for the save and upload is disconnected after the upload, or here when
+            // neither is running any more.
+            if (session->inWaitDisconnected())
+                finalRemoveSession(session);
+            else if (!_saveManager.isSaving() && !isAsyncUploading())
+                disconnectSessionInternal(session);
+        }
+        else if (isDetached() || !lastEditableSession ||
+                 (!_saveManager.isSaving() &&
+                  !autoSave(/*force=*/_alwaysSaveOnExit || isPossiblyModified(),
+                            dontSaveIfUnmodified, /*finalWrite=*/true)))
         {
             disconnectSessionInternal(session);
         }
@@ -5932,11 +5938,33 @@ void DocumentBroker::pushSessionsToCollabBroker()
 #endif
 }
 
+void DocumentBroker::disconnectRemovedSessions()
+{
+    // Disconnecting a session can drop sessions from the map, so the ones to disconnect are
+    // collected first.
+    std::vector<std::shared_ptr<ClientSession>> removed;
+    for (const auto& pair : _sessions)
+    {
+        if (pair.second->isRemoved() && !pair.second->inWaitDisconnected())
+            removed.push_back(pair.second);
+    }
+
+    for (const std::shared_ptr<ClientSession>& session : removed)
+    {
+        if (_sessions.find(session->getId()) == _sessions.end())
+            continue; // Dropped by an earlier disconnection.
+
+        LOG_TRC("Disconnecting removed session [" << session->getName() << ']');
+        disconnectSessionInternal(session);
+    }
+}
+
 void DocumentBroker::disconnectSessionInternal(const std::shared_ptr<ClientSession>& session)
 {
     ASSERT_CORRECT_THREAD();
 
     LOG_ASSERT_MSG(session, "Got null ClientSession");
+    LOG_ASSERT_MSG(session->isRemoved(), "Disconnecting a session that was not removed");
     const std::string id = session->getId();
     try
     {

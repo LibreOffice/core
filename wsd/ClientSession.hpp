@@ -86,6 +86,10 @@ public:
     /// returns true if we're waiting for the kit to acknowledge disconnect.
     bool inWaitDisconnected() const { return _state == SessionState::WAIT_DISCONNECT; }
 
+    /// True once the broker has started to remove this session.
+    bool isRemoved() const { return _isRemoved; }
+    void setRemoved() { _isRemoved = true; }
+
     /// transition to a new state
     void setState(SessionState newState);
 
@@ -918,6 +922,10 @@ private:
 
     /// Whether this session is the owner of currently opened document
     bool _isDocumentOwner;
+
+    /// Whether the broker has started to remove this session. Once set, it stays set for the rest
+    /// of the session's life.
+    bool _isRemoved = false;
 
     /// If it is allowed to try to switch from read-only to edit mode,
     /// because it's read-only just because of transient lock failure.

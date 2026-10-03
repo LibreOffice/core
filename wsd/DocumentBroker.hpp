@@ -1358,6 +1358,9 @@ private:
     /// Starts the Kit <-> DocumentBroker shutdown handshake
     void disconnectSessionInternal(const std::shared_ptr<ClientSession>& session);
 
+    /// Disconnects from the Kit every removed session that is not waiting for the Kit yet.
+    void disconnectRemovedSessions();
+
     /// Forward a message from child session to its respective client session.
     bool forwardToClient(const std::shared_ptr<Message>& payload);
 

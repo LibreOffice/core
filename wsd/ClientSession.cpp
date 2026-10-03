@@ -6195,7 +6195,7 @@ bool ClientSession::shouldPark(const std::shared_ptr<DocumentBroker>& docBroker)
     (void)docBroker;
     return false;
 #else
-    if (!isReconnectable() || _state != SessionState::LIVE ||
+    if (!isReconnectable() || _state != SessionState::LIVE || isRemoved() ||
         isParked() || docBroker->isUnloading() || SigUtil::getShutdownRequestFlag() ||
         SigUtil::getTerminationFlag())
         return false;
@@ -6282,7 +6282,8 @@ void ClientSession::dumpState(std::ostream& os)
     os << "\t\tisLive: " << isLive()
        << "\n\t\tisViewLoaded: " << isViewLoaded()
        << "\n\t\tisDocumentOwner: " << isDocumentOwner()
-       << "\n\t\tstate: " << name(_state);
+       << "\n\t\tstate: " << name(_state)
+       << "\n\t\tisRemoved: " << _isRemoved;
 
     _auth.dumpState(os);
 

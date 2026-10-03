@@ -25,6 +25,7 @@
 #include <Poco/Net/HTTPRequest.h>
 
 #include <chrono>
+#include <map>
 
 /// This is to test that dropping connection is seen as leaving the document
 class SecondJoinQuit : public WopiTestServer
@@ -366,10 +367,85 @@ public:
     }
 };
 
+/// Closing a document takes its sessions down from the broker's side first, and their sockets
+/// closing afterwards leaves them as they are: each session is saved, unlocked and disconnected
+/// from the Kit once.
+class UnitRemoveSessionOnce : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoad, WaitUnload, Done) _phase;
+
+    /// How many times each session was taken out. Touched on the broker's thread only.
+    std::map<std::string, std::size_t> _removals;
+
+public:
+    UnitRemoveSessionOnce()
+        : WopiTestServer("UnitRemoveSessionOnce")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void onDocBrokerRemovingSession(const std::string& /*docKey*/,
+                                    const std::shared_ptr<ClientSession>& session) override
+    {
+        const std::size_t count = ++_removals[session->getId()];
+        TST_LOG("Removing session [" << session->getId() << "], time #" << count);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoad);
+
+        TRANSITION_STATE(_phase, Phase::WaitUnload);
+
+        // Unloads, and takes the session down from the broker's side.
+        WSD_CMD("closedocument");
+
+        return true;
+    }
+
+    void onDocBrokerDestroy(const std::string& /*docKey*/) override
+    {
+        LOK_ASSERT_MESSAGE("Expected the session to have been removed", !_removals.empty());
+        for (const auto& [id, count] : _removals)
+        {
+            LOK_ASSERT_EQUAL_MESSAGE("Expected session [" + id + "] to be removed only once",
+                                     static_cast<std::size_t>(1), count);
+        }
+
+        TRANSITION_STATE(_phase, Phase::Done);
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoad);
+
+                TST_LOG("Load: initWebsocket");
+                initWebsocket("/wopi/files/0?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::Done:
+            {
+                passTest("Each session was removed once");
+                break;
+            }
+            case Phase::WaitLoad:
+            case Phase::WaitUnload:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[4]{ new SecondJoinQuitNormal(), new SecondJoinQuitEarly(),
-                             new SecondJoinWhileFirstQuit(), nullptr };
+    return new UnitBase*[5]{ new SecondJoinQuitNormal(), new SecondJoinQuitEarly(),
+                             new SecondJoinWhileFirstQuit(), new UnitRemoveSessionOnce(),
+                             nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
