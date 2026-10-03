@@ -39,6 +39,7 @@
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <sdr/attribute/sdrtextattribute.hxx>
 #include <drawinglayer/primitive2d/glowprimitive2d.hxx>
+#include <drawinglayer/primitive2d/ReflectionPrimitive2D.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <svx/svdotext.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -969,6 +970,20 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 return std::move(aContent);
             Primitive2DContainer aRetval(1);
             aRetval[0] = new SoftEdgePrimitive2D(nRadius, std::move(aContent));
+            return aRetval;
+        }
+
+        Primitive2DContainer createEmbeddedReflectionPrimitive(
+            Primitive2DContainer&& rContent,
+            Primitive2DContainer&& rReflected,
+            const attribute::ReflectionAttribute& rReflection)
+        {
+            if (rReflected.empty() || rReflection.isDefault())
+                return std::move(rContent);
+
+            Primitive2DContainer aRetval(2);
+            aRetval[0] = new ReflectionPrimitive2D(rReflection, std::move(rReflected));
+            aRetval[1] = new GroupPrimitive2D(std::move(rContent));
             return aRetval;
         }
 

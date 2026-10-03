@@ -23,6 +23,7 @@
 #include <sdr/attribute/sdrtextattribute.hxx>
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
 #include <drawinglayer/attribute/sdrglowtextattribute.hxx>
+#include <drawinglayer/attribute/ReflectionAttribute.hxx>
 
 
 namespace drawinglayer::attribute
@@ -42,13 +43,17 @@ namespace drawinglayer::attribute
             // soft edge
             sal_Int32 mnSoftEdgeRadius = 0;
 
+            // reflection effect
+            ReflectionAttribute maReflection;
+
         public:
             SdrEffectsTextAttribute(
                 SdrShadowAttribute aShadow,
                 SdrTextAttribute aTextAttribute,
                 SdrGlowAttribute aGlow,
                 SdrGlowTextAttribute aGlowText,
-                sal_Int32 nSoftEdgeRadius);
+                sal_Int32 nSoftEdgeRadius,
+                ReflectionAttribute aReflection);
             SdrEffectsTextAttribute();
             SdrEffectsTextAttribute(const SdrEffectsTextAttribute& rCandidate);
             SdrEffectsTextAttribute& operator=(const SdrEffectsTextAttribute& rCandidate);
@@ -65,6 +70,7 @@ namespace drawinglayer::attribute
             const SdrGlowAttribute& getGlow() const { return maGlow; }
             const SdrGlowTextAttribute& getGlowText() const { return maGlowText; }
             sal_Int32 getSoftEdgeRadius() const { return mnSoftEdgeRadius; }
+            const ReflectionAttribute& getReflection() const { return maReflection; }
         };
 
 } // end of namespace drawinglayer::attribute

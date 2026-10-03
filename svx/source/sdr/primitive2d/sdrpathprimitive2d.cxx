@@ -124,12 +124,23 @@ namespace drawinglayer::primitive2d
                         false));
             }
 
+            // The reflection shows the shape with its glow and text, but not its shadow.
+            Primitive2DContainer aReflected;
+            if (mbApplyEffects && !getSdrLFSTAttribute().getReflection().isDefault())
+                aReflected = aRetval;
+
             // add shadow
             if(!getSdrLFSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(
                     std::move(aRetval),
                     getSdrLFSTAttribute().getShadow());
+            }
+
+            if (!aReflected.empty())
+            {
+                aRetval = createEmbeddedReflectionPrimitive(
+                    std::move(aRetval), std::move(aReflected), getSdrLFSTAttribute().getReflection());
             }
 
             if (getClipPolyPolygon().count() > 0)

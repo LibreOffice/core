@@ -130,11 +130,22 @@ Primitive2DReference SdrGrafPrimitive2D::create2DDecomposition(
         aRetval = createEmbeddedGlowPrimitive(std::move(aRetval), getSdrLFSTAttribute().getGlow());
     }
 
+    // The reflection shows the graphic with its glow and text, but not its shadow.
+    Primitive2DContainer aReflected;
+    if (!getSdrLFSTAttribute().getReflection().isDefault())
+        aReflected = aRetval;
+
     // add shadow
     if (!getSdrLFSTAttribute().getShadow().isDefault())
     {
         aRetval = createEmbeddedShadowPrimitive(std::move(aRetval),
                                                 getSdrLFSTAttribute().getShadow(), getTransform());
+    }
+
+    if (!aReflected.empty())
+    {
+        aRetval = createEmbeddedReflectionPrimitive(std::move(aRetval), std::move(aReflected),
+                                                    getSdrLFSTAttribute().getReflection());
     }
 
     return new GroupPrimitive2D(std::move(aRetval));

@@ -29,12 +29,14 @@ namespace drawinglayer::attribute
             SdrTextAttribute aTextAttribute,
             SdrGlowAttribute aGlow,
             SdrGlowTextAttribute aGlowText,
-            sal_Int32 nSoftEdgeRadius)
+            sal_Int32 nSoftEdgeRadius,
+            ReflectionAttribute aReflection)
         :   maShadow(std::move(aShadow)),
             maTextAttribute(std::move(aTextAttribute)),
             maGlow(std::move(aGlow)),
             maGlowText(std::move(aGlowText)),
-            mnSoftEdgeRadius(nSoftEdgeRadius)
+            mnSoftEdgeRadius(nSoftEdgeRadius),
+            maReflection(std::move(aReflection))
         {
         }
 
@@ -47,7 +49,8 @@ namespace drawinglayer::attribute
             maTextAttribute(rCandidate.getText()),
             maGlow(rCandidate.maGlow),
             maGlowText(rCandidate.maGlowText),
-            mnSoftEdgeRadius(rCandidate.mnSoftEdgeRadius)
+            mnSoftEdgeRadius(rCandidate.mnSoftEdgeRadius),
+            maReflection(rCandidate.maReflection)
         {
         }
 
@@ -58,6 +61,7 @@ namespace drawinglayer::attribute
             maGlow = rCandidate.maGlow;
             maGlowText = rCandidate.maGlowText;
             mnSoftEdgeRadius = rCandidate.mnSoftEdgeRadius;
+            maReflection = rCandidate.maReflection;
 
             return *this;
         }
@@ -66,7 +70,8 @@ namespace drawinglayer::attribute
         {
             return (getShadow().isDefault()
                 && getText().isDefault() && maGlow.isDefault()
-                && maGlowText.isDefault() && getSoftEdgeRadius() == 0);
+                && maGlowText.isDefault() && getSoftEdgeRadius() == 0
+                && maReflection.isDefault());
         }
 
         bool SdrEffectsTextAttribute::operator==(const SdrEffectsTextAttribute& rCandidate) const
@@ -75,7 +80,8 @@ namespace drawinglayer::attribute
                 && getText() == rCandidate.getText()
                 && getGlow() == rCandidate.getGlow()
                 && getGlowText() == rCandidate.getGlowText()
-                && getSoftEdgeRadius() == rCandidate.getSoftEdgeRadius());
+                && getSoftEdgeRadius() == rCandidate.getSoftEdgeRadius()
+                && getReflection() == rCandidate.getReflection());
         }
 
 } // end of namespace

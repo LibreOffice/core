@@ -22,6 +22,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
 #include <drawinglayer/attribute/sdrglowtextattribute.hxx>
+#include <drawinglayer/attribute/ReflectionAttribute.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 
 #include <svx/svxdllapi.h>
@@ -85,6 +86,13 @@ namespace drawinglayer::primitive2d
         Primitive2DContainer SVXCORE_DLLPUBLIC createEmbeddedSoftEdgePrimitive(
             Primitive2DContainer&& aContent,
             sal_Int32 nRadius);
+
+        // Returns rContent with the reflection of rReflected behind it. rReflected is the part of
+        // the object that shows in the reflection.
+        Primitive2DContainer SVXCORE_DLLPUBLIC createEmbeddedReflectionPrimitive(
+            Primitive2DContainer&& rContent,
+            Primitive2DContainer&& rReflected,
+            const attribute::ReflectionAttribute& rReflection);
 
 } // end of namespace drawinglayer::primitive2d
 

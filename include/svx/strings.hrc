@@ -519,6 +519,13 @@
 #define SIP_SA_GLOW_TEXT_COLOR                              NC_("SIP_SA_GLOW_TEXT_COLOR", "Color of text glow effect")
 #define SIP_SA_GLOW_TEXT_TRANSPARENCY                       NC_("SIP_SA_GLOW_TEXT_TRANSPARENCY", "Transparency of text glow effect")
 #define SIP_SA_SOFTEDGE_RADIUS                              NC_("SIP_SA_SOFTEDGE_RADIUS", "Radius of soft edge effect")
+#define SIP_SA_REFLECTION                                   NC_("SIP_SA_REFLECTION", "Reflection effect")
+#define SIP_SA_REFLECTION_DISTANCE                          NC_("SIP_SA_REFLECTION_DISTANCE", "Distance of reflection effect")
+#define SIP_SA_REFLECTION_BLUR_RADIUS                       NC_("SIP_SA_REFLECTION_BLUR_RADIUS", "Blur radius of reflection effect")
+#define SIP_SA_REFLECTION_START_TRANSPARENCY                NC_("SIP_SA_REFLECTION_START_TRANSPARENCY", "Start transparency of reflection effect")
+#define SIP_SA_REFLECTION_START_POSITION                    NC_("SIP_SA_REFLECTION_START_POSITION", "Start position of reflection effect")
+#define SIP_SA_REFLECTION_END_TRANSPARENCY                  NC_("SIP_SA_REFLECTION_END_TRANSPARENCY", "End transparency of reflection effect")
+#define SIP_SA_REFLECTION_END_POSITION                      NC_("SIP_SA_REFLECTION_END_POSITION", "End position of reflection effect")
 #define STR_ObjNameSingulMEDIA                              NC_("STR_ObjNameSingulMEDIA", "Media object")
 #define STR_ObjNamePluralMEDIA                              NC_("STR_ObjNamePluralMEDIA", "Media objects")
 // drawing layer table strings

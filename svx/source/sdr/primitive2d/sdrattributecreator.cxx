@@ -86,6 +86,7 @@
 #include <sdr/attribute/sdrlinefilleffectstextattribute.hxx>
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
 #include <drawinglayer/attribute/sdrglowtextattribute.hxx>
+#include <drawinglayer/attribute/ReflectionAttribute.hxx>
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
@@ -262,6 +263,21 @@ namespace drawinglayer
         sal_Int32 getSoftEdgeRadius(const SfxItemSet& rSet)
         {
             return rSet.Get(SDRATTR_SOFTEDGE_RADIUS).GetValue();
+        }
+
+        attribute::ReflectionAttribute createNewReflectionAttribute(const SfxItemSet& rSet)
+        {
+            if (!rSet.Get(SDRATTR_REFLECTION).GetValue())
+                return attribute::ReflectionAttribute();
+
+            // The items hold percentages, the attribute holds fractions.
+            return attribute::ReflectionAttribute(
+                rSet.Get(SDRATTR_REFLECTION_DISTANCE).GetValue(),
+                rSet.Get(SDRATTR_REFLECTION_BLUR_RADIUS).GetValue(),
+                rSet.Get(SDRATTR_REFLECTION_START_TRANSPARENCY).GetValue() / 100.0,
+                rSet.Get(SDRATTR_REFLECTION_START_POSITION).GetValue() / 100.0,
+                rSet.Get(SDRATTR_REFLECTION_END_TRANSPARENCY).GetValue() / 100.0,
+                rSet.Get(SDRATTR_REFLECTION_END_POSITION).GetValue() / 100.0);
         }
     } // end of anonymous namespace
 } // end of namespace drawinglayer
@@ -820,9 +836,11 @@ namespace drawinglayer::primitive2d
             const OutlinerParaObject* pOutliner = pText ? pText->GetObject().GetOutlinerParaObject() : nullptr;
             const attribute::SdrGlowTextAttribute aGlowText(createNewSdrGlowTextAttribute(rSet, pOutliner));
             const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
+            attribute::ReflectionAttribute aReflection(createNewReflectionAttribute(rSet));
 
             return attribute::SdrEffectsTextAttribute(aShadow, std::move(aText),
-                                                      aGlow, aGlowText, nSoftEdgeRadius);
+                                                      aGlow, aGlowText, nSoftEdgeRadius,
+                                                      std::move(aReflection));
         }
 
         attribute::SdrLineEffectsTextAttribute createNewSdrLineEffectsTextAttribute(
@@ -869,13 +887,15 @@ namespace drawinglayer::primitive2d
                 const OutlinerParaObject* pOutliner = pText ? pText->GetObject().GetOutlinerParaObject() : nullptr;
                 attribute::SdrGlowTextAttribute aGlowText = createNewSdrGlowTextAttribute(rSet, pOutliner);
                 const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
+                const attribute::ReflectionAttribute aReflection(createNewReflectionAttribute(rSet));
 
                 return attribute::SdrLineEffectsTextAttribute(std::move(aLine),
                                                               std::move(aLineStartEnd),
                                                               std::move(aShadow),
                                                               std::move(aText),
                                                               std::move(aGlow),
-                                                              std::move(aGlowText), nSoftEdgeRadius);
+                                                              std::move(aGlowText), nSoftEdgeRadius,
+                                                              aReflection);
             }
 
             return attribute::SdrLineEffectsTextAttribute();
@@ -947,9 +967,12 @@ namespace drawinglayer::primitive2d
 
                 const sal_Int32 nSoftEdgeRadius(getSoftEdgeRadius(rSet));
 
+                const attribute::ReflectionAttribute aReflection(createNewReflectionAttribute(rSet));
+
                 return attribute::SdrLineFillEffectsTextAttribute(aLine, std::move(aFill), aLineStartEnd,
                                                                   aShadow, std::move(aFillFloatTransGradient),
-                                                                  aText, aGlow, aGlowText, nSoftEdgeRadius);
+                                                                  aText, aGlow, aGlowText, nSoftEdgeRadius,
+                                                                  aReflection);
             }
 
             return attribute::SdrLineFillEffectsTextAttribute();

@@ -57,6 +57,7 @@ namespace sdr::properties
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
                 SDRATTR_GLOW_FIRST, SDRATTR_GLOW_TEXT_LAST,
                 SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
+                SDRATTR_REFLECTION_FIRST, SDRATTR_REFLECTION_LAST,
 
                 // range from SdrTextObj
                 EE_ITEMS_START, EE_ITEMS_END>);

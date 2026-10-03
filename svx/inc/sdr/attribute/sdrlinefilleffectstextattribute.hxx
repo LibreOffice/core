@@ -42,7 +42,8 @@ namespace drawinglayer::attribute
                 const SdrTextAttribute& rTextAttribute,
                 const SdrGlowAttribute& rGlow,
                 const SdrGlowTextAttribute& rGlowText,
-                sal_Int32 nSoftEdgeRadius);
+                sal_Int32 nSoftEdgeRadius,
+                const ReflectionAttribute& rReflection);
             SdrLineFillEffectsTextAttribute();
             SdrLineFillEffectsTextAttribute(const SdrLineFillEffectsTextAttribute& rCandidate);
             SdrLineFillEffectsTextAttribute& operator=(const SdrLineFillEffectsTextAttribute& rCandidate);

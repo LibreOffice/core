@@ -75,6 +75,11 @@ namespace drawinglayer::primitive2d
                 aRetval.append(std::move(aTempContentText));
             }
 
+            // The reflection shows the shape with its glow and text, but not its shadow.
+            Primitive2DContainer aReflected;
+            if (!getSdrSTAttribute().getReflection().isDefault())
+                aReflected = aRetval;
+
             // add shadow
             if(!aRetval.empty() && !getSdrSTAttribute().getShadow().isDefault())
             {
@@ -93,6 +98,12 @@ namespace drawinglayer::primitive2d
                     aRetval = createEmbeddedShadowPrimitive(std::move(aRetval), getSdrSTAttribute().getShadow(),
                                                             maTransform);
                 }
+            }
+
+            if (!aReflected.empty())
+            {
+                aRetval = createEmbeddedReflectionPrimitive(
+                    std::move(aRetval), std::move(aReflected), getSdrSTAttribute().getReflection());
             }
 
             return new GroupPrimitive2D(std::move(aRetval));
