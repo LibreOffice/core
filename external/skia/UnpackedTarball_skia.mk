@@ -43,6 +43,7 @@ skia_patches := \
     msvc-unknown-attributes.patch.1 \
 	fix-semaphore-include.patch.1 \
 	fix-xputimage-depth.patch.1 \
+	freebsd-executable-path.patch.0 \
 
 ifneq ($(MSYSTEM),)
 # use binary flag so patch from git-bash won't choke on mixed line-endings in patches

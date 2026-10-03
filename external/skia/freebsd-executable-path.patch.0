@@ -1,0 +1,40 @@
+--- src/utils/SkGetExecutablePath_linux.cpp.orig
++++ src/utils/SkGetExecutablePath_linux.cpp
+@@ -7,7 +7,15 @@
+ 
+ #include "src/utils/SkGetExecutablePath.h"
+ 
++#if defined(__linux__)
+ #include <linux/limits.h>
++#else
++#include <limits.h>
++#endif
++#if defined(__FreeBSD__)
++#include <sys/param.h>
++#include <sys/sysctl.h>
++#endif
+ #include <sys/types.h>
+ #include <unistd.h>
+ #include <cstddef>
+@@ -16,11 +24,21 @@
+ 
+ std::string SkGetExecutablePath() {
+     std::string result(PATH_MAX, '\0');
++#if defined(__FreeBSD__)
++    int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1 };
++    size_t len = result.size();
++    if (sysctl(mib, 4, result.data(), &len, nullptr, 0) != 0 || len < 2) {
++        result.clear();
++    } else {
++        result.resize(len - 1); // len includes the terminating NUL
++    }
++#else
+     ssize_t len = readlink("/proc/self/exe", result.data(), result.size() - 1);
+     if (len < 0 || static_cast<size_t>(len) >= PATH_MAX - 1) {
+         result.clear();
+     } else {
+         result.resize(len);
+     }
++#endif
+     return result;
+ }
