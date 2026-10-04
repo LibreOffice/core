@@ -5383,6 +5383,7 @@ class DispatchResultListener : public cppu::WeakImplHelper<css::frame::XDispatch
     const std::chrono::steady_clock::time_point mSaveTime; //< The time we started saving.
     const bool mbWasModified; //< Whether or not the document was modified before saving.
     const cpo::uno::Reference<css::lang::XComponent> mxComponent; //< The document the command ran on.
+    bool mbFinished = false; //< Whether the result was given.
 
 public:
     DispatchResultListener(const char* pCommand, std::shared_ptr<CallbackFlushHandler> pCallback,
@@ -5396,8 +5397,12 @@ public:
         assert(mpCallback);
     }
 
+    /// Whether dispatchFinished() was called.
+    bool hasFinished() const { return mbFinished; }
+
     virtual void dispatchFinished(const css::frame::DispatchResultEvent& rEvent) override
     {
+        mbFinished = true;
         tools::JsonWriter aJson;
         aJson.put("commandName", maCommand);
 
@@ -5993,6 +5998,32 @@ static bool extractDontSaveIfUnmodified(std::vector<beans::PropertyValue>& rArgu
     return bDontSaveIfUnmodified;
 }
 
+namespace
+{
+/// Give a failed result with rMessage to xListener, unless it has a result already.
+void giveFailedResult(const rtl::Reference<DispatchResultListener>& xListener,
+                      const OUString& rMessage)
+{
+    if (xListener.is() && !xListener->hasFinished())
+    {
+        css::frame::DispatchResultEvent aEvent;
+        aEvent.State = frame::DispatchResultState::FAILURE;
+        aEvent.Result <<= rMessage;
+        xListener->dispatchFinished(aEvent);
+    }
+}
+
+/// Log the exception that dispatching rCommand threw, and give a failed result to xListener,
+/// unless it has a result already.
+void reportDispatchException(const rtl::Reference<DispatchResultListener>& xListener,
+                             const OUString& rCommand, const OUString& rMessage)
+{
+    SAL_WARN("kit", "Dispatching " << rCommand << " threw: " << rMessage);
+    SetLastExceptionMsg("Failed to dispatch " + rCommand + ": " + rMessage);
+    giveFailedResult(xListener, rMessage);
+}
+} // anonymous namespace
+
 void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArguments,
                                        bool bNotifyWhenFinished)
 {
@@ -6314,19 +6345,35 @@ void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArgume
         }
     }
     bool bResult = false;
-    if (bNotifyWhenFinished && mpCallbackFlushHandlers.count(nView))
+    rtl::Reference<DispatchResultListener> xListener;
+    try
     {
-        bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector),
-                new DispatchResultListener(pCommand, mpCallbackFlushHandlers[nView],
-                                           pDocSh && pDocSh->IsModified(),
-                                           mxComponent));
+        if (bNotifyWhenFinished && mpCallbackFlushHandlers.count(nView))
+        {
+            xListener = new DispatchResultListener(pCommand, mpCallbackFlushHandlers[nView],
+                                                   pDocSh && pDocSh->IsModified(), mxComponent);
+            bResult = comphelper::dispatchCommand(
+                aCommand, comphelper::containerToSequence(aPropertyValuesVector),
+                cpo::uno::Reference<css::frame::XDispatchResultListener>(xListener));
+        }
+        else
+            bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
     }
-    else
-        bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
+    catch (const std::exception& rException)
+    {
+        reportDispatchException(xListener, aCommand, OUString::fromUtf8(rException.what()));
+        return;
+    }
+    catch (const cpo::uno::Exception& rException)
+    {
+        reportDispatchException(xListener, aCommand, rException.Message);
+        return;
+    }
 
     if (!bResult)
     {
         SetLastExceptionMsg("Failed to dispatch " + aCommand);
+        giveFailedResult(xListener, "Failed to dispatch " + aCommand);
     }
 }
 
