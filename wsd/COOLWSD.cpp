@@ -162,6 +162,17 @@ ServerSocket::Type ClientListenAddr = ServerSocket::Type::Public;
 // Tracks the set of prisoners / children waiting to be used.
 std::mutex NewChildrenMutex;
 std::condition_variable NewChildrenCV;
+
+/// Whether any Kit has started, so far.
+std::atomic<bool> AnyKitStarted(false);
+
+#if !MOBILEAPP
+/// How many times the forkit died before any Kit started.
+int ForKitDeathsBeforeAnyKit = 0;
+
+/// The most times the forkit may die before any Kit has started.
+constexpr int MaxForKitDeathsBeforeAnyKit = 3;
+#endif
 std::vector<std::shared_ptr<ChildProcess>> NewChildren;
 
 std::atomic<int> TotalOutstandingForks(0);
@@ -964,6 +975,7 @@ static size_t addNewChild(std::shared_ptr<ChildProcess> child)
                                   << " outstanding requests");
     SigUtil::addActivity("added child " + std::to_string(pid));
     NewChildren.emplace_back(std::move(child));
+    AnyKitStarted = true;
     const size_t count = NewChildren.size();
     lock.unlock();
 
@@ -3544,13 +3556,15 @@ bool COOLWSD::checkAndRestoreForKit()
         {
             if (WIFEXITED(status) || WIFSIGNALED(status))
             {
+                // Whether the forkit gave up its place to one without capabilities. EX_CONFIG is
+                // coolforkit-caps saying it holds no capabilities.
+                const bool handedOver = WIFEXITED(status) && WEXITSTATUS(status) == EX_CONFIG;
                 if (WIFEXITED(status))
                 {
                     LOG_INF("Forkit process [" << pid << "] exited with code: " <<
                             WEXITSTATUS(status) << '.');
 
-                    // EX_CONFIG is coolforkit-caps saying it holds no capabilities.
-                    if (WEXITSTATUS(status) == EX_CONFIG)
+                    if (handedOver)
                         CapabilityJailUnusable = true;
                 }
                 else
@@ -3572,6 +3586,20 @@ bool COOLWSD::checkAndRestoreForKit()
                     OutstandingSubForKitSpawns.clear();
                     LastSubForKitSpawnRequestTimes.clear();
                     orphanSpareKits(nullptr);
+                }
+
+                // A forkit that dies this many times before any Kit started cannot start here, for
+                // the reasons logged as each died, so wsd shuts down. A forkit that handed over did
+                // not die.
+                if (!AnyKitStarted && !handedOver &&
+                    ++ForKitDeathsBeforeAnyKit >= MaxForKitDeathsBeforeAnyKit)
+                {
+                    LOG_FTL("Setting ShutdownRequestFlag: Forkit died "
+                            << ForKitDeathsBeforeAnyKit
+                            << " times before any Kit started. Giving up.");
+                    SigUtil::requestShutdown();
+                    NewChildrenCV.notify_all();
+                    return true;
                 }
 
                 // Spawn a new forkit and try to dust it off and resume.
@@ -4775,22 +4803,23 @@ void COOLWSD::innerMain()
         // If we are debugging, it's not uncommon to wait for several minutes before first
         // child is born. Don't use an expiry timeout in that case.
         const bool debugging = std::getenv("SLEEPFORDEBUGGER") || std::getenv("SLEEPKITFORDEBUGGER");
+        const auto timeout = ChildSpawnTimeoutMs.load() * (COOLWSD::NoCapsForKit ? 150 : 50);
+        const auto deadline = debugging ? std::chrono::steady_clock::time_point::max()
+                                        : std::chrono::steady_clock::now() + timeout;
         if (debugging)
-        {
             LOG_DBG("Waiting for new child without timeout.");
-            NewChildrenCV.wait(lock, []() { return !NewChildren.empty(); });
-        }
         else
+            LOG_INF("Waiting for a new child for a max of " << timeout);
+
+        while (!SigUtil::getShutdownRequestFlag() && std::chrono::steady_clock::now() < deadline)
         {
-            int retry = (COOLWSD::NoCapsForKit ? 150 : 50);
-            const auto timeout = ChildSpawnTimeoutMs.load();
-            while (retry-- > 0 && !SigUtil::getShutdownRequestFlag())
+            // The prisoner poll checks on the forkit and forks it again when it has died. It is
+            // woken every second, so it does that while we wait here.
+            PrisonerPoll->wakeup();
+            if (NewChildrenCV.wait_for(lock, std::chrono::seconds(1),
+                                       []() { return !NewChildren.empty(); }))
             {
-                LOG_INF("Waiting for a new child for a max of " << timeout);
-                if (NewChildrenCV.wait_for(lock, timeout, []() { return !NewChildren.empty(); }))
-                {
-                    break;
-                }
+                break;
             }
         }
 
