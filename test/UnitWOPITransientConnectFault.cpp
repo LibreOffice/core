@@ -39,6 +39,7 @@ class UnitWOPITransientConnectFault : public WopiTestServer
 
     bool _injectDNSFault;
     int _uploadFailures;
+    std::string _saveResult;
 public:
     UnitWOPITransientConnectFault()
         : WopiTestServer("UnitWOPITransientConnectFault")
@@ -85,6 +86,12 @@ public:
 
         LOK_ASSERT_EQUAL(1, _uploadFailures);
 
+        // The client is told why the connection failed.
+        LOK_ASSERT_MESSAGE("Expected the save result to tell why connecting failed, got: " +
+                               _saveResult,
+                           _saveResult.find("Connection failed: UnknownHostError") !=
+                               std::string::npos);
+
         TRANSITION_STATE(_phase, Phase::WaitSuccessUpload);
 
         WSD_CMD("key type=input char=97 key=0");
@@ -105,6 +112,18 @@ public:
         bool ret = WopiTestServer::handleWopiUpload(request, message, socket);
         passTest("Finished, upload retry arrived.");
         return ret;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (message.starts_with("commandresult:") && message.find("\"save\"") != std::string::npos)
+        {
+            TST_LOG("Save result: " << message);
+            _saveResult = message;
+        }
+
+        return false;
     }
 
     void filterResolveDNS(std::string& query) override

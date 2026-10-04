@@ -1036,13 +1036,15 @@ std::size_t WopiStorage::uploadLocalFileToStorageAsync(
 
         _uploadHttpSession->setConnectFailHandler(
             [this, asyncUploadCallback,
-             uri=uriObject.toString()](const std::shared_ptr<http::Session>& /* httpSession */)
+             uri=uriObject.toString()](const std::shared_ptr<http::Session>& httpSession)
             {
-                LOG_ERR("Cannot connect to [" << uri << "] for uploading to wopi storage");
+                const std::string reason = httpSession->getConnectFailureReason();
+                LOG_DBG("Cannot connect to [" << uri << "] for uploading to wopi storage: "
+                        << reason);
                 // Retire.
                 _uploadHttpSession.reset();
                 // We never connected, so storage cannot have been written.
-                UploadResult res(UploadResult::Result::FAILED, "Connection failed.");
+                UploadResult res(UploadResult::Result::FAILED, "Connection failed: " + reason);
                 res.setDefiniteFailure(true);
                 asyncUploadCallback(AsyncUpload(AsyncUpload::State::Error, std::move(res)));
             });

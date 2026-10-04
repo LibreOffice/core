@@ -492,12 +492,14 @@ private:
                 oss << bioErrStr;
                 LOG_DBG("SSL Error (" << context << "): " << oss.str());
 
-                handshakeFail();
-
+                // The reason the certificate did not verify, if it didn't, is logged before the
+                // handler of the failure runs, so the cause comes first in the log.
                 std::string sslVerifyResult = getSslVerifyString(SSL_get_verify_result(_ssl));
-                // If there is anything useful available from SSL_get_verify_result provide a warning about that.
                 if (!sslVerifyResult.empty())
-                    LOG_ERR("SSL verification warning (" << context << "): " << sslVerifyResult);
+                    LOG_ERR("The certificate of [" << hostname() << "] did not verify (" << context
+                                                   << "): " << sslVerifyResult);
+
+                handshakeFail();
 
                 last_errno = last_errno ? last_errno : EPIPE; // Set errno if unset.
                 return 0; // EOF.

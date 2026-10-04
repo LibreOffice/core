@@ -4123,7 +4123,8 @@ void DocumentBroker::uploadToStorageInternal(const std::shared_ptr<ClientSession
         }
 
         LOG_WRN("Failed to upload [" << _docKey << "] asynchronously. "
-                                     << DocumentState::name(_docState.activity()));
+                                     << DocumentState::name(_docState.activity())
+                                     << ", reason: " << asyncUp.result().getReason());
         _storageManager.setLastUploadResult(false);
 
         switch (_docState.activity())

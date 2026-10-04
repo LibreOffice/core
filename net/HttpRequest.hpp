@@ -1647,6 +1647,17 @@ public:
         return _result;
     }
 
+    /// Why connecting failed, with the certificate verification error, if any.
+    std::string getConnectFailureReason() const
+    {
+        std::string reason(net::nameShort(_result));
+#if ENABLE_SSL
+        if (getSslVerifyResult() != X509_V_OK)
+            reason += ": " + getSslVerifyMessage();
+#endif
+        return reason;
+    }
+
     /// Returns the socket FD, for logging/informational purposes.
     int getFD() const { return _fd; }
 
@@ -1706,7 +1717,8 @@ private:
         assert(!_socket.use_count());
         _result = result;
 
-        LOG_ERR("Failed to connect to " << _host << ':' << _port);
+        LOG_ERR("Failed to connect to " << _host << ':' << _port << ": "
+                                        << getConnectFailureReason());
         callOnConnectFail();
     }
 

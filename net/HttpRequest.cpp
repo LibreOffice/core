@@ -1547,6 +1547,7 @@ bool Session::asyncRequest(const Request& req, const std::weak_ptr<SocketPoll>& 
 
         if (_onConnectFail)
         {
+            _result = net::AsyncConnectResult::SocketError;
             // Call directly since we haven't started the async
             // connect to pass the validation in callOnConnectFail().
             _onConnectFail(shared_from_this());
@@ -1707,6 +1708,8 @@ void Session::callOnFinished()
 
 void Session::newRequest(const Request& req, bool asyncShutdownOnFinish)
 {
+    // Clear the certificate verification error that an earlier request stored.
+    _handshakeSslVerifyFailure = 0;
     _startTime = std::chrono::steady_clock::now();
 
     // Called when the response is finished.
@@ -1882,14 +1885,14 @@ void Session::callOnConnectFail()
 void Session::onHandshakeFail()
 {
     ASSERT_CORRECT_THREAD();
+    _result = net::AsyncConnectResult::SSLHandShakeFailure;
     std::shared_ptr<StreamSocket> socket = _socket.lock();
     if (socket)
     {
-        LOG_TRC("onHandshakeFail");
         _handshakeSslVerifyFailure = socket->getSslVerifyResult();
-        _result = net::AsyncConnectResult::SSLHandShakeFailure;
     }
 
+    LOG_DBG("TLS failed with " << _host << ':' << _port << ": " << getConnectFailureReason());
     callOnConnectFail();
 }
 
