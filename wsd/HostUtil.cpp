@@ -189,6 +189,15 @@ void HostUtil::parseAliases(Poco::Util::LayeredConfiguration& conf)
             continue;
         }
 
+        for (const std::string& extraHost : getExtraGroupHosts(conf, path))
+        {
+            LOG_WRN("alias_groups: ignoring <host> [" << extraHost << "] of group #" << i + 1
+                                                       << ", which has [" << uri
+                                                       << "] already. Put each host in a "
+                                                          "<group> of its own, or make it an "
+                                                          "<alias>");
+        }
+
         const bool allow = conf.getBool(path + ".host[@allow]", false);
 
         const std::optional<Poco::URI> parsedHost = parseHostUri(uri);
@@ -315,6 +324,22 @@ Poco::URI HostUtil::getNewLockedUri(const Poco::URI& uri)
     return newUri;
 }
 
+std::vector<std::string> HostUtil::getExtraGroupHosts(const Poco::Util::AbstractConfiguration& conf,
+                                                      const std::string& groupPath)
+{
+    std::vector<std::string> extraHosts;
+    Poco::Util::AbstractConfiguration::Keys keys;
+    conf.keys(groupPath, keys);
+    for (const std::string& key : keys)
+    {
+        // The first is "host", the others "host[1]" and on.
+        if (key.starts_with("host[") && key != "host[0]")
+            extraHosts.push_back(conf.getString(groupPath + '.' + key, ""));
+    }
+
+    return extraHosts;
+}
+
 void HostUtil::setFirstHost(const Poco::URI& uri)
 {
     if (!Util::iequal(ConfigUtil::getString("storage.wopi.alias_groups[@mode]", "first"), "first"))
@@ -331,9 +356,10 @@ void HostUtil::setFirstHost(const Poco::URI& uri)
     }
     else if(!FirstHost.empty() && FirstHost != uri.getAuthority())
     {
-        LOG_ERR("Only allowed host is: "
-                << FirstHost
-                << ", To use multiple host/aliases check alias_groups tag in configuration");
+        LOG_ERR("Rejected WOPI host [" << uri.getAuthority() << "]: the only allowed host is ["
+                                       << FirstHost
+                                       << "]. To use multiple host/aliases check alias_groups tag "
+                                          "in configuration");
     }
 }
 

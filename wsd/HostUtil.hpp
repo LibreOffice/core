@@ -24,11 +24,13 @@
 #include <common/RegexUtil.hpp>
 
 #include <Poco/URI.h>
+#include <Poco/Util/AbstractConfiguration.h>
 #include <Poco/Util/Application.h>
 
 #include <optional>
 #include <set>
 #include <string>
+#include <vector>
 
 /// This class contains static methods to parse alias_groups and WOPI host and static containers to store the data from the coolwsd.xml
 class HostUtil
@@ -98,6 +100,12 @@ private:
 
     /// add host to WopiHosts
     static void addWopiHost(const std::string& host, bool allow);
+
+    /// The <host> values after the first one in the alias_groups <group> at @groupPath. Only the
+    /// first is used: the others would have to be in groups of their own, or be aliases.
+    static std::vector<std::string>
+    getExtraGroupHosts(const Poco::Util::AbstractConfiguration& conf,
+                       const std::string& groupPath);
 
     friend class HostUtilTests;
 };

@@ -34,6 +34,7 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testFirstHostTrustedOnlyInFirstMode);
     CPPUNIT_TEST(testGetNewUriBracketsIPv6Host);
     CPPUNIT_TEST(testHostListWithGaps);
+    CPPUNIT_TEST(testAliasGroupExtraHosts);
     CPPUNIT_TEST(testEveryAllowedKitHostIsAccepted);
 
     CPPUNIT_TEST_SUITE_END();
@@ -43,6 +44,7 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     void testFirstHostTrustedOnlyInFirstMode();
     void testGetNewUriBracketsIPv6Host();
     void testHostListWithGaps();
+    void testAliasGroupExtraHosts();
     void testEveryAllowedKitHostIsAccepted();
 
 public:
@@ -254,6 +256,29 @@ void HostUtilTests::testHostListWithGaps()
     LOK_ASSERT(!HostUtil::allowedWopiHost("denied.example"));
     LOK_ASSERT(!HostUtil::allowedWopiHost("garbage.example"));
     LOK_ASSERT(!HostUtil::allowedWopiHost("garbage2.example"));
+}
+
+/// Only the first <host> of an alias_groups <group> is used. The others are found, to warn about
+/// them: before, they were ignored without a word, and their documents rejected.
+void HostUtilTests::testAliasGroupExtraHosts()
+{
+    constexpr std::string_view testname = __func__;
+
+    Poco::AutoPtr<Poco::Util::MapConfiguration> config(new Poco::Util::MapConfiguration);
+    const std::string group = "storage.wopi.alias_groups.group[0]";
+    config->setString(group + ".host", "https://first.example:443");
+    config->setString(group + ".host[1]", "https://second.example:443");
+    config->setString(group + ".host[2]", "https://third.example:443");
+    config->setString(group + ".alias", "https://alias.example:443");
+    config->setString("storage.wopi.alias_groups.group[1].host", "https://other.example:443");
+
+    const std::vector<std::string> extraHosts = HostUtil::getExtraGroupHosts(*config, group);
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), extraHosts.size());
+    LOK_ASSERT_EQUAL_STR("https://second.example:443", extraHosts[0]);
+    LOK_ASSERT_EQUAL_STR("https://third.example:443", extraHosts[1]);
+
+    LOK_ASSERT(
+        HostUtil::getExtraGroupHosts(*config, "storage.wopi.alias_groups.group[1]").empty());
 }
 
 void HostUtilTests::testEveryAllowedKitHostIsAccepted()
