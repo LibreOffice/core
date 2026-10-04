@@ -1557,7 +1557,7 @@ bool StringConstant::isStringConstant(
         return true;
     }
     APValue v;
-    if (!expr->isCXX11ConstantExpr(compiler.getASTContext(), &v)) {
+    if (!compat::isCXX11ConstantExpr(expr, compiler.getASTContext(), v)) {
         return false;
     }
     switch (v.getKind()) {

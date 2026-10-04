@@ -12,6 +12,7 @@
 #include <stack>
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 // Find non-const vars of 'char const *' type initialized with a const expr,
@@ -122,7 +123,7 @@ public:
             return true;
         }
         APValue v;
-        if (!init->isCXX11ConstantExpr(compiler.getASTContext(), &v)) {
+        if (!compat::isCXX11ConstantExpr(init, compiler.getASTContext(), v)) {
             return true;
         }
         vars_.insert(decl);

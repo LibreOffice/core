@@ -232,8 +232,12 @@ Expr const * stripConstructor(Expr const * expr) {
 
 bool CppunitAssertEquals::isCompileTimeConstant(Expr const * expr)
 {
-    if (!expr->isValueDependent() && expr->isCXX11ConstantExpr(compiler.getASTContext()))
+    APValue res;
+    if (!expr->isValueDependent()
+        && compat::isCXX11ConstantExpr(expr, compiler.getASTContext(), res))
+    {
         return true;
+    }
     // is string literal ?
     expr = expr->IgnoreParenImpCasts();
     expr = stripConstructor(expr);

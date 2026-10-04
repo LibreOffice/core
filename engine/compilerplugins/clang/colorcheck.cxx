@@ -19,6 +19,7 @@
 #include "config_clang.h"
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 /**
@@ -69,7 +70,8 @@ bool ColorCheck::VisitCXXConstructExpr(const CXXConstructExpr* constructExpr)
         return true;
 
     auto arg0 = constructExpr->getArg(0);
-    if (arg0->isCXX11ConstantExpr(compiler.getASTContext()))
+    APValue res;
+    if (compat::isCXX11ConstantExpr(arg0, compiler.getASTContext(), res))
     {
         if (!arg0->isValueDependent())
         {

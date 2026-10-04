@@ -453,7 +453,8 @@ bool FieldCanBeLocal::isSomeKindOfConstant(const Expr* arg)
     assert(arg);
     if (arg->isValueDependent())
         return false;
-    return arg->isCXX11ConstantExpr(compiler.getASTContext());
+    APValue res;
+    return compat::isCXX11ConstantExpr(arg, compiler.getASTContext(), res);
 }
 
 loplugin::Plugin::Registration<FieldCanBeLocal> X("fieldcanbelocal", false);

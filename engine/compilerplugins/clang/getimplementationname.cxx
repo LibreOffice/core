@@ -20,6 +20,7 @@
 #include <fstream>
 #include <regex>
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 #include "clang/Frontend/CompilerInstance.h"
 
@@ -177,7 +178,7 @@ bool GetImplementationName::isStringConstant(
         return true;
     }
     APValue v;
-    if (!expr->isCXX11ConstantExpr(compiler.getASTContext(), &v)) {
+    if (!compat::isCXX11ConstantExpr(expr, compiler.getASTContext(), v)) {
         return false;
     }
     switch (v.getKind()) {

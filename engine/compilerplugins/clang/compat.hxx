@@ -162,6 +162,16 @@ inline const clang::Expr *getSubExprAsWritten(const clang::CastExpr *This) {
   return getSubExprAsWritten(const_cast<clang::CastExpr *>(This));
 }
 
+inline bool isCXX11ConstantExpr(
+    clang::Expr const * expr, clang::ASTContext const & Ctx, clang::APValue & Result)
+{
+#if CLANG_VERSION >= 240000
+    return expr->isCXX11ConstantExpr(Ctx, Result);
+#else
+    return expr->isCXX11ConstantExpr(Ctx, &Result);
+#endif
+}
+
 inline bool isUnnamedBitField(clang::FieldDecl const * decl) {
 #if CLANG_VERSION >= 190000
     return decl->isUnnamedBitField();
