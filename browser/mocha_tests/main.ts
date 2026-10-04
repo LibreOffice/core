@@ -145,4 +145,5 @@
 /// <reference path="./NotebookbarTabs.test.ts" />
 /// <reference path="./NotebookbarTitleCase.test.ts" />
 /// <reference path="./DocPartChanged.test.ts" />
+/// <reference path="./AdminVersionInfo.test.ts" />
 // NOTE: reference new tests here ...

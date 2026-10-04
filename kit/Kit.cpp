@@ -5182,40 +5182,24 @@ void lokit_main(
                 Util::forcedExit(EX_SOFTWARE);
             }
 
+            // The point release and the commit may differ. That is routine locally, where one half
+            // was built from an older tree, and worth knowing about when a Kit misbehaves in a way
+            // that no single commit explains. A difference is logged, and the Kit goes on starting.
             const std::string coreFullVersion =
                 coreVersion + versionJSON->optValue<std::string>("ProductExtension", std::string());
-            if (coreFullVersion != Util::getCoolVersion())
-            {
-                LOG_WRN("The office library is ["
-                        << coreFullVersion << "] but coolwsd is [" << Util::getCoolVersion()
-                        << "]; they are from different point releases.");
-            }
-
-            // Both halves come out of the same repository, so a clean build gives them
-            // the same commit. They differ whenever one half was built from an older
-            // tree, which is routine locally and worth knowing about when a kit
-            // misbehaves in a way no single commit explains. Never a reason to refuse
-            // to start, only something to have in the log when reading one.
             const std::string coreBuildId =
                 versionJSON->optValue<std::string>("BuildId", std::string());
-            // Built without git, coolwsd's hash is its version string instead, and
-            // there is nothing to compare.
-            if (Util::getCoolVersionHash() == Util::getCoolVersion())
-            {
-                LOG_INF("Kit core is from commit [" << coreBuildId
-                                                    << "], coolwsd was built without git.");
-            }
-            else if (coreBuildId.starts_with(Util::getCoolVersionHash()))
-            {
-                LOG_INF("Kit core and coolwsd are both from commit ["
-                        << Util::getCoolVersionHash() << "].");
-            }
-            else
-            {
-                LOG_WRN("Kit core is from commit ["
-                        << coreBuildId << "] but coolwsd is from commit ["
-                        << Util::getCoolVersionHash() << "].");
-            }
+            const std::string versionMismatch =
+                Util::getCoreVersionMismatch(Util::getCoolVersion(), coreFullVersion);
+            const std::string commitMismatch = Util::getCoreCommitMismatch(
+                Util::getCoolVersion(), Util::getCoolVersionHash(), coreBuildId);
+            if (!versionMismatch.empty())
+                LOG_WRN("The office library differs from coolwsd: " << versionMismatch);
+            if (!commitMismatch.empty())
+                LOG_WRN("The office library differs from coolwsd: " << commitMismatch);
+            if (versionMismatch.empty() && commitMismatch.empty())
+                LOG_INF("The office library is [" << coreFullVersion << "] from commit ["
+                                                   << coreBuildId << ']');
 
             // Add some parameters we want to pass to the client. Could not figure out how to get
             // the configuration parameters from COOLWSD.cpp's initialize() or coolwsd.xml here, so

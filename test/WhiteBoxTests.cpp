@@ -1995,6 +1995,7 @@ void WhiteBoxTests::testKitVersion()
 
     const std::string initialJson = COOLWSD::getKitVersion()->json;
 
+    // No coolwsd is of release 1.2.3.4, so the library differs from it.
     const std::string firstJson =
         R"({"ProductVersion":"1.2","ProductExtension":".3.4","BuildId":"0123456789abcdef"})";
     COOLWSD::setKitVersion(firstJson);
@@ -2002,6 +2003,7 @@ void WhiteBoxTests::testKitVersion()
     LOK_ASSERT_EQUAL(firstJson, first->json);
     LOK_ASSERT_EQUAL(std::string("1.2.3.4"), first->number);
     LOK_ASSERT_EQUAL(std::string("01234567"), first->hash);
+    LOK_ASSERT(!first->mismatch.empty());
 
     // Another Kit of the same library leaves the stored version as it is.
     COOLWSD::setKitVersion(firstJson);
@@ -2016,8 +2018,10 @@ void WhiteBoxTests::testKitVersion()
     LOK_ASSERT_EQUAL(secondJson, second->json);
     LOK_ASSERT_EQUAL(std::string("5.6.7.8"), second->number);
     LOK_ASSERT_EQUAL(std::string("fedcba98"), second->hash);
+    LOK_ASSERT(second->mismatch.find("5.6.7.8") != std::string::npos);
     LOK_ASSERT_EQUAL(firstJson, first->json);
     LOK_ASSERT_EQUAL(std::string("1.2.3.4"), first->number);
+    LOK_ASSERT(first->mismatch.find("1.2.3.4") != std::string::npos);
 
     // A version that is not JSON is kept as text, with the other fields empty.
     COOLWSD::setKitVersion("unknown");
@@ -2025,6 +2029,7 @@ void WhiteBoxTests::testKitVersion()
     LOK_ASSERT_EQUAL(std::string("unknown"), unknown->json);
     LOK_ASSERT(unknown->number.empty());
     LOK_ASSERT(unknown->hash.empty());
+    LOK_ASSERT(unknown->mismatch.empty());
 
     COOLWSD::setKitVersion(initialJson);
 }

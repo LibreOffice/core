@@ -329,6 +329,18 @@ namespace Util
     /// Returns the COOL Version Hash string.
     std::string getCoolVersionHash();
 
+    /// How the core, of the given version (ProductVersion and ProductExtension), differs from
+    /// coolwsd, of the given version, or empty when it doesn't.
+    std::string getCoreVersionMismatch(const std::string& coolVersion,
+                                       const std::string& coreVersion);
+
+    /// How the commit of the core, given as its build id, differs from the commit of coolwsd, of
+    /// the given version and hash, or empty when it doesn't. The result is also empty when either
+    /// side was built without git and has no commit to compare. For coolwsd that is a hash equal
+    /// to the version. For the core that is an empty build id, or "development".
+    std::string getCoreCommitMismatch(const std::string& coolVersion, const std::string& coolHash,
+                                      const std::string& coreBuildId);
+
     /// Get version information, that is, both version and hash.
     void getVersionInfo(std::string& version, std::string& hash);
 

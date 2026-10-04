@@ -104,6 +104,8 @@ public:
         std::string number;
         /// The first 8 characters of BuildId, the commit the library was built from.
         std::string hash;
+        /// How the release of the library differs from that of coolwsd. Empty when they match.
+        std::string mismatch;
     };
 
     /// Returns the version of the office library. The fields of the result belong to one version,

@@ -585,3 +585,4 @@
 /// <reference path="../src/slideshow/operation/SRotate.ts" />
 /// <reference path="../src/slideshow/operation/SScale.ts" />
 /// <reference path="../src/slideshow/operation/STranslate.ts" />
+/// <reference path="../admin/src/AdminVersionInfo.js" />

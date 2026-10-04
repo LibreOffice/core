@@ -738,6 +738,45 @@ namespace Util
         return oss.str();
     }
 
+std::string getCoreVersionMismatch(const std::string& coolVersion, const std::string& coreVersion)
+{
+    // Without the build id that --with-build-id appends, which the core doesn't have.
+    std::string_view release = coolVersion;
+    const std::size_t dash = release.rfind('-');
+    if (dash != std::string_view::npos && dash + 1 < release.size() &&
+        release.find_first_not_of("0123456789", dash + 1) == std::string_view::npos)
+    {
+        release = release.substr(0, dash);
+    }
+
+    if (coreVersion != release)
+    {
+        return "the office library is [" + coreVersion + "] but coolwsd is [" + coolVersion +
+               ']';
+    }
+
+    return std::string();
+}
+
+std::string getCoreCommitMismatch(const std::string& coolVersion, const std::string& coolHash,
+                                  const std::string& coreBuildId)
+{
+    // A core built without git has an empty build id, or the "development" placeholder.
+    if (coolHash == coolVersion || coolHash.empty() || coreBuildId.empty() ||
+        coreBuildId == "development")
+    {
+        return std::string();
+    }
+
+    if (!coreBuildId.starts_with(coolHash))
+    {
+        return "the office library is from commit [" + coreBuildId +
+               "] but coolwsd is from commit [" + coolHash + ']';
+    }
+
+    return std::string();
+}
+
 } // namespace Util
 
 namespace SigUtil {

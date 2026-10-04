@@ -144,8 +144,19 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
         // Send COOL version information
         sendTextFrame("coolserver " + Util::getVersionJSON(EnableExperimental));
 
-        // Send LOKit version information
-        sendTextFrame("lokitversion " + COOLWSD::getKitVersion()->json);
+        // Send LOKit version information, and how it differs from ours, if it does.
+        const std::shared_ptr<const COOLWSD::KitVersion> kitVersion = COOLWSD::getKitVersion();
+        std::string lokitVersion = kitVersion->json;
+        Poco::JSON::Object::Ptr versionObject;
+        if (!kitVersion->mismatch.empty() && JsonUtil::parseJSON(lokitVersion, versionObject))
+        {
+            versionObject->set("Mismatch", kitVersion->mismatch);
+            std::ostringstream oss;
+            versionObject->stringify(oss);
+            lokitVersion = oss.str();
+        }
+
+        sendTextFrame("lokitversion " + lokitVersion);
     }
     else if (tokens.equals(0, "subscribe") && tokens.size() > 1)
     {

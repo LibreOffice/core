@@ -12,7 +12,7 @@
  * Socket to be intialized on opening the settings page in Admin console
  */
 
-/* global DlgYesNo $ AdminSocketBase Admin _ */
+/* global DlgYesNo $ AdminSocketBase AdminVersionInfo Admin _ */
 
 var AdminSocketSettings = AdminSocketBase.extend({
 	constructor: function(host) {
@@ -108,7 +108,8 @@ var AdminSocketSettings = AdminSocketBase.extend({
 		}
 		else if (textMsg.startsWith('lokitversion ')) {
 			var lokitVersionObj = JSON.parse(textMsg.substring(textMsg.indexOf('{')));
-			$('#lokit-buildconfig').text(lokitVersionObj.BuildConfig);
+			$('#lokit-buildconfig').text(AdminVersionInfo.buildConfigText(lokitVersionObj,
+				_('Warning: the installed packages don\'t match')));
 		}
 	},
 

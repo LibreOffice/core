@@ -40,6 +40,8 @@ class UtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testBase64Decode);
     CPPUNIT_TEST(testIsRtlLanguage);
 
+    CPPUNIT_TEST(testCoreVersionMismatch);
+    CPPUNIT_TEST(testCoreCommitMismatch);
     CPPUNIT_TEST_SUITE_END();
 
     void testCharacterConverter();
@@ -49,6 +51,8 @@ class UtilTests : public CPPUNIT_NS::TestFixture
     void testBase64Encode();
     void testBase64Decode();
     void testIsRtlLanguage();
+    void testCoreVersionMismatch();
+    void testCoreCommitMismatch();
 };
 
 void UtilTests::testCharacterConverter()
@@ -215,6 +219,46 @@ void UtilTests::testIsRtlLanguage()
     LOK_ASSERT(!LangUtil::isRtlLanguage("arn-CL"));
     LOK_ASSERT(!LangUtil::isRtlLanguage("haw"));
     LOK_ASSERT(!LangUtil::isRtlLanguage("urj"));
+}
+
+void UtilTests::testCoreVersionMismatch()
+{
+    constexpr std::string_view testname = __func__;
+
+    // The same release.
+    LOK_ASSERT(Util::getCoreVersionMismatch("25.04.8.2", "25.04.8.2").empty());
+
+    // Built with --with-build-id, which only coolwsd's version has.
+    LOK_ASSERT(Util::getCoreVersionMismatch("25.04.8.2-3", "25.04.8.2").empty());
+
+    // Different point releases.
+    const std::string release = Util::getCoreVersionMismatch("25.04.8.2", "25.04.7.1");
+    TST_LOG("Release mismatch: " << release);
+    LOK_ASSERT(release.find("[25.04.7.1]") != std::string::npos);
+    LOK_ASSERT(release.find("[25.04.8.2]") != std::string::npos);
+}
+
+void UtilTests::testCoreCommitMismatch()
+{
+    constexpr std::string_view testname = __func__;
+
+    // The same commit.
+    LOK_ASSERT(Util::getCoreCommitMismatch("25.04.8.2", "eb4fe084", "eb4fe08485abcdef").empty());
+
+    // coolwsd built without git: there is no commit to compare.
+    LOK_ASSERT(Util::getCoreCommitMismatch("25.04.8.2", "25.04.8.2", "abcdef").empty());
+
+    // The core built without git, with an empty build id or the default one: there is no commit
+    // to compare.
+    LOK_ASSERT(Util::getCoreCommitMismatch("25.04.8.2", "eb4fe084", "").empty());
+    LOK_ASSERT(Util::getCoreCommitMismatch("25.04.8.2", "eb4fe084", "development").empty());
+
+    // Different commits, as when coolwsd alone was rebuilt from a later commit for a respin.
+    const std::string commit =
+        Util::getCoreCommitMismatch("25.04.8.2-3", "eb4fe084", "12345678abcdef");
+    TST_LOG("Commit mismatch: " << commit);
+    LOK_ASSERT(commit.find("[12345678abcdef]") != std::string::npos);
+    LOK_ASSERT(commit.find("[eb4fe084]") != std::string::npos);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UtilTests);

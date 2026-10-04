@@ -4430,6 +4430,7 @@ void COOLWSDServer::dumpState(std::ostream& os) const
        << "\n  KitVersion: " << kitVersion->json
        << "\n  KitVersionNumber: " << kitVersion->number
        << "\n  KitVersionHash: " << kitVersion->hash
+       << "\n  KitVersionMismatch: " << kitVersion->mismatch
        << "\n  HostIdentifier: " << Util::getProcessIdentifier()
        << "\n  ConfigFile: " << COOLWSD::ConfigFile
        << "\n  LogLevel: " << COOLWSD::LogLevel
@@ -5314,6 +5315,13 @@ void COOLWSD::setKitVersion(const std::string& versionJson)
         version->number = JsonUtil::getJSONValue<std::string>(object, "ProductVersion") +
                           JsonUtil::getJSONValue<std::string>(object, "ProductExtension");
         version->hash = JsonUtil::getJSONValue<std::string>(object, "BuildId").substr(0, 8);
+
+        // Packages installed from different releases cause problems, and core dumps that can't be
+        // decoded. The mismatch is logged again only when it changes.
+        version->mismatch = Util::getCoreVersionMismatch(Util::getCoolVersion(), version->number);
+        if (!version->mismatch.empty() && version->mismatch != previous->mismatch)
+            LOG_WRN("The office library differs from coolwsd, update the packages: "
+                    << version->mismatch);
     }
 
     std::lock_guard<std::mutex> lock(KitVersionMutex);

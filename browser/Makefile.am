@@ -142,8 +142,8 @@ MOCHA_JS_DIR = $(MOCHA_DIR)/workdir
 ENGINE_WORKDIR = @LO_PATH@/../workdir
 
 # The mocha bundle compiles the files that mocha_tests/sources.ts references out
-# of src/ and js/, so a change to any source file there must rebuild it.
-MOCHA_SRC_DEPS = $(shell find $(srcdir)/src $(srcdir)/js \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' \))
+# of src/, js/ and admin/src/, so a change to any source file there must rebuild it.
+MOCHA_SRC_DEPS = $(shell find $(srcdir)/src $(srcdir)/js $(srcdir)/admin/src \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' \))
 
 # tsc can report a failure, but still create a .js and a second make attempt will succeed,
 # so if this returns an error then delete the target
@@ -300,6 +300,7 @@ COOL_ADMIN_JS =\
 	admin/src/Admin.js \
 	admin/src/AdminSocketBase.js \
 	admin/src/Util.js \
+	admin/src/AdminVersionInfo.js \
 	admin/src/AdminSocketOverview.js \
 	admin/src/AdminSocketAnalytics.js \
 	admin/src/AdminSocketSettings.js \
