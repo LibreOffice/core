@@ -24,12 +24,19 @@
 
 #include <comphelper/comphelperdllapi.h>
 
+#include <rtl/ustring.hxx>
+
 #include <string_view>
 
 namespace comphelper
 {
 // Return true iff url is an absolute URL of "file" scheme:
 COMPHELPER_DLLPUBLIC bool isFileUrl(std::u16string_view url);
+
+// Replace rURL, a file URL, with the absolute URL of the existing file or folder it names: "."
+// and ".." segments, percent-encoded characters and symbolic links resolved, and no final slash.
+// Return false, leaving rURL unchanged, when it names nothing that exists.
+COMPHELPER_DLLPUBLIC bool makeCanonicalFileURL(OUString& rURL);
 }
 
 #endif
