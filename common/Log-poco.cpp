@@ -479,6 +479,38 @@ namespace Log
 
     }
 
+    namespace
+    {
+    /// Creates and opens the file channel with the given properties, or returns null, with the
+    /// reason in @error, when the file cannot be opened.
+    /// Open it now, instead of waiting for the first log message: the Kit would otherwise
+    /// create the file after its chroot, inside the jail.
+    AutoPtr<Channel> openFileChannel(const std::string& path,
+                                     const std::map<std::string, std::string>& config,
+                                     std::string& error)
+    {
+        try
+        {
+            AutoPtr<Channel> channel = static_cast<Poco::Channel*>(new Poco::FileChannel(path));
+            for (const auto& pair : config)
+                channel->setProperty(pair.first, pair.second);
+
+            channel->open();
+            return channel;
+        }
+        catch (const Poco::Exception& exc)
+        {
+            error = exc.displayText();
+        }
+        catch (const std::exception& exc)
+        {
+            error = exc.what();
+        }
+
+        return nullptr;
+    }
+    } // namespace
+
     void initialize(const std::string& name,
                     const std::string& logLevel,
                     const bool withColor,
@@ -497,39 +529,34 @@ namespace Log
         // Configure the logger.
         AutoPtr<Channel> channel;
 
+        // Why the log file could not be opened, to log once we can.
+        std::string logFileError;
         if (logToFile)
+            channel = openFileChannel("coolwsd.log", config, logFileError);
+
+        if (!channel)
         {
-            channel = static_cast<Poco::Channel*>(new Poco::FileChannel("coolwsd.log"));
-            for (const auto& pair : config)
+            if (withColor)
             {
-                channel->setProperty(pair.first, pair.second);
-            }
-        }
-        else if (withColor)
-        {
-            channel = static_cast<Poco::Channel*>(new Log::ColorConsoleChannel());
-        }
-        else
-        {
-            const auto it = config.find("flush");
-            if (it == config.end() || Util::toLower(it->second) != "false")
-            {
-                // Unbuffered (flushed) logging, directly writes each entry (to stderr).
-                channel = static_cast<Poco::Channel*>(new Log::ConsoleChannel);
+                channel = static_cast<Poco::Channel*>(new Log::ColorConsoleChannel());
             }
             else
             {
-                // Buffered logging, reduces number of write(2) syscalls.
-                channel = static_cast<Poco::Channel*>(new Log::BufferedConsoleChannel);
+                const auto it = config.find("flush");
+                if (it == config.end() || Util::toLower(it->second) != "false")
+                {
+                    // Unbuffered (flushed) logging, directly writes each entry (to stderr).
+                    channel = static_cast<Poco::Channel*>(new Log::ConsoleChannel);
+                }
+                else
+                {
+                    // Buffered logging, reduces number of write(2) syscalls.
+                    channel = static_cast<Poco::Channel*>(new Log::BufferedConsoleChannel);
+                }
             }
-        }
 
-        /**
-         * Open the channel explicitly, instead of waiting for first log message
-         * This is important especially for the kit process where opening the channel
-         * after chroot can cause file creation inside the jail instead of outside
-         * */
-        channel->open();
+            channel->open();
+        }
 
         try
         {
@@ -554,17 +581,22 @@ namespace Log
                                 << std::put_time(Util::time_t_to_gmtime(t, tm), "%a %F %T %z")
                                 << ". Log level is [" << logger->getLevel() << ']');
 
+        if (!logFileError.empty())
+            LOG_ERR("Cannot open the log file, logging to stderr instead: " << logFileError);
+
         StaticUILog.setName(name+"_ui");
         AutoPtr<Channel> channelUILog;
+        std::string logFileUICmdError;
         if (logToFileUICmd)
-        {
-            channelUILog = static_cast<Poco::Channel*>(new Poco::FileChannel("coolwsd-ui-cmd.log"));
-            for (const auto& pair : configUICmd)
-            {
-                channelUILog->setProperty(pair.first, pair.second);
-            }
+            channelUILog = openFileChannel("coolwsd-ui-cmd.log", configUICmd, logFileUICmdError);
 
-            channelUILog->open();
+        if (!logFileUICmdError.empty())
+        {
+            LOG_ERR("Cannot open the UI command log file, not logging UI commands: "
+                    << logFileUICmdError);
+        }
+        else if (channelUILog)
+        {
             try
             {
                 auto& loggerUILog = GenericLogger::create(StaticUILog.getName(), std::move(channelUILog), Poco::Message::PRIO_TRACE);

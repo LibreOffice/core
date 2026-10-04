@@ -15,6 +15,7 @@
 
 #include <config.h>
 
+#include <sys/wait.h>
 #include <unistd.h>
 
 #include <common/Log.hpp>
@@ -26,6 +27,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <chrono>
+#include <map>
+#include <string>
 
 using namespace std::literals;
 
@@ -37,12 +40,14 @@ class LoggingTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testGetTimeForLog);
     CPPUNIT_TEST(testIso8601Time);
     CPPUNIT_TEST(testClockAsString);
+    CPPUNIT_TEST(testUnwritableLogFile);
     CPPUNIT_TEST_SUITE_END();
 
     void testLogPrefix();
     void testGetTimeForLog();
     void testIso8601Time();
     void testClockAsString();
+    void testUnwritableLogFile();
 };
 
 namespace
@@ -350,6 +355,41 @@ void LoggingTests::testClockAsString()
     LOK_ASSERT_EQUAL_STR("Sat Feb 12 18:58.889 2022",
                      Util::getSystemClockAsString(sys_tp));
 #endif
+}
+
+/// A log file that cannot be opened leaves the logging on stderr. Before, the exception went
+/// unhandled and the process aborted: a Kit, about 100 times a minute, for a month.
+void LoggingTests::testUnwritableLogFile()
+{
+    constexpr std::string_view testname = __func__;
+
+    // In a child, as the logging is set up once per process.
+    const pid_t pid = fork();
+    LOK_ASSERT_MESSAGE("Failed to fork", pid >= 0);
+    if (pid == 0)
+    {
+        try
+        {
+            const std::map<std::string, std::string> config = {
+                { "path", "/nonexistent/directory/coolwsd.log" }
+            };
+            Log::initialize("unwritable", "error", /*withColor=*/false, /*logToFile=*/true, config,
+                            /*logToFileUICmd=*/true, config);
+            LOG_ERR("Logging goes on");
+        }
+        catch (...)
+        {
+            // Uncaught, as in a Kit, it would abort.
+            _exit(1);
+        }
+
+        _exit(0);
+    }
+
+    int status = 0;
+    LOK_ASSERT_EQUAL(pid, waitpid(pid, &status, 0));
+    LOK_ASSERT_MESSAGE("Expected the process to go on logging",
+                       WIFEXITED(status) && WEXITSTATUS(status) == 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LoggingTests);
