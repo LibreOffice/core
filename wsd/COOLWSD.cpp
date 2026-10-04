@@ -4711,6 +4711,12 @@ std::vector<std::shared_ptr<DocumentBroker>> COOLWSD::getBrokersTestOnly()
     return result;
 }
 
+void COOLWSD::runInPrisonerPollTestOnly(const std::function<void()>& callback)
+{
+    if (PrisonerPoll)
+        PrisonerPoll->addCallback(callback);
+}
+
 std::set<pid_t> COOLWSD::getKitPids()
 {
     std::set<pid_t> pids = getSpareKitPids();

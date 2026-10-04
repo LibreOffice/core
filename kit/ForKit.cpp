@@ -721,10 +721,16 @@ void createSubForKits(const std::string& childRoot, const std::string& sysTempla
     std::vector<std::string> subForKitRequests = std::move(SubForKitRequests);
     for (const auto& subForKitIdent : subForKitRequests)
     {
-        if (createSubForKit(subForKitIdent, childRoot, sysTemplate, loTemplate,
-                            useMountNamespaces) < 0)
+        const int pid = createSubForKit(subForKitIdent, childRoot, sysTemplate, loTemplate,
+                                        useMountNamespaces);
+        if (pid < 0)
         {
             LOG_ERR("Failed to create a subForKit process for ident: " << subForKitIdent);
+        }
+        else if (pid == 0)
+        {
+            // We are the new subForKit: the rest of the requests are for our parent.
+            return;
         }
     }
 }

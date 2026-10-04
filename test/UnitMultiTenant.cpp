@@ -28,7 +28,12 @@
 #include <Poco/Net/HTTPRequest.h>
 #include <csignal>
 #include <ctime>
+#include <filesystem>
+#include <fstream>
 #include <mutex>
+#include <sstream>
+#include <string>
+#include <utility>
 
 /// This test simulates a crashing kit with modifications.
 class UnitSubForKit : public WopiTestServer
@@ -301,10 +306,118 @@ public:
     }
 };
 
+/// Two subforkits requested at once must both be forked by the forkit. Before, the first
+/// subforkit went on through the rest of the requests that its parent had queued, and forked
+/// a subforkit of its own, which nothing could reach.
+class UnitSubForKitNested : public UnitWSD
+{
+    STATE_ENUM(Phase, Request, WaitSubForKits, Check, Done) _phase;
+
+    std::atomic<int> _created;
+    std::chrono::steady_clock::time_point _createdTime;
+
+    /// The parent of a process, and its name, or 0 and empty when it is gone.
+    static std::pair<pid_t, std::string> getParentAndName(pid_t pid)
+    {
+        std::ifstream stat("/proc/" + std::to_string(pid) + "/stat");
+        std::string line;
+        std::getline(stat, line);
+        const auto open = line.find('(');
+        const auto close = line.rfind(')');
+        if (open == std::string::npos || close == std::string::npos)
+            return { 0, std::string() };
+
+        std::istringstream rest(line.substr(close + 2));
+        char state = 0;
+        pid_t ppid = 0;
+        rest >> state >> ppid;
+        return { ppid, line.substr(open + 1, close - open - 1) };
+    }
+
+public:
+    UnitSubForKitNested()
+        : UnitWSD("UnitSubForKitNested")
+        , _phase(Phase::Request)
+        , _created(0)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        UnitWSD::configure(config);
+
+        // Discard the subforkits as soon as the test is done with them.
+        config.setUInt("serverside_config.idle_timeout_secs", 0);
+    }
+
+    void newSubForKit(const std::shared_ptr<ForKitProcess>& subforkit,
+                      const std::string& configId) override
+    {
+        const pid_t parent = getParentAndName(subforkit->getPid()).first;
+        TST_LOG("New SubForKit " << subforkit->getPid() << " for [" << configId
+                                 << "], forked by " << parent);
+        LOK_ASSERT_EQUAL_MESSAGE("Expected the forkit to fork the subforkit",
+                                 static_cast<int>(COOLWSD::ForKitProcId), parent);
+
+        if (++_created == 2)
+        {
+            _createdTime = std::chrono::steady_clock::now();
+            TRANSITION_STATE(_phase, Phase::Check);
+        }
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Request:
+                TRANSITION_STATE(_phase, Phase::WaitSubForKits);
+                // From the prisoner poll, so that both requests reach the forkit together.
+                TST_LOG("Requesting two subforkits at once");
+                COOLWSD::runInPrisonerPollTestOnly(
+                    []
+                    {
+                        COOLWSD::ensureSubForKit("nestedconfig_a");
+                        COOLWSD::ensureSubForKit("nestedconfig_b");
+                    });
+                break;
+            case Phase::Check:
+            {
+                // Leave time for any subforkit forked by a subforkit to start.
+                if (std::chrono::steady_clock::now() - _createdTime < std::chrono::seconds(2))
+                    break;
+
+                TRANSITION_STATE(_phase, Phase::Done);
+                for (const auto& entry : std::filesystem::directory_iterator("/proc"))
+                {
+                    const std::string name = entry.path().filename().string();
+                    if (name.find_first_not_of("0123456789") != std::string::npos)
+                        continue;
+
+                    const auto [parent, comm] = getParentAndName(std::stoi(name));
+                    if (comm.starts_with("subforkit_") &&
+                        getParentAndName(parent).second.starts_with("subforkit_"))
+                    {
+                        failTest("Subforkit " + name + " was forked by subforkit " +
+                                 std::to_string(parent));
+                        return;
+                    }
+                }
+
+                passTest("Both subforkits were forked by the forkit");
+                break;
+            }
+            case Phase::WaitSubForKits:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[3]{
-        new UnitSubForKit(), new UnitSubForKitJails(), nullptr
+    return new UnitBase*[4]{
+        new UnitSubForKit(), new UnitSubForKitJails(), new UnitSubForKitNested(), nullptr
     };
 }
 

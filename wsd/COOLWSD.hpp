@@ -26,6 +26,7 @@
 #include <atomic>
 #include <chrono>
 #include <cstdio>
+#include <functional>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -154,6 +155,8 @@ public:
     static int getClientPortNumber();
     /// For testing only [!] DocumentBrokers are mostly single-threaded with their own thread
     static std::vector<std::shared_ptr<DocumentBroker>> getBrokersTestOnly();
+    /// Runs the callback in the thread of the prisoner poll, which talks to the forkit.
+    static void runInPrisonerPollTestOnly(const std::function<void()>& callback);
 
     // Return a map for fast searches. Used in testing and in admin for cleanup
     static std::set<pid_t> getKitPids();
