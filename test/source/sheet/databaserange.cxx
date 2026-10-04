@@ -214,6 +214,17 @@ void DatabaseRange::testContainsHeader()
     CPPUNIT_ASSERT(xDatabaseRange->getPropertyValue(propName) >>= bContainsHeader);
     CPPUNIT_ASSERT_MESSAGE("Value of ContainsHeader wasn't changed", !bContainsHeader);
 }
+
+void DatabaseRange::testTdf170842_TableStylePropertiesPlainRange()
+{
+    uno::Reference<beans::XPropertySet> xDatabaseRange(init(u"DataArea"_ustr), UNO_QUERY_THROW);
+
+    // Without the fix in place, this test would have crashed here
+    xDatabaseRange->getPropertyValue(u"UseRowStripes"_ustr);
+    xDatabaseRange->getPropertyValue(u"UseColStripes"_ustr);
+    xDatabaseRange->getPropertyValue(u"UseFirstColumnFormatting"_ustr);
+    xDatabaseRange->getPropertyValue(u"UseLastColumnFormatting"_ustr);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

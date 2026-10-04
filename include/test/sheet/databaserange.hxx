@@ -32,6 +32,7 @@ public:
     void testTokenIndex();
     void testTotalsRow();
     void testContainsHeader();
+    void testTdf170842_TableStylePropertiesPlainRange();
 
 protected:
     ~DatabaseRange() {}
