@@ -38,7 +38,7 @@
 using namespace com::sun::star;
 using namespace ::cpo;
 
-static bool makeCanonicalFileURL( OUString & rURL )
+bool comphelper::makeCanonicalFileURL( OUString & rURL )
 {
     OSL_ENSURE(comphelper::isFileUrl(rURL), "File URL expected!");
 
