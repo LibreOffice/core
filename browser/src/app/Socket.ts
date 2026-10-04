@@ -586,12 +586,13 @@ class Socket {
 			if (reason && reason.startsWith('error:')) {
 				var command = this.parseServerCmd(reason);
 				errorDetail = command.errorDetail;
-				if (
-					command.errorCmd === 'internal' &&
-					command.errorKind === 'unauthorized'
-				) {
-					errorType = 'websocketunauthorized';
-					errorMsg = this._buildUnauthorizedMessage(command);
+				const loadError =
+					command.errorCmd === 'internal' ?
+						this._buildLoadError(command)
+					:	null;
+				if (loadError) {
+					errorType = loadError.errorType;
+					errorMsg = loadError.errorMsg;
 				} else if (
 					command.errorCmd === 'storage' &&
 					command.errorKind === 'loadfailed'
@@ -1967,6 +1968,28 @@ class Socket {
 		return unauthorizedMsg;
 	}
 
+	// The error type and message that report a document that could not load, for the kinds of
+	// the internal error that say why, or null for any other kind.
+	private _buildLoadError(
+		command: ServerCommand,
+	): { errorType: string; errorMsg: string } | null {
+		if (command.errorKind === 'unauthorized') {
+			return {
+				errorType: 'websocketunauthorized',
+				errorMsg: this._buildUnauthorizedMessage(command),
+			};
+		}
+		if (command.errorKind === 'storageunavailable') {
+			// The storage didn't answer, or asked to come back later, so the user is told it
+			// is unavailable.
+			return {
+				errorType: 'websocketstorageunavailable',
+				errorMsg: window.errorMessages.storageunavailable,
+			};
+		}
+		return null;
+	}
+
 	public manualReconnect(timeout: number): void {
 		if (this._map._docLayer) {
 			this._map._docLayer.removeAllViews();
@@ -2827,17 +2850,20 @@ class Socket {
 				// label change, and the server closed the view. Loading the page
 				// again opens the document anew, and the host is asked again.
 				window.location.reload();
-			} else if (command.errorKind === 'unauthorized') {
-				const postMessageObj = {
-					errorType: 'websocketunauthorized',
-					success: false,
-					errorMsg: this._buildUnauthorizedMessage(command),
-					result: '',
-				};
-				this._map.fire('postMessage', {
-					msgId: 'Action_Load_Resp',
-					args: postMessageObj,
-				});
+			} else {
+				const loadError = this._buildLoadError(command);
+				if (loadError) {
+					const postMessageObj = {
+						errorType: loadError.errorType,
+						success: false,
+						errorMsg: loadError.errorMsg,
+						result: '',
+					};
+					this._map.fire('postMessage', {
+						msgId: 'Action_Load_Resp',
+						args: postMessageObj,
+					});
+				}
 			}
 
 			if (this._map._docLayer) {

@@ -426,6 +426,7 @@ interface ErrorMessages {
 	infoandsupport: string;
 	limitreachedprod: string;
 	serviceunavailable: string;
+	storageunavailable: string;
 	unauthorized: string;
 	accessrevoked: string;
 	accessdowngraded: string;

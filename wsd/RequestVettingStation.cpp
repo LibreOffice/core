@@ -390,7 +390,19 @@ void RequestVettingStation::checkFileInfo(const Poco::URI& uri, int redirectLimi
             if (_ws)
             {
                 LOG_DBG("WOPI::CheckFileInfo failed, sending error and closing connection now");
-                sendUnauthorizedErrorAndShutdown();
+                // A host that gave no answer, or a transient error, is unavailable, and the user is
+                // told so. A host whose certificate we refused is reported as unauthorized, with
+                // the reason.
+                const CheckFileInfo::State state = checkFileInfo.state();
+                if ((state == CheckFileInfo::State::NoAnswer ||
+                     state == CheckFileInfo::State::Transient) &&
+                    checkFileInfo.getSslVerifyMessage().empty())
+                {
+                    sendErrorAndShutdown("error: cmd=internal kind=storageunavailable",
+                                         WebSocketHandler::StatusCodes::UNEXPECTED_CONDITION);
+                }
+                else
+                    sendUnauthorizedErrorAndShutdown();
             }
             else
             {

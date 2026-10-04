@@ -38,6 +38,9 @@ const errorMessages: ErrorMessages = {
 	accessdowngraded: _(
 		'You can no longer edit this document. Its security label was changed. Please open it again to view it.',
 	),
+	storageunavailable: _(
+		'The document storage is not responding. Please try again later and report to your administrator if the issue persists.',
+	),
 	verificationerror: _("Authorization error was: '{errormessage}'."),
 	wrongwopisrc: _(
 		'Wrong or missing WOPISrc parameter, please contact support.',

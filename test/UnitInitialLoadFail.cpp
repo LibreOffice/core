@@ -28,6 +28,19 @@
 
 using namespace std::literals;
 
+namespace
+{
+/// What parallelizeCheckInfo answers for the document that the tests load.
+std::map<std::string, std::string> testDocumentCheckInfo()
+{
+    return std::map<std::string, std::string>{ { "wopiSrc", "/wopi/files/0" },
+                                               { "accessToken", "anything" },
+                                               { "noAuthHeader", "" },
+                                               { "permission", "" },
+                                               { "configid", "" } };
+}
+} // namespace
+
 /// This is to test that: if a file initially fails to load for some transient
 /// reason, f.e. timeout, then a subsequent load where there is no such failure
 /// should succeed.
@@ -66,13 +79,7 @@ public:
     {
         std::string uri = Uri::decode(request.getURI());
         TST_LOG("parallelizeCheckInfo requested: " << uri);
-        return std::map<std::string, std::string>{
-            {"wopiSrc", "/wopi/files/0"},
-            {"accessToken", "anything"},
-            {"noAuthHeader", ""},
-            {"permission", ""},
-            {"configid", ""}
-        };
+        return testDocumentCheckInfo();
     }
 
     bool handleGetFileRequest(const Poco::Net::HTTPRequest& request,
@@ -170,13 +177,7 @@ public:
 
         std::string uri = Uri::decode(request.getURI());
         TST_LOG("parallelizeCheckInfo requested: " << uri);
-        return std::map<std::string, std::string>{
-            {"wopiSrc", "/wopi/files/0"},
-            {"accessToken", "anything"},
-            {"noAuthHeader", ""},
-            {"permission", ""},
-            {"configid", ""}
-        };
+        return testDocumentCheckInfo();
     }
 
     bool handleCheckFileInfoRequest(const Poco::Net::HTTPRequest& /*request*/,
@@ -235,12 +236,67 @@ public:
     }
 };
 
+/// The host answers CheckFileInfo with 503: it is busy, it didn't refuse the user. The client is
+/// told the storage is unavailable, not that it is unauthorized.
+class StorageUnavailableLoad : public WopiTestServer
+{
+    STATE_ENUM(Phase, LoadAttempt, WaitError, Done) _phase;
+
+public:
+    StorageUnavailableLoad()
+        : WopiTestServer("StorageUnavailableLoad")
+        , _phase(Phase::LoadAttempt)
+    {
+    }
+
+    std::map<std::string, std::string>
+    parallelizeCheckInfo(const Poco::Net::HTTPRequest& /*request*/, std::istream& /*message*/,
+                         const std::shared_ptr<StreamSocket>& /*socket*/) override
+    {
+        return testDocumentCheckInfo();
+    }
+
+    std::unique_ptr<http::Response>
+    assertCheckFileInfoRequest(const Poco::Net::HTTPRequest& /*request*/) override
+    {
+        // The answer has a body length, so it is read as complete.
+        auto response = std::make_unique<http::Response>(http::StatusCode::ServiceUnavailable);
+        response->setContentLength(0);
+        return response;
+    }
+
+    bool onFilterSendWebSocketMessage(const std::string_view message, const WSOpCode /* code */,
+                                      const bool /* flush */, int& /*unitReturn*/) override
+    {
+        if (_phase == Phase::WaitError && message.starts_with("error:"))
+        {
+            TST_LOG("Load failed with: " << message);
+            TRANSITION_STATE(_phase, Phase::Done);
+            LOK_ASSERT_EQUAL_STR("error: cmd=internal kind=storageunavailable", message);
+            passTest("The storage was reported unavailable");
+        }
+
+        return false;
+    }
+
+    void invokeWSDTest() override
+    {
+        if (_phase == Phase::LoadAttempt)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitError);
+            initWebsocket("/wopi/files/0?access_token=anything");
+            WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [3]
+    return new UnitBase* [4]
     {
         new InitialLoadFail(),
         new UnauthorizedSocketLeak(),
+        new StorageUnavailableLoad(),
         nullptr
     };
 }
