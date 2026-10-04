@@ -53,6 +53,29 @@ namespace
                                                            << ']');
 }
 
+/// Some clients and proxies send the path with more than one leading slash, as in
+/// "//browser/...", which is the same resource, but would be taken for an unknown one.
+void collapseLeadingSlashes(std::string& uri)
+{
+    const std::size_t first = uri.find_first_not_of('/');
+    const std::size_t slashes = (first == std::string::npos ? uri.size() : first);
+    if (slashes > 1)
+        uri.erase(0, slashes - 1);
+}
+
+/// Returns the path of @uri after the service root, which it must start with, with the
+/// leading slashes of each collapsed.
+std::string stripServiceRoot(std::string uri, const std::string& serviceRoot)
+{
+    collapseLeadingSlashes(uri);
+    if (!uri.starts_with(serviceRoot))
+        throw BadRequestException("The request does not start with prefix: " + serviceRoot);
+
+    uri.erase(0, serviceRoot.length());
+    collapseLeadingSlashes(uri);
+    return uri;
+}
+
 std::map<std::string, std::string> getParams(const std::string& uri)
 {
     std::map<std::string, std::string> result;
@@ -83,11 +106,7 @@ std::map<std::string, std::string> getParams(const std::string& uri)
 RequestDetails::RequestDetails(Poco::Net::HTTPRequest &request, const std::string& serviceRoot)
 {
     // Check and remove the ServiceRoot from the request.getURI()
-    if (!request.getURI().starts_with(serviceRoot))
-        throw BadRequestException("The request does not start with prefix: " + serviceRoot);
-
-    // re-writes ServiceRoot out of request
-    _uriString = request.getURI().substr(serviceRoot.length());
+    _uriString = stripServiceRoot(request.getURI(), serviceRoot);
     dehexify();
     request.setURI(_uriString);
     _method = stringToMethod(request.getMethod());
@@ -111,11 +130,7 @@ RequestDetails::RequestDetails(Poco::Net::HTTPRequest &request, const std::strin
 RequestDetails::RequestDetails(http::RequestParser& request, const std::string& serviceRoot)
 {
     // Check and remove the ServiceRoot from the request.getURI()
-    if (!request.getUrl().starts_with(serviceRoot))
-        throw BadRequestException("The request does not start with prefix: " + serviceRoot);
-
-    // re-writes ServiceRoot out of request
-    _uriString = request.getUrl().substr(serviceRoot.length());
+    _uriString = stripServiceRoot(request.getUrl(), serviceRoot);
     dehexify();
     request.setUrl(_uriString);
     _method = stringToMethod(request.getVerb());

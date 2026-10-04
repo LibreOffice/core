@@ -34,6 +34,7 @@ class RequestDetailsTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testDownloadURI);
     CPPUNIT_TEST(testCoolURI);
     CPPUNIT_TEST(testLocal);
+    CPPUNIT_TEST(testLeadingSlashes);
     CPPUNIT_TEST(testLocalHexified);
     CPPUNIT_TEST(testRequestDetailsProxyClose);
     CPPUNIT_TEST(testRequestDetailsProxyWrite);
@@ -57,6 +58,7 @@ class RequestDetailsTests : public CPPUNIT_NS::TestFixture
 
     void testDownloadURI();
     void testCoolURI();
+    void testLeadingSlashes();
     void testLocal();
     void testLocalHexified();
     void testRequestDetailsProxyClose();
@@ -189,7 +191,7 @@ void RequestDetailsTests::testLocal()
 
     {
         static const std::string URI = "/cool/"
-                                       "file%3A%2F%2F%2Fhome%2Fash%2Fprj%2Flo%2Fonline%2Ftest%"
+                                       "file%3A%2F%2F%2Fpath%2Fto%2Ftest%"
                                        "2Fdata%2Fhello-world.odt/ws/open/open/0";
 
         Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, URI,
@@ -206,7 +208,7 @@ void RequestDetailsTests::testLocal()
         LOK_ASSERT_EQUAL(false, details.isWebSocket());
         LOK_ASSERT_EQUAL(true, details.isGet());
 
-        const std::string docUri = "file:///home/ash/prj/lo/online/test/data/hello-world.odt";
+        const std::string docUri = "file:///path/to/test/data/hello-world.odt";
 
         LOK_ASSERT_EQUAL(docUri, details.getDocumentURI());
 
@@ -215,7 +217,7 @@ void RequestDetailsTests::testLocal()
         LOK_ASSERT(details.equals(0, "cool"));
         LOK_ASSERT_EQUAL(
             std::string(
-                "file%3A%2F%2F%2Fhome%2Fash%2Fprj%2Flo%2Fonline%2Ftest%2Fdata%2Fhello-world.odt"),
+                "file%3A%2F%2F%2Fpath%2Fto%2Ftest%2Fdata%2Fhello-world.odt"),
             details[1]);
         LOK_ASSERT_EQUAL_STR("ws", details[2]);
         LOK_ASSERT_EQUAL_STR("open", details[3]);
@@ -242,7 +244,7 @@ void RequestDetailsTests::testLocal()
     {
         // Blank entries are skipped.
         static const std::string URI = "/cool/"
-                                       "file%3A%2F%2F%2Fhome%2Fash%2Fprj%2Flo%2Fonline%2Ftest%"
+                                       "file%3A%2F%2F%2Fpath%2Fto%2Ftest%"
                                        "2Fdata%2Fhello-world.odt/ws//write/2";
 
         Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, URI,
@@ -259,7 +261,7 @@ void RequestDetailsTests::testLocal()
         LOK_ASSERT_EQUAL(false, details.isWebSocket());
         LOK_ASSERT_EQUAL(true, details.isGet());
 
-        const std::string docUri = "file:///home/ash/prj/lo/online/test/data/hello-world.odt";
+        const std::string docUri = "file:///path/to/test/data/hello-world.odt";
 
         LOK_ASSERT_EQUAL(docUri, details.getDocumentURI());
 
@@ -268,7 +270,7 @@ void RequestDetailsTests::testLocal()
         LOK_ASSERT(details.equals(0, "cool"));
         LOK_ASSERT_EQUAL(
             std::string(
-                "file%3A%2F%2F%2Fhome%2Fash%2Fprj%2Flo%2Fonline%2Ftest%2Fdata%2Fhello-world.odt"),
+                "file%3A%2F%2F%2Fpath%2Fto%2Ftest%2Fdata%2Fhello-world.odt"),
             details[1]);
         LOK_ASSERT_EQUAL_STR("ws", details[2]);
         LOK_ASSERT_EQUAL_STR("write", details[3]); // SessionId, since the real SessionId is blank.
@@ -294,7 +296,7 @@ void RequestDetailsTests::testLocal()
     {
         // Apparently, the initial / can be missing -- all the tests do that.
         static const std::string URI = "cool/"
-                                       "file%3A%2F%2F%2Fhome%2Fash%2Fprj%2Flo%2Fonline%2Ftest%"
+                                       "file%3A%2F%2F%2Fpath%2Fto%2Ftest%"
                                        "2Fdata%2Fhello-world.odt/ws//write/2";
 
         Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, URI,
@@ -311,7 +313,7 @@ void RequestDetailsTests::testLocal()
         LOK_ASSERT_EQUAL(false, details.isWebSocket());
         LOK_ASSERT_EQUAL(true, details.isGet());
 
-        const std::string docUri = "file:///home/ash/prj/lo/online/test/data/hello-world.odt";
+        const std::string docUri = "file:///path/to/test/data/hello-world.odt";
 
         LOK_ASSERT_EQUAL(docUri, details.getDocumentURI());
 
@@ -320,7 +322,7 @@ void RequestDetailsTests::testLocal()
         LOK_ASSERT(details.equals(0, "cool"));
         LOK_ASSERT_EQUAL(
             std::string(
-                "file%3A%2F%2F%2Fhome%2Fash%2Fprj%2Flo%2Fonline%2Ftest%2Fdata%2Fhello-world.odt"),
+                "file%3A%2F%2F%2Fpath%2Fto%2Ftest%2Fdata%2Fhello-world.odt"),
             details[1]);
         LOK_ASSERT_EQUAL_STR("ws", details[2]);
         LOK_ASSERT_EQUAL_STR("write", details[3]); // SessionId, since the real SessionId is blank.
@@ -344,6 +346,52 @@ void RequestDetailsTests::testLocal()
     }
 }
 
+/// A path with more than one leading slash is the same resource as with one. Before, it was
+/// taken for an unknown resource, and thousands of thumbnail requests failed.
+void RequestDetailsTests::testLeadingSlashes()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string docUri = "file:///path/to/test/data/hello-world.odt";
+    const std::string coolUri = "/cool/"
+                                "file%3A%2F%2F%2Fpath%2Fto%2Ftest%"
+                                "2Fdata%2Fhello-world.odt/ws";
+
+    for (const std::string prefix : { "", "/", "//" })
+    {
+        Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, prefix + coolUri,
+                                       Poco::Net::HTTPMessage::HTTP_1_1);
+        request.setHost("localhost:9980");
+
+        RequestDetails details(request, "");
+        LOK_ASSERT_EQUAL_STR("cool", details.getField(RequestDetails::Field::Type));
+        LOK_ASSERT_EQUAL(docUri, details.getDocumentURI());
+        LOK_ASSERT_EQUAL(coolUri, details.getURI());
+    }
+
+    {
+        Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET,
+                                       "//browser/dist/cool.html", Poco::Net::HTTPMessage::HTTP_1_1);
+        request.setHost("localhost:9980");
+
+        RequestDetails details(request, "");
+        LOK_ASSERT_EQUAL_STR("browser", details.getField(RequestDetails::Field::Type));
+    }
+
+    // A service root, then the path. Also with slashes before the service root, which were
+    // taken for a request not under it.
+    for (const std::string uri : { "/root//browser/dist/cool.html", "//root/browser/dist/cool.html",
+                                   "//root//browser/dist/cool.html" })
+    {
+        Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, uri,
+                                       Poco::Net::HTTPMessage::HTTP_1_1);
+        request.setHost("localhost:9980");
+
+        RequestDetails details(request, "/root");
+        LOK_ASSERT_EQUAL_STR("browser", details.getField(RequestDetails::Field::Type));
+    }
+}
+
 void RequestDetailsTests::testLocalHexified()
 {
     constexpr std::string_view testname = __func__;
@@ -353,9 +401,9 @@ void RequestDetailsTests::testLocalHexified()
     static const std::string ProxyPrefix
         = "http://localhost/nextcloud/apps/richdocuments/proxy.php?req=";
 
-    static const std::string docUri = "file:///home/ash/prj/lo/online/test/data/hello-world.odt";
+    static const std::string docUri = "file:///path/to/test/data/hello-world.odt";
     static const std::string fileUrl =
-        "file%3A%2F%2F%2Fhome%2Fash%2Fprj%2Flo%2Fonline%2Ftest%2Fdata%2Fhello-world.odt";
+        "file%3A%2F%2F%2Fpath%2Fto%2Ftest%2Fdata%2Fhello-world.odt";
 
     const std::string fileUrlHex = "0x" + HexUtil::dataToHexString(fileUrl, 0, fileUrl.size());
 
