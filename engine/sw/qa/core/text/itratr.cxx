@@ -13,10 +13,15 @@
 
 #include <IDocumentLayoutAccess.hxx>
 #include <doc.hxx>
+#include <docsh.hxx>
 #include <frame.hxx>
+#include <hintids.hxx>
+#include <ndtxt.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <sortedobjs.hxx>
+#include <txtfrm.hxx>
+#include <wrtsh.hxx>
 
 namespace
 {
@@ -52,6 +57,27 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableNegativeVertOffsetEmptyAnchor)
     // i.e. the last floating table was shifted to page 2, which lead to overlapping text in the
     // original document.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), rPage1Objs.size());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testScalingOfSelectedTextDummyCharWithoutHint)
+{
+    // Given a paragraph with a dummy character that has no hint, as a document can carry:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"a"_ustr + OUStringChar(CH_TXTATR_INWORD) + u"b"_ustr);
+    const SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT(pTextNode);
+    CPPUNIT_ASSERT(pTextNode->GetText().indexOf(CH_TXTATR_INWORD) >= 0);
+
+    // When getting the scaling of all its text, as the character dialog does for the selection:
+    calcLayout();
+    auto pFrame = dynamic_cast<SwTextFrame*>(pTextNode->getLayoutFrame(pWrtShell->GetLayout()));
+    CPPUNIT_ASSERT(pFrame);
+    // Then make sure it returns: without the accompanying fix in place, this never did, as the
+    // scan stopped at the dummy character again and again.
+    CPPUNIT_ASSERT_GREATER(sal_uInt16(0),
+                           pFrame->GetScalingOfSelectedText(
+                               TextFrameIndex(0), TextFrameIndex(pFrame->GetText().getLength())));
 }
 }
 

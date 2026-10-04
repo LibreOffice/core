@@ -1537,6 +1537,7 @@ sal_uInt16 SwTextFrame::GetScalingOfSelectedText(
 
     while( nIdx < nEnd )
     {
+        const TextFrameIndex nPrevIdx = nIdx;
         aIter.SeekAndChgAttrIter( nIdx, pOut );
 
         // scan for end of portion
@@ -1562,9 +1563,11 @@ sal_uInt16 SwTextFrame::GetScalingOfSelectedText(
                 CH_TXT_ATR_FIELDSTART == cChar ||
                 CH_TXT_ATR_FIELDSEP == cChar ||
                 CH_TXT_ATR_FIELDEND == cChar ||
+                // A dummy char stands for its hint, handled below. Without one, as
+                // GetMinMaxSize() does, it is just text: stopping at it would loop forever.
                 (
                   (CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar) &&
-                  (nullptr == (pHint = aIter.GetAttr(nStop)))
+                  (nullptr != (pHint = aIter.GetAttr(nStop)))
                 )
                )
             {
@@ -1646,6 +1649,10 @@ sal_uInt16 SwTextFrame::GetScalingOfSelectedText(
         {   // just skip it and continue with the content...
             ++nIdx;
         }
+
+        // Make progress whatever the text, as SwBreakIt::getGraphemeCount() does.
+        if (nIdx == nPrevIdx)
+            ++nIdx;
     } // end of while
 
     nWidth = std::max( nWidth, nProWidth );
