@@ -159,6 +159,7 @@ void NotesPanelViewShell::Construct()
 
     if (comphelper::COKit::isActive())
     {
+        mpNotesPanelView->hideMarkHandles();
         mpNotesPanelWidget
             = VclPtr<NotesPanelWidget>::Create(GetActiveWindow(), *this, *mpNotesPanelView,
                                                reinterpret_cast<sal_uInt64>(&GetViewShellBase()));

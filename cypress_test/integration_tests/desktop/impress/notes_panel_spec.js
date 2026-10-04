@@ -661,4 +661,52 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 			'external text'
 		);
 	});
+	// The notes pane takes no selection of its own, so a shape selected on the
+	// slide keeps its frame while the notes are typed.
+	it('keeps the selection of a shape on the slide while the notes are typed', function () {
+		// Insert a shape, which arrives selected.
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:BasicShapes.rectangle');
+		});
+		cy.cGet('#test-div-shapeHandlesSection').should('exist');
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+
+		openNotesPane();
+
+		// The client drops the handles section on an empty selection, so each
+		// removal of its test div is one flicker.
+		cy.getFrameWindow().then(function (win) {
+			win._testHandlesRemoved = 0;
+
+			var observer = new MutationObserver(function (mutations) {
+				mutations.forEach(function (mutation) {
+					mutation.removedNodes.forEach(function (node) {
+						if (node.id === 'test-div-shapeHandlesSection')
+							win._testHandlesRemoved++;
+					});
+				});
+			});
+
+			observer.observe(win.document.body, { childList: true });
+			win._testHandlesObserver = observer;
+		});
+
+		var editEngine = '#notespanel-container .ui-editengine';
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('Remember the demo');
+		cy.cGet(editEngine + ' .ui-editengine-paragraph').should(
+			'have.text',
+			'Remember the demo'
+		);
+
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+
+		// The shape stays selected, and its frame was never taken away.
+		cy.cGet('#test-div-shapeHandlesSection').should('exist');
+
+		cy.getFrameWindow().then(function (win) {
+			expect(win._testHandlesRemoved).to.equal(0);
+			win._testHandlesObserver.disconnect();
+		});
+	});
 });
