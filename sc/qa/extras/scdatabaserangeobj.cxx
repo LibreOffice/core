@@ -51,6 +51,7 @@ public:
     CPPUNIT_TEST(testTokenIndex);
     CPPUNIT_TEST(testTotalsRow);
     CPPUNIT_TEST(testContainsHeader);
+    CPPUNIT_TEST(testTdf170842_TableStylePropertiesPlainRange);
 
     // XCellRangeReferrer
     CPPUNIT_TEST(testGetReferredCells);

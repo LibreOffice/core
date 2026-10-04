@@ -2129,14 +2129,18 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
         {
             const ScTableStyleParam* pTableStyleInfo = GetDBData_Impl()->GetTableStyleInfo();
             bool bVal = false;
-            if (aPropertyName == SC_UNONAME_ROW_STRIPES)
-                bVal = pTableStyleInfo->mbRowStripes;
-            else if (aPropertyName == SC_UNONAME_COL_STRIPES)
-                bVal = pTableStyleInfo->mbColumnStripes;
-            else if (aPropertyName == SC_UNONAME_FIRST_COL)
-                bVal = pTableStyleInfo->mbFirstColumn;
-            else if (aPropertyName == SC_UNONAME_LAST_COL)
-                bVal = pTableStyleInfo->mbLastColumn;
+            // tdf#170842 - check for missing table style info on plain database ranges
+            if (pTableStyleInfo)
+            {
+                if (aPropertyName == SC_UNONAME_ROW_STRIPES)
+                    bVal = pTableStyleInfo->mbRowStripes;
+                else if (aPropertyName == SC_UNONAME_COL_STRIPES)
+                    bVal = pTableStyleInfo->mbColumnStripes;
+                else if (aPropertyName == SC_UNONAME_FIRST_COL)
+                    bVal = pTableStyleInfo->mbFirstColumn;
+                else if (aPropertyName == SC_UNONAME_LAST_COL)
+                    bVal = pTableStyleInfo->mbLastColumn;
+            }
 
             aRet <<= bVal;
         }
