@@ -208,7 +208,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', { testI
 
 	function minimalRowHeightTest(parentClass) {
 		prepareForTableSizeTests(parentClass);
+		cy.cGet(parentClass + ' #rowsizing .unoSetOptimalRowHeight').should('not.have.attr','disabled');
 		cy.cGet(parentClass + ' #rowsizing .unoSetOptimalRowHeight').click();
+		cy.cGet(parentClass + ' #rowsizing .unoSetMinimalRowHeight').should('not.have.attr','disabled');
 		cy.cGet(parentClass + ' #rowsizing .unoSetMinimalRowHeight').click();
 
 		selectFullTable();
@@ -258,6 +260,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', { testI
 
 	function minimalColumnWidthTest(parentClass) {
 		prepareForTableSizeTests(parentClass);
+		cy.cGet(parentClass + ' #columnsizing .unoSetMinimalColumnWidth').should('not.have.attr','disabled');
 		cy.cGet(parentClass + ' #columnsizing .unoSetMinimalColumnWidth').click();
 
 		selectFullTable();
@@ -267,6 +270,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', { testI
 
 	function optimalColumnWidthTest(parentClass) {
 		prepareForTableSizeTests(parentClass);
+		cy.cGet(parentClass + ' #columnsizing .unoSetOptimalColumnWidth').should('not.have.attr','disabled');
 		cy.cGet(parentClass + ' #columnsizing .unoSetOptimalColumnWidth').click();
 
 		selectFullTable();
@@ -277,6 +281,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', { testI
 
 	function distributeColumnsTest(parentClass) {
 		prepareForTableSizeTests(parentClass);
+		cy.cGet(parentClass + ' #columnsizing .unoDistributeColumns').should('not.have.attr','disabled');
 		cy.cGet(parentClass + ' #columnsizing .unoDistributeColumns').click();
 
 		selectFullTable();
