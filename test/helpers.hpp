@@ -42,6 +42,7 @@
 #include <chrono>
 #include <filesystem>
 #include <fstream>
+#include <functional>
 #include <iterator>
 #include <stdexcept>
 #include <string>
@@ -62,6 +63,28 @@ constexpr int COMMAND_RETRY_COUNT = 5;
 /// These are supposed to be testing the latter.
 namespace helpers
 {
+
+/// Runs a function when it goes out of scope, however the scope is left, including by an exception
+/// that a failed assertion throws.
+class ScopeGuard
+{
+    std::function<void()> _function;
+
+public:
+    explicit ScopeGuard(std::function<void()> function)
+        : _function(std::move(function))
+    {
+    }
+
+    ~ScopeGuard()
+    {
+        if (_function)
+            _function();
+    }
+
+    ScopeGuard(const ScopeGuard&) = delete;
+    ScopeGuard& operator=(const ScopeGuard&) = delete;
+};
 
 std::vector<char> genRandomData(const size_t size);
 

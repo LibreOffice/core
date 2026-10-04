@@ -93,6 +93,14 @@ public:
         return _totalBytes;
     }
 
+    /// Total number of payload bytes currently held across all queued items, plus the given number
+    /// of bytes for each item.
+    size_t bytes(size_t bytesPerItem) const
+    {
+        std::lock_guard<std::mutex> lock(_mutex);
+        return _totalBytes + _queue.size() * bytesPerItem;
+    }
+
     bool empty() const
     {
         std::lock_guard<std::mutex> lock(_mutex);

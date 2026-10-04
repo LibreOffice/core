@@ -101,9 +101,12 @@ constexpr int SYNTHETIC_COOL_PID_OFFSET = 10000000;
 /// How many screenfuls beyond its visible area a client is taken to be preloading.
 constexpr int TILE_PRELOAD_SCREENS = 2;
 
-/// Log a warning once the queue of messages waiting to be sent to a client
-/// grows past this many bytes, which usually means the client is not reading.
-constexpr std::size_t LargeSenderQueueBytes = 200 * 1024 * 1024;
+std::size_t ClientSession::MaxSenderQueueBytes = 400 * 1024 * 1024;
+
+/// The heap that each queued message takes whatever its size: the Message object, its list of
+/// tokens, the control block of its shared pointer and its slot in the queue. It came to about 520
+/// bytes on 64-bit Linux.
+constexpr std::size_t SenderQueueMessageOverheadBytes = 512;
 
 using Poco::Path;
 
@@ -6028,18 +6031,58 @@ void ClientSession::enqueueSendMessage(const std::shared_ptr<Message>& data)
         haveWireId = true;
     }
 
+    // The queue is measured by its payload and by the heap each message takes besides, so that
+    // many small messages count for what they hold.
     LOG_TRC("Enqueueing client message " << data->id());
-    const std::size_t queueBytesBefore = _senderQueue.bytes();
+    const std::size_t queueBytesBefore = _senderQueue.bytes(SenderQueueMessageOverheadBytes);
     TileWireId droppedTileWireId = 0;
     const bool enqueued = _senderQueue.enqueue(data, &droppedTileWireId);
+    const std::size_t queueBytes = _senderQueue.bytes(SenderQueueMessageOverheadBytes);
 
-    // Warn as the outgoing queue crosses the large threshold, once per crossing,
-    // so a slow or stalled client that makes messages pile up is visible in the logs.
-    const std::size_t queueBytesAfter = _senderQueue.bytes();
-    if (queueBytesBefore <= LargeSenderQueueBytes && queueBytesAfter > LargeSenderQueueBytes)
-        LOG_WRN("Send queue for session [" << getId() << "] of doc [" << getDocURL()
-                << "] has grown to " << queueBytesAfter
-                << " bytes; the client appears to be reading slowly.");
+    // A client whose queue grows past the limit is not reading. Its messages are dropped and it
+    // is disconnected, and the broker removes its session, which saves the edits made in it. A
+    // session without a protocol, as a conversion has, has no client to read its queue, so the
+    // limit is for sessions with one. The check looks at the size of the queue only, not at
+    // whether it drains, so a single message larger than the limit disconnects a client that is
+    // reading too.
+    if (_protocol && queueBytes > MaxSenderQueueBytes)
+    {
+        LOG_ERR("Send queue for session ["
+                << getId() << "] of doc [" << getDocURL() << "] has grown to "
+                << _senderQueue.size() << " messages taking " << queueBytes
+                << " bytes, over the limit of "
+                << MaxSenderQueueBytes << "; the client is not reading. Disconnecting it");
+        _senderQueue.clear();
+        closeFrame(); // Drop what comes next.
+        shutdownGoingAway("send queue full");
+
+        // The broker removes the session on the next pass of its poll.
+        const std::weak_ptr<ClientSession> weakSession = client_from_this();
+        docBroker->addCallback(
+            [weakSession]()
+            {
+                const std::shared_ptr<ClientSession> session = weakSession.lock();
+                if (!session || session->isRemoved())
+                    return;
+
+                if (const std::shared_ptr<DocumentBroker> broker = session->getDocumentBroker())
+                    broker->removeSession(session);
+            });
+
+        return;
+    }
+
+    // Half the limit is logged once per crossing, so a client that falls behind shows in the logs
+    // before it is disconnected.
+    const std::size_t warnBytes = MaxSenderQueueBytes / 2;
+    if (_protocol && queueBytesBefore <= warnBytes && queueBytes > warnBytes)
+    {
+        LOG_WRN("Send queue for session ["
+                << getId() << "] of doc [" << getDocURL() << "] has grown to "
+                << _senderQueue.size() << " messages taking " << queueBytes
+                << " bytes, over half the limit of "
+                << MaxSenderQueueBytes << "; the client appears to be reading slowly");
+    }
 
     // If the new tile deduplicated a previously-queued tile, that older tile was
     // counted in _tilesOnFly when first enqueued but will never reach the

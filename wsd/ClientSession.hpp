@@ -58,6 +58,10 @@ class ClientSession final : public Session
     friend class AIChatSession;
 #endif
 public:
+    /// The largest number of bytes that the queue of messages waiting to be sent to one client may
+    /// hold.
+    static std::size_t MaxSenderQueueBytes;
+
     ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws, const std::string& id,
                   const std::shared_ptr<DocumentBroker>& docBroker, const Poco::URI& uriPublic,
                   bool isReadOnly, const RequestDetails& requestDetails,

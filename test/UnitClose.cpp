@@ -25,6 +25,7 @@
 
 #include <Unit.hpp>
 #include <helpers.hpp>
+#include <wsd/ClientSession.hpp>
 
 using namespace std::literals;
 
@@ -49,6 +50,7 @@ class UnitClose : public UnitWSD
     TestResult testFontList();
     TestResult testGraphicInvalidate();
     TestResult testAlertAllUsers();
+    TestResult testSendQueueFull();
 
 public:
     UnitClose();
@@ -198,6 +200,32 @@ UnitBase::TestResult UnitClose::testAlertAllUsers()
     return TestResult::Ok;
 }
 
+/// A client whose send queue grows past the limit is told why and disconnected.
+UnitBase::TestResult UnitClose::testSendQueueFull()
+{
+    // Any message is over this limit. The test puts the limit back however it ends.
+    const std::size_t maxSenderQueueBytes = ClientSession::MaxSenderQueueBytes;
+    ClientSession::MaxSenderQueueBytes = 1;
+    const helpers::ScopeGuard restoreLimit(
+        [maxSenderQueueBytes]() { ClientSession::MaxSenderQueueBytes = maxSenderQueueBytes; });
+
+    std::shared_ptr<SocketPoll> socketPoll = std::make_shared<SocketPoll>("ClosePoll");
+    socketPoll->startThread();
+
+    std::string documentPath, documentURL;
+    helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
+    std::shared_ptr<http::WebSocketSession> socket = helpers::connectLOKit(
+        socketPoll, Poco::URI(helpers::getTestServerURI()), documentURL, testname);
+    helpers::sendTextFrame(socket, "load url=" + documentURL, testname);
+
+    const std::string closeMessage = helpers::getResponseString(socket, "close:", testname);
+
+    LOK_ASSERT_EQUAL(std::string("close: send queue full"), closeMessage);
+    LOK_ASSERT_MESSAGE("Expected the client to be disconnected",
+                       socket->waitForDisconnection(5s));
+    return TestResult::Ok;
+}
+
 UnitClose::UnitClose()
     : UnitWSD("UnitClose")
 {
@@ -220,6 +248,10 @@ void UnitClose::invokeWSDTest()
         exitTest(result);
 
     result = testAlertAllUsers();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testSendQueueFull();
     if (result != TestResult::Ok)
         exitTest(result);
 

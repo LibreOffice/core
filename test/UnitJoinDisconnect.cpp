@@ -24,8 +24,10 @@
 
 #include <Poco/Net/HTTPRequest.h>
 
+#include <atomic>
 #include <chrono>
 #include <map>
+#include <thread>
 
 /// This is to test that dropping connection is seen as leaving the document
 class SecondJoinQuit : public WopiTestServer
@@ -441,11 +443,154 @@ public:
     }
 };
 
+namespace
+{
+/// Waits until the flag is set, for up to 30 seconds. Returns whether it was set.
+bool waitForFlag(const std::atomic<bool>& flag)
+{
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(30);
+    while (!flag && std::chrono::steady_clock::now() < deadline)
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    return flag;
+}
+} // namespace
+
+/// A client that is disconnected for a full send queue leaves the way a closing view does: the
+/// edits it made after the last upload are saved and uploaded on its way out. Its queue fills up as
+/// an upload finishes, right before the broker disconnects the views that left during the upload.
+class UnitSendQueueFullSaves : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoad, WaitModified, WaitUpload, WaitModifiedAgain, WaitUploaded,
+               WaitExitUpload, Done)
+    _phase;
+
+    /// The first upload reached the host, which holds it until the document has an edit that the
+    /// upload does not carry.
+    std::atomic<bool> _uploadHeld;
+    std::atomic<bool> _releaseUpload;
+
+    /// The limit on the send queue that the test found, and puts back when it ends.
+    const std::size_t _defaultLimit;
+
+public:
+    UnitSendQueueFullSaves()
+        : WopiTestServer("UnitSendQueueFullSaves")
+        , _phase(Phase::Load)
+        , _uploadHeld(false)
+        , _releaseUpload(false)
+        , _defaultLimit(ClientSession::MaxSenderQueueBytes)
+    {
+    }
+
+    ~UnitSendQueueFullSaves() { ClientSession::MaxSenderQueueBytes = _defaultLimit; }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(const Poco::Net::HTTPRequest& request) override
+    {
+        if (getCountPutFile() == 1)
+        {
+            TST_LOG("Holding the first upload until the document is modified again");
+            LOK_ASSERT_STATE(_phase, Phase::WaitUpload);
+            _uploadHeld = true;
+            LOK_ASSERT_MESSAGE("Expected the document to be modified during the upload",
+                               waitForFlag(_releaseUpload));
+            return nullptr;
+        }
+
+        TST_LOG("Upload of the view that left");
+        LOK_ASSERT_STATE(_phase, Phase::WaitExitUpload);
+        LOK_ASSERT_EQUAL_STR("true", request.get("X-COOL-WOPI-IsExitSave"));
+        TRANSITION_STATE(_phase, Phase::Done);
+        return nullptr;
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoad);
+
+        TRANSITION_STATE(_phase, Phase::WaitModified);
+        WSD_CMD("key type=input char=97 key=0");
+        WSD_CMD("key type=up char=0 key=512");
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("onDocumentModified: [" << message << ']');
+        if (_phase == Phase::WaitModified)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitUpload);
+            WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        }
+        else if (_phase == Phase::WaitModifiedAgain)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitUploaded);
+            _releaseUpload = true;
+        }
+
+        return true;
+    }
+
+    void onDocumentUploaded(bool success) override
+    {
+        TST_LOG("onDocumentUploaded: " << (success ? "success" : "failure"));
+        if (_phase == Phase::WaitUploaded)
+        {
+            LOK_ASSERT_MESSAGE("Expected the first upload to succeed", success);
+            TRANSITION_STATE(_phase, Phase::WaitExitUpload);
+
+            // The next message to the client finds its queue full, as it would if the client had
+            // stopped reading.
+            ClientSession::MaxSenderQueueBytes = 1;
+        }
+    }
+
+    void onDocBrokerDestroy(const std::string& /*docKey*/) override
+    {
+        ClientSession::MaxSenderQueueBytes = _defaultLimit;
+        LOK_ASSERT_STATE(_phase, Phase::Done);
+        passTest("The edits of the disconnected view were uploaded");
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoad);
+
+                initWebsocket("/wopi/files/0?access_token=anything");
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitUpload:
+            {
+                if (_uploadHeld)
+                {
+                    TRANSITION_STATE(_phase, Phase::WaitModifiedAgain);
+                    WSD_CMD("key type=input char=98 key=0");
+                    WSD_CMD("key type=up char=0 key=512");
+                }
+                break;
+            }
+            case Phase::WaitLoad:
+            case Phase::WaitModified:
+            case Phase::WaitModifiedAgain:
+            case Phase::WaitUploaded:
+            case Phase::WaitExitUpload:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[5]{ new SecondJoinQuitNormal(), new SecondJoinQuitEarly(),
+    return new UnitBase*[6]{ new SecondJoinQuitNormal(), new SecondJoinQuitEarly(),
                              new SecondJoinWhileFirstQuit(), new UnitRemoveSessionOnce(),
-                             nullptr };
+                             new UnitSendQueueFullSaves(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
