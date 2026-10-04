@@ -1429,8 +1429,10 @@ public:
         {
             LOK_ASSERT_MESSAGE("Expected no more lock refreshes with the rejected owner's token",
                                !owner);
+            // Passed from invokeWSDTest(): ending the test here, on the host's
+            // thread, would take its connections away from under the ping that
+            // the test's own thread may be sending meanwhile.
             TRANSITION_STATE(_phase, Phase::Done);
-            passTest("Refreshed the lock with the other editor's token");
         }
 
         return nullptr;
@@ -1477,9 +1479,13 @@ public:
                 WSD_CMD_BY_CONNECTION_INDEX(0, "ping");
                 break;
             }
+            case Phase::Done:
+            {
+                passTest("Refreshed the lock with the other editor's token");
+                break;
+            }
             case Phase::WaitViews:
             case Phase::RefuseOwnerRefresh:
-            case Phase::Done:
                 break;
         }
     }
