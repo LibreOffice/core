@@ -49,6 +49,8 @@ class StylesSidebar(UITestCase):
             expectedResults = ["customParagraphStyle", "customCharacterStyle", "customFrameStyle",
                     "customPageStyle", "customNumberingStyle"]
 
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+
             for i in range(5):
 
                 self.xUITest.executeCommand(".uno:Sidebar")
@@ -63,6 +65,9 @@ class StylesSidebar(UITestCase):
                 xLeft.executeAction("CLICK", mkPropertyValues({"POS": str( i )}))
 
                 xFlatView = xWriterEdit.getChild("flatview")
+
+                # A pending refresh of the style list resets its selection, so let it run first.
+                xToolkit.processEventsToIdle()
 
                 self.assertEqual(1, len(xFlatView.getChildren()))
 
