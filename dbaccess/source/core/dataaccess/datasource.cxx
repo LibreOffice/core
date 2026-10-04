@@ -48,6 +48,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -60,6 +61,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/securityoptions.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/vclenum.hxx>
 
@@ -660,6 +662,21 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
                 pDriverInfo[nCount].Name = "Document";
                 pDriverInfo[nCount++].Value <<= getDatabaseDocument();
+            }
+            // DocumentInTrustedLocation says whether the database document is in a trusted
+            // location. Any setting of that name from the document is replaced.
+            {
+                std::vector<PropertyValue> aInfo;
+                for (const PropertyValue& rValue : aDriverInfo)
+                {
+                    if (rValue.Name != "DocumentInTrustedLocation")
+                        aInfo.push_back(rValue);
+                }
+                aInfo.push_back(comphelper::makePropertyValue(
+                    u"DocumentInTrustedLocation"_ustr,
+                    SvtSecurityOptions::isTrustedLocationUriForUpdatingLinks(
+                        m_pImpl->getDocFileLocation())));
+                aDriverInfo = comphelper::containerToSequence(aInfo);
             }
             if (nAdditionalArgs)
                 xReturn = xManager->getConnectionWithInfo(m_pImpl->m_sConnectURL, ::comphelper::concatSequences(aUserPwd,aDriverInfo));
