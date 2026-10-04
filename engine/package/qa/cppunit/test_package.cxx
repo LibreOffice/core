@@ -16,6 +16,11 @@
 
 #include <iterator>
 
+#ifdef LINUX
+#include <sys/resource.h>
+#include <unistd.h>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::cpo;
 
@@ -37,12 +42,14 @@ namespace
         void test();
         void testThreadedStreams();
         void testBufferedThreadedStreams();
+        void testThreadStartFailure();
         void testZip64();
 
         CPPUNIT_TEST_SUITE(PackageTest);
         CPPUNIT_TEST(test);
         CPPUNIT_TEST(testThreadedStreams);
         CPPUNIT_TEST(testBufferedThreadedStreams);
+        CPPUNIT_TEST(testThreadStartFailure);
         CPPUNIT_TEST(testZip64);
         CPPUNIT_TEST_SUITE_END();
 
@@ -199,6 +206,44 @@ namespace
         }
 
         verifyStreams( aTestBuffers );
+    }
+
+    void PackageTest::testThreadStartFailure()
+    {
+#ifdef LINUX
+        // A limit on processes doesn't bind root.
+        if (geteuid() == 0)
+            return;
+
+        // No thread can start, as under the limits of a jail.
+        struct rlimit aLimit;
+        CPPUNIT_ASSERT_EQUAL(0, getrlimit(RLIMIT_NPROC, &aLimit));
+        const struct rlimit aSaved = aLimit;
+        aLimit.rlim_cur = 1;
+        CPPUNIT_ASSERT_EQUAL(0, setrlimit(RLIMIT_NPROC, &aLimit));
+
+        // The stream of a large entry is read in a thread of its own, when it can be.
+        // Without the fix in place, getting it threw std::runtime_error, which aborted the Kit.
+        uno::Reference<io::XInputStream> xStrm;
+        try
+        {
+            mxNA->getByName(u"a.txt"_ustr) >>= xStrm;
+        }
+        catch (...)
+        {
+            setrlimit(RLIMIT_NPROC, &aSaved);
+            throw;
+        }
+        CPPUNIT_ASSERT_EQUAL(0, setrlimit(RLIMIT_NPROC, &aSaved));
+
+        CPPUNIT_ASSERT(xStrm.is());
+        cpo::uno::Sequence<sal_Int8> aBytes;
+        const sal_Int32 nBytesRead = xStrm->readBytes(aBytes, 2 * 1024 * 1024);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1048576), nBytesRead);
+        for (sal_Int8 c : aBytes)
+            if (c != 'a')
+                CPPUNIT_ASSERT_MESSAGE("stream does not contain expected data", false);
+#endif
     }
 
     void PackageTest::testZip64()

@@ -743,7 +743,17 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
             || !rData.is()
             || rData->m_nEncAlg != xml::crypto::CipherID::AES_GCM_W3C))
     {
-        return new XBufferedThreadedStream(xSrcStream, xSrcStream->getSize());
+        try
+        {
+            return new XBufferedThreadedStream(xSrcStream, xSrcStream->getSize());
+        }
+        catch (const std::exception& e)
+        {
+            // Under limits on threads or processes, as in a jail: unzip in this thread instead,
+            // rather than fail to load the document, or abort.
+            SAL_WARN("package", "Cannot start a thread to unzip, unzipping in this one: "
+                                    << e.what());
+        }
     }
 #endif
 
