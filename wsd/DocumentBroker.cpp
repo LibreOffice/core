@@ -5877,6 +5877,13 @@ Poco::URI DocumentBroker::getPresetUploadBaseUrl(const Poco::URI& uriObject)
 
 void DocumentBroker::uploadPresetsToWopiHost()
 {
+    // Only to a host that has settings for the user, as it told in CheckFileInfo.
+    if (_userSettingsUri.empty())
+    {
+        LOG_TRC("Not uploading presets: the WOPI host has no user settings");
+        return;
+    }
+
     const std::string jailPresetsPath = FileUtil::buildLocalPathToJail(
         COOLWSD::EnableMountNamespaces, getJailRoot(), JAILED_CONFIG_ROOT);
 

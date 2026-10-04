@@ -20,12 +20,15 @@
 #include <lokassert.hpp>
 #include <testlog.hpp>
 #include <common/FileUtil.hpp>
+#include <common/JailUtil.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/Process.hpp>
 
 #include <Poco/Net/HTTPRequest.h>
+#include <atomic>
 #include <csignal>
 #include <ctime>
+#include <fstream>
 #include <set>
 #include <string>
 #include <vector>
@@ -586,11 +589,77 @@ public:
     }
 };
 
+/// A host that has no settings for the user, as its CheckFileInfo gives no UserSettings, is sent
+/// none when the document closes. Before, it was sent the user's standard.dic.
+class UnitNoUserSettingsNoUpload : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitDestroy, Done) _phase;
+
+    std::atomic<int> _settingsUploads;
+
+public:
+    UnitNoUserSettingsNoUpload()
+        : WopiTestServer("UnitNoUserSettingsNoUpload")
+        , _phase(Phase::Load)
+        , _settingsUploads(0)
+    {
+    }
+
+    bool handleHttpRequest(const Poco::Net::HTTPRequest& request, std::istream& message,
+                           const std::shared_ptr<StreamSocket>& socket) override
+    {
+        if (request.getURI().find("/settings/upload") != std::string::npos)
+        {
+            ++_settingsUploads;
+            TST_LOG("Settings upload: " << request.getURI());
+        }
+
+        return WopiTestServer::handleHttpRequest(request, message, socket);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
+        TRANSITION_STATE(_phase, Phase::WaitDestroy);
+
+        // The user's dictionary, as the Kit writes it once the user adds a word.
+        const std::string wordbook = FileUtil::buildLocalPathToJail(
+            JailUtil::isMountNamespacesEnabled(), getJailRoot(), "/tmp/user/user/wordbook/");
+        TST_LOG("Writing standard.dic in " << wordbook);
+        std::ofstream(wordbook + "/standard.dic") << "OOoUserDict1\nlang: <none>\n---\nword\n";
+
+        WSD_CMD("closedocument");
+        return true;
+    }
+
+    void onDocBrokerDestroy(const std::string& docKey) override
+    {
+        LOK_ASSERT_STATE(_phase, Phase::WaitDestroy);
+        TRANSITION_STATE(_phase, Phase::Done);
+
+        LOK_ASSERT_EQUAL_MESSAGE("Expected no settings uploaded to a host without settings", 0,
+                                 _settingsUploads.load());
+        passTest("Nothing was uploaded to the settings of a host without settings");
+        WopiTestServer::onDocBrokerDestroy(docKey);
+    }
+
+    void invokeWSDTest() override
+    {
+        if (_phase == Phase::Load)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+            initWebsocket("/wopi/files/0?access_token=anything");
+            WSD_CMD("load url=" + getWopiSrc());
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[5]{ new UnitEarlyDocDeath(), new UnitSpifPreset(),
+    return new UnitBase*[6]{ new UnitEarlyDocDeath(), new UnitSpifPreset(),
                              new UnitSecondUserPresets(), new UnitLoneUserReloadsPresets(),
-                             nullptr };
+                             new UnitNoUserSettingsNoUpload(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
