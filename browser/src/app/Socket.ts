@@ -2379,8 +2379,8 @@ class Socket {
 
 			clearTimeout(this.timer);
 			this.timer = setInterval(() => {
-				if (this.connected()) {
-					// We're connected: cancel timer and dialog.
+				// Connected, or given up on with a fatal error: cancel timer and dialog.
+				if (this.connected() || this._map._fatal) {
 					clearTimeout(this.timer);
 					return;
 				}
@@ -2556,6 +2556,9 @@ class Socket {
 		) {
 			this._map.hideBusy();
 			this._map._fatal = true;
+			// Nothing to load again: stop asking for the document.
+			clearTimeout(this.timer);
+			this.timer = undefined;
 			if (command.errorKind === 'diskfull') {
 				this._map.fire('error', {
 					msg: errorMessages.diskfull,
@@ -2627,8 +2630,9 @@ class Socket {
 
 				this.timer = setInterval(
 					() => {
-						if (this.connected()) {
-							// We're connected: cancel timer and dialog.
+						// Connected, or given up on with a fatal error: cancel timer and
+						// dialog.
+						if (this.connected() || this._map._fatal) {
 							clearTimeout(this.timer);
 							return;
 						}
