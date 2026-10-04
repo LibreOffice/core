@@ -37,6 +37,9 @@
 #include <utility>
 #include <vector>
 #include <string.h>
+#include <algorithm>
+#include <iterator>
+#include <string_view>
 
 #include <memory>
 
@@ -53,6 +56,7 @@
 #include <rtl/uuid.h>
 #include <sal/log.hxx>
 
+#include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -368,6 +372,15 @@ public:
 
 }
 
+// The libpq keywords that say where to connect and as whom, which any connection URL may set.
+static bool isAllowedUrlKeyword(std::string_view aKeyword)
+{
+    static constexpr std::string_view aAllowed[]
+        = { "host", "hostaddr", "port", "dbname", "user", "password", "connect_timeout",
+            "sslmode" };
+    return std::find(std::begin(aAllowed), std::end(aAllowed), aKeyword) != std::end(aAllowed);
+}
+
 static void properties2arrays( const Sequence< PropertyValue > & args,
                                const Reference< XTypeConverter> &tc,
                                rtl_TextEncoding enc,
@@ -459,6 +472,10 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         cstr_vector keywords;
         cstr_vector values;
 
+        // A database document in a trusted location may set any keyword in its URL.
+        const bool bTrustedLocation = ::comphelper::NamedValueCollection(args).getOrDefault(
+            u"DocumentInTrustedLocation"_ustr, false);
+
         if ( o.getLength() > 0 )
         {
             char *err;
@@ -485,6 +502,14 @@ void Connection::initialize( const Sequence< Any >& aArguments )
             {
                 if ( opt->val != nullptr )
                 {
+                    if (!bTrustedLocation && !isAllowedUrlKeyword(opt->keyword))
+                    {
+                        throw SQLException(
+                            "Error in database URL '" + url + "':\nthe keyword \""
+                                + OUString::createFromAscii(opt->keyword)
+                                + "\" cannot be set in the URL",
+                            *this, u"HY092"_ustr, 5, Any() );
+                    }
                     keywords.push_back(strdup(opt->keyword));
                     values.push_back(strdup(opt->val));
                 }
