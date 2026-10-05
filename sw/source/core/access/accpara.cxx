@@ -3298,6 +3298,11 @@ sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole()
 //Get the real heading level, Heading1 ~ Heading10
 sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
 {
+    const SwTextFrame* const pFrame = GetTextFrame();
+    const SwTextNode* const pTextNd = pFrame ? pFrame->GetTextNodeForParaProps() : nullptr;
+    if (pTextNd && pTextNd->IsOutline())
+        return pTextNd->GetAttrOutlineLevel();
+
     rtl::Reference< SwXTextPortion > xPortion = CreateUnoPortion( 0, 0 );
     uno::Any styleAny = xPortion->getPropertyValue( u"ParaStyleName"_ustr );
     OUString sValue;
