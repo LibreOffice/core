@@ -18,6 +18,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,dbaccess_xmlimport, \
 $(eval $(call gb_CppunitTest_use_libraries,dbaccess_xmlimport, \
     comphelper \
     cppu \
+    cppuhelper \
     sal \
     subsequenttest \
     test \
