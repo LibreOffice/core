@@ -117,6 +117,7 @@ public class LOActivity extends AppCompatActivity {
     private static final String KEY_INTENT_URI = "intentUri";
     private static final String CLIPBOARD_FILE_PATH = "LibreofficeClipboardFile.data";
     private static final String CLIPBOARD_COOL_SIGNATURE = "cool-clip-magic-4a22437e49a8-";
+    private static final int CLIPBOARD_SYSTEM_LIMIT_BYTES = 512 * 1024;
     public static final String RECENT_DOCUMENTS_KEY = "RECENT_DOCUMENTS_LIST";
     private static String USER_NAME_KEY = "USER_NAME";
     public static final String NIGHT_MODE_KEY = "NIGHT_MODE";
@@ -1892,39 +1893,101 @@ public class LOActivity extends AppCompatActivity {
     /// Needs to be executed after the .uno:Copy / Paste has executed
     public final void populateClipboard()
     {
-        File clipboardFile = new File(getApplicationContext().getCacheDir(), CLIPBOARD_FILE_PATH);
-        if (clipboardFile.exists())
-            clipboardFile.delete();
+        // No longer written; left over from previous versions of the app.
+        File legacyFile = new File(getApplicationContext().getCacheDir(), CLIPBOARD_FILE_PATH);
+        if (legacyFile.exists())
+            legacyFile.delete();
 
         LokClipboardData clipboardData = new LokClipboardData();
-        if (!LOActivity.this.getClipboardContent(clipboardData))
+        if (!LOActivity.this.getClipboardContent(clipboardData)) {
             Log.e(TAG, "no clipboard to copy");
-        else
-        {
-            clipboardData.writeToFile(clipboardFile);
+            return;
+        }
 
-            String text = clipboardData.getText();
-            String html = clipboardData.getHtml();
+        // The full content always goes to a file: in-app pastes read it
+        // back from there, and ClipboardFileProvider streams it to other
+        // apps, both without any size constraint.
+        File clipboardFile = newClipboardFile();
+        if (clipboardFile != null && !clipboardData.writeToFile(clipboardFile)) {
+            Log.e(TAG, "failed to write the clipboard file");
+            clipboardFile = null;
+        }
 
-            if (html != null) {
-                int idx = html.indexOf("<meta name=\"generator\" content=\"");
+        String text = clipboardData.getText();
+        String html = clipboardData.getHtml();
 
-                if (idx < 0)
-                    idx = html.indexOf("<meta http-equiv=\"content-type\" content=\"text/html;");
+        if (html == null)
+            return;
 
-                if (idx >= 0) { // inject our magic
-                    StringBuffer newHtml = new StringBuffer(html);
-                    newHtml.insert(idx, "<meta name=\"origin\" content=\"" + getClipboardMagic() + "\"/>\n");
-                    html = newHtml.toString();
-                }
+        int idx = html.indexOf("<meta name=\"generator\" content=\"");
 
-                if (text == null || text.length() == 0)
-                    Log.i(TAG, "set text to clipoard with: text '" + text + "' and html '" + html + "'");
+        if (idx < 0)
+            idx = html.indexOf("<meta http-equiv=\"content-type\" content=\"text/html;");
 
-                clipData = ClipData.newHtmlText(ClipDescription.MIMETYPE_TEXT_HTML, text, html);
+        if (idx >= 0) { // inject our magic
+            StringBuffer newHtml = new StringBuffer(html);
+            newHtml.insert(idx, "<meta name=\"origin\" content=\"" + getClipboardMagic() + "\"/>\n");
+            html = newHtml.toString();
+        }
+
+        if (text == null || text.length() == 0)
+            Log.i(TAG, "set text to clipoard with: text '" + text + "' and html '" + html + "'");
+
+        Uri clipUri = clipboardFile != null
+            ? ClipboardFileProvider.uriFor(this, clipboardFile.getName()) : null;
+
+        // Binder transactions share a ~1 MB buffer per process, and larger
+        // setPrimaryClip() calls throw TransactionTooLargeException
+        // (strings are parceled as UTF-16, two bytes per char). Oversized
+        // content is therefore not inlined into the clip - receivers
+        // stream it from clipUri instead, which coerceToText() /
+        // coerceToHtmlText() do transparently when there is no inline text.
+        int estimatedParcelSize = 2 * (html.length() + (text != null ? text.length() : 0));
+        boolean inline = estimatedParcelSize <= CLIPBOARD_SYSTEM_LIMIT_BYTES || clipUri == null;
+
+        clipData = makeClipData(inline ? text : null, inline ? html : null, clipUri);
+        try {
+            clipboardManager.setPrimaryClip(clipData);
+        } catch (RuntimeException e) {
+            // Some vendors reject clips well below the nominal limit; a
+            // URI-only clip is tiny and always fits.
+            Log.w(TAG, "setPrimaryClip failed, retrying with the URI only: " + e);
+            if (clipUri != null) {
+                clipData = makeClipData(null, null, clipUri);
                 clipboardManager.setPrimaryClip(clipData);
             }
         }
+    }
+
+    /// a clipboard carrying our magic in the label, the full-fidelity data
+    /// behind 'uri', and - when small enough - the inline text and HTML
+    private final ClipData makeClipData(String text, String html, Uri uri) {
+        // ClipData.Item refuses HTML without plain text
+        if (html != null && text == null)
+            text = "";
+        ClipDescription description = new ClipDescription(getClipboardMagic(),
+            new String[]{ClipDescription.MIMETYPE_TEXT_HTML, ClipDescription.MIMETYPE_TEXT_PLAIN});
+        return new ClipData(description, new ClipData.Item(text, html, null, uri));
+    }
+
+    /// create a fresh file for the current clipboard... open streams of a
+    /// deleted file keep working, so a paste that is happening while we copy
+    /// is allowed to finish. We prefer this than deleting/recreating due to
+    /// potential permission issues if we or the smartphone vendor does that
+    /// improperly...
+    private final File newClipboardFile() {
+        File dir = ClipboardFileProvider.getClipboardDir(this);
+        if (!dir.isDirectory() && !dir.mkdirs()) {
+            Log.e(TAG, "failed to create the clipboard directory");
+            return null;
+        }
+
+        File[] oldFiles = dir.listFiles();
+        if (oldFiles != null)
+            for (File oldFile : oldFiles)
+                oldFile.delete();
+
+        return new File(dir, "clip-" + System.currentTimeMillis() + ".data");
     }
 
     /// Do the paste, and return true if we should short-circuit the paste locally (ie. let the core handle that)
@@ -1935,8 +1998,28 @@ public class LOActivity extends AppCompatActivity {
             return false;
 
         ClipDescription clipDesc = clipData.getDescription();
-        if (clipDesc == null)
+        if (clipDesc == null || clipData.getItemCount() < 1)
             return false;
+
+        CharSequence label = clipDesc.getLabel();
+        if (label != null && label.toString().startsWith(CLIPBOARD_COOL_SIGNATURE)) {
+            if (label.toString().equals(getClipboardMagic())) {
+                Log.i(TAG, "clipboard comes from us - same instance: short circuit it");
+                return true;
+            }
+
+            Log.i(TAG, "clipboard comes from us - other instance: paste from the clipboard file");
+            File clipboardFile = ClipboardFileProvider.fileFor(this, clipData.getItemAt(0).getUri());
+            LokClipboardData clipboardData = null;
+            if (clipboardFile != null && clipboardFile.exists())
+                clipboardData = LokClipboardData.createFromFile(clipboardFile);
+
+            if (clipboardData != null) {
+                LOActivity.this.setClipboardContent(clipboardData);
+                return true;
+            }
+            // couldn't read the clipboard file, try a standard paste...
+        }
 
         for (int i = 0; i < clipDesc.getMimeTypeCount(); ++i) {
             Log.d(TAG, "Pasting mime " + i + ": " + clipDesc.getMimeType(i));
@@ -1977,7 +2060,7 @@ public class LOActivity extends AppCompatActivity {
                 }
             }
             else if (clipDesc.getMimeType(i).startsWith("image/")) {
-                ClipData.Item item = clipData.getItemAt(i);
+                ClipData.Item item = clipData.getItemAt(0);
                 Uri uri = item.getUri();
                 try {
                     InputStream imageStream = getContentResolver().openInputStream(uri);
