@@ -113,7 +113,6 @@
 #include <svl/whiter.hxx>
 #include <svdobjplusdata.hxx>
 #include <svdobjuserdatalist.hxx>
-#include <svx/xfillit0.hxx>
 
 #include <optional>
 #include <libxml/xmlwriter.h>
