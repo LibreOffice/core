@@ -148,7 +148,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         {
             try
             {
-                // std::cerr << "pointer_coordination in the is" << std::endl;
+                // std::cerr << "pointer_coordination is" << std::endl;
                 xSlideShow->setProperty(beans::PropertyValue(u"PointerPosition"_ustr, -1, Any(pos),
                                                              beans::PropertyState_DIRECT_VALUE));
             }
