@@ -269,6 +269,11 @@ public:
         /// holds on to. False for anything that is not a connector.
         bool mbTiedAtStart = false;
         bool mbTiedAtEnd = false;
+        /// The unique id of the object a tied end holds on to, zero for a free end and for
+        /// anything that is not a connector. The connector names what it is tied to. Which
+        /// connectors hang on an object follows from that.
+        sal_uInt64 mnTiedToAtStart = 0;
+        sal_uInt64 mnTiedToAtEnd = 0;
 
         /** One of the points someone added to the object for a connector to tie itself to. The
             place is given on the object rather than on the page: 0 and 0 is the upper left corner
@@ -362,6 +367,8 @@ public:
                    && mbCanBeTurned == rOther.mbCanBeTurned
                    && mbTiedAtStart == rOther.mbTiedAtStart
                    && mbTiedAtEnd == rOther.mbTiedAtEnd
+                   && mnTiedToAtStart == rOther.mnTiedToAtStart
+                   && mnTiedToAtEnd == rOther.mnTiedToAtEnd
                    && maOwnGluePoints == rOther.maOwnGluePoints;
         }
     };

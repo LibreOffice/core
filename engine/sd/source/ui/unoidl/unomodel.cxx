@@ -3673,8 +3673,12 @@ private:
 
             if (const SdrEdgeObj* pConnector = dynamic_cast<const SdrEdgeObj*>(&rObject))
             {
-                aContent.mbTiedAtStart = nullptr != pConnector->GetConnectedNode(true);
-                aContent.mbTiedAtEnd = nullptr != pConnector->GetConnectedNode(false);
+                const SdrObject* pAtStart = pConnector->GetConnectedNode(true);
+                const SdrObject* pAtEnd = pConnector->GetConnectedNode(false);
+                aContent.mbTiedAtStart = nullptr != pAtStart;
+                aContent.mbTiedAtEnd = nullptr != pAtEnd;
+                aContent.mnTiedToAtStart = pAtStart ? pAtStart->GetUniqueID() : 0;
+                aContent.mnTiedToAtEnd = pAtEnd ? pAtEnd->GetUniqueID() : 0;
             }
 
             if (const SdrGluePointList* pGluePoints = rObject.GetGluePointList())
@@ -4374,6 +4378,10 @@ private:
             rWriter.put("tiedAtStart", true);
         if (rContent.mbTiedAtEnd)
             rWriter.put("tiedAtEnd", true);
+        if (rContent.mnTiedToAtStart)
+            rWriter.put("tiedToAtStart", sal_Int64(rContent.mnTiedToAtStart));
+        if (rContent.mnTiedToAtEnd)
+            rWriter.put("tiedToAtEnd", sal_Int64(rContent.mnTiedToAtEnd));
 
         if (!rContent.maOwnGluePoints.empty())
         {

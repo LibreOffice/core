@@ -219,6 +219,10 @@ namespace cool {
 		/// end. Absent for anything that is not a connector, and for an end that is free.
 		tiedAtStart?: boolean;
 		tiedAtEnd?: boolean;
+		/// The id of the object a tied end holds on to. Absent for a free end, and for anything
+		/// that is not a connector.
+		tiedToAtStart?: number;
+		tiedToAtEnd?: number;
 		/** The points someone added to the object for a connector to tie itself to, where they
 		 * lie on the object: 0 and 0 is its upper left corner and 1 and 1 its lower right one, so
 		 * a point follows the object wherever it goes and however it is turned. Absent for an
