@@ -701,8 +701,8 @@ ZMF_TARBALL := libzmf-0.0.2.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ZXCVBN_C_SHA256SUM := 11e39f6776f9c82c68b2acb94336e32697d4ab6cdb4ac16f9583ccbdd735113a
-ZXCVBN_C_TARBALL := zxcvbn-c-2.6.tar.gz
+ZXCVBN_C_SHA256SUM := 0548647d8cda5c0d52e6e00cd6896005f2813869f9ed93c245536129e3bd3f4b
+ZXCVBN_C_TARBALL := zxcvbn-c-2.7.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
