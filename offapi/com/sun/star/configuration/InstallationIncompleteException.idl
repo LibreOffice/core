@@ -22,7 +22,7 @@
 
 
 /** is thrown when creating a configuration provider fails because
-    the user's installation for the is missing or incomplete
+    the user's installation for is missing or incomplete
  */
 published exception InstallationIncompleteException: com::sun::star::configuration::CannotLoadConfigurationException
 {
