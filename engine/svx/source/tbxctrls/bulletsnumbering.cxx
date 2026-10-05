@@ -198,21 +198,10 @@ void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent 
         {
             maCharacterBullets.clear();
 
-            // The string contains the bullet as first character, and then the font name
             for (const OUString& sBulletFont : aSeq)
             {
-                if (sBulletFont.isEmpty())
-                    continue;
-
-                // A bullet outside the Basic Multilingual Plane takes two units of the string, so
-                // the font name starts after the whole character rather than after the first unit.
-                sal_Int32 nFontNameStart = 0;
-                o3tl::iterateCodePoints(sBulletFont, &nFontNameStart);
-
-                SvxDocumentBullet aBullet;
-                aBullet.aBulletCharacter = sBulletFont.copy(0, nFontNameStart);
-                aBullet.aFontName = sBulletFont.copy(nFontNameStart);
-                if (aBullet.IsInDefaultLibrary())
+                const SvxDocumentBullet aBullet = SvxDocumentBullet::FromStatusString(sBulletFont);
+                if (aBullet.aBulletCharacter.isEmpty() || aBullet.IsInDefaultLibrary())
                     continue;
 
                 maCharacterBullets.push_back(aBullet);

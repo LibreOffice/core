@@ -17,6 +17,7 @@
 #include <vcl/graph.hxx>
 
 #include <memory>
+#include <string_view>
 #include <vector>
 
 namespace weld
@@ -47,6 +48,14 @@ struct SVXCORE_DLLPUBLIC SvxDocumentBullet
     /// The size to draw the image at, in 1/100 mm. Falls back to the size the picture itself
     /// carries when the numbering rule recorded none.
     Size GetGraphicSizeMM100() const;
+
+    /// The character and the font name as one string, which is how a character bullet reaches
+    /// the bullet dropdown. The character comes first and the font name is the rest.
+    OUString ToStatusString() const;
+
+    /// Reads back what ToStatusString wrote. A character outside the Basic Multilingual Plane
+    /// takes two units of the string, so the font name starts after the whole character.
+    static SvxDocumentBullet FromStatusString(std::u16string_view aStatusString);
 
     /// A name that tells this bullet apart from every other bullet of the same document. For a
     /// character bullet it is the character followed by the font name. For an image bullet it is

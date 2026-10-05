@@ -965,9 +965,8 @@ void ViewShell::PutDocumentBulletsState(SfxItemSet& rSet, sal_uInt16 nSlotId,
         std::vector<OUString> aCharacterBullets;
         for (const SvxDocumentBullet& rBullet : rBullets)
         {
-            // The character comes first and the font name makes up the rest of the string.
             if (!rBullet.IsGraphic())
-                aCharacterBullets.push_back(rBullet.aBulletCharacter + rBullet.aFontName);
+                aCharacterBullets.push_back(rBullet.ToStatusString());
         }
 
         SfxStringListItem aItem(FN_BUL_GET_DOC_BULLETS);

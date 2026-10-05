@@ -18,6 +18,7 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <comphelper/sequence.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
@@ -37,6 +38,21 @@ OUString SvxDocumentBullet::GetIdentifier() const
         return "G" + OUString::number(static_cast<sal_Int64>(aGraphic.GetChecksum()));
 
     return "C" + aBulletCharacter + aFontName;
+}
+
+OUString SvxDocumentBullet::ToStatusString() const { return aBulletCharacter + aFontName; }
+
+SvxDocumentBullet SvxDocumentBullet::FromStatusString(std::u16string_view aStatusString)
+{
+    SvxDocumentBullet aBullet;
+    if (aStatusString.empty())
+        return aBullet;
+
+    sal_Int32 nFontNameStart = 0;
+    o3tl::iterateCodePoints(aStatusString, &nFontNameStart);
+    aBullet.aBulletCharacter = OUString(aStatusString.substr(0, nFontNameStart));
+    aBullet.aFontName = OUString(aStatusString.substr(nFontNameStart));
+    return aBullet;
 }
 
 Size SvxDocumentBullet::GetGraphicSizeMM100() const
