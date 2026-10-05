@@ -25,6 +25,7 @@
 
 #include <osl/socket.h>
 #include <osl/thread.h>
+#include <osl/time.h>
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
 #include <rtl/byteseq.h>

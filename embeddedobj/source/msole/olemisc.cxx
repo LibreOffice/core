@@ -34,7 +34,10 @@
 #include <osl/diagnose.h>
 
 #include <oleembobj.hxx>
+
 #include <utility>
+#include <optional>
+
 #include "olepersist.hxx"
 
 #include "ownview.hxx"

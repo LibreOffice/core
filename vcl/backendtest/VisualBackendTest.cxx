@@ -9,6 +9,7 @@
 
 #include <sal/log.hxx>
 
+#include <osl/time.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/awt/GradientStyle.hpp>

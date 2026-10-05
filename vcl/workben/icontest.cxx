@@ -25,6 +25,7 @@
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <osl/time.h>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <vcl/toolkit/fixed.hxx>

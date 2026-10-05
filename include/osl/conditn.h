@@ -26,8 +26,13 @@
 
 #include "sal/config.h"
 
-#include "osl/time.h"
 #include "sal/saldllapi.h"
+
+#if defined LIBO_INTERNAL_ONLY && defined __cplusplus
+struct TimeValue;
+#else
+#include "osl/time.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {

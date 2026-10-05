@@ -24,6 +24,7 @@
 #include "system.hxx"
 
 #include <osl/socket.h>
+#include <osl/time.h>
 
 #include <rtl/alloc.h>
 #include <rtl/byteseq.h>

@@ -25,7 +25,12 @@
 #define INCLUDED_OSL_SOCKET_H
 
 #include "rtl/ustring.h"
+
+#if defined LIBO_INTERNAL_ONLY && defined __cplusplus
+struct TimeValue;
+#else
 #include "osl/time.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
