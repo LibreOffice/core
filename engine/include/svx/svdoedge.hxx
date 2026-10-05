@@ -232,6 +232,8 @@ public:
 
     void    SetEdgeTrackPath( const basegfx::B2DPolyPolygon& rPoly );
     basegfx::B2DPolyPolygon GetEdgeTrackPath() const;
+    /// True while the run was set from outside rather than laid out, and is kept as it is.
+    bool IsEdgeTrackUserDefined() const { return m_bEdgeTrackUserDefined; }
 
     SAL_DLLPRIVATE virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
     SAL_DLLPRIVATE virtual sal_uInt32 GetHdlCount() const override;

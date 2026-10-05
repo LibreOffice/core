@@ -319,6 +319,9 @@ public:
             double mfLineDelta2 = 0.0;
             double mfLineDelta3 = 0.0;
             bool mbAgainstSnapRectangles = false;
+            /// True for a run that was set from outside, by the file it was read from or by
+            /// hand, and is kept as it is rather than laid out from the numbers above.
+            bool mbTrackUserDefined = false;
             ConnectorTie maTieAtStart;
             ConnectorTie maTieAtEnd;
 

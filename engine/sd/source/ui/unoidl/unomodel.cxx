@@ -3637,6 +3637,7 @@ private:
             = rConnector.getSdrModelFromSdrObject().GetCompatibilityFlag(
                 SdrCompatibilityFlag::ConnectorUseSnapRect);
 
+        aRouting.mbTrackUserDefined = rConnector.IsEdgeTrackUserDefined();
         aRouting.maTieAtStart = tieOf(rConnector.GetConnection(true));
         aRouting.maTieAtEnd = tieOf(rConnector.GetConnection(false));
         return aRouting;
@@ -4419,6 +4420,8 @@ private:
         }
         if (rRouting.mbAgainstSnapRectangles)
             rWriter.put("againstSnapRectangles", true);
+        if (rRouting.mbTrackUserDefined)
+            rWriter.put("trackUserDefined", true);
         writeTie(rWriter, "tieAtStart", rRouting.maTieAtStart);
         writeTie(rWriter, "tieAtEnd", rRouting.maTieAtEnd);
     }

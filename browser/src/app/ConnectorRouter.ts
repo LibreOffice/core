@@ -282,6 +282,9 @@ class ConnectorRouter {
 		startNode: cool.RouteNode | undefined,
 		endNode: cool.RouteNode | undefined,
 	): cool.ObjectPathPoint[] {
+		// A run set from outside is kept as it is. The engine lays no such run out either.
+		if (routing.trackUserDefined) return current;
+
 		const start = current[0] ?? { x: 0, y: 0 };
 		const end = current[current.length - 1] ?? start;
 		const first = new cool.Point(start.x, start.y);

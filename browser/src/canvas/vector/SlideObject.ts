@@ -118,6 +118,9 @@ namespace cool {
 		lineDeltaCount: number;
 		lineDeltas: number[];
 		againstSnapRectangles?: boolean;
+		/// True for a run that was set from outside, by the file or by hand, and is kept as it
+		/// is rather than laid out from the numbers here.
+		trackUserDefined?: boolean;
 		tieAtStart: ConnectorTie;
 		tieAtEnd: ConnectorTie;
 	}
