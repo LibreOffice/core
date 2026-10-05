@@ -128,6 +128,9 @@ namespace cool {
 	export interface ObjectGluePoint {
 		x: number;
 		y: number;
+		/// The number the point is known by on the object, which is how a connector tied to it
+		/// names it.
+		id?: number;
 		/// True for a point the object holds as a distance of its own rather than as a share of
 		/// its size: making the object larger leaves such a point where it is.
 		keepsItsDistance?: boolean;

@@ -3770,6 +3770,7 @@ private:
                     aOne.mfX = aOnThePage.getX();
                     aOne.mfY = aOnThePage.getY();
                     aOne.mbShareOfTheSize = rGluePoint.IsPercent();
+                    aOne.mnId = rGluePoint.GetId();
 
                     /*
                         The six a point can hold, which are the six the interface a document is
@@ -4502,6 +4503,7 @@ private:
                 auto aOneNode = rWriter.startStruct();
                 rWriter.put("x", rGluePoint.mfX);
                 rWriter.put("y", rGluePoint.mfY);
+                rWriter.put("id", sal_Int32(rGluePoint.mnId));
                 if (!rGluePoint.mbShareOfTheSize)
                     rWriter.put("keepsItsDistance", true);
                 if (!rGluePoint.maWayOut.isEmpty())

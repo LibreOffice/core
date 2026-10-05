@@ -360,9 +360,13 @@ public:
             OString maFromAcross;
             OString maFromDown;
 
+            /// The number the point is known by on the object, which is how a connector tied
+            /// to it names it.
+            sal_uInt16 mnId = 0;
+
             bool operator==(const GluePoint& rOther) const
             {
-                return mfX == rOther.mfX && mfY == rOther.mfY
+                return mfX == rOther.mfX && mfY == rOther.mfY && mnId == rOther.mnId
                        && mbShareOfTheSize == rOther.mbShareOfTheSize
                        && maWayOut == rOther.maWayOut
                        && maFromAcross == rOther.maFromAcross
