@@ -45,7 +45,6 @@
 #include <svx/fillbitmaplink.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
-#include <unotools/securityoptions.hxx>
 
 using namespace ::com::sun::star;
 
@@ -231,9 +230,7 @@ void DocumentLinksAdministrationManager::UpdateLinks()
     }
     if (nLinkMode == AUTOMATIC && !bAskUpdate)
     {
-        SfxMedium * medium = pShell->GetMedium();
-        if (!SvtSecurityOptions::isTrustedLocationUriForUpdatingLinks(
-                medium == nullptr ? OUString() : medium->GetName()))
+        if (!pShell->IsTrustedLocationForUpdatingLinks())
         {
             bAskUpdate = true;
         }
