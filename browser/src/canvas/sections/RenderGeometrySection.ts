@@ -221,6 +221,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 		return 'hsl(' + ((id * 137.508) % 360).toFixed(1) + ', 100%, 45%)';
 	}
 
+	/// The content version the connector routing was last checked against the engine's for.
+	private static routingCheckedAt: number | undefined = undefined;
+
 	/*
 		The four corners of the unit rectangle put through the transformation, in twips. They are
 		transformed here rather than by the canvas so the line stays one pixel wide whatever the
@@ -660,6 +663,13 @@ class RenderGeometrySection extends CanvasSectionObject {
 		// The rectangles and the name of the hit are feedback about the geometry the client holds,
 		// so they follow the debug panel's "Vector Overlays" tool.
 		if (!app.map._debug.renderGeometryOn) return;
+
+		// The routing of the connectors is held against the engine's once per content, while the
+		// overlays are on. What it finds goes to the console.
+		if (RenderGeometrySection.routingCheckedAt !== data.version) {
+			RenderGeometrySection.routingCheckedAt = data.version;
+			ConnectorRouter.checkAgainstTheEngine(data);
+		}
 
 		this.context.save();
 		this.context.lineWidth = 1;

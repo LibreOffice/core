@@ -37,6 +37,7 @@
 /// <reference path="../src/app/PolyPolygonEditor.ts" />
 /// <reference path="../src/app/HandleLook.ts" />
 /// <reference path="../src/app/HandleGroups.ts" />
+/// <reference path="../src/app/ConnectorRouter.ts" />
 /// <reference path="../src/app/HandleTravel.ts" />
 /// <reference path="../src/app/GraphicSelectionMiddleware.ts" />
 /// <reference path="../src/app/TextSelectionMiddleware.ts" />

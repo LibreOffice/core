@@ -389,6 +389,7 @@ COOL_JS_LST =\
 	src/app/SelectionHandles.ts \
 	src/app/PolyPolygonEditor.ts \
 	src/app/HandleGroups.ts \
+	src/app/ConnectorRouter.ts \
 	src/app/HandleTravel.ts \
 	src/app/GraphicSelectionMiddleware.ts \
 	src/app/TextSelectionMiddleware.ts \
