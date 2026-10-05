@@ -346,6 +346,40 @@ function to the kit as one `executescript` message, the same way any contributed
 command runs. Messages the add-on passes to `getUi().alert()` then arrive as a
 snackbar.
 
+### Contributions beyond the menu
+
+Apps Script gives an add-on no way to add to the context menu, the notebookbar
+or the keyboard shortcuts. An add-on that wants to can have a
+`_cool-gas-contributes.json` next to its `appsscript.json`, with the same
+content as the `contributes` file of a native extension (see above). Only its
+`extensionsMenu` is not used, as the menu that `onOpen()` builds takes that
+place.
+
+A command's `script` names one of the add-on's own server files. Instead of the
+`commands` of a native extension, that file has a top-level binding
+`__coolGasCommands`. Its functions run in the kit like the add-on's other server
+code, with all of the shimmed services:
+
+```js
+var __coolGasCommands = {
+    editMath: function () { openEditor('general'); },
+};
+```
+
+```json
+{
+  "commands": [
+    { "id": "editMath", "title": "Edit with MathType", "script": "cool-commands.js" }
+  ],
+  "contextMenu": [
+    { "command": "editMath", "contexts": ["image"] }
+  ]
+}
+```
+
+Titles are translated through the add-on's `l10n/<lang>.json`, as for a native
+extension.
+
 ### What the shims cover
 
 `DocumentApp` and `SpreadsheetApp` (documents, sheets, ranges, the active

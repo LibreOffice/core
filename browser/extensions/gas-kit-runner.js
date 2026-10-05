@@ -923,6 +923,16 @@ globalThis.__gasKitRunner = function(
                 globalThis.onOpen({ authMode: globalThis.ScriptApp.AuthMode.FULL });
             }
             value = menuItems;
+        } else if (fnName === '__coolGasCommand') {
+            // The name __coolGasCommand is reserved too, for running the function that the
+            // add-on's __coolGasCommands object has under the command ID given as its argument:
+            const commandId = String(callArgs[0]);
+            const command = globalThis.__coolGasCommands
+                ? globalThis.__coolGasCommands[commandId] : undefined;
+            if (typeof command !== 'function') {
+                throw new Error('Apps Script command not defined: ' + commandId);
+            }
+            value = command();
         } else {
             const fn = globalThis[fnName];
             if (typeof fn !== 'function' || fn === beforeEvals) {

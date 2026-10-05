@@ -127,6 +127,7 @@ interface ExtensionCommand {
 	// cool.onCommand. For extensions whose logic lives in the panel.
 	panel?: boolean;
 	gasFunctionName?: string;
+	gasArguments?: unknown[];
 }
 
 // One notebookbar button, referencing a command declared in
@@ -753,7 +754,12 @@ window.L.Control.Extension = window.L.Control.extend({
 			delete this._pendingCommandCalls[callId];
 			pending.onError(new Error('timed out waiting for a response'));
 		}, 30000);
-		this._sendGasRunner(callId, proxyId, command.gasFunctionName, []);
+		this._sendGasRunner(
+			callId,
+			proxyId,
+			command.gasFunctionName,
+			command.gasArguments || [],
+		);
 	},
 
 	// Open the sidebar and the dialog that the add-on asked for in a GAS runner result:
@@ -803,11 +809,13 @@ window.L.Control.Extension = window.L.Control.extend({
 			return;
 		}
 		// As in GAS, google.script.run cannot call a private function, whose name ends in
-		// "_", and the reserved name __coolGasMenu names none of the add-on's functions:
+		// "_", and the reserved names __coolGasMenu and __coolGasCommand name none of the
+		// add-on's functions:
 		if (
 			typeof msg.functionName !== 'string' ||
 			msg.functionName.endsWith('_') ||
-			msg.functionName === '__coolGasMenu'
+			msg.functionName === '__coolGasMenu' ||
+			msg.functionName === '__coolGasCommand'
 		) {
 			this._postToCaller(msg.callId, {
 				msgId: 'Extension_CallResult',
@@ -1605,6 +1613,54 @@ async function tryLoadAppsScriptExtension(
 		placement.pop();
 	}
 
+	// An add-on can have the same contributions as a native extension, in a
+	// _cool-gas-contributes.json whose commands each name one of the add-on's own server files
+	// as their script, where the add-on's __coolGasCommands object has the command's function:
+	let contributes: ExtensionContributes = {};
+	let contributesResp: Response | null = null;
+	try {
+		contributesResp = await fetch(
+			app.LOUtil.getURL(baseRel + '_cool-gas-contributes.json'),
+		);
+	} catch {
+		// A file: URL of a missing file fails the fetch rather than answering 404.
+	}
+	if (contributesResp && responseSucceeded(contributesResp)) {
+		try {
+			contributes = await contributesResp.json();
+		} catch (e) {
+			console.warn(
+				'extension ' + id + ': malformed _cool-gas-contributes.json: ' + e,
+			);
+		}
+	}
+	for (const command of contributes.commands || []) {
+		if (!command.script || !scriptNames.includes(command.script)) {
+			console.warn(
+				'extension ' +
+					id +
+					': command ' +
+					command.id +
+					" does not name one of the add-on's scripts",
+			);
+			continue;
+		}
+		if (usedIds.has(command.id)) {
+			console.warn(
+				'extension ' + id + ': command ' + command.id + ' is already defined',
+			);
+			continue;
+		}
+		usedIds.add(command.id);
+		commands.push({
+			id: command.id,
+			title: command.title,
+			icon: command.icon,
+			gasFunctionName: '__coolGasCommand',
+			gasArguments: [command.id],
+		});
+	}
+
 	// Cache the runner source and the .gs sources so a menu click doesn't refetch them:
 	if (commands.length && scriptNames.length) {
 		try {
@@ -1626,7 +1682,11 @@ async function tryLoadAppsScriptExtension(
 				libraries: libraries,
 				runnerExpr: runnerExpr,
 			};
-			manifest.contributes = { commands: commands, extensionsMenu: placement };
+			manifest.contributes = {
+				...contributes,
+				commands: commands,
+				extensionsMenu: placement,
+			};
 		} catch (err) {
 			console.warn(
 				'extension ' + id + ': Apps Script sources unreadable:',
@@ -2423,7 +2483,10 @@ window.L.loadExtensions = async function (map: any, docType: string) {
 						baseRel,
 						map,
 					);
-					if (gasManifest) return { id, baseRel, manifest: gasManifest };
+					if (gasManifest) {
+						await localizeManifest(gasManifest, baseRel);
+						return { id, baseRel, manifest: gasManifest };
+					}
 				} catch (gasErr) {
 					console.warn('extension ' + id + ': failed to load:', gasErr);
 					return null;
