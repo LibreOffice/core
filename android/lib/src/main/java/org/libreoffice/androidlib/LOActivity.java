@@ -82,6 +82,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -119,6 +122,11 @@ public class LOActivity extends AppCompatActivity {
     public static final String NIGHT_MODE_KEY = "NIGHT_MODE";
 
     private File mTempFile = null;
+
+    private final AtomicBoolean mPendingCopyToSystemClipboard = new AtomicBoolean(false);
+
+    // Since as the clipboard can be quite large, it's better to not do this on the same thread as everything else
+    private static final ExecutorService clipboardExecutor = Executors.newSingleThreadExecutor();
 
     /// The actual file path of the document, when the app can write it directly.
     private volatile File mResolvedFile = null;
@@ -1460,6 +1468,12 @@ public class LOActivity extends AppCompatActivity {
             });
         } else if (messageStartsWith(message, "error:")) {
             runOnUiThread(() -> mProgressDialog.dismiss());
+        } else if (messageStartsWith(message, "unocommandresult:")
+                   && mPendingCopyToSystemClipboard.get()) {
+            final String result = new String(message, Charset.forName("UTF-8"));
+            if ((result.contains(".uno:Copy") || result.contains(".uno:Cut"))
+                    && mPendingCopyToSystemClipboard.compareAndSet(true, false))
+                clipboardExecutor.execute(this::populateClipboard);
         }
     }
 
@@ -1470,6 +1484,8 @@ public class LOActivity extends AppCompatActivity {
      */
     private static boolean messageStartsWith(byte[] message, String prefix) {
         byte[] prefixBytes = prefix.getBytes();
+        if (message.length < prefixBytes.length)
+            return false;
         for (int i = 0; i < prefixBytes.length; i++) {
             if (message[i] != prefixBytes[i]) {
                 return false;
@@ -1834,7 +1850,7 @@ public class LOActivity extends AppCompatActivity {
                 switch (messageAndParameterArray[1]) {
                     case ".uno:Copy":
                     case ".uno:Cut":
-                        populateClipboard();
+                        mPendingCopyToSystemClipboard.set(true);
                         break;
                     default:
                         break;
