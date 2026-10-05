@@ -6800,6 +6800,7 @@ SvxDocumentBullet lcl_SetImageBullet(SdrTextObj& rObject)
 
     SvxDocumentBullet aBullet;
     aBullet.aGraphic = aGraphic;
+    aBullet.aGraphicSize = aSize;
     return aBullet;
 }
 
@@ -6942,6 +6943,178 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletOfTextUnderEditIsCollect
     CPPUNIT_ASSERT(aWithEdit.count(aExpected.GetIdentifier()));
 
     pView->SdrEndTextEdit();
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletIsOfferedOnceWhenUsedTwice)
+{
+    createSdImpressDoc("document-bullets.odp");
+    SdDrawDocument* pDocument = getSdDocShell()->GetDoc();
+
+    auto nTimesOffered = [pDocument]() {
+        int nFound = 0;
+        for (const SvxDocumentBullet& rBullet : pDocument->GetUsedBullets())
+        {
+            if (!rBullet.IsGraphic() && rBullet.aBulletCharacter == u"\u2726"_ustr)
+                ++nFound;
+        }
+        return nFound;
+    };
+    CPPUNIT_ASSERT_EQUAL(1, nTimesOffered());
+
+    // The slide layout already carries this character. Putting it on a shape as well gives the
+    // presentation two places that use it.
+    sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    SdrObject* pShape = pViewShell->GetActualPage()->GetObj(0);
+    CPPUNIT_ASSERT(pShape);
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pShape, pView->GetSdrPageView());
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(
+        mxComponent, u".uno:SetBullet"_ustr,
+        comphelper::InitPropertySequence({ { u"BulletChar"_ustr, uno::Any(u"\u2726"_ustr) },
+                                           { u"BulletFont"_ustr, uno::Any(u"OpenSymbol"_ustr) } }));
+    Scheduler::ProcessEventsToIdle();
+
+    // A bullet the presentation uses in two places is still one entry to pick from.
+    CPPUNIT_ASSERT_EQUAL(1, nTimesOffered());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentCharacterBulletSurvivesReload)
+{
+    createSdImpressDoc("document-bullets.odp");
+
+    saveAndReload(TestFilter::ODP);
+
+    bool bFound = false;
+    for (const SvxDocumentBullet& rBullet : getSdDocShell()->GetDoc()->GetUsedBullets())
+    {
+        if (!rBullet.IsGraphic() && rBullet.aBulletCharacter == u"\u2726"_ustr)
+            bFound = true;
+    }
+
+    // The character a slide layout carries comes back when the file is reopened.
+    CPPUNIT_ASSERT(bFound);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletOfATableCellIsCollected)
+{
+    createSdImpressDoc();
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+    dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pTableObject = nullptr;
+    for (size_t nObject = 0; nObject < pActualPage->GetObjCount(); ++nObject)
+    {
+        if (dynamic_cast<sdr::table::SdrTableObj*>(pActualPage->GetObj(nObject)))
+            pTableObject = pActualPage->GetObj(nObject);
+    }
+    CPPUNIT_ASSERT(pTableObject);
+
+    // A table keeps one text per cell, and a bullet of a cell other than the first is reached
+    // only by walking all of them.
+    SdrTextObj* pAsText = DynCastSdrTextObj(pTableObject);
+    CPPUNIT_ASSERT(pAsText);
+    CPPUNIT_ASSERT(pAsText->getTextCount() > 1);
+
+    const SvxDocumentBullet aExpected = lcl_SetImageBullet(*pAsText);
+
+    bool bFound = false;
+    for (const SvxDocumentBullet& rBullet : getSdDocShell()->GetDoc()->GetUsedBullets())
+    {
+        if (rBullet.GetIdentifier() == aExpected.GetIdentifier())
+            bFound = true;
+    }
+    CPPUNIT_ASSERT(bFound);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDefaultLibraryCharacterIsNotOfferedAgain)
+{
+    // The bullet dropdown leaves out a character the fixed library already offers, so the same
+    // bullet is not on the screen twice. An image is never in that library.
+    SvxDocumentBullet aFromLibrary;
+    aFromLibrary.aBulletCharacter = u"\u25CF"_ustr;
+    aFromLibrary.aFontName = u"OpenSymbol"_ustr;
+    CPPUNIT_ASSERT(aFromLibrary.IsInDefaultLibrary());
+
+    SvxDocumentBullet aOfItsOwn;
+    aOfItsOwn.aBulletCharacter = u"\u2726"_ustr;
+    aOfItsOwn.aFontName = u"OpenSymbol"_ustr;
+    CPPUNIT_ASSERT(!aOfItsOwn.IsInDefaultLibrary());
+
+    SvxDocumentBullet aImage;
+    aImage.aGraphic = Graphic(Bitmap(Size(8, 8), vcl::PixelFormat::N24_BPP));
+    CPPUNIT_ASSERT(aImage.IsGraphic());
+    CPPUNIT_ASSERT(!aImage.IsInDefaultLibrary());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletsAreWalkedOnceUntilAChange)
+{
+    createSdImpressDoc("document-bullets.odp");
+    SdDrawDocument* pDocument = getSdDocShell()->GetDoc();
+
+    pDocument->GetUsedBullets();
+    const sal_uInt32 nAfterFirst = pDocument->GetUsedBulletWalkCount();
+    CPPUNIT_ASSERT(nAfterFirst > 0);
+
+    // Asking again while nothing has changed is answered from what the document already holds,
+    // which is what keeps the bullet dropdown from walking a large presentation over and over.
+    pDocument->GetUsedBullets();
+    pDocument->GetUsedBullets();
+    CPPUNIT_ASSERT_EQUAL(nAfterFirst, pDocument->GetUsedBulletWalkCount());
+
+    SdrTextObj* pMasterSlideObject = lcl_MasterSlideTextObject(*pDocument);
+    CPPUNIT_ASSERT(pMasterSlideObject);
+    lcl_SetImageBullet(*pMasterSlideObject);
+
+    pDocument->GetUsedBullets();
+    CPPUNIT_ASSERT_EQUAL(nAfterFirst + 1, pDocument->GetUsedBulletWalkCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletSurvivesTheStatusString)
+{
+    // A character bullet reaches the bullet dropdown as one string holding the character and then
+    // the font name, and both ends read it the same way.
+    SvxDocumentBullet aPlain;
+    aPlain.aBulletCharacter = u"\u2726"_ustr;
+    aPlain.aFontName = u"OpenSymbol"_ustr;
+    const SvxDocumentBullet aPlainBack
+        = SvxDocumentBullet::FromStatusString(aPlain.ToStatusString());
+    CPPUNIT_ASSERT_EQUAL(aPlain.aBulletCharacter, aPlainBack.aBulletCharacter);
+    CPPUNIT_ASSERT_EQUAL(aPlain.aFontName, aPlainBack.aFontName);
+
+    // A character of a symbol font sits in the private use area and travels whole.
+    SvxDocumentBullet aSymbol;
+    aSymbol.aBulletCharacter = u"\uF04A"_ustr;
+    aSymbol.aFontName = u"Wingdings"_ustr;
+    const SvxDocumentBullet aSymbolBack
+        = SvxDocumentBullet::FromStatusString(aSymbol.ToStatusString());
+    CPPUNIT_ASSERT_EQUAL(aSymbol.aBulletCharacter, aSymbolBack.aBulletCharacter);
+    CPPUNIT_ASSERT_EQUAL(aSymbol.aFontName, aSymbolBack.aFontName);
+
+    // A character outside the Basic Multilingual Plane takes two units of the string, and the
+    // font name starts after the whole character rather than after the first unit.
+    SvxDocumentBullet aAstral;
+    aAstral.aBulletCharacter = u"\U0001F600"_ustr;
+    aAstral.aFontName = u"OpenSymbol"_ustr;
+    const SvxDocumentBullet aAstralBack
+        = SvxDocumentBullet::FromStatusString(aAstral.ToStatusString());
+    CPPUNIT_ASSERT_EQUAL(aAstral.aBulletCharacter, aAstralBack.aBulletCharacter);
+    CPPUNIT_ASSERT_EQUAL(aAstral.aFontName, aAstralBack.aFontName);
+
+    // A font name of its own is not required.
+    SvxDocumentBullet aNoFont;
+    aNoFont.aBulletCharacter = u"\u2726"_ustr;
+    const SvxDocumentBullet aNoFontBack
+        = SvxDocumentBullet::FromStatusString(aNoFont.ToStatusString());
+    CPPUNIT_ASSERT_EQUAL(aNoFont.aBulletCharacter, aNoFontBack.aBulletCharacter);
+    CPPUNIT_ASSERT(aNoFontBack.aFontName.isEmpty());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetBulletToDocumentCharacter)
@@ -7111,6 +7284,10 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetBulletToDocumentImage)
     CPPUNIT_ASSERT_EQUAL(SVX_NUM_BITMAP, rFormat.GetNumberingType());
     CPPUNIT_ASSERT(rFormat.GetBrush());
     CPPUNIT_ASSERT(rFormat.GetBrush()->GetGraphic());
+
+    // The image is drawn at the size the bullet it came from records, rather than at the size of
+    // the picture itself.
+    CPPUNIT_ASSERT_EQUAL(aOnMasterSlide.GetGraphicSizeMM100(), rFormat.GetGraphicSize());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

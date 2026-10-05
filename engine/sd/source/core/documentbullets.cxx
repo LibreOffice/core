@@ -148,7 +148,10 @@ SdDrawDocument::GetUsedBullets(const SdrOutliner* pActiveOutliner) const
     }
 
     if (!moUsedBullets)
+    {
         moUsedBullets = WalkPagesForUsedBullets();
+        ++mnUsedBulletWalks;
+    }
 
     for (const SvxDocumentBullet& rBullet : *moUsedBullets)
     {

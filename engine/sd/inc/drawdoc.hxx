@@ -402,6 +402,8 @@ private:
     /// The bullets the slides and the master slides use, as the last walk over them found
     /// them. Empty until something asks for them, and dropped whenever the document changes.
     mutable std::optional<std::vector<SvxDocumentBullet>> moUsedBullets;
+    /// How many times the walk behind moUsedBullets has run.
+    mutable sal_uInt32 mnUsedBulletWalks = 0;
 
     rtl::Reference< sd::SlideShow > mxPresentation;
 
@@ -1248,6 +1250,10 @@ public:
     /** Every bullet the slides and the master slides use, once each.
      */
     SAL_DLLPRIVATE std::vector<SvxDocumentBullet> WalkPagesForUsedBullets() const;
+
+    /** How many times the presentation has been walked for its bullets since it was opened.
+     */
+    SAL_DLLPRIVATE sal_uInt32 GetUsedBulletWalkCount() const { return mnUsedBulletWalks; }
 
     SAL_DLLPRIVATE void UpdatePageRelativeURLs(
         std::u16string_view aOldName, std::u16string_view aNewName);
