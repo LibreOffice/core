@@ -5,6 +5,7 @@ ext {
     coLauncherIcon    = '@mipmap/@APP_IC_LAUNCHER@'
     coHasBranding     = '@APP_HAS_BRANDING@'
     coBrandingDir     = '@APP_BRANDING_DIR@'
+    coBrandingSuffix  = '@APP_BRANDING_SUFFIX@'
     coVersionHash     = '@COOLWSD_VERSION_HASH@'
     coAbiSplit        = [@ANDROID_ABI_SPLIT@]
 }

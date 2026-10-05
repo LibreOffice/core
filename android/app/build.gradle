@@ -58,8 +58,8 @@ android {
             debuggable true
         }
         release {
-            if (file("src/main/res/drawable/drawer_header_brand.png").exists()) {
-                resValue "string", "image_draw_header", "@drawable/drawer_header_brand"
+            if (file("src/main/res/drawable/drawer_header${coBrandingSuffix}.png").exists()) {
+                resValue "string", "image_draw_header", "@drawable/drawer_header${coBrandingSuffix}"
             }
 
             optimization {

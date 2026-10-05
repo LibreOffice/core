@@ -273,8 +273,13 @@ AC_ARG_WITH([iosapp-fonts],
 AC_ARG_WITH([app-branding],
               AS_HELP_STRING([--with-app-branding=<path>],
                              [Point to a directory containing a branding.css file and possibly other files it references,
-                              to be bundled and used by the iOS app. The directory structure is copied to
+                              to be bundled and used by the mobile apps. The directory structure is copied to
                               "browser/dist/branding" and that directory ends upp in the app bundle as "branding".]))
+
+AC_ARG_WITH([app-branding-suffix],
+              AS_HELP_STRING([--with-app-branding-suffix=<suffix>],
+                             [A suffix that branded assets will use. Defaults to empty if --with-app-branding is not supplied,
+                              otherwise "_brand"]))
 
 AC_ARG_ENABLE([qtapp],
               AS_HELP_STRING([--enable-qtapp],
@@ -2620,17 +2625,25 @@ if test "$srcdir" != '.'; then
 fi])
 
 APP_BRANDING_DIR=
-APP_IC_LAUNCHER="ic_launcher"
+APP_BRANDING_SUFFIX=
 APP_HAS_BRANDING="false"
 if test "$with_app_branding" != no -a -d "$with_app_branding"; then
     APP_BRANDING_DIR="$with_app_branding"
-    APP_IC_LAUNCHER="ic_launcher_brand"
+    APP_BRANDING_SUFFIX=_brand
     APP_HAS_BRANDING="true"
 fi
+
+if test "$with_app_branding_suffix" != no -a -n "$with_app_branding_suffix"; then
+    APP_BRANDING_SUFFIX="$with_app_branding_suffix"
+fi
+
 AC_SUBST(APP_BRANDING_DIR)
-AC_SUBST(APP_IC_LAUNCHER)
+AC_SUBST(APP_BRANDING_SUFFIX)
 AC_SUBST(APP_HAS_BRANDING)
 AM_CONDITIONAL([APP_HAS_BRANDING], [test "$APP_HAS_BRANDING" = "true"])
+
+APP_IC_LAUNCHER="ic_launcher$APP_BRANDING_SUFFIX"
+AC_SUBST(APP_IC_LAUNCHER)
 
 APP_GOOGLE_PLAY="false"
 if test "$enable_android_google_play" = "yes"; then
