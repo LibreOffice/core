@@ -247,6 +247,16 @@ bool MasterPageContainerQueue::HasRequest (MasterPageContainer::Token aToken) co
         PreviewCreationRequest::CompareToken(aToken));
 }
 
+void MasterPageContainerQueue::RemoveRequest (MasterPageContainer::Token aToken)
+{
+    RequestQueue::iterator iRequest (::std::find_if(
+        mpRequestQueue->begin(),
+        mpRequestQueue->end(),
+        PreviewCreationRequest::CompareToken(aToken)));
+    if (iRequest != mpRequestQueue->end())
+        mpRequestQueue->erase(iRequest);
+}
+
 bool MasterPageContainerQueue::IsEmpty() const
 {
     return mpRequestQueue->empty();

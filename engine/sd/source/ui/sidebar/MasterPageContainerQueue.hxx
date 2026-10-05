@@ -66,6 +66,9 @@ public:
     */
     bool HasRequest (MasterPageContainer::Token aToken) const;
 
+    // Remove any pending request for the given token.
+    void RemoveRequest (MasterPageContainer::Token aToken);
+
     /** Return <TRUE/> when there is at least one request in the queue.
     */
     bool IsEmpty() const;

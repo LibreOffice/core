@@ -316,6 +316,14 @@ bool MasterPageDescriptor::AllComparator::operator() (const SharedMasterPageDesc
 {
     if (!rDescriptor)
         return false;
+    else if (mpDescriptor->meOrigin == MasterPageContainer::MASTERPAGE)
+    {
+        // The master page of a document is that page and no other: two
+        // documents may well have master pages of the same name.
+        return rDescriptor->meOrigin == MasterPageContainer::MASTERPAGE
+               && mpDescriptor->mpMasterPage != nullptr
+               && mpDescriptor->mpMasterPage == rDescriptor->mpMasterPage;
+    }
     else
     {
         // Take URL, page name, style name, and page object into account

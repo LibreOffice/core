@@ -955,6 +955,7 @@ void MasterPageContainer::Implementation::ReleaseDescriptor (Token aToken)
     if (aToken>=0 && o3tl::make_unsigned(aToken)<maContainer.size())
     {
         maContainer[aToken].reset();
+        mpRequestQueue->RemoveRequest(aToken);
     }
 }
 
