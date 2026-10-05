@@ -37,6 +37,10 @@ class GraphicSelection {
 	/// The object the dark overlay was last laid out for.
 	public static darkOverlayRectangle: cool.SimpleRectangle | null = null;
 
+	/// The player of a selected video or audio object while the client draws the selection
+	/// itself, null while none is selected or the tiled sections host it.
+	public static mediaPlayer: MediaPlayerSection | null = null;
+
 	/*
 		Whether anything is selected. While the document is drawn from objects that is what the
 		ids say, and the rectangle the engine sends is not needed for it; otherwise it is the
@@ -216,39 +220,11 @@ class GraphicSelection {
 		return rectangles.filter((rectangle: number[]) => rectangle[4] !== ordNum);
 	}
 
-	/// The handles the client last worked out, as text, to tell a set that moved from one that
-	/// did not.
-	private static lastLocalHandles: string | null = null;
-
-	/*
-		Puts the handles the client works out into the selection, and says whether they differ from
-		the ones drawn now.
-	*/
-	public static applyLocalHandles(): boolean {
-		if (!RenderManager.isVectorRendering() || !this.extraInfo) return false;
-
-		const handles = ObjectHandles.asKinds(
-			new ObjectHandles(this.selectedObjectIDs).handles(),
-		);
-		if (!handles) return false;
-
-		this.extraInfo.handles = handles;
-
-		const shape = JSON.stringify(handles);
-		const moved = shape !== this.lastLocalHandles;
-		this.lastLocalHandles = shape;
-		return moved;
-	}
-
 	/*
 		Works the handles out again from the objects as they stand now. The engine reports a
 		selection as soon as it changes, while the objects it stands on arrive with the update
 		that follows, so the handles of a shape that was just dragged are worked out once more when
 		that update lands. Without it they would show where the shape was before.
-
-		Objects change far more often than a selection does - one update per keystroke while
-		someone types - so the sections that draw the handles are built again only when the
-		handles really moved.
 	*/
 	public static refreshLocalHandles(): void {
 		// The section that draws the selection works its handles out from the objects, so it is
@@ -256,13 +232,9 @@ class GraphicSelection {
 		this.selectionSection?.refresh();
 
 		// The button of a diagram stands beside the selection, so it follows it wherever the
-		// objects take it.
+		// objects take it, as does the player of a video.
 		this.diagramButton?.follow();
-
-		// The older section is given the set it reads only when that set is one it can read,
-		// and only when it differs from the one it holds.
-		if (GraphicSelection.applyLocalHandles() && this.handlesSection)
-			this.handlesSection.refreshInfo(this.extraInfo);
+		this.followThePlayer();
 	}
 
 	/*
@@ -342,6 +314,7 @@ class GraphicSelection {
 			app.sectionContainer.removeSection(this.selectionSection.name);
 			this.selectionSection = null;
 			RenderManager.drawnElsewhere([]);
+			this.dropThePlayer();
 		}
 
 		if (wanted === null) return;
@@ -467,7 +440,6 @@ class GraphicSelection {
 		this.selectionChanged([]);
 		GraphicSelection.updateSelectionSection();
 		GraphicSelection.travel()?.leave();
-		this.lastLocalHandles = null;
 		this.rectangle = null;
 		this.extraInfo = null;
 
@@ -478,23 +450,58 @@ class GraphicSelection {
 		}
 	}
 
+	/*
+		The player of a selected video or audio object, where the client draws the selection
+		itself: laid on the box of the selection and kept while the same object is selected
+		again, so a running video is not started over by a click on it.
+	*/
+	private static showThePlayer(description: any): void {
+		const section = this.selectionSection;
+		if (!section) return;
+
+		if (this.mediaPlayer && this.mediaPlayer.url !== description.url)
+			this.dropThePlayer();
+
+		if (!this.mediaPlayer) {
+			this.mediaPlayer = new MediaPlayerSection(
+				description,
+				section.selectionCorner(),
+				section.selectionSize(),
+			);
+			app.sectionContainer.addSection(this.mediaPlayer as any);
+		}
+
+		this.followThePlayer();
+	}
+
+	public static followThePlayer(): void {
+		const section = this.selectionSection;
+		if (!this.mediaPlayer || !section) return;
+
+		this.mediaPlayer.follow(section.selectionCorner(), section.selectionSize());
+	}
+
+	private static dropThePlayer(): void {
+		if (!this.mediaPlayer) return;
+
+		app.sectionContainer.removeSection(this.mediaPlayer.name);
+		this.mediaPlayer = null;
+	}
+
 	// shows the video inside current selection marker
 	static onEmbeddedVideoContent(textMsg: string) {
-		if (!this.handlesSection) return;
-
 		var videoDesc = JSON.parse(textMsg);
 
+		if (RenderManager.isVectorRendering()) {
+			this.showThePlayer(videoDesc);
+			return;
+		}
+
+		if (!this.handlesSection) return;
+
 		if (this.hasActiveSelection()) {
-			// The player takes the size of the selection in CSS pixels. Where the client draws
-			// the selection itself, that is the box round the selected objects.
-			const size = this.selectionSection?.selectionSize();
-			if (size) {
-				videoDesc.width = Math.round(size[0] / app.dpiScale);
-				videoDesc.height = Math.round(size[1] / app.dpiScale);
-			} else {
-				videoDesc.width = this.rectangle.cWidth;
-				videoDesc.height = this.rectangle.cHeight;
-			}
+			videoDesc.width = this.rectangle.cWidth;
+			videoDesc.height = this.rectangle.cHeight;
 		}
 
 		// proxy cannot identify RouteToken if it is encoded
@@ -677,6 +684,16 @@ class GraphicSelection {
 				return;
 			}
 
+			// Where the client draws the selection itself, the sections that draw it from the
+			// message are not built at all. The selection section is all there is.
+			if (RenderManager.isVectorRendering()) {
+				GraphicSelection.updateSelectionSection();
+				this.selectionSection?.setShowSection(editMode);
+				app.sectionContainer.requestReDraw();
+				app.map._docLayer._updateCursorAndOverlay();
+				return;
+			}
+
 			var extraInfo = this.extraInfo;
 			let addHandlesSection = false;
 
@@ -754,9 +771,12 @@ class GraphicSelection {
 		if (GraphicSelection.isADiagram()) {
 			if (!GraphicSelection.diagramButton) {
 				// need to create DiagramButtonSection
-				const subSection = app.sectionContainer.getSectionWithName(
-					this.handlesSection.sectionProperties.subSectionPrefix + 'diagram',
-				);
+				const subSection = this.handlesSection
+					? app.sectionContainer.getSectionWithName(
+							this.handlesSection.sectionProperties.subSectionPrefix +
+								'diagram',
+						)
+					: null;
 				var halfWidth: number = 0;
 
 				if (subSection && subSection.sectionProperties) {
@@ -865,13 +885,6 @@ class GraphicSelection {
 					msgData.length > 5 ? msgData[5] : null,
 				),
 			);
-
-			/*
-				While the document is drawn from objects, the handles are worked out here from the
-				geometry the client holds and named by what they are. The ones the engine sent are
-				used where the client holds nothing for what is selected.
-			*/
-			GraphicSelection.applyLocalHandles();
 
 			// Update the dark overlay on zooming & scrolling
 			if (!app.map._docLayer._oleCSelections.empty()) {
@@ -1015,7 +1028,7 @@ class GraphicSelection {
 		// Text is being edited, so the keyboard belongs to the text and no longer to a handle.
 		if (event.detail.visible) GraphicSelection.travel()?.leave();
 
-		if (this.hasActiveSelection()) {
+		if (this.hasActiveSelection() && this.handlesSection) {
 			if (event.detail.visible) this.handlesSection.interactable = false;
 			else this.handlesSection.interactable = true;
 		}

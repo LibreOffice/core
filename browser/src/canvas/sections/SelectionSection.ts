@@ -256,9 +256,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 	public redraw(): void {
 		this.tellWhoStandsIn();
 
-		// The button of a diagram is a thing of its own beside the canvas, so it is moved rather
-		// than drawn along with the rest.
+		// The button of a diagram and the player of a video are things of their own beside the
+		// canvas, so they are moved rather than drawn along with the rest.
 		GraphicSelection.diagramButton?.follow();
+		GraphicSelection.followThePlayer();
 
 		this.containerObject.requestReDraw();
 	}
@@ -1650,6 +1651,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 		// The group that took the press says whether the engine hears of it: a press on the line
 		// of a connector is the connector itself, and it stays selected.
 		if (this.pressedGroup && !this.pressedGroup.passesTheClickOn()) return;
+
+		// A click on a selected video wakes its player, so its controls take the presses from
+		// now on.
+		GraphicSelection.mediaPlayer?.wake();
 
 		const at = this.inTheDocument(point);
 		const modifier = MouseControl.readModifier(e);

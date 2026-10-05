@@ -605,6 +605,7 @@ COOL_JS_LST =\
 	src/canvas/sections/GenericButtonSection.ts \
 	src/canvas/sections/ChartContextButtonSection.ts \
 	src/canvas/sections/DiagramButtonSection.ts \
+	src/canvas/sections/MediaPlayerSection.tsx \
 	src/canvas/sections/ContentControlDropdownSubSection.ts \
 	src/canvas/sections/ContentControlSection.ts \
 	src/canvas/sections/HeaderFooterBoundarySection.ts \
@@ -1621,6 +1622,7 @@ pot:
 		src/canvas/sections/GenericButtonSection.ts \
 		src/canvas/sections/ChartContextButtonSection.ts \
 		src/canvas/sections/DiagramButtonSection.ts \
+		src/canvas/sections/MediaPlayerSection.tsx \
 		src/canvas/sections/FormFieldButton.ts \
 		src/canvas/sections/FormulaErrorHelpSection.ts \
 		src/canvas/sections/HeaderFooterBoundarySection.ts \

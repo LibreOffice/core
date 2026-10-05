@@ -507,7 +507,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			this.sectionProperties.svg.remove();
 	}
 
-	addVideoSupportHandlers(videos: any) {
+	static addVideoSupportHandlers(videos: any) {
 		if (!videos)
 			return;
 
@@ -519,24 +519,24 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			video.addEventListener('playing', function() {
 				window.setTimeout(function() {
 					if (video.webkitDecodedFrameCount === 0 && video.webkitAudioDecodedByteCount === 0) {
-						this.showUnsupportedMediaWarning();
+						ShapeHandlesSection.showUnsupportedMediaWarning();
 					}
-				}.bind(this), 1000);
-			}.bind(this));
+				}, 1000);
+			});
 
 			video.addEventListener('error', function() {
-				this.showUnsupportedMediaWarning();
-			}.bind(this));
+				ShapeHandlesSection.showUnsupportedMediaWarning();
+			});
 
 			if (sources.length) {
 				sources[0].addEventListener('error', function(error: string) {
-					this.showUnsupportedMediaWarning();
-				}.bind(this));
+					ShapeHandlesSection.showUnsupportedMediaWarning();
+				});
 			}
 		}
 	}
 
-	showUnsupportedMediaWarning() {
+	static showUnsupportedMediaWarning() {
 		var videoWarning = _('Document contains unsupported media');
 		window.L.Map.THIS.uiManager.showSnackbar(videoWarning);
 	}
@@ -570,7 +570,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		var source = this.sectionProperties.svg.getElementsByTagName('source');
 		source[0].src = decodeURIComponent(source[0].src);
 
-		this.addVideoSupportHandlers(videos);
+		ShapeHandlesSection.addVideoSupportHandlers(videos);
 	}
 
 	removeTagFromHTML(data: string, startString: string, endString: string): string {

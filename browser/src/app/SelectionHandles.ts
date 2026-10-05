@@ -493,46 +493,4 @@ class ObjectHandles implements HandleSource {
 			rails: handle.rails,
 		}));
 	}
-
-	/*
-		The handles grouped by kind, which is the shape the section that draws a selection from
-		tiles reads them in. It names each handle by an id as well, which that section uses to
-		name the piece of canvas it gives the handle. It goes when the tile path goes.
-	*/
-	public static asKinds(handles: SelectionHandle[]): any | undefined {
-		if (!handles.length) return undefined;
-
-		/*
-			That section reads the eight by their kind and stands on their being there, so a set
-			without them is not for it: an object shaped by its own points keeps the set the
-			engine sent, which is what that section was written for.
-		*/
-		const framing = handles.filter((handle: SelectionHandle) => {
-			const kind = Number(handle.kind);
-			return kind >= 1 && kind <= 8;
-		});
-		if (framing.length !== 8) return undefined;
-
-		const withId = (handle: SelectionHandle) => ({
-			...handle,
-			id: handle.name,
-		});
-
-		const rectangle: any = {};
-		const shaping: any[] = [];
-		for (const handle of handles) {
-			if (Number(handle.kind) <= 8) rectangle[handle.kind] = [withId(handle)];
-			else shaping.push(withId(handle));
-		}
-
-		const kinds: any = {
-			rectangle: rectangle,
-			poly: '',
-			anchor: '',
-			others: '',
-		};
-		if (shaping.length) kinds.custom = { '22': shaping };
-
-		return { kinds: kinds };
-	}
 }

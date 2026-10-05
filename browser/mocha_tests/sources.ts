@@ -226,6 +226,7 @@
 /// <reference path="../src/canvas/sections/GenericButtonSection.ts" />
 /// <reference path="../src/canvas/sections/ChartContextButtonSection.ts" />
 /// <reference path="../src/canvas/sections/DiagramButtonSection.ts" />
+/// <reference path="../src/canvas/sections/MediaPlayerSection.tsx" />
 /// <reference path="../src/canvas/sections/ContentControlDropdownSubSection.ts" />
 /// <reference path="../src/canvas/sections/ContentControlSection.ts" />
 /// <reference path="../src/map/handler/Map.KeyboardShortcuts.ts" />
