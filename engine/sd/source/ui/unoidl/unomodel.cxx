@@ -120,6 +120,11 @@
 #include <svx/svdundo.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdoedge.hxx>
+#include <svx/sxekitm.hxx>
+#include <svx/sxelditm.hxx>
+#include <svx/sxenditm.hxx>
+#include <svx/sdmetitm.hxx>
+#include <svx/compatflags.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/sdgcpitm.hxx>
@@ -3579,6 +3584,64 @@ private:
         does, and the four amounts cropped away from it, all as twips. A picture that shows no
         graphic yet says nothing.
     */
+    /// How one end of the connector holds on to its object, read from the connection record.
+    static SdXImpressDocument::VectorObjectContent::ConnectorTie
+    tieOf(const SdrObjConnection& rConnection)
+    {
+        SdXImpressDocument::VectorObjectContent::ConnectorTie aTie;
+        if (!rConnection.IsBestConnection())
+            aTie.moPoint = rConnection.GetConnectorId();
+        aTie.mbBestVertex = rConnection.IsBestVertex();
+        aTie.mbAutoVertex = rConnection.IsAutoVertex();
+        aTie.mbAutoCorner = rConnection.IsAutoCorner();
+        return aTie;
+    }
+
+    /// The numbers the connector's run is worked out from, read from its items and its ties.
+    static SdXImpressDocument::VectorObjectContent::ConnectorRouting
+    routingOf(const SdrEdgeObj& rConnector)
+    {
+        SdXImpressDocument::VectorObjectContent::ConnectorRouting aRouting;
+        const SfxItemSet& rSet = rConnector.GetMergedItemSet();
+
+        switch (rSet.Get(SDRATTR_EDGEKIND).GetValue())
+        {
+            case SdrEdgeKind::OrthoLines: aRouting.maKind = "ortho"_ostr; break;
+            case SdrEdgeKind::ThreeLines: aRouting.maKind = "three"_ostr; break;
+            case SdrEdgeKind::OneLine: aRouting.maKind = "one"_ostr; break;
+            case SdrEdgeKind::Bezier: aRouting.maKind = "bezier"_ostr; break;
+            case SdrEdgeKind::Arc: aRouting.maKind = "arc"_ostr; break;
+        }
+
+        if (rSet.HasItem(SDRATTR_EDGEOOXMLCURVE))
+            aRouting.mbCurveFollowsOOXML = rSet.Get(SDRATTR_EDGEOOXMLCURVE).GetValue();
+
+        aRouting.mfNode1Across
+            = rSet.Get(SDRATTR_EDGENODE1HORZDIST).GetValue() * constTwipConversionFactor;
+        aRouting.mfNode1Down
+            = rSet.Get(SDRATTR_EDGENODE1VERTDIST).GetValue() * constTwipConversionFactor;
+        aRouting.mfNode2Across
+            = rSet.Get(SDRATTR_EDGENODE2HORZDIST).GetValue() * constTwipConversionFactor;
+        aRouting.mfNode2Down
+            = rSet.Get(SDRATTR_EDGENODE2VERTDIST).GetValue() * constTwipConversionFactor;
+
+        aRouting.mnLineDeltaCount = rSet.Get(SDRATTR_EDGELINEDELTACOUNT).GetValue();
+        aRouting.mfLineDelta1
+            = rSet.Get(SDRATTR_EDGELINE1DELTA).GetValue() * constTwipConversionFactor;
+        aRouting.mfLineDelta2
+            = rSet.Get(SDRATTR_EDGELINE2DELTA).GetValue() * constTwipConversionFactor;
+        aRouting.mfLineDelta3
+            = rSet.Get(SDRATTR_EDGELINE3DELTA).GetValue() * constTwipConversionFactor;
+
+        aRouting.mbAgainstSnapRectangles
+            = rConnector.getSdrModelFromSdrObject().GetCompatibilityFlag(
+                SdrCompatibilityFlag::ConnectorUseSnapRect);
+
+        aRouting.maTieAtStart = tieOf(rConnector.GetConnection(true));
+        aRouting.maTieAtEnd = tieOf(rConnector.GetConnection(false));
+        return aRouting;
+    }
+
     static void takeInThePicture(const SdrGrafObj& rPicture,
                                  SdXImpressDocument::VectorObjectContent& rContent)
     {
@@ -3679,6 +3742,7 @@ private:
                 aContent.mbTiedAtEnd = nullptr != pAtEnd;
                 aContent.mnTiedToAtStart = pAtStart ? pAtStart->GetUniqueID() : 0;
                 aContent.mnTiedToAtEnd = pAtEnd ? pAtEnd->GetUniqueID() : 0;
+                aContent.moRouting = routingOf(*pConnector);
             }
 
             if (const SdrGluePointList* pGluePoints = rObject.GetGluePointList())
@@ -4314,6 +4378,50 @@ private:
         writeEntryGeometry(rWriter, rContent);
     }
 
+    /// How one end of a connector holds on to its object, as a node of the given name.
+    static void writeTie(tools::JsonWriter& rWriter, std::string_view aName,
+                         const SdXImpressDocument::VectorObjectContent::ConnectorTie& rTie)
+    {
+        auto aNode = rWriter.startNode(aName);
+        if (rTie.moPoint)
+            rWriter.put("point", sal_Int32(*rTie.moPoint));
+        if (rTie.mbBestVertex)
+            rWriter.put("bestVertex", true);
+        if (rTie.mbAutoVertex)
+            rWriter.put("autoVertex", true);
+        if (rTie.mbAutoCorner)
+            rWriter.put("autoCorner", true);
+    }
+
+    /// The numbers a connector's run is worked out from, as the "routing" node of its entry.
+    static void
+    writeRouting(tools::JsonWriter& rWriter,
+                 const SdXImpressDocument::VectorObjectContent::ConnectorRouting& rRouting)
+    {
+        auto aNode = rWriter.startNode("routing");
+        rWriter.put("kind", rRouting.maKind);
+        if (rRouting.mbCurveFollowsOOXML)
+            rWriter.put("curveFollowsOOXML", true);
+        {
+            auto aDistances = rWriter.startArray("nodeDistances");
+            rWriter.putSimpleValue(rRouting.mfNode1Across);
+            rWriter.putSimpleValue(rRouting.mfNode1Down);
+            rWriter.putSimpleValue(rRouting.mfNode2Across);
+            rWriter.putSimpleValue(rRouting.mfNode2Down);
+        }
+        rWriter.put("lineDeltaCount", rRouting.mnLineDeltaCount);
+        {
+            auto aDeltas = rWriter.startArray("lineDeltas");
+            rWriter.putSimpleValue(rRouting.mfLineDelta1);
+            rWriter.putSimpleValue(rRouting.mfLineDelta2);
+            rWriter.putSimpleValue(rRouting.mfLineDelta3);
+        }
+        if (rRouting.mbAgainstSnapRectangles)
+            rWriter.put("againstSnapRectangles", true);
+        writeTie(rWriter, "tieAtStart", rRouting.maTieAtStart);
+        writeTie(rWriter, "tieAtEnd", rRouting.maTieAtEnd);
+    }
+
     /// Where an entry paints, how the unit rectangle maps onto it, and how it looks.
     void writeEntryGeometry(tools::JsonWriter& rWriter,
                             const SdXImpressDocument::VectorObjectContent& rContent)
@@ -4382,6 +4490,9 @@ private:
             rWriter.put("tiedToAtStart", sal_Int64(rContent.mnTiedToAtStart));
         if (rContent.mnTiedToAtEnd)
             rWriter.put("tiedToAtEnd", sal_Int64(rContent.mnTiedToAtEnd));
+
+        if (rContent.moRouting)
+            writeRouting(rWriter, *rContent.moRouting);
 
         if (!rContent.maOwnGluePoints.empty())
         {

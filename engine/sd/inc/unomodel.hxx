@@ -275,6 +275,59 @@ public:
         sal_uInt64 mnTiedToAtStart = 0;
         sal_uInt64 mnTiedToAtEnd = 0;
 
+        /** How one end of a connector holds on to its object: the number of the glue point it is
+            tied to, or none while the connector picks the best point itself. The three flags
+            say how that pick goes: whether the best of the four sides is searched for, whether
+            the pick landed on a side or on a corner. */
+        struct ConnectorTie
+        {
+            std::optional<sal_uInt16> moPoint;
+            bool mbBestVertex = false;
+            bool mbAutoVertex = false;
+            bool mbAutoCorner = false;
+
+            bool operator==(const ConnectorTie&) const = default;
+        };
+
+        /** The numbers a connector's run between its two ends is worked out from, all in twips
+            where they are lengths. Only a connector has them.
+
+            The kind names the shape of the run: "ortho" for lines meeting at right angles,
+            "three" for three straight lines, "one" for one straight line, "bezier" for a curve
+            and "arc" for an arc. The curve follows the OOXML way of routing when the flag says
+            so, and the office's own way otherwise.
+
+            The node distances are how far the run keeps away from each object it is tied to:
+            across and down for the first object, then for the second.
+
+            The line deltas are how far the user moved the lines of an orthogonal run from where
+            the routing would have put them: up to three of them, and the count says how many
+            are set.
+
+            The run is laid out against the snap rectangle of each object when the document asks
+            for it, against the object's bound rectangle otherwise. */
+        struct ConnectorRouting
+        {
+            OString maKind;
+            bool mbCurveFollowsOOXML = false;
+            double mfNode1Across = 0.0;
+            double mfNode1Down = 0.0;
+            double mfNode2Across = 0.0;
+            double mfNode2Down = 0.0;
+            sal_Int32 mnLineDeltaCount = 0;
+            double mfLineDelta1 = 0.0;
+            double mfLineDelta2 = 0.0;
+            double mfLineDelta3 = 0.0;
+            bool mbAgainstSnapRectangles = false;
+            ConnectorTie maTieAtStart;
+            ConnectorTie maTieAtEnd;
+
+            bool operator==(const ConnectorRouting&) const = default;
+        };
+
+        /// The routing numbers of a connector. Nothing for anything else.
+        std::optional<ConnectorRouting> moRouting;
+
         /** One of the points someone added to the object for a connector to tie itself to. The
             place is given on the object rather than on the page: 0 and 0 is the upper left corner
             of the object and 1 and 1 the lower right one, so the point follows the object
@@ -368,7 +421,7 @@ public:
                    && mbTiedAtStart == rOther.mbTiedAtStart
                    && mbTiedAtEnd == rOther.mbTiedAtEnd
                    && mnTiedToAtStart == rOther.mnTiedToAtStart
-                   && mnTiedToAtEnd == rOther.mnTiedToAtEnd
+                   && mnTiedToAtEnd == rOther.mnTiedToAtEnd && moRouting == rOther.moRouting
                    && maOwnGluePoints == rOther.maOwnGluePoints;
         }
     };

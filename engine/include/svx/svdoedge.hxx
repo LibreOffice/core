@@ -63,7 +63,9 @@ public:
     void SetConnectorId( sal_uInt16 nId ) { m_nConId = nId; };
 
     bool IsBestConnection() const { return m_bBestConn; };
+    bool IsBestVertex() const { return m_bBestVertex; };
     bool IsAutoVertex() const { return m_bAutoVertex; };
+    bool IsAutoCorner() const { return m_bAutoCorner; };
     sal_uInt16 GetConnectorId() const { return m_nConId; };
     SdrObject* GetSdrObject() const { return m_pSdrObj; }
 };

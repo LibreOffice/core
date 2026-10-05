@@ -87,6 +87,41 @@ namespace cool {
 		continuity?: 1 | 2;
 	}
 
+	/**
+	 * How one end of a connector holds on to its object: the number of the glue point it is tied
+	 * to, or none while the connector picks the best point itself. The flags say how that pick
+	 * goes: whether the best of the four sides is searched for, and whether the pick landed on a
+	 * side or on a corner.
+	 */
+	export interface ConnectorTie {
+		point?: number;
+		bestVertex?: boolean;
+		autoVertex?: boolean;
+		autoCorner?: boolean;
+	}
+
+	/**
+	 * The numbers a connector's run is worked out from, in twips where they are lengths. The kind
+	 * names the shape of the run: "ortho" for lines meeting at right angles, "three" for three
+	 * straight lines, "one" for one straight line, "bezier" for a curve and "arc" for an arc. The
+	 * curve follows the OOXML way of routing when the flag says so. The node distances are how
+	 * far the run keeps away from the first object, across and down, then from the second. The
+	 * line deltas are how far the user moved the lines of an orthogonal run from where the
+	 * routing would put them, and the count says how many of the three are set. The run is laid
+	 * out against the objects' snap rectangles when the flag says so, their bound rectangles
+	 * otherwise.
+	 */
+	export interface ConnectorRouting {
+		kind: 'ortho' | 'three' | 'one' | 'bezier' | 'arc';
+		curveFollowsOOXML?: boolean;
+		nodeDistances: number[];
+		lineDeltaCount: number;
+		lineDeltas: number[];
+		againstSnapRectangles?: boolean;
+		tieAtStart: ConnectorTie;
+		tieAtEnd: ConnectorTie;
+	}
+
 	/** One point an object was given for a connector to tie itself to, where it lies on the
 	 * object: 0 and 0 is its upper left corner and 1 and 1 its lower right one.
 	 */
@@ -223,6 +258,9 @@ namespace cool {
 		/// that is not a connector.
 		tiedToAtStart?: number;
 		tiedToAtEnd?: number;
+		/// The numbers a connector's run between its two ends is worked out from. Absent for
+		/// anything that is not a connector.
+		routing?: ConnectorRouting;
 		/** The points someone added to the object for a connector to tie itself to, where they
 		 * lie on the object: 0 and 0 is its upper left corner and 1 and 1 its lower right one, so
 		 * a point follows the object wherever it goes and however it is turned. Absent for an
