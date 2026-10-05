@@ -109,11 +109,10 @@ void CRMDBTest::testRegistrationName()
 
     // 2. register a newly created data source, and verify it has the proper name
     // Setup the CRMDatabase
-    createDBDocument(u"sdbc:embedded:hsqldb"_ustr);
-    uno::Reference<sdb::XOfficeDatabaseDocument> xDocument(mxComponent, UNO_QUERY_THROW);
-    uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+    uno::Reference<XConnection> xConnection = setUpDBConnection();
     createTables(xConnection);
 
+    uno::Reference<sdb::XOfficeDatabaseDocument> xDocument(mxComponent, UNO_QUERY_THROW);
     uno::Reference<XDataSource> xDataSource = xDocument->getDataSource();
     CPPUNIT_ASSERT(xDataSource.is());
 
@@ -142,15 +141,7 @@ void CRMDBTest::testQueryColumns()
     // Ported from dbaccess/Query.java
     // Test prepared queries return the expected column names
 
-    createDBDocument(u"sdbc:embedded:hsqldb"_ustr);
-    uno::Reference<sdb::XOfficeDatabaseDocument> xDocument(mxComponent, UNO_QUERY_THROW);
-    uno::Reference<XDataSource> xDataSource = xDocument->getDataSource();
-    CPPUNIT_ASSERT(xDataSource.is());
-
-    // Create queries before establishing connection to database
-    createQueries(xDataSource);
-
-    uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+    uno::Reference<XConnection> xConnection = setUpDBConnection();
     createTables(xConnection);
 
     uno::Reference<XQueriesSupplier> xQuerySupplier(xConnection, UNO_QUERY_THROW);
