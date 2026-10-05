@@ -25,6 +25,8 @@
 #include <basegfx/color/bcolor.hxx>
 #include <osl/endian.h>
 
+#include <ostream>
+
 namespace color
 {
 

@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <cstdlib>
+#include <iomanip>
 #include <thread>
 
 #include <salinst.hxx>

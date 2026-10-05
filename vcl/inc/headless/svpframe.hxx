@@ -23,6 +23,7 @@
 
 #include <salframe.hxx>
 
+#include <iomanip>
 #include <vector>
 
 #ifdef IOS

@@ -22,6 +22,7 @@
 
 #include <comphelper/hash.hxx>
 
+#include <iomanip>
 #include <sstream>
 
 namespace

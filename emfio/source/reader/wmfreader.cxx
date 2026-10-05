@@ -21,6 +21,7 @@
 #include <emfreader.hxx>
 
 #include <cstdlib>
+#include <iomanip>
 #include <memory>
 #include <optional>
 #include <comphelper/configuration.hxx>

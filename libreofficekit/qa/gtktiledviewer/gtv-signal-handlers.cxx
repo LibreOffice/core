@@ -17,6 +17,7 @@
 #include <sal/macros.h>
 
 #include <cassert>
+#include <iomanip>
 #include <map>
 #include <vector>
 

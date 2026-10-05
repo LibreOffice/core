@@ -38,6 +38,7 @@
 #include <tools/stream.hxx>
 #include <o3tl/string_view.hxx>
 
+#include <iomanip>
 #include <sstream>
 
 #define TXTCONV_BUFFER_SIZE 20

@@ -11,6 +11,7 @@
 #include <basegfx/utils/gradienttools.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 #include <boost/property_tree/json_parser.hpp>
+#include <iomanip>
 #include <map>
 
 typedef std::map<OUString, OUString> StringMap;

@@ -44,6 +44,8 @@
 #include <SkColorMatrix.h>
 #include <skia_opts.hxx>
 
+#include <iomanip>
+
 #ifdef DBG_UTIL
 #include <fstream>
 #define CANARY "skia-canary"

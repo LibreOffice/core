@@ -29,6 +29,7 @@
 #include "op_spreadsheet.hxx"
 #include "op_addin.hxx"
 
+#include <iomanip>
 #include <limits>
 
 #include <com/sun/star/sheet/FormulaLanguage.hpp>

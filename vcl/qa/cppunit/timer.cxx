@@ -14,6 +14,7 @@
 
 #include <osl/thread.hxx>
 #include <chrono>
+#include <iomanip>
 
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>

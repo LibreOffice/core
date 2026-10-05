@@ -19,6 +19,7 @@
 
 #include <o3tl/sorted_vector.hxx>
 #include <tools/fontenum.hxx>
+#include <iomanip>
 #include <utility>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>

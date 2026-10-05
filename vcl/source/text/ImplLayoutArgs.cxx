@@ -23,6 +23,7 @@
 #include <unicode/uchar.h>
 
 #include <algorithm>
+#include <iomanip>
 #include <memory>
 #include <utility>
 
