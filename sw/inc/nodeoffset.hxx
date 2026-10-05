@@ -12,7 +12,7 @@
 #include "swdllapi.h"
 #include <o3tl/concepts.hxx>
 #include <o3tl/strong_int.hxx>
-#include <iostream>
+#include <iosfwd>
 
 typedef o3tl::strong_int<sal_Int32, struct Tag_SwNodeOffset> SwNodeOffset;
 
