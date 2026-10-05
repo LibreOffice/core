@@ -247,32 +247,20 @@ HostEntry syncResolveDNS(const std::string& addressToCheck)
 /// matching core's opensocket_callback in CurlSession.cxx.
 [[nodiscard]] bool isInstanceMetadataAddress(const sockaddr* ai_addr)
 {
-    char addrstr[INET6_ADDRSTRLEN];
-    int family = ai_addr->sa_family;
-    const void* inAddr = nullptr;
-
-    if (family == AF_INET)
-        inAddr = &(reinterpret_cast<const sockaddr_in*>(ai_addr)->sin_addr);
-    else if (family == AF_INET6)
+    std::string addr;
+    if (ai_addr->sa_family == AF_INET6 &&
+        IN6_IS_ADDR_V4MAPPED(&reinterpret_cast<const sockaddr_in6*>(ai_addr)->sin6_addr))
     {
-        const in6_addr& addr6 = reinterpret_cast<const sockaddr_in6*>(ai_addr)->sin6_addr;
         // An IPv4-mapped IPv6 address connects to its IPv4 address.
-        if (IN6_IS_ADDR_V4MAPPED(&addr6))
-        {
-            family = AF_INET;
-            inAddr = &addr6.s6_addr[12];
-        }
-        else
-            inAddr = &addr6;
+        const in6_addr& addr6 = reinterpret_cast<const sockaddr_in6*>(ai_addr)->sin6_addr;
+        sockaddr_in addr4{};
+        addr4.sin_family = AF_INET;
+        memcpy(&addr4.sin_addr, &addr6.s6_addr[12], sizeof(addr4.sin_addr));
+        addr = ipAddressToString(reinterpret_cast<const sockaddr*>(&addr4));
     }
+    else
+        addr = ipAddressToString(ai_addr);
 
-    if (!inAddr)
-        return false;
-
-    if (!inet_ntop(family, inAddr, addrstr, sizeof(addrstr)))
-        return false;
-
-    const std::string_view addr(addrstr);
     return addr.starts_with("169.254.") || // AWS-alike link-local
            addr == "100.100.100.200" || // Alibaba
            addr == "fd00:ec2::254" || // AWS IPv6
