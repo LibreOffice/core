@@ -466,6 +466,8 @@ private:
     /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
     /// Preserved rotation for TextFrames.
     Degree100 m_nDMLandVMLTextFrameRotation;
+    /// The number of the next diagram written, counting from one.
+    sal_Int32 m_nDiagramId;
 
 public:
     bool m_bFlyFrameGraphic = false;
@@ -482,8 +484,11 @@ public:
         , m_bParagraphSdtOpen(false)
         , m_bParagraphHasDrawing(false)
         , m_bDMLAndVMLDrawingOpen(false)
+        , m_nDiagramId(1)
     {
     }
+
+    sal_Int32 getAndIncrementDiagramId() { return m_nDiagramId++; }
 
     /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
 
@@ -1732,7 +1737,9 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
     startDMLAnchorInline(&rFrameFormat, aSize);
 
     m_pImpl->getDrawingML()->SetFS(m_pImpl->getSerializer());
-    m_pImpl->getDrawingML()->WriteDiagram(xShape, m_pImpl->getExport().GetFilter().GetUniqueId());
+    const sal_Int32 nDiagramId = m_pImpl->getAndIncrementDiagramId();
+    const sal_Int32 nShapeId = m_pImpl->getExport().GetFilter().GetUniqueId();
+    m_pImpl->getDrawingML()->WriteDiagram(xShape, nDiagramId, nShapeId);
 
     endDMLAnchorInline(&rFrameFormat);
 }

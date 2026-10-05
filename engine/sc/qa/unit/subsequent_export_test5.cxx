@@ -1346,6 +1346,29 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf165655)
     CPPUNIT_ASSERT_EQUAL(3, aNodes);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testConnectorToFirstShape)
+{
+    // The sheet has an oval and a connector whose two ends are both attached to it. The oval is
+    // the first shape of the drawing.
+    createScDoc("xlsx/connector-first-shape.xlsx");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDrawing);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the oval was numbered one, and a connection to a shape numbered one is dropped when
+    // the file is read again.
+    const OUString sOvalId = getXPath(pDrawing, "//xdr:sp/xdr:nvSpPr/xdr:cNvPr", "id");
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, sOvalId);
+
+    // Both ends of the connector name the oval.
+    assertXPath(pDrawing, "//xdr:cxnSp/xdr:nvCxnSpPr/xdr:cNvCxnSpPr/a:stCxn", "id", sOvalId);
+    assertXPath(pDrawing, "//xdr:cxnSp/xdr:nvCxnSpPr/xdr:cNvCxnSpPr/a:endCxn", "id", sOvalId);
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf165886)
 {
     createScDoc("xlsx/tdf165886.xlsx");

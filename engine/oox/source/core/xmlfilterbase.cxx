@@ -217,8 +217,10 @@ XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) 
     FilterBase( rxContext ),
     mxImpl( new XmlFilterBaseImpl ),
     mnRelId( 1 ),
-    // mnMaxDocId has to start from 1, Word doesn't accept id 0 for eg. grouped shapes
-    mnMaxDocId( 1 ),
+    // The first identifier a shape is given. Zero is not accepted for a grouped shape, and a
+    // shape numbered one is not accepted as the shape a connector attaches to, so numbering
+    // starts past both.
+    mnMaxDocId( 2 ),
     mbMSO2007(false),
     mbMSO(false),
     mbMissingExtDrawing(false)
