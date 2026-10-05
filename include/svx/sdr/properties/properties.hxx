@@ -76,7 +76,7 @@ namespace sdr::properties
             // to be changed in any way.
             SdrObject&                                      mrObject;
 
-            // thje Clone-implementations, overloaded for each derivation
+            // the Clone-implementations, overloaded for each derivation
             virtual std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const = 0;
 
         protected:
