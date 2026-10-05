@@ -1942,7 +1942,9 @@ public class LOActivity extends AppCompatActivity {
             Log.d(TAG, "Pasting mime " + i + ": " + clipDesc.getMimeType(i));
 
             if (clipDesc.getMimeType(i).equals(ClipDescription.MIMETYPE_TEXT_HTML)) {
-                final String html = clipData.getItemAt(i).getHtmlText();
+                final String html = clipData.getItemAt(0).coerceToHtmlText(this);
+                if (html == null || html.isEmpty())
+                    continue;
                 // Check if the clipboard content was made with the app
                 if (html.contains(CLIPBOARD_COOL_SIGNATURE)) {
                     // Check if the clipboard content is from the same app instance
@@ -1968,7 +1970,7 @@ public class LOActivity extends AppCompatActivity {
                         return false;
                     }
                 } else {
-                    Log.i(TAG, "foreign html '" + html + "'");
+                    Log.i(TAG, "foreign html, length " + html.length());
                     byte[] htmlByteArray = html.getBytes(Charset.forName("UTF-8"));
                     LOActivity.this.paste("text/html", htmlByteArray);
                     return false;
@@ -2000,8 +2002,11 @@ public class LOActivity extends AppCompatActivity {
             Log.d(TAG, "Plain text paste attempt " + i + ": " + clipDesc.getMimeType(i));
 
             if (clipDesc.getMimeType(i).equals(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                final ClipData.Item clipItem = clipData.getItemAt(i);
-                String text = clipItem.getText().toString();
+                final ClipData.Item clipItem = clipData.getItemAt(0);
+                final CharSequence textSequence = clipItem.coerceToText(this);
+                if (textSequence == null)
+                    continue;
+                String text = textSequence.toString();
                 byte[] textByteArray = text.getBytes(Charset.forName("UTF-8"));
                 LOActivity.this.paste("text/plain;charset=utf-8", textByteArray);
             }
