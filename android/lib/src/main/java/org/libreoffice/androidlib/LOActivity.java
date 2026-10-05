@@ -2021,6 +2021,32 @@ public class LOActivity extends AppCompatActivity {
             // couldn't read the clipboard file, try a standard paste...
         }
 
+        // Choose a representation from the clipboard that we prefer rather than going with the
+        // first one by default ... ideally we'd eventually change this so that we have a native
+        // clipboard handler in VCL so everything is done like in the other apps...
+        for (int i = 0; i < clipDesc.getMimeTypeCount(); ++i) {
+            if (clipDesc.getMimeType(i).startsWith("image/")) {
+                Log.d(TAG, "Pasting image mime: " + clipDesc.getMimeType(i));
+                ClipData.Item item = clipData.getItemAt(0);
+                Uri uri = item.getUri();
+                try {
+                    InputStream imageStream = getContentResolver().openInputStream(uri);
+                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+                    int nRead;
+                    byte[] data = new byte[16384];
+                    while ((nRead = imageStream.read(data, 0, data.length)) != -1) {
+                        buffer.write(data, 0, nRead);
+                    }
+
+                    LOActivity.this.paste(clipDesc.getMimeType(i), buffer.toByteArray());
+                    return false;
+                } catch (Exception e) {
+                    Log.d(TAG, "Failed to paste image: " + e.getMessage());
+                }
+            }
+        }
+
         for (int i = 0; i < clipDesc.getMimeTypeCount(); ++i) {
             Log.d(TAG, "Pasting mime " + i + ": " + clipDesc.getMimeType(i));
 
@@ -2057,25 +2083,6 @@ public class LOActivity extends AppCompatActivity {
                     byte[] htmlByteArray = html.getBytes(Charset.forName("UTF-8"));
                     LOActivity.this.paste("text/html", htmlByteArray);
                     return false;
-                }
-            }
-            else if (clipDesc.getMimeType(i).startsWith("image/")) {
-                ClipData.Item item = clipData.getItemAt(0);
-                Uri uri = item.getUri();
-                try {
-                    InputStream imageStream = getContentResolver().openInputStream(uri);
-                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-                    int nRead;
-                    byte[] data = new byte[16384];
-                    while ((nRead = imageStream.read(data, 0, data.length)) != -1) {
-                        buffer.write(data, 0, nRead);
-                    }
-
-                    LOActivity.this.paste(clipDesc.getMimeType(i), buffer.toByteArray());
-                    return false;
-                } catch (Exception e) {
-                    Log.d(TAG, "Failed to paste image: " + e.getMessage());
                 }
             }
         }
