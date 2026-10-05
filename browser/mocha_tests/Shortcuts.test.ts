@@ -104,6 +104,30 @@ describe('ShortcutsUtil per document type', function () {
 			'Strg+Alt+F',
 		);
 	});
+
+	it('takes the table of the region ahead of the base language', function () {
+		// Brazilian Portuguese gives Calc's character dialog no key, while
+		// Portuguese keeps the one it inherits.
+		setContext('pt-BR', 'spreadsheet');
+		nodeassert.strictEqual(
+			JSDialog.ShortcutsUtil.getShortcutText('.uno:FontDialog'),
+			undefined,
+		);
+
+		setContext('pt', 'spreadsheet');
+		nodeassert.strictEqual(
+			JSDialog.ShortcutsUtil.getShortcutText('.uno:FontDialog'),
+			'Alt+C',
+		);
+	});
+
+	it('matches the language without regard to case', function () {
+		setContext('pt-br', 'spreadsheet');
+		nodeassert.strictEqual(
+			JSDialog.ShortcutsUtil.getShortcutText('.uno:FontDialog'),
+			undefined,
+		);
+	});
 });
 
 describe('KeyboardShortcuts', function () {

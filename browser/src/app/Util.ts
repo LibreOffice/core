@@ -236,6 +236,21 @@ class Util {
 		return brandFAQURL;
 	}
 
+	/// Returns the entry of a table keyed by language whose key matches the
+	/// UI language most closely, so that pt-BR takes 'pt-BR' ahead of 'pt'.
+	/// A key matches when it is the whole language or its leading subtags,
+	/// compared without regard to case as language tags are case-insensitive.
+	public static getLanguageEntry<T>(table: Record<string, T>): T | undefined {
+		const locale: string = (String as any).locale.toLowerCase();
+		let bestKey: string | undefined;
+		for (const key of Object.keys(table)) {
+			const lowerKey = key.toLowerCase();
+			const matches = locale === lowerKey || locale.startsWith(lowerKey + '-');
+			if (matches && (!bestKey || key.length > bestKey.length)) bestKey = key;
+		}
+		return bestKey === undefined ? undefined : table[bestKey];
+	}
+
 	public static replaceCtrlAltInMac(msg: string): string {
 		if (!window.L.Browser.mac) return msg;
 
@@ -244,14 +259,10 @@ class Util {
 		let ctrlName = 'Ctrl';
 		let altName = 'Alt';
 		if (typeof unoShortcutsModifierL10N !== 'undefined') {
-			for (const [lang, replacements] of Object.entries(
-				unoShortcutsModifierL10N,
-			)) {
-				if ((String as any).locale.startsWith(lang)) {
-					if (replacements['Ctrl']) ctrlName = replacements['Ctrl'];
-					if (replacements['Alt']) altName = replacements['Alt'];
-					break;
-				}
+			const replacements = Util.getLanguageEntry(unoShortcutsModifierL10N);
+			if (replacements) {
+				if (replacements['Ctrl']) ctrlName = replacements['Ctrl'];
+				if (replacements['Alt']) altName = replacements['Alt'];
 			}
 		}
 

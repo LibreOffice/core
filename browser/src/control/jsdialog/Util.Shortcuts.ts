@@ -68,11 +68,9 @@ class ShortcutsUtil {
 			layers.push(unoShortcutsDocType[docType] || {});
 		}
 		if (typeof unoShortcutsL10N !== 'undefined') {
-			for (const [lang, overrides] of Object.entries(unoShortcutsL10N)) {
-				if ((String as any).locale.startsWith(lang)) {
-					layers.push(overrides[docType] || {});
-					break;
-				}
+			const overrides = Util.getLanguageEntry(unoShortcutsL10N);
+			if (overrides) {
+				layers.push(overrides[docType] || {});
 			}
 		}
 		for (const layer of layers) {
@@ -119,14 +117,10 @@ class ShortcutsUtil {
 	 */
 	public localizeModifiers(text: string): string {
 		if (typeof unoShortcutsModifierL10N !== 'undefined') {
-			for (const [lang, replacements] of Object.entries(
-				unoShortcutsModifierL10N,
-			)) {
-				if (String.locale.startsWith(lang)) {
-					for (const [eng, loc] of Object.entries(replacements)) {
-						text = text.replace(eng, loc);
-					}
-					break;
+			const replacements = Util.getLanguageEntry(unoShortcutsModifierL10N);
+			if (replacements) {
+				for (const [eng, loc] of Object.entries(replacements)) {
+					text = text.replace(eng, loc);
 				}
 			}
 		}
