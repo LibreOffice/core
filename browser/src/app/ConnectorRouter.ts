@@ -1197,19 +1197,45 @@ class ConnectorRouter {
 		};
 	}
 
+	/// The run of a connector as the engine drew it: the first line its primitives draw, taken
+	/// from them by the line geometry extractor, so nothing here knows how the tree is built.
+	public static trackOf(
+		object: cool.SlideObject,
+	): cool.ObjectPathPoint[] | undefined {
+		const lines = cool.VectorLineGeometryExtractor.extract(object.primitives);
+		return lines.length ? lines[0].points : undefined;
+	}
+
+	/// How far a point lies off the line through two others, in the same unit.
+	private static offTheLine(
+		point: cool.ObjectPathPoint,
+		a: cool.ObjectPathPoint,
+		b: cool.ObjectPathPoint,
+	): number {
+		const start = new cool.Point(a.x, a.y);
+		const along = new cool.Point(b.x, b.y).subtract(start);
+		const away = new cool.Point(point.x, point.y).subtract(start);
+		const length = along.length();
+		if (!length) return away.length();
+		return Math.abs(away.cross(along)) / length;
+	}
+
 	/*
 		A check of this routing against the engine's: every connector of the part that carries its
 		routing numbers is routed here from the objects as they stand, and the result is held
-		against the path the engine sent, which is the engine's own run. A difference beyond a few
-		twips in any point, or another number of points, is reported on the console with the
-		connector's id. It is run from the debug panel's Vector Overlays tool.
+		against the line the engine drew for it, which is the engine's own run. The two ends are
+		only held to lie on our first and last line, since an arrow head shortens the line the
+		engine draws there. A corner off by more than a few twips, or another number of corners,
+		is reported on the console with the connector's id. It is run from the debug panel's
+		Vector Overlays tool.
 	*/
 	public static checkAgainstTheEngine(data: cool.VectorPrimitivesData): void {
 		for (const id of data.order) {
 			const object = data.objects.get(id);
-			if (!object?.routing || !object.path?.length) continue;
+			if (!object?.routing) continue;
+			const engine = ConnectorRouter.trackOf(object);
+			if (!engine || engine.length < 2) continue;
 
-			const engine = object.path[0].points;
 			const routed = ConnectorRouter.route(
 				object.routing,
 				engine,
@@ -1226,14 +1252,26 @@ class ConnectorRouter {
 			);
 
 			let worst = 0;
-			if (routed.length !== engine.length) worst = Number.POSITIVE_INFINITY;
-			else
-				for (let n = 0; n < engine.length; ++n)
+			if (routed.length !== engine.length || routed.length < 2)
+				worst = Number.POSITIVE_INFINITY;
+			else {
+				const n = engine.length;
+				for (let i = 1; i < n - 1; ++i)
 					worst = Math.max(
 						worst,
-						Math.abs(routed[n].x - engine[n].x),
-						Math.abs(routed[n].y - engine[n].y),
+						Math.abs(routed[i].x - engine[i].x),
+						Math.abs(routed[i].y - engine[i].y),
 					);
+				worst = Math.max(
+					worst,
+					ConnectorRouter.offTheLine(engine[0], routed[0], routed[1]),
+					ConnectorRouter.offTheLine(
+						engine[n - 1],
+						routed[n - 2],
+						routed[n - 1],
+					),
+				);
+			}
 
 			console.log(
 				'ROUTEPROBE id=' +
