@@ -70,6 +70,7 @@
 #include <svtools/sfxecode.hxx>
 
 #include <unotools/mediadescriptor.hxx>
+#include <unotools/securityoptions.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/sharecontrolfile.hxx>
@@ -654,6 +655,14 @@ bool SfxObjectShell::HasSharedXMLFlagSet() const
 }
 
 #endif
+
+bool SfxObjectShell::IsTrustedLocationForUpdatingLinks() const
+{
+    if (GetCreateMode() == SfxObjectCreateMode::EMBEDDED)
+        return SvtSecurityOptions::GetMacroSecurityLevel() == 0;
+    return SvtSecurityOptions::isTrustedLocationUriForUpdatingLinks(
+        pMedium == nullptr ? OUString() : pMedium->GetName());
+}
 
 bool SfxObjectShell::IsDocShared() const
 {

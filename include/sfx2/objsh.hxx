@@ -292,6 +292,10 @@ public:
     bool                        AcceptStateUpdate() const;
     bool                        IsHelpDocument() const;
 
+    // Whether the document's location lets its links update without asking. A document embedded
+    // in another one has no location of its own and is never in a trusted location.
+    bool                        IsTrustedLocationForUpdatingLinks() const;
+
     bool                        IsDocShared() const;
     OUString                    GetSharedFileURL() const;
     bool                        SwitchToShared( bool bShared, bool bSave );
