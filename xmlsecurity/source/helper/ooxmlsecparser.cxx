@@ -623,6 +623,9 @@ class OOXMLSecParser::XadesCertContext
     : public OOXMLSecParser::ReferencedContextImpl
 {
     private:
+        /// ETSI EN 319 132-1 V1.3 says SigningCertificate and SigningCertificateV2
+        /// are mutually exclusive so just handle both in simplest way.
+        bool const m_isV2;
         sal_Int32 m_nReferenceDigestID = css::xml::crypto::DigestID::SHA1;
         OUString m_CertDigest;
         OUString m_X509IssuerName;
@@ -631,8 +634,9 @@ class OOXMLSecParser::XadesCertContext
     public:
         XadesCertContext(OOXMLSecParser& rParser,
                 std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
-                bool const isReferenced)
+                bool const isReferenced, bool const isV2)
             : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
+            , m_isV2(isV2)
         {
         }
 
@@ -656,10 +660,15 @@ class OOXMLSecParser::XadesCertContext
             {
                 return std::make_unique<XadesCertDigestContext>(m_rParser, std::move(pOldNamespaceMap), m_CertDigest, m_nReferenceDigestID);
             }
-            if (nNamespace == XML_NAMESPACE_XADES132 && rName == "IssuerSerial")
+            if (!m_isV2 && nNamespace == XML_NAMESPACE_XADES132 && rName == "IssuerSerial")
             {
                 return std::make_unique<DsX509IssuerSerialContext>(m_rParser, std::move(pOldNamespaceMap), m_X509IssuerName, m_X509SerialNumber);
             }
+            // note: only the digest is actually used currently so issuer/serial
+            // is not needed, but add this to mark the location in case it's
+            // needed later (it is DER-encoded RFC 5035 IssuerSerial) ...
+            // (yes, this is in the same versioned namespace as the old element)
+//            if (m_isV2 && nNamespace == XML_NAMESPACE_XADES132 && rName == "IssuerSerialV2")
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
 };
@@ -667,11 +676,15 @@ class OOXMLSecParser::XadesCertContext
 class OOXMLSecParser::XadesSigningCertificateContext
     : public OOXMLSecParser::ReferencedContextImpl
 {
+    private:
+        bool const m_isV2;
+
     public:
         XadesSigningCertificateContext(OOXMLSecParser& rParser,
                 std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
-                bool const isReferenced)
+                bool const isReferenced, bool const isV2)
             : ReferencedContextImpl(rParser, std::move(pOldNamespaceMap), isReferenced)
+            , m_isV2(isV2)
         {
         }
 
@@ -681,7 +694,7 @@ class OOXMLSecParser::XadesSigningCertificateContext
         {
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "Cert")
             {
-                return std::make_unique<XadesCertContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return std::make_unique<XadesCertContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced, m_isV2);
             }
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
         }
@@ -746,7 +759,11 @@ class OOXMLSecParser::XadesSignedSignaturePropertiesContext
             }
             if (nNamespace == XML_NAMESPACE_XADES132 && rName == "SigningCertificate")
             {
-                return std::make_unique<XadesSigningCertificateContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced);
+                return std::make_unique<XadesSigningCertificateContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced, false);
+            }
+            if (nNamespace == XML_NAMESPACE_XADES132 && rName == "SigningCertificateV2")
+            {
+                return std::make_unique<XadesSigningCertificateContext>(m_rParser, std::move(pOldNamespaceMap), m_isReferenced, true);
             }
             // missing: xades:SignaturePolicyIdentifier, xades:SignatureProductionPlace, xades:SignerRole
             return OOXMLSecParser::Context::CreateChildContext(std::move(pOldNamespaceMap), nNamespace, rName);
