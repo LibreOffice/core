@@ -59,6 +59,21 @@ describe('Range2D', function () {
 		assert.deepStrictEqual(union.toArray(), [0, 20, 30, 50]);
 	});
 
+	it('holds its four corners after a mapping', function () {
+		const moved = new cool.Range2D(10, 20, 30, 40).transform(
+			cool.Matrix2D.IDENTITY.scale(2, 3).translate(5, 6),
+		);
+		assert.deepStrictEqual(moved.toArray(), [25, 66, 65, 126]);
+
+		const turned = new cool.Range2D(0, 0, 2, 1).transform(
+			cool.Matrix2D.IDENTITY.rotateAround(0, 0, Math.PI / 2),
+		);
+		assert.deepStrictEqual(
+			turned.toArray().map((value: number) => Math.round(value) + 0),
+			[-1, 0, 0, 2],
+		);
+	});
+
 	it('is empty when it has no area', function () {
 		assert.ok(new cool.Range2D(10, 10, 10, 20).isEmpty());
 		assert.ok(new cool.Range2D(10, 10, 20, 10).isEmpty());

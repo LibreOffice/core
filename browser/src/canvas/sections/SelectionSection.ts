@@ -51,6 +51,14 @@ abstract class SelectionSection extends CanvasSectionObject {
 	private aimingAt: number | null = null;
 
 	/*
+		The connectors whose run was worked out here after a change was laid on the objects they
+		hold on to, and which the engine has not answered for yet. The page leaves them out and
+		this section draws their run meanwhile, so they stand where the objects now are rather
+		than where they were.
+	*/
+	private connectorsAwaitingAnswer: Set<number> = new Set();
+
+	/*
 		The window change of a crop that was sent and is not answered yet, with the picture it
 		was sent for, or null while none is open. It keeps the picture drawn as the crop will
 		leave it for as long as the engine takes to answer.
@@ -814,6 +822,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	onDraw(): void {
 		this.drawTheInteraction();
+		this.drawTheConnectorsAwaitingAnswer();
 		this.drawTheOutline();
 
 		const shown = this.handles();
@@ -904,14 +913,25 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	/// Takes in that the engine answered for that object, or for anything given no object, so a
 	/// crop that waited for it is over.
-	public cropAnswered(objectId?: number): void {
+	public theEngineAnswered(objectId?: number): void {
+		let changed = false;
 		if (
 			this.cropAwaitingAnswer &&
 			(objectId === undefined || objectId === this.cropAwaitingAnswer.objectId)
 		) {
 			this.cropAwaitingAnswer = null;
-			this.tellWhoStandsIn();
+			changed = true;
 		}
+		if (objectId === undefined && this.connectorsAwaitingAnswer.size) {
+			this.connectorsAwaitingAnswer.clear();
+			changed = true;
+		} else if (
+			objectId !== undefined &&
+			this.connectorsAwaitingAnswer.delete(objectId)
+		)
+			changed = true;
+
+		if (changed) this.tellWhoStandsIn();
 	}
 
 	/*
@@ -924,9 +944,76 @@ abstract class SelectionSection extends CanvasSectionObject {
 		const standsIn =
 			this.runningChange()?.cropOnly === true && GraphicSelection.cropping;
 		const objectId = this.selectedObjects()[0];
-		RenderManager.drawnElsewhere(
-			standsIn && objectId !== undefined ? [objectId] : [],
-		);
+		const drawnHere = [...this.connectorsAwaitingAnswer];
+		if (standsIn && objectId !== undefined) drawnHere.push(objectId);
+		RenderManager.drawnElsewhere(drawnHere);
+	}
+
+	/// The objects a change here moves: the selected ones, the groups above them and what they
+	/// draw, so a connector tied to any of them follows.
+	private theOnesAChangeMoves(): Set<number> {
+		const selected = this.selectedObjects();
+		return new Set([
+			...selected,
+			...RenderGeometrySection.theOnesThatDraw(selected),
+			...RenderGeometrySection.theOnesAChangeTouches(selected),
+		]);
+	}
+
+	/*
+		Draws the run of every connector tied to what a change moves, routed here from where the
+		objects stand with the mapping laid over them, as a hairline in the drag's color: the
+		drag of an object shows its connectors going along, and a change already laid on shows
+		them where they will be until the engine answers for them.
+	*/
+	/// The connectors a change here lays out anew: the tied ones among what it moves, and the
+	/// ones tied to anything it moves.
+	private theConnectorsAChangeRoutes(
+		data: cool.VectorPrimitivesData,
+		moved: Set<number>,
+	): number[] {
+		const routed = new Set(ConnectorRouter.tiedTo(data, [...moved]));
+		for (const objectId of moved)
+			if (ConnectorRouter.isATiedConnector(data.objects.get(objectId)))
+				routed.add(objectId);
+		return [...routed];
+	}
+
+	private drawTheTiedConnectors(
+		data: cool.VectorPrimitivesData,
+		matrix: cool.Matrix2D | null,
+		only?: Set<number>,
+	): void {
+		const moved = this.theOnesAChangeMoves();
+		for (const connectorId of this.theConnectorsAChangeRoutes(data, moved)) {
+			if (only && !only.has(connectorId)) continue;
+			const connector = data.objects.get(connectorId);
+			if (!connector) continue;
+			const run = ConnectorRouter.routeWithMoved(
+				data,
+				connector,
+				moved,
+				matrix,
+			);
+			if (run)
+				ConnectorRouter.strokeRun(this.context, run, HandleLook.outlineOfADrag);
+		}
+	}
+
+	/// Draws the connectors whose change was laid on here and not answered yet, where the laid
+	/// objects now put them.
+	private drawTheConnectorsAwaitingAnswer(): void {
+		if (!this.connectorsAwaitingAnswer.size) return;
+		const data = RenderGeometrySection.currentPart();
+		if (!data) return;
+
+		this.context.save();
+		this.context.setTransform(1, 0, 0, 1, 0, 0);
+		const origin = new cool.SimplePoint(0, 0);
+		this.context.translate(origin.vX, origin.vY);
+		this.context.scale(app.twipsToPixels, app.twipsToPixels);
+		this.drawTheTiedConnectors(data, null, this.connectorsAwaitingAnswer);
+		this.context.restore();
 	}
 
 	/*
@@ -951,12 +1038,20 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.context.scale(app.twipsToPixels, app.twipsToPixels);
 		this.context.globalAlpha = 0.5;
 
+		// A tied connector is not moved as a whole. It is routed below, as a hairline.
 		RenderManager.renderObjectsWith(
 			this.context,
 			data,
-			RenderGeometrySection.theOnesThatDraw(this.selectedObjects()),
+			RenderGeometrySection.theOnesThatDraw(this.selectedObjects()).filter(
+				(objectId: number) =>
+					!ConnectorRouter.isATiedConnector(data.objects.get(objectId)),
+			),
 			matrix,
 		);
+
+		// The connectors tied to what moves go along, as hairlines.
+		this.context.globalAlpha = 1;
+		this.drawTheTiedConnectors(data, matrix);
 
 		this.context.restore();
 	}
@@ -1305,10 +1400,25 @@ abstract class SelectionSection extends CanvasSectionObject {
 			group's mapping and box are read for the next change before the engine has answered
 			this one, so they are kept current here just as the members are.
 		*/
+		const data = RenderGeometrySection.currentPart();
 		for (const objectId of RenderGeometrySection.theOnesAChangeTouches(
 			this.selectedObjects(),
 		))
-			RenderGeometrySection.changeObject(objectId, matrix);
+			if (!ConnectorRouter.isATiedConnector(data?.objects.get(objectId)))
+				RenderGeometrySection.changeObject(objectId, matrix);
+
+		/*
+			A tied connector cannot take the change as a mapping, whether it was moved itself or
+			hangs on something that was: its run is laid out anew. Such connectors are drawn here
+			from the laid objects until the engine answers for them, and the page leaves them out
+			meanwhile.
+		*/
+		if (data) {
+			const moved = this.theOnesAChangeMoves();
+			for (const connectorId of this.theConnectorsAChangeRoutes(data, moved))
+				this.connectorsAwaitingAnswer.add(connectorId);
+			this.tellWhoStandsIn();
+		}
 
 		app.sectionContainer?.requestReDraw();
 	}

@@ -246,7 +246,7 @@ class GraphicSelection {
 		const section = this.selectionSection;
 		if (!section) return;
 
-		section.cropAnswered(objectId);
+		section.theEngineAnswered(objectId);
 		if (
 			objectId === undefined ||
 			RenderGeometrySection.theOnesAChangeTouches(

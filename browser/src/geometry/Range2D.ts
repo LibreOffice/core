@@ -82,6 +82,17 @@ namespace cool {
 			);
 		}
 
+		/// The smallest range that holds the four corners of this one, each put through the mapping.
+		/// A mapping that turns or shears the range gives a larger range than the one put in.
+		transform(mapping: Matrix2D): Range2D {
+			return Range2D.fromPoints([
+				mapping.apply(this.minX, this.minY),
+				mapping.apply(this.maxX, this.minY),
+				mapping.apply(this.maxX, this.maxY),
+				mapping.apply(this.minX, this.maxY),
+			]);
+		}
+
 		/// True when the range covers no area, including when a corner is
 		/// not a number.
 		isEmpty(): boolean {

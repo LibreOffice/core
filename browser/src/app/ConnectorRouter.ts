@@ -1175,14 +1175,7 @@ class ConnectorRouter {
 		if (!object?.transform) return undefined;
 		const transform = cool.Matrix2D.fromArray(object.transform);
 		if (!transform) return undefined;
-		const snap = cool.Range2D.fromPoints(
-			[
-				[0, 0],
-				[1, 0],
-				[1, 1],
-				[0, 1],
-			].map(([x, y]: number[]) => transform.apply(x, y)),
-		);
+		const snap = new cool.Range2D(0, 0, 1, 1).transform(transform);
 		const bound =
 			object.x !== undefined && object.y !== undefined
 				? new cool.Range2D(
@@ -1198,6 +1191,131 @@ class ConnectorRouter {
 			transform,
 			gluePoints: object.gluePoints ?? [],
 		};
+	}
+
+	/*
+		The connectors of the part that hold on to any of these objects with an end, not counting
+		a run set from outside, which follows nothing. Each connector is named once however many
+		of its ends hold on; its own tie nodes say which ends do.
+	*/
+	public static tiedTo(
+		data: cool.VectorPrimitivesData,
+		objectIds: number[],
+	): number[] {
+		const held = new Set(objectIds);
+		const found: number[] = [];
+		for (const id of data.order) {
+			const object = data.objects.get(id);
+			if (!object?.routing || object.routing.trackUserDefined) continue;
+			if (
+				(object.tiedToAtStart !== undefined &&
+					held.has(object.tiedToAtStart)) ||
+				(object.tiedToAtEnd !== undefined && held.has(object.tiedToAtEnd))
+			)
+				found.push(id);
+		}
+		return found;
+	}
+
+	/*
+		The run of a connector while some of the objects it may hold on to stand moved by a
+		mapping: an end tied to one of those is routed from where the mapping puts the object, an
+		end tied to anything else from where the object stands, and a free end stays. Nothing for
+		a run set from outside.
+	*/
+	public static routeWithMoved(
+		data: cool.VectorPrimitivesData,
+		connector: cool.SlideObject,
+		moved: Set<number>,
+		matrix: cool.Matrix2D | null,
+	): cool.ObjectPathPoint[] | undefined {
+		if (!connector.routing) return undefined;
+
+		const nodeFor = (
+			objectId: number | undefined,
+		): cool.RouteNode | undefined => {
+			if (objectId === undefined) return undefined;
+			const node = ConnectorRouter.nodeOf(data.objects.get(objectId));
+			if (!node || !matrix || !moved.has(objectId)) return node;
+			return ConnectorRouter.nodeThrough(node, matrix);
+		};
+
+		// A connector that is itself among the moved has its free ends moved. A tied end stays
+		// with its object, moved or not.
+		let routing = connector.routing;
+		if (matrix && connector.id !== undefined && moved.has(connector.id)) {
+			const movedTie = (tie: cool.ConnectorTie): cool.ConnectorTie => {
+				if (tie.x === undefined || tie.y === undefined) return tie;
+				const at = matrix.apply(tie.x, tie.y);
+				return { ...tie, x: at.x, y: at.y };
+			};
+			routing = {
+				...routing,
+				tieAtStart: movedTie(routing.tieAtStart),
+				tieAtEnd: movedTie(routing.tieAtEnd),
+			};
+		}
+
+		return ConnectorRouter.route(
+			routing,
+			nodeFor(connector.tiedToAtStart),
+			nodeFor(connector.tiedToAtEnd),
+		);
+	}
+
+	/// Whether the object is a connector holding on to something with at least one end, whose
+	/// run is laid out rather than moved as a whole.
+	public static isATiedConnector(
+		object: cool.SlideObject | undefined,
+	): boolean {
+		return (
+			object?.routing !== undefined &&
+			!object.routing.trackUserDefined &&
+			(object.tiedToAtStart !== undefined || object.tiedToAtEnd !== undefined)
+		);
+	}
+
+	/// The node as a mapping leaves it: its snap rectangle round the mapped unit square, its
+	/// bound rectangle round the mapped corners of the old one, its glue points on the mapped
+	/// object.
+	private static nodeThrough(
+		node: cool.RouteNode,
+		matrix: cool.Matrix2D,
+	): cool.RouteNode {
+		const transform = node.transform.then(matrix);
+		return {
+			transform,
+			snap: new cool.Range2D(0, 0, 1, 1).transform(transform),
+			bound: node.bound.transform(matrix),
+			gluePoints: node.gluePoints,
+		};
+	}
+
+	/// Draws a run as a hairline on a context set up in twips, curves where the run has them.
+	public static strokeRun(
+		context: CanvasRenderingContext2D,
+		points: cool.ObjectPathPoint[],
+		color: string,
+	): void {
+		if (points.length < 2) return;
+		context.save();
+		context.strokeStyle = color;
+		context.lineWidth = 1 / app.twipsToPixels;
+		context.beginPath();
+		context.moveTo(points[0].x, points[0].y);
+		for (let n = 1; n < points.length; ++n) {
+			const from = points[n - 1];
+			const to = points[n];
+			const c1x = from.aheadX ?? from.x;
+			const c1y = from.aheadY ?? from.y;
+			const c2x = to.behindX ?? to.x;
+			const c2y = to.behindY ?? to.y;
+			if (from.aheadX !== undefined || to.behindX !== undefined)
+				context.bezierCurveTo(c1x, c1y, c2x, c2y, to.x, to.y);
+			else context.lineTo(to.x, to.y);
+		}
+		context.stroke();
+		context.restore();
 	}
 
 	/// The run of a connector as the engine drew it: the first line its primitives draw, taken
