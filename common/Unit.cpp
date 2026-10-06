@@ -81,17 +81,19 @@ bool UnitBase::matchesFilter(std::size_t index)
     return strstr(Util::toLower(name).c_str(), GlobalTestOptions.getFilter().c_str()) != nullptr;
 }
 
-void UnitBase::filter()
+std::size_t UnitBase::filter(std::size_t index)
 {
     // Stop at the first test that matches, or at the dummy instance, which is the last entry.
-    for (; GlobalArray[GlobalIndex + 1] != nullptr; ++GlobalIndex)
+    for (; GlobalArray[index + 1] != nullptr; ++index)
     {
-        if (matchesFilter(GlobalIndex))
+        if (matchesFilter(index))
             break;
 
-        LOG_INF("Skipping test [" << GlobalArray[GlobalIndex]->getTestname() << "] per filter ["
+        LOG_INF("Skipping test [" << GlobalArray[index]->getTestname() << "] per filter ["
                                   << GlobalTestOptions.getFilter() << ']');
     }
+
+    return index;
 }
 
 bool UnitBase::haveMoreTests()
@@ -204,8 +206,7 @@ bool UnitBase::init([[maybe_unused]] UnitType type, [[maybe_unused]] const std::
 
         // Filter tests. GlobalIndex stays at the first test that matches, or at the dummy
         // when none does, which is not started.
-        GlobalIndex = 0;
-        filter();
+        GlobalIndex = filter(0);
         if (GlobalIndex == testCount && testCount > 0)
             LOG_WRN("No test matches the filter [" << GlobalTestOptions.getFilter() << ']');
 
@@ -587,9 +588,9 @@ void UnitWSD::startNextTest()
     UnitWSD* currentWSD = getMaybeNull();
     UnitWSDInterface* unitWsdInterface = currentWSD ? currentWSD->_wsd : nullptr;
 
-    // We have more tests.
-    ++GlobalIndex;
-    filter();
+    // We have more tests. Move to the next in one step: other threads, such as that of DNS,
+    // ask for the test that is running, which must never be one skipped.
+    GlobalIndex = filter(GlobalIndex + 1);
 
     if (GlobalArray[GlobalIndex] != nullptr && !SigUtil::getShutdownRequestFlag() &&
         (_result == TestResult::Ok || GlobalTestOptions.getKeepgoing()))

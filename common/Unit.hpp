@@ -326,8 +326,9 @@ private:
     /// Initialize the Test Suite options.
     static void initTestSuiteOptions();
 
-    /// Based on COOL_TEST_OPTIONS envar, filter the tests.
-    static void filter();
+    /// Based on COOL_TEST_OPTIONS envar, filter the tests: returns the index of the first test,
+    /// from @index on, that matches, or that of the dummy instance at the end when none does.
+    static std::size_t filter(std::size_t index);
 
     /// Returns true iff a test after the current one matches the filter. The dummy instance at
     /// the end of GlobalArray is not a test.
