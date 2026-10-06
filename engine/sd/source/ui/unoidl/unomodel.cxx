@@ -3584,11 +3584,28 @@ private:
         does, and the four amounts cropped away from it, all as twips. A picture that shows no
         graphic yet says nothing.
     */
-    /// How one end of the connector holds on to its object, read from the connection record.
+    /// How one end of the connector holds on to its object, read from the connection record,
+    /// or where the end lies when it holds on to none, read from the run.
     static SdXImpressDocument::VectorObjectContent::ConnectorTie
-    tieOf(const SdrObjConnection& rConnection)
+    tieOf(const SdrEdgeObj& rConnector, bool bStart)
     {
         SdXImpressDocument::VectorObjectContent::ConnectorTie aTie;
+        const SdrObjConnection& rConnection = rConnector.GetConnection(bStart);
+
+        if (!rConnector.GetConnectedNode(bStart))
+        {
+            const basegfx::B2DPolyPolygon aTrack(rConnector.GetEdgeTrackPath());
+            if (aTrack.count() && aTrack.getB2DPolygon(0).count())
+            {
+                const basegfx::B2DPolygon& rRun = aTrack.getB2DPolygon(0);
+                const basegfx::B2DPoint aAt(
+                    rRun.getB2DPoint(bStart ? 0 : rRun.count() - 1));
+                aTie.moAt = basegfx::B2DPoint(aAt.getX() * constTwipConversionFactor,
+                                              aAt.getY() * constTwipConversionFactor);
+            }
+            return aTie;
+        }
+
         if (!rConnection.IsBestConnection())
             aTie.moPoint = rConnection.GetConnectorId();
         aTie.mbBestVertex = rConnection.IsBestVertex();
@@ -3638,8 +3655,8 @@ private:
                 SdrCompatibilityFlag::ConnectorUseSnapRect);
 
         aRouting.mbTrackUserDefined = rConnector.IsEdgeTrackUserDefined();
-        aRouting.maTieAtStart = tieOf(rConnector.GetConnection(true));
-        aRouting.maTieAtEnd = tieOf(rConnector.GetConnection(false));
+        aRouting.maTieAtStart = tieOf(rConnector, true);
+        aRouting.maTieAtEnd = tieOf(rConnector, false);
         return aRouting;
     }
 
@@ -4385,6 +4402,11 @@ private:
                          const SdXImpressDocument::VectorObjectContent::ConnectorTie& rTie)
     {
         auto aNode = rWriter.startNode(aName);
+        if (rTie.moAt)
+        {
+            rWriter.put("x", rTie.moAt->getX());
+            rWriter.put("y", rTie.moAt->getY());
+        }
         if (rTie.moPoint)
             rWriter.put("point", sal_Int32(*rTie.moPoint));
         if (rTie.mbBestVertex)

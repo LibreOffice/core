@@ -88,16 +88,19 @@ namespace cool {
 	}
 
 	/**
-	 * How one end of a connector holds on to its object: the number of the glue point it is tied
-	 * to, or none while the connector picks the best point itself. The flags say how that pick
-	 * goes: whether the best of the four sides is searched for, and whether the pick landed on a
-	 * side or on a corner.
+	 * How one end of a connector holds on to its object, or where it lies when it holds on to
+	 * none. A tied end has the number of the glue point it is tied to, or none while the
+	 * connector picks the best point itself, and the flags say how that pick goes: whether the
+	 * best of the four sides is searched for, and whether the pick landed on a side or on a
+	 * corner. A free end has its place on the page instead, in twips.
 	 */
 	export interface ConnectorTie {
 		point?: number;
 		bestVertex?: boolean;
 		autoVertex?: boolean;
 		autoCorner?: boolean;
+		x?: number;
+		y?: number;
 	}
 
 	/**

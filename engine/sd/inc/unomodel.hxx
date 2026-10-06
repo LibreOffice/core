@@ -275,16 +275,18 @@ public:
         sal_uInt64 mnTiedToAtStart = 0;
         sal_uInt64 mnTiedToAtEnd = 0;
 
-        /** How one end of a connector holds on to its object: the number of the glue point it is
-            tied to, or none while the connector picks the best point itself. The three flags
-            say how that pick goes: whether the best of the four sides is searched for, whether
-            the pick landed on a side or on a corner. */
+        /** How one end of a connector holds on to its object, or where it lies when it holds on
+            to none. A tied end has the number of the glue point it is tied to, or none while the
+            connector picks the best point itself, and the three flags say how that pick goes:
+            whether the best of the four sides is searched for, whether the pick landed on a
+            side or on a corner. A free end has its place on the page instead, in twips. */
         struct ConnectorTie
         {
             std::optional<sal_uInt16> moPoint;
             bool mbBestVertex = false;
             bool mbAutoVertex = false;
             bool mbAutoCorner = false;
+            std::optional<basegfx::B2DPoint> moAt;
 
             bool operator==(const ConnectorTie&) const = default;
         };

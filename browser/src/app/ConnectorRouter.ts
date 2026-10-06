@@ -272,23 +272,23 @@ class ConnectorRouter {
 
 	/*
 		The run of a connector, as the points of its path. The two ends come as what they are tied
-		to, or as nothing for a free end, and a free end stays where the current path has it. The
+		to, or as nothing for a free end, and a free end stays where its tie says it lies. The
 		deltas a user dragged into the lines are laid on in a second pass, since which line they
-		belong to is only known once the run has been worked out the first time.
+		belong to is only known once the run has been worked out the first time. Nothing comes
+		back for a run that was set from outside: the engine lays no such run out, and neither
+		does this.
 	*/
 	public static route(
 		routing: cool.ConnectorRouting,
-		current: cool.ObjectPathPoint[],
 		startNode: cool.RouteNode | undefined,
 		endNode: cool.RouteNode | undefined,
-	): cool.ObjectPathPoint[] {
-		// A run set from outside is kept as it is. The engine lays no such run out either.
-		if (routing.trackUserDefined) return current;
+	): cool.ObjectPathPoint[] | undefined {
+		if (routing.trackUserDefined) return undefined;
 
-		const start = current[0] ?? { x: 0, y: 0 };
-		const end = current[current.length - 1] ?? start;
-		const first = new cool.Point(start.x, start.y);
-		const last = new cool.Point(end.x, end.y);
+		const placeOf = (tie: cool.ConnectorTie): cool.Point =>
+			new cool.Point(tie.x ?? 0, tie.y ?? 0);
+		const first = placeOf(routing.tieAtStart);
+		const last = placeOf(routing.tieAtEnd);
 
 		let info = new RouteInfo();
 		info.curveFollowsOOXML = routing.curveFollowsOOXML === true;
@@ -1241,7 +1241,6 @@ class ConnectorRouter {
 
 			const routed = ConnectorRouter.route(
 				object.routing,
-				engine,
 				ConnectorRouter.nodeOf(
 					object.tiedToAtStart !== undefined
 						? data.objects.get(object.tiedToAtStart)
@@ -1253,6 +1252,13 @@ class ConnectorRouter {
 						: undefined,
 				),
 			);
+
+			if (!routed) {
+				console.log(
+					'ROUTEPROBE id=' + String(id) + ' kept, the run was set from outside',
+				);
+				continue;
+			}
 
 			let worst = 0;
 			if (routed.length !== engine.length || routed.length < 2)
