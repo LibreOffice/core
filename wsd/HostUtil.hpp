@@ -80,6 +80,10 @@ public:
 
     static void setFirstHost(const Poco::URI& uri);
 
+    /// True once the host of the first WOPISrc seen has been trusted as the only WOPI host,
+    /// because no WOPI host is configured and alias_groups mode is "first".
+    static bool isFirstHostTrusted() { return !FirstHost.empty(); }
+
     static bool isWopiHostsEmpty();
 
     [[nodiscard]] static bool allowedWSOrigin(const std::string& origin);

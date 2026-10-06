@@ -101,6 +101,19 @@ class ServerAuditDialog {
 				],
 				ok: [_('System call security filtering enabled'), 'SDK: seccomp', ''],
 			},
+			wopihost: {
+				priority: 4,
+				not_recommended: [
+					_('No WOPI host configured: trusting the first host that connected'),
+					'SDK: wopi-host',
+					'https://sdk.collaboraonline.com/docs/installation/Configuration.html#wopi-host',
+				],
+				ok: [
+					_('The trusted WOPI hosts are configured'),
+					'SDK: wopi-host',
+					'https://sdk.collaboraonline.com/docs/installation/Configuration.html#wopi-host',
+				],
+			},
 
 			hardwarewarning: {
 				priority: 10,

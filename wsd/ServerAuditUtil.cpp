@@ -27,6 +27,7 @@ ServerAuditUtil::ServerAuditUtil()
     set("certwarning", "ok");
     set("hardwarewarning", "ok");
     set("wsurl", "ok");
+    set("wopihost", "ok");
 }
 
 std::string ServerAuditUtil::getResultsJSON() const

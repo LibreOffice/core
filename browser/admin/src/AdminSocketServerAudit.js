@@ -45,6 +45,11 @@ var AdminSocketServerAudit = AdminSocketBase.extend({
 				'BPF filtering of potentially risky system calls (seccomp) is not enabled; a security hazard.',
 			),
 		},
+		wopihost: {
+			not_recommended: _(
+				'No WOPI host configured: trusting the first host that connected',
+			),
+		},
 		hardwarewarning: {
 			lowresources: _(
 				'Your server is configured with insufficient hardware resources, which may lead to poor performance.',
@@ -66,6 +71,8 @@ var AdminSocketServerAudit = AdminSocketBase.extend({
 	_links: {
 		certwarning:
 			'https://sdk.collaboraonline.com/docs/installation/Configuration.html#ssl-configuration',
+		wopihost:
+			'https://sdk.collaboraonline.com/docs/installation/Configuration.html#wopi-host',
 		hardwarewarning:
 			'https://sdk.collaboraonline.com/docs/installation/Configuration.html#performance',
 		bindmounted:

@@ -1794,6 +1794,9 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     if (!COOLWSD::getHardwareResourceWarning().empty())
         _serverAudit.set("hardwarewarning", COOLWSD::getHardwareResourceWarning());
 
+    if (HostUtil::isFirstHostTrusted())
+        _serverAudit.set("wopihost", "not_recommended");
+
     if (_childProcess)
         _serverAudit.mergeSettings(_childProcess);
 
