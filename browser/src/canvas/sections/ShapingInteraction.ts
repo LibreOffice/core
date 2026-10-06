@@ -92,6 +92,8 @@ class ShapingInteraction extends SelectionInteraction {
 			.pathEditor()
 			?.outlineFor(this.handle.name, this.shownAt());
 
-		return path ?? this.selection.straightLineFrom(this.handle, this.shownAt());
+		return (
+			path ?? this.selection.runWhileAnEndIsDragged(this.handle, this.shownAt())
+		);
 	}
 }

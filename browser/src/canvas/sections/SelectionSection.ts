@@ -448,25 +448,112 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.redraw();
 	}
 
+	/// The names of a connector's two ends: it counts them as the first two points of its first
+	/// polygon.
+	private static readonly connectorEnds: string[] = ['9.0.0', '9.0.1'];
+
 	/*
-		The line a drag of one end of a connector shows of itself: straight from the end that
-		stays to the one the drag holds. The engine lays a connector out again as an end moves,
-		turning corners that nothing here can work out, so this says where the end goes and
-		leaves the way there to the engine. Nothing for anything else.
+		Where an end of the connector being dragged to that place would tie itself, worked out
+		the way the engine works it out when the end is let go: on the object aimed at, one of
+		its own points within a handle's reach comes first, then the middle of one of its sides,
+		then the middle of its box, which makes the engine pick the best side itself. An end over
+		the object but near none of those stays free, so a shape behind the drag does not take
+		an end that was only passing over it. Nothing while no object is aimed at.
 	*/
-	public straightLineFrom(
+	public whereTheEndWouldTie(at: cool.Point): {
+		objectId: number;
+		tie: cool.ConnectorTie;
+		point?: cool.Point;
+	} | null {
+		const aimed = this.aimingAt;
+		if (aimed === null) return null;
+
+		const object = RenderGeometrySection.objectOf(aimed);
+		if (!object) return null;
+
+		// The engine's reach for a tie is a handle's size either way of the point.
+		const reach = ShapeHandlesSection.handleSize() * app.pixelsToTwips;
+		const within = (point: cool.Point) =>
+			Math.abs(point.x - at.x) <= reach && Math.abs(point.y - at.y) <= reach;
+		const nearest = (
+			handles: SelectionHandle[],
+		): { handle: SelectionHandle; index: number } | undefined => {
+			let best: { handle: SelectionHandle; index: number } | undefined;
+			let bestDistance = Number.POSITIVE_INFINITY;
+			handles.forEach((handle: SelectionHandle, index: number) => {
+				if (!within(handle.point)) return;
+				const distance =
+					Math.abs(handle.point.x - at.x) + Math.abs(handle.point.y - at.y);
+				if (distance < bestDistance) {
+					bestDistance = distance;
+					best = { handle, index };
+				}
+			});
+			return best;
+		};
+
+		const own = nearest(GluePointHandles.ownPointsOf(aimed));
+		if (own) {
+			const id = object.gluePoints?.[own.index]?.id;
+			return {
+				objectId: aimed,
+				tie: { point: id ?? 0 },
+				point: own.handle.point,
+			};
+		}
+
+		const side = nearest(GluePointHandles.defaultPointsOf(aimed));
+		if (side)
+			return {
+				objectId: aimed,
+				tie: { autoVertex: true, point: side.index },
+				point: side.handle.point,
+			};
+
+		if (object.x !== undefined && object.y !== undefined) {
+			const middle = new cool.Point(
+				object.x + (object.width ?? 0) / 2,
+				object.y + (object.height ?? 0) / 2,
+			);
+			if (within(middle)) return { objectId: aimed, tie: { bestVertex: true } };
+		}
+
+		return null;
+	}
+
+	/*
+		The run a drag of one end of a connector shows of itself: the connector laid out anew
+		between the end that stays and the one the drag holds, tied where it would tie or free
+		where it would lie, as a thin line. Where the connector has no routing numbers the line
+		runs straight from the one end to the other. Nothing for anything else.
+	*/
+	public runWhileAnEndIsDragged(
 		handle: SelectionHandle,
 		at: cool.Point,
 	): cool.ObjectPathPolygon[] | null {
-		if (this.theConnector() === undefined) return null;
+		const connector = this.theConnector();
+		if (connector === undefined) return null;
 
-		// A connector counts its own ends as the first two points of its first polygon.
-		const ends = ['9.0.0', '9.0.1'];
-		const dragged = ends.indexOf(handle.name);
+		const dragged = SelectionSection.connectorEnds.indexOf(handle.name);
 		if (dragged < 0) return null;
 
+		const data = RenderGeometrySection.currentPart();
+		const object = data?.objects.get(connector);
+		if (data && object?.routing) {
+			const would = this.whereTheEndWouldTie(at);
+			const run = ConnectorRouter.routeWithAnEnd(
+				data,
+				object,
+				dragged === 0,
+				would ? would.tie : { x: at.x, y: at.y },
+				would?.objectId,
+			);
+			if (run) return [{ closed: false, points: run }];
+		}
+
 		const stays = this.known.find(
-			(one: SelectionHandle) => one.name === ends[1 - dragged],
+			(one: SelectionHandle) =>
+				one.name === SelectionSection.connectorEnds[1 - dragged],
 		);
 		if (!stays) return null;
 
@@ -484,6 +571,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/// The object an end of a connector is being dragged onto, or nothing while none is aimed at.
 	public aimedAtObject(): number | null {
 		return this.aimingAt;
+	}
+
+	/// Where the running drag has taken what it holds, or nothing while nothing is dragged.
+	public leadingPointOfTheDrag(): cool.SimplePoint | null {
+		return this.interaction?.leadingPoint() ?? null;
 	}
 
 	/// The connector this selection stands on, where it stands on one and it is a connector.
@@ -842,9 +934,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 			const point = HandleLook.drawnAt(handle);
 			const hovered =
-				!handle.deactivated &&
-				handle.name !== '' &&
-				handle.name === this.hovered;
+				(!handle.deactivated &&
+					handle.name !== '' &&
+					handle.name === this.hovered) ||
+				handle.lit === true;
 
 			/*
 				The handle the keyboard is on is drawn a third larger, at the larger half of its
@@ -974,8 +1067,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 	): number[] {
 		const routed = new Set(ConnectorRouter.tiedTo(data, [...moved]));
 		for (const objectId of moved)
-			if (ConnectorRouter.isATiedConnector(data.objects.get(objectId)))
-				routed.add(objectId);
+			if (ObjectHandles.isATiedConnector(objectId)) routed.add(objectId);
 		return [...routed];
 	}
 
@@ -1043,8 +1135,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 			this.context,
 			data,
 			RenderGeometrySection.theOnesThatDraw(this.selectedObjects()).filter(
-				(objectId: number) =>
-					!ConnectorRouter.isATiedConnector(data.objects.get(objectId)),
+				(objectId: number) => !ObjectHandles.isATiedConnector(objectId),
 			),
 			matrix,
 		);
@@ -1404,7 +1495,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		for (const objectId of RenderGeometrySection.theOnesAChangeTouches(
 			this.selectedObjects(),
 		))
-			if (!ConnectorRouter.isATiedConnector(data?.objects.get(objectId)))
+			if (!ObjectHandles.isATiedConnector(objectId))
 				RenderGeometrySection.changeObject(objectId, matrix);
 
 		/*
@@ -1428,8 +1519,14 @@ abstract class SelectionSection extends CanvasSectionObject {
 		return this.interaction?.transformation() ?? null;
 	}
 
-	/// Where a drag of that handle may take it, which its own group says.
+	/// Where a drag of that handle may take it, which its own group says. The end of a connector
+	/// snaps onto the point it would tie itself to, so that it is let go exactly there.
 	public holdTheDrag(handle: SelectionHandle, at: cool.Point): cool.Point {
+		if (SelectionSection.connectorEnds.includes(handle.name)) {
+			const would = this.whereTheEndWouldTie(at);
+			if (would?.point) return would.point.clone();
+		}
+
 		return this.groupOf(handle)?.holdInside(handle, at) ?? at;
 	}
 

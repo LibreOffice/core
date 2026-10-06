@@ -25,6 +25,8 @@ interface SelectionHandle {
 	 * mouse cannot take hold of it and the keyboard walks past it.
 	 */
 	deactivated?: boolean;
+	/// True for a handle that is lit: the point an end being dragged would tie itself to.
+	lit?: boolean;
 	/** Which way the handle is drawn away from the place it stands on, one step along each of
 	 * the two axes of the selection, with a nought for an axis it does not move along. It is
 	 * only for the drawing and for the hit test: what a drag does goes from the place itself.

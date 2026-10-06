@@ -2339,8 +2339,15 @@ bool SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrO
                     }
                 }
                 // if no connector is hit, try HitTest again, for BestConnector (=bCenter)
+                //
+                // A view that draws from the objects ties an end only within reach of a point
+                // it shows for the tie: one of the object's own, the middle of a side or of the
+                // box. An end let go anywhere else over the object stays free there.
+                const SfxViewShell* pViewShell(SfxViewShell::Current());
+                const bool bOnlyAtAPoint(pViewShell && pViewShell->drawsFromObjects());
                 if(!bFnd &&
                     !bEdge &&
+                    !bOnlyAtAPoint &&
                     SdrObjectPrimitiveHit(*pObj, rPt, {fBoundHitTol, fBoundHitTol}, rPV, &rVisLayer, false))
                 {
                     // Suppress default connect at object inside bound

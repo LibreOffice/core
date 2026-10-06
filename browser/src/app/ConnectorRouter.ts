@@ -1269,15 +1269,36 @@ class ConnectorRouter {
 		);
 	}
 
-	/// Whether the object is a connector holding on to something with at least one end, whose
-	/// run is laid out rather than moved as a whole.
-	public static isATiedConnector(
-		object: cool.SlideObject | undefined,
-	): boolean {
-		return (
-			object?.routing !== undefined &&
-			!object.routing.trackUserDefined &&
-			(object.tiedToAtStart !== undefined || object.tiedToAtEnd !== undefined)
+	/*
+		The run of a connector while one of its ends is being dragged: that end holds on to the
+		given object the way the tie says, or lies free where the tie says, and the other end
+		stays as it is. A run set from outside is laid out all the same, as the engine lays it
+		out once an end is moved.
+	*/
+	public static routeWithAnEnd(
+		data: cool.VectorPrimitivesData,
+		connector: cool.SlideObject,
+		atStart: boolean,
+		tie: cool.ConnectorTie,
+		tiedTo: number | undefined,
+	): cool.ObjectPathPoint[] | undefined {
+		if (!connector.routing) return undefined;
+
+		const routing: cool.ConnectorRouting = {
+			...connector.routing,
+			trackUserDefined: false,
+			tieAtStart: atStart ? tie : connector.routing.tieAtStart,
+			tieAtEnd: atStart ? connector.routing.tieAtEnd : tie,
+		};
+		const nodeFor = (objectId: number | undefined) =>
+			objectId === undefined
+				? undefined
+				: ConnectorRouter.nodeOf(data.objects.get(objectId));
+
+		return ConnectorRouter.route(
+			routing,
+			nodeFor(atStart ? tiedTo : connector.tiedToAtStart),
+			nodeFor(atStart ? connector.tiedToAtEnd : tiedTo),
 		);
 	}
 

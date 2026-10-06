@@ -981,10 +981,18 @@ class TiePointHandles extends HandleGroup {
 		const aimedAt = this.selection.aimedAtObject();
 		if (aimedAt === null) return own;
 
+		// The point the dragged end would tie itself to is lit, so the drag says where it lands.
+		const led = this.selection.leadingPointOfTheDrag();
+		const would = led
+			? this.selection.whereTheEndWouldTie(new cool.Point(led.x, led.y))
+			: null;
+		const lit = (handle: SelectionHandle): SelectionHandle =>
+			would?.point?.equals(handle.point) ? { ...handle, lit: true } : handle;
+
 		return [
 			...own,
-			...GluePointHandles.ownPointsOf(aimedAt),
-			...GluePointHandles.defaultPointsOf(aimedAt),
+			...GluePointHandles.ownPointsOf(aimedAt).map(lit),
+			...GluePointHandles.defaultPointsOf(aimedAt).map(lit),
 		];
 	}
 
