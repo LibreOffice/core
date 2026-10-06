@@ -887,7 +887,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SwTableAutoFormatTable& rFormats = rSh.GetDoc()->GetTableStyles();
             SvxTableAutoFmtDlg aDlg(rFormats, sFormatName, GetView().GetFrameWeld(), true, bRTL);
             if (aDlg.run() == RET_OK)
-                rSh.SetTableStyle(*rFormats.GetData(aDlg.GetIndex()));
+            {
+                size_t nIndex = aDlg.GetIndex();
+                if (nIndex < rFormats.size())
+                    rSh.SetTableStyle(*rFormats.GetData(nIndex));
+            }
 
             break;
         }
