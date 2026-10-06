@@ -315,11 +315,19 @@ public:
 public: //XLocator
     virtual sal_Int32 SAL_CALL getColumnNumber() override
     {
+#if (XML_MAJOR_VERSION > 2 || (XML_MAJOR_VERSION == 2 && XML_MINOR_VERSION >= 9))
+        return XML_GetCurrentColumnNumber64( m_pParser->getEntity().pParser );
+#else
         return XML_GetCurrentColumnNumber( m_pParser->getEntity().pParser );
+#endif
     }
     virtual sal_Int32 SAL_CALL getLineNumber() override
     {
+#if (XML_MAJOR_VERSION > 2 || (XML_MAJOR_VERSION == 2 && XML_MINOR_VERSION >= 9))
+        return XML_GetCurrentLineNumber64( m_pParser->getEntity().pParser );
+#else
         return XML_GetCurrentLineNumber( m_pParser->getEntity().pParser );
+#endif
     }
     virtual OUString SAL_CALL getPublicId() override
     {
@@ -337,7 +345,11 @@ public: //XLocator
     }
     virtual sal_Int64 SAL_CALL getPosition() override
     {
+#if (XML_MAJOR_VERSION > 2 || (XML_MAJOR_VERSION == 2 && XML_MINOR_VERSION >= 9))
+        return XML_GetCurrentByteIndex64( m_pParser->getEntity().pParser );
+#else
         return XML_GetCurrentByteIndex( m_pParser->getEntity().pParser );
+#endif
     }
     virtual ::sal_Int64 SAL_CALL getLength() override
     {

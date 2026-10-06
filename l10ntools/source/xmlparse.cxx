@@ -888,8 +888,13 @@ bool SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFile )
     if (!result)
     {
         m_aErrorInformation.m_eCode = XML_GetErrorCode( m_aParser );
+#if (XML_MAJOR_VERSION > 2 || (XML_MAJOR_VERSION == 2 && XML_MINOR_VERSION >= 9))
+        m_aErrorInformation.m_nLine = XML_GetCurrentLineNumber64( m_aParser );
+        m_aErrorInformation.m_nColumn = XML_GetCurrentColumnNumber64( m_aParser );
+#else
         m_aErrorInformation.m_nLine = XML_GetErrorLineNumber( m_aParser );
         m_aErrorInformation.m_nColumn = XML_GetErrorColumnNumber( m_aParser );
+#endif
 
         m_aErrorInformation.m_sMessage = "ERROR: "_ostr;
         if ( !pXMLFile->GetName().isEmpty())
