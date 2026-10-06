@@ -3543,6 +3543,10 @@ button.has-img img {
 	animation: fade-out var(--duration-fast) var(--ease-in) forwards;
 }
 
+.jsdialog-window.dropdown-fade-scale {
+	animation: fade-scale-in var(--duration-fast) var(--ease-out);
+}
+
 /* images */
 
 .ui-image {

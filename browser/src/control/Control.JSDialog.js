@@ -955,6 +955,37 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		instance.updatePos({x: instance.posx, y: instance.posy});
 	},
 
+	scaleOpenFromToolButton: function (instance) {
+		if (!instance.isModalPopUp || instance.popoutWindow)
+			return;
+
+		const anchor = instance.clickToCloseElement || window.L.DomUtil.get(instance.popupParent);
+		if (!anchor || !anchor.matches('.unotoolbutton, .ui-combobox, .ui-listbox')
+			|| anchor.closest('.jsdialog-window'))
+			return;
+
+		const container = instance.container;
+		if (container.querySelector('select'))
+			return;
+
+		const popupRect = container.getBoundingClientRect();
+		const anchorRect = anchor.getBoundingClientRect();
+		const originX = this._clamp(anchorRect.left + anchorRect.width / 2 - popupRect.left, 0, popupRect.width);
+		const originY = this._clamp(anchorRect.top + anchorRect.height / 2 - popupRect.top, 0, popupRect.height);
+		container.style.transformOrigin = originX + 'px ' + originY + 'px';
+		container.classList.replace('fadein', 'dropdown-fade-scale');
+
+		const onScaleEnd = (event) => {
+			app.layoutingService.appendLayoutingTask(() => {
+				if (event.target !== container)
+					return;
+				container.classList.remove('dropdown-fade-scale');
+				container.removeEventListener('animationend', onScaleEnd);
+			});
+		};
+		container.addEventListener('animationend', onScaleEnd);
+	},
+
 	parentAutofilter : null,
 
 	calculateAutoFilterPosition: function(instance) {
@@ -1373,7 +1404,8 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				// rebuilds that arrive before any of them is shown, so a rebuild
 				// never leaves an earlier container orphaned. With nothing on
 				// screen yet, append fresh.
-				if (instance.replacedContainer && instance.replacedContainer.isConnected) {
+				const isFirstShow = !(instance.replacedContainer && instance.replacedContainer.isConnected);
+				if (!isFirstShow) {
 					instance.replacedContainer.replaceWith(instance.container);
 				} else {
 					instance.container.classList.add('fadein');
@@ -1410,6 +1442,9 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				else if (instance.isAutoFillPreviewTooltip || instance.isAutoCompletePopup){
 					this.updateAutoPopPosition(instance.container, instance.posx, instance.posy);
 				}
+
+				if (isFirstShow)
+					this.scaleOpenFromToolButton(instance);
 			});
 
 			// Keep a model of the built content next to the instance. It holds
