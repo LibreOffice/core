@@ -302,6 +302,24 @@ describe('VectorPrimitiveRenderer effects', function () {
 			assert.deepStrictEqual(draw.args.slice(1), [9, 9]);
 		});
 
+		it('keeps a blurred effect to the bounds the engine gives', function () {
+			// The bounds include the glow, so the canvas covers only them.
+			const context = render({
+				type: 'glow',
+				color: '#ff0000',
+				radius: 8,
+				bounds: [10, 10, 50, 50],
+				children: [child],
+			});
+
+			const scratch = ScratchCanvasStub.recorder(0);
+			assert.strictEqual(scratch.canvas.width, 42);
+			assert.strictEqual(scratch.canvas.height, 42);
+			const draw = context.findCall('drawImage');
+			assert.ok(draw);
+			assert.deepStrictEqual(draw.args.slice(1), [9, 9]);
+		});
+
 		it('keeps the soft edge solid where the object runs past the target', function () {
 			// The object crosses the right edge of the 200 pixel target.
 			// The canvas reaches past that edge, so the fade stays off it.

@@ -121,10 +121,10 @@ namespace cool {
 			};
 		}
 
-		// The target pixels an effect draws on: its bounds grown by the spread,
-		// within the target grown by the spread, so content just past the edge
-		// still blurs into view. Without bounds, the grown target. Null when
-		// off the target.
+		// The target pixels an effect draws on: its bounds, which hold the
+		// whole effect, within the target grown by the spread so content just
+		// off the edge still blurs in. Without bounds, the grown target. Null
+		// when off the target.
 		static effectRegion(
 			context: CanvasRenderingContext2D,
 			bounds: number[] | undefined,
@@ -159,10 +159,11 @@ namespace cool {
 						boundsMaxY = Math.max(boundsMaxY, y);
 					}
 				}
-				minX = Math.max(minX, boundsMinX - margin);
-				minY = Math.max(minY, boundsMinY - margin);
-				maxX = Math.min(maxX, boundsMaxX + margin);
-				maxY = Math.min(maxY, boundsMaxY + margin);
+				// One pixel more for the antialiased edge.
+				minX = Math.max(minX, boundsMinX - 1);
+				minY = Math.max(minY, boundsMinY - 1);
+				maxX = Math.min(maxX, boundsMaxX + 1);
+				maxY = Math.min(maxY, boundsMaxY + 1);
 			}
 
 			const x = Math.floor(minX);
