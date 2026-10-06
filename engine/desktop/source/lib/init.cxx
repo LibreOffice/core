@@ -6996,6 +6996,11 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
                                             nEnd);
                 }
 
+                // Moving an end lays the run out anew, as the drag of an end does in the
+                // office, so a run that was set from outside is let go of here as well.
+                pConnector->ForgetUserDefinedEdgeTrack();
+                pConnector->SetEdgeTrackDirty();
+
                 pObject->SetChanged();
                 pObject->BroadcastObjectChange();
                 continue;

@@ -1194,9 +1194,10 @@ class ConnectorRouter {
 	}
 
 	/*
-		The connectors of the part that hold on to any of these objects with an end, not counting
-		a run set from outside, which follows nothing. Each connector is named once however many
-		of its ends hold on; its own tie nodes say which ends do.
+		The connectors of the part that hold on to any of these objects with an end. Each
+		connector is named once however many of its ends hold on; its own tie nodes say which
+		ends do. A run set from outside counts too: the engine lets go of that mark as soon as a
+		tied object moves or an end is moved, and lays the run out.
 	*/
 	public static tiedTo(
 		data: cool.VectorPrimitivesData,
@@ -1206,7 +1207,7 @@ class ConnectorRouter {
 		const found: number[] = [];
 		for (const id of data.order) {
 			const object = data.objects.get(id);
-			if (!object?.routing || object.routing.trackUserDefined) continue;
+			if (!object?.routing) continue;
 			if (
 				(object.tiedToAtStart !== undefined &&
 					held.has(object.tiedToAtStart)) ||
@@ -1240,9 +1241,14 @@ class ConnectorRouter {
 			return ConnectorRouter.nodeThrough(node, matrix);
 		};
 
+		// A move lays the run out whether or not it was set from outside, as the engine does.
+		let routing: cool.ConnectorRouting = {
+			...connector.routing,
+			trackUserDefined: false,
+		};
+
 		// A connector that is itself among the moved has its free ends moved. A tied end stays
 		// with its object, moved or not.
-		let routing = connector.routing;
 		if (matrix && connector.id !== undefined && moved.has(connector.id)) {
 			const movedTie = (tie: cool.ConnectorTie): cool.ConnectorTie => {
 				if (tie.x === undefined || tie.y === undefined) return tie;
