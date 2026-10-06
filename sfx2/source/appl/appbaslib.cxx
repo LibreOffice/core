@@ -51,6 +51,11 @@ void SfxBasicManagerHolder::Notify(SfxBroadcaster& rBC, SfxHint const& rHint)
 
 void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
 {
+    // A document's Basic manager can be handed over a second time while it is still being
+    // created. The holder already listens to it and holds its containers, so it stays as it is.
+    if ( _pBasicManager == mpBasicManager )
+        return;
+
     impl_releaseContainers();
 
 #if !HAVE_FEATURE_SCRIPTING
