@@ -1259,6 +1259,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                                              true); // legacy processing for tdf#163590
             pDrawModel->SetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy,
                                              true); // legacy processing for tdf#163590
+            pDrawModel->SetCompatibilityFlag(SdrCompatibilityFlag::LegacyHyperlinksWraps, true);
         }
     }
 

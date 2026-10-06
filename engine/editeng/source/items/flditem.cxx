@@ -121,9 +121,13 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                     OUString aName;
                     if (xPropSet->getPropertySetInfo()->hasPropertyByName(UNO_TC_PROP_NAME))
                         xPropSet->getPropertyValue(UNO_TC_PROP_NAME) >>= aName;
+                    bool bLegacyWrap = false;
+                    if (xPropSet->getPropertySetInfo()->hasPropertyByName(UNO_TC_PROP_URL_LEGACY_WRAP))
+                        xPropSet->getPropertyValue(UNO_TC_PROP_URL_LEGACY_WRAP) >>= bLegacyWrap;
                     SvxURLField* pData = new SvxURLField(aURL, aRep, aRep.isEmpty() ? SvxURLFormat::Url : SvxURLFormat::Repr);
                     pData->SetTargetFrame(aTarget);
                     pData->SetName(aName);
+                    pData->SetLegacyWrap(bLegacyWrap);
                     if (static_cast<SvxURLFormat>(nFmt) >= SvxURLFormat::AppDefault &&
                         static_cast<SvxURLFormat>(nFmt) <= SvxURLFormat::Repr)
                         pData->SetFormat(static_cast<SvxURLFormat>(nFmt));
@@ -484,7 +488,8 @@ bool SvxURLField::operator==( const SvxFieldData& rOther ) const
     return ( ( eFormat == rOtherFld.eFormat ) &&
                 ( aURL == rOtherFld.aURL ) &&
                 ( aRepresentation == rOtherFld.aRepresentation ) &&
-                ( aTargetFrame == rOtherFld.aTargetFrame ) );
+                ( aTargetFrame == rOtherFld.aTargetFrame ) &&
+                ( mbLegacyWrap == rOtherFld.mbLegacyWrap ) );
 }
 
 size_t SvxURLField::hashCode() const
@@ -494,6 +499,7 @@ size_t SvxURLField::hashCode() const
     o3tl::hash_combine(seed, aURL);
     o3tl::hash_combine(seed, aRepresentation);
     o3tl::hash_combine(seed, aTargetFrame);
+    o3tl::hash_combine(seed, mbLegacyWrap);
     return seed;
 }
 
@@ -505,6 +511,7 @@ void SvxURLField::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("url"), BAD_CAST(aURL.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("representation"), BAD_CAST(aRepresentation.toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("targetFrame"), BAD_CAST(aTargetFrame.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("legacyWrap"), BAD_CAST(OString::boolean(mbLegacyWrap).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
 

@@ -3653,6 +3653,7 @@ namespace xmloff::token {
         TOKEN( "reflection-end-position",         XML_REFLECTION_END_POSITION ),
 
         TOKEN( "airplane",                        XML_AIRPLANE ),
+        TOKEN( "wrap-as-text",                    XML_WRAP_AS_TEXT ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }

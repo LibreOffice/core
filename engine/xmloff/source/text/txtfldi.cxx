@@ -2887,6 +2887,13 @@ void XMLUrlFieldImportContext::ProcessAttribute(
         case XML_ELEMENT(XLINK, XML_TYPE):
             // The link is a simple one, which is the only kind ODF has here.
             break;
+        case XML_ELEMENT(CO_EXT, XML_WRAP_AS_TEXT):
+        {
+            bool bWrapAsText = false;
+            if (::sax::Converter::convertBool(bWrapAsText, sAttrValue))
+                moWrapAsText = bWrapAsText;
+            break;
+        }
         default:
             // ignore
             XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
@@ -2911,6 +2918,15 @@ void XMLUrlFieldImportContext::PrepareField(
     }
 
     xPropertySet->setPropertyValue(u"Representation"_ustr, Any(GetContent()));
+
+    // A link without coext:wrap-as-text follows the LegacyHyperlinksWraps setting.
+    if (xPropertySet->getPropertySetInfo()->hasPropertyByName(u"LegacyWrap"_ustr))
+    {
+        const bool bLegacyWrap
+            = moWrapAsText.has_value() ? !*moWrapAsText
+                                       : GetImportHelper().IsLegacyHyperlinksWraps();
+        xPropertySet->setPropertyValue(u"LegacyWrap"_ustr, Any(bLegacyWrap));
+    }
 }
 
 

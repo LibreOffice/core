@@ -38,6 +38,7 @@
 #include "XMLTextCharStyleNamesElementExport.hxx"
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/UserDataPart.hpp>
@@ -284,6 +285,26 @@ SvXMLEnumStringMapEntry<FieldIdEnum> const aFieldServiceNameMapping[] =
     { nullptr, 0, FieldIdEnum(0) }
 };
 
+
+bool GetLegacyHyperlinksWraps(const Reference<XMultiServiceFactory>& rFactory)
+{
+    if (!rFactory.is())
+        return false;
+    try
+    {
+        Reference<XPropertySet> xSettings(
+            rFactory->createInstance(u"com.sun.star.document.Settings"_ustr), UNO_QUERY);
+        static constexpr OUString aName(u"LegacyHyperlinksWraps"_ustr);
+        bool bLegacy = false;
+        if (xSettings.is() && xSettings->getPropertySetInfo()->hasPropertyByName(aName))
+            xSettings->getPropertyValue(aName) >>= bLegacy;
+        return bLegacy;
+    }
+    catch (const Exception&)
+    {
+        return false;
+    }
+}
 
 // property accessor helper functions
 static bool GetBoolProperty(const OUString&,
@@ -1714,6 +1735,23 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessString(XML_NAME, GetStringProperty(u"Name"_ustr, rPropSet),
                       true, XML_NAMESPACE_OFFICE);
         GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+        // Only a link that differs from the LegacyHyperlinksWraps setting has the attribute.
+        if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+        {
+            if (!moLegacyHyperlinksWraps.has_value())
+            {
+                moLegacyHyperlinksWraps = GetLegacyHyperlinksWraps(
+                    Reference<XMultiServiceFactory>(GetExport().GetModel(), UNO_QUERY));
+            }
+            const bool bLegacyWrap
+                = GetOptionalBoolProperty(u"LegacyWrap"_ustr, rPropSet,
+                                          rPropSet->getPropertySetInfo(), *moLegacyHyperlinksWraps);
+            if (bLegacyWrap != *moLegacyHyperlinksWraps)
+            {
+                GetExport().AddAttribute(XML_NAMESPACE_CO_EXT, XML_WRAP_AS_TEXT,
+                                         bLegacyWrap ? XML_FALSE : XML_TRUE);
+            }
+        }
         SvXMLElementExport aUrlField(rExport, XML_NAMESPACE_TEXT, XML_A,
                                      false, false);
         GetExport().Characters(sPresentation);

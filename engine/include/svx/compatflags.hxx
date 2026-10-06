@@ -22,7 +22,9 @@ enum class SdrCompatibilityFlag
     LineSpacingBelowBaselineLegacy, ///< for tdf#163590 true == all the extra height a line gains
                                     ///< from its line spacing sits below the baseline
     TextFittingLegacy, ///< for tdf#163590 true == the older shrink-on-overflow fitting
-    LAST = TextFittingLegacy /// add new items above
+    LegacyHyperlinksWraps, ///< true == a hyperlink without its own wrap setting keeps the field
+                           ///< wrapping of older versions
+    LAST = LegacyHyperlinksWraps /// add new items above
 };
 
 /// The name a SdrCompatibilityFlag is stored under in the settings of a document

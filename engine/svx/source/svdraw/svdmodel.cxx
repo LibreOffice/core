@@ -108,6 +108,7 @@ struct SdrModelImpl
             false, // tdf#168010 UseTrailingEmptyLinesInLayout
             false, // tdf#163590 LineSpacingBelowBaselineLegacy
             false, // tdf#163590 TextFittingLegacy
+            false, // LegacyHyperlinksWraps
           }
         , mpTheme(new model::Theme(u"Office"_ustr))
     {}
@@ -1809,6 +1810,7 @@ std::span<const SdrCompatibilityFlagName> SdrModel::GetCompatibilityFlagNames()
         { u"LineSpacingBelowBaselineLegacy"_ustr,
           SdrCompatibilityFlag::LineSpacingBelowBaselineLegacy },
         { u"TextFittingLegacy"_ustr, SdrCompatibilityFlag::TextFittingLegacy },
+        { u"LegacyHyperlinksWraps"_ustr, SdrCompatibilityFlag::LegacyHyperlinksWraps },
     };
     static_assert(std::size(aNames) == size_t(SdrCompatibilityFlag::LAST) + 1);
     return aNames;

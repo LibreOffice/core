@@ -30,6 +30,7 @@ inline constexpr OUString UNO_TC_PROP_URL_FORMAT = u"Format"_ustr;
 inline constexpr OUString UNO_TC_PROP_URL_REPRESENTATION = u"Representation"_ustr;
 inline constexpr OUString UNO_TC_PROP_URL_TARGET = u"TargetFrame"_ustr;
 inline constexpr OUString UNO_TC_PROP_URL = u"URL"_ustr;
+inline constexpr OUString UNO_TC_PROP_URL_LEGACY_WRAP = u"LegacyWrap"_ustr;
 
 // Table
 inline constexpr OUString UNO_TC_PROP_TABLE_POSITION = u"TablePosition"_ustr;

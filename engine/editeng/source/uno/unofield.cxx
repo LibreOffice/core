@@ -100,6 +100,7 @@ static const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
         { UNO_TC_PROP_URL_TARGET,         WID_STRING2, ::cppu::UnoType<OUString>::get(),  0, 0 },
         { UNO_TC_PROP_URL,                WID_STRING3, ::cppu::UnoType<OUString>::get(),  0, 0 },
         { UNO_TC_PROP_NAME,               WID_STRING4, ::cppu::UnoType<OUString>::get(),  0, 0 },
+        { UNO_TC_PROP_URL_LEGACY_WRAP,    WID_BOOL1,   cppu::UnoType<bool>::get(),        0, 0 },
     };
     static const SfxItemPropertySet aUrlFieldPropertySet_Impl(aUrlFieldPropertyMap_Impl);
 
@@ -261,6 +262,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) noexcept
 
     case text::textfield::Type::URL:
         mpImpl->mnInt16 = static_cast<sal_uInt16>(SvxURLFormat::Repr);
+        mpImpl->mbBoolean1 = false;
         break;
 
     case text::textfield::Type::EXTENDED_FILE:
@@ -347,6 +349,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                 mpImpl->msString4 = static_cast<const SvxURLField*>(pData)->GetName();
                 mpImpl->mnInt16 = sal::static_int_cast< sal_Int16 >(
                     static_cast<const SvxURLField*>(pData)->GetFormat());
+                mpImpl->mbBoolean1 = static_cast<const SvxURLField*>(pData)->IsLegacyWrap();
                 break;
 
             case text::textfield::Type::EXTENDED_FILE:
@@ -432,6 +435,7 @@ std::unique_ptr<SvxFieldData> SvxUnoTextField::CreateFieldData() const noexcept
         pData.reset( new SvxURLField( mpImpl->msString3, mpImpl->msString1, !mpImpl->msString1.isEmpty() ? SvxURLFormat::Repr : SvxURLFormat::Url ) );
         static_cast<SvxURLField*>(pData.get())->SetTargetFrame( mpImpl->msString2 );
         static_cast<SvxURLField*>(pData.get())->SetName( mpImpl->msString4 );
+        static_cast<SvxURLField*>(pData.get())->SetLegacyWrap( mpImpl->mbBoolean1 );
         if( static_cast<SvxURLFormat>(mpImpl->mnInt16) >= SvxURLFormat::AppDefault &&
             static_cast<SvxURLFormat>(mpImpl->mnInt16) <= SvxURLFormat::Repr )
             static_cast<SvxURLField*>(pData.get())->SetFormat( static_cast<SvxURLFormat>(mpImpl->mnInt16) );

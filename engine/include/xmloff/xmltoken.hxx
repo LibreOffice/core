@@ -3651,6 +3651,7 @@ namespace xmloff::token {
         XML_REFLECTION_END_POSITION,
 
         XML_AIRPLANE,
+        XML_WRAP_AS_TEXT,
 
         XML_TOKEN_END
     };

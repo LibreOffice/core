@@ -33,6 +33,7 @@
 #include <xmloff/XMLEventsImportContext.hxx>
 #include <xmloff/txtimp.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <optional>
 #include <vector>
 
 namespace com::sun::star {
@@ -912,6 +913,7 @@ class XMLUrlFieldImportContext final : public XMLTextFieldImportContext
     OUString sName;
     bool bFrameOK;
     bool bNameOK;
+    std::optional<bool> moWrapAsText;
 
 public:
 

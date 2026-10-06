@@ -48,6 +48,7 @@
 #include <txtimppr.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <txtvfldi.hxx>
+#include <txtflde.hxx>
 #include <xmloff/i18nmap.hxx>
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
@@ -168,6 +169,9 @@ struct XMLTextImportHelper::Impl
 
     OUString m_sCellParaStyleDefault;
 
+    /// The LegacyHyperlinksWraps setting of the document, once read.
+    std::optional<bool> m_oLegacyHyperlinksWraps;
+
     std::optional<std::map<OUString, OUString>> m_xCrossRefHeadingBookmarkMap;
 
     Impl(       uno::Reference<frame::XModel> const& rModel,
@@ -237,6 +241,14 @@ bool XMLTextImportHelper::IsBlockMode() const
 bool XMLTextImportHelper::IsOrganizerMode() const
 {
     return m_xImpl->m_bOrganizerMode;
+}
+
+bool XMLTextImportHelper::IsLegacyHyperlinksWraps()
+{
+    // The settings are read before the content.
+    if (!m_xImpl->m_oLegacyHyperlinksWraps.has_value())
+        m_xImpl->m_oLegacyHyperlinksWraps = GetLegacyHyperlinksWraps(m_xImpl->m_xServiceFactory);
+    return *m_xImpl->m_oLegacyHyperlinksWraps;
 }
 
 bool XMLTextImportHelper::IsProgress() const

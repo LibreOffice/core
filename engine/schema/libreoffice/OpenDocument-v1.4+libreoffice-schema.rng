@@ -2618,6 +2618,15 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
       </rng:attribute>
     </rng:optional>
   </rng:define>
+  <!-- True on a hyperlink whose text breaks into lines like ordinary text. Without it the
+       hyperlink breaks into lines like the placeholder field older versions laid it out as. -->
+  <rng:define name="text-a-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="coext:wrap-as-text">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
   <!-- Globally unique identifier of a page, as a braced GUID string. -->
   <rng:define name="coext-guid-value">
     <rng:data type="string">

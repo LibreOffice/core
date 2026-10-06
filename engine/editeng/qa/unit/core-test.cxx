@@ -128,8 +128,17 @@ public:
     /// Clearing direct formatting drops other attributes but keeps the link.
     void testHyperlinkSpanKeptOnClearFormatting();
 
-    /// A hyperlink span wraps like ordinary text, at a blank inside it.
+    /// A hyperlink span wraps like ordinary text, a legacy wrap span moves to the next line whole.
     void testHyperlinkSpanNoWrapInside();
+
+    /// A legacy wrap link wider than the line breaks at character cells.
+    void testHyperlinkSpanLegacyCellBreak();
+
+    /// The text after a wrapped legacy wrap link starts a new line.
+    void testHyperlinkSpanLegacyLineEndsAfterLink();
+
+    /// Text glued to a legacy wrap link breaks away from it, like from a placeholder field.
+    void testHyperlinkSpanLegacyGluedText();
 
     /// A word inside a hyperlink span is not split by automatic hyphenation.
     void testHyperlinkSpanNoHyphenation();
@@ -250,6 +259,9 @@ public:
     CPPUNIT_TEST(testHyperlinkInsertAsSpan);
     CPPUNIT_TEST(testHyperlinkSpanKeptOnClearFormatting);
     CPPUNIT_TEST(testHyperlinkSpanNoWrapInside);
+    CPPUNIT_TEST(testHyperlinkSpanLegacyCellBreak);
+    CPPUNIT_TEST(testHyperlinkSpanLegacyLineEndsAfterLink);
+    CPPUNIT_TEST(testHyperlinkSpanLegacyGluedText);
     CPPUNIT_TEST(testHyperlinkSpanNoHyphenation);
     CPPUNIT_TEST(testHyperlinkSpanRigidInJustifiedText);
     CPPUNIT_TEST(testCopyPaste);
@@ -886,30 +898,103 @@ void Test::testHyperlinkSpanKeptOnClearFormatting()
     CPPUNIT_ASSERT_EQUAL(u"Hello World"_ustr, rDoc.GetParaAsString(sal_Int32(0)));
 }
 
+// Marks [nStart, nEnd) of the first paragraph as a hyperlink span, legacy wrap or not.
+void lcl_markLink(EditEngine& rEditEngine, sal_Int32 nStart, sal_Int32 nEnd, bool bLegacyWrap)
+{
+    SvxURLField aURLField(u"http://example.com/"_ustr,
+                          rEditEngine.GetText(0).copy(nStart, nEnd - nStart), SvxURLFormat::Repr);
+    aURLField.SetLegacyWrap(bLegacyWrap);
+    SfxItemSet aSet(rEditEngine.GetEmptyItemSet());
+    aSet.Put(SvxFieldItem(aURLField, EE_CHAR_URL));
+    rEditEngine.QuickSetAttribs(aSet, ESelection(0, nStart, 0, nEnd));
+}
+
+// Width of rText laid out alone.
+tools::Long lcl_getTextWidth(EditEngine& rEditEngine, const OUString& rText)
+{
+    rEditEngine.SetPaperSize(Size(100000, 2000));
+    rEditEngine.SetText(rText);
+    rEditEngine.QuickFormatDoc(false);
+    return rEditEngine.CalcTextWidth();
+}
+
+// Sets rText with a hyperlink span over [nStart, nEnd), on a paper just wider than rFittingText.
+void lcl_setLinkText(EditEngine& rEditEngine, const OUString& rText, sal_Int32 nStart,
+                     sal_Int32 nEnd, const OUString& rFittingText, bool bLegacyWrap)
+{
+    const tools::Long nWidth = lcl_getTextWidth(rEditEngine, rFittingText);
+    rEditEngine.SetText(rText);
+    lcl_markLink(rEditEngine, nStart, nEnd, bLegacyWrap);
+    rEditEngine.SetPaperSize(Size(nWidth + 1, 2000));
+    rEditEngine.QuickFormatDoc(false);
+}
+
+sal_Int32 lcl_getLineStart(EditEngine& rEditEngine, sal_Int32 nLine)
+{
+    return rEditEngine.GetParaPortions().getRef(0).GetLines()[nLine].GetStart();
+}
+
 void Test::testHyperlinkSpanNoWrapInside()
 {
     EditEngine aEditEngine(mpItemPool.get());
-    aEditEngine.SetPaperSize(Size(10000, 2000));
-    aEditEngine.SetText(u"ab example link"_ustr);
 
-    // Mark "example link" as a hyperlink span. It has a blank inside it.
-    SvxURLField aURLField(u"http://example.com/"_ustr, u"example link"_ustr, SvxURLFormat::Repr);
-    SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
-    aSet.Put(SvxFieldItem(aURLField, EE_CHAR_URL));
-    aEditEngine.QuickSetAttribs(aSet, ESelection(0, 3, 0, 15));
-
-    aEditEngine.QuickFormatDoc(false);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetLineCount(0));
-    const tools::Long nFullWidth = aEditEngine.CalcTextWidth();
-
-    // The whole text no longer fits, but the link alone does.
-    aEditEngine.SetPaperSize(Size(nFullWidth - 10, 2000));
-    aEditEngine.QuickFormatDoc(false);
+    // The paper holds "ab example li".
+    lcl_setLinkText(aEditEngine, u"ab example link"_ustr, 3, 15, u"ab example li"_ustr, false);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetLineCount(0));
 
-    // The link wraps like ordinary text, at the blank inside it.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(11),
-                         aEditEngine.GetParaPortions().getRef(0).GetLines()[1].GetStart());
+    // An ordinary link breaks at the blank inside it.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), lcl_getLineStart(aEditEngine, 1));
+
+    // A legacy wrap link moves to the second line whole.
+    lcl_setLinkText(aEditEngine, u"ab example link"_ustr, 3, 15, u"ab example li"_ustr, true);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetLineCount(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), lcl_getLineStart(aEditEngine, 1));
+}
+
+void Test::testHyperlinkSpanLegacyCellBreak()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+
+    // The paper holds "cc dd e". An ordinary link breaks after "ab cc ".
+    lcl_setLinkText(aEditEngine, u"ab cc dd ee ff gg hh"_ustr, 3, 20, u"cc dd e"_ustr, false);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), lcl_getLineStart(aEditEngine, 1));
+
+    // A legacy wrap link starts the second line and breaks inside "ee".
+    lcl_setLinkText(aEditEngine, u"ab cc dd ee ff gg hh"_ustr, 3, 20, u"cc dd e"_ustr, true);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), lcl_getLineStart(aEditEngine, 1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), lcl_getLineStart(aEditEngine, 2));
+}
+
+void Test::testHyperlinkSpanLegacyLineEndsAfterLink()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+
+    // The legacy wrap link "cc dd ee" wraps onto a third line, which has room for " ff gg".
+    lcl_setLinkText(aEditEngine, u"ab cc dd ee ff gg"_ustr, 3, 11, u"cc dd e"_ustr, true);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aEditEngine.GetLineCount(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), lcl_getLineStart(aEditEngine, 2));
+
+    // The text after the link starts a new line.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), lcl_getLineStart(aEditEngine, 3));
+}
+
+void Test::testHyperlinkSpanLegacyGluedText()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+
+    // The legacy wrap link "cc dd" follows "(", and the paper holds "aa (cc". The "(" stays on the
+    // first line.
+    lcl_setLinkText(aEditEngine, u"aa (cc dd"_ustr, 4, 9, u"aa (cc"_ustr, true);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), lcl_getLineStart(aEditEngine, 1));
+
+    // The legacy wrap link "bb cc" is followed by ".", and the paper holds the text up to the link
+    // end. Only the "." moves.
+    lcl_setLinkText(aEditEngine, u"aa bb cc."_ustr, 3, 8, u"aa bb cc"_ustr, true);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), lcl_getLineStart(aEditEngine, 1));
+
+    // An ordinary link takes the "." along, from the blank inside it.
+    lcl_setLinkText(aEditEngine, u"aa bb cc."_ustr, 3, 8, u"aa bb cc"_ustr, false);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), lcl_getLineStart(aEditEngine, 1));
 }
 
 class TestHyphenatedWord : public cppu::WeakImplHelper<css::linguistic2::XHyphenatedWord>

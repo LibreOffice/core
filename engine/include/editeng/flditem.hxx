@@ -150,6 +150,8 @@ private:
     OUString                aRepresentation;    // Text shown in document
     OUString                aTargetFrame;       // Frame to open in
     OUString                m_Name;             // Alt-text
+    /// The link was laid out as a placeholder field, before hyperlinks were stored as text.
+    bool mbLegacyWrap = false;
 
 public:
     static constexpr auto CLASS_ID = css::text::textfield::Type::URL;
@@ -172,6 +174,9 @@ public:
 
     SvxURLFormat            GetFormat() const { return eFormat; }
     void                    SetFormat( SvxURLFormat eFmt ) { eFormat = eFmt; }
+
+    bool IsLegacyWrap() const { return mbLegacyWrap; }
+    void SetLegacyWrap(bool bLegacyWrap) { mbLegacyWrap = bLegacyWrap; }
 
     virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;

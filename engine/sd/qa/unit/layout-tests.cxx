@@ -22,6 +22,15 @@
 #include <drawdoc.hxx>
 #include <unomodel.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
+
 class SdLayoutTest : public SdModelTestBase
 {
 public:
@@ -461,9 +470,10 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf156955)
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)
 {
-    // A hyperlink span wraps like ordinary text, so IgnoreBreakAfterMultilineField no longer
-    // matters and all three documents break into the same lines.
+    // In an ODF document from an older version, a link without coext:wrap-as-text keeps the field
+    // wrapping.
     {
+        // OOXML: the link wraps like ordinary text.
         createSdImpressDoc("pptx/tdf148966.pptx");
         xmlDocUniquePtr pXmlDoc = parseLayout();
         // The text sits higher than in the ODF documents, which keep the extra line height below
@@ -471,15 +481,121 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)
         assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"6218");
     }
     {
+        // Field layout; the flag drops the line break after the link.
         createSdImpressDoc("odp/tdf148966-withflag.odp");
         xmlDocUniquePtr pXmlDoc = parseLayout();
         assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"6262");
     }
     {
+        // Field layout: the line break after the link makes an empty row.
         createSdImpressDoc("odp/tdf148966-withoutflag.odp");
+        xmlDocUniquePtr pXmlDoc = parseLayout();
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"8124");
+    }
+    {
+        // The same document with coext:wrap-as-text="true" on the link.
+        createSdImpressDoc("odp/tdf148966-wrap-as-text.odp");
         xmlDocUniquePtr pXmlDoc = parseLayout();
         assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"6262");
     }
+    {
+        // The same document with LegacyHyperlinksWraps off in its settings.
+        createSdImpressDoc("odp/tdf148966-hyperlinks-as-text.odp");
+        xmlDocUniquePtr pXmlDoc = parseLayout();
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"6262");
+    }
+    {
+        // LegacyHyperlinksWraps off, and coext:wrap-as-text="false" on the link.
+        createSdImpressDoc("odp/tdf148966-legacy-link.odp");
+        xmlDocUniquePtr pXmlDoc = parseLayout();
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"8124");
+    }
+}
+
+namespace
+{
+constexpr OString aLegacyHyperlinksWrapsPath
+    = "/office:document-settings/office:settings/"
+      "config:config-item-set[@config:name='ooo:configuration-settings']/"
+      "config:config-item[@config:name='LegacyHyperlinksWraps']"_ostr;
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testHyperlinkWrapOldOdfSaved)
+{
+    // An old document keeps the field wrapping after a save and reload, and a link added to it
+    // wraps as text.
+    createSdImpressDoc("odp/tdf148966-withoutflag.odp");
+
+    // Add the link on a new second slide, so the first slide keeps its layout.
+    cpo::uno::Reference<css::drawing::XDrawPagesSupplier> xPagesSupplier(
+        mxComponent, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::drawing::XDrawPage> xPage
+        = xPagesSupplier->getDrawPages()->insertNewByIndex(0);
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent,
+                                                                  cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.TextShape"_ustr),
+        cpo::uno::UNO_QUERY_THROW);
+    xPage->add(xShape);
+    cpo::uno::Reference<css::text::XText> xText(xShape, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XTextContent> xField(
+        xFactory->createInstance(u"com.sun.star.text.TextField.URL"_ustr),
+        cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xFieldProps(xField, cpo::uno::UNO_QUERY_THROW);
+    xFieldProps->setPropertyValue(u"URL"_ustr, cpo::uno::Any(u"https://example.com/"_ustr));
+    xFieldProps->setPropertyValue(u"Representation"_ustr, cpo::uno::Any(u"example"_ustr));
+    xText->insertTextContent(xText->getEnd(), xField, false);
+
+    saveAndReload(TestFilter::ODP);
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"8124");
+    xmlDocUniquePtr pSettings = parseExport(u"settings.xml"_ustr);
+    assertXPathContent(pSettings, aLegacyHyperlinksWrapsPath, u"true");
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    assertXPath(pContent, "//text:a", 2);
+    assertXPath(pContent, "//text:a[not(@coext:wrap-as-text)]", 1);
+    assertXPath(pContent, "//text:a[@coext:wrap-as-text='true']", 1);
+
+    // The added link still wraps as text.
+    cpo::uno::Reference<css::beans::XPropertySet> xReloadedField(
+        getTextFieldFromPage(0, 0, 0, 1), cpo::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!xReloadedField->getPropertyValue(u"LegacyWrap"_ustr).get<bool>());
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testHyperlinkWrapNewOdfSaved)
+{
+    // A new document keeps its layout after a save and reload. Only the legacy link has
+    // coext:wrap-as-text.
+    createSdImpressDoc("odp/tdf148966-hyperlinks-as-text.odp");
+    saveAndReload(TestFilter::ODP);
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"6262");
+    xmlDocUniquePtr pSettings = parseExport(u"settings.xml"_ustr);
+    assertXPathContent(pSettings, aLegacyHyperlinksWrapsPath, u"false");
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    assertXPathNoAttribute(pContent, "//text:a", "wrap-as-text");
+
+    createSdImpressDoc("odp/tdf148966-legacy-link.odp");
+    saveAndReload(TestFilter::ODP);
+    pXmlDoc = parseLayout();
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"8124");
+    pSettings = parseExport(u"settings.xml"_ustr);
+    assertXPathContent(pSettings, aLegacyHyperlinksWrapsPath, u"false");
+    pContent = parseExport(u"content.xml"_ustr);
+    assertXPath(pContent, "//text:a", "wrap-as-text", u"false");
+}
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testHyperlinkWrapOoxmlSaved)
+{
+    // A link from OOXML wraps as text, also after a save to ODF and reload.
+    createSdImpressDoc("pptx/tdf148966.pptx");
+    saveAndReload(TestFilter::ODP);
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"6218");
+    xmlDocUniquePtr pSettings = parseExport(u"settings.xml"_ustr);
+    assertXPathContent(pSettings, aLegacyHyperlinksWrapsPath, u"false");
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    assertXPathNoAttribute(pContent, "//text:a", "wrap-as-text");
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTableVerticalText)

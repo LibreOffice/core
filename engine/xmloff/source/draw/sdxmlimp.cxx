@@ -739,6 +739,7 @@ void SdXMLImport::SetConfigurationSettings(const cpo::uno::Sequence<css::beans::
         u"LegacySingleLineFontwork"_ustr, // tdf#148000
         u"LineSpacingBelowBaselineLegacy"_ustr, // tdf#163590
         u"TextFittingLegacy"_ustr, // tdf#163590
+        u"LegacyHyperlinksWraps"_ustr,
     };
     for (const OUString& rName : aLegacyFlags)
     {

@@ -751,6 +751,7 @@ void ScXMLImport::SetConfigurationSettings(const cpo::uno::Sequence<beans::Prope
                                     true); // for tdf#163590
         mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::TextFittingLegacy,
                                     true); // for tdf#163590
+        mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::LegacyHyperlinksWraps, true);
     }
 
     rtl::Reference<ScModelObj> xMultiServiceFactory(GetScModel());

@@ -44,6 +44,7 @@ namespace com::sun::star {
     namespace text { class XText; }
     namespace beans { class XPropertySet; }
     namespace beans { class XPropertySetInfo; }
+    namespace lang { class XMultiServiceFactory; }
 }
 namespace cpo::uno { template<typename A> class Sequence; }
 
@@ -157,6 +158,9 @@ class XMLTextFieldExport final
             cpo::uno::Reference< css::text::XText >,
             ::std::set< OUString > > >
         moUsedMasters;
+
+    /// The LegacyHyperlinksWraps setting of the document, once read.
+    std::optional<bool> moLegacyHyperlinksWraps;
 
 public:
 
@@ -420,5 +424,10 @@ private:
 
 };
 
+
+/// @returns the LegacyHyperlinksWraps setting of the document behind rFactory, false when it has
+/// none.
+bool GetLegacyHyperlinksWraps(
+    const cpo::uno::Reference<css::lang::XMultiServiceFactory>& rFactory);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -106,6 +106,17 @@ bool ImpEditEngine::bDebugPaint = false;
 
 namespace {
 
+// Whether pAttr is a hyperlink span with the field wrapping of older versions.
+bool isLegacyWrapUrlSpan(const EditCharAttrib* pAttr)
+{
+    if (!pAttr || pAttr->Which() != EE_CHAR_URL)
+        return false;
+    const SvxFieldItem* pItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
+    const SvxURLField* pUrl
+        = pItem ? dynamic_cast<const SvxURLField*>(pItem->GetField()) : nullptr;
+    return pUrl && pUrl->IsLegacyWrap();
+}
+
 struct TabInfo
 {
     bool        bValid;
@@ -921,6 +932,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
         bForceOneRun = false;
         bool bFieldStartNextLine = false;
+        bool bEndLineAfterUrlSpan = false;
 
         bool bEOL = false;
         bool bEOC = false;
@@ -1369,6 +1381,27 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
                 nTmpWidth += pPortion->GetSize().Width();
 
+                // A legacy wrap link that began on an earlier line ends the line, unless a line
+                // break follows and the document ignores the break after a multiline field.
+                if (nTmpWidth < nXWidth)
+                {
+                    const sal_Int32 nSpanEnd = nTmpPos + nPortionLen;
+                    const EditCharAttrib* pUrlAttr
+                        = rNode.GetCharAttribs().FindAttribRightOpen(EE_CHAR_URL, nTmpPos);
+                    if (isLegacyWrapUrlSpan(pUrlAttr) && pUrlAttr->GetStart() < pLine->GetStart()
+                        && pUrlAttr->GetEnd() == nSpanEnd && nSpanEnd < rNode.Len())
+                    {
+                        const bool bLineBreakFollows
+                            = pNextFeature && pNextFeature->GetStart() == nSpanEnd
+                              && pNextFeature->GetItem()->Which() == EE_FEATURE_LINEBR;
+                        if (!(bLineBreakFollows && mbIgnoreBreakAfterMultilineField))
+                        {
+                            bEndLineAfterUrlSpan = true;
+                            bEOL = true;
+                        }
+                    }
+                }
+
                 sal_Int32 _nPortionEnd = nTmpPos + nPortionLen;
                 if( bScriptSpace && ( _nPortionEnd < rNode.Len() ) && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( rNode, _nPortionEnd ) ) )
                 {
@@ -1473,6 +1506,13 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 sal_Int32 nP = SplitTextPortion(rParaPortion, nTmpPos, pLine);
                 nTmpWidth += rParaPortion.GetTextPortions()[nP].GetSize().Width();
             }
+        }
+        else if (bEndLineAfterUrlSpan)
+        {
+            bEOL = true;
+            bEOC = false;
+            pLine->SetEnd(nPortionEnd);
+            pLine->SetEndPortion(nTmpPortion - 1);
         }
         else if ( nTmpWidth >= nXWidth )
         {
@@ -2183,7 +2223,42 @@ void ImpEditEngine::ImpBreakLine(ParaPortion& rParaPortion, EditLine& rLine, Tex
     bool bAltFullRight = false;
     sal_uInt32 nAltDelChar = 0;
 
-    if ( ( nMaxBreakPos < ( nMax + rLine.GetStart() ) ) && ( rNode.GetChar( nMaxBreakPos ) == ' ' ) )
+    // A legacy wrap link breaks like a placeholder field. Starting the line, it breaks at the first
+    // character cell that does not fit. Starting later, it moves to the next line whole.
+    bool bLegacyUrlBreak = false;
+    if (const EditCharAttrib* pUrlAttr
+        = rNode.GetCharAttribs().FindAttribRightOpen(EE_CHAR_URL, rLine.GetStart());
+        isLegacyWrapUrlSpan(pUrlAttr) && nMaxBreakPos < pUrlAttr->GetEnd())
+    {
+        Reference<i18n::XBreakIterator> xBreakIterator(ImplGetBreakIterator());
+        const lang::Locale aLocale(GetLocale(EditPaM(rNode, nMaxBreakPos)));
+        sal_Int32 nDone = 0;
+        // Start of the first cell that does not fit.
+        nBreakPos = xBreakIterator->previousCharacters(rNode.GetString(), nMaxBreakPos + 1,
+                                                       aLocale,
+                                                       i18n::CharacterIteratorMode::SKIPCELL, 1,
+                                                       nDone);
+        // At least one cell stays on the line.
+        if (nBreakPos <= rLine.GetStart())
+            nBreakPos = xBreakIterator->nextCharacters(rNode.GetString(), rLine.GetStart(),
+                                                       aLocale,
+                                                       i18n::CharacterIteratorMode::SKIPCELL, 1,
+                                                       nDone);
+        bLegacyUrlBreak = true;
+    }
+    else if (const EditCharAttrib* pOverflowAttr
+             = rNode.GetCharAttribs().FindAttribRightOpen(EE_CHAR_URL, nMaxBreakPos);
+             isLegacyWrapUrlSpan(pOverflowAttr) && pOverflowAttr->GetStart() > rLine.GetStart())
+    {
+        nBreakPos = pOverflowAttr->GetStart();
+        bLegacyUrlBreak = true;
+    }
+
+    if (bLegacyUrlBreak)
+    {
+        // nBreakPos is already set.
+    }
+    else if ( ( nMaxBreakPos < ( nMax + rLine.GetStart() ) ) && ( rNode.GetChar( nMaxBreakPos ) == ' ' ) )
     {
         // Break behind the blank, blank will be compressed...
         nBreakPos = nMaxBreakPos + 1;
@@ -2201,6 +2276,13 @@ void ImpEditEngine::ImpBreakLine(ParaPortion& rParaPortion, EditLine& rLine, Tex
                 nMinBreakPos = rAttr.GetEnd();
                 break;
             }
+        }
+        // The end of a legacy wrap link is a break opportunity, like the end of a field.
+        for (const std::unique_ptr<EditCharAttrib>& rxAttr : rAttrs)
+        {
+            if (rxAttr->GetEnd() > nMinBreakPos && rxAttr->GetEnd() <= nMaxBreakPos
+                && isLegacyWrapUrlSpan(rxAttr.get()))
+                nMinBreakPos = rxAttr->GetEnd();
         }
         assert(nMinBreakPos <= nMaxBreakPos);
 

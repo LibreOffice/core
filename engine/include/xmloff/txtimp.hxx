@@ -148,6 +148,8 @@ public:
     bool IsBlockMode() const;
     bool IsOrganizerMode() const;
     bool IsProgress() const;
+    /// The LegacyHyperlinksWraps setting of the document.
+    bool IsLegacyHyperlinksWraps();
 
     OUString ConvertStarFonts( const OUString& rChars,
                                const OUString& rStyleName,
