@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/editobj.hxx>
@@ -157,6 +158,25 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDrawImageRemoteNotFetched)
 
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT(pDoc);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testVBADocumentBasicAfterLoad)
+{
+    // A document in VBA compatibility mode with a VBA document module, loaded with macros not
+    // allowed, gets its Basic only when something first asks for it. Here that is the INDIRECT
+    // in A1 compiling "FOO" during a recalculation. Loading the document module asks for the
+    // document Basic again while the first request is still creating it.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"MacroExecutionMode"_ustr,
+                                      css::document::MacroExecMode::NEVER_EXECUTE),
+    };
+    loadFromFile(u"ods/vba-document-module.ods", aParams);
+
+    ScDocShell* pDocSh = getScDocShell();
+    pDocSh->DoHardRecalc();
+
+    CPPUNIT_ASSERT_EQUAL(u"#REF!"_ustr, getScDoc()->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT(pDocSh->GetBasic());
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testContentODS)
