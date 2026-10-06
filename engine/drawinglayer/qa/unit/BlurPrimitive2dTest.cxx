@@ -108,6 +108,21 @@ CPPUNIT_TEST_FIXTURE(BlurPrimitive2dTest, testShadowBlurIsAGaussianOfAThirdOfThe
     CPPUNIT_ASSERT_LESS(2.0, getCoverage(aAccess, nSquareRightEdge + nBlurRadius));
 }
 
+CPPUNIT_TEST_FIXTURE(BlurPrimitive2dTest, testScaledShadowRangeHoldsTheWholeBlur)
+{
+    // The shadow at half size spans 100 to 200, and the blur adds the full radius around it.
+    basegfx::B2DHomMatrix aShadowTransform;
+    aShadowTransform.scale(0.5, 0.5);
+    const rtl::Reference<primitive2d::ShadowPrimitive2D> pShadow(new primitive2d::ShadowPrimitive2D(
+        aShadowTransform, basegfx::BColor(0, 0, 0), nBlurRadius, createBlackSquare()));
+
+    const basegfx::B2DRange aRange(pShadow->getB2DRange(geometry::ViewInformation2D()));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0 - nBlurRadius, aRange.getMinX(), 1e-9);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(100.0 - nBlurRadius, aRange.getMinY(), 1e-9);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(200.0 + nBlurRadius, aRange.getMaxX(), 1e-9);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(200.0 + nBlurRadius, aRange.getMaxY(), 1e-9);
+}
+
 CPPUNIT_TEST_FIXTURE(BlurPrimitive2dTest, testSoftEdgeFadesOneRadiusInsideTheShape)
 {
     // The shape is pulled in by the radius and blurred back out, so the fade is centered a radius

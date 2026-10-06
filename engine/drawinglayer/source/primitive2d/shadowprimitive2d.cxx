@@ -384,14 +384,12 @@ ShadowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformati
     // We know the to-be-visualized geometry and the radius it needs to be extended,
     // so simply calculate the exact needed range.
     basegfx::B2DRange aRetval(getChildren().getB2DRange(rViewInformation));
-
-    if (getShadowBlur() > 0.0)
-    {
-        // blurred shadow, that extends the geometry
-        aRetval.grow(getShadowBlur());
-    }
-
     aRetval.transform(getShadowTransform());
+
+    // The blur applies after the shadow transform, so the radius keeps its size.
+    if (getShadowBlur() > 0.0)
+        aRetval.grow(getShadowBlur());
+
     return aRetval;
 }
 
