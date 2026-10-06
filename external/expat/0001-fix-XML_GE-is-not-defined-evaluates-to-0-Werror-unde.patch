@@ -1,0 +1,25 @@
+From 3e3d9091bc3db29901a1507466bf0479ff38de9a Mon Sep 17 00:00:00 2001
+From: Xisco Fauli <xiscofauli@libreoffice.org>
+Date: Tue, 6 Oct 2026 10:50:50 +0200
+Subject: [PATCH] fix XML_GE is not defined, evaluates to 0 [-Werror=undef]
+
+---
+ expat/lib/expat.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/expat/lib/expat.h b/expat/lib/expat.h
+index 1b2852dd..fea2fd99 100644
+--- a/expat/lib/expat.h
++++ b/expat/lib/expat.h
+@@ -1084,7 +1084,7 @@ enum XML_Parser_Property {
+ #  if defined(XML_TESTING)
+   XML_PROP_INVALID = 0,
+ #  endif
+-#  if XML_GE == 1
++#  if defined(XML_GE) && XML_GE == 1
+   XML_PROP_ALLOC_TRACKER_ACTIVATION_THRESHOLD = 1,   // of type `uint64_t`
+   XML_PROP_ALLOC_TRACKER_MAXIMUM_AMPLIFICATION = 2,  // of type `double`
+   XML_PROP_BILLION_LAUGHS_ACTIVATION_THRESHOLD = 3,  // of type `uint64_t`
+-- 
+2.47.3
+

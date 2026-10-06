@@ -57,6 +57,7 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,expat,\
 endif
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,expat,\
+	UnpackedTarball/expat/lib/xcs \
 	UnpackedTarball/expat/lib/xmlparse \
 	UnpackedTarball/expat/lib/xmlrole \
 	UnpackedTarball/expat/lib/xmltok \
