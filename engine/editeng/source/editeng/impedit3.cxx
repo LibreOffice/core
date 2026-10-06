@@ -2295,7 +2295,9 @@ void ImpEditEngine::ImpBreakLine(ParaPortion& rParaPortion, EditLine& rLine, Tex
         // the line, nBreakPos is the beginning of the word.
         // There is a problem if the Doc is so narrow that a word is broken
         // into more than two lines...
-        if ( !bHangingPunctuation && bCanHyphenate && GetHyphenator().is() )
+        // A word in a hyperlink span is not hyphenated.
+        if (!bHangingPunctuation && bCanHyphenate && GetHyphenator().is()
+             && !rNode.GetCharAttribs().FindAttribRightOpen(EE_CHAR_URL, nBreakPos))
         {
             i18n::Boundary aBoundary = _xBI->getWordBoundary(
                 rNode.GetString(), nBreakPos, GetLocale( EditPaM( rNode, nBreakPos ) ), css::i18n::WordType::DICTIONARY_WORD, true);
@@ -2502,6 +2504,11 @@ void ImpEditEngine::ImpAdjustBlocks(ParaPortion& rParaPortion, EditLine& rLine, 
 
         nLastScript = nScript;
     }
+
+    // A hyperlink span takes no justification stretch.
+    std::erase_if(aPositions, [&rNode](sal_Int32 nPos) {
+        return rNode.GetCharAttribs().FindAttribRightOpen(EE_CHAR_URL, nPos) != nullptr;
+    });
 
     // Kashidas ?
     auto nKashidaStart = aPositions.size();
@@ -3099,8 +3106,11 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
                 if ( IsScriptItemValid( pAttrib->Which(), nScriptTypeI18N ) )
                 {
                     pAttrib->SetFont( rFont, pOut );
+                    // A hyperlink span shows in the link color.
+                    if (pAttrib->Which() == EE_CHAR_URL)
+                        rFont.SetColor(GetColorConfig().GetColorValue(svtools::LINKS).nColor);
                     // #i1550# hard color attrib should win over text color from field
-                    if ( pAttrib->Which() == EE_FEATURE_FIELD )
+                    if ( pAttrib->Which() == EE_FEATURE_FIELD || pAttrib->Which() == EE_CHAR_URL )
                     {
                         // These Attribs positions come from PaMs, so their interval is right-open and left-closed
                         // when SeekCursor is called, nPos is incremented by 1. I do not know why...
@@ -4160,6 +4170,13 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                     {
                                         pFieldData = pFieldItem->GetField();
                                     }
+                                }
+                                else if (const EditCharAttrib* pUrlAttr = rParaPortion.GetNode().GetCharAttribs().FindAttribRightOpen(EE_CHAR_URL, nIndex))
+                                {
+                                    // Attach the URL of a hyperlink span, for PDF links and hit
+                                    // testing.
+                                    if (const SvxFieldItem* pUrlItem = dynamic_cast<const SvxFieldItem*>(pUrlAttr->GetItem()))
+                                        pFieldData = pUrlItem->GetField();
                                 }
 
                                 // support for EOC, EOW, EOS TEXT comments. To support that,

@@ -9,6 +9,7 @@
 
 #include <editeng/urlfieldhelper.hxx>
 
+#include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
@@ -18,12 +19,22 @@ void URLFieldHelper::RemoveURLField(EditView& pEditView)
     pEditView.SelectFieldAtCursor();
     const SvxFieldItem* pFieldItem = pEditView.GetFieldAtSelection();
     const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
-    if (auto pUrlField = dynamic_cast<const SvxURLField*>(pField))
+    auto pUrlField = dynamic_cast<const SvxURLField*>(pField);
+    if (!pUrlField)
+        return;
+
+    ESelection aSel = pEditView.GetSelection();
+    if (pFieldItem->Which() == EE_CHAR_URL)
     {
-        ESelection aSel = pEditView.GetSelection();
-        pEditView.getEditEngine().QuickInsertText(pUrlField->GetRepresentation(), aSel);
-        pEditView.Invalidate();
+        // The link text is real text, so only the link attribute goes.
+        pEditView.getEditEngine().RemoveAttribs(aSel, false, EE_CHAR_URL);
     }
+    else
+    {
+        // Replace the placeholder field with its text.
+        pEditView.getEditEngine().QuickInsertText(pUrlField->GetRepresentation(), aSel);
+    }
+    pEditView.Invalidate();
 }
 
 bool URLFieldHelper::IsCursorAtURLField(const EditView& pEditView, bool bAlsoCheckBeforeCursor)

@@ -21,6 +21,7 @@
 #include <TextPortion.hxx>
 
 #include <sfx2/app.hxx>
+#include <svl/eitem.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/editeng.hxx>
@@ -54,6 +55,10 @@
 #include <editeng/editview.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
+#include <com/sun/star/linguistic2/XHyphenator.hpp>
+#include <com/sun/star/linguistic2/XPossibleHyphens.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/text/textfield/Type.hpp>
 
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
@@ -104,6 +109,30 @@ public:
 
     /// Test Copy/Paste with hyperlinks in text using Legacy Format
     void testHyperlinkCopyPaste();
+
+    /// A hyperlink spans real text, and typing or deleting inside it grows or shrinks it.
+    void testHyperlinkSpanFollowsEdits();
+
+    /// A hyperlink span is listed as a field with its current text.
+    void testHyperlinkSpanListedAsField();
+
+    /// Removing a hyperlink keeps its text.
+    void testHyperlinkSpanRemove();
+
+    /// A URL span survives a copy and paste as a hyperlink with the same target.
+    void testHyperlinkSpanCopyPaste();
+
+    /// Clearing direct formatting drops other attributes but keeps the link.
+    void testHyperlinkSpanKeptOnClearFormatting();
+
+    /// A hyperlink span wraps like ordinary text, at a blank inside it.
+    void testHyperlinkSpanNoWrapInside();
+
+    /// A word inside a hyperlink span is not split by automatic hyphenation.
+    void testHyperlinkSpanNoHyphenation();
+
+    /// A hyperlink span keeps its width when the line is justified.
+    void testHyperlinkSpanRigidInJustifiedText();
 
     /// Test Copy/Paste using Legacy Format
     void testCopyPaste();
@@ -211,6 +240,14 @@ public:
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testUnoTextFields);
     CPPUNIT_TEST(testHyperlinkCopyPaste);
+    CPPUNIT_TEST(testHyperlinkSpanFollowsEdits);
+    CPPUNIT_TEST(testHyperlinkSpanListedAsField);
+    CPPUNIT_TEST(testHyperlinkSpanRemove);
+    CPPUNIT_TEST(testHyperlinkSpanCopyPaste);
+    CPPUNIT_TEST(testHyperlinkSpanKeptOnClearFormatting);
+    CPPUNIT_TEST(testHyperlinkSpanNoWrapInside);
+    CPPUNIT_TEST(testHyperlinkSpanNoHyphenation);
+    CPPUNIT_TEST(testHyperlinkSpanRigidInJustifiedText);
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testHTMLPaste);
     CPPUNIT_TEST(testHTMLFragmentPaste);
@@ -636,6 +673,333 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT(pACPURLField3);
     CPPUNIT_ASSERT_EQUAL(aURL1, pACPURLField3->GetURL());
     CPPUNIT_ASSERT_EQUAL(aRepres1, pACPURLField3->GetRepresentation());
+}
+
+// Returns the EE_CHAR_URL attribute of the first paragraph, if there is one.
+EECharAttrib lcl_findUrlSpan(EditEngine& rEditEngine)
+{
+    std::vector<EECharAttrib> aAttribs;
+    rEditEngine.GetCharAttribs(0, aAttribs);
+    for (const auto& rAttrib : aAttribs)
+    {
+        if (rAttrib.pAttr && rAttrib.pAttr->Which() == EE_CHAR_URL)
+            return rAttrib;
+    }
+    return EECharAttrib(-1, -1, nullptr);
+}
+
+void Test::testHyperlinkSpanFollowsEdits()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    EditDoc& rDoc = aEditEngine.GetEditDoc();
+
+    aEditEngine.SetText(u"Hello World"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Hello World"_ustr, rDoc.GetParaAsString(sal_Int32(0)));
+
+    // Mark the word "World" (indices 6 to 11) as a link.
+    OUString aURL = u"http://example.com/"_ustr;
+    SvxURLField aURLField(aURL, u"World"_ustr, SvxURLFormat::Repr);
+    SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
+    aSet.Put(SvxFieldItem(aURLField, EE_CHAR_URL));
+    aEditEngine.QuickSetAttribs(aSet, ESelection(0, 6, 0, 11));
+
+    // The text keeps its characters, with no placeholder.
+    CPPUNIT_ASSERT_EQUAL(u"Hello World"_ustr, rDoc.GetParaAsString(sal_Int32(0)));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), rDoc.GetTextLen());
+
+    // The attribute spans exactly the marked text and carries the URL.
+    EECharAttrib aSpan = lcl_findUrlSpan(aEditEngine);
+    CPPUNIT_ASSERT(aSpan.pAttr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aSpan.nStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aSpan.nEnd);
+    auto pField = dynamic_cast<const SvxFieldItem*>(aSpan.pAttr);
+    CPPUNIT_ASSERT(pField);
+    auto pURLField = dynamic_cast<const SvxURLField*>(pField->GetField());
+    CPPUNIT_ASSERT(pURLField);
+    CPPUNIT_ASSERT_EQUAL(aURL, pURLField->GetURL());
+
+    // Typing inside the link extends it, the way an ordinary attribute grows.
+    aEditEngine.QuickInsertText(u"XX"_ustr, ESelection(0, 8, 0, 8));
+    CPPUNIT_ASSERT_EQUAL(u"Hello WoXXrld"_ustr, rDoc.GetParaAsString(sal_Int32(0)));
+    aSpan = lcl_findUrlSpan(aEditEngine);
+    CPPUNIT_ASSERT(aSpan.pAttr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aSpan.nStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(13), aSpan.nEnd);
+
+    // Deleting inside the link shrinks it again.
+    aEditEngine.QuickDelete(ESelection(0, 8, 0, 10));
+    CPPUNIT_ASSERT_EQUAL(u"Hello World"_ustr, rDoc.GetParaAsString(sal_Int32(0)));
+    aSpan = lcl_findUrlSpan(aEditEngine);
+    CPPUNIT_ASSERT(aSpan.pAttr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aSpan.nStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aSpan.nEnd);
+}
+
+void Test::testHyperlinkSpanListedAsField()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+
+    aEditEngine.SetText(u"Hello World"_ustr);
+
+    OUString aURL = u"http://example.com/"_ustr;
+    SvxURLField aURLField(aURL, u"World"_ustr, SvxURLFormat::Repr);
+    SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
+    aSet.Put(SvxFieldItem(aURLField, EE_CHAR_URL));
+    aEditEngine.QuickSetAttribs(aSet, ESelection(0, 6, 0, 11));
+
+    // A URL span is reported as a field whose text is the spanned characters.
+    std::vector<EFieldInfo> aFieldInfos = aEditEngine.GetFieldInfo(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aFieldInfos.size());
+    const EFieldInfo& rInfo = aFieldInfos[0];
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), rInfo.aPosition.nIndex);
+    CPPUNIT_ASSERT(rInfo.bTextIsSpanned);
+    CPPUNIT_ASSERT_EQUAL(u"World"_ustr, rInfo.aCurrentText);
+    auto pUrlField = dynamic_cast<const SvxURLField*>(rInfo.pFieldItem->GetField());
+    CPPUNIT_ASSERT(pUrlField);
+    CPPUNIT_ASSERT_EQUAL(aURL, pUrlField->GetURL());
+
+    // The field reports the live link text.
+    aEditEngine.QuickInsertText(u"XX"_ustr, ESelection(0, 8, 0, 8));
+    aFieldInfos = aEditEngine.GetFieldInfo(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aFieldInfos.size());
+    CPPUNIT_ASSERT_EQUAL(u"WoXXrld"_ustr, aFieldInfos[0].aCurrentText);
+    auto pEditedField = dynamic_cast<const SvxURLField*>(aFieldInfos[0].pFieldItem->GetField());
+    CPPUNIT_ASSERT(pEditedField);
+    CPPUNIT_ASSERT_EQUAL(u"WoXXrld"_ustr, pEditedField->GetRepresentation());
+}
+
+void Test::testHyperlinkSpanRemove()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    EditDoc& rDoc = aEditEngine.GetEditDoc();
+    aEditEngine.SetText(u"Hello World"_ustr);
+
+    SvxURLField aURLField(u"http://example.com/"_ustr, u"World"_ustr, SvxURLFormat::Repr);
+    SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
+    aSet.Put(SvxFieldItem(aURLField, EE_CHAR_URL));
+    aEditEngine.QuickSetAttribs(aSet, ESelection(0, 6, 0, 11));
+    CPPUNIT_ASSERT(lcl_findUrlSpan(aEditEngine).pAttr);
+
+    // Removing the link attribute over the span drops the link.
+    aEditEngine.RemoveAttribs(ESelection(0, 6, 0, 11), false, EE_CHAR_URL);
+
+    // The link is gone but its text stays.
+    CPPUNIT_ASSERT(!lcl_findUrlSpan(aEditEngine).pAttr);
+    CPPUNIT_ASSERT_EQUAL(u"Hello World"_ustr, rDoc.GetParaAsString(sal_Int32(0)));
+}
+
+void Test::testHyperlinkSpanCopyPaste()
+{
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::TextObject);
+    aOutliner.SetCalcFieldValueHdl(LINK(nullptr, Test, CalcFieldValueHdl));
+    EditEngine& rEditEngine = aOutliner.GetEditEngine();
+    EditDoc& rDoc = rEditEngine.GetEditDoc();
+
+    rEditEngine.SetText(u"Hello World"_ustr);
+
+    OUString aURL = u"http://example.com/"_ustr;
+    SvxURLField aURLField(aURL, u"World"_ustr, SvxURLFormat::Repr);
+    SfxItemSet aSet(rEditEngine.GetEmptyItemSet());
+    aSet.Put(SvxFieldItem(aURLField, EE_CHAR_URL));
+    rEditEngine.QuickSetAttribs(aSet, ESelection(0, 6, 0, 11));
+
+    uno::Reference<datatransfer::XTransferable> xData
+        = rEditEngine.CreateTransferable(ESelection(0, 0, 0, 11));
+    rEditEngine.InsertText(xData, OUString(), rDoc.GetEndPaM(), true);
+
+    // The copy carries a hyperlink to the same target.
+    std::vector<EFieldInfo> aFieldInfos = rEditEngine.GetFieldInfo(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aFieldInfos.size());
+    for (const EFieldInfo& rInfo : aFieldInfos)
+    {
+        auto pUrlField = dynamic_cast<const SvxURLField*>(rInfo.pFieldItem->GetField());
+        CPPUNIT_ASSERT(pUrlField);
+        CPPUNIT_ASSERT_EQUAL(aURL, pUrlField->GetURL());
+    }
+}
+
+void Test::testHyperlinkSpanKeptOnClearFormatting()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    EditDoc& rDoc = aEditEngine.GetEditDoc();
+    aEditEngine.SetText(u"Hello World"_ustr);
+
+    // Mark "World" as a link and also make it bold.
+    SvxURLField aURLField(u"http://example.com/"_ustr, u"World"_ustr, SvxURLFormat::Repr);
+    SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
+    aSet.Put(SvxFieldItem(aURLField, EE_CHAR_URL));
+    aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
+    aEditEngine.QuickSetAttribs(aSet, ESelection(0, 6, 0, 11));
+    CPPUNIT_ASSERT(lcl_findUrlSpan(aEditEngine).pAttr);
+
+    // Clearing all direct character formatting removes the bold.
+    aEditEngine.RemoveCharAttribs(0, 0);
+
+    std::vector<EECharAttrib> aAttribs;
+    aEditEngine.GetCharAttribs(0, aAttribs);
+    bool bHasWeight = false;
+    for (const auto& rAttrib : aAttribs)
+        if (rAttrib.pAttr && rAttrib.pAttr->Which() == EE_CHAR_WEIGHT)
+            bHasWeight = true;
+    CPPUNIT_ASSERT(!bHasWeight);
+
+    // But the link and its text stay.
+    CPPUNIT_ASSERT(lcl_findUrlSpan(aEditEngine).pAttr);
+    CPPUNIT_ASSERT_EQUAL(u"Hello World"_ustr, rDoc.GetParaAsString(sal_Int32(0)));
+}
+
+void Test::testHyperlinkSpanNoWrapInside()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetPaperSize(Size(10000, 2000));
+    aEditEngine.SetText(u"ab example link"_ustr);
+
+    // Mark "example link" as a hyperlink span. It has a blank inside it.
+    SvxURLField aURLField(u"http://example.com/"_ustr, u"example link"_ustr, SvxURLFormat::Repr);
+    SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
+    aSet.Put(SvxFieldItem(aURLField, EE_CHAR_URL));
+    aEditEngine.QuickSetAttribs(aSet, ESelection(0, 3, 0, 15));
+
+    aEditEngine.QuickFormatDoc(false);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetLineCount(0));
+    const tools::Long nFullWidth = aEditEngine.CalcTextWidth();
+
+    // The whole text no longer fits, but the link alone does.
+    aEditEngine.SetPaperSize(Size(nFullWidth - 10, 2000));
+    aEditEngine.QuickFormatDoc(false);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetLineCount(0));
+
+    // The link wraps like ordinary text, at the blank inside it.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11),
+                         aEditEngine.GetParaPortions().getRef(0).GetLines()[1].GetStart());
+}
+
+class TestHyphenatedWord : public cppu::WeakImplHelper<css::linguistic2::XHyphenatedWord>
+{
+    OUString maWord;
+    css::lang::Locale maLocale;
+    sal_Int16 mnPos;
+
+public:
+    TestHyphenatedWord(OUString aWord, css::lang::Locale aLocale, sal_Int16 nPos)
+        : maWord(std::move(aWord))
+        , maLocale(std::move(aLocale))
+        , mnPos(nPos)
+    {
+    }
+
+    virtual OUString getWord() override { return maWord; }
+    virtual css::lang::Locale getLocale() override { return maLocale; }
+    virtual sal_Int16 getHyphenationPos() override { return mnPos; }
+    virtual OUString getHyphenatedWord() override { return maWord; }
+    virtual sal_Int16 getHyphenPos() override { return mnPos; }
+    virtual bool isAlternativeSpelling() override { return false; }
+};
+
+// Splits any word at the largest allowed position, so no dictionary is needed.
+class TestHyphenator : public cppu::WeakImplHelper<css::linguistic2::XHyphenator>
+{
+public:
+    virtual cpo::uno::Sequence<css::lang::Locale> getLocales() override { return {}; }
+    virtual bool hasLocale(const css::lang::Locale&) override { return true; }
+
+    virtual cpo::uno::Reference<css::linguistic2::XHyphenatedWord>
+    hyphenate(const OUString& rWord, const css::lang::Locale& rLocale, sal_Int16 nMaxLeading,
+              const cpo::uno::Sequence<css::beans::PropertyValue>&) override
+    {
+        const sal_Int16 nLeading
+            = std::min<sal_Int16>(nMaxLeading, static_cast<sal_Int16>(rWord.getLength() - 2));
+        if (nLeading < 2)
+            return nullptr;
+        return new TestHyphenatedWord(rWord, rLocale, nLeading - 1);
+    }
+
+    virtual cpo::uno::Reference<css::linguistic2::XHyphenatedWord>
+    queryAlternativeSpelling(const OUString&, const css::lang::Locale&, sal_Int16,
+                             const cpo::uno::Sequence<css::beans::PropertyValue>&) override
+    {
+        return nullptr;
+    }
+
+    virtual cpo::uno::Reference<css::linguistic2::XPossibleHyphens>
+    createPossibleHyphens(const OUString&, const css::lang::Locale&,
+                          const cpo::uno::Sequence<css::beans::PropertyValue>&) override
+    {
+        return nullptr;
+    }
+};
+
+void Test::testHyperlinkSpanNoHyphenation()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    cpo::uno::Reference<css::linguistic2::XHyphenator> xHyphenator(new TestHyphenator);
+    aEditEngine.SetHyphenator(xHyphenator);
+    aEditEngine.SetPaperSize(Size(10000, 2000));
+    aEditEngine.SetText(u"aa hyphenation"_ustr);
+
+    SfxItemSet aParaSet(aEditEngine.GetEmptyItemSet());
+    aParaSet.Put(SfxBoolItem(EE_PARA_HYPHENATE, true));
+    aEditEngine.SetParaAttribs(0, aParaSet);
+
+    // Narrow the paper so "hyphenation" no longer fits on the first line.
+    aEditEngine.QuickFormatDoc(false);
+    const tools::Long nFullWidth = aEditEngine.CalcTextWidth();
+    aEditEngine.SetPaperSize(Size(nFullWidth - 10, 2000));
+    aEditEngine.QuickFormatDoc(false);
+
+    // The plain word is hyphenated: part of it stays on the first line.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetLineCount(0));
+    CPPUNIT_ASSERT_GREATER(sal_Int32(3),
+                           aEditEngine.GetParaPortions().getRef(0).GetLines()[1].GetStart());
+
+    // As a hyperlink the word is not hyphenated and moves to the second line.
+    SvxURLField aURLField(u"http://example.com/"_ustr, u"hyphenation"_ustr, SvxURLFormat::Repr);
+    SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
+    aSet.Put(SvxFieldItem(aURLField, EE_CHAR_URL));
+    aEditEngine.QuickSetAttribs(aSet, ESelection(0, 3, 0, 14));
+    aEditEngine.QuickFormatDoc(false);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetLineCount(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
+                         aEditEngine.GetParaPortions().getRef(0).GetLines()[1].GetStart());
+}
+
+void Test::testHyperlinkSpanRigidInJustifiedText()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetPaperSize(Size(10000, 2000));
+    aEditEngine.SetText(u"aa bb cc dd end"_ustr);
+
+    // Mark "bb cc" as a hyperlink span. The blank at 5 is inside it, the ones at 2, 8 and 11 are
+    // outside.
+    SvxURLField aURLField(u"http://example.com/"_ustr, u"bb cc"_ustr, SvxURLFormat::Repr);
+    SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
+    aSet.Put(SvxFieldItem(aURLField, EE_CHAR_URL));
+    aEditEngine.QuickSetAttribs(aSet, ESelection(0, 3, 0, 8));
+
+    aEditEngine.QuickFormatDoc(false);
+    const tools::Long nFullWidth = aEditEngine.CalcTextWidth();
+
+    // Two lines: "aa bb cc dd " and "end". Only the first line is justified.
+    aEditEngine.SetPaperSize(Size(nFullWidth - 10, 2000));
+    aEditEngine.QuickFormatDoc(false);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetLineCount(0));
+
+    const auto aGapAt = [&aEditEngine](sal_Int32 nChar) {
+        EditLine const& rLine = aEditEngine.GetParaPortions().getRef(0).GetLines()[0];
+        return rLine.GetCharPosArray()[nChar] - rLine.GetCharPosArray()[nChar - 1];
+    };
+    const double fInsideGap = aGapAt(5);
+    const double fOutsideGap = aGapAt(8);
+
+    SfxItemSet aParaSet(aEditEngine.GetEmptyItemSet());
+    aParaSet.Put(SvxAdjustItem(SvxAdjust::Block, EE_PARA_JUST));
+    aEditEngine.SetParaAttribs(0, aParaSet);
+    aEditEngine.QuickFormatDoc(false);
+
+    // Only the blank outside the link stretches.
+    CPPUNIT_ASSERT(aGapAt(8) > fOutsideGap);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(fInsideGap, aGapAt(5), 0.01);
 }
 
 void Test::testCopyPaste()

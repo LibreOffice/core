@@ -196,6 +196,10 @@ void SvxAccessibleTextIndex::SetEEIndex( sal_Int32 nEEIndex, const SvxTextForwar
     std::vector<EFieldInfo> aFieldInfos = rTF.GetFieldInfo( GetParagraph() );
     for( const EFieldInfo& rFieldInfo : aFieldInfos )
     {
+        // A hyperlink span is real text, at the same index in both counts.
+        if (rFieldInfo.bTextIsSpanned)
+            continue;
+
         if( rFieldInfo.aPosition.nIndex > nEEIndex )
             break;
 
@@ -252,6 +256,10 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
     std::vector<EFieldInfo> aFieldInfos = rTF.GetFieldInfo( GetParagraph() );
     for( const EFieldInfo& rFieldInfo : aFieldInfos )
     {
+        // A hyperlink span is real text, at the same index in both counts.
+        if (rFieldInfo.bTextIsSpanned)
+            continue;
+
         // we're before a field
         if( rFieldInfo.aPosition.nIndex > mnEEIndex )
             break;

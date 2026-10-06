@@ -78,8 +78,8 @@ public:
             for (XEditAttribute & rAttr : rContent.GetCharAttribs())
             {
                 const SfxPoolItem* pItem = rAttr.GetItem();
-                if (pItem->Which() != EE_FEATURE_FIELD)
-                    // This is not a field item.
+                // Both a placeholder field and a hyperlink span hold an SvxFieldItem.
+                if (pItem->Which() != EE_FEATURE_FIELD && pItem->Which() != EE_CHAR_URL)
                     continue;
                 SvxFieldItemUpdaterImpl aUpdater(rAttr.GetItemHolder());
                 rItemCallback(static_cast<const SvxFieldItem&>(*pItem), aUpdater);

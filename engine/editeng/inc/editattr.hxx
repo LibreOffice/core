@@ -365,6 +365,17 @@ public:
 
 
 
+// A hyperlink over real text. Editing inside it grows and shrinks the span like any character
+// attribute. The item is an SvxFieldItem holding an SvxURLField.
+class EditCharAttribURL final : public EditCharAttrib
+{
+public:
+    EditCharAttribURL(SfxItemPool&, const SfxPoolItem&, sal_Int32 nStart, sal_Int32 nEnd);
+
+    virtual void SetFont(SvxFont& rFont, OutputDevice* pOutDev) override;
+};
+
+
 class EditCharAttribPairKerning final : public EditCharAttrib
 {
 public:

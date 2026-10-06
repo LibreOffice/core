@@ -3603,6 +3603,7 @@ void ScInputHandler::EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUStrin
                 if ( eState == SfxItemState::SET &&
                         nId != EE_CHAR_ESCAPEMENT && nId != EE_CHAR_PAIRKERNING &&
                         nId != EE_CHAR_KERNING && nId != EE_CHAR_XMLATTRIBS &&
+                        nId != EE_CHAR_URL &&
                             *pItem != pEditDefaults->Get(nId) )
                 {
                     if ( !pCommonAttrs )
@@ -3638,7 +3639,8 @@ void ScInputHandler::EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUStrin
                 {
                     // Keep same items in EditEngine as in ScEditAttrTester
                     if ( nId == EE_CHAR_ESCAPEMENT || nId == EE_CHAR_PAIRKERNING ||
-                         nId == EE_CHAR_KERNING || nId == EE_CHAR_XMLATTRIBS )
+                         nId == EE_CHAR_KERNING || nId == EE_CHAR_XMLATTRIBS ||
+                         nId == EE_CHAR_URL )
                     {
                         if ( *pItem != pEditDefaults->Get(nId) )
                             bAttrib = true;

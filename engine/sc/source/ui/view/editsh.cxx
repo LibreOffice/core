@@ -165,12 +165,19 @@ static void lclInsertCharacter( EditView* pTableView, EditView* pTopView, sal_Un
 namespace
 {
 
-// One URL field occupies a single character, so every returned selection is one index wide.
-// The field data is cloned because the item set it is read from is a temporary one.
-std::vector<std::pair<ESelection, std::unique_ptr<const SvxFieldData>>>
-lcl_CollectURLFields(EditEngine& rEditEngine)
+// A hyperlink in the cell text. A placeholder field is one character wide. A span covers the link
+// text and can show up as several entries when other attributes change inside it. The field data is
+// cloned from a temporary item set.
+struct ScCellURLField
 {
-    std::vector<std::pair<ESelection, std::unique_ptr<const SvxFieldData>>> aFields;
+    ESelection aSelection;
+    std::unique_ptr<const SvxFieldData> pField;
+    bool bSpan;
+};
+
+std::vector<ScCellURLField> lcl_CollectURLFields(EditEngine& rEditEngine)
+{
+    std::vector<ScCellURLField> aFields;
 
     const sal_Int32 nParaCount = rEditEngine.GetParagraphCount();
     for (sal_Int32 nPara = 0; nPara < nParaCount; ++nPara)
@@ -183,15 +190,21 @@ lcl_CollectURLFields(EditEngine& rEditEngine)
             aSel.end.nIndex = rPos;
 
             SfxItemSet aEditSet(rEditEngine.GetAttribs(aSel));
+            // A placeholder field is one character. A span covers the whole portion.
+            const SvxFieldItem* pItem = nullptr;
+            bool bSpan = false;
             if (aSel.start.nIndex + 1 == aSel.end.nIndex)
+                pItem = aEditSet.GetItemIfSet(EE_FEATURE_FIELD, false);
+            if (!pItem)
             {
-                // test if the character is a text field
-                if (const SvxFieldItem* pItem = aEditSet.GetItemIfSet(EE_FEATURE_FIELD, false))
-                {
-                    const SvxFieldData* pField = pItem->GetField();
-                    if (const SvxURLField* pUrlField = dynamic_cast<const SvxURLField*>(pField))
-                        aFields.emplace_back(aSel, pUrlField->Clone());
-                }
+                pItem = aEditSet.GetItemIfSet(EE_CHAR_URL, false);
+                bSpan = pItem != nullptr;
+            }
+            if (pItem)
+            {
+                const SvxFieldData* pField = pItem->GetField();
+                if (const SvxURLField* pUrlField = dynamic_cast<const SvxURLField*>(pField))
+                    aFields.emplace_back(ScCellURLField{ aSel, pUrlField->Clone(), bSpan });
             }
             aSel.start.nIndex = aSel.end.nIndex;
         }
@@ -216,15 +229,22 @@ void lcl_UnlinkURLFieldsOutsideSelection(EditView& rView)
     // fields still to come untouched.
     for (auto it = aFields.rbegin(); it != aFields.rend(); ++it)
     {
-        const ESelection& rField = it->first;
+        const ESelection& rField = it->aSelection;
 
         // A field the selection already covers is replaced along with the rest of it.
         const bool bInsideSelection = !(rField.start < aSel.start) && !(aSel.end < rField.end);
         if (bInsideSelection)
             continue;
 
+        // A span keeps its text, so the positions around it stay the same.
+        if (it->bSpan)
+        {
+            rEditEngine.RemoveAttribs(rField, false, EE_CHAR_URL);
+            continue;
+        }
+
         const OUString aRepresentation
-            = static_cast<const SvxURLField*>(it->second.get())->GetRepresentation();
+            = static_cast<const SvxURLField*>(it->pField.get())->GetRepresentation();
         rEditEngine.QuickInsertText(aRepresentation, rField);
 
         const sal_Int32 nGrowth = aRepresentation.getLength() - 1;
@@ -1044,7 +1064,7 @@ std::unique_ptr<const SvxFieldData> ScEditShell::GetFirstURLFieldFromCell()
     if (aFields.empty())
         return std::unique_ptr<const SvxFieldData>();
 
-    return std::move(aFields.front().second);
+    return std::move(aFields.front().pField);
 }
 
 IMPL_LINK( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )

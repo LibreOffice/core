@@ -418,10 +418,8 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
                 if (pFieldItem && dynamic_cast<const SvxURLField *>(pFieldItem->GetField()) != nullptr)
                 {
-                    // Select the field so that it will be deleted during insert
-                    ESelection aSel = pOLV->GetSelection();
-                    aSel.end.nIndex++;
-                    pOLV->SetSelection(aSel);
+                    // Select the whole hyperlink so the insert replaces it.
+                    pOLV->SelectFieldAtCursor();
                 }
                 if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)
                     pOLV->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));

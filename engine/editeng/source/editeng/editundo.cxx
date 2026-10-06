@@ -542,6 +542,9 @@ void EditUndoSetAttribs::Undo()
         // Then the character attributes ...
         // Remove all attributes including features, are later re-established.
         pEE->RemoveCharAttribs(nPara, 0, true);
+        // Removing all attributes keeps hyperlink spans, so they go separately. The stored
+        // attributes below bring back the ones from before.
+        pEE->RemoveCharAttribs(nPara, EE_CHAR_URL, true);
         ContentNode& rNode = pEE->GetEditDoc().GetObject( nPara );
         for (const auto & nAttr : rInf.GetPrevCharAttribs())
         {

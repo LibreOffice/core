@@ -290,6 +290,10 @@ private:
     std::optional<PointerStyle> mxPointer;
     std::unique_ptr<DragAndDropInfo> mpDragAndDropInfo;
 
+    /// The field item last built from an EE_CHAR_URL span. A returned pointer to it stays valid
+    /// until the next request.
+    mutable std::unique_ptr<SvxFieldItem> mpSynthesizedUrlFieldItem;
+
     rtl::Reference<vcl::unohelper::DragAndDropWrapper> mxDnDListener;
 
     tools::Long mnInvalidateMore;
@@ -522,6 +526,11 @@ public:
     OUString        SpellIgnoreWord();
 
     const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pPara, sal_Int32* pPos ) const;
+
+    /// Builds a field item from an EE_CHAR_URL span item, with rLiveText as its representation.
+    /// Returns nullptr when the item holds no URL field.
+    const SvxFieldItem* SynthesizeUrlFieldItem(const SvxFieldItem& rBacking, const OUString& rLiveText) const;
+
     void            DeleteSelected();
 
     //  If possible invalidate more than OutputArea, for the DrawingEngine text frame

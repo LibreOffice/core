@@ -1094,7 +1094,7 @@ void MSWord_SdrAttrIter::SetCharSet(const EECharAttrib& rAttr, bool bStart)
     }
 }
 
-void MSWord_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
+void MSWord_SdrAttrIter::OutEEField(const SfxPoolItem& rHt, const OUString* pLinkText)
 {
     const SvxFieldItem &rField = static_cast<const SvxFieldItem &>(rHt);
     const SvxFieldData *pField = rField.GetField();
@@ -1104,7 +1104,7 @@ void MSWord_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
         m_rExport.m_nTextTyp = mnTyp;
         m_rExport.AttrOutput().StartURL( pURL->GetURL(), pURL->GetTargetFrame() );
 
-        const OUString &rStr = pURL->GetRepresentation();
+        const OUString &rStr = pLinkText ? *pLinkText : pURL->GetRepresentation();
         m_rExport.AttrOutput().RawText(rStr, GetNodeCharSet());
 
         m_rExport.AttrOutput().EndURL(false);
@@ -1156,6 +1156,15 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
                 OutEEField(*(rTextAtr.pAttr));
                 continue;
             }
+            if (nWhich == EE_CHAR_URL && nSwPos == rTextAtr.nStart)
+            {
+                // A hyperlink span exports like a field, with the markers at the span start. The
+                // text is the current text of the span.
+                const OUString aLinkText = m_pEditObj->GetText(m_nPara).copy(
+                    rTextAtr.nStart, rTextAtr.nEnd - rTextAtr.nStart);
+                OutEEField(*(rTextAtr.pAttr), &aLinkText);
+                continue;
+            }
             if (nWhich == EE_FEATURE_TAB)
             {
                 m_rExport.WriteChar(0x9);
@@ -1204,7 +1213,8 @@ bool MSWord_SdrAttrIter::IsTextAttr(sal_Int32 nSwPos)
         [nSwPos](const EECharAttrib& rTextAtr) {
             return (nSwPos >= rTextAtr.nStart && nSwPos < rTextAtr.nEnd) &&
                 (rTextAtr.pAttr->Which() == EE_FEATURE_FIELD ||
-                 rTextAtr.pAttr->Which() == EE_FEATURE_TAB);
+                 rTextAtr.pAttr->Which() == EE_FEATURE_TAB ||
+                 rTextAtr.pAttr->Which() == EE_CHAR_URL);
         }
     );
 }

@@ -640,35 +640,60 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertyMapEntry* pMap,
     {
     case EE_FEATURE_FIELD:
     {
+        // A hyperlink span shows as a URL text field too. GetAttribs fills in defaults, so only a
+        // real URL field counts.
         const SvxFieldItem* pItem = nullptr;
-        if ( rSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SfxItemState::SET )
+        bool bSpan = false;
+        if (rSet.GetItemState(EE_FEATURE_FIELD, false, &pItem) != SfxItemState::SET)
+        {
+            pItem = nullptr;
+            if (const SvxFieldItem* pUrlItem = rSet.GetItemIfSet(EE_CHAR_URL, false))
+            {
+                if (dynamic_cast<const SvxURLField*>(pUrlItem->GetField()))
+                {
+                    pItem = pUrlItem;
+                    bSpan = true;
+                }
+            }
+        }
+        if (pItem)
         {
             const SvxFieldData* pData = pItem->GetField();
             uno::Reference< text::XTextRange > xAnchor( this );
 
-            // get presentation string for field
-            std::optional<Color> pTColor;
-            std::optional<Color> pFColor;
-            std::optional<FontLineStyle> pFldLineStyle;
-
             SvxTextForwarder* pForwarder = mpEditSource->GetTextForwarder();
-            OUString aPresentation( pForwarder->CalcFieldValue( SvxFieldItem(*pData, EE_FEATURE_FIELD), maSelection.start.nPara, maSelection.start.nIndex, pTColor, pFColor, pFldLineStyle ) );
+            OUString aPresentation;
+            if (bSpan)
+            {
+                // The presentation is the spanned text.
+                aPresentation = pForwarder->GetText( maSelection );
+            }
+            else
+            {
+                // get presentation string for field
+                std::optional<Color> pTColor;
+                std::optional<Color> pFColor;
+                std::optional<FontLineStyle> pFldLineStyle;
+                aPresentation = pForwarder->CalcFieldValue( SvxFieldItem(*pData, EE_FEATURE_FIELD), maSelection.start.nPara, maSelection.start.nIndex, pTColor, pFColor, pFldLineStyle );
+            }
 
-            uno::Reference< text::XTextField > xField( new SvxUnoTextField( xAnchor, aPresentation, pData ) );
+            uno::Reference<text::XTextField> xField(new SvxUnoTextField(xAnchor, aPresentation, pData));
             rAny <<= xField;
         }
         break;
     }
     case WID_PORTIONTYPE:
-        if ( rSet.GetItemState( EE_FEATURE_FIELD, false ) == SfxItemState::SET )
+    {
+        // GetAttribs fills in defaults, so only a placeholder field or a real URL span is a field.
+        bool bIsField = rSet.GetItemState(EE_FEATURE_FIELD, false) == SfxItemState::SET;
+        if (!bIsField)
         {
-            rAny <<= u"TextField"_ustr;
+            if (const SvxFieldItem* pUrlItem = rSet.GetItemIfSet(EE_CHAR_URL, false))
+                bIsField = dynamic_cast<const SvxURLField*>(pUrlItem->GetField()) != nullptr;
         }
-        else
-        {
-            rAny <<= u"Text"_ustr;
-        }
+        rAny <<= bIsField ? u"TextField"_ustr : u"Text"_ustr;
         break;
+    }
 
     case WID_PARASTYLENAME:
         {

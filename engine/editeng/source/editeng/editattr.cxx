@@ -485,4 +485,17 @@ EditCharAttribGrabBag::EditCharAttribGrabBag(SfxItemPool& rPool, const SfxPoolIt
     assert(rItem.Which() == EE_CHAR_GRABBAG);
 }
 
+EditCharAttribURL::EditCharAttribURL(SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 _nStart, sal_Int32 _nEnd)
+: EditCharAttrib(rPool, rItem, _nStart, _nEnd)
+{
+    assert(rItem.Which() == EE_CHAR_URL);
+    // Typing at either edge does not extend the link. Typing inside it still does.
+    SetExpandable(false);
+}
+
+void EditCharAttribURL::SetFont(SvxFont& rFont, OutputDevice*)
+{
+    rFont.SetUnderline(LINESTYLE_SINGLE);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

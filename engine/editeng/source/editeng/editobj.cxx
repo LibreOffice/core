@@ -513,7 +513,9 @@ const SvxFieldData* EditTextObject::GetFieldData(sal_Int32 nPara, size_t nPos, s
     size_t nCurPos = 0;
     for (XEditAttribute const& rAttr : rC.maCharAttribs)
     {
-        if (rAttr.GetItem()->Which() != EE_FEATURE_FIELD)
+        const sal_uInt16 nAttrWhich = rAttr.GetItem()->Which();
+        // Both a placeholder field and a hyperlink span hold an SvxFieldItem.
+        if (nAttrWhich != EE_FEATURE_FIELD && nAttrWhich != EE_CHAR_URL)
             // Skip attributes that are not fields.
             continue;
 
@@ -543,7 +545,8 @@ bool EditTextObject::HasField( sal_Int32 nType ) const
         for (size_t nAttr = 0; nAttr < nAttrs; ++nAttr)
         {
             const XEditAttribute& rAttr = rC.maCharAttribs[nAttr];
-            if (rAttr.GetItem()->Which() != EE_FEATURE_FIELD)
+            const sal_uInt16 nItemWhich = rAttr.GetItem()->Which();
+            if (nItemWhich != EE_FEATURE_FIELD && nItemWhich != EE_CHAR_URL)
                 continue;
 
             if (nType == text::textfield::Type::UNSPECIFIED)

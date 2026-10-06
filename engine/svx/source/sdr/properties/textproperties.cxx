@@ -473,7 +473,8 @@ namespace sdr::properties
 
                                 for(const auto& rAttrib : aAttribs)
                                 {
-                                    if(rAttrib.pAttr && EE_FEATURE_FIELD == rAttrib.pAttr->Which())
+                                    // A hyperlink is a placeholder field or a URL span.
+                                    if (rAttrib.pAttr && (EE_FEATURE_FIELD == rAttrib.pAttr->Which() || EE_CHAR_URL == rAttrib.pAttr->Which()))
                                     {
                                         const SvxFieldItem* pFieldItem = static_cast<const SvxFieldItem*>(rAttrib.pAttr);
 
@@ -499,7 +500,7 @@ namespace sdr::properties
 
                                     for(const auto& rAttrib : aAttribs)
                                     {
-                                        if(EE_FEATURE_FIELD == rAttrib.pAttr->Which())
+                                        if (EE_FEATURE_FIELD == rAttrib.pAttr->Which() || EE_CHAR_URL == rAttrib.pAttr->Which())
                                         {
                                             aSel.end.nIndex = rAttrib.nStart;
 

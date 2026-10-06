@@ -1522,7 +1522,7 @@ public:
         sal_uInt8 nType );
     void NextPara( sal_Int32 nPar );
     void OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>* pWhichsToIgnore = nullptr);
-    void OutEEField(const SfxPoolItem& rHt);
+    void OutEEField(const SfxPoolItem& rHt, const OUString* pLinkText = nullptr);
 
     bool IsTextAttr(sal_Int32 nSwPos);
 

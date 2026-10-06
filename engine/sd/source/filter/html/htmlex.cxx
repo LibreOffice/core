@@ -352,7 +352,9 @@ OUString TextAttribToHTMLString( SfxItemSet const * pSet, HtmlState* pState )
 
     OUString aLink, aTarget;
     const SvxFieldItem* pItem = nullptr;
-    if ( pSet->GetItemState( EE_FEATURE_FIELD, true, &pItem ) == SfxItemState::SET )
+    // A hyperlink is a placeholder field or a URL span.
+    if (pSet->GetItemState(EE_FEATURE_FIELD, true, &pItem) == SfxItemState::SET
+         || pSet->GetItemState(EE_CHAR_URL, true, &pItem) == SfxItemState::SET)
     {
         const SvxURLField* pURL = dynamic_cast<const SvxURLField*>( pItem->GetField() );
         if(pURL)

@@ -1959,6 +1959,20 @@ void ImpEditView::DeleteSelected()
     ShowCursor( DoAutoScroll(), true );
 }
 
+const SvxFieldItem* ImpEditView::SynthesizeUrlFieldItem(const SvxFieldItem& rBacking, const OUString& rLiveText) const
+{
+    const SvxURLField* pUrl = dynamic_cast<const SvxURLField*>(rBacking.GetField());
+    if (!pUrl)
+    {
+        mpSynthesizedUrlFieldItem.reset();
+        return nullptr;
+    }
+    SvxURLField aLive(*pUrl);
+    aLive.SetRepresentation(rLiveText);
+    mpSynthesizedUrlFieldItem.reset(new SvxFieldItem(aLive, EE_CHAR_URL));
+    return mpSynthesizedUrlFieldItem.get();
+}
+
 const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, sal_Int32* pPos ) const
 {
     if( !GetOutputArea().Contains( rPos ) )
@@ -1980,17 +1994,24 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, 
     for (size_t nAttr = rAttrs.size(); nAttr; )
     {
         const EditCharAttrib& rAttr = *rAttrs[--nAttr];
-        if (rAttr.GetStart() == nXPos || rAttr.GetEnd() == nXPos)
+        if (rAttr.Which() == EE_FEATURE_FIELD && (rAttr.GetStart() == nXPos || rAttr.GetEnd() == nXPos))
         {
-            if (rAttr.Which() == EE_FEATURE_FIELD)
-            {
-                DBG_ASSERT(dynamic_cast<const SvxFieldItem*>(rAttr.GetItem()), "No FieldItem...");
-                if ( pPara )
-                    *pPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
-                if ( pPos )
-                    *pPos = rAttr.GetStart();
-                return static_cast<const SvxFieldItem*>(rAttr.GetItem());
-            }
+            DBG_ASSERT(dynamic_cast<const SvxFieldItem*>(rAttr.GetItem()), "No FieldItem...");
+            if (pPara)
+                *pPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
+            if (pPos)
+                *pPos = rAttr.GetStart();
+            return static_cast<const SvxFieldItem*>(rAttr.GetItem());
+        }
+        // The point is on the link when it falls inside the span.
+        if (rAttr.Which() == EE_CHAR_URL && rAttr.GetStart() <= nXPos && nXPos < rAttr.GetEnd())
+        {
+            if (pPara)
+                *pPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
+            if (pPos)
+                *pPos = rAttr.GetStart();
+            OUString aLiveText = aPaM.GetNode()->Copy(rAttr.GetStart(), rAttr.GetEnd() - rAttr.GetStart());
+            return SynthesizeUrlFieldItem(*static_cast<const SvxFieldItem*>(rAttr.GetItem()), aLiveText);
         }
     }
     return nullptr;

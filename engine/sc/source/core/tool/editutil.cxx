@@ -472,12 +472,14 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEngine ) :
             else if (eState == SfxItemState::SET)
             {
                 if ( nId == EE_CHAR_ESCAPEMENT || nId == EE_CHAR_PAIRKERNING ||
-                        nId == EE_CHAR_KERNING || nId == EE_CHAR_XMLATTRIBS )
+                        nId == EE_CHAR_KERNING || nId == EE_CHAR_XMLATTRIBS ||
+                        nId == EE_CHAR_URL )
                 {
                     //  Escapement and kerning are kept in EditEngine because there are no
                     //  corresponding cell format items. User defined attributes are kept in
                     //  EditEngine because "user attributes applied to all the text" is different
-                    //  from "user attributes applied to the cell".
+                    //  from "user attributes applied to the cell". A hyperlink span has no cell
+                    //  format either.
 
                     if ( *pItem != rEditDefaults.Get(nId) )
                         bNeedsObject = true;

@@ -230,39 +230,53 @@ OUString ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,
 
 sal_uInt16 ScUnoEditEngine::CountFields()
 {
-    eMode = SC_UNO_COLLECT_COUNT;
-    mnFieldType = text::textfield::Type::UNSPECIFIED;
-    nFieldCount = 0;
-    UpdateFields();
-    eMode = SC_UNO_COLLECT_NONE;
-
-    return nFieldCount;
+    // GetFieldInfo reports hyperlink spans too.
+    sal_uInt16 nCount = 0;
+    const sal_Int32 nParaCount = GetParagraphCount();
+    for (sal_Int32 nPara = 0; nPara < nParaCount; ++nPara)
+        nCount = nCount + static_cast<sal_uInt16>(GetFieldInfo(nPara).size());
+    return nCount;
 }
 
 SvxFieldData* ScUnoEditEngine::FindByIndex(sal_uInt16 nIndex)
 {
-    eMode = SC_UNO_COLLECT_FINDINDEX;
-    nFieldIndex = nIndex;
-    mnFieldType = text::textfield::Type::UNSPECIFIED;
-    nFieldCount = 0;
-    UpdateFields();
-    eMode = SC_UNO_COLLECT_NONE;
-
-    return pFound.get();
+    sal_uInt16 nCount = 0;
+    const sal_Int32 nParaCount = GetParagraphCount();
+    for (sal_Int32 nPara = 0; nPara < nParaCount; ++nPara)
+    {
+        for (const EFieldInfo& rInfo : GetFieldInfo(nPara))
+        {
+            if (nCount == nIndex && rInfo.pFieldItem && rInfo.pFieldItem->GetField())
+            {
+                nFieldPar = nPara;
+                nFieldPos = rInfo.aPosition.nIndex;
+                pFound = rInfo.pFieldItem->GetField()->Clone();
+                return pFound.get();
+            }
+            ++nCount;
+        }
+    }
+    return nullptr;
 }
 
 SvxFieldData* ScUnoEditEngine::FindByPos(const EPaM& rPos, sal_Int32 nType)
 {
-    eMode = SC_UNO_COLLECT_FINDPOS;
-    nFieldPar = rPos.nPara;
-    nFieldPos = rPos.nIndex;
-    mnFieldType = nType;
-    nFieldCount = 0;
-    UpdateFields();
-    mnFieldType = text::textfield::Type::UNSPECIFIED;
-    eMode = SC_UNO_COLLECT_NONE;
-
-    return pFound.get();
+    for (const EFieldInfo& rInfo : GetFieldInfo(rPos.nPara))
+    {
+        if (rInfo.aPosition.nIndex == rPos.nIndex && rInfo.pFieldItem)
+        {
+            const SvxFieldData* pData = rInfo.pFieldItem->GetField();
+            if (pData
+                && (nType == text::textfield::Type::UNSPECIFIED || pData->GetClassId() == nType))
+            {
+                nFieldPar = rPos.nPara;
+                nFieldPos = rPos.nIndex;
+                pFound = pData->Clone();
+                return pFound.get();
+            }
+        }
+    }
+    return nullptr;
 }
 
 ScCellFieldsObj::ScCellFieldsObj(

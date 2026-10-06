@@ -4393,6 +4393,22 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
             }
         }
     }
+    else if ( aSelection.Min().GetNode() == aSelection.Max().GetNode() )
+    {
+        // A selection of exactly one URL span offers its target as the clipboard bookmark.
+        const sal_Int32 nMin = aSelection.Min().GetIndex();
+        const sal_Int32 nMax = aSelection.Max().GetIndex();
+        for (const auto& rAttr : aSelection.Min().GetNode()->GetCharAttribs().GetAttribs())
+        {
+            if ( rAttr->Which() == EE_CHAR_URL && rAttr->GetStart() == nMin && rAttr->GetEnd() == nMax )
+            {
+                if ( auto pUrlField = dynamic_cast<const SvxURLField*>(
+                         static_cast<const SvxFieldItem*>(rAttr->GetItem())->GetField()) )
+                    pDataObj->GetURL() = pUrlField->GetURL();
+                break;
+            }
+        }
+    }
 
     return pDataObj;
 }

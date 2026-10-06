@@ -83,6 +83,9 @@ struct EDITENG_DLLPUBLIC EFieldInfo
     std::unique_ptr<SvxFieldItem>   pFieldItem;
     OUString                        aCurrentText;
     EPaM                            aPosition = EPaM::NotFound();
+    // True when the field text is real characters in the paragraph, as for a hyperlink span. False
+    // for a placeholder field, whose one character stands for a longer text.
+    bool bTextIsSpanned = false;
 
     EFieldInfo();
     EFieldInfo( const SvxFieldItem& rFieldItem, sal_Int32 nPara, sal_Int32 nPos );

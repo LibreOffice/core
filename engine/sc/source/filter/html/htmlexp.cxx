@@ -1368,9 +1368,16 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
     {
         ESelection aSel( 0, 0, nParas-1, rEngine.GetTextLen( nParas-1 ) );
         SfxItemSet aSet( rEngine.GetAttribs( aSel ) );
+        // A hyperlink is a placeholder field or a URL span. GetAttribs fills in defaults, so only a
+        // real URL field counts.
         SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, false );
         if ( eFieldState == SfxItemState::INVALID || eFieldState == SfxItemState::SET )
             bFields = true;
+        else if (const SvxFieldItem* pUrlItem = aSet.GetItemIfSet(EE_CHAR_URL, false))
+        {
+            if (dynamic_cast<const SvxURLField*>(pUrlItem->GetField()))
+                bFields = true;
+        }
     }
     if ( bFields )
     {
@@ -1400,6 +1407,27 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
                             OUT_STR( pURLField->GetURL() );
                             rStrm.WriteOString( "\">" );
                             OUT_STR( pURLField->GetRepresentation() );
+                            rStrm.WriteOString( "</" ).WriteOString(OOO_STRING_SVTOOLS_HTML_anchor).WriteChar('>');
+                        }
+                    }
+                }
+                if (!bUrl)
+                {
+                    // The text of a span is the anchor content.
+                    SfxItemSet aSpanSet = rEngine.GetAttribs(aSel);
+                    if (const SvxFieldItem* pUrlItem = aSpanSet.GetItemIfSet(EE_CHAR_URL, false))
+                    {
+                        if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pUrlItem->GetField()))
+                        {
+                            bUrl = true;
+                            rStrm.WriteChar('<');
+                            rStrm.WriteOString(OOO_STRING_SVTOOLS_HTML_anchor);
+                            rStrm.WriteChar(' ');
+                            rStrm.WriteOString(OOO_STRING_SVTOOLS_HTML_O_href);
+                            rStrm.WriteOString("=\"");
+                            OUT_STR(pURLField->GetURL());
+                            rStrm.WriteOString("\">");
+                            OUT_STR(rEngine.GetText(aSel));
                             rStrm.WriteOString( "</" ).WriteOString( OOO_STRING_SVTOOLS_HTML_anchor ).WriteChar( '>' );
                         }
                     }

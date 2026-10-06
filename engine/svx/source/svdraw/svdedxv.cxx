@@ -3041,6 +3041,8 @@ bool SdrObjEditView::SupportsFormatPaintbrush(SdrInventor nObjectInventor,
 
 static const WhichRangesContainer& GetFormatRangeImpl(bool bTextOnly, bool withParagraphAttr = true)
 {
+    // The character attributes end before the hyperlink, which is not formatting.
+    static_assert(EE_CHAR_URL == EE_CHAR_END);
     static const WhichRangesContainer gFull(
         svl::Items<XATTR_LINE_FIRST, XATTR_LINE_LAST, XATTR_FILL_FIRST, XATTR_FILL_LAST,
                    SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST, SDRATTR_MISC_FIRST,
@@ -3049,14 +3051,14 @@ static const WhichRangesContainer& GetFormatRangeImpl(bool bTextOnly, bool withP
                    SDRATTR_GLOW_FIRST, SDRATTR_GLOW_LAST, SDRATTR_SOFTEDGE_FIRST,
                    SDRATTR_SOFTEDGE_LAST, SDRATTR_GLOW_TEXT_FIRST, SDRATTR_GLOW_TEXT_LAST,
                    SDRATTR_REFLECTION_FIRST, SDRATTR_REFLECTION_LAST, EE_PARA_START, EE_PARA_END,
-                   EE_CHAR_START, EE_CHAR_END>);
+                   EE_CHAR_START, EE_CHAR_URL - 1>);
 
     static const WhichRangesContainer gTextOnly(
-        svl::Items<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST, EE_CHAR_START, EE_CHAR_END>);
+        svl::Items<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST, EE_CHAR_START, EE_CHAR_URL - 1>);
 
     static const WhichRangesContainer gParaTextOnly(
         svl::Items<SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST, EE_PARA_START, EE_PARA_END, EE_CHAR_START,
-                   EE_CHAR_END>);
+                   EE_CHAR_URL - 1>);
 
     return bTextOnly ? withParagraphAttr ? gParaTextOnly : gTextOnly : gFull;
 }

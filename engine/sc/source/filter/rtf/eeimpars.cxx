@@ -22,6 +22,7 @@
 
 #include <editeng/adjustitem.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/flditem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/langitem.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -200,6 +201,12 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, false );
                 if ( eFieldState == SfxItemState::INVALID || eFieldState == SfxItemState::SET )
                     bSimple = false;
+                // A hyperlink span. GetAttribs fills in defaults, so only a real URL field counts.
+                else if (const SvxFieldItem* pUrlItem = aSet.GetItemIfSet(EE_CHAR_URL, false))
+                {
+                    if (dynamic_cast<const SvxURLField*>(pUrlItem->GetField()))
+                        bSimple = false;
+                }
             }
 
             // HTML

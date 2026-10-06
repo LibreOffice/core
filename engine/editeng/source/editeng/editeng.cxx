@@ -1474,6 +1474,22 @@ std::vector<EFieldInfo> EditEngine::GetFieldInfo( sal_Int32 nPara ) const
             aInfo.aCurrentText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
             aFieldInfos.push_back(aInfo);
         }
+        else if (rAttr.Which() == EE_CHAR_URL)
+        {
+            // The link text is real text, so it is both the current text and the representation.
+            const SvxFieldData* pData
+                = static_cast<const SvxFieldItem*>(rAttr.GetItem())->GetField();
+            if (auto pUrlField = dynamic_cast<const SvxURLField*>(pData))
+            {
+                OUString aText = rNode.Copy(rAttr.GetStart(), rAttr.GetEnd() - rAttr.GetStart());
+                SvxURLField aLiveField(*pUrlField);
+                aLiveField.SetRepresentation(aText);
+                EFieldInfo aInfo(SvxFieldItem(aLiveField, EE_CHAR_URL), nPara, rAttr.GetStart());
+                aInfo.aCurrentText = aText;
+                aInfo.bTextIsSpanned = true;
+                aFieldInfos.push_back(aInfo);
+            }
+        }
     }
     return aFieldInfos;
 }
@@ -1513,6 +1529,16 @@ void EditEngine::RemoveFields( const std::function<bool ( const SvxFieldData* )>
                     EditSelection aSel( EditPaM(rNode, rAttr.GetStart()), EditPaM(rNode, rAttr.GetEnd()) );
                     OUString aFieldText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
                     getImpl().ImpInsertText(aSel, aFieldText);
+                }
+            }
+            else if (rAttr.Which() == EE_CHAR_URL)
+            {
+                const SvxFieldData* pFieldData = static_cast<const SvxFieldItem*>(rAttr.GetItem())->GetField();
+                if ( pFieldData && isFieldData( pFieldData ) )
+                {
+                    // The link text is real text, so only the URL attribute goes.
+                    EditSelection aSel( EditPaM(rNode, rAttr.GetStart()), EditPaM(rNode, rAttr.GetEnd()) );
+                    getImpl().RemoveCharAttribs( aSel, EERemoveParaAttribsMode::RemoveNone, EE_CHAR_URL );
                 }
             }
         }
@@ -2075,6 +2101,7 @@ EFieldInfo& EFieldInfo::operator= ( const EFieldInfo& rFldInfo )
     pFieldItem.reset( rFldInfo.pFieldItem ? new SvxFieldItem( *rFldInfo.pFieldItem ) : nullptr );
     aCurrentText = rFldInfo.aCurrentText;
     aPosition = rFldInfo.aPosition;
+    bTextIsSpanned = rFldInfo.bTextIsSpanned;
 
     return *this;
 }

@@ -207,6 +207,31 @@ tools::Rectangle lcl_negateRectX(const tools::Rectangle& rRect)
     return tools::Rectangle(-rRect.Right(), rRect.Top(), -rRect.Left(), rRect.Bottom());
 }
 
+// The hyperlink span that holds the selection [nMinIndex, nMaxIndex), or nullptr.
+const EditCharAttrib* lcl_findUrlSpanAt(const CharAttribList::AttribsType& rAttrs,
+                                        sal_Int32 nMinIndex, sal_Int32 nMaxIndex)
+{
+    for (const auto& rAttr : rAttrs)
+    {
+        if (rAttr->Which() == EE_CHAR_URL && rAttr->GetStart() <= nMinIndex
+            && nMaxIndex <= rAttr->GetEnd() && nMinIndex < rAttr->GetEnd())
+            return rAttr.get();
+    }
+    return nullptr;
+}
+
+// The hyperlink span that ends at nIndex, or nullptr.
+const EditCharAttrib* lcl_findUrlSpanEndingAt(const CharAttribList::AttribsType& rAttrs,
+                                              sal_Int32 nIndex)
+{
+    for (const auto& rAttr : rAttrs)
+    {
+        if (rAttr->Which() == EE_CHAR_URL && nIndex && rAttr->GetEnd() == nIndex)
+            return rAttr.get();
+    }
+    return nullptr;
+}
+
 }
 
 void EditView::InvalidateWindow(const tools::Rectangle& rClipRect)
@@ -1340,7 +1365,9 @@ const SvxFieldItem* EditView::GetFieldAtSelection(bool bAlsoCheckBeforeCursor) c
 // If no field is returned, the value in pIsBeforeCursor is meaningless.
 const SvxFieldItem* EditView::GetFieldAtSelection(bool* pIsBeforeCursor) const
 {
-    // a field is a dummy character - so it cannot span nodes or be a selection larger than 1
+    if (pIsBeforeCursor)
+        *pIsBeforeCursor = false;
+
     EditSelection aSel( getImpl().GetEditSelection() );
     if (aSel.Min().GetNode() != aSel.Max().GetNode())
         return nullptr;
@@ -1348,38 +1375,55 @@ const SvxFieldItem* EditView::GetFieldAtSelection(bool* pIsBeforeCursor) const
     // normalize: min < max
     aSel.Adjust(getEditEngine().GetEditDoc());
 
-    const sal_Int32 nMinIndex =  aSel.Min().GetIndex();
-    const sal_Int32 nMaxIndex =  aSel.Max().GetIndex();
-    if (nMaxIndex > nMinIndex + 1)
-        return nullptr;
+    const sal_Int32 nMinIndex = aSel.Min().GetIndex();
+    const sal_Int32 nMaxIndex = aSel.Max().GetIndex();
+    ContentNode* pNode = aSel.Min().GetNode();
+    const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
 
-    // Only when cursor is in font of field, no selection,
-    // or only selecting field
-    bool bAlsoCheckBeforeCursor = false;
-    if (pIsBeforeCursor)
+    // A span covers real text, so the cursor or the selection can be inside it.
+    if (const EditCharAttrib* pSpan = lcl_findUrlSpanAt(rAttrs, nMinIndex, nMaxIndex))
     {
-        *pIsBeforeCursor = false;
-        bAlsoCheckBeforeCursor = nMaxIndex == nMinIndex;
+        OUString aLiveText = pNode->Copy(pSpan->GetStart(), pSpan->GetEnd() - pSpan->GetStart());
+        return getImpl().SynthesizeUrlFieldItem(
+            *static_cast<const SvxFieldItem*>(pSpan->GetItem()), aLiveText);
     }
-    const SvxFieldItem* pFoundBeforeCursor = nullptr;
-    const CharAttribList::AttribsType& rAttrs = aSel.Min().GetNode()->GetCharAttribs().GetAttribs();
-    for (const auto& rAttr: rAttrs)
-    {
-        if (rAttr->Which() == EE_FEATURE_FIELD)
-        {
-            DBG_ASSERT(dynamic_cast<const SvxFieldItem*>(rAttr->GetItem()), "No FieldItem...");
-            if (rAttr->GetStart() == nMinIndex)
-                return static_cast<const SvxFieldItem*>(rAttr->GetItem());
 
-            // perhaps the cursor is behind the field?
-            if (nMinIndex && rAttr->GetStart() == nMinIndex - 1)
-                pFoundBeforeCursor = static_cast<const SvxFieldItem*>(rAttr->GetItem());
+    const bool bAlsoCheckBeforeCursor = pIsBeforeCursor && (nMaxIndex == nMinIndex);
+
+    // A placeholder field is one character, so its selection is at most one wide.
+    if (nMaxIndex <= nMinIndex + 1)
+    {
+        const SvxFieldItem* pFoundBeforeCursor = nullptr;
+        for (const auto& rAttr: rAttrs)
+        {
+            if (rAttr->Which() == EE_FEATURE_FIELD)
+            {
+                DBG_ASSERT(dynamic_cast<const SvxFieldItem*>(rAttr->GetItem()), "No FieldItem...");
+                if (rAttr->GetStart() == nMinIndex)
+                    return static_cast<const SvxFieldItem*>(rAttr->GetItem());
+
+                // perhaps the cursor is behind the field?
+                if (nMinIndex && rAttr->GetStart() == nMinIndex - 1)
+                    pFoundBeforeCursor = static_cast<const SvxFieldItem*>(rAttr->GetItem());
+            }
+        }
+        if (bAlsoCheckBeforeCursor && pFoundBeforeCursor)
+        {
+            *pIsBeforeCursor = true;
+            return pFoundBeforeCursor;
         }
     }
+
+    // A hyperlink span that ends right at the cursor.
     if (bAlsoCheckBeforeCursor)
     {
-        *pIsBeforeCursor = /*(bool)*/pFoundBeforeCursor;
-        return pFoundBeforeCursor;
+        if (const EditCharAttrib* pSpan = lcl_findUrlSpanEndingAt(rAttrs, nMinIndex))
+        {
+            *pIsBeforeCursor = true;
+            OUString aLiveText = pNode->Copy(pSpan->GetStart(), pSpan->GetEnd() - pSpan->GetStart());
+            return getImpl().SynthesizeUrlFieldItem(
+                *static_cast<const SvxFieldItem*>(pSpan->GetItem()), aLiveText);
+        }
     }
     return nullptr;
 }
@@ -1391,9 +1435,32 @@ void EditView::SelectFieldAtCursor()
     if (!pFieldItem)
         return;
 
+    ESelection aSel = GetSelection();
+
+    // A hyperlink span covers real text, so select the whole span.
+    if (pFieldItem->Which() == EE_CHAR_URL)
+    {
+        EditSelection aEditSel(getImpl().GetEditSelection());
+        aEditSel.Adjust(getEditEngine().GetEditDoc());
+        const CharAttribList::AttribsType& rAttrs
+            = aEditSel.Min().GetNode()->GetCharAttribs().GetAttribs();
+        const sal_Int32 nMinIndex = aEditSel.Min().GetIndex();
+        // The span that holds the selection, or the one that ends at the cursor when the field is
+        // before it.
+        const EditCharAttrib* pSpan
+            = bIsBeforeCursor ? lcl_findUrlSpanEndingAt(rAttrs, nMinIndex)
+                              : lcl_findUrlSpanAt(rAttrs, nMinIndex, aEditSel.Max().GetIndex());
+        if (pSpan)
+        {
+            aSel.start.nIndex = pSpan->GetStart();
+            aSel.end.nIndex = pSpan->GetEnd();
+            SetSelection(aSel);
+        }
+        return;
+    }
+
     // Make sure the whole field is selected
     // A field is represented by a dummy character - so it cannot be a selection larger than 1
-    ESelection aSel = GetSelection();
     if (!aSel.HasRange()) // not yet selected
     {
         if (bIsBeforeCursor)
@@ -1432,6 +1499,10 @@ sal_Int32 EditView::countFieldsOffsetSum(sal_Int32 nPara, sal_Int32 nPos, bool b
 
             if (bLastPara && nFieldPos >= nPos)
                 break;
+
+            // A spanned field has the same length in the model and in the shown text.
+            if (rFieldInfo.bTextIsSpanned)
+                continue;
 
             sal_Int32 nFieldLen = rFieldInfo.aCurrentText.getLength();
 

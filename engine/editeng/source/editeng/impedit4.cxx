@@ -1265,6 +1265,19 @@ OString ImpEditEngine::GetSimpleHtml() const
                     pURLField = dynamic_cast<const SvxURLField*>(pFieldData);
                 }
             }
+            else
+            {
+                // A text portion inside a hyperlink span links to the URL of the span.
+                for (const auto& rAttr : rNode.GetCharAttribs().GetAttribs())
+                {
+                    if (rAttr->Which() != EE_CHAR_URL || rAttr->GetStart() > nIndex
+                        || nIndex >= rAttr->GetEnd())
+                        continue;
+                    if (const SvxFieldItem* pUrlItem = dynamic_cast<const SvxFieldItem*>(rAttr->GetItem()))
+                        pURLField = dynamic_cast<const SvxURLField*>(pUrlItem->GetField());
+                    break;
+                }
+            }
 
             OUString aRTFStr = EditDoc::GetParaAsString(&rNode, nIndex, nIndex + rTextPortion.GetLen());
             if (pURLField)

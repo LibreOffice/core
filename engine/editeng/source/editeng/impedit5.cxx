@@ -685,8 +685,10 @@ void ImpEditEngine::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich, bool 
     EditCharAttrib* pAttr = GetAttrib(rAttrs, nAttr);
     while ( pAttr )
     {
-        if ( ( !pAttr->IsFeature() || bRemoveFeatures ) &&
-             ( !nWhich || ( pAttr->GetItem()->Which() == nWhich ) ) )
+        // Clearing all formatting (nWhich == 0) keeps hyperlinks.
+        if ((!pAttr->IsFeature() || bRemoveFeatures) &&
+             (nWhich ? (pAttr->GetItem()->Which() == nWhich)
+                      : (pAttr->GetItem()->Which() != EE_CHAR_URL)))
         {
             rNode.GetCharAttribs().Remove(nAttr);
         }

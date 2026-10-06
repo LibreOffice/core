@@ -528,10 +528,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                 if (pFieldItem && dynamic_cast< const SvxURLField *>( pFieldItem->GetField() ) != nullptr )
                 {
-                    // Select field so that it will be deleted during insert
-                    ESelection aSel = pOLV->GetSelection();
-                    aSel.end.nIndex++;
-                    pOLV->SetSelection(aSel);
+                    // Select the whole hyperlink so the insert replaces it.
+                    pOLV->SelectFieldAtCursor();
                 }
                 pOLV->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));
             }

@@ -327,6 +327,11 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
             return new EditCharAttribOpticalSizing(rPool, rAttr, nS, nE );
         }
         break;
+        case EE_CHAR_URL:
+        {
+            return new EditCharAttribURL(rPool, rAttr, nS, nE);
+        }
+        break;
         default:
         break;
     }
@@ -3767,7 +3772,9 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
     {
         bool bRemoveAttrib = false;
         sal_uInt16 nAttrWhich = pAttr->Which();
-        if ( ( nAttrWhich < EE_FEATURE_START ) && ( !nWhich || ( nAttrWhich == nWhich ) ) )
+        // Clearing all formatting (nWhich == 0) keeps hyperlinks.
+        if ( ( nAttrWhich < EE_FEATURE_START )
+             && ( nWhich ? ( nAttrWhich == nWhich ) : ( nAttrWhich != EE_CHAR_URL ) ) )
         {
             // Attribute starts in Selection
             if ( ( pAttr->GetStart() >= nStart ) && ( pAttr->GetStart() <= nEnd ) )

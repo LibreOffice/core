@@ -762,7 +762,8 @@ OUString AccessibleEditableTextPara::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
     {
         sal_Int32 reeBegin = ree.aPosition.nIndex + nAllFieldLen;
         sal_Int32 reeEnd = reeBegin + ree.aCurrentText.getLength();
-        nAllFieldLen += (ree.aCurrentText.getLength() - 1);
+        if (!ree.bTextIsSpanned)
+            nAllFieldLen += (ree.aCurrentText.getLength() - 1);
         if (nIndex < reeBegin)
             break;
         if (nIndex < reeEnd)
@@ -1308,7 +1309,8 @@ sal_Int32 AccessibleEditableTextPara::SkipField(sal_Int32 nIndex, bool bForward)
     {
         reeBegin = ree.aPosition.nIndex + nAllFieldLen;
         reeEnd = reeBegin + ree.aCurrentText.getLength();
-        nAllFieldLen += (ree.aCurrentText.getLength() - 1);
+        if (!ree.bTextIsSpanned)
+            nAllFieldLen += (ree.aCurrentText.getLength() - 1);
         if (nIndex < reeBegin)
             break;
         if (!ree.pFieldItem)
@@ -1345,7 +1347,8 @@ void AccessibleEditableTextPara::ExtendByField( css::accessibility::TextSegment&
         const EFieldInfo& ree = aFieldInfos[j];
         reeBegin  = ree.aPosition.nIndex + nAllFieldLen;
         reeEnd = reeBegin + ree.aCurrentText.getLength();
-        nAllFieldLen += (ree.aCurrentText.getLength() - 1);
+        if (!ree.bTextIsSpanned)
+            nAllFieldLen += (ree.aCurrentText.getLength() - 1);
         if( reeBegin > Segment.SegmentEnd )
         {
             break;
@@ -2300,7 +2303,9 @@ cpo::uno::Reference< css::accessibility::XAccessibleHyperlink > AccessibleEditab
     {
         if ( dynamic_cast<const SvxURLField* >( rField.pFieldItem->GetField() ) != nullptr)
         {
-            if ( rField.aPosition.nIndex == nEEIndex )
+            // A hyperlink span covers each of its characters.
+            const sal_Int32 nLength = rField.bTextIsSpanned ? rField.aCurrentText.getLength() : 1;
+            if (rField.aPosition.nIndex <= nEEIndex && nEEIndex < rField.aPosition.nIndex + nLength)
             {
                 nHLIndex = nHyperLink;
                 break;

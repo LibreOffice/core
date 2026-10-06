@@ -4626,11 +4626,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                     nullptr != dynamic_cast< const SvxAuthorField *>( pOldFldItem->GetField() ) ||
                                     nullptr != dynamic_cast< const SvxPageField *>( pOldFldItem->GetField() ) ) )
                 {
-                    // select field, then it will be deleted when inserting
-                    ESelection aSel = pOLV->GetSelection();
-                    if (aSel.start.nIndex == aSel.end.nIndex)
-                        aSel.end.nIndex++;
-                    pOLV->SetSelection( aSel );
+                    // Select the whole field, so the insert replaces it.
+                    pOLV->SelectFieldAtCursor();
                 }
 
                 if( pFieldItem )

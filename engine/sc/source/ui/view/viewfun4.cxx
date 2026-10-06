@@ -756,28 +756,50 @@ bool ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
     if (!pData)
         return false;
 
-    if (!pData->IsFieldObject())
-        // not a field object.
+    // The dialog shows a hyperlink only when the whole cell is one link: a placeholder field or a
+    // URL span over all the text.
+    if (pData->GetParagraphCount() != 1)
         return false;
 
-    const SvxFieldItem* pFieldItem = pData->GetField();
-    if (!pFieldItem)
-        // doesn't have a field item.
-        return false;
+    const SvxURLField* pURLField = nullptr;
+    OUString aRepresentation;
 
-    const SvxFieldData* pField = pFieldItem->GetField();
-    if (!pField)
-        // doesn't have a field item data.
-        return false;
+    // The cell is one placeholder field.
+    if (const SvxFieldItem* pFieldItem = pData->GetField())
+    {
+        pURLField = dynamic_cast<const SvxURLField*>(pFieldItem->GetField());
+        if (pURLField)
+            aRepresentation = pURLField->GetRepresentation();
+    }
 
-    if (pField->GetClassId() != css::text::textfield::Type::URL)
-        // not a URL field.
+    // A URL span covers the whole cell text.
+    if (!pURLField)
+    {
+        const sal_Int32 nTextLen = pData->GetTextLen(0);
+        std::vector<EECharAttrib> aAttribs;
+        pData->GetCharAttribs(0, aAttribs);
+        for (const EECharAttrib& rAttrib : aAttribs)
+        {
+            if (rAttrib.pAttr->Which() != EE_CHAR_URL)
+                continue;
+            if (rAttrib.nStart != 0 || rAttrib.nEnd != nTextLen)
+                continue;
+            pURLField = dynamic_cast<const SvxURLField*>(
+                static_cast<const SvxFieldItem*>(rAttrib.pAttr)->GetField());
+            if (pURLField)
+            {
+                aRepresentation = pData->GetText(0);
+                break;
+            }
+        }
+    }
+
+    if (!pURLField)
         return false;
 
     if (pContent)
     {
-        const SvxURLField* pURLField = static_cast<const SvxURLField*>(pField);
-        pContent->SetName( pURLField->GetRepresentation() );
+        pContent->SetName(aRepresentation);
         pContent->SetURL( pURLField->GetURL() );
         pContent->SetTargetFrame( pURLField->GetTargetFrame() );
     }

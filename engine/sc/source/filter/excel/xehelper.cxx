@@ -456,6 +456,10 @@ XclExpStringRef lclCreateFormattedString(
 
         std::vector<sal_Int32> aPosList;
         rEE.GetPortions( nPara, aPosList );
+        // The hyperlink spans of the paragraph, each with its current text as representation.
+        const std::vector<EFieldInfo> aFieldInfos = rEE.GetFieldInfo(nPara);
+        // The hyperlink span of the previous portion, if it had one.
+        std::optional<SvxURLField> oPrevSpanUrl;
 
         // process all portions in the paragraph
         for( const auto& rPos : aPosList )
@@ -493,6 +497,36 @@ XclExpStringRef lclCreateFormattedString(
                     }
                 }
             }
+            // A hyperlink span keeps its text and gets the hyperlink color. The link is recorded
+            // once per span, even when the span is split into portions.
+            const SvxURLField* pSpanUrl = nullptr;
+            if (!bIsHyperlink)
+            {
+                for (const EFieldInfo& rInfo : aFieldInfos)
+                {
+                    if (rInfo.bTextIsSpanned && rInfo.aPosition.nIndex <= aSel.start.nIndex
+                        && aSel.start.nIndex
+                               < rInfo.aPosition.nIndex + rInfo.aCurrentText.getLength())
+                    {
+                        pSpanUrl = dynamic_cast<const SvxURLField*>(rInfo.pFieldItem->GetField());
+                        break;
+                    }
+                }
+                if (pSpanUrl)
+                {
+                    bIsHyperlink = true;
+                    const SvxFieldData* pPrevSpan
+                        = oPrevSpanUrl.has_value() ? &*oPrevSpanUrl : nullptr;
+                    const SvxFieldData& rSpan = *pSpanUrl;
+                    const bool bSameSpan = pPrevSpan && *pPrevSpan == rSpan;
+                    if (pLinkHelper && !bSameSpan)
+                        pLinkHelper->ProcessUrlField(*pSpanUrl);
+                }
+            }
+            if (pSpanUrl)
+                oPrevSpanUrl = *pSpanUrl;
+            else
+                oPrevSpanUrl.reset();
 
             // Excel start position of this portion
             sal_Int32 nXclPortionStart = xString->Len();

@@ -969,7 +969,8 @@ const SvxFieldData* toXMLPropertyStates(
     rPropStates.reserve(rSecAttrs.size());
     for (const SfxPoolItem* p : rSecAttrs)
     {
-        if (p->Which() == EE_FEATURE_FIELD)
+        // A hyperlink is a placeholder field or a URL span.
+        if (p->Which() == EE_FEATURE_FIELD || p->Which() == EE_CHAR_URL)
         {
             pField = static_cast<const SvxFieldItem*>(p)->GetField();
             continue;
@@ -3085,7 +3086,8 @@ void writeContent(const ScDocument& rDoc, ScXMLExport& rExport, const OUString& 
                 OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
                     XML_NAMESPACE_TEXT, GetXMLToken(XML_A));
                 SvXMLElementExport aElem(rExport, aElemName, false, false);
-                rExport.Characters(aFieldVal);
+                // A span shows its own text. A placeholder field shows the computed field value.
+                rExport.Characters((rContent != u"\x0001") ? rContent : aFieldVal);
             }
             break;
             case text::textfield::Type::DATE:

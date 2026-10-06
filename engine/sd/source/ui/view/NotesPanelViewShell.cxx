@@ -1050,11 +1050,8 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
                     || nullptr != dynamic_cast<const SvxPageField*>(pOldFldItem->GetField())
                     || nullptr != dynamic_cast<const SvxPagesField*>(pOldFldItem->GetField())))
             {
-                // select field, so it gets deleted on Insert
-                ESelection aSel = pOutlinerView->GetSelection();
-                if (aSel.start.nIndex == aSel.end.nIndex)
-                    aSel.end.nIndex++;
-                pOutlinerView->SetSelection(aSel);
+                // Select the whole field, so the insert replaces it.
+                pOutlinerView->SelectFieldAtCursor();
             }
 
             if (pFieldItem)
