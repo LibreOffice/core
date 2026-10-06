@@ -74,8 +74,12 @@
 #   define GDK_ALT_MASK GDK_MOD1_MASK
 #   define GDK_TOPLEVEL_STATE_MAXIMIZED GDK_WINDOW_STATE_MAXIMIZED
 #   define GDK_TOPLEVEL_STATE_MINIMIZED GDK_WINDOW_STATE_ICONIFIED
+#if defined(GDK_WINDOWING_WAYLAND)
 #   define gdk_wayland_surface_get_wl_surface gdk_wayland_window_get_wl_surface
+#endif
+#if defined(GDK_WINDOWING_X11)
 #   define gdk_x11_surface_get_xid gdk_x11_window_get_xid
+#endif
 #endif
 
 using namespace com::sun::star;
@@ -1248,8 +1252,8 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.pSalFrame     = this;
     m_aSystemData.pWidget       = m_pWindow;
 
-#if defined(GDK_WINDOWING_X11)
     GdkDisplay *pDisplay = getGdkDisplay();
+#if defined(GDK_WINDOWING_X11)
     if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
         m_aSystemData.pDisplay = gdk_x11_display_get_xdisplay(pDisplay);
 #endif
@@ -1677,7 +1681,9 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     {
         if (m_pParent)
             m_sWMClass = m_pParent->m_sWMClass;
+#if defined(GDK_WINDOWING_X11)
         updateWMClass();
+#endif
     }
 
     if (GTK_IS_WINDOW(m_pWindow))
@@ -1806,6 +1812,7 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     m_aForeignParentWindow = pSysData->aWindow;
     m_pForeignParent = nullptr;
     m_aForeignTopLevelWindow = findTopLevelSystemWindow(pSysData->aWindow);
+#if defined(GDK_WINDOWING_X11)
     m_pForeignTopLevel = gdk_x11_window_foreign_new_for_display( getGdkDisplay(), m_aForeignTopLevelWindow );
     gdk_window_set_events( m_pForeignTopLevel, GDK_STRUCTURE_MASK );
 
@@ -1817,6 +1824,7 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
         gtk_widget_set_sensitive(m_pWindow, true);
     }
     else
+#endif
     {
         m_pWindow = gtk_window_new( GTK_WINDOW_POPUP );
     }
@@ -1824,7 +1832,7 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     m_nStyle = SalFrameStyleFlags::PLUG;
     InitCommon();
 
-#if !GTK_CHECK_VERSION(4,0,0)
+#if !GTK_CHECK_VERSION(4,0,0) && defined(GDK_WINDOWING_X11)
     m_pForeignParent = gdk_x11_window_foreign_new_for_display( getGdkDisplay(), m_aForeignParentWindow );
     gdk_window_set_events( m_pForeignParent, GDK_STRUCTURE_MASK );
 #else
@@ -2591,6 +2599,7 @@ void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
     SetScreen( nNewScreen, SetType::RetainSize );
 }
 
+#if defined(GDK_WINDOWING_X11)
 void GtkSalFrame::updateWMClass()
 {
     if (!DLSYM_GDK_IS_X11_DISPLAY(getGdkDisplay()))
@@ -2612,14 +2621,16 @@ void GtkSalFrame::updateWMClass()
                    pClass );
     XFree( pClass );
 }
+#endif
 
 void GtkSalFrame::SetApplicationID( const OUString &rWMClass )
 {
     if( rWMClass != m_sWMClass && ! isChild() )
     {
         m_sWMClass = rWMClass;
+#if defined(GDK_WINDOWING_X11)
         updateWMClass();
-
+#endif
         for (auto const& child : m_aChildren)
             child->SetApplicationID(rWMClass);
     }
@@ -2647,12 +2658,16 @@ void GtkSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
 
 void GtkSalFrame::SessionManagerInhibit(bool bStart, ApplicationInhibitFlags eType, std::u16string_view sReason, const char* application_id)
 {
+#if defined(GDK_WINDOWING_X11)
     std::optional<Display*> aDisplay;
 
     if (DLSYM_GDK_IS_X11_DISPLAY(getGdkDisplay()))
         aDisplay = gdk_x11_display_get_xdisplay(getGdkDisplay());
 
     m_SessionManagerInhibitor.inhibit(bStart, sReason, eType, aDisplay, application_id);
+#else
+    m_SessionManagerInhibitor.inhibit(bStart, sReason, eType, application_id);
+#endif
 }
 
 void GtkSalFrame::StartPresentation( bool bStart )

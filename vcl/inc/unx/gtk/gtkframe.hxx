@@ -412,9 +412,9 @@ class GtkSalFrame final : public SalFrame
     //returns true if FrameSize changed
     bool AllocateFrame();
     void TriggerPaintEvent();
-
+#if defined(GDK_WINDOWING_X11)
     void updateWMClass();
-
+#endif
     enum class SetType { RetainSize, Fullscreen, UnFullscreen };
 
     void SetScreen( unsigned int nNewScreen, SetType eType, tools::Rectangle const *pSize = nullptr );

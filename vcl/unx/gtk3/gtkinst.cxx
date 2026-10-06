@@ -10368,12 +10368,13 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, co
 bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu, const GdkRectangle &rAnchor,
                          weld::Placement ePlace, bool bTryShrink)
 {
+#if defined(GDK_WINDOWING_X11)
     // under wayland gdk_window_move_to_rect works great for me, but in my current
     // gtk 3.24 under X it leaves part of long menus outside the work area
     GdkDisplay *pDisplay = gtk_widget_get_display(pComboBox);
     if (DLSYM_GDK_IS_X11_DISPLAY(pDisplay))
         return false;
-
+#endif
     //place the toplevel just below its launcher button
     GtkWidget* pToplevel = widget_get_toplevel(pComboBox);
     gtk_coord x, y;
@@ -10938,7 +10939,7 @@ public:
         }
 
         m_nSignalId = g_signal_connect(GTK_TOGGLE_BUTTON(m_pMenuButton), "toggled", G_CALLBACK(signalMenuButtonToggled), this);
-
+#if defined(GDK_WINDOWING_X11)
         if (!m_pMenuHack)
         {
             //under wayland a Popover will work to "escape" the parent dialog, not
@@ -10957,7 +10958,7 @@ public:
                 g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
             }
         }
-
+#endif
         if (m_pMenuHack)
         {
             GtkWidget* pPlaceHolder = gtk_popover_new(GTK_WIDGET(m_pMenuButton));
@@ -22927,7 +22928,7 @@ public:
         , m_nSignalId(g_signal_connect(m_pPopover, "closed", G_CALLBACK(signalClosed), this))
         , m_pClosedEvent(nullptr)
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if !GTK_CHECK_VERSION(4, 0, 0) && defined(GDK_WINDOWING_X11)
         //under wayland a Popover will work to "escape" the parent dialog, not
         //so under X, so come up with this hack to use a raw GtkWindow
         GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pPopover));
@@ -22979,7 +22980,7 @@ public:
                 gtk_popover_set_position(m_pPopover, GTK_POS_RIGHT);
         }
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if !GTK_CHECK_VERSION(4, 0, 0) && defined(GDK_WINDOWING_X11)
         //under wayland a Popover will work to "escape" the parent dialog, not
         //so under X, so come up with this hack to use a raw GtkWindow
         GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pPopover));
@@ -23018,7 +23019,7 @@ public:
 
     virtual void popdown() override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if !GTK_CHECK_VERSION(4, 0, 0) && defined(GDK_WINDOWING_X11)
         //under wayland a Popover will work to "escape" the parent dialog, not
         //so under X, so come up with this hack to use a raw GtkWindow
         GdkDisplay *pDisplay = gtk_widget_get_display(GTK_WIDGET(m_pPopover));

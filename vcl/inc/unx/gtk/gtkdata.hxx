@@ -22,10 +22,12 @@
 #define GLIB_DISABLE_DEPRECATION_WARNINGS
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
+#if defined(GDK_WINDOWING_X11)
 #if GTK_CHECK_VERSION(4,0,0)
 #include <gdk/x11/gdkx.h>
 #else
 #include <gdk/gdkx.h>
+#endif
 #endif
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
