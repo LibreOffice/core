@@ -480,6 +480,9 @@ interface Window {
 	pageMobileWizard: boolean;
 	protocolDebug: boolean;
 	routeToken: string;
+	// The latest token from the server's 'reconnecttoken:' message. Defined in
+	// js/global.js.
+	reconnectToken: string;
 	mobileDialogId?: number;
 	savedUIState: boolean;
 	sidebarId: number;

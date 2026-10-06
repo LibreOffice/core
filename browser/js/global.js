@@ -2360,6 +2360,10 @@ function showWelcomeSVG() {
 		global.webserver = global.webserver.replace(/\/*$/, ''); // Remove trailing slash.
 	}
 
+	// The latest token from the server's 'reconnecttoken:' message. Empty until the first one
+	// arrives.
+	global.reconnectToken = '';
+
 	var docParams = '', wopiParams;
 	var filePath = global.coolParams.get('file_path');
 	global.wopiSrc = global.coolParams.get('WOPISrc');

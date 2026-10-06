@@ -294,11 +294,14 @@ class Socket {
 
 	private getWebSocketBaseURI(map: MapInterface): string {
 		if (map.options.wopiSrc && !this._forceLegacyWsUrl) {
-			// Use the new Cool WS URL for WOPI documents.
-			return window.makeWopiCoolWsUrl(
-				window.makeWsUrl('/cool'),
-				$.param(map.options.docParams),
-			);
+			// Use the new Cool WS URL for WOPI documents. It carries the latest token
+			// the server sent, so the server can attach this socket to the previous
+			// session.
+			let docParams = $.param(map.options.docParams);
+			if (window.reconnectToken)
+				docParams +=
+					(docParams ? '&' : '') + 'ReconnectToken=' + window.reconnectToken;
+			return window.makeWopiCoolWsUrl(window.makeWsUrl('/cool'), docParams);
 		} else {
 			return window.makeWsUrlWopiSrc(
 				'/cool/',
@@ -1309,6 +1312,8 @@ class Socket {
 			this._onOsInfoMsg(textMsg);
 		} else if (textMsg.startsWith('clipboardkey: ')) {
 			this._onClipboardKeyMsg(textMsg);
+		} else if (textMsg.startsWith('reconnecttoken: ')) {
+			window.reconnectToken = textMsg.substring('reconnecttoken: '.length);
 		} else if (textMsg.startsWith('executescriptresult: ')) {
 			try {
 				const result = JSON.parse(
