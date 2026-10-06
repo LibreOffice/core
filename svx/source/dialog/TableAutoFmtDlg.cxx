@@ -280,6 +280,8 @@ IMPL_LINK_NOARG(SvxTableAutoFmtDlg, SelFormatHdl, weld::ItemView&, void)
 
     if (const SvxAutoFormatData* pData = lcl_GetTableAutoFormat(mnIndex, mpFormat))
         maWndPreview.NotifyChange(mpFormat.GetResolvedStyle(pData));
+    else
+        maWndPreview.NotifyChange(mpFormat.GetDefaultData());
 }
 
 OUString SvxTableAutoFmtDlg::GetCurrFormatName()
