@@ -6967,6 +6967,41 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
             }
         }
 
+        /*
+            A connector that holds on to an object with an end keeps that end where the object
+            is, whatever mapping arrives for it: the mapping moves its free ends, and the run is
+            laid out anew between them. The mapping arrives as the whole new place of the
+            connector's box, so what moved is read against the box as it stood.
+        */
+        if (auto* pConnector = dynamic_cast<SdrEdgeObj*>(pObject))
+        {
+            const bool bTiedAtStart(nullptr != pConnector->GetConnectedNode(true));
+            const bool bTiedAtEnd(nullptr != pConnector->GetConnectedNode(false));
+            basegfx::B2DHomMatrix aBack(aOfTheObject);
+
+            if ((bTiedAtStart || bTiedAtEnd) && aBack.invert())
+            {
+                const basegfx::B2DHomMatrix aChange(aReached * aBack);
+
+                for (sal_uInt32 nEnd = 0; nEnd < 2; ++nEnd)
+                {
+                    if (0 == nEnd ? bTiedAtStart : bTiedAtEnd)
+                        continue;
+
+                    const Point aWas(pConnector->GetPoint(nEnd));
+                    const basegfx::B2DPoint aMoved(aChange
+                                                   * basegfx::B2DPoint(aWas.X(), aWas.Y()));
+                    pConnector->NbcSetPoint(Point(basegfx::fround<tools::Long>(aMoved.getX()),
+                                                  basegfx::fround<tools::Long>(aMoved.getY())),
+                                            nEnd);
+                }
+
+                pObject->SetChanged();
+                pObject->BroadcastObjectChange();
+                continue;
+            }
+        }
+
         pObject->TRSetBaseGeometry(aReached, aOutline);
 
         /*

@@ -273,8 +273,8 @@ public:
     SAL_DLLPRIVATE virtual Point GetSnapPoint(sal_uInt32 i) const override;
     SAL_DLLPRIVATE virtual bool IsPolyObj() const override;
     SAL_DLLPRIVATE virtual sal_uInt32 GetPointCount() const override;
-    SAL_DLLPRIVATE virtual Point GetPoint(sal_uInt32 i) const override;
-    SAL_DLLPRIVATE virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i) override;
+    virtual Point GetPoint(sal_uInt32 i) const override;
+    virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i) override;
 
     SAL_DLLPRIVATE virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     SAL_DLLPRIVATE virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
