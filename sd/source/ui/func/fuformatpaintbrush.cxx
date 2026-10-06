@@ -274,7 +274,17 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
             mrDoc.AddUndo( mrDoc.GetSdrUndoFactory().CreateUndoAttrObject( *pObj, false, true ) );
     }
 
+    // The attribute changes below all belong to one pass of the paintbrush, and they are
+    // grouped into a single action so that one undo takes the text back to the formatting it
+    // had.
+    OutlinerView* pOutlinerView = mpView->GetTextEditOutlinerView();
+    if (pOutlinerView)
+        pOutlinerView->GetOutliner().UndoActionStart(OLUNDO_ATTR);
+
     mpView->ApplyFormatPaintBrush( *mxItemSet, mnDepth, bNoCharacterFormats, bNoParagraphFormats );
+
+    if (pOutlinerView)
+        pOutlinerView->GetOutliner().UndoActionEnd();
 
     if( pObj )
     {

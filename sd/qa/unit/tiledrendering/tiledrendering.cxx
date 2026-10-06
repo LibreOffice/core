@@ -18,8 +18,10 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/hash.hxx>
+#include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editids.hrc>
+#include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/numitem.hxx>
@@ -1280,6 +1282,86 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf104405)
             "/SdDrawDocument/SdrModel/maPages/SdPage/SdrPage/SdrObjList/SdrTableObj/SdrTableObjImpl"
                 "/TableModel/Cell[1]/DefaultProperties/SfxItemSet/SdrTextVertAdjustItem",
             "value"));
+}
+
+namespace
+{
+/// This helper clicks in the middle of the given cell of a table on a slide.
+void clickIntoCell(SdXImpressDocument& rDocument, sdr::table::SdrTableObj& rTable,
+                   sal_Int32 nColumn, sal_Int32 nRow)
+{
+    ::tools::Rectangle aCellRect;
+    rTable.getCellBounds(sdr::table::CellPos(nColumn, nRow), aCellRect);
+    // The rectangle stays empty when the table has no cell at that column and row.
+    CPPUNIT_ASSERT(!aCellRect.IsEmpty());
+    const Point aCentre = aCellRect.Center();
+    const int nX = o3tl::toTwips(aCentre.X(), o3tl::Length::mm100);
+    const int nY = o3tl::toTwips(aCentre.Y(), o3tl::Length::mm100);
+    rDocument.postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, nX, nY, 1, MOUSE_LEFT, 0);
+    rDocument.postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, nX, nY, 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+}
+
+/// This helper selects the whole text of the cell that is being edited.
+void selectEditedText(SdrView& rView)
+{
+    OutlinerView* pOutlinerView = rView.GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerView);
+    const sal_Int32 nTextLength = pOutlinerView->GetOutliner().GetEditEngine().GetTextLen(0);
+    pOutlinerView->SetSelection(ESelection(0, 0, 0, nTextLength));
+}
+
+/// This helper returns the character formatting of the text that is selected in the cell being
+/// edited.
+SfxItemSet getEditedTextAttributes(SdrView& rView)
+{
+    OutlinerView* pOutlinerView = rView.GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerView);
+    return pOutlinerView->GetAttribs();
+}
+}
+
+/// A single undo takes a cell that was painted with Clone Formatting back to the formatting
+/// it had, while its text is still being edited.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCloneFormattingUndoInTableCell)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("table-clone-formatting.fodp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pActualPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObject);
+    SdrView* pView = pViewShell->GetView();
+
+    // The text of the first cell gets a highlight colour, which is the formatting that the
+    // paintbrush carries to the second cell.
+    clickIntoCell(*pXImpressDocument, *pTableObject, 0, 0);
+    selectEditedText(*pView);
+    const sal_uInt32 nFontHeight
+        = getEditedTextAttributes(*pView).Get(EE_CHAR_FONTHEIGHT).GetHeight();
+    uno::Sequence aColourArgs{ comphelper::makePropertyValue(u"CharBackColor"_ustr,
+                                                             sal_Int32(0xffff00)) };
+    dispatchCommand(mxComponent, u".uno:CharBackColor"_ustr, aColourArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // The paintbrush stays active, the way it does after a double click on its icon, and the
+    // second cell takes the formatting of the first one.
+    uno::Sequence aBrushArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, true) };
+    dispatchCommand(mxComponent, u".uno:FormatPaintbrush"_ustr, aBrushArgs);
+    Scheduler::ProcessEventsToIdle();
+    clickIntoCell(*pXImpressDocument, *pTableObject, 1, 0);
+    selectEditedText(*pView);
+    CPPUNIT_ASSERT_EQUAL(Color(0xffff00),
+                         getEditedTextAttributes(*pView).Get(EE_CHAR_BKGCOLOR).GetValue());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    selectEditedText(*pView);
+    const SfxItemSet aAttributes = getEditedTextAttributes(*pView);
+    // Without the fix one undo took back only a part of the paste. The text lost the character
+    // height it started with, so it was shown at the larger height it inherits.
+    CPPUNIT_ASSERT_EQUAL(nFontHeight, aAttributes.Get(EE_CHAR_FONTHEIGHT).GetHeight());
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, aAttributes.Get(EE_CHAR_BKGCOLOR).GetValue());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf81754)
