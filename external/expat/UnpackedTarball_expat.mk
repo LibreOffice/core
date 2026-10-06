@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,expat,2))
 
 $(eval $(call gb_UnpackedTarball_add_patches,expat,\
 	external/expat/expat-winapi.patch \
+	external/expat/0001-fix-XML_GE-is-not-defined-evaluates-to-0-Werror-unde.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
