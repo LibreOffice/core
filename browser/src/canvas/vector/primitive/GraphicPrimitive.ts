@@ -30,7 +30,8 @@ namespace cool {
 	/// rectangle the whole image maps onto in the frame's unit
 	/// square, alpha from 0 to 255 where 255 is opaque, rotation in
 	/// tenths of a degree, a mirror bitfield where bit 0 flips
-	/// horizontally and bit 1 vertically, and a drawMode recolour.
+	/// horizontally and bit 1 vertically, and colorModifiers, the
+	/// color changes of the image's pixels in the order they apply.
 	export interface GraphicPrimitive extends Primitive, GraphicResource {
 		type: typeof GraphicPrimitive.type;
 		vector?: boolean;
@@ -46,7 +47,7 @@ namespace cool {
 		alpha?: number;
 		rotation?: number;
 		mirror?: number;
-		drawMode?: 'greys' | 'mono' | 'watermark';
+		colorModifiers?: ColorModifierAttribute[];
 	}
 
 	export namespace GraphicPrimitive {

@@ -643,15 +643,17 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.strictEqual(draw.args[0], cachedImage);
 		});
 
-		it('recolours a graphic through a CSS filter for drawMode', function () {
-			// The drawMode wire value picks a CSS filter set on the
-			// context inside the save/restore. The greys mode maps to
-			// grayscale(1).
+		it('grays the pixels of a graphic in the greys draw mode', function () {
+			// The image is grayed once, at its own size, and the copy is drawn.
 			const primitive = loadVectorRenderingReference('testGraphicDrawMode')
 				.primitives[0];
 			nodeassert.strictEqual(primitive.type, 'graphic');
-			nodeassert.strictEqual(primitive.drawMode, 'greys');
+			nodeassert.deepStrictEqual(primitive.colorModifiers, [
+				{ modifier: 'gray' },
+			]);
 
+			ScratchCanvasStub.install();
+			ScratchCanvasStub.imagePixels[0] = [255, 0, 0, 255];
 			const cachedImage = new ImageRecorder();
 			const recorder = new CanvasRecorder();
 			const renderer = new cool.VectorPrimitiveRenderer((checksum) =>
@@ -661,9 +663,156 @@ describe('VectorPrimitiveRenderer', function () {
 			);
 			renderer.renderPrimitive(recorder as any, primitive);
 
+			const copy = ScratchCanvasStub.recorder(0);
+			nodeassert.strictEqual(copy.canvas.width, cachedImage.naturalWidth);
+			nodeassert.strictEqual(copy.findCall('drawImage')?.args[0], cachedImage);
+			const put = copy.findCall('putImageData');
+			nodeassert.ok(put, 'the gray pixels are written back');
+			// Red grays to the engine's 77 out of 256.
+			nodeassert.deepStrictEqual(
+				Array.from(put.args[0].data.slice(0, 4)),
+				[77, 77, 77, 255],
+			);
+
 			const draw = recorder.findCall('drawImage');
 			nodeassert.ok(draw, 'drawImage not called');
-			nodeassert.strictEqual(draw.properties.filter, 'grayscale(1)');
+			nodeassert.strictEqual(draw.args[0], copy.canvas);
+			nodeassert.strictEqual(draw.properties.filter, undefined);
+		});
+
+		it('changes the colors of a graphic once for every draw', function () {
+			ScratchCanvasStub.install();
+			const primitive = {
+				type: 'graphic',
+				checksum: 7,
+				matrix: [100, 0, 0, 100, 0, 0],
+				colorModifiers: [{ modifier: 'invert' }],
+			} as any;
+			const cachedImage = new ImageRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer(
+				() => cachedImage as unknown as HTMLImageElement,
+			);
+			const first = new CanvasRecorder();
+			const second = new CanvasRecorder();
+			renderer.renderPrimitive(first as any, primitive);
+			renderer.renderPrimitive(second as any, primitive);
+
+			nodeassert.strictEqual(ScratchCanvasStub.created.length, 1);
+			nodeassert.strictEqual(
+				second.findCall('drawImage')?.args[0],
+				ScratchCanvasStub.recorder(0).canvas,
+			);
+
+			// Other changes to the same image get a copy of their own.
+			renderer.renderPrimitive(new CanvasRecorder() as any, {
+				...primitive,
+				colorModifiers: [{ modifier: 'gray' }],
+			});
+			nodeassert.strictEqual(ScratchCanvasStub.created.length, 2);
+		});
+
+		it('draws a graphic in its own colors when no canvas is left for a copy', function () {
+			ScratchCanvasStub.installUnavailable();
+			const primitive = {
+				type: 'graphic',
+				checksum: 7,
+				matrix: [100, 0, 0, 100, 0, 0],
+				colorModifiers: [{ modifier: 'invert' }],
+			} as any;
+			const cachedImage = new ImageRecorder();
+			const recorder = new CanvasRecorder();
+			new cool.VectorPrimitiveRenderer(
+				() => cachedImage as unknown as HTMLImageElement,
+			).renderPrimitive(recorder as any, primitive);
+
+			nodeassert.strictEqual(
+				recorder.findCall('drawImage')?.args[0],
+				cachedImage,
+			);
+		});
+
+		it('draws a graphic through an SVG filter where the canvas has one', function () {
+			ScratchCanvasStub.install();
+			const primitive = {
+				type: 'graphic',
+				checksum: 7,
+				matrix: [100, 0, 0, 100, 0, 0],
+				colorModifiers: [{ modifier: 'gray' }],
+			} as any;
+			const cachedImage = new ImageRecorder();
+			const recorder = new CanvasRecorder();
+			// A canvas that has filters starts with none.
+			(recorder as any).filter = 'none';
+			const renderer = new cool.VectorPrimitiveRenderer(
+				() => cachedImage as unknown as HTMLImageElement,
+			);
+			renderer.renderPrimitive(recorder as any, primitive);
+
+			// The image itself goes through the filter, with no copy.
+			const draw = recorder.findCall('drawImage');
+			nodeassert.ok(draw, 'drawImage not called');
+			nodeassert.strictEqual(draw.args[0], cachedImage);
+			const match = /^url\(#(.+)\)$/.exec(draw.properties.filter);
+			nodeassert.ok(match, 'drawn through an SVG filter');
+			nodeassert.ok(document.getElementById(match![1]));
+			nodeassert.strictEqual(ScratchCanvasStub.created.length, 0);
+
+			renderer.releaseColorChangedImages();
+			nodeassert.strictEqual(document.getElementById(match![1]), null);
+		});
+
+		it('makes the copy of a graphic at the size it is drawn at', function () {
+			ScratchCanvasStub.install();
+			const cachedImage = new ImageRecorder();
+			const renderer = new cool.VectorPrimitiveRenderer(
+				() => cachedImage as unknown as HTMLImageElement,
+			);
+			// The image is 100 pixels square and drawn at 10.
+			renderer.renderPrimitive(
+				new CanvasRecorder() as any,
+				{
+					type: 'graphic',
+					checksum: 7,
+					matrix: [10, 0, 0, 10, 0, 0],
+					colorModifiers: [{ modifier: 'invert' }],
+				} as any,
+			);
+
+			const copy = ScratchCanvasStub.recorder(0);
+			nodeassert.strictEqual(copy.canvas.width, 13);
+			nodeassert.strictEqual(copy.canvas.height, 13);
+		});
+
+		it('lists every picture adjustment of a graphic in the order they apply', function () {
+			const primitive = loadVectorRenderingReference('testGraphicAdjusted')
+				.primitives[0];
+			nodeassert.deepStrictEqual(
+				primitive.colorModifiers.map((modifier: any) => modifier.modifier),
+				['black_and_white', 'RGBLuminanceContrast', 'gamma', 'invert'],
+			);
+
+			ScratchCanvasStub.install();
+			ScratchCanvasStub.imagePixels[0] = [0, 0, 0, 255];
+			const cachedImage = new ImageRecorder();
+			const recorder = new CanvasRecorder();
+			new cool.VectorPrimitiveRenderer(
+				() => cachedImage as unknown as HTMLImageElement,
+			).renderPrimitive(recorder as any, primitive);
+
+			// Black stays black in mono, then each other adjustment applies.
+			const put = ScratchCanvasStub.recorder(0).findCall('putImageData');
+			nodeassert.ok(put, 'the adjusted pixels are written back');
+			const expected = [0, 0, 0];
+			for (const modifier of primitive.colorModifiers)
+				cool.VectorColorModifiers.colorChange(modifier)!(expected);
+			nodeassert.deepStrictEqual(
+				Array.from(put.args[0].data.slice(0, 3)),
+				expected.map((channel) => Math.round(channel * 255)),
+			);
+			nodeassert.strictEqual(
+				recorder.findCall('drawImage')?.args[0],
+				ScratchCanvasStub.recorder(0).canvas,
+			);
 		});
 
 		it('draws a cropped graphic onto its image rectangle', function () {
@@ -754,36 +903,6 @@ describe('VectorPrimitiveRenderer', function () {
 			const fill = recorder.findCall('fill');
 			nodeassert.ok(fill, 'fill not called');
 			nodeassert.strictEqual(fill?.properties.filter, 'invert(1) grayscale(1)');
-		});
-
-		it('composes a drawMode recolor with an enclosing color modifier without a scratch canvas', function () {
-			// The drawMode is the innermost color modifier around
-			// its graphic, so its filter leads and the enclosing
-			// invert follows.
-			ScratchCanvasStub.installUnavailable();
-			const primitive = {
-				type: 'modifiedColor',
-				modifier: 'invert',
-				children: [
-					{
-						type: 'graphic',
-						checksum: 7,
-						matrix: [100, 0, 0, 100, 0, 0],
-						drawMode: 'greys',
-					},
-				],
-			} as any;
-
-			const cachedImage = new ImageRecorder();
-			const recorder = new CanvasRecorder();
-			const renderer = new cool.VectorPrimitiveRenderer(
-				() => cachedImage as unknown as HTMLImageElement,
-			);
-			renderer.renderPrimitive(recorder as any, primitive);
-
-			const draw = recorder.findCall('drawImage');
-			nodeassert.ok(draw, 'drawImage not called');
-			nodeassert.strictEqual(draw?.properties.filter, 'grayscale(1) invert(1)');
 		});
 
 		it('rotates a graphic around the centre of the unit square', function () {
@@ -1203,30 +1322,163 @@ describe('VectorPrimitiveRenderer', function () {
 			nodeassert.strictEqual(recorder.countOf('drawImage'), 1);
 		});
 
-		it('passes through modifiedColor replace without a filter', function () {
-			// The replace modifier carries a colour but the renderer
-			// has not implemented colour substitution yet. The
-			// children must still render with their original colour
-			// and no canvas filter must be set.
+		it('gives every pixel of a replaced subtree the replacement color', function () {
 			const primitive = loadVectorRenderingReference('testModifiedColorReplace')
 				.primitives[0];
 			nodeassert.strictEqual(primitive.type, 'modifiedColor');
 			nodeassert.strictEqual(primitive.modifier, 'replace');
 			nodeassert.strictEqual(typeof primitive.color, 'string');
 
+			ScratchCanvasStub.install();
+			const recorder = new CanvasRecorder(200, 200);
+			new cool.VectorPrimitiveRenderer().renderPrimitive(
+				recorder as any,
+				primitive,
+			);
+
+			// The child keeps its shape and alpha, in the replacement color.
+			const content = ScratchCanvasStub.recorder(0);
+			nodeassert.strictEqual(content.countOf('fill'), 1);
+			const replace = content.findCall('fillRect');
+			nodeassert.ok(replace, 'the color is filled over the child');
+			nodeassert.strictEqual(
+				replace.properties.globalCompositeOperation,
+				'source-in',
+			);
+			nodeassert.strictEqual(replace.properties.fillStyle, primitive.color);
+			nodeassert.strictEqual(content.countOf('getImageData'), 0);
+			nodeassert.strictEqual(recorder.countOf('drawImage'), 1);
+			nodeassert.strictEqual(recorder.countOf('fill'), 0);
+		});
+
+		it('draws a replaced subtree in its own colors without a scratch canvas', function () {
+			ScratchCanvasStub.installUnavailable();
 			const recorder = new CanvasRecorder();
+			new cool.VectorPrimitiveRenderer().renderPrimitive(
+				recorder as any,
+				{
+					type: 'modifiedColor',
+					modifier: 'replace',
+					color: '#ff0000',
+					children: [
+						{
+							type: 'polyPolygonColor',
+							color: '#0000ff',
+							path: 'M 0 0 L 10 0 L 10 10 Z',
+						},
+					],
+				} as any,
+			);
+
+			nodeassert.strictEqual(recorder.countOf('fill'), 1);
+			nodeassert.strictEqual(
+				recorder.findCall('fill')?.properties.fillStyle,
+				'#0000ff',
+			);
+		});
+
+		it('mixes the interpolation color over a subtree by one minus the value', function () {
+			const primitive = loadVectorRenderingReference(
+				'testModifiedColorParameters',
+			).primitives[0];
+			nodeassert.strictEqual(primitive.modifier, 'interpolate');
+
+			ScratchCanvasStub.install();
+			const recorder = new CanvasRecorder(200, 200);
+			new cool.VectorPrimitiveRenderer().renderPrimitive(
+				recorder as any,
+				primitive,
+			);
+
+			const mix = ScratchCanvasStub.recorder(0).findCall('fillRect');
+			nodeassert.ok(mix, 'the color is filled over the child');
+			nodeassert.strictEqual(
+				mix.properties.globalCompositeOperation,
+				'source-atop',
+			);
+			nodeassert.strictEqual(mix.properties.globalAlpha, 1 - primitive.value);
+			nodeassert.strictEqual(mix.properties.fillStyle, primitive.color);
+			nodeassert.strictEqual(recorder.countOf('drawImage'), 1);
+		});
+
+		it('changes the pixels of a subtree for every other modifier', function () {
+			// Each modifier after the interpolation colors a red triangle as
+			// the engine does, and the result is drawn once.
+			const primitives = loadVectorRenderingReference(
+				'testModifiedColorParameters',
+			).primitives.slice(1);
+			nodeassert.deepStrictEqual(
+				primitives.map((primitive: any) => primitive.modifier),
+				[
+					'saturate',
+					'hueRotate',
+					'matrix',
+					'black_and_white',
+					'gamma',
+					'luminance_to_alpha',
+				],
+			);
+
+			for (const primitive of primitives) {
+				ScratchCanvasStub.install();
+				ScratchCanvasStub.imagePixels[0] = [255, 0, 0, 255];
+				const recorder = new CanvasRecorder(200, 200);
+				new cool.VectorPrimitiveRenderer().renderPrimitive(
+					recorder as any,
+					primitive,
+				);
+				ScratchCanvasStub.uninstall();
+
+				const content = ScratchCanvasStub.recorder(0);
+				nodeassert.strictEqual(content.countOf('fill'), 1, primitive.modifier);
+				const put = content.findCall('putImageData');
+				nodeassert.ok(put, primitive.modifier + ' writes its pixels back');
+				const expected = [1, 0, 0];
+				cool.VectorColorModifiers.colorChange(primitive)!(expected);
+				nodeassert.deepStrictEqual(
+					Array.from(put.args[0].data.slice(0, 4)),
+					[
+						...expected.map((channel) =>
+							Math.round(Math.min(Math.max(channel, 0), 1) * 255),
+						),
+						255,
+					],
+					primitive.modifier,
+				);
+				nodeassert.strictEqual(
+					recorder.countOf('drawImage'),
+					1,
+					primitive.modifier,
+				);
+				nodeassert.strictEqual(recorder.countOf('fill'), 0, primitive.modifier);
+			}
+		});
+
+		it('draws a modified subtree through an SVG filter where the canvas has one', function () {
+			const primitive = loadVectorRenderingReference(
+				'testModifiedColorParameters',
+			).primitives[1];
+			nodeassert.strictEqual(primitive.modifier, 'saturate');
+
+			ScratchCanvasStub.install();
+			const recorder = new CanvasRecorder(200, 200);
+			// A canvas that has filters starts with none.
+			(recorder as any).filter = 'none';
 			const renderer = new cool.VectorPrimitiveRenderer();
 			renderer.renderPrimitive(recorder as any, primitive);
 
-			nodeassert.strictEqual(recorder.properties.filter, undefined);
-			// The wrapped child is a polyPolygonColor in its own
-			// fill colour. The renderer must not override it.
-			const fill = recorder.findCall('fill');
-			nodeassert.ok(fill, 'child fill missing');
-			nodeassert.strictEqual(
-				fill?.properties.fillStyle,
-				primitive.children[0].color,
-			);
+			// The colors change on the way to the target, not on the scratch.
+			const content = ScratchCanvasStub.recorder(0);
+			nodeassert.strictEqual(content.countOf('fill'), 1);
+			nodeassert.strictEqual(content.countOf('getImageData'), 0);
+			nodeassert.strictEqual(content.countOf('putImageData'), 0);
+			nodeassert.strictEqual(recorder.countOf('drawImage'), 1);
+			const draw = recorder.findCall('drawImage')!;
+			const match = /^url\(#(.+)\)$/.exec(draw.properties.filter);
+			nodeassert.ok(match, 'drawn through an SVG filter');
+			nodeassert.ok(document.getElementById(match![1]));
+
+			renderer.releaseColorChangedImages();
 		});
 
 		it('fills the bounds for filledRectangle', function () {

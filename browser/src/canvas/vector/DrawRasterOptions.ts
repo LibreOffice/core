@@ -30,8 +30,7 @@ namespace cool {
 		/// Bitfield of the flipped axes. Bit 0 flips horizontally
 		/// and bit 1 flips vertically.
 		mirror?: number;
-		/// A recolour of the image: greys is desaturated, mono is
-		/// one-bit black and white, and watermark is a faded grey.
-		drawMode?: GraphicPrimitive['drawMode'];
+		/// Color changes of the image's pixels, in the order they apply.
+		colorModifiers?: ColorModifierAttribute[];
 	}
 }

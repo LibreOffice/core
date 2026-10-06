@@ -506,6 +506,7 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/HiddenGeometryPrimitive.ts \
 	src/canvas/vector/primitive/MaskPrimitive.ts \
 	src/canvas/vector/primitive/LineRectanglePrimitive.ts \
+	src/canvas/vector/primitive/ColorModifierAttribute.ts \
 	src/canvas/vector/primitive/ModifiedColorPrimitive.ts \
 	src/canvas/vector/primitive/ObjectInfoPrimitive.ts \
 	src/canvas/vector/primitive/PointArrayPrimitive.ts \
@@ -539,6 +540,9 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorFillGraphicPrimitiveRenderer.ts \
 	src/canvas/vector/VectorGradientFrame.ts \
 	src/canvas/vector/VectorGradientPrimitiveRenderer.ts \
+	src/canvas/vector/VectorColorModifiers.ts \
+	src/canvas/vector/VectorColorFilters.ts \
+	src/canvas/vector/VectorModifiedImages.ts \
 	src/canvas/vector/VectorScratchCanvases.ts \
 	src/canvas/vector/VectorResourceWalker.ts \
 	src/canvas/vector/VectorPrimitiveRenderer.ts \

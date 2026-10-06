@@ -24,10 +24,12 @@
 
 class Bitmap;
 class Graphic;
+class GraphicAttr;
 
 namespace basegfx
 {
 class B2DHomMatrix;
+class BColorModifier;
 }
 namespace tools
 {
@@ -122,6 +124,10 @@ private:
     void writeFillGraphic(const drawinglayer::attribute::FillGraphicAttribute& rFillGraphic);
     void writeLineAttributeScaled(const drawinglayer::attribute::LineAttribute& rLineAttribute);
     void writeStrokeAttributeScaled(const drawinglayer::attribute::StrokeAttribute& rStroke);
+    /// Write the modifier's name and its parameters into the open node.
+    void writeColorModifier(const basegfx::BColorModifier& rModifier);
+    /// Write a graphic's draw mode and adjustments as color modifiers, in order. None if unchanged.
+    void writeGraphicColorModifiers(const GraphicAttr& rAttributes);
     void
     writeTextPortionScaled(const drawinglayer::primitive2d::TextSimplePortionPrimitive2D& rPrim);
 

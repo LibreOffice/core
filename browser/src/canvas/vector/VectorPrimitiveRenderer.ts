@@ -28,6 +28,8 @@ namespace cool {
 		private _scratch: VectorScratchCanvases;
 		private _gradients: VectorGradientPrimitiveRenderer;
 		private _fillGraphics: VectorFillGraphicPrimitiveRenderer;
+		private _colorFilters = new VectorColorFilters();
+		private _modifiedImages = new VectorModifiedImages();
 		// Whether the content an editing view alone shows is drawn. Every
 		// entry point sets it from what the render is for, so it never
 		// carries over from an earlier render.
@@ -545,7 +547,7 @@ namespace cool {
 						? primitive.alpha / 255
 						: undefined,
 				mirror: primitive.mirror,
-				drawMode: primitive.drawMode,
+				colorModifiers: primitive.colorModifiers,
 			});
 		}
 
@@ -567,24 +569,10 @@ namespace cool {
 			if (!image) return;
 			if (!image.complete) return;
 
-			const { imageRect, rotation, alpha, mirror, drawMode } = options;
+			const { imageRect, rotation, alpha, mirror, colorModifiers } = options;
 
 			context.save();
 			if (typeof alpha === 'number' && alpha < 1) context.globalAlpha = alpha;
-			// A drawMode recolour is the innermost colour modifier
-			// around its graphic, so its filter leads the list.
-			if (drawMode === 'greys')
-				context.filter = this._composeFilter(context, 'grayscale(1)');
-			else if (drawMode === 'mono')
-				context.filter = this._composeFilter(
-					context,
-					'grayscale(1) contrast(1000%)',
-				);
-			else if (drawMode === 'watermark')
-				context.filter = this._composeFilter(
-					context,
-					'grayscale(1) brightness(1.5) opacity(0.3)',
-				);
 			// The matrix maps the unit square to the image's bounds,
 			// so we draw the image into the unit square and let the
 			// transform place it on the slide.
@@ -606,6 +594,10 @@ namespace cool {
 				context.translate(-0.5, -0.5);
 			}
 
+			const source = colorModifiers?.length
+				? this._colorChangedImage(context, image, colorModifiers, imageRect)
+				: image;
+
 			if (imageRect) {
 				// The whole image maps onto this rectangle of the
 				// unit square; the clip keeps the frame's part.
@@ -613,16 +605,41 @@ namespace cool {
 				context.rect(0, 0, 1, 1);
 				context.clip();
 				context.drawImage(
-					image,
+					source,
 					imageRect.x,
 					imageRect.y,
 					imageRect.width,
 					imageRect.height,
 				);
 			} else {
-				context.drawImage(image, 0, 0, 1, 1);
+				context.drawImage(source, 0, 0, 1, 1);
 			}
 			context.restore();
+		}
+
+		// The image with its colors changed: through an SVG filter where the
+		// canvas has filters, else a copy at the drawn size. The engine changes
+		// pixels before scaling, so mono or gamma can differ along sharp edges.
+		private _colorChangedImage(
+			context: CanvasRenderingContext2D,
+			image: HTMLImageElement,
+			modifiers: ColorModifierAttribute[],
+			imageRect: DrawRasterOptions['imageRect'],
+		): CanvasImageSource {
+			if (VectorColorFilters.canFilter(context)) {
+				const filter = this._colorFilters.filterFor(modifiers);
+				if (filter) context.filter = this._composeFilter(context, filter);
+				return image;
+			}
+
+			// The whole image spans the image rectangle of the unit square.
+			const matrix = context.getTransform();
+			return this._modifiedImages.get(
+				image,
+				modifiers,
+				Math.hypot(matrix.a, matrix.b) * (imageRect?.width ?? 1),
+				Math.hypot(matrix.c, matrix.d) * (imageRect?.height ?? 1),
+			);
 		}
 
 		private _renderPointArray(
@@ -662,24 +679,99 @@ namespace cool {
 			const children = primitive.children;
 			if (!children) return;
 
-			let invert: boolean;
-			switch (primitive.modifier) {
-				case 'gray':
-				case 'luminance_to_alpha':
-					invert = false;
-					break;
-				case 'invert':
-					invert = true;
-					break;
-				default:
-					// The "replace" modifier needs every primitive that
-					// draws a color to consult a shared color override.
-					// That is left for a follow-up, so for now children
-					// render with their original colors.
-					this._renderPrimitives(context, children);
-					return;
+			if (primitive.modifier === 'gray' || primitive.modifier === 'invert') {
+				this._renderGrayOrInvert(
+					context,
+					children,
+					primitive.bounds,
+					primitive.modifier === 'invert',
+				);
+				return;
 			}
 
+			// No scratch canvas, or no color change: the children draw as is.
+			const plain = () => this._renderPrimitives(context, children);
+			if (!VectorColorModifiers.changesColors(primitive)) {
+				plain();
+				return;
+			}
+			this._scratch.withEffectSlots(plain, (slot) => {
+				const region = VectorScratchCanvases.effectRegion(
+					context,
+					primitive.bounds,
+					0,
+				);
+				if (!region) return;
+				const content = this._renderToScratch(context, slot, children, region);
+				if (!content) {
+					plain();
+					return;
+				}
+				if (
+					!VectorPrimitiveRenderer._modifiesByCompositing(primitive) &&
+					VectorColorFilters.canFilter(context)
+				) {
+					// Drawn through the filter, with no pixel read back.
+					context.save();
+					const filter = this._colorFilters.filterFor([primitive]);
+					if (filter) context.filter = this._composeFilter(context, filter);
+					this._scratch.drawOnto(context, content, region);
+					context.restore();
+					return;
+				}
+				VectorPrimitiveRenderer._modifyScratch(content, primitive);
+				this._scratch.drawOnto(context, content, region);
+			});
+		}
+
+		// Replace and interpolate are composited fills, which all browsers do.
+		private static _modifiesByCompositing(
+			modifier: ColorModifierAttribute,
+		): boolean {
+			return (
+				modifier.modifier === 'replace' || modifier.modifier === 'interpolate'
+			);
+		}
+
+		// Change the colors on a scratch canvas, keeping its alpha. Replace and
+		// interpolate are composited fills, the rest read the pixels back.
+		private static _modifyScratch(
+			content: CanvasRenderingContext2D,
+			modifier: ColorModifierAttribute,
+		): void {
+			const width = content.canvas.width;
+			const height = content.canvas.height;
+			// The engine holds the value of an interpolate between 0 and 1.
+			const value = Math.min(Math.max(modifier.value ?? 0, 0), 1);
+
+			content.save();
+			content.setTransform(1, 0, 0, 1, 0, 0);
+			if (modifier.modifier === 'replace') {
+				// Source in keeps the content's alpha and takes the color.
+				content.globalCompositeOperation = 'source-in';
+				content.fillStyle = modifier.color ?? '#000000';
+				content.fillRect(0, 0, width, height);
+			} else if (modifier.modifier === 'interpolate') {
+				// Source atop keeps the alpha and lays the color at one minus
+				// the value over the original.
+				content.globalCompositeOperation = 'source-atop';
+				content.globalAlpha = 1 - value;
+				content.fillStyle = modifier.color ?? '#000000';
+				content.fillRect(0, 0, width, height);
+			} else {
+				const pixels = content.getImageData(0, 0, width, height);
+				VectorColorModifiers.applyToPixels(pixels.data, [modifier]);
+				content.putImageData(pixels, 0, 0);
+			}
+			content.restore();
+		}
+
+		private _renderGrayOrInvert(
+			context: CanvasRenderingContext2D,
+			children: Primitive[],
+			bounds: number[] | undefined,
+			invert: boolean,
+		): void {
 			// Without a scratch canvas the canvas filter does it, in the
 			// browsers that have one.
 			const filtered = (): void => {
@@ -697,7 +789,7 @@ namespace cool {
 						context,
 						slot,
 						children,
-						primitive.bounds,
+						bounds,
 						invert,
 					)
 				)
@@ -816,6 +908,12 @@ namespace cool {
 		/// Drop the effects' scratch canvases. The next effect makes new ones.
 		releaseScratchCanvases(): void {
 			this._scratch.release();
+		}
+
+		/// Drop the color-changed images and filters. Draws rebuild them.
+		releaseColorChangedImages(): void {
+			this._modifiedImages.release();
+			this._colorFilters.release();
 		}
 
 		// Gaussian deviation for a blur radius. The engine takes the radius as

@@ -48,6 +48,7 @@
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonGraphicPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#include <drawinglayer/primitive2d/graphicprimitivehelper2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonRGBAPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonAlphaGradientPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/BitmapAlphaPrimitive2D.hxx>
@@ -381,6 +382,112 @@ void Primitive2dJsonProcessor::writeStrokeAttributeScaled(
         auto aDashArrayNode = mrWriter.startArray("dotDashArray");
         for (double fValue : rDashArray)
             mrWriter.putSimpleValue(fValue * mfScaleFactor);
+    }
+}
+
+void Primitive2dJsonProcessor::writeColorModifier(const basegfx::BColorModifier& rModifier)
+{
+    mrWriter.put("modifier", rModifier.getModifierName());
+
+    switch (rModifier.getBColorModifierType())
+    {
+        case basegfx::BColorModifierType::BCMType_replace:
+        {
+            const auto& rReplace = static_cast<const basegfx::BColorModifier_replace&>(rModifier);
+            mrWriter.put("color", colorToHex(rReplace.getBColor()));
+        }
+        break;
+
+        case basegfx::BColorModifierType::BCMType_interpolate:
+        {
+            const auto& rInterpolate
+                = static_cast<const basegfx::BColorModifier_interpolate&>(rModifier);
+            mrWriter.put("color", colorToHex(rInterpolate.getBColor()));
+            mrWriter.put("value", rInterpolate.getValue());
+        }
+        break;
+
+        case basegfx::BColorModifierType::BCMType_saturate:
+        case basegfx::BColorModifierType::BCMType_hueRotate:
+        {
+            // Both are a 3x3 matrix over red, green and blue, row by row.
+            const basegfx::B3DHomMatrix& rMatrix
+                = rModifier.getBColorModifierType() == basegfx::BColorModifierType::BCMType_saturate
+                      ? static_cast<const basegfx::BColorModifier_saturate&>(rModifier).getMatrix()
+                      : static_cast<const basegfx::BColorModifier_hueRotate&>(rModifier)
+                            .getMatrix();
+            auto aArray = mrWriter.startArray("matrix");
+            for (sal_uInt16 nRow = 0; nRow < 3; ++nRow)
+                for (sal_uInt16 nColumn = 0; nColumn < 3; ++nColumn)
+                    mrWriter.putSimpleValue(rMatrix.get(nRow, nColumn));
+        }
+        break;
+
+        case basegfx::BColorModifierType::BCMType_matrix:
+        {
+            // A 4x5 matrix over red, green, blue, alpha and one, row by row.
+            const auto& rMatrix = static_cast<const basegfx::BColorModifier_matrix&>(rModifier);
+            auto aArray = mrWriter.startArray("matrix");
+            for (double fValue : rMatrix.getVector())
+                mrWriter.putSimpleValue(fValue);
+        }
+        break;
+
+        case basegfx::BColorModifierType::BCMType_black_and_white:
+            mrWriter.put(
+                "value",
+                static_cast<const basegfx::BColorModifier_black_and_white&>(rModifier).getValue());
+            break;
+
+        case basegfx::BColorModifierType::BCMType_gamma:
+            mrWriter.put("value",
+                         static_cast<const basegfx::BColorModifier_gamma&>(rModifier).getValue());
+            break;
+
+        case basegfx::BColorModifierType::BCMType_RGBLuminanceContrast:
+        {
+            const auto& rAdjust
+                = static_cast<const basegfx::BColorModifier_RGBLuminanceContrast&>(rModifier);
+            mrWriter.put("red", rAdjust.getRed());
+            mrWriter.put("green", rAdjust.getGreen());
+            mrWriter.put("blue", rAdjust.getBlue());
+            mrWriter.put("luminance", rAdjust.getLuminance());
+            mrWriter.put("contrast", rAdjust.getContrast());
+        }
+        break;
+
+        default:
+            break;
+    }
+}
+
+void Primitive2dJsonProcessor::writeGraphicColorModifiers(const GraphicAttr& rAttributes)
+{
+    if (!rAttributes.IsAdjusted() && !rAttributes.IsSpecialDrawMode())
+        return;
+
+    // A stand-in child nests like the decomposition, draw mode innermost. The list goes out
+    // innermost first, the order the colors change in.
+    const Primitive2DContainer aEmbedded(create2DColorModifierEmbeddingsAsNeeded(
+        Primitive2DContainer{ new GroupPrimitive2D(Primitive2DContainer()) }, rAttributes));
+
+    std::vector<const basegfx::BColorModifier*> aModifiers;
+    const BasePrimitive2D* pCurrent = aEmbedded.empty() ? nullptr : aEmbedded[0].get();
+    while (auto pModified = dynamic_cast<const ModifiedColorPrimitive2D*>(pCurrent))
+    {
+        aModifiers.push_back(pModified->getColorModifier().get());
+        const Primitive2DContainer& rChildren = pModified->getChildren();
+        pCurrent = rChildren.empty() ? nullptr : rChildren[0].get();
+    }
+
+    if (aModifiers.empty())
+        return;
+
+    auto aModifierArray = mrWriter.startArray("colorModifiers");
+    for (auto it = aModifiers.rbegin(); it != aModifiers.rend(); ++it)
+    {
+        auto aModifierNode = mrWriter.startStruct();
+        writeColorModifier(**it);
     }
 }
 
@@ -926,6 +1033,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
                 {
                     mrWriter.put("type", "graphic");
                     writeMatrixScaled("matrix", rPrimitive.getTransform());
+                    writeGraphicColorModifiers(rPrimitive.getGraphicAttr());
                     writeGraphicData(rGraphic);
                     break;
                 }
@@ -985,23 +1093,7 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             if (rAttributes.IsMirrored())
                 mrWriter.put("mirror", sal_Int32(rAttributes.GetMirrorFlags()));
 
-            if (rAttributes.IsSpecialDrawMode())
-            {
-                switch (rAttributes.GetDrawMode())
-                {
-                    case GraphicDrawMode::Greys:
-                        mrWriter.put("drawMode", "greys");
-                        break;
-                    case GraphicDrawMode::Mono:
-                        mrWriter.put("drawMode", "mono");
-                        break;
-                    case GraphicDrawMode::Watermark:
-                        mrWriter.put("drawMode", "watermark");
-                        break;
-                    default:
-                        break;
-                }
-            }
+            writeGraphicColorModifiers(rAttributes);
 
             const Size aSizePixel(rGraphic.GetSizePixel());
             mrWriter.put("width", sal_Int64(aSizePixel.getWidth()));
@@ -1105,17 +1197,8 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
         {
             const auto& rPrimitive = static_cast<const ModifiedColorPrimitive2D&>(rBasePrimitive);
             mrWriter.put("type", "modifiedColor");
-            const basegfx::BColorModifierSharedPtr& rModifier = rPrimitive.getColorModifier();
-            mrWriter.put("modifier", rModifier->getModifierName());
+            writeColorModifier(*rPrimitive.getColorModifier());
             writeBoundsScaled(rPrimitive);
-
-            // Output modifier-specific parameters so the client can apply the modification
-            if (rModifier->getBColorModifierType() == basegfx::BColorModifierType::BCMType_replace)
-            {
-                const auto& rReplace
-                    = static_cast<const basegfx::BColorModifier_replace&>(*rModifier);
-                mrWriter.put("color", colorToHex(rReplace.getBColor()));
-            }
 
             {
                 auto aChildArray = mrWriter.startArray("children");

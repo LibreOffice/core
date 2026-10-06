@@ -844,6 +844,20 @@ namespace drawinglayer::primitive2d
             return aRetval;
         }
 
+        Primitive2DContainer create2DColorModifierEmbeddingsAsNeeded(
+            Primitive2DContainer&& rChildren,
+            const GraphicAttr& rGraphicAttr)
+        {
+            return create2DColorModifierEmbeddingsAsNeeded(
+                std::move(rChildren), rGraphicAttr.GetDrawMode(),
+                std::clamp(rGraphicAttr.GetLuminance() * 0.01, -1.0, 1.0),
+                std::clamp(rGraphicAttr.GetContrast() * 0.01, -1.0, 1.0),
+                std::clamp(rGraphicAttr.GetChannelR() * 0.01, -1.0, 1.0),
+                std::clamp(rGraphicAttr.GetChannelG() * 0.01, -1.0, 1.0),
+                std::clamp(rGraphicAttr.GetChannelB() * 0.01, -1.0, 1.0),
+                std::clamp(rGraphicAttr.GetGamma(), 0.0, 10.0), rGraphicAttr.IsInvert());
+        }
+
 } // end of namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

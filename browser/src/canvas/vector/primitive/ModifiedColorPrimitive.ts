@@ -10,16 +10,10 @@
  */
 
 namespace cool {
-	/// A colour transformation applied to the wrapped subtree.
-	///
-	/// modifier names the kind of transformation. Known values
-	/// include "gray", "luminance_to_alpha", "invert" and "replace".
-	/// color is only set for the "replace" transformation, which
-	/// carries the substitute colour.
-	export interface ModifiedColorPrimitive extends Primitive {
+	/// A color change applied to the wrapped subtree.
+	export interface ModifiedColorPrimitive
+		extends Primitive, ColorModifierAttribute {
 		type: typeof ModifiedColorPrimitive.type;
-		modifier?: string;
-		color?: string;
 		bounds?: [number, number, number, number]; // what the subtree covers, in twips
 	}
 

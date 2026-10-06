@@ -197,7 +197,6 @@ namespace basegfx
 
         virtual ~BColorModifier_replace() override;
 
-        // data access
         const ::basegfx::BColor& getBColor() const { return maBColor; }
 
         // compare operator
@@ -231,6 +230,9 @@ namespace basegfx
 
         virtual ~BColorModifier_interpolate() override;
 
+        const ::basegfx::BColor& getBColor() const { return maBColor; }
+        double getValue() const { return mfValue; }
+
         // compare operator
         SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
 
@@ -255,6 +257,8 @@ namespace basegfx
         BColorModifier_saturate(double fValue);
 
         virtual ~BColorModifier_saturate() override;
+
+        const basegfx::B3DHomMatrix& getMatrix() const { return maSatMatrix; }
 
         // compare operator
         SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
@@ -285,6 +289,8 @@ namespace basegfx
 
         virtual ~BColorModifier_matrix() override;
 
+        const std::vector<double>& getVector() const { return maVector; }
+
         // compare operator
         SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
         // compute modified color
@@ -308,6 +314,8 @@ namespace basegfx
         BColorModifier_hueRotate(double fRad);
 
         virtual ~BColorModifier_hueRotate() override;
+
+        const basegfx::B3DHomMatrix& getMatrix() const { return maHueMatrix; }
 
         // compare operator
         SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
@@ -336,6 +344,8 @@ namespace basegfx
 
         virtual ~BColorModifier_black_and_white() override;
 
+        double getValue() const { return mfValue; }
+
         // compare operator
         SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
 
@@ -363,6 +373,8 @@ namespace basegfx
         BColorModifier_gamma(double fValue);
 
         virtual ~BColorModifier_gamma() override;
+
+        double getValue() const { return mfValue; }
 
         // compare operator
         SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;
@@ -400,6 +412,12 @@ namespace basegfx
         BColorModifier_RGBLuminanceContrast(double fRed, double fGreen, double fBlue, double fLuminance, double fContrast);
 
         virtual ~BColorModifier_RGBLuminanceContrast() override;
+
+        double getRed() const { return mfRed; }
+        double getGreen() const { return mfGreen; }
+        double getBlue() const { return mfBlue; }
+        double getLuminance() const { return mfLuminance; }
+        double getContrast() const { return mfContrast; }
 
         // compare operator
         SAL_DLLPRIVATE virtual bool operator==(const BColorModifier& rCompare) const override;

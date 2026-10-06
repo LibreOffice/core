@@ -71,6 +71,13 @@ namespace drawinglayer::primitive2d
             double fGamma = 1.0,            // ]0.0 .. 10.0]
             bool bInvert = false);
 
+        /** Embed the children in the color modifiers of the draw mode and the color adjustments of
+            rGraphicAttr, with the percentages scaled to the ranges above.
+        */
+        Primitive2DContainer create2DColorModifierEmbeddingsAsNeeded(
+            Primitive2DContainer&& rChildren,
+            const GraphicAttr& rGraphicAttr);
+
 } // end of namespace drawinglayer::primitive2d
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
