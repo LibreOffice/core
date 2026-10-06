@@ -24,6 +24,8 @@
 #include "tablecolumnsbuffer.hxx"
 #include "workbookhelper.hxx"
 
+#include <vector>
+
 namespace oox::xls {
 
 struct TableStyleInfo
@@ -90,6 +92,8 @@ public:
     sal_Int32    getHeaderRows() const { return maModel.mnHeaderRows; }
     /** Returns the number of totals rows in the table range. */
     sal_Int32    getTotalsRows() const { return maModel.mnTotalsRows; }
+    /** Returns true, if the database range of this table gets an auto filter. */
+    bool         hasAutoFilter() const { return !maDBRangeName.isEmpty() && maAutoFilters.hasAutoFilter(); }
 
 private:
     TableModel          maModel;
@@ -121,6 +125,9 @@ public:
     TableRef            getTable( sal_Int32 nTableId ) const;
     /** Returns a table by its display name. */
     TableRef            getTable( const OUString& rDispName ) const;
+    /** Returns the ranges of the tables on the passed sheet that get an auto filter. Valid
+        already before applyAutoFilters, while the sheets are imported. */
+    std::vector<ScRange> getAutoFilterRanges( SCTAB nSheet ) const;
 
 private:
     /** Inserts the passed table into the maps according to its identifier and name. */

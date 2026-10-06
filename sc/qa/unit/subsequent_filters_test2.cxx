@@ -811,6 +811,24 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf145054)
     CPPUNIT_ASSERT(pDBData);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf99913TableFilteredRows)
+{
+    // Table1 is A1:C11 with a colour filter on column B, which hides rows 5-11
+    createScDoc("xlsx/tdf145054.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // XLSX does not tell filtered and manually hidden rows apart, so the rows hidden in a table
+    // with an autofilter must be flagged as filtered, like the rows of a sheet autofilter.
+    CPPUNIT_ASSERT(!pDoc->RowHidden(3, 0));
+    CPPUNIT_ASSERT(!pDoc->RowFiltered(3, 0));
+    for (SCROW nRow = 4; nRow <= 10; ++nRow)
+    {
+        CPPUNIT_ASSERT(pDoc->RowHidden(nRow, 0));
+        CPPUNIT_ASSERT_MESSAGE(OString("row " + OString::number(nRow + 1)).getStr(),
+                               pDoc->RowFiltered(nRow, 0));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf84762)
 {
     createScDoc();

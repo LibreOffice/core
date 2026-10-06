@@ -973,21 +973,13 @@ void WorksheetGlobals::finalizeWorksheetImport()
         SCCOLROW nEndRow = static_cast<SCCOLROW>(aRange.aEnd.Row());
         aSpans.push_back(sc::ColRowSpan(nStartRow, nEndRow));
     }
-    ScDBCollection* pDocColl = rDoc.GetDBCollection();
-    if (!pDocColl->empty())
+    // The database range of a table gets its auto filter only after all sheets are imported, see
+    // TableBuffer::applyAutoFilters, so ask the table model instead.
+    for (const ScRange& rRange : getTables().getAutoFilterRanges(nTab))
     {
-        ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
-        for (const auto& rxDB : rDBs)
-        {
-            if (rxDB->GetTab() == nTab && rxDB->HasAutoFilter())
-            {
-                ScRange aRange;
-                rxDB->GetArea(aRange);
-                SCCOLROW nStartRow = static_cast<SCCOLROW>(aRange.aStart.Row());
-                SCCOLROW nEndRow = static_cast<SCCOLROW>(aRange.aEnd.Row());
-                aSpans.push_back(sc::ColRowSpan(nStartRow, nEndRow));
-            }
-        }
+        SCCOLROW nStartRow = static_cast<SCCOLROW>(rRange.aStart.Row());
+        SCCOLROW nEndRow = static_cast<SCCOLROW>(rRange.aEnd.Row());
+        aSpans.push_back(sc::ColRowSpan(nStartRow, nEndRow));
     }
     convertRows(aSpans);
     lclUpdateProgressBar( mxFinalProgress, 1.0 );

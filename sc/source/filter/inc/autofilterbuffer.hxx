@@ -280,6 +280,9 @@ public:
     bool                finalizeImport( const rtl::Reference<ScDatabaseRangeObj>& rxDatabaseRange,
                                         sal_Int16 nSheet );
 
+    /** Returns true, if an auto filter was imported. */
+    bool                hasAutoFilter() const { return !maAutoFilters.empty(); }
+
 private:
     /** Returns the auto filter object used to perform auto filtering. */
     AutoFilter*         getActiveAutoFilter();
