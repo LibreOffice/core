@@ -121,7 +121,8 @@ void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& 
     }
     else
     {
-        auto eType = rGraphic.GetGfxLink().GetType();
+        const std::shared_ptr<GfxLink>& pGfxLink = rGraphic.GetSharedGfxLink();
+        GfxLinkType eType = pGfxLink ? pGfxLink->GetType() : GfxLinkType::NONE;
         const auto iter = constGfxTypeToExtension.find(eType);
         if (iter != constGfxTypeToExtension.end())
             rExtension = iter->second;
