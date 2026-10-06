@@ -1640,6 +1640,11 @@ menu-entry-with-icon.padding-left + menu-entry-icon.width */
 	border-color: transparent !important;
 }
 
+#userListSummaryButton .avatar-img.joining {
+	--motion-scale-from: 0.8;
+	animation: fade-scale-in var(--duration-normal) var(--ease-out);
+}
+
 #userlist-dropdown {
 	color: var(--color-main-text);
 	background-color: var(--color-main-background);

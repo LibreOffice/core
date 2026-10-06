@@ -65,9 +65,14 @@ class UserList extends window.L.Control {
 
 	users: Map<number, User> = new Map();
 
+	viewsAreJoining: boolean = false;
+
+	joinedViews: Set<number> = new Set();
+
 	onAdd(map: any) {
 		this.map = map;
 
+		map.on('viewinfo', this.onViewInfo, this);
 		map.on('addview', this.onAddView, this);
 		map.on('removeview', this.onRemoveView, this);
 		map.on('deselectuser', this.deselectUser, this);
@@ -80,6 +85,11 @@ class UserList extends window.L.Control {
 		(userListElement as any)._onDropDown = (open: boolean) => {
 			userListElement.setAttribute('aria-expanded', String(open));
 		};
+		userListElement.addEventListener('animationend', (e: AnimationEvent) => {
+			app.layoutingService.appendLayoutingTask(() => {
+				(e.target as HTMLElement).classList.remove('joining');
+			});
+		});
 
 		this.registerHeaderAvatarEvents();
 	}
@@ -361,6 +371,8 @@ class UserList extends window.L.Control {
 		const userListElement = document.getElementById('userListSummaryButton');
 
 		const sortedUsers = Array.from(this.getSortedUsers());
+		const joinedViews = this.joinedViews;
+		this.joinedViews = new Set();
 
 		if (
 			window.mode.isSmallScreenDevice() ||
@@ -403,6 +415,8 @@ class UserList extends window.L.Control {
 					img.classList.remove('following');
 				}
 
+				img.classList.toggle('joining', joinedViews.has(viewId));
+
 				return img;
 			}),
 		);
@@ -429,6 +443,10 @@ class UserList extends window.L.Control {
 		}
 
 		this.renderAll();
+	}
+
+	onViewInfo() {
+		this.viewsAreJoining = this.users.has(this.map._docLayer._viewId);
 	}
 
 	onAddView(e: UserEvent) {
@@ -461,6 +479,10 @@ class UserList extends window.L.Control {
 		// joins the row they already have.
 		if (firstViewOfUser) {
 			this.showJoinLeaveMessage('join', e.viewId, username, color);
+
+			if (this.viewsAreJoining) {
+				this.joinedViews.add(e.viewId);
+			}
 		}
 
 		this.renderAll();
