@@ -153,6 +153,7 @@ void SvxTableAutoFmtDlg::UpdateUIState()
     const bool bCanModify = mnIndex != DEFAULT_STYLE;
     mxBtnRename->set_sensitive(bCanModify);
     mxBtnRemove->set_sensitive(bCanModify);
+    mxBtnEdit->set_sensitive(bCanModify);
 }
 
 void SvxTableAutoFmtDlg::UpdateChecks()
