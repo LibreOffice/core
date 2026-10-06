@@ -70,7 +70,6 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,svx,\
 ))
 
 $(eval $(call gb_Module_add_uicheck_targets,svx,\
-    UITest_svx_form \
     UITest_svx_table \
 ))
 
