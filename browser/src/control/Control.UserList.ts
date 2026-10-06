@@ -24,6 +24,7 @@ interface User {
 	extraInfo: UserExtraInfo;
 	color: string;
 	readonly: boolean;
+	parked: boolean;
 	you: boolean;
 	cachedHeaderAvatar?: HTMLImageElement;
 	cachedUserListAvatar?: HTMLImageElement;
@@ -36,6 +37,12 @@ interface UserEvent {
 	username: string;
 	extraInfo: UserExtraInfo;
 	readonly: boolean;
+	parked: boolean;
+}
+
+interface ViewParkedEvent {
+	viewId: number;
+	parked: boolean;
 }
 
 class UserList extends window.L.Control {
@@ -75,6 +82,7 @@ class UserList extends window.L.Control {
 		map.on('viewinfo', this.onViewInfo, this);
 		map.on('addview', this.onAddView, this);
 		map.on('removeview', this.onRemoveView, this);
+		map.on('updateviewparked', this.onUpdateViewParked, this);
 		map.on('deselectuser', this.deselectUser, this);
 
 		const userListElement = document.getElementById('userListSummaryButton');
@@ -408,6 +416,7 @@ class UserList extends window.L.Control {
 					displayCount - index,
 				);
 				user.cachedHeaderAvatar = img;
+				img.classList.toggle('parked', this.isUserParked(user));
 
 				if (followed !== undefined && followed[0] === viewId) {
 					img.classList.add('following');
@@ -473,6 +482,7 @@ class UserList extends window.L.Control {
 			extraInfo: e.extraInfo,
 			color: color,
 			readonly: e.readonly,
+			parked: e.parked,
 		});
 
 		// A user who is already in the list opened one more connection, which
@@ -486,6 +496,34 @@ class UserList extends window.L.Control {
 		}
 
 		this.renderAll();
+	}
+
+	// The server keeps the view of a dropped connection for a while so its
+	// browser can come back to it. The row stays, and shows the user as away.
+	onUpdateViewParked(e: ViewParkedEvent) {
+		const user = this.users.get(e.viewId);
+		if (user === undefined) {
+			return;
+		}
+
+		user.parked = e.parked;
+		this.renderAll();
+	}
+
+	// A row stands for a user, who may have several views. The user is away
+	// only when every one of those views is parked.
+	isUserParked(user: User): boolean {
+		if (!user.userId) {
+			return user.parked;
+		}
+
+		for (const other of this.users.values()) {
+			if (other.userId === user.userId && !other.parked) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	onRemoveView(e: UserEvent) {
@@ -655,6 +693,10 @@ class UserList extends window.L.Control {
 			// focus on ArrowUp/ArrowDown - without it getRowColumn returns
 			// [-1,-1] and arrows do nothing.
 			listItem.setAttribute('index', rowIndex + ':0');
+
+			if (this.isUserParked(user)) {
+				listItem.classList.add('parked');
+			}
 
 			if (following !== undefined && viewId == following[0]) {
 				$(listItem).addClass('selected-user');

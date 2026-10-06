@@ -1689,6 +1689,12 @@ menu-entry-with-icon.padding-left + menu-entry-icon.width */
 	grid-template-columns: 0fr 1fr;
 }
 
+/* The user's connection dropped and the server is holding their view. */
+.user-list-item.parked,
+#userListSummaryButton img.parked {
+	opacity: 0.5;
+}
+
 #follow-editor {
 	padding: var(--spacing-m);
 	display: flex;

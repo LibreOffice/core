@@ -116,6 +116,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		map.on('addview', this._updateViewAvatars, this);
 		map.on('removeview', this._updateViewAvatars, this);
 		map.on('updateviewpart', this._updateViewAvatars, this);
+		map.on('updateviewparked', this._updateViewAvatars, this);
 
 		window.addEventListener('resize', window.L.bind(this._resize, this));
 	},
@@ -382,7 +383,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		for (var viewId in this._map._viewInfo) {
 			var id = parseInt(viewId);
 			var part = this._map._viewInfo[viewId].part;
-			if (id === myViewId || !part)
+			// A parked view has nobody behind it until its browser comes back.
+			if (id === myViewId || !part || this._map.isViewParked(id))
 				continue;
 			if (!viewIdsByPart.has(part))
 				viewIdsByPart.set(part, []);

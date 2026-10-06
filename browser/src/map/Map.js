@@ -574,7 +574,7 @@ window.L.Map = window.L.Evented.extend({
 		this.fire('postMessage', {msgId: 'View_Added', args: {Deprecated: true, ViewId: viewInfo.id, UserId: viewInfo.userid, UserName: viewInfo.username, UserExtraInfo: viewInfo.userextrainfo, Color: app.LOUtil.rgbToHex(viewInfo.color), ReadOnly: viewInfo.readonly}});
 
 		// Fire last, otherwise not all events are handled correctly.
-		this.fire('addview', {viewId: viewInfo.id, userId: viewInfo.userid, username: viewInfo.username, extraInfo: viewInfo.userextrainfo, readonly: this.isViewReadOnly(viewInfo.id)});
+		this.fire('addview', {viewId: viewInfo.id, userId: viewInfo.userid, username: viewInfo.username, extraInfo: viewInfo.userextrainfo, readonly: this.isViewReadOnly(viewInfo.id), parked: this.isViewParked(viewInfo.id)});
 
 		this.updateAvatars();
 	},
@@ -800,6 +800,12 @@ window.L.Map = window.L.Evented.extend({
 
 	isViewReadOnly: function(viewid) {
 		return this._viewInfo[viewid].readonly !== '0';
+	},
+
+	// The view's connection dropped and the server is holding the view for the browser to come
+	// back to.
+	isViewParked: function(viewid) {
+		return this._viewInfo[viewid].parked === 'true';
 	},
 
 	getZoom: function () {

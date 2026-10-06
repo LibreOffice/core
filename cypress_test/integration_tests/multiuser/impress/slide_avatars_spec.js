@@ -109,6 +109,93 @@ describe(['tagmultiuser'], 'Multiuser slide sorter avatars', function() {
 		});
 	});
 
+	it('hides the mark while the other user is parked and brings it back', function() {
+		cy.cSetActiveFrame('#iframe1');
+		waitForLayout(win1);
+		cy.cSetActiveFrame('#iframe2');
+		waitForLayout(win2);
+
+		cy.cSetActiveFrame('#iframe2');
+		clickSlideThumbnail(1);
+		helper.processToIdle(win2);
+
+		cy.cSetActiveFrame('#iframe1');
+		helper.processToIdle(win1);
+		cy.wrap(null).should(function() {
+			expect(avatarCounts(win1)[1].faces).to.equal(1);
+			expect(Object.keys(win1.app.map._viewInfo)).to.have.length(2);
+		});
+
+		// One row each for A and B, neither away.
+		cy.cGet('#userListHeader').click();
+		cy.cGet('#userlist-dropdown').should('exist');
+		cy.cGet('.user-list-item').should('have.length', 2);
+		cy.cGet('.user-list-item.parked').should('not.exist');
+		cy.then(function() {
+			win1.JSDialog.CloseDropdown('userlist');
+		});
+		cy.cGet('#userlist-dropdown').should('not.exist');
+
+		// A third view would come to A as an addview, so count them.
+		let addedViews = 0;
+		let otherViewId;
+		cy.then(function() {
+			win1.app.map.on('addview', function() { addedViews++; });
+			otherViewId = win2.app.map._docLayer._viewId;
+			// B's connection drops without a close frame, as through a bad
+			// proxy. Reconnecting would follow within milliseconds, so B is
+			// held in the state it uses while the server has it idle, which
+			// stops _activate() from opening a new socket until released.
+			win2.app.idleHandler._documentIdle = true;
+			win2.app.socket.sendMessage('debugdropconnection');
+		});
+
+		// No processToIdle on win2 here: its socket is down. A hears about
+		// the parking through viewinfo, so let the assertion retry until it
+		// lands. The view stays known, so the count stays at two.
+		cy.cSetActiveFrame('#iframe1');
+		cy.wrap(null).should(function() {
+			expect(win1.app.map.isViewParked(otherViewId)).to.equal(true);
+			expect(avatarCounts(win1)[1].faces).to.equal(0);
+			expect(Object.keys(win1.app.map._viewInfo)).to.have.length(2);
+		});
+		cy.cGet('#userListHeader').click();
+		cy.cGet('#userlist-dropdown').should('exist');
+		cy.cGet('.user-list-item').should('have.length', 2);
+		cy.cGet('.user-list-item.parked').should('have.length', 1);
+		cy.then(function() {
+			win1.JSDialog.CloseDropdown('userlist');
+		});
+		cy.cGet('#userlist-dropdown').should('not.exist');
+
+		// Release B. Its socket carries the same token, so the server attaches
+		// it to the parked view and B keeps its view id.
+		cy.then(function() {
+			win2.app.idleHandler._documentIdle = false;
+			win2.app.idleHandler._activate();
+		});
+		cy.cSetActiveFrame('#iframe2');
+		cy.wrap(null).should(function() {
+			expect(win2.app.socket._reconnecting).to.equal(false);
+			expect(win2.app.socket.connected()).to.equal(true);
+			expect(win2.app.map._docLayer._viewId).to.equal(otherViewId);
+		});
+		helper.processToIdle(win2);
+
+		cy.cSetActiveFrame('#iframe1');
+		helper.processToIdle(win1);
+		cy.wrap(null).should(function() {
+			expect(win1.app.map.isViewParked(otherViewId)).to.equal(false);
+			expect(avatarCounts(win1)[1].faces).to.equal(1);
+			expect(Object.keys(win1.app.map._viewInfo)).to.have.length(2);
+			expect(addedViews).to.equal(0);
+		});
+		cy.cGet('#userListHeader').click();
+		cy.cGet('#userlist-dropdown').should('exist');
+		cy.cGet('.user-list-item').should('have.length', 2);
+		cy.cGet('.user-list-item.parked').should('not.exist');
+	});
+
 	// The name the other view is known by, however the test host set it.
 	function otherName(win) {
 		var mine = win.app.map._docLayer._viewId;

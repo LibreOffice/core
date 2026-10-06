@@ -193,6 +193,7 @@ interface MapInterface extends Evented {
 	): void;
 	_limitZoom(zoom: number): number;
 	isViewReadOnly(viewid: number): boolean;
+	isViewParked(viewid: number): boolean;
 	context?: { appId: string; context: string };
 	eSignature?: cool.ESignature;
 

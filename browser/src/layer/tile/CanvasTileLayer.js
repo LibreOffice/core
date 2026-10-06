@@ -2100,6 +2100,17 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		this._map.fire('updateviewpart', {viewId: viewId, part: obj.part});
 	},
 
+	// The server parks a view whose connection dropped and holds it for the browser to come
+	// back to. That flag is the one thing that changes on a view that is already known.
+	_updateViewParked: function(viewId, parked) {
+		const known = this._map._viewInfo[viewId];
+		if (known.parked === parked)
+			return;
+
+		known.parked = parked;
+		this._map.fire('updateviewparked', {viewId: viewId, parked: this._map.isViewParked(viewId)});
+	},
+
 	_onViewInfoMsg: function(textMsg) {
 		textMsg = textMsg.substring('viewinfo: '.length);
 		var viewInfo = JSON.parse(textMsg);
@@ -2108,8 +2119,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// A new view
 		var viewIds = [];
 		for (var viewInfoIdx in viewInfo) {
-			if (!(parseInt(viewInfo[viewInfoIdx].id) in this._map._viewInfo)) {
+			const viewId = parseInt(viewInfo[viewInfoIdx].id);
+			if (!(viewId in this._map._viewInfo)) {
 				this._addView(viewInfo[viewInfoIdx]);
+			} else {
+				this._updateViewParked(viewId, viewInfo[viewInfoIdx].parked);
 			}
 			viewIds.push(viewInfo[viewInfoIdx].id);
 		}
