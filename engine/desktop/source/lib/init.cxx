@@ -7213,6 +7213,13 @@ void COKitDocumentImpl::setObjectHandle(unsigned long long nObjectId, int nKind,
             continue;
 
         pHandle = pOne;
+
+        // The view gives every handle it collects its object and its number in the object's
+        // list, and a handle reads both when it is dragged: a connector's line handle asks its
+        // connector which way the line runs, and answers for a handle without one as if the
+        // line ran upright. The handle gets both here, once it is the one that is meant.
+        pHandle->SetObj(pObject);
+        pHandle->SetObjHdlNum(static_cast<sal_uInt32>(nHandle));
         break;
     }
 
