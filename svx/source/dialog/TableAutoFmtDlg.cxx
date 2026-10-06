@@ -158,7 +158,7 @@ void SvxTableAutoFmtDlg::PopulateFormatList()
 
 void SvxTableAutoFmtDlg::UpdateUIState()
 {
-    const bool bCanModify = mnIndex != DEFAULT_STYLE;
+    const bool bCanModify = mnIndex != DEFAULT_STYLE && mnIndex < mpFormat.size();
     mxBtnRename->set_sensitive(bCanModify);
     mxBtnRemove->set_sensitive(bCanModify);
 }
