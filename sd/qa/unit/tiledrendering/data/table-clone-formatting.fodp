@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+                 xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+                 xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+                 office:version="1.3"
+                 office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:styles>
+  <style:style style:name="standard" style:family="graphic"/>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PM1">
+   <style:page-layout-properties fo:page-width="28cm" fo:page-height="21cm" style:print-orientation="landscape"/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page"/>
+  <style:style style:name="gr1" style:family="graphic" style:parent-style-name="standard"/>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties fo:font-size="9pt"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="PM1" draw:style-name="dp1"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:layer="layout" svg:width="12cm" svg:height="3cm" svg:x="3cm" svg:y="3cm">
+     <table:table>
+      <table:table-column/>
+      <table:table-column/>
+      <table:table-row>
+       <table:table-cell>
+        <text:p><text:span text:style-name="T1">ONE</text:span></text:p>
+       </table:table-cell>
+       <table:table-cell>
+        <text:p><text:span text:style-name="T1">TWO</text:span></text:p>
+       </table:table-cell>
+      </table:table-row>
+     </table:table>
+    </draw:frame>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>
