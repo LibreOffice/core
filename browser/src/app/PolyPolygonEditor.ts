@@ -107,9 +107,10 @@ class PolyPolygonEditor implements HandleSource {
 	}
 
 	/*
-		Draws the thin line that ties every weight to the point it belongs to, so light that it
-		says where a weight belongs without competing with anything. The handles it is given are
-		the handles as they stand, so while a drag runs the lines follow what it moves.
+		Draws the thin line that ties every weight to the point it belongs to. It is drawn twice,
+		a dark line and the blue one dashed over it, so that one of the two stands out on any
+		background, light or dark, and still does not compete with the handles. The handles it is
+		given are the handles as they stand, so while a drag runs the lines follow what it moves.
 	*/
 	public paint(section: CanvasSectionObject, shown: SelectionHandle[]): void {
 		const points = new Map<string, SelectionHandle>();
@@ -123,8 +124,7 @@ class PolyPolygonEditor implements HandleSource {
 
 		section.context.save();
 		section.context.setTransform(1, 0, 0, 1, 0, 0);
-		section.context.globalAlpha = 0.2;
-		section.context.strokeStyle = '#1C99E0';
+		section.context.globalAlpha = HandleLook.helperLineAlpha;
 		section.context.lineWidth = app.dpiScale;
 		section.context.beginPath();
 
@@ -141,7 +141,14 @@ class PolyPolygonEditor implements HandleSource {
 			section.context.lineTo(to.vX, to.vY);
 		}
 
+		section.context.strokeStyle = HandleLook.helperLineDarkColour;
 		section.context.stroke();
+
+		const dash = HandleLook.helperLineDash * app.dpiScale;
+		section.context.setLineDash([dash, dash]);
+		section.context.strokeStyle = HandleLook.helperLineColour;
+		section.context.stroke();
+
 		section.context.restore();
 	}
 

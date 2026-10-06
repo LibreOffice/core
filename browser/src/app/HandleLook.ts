@@ -171,6 +171,14 @@ class HandleLook {
 	/// edited.
 	public static readonly outlineOfADrag: string = '#1C99E0';
 
+	/// The line that ties a weight of a curve to its point, drawn in two colors one over the
+	/// other with a dash, so it shows on a light background and on a dark one alike.
+	public static readonly helperLineColour: string = '#1C99E0';
+	public static readonly helperLineDarkColour: string = '#0B3F63';
+	public static readonly helperLineAlpha: number = 0.7;
+	/// The length of a dash of that line, in CSS pixels.
+	public static readonly helperLineDash: number = 4;
+
 	/// How wide a handle of that kind is drawn, in core pixels.
 	public static widthOf(kind: HandleKind): number {
 		return HandleLook.size * HandleLook.shareOfTheSize[kind] * app.dpiScale;
