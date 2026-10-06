@@ -7285,14 +7285,21 @@ void COKitDocumentImpl::setObjectHandle(unsigned long long nObjectId, int nKind,
     /*
         What has to be put back to undo the move is the object's own business as well: most of
         them change their geometry, while one that changes an attribute - the corner radius is
-        kept among the attributes - says so on the drag.
+        kept among the attributes - says so on the drag. A connector says so only while its drag
+        runs, which is after this, and its drag changes its run and its items both ways, so
+        both are recorded for it.
     */
     SdrModel& rModel(pObject->getSdrModelFromSdrObject());
     SdrUndoFactory& rFactory(rModel.GetSdrUndoFactory());
     std::unique_ptr<SdrUndoAction> pAttributes;
     std::unique_ptr<SdrUndoAction> pGeometry;
 
-    if (aDrag.IsEndDragChangesAttributes())
+    if (nullptr != dynamic_cast<const SdrEdgeObj*>(pObject))
+    {
+        pAttributes = rFactory.CreateUndoAttrObject(*pObject);
+        pGeometry = rFactory.CreateUndoGeoObject(*pObject);
+    }
+    else if (aDrag.IsEndDragChangesAttributes())
     {
         pAttributes = rFactory.CreateUndoAttrObject(*pObject);
 
