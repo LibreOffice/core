@@ -9,11 +9,14 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <editeng/ulspitem.hxx>
+
 #include <docsh.hxx>
 #include <swdtflvr.hxx>
 #include <swmodule.hxx>
 #include <frmmgr.hxx>
 #include <frameformats.hxx>
+#include <frmatr.hxx>
 #include <formatflysplit.hxx>
 #include <formatwraptextatflystart.hxx>
 
@@ -92,6 +95,30 @@ CPPUNIT_TEST_FIXTURE(Test, testFormatWrapTextAtFlyStart)
     pDoc->SetFlyFrameAttr(*pFly, aSet);
 
     CPPUNIT_ASSERT(pFly->GetAttrSet().GetWrapTextAtFlyStart().GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFormatCopyInheritsFromSourceParent)
+{
+    // Given a format derived from a parent with an upper spacing, and a format derived from the
+    // default frame format:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwFrameFormat* pParent
+        = pDoc->MakeFrameFormat(UIName(u"parent"_ustr), pDoc->GetDfltFrameFormat());
+    pParent->SetFormatAttr(SvxULSpaceItem(1234, 0, RES_UL_SPACE));
+    SwFrameFormat* pSource = pDoc->MakeFrameFormat(UIName(u"source"_ustr), pParent);
+    SwFrameFormat* pCopy = pDoc->MakeFrameFormat(UIName(u"copy"_ustr), pDoc->GetDfltFrameFormat());
+
+    // When the second format is made a copy of the first, and the first is then deleted:
+    *pCopy = *pSource;
+    pDoc->DelFrameFormat(pSource);
+
+    // Then the copy derives from the parent and inherits its attributes from the parent too, so
+    // it still has the parent's upper spacing:
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwFormat*>(pParent), pCopy->DerivedFrom());
+    CPPUNIT_ASSERT_EQUAL(static_cast<const SfxItemSet*>(&pParent->GetAttrSet()),
+                         pCopy->GetAttrSet().GetParent());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1234), pCopy->GetAttrSet().GetULSpace().GetUpper());
 }
 }
 
