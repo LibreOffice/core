@@ -150,19 +150,27 @@ IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, weld::ItemView&, void)
 {
     // Get index of selected item from the listbox
     int styleIdx = m_xLbFormat->get_selected_index();
-    assert(styleIdx != -1 && "nothing selected");
-    m_aWndPreview.NotifyChange(m_xTableTable->GetResolvedStyle(m_xTableTable->GetData(styleIdx)));
+    if (styleIdx == -1)
+    {
+        SwTableAutoFormat aNone(TableStyleName(SwViewShell::GetShellRes()->aStrNone));
+        aNone.DisableAll();
+        m_aWndPreview.NotifyChange(&aNone);
+    }
+    else
+        m_aWndPreview.NotifyChange(m_xTableTable->GetResolvedStyle(
+            m_xTableTable->GetData(styleIdx)));
 }
 
 IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, weld::Button&, void)
 {
     int styleIdx = m_xLbFormat->get_selected_index();
-    assert(styleIdx != -1 && "nothing selected");
-
-    if( m_xTAutoFormat )
-        *m_xTAutoFormat = (*m_xTableTable)[styleIdx];
-    else
-        m_xTAutoFormat.reset(new SwTableAutoFormat((*m_xTableTable)[styleIdx]));
+    if (styleIdx != -1)
+    {
+        if (m_xTAutoFormat)
+            *m_xTAutoFormat = (*m_xTableTable)[styleIdx];
+        else
+            m_xTAutoFormat.reset(new SwTableAutoFormat((*m_xTableTable)[styleIdx]));
+    }
 
     m_xDialog->response(RET_OK);
 }
