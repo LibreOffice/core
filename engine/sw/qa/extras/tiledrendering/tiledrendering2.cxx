@@ -70,6 +70,14 @@
 #include <ThemeColorChanger.hxx>
 #include <svx/ColorSets.hxx>
 #include <docmodel/theme/ColorSet.hxx>
+#include <IDocumentDrawModelAccess.hxx>
+#include <drawdoc.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdobj.hxx>
+#include <vcl/window.hxx>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 using namespace css;
 using namespace ::cpo;
@@ -2241,6 +2249,59 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphBlockQuote)
     CPPUNIT_ASSERT_EQUAL(
         std::string("Quoted from the Collabora website."),
         aView.m_aA11yFocusedParagraph.get_child("after").begin()->second.get_value<std::string>());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPasteShapeFromPresentationAtCaret)
+{
+    // A shape copied in a presentation and pasted into a text document lands at the caret, on
+    // whichever page that is, and not at the coordinates the shape had on its slide.
+    SwXTextDocument* pXTextDocument = createDoc("shape-paste-target.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwFrame* pPage1 = pWrtShell->GetLayout()->GetLower();
+    CPPUNIT_ASSERT(pPage1);
+    SwFrame* pPage2 = pPage1->GetNext();
+    CPPUNIT_ASSERT(pPage2);
+    // The caret goes to the end of the document, which is on the second page, far from where
+    // the slide coordinates of the shape fall.
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    const SwRect aCaret(pWrtShell->GetCharRect());
+    CPPUNIT_ASSERT(pPage2->getFrameArea().Contains(aCaret.Pos()));
+
+    mxComponent2 = loadFromDesktop(createFileURL(u"shape-paste-source.fodp"),
+                                   u"com.sun.star.presentation.PresentationDocument"_ustr);
+    uno::Reference<frame::XModel> xPresentation(mxComponent2, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xPresentation,
+                                                                   uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xSlide(
+        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<view::XSelectionSupplier> xSelection(xPresentation->getCurrentController(),
+                                                         uno::UNO_QUERY_THROW);
+    xSelection->select(xSlide->getByIndex(0));
+    dispatchCommand(mxComponent2, u".uno:Copy"_ustr, {});
+
+    // The kit gives every document view a clipboard of its own, and a paste across documents
+    // starts by filling the destination's clipboard with the content of the source's. Hand the
+    // presentation's clipboard to the text document the same way.
+    SfxViewShell* pPresentationView = SfxViewShell::Get(xPresentation->getCurrentController());
+    CPPUNIT_ASSERT(pPresentationView);
+    pXTextDocument->setClipboard(pPresentationView->GetWindow()->GetClipboard());
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The text box arrives as a drawing object on the second page, with its top left corner at
+    // the caret.
+    SdrPage* pDrawPage
+        = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    CPPUNIT_ASSERT(pDrawPage);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDrawPage->GetObjCount());
+    const tools::Rectangle aPasted = pDrawPage->GetObj(0)->GetSnapRect();
+    CPPUNIT_ASSERT(pPage2->getFrameArea().Contains(aPasted.TopLeft()));
+    // The layout places the shape from its anchor paragraph, so allow one line height for the
+    // rounding on the way from the paste point to that anchor and back.
+    const double fTolerance = aCaret.Height();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCaret.Left()), double(aPasted.Left()), fTolerance);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCaret.Top()), double(aPasted.Top()), fTolerance);
 }
 }
 

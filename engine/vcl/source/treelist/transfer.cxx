@@ -188,7 +188,7 @@ static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObj
         + "\";width=\"" + OUString::number(rObjDesc.maSize.Width())
         + "\";height=\"" + OUString::number(rObjDesc.maSize.Height())
         + "\";posx=\"" + OUString::number(rObjDesc.maDragStartPos.X())
-        + "\";posy=\"" + OUString::number(rObjDesc.maDragStartPos.X()) + "\"";
+        + "\";posy=\"" + OUString::number(rObjDesc.maDragStartPos.Y()) + "\"";
 
     return aParams;
 }

@@ -65,6 +65,7 @@
 #include <ViewClipboard.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/classificationhelper.hxx>
+#include <comphelper/classids.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -72,6 +73,7 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/xbtmpit.hxx>
 #include <memory>
+#include <optional>
 #include <SlideSorter.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsClipboard.hxx>
@@ -252,6 +254,26 @@ bool View::InsertMetaFile( const TransferableDataHelper& rDataHelper, const Poin
     InsertGraphic( aGraphic, mnAction, aInsertPos, nullptr, pImageMap );
 
     return true;
+}
+
+// The top left corner of a copied selection on its page, in 1/100 mm, read from the object
+// descriptor. Only a copy made in a presentation or a drawing carries a page position there.
+static std::optional<Point> lcl_GetSourcePagePosition( const TransferableDataHelper& rDataHelper )
+{
+    if( !rDataHelper.HasFormat( SotClipboardFormatId::OBJECTDESCRIPTOR ) )
+        return std::nullopt;
+
+    TransferableObjectDescriptor aObjDesc;
+    if( !rDataHelper.GetTransferableObjectDescriptor( SotClipboardFormatId::OBJECTDESCRIPTOR,
+                                                       aObjDesc ) )
+        return std::nullopt;
+
+    const bool bFromPage = aObjDesc.maClassName == SvGlobalName( SO3_SIMPRESS_CLASSID ) ||
+                           aObjDesc.maClassName == SvGlobalName( SO3_SDRAW_CLASSID );
+    if( !bFromPage )
+        return std::nullopt;
+
+    return aObjDesc.maDragStartPos;
 }
 
 bool View::InsertData( const TransferableDataHelper& rDataHelper,
@@ -687,9 +709,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     pWorkModel->DeletePage( static_cast<sal_uInt16>(i) );
             }
 
-            // The place comes from where the copy began in the document.
-            bool bReturn = Paste(*pWorkModel, maDropPos, pPage,
-                                 nPasteOptions | SdrInsertFlags::POSITIONFROMDOCUMENT);
+            bool bReturn = Paste(*pWorkModel, maDropPos, pPage, nPasteOptions);
 
             if( !pPage )
                 pPage = static_cast<SdPage*>( GetSdrPageView()->GetPage() );
@@ -871,20 +891,29 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     pWorkPage->SetSdrObjListRectsDirty();
 
-                    SdrInsertFlags nOptions = nPasteOptions;
+                    // A paste puts the shapes where they were copied from: on top of the
+                    // originals within one document, and at the same place on the page when
+                    // they come from another presentation or drawing. A drop goes to the
+                    // drop point.
+                    std::optional<Point> oStartPos;
                     if( pOwnData )
+                        oStartPos = pOwnData->GetBoundStartPos();
+                    else if( !bDrag )
+                        oStartPos = lcl_GetSourcePagePosition( rDataHelper );
+
+                    if( oStartPos )
                     {
                         // tdf#118171 - snap rectangles of objects without line width
-                        const Size aSize(pWorkPage->GetAllObjSnapRect().GetSize());
+                        const ::tools::Rectangle aSnapRect( pWorkPage->GetAllObjSnapRect() );
 
-                        maDropPos.setX( pOwnData->GetBoundStartPos().X() + ( aSize.Width() >> 1 ) );
-                        maDropPos.setY( pOwnData->GetBoundStartPos().Y() + ( aSize.Height() >> 1 ) );
-
-                        // The place comes from where the copy began in the document.
-                        nOptions |= SdrInsertFlags::POSITIONFROMDOCUMENT;
+                        // The paste centres the objects on the drop position, so the drop
+                        // position is the centre of that rectangle once its top left corner
+                        // sits at the start position. The same centre arithmetic on both
+                        // sides keeps the corner exact.
+                        maDropPos = *oStartPos + ( aSnapRect.Center() - aSnapRect.TopLeft() );
                     }
 
-                    bReturn = Paste(*pModel, maDropPos, pPage, nOptions);
+                    bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions);
                 }
 
                 xShell->DoClose();
@@ -951,7 +980,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     pWorkPage->SetSdrObjListRectsDirty();
 
-                    SdrInsertFlags nOptions = nPasteOptions;
                     if( pOwnData )
                     {
                         // tdf#118171 - snap rectangles of objects without line width
@@ -960,8 +988,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         maDropPos.setX( pOwnData->GetBoundStartPos().X() + ( aSize.Width() >> 1 ) );
                         maDropPos.setY( pOwnData->GetBoundStartPos().Y() + ( aSize.Height() >> 1 ) );
 
-                        // The place comes from where the copy began in the document.
-                        nOptions |= SdrInsertFlags::POSITIONFROMDOCUMENT;
                     }
 
                     // delete pages, that are not of any interest for us
@@ -973,7 +999,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             pModel->DeletePage( static_cast<sal_uInt16>(i) );
                     }
 
-                    bReturn = Paste(*pModel, maDropPos, pPage, nOptions);
+                    bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions);
 
                     if( !pPage )
                         pPage = static_cast<SdPage*>(GetSdrPageView()->GetPage());

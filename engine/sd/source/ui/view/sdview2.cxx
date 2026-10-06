@@ -149,6 +149,9 @@ cpo::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
         pObjDesc->maDisplayName = mpDocSh->GetMedium()->GetURLObject().GetURLNoPass();
 
     pObjDesc->maSize = aMarkRect.GetSize();
+    // The top left corner of the selection on its page, in 1/100 mm. The descriptor is the part
+    // of the clipboard content that another document can read.
+    pObjDesc->maDragStartPos = aMarkBoundRect.TopLeft();
 
     pTransferable->SetStartPos( aMarkRect.TopLeft() );
     pTransferable->SetBoundStartPos(aMarkBoundRect.TopLeft());
@@ -222,6 +225,7 @@ cpo::uno::Reference< css::datatransfer::XTransferable > View::CreateSelectionDat
     }
 
     pObjDesc->maSize = aMarkRect.GetSize();
+    pObjDesc->maDragStartPos = aMarkRect.TopLeft();
 
     pTransferable->SetStartPos( aMarkRect.TopLeft() );
     pTransferable->SetObjectDescriptor( std::move(pObjDesc) );

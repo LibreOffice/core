@@ -200,8 +200,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         // don't change marking if OLE object is active
         // (at Drop from OLE object it would be deactivated in the middle of ExecuteDrag!)
 
-        // aPos comes from the cell cursor, so it holds in kit too.
-        SdrInsertFlags nOptions = SdrInsertFlags::POSITIONFROMDOCUMENT;
+        SdrInsertFlags nOptions = SdrInsertFlags::NONE;
         SfxInPlaceClient* pClient = GetViewData().GetViewShell()->GetIPClient();
         if ( pClient && pClient->IsObjectInPlaceActive() )
             nOptions |= SdrInsertFlags::DONTMARK;

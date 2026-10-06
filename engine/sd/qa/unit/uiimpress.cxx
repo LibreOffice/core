@@ -89,6 +89,7 @@
 #include <SlideSectionManager.hxx>
 #include <DesignTemplates.hxx>
 #include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
 #include <OutlineView.hxx>
 #include <Window.hxx>
 #include <app.hrc>
@@ -1897,13 +1898,10 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteTextboxBackgroundCrossProcess)
                          pDstShape->GetMergedItem(XATTR_FILLSTYLE).GetValue());
 }
 
-CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteKeepsPositionInKit)
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteFromOtherDocumentKeepsSlidePosition)
 {
-    // When kit is active the destination's visible area is not a reliable
-    // paste position. A cross-document paste arrives with the selection
-    // normalised to the origin, so place the group's top-left at the page
-    // origin instead of recentering it on that visible area. Recentering
-    // shifted the pasted shape away from the corner.
+    // A shape pasted from another presentation lands where it was on its own slide, the same as
+    // a copy within one document does, wherever the destination view happens to look.
     mxComponent2 = loadFromDesktop(createFileURL(u"odp/paste-textbox-background.odp"),
                                    u"com.sun.star.presentation.PresentationDocument"_ustr);
     CPPUNIT_ASSERT(mxComponent2.is());
@@ -1915,7 +1913,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteKeepsPositionInKit)
 
     SdrObject* pSrcTextBox = lcl_findTextBoxByText(pSrcPage, u"xxx");
     CPPUNIT_ASSERT_MESSAGE("source textbox 'xxx' not found", pSrcTextBox);
-    const Size aSrcSize = pSrcTextBox->GetSnapRect().GetSize();
+    const tools::Rectangle aSrcRect = pSrcTextBox->GetSnapRect();
 
     SdrView* pSrcView = pSrcViewShell->GetView();
     pSrcView->UnmarkAllObj();
@@ -1936,16 +1934,17 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPasteKeepsPositionInKit)
     {
         comphelper::COKit::setActive(true);
         comphelper::ScopeGuard aKitGuard([] { comphelper::COKit::setActive(false); });
+        // The kit knows where the client looks, in twips. A small area at the page origin is far
+        // from the source position, so a paste centred on the view would show up clearly.
+        pDstViewShell->GetViewShellBase().setKitVisibleArea(
+            tools::Rectangle(Point(0, 0), Size(2000, 2000)));
         dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     }
 
     CPPUNIT_ASSERT_EQUAL(nDstObjsBefore + 1, pDstPage->GetObjCount());
     SdrObject* pDstShape = pDstPage->GetObj(nDstObjsBefore);
 
-    // The pasted shape sits at the page origin with its size preserved,
-    // rather than being shifted by the recentering offset.
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(0, 0), aSrcSize),
-                         pDstShape->GetSnapRect());
+    CPPUNIT_ASSERT_EQUAL(aSrcRect, pDstShape->GetSnapRect());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSlidePasteSizeMismatch)
