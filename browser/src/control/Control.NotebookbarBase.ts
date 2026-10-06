@@ -120,6 +120,14 @@ class NotebookbarBase extends JSDialogComponent {
 	}
 
 	protected onJSUpdate(e: { data: UpdateData }) {
+		if (
+			e.data &&
+			e.data.jsontype === this.allowedJsonType &&
+			e.data.control &&
+			this.impl?.onCoreWidgetUpdate?.(e.data.control)
+		)
+			return true;
+
 		if (super.onJSUpdate(e)) {
 			this.impl?.setInitialized(true);
 			return true;

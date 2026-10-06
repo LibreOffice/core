@@ -132,6 +132,7 @@ private:
     void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     DECL_LINK(FormulaEnteredHdl, void*, void);
+    DECL_LINK(InFormulaTabToggledHdl, weld::Toggleable&, void);
     DECL_LINK(CategorySelectedHandle, weld::ComboBox&, void);
     DECL_LINK(ElementClickHandler, const OUString&, void);
 
@@ -150,6 +151,7 @@ private:
     ImplSVEvent* mpFormulaEnteredEvent = nullptr;
     bool mbListeningForFormulas = false;
 
+    std::unique_ptr<weld::CheckButton> mxInFormulaTab;
     std::unique_ptr<weld::ComboBox> mxCategoryList;
     std::vector<std::unique_ptr<SmElementsControl>> maElementsControls;
     std::vector<std::unique_ptr<weld::Widget>> maGroupSections;
@@ -174,10 +176,15 @@ void NotebookbarElementsController::initialize(const cpo::uno::Sequence<cpo::uno
     if (mpBindings->GetDispatcher() && mpBindings->GetDispatcher()->GetFrame())
     {
         if (const SfxViewShell* pHostView = mpBindings->GetDispatcher()->GetFrame()->GetViewShell())
-        {
             mnHostViewId = pHostView->GetViewShellId();
-            sm::notebookbar::SetHostsElements(mnHostViewId, true);
-        }
+    }
+
+    mxInFormulaTab = mpBuilder->weld_check_button(u"elementsinformulatab"_ustr);
+    if (mxInFormulaTab)
+    {
+        mxInFormulaTab->connect_toggled(
+            LINK(this, NotebookbarElementsController, InFormulaTabToggledHdl));
+        mxInFormulaTab->set_active(false);
     }
 
     try
@@ -221,6 +228,7 @@ void NotebookbarElementsController::disposing(std::unique_lock<std::mutex>& /*rG
     }
 
     EndListeningAll();
+    mxInFormulaTab.reset();
     maElementsControls.clear();
     maGroupSections.clear();
     mxCategoryList.reset();
@@ -242,6 +250,11 @@ void NotebookbarElementsController::notifyContextChangeEvent(
         = Application::PostUserEvent(LINK(this, NotebookbarElementsController, FormulaEnteredHdl));
 }
 
+IMPL_LINK(NotebookbarElementsController, InFormulaTabToggledHdl, weld::Toggleable&, rButton, void)
+{
+    sm::notebookbar::SetHostsElements(mnHostViewId, rButton.get_active());
+}
+
 IMPL_LINK_NOARG(NotebookbarElementsController, FormulaEnteredHdl, void*, void)
 {
     mpFormulaEnteredEvent = nullptr;
@@ -249,7 +262,8 @@ IMPL_LINK_NOARG(NotebookbarElementsController, FormulaEnteredHdl, void*, void)
     if (!mpBuilder || !GetView())
         return;
 
-    if (maElementsControls.empty())
+    // nothing to show when tab is hidden
+    if (maElementsControls.empty() && mxInFormulaTab && mxInFormulaTab->get_active())
         BuildElements();
 }
 

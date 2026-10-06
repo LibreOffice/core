@@ -1568,6 +1568,7 @@ class UIManager extends window.L.Control {
 		window.prefs.set('compactMode', uiMode.mode === 'classic');
 		this.permissionViewMode?.updateShareButton();
 		this.initializeLateComponents();
+		this.notebookbar?.impl?.reportFormulaTabShown?.();
 		this.insertCustomButtons();
 
 		// this code ensures that elements in the notebookbar have their "selected" status

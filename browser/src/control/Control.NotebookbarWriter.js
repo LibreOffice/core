@@ -31,6 +31,33 @@ var formulaTabName = 'Formula';
 
 window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 
+	onCoreWidgetUpdate: function(control) {
+		if (control.id !== 'elementsinformulatab')
+			return false;
+
+		if (control.checked !== this.isFormulaTabShown())
+			this.reportFormulaTabShown();
+		return true;
+	},
+
+	isFormulaTabShown: function() {
+		return this.map.uiManager.getCurrentMode() === 'notebookbar';
+	},
+
+	reportFormulaTabShown: function() {
+		var windowId = JSDialog.resolveWindowId(this.builder);
+		if (typeof windowId !== 'number')
+			return;
+
+		var shown = this.isFormulaTabShown();
+		app.socket.sendMessage('dialogevent ' + windowId + ' ' + JSON.stringify({
+			id: 'elementsinformulatab',
+			cmd: 'change',
+			data: shown ? 'true' : 'false',
+			type: 'checkbox'
+		}));
+	},
+
 	onCallback: function(objectType, eventType, object, data, builder) {
 		return JSDialog.WriterTableDesignTab.onCallback(objectType, eventType, object, data, builder);
 	},
