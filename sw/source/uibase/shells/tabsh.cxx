@@ -891,6 +891,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 size_t nIndex = aDlg.GetIndex();
                 if (nIndex < rFormats.size())
                     rSh.SetTableStyle(*rFormats.GetData(nIndex));
+                else
+                {
+                    TableStyleName aNone;
+                    rSh.UpdateTableStyleFormatting(nullptr, false, &aNone);
+                }
             }
 
             break;
