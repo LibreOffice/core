@@ -263,6 +263,8 @@ namespace cool {
 		cannotBeResizedFreely?: boolean;
 		/// True where the object may not be turned over, a media object for one.
 		cannotBeMirrored?: boolean;
+		/// True where the object cannot hold a shear at all, a text frame for one.
+		cannotBeSheared?: boolean;
 		gluePoints?: ObjectGluePoint[];
 		/// True for a connector whose first end is tied to an object, and the same for its last
 		/// end. Absent for anything that is not a connector, and for an end that is free.

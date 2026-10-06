@@ -97,6 +97,15 @@ class ScalingInteraction extends SelectionInteraction {
 		return this;
 	}
 
+	/// Whether the objects keep the way they face through this drag: a crop does, and so does a
+	/// selection holding an object that may not be turned over.
+	private facingKept(): boolean {
+		return (
+			this.keepsItsFacing ||
+			!ObjectHandles.canBeMirrored(this.selection.selectedObjects())
+		);
+	}
+
 	/// The shape the mouse at that point leads to. Its width or its height counts backwards where
 	/// the drag took a side past the one opposite it.
 	private shapeFor(to: cool.SimplePoint): any {
@@ -112,7 +121,23 @@ class ScalingInteraction extends SelectionInteraction {
 		if (!ObjectHandles.canBeResized(this.selection.selectedObjects())) return;
 		if (!this.shapeAtStart) return;
 
-		this.keepsRatio = !this.exact && this.ratioKept(event);
+		/*
+			Whether the drag keeps the ratio. A group or a selection of several with a turned
+			object in it keeps the ratio by default and Shift lets it go, the other way round from
+			a plain shape, where Shift asks for it. One with an object in it that cannot shear
+			keeps it whatever the keys say. A single object is never sheared by a scale on its own
+			square and goes by the keys alone. A key step has no Shift for this, so it goes by the
+			default.
+		*/
+		const selected = this.selection.selectedObjects();
+		const byDefault = ObjectHandles.keepsTheRatioByDefault(selected);
+		const always = ObjectHandles.keepsTheRatioAlways(selected);
+		const asked = this.exact
+			? byDefault
+			: byDefault
+				? event?.shiftKey !== true
+				: this.ratioKept(event);
+		this.keepsRatio = always || asked;
 
 		// The drag leads the handle, so it goes to where the handle stands for this mouse point
 		// and not to the mouse point itself.
@@ -141,8 +166,8 @@ class ScalingInteraction extends SelectionInteraction {
 		where it found one and from the mouse where it did not. A drag that keeps the shape of the
 		object snaps to nothing, since it has only one number to give.
 	*/
-	private applyTheSnap(to: cool.SimplePoint, event: MouseEvent): void {
-		if (this.ratioKept(event)) return;
+	private applyTheSnap(to: cool.SimplePoint, _event: MouseEvent): void {
+		if (this.keepsRatio) return;
 
 		const snapped = this.selection.snappedTo();
 		if (!snapped || (snapped[0] === null && snapped[1] === null)) return;
@@ -271,7 +296,7 @@ class ScalingInteraction extends SelectionInteraction {
 			// to invalidate for a mapping like that.
 			const most = 1000;
 
-			if (this.keepsItsFacing) return Math.min(Math.max(reached, hair), most);
+			if (this.facingKept()) return Math.min(Math.max(reached, hair), most);
 
 			return (
 				Math.sign(reached || 1) *

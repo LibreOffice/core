@@ -289,6 +289,70 @@ class ObjectHandles implements HandleSource {
 		);
 	}
 
+	/// Whether the object stands at a right angle to the page, turned by a multiple of ninety
+	/// degrees or not at all. A resize with two different factors shears no such object.
+	private static standsAtARightAngle(objectId: number): boolean {
+		const transform = RenderGeometrySection.transformOf(objectId);
+		if (!transform) return true;
+
+		const quarterTurns = transform.rotation() / (Math.PI / 2);
+		return Math.abs(quarterTurns - Math.round(quarterTurns)) < 0.0001;
+	}
+
+	/*
+		Whether a resize of these objects is laid through a square that is not an object's own: a
+		selection of several stands on the box round them all, and a group on its own box, both
+		upright on the page. A member turned off the right angles is sheared by two different
+		factors through such a square. A single object that holds nothing is resized on its own
+		square and shears never, however it is turned.
+	*/
+	private static resizesThroughABox(objectIds: number[]): boolean {
+		return (
+			objectIds.length > 1 ||
+			(objectIds.length === 1 &&
+				RenderGeometrySection.holdsObjects(objectIds[0]))
+		);
+	}
+
+	/*
+		Whether a resize of these objects keeps the ratio unless the user asks otherwise: the
+		office holds a resize in ratio as soon as one object says it allows no free resize, which
+		a shape says once it is turned at all. That matters only where the resize goes through a
+		box and the object stands turned in it; a single object, or a member at a right angle, is
+		not sheared by a free resize and does not ask for the ratio.
+	*/
+	public static keepsTheRatioByDefault(objectIds: number[]): boolean {
+		if (!ObjectHandles.resizesThroughABox(objectIds)) return false;
+
+		return ObjectHandles.allOfThem(objectIds).some(
+			(objectId: number) =>
+				RenderGeometrySection.objectOf(objectId)?.cannotBeResizedFreely ===
+					true && !ObjectHandles.standsAtARightAngle(objectId),
+		);
+	}
+
+	/*
+		Whether a resize of these objects keeps the ratio whatever the user asks: one of them
+		cannot hold a shear at all and stands turned in the box the resize goes through, so two
+		different factors would bring in a shear it has nowhere to put.
+	*/
+	public static keepsTheRatioAlways(objectIds: number[]): boolean {
+		if (!ObjectHandles.resizesThroughABox(objectIds)) return false;
+
+		return ObjectHandles.allOfThem(objectIds).some(
+			(objectId: number) =>
+				RenderGeometrySection.objectOf(objectId)?.cannotBeSheared === true &&
+				!ObjectHandles.standsAtARightAngle(objectId),
+		);
+	}
+
+	public static canBeMirrored(objectIds: number[]): boolean {
+		return ObjectHandles.allOfThem(objectIds).every(
+			(objectId: number) =>
+				RenderGeometrySection.objectOf(objectId)?.cannotBeMirrored !== true,
+		);
+	}
+
 	/*
 		Gives each of the eight the way it is drawn away from the place it stands on: one step
 		along each of the two axes of the selection, worked out from where the eight stand now.

@@ -6879,6 +6879,63 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
         const basegfx::B2DHomMatrix aReached(lcl_turnTheShearOver(aWanted));
 
         /*
+            What the object allows is asked before anything is done to it: a turn where it says
+            it cannot be turned, a mirror where it cannot be turned over, and a resize with two
+            different factors where it allows a resize in ratio only, are refused. The client
+            keeps to the same rules while a drag runs, so a mapping refused here is one that was
+            not meant.
+        */
+        {
+            SdrObjTransformInfoRec aAllows;
+            pObject->TakeObjInfo(aAllows);
+
+            basegfx::B2DTuple aScaleWas;
+            basegfx::B2DTuple aScaleBecomes;
+            basegfx::B2DTuple aTranslate;
+            double fRotateWas(0.0);
+            double fRotateBecomes(0.0);
+            double fShearWas(0.0);
+            double fShearBecomes(0.0);
+            aOfTheObject.decompose(aScaleWas, aTranslate, fRotateWas, fShearWas);
+            aReached.decompose(aScaleBecomes, aTranslate, fRotateBecomes, fShearBecomes);
+
+            const bool bTurns(!basegfx::fTools::equal(
+                basegfx::normalizeToRange(fRotateWas, 2.0 * M_PI),
+                basegfx::normalizeToRange(fRotateBecomes, 2.0 * M_PI), 0.0001));
+            // A mapping that turns the object over has a determinant below zero.
+            const auto determinantOf = [](const basegfx::B2DHomMatrix& rMatrix) {
+                return rMatrix.get(0, 0) * rMatrix.get(1, 1)
+                       - rMatrix.get(0, 1) * rMatrix.get(1, 0);
+            };
+            const bool bTurnsOver((determinantOf(aOfTheObject) < 0.0)
+                                  != (determinantOf(aReached) < 0.0));
+            const bool bShears(!basegfx::fTools::equal(fShearWas, fShearBecomes, 0.0001));
+
+            if (bTurns && !aAllows.bRotateFreeAllowed)
+            {
+                SetLastExceptionMsg(u"The object cannot be turned"_ustr);
+                SAL_WARN("sd", "setobjecttransform left the object alone: it cannot be turned");
+                continue;
+            }
+            if (bTurnsOver && !aAllows.bMirrorFreeAllowed)
+            {
+                SetLastExceptionMsg(u"The object cannot be turned over"_ustr);
+                SAL_WARN("sd",
+                         "setobjecttransform left the object alone: it cannot be turned over");
+                continue;
+            }
+            // A mapping that brings a shear in is refused by an object that cannot hold one. A
+            // resize of such an object in its own frame has none and passes, whatever the
+            // factors. A resize of a group it stands turned in brings one, and is refused.
+            if (bShears && !aAllows.bShearAllowed)
+            {
+                SetLastExceptionMsg(u"The object cannot be sheared"_ustr);
+                SAL_WARN("sd", "setobjecttransform left the object alone: it cannot be sheared");
+                continue;
+            }
+        }
+
+        /*
             An object that carries an outline of its own is given that outline at the size it is
             to have: the size in the mapping is not read for such an object, the outline is what
             says how large it is. So the outline is made larger or smaller by as much as the

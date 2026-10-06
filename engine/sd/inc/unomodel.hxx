@@ -239,6 +239,10 @@ public:
         bool mbCanBeResizedFreely = true;
         /// False where the object may not be turned over, a media object for one.
         bool mbCanBeMirrored = true;
+        /// False where the object cannot hold a shear at all, a text frame for one. A resize of
+        /// such an object with two different factors is held to the ratio while it stands off
+        /// the right angles, since the shear it would bring in has nowhere to go.
+        bool mbCanBeSheared = true;
 
         /** True where the object is a diagram, which is a set of shapes the office lays out
             from data it holds beside them, and the file name ending of the picture an object
@@ -435,6 +439,7 @@ public:
                    && mbCanBeTurned == rOther.mbCanBeTurned
                    && mbCanBeResizedFreely == rOther.mbCanBeResizedFreely
                    && mbCanBeMirrored == rOther.mbCanBeMirrored
+                   && mbCanBeSheared == rOther.mbCanBeSheared
                    && mbTiedAtStart == rOther.mbTiedAtStart
                    && mbTiedAtEnd == rOther.mbTiedAtEnd
                    && mnTiedToAtStart == rOther.mnTiedToAtStart
