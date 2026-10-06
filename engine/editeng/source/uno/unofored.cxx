@@ -153,6 +153,11 @@ void SvxEditEngineForwarder::QuickInsertField( const SvxFieldItem& rFld, const E
     rEditEngine.QuickInsertField( rFld, rSel );
 }
 
+ESelection SvxEditEngineForwarder::QuickInsertUrlField( const SvxURLField& rField, const ESelection& rSel )
+{
+    return rEditEngine.QuickInsertUrlField( rField, rSel );
+}
+
 void SvxEditEngineForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel )
 {
     rEditEngine.QuickSetAttribs( rSet, rSel );

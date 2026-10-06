@@ -168,6 +168,10 @@ class ScUnoEditEngine : public ScEditEngineDefaulter
     sal_Int32           nFieldPar;
     sal_Int32           nFieldPos;
     sal_uInt16          nFieldIndex;
+    /// The length of the found field: the link text for a hyperlink span, else 1.
+    sal_Int32           mnFieldLength;
+    /// Whether the found field is a hyperlink span rather than a placeholder field.
+    bool                mbFieldIsSpanned;
 
 public:
     explicit ScUnoEditEngine(ScEditEngineDefaulter* pSource);
@@ -181,6 +185,11 @@ public:
 
     sal_Int32       GetFieldPar() const     { return nFieldPar; }
     sal_Int32       GetFieldPos() const     { return nFieldPos; }
+    sal_Int32       GetFieldLength() const  { return mnFieldLength; }
+    bool            IsFieldSpanned() const  { return mbFieldIsSpanned; }
+
+private:
+    void            SetFound(sal_Int32 nPara, const EFieldInfo& rInfo);
 };
 
 }
@@ -193,6 +202,8 @@ ScUnoEditEngine::ScUnoEditEngine(ScEditEngineDefaulter* pSource)
     , nFieldPar(0)
     , nFieldPos(0)
     , nFieldIndex(0)
+    , mnFieldLength(1)
+    , mbFieldIsSpanned(false)
 {
     EditTextObject aData = pSource->CreateTextObject();
     SetTextCurrentDefaults( aData );
@@ -238,6 +249,15 @@ sal_uInt16 ScUnoEditEngine::CountFields()
     return nCount;
 }
 
+void ScUnoEditEngine::SetFound(sal_Int32 nPara, const EFieldInfo& rInfo)
+{
+    nFieldPar = nPara;
+    nFieldPos = rInfo.aPosition.nIndex;
+    mbFieldIsSpanned = rInfo.bTextIsSpanned;
+    mnFieldLength = mbFieldIsSpanned ? rInfo.aCurrentText.getLength() : 1;
+    pFound = rInfo.pFieldItem->GetField()->Clone();
+}
+
 SvxFieldData* ScUnoEditEngine::FindByIndex(sal_uInt16 nIndex)
 {
     sal_uInt16 nCount = 0;
@@ -248,9 +268,7 @@ SvxFieldData* ScUnoEditEngine::FindByIndex(sal_uInt16 nIndex)
         {
             if (nCount == nIndex && rInfo.pFieldItem && rInfo.pFieldItem->GetField())
             {
-                nFieldPar = nPara;
-                nFieldPos = rInfo.aPosition.nIndex;
-                pFound = rInfo.pFieldItem->GetField()->Clone();
+                SetFound(nPara, rInfo);
                 return pFound.get();
             }
             ++nCount;
@@ -269,9 +287,7 @@ SvxFieldData* ScUnoEditEngine::FindByPos(const EPaM& rPos, sal_Int32 nType)
             if (pData
                 && (nType == text::textfield::Type::UNSPECIFIED || pData->GetClassId() == nType))
             {
-                nFieldPar = rPos.nPara;
-                nFieldPos = rPos.nIndex;
-                pFound = pData->Clone();
+                SetFound(rPos.nPara, rInfo);
                 return pFound.get();
             }
         }
@@ -341,7 +357,7 @@ uno::Reference<text::XTextField> ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int3
 
     sal_Int32 nPar = aTempEngine.GetFieldPar();
     sal_Int32 nPos = aTempEngine.GetFieldPos();
-    ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field size is 1 character
+    ESelection aSelection(nPar, nPos, nPar, nPos + aTempEngine.GetFieldLength());
 
     sal_Int32 eType = pData->GetClassId();
     uno::Reference<text::XTextField> xRet(
@@ -489,7 +505,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
 
     sal_Int32 nPar = aTempEngine.GetFieldPar();
     sal_Int32 nPos = aTempEngine.GetFieldPos();
-    ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Field size is 1 character
+    ESelection aSelection(nPar, nPos, nPar, nPos + aTempEngine.GetFieldLength());
 
     sal_Int32 eRealType = pData->GetClassId();
     uno::Reference<text::XTextField> xRet(
@@ -669,7 +685,14 @@ void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const cpo::uno::
         else
             throw beans::UnknownPropertyException(rName);
 
-        pEditEngine->QuickInsertField( SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection );
+        if (aTempEngine.IsFieldSpanned())
+        {
+            // The new representation replaces the link text, so the selection follows its end.
+            const ESelection aEnd = pEditEngine->QuickInsertUrlField(*pURL, aSelection);
+            aSelection.end = aEnd.end;
+        }
+        else
+            pEditEngine->QuickInsertField( SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection );
         mpEditSource->UpdateData();
         return;
     }

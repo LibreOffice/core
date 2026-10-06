@@ -596,6 +596,24 @@ void SvxAccessibleTextAdapter::QuickInsertField( const SvxFieldItem& rFld, const
                                        MakeEESelection(aStartIndex, aEndIndex) );
 }
 
+ESelection SvxAccessibleTextAdapter::QuickInsertUrlField( const SvxURLField& rField, const ESelection& rSel )
+{
+    assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
+
+    SvxAccessibleTextIndex aStartIndex;
+    SvxAccessibleTextIndex aEndIndex;
+
+    aStartIndex.SetIndex( rSel.start.nPara, rSel.start.nIndex, *this );
+    aEndIndex.SetIndex( rSel.end.nPara, rSel.end.nIndex, *this );
+
+    const ESelection aEESel = mpTextForwarder->QuickInsertUrlField(
+        rField, MakeEESelection(aStartIndex, aEndIndex) );
+
+    SvxAccessibleTextIndex aIndex;
+    aIndex.SetEEIndex( aEESel.end.nPara, aEESel.end.nIndex, *this );
+    return ESelection( aIndex.GetParagraph(), aIndex.GetIndex() );
+}
+
 void SvxAccessibleTextAdapter::QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel )
 {
     assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");

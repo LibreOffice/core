@@ -351,6 +351,8 @@ public:
     const SvxFieldData* GetFieldUnderMouseOrInSelectionOrAtCursor(bool bAlsoCheckBeforeCursor = false) const;
     /// if no selection, select the field immediately after or before the current cursor
     void SelectFieldAtCursor();
+    /// Inserts rFld over the selection and selects the inserted field.
+    void InsertFieldAndSelect(const SvxFieldItem& rFld);
     /// Converts position in paragraph to logical position without unfolding fields
     sal_Int32       GetPosNoField(sal_Int32 nPara, sal_Int32 nPos) const;
     /// Converts logical position in paragraph to position with unfolded fields

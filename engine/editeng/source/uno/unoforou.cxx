@@ -223,6 +223,12 @@ void SvxOutlinerForwarder::QuickInsertField( const SvxFieldItem& rFld, const ESe
     rOutliner.QuickInsertField( rFld, rSel );
 }
 
+ESelection SvxOutlinerForwarder::QuickInsertUrlField( const SvxURLField& rField, const ESelection& rSel )
+{
+    flushCache();
+    return rOutliner.QuickInsertUrlField( rField, rSel );
+}
+
 void SvxOutlinerForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel )
 {
     flushCache();

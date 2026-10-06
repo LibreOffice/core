@@ -1888,9 +1888,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testQuickFindCommentMatchEditedAway)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testQuickFindFindsTextAfterLinkInComment)
 {
-    // A link in a comment counts as one character in the selection that the client is told
-    // about, so a match after the link is still selected in the right place. The client also
-    // gets the matched text and how many times it occurs earlier in the paragraph.
+    // A match after a link in a comment is selected in the right place. The client also gets
+    // the matched text and how many times it occurs earlier in the paragraph.
     createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
@@ -1911,8 +1910,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testQuickFindFindsTextAfterLinkInComm
     // The rows are the page 1 divider and the two matches in the comment.
     aQuickFind.pickRow(2);
 
-    // "A kiwi, see " is 12 characters, the link is 1 and " for the " is 9.
-    CPPUNIT_ASSERT_EQUAL(std::string("0,22,0,26"),
+    // "A kiwi, see " is 12 characters, the link text is 20 and " for the " is 9.
+    CPPUNIT_ASSERT_EQUAL(std::string("0,41,0,45"),
                          aView.m_aComment.get_child("searchSelection").get_value<std::string>());
     // The client also learns the matched text and that it is the second "kiwi" of the paragraph.
     CPPUNIT_ASSERT_EQUAL(std::string("kiwi"),

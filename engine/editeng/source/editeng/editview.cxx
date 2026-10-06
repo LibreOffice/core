@@ -1476,6 +1476,16 @@ void EditView::SelectFieldAtCursor()
         assert(std::abs(aSel.start.nIndex - aSel.end.nIndex) == 1);
 }
 
+void EditView::InsertFieldAndSelect(const SvxFieldItem& rFld)
+{
+    ESelection aSel(GetSelection());
+    aSel.Adjust();
+    InsertField(rFld);
+    // The cursor is after the inserted field.
+    aSel.end = GetSelection().end;
+    SetSelection(aSel);
+}
+
 const SvxFieldData* EditView::GetFieldUnderMouseOrInSelectionOrAtCursor(bool bAlsoCheckBeforeCursor) const
 {
     const SvxFieldItem* pFieldItem = GetFieldUnderMousePointer();

@@ -113,6 +113,7 @@ namespace accessibility
 
         void            QuickInsertText( const OUString& /*rText*/, const ESelection& /*rSel*/ ) override {}
         void            QuickInsertField( const SvxFieldItem& /*rFld*/, const ESelection& /*rSel*/ ) override {}
+        ESelection      QuickInsertUrlField( const SvxURLField& /*rField*/, const ESelection& rSel ) override { return rSel; }
         void            QuickSetAttribs( const SfxItemSet& /*rSet*/, const ESelection& /*rSel*/ ) override {}
         void            QuickInsertLineBreak( const ESelection& /*rSel*/ ) override {}
 

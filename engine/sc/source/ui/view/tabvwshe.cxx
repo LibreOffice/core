@@ -148,18 +148,6 @@ void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, con
     }
 }
 
-static void lcl_SelectFieldAfterInsert( EditView& rView )
-{
-    ESelection aSel = rView.GetSelection();
-    if (aSel.start.nIndex == aSel.end.nIndex && aSel.start.nIndex > 0)
-    {
-        //  Cursor is behind the inserted field -> extend selection to the left
-
-        --aSel.start.nIndex;
-        rView.SetSelection( aSel );
-    }
-}
-
 void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL, const OUString& rTarget )
 {
     SvxURLField aURLField( rURL, rName, SvxURLFormat::Repr );
@@ -172,7 +160,6 @@ void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL
 
     bool bSelectFirst = false;
     bool bIsEditMode = pScMod->IsEditMode();
-    int nSelInd = 1;
     bool bHasText = !GetSelectionText().isEmpty();
 
     if ( !bIsEditMode )
@@ -196,32 +183,24 @@ void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL
     // tdf#80043 - if true, replace the entire content of the selected cell instead of
     // inserting a duplicate, or appending the url.
     if (!bIsEditMode && !bSelectFirst && pTableView && bHasText)
-    {
-        // Using GetSelectionText() length is not safe here in case of cell content has trailing spaces
-        nSelInd = EE_TEXTPOS_MAX;
         bSelectFirst = true;
-    }
 
     if ( bSelectFirst )
     {
+        // The link replaces the whole cell text, which the link at the cursor covers too.
+        // EE_TEXTPOS_MAX reaches the end of the cell text, trailing spaces included.
         if ( pTopView )
-            pTopView->SetSelection( ESelection(0,0,0,1) );
+            pTopView->SetSelection( ESelection(0,0,0,EE_TEXTPOS_MAX) );
         if ( pTableView )
-            pTableView->SetSelection( ESelection(0,0,0,nSelInd) );
+            pTableView->SetSelection( ESelection(0,0,0,EE_TEXTPOS_MAX) );
     }
 
     pHdl->DataChanging();
 
     if ( pTopView )
-    {
-        pTopView->InsertField( aURLItem );
-        lcl_SelectFieldAfterInsert( *pTopView );
-    }
+        pTopView->InsertFieldAndSelect( aURLItem );
     if ( pTableView )
-    {
-        pTableView->InsertField( aURLItem );
-        lcl_SelectFieldAfterInsert( *pTableView );
-    }
+        pTableView->InsertFieldAndSelect( aURLItem );
 
     pHdl->DataChanged();
 }

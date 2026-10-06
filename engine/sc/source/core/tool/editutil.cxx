@@ -142,7 +142,7 @@ EditTextObject ScEditUtil::CreateURLObjectFromURL( ScDocument& rDoc, const OUStr
     SvxURLField aUrlField( rURL, rText, SvxURLFormat::AppDefault);
     EditEngine& rEE = rDoc.GetEditEngine();
     rEE.SetText( OUString() );
-    rEE.QuickInsertField(SvxFieldItem(aUrlField, EE_FEATURE_FIELD), ESelection::AtEnd());
+    rEE.QuickInsertUrlField(aUrlField, ESelection::AtEnd());
 
     return rEE.CreateTextObject();
 }

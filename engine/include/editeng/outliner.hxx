@@ -53,6 +53,7 @@ class OutlinerParaObject;
 class SvStream;
 class SvxSearchItem;
 class SvxFieldItem;
+class SvxURLField;
 namespace vcl { class Window; }
 namespace weld { class Widget; }
 class KeyEvent;
@@ -256,6 +257,8 @@ public:
     const SvxFieldItem* GetFieldAtSelection(bool bAlsoCheckBeforeCursor = false) const;
     /// if no selection, select the field immediately after or before the current cursor
     void SelectFieldAtCursor();
+    /// Inserts rFld over the selection and selects the inserted field.
+    void InsertFieldAndSelect(const SvxFieldItem& rFld);
 
     /** enables bullets for the selected paragraphs if the bullets/numbering of the first paragraph is off
         or disables bullets/numbering for the selected paragraphs if the bullets/numbering of the first paragraph is on
@@ -725,6 +728,9 @@ public:
 
     void            QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
     void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
+    /** Replaces rSel with the link text as a hyperlink span. Returns the position after the
+        link text. */
+    ESelection QuickInsertUrlField(const SvxURLField& rField, const ESelection& rSelection);
     void            QuickInsertLineBreak( const ESelection& rSel );
 
     // Only for EditEngine mode

@@ -2319,8 +2319,18 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                     std::unique_ptr<SvxFieldItem> pFieldItem(pPortion->GetTextField());
                     if ( pFieldItem )
                     {
-                        rOutliner.QuickInsertField( *pFieldItem, ESelection( nParaIndex, aSelection.end.nIndex, nParaIndex, aSelection.end.nIndex + 1 ) );
-                        aSelection.end.nIndex++;
+                        const ESelection aFieldSel( nParaIndex, aSelection.end.nIndex, nParaIndex, aSelection.end.nIndex + 1 );
+                        if (const SvxURLField* pUrl = dynamic_cast<const SvxURLField*>(pFieldItem->GetField()))
+                        {
+                            // Replace the placeholder character with the link text.
+                            const ESelection aAfter = rOutliner.QuickInsertUrlField( *pUrl, aFieldSel );
+                            aSelection.end.nIndex = aAfter.end.nIndex;
+                        }
+                        else
+                        {
+                            rOutliner.QuickInsertField( *pFieldItem, aFieldSel );
+                            aSelection.end.nIndex++;
+                        }
                     }
                     else
                     {

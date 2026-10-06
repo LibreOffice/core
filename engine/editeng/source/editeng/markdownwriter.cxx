@@ -315,6 +315,7 @@ void MarkdownWriter::WriteContent(const std::function<void(std::string_view)>& r
 
             // Check for URL field
             const SvxURLField* pURLField = nullptr;
+            bool bUrlSpan = false;
             if (rTextPortion.GetKind() == PortionKind::FIELD)
             {
                 const EditCharAttrib* pAttr = rNode.GetCharAttribs().FindFeature(nPortionStart);
@@ -341,6 +342,16 @@ void MarkdownWriter::WriteContent(const std::function<void(std::string_view)>& r
 
             SfxItemSet aAttribs
                 = mrEngine.GetAttribs(nNode, nEffStart, nEffEnd, GetAttribsFlags::CHARATTRIBS);
+
+            // A hyperlink span is a text portion with the URL as a character attribute.
+            if (!pURLField)
+            {
+                if (const SvxFieldItem* pUrlItem = aAttribs.GetItemIfSet(EE_CHAR_URL, false))
+                {
+                    pURLField = dynamic_cast<const SvxURLField*>(pUrlItem->GetField());
+                    bUrlSpan = pURLField != nullptr;
+                }
+            }
 
             const SvxWeightItem& rWeight = aAttribs.Get(EE_CHAR_WEIGHT);
             if (rWeight.GetWeight() == WEIGHT_BOLD)
@@ -377,8 +388,9 @@ void MarkdownWriter::WriteContent(const std::function<void(std::string_view)>& r
 
             if (pURLField)
             {
-                OString aRepr
-                    = OUStringToOString(pURLField->GetRepresentation(), RTL_TEXTENCODING_UTF8);
+                // A span shows its portion text, a placeholder field its representation.
+                OUString aLinkText = bUrlSpan ? aText : pURLField->GetRepresentation();
+                OString aRepr = OUStringToOString(aLinkText, RTL_TEXTENCODING_UTF8);
                 OString aUrl = OUStringToOString(pURLField->GetURL(), RTL_TEXTENCODING_UTF8);
                 // Escape ] in link text and ) in URL
                 aRepr = aRepr.replaceAll("]"_ostr, "\\]"_ostr);

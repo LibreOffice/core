@@ -147,8 +147,9 @@ OUString MakeSearchFindEntryText(const OUString& sNodeText, sal_Int32 nMarkIndex
     return sTextBeforeFind + "[" + sFind + "]" + sTextAfterFind;
 }
 
-// The comment search works on the text of EditEngine::GetText, where a field such as a link
-// shows its text. The selection of the edit engine counts a field as one character instead.
+// The comment search works on the text of EditEngine::GetText, where a placeholder field shows
+// its text. The selection of the edit engine counts a placeholder field as one character instead.
+// A hyperlink span is real text in both.
 
 // Returns the offset of a position in the text of rEditEngine, counting one line feed between
 // paragraphs, as the text of EditEngine::GetText has it.
@@ -174,14 +175,17 @@ EPaM GetCommentTextPosition(const EditEngine& rEditEngine, sal_Int32 nOffset)
 }
 
 // Returns the index in paragraph nPara as the selection of rEditEngine counts it, for an index
-// into the text of the paragraph where each field shows its text. An index inside the text of a
-// field becomes the index of the field, or the index after the field when bEnd is true.
+// into the text of the paragraph where each placeholder field shows its text. An index inside the
+// text of a placeholder field becomes the index of the field, or the index after the field when
+// bEnd is true.
 sal_Int32 GetCommentSelectionIndex(const EditEngine& rEditEngine, sal_Int32 nPara, sal_Int32 nIndex,
                                    bool bEnd)
 {
     sal_Int32 nFieldTextExtra = 0;
     for (const EFieldInfo& rField : rEditEngine.GetFieldInfo(nPara))
     {
+        if (rField.bTextIsSpanned)
+            continue;
         const sal_Int32 nFieldStart = rField.aPosition.nIndex + nFieldTextExtra;
         if (nIndex <= nFieldStart)
             break;

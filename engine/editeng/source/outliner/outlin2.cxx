@@ -491,6 +491,12 @@ void Outliner::QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSe
     pEditEngine->QuickInsertField( rFld, rSel );
 }
 
+ESelection Outliner::QuickInsertUrlField( const SvxURLField& rField, const ESelection& rSel )
+{
+    bFirstParaIsEmpty = false;
+    return pEditEngine->QuickInsertUrlField( rField, rSel );
+}
+
 void Outliner::QuickInsertLineBreak( const ESelection& rSel )
 {
     bFirstParaIsEmpty = false;

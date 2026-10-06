@@ -734,32 +734,16 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         const SvxURLField* pURLField(static_cast<const SvxURLField*>(aSvxFieldDataPtr.get()));
                         if ( pURLField )
                         {
-                            // select old field
-
-                            ESelection aSel = pTableView->GetSelection();
-                            aSel.Adjust();
-                            aSel.end.nPara = aSel.start.nPara;
-                            aSel.end.nIndex = aSel.start.nIndex + 1;
-                            pTableView->SetSelection( aSel );
-
-                            // insert new field
-
+                            // Replace the old link and select the new one.
                             SvxURLField aURLField( rURL, rName, SvxURLFormat::Repr );
                             aURLField.SetTargetFrame( rTarget );
                             SvxFieldItem aURLItem( aURLField, EE_FEATURE_FIELD );
-                            pTableView->InsertField( aURLItem );
-                            pTableView->SetSelection( aSel );       // select inserted field
-
-                            // now also fields in the Top-View
-
+                            pTableView->SelectFieldAtCursor();
+                            pTableView->InsertFieldAndSelect( aURLItem );
                             if ( pTopView )
                             {
-                                aSel = pTopView->GetSelection();
-                                aSel.end.nPara = aSel.start.nPara;
-                                aSel.end.nIndex = aSel.start.nIndex + 1;
-                                pTopView->SetSelection( aSel );
-                                pTopView->InsertField( aURLItem );
-                                pTopView->SetSelection( aSel );     // select inserted field
+                                pTopView->SelectFieldAtCursor();
+                                pTopView->InsertFieldAndSelect( aURLItem );
                             }
 
                             bDone = true;

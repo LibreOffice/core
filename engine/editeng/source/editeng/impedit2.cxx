@@ -3167,7 +3167,26 @@ EditPaM ImpEditEngine::InsertTab(const EditSelection& rCurSel)
 
 EditPaM ImpEditEngine::InsertField(const EditSelection& rCurSel, const SvxFieldItem& rFld)
 {
-    return ImpInsertFeature(rCurSel, rFld);
+    const SvxURLField* pUrlField = dynamic_cast<const SvxURLField*>(rFld.GetField());
+    if (!pUrlField)
+        return ImpInsertFeature(rCurSel, rFld);
+
+    // Insert the link text and mark it with the URL. With no text to show, the URL is the text.
+    OUString aText = pUrlField->GetRepresentation();
+    if (aText.isEmpty())
+        aText = pUrlField->GetURL();
+
+    EditPaM aStartPaM(rCurSel.HasRange() ? ImpDeleteSelection(rCurSel) : rCurSel.Max());
+    EditPaM aEndPaM(ImpInsertText(EditSelection(aStartPaM), aText));
+
+    EditSelection aSpanSel(aStartPaM, aEndPaM);
+    SvxURLField aField(*pUrlField);
+    aField.SetRepresentation(aText);
+    SfxItemSet aSet(GetEmptyItemSet());
+    aSet.Put(SvxFieldItem(aField, EE_CHAR_URL));
+    SetAttribs(aSpanSel, aSet);
+
+    return aEndPaM;
 }
 
 bool ImpEditEngine::UpdateFields()

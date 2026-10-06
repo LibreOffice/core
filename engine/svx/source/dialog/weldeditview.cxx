@@ -375,6 +375,8 @@ public:
 
     virtual void QuickInsertText(const OUString& rText, const ESelection& rSel) override;
     virtual void QuickInsertField(const SvxFieldItem& rFld, const ESelection& rSel) override;
+    virtual ESelection QuickInsertUrlField(const SvxURLField& rField,
+                                           const ESelection& rSel) override;
     virtual void QuickSetAttribs(const SfxItemSet& rSet, const ESelection& rSel) override;
     virtual void QuickInsertLineBreak(const ESelection& rSel) override;
 
@@ -1005,6 +1007,13 @@ void WeldTextForwarder::QuickInsertField(const SvxFieldItem& rFld, const ESelect
     EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
     if (pEditEngine)
         pEditEngine->QuickInsertField(rFld, rSel);
+}
+
+ESelection WeldTextForwarder::QuickInsertUrlField(const SvxURLField& rField,
+                                                  const ESelection& rSel)
+{
+    EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
+    return pEditEngine ? pEditEngine->QuickInsertUrlField(rField, rSel) : rSel;
 }
 
 void WeldTextForwarder::QuickSetAttribs(const SfxItemSet& rSet, const ESelection& rSel)

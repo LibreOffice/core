@@ -52,6 +52,7 @@ public:
 
     virtual void        QuickInsertText( const OUString& rText, const ESelection& rSel ) override;
     virtual void        QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel ) override;
+    virtual ESelection  QuickInsertUrlField( const SvxURLField& rField, const ESelection& rSel ) override;
     virtual void        QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel ) override;
     virtual void        QuickInsertLineBreak( const ESelection& rSel ) override;
 

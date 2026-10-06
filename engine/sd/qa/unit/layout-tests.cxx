@@ -461,27 +461,24 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf156955)
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)
 {
-    // Test related to IgnoreBreakAfterMultilineField compatibility flag.
+    // A hyperlink span wraps like ordinary text, so IgnoreBreakAfterMultilineField no longer
+    // matters and all three documents break into the same lines.
     {
         createSdImpressDoc("pptx/tdf148966.pptx");
         xmlDocUniquePtr pXmlDoc = parseLayout();
-        // The line break after the multiline field is ignored, so the text
-        // that follows starts on the field's last subline row.
+        // The text sits higher than in the ODF documents, which keep the extra line height below
+        // the baseline.
         assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"6218");
     }
     {
         createSdImpressDoc("odp/tdf148966-withflag.odp");
         xmlDocUniquePtr pXmlDoc = parseLayout();
-        // When the IgnoreBreakAfterMultilineField flag is set, the line
-        // break after the multiline field is ignored. The text sits lower
-        // than in the OOXML document above because a document in our own
-        // format keeps the whole of the extra line height below the baseline.
         assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"6262");
     }
     {
         createSdImpressDoc("odp/tdf148966-withoutflag.odp");
         xmlDocUniquePtr pXmlDoc = parseLayout();
-        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"8124");
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"6262");
     }
 }
 

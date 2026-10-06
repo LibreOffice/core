@@ -595,8 +595,8 @@ bool EdtAutoCorrDoc::SetINetAttr(sal_Int32 nStt, sal_Int32 nEnd,
     nCursor -= ( nEnd-nStt );
     SvxFieldItem aField( SvxURLField( rURL, aText, SvxURLFormat::Repr ),
                                       EE_FEATURE_FIELD  );
-    mpEditEngine->InsertField(aSel, aField);
-    nCursor++;
+    const EditPaM aEndPaM = mpEditEngine->InsertField(aSel, aField);
+    nCursor += aEndPaM.GetIndex() - nStt;
     mpEditEngine->UpdateFieldsOnly();
     bAllowUndoAction = false;
     return true;

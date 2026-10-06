@@ -179,12 +179,15 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
             {
                 const EditTextObject* pEditObj = aCell.getEditText();
                 rEE.SetTextCurrentDefaults( *pEditObj );
-                rEE.QuickInsertField(SvxFieldItem(aUrlField, EE_FEATURE_FIELD), ESelection::All());
+                // Mark the whole cell text as the hyperlink, keeping its formatting.
+                SfxItemSet aUrlSet(rEE.GetEmptyItemSet());
+                aUrlSet.Put(SvxFieldItem(aUrlField, EE_CHAR_URL));
+                rEE.QuickSetAttribs(aUrlSet, ESelection::All());
             }
             else
             {
                 rEE.SetTextCurrentDefaults( OUString() );
-                rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection() );
+                rEE.QuickInsertUrlField(aUrlField, ESelection());
                 if( const ScPatternAttr* pPattern = rDoc.getDoc().GetPattern( aScPos.Col(), aScPos.Row(), nScTab ) )
                 {
                     SfxItemSet aItemSet( rEE.GetEmptyItemSet() );

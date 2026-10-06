@@ -82,6 +82,7 @@ class SfxStyleSheet;
 class SfxStyleSheetPool;
 class SvxSearchItem;
 class SvxFieldItem;
+class SvxURLField;
 class MapMode;
 class Color;
 namespace vcl { class Font; }
@@ -417,6 +418,9 @@ public:
     SAL_DLLPRIVATE void            QuickMarkInvalid( const ESelection& rSel );
     void            QuickFormatDoc( bool bFull = false );
     void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
+    /** Replaces rSel with the link text as a hyperlink span. The text is the representation,
+        or the URL when that is empty. Returns the position after the link text. */
+    ESelection      QuickInsertUrlField( const SvxURLField& rField, const ESelection& rSel );
     void            QuickInsertLineBreak( const ESelection& rSel );
     void            QuickInsertText(const OUString& rText, const ESelection& rSel);
     void            QuickDelete( const ESelection& rSel );

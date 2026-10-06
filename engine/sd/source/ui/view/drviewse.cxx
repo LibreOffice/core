@@ -1577,14 +1577,8 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
 
     if (pOLV)
     {
-        ESelection aSel( pOLV->GetSelection() );
         SvxFieldItem const aURLItem(aURLField, EE_FEATURE_FIELD);
-        pOLV->InsertField( aURLItem );
-        if (aSel.start.nIndex <= aSel.end.nIndex)
-            aSel.end.nIndex = aSel.start.nIndex + 1;
-        else
-            aSel.start.nIndex = aSel.end.nIndex + 1;
-        pOLV->SetSelection( aSel );
+        pOLV->InsertFieldAndSelect( aURLItem );
     }
     else
     {
@@ -1592,8 +1586,7 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         pOutl->Init( OutlinerMode::TextObject );
         OutlinerMode nOutlMode = pOutl->GetOutlinerMode();
 
-        SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
-        pOutl->QuickInsertField( aURLItem, ESelection() );
+        pOutl->QuickInsertUrlField(aURLField, ESelection());
         std::optional<OutlinerParaObject> pOutlParaObject = pOutl->CreateParaObject();
 
         rtl::Reference<SdrRectObj> pRectObj = new SdrRectObj(

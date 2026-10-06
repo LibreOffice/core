@@ -735,13 +735,13 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
         //  if called from hyperlink slot and cell contains only a URL,
         //  replace old URL with new one
 
-        aInsSel = ESelection( 0, 0, 0, 1 );     // replace first character (field)
+        aInsSel = ESelection::All(); // replace the whole hyperlink text
     }
 
     SvxURLField aField( rURL, rDescription, SvxURLFormat::AppDefault );
     if (pTarget)
         aField.SetTargetFrame(*pTarget);
-    aEngine.QuickInsertField( SvxFieldItem( aField, EE_FEATURE_FIELD ), aInsSel );
+    aEngine.QuickInsertUrlField(aField, aInsSel);
 
     EditTextObject aData(aEngine.CreateTextObject());
     EnterData(nPosX, nPosY, nTab, aData);

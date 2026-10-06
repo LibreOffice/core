@@ -160,6 +160,9 @@ public:
 
     virtual void        QuickInsertText( const OUString& rText, const ESelection& rSel ) = 0;
     virtual void        QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel ) = 0;
+    /// Replaces rSel with the link text as a hyperlink span. Returns the position after the
+    /// link text.
+    virtual ESelection  QuickInsertUrlField( const SvxURLField& rField, const ESelection& rSel ) = 0;
     virtual void        QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel ) = 0;
     virtual void        QuickInsertLineBreak( const ESelection& rSel ) = 0;
 

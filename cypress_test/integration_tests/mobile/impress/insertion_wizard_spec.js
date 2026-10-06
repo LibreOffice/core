@@ -124,10 +124,10 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		// Insert
 		cy.cGet('#ok').click();
 
-		// tap on the link at the start of the text
+		// tap on the start of the link text, which can wrap in the new text box
 		impressHelper.dblclickOnSelectedShape();
-		helper.typeIntoDocument('{home}');
-		mobileHelper.tapNextToCursor(20);
+		helper.typeIntoDocument('{ctrl}{home}');
+		mobileHelper.tapNextToCursor(0);
 		cy.cGet('#mobile-wizard .ui-header-openlink').should('have.text', 'http://www.something.com/');
 		cy.cGet('#mobile-wizard-back').click();
 		cy.cGet('#mobile-wizard').should('not.be.visible');

@@ -122,6 +122,9 @@ public:
     /// A URL span survives a copy and paste as a hyperlink with the same target.
     void testHyperlinkSpanCopyPaste();
 
+    /// An inserted hyperlink is a span over real text.
+    void testHyperlinkInsertAsSpan();
+
     /// Clearing direct formatting drops other attributes but keeps the link.
     void testHyperlinkSpanKeptOnClearFormatting();
 
@@ -244,6 +247,7 @@ public:
     CPPUNIT_TEST(testHyperlinkSpanListedAsField);
     CPPUNIT_TEST(testHyperlinkSpanRemove);
     CPPUNIT_TEST(testHyperlinkSpanCopyPaste);
+    CPPUNIT_TEST(testHyperlinkInsertAsSpan);
     CPPUNIT_TEST(testHyperlinkSpanKeptOnClearFormatting);
     CPPUNIT_TEST(testHyperlinkSpanNoWrapInside);
     CPPUNIT_TEST(testHyperlinkSpanNoHyphenation);
@@ -583,17 +587,14 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL(aTextLen, rDoc.GetTextLen());
     CPPUNIT_ASSERT_EQUAL(aParaText, rDoc.GetParaAsString(sal_Int32(0)));
 
-    // Insert URL 1
-    ContentNode* pNode = &rDoc.GetObject(0);
-    EditSelection aSel1(EditPaM(pNode, 13), EditPaM(pNode, 13));
-    aEditEngine.InsertField(aSel1, aField1);
+    // Insert URL 1 as a placeholder field, as document import still does.
+    aEditEngine.QuickInsertField(aField1, ESelection(0, 13, 0, 13));
 
     // Assert Field Count
     CPPUNIT_ASSERT_EQUAL(size_t(1), aEditEngine.GetFieldInfo(0).size());
 
-    // Insert URL 2
-    EditSelection aSel2(EditPaM(pNode, 20 + 1), EditPaM(pNode, 20 + 1));
-    aEditEngine.InsertField(aSel2, aField2);
+    // Insert URL 2 after the first field's single placeholder character.
+    aEditEngine.QuickInsertField(aField2, ESelection(0, 20 + 1, 0, 20 + 1));
 
     // Assert Field Count
     CPPUNIT_ASSERT_EQUAL(size_t(2), aEditEngine.GetFieldInfo(0).size());
@@ -664,10 +665,10 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL(aURL2, pACPURLField2->GetURL());
     CPPUNIT_ASSERT_EQUAL(aRepres2, pACPURLField2->GetRepresentation());
 
-    // Field 3
+    // Field 3 is the pasted copy, which comes back from flat ODF as a span.
     EFieldInfo aACPURLFieldInfo3 = aEditEngine.GetFieldInfo(sal_Int32(0))[2];
     CPPUNIT_ASSERT_EQUAL(sal_Int32(38), aACPURLFieldInfo3.aPosition.nIndex);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(EE_FEATURE_FIELD), aACPURLFieldInfo3.pFieldItem->Which());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(EE_CHAR_URL), aACPURLFieldInfo3.pFieldItem->Which());
     SvxURLField* pACPURLField3 = dynamic_cast<SvxURLField*>(
         const_cast<SvxFieldData*>(aACPURLFieldInfo3.pFieldItem->GetField()));
     CPPUNIT_ASSERT(pACPURLField3);
@@ -803,19 +804,56 @@ void Test::testHyperlinkSpanCopyPaste()
     aSet.Put(SvxFieldItem(aURLField, EE_CHAR_URL));
     rEditEngine.QuickSetAttribs(aSet, ESelection(0, 6, 0, 11));
 
+    // Before copying there is exactly the one link.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rEditEngine.GetFieldInfo(0).size());
+
     uno::Reference<datatransfer::XTransferable> xData
         = rEditEngine.CreateTransferable(ESelection(0, 0, 0, 11));
     rEditEngine.InsertText(xData, OUString(), rDoc.GetEndPaM(), true);
 
-    // The copy carries a hyperlink to the same target.
+    // The copy adds hyperlinks, all of them spans to the same target.
     std::vector<EFieldInfo> aFieldInfos = rEditEngine.GetFieldInfo(0);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aFieldInfos.size());
+    CPPUNIT_ASSERT(aFieldInfos.size() > 1);
     for (const EFieldInfo& rInfo : aFieldInfos)
     {
         auto pUrlField = dynamic_cast<const SvxURLField*>(rInfo.pFieldItem->GetField());
         CPPUNIT_ASSERT(pUrlField);
         CPPUNIT_ASSERT_EQUAL(aURL, pUrlField->GetURL());
+        CPPUNIT_ASSERT(rInfo.bTextIsSpanned);
     }
+}
+
+void Test::testHyperlinkInsertAsSpan()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    EditDoc& rDoc = aEditEngine.GetEditDoc();
+    aEditEngine.SetText(u"Go "_ustr);
+
+    // Insert a hyperlink whose shown text is "here" at the end.
+    ContentNode* pNode = &rDoc.GetObject(0);
+    EditSelection aSel(EditPaM(pNode, 3), EditPaM(pNode, 3));
+    SvxURLField aURLField(u"http://example.com/"_ustr, u"here"_ustr, SvxURLFormat::Repr);
+    aEditEngine.InsertField(aSel, SvxFieldItem(aURLField, EE_FEATURE_FIELD));
+
+    // The link text is real characters with a URL span, with no placeholder.
+    CPPUNIT_ASSERT_EQUAL(u"Go here"_ustr, rDoc.GetParaAsString(sal_Int32(0)));
+    EECharAttrib aSpan = lcl_findUrlSpan(aEditEngine);
+    CPPUNIT_ASSERT(aSpan.pAttr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aSpan.nStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aSpan.nEnd);
+
+    std::vector<EFieldInfo> aFieldInfos = aEditEngine.GetFieldInfo(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aFieldInfos.size());
+    CPPUNIT_ASSERT(aFieldInfos[0].bTextIsSpanned);
+    CPPUNIT_ASSERT_EQUAL(u"here"_ustr, aFieldInfos[0].aCurrentText);
+
+    // Typing right after the link does not pull the new text into it.
+    aEditEngine.QuickInsertText(u"!"_ustr, ESelection(0, 7, 0, 7));
+    CPPUNIT_ASSERT_EQUAL(u"Go here!"_ustr, rDoc.GetParaAsString(sal_Int32(0)));
+    aSpan = lcl_findUrlSpan(aEditEngine);
+    CPPUNIT_ASSERT(aSpan.pAttr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aSpan.nStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aSpan.nEnd);
 }
 
 void Test::testHyperlinkSpanKeptOnClearFormatting()
@@ -1323,12 +1361,12 @@ void Test::testHyperlinkSearch()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("set text", aSampleText, rDoc.GetParaAsString(sal_Int32(0)));
 
     ContentNode* pNode = &rDoc.GetObject(0);
-    EditSelection aSel(EditPaM(pNode, 22), EditPaM(pNode, 22));
     SvxURLField aURLField(u"mailto:///jim@bob.com"_ustr, u"jim@bob.com"_ustr,
                           SvxURLFormat::Repr);
     SvxFieldItem aField(aURLField, EE_FEATURE_FIELD);
 
-    aEngine.InsertField(aSel, aField);
+    // A placeholder field, to test the expand and unexpand handling.
+    aEngine.QuickInsertField(aField, ESelection(0, 22, 0, 22));
 
     OUString aContent = pNode->GetExpandedText();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("get text", u"Please write email to jim@bob.com. if you find a fish(not a dog)."_ustr,
@@ -2656,11 +2694,8 @@ void Test::testTdf154248MultilineFieldWrapping()
                           SvxURLFormat::Repr);
     SvxFieldItem aField(aURLField, EE_FEATURE_FIELD);
 
-    // Insert URL
-    EditDoc& rDoc = aEditEngine.GetEditDoc();
-    ContentNode* pNode = &rDoc.GetObject(0);
-    EditSelection aSel(EditPaM(pNode, 4), EditPaM(pNode, 4));
-    aEditEngine.InsertField(aSel, aField);
+    // A placeholder field, whose multi-line wrapping this test measures.
+    aEditEngine.QuickInsertField(aField, ESelection(0, 4, 0, 4));
 
     // Assert Field Count
     CPPUNIT_ASSERT_EQUAL(size_t(1), aEditEngine.GetFieldInfo(0).size());
@@ -2750,9 +2785,8 @@ EditEngine& Test::prepareWrappedFieldDocument(Outliner& rOutliner, const OUStrin
         SvxURLFormat::Repr);
     SvxFieldItem aField(aURLField, EE_FEATURE_FIELD);
 
-    ContentNode* pNode = &rEditEngine.GetEditDoc().GetObject(0);
-    EditSelection aSel(EditPaM(pNode, 0), EditPaM(pNode, 0));
-    rEditEngine.InsertField(aSel, aField);
+    // A placeholder field is what wraps into sublines as one PortionKind::FIELD.
+    rEditEngine.QuickInsertField(aField, ESelection(0, 0, 0, 0));
 
     rEditEngine.QuickFormatDoc(false);
     CPPUNIT_ASSERT_EQUAL(true, rEditEngine.IsFormatted());

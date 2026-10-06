@@ -1263,6 +1263,13 @@ void EditEngine::QuickInsertField( const SvxFieldItem& rFld, const ESelection& r
     getImpl().ImpInsertFeature(getImpl().CreateNormalizedSel(rSel), rFld);
 }
 
+ESelection EditEngine::QuickInsertUrlField( const SvxURLField& rField, const ESelection& rSel )
+{
+    EditPaM aEndPaM = getImpl().InsertField(getImpl().CreateNormalizedSel(rSel),
+                                            SvxFieldItem(rField, EE_CHAR_URL));
+    return getImpl().CreateESel(EditSelection(aEndPaM, aEndPaM));
+}
+
 void EditEngine::QuickFormatDoc( bool bFull )
 {
     if (bFull)

@@ -9,6 +9,8 @@
 
 #include <sctiledrenderingtest.hxx>
 
+#include <algorithm>
+
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -568,9 +570,32 @@ OUString lcl_getCellTextWithLinks(ScDocument& rDocument, const ScAddress& rPosit
             aBuffer.append('\n');
 
         const OUString aParaText = pEditText->GetText(nPara);
+        std::vector<EECharAttrib> aAttribs;
+        pEditText->GetCharAttribs(nPara, aAttribs);
         size_t nField = 0;
         for (sal_Int32 nIndex = 0; nIndex < aParaText.getLength(); ++nIndex)
         {
+            // A hyperlink span covers its text, which shows as the label of the link.
+            auto aSpanIt = std::find_if(aAttribs.begin(), aAttribs.end(),
+                                        [nIndex](const EECharAttrib& rAttrib) {
+                                            return rAttrib.pAttr->Which() == EE_CHAR_URL
+                                                   && rAttrib.nStart == nIndex;
+                                        });
+            if (aSpanIt != aAttribs.end())
+            {
+                auto pSpanURLField = dynamic_cast<const SvxURLField*>(
+                    static_cast<const SvxFieldItem*>(aSpanIt->pAttr)->GetField());
+                CPPUNIT_ASSERT(pSpanURLField);
+                aBuffer.append(OUString::Concat("[")
+                               + aParaText.subView(aSpanIt->nStart,
+                                                   aSpanIt->nEnd - aSpanIt->nStart)
+                               + "](" + pSpanURLField->GetURL() + ")");
+                // GetFieldData counts a span too.
+                ++nField;
+                nIndex = aSpanIt->nEnd - 1;
+                continue;
+            }
+
             if (aParaText[nIndex] != CH_FIELD)
             {
                 aBuffer.append(aParaText[nIndex]);
@@ -722,9 +747,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertHyperlinkDropsTheCellsOther
     dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr,
                     lcl_hyperlinkArgs(u"Docs"_ustr, u"http://www.example.com/docs"_ustr));
 
-    // "reference" is linked next. The field left by the first link takes up one character, so
-    // the word now starts at index 6.
-    lcl_selectInCell(pView, 6, 15);
+    // "reference" is linked next. The first link keeps its text, so the word still starts at
+    // index 9.
+    lcl_selectInCell(pView, 9, 18);
     dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr,
                     lcl_hyperlinkArgs(u"reference"_ustr, u"http://www.example.com/reference"_ustr));
     ScModule::get()->InputEnterHandler();
@@ -772,8 +797,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHyperlinkOverSelectionSavedToOOXM
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditingHyperlinkCellAllowsCursorInTheMiddle)
 {
-    // A cell whose whole content is a hyperlink holds that content as one field, and a
-    // field takes up a single character, with no positions between its start and its end.
+    // A cell whose whole content is a hyperlink to that same address shows the address as plain
+    // text while it is edited, and gets the link back when the edit is committed.
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView);
@@ -807,8 +832,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditingHyperlinkCellAllowsCursorI
 
     const SfxItemSet aAttribs = pEditView->getEditEngine().GetAttribs(ESelection::All());
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, aAttribs.GetItemState(EE_FEATURE_FIELD, false));
+    CPPUNIT_ASSERT(pEditView->getEditEngine().GetFieldInfo(0).empty());
 
-    // Committing unchanged re-creates the field, the same way committing a freshly typed
+    // Committing unchanged re-creates the link, the same way committing a freshly typed
     // address already does.
     ScModule::get()->InputEnterHandler();
     CPPUNIT_ASSERT_EQUAL(u"[foo@example.com](mailto:foo@example.com)"_ustr,

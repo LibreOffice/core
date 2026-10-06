@@ -283,8 +283,16 @@ void SvxUnoTextRangeBase::attachField( std::unique_ptr<SvxFieldData> pData ) noe
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
     if( pForwarder )
     {
-        SvxFieldItem aField( std::move(pData), EE_FEATURE_FIELD );
-        pForwarder->QuickInsertField( std::move(aField), maSelection );
+        // A hyperlink is a span over its text. Other fields keep the placeholder.
+        if (const SvxURLField* pUrl = dynamic_cast<const SvxURLField*>(pData.get()))
+        {
+            pForwarder->QuickInsertUrlField(*pUrl, maSelection);
+        }
+        else
+        {
+            SvxFieldItem aField( std::move(pData), EE_FEATURE_FIELD );
+            pForwarder->QuickInsertField( std::move(aField), maSelection );
+        }
     }
 }
 
@@ -1920,8 +1928,20 @@ void SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTextRange >
     if (!pFieldData)
         throw lang::IllegalArgumentException();
 
-    SvxFieldItem aField( *pFieldData, EE_FEATURE_FIELD );
-    pForwarder->QuickInsertField(aField, toESelection(aSel));
+    // A hyperlink span is as long as its text, so the position moves past all of it.
+    sal_Int32 nFieldLen = 1;
+    if (const SvxURLField* pUrl = dynamic_cast<const SvxURLField*>(pFieldData.get()))
+    {
+        ESelection aInsertSelection(toESelection(aSel));
+        aInsertSelection.Adjust();
+        nFieldLen = pForwarder->QuickInsertUrlField(*pUrl, aInsertSelection).end.nIndex
+                    - aInsertSelection.start.nIndex;
+    }
+    else
+    {
+        SvxFieldItem aField( *pFieldData, EE_FEATURE_FIELD );
+        pForwarder->QuickInsertField(aField, toESelection(aSel));
+    }
     GetEditSource()->UpdateData();
 
     uno::Reference<beans::XPropertySet> xPropSetContent(xContent, uno::UNO_QUERY);
@@ -1930,7 +1950,7 @@ void SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTextRange >
 
     xPropSetContent->setPropertyValue(UNO_TC_PROP_ANCHOR, cpo::uno::Any(xRange));
 
-    aSel.End.PositionInParagraph += 1;
+    aSel.End.PositionInParagraph += nFieldLen;
     aSel.Start.PositionInParagraph = aSel.End.PositionInParagraph;
     xPropSet->setPropertyValue(UNO_TR_PROP_SELECTION, cpo::uno::Any(aSel));
 }
@@ -2421,6 +2441,11 @@ void SvxDummyTextSource::QuickInsertText( const OUString&, const ESelection& )
 
 void SvxDummyTextSource::QuickInsertField( const SvxFieldItem&, const ESelection& )
 {
+}
+
+ESelection SvxDummyTextSource::QuickInsertUrlField( const SvxURLField&, const ESelection& rSel )
+{
+    return rSel;
 }
 
 void SvxDummyTextSource::QuickSetAttribs( const SfxItemSet&, const ESelection& )

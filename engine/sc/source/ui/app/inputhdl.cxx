@@ -3352,8 +3352,9 @@ static void lcl_SelectionToEnd( EditView* pView )
 }
 
 /// The ranges of plain text between the fields of paragraph nPar, as pairs of start and end
-/// positions. A field takes up one character of the paragraph but its text can be longer, so
-/// only in these ranges is each position of the text the same position in the paragraph.
+/// positions. A placeholder field takes up one character of the paragraph but its text can be
+/// longer, so only in these ranges is each position of the text the same position in the
+/// paragraph. A hyperlink span covers its own text, which is a link already.
 static std::vector<std::pair<sal_Int32, sal_Int32>>
 lcl_GetTextRangesBetweenFields(const EditEngine& rEngine, sal_Int32 nPar)
 {
@@ -3362,7 +3363,8 @@ lcl_GetTextRangesBetweenFields(const EditEngine& rEngine, sal_Int32 nPar)
     for (const EFieldInfo& rFieldInfo : rEngine.GetFieldInfo(nPar))
     {
         aTextRanges.emplace_back(nTextStart, rFieldInfo.aPosition.nIndex);
-        nTextStart = rFieldInfo.aPosition.nIndex + 1;
+        nTextStart = rFieldInfo.aPosition.nIndex
+                     + (rFieldInfo.bTextIsSpanned ? rFieldInfo.aCurrentText.getLength() : 1);
     }
     aTextRanges.emplace_back(nTextStart, rEngine.GetTextLen(nPar));
     return aTextRanges;
@@ -4917,14 +4919,28 @@ Size ScInputHandler::GetTextSize()
     return aSize;
 }
 
+/// Whether rText, the text of a link, is exactly the address that URIHelper::FindFirstURLInText
+/// finds for the URL of the link.
+static bool lcl_IsLinkTextItsAddress(const SvxURLField& rUrlField, const OUString& rText,
+                                     CharClass& rCharClass)
+{
+    sal_Int32 nUrlStart = 0, nUrlEnd = rText.getLength();
+    const OUString aFoundUrl = URIHelper::FindFirstURLInText(rText, nUrlStart, nUrlEnd, rCharClass);
+    return aFoundUrl == rUrlField.GetURL() && nUrlStart == 0 && nUrlEnd == rText.getLength();
+}
+
 void ScInputHandler::RemoveURLFieldsFromEditEngine()
 {
     maUnlinkedURLFields.clear();
     if (!mpEditEngine)
         return;
 
-    SfxItemSet aSet = mpEditEngine->GetAttribs(ESelection::All());
-    if (aSet.GetItemState(EE_FEATURE_FIELD, false) == SfxItemState::DEFAULT)
+    // GetFieldInfo lists the placeholder fields and the hyperlink spans.
+    sal_Int32 nParCnt = mpEditEngine->GetParagraphCount();
+    bool bHasLink = false;
+    for (sal_Int32 nPar = 0; nPar < nParCnt && !bHasLink; ++nPar)
+        bHasLink = !mpEditEngine->GetFieldInfo(nPar).empty();
+    if (!bHasLink)
         return;
 
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
@@ -4932,9 +4948,25 @@ void ScInputHandler::RemoveURLFieldsFromEditEngine()
         return;
     CharClass& rCharClass = pAutoCorrect->GetCharClass(mpEditEngine->GetDefaultLanguage());
 
-    sal_Int32 nParCnt = mpEditEngine->GetParagraphCount();
     for (sal_Int32 nPar = 0; nPar < nParCnt; ++nPar)
     {
+        // A hyperlink span whose text is its address loses the link and keeps its text, so the
+        // positions in the paragraph stay the same.
+        for (const EFieldInfo& rInfo : mpEditEngine->GetFieldInfo(nPar))
+        {
+            if (!rInfo.bTextIsSpanned)
+                continue;
+            auto pUrlField = dynamic_cast<const SvxURLField*>(rInfo.pFieldItem->GetField());
+            if (!pUrlField || !lcl_IsLinkTextItsAddress(*pUrlField, rInfo.aCurrentText, rCharClass))
+                continue;
+
+            maUnlinkedURLFields.push_back(*pUrlField);
+            const sal_Int32 nStart = rInfo.aPosition.nIndex;
+            mpEditEngine->RemoveAttribs(
+                ESelection(nPar, nStart, nPar, nStart + rInfo.aCurrentText.getLength()), false,
+                EE_CHAR_URL);
+        }
+
         std::vector<sal_Int32> aPortionEnds;
         mpEditEngine->GetPortions( nPar, aPortionEnds );
 
@@ -4969,11 +5001,7 @@ void ScInputHandler::RemoveURLFieldsFromEditEngine()
             // differs from its target, such as one set up through the Hyperlink dialog
             // with a separate label, cannot be recreated that way, so leave it as a field.
             const OUString& rRepresentation = pUrlField->GetRepresentation();
-            sal_Int32 nUrlStart = 0, nUrlEnd = rRepresentation.getLength();
-            OUString aFoundUrl = URIHelper::FindFirstURLInText(
-                rRepresentation, nUrlStart, nUrlEnd, rCharClass );
-            if (aFoundUrl != pUrlField->GetURL() || nUrlStart != 0
-                || nUrlEnd != rRepresentation.getLength())
+            if (!lcl_IsLinkTextItsAddress(*pUrlField, rRepresentation, rCharClass))
                 continue;
 
             maUnlinkedURLFields.push_back(*pUrlField);
@@ -5036,11 +5064,10 @@ void ScInputHandler::RestoreURLFieldsInEditEngine()
             }
         }
 
-        // Insert from the last address back to the first, so an earlier address keeps its
-        // position when a later one shrinks to a single field character.
-        for (auto aFoundIt = aFoundFields.rbegin(); aFoundIt != aFoundFields.rend(); ++aFoundIt)
-            mpEditEngine->QuickInsertField(SvxFieldItem(aFoundIt->second, EE_FEATURE_FIELD),
-                                           aFoundIt->first);
+        // The link text is the address itself, so the positions of the other addresses stay the
+        // same.
+        for (const auto& [rSelection, rField] : aFoundFields)
+            mpEditEngine->QuickInsertUrlField(rField, rSelection);
     }
 }
 

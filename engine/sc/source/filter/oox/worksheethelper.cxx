@@ -1133,8 +1133,7 @@ void WorksheetGlobals::insertHyperlink( const ScAddress& rAddress, const OUStrin
         rEE.Clear();
 
         SvxURLField aURLField(rUrl, aStr, SvxURLFormat::Repr);
-        SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
-        rEE.QuickInsertField(aURLItem, ESelection());
+        rEE.QuickInsertUrlField(aURLField, ESelection());
 
         rDoc.setEditCell(rAddress, std::make_unique<EditTextObject>(rEE.CreateTextObject()));
     }
