@@ -152,7 +152,7 @@ public:
 
     void         Reset(const Point& rPnt);
     void         NextMove(const Point& rPnt);
-    SAL_DLLPRIVATE void         NextPoint();
+    void         NextPoint();
     SAL_DLLPRIVATE void         PrevPoint();
     bool         CheckMinMoved(const Point& rPnt);
     tools::Long         GetDX() const                     { return GetNow().X()-GetPrev().X(); }

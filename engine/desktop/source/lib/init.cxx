@@ -7275,6 +7275,11 @@ void COKitDocumentImpl::setObjectHandle(unsigned long long nObjectId, int nKind,
         return;
     }
 
+    // The drag holds its points in a list, and a move replaces the last of them. With the one
+    // point the reset left there, the start would move along and the drag would read no
+    // distance, which is what a connector's line handle goes by. So a second point is opened
+    // for the move, and the first stays where the handle was.
+    aDrag.NextPoint();
     aDrag.NextMove(aWhereTo);
 
     /*
