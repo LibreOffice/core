@@ -290,8 +290,12 @@ class Sidebar extends SidebarBase {
 						// just to be sure check with other method
 						if (isCurrent === 'false' || !isCurrent)
 							isCurrent = target === this.commandForDeck(activeDeckId);
-						if (target && (isCurrent === 'false' || !isCurrent))
+						if (target && (isCurrent === 'false' || !isCurrent)) {
 							this.changeDeck(target);
+							// A closed sidebar opens on the last deck core showed. It stays
+							// closed until the requested deck arrives, so only that deck is seen.
+							if (!this.isVisible()) return;
+						}
 					} else {
 						this.changeDeck(target);
 					}
@@ -312,18 +316,10 @@ class Sidebar extends SidebarBase {
 				const keepClosed = this.formulaKeepsDockClosed();
 				this.setDeckState({ showRequested: false });
 
-				if (!this.isVisible() && !keepClosed) {
-					this.showSidebar();
-
-					if (this.sidebarShownTheFirstTime) {
-						// The resize that the new width triggers is what refits the
-						// zoom, so ask before that resize is handled.
-						app.serverConnectionService.onShowSidebar();
-					} else {
-						// on initial load of file do not focus automatically
-						this.isUserRequest = true;
-					}
-				}
+				const showDock = !this.isVisible() && !keepClosed;
+				// on initial load of file do not focus automatically
+				if (showDock && !this.sidebarShownTheFirstTime)
+					this.isUserRequest = true;
 
 				if (!keepClosed) this.map.uiManager.setDocTypePref('ShowSidebar', true);
 
@@ -333,6 +329,22 @@ class Sidebar extends SidebarBase {
 				app.layoutingService.appendLayoutingTask(() => {
 					// now attach to the DOM built content
 					this.container.replaceChildren(tempContainer.firstChild);
+
+					// The dock opens in the same task that attaches its new content, so it opens
+					// on this deck. A close that arrived meanwhile cleared activeDeckId.
+					if (
+						showDock &&
+						!this.isVisible() &&
+						this.deckState.activeDeckId !== null
+					) {
+						this.showSidebar();
+
+						if (this.sidebarShownTheFirstTime) {
+							// The resize that the new width triggers is what refits the
+							// zoom, so ask before that resize is handled.
+							app.serverConnectionService.onShowSidebar();
+						}
+					}
 
 					// schedule focus after animation so it will not shift the browser page
 					if (wasUserRequest) {

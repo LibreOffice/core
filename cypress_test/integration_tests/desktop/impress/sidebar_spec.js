@@ -1,4 +1,4 @@
-/* global describe it cy require beforeEach */
+/* global describe it cy require beforeEach expect */
 
 var helper = require('../../common/helper');
 var impressHelper = require('../../common/impress_helper');
@@ -87,5 +87,55 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sidebar Tests', function()
 
 		cy.cGet('#sidebar-dock-wrapper').should('not.have.class', 'visible');
 		cy.cGet('#sidebar-dock-wrapper').should('not.be.visible');
+	});
+});
+
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sidebar decks in compact view', function() {
+
+	beforeEach(function() {
+		// The compact toolbar shows the deck buttons only when it is this wide.
+		cy.viewport(1920, 1080);
+		helper.setupAndLoadDocument('impress/sidebar.odp');
+		desktopHelper.switchUIToCompact();
+		cy.getFrameWindow().then(function(win) {
+			this.win = win;
+		}.bind(this));
+	});
+
+	it('A deck opened while the sidebar is closed is the only deck shown', function() {
+		desktopHelper.hideSidebarImpress();
+
+		// Record each set of decks the dock shows from here on, so a deck that is shown only
+		// for a moment is recorded too.
+		cy.getFrameWindow().then(function(win) {
+			var wrapper = win.document.getElementById('sidebar-dock-wrapper');
+			var container = win.document.getElementById('sidebar-container');
+			win.shownDecks = [];
+			var recordShownDecks = function() {
+				if (!wrapper.classList.contains('visible'))
+					return;
+				// Core sends every deck and the inactive ones are built but not displayed.
+				var decks = Array.from(container.querySelectorAll('[id$="Deck"]'))
+					.filter(function(deck) { return deck.offsetParent !== null; })
+					.map(function(deck) { return deck.id; })
+					.filter(function(id, index, ids) { return ids.indexOf(id) === index; })
+					.join(',');
+				if (win.shownDecks[win.shownDecks.length - 1] !== decks)
+					win.shownDecks.push(decks);
+			};
+			win.shownDecksObserver = new win.MutationObserver(recordShownDecks);
+			win.shownDecksObserver.observe(wrapper, { attributes: true, attributeFilter: ['class'] });
+			win.shownDecksObserver.observe(container, { childList: true, subtree: true });
+		});
+
+		desktopHelper.getCompactIcon('CustomAnimation').find('button').should('not.be.disabled').click();
+		helper.processToIdle(this.win);
+		cy.cGet('#sidebar-container [id="SdCustomAnimationDeck"]').should('be.visible');
+
+		cy.getFrameWindow().should(function(win) {
+			expect(win.shownDecks.join(' then ')).to.equal('SdCustomAnimationDeck');
+		}).then(function(win) {
+			win.shownDecksObserver.disconnect();
+		});
 	});
 });
