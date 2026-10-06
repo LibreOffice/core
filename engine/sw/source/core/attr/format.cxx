@@ -121,8 +121,8 @@ SwFormat &SwFormat::operator=(const SwFormat& rFormat)
     if(GetRegisteredIn() != rFormat.GetRegisteredIn())
     {
         StartListeningToSameModifyAs(rFormat);
-        m_aSet.SetParent( GetRegisteredIn()
-            ? &rFormat.m_aSet
+        m_aSet.SetParent( rFormat.DerivedFrom()
+            ? &rFormat.DerivedFrom()->m_aSet
             : nullptr);
     }
 
