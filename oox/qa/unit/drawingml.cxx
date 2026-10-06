@@ -97,6 +97,34 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTransparentText)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(75), nTransparency);
 }
 
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testUnderlineFillOverridesInheritedFollowText)
+{
+    loadFromFile(u"underline-inherited-follow-text.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xShape->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph;
+    auto getUnderlineColor = [&xParagraph]() {
+        uno::Reference<beans::XPropertySet> xRun(xParagraph->createEnumeration()->nextElement(),
+                                                 uno::UNO_QUERY);
+        Color aColor;
+        xRun->getPropertyValue(u"CharUnderlineColor"_ustr) >>= aColor;
+        return aColor;
+    };
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: rgba[ff0000ff]
+    // - Actual  : rgba[ffffff00]
+    // i.e. the inherited uFillTx won over the uFill of the run
+    xParagraph.set(xParagraphs->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), getUnderlineColor());
+    xParagraph.set(xParagraphs->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getUnderlineColor());
+}
+
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf131082)
 {
     loadFromFile(u"tdf131082.pptx");
