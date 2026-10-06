@@ -3857,6 +3857,8 @@ private:
         aContent.mbCanBeMoved = !rObject.IsMoveProtect();
         aContent.mbCanBeResized = !rObject.IsResizeProtect();
         aContent.mbCanBeTurned = aWhatItAllows.bRotateFreeAllowed;
+        aContent.mbCanBeResizedFreely = aWhatItAllows.bResizeFreeAllowed;
+        aContent.mbCanBeMirrored = aWhatItAllows.bMirrorFreeAllowed;
 
         aContent.maPaintedBox = paintedRectangleInTwips(rObject, aContent.maPrimitives);
         aContent.maTransformation = transformationInTwips(rObject);
@@ -4507,6 +4509,10 @@ private:
             rWriter.put("cannotBeResized", true);
         if (!rContent.mbCanBeTurned)
             rWriter.put("cannotBeTurned", true);
+        if (!rContent.mbCanBeResizedFreely)
+            rWriter.put("cannotBeResizedFreely", true);
+        if (!rContent.mbCanBeMirrored)
+            rWriter.put("cannotBeMirrored", true);
 
         if (rContent.mbTiedAtStart)
             rWriter.put("tiedAtStart", true);

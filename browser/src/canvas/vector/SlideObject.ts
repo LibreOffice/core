@@ -258,6 +258,11 @@ namespace cool {
 		cannotBeMoved?: boolean;
 		cannotBeResized?: boolean;
 		cannotBeTurned?: boolean;
+		/// True where the object allows a resize in ratio only: a text frame turned off the right
+		/// angles, a shape turned at all. A selection holding one keeps the ratio as a whole.
+		cannotBeResizedFreely?: boolean;
+		/// True where the object may not be turned over, a media object for one.
+		cannotBeMirrored?: boolean;
 		gluePoints?: ObjectGluePoint[];
 		/// True for a connector whose first end is tied to an object, and the same for its last
 		/// end. Absent for anything that is not a connector, and for an end that is free.

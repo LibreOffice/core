@@ -233,6 +233,12 @@ public:
         bool mbCanBeMoved = true;
         bool mbCanBeResized = true;
         bool mbCanBeTurned = true;
+        /// False where the object allows a resize in ratio only: a text frame that is turned
+        /// off the right angles, a shape that is turned at all. A resize of a selection holding
+        /// such an object keeps the ratio for the whole selection, as the office does.
+        bool mbCanBeResizedFreely = true;
+        /// False where the object may not be turned over, a media object for one.
+        bool mbCanBeMirrored = true;
 
         /** True where the object is a diagram, which is a set of shapes the office lays out
             from data it holds beside them, and the file name ending of the picture an object
@@ -427,6 +433,8 @@ public:
                    && mbCanBeMoved == rOther.mbCanBeMoved
                    && mbCanBeResized == rOther.mbCanBeResized
                    && mbCanBeTurned == rOther.mbCanBeTurned
+                   && mbCanBeResizedFreely == rOther.mbCanBeResizedFreely
+                   && mbCanBeMirrored == rOther.mbCanBeMirrored
                    && mbTiedAtStart == rOther.mbTiedAtStart
                    && mbTiedAtEnd == rOther.mbTiedAtEnd
                    && mnTiedToAtStart == rOther.mnTiedToAtStart
