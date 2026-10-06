@@ -283,13 +283,14 @@ void Quarantine::makeQuarantineSpace(std::size_t headroomBytes)
     {
         // Remove the first entry of the first container.
         assert(!(*entries[0]).empty() && "Unexpected empty Quarantine Entries");
-        Entry& entry = *entries[0]->begin();
+        const Entry& entry = *entries[0]->begin();
+        const std::size_t size = entry.size();
         LOG_DBG("Removing quarantined file [" << entry.filename() << "] for [" << entry.docKey()
-                                              << "] with " << entry.size() << " bytes");
+                                              << "] with " << size << " bytes");
         FileUtil::removeFile(entry.fullPath());
-        entries[0]->erase(entries[0]->begin());
+        entries[0]->erase(entries[0]->begin()); // Invalidates entry.
 
-        currentSize -= entry.size();
+        currentSize -= size;
         if (currentSize <= MaxSizeBytes)
         {
             return; // We are good, for now.
