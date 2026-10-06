@@ -522,6 +522,61 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/*
+		The run a drag of a line handle of a connector shows of itself: the current run with the
+		line the handle sits on moved by what the drag moved, across the line, which is what the
+		engine does with such a drag. The line is the one whose middle the handle stood on.
+		Nothing for anything else.
+	*/
+	public runWhileALineIsDragged(
+		handle: SelectionHandle,
+		at: cool.Point,
+	): cool.ObjectPathPolygon[] | null {
+		const connector = this.theConnector();
+		if (connector === undefined) return null;
+		if (
+			handle.kind !== '9' ||
+			SelectionSection.connectorEnds.includes(handle.name)
+		)
+			return null;
+
+		const object = RenderGeometrySection.objectOf(connector);
+		const run = object ? ConnectorRouter.trackOf(object) : undefined;
+		if (!run || run.length < 2) return null;
+
+		const stood = this.known.find(
+			(one: SelectionHandle) => one.name === handle.name,
+		);
+		if (!stood) return null;
+
+		let line = -1;
+		let nearest = Number.POSITIVE_INFINITY;
+		for (let n = 0; n + 1 < run.length; ++n) {
+			const middle = new cool.Point(
+				(run[n].x + run[n + 1].x) / 2,
+				(run[n].y + run[n + 1].y) / 2,
+			);
+			const away = middle.distanceTo(stood.point);
+			if (away < nearest) {
+				nearest = away;
+				line = n;
+			}
+		}
+		if (line < 0) return null;
+
+		const horizontal =
+			Math.abs(run[line + 1].y - run[line].y) <=
+			Math.abs(run[line + 1].x - run[line].x);
+		const moved = run.map((point: cool.ObjectPathPoint) => ({ ...point }));
+		const by = at.subtract(stood.point);
+		for (const n of [line, line + 1]) {
+			if (horizontal) moved[n].y += by.y;
+			else moved[n].x += by.x;
+		}
+
+		return [{ closed: false, points: moved }];
+	}
+
+	/*
 		The run a drag of one end of a connector shows of itself: the connector laid out anew
 		between the end that stays and the one the drag holds, tied where it would tie or free
 		where it would lie, as a thin line. Where the connector has no routing numbers the line
