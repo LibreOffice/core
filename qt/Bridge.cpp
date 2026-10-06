@@ -1273,6 +1273,7 @@ QVariant Bridge::cool(const QString& messageStr)
         const QStringList displayUri{ QString::fromStdString(
             coda::hostDisplayUriForPath(absolutePath)) };
         coda::openFiles(QStringList() << absolutePath, displayUri);
+        closeStarterScreen(_owner);
 
         LOG_INF("opendoc: opened file: " << absolutePath.toStdString());
         return {};
