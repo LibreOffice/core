@@ -111,8 +111,8 @@ ETONYEK_TARBALL := libetonyek-0.1.$(ETONYEK_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-EXPAT_SHA256SUM := 1e727b8933ec51a77a9a9d9afcf8e688bce45d907c13e36ab7393fe36e703182
-EXPAT_TARBALL := expat-2.8.5.tar.xz
+EXPAT_SHA256SUM := 1e6371862cc31999b368c3b89b49994f0677e1bab5f1b2b85ae3741f5d803051
+EXPAT_TARBALL := expat-2.9.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
