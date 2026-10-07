@@ -3232,7 +3232,12 @@ void ScInterpreter::ScMacro()
         return;
     }
 
-    //  no security queue beforehand (just CheckMacroWarn), moved to  CallBasic
+    // The macro mode is decided before the document's Basic is loaded.
+    if (!pDocSh->AdjustMacroMode())
+    {
+        PushError( FormulaError::NoMacro );
+        return;
+    }
 
     //  If the  Dok was loaded during a Basic-Calls,
     //  is the  Sbx-object created(?)
