@@ -438,6 +438,21 @@ CPPUNIT_TEST_FIXTURE(Test, testPageStyleLayoutDefault)
     CPPUNIT_ASSERT_EQUAL(style::PageStyleLayout_ALL, getProperty<style::PageStyleLayout>(xPropertySet, u"PageStyleLayout"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFormControlImplementationOutsideForms)
+{
+    // a form with two controls: one names a form component service, the other names a form
+    // component by an implementation name outside the form namespaces
+    createSwDoc("form-control-implementation.fodt");
+    uno::Reference<drawing::XDrawPageSupplier> const xDPS(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<form::XFormsSupplier> const xFS(xDPS->getDrawPage(), uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexContainer> const xForms(xFS->getForms(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xForms->getCount());
+    uno::Reference<container::XNameAccess> const xForm(xForms->getByIndex(0), uno::UNO_QUERY_THROW);
+    // only the control named by a form component service is imported
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), uno::Reference<container::XIndexAccess>(xForm, uno::UNO_QUERY_THROW)->getCount());
+    CPPUNIT_ASSERT(xForm->hasByName(u"TextBox"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTimeFormFormats)
 {
     createSwDoc("timeFormFormats.odt");
