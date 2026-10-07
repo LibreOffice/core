@@ -69,6 +69,7 @@ class ZoomControl extends CanvasSectionObject {
 		targetZoom: number,
 		anchorTwips?: cool.SimplePoint,
 		animate: boolean = true,
+		anchorOnCanvas?: cool.SimplePoint,
 	): void {
 		const layout = this.layout;
 		if (!layout) return;
@@ -98,7 +99,11 @@ class ZoomControl extends CanvasSectionObject {
 		// When no explicit anchor is given (programmatic zoom that skipped the
 		// animation above, e.g. under cypress), pivot on the current view centre,
 		// captured here while the viewed rectangle still holds the old scale.
-		layout.applyZoom(target, anchorTwips || layout.zoomAnchorPoint());
+		layout.applyZoom(
+			target,
+			anchorTwips || layout.zoomAnchorPoint(),
+			anchorTwips ? anchorOnCanvas : undefined,
+		);
 	}
 
 	// Animate a centre-pivoted zoom through the section container's own
@@ -208,8 +213,10 @@ class ZoomControl extends CanvasSectionObject {
 		this.wheelAccumulatedDelta = 0;
 		this.wheelLastStepTime = now;
 
+		// The point under the mouse is handed on with where it stood, for a layout that keeps it
+		// there.
 		const anchor = this.layout.canvasToDocumentPoint(point);
-		this.zoomTo(app.map.getZoom() + step, anchor, false);
+		this.zoomTo(app.map.getZoom() + step, anchor, false, point);
 	}
 
 	// ---- Pinch zoom -----------------------------------------------------
@@ -220,6 +227,8 @@ class ZoomControl extends CanvasSectionObject {
 	private pinchStartDistance: number | null = null;
 	private pinchStartZoom: number | null = null;
 	private pinchAnchor: cool.SimplePoint | null = null;
+	/// The canvas point the pinch began at.
+	private pinchAnchorOnCanvas: cool.SimplePoint | null = null;
 	private pinchTargetZoom: number | null = null;
 
 	public onMultiTouchStart(e: TouchEvent): void {
@@ -241,6 +250,7 @@ class ZoomControl extends CanvasSectionObject {
 		if (this.pinchStartDistance === null) {
 			this.pinchStartDistance = distance;
 			this.pinchAnchor = this.layout.canvasToDocumentPoint(point);
+			this.pinchAnchorOnCanvas = point.clone();
 			return;
 		}
 		if (!distance || !this.pinchStartDistance) return;
@@ -259,10 +269,16 @@ class ZoomControl extends CanvasSectionObject {
 				delta > 0
 					? Math.ceil(this.pinchTargetZoom)
 					: Math.floor(this.pinchTargetZoom);
-			this.zoomTo(finalZoom, this.pinchAnchor, false);
+			this.zoomTo(
+				finalZoom,
+				this.pinchAnchor,
+				false,
+				this.pinchAnchorOnCanvas ?? undefined,
+			);
 		}
 		this.pinchStartDistance = null;
 		this.pinchTargetZoom = null;
 		this.pinchAnchor = null;
+		this.pinchAnchorOnCanvas = null;
 	}
 }

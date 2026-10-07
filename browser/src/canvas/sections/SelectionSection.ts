@@ -25,6 +25,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 		app.CSections.DefaultForDocumentObjects.drawingOrder + 1;
 	zIndex: number = app.CSections.DefaultForDocumentObjects.zIndex;
 	documentObject: boolean = true;
+	/*
+		The section covers the handles where the objects stand, but it draws a good deal beyond
+		that: the ghost of a drag wherever the drag has taken it, the connectors laid out anew, the
+		crop preview. A drag can scroll the view so far that the place the objects stand on leaves
+		it, and a document object out of view is not drawn, so the section counts as visible always.
+	*/
+	isAlwaysVisible: boolean = true;
 
 	/// The keyboard on the handles of this selection.
 	public readonly travel: HandleTravel = new HandleTravel(

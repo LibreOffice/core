@@ -130,6 +130,24 @@ class ViewLayoutBase {
 		);
 	}
 
+	/*
+		Whether the layout lays room before the document, so that the view can start before the
+		document's origin. Only the layout of the vector view does, with the lawn round its page;
+		the scroll section asks this where it would otherwise read the start of the view.
+	*/
+	public laysRoomBeforeTheDocument(): boolean {
+		return false;
+	}
+
+	/// Shows that point of the document at the middle of the frame, as far as the layout's limits
+	/// allow. A layout that holds its view in other terms says how.
+	public showAtTheMiddle(point: cool.SimplePoint): void {
+		// The view is placed and built again. The frame did not change, so nothing is fitted
+		// anew, which a resize of a presentation would do.
+		this.setViewRectangleFromPointAndScale(point, app.twipsToPixels);
+		this.updateViewData();
+	}
+
 	public adjustViewZoomLevel() {
 		if (app.map._docLayer)
 			app.map._docLayer._fitWidthZoom(undefined, undefined, true);
@@ -552,7 +570,13 @@ class ViewLayoutBase {
 	// Used by both the animated end and the non-animated path. Map-free: the
 	// scale is applied via _updateTileTwips (not _resetView) and the doc type's
 	// 'zoomend' listeners do the rest of the post-zoom work.
-	public applyZoom(targetZoom: number, anchorTwips?: cool.SimplePoint): void {
+	// anchorOnCanvas is the canvas point the anchor stood under. This layout centers the anchor
+	// and does not read it. A layout that keeps the anchor under that point does.
+	public applyZoom(
+		targetZoom: number,
+		anchorTwips?: cool.SimplePoint,
+		anchorOnCanvas?: cool.SimplePoint,
+	): void {
 		// The zoom internals used here (_zoom, _clientZoom, _tileZoom,
 		// _updateTileTwips) are not on the typed interfaces; cast for now while
 		// the map is still being removed from the zoom path.

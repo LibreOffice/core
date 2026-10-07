@@ -274,6 +274,9 @@ class DebugManager {
 		// The objects the client holds answer what lies under the mouse while they are there,
 		// so the engine is asked for the pointer only while they are not.
 		RenderGeometrySection.requestPointerFromServer(!wanted);
+
+		// Drawing from the objects has a layout of its own, with the lawn round the page.
+		ViewLayoutVector.switchTheRendering();
 	}
 
 	/// Offer the tools that belong under the given one, or take the offer away. One that is on

@@ -405,6 +405,7 @@ COOL_JS_LST =\
 	src/app/OverviewFade.ts \
 	src/app/ViewLayout.ts \
 	src/app/ViewLayoutImpress.ts \
+	src/app/ViewLayoutVector.ts \
 	src/app/ViewLayoutWriter.ts \
 	src/app/ViewLayoutCalc.ts \
 	src/app/ViewLayoutMultiPage.ts \

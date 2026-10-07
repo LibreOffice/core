@@ -209,10 +209,17 @@ export class ScrollSection extends CanvasSectionObject {
 		var vx = 0;
 		var vy = 0;
 
-		// Every layout is off-map now, so the top-left comes from the viewed
-		// rectangle (the leaflet map pane is stale/unused).
-		const topLeftX = app.activeDocument.activeLayout.viewedRectangle.cX1;
-		const topLeftY = app.activeDocument.activeLayout.viewedRectangle.cY1;
+		// How far the view is scrolled from the start, in CSS pixels. Where room is laid before
+		// the document, as the lawn of the vector view, the viewed rectangle starts before the
+		// document's origin, so the scroll itself says it. Elsewhere the rectangle, as always.
+		const layout = app.activeDocument.activeLayout;
+		const roomBefore = layout.laysRoomBeforeTheDocument();
+		const topLeftX = roomBefore
+			? layout.scrollProperties.viewX / app.dpiScale
+			: layout.viewedRectangle.cX1;
+		const topLeftY = roomBefore
+			? layout.scrollProperties.viewY / app.dpiScale
+			: layout.viewedRectangle.cY1;
 
 		// The document area (anchor/tiles section) the map used to represent.
 		const frame = app.activeDocument.activeLayout.frameSize;
@@ -745,8 +752,22 @@ export class ScrollSection extends CanvasSectionObject {
 		const mirrorX = this.isRTL();
 		const documentAnchor = app.sectionContainer.getSectionWithName(app.CSections.Tiles.name);
 
-		// For CompareChanges view, viewedRectangle.pY1 can be negative while scrolling is possible.
-		const initialVerticalCheck = layout.type === 'ViewLayoutCompareChanges' ? true : layout.viewedRectangle.pY1 >= 0;
+		// Whether a bar can be taken hold of. The viewed rectangle starts before the document's
+		// origin wherever room is laid before the document - the compare view, the lawn of the
+		// vector view - so there the layout is asked whether it can scroll. Elsewhere the
+		// rectangle's start says it, as it always did.
+		const roomBefore =
+			layout.type === 'ViewLayoutCompareChanges' || layout.laysRoomBeforeTheDocument();
+
+		// Where the view stood when a bar was taken hold of, so Escape can put it back. Only the
+		// vector view keeps its view in terms that can be put back this simply.
+		this.sectionProperties.viewBeforeTheBarDrag = layout.laysRoomBeforeTheDocument()
+			? layout.zoomAnchorPoint()
+			: null;
+		this.listenForEscape(this.sectionProperties.viewBeforeTheBarDrag !== null);
+		const initialVerticalCheck = roomBefore
+			? layout.canScrollVertical(documentAnchor)
+			: layout.viewedRectangle.pY1 >= 0;
 
 		if (initialVerticalCheck) {
 			if ((!mirrorX && point.pX >= this.size[0] - scrollProps.usableThickness)
@@ -794,6 +815,37 @@ export class ScrollSection extends CanvasSectionObject {
 		}
 	}
 
+	/*
+		Escape while a bar is dragged in the vector view puts the view back where it stood when the
+		bar was taken hold of, as the user asked to interrupt the scroll. This section is a window
+		section, and the container tells only the section a press landed on that a drag was called
+		off, so the section listens for the key itself while a bar is held.
+	*/
+	private readonly onEscapeKey = (event: KeyboardEvent): void => {
+		if (event.key !== 'Escape') return;
+
+		const before: cool.SimplePoint | null = this.sectionProperties.viewBeforeTheBarDrag;
+		const onABar = this.sectionProperties.clickScrollVertical || this.sectionProperties.clickScrollHorizontal;
+		if (!onABar || !before) return;
+
+		event.preventDefault();
+		event.stopPropagation();
+
+		this.sectionProperties.clickScrollVertical = false;
+		this.sectionProperties.clickScrollHorizontal = false;
+		this.sectionProperties.previousDragDistance = null;
+		this.sectionProperties.viewBeforeTheBarDrag = null;
+		this.listenForEscape(false);
+
+		app.sectionContainer.cancelDragging();
+		app.activeDocument.activeLayout.showAtTheMiddle(before);
+	};
+
+	private listenForEscape (listen: boolean): void {
+		document.removeEventListener('keydown', this.onEscapeKey, true);
+		if (listen) document.addEventListener('keydown', this.onEscapeKey, true);
+	}
+
 	public onMouseUp (point: cool.SimplePoint, e: MouseEvent): void {
 		window.L.DomUtil.removeClass(document.documentElement, 'prevent-select');
 		this.map.scrollingIsHandled = false;
@@ -814,6 +866,8 @@ export class ScrollSection extends CanvasSectionObject {
 		}
 
 		this.sectionProperties.previousDragDistance = null;
+		this.sectionProperties.viewBeforeTheBarDrag = null;
+		this.listenForEscape(false);
 
 		if (e.type === 'touchend')
 			this.onMouseLeave();
