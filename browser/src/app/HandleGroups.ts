@@ -311,7 +311,7 @@ class CropHandles extends HandleGroup {
 			half a mark in along each axis it runs along; the mark itself is still laid from the
 			place, which is why the drawing takes the same half back.
 		*/
-		return eight.map((one: SelectionHandle) => {
+		const marks: SelectionHandle[] = eight.map((one: SelectionHandle) => {
 			const inward = CropHandles.inwardOf(one.kind);
 
 			return {
@@ -326,7 +326,21 @@ class CropHandles extends HandleGroup {
 				awayBy: HandleLook.widthOf('crop') * 0.5,
 			};
 		});
+
+		// The handle in the middle takes the window, the visible part, over the graphic.
+		marks.push({
+			name: CropHandles.middleKind,
+			kind: CropHandles.middleKind,
+			pointer: 'move',
+			point: square.apply(0.5, 0.5),
+			turnedBy: Math.atan2(across.y, across.x),
+		});
+
+		return marks;
 	}
+
+	/// The kind of the handle in the middle of the picture.
+	public static readonly middleKind: string = 'cropMove';
 
 	/*
 		Tells the engine to crop the picture to the window that square maps the unit square to,
@@ -377,6 +391,9 @@ class CropHandles extends HandleGroup {
 		handle: SelectionHandle,
 		_at: cool.SimplePoint,
 	): SelectionInteraction | null {
+		if (handle.kind === CropHandles.middleKind)
+			return new CropPanInteraction(this.selection, handle);
+
 		const shape = this.selection.shapeNow();
 
 		return shape ? new CropInteraction(this.selection, handle, shape) : null;
@@ -392,16 +409,24 @@ class CropHandles extends HandleGroup {
 		towards: cool.Point,
 		event: KeyboardEvent,
 	): cool.Point | null {
-		const shape = this.selection.shapeNow();
-		if (!shape) return null;
-
 		const to = HandleGroup.steppedBy(handle, towards, event);
-		const mark = new CropInteraction(this.selection, handle, shape);
-		mark
-			.exactlyAsTold()
-			.finish(new cool.SimplePoint(to.x, to.y), event as unknown as MouseEvent);
+		const place = new cool.SimplePoint(to.x, to.y);
 
-		this.selection.keepWhatItDid(mark);
+		let crop: SelectionInteraction;
+		if (handle.kind === CropHandles.middleKind) {
+			const pan = new CropPanInteraction(this.selection, handle);
+			pan.finish(place);
+			crop = pan;
+		} else {
+			const shape = this.selection.shapeNow();
+			if (!shape) return null;
+
+			const mark = new CropInteraction(this.selection, handle, shape);
+			mark.exactlyAsTold().finish(place, event as unknown as MouseEvent);
+			crop = mark;
+		}
+
+		this.selection.keepWhatItDid(crop);
 		return to;
 	}
 
@@ -623,9 +648,34 @@ class CropHandles extends HandleGroup {
 		);
 		const place = ObjectHandles.placeOfKind(handle.kind.substring(4));
 		const square = this.selection.squareNow();
-		if (!place || !square) return color;
+		if (!square) return color;
 
 		const [across, down] = CropHandles.axesOf(square);
+
+		/*
+			The handle in the middle is as wide as the mark on the top side is long, and as high
+			as the mark on the left side is long, laid in the picture's axes and standing on its
+			point. Three lines across it, kept off its sides, say that it is taken hold of to
+			move; the edge is drawn closed here, so the lines are drawn as lines alone.
+		*/
+		if (handle.kind === CropHandles.middleKind) {
+			const long = HandleLook.widthOf('crop') + 2 * grown;
+			context.save();
+			context.setTransform(across.x, across.y, down.x, down.y, at.vX, at.vY);
+			context.moveTo(-long * 0.5, -long * 0.5);
+			context.lineTo(long * 0.5, -long * 0.5);
+			context.lineTo(long * 0.5, long * 0.5);
+			context.lineTo(-long * 0.5, long * 0.5);
+			context.closePath();
+			for (const y of [-long * 0.25, 0, long * 0.25]) {
+				context.moveTo(-long * 0.3, y);
+				context.lineTo(long * 0.3, y);
+			}
+			context.restore();
+			return color;
+		}
+
+		if (!place) return color;
 		const inward = CropHandles.inwardOf(handle.kind.substring(4));
 		const inwardAcross = inward.x;
 		const inwardDown = inward.y;

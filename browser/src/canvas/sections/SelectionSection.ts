@@ -1227,6 +1227,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 	private pointerOver(handle: SelectionHandle): string {
 		if (handle.kind === SelectionSection.turningKind) return 'pointer';
 
+		if (handle.kind === CropHandles.middleKind) return 'move';
+
 		if (handle.group === 'crop')
 			return (
 				'url(' + app.LOUtil.getURL('images/cursors/crop.svg') + ') 8 8, auto'
