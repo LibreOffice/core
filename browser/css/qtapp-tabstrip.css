@@ -14,7 +14,8 @@ body {
 	flex-direction: row;
 	align-items: stretch;
 	height: 100%;
-	overflow: hidden;
+	overflow-x: auto;
+	overflow-y: hidden;
 }
 .tab {
 	box-sizing: border-box;
@@ -144,6 +145,9 @@ body {
 	font-size: 1.5em;
 	/* See .tab .close: keeps the + glyph optically centered. */
 	line-height: 0;
+	position: sticky;
+	right: 0;
+	background: var(--color-background-tabs-group);
 }
 #new-tab:hover {
 	background: var(--color-background-dark);
