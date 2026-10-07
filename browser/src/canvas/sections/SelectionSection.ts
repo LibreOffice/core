@@ -2000,6 +2000,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.endTheInteraction(false);
 	}
 
+	/// Whether an interaction of the mouse is running on the selection.
+	public isDragged(): boolean {
+		return this.interaction !== null;
+	}
+
 	/// The handles the groups work out from the objects as they stand. Every handle is marked
 	/// with the group it came from, so that whatever is done to it afterwards is done by the group
 	/// that knows it.

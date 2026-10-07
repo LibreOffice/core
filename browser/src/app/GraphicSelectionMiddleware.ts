@@ -284,6 +284,11 @@ class GraphicSelection {
 	public static handleKeyboard(event: KeyboardEvent): boolean {
 		if (!this.hasActiveSelection()) return false;
 
+		// A drag by the mouse owns the selection while it runs, so a key does nothing to it then
+		// and is taken here. Escape stays with the drag, which it calls off.
+		if (this.selectionSection?.isDragged() && event.key !== 'Escape')
+			return true;
+
 		// What a key changes goes to the engine once the keys are let go, as the last state of
 		// each thing it changed. It is shown here at once all the same.
 		return ChangeOutbox.byAKey(event, () => {
