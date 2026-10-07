@@ -371,6 +371,16 @@ html[data-theme='dark'] .savemodified.unotoolbutton:not(.notebookbar) .unobutton
 	pointer-events: none;
 }
 
+.unotoolbutton .unobutton > img,
+.unotoolbutton .unobutton > .w2ui-icon {
+	transition: scale var(--duration-instant) var(--ease-out);
+}
+
+.unotoolbutton:not(.disabled, [disabled]) .unobutton:not(:disabled):active > img,
+.unotoolbutton:not(.disabled, [disabled]) .unobutton:not(:disabled):active > .w2ui-icon {
+	scale: 0.92;
+}
+
 .unotoolbutton.notebookbar.inline:hover {
 	background-color: var(--color-background-darker);
 }
