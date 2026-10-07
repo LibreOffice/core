@@ -182,6 +182,12 @@ void SvxCharacterMap::init()
     for (int i = 0; i < nCount; ++i)
     {
         OUString aFontName( m_xVirDev->GetFontMetricFromCollection( i ).GetFamilyName() );
+#ifdef MACOSX
+        // tdf#91400 tdf#173342: hide private system fonts (family name starting
+        // with a period), like the system UI font, from the font list.
+        if (!aFontName.isEmpty() && aFontName[0] == '.')
+            continue;
+#endif
         if (aFontName != aLastName)
         {
             aLastName = aFontName;
