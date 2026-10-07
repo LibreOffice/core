@@ -29,6 +29,8 @@ describe(['tagdesktop'], 'Presenter Console.', function() {
 			this._slideCompositor = new FakeCompositor();
 			// fake window
 			this._slideShowWindowProxy = new FakeWindowProxy();
+			this.notes = 'test notes\nbullet one';
+			this.notesHtml = '<p>test notes</p>\r\n<ul>\r\n<li>bullet one</li>\r\n</ul>\r\n';
 		}
 
 		_getSlidesCount() {
@@ -52,11 +54,11 @@ describe(['tagdesktop'], 'Presenter Console.', function() {
 		}
 
 		getNotes() {
-			return "test notes\nbullet one";
+			return this.notes;
 		}
 
 		getNotesHtml() {
-			return "<p>test notes</p>\r\n<ul>\r\n<li>bullet one</li>\r\n</ul>\r\n";
+			return this.notesHtml;
 		}
 
 		slideshowWindowCleanUp() {
@@ -103,12 +105,33 @@ describe(['tagdesktop'], 'Presenter Console.', function() {
 			.to.be.at.most(parseFloat(style.fontSize) * 1.5);
 	}
 
+	// Returns notes of the given number of paragraphs, as plain text and as markup.
+	function makeNotes(paragraphCount) {
+		const paragraphs = [];
+		for (let i = 0; i < paragraphCount; ++i)
+			paragraphs.push('Paragraph ' + (i + 1) + ' of the notes for this slide.');
+		return {
+			text: paragraphs.join('\n'),
+			html: paragraphs.map(function(text) { return '<p>' + text + '</p>'; }).join(''),
+		};
+	}
+
+	function notesFontSize(fakeConsole) {
+		return parseFloat(fakeConsole._notes.style.fontSize);
+	}
+
 	// This opens the console on a two slide presentation. It returns the map the
-	// console listens to along with the console itself.
-	function openConsole(win, getPreview) {
+	// console listens to along with the console itself. The notes of every slide are
+	// the ones given, or a short default when none are given.
+	function openConsole(win, getPreview, notes) {
 		const FakeMap = win.L.Evented.extend({ getPreview: getPreview });
 		const map = new FakeMap();
-		const presenterConsole = new win.SlideShow.PresenterConsole(map, new FakePresenter());
+		const presenter = new FakePresenter();
+		if (notes) {
+			presenter.notes = notes.text;
+			presenter.notesHtml = notes.html;
+		}
+		const presenterConsole = new win.SlideShow.PresenterConsole(map, presenter);
 
 		// create popup window
 		map.fire('newpresentinconsole');
@@ -206,6 +229,70 @@ describe(['tagdesktop'], 'Presenter Console.', function() {
 			expectOneLine(doc.querySelector('#today'));
 
 			expectConsoleOnScreen(fakeConsole);
+
+			fakeConsole._proxyPresenter.close();
+		});
+	});
+
+	it('Short notes are shown larger to fill the notes pane', function() {
+		cy.getFrameWindow().then(function(win) {
+			const opened = openConsole(win, fittedPreview(16 / 9), makeNotes(2));
+			const fakeConsole = opened.presenterConsole;
+			const notes = fakeConsole._notes;
+
+			// The console measures itself while the window is still coming up. This
+			// lays it out again now that the window has its real size.
+			fakeConsole._onResize();
+			opened.map.fire('transitionend', { slide: 0 });
+
+			expect(notesFontSize(fakeConsole)).to.be.above(fakeConsole._notesBaseFontSize);
+			expect(notes.scrollHeight).to.be.at.most(notes.clientHeight);
+
+			fakeConsole._proxyPresenter.close();
+		});
+	});
+
+	it('Long notes keep the base font size and scroll', function() {
+		cy.getFrameWindow().then(function(win) {
+			const opened = openConsole(win, fittedPreview(16 / 9), makeNotes(60));
+			const fakeConsole = opened.presenterConsole;
+			const notes = fakeConsole._notes;
+
+			// The console measures itself while the window is still coming up. This
+			// lays it out again now that the window has its real size.
+			fakeConsole._onResize();
+			opened.map.fire('transitionend', { slide: 0 });
+
+			expect(notesFontSize(fakeConsole)).to.equal(fakeConsole._notesBaseFontSize);
+			expect(notes.scrollHeight).to.be.above(notes.clientHeight);
+
+			fakeConsole._proxyPresenter.close();
+		});
+	});
+
+	it('Zooming changes the size of fitted notes, on this slide and the next', function() {
+		cy.getFrameWindow().then(function(win) {
+			const opened = openConsole(win, fittedPreview(16 / 9), makeNotes(2));
+			const fakeConsole = opened.presenterConsole;
+			const doc = fakeConsole._proxyPresenter.document;
+
+			// The console measures itself while the window is still coming up. This
+			// lays it out again now that the window has its real size.
+			fakeConsole._onResize();
+			opened.map.fire('transitionend', { slide: 0 });
+			const fittedSize = notesFontSize(fakeConsole);
+
+			doc.querySelector('#decrease').click();
+			expect(notesFontSize(fakeConsole)).to.be.below(fittedSize);
+			const zoomedOutSize = notesFontSize(fakeConsole);
+
+			// The next slide has the same notes, so it is shown at the same smaller size.
+			opened.map.fire('transitionend', { slide: 1 });
+			expect(notesFontSize(fakeConsole)).to.equal(zoomedOutSize);
+
+			doc.querySelector('#increase').click();
+			doc.querySelector('#increase').click();
+			expect(notesFontSize(fakeConsole)).to.be.above(fittedSize);
 
 			fakeConsole._proxyPresenter.close();
 		});

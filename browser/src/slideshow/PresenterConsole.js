@@ -53,18 +53,6 @@ class PresenterConsole {
 			<head>
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1">
-				<style>
-					/* The notes pane is narrow, so paragraphs and lists sit
-					   closer together than the browser default. */
-					.notes-content p {
-						margin: 0 0 0.4em 0;
-					}
-					.notes-content ul,
-					.notes-content ol {
-						margin: 0 0 0.4em 0;
-						padding-inline-start: 1.2em;
-					}
-				</style>
 			</head>
 			<body>
                                 <header>
@@ -516,7 +504,14 @@ class PresenterConsole {
 		this._notes.style.width = '25vw';
 		this._notes.style.paddingTop = '10px';
 		this._notes.style.borderTop = '2px solid transparent';
-		this._notes.style.fontSize = '24px';
+		// The smallest font size the notes are fitted at. Notes that leave room in the pane
+		// are fitted larger.
+		this._notesBaseFontSize = 24;
+		this._notesFittedFontSize = this._notesBaseFontSize;
+		// The pixels the zoom buttons add to the fitted size, or take away when negative.
+		this._notesZoom = 0;
+		this._hasNotes = false;
+		this._notes.style.fontSize = `${this._notesBaseFontSize}px`;
 		this._notes.style.overflowX = 'hidden';
 		// Notes longer than the pane scroll inside it.
 		this._notes.style.overflowY = 'auto';
@@ -925,27 +920,68 @@ class PresenterConsole {
 		);
 	}
 
+	// Changes the shown size of the notes by the increment. The zoom is kept as the
+	// difference from the fitted size, so the following slides are shown that much larger or
+	// smaller than they fit.
 	_adjustFontSize(increment) {
-		// Define the font size bounds
+		const shownSize = parseFloat(this._notes.style.fontSize);
+		this._notesZoom = shownSize + increment - this._notesFittedFontSize;
+		this._fitNotesFontSize();
+	}
+
+	_notesOverflow() {
+		return (
+			this._notes.scrollHeight > this._notes.clientHeight ||
+			this._notes.scrollWidth > this._notes.clientWidth
+		);
+	}
+
+	// Shows the notes at the largest font size that fits the pane, so a few short lines are
+	// easy to read from a distance. The fitted size is at least the base size and at most
+	// 48px. Notes that do not fit at the base size keep it and scroll. The "No Notes"
+	// placeholder is fitted at the base size. The zoom is added to the fitted size, and the
+	// shown size stays between 12px and 64px. The scroll position stays where it was.
+	_fitNotesFontSize() {
+		const MAX_FITTED_FONT_SIZE = 48;
 		const MIN_FONT_SIZE = 12;
 		const MAX_FONT_SIZE = 64;
 
-		let currentFontSize = parseInt(this._notes.style.fontSize);
-		let newFontSize = currentFontSize + increment;
-		let zoomInBtn = this._proxyPresenter.document.querySelector('#increase');
-		let zoomOutBtn = this._proxyPresenter.document.querySelector('#decrease');
+		if (!this._notes) return;
 
-		// Ensure the font size stays within bounds
-		if (newFontSize >= MIN_FONT_SIZE && newFontSize <= MAX_FONT_SIZE) {
-			this._notes.style.fontSize = `${newFontSize}px`;
-			this._enableButton(zoomInBtn);
-			this._enableButton(zoomOutBtn);
+		let low = this._notesBaseFontSize;
+		let high = low;
+		// A pane with no height is hidden, and the size it would fit at is unknown.
+		if (this._notes.clientHeight > 0 && this._hasNotes)
+			high = MAX_FITTED_FONT_SIZE;
+
+		// The sizes tried while measuring can fit the pane and reset the scroll position.
+		const scrollTop = this._notes.scrollTop;
+
+		// Halve the range of sizes until the largest one that fits is left. The scroll bar is
+		// off while measuring, so the text wraps in the same width at every size.
+		this._notes.style.overflowY = 'hidden';
+		while (low < high) {
+			const middle = Math.ceil((low + high) / 2);
+			this._notes.style.fontSize = `${middle}px`;
+			if (this._notesOverflow()) high = middle - 1;
+			else low = middle;
 		}
+		this._notesFittedFontSize = low;
+		const size = Math.min(
+			Math.max(low + this._notesZoom, MIN_FONT_SIZE),
+			MAX_FONT_SIZE,
+		);
+		this._notes.style.fontSize = `${size}px`;
+		this._notes.style.overflowY = 'auto';
+		this._notes.scrollTop = scrollTop;
 
-		if (newFontSize <= MIN_FONT_SIZE) {
-			this._disableButton(zoomOutBtn);
-		} else if (newFontSize >= MAX_FONT_SIZE) {
-			this._disableButton(zoomInBtn);
+		const zoomIn = this._proxyPresenter.document.querySelector('#increase');
+		const zoomOut = this._proxyPresenter.document.querySelector('#decrease');
+		if (zoomIn && zoomOut) {
+			if (size < MAX_FONT_SIZE) this._enableButton(zoomIn);
+			else this._disableButton(zoomIn);
+			if (size > MIN_FONT_SIZE) this._enableButton(zoomOut);
+			else this._disableButton(zoomOut);
 		}
 	}
 
@@ -1275,6 +1311,7 @@ class PresenterConsole {
 
 		// Insert _notes before textScaler
 		container.insertBefore(this._notes, textScaler);
+		this._fitNotesFontSize();
 	}
 
 	_onHideNotes(e) {
@@ -1516,6 +1553,8 @@ class PresenterConsole {
 			timeControlContainer.style.width = this._currentSlideCanvas.style.width;
 		}
 
+		this._fitNotesFontSize();
+
 		this._resizeTimeout = this._proxyPresenter.setTimeout(
 			function () {
 				let previews =
@@ -1598,6 +1637,19 @@ class PresenterConsole {
 		});
 	}
 
+	// The notes pane is narrow, so paragraphs and lists sit closer together than the browser
+	// default. The text starts at the top of the pane and the pane ends with the last line.
+	// The console window has the content security policy of the editor, which blocks style
+	// elements, so the spacing is set on each element.
+	_setNotesSpacing(content) {
+		for (const block of content.querySelectorAll('p, ul, ol'))
+			block.style.margin = '0 0 0.4em 0';
+		for (const list of content.querySelectorAll('ul, ol'))
+			list.style.paddingInlineStart = '1.2em';
+		if (content.lastElementChild)
+			content.lastElementChild.style.marginBottom = '0';
+	}
+
 	_onTransitionEnd(e) {
 		if (!this._proxyPresenter) {
 			return;
@@ -1609,14 +1661,20 @@ class PresenterConsole {
 			let notes = this._presenter.getNotes(e.slide);
 			let notesContentElem = this._notes.querySelector('#notes');
 			notesContentElem.innerText = _('No Notes');
-			if (notes && notes.toLowerCase() !== 'click to add notes'.toLowerCase()) {
+			this._hasNotes =
+				!!notes && notes.toLowerCase() !== 'click to add notes'.toLowerCase();
+			if (this._hasNotes) {
 				const notesHtml = this._sanitizeNotes(
 					this._presenter.getNotesHtml(e.slide),
 				);
 				// eslint-disable-next-line no-restricted-syntax -- sanitized notes markup
 				if (notesHtml) notesContentElem.innerHTML = notesHtml;
 				else notesContentElem.innerText = notes;
+				this._setNotesSpacing(notesContentElem);
 			}
+			// Each slide shows its notes from the start.
+			this._notes.scrollTop = 0;
+			this._fitNotesFontSize();
 		}
 
 		let img = this._slides.querySelector(
