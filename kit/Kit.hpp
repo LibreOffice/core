@@ -572,6 +572,9 @@ public:
     /// Are we currently performing a load ?
     bool isLoadOngoing() const { return _duringLoad > 0; }
 
+    /// The loaded, connected, non-closing sessions that can carry =PY() requests to coolwsd.
+    std::vector<std::shared_ptr<ChildSession>> findLivePythonComputeSessions() const;
+
     LogUiCmd& getLogUiCmd() { return logUiCmd; }
 
     /// Get a thread-pool to perform an operation in

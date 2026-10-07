@@ -94,6 +94,7 @@
 		BEA264922CBE986C0007435A /* KitQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA264902CBE986C0007435A /* KitQueue.cpp */; };
 		BEA264932CBE986C0007435A /* KitWebSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA264912CBE986C0007435A /* KitWebSocket.cpp */; };
 		BEA264942CBE986C0007435A /* ChildSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA2648D2CBE986C0007435A /* ChildSession.cpp */; };
+		F8123A061CBE986C0007435A /* PythonComputeEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F8123A041CBE986C0007435A /* PythonComputeEmitter.cpp */; };
 		BEA264962CBE986C0007435A /* DeltaSimd.c in Sources */ = {isa = PBXBuildFile; fileRef = BEA2648C2CBE986C0007435A /* DeltaSimd.c */; };
 		BEA264A62CBE98CD0007435A /* HttpRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA264A52CBE98CD0007435A /* HttpRequest.cpp */; };
 		BEA264A12CBE98CD0007435A /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA2649E2CBE98CD0007435A /* Socket.cpp */; };
@@ -341,6 +342,8 @@
 		BEA2648F2CBE986C0007435A /* KitQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = KitQueue.hpp; path = KitQueue.hpp; sourceTree = "<group>"; };
 		BEA264902CBE986C0007435A /* KitQueue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = KitQueue.cpp; path = KitQueue.cpp; sourceTree = "<group>"; };
 		BEA264912CBE986C0007435A /* KitWebSocket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = KitWebSocket.cpp; path = KitWebSocket.cpp; sourceTree = "<group>"; };
+		F8123A041CBE986C0007435A /* PythonComputeEmitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PythonComputeEmitter.cpp; path = PythonComputeEmitter.cpp; sourceTree = "<group>"; };
+		F8123A051CBE986C0007435A /* PythonComputeEmitter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = PythonComputeEmitter.hpp; path = PythonComputeEmitter.hpp; sourceTree = "<group>"; };
 		BEA264972CBE98CD0007435A /* AsyncDNS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = AsyncDNS.hpp; path = AsyncDNS.hpp; sourceTree = "<group>"; };
 		BEA264982CBE98CD0007435A /* FakeSocket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FakeSocket.cpp; path = FakeSocket.cpp; sourceTree = "<group>"; };
 		BEA2649D2CBE98CD0007435A /* Socket.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Socket.hpp; path = Socket.hpp; sourceTree = "<group>"; };
@@ -607,6 +610,8 @@
 				BEA2648F2CBE986C0007435A /* KitQueue.hpp */,
 				BEA264902CBE986C0007435A /* KitQueue.cpp */,
 				BEA264912CBE986C0007435A /* KitWebSocket.cpp */,
+				F8123A041CBE986C0007435A /* PythonComputeEmitter.cpp */,
+				F8123A051CBE986C0007435A /* PythonComputeEmitter.hpp */,
 				BE5FDE352DAD3DCF00C48DB2 /* LogUI.hpp */,
 				BE5FDE362DAD3DCF00C48DB2 /* LogUI.cpp */,
 				BEEF3F822CE20BDD00ABE785 /* SetupKitEnvironment.hpp */,
@@ -1022,6 +1027,7 @@
 				BE9115AE2CECBD3100C597B2 /* FileUtil-unix.cpp in Sources */,
 				BEA264932CBE986C0007435A /* KitWebSocket.cpp in Sources */,
 				BEA264942CBE986C0007435A /* ChildSession.cpp in Sources */,
+				F8123A061CBE986C0007435A /* PythonComputeEmitter.cpp in Sources */,
 				BEA264962CBE986C0007435A /* DeltaSimd.c in Sources */,
 				BEDAD86B2F5EF7BA00E82F00 /* WSDGlobals.cpp in Sources */,
 				BEF6F02D2DD1EC0200EA06BF /* RegexUtil.cpp in Sources */,

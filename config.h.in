@@ -63,6 +63,9 @@
 /* Whether to compile and enable feature locking */
 #undef ENABLE_FEATURE_LOCK
 
+/* Whether =PY() formulas are brokered to a Python compute service */
+#undef ENABLE_PYTHON_COMPUTE
+
 /* Whether to compile and enable feature restrictions */
 #undef ENABLE_FEATURE_RESTRICTION
 

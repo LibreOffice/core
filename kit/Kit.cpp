@@ -37,6 +37,7 @@
 #include <kit/ChildSession.hpp>
 #include <kit/KitHelper.hpp>
 #include <kit/KitWebSocket.hpp>
+#include <kit/PythonComputeEmitter.hpp>
 #include <wsd/TileDesc.hpp>
 #include <wsd/UserMessages.hpp>
 
@@ -1506,6 +1507,18 @@ bool Document::onLoad(const std::string& sessionId,
     }
 
     return false;
+}
+
+std::vector<std::shared_ptr<ChildSession>> Document::findLivePythonComputeSessions() const
+{
+    std::vector<std::shared_ptr<ChildSession>> sessions;
+    for (const auto& [id, session] : _sessions)
+    {
+        if (session && session->getViewId() >= 0 && !session->isCloseFrame()
+            && !session->isDisconnected())
+            sessions.push_back(session);
+    }
+    return sessions;
 }
 
 bool Document::destroyKeptView()
@@ -3438,6 +3451,15 @@ void Document::drainQueue()
                 LOG_INF("Remote document event: " << COOLProtocol::getFirstLine(input.data(),
                                                                                 input.size()));
             }
+            else if (tokens.equals(0, "pythoncomputeresult:"))
+            {
+                // Document-level =PY() result from coolwsd: no view involved, so a closed
+                // view cannot drop it. Queued, so never handled during load.
+                std::string_view body(input.data(), input.size());
+                body.remove_prefix(std::string_view("pythoncomputeresult:").size());
+                const std::string json(Util::trimmed(body));
+                pythoncompute::completeFromJson(json);
+            }
             else
             {
                 LOG_ERR("Unexpected request: [" << COOLProtocol::getAbbreviatedMessage(input) << "].");
@@ -3472,6 +3494,20 @@ void Document::drainQueue()
                 {
                     session->sendTextFrame("legacyunoapinotice:");
                 }
+            }
+        }
+
+        // After the commands: one may have loaded the AddIn (a =PY() typed now); installing
+        // the wakeup then drains what it already queued. No-op once installed.
+        if (_loKitDocument && _loKitDocument->getDocumentType() == COKitDocumentType::SPREADSHEET)
+        {
+            try
+            {
+                pythoncompute::ensureWakeup();
+            }
+            catch (const std::exception& ex)
+            {
+                LOG_ERR("pythoncompute: ensureWakeup failed: " << ex.what());
             }
         }
     }
@@ -4998,6 +5034,11 @@ void lokit_main(
                 ::setenv("SAL_ABORT_ON_FORBIDDEN", "1", 1);
 #endif
         }
+
+#if PYTHON_COMPUTE_ENABLED
+        // Tells the Calc =PY() AddIn that this kit takes its requests (else: #DISABLED).
+        ::setenv("COOL_PYTHON_COMPUTE", "1", 1);
+#endif
 
         LOG_DBG("Initializing COKit with instdir [" << instdir_path << "] and userdir ["
                                                   << userdir_url << "].");

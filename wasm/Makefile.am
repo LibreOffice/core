@@ -60,6 +60,7 @@ online_SOURCES = \
 	../kit/KitQueue.cpp \
 	../kit/LogUI.cpp \
 	../kit/KitWebSocket.cpp \
+	../kit/PythonComputeEmitter.cpp \
 	../kit/DeltaSimd.c \
 	../net/FakeSocket.cpp \
 	../net/HttpRequest.cpp \

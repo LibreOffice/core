@@ -40,6 +40,7 @@ add_library(androidapp SHARED
             ../../../../../kit/KitQueue.cpp
             ../../../../../kit/LogUI.cpp
             ../../../../../kit/KitWebSocket.cpp
+            ../../../../../kit/PythonComputeEmitter.cpp
             ../../../../../net/FakeSocket.cpp
             ../../../../../net/HttpRequest.cpp
             ../../../../../net/NetUtil.cpp

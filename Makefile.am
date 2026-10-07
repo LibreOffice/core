@@ -311,7 +311,8 @@ coolforkit_sources = \
                      kit/ChildSession.cpp \
                      kit/ForKit.cpp \
                      kit/Kit.cpp \
-                     kit/KitWebSocket.cpp
+                     kit/KitWebSocket.cpp \
+                     kit/PythonComputeEmitter.cpp
 
 # Sources that only gbuild compiles: the tools, the two coolforkit variants and
 # the kit globals.  No automake _SOURCES mentions them, so they reach the
@@ -503,6 +504,7 @@ kit_headers = \
               kit/KitHelper.hpp \
               kit/KitWebSocket.hpp \
               kit/OomKills.hpp \
+              kit/PythonComputeEmitter.hpp \
               kit/SetupKitEnvironment.hpp \
               kit/SlideCompressor.hpp \
               kit/StateRecorder.hpp \

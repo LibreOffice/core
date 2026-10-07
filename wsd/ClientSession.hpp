@@ -740,6 +740,11 @@ private:
     bool handleSaveAs(const std::shared_ptr<Message>& payload,
                       const std::shared_ptr<DocumentBroker>& docBroker,
                       const std::shared_ptr<StreamSocket>& saveAsSocket);
+
+#if (defined(ENABLE_PYTHON_COMPUTE) && ENABLE_PYTHON_COMPUTE)
+    /// Kit-initiated =PY() request: hand it to the DocumentBroker, which owns it.
+    bool handlePythonComputeFromKit(const std::shared_ptr<Message>& payload);
+#endif
 #endif // !MOBILEAPP
 
 private:

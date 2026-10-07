@@ -208,6 +208,11 @@ AC_ARG_ENABLE([debug],
               AS_HELP_STRING([--enable-debug],
                              [Enable a debugging build]))
 
+AC_ARG_ENABLE([python-compute],
+              AS_HELP_STRING([--enable-python-compute],
+                             [Broker Calc =PY() formulas to a Python compute service. Needs a
+                              Core built with the python compute AddIn.]))
+
 AC_ARG_ENABLE([hardening-flags],
               AS_HELP_STRING([--disable-hardening-flags],
                              [Disable detection and use of compiler hardening flags]))
@@ -2222,6 +2227,13 @@ else
      AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_MOBILEAPP)
+
+ENABLE_PYTHON_COMPUTE=0
+if test "$enable_python_compute" = "yes" -a "$MOBILEAPP" != "1"; then
+    ENABLE_PYTHON_COMPUTE=1
+fi
+AC_DEFINE_UNQUOTED([ENABLE_PYTHON_COMPUTE],[$ENABLE_PYTHON_COMPUTE],[Whether =PY() formulas are brokered to a Python compute service])
+AC_SUBST(ENABLE_PYTHON_COMPUTE)
 AM_CONDITIONAL([ENABLE_MOBILEAPP], [test "$ENABLE_MOBILEAPP" = "true"])
 
 ENABLE_SERVER=true

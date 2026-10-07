@@ -45,6 +45,7 @@
 #include <common/Util.hpp>
 #include <common/base64.hpp>
 #include <kit/KitHelper.hpp>
+#include <kit/PythonComputeEmitter.hpp>
 #include <kit/SlideCompressor.hpp>
 
 #include <COKit/COKit.hxx>
@@ -1552,6 +1553,18 @@ bool ChildSession::loadDocument(const StringVector& tokens)
     LOG_INF("Created new view with viewid: [" << _viewId << "] for username: ["
                                               << getUserNameAnonym() << "] in session: [" << getId()
                                               << "], template: [" << getDocTemplate() << ']');
+
+    // Requests queued by the on-load recalc (or while no view was live) go out now.
+    try
+    {
+        if (getLOKitDocument()->getDocumentType() == COKitDocumentType::SPREADSHEET)
+            pythoncompute::drain(*_docManager);
+    }
+    catch (const std::exception& ex)
+    {
+        // The load succeeded; queued requests go out on the next drain.
+        LOG_ERR("pythoncompute: post-load drain failed: " << ex.what());
+    }
 
     if (!getDocTemplate().empty())
     {

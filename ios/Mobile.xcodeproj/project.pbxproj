@@ -83,6 +83,7 @@
 		BEA2835621467F0D00848631 /* KitWebSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA2835521467F0D00848631 /* KitWebSocket.cpp */; };
 		BEA2835621467FDD00848631 /* Kit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA2835521467FDD00848631 /* Kit.cpp */; };
 		BEA283582146945500848631 /* ChildSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA283572146945500848631 /* ChildSession.cpp */; };
+		F8123A031F4E900100848631 /* PythonComputeEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F8123A011F4E900100848631 /* PythonComputeEmitter.cpp */; };
 		BEA2835A21470A1C00848631 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA2835921470A1C00848631 /* WebKit.framework */; };
 		BEA2835D21498AD400848631 /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA2835C21498AD400848631 /* Socket.cpp */; };
 		BEA28360214ACA8500848631 /* FakeSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA2835F214ACA8500848631 /* FakeSocket.cpp */; };
@@ -1163,6 +1164,8 @@
 		BEA2835521467F0D00848631 /* KitWebSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KitWebSocket.cpp; sourceTree = "<group>"; };
 		BEA2835521467FDD00848631 /* Kit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Kit.cpp; sourceTree = "<group>"; };
 		BEA283572146945500848631 /* ChildSession.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChildSession.cpp; sourceTree = "<group>"; };
+		F8123A011F4E900100848631 /* PythonComputeEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PythonComputeEmitter.cpp; sourceTree = "<group>"; };
+		F8123A021F4E900100848631 /* PythonComputeEmitter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PythonComputeEmitter.hpp; sourceTree = "<group>"; };
 		BEA2835921470A1C00848631 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		BEA2835C21498AD400848631 /* Socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Socket.cpp; path = ../net/Socket.cpp; sourceTree = "<group>"; };
 		BEA2835E214A8E2000848631 /* Socket.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Socket.hpp; sourceTree = "<group>"; };
@@ -3097,6 +3100,8 @@
 				BE5EB5BD214FE29900E0826C /* LogUI.cpp */,
 				BE58E12D218F295B00249358 /* LogUI.hpp */,
 				BEA2835521467F0D00848631 /* KitWebSocket.cpp */,
+				F8123A011F4E900100848631 /* PythonComputeEmitter.cpp */,
+				F8123A021F4E900100848631 /* PythonComputeEmitter.hpp */,
 			);
 			name = kit;
 			path = ../kit;
@@ -3945,6 +3950,7 @@
 				BE5EB5C4213FE29901E0826C /* RegexUtil.cpp in Sources */,
 				BE5EB5C4214FE29900E0826C /* Uri.cpp in Sources */,
 				BEA283582146945500848631 /* ChildSession.cpp in Sources */,
+				F8123A031F4E900100848631 /* PythonComputeEmitter.cpp in Sources */,
 				BE80E45E21B6CEF200859C97 /* TemplateSectionHeaderView.m in Sources */,
 				BE5EB5C3213FE29900E0826C /* Session.cpp in Sources */,
 				BE980C592CEB557A00FED7BC /* FileUtil-apple.mm in Sources */,

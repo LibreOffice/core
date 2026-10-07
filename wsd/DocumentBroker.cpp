@@ -41,6 +41,7 @@
 #include <common/Unit.hpp>
 #include <common/Uri.hpp>
 #include <common/Util.hpp>
+#include <net/HttpRequest.hpp>
 #include <net/HttpServer.hpp>
 #include <net/HttpHelper.hpp>
 #include <net/Socket.hpp>
@@ -68,6 +69,8 @@
 #include <wsd/TileCache.hpp>
 #include <wsd/Unzip.hpp>
 
+#include <functional>
+
 #include <Poco/DigestStream.h>
 #include <Poco/DirectoryIterator.h>
 #include <Poco/DOM/AutoPtr.h>
@@ -82,6 +85,7 @@
 #include <Poco/SHA1Engine.h>
 #include <Poco/StreamCopier.h>
 #include <Poco/URI.h>
+#include <Poco/UTF8Encoding.h>
 #include <Poco/XML/XMLWriter.h>
 
 #include <algorithm>
@@ -961,6 +965,11 @@ void DocumentBroker::pollThread()
     abandonPreviewSessions();
 #endif
 
+#if (defined(ENABLE_PYTHON_COMPUTE) && ENABLE_PYTHON_COMPUTE) && !MOBILEAPP
+    // Teardown starts: cancel =PY() POSTs so their sockets do not outlive the document.
+    shutdownPythonCompute();
+#endif
+
     LOG_INF("Finished polling doc ["
             << _docKey << "]. stop: " << _stop << ", continuePolling: " << _poll->continuePolling()
             << ", CloseReason: [" << _closeReason << ']'
@@ -1137,6 +1146,11 @@ void DocumentBroker::pollThread()
     // Terminate properly while we can.
     LOG_DBG("Terminating child with reason: [" << _closeReason << ']');
     terminateChild(_closeReason);
+
+#if (defined(ENABLE_PYTHON_COMPUTE) && ENABLE_PYTHON_COMPUTE) && !MOBILEAPP
+    // The unlock and flush loops above still polled: cancel anything they let in.
+    shutdownPythonCompute();
+#endif
 
     // Stop to mark it done and cleanup.
     _poll->stop();
@@ -6178,6 +6192,345 @@ bool DocumentBroker::sendTextFrameToKit(const std::string& message)
     return _childProcess->sendTextFrame(message);
 }
 
+#if (defined(ENABLE_PYTHON_COMPUTE) && ENABLE_PYTHON_COMPUTE) && !MOBILEAPP
+namespace
+{
+/// =PY() requests POSTed at once per document; more wait, in order, in the per-document
+/// queue. The queue needs no cap of its own: the AddIn hands the kit at most
+/// 16 x max_payload_bytes of requests without a result (bridge.cxx kHandedOffPayloads).
+constexpr std::size_t MAX_PYTHON_COMPUTE_IN_FLIGHT = 8;
+/// Default of security.python_compute.timeout_secs, also used for a value <= 0.
+constexpr int DEFAULT_PYTHON_COMPUTE_TIMEOUT_SECS = 60;
+/// Default of security.python_compute.max_payload_bytes, also used for a value <= 0.
+constexpr int DEFAULT_PYTHON_COMPUTE_MAX_PAYLOAD_BYTES = 16 * 1024 * 1024;
+
+int pythonComputeMaxPayload()
+{
+    const int bytes = ConfigUtil::getConfigValue<int>("security.python_compute.max_payload_bytes",
+                                                      DEFAULT_PYTHON_COMPUTE_MAX_PAYLOAD_BYTES);
+    return bytes > 0 ? bytes : DEFAULT_PYTHON_COMPUTE_MAX_PAYLOAD_BYTES;
+}
+
+/// Strict UTF-8, as the AddIn decodes it: no overlong, surrogate or >U+10FFFF sequences.
+bool isStrictUtf8(std::string_view str)
+{
+    const auto* bytes = reinterpret_cast<const unsigned char*>(str.data());
+    for (std::size_t i = 0; i < str.size();)
+    {
+        const int len = bytes[i] < 0x80 ? 1 : bytes[i] < 0xE0 ? 2 : bytes[i] < 0xF0 ? 3 : 4;
+        if (str.size() - i < static_cast<std::size_t>(len)
+            || !Poco::UTF8Encoding::isLegal(bytes + i, len))
+            return false;
+        i += len;
+    }
+    return true;
+}
+
+/// Releases a request's in-flight slot exactly once, also if a handler never runs
+/// (only at teardown, when the kit goes away too).
+class PythonComputeSlot final
+{
+public:
+    explicit PythonComputeSlot(std::function<void()> release)
+        : _release(std::move(release))
+    {
+    }
+    ~PythonComputeSlot() { release(); }
+    void release() noexcept
+    {
+        if (!_release)
+            return;
+        try
+        {
+            auto fn = std::move(_release);
+            _release = nullptr;
+            fn();
+        }
+        catch (const std::exception& ex)
+        {
+            LOG_ERR_S("Python compute: slot release failed: " << ex.what());
+        }
+    }
+
+private:
+    std::function<void()> _release;
+};
+} // namespace
+
+void DocumentBroker::replyPythonComputeError(const std::string& id, const std::string& error)
+try
+{
+    // coolwsd's own errors are transient for the AddIn: it retries after its retry window.
+    Poco::JSON::Object::Ptr obj = new Poco::JSON::Object();
+    if (!id.empty())
+        obj->set("id", id);
+    obj->set("status", "error");
+    obj->set("error", error);
+    obj->set("transient", true);
+    std::ostringstream oss;
+    obj->stringify(oss);
+    sendTextFrameToKit("pythoncomputeresult: " + oss.str());
+}
+catch (const std::exception& ex)
+{
+    // Only if the kit socket is gone; the kit then exits.
+    LOG_ERR("Python compute: error reply failed id=[" << id << "]: " << ex.what());
+}
+
+void DocumentBroker::handlePythonComputeRequest(const std::shared_ptr<Message>& payload)
+{
+    ASSERT_CORRECT_THREAD();
+    std::string requestId;
+    try
+    {
+        std::string json(Util::trimmed(payload->jsonString()));
+        Poco::JSON::Object::Ptr reqObj;
+        if (json.empty() || !JsonUtil::parseJSON(json, reqObj) || !reqObj)
+        {
+            LOG_WRN("Python compute: invalid request bytes=" << json.size());
+            return; // no id: nothing to reply to
+        }
+        JsonUtil::findJSONValue(reqObj, "id", requestId);
+        if (requestId.empty())
+        {
+            LOG_WRN("Python compute: request without id");
+            return;
+        }
+
+        if (_stop)
+        {
+            // Teardown has cancelled everything; the AddIn goes away with the kit.
+            LOG_DBG("Python compute: broker stopping; dropped id=[" << requestId << ']');
+            return;
+        }
+
+        if (!ConfigUtil::getConfigValue<bool>("security.python_compute.enable", false))
+        {
+            LOG_INF("Python compute: disabled; rejecting id=[" << requestId << ']');
+            replyPythonComputeError(requestId, "Python compute is disabled");
+            return;
+        }
+
+        if (json.size() > static_cast<std::size_t>(pythonComputeMaxPayload()))
+        {
+            LOG_WRN("Python compute: request too large id=[" << requestId << "] bytes=" << json.size());
+            replyPythonComputeError(requestId, "too_large");
+            return;
+        }
+
+        if (_pythonComputeInFlight.size() < MAX_PYTHON_COMPUTE_IN_FLIGHT)
+        {
+            startPythonCompute(requestId, std::move(json)); // keep requestId for the catch
+            return;
+        }
+
+        LOG_DBG("Python compute: queued id=[" << requestId << "] queue=" << _pythonComputeQueue.size() + 1);
+        _pythonComputeQueue.push_back(PythonComputeQueued{ requestId, std::move(json) });
+    }
+    catch (const std::exception& ex)
+    {
+        LOG_ERR("Python compute: request failed id=[" << requestId << "]: " << ex.what());
+        if (!requestId.empty())
+            replyPythonComputeError(requestId, "Python compute request failed");
+    }
+}
+
+void DocumentBroker::startPythonCompute(std::string id, std::string json)
+{
+    ASSERT_CORRECT_THREAD();
+    if (_stop)
+        return;
+    try
+    {
+        const std::string url = ConfigUtil::getConfigValue<std::string>(
+            "security.python_compute.url", "http://localhost:8000/v1/execute");
+        if (url.empty())
+        {
+            replyPythonComputeError(id, "python_compute.url is empty");
+            return;
+        }
+
+        const Poco::URI uri(url); // throws on a malformed URL
+        if (HostUtil::isForbiddenKitHost(uri.getHost()))
+        {
+            LOG_WRN("Rejected python compute request to host not in KIT allowlist ["
+                    << Anonymizer::anonymizeUrl(url) << ']');
+            replyPythonComputeError(id, "Target host \"" + uri.getHost()
+                                            + "\" is not in the allowed host list, contact your "
+                                              "administrator");
+            return;
+        }
+
+        int timeoutSec = ConfigUtil::getConfigValue<int>("security.python_compute.timeout_secs",
+                                                         DEFAULT_PYTHON_COMPUTE_TIMEOUT_SECS);
+        if (timeoutSec <= 0)
+            timeoutSec = DEFAULT_PYTHON_COMPUTE_TIMEOUT_SECS;
+
+        std::shared_ptr<http::Session> httpSession = http::Session::create(url);
+        if (!httpSession)
+        {
+            replyPythonComputeError(id, "Failed to create HTTP session");
+            return;
+        }
+        httpSession->setTimeout(std::chrono::seconds(timeoutSec));
+
+        // Handlers hold only a weak broker: an in-flight POST never keeps the broker alive.
+        const std::weak_ptr<DocumentBroker> weakBroker = shared_from_this();
+        // The slot posts the release to the broker poll and locks the broker only there,
+        // so whichever thread drops the last Session reference never owns the broker.
+        const std::weak_ptr<SocketPoll> weakPoll = getPoll();
+        auto slot = std::make_shared<PythonComputeSlot>([weakPoll, weakBroker, id]() {
+            if (auto poll = weakPoll.lock())
+                poll->addCallback([weakBroker, id]() {
+                    if (auto broker = weakBroker.lock())
+                        broker->finishPythonCompute(id);
+                });
+        });
+        auto reply = [weakBroker](const std::string& body) {
+            if (auto broker = weakBroker.lock())
+                broker->sendTextFrameToKit("pythoncomputeresult: " + body);
+        };
+        auto replyError = [weakBroker, id](const std::string& error) {
+            if (auto broker = weakBroker.lock())
+                broker->replyPythonComputeError(id, error);
+        };
+
+        httpSession->setFinishedHandler(
+            [id, slot, reply, replyError](const std::shared_ptr<http::Session>& session) {
+                try
+                {
+                    const std::shared_ptr<const http::Response> response = session->response();
+                    if (!response || response->state() == http::Response::State::Timeout)
+                        replyError("Request timeout");
+                    else if (response->state() != http::Response::State::Complete)
+                        // Refused or broken connection, or a reply over max_payload_bytes:
+                        // the parser cannot tell them apart.
+                        replyError("Network error or reply over max_payload_bytes");
+                    else
+                    {
+                        const int statusCode = static_cast<int>(response->statusLine().statusCode());
+                        LOG_INF_S("Python compute: HTTP " << statusCode << " id=[" << id
+                                                          << "] bodyBytes=" << response->getBody().size());
+                        Poco::JSON::Object::Ptr obj;
+                        const bool isJson = JsonUtil::parseJSON(response->getBody(), obj) && obj;
+                        if (statusCode != 200)
+                        {
+                            // Only a 200 body is a real result. Any other status (401 from a
+                            // wrong api_key, 5xx, 429...) is transient: retried after the
+                            // AddIn's window, never cached for the document's life. The body
+                            // goes on only as the error text of coolwsd's own reply: its
+                            // "error" string, else the whole body as a string. Invalid UTF-8
+                            // would make the AddIn reject, and cache, the reply.
+                            std::string error;
+                            if (isJson)
+                            {
+                                const Poco::Dynamic::Var var = obj->get("error");
+                                if (var.isString())
+                                    error = var.extract<std::string>();
+                            }
+                            if (error.empty() && isStrictUtf8(response->getBody()))
+                                error = response->getBody();
+                            replyError(error.empty()
+                                           ? "Python compute HTTP " + std::to_string(statusCode)
+                                           : error);
+                        }
+                        else if (!isJson)
+                            replyError("Python compute returned non-JSON body");
+                        else
+                        {
+                            // Always stamp the request id; never trust the service's.
+                            obj->set("id", id);
+                            std::ostringstream oss;
+                            obj->stringify(oss);
+                            reply(oss.str());
+                        }
+                    }
+                }
+                catch (const std::exception& ex)
+                {
+                    LOG_ERR_S("Python compute: result handling failed id=[" << id << "]: " << ex.what());
+                    replyError("Python compute result handling failed");
+                }
+                slot->release();
+            });
+
+        httpSession->setConnectFailHandler(
+            [id, slot, replyError](const std::shared_ptr<http::Session>&) {
+                LOG_WRN_S("Python compute: network error id=[" << id << ']');
+                try
+                {
+                    replyError("Network error reaching Python compute service");
+                }
+                catch (const std::exception& ex)
+                {
+                    LOG_ERR_S("Python compute: error reply failed id=[" << id << "]: " << ex.what());
+                }
+                slot->release();
+            });
+
+        http::Request httpRequest(uri.getPathAndQuery());
+        httpRequest.setVerb(http::Request::VERB_POST);
+        httpRequest.set("Content-Type", "application/json");
+        // Send Bearer only when a key is set.
+        const std::string apiKey =
+            ConfigUtil::getConfigValue<std::string>("security.python_compute.api_key", "");
+        if (!apiKey.empty())
+            httpRequest.set("Authorization", "Bearer " + apiKey);
+        httpRequest.setBody(std::move(json), "application/json");
+
+        LOG_INF("Python compute: POST id=[" << id << "] timeoutSec=" << timeoutSec
+                                            << " auth=" << (apiKey.empty() ? "no" : "yes")
+                                            << " inFlight=" << _pythonComputeInFlight.size() + 1
+                                            << " to " << Anonymizer::anonymizeUrl(url));
+        _pythonComputeInFlight[id] = httpSession;
+        // Single attempt: formula execution is not idempotent.
+        // On failure asyncRequest() has already run the connect-fail handler above:
+        // it replied the error to the kit and released the slot.
+        if (!httpSession->asyncRequest(httpRequest, _poll))
+        {
+            LOG_WRN("Python compute: asyncRequest failed id=[" << id << ']');
+            return;
+        }
+        httpSession->response()->setBodySizeLimit(pythonComputeMaxPayload());
+    }
+    catch (const std::exception& ex)
+    {
+        LOG_ERR("Python compute: POST failed id=[" << id << "]: " << ex.what());
+        _pythonComputeInFlight.erase(id);
+        replyPythonComputeError(id, "Python compute request failed");
+    }
+}
+
+void DocumentBroker::finishPythonCompute(const std::string& id)
+{
+    ASSERT_CORRECT_THREAD();
+    _pythonComputeInFlight.erase(id);
+    while (_pythonComputeInFlight.size() < MAX_PYTHON_COMPUTE_IN_FLIGHT
+           && !_pythonComputeQueue.empty() && !_stop)
+    {
+        PythonComputeQueued next = std::move(_pythonComputeQueue.front());
+        _pythonComputeQueue.pop_front();
+        startPythonCompute(std::move(next.id), std::move(next.json));
+    }
+}
+
+void DocumentBroker::shutdownPythonCompute()
+{
+    ASSERT_CORRECT_THREAD();
+    if (_pythonComputeQueue.empty() && _pythonComputeInFlight.empty())
+        return;
+    LOG_INF("Python compute: cancelling " << _pythonComputeInFlight.size() << " in flight, "
+                                          << _pythonComputeQueue.size() << " queued");
+    _pythonComputeQueue.clear();
+    // Move out first: asyncShutdown may run handlers that call finishPythonCompute.
+    auto inFlight = std::move(_pythonComputeInFlight);
+    _pythonComputeInFlight.clear();
+    for (auto& [id, weakSession] : inFlight)
+        if (auto session = weakSession.lock())
+            session->asyncShutdown();
+}
+#endif // ENABLE_PYTHON_COMPUTE && !MOBILEAPP
+
 #if !MOBILEAPP
 void DocumentBroker::setRemoteDocumentSource(const RemoteLink& link)
 {
@@ -7905,6 +8258,15 @@ bool DocumentBroker::forwardToClient(const std::shared_ptr<Message>& payload)
                 return session->handleKitToClientMessage(payload);
             }
 
+#if (defined(ENABLE_PYTHON_COMPUTE) && ENABLE_PYTHON_COMPUTE) && !MOBILEAPP
+            // =PY() requests belong to the document: the view the kit picked may have
+            // closed while the frame was in transit.
+            if (payload->firstTokenMatches("pythoncompute:"))
+            {
+                handlePythonComputeRequest(payload);
+                return true;
+            }
+#endif
             LOG_WRN("Client session [" << sid << "] not found to forward message: "
                                        << (Anonymizer::enabled() ? "..." : payload->abbr()));
         }

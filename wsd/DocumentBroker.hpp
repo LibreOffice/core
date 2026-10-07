@@ -41,12 +41,14 @@
 #include <algorithm>
 #include <atomic>
 #include <chrono>
+#include <deque>
 #include <cstddef>
 #include <map>
 #include <memory>
 #include <sstream>
 #include <string>
 #include <tuple>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -60,6 +62,10 @@ class PrisonerRequestDispatcher;
 class CheckFileInfo;
 class WebSocketHandler;
 class DocumentBroker;
+namespace http
+{
+class Session;
+}
 class LockContext;
 class PresetsInstallTask;
 class TileCache;
@@ -568,6 +574,12 @@ public:
 
     /// Sends a raw text frame to the kit child process, without a view prefix.
     bool sendTextFrameToKit(const std::string& message);
+
+#if (defined(ENABLE_PYTHON_COMPUTE) && ENABLE_PYTHON_COMPUTE) && !MOBILEAPP
+    /// A =PY() request from the kit. Broker thread. POSTs it to the compute service, or
+    /// queues it; the result goes back to the kit as a document-level frame.
+    void handlePythonComputeRequest(const std::shared_ptr<Message>& payload);
+#endif
 
     /// Returns true when the given access token belongs to a live session of
     /// this document.
@@ -2242,6 +2254,24 @@ private:
     std::string _userSettingsUri;
 
     std::shared_ptr<ChildProcess> _childProcess;
+
+    /// =PY() requests of this document. Broker thread only. Unused, but present, when
+    /// python compute is disabled or in the mobile build, so the class has the same members.
+    struct PythonComputeQueued
+    {
+        std::string id;
+        std::string json;
+    };
+    std::unordered_map<std::string, std::weak_ptr<http::Session>> _pythonComputeInFlight;
+    std::deque<PythonComputeQueued> _pythonComputeQueue;
+
+#if (defined(ENABLE_PYTHON_COMPUTE) && ENABLE_PYTHON_COMPUTE) && !MOBILEAPP
+    void startPythonCompute(std::string id, std::string json);
+    void finishPythonCompute(const std::string& id);
+    void replyPythonComputeError(const std::string& id, const std::string& error);
+    /// Cancels every request; called when teardown starts.
+    void shutdownPythonCompute();
+#endif
 
     /// The current CheckFileInfo request, if any.
     std::shared_ptr<CheckFileInfo> _checkFileInfo;

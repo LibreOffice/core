@@ -325,6 +325,13 @@
       <macro_security_level desc="Level of Macro security. 1 (Medium) Confirmation required before executing macros from untrusted sources. 0 (Low, not recommended) All macros will be executed without confirmation." type="int" default="1">1</macro_security_level>
       <enable_metrics_unauthenticated desc="When enabled, the /cool/getMetrics endpoint will not require authentication." type="bool" default="false">false</enable_metrics_unauthenticated>
       <server_signature desc="Whether to send server signature in HTTP response headers" type="bool" default="@SERVER_SIGNATURE@">@SERVER_SIGNATURE@</server_signature>
+      <python_compute desc="Configuration for remote Python compute service used by Calc =PY() formulas">
+        <enable desc="Enable remote Python compute service for Calc =PY() formulas." type="bool" default="false">false</enable>
+        <url desc="URL of the remote Python compute service." type="string" default="http://localhost:8000/v1/execute">http://localhost:8000/v1/execute</url>
+        <api_key desc="Optional shared secret sent as Authorization: Bearer …. Empty = no auth header (local/dev)." type="string" default=""></api_key>
+        <timeout_secs desc="HTTP timeout for compute POSTs (seconds). No automatic retries: formula execution is not idempotent." type="int" default="60">60</timeout_secs>
+        <max_payload_bytes desc="Largest =PY() request or result, in bytes. 0 or less means the default." type="int" default="16777216">16777216</max_payload_bytes>
+      </python_compute>
     </security>
 
     <certificates>

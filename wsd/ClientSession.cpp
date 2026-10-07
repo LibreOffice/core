@@ -4454,6 +4454,19 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
             LOG_WRN("Expected json unocommandresult. Ignoring: " << firstLine);
         }
     }
+#if !MOBILEAPP && (defined(ENABLE_PYTHON_COMPUTE) && ENABLE_PYTHON_COMPUTE)
+    else if (tokens.equals(0, "pythoncompute:"))
+    {
+        // Kit asks coolwsd to POST; do not forward the raw request to the browser.
+        return handlePythonComputeFromKit(payload);
+    }
+#else
+    else if (tokens.equals(0, "pythoncompute:"))
+    {
+        LOG_WRN("pythoncompute: ignored (built without python compute)");
+        return true; // swallow — do not forward to client
+    }
+#endif
     else if (tokens.equals(0, "error:"))
     {
         std::string errorCommand;
@@ -5443,6 +5456,23 @@ void ClientSession::abortConversion(const std::shared_ptr<DocumentBroker>& docBr
 }
 
 #if !MOBILEAPP
+#if (defined(ENABLE_PYTHON_COMPUTE) && ENABLE_PYTHON_COMPUTE)
+bool ClientSession::handlePythonComputeFromKit(const std::shared_ptr<Message>& payload)
+{
+    // The kit sends =PY() requests through any live view; the request belongs to the
+    // document, so the broker owns it and replies to the kit without this session.
+    const std::shared_ptr<DocumentBroker> docBroker = _docBroker.lock();
+    if (!docBroker)
+    {
+        LOG_ERR("No DocBroker for pythoncompute request");
+        return false;
+    }
+
+    docBroker->handlePythonComputeRequest(payload);
+    return true;
+}
+#endif // ENABLE_PYTHON_COMPUTE
+
 bool ClientSession::handleSaveAs(const std::shared_ptr<Message>& payload,
                                  const std::shared_ptr<DocumentBroker>& docBroker,
                                  const std::shared_ptr<StreamSocket>& saveAsSocket)

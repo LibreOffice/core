@@ -49,6 +49,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,forkit, \
     kit/ForKit \
     kit/Kit \
     kit/KitWebSocket \
+    kit/PythonComputeEmitter \
 ))
 
 # vim: set noet sw=4 ts=4:

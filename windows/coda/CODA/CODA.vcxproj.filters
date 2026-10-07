@@ -113,6 +113,9 @@
     <ClCompile Include="..\..\..\common\Watchdog-windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\kit\PythonComputeEmitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\net\FakeSocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

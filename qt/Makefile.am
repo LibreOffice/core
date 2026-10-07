@@ -41,6 +41,7 @@ cmake_list= \
             ../kit/DeltaSimd.c \
             ../kit/Kit.cpp \
             ../kit/KitWebSocket.cpp \
+            ../kit/PythonComputeEmitter.cpp \
             ../net/FakeSocket.cpp \
             ../wsd/ClientSession.cpp \
             ../wsd/DocumentBroker.cpp \

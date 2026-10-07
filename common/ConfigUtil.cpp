@@ -238,6 +238,12 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "security.enable_websocket_urp", "false" },
     { "security.jwt_expiry_secs", "1800" },
     { "security.macro_security_level", "1" },
+    // Remote Python compute for Calc =PY() (kit asks; coolwsd POSTs dumb JSON). Default deny.
+    { "security.python_compute.enable", "false" },
+    { "security.python_compute.url", "http://localhost:8000/v1/execute" },
+    { "security.python_compute.api_key", "" },
+    { "security.python_compute.timeout_secs", "60" },
+    { "security.python_compute.max_payload_bytes", "16777216" },
     { "security.seccomp", "true" },
     { "security.server_signature", ENABLE_DEBUG ? "true" : "false" },
     { "server_name", "" },
