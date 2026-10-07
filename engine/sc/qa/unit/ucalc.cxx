@@ -10,6 +10,16 @@
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
 
+#include <config_features.h>
+
+#if HAVE_FEATURE_PYTHON_COMPUTE && defined(LINUX)
+#include <bridge.h>
+#include <stdlib.h>
+#include <string>
+#include <vcl/scheduler.hxx>
+#include <vcl/svapp.hxx>
+#endif
+
 #include <svl/asiancfg.hxx>
 
 #include <simpleformulacalc.hxx>
@@ -2807,6 +2817,88 @@ CPPUNIT_TEST_FIXTURE(Test, testStreamValid)
     m_pDoc->DeleteTab(0);
 }
 
+#if HAVE_FEATURE_PYTHON_COMPUTE && defined(LINUX)
+namespace
+{
+int countRequest(void* pUserData, const char* pJson, int32_t nLen)
+{
+    // The kit's callback writes a socket: never under Solar. (An assert would be swallowed
+    // by take_requests; refusing makes the emit count fail instead.)
+    if (Application::GetSolarMutex().IsCurrentThread())
+        return 0;
+    auto* pLast = static_cast<std::string*>(pUserData);
+    pLast->assign(pJson, nLen);
+    return 1;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPythonComputeErrorNoStorm)
+{
+    // T2: a real cell and Calc's own ScAddInListener. After an error result, recalcs and
+    // scheduler idle inside the retry window send no new request.
+
+    // The AddIn only queues requests when the Online kit brokers them (kit/Kit.cpp).
+    struct KitBrokers
+    {
+        KitBrokers() { setenv("COOL_PYTHON_COMPUTE", "1", 1); }
+        ~KitBrokers() { unsetenv("COOL_PYTHON_COMPUTE"); }
+    } aKitBrokers;
+
+    m_pDoc->InsertTab(0, u"Py"_ustr);
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=PY(\"result=1\")"_ustr);
+    m_pDoc->CalcAll();
+
+    struct ResetAddIn
+    {
+        ~ResetAddIn() { pythoncompute_reset_for_tests(); } // also if an assert fails
+    } aReset;
+
+    std::string aLast;
+    int nEmits;
+    {
+        SolarMutexReleaser aReleaser; // take_requests must run without Solar
+        nEmits = pythoncompute_take_requests(countRequest, &aLast);
+    }
+    CPPUNIT_ASSERT_EQUAL(1, nEmits);
+    // The writer may put a space after the colon: find the value's opening quote.
+    const std::string::size_type nKey = aLast.find("\"id\"");
+    CPPUNIT_ASSERT(nKey != std::string::npos);
+    const std::string::size_type nStart = aLast.find('"', aLast.find(':', nKey) + 1) + 1;
+    const std::string aId = aLast.substr(nStart, aLast.find('"', nStart) - nStart);
+    CPPUNIT_ASSERT(aId.starts_with("py-"));
+
+    const std::string aReply
+        = "{\"id\":\"" + aId + "\",\"status\":\"error\",\"error\":\"boom\",\"transient\":true}";
+    {
+        SolarMutexReleaser aReleaser; // complete takes Solar itself
+        CPPUNIT_ASSERT_EQUAL(1, pythoncompute_complete(aReply.data(), static_cast<int32_t>(aReply.size())));
+    }
+
+    // Inside the retry window (seconds; this loop takes milliseconds) nothing is resent.
+    for (int i = 0; i < 20; ++i)
+    {
+        Scheduler::ProcessEventsToIdle();
+        m_pDoc->CalcAll();
+        SolarMutexReleaser aReleaser;
+        nEmits += pythoncompute_take_requests(countRequest, &aLast);
+    }
+    CPPUNIT_ASSERT_EQUAL(1, nEmits);
+    // A service error shows as #VALUE! (anyjson.cxx jsonResultToAny).
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
+
+    // Control: once the window is over, the same loop does see the resend.
+    pythoncompute_set_retry_ms_for_tests(0);
+    m_pDoc->CalcAll();
+    {
+        SolarMutexReleaser aReleaser;
+        nEmits += pythoncompute_take_requests(countRequest, &aLast);
+    }
+    CPPUNIT_ASSERT_EQUAL(2, nEmits);
+
+    m_pDoc->DeleteTab(0);
+}
+#endif
+
 CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
 {
     /**
@@ -3293,6 +3385,14 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         nullptr
     };
 
+#if HAVE_FEATURE_PYTHON_COMPUTE
+    const char* aAddIn[] = {
+        "PY",
+        "PYTHON",
+        nullptr
+    };
+#endif
+
     struct {
         const char* Category; const char** Functions;
     } aTests[] = {
@@ -3306,7 +3406,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         { "Statistical",  aStatistical },
         { "Spreadsheet",  aSpreadsheet },
         { "Text",         aText },
+#if HAVE_FEATURE_PYTHON_COMPUTE
+        { "Add-in",       aAddIn },
+#else
         { "Add-in",       nullptr },
+#endif
         { nullptr, nullptr }
     };
 

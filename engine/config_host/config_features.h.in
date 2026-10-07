@@ -112,4 +112,10 @@
 
 #define HAVE_FEATURE_QUICKJS 0
 
+/*
+ * Experimental Calc =PY() Python compute AddIn.
+ * Disabled with --disable-python-compute.
+ */
+#define HAVE_FEATURE_PYTHON_COMPUTE 0
+
 #endif

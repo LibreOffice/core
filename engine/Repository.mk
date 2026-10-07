@@ -207,6 +207,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
 	$(call gb_Helper_optional,DBCONNECTIVITY,calc) \
 	date \
 	pricing \
+	$(call gb_Helper_optional,PYTHON_COMPUTE,pythoncompute) \
 	sc \
 	scd \
 	wpftcalc \

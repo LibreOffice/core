@@ -164,6 +164,7 @@ certain functionality.
 @li @c sc.ui - Calc UI
 @li @c sc.uitest - Calc UI Test part
 @li @c sc.viewdata
+@li @c scaddins.pythoncompute - Calc =PY() / Python compute AddIn
 
 @section desktop
 

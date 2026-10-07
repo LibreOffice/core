@@ -1,0 +1,26 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_SCADDINS_IDL_ORG_COLLABORAOFFICE_SHEET_ADDIN_PYTHONCOMPUTEFUNCTIONS_IDL
+#define INCLUDED_SCADDINS_IDL_ORG_COLLABORAOFFICE_SHEET_ADDIN_PYTHONCOMPUTEFUNCTIONS_IDL
+
+#include <org/collaboraoffice/sheet/addin/XPythonComputeFunctions.idl>
+
+module org { module collaboraoffice { module sheet { module addin {
+
+service PythonComputeFunctions
+{
+    interface XPythonComputeFunctions;
+};
+
+}; }; }; };
+
+#endif

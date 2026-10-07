@@ -29,4 +29,11 @@ $(eval $(call gb_InternalUnoApi_add_idlfiles,scaddins,com/sun/star/sheet/addin,\
     XMiscFunctions \
 ))
 
+ifneq ($(filter PYTHON_COMPUTE,$(BUILD_TYPE)),)
+$(eval $(call gb_InternalUnoApi_add_idlfiles,scaddins,org/collaboraoffice/sheet/addin,\
+    PythonComputeFunctions \
+    XPythonComputeFunctions \
+))
+endif
+
 # vim:set noet sw=4 ts=4:

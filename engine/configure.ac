@@ -1813,6 +1813,11 @@ AC_ARG_ENABLE(python,
          ]),
 ,enable_python=internal)
 
+AC_ARG_ENABLE(python-compute,
+    AS_HELP_STRING([--disable-python-compute],
+        [Disable the experimental Calc =PY() Python compute AddIn.]),
+,test "${enable_python_compute+set}" = set || enable_python_compute=yes)
+
 libo_FUZZ_ARG_ENABLE(gtk3,
     AS_HELP_STRING([--disable-gtk3],
         [Determines whether to use Gtk+ 3.0 vclplug on platforms where Gtk+ 3.0 is available.]),
@@ -11649,6 +11654,19 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_PDFIUM)
+
+# Experimental Calc =PY() AddIn (scaddins pythoncompute)
+AC_MSG_CHECKING([whether to build the experimental Python compute AddIn])
+ENABLE_PYTHON_COMPUTE=
+if test "$enable_python_compute" != no; then
+    AC_MSG_RESULT([yes])
+    ENABLE_PYTHON_COMPUTE=TRUE
+    BUILD_TYPE="$BUILD_TYPE PYTHON_COMPUTE"
+    AC_DEFINE(HAVE_FEATURE_PYTHON_COMPUTE)
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_PYTHON_COMPUTE)
 
 if test "$ENABLE_PDFIUM" = "TRUE"; then
     AC_MSG_CHECKING([which OpenJPEG library to use])

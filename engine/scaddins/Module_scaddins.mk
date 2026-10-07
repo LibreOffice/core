@@ -24,6 +24,7 @@ $(eval $(call gb_Module_add_targets,scaddins,\
     Library_analysis \
     Library_date \
     Library_pricing \
+    $(call gb_Helper_optional,PYTHON_COMPUTE,Library_pythoncompute) \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,scaddins,\
@@ -32,6 +33,7 @@ $(eval $(call gb_Module_add_l10n_targets,scaddins,\
 
 $(eval $(call gb_Module_add_check_targets,scaddins,\
     CppunitTest_scaddins_analysis \
+    $(call gb_Helper_optional,PYTHON_COMPUTE,CppunitTest_scaddins_pythoncompute) \
 ))
 
 # vim: set noet sw=4 ts=4:

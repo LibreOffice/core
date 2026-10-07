@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="org.collaboraoffice.sheet.addin.PythonComputeFunctionsImpl"
+    constructor="scaddins_CollaboraOfficePythonComputeAddIn_get_implementation" single-instance="true">
+    <service name="com.sun.star.sheet.AddIn"/>
+    <service name="org.collaboraoffice.sheet.addin.PythonComputeFunctions"/>
+  </implementation>
+</component>

@@ -72,6 +72,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc$(1), \
     svt \
     svx \
     svxcore \
+    $(call gb_Helper_optional,PYTHON_COMPUTE,pythoncompute) \
 	test \
 	textconversiondlgs \
     tk \
@@ -89,6 +90,7 @@ $(eval $(call gb_CppunitTest_set_include,sc_ucalc$(1),\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/source/core/inc \
     -I$(SRCDIR)/sc/inc \
+    -I$(SRCDIR)/scaddins/source/pythoncompute \
     $$(INCLUDE) \
 ))
 
@@ -114,6 +116,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_ucalc$(1),\
     scaddins/source/analysis/analysis \
     scaddins/source/datefunc/date \
     scaddins/source/pricing/pricing \
+    $(call gb_Helper_optional,PYTHON_COMPUTE,scaddins/source/pythoncompute/pythoncompute) \
     sfx2/util/sfx \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
