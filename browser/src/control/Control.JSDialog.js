@@ -389,7 +389,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			timeoutId = app.timerRegistry.setTimeout(
 				'jsdialog-deferred',
 				finallyClose,
-				700,
+				window.L.DomUtil.getDurationMs('--duration-fast') + 100,
 			);
 		});
 	},

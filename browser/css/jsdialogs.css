@@ -3508,21 +3508,14 @@ button.has-img img {
 }
 
 /* dialog/popup fade animation */
-@media (prefers-reduced-motion: no-preference) {
-	.fadeout {
-		animation: fade 0.7s;
-	}
-	.fadein {
-		animation: fade reverse var(--duration-fast);
-	}
-	.fsdialog-overlay {
-		animation: fade reverse var(--duration-slow);
-	}
+.fadein {
+	animation: fade-in var(--duration-fast) var(--ease-out);
 }
-
-@keyframes fade {
-	from { opacity: 1 }
-	to { opacity: 0 }
+.fsdialog-overlay {
+	animation: fade-in var(--duration-slow) var(--ease-out);
+}
+.fadeout {
+	animation: fade-out var(--duration-fast) var(--ease-in) forwards;
 }
 
 /* images */
