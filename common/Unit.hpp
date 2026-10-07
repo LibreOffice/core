@@ -151,11 +151,6 @@ public:
     /// Load unit test hook shared library from this path
     static bool init(UnitType type, const std::string& unitLibPath);
 
-    /// Start the timeout of a kit test loaded by init(). ForKit calls this once the engine
-    /// preinit is done, so the time spent there, which can be long in a sanitizer build, does
-    /// not count against the test.
-    static void startKitTimeout();
-
     /// Uninitialize the unit-test and return the global exit code.
     /// Returns 0 on success.
     static int uninit();
@@ -669,6 +664,10 @@ public:
     static UnitKit& get();
 
     // ---------------- ForKit hooks ----------------
+
+    /// ForKit forks the Kits, and must not have other threads when it does, so the test starts
+    /// none: it runs on the main loop of ForKit, which also checks that it doesn't time out.
+    void initialize() override;
 
     /// main-loop reached, time for testing
     virtual void invokeForKitTest() {}

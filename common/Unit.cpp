@@ -29,14 +29,12 @@
 
 #include <atomic>
 #include <cassert>
-#include <condition_variable>
 #include <csignal>
 #include <iostream>
 #include <mutex>
 #ifndef _WIN32
 #include <sysexits.h>
 #endif
-#include <thread>
 
 UnitBase** UnitBase::GlobalArray = nullptr;
 std::atomic_int_fast64_t UnitBase::GlobalIndex = -1;
@@ -44,18 +42,6 @@ char* UnitBase::UnitLibPath = nullptr;
 void* UnitBase::DlHandle = nullptr;
 UnitBase::TestOptions UnitBase::GlobalTestOptions;
 UnitBase::TestResult UnitBase::GlobalResult = UnitBase::TestResult::Ok;
-
-namespace
-{
-std::thread TimeoutThread;
-// Only locked inside the ENABLE_DEBUG block that starts TimeoutThread.
-[[maybe_unused]] std::mutex TimeoutThreadMutex;
-std::condition_variable TimeoutConditionVariable;
-bool KitWorkFinished = false;
-// The kit test whose timeout is started by startKitTimeout().
-[[maybe_unused]] UnitBase* PendingKitTimeoutInstance = nullptr;
-
-} // namespace
 
 /// Controls whether experimental features/behavior is enabled or not.
 bool EnableExperimental = false;
@@ -229,9 +215,6 @@ bool UnitBase::init([[maybe_unused]] UnitType type, [[maybe_unused]] const std::
             TST_LOG_NAME("UnitBase",
                          "Starting test #1: " << GlobalArray[GlobalIndex]->getTestname());
             instance->initialize();
-
-            if (type == UnitType::Kit)
-                PendingKitTimeoutInstance = instance;
         }
     }
     else
@@ -243,36 +226,6 @@ bool UnitBase::init([[maybe_unused]] UnitType type, [[maybe_unused]] const std::
     }
 
     return GlobalArray[GlobalIndex] != nullptr;
-}
-
-void UnitBase::startKitTimeout()
-{
-#if ENABLE_DEBUG
-    UnitBase* const instance = PendingKitTimeoutInstance;
-    PendingKitTimeoutInstance = nullptr;
-    if (!instance)
-        return;
-
-    std::unique_lock<std::mutex> lock(TimeoutThreadMutex);
-    TimeoutThread = std::thread(
-        [instance]
-        {
-            ProcUtil::setThreadName("unit timeout");
-
-            std::unique_lock<std::mutex> lock2(TimeoutThreadMutex);
-            if (TimeoutConditionVariable.wait_for(lock2, instance->_timeoutMilliSeconds,
-                                                  [] { return KitWorkFinished; }))
-            {
-                LOG_DBG(instance->getTestname() << ": Unit test finished in time");
-            }
-            else
-            {
-                LOG_ERR(instance->getTestname() << ": Unit test timeout after "
-                                                << instance->_timeoutMilliSeconds);
-                instance->timeout();
-            }
-        });
-#endif // ENABLE_DEBUG
 }
 
 int UnitBase::uninit()
@@ -340,9 +293,14 @@ void UnitBase::initialize()
     socketPoll()->startThread();
 }
 
+void UnitKit::initialize()
+{
+    assert(isUnitTesting() && "Invalid handle to set");
+    TST_LOG("==================== Starting [" << getTestname() << "] ====================");
+}
+
 void UnitBase::setTimeout(std::chrono::milliseconds timeoutMilliSeconds)
 {
-    assert(!TimeoutThread.joinable() && "setTimeout must be called before starting a test");
     _timeoutMilliSeconds = timeoutMilliSeconds;
     TST_LOG(getTestname() << ": setTimeout: " << _timeoutMilliSeconds);
 }
@@ -542,15 +500,6 @@ void UnitBase::endTest([[maybe_unused]] const std::string& reason)
     std::shared_ptr<SocketPoll> socketPoll = getSocketPoll();
     if (socketPoll)
         socketPoll->joinThread();
-
-    // tell the timeout thread that the work has finished
-    {
-        std::lock_guard<std::mutex> lock(TimeoutThreadMutex);
-        KitWorkFinished = true;
-    }
-    TimeoutConditionVariable.notify_all();
-    if (TimeoutThread.joinable())
-        TimeoutThread.join();
 
     TST_LOG("==================== Finished [" << getTestname() << "] " << name(_result) << " - "
                                               << reason << " ====================");

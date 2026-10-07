@@ -1109,9 +1109,6 @@ int forkit_main(int argc, char** argv)
 
     LOG_INF("Preinit stage OK.");
 
-    if (!Util::isKitInProcess())
-        UnitBase::startKitTimeout();
-
     // We must have at least one child, more are created dynamically.
     // Ask this first child to send version information to master process and trace startup.
     ::setenv("COOL_TRACE_STARTUP", "1", 1);
@@ -1155,11 +1152,16 @@ int forkit_main(int argc, char** argv)
     parentPid = getppid();
     LOG_INF("ForKit process is ready. Parent: " << parentPid);
 
+    const auto startTime = std::chrono::steady_clock::now();
     while (!SigUtil::getShutdownRequestFlag())
     {
         UnitKit::get().invokeForKitTest();
 
         ForKitPoll->poll(std::chrono::seconds(POLL_FORKIT_TIMEOUT_SECS));
+
+        if (UnitKit::isUnitTesting())
+            UnitKit::get().checkTimeout(std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::steady_clock::now() - startTime));
 
         SigUtil::checkDumpGlobalState(dump_forkit_state);
 
