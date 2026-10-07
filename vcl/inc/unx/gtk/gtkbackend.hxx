@@ -9,8 +9,10 @@
 
 #pragma once
 
+#include <config_vclplug.h>
+
 #include <gtk/gtk.h>
-#if defined(GDK_WINDOWING_X11)
+#if defined(GDK_WINDOWING_X11) && USING_X11
 #if GTK_CHECK_VERSION(4, 0, 0)
 #include <gdk/x11/gdkx.h>
 #else

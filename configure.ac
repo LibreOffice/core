@@ -1049,6 +1049,7 @@ case "$host_os" in
 
 solaris*)
     using_freetype_fontconfig=yes
+    using_unix_desktop=yes
     using_x11=yes
     build_skia=yes
     _os=SunOS
@@ -1075,6 +1076,7 @@ solaris*)
 
 linux-gnu*|k*bsd*-gnu*|linux-musl*)
     using_freetype_fontconfig=yes
+    using_unix_desktop=yes
     using_x11=yes
     build_skia=yes
     test_gdb_index=yes
@@ -1087,6 +1089,7 @@ linux-gnu*|k*bsd*-gnu*|linux-musl*)
 
 gnu)
     using_freetype_fontconfig=yes
+    using_unix_desktop=no
     using_x11=no
     _os=GNU
      ;;
@@ -1108,6 +1111,7 @@ cygwin*|wsl*)
     else
         using_freetype_fontconfig=yes
     fi
+    using_unix_desktop=no
     using_x11=no
     test_unix_dlapi=no
     test_openldap=no
@@ -1134,6 +1138,7 @@ darwin*) # macOS
     else
         using_freetype_fontconfig=yes
     fi
+    using_unix_desktop=no
     using_x11=no
     build_skia=yes
     enable_pagein=no
@@ -1165,6 +1170,7 @@ darwin*) # macOS
 
 ios*) # iOS
     using_freetype_fontconfig=no
+    using_unix_desktop=no
     using_x11=no
     build_crypto=no
     test_libcmis=no
@@ -1208,6 +1214,7 @@ ios*) # iOS
 
 freebsd*)
     using_freetype_fontconfig=yes
+    using_unix_desktop=yes
     using_x11=yes
     build_skia=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
@@ -1234,6 +1241,7 @@ freebsd*)
 
 *netbsd*)
     using_freetype_fontconfig=yes
+    using_unix_desktop=yes
     using_x11=yes
     test_gtk3_kde5=no
     build_skia=yes
@@ -1243,6 +1251,7 @@ freebsd*)
 
 openbsd*)
     using_freetype_fontconfig=yes
+    using_unix_desktop=yes
     using_x11=yes
     PTHREAD_CFLAGS="-D_THREAD_SAFE"
     PTHREAD_LIBS="-pthread"
@@ -1251,6 +1260,7 @@ openbsd*)
 
 dragonfly*)
     using_freetype_fontconfig=yes
+    using_unix_desktop=yes
     using_x11=yes
     build_skia=yes
     PTHREAD_LIBS="-pthread"
@@ -1262,6 +1272,7 @@ linux-android*)
     usable_dlapi=no
     using_freetype_fontconfig=yes
     using_headless_plugin=no
+    using_unix_desktop=no
     using_x11=no
     build_crypto=no
     test_openldap=no
@@ -1281,6 +1292,7 @@ linux-android*)
 
 haiku*)
     using_freetype_fontconfig=yes
+    using_unix_desktop=no
     using_x11=no
     test_gtk3=no
     test_gtk3_kde5=no
@@ -1299,6 +1311,7 @@ emscripten)
     # API currently just exists in headers, not code
     usable_dlapi=no
     using_freetype_fontconfig=yes
+    using_unix_desktop=yes
     using_x11=yes
     test_openldap=no
     test_qt5=yes
@@ -1320,22 +1333,22 @@ esac
 
 AC_SUBST(HOST_PLATFORM)
 
-if test -z "$using_x11" -o -z "$using_freetype_fontconfig"; then
-    AC_MSG_ERROR([You must set \$using_freetype_fontconfig and \$using_x11 for your platform])
+if test -z "$using_unix_desktop" -o -z "$using_freetype_fontconfig"; then
+    AC_MSG_ERROR([You must set \$using_freetype_fontconfig and \$using_unix_desktop for your platform])
 fi
 
 # Set defaults, if not set by platform
-test "${test_cpdb+set}" = set || test_cpdb="$using_x11"
-test "${test_cups+set}" = set || test_cups="$using_x11"
-test "${test_dbus+set}" = set || test_dbus="$using_x11"
+test "${test_cpdb+set}" = set || test_cpdb="$using_unix_desktop"
+test "${test_cups+set}" = set || test_cups="$using_unix_desktop"
+test "${test_dbus+set}" = set || test_dbus="$using_unix_desktop"
 test "${test_gen+set}" = set || test_gen="$using_x11"
-test "${test_gstreamer_1_0+set}" = set || test_gstreamer_1_0="$using_x11"
-test "${test_gtk3+set}" = set || test_gtk3="$using_x11"
-test "${test_gtk4+set}" = set || test_gtk4="$using_x11"
-test "${test_kf5+set}" = set || test_kf5="$using_x11"
-test "${test_kf6+set}" = set || test_kf6="$using_x11"
+test "${test_gstreamer_1_0+set}" = set || test_gstreamer_1_0="$using_unix_desktop"
+test "${test_gtk3+set}" = set || test_gtk3="$using_unix_desktop"
+test "${test_gtk4+set}" = set || test_gtk4="$using_unix_desktop"
+test "${test_kf5+set}" = set || test_kf5="$using_unix_desktop"
+test "${test_kf6+set}" = set || test_kf6="$using_unix_desktop"
 # don't handle test_qt5, so it can disable test_kf5 later
-test "${test_qt6+set}" = set || test_qt6="$using_x11"
+test "${test_qt6+set}" = set || test_qt6="$using_unix_desktop"
 test "${test_randr+set}" = set || test_randr="$using_x11"
 test "${test_xrender+set}" = set || test_xrender="$using_x11"
 test "${using_headless_plugin+set}" = set || using_headless_plugin="$using_freetype_fontconfig"
@@ -1355,13 +1368,12 @@ test "$test_win" != yes && enable_win=no
 test "$using_freetype_fontconfig" = no && using_headless_plugin=no
 test "$using_freetype_fontconfig" = yes && test_cairo=yes
 
-# Keep in sync with the above $using_x11 depending test default list
-disable_x11_tests()
+# Keep in sync with the above $using_unix_desktop depending test default list
+disable_unix_desktop_tests()
 {
     test_cpdb=no
     test_cups=no
     test_dbus=no
-    test_gen=no
     test_gstreamer_1_0=no
     test_gtk3_kde5=no
     test_gtk3=no
@@ -1370,10 +1382,17 @@ disable_x11_tests()
     test_kf6=no
     test_qt5=no
     test_qt6=no
+}
+
+# Keep in sync with the above $using_x11 depending test default list
+disable_x11_tests()
+{
+    test_gen=no
     test_randr=no
     test_xrender=no
 }
 
+test "$using_unix_desktop" = yes && USING_UNIX_DESKTOP=TRUE
 test "$using_x11" = yes && USING_X11=TRUE
 
 if test "$using_freetype_fontconfig" = yes; then
@@ -1402,6 +1421,7 @@ AC_SUBST(USE_HEADLESS_CODE)
 AC_MSG_NOTICE([VCL platform has a usable dynamic loading API: $usable_dlapi])
 AC_MSG_NOTICE([VCL platform uses freetype+fontconfig: $using_freetype_fontconfig])
 AC_MSG_NOTICE([VCL platform uses headless plugin: $using_headless_plugin])
+AC_MSG_NOTICE([VCL platform uses a Unix desktop: $using_unix_desktop])
 AC_MSG_NOTICE([VCL platform uses X11: $using_x11])
 
 # ===================================================================
@@ -6044,9 +6064,10 @@ fi
 
 DISABLE_GUI=""
 if test "$enable_gui" = "no"; then
-    if test "$using_x11" != yes; then
+    if test "$using_unix_desktop" != yes; then
         AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice with --disable-gui.])
     fi
+    USING_UNIX_DESKTOP=
     USING_X11=
     DISABLE_GUI=TRUE
     test_epoxy=no
@@ -6063,19 +6084,31 @@ if test -z "$USING_X11" -a "$enable_qt5" = "yes" -a "$enable_gen" = "yes"; then
     AC_MSG_ERROR([Can't select gen VCL plugin, if --without-x is used!])
 fi
 
+if test -z "$USING_UNIX_DESKTOP" -a "$USING_X11" = TRUE; then
+    AC_MSG_ERROR([Platform doesn't support a Unix desktop (\$using_unix_desktop), but \$USING_X11 is set!])
+fi
+
 if test "$using_x11" = yes; then
     if test "$USING_X11" = TRUE; then
         AC_DEFINE(USING_X11)
     else
         disable_x11_tests
-        if test "$DISABLE_DYNLOADING" = TRUE; then
-            test_qt5=yes
-            test_qt6=yes
-        fi
     fi
 else
     if test "$USING_X11" = TRUE; then
         AC_MSG_ERROR([Platform doesn't support X11 (\$using_x11), but \$USING_X11 is set!])
+    fi
+fi
+
+if test "$using_unix_desktop" = yes; then
+    if test "$USING_UNIX_DESKTOP" = TRUE; then
+        AC_DEFINE(USING_UNIX_DESKTOP)
+    else
+        disable_unix_desktop_tests
+        if test "$DISABLE_DYNLOADING" = TRUE; then
+            test_qt5=yes
+            test_qt6=yes
+        fi
     fi
 fi
 
@@ -6088,6 +6121,7 @@ AC_SUBST(CPUNAME)
 AC_SUBST(RTL_OS)
 AC_SUBST(RTL_ARCH)
 AC_SUBST(EPM_FLAGS)
+AC_SUBST(USING_UNIX_DESKTOP)
 AC_SUBST(USING_X11)
 AC_SUBST([INSTDIR])
 AC_SUBST([INSTROOT])
@@ -11945,7 +11979,7 @@ if test "$USING_X11" = TRUE; then
         [AC_MSG_ERROR(SM library not found)])
 fi
 
-if test "$USING_X11" = TRUE -a "$ENABLE_JAVA" != ""; then
+if test "$USING_UNIX_DESKTOP" = TRUE -a "$ENABLE_JAVA" != ""; then
     # bean/native/unix/com_sun_star_comp_beans_LocalOfficeWindow.c needs Xt
     AC_CHECK_HEADERS(X11/Intrinsic.h,[],[AC_MSG_ERROR([libXt headers not found])])
 fi
@@ -13049,7 +13083,7 @@ elif test $_os = WINNT; then
     AC_DEFINE(HAVE_FEATURE_OPENGL,1)
     ENABLE_OPENGL_CANVAS=TRUE
 else
-    if test "$USING_X11" = TRUE; then
+    if test "$USING_UNIX_DESKTOP" = TRUE; then
         AC_CHECK_LIB(GL, glBegin, [:], AC_MSG_ERROR([libGL required.]))
         ENABLE_OPENGL_TRANSITIONS=TRUE
         AC_DEFINE(HAVE_FEATURE_OPENGL,1)

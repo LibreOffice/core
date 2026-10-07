@@ -49,11 +49,16 @@ $(eval $(call gb_Library_use_sdk_api,vclplug_gtk4))
 
 $(eval $(call gb_Library_add_libs,vclplug_gtk4,\
 	$(GTK4_LIBS) \
+))
+
+ifeq ($(USING_X11), TRUE)
+$(eval $(call gb_Library_add_libs,vclplug_gtk4,\
 	-lX11 \
 	-lXext \
 	-lSM \
 	-lICE \
 ))
+endif
 
 $(eval $(call gb_Library_use_libraries,vclplug_gtk4,\
     svl \

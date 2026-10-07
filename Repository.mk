@@ -986,7 +986,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	$(call gb_Helper_optional,DESKTOP,\
 		$(if $(filter-out WNT,$(OS)),$(if $(ENABLE_MACOSX_SANDBOX),,shell_senddoc))) \
 	$(call gb_Helper_optional,DESKTOP,$(if $(filter-out EMSCRIPTEN MACOSX WNT,$(OS)),svx_gengal)) \
-	$(if $(USING_X11),vcl_fontunxppds) \
+	$(if $(USING_UNIX_DESKTOP),vcl_fontunxppds) \
 	$(if $(filter $(OS),MACOSX),vcl_osxres) \
 	xmloff_dtd \
 	xmlscript_dtd \
@@ -1052,7 +1052,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 	extras_fonts \
-	$(if $(USE_HEADLESS_CODE)$(USING_X11)$(DISABLE_GUI)$(filter FONTCONFIG,$(BUILD_TYPE))$(filter ANDROID EMSCRIPTEN,$(OS)), \
+	$(if $(USE_HEADLESS_CODE)$(USING_UNIX_DESKTOP)$(DISABLE_GUI)$(filter FONTCONFIG,$(BUILD_TYPE))$(filter ANDROID EMSCRIPTEN,$(OS)), \
 		postprocess_fontconfig) \
 	$(call gb_Helper_optional,MORE_FONTS,\
 		fonts_alef \
@@ -1125,7 +1125,7 @@ $(eval $(call gb_Helper_register_packages_for_install,brand,\
 	) \
 ))
 
-ifeq ($(USING_X11), TRUE)
+ifeq ($(USING_UNIX_DESKTOP), TRUE)
 $(eval $(call gb_Helper_register_packages_for_install,base_brand,\
 	desktop_sbase_sh \
 ))
@@ -1149,7 +1149,7 @@ $(eval $(call gb_Helper_register_packages_for_install,math_brand,\
 $(eval $(call gb_Helper_register_packages_for_install,writer_brand,\
 	desktop_swriter_sh \
 ))
-endif # USING_X11=TRUE
+endif # USING_UNIX_DESKTOP=TRUE
 
 $(eval $(call gb_Helper_register_packages_for_install,onlineupdate,\
 	$(if $(ENABLE_ONLINE_UPDATE),$(if $(filter LINUX SOLARIS,$(OS)),setup_native_scripts)) \

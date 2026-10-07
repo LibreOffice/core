@@ -334,7 +334,7 @@ GtkSalData::GtkSalData()
     m_pUserEvent = nullptr;
 }
 
-#if defined(GDK_WINDOWING_X11)
+#if defined(GDK_WINDOWING_X11) && USING_X11
 static XIOErrorHandler aOrigXIOErrorHandler = nullptr;
 
 extern "C" {
@@ -363,7 +363,7 @@ GtkSalData::~GtkSalData()
         g_source_unref (m_pUserEvent);
         m_pUserEvent = nullptr;
     }
-#if defined(GDK_WINDOWING_X11)
+#if defined(GDK_WINDOWING_X11) && USING_X11
     if (DLSYM_GDK_IS_X11_DISPLAY(gdk_display_get_default()))
         XSetIOErrorHandler(aOrigXIOErrorHandler);
 #endif
@@ -570,7 +570,7 @@ void GtkSalData::Init()
 
     ErrorTrapPush();
 
-#if defined(GDK_WINDOWING_X11)
+#if defined(GDK_WINDOWING_X11) && USING_X11
     if (DLSYM_GDK_IS_X11_DISPLAY(pGdkDisp))
         aOrigXIOErrorHandler = XSetIOErrorHandler(XIOErrorHdl);
 #endif
@@ -603,7 +603,7 @@ void GtkSalData::Init()
 
 void GtkSalData::ErrorTrapPush()
 {
-# if defined(GDK_WINDOWING_X11)
+# if defined(GDK_WINDOWING_X11) && USING_X11
     GdkDisplay* pGdkDisp = gdk_display_get_default();
     if (DLSYM_GDK_IS_X11_DISPLAY(pGdkDisp))
         gdk_x11_display_error_trap_push(pGdkDisp);
@@ -612,7 +612,7 @@ void GtkSalData::ErrorTrapPush()
 
 bool GtkSalData::ErrorTrapPop( bool bIgnoreError )
 {
-#if defined(GDK_WINDOWING_X11)
+#if defined(GDK_WINDOWING_X11) && USING_X11
     GdkDisplay* pGdkDisp = gdk_display_get_default();
     if (DLSYM_GDK_IS_X11_DISPLAY(pGdkDisp))
     {

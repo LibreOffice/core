@@ -8,6 +8,11 @@ Settings about which desktops have support enabled.
 #define CONFIG_VCLPLUG_H
 
 /**
+ * Set, if the platform uses a Unix desktop.
+ */
+#define USING_UNIX_DESKTOP 0
+
+/**
  * Set, if the platform uses X11 code.
  */
 #define USING_X11 0

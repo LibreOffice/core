@@ -54,7 +54,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
 ))
 endif
 
-ifeq ($(USING_X11), TRUE)
+ifeq ($(USING_UNIX_DESKTOP), TRUE)
 $(eval $(call gb_Module_add_targets,desktop,\
     Package_sbase_sh \
     Package_scalc_sh \

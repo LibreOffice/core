@@ -283,7 +283,7 @@ postprocess_FILES_main += \
 	$(postprocess_MOD)/org/openoffice/Office/Paths-macosx.xcu
 		# Inet-macosx.xcu must come after Inet.xcu
 
-else ifeq ($(USING_X11), TRUE)
+else ifeq ($(USING_UNIX_DESKTOP), TRUE)
 postprocess_FILES_main += \
 	$(postprocess_MOD)/org/openoffice/Inet-unixdesktop.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Accelerators-unxwnt.xcu \
@@ -407,7 +407,7 @@ postprocess_FILES_xsltfilter := \
 	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_xslt_filters.xcu) \
 	$(call gb_XcuFilterTypesTarget_get_target,fcfg_xslt_types.xcu)
 
-ifneq (,$(and $(USING_X11), $(ENABLE_GIO)))
+ifneq (,$(and $(USING_UNIX_DESKTOP), $(ENABLE_GIO)))
 postprocess_XCDS += gnome.xcd
 postprocess_DEPS_gnome := main
 postprocess_FILES_gnome += $(postprocess_MOD)/org/openoffice/ucb/Configuration-gio.xcu

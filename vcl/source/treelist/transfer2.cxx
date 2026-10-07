@@ -506,7 +506,7 @@ Reference<XClipboard> GetSystemPrimarySelection()
     Reference<XClipboard> xSelection;
     try
     {
-#if USING_X11
+#if USING_UNIX_DESKTOP
         xSelection = GetSalInstance()->CreateClipboard(ClipboardSelectionType::Primary);
 #else
         const Reference<XComponentContext>& xContext(comphelper::getProcessComponentContext());

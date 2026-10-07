@@ -25,7 +25,7 @@ File gid_File_Extra_Autotextshare_Lang
     EXTRA_ALL_LANG(autotextshare,filelist);
 End
 
-#ifdef USING_X11
+#ifdef USING_UNIX_DESKTOP
 
 File gid_File_Extra_Fontunxpsprint
     Dir = FILELIST_DIR;

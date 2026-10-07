@@ -149,7 +149,7 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 ))
 $(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/lokclipboard,services))
 else
-ifneq ($(filter TRUE,$(USING_X11) $(DISABLE_GUI))($filter EMSCRIPTEN,$(OS)),)
+ifneq ($(filter TRUE,$(USING_UNIX_DESKTOP) $(DISABLE_GUI))($filter EMSCRIPTEN,$(OS)),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
 	desktop/source/lib/lokinteractionhandler \

@@ -19,10 +19,12 @@
 
 #pragma once
 
+#include <config_vclplug.h>
+
 #include <cairo.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
-#if !GTK_CHECK_VERSION(4,0,0)
+#if !GTK_CHECK_VERSION(4,0,0) && defined(GDK_WINDOWING_X11) && USING_X11
 #include <gtk/gtkx.h>
 #endif
 #include <gdk/gdkkeysyms.h>
@@ -187,7 +189,7 @@ class GtkSalFrame final : public SalFrame
     gulong                          m_nSessionClientSignalId;
     GDBusProxy*                     m_pSessionManager;
     GDBusProxy*                     m_pSessionClient;
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if !GTK_CHECK_VERSION(4, 0, 0) && defined(GDK_WINDOWING_X11) && USING_X11
     GdkWindow*                      m_pForeignParent;
     GdkNativeWindow                 m_aForeignParentWindow;
     GdkWindow*                      m_pForeignTopLevel;
@@ -373,7 +375,7 @@ class GtkSalFrame final : public SalFrame
                                    bool bSendRelease
                                    );
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if !GTK_CHECK_VERSION(4, 0, 0) && defined(GDK_WINDOWING_X11) && USING_X11
     static GdkNativeWindow findTopLevelSystemWindow( GdkNativeWindow aWindow );
 #endif
 
@@ -412,7 +414,7 @@ class GtkSalFrame final : public SalFrame
     //returns true if FrameSize changed
     bool AllocateFrame();
     void TriggerPaintEvent();
-#if defined(GDK_WINDOWING_X11)
+#if defined(GDK_WINDOWING_X11) && USING_X11
     void updateWMClass();
 #endif
     enum class SetType { RetainSize, Fullscreen, UnFullscreen };

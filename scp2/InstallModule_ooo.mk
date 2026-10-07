@@ -38,9 +38,9 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	) \
 ))
 
-ifeq ($(USING_X11),TRUE)
+ifeq ($(USING_UNIX_DESKTOP),TRUE)
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
-	-DUSING_X11 \
+	-DUSING_UNIX_DESKTOP \
 ))
 endif
 

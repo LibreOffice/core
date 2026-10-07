@@ -138,7 +138,7 @@ unsigned int GtkSalSystem::GetDisplayScreenCount()
 unsigned int GtkSalSystem::GetDisplayBuiltInScreen()
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
-#if defined(GDK_WINDOWING_X11)
+#if defined(GDK_WINDOWING_X11) && USING_X11
     if (DLSYM_GDK_IS_X11_DISPLAY(mpDisplay))
     {
         GdkMonitor* pPrimary = gdk_x11_display_get_primary_monitor(mpDisplay);
