@@ -360,6 +360,35 @@ bool SystemFontList::Init()
     const CFRange aFullRange = CFRangeMake( 0, nFontCount );
     CFArrayApplyFunction( mpCTFontArray, aFullRange, fontEnumCallBack, this );
 
+    // tdf#91400 tdf#173342: The system UI font is deliberately hidden from
+    // the list of available fonts returned by CoreText; its family name starts
+    // with a dot (".AppleSystemUIFont"), which is the convention macOS uses to
+    // mark a font as private and unselectable. Add it explicitly so that it can
+    // be used as the default UI font (see the UI_SANS entry in VCL.xcu), while
+    // keeping it out of the font selection lists (see the filtering added to
+    // FontList::ImplInsertFonts()).
+    const CTFontUIFontType aUIFontTypes[] = { kCTFontUIFontSystem, kCTFontUIFontEmphasizedSystem };
+    for (CTFontUIFontType eUIFontType : aUIFontTypes)
+    {
+        CTFontRef pUIFont = CTFontCreateUIFontForLanguage(eUIFontType, 0, nullptr);
+        if (!pUIFont)
+            continue;
+
+        CTFontDescriptorRef pUIFontDesc = CTFontCopyFontDescriptor(pUIFont);
+        CFRelease(pUIFont);
+        if (!pUIFontDesc)
+            continue;
+
+        // Pass a null bFontEnabled so that the private system font is not
+        // rejected by checkFontTypeSupported().
+        FontAttributes rDFA = DevFontFromCTFontDescriptor(pUIFontDesc, nullptr);
+        rDFA.SetFamilyName(".AppleSystemUIFont");
+
+        rtl::Reference<CoreTextFontFace> pFontData = new CoreTextFontFace(rDFA, pUIFontDesc);
+        AddFont(pFontData.get());
+        CFRelease(pUIFontDesc);
+    }
+
     return true;
 }
 

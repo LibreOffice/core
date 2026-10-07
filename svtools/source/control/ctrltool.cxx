@@ -298,6 +298,17 @@ void FontList::ImplInsertFonts(OutputDevice* pDevice, bool bInsertData)
         FontMetric aFontMetric = pDevice->GetFontMetricFromCollection( i );
         OUString aSearchName(aFontMetric.GetFamilyName());
 
+#ifdef MACOSX
+        // tdf#91400 tdf#173342: Skip private system fonts. macOS marks these by
+        // prefixing the family name with a period; they are not intended to be
+        // used by applications and Apple's own font panels hide them. The system
+        // UI font (".AppleSystemUIFont") is one of them: it is added to the font
+        // list so that it can be used as the default UI font, but it must not be
+        // offered in the font selection lists.
+        if (!aSearchName.isEmpty() && aSearchName[0] == '.')
+            continue;
+#endif
+
         // If this font is embedded in a document, is restricted, and is not installed locally
         // (which is returned from EmbeddedFontsManager::isEmbeddedAndRestricted), we must not
         // display this family name in the UI.
