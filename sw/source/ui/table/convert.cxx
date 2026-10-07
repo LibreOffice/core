@@ -277,7 +277,11 @@ IMPL_LINK_NOARG(SwConvertTableDlg, SelFormatHdl, weld::ItemView&, void)
     m_nIndex = m_xLbFormat->get_selected_index();
     if (m_nIndex == -1)
     {
-        SAL_WARN("sw.ui", "No entry selected");
+        SwTableAutoFormat aNone(TableStyleName(SwViewShell::GetShellRes()->aStrNone));
+        aNone.DisableAll();
+        m_aWndPreview.NotifyChange(&aNone);
+        mxTAutoFormat.reset();
+
         return;
     }
     m_aWndPreview.NotifyChange(m_xTableTable->GetResolvedStyle(m_xTableTable->GetData(m_nIndex)));
