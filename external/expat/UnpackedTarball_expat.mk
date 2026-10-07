@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,expat,conftools))
 
 $(eval $(call gb_UnpackedTarball_add_patches,expat,\
 	external/expat/expat-winapi.patch \
+	external/expat/Wundef.patch.1 \
 ))
 
 # This is a bit hackish.
