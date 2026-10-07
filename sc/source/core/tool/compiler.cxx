@@ -3721,16 +3721,16 @@ bool ScCompiler::ParseMacro( const OUString& rName )
     // During ODF import the Basic of a document whose macros are not allowed yet stays unloaded.
     // A called name that is not an application Basic function may be one of the document's own
     // macros only if the document has Basic libraries. Such a call is kept as a macro call, and the
-    // document is flagged as calling macros.
+    // document is flagged as calling macros, whichever Basic the function lives in.
     if (pDocSh && rDoc.IsImportingXML() && !pDocSh->IsMacroExecutionAllowed())
     {
         StarBASIC* pAppBasic = SfxApplication::GetBasic();
-        if (!pAppBasic || !lcl_IsBasicFunction(*pAppBasic, aName))
+        if ((!pAppBasic || !lcl_IsBasicFunction(*pAppBasic, aName))
+            && !sfx2::DocumentMacroMode::containerHasBasicMacros(pDocSh->GetBasicContainer()))
         {
-            if (!sfx2::DocumentMacroMode::containerHasBasicMacros(pDocSh->GetBasicContainer()))
-                return false;
-            pDocSh->SetMacroCallsSeenWhileLoading();
+            return false;
         }
+        pDocSh->SetMacroCallsSeenWhileLoading();
         maRawToken.SetExternal( aName );
         maRawToken.eOp = ocMacro;
         return true;
@@ -3750,6 +3750,10 @@ bool ScCompiler::ParseMacro( const OUString& rName )
 
     if (!pObj || !lcl_IsBasicFunction(*pObj, aName))
         return false;
+
+    // A formula that calls a Basic function is macro use of the document being loaded.
+    if (pDocSh && pDocSh->IsLoading())
+        pDocSh->SetMacroCallsSeenWhileLoading();
 
     maRawToken.SetExternal( aName );
     maRawToken.eOp = ocMacro;
