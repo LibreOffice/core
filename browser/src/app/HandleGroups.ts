@@ -472,7 +472,15 @@ class CropHandles extends HandleGroup {
 		const extent = CropHandles.graphicExtentOf(picture);
 		if (!extent) return;
 
-		if (!extent.minX && !extent.minY && extent.maxX === 1 && extent.maxY === 1)
+		// An uncropped picture has nothing to show round it, until a crop moves its window.
+		const running = section.runningChange();
+		if (
+			!extent.minX &&
+			!extent.minY &&
+			extent.maxX === 1 &&
+			extent.maxY === 1 &&
+			!running?.cropOnly
+		)
 			return;
 
 		let whole = cool.Matrix2D.fromRange(extent).then(square);
@@ -480,7 +488,6 @@ class CropHandles extends HandleGroup {
 
 		// While a drag runs the picture is shown as it would be: a scale takes the whole graphic
 		// and the window with it, a crop moves the window over a graphic that stays.
-		const running = section.runningChange();
 		if (running) {
 			window = window.then(running.matrix);
 			if (!running.cropOnly) whole = whole.then(running.matrix);
