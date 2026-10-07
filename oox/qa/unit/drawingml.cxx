@@ -907,6 +907,49 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testConnectorText)
     CPPUNIT_ASSERT_EQUAL(u"{55B8016A-A755-4069-A179-DFC2070CA8C9}"_ustr, sName);
 }
 
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testUnderlineFillColorTypes)
+{
+    loadFromFile(u"underline-fill-colors.pptx");
+
+    // Each paragraph has one underlined run, and the color of each underline uses a different
+    // color type of DrawingML.
+    // accent1 is 5B9BD5 and accent2 is ED7D31 in the theme of the document
+    const std::pair<OUString, Color> aExpected[] = {
+        { u"srgbClr"_ustr, Color(0xFF0000) },
+        { u"schemeClr"_ustr, Color(0xED7D31) },
+        { u"schemeClr lumMod"_ustr, Color(0x2E75B6) },
+        { u"prstClr"_ustr, Color(0x008000) },
+        { u"hslClr"_ustr, Color(0x00FFFF) },
+        { u"scrgbClr"_ustr, Color(0x0000FF) },
+        { u"no uFill"_ustr, COL_AUTO },
+    };
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
+    for (const auto & [ rText, rColor ] : aExpected)
+    {
+        CPPUNIT_ASSERT(xParagraphs->hasMoreElements());
+        uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                                 uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xRun(xParagraph->createEnumeration()->nextElement(),
+                                              uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(rText, xRun->getString());
+
+        uno::Reference<beans::XPropertySet> xRunProperties(xRun, uno::UNO_QUERY);
+        Color aUnderlineColor;
+        xRunProperties->getPropertyValue(u"CharUnderlineColor"_ustr) >>= aUnderlineColor;
+        // Without the fix in place, this test would have failed for the schemeClr runs with
+        // - Expected: rgba[ed7d31ff]
+        // - Actual  : rgba[000000ff]
+        // and the hslClr and scrgbClr runs had COL_AUTO, so their underline took the text color
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rText.toUtf8().getStr(), rColor, aUnderlineColor);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

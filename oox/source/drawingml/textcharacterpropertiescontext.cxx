@@ -156,7 +156,9 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case A_TOKEN( uFill ):      // CT_TextUnderlineFillGroupWrapper->EG_FillProperties (not supported)
             // A fill of its own replaces a uFillTx that the run inherits from a list style
             mrTextCharacterProperties.moUnderlineFillFollowText = false;
-            return new SimpleFillPropertiesContext( *this, mrTextCharacterProperties.maUnderlineColor);
+            return new SimpleFillPropertiesContext(*this,
+                                                   mrTextCharacterProperties.maUnderlineColor,
+                                                   mrTextCharacterProperties.maUnderlineOOXColor);
 
         // CT_FontCollection
         case A_TOKEN( latin ):      // CT_TextFont
@@ -246,7 +248,9 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
             {
                 oox::drawingml::Color theColor;
                 theColor.setSrgbClr(colorAttrib.value());
-                mrTextCharacterProperties.maUnderlineColor = theColor.getComplexColor();
+                mrTextCharacterProperties.maUnderlineColor
+                    = theColor.createComplexColor(getFilter().getGraphicHelper(), -1);
+                mrTextCharacterProperties.maUnderlineOOXColor = std::move(theColor);
             }
             break;
         }

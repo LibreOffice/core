@@ -56,6 +56,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     maHighlightColor.assignIfUsed( rSourceProps.maHighlightColor );
     maHighlightOOXColor.assignIfUsed( rSourceProps.maHighlightOOXColor );
     maUnderlineColor.assignIfUsed( rSourceProps.maUnderlineColor );
+    maUnderlineOOXColor.assignIfUsed( rSourceProps.maUnderlineOOXColor );
     assignIfUsed( moLang, rSourceProps.moLang );
     assignIfUsed( moHeight, rSourceProps.moHeight );
     assignIfUsed( moFontScale, rSourceProps.moFontScale);
@@ -212,10 +213,10 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     rPropMap.setProperty( PROP_CharPostureComplex, eSlant);
 
     bool bUnderlineFillFollowText = moUnderlineFillFollowText.value_or( false );
-    if( moUnderline.has_value() && maUnderlineColor.isUsed() && !bUnderlineFillFollowText )
+    if( moUnderline.has_value() && maUnderlineOOXColor.isUsed() && !bUnderlineFillFollowText )
     {
         rPropMap.setProperty( PROP_CharUnderlineHasColor, true);
-        rPropMap.setProperty( PROP_CharUnderlineColor, maUnderlineColor.getRGBColor());
+        rPropMap.setProperty( PROP_CharUnderlineColor, maUnderlineOOXColor.getColor( rFilter.getGraphicHelper() ));
         rPropMap.setProperty( PROP_CharUnderlineComplexColor, model::color::createXComplexColor(maUnderlineColor));
     }
     else

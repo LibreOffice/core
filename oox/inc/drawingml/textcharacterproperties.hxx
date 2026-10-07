@@ -62,6 +62,7 @@ struct TextCharacterProperties
     std::optional<LineProperties> moTextOutlineProperties;
 
     Color maHighlightOOXColor;
+    Color maUnderlineOOXColor;
     FillProperties      maFillProperties;
     /// Set if there was a property set that alters run visually during import
     bool mbHasVisualRunProperties;
