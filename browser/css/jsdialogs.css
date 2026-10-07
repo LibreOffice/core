@@ -941,7 +941,7 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	content: 'V';
 	color: transparent;
 	margin-inline-end: 7px;
-	background: transparent url('images/lc_menu_chevron.svg') no-repeat center right;
+	background: transparent url('images/lc_menu_chevron.svg') no-repeat center;
 	filter: brightness(0.5);
 }
 
@@ -965,6 +965,12 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	.ui-treeview div[aria-expanded='true'] > div > .ui-treeview-expander::before {
 		content: 'V' / '';
 	}
+}
+
+.ui-expander-label::before,
+.ui-treeview-expandable > div > .ui-treeview-expander::before,
+.ui-treeview div[aria-expanded] > div > .ui-treeview-expander::before {
+	transition: transform var(--duration-fast) var(--ease-standard);
 }
 
 [data-theme='dark'] .ui-expander-label::before,
@@ -1022,6 +1028,10 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 
 .ui-expander-content:not(.expanded) {
 	display: none;
+}
+
+.ui-expander-content.expanded.expanding {
+	animation: fade-in var(--duration-fast) var(--ease-out);
 }
 
 .ui-expander:hover {

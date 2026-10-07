@@ -245,7 +245,7 @@
 	height: var(--btn-img-size-s);
 	flex-shrink: 0;
 	position: relative;
-	transition: transform var(--duration-fast) var(--ease-out);
+	transition: transform var(--duration-fast) var(--ease-standard);
 }
 
 .slide-import-source-chevron::before {

@@ -742,6 +742,17 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 
 					$(label).toggleClass('expanded');
 					$(expander).siblings().toggleClass('expanded');
+					$(expander).siblings('.ui-expander-content.expanded').each(function () {
+						const content = this;
+						const onFadeEnd = (event) => {
+							if (event.target !== content)
+								return;
+							content.classList.remove('expanding');
+							content.removeEventListener('animationend', onFadeEnd);
+						};
+						content.classList.add('expanding');
+						content.addEventListener('animationend', onFadeEnd);
+					});
 
 					// Toggle aria-expanded attribute
 					const currentState = expanderBtn.getAttribute('aria-expanded') === 'true';

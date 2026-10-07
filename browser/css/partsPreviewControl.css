@@ -285,7 +285,7 @@
 	background: transparent url('images/lc_menu_chevron.svg') no-repeat center;
 	filter: brightness(0.5);
 	transform: rotate(90deg); /* expanded: chevron points down */
-	transition: transform var(--duration-instant) ease-in;
+	transition: transform var(--duration-fast) var(--ease-standard);
 }
 
 .slide-section-header.collapsed .slide-section-toggle::before {
