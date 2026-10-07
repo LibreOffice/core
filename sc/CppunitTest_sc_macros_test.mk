@@ -78,6 +78,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_macros_test,\
     emfio/emfio \
     eventattacher/source/evtatt \
     filter/source/config/cache/filterconfig1 \
+    filter/source/odfflatxml/odfflatxml \
+    filter/source/xmlfilteradaptor/xmlfa \
     filter/source/storagefilterdetect/storagefd \
     forms/util/frm \
     framework/util/fwk \
@@ -98,6 +100,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_macros_test,\
     sc/util/scfilt \
     $(call gb_Helper_optional,SCRIPTING, \
 	    sc/util/vbaobj) \
+    scaddins/source/analysis/analysis \
+    scaddins/source/datefunc/date \
     sfx2/util/sfx \
     sot/util/sot \
     svl/source/fsstor/fsstorage \

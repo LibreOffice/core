@@ -16,6 +16,14 @@
 
 #include <docsh.hxx>
 #include <document.hxx>
+#include <formulacell.hxx>
+
+#include <com/sun/star/document/MacroExecMode.hpp>
+#include <basic/sbmod.hxx>
+#include <basic/sbstar.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <formula/errorcodes.hxx>
+#include <sfx2/app.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -32,6 +40,7 @@ public:
     void testMSP();
     void testPasswordProtectedStarBasic();
     void testRowColumn();
+    void testFormulaCallingApplicationBasicIsMacroUse();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -39,6 +48,7 @@ public:
     CPPUNIT_TEST(testVba);
     CPPUNIT_TEST(testPasswordProtectedStarBasic);
     CPPUNIT_TEST(testRowColumn);
+    CPPUNIT_TEST(testFormulaCallingApplicationBasicIsMacroUse);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -367,6 +377,42 @@ void ScMacrosTest::testRowColumn()
         aParams, aRet, aOutParamIndex, aOutParam);
     sal_uInt16 nWidth  = rDoc.GetColWidth(0, 0) * HMM_PER_TWIPS;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4000), nWidth);
+
+    pDocSh->DoClose();
+}
+
+void ScMacrosTest::testFormulaCallingApplicationBasicIsMacroUse()
+{
+    // a function the user keeps in application Basic
+    StarBASIC* pAppBasic = SfxApplication::GetBasic();
+    CPPUNIT_ASSERT(pAppBasic);
+    SbModule* pModule = pAppBasic->MakeModule("ScMacrosTestModule",
+                                              "Function SCMACROSTESTAPPFUNCTION()\n"
+                                              "    SCMACROSTESTAPPFUNCTION = 42\n"
+                                              "End Function\n");
+    CPPUNIT_ASSERT(pModule);
+    CPPUNIT_ASSERT(pModule->Compile());
+
+    // a document with no Basic of its own calls it from a formula, opened at the default macro
+    // security level, where unsigned macros are refused
+    OUString aFileName;
+    createFileURL("application-basic-function.fods", aFileName);
+    uno::Reference< css::lang::XComponent > xComponent = loadFromDesktop(
+        aFileName, "com.sun.star.sheet.SpreadsheetDocument",
+        { comphelper::makePropertyValue("MacroExecutionMode",
+                                        document::MacroExecMode::FROM_LIST_AND_SIGNED_WARN) });
+    CPPUNIT_ASSERT(xComponent.is());
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+
+    // the formula counts as macro use, so the document got the macro decision on load and the
+    // call is refused the way a document macro would be
+    CPPUNIT_ASSERT(pDocSh->GetMacroCallsSeenWhileLoading());
+    ScFormulaCell* pCell = pDocSh->GetDocument().GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT_EQUAL(int(FormulaError::NoMacro), int(pCell->GetErrCode()));
 
     pDocSh->DoClose();
 }
