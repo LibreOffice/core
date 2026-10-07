@@ -224,18 +224,45 @@ export class ScrollSection extends CanvasSectionObject {
 		// The document area (anchor/tiles section) the map used to represent.
 		const frame = app.activeDocument.activeLayout.frameSize;
 
-		if (e.pos.y > frame.cY - 50) {
-			vy = 50;
-		} else if (e.pos.y < 50 && topLeftY > 50) {
-			vy = -50;
+		/*
+			How far one step scrolls, in CSS pixels, for the mouse standing that far into the band
+			along the edge, the band being 50 pixels wide inside the frame. In the vector view a
+			mouse in the band or just past the edge scrolls gently, and taken further out it
+			scrolls faster the further out it is, up to a limit, so a long way across the lawn is
+			quick and a short one stays under control. Elsewhere a
+			step is always 50, as it was. The vector view scrolls up and left as long as there is
+			anything to scroll to; elsewhere it waits for a band's width of it, as it did.
+		*/
+		const band = 50;
+		// The step at the edge and just past it, how far past the edge it stays so, how many CSS
+		// pixels further out the step doubles, and the largest step. Doubling makes it grow
+		// slowly near the edge and quickly further out.
+		const calmStep = 25;
+		const calmPastTheEdge = 30;
+		const doublingDistance = 75;
+		const largestStep = 150;
+		const stepFor = (intoTheBand: number): number => {
+			if (!roomBefore) return band;
+			const beyondTheCalm = Math.max(0, intoTheBand - band - calmPastTheEdge);
+			return Math.min(
+				largestStep,
+				calmStep * Math.pow(2, beyondTheCalm / doublingDistance),
+			);
+		};
+		const roomNeeded = roomBefore ? 0 : band;
+
+		if (e.pos.y > frame.cY - band) {
+			vy = stepFor(e.pos.y - (frame.cY - band));
+		} else if (e.pos.y < band && topLeftY > roomNeeded) {
+			vy = -stepFor(band - e.pos.y);
 		}
 
 		const mousePosX: number = this.isRTL() ? frame.cX - e.pos.x : e.pos.x;
 		const mapLeft: number = this.isRTL() ? frame.cX - topLeftX : topLeftX;
-		if (mousePosX > frame.cX - 50) {
-			vx = 50;
-		} else if (mousePosX < 50 && mapLeft > 50) {
-			vx = -50;
+		if (mousePosX > frame.cX - band) {
+			vx = stepFor(mousePosX - (frame.cX - band));
+		} else if (mousePosX < band && mapLeft > roomNeeded) {
+			vx = -stepFor(band - mousePosX);
 		}
 
 		this.onScrollVelocity({ vx: vx, vy: vy, pos: e.pos });
