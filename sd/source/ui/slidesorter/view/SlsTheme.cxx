@@ -144,8 +144,13 @@ std::shared_ptr<vcl::Font> Theme::GetFont (
     if (pFont)
     {
         // Transform the point size to pixel size.
+#ifdef MACOSX
+        // already in pixels on macOS: a point conversion would inflate the font
+        const Size aFontSize (pFont->GetFontSize());
+#else
         const MapMode aFontMapMode (MapUnit::MapPoint);
         const Size aFontSize (rDevice.LogicToPixel(pFont->GetFontSize(), aFontMapMode));
+#endif
 
         // Transform the font size to the logical coordinates of the device.
         pFont->SetFontSize(rDevice.PixelToLogic(aFontSize));

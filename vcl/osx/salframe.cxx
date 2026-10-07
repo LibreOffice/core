@@ -18,6 +18,7 @@
  */
 
 #include <IconThemeSelector.hxx>
+#include <cmath>
 #include <string>
 
 #include <comphelper/fileurl.hxx>
@@ -1472,13 +1473,18 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     return aRet;
 }
 
-static vcl::Font getFont( NSFont* pFont, sal_Int32 nDPIY, const vcl::Font& rDefault )
+static vcl::Font getFont( NSFont* pFont, const vcl::Font& rDefault )
 {
     vcl::Font aResult( rDefault );
     if( pFont )
     {
         aResult.SetFamilyName( GetOUString( [pFont familyName] ) );
-        aResult.SetFontHeight( static_cast<int>(ceil([pFont pointSize] * 72.0 / static_cast<float>(nDPIY))) );
+        // macOS reports the system font sizes in Quartz points, which are the
+        // same as VCL's logical (device independent) pixels. Store the point
+        // size directly; the point-to-logic conversion is a no-op on macOS
+        // (see Window::ImplPointToLogic()), so applying the screen DPI here
+        // would just inflate the UI font.
+        aResult.SetFontHeight( static_cast<int>(std::lround([pFont pointSize])) );
         aResult.SetItalic( ([pFont italicAngle] != 0.0) ? ITALIC_NORMAL : ITALIC_NONE );
         // FIMXE: bold ?
     }
@@ -1694,23 +1700,21 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // get the system font settings
     vcl::Font aAppFont = aStyleSettings.GetAppFont();
-    sal_Int32 nDPIX = 72, nDPIY = 72;
-    getResolution( nDPIX, nDPIY );
-    aAppFont = getFont( [NSFont systemFontOfSize: 0], nDPIY, aAppFont );
+    aAppFont = getFont( [NSFont systemFontOfSize: 0], aAppFont );
 
     aStyleSettings.SetToolbarIconSize( ToolbarIconSize::Large );
 
     // TODO: better mapping of macOS<->LibreOffice font settings
-    vcl::Font aLabelFont( getFont( [NSFont labelFontOfSize: 0], nDPIY, aAppFont ) );
+    vcl::Font aLabelFont( getFont( [NSFont labelFontOfSize: 0], aAppFont ) );
     aStyleSettings.BatchSetFonts( aAppFont, aLabelFont );
-    vcl::Font aMenuFont( getFont( [NSFont menuFontOfSize: 0], nDPIY, aAppFont ) );
+    vcl::Font aMenuFont( getFont( [NSFont menuFontOfSize: 0], aAppFont ) );
     aStyleSettings.SetMenuFont( aMenuFont );
 
-    vcl::Font aTitleFont( getFont( [NSFont titleBarFontOfSize: 0], nDPIY, aAppFont ) );
+    vcl::Font aTitleFont( getFont( [NSFont titleBarFontOfSize: 0], aAppFont ) );
     aStyleSettings.SetTitleFont( aTitleFont );
     aStyleSettings.SetFloatTitleFont( aTitleFont );
 
-    vcl::Font aTooltipFont(getFont([NSFont toolTipsFontOfSize: 0], nDPIY, aAppFont));
+    vcl::Font aTooltipFont(getFont([NSFont toolTipsFontOfSize: 0], aAppFont));
     aStyleSettings.SetHelpFont(aTooltipFont);
 
     Color aAccentColor( getColor( [NSColor controlAccentColor],

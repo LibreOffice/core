@@ -355,8 +355,10 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
 
     Size aFontSize = rStyleSettings.GetTabFont().GetFontSize();
+#ifndef MACOSX // already in pixels on macOS: a point conversion would inflate the tab bar
     MapMode aPtMapMode(MapUnit::MapPoint);
     aFontSize = pFrameWin->LogicToPixel(aFontSize, aPtMapMode);
+#endif
     sal_Int32 nTabHeight = aFontSize.Height() + TAB_HEIGHT_MARGIN;
 
     if ( aViewData.GetHSplitMode() != SC_SPLIT_NONE )
