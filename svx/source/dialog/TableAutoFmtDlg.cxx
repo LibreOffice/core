@@ -286,7 +286,7 @@ IMPL_LINK_NOARG(SvxTableAutoFmtDlg, SelFormatHdl, weld::ItemView&, void)
 
 OUString SvxTableAutoFmtDlg::GetCurrFormatName()
 {
-    const SvxAutoFormatData* pData = mpFormat.GetData(mnIndex);
+    const SvxAutoFormatData* pData = lcl_GetTableAutoFormat(mnIndex, mpFormat);
     return pData ? pData->GetName() : OUString();
 }
 
