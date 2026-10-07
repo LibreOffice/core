@@ -44,7 +44,6 @@
 #include <vcl/cursor.hxx>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
-#include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>

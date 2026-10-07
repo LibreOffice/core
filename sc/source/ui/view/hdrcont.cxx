@@ -21,7 +21,6 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/help.hxx>
-#include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/colorcfg.hxx>
 #include <osl/diagnose.h>

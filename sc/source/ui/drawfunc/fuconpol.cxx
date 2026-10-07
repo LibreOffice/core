@@ -26,7 +26,6 @@
 #include <svx/svdopath.hxx>
 #include <svx/svxids.hrc>
 #include <osl/diagnose.h>
-#include <vcl/ptrstyle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 

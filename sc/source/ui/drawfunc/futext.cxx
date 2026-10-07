@@ -34,7 +34,6 @@
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include <osl/diagnose.h>
-#include <vcl/ptrstyle.hxx>
 
 #include <futext.hxx>
 #include <drwlayer.hxx>
