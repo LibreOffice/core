@@ -14,7 +14,7 @@
 // versions of inlined code that get injected outside of this
 // module by the linker.
 
-#include "config.h"
+#include <config.h>
 
 #include <assert.h>
 #include <string.h>
@@ -36,7 +36,7 @@ static __m256i vpermd_last_to_first;
 static __m256i low_pixel_mask;
 
 // Build table we can lookup bitmasks in to generate gather data
-void init_gather_lut(void)
+static void init_gather_lut(void)
 {
     for (unsigned int pattern = 0; pattern < 256; ++pattern)
     {
