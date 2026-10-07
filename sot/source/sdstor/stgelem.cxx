@@ -193,9 +193,11 @@ static bool isKnownSpecial(sal_Int32 nLocation)
 // Perform thorough checks also on unknown variables
 bool StgHeader::Check()
 {
+    constexpr sal_Int16 SECTOR_SHIFT_V3 = 9;  // 2^9 = 512 bytes per sector
+    constexpr sal_Int16 SECTOR_SHIFT_V4 = 12; // 2^12 = 4096 bytes per sector
+    short version = static_cast<short>( m_nVersion >> 16 );
     return  memcmp( m_cSignature, cStgSignature, 8 ) == 0
-            && static_cast<short>( m_nVersion >> 16 ) == 3
-            && m_nPageSize == 9
+            && ((version == 3 && m_nPageSize == SECTOR_SHIFT_V3) || (version == 4 && m_nPageSize == SECTOR_SHIFT_V4))
             && lcl_wontoverflow(m_nPageSize)
             && lcl_wontoverflow(m_nDataPageSize)
             && m_nFATSize > 0
