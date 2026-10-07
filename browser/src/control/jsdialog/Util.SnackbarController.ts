@@ -31,6 +31,7 @@ class SnackbarController {
 	snackbarQueue: Array<SnackbarData>;
 	showingSnackbar: boolean = false;
 	private liveRegion: HTMLElement = null;
+	private fadeOutTimer: ReturnType<typeof setTimeout> = null;
 
 	constructor() {
 		this.snackbarQueue = new Array<SnackbarData>();
@@ -48,7 +49,10 @@ class SnackbarController {
 		});
 	}
 
-	public closeSnackbar() {
+	private removeSnackbar() {
+		app.timerRegistry.clearTimeout(this.fadeOutTimer);
+		this.fadeOutTimer = null;
+
 		var closeMessage = {
 			id: 'snackbar',
 			jsontype: 'dialog',
@@ -62,6 +66,34 @@ class SnackbarController {
 		this.showingSnackbar = false;
 		this.writeLiveRegion('');
 		this.scheduleSnackbar();
+	}
+
+	public closeSnackbar(byUser: boolean = false) {
+		const snackbar = document.getElementById('snackbar');
+		if (byUser || !snackbar) {
+			this.removeSnackbar();
+			return;
+		}
+
+		if (this.fadeOutTimer !== null) return;
+
+		let timer: ReturnType<typeof setTimeout> = null;
+		const onAnimationEnd = (event: AnimationEvent) => {
+			if (event.target === snackbar) finishFadeOut();
+		};
+		const finishFadeOut = () => {
+			snackbar.removeEventListener('animationend', onAnimationEnd);
+			if (this.fadeOutTimer === timer) this.removeSnackbar();
+		};
+
+		snackbar.classList.remove('fadein');
+		snackbar.classList.add('snackbar-leaving');
+		snackbar.addEventListener('animationend', onAnimationEnd);
+		timer = this.fadeOutTimer = app.timerRegistry.setTimeout(
+			'snackbar-fadeout',
+			finishFadeOut,
+			window.L.DomUtil.getDurationMs('--duration-fast') + 100,
+		);
 	}
 
 	public showSnackbar(
@@ -195,13 +227,13 @@ class SnackbarController {
 				if (typeof snackbarData.callback === 'function')
 					snackbarData.callback();
 
-				this.closeSnackbar();
+				this.closeSnackbar(true);
 			} else if (
 				object.id === '__POPOVER__' &&
 				objectType === 'popover' &&
 				eventType === 'close'
 			) {
-				this.closeSnackbar();
+				this.closeSnackbar(true);
 			}
 
 			if (
@@ -209,7 +241,7 @@ class SnackbarController {
 				objectType === 'pushbutton' &&
 				eventType === 'click'
 			) {
-				this.closeSnackbar();
+				this.closeSnackbar(true);
 			}
 		};
 

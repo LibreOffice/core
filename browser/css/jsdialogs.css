@@ -3380,6 +3380,13 @@ button.has-img img {
 .snackbar.jsdialog-window {
 	overflow: visible;
 }
+.jsdialog-window.snackbar.fadein {
+	animation: slide-up-in var(--duration-normal) var(--ease-out);
+}
+.snackbar-leaving {
+	pointer-events: none;
+	animation: fade-out var(--duration-fast) var(--ease-in) forwards;
+}
 .snackbar #snackbar-container,
 .snackbar #snackbar-container-progress {
 	align-items: center;

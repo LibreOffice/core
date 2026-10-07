@@ -1503,6 +1503,8 @@ function waitForResizeObserver(win) {
 
 function processToIdle(win) {
 	return waitUntilCoreIsIdle(win).then(function() {
+		return waitForTimers(win, 'snackbar-fadeout');
+	}).then(function() {
 		return waitForTimers(win, 'jsdialog-deferred');
 	}).then(function() {
 		return waitUntilLayoutingIsIdle(win);
