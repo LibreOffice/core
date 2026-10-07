@@ -313,11 +313,7 @@ body.qt-app .spreadsheet-cursor:not(.bucket-cursor) {
 	pointer-events: auto;
 	transform: translate(calc(-100% - 3px), -100%);
 	cursor: pointer;
-	animation: formula-help-fade-in 0.12s ease-out;
-}
-@keyframes formula-help-fade-in {
-	from { opacity: 0; }
-	to { opacity: 1; }
+	animation: fade-in var(--duration-fast) var(--ease-out);
 }
 .formula-error-icon {
 	display: flex;

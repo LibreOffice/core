@@ -150,7 +150,7 @@
 	border-radius: var(--border-radius);
 	background: transparent;
 	cursor: pointer;
-	transition: all var(--duration-fast) ease;
+	transition: all var(--duration-fast) var(--ease-standard);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -326,7 +326,7 @@
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	line-height: 1.55;
-	animation: aichat-slide-up 0.25s ease-out;
+	animation: aichat-slide-up var(--duration-normal) var(--ease-out);
 	position: relative;
 }
 
@@ -438,7 +438,7 @@
 	box-sizing: border-box;
 	padding-left: 26px;
 	align-self: flex-start;
-	animation: aichat-slide-up var(--duration-normal) ease-out;
+	animation: aichat-slide-up var(--duration-normal) var(--ease-out);
 }
 
 #aichat-loading-dots::before {
@@ -493,7 +493,7 @@
 	margin-top: 6px;
 	margin-left: -7px;
 	flex-wrap: wrap;
-	transition: opacity var(--duration-fast) ease;
+	transition: opacity var(--duration-fast) var(--ease-standard);
 }
 
 [id^='aichat-actions-'] .ui-pushbutton-wrapper {
@@ -512,8 +512,8 @@
 	border: none;
 	background: transparent;
 	cursor: pointer;
-	transition: background var(--duration-fast) ease,
-		color var(--duration-fast) ease;
+	transition: background var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -591,8 +591,8 @@ button.ui-pushbutton:focus-visible {
 	padding: var(--spacing-m) var(--spacing-m) var(--spacing-m) 10px;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
 		0 8px 24px -10px rgba(0, 0, 0, 0.22);
-	transition: border-color var(--duration-normal) ease,
-		box-shadow var(--duration-normal) ease;
+	transition: border-color var(--duration-normal) var(--ease-standard),
+		box-shadow var(--duration-normal) var(--ease-standard);
 }
 
 #aichat-input-container:focus-within {
@@ -666,9 +666,9 @@ button.ui-pushbutton:focus-visible {
 	border: none;
 	border-radius: 50%;
 	cursor: pointer;
-	transition: background var(--duration-fast) ease,
-		transform var(--duration-instant) ease,
-		opacity var(--duration-fast) ease;
+	transition: background var(--duration-fast) var(--ease-standard),
+		transform var(--duration-instant) var(--ease-standard),
+		opacity var(--duration-fast) var(--ease-standard);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -753,8 +753,8 @@ button.ui-pushbutton:focus-visible {
 	color: var(--color-main-text);
 	font-family: var(--cool-font);
 	cursor: pointer;
-	transition: background var(--duration-fast) ease,
-		border-color var(--duration-fast) ease;
+	transition: background var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard);
 	white-space: nowrap;
 }
 
@@ -879,8 +879,8 @@ button.ui-pushbutton:focus-visible {
 	border: 1px solid var(--color-border);
 	background: var(--color-border);
 	cursor: pointer;
-	transition: background var(--duration-fast) ease,
-		border-color var(--duration-fast) ease;
+	transition: background var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard);
 }
 
 #aichat-tone-emojify button.ui-pushbutton::before {
@@ -894,7 +894,7 @@ button.ui-pushbutton:focus-visible {
 	background: #fff;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 	transform: translateX(0);
-	transition: transform var(--duration-fast) ease;
+	transition: transform var(--duration-fast) var(--ease-standard);
 }
 
 #aichat-tone-emojify button.ui-pushbutton[aria-pressed='true'] {
@@ -952,7 +952,7 @@ button.ui-pushbutton:focus-visible {
 	color: var(--aichat-text-muted);
 	cursor: pointer;
 	margin-top: 4px;
-	transition: color var(--duration-fast) ease;
+	transition: color var(--duration-fast) var(--ease-standard);
 }
 
 #aichat-tone-add button.ui-pushbutton:hover:not([disabled]) {
@@ -1040,8 +1040,8 @@ button.ui-pushbutton:focus-visible {
 	border: 1px solid var(--color-border);
 	color: var(--color-main-text);
 	cursor: pointer;
-	transition: border-color var(--duration-fast) ease,
-		background var(--duration-fast) ease;
+	transition: border-color var(--duration-fast) var(--ease-standard),
+		background var(--duration-fast) var(--ease-standard);
 }
 
 #aichat-tone-form-icons
@@ -1465,7 +1465,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	padding: 4px 12px;
 	border-radius: var(--border-radius-pill);
 	cursor: pointer;
-	transition: all var(--duration-fast) ease;
+	transition: all var(--duration-fast) var(--ease-standard);
 }
 
 #aichat-messages-list [id^='aichat-retry-'] button.ui-pushbutton:hover {
@@ -1493,9 +1493,9 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	font-weight: 500;
 	border-radius: var(--border-radius-pill);
 	cursor: pointer;
-	transition: background var(--duration-fast) ease,
-		border-color var(--duration-fast) ease,
-		box-shadow var(--duration-fast) ease;
+	transition: background var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard),
+		box-shadow var(--duration-fast) var(--ease-standard);
 	line-height: 1.4;
 }
 
@@ -1726,8 +1726,8 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	font-size: 15px;
 	line-height: 1;
 	cursor: pointer;
-	transition: background 0.15s ease,
-		color 0.15s ease;
+	transition: background var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard);
 }
 
 #aichat-messages-list .aichat-outline-delete:hover,
@@ -1817,9 +1817,9 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	font-family: var(--cool-font);
 	font-size: 0.9em;
 	cursor: pointer;
-	transition: background 0.15s ease,
-		border-color 0.15s ease,
-		color 0.15s ease;
+	transition: background var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard),
+		color var(--duration-fast) var(--ease-standard);
 }
 
 #aichat-messages-list .aichat-outline-add:hover {
@@ -1913,7 +1913,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	margin: 0;
 	white-space: nowrap;
 	overflow: hidden;
-	animation: aichat-slide-up var(--duration-fast) ease-out;
+	animation: aichat-slide-up var(--duration-fast) var(--ease-out);
 }
 
 /* -- Prompt suggestions (a wrapping row of pills) -- */
@@ -1932,7 +1932,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 #aichat-chips > [id^='aichat-chip-'],
 #aichat-chips > #aichat-see-more {
 	margin: 0;
-	animation: aichat-slide-up var(--duration-normal) ease-out both;
+	animation: aichat-slide-up var(--duration-normal) var(--ease-out) both;
 }
 
 #aichat-chips > [id^='aichat-chip-']:nth-child(2) {
@@ -1968,8 +1968,8 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	white-space: nowrap;
 	color: var(--color-main-text);
 	cursor: pointer;
-	transition: border-color var(--duration-fast) ease,
-		background var(--duration-fast) ease;
+	transition: border-color var(--duration-fast) var(--ease-standard),
+		background var(--duration-fast) var(--ease-standard);
 }
 
 #aichat-chips > [id^='aichat-chip-'] > button.ui-pushbutton img {
@@ -2009,8 +2009,8 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	border-radius: 3px;
 	border-bottom: 1px dotted rgba(var(--aichat-accent), 0.5);
 	cursor: pointer;
-	transition: background var(--duration-fast) ease,
-		border-color var(--duration-fast) ease;
+	transition: background var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard);
 	font-size: 12px;
 	white-space: nowrap;
 }

@@ -187,7 +187,7 @@
 	cursor: pointer;
 	color: var(--color-main-text);
 	font-size: var(--medium-font-size);
-	transition: all var(--duration-normal) ease;
+	transition: all var(--duration-normal) var(--ease-standard);
 	position: relative;
 	margin: 2px 8px;
 	border-radius: var(--border-radius);
@@ -348,7 +348,7 @@
 	font-weight: 600;
 	color: var(--color-main-text);
 	cursor: pointer;
-	transition: all var(--duration-normal) ease;
+	transition: all var(--duration-normal) var(--ease-standard);
 	white-space: nowrap;
 	display: inline-flex;
 	align-items: center;
@@ -386,7 +386,7 @@
 	padding: var(--spacing-l);
 	cursor: pointer;
 	text-align: center;
-	transition: all var(--duration-normal) ease;
+	transition: all var(--duration-normal) var(--ease-standard);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -416,7 +416,7 @@
 	display: block;
 	border: 1px solid var(--color-border);
 	border-radius: var(--border-radius-medium);
-	transition: all var(--duration-normal) ease;
+	transition: all var(--duration-normal) var(--ease-standard);
 }
 
 .backstage-template-card:hover .template-thumbnail img {
@@ -454,7 +454,7 @@
 	padding: 6px 16px;
 	font-size: 14px;
 	cursor: pointer;
-	transition: all var(--duration-normal) ease;
+	transition: all var(--duration-normal) var(--ease-standard);
 }
 
 .template-type-button.active,
@@ -532,7 +532,7 @@
 	cursor: pointer;
 	border-radius: var(--border-radius-large);
 	text-align: center;
-	transition: all var(--duration-normal) ease;
+	transition: all var(--duration-normal) var(--ease-standard);
 	box-shadow: 0 1px 3px var(--color-black-5);
 	display: flex;
 	flex-direction: column;
@@ -575,7 +575,7 @@
 	border-radius: var(--border-radius);
 	font-weight: 600;
 	box-shadow: 0 2px 4px var(--color-black-10);
-	transition: all var(--duration-normal) ease;
+	transition: all var(--duration-normal) var(--ease-standard);
 }
 
 .backstage-action-button:hover {
@@ -660,7 +660,7 @@
 
 .backstage-recent-document-row {
 	cursor: pointer;
-	transition: background-color var(--duration-normal) ease;
+	transition: background-color var(--duration-normal) var(--ease-standard);
 }
 
 .backstage-recent-document-row:hover {
@@ -901,8 +901,8 @@
 	background: transparent;
 	cursor: pointer;
 	opacity: 0;
-	transition: opacity var(--duration-fast) ease,
-		border-color var(--duration-fast) ease;
+	transition: opacity var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard);
 	display: flex;
 	align-items: center;
 	justify-content: center;

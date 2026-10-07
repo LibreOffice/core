@@ -139,8 +139,8 @@
    the space the dragged slide left and a new insertion gap opens under
    the pointer. */
 #slide-sorter.dragging-slide .preview-frame {
-	transition: margin var(--duration-fast) ease-out, height var(--duration-fast) ease-out,
-		width var(--duration-fast) ease-out, padding var(--duration-fast) ease-out, opacity var(--duration-fast) ease-out;
+	transition: margin var(--duration-fast) var(--ease-out), height var(--duration-fast) var(--ease-out),
+		width var(--duration-fast) var(--ease-out), padding var(--duration-fast) var(--ease-out), opacity var(--duration-fast) var(--ease-out);
 }
 
 /* A finished drop rearranges the frames in a single step. */

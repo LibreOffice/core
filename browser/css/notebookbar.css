@@ -141,12 +141,12 @@ button.ui-tab.notebookbar {
 	border: 1px solid transparent !important;
 	color: var(--color-text-darker) !important;
 	box-shadow: inset 12px 0 var(--color-main-background), inset -12px 0 var(--color-main-background), inset 0 -2px rgb(var(--doc-type));
-	transition: box-shadow var(--duration-instant) ease-out;
+	transition: box-shadow var(--duration-instant) var(--ease-out);
 }
 
 .ui-tab.selected.notebookbar:hover {
 	box-shadow: inset 0 0 var(--color-main-background), inset 0 0 var(--color-main-background), inset 0 -2px rgb(var(--doc-type));
-	transition: box-shadow var(--duration-slow) ease;
+	transition: box-shadow var(--duration-slow) var(--ease-standard);
 }
 
 /* Tint contextual tabs (Table Design, Sparkline, Picture, Chart, Shape,
@@ -256,7 +256,7 @@ html[data-theme='dark'] .savemodified.unotoolbutton:not(.notebookbar) .unobutton
 	left: 6px;
 	height: 2px;
 	width: 16px;
-	transition: all 0.25s;
+	transition: all var(--duration-normal);
 }
 
 #Open_Local_Editor img {
@@ -1254,14 +1254,14 @@ label.notebookbar.ui-checkbox-label {
 	border: solid var(--color-toolbar-border) 1px;
 	display: grid;
 	opacity: 1;
-	transition: all 0.25s allow-discrete;
+	transition: all var(--duration-normal) allow-discrete;
 	box-shadow: 0 6px 18px var(--color-box-shadow-light);
 }
 
 #context-toolbar.hidden {
 	display: none;
 	opacity: 0;
-	transition: all 0.25s allow-discrete;
+	transition: all var(--duration-normal) allow-discrete;
 }
 
 #context-toolbar .unobutton > img {

@@ -496,7 +496,7 @@ input, button {
 #sidebar-dock-wrapper.visible {
 	display: block;
 	/* synchronize time with Sidebar.ts setting focus */
-	animation: var(--duration-normal) ease-out appear-from-right;
+	animation: var(--duration-normal) var(--ease-out) appear-from-right;
 	border-inline-start: 1px solid var(--color-border);
 }
 
@@ -513,7 +513,7 @@ input, button {
 #aichat-dock-wrapper.visible {
 	display: block;
 	width: 350px;
-	animation: var(--duration-normal) ease-out aichat-dock-open;
+	animation: var(--duration-normal) var(--ease-out) aichat-dock-open;
 	border-inline-start: 1px solid var(--color-border);
 }
 
@@ -752,7 +752,7 @@ input, button {
 	z-index: 12;
 	width: min-content;
 	min-width: 250px;
-	transition: left .25s;
+	transition: left var(--duration-normal);
 }
 
 /* Drawn below the card, down the side of its replies. It is out of the card's
@@ -1178,7 +1178,7 @@ input, button {
 	font-size: 1em;
 	line-height: 1;
 	opacity: 1;
-	transition: all var(--duration-instant) ease 0.5s;
+	transition: all var(--duration-instant) var(--ease-standard) 0.5s;
 	visibility: visible;
 }
 [data-title]:after {

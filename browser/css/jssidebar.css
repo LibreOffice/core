@@ -866,7 +866,7 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	border-radius: 5px;
 	cursor: pointer;
 	font-size: 16px;
-	transition: background-color var(--duration-slow) ease;
+	transition: background-color var(--duration-slow) var(--ease-standard);
 }
 
 #toggle-sidebar-btn:hover {

@@ -403,8 +403,7 @@ nav [id^='save'].saved img {
 	height: 1px;
 	width: 20px;
 	background: var(--color-main-text);
-	-webkit-transition: all 0.25s;
-	transition: all 0.25s;
+	transition: all var(--duration-normal);
 }
 
 .main-menu-btn-icon:before {

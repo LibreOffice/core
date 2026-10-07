@@ -3098,8 +3098,8 @@ button.has-img img {
 	border: 1px solid var(--color-border);
 	border-radius: 999px;
 	overflow: hidden;
-	transition: background var(--duration-fast) ease,
-		border-color var(--duration-fast) ease;
+	transition: background var(--duration-fast) var(--ease-standard),
+		border-color var(--duration-fast) var(--ease-standard);
 }
 
 .ui-chip:hover {
@@ -3125,8 +3125,8 @@ button.has-img img {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	transition: color var(--duration-fast) ease,
-		background var(--duration-fast) ease;
+	transition: color var(--duration-fast) var(--ease-standard),
+		background var(--duration-fast) var(--ease-standard);
 }
 
 .ui-chip-main {
