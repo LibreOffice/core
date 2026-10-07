@@ -405,10 +405,11 @@ void AquaSalMenu::unsetMainMenu()
     pCurrentMenuBar = nullptr;
 
     // remove all menus except the app menu
-    NSMenu* pMenu = [NSApp mainMenu];
+    NSMenu* pMenu = [[NSApp mainMenu] retain];
     [NSApp setMainMenu:nil];
     for( int nItems = [pMenu numberOfItems]; nItems > 1; nItems-- )
         [pMenu removeItemAtIndex: 1];
+    [pMenu release];
 }
 
 void AquaSalMenu::useAltTitle(bool bAltTitle)
@@ -466,7 +467,7 @@ void AquaSalMenu::setDefaultMenu()
     // tdf#160427 native menu changes can only be done on the main thread
     OSX_SALDATA_RUNINMAIN(AquaSalMenu::setDefaultMenu())
 
-    NSMenu* pMenu = [NSApp mainMenu];
+    NSMenu* pMenu = [[NSApp mainMenu] retain];
 
     unsetMainMenu();
 
@@ -479,6 +480,7 @@ void AquaSalMenu::setDefaultMenu()
             [pMenu insertItem: pItem atIndex: i+1];
     }
     [NSApp setMainMenu:pMenu];
+    [pMenu release];
 
     // Related: tdf#128186 force key window to a native full screen window
     // AquaSalMenu::setDefaultMenu() is generally called when the key
