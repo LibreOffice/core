@@ -417,7 +417,6 @@ void ColorFieldControl::UpdatePosition()
 
 ColorSliderControl::ColorSliderControl()
     : meMode( DefaultMode )
-    , mnLevel( 0 )
     , mdValue( -1.0 )
 {
 }
@@ -519,7 +518,6 @@ void ColorSliderControl::ChangePosition(tools::Long nY)
     else if (nY > nHeight)
         nY = nHeight;
 
-    mnLevel = nY;
     mdValue = double(nHeight - nY) / double(nHeight);
 }
 
@@ -567,6 +565,7 @@ void ColorSliderControl::Resize()
 {
     CustomWidgetController::Resize();
     UpdateBitmap();
+    maResizeHdl.Call(*this);
 }
 
 void ColorSliderControl::Modify()
@@ -581,7 +580,6 @@ void ColorSliderControl::SetValue(const Color& rColor, ColorMode eMode, double d
     {
         maColor = rColor;
         mdValue = dValue;
-        mnLevel = static_cast<sal_Int16>((1.0-dValue) * GetOutputSizePixel().Height());
         meMode = eMode;
         if (bUpdateBitmap)
             UpdateBitmap();
@@ -618,6 +616,7 @@ ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, const Color& rColor,
 {
     m_aColorField.SetModifyHdl( LINK( this, ColorPickerDialog, ColorFieldControlModifydl ) );
     m_aColorSlider.SetModifyHdl( LINK( this, ColorPickerDialog, ColorSliderControlModifyHdl ) );
+    m_aColorSlider.SetResizeHdl(LINK(this, ColorPickerDialog, ColorSliderResizeHdl));
 
     int nMargin = (m_xFISliderLeft->get_preferred_size().Height() + 1) / 2;
     m_xColorSlider->set_margin_top(nMargin);
@@ -763,12 +762,12 @@ void ColorPickerDialog::update_color( UpdateFlags n )
         }
     }
 
+    // tdf#171730 - always sync slider markers with current slider level
+    m_xFISliderLeft->set_margin_top(m_aColorSlider.GetLevel());
+    m_xFISliderRight->set_margin_top(m_aColorSlider.GetLevel());
+
     if (n & UpdateFlags::Hex) // update hex
-    {
-        m_xFISliderLeft->set_margin_top(m_aColorSlider.GetLevel());
-        m_xFISliderRight->set_margin_top(m_aColorSlider.GetLevel());
         m_xEDHex->SetColor(aColor);
-    }
     m_aColorPreview.SetColor(aColor);
 }
 
@@ -834,6 +833,13 @@ IMPL_LINK_NOARG(ColorPickerDialog, ColorSliderControlModifyHdl, ColorSliderContr
     }
 
     update_color(UpdateFlags::All & ~UpdateFlags::ColorSlider);
+}
+
+IMPL_LINK_NOARG(ColorPickerDialog, ColorSliderResizeHdl, ColorSliderControl&, void)
+{
+    // tdf#171730 - sync slider markers with current slider level
+    m_xFISliderLeft->set_margin_top(m_aColorSlider.GetLevel());
+    m_xFISliderRight->set_margin_top(m_aColorSlider.GetLevel());
 }
 
 IMPL_LINK(ColorPickerDialog, ColorModifyMetricHdl, weld::MetricSpinButton&, rEdit, void)
