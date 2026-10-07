@@ -134,7 +134,11 @@ namespace cool {
 			const h = this.context.canvas.height;
 			this._ensureOffscreen(w, h);
 
+			// The objects drawn elsewhere are left out of the page, so the drawing is made again
+			// when they change.
 			const renderKey =
+				RenderManager.drawnElsewhereVersion() +
+				':' +
 				cached.partId +
 				':' +
 				scale +

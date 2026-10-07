@@ -74,6 +74,9 @@ class VectorManager extends RenderManagerBase {
 
 	/// The objects left out of the drawing of a part because they are drawn elsewhere, by id.
 	private _drawnElsewhere: Set<number> = new Set();
+	/// Counts up each time the objects left out of the drawing change, so a drawing kept from
+	/// before can be told apart from one that matches them.
+	private _drawnElsewhereVersion: number = 0;
 
 	// The Impress or Draw doc layer, read lazily so the manager can be
 	// created before the layer is registered on the map.
@@ -211,7 +214,17 @@ class VectorManager extends RenderManagerBase {
 	/// The objects to leave out of the drawing of a part from now on, since they are drawn
 	/// elsewhere. An empty list leaves nothing out.
 	drawnElsewhere(objectIds: number[]): void {
-		this._drawnElsewhere = new Set(objectIds);
+		const next = new Set(objectIds);
+		const same =
+			next.size === this._drawnElsewhere.size &&
+			objectIds.every((id) => this._drawnElsewhere.has(id));
+		if (same) return;
+		this._drawnElsewhere = next;
+		this._drawnElsewhereVersion++;
+	}
+
+	drawnElsewhereVersion(): number {
+		return this._drawnElsewhereVersion;
 	}
 
 	/// The page rectangle carried by the entry that stands for the page, or

@@ -235,6 +235,10 @@ class RenderManagerBase {
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	drawnElsewhere(_objectIds: number[]): void {}
 
+	drawnElsewhereVersion(): number {
+		return 0;
+	}
+
 	isPartDrawable(_part: number, _mode: number): boolean {
 		return false;
 	}

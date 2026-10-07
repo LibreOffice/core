@@ -298,6 +298,10 @@ class RenderManager {
 		RenderManager.ensureInstance().drawnElsewhere(objectIds);
 	}
 
+	static drawnElsewhereVersion(): number {
+		return RenderManager.ensureInstance().drawnElsewhereVersion();
+	}
+
 	static isPartDrawable(part: number, mode: number): boolean {
 		return RenderManager.ensureInstance().isPartDrawable(part, mode);
 	}
