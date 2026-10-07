@@ -18,11 +18,6 @@ body {
 }
 .tab {
 	box-sizing: border-box;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	gap: 6px;
-	padding: 0 8px;
 	flex: 1 1 0;
 	min-width: 32px;
 	max-width: 220px;
@@ -34,15 +29,30 @@ body {
 	cursor: pointer;
 	overflow: hidden;
 	position: relative;
+	/* Each tab is a size container, so a rule can test the width of its own tab. The tab has no
+	   padding, so that width is the whole tab. */
+	container-type: inline-size;
+}
+.tab .content {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 6px;
+	padding: 0 30px 0 8px;
+	height: 100%;
 }
 .tab:hover:not(.active) {
 	background: var(--color-background-hover);
+	--close-color: var(--color-background-hover);
 }
 .tab[data-doctype] {
 	--tab-accent: rgb(var(--doc-type));
 }
 .tab.active {
 	background: var(--color-main-background);
+	--close-color: var(--color-main-background);
+	min-width: 66px;
 }
 /* The document type in colour along the top edge. In the light palette the
    strip and the document background are only a few shades apart, so this is
@@ -76,7 +86,6 @@ body {
 	color: var(--color-text-lighter);
 }
 .tab .close {
-	flex: 0 0 16px;
 	width: 16px;
 	height: 16px;
 	border-radius: 50%;
@@ -85,15 +94,24 @@ body {
 	justify-content: center;
 	color: var(--color-text-lighter);
 	visibility: hidden;
-	font-size: 1.17em;
+	font-size: 1.5em;
 	/* line-height: 0 keeps the X glyph optically centered; the flex
        container's align-items alone leaves it sitting too low. */
 	line-height: 0;
+	position: absolute;
+	right: 8px;
+	top: 50%;
+	transform: translateY(-50%);
+	background: var(--close-color);
 }
 .tab:hover .close,
 .tab.active .close { visibility: visible; }
+/* A tab narrower than 82px shows its close button only while it is the active one. */
+@container (width < 82px) {
+	.tab:not(.active) .close { visibility: hidden; }
+}
 .tab .close:hover {
-	background: var(--color-background-hover);
+	background: var(--color-background-dark);
 	color: var(--color-main-text);
 }
 .tab.dragging { opacity: 0.5; }
@@ -117,12 +135,10 @@ body {
 	justify-content: center;
 	flex: 0 0 28px;
 	width: 28px;
-	/* A rounded square centred in the strip, so its hover fill sits clear of
-	   the tabs beside it and of the document below. */
 	align-self: center;
-	height: 24px;
-	margin: 0 2px;
-	border-radius: 4px;
+	height: 28px;
+	margin: 0 4px;
+	border-radius: 50%;
 	cursor: pointer;
 	color: var(--color-text-lighter);
 	font-size: 1.5em;
@@ -130,6 +146,6 @@ body {
 	line-height: 0;
 }
 #new-tab:hover {
-	background: var(--color-background-hover);
+	background: var(--color-background-dark);
 	color: var(--color-main-text);
 }

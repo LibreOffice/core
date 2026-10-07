@@ -211,8 +211,11 @@
 				dragState.inStripDropHandled = false;
 			});
 
-			tab.appendChild(icon);
-			tab.appendChild(title);
+			const content = el('div');
+			content.className = 'content';
+			content.appendChild(icon);
+			content.appendChild(title);
+			tab.appendChild(content);
 			tab.appendChild(close);
 			strip.appendChild(tab);
 			tabEls.push(tab);
