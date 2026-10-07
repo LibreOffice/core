@@ -30,6 +30,8 @@ namespace cool {
 		bound: Range2D;
 		transform: Matrix2D;
 		gluePoints: ObjectGluePoint[];
+		/// The four glue points at the middles of the sides, where they lie on the object.
+		sideGluePoints: ObjectPlace[];
 	}
 }
 
@@ -226,6 +228,15 @@ class ConnectorRouter {
 		number: number,
 	): { point: cool.Point; escape: Escape } | undefined {
 		if (tie.autoVertex) {
+			// The object gives the four itself. The middles of its box stand in where it gave
+			// none.
+			const side = node.sideGluePoints[number];
+			if (side)
+				return {
+					point: node.transform.apply(side.x, side.y),
+					escape: Escape.Smart,
+				};
+
 			const rect = node.snap;
 			const middle = ConnectorRouter.center(rect);
 			const at =
@@ -1190,6 +1201,7 @@ class ConnectorRouter {
 			bound,
 			transform,
 			gluePoints: object.gluePoints ?? [],
+			sideGluePoints: object.sideGluePoints ?? [],
 		};
 	}
 
@@ -1315,6 +1327,7 @@ class ConnectorRouter {
 			snap: new cool.Range2D(0, 0, 1, 1).transform(transform),
 			bound: node.bound.transform(matrix),
 			gluePoints: node.gluePoints,
+			sideGluePoints: node.sideGluePoints,
 		};
 	}
 

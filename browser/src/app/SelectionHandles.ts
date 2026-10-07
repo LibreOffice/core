@@ -101,13 +101,25 @@ class GluePointHandles {
 	}
 
 	/*
-		The four points an object falls back on, in the middle of each side of the box around it.
-		The box is upright, as the drawing layer takes it for these: an object that is turned is
-		reached at the sides of the box it stands in, not at the sides it was given.
+		The four points an object falls back on, in the middle of each of its sides: the upper,
+		the right, the lower and the left one. Where they lie is the object's own business - a
+		rectangle or a picture turns and shears them with itself, other objects take the sides of
+		the upright box they stand in - so they are taken from the object as it gives them. Data
+		that carries none falls back on the middles of the upright box.
 	*/
 	public static defaultPointsOf(objectId: number): SelectionHandle[] {
 		const transform = RenderGeometrySection.transformOf(objectId);
 		if (!transform) return [];
+
+		const fallback = 'DefaultGluePoint';
+
+		// The object gives the four itself. The middles of its box stand in where it gave none.
+		const sides = RenderGeometrySection.objectOf(objectId)?.sideGluePoints;
+		if (sides?.length === 4)
+			return sides.map((side: cool.ObjectPlace) => {
+				const at = transform.apply(side.x, side.y);
+				return GluePointHandles.handleAt(at.x, at.y, fallback);
+			});
 
 		const box = cool.Range2D.fromPoints(
 			[
@@ -117,8 +129,6 @@ class GluePointHandles {
 				[0, 1],
 			].map(([x, y]: number[]) => transform.apply(x, y)),
 		);
-
-		const fallback = 'DefaultGluePoint';
 
 		return [
 			GluePointHandles.handleAt(box.centerX, box.minY, fallback),

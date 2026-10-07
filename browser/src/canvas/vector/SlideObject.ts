@@ -266,6 +266,12 @@ namespace cool {
 		/// True where the object cannot hold a shear at all, a text frame for one.
 		cannotBeSheared?: boolean;
 		gluePoints?: ObjectGluePoint[];
+		/** The four glue points the object has at the middles of its sides - the upper, the
+		 * right, the lower and the left one - where they lie on the object, as gluePoints are
+		 * given. The object places them itself, turned and sheared with it on some objects, put
+		 * out by half its line on others. Absent for a connector.
+		 */
+		sideGluePoints?: ObjectPlace[];
 		/// True for a connector whose first end is tied to an object, and the same for its last
 		/// end. Absent for anything that is not a connector, and for an end that is free.
 		tiedAtStart?: boolean;

@@ -3763,15 +3763,34 @@ private:
                 aContent.moRouting = routingOf(*pConnector);
             }
 
+            /*
+                The place of a glue point is given on the object, so that the client can move it,
+                scale it and turn it with the object without asking anything. The way back from
+                the page to the object is the transformation the entry carries, undone.
+            */
+            basegfx::B2DHomMatrix aFromTheObject(transformationInTwips(rObject));
+            const bool bCanBeUndone(aFromTheObject.invert());
+
+            /*
+                The four at the middles of the sides are the object's own business: a rectangle
+                or a picture turns them and shears them with itself and puts them out by half its
+                line, a custom shape has its own, and anything else takes the middles of its box.
+                So they are asked for, and given on the object like the others.
+            */
+            if (bCanBeUndone && !dynamic_cast<const SdrEdgeObj*>(&rObject))
+            {
+                for (sal_uInt16 nSide = 0; nSide < 4; ++nSide)
+                {
+                    const Point aAt(rObject.GetVertexGluePoint(nSide).GetAbsolutePos(rObject));
+                    aContent.maSideGluePoints.push_back(
+                        aFromTheObject
+                        * basegfx::B2DPoint(aAt.X() * constTwipConversionFactor,
+                                            aAt.Y() * constTwipConversionFactor));
+                }
+            }
+
             if (const SdrGluePointList* pGluePoints = rObject.GetGluePointList())
             {
-                /*
-                    The place of such a point is given on the object, so that the client can move
-                    it, scale it and turn it with the object without asking anything. The way back
-                    from the page to the object is the transformation the entry carries, undone.
-                */
-                basegfx::B2DHomMatrix aFromTheObject(transformationInTwips(rObject));
-                const bool bCanBeUndone(aFromTheObject.invert());
 
                 for (sal_uInt16 nGluePoint = 0; nGluePoint < pGluePoints->GetCount();
                      ++nGluePoint)
@@ -4546,6 +4565,17 @@ private:
                     rWriter.put("fromAcross", rGluePoint.maFromAcross);
                 if (!rGluePoint.maFromDown.isEmpty())
                     rWriter.put("fromDown", rGluePoint.maFromDown);
+            }
+        }
+
+        if (!rContent.maSideGluePoints.empty())
+        {
+            auto aSideNode = rWriter.startArray("sideGluePoints");
+            for (const auto& rPoint : rContent.maSideGluePoints)
+            {
+                auto aOneNode = rWriter.startStruct();
+                rWriter.put("x", rPoint.getX());
+                rWriter.put("y", rPoint.getY());
             }
         }
 

@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 #include <svx/sdrhandlerails.hxx>
 #include <svx/svdobjkind.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -393,6 +394,10 @@ public:
         /// was given none, and then the four middles of the sides of its box are what a connector
         /// can reach for.
         std::vector<GluePoint> maOwnGluePoints;
+        /// The four glue points every object has at the middles of its sides - the upper, the
+        /// right, the lower and the left one - where they lie on the object, as the points in
+        /// maOwnGluePoints are given. Empty for a connector.
+        std::vector<basegfx::B2DPoint> maSideGluePoints;
 
         tools::Rectangle maPaintedBox;
         basegfx::B2DHomMatrix maTransformation;
@@ -444,7 +449,8 @@ public:
                    && mbTiedAtEnd == rOther.mbTiedAtEnd
                    && mnTiedToAtStart == rOther.mnTiedToAtStart
                    && mnTiedToAtEnd == rOther.mnTiedToAtEnd && moRouting == rOther.moRouting
-                   && maOwnGluePoints == rOther.maOwnGluePoints;
+                   && maOwnGluePoints == rOther.maOwnGluePoints
+                   && maSideGluePoints == rOther.maSideGluePoints;
         }
     };
 
