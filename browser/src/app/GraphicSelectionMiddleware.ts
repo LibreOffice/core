@@ -284,15 +284,19 @@ class GraphicSelection {
 	public static handleKeyboard(event: KeyboardEvent): boolean {
 		if (!this.hasActiveSelection()) return false;
 
-		if (GraphicSelection.travel()?.keyboard(event)) return true;
+		// What a key changes goes to the engine once the keys are let go, as the last state of
+		// each thing it changed. It is shown here at once all the same.
+		return ChangeOutbox.byAKey(event, () => {
+			if (GraphicSelection.travel()?.keyboard(event)) return true;
 
-		if (!RenderManager.isVectorRendering()) return false;
+			if (!RenderManager.isVectorRendering()) return false;
 
-		const way = GraphicSelection.theWayOf[event.key];
-		if (!way) return false;
+			const way = GraphicSelection.theWayOf[event.key];
+			if (!way) return false;
 
-		this.selectionSection?.moveByKey(new cool.Point(way[0], way[1]), event);
-		return true;
+			this.selectionSection?.moveByKey(new cool.Point(way[0], way[1]), event);
+			return true;
+		});
 	}
 
 	/*

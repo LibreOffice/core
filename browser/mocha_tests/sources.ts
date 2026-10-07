@@ -48,6 +48,7 @@
 /// <reference path="../src/app/ViewLayoutWriter.ts" />
 /// <reference path="../src/app/ViewLayoutImpress.ts" />
 /// <reference path="../src/app/ViewLayoutVector.ts" />
+/// <reference path="../src/app/ChangeOutbox.ts" />
 /// <reference path="../src/app/ViewLayoutCalc.ts" />
 /// <reference path="../src/app/ViewLayoutMultiPage.ts" />
 /// <reference path="../src/app/ViewLayoutFileBased.ts" />

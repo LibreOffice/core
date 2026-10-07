@@ -217,6 +217,10 @@ class Socket {
 
 		if (this._map.uiManager && this._map.uiManager.isUIBlocked()) return;
 
+		// The changes of objects and the undos and redos of a view that draws from the objects
+		// go to the engine at its own pace, one at a time. The outbox holds them meanwhile.
+		if (typeof msg === 'string' && ChangeOutbox.take(msg)) return;
+
 		const socketState = this.socket.readyState;
 		if (socketState === 2 || socketState === 3) {
 			this._map.loadDocument();

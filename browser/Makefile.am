@@ -406,6 +406,7 @@ COOL_JS_LST =\
 	src/app/ViewLayout.ts \
 	src/app/ViewLayoutImpress.ts \
 	src/app/ViewLayoutVector.ts \
+	src/app/ChangeOutbox.ts \
 	src/app/ViewLayoutWriter.ts \
 	src/app/ViewLayoutCalc.ts \
 	src/app/ViewLayoutMultiPage.ts \
