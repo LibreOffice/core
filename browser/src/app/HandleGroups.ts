@@ -328,6 +328,29 @@ class CropHandles extends HandleGroup {
 		});
 	}
 
+	/*
+		Tells the engine to crop the picture to the window that square maps the unit square to,
+		by two opposite corners of the window on the page, in twips. The window is named whole,
+		whatever part of it moved.
+	*/
+	public static cropTo(objectId: number, window: cool.Matrix2D): void {
+		const upperLeft = window.apply(0, 0);
+		const lowerRight = window.apply(1, 1);
+
+		app.socket.sendMessage(
+			'cropobject id=' +
+				String(objectId) +
+				' x1=' +
+				String(Math.round(upperLeft.x)) +
+				' y1=' +
+				String(Math.round(upperLeft.y)) +
+				' x2=' +
+				String(Math.round(lowerRight.x)) +
+				' y2=' +
+				String(Math.round(lowerRight.y)),
+		);
+	}
+
 	/// The two axes of that square, each a step of length one.
 	private static axesOf(square: cool.Matrix2D): cool.Point[] {
 		const unit = (axis: cool.Point): cool.Point =>

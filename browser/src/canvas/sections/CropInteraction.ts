@@ -15,8 +15,8 @@
 	picture. A scale moves the picture with its window; a crop moves the window alone and the
 	picture stays where it is, so nothing of the picture is drawn through the change while it
 	runs, only the handles go with it, and the whole graphic shown faintly round the picture says
-	what the window is being moved over. The engine is told at the end which mark went where and
-	works the crop out itself, in the graphic's own units.
+	what the window is being moved over. The engine is told at the end the window the drag left,
+	and works the crop out itself, in the graphic's own units.
 */
 class CropInteraction extends ScalingInteraction {
 	/// Which of the eight the mark stands for.
@@ -131,22 +131,16 @@ class CropInteraction extends ScalingInteraction {
 		return null;
 	}
 
+	/// The engine is told the window the drag left, as the square the drag took the picture's
+	/// square to.
 	public finish(to: cool.SimplePoint, event: MouseEvent): void {
 		this.move(to, event);
-		if (!this.at) return;
 
+		const matrix = this.transformation();
+		const square = this.selection.squareNow();
 		const objectId = this.selection.selectedObjects()[0];
-		if (objectId === undefined) return;
+		if (!matrix || !square || objectId === undefined) return;
 
-		app.socket.sendMessage(
-			'cropobject id=' +
-				String(objectId) +
-				' kind=' +
-				String(Number(this.ofTheEight)) +
-				' x=' +
-				String(Math.round(this.at.x)) +
-				' y=' +
-				String(Math.round(this.at.y)),
-		);
+		CropHandles.cropTo(objectId, square.then(matrix));
 	}
 }

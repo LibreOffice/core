@@ -2858,16 +2858,20 @@ struct COKitDocument
         = 0;
 
     /**
-     * Crops a picture by one of its eight crop handles, which stand where the eight that frame
-     * it stand. The graphic stays where it is on the page and only the window onto it moves,
-     * the way the office crops. Nothing needs to be selected for it.
+     * Crops a picture to a new window onto its graphic, given by the window's upper left and
+     * lower right corners. The corners are the window's own, along the picture's axes, so a
+     * turned or sheared picture keeps its turn and shear. The graphic stays where it is on the
+     * page and only the window onto it moves, the way the office crops. The crop values follow
+     * from the window. Nothing needs to be selected for it.
      *
      * @param nObjectId the unique id of the picture
-     * @param nKind which of the eight, as setObjectHandle names a handle's kind
-     * @param nX where the handle goes, on the page, in twips
-     * @param nY where the handle goes, on the page, in twips
+     * @param nUpperLeftX where the window's upper left corner goes, on the page, in twips
+     * @param nUpperLeftY where the window's upper left corner goes, on the page, in twips
+     * @param nLowerRightX where the window's lower right corner goes, on the page, in twips
+     * @param nLowerRightY where the window's lower right corner goes, on the page, in twips
      */
-    virtual void cropObject(unsigned long long nObjectId, int nKind, int nX, int nY) = 0;
+    virtual void cropObject(unsigned long long nObjectId, int nUpperLeftX, int nUpperLeftY,
+                            int nLowerRightX, int nLowerRightY) = 0;
 
 };
 

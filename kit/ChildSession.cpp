@@ -1877,20 +1877,24 @@ bool ChildSession::setObjectHandle(const StringVector& tokens)
 bool ChildSession::cropObject(const StringVector& tokens)
 {
     std::string objectId;
-    int nKind = 0;
-    int nX = 0;
-    int nY = 0;
+    int nUpperLeftX = 0;
+    int nUpperLeftY = 0;
+    int nLowerRightX = 0;
+    int nLowerRightY = 0;
 
-    if (tokens.size() != 5 || !getTokenString(tokens[1], "id", objectId)
-        || !getTokenInteger(tokens[2], "kind", nKind) || !getTokenInteger(tokens[3], "x", nX)
-        || !getTokenInteger(tokens[4], "y", nY))
+    if (tokens.size() != 6 || !getTokenString(tokens[1], "id", objectId)
+        || !getTokenInteger(tokens[2], "x1", nUpperLeftX)
+        || !getTokenInteger(tokens[3], "y1", nUpperLeftY)
+        || !getTokenInteger(tokens[4], "x2", nLowerRightX)
+        || !getTokenInteger(tokens[5], "y2", nLowerRightY))
     {
         sendTextFrameAndLogError("error: cmd=cropobject kind=syntax");
         return false;
     }
 
     getLOKitDocument()->setView(_viewId);
-    getLOKitDocument()->cropObject(std::strtoull(objectId.c_str(), nullptr, 10), nKind, nX, nY);
+    getLOKitDocument()->cropObject(std::strtoull(objectId.c_str(), nullptr, 10), nUpperLeftX,
+                                   nUpperLeftY, nLowerRightX, nLowerRightY);
 
     return true;
 }

@@ -16,8 +16,8 @@
 	it for undo, compares the slide and sends a delta, and cannot keep up, so the queue towards it
 	grows and the answers come back long after the steps they belong to.
 
-	Every change of an object names the whole state it is to reach - the object's mapping, the
-	place a handle goes to, the places of the points of a path, a glue point, a crop mark - and the
+	Every change of an object names the whole state it is to reach - the object's mapping, the place
+	a handle goes to, the places of the points of a path, a glue point, a crop window - and the
 	engine works it out from its own state. So of a run of changes to the same thing only the last
 	counts. A change made by a key is held here until the keys are let go, and then only the last
 	state of each thing goes out: a single press a moment after it was made, a key held down as one
@@ -49,7 +49,7 @@ class ChangeOutbox {
 		setobjecthandle: ' x=',
 		setobjectcontrolpoint: ' x=',
 		setobjectgluepoint: ' x=',
-		cropobject: ' x=',
+		cropobject: ' x1=',
 		setobjectpoints: ' changes=',
 	};
 

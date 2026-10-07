@@ -213,6 +213,16 @@ public:
     void cropChangeFor(SdrHdlKind eHandle, const basegfx::B2DPoint& rTo,
                        SdrGrafCropChange& rChange) const;
 
+    /** Works out what a crop to a new window does on the unit square: the window given by two
+        of its opposite corners, in the page's own unit, along the picture's axes. The corners
+        may come in either order, since a picture that is turned over holds its axes the other
+        way round from how they are seen. An edge within a twip of the window's present one is
+        taken as that one, so an edge that stays where it is keeps its crop value. False where
+        the window has no width or no height. */
+    bool cropChangeForWindow(const basegfx::B2DPoint& rCorner,
+                             const basegfx::B2DPoint& rOppositeCorner,
+                             SdrGrafCropChange& rChange) const;
+
     /** The box the picture's window takes up before and after such a change, upright and
         unsheared, in the page's own unit. */
     static void cropWindowRanges(const SdrGrafCropChange& rChange, basegfx::B2DRange& rBefore,

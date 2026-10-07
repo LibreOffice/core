@@ -7150,12 +7150,13 @@ void COKitDocumentImpl::setObjectControlPoint(unsigned long long nObjectId,
 }
 
 /*
-    Crops a picture by naming it: which of the eight marks went where, in twips on the page.
-    The picture works the crop out itself in its graphic's own units, and the window moves with
-    it, so the graphic stays where it was on the page.
+    Crops a picture by naming it and the window it is to show, by the window's upper left and
+    lower right corners in twips on the page. The picture works the crop out itself in its
+    graphic's own units, and the window moves with it, so the graphic stays where it was on the
+    page.
 */
-void COKitDocumentImpl::cropObject(unsigned long long nObjectId, int nKind, int nX,
-                                   int nY)
+void COKitDocumentImpl::cropObject(unsigned long long nObjectId, int nUpperLeftX,
+                                   int nUpperLeftY, int nLowerRightX, int nLowerRightY)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::cropObject");
 
@@ -7187,20 +7188,21 @@ void COKitDocumentImpl::cropObject(unsigned long long nObjectId, int nKind, int 
         return;
     }
 
-    if (nKind < static_cast<int>(SdrHdlKind::UpperLeft)
-        || nKind > static_cast<int>(SdrHdlKind::LowerRight))
-    {
-        SetLastExceptionMsg(u"A picture is cropped by one of the eight handles that frame it"_ustr);
-        return;
-    }
-
-    // The place arrives in twips and the model holds the page in its own unit.
-    const basegfx::B2DPoint aTo(
-        o3tl::convert(tools::Long(nX), o3tl::Length::twip, o3tl::Length::mm100),
-        o3tl::convert(tools::Long(nY), o3tl::Length::twip, o3tl::Length::mm100));
+    // The corners arrive in twips and the model holds the page in its own unit.
+    const auto inModelUnit = [](int nX, int nY) {
+        return basegfx::B2DPoint(
+            o3tl::convert(tools::Long(nX), o3tl::Length::twip, o3tl::Length::mm100),
+            o3tl::convert(tools::Long(nY), o3tl::Length::twip, o3tl::Length::mm100));
+    };
 
     SdrGrafCropChange aChange;
-    pPicture->cropChangeFor(static_cast<SdrHdlKind>(nKind), aTo, aChange);
+    if (!pPicture->cropChangeForWindow(inModelUnit(nUpperLeftX, nUpperLeftY),
+                                       inModelUnit(nLowerRightX, nLowerRightY), aChange))
+    {
+        SetLastExceptionMsg(
+            u"The window has no width or no height"_ustr);
+        return;
+    }
 
     // A crop changes the geometry and the crop values both, so both are put back by an undo.
     SdrModel& rModel(pPicture->getSdrModelFromSdrObject());

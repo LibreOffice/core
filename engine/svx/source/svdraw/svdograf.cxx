@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+#include <cmath>
 #include <unotools/streamwrap.hxx>
 
 #include <sfx2/lnkbase.hxx>
@@ -57,6 +59,7 @@
 #include <sdr/contact/viewcontactofgraphic.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <o3tl/numeric.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <memory>
@@ -1321,6 +1324,25 @@ void SdrGrafObj::addCropHandles(SdrHdlList& rTarget) const
     }
 }
 
+namespace
+{
+/** The mapping with its shear turned the other way. The shear comes mirrored from
+    TRGetBaseGeometry and goes back the same way into TRSetBaseGeometry, so a crop works on the
+    mapping turned over and turns it back when it is done. A mapping without shear stays as it is,
+    and bTurned says whether there was any. */
+basegfx::B2DHomMatrix withShearTurnedOver(const basegfx::B2DHomMatrix& rMapping, bool& bTurned)
+{
+    const basegfx::utils::B2DHomMatrixBufferedDecompose aDecompose(rMapping);
+    bTurned = !basegfx::fTools::equalZero(aDecompose.getShearX());
+    if (!bTurned)
+        return rMapping;
+
+    return basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
+        aDecompose.getScale(), -aDecompose.getShearX(), aDecompose.getRotate(),
+        aDecompose.getTranslate());
+}
+}
+
 void SdrGrafObj::cropChangeFor(SdrHdlKind eHandle, const basegfx::B2DPoint& rTo,
                                SdrGrafCropChange& rChange) const
 {
@@ -1329,19 +1351,8 @@ void SdrGrafObj::cropChangeFor(SdrHdlKind eHandle, const basegfx::B2DPoint& rTo,
     rChange.mbShearCorrected = false;
     TRGetBaseGeometry(rChange.maOriginal, aPolyPolygon);
 
-    {   // correct shear, it comes currently mirrored from TRGetBaseGeometry, can be removed with aw080
-        const basegfx::utils::B2DHomMatrixBufferedDecompose aTmpDecomp(rChange.maOriginal);
-
-        if(!basegfx::fTools::equalZero(aTmpDecomp.getShearX()))
-        {
-            rChange.mbShearCorrected = true;
-            rChange.maOriginal = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-                aTmpDecomp.getScale(),
-                -aTmpDecomp.getShearX(),
-                aTmpDecomp.getRotate(),
-                aTmpDecomp.getTranslate());
-        }
-    }
+    // correct shear, it comes currently mirrored from TRGetBaseGeometry, can be removed with aw080
+    rChange.maOriginal = withShearTurnedOver(rChange.maOriginal, rChange.mbShearCorrected);
 
     // generate start point of original drag vector in unit coordinates (the
     // vis-a-vis of the drag point)
@@ -1414,6 +1425,43 @@ void SdrGrafObj::cropChangeFor(SdrHdlKind eHandle, const basegfx::B2DPoint& rTo,
     rChange.maChange = aDiscreteChangeMatrix;
 }
 
+bool SdrGrafObj::cropChangeForWindow(const basegfx::B2DPoint& rCorner,
+                                     const basegfx::B2DPoint& rOppositeCorner,
+                                     SdrGrafCropChange& rChange) const
+{
+    // A crop by the upper left handle takes the picture's mapping onto the page, with the
+    // shear set right, and the window is read through that same mapping.
+    cropChangeFor(SdrHdlKind::UpperLeft, rCorner, rChange);
+    basegfx::B2DHomMatrix aInverse(rChange.maOriginal);
+    aInverse.invert();
+    // The two corners are opposite ones, and the window runs between them on each axis.
+    const basegfx::B2DPoint aFirst(aInverse * rCorner);
+    const basegfx::B2DPoint aSecond(aInverse * rOppositeCorner);
+    basegfx::B2DPoint aStart(std::min(aFirst.getX(), aSecond.getX()),
+                             std::min(aFirst.getY(), aSecond.getY()));
+    basegfx::B2DPoint aEnd(std::max(aFirst.getX(), aSecond.getX()),
+                           std::max(aFirst.getY(), aSecond.getY()));
+
+    // A twip on the page, as a share of the window along each axis. The corners come in whole
+    // twips, so an edge within that of where it is now is the edge as it is.
+    const basegfx::utils::B2DHomMatrixBufferedDecompose aDecompose(rChange.maOriginal);
+    const double fTwip(o3tl::convert(1.0, o3tl::Length::twip, o3tl::Length::mm100));
+    const double fAcross(fTwip / std::max(std::abs(aDecompose.getScale().getX()), 1.0));
+    const double fDown(fTwip / std::max(std::abs(aDecompose.getScale().getY()), 1.0));
+    const auto kept = [](double fEdge, double fNow, double fNear) {
+        return std::abs(fEdge - fNow) <= fNear ? fNow : fEdge;
+    };
+    aStart = basegfx::B2DPoint(kept(aStart.getX(), 0.0, fAcross), kept(aStart.getY(), 0.0, fDown));
+    aEnd = basegfx::B2DPoint(kept(aEnd.getX(), 1.0, fAcross), kept(aEnd.getY(), 1.0, fDown));
+
+    if (aEnd.getX() <= aStart.getX() || aEnd.getY() <= aStart.getY())
+        return false;
+
+    rChange.maChange = basegfx::utils::createScaleTranslateB2DHomMatrix(
+        aEnd.getX() - aStart.getX(), aEnd.getY() - aStart.getY(), aStart.getX(), aStart.getY());
+    return true;
+}
+
 void SdrGrafObj::cropWindowRanges(const SdrGrafCropChange& rChange, basegfx::B2DRange& rBefore,
                                   basegfx::B2DRange& rAfter)
 {
@@ -1439,16 +1487,11 @@ bool SdrGrafObj::applyCropChange(const SdrGrafCropChange& rChange)
     // prepare matrix to apply to object. Evtl. back-correct shear
     basegfx::B2DHomMatrix aNewObjectMatrix(rChange.maOriginal * rChange.maChange);
 
+    bool bTurned(false);
     if(rChange.mbShearCorrected)
     {
         // back-correct shear
-        const basegfx::utils::B2DHomMatrixBufferedDecompose aTmpDecomp(aNewObjectMatrix);
-
-        aNewObjectMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
-            aTmpDecomp.getScale(),
-            -aTmpDecomp.getShearX(),
-            aTmpDecomp.getRotate(),
-            aTmpDecomp.getTranslate());
+        aNewObjectMatrix = withShearTurnedOver(aNewObjectMatrix, bTurned);
     }
 
     // apply change to object by applying the unit coordinate change followed
@@ -1456,24 +1499,47 @@ bool SdrGrafObj::applyCropChange(const SdrGrafCropChange& rChange)
     basegfx::B2DPolyPolygon aPolyPolygon;
     TRSetBaseGeometry(aNewObjectMatrix, aPolyPolygon);
 
+    /*
+        The model holds the geometry in whole units, its turn and its shear included, so the
+        window it laid down is not exactly the one asked for. The crop values are worked out from
+        the window it reached, read back the way the change was worked out, so the graphic keeps
+        its place and its scale however narrow the window is.
+    */
+    SdrGrafCropChange aReached(rChange);
+    {
+        basegfx::B2DHomMatrix aMappingReached;
+        TRGetBaseGeometry(aMappingReached, aPolyPolygon);
+        if (rChange.mbShearCorrected)
+            aMappingReached = withShearTurnedOver(aMappingReached, bTurned);
+
+        /*
+            The reached window is measured on the unit square of the old one by where its corner
+            went and how long its two sides are along the two axes. A shear or a turn that came
+            back a hair off from what was asked for adds nothing to that, where it would widen a
+            narrow window's box by as much as the window is high against its width.
+        */
+        basegfx::B2DHomMatrix aToTheUnitSquare(rChange.maOriginal);
+        if (aToTheUnitSquare.invert())
+        {
+            const basegfx::B2DHomMatrix aOnTheSquare(aToTheUnitSquare * aMappingReached);
+            const basegfx::B2DPoint aCorner(aOnTheSquare * basegfx::B2DPoint(0.0, 0.0));
+            const basegfx::B2DPoint aAcross(aOnTheSquare * basegfx::B2DPoint(1.0, 0.0));
+            const basegfx::B2DPoint aDown(aOnTheSquare * basegfx::B2DPoint(0.0, 1.0));
+            aReached.maChange = basegfx::utils::createScaleTranslateB2DHomMatrix(
+                aAcross.getX() - aCorner.getX(), aDown.getY() - aCorner.getY(), aCorner.getX(),
+                aCorner.getY());
+        }
+    }
+
     // extract the old Rectangle structures
     basegfx::B2DRange aRangeOriginalNoShearNoRotate;
     basegfx::B2DRange aRangeNewNoShearNoRotate;
-    cropWindowRanges(rChange, aRangeOriginalNoShearNoRotate, aRangeNewNoShearNoRotate);
+    cropWindowRanges(aReached, aRangeOriginalNoShearNoRotate, aRangeNewNoShearNoRotate);
 
-    tools::Rectangle aOldRect(
-        basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMinX()),
-        basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMinY()),
-        basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMaxX()),
-        basegfx::fround<tools::Long>(aRangeOriginalNoShearNoRotate.getMaxY()));
-    tools::Rectangle aNewRect(
-        basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMinX()),
-        basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMinY()),
-        basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMaxX()),
-        basegfx::fround<tools::Long>(aRangeNewNoShearNoRotate.getMaxY()));
-
-    // continue with the old original stuff
-    if (!aOldRect.GetWidth() || !aOldRect.GetHeight())
+    // The window's edges are taken as they are, not rounded, and the crop values are rounded
+    // once at the end, so a narrow window keeps the scale its graphic is drawn at.
+    if (basegfx::fTools::equalZero(aRangeOriginalNoShearNoRotate.getWidth())
+        || basegfx::fTools::equalZero(aRangeOriginalNoShearNoRotate.getHeight()))
     {
         throw o3tl::divide_by_zero();
     }
@@ -1509,27 +1575,31 @@ bool SdrGrafObj::applyCropChange(const SdrGrafCropChange& rChange)
     }
 
     const SdrGrafCropItem& rOldCrop = GetMergedItem(SDRATTR_GRAFCROP);
-    double fScaleX = ( aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight() ) / static_cast<double>(aOldRect.GetWidth());
-    double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / static_cast<double>(aOldRect.GetHeight());
+    const basegfx::B2DRange& rOld(aRangeOriginalNoShearNoRotate);
+    const basegfx::B2DRange& rNew(aRangeNewNoShearNoRotate);
+    const double fScaleX
+        = (aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight()) / rOld.getWidth();
+    const double fScaleY
+        = (aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom()) / rOld.getHeight();
 
-    sal_Int32 nDiffLeft = aNewRect.Left() - aOldRect.Left();
-    sal_Int32 nDiffTop = aNewRect.Top() - aOldRect.Top();
-    sal_Int32 nDiffRight = aNewRect.Right() - aOldRect.Right();
-    sal_Int32 nDiffBottom = aNewRect.Bottom() - aOldRect.Bottom();
+    double fDiffLeft = rNew.getMinX() - rOld.getMinX();
+    const double fDiffTop = rNew.getMinY() - rOld.getMinY();
+    double fDiffRight = rNew.getMaxX() - rOld.getMaxX();
+    const double fDiffBottom = rNew.getMaxY() - rOld.getMaxY();
 
     if(IsMirrored())
     {
         // mirrored X or Y, for old stuff, exchange X
         // check for aw080
-        sal_Int32 nTmp(nDiffLeft);
-        nDiffLeft = -nDiffRight;
-        nDiffRight = -nTmp;
+        const double fTmp(fDiffLeft);
+        fDiffLeft = -fDiffRight;
+        fDiffRight = -fTmp;
     }
 
-    sal_Int32 nLeftCrop = static_cast<sal_Int32>( rOldCrop.GetLeft() + nDiffLeft * fScaleX );
-    sal_Int32 nTopCrop = static_cast<sal_Int32>( rOldCrop.GetTop() + nDiffTop * fScaleY );
-    sal_Int32 nRightCrop = static_cast<sal_Int32>( rOldCrop.GetRight() - nDiffRight * fScaleX );
-    sal_Int32 nBottomCrop = static_cast<sal_Int32>( rOldCrop.GetBottom() - nDiffBottom * fScaleY );
+    const sal_Int32 nLeftCrop = basegfx::fround( rOldCrop.GetLeft() + fDiffLeft * fScaleX );
+    const sal_Int32 nTopCrop = basegfx::fround( rOldCrop.GetTop() + fDiffTop * fScaleY );
+    const sal_Int32 nRightCrop = basegfx::fround( rOldCrop.GetRight() - fDiffRight * fScaleX );
+    const sal_Int32 nBottomCrop = basegfx::fround( rOldCrop.GetBottom() - fDiffBottom * fScaleY );
 
     SetMergedItem( SdrGrafCropItem( nLeftCrop, nTopCrop, nRightCrop, nBottomCrop ) );
 

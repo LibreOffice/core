@@ -446,7 +446,8 @@ namespace desktop {
                                    bool bWithTheShape) override;
         void setObjectHandle(unsigned long long nObjectId, int nKind, int nPolygon, int nPoint,
                              int nAt, int nX, int nY) override;
-        void cropObject(unsigned long long nObjectId, int nKind, int nX, int nY) override;
+        void cropObject(unsigned long long nObjectId, int nUpperLeftX, int nUpperLeftY,
+                        int nLowerRightX, int nLowerRightY) override;
     };
 
     struct DESKTOP_DLLPUBLIC COKitImpl : public COKit
