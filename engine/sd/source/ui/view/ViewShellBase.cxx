@@ -1241,11 +1241,9 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
             KitHelper::notifyOtherView(pDrawViewShell->GetViewShellBase(), pOtherShell, COKitCallbackType::VIEW_LOCK, "rectangle", sRectangle);
         }
     }
-    else
-    {
-        // Graphic selection.
-        pDrawView->AdjustMarkHdl(pOtherShell);
-    }
+
+    // Graphic selection. During text edit, this is the shape that holds the text.
+    pDrawView->AdjustMarkHdl(pOtherShell);
 }
 
 ::Color ViewShellBase::GetColorConfigColor(svtools::ColorConfigEntry nColorType) const

@@ -879,6 +879,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorViews)
     // This failed: the second view didn't get a lock notification, even if the
     // first view already started text edit.
     CPPUNIT_ASSERT(aView2.m_bViewLock);
+    // The second view also sees the border of the shape whose text the first view edits.
+    CPPUNIT_ASSERT(aView2.m_bGraphicViewSelectionInvalidated);
     KitHelper::setView(nView1);
     aView2.m_bTilesInvalidated = false;
     pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
