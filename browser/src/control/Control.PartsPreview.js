@@ -2428,14 +2428,15 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		// With the old positions frozen in as transforms, releasing them
 		// after a reflow slides each child into its new cell.
 		window.L.DomUtil.forceLayoutFlush(container);
+		const slideMs = window.L.DomUtil.getDurationMs('--duration-fast') + 50;
 		for (let i = 0; i < moved.length; i++) {
 			const el = moved[i];
-			el.style.transition = 'transform 0.15s ease-out';
+			el.style.transition = 'transform var(--duration-fast) var(--ease-out)';
 			el.style.transform = '';
 			el._gridSlideTimer = setTimeout(() => {
 				el.style.transition = '';
 				el._gridSlideTimer = null;
-			}, 200);
+			}, slideMs);
 		}
 	},
 

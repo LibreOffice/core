@@ -47,6 +47,15 @@ class DomUtil {
 		return element.offsetHeight;
 	}
 
+	public static getDurationMs(token: string): number {
+		const value = getComputedStyle(document.documentElement)
+			.getPropertyValue(token)
+			.trim();
+		const duration = parseFloat(value);
+		if (isNaN(duration)) return 0;
+		return value.endsWith('ms') ? duration : duration * 1000;
+	}
+
 	public static create(
 		tagName: string,
 		className: string,

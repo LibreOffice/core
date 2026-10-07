@@ -353,7 +353,7 @@ class Sidebar extends SidebarBase {
 									}
 								});
 							},
-							250,
+							window.L.DomUtil.getDurationMs('--duration-normal') + 50,
 						); // see animation time in #sidebar-dock-wrapper.visible
 					}
 
