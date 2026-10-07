@@ -32,6 +32,7 @@
 
 #if HAVE_FEATURE_QUICKJS
 #include <jsuno/jsuno.hxx>
+#include <prelude.hxx>
 #endif
 
 #include <stdio.h>
@@ -10296,6 +10297,7 @@ COKitScriptResult COKitImpl::executeScript(
     }
     try {
         OUString value = jsuno::execute(
+            prelude,
             OUString::fromUtf8(script), OUString::fromUtf8(source), line,
             [consoleCallback, consoleCallbackData](OUString const & level, OUString const & message)
             { consoleCallback(consoleCallbackData, level.toUtf8(), message.toUtf8()); },

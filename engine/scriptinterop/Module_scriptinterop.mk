@@ -12,6 +12,7 @@
 $(eval $(call gb_Module_Module,scriptinterop))
 
 $(eval $(call gb_Module_add_targets,scriptinterop,\
+    $(call gb_Helper_optional,QUICKJS,CustomTarget_prelude) \
     Library_scriptinterop \
     UnoApi_scriptinterop \
 ))

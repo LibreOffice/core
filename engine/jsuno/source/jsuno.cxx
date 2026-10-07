@@ -3302,6 +3302,12 @@ JSValue invokeUno(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst*
     });
 }
 
+ValueRef eval(JSContext * ctx, std::string_view script, char const * source, int line) {
+    assert(!script.empty() && script.back() == '\0');
+    JSEvalOptions opts{JS_EVAL_OPTIONS_VERSION, JS_EVAL_TYPE_GLOBAL, source, line};
+    return ValueRef(ctx, JS_Eval2(ctx, script.data(), script.size() - 1, &opts));
+}
+
 // Parse err.stack (QuickJS format) into structured frames.  Each frame appears on its own
 // line, typically "    at NAME (SOURCE:LINE:COL)".  Non-matching lines (e.g. a synthesized
 // "Error\n" preamble, or "at <anonymous> (native)" frames without a source location) are
@@ -3397,7 +3403,8 @@ jsuno::Exception extractException(JSContext* ctx, ValueRef const& err)
 
 jsuno::Exception::~Exception() = default;
 
-OUString jsuno::execute(OUString const& script, OUString const & source, int line,
+OUString jsuno::execute(std::u8string_view prelude,
+                        OUString const& script, OUString const & source, int line,
                         std::function<void(OUString const& level, OUString const& message)>
                             consoleHook,
                         std::function<void(OUString const&)> proxyCallHook,
@@ -3568,11 +3575,15 @@ OUString jsuno::execute(OUString const& script, OUString const & source, int lin
         JS_SetPropertyStr(
             ctx, global, "cool",
             wrapUnoObject(ctx, cool::get(comphelper::getProcessComponentContext())));
-        auto const input = script.toUtf8();
-        auto const sourceUtf8 = source.toUtf8();
-        JSEvalOptions opts{JS_EVAL_OPTIONS_VERSION, JS_EVAL_TYPE_GLOBAL, sourceUtf8.getStr(), line};
-        ValueRef const evalRes(
-            ctx, JS_Eval2(ctx, input.getStr(), input.getLength(), &opts));
+        ValueRef evalRes(eval(
+            ctx, std::string_view(reinterpret_cast<char const *>(prelude.data()), prelude.size()),
+            "<prelude>", 1));
+        if (!JS_IsException(evalRes)) {
+            auto const input = script.toUtf8();
+            evalRes = eval(
+                ctx, std::string_view(input.getStr(), input.getLength() + 1),
+                source.toUtf8().getStr(), line);
+        }
         if (JS_IsException(evalRes))
         {
             //TODO: reconstruct UNO exceptions

@@ -3720,7 +3720,6 @@ share/coolwsd/browser/dist/device-mobile.css
 share/coolwsd/browser/dist/device-tablet.css
 share/coolwsd/browser/dist/extension-sidebar.css
 share/coolwsd/browser/dist/extensions/cool.js
-share/coolwsd/browser/dist/extensions/gas-kit-runner.js
 share/coolwsd/browser/dist/extensions/gas-shim.js
 share/coolwsd/browser/dist/extensions/gas-wrapper.html
 share/coolwsd/browser/dist/forced-colors.css

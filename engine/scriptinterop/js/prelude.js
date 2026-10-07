@@ -9,22 +9,392 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// The next line's number is recorded as a hardcoded 13 in browser/src/control/Control.Extension.ts:
-globalThis.__gasKitRunner = function(
+// The Apps Script services that work the same for any script in the kit, which installGasServices
+// sets up as globals:
+$internal.installGasServices = function(uiStub, menuItems, pendingAlerts) {
+    // One document object for the whole call, as it holds the position that setCursor set:
+    let activeDocument = null;
+    function activeDoc() {
+        if (activeDocument === null) {
+            activeDocument = cool.getActiveDocument();
+        }
+        return activeDocument;
+    }
+
+    globalThis.DocumentApp = {
+        getActiveDocument: function() {
+            const document = {
+                getSelection: function() { return activeDoc().getSelection(); },
+                getCursor: function() { return activeDoc().getCursor(); },
+                getBody: function() { return activeDoc().getBody(); },
+                getFootnotes: function() { return activeDoc().getFootnotes(); },
+                newPosition: function(element, offset) {
+                    return activeDoc().newPosition(element, offset);
+                },
+                newRange: function() { return activeDoc().newRange(); },
+                setCursor: function(position) {
+                    activeDoc().setCursor(position);
+                    return document;
+                },
+                setSelection: function(sel) {
+                    activeDoc().setSelection(sel);
+                    return document;
+                },
+                getName: function() { return 'Untitled'; },
+                getUrl: function() { return ''; },
+                getId: function() { return ''; },
+                getUi: function() { return uiStub; }
+            };
+            return document;
+        },
+        getUi: function() { return uiStub; },
+        // Members scriptinterop's ElementType has round-trip as the same enum object, so a
+        // strict === comparison with what getType() returns matches; members GAS defines that
+        // scriptinterop does not know stay as strings that never match anything on our side:
+        ElementType: {
+            BODY_SECTION: uno.idl.scriptinterop.ElementType.BODY_SECTION,
+            COMMENT_SECTION: 'COMMENT_SECTION',
+            DATE: 'DATE',
+            DOCUMENT: 'DOCUMENT',
+            EQUATION: 'EQUATION',
+            EQUATION_FUNCTION: 'EQUATION_FUNCTION',
+            EQUATION_FUNCTION_ARGUMENT_SEPARATOR: 'EQUATION_FUNCTION_ARGUMENT_SEPARATOR',
+            EQUATION_SYMBOL: 'EQUATION_SYMBOL',
+            FOOTER_SECTION: 'FOOTER_SECTION',
+            FOOTNOTE: uno.idl.scriptinterop.ElementType.FOOTNOTE,
+            FOOTNOTE_SECTION: uno.idl.scriptinterop.ElementType.FOOTNOTE_SECTION,
+            HEADER_SECTION: 'HEADER_SECTION',
+            HORIZONTAL_RULE: uno.idl.scriptinterop.ElementType.HORIZONTAL_RULE,
+            INLINE_DRAWING: 'INLINE_DRAWING',
+            INLINE_IMAGE: uno.idl.scriptinterop.ElementType.INLINE_IMAGE,
+            LIST_ITEM: uno.idl.scriptinterop.ElementType.LIST_ITEM,
+            PAGE_BREAK: uno.idl.scriptinterop.ElementType.PAGE_BREAK,
+            PARAGRAPH: uno.idl.scriptinterop.ElementType.PARAGRAPH,
+            PERSON: 'PERSON',
+            RICH_LINK: 'RICH_LINK',
+            TABLE: uno.idl.scriptinterop.ElementType.TABLE,
+            TABLE_CELL: uno.idl.scriptinterop.ElementType.TABLE_CELL,
+            TABLE_OF_CONTENTS: 'TABLE_OF_CONTENTS',
+            TABLE_ROW: uno.idl.scriptinterop.ElementType.TABLE_ROW,
+            TEXT: uno.idl.scriptinterop.ElementType.TEXT,
+            UNSUPPORTED: uno.idl.scriptinterop.ElementType.UNSUPPORTED
+        },
+        TextAlignment: uno.idl.scriptinterop.TextAlignment,
+        HorizontalAlignment: uno.idl.scriptinterop.HorizontalAlignment,
+        VerticalAlignment: { TOP: 'TOP', MIDDLE: 'MIDDLE', BOTTOM: 'BOTTOM' },
+        ParagraphHeading: uno.idl.scriptinterop.ParagraphHeading,
+        GlyphType: uno.idl.scriptinterop.GlyphType
+    };
+
+    // GAS's Spreadsheet/Sheet/Range on top of scriptinterop's XSpreadsheet/XSheet/XRange.
+    // Only what add-ons have actually asked for so far is wired up; anything missing is
+    // simply absent, so an add-on that needs more fails naming the call it wanted:
+    function activeSpreadsheet() { return cool.getActiveSpreadsheet(); }
+
+    // An empty cell reads as a void Any, which arrives here as null, while GAS hands out ''
+    // for it - and add-ons test a cell for emptiness with === '':
+    function cellValue(v) { return v === null || v === undefined ? '' : v; }
+
+    function rangeFacade(xr, sheet) {
+        if (!xr) return null;
+        const r = {
+            getRow: function() { return xr.getRow(); },
+            getRowIndex: function() { return xr.getRow(); },
+            getColumn: function() { return xr.getColumn(); },
+            getColumnIndex: function() { return xr.getColumn(); },
+            getNumRows: function() { return xr.getNumRows(); },
+            getHeight: function() { return xr.getNumRows(); },
+            getNumColumns: function() { return xr.getNumColumns(); },
+            getWidth: function() { return xr.getNumColumns(); },
+            getLastRow: function() { return xr.getRow() + xr.getNumRows() - 1; },
+            getLastColumn: function() { return xr.getColumn() + xr.getNumColumns() - 1; },
+            getSheet: function() { return sheet; },
+            getValue: function() { return cellValue(xr.getValue()); },
+            getValues: function() {
+                return xr.getValues().map(function(row) { return row.map(cellValue); });
+            },
+            // Formatted cell text, which scriptinterop has no call of its own for yet.
+            // Stringifying the raw values gets the emptiness tests add-ons use this for
+            // right, but a formatted number comes out unformatted:
+            getDisplayValues: function() {
+                return xr.getValues().map(function(row) {
+                    return row.map(function(v) { return String(cellValue(v)); });
+                });
+            },
+            setValue: function(v) { xr.setValue(v); return r; },
+            setValues: function(v) { xr.setValues(v); return r; },
+            // GAS counts an omitted numRows/numColumns as "keep this dimension":
+            offset: function(rowOffset, columnOffset, numRows, numColumns) {
+                return rangeFacade(
+                    xr.offset(
+                        rowOffset, columnOffset,
+                        numRows === undefined ? xr.getNumRows() : numRows,
+                        numColumns === undefined ? xr.getNumColumns() : numColumns),
+                    sheet);
+            },
+            setBackground: function(c) { xr.setBackgroundColor(String(c)); return r; },
+            // The older name for the same thing, which plenty of samples still use:
+            setBackgroundColor: function(c) { xr.setBackgroundColor(String(c)); return r; },
+            setFontWeight: function(w) { xr.setFontWeight(String(w)); return r; },
+            setFontStyle: function(w) { xr.setFontStyle(String(w)); return r; },
+            setFontColor: function(c) { xr.setFontColor(String(c)); return r; },
+            setNumberFormat: function(f) { xr.setNumberFormat(String(f)); return r; }
+        };
+        return r;
+    }
+
+    function sheetFacade(xs) {
+        if (!xs) return null;
+        const s = {
+            getName: function() { return xs.getName(); },
+            getSheetName: function() { return xs.getName(); },
+            // One JS name for scriptinterop's four getRange overloads, dispatched the way
+            // GAS dispatches its own: A1 notation, a cell, a column of cells, a block:
+            getRange: function(a, b, numRows, numColumns) {
+                if (typeof a === 'string') return rangeFacade(xs.getRange(a), s);
+                if (numRows === undefined) return rangeFacade(xs.getRange(a, b), s);
+                if (numColumns === undefined) {
+                    return rangeFacade(xs.getRange(a, b, numRows), s);
+                }
+                return rangeFacade(xs.getRange(a, b, numRows, numColumns), s);
+            },
+            getActiveRange: function() { return rangeFacade(xs.getActiveRange(), s); },
+            getActiveCell: function() { return rangeFacade(xs.getActiveCell(), s); },
+            getDataRange: function() { return rangeFacade(xs.getDataRange(), s); },
+            getMaxRows: function() { return xs.getMaxRows(); },
+            getMaxColumns: function() { return xs.getMaxColumns(); },
+            getLastRow: function() { return xs.getLastRow(); },
+            getLastColumn: function() { return xs.getLastColumn(); },
+            getFrozenRows: function() { return xs.getFrozenRows(); },
+            getFrozenColumns: function() { return xs.getFrozenColumns(); },
+            deleteRow: function(row) { xs.deleteRow(row); return s; },
+            deleteRows: function(row, numRows) { xs.deleteRows(row, numRows); return null; },
+            deleteColumn: function(column) { xs.deleteColumn(column); return s; },
+            deleteColumns: function(column, numColumns) {
+                xs.deleteColumns(column, numColumns);
+                return null;
+            },
+            setColumnWidth: function(column, pixels) {
+                xs.setColumnWidth(column, pixels);
+                return s;
+            },
+            autoResizeColumn: function(column) { xs.autoResizeColumns(column, 1); return s; },
+            autoResizeColumns: function(column, numColumns) {
+                xs.autoResizeColumns(column, numColumns);
+                return s;
+            },
+            autoResizeRows: function(row, numRows) {
+                xs.autoResizeRows(row, numRows);
+                return s;
+            },
+            clear: function() { xs.clear(); return s; },
+            getParent: function() { return spreadsheetFacade(activeSpreadsheet()); }
+        };
+        return s;
+    }
+
+    function spreadsheetFacade(xss) {
+        const ss = {
+            getName: function() { return xss.getName(); },
+            getId: function() { return ''; },
+            getUrl: function() { return ''; },
+            getActiveSheet: function() { return sheetFacade(xss.getActiveSheet()); },
+            getSheetByName: function(name) {
+                return sheetFacade(xss.getSheetByName(String(name)));
+            },
+            getSheets: function() {
+                return xss.getSheets().map(function(x) { return sheetFacade(x); });
+            },
+            insertSheet: function(name) {
+                return sheetFacade(name === undefined ? xss.insertSheet()
+                                                      : xss.insertSheet(String(name)));
+            },
+            getRangeByName: function(name) {
+                return rangeFacade(xss.getRangeByName(String(name)), null);
+            },
+            getActiveRange: function() {
+                return sheetFacade(xss.getActiveSheet()).getActiveRange();
+            },
+            getActiveCell: function() {
+                return sheetFacade(xss.getActiveSheet()).getActiveCell();
+            },
+            flush: function() { xss.flush(); return null; },
+            // The older menu call, which takes the whole menu at once: an array of
+            // {name, functionName} objects, where a null entry stands for a separator.  The
+            // menu's own name is dropped, because the items are offered under the
+            // extension's name either way:
+            addMenu: function(name, items) {
+                (items || []).forEach(function(item) {
+                    if (item) {
+                        menuItems.push({ caption: String(item.name),
+                                         functionName: String(item.functionName) });
+                    } else {
+                        menuItems.push({ separator: true });
+                    }
+                });
+                return null;
+            },
+            // Not a modal, but the same one-way message, so it takes the alert path:
+            toast: function(message, title) {
+                pendingAlerts.push(
+                    { title: title === undefined ? '' : String(title),
+                      message: String(message) });
+                return null;
+            },
+            getUi: function() { return uiStub; }
+        };
+        return ss;
+    }
+
+    globalThis.SpreadsheetApp = {
+        getActive: function() { return spreadsheetFacade(activeSpreadsheet()); },
+        getActiveSpreadsheet: function() { return spreadsheetFacade(activeSpreadsheet()); },
+        getActiveSheet: function() {
+            return sheetFacade(activeSpreadsheet().getActiveSheet());
+        },
+        getActiveRange: function() {
+            return sheetFacade(activeSpreadsheet().getActiveSheet()).getActiveRange();
+        },
+        getActiveCell: function() {
+            return sheetFacade(activeSpreadsheet().getActiveSheet()).getActiveCell();
+        },
+        flush: function() { activeSpreadsheet().flush(); return null; },
+        getUi: function() { return uiStub; }
+    };
+
+    function activePresentation() { return cool.getActivePresentation(); }
+
+    // The enums round-trip as the same enum objects scriptinterop hands back, so a strict ===
+    // comparison with a getter's result matches:
+    globalThis.SlidesApp = {
+        getActivePresentation: activePresentation,
+        newAffineTransformBuilder: function() { return cool.newAffineTransformBuilder(); },
+        getUi: function() { return uiStub; },
+        AlignmentPosition: uno.idl.scriptinterop.AlignmentPosition,
+        ArrowStyle: uno.idl.scriptinterop.ArrowStyle,
+        AutofitType: uno.idl.scriptinterop.AutofitType,
+        AutoTextType: uno.idl.scriptinterop.AutoTextType,
+        CellMergeState: uno.idl.scriptinterop.CellMergeState,
+        ColorType: uno.idl.scriptinterop.ColorType,
+        ContentAlignment: uno.idl.scriptinterop.ContentAlignment,
+        DashStyle: uno.idl.scriptinterop.DashStyle,
+        FillType: uno.idl.scriptinterop.FillType,
+        LineCategory: uno.idl.scriptinterop.LineCategory,
+        LineFillType: uno.idl.scriptinterop.LineFillType,
+        LineType: uno.idl.scriptinterop.LineType,
+        LinkType: uno.idl.scriptinterop.LinkType,
+        ListPreset: uno.idl.scriptinterop.ListPreset,
+        PageBackgroundType: uno.idl.scriptinterop.PageBackgroundType,
+        PageElementType: uno.idl.scriptinterop.PageElementType,
+        PageType: uno.idl.scriptinterop.PageType,
+        ParagraphAlignment: uno.idl.scriptinterop.ParagraphAlignment,
+        PlaceholderType: uno.idl.scriptinterop.PlaceholderType,
+        PredefinedLayout: uno.idl.scriptinterop.PredefinedLayout,
+        SelectionType: uno.idl.scriptinterop.SelectionType,
+        ShapeType: uno.idl.scriptinterop.ShapeType,
+        SlideLinkingMode: uno.idl.scriptinterop.SlideLinkingMode,
+        SlidePosition: uno.idl.scriptinterop.SlidePosition,
+        SpacingMode: uno.idl.scriptinterop.SpacingMode,
+        TextBaselineOffset: uno.idl.scriptinterop.TextBaselineOffset,
+        TextDirection: uno.idl.scriptinterop.TextDirection,
+        ThemeColorType: uno.idl.scriptinterop.ThemeColorType,
+        VideoSourceType: uno.idl.scriptinterop.VideoSourceType
+    };
+
+    const charsetValues = { UTF_8: 'UTF-8', US_ASCII: 'US-ASCII' };
+    // As in GAS, a string is encoded as US-ASCII unless UTF_8 is asked for, with "?" for each
+    // code point that US-ASCII does not have:
+    function stringBytes(text, charset) {
+        const bytes = [];
+        for (const character of String(text)) {
+            const c = character.codePointAt(0);
+            if (c < 0x80) {
+                bytes.push(c);
+            } else if (charset !== charsetValues.UTF_8) {
+                bytes.push(0x3f);
+            } else if (c < 0x800) {
+                bytes.push(0xc0 | c >> 6, 0x80 | c & 0x3f);
+            } else if (c < 0x10000) {
+                bytes.push(0xe0 | c >> 12, 0x80 | c >> 6 & 0x3f, 0x80 | c & 0x3f);
+            } else {
+                bytes.push(
+                    0xf0 | c >> 18, 0x80 | c >> 12 & 0x3f, 0x80 | c >> 6 & 0x3f,
+                    0x80 | c & 0x3f);
+            }
+        }
+        return bytes;
+    }
+    // GAS rejects a charset argument that is passed but null or undefined:
+    function checkCharset(args) {
+        if (args.length > 1 && args[1] == null) {
+            throw new Error('Argument cannot be null: charset');
+        }
+    }
+    globalThis.Utilities = {
+        base64Encode: function(data, charset) {
+            checkCharset(arguments);
+            const bytes = typeof data === 'string' ? stringBytes(data, charset) : data;
+            return Uint8Array.from(bytes).toBase64();
+        },
+        // Like GAS, this returns signed bytes and ignores white space and any missing or extra
+        // padding:
+        base64Decode: function(encoded) {
+            checkCharset(arguments);
+            const text = String(encoded).replace(/[\s=]/g, '');
+            if (!/^[A-Za-z0-9+/]*$/.test(text) || text.length % 4 === 1) {
+                throw new Error('Could not decode string.');
+            }
+            return Array.from(Uint8Array.fromBase64(text), b => b > 127 ? b - 256 : b);
+        },
+        getUuid: function() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.floor(Math.random() * 16);
+                return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+            });
+        },
+        newBlob: cool.newBlob.bind(cool),
+        Charset: charsetValues
+    };
+
+    globalThis.Logger = {
+        log: function() {
+            console.log.apply(console, arguments);
+            return globalThis.Logger;
+        }
+    };
+
+    globalThis.Session = {
+        getActiveUser: function() {
+            return { getEmail: function() { return ''; } };
+        },
+        getActiveUserLocale: cool.getActiveUserLocale.bind(cool)
+    };
+};
+(function() {
+    function addOnOnly(what) {
+        return function() {
+            throw new Error(what + ' is only available to an Apps Script add-on');
+        };
+    }
+    const noUi = new Proxy({}, {
+        get: function(target, name) {
+            if (typeof name === 'symbol') {
+                return undefined;
+            }
+            throw new Error('getUi().' + name + ' is only available to an Apps Script add-on');
+        }
+    });
+    $internal.installGasServices(
+        noUi, { push: addOnOnly('Spreadsheet.addMenu') }, { push: addOnOnly('Spreadsheet.toast') });
+})();
+
+// Runs the add-on's function fnName with callArgs, after the add-on's libraries and sources, and
+// returns its result together with what the add-on asked the user interface for:
+$internal.runGasAddOn = function(
     proxyId, gsSources, gsNames, fnName, callArgs, extensionId, libraries)
 {
-    // Body must be self-contained, as it gets shipped to the kit as source text:
     const clientRuntime = $internal.createProxy(uno.idl.scriptinterop.XClientRuntime, proxyId);
     try {
-        // One document object for the whole call, as it holds the position that setCursor set:
-        let activeDocument = null;
-        function activeDoc() {
-            if (activeDocument === null) {
-                activeDocument = cool.getActiveDocument();
-            }
-            return activeDocument;
-        }
-
         // What getUi() collects over one call: the messages an add-on passed to alert(), the
         // items it put in its menu, and (if any) the sidebar file and the dialog it asked us to
         // show.  All travel back with the call's result:
@@ -132,285 +502,7 @@ globalThis.__gasKitRunner = function(
             Button: buttonValues
         };
 
-        globalThis.DocumentApp = {
-            getActiveDocument: function() {
-                const document = {
-                    getSelection: function() { return activeDoc().getSelection(); },
-                    getCursor: function() { return activeDoc().getCursor(); },
-                    getBody: function() { return activeDoc().getBody(); },
-                    getFootnotes: function() { return activeDoc().getFootnotes(); },
-                    newPosition: function(element, offset) {
-                        return activeDoc().newPosition(element, offset);
-                    },
-                    newRange: function() { return activeDoc().newRange(); },
-                    setCursor: function(position) {
-                        activeDoc().setCursor(position);
-                        return document;
-                    },
-                    setSelection: function(sel) {
-                        activeDoc().setSelection(sel);
-                        return document;
-                    },
-                    getName: function() { return 'Untitled'; },
-                    getUrl: function() { return ''; },
-                    getId: function() { return ''; },
-                    getUi: function() { return uiStub; }
-                };
-                return document;
-            },
-            getUi: function() { return uiStub; },
-            // Members scriptinterop's ElementType has round-trip as the same enum object, so a
-            // strict === comparison with what getType() returns matches; members GAS defines that
-            // scriptinterop does not know stay as strings that never match anything on our side:
-            ElementType: {
-                BODY_SECTION: uno.idl.scriptinterop.ElementType.BODY_SECTION,
-                COMMENT_SECTION: 'COMMENT_SECTION',
-                DATE: 'DATE',
-                DOCUMENT: 'DOCUMENT',
-                EQUATION: 'EQUATION',
-                EQUATION_FUNCTION: 'EQUATION_FUNCTION',
-                EQUATION_FUNCTION_ARGUMENT_SEPARATOR: 'EQUATION_FUNCTION_ARGUMENT_SEPARATOR',
-                EQUATION_SYMBOL: 'EQUATION_SYMBOL',
-                FOOTER_SECTION: 'FOOTER_SECTION',
-                FOOTNOTE: uno.idl.scriptinterop.ElementType.FOOTNOTE,
-                FOOTNOTE_SECTION: uno.idl.scriptinterop.ElementType.FOOTNOTE_SECTION,
-                HEADER_SECTION: 'HEADER_SECTION',
-                HORIZONTAL_RULE: uno.idl.scriptinterop.ElementType.HORIZONTAL_RULE,
-                INLINE_DRAWING: 'INLINE_DRAWING',
-                INLINE_IMAGE: uno.idl.scriptinterop.ElementType.INLINE_IMAGE,
-                LIST_ITEM: uno.idl.scriptinterop.ElementType.LIST_ITEM,
-                PAGE_BREAK: uno.idl.scriptinterop.ElementType.PAGE_BREAK,
-                PARAGRAPH: uno.idl.scriptinterop.ElementType.PARAGRAPH,
-                PERSON: 'PERSON',
-                RICH_LINK: 'RICH_LINK',
-                TABLE: uno.idl.scriptinterop.ElementType.TABLE,
-                TABLE_CELL: uno.idl.scriptinterop.ElementType.TABLE_CELL,
-                TABLE_OF_CONTENTS: 'TABLE_OF_CONTENTS',
-                TABLE_ROW: uno.idl.scriptinterop.ElementType.TABLE_ROW,
-                TEXT: uno.idl.scriptinterop.ElementType.TEXT,
-                UNSUPPORTED: uno.idl.scriptinterop.ElementType.UNSUPPORTED
-            },
-            TextAlignment: uno.idl.scriptinterop.TextAlignment,
-            HorizontalAlignment: uno.idl.scriptinterop.HorizontalAlignment,
-            VerticalAlignment: { TOP: 'TOP', MIDDLE: 'MIDDLE', BOTTOM: 'BOTTOM' },
-            ParagraphHeading: uno.idl.scriptinterop.ParagraphHeading,
-            GlyphType: uno.idl.scriptinterop.GlyphType
-        };
-
-        // GAS's Spreadsheet/Sheet/Range on top of scriptinterop's XSpreadsheet/XSheet/XRange.
-        // Only what add-ons have actually asked for so far is wired up; anything missing is
-        // simply absent, so an add-on that needs more fails naming the call it wanted:
-        function activeSpreadsheet() { return cool.getActiveSpreadsheet(); }
-
-        // An empty cell reads as a void Any, which arrives here as null, while GAS hands out ''
-        // for it - and add-ons test a cell for emptiness with === '':
-        function cellValue(v) { return v === null || v === undefined ? '' : v; }
-
-        function rangeFacade(xr, sheet) {
-            if (!xr) return null;
-            const r = {
-                getRow: function() { return xr.getRow(); },
-                getRowIndex: function() { return xr.getRow(); },
-                getColumn: function() { return xr.getColumn(); },
-                getColumnIndex: function() { return xr.getColumn(); },
-                getNumRows: function() { return xr.getNumRows(); },
-                getHeight: function() { return xr.getNumRows(); },
-                getNumColumns: function() { return xr.getNumColumns(); },
-                getWidth: function() { return xr.getNumColumns(); },
-                getLastRow: function() { return xr.getRow() + xr.getNumRows() - 1; },
-                getLastColumn: function() { return xr.getColumn() + xr.getNumColumns() - 1; },
-                getSheet: function() { return sheet; },
-                getValue: function() { return cellValue(xr.getValue()); },
-                getValues: function() {
-                    return xr.getValues().map(function(row) { return row.map(cellValue); });
-                },
-                // Formatted cell text, which scriptinterop has no call of its own for yet.
-                // Stringifying the raw values gets the emptiness tests add-ons use this for
-                // right, but a formatted number comes out unformatted:
-                getDisplayValues: function() {
-                    return xr.getValues().map(function(row) {
-                        return row.map(function(v) { return String(cellValue(v)); });
-                    });
-                },
-                setValue: function(v) { xr.setValue(v); return r; },
-                setValues: function(v) { xr.setValues(v); return r; },
-                // GAS counts an omitted numRows/numColumns as "keep this dimension":
-                offset: function(rowOffset, columnOffset, numRows, numColumns) {
-                    return rangeFacade(
-                        xr.offset(
-                            rowOffset, columnOffset,
-                            numRows === undefined ? xr.getNumRows() : numRows,
-                            numColumns === undefined ? xr.getNumColumns() : numColumns),
-                        sheet);
-                },
-                setBackground: function(c) { xr.setBackgroundColor(String(c)); return r; },
-                // The older name for the same thing, which plenty of samples still use:
-                setBackgroundColor: function(c) { xr.setBackgroundColor(String(c)); return r; },
-                setFontWeight: function(w) { xr.setFontWeight(String(w)); return r; },
-                setFontStyle: function(w) { xr.setFontStyle(String(w)); return r; },
-                setFontColor: function(c) { xr.setFontColor(String(c)); return r; },
-                setNumberFormat: function(f) { xr.setNumberFormat(String(f)); return r; }
-            };
-            return r;
-        }
-
-        function sheetFacade(xs) {
-            if (!xs) return null;
-            const s = {
-                getName: function() { return xs.getName(); },
-                getSheetName: function() { return xs.getName(); },
-                // One JS name for scriptinterop's four getRange overloads, dispatched the way
-                // GAS dispatches its own: A1 notation, a cell, a column of cells, a block:
-                getRange: function(a, b, numRows, numColumns) {
-                    if (typeof a === 'string') return rangeFacade(xs.getRange(a), s);
-                    if (numRows === undefined) return rangeFacade(xs.getRange(a, b), s);
-                    if (numColumns === undefined) {
-                        return rangeFacade(xs.getRange(a, b, numRows), s);
-                    }
-                    return rangeFacade(xs.getRange(a, b, numRows, numColumns), s);
-                },
-                getActiveRange: function() { return rangeFacade(xs.getActiveRange(), s); },
-                getActiveCell: function() { return rangeFacade(xs.getActiveCell(), s); },
-                getDataRange: function() { return rangeFacade(xs.getDataRange(), s); },
-                getMaxRows: function() { return xs.getMaxRows(); },
-                getMaxColumns: function() { return xs.getMaxColumns(); },
-                getLastRow: function() { return xs.getLastRow(); },
-                getLastColumn: function() { return xs.getLastColumn(); },
-                getFrozenRows: function() { return xs.getFrozenRows(); },
-                getFrozenColumns: function() { return xs.getFrozenColumns(); },
-                deleteRow: function(row) { xs.deleteRow(row); return s; },
-                deleteRows: function(row, numRows) { xs.deleteRows(row, numRows); return null; },
-                deleteColumn: function(column) { xs.deleteColumn(column); return s; },
-                deleteColumns: function(column, numColumns) {
-                    xs.deleteColumns(column, numColumns);
-                    return null;
-                },
-                setColumnWidth: function(column, pixels) {
-                    xs.setColumnWidth(column, pixels);
-                    return s;
-                },
-                autoResizeColumn: function(column) { xs.autoResizeColumns(column, 1); return s; },
-                autoResizeColumns: function(column, numColumns) {
-                    xs.autoResizeColumns(column, numColumns);
-                    return s;
-                },
-                autoResizeRows: function(row, numRows) {
-                    xs.autoResizeRows(row, numRows);
-                    return s;
-                },
-                clear: function() { xs.clear(); return s; },
-                getParent: function() { return spreadsheetFacade(activeSpreadsheet()); }
-            };
-            return s;
-        }
-
-        function spreadsheetFacade(xss) {
-            const ss = {
-                getName: function() { return xss.getName(); },
-                getId: function() { return ''; },
-                getUrl: function() { return ''; },
-                getActiveSheet: function() { return sheetFacade(xss.getActiveSheet()); },
-                getSheetByName: function(name) {
-                    return sheetFacade(xss.getSheetByName(String(name)));
-                },
-                getSheets: function() {
-                    return xss.getSheets().map(function(x) { return sheetFacade(x); });
-                },
-                insertSheet: function(name) {
-                    return sheetFacade(name === undefined ? xss.insertSheet()
-                                                          : xss.insertSheet(String(name)));
-                },
-                getRangeByName: function(name) {
-                    return rangeFacade(xss.getRangeByName(String(name)), null);
-                },
-                getActiveRange: function() {
-                    return sheetFacade(xss.getActiveSheet()).getActiveRange();
-                },
-                getActiveCell: function() {
-                    return sheetFacade(xss.getActiveSheet()).getActiveCell();
-                },
-                flush: function() { xss.flush(); return null; },
-                // The older menu call, which takes the whole menu at once: an array of
-                // {name, functionName} objects, where a null entry stands for a separator.  The
-                // menu's own name is dropped, because the items are offered under the
-                // extension's name either way:
-                addMenu: function(name, items) {
-                    (items || []).forEach(function(item) {
-                        if (item) {
-                            menuItems.push({ caption: String(item.name),
-                                             functionName: String(item.functionName) });
-                        } else {
-                            menuItems.push({ separator: true });
-                        }
-                    });
-                    return null;
-                },
-                // Not a modal, but the same one-way message, so it takes the alert path:
-                toast: function(message, title) {
-                    pendingAlerts.push(
-                        { title: title === undefined ? '' : String(title),
-                          message: String(message) });
-                    return null;
-                },
-                getUi: function() { return uiStub; }
-            };
-            return ss;
-        }
-
-        globalThis.SpreadsheetApp = {
-            getActive: function() { return spreadsheetFacade(activeSpreadsheet()); },
-            getActiveSpreadsheet: function() { return spreadsheetFacade(activeSpreadsheet()); },
-            getActiveSheet: function() {
-                return sheetFacade(activeSpreadsheet().getActiveSheet());
-            },
-            getActiveRange: function() {
-                return sheetFacade(activeSpreadsheet().getActiveSheet()).getActiveRange();
-            },
-            getActiveCell: function() {
-                return sheetFacade(activeSpreadsheet().getActiveSheet()).getActiveCell();
-            },
-            flush: function() { activeSpreadsheet().flush(); return null; },
-            getUi: function() { return uiStub; }
-        };
-
-        function activePresentation() { return cool.getActivePresentation(); }
-
-        // The enums round-trip as the same enum objects scriptinterop hands back, so a strict ===
-        // comparison with a getter's result matches:
-        globalThis.SlidesApp = {
-            getActivePresentation: activePresentation,
-            newAffineTransformBuilder: function() { return cool.newAffineTransformBuilder(); },
-            getUi: function() { return uiStub; },
-            AlignmentPosition: uno.idl.scriptinterop.AlignmentPosition,
-            ArrowStyle: uno.idl.scriptinterop.ArrowStyle,
-            AutofitType: uno.idl.scriptinterop.AutofitType,
-            AutoTextType: uno.idl.scriptinterop.AutoTextType,
-            CellMergeState: uno.idl.scriptinterop.CellMergeState,
-            ColorType: uno.idl.scriptinterop.ColorType,
-            ContentAlignment: uno.idl.scriptinterop.ContentAlignment,
-            DashStyle: uno.idl.scriptinterop.DashStyle,
-            FillType: uno.idl.scriptinterop.FillType,
-            LineCategory: uno.idl.scriptinterop.LineCategory,
-            LineFillType: uno.idl.scriptinterop.LineFillType,
-            LineType: uno.idl.scriptinterop.LineType,
-            LinkType: uno.idl.scriptinterop.LinkType,
-            ListPreset: uno.idl.scriptinterop.ListPreset,
-            PageBackgroundType: uno.idl.scriptinterop.PageBackgroundType,
-            PageElementType: uno.idl.scriptinterop.PageElementType,
-            PageType: uno.idl.scriptinterop.PageType,
-            ParagraphAlignment: uno.idl.scriptinterop.ParagraphAlignment,
-            PlaceholderType: uno.idl.scriptinterop.PlaceholderType,
-            PredefinedLayout: uno.idl.scriptinterop.PredefinedLayout,
-            SelectionType: uno.idl.scriptinterop.SelectionType,
-            ShapeType: uno.idl.scriptinterop.ShapeType,
-            SlideLinkingMode: uno.idl.scriptinterop.SlideLinkingMode,
-            SlidePosition: uno.idl.scriptinterop.SlidePosition,
-            SpacingMode: uno.idl.scriptinterop.SpacingMode,
-            TextBaselineOffset: uno.idl.scriptinterop.TextBaselineOffset,
-            TextDirection: uno.idl.scriptinterop.TextDirection,
-            ThemeColorType: uno.idl.scriptinterop.ThemeColorType,
-            VideoSourceType: uno.idl.scriptinterop.VideoSourceType
-        };
+        $internal.installGasServices(uiStub, menuItems, pendingAlerts);
 
         function makeHtmlOutput(fileName, templateValues) {
             const o = {
@@ -467,61 +559,6 @@ globalThis.__gasKitRunner = function(
                 return t;
             },
             SandboxMode: { IFRAME: 'IFRAME', NATIVE: 'NATIVE' }
-        };
-
-        const charsetValues = { UTF_8: 'UTF-8', US_ASCII: 'US-ASCII' };
-        // As in GAS, a string is encoded as US-ASCII unless UTF_8 is asked for, with "?" for each
-        // code point that US-ASCII does not have:
-        function stringBytes(text, charset) {
-            const bytes = [];
-            for (const character of String(text)) {
-                const c = character.codePointAt(0);
-                if (c < 0x80) {
-                    bytes.push(c);
-                } else if (charset !== charsetValues.UTF_8) {
-                    bytes.push(0x3f);
-                } else if (c < 0x800) {
-                    bytes.push(0xc0 | c >> 6, 0x80 | c & 0x3f);
-                } else if (c < 0x10000) {
-                    bytes.push(0xe0 | c >> 12, 0x80 | c >> 6 & 0x3f, 0x80 | c & 0x3f);
-                } else {
-                    bytes.push(
-                        0xf0 | c >> 18, 0x80 | c >> 12 & 0x3f, 0x80 | c >> 6 & 0x3f,
-                        0x80 | c & 0x3f);
-                }
-            }
-            return bytes;
-        }
-        // GAS rejects a charset argument that is passed but null or undefined:
-        function checkCharset(args) {
-            if (args.length > 1 && args[1] == null) {
-                throw new Error('Argument cannot be null: charset');
-            }
-        }
-        globalThis.Utilities = {
-            base64Encode: function(data, charset) {
-                checkCharset(arguments);
-                const bytes = typeof data === 'string' ? stringBytes(data, charset) : data;
-                return Uint8Array.from(bytes).toBase64();
-            },
-            // Like GAS, this returns signed bytes and ignores white space and any missing or extra
-            // padding:
-            base64Decode: function(encoded) {
-                checkCharset(arguments);
-                const text = String(encoded).replace(/[\s=]/g, '');
-                if (!/^[A-Za-z0-9+/]*$/.test(text) || text.length % 4 === 1) {
-                    throw new Error('Could not decode string.');
-                }
-                return Array.from(Uint8Array.fromBase64(text), b => b > 127 ? b - 256 : b);
-            },
-            getUuid: function() {
-                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                    const r = Math.floor(Math.random() * 16);
-                    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
-                });
-            },
-            newBlob: cool.newBlob.bind(cool),
-            Charset: charsetValues
         };
 
         // Round-tripped over the XClientRuntime proxy so the store lives in the main window's
@@ -582,20 +619,6 @@ globalThis.__gasKitRunner = function(
                 return clientRuntime.translate(
                     String(text), String(origin || ''), String(dest || ''));
             }
-        };
-
-        globalThis.Logger = {
-            log: function() {
-                console.log.apply(console, arguments);
-                return globalThis.Logger;
-            }
-        };
-
-        globalThis.Session = {
-            getActiveUser: function() {
-                return { getEmail: function() { return ''; } };
-            },
-            getActiveUserLocale: cool.getActiveUserLocale.bind(cool)
         };
 
         function scriptAppNotSupported(name) {

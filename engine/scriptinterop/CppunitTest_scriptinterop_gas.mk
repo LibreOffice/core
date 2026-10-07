@@ -21,6 +21,10 @@ $(eval $(call gb_CppunitTest_use_api,scriptinterop_gas, \
 
 $(eval $(call gb_CppunitTest_use_configuration,scriptinterop_gas))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,scriptinterop_gas, \
+    scriptinterop/prelude \
+))
+
 $(eval $(call gb_CppunitTest_use_external,scriptinterop_gas,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,scriptinterop_gas, \

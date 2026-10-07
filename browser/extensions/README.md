@@ -315,7 +315,7 @@ The pieces:
 |---|---|
 | `gas-wrapper.html` | The page loaded into a sidebar panel. It reads the add-on's server sources and the requested HTML through the main window, and grafts the HTML into itself, expanding `<?!= include('name') ?>`. |
 | `gas-shim.js` | Client half. Exposes `google.script.run` as a Proxy, so a leaf call asks the main window to run the named function in the kit, through the kit half. |
-| `gas-kit-runner.js` | Kit half. Shims a subset of the Apps Script services on top of scriptinterop, then calls the named function. |
+| `engine/scriptinterop/js/prelude.js` | Kit half, which the kit runs ahead of every script. It sets up the Apps Script services that work the same for any script (`DocumentApp`, `SlidesApp`, `SpreadsheetApp`, `Utilities`, `Logger`, `Session`), and defines the runner that shims the services that depend on the add-on and then calls the named function. |
 
 The sidebar and dialog frames run in a sandbox without `allow-same-origin`, so
 they have an origin of their own, as HtmlService pages do in GAS, and they reach
@@ -341,9 +341,9 @@ Extension load asks the runner for that menu through the reserved name
 the Extensions menu and in the Extensions notebookbar tab, where an editor
 add-on's menu belongs.
 
-Choosing an item ships the runner, the add-on's sources and a call to the item's
-function to the kit as one `executescript` message, the same way any contributed
-command runs. Messages the add-on passes to `getUi().alert()` then arrive as a
+Choosing an item ships the add-on's sources and a call to the item's function to
+the kit as one `executescript` message, the same way any contributed command
+runs. Messages the add-on passes to `getUi().alert()` then arrive as a
 snackbar.
 
 ### Contributions beyond the menu

@@ -31,13 +31,12 @@
 #include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <config_srcdir.h>
 #include <cool.hpp>
 #include <cppu/unotype.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <jsuno/jsuno.hxx>
 #include <o3tl/safeint.hxx>
-#include <osl/file.hxx>
+#include <prelude.hxx>
 #include <rtl/character.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
@@ -125,17 +124,14 @@ protected:
         OUString const & url, std::function<void(OUString const &)> proxyCallHook,
         std::u16string_view libraries)
     {
-        OUString gasUrl;
-        auto const rc = osl::FileBase::getFileURLFromSystemPath(
-            u"" SRC_ROOT "/../browser/extensions/gas-kit-runner.js"_ustr, gasUrl);
-        CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, rc);
         OUString const script(
-            "var window = globalThis;\n" + read(gasUrl)
-            + "\n__gasKitRunner('scriptinterop_document_test', [" + jsLiteral(read(url)) + "], ["
+            "var window = globalThis;\n$internal.runGasAddOn('scriptinterop_document_test', ["
+            + jsLiteral(read(url)) + "], ["
             + jsLiteral(url) + "], 'test', [], 'scriptinterop_test', [" + libraries + "]);");
         try {
             bool usedLegacyUnoApi;
             jsuno::execute(
+                prelude,
                 script, u"<input>"_ustr, 1,
                 [](OUString const & level, OUString const & message) {
                     OUString const msg("console." + level + ": " + message);
@@ -397,7 +393,7 @@ CPPUNIT_TEST_FIXTURE(Test, testUrlFetchApp) {
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPropertiesService) {
-    // The gas-kit-runner's PropertiesService facade calls XClientRuntime.userPropGetProperty for
+    // The prelude's GAS PropertiesService facade calls XClientRuntime.userPropGetProperty for
     // every property read; the proxy hook plays the client side of that call and returns an absent
     // Optional<string> so `getProperty` should hand back null:
     runScript(

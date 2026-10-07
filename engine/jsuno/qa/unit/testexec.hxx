@@ -15,6 +15,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <string_view>
 
 #include <jsuno/jsuno.hxx>
 #include <rtl/ustring.hxx>
@@ -27,6 +28,7 @@ struct Result {
 Result testexec(OUString const & script) {
     bool usedLegacyUnoApi;
     auto const res = jsuno::execute(
+        std::u8string_view(u8"", 1),
         script, u"<input>"_ustr, 1,
         [](OUString const & level, OUString const & message) {
             std::cout << "console." << level << ": " << message << std::endl;

@@ -10,7 +10,8 @@
  */
 
 // Client-side google.script.run shim for Google Apps Script Editor Add-ons hosted in COOL; each
-// leaf call has its add-on function run in the kit, through gas-kit-runner.js:
+// leaf call has its add-on function run in the kit, through the runner in
+// engine/scriptinterop/js/prelude.js:
 (function() {
     if (!window.cool || typeof window.cool._postCall !== 'function') {
         console.warn('gas-shim.js: cool._postCall is not available');

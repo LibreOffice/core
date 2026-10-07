@@ -32,6 +32,7 @@ $(eval $(call gb_Library_use_externals,sofficeapp, \
 
 $(eval $(call gb_Library_use_custom_headers,sofficeapp,\
 	officecfg/registry \
+	$(call gb_Helper_optional,QUICKJS,scriptinterop/prelude) \
 ))
 
 $(eval $(call gb_Library_use_api,sofficeapp,\

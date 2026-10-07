@@ -12,6 +12,7 @@
 #include <sal/config.h>
 
 #include <functional>
+#include <string_view>
 #include <vector>
 
 #include <jsuno/detail/dllapi.hxx>
@@ -38,10 +39,12 @@ struct LO_DLLPUBLIC_JSUNO Exception {
     std::vector<Frame> stack;
 };
 
-// Run `script` in a JS UNO context and return the JSON-stringified result (empty string for
-// values JSON.stringify drops: `undefined`, a function, or a symbol).
+// Run `prelude` (whose last element must be a terminating NUL) and then `script` in one JS UNO
+// context, and return the JSON-stringified result of `script` (empty string for values
+// JSON.stringify drops: `undefined`, a function, or a symbol).
 //
-// `source` and (1-based) `line` are used for any exception stack frames that are reported back.
+// `source` and (1-based) `line` are used for any exception stack frames in `script` that are
+// reported back; frames in `prelude` name the source "<prelude>" and count its lines from 1.
 //
 // `consoleHook` receives every call the script makes on the global `console` object.  jsuno
 // registers the WHATWG Console API methods `log`, `info`, `warn`, `error`, `debug`, `trace`,
@@ -63,7 +66,8 @@ struct LO_DLLPUBLIC_JSUNO Exception {
 // modified otherwise.
 //
 // @throws jsuno::Exception
-LO_DLLPUBLIC_JSUNO OUString execute(OUString const& script, OUString const & source, int line,
+LO_DLLPUBLIC_JSUNO OUString execute(std::u8string_view prelude,
+                                    OUString const& script, OUString const & source, int line,
                                     std::function<void(OUString const &, OUString const &)>
                                         consoleHook,
                                     std::function<void(OUString const&)> proxyCallHook,
