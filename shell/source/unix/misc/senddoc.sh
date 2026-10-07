@@ -308,9 +308,6 @@ case $MAILER_TYPE in
                     shift
                     ;;
                 --attach)
-                    # Just add both attach and attachment "headers" - some apps use one, some the other
-                    ATTACH_URL=$(printf file://%s "$2" | "${URI_ENCODE}")
-                    MAILTO="${MAILTO:+${MAILTO}&}attach=${ATTACH_URL}&attachment=${ATTACH_URL}"
                     if [ "$MAILER_TYPE" = "xdg-email" ]; then
                         # Also add the argument: see https://gitlab.freedesktop.org/xdg/xdg-utils/-/issues/177
                         set -- "$@" --attach "$2"
