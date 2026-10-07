@@ -13,6 +13,7 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/propertysequence.hxx>
@@ -37,6 +38,7 @@
 #include <sfx2/ipclient.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdouno.hxx>
 #include <drawview.hxx>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <vcl/virdev.hxx>
@@ -3345,6 +3347,59 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDateTimeUsesViewTi
     CPPUNIT_ASSERT(isUtcTime(pThreaded->maRoot.maDateTime, aBefore, aAfter));
 }
 #endif
+
+namespace
+{
+// The state a check box control carries, 0 when it is cleared and 1 when it is ticked.
+sal_Int16 lcl_getCheckBoxState(const SdrPage* pPage, size_t nIndex)
+{
+    auto* pUnoObject = dynamic_cast<SdrUnoObj*>(pPage->GetObj(nIndex));
+    CPPUNIT_ASSERT(pUnoObject);
+    cpo::uno::Reference<beans::XPropertySet> xModel(pUnoObject->GetUnoControlModel(),
+                                                    cpo::uno::UNO_QUERY_THROW);
+    sal_Int16 nState = -1;
+    xModel->getPropertyValue(u"State"_ustr) >>= nState;
+    return nState;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testClickOnStackedCheckBoxesTicksTheTopOne)
+{
+    // Two check boxes sit on exactly the same spot, the second one on top of the first.
+    ScModelObj* pModelObj = createDoc("stacked-checkboxes.fods");
+    ScTestViewCallback aView;
+    ScTabViewShell* pTabViewShell = aView.getTabViewShell();
+    CPPUNIT_ASSERT(pTabViewShell);
+
+    ScDrawLayer* pDrawLayer = pModelObj->GetDocument()->GetDrawLayer();
+    CPPUNIT_ASSERT(pDrawLayer);
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT(pPage);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
+
+    // A client paints before it clicks, which is what brings the live controls into being.
+    getTile(pModelObj, 0, 0, 3840, 3840);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), lcl_getCheckBoxState(pPage, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), lcl_getCheckBoxState(pPage, 1));
+
+    const tools::Rectangle aControlRect = o3tl::convert(
+        pPage->GetObj(1)->GetLogicRect(), o3tl::Length::mm100, o3tl::Length::twip);
+    // Only the check box glyph answers a click. Each control in the document is smaller than
+    // the glyph, so the glyph covers the whole of it and any point inside will do.
+    const Point aClickPoint = aControlRect.Center();
+    pModelObj->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aClickPoint.X(), aClickPoint.Y(),
+                              /*count=*/1, /*buttons=*/MOUSE_LEFT, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::BUTTONUP, aClickPoint.X(), aClickPoint.Y(),
+                              /*count=*/1, /*buttons=*/MOUSE_LEFT, /*modifier=*/0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the accompanying fix in place, this test would have failed: the click went to the
+    // check box underneath, so the one the user sees stayed cleared.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), lcl_getCheckBoxState(pPage, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), lcl_getCheckBoxState(pPage, 1));
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

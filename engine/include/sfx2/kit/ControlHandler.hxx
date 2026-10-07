@@ -35,7 +35,9 @@ public:
         static std::optional<PointerStyle> eDocPointerStyle;
 
         o3tl::Length eControlUnitLength = MapToO3tlLength(rMainWindow.GetMapMode().GetMapUnit());
-        SdrObjListIter aIterator(pPage, SdrIterMode::Flat);
+        // Walk the objects from the top of the stacking order downwards. Where several
+        // controls overlap, the click reaches the one that is drawn on top.
+        SdrObjListIter aIterator(pPage, SdrIterMode::Flat, /*bReverse=*/true);
         while (aIterator.IsMore())
         {
             SdrObject* pObject = aIterator.Next();
