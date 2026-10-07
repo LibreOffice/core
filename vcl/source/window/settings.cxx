@@ -171,8 +171,10 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl ) c
 
     // i22098, toolfont will be scaled differently to avoid bloated rulers and status bars for big fonts
     int toolfontheight = defFontheight;
+#ifndef MACOSX // macOS font sizes are in logical pixels and not "big", keep the tool font as is
     if( toolfontheight > 9 )
         toolfontheight = (defFontheight+8) / 2;
+#endif
 
     aFont = aStyleSettings.GetAppFont();
     aFont.SetFontHeight( defFontheight );
