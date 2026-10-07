@@ -24,6 +24,7 @@
 #include <regex>
 #include <set>
 #include <sstream>
+#include <string>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -68,6 +69,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/unreachable.hxx>
+#include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -264,9 +266,9 @@ struct RuntimeData
 {
     RuntimeData(
         JSRuntime* rt,
-        OUString const & source_, int line_,
-        std::function<void(OUString const& level, OUString const& message)> consoleHook_,
-        std::function<void(OUString const&)> proxyCallHook_)
+        std::string_view source_, int line_,
+        std::function<void(std::string_view level, std::string_view message)> consoleHook_,
+        std::function<void(std::string_view payload)> proxyCallHook_)
         : source(source_)
         , line(line_)
         , consoleHook(std::move(consoleHook_))
@@ -290,13 +292,13 @@ struct RuntimeData
     JSClassID singletonClassId = 0;
     JSClassID moduleClassId = 0;
 
-    OUString source;
+    std::string source;
     int line;
 
-    std::function<void(OUString const& level, OUString const& message)> consoleHook;
+    std::function<void(std::string_view level, std::string_view message)> consoleHook;
 
     // Hook captured by every ProxyInvocation created during this execute() call:
-    std::function<void(OUString const&)> proxyCallHook;
+    std::function<void(std::string_view payload)> proxyCallHook;
 
     // Set whenever the script touches the legacy UNO API outside a suppression scope:
     bool usedLegacyUnoApi = false;
@@ -349,42 +351,64 @@ template <typename F> JSValue callFromJs(JSContext* ctx, F&& f)
     }
 }
 
-OUString joinConsoleArgs(JSContext * ctx, int argc, JSValueConst * argv) {
+// Return the JS value converted to a string, in UTF-8 and with each lone surrogate replaced by
+// U+FFFD, or an empty optional if converting the JS value to a string throws:
+std::optional<OString> toWellFormedUtf8(JSContext * ctx, JSValueConst value) {
+    std::size_t n;
+    UniqueCString16 const s(ctx, JS_ToCStringLenUTF16(ctx, &n, value));
+    if (s.get() == nullptr) {
+        return {};
+    }
     OUStringBuffer buf;
+    for (std::size_t i = 0; i != n; ++i) {
+        auto const c = s.get()[i];
+        if (rtl::isHighSurrogate(c) && i + 1 != n && rtl::isLowSurrogate(s.get()[i + 1])) {
+            buf.append(c);
+            buf.append(s.get()[++i]);
+        } else if (rtl::isSurrogate(c)) {
+            buf.append(u'\xFFFD');
+        } else {
+            buf.append(c);
+        }
+    }
+    return buf.makeStringAndClear().toUtf8();
+}
+
+OString joinConsoleArgs(JSContext * ctx, int argc, JSValueConst * argv) {
+    OStringBuffer buf;
     for (int i = 0; i != argc; ++i) {
-        std::size_t n;
-        UniqueCString16 const s(ctx, JS_ToCStringLenUTF16(ctx, &n, argv[i]));
-        if (s.get() == nullptr) {
+        auto const s = toWellFormedUtf8(ctx, argv[i]);
+        if (!s) {
             throw JsException();
         }
         if (i != 0) {
             buf.append(' ');
         }
-        buf.append(std::u16string_view(s.get(), n));
+        buf.append(*s);
     }
     return buf.makeStringAndClear();
 }
 
-OUString appendConsoleStack(JSContext * ctx, OUString const & text) {
+OString appendConsoleStack(JSContext * ctx, OString const & text) {
     JS_ThrowTypeError(ctx, "");
     ValueRef const tmp(ctx, JS_GetException(ctx));
     ValueRef const stack(ctx, JS_GetPropertyStr(ctx, tmp, "stack"));
-    std::size_t n = 0;
-    UniqueCString16 const s(ctx, JS_ToCStringLenUTF16(ctx, &n, stack));
-    if (s.get() == nullptr) {
+    auto const s = toWellFormedUtf8(ctx, stack);
+    if (!s) {
         return text;
     }
     // Drop the topmost synthetic "at error (native)" frame for the TypeError we invoked:
-    OUString bottom(s.get(), n);
-    if (auto const i = bottom.indexOf('\n');
-        i != -1 && bottom.subView(0, i).find(u"(native)") != std::u16string_view::npos)
+    std::string_view bottom(*s);
+    if (auto const i = bottom.find('\n');
+        i != std::string_view::npos
+        && bottom.substr(0, i).find("(native)") != std::string_view::npos)
     {
-        bottom = bottom.copy(i + 1);
+        bottom = bottom.substr(i + 1);
     }
-    if (bottom.isEmpty()) {
+    if (bottom.empty()) {
         return text;
     }
-    return text + (text.isEmpty() ? u"" : u"\n") + bottom;
+    return text + (text.isEmpty() ? "" : "\n") + bottom;
 }
 
 JSValue consoleAssert(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
@@ -400,14 +424,14 @@ JSValue consoleAssert(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv
             return JS_UNDEFINED;
         }
         getRuntimeData(ctx)->consoleHook(
-            u"assert"_ustr, appendConsoleStack(ctx, joinConsoleArgs(ctx, argc - 1, argv + 1)));
+            "assert", appendConsoleStack(ctx, joinConsoleArgs(ctx, argc - 1, argv + 1)));
         return JS_UNDEFINED;
     });
 }
 
 JSValue consoleDebug(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
     return callFromJs(ctx, [ctx, argc, argv] {
-        getRuntimeData(ctx)->consoleHook(u"debug"_ustr, joinConsoleArgs(ctx, argc, argv));
+        getRuntimeData(ctx)->consoleHook("debug", joinConsoleArgs(ctx, argc, argv));
         return JS_UNDEFINED;
     });
 }
@@ -415,21 +439,21 @@ JSValue consoleDebug(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
 JSValue consoleError(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
     return callFromJs(ctx, [ctx, argc, argv] {
         getRuntimeData(ctx)->consoleHook(
-            u"error"_ustr, appendConsoleStack(ctx, joinConsoleArgs(ctx, argc, argv)));
+            "error", appendConsoleStack(ctx, joinConsoleArgs(ctx, argc, argv)));
         return JS_UNDEFINED;
     });
 }
 
 JSValue consoleInfo(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
     return callFromJs(ctx, [ctx, argc, argv] {
-        getRuntimeData(ctx)->consoleHook(u"info"_ustr, joinConsoleArgs(ctx, argc, argv));
+        getRuntimeData(ctx)->consoleHook("info", joinConsoleArgs(ctx, argc, argv));
         return JS_UNDEFINED;
     });
 }
 
 JSValue consoleLog(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
     return callFromJs(ctx, [ctx, argc, argv] {
-        getRuntimeData(ctx)->consoleHook(u"log"_ustr, joinConsoleArgs(ctx, argc, argv));
+        getRuntimeData(ctx)->consoleHook("log", joinConsoleArgs(ctx, argc, argv));
         return JS_UNDEFINED;
     });
 }
@@ -437,7 +461,7 @@ JSValue consoleLog(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
 JSValue consoleTrace(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
     return callFromJs(ctx, [ctx, argc, argv] {
         getRuntimeData(ctx)->consoleHook(
-            u"trace"_ustr, appendConsoleStack(ctx, joinConsoleArgs(ctx, argc, argv)));
+            "trace", appendConsoleStack(ctx, joinConsoleArgs(ctx, argc, argv)));
         return JS_UNDEFINED;
     });
 }
@@ -445,7 +469,7 @@ JSValue consoleTrace(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv)
 JSValue consoleWarn(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv) {
     return callFromJs(ctx, [ctx, argc, argv] {
         getRuntimeData(ctx)->consoleHook(
-            u"warn"_ustr, appendConsoleStack(ctx, joinConsoleArgs(ctx, argc, argv)));
+            "warn", appendConsoleStack(ctx, joinConsoleArgs(ctx, argc, argv)));
         return JS_UNDEFINED;
     });
 }
@@ -2921,10 +2945,10 @@ std::map<OUString, cpo::uno::Reference<cpo::uno::XInterface>> g_proxyMap;
 struct PendingProxyResult
 {
     bool delivered = false;
-    OUString json;
+    std::string json;
 };
 std::mutex g_pendingProxyResultsMutex;
-std::map<OUString, PendingProxyResult> g_pendingProxyResults;
+std::map<std::string, PendingProxyResult, std::less<>> g_pendingProxyResults;
 sal_Int64 g_nextProxyCallId = 0;
 
 // Return the declared return type of `methodName` on `interfaceType`, or void if it has no
@@ -2972,7 +2996,7 @@ class ProxyInvocation final : public cppu::WeakImplHelper<css::script::XInvocati
 {
 public:
     ProxyInvocation(cpo::uno::Type interfaceType, OUString proxyId,
-                    std::function<void(OUString const&)> proxyCallHook)
+                    std::function<void(std::string_view payload)> proxyCallHook)
         : m_interfaceType(std::move(interfaceType))
         , m_proxyId(std::move(proxyId))
         , m_proxyCallHook(std::move(proxyCallHook))
@@ -3007,11 +3031,11 @@ public:
         // below until the iframe answers (listener notifications often fire from engine code
         // that cannot tolerate Application::Yield re-entry, and a void handler's only signal
         // back to its caller would be an exception --- which no listener we mirror does):
-        OUString callId;
+        std::string callId;
         if (!isVoid)
         {
             std::lock_guard lock(g_pendingProxyResultsMutex);
-            callId = "c" + OUString::number(g_nextProxyCallId++);
+            callId = "c" + std::to_string(g_nextProxyCallId++);
             g_pendingProxyResults[callId] = {};
         }
 
@@ -3021,7 +3045,7 @@ public:
             try
             {
                 w.put("proxyId", m_proxyId);
-                if (!callId.isEmpty())
+                if (!callId.empty())
                 {
                     w.put("callId", callId);
                 }
@@ -3047,7 +3071,7 @@ public:
         }
         if (m_proxyCallHook)
         {
-            m_proxyCallHook(OUString::fromUtf8(payload));
+            m_proxyCallHook(payload);
         }
 
         if (isVoid)
@@ -3070,7 +3094,7 @@ public:
         // the view that was current when the call was made:
         comphelper::ScopeGuard restoreView(
             [view = KitHelper::getCurrentView()] { KitHelper::setView(view); });
-        OUString jsonResult;
+        std::string jsonResult;
         for (;;)
         {
             {
@@ -3085,7 +3109,7 @@ public:
             }
             Application::Yield();
         }
-        return comphelper::parseJsonToAny(jsonResult, returnType);
+        return comphelper::parseJsonToAny(OUString::fromUtf8(jsonResult), returnType);
     }
 
     void setValue(OUString const&, cpo::uno::Any const&) override {}
@@ -3099,7 +3123,7 @@ public:
 private:
     cpo::uno::Type m_interfaceType;
     OUString m_proxyId;
-    std::function<void(OUString const&)> m_proxyCallHook;
+    std::function<void(std::string_view payload)> m_proxyCallHook;
 };
 
 JSValue internalCreateProxy(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, JSValueConst* argv)
@@ -3319,21 +3343,19 @@ void parseStackTrace(
     if (!JS_IsString(stackVal)) {
         return;
     }
-    UniqueCString8 const p(ctx, JS_ToCString(ctx, stackVal));
-    if (p.get() == nullptr) {
+    auto const p = toWellFormedUtf8(ctx, stackVal);
+    if (!p) {
         return;
     }
-    std::string const stackText(p.get());
     static const std::regex reFrame(R"(at\s+([^\n]+?)\s*\(([^)]+?):(\d+):(\d+)\))");
-    auto const end = std::sregex_iterator();
-    for (auto i = std::sregex_iterator(stackText.begin(), stackText.end(), reFrame); i != end; ++i)
+    auto const end = std::cregex_iterator();
+    for (auto i = std::cregex_iterator(p->getStr(), p->getStr() + p->getLength(), reFrame);
+         i != end; ++i)
     {
-        stack.emplace_back(
-            OUString::fromUtf8((*i)[2].str()), OUString::fromUtf8((*i)[3].str()),
-            OUString::fromUtf8((*i)[4].str()), OUString::fromUtf8((*i)[1].str()));
+        stack.emplace_back((*i)[2].str(), (*i)[3].str(), (*i)[4].str(), (*i)[1].str());
     }
     // Drop a QuickJS synthetic <eval> frame at the bottom of the stack:
-    if (stack.size() >= 2 && stack.back().functionName == u"<eval>") {
+    if (stack.size() >= 2 && stack.back().functionName == "<eval>") {
         stack.pop_back();
     }
 }
@@ -3347,14 +3369,12 @@ jsuno::Exception extractException(JSContext* ctx, ValueRef const& err)
         ValueRef const nameVal(ctx, JS_GetPropertyStr(ctx, err, "name"));
         if (JS_IsString(nameVal))
         {
-            std::size_t n;
-            UniqueCString16 const p(ctx, JS_ToCStringLenUTF16(ctx, &n, nameVal));
-            if (p.get() != nullptr)
+            if (auto const p = toWellFormedUtf8(ctx, nameVal))
             {
-                exc.name = OUString(p.get(), n);
+                exc.name.assign(p->getStr(), p->getLength());
             }
         }
-        if (exc.name.isEmpty()) {
+        if (exc.name.empty()) {
             // For a UNO exception marshaled to JS, extract its name from the constructor's opaque
             // 'data member:
             if (ValueRef const ctorVal(ctx, JS_GetPropertyStr(ctx, err, "constructor"));
@@ -3366,7 +3386,7 @@ jsuno::Exception extractException(JSContext* ctx, ValueRef const& err)
                     auto const typeRef = static_cast<typelib_TypeDescriptionReference *>(
                         JS_GetOpaque(dataVal, getRuntimeData(ctx)->exceptionClassId));
                     if (typeRef != nullptr) {
-                        exc.name = OUString::unacquired(&typeRef->pTypeName);
+                        exc.name = OUString::unacquired(&typeRef->pTypeName).toUtf8();
                     }
                 }
             }
@@ -3374,11 +3394,9 @@ jsuno::Exception extractException(JSContext* ctx, ValueRef const& err)
         ValueRef const msgVal(ctx, JS_GetPropertyStr(ctx, err, "message"));
         if (JS_IsString(msgVal))
         {
-            std::size_t n;
-            UniqueCString16 const p(ctx, JS_ToCStringLenUTF16(ctx, &n, msgVal));
-            if (p.get() != nullptr)
+            if (auto const p = toWellFormedUtf8(ctx, msgVal))
             {
-                exc.message = OUString(p.get(), n);
+                exc.message.assign(p->getStr(), p->getLength());
                 haveMessage = true;
             }
         }
@@ -3389,11 +3407,9 @@ jsuno::Exception extractException(JSContext* ctx, ValueRef const& err)
         ValueRef const str(ctx, JS_ToString(ctx, err));
         if (!JS_IsException(str))
         {
-            std::size_t n;
-            UniqueCString16 const p(ctx, JS_ToCStringLenUTF16(ctx, &n, str));
-            if (p.get() != nullptr)
+            if (auto const p = toWellFormedUtf8(ctx, str))
             {
-                exc.message = OUString(p.get(), n);
+                exc.message.assign(p->getStr(), p->getLength());
             }
         }
     }
@@ -3403,12 +3419,10 @@ jsuno::Exception extractException(JSContext* ctx, ValueRef const& err)
 
 jsuno::Exception::~Exception() = default;
 
-OUString jsuno::execute(std::u8string_view prelude,
-                        OUString const& script, OUString const & source, int line,
-                        std::function<void(OUString const& level, OUString const& message)>
-                            consoleHook,
-                        std::function<void(OUString const&)> proxyCallHook,
-                        bool* usedLegacyUnoApi)
+jsuno::Result jsuno::execute(
+    std::u8string_view prelude, std::string_view script, std::string_view source, int line,
+    std::function<void(std::string_view level, std::string_view message)> consoleHook,
+    std::function<void(std::string_view payload)> proxyCallHook)
 {
     auto const rt = JS_NewRuntime();
     JS_SetMaxStackSize(rt, 4 * 1024 * 1024); // from default 256 KiB to 4 MiB
@@ -3495,7 +3509,7 @@ OUString jsuno::execute(std::u8string_view prelude,
         JS_SetClassProto(ctx, getRuntimeData(ctx)->wrapperClassId, proto.release());
     }
     std::optional<jsuno::Exception> exc;
-    OUString result;
+    std::string result;
     {
         ValueRef const global(ctx, JS_GetGlobalObject(ctx));
         getRuntimeData(ctx)->symbolIteratorAtom = JS_ValueToAtom(
@@ -3579,10 +3593,7 @@ OUString jsuno::execute(std::u8string_view prelude,
             ctx, std::string_view(reinterpret_cast<char const *>(prelude.data()), prelude.size()),
             "<prelude>", 1));
         if (!JS_IsException(evalRes)) {
-            auto const input = script.toUtf8();
-            evalRes = eval(
-                ctx, std::string_view(input.getStr(), input.getLength() + 1),
-                source.toUtf8().getStr(), line);
+            evalRes = eval(ctx, script, getRuntimeData(ctx)->source.c_str(), line);
         }
         if (JS_IsException(evalRes))
         {
@@ -3604,32 +3615,29 @@ OUString jsuno::execute(std::u8string_view prelude,
             else if (!JS_IsUndefined(json))
             {
                 // Values that JSON.stringify drops (undefined, functions, symbols) come back as
-                // JS_UNDEFINED, for which we use an empty OUString:
+                // JS_UNDEFINED, for which we use an empty string:
                 std::size_t n;
-                UniqueCString16 const p(ctx, JS_ToCStringLenUTF16(ctx, &n, json));
+                UniqueCString8 const p(ctx, JS_ToCStringLen(ctx, &n, json));
                 if (p.get() != nullptr)
                 {
-                    result = OUString(p.get(), n);
+                    result.assign(p.get(), n);
                 }
             }
         }
     }
     JS_FreeContext(ctx);
     std::unique_ptr<RuntimeData> data(getRuntimeData(rt));
-    if (usedLegacyUnoApi != nullptr)
-    {
-        *usedLegacyUnoApi = data->usedLegacyUnoApi;
-    }
+    bool const usedLegacyUnoApi = data->usedLegacyUnoApi;
     data->clear();
     JS_FreeRuntime(rt);
     if (exc)
     {
         throw *exc;
     }
-    return result;
+    return {std::move(result), usedLegacyUnoApi};
 }
 
-void jsuno::deliverProxyResult(OUString const& callId, OUString const& jsonValue)
+void jsuno::deliverProxyResult(std::string_view callId, std::string_view jsonValue)
 {
     std::lock_guard lock(g_pendingProxyResultsMutex);
     auto const it = g_pendingProxyResults.find(callId);

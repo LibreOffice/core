@@ -18,26 +18,19 @@
 #include <string_view>
 
 #include <jsuno/jsuno.hxx>
-#include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
 
-struct Result {
-    OUString result;
-    bool usedLegacyUnoApi;
-};
-
-Result testexec(OUString const & script) {
-    bool usedLegacyUnoApi;
-    auto const res = jsuno::execute(
+jsuno::Result testexec(OString const & script) {
+    return jsuno::execute(
         std::u8string_view(u8"", 1),
-        script, u"<input>"_ustr, 1,
-        [](OUString const & level, OUString const & message) {
+        std::string_view(script.getStr(), script.getLength() + 1), "<input>", 1,
+        [](std::string_view level, std::string_view message) {
             std::cout << "console." << level << ": " << message << std::endl;
-            if (level == u"assert") {
+            if (level == "assert") {
                 std::abort();
             }
         },
-        {}, &usedLegacyUnoApi);
-    return {res, usedLegacyUnoApi};
+        {});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

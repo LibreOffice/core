@@ -11,12 +11,14 @@
 
 #include <sal/config.h>
 
+#include <string>
+
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <jsuno/jsuno.hxx>
-#include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
 
 #include "testexec.hxx"
 
@@ -27,29 +29,29 @@ class Execute : public CppUnit::TestFixture
 public:
     void testReturnValue()
     {
-        CPPUNIT_ASSERT_EQUAL(u"42"_ustr, testexec(u"42"_ustr).result);
-        CPPUNIT_ASSERT_EQUAL(u"true"_ustr, testexec(u"true"_ustr).result);
+        CPPUNIT_ASSERT_EQUAL(std::string("42"), testexec("42"_ostr).json);
+        CPPUNIT_ASSERT_EQUAL(std::string("true"), testexec("true"_ostr).json);
         CPPUNIT_ASSERT_EQUAL(
-            u"\"hello\""_ustr, testexec(u"'hello'"_ustr).result);
-        CPPUNIT_ASSERT_EQUAL(u"null"_ustr, testexec(u"null"_ustr).result);
+            std::string("\"hello\""), testexec("'hello'"_ostr).json);
+        CPPUNIT_ASSERT_EQUAL(std::string("null"), testexec("null"_ostr).json);
         CPPUNIT_ASSERT_EQUAL(
-            u"[1,2,3]"_ustr, testexec(u"[1, 2, 3]"_ustr).result);
-        CPPUNIT_ASSERT_EQUAL(u"{\"a\":1,\"b\":\"two\"}"_ustr,
-                             testexec(u"({a: 1, b: 'two'})"_ustr).result);
-        CPPUNIT_ASSERT_EQUAL(u""_ustr, testexec(u"undefined"_ustr).result);
+            std::string("[1,2,3]"), testexec("[1, 2, 3]"_ostr).json);
+        CPPUNIT_ASSERT_EQUAL(std::string("{\"a\":1,\"b\":\"two\"}"),
+                             testexec("({a: 1, b: 'two'})"_ostr).json);
+        CPPUNIT_ASSERT_EQUAL(std::string(""), testexec("undefined"_ostr).json);
         CPPUNIT_ASSERT_EQUAL(
-            u""_ustr, testexec(u"(function () {})"_ustr).result);
-        CPPUNIT_ASSERT_EQUAL(u"42"_ustr,
+            std::string(""), testexec("(function () {})"_ostr).json);
+        CPPUNIT_ASSERT_EQUAL(std::string("42"),
                              testexec(
-                                 u"(function () { return 42; }).apply(null, [])"_ustr).result);
+                                 "(function () { return 42; }).apply(null, [])"_ostr).json);
         try
         {
-            testexec(u"1n"_ustr);
+            testexec("1n"_ostr);
             CPPUNIT_FAIL("expected jsuno::Exception");
         }
         catch (jsuno::Exception const& e)
         {
-            CPPUNIT_ASSERT_EQUAL(u"TypeError"_ustr, e.name);
+            CPPUNIT_ASSERT_EQUAL(std::string("TypeError"), e.name);
         }
     }
 
@@ -57,69 +59,76 @@ public:
     {
         try
         {
-            testexec(u"throw new Error('boom')"_ustr);
+            testexec("throw new Error('boom')"_ostr);
             CPPUNIT_FAIL("expected jsuno::Exception");
         }
         catch (jsuno::Exception const& e)
         {
-            CPPUNIT_ASSERT_EQUAL(u"boom"_ustr, e.message);
+            CPPUNIT_ASSERT_EQUAL(std::string("boom"), e.message);
             CPPUNIT_ASSERT_EQUAL(std::size_t(1), e.stack.size());
-            CPPUNIT_ASSERT_EQUAL(u"<input>"_ustr, e.stack[0].source);
-            CPPUNIT_ASSERT_EQUAL(u"1"_ustr, e.stack[0].line);
-            CPPUNIT_ASSERT_EQUAL(u"11"_ustr, e.stack[0].column);
-            CPPUNIT_ASSERT_EQUAL(u"<eval>"_ustr, e.stack[0].functionName);
-            CPPUNIT_ASSERT_EQUAL(u"Error"_ustr, e.name);
+            CPPUNIT_ASSERT_EQUAL(std::string("<input>"), e.stack[0].source);
+            CPPUNIT_ASSERT_EQUAL(std::string("1"), e.stack[0].line);
+            CPPUNIT_ASSERT_EQUAL(std::string("11"), e.stack[0].column);
+            CPPUNIT_ASSERT_EQUAL(std::string("<eval>"), e.stack[0].functionName);
+            CPPUNIT_ASSERT_EQUAL(std::string("Error"), e.name);
         }
         try
         {
-            testexec(u"throw new TypeError('bad type')"_ustr);
+            testexec("throw new TypeError('bad type')"_ostr);
             CPPUNIT_FAIL("expected jsuno::Exception");
         }
         catch (jsuno::Exception const& e)
         {
-            CPPUNIT_ASSERT_EQUAL(u"bad type"_ustr, e.message);
-            CPPUNIT_ASSERT_EQUAL(u"TypeError"_ustr, e.name);
+            CPPUNIT_ASSERT_EQUAL(std::string("bad type"), e.message);
+            CPPUNIT_ASSERT_EQUAL(std::string("TypeError"), e.name);
         }
         try
         {
-            testexec(u"@@@ not valid JS"_ustr);
+            testexec("@@@ not valid JS"_ostr);
             CPPUNIT_FAIL("expected jsuno::Exception");
         }
         catch (jsuno::Exception const& e)
         {
-            CPPUNIT_ASSERT_EQUAL(u"SyntaxError"_ustr, e.name);
+            CPPUNIT_ASSERT_EQUAL(std::string("SyntaxError"), e.name);
         }
         try
         {
-            testexec(u"throw 'plain string'"_ustr);
+            testexec("throw 'plain string'"_ostr);
             CPPUNIT_FAIL("expected jsuno::Exception");
         }
         catch (jsuno::Exception const& e)
         {
-            CPPUNIT_ASSERT_EQUAL(u"plain string"_ustr, e.message);
-            CPPUNIT_ASSERT_EQUAL(u""_ustr, e.name);
+            CPPUNIT_ASSERT_EQUAL(std::string("plain string"), e.message);
+            CPPUNIT_ASSERT_EQUAL(std::string(""), e.name);
+        }
+        // A lone surrogate in the message comes out as U+FFFD, so the message is well-formed UTF-8:
+        try {
+            testexec("throw new Error('a\\uD83Db')"_ostr);
+            CPPUNIT_FAIL("expected jsuno::Exception");
+        } catch (jsuno::Exception const & e) {
+            CPPUNIT_ASSERT_EQUAL(std::string("a\xEF\xBF\xBD" "b"), e.message);
         }
         CPPUNIT_ASSERT_EQUAL(
-            u"[\"boom\",\"cpo.uno.RuntimeException: boom\"]"_ustr,
+            std::string("[\"boom\",\"cpo.uno.RuntimeException: boom\"]"),
             testexec(
-                u"var e = new uno.idl.cpo.uno.RuntimeException({message: 'boom'});"
-                    "[e.message, String(e)]"_ustr).result);
+                "var e = new uno.idl.cpo.uno.RuntimeException({message: 'boom'});"
+                    "[e.message, String(e)]"_ostr).json);
     }
 
     void testLegacyUnoApiUse() {
-        CPPUNIT_ASSERT(testexec(u"uno.idl.com.sun.star.uno.XInterface"_ustr).usedLegacyUnoApi);
-        CPPUNIT_ASSERT(testexec(u"uno.idl.cpo.uno.XInterface"_ustr).usedLegacyUnoApi);
-        CPPUNIT_ASSERT(!testexec(u"uno.idl.scriptinterop.XFactory"_ustr).usedLegacyUnoApi);
+        CPPUNIT_ASSERT(testexec("uno.idl.com.sun.star.uno.XInterface"_ostr).usedLegacyUnoApi);
+        CPPUNIT_ASSERT(testexec("uno.idl.cpo.uno.XInterface"_ostr).usedLegacyUnoApi);
+        CPPUNIT_ASSERT(!testexec("uno.idl.scriptinterop.XFactory"_ostr).usedLegacyUnoApi);
         CPPUNIT_ASSERT(
             !testexec(
-                u"$internal.suppressLegacyUnoApiStart();"
+                "$internal.suppressLegacyUnoApiStart();"
                 " uno.idl.com.sun.star.uno.XInterface;"
-                " $internal.suppressLegacyUnoApiEnd();"_ustr).usedLegacyUnoApi);
+                " $internal.suppressLegacyUnoApiEnd();"_ostr).usedLegacyUnoApi);
         // A UNO exception thrown into the script is not the script's own use of the legacy API,
         // even though its JS representation is a cpo.uno.RuntimeException:
         CPPUNIT_ASSERT(
             !testexec(
-                u"try { cool.newAffineTransformBuilder(); } catch (e) {}"_ustr).usedLegacyUnoApi);
+                "try { cool.newAffineTransformBuilder(); } catch (e) {}"_ostr).usedLegacyUnoApi);
     }
 
     CPPUNIT_TEST_SUITE(Execute);

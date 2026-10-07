@@ -5097,15 +5097,15 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
     // executeScript has returned, since the callback runs only while the proxy stays
     // attached and ChildSession outlives that:
     const COKitScriptResult aScriptResult = _docManager->getLOKit()->executeScript(
-        script.c_str(), source, line,
+        script, source, line,
         [](void * data, std::string_view level, std::string_view message) {
             static_cast<ChildSession *>(data)->sendTextFrame(
                 std::string("consolemsg ").append(level).append("\n").append(message));
         },
         this,
-        [](void * data, char const * payload) {
+        [](void * data, std::string_view payload) {
             static_cast<ChildSession *>(data)->sendTextFrame(
-                "proxycall: " + std::string(payload));
+                std::string("proxycall: ").append(payload));
         },
         this);
 
@@ -5154,9 +5154,8 @@ bool ChildSession::proxyReturn(char const * buffer, int length) {
         sendTextFrameAndLogError("error: cmd=proxyreturn kind=syntax");
         return false;
     }
-    std::string const callId(full.substr(prefix.size(), idEnd - prefix.size()));
-    std::string const jsonValue(full.substr(idEnd + 1));
-    _docManager->getLOKit()->deliverProxyResult(callId.c_str(), jsonValue.c_str());
+    _docManager->getLOKit()->deliverProxyResult(
+        full.substr(prefix.size(), idEnd - prefix.size()), full.substr(idEnd + 1));
     return true;
 }
 

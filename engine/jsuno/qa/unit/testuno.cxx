@@ -13,7 +13,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
 
 #include "testexec.hxx"
 
@@ -26,7 +26,7 @@ public:
     {
         // The string literal needs to be cut into multiple parts to avoid MSVC "error C2026: string
         // too big, trailing characters truncated":
-        testexec(uR"(
+        testexec(R"(
 console.assert(uno.type.void.toString() == 'void');
 console.assert(uno.type.boolean.toString() == 'boolean');
 console.assert(uno.type.byte.toString() == 'byte');
@@ -264,7 +264,7 @@ const test = uno.idl.com.sun.star.testuno.Test.create(uno.componentContext);
     console.assert(def.m19 === null);
 }
 )"
-                       uR"(
+                       R"(
 {
     const v = test.getTemplate();
     console.log(v);
@@ -451,7 +451,7 @@ const test = uno.idl.com.sun.star.testuno.Test.create(uno.componentContext);
              m18: {m1: {m: 'foo'}, m2: -123456, m3: -123456, m4: {m: 'barr'}}, m19: test})));
 }
 )"
-                       uR"(
+                       R"(
 {
     const v = test.getAnyException();
     console.log(v);
@@ -638,7 +638,7 @@ const test = uno.idl.com.sun.star.testuno.Test.create(uno.componentContext);
         uno.idl.com.sun.star.testuno.Enum.E_10]));
 }
 )"
-                       uR"(
+                       R"(
 {
     const v = test.getSequenceStruct();
     console.log(v);
@@ -817,7 +817,7 @@ const test = uno.idl.com.sun.star.testuno.Test.create(uno.componentContext);
     console.assert(uno.sameUnoObject(v18.val, test));
 }
 )"
-                       uR"(
+                       R"(
 {
     console.assert(test.getOverloaded() === 'foo');
     console.assert(test.getOverloaded(-123456) === -123456);
@@ -926,7 +926,7 @@ console.assert(test.StringAttribute === 'foo');
     console.assert(uno.sameUnoObject(v[0], test));
 }
 )"
-                       uR"(
+                       R"(
 {
     const s = uno.idl.com.sun.star.testuno.ExplicitConstructors.restArgument(
         uno.componentContext, -123456, undefined,
@@ -949,7 +949,7 @@ console.assert(test.StringAttribute === 'foo');
 console.assert(
     uno.idl.com.sun.star.uno.TypeClass.VOID.toString()
     === uno.idl.cpo.uno.TypeClass.VOID.toString());
-)"_ustr);
+)"_ostr);
     }
 
     CPPUNIT_TEST_SUITE(TestUno);

@@ -1805,8 +1805,7 @@ struct COKit
      * JS exception message.  A script whose value stringifies to nothing, such as `undefined`,
      * leaves both empty.
      *
-     * The @c script string is a NUL-terminated C string, thus cannot contain embedded NUL
-     * characters.
+     * The @c script is UTF-8.
      *
      * @c consoleCallback receives every call the script makes on the global @c console object.
      * jsuno registers the WHATWG Console API methods @c log, @c info, @c warn, @c error, @c debug,
@@ -1818,11 +1817,11 @@ struct COKit
      *
      * @c proxyCallback, if non-null, is captured by every JS-UNO proxy listener stub created
      * during this call, and fires when the stub later receives a UNO call.  It is called
-     * with the @c proxyCallbackData pointer and a NUL-terminated JSON payload describing the
-     * call (see jsuno::execute).  The callback may fire synchronously while @c script runs,
-     * or later from any thread for as long as the proxy is registered.  Each proxy keeps the
-     * callback it captured at creation time, so a later executeScript with a different
-     * callback only affects proxies created by that later call.
+     * with the @c proxyCallbackData pointer and a UTF-8 JSON payload describing the call (see
+     * jsuno::execute), valid only for the duration of the callback.  The callback may fire
+     * synchronously while @c script runs, or later from any thread for as long as the proxy is
+     * registered.  Each proxy keeps the callback it captured at creation time, so a later
+     * executeScript with a different callback only affects proxies created by that later call.
      *
      * @param script the script source.
      * @param source used for any exception stack frames that are reported back.
@@ -1834,12 +1833,13 @@ struct COKit
      * @return the script's result or error, and whether it resolved an identifier in the
      *         legacy com.sun.star UNO API.
      */
-    virtual COKitScriptResult executeScript(char const * script, std::string_view source, int line,
+    virtual COKitScriptResult executeScript(std::string const & script,
+                               std::string_view source, int line,
                                std::function<void(
                                    void * data, std::string_view level, std::string_view message)>
                                    consoleCallback,
                                void * consoleCallbackData,
-                               void (*proxyCallback) (void * data, char const * payload),
+                               void (*proxyCallback) (void * data, std::string_view payload),
                                void * proxyCallbackData) = 0;
 
     /**
@@ -1849,14 +1849,14 @@ struct COKit
      * encoding of the JS-side return value, which the proxy will decode to the listener
      * method's declared return type.
      *
-     * Both strings are NUL-terminated C strings and must not contain embedded U+0000.
+     * Both strings are UTF-8.
      *
      * Spurious callIds (no matching pending invoke) are silently ignored.
      *
      * @param callId opaque token matching one previously delivered to proxyCallback.
      * @param jsonValue JSON-encoded return value for the listener method.
      */
-    virtual void deliverProxyResult(char const * callId, char const * jsonValue) = 0;
+    virtual void deliverProxyResult(std::string_view callId, std::string_view jsonValue) = 0;
 
     /**
      * Cancel all in-flight JS-UNO proxy listener calls by unblocking any

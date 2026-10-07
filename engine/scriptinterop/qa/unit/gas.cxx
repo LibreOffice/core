@@ -128,21 +128,27 @@ protected:
             "var window = globalThis;\n$internal.runGasAddOn('scriptinterop_document_test', ["
             + jsLiteral(read(url)) + "], ["
             + jsLiteral(url) + "], 'test', [], 'scriptinterop_test', [" + libraries + "]);");
+        std::function<void(std::string_view)> hook;
+        if (proxyCallHook) {
+            hook = [proxyCallHook](std::string_view payload) {
+                proxyCallHook(OUString::fromUtf8(payload));
+            };
+        }
+        auto const utf8 = script.toUtf8();
         try {
-            bool usedLegacyUnoApi;
-            jsuno::execute(
-                prelude,
-                script, u"<input>"_ustr, 1,
-                [](OUString const & level, OUString const & message) {
-                    OUString const msg("console." + level + ": " + message);
-                    if (level == u"assert") {
-                        CPPUNIT_FAIL((std::ostringstream() << msg).str());
+            auto const result = jsuno::execute(
+                prelude, std::string_view(utf8.getStr(), utf8.getLength() + 1), "<input>", 1,
+                [](std::string_view level, std::string_view message) {
+                    std::string const msg
+                        = "console." + std::string(level) + ": " + std::string(message);
+                    if (level == "assert") {
+                        CPPUNIT_FAIL(msg);
                     } else {
                         std::cout << msg << std::endl;
                     }
                 },
-                proxyCallHook, &usedLegacyUnoApi);
-            CPPUNIT_ASSERT(!usedLegacyUnoApi);
+                hook);
+            CPPUNIT_ASSERT(!result.usedLegacyUnoApi);
         } catch (jsuno::Exception const & e) {
             std::ostringstream buf;
             buf << e.name << ": " << e.message;
@@ -316,7 +322,7 @@ void httpbin(OUString const & payload) {
     appendJsonString(buf, error);
     buf.append('}');
     jsuno::deliverProxyResult(
-        OUString::fromUtf8(call.get<std::string>("callId")), OUString::fromUtf8(buf));
+        call.get<std::string>("callId"), std::string_view(buf.getStr(), buf.getLength()));
 }
 
 // The client side of XClientRuntime.cacheGet, cachePut and cacheRemove, which keeps the entries in
@@ -343,7 +349,7 @@ void cache(OUString const & payload) {
             buf.append('}');
         }
         jsuno::deliverProxyResult(
-            OUString::fromUtf8(call.get<std::string>("callId")), OUString::fromUtf8(buf));
+            call.get<std::string>("callId"), std::string_view(buf.getStr(), buf.getLength()));
     } else if (method == "cachePut") {
         for (auto const & [suffix, ttl]:
              {std::pair{"-ttl-default", "600"}, {"-ttl-zero", "600"}, {"-ttl-big", "21600"}})
@@ -402,7 +408,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPropertiesService) {
             auto const callId = extractCallId(payload);
             if (!callId.empty()) {
                 jsuno::deliverProxyResult(
-                    OUString(callId), u"{\"IsPresent\":false,\"Value\":\"\"}"_ustr);
+                    OUString(callId).toUtf8(), "{\"IsPresent\":false,\"Value\":\"\"}");
             }
         },
         u"");

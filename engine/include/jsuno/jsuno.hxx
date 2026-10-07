@@ -12,21 +12,20 @@
 #include <sal/config.h>
 
 #include <functional>
+#include <string>
 #include <string_view>
 #include <vector>
 
 #include <jsuno/detail/dllapi.hxx>
-#include <rtl/string.hxx>
-#include <rtl/ustring.hxx>
 
 namespace jsuno
 {
 struct LO_DLLPUBLIC_JSUNO Exception {
     struct Frame {
-        OUString source;
-        OUString line;
-        OUString column;
-        OUString functionName;
+        std::string source;
+        std::string line;
+        std::string column;
+        std::string functionName;
     };
 
     Exception() = default;
@@ -34,14 +33,22 @@ struct LO_DLLPUBLIC_JSUNO Exception {
     Exception & operator =(Exception const &) = default;
     virtual ~Exception();
 
-    OUString name;
-    OUString message;
+    std::string name;
+    std::string message;
     std::vector<Frame> stack;
 };
 
-// Run `prelude` (whose last element must be a terminating NUL) and then `script` in one JS UNO
+struct Result {
+    std::string json;
+    bool usedLegacyUnoApi;
+};
+
+// Run `prelude` and then `script` (for both of which the last element must be a terminating NUL) in
+// one JS UNO
 // context, and return the JSON-stringified result of `script` (empty string for values
 // JSON.stringify drops: `undefined`, a function, or a symbol).
+//
+// All strings passed in and out are UTF-8.
 //
 // `source` and (1-based) `line` are used for any exception stack frames in `script` that are
 // reported back; frames in `prelude` name the source "<prelude>" and count its lines from 1.
@@ -62,20 +69,15 @@ struct LO_DLLPUBLIC_JSUNO Exception {
 // where `callId` is present iff the proxy's invoke is going to wait for a value back via
 // deliverProxyResult (i.e. the listener method has a non-void return type).
 //
-// If `usedLegacyUnoApi` is non-null, set to true when the script touched the legacy UNO API; not
-// modified otherwise.
-//
 // @throws jsuno::Exception
-LO_DLLPUBLIC_JSUNO OUString execute(std::u8string_view prelude,
-                                    OUString const& script, OUString const & source, int line,
-                                    std::function<void(OUString const &, OUString const &)>
-                                        consoleHook,
-                                    std::function<void(OUString const&)> proxyCallHook,
-                                    bool* usedLegacyUnoApi);
+LO_DLLPUBLIC_JSUNO Result execute(
+    std::u8string_view prelude, std::string_view script, std::string_view source, int line,
+    std::function<void(std::string_view level, std::string_view message)> consoleHook,
+    std::function<void(std::string_view payload)> proxyCallHook);
 
 // Deliver an iframe-side `jsonValue` to a `ProxyInvocation::invoke` blocked in Application::
 // Yield on `callId`; spurious callIds are silently ignored:
-LO_DLLPUBLIC_JSUNO void deliverProxyResult(OUString const& callId, OUString const& jsonValue);
+LO_DLLPUBLIC_JSUNO void deliverProxyResult(std::string_view callId, std::string_view jsonValue);
 
 // Unblock every spinning ProxyInvocation::invoke by marking each pending call as delivered
 // with an empty JSON value, so a torn-down iframe cannot leave the kit waiting forever:

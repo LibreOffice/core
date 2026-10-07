@@ -78,6 +78,7 @@
 #include <map>
 #include <iostream>
 #include <mutex>
+#include <string>
 #include <string_view>
 #include <unordered_map>
 
@@ -10277,38 +10278,38 @@ void COKitDocumentImpl::setColorPreviewState(int nId, bool bEnabled)
 }
 
 COKitScriptResult COKitImpl::executeScript(
-    char const * script, std::string_view source, int line,
+    std::string const & script, std::string_view source, int line,
     std::function<void(void * data, std::string_view level, std::string_view message)>
         consoleCallback,
     void * consoleCallbackData,
-    void (*proxyCallback) (void * data, char const * payload), void * proxyCallbackData)
+    void (*proxyCallback) (void * data, std::string_view payload), void * proxyCallbackData)
 {
     comphelper::ProfileZone zone("lo_executeScript");
     SolarMutexGuard guard;
     SetLastExceptionMsg();
     COKitScriptResult aScriptResult;
 #if HAVE_FEATURE_QUICKJS
-    std::function<void(OUString const&)> hook;
+    std::function<void(std::string_view)> hook;
     if (proxyCallback != nullptr) {
-        hook = [proxyCallback, proxyCallbackData](OUString const & payload) {
-            OString const utf8(payload.toUtf8());
-            proxyCallback(proxyCallbackData, utf8.getStr());
+        hook = [proxyCallback, proxyCallbackData](std::string_view payload) {
+            proxyCallback(proxyCallbackData, payload);
         };
     }
     try {
-        OUString value = jsuno::execute(
+        auto [value, legacy] = jsuno::execute(
             prelude,
-            OUString::fromUtf8(script), OUString::fromUtf8(source), line,
-            [consoleCallback, consoleCallbackData](OUString const & level, OUString const & message)
-            { consoleCallback(consoleCallbackData, level.toUtf8(), message.toUtf8()); },
-            std::move(hook), &aScriptResult.bUsedLegacyUnoApi);
-        if (!value.isEmpty()) {
-            aScriptResult.oResult = convertOUStringToStdString(value);
+            std::string_view(script.c_str(), script.size() + 1), source, line,
+            [consoleCallback, consoleCallbackData](std::string_view level, std::string_view message)
+            { consoleCallback(consoleCallbackData, level, message); },
+            std::move(hook));
+        aScriptResult.bUsedLegacyUnoApi = legacy;
+        if (!value.empty()) {
+            aScriptResult.oResult = std::move(value);
         }
     } catch (jsuno::Exception const & exception) {
         // Ship as a JSON object; the receiver (ChildSession::executeScript) recognises the leading
         // '{' and splices it in as a JSON value rather than an escaped string.
-        SetLastExceptionMsg(exception.message);
+        SetLastExceptionMsg(OUString::fromUtf8(exception.message));
         tools::JsonWriter w;
         w.put("message", exception.message);
         w.put("name", exception.name);
@@ -10342,13 +10343,13 @@ COKitScriptResult COKitImpl::executeScript(
     return aScriptResult;
 }
 
-void COKitImpl::deliverProxyResult(char const * callId, char const * jsonValue)
+void COKitImpl::deliverProxyResult(std::string_view callId, std::string_view jsonValue)
 {
     comphelper::ProfileZone zone("lo_deliverProxyResult");
     SolarMutexGuard guard;
     SetLastExceptionMsg();
 #if HAVE_FEATURE_QUICKJS
-    jsuno::deliverProxyResult(OUString::fromUtf8(callId), OUString::fromUtf8(jsonValue));
+    jsuno::deliverProxyResult(callId, jsonValue);
 #else
     (void) callId;
     (void) jsonValue;

@@ -14,6 +14,7 @@
 #include <memory>
 #include <mutex>
 #include <set>
+#include <string>
 #include <string_view>
 #include <utility>
 
@@ -505,14 +506,15 @@ namespace desktop {
         void registerAnyInputCallback(COKitAnyInputCallback pCallback, void* pData) override;
         int getDocsCount() override;
         void registerFileSaveDialogCallback(COKitFileSaveDialogCallback pCallback) override;
-        COKitScriptResult executeScript(char const * script, std::string_view source, int line,
+        COKitScriptResult executeScript(std::string const & script,
+                           std::string_view source, int line,
                            std::function<void(
                                void * data, std::string_view level, std::string_view message)>
                                consoleCallback,
                            void * consoleCallbackData,
-                           void (*proxyCallback) (void * data, char const * payload),
+                           void (*proxyCallback) (void * data, std::string_view payload),
                            void * proxyCallbackData) override;
-        void deliverProxyResult(char const * callId, char const * jsonValue) override;
+        void deliverProxyResult(std::string_view callId, std::string_view jsonValue) override;
         void cancelProxyCalls() override;
         bool isExpectedReentry() override;
         bool takeLegacyUnoApiUseFlag() override;
