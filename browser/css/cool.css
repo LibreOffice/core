@@ -53,11 +53,12 @@
 	--shadow-subtle: 0 0 3px var(--color-box-shadow);
 	--shadow-elevated: 0 -1px 2px 0 var(--color-black-15), 0 2px 2px 0 var(--color-black-10);
 
-	/* Motion scale for transitions and animations. The duration grows with how much of the
-	   screen moves: instant for a colour or an opacity change, fast for a single small control,
-	   normal for a dropdown or a menu, slow for a panel, deliberate for a full width surface.
-	   Pick ease-standard for movement the user asked for, ease-out for something coming in and
-	   ease-in for something going away. */
+	/* Motion scale for transitions and animations, picked by purpose: instant for feedback while
+	   the pointer is down, fast for something the user opened or toggled and for an exit that
+	   animates, normal for something the system shows on its own that the user must notice, slow
+	   for a panel, deliberate for a full width surface. Pick ease-standard for movement from one
+	   resting state to another, ease-out for something coming in and ease-in for something going
+	   away. */
 	--duration-instant: 100ms;
 	--duration-fast: 150ms;
 	--duration-normal: 200ms;
@@ -106,9 +107,11 @@
 	--scrollbar-width: thin;
 }
 
+/* BEGIN shared motion */
 /* When the user asks the system for less motion, every transition and animation that takes its
    time from the motion scale becomes short enough to read as immediate. One millisecond keeps the
    transitionend and animationend events firing, so code that waits for them still runs. */
+/* TODO: also apply on :root[data-motion=reduce], so integrators can force it without the OS setting */
 @media (prefers-reduced-motion: reduce) {
 	:root {
 		--duration-instant: 1ms;
@@ -125,6 +128,23 @@
 	0% { transform: rotate(0deg); }
 	100% { transform: rotate(360deg); }
 }
+
+@keyframes fade-in {
+	from { opacity: 0; }
+}
+
+@keyframes fade-out {
+	to { opacity: 0; }
+}
+
+@keyframes fade-scale-in {
+	from { opacity: 0; transform: scale(var(--motion-scale-from, 0.96)); }
+}
+
+@keyframes slide-up-in {
+	from { opacity: 0; transform: translateY(8px); }
+}
+/* END shared motion */
 
 html {
 	height: 100%;
