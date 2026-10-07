@@ -582,6 +582,15 @@ namespace xmloff
         Reference< XPropertySet > xReturn;
         if (!m_sServiceName.isEmpty())
         {
+            // a form component is named by a service in the form namespace, or in the StarOffice
+            // one older documents use
+            if (!m_sServiceName.startsWith(u"com.sun.star.form.")
+                && !m_sServiceName.startsWith(u"stardiv.one.form."))
+            {
+                SAL_WARN("xmloff.forms", "OElementImport::createElement: " << m_sServiceName
+                            << " is not a form component service");
+                return xReturn;
+            }
             Reference< XComponentContext > xContext = m_rFormImport.getGlobalContext().GetComponentContext();
             Reference< XInterface > xPure = xContext->getServiceManager()->createInstanceWithContext(m_sServiceName, xContext);
             OSL_ENSURE(xPure.is(),
