@@ -1495,6 +1495,11 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
                 pPresetTransition = "fallOver";
                 bOOXmlSpecificTransition = true;
                 break;
+            case animations::TransitionSubType::AIRPLANE: // Airplane
+                nTransition = XML_fade;
+                pPresetTransition = "airplane";
+                bOOXmlSpecificTransition = true;
+                break;
             case animations::TransitionSubType::CORNERSIN: // Inside turning cube
                 pInverted = "true";
                 [[fallthrough]];
@@ -1691,7 +1696,8 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
     bool isAdvanceTimingSet = advanceTiming != -1;
     if (nTransition14 || pPresetTransition || isTransitionDurationSet)
     {
-        const char* pRequiresNS = (nTransition14 || isTransitionDurationSet) ? "p14" : "p15";
+        // p15:prstTrans needs p15, even if p14:dur is also written.
+        const char* pRequiresNS = (!nTransition14 && pPresetTransition) ? "p15" : "p14";
 
         pFS->startElement(FSNS(XML_mc, XML_AlternateContent));
         pFS->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, pRequiresNS);

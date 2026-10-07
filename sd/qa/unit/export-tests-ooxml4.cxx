@@ -23,6 +23,8 @@
 #include <svx/unoapi.hxx>
 #include <unotools/tempfile.hxx>
 
+#include <com/sun/star/animations/TransitionSubType.hpp>
+#include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -1338,6 +1340,35 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testAutofittedTextboxIndent)
     xmlDocUniquePtr pXmlDocContent1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p[1]/a:pPr", "marL",
                 u"1080000");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testAirplaneTransition)
+{
+    // Given a document with an airplane slide transition:
+    createSdImpressDoc("pptx/airplane-transition.pptx");
+
+    // When importing that document:
+    uno::Reference<beans::XPropertySet> xPage(getPage(0), uno::UNO_QUERY);
+
+    // Then make sure the transition is not lost:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 21 (MISCSHAPEWIPE)
+    // - Actual  : 0
+    // i.e. only the fallOver preset transition was imported.
+    CPPUNIT_ASSERT_EQUAL(animations::TransitionType::MISCSHAPEWIPE,
+                         xPage->getPropertyValue(u"TransitionType"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(animations::TransitionSubType::AIRPLANE,
+                         xPage->getPropertyValue(u"TransitionSubtype"_ustr).get<sal_Int16>());
+
+    // And when exporting that document back to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then make sure the transition is written back:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//mc:AlternateContent/mc:Choice/p:transition/p15:prstTrans", "prst",
+                u"airplane");
+    // Also make sure that the choice requires p15, even if p14:dur is written, too:
+    assertXPath(pXmlDoc, "//mc:AlternateContent/mc:Choice", "Requires", u"p15");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

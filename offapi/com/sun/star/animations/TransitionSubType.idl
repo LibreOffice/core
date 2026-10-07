@@ -143,6 +143,9 @@ constants TransitionSubType
     const short FROMTOPRIGHT = 117;
     const short FROMBOTTOMLEFT = 118;
     const short FROMBOTTOMRIGHT = 119;
+    /** Airplane transition, used with TransitionType::MISCSHAPEWIPE.
+    */
+    const short AIRPLANE = 120;
 };
 
 

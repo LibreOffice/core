@@ -456,6 +456,11 @@ namespace oox::ppt {
             mnTransitionType = TransitionType::MISCSHAPEWIPE;
             mnTransitionSubType = TransitionSubType::LEFTTORIGHT;
         }
+        else if (sPresetTransition == u"airplane")
+        {
+            mnTransitionType = TransitionType::MISCSHAPEWIPE;
+            mnTransitionSubType = TransitionSubType::AIRPLANE;
+        }
         else
         {
             mnTransitionType = 0;
