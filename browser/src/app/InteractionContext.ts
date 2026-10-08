@@ -53,8 +53,17 @@ interface InteractionContext {
 	/// Escape, once a drag, a text edit and the handle mode have had it and left it.
 	escape(): boolean;
 
-	/// Enter with no modifier.
+	/// Enter with no modifier, or F3, which enters a group.
 	enterKey(): boolean;
+
+	/// Ctrl+F3, which leaves a group.
+	leaveKey(): boolean;
+
+	/// Tab, forwards, or with Shift backwards.
+	tabKey(forwards: boolean): boolean;
+
+	/// Ctrl+Home for the first object, Ctrl+End for the last.
+	toAnEnd(first: boolean): boolean;
 
 	/// The engine was asked to enter the group that is selected; selects what that leaves.
 	groupEntered(): void;

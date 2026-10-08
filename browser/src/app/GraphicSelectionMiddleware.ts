@@ -343,12 +343,15 @@ class GraphicSelection {
 		if (this.textIsBeingEdited()) return false;
 
 		if (!this.hasActiveSelection()) {
+			if (!RenderManager.isVectorRendering()) return false;
 			const way = GraphicSelection.theWayOf[event.key];
-			if (!way || !RenderManager.isVectorRendering()) return false;
-			return Interaction.context().arrowKey(
-				new cool.Point(way[0], way[1]),
-				event,
-			);
+			if (way) {
+				return Interaction.context().arrowKey(
+					new cool.Point(way[0], way[1]),
+					event,
+				);
+			}
+			return this.travelByKey(event);
 		}
 
 		// A drag by the mouse owns the selection while it runs, so a key does nothing to it then
@@ -364,6 +367,7 @@ class GraphicSelection {
 			if (!RenderManager.isVectorRendering()) return false;
 
 			if (event.key === 'Escape') return Interaction.context().escape();
+			if (this.travelByKey(event)) return true;
 			if (
 				event.key === 'Enter' &&
 				!event.shiftKey &&
@@ -381,6 +385,27 @@ class GraphicSelection {
 				event,
 			);
 		});
+	}
+
+	/*
+		The keys that go from object to object and in and out of groups: Tab and Shift+Tab,
+		Ctrl+Home and Ctrl+End, F3 and Ctrl+F3. Answers whether the context used the key.
+	*/
+	private static travelByKey(event: KeyboardEvent): boolean {
+		const context = Interaction.context();
+		const ctrl = event.ctrlKey || event.metaKey;
+
+		if (event.key === 'Tab' && !ctrl && !event.altKey)
+			return context.tabKey(!event.shiftKey);
+		if (
+			(event.key === 'Home' || event.key === 'End') &&
+			ctrl &&
+			!event.shiftKey
+		)
+			return context.toAnEnd(event.key === 'Home');
+		if (event.key === 'F3' && !event.shiftKey && !event.altKey)
+			return ctrl ? context.leaveKey() : context.enterKey();
+		return false;
 	}
 
 	/*

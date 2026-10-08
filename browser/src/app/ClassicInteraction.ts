@@ -98,6 +98,61 @@ abstract class ClassicContext implements InteractionContext {
 		return true;
 	}
 
+	/// Ctrl+F3 leaves the group one stands in, selecting it. On the page there is none to leave.
+	public leaveKey(): boolean {
+		if (this.groupStoodIn === undefined) return false;
+
+		GraphicSelection.selectObjects([this.groupStoodIn]);
+		GraphicSelection.updateSelectionSection();
+		return true;
+	}
+
+	/*
+		The objects one travels through where one stands: the ones the group holds, or those of
+		the page. In the order the page draws them, from the back to the front, as the office
+		travels.
+	*/
+	protected objectsOfTheLevel(): number[] {
+		return this.groupStoodIn === undefined
+			? RenderGeometrySection.heldByThePage()
+			: RenderGeometrySection.heldBy(this.groupStoodIn);
+	}
+
+	/// Selects that one object of the level alone.
+	private selectOnly(objectId: number): boolean {
+		GraphicSelection.selectObjects([objectId]);
+		GraphicSelection.updateSelectionSection();
+		return true;
+	}
+
+	/*
+		Tab selects the next object of the level after the selection, Shift+Tab the one before it,
+		going round from the last to the first. With nothing selected it starts at the first, or
+		with Shift at the last.
+	*/
+	public tabKey(forwards: boolean): boolean {
+		const level = this.objectsOfTheLevel();
+		if (!level.length) return false;
+
+		const places = GraphicSelection.selectedObjectIDs
+			.map((objectId: number) => level.indexOf(objectId))
+			.filter((place: number) => place >= 0);
+		if (!places.length)
+			return this.selectOnly(level[forwards ? 0 : level.length - 1]);
+
+		const from = forwards ? Math.max(...places) : Math.min(...places);
+		const to = (from + (forwards ? 1 : -1) + level.length) % level.length;
+		return this.selectOnly(level[to]);
+	}
+
+	/// Ctrl+Home selects the first object of the level, Ctrl+End the last.
+	public toAnEnd(first: boolean): boolean {
+		const level = this.objectsOfTheLevel();
+		if (!level.length) return false;
+
+		return this.selectOnly(level[first ? 0 : level.length - 1]);
+	}
+
 	/*
 		Escape takes the selection away; in a group that selects the group, which leaves it, so
 		Escape pressed again and again goes up group by group to the page and to nothing selected.

@@ -1066,6 +1066,24 @@ class RenderGeometrySection extends CanvasSectionObject {
 	}
 
 	/// Whether the object holds other objects, which is what makes it a group.
+	/*
+		The objects the page holds itself, outside any group, in the order it draws them: no page
+		entry, no text edit, no copy of a master placeholder, nothing on a layer the view hides.
+	*/
+	public static heldByThePage(): number[] {
+		const data = RenderGeometrySection.currentPart();
+		if (!data) return [];
+
+		return data.order.filter((id: number) => {
+			const object = data.objects.get(id);
+			if (!object || object.parent || object.kind !== undefined) return false;
+			if (object.masterContent) return false;
+			return (
+				object.layer === undefined || RenderManager.isLayerVisible(object.layer)
+			);
+		});
+	}
+
 	public static holdsObjects(objectId: number): boolean {
 		return RenderGeometrySection.heldBy(objectId).length > 0;
 	}

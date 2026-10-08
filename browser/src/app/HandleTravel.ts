@@ -226,6 +226,8 @@ class HandleTravel {
 	/*
 		What the keyboard does to the handles: travel from one to the next, to either end of them,
 		away from them again, and move the one it is on. Answers whether the key was used up here.
+		Going to either end and moving work on the handle the keyboard is on, so they are used up
+		only while it is on one; otherwise Ctrl+Home and Ctrl+End are left to the objects.
 	*/
 	public keyboard(event: KeyboardEvent): boolean {
 		const towards: { [key: string]: cool.Point } = {
@@ -238,9 +240,11 @@ class HandleTravel {
 		if (event.key === 'Tab' && (event.ctrlKey || event.altKey))
 			return this.travel(!event.shiftKey);
 
-		if (event.key === 'Home' && event.ctrlKey) return this.travelToEnd(true);
+		if (event.key === 'Home' && event.ctrlKey && this.activeName !== null)
+			return this.travelToEnd(true);
 
-		if (event.key === 'End' && event.ctrlKey) return this.travelToEnd(false);
+		if (event.key === 'End' && event.ctrlKey && this.activeName !== null)
+			return this.travelToEnd(false);
 
 		if (event.key === 'Escape') return this.leave();
 
