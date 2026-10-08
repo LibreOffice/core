@@ -84,6 +84,7 @@
 #include <rtl/ustring.hxx>
 
 #include <editeng/outliner.hxx>
+#include <svx/documentbullets.hxx>
 #include <drawdoc.hxx>
 #include <SlideSectionManager.hxx>
 #include <sdpage.hxx>

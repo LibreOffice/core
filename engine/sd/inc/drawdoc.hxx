@@ -22,7 +22,6 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <rtl/string.hxx>
 #include <svl/style.hxx>
-#include <svx/documentbullets.hxx>
 #include <svx/fmmodel.hxx>
 #include <unotools/charclass.hxx>
 #include <vcl/prntypes.hxx>
@@ -1245,7 +1244,7 @@ public:
 
     /** Drops the remembered bullets, so the next caller walks the document again.
      */
-    SAL_DLLPRIVATE void ForgetUsedBullets() { moUsedBullets.reset(); }
+    SAL_DLLPRIVATE void ForgetUsedBullets();
 
     /** Every bullet the slides and the master slides use, once each.
      */

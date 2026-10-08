@@ -125,6 +125,8 @@ void lcl_AddBulletsOfPage(const SdrPage& rPage, std::vector<SvxDocumentBullet>& 
 }
 }
 
+void SdDrawDocument::ForgetUsedBullets() { moUsedBullets.reset(); }
+
 std::vector<SvxDocumentBullet>
 SdDrawDocument::GetUsedBullets(const SdrOutliner* pActiveOutliner) const
 {
