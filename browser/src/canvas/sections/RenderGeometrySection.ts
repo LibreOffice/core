@@ -979,10 +979,13 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const data = RenderGeometrySection.currentPart();
 		if (!data) return objectIds;
 
+		// The entry of a text edit names the object under edit as its parent, but it is what that
+		// object shows while the edit runs, not something the object holds.
 		const holds = new Map<number, number[]>();
 		for (const id of data.order) {
-			const parent = data.objects.get(id)?.parent;
-			if (!parent) continue;
+			const object = data.objects.get(id);
+			const parent = object?.parent;
+			if (!parent || object?.kind === 'texteditoverlay') continue;
 
 			const held = holds.get(parent);
 			if (held) held.push(id);
@@ -1035,9 +1038,11 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const data = RenderGeometrySection.currentPart();
 		if (!data) return [];
 
-		return data.order.filter(
-			(id: number) => data.objects.get(id)?.parent === objectId,
-		);
+		// A text edit entry names the object under edit as its parent without being held by it.
+		return data.order.filter((id: number) => {
+			const object = data.objects.get(id);
+			return object?.parent === objectId && object.kind !== 'texteditoverlay';
+		});
 	}
 
 	/// Whether the object holds other objects, which is what makes it a group.
