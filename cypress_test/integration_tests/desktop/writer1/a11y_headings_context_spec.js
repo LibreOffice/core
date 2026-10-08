@@ -209,7 +209,7 @@ describe(['tagdesktop'], 'Writer headings given to the reader', { testIsolation:
 					return !node.ignored && node.role === 'StaticText';
 				}).map(function (node) { return node.name.trim(); });
 				expect(given, 'the paragraphs before the caret').to.deep.equal(
-					[OUTLINE[0].text, 'Opening paragraph.', OUTLINE[1].text]);
+					[OUTLINE[0].text, 'Opening paragraph.', 'Quoted words.', OUTLINE[1].text]);
 			});
 		});
 	});

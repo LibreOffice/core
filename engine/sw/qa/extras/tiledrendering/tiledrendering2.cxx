@@ -1981,6 +1981,40 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphLinkURLChange
     // Then the focused paragraph reports no link:
     CPPUNIT_ASSERT(!aView.m_aA11yFocusedParagraph.get_child_optional("links"));
 }
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphBlockQuote)
+{
+    // Given a block quote with a link, after a plain paragraph:
+    createDoc("a11y-blockquote.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the cursor moves into the block quote:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then it is the focused paragraph, with its link:
+    // Without the fix, no paragraph was reported at all.
+    CPPUNIT_ASSERT_EQUAL(std::string("Quoted from the Collabora website."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content"));
+    boost::property_tree::ptree aLinks = aView.m_aA11yFocusedParagraph.get_child("links");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aLinks.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("https://www.collaboraonline.com/"),
+                         aLinks.begin()->second.get<std::string>("url"));
+
+    // And when the cursor moves back up:
+    pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the block quote is the paragraph after the caret:
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("Quoted from the Collabora website."),
+        aView.m_aA11yFocusedParagraph.get_child("after").begin()->second.get_value<std::string>());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

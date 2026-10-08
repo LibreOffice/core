@@ -601,11 +601,12 @@ WindowSide windowSide(const uno::Reference<accessibility::XAccessibleContext>& x
     return WindowSide::Inside;
 }
 
-// Writer gives a heading paragraph its own role.
+// Writer gives a heading or a block quote paragraph its own role.
 bool isParagraphRole(sal_Int16 nRole)
 {
     return nRole == accessibility::AccessibleRole::PARAGRAPH
-           || nRole == accessibility::AccessibleRole::HEADING;
+           || nRole == accessibility::AccessibleRole::HEADING
+           || nRole == accessibility::AccessibleRole::BLOCK_QUOTE;
 }
 
 // A paragraph in a table cell is read in the flow of the text the table is in.
@@ -1973,7 +1974,8 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
             }
             case AccessibleEventId::ROLE_CHANGED:
             {
-                // Writer raises this when a paragraph style makes a heading or undoes one.
+                // Writer raises this when a paragraph style makes a heading or a block quote, or
+                // undoes one.
                 uno::Reference<XAccessibleText> xAccText(getAccessible(aEvent), uno::UNO_QUERY);
                 updateAndNotifyParagraph(xAccText, false, "ROLE_CHANGED");
 
