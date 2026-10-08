@@ -692,6 +692,14 @@ ul {
   color: var(--color-primary-text);
 }
 
+#ai-reset-button .material-design-icon {
+  width: 18px;
+  height: 18px;
+  background-color: currentColor;
+  -webkit-mask: url('../../images/lc_updateall.svg') no-repeat center / contain;
+  mask: url('../../images/lc_updateall.svg') no-repeat center / contain;
+}
+
 .ai-providers-header {
   display: flex;
   flex-wrap: wrap;
@@ -851,7 +859,7 @@ ul {
   width: 10px;
   height: 10px;
   transform: scale(0);
-  background-color: var(--settings-btn-primary-text);
+  background-color: var(--color-primary-text);
   /* A tick, so the mark scales with the box instead of being a glyph. */
   clip-path: polygon(
     14% 44%,
