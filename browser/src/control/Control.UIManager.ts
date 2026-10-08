@@ -1143,8 +1143,9 @@ class UIManager extends window.L.Control {
 
 		if (this.map.navigator) {
 			const show = this.getBooleanDocTypePref('ShowNavigator', false);
-			// .uno:Navigator toggles the panel.
-			if (show !== !!app.showNavigator) this.map.sendUnoCommand('.uno:Navigator');
+			// The argument sets the panel to the wanted state, even if app.showNavigator is stale.
+			if (show !== !!app.showNavigator)
+				this.map.sendUnoCommand('.uno:Navigator?Navigator:bool=' + show);
 		}
 
 		if (this.map.sidebar) {
@@ -1196,10 +1197,11 @@ class UIManager extends window.L.Control {
 	initializeNavigator(): void {
 		if (!window.mode.isDesktop()) return;
 
-		// .uno:Navigator toggles the panel, and it starts closed, so send it
-		// only when the saved state wants the navigator open.
+		// The panel starts closed, so open it only when the saved state wants
+		// the navigator open. The argument opens it, and leaves an open panel
+		// open when this runs again for the same view.
 		if (this.getBooleanDocTypePref('ShowNavigator', false))
-			app.socket.sendMessage('uno .uno:Navigator');
+			app.socket.sendMessage('uno .uno:Navigator?Navigator:bool=true');
 	}
 
 	/**
@@ -2026,8 +2028,9 @@ class UIManager extends window.L.Control {
 	initializeQuickFindInCore(): void {
 		if (!this.map.quickFindPanel) return;
 
-		// Initialize QuickFindPanel in core
-		app.socket.sendMessage('uno .uno:QuickFind');
+		// Open the QuickFindPanel in core. The argument opens it, and leaves an
+		// open panel open when this runs again for the same view.
+		app.socket.sendMessage('uno .uno:QuickFind?QuickFind:bool=true');
 	}
 
 	/**

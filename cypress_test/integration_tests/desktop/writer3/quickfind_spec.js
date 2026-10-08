@@ -74,6 +74,21 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching via quickfind in
         // match would replace it with "Match X of N matches found.".
         writerHelper.assertQuickFindMatches(2);
     });
+
+    it('Search still finds matches after the browser settings arrive again', function() {
+        writerHelper.searchInQuickFind('a');
+        writerHelper.assertQuickFindMatches(2);
+
+        // The server sends the browser settings again on a reconnect, or when the same user
+        // changes a setting in another document. The client then sets up its panels again.
+        cy.getFrameWindow().then(function(win) {
+            win.dispatchEvent(new win.Event('browsersettingchanged'));
+            return helper.processToIdle(win);
+        });
+
+        writerHelper.searchInQuickFind('b');
+        writerHelper.assertQuickFindMatches(5);
+    });
 });
 
 // Both of these read what happens as the panel goes from closed to open, so

@@ -155,6 +155,12 @@ void WhiteBoxTests::testCOOLProtocolFunctions()
     LOK_ASSERT(COOLProtocol::tokenIndicatesDocumentModification(
         StringVector::tokenize("slideimport insert file=source.odp slides=0,1 at=2")));
 
+    // Opening the quick find panel leaves the document as it was, with or without the argument.
+    LOK_ASSERT(!COOLProtocol::tokenIndicatesDocumentModification(
+        StringVector::tokenize("uno .uno:QuickFind")));
+    LOK_ASSERT(!COOLProtocol::tokenIndicatesDocumentModification(
+        StringVector::tokenize("uno .uno:QuickFind?QuickFind:bool=true")));
+
     LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), Util::trimmed("A").size());
     LOK_ASSERT_EQUAL_STR("A", Util::trimmed("A"));
 

@@ -280,7 +280,7 @@ class Dispatcher {
 					.getElementById('navigation-sidebar')
 					.classList.contains('visible')
 			)
-				app.map.sendUnoCommand('.uno:Navigator');
+				app.map.sendUnoCommand('.uno:Navigator?Navigator:bool=true');
 			app.map.sendUnoCommand(
 				'.uno:NavigatorSelectComment?CommentId:short=' +
 					(data ? (data as number) : 0),

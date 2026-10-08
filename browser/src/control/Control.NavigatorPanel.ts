@@ -160,7 +160,7 @@ class NavigatorPanel extends SidebarBase {
 		const clickFunction = function () {
 			this.closeNavigation();
 			if (app.showNavigator) {
-				app.map.sendUnoCommand('.uno:Navigator');
+				app.map.sendUnoCommand('.uno:Navigator?Navigator:bool=false');
 			}
 			app.map.focus();
 		}.bind(this);
@@ -371,7 +371,7 @@ class NavigatorPanel extends SidebarBase {
 						this.focusNavigationItem();
 					});
 				} else {
-					app.map.sendUnoCommand('.uno:Navigator');
+					app.map.sendUnoCommand('.uno:Navigator?Navigator:bool=true');
 					this.focusSearch();
 				}
 			}.bind(this),
@@ -493,12 +493,14 @@ class NavigatorPanel extends SidebarBase {
 			this.navigatorDockWrapper.style.display = 'none';
 			this.quickFindWrapper.style.display = 'none';
 		} else if (tabId === 'tab-navigator') {
-			if (!app.showNavigator) app.map.sendUnoCommand('.uno:Navigator');
+			if (!app.showNavigator)
+				app.map.sendUnoCommand('.uno:Navigator?Navigator:bool=true');
 			this.presentationControlsWrapper.style.display = 'none';
 			this.navigatorDockWrapper.style.display = 'block';
 			this.quickFindWrapper.style.display = 'none';
 		} else if (tabId === 'tab-quick-find') {
-			if (!app.showQuickFind) app.map.sendUnoCommand('.uno:QuickFind'); // todo add showQuickFind to other areas of app
+			if (!app.showQuickFind)
+				app.map.sendUnoCommand('.uno:QuickFind?QuickFind:bool=true'); // todo add showQuickFind to other areas of app
 			this.presentationControlsWrapper.style.display = 'none';
 			this.navigatorDockWrapper.style.display = 'none';
 			this.quickFindWrapper.style.display = 'block';
@@ -536,7 +538,7 @@ class NavigatorPanel extends SidebarBase {
 	}
 
 	requestShow() {
-		app.socket.sendMessage('uno .uno:Navigator');
+		app.socket.sendMessage('uno .uno:Navigator?Navigator:bool=true');
 	}
 
 	showNavigationPanel(setFocus: boolean) {
