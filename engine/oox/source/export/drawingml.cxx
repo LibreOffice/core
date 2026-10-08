@@ -203,6 +203,8 @@ sal_Int64 toTextSpacingPoint(sal_Int64 mm100)
     constexpr o3tl::detail::m_and_d md(mdToPt.first * 100, mdToPt.second);
     return o3tl::convert(mm100, md.m, md.d);
 }
+
+const sal_Int32 Tag_TextEffects = 1;
 }
 
 namespace oox::drawingml {
@@ -2990,10 +2992,17 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
 
             if (rRunInput.xShapePropSet.is() && GetDocumentType() != DOCUMENT_DOCX)
             {
-                mpFS->startElementNS(XML_a, XML_effectLst);
-                WriteTextGlowEffect(rRunInput.xShapePropSet);
-                WriteTextShadowEffect(rXPropSet);
-                mpFS->endElementNS(XML_a, XML_effectLst);
+                mpFS->mark(Tag_TextEffects);
+                bool bTextGlowWritten = WriteTextGlowEffect(rRunInput.xShapePropSet);
+                bool bTextShadowWritten = WriteTextShadowEffect(rXPropSet);
+                if (bTextGlowWritten || bTextShadowWritten)
+                {
+                    mpFS->mark(Tag_TextEffects);
+                    mpFS->startElementNS(XML_a, XML_effectLst);
+                    mpFS->mergeTopMarks(Tag_TextEffects, sax_fastparser::MergeMarks::PREPEND);
+                    mpFS->endElementNS(XML_a, XML_effectLst);
+                }
+                mpFS->mergeTopMarks(Tag_TextEffects, sax_fastparser::MergeMarks::APPEND);
             }
         }
     }
@@ -9982,17 +9991,17 @@ void DrawingML::WriteShadowEffect(const Reference<XPropertySet>& rXPropSet)
     WriteOuterShadowEffect(aShadow);
 }
 
-void DrawingML::WriteTextGlowEffect(const Reference< XPropertySet >& rXPropSet)
+bool DrawingML::WriteTextGlowEffect(const Reference< XPropertySet >& rXPropSet)
 {
     if (!rXPropSet->getPropertySetInfo()->hasPropertyByName(u"GlowTextEffectRadius"_ustr))
     {
-        return;
+        return false;
     }
 
     sal_Int32 nRad = 0;
     rXPropSet->getPropertyValue(u"GlowTextEffectRadius"_ustr) >>= nRad;
     if (!nRad)
-        return;
+        return false;
 
     Sequence< PropertyValue > aGlowAttribs{ comphelper::makePropertyValue(
         u"rad"_ustr, oox::drawingml::convertHmmToEmu(nRad)) };
@@ -10004,12 +10013,14 @@ void DrawingML::WriteTextGlowEffect(const Reference< XPropertySet >& rXPropSet)
     // TODO other stuff like saturation or luminance
 
     WriteShapeEffect(u"glowtext", aGlowProps);
+
+    return true;
 }
 
-void DrawingML::WriteTextShadowEffect(const Reference<XPropertySet>& rXPropSet)
+bool DrawingML::WriteTextShadowEffect(const Reference<XPropertySet>& rXPropSet)
 {
     if (!GetProperty(rXPropSet, u"CharShadowed"_ustr) || !mAny.get<bool>())
-        return;
+        return false;
 
     // The shadow sits one twenty fourth of the height of the text below it and to its right, in
     // black. A direction of 45 degrees is stated in sixtieths of a thousandth of a degree.
@@ -10025,6 +10036,8 @@ void DrawingML::WriteTextShadowEffect(const Reference<XPropertySet>& rXPropSet)
                          OString::number(nDistance), XML_dir, OString::number(2700000));
     WriteColor(COL_BLACK);
     mpFS->endElementNS(XML_a, XML_outerShdw);
+
+    return true;
 }
 
 void DrawingML::WriteReflectionEffect(model::ReflectionEffect const& rReflection)

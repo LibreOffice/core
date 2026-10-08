@@ -64,6 +64,21 @@ public:
         : SdModelTestBase(u"/sd/qa/unit/data/"_ustr)
     {
     }
+
+    // Add a text shape with given text to the first slide, and return
+    // its properties
+    uno::Reference<beans::XPropertySet> addTextShape(const OUString& rText)
+    {
+        uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShape> xShape(
+            xFactory->createInstance(u"com.sun.star.drawing.TextShape"_ustr),
+            uno::UNO_QUERY_THROW);
+        getPage(0)->add(xShape);
+        xShape->setSize(awt::Size(10000, 2000));
+        xShape->setPosition(awt::Point(1000, 1000));
+        uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->setString(rText);
+        return uno::Reference<beans::XPropertySet>(xShape, uno::UNO_QUERY_THROW);
+    }
 };
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf160591)
@@ -682,6 +697,44 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testUnderline)
 
     xPropSet->getPropertyValue(u"CharUnderline"_ustr) >>= nUnderline;
     CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::DOUBLE, nUnderline);
+}
+
+// Verify no effects means no effect list
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTextEffectListOnlyWithEffects)
+{
+    createSdImpressDoc();
+    addTextShape(u"plain"_ustr);
+    addTextShape(u"glowing"_ustr)
+        ->setPropertyValue(u"GlowTextEffectRadius"_ustr, uno::Any(sal_Int32(706)));
+    addTextShape(u"zero-radius-glow"_ustr)
+        ->setPropertyValue(u"GlowTextEffectRadius"_ustr, uno::Any(sal_Int32(0)));
+    addTextShape(u"shadow"_ustr)
+        ->setPropertyValue(u"CharShadowed"_ustr, uno::Any(true));
+    uno::Reference<beans::XPropertySet> rShadowAndGlowShape = addTextShape(u"glow-and-shadow"_ustr);
+    rShadowAndGlowShape->setPropertyValue(u"GlowTextEffectRadius"_ustr, uno::Any(sal_Int32(300)));
+    rShadowAndGlowShape->setPropertyValue(u"CharShadowed"_ustr, uno::Any(true));
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    static constexpr OString sPlainRun
+        = "/p:sld/p:cSld/p:spTree/p:sp[3]/p:txBody/a:p/a:r/a:rPr"_ostr;
+    static constexpr OString sGlowRun
+        = "/p:sld/p:cSld/p:spTree/p:sp[4]/p:txBody/a:p/a:r/a:rPr"_ostr;
+    static constexpr OString sZeroRadiusGlowRun
+        = "/p:sld/p:cSld/p:spTree/p:sp[5]/p:txBody/a:p/a:r/a:rPr"_ostr;
+    static constexpr OString sShadowRun
+        = "/p:sld/p:cSld/p:spTree/p:sp[6]/p:txBody/a:p/a:r/a:rPr"_ostr;
+    static constexpr OString sShadowAndGlowRun
+        = "/p:sld/p:cSld/p:spTree/p:sp[7]/p:txBody/a:p/a:r/a:rPr"_ostr;
+    assertXPath(pXmlDoc, sPlainRun, 1);
+    assertXPath(pXmlDoc, sPlainRun + "/a:effectLst", 0);
+    assertXPath(pXmlDoc, sGlowRun + "/a:effectLst/a:glow", 1);
+    assertXPath(pXmlDoc, sZeroRadiusGlowRun, 1);
+    assertXPath(pXmlDoc, sZeroRadiusGlowRun + "/a:effectLst", 0);
+    assertXPath(pXmlDoc, sShadowRun + "/a:effectLst/a:outerShdw", 1);
+    assertXPath(pXmlDoc, sShadowAndGlowRun + "/a:effectLst/a:glow", 1);
+    assertXPath(pXmlDoc, sShadowAndGlowRun + "/a:effectLst/a:outerShdw", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf119087)
