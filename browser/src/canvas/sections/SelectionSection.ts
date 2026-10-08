@@ -680,13 +680,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	/*
 		The objects the bands go round, from the outermost one inwards: every group the selection
-		sits inside, and the selection itself where it is a single object holding others. Each of
-		them takes a band, so how deep in a hierarchy of groups the selection sits is there to be
-		seen. A diagram is one of them, which is why a band stays round a diagram when one of the
-		shapes it holds is selected on its own.
+		sits inside, and every selected object that holds others. Each of them takes a band, so how
+		deep in a hierarchy of groups the selection sits is there to be seen, and which of several
+		selected objects are groups is seen at one look. A diagram is one of them, which is why a
+		band stays round a diagram when one of the shapes it holds is selected on its own.
 
-		A selection of several objects takes none of its own: it is put together for the moment
-		and taken apart again, while a group stays. The groups above it still take theirs.
+		A selection of several objects takes none round itself: it is put together for the moment
+		and taken apart again, while a group stays.
 	*/
 	private surroundObjects(): number[] {
 		const objects = this.selectedObjects();
@@ -700,8 +700,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 			walking = RenderGeometrySection.parentOf(walking);
 		}
 
-		if (objects.length === 1 && RenderGeometrySection.holdsObjects(objects[0]))
-			holding.push(objects[0]);
+		for (const objectId of objects)
+			if (RenderGeometrySection.holdsObjects(objectId)) holding.push(objectId);
 
 		return holding;
 	}
@@ -716,8 +716,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/*
 		The four places the band round that object goes through, in twips, in the order they go
 		round it. For the object that is itself selected they are the places the framing handles
-		stand on, so its band follows a drag as they do; for a group holding what is selected they
-		are the corners of the box that group takes up.
+		stand on, so its band follows a drag as they do; for one of several selected objects they
+		are the corners of its box with the running drag laid over them, which does the same; for
+		a group holding what is selected they are the corners of the box that group takes up.
 	*/
 	private surroundPlaces(objectId: number): cool.SimplePoint[] {
 		const objects = this.selectedObjects();
@@ -743,12 +744,20 @@ abstract class SelectionSection extends CanvasSectionObject {
 		);
 		if (!box) return [];
 
-		return [
-			new cool.SimplePoint(box.minX, box.minY),
-			new cool.SimplePoint(box.maxX, box.minY),
-			new cool.SimplePoint(box.maxX, box.maxY),
-			new cool.SimplePoint(box.minX, box.maxY),
+		const corners = [
+			new cool.Point(box.minX, box.minY),
+			new cool.Point(box.maxX, box.minY),
+			new cool.Point(box.maxX, box.maxY),
+			new cool.Point(box.minX, box.maxY),
 		];
+		const drag = objects.includes(objectId)
+			? this.interaction?.ghostTransformation()
+			: null;
+
+		return corners.map((corner: cool.Point) => {
+			const at = drag ? drag.apply(corner.x, corner.y) : corner;
+			return new cool.SimplePoint(at.x, at.y);
+		});
 	}
 
 	/*
