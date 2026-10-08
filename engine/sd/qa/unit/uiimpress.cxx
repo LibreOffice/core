@@ -86,6 +86,7 @@
 #include <controller/SlsPageSelector.hxx>
 #include <svl/stritem.hxx>
 #include <undo/undomanager.hxx>
+#include <vcl/font.hxx>
 #include <vcl/scheduler.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -97,6 +98,7 @@
 #include <docmodel/color/ComplexColorJSON.hxx>
 
 #include <drawdoc.hxx>
+#include <stlpool.hxx>
 #include <DrawDocShell.hxx>
 #include <SlideSectionManager.hxx>
 #include <DesignTemplates.hxx>
@@ -7178,6 +7180,61 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletFollowsAStyleSheetChange
     for (const SvxDocumentBullet& rBullet : pDocument->GetUsedBullets())
     {
         if (!rBullet.IsGraphic() && rBullet.aBulletCharacter == u"\u2756"_ustr)
+            bFound = true;
+    }
+    CPPUNIT_ASSERT_EQUAL(true, bFound);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStyleBulletsAreWalkedOnceUntilAStyleChanges)
+{
+    createSdImpressDoc("document-bullets.odp");
+    SdDrawDocument* pDocument = getSdDocShell()->GetDoc();
+
+    pDocument->GetUsedBullets();
+    const sal_uInt32 nAfterFirst = pDocument->GetStyleSheetBulletWalkCount();
+    CPPUNIT_ASSERT(nAfterFirst > 0);
+
+    // While no style sheet has changed the document answers from what it holds, so the toolbar
+    // can ask on every update.
+    pDocument->GetUsedBullets();
+    pDocument->GetUsedBullets();
+    CPPUNIT_ASSERT_EQUAL(nAfterFirst, pDocument->GetStyleSheetBulletWalkCount());
+
+    lcl_SetOutlineStyleBulletCharacter(mxComponent, u"outline1"_ustr, u"\u2756"_ustr);
+
+    // A style sheet change is heard, so the next caller gets a new walk.
+    pDocument->GetUsedBullets();
+    CPPUNIT_ASSERT_EQUAL(nAfterFirst + 1, pDocument->GetStyleSheetBulletWalkCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletFollowsAStyleNoShapeFollows)
+{
+    createSdImpressDoc("document-bullets.odp");
+    SdDrawDocument* pDocument = getSdDocShell()->GetDoc();
+
+    SdStyleSheetPool* pStyleSheetPool = pDocument->GetSdStyleSheetPool();
+    CPPUNIT_ASSERT(pStyleSheetPool);
+    SfxStyleSheetBase& rStyle = pStyleSheetPool->Make(u"bullet holder"_ustr, SfxStyleFamily::Para);
+
+    pDocument->GetUsedBullets();
+
+    // A style sheet carries its bullet whether or not a shape follows it. The style sheet
+    // announces the change itself, which is what the presentation style dialog relies on.
+    vcl::Font aFont;
+    aFont.SetFamilyName(u"OpenSymbol"_ustr);
+    SvxNumberFormat aFormat(SVX_NUM_CHAR_SPECIAL);
+    aFormat.SetBulletFont(&aFont);
+    aFormat.SetBulletChar(0x2767);
+
+    SvxNumRule aRule(SvxNumRuleFlags::NONE, SVX_MAX_NUM, false);
+    aRule.SetLevel(0, aFormat);
+    rStyle.GetItemSet().Put(SvxNumBulletItem(std::move(aRule), EE_PARA_NUMBULLET));
+    static_cast<SfxStyleSheet&>(rStyle).Broadcast(SfxHint(SfxHintId::DataChanged));
+
+    bool bFound = false;
+    for (const SvxDocumentBullet& rBullet : pDocument->GetUsedBullets())
+    {
+        if (!rBullet.IsGraphic() && rBullet.aBulletCharacter == u"\u2767"_ustr)
             bFound = true;
     }
     CPPUNIT_ASSERT_EQUAL(true, bFound);

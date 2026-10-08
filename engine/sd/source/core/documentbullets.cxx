@@ -10,6 +10,7 @@
  */
 
 #include <drawdoc.hxx>
+#include <documentbulletwatcher.hxx>
 #include <stlpool.hxx>
 
 #include <editeng/brushitem.hxx>
@@ -125,7 +126,58 @@ void lcl_AddBulletsOfPage(const SdrPage& rPage, std::vector<SvxDocumentBullet>& 
 }
 }
 
-void SdDrawDocument::ForgetUsedBullets() { moUsedBullets.reset(); }
+SdStyleSheetBulletWatcher::SdStyleSheetBulletWatcher(const SdDrawDocument& rDocument)
+    : mrDocument(rDocument)
+{
+}
+
+void SdStyleSheetBulletWatcher::Watch(SfxStyleSheetBasePool& rPool)
+{
+    EndListeningAll();
+    StartListening(rPool);
+
+    std::unique_ptr<SfxStyleSheetIterator> pIterator = rPool.CreateIterator(SfxStyleFamily::All);
+    for (SfxStyleSheetBase* pStyle = pIterator->First(); pStyle; pStyle = pIterator->Next())
+    {
+        if (SfxStyleSheet* pSheet = dynamic_cast<SfxStyleSheet*>(pStyle))
+            StartListening(*pSheet);
+    }
+}
+
+void SdStyleSheetBulletWatcher::Notify(SfxBroadcaster& /*rBroadcaster*/, const SfxHint& /*rHint*/)
+{
+    mrDocument.ForgetStyleSheetBullets();
+}
+
+void SdDrawDocument::ForgetUsedBullets()
+{
+    moUsedBullets.reset();
+    moStyleSheetBullets.reset();
+}
+
+void SdDrawDocument::ForgetStyleSheetBullets() const { moStyleSheetBullets.reset(); }
+
+std::vector<SvxDocumentBullet> SdDrawDocument::WalkStyleSheetsForUsedBullets() const
+{
+    std::vector<SvxDocumentBullet> aBullets;
+    std::set<OUString> aSeenIdentifiers;
+
+    SdStyleSheetPool* pStyleSheetPool = GetSdStyleSheetPool();
+    if (!pStyleSheetPool)
+        return aBullets;
+
+    if (!mpStyleSheetBulletWatcher)
+        mpStyleSheetBulletWatcher.reset(new SdStyleSheetBulletWatcher(*this));
+    mpStyleSheetBulletWatcher->Watch(*pStyleSheetPool);
+
+    // The pool's own First and Next share one cached iterator, so this walk creates its own.
+    std::unique_ptr<SfxStyleSheetIterator> pIterator
+        = pStyleSheetPool->CreateIterator(SfxStyleFamily::All);
+    for (SfxStyleSheetBase* pStyle = pIterator->First(); pStyle; pStyle = pIterator->Next())
+        lcl_AddBulletsOfItemSet(pStyle->GetItemSet(), aBullets, aSeenIdentifiers);
+
+    return aBullets;
+}
 
 std::vector<SvxDocumentBullet>
 SdDrawDocument::GetUsedBullets(const SdrOutliner* pActiveOutliner) const
@@ -133,26 +185,27 @@ SdDrawDocument::GetUsedBullets(const SdrOutliner* pActiveOutliner) const
     std::vector<SvxDocumentBullet> aBullets;
     std::set<OUString> aSeenIdentifiers;
 
-    // The outline styles of every slide layout live in the style sheet pool, so a bullet that a
-    // master slide defines is found here whether or not a slide goes on to use it. A style sheet
-    // reaches the document as changed only through a shape that follows it, so a style no shape
-    // follows would otherwise answer from a list made before it gained its bullet. There are tens
-    // of style sheets where there are thousands of paragraphs, so these are read every time.
-    SdStyleSheetPool* pStyleSheetPool = GetSdStyleSheetPool();
-    if (pStyleSheetPool)
-    {
-        // The pool's own First and Next share one cached iterator, so walking with them here would
-        // disturb a walk already under way in the caller. This iterator belongs to us alone.
-        std::unique_ptr<SfxStyleSheetIterator> pIterator
-            = pStyleSheetPool->CreateIterator(SfxStyleFamily::All);
-        for (SfxStyleSheetBase* pStyle = pIterator->First(); pStyle; pStyle = pIterator->Next())
-            lcl_AddBulletsOfItemSet(pStyle->GetItemSet(), aBullets, aSeenIdentifiers);
-    }
-
+    // A presentation can carry thousands of paragraphs, so the slides and the master slides
+    // are read once and the result kept.
     if (!moUsedBullets)
     {
         moUsedBullets = WalkPagesForUsedBullets();
         ++mnUsedBulletWalks;
+    }
+
+    // The outline styles of every slide layout live in the style sheet pool, so a bullet that a
+    // master slide defines is found here whether or not a slide uses it. The result is kept
+    // until a style sheet announces a change.
+    if (!moStyleSheetBullets)
+    {
+        moStyleSheetBullets = WalkStyleSheetsForUsedBullets();
+        ++mnStyleSheetBulletWalks;
+    }
+
+    for (const SvxDocumentBullet& rBullet : *moStyleSheetBullets)
+    {
+        if (aSeenIdentifiers.insert(rBullet.GetIdentifier()).second)
+            aBullets.push_back(rBullet);
     }
 
     for (const SvxDocumentBullet& rBullet : *moUsedBullets)

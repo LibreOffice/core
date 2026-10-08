@@ -86,6 +86,7 @@
 #include <editeng/outliner.hxx>
 #include <svx/documentbullets.hxx>
 #include <drawdoc.hxx>
+#include <documentbulletwatcher.hxx>
 #include <SlideSectionManager.hxx>
 #include <sdpage.hxx>
 #include <anminfo.hxx>

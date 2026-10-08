@@ -59,6 +59,7 @@ class SdCustomShowList;
 class SdUndoGroup;
 class SdrObject;
 struct SvxDocumentBullet;
+class SdStyleSheetBulletWatcher;
 class Idle;
 class Outliner;
 class SdrOutliner;
@@ -403,6 +404,13 @@ private:
     mutable std::optional<std::vector<SvxDocumentBullet>> moUsedBullets;
     /// How many times the walk behind moUsedBullets has run.
     mutable sal_uInt32 mnUsedBulletWalks = 0;
+    /// The bullets the style sheets define. Empty until something asks for them, and dropped
+    /// whenever a style sheet changes.
+    mutable std::optional<std::vector<SvxDocumentBullet>> moStyleSheetBullets;
+    /// How many times the style sheets have been read for their bullets.
+    mutable sal_uInt32 mnStyleSheetBulletWalks = 0;
+    /// Listens for a style sheet change.
+    mutable std::unique_ptr<SdStyleSheetBulletWatcher> mpStyleSheetBulletWatcher;
 
     rtl::Reference< sd::SlideShow > mxPresentation;
 
@@ -1242,17 +1250,33 @@ public:
     std::vector<SvxDocumentBullet> GetUsedBullets(const SdrOutliner* pActiveOutliner
                                                   = nullptr) const;
 
-    /** Drops the remembered bullets, so the next caller walks the document again.
+    /** Drops every remembered bullet, so the next caller walks the document again.
      */
     SAL_DLLPRIVATE void ForgetUsedBullets();
+
+    /** Drops the bullets remembered from the style sheets alone.
+     */
+    SAL_DLLPRIVATE void ForgetStyleSheetBullets() const;
 
     /** Every bullet the slides and the master slides use, once each.
      */
     SAL_DLLPRIVATE std::vector<SvxDocumentBullet> WalkPagesForUsedBullets() const;
 
+    /** Every bullet the style sheets define, once each.
+     */
+    SAL_DLLPRIVATE std::vector<SvxDocumentBullet> WalkStyleSheetsForUsedBullets() const;
+
     /** How many times the presentation has been walked for its bullets since it was opened.
      */
     SAL_DLLPRIVATE sal_uInt32 GetUsedBulletWalkCount() const { return mnUsedBulletWalks; }
+
+    /** How many times the style sheets have been walked for their bullets since the
+        presentation was opened.
+     */
+    SAL_DLLPRIVATE sal_uInt32 GetStyleSheetBulletWalkCount() const
+    {
+        return mnStyleSheetBulletWalks;
+    }
 
     SAL_DLLPRIVATE void UpdatePageRelativeURLs(
         std::u16string_view aOldName, std::u16string_view aNewName);
