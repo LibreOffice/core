@@ -2959,6 +2959,9 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
         }
         maArrIterator = FormulaTokenArrayPlainIterator( *mpArr );
     }
+    // Relative references in named expressions depend on this flag.
+    if (mpArr != pSaveArr)
+        mpArr->SetFromRangeName( pSaveArr->IsFromRangeName());
 
     // At least one character per token, plus some are references, some are
     // function names, some are numbers, ...

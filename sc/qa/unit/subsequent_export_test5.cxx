@@ -19,6 +19,7 @@
 #include <postit.hxx>
 #include <tabprotection.hxx>
 #include <dpobject.hxx>
+#include <rangenam.hxx>
 
 #include <editeng/wghtitem.hxx>
 #include <editeng/eeitem.hxx>
@@ -1466,6 +1467,34 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf170565_empty_functions)
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[4]/x:c[2]/x:f", u"AVERAGE(,)");
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[5]/x:c[2]/x:f", u"COUNT(,)");
     assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[6]/x:c[2]/x:f", u"PRODUCT(,)");
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testNamedExpressionRelativeReferenceXLSX)
+{
+    // Names defined at B1. OOXML stores relative references relative to A1, so B becomes A, also
+    // in formulas that are rewritten for OOXML: SUM and a union of references.
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScRangeName* pNames = &pDoc->GetRangeName();
+    const ScAddress aPos(1, 0, 0);
+    pNames->insert(
+        std::make_unique<ScRangeData>(*pDoc, u"withSum"_ustr, u"SUM($Sheet1.B$1)"_ustr, aPos));
+    pNames->insert(std::make_unique<ScRangeData>(*pDoc, u"withUnion"_ustr,
+                                                 u"AREAS($Sheet1.B$1~$Sheet1.B$2)"_ustr, aPos));
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pBook = parseExport(u"xl/workbook.xml"_ustr);
+    CPPUNIT_ASSERT(pBook);
+    assertXPathContent(pBook, "/x:workbook/x:definedNames/x:definedName[@name='withSum']",
+                       u"SUM(Sheet1!A$1)");
+    assertXPathContent(pBook, "/x:workbook/x:definedNames/x:definedName[@name='withUnion']",
+                       u"AREAS((Sheet1!A$1,Sheet1!A$2))");
+
+    // After reload, seen from B1, the name refers to column B again.
+    saveAndReload(TestFilter::XLSX);
+    pNames = &getScDoc()->GetRangeName();
+    CPPUNIT_ASSERT_EQUAL(u"SUM($Sheet1.B$1)"_ustr,
+                         pNames->findByUpperName(u"WITHSUM"_ustr)->GetSymbol(aPos));
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf170963_row_breaks)
