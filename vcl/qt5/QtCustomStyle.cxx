@@ -78,21 +78,29 @@ QPalette QtCustomStyle::customPalette()
     return aPal;
 }
 
-QPalette QtCustomStyle::GetMenuBarPalette()
+QString QtCustomStyle::CreateMenuBarStyleSheet()
 {
-    if (!ThemeColors::IsThemeCached() || IsSystemThemeChanged())
-        return QApplication::palette();
+    if (!ThemeColors::VclPluginCanUseThemeColors())
+        return QString();
 
-    QPalette aPal;
     const ThemeColors& aThemeColors = ThemeColors::GetThemeColors();
+    const auto makeColorString = [](const Color& rColor) -> QString {
+        return QStringLiteral("#") + toQString(rColor.AsRGBHexString());
+    };
 
-    aPal.setColor(QPalette::Text, toQColor(aThemeColors.GetMenuBarTextColor()));
-    aPal.setColor(QPalette::ButtonText, toQColor(aThemeColors.GetMenuBarTextColor()));
-    aPal.setColor(QPalette::Window, toQColor(aThemeColors.GetMenuBarColor()));
-    aPal.setColor(QPalette::Highlight, toQColor(aThemeColors.GetMenuBarHighlightColor()));
-    aPal.setColor(QPalette::HighlightedText, toQColor(aThemeColors.GetMenuBarHighlightTextColor()));
+    const QString sBackground = makeColorString(aThemeColors.GetMenuBarColor());
+    const QString sForeground = makeColorString(aThemeColors.GetMenuBarTextColor());
+    const QString sHighlight = makeColorString(aThemeColors.GetMenuBarHighlightColor());
+    const QString sHighlightForeground
+        = makeColorString(aThemeColors.GetMenuBarHighlightTextColor());
+    const QString sDisabledForeground = makeColorString(aThemeColors.GetDisabledTextColor());
 
-    return aPal;
+    return QStringLiteral("QMenuBar { background-color: %1; color: %2; }"
+                          "QMenuBar::item { background-color: %1; color: %2; }"
+                          "QMenuBar::item:selected { background-color: %3; color: %4; }"
+                          "QMenuBar::item:pressed { background-color: %3; color: %4; }"
+                          "QMenuBar::item:disabled { color: %5; }")
+        .arg(sBackground, sForeground, sHighlight, sHighlightForeground, sDisabledForeground);
 }
 
 QPalette QtCustomStyle::GetMenuPalette()

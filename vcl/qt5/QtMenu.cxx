@@ -552,7 +552,7 @@ void QtMenu::SetFrame(const SalFrame* pFrame)
 void QtMenu::DoFullMenuUpdate(Menu* pMenuBar)
 {
     if (mpQMenuBar && ThemeColors::VclPluginCanUseThemeColors())
-        mpQMenuBar->setPalette(QtCustomStyle::GetMenuBarPalette());
+        mpQMenuBar->setStyleSheet(QtCustomStyle::CreateMenuBarStyleSheet());
 
     if (mpQMenu && ThemeColors::VclPluginCanUseThemeColors())
         mpQMenu->setPalette(QtCustomStyle::GetMenuPalette());
