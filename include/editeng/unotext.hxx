@@ -101,6 +101,7 @@ struct SfxItemPropertyMapEntry;
     { UNO_NAME_EDIT_CHAR_UNDERLINE,   EE_CHAR_UNDERLINE,  ::cppu::UnoType<sal_Int16>::get(),        0, MID_TL_STYLE }, \
     { u"CharUnderlineColor"_ustr,      EE_CHAR_UNDERLINE,  ::cppu::UnoType<sal_Int32>::get(),        0, MID_TL_COLOR }, \
     { u"CharUnderlineHasColor"_ustr,   EE_CHAR_UNDERLINE,  cppu::UnoType<bool>::get(),                    0, MID_TL_HASCOLOR } , \
+    { u"CharUnderlineComplexColor"_ustr, EE_CHAR_UNDERLINE, ::cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_TL_COMPLEX_COLOR }, \
     { UNO_NAME_EDIT_CHAR_OVERLINE,    EE_CHAR_OVERLINE,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_TL_STYLE }, \
     { u"CharOverlineColor"_ustr,       EE_CHAR_OVERLINE,   ::cppu::UnoType<sal_Int32>::get(),        0, MID_TL_COLOR }, \
     { u"CharOverlineHasColor"_ustr,    EE_CHAR_OVERLINE,   cppu::UnoType<bool>::get(),                    0, MID_TL_HASCOLOR } , \

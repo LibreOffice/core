@@ -1429,6 +1429,36 @@ CPPUNIT_TEST_FIXTURE(Test, testPPTXExportOutlinerListStyle)
     assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:lstStyle/a:lvl6pPr", 1);
     assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:lstStyle/a:lvl7pPr", 1);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testUnderlineFillThemeColor)
+{
+    loadFromFile(u"underline-fill-colors.pptx");
+
+    save(TestFilter::PPTX);
+
+    // Make sure a theme color is written as a scheme color, with its transformation
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    auto getRunProperties = [](int nParagraph) -> OString {
+        return "//p:sp[1]/p:txBody/a:p[" + OString::number(nParagraph) + "]/a:r/a:rPr";
+    };
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//p:sp[1]/p:txBody/a:p[2]/a:r/a:rPr/a:uFill/a:solidFill/a:schemeClr'
+    //   number of nodes is incorrect
+    assertXPath(pXmlDoc, getRunProperties(2) + "/a:uFill/a:solidFill/a:schemeClr", "val",
+                u"accent2");
+    assertXPath(pXmlDoc, getRunProperties(3) + "/a:uFill/a:solidFill/a:schemeClr", "val",
+                u"accent1");
+    assertXPath(pXmlDoc, getRunProperties(3) + "/a:uFill/a:solidFill/a:schemeClr/a:lumMod", "val",
+                u"75000");
+
+    // The other color types have no theme color, so they become their RGB value
+    assertXPath(pXmlDoc, getRunProperties(1) + "/a:uFill/a:solidFill/a:srgbClr", "val", u"FF0000");
+    assertXPath(pXmlDoc, getRunProperties(4) + "/a:uFill/a:solidFill/a:srgbClr", "val", u"008000");
+    assertXPath(pXmlDoc, getRunProperties(5) + "/a:uFill/a:solidFill/a:srgbClr", "val", u"00FFFF");
+    assertXPath(pXmlDoc, getRunProperties(6) + "/a:uFill/a:solidFill/a:srgbClr", "val", u"0000FF");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
