@@ -291,7 +291,7 @@ class GraphicSelection {
 		// While text is being edited every key belongs to the text.
 		if (this.textIsBeingEdited()) return false;
 
-		if (!this.hasActiveSelection()) return false;
+		if (!this.hasActiveSelection()) return this.scrollByKey(event);
 
 		// A drag by the mouse owns the selection while it runs, so a key does nothing to it then
 		// and is taken here. Escape stays with the drag, which it calls off.
@@ -331,6 +331,28 @@ class GraphicSelection {
 			if (object.kind === 'texteditoverlay' && object.viewId === ownViewId)
 				return true;
 		return false;
+	}
+
+	/*
+		Scrolls the view by an arrow key while nothing is selected, as the office does, in the
+		view that draws from the objects, whose view is the client's own, by the step EditSteps
+		gives for the modifier held.
+	*/
+	private static scrollByKey(event: KeyboardEvent): boolean {
+		const towards = GraphicSelection.theWayOf[event.key];
+		if (!towards || !RenderManager.isVectorRendering()) return false;
+
+		const layout = app.activeDocument?.activeLayout;
+		if (layout?.type !== 'ViewLayoutVector') return false;
+
+		const view = layout.viewedRectangle;
+		const step = EditSteps.scrollStep(event, view.width, view.height);
+		layout.scroll(
+			towards[0] * step.x * app.twipsToPixels,
+			towards[1] * step.y * app.twipsToPixels,
+			true,
+		);
+		return true;
 	}
 
 	/*

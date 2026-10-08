@@ -39,20 +39,9 @@ class HandleTravel {
 		}
 	}
 
-	/*
-		How far a key moves what it works on, in twips: a millimetre, ten of them with Shift, and
-		the width of one pixel with Alt, which is as fine as the screen goes. These are the steps
-		the office takes, and moving an object from the keyboard should take them as well once the
-		client does that itself.
-	*/
+	/// How far a key moves what it works on, in twips, as EditSteps sets it out.
 	public static stepFor(event: KeyboardEvent): number {
-		const millimetre = 1440 / 25.4;
-
-		if (event.shiftKey) return 10 * millimetre;
-		// One pixel as it is seen: the twips of a core pixel are the twips of a screen pixel
-		// only where the screen is not scaled, so the scale goes in.
-		if (event.altKey) return app.pixelsToTwips * app.dpiScale;
-		return millimetre;
+		return EditSteps.moveStep(event);
 	}
 
 	/// The handles to travel, in the order they are drawn, asked for afresh every time because
