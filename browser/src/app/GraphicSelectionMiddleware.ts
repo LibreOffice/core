@@ -364,6 +364,14 @@ class GraphicSelection {
 			if (!RenderManager.isVectorRendering()) return false;
 
 			if (event.key === 'Escape') return Interaction.context().escape();
+			if (
+				event.key === 'Enter' &&
+				!event.shiftKey &&
+				!event.ctrlKey &&
+				!event.altKey &&
+				!event.metaKey
+			)
+				return Interaction.context().enterKey();
 
 			const way = GraphicSelection.theWayOf[event.key];
 			if (!way) return false;

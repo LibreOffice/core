@@ -82,6 +82,23 @@ abstract class ClassicContext implements InteractionContext {
 	}
 
 	/*
+		Enter on one selected group that is no diagram enters it, selecting its first object.
+		Anything else is the engine's, which starts the text edit of the object selected.
+	*/
+	public enterKey(): boolean {
+		const selected = GraphicSelection.selectedObjectIDs;
+		if (selected.length !== 1) return false;
+		if (RenderGeometrySection.objectOf(selected[0])?.isDiagram) return false;
+
+		const held = RenderGeometrySection.heldBy(selected[0]);
+		if (!held.length) return false;
+
+		GraphicSelection.selectObjects([held[0]]);
+		GraphicSelection.updateSelectionSection();
+		return true;
+	}
+
+	/*
 		Escape takes the selection away; in a group that selects the group, which leaves it, so
 		Escape pressed again and again goes up group by group to the page and to nothing selected.
 		With nothing selected it is left to the engine.
