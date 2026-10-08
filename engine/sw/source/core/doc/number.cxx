@@ -783,17 +783,7 @@ void SwNumRule::Set( sal_uInt16 i, const SwNumFormat& rNumFormat )
             aFiltered.SetNumberingType(rNumFormat.GetNumberingType());
             aFiltered.SetCharFormat(rNumFormat.GetCharFormat());
             if (aFiltered.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
-            {
-                cpo::uno::Sequence<OUString> aBulletSymbols(
-                    officecfg::Office::Common::BulletsNumbering::DefaultListBullets::get());
-                cpo::uno::Sequence<OUString> aBulletFonts(
-                    officecfg::Office::Common::BulletsNumbering::DefaultListBulletsFonts::get());
-                sal_Int32 nBulletIdx = i % aBulletSymbols.getLength();
-                aFiltered.SetBulletChar(aBulletSymbols[nBulletIdx].toChar());
-                vcl::Font aFont;
-                aFont.SetFamilyName(aBulletFonts[nBulletIdx]);
-                aFiltered.SetBulletFont(&aFont);
-            }
+                numfunc::SetDefaultListBullet(aFiltered, i);
             else
             {
                 aFiltered.SetStart(rNumFormat.GetStart());
@@ -1664,6 +1654,32 @@ namespace numfunc
     sal_Unicode GetBulletChar( sal_uInt8 nLevel )
     {
         return SwDefBulletConfig::getInstance().GetChar( nLevel );
+    }
+
+    void SetDefaultListBullet(SwNumFormat& rFormat, sal_uInt16 nLevel)
+    {
+        static constexpr OUString sDefaultBulletSymbol = u"•"_ustr;
+        static constexpr OUString sDefaultBulletSymbolFont = u"OpenSymbol"_ustr;
+        cpo::uno::Sequence<OUString> aBulletSymbols(
+            officecfg::Office::Common::BulletsNumbering::DefaultListBullets::get());
+        const cpo::uno::Sequence<OUString> aBulletSymbolsFonts(
+            officecfg::Office::Common::BulletsNumbering::DefaultListBulletsFonts::get());
+        if (!aBulletSymbols.hasElements())
+        {
+            SAL_WARN("sw", "empty DefaultListBullets config, adding a default single bullet");
+            // Add a single element even if user cleared the list in the config
+            aBulletSymbols.realloc(1);
+            aBulletSymbols.getArray()[0] = sDefaultBulletSymbol;
+        }
+        const sal_Int32 nBulletSymbolIndex = nLevel % aBulletSymbols.getLength();
+        rFormat.SetBulletChar(aBulletSymbols[nBulletSymbolIndex].toChar());
+        vcl::Font aFont;
+        // Symbol and font correspond to each other, use same index
+        if (nBulletSymbolIndex < aBulletSymbolsFonts.getLength())
+            aFont.SetFamilyName(aBulletSymbolsFonts[nBulletSymbolIndex]);
+        else
+            aFont.SetFamilyName(sDefaultBulletSymbolFont);
+        rFormat.SetBulletFont(&aFont);
     }
 
     namespace {

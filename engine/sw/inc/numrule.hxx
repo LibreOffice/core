@@ -313,6 +313,14 @@ namespace numfunc
     /** retrieve unicode of character used for the default bullet list for the given list level */
     sal_Unicode GetBulletChar( sal_uInt8 nLevel );
 
+    /** set the bullet character and font of rFormat to the default bullet for list level nLevel
+
+        The default comes from the DefaultListBullets and DefaultListBulletsFonts settings, which
+        repeat when nLevel is past their end. An empty DefaultListBullets gives U+2022 in
+        OpenSymbol, and a level with no font entry gets OpenSymbol.
+    */
+    void SetDefaultListBullet(SwNumFormat& rFormat, sal_uInt16 nLevel);
+
     /** configuration, if at first position of the first list item the <TAB>-key
         increased the indent of the complete list or only demotes this list item.
         The same for <SHIFT-TAB>-key at the same position for decreasing the
