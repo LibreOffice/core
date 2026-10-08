@@ -1,7 +1,7 @@
 // The text ranges that a command works on, which are the selected ones when there is a selection
 // and the cursor otherwise:
 function targetRanges() {
-	var doc = cool.getActiveDocument();
+	var doc = DocumentApp.getActiveDocument();
 	var selection = doc.getSelection();
 	if (!selection) return [doc.getCursor().uno];
 	var ranges = [];

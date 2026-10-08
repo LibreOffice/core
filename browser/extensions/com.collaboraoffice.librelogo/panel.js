@@ -469,7 +469,7 @@ class Panel {
 		}
 		try {
 			await window.cool.callRemote(function (program) {
-				const doc = cool.getActiveDocument();
+				const doc = DocumentApp.getActiveDocument();
 				const selection = doc.getSelection();
 				if (selection) selection.replace(program);
 				else doc.getCursor().insertText(program);

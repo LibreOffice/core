@@ -1,6 +1,6 @@
 // Insert text the way typing does, replacing the selection when there is one:
 function insertText(text) {
-	var doc = cool.getActiveDocument();
+	var doc = DocumentApp.getActiveDocument();
 	var selection = doc.getSelection();
 	if (selection) selection.replace(text);
 	else doc.getCursor().insertText(text);

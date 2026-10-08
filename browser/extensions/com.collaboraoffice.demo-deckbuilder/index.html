@@ -208,7 +208,7 @@ function buildSlides() {
   resultEl.textContent = '...';
   btn.disabled = true;
   cool.callRemote(function (slides, theme) {
-    const p = cool.getActivePresentation();
+    const p = SlidesApp.getActivePresentation();
     const pageWidth = p.getPageWidth();
     const pageHeight = p.getPageHeight();
     const margin = pageWidth * 0.08;

@@ -74,8 +74,8 @@ ui.json:
   ```js
   var commands = {
       insertDate: function () {
-          var doc = cool.getActiveDocument();
-          // ... call into the document via the UNO API ...
+          var doc = DocumentApp.getActiveDocument();
+          // ... call into the document via the API ...
       },
   };
   ```
@@ -99,7 +99,7 @@ ui.json:
   in the notebookbar, in menus, in the context menu and on key bindings like
   any other command; only the target differs.
   A referenced function runs when its command is chosen from the menu or
-  notebookbar. It only has access to the UNO API shown above - no DOM, no network,
+  notebookbar. It only has access to the API shown above - no DOM, no network,
   no other browser capability - and it runs without ever loading a visible panel,
   so the command works whether or not the extension has a sidebar UI at all. `icon`
   is optional and shown on a notebookbar button or dropdown entry that references
