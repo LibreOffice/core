@@ -244,6 +244,8 @@ void SdTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
                 aInvalidationRect.setWidth(aSeq[2].toInt32());
                 aInvalidationRect.setHeight(aSeq[3].toInt32());
                 m_aInvalidations.push_back(aInvalidationRect);
+                if (aSeq.getLength() >= 5)
+                    m_aInvalidationParts.push_back(aSeq[4].toInt32());
             }
             else
             {

@@ -207,9 +207,11 @@ public:
                                            bool bSkipViewShowingPart = true);
     /// Emits a COKitCallbackType::INVALIDATE_TILES for the given part and rectangle on the
     /// views of the document whose current edit mode is nMode. A null rectangle invalidates
-    /// the whole part.
+    /// the whole part. When bSkipViewShowingPart is true the views currently showing that part
+    /// are left out.
     static void notifyInvalidationViewsInMode(vcl::ITiledRenderable* pDoc, int nPart, int nMode,
-                                              tools::Rectangle const* pRect);
+                                              tools::Rectangle const* pRect,
+                                              bool bSkipViewShowingPart = false);
     /// Emits a COKitCallbackType::INVALIDATE_VISIBLE_CURSOR
     static void notifyCursorInvalidation(SfxViewShell const* pThisView, tools::Rectangle const * pRect, bool bControlEvent, int windowID);
     /// Emits a COKitCallbackType::INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.

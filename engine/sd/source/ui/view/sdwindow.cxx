@@ -40,6 +40,7 @@
 #include <drawdoc.hxx>
 #include <WindowUpdater.hxx>
 #include <ViewShellBase.hxx>
+#include <unomodel.hxx>
 #include <uiobject.hxx>
 
 #include <officecfg/Office/Common.hxx>
@@ -1054,6 +1055,14 @@ void Window::LogicInvalidate(const ::tools::Rectangle* pRectangle)
     }
     SfxViewShell& rSfxViewShell = pDrawViewShell->GetViewShellBase();
     KitHelper::notifyInvalidation(&rSfxViewShell, pResultRectangle);
+
+    // A view that shows another page has no window on this page, so this is the only notice it
+    // gets of the change. Its client still shows a preview of this page. The views showing this
+    // page get the change from their own window.
+    KitHelper::notifyInvalidationViewsInMode(pDrawViewShell->GetDoc()->getUnoModel(),
+                                             rSfxViewShell.getPart(),
+                                             rSfxViewShell.getEditMode(), pResultRectangle,
+                                             /*bSkipViewShowingPart=*/true);
 }
 
 FactoryFunction Window::GetUITestFactory() const

@@ -1310,6 +1310,35 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostKeyEventInvalidation)
     CPPUNIT_ASSERT(!aView2.m_bTilesInvalidated);
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTypingInvalidatesSlideForViewOnOtherSlide)
+{
+    // The first view shows the first slide, the second view the second slide.
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    int nView1 = KitHelper::getCurrentView();
+    SdTestViewCallback aView1;
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
+    SdTestViewCallback aView2;
+    pXImpressDocument->setPart(1);
+    Scheduler::ProcessEventsToIdle();
+
+    // Type into the title of the first slide in the first view.
+    KitHelper::setView(nView1);
+    aView2.m_aInvalidations.clear();
+    aView2.m_aInvalidationParts.clear();
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_TAB);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_TAB);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // The second view still shows a preview of the first slide, so it learns that the first
+    // slide changed.
+    CPPUNIT_ASSERT(!aView2.m_aInvalidations.empty());
+    for (int nPart : aView2.m_aInvalidationParts)
+        CPPUNIT_ASSERT_EQUAL(0, nPart);
+}
+
 // Rendering a slide-panel preview transiently switches the part (with
 // bAllowChangeFocus false) to paint another slide and switches back. That must
 // keep the selection of a shape that is being text-edited, otherwise the next

@@ -863,7 +863,8 @@ void KitHelper::notifyInvalidationAllViews(vcl::ITiledRenderable* pDoc, int nPar
 }
 
 void KitHelper::notifyInvalidationViewsInMode(vcl::ITiledRenderable* pDoc, int nPart, int nMode,
-                                              tools::Rectangle const* pRect)
+                                              tools::Rectangle const* pRect,
+                                              bool bSkipViewShowingPart)
 {
     if (!pDoc || pDoc->isDisposed() || DisableCallbacks::disabled())
         return;
@@ -873,7 +874,8 @@ void KitHelper::notifyInvalidationViewsInMode(vcl::ITiledRenderable* pDoc, int n
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (lcl_getDocForView(pViewShell) == pDoc && pViewShell->getEditMode() == nMode)
+        if (lcl_getDocForView(pViewShell) == pDoc && pViewShell->getEditMode() == nMode
+            && (!bSkipViewShowingPart || pViewShell->getPart() != nPart))
             KitHelper::notifyInvalidation(pViewShell, nPart, pRect);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
