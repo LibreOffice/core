@@ -772,6 +772,8 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 		if (!parent)
 			return;
 
+		$(parent).children().stop(true, true);
+
 		var scrollTop = control.scrollTop;
 		var wasHidden = control.style.display === 'none';
 
