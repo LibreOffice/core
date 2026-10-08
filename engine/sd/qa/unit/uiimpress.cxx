@@ -19,6 +19,9 @@
 
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -32,6 +35,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -39,6 +43,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequence.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/editobj.hxx>
@@ -6772,6 +6777,32 @@ std::set<OUString> lcl_BulletIdentifiers(const std::vector<SvxDocumentBullet>& r
 }
 
 /// Gives rObject a red square as its first-level bullet, so the document holds an image bullet.
+/// Sets rBullet as the bullet character of the first level of the named presentation style.
+void lcl_SetOutlineStyleBulletCharacter(const uno::Reference<lang::XComponent>& xComponent,
+                                        const OUString& rStyleName, const OUString& rBullet)
+{
+    uno::Reference<style::XStyleFamiliesSupplier> xSupplier(xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xFamilies(xSupplier->getStyleFamilies(),
+                                                     uno::UNO_SET_THROW);
+    uno::Reference<container::XNameAccess> xFamily(xFamilies->getByName(u"Default"_ustr),
+                                                   uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xStyle(xFamily->getByName(rStyleName),
+                                               uno::UNO_QUERY_THROW);
+
+    uno::Reference<container::XIndexReplace> xRules(
+        xStyle->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aLevel;
+    xRules->getByIndex(0) >>= aLevel;
+    for (beans::PropertyValue& rValue : asNonConstRange(aLevel))
+    {
+        if (rValue.Name == "BulletChar")
+            rValue.Value <<= rBullet;
+    }
+    xRules->replaceByIndex(0, uno::Any(aLevel));
+    xStyle->setPropertyValue(u"NumberingRules"_ustr, uno::Any(xRules));
+    Scheduler::ProcessEventsToIdle();
+}
+
 SvxDocumentBullet lcl_SetImageBullet(SdrTextObj& rObject)
 {
     Bitmap aBitmap(Size(8, 8), vcl::PixelFormat::N24_BPP);
@@ -7115,6 +7146,25 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletSurvivesTheStatusString)
         = SvxDocumentBullet::FromStatusString(aNoFont.ToStatusString());
     CPPUNIT_ASSERT_EQUAL(aNoFont.aBulletCharacter, aNoFontBack.aBulletCharacter);
     CPPUNIT_ASSERT(aNoFontBack.aFontName.isEmpty());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletFollowsAStyleSheetChange)
+{
+    createSdImpressDoc("document-bullets.odp");
+    SdDrawDocument* pDocument = getSdDocShell()->GetDoc();
+    pDocument->GetUsedBullets();
+
+    // A master slide keeps its bullets on an outline style, so a bullet set there is one the
+    // presentation offers.
+    lcl_SetOutlineStyleBulletCharacter(mxComponent, u"outline1"_ustr, u"\u2756"_ustr);
+
+    bool bFound = false;
+    for (const SvxDocumentBullet& rBullet : pDocument->GetUsedBullets())
+    {
+        if (!rBullet.IsGraphic() && rBullet.aBulletCharacter == u"\u2756"_ustr)
+            bFound = true;
+    }
+    CPPUNIT_ASSERT_EQUAL(true, bFound);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetBulletToDocumentCharacter)
