@@ -116,6 +116,8 @@ void MediaChildWindow::Command( const CommandEvent& rCEvt )
                                           rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetEventData() );
 
     SystemChildWindow::Command( rCEvt );
+    if(isDisposed())
+        return;
     GetParent()->Command( aTransformedEvent );
 }
 
