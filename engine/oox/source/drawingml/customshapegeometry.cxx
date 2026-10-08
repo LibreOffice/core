@@ -633,16 +633,20 @@ namespace {
 class AdjPoint2DContext : public ContextHandler2
 {
 public:
-    AdjPoint2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
+    AdjPoint2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D, bool bIsPathPoint );
 };
 
 }
 
-AdjPoint2DContext::AdjPoint2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
+AdjPoint2DContext::AdjPoint2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D, bool bIsPathPoint )
 : ContextHandler2( rParent )
 {
     rAdjPoint2D.First = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getStringDefaulted( XML_x ) );
     rAdjPoint2D.Second = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getStringDefaulted( XML_y ) );
+    if ( bIsPathPoint
+         && ( rAdjPoint2D.First.Type == EnhancedCustomShapeParameterType::EQUATION
+              || rAdjPoint2D.Second.Type == EnhancedCustomShapeParameterType::EQUATION ) )
+        rCustomShapeProperties.setPathUsesEquations();
 }
 
 namespace {
@@ -695,7 +699,7 @@ XYAdjustHandleContext::XYAdjustHandleContext( ContextHandler2Helper const & rPar
 ContextHandlerRef XYAdjustHandleContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     if ( aElementToken == A_TOKEN( pos ) )
-        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandle.pos, false );   // CT_AdjPoint2D
     return nullptr;
 }
 
@@ -752,7 +756,7 @@ ContextHandlerRef PolarAdjustHandleContext::onCreateContext( sal_Int32 aElementT
 {
     // mrAdjustHandle.pos uses planar coordinates.
     if ( aElementToken == A_TOKEN( pos ) )
-        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandle.pos, false );   // CT_AdjPoint2D
     return nullptr;
 }
 
@@ -823,7 +827,7 @@ ConnectionSiteContext::ConnectionSiteContext( ContextHandler2Helper const & rPar
 ContextHandlerRef ConnectionSiteContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     if ( aElementToken == A_TOKEN( pos ) )
-        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrConnectionSite.pos ); // CT_AdjPoint2D
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrConnectionSite.pos, false ); // CT_AdjPoint2D
     return nullptr;
 }
 
@@ -853,7 +857,7 @@ Path2DMoveToContext::Path2DMoveToContext( ContextHandler2Helper const & rParent,
 ContextHandlerRef Path2DMoveToContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     if ( aElementToken == A_TOKEN( pt ) )
-        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjPoint2D, true );     // CT_AdjPoint2D
     return nullptr;
 }
 
@@ -883,7 +887,7 @@ Path2DLineToContext::Path2DLineToContext( ContextHandler2Helper const & rParent,
 ContextHandlerRef Path2DLineToContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     if ( aElementToken == A_TOKEN( pt ) )
-        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjPoint2D, true );     // CT_AdjPoint2D
     return nullptr;
 }
 
@@ -920,7 +924,7 @@ Path2DQuadBezierToContext::Path2DQuadBezierToContext( ContextHandler2Helper cons
 ContextHandlerRef Path2DQuadBezierToContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     if ( aElementToken == A_TOKEN( pt ) )
-        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, nCount++ ? mrPt2 : mrPt1 ); // CT_AdjPoint2D
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, nCount++ ? mrPt2 : mrPt1, true ); // CT_AdjPoint2D
     return nullptr;
 }
 
@@ -961,7 +965,7 @@ ContextHandlerRef Path2DCubicBezierToContext::onCreateContext( sal_Int32 aElemen
 {
     if ( aElementToken == A_TOKEN( pt ) )
         return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties,
-            nCount++ ? nCount == 2 ? mrControlPt2 : mrEndPt : mrControlPt1 );   // CT_AdjPoint2D
+            nCount++ ? nCount == 2 ? mrControlPt2 : mrEndPt : mrControlPt1, true );   // CT_AdjPoint2D
     return nullptr;
 }
 
@@ -1095,6 +1099,11 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
 
             aScale.First = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getStringDefaulted( XML_wR ) );
             aScale.Second = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getStringDefaulted( XML_hR ) );
+            // The width and height radius are the only arcTo values that come from the file as
+            // they are. The angles below are turned into equations in every case.
+            if ( aScale.First.Type == EnhancedCustomShapeParameterType::EQUATION
+                 || aScale.Second.Type == EnhancedCustomShapeParameterType::EQUATION )
+                mrCustomShapeProperties.setPathUsesEquations();
 
             CustomShapeGuide aGuide;
             sal_Int32 nArcNum = mrCustomShapeProperties.getArcNum();

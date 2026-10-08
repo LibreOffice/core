@@ -706,6 +706,27 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf113187ConstantArcTo)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3600000), aViewBox.Height);
 }
 
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf139425PathWithoutGuideReferences)
+{
+    // The shape has a guide list, but its path uses plain numbers and none of the guides.
+    loadFromFile(u"tdf139425_pathWithoutGuideReferences.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
+    comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
+
+    // The path holds ooxml coordinates, so the ViewBox carries the shape size in the same unit.
+    // Without the fix its width and height were 0, and the polygon came out 360 times too large.
+    auto aViewBox = aGeoPropMap[u"ViewBox"_ustr].get<css::awt::Rectangle>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(325438), aViewBox.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(357187), aViewBox.Height);
+}
+
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontTheme)
 {
     // The font info for the shape is in the theme, the text run has no font settings.

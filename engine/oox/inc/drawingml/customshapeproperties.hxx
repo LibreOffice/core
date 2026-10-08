@@ -142,7 +142,10 @@ public:
     void                                setTextAreaRotateAngle(sal_Int32 nAngle) { moTextAreaRotateAngle = nAngle; };
 
     sal_Int32 getArcNum() { return mnArcNum++; }
-    sal_Int32 countArcTo() { return mnArcNum; }
+
+    // Whether the path is built from guide equations, which hold a value in 1/100 mm, rather
+    // than from plain numbers, which hold an ooxml coordinate. The angles of an arcTo do not count.
+    void setPathUsesEquations() { mbPathUsesEquations = true; };
     PropertyMap& getExtrusionPropertyMap() { return maExtrusionPropertyMap; }
 
     /**
@@ -176,6 +179,7 @@ private:
     static void initializePresetDataMap();
 
     sal_Int32 mnArcNum;
+    bool mbPathUsesEquations;
     PropertyMap maExtrusionPropertyMap;
 };
 
