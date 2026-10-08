@@ -1917,6 +1917,11 @@ class Menubar extends window.L.Control {
 			this._onDocLayerInit();
 		}
 
+		// _onRefresh() can run several times (nested from _onDocLayerInit and
+		// again on updatepermission); drop any previous instance first so the
+		// handlers don't stack and one click doesn't fire 'select' twice.
+		$('#main-menu').smartmenus('destroy');
+
 		// clear initial menu
 		if (this._menubarCont)
 			window.L.DomUtil.removeChildNodes(this._menubarCont);
