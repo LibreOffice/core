@@ -670,7 +670,7 @@ void DocumentBroker::pollThread()
                 deltaSent = sent - adminSent;
                 adminSent = sent;
             }
-            if (recv > deltaRecv)
+            if (recv > adminRecv)
             {
                 deltaRecv = recv - adminRecv;
                 adminRecv = recv;
