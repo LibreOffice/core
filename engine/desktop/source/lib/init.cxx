@@ -6572,6 +6572,26 @@ void COKitDocumentImpl::selectObjects(const char* pObjectIds)
         aWanted.push_back(pObject);
     }
 
+    /*
+        The page view stands in the group whose members are selected, or on the page where nothing
+        is selected or the page holds them, so what the engine does with the view next - its own
+        double click, Enter Group and Leave Group and their states - starts from where the client
+        stands. The group is set directly and the marks are left to the lines below, which put on
+        exactly the ones asked for. A diagram is not entered, as EnterGroup does not enter one.
+    */
+    SdrObject* pGroup
+        = aWanted.empty() ? nullptr : aWanted.front()->getParentSdrObjectFromSdrObject();
+    bool bInADiagram(false);
+    for (const SdrObject* pAbove = pGroup; pAbove && !bInADiagram;
+         pAbove = pAbove->getParentSdrObjectFromSdrObject())
+        bInADiagram = pAbove->isDiagram();
+
+    if (!bInADiagram && pPageView->GetCurrentGroup() != pGroup)
+    {
+        SdrObjList* pList = pGroup ? pGroup->GetSubList() : pPageView->GetPage();
+        pPageView->SetCurrentGroupAndList(pGroup, pList);
+    }
+
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     std::vector<SdrObject*> aMarked;
     for (size_t nMark = 0; nMark < rMarkList.GetMarkCount(); ++nMark)
