@@ -2240,7 +2240,9 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 
 		case 'rename':
 			control.setAttribute('modelId', data.new_id);
-			control.id = JSDialog.MakeIdUnique(data.new_id);
+			// A widget renamed before its first full update already carries the new id.
+			if (control.id !== data.new_id)
+				control.id = JSDialog.MakeIdUnique(data.new_id);
 			break;
 
 		case 'rendered_entry':
