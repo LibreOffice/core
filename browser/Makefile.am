@@ -398,6 +398,8 @@ COOL_JS_LST =\
 	src/app/HandleGroups.ts \
 	src/app/ConnectorRouter.ts \
 	src/app/EditSteps.ts \
+	src/app/InteractionContext.ts \
+	src/app/ClassicInteraction.ts \
 	src/app/HandleTravel.ts \
 	src/app/GraphicSelectionMiddleware.ts \
 	src/app/TextSelectionMiddleware.ts \

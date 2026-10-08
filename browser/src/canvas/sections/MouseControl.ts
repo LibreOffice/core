@@ -509,21 +509,15 @@ class MouseControl extends CanvasSectionObject {
 		if (app.file.textCursor.visible) return false;
 
 		if (!this.carrying) {
-			if (modifier !== 0) return false;
-
-			// A drag that begins on something nobody selected takes hold of the outermost
-			// object it belongs to, which is the group where it is in one.
+			// Which object a drag that begins there takes hold of is the context's business.
 			const hit = RenderGeometrySection.objectIdAt(
 				this.positionOnMouseDown.x,
 				this.positionOnMouseDown.y,
 			);
 			if (hit === undefined) return false;
 
-			const objectId = RenderGeometrySection.outermostOf(
-				hit,
-				GraphicSelection.theGroupStoodIn(),
-			);
-			if (!ObjectHandles.canBeMoved([objectId])) return false;
+			const objectId = Interaction.context().takesHoldFor(hit, modifier);
+			if (objectId === undefined) return false;
 
 			GraphicSelection.selectObjects([objectId]);
 			GraphicSelection.updateSelectionSection();
@@ -694,46 +688,13 @@ class MouseControl extends CanvasSectionObject {
 	}
 
 	/*
-		The selection a click asks for, from the objects the client holds. A plain click asks for
-		the object it meets alone, and none where it meets no object. A click with Shift or Ctrl
-		asks for the object to join what is selected, or to leave it when it is in there already.
+		Answers a click from the geometry the client holds, where the context takes it. The hit
+		test is asked at the position of this click, so what is marked is what the click met and
+		not what the mouse passed over earlier.
 
-		The objects of one selection all sit at the same level, so an object from another group, or
-		from the page while a group's members are selected, starts a selection of its own instead
-		of joining one.
-	*/
-	private selectionForClick(
-		objectId: number | undefined,
-		extending: boolean,
-	): number[] {
-		const selected = GraphicSelection.selectedObjectIDs;
-
-		if (objectId === undefined) return [];
-		if (!extending) return [objectId];
-
-		if (selected.includes(objectId))
-			return selected.filter((selectedId: number) => selectedId !== objectId);
-
-		const parent = RenderGeometrySection.parentOf(objectId);
-		const sameLevel = selected.every(
-			(selectedId: number) =>
-				RenderGeometrySection.parentOf(selectedId) === parent,
-		);
-
-		return sameLevel ? selected.concat(objectId) : [objectId];
-	}
-
-	/*
-		Answers a click from the geometry the client holds, by naming the objects to the engine
-		instead of sending the click for it to hit test. The hit test is asked at the position of
-		this click, so what is marked is what the click met and not what the mouse passed over
-		earlier. A click that meets no object asks for no selection at all, which is how the
-		engine is told to drop the one it holds.
-
-		False where the click is not one for selecting: another button, a modifier other than
-		Shift or Ctrl, a document not drawn from objects, or a click that meets nothing while
-		nothing is selected. Those take the click path to the engine, as does a click while a text
-		edit runs, which the engine ends on its own.
+		False where the click is not one for selecting here: another button, a document not drawn
+		from objects, a click while a text edit runs, which the engine ends on its own, or one the
+		context leaves to the engine. Those take the click path to the engine.
 	*/
 	private selectObjectAt(
 		point: cool.SimplePoint,
@@ -744,27 +705,8 @@ class MouseControl extends CanvasSectionObject {
 		if (!RenderGeometrySection.answersPointer()) return false;
 		if (app.file.textCursor.visible) return false;
 
-		const extending =
-			modifier === app.UNOModifier.SHIFT || modifier === app.UNOModifier.CTRL;
-		if (modifier !== 0 && !extending) return false;
-
-		/*
-			A press inside a group takes hold of the group. What was hit may be an object the
-			group holds, and only entering the group reaches that.
-		*/
 		const hit = RenderGeometrySection.objectIdAt(point.x, point.y);
-		const objectId =
-			hit === undefined
-				? undefined
-				: RenderGeometrySection.outermostOf(
-						hit,
-						GraphicSelection.theGroupStoodIn(),
-					);
-		if (objectId === undefined && !GraphicSelection.selectedObjectIDs.length)
-			return false;
-
-		GraphicSelection.selectObjects(this.selectionForClick(objectId, extending));
-		return true;
+		return Interaction.context().press(hit, modifier);
 	}
 
 	onClick(point: cool.SimplePoint, e: MouseEvent): void {

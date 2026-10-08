@@ -135,38 +135,10 @@ class GraphicSelection {
 		app.socket.sendMessage('selectobjects ids=' + objectIds.join(','));
 	}
 
-	/*
-		The group the selection stands inside, or nothing while it stands on the page. Nothing has
-		to be remembered for it: an object says which group holds it, and that group is the one
-		being stood in. A press then takes hold of what that group holds rather than of the group
-		itself, which is what makes a selection of several inside a group possible at all.
-
-		Several objects are only ever selected on one level, so they all have the same group above
-		them and any one of them answers for all.
-	*/
-	public static theGroupStoodIn(): number | undefined {
-		const first = this.selectedObjectIDs[0];
-
-		return first === undefined
-			? undefined
-			: RenderGeometrySection.parentOf(first) || undefined;
-	}
-
-	/*
-		Takes hold of the first object of the group that was selected, which is what stepping into
-		a group leaves behind. Stepping in leaves nothing selected on its own, and with nothing
-		selected there is no band to say which group one is standing in, and nothing to add to
-		with a second press either.
-	*/
+	/// The engine was asked to enter the selected group; the context says what is selected then.
 	public static takeTheFirstOfTheGroup(): void {
 		if (!RenderManager.isVectorRendering()) return;
-		if (this.selectedObjectIDs.length !== 1) return;
-
-		const held = RenderGeometrySection.heldBy(this.selectedObjectIDs[0]);
-		if (!held.length) return;
-
-		this.selectObjects([held[0]]);
-		this.updateSelectionSection();
+		Interaction.context().groupEntered();
 	}
 
 	/*
@@ -291,7 +263,14 @@ class GraphicSelection {
 		// While text is being edited every key belongs to the text.
 		if (this.textIsBeingEdited()) return false;
 
-		if (!this.hasActiveSelection()) return this.scrollByKey(event);
+		if (!this.hasActiveSelection()) {
+			const way = GraphicSelection.theWayOf[event.key];
+			if (!way || !RenderManager.isVectorRendering()) return false;
+			return Interaction.context().arrowKey(
+				new cool.Point(way[0], way[1]),
+				event,
+			);
+		}
 
 		// A drag by the mouse owns the selection while it runs, so a key does nothing to it then
 		// and is taken here. Escape stays with the drag, which it calls off.
@@ -308,8 +287,10 @@ class GraphicSelection {
 			const way = GraphicSelection.theWayOf[event.key];
 			if (!way) return false;
 
-			this.selectionSection?.moveByKey(new cool.Point(way[0], way[1]), event);
-			return true;
+			return Interaction.context().arrowKey(
+				new cool.Point(way[0], way[1]),
+				event,
+			);
 		});
 	}
 
@@ -331,28 +312,6 @@ class GraphicSelection {
 			if (object.kind === 'texteditoverlay' && object.viewId === ownViewId)
 				return true;
 		return false;
-	}
-
-	/*
-		Scrolls the view by an arrow key while nothing is selected, as the office does, in the
-		view that draws from the objects, whose view is the client's own, by the step EditSteps
-		gives for the modifier held.
-	*/
-	private static scrollByKey(event: KeyboardEvent): boolean {
-		const towards = GraphicSelection.theWayOf[event.key];
-		if (!towards || !RenderManager.isVectorRendering()) return false;
-
-		const layout = app.activeDocument?.activeLayout;
-		if (layout?.type !== 'ViewLayoutVector') return false;
-
-		const view = layout.viewedRectangle;
-		const step = EditSteps.scrollStep(event, view.width, view.height);
-		layout.scroll(
-			towards[0] * step.x * app.twipsToPixels,
-			towards[1] * step.y * app.twipsToPixels,
-			true,
-		);
-		return true;
 	}
 
 	/*
