@@ -288,6 +288,9 @@ class GraphicSelection {
 		marked, not the ones they hold, so it would move a group whose member is held fast.
 	*/
 	public static handleKeyboard(event: KeyboardEvent): boolean {
+		// While text is being edited every key belongs to the text.
+		if (this.textIsBeingEdited()) return false;
+
 		if (!this.hasActiveSelection()) return false;
 
 		// A drag by the mouse owns the selection while it runs, so a key does nothing to it then
@@ -308,6 +311,26 @@ class GraphicSelection {
 			this.selectionSection?.moveByKey(new cool.Point(way[0], way[1]), event);
 			return true;
 		});
+	}
+
+	/*
+		Whether this view is editing text: the text cursor shows, or, in a view that draws from the
+		objects, the page holds a text edit entry of this view.
+	*/
+	private static textIsBeingEdited(): boolean {
+		if (app.file.textCursor.visible) return true;
+		if (!RenderManager.isVectorRendering()) return false;
+
+		const data = RenderGeometrySection.currentPart();
+		const ownViewId = (
+			app.map?._docLayer as unknown as cool.CanvasTileLayerInterface | undefined
+		)?._viewId;
+		if (!data || ownViewId === undefined) return false;
+
+		for (const object of data.objects.values())
+			if (object.kind === 'texteditoverlay' && object.viewId === ownViewId)
+				return true;
+		return false;
 	}
 
 	/*
