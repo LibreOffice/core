@@ -71,7 +71,8 @@ void BorderHandler::lcl_attribute(Id rName, const Value & rVal)
             appendGrabBag(u"color"_ustr, msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue)));
         break;
         case NS_ooxml::LN_CT_Border_space: // border distance in points
-            m_nLineDistance = ConversionHelper::convertTwipToMm100_Limited(nIntValue * 20);
+            m_nLineDistance = ConversionHelper::convertTwipToMm100_Limited(
+                std::clamp<sal_Int64>(sal_Int64(nIntValue) * 20, SAL_MIN_INT32, SAL_MAX_INT32));
             appendGrabBag(u"space"_ustr, OUString::number(nIntValue));
         break;
         case NS_ooxml::LN_CT_Border_shadow:
