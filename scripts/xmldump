@@ -119,7 +119,7 @@ def compare_files(before, after):
         merged = before + after;
         same_count = 0;
         for key, count in sorted(merged.items(), key=lambda kv: (-kv[1], kv[0])):
-            if before[key] is after[key]:
+            if before[key] == after[key]:
                 same_count += 1;
             else:
                 short_key = shorten_tag(key);
