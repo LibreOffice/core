@@ -11,6 +11,7 @@
 
 #include <sal/config.h>
 
+#include <QtCore/QString>
 #include <QtGui/QPainter>
 #include <QtWidgets/QProxyStyle>
 #include <QtWidgets/QStyleOption>
@@ -27,7 +28,7 @@ public:
                        const QWidget* widget = nullptr) const override;
 
     static QPalette customPalette();
-    static QPalette GetMenuBarPalette();
+    static QString CreateMenuBarStyleSheet();
     static QPalette GetMenuPalette();
     static bool IsSystemThemeChanged();
 
