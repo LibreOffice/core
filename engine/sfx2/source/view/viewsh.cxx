@@ -700,12 +700,93 @@ boost::property_tree::ptree makeLinksTree(const std::vector<ParagraphLink>& rLin
     return aLinks;
 }
 
+struct ParagraphImage
+{
+    sal_Int32 nPosition;
+    OUString aName;
+    OUString aDescription;
+
+    bool operator==(const ParagraphImage&) const = default;
+};
+
+// How far two rectangles overlap horizontally, if they overlap at all.
+sal_Int32 overlapWidth(const css::awt::Rectangle& rA, const css::awt::Rectangle& rB)
+{
+    if (rA.Y >= rB.Y + rB.Height || rB.Y >= rA.Y + rA.Height)
+        return 0;
+    return std::min(rA.X + rA.Width, rB.X + rB.Width) - std::max(rA.X, rB.X);
+}
+
+// An image anchored as a character is a child of the paragraph, and U+FFFC (OBJECT REPLACEMENT
+// CHARACTER) in its text.
+std::vector<ParagraphImage>
+collectImages(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
+{
+    const OUString aText = xAccText->getText();
+    std::vector<std::pair<sal_Int32, css::awt::Rectangle>> aCharacters;
+    for (sal_Int32 nPos = aText.indexOf(u'\xfffc'); nPos >= 0;
+         nPos = aText.indexOf(u'\xfffc', nPos + 1))
+        aCharacters.emplace_back(nPos, xAccText->getCharacterBounds(nPos));
+    const auto xContext = xAccText.query<accessibility::XAccessibleContext>();
+    if (aCharacters.empty() || !xContext.is())
+        return {};
+
+    std::vector<ParagraphImage> aResult;
+    const sal_Int64 nChildren = xContext->getAccessibleChildCount();
+    for (sal_Int64 i = 0; i < nChildren; ++i)
+    {
+        const uno::Reference<accessibility::XAccessible> xChild = xContext->getAccessibleChild(i);
+        if (!xChild.is())
+            continue;
+        const uno::Reference<accessibility::XAccessibleContext> xChildContext
+            = xChild->getAccessibleContext();
+        const auto xComponent = xChildContext.query<accessibility::XAccessibleComponent>();
+        if (!xComponent.is()
+            || xChildContext->getAccessibleRole() != accessibility::AccessibleRole::GRAPHIC)
+            continue;
+
+        // a comment or an empty field is U+FFFC too, and may touch the image
+        const css::awt::Rectangle aBounds = xComponent->getBounds();
+        sal_Int32 nPosition = -1;
+        sal_Int32 nWidth = 0;
+        for (const auto & [ nPos, aCharacter ] : aCharacters)
+        {
+            if (const sal_Int32 n = overlapWidth(aCharacter, aBounds); n > nWidth)
+            {
+                nPosition = nPos;
+                nWidth = n;
+            }
+        }
+        if (nPosition >= 0)
+            aResult.push_back({ .nPosition = nPosition,
+                                .aName = xChildContext->getAccessibleName(),
+                                .aDescription = xChildContext->getAccessibleDescription() });
+    }
+    std::ranges::stable_sort(aResult, {}, &ParagraphImage::nPosition);
+    return aResult;
+}
+
+boost::property_tree::ptree makeImagesTree(const std::vector<ParagraphImage>& rImages)
+{
+    boost::property_tree::ptree aImages;
+    for (const ParagraphImage& rImage : rImages)
+    {
+        boost::property_tree::ptree aImage;
+        aImage.put("position", rImage.nPosition);
+        aImage.put("name", rImage.aName.toUtf8().getStr());
+        aImage.put("description", rImage.aDescription.toUtf8().getStr());
+        aImages.push_back(std::make_pair("", aImage));
+    }
+    return aImages;
+}
+
 struct ContextParagraph
 {
     OUString aText;
     tools::Rectangle aTwips;
     sal_Int32 nLevel = 0;
     std::vector<ParagraphLink> aLinks;
+    std::vector<ParagraphImage> aImages;
 };
 
 ContextParagraph contextParagraph(const uno::Reference<accessibility::XAccessibleContext>& xContext,
@@ -718,6 +799,7 @@ ContextParagraph contextParagraph(const uno::Reference<accessibility::XAccessibl
         aParagraph.aText = xText->getText();
         aParagraph.nLevel = getHeadingLevel(xText);
         aParagraph.aLinks = collectLinks(xText);
+        aParagraph.aImages = collectImages(xText);
     }
     uno::Reference<accessibility::XAccessibleComponent> xComponent(xContext, uno::UNO_QUERY);
     if (xComponent.is())
@@ -1121,6 +1203,7 @@ class KitDocumentFocusListener :
     sal_Int32 m_nListPrefixLength;
     sal_Int32 m_nHeadingLevel;
     std::vector<ParagraphLink> m_aFocusedLinks;
+    std::vector<ParagraphImage> m_aFocusedImages;
     mutable std::vector<ContextParagraph> m_aParagraphsBefore;
     mutable std::vector<ContextParagraph> m_aParagraphsAfter;
     uno::Reference<accessibility::XAccessibleText> m_xFocusedText;
@@ -1242,6 +1325,8 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
         aPayloadTree.put("headingLevel", m_nHeadingLevel);
     if (!m_aFocusedLinks.empty())
         aPayloadTree.add_child("links", makeLinksTree(m_aFocusedLinks));
+    if (!m_aFocusedImages.empty())
+        aPayloadTree.add_child("images", makeImagesTree(m_aFocusedImages));
     if (!m_aParagraphsBefore.empty() || !m_aParagraphsAfter.empty())
     {
         auto toArray = [](const std::vector<ContextParagraph>& rParagraphs, auto aValue) {
@@ -1276,6 +1361,14 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
         };
         aPayloadTree.add_child("beforeLinks", toLinks(m_aParagraphsBefore));
         aPayloadTree.add_child("afterLinks", toLinks(m_aParagraphsAfter));
+        auto toImages = [](const std::vector<ContextParagraph>& rParagraphs) {
+            boost::property_tree::ptree aArray;
+            for (const ContextParagraph& rParagraph : rParagraphs)
+                aArray.push_back(std::make_pair("", makeImagesTree(rParagraph.aImages)));
+            return aArray;
+        };
+        aPayloadTree.add_child("beforeImages", toImages(m_aParagraphsBefore));
+        aPayloadTree.add_child("afterImages", toImages(m_aParagraphsAfter));
     }
     if (force)
         aPayloadTree.put("force", 1);
@@ -1630,13 +1723,15 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
         m_xFocusedText = xAccText;
 
         // In case only caret position or text selection are different we can rely on specific events.
-        if (std::vector<ParagraphLink> aLinks = collectLinks(xAccText);
-            m_sFocusedParagraph != sText || m_nHeadingLevel != nHeadingLevel
-            || m_aFocusedLinks != aLinks)
+        std::vector<ParagraphLink> aLinks = collectLinks(xAccText);
+        std::vector<ParagraphImage> aImages = collectImages(xAccText);
+        if (m_sFocusedParagraph != sText || m_nHeadingLevel != nHeadingLevel
+            || m_aFocusedLinks != aLinks || m_aFocusedImages != aImages)
         {
             m_sFocusedParagraph = sText;
             m_nHeadingLevel = nHeadingLevel;
             m_aFocusedLinks = std::move(aLinks);
+            m_aFocusedImages = std::move(aImages);
             collectParagraphWindow(xAccText, PARAGRAPH_WINDOW, visibleArea(), m_aParagraphsBefore, m_aParagraphsAfter);
             bNotify = true;
         }
@@ -1672,6 +1767,7 @@ void KitDocumentFocusListener::resetParagraphInfo()
     m_nListPrefixLength = 0;
     m_nHeadingLevel = 0;
     m_aFocusedLinks.clear();
+    m_aFocusedImages.clear();
     m_aParagraphsBefore.clear();
     m_aParagraphsAfter.clear();
     m_xFocusedText.clear();

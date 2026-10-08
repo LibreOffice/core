@@ -1982,6 +1982,39 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphLinkURLChange
     CPPUNIT_ASSERT(!aView.m_aA11yFocusedParagraph.get_child_optional("links"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphImage)
+{
+    // Given an image anchored as a character, in the paragraph after the first one:
+    createDoc("a11y-image.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the paragraph after the caret reports the image:
+    boost::property_tree::ptree aImages
+        = aView.m_aA11yFocusedParagraph.get_child("afterImages").begin()->second;
+    // Without the fix, there was no "afterImages" node.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aImages.size());
+
+    // And when the cursor moves into that paragraph:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the image is reported at the character standing for it, with its alternative text:
+    CPPUNIT_ASSERT_EQUAL(std::string("Before \xef\xbf\xbc after."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content"));
+    aImages = aView.m_aA11yFocusedParagraph.get_child("images");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aImages.size());
+    const boost::property_tree::ptree& rImage = aImages.begin()->second;
+    CPPUNIT_ASSERT_EQUAL(7, rImage.get<int>("position"));
+    CPPUNIT_ASSERT_EQUAL(std::string("A red square"), rImage.get<std::string>("name"));
+    CPPUNIT_ASSERT_EQUAL(std::string("A small square filled with red"),
+                         rImage.get<std::string>("description"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphBlockQuote)
 {
     // Given a block quote with a link, after a plain paragraph:

@@ -1046,7 +1046,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 						obj.afterLevels,
 						obj.links,
 						obj.beforeLinks,
-						obj.afterLinks);
+						obj.afterLinks,
+						obj.images,
+						obj.beforeImages,
+						obj.afterImages);
 				}
 			}
 			else if (textMsg.startsWith('a11ycaretchanged:')) {
@@ -1084,7 +1087,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				this._map._textInput.setA11yFocusedParagraph(
 					obj.content, parseInt(obj.position), parseInt(obj.start), parseInt(obj.end),
 					obj.before, obj.after, obj.beforeRects, obj.afterRects, obj.headingLevel,
-					obj.beforeLevels, obj.afterLevels, obj.links, obj.beforeLinks, obj.afterLinks);
+					obj.beforeLevels, obj.afterLevels, obj.links, obj.beforeLinks, obj.afterLinks,
+					obj.images, obj.beforeImages, obj.afterImages);
 			}
 			else if (textMsg.startsWith('a11ycaretposition:')) {
 				var pos = textMsg.substring('a11ycaretposition:'.length + 1);

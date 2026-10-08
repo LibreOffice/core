@@ -163,9 +163,9 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		return true;
 	},
 
-	setHTML: function(content, links) {
+	setHTML: function(content, links, images) {
 		// eslint-disable-next-line no-restricted-syntax -- markup around escaped text
-		this._textArea.innerHTML = this._wrapContent(content, links);
+		this._textArea.innerHTML = this._wrapContent(content, links, images);
 	},
 
 	_prependSpace: function() {
@@ -268,7 +268,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			this._textArea.isSelectionNull = !flag;
 	},
 
-	_setFocusedParagraph: function(content, pos, start, end, links) {
+	_setFocusedParagraph: function(content, pos, start, end, links, images) {
 		window.app.console.log('_setFocusedParagraph:'
 			+ '\n    content "' + content + '"'
 			+ '\n    pos: ' + pos
@@ -284,12 +284,13 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		const current = this.getPlainTextContent();
 		this._pendingFocusedParagraph = null;
 		if (window.L.Browser.win || !this._lineNavigation || current === '' || content === '' || content === current) {
-			this._fillFocusedParagraph(content, pos, start, end, links);
+			this._fillFocusedParagraph(content, pos, start, end, links, images);
 			return;
 		}
 
 		// Emptied first so Orca hears the new paragraph whole; NVDA would catch the editable empty.
-		const pending = { content: content, pos: pos, start: start, end: end, links: links };
+		const pending = { content: content, pos: pos, start: start, end: end, links: links,
+			images: images };
 		this._pendingFocusedParagraph = pending;
 		this.resetContent();
 		requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -298,8 +299,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		}));
 	},
 
-	_fillFocusedParagraph: function(content, pos, start, end, links) {
-		this.setHTML(content, links);
+	_fillFocusedParagraph: function(content, pos, start, end, links, images) {
+		this.setHTML(content, links, images);
 		this.updateLastContent();
 		this._updateSelection(pos, start, end, true);
 		this._placeContextRegions();
@@ -311,7 +312,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			return;
 		this._pendingFocusedParagraph = null;
 		this._fillFocusedParagraph(pending.content, pending.pos, pending.start, pending.end,
-			pending.links);
+			pending.links, pending.images);
 	},
 
 	_onKeyDown: function(ev) {
@@ -325,7 +326,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._log('_updateFocusedParagraph');
 		if (this._remoteContent !== undefined) {
 			this._setFocusedParagraph(this._remoteContent, this._remotePosition,
-				this._remoteSelectionStart, this._remoteSelectionEnd, this._remoteLinks);
+				this._remoteSelectionStart, this._remoteSelectionEnd, this._remoteLinks,
+				this._remoteImages);
 		} else if (this._remoteSelectionEnd !== undefined) {
 			this._updateSelection(this._remotePosition, this._remoteSelectionStart, this._remoteSelectionEnd);
 		} else if (this._remotePosition !== undefined) {
@@ -333,6 +335,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		}
 		this._remoteContent = undefined;
 		this._remoteLinks = undefined;
+		this._remoteImages = undefined;
 		this._remotePosition = undefined;
 		this._remoteSelectionStart = undefined;
 		this._remoteSelectionEnd = undefined;
@@ -374,12 +377,12 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 	onAccessibilityFocusChanged: function(content, pos, start, end, listPrefixLength, force, before, after,
 		beforeRects, afterRects, headingLevel, beforeLevels, afterLevels, links, beforeLinks,
-		afterLinks) {
+		afterLinks, images, beforeImages, afterImages) {
 		this._listPrefixLength = listPrefixLength;
 		this._setHeadingLevel(headingLevel);
 		this._endContextJump();
 		this._setContextParagraphs(before, after, beforeRects, afterRects, beforeLevels,
-			afterLevels, beforeLinks, afterLinks);
+			afterLevels, beforeLinks, afterLinks, beforeImages, afterImages);
 		this._requestHeadings();
 		if (!this.hasFocus() || (this._isComposing && !force)) {
 			this._log('onAccessibilityFocusChanged: skipped updating: '
@@ -388,29 +391,32 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 				+ '\n  force: ' + force);
 			this._remoteContent = content;
 			this._remoteLinks = links;
+			this._remoteImages = images;
 			this._remotePosition = pos;
 			this._remoteSelectionStart = start;
 			this._remoteSelectionEnd = end;
 		} else {
-			this._setFocusedParagraph(content, pos, start, end, links);
+			this._setFocusedParagraph(content, pos, start, end, links, images);
 		}
 	},
 
 	setA11yFocusedParagraph: function(content, pos, start, end, before, after, beforeRects, afterRects, headingLevel,
-		beforeLevels, afterLevels, links, beforeLinks, afterLinks) {
+		beforeLevels, afterLevels, links, beforeLinks, afterLinks, images, beforeImages,
+		afterImages) {
 		this._contextPending = Math.max(0, (this._contextPending || 0) - 1);
 		this._setHeadingLevel(headingLevel);
 		if (this._isComposing) {
 			this._remoteContent = content;
 			this._remoteLinks = links;
+			this._remoteImages = images;
 			this._remotePosition = pos;
 			this._remoteSelectionStart = start;
 			this._remoteSelectionEnd = end;
 		} else {
-			this._setFocusedParagraph(content, pos, start, end, links);
+			this._setFocusedParagraph(content, pos, start, end, links, images);
 		}
 		this._setContextParagraphs(before, after, beforeRects, afterRects, beforeLevels,
-			afterLevels, beforeLinks, afterLinks);
+			afterLevels, beforeLinks, afterLinks, beforeImages, afterImages);
 	},
 
 	// getPlainTextContent() reads the whole editable, and every caret offset is
@@ -573,14 +579,14 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 	},
 
 	_setContextParagraphs: function(before, after, beforeRects, afterRects, beforeLevels,
-		afterLevels, beforeLinks, afterLinks) {
+		afterLevels, beforeLinks, afterLinks, beforeImages, afterImages) {
 		this._initContextRegions();
 		if (!this._contextBefore)
 			return;
 
 		// The spans are reused: a reader whose position is on one that goes away looks for
 		// another nearby and leaves focus mode.
-		const fillContextRegion = (region, paragraphs, rects, levels, links) => {
+		const fillContextRegion = (region, paragraphs, rects, levels, links, images) => {
 			const texts = Array.isArray(paragraphs) ? paragraphs : [];
 			while (region.children.length > texts.length)
 				region.lastElementChild.remove();
@@ -606,8 +612,12 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 				const spanLinks = Array.isArray(links) && Array.isArray(links[index])
 					? links[index] : [];
 				const linksKey = JSON.stringify(spanLinks);
-				if (span.textContent !== text || (span.dataset.links || '[]') !== linksKey) {
-					span.replaceChildren(...this._createLinkedNodes(text, spanLinks));
+				const spanImages = Array.isArray(images) && Array.isArray(images[index])
+					? images[index] : [];
+				const imagesKey = JSON.stringify(spanImages);
+				if (span.textContent !== text || (span.dataset.links || '[]') !== linksKey
+					|| (span.dataset.images || '[]') !== imagesKey) {
+					span.replaceChildren(...this._createLinkedNodes(text, spanLinks, spanImages));
 					// a reader still reaches them; Tab does not
 					for (const link of span.querySelectorAll('a'))
 						link.tabIndex = -1;
@@ -615,6 +625,10 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 						span.dataset.links = linksKey;
 					else
 						delete span.dataset.links;
+					if (spanImages.length)
+						span.dataset.images = imagesKey;
+					else
+						delete span.dataset.images;
 				}
 				if (span.getAttribute('role') !== role)
 					span.setAttribute('role', role);
@@ -629,8 +643,10 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			});
 		};
 
-		fillContextRegion(this._contextBefore, before, beforeRects, beforeLevels, beforeLinks);
-		fillContextRegion(this._contextAfter, after, afterRects, afterLevels, afterLinks);
+		fillContextRegion(this._contextBefore, before, beforeRects, beforeLevels, beforeLinks,
+			beforeImages);
+		fillContextRegion(this._contextAfter, after, afterRects, afterLevels, afterLinks,
+			afterImages);
 		this._fillHeadingRegions();
 		this._placeContextRegions();
 		this._endHeadingJump();
@@ -909,9 +925,9 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._requestHeadings();
 		this._setContextParagraphs(paragraph.before, paragraph.after, paragraph.beforeRects, paragraph.afterRects,
 			paragraph.beforeLevels, paragraph.afterLevels, paragraph.beforeLinks,
-			paragraph.afterLinks);
+			paragraph.afterLinks, paragraph.beforeImages, paragraph.afterImages);
 		this._setFocusedParagraph(paragraph.content, parseInt(paragraph.position),
-			parseInt(paragraph.start), parseInt(paragraph.end), paragraph.links);
+			parseInt(paragraph.start), parseInt(paragraph.end), paragraph.links, paragraph.images);
 		this._setHeadingLevel(paragraph.headingLevel);
 		this._updateTable(outCount, inList, row + 1, col + 1, rowSpan, colSpan);
 	},
