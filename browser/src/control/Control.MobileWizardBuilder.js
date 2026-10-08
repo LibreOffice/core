@@ -389,8 +389,13 @@ window.L.Control.MobileWizardBuilder = window.L.Control.JSDialogBuilder.extend({
 		if (data.password)
 			edit.type = 'password';
 
-		if (data.enabled === 'false' || data.enabled === false)
+		if (data.enabled === 'false' || data.enabled === false) {
 			$(edit).prop('disabled', true);
+			container.setAttribute('disabled', 'disabled');
+		}
+
+		// Enable and disable actions land on the container.
+		JSDialog.SynchronizeDisabledState(container, [edit]);
 
 		// TODO: below is not true anymore
 		// we still use non welded sidebar where don't have partial updates
