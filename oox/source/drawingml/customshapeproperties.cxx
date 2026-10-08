@@ -112,6 +112,7 @@ CustomShapeProperties::CustomShapeProperties()
 , mnTextPreRotateAngle ( 0 )
 , mnTextCameraZRotateAngle ( 0 )
 , mnArcNum ( 0 )
+, mbPathUsesEquations ( false )
 {
 }
 
@@ -231,14 +232,14 @@ void CustomShapeProperties::pushToPropSet(
             aPropertyMap.setProperty(PROP_TextCameraZRotateAngle, mnTextCameraZRotateAngle);
         if (moTextAreaRotateAngle.has_value())
             aPropertyMap.setProperty(PROP_TextRotateAngle, moTextAreaRotateAngle.value());
-        // Note 1: If Equations are defined - they are processed using internal div by 360 coordinates
-        // while if they are not, standard ooxml coordinates are used.
-        // This size specifically affects scaling.
-        // Note 2: Width and Height are set to 0 to force scaling to 1.
+        // A path of plain numbers holds ooxml coordinates, so the ViewBox carries the shape size
+        // in the same unit and scales the path down to 1/100 mm. Equations, and a path with its
+        // own w and h, need the scale of 1 that a width and height of 0 force.
+        bool bPathHasOwnBox
+            = std::any_of( maPath2DList.begin(), maPath2DList.end(),
+                           []( const Path2D& rPath ) { return rPath.w || rPath.h; } );
         awt::Rectangle aViewBox( 0, 0, aSize.Width, aSize.Height );
-        // tdf#113187 Each ArcTo introduces two additional equations for converting start and swing
-        // angles. They do not count for test for use of standard ooxml coordinates
-        if (maGuideList.size() - 2 * countArcTo() > 0)
+        if ( mbPathUsesEquations || bPathHasOwnBox )
             aViewBox = awt::Rectangle( 0, 0, 0, 0 );
         aPropertyMap.setProperty( PROP_ViewBox, aViewBox);
 
@@ -294,28 +295,17 @@ void CustomShapeProperties::pushToPropSet(
                 aParameterPairsRange[ k++ ] = j;
         aPath.setProperty( PROP_Coordinates, aParameterPairs);
 
-        if ( !maPath2DList.empty() )
+        if ( bPathHasOwnBox )
         {
-            bool bAllZero = true;
-            for ( auto const & i: maPath2DList )
-            {
-                if ( i.w || i.h ) {
-                    bAllZero = false;
-                    break;
-                }
-            }
-
-            if ( !bAllZero ) {
-                Sequence< awt::Size > aSubViewSize( maPath2DList.size() );
-                std::transform(maPath2DList.begin(), maPath2DList.end(), aSubViewSize.getArray(),
-                               [](const auto& p2d)
-                               {
-                                   SAL_INFO("oox.cscode",
-                                            "set subpath; size: " << p2d.w << " x " << p2d.h);
-                                   return awt::Size(p2d.w, p2d.h);
-                               });
-                aPath.setProperty( PROP_SubViewSize, aSubViewSize);
-            }
+            Sequence< awt::Size > aSubViewSize( maPath2DList.size() );
+            std::transform(maPath2DList.begin(), maPath2DList.end(), aSubViewSize.getArray(),
+                           [](const auto& p2d)
+                           {
+                               SAL_INFO("oox.cscode",
+                                        "set subpath; size: " << p2d.w << " x " << p2d.h);
+                               return awt::Size(p2d.w, p2d.h);
+                           });
+            aPath.setProperty( PROP_SubViewSize, aSubViewSize);
         }
 
         Sequence< PropertyValue > aPathSequence = aPath.makePropertyValueSequence();
