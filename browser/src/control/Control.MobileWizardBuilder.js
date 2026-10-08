@@ -348,10 +348,11 @@ window.L.Control.MobileWizardBuilder = window.L.Control.JSDialogBuilder.extend({
 
 		var radiobuttonLabel = window.L.DomUtil.create('label', '', container);
 		radiobuttonLabel.textContent = builder._cleanText(data.text);
-		radiobuttonLabel.htmlFor = data.id;
 
 		var radiobutton = window.L.DomUtil.create('input', '', container);
 		radiobutton.type = 'radio';
+		radiobutton.id = data.id + '-input';
+		radiobuttonLabel.htmlFor = radiobutton.id;
 
 		if (data.group)
 			radiobutton.name = data.group;
