@@ -397,7 +397,27 @@ class RenderGeometrySection extends CanvasSectionObject {
 	/// not hold.
 	public static boxOf(objectId: number): cool.Range2D | undefined {
 		const object = RenderGeometrySection.objectOf(objectId);
-		return object ? RenderGeometrySection.boxOfTheObject(object) : undefined;
+		if (!object) return undefined;
+
+		/*
+			While a text edit runs on the object it paints none of its own text, and the entry of
+			the text edit carries what is typed; the box the object takes up is both of them.
+		*/
+		const objects = [object];
+		if (object.textEdit) {
+			const data = RenderGeometrySection.currentPart();
+			data?.objects.forEach((entry: cool.SlideObject) => {
+				if (entry.kind === 'texteditoverlay' && entry.parent === objectId)
+					objects.push(entry);
+			});
+		}
+
+		let box: cool.Range2D | undefined;
+		for (const each of objects) {
+			const own = RenderGeometrySection.boxOfTheObject(each);
+			if (own) box = box ? box.union(own) : own;
+		}
+		return box;
 	}
 
 	/// The box that object takes up on the page, in twips. Nothing where it says no place.
