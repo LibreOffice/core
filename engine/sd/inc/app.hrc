@@ -445,5 +445,9 @@
 #define SID_MOVE_PREVIEW_SHAPE              (SID_SD_START+465)
 #define SID_MOVE_PREVIEW_SHAPE_OUT          (SID_SD_START+466)
 #define SID_DELETE_CANVAS_SLIDE             (SID_SD_START+467)
+#define SID_TAKE_OVER_TEXT_EDIT             (SID_SD_START+468)
+#define SID_REQUEST_TEXT_EDIT               (SID_SD_START+469)
+#define SID_REJECT_TEXT_EDIT_REQUEST        (SID_SD_START+470)
+#define SID_RETURN_TEXT_EDIT                (SID_SD_START+471)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

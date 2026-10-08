@@ -57,6 +57,7 @@
 #include <editeng/outliner.hxx>
 #include <sal/log.hxx>
 #include <sdr/overlay/overlaytools.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -1417,6 +1418,23 @@ bool SdrObjEditView::SetKitTextCursor(sal_uInt64 nObjectId, sal_Int32 nParagraph
     return true;
 }
 
+void SdrObjEditView::NotifyTextEditLocked(const SdrTextObj& rTextObject) const
+{
+    SfxViewShell* pThisShell = GetSfxViewShell();
+    if (!pThisShell)
+        return;
+
+    SfxViewShell* pEditingShell = nullptr;
+    SdrViewIter::ForAllViews(&rTextObject, [this, &rTextObject, &pEditingShell](SdrView* pView) {
+        if (!pEditingShell && pView != this && pView->GetTextEditObject() == &rTextObject)
+            pEditingShell = pView->GetSfxViewShell();
+    });
+    if (!pEditingShell || pEditingShell == pThisShell)
+        return;
+
+    KitHelper::notifyTextEditLocked(*pEditingShell, *pThisShell, "refused");
+}
+
 bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::Window* pWin,
                                       bool bIsNewObj, SdrOutliner* pGivenOutliner,
                                       OutlinerView* pGivenOutlinerView, bool bDontDeleteOutliner,
@@ -1773,6 +1791,9 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
             mpTextEditOutliner->SetCalcFieldValueHdl(m_aOldCalcFieldValueLink);
             mpTextEditOutliner->SetBeginPasteOrDropHdl(Link<PasteOrDropInfos*, void>());
             mpTextEditOutliner->SetEndPasteOrDropHdl(Link<PasteOrDropInfos*, void>());
+
+            if (comphelper::COKit::isActive() && pTextObj->IsInEditMode())
+                NotifyTextEditLocked(*pTextObj);
         }
     }
     if (mpTextEditOutliner != nullptr)

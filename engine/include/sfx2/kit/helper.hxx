@@ -182,6 +182,26 @@ public:
 
     /// Emits a COKitCallbackType::STATE_CHANGED
     static void sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pItem);
+    /**
+     * Emits a COKitCallbackType::STATE_CHANGED to rOtherView: rOtherView and rThisView both want
+     * to edit the text of one shape. The payload is
+     *
+     * { "commandName": ".uno:TextEditLocked",
+     *   "state": { "viewId": ..., "part": "...", "mode": ..., "reason": "...", "event": ... } }
+     *
+     * - viewId, part and mode are those of rThisView, as in COKitCallbackType::VIEW_LOCK.
+     * - reason is one of these:
+     *   - "refused": rOtherView tried to edit the text of the shape, but rThisView edits it.
+     *   - "takenover": rThisView took the text edit of the shape from rOtherView.
+     *   - "requested": rThisView asks rOtherView to leave the text of the shape it edits.
+     *   - "rejected": rThisView, which edits the text of the shape, goes on with it after
+     *     rOtherView asked for it.
+     *   - "returned": rThisView gave back the text edit of the shape that it took from
+     *     rOtherView, and rOtherView edits the text again.
+     * - event is a number that is different in each of these payloads.
+     */
+    static void notifyTextEditLocked(const SfxViewShell& rThisView, const SfxViewShell& rOtherView,
+                                     std::string_view rReason);
     /// Emits a COKitCallbackType::WINDOW
     static void notifyWindow(const SfxViewShell* pThisView,
                              vcl::KitWindowId nWindowId,

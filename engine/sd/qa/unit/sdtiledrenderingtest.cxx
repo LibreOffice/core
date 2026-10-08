@@ -201,6 +201,7 @@ SdTestViewCallback::SdTestViewCallback()
     , m_bCursorVisibleChanged(false)
     , m_bCursorVisible(false)
     , m_bViewLock(false)
+    , m_nTextEditLockedViewId(-1)
     , m_bTilesInvalidated(false)
     , m_bViewSelectionSet(false)
     , m_callbackWrapper(&callback, this)
@@ -356,6 +357,11 @@ void SdTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
 
             std::string aCommandName = it->second.get_value<std::string>();
             m_aStateChanges[aCommandName] = aTree;
+            if (aCommandName == ".uno:TextEditLocked")
+            {
+                m_nTextEditLockedViewId = aTree.get_child("state.viewId").get_value<int>();
+                m_aTextEditLockedReason = aTree.get_child("state.reason").get_value<std::string>();
+            }
         }
         break;
         case COKitCallbackType::JSDIALOG:

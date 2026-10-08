@@ -352,6 +352,9 @@ private:
     bool getSlideSections();
 
     void rememberEventsForInactiveUser(COKitCallbackType type, const std::string& payload);
+    /// Keeps a .uno:TextEditLocked state change for a user who is away, when it is one that user
+    /// is told about on return.
+    void rememberTextEditLockedForInactiveUser(const std::string& payload);
 
     virtual void disconnect() override;
     virtual bool _handleInput(const char* buffer, int length) override;

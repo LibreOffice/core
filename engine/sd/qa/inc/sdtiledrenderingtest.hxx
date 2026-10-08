@@ -67,6 +67,10 @@ public:
     bool m_bCursorVisibleChanged;
     bool m_bCursorVisible;
     bool m_bViewLock;
+    /// The view named by the last .uno:TextEditLocked state change, or -1.
+    int m_nTextEditLockedViewId;
+    /// The reason given by the last .uno:TextEditLocked state change.
+    std::string m_aTextEditLockedReason;
     bool m_bTilesInvalidated;
     std::vector<tools::Rectangle> m_aInvalidations;
     /// The part each entry of m_aInvalidations names.

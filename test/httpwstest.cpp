@@ -53,6 +53,7 @@ class HTTPWSTest : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testInactiveClient);
     CPPUNIT_TEST(testViewInfoMsg);
     CPPUNIT_TEST(testUndoConflict);
+    CPPUNIT_TEST(testTextEditTakenOverWhileInactive);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -62,6 +63,7 @@ class HTTPWSTest : public CPPUNIT_NS::TestFixture
     void testInactiveClient();
     void testViewInfoMsg();
     void testUndoConflict();
+    void testTextEditTakenOverWhileInactive();
 
 public:
     HTTPWSTest()
@@ -486,6 +488,81 @@ void HTTPWSTest::testUndoConflict()
     catch(const Poco::Exception& exc)
     {
         LOK_ASSERT_FAIL(exc.displayText());
+    }
+}
+
+void HTTPWSTest::testTextEditTakenOverWhileInactive()
+{
+    // A user who edits the text of a shape and goes away learns, once back, that another view took
+    // the shape over meanwhile.
+    const std::string testname = "testTextEditTakenOverWhileInactive-";
+    std::string documentPath;
+    std::string documentURL;
+    getDocumentPathAndURL("viewcursor.odp", documentPath, documentURL, testname);
+
+    std::shared_ptr<http::WebSocketSession> socket0
+        = connectLOKit(_socketPoll, _uri, documentURL, testname + "0 ");
+    std::shared_ptr<http::WebSocketSession> socket1
+        = connectLOKit(_socketPoll, _uri, documentURL, testname + "1 ");
+
+    try
+    {
+        std::string response;
+        std::string part;
+        int parts, width, height;
+        int viewId0 = -1;
+        int viewId1 = -1;
+
+        sendTextFrame(socket0, "load url=" + documentURL, testname + "0 ");
+        response = getResponseString(socket0, "status:", testname + "0 ");
+        parseDocSize(response.substr(7), "presentation", part, parts, width, height, viewId0,
+                     testname);
+        sendTextFrame(socket1, "load url=" + documentURL, testname + "1 ");
+        response = getResponseString(socket1, "status:", testname + "1 ");
+        parseDocSize(response.substr(7), "presentation", part, parts, width, height, viewId1,
+                     testname);
+
+        // The first view types into the first shape, and the second view sees the shape locked.
+        sendKeyPress(socket0, 0, 1282 /* Tab */, testname + "0 ");
+        sendChar(socket0, 'x', skNone, testname + "0 ");
+        response = getResponseString(socket1, "viewlock:", testname + "1 ");
+        LOK_ASSERT_MESSAGE("Expected the shape to be locked",
+                           response.find("EMPTY") == std::string::npos);
+
+        // The first user goes away, and the second view takes the shape over.
+        sendTextFrame(socket0, "userinactive", testname + "0 ");
+        sendTextFrame(socket1,
+                      "uno .uno:TakeOverTextEdit {\"ViewId\":{\"type\":\"long\",\"value\":"
+                          + std::to_string(viewId0) + "}}",
+                      testname + "1 ");
+        response = getResponseString(socket1, "cursorvisible: true", testname + "1 ");
+        LOK_ASSERT_MESSAGE("Expected the second view to edit the shape", !response.empty());
+
+        // The first user comes back and learns which view took the shape over.
+        sendTextFrame(socket0, "useractive", testname + "0 ");
+        const std::string textEditLocked
+            = "statechanged: { \"commandName\": \".uno:TextEditLocked\"";
+        response = getResponseString(socket0, textEditLocked, testname + "0 ");
+        LOK_ASSERT_MESSAGE("Expected .uno:TextEditLocked once active again", !response.empty());
+        Poco::JSON::Parser parser;
+        Poco::JSON::Object::Ptr object
+            = parser.parse(response.substr(std::string("statechanged:").size()))
+                  .extract<Poco::JSON::Object::Ptr>()
+                  ->getObject("state");
+        LOK_ASSERT_EQUAL(viewId1, object->getValue<int>("viewId"));
+        LOK_ASSERT_EQUAL_STR("takenover", object->getValue<std::string>("reason"));
+
+        socket1->asyncShutdown();
+        socket0->asyncShutdown();
+
+        LOK_ASSERT_MESSAGE("Expected successful disconnection of the WebSocket 1",
+                           socket1->waitForDisconnection(5s));
+        LOK_ASSERT_MESSAGE("Expected successful disconnection of the WebSocket 0",
+                           socket0->waitForDisconnection(5s));
+    }
+    catch (const Poco::Exception& exception)
+    {
+        LOK_ASSERT_FAIL(exception.displayText());
     }
 }
 

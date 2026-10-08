@@ -30,6 +30,7 @@
 #include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/outlobj.hxx>
 #include <vcl/svapp.hxx>
@@ -106,6 +107,8 @@
 #include <controller/SlsClipboard.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
+
+#include <functional>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -830,6 +833,50 @@ IMPL_LINK(DrawViewShell, SearchDialogHdl, SfxRequest&, rReq, void)
     GetViewFrame()->ToggleChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
 }
 
+// The view with the id that pViewIdItem gives, when it is another view of the same document.
+static SfxViewShell* GetOtherViewShell(const SfxViewShell& rThisShell,
+                                       const SfxInt32Item* pViewIdItem)
+{
+    SfxViewShell* pShell = pViewIdItem ? KitHelper::getViewOfId(pViewIdItem->GetValue()) : nullptr;
+    if (!pShell || pShell == &rThisShell || pShell->GetDocId() != rThisShell.GetDocId())
+        return nullptr;
+    return pShell;
+}
+
+// The view of rShell shows the page that holds rObj.
+static bool ShowsPageOf(DrawViewShell& rShell, const SdrObject& rObj)
+{
+    SdrPageView* pPageView = rShell.GetView()->GetSdrPageView();
+    return pPageView && pPageView->GetPage() == rObj.getSdrPageFromSdrObject();
+}
+
+// The view of rShell edits the text of rTextObject, as typing into a selected shape starts an edit.
+// It returns false when the edit does not start, or when rTextObject is no longer on its page. A
+// new text box without text leaves its page when its edit ends.
+static bool BeginTextEditOf(DrawViewShell& rShell, SdrTextObj& rTextObject)
+{
+    if (!rTextObject.IsInserted())
+        return false;
+
+    ::sd::View* pView = rShell.GetView();
+    if (pView->IsTextEdit())
+        pView->SdrEndTextEdit();
+    pView->UnmarkAll();
+    pView->MarkObj(&rTextObject, pView->GetSdrPageView());
+    rShell.GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR, SfxCallMode::SYNCHRON);
+    return pView->GetTextEditObject() == &rTextObject;
+}
+
+// Run rFunction with rShell as the current view, as when the user of rShell acts in it. The view
+// that was current before is current again afterwards.
+static void RunAsView(const SfxViewShell& rShell, const std::function<void()>& rFunction)
+{
+    const int nCurrentViewId = KitHelper::getCurrentView();
+    KitHelper::setView(KitHelper::getView(rShell));
+    comphelper::ScopeGuard aRestoreView([nCurrentViewId] { KitHelper::setView(nCurrentViewId); });
+    rFunction();
+}
+
 void DrawViewShell::FuSupport(SfxRequest& rReq)
 {
     if( rReq.GetSlot() == SID_STYLE_FAMILY && rReq.GetArgs())
@@ -852,6 +899,89 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_PRESENTATION_END:
             break;
+
+        case SID_TAKE_OVER_TEXT_EDIT:
+        {
+            // The view that edits the text of a shape writes its text into the shape and leaves
+            // it. Then this view edits the shape.
+            SfxViewShell* pEditingShell
+                = GetOtherViewShell(GetViewShellBase(), rReq.GetArg<SfxInt32Item>(FN_PARAM_1));
+            SdrView* pEditingView = pEditingShell ? pEditingShell->GetDrawView() : nullptr;
+            rtl::Reference<SdrTextObj> xTextObject
+                = pEditingView ? pEditingView->GetTextEditObject() : nullptr;
+            if (!xTextObject || !ShowsPageOf(*this, *xTextObject))
+                break;
+
+            // The other view leaves the text as when its own user leaves it, so the undo step of
+            // that text belongs to that view.
+            RunAsView(*pEditingShell, [pEditingView] { pEditingView->SdrEndTextEdit(); });
+            if (!BeginTextEditOf(*this, *xTextObject))
+                break;
+
+            // The view that edited the shape learns which view edits it now.
+            KitHelper::notifyTextEditLocked(GetViewShellBase(), *pEditingShell, "takenover");
+            rReq.Done();
+        }
+        break;
+
+        case SID_REQUEST_TEXT_EDIT:
+        {
+            // This view asks the view that edits the text of a shape on this page to leave it.
+            SfxViewShell* pEditingShell
+                = GetOtherViewShell(GetViewShellBase(), rReq.GetArg<SfxInt32Item>(FN_PARAM_1));
+            SdrView* pEditingView = pEditingShell ? pEditingShell->GetDrawView() : nullptr;
+            SdrTextObj* pTextObject = pEditingView ? pEditingView->GetTextEditObject() : nullptr;
+            if (!pTextObject || !ShowsPageOf(*this, *pTextObject))
+                break;
+
+            KitHelper::notifyTextEditLocked(GetViewShellBase(), *pEditingShell, "requested");
+            rReq.Done();
+        }
+        break;
+
+        case SID_REJECT_TEXT_EDIT_REQUEST:
+        {
+            // This view goes on with the text it edits, and the view that asked for it learns so.
+            SfxViewShell* pAskingShell
+                = GetOtherViewShell(GetViewShellBase(), rReq.GetArg<SfxInt32Item>(FN_PARAM_1));
+            if (!pAskingShell || !mpDrawView->IsTextEdit())
+                break;
+
+            KitHelper::notifyTextEditLocked(GetViewShellBase(), *pAskingShell, "rejected");
+            rReq.Done();
+        }
+        break;
+
+        case SID_RETURN_TEXT_EDIT:
+        {
+            // This view writes its text into the shape it edits and leaves it. Then the given view,
+            // which edited the shape before this view took it over, edits it again. A given view
+            // that edits some text by then goes on with that text, and this view keeps the shape.
+            SfxViewShell* pOwnerShell
+                = GetOtherViewShell(GetViewShellBase(), rReq.GetArg<SfxInt32Item>(FN_PARAM_1));
+            auto pOwnerBase = dynamic_cast<ViewShellBase*>(pOwnerShell);
+            DrawViewShell* pOwnerDrawShell = nullptr;
+            if (pOwnerBase)
+                pOwnerDrawShell
+                    = dynamic_cast<DrawViewShell*>(pOwnerBase->GetMainViewShell().get());
+            rtl::Reference<SdrTextObj> xTextObject = mpDrawView->GetTextEditObject();
+            if (!pOwnerDrawShell || !xTextObject || !ShowsPageOf(*pOwnerDrawShell, *xTextObject)
+                || pOwnerDrawShell->GetView()->IsTextEdit())
+                break;
+
+            mpDrawView->SdrEndTextEdit();
+            // The other view starts its edit as when its own user starts it.
+            bool bOwnerEdits = false;
+            RunAsView(*pOwnerShell, [&bOwnerEdits, pOwnerDrawShell, &xTextObject] {
+                bOwnerEdits = BeginTextEditOf(*pOwnerDrawShell, *xTextObject);
+            });
+            if (!bOwnerEdits)
+                break;
+
+            KitHelper::notifyTextEditLocked(GetViewShellBase(), *pOwnerShell, "returned");
+            rReq.Done();
+        }
+        break;
 
         case SID_BEZIER_EDIT:
         {

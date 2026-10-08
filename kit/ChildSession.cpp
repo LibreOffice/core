@@ -5855,7 +5855,11 @@ void ChildSession::rememberEventsForInactiveUser(const COKitCallbackType type,
     {
         std::string name;
         std::string value;
-        if (COOLProtocol::parseNameValuePair(payload, name, value, '='))
+        if (payload.find("\".uno:TextEditLocked\"") != std::string::npos)
+        {
+            rememberTextEditLockedForInactiveUser(payload);
+        }
+        else if (COOLProtocol::parseNameValuePair(payload, name, value, '='))
         {
             _stateRecorder.recordState(name, payload);
         }
@@ -5866,6 +5870,26 @@ void ChildSession::rememberEventsForInactiveUser(const COKitCallbackType type,
     {
         _stateRecorder.recordEventSequence(type, payload);
     }
+}
+
+void ChildSession::rememberTextEditLockedForInactiveUser(const std::string& payload)
+{
+    Poco::JSON::Object::Ptr root;
+    if (!JsonUtil::parseJSON(payload, root) ||
+        root->optValue<std::string>("commandName", std::string()) != ".uno:TextEditLocked")
+        return;
+
+    const Poco::JSON::Object::Ptr state = root->getObject("state");
+    if (!state)
+        return;
+
+    // Another view took over the text this view edited, or gave it back. The last of these from
+    // each view is kept, as a view event of that view. The other reasons are about a request or
+    // an attempt that is over by the time the user is back.
+    const std::string reason = state->optValue<std::string>("reason", std::string());
+    if (reason == "takenover" || reason == "returned")
+        _stateRecorder.recordViewEvent(state->getValue<int>("viewId"),
+                                       COKitCallbackType::STATE_CHANGED, payload);
 }
 
 void ChildSession::updateSpeed()

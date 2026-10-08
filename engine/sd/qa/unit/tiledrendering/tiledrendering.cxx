@@ -1199,6 +1199,195 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewLock)
     CPPUNIT_ASSERT(!aView1.m_bViewLock);
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTextEditLockedAndTakeOver)
+{
+    // A view that cannot edit a shape learns which view holds it, and can take the shape over with
+    // the text of that view kept.
+    SdXImpressDocument* pXImpressDocument = createDoc("title-shape.odp");
+    int nView1 = KitHelper::getCurrentView();
+    SdTestViewCallback aView1;
+    sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView1 = pViewShell1->GetView();
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    int nView2 = KitHelper::getCurrentView();
+    SdTestViewCallback aView2;
+    sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView2 = pViewShell2->GetView();
+    CPPUNIT_ASSERT(pView1 != pView2);
+
+    // The first view types into the shape.
+    KitHelper::setView(nView1);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView1->IsTextEdit());
+
+    // The second view types into the same shape. It cannot edit the shape, and it learns that
+    // the first view holds it.
+    KitHelper::setView(nView2);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'y', 0);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 'y', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pView2->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(nView1, aView2.m_nTextEditLockedViewId);
+    CPPUNIT_ASSERT_EQUAL(std::string("refused"), aView2.m_aTextEditLockedReason);
+
+    // The second view takes the shape over. The text of the first view stays in the shape, and
+    // the first view learns that the second view edits the shape now.
+    SfxInt32Item aViewId(FN_PARAM_1, nView1);
+    pViewShell2->GetViewFrame()->GetDispatcher()->ExecuteList(SID_TAKE_OVER_TEXT_EDIT,
+                                                              SfxCallMode::SYNCHRON, { &aViewId });
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pView1->IsTextEdit());
+    CPPUNIT_ASSERT(pView2->IsTextEdit());
+    SdrTextObj* pTextObject = pView2->GetTextEditObject();
+    CPPUNIT_ASSERT(pTextObject);
+    CPPUNIT_ASSERT_EQUAL(u"Drawing in the slidex"_ustr,
+                         pTextObject->GetOutlinerParaObject()->GetTextObject().GetText(0));
+    CPPUNIT_ASSERT_EQUAL(nView2, aView1.m_nTextEditLockedViewId);
+    CPPUNIT_ASSERT_EQUAL(std::string("takenover"), aView1.m_aTextEditLockedReason);
+
+    // The text of the first view is an undo step of the first view, as when its own user leaves
+    // the text.
+    SfxUndoManager* pUndoManager = pXImpressDocument->GetDocShell()->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager->GetUndoActionCount() > 0);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(pViewShell1->GetViewShellBase().GetViewShellId()),
+                         sal_Int32(pUndoManager->GetUndoAction()->GetViewShellId()));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTextEditRequestRejectAndReturn)
+{
+    // A view can ask for a shape, be rejected, take the shape over and give it back, and the other
+    // view learns of each step.
+    SdXImpressDocument* pXImpressDocument = createDoc("title-shape.odp");
+    int nView1 = KitHelper::getCurrentView();
+    SdTestViewCallback aView1;
+    sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView1 = pViewShell1->GetView();
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    int nView2 = KitHelper::getCurrentView();
+    SdTestViewCallback aView2;
+    sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView2 = pViewShell2->GetView();
+    CPPUNIT_ASSERT(pView1 != pView2);
+
+    // The first view types into the shape.
+    KitHelper::setView(nView1);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView1->IsTextEdit());
+
+    // The second view asks for the shape, and the first view learns that.
+    KitHelper::setView(nView2);
+    SfxInt32Item aView1Id(FN_PARAM_1, nView1);
+    pViewShell2->GetViewFrame()->GetDispatcher()->ExecuteList(SID_REQUEST_TEXT_EDIT,
+                                                              SfxCallMode::SYNCHRON, { &aView1Id });
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(nView2, aView1.m_nTextEditLockedViewId);
+    CPPUNIT_ASSERT_EQUAL(std::string("requested"), aView1.m_aTextEditLockedReason);
+
+    // The first view goes on with the text, and the second view learns that.
+    KitHelper::setView(nView1);
+    SfxInt32Item aView2Id(FN_PARAM_1, nView2);
+    pViewShell1->GetViewFrame()->GetDispatcher()->ExecuteList(SID_REJECT_TEXT_EDIT_REQUEST,
+                                                              SfxCallMode::SYNCHRON, { &aView2Id });
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView1->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(nView1, aView2.m_nTextEditLockedViewId);
+    CPPUNIT_ASSERT_EQUAL(std::string("rejected"), aView2.m_aTextEditLockedReason);
+
+    // The second view takes the shape over, types, and gives the shape back. The first view edits
+    // the shape again, with the text of both views in it.
+    KitHelper::setView(nView2);
+    pViewShell2->GetViewFrame()->GetDispatcher()->ExecuteList(SID_TAKE_OVER_TEXT_EDIT,
+                                                              SfxCallMode::SYNCHRON, { &aView1Id });
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pView2->IsTextEdit());
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'y', 0);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 'y', 0);
+    Scheduler::ProcessEventsToIdle();
+    pViewShell2->GetViewFrame()->GetDispatcher()->ExecuteList(SID_RETURN_TEXT_EDIT,
+                                                              SfxCallMode::SYNCHRON, { &aView1Id });
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pView2->IsTextEdit());
+    CPPUNIT_ASSERT(pView1->IsTextEdit());
+    CPPUNIT_ASSERT_EQUAL(nView2, KitHelper::getCurrentView());
+    SdrTextObj* pTextObject = pView1->GetTextEditObject();
+    CPPUNIT_ASSERT(pTextObject);
+    CPPUNIT_ASSERT_EQUAL(u"Drawing in the slidexy"_ustr,
+                         pTextObject->GetOutlinerParaObject()->GetTextObject().GetText(0));
+    CPPUNIT_ASSERT_EQUAL(nView2, aView1.m_nTextEditLockedViewId);
+    CPPUNIT_ASSERT_EQUAL(std::string("returned"), aView1.m_aTextEditLockedReason);
+
+    // The first view types on in the shape.
+    KitHelper::setView(nView1);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'z', 0);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 'z', 0);
+    Scheduler::ProcessEventsToIdle();
+    pView1->SdrEndTextEdit();
+    CPPUNIT_ASSERT_EQUAL(u"Drawing in the slidexyz"_ustr,
+                         pTextObject->GetOutlinerParaObject()->GetTextObject().GetText(0));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testReturnTextEditToViewThatEditsOtherText)
+{
+    // A view that edits other text when a shape is given back to it goes on with that text, and the
+    // shape stays with the view that took it over.
+    SdXImpressDocument* pXImpressDocument = createDoc("TextBoxAndRect.odg");
+    int nView1 = KitHelper::getCurrentView();
+    SdrView* pView1 = pXImpressDocument->GetDocShell()->GetViewShell()->GetView();
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView2 = pViewShell2->GetView();
+    CPPUNIT_ASSERT(pView1 != pView2);
+
+    // The first view types into the text box, and the second view takes it over.
+    KitHelper::setView(nView1);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+    SdrTextObj* pTextBox = pView1->GetTextEditObject();
+    CPPUNIT_ASSERT(pTextBox);
+    KitHelper::setView(KitHelper::getView(pViewShell2->GetViewShellBase()));
+    SfxInt32Item aView1Id(FN_PARAM_1, nView1);
+    pViewShell2->GetViewFrame()->GetDispatcher()->ExecuteList(SID_TAKE_OVER_TEXT_EDIT,
+                                                              SfxCallMode::SYNCHRON, { &aView1Id });
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(pTextBox, pView2->GetTextEditObject());
+
+    // The first view types into the rectangle.
+    KitHelper::setView(nView1);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'y', 0);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 'y', 0);
+    Scheduler::ProcessEventsToIdle();
+    SdrTextObj* pRectangle = pView1->GetTextEditObject();
+    CPPUNIT_ASSERT(pRectangle);
+    CPPUNIT_ASSERT(pRectangle != pTextBox);
+
+    // The second view gives the text box back. The first view goes on with the rectangle, and the
+    // second view keeps the text box.
+    KitHelper::setView(KitHelper::getView(pViewShell2->GetViewShellBase()));
+    pViewShell2->GetViewFrame()->GetDispatcher()->ExecuteList(SID_RETURN_TEXT_EDIT,
+                                                              SfxCallMode::SYNCHRON, { &aView1Id });
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(pRectangle, pView1->GetTextEditObject());
+    CPPUNIT_ASSERT_EQUAL(pTextBox, pView2->GetTextEditObject());
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testUndoLimiting)
 {
     // Create the first view.

@@ -129,6 +129,9 @@ private:
     EditUndoManager* mpOldTextEditUndoManager;
     std::unique_ptr<SdrUndoManager> mpLocalTextEditUndoManager;
 
+    // Tell the client of this view which other view edits the text of rTextObject.
+    void NotifyTextEditLocked(const SdrTextObj& rTextObject) const;
+
 protected:
     // Create a local UndoManager that is used for text editing.
     virtual std::unique_ptr<SdrUndoManager> createLocalTextUndoManager();

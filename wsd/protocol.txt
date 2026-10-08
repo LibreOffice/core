@@ -1391,6 +1391,25 @@ statechanged: <key>=<value>
     postMessage API). The separate on-load 'commandvalues command=.uno:SecurityLabel'
     seeds the banner without an action and is not broadcast.
 
+    The text edit lock event is a statechanged whose value is a JSON object. It
+    tells this view that it and another view both want to edit the text of one
+    shape:
+
+        statechanged: {"commandName":".uno:TextEditLocked","state":{
+            "viewId":<the other view>,"part":...,"mode":...,"reason":...,
+            "event":<a number that differs in each of these messages>}}
+
+    The reason is one of these:
+    "refused": this view tried to edit the text, but the other view edits it.
+    "takenover": the other view took the text edit from this view.
+    "requested": the other view asks this view to leave the text it edits.
+    "rejected": the other view goes on with the text after this view asked.
+    "returned": the other view gave the text edit back to this view.
+    The engine does not check how long a view has not typed. The client
+    decides when to offer a take over. A view that is inactive gets the
+    last "takenover" or "returned" of each other view once it is active
+    again.
+
 viewposition: [editmode=1] [zoompercent=<percent>] [x=<twips> y=<twips> width=<twips> height=<twips>]
 
     Sent once, after the status that follows the load, when the document kept

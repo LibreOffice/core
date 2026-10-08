@@ -1491,6 +1491,66 @@ SfxVoidItem PresentationCleanup SID_PRESENTATION_CLEANUP
     GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem TakeOverTextEdit SID_TAKE_OVER_TEXT_EDIT
+(SfxInt32Item ViewId FN_PARAM_1)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Edit;
+]
+
+SfxVoidItem RequestTextEdit SID_REQUEST_TEXT_EDIT
+(SfxInt32Item ViewId FN_PARAM_1)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Edit;
+]
+
+SfxVoidItem RejectTextEditRequest SID_REJECT_TEXT_EDIT_REQUEST
+(SfxInt32Item ViewId FN_PARAM_1)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Edit;
+]
+
+SfxVoidItem ReturnTextEdit SID_RETURN_TEXT_EDIT
+(SfxInt32Item ViewId FN_PARAM_1)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Edit;
+]
+
 SfxVoidItem InsertPage SID_INSERTPAGE
 (SfxStringItem PageName ID_VAL_PAGENAME,SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT,SfxBoolItem IsPageBack ID_VAL_ISPAGEBACK,SfxBoolItem IsPageObj ID_VAL_ISPAGEOBJ,SfxUInt16Item InsertPos ID_INSERT_POS)
 [

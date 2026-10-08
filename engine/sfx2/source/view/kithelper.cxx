@@ -710,6 +710,29 @@ void KitHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pIt
     }
 }
 
+void KitHelper::notifyTextEditLocked(const SfxViewShell& rThisView, const SfxViewShell& rOtherView,
+                                     std::string_view rReason)
+{
+    if (DisableCallbacks::disabled())
+        return;
+
+    // The event number differs in each payload, so two payloads with the same reason from the same
+    // view are still distinct.
+    static sal_uInt32 nEventNumber = 0;
+
+    tools::JsonWriter aJson;
+    aJson.put("commandName", ".uno:TextEditLocked");
+    {
+        auto aState = aJson.startNode("state");
+        aJson.put("viewId", KitHelper::getView(rThisView));
+        aJson.put("part", rThisView.getPartId());
+        aJson.put("mode", rThisView.getEditMode());
+        aJson.put("reason", rReason);
+        aJson.put("event", ++nEventNumber);
+    }
+    rOtherView.viewCallback(COKitCallbackType::STATE_CHANGED, aJson.finishAndGetAsOString());
+}
+
 void KitHelper::notifyViewRenderState(const SfxViewShell* pShell, vcl::ITiledRenderable* pDoc)
 {
     pShell->viewCallback(COKitCallbackType::VIEW_RENDER_STATE, pDoc->getViewRenderState(pShell));

@@ -894,6 +894,22 @@ interface DrawView
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
     ]
+    SID_TAKE_OVER_TEXT_EDIT
+    [
+        ExecMethod = FuSupport ;
+    ]
+    SID_REQUEST_TEXT_EDIT
+    [
+        ExecMethod = FuSupport ;
+    ]
+    SID_REJECT_TEXT_EDIT_REQUEST
+    [
+        ExecMethod = FuSupport ;
+    ]
+    SID_RETURN_TEXT_EDIT
+    [
+        ExecMethod = FuSupport ;
+    ]
     SID_TEXT_FITTOSIZE // ole : no, status : ?
     [
         ExecMethod = FuPermanent ;
