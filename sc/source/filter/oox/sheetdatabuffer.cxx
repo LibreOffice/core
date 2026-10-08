@@ -634,6 +634,14 @@ ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const ScAddress& rAddr )
 
 void SheetDataBuffer::finalizeArrayFormula( const ScRange& rRange, const ApiTokenSequence& rTokens )
 {
+    // An array formula that could not be imported leaves its range empty. Only this sheet is
+    // touched, because the other sheets may still be importing on other threads.
+    if( !rTokens.hasElements() )
+    {
+        getScDocument().DeleteAreaTab( rRange, InsertDeleteFlags::CONTENTS );
+        return;
+    }
+
     rtl::Reference<ScCellRangeObj> xCellRangeObj(new ScCellRangeObj(getScDocument().GetDocumentShell(), rRange));
     xCellRangeObj->setArrayTokens(rTokens);
 }

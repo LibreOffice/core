@@ -1841,7 +1841,7 @@ public:
 
     SC_DLLPUBLIC void            DeleteAreaTab(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                                SCTAB nTab, InsertDeleteFlags nDelFlag);
-    void                         DeleteAreaTab(const ScRange& rRange, InsertDeleteFlags nDelFlag);
+    SC_DLLPUBLIC void            DeleteAreaTab(const ScRange& rRange, InsertDeleteFlags nDelFlag);
 
     SC_DLLPUBLIC void            CopyToClip( const ScClipParam& rClipParam, ScDocument* pClipDoc,
                                              const ScMarkData* pMarks, bool bKeepScenarioFlags,
