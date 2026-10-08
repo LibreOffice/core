@@ -132,7 +132,85 @@ class GraphicSelection {
 	*/
 	public static selectObjects(objectIds: number[]) {
 		this.selectedObjectIDs = objectIds.slice();
+		// Nothing selected by asking for it is where one meant to be; nothing is to follow.
+		this.rememberWhereItStands(objectIds);
+		if (!objectIds.length) this.stoodAt = null;
 		app.socket.sendMessage('selectobjects ids=' + objectIds.join(','));
+	}
+
+	/*
+		The selection as it stood last with something in it, and the groups above it, from its
+		parent up. The engine drops objects that are deleted from what it has marked and reports
+		what is left, possibly nothing, before the objects of the page say they are gone; this is
+		what the selection is put right from once they do.
+	*/
+	private static stoodAt: {
+		selected: number[];
+		groupsAbove: number[];
+		place: InteractionPlace;
+	} | null = null;
+
+	/// Whether the update of the objects is listened to, which is once.
+	private static followingDeletions: boolean = false;
+
+	/// Notes where a selection with something in it stands, in a view that draws from objects.
+	private static rememberWhereItStands(objectIds: number[]): void {
+		if (!objectIds.length || !RenderManager.isVectorRendering()) return;
+
+		this.stoodAt = {
+			selected: objectIds.slice(),
+			groupsAbove: Interaction.groupsAbove(objectIds),
+			place: Interaction.placeOf(objectIds),
+		};
+
+		if (this.followingDeletions) return;
+		this.followingDeletions = true;
+		RenderManager.onVectorChanged(() => GraphicSelection.followDeletions());
+	}
+
+	/*
+		Puts the selection right where objects it stood on were deleted, by this view or another:
+		the context it stood in says what to take instead. Where nothing it stood on is gone, the
+		selection stands as the engine reports it.
+	*/
+	private static followDeletions(): void {
+		const stoodAt = this.stoodAt;
+		if (!stoodAt || !RenderManager.isVectorRendering()) return;
+
+		// The objects of the page are dropped from memory at times, when the window loses the
+		// focus among others, and fetched again; while they are away they say nothing about what
+		// was deleted.
+		if (!RenderGeometrySection.currentPart()) return;
+
+		const gone = stoodAt.selected.some(
+			(objectId: number) =>
+				RenderGeometrySection.objectOf(objectId) === undefined,
+		);
+		if (!gone) {
+			if (!this.selectedObjectIDs.length) this.stoodAt = null;
+			return;
+		}
+
+		const wanted = Interaction.contextAt(stoodAt.place).whatIsLeft(
+			stoodAt.selected,
+			stoodAt.groupsAbove,
+		);
+		const same =
+			wanted.length === this.selectedObjectIDs.length &&
+			wanted.every(
+				(objectId: number, index: number) =>
+					objectId === this.selectedObjectIDs[index],
+			);
+
+		// The selection is what is left already; with nothing left there is nothing to follow.
+		if (same) {
+			if (wanted.length) this.rememberWhereItStands(wanted);
+			else this.stoodAt = null;
+			return;
+		}
+
+		this.selectObjects(wanted);
+		this.updateSelectionSection();
 	}
 
 	/// The engine was asked to enter the selected group; the context says what is selected then.
@@ -159,6 +237,7 @@ class GraphicSelection {
 
 		this.selectedObjectIDs = objectIds.slice();
 		this.selectionCameFromElsewhere = changed;
+		this.rememberWhereItStands(objectIds);
 		return changed;
 	}
 

@@ -49,6 +49,10 @@ interface InteractionContext {
 
 	/// The engine was asked to enter the group that is selected; selects what that leaves.
 	groupEntered(): void;
+
+	/// Objects of the selection were deleted, by this view or another. Answers the selection to
+	/// take instead, from what was selected and the groups it stood in, from its parent up.
+	whatIsLeft(selected: number[], groupsAbove: number[]): number[];
 }
 
 /// A way of editing: the context it gives for each place one can stand at.
@@ -92,8 +96,27 @@ class Interaction {
 
 	/// The context for the selection as it is now.
 	public static context(): InteractionContext {
-		return Interaction.set().contextFor(
+		return Interaction.contextAt(
 			Interaction.placeOf(GraphicSelection.selectedObjectIDs),
 		);
+	}
+
+	/// The context for that place, which may be one the selection stood at before.
+	public static contextAt(place: InteractionPlace): InteractionContext {
+		return Interaction.set().contextFor(place);
+	}
+
+	/// The groups above those objects, from their parent up to the one the page holds.
+	public static groupsAbove(selected: number[]): number[] {
+		const groups: number[] = [];
+		const first = selected[0];
+		let above =
+			first === undefined ? undefined : RenderGeometrySection.parentOf(first);
+
+		for (let guard = 0; above && guard < 100; ++guard) {
+			groups.push(above);
+			above = RenderGeometrySection.parentOf(above);
+		}
+		return groups;
 	}
 }

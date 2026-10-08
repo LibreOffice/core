@@ -114,6 +114,28 @@ abstract class ClassicContext implements InteractionContext {
 		GraphicSelection.selectObjects([held[0]]);
 		GraphicSelection.updateSelectionSection();
 	}
+
+	/*
+		What is left of the selection where some of its objects were deleted: the ones that still
+		stand. Where none does, one stays in the group they stood in and its first object is
+		selected; a group holding nothing is deleted with its last member, so the first group up
+		that still stands and holds something is taken, and the page with nothing selected where
+		none does.
+	*/
+	public whatIsLeft(selected: number[], groupsAbove: number[]): number[] {
+		const standing = (objectId: number): boolean =>
+			RenderGeometrySection.objectOf(objectId) !== undefined;
+
+		const left = selected.filter(standing);
+		if (left.length) return left;
+
+		for (const group of groupsAbove) {
+			if (!standing(group)) continue;
+			const held = RenderGeometrySection.heldBy(group);
+			if (held.length) return [held[0]];
+		}
+		return [];
+	}
 }
 
 /// The page: what a selection of the page's objects does, and what one does with none.
