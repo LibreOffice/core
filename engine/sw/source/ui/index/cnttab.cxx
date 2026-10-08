@@ -2096,6 +2096,11 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogControl
     Size aPrefSize(m_xContainer->get_preferred_size());
     m_xFieldBox->set_size_request(-1, -1);
     m_xContainer->set_size_request(aPrefSize.Width(), aPrefSize.Height());
+
+    // The measuring loop leaves the controls laid out for the last index type it tried. Activating
+    // the page here lays the controls out for the index type the dialog opened with, so the page
+    // has its final set of visible controls, and its final height, before it is shown anywhere.
+    ActivatePage(rAttrSet);
 }
 
 SwTOXEntryTabPage::~SwTOXEntryTabPage()
