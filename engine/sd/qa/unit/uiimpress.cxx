@@ -7108,6 +7108,22 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletsAreWalkedOnceUntilAChan
     CPPUNIT_ASSERT_EQUAL(nAfterFirst + 1, pDocument->GetUsedBulletWalkCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletsSurviveASave)
+{
+    createSdImpressDoc("document-bullets.odp");
+    SdDrawDocument* pDocument = getSdDocShell()->GetDoc();
+
+    pDocument->GetUsedBullets();
+    const sal_uInt32 nAfterFirst = pDocument->GetUsedBulletWalkCount();
+    CPPUNIT_ASSERT(nAfterFirst > 0);
+
+    save(TestFilter::ODP);
+
+    // Saving does not change which bullets the presentation holds, so the list is kept.
+    pDocument->GetUsedBullets();
+    CPPUNIT_ASSERT_EQUAL(nAfterFirst, pDocument->GetUsedBulletWalkCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletSurvivesTheStatusString)
 {
     // A character bullet reaches the bullet dropdown as one string holding the character and then

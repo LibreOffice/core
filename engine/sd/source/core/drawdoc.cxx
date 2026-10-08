@@ -876,8 +876,10 @@ rtl::Reference<SdrPage> SdDrawDocument::AllocPage(bool bMasterPage)
 // When the model has changed
 void SdDrawDocument::SetChanged(bool bFlag)
 {
-    // A bullet can appear or disappear with any change, so the remembered list goes with it.
-    ForgetUsedBullets();
+    // A change to the document can bring a bullet in or take one away, so the remembered list
+    // is dropped. Marking the document as saved leaves its bullets unchanged.
+    if (bFlag)
+        ForgetUsedBullets();
 
     if (mpDocSh)
     {
@@ -900,7 +902,8 @@ void SdDrawDocument::SetChanged(bool bFlag)
 // The model changed, don't call anything else
 void SdDrawDocument::NbcSetChanged(bool bFlag)
 {
-    ForgetUsedBullets();
+    if (bFlag)
+        ForgetUsedBullets();
 
     // forward to baseclass
     FmFormModel::SetChanged(bFlag);
