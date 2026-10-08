@@ -741,8 +741,11 @@ bool TransferableHelper::SetBitmap(const Bitmap& rBitmap, const DataFlavor& rFla
         }
         else
         {
+            // BMP has no alpha channel, blend any transparency onto white
+            Bitmap aBitmap(rBitmap);
+            aBitmap.ReplaceTransparency(COL_WHITE);
             // explicitly use Bitmap::Write with bCompressed = sal_False and bFileHeader = sal_True
-            WriteDIB(rBitmap, aMemStm, false, true);
+            WriteDIB(aBitmap, aMemStm, false, true);
         }
 
         maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.TellEnd() );

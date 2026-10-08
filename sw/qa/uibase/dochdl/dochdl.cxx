@@ -9,16 +9,22 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <vcl/dibtools.hxx>
 #include <vcl/transfer.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <svx/svdpage.hxx>
 
+#include <drawdoc.hxx>
 #include <docsh.hxx>
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <fmtanchr.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 /// Covers sw/source/uibase/dochdl/ fixes.
 class SwUibaseDochdlTest : public SwModelTestBase
@@ -98,6 +104,39 @@ CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testComplexSelectionAtChar)
     // Without the accompanying fix in place, this test would have failed, a selection containing an
     // image was considered simple.
     CPPUNIT_ASSERT(bComplex);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testCopyShapeBitmapBackground)
+{
+    // Create a document with an ellipse (leaves the corners of its bounding box empty)
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.EllipseShape"_ustr), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(2000, 2000));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+
+    // Select and copy ellipse
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SdrPage* pPage = getSwDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0));
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+    pTransfer->Copy();
+
+    // The BMP image on the clipboard must show the empty corners as white
+    TransferableDataHelper aHelper(pTransfer);
+    uno::Sequence<sal_Int8> aBmpData
+        = aHelper.GetSequence(SotClipboardFormatId::BITMAP, OUString());
+    SvMemoryStream aBmpStream(const_cast<sal_Int8*>(aBmpData.getConstArray()), aBmpData.getLength(),
+                              StreamMode::READ);
+    Bitmap aBitmap;
+    CPPUNIT_ASSERT(ReadDIB(aBitmap, aBmpStream, /*bFileHeader=*/true));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: rgba[ffffffff]
+    // - Actual  : rgba[000000ff]
+    // i.e. the "transparent" area of the shape turned black (BMP has no alpha channel)
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aBitmap.GetPixelColor(0, 0));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
