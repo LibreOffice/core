@@ -74,6 +74,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testAnonymization);
     CPPUNIT_TEST(testStat);
     CPPUNIT_TEST(testReadFile);
+    CPPUNIT_TEST(testKeyedFromFile);
     CPPUNIT_TEST(testIsPlainFileName);
     CPPUNIT_TEST(testBuildLocalPathToJail);
     CPPUNIT_TEST(testFindFileInJail);
@@ -108,6 +109,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testAnonymization();
     void testStat();
     void testReadFile();
+    void testKeyedFromFile();
     void testIsPlainFileName();
     void testBuildLocalPathToJail();
     void testFindFileInJail();
@@ -1005,6 +1007,49 @@ template <typename T> struct PeakAllocator
 };
 
 using CountedString = std::basic_string<char, std::char_traits<char>, PeakAllocator<char>>;
+}
+
+void WhiteBoxTests::testKeyedFromFile()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string tmpFile = FileUtil::getSysTempDirectoryPath() + "/test_keyed_from_file";
+
+    // memory.events, where oom comes before oom_kill and is a prefix of it, so
+    // a reader matching on a prefix answers either key with the wrong number.
+    {
+        std::ofstream ofs(tmpFile, std::ios::trunc);
+        ofs << "low 0\nhigh 0\nmax 12\noom 3\noom_kill 42\noom_group_kill 7\n";
+    }
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(42), Util::getKeyedFromFile(tmpFile, "oom_kill"));
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), Util::getKeyedFromFile(tmpFile, "oom"));
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(7),
+                     Util::getKeyedFromFile(tmpFile, "oom_group_kill"));
+
+    // memory.oom_control of cgroup v1, which lists oom_kill_disable first and
+    // is the other way a prefix match answers oom_kill with the wrong number.
+    {
+        std::ofstream ofs(tmpFile, std::ios::trunc);
+        ofs << "oom_kill_disable 1\nunder_oom 0\noom_kill 9\n";
+    }
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(9), Util::getKeyedFromFile(tmpFile, "oom_kill"));
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(1),
+                     Util::getKeyedFromFile(tmpFile, "oom_kill_disable"));
+
+    // A key the kernel does not write, a line with no value, and a value that
+    // is not a number all read as zero rather than throwing.
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), Util::getKeyedFromFile(tmpFile, "oom_kills"));
+    {
+        std::ofstream ofs(tmpFile, std::ios::trunc);
+        ofs << "oom_kill\noom_kill unknown\n";
+    }
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), Util::getKeyedFromFile(tmpFile, "oom_kill"));
+
+    FileUtil::removeFile(tmpFile);
+
+    // A file that is not there is not an error either: the kernel adds these
+    // keys over time and older ones have no such file at all.
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), Util::getKeyedFromFile(tmpFile, "oom_kill"));
 }
 
 void WhiteBoxTests::testReadFile()

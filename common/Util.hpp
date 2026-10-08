@@ -285,6 +285,14 @@ namespace Util
     /// Returns the cgroup's soft memory limit, or 0 if not available in bytes
     std::size_t getCGroupMemSoftLimit();
 
+    /// Returns how many processes of this cgroup an OOM killer has killed,
+    /// counted by the kernel since boot, or 0 where it is not reported
+    std::size_t getCGroupOomKillCount();
+
+    /// Returns the value of @p key in a file of "name value" lines, as the
+    /// kernel writes them, or 0 when the file or the key is absent
+    std::size_t getKeyedFromFile(const std::string& path, const std::string& key);
+
     /// Replace substring @a in string @s with string @b.
     std::string replace(std::string s, std::string_view a, std::string_view b);
 

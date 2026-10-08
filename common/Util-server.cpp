@@ -68,10 +68,8 @@ const char* startsWith(const char* line, std::string_view tag)
     return nullptr;
 }
 
-std::size_t getFromCGroup(const std::string& group, const std::string& key)
+std::string getCGroupV1Path(const std::string& group)
 {
-    std::size_t num = 0;
-
     std::string groupPath;
     FILE* cg = fopen("/proc/self/cgroup", "r");
     if (cg != nullptr)
@@ -90,6 +88,14 @@ std::size_t getFromCGroup(const std::string& group, const std::string& key)
         fclose(cg);
     }
 
+    return groupPath;
+}
+
+std::size_t getFromCGroup(const std::string& group, const std::string& key)
+{
+    std::size_t num = 0;
+
+    const std::string groupPath = getCGroupV1Path(group);
     if (groupPath.empty())
         return 0;
 
@@ -259,6 +265,51 @@ std::size_t getCGroupMemLimit()
     {
         return getFromCGroup("memory", "memory.limit_in_bytes");
     }
+#else
+    return 0;
+#endif
+}
+
+std::size_t getKeyedFromFile(const std::string& path, const std::string& key)
+{
+    LOG_TRC("Reading " << key << " from " << path);
+
+    std::ifstream file(path);
+    std::string line;
+    while (std::getline(file, line))
+    {
+        // The name has to match whole: oom is a prefix of oom_kill.
+        const std::size_t space = line.find(' ');
+        if (space != key.size() || line.compare(0, space, key) != 0)
+            continue;
+
+        try
+        {
+            return std::stoull(line.substr(space + 1));
+        }
+        catch (const std::exception&)
+        {
+            return 0;
+        }
+    }
+
+    return 0;
+}
+
+std::size_t getCGroupOomKillCount()
+{
+#ifdef __linux__
+    // Counts every process of this cgroup an OOM killer took, whether the
+    // limit it hit was the cgroup's or the machine's.
+    if (isCGroupV2())
+        return getKeyedFromFile("/sys/fs/cgroup" + getCurrentCGroupPath() + "/memory.events",
+                                "oom_kill");
+
+    const std::string groupPath = getCGroupV1Path("memory");
+    if (groupPath.empty())
+        return 0;
+
+    return getKeyedFromFile(groupPath + "/memory.oom_control", "oom_kill");
 #else
     return 0;
 #endif

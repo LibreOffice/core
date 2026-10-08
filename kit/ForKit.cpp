@@ -316,6 +316,20 @@ bool haveCorrectCapabilities()
 }
 #endif // HAVE_LIBCAP
 
+/// How many processes of our cgroup an OOM killer has taken since the last
+/// call. The count is per cgroup rather than per child, so a reap that finds
+/// fewer SIGKILLed kits than the kernel counted leaves the rest to the next.
+int takeCGroupOomKills()
+{
+    static std::size_t lastCount = 0;
+
+    const std::size_t count = Util::getCGroupOomKillCount();
+    const std::size_t taken = count > lastCount ? count - lastCount : 0;
+    lastCount = count;
+
+    return taken;
+}
+
 /// Check if some previously forked kids have died.
 void cleanupChildren()
 {
@@ -327,6 +341,8 @@ void cleanupChildren()
     int segFaultCount = 0;
     int killedCount = 0;
     int oomKilledCount = 0;
+
+    int oomKillsToAttribute = -1; // read on the first SIGKILL of this reap
 
     siginfo_t info;
     memset(&info, 0, sizeof(info)); // Make sure no stale fields remain
@@ -361,16 +377,17 @@ void cleanupChildren()
                 }
                 else if (status == SIGKILL)
                 {
-#if !defined(MACOS)
-                    // TODO differentiate with docker
-                    if (info.si_code == SI_KERNEL)
+                    if (oomKillsToAttribute < 0)
+                        oomKillsToAttribute = takeCGroupOomKills();
+
+                    if (oomKillsToAttribute > 0)
                     {
+                        --oomKillsToAttribute;
                         ++oomKilledCount;
                         LOG_WRN("Child " << exitedChildPid << " was killed by OOM, with status "
                                          << status);
                     }
                     else
-#endif
                     {
                         ++killedCount;
                         LOG_WRN("Child " << exitedChildPid << " was killed, with status "
@@ -1128,6 +1145,10 @@ int forkit_main(int argc, char** argv)
     LOG_INF("ForKit process is ready. Parent: " << parentPid);
 
     const auto startTime = std::chrono::steady_clock::now();
+
+    // Seed the baseline, so kills from before this forkit are not its kits'.
+    takeCGroupOomKills();
+
     while (!SigUtil::getShutdownRequestFlag())
     {
         UnitKit::get().invokeForKitTest();

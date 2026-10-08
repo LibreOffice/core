@@ -42,6 +42,8 @@ size_t getTotalSystemMemoryKb() { return 0; }
 std::size_t getFromFile(const char*) { return 0; }
 std::size_t getCGroupMemLimit() { return 0; }
 std::size_t getCGroupMemSoftLimit() { return 0; }
+std::size_t getCGroupOomKillCount() { return 0; }
+std::size_t getKeyedFromFile(const std::string&, const std::string&) { return 0; }
 
 std::string getLinuxVersion() { return "unknown"; }
 
