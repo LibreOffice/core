@@ -735,14 +735,6 @@ class TurningHandle extends HandleGroup {
 	/// How far above the selection it sits, in core pixels.
 	private static readonly distance: number = 30;
 
-	/// How far a key turns the selection, in degrees: one of them, fifteen with Shift, which is
-	/// the step the office holds a turn to, and a tenth with Alt for the finest of it.
-	private static turningStep(event: KeyboardEvent): number {
-		if (event.shiftKey) return 15;
-		if (event.altKey) return 0.1;
-		return 1;
-	}
-
 	public handles(): SelectionHandle[] {
 		return this.placedAbove(
 			ObjectHandles.framingOf(
@@ -812,6 +804,27 @@ class TurningHandle extends HandleGroup {
 		return middle ? new TurningInteraction(this.selection, middle, at) : null;
 	}
 
+	/*
+		How far a key turns the selection, in degrees against the clock for a way of 1 and with it
+		for -1: on to the next step of the angle the selection stands at, counted from the page, so
+		a few presses bring a turned object back to standing upright. The step is the one a turn
+		by the mouse snaps to for the modifier held (EditSteps.turnSnap), and with no modifier the
+		smallest one (EditSteps.keyTurnStep).
+	*/
+	private keyTurn(event: KeyboardEvent, way: number): number {
+		const step = EditSteps.turnSnap(event) ?? EditSteps.keyTurnStep();
+		const square = this.selection.squareNow();
+		if (!square) return step * way;
+
+		// The angle the selection stands at, counted against the clock as the engine counts it,
+		// in steps. A hair is allowed for, so an angle that stands on a step goes to the next.
+		const stands = (-square.rotation() * 180) / Math.PI;
+		const inSteps = stands / step;
+		const next =
+			way > 0 ? Math.floor(inSteps + 1e-6) + 1 : Math.ceil(inSteps - 1e-6) - 1;
+		return next * step - stands;
+	}
+
 	public moveByKey(
 		_handle: SelectionHandle,
 		towards: cool.Point,
@@ -825,7 +838,7 @@ class TurningHandle extends HandleGroup {
 		const turned = TurningInteraction.turnObjects(
 			this.selection,
 			middle,
-			TurningHandle.turningStep(event) * (against ? 1 : -1),
+			this.keyTurn(event, against ? 1 : -1),
 		);
 
 		// What the key did is laid on the objects, as the end of a drag lays its own.

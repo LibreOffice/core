@@ -75,13 +75,37 @@ class TurningInteraction extends SelectionInteraction {
 		);
 	}
 
-	public move(to: cool.SimplePoint): void {
+	/*
+		Follows the mouse. While a modifier is held the angle the selection ends up standing at is
+		snapped to the step it names, counted from the page and not from where the turn began, so
+		a turned object goes straight back to standing upright. The angle the selection stands at
+		is that of the across axis of its square: an object's own, nought for a frame around
+		several, which then snaps the turn itself.
+	*/
+	public move(
+		to: cool.SimplePoint,
+		event?: { ctrlKey?: boolean; shiftKey?: boolean; altKey?: boolean },
+	): void {
 		this.turned = TurningInteraction.angleAt(this.middle, to) - this.from;
+
+		const step = EditSteps.turnSnap(event);
+		const square = this.selection.squareNow();
+		if (step && square) {
+			const stands = square.rotation();
+			const stepInRadians = (step * Math.PI) / 180;
+			const snapped =
+				Math.round((stands + this.turned) / stepInRadians) * stepInRadians;
+			this.turned = snapped - stands;
+		}
+
 		this.selection.redraw();
 	}
 
-	public finish(to: cool.SimplePoint): void {
-		this.move(to);
+	public finish(
+		to: cool.SimplePoint,
+		event?: { ctrlKey?: boolean; shiftKey?: boolean; altKey?: boolean },
+	): void {
+		this.move(to, event);
 
 		// The canvas counts an angle with the clock, the engine against it.
 		TurningInteraction.turnObjects(
