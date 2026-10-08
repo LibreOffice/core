@@ -9,6 +9,7 @@
   --settings-text-maxcontrast: var(--color-border-lighter);
   --settings-background: var(--color-main-background);
   --settings-background-hover: var(--color-background-dark);
+  --settings-input-background: var(--color-background-dark);
   --settings-font-face:
     system-ui, -apple-system, 'Noto Sans', 'Segoe UI', Roboto, Oxygen-Sans,
     Cantarell, Ubuntu, 'Helvetica Neue', 'Liberation Sans', Arial, sans-serif;
@@ -314,7 +315,7 @@ ul {
   border: 1px solid var(--settings-border);
   border-radius: 4px;
   color: var(--settings-text);
-  background-color: var(--settings-background);
+  background-color: var(--settings-input-background);
 }
 
 .view-input-container {
@@ -434,7 +435,7 @@ ul {
 	border: 1px solid var(--settings-border);
 	border-radius: 4px;
 	color: var(--settings-text);
-	background-color: var(--settings-background);
+	background-color: var(--settings-input-background);
 	transition: border-color 0.2s ease;
 }
 
@@ -595,7 +596,7 @@ ul {
   font-size: var(--default-font-size);
   border: 1px solid var(--settings-border);
   border-radius: 4px;
-  background-color: var(--settings-background);
+  background-color: var(--settings-input-background);
   color: var(--settings-text);
 }
 
@@ -690,6 +691,7 @@ ul {
 #ai-reset-button {
   flex: 0 0 auto;
   color: var(--color-primary-text);
+  background-color: var(--settings-btn-primary);
 }
 
 #ai-reset-button .material-design-icon {
@@ -1052,7 +1054,7 @@ ul {
 	border: 1px solid var(--settings-border);
 	padding: calc(var(--default-grid-baseline) * 2) calc(var(--default-grid-baseline) * 3);
 	border-radius: var(--border-radius-element);
-	background-color: var(--settings-background);
+	background-color: var(--settings-input-background);
 	color: var(--settings-text);
 	transition: border-color calc(var(--animation-quick) * 2) ease;
 	box-sizing: border-box;
