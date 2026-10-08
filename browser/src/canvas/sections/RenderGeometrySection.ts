@@ -656,7 +656,6 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const viewedRectangle = app.activeDocument.activeLayout.viewedRectangle;
 		const xDiff = -viewedRectangle.pX1;
 		const yDiff = -viewedRectangle.pY1;
-		const scale = app.twipsToPixels;
 
 		this.outlineHitUnderMouse(data, xDiff, yDiff);
 
@@ -677,9 +676,47 @@ class RenderGeometrySection extends CanvasSectionObject {
 		// background of what the pointer is being told about.
 		this.context.globalAlpha = 0.2;
 
+		this.strokeFramesOf(data, xDiff, yDiff, false);
+
+		/*
+			The objects of the master page the slide draws under itself get their frames too,
+			dashed, so they are told apart from the slide's own. They are not hit, so the name
+			under the pointer stays the slide's. The master's page entry is the slide's page.
+		*/
+		const master =
+			data.masterPartId !== undefined
+				? RenderManager.requestPartById(
+						data.masterPartId,
+						cool.VectorMode.MasterPages,
+					)
+				: undefined;
+		if (master) {
+			this.context.setLineDash([4, 3]);
+			this.strokeFramesOf(master, xDiff, yDiff, true);
+			this.context.setLineDash([]);
+		}
+
+		this.nameHitUnderMouse(data, xDiff, yDiff);
+
+		this.context.restore();
+	}
+
+	/*
+		Strokes, for every object of that part, the box it paints into and the rectangle of its
+		own mapping, each in the object's own colour. The page entry is left out where asked.
+	*/
+	private strokeFramesOf(
+		data: cool.VectorPrimitivesData,
+		xDiff: number,
+		yDiff: number,
+		leaveOutThePage: boolean,
+	): void {
+		const scale = app.twipsToPixels;
+
 		for (const id of data.order) {
 			const object = data.objects.get(id);
 			if (!object) continue;
+			if (leaveOutThePage && object.kind === 'page') continue;
 
 			this.context.strokeStyle = RenderGeometrySection.colorOfObject(id);
 
@@ -702,10 +739,6 @@ class RenderGeometrySection extends CanvasSectionObject {
 			if (object.transform)
 				this.strokeUnitRectangle(object.transform, xDiff, yDiff);
 		}
-
-		this.nameHitUnderMouse(data, xDiff, yDiff);
-
-		this.context.restore();
 	}
 
 	/*
