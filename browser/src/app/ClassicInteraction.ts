@@ -46,7 +46,51 @@ abstract class ClassicContext implements InteractionContext {
 		if (objectId === undefined && !GraphicSelection.selectedObjectIDs.length)
 			return false;
 
-		GraphicSelection.selectObjects(this.selectionForPress(objectId, extending));
+		GraphicSelection.selectObjects(
+			this.orTheGroup(this.selectionForPress(objectId, extending)),
+		);
+		return true;
+	}
+
+	/*
+		The selection to take for that one: as it is where it holds something, and where it holds
+		nothing the group one stands in, since standing in a group with nothing selected is no
+		place to be. Leaving a group selects it. On the page nothing is selected then.
+	*/
+	protected orTheGroup(selection: number[]): number[] {
+		if (selection.length || this.groupStoodIn === undefined) return selection;
+		return [this.groupStoodIn];
+	}
+
+	/*
+		A double press on a group that is no diagram enters it: the member hit is selected, which
+		puts one in the group's context. Anything else - an object with text, a chart, a diagram,
+		empty space - is the engine's, which starts a text edit or activates the object.
+	*/
+	public doublePress(hit: number | undefined): boolean {
+		if (hit === undefined) return false;
+
+		const objectId = RenderGeometrySection.outermostOf(hit, this.groupStoodIn);
+		if (objectId === hit) return false;
+		if (RenderGeometrySection.objectOf(objectId)?.isDiagram) return false;
+
+		GraphicSelection.selectObjects([
+			RenderGeometrySection.outermostOf(hit, objectId),
+		]);
+		GraphicSelection.updateSelectionSection();
+		return true;
+	}
+
+	/*
+		Escape takes the selection away; in a group that selects the group, which leaves it, so
+		Escape pressed again and again goes up group by group to the page and to nothing selected.
+		With nothing selected it is left to the engine.
+	*/
+	public escape(): boolean {
+		if (!GraphicSelection.selectedObjectIDs.length) return false;
+
+		GraphicSelection.selectObjects(this.orTheGroup([]));
+		GraphicSelection.updateSelectionSection();
 		return true;
 	}
 

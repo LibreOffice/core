@@ -44,8 +44,14 @@ interface InteractionContext {
 	/// such a drag is not carried here.
 	takesHoldFor(hit: number, modifier: number): number | undefined;
 
+	/// A double press of the left button on that object, or on no object.
+	doublePress(hit: number | undefined): boolean;
+
 	/// An arrow key, pointing that way.
 	arrowKey(towards: cool.Point, event: KeyboardEvent): boolean;
+
+	/// Escape, once a drag, a text edit and the handle mode have had it and left it.
+	escape(): boolean;
 
 	/// The engine was asked to enter the group that is selected; selects what that leaves.
 	groupEntered(): void;

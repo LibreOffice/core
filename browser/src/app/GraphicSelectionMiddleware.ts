@@ -363,6 +363,8 @@ class GraphicSelection {
 
 			if (!RenderManager.isVectorRendering()) return false;
 
+			if (event.key === 'Escape') return Interaction.context().escape();
+
 			const way = GraphicSelection.theWayOf[event.key];
 			if (!way) return false;
 

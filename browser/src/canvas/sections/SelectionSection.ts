@@ -1932,6 +1932,22 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 		this.forgetThePendingClick();
 
+		/*
+			A click with Shift or Ctrl adds an object to the selection or takes one away, and that
+			is the context's: taking away the last one in a group selects the group, for one. A
+			plain click goes on to the engine, which places the text cursor and the like.
+		*/
+		if (
+			(modifier === app.UNOModifier.SHIFT ||
+				modifier === app.UNOModifier.CTRL) &&
+			RenderGeometrySection.answersPointer() &&
+			Interaction.context().press(
+				RenderGeometrySection.objectIdAt(at.x, at.y),
+				modifier,
+			)
+		)
+			return;
+
 		this.pendingClick = app.timerRegistry.setTimeout(
 			'selectionClick',
 			() => {
@@ -1957,11 +1973,24 @@ abstract class SelectionSection extends CanvasSectionObject {
 		);
 	}
 
-	/// A press of two, which starts the text edit of the object underneath.
+	/*
+		A press of two. The context takes it where it means something it does itself, entering a
+		group; otherwise it goes to the engine, which starts the text edit of the object underneath.
+	*/
 	onDoubleClick(point: cool.SimplePoint, e: MouseEvent): void {
 		const at = this.inTheDocument(point);
 
 		this.forgetThePendingClick();
+
+		if (
+			Interaction.context().doublePress(
+				RenderGeometrySection.objectIdAt(at.x, at.y),
+			)
+		) {
+			this.stopPropagating();
+			e.stopPropagation();
+			return;
+		}
 
 		app.map._docLayer._postMouseEvent('buttondown', at.x, at.y, 2, 1, 0);
 		app.map._docLayer._postMouseEvent('buttonup', at.x, at.y, 2, 1, 0);

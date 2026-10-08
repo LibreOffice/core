@@ -709,6 +709,26 @@ class MouseControl extends CanvasSectionObject {
 		return Interaction.context().press(hit, modifier);
 	}
 
+	/*
+		Whether the context takes a double press itself, on the same terms as a single press is
+		taken from the geometry the client holds.
+	*/
+	private doublePressTaken(clickInfo: {
+		sendingPosition: cool.SimplePoint;
+		buttons: number;
+		modifier: number;
+	}): boolean {
+		if (clickInfo.buttons !== app.LOButtons.left || clickInfo.modifier !== 0)
+			return false;
+		if (!RenderGeometrySection.answersPointer()) return false;
+		if (app.file.textCursor.visible) return false;
+
+		const at = clickInfo.sendingPosition;
+		return Interaction.context().doublePress(
+			RenderGeometrySection.objectIdAt(at.x, at.y),
+		);
+	}
+
 	onClick(point: cool.SimplePoint, e: MouseEvent): void {
 		app.map.fire('closepopups');
 		app.map.fire('editorgotfocus');
@@ -819,7 +839,8 @@ class MouseControl extends CanvasSectionObject {
 				this.sendClick(clickInfo, 2);
 				this.sendClick(clickInfo, 3);
 			} else if (this.clickCount > 1) {
-				this.sendClick(clickInfo, this.clickCount);
+				if (this.clickCount !== 2 || !this.doublePressTaken(clickInfo))
+					this.sendClick(clickInfo, this.clickCount);
 			}
 		}
 
