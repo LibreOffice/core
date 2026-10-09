@@ -6629,15 +6629,15 @@ void COKitDocumentImpl::selectObjects(const char* pObjectIds)
         bSubSelectionChanged = pDiagram->getDiagramSubSelection() != pBefore;
     }
 
-    // The objects asked for are the ones already marked, so the selection stands as it is and
-    // nothing is reported - unless only the object the diagram works on changed, which the
-    // handles and the report have to show.
-    if (aMarked == aWanted)
-    {
-        if (bSubSelectionChanged)
-            pView->AdjustMarkHdl();
+    /*
+        The objects asked for are the ones already marked, so the selection stands as it is and
+        nothing is reported - unless only the object the diagram works on changed. Then the
+        diagram is marked afresh below, as the office does after a press changed its
+        sub-selection: the mark is taken off without a word and put on again, so the view stands
+        as after any new selection and the one report shows the object.
+    */
+    if (aMarked == aWanted && !bSubSelectionChanged)
         return;
-    }
 
     if (aWanted.empty())
     {
