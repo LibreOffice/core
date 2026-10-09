@@ -64,6 +64,25 @@
     function fetchText(url) {
         return window.cool._postCall({ msgId: 'Extension_GasReadFile', url: String(url) });
     }
+    // A script that the DOMParser made does not run when moved into this document, so a fresh copy
+    // of it goes where place puts it:
+    async function insertScript(el, place) {
+        const s = document.createElement('script');
+        for (const a of Array.from(el.attributes)) {
+            s.setAttribute(a.name, a.value);
+        }
+        if (s.src) {
+            s.async = false;
+            await new Promise(function(resolve) {
+                s.onload = resolve;
+                s.onerror = function() { resolve(); };
+                place(s);
+            });
+        } else {
+            s.text = el.textContent;
+            place(s);
+        }
+    }
     // Serialise script insertion so a later inline script that depends on an external one above it
     // (typical jQuery pattern) sees the library rather than racing against its async load:
     async function injectNodes(sourceParent, target) {
@@ -73,23 +92,16 @@
                 continue;
             }
             if (el.nodeType === 1 && el.tagName === 'SCRIPT') {
-                const s = document.createElement('script');
-                for (const a of Array.from(el.attributes)) {
-                    s.setAttribute(a.name, a.value);
-                }
-                if (s.src) {
-                    s.async = false;
-                    await new Promise(function(resolve) {
-                        s.onload = resolve;
-                        s.onerror = function() { resolve(); };
-                        target.appendChild(s);
-                    });
-                } else {
-                    s.text = el.textContent;
-                    target.appendChild(s);
-                }
+                await insertScript(el, function(s) { target.appendChild(s); });
             } else {
                 target.appendChild(el);
+                // Scripts also stand inside other elements, as in a page whose div lacks its end
+                // tag, and they run where they stand, in document order:
+                if (el.nodeType === 1) {
+                    for (const nested of Array.from(el.querySelectorAll('script'))) {
+                        await insertScript(nested, function(s) { nested.replaceWith(s); });
+                    }
+                }
             }
         }
     }
