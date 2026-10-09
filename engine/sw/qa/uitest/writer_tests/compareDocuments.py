@@ -54,7 +54,7 @@ class compareDocuments(UITestCase):
                 changesList = xTrackDlg.getChild("writerchanges")
 
                 # Check the number of changes
-                self.assertEqual(263, len(changesList.getChildren()))
+                self.assertEqual(267, len(changesList.getChildren()))
 
                 # Without the fix in place, this test would have crashed here
                 xAccBtn = xTrackDlg.getChild("acceptall")

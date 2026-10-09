@@ -40,11 +40,13 @@
 #include <fmtcntnt.hxx>
 #include <modcfg.hxx>
 #include <frameformats.hxx>
+#include <swtable.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
+#include <algorithm>
 #include <cstddef>
 #include <memory>
 #include <type_traits>
@@ -72,8 +74,11 @@ public:
     static bool CompareTextNd( const SwTextNode& rDstNd,
                               const SwTextNode& rSrcNd );
 
+    // bEvenIfDissimilar: show the changes inside the paragraph even when the two paragraphs have
+    // little text in common.
     bool ChangesInLine( const SwCompareLine& rLine,
-                            std::unique_ptr<SwPaM>& rpInsRing, std::unique_ptr<SwPaM>& rpDelRing ) const;
+                            std::unique_ptr<SwPaM>& rpInsRing, std::unique_ptr<SwPaM>& rpDelRing,
+                            bool bEvenIfDissimilar = false ) const;
 
     const SwNode& GetNode() const { return *m_pNode; }
 
@@ -100,8 +105,15 @@ private:
     vector<SwCompareLine> m_aLines;
     bool m_bRecordDiff;
 
+    // Comparisons of the cells of tables that have the same shape, each holding the changes found
+    // inside one cell.
+    vector<std::unique_ptr<CompareData>> m_aCellComparisons;
+
     // Truncate beginning and end and add all others to the LinesArray
     void CheckRanges( CompareData& );
+
+    // Whether nLine is the last line and nothing follows it before the end of the section.
+    bool IsLastLineOfSection( sal_uLong nLine );
 
     virtual const SwNode& GetEndOfContent() = 0;
 
@@ -129,6 +141,10 @@ public:
     void CheckForChangesInLine( const CompareData& rData,
                                     sal_uLong nStt, sal_uLong nEnd,
                                     sal_uLong nThisStt, sal_uLong nThisEnd );
+    // Compares two tables cell by cell. Returns false if the tables have different shapes, or if a
+    // cell of either table ends with a nested table.
+    bool CompareTableCells( const CompareData& rData, const SwTableNode& rDstTable,
+                            const SwTableNode& rSrcTable );
 
     // Set non-ambiguous index for a line. Same lines have the same index, even in the other CompareData!
     void SetIndex( size_t nLine, size_t nIndex );
@@ -150,6 +166,14 @@ public:
         { m_aLines.push_back( aLine ); }
 
     void SetRedlinesToDoc( bool bUseDocInfo );
+
+private:
+    // Moves the end of a range off the end node of the section.
+    void KeepRangeInSection( SwPaM& rPaM );
+    // Adjusts the ranges of this comparison and of its cells before they become redlines.
+    void PrepareRedlineRanges();
+    // Adds the ranges of this comparison and of its cells.
+    void CollectRedlineRanges( vector<SwPaM*>& rDeletes, vector<SwPaM*>& rInserts );
 };
 
 class CompareMainText : public CompareData
@@ -166,19 +190,21 @@ public:
     }
 };
 
-class CompareFrameFormatText : public CompareData
+// Compares the content between a start node and its end node, for example a text frame or a
+// table cell.
+class CompareSectionText : public CompareData
 {
-    const SwNodeIndex &m_rIndex;
+    const SwNode& m_rStartNode;
 public:
-    CompareFrameFormatText(SwDoc &rD, const SwNodeIndex &rIndex)
+    CompareSectionText(SwDoc &rD, const SwNode& rStartNode)
         : CompareData(rD, true/*bRecordDiff*/)
-        , m_rIndex(rIndex)
+        , m_rStartNode(rStartNode)
     {
     }
 
     virtual const SwNode& GetEndOfContent() override
     {
-        return *m_rIndex.GetNode().EndOfSectionNode();
+        return *m_rStartNode.EndOfSectionNode();
     }
 };
 
@@ -1096,6 +1122,57 @@ namespace
         }
         return sRet.makeStringAndClear();
     }
+
+    // The start nodes of the cells of a table in document order. The cells of nested tables are
+    // inside these cells, so they are not in the list.
+    std::vector<const SwNode*> GetCellStartNodes(const SwTableNode& rTableNode)
+    {
+        std::vector<const SwNode*> aCells;
+        const SwNode* pEndNode = rTableNode.EndOfSectionNode();
+        SwNodeIndex aIdx(rTableNode, 1);
+        while (&aIdx.GetNode() != pEndNode)
+        {
+            aCells.push_back(&aIdx.GetNode());
+            aIdx.Assign(*aIdx.GetNode().EndOfSectionNode(), 1);
+        }
+        return aCells;
+    }
+
+    // Whether the content of the cell that starts at rCellStart ends with a nested table.
+    bool CellEndsWithTable(const SwNode& rCellStart)
+    {
+        const SwNode& rLast = *rCellStart.GetNodes()[rCellStart.EndOfSectionIndex() - 1];
+        return rLast.IsEndNode() && rLast.StartOfSectionNode()->IsTableNode();
+    }
+
+    // Same number of rows, the same number of cells in each row, and each pair of cells is split
+    // into the same rows and spans the same number of rows, down to the cells with content.
+    bool HasSameLinesShape(const SwTableLines& rLines1, const SwTableLines& rLines2)
+    {
+        if (rLines1.size() != rLines2.size())
+            return false;
+        for (size_t i = 0; i < rLines1.size(); ++i)
+        {
+            const SwTableBoxes& rBoxes1 = rLines1[i]->GetTabBoxes();
+            const SwTableBoxes& rBoxes2 = rLines2[i]->GetTabBoxes();
+            if (rBoxes1.size() != rBoxes2.size())
+                return false;
+            for (size_t j = 0; j < rBoxes1.size(); ++j)
+            {
+                if (rBoxes1[j]->getRowSpan() != rBoxes2[j]->getRowSpan()
+                    || !HasSameLinesShape(rBoxes1[j]->GetTabLines(), rBoxes2[j]->GetTabLines()))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    // The cells with content of two tables of the same shape pair up in document order.
+    bool HasSameTableShape(const SwTableNode& rTableNode1, const SwTableNode& rTableNode2)
+    {
+        return HasSameLinesShape(rTableNode1.GetTable().GetTabLines(),
+                                 rTableNode2.GetTable().GetTabLines());
+    }
 }
 
 bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
@@ -1273,7 +1350,8 @@ bool SwCompareLine::CompareTextNd( const SwTextNode& rDstNd,
 }
 
 bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
-                            std::unique_ptr<SwPaM>& rpInsRing, std::unique_ptr<SwPaM>& rpDelRing ) const
+                            std::unique_ptr<SwPaM>& rpInsRing, std::unique_ptr<SwPaM>& rpDelRing,
+                            bool bEvenIfDissimilar ) const
 {
     bool bRet = false;
 
@@ -1349,7 +1427,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
         }
 
         // Don't compare if there aren't enough similarities
-        if ( nAvgLen >= 8 && nSqSum*32 < nAvgLen*nAvgLen )
+        if ( !bEvenIfDissimilar && nAvgLen >= 8 && nSqSum*32 < nAvgLen*nAvgLen )
         {
             return false;
         }
@@ -1518,17 +1596,16 @@ void CompareData::ShowDelete(
         rData.GetLine( nStt ).GetNode(), SwNodeOffset(0),
         rData.GetLine( nEnd-1 ).GetEndNode(), SwNodeOffset(1) );
 
+    // The deleted lines go in front of line nInsPos, or after the last line when nInsPos is past
+    // the end.
     SwNodeOffset nOffset(0);
     std::optional<SwCompareLine> xLine;
-    if( nInsPos >= 1 )
+    if( nInsPos < GetLineCount() )
+        xLine = GetLine( nInsPos );
+    else if( nInsPos >= 1 )
     {
-        if( GetLineCount() == nInsPos )
-        {
-            xLine = GetLine( nInsPos-1 );
-            nOffset = SwNodeOffset(1);
-        }
-        else
-            xLine = GetLine( nInsPos );
+        xLine = GetLine( nInsPos-1 );
+        nOffset = SwNodeOffset(1);
     }
 
     const SwNode* pLineNd;
@@ -1572,6 +1649,12 @@ void CompareData::ShowDelete(
     }
 }
 
+bool CompareData::IsLastLineOfSection( sal_uLong nLine )
+{
+    return nLine + 1 == GetLineCount()
+           && GetLine( nLine ).GetEndNode().GetIndex() + 1 == GetEndOfContent().GetIndex();
+}
+
 void CompareData::CheckForChangesInLine( const CompareData& rData,
                                     sal_uLong nStt, sal_uLong nEnd,
                                     sal_uLong nThisStt, sal_uLong nThisEnd )
@@ -1603,7 +1686,14 @@ void CompareData::CheckForChangesInLine( const CompareData& rData,
 
             // Show differences in detail for lines that
             // were matched as only slightly different
-            if( !aDstLn.ChangesInLine( aSrcLn, m_pInsertRing, m_pDelRing ) )
+            const SwTableNode* pDstTable = aDstLn.GetNode().GetTableNode();
+            const SwTableNode* pSrcTable = aSrcLn.GetNode().GetTableNode();
+            bool bShownInDetail
+                = pDstTable && pSrcTable
+                      ? CompareTableCells(rData, *pDstTable, *pSrcTable)
+                      : aDstLn.ChangesInLine(aSrcLn, m_pInsertRing, m_pDelRing,
+                                             IsLastLineOfSection(nThisStt + nDstFrom - 1));
+            if( !bShownInDetail )
             {
                 ShowInsert( nThisStt + nDstFrom - 1, nThisStt + nDstFrom );
                 ShowDelete( rData, nStt + nSrcFrom - 1, nStt + nSrcFrom,
@@ -1611,93 +1701,111 @@ void CompareData::CheckForChangesInLine( const CompareData& rData,
             }
         }
 
-        // Lines missing from source are inserted
-        if( nDstFrom != nDstTo )
+        // The deleted lines are copied after the inserted lines. At the end of a section no
+        // paragraph follows them, so the last inserted paragraph and the first deleted one are
+        // shown as changes inside one paragraph. Then accepting and rejecting both leave a single
+        // paragraph there.
+        int nJoinedLines = 0;
+        if (nDstFrom != nDstTo && nSrcFrom != nSrcTo
+            && IsLastLineOfSection(nThisStt + nDstTo - 1)
+            && GetLine(nThisStt + nDstTo - 1).GetNode().IsTextNode()
+            && rData.GetLine(nStt + nSrcFrom).GetNode().IsTextNode())
         {
-            ShowInsert( nThisStt + nDstFrom, nThisStt + nDstTo );
+            nJoinedLines = 1;
+        }
+
+        // Lines missing from source are inserted
+        if( nDstFrom != nDstTo - nJoinedLines )
+        {
+            ShowInsert( nThisStt + nDstFrom, nThisStt + nDstTo - nJoinedLines );
+        }
+
+        if (nJoinedLines)
+        {
+            GetLine(nThisStt + nDstTo - 1)
+                .ChangesInLine(rData.GetLine(nStt + nSrcFrom), m_pInsertRing, m_pDelRing,
+                               /*bEvenIfDissimilar=*/true);
         }
 
         // Lines missing from destination are deleted
-        if( nSrcFrom != nSrcTo )
+        if( nSrcFrom + nJoinedLines != nSrcTo )
         {
-            ShowDelete( rData, nStt + nSrcFrom, nStt + nSrcTo, nThisStt + nDstTo );
+            ShowDelete( rData, nStt + nSrcFrom + nJoinedLines, nStt + nSrcTo, nThisStt + nDstTo );
         }
     }
 }
 
-void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
+bool CompareData::CompareTableCells( const CompareData& rData, const SwTableNode& rDstTable,
+                                     const SwTableNode& rSrcTable )
 {
-    SwPaM* pTmp = m_pDelRing.get();
+    if (!HasSameTableShape(rDstTable, rSrcTable))
+        return false;
 
-    // get the Author / TimeStamp from the "other" document info
-    std::size_t nAuthor = m_rDoc.getIDocumentRedlineAccess().GetRedlineAuthor();
-    DateTime aTimeStamp( DateTime::SYSTEM );
-    SwDocShell *pDocShell(m_rDoc.GetDocShell());
-    OSL_ENSURE(pDocShell, "no SwDocShell");
-    if (pDocShell) {
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-        uno::Reference<document::XDocumentProperties> xDocProps(
-            xDPS->getDocumentProperties());
-        OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
+    // Collect all cells first, because comparing a cell can add nodes to the destination table.
+    const std::vector<const SwNode*> aDstCells = GetCellStartNodes(rDstTable);
+    const std::vector<const SwNode*> aSrcCells = GetCellStartNodes(rSrcTable);
 
-        if( bUseDocInfo && xDocProps.is() ) {
-            OUString aTmp( 1 == xDocProps->getEditingCycles()
-                                ? xDocProps->getAuthor()
-                                : xDocProps->getModifiedBy() );
-            util::DateTime uDT( 1 == xDocProps->getEditingCycles()
-                                ? xDocProps->getCreationDate()
-                                : xDocProps->getModificationDate() );
+    // A tracked deletion ends in the paragraph that follows the deleted content. A cell that ends
+    // with a nested table has no such paragraph, so its table is compared as a whole.
+    if (std::any_of(aDstCells.begin(), aDstCells.end(),
+                    [](const SwNode* pCell) { return CellEndsWithTable(*pCell); })
+        || std::any_of(aSrcCells.begin(), aSrcCells.end(),
+                       [](const SwNode* pCell) { return CellEndsWithTable(*pCell); }))
+    {
+        return false;
+    }
+    for (size_t i = 0; i < aDstCells.size(); ++i)
+    {
+        CompareSectionText aSrcCell(rData.m_rDoc, *aSrcCells[i]);
+        auto pDstCell = std::make_unique<CompareSectionText>(m_rDoc, *aDstCells[i]);
+        pDstCell->CompareLines(aSrcCell);
+        if (pDstCell->ShowDiffs(aSrcCell))
+            m_aCellComparisons.push_back(std::move(pDstCell));
+    }
+    return true;
+}
 
-            if( !aTmp.isEmpty() )
+void CompareData::KeepRangeInSection( SwPaM& rPaM )
+{
+    // #i65201#: A range that ends at the start of a paragraph was made one node shorter when it
+    // was recorded, so it is expanded again here.
+    if( rPaM.GetPoint()->GetContentIndex() == 0 )
+    {
+        rPaM.GetPoint()->Adjust(SwNodeOffset(1));
+    }
+    // #i101009#
+    // prevent redlines that end on structural end node
+    if (& GetEndOfContent() ==
+        & rPaM.GetPoint()->GetNode())
+    {
+        rPaM.GetPoint()->Adjust(SwNodeOffset(-1));
+        SwContentNode *const pContentNode( rPaM.GetPointContentNode() );
+        if( pContentNode )
+            rPaM.GetPoint()->SetContent( pContentNode->Len() );
+        // tdf#106218 try to avoid losing a paragraph break here:
+        if (rPaM.GetMark()->GetContentIndex() == 0)
+        {
+            SwNodeIndex const prev(rPaM.GetMark()->GetNode(), -1);
+            if (prev.GetNode().IsTextNode())
             {
-                nAuthor = m_rDoc.getIDocumentRedlineAccess().InsertRedlineAuthor( aTmp );
-                aTimeStamp = DateTime(uDT);
+                rPaM.GetMark()->Assign(
+                    *prev.GetNode().GetTextNode(),
+                    prev.GetNode().GetTextNode()->Len());
             }
         }
     }
+}
 
+void CompareData::PrepareRedlineRanges()
+{
+    for (const auto& pCellComparison : m_aCellComparisons)
+        pCellComparison->PrepareRedlineRanges();
+
+    SwPaM* pTmp = m_pDelRing.get();
     if( pTmp )
     {
-        SwRedlineData aRedlnData( RedlineType::Delete, nAuthor, aTimeStamp, 0,
-                                    OUString(), nullptr );
         do {
-            // #i65201#: Expand again, see comment above.
-            if( pTmp->GetPoint()->GetContentIndex() == 0 )
-            {
-                pTmp->GetPoint()->Adjust(SwNodeOffset(1));
-            }
-            // #i101009#
-            // prevent redlines that end on structural end node
-            if (& GetEndOfContent() ==
-                & pTmp->GetPoint()->GetNode())
-            {
-                pTmp->GetPoint()->Adjust(SwNodeOffset(-1));
-                SwContentNode *const pContentNode( pTmp->GetPointContentNode() );
-                if( pContentNode )
-                    pTmp->GetPoint()->SetContent( pContentNode->Len() );
-                // tdf#106218 try to avoid losing a paragraph break here:
-                if (pTmp->GetMark()->GetContentIndex() == 0)
-                {
-                    SwNodeIndex const prev(pTmp->GetMark()->GetNode(), -1);
-                    if (prev.GetNode().IsTextNode())
-                    {
-                        pTmp->GetMark()->Assign(
-                            *prev.GetNode().GetTextNode(),
-                            prev.GetNode().GetTextNode()->Len());
-                    }
-                }
-            }
-
-            m_rDoc.getIDocumentRedlineAccess().DeleteRedline( *pTmp, false, RedlineType::Any );
-
-            if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
-            {
-                m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-                    std::make_unique<SwUndoCompDoc>( *pTmp, false ));
-            }
-            m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( aRedlnData, *pTmp ), true );
-
+            KeepRangeInSection( *pTmp );
         } while( m_pDelRing.get() != ( pTmp = pTmp->GetNext()) );
     }
 
@@ -1706,34 +1814,8 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
         return;
 
     do {
-        if( pTmp->GetPoint()->GetContentIndex() == 0 )
-        {
-            pTmp->GetPoint()->Adjust(SwNodeOffset(1));
-        }
-        // #i101009#
-        // prevent redlines that end on structural end node
-        if (& GetEndOfContent() ==
-            & pTmp->GetPoint()->GetNode())
-        {
-            pTmp->GetPoint()->Adjust(SwNodeOffset(-1));
-            SwContentNode *const pContentNode( pTmp->GetPointContentNode() );
-            if( pContentNode )
-                pTmp->GetPoint()->SetContent( pContentNode->Len() );
-            // tdf#106218 try to avoid losing a paragraph break here:
-            if (pTmp->GetMark()->GetContentIndex() == 0)
-            {
-                SwNodeIndex const prev(pTmp->GetMark()->GetNode(), -1);
-                if (prev.GetNode().IsTextNode())
-                {
-                    pTmp->GetMark()->Assign(
-                        *prev.GetNode().GetTextNode(),
-                        prev.GetNode().GetTextNode()->Len());
-                }
-            }
-        }
+        KeepRangeInSection( *pTmp );
     } while( m_pInsertRing.get() != ( pTmp = pTmp->GetNext()) );
-    SwRedlineData aRedlnData( RedlineType::Insert, nAuthor, aTimeStamp, 0,
-                                OUString(), nullptr );
 
     // combine consecutive
     if( pTmp->GetNext() != m_pInsertRing.get() )
@@ -1767,18 +1849,94 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 pTmp = pTmp->GetNext();
         } while( m_pInsertRing.get() != pTmp );
     }
+}
 
-    do {
-        // coverity[deref_arg] - pTmp is valid here
+void CompareData::CollectRedlineRanges( vector<SwPaM*>& rDeletes, vector<SwPaM*>& rInserts )
+{
+    for (auto& [pRing, rRanges] : { std::pair(m_pDelRing.get(), &rDeletes),
+                                     std::pair(m_pInsertRing.get(), &rInserts) })
+    {
+        SwPaM* pTmp = pRing;
+        if (!pTmp)
+            continue;
+        do {
+            rRanges->push_back(pTmp);
+        } while (pRing != (pTmp = pTmp->GetNext()));
+    }
+
+    for (const auto& pCellComparison : m_aCellComparisons)
+        pCellComparison->CollectRedlineRanges(rDeletes, rInserts);
+}
+
+void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
+{
+    // get the Author / TimeStamp from the "other" document info
+    std::size_t nAuthor = m_rDoc.getIDocumentRedlineAccess().GetRedlineAuthor();
+    DateTime aTimeStamp( DateTime::SYSTEM );
+    SwDocShell *pDocShell(m_rDoc.GetDocShell());
+    OSL_ENSURE(pDocShell, "no SwDocShell");
+    if (pDocShell) {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<document::XDocumentProperties> xDocProps(
+            xDPS->getDocumentProperties());
+        OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
+
+        if( bUseDocInfo && xDocProps.is() ) {
+            OUString aTmp( 1 == xDocProps->getEditingCycles()
+                                ? xDocProps->getAuthor()
+                                : xDocProps->getModifiedBy() );
+            util::DateTime uDT( 1 == xDocProps->getEditingCycles()
+                                ? xDocProps->getCreationDate()
+                                : xDocProps->getModificationDate() );
+
+            if( !aTmp.isEmpty() )
+            {
+                nAuthor = m_rDoc.getIDocumentRedlineAccess().InsertRedlineAuthor( aTmp );
+                aTimeStamp = DateTime(uDT);
+            }
+        }
+    }
+
+    PrepareRedlineRanges();
+
+    // The undo actions hold node positions. The ranges of the cells are applied in document order
+    // together with the others, so undo, which goes in reverse order, finds each position as it
+    // was recorded.
+    vector<SwPaM*> aDeletes, aInserts;
+    CollectRedlineRanges(aDeletes, aInserts);
+    auto aByStart = [](const SwPaM* pA, const SwPaM* pB) { return *pA->Start() < *pB->Start(); };
+    std::stable_sort(aDeletes.begin(), aDeletes.end(), aByStart);
+    std::stable_sort(aInserts.begin(), aInserts.end(), aByStart);
+
+    SwRedlineData aDeleteData( RedlineType::Delete, nAuthor, aTimeStamp, 0,
+                               OUString(), nullptr );
+    for (SwPaM* pTmp : aDeletes)
+    {
+        m_rDoc.getIDocumentRedlineAccess().DeleteRedline( *pTmp, false, RedlineType::Any );
+
+        if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
+        {
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(
+                std::make_unique<SwUndoCompDoc>( *pTmp, false ));
+        }
+        m_rDoc.getIDocumentRedlineAccess().AppendRedline(
+            new SwRangeRedline( aDeleteData, *pTmp ), true );
+    }
+
+    SwRedlineData aInsertData( RedlineType::Insert, nAuthor, aTimeStamp, 0,
+                               OUString(), nullptr );
+    for (SwPaM* pTmp : aInserts)
+    {
         if (IDocumentRedlineAccess::AppendResult::APPENDED ==
                 m_rDoc.getIDocumentRedlineAccess().AppendRedline(
-                    new SwRangeRedline(aRedlnData, *pTmp), true) &&
+                    new SwRangeRedline(aInsertData, *pTmp), true) &&
             m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
             m_rDoc.GetIDocumentUndoRedo().AppendUndo(
                 std::make_unique<SwUndoCompDoc>( *pTmp, true ));
         }
-    } while( m_pInsertRing.get() != ( pTmp = pTmp->GetNext()) );
+    }
 }
 
 typedef std::shared_ptr<CompareData> CompareDataPtr;
@@ -1820,8 +1978,9 @@ namespace
                 {
                     continue; // tdf#125660 don't redline GrfNode/OLENode
                 }
-                aComparisons.emplace_back(std::make_shared<CompareFrameFormatText>(rSrcDoc, *pSrcIdx),
-                                          std::make_shared<CompareFrameFormatText>(rDestDoc, *pDestIdx));
+                aComparisons.emplace_back(
+                    std::make_shared<CompareSectionText>(rSrcDoc, pSrcIdx->GetNode()),
+                    std::make_shared<CompareSectionText>(rDestDoc, pDestIdx->GetNode()));
             }
         }
         return aComparisons;
@@ -2163,8 +2322,14 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
         return false;
     }
 
-    const SwTextNode *pTextNd1 = m_rData1.GetLine( m_nFirst1 + nIdx1 ).GetNode().GetTextNode();
-    const SwTextNode *pTextNd2 = m_rData2.GetLine( m_nFirst2 + nIdx2 ).GetNode().GetTextNode();
+    const SwNode& rNode1 = m_rData1.GetLine( m_nFirst1 + nIdx1 ).GetNode();
+    const SwNode& rNode2 = m_rData2.GetLine( m_nFirst2 + nIdx2 ).GetNode();
+    // Tables of the same shape count as similar, so their cells can be compared one by one.
+    if (rNode1.IsTableNode() && rNode2.IsTableNode())
+        return HasSameTableShape(*rNode1.GetTableNode(), *rNode2.GetTableNode());
+
+    const SwTextNode *pTextNd1 = rNode1.GetTextNode();
+    const SwTextNode *pTextNd2 = rNode2.GetTextNode();
 
     if( !pTextNd1 || !pTextNd2
         || ( CmpOptions.bUseRsid && !pTextNd1->CompareParRsid( *pTextNd2 ) ) )

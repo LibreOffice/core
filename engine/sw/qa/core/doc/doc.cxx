@@ -15,6 +15,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -1799,6 +1800,217 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBrushGraphicLinkProtocols)
                               OUString(), GPOS_TILED, RES_BACKGROUND);
     CPPUNIT_ASSERT(aExpandBrush.QueryValue(aValue, MID_GRAPHIC));
     CPPUNIT_ASSERT(!aValue.get<uno::Reference<graphic::XGraphic>>().is());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableCellChange)
+{
+    // Given a document with a 2x2 table where one cell gained text compared to the old version:
+    createSwDoc("compare-table-new.fodt");
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr, createFileURL(u"compare-table-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then only the added text in that cell is tracked:
+    SwDoc* pDoc = getSwDoc();
+    const SwRedlineTable& rRedlines = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the whole old table was tracked as deleted and the whole new table as inserted.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    const SwRangeRedline* pRedline = rRedlines[0];
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, pRedline->GetType());
+    CPPUNIT_ASSERT(pRedline->Start()->GetNode().FindTableNode());
+    CPPUNIT_ASSERT_EQUAL(u", edited"_ustr, pRedline->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableRowAdded)
+{
+    // Given a document whose table has one more row than in the old version:
+    createSwDoc("compare-table-new-row.fodt");
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr, createFileURL(u"compare-table-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then tables of a different shape are still tracked as a whole-table delete and insert:
+    SwDoc* pDoc = getSwDoc();
+    const SwRedlineTable& rRedlines = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rRedlines.size());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableCellReplacedText)
+{
+    // Given a document where the only paragraph of a cell has unrelated text compared to the old
+    // version:
+    auto aCompareWithOld = [this]() {
+        createSwDoc("compare-table-replaced-new.fodt");
+        cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+            comphelper::makePropertyValue(u"URL"_ustr,
+                                          createFileURL(u"compare-table-replaced-old.fodt")),
+            comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+        };
+        dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+    };
+    auto aGetCellText = [this](const OUString& rCellName) {
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(
+            xTablesSupplier->getTextTables()->getByName(u"Table1"_ustr), uno::UNO_QUERY);
+        uno::Reference<text::XText> xCell(xTable->getCellByName(rCellName), uno::UNO_QUERY);
+        return xCell->getString();
+    };
+
+    // When comparing with the old version:
+    aCompareWithOld();
+
+    // Then the old and the new text are tracked inside the cell's one paragraph:
+    // Without the fix in place, this test would have failed with:
+    // - Expected: Cmdx+T
+    // - Actual  : Cmd+T
+    // i.e. the whole old table was tracked as deleted and the whole new table as inserted.
+    CPPUNIT_ASSERT_EQUAL(u"Cmdx+T"_ustr, aGetCellText(u"B1"_ustr));
+
+    // And rejecting all changes gives the old text:
+    getSwDoc()->getIDocumentRedlineAccess().AcceptAllRedline(/*bAcceptReject=*/false);
+    CPPUNIT_ASSERT_EQUAL(u"x+T"_ustr, aGetCellText(u"B1"_ustr));
+
+    // And accepting all changes instead gives the new text:
+    aCompareWithOld();
+    getSwDoc()->getIDocumentRedlineAccess().AcceptAllRedline(/*bAcceptReject=*/true);
+    CPPUNIT_ASSERT_EQUAL(u"Cmd+T"_ustr, aGetCellText(u"B1"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableCellFirstParagraphDeleted)
+{
+    // Given a document where the first of two paragraphs in a cell was deleted compared to the old
+    // version:
+    createSwDoc("compare-table-paragraph-deleted-new.fodt");
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr,
+                                      createFileURL(u"compare-table-paragraph-deleted-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then the deleted paragraph is shown where it was, before the kept one:
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(
+        xTablesSupplier->getTextTables()->getByName(u"Table1"_ustr), uno::UNO_QUERY);
+    uno::Reference<text::XText> xCell(xTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
+    // Without the fix in place, this test would have failed with:
+    // - Expected: First paragraph of the cell\nSecond paragraph of the cell
+    // - Actual  : Second paragraph of the cell
+    // i.e. the whole old table was tracked as deleted and the whole new table as inserted.
+    CPPUNIT_ASSERT_EQUAL(u"First paragraph of the cell\nSecond paragraph of the cell"_ustr,
+                         xCell->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableCellUndo)
+{
+    // Given a document where a paragraph before a table was removed and a cell was edited compared
+    // to the old version:
+    createSwDoc("compare-table-undo-new.fodt");
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr, createFileURL(u"compare-table-undo-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
+
+    // When undoing the compare:
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // Then the document is as before the compare:
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(
+        xTablesSupplier->getTextTables()->getByName(u"Table1"_ustr), uno::UNO_QUERY);
+    uno::Reference<text::XText> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Text in the cell, edited"_ustr, xCell->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareRemovedTableUndo)
+{
+    // Given a document where a table between two paragraphs was removed compared to the old
+    // version:
+    createSwDoc("compare-table-removed-new.fodt");
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr, createFileURL(u"compare-table-removed-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // When undoing the compare:
+    // Without the fix in place, this test would have failed here, because the undo aborted on an
+    // assertion in BigPtrArray::operator[].
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // Then the document is as before the compare, with no table and no tracked changes:
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0),
+                         getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable().size());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableNestedTableAtCellEndUndo)
+{
+    // Given a document where a nested table at the end of a cell was removed compared to the old
+    // version:
+    createSwDoc("compare-table-nested-at-cell-end-new.fodt");
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr,
+                                      createFileURL(u"compare-table-nested-at-cell-end-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // When undoing the compare:
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // Then the document is as before the compare, with one table and no tracked changes:
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0),
+                         getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable().size());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableSplitCellMoved)
+{
+    // Given a document with a 2x2 table where the first cell is split in two rows, while the old
+    // version has the second cell split instead:
+    createSwDoc("compare-table-split-cell-new.fodt");
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(
+        xTablesSupplier->getTextTables()->getByName(u"Table1"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xTable->getCellNames().getLength());
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr,
+                                      createFileURL(u"compare-table-split-cell-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then the cells are not paired, and the change is tracked as a whole-table delete and insert:
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rRedlines.size());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
