@@ -93,6 +93,7 @@ private:
     void ImplViewSignatures(const cpo::uno::Reference<css::embed::XStorage>& rxStorage,
                             const cpo::uno::Reference<css::io::XInputStream>& xSignStream,
                             DocumentSignatureMode eMode, bool bReadOnly);
+    void ImplManageMacroSecurity(const OUString& rStartPage);
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence<css::security::DocumentSignatureInformation>
     ImplVerifySignatures(const cpo::uno::Reference<css::embed::XStorage>& rxStorage,
@@ -150,6 +151,7 @@ public:
     void
     showCertificate(const cpo::uno::Reference<css::security::XCertificate>& Certificate) override;
     void manageTrustedSources() override;
+    void manageMacroSecurity() override;
     bool
     isAuthorTrusted(const cpo::uno::Reference<css::security::XCertificate>& Author) override;
     bool isLocationTrusted(const OUString& Location) override;
@@ -562,6 +564,16 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
 void DocumentDigitalSignatures::manageTrustedSources(  )
 {
+    ImplManageMacroSecurity(u"SecurityLevelPage"_ustr);
+}
+
+void DocumentDigitalSignatures::manageMacroSecurity()
+{
+    ImplManageMacroSecurity(u"SecurityLevelPage"_ustr);
+}
+
+void DocumentDigitalSignatures::ImplManageMacroSecurity(const OUString& rStartPage)
+{
     // MT: i45295
     // SecEnv is only needed to display certificate information from trusted sources.
     // Macro Security also has some options where no security environment is needed, so raise dialog anyway.
@@ -573,7 +585,7 @@ void DocumentDigitalSignatures::manageTrustedSources(  )
     if (aSignatureManager.init())
         xSecEnv = aSignatureManager.getSecurityEnvironment();
 
-    MacroSecurity aDlg(Application::GetFrameWeld(mxParentWindow), xSecEnv);
+    MacroSecurity aDlg(Application::GetFrameWeld(mxParentWindow), xSecEnv, rStartPage);
     aDlg.run();
 }
 

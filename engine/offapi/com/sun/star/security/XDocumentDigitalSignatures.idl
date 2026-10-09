@@ -154,6 +154,10 @@ interface XDocumentDigitalSignatures : cpo::uno::XInterface
     boolean signScriptingContentWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
                                                 [in] ::com::sun::star::embed::XStorage xStorage,
                                                 [in] ::com::sun::star::io::XStream xStream);
+
+    /** manages the macro security level and trusted sources
+     */
+    void manageMacroSecurity();
 };
 
 } ; } ; } ; } ;

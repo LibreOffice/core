@@ -55,7 +55,8 @@ IMPL_LINK_NOARG(MacroSecurity, OkBtnHdl, weld::Button&, void)
 }
 
 MacroSecurity::MacroSecurity(weld::Window* pParent,
-    cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSecurityEnvironment)
+    cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSecurityEnvironment,
+    const OUString& rStartPage)
     : GenericDialogController(pParent, u"xmlsec/ui/macrosecuritydialog.ui"_ustr, u"MacroSecurityDialog"_ustr)
     , m_xSecurityEnvironment(std::move(xSecurityEnvironment))
     , m_xTabCtrl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
@@ -67,7 +68,7 @@ MacroSecurity::MacroSecurity(weld::Window* pParent,
     m_xLevelTP.reset(new MacroSecurityLevelTP(m_xTabCtrl->get_page(u"SecurityLevelPage"_ustr), this));
     m_xTrustSrcTP.reset(new MacroSecurityTrustedSourcesTP(m_xTabCtrl->get_page(u"SecurityTrustPage"_ustr), this));
 
-    m_xTabCtrl->set_current_page(u"SecurityLevelPage"_ustr);
+    m_xTabCtrl->set_current_page(rStartPage);
     m_xOkBtn->connect_clicked(LINK(this, MacroSecurity, OkBtnHdl));
 }
 
