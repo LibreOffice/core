@@ -1212,9 +1212,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 		RenderManager.renderObjectsWith(
 			this.context,
 			data,
-			RenderGeometrySection.theOnesThatDraw(this.selectedObjects()).filter(
-				(objectId: number) => !ObjectHandles.isATiedConnector(objectId),
-			),
+			RenderGeometrySection.theOnesThatDraw(
+				RenderGeometrySection.standingFor(this.selectedObjects()),
+			).filter((objectId: number) => !ObjectHandles.isATiedConnector(objectId)),
 			matrix,
 		);
 
@@ -1639,7 +1639,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 			what is inside it - so naming the group would lose the turn. Naming the objects
 			cannot: each of them has a mapping and takes it whole.
 		*/
-		for (const objectId of RenderGeometrySection.theOnesThatDraw(objectIds)) {
+		for (const objectId of RenderGeometrySection.theOnesThatDraw(
+			RenderGeometrySection.standingFor(objectIds),
+		)) {
 			const mapping = RenderGeometrySection.transformOf(objectId);
 			if (!mapping) continue;
 

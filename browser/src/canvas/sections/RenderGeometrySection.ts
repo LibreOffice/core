@@ -931,8 +931,25 @@ class RenderGeometrySection extends CanvasSectionObject {
 
 		const hit = section.hitObjectInDocument(x, y);
 		if (!hit) return 'default';
+		if (hit.hit.kind === 'text') return 'text';
 
-		return hit.hit.kind === 'text' ? 'text' : 'move';
+		// An object of a diagram other than its first, which spans the whole of it, cannot be
+		// moved, so the pointer does not say it can.
+		const data = RenderGeometrySection.currentPart();
+		const parent = data?.objects.get(hit.id)?.parent;
+		const inADiagram =
+			parent !== undefined &&
+			Interaction.groupsAbove([hit.id]).some(
+				(group: number) => data?.objects.get(group)?.isDiagram === true,
+			);
+		if (
+			data &&
+			inADiagram &&
+			!RenderGeometrySection.spansADiagram(data, hit.id)
+		)
+			return 'default';
+
+		return 'move';
 	}
 
 	/// The section holding the objects of the page, while the document is drawn from them.
@@ -1027,8 +1044,25 @@ class RenderGeometrySection extends CanvasSectionObject {
 		one thing that places them, which is not the user saying the diagram may not be moved.
 	*/
 	public static theOnesThatHaveASay(objectIds: number[]): number[] {
-		return objectIds.concat(
-			RenderGeometrySection.descendingInto(objectIds, true),
+		const standing = RenderGeometrySection.standingFor(objectIds);
+		return standing.concat(
+			RenderGeometrySection.descendingInto(standing, true),
+		);
+	}
+
+	/*
+		The objects a change of these ones is a change of: each as it is, but the first object of
+		a diagram, which spans the whole of it, stands for the diagram - moving, scaling or
+		turning it is moving, scaling or turning the diagram, with what the diagram allows.
+	*/
+	public static standingFor(objectIds: number[]): number[] {
+		const data = RenderGeometrySection.currentPart();
+		if (!data) return objectIds;
+
+		return objectIds.map((objectId: number) =>
+			RenderGeometrySection.spansADiagram(data, objectId)
+				? (data.objects.get(objectId)?.parent ?? objectId)
+				: objectId,
 		);
 	}
 
@@ -1079,6 +1113,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 		would be worked out on a stale one.
 	*/
 	public static theOnesAChangeTouches(objectIds: number[]): number[] {
+		objectIds = RenderGeometrySection.standingFor(objectIds);
 		const touched: number[] = [];
 		const takeIn = (objectId: number, depth: number) => {
 			touched.push(objectId);
