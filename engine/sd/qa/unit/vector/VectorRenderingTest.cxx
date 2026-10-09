@@ -1336,8 +1336,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSlideNamesTheMasterLayersItHides)
     // Turn the master objects off for this slide, the way the menu entry does.
     SdrLayerIDSet aVisible = pSlide->TRG_GetMasterPageVisibleLayers();
     aVisible.Set(nObjectsLayer, false);
-    pSlide->TRG_SetMasterPageVisibleLayers(aVisible);
-    getSdDocShell()->GetDoc()->Broadcast(SdrHint(SdrHintKind::PageOrderChange, pSlide));
+    pSlide->SetMasterPageVisibleLayers(aVisible);
 
     auto aDelta = getVectorPrimitives(u"testMasterLayersDelta", nVersion);
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");

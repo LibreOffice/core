@@ -215,7 +215,7 @@ public:
 
     /** Sets the layers of its master that the page shows. When they differ from the layers it
         showed, the model announces a change of the page, the same as for a new background. */
-    void SetMasterPageVisibleLayers(const SdrLayerIDSet& rVisibleLayers);
+    SD_DLLPUBLIC void SetMasterPageVisibleLayers(const SdrLayerIDSet& rVisibleLayers);
 
     SD_DLLPUBLIC void SetAutoLayout(AutoLayout eLayout, bool bInit=false, bool bCreate=false);
     AutoLayout      GetAutoLayout() const { return meAutoLayout; }
