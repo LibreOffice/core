@@ -334,7 +334,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
         {
             static bool bUseNew(nullptr != std::getenv("DIAGRAM_NEW_ODF"));
             if (bUseNew)
-                // import <loext::diagram>
+                // import <loext:diagram>
                 return new SdXMLDiagramContext( rImport, xAttrList, rShapes );
             return new SvXMLShapeContext( rImport, bTemporaryShape );
         }

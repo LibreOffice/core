@@ -423,7 +423,7 @@ void SmartArtDiagram::writeDiagramOOXData(DrawingML& rOriginalDrawingML, uno::Re
 void SmartArtDiagram::writeDiagramReducedOOXData(css::uno::Reference<css::io::XOutputStream>& xOutputStream) const
 {
     // need a XmlFilterBase for ShapeExport/DrawingML. All the 'big' exports classes for
-    // this are in sd/sc/sw and we are not in an oox export here, so none exists. Use
+    // this are in sd/sc/sw and we are not in an oox export here, so none exist. Use
     // a minimal one. It's main purpose is to host the XModel access. In this case we
     // will not write any Line/Fill/TextAttributes and/or text, so will be fine for the
     // reduced form.

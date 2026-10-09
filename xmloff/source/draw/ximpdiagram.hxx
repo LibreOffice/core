@@ -23,7 +23,7 @@
 // #include <xmloff/shapeimport.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 
-// context for import of <loext::diagram> // XML_DIAGRAM
+// context for import of <loext:diagram> // XML_DIAGRAM
 class SdXMLDiagramContext : public SvXMLShapeContext
 {
 public:

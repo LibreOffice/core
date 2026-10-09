@@ -374,7 +374,7 @@ bool SvxShapeGroup::getPropertyValueImpl( const OUString& rName, const SfxItemPr
     {
         // get DiagramData if available. Format is a uno::Sequence< OUString >
         // with exactly four entries in a defined order. The entries are
-        // OUString representationms of the needed DomTrees. The Data one is
+        // OUString representations of the needed DomTrees. The Data one is
         // a reduced version of data.xml, the others are unchanged/original
         uno::Sequence< OUString > aRetval;
         auto* pGroup = dynamic_cast<SdrObjGroup*>(GetSdrObject());

@@ -220,7 +220,7 @@ public:
 };
 
 /**
- * Content type, knows it's contents and the WrtShell.
+ * Content type, knows its contents and the WrtShell.
  *
  * The class ContentType contains information to one type of content.
  * MemberArray is only populated if the content is requested by

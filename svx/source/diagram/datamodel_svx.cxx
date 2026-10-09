@@ -430,8 +430,8 @@ const OUString& DiagramData_svx::getBackgroundShapeModelID() const
 {
     if (msBackgroundShapeModelID.isEmpty() && mxRootShape.is())
     {
-        // TODO: WORKAROUND: Need to access BackgroundShape different
-        // copy the BackgroundShapeModelID transfered from 1st XShape to
+        // TODO: WORKAROUND: Need to access BackgroundShape differently
+        // copy the BackgroundShapeModelID transferred from 1st XShape to
         // msBackgroundShapeModelID if empty. Future change will not
         // use any msBackgroundShapeModelID at all, but I cannot change
         // all stuff at once. Correct it here after ODF import.

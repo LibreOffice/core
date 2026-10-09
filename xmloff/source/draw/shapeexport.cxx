@@ -2098,7 +2098,7 @@ void XMLShapeExport::ImpExportDiagramData( const uno::Reference< drawing::XShape
         xProps->getPropertyValue(u"DiagramData"_ustr) >>= aAllDiagramData;
 
         if (4 != aAllDiagramData.getLength())
-            // we expect four Strings, if different we are done
+            // we expect four Strings, otherwise we are done
             return;
 
         // extract Data
@@ -2163,7 +2163,7 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
     bool bCreateNewline( (nFeatures & XMLShapeExportFlags::NO_WS) == XMLShapeExportFlags::NONE ); // #86116#/#92210#
     SvXMLElementExport aPGR(mrExport, XML_NAMESPACE_DRAW, XML_G, bCreateNewline, true);
 
-    // export Diagram (if exists)
+    // export Diagram (if it exists)
     static bool bUseNew(nullptr != std::getenv("DIAGRAM_NEW_ODF"));
     if (bUseNew)
         ImpExportDiagramData(xShape, nFeatures);

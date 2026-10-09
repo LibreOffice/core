@@ -131,7 +131,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, const sax_
         FSNS(XML_xmlns, XML_dgm), aNsDmlDiagram,
         FSNS(XML_xmlns, XML_a), aNsDml);
 
-    // need to use a full ShapeExport to get the correct DocumentType suppport if SW export
+    // need to use a full ShapeExport to get the correct DocumentType support if SW export
     std::unique_ptr<ShapeExport> aShapeExport;
 
     if (!bReducedData)
@@ -181,7 +181,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, const sax_
             else
             {
                 // for TextShapes it's more complex: this Node (rPoint) may be the
-                // Node holdig the text, but the XShape referencing it is associated
+                // Node holding the text, but the XShape referencing it is associated
                 // with a Node that references this by using presAssocID. Use
                 // getMasterXShapeForPoint that uses that association and try
                 // to access the XShape containing the Text ModelData
@@ -297,7 +297,7 @@ void DiagramData_oox::writeDiagramData(DrawingML& rOriginalDrawingML, const sax_
         if (!bBGLineStyleWritten)
             rTarget->singleElementNS(XML_dgm, XML_whole);
 
-        // write ExtList & it's contents
+        // write ExtList & its contents
         // Note: I *tried* to use XML_dsp and xmlns:dsp, but these are not defined, thus
         // for this case where the only relevant data is the 'relId' entry I will allow
         // to construct the XML statement by own string concatenation

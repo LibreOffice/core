@@ -180,7 +180,7 @@ namespace drawinglayer::attribute
                 {
                     if (mxOutlinerParaObject && rCandidate.mxOutlinerParaObject)
                     {
-                        // compares OPO and it's contents, but traditionally not the RedLining
+                        // compares OPO and its contents, but traditionally not the RedLining
                         // which is not seen as model, but as temporary information
                         if(getOutlinerParaObject() != rCandidate.getOutlinerParaObject())
                         {
