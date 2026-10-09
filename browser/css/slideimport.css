@@ -862,6 +862,28 @@
 	inset-inline-start: var(--expanded-navigation-width, 50%);
 }
 
+/* The button that reopens the closed navigation sidebar floats at the start
+ * of the document area. An absolutely placed child of the flex row starts at
+ * the row's own edge, so with the import pane docked there the button moves
+ * past the pane. While the import pane is maximized it covers the whole area,
+ * so the button floats above it, in a strip the pane keeps clear at its start. */
+#main-document-content:has(#slide-import-dock-wrapper.visible)
+#navigator-floating-icon {
+	inset-inline-start: var(--slide-import-width, 384px);
+}
+
+#main-document-content.panes-expanded:has(#slide-import-dock-wrapper.visible)
+#navigator-floating-icon {
+	inset-inline-start: 0;
+	z-index: 993;
+}
+
+#main-document-content.panes-expanded:has(#navigator-floating-icon.visible)
+#slide-import-dock-wrapper.visible {
+	padding-inline-start: var(--floating-navigator-strip-width, 80px);
+	box-sizing: border-box;
+}
+
 /* In the wide layout the insert button keeps the compact width of the
  * navigator's import-your-slides pill and sits centred like it, instead
  * of stretching across the whole panel. */

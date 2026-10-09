@@ -898,6 +898,10 @@ input, button {
 	 * the document area; the import grid fills the rest. The two grids start
 	 * at an even split. */
 	--expanded-navigation-width: 50%;
+	/* The strip at the start of the maximized import pane that holds the
+	 * button which reopens the navigation sidebar: the button's 28px margin,
+	 * its 36px box and a 16px gap. */
+	--floating-navigator-strip-width: 80px;
 }
 
 .cool-annotation-collapsed-show .cool-annotation-img {
