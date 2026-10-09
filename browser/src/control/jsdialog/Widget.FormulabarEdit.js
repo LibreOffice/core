@@ -31,6 +31,21 @@ var scrollToCursorTimeout = null;
 var startHandle;
 var endHandle;
 
+// Keys that change only a modifier or lock state, so they neither edit text nor move the caret.
+const STATE_KEYS = [
+	'Shift',
+	'Control',
+	'Alt',
+	'Meta',
+	'AltGraph',
+	'CapsLock',
+	'NumLock',
+	'ScrollLock',
+	'Fn',
+	'FnLock',
+	'ContextMenu',
+];
+
 function _sendSelection(edit, builder, id) {
 	if (document.activeElement != edit)
 		return;
@@ -558,6 +573,8 @@ function _formulabarEditControl(parentContainer, data, builder) {
 	};
 
 	var pointerFocus = false;
+	// True from a press on the text layer until the release or the first key hands the field over.
+	let buttonHeld = false;
 
 	// Outside edit mode the formula bar is display only, so ignore it like the disabled case.
 	var isInactive = function() {
@@ -575,15 +592,24 @@ function _formulabarEditControl(parentContainer, data, builder) {
 		builder.map._textInput.focus(true);
 	};
 
+	// Sends the selection made in the layer to the document and gives it the keyboard.
+	const handFieldOver = function () {
+		pointerFocus = false;
+		buttonHeld = false;
+		window.removeEventListener('mouseup', textSelectionHandler);
+		grabEditFocus(true);
+	};
+
 	var textSelectionHandler = function(event) {
 		pointerFocus = false;
+		buttonHeld = false;
 
 		if (isInactive()) {
 			event.preventDefault();
 			return;
 		}
 
-		grabEditFocus(true);
+		handFieldOver();
 
 		event.preventDefault();
 	};
@@ -609,6 +635,7 @@ function _formulabarEditControl(parentContainer, data, builder) {
 			return;
 
 		pointerFocus = true;
+		buttonHeld = true;
 		// A drag can end outside the text layer.
 		window.addEventListener('mouseup', textSelectionHandler, {once: true});
 		builder.callback('edit', 'grab_focus', container, null, builder);
@@ -620,6 +647,22 @@ function _formulabarEditControl(parentContainer, data, builder) {
 		var cursor = cursorLayer.querySelector('.cursor');
 		if (cursor)
 			window.L.DomUtil.addClass(cursor, 'hidden');
+	});
+
+	// A key pressed while the button is still held hands the field over before the key is
+	// applied, so the key lands in the document's text input. The layer sits outside the
+	// document container, so the document's key handlers get the event by a direct call.
+	textLayer.addEventListener('keydown', function (event) {
+		if (!buttonHeld || isInactive())
+			return;
+
+		if (event.ctrlKey || event.metaKey || event.altKey || STATE_KEYS.includes(event.key))
+			return;
+
+		handFieldOver();
+
+		builder.map._textInput._onKeyDown(event);
+		builder.map.keyboard._onKeyDown(event);
 	});
 
 	textLayer.addEventListener('focus', function() {

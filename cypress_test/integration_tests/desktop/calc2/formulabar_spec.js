@@ -92,6 +92,45 @@ describe(['tagdesktop'], 'Formulabar tests', function() {
 		cy.cGet(textLayer).should('have.text', 'TWO THREE');
 	});
 
+	it('Deleting a selection while the mouse button is still held updates the cell', function() {
+		cy.getFrameWindow().then(function(win) {
+			calcHelper.enterCellAddressAndConfirm(win, 'A1');
+		});
+		helper.typeIntoDocument('ONE TWO THREE{enter}');
+		cy.getFrameWindow().then(function(win) {
+			calcHelper.enterCellAddressAndConfirm(win, 'A1');
+		});
+
+		var textLayer = '#sc_input_window .ui-custom-textarea-text-layer';
+		cy.cGet(textLayer).should('have.text', 'ONE TWO THREE');
+
+		// Press on the text and select "ONE " by dragging, with the button still held.
+		cy.cGet(textLayer).trigger('mousedown');
+		cy.cGet(textLayer).then(function(layer) {
+			var edit = layer[0];
+			edit.focus();
+			edit.ownerDocument.getSelection().setBaseAndExtent(
+				edit.childNodes[0].firstChild, 0, edit.childNodes[3].firstChild, 1);
+		});
+
+		// A real key press, so the browser applies it where the keyboard focus is.
+		cy.realPress('Backspace');
+		cy.cGet('body').trigger('mouseup');
+
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+		cy.cGet('body').type('{enter}');
+
+		// Visit another cell and come back, so the formula bar shows the cell content as the
+		// document holds it.
+		cy.getFrameWindow().then(function(win) {
+			calcHelper.enterCellAddressAndConfirm(win, 'A2');
+			calcHelper.enterCellAddressAndConfirm(win, 'A1');
+		});
+		cy.cGet(textLayer).should('have.text', 'TWO THREE');
+	});
+
 	// FIXME: need to stabilize
 	it.skip('Formula editing shows usage popup for a function', function() {
 		// verify default cell selected
