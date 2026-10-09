@@ -115,13 +115,7 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     if ( !pApp )
         return nullptr;
     SfxDispatcher* pAppDisp = pApp->GetAppDispatcher_Impl();
-    if ( aURL.Protocol == "slot:" || aURL.Protocol == "commandId:" )
-    {
-        sal_uInt16 nId = static_cast<sal_uInt16>(aURL.Path.toInt32());
-        SfxShell* pShell;
-        pAppDisp->GetShellAndSlot_Impl( nId, &pShell, &pSlot, true, true );
-    }
-    else if ( aURL.Protocol == ".uno:" )
+    if ( aURL.Protocol == ".uno:" )
     {
         // Support ".uno" commands. Map commands to slotid
         bMasterCommand = SfxOfficeDispatch::IsMasterUnoCommand( aURL );

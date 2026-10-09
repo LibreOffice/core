@@ -33,8 +33,6 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
@@ -341,19 +339,11 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
     , bMasterSlave( false )
     , bVisible( true )
 {
-    if ( aDispatchURL.Protocol == "slot:" && !pSlot->aUnoName.isEmpty() )
-    {
-        aDispatchURL.Complete = pSlot->GetCommand();
-        Reference< XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
-        xTrans->parseStrict( aDispatchURL );
-    }
-
     sal_uInt16 nSlot = pSlot->GetSlotId();
     SetId( nSlot );
     if ( pBindings )
     {
         // Bind immediately to enable the cache to recycle dispatches when asked for the same command
-        // a command in "slot" or in ".uno" notation must be treated as identical commands!
         pBindings->ENTERREGISTRATIONS();
         BindInternal_Impl( nSlot, pBindings );
         pBindings->LEAVEREGISTRATIONS();
@@ -595,13 +585,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         }
     }
 
-    if (
-        !(pDispatch &&
-        (
-         (aURL.Protocol == ".uno:" && aURL.Path == aDispatchURL.Path) ||
-         (aURL.Protocol == "slot:" && aURL.Path.toInt32() == GetId())
-        ))
-       )
+    if (!pDispatch || aURL.Protocol != ".uno:" || aURL.Path != aDispatchURL.Path)
         return;
 
     if ( !pDispatcher && pBindings )

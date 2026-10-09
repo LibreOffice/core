@@ -746,20 +746,6 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
             const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(&rAct).GetUnoSlot(aActCommand);
             return GetSlotDispatchWithFallback(&rAct, aURL, aActCommand, bMasterCommand, pSlot);
         }
-        else if ( aURL.Protocol == "slot:" )
-        {
-            sal_uInt16 nId = static_cast<sal_uInt16>(aURL.Path.toInt32());
-
-            if (nId >= SID_VERB_START && nId <= SID_VERB_END)
-            {
-                const SfxSlot* pSlot = m_pData->m_pViewShell->GetVerbSlot_Impl(nId);
-                if ( pSlot )
-                    return rAct.GetBindings().GetDispatch( pSlot, aURL, false );
-            }
-
-            const SfxSlot* pSlot = SfxSlotPool::GetSlotPool(&rAct).GetSlot(nId);
-            return GetSlotDispatchWithFallback(&rAct, aURL, aURL.Path, false, pSlot);
-        }
         else if( sTargetFrameName == "_self" || sTargetFrameName.isEmpty() )
         {
             // check for already loaded URL ... but with additional jumpmark!
