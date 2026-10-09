@@ -32,6 +32,7 @@ pdfium_patches += ofz451333752.patch
 pdfium_patches += charbboxinflation.patch.1
 # Hide bundled FreeType symbols
 pdfium_patches += freetype-hidden-visibility.patch
+pdfium_patches += ofz464123310.patch
 pdfium_patches += ofz503815636.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
