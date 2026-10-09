@@ -1540,6 +1540,128 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSections)
     CPPUNIT_ASSERT_EQUAL(u"new content"_ustr, aActualResult);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmarksKeepsCaret)
+{
+    // Given a document with two lines that end with a citation, and an empty last line that
+    // holds the caret:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    std::vector<cpo::uno::Sequence<css::beans::PropertyValue>> aFields;
+    for (int i = 0; i < 2; ++i)
+    {
+        pWrtShell->Insert(u"line "_ustr);
+        cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
+            comphelper::makePropertyValue(u"FieldType"_ustr, cpo::uno::Any(ODF_UNHANDLED)),
+            comphelper::makePropertyValue(u"FieldCommand"_ustr,
+                                          cpo::uno::Any(u"ADDIN ZOTERO_ITEM old command"_ustr)),
+            comphelper::makePropertyValue(u"FieldResult"_ustr, cpo::uno::Any(u"old result"_ustr)),
+        };
+        dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
+        pWrtShell->SttEndDoc(/*bStt=*/false);
+        pWrtShell->SplitNode();
+        aFields.push_back({
+            comphelper::makePropertyValue(u"FieldType"_ustr, cpo::uno::Any(ODF_UNHANDLED)),
+            comphelper::makePropertyValue(u"FieldCommand"_ustr,
+                                          cpo::uno::Any(u"ADDIN ZOTERO_ITEM new command"_ustr)),
+            comphelper::makePropertyValue(u"FieldResult"_ustr, cpo::uno::Any(u"new result"_ustr)),
+        });
+    }
+    SwNodeOffset nCaretNode = pWrtShell->GetCursor()->GetPoint()->GetNodeIndex();
+
+    // When updating all the citations:
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"FieldType"_ustr, cpo::uno::Any(ODF_UNHANDLED)),
+        comphelper::makePropertyValue(u"FieldCommandPrefix"_ustr,
+                                      cpo::uno::Any(u"ADDIN ZOTERO_ITEM"_ustr)),
+        comphelper::makePropertyValue(u"Fields"_ustr,
+                                      cpo::uno::Any(comphelper::containerToSequence(aFields))),
+    };
+    dispatchCommand(mxComponent, u".uno:TextFormFields"_ustr, aArgs);
+
+    // Then make sure that the caret is still at the start of the empty last line:
+    SwPosition& rCaret = *pWrtShell->GetCursor()->GetPoint();
+    // Without the accompanying fix in place, this test would have failed, the caret was at the end
+    // of the line above, behind the last updated citation.
+    CPPUNIT_ASSERT_EQUAL(nCaretNode, rCaret.GetNodeIndex());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), rCaret.GetContentIndex());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarksKeepsCaret)
+{
+    // Given a document with two lines that end with a citation, and an empty last line that
+    // holds the caret:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    std::vector<cpo::uno::Sequence<css::beans::PropertyValue>> aBookmarks;
+    for (int i = 0; i < 2; ++i)
+    {
+        pWrtShell->Insert(u"line old"_ustr);
+        pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+        pWrtShell->SetBookmark(vcl::KeyCode(), SwMarkName("ZOTERO_BREF_old" + OUString::number(i)));
+        pWrtShell->SttEndDoc(/*bStt=*/false);
+        pWrtShell->SplitNode();
+        aBookmarks.push_back({
+            comphelper::makePropertyValue(u"Bookmark"_ustr,
+                                          cpo::uno::Any("ZOTERO_BREF_new" + OUString::number(i))),
+            comphelper::makePropertyValue(u"BookmarkText"_ustr, cpo::uno::Any(u"new"_ustr)),
+        });
+    }
+    SwNodeOffset nCaretNode = pWrtShell->GetCursor()->GetPoint()->GetNodeIndex();
+
+    // When updating all the citations:
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"BookmarkNamePrefix"_ustr,
+                                      cpo::uno::Any(u"ZOTERO_BREF_"_ustr)),
+        comphelper::makePropertyValue(u"Bookmarks"_ustr,
+                                      cpo::uno::Any(comphelper::containerToSequence(aBookmarks))),
+    };
+    dispatchCommand(mxComponent, u".uno:UpdateBookmarks"_ustr, aArgs);
+
+    // Then make sure that the caret is still at the start of the empty last line:
+    SwPosition& rCaret = *pWrtShell->GetCursor()->GetPoint();
+    // Without the accompanying fix in place, this test would have failed, the caret was at the end
+    // of the line above, behind the last updated citation.
+    CPPUNIT_ASSERT_EQUAL(nCaretNode, rCaret.GetNodeIndex());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), rCaret.GetContentIndex());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSectionsKeepsCaret)
+{
+    // Given a document with a bibliography section, followed by a line that holds the caret:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(
+            u"RegionName"_ustr, cpo::uno::Any(u"ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDold"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, cpo::uno::Any(u"old content"_ustr)),
+    };
+    dispatchCommand(mxComponent, u".uno:InsertSection"_ustr, aArgs);
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    CPPUNIT_ASSERT(!pWrtShell->GetCurrSection());
+    SwNodeOffset nCaretNode = pWrtShell->GetCursor()->GetPoint()->GetNodeIndex();
+
+    // When updating the bibliography:
+    cpo::uno::Sequence<css::beans::PropertyValue> aSection = {
+        comphelper::makePropertyValue(
+            u"RegionName"_ustr, cpo::uno::Any(u"ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDnew"_ustr)),
+        comphelper::makePropertyValue(u"Content"_ustr, cpo::uno::Any(u"new content"_ustr)),
+    };
+    cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>> aSections = { aSection };
+    aArgs = {
+        comphelper::makePropertyValue(u"SectionNamePrefix"_ustr,
+                                      cpo::uno::Any(u"ZOTERO_BIBL"_ustr)),
+        comphelper::makePropertyValue(u"Sections"_ustr, cpo::uno::Any(aSections)),
+    };
+    dispatchCommand(mxComponent, u".uno:UpdateSections"_ustr, aArgs);
+
+    // Then make sure that the caret is still on the line after the bibliography:
+    SwPosition& rCaret = *pWrtShell->GetCursor()->GetPoint();
+    // Without the accompanying fix in place, this test would have failed, the caret was inside the
+    // bibliography section, behind its new content.
+    CPPUNIT_ASSERT_EQUAL(nCaretNode, rCaret.GetNodeIndex());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), rCaret.GetContentIndex());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteFieldmarks)
 {
     // Given a document with 2 fieldmarks:

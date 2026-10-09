@@ -464,8 +464,7 @@ void UpdateSections(const SfxRequest& rReq, SwWrtShell& rWrtSh)
         pSections->GetValue() >>= aSections;
     }
 
-    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::UPDATE_SECTIONS, nullptr);
-    rWrtSh.StartAction();
+    SwTranslateHelper::BulkUpdateGuard aGuard(rWrtSh, SwUndoId::UPDATE_SECTIONS);
 
     SwDoc* pDoc = rWrtSh.GetDoc();
     sal_Int32 nSectionIndex = 0;
@@ -510,9 +509,6 @@ void UpdateSections(const SfxRequest& rReq, SwWrtShell& rWrtSh)
             SwTranslateHelper::PasteHTMLToPaM(rWrtSh, pCursorPos, aSectionText.toUtf8());
         }
     }
-
-    rWrtSh.EndAction();
-    rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_SECTIONS, nullptr);
 }
 
 void DeleteSections(const SfxRequest& rReq, SwWrtShell& rWrtSh)
@@ -579,8 +575,7 @@ void UpdateBookmarks(const SfxRequest& rReq, SwWrtShell& rWrtSh)
         pBookmarks->GetValue() >>= aBookmarks;
     }
 
-    rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::UPDATE_BOOKMARKS, nullptr);
-    rWrtSh.StartAction();
+    SwTranslateHelper::BulkUpdateGuard aGuard(rWrtSh, SwUndoId::UPDATE_BOOKMARKS);
 
     IDocumentMarkAccess& rIDMA = *rWrtSh.GetDoc()->getIDocumentMarkAccess();
     sal_Int32 nBookmarkIndex = 0;
@@ -640,9 +635,6 @@ void UpdateBookmarks(const SfxRequest& rReq, SwWrtShell& rWrtSh)
     {
         rIDMA.assureSortedMarkContainers();
     }
-
-    rWrtSh.EndAction();
-    rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_BOOKMARKS, nullptr);
 }
 
 void UpdateBookmark(const SfxRequest& rReq, SwWrtShell& rWrtSh)

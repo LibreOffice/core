@@ -1114,8 +1114,7 @@ FIELD_INSERT:
             pFields->GetValue() >>= aFields;
         }
 
-        rSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::UPDATE_FORM_FIELDS, nullptr);
-        rSh.StartAction();
+        SwTranslateHelper::BulkUpdateGuard aGuard(rSh, SwUndoId::UPDATE_FORM_FIELDS);
 
         IDocumentMarkAccess* pMarkAccess = rSh.GetDoc()->getIDocumentMarkAccess();
         sal_Int32 nFieldIndex = 0;
@@ -1159,9 +1158,6 @@ FIELD_INSERT:
             aMap[u"FieldResult"_ustr] >>= aFieldResult;
             SwTranslateHelper::PasteHTMLToPaM(rSh, &aPaM, aFieldResult.toUtf8());
         }
-
-        rSh.EndAction();
-        rSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_FORM_FIELDS, nullptr);
     }
     break;
     case FN_DELETE_TEXT_FORMFIELDS:
