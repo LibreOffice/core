@@ -42,6 +42,7 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 #include <tools/gen.hxx>
+#include <tools/Guid.hxx>
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>
 
@@ -584,10 +585,10 @@ private:
     /// Extracted animated GIF files, keyed by the graphic object's unique id.
     mutable std::unordered_map<sal_uInt64, AnimatedGifTempFile> maAnimatedGifCache;
 
-    /// Vector content state, keyed by the part id of the page it belongs to. The part id is
-    /// the page GUID, so the state stays with the page when pages are inserted, removed or
-    /// moved and its index in the page list changes.
-    std::unordered_map<OString, VectorPartState> maVectorParts;
+    /// Vector content state, keyed by the GUID of the page it belongs to, which is also the
+    /// page's part id. The state stays with the page when pages are inserted, removed or moved
+    /// and its index in the page list changes.
+    std::unordered_map<tools::Guid, VectorPartState> maVectorParts;
 
     /// The version space the part versions count in, drawn once for this model. 0 until it is
     /// first asked for.

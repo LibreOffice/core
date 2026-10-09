@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <stdio.h>
 #include <cctype>
+#include <o3tl/hash_combine.hxx>
 #include <o3tl/numeric.hxx>
 
 namespace tools
@@ -144,6 +145,19 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
     rStream << "GUID" << aString.getStr();
     return rStream;
 }
+}
+
+namespace std
+{
+template <> struct hash<tools::Guid>
+{
+    std::size_t operator()(tools::Guid const& rGuid) const
+    {
+        std::size_t nSeed = 0;
+        o3tl::hash_combine(nSeed, &*rGuid.cbegin(), std::distance(rGuid.cbegin(), rGuid.cend()));
+        return nSeed;
+    }
+};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

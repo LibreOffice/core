@@ -2282,9 +2282,9 @@ sal_Int32 SdXImpressDocument::getVectorEpoch() const
     return mnVectorEpoch;
 }
 
-/// The key the vector content state of a page is filed under: the page's part id, which is its
-/// GUID. It names the same page however the page list around it changes.
-static OString vectorPartKeyOf(const SdrPage& rPage) { return rPage.GetGuid().getString(); }
+/// The key the vector content state of a page is filed under: the page's GUID, which the part id
+/// spells out. It names the same page however the page list around it changes.
+static const tools::Guid& vectorPartKeyOf(const SdrPage& rPage) { return rPage.GetGuid(); }
 
 sal_uInt64 SdXImpressDocument::getVectorPartVersion(const SdrPage& rPage) const
 {
@@ -2423,7 +2423,7 @@ constexpr sal_Int32 constVectorModeNotesPages = 2;
 void notifyViewsVectorPartChanged(const SfxObjectShell* pDocShell, const SdrPage& rPage,
                                   sal_Int32 nMode)
 {
-    const OString aPartId = vectorPartKeyOf(rPage);
+    const OString aPartId = rPage.GetGuid().getString();
     SfxViewShell* pShell = SfxViewShell::GetFirst(false);
     while (pShell)
     {
@@ -2681,7 +2681,7 @@ void notifyViewsPresentationInfoChanged(const SfxObjectShell* pDocShell, sal_Int
 /// the object and counts the version up only when what it shows really differs.
 void recordSlidePreviewChange(
     SdDrawDocument& rDocument, const SfxObjectShell* pDocShell,
-    std::unordered_map<OString, SdXImpressDocument::VectorPartState>& rVectorParts,
+    std::unordered_map<tools::Guid, SdXImpressDocument::VectorPartState>& rVectorParts,
     sal_Int32 nSlide)
 {
     if (nSlide < 0 || nSlide >= rDocument.GetSdPageCount(PageKind::Notes))
@@ -2713,7 +2713,7 @@ void recordSlidePreviewChange(
 /// notes pages. A master's page number is a place in the master list, so it names no page.
 void bumpMasterChangeForUsers(
     SdDrawDocument& rDocument, const SfxObjectShell* pDocShell,
-    std::unordered_map<OString, SdXImpressDocument::VectorPartState>& rVectorParts,
+    std::unordered_map<tools::Guid, SdXImpressDocument::VectorPartState>& rVectorParts,
     const SdPage* pMasterPage, const SdrObject* pChangedObject = nullptr)
 {
     const PageKind ePageKind = pMasterPage->GetPageKind();
@@ -3121,7 +3121,7 @@ private:
     void writeHeader(tools::JsonWriter& rWriter, SdPage* pPage)
     {
         writeCommonHeader(rWriter, isDelta() ? "vectorprimitivesdelta" : "vectorprimitives",
-                          vectorPartKeyOf(*pPage));
+                          pPage->GetGuid().getString());
 
         // A delta names the version it was compared against and the version it brings the part
         // to. Only the objects that moved between those two versions are in it.
@@ -3227,7 +3227,7 @@ private:
             if (const SdPage* pMasterPage = servedMasterOf(pPage))
             {
                 pageOwnPrimitives(pPage, aContent.maPrimitives);
-                maPageMasterPartId = vectorPartKeyOf(*pMasterPage);
+                maPageMasterPartId = pMasterPage->GetGuid().getString();
                 maPageMasterHiddenLayers = hiddenMasterLayersOf(pPage);
             }
             else
