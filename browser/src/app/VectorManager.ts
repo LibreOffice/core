@@ -618,7 +618,14 @@ class VectorManager extends RenderManagerBase {
 
 		// Every later delta is checked against the version, so a delta without
 		// one cannot be applied.
-		if (values.version === undefined) return;
+		if (values.version === undefined) {
+			window.app.console.warn(
+				'VectorPrimitivesDelta: delta for part ' +
+					partId +
+					' carries no version and is ignored',
+			);
+			return;
+		}
 
 		// A delta computed against an older version can arrive after a
 		// newer full response. Its order describes that older state, so
