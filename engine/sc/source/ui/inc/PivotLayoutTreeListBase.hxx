@@ -64,6 +64,10 @@ public:
 
     void RemoveEntryForItem(const ScItemValue* pItemValue);
 
+    int GetEntryCount() const;
+    ScItemValue* GetItemAt(int nPosition) const;
+    int FindEntryForColumn(SCCOL nColumn) const;
+
     virtual void InsertEntryForSourceTarget(weld::TreeView& rSource, int nTarget);
 };
 

@@ -1242,6 +1242,111 @@ label[disabled] {
 	gap: var(--spacing-s);
 }
 
+/* Pivot table layout: placed fields. The 88px remove column holds the button on the left and
+   the picker arrows on the right. */
+#mobile-wizard #PivotTableLayout [id^='name-'].ui-text {
+	float: left;
+	width: calc(100% - 88px);
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0 0 0 16px;
+	border-top: none;
+	line-height: 48px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	background-color: var(--color-background-dark);
+}
+#mobile-wizard #PivotTableLayout [id^='remove-'].ui-pushbutton-wrapper {
+	float: right;
+	width: 88px;
+	height: 48px;
+	margin: 0;
+	background-color: var(--color-background-dark);
+}
+#mobile-wizard #PivotTableLayout [id^='remove-'] button {
+	position: relative;
+	width: 40px;
+	height: 40px;
+	margin: 4px 44px 4px 4px;
+	padding: 0;
+	background-color: transparent;
+	border: 1px solid transparent;
+}
+/* The cross is two short red bars. */
+#mobile-wizard #PivotTableLayout [id^='remove-'] button::before,
+#mobile-wizard #PivotTableLayout [id^='remove-'] button::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 16px;
+	height: 2px;
+	background-color: var(--color-error);
+	transform: translate(-50%, -50%) rotate(45deg);
+}
+#mobile-wizard #PivotTableLayout [id^='remove-'] button::after {
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+/* Values line: the function picker, its arrow moved into the remove column. */
+#mobile-wizard #PivotTableLayout [id^='function-'] > .ui-header {
+	width: calc(100% - 88px);
+	box-sizing: border-box;
+	height: 48px !important;
+	background-color: var(--color-background-dark);
+}
+#mobile-wizard #PivotTableLayout [id^='function-'] > .ui-header .sub-menu-arrow {
+	position: relative;
+	left: 88px;
+}
+#mobile-wizard #PivotTableLayout .sub-menu-arrow {
+	font-size: 1.1em;
+}
+#mobile-wizard #PivotTableLayout [id$='-add'] {
+	clear: both;
+}
+/* "Add field": a round plus in the remove column. */
+#mobile-wizard #PivotTableLayout [id$='-add'] > .ui-header {
+	position: relative;
+}
+#mobile-wizard #PivotTableLayout [id$='-add'] .sub-menu-arrow {
+	position: absolute;
+	top: 50%;
+	right: 50px;
+	display: block;
+	box-sizing: border-box;
+	width: 28px;
+	height: 28px;
+	margin: -14px 0 0;
+	padding: 0;
+	font-size: 0;
+	background: none;
+	transform: none;
+	border: 2px solid var(--color-primary);
+	border-radius: 50%;
+}
+#mobile-wizard #PivotTableLayout [id$='-add'] .sub-menu-arrow::before,
+#mobile-wizard #PivotTableLayout [id$='-add'] .sub-menu-arrow::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	background-color: var(--color-primary);
+	transform: translate(-50%, -50%);
+}
+#mobile-wizard #PivotTableLayout [id$='-add'] .sub-menu-arrow::before {
+	width: 14px;
+	height: 2px;
+}
+#mobile-wizard #PivotTableLayout [id$='-add'] .sub-menu-arrow::after {
+	width: 2px;
+	height: 14px;
+}
+/* The first picker item is the placeholder text. */
+#mobile-wizard #PivotTableLayout [id$='-add'] .ui-content > .ui-combobox-text:first-child {
+	display: none;
+}
+
 #mobile-wizard-tabs.has-dismiss {
 	display: flex;
 	align-items: center;

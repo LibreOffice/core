@@ -97,19 +97,8 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeListData, DoubleClickHdl, weld::TreeView&, bool
     mpFunctionDlg->StartExecuteAsync([this, pCurrentItemValue, nEntry](int nResult) mutable {
         if (nResult == RET_OK)
         {
-            ScPivotFuncData& rFunctionData = pCurrentItemValue->maFunctionData;
-            rFunctionData.mnFuncMask = mpFunctionDlg->GetFuncMask();
-            ScDPLabelData& rLabelData = mpParent->GetLabelData(rFunctionData.mnCol);
-            rLabelData.mnFuncMask = mpFunctionDlg->GetFuncMask();
-
-            rFunctionData.maFieldRef = mpFunctionDlg->GetFieldRef();
-            AdjustDuplicateCount(pCurrentItemValue);
-            OUString sDataItemName = lclCreateDataItemName(
-                                        rFunctionData.mnFuncMask,
-                                        rLabelData.maName,
-                                        rFunctionData.mnDupCount);
-
-            mxControl->set_text(nEntry, sDataItemName);
+            pCurrentItemValue->maFunctionData.maFieldRef = mpFunctionDlg->GetFieldRef();
+            SetFunctionAt(nEntry, mpFunctionDlg->GetFuncMask());
         }
 
         mpFunctionDlg->disposeOnce();
@@ -179,6 +168,20 @@ void ScPivotLayoutTreeListData::PushDataFieldNames(std::vector<ScDPName>& rDataF
 
         rDataFieldNames.emplace_back(rLabelData.maName, sLayoutName, rLabelData.mnDupCount);
     } while (mxControl->iter_next(*xLoopEntry));
+}
+
+void ScPivotLayoutTreeListData::SetFunctionAt(int nPosition, PivotFunc nFunction)
+{
+    ScItemValue* pItemValue = GetItemAt(nPosition);
+    ScPivotFuncData& rFunctionData = pItemValue->maFunctionData;
+    rFunctionData.mnFuncMask = nFunction;
+
+    ScDPLabelData& rLabelData = mpParent->GetLabelData(rFunctionData.mnCol);
+    rLabelData.mnFuncMask = nFunction;
+
+    AdjustDuplicateCount(pItemValue);
+    mxControl->set_text(nPosition, lclCreateDataItemName(nFunction, rLabelData.maName,
+                                                         rFunctionData.mnDupCount));
 }
 
 void ScPivotLayoutTreeListData::InsertEntryForSourceTarget(weld::TreeView& rSource, int nTarget)

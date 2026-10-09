@@ -46,6 +46,8 @@ constexpr auto IgnoredList
 
 constexpr auto MobileDialogList
     = frozen::make_unordered_set<std::u16string_view>({
+        { u"modules/scalc/ui/pivottablelayoutdialog-mobile.ui" },
+        { u"modules/scalc/ui/pivottablelayoutentry-mobile.ui" },
         { u"modules/schart/ui/chartwizard-mobile.ui" },
         { u"modules/schart/ui/tp_ChartType-mobile.ui" },
         { u"modules/swriter/ui/watermarkdialog.ui" },

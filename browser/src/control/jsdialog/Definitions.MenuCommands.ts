@@ -123,7 +123,7 @@ const MenuCommands: MenuCommandsInterface = {
 		// text
 		'SpellingAndGrammarDialog', 'FontDialog', 'FontDialogForParagraph',
 		// spreadsheet
-		'FormatCellDialog', 'DataDataPilotRun', 'CalculatedFieldRun', 'InsertCalcTable',
+		'FormatCellDialog', 'CalculatedFieldRun', 'InsertCalcTable',
 		'SummarizeWithPivot',
 		'GroupSparklines', 'UngroupSparklines', 'AutoFill'
 	],

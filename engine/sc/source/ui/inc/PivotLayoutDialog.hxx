@@ -17,6 +17,9 @@
 #include "PivotLayoutTreeList.hxx"
 #include "PivotLayoutTreeListData.hxx"
 #include "PivotLayoutTreeListLabel.hxx"
+#include "PivotLayoutMobileEntry.hxx"
+
+struct ImplSVEvent;
 
 class ScItemValue final
 {
@@ -86,6 +89,22 @@ private:
     std::unique_ptr<weld::Expander> mxOptions;
     std::unique_ptr<weld::Expander> mxMore;
 
+    // The areas of the phone layout, empty on desktop.
+    struct MobileArea
+    {
+        ScPivotLayoutMobileArea meArea;
+        // The id prefix of the area's widgets in the ui file.
+        OUString maName;
+        ScPivotLayoutTreeListBase* mpList;
+        std::unique_ptr<weld::Container> mxEntries;
+        std::unique_ptr<weld::ComboBox> mxAdd;
+        // Item i + 1 of mxAdd offers column i.
+        std::vector<SCCOL> maAddColumns;
+        std::vector<std::unique_ptr<ScPivotLayoutMobileEntry>> maEntries;
+    };
+    std::vector<MobileArea> maMobileAreas;
+    ImplSVEvent* mpMobileRefreshEvent = nullptr;
+
     DECL_LINK(CancelClicked, weld::Button&, void);
     DECL_LINK(OKClicked, weld::Button&, void);
     DECL_LINK(GetEditFocusHandler, formula::RefEdit&, void);
@@ -107,6 +126,13 @@ private:
     void SetupSource();
     void SetupDestination();
     void FillValuesToListBoxes();
+    void SetupMobileAreas();
+    void RefreshMobileAreas();
+    void RefreshMobileArea(MobileArea& rArea);
+    // Whether the column is in filters, columns or rows. Values may hold it more than once.
+    bool IsColumnPlaced(SCCOL nColumn) const;
+    DECL_LINK(MobileAddFieldHdl, weld::ComboBox&, void);
+    DECL_LINK(MobileRefreshHdl, void*, void);
 
     // Other
     bool GetDestination(ScRange& aDestinationRange, bool& bToNewSheet);
@@ -121,6 +147,9 @@ public:
     virtual bool IsRefInputMode() const override;
 
     void ItemInserted(const ScItemValue* pItemValue, ScPivotLayoutTreeList::SvPivotTreeListType eType);
+
+    void MobileEntryRemoved(const ScPivotLayoutMobileEntry& rEntry);
+    void MobileEntryFunctionChanged(const ScPivotLayoutMobileEntry& rEntry);
 
     void UpdateSourceRange();
 

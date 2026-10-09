@@ -105,6 +105,27 @@ void ScPivotLayoutTreeListBase::RemoveEntryForItem(const ScItemValue* pItemValue
     mxControl->remove(nPos);
 }
 
+int ScPivotLayoutTreeListBase::GetEntryCount() const
+{
+    return mxControl->n_children();
+}
+
+ScItemValue* ScPivotLayoutTreeListBase::GetItemAt(int nPosition) const
+{
+    return weld::fromId<ScItemValue*>(mxControl->get_id(nPosition));
+}
+
+int ScPivotLayoutTreeListBase::FindEntryForColumn(SCCOL nColumn) const
+{
+    const int nCount = GetEntryCount();
+    for (int nPosition = 0; nPosition < nCount; ++nPosition)
+    {
+        if (GetItemAt(nPosition)->maFunctionData.mnCol == nColumn)
+            return nPosition;
+    }
+    return -1;
+}
+
 IMPL_LINK_NOARG(ScPivotLayoutTreeListBase, GetFocusHdl, weld::Widget&, void)
 {
     if (!mpParent)

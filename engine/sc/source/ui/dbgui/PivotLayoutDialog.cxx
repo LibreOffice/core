@@ -12,6 +12,7 @@
 #include <PivotLayoutTreeList.hxx>
 #include <PivotLayoutDialog.hxx>
 #include <reffact.hxx>
+#include <tabvwsh.hxx>
 
 #include <rangeutl.hxx>
 #include <uiitems.hxx>
@@ -21,6 +22,8 @@
 #include <dpshttab.hxx>
 #include <dbdata.hxx>
 #include <scmod.hxx>
+#include <o3tl/safeint.hxx>
+#include <vcl/svapp.hxx>
 
 #include <memory>
 #include <utility>
@@ -50,6 +53,14 @@ ScItemValue::~ScItemValue()
 namespace
 {
 
+OUString lclGetDialogUIFile(const ScViewData& rViewData)
+{
+    const ScTabViewShell* pViewShell = rViewData.GetViewShell();
+    if (pViewShell && pViewShell->isKitMobilePhone())
+        return u"modules/scalc/ui/pivottablelayoutdialog-mobile.ui"_ustr;
+    return u"modules/scalc/ui/pivottablelayoutdialog.ui"_ustr;
+}
+
 ScRange lclGetRangeForNamedRange(OUString const & aName, const ScDocument& rDocument)
 {
     ScRange aInvalidRange(ScAddress::INITIALIZE_INVALID);
@@ -71,7 +82,7 @@ ScRange lclGetRangeForNamedRange(OUString const & aName, const ScDocument& rDocu
 ScPivotLayoutDialog::ScPivotLayoutDialog(
                             SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, weld::Window* pParent,
                             ScViewData& rViewData, const ScDPObject* pPivotTableObject, bool bNewPivotTable)
-    : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent, u"modules/scalc/ui/pivottablelayoutdialog.ui"_ustr, u"PivotTableLayout"_ustr)
+    : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent, lclGetDialogUIFile(rViewData), u"PivotTableLayout"_ustr)
     , maPivotTableObject(*pPivotTableObject)
     , mpPreviouslyFocusedListBox(nullptr)
     , mrViewData(rViewData)
@@ -162,6 +173,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     mxListBoxRow->Setup   (this, ScPivotLayoutTreeList::ROW_LIST);
     mxListBoxData->Setup  (this);
 
+    SetupMobileAreas();
     FillValuesToListBoxes();
 
     // Initialize Options
@@ -192,6 +204,8 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
 
 ScPivotLayoutDialog::~ScPivotLayoutDialog()
 {
+    if (mpMobileRefreshEvent)
+        Application::RemoveUserEvent(mpMobileRefreshEvent);
 }
 
 void ScPivotLayoutDialog::SetupSource()
@@ -335,6 +349,147 @@ void ScPivotLayoutDialog::FillValuesToListBoxes()
     mxListBoxColumn->FillFields(maPivotParameters.maColFields);
     mxListBoxRow->FillFields(maPivotParameters.maRowFields);
     mxListBoxPage->FillFields(maPivotParameters.maPageFields);
+
+    RefreshMobileAreas();
+}
+
+void ScPivotLayoutDialog::SetupMobileAreas()
+{
+    struct AreaSetup
+    {
+        ScPivotLayoutMobileArea meArea;
+        ScPivotLayoutTreeListBase* mpList;
+        OUString maName;
+    };
+    const AreaSetup aSetups[] = {
+        { ScPivotLayoutMobileArea::Filters, mxListBoxPage.get(), u"filters"_ustr },
+        { ScPivotLayoutMobileArea::Columns, mxListBoxColumn.get(), u"columns"_ustr },
+        { ScPivotLayoutMobileArea::Rows, mxListBoxRow.get(), u"rows"_ustr },
+        { ScPivotLayoutMobileArea::Values, mxListBoxData.get(), u"values"_ustr },
+    };
+
+    for (const AreaSetup& rSetup : aSetups)
+    {
+        std::unique_ptr<weld::Container> xEntries
+            = m_xBuilder->weld_container(rSetup.maName + "-entries");
+        std::unique_ptr<weld::ComboBox> xAdd = m_xBuilder->weld_combo_box(rSetup.maName + "-add");
+        if (!xEntries || !xAdd)
+            return;
+
+        xAdd->connect_changed(LINK(this, ScPivotLayoutDialog, MobileAddFieldHdl));
+        maMobileAreas.push_back({ rSetup.meArea, rSetup.maName, rSetup.mpList, std::move(xEntries),
+                                  std::move(xAdd), {}, {} });
+    }
+}
+
+bool ScPivotLayoutDialog::IsColumnPlaced(SCCOL nColumn) const
+{
+    return mxListBoxPage->FindEntryForColumn(nColumn) != -1
+           || mxListBoxColumn->FindEntryForColumn(nColumn) != -1
+           || mxListBoxRow->FindEntryForColumn(nColumn) != -1;
+}
+
+void ScPivotLayoutDialog::RefreshMobileAreas()
+{
+    for (MobileArea& rArea : maMobileAreas)
+        RefreshMobileArea(rArea);
+}
+
+void ScPivotLayoutDialog::RefreshMobileArea(MobileArea& rArea)
+{
+    const bool bValues = rArea.meArea == ScPivotLayoutMobileArea::Values;
+
+    rArea.maEntries.clear();
+    const int nCount = rArea.mpList->GetEntryCount();
+    for (int nPosition = 0; nPosition < nCount; ++nPosition)
+    {
+        const ScItemValue* pItemValue = rArea.mpList->GetItemAt(nPosition);
+        // The engine's "Data" placeholder is not shown.
+        if (IsDataElement(pItemValue->maFunctionData.mnCol))
+            continue;
+        const int nIndex = static_cast<int>(rArea.maEntries.size());
+        rArea.maEntries.push_back(std::make_unique<ScPivotLayoutMobileEntry>(
+            *this, *rArea.mxEntries, rArea.meArea, rArea.maName, nIndex, nPosition,
+            pItemValue->maName, pItemValue->maFunctionData.mnFuncMask));
+    }
+
+    // A column sits in one of filters, columns and rows, but any number of times in values.
+    // Calculated fields only go in values.
+    while (rArea.mxAdd->get_count() > 1)
+        rArea.mxAdd->remove(1);
+    rArea.maAddColumns.clear();
+    for (const std::unique_ptr<ScDPLabelData>& pLabelData : maPivotParameters.maLabelArray)
+    {
+        if (pLabelData->mbDataLayout || pLabelData->mnOriginalDim >= 0)
+            continue;
+        if (!bValues && (pLabelData->mbCalculatedField || IsColumnPlaced(pLabelData->mnCol)))
+            continue;
+        rArea.mxAdd->append_text(pLabelData->maName);
+        rArea.maAddColumns.push_back(pLabelData->mnCol);
+    }
+    rArea.mxAdd->set_active(0);
+    rArea.mxAdd->set_sensitive(!rArea.maAddColumns.empty());
+}
+
+IMPL_LINK(ScPivotLayoutDialog, MobileAddFieldHdl, weld::ComboBox&, rAdd, void)
+{
+    for (MobileArea& rArea : maMobileAreas)
+    {
+        if (rArea.mxAdd.get() != &rAdd)
+            continue;
+
+        int nActive = rArea.mxAdd->get_active();
+        if (nActive < 1 || o3tl::make_unsigned(nActive) > rArea.maAddColumns.size())
+            return;
+        SCCOL nColumn = rArea.maAddColumns[nActive - 1];
+
+        int nEntry = mxListBoxField->FindEntryForColumn(nColumn);
+        if (nEntry == -1)
+            return;
+        weld::TreeView& rFieldList = mxListBoxField->get_widget();
+        rFieldList.unselect_all();
+        rFieldList.select(nEntry);
+        rArea.mpList->InsertEntryForSourceTarget(rFieldList, -1);
+
+        RefreshMobileAreas();
+        return;
+    }
+}
+
+void ScPivotLayoutDialog::MobileEntryRemoved(const ScPivotLayoutMobileEntry& rEntry)
+{
+    if (mpMobileRefreshEvent)
+        return;
+
+    for (MobileArea& rArea : maMobileAreas)
+    {
+        if (rArea.meArea != rEntry.GetArea())
+            continue;
+        rArea.mpList->RemoveEntryForItem(rArea.mpList->GetItemAt(rEntry.GetPosition()));
+        break;
+    }
+
+    // The refresh destroys the entry, so it runs after the entry's click handler has returned.
+    mpMobileRefreshEvent
+        = Application::PostUserEvent(LINK(this, ScPivotLayoutDialog, MobileRefreshHdl));
+}
+
+IMPL_LINK_NOARG(ScPivotLayoutDialog, MobileRefreshHdl, void*, void)
+{
+    mpMobileRefreshEvent = nullptr;
+    RefreshMobileAreas();
+}
+
+void ScPivotLayoutDialog::MobileEntryFunctionChanged(const ScPivotLayoutMobileEntry& rEntry)
+{
+    if (mpMobileRefreshEvent)
+        return;
+    if (rEntry.GetArea() != ScPivotLayoutMobileArea::Values)
+        return;
+    PivotFunc nFunction = rEntry.GetFunction();
+    if (nFunction == PivotFunc::NONE)
+        return;
+    mxListBoxData->SetFunctionAt(rEntry.GetPosition(), nFunction);
 }
 
 void ScPivotLayoutDialog::SetActive()

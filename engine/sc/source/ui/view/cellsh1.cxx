@@ -3828,6 +3828,18 @@ void ScCellShell::ExecuteDataPilotDialog()
         ScAddress aDestPos( rData.GetCurX(), rData.GetCurY(),
                                 rData.CurrentTabForData() );
 
+        // On a phone the source is always the selection.
+        if (pTabViewShell->isKitMobilePhone())
+        {
+            if (!RunPivotLayoutDialogForSelection(rData, aDestPos, pScMod))
+            {
+                std::unique_ptr<ScDPObject> pNoObject;
+                ErrorOrRunPivotLayoutDialog(STR_NOMULTISELECT, aDestPos, pScMod, pTabViewShell,
+                                            pNoObject);
+            }
+            return;
+        }
+
         //  first select type of source data
 
         bool bEnableExt = ScDPObject::HasRegisteredSources();
