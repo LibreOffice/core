@@ -21,6 +21,8 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
 #include <config_buildconfig.h>
 #include <config_cairo_rgba.h>
 #include <config_features.h>
@@ -6544,6 +6546,8 @@ void COKitDocumentImpl::selectObjects(const char* pObjectIds)
     const OString aObjectIds(pObjectIds ? pObjectIds : "");
     const SdrObjList* pLevel = nullptr;
     std::vector<SdrObject*> aWanted;
+    // The object of a diagram asked for, where the diagram itself is marked in its place.
+    SdrObject* pSubSelected = nullptr;
 
     for (sal_Int32 nPosition = 0; nPosition >= 0;)
     {
@@ -6557,6 +6561,24 @@ void COKitDocumentImpl::selectObjects(const char* pObjectIds)
         {
             SAL_WARN("kit", "selectObjects: nothing to mark for the id " << aId);
             continue;
+        }
+
+        /*
+            An object of a diagram that is edited one object at a time is selected as the office
+            does it: the diagram's root group is marked, and the object becomes the diagram's
+            sub-selection, which the engine's edits of attributes, text and the like go by.
+        */
+        SdrObjGroup* pDiagram = nullptr;
+        if (SdrObject::useAdvancedDiagramFeatures())
+            for (SdrObject* pAbove = pObject->getParentSdrObjectFromSdrObject(); pAbove;
+                 pAbove = pAbove->getParentSdrObjectFromSdrObject())
+                if (pAbove->isDiagram())
+                    pDiagram = dynamic_cast<SdrObjGroup*>(pAbove);
+
+        if (pDiagram && pDiagram->getDiagramHelper())
+        {
+            pSubSelected = pObject;
+            pObject = pDiagram;
         }
 
         // The objects of one selection sit at one level, so the first object says which level
@@ -6597,10 +6619,25 @@ void COKitDocumentImpl::selectObjects(const char* pObjectIds)
     for (size_t nMark = 0; nMark < rMarkList.GetMarkCount(); ++nMark)
         aMarked.push_back(rMarkList.GetMark(nMark)->GetMarkedSdrObj());
 
+    // The diagram takes the object asked for as its sub-selection before the marks report.
+    bool bSubSelectionChanged(false);
+    if (pSubSelected && aWanted.size() == 1)
+    {
+        auto pDiagram = static_cast<SdrObjGroup*>(aWanted.front());
+        const SdrObject* pBefore = pDiagram->getDiagramSubSelection();
+        pDiagram->getDiagramHelper()->markDirectDiagramSubSelection(*pSubSelected);
+        bSubSelectionChanged = pDiagram->getDiagramSubSelection() != pBefore;
+    }
+
     // The objects asked for are the ones already marked, so the selection stands as it is and
-    // nothing is reported.
+    // nothing is reported - unless only the object the diagram works on changed, which the
+    // handles and the report have to show.
     if (aMarked == aWanted)
+    {
+        if (bSubSelectionChanged)
+            pView->AdjustMarkHdl();
         return;
+    }
 
     if (aWanted.empty())
     {

@@ -1058,7 +1058,15 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                 if (nMark > 0)
                     aExtraInfo.append(",");
 
-                const SdrObject* pMarked = rMarkList.GetMark(nMark)->GetMarkedSdrObj();
+                SdrObject* pMarked = rMarkList.GetMark(nMark)->GetMarkedSdrObj();
+
+                // A diagram marked alone and edited one object at a time is selected as the
+                // object it works on, its sub-selection; with none chosen that is its background
+                // shape, which stands for the whole diagram.
+                if (pMarked && rMarkList.GetMarkCount() == 1 && pMarked->isDiagram()
+                    && SdrObject::useAdvancedDiagramFeatures())
+                    pMarked = pMarked->getDiagramSubSelection();
+
                 aExtraInfo.append(OString::number(pMarked ? pMarked->GetUniqueID() : 0));
             }
             aExtraInfo.append("], \"isMathObject\": " + OString::boolean(lcl_isStarMath(pO)));
