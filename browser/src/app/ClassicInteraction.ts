@@ -432,15 +432,34 @@ class ClassicDiagramContext extends ClassicGroupContext {
 	}
 
 	/*
-		A press on an object of the diagram selects it; Shift and Ctrl add nothing, as one object
-		is selected here at a time. A press anywhere else leaves the diagram and is answered as
-		the place around it answers it: another object is selected, empty space selects nothing,
-		or the group holding the diagram.
+		A press on an object of the diagram selects it; Shift and Ctrl add nothing there, as one
+		object is selected in a diagram at a time. Shift or Ctrl on an object outside the diagram
+		selects the whole diagram, as an object, together with it, where the two stand at one
+		level, or that object alone where they do not. A plain press anywhere else leaves the
+		diagram and is answered as the place around it answers it: another object is selected,
+		empty space selects nothing, or the group holding the diagram.
 	*/
 	public press(hit: number | undefined, modifier: number): boolean {
 		const extending =
 			modifier === app.UNOModifier.SHIFT || modifier === app.UNOModifier.CTRL;
-		if (extending) return true;
+		if (extending) {
+			if (hit === undefined || this.objectsOfTheLevel().includes(hit))
+				return true;
+
+			const holder = RenderGeometrySection.parentOf(this.diagram) || undefined;
+			const objectId = RenderGeometrySection.outermostOf(hit, holder);
+			if (objectId === this.diagram) return true;
+
+			const sameLevel =
+				RenderGeometrySection.parentOf(objectId) ===
+				RenderGeometrySection.parentOf(this.diagram);
+			GraphicSelection.selectObjects(
+				sameLevel
+					? [this.diagram, objectId]
+					: this.enteredBy([objectId], [hit]),
+			);
+			return true;
+		}
 		if (modifier !== 0) return false;
 
 		if (hit !== undefined && this.objectsOfTheLevel().includes(hit)) {
