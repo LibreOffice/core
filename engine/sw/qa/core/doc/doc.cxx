@@ -23,6 +23,8 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 
 #include <comphelper/classids.hxx>
+#include <comphelper/configuration.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <tools/globname.hxx>
 #include <svtools/embedhlp.hxx>
 #include <editeng/acorrcfg.hxx>
@@ -43,6 +45,7 @@
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <ndtxt.hxx>
+#include <numrule.hxx>
 #include <swdtflvr.hxx>
 #include <unotxdoc.hxx>
 #include <UndoManager.hxx>
@@ -187,6 +190,188 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBulletsOnSpace)
 
     // '- ' was converted into bullet
     CPPUNIT_ASSERT_EQUAL(u"a"_ustr, pTextNode->GetText());
+    ErrorRegistry::Reset();
+}
+
+namespace
+{
+/// Types the text and then Enter into the edit window of the document.
+void TypeLineWithEnter(SwDocShell& rDocShell, std::u16string_view aText)
+{
+    SwEditWin& rEditWin = rDocShell.GetView()->GetEditWin();
+    for (sal_Unicode cChar : aText)
+    {
+        KeyEvent aKeyEvent(cChar, cChar == ' ' ? KEY_SPACE : 0);
+        rEditWin.KeyInput(aKeyEvent);
+    }
+    KeyEvent aEnterEvent(0, KEY_RETURN);
+    rEditWin.KeyInput(aEnterEvent);
+}
+
+/// Sets the default bullet characters and fonts of unordered lists.
+void SetDefaultListBullets(const cpo::uno::Sequence<OUString>& rBullets,
+                           const cpo::uno::Sequence<OUString>& rFonts)
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::BulletsNumbering::DefaultListBullets::set(rBullets, pBatch);
+    officecfg::Office::Common::BulletsNumbering::DefaultListBulletsFonts::set(rFonts, pBatch);
+    pBatch->commit();
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testAutoFormatBulletIsDefaultBullet)
+{
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    pAutoCorrect->GetSwFlags().bSetNumRule = true;
+
+    // "-", "*" and "+" each start a list with the default bullet of each level, the same as the
+    // Unordered List button:
+    for (std::u16string_view aStart : { u"-", u"*", u"+" })
+    {
+        createSwDoc();
+        SwDocShell* pDocShell = getSwDocShell();
+        TypeLineWithEnter(*pDocShell, Concat2View(OUString::Concat(aStart) + " A"));
+
+        SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+        pWrtShell->Up(/*bSelect=*/false);
+        SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+        CPPUNIT_ASSERT_EQUAL(u"A"_ustr, pTextNode->GetText());
+        const SwNumRule* pRule = pTextNode->GetNumRule();
+        CPPUNIT_ASSERT(pRule);
+        OString aMessage = "list started by " + OUString(aStart).toUtf8();
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: 8226
+        // - Actual  : 8211
+        // i.e. "-" gave an en dash bullet.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), sal_UCS4(0x2022),
+                                     pRule->Get(0).GetBulletChar());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), sal_UCS4(0x25e6),
+                                     pRule->Get(1).GetBulletChar());
+        const std::optional<vcl::Font>& oFont = pRule->Get(0).GetBulletFont();
+        CPPUNIT_ASSERT(oFont);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), u"OpenSymbol"_ustr, oFont->GetFamilyName());
+    }
+    ErrorRegistry::Reset();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testAutoFormatBulletFollowsDefaultBulletSetting)
+{
+    // Given a custom default bullet:
+    const cpo::uno::Sequence<OUString> aOldBullets
+        = officecfg::Office::Common::BulletsNumbering::DefaultListBullets::get();
+    const cpo::uno::Sequence<OUString> aOldFonts
+        = officecfg::Office::Common::BulletsNumbering::DefaultListBulletsFonts::get();
+    SetDefaultListBullets({ u"■"_ustr }, { u"DejaVu Sans"_ustr });
+    comphelper::ScopeGuard aConfigGuard([&] { SetDefaultListBullets(aOldBullets, aOldFonts); });
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    pAutoCorrect->GetSwFlags().bSetNumRule = true;
+
+    // When typing "- a" and Enter:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    TypeLineWithEnter(*pDocShell, u"- a");
+
+    // Then the list uses the custom bullet:
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Up(/*bSelect=*/false);
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    const SwNumRule* pRule = pTextNode->GetNumRule();
+    CPPUNIT_ASSERT(pRule);
+    CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x25a0), pRule->Get(0).GetBulletChar());
+    const std::optional<vcl::Font>& oFont = pRule->Get(0).GetBulletFont();
+    CPPUNIT_ASSERT(oFont);
+    CPPUNIT_ASSERT_EQUAL(u"DejaVu Sans"_ustr, oFont->GetFamilyName());
+    ErrorRegistry::Reset();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testAutoFormatBulletTypedDashStaysDash)
+{
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    pAutoCorrect->GetSwFlags().bSetNumRule = true;
+
+    // A typed en dash or em dash starts a list with that dash as the bullet:
+    for (sal_Unicode cDash : { u'\u2013', u'\u2014' })
+    {
+        createSwDoc();
+        SwDocShell* pDocShell = getSwDocShell();
+        TypeLineWithEnter(*pDocShell, Concat2View(OUStringChar(cDash) + " a"));
+
+        SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+        pWrtShell->Up(/*bSelect=*/false);
+        SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+        const SwNumRule* pRule = pTextNode->GetNumRule();
+        CPPUNIT_ASSERT(pRule);
+        CPPUNIT_ASSERT_EQUAL(sal_UCS4(cDash), pRule->Get(0).GetBulletChar());
+    }
+    ErrorRegistry::Reset();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testAutoFormatBulletContinuesPreviousBulletList)
+{
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    pAutoCorrect->GetSwFlags().bSetNumRule = true;
+
+    // Given a paragraph in a list with a check mark bullet, followed by an empty paragraph:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"A"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->SplitNode();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->BulletOn();
+    SwTextNode* pFirstNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    SwNumRule* pCheckRule = pFirstNode->GetNumRule();
+    CPPUNIT_ASSERT(pCheckRule);
+    SwNumFormat aFormat(pCheckRule->Get(0));
+    aFormat.SetBulletChar(0x2714);
+    pCheckRule->Set(0, aFormat);
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+
+    // When typing "- B" and Enter in the last paragraph:
+    TypeLineWithEnter(*pDocShell, u"- B");
+
+    // Then the new paragraph continues the list with the check mark bullet, the same as the
+    // Unordered List button:
+    pWrtShell->Up(/*bSelect=*/false);
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT_EQUAL(u"B"_ustr, pTextNode->GetText());
+    const SwNumRule* pRule = pTextNode->GetNumRule();
+    CPPUNIT_ASSERT(pRule);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 10004
+    // - Actual  : 8226
+    // i.e. the typed bullet started a new list with the default bullet.
+    CPPUNIT_ASSERT_EQUAL(sal_UCS4(0x2714), pRule->Get(0).GetBulletChar());
+    CPPUNIT_ASSERT_EQUAL(pFirstNode->GetListId(), pTextNode->GetListId());
+    ErrorRegistry::Reset();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBulletsOnSpacePlus)
+{
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    pAutoCorrect->GetSwFlags().bSetNumRule = true;
+    pAutoCorrect->GetSwFlags().bSetNumRuleAfterSpace = true;
+
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
+    KeyEvent aKeyEvent('+', 0);
+    rEditWin.KeyInput(aKeyEvent);
+    KeyEvent aKeyEvent2(' ', KEY_SPACE);
+    rEditWin.KeyInput(aKeyEvent2);
+    KeyEvent aKeyEvent3('a', 0);
+    rEditWin.KeyInput(aKeyEvent3);
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: a
+    // - Actual  : + a
+    // i.e. '+ ' was not converted into a bullet, unlike '- ' and '* '.
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, pTextNode->GetText());
+    CPPUNIT_ASSERT(pTextNode->GetNumRule());
     ErrorRegistry::Reset();
 }
 

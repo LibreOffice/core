@@ -68,13 +68,13 @@
 
 using namespace ::com::sun::star;
 
-//JP 16.12.99: definition:
-//      from pos cPosEnDash to cPosEmDash all chars changed to em dashes,
-//      from pos cPosEmDash to cPosEnd    all chars changed to em dashes
-//      all other chars are changed to the user configuration
+// Characters that start a bullet list when typed before a blank:
+//      before pos cnPosEnDash, the char becomes the default bullet of each list level,
+//      from pos cnPosEnDash to cnPosEmDash, the char becomes an en dash,
+//      from pos cnPosEmDash to the end, the char becomes an em dash.
 
 const sal_Unicode pBulletChar[6] = { '+', '*', '-', 0x2013, 0x2014, 0 };
-const int cnPosEnDash = 2, cnPosEmDash = 4;
+const int cnPosEnDash = 3, cnPosEmDash = 4;
 
 const sal_Unicode cStarSymbolEnDash = 0x2013;
 const sal_Unicode cStarSymbolEmDash = 0x2014;
@@ -228,6 +228,12 @@ static const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
     while( *pSrc && *pSrc != c )
         ++pSrc;
     return *pSrc ? pSrc : nullptr;
+}
+
+/// Returns true if aText is only a typed bullet and a blank, for example "- ".
+static bool IsShortBullet(std::u16string_view aText)
+{
+    return aText == u"* " || aText == u"- " || aText == u"+ ";
 }
 
 SwTextFrame* SwAutoFormat::GetFrame( const SwTextNode& rTextNd ) const
@@ -390,7 +396,7 @@ bool SwAutoFormat::IsFastFullLine(const SwTextFrame & rFrame) const
 bool SwAutoFormat::IsEnumericChar(const SwTextFrame& rFrame) const
 {
     const OUString& rText = rFrame.GetText();
-    bool bIsShortBullet = rText == "* " || rText == "- ";
+    bool bIsShortBullet = IsShortBullet(rText);
     sal_uInt16 nMinLen = bIsShortBullet ? 1 : 2;
     TextFrameIndex nBlanks(GetLeadingBlanks(rText));
     const TextFrameIndex nLen = TextFrameIndex(rText.getLength()) - nBlanks;
@@ -1503,7 +1509,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     bool bRTL = m_pEditShell->IsInRightToLeftText();
 
     const OUString sStrWithTrailingBlanks = DelLeadingBlanks(m_pCurTextFrame->GetText());
-    bool bIsShortBullet = sStrWithTrailingBlanks == "* " || sStrWithTrailingBlanks == "- ";
+    bool bIsShortBullet = IsShortBullet(sStrWithTrailingBlanks);
     sal_uInt16 nMinLen = bIsShortBullet ? 1 : 2;
 
     // only delete blanks if something else (numbering or style) is going to be changed
@@ -1528,6 +1534,10 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         }
     }
 
+    // set when the paragraph joins a bullet list above it
+    OUString sContinuedListId;
+    bool bContinueList = false;
+
     // replace bullet character with defined one
     const OUString& rStr = bIsShortBullet ? sStrWithTrailingBlanks : m_pCurTextFrame->GetText();
     TextFrameIndex nTextStt(0);
@@ -1543,28 +1553,33 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 SwCharFormat* pCFormat = m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(
                                             SwPoolFormatId::CHR_BULLET_LEVEL );
                 bChgBullet = true;
-                // Was the format already somewhere adjusted?
-                if( !aRule.GetNumFormat( nLvl ) )
+                int nBulletPos = pFndBulletChr - pBulletChar;
+                const bool bDefaultBullet = nBulletPos < cnPosEnDash;
+                if (!pCur && bDefaultBullet)
                 {
-                    int nBulletPos = pFndBulletChr - pBulletChar;
-                    sal_UCS4 cBullChar;
-                    const vcl::Font* pBullFnt( nullptr );
-                    if( nBulletPos < cnPosEnDash )
+                    // Join the nearest bullet list above, across empty paragraphs.
+                    const SwNumRule* pPreviousRule = m_pDoc->SearchNumRule(
+                        SwPosition(*m_pCurTextFrame->GetTextNodeForParaProps()),
+                        /*bForward=*/false, /*bNum=*/false, /*bOutline=*/false,
+                        /*nNonEmptyAllowed=*/0, sContinuedListId, m_pEditShell->GetLayout());
+                    if (pPreviousRule)
                     {
-                        cBullChar = m_aFlags.cBullet;
-                        pBullFnt = &m_aFlags.aBulletFont;
+                        aRule = *pPreviousRule;
+                        bContinueList = true;
                     }
-                    else
+                }
+                // Was the format already somewhere adjusted?
+                if (!bContinueList && !aRule.GetNumFormat(nLvl))
+                {
+                    const sal_UCS4 cBullChar = nBulletPos < cnPosEmDash
+                                                   ? cStarSymbolEnDash
+                                                   : cStarSymbolEmDash;
+                    const vcl::Font* pBullFnt( nullptr );
+                    // #i63395#
+                    // Only apply user defined default bullet font
+                    if ( numfunc::IsDefBulletFontUserDefined() )
                     {
-                        cBullChar = nBulletPos < cnPosEmDash
-                                        ? cStarSymbolEnDash
-                                        : cStarSymbolEmDash;
-                        // #i63395#
-                        // Only apply user defined default bullet font
-                        if ( numfunc::IsDefBulletFontUserDefined() )
-                        {
-                            pBullFnt = &numfunc::GetDefBulletFont();
-                        }
+                        pBullFnt = &numfunc::GetDefBulletFont();
                     }
 
                     sal_Int32 nAbsPos = lBulletIndent;
@@ -1574,8 +1589,13 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                     for( sal_uInt8 n = 0; n < MAXLEVEL; ++n, nAbsPos = nAbsPos + nSpaceSteps )
                     {
                         SwNumFormat aFormat( aRule.Get( n ) );
-                        aFormat.SetBulletFont( pBullFnt );
-                        aFormat.SetBulletChar( cBullChar );
+                        if (bDefaultBullet)
+                            numfunc::SetDefaultListBullet(aFormat, n);
+                        else
+                        {
+                            aFormat.SetBulletFont( pBullFnt );
+                            aFormat.SetBulletChar( cBullChar );
+                        }
                         aFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                         // #i93908# clear suffix for bullet lists
                         aFormat.SetListFormat(u""_ustr, u""_ustr, n);
@@ -1725,8 +1745,13 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 
             const_cast<SwTextNode*>(m_pCurTextFrame->GetTextNodeForParaProps())->SetAttrListLevel(nLvl);
 
-            // start new list
-            m_pDoc->SetNumRule(m_aDelPam, aRule, SwDoc::SetNumRuleMode::CreateNewList, m_pEditShell->GetLayout());
+            if (bContinueList)
+                m_pDoc->SetNumRule(m_aDelPam, aRule, SwDoc::SetNumRuleMode::Default,
+                                   m_pEditShell->GetLayout(), sContinuedListId);
+            else
+                // start new list
+                m_pDoc->SetNumRule(m_aDelPam, aRule, SwDoc::SetNumRuleMode::CreateNewList,
+                                   m_pEditShell->GetLayout());
             m_aDelPam.DeleteMark();
 
             *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(TextFrameIndex(0));
@@ -2455,7 +2480,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
 
                 const OUString& rStr = m_pCurTextFrame->GetText();
                 SvxSwAutoFormatFlags& rFlags = pACorr->GetSwFlags();
-                if (rFlags.bChgEnumNum && (rStr == "- " || rStr == "* "))
+                if (rFlags.bChgEnumNum && IsShortBullet(rStr))
                 {
                     eStat = TST_ENUMERIC;
                     break;
