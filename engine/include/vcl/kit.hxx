@@ -12,7 +12,10 @@
 #include <sal/config.h>
 #include <vcl/dllapi.h>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
 #include <COKit/COKit.hxx>
+
+#include <string_view>
 
 namespace vcl::kit
 {
@@ -37,6 +40,13 @@ void VCL_DLLPUBLIC dumpState(rtl::OStringBuffer& rState);
 void VCL_DLLPUBLIC pushExpectedReentry();
 void VCL_DLLPUBLIC popExpectedReentry();
 bool VCL_DLLPUBLIC isExpectedReentry();
+
+/* Turns an icon theme path, e.g. "cmd/sc_paste.png" or "res/showpass.png",
+   into the canonical "lc_paste.svg" / "lc_showpass.svg" name that the COKit
+   client resolves against its own icon set. Sending the name rather than the
+   bitmap lets the client pick its light or dark variant and stay crisp at any
+   DPI. Returns an empty string if there is no name to send. */
+OUString VCL_DLLPUBLIC svgIconName(std::u16string_view rIconPath);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

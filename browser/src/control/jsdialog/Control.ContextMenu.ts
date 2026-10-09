@@ -551,6 +551,10 @@ class ContextMenuControl extends JSControl {
 					isHtmlName: true,
 				};
 
+				// The engine names the icon of an item that has one, e.g. the
+				// sentence checker's icon on the message of a grammar error.
+				if (item.icon) contextMenu[item.command].icon = item.icon;
+
 				if (item.checktype === 'checkmark') {
 					if (item.checked === 'true') {
 						contextMenu[item.command]['icon'] = 'lo-checkmark';

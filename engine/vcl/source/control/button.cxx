@@ -33,6 +33,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/kit.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/uitest/uiobject.hxx>
 
@@ -618,7 +619,7 @@ void Button::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     {
         // Emit the icon name first so COOL can resolve it as a local SVG; the
         // base64 bitmap below is the fallback when it ships no such icon.
-        const OUString sIconName = ImplGetKitSvgIconName(GetModeImage().GetStock());
+        const OUString sIconName = vcl::kit::svgIconName(GetModeImage().GetStock());
         if (!sIconName.isEmpty())
             rJsonWriter.put("icon", sIconName);
 

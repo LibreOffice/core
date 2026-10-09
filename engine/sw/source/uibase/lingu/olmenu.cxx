@@ -450,15 +450,24 @@ SwSpellPopup::SwSpellPopup(
     m_nCheckedLanguage = LanguageTag::convertToLanguageType( rResult.aLocale );
     bool bUseImagesInMenus = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
 
+    OUString aProofreaderName;
+    uno::Reference< lang::XServiceInfo > xInfo( rResult.xProofreader, uno::UNO_QUERY );
+    if (xInfo.is())
+        aProofreaderName = xInfo->getImplementationName();
+
     sal_uInt16 nPos = 0;
     OUString aMessageText( rResult.aErrors[ nErrorInResult ].aShortComment );
     m_xPopupMenu->InsertSeparator({}, nPos++);
     m_xPopupMenu->InsertItem(MN_SHORT_COMMENT, aMessageText, MenuItemBits::NOSELECT, {}, nPos++);
     if (bUseImagesInMenus)
     {
+        // The icon beside the message tells which checker found the error:
+        // the sentence checker has an icon of its own, any other checker
+        // gets the generic info icon.
         // An image that did not load still takes the icon column, drawing an
         // empty box beside the message.
-        Image aInfoImage(StockImage::Yes, BMP_INFO_16);
+        Image aInfoImage(StockImage::Yes,
+            aProofreaderName == "cpo.lingu.Lightproof" ? BMP_LIGHTPROOF_16 : BMP_INFO_16);
         if (!!aInfoImage)
             m_xPopupMenu->SetItemImage(MN_SHORT_COMMENT, aInfoImage);
     }
@@ -492,13 +501,9 @@ SwSpellPopup::SwSpellPopup(
 
         if (bUseImagesInMenus)
         {
-            uno::Reference< lang::XServiceInfo > xInfo( rResult.xProofreader, uno::UNO_QUERY );
-            if (xInfo.is())
-            {
-                aSuggestionImageUrl = SvtLinguConfig().GetSpellAndGrammarContextSuggestionImage( xInfo->getImplementationName() );
-                if (!aSuggestionImageUrl.isEmpty())
-                    aImage = Image( aSuggestionImageUrl );
-            }
+            aSuggestionImageUrl = SvtLinguConfig().GetSpellAndGrammarContextSuggestionImage( aProofreaderName );
+            if (!aSuggestionImageUrl.isEmpty())
+                aImage = Image( aSuggestionImageUrl );
         }
 
         sal_uInt16 nItemId = MN_SUGGESTION_START;

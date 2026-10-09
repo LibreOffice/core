@@ -37,6 +37,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/IconThemeInfo.hxx>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/kit.hxx>
 
 #include <accessibility/vclxaccessibletoolbox.hxx>
 #include <svdata.hxx>
@@ -1794,7 +1795,7 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
                 // is not available it falls back to the base64 "image" below.
                 // e.g. "chart2/res/dataeditor_icon05.png" -> "lc_dataeditor_icon05.svg"
                 // e.g. "cmd/sc_paste.png"                 -> "lc_paste.svg"
-                const OUString sIconName = ImplGetKitSvgIconName(GetItemIconName(nId));
+                const OUString sIconName = vcl::kit::svgIconName(GetItemIconName(nId));
                 if (!sIconName.isEmpty())
                     rJsonWriter.put("icon", sIconName);
 

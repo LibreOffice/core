@@ -1735,6 +1735,28 @@ void trimMemory(int nTarget)
     // else for now caches re-fill themselves as/when used.
 }
 
+OUString svgIconName(std::u16string_view rIconPath)
+{
+    if (rIconPath.empty())
+        return OUString();
+
+    const size_t nSlash = rIconPath.rfind(u'/');
+    std::u16string_view aFileName
+        = (nSlash != std::u16string_view::npos) ? rIconPath.substr(nSlash + 1) : rIconPath;
+
+    OUString aName(aFileName);
+    if (aName.endsWith(".png"))
+        aName = OUString::Concat(aName.subView(0, aName.getLength() - 4)) + ".svg";
+    else if (aName.indexOf('.') < 0)
+        aName += ".svg";
+
+    // Drop the size prefix before adding the canonical one the client expects.
+    if (aName.startsWith("sc_") || aName.startsWith("lc_"))
+        aName = aName.copy(3);
+
+    return "lc_" + aName;
+}
+
 } // namespace kit, namespace vcl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

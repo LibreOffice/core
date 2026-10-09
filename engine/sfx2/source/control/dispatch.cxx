@@ -67,6 +67,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/image.hxx>
+#include <vcl/kit.hxx>
 #include <vcl/menu.hxx>
 
 #include <sfxtypes.hxx>
@@ -1870,6 +1872,13 @@ boost::property_tree::ptree fillPopupMenu(Menu* pMenu)
 
             if (!aItemText.isEmpty())
                 aItemTree.put("text", aItemText.toUtf8().getStr());
+
+            // An item image from the icon theme is sent by name, so the client
+            // shows its own icon for it, e.g. the sentence checker's icon on
+            // the message of a grammar error.
+            const OUString aIconName = vcl::kit::svgIconName(pMenu->GetItemImage(nItemId).GetStock());
+            if (!aIconName.isEmpty())
+                aItemTree.put("icon", aIconName.toUtf8().getStr());
 
             if (pPopupSubmenu)
             {

@@ -658,6 +658,8 @@ class LOUtil {
 			decrementlevel: 'outlineright',
 			acceptformula: 'ok',
 			insertannotation: 'shownote',
+			// the engine's generic info icon, shown beside a grammar message
+			info_16: 'about',
 			insertcomment: 'shownote',
 			objecttitledescription: 'shownote',
 			namegroup: 'shownote',
