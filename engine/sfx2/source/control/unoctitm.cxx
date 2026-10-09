@@ -1553,6 +1553,13 @@ static void InterceptKitStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
     if (!comphelper::COKit::isActive() || !pViewShell)
         return;
 
+    // A view that draws from the objects gives the state of these itself, from where its
+    // selection stands.
+    if (pViewShell->drawsFromObjects()
+        && (aEvent.FeatureURL.Path == "EnterGroup" || aEvent.FeatureURL.Path == "LeaveGroup"
+            || aEvent.FeatureURL.Path == "FormatUngroup"))
+        return;
+
     const std::map<std::u16string_view, KitUnoCommand>& rUnoCommandList = GetKitUnoCommandList();
     auto handler = rUnoCommandList.find(aEvent.FeatureURL.Path);
     if (handler == rUnoCommandList.end())
