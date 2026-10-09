@@ -53,6 +53,11 @@ interface XClientRuntime {
         [in] string url, [in] string method, [in] string contentType, [in] string payload,
         [in] boolean payloadIsBase64, [in] sequence<string> headerNames,
         [in] sequence<string> headerValues, [in] boolean followRedirects);
+
+    // Show a modal dialog with title (empty for none), prompt and the buttons of buttonSet ("OK",
+    // "OK_CANCEL", "YES_NO" or "YES_NO_CANCEL"), and return the button that closed it ("OK",
+    // "CANCEL", "YES" or "NO"), or "CLOSE" for one closed without a button:
+    string alert([in] string title, [in] string prompt, [in] string buttonSet);
 };
 
 };

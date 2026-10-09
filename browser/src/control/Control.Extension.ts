@@ -2050,6 +2050,49 @@ function makeGasProxyHandlers(extensionId: string): GasProxyHandlers {
 		cacheRemove: (...args: unknown[]) => {
 			localStorage.removeItem(cacheKey(String(args[0]), String(args[1])));
 		},
+		// The script waits for the answer, so the dialog answers once, with CLOSE when it is
+		// closed without a button:
+		alert: (...args: unknown[]) =>
+			new Promise<string>((resolve) => {
+				const labels: { [name: string]: string } = {
+					OK: _('OK'),
+					CANCEL: _('Cancel'),
+					YES: _('Yes'),
+					NO: _('No'),
+				};
+				const buttonSets: { [name: string]: string[] } = {
+					OK: ['OK'],
+					OK_CANCEL: ['OK', 'CANCEL'],
+					YES_NO: ['YES', 'NO'],
+					YES_NO_CANCEL: ['YES', 'NO', 'CANCEL'],
+				};
+				const names = buttonSets[String(args[2])] || buttonSets.OK;
+				let answered = false;
+				const answer = (name: string) => {
+					if (answered) return;
+					answered = true;
+					resolve(name);
+				};
+				const callbacks: any[] = names.map((name) => ({
+					id: 'gas-alert-' + name,
+					func_: () => answer(name),
+				}));
+				callbacks.push(
+					{ id: 'response-cancel', func: () => answer('CLOSE') },
+					{ id: '__POPOVER__', func: () => answer('CLOSE') },
+				);
+				gasProxyMap.uiManager.showModalWithCustomButtons(
+					'gas-alert',
+					String(args[0]),
+					String(args[1]),
+					true,
+					names.map((name) => ({
+						id: 'gas-alert-' + name,
+						text: labels[name],
+					})),
+					callbacks,
+				);
+			}),
 		urlFetch: async (...args: unknown[]) => {
 			const url = String(args[0]);
 			const method = String(args[1]);

@@ -343,8 +343,8 @@ add-on's menu belongs.
 
 Choosing an item ships the add-on's sources and a call to the item's function to
 the kit as one `executescript` message, the same way any contributed command
-runs. Messages the add-on passes to `getUi().alert()` then arrive as a
-snackbar.
+runs. Messages the add-on passes to `getUi().alert()` then appear in a modal
+dialog in the document window, which the script waits on.
 
 ### Contributions beyond the menu
 
@@ -390,8 +390,8 @@ in one custom document property per add-on), `LanguageApp.translate`, `Session`,
 the add-on's own entries, which the main window keeps, through the `Storage`
 methods only, and its `sessionStorage` lasts as long as the frame.
 
-`getUi().alert()` records its message rather than blocking on a modal, and the
-message becomes a dismissible banner in the panel once the call returns. Script
+`getUi().alert()` and `Browser.msgBox()` show a modal dialog in the document
+window, as in GAS, and the script waits for the button that closes it. Script
 properties, `getUi().prompt()`, the dialog calls and installable triggers all
 throw, naming what was missing.
 

@@ -395,7 +395,7 @@ $internal.runGasAddOn = function(
 {
     const clientRuntime = $internal.createProxy(uno.idl.scriptinterop.XClientRuntime, proxyId);
     try {
-        // What getUi() collects over one call: the messages an add-on passed to alert(), the
+        // What getUi() collects over one call: the messages an add-on passed to toast(), the
         // items it put in its menu, and (if any) the sidebar file and the dialog it asked us to
         // show.  All travel back with the call's result:
         const pendingAlerts = [];
@@ -415,22 +415,15 @@ $internal.runGasAddOn = function(
             YES_NO_CANCEL: { name: 'YES_NO_CANCEL' }
         };
 
-        // A message an add-on wanted shown.  Only the strings among the arguments are text: the
-        // several forms of alert() and msgBox() take a title, a message and a button set in
-        // varying order, and the button set is an object on our side.  With a title and a
-        // message, the first string is the title:
-        function recordMessage(args) {
-            const texts = [];
-            for (let i = 0; i !== args.length; ++i) {
-                const a = args[i];
-                if (typeof a === 'string' || typeof a === 'number') {
-                    texts.push(String(a));
-                }
-            }
-            pendingAlerts.push({
-                title: texts.length > 1 ? texts[0] : '',
-                message: texts.length > 1 ? texts.slice(1).join('\n') : (texts[0] || '')
-            });
+        // Same as in GAS, alert() and msgBox() show a modal dialog that the script waits on, as
+        // alert(prompt), alert(prompt, buttons) or alert(title, prompt, buttons), and give back
+        // the name of the button that closed it:
+        function showModal(args) {
+            const title = args.length >= 3 ? String(args[0]) : '';
+            const prompt = String(args[args.length >= 3 ? 1 : 0]);
+            const buttons = args.length >= 2 ? args[args.length >= 3 ? 2 : 1] : buttonSetValues.OK;
+            return clientRuntime.alert(
+                title, prompt, buttons && buttons.name ? buttons.name : 'OK');
         }
 
         // An add-on's onOpen() builds its menu against this.  Submenu items land in the same flat
@@ -487,12 +480,8 @@ $internal.runGasAddOn = function(
                 recordDialog('showModelessDialog', html, title);
                 return null;
             },
-            // GAS blocks the script on a modal here.  This one only records the message, which
-            // travels back with the call's result, so an add-on that alerts and then keeps
-            // editing has its message appear after the edit rather than before it:
             alert: function() {
-                recordMessage(arguments);
-                return buttonValues.OK;
+                return buttonValues[showModal(arguments)];
             },
             prompt: function() {
                 throw new Error(
@@ -524,13 +513,12 @@ $internal.runGasAddOn = function(
             };
             return o;
         }
-        // The older dialog service.  Like getUi().alert(), a message is recorded and travels
-        // back with the call's result rather than stopping the script, so msgBox answers with
-        // the button an add-on gets when a person clicks OK:
+        // The older dialog service, whose msgBox answers with the button in lower case, and with
+        // 'cancel' for a dialog closed without a button:
         globalThis.Browser = {
             msgBox: function() {
-                recordMessage(arguments);
-                return 'ok';
+                const button = showModal(arguments);
+                return button === 'CLOSE' ? 'cancel' : button.toLowerCase();
             },
             inputBox: function() {
                 throw new Error(
