@@ -858,24 +858,7 @@ bool UpdateFieldContents(const SfxRequest& rReq, SwWrtShell& rWrtSh)
     pFields->GetValue() >>= aFields;
 
     SwDoc* pDoc = rWrtSh.GetDoc();
-    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::UPDATE_FIELDS, nullptr);
-    rWrtSh.StartAction();
-
-    // (zotero) Rewriting each field's content moves the shell cursor onto that field.
-    // Remember the caret here and put it back when the function returns, so a bulk
-    // field refresh leaves the caret where the user was editing.
-    rWrtSh.Push();
-
-    // Restore the caret and close the action and the undo grouping when the
-    // function returns, even if a field entry makes the loop throw. The stacked
-    // cursor tracked the content edits, so it still points at the original spot.
-    comphelper::ScopeGuard aGuard(
-        [&rWrtSh]
-        {
-            rWrtSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
-            rWrtSh.EndAction();
-            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_FIELDS, nullptr);
-        });
+    SwTranslateHelper::BulkUpdateGuard aGuard(rWrtSh, SwUndoId::UPDATE_FIELDS);
 
     std::vector<const SwFormatRefMark*> aRefMarks;
     pDoc->GetRefMarks(aRefMarks);

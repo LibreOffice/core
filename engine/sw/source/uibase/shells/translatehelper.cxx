@@ -30,6 +30,8 @@
 #include <tblsel.hxx>
 #include <ndtxt.hxx>
 #include <swcrsr.hxx>
+#include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <translatehelper.hxx>
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
@@ -105,6 +107,22 @@ void PasteHTMLToPaM(SwWrtShell& rWrtSh, const SwPaM* pCursor, const OString& rDa
             rWrtSh.KillSelection(nullptr, false);
         }
     }
+}
+
+BulkUpdateGuard::BulkUpdateGuard(SwWrtShell& rWrtSh, SwUndoId eUndoId)
+    : m_rWrtSh(rWrtSh)
+    , m_eUndoId(eUndoId)
+{
+    m_rWrtSh.GetDoc()->GetIDocumentUndoRedo().StartUndo(m_eUndoId, nullptr);
+    m_rWrtSh.StartAction();
+    m_rWrtSh.Push();
+}
+
+BulkUpdateGuard::~BulkUpdateGuard()
+{
+    m_rWrtSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+    m_rWrtSh.EndAction();
+    m_rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(m_eUndoId, nullptr);
 }
 
 void GetTranslationNodeRange(SwWrtShell& rWrtSh, SwNodeOffset& rStartNode, SwNodeOffset& rEndNode)

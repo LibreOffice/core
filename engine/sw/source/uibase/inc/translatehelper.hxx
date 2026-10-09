@@ -28,6 +28,7 @@
 
 #include <swdllapi.h>
 #include <nodeoffset.hxx>
+#include <swundo.hxx>
 
 class SwWrtShell;
 class SwPaM;
@@ -36,6 +37,24 @@ namespace SwTranslateHelper
 {
 SW_DLLPUBLIC OString ExportPaMToHTML(SwPaM* pCursor);
 SW_DLLPUBLIC void PasteHTMLToPaM(SwWrtShell& rWrtSh, const SwPaM* pCursor, const OString& rData);
+
+/// Groups a bulk update of several ranges into one undo step and one layout action, and keeps the
+/// caret in place across it. Pasting into a range moves the shell cursor there, so the caret is
+/// saved when the object is created and put back when it is destroyed. The saved cursor follows
+/// the content edits, so it still points at the original spot when it is restored.
+class SW_DLLPUBLIC BulkUpdateGuard
+{
+public:
+    BulkUpdateGuard(SwWrtShell& rWrtSh, SwUndoId eUndoId);
+    ~BulkUpdateGuard();
+
+    BulkUpdateGuard(const BulkUpdateGuard&) = delete;
+    BulkUpdateGuard& operator=(const BulkUpdateGuard&) = delete;
+
+private:
+    SwWrtShell& m_rWrtSh;
+    SwUndoId m_eUndoId;
+};
 /// Node range to walk for translation: the current selection when there is one, otherwise
 /// the whole document body, but never the header/footer/footnote sections that also live in
 /// the shell's node array outside the body.
