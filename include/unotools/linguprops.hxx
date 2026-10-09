@@ -50,7 +50,7 @@ inline constexpr OUString UPN_HYPH_ZONE_SPREAD                = u"HyphZoneSpread
 inline constexpr OUString UPN_HYPH_KEEP                       = u"HyphKeep"_ustr;
 inline constexpr OUString UPN_HYPH_KEEP_TYPE                  = u"HyphKeepType"_ustr;
 inline constexpr OUString UPN_HYPH_KEEP_LINE                  = u"HyphKeepLine"_ustr;
-inline constexpr OUString UPN_HYPH_LEVEL                      = u"HyphKeepLevel"_ustr;
+inline constexpr OUString UPN_HYPH_LEVEL                      = u"HyphLevel"_ustr;
 
 // UNO property names for Lingu
 // (those not covered by the SpellChecker and Hyphenator
