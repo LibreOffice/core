@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "sddllapi.h"
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <vector>
@@ -41,7 +43,7 @@ typedef std::unordered_map< OUString, OUString > UStringMap;
 class TransitionPreset
 {
 public:
-    static const TransitionPresetList& getTransitionPresetList();
+    SD_DLLPUBLIC static const TransitionPresetList& getTransitionPresetList();
 
     sal_Int16 getTransition() const { return mnTransition; }
     sal_Int16 getSubtype() const { return mnSubtype; }

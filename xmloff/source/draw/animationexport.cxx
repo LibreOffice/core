@@ -330,6 +330,7 @@ const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransitionSubType[] =
     { XML_FROMTOPRIGHT,         TransitionSubType::FROMTOPRIGHT },
     { XML_FROMBOTTOMLEFT,       TransitionSubType::FROMBOTTOMLEFT },
     { XML_FROMBOTTOMRIGHT,      TransitionSubType::FROMBOTTOMRIGHT },
+    { XML_AIRPLANE,             TransitionSubType::AIRPLANE },
 
     { XML_TOKEN_INVALID, 0 }
 };

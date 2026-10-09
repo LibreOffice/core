@@ -3383,4 +3383,5 @@ reflection-start-transparency
 reflection-start-position
 reflection-end-transparency
 reflection-end-position
+airplane
 TOKEN_END_DUMMY

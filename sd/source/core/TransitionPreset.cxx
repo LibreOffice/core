@@ -220,7 +220,8 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             TransitionSubType::COMBHORIZONTAL,
             TransitionSubType::FANOUTHORIZONTAL,
             TransitionSubType::HEART,
-            TransitionSubType::ROTATEIN
+            TransitionSubType::ROTATEIN,
+            TransitionSubType::AIRPLANE
     };
 
     const std::set<sal_Int16> LOKMiscShapeWipeNonSupportedTransitionSubTypes = {
