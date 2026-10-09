@@ -105,10 +105,11 @@
             }
         }
     }
-    // Expand the one common HtmlService scriptlet form `<?!= include('name') ?>` (fetching
-    // name.html, per Google's convention that on-disk files gain a .html suffix):
+    // Expand the one common HtmlService scriptlet form `<?!= include('name') ?>`, also with a `;`
+    // after the call (fetching name.html, per Google's convention that on-disk files gain a .html
+    // suffix):
     async function expandScriptlets(html) {
-        const includeRe = /<\?!=\s*include\(\s*['"]([^'"]+)['"]\s*\)\s*\?>/g;
+        const includeRe = /<\?!=\s*include\(\s*['"]([^'"]+)['"]\s*\)\s*;?\s*\?>/g;
         let out = '';
         let last = 0;
         let match;
