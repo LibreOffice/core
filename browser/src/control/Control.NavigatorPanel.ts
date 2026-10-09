@@ -57,11 +57,7 @@ class NavigatorPanel extends SidebarBase {
 		this.quickFindWrapper = this.navigationPanel.querySelector(
 			'#quickfind-dock-wrapper',
 		);
-		this.map.on(
-			'zoomend',
-			this.handleFloatingButtonVisibilityOnZoomChange,
-			this,
-		);
+		this.map.on('zoomend', this.updateFloatingButtonVisibility, this);
 	}
 
 	onRemove() {
@@ -503,11 +499,16 @@ class NavigatorPanel extends SidebarBase {
 		}
 	}
 
-	handleFloatingButtonVisibilityOnZoomChange() {
+	updateFloatingButtonVisibility() {
+		// While the panes are maximized they cover the document, so the button shows at
+		// any zoom.
+		const documentCovered =
+			this.map.paneExpander && this.map.paneExpander.getMode() === 'expanded';
 		// Handle special case for impress as the view there is landscape so better to hide Floating Nav ICON on lower zoom compare to other app
 		if (
-			this.map.getZoom() > 14 ||
-			(this.map.getZoom() >= 13 && this.map.getDocType() === 'presentation')
+			!documentCovered &&
+			(this.map.getZoom() > 14 ||
+				(this.map.getZoom() >= 13 && this.map.getDocType() === 'presentation'))
 		) {
 			this.floatingNavIcon.classList.remove('visible');
 		} else if (!this.navigationPanel.classList.contains('visible')) {
@@ -603,7 +604,7 @@ class NavigatorPanel extends SidebarBase {
 		app.layoutingService.appendLayoutingTask(() => {
 			this.navigationPanel.classList.remove('visible');
 			this.floatingNavIcon.classList.add('visible');
-			this.handleFloatingButtonVisibilityOnZoomChange(); // on close panel we should check if we can display nav icon or not based on zoom level
+			this.updateFloatingButtonVisibility(); // on close panel we should check if we can display nav icon or not based on zoom level
 		});
 	}
 

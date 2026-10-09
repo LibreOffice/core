@@ -85,6 +85,7 @@ class PaneExpander {
 		this.applyGridMode(mode === 'expanded');
 		this.updateToggles();
 		if (this.map.paneSplitter) this.map.paneSplitter.onModeChange();
+		if (this.map.navigator) this.map.navigator.updateFloatingButtonVisibility();
 	}
 
 	private applyGridMode(enabled: boolean): void {
