@@ -2408,6 +2408,140 @@ class BitmapTileManager extends RenderManagerBase {
 		if (!tile.image) tile.missingContent++;
 	}
 
+	// -- vector rendering --
+	// Bitmap tiles carry no vector content: there is no part to name, fetch or
+	// draw, and every layer is visible.
+	public isVectorRendering(): boolean {
+		return false;
+	}
+
+	public requestThumbnail(
+		_id: cool.PreviewId,
+		_part: number,
+		_mode: number,
+		_maxWidth: number,
+		_maxHeight: number,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
+
+	public requestPart(
+		_part: number,
+		_mode: number,
+	): cool.VectorPrimitivesData | undefined {
+		return undefined;
+	}
+
+	public partIdAt(
+		_part: number,
+		_mode: number,
+	): cool.VectorPartGuid | undefined {
+		return undefined;
+	}
+
+	public renderInto(
+		_context: CanvasRenderingContext2D,
+		_data: cool.VectorPrimitivesData,
+		_options?: cool.VectorRenderOptions,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
+
+	public renderObjectsWith(
+		_context: CanvasRenderingContext2D,
+		_data: cool.VectorPrimitivesData,
+		_objectIds: number[],
+		_matrix: cool.Matrix2D,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
+
+	public renderPrimitives(
+		_context: CanvasRenderingContext2D,
+		_data: cool.VectorPrimitivesData,
+		_primitives: cool.Primitive[],
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
+
+	public renderPlaceholderAids(
+		_context: CanvasRenderingContext2D,
+		_data: cool.VectorPrimitivesData,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public setHiddenLayers(_layers: unknown): void {}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public drawnElsewhere(_objectIds: number[]): void {}
+
+	public drawnElsewhereVersion(): number {
+		return 0;
+	}
+
+	public isPartDrawable(_part: number, _mode: number): boolean {
+		return false;
+	}
+
+	public requestPartById(
+		_partId: cool.VectorPartGuid,
+		_mode: number,
+	): cool.VectorPrimitivesData | undefined {
+		return undefined;
+	}
+
+	public isPartDrawableById(
+		_partId: cool.VectorPartGuid,
+		_mode: number,
+	): boolean {
+		return false;
+	}
+
+	public isLayerVisible(_layer: number): boolean {
+		return true;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public onVectorChanged(_callback: (answered?: number[]) => void): void {}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public offVectorChanged(_callback: () => void): void {}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public changedHere(): void {}
+
+	public handleVectorPrimitivesResponse(
+		_values: cool.VectorPrimitivesResponse,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
+
+	public handleVectorRenderingGraphicsResponse(
+		_values: cool.VectorRenderingGraphicsResponse,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
+
+	public handleVectorRenderingFontResponse(
+		_values: cool.VectorRenderingFontResponse,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
+
+	public handleVectorPrimitivesDelta(
+		_values: cool.VectorPrimitivesResponse,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public partListChanged(): void {}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public revalidateCachedParts(): void {}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public forgetRequestsInFlight(): void {}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public clearCachedPart(_partId: cool.VectorPartGuid): void {}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public clearAllParts(): void {}
+
 	// flip to true for extra bitmap list consistency checks
 	private extraDebugChecks(): boolean {
 		return false;
