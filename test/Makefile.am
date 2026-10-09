@@ -32,6 +32,11 @@ else
 util_platform_cpp = ../common/Util-linux.cpp
 endif
 
+# The test code compiles with the C++ flags configure chose for it, TEST_CXXFLAGS in configure.ac,
+# which build it without optimization. They replace CXXFLAGS for this directory because the
+# compile rule puts CXXFLAGS last, so an optimization level in it would otherwise win.
+CXXFLAGS = @TEST_CXXFLAGS@
+
 AM_CXXFLAGS = $(CPPUNIT_CFLAGS) -DTDOC=\"$(abs_top_srcdir)/test/data\" -DTDIST=\"$(DIST_FOLDER)\" \
 	-DCOOLWSD_XML_PATH=\"$(abs_top_builddir)/coolwsd.xml\" \
 	-I${top_srcdir}/common -I${top_srcdir}/net -I${top_srcdir}/wsd -I${top_srcdir}/kit \

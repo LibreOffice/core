@@ -2864,6 +2864,31 @@ else
     AC_MSG_RESULT([no])
 fi
 
+# The unit tests in test/ compile with their own C++ flags. The optimizer is most of the compile
+# time of a test file, because every assertion macro expands to several stream expressions, so
+# the tests build at -O0 whatever level the rest of the tree uses. The production code they link
+# comes from the gbuild libraries and keeps the configured level. _FORTIFY_SOURCE needs
+# optimization, so its define goes too. The fuzzer build keeps the full CXXFLAGS. This runs after
+# the last change to CXXFLAGS above, so the tests see every other flag the tree gets.
+AC_ARG_VAR([TEST_CXXFLAGS],
+    [C++ compiler flags for the unit tests in test/, in place of CXXFLAGS. The default is CXXFLAGS without its -O level and _FORTIFY_SOURCE define, plus -O0])
+AC_MSG_CHECKING([the C++ compiler flags for the unit tests])
+if test -z "$TEST_CXXFLAGS"; then
+    if test "$LIBFUZZER" = "1"; then
+        TEST_CXXFLAGS="$CXXFLAGS"
+    else
+        TEST_CXXFLAGS=
+        for flag in $CXXFLAGS; do
+            case $flag in
+                -O*|-D_FORTIFY_SOURCE=*|-Wp,-D_FORTIFY_SOURCE=*) ;;
+                *) TEST_CXXFLAGS="$TEST_CXXFLAGS $flag" ;;
+            esac
+        done
+        TEST_CXXFLAGS="${TEST_CXXFLAGS# } -O0"
+    fi
+fi
+AC_MSG_RESULT([$TEST_CXXFLAGS])
+
 AS_IF([test "$enable_feature_lock" = "yes"],
       [AC_DEFINE([ENABLE_FEATURE_LOCK],1,[Whether to compile and enable feature locking])],
       [AC_DEFINE([ENABLE_FEATURE_LOCK],0,[Whether to compile and enable feature locking])])
