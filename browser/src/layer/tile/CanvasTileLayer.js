@@ -3189,10 +3189,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	goToOtherUserView: function(viewId) {
 		const graphicSection = OtherViewGraphicSelectionSection.getViewSection(viewId);
 
-		if (graphicSection) {
-			if (this._selectedPart !== graphicSection.sectionProperties.part) {
+		// The part is -1 when the other view is on a page this view does not list, such as the
+		// handout page, so this view stays where it is.
+		if (graphicSection && graphicSection.sectionProperties.part >= 0) {
+			const part = graphicSection.sectionProperties.part;
+			if (this._selectedPart !== part) {
 				this._map.deselectAll();
-				this._map.setPart(graphicSection.sectionProperties.part);
+				this._map.setPart(part);
 			}
 			graphicSection.goToSection();
 		}
@@ -3207,9 +3210,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		const section = TextCursorSection.getViewCursorSection(viewId);
 
 		if (section) {
-			if ((this.isImpress() || this.isDraw()) && this._selectedPart !== section.sectionProperties.part) {
+			// The part is -1 when the other view is on a page this view does not list, such as
+			// the handout page, so this view stays on its own part.
+			const part = section.sectionProperties.part;
+			if ((this.isImpress() || this.isDraw()) && part >= 0 && this._selectedPart !== part) {
 				this._map.deselectAll();
-				this._map.setPart(section.sectionProperties.part);
+				this._map.setPart(part);
 			}
 
 			if (section.showSection) {
