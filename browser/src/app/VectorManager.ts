@@ -40,6 +40,11 @@ class VectorManager extends RenderManagerBase {
 	// Pages a JSON primitive tree request is in flight for, keyed by page id.
 	private _inFlightParts: Set<cool.VectorPartGuid> = new Set();
 
+	// Cached pages that may be behind the document, because the client was
+	// away while they could change. A stale page is still drawn from the
+	// cache, and its next draw asks for what changed since the version held.
+	private _staleParts: Set<cool.VectorPartGuid> = new Set();
+
 	// Pages the document said it does not hold. Asking again is pointless
 	// until the page list is replaced.
 	private _missingParts: Set<cool.VectorPartGuid> = new Set();
@@ -168,10 +173,24 @@ class VectorManager extends RenderManagerBase {
 		mode: number,
 	): cool.VectorPrimitivesData | undefined {
 		const cached = this._cache.get(partId);
-		if (cached) return cached;
+		if (cached) {
+			this._revalidateIfStale(cached);
+			return cached;
+		}
 
 		this._request(partId, mode);
 		return undefined;
+	}
+
+	/// Ask for what changed on a stale page since the version held. A request
+	/// already in flight brings the current content too, so it is not sent
+	/// twice.
+	private _revalidateIfStale(held: cool.VectorPrimitivesData): void {
+		const partId = held.partId;
+		if (!this._staleParts.delete(partId) || this._inFlightParts.has(partId))
+			return;
+		this._inFlightParts.add(partId);
+		this._sendVectorPrimitivesRequest(partId, held.mode, held);
 	}
 
 	/// Send for a page unless a request for it is already out.
@@ -447,6 +466,7 @@ class VectorManager extends RenderManagerBase {
 		const partId = this.partIdAt(part, mode);
 		if (partId === undefined) return;
 		const cached = this._cache.get(partId);
+		if (cached) this._revalidateIfStale(cached);
 		if (cached && this._isDrawable(cached)) {
 			this._renderAndFire(id, maxWidth, maxHeight, cached);
 			return;
@@ -521,6 +541,7 @@ class VectorManager extends RenderManagerBase {
 		// the page list is replaced.
 		if (values.objects === undefined) {
 			this._cache.delete(partId);
+			this._staleParts.delete(partId);
 			this._pendingPreviews.delete(partId);
 			this._missingParts.add(partId);
 			return;
@@ -566,6 +587,7 @@ class VectorManager extends RenderManagerBase {
 		const page = VectorManager._pageEntryOf(received);
 		if (page) this._takeMasterReference(data, page);
 		this._cache.set(partId, data);
+		this._staleParts.delete(partId);
 
 		this._collectResources(partId, (walker) => {
 			walker.walkObjects(received);
@@ -834,16 +856,14 @@ class VectorManager extends RenderManagerBase {
 		this._fireChanged();
 	}
 
-	/// Ask for every cached part again, keeping what is drawn until the answer arrives. A
-	/// client that was away while a part changed has nothing that marks its cache as stale,
-	/// so it would not ask on its own. Each request names the version the client holds, so
-	/// the answer is a delta from there, or a header alone when nothing changed.
+	/// Mark every cached part as stale. A client that was away while a part changed has
+	/// nothing else that tells it so. The views and the previews in view draw again, and each
+	/// stale part they draw asks for the delta since the version held, or a header alone
+	/// when nothing changed. A part that is not drawn is not asked for until it is.
 	revalidateCachedParts(): void {
-		for (const [partId, data] of Array.from(this._cache.entries())) {
-			if (this._inFlightParts.has(partId)) continue;
-			this._inFlightParts.add(partId);
-			this._sendVectorPrimitivesRequest(partId, data.mode, data);
-		}
+		for (const partId of this._cache.keys()) this._staleParts.add(partId);
+		this._fireChanged();
+		app.map.fire('vectorcontentstale');
 	}
 
 	/// Forget the requests in flight. A request sent before the connection dropped gets no
@@ -856,6 +876,7 @@ class VectorManager extends RenderManagerBase {
 	/// no other cached page uses.
 	clearCachedPart(partId: cool.VectorPartGuid): void {
 		this._cache.delete(partId);
+		this._staleParts.delete(partId);
 		this._inFlightParts.delete(partId);
 		this._bitmaps.releasePart(partId);
 		this._fonts.forgetPart(partId);
@@ -867,6 +888,7 @@ class VectorManager extends RenderManagerBase {
 	/// actually changed comes back under a new checksum anyway.
 	clearAllParts(): void {
 		this._cache.clear();
+		this._staleParts.clear();
 		this._inFlightParts.clear();
 		this._bitmaps.forgetAllParts();
 		this._fonts.forgetAllParts();
@@ -879,6 +901,7 @@ class VectorManager extends RenderManagerBase {
 	reclaimGraphicsMemory(): void {
 		this._bitmaps.clear();
 		this._cache.clear();
+		this._staleParts.clear();
 		this._inFlightParts.clear();
 		this._renderer.releaseScratchCanvases();
 		this._renderer.releaseColorChangedImages();
@@ -888,6 +911,7 @@ class VectorManager extends RenderManagerBase {
 	/// Drop all cached data for all parts.
 	discardAllCache(): void {
 		this._cache.clear();
+		this._staleParts.clear();
 		this._inFlightParts.clear();
 		this._pendingPreviews.clear();
 		this._bitmaps.clear();

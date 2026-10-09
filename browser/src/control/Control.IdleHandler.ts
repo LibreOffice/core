@@ -82,9 +82,8 @@ class IdleHandler {
 				this._active = true;
 
 				// Vector content is pushed, and a view that is away is sent none
-				// of it. Nothing marks the cache as stale, so ask for every
-				// cached part again. A view that is still loading the document
-				// asks once the load is done.
+				// of it, so the cache is marked as stale. A view that is still
+				// loading the document asks once the load is done.
 				if (this.map._docLoaded) RenderManager.revalidateCachedParts();
 
 				/*

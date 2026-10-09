@@ -358,30 +358,56 @@ describe('VectorManager', function () {
 		nodeassert.ok(data.objects.has(22), 'the new page is cached');
 	});
 
-	// A client that was away was sent none of the changes made while it was, and nothing
-	// marks its cache as stale, so it asks for every cached part again. The cache stays
-	// drawable until the answer arrives.
-	it('asks for the cached parts again and keeps drawing them', function () {
-		const manager = new VectorManager();
-		manager.handleVectorPrimitivesResponse({
-			partId: 'S0',
-			epoch: 100,
-			version: 5,
-			objects: [{ id: 11, primitives: [] }],
-		});
-
+	// Runs the steps with the socket and the map recording what the manager
+	// sends to the server and tells the rest of the client.
+	function recording(steps: () => void): { sent: string[]; fired: string[] } {
 		const sent: string[] = [];
+		const fired: string[] = [];
 		const socket: any = (app as any).socket;
 		const originalSendMessage = socket.sendMessage;
+		const originalMap = (app as any).map;
 		socket.sendMessage = function (message: string) {
 			sent.push(message);
 		};
+		(app as any).map = {
+			fire: function (name: string) {
+				fired.push(name);
+			},
+		};
 		try {
-			manager.revalidateCachedParts();
+			steps();
 		} finally {
 			socket.sendMessage = originalSendMessage;
+			(app as any).map = originalMap;
 		}
+		return { sent: sent, fired: fired };
+	}
 
+	// A response for slide i, version 5 of epoch 100.
+	const cachedSlide = (i: number): cool.VectorPrimitivesResponse => ({
+		partId: 'S' + String(i),
+		epoch: 100,
+		version: 5,
+		objects: [{ id: 11, primitives: [] }],
+	});
+
+	// A client that was away was sent none of the changes made while it was, so
+	// its cache may be behind. A page drawn after that asks what changed since
+	// the version it holds, and is drawn from the cache until the answer comes.
+	it('asks what changed on a cached page when it is drawn after being away', function () {
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse(cachedSlide(0));
+
+		const { sent, fired } = recording(() => {
+			manager.revalidateCachedParts();
+			nodeassert.ok(
+				manager.requestPart(0, cool.VectorMode.Slides),
+				'the part stopped being drawable while it was asked for again',
+			);
+			manager.requestPart(0, cool.VectorMode.Slides);
+		});
+
+		nodeassert.deepStrictEqual(fired, ['vectorcontentstale']);
 		nodeassert.strictEqual(sent.length, 1);
 		nodeassert.ok(
 			sent[0].indexOf(
@@ -389,13 +415,9 @@ describe('VectorManager', function () {
 			) >= 0,
 			'the request does not say what the client holds: ' + sent[0],
 		);
-		nodeassert.ok(
-			manager.requestPart(0, cool.VectorMode.Slides),
-			'the part stopped being drawable while it was asked for again',
-		);
 
 		// The answer is a delta, or a header alone when nothing changed. Either
-		// way it closes the request, so the part can be asked for again later.
+		// way it closes the request, so the next time away asks again.
 		manager.handleVectorPrimitivesDelta({
 			partId: 'S0',
 			epoch: 100,
@@ -403,20 +425,47 @@ describe('VectorManager', function () {
 			version: 5,
 			objects: [],
 		});
-		sent.length = 0;
-		socket.sendMessage = function (message: string) {
-			sent.push(message);
-		};
-		try {
+		const again = recording(() => {
+			manager.requestPart(0, cool.VectorMode.Slides);
 			manager.revalidateCachedParts();
-		} finally {
-			socket.sendMessage = originalSendMessage;
-		}
-		nodeassert.strictEqual(
-			sent.length,
-			1,
-			'the closed request blocked the next',
+			manager.requestPart(0, cool.VectorMode.Slides);
+		});
+		nodeassert.strictEqual(again.sent.length, 1);
+	});
+
+	// Coming back with many pages cached asks only for the ones drawn.
+	it('leaves a cached page that is not drawn after being away unasked', function () {
+		const manager = new VectorManager();
+		for (let i = 0; i < 10; i++)
+			manager.handleVectorPrimitivesResponse(cachedSlide(i));
+
+		const { sent } = recording(() => {
+			manager.revalidateCachedParts();
+			manager.requestPart(3, cool.VectorMode.Slides);
+		});
+
+		nodeassert.strictEqual(sent.length, 1);
+		nodeassert.ok(
+			sent[0].indexOf('partid=S3&') >= 0,
+			'another page was asked for: ' + sent[0],
 		);
+	});
+
+	// A page that arrives whole after being away is current, so drawing it asks
+	// for nothing.
+	it('asks nothing for a page that arrived whole after being away', function () {
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse(cachedSlide(0));
+
+		const { sent } = recording(() => {
+			manager.revalidateCachedParts();
+			const fresh = cachedSlide(0);
+			fresh.version = 6;
+			manager.handleVectorPrimitivesResponse(fresh);
+			manager.requestPart(0, cool.VectorMode.Slides);
+		});
+
+		nodeassert.strictEqual(sent.length, 0);
 	});
 
 	// A pushed delta for a page that is not cached yet answers no request, so
@@ -448,33 +497,25 @@ describe('VectorManager', function () {
 	});
 
 	// A request sent before the connection dropped gets no answer, so a reconnect forgets it
-	// and asks for the part again. A request still in flight is not sent twice.
+	// and the next draw asks for the part again. A request still in flight is not sent twice.
 	it('asks again for a cached part once its request is forgotten', function () {
 		const manager = new VectorManager();
-		manager.handleVectorPrimitivesResponse({
-			partId: 'S0',
-			epoch: 100,
-			version: 5,
-			objects: [{ id: 11, primitives: [] }],
-		});
+		manager.handleVectorPrimitivesResponse(cachedSlide(0));
 
-		const sent: string[] = [];
-		const socket: any = (app as any).socket;
-		const originalSendMessage = socket.sendMessage;
-		socket.sendMessage = function (message: string) {
-			sent.push(message);
-		};
-		try {
+		const whileInFlight = recording(() => {
 			manager.revalidateCachedParts();
+			manager.requestPart(0, cool.VectorMode.Slides);
 			manager.revalidateCachedParts();
-			nodeassert.strictEqual(sent.length, 1);
+			manager.requestPart(0, cool.VectorMode.Slides);
+		});
+		nodeassert.strictEqual(whileInFlight.sent.length, 1);
+
+		const afterReconnect = recording(() => {
 			manager.forgetRequestsInFlight();
 			manager.revalidateCachedParts();
-		} finally {
-			socket.sendMessage = originalSendMessage;
-		}
-
-		nodeassert.strictEqual(sent.length, 2);
+			manager.requestPart(0, cool.VectorMode.Slides);
+		});
+		nodeassert.strictEqual(afterReconnect.sent.length, 1);
 	});
 
 	// A page removed while the client was away is answered with the header
@@ -1507,6 +1548,35 @@ describe('VectorManager', function () {
 			again.version = 2;
 			manager.handleVectorPrimitivesResponse(again);
 			nodeassert.strictEqual(drawn.length, 2);
+		});
+
+		// A preview of a page that may be behind the document is drawn from the
+		// cache at once, and asks what changed since the version held.
+		it('draws a stale preview from the cache and asks what changed', function () {
+			const manager = new VectorManager();
+			const held = page(0, cool.VectorMode.Slides, [{ id: 1, primitives: [] }]);
+			held.epoch = 100;
+			manager.handleVectorPrimitivesResponse(held);
+			manager.revalidateCachedParts();
+
+			const sent: string[] = [];
+			const socket: any = (app as any).socket;
+			const originalSendMessage = socket.sendMessage;
+			socket.sendMessage = function (message: string) {
+				sent.push(message);
+			};
+			try {
+				manager.requestThumbnail(0, 0, cool.VectorMode.Slides, 100, 100);
+			} finally {
+				socket.sendMessage = originalSendMessage;
+			}
+
+			nodeassert.strictEqual(drawn.length, 1);
+			nodeassert.strictEqual(sent.length, 1);
+			nodeassert.ok(
+				sent[0].indexOf('partid=S0&mode=0&since=1&epoch=100') >= 0,
+				'the request does not say what the client holds: ' + sent[0],
+			);
 		});
 
 		// A preview asked for twice while its page is pending is drawn once.

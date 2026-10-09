@@ -101,6 +101,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		map.on('updateparts', this._updateDisabled, this);
 		map.on('updatepart', this._updatePart, this);
 		map.on('invalidateparts', this._invalidateParts, this);
+		map.on('vectorcontentstale', this._onVectorContentStale, this);
 		map.on('tilepreview', this._updatePreview, this);
 		map.on('tilepreviewgone', this._onPreviewGone, this);
 		map.on('insertpage', this._insertPreview, this);
@@ -1934,6 +1935,20 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	},
 
 	_onScroll: function () {
+		this._ensureVisiblePreviews();
+	},
+
+	// The vector content the previews were drawn from may be behind the
+	// document. Every preview counts as not fetched, so the ones in view are
+	// asked for now and the rest once scrolling reaches them. Each keeps its
+	// image until the new one arrives.
+	_onVectorContentStale: function () {
+		if (!this._previewTiles)
+			return;
+		for (let part = 0; part < this._previewTiles.length; ++part) {
+			if (this._previewTiles[part])
+				this._previewTiles[part].fetched = false;
+		}
 		this._ensureVisiblePreviews();
 	},
 
