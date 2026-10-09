@@ -705,6 +705,13 @@ class MouseControl extends CanvasSectionObject {
 		if (!RenderGeometrySection.answersPointer()) return false;
 		if (app.file.textCursor.visible) return false;
 
+		const alt = app.UNOModifier.ALT;
+		if (modifier === alt || modifier === (alt | app.UNOModifier.SHIFT))
+			return Interaction.context().altPress(
+				RenderGeometrySection.objectIdsAt(point.x, point.y),
+				modifier !== alt,
+			);
+
 		const hit = RenderGeometrySection.objectIdAt(point.x, point.y);
 		return Interaction.context().press(hit, modifier);
 	}
@@ -757,6 +764,23 @@ class MouseControl extends CanvasSectionObject {
 			buttons: buttons,
 			modifier: modifier,
 		};
+
+		/*
+			Alt goes through the objects under the mouse one press at a time, so two presses close
+			together are two steps, not a double press: each is answered at once and none is kept
+			to be counted with the next.
+		*/
+		const alt = app.UNOModifier.ALT;
+		if (
+			(modifier === alt || modifier === (alt | app.UNOModifier.SHIFT)) &&
+			this.selectObjectAt(sendingPosition, buttons, modifier)
+		) {
+			if (this.clickTimer) app.timerRegistry.clearTimeout(this.clickTimer);
+			this.clickTimer = null;
+			this.pendingClickInfo = null;
+			this.clickCount = 0;
+			return;
+		}
 
 		if (this.clickTimer) app.timerRegistry.clearTimeout(this.clickTimer);
 		else {

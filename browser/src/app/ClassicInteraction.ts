@@ -145,6 +145,45 @@ abstract class ClassicContext implements InteractionContext {
 		return this.selectOnly(level[to]);
 	}
 
+	/*
+		Alt+press goes through the objects under the press, deep: every object on the way from the
+		page down to each object the press meets, in the order a walk from the front to the back
+		meets them, a group before what it holds. It selects the one after the selected one, or
+		with Shift the one before it, going round at either end. So a group is selected first, the
+		next press enters it, selecting the member under the press, and after its last member under
+		the press one leaves it for the object behind. A diagram is taken whole, until what a
+		diagram does is defined. With nothing under the press selected, the frontmost is taken.
+	*/
+	public altPress(hits: number[], backwards: boolean): boolean {
+		const order: number[] = [];
+		for (const hit of hits) {
+			// The way from the page down to the object met, a diagram ending it.
+			const way: number[] = [];
+			for (
+				let objectId: number | undefined = hit, guard = 0;
+				objectId && guard < 100;
+				objectId = RenderGeometrySection.parentOf(objectId), ++guard
+			) {
+				if (RenderGeometrySection.objectOf(objectId)?.isDiagram) way.length = 0;
+				way.unshift(objectId);
+			}
+			for (const objectId of way)
+				if (!order.includes(objectId)) order.push(objectId);
+		}
+		if (!order.length) return false;
+
+		const selected = GraphicSelection.selectedObjectIDs;
+		const isSelected = (objectId: number): boolean =>
+			selected.includes(objectId);
+		const at = backwards
+			? order.map(isSelected).lastIndexOf(true)
+			: order.findIndex(isSelected);
+		if (at < 0) return this.selectOnly(order[0]);
+
+		const next = (at + (backwards ? -1 : 1) + order.length) % order.length;
+		return this.selectOnly(order[next]);
+	}
+
 	/// Ctrl+Home selects the first object of the level, Ctrl+End the last.
 	public toAnEnd(first: boolean): boolean {
 		const level = this.objectsOfTheLevel();

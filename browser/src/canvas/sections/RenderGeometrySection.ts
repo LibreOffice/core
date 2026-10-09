@@ -312,7 +312,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 		)
 			return last.hit;
 
-		const hit = this.walkObjectsAt(data, x, y);
+		const hit = this.walkObjectsAt(data, x, y, false)[0];
 		RenderGeometrySection._lastHit = {
 			x: x,
 			y: y,
@@ -323,11 +323,27 @@ class RenderGeometrySection extends CanvasSectionObject {
 		return hit;
 	}
 
+	/// The objects of the page under a document position, in twips, from the front to the back:
+	/// every one the point meets, not only the topmost. Empty where it meets none.
+	public static objectIdsAt(x: number, y: number): number[] {
+		const data = RenderGeometrySection.currentPart();
+		const section = RenderGeometrySection.ofPage();
+		if (!data || !section) return [];
+
+		return section
+			.walkObjectsAt(data, x, y, true)
+			.map((hit: RenderGeometryHit) => hit.id);
+	}
+
+	/// The objects the point meets, from the front to the back: the topmost alone, or with
+	/// everyOne set every one of them.
 	private walkObjectsAt(
 		data: cool.VectorPrimitivesData,
 		x: number,
 		y: number,
-	): RenderGeometryHit | undefined {
+		everyOne: boolean,
+	): RenderGeometryHit[] {
+		const hits: RenderGeometryHit[] = [];
 		const tolerance =
 			RenderGeometrySection.hitTolerancePixels * app.pixelsToTwips;
 		const position: cool.HitPosition = {
@@ -375,10 +391,13 @@ class RenderGeometrySection extends CanvasSectionObject {
 				position,
 				range,
 			);
-			if (hit) return { id: id, hit: hit };
+			if (!hit) continue;
+
+			hits.push({ id: id, hit: hit });
+			if (!everyOne) break;
 		}
 
-		return undefined;
+		return hits;
 	}
 
 	/*

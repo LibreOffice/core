@@ -47,6 +47,10 @@ interface InteractionContext {
 	/// A double press of the left button on that object, or on no object.
 	doublePress(hit: number | undefined): boolean;
 
+	/// A press with Alt, or with Alt and Shift for backwards, on those objects, from the front to
+	/// the back: all the objects under the press, not only the topmost.
+	altPress(hits: number[], backwards: boolean): boolean;
+
 	/// An arrow key, pointing that way.
 	arrowKey(towards: cool.Point, event: KeyboardEvent): boolean;
 

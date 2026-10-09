@@ -1957,6 +1957,18 @@ abstract class SelectionSection extends CanvasSectionObject {
 		)
 			return;
 
+		// Alt goes through the objects under the press, which is the context's as well.
+		const alt = app.UNOModifier.ALT;
+		if (
+			(modifier === alt || modifier === (alt | app.UNOModifier.SHIFT)) &&
+			RenderGeometrySection.answersPointer() &&
+			Interaction.context().altPress(
+				RenderGeometrySection.objectIdsAt(at.x, at.y),
+				modifier !== alt,
+			)
+		)
+			return;
+
 		this.pendingClick = app.timerRegistry.setTimeout(
 			'selectionClick',
 			() => {
@@ -1990,6 +2002,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 		const at = this.inTheDocument(point);
 
 		this.forgetThePendingClick();
+
+		// With Alt each press is a step through the objects under the mouse, taken on its own.
+		if (e.altKey) {
+			this.stopPropagating();
+			e.stopPropagation();
+			return;
+		}
 
 		if (
 			Interaction.context().doublePress(
