@@ -165,7 +165,10 @@ class GraphicSelection {
 
 		if (this.followingDeletions) return;
 		this.followingDeletions = true;
-		RenderManager.onVectorChanged(() => GraphicSelection.followDeletions());
+		RenderManager.onVectorChanged(() => {
+			GraphicSelection.followDeletions();
+			GraphicSelection.followTheTextEdit();
+		});
 	}
 
 	/*
@@ -427,18 +430,40 @@ class GraphicSelection {
 	*/
 	private static textIsBeingEdited(): boolean {
 		if (app.file.textCursor.visible) return true;
-		if (!RenderManager.isVectorRendering()) return false;
+		return this.objectUnderTextEdit() !== undefined;
+	}
+
+	/// The object this view edits the text of, in a view that draws from the objects: the one its
+	/// text edit entry belongs to. Nothing while it edits none.
+	private static objectUnderTextEdit(): number | undefined {
+		if (!RenderManager.isVectorRendering()) return undefined;
 
 		const data = RenderGeometrySection.currentPart();
 		const ownViewId = (
 			app.map?._docLayer as unknown as cool.CanvasTileLayerInterface | undefined
 		)?._viewId;
-		if (!data || ownViewId === undefined) return false;
+		if (!data || ownViewId === undefined) return undefined;
 
 		for (const object of data.objects.values())
 			if (object.kind === 'texteditoverlay' && object.viewId === ownViewId)
-				return true;
-		return false;
+				return object.parent;
+		return undefined;
+	}
+
+	/*
+		Takes the object this view edits the text of as the selection, where the edit moved on to
+		another one: a press during a text edit goes to the engine, which in a diagram edits the
+		object pressed without marking anything new, so no report says so. The engine works on that
+		object already, and is not told again, which would end the edit.
+	*/
+	private static followTheTextEdit(): void {
+		const edited = this.objectUnderTextEdit();
+		if (!edited || this.selectedObjectIDs.includes(edited)) return;
+		if (!RenderGeometrySection.objectOf(edited)) return;
+
+		this.selectedObjectIDs = [edited];
+		this.rememberWhereItStands([edited]);
+		this.updateSelectionSection();
 	}
 
 	/*
