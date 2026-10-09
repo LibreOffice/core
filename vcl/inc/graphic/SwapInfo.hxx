@@ -38,6 +38,8 @@ struct SwapInfo
 
     sal_uInt32 mnAnimationLoopCount = 0;
     sal_Int32 mnPageIndex = -1;
+    /// location of an SVG, for its relative references, or empty if it has none
+    OUString maSvgLocation;
 
     bool operator==(SwapInfo const& rOther) const = default;
 };

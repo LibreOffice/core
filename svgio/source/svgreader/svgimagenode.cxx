@@ -182,6 +182,11 @@ namespace svgio::svgreader
             }
         }
 
+        OUString SvgImageNode::getExternalImageUrl() const
+        {
+            return resolveExternalImageUrl(getDocument().getAbsolutePath(), maUrl, maData);
+        }
+
         void SvgImageNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool /*bReferenced*/) const
         {
             // get size range and create path
@@ -227,8 +232,7 @@ namespace svgio::svgreader
             }
             else if(!maUrl.isEmpty())
             {
-                const OUString aAbsUrl
-                    = resolveImageUrl(getDocument().getAbsolutePath(), maUrl);
+                const OUString aAbsUrl = getExternalImageUrl();
 
                 if (!aAbsUrl.isEmpty())
                 {

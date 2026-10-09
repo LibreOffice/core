@@ -383,6 +383,8 @@ void ImpGraphic::createSwapInfo()
     maSwapInfo.mbIsAlpha = isAlpha();
     maSwapInfo.mnAnimationLoopCount = getAnimationLoopCount();
     maSwapInfo.mnPageIndex = getPageNumber();
+    maSwapInfo.maSvgLocation
+        = maVectorGraphicData ? maVectorGraphicData->getSvgLocation() : OUString();
 }
 
 void ImpGraphic::clearGraphics()
@@ -1449,6 +1451,14 @@ void ImpGraphic::restoreFromSwapInfo()
 {
     setValuesForPrefMapMod(maSwapInfo.maPrefMapMode);
     setValuesForPrefSize(maSwapInfo.maPrefSize);
+
+    // The data read back holds only the bytes, so an SVG gets its location again here.
+    if (maVectorGraphicData && maVectorGraphicData->getSvgLocation() != maSwapInfo.maSvgLocation)
+    {
+        maVectorGraphicData = std::make_shared<VectorGraphicData>(
+            maVectorGraphicData->getBinaryDataContainer(), maVectorGraphicData->getType(),
+            maSwapInfo.mnPageIndex, maSwapInfo.maSvgLocation);
+    }
 
     if (maVectorGraphicData)
     {

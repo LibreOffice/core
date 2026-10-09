@@ -65,6 +65,9 @@ private:
     /// If the vector format has more pages this denotes which page to render
     sal_Int32 mnPageIndex;
 
+    /// The location an SVG was read from, for its relative references, or empty if it has none
+    OUString maSvgLocation;
+
     /// Useful for PDF, which is vector-based, but still rendered to a bitmap.
     basegfx::B2DTuple maSizeHint;
 
@@ -82,7 +85,8 @@ public:
     VectorGraphicData(
         BinaryDataContainer aDataContainer,
         VectorGraphicDataType eVectorDataType,
-        sal_Int32 nPageIndex = -1);
+        sal_Int32 nPageIndex = -1,
+        OUString aSvgLocation = OUString());
     ~VectorGraphicData();
 
     /// compare op
@@ -98,6 +102,8 @@ public:
     std::pair<State, size_t> getSizeBytes() const;
 
     const VectorGraphicDataType& getType() const { return meType; }
+
+    const OUString& getSvgLocation() const { return maSvgLocation; }
 
     /// data read and evtl. on demand creation
     const basegfx::B2DRange& getRange() const;

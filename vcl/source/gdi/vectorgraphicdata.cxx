@@ -127,7 +127,7 @@ static size_t estimateSize(
 
 bool VectorGraphicData::operator==(const VectorGraphicData& rCandidate) const
 {
-    if (getType() == rCandidate.getType())
+    if (getType() == rCandidate.getType() && maSvgLocation == rCandidate.maSvgLocation)
     {
         if (maDataContainer.getSize() == rCandidate.maDataContainer.getSize())
         {
@@ -233,7 +233,7 @@ void VectorGraphicData::ensureSequenceAndRange()
             const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
 
             if (xInputStream.is())
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(xInputStream, OUString()));
+                maSequence = comphelper::sequenceToContainer<std::deque<uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(xInputStream, maSvgLocation));
 
             break;
         }
@@ -320,12 +320,13 @@ std::pair<VectorGraphicData::State, size_t> VectorGraphicData::getSizeBytes() co
     }
 }
 
-VectorGraphicData::VectorGraphicData(BinaryDataContainer aDataContainer, VectorGraphicDataType eVectorDataType, sal_Int32 nPageIndex)
+VectorGraphicData::VectorGraphicData(BinaryDataContainer aDataContainer, VectorGraphicDataType eVectorDataType, sal_Int32 nPageIndex, OUString aSvgLocation)
 :   maDataContainer(std::move(aDataContainer)),
     mbSequenceCreated(false),
     mNestedBitmapSize(0),
     meType(eVectorDataType),
-    mnPageIndex(nPageIndex)
+    mnPageIndex(nPageIndex),
+    maSvgLocation(std::move(aSvgLocation))
 {
 }
 

@@ -29,16 +29,20 @@
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/drawing/XSlideSorterSelectionSupplier.hpp>
 
 #include <unotools/mediadescriptor.hxx>
+#include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
@@ -411,6 +415,25 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
                 tools::Rectangle(
                     Point(0, 0),
                     aGraphicSize));
+
+            // An SVG opened as a document of its own gets its location, and so the pictures outside
+            // it that it refers to, once the user allows link updates. Under the kit the document
+            // is a copy in the jail, so the files beside it are not the user's.
+            const OUString aSvgLocation(aMediaDescriptor.getUnpackedValueOrDefault(
+                utl::MediaDescriptor::PROP_URL, OUString()));
+            if (!aSvgLocation.isEmpty() && rVectorGraphicData
+                && VectorGraphicDataType::Svg == rVectorGraphicData->getType())
+            {
+                const uno::Reference<graphic::XSvgParser> xSvgParser
+                    = graphic::SvgTools::create(comphelper::getProcessComponentContext());
+                const BinaryDataContainer& rSvgData = rVectorGraphicData->getBinaryDataContainer();
+                SvMemoryStream aSvgStream(const_cast<sal_uInt8*>(rSvgData.getData()),
+                                          rSvgData.getSize(), StreamMode::READ);
+                const uno::Sequence<OUString> aPictureUrls = xSvgParser->getExternalImageUrls(
+                    new utl::OInputStreamWrapper(aSvgStream), aSvgLocation);
+                if (aPictureUrls.hasElements())
+                    aNewSdrGrafObj->SetSvgPictureLink(aSvgLocation, aPictureUrls[0]);
+            }
 
             // insert to page (owner change of SdrGrafObj)
             pTargetSdrPage->InsertObject(aNewSdrGrafObj.get());

@@ -20,6 +20,7 @@
 #include <unotools/streamwrap.hxx>
 
 #include <sfx2/lnkbase.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
@@ -125,6 +126,40 @@ void SdrGraphicLink::Closed()
     SvBaseLink::Closed();
 }
 
+// An SVG opened as a document of its own may refer to pictures outside itself. It is shown without
+// them until the user allows link updates, and then it gets its location so that it opens them.
+class SdrSvgPictureLink final : public sfx2::SvBaseLink
+{
+    SdrGrafObj& mrGrafObj;
+
+public:
+    explicit SdrSvgPictureLink(SdrGrafObj& rObj);
+
+    virtual void Closed() override;
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const OUString& rMimeType, const uno::Any& rValue) override;
+};
+
+SdrSvgPictureLink::SdrSvgPictureLink(SdrGrafObj& rObj)
+    : ::sfx2::SvBaseLink(::SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SIMPLE_FILE)
+    , mrGrafObj(rObj)
+{
+    SetSynchron(false);
+}
+
+::sfx2::SvBaseLink::UpdateResult SdrSvgPictureLink::DataChanged(
+    const OUString&, const uno::Any&)
+{
+    mrGrafObj.ImpApplySvgLocation();
+    return SUCCESS;
+}
+
+void SdrSvgPictureLink::Closed()
+{
+    mrGrafObj.m_pSvgPictureLink = nullptr;
+    SvBaseLink::Closed();
+}
+
 std::unique_ptr<sdr::properties::BaseProperties> SdrGrafObj::CreateObjectSpecificProperties()
 {
     return std::make_unique<sdr::properties::GraphicProperties>(*this);
@@ -196,6 +231,7 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel)
 :   SdrRectObj(rSdrModel)
     ,mpGraphicObject(new GraphicObject)
     ,m_pGraphicLink(nullptr)
+    ,m_pSvgPictureLink(nullptr)
     ,m_bMirrored(false)
     ,mbIsSignatureLine(false)
     ,mbIsSignatureLineShowSignDate(true)
@@ -220,6 +256,7 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel, SdrGrafObj const & rSource)
 :   SdrRectObj(rSdrModel, rSource)
     ,mpGraphicObject(new GraphicObject)
     ,m_pGraphicLink(nullptr)
+    ,m_pSvgPictureLink(nullptr)
 {
     onGraphicChanged();
 
@@ -275,6 +312,7 @@ SdrGrafObj::SdrGrafObj(
 :   SdrRectObj(rSdrModel, rRect)
     ,mpGraphicObject(new GraphicObject(rGraphic))
     ,m_pGraphicLink(nullptr)
+    ,m_pSvgPictureLink(nullptr)
     ,m_bMirrored(false)
     ,mbIsSignatureLine(false)
     ,mbIsSignatureLineShowSignDate(true)
@@ -301,6 +339,7 @@ SdrGrafObj::SdrGrafObj(
 :   SdrRectObj(rSdrModel)
     ,mpGraphicObject(new GraphicObject(rGraphic))
     ,m_pGraphicLink(nullptr)
+    ,m_pSvgPictureLink(nullptr)
     ,m_bMirrored(false)
     ,mbIsSignatureLine(false)
     ,mbIsSignatureLineShowSignDate(true)
@@ -324,10 +363,12 @@ SdrGrafObj::SdrGrafObj(
 SdrGrafObj::~SdrGrafObj()
 {
     ImpDeregisterLink();
+    ImpDeregisterSvgPictureLink();
 }
 
 void SdrGrafObj::SetGraphicObject(const GraphicObject& rGraphicObject)
 {
+    SetSvgPictureLink(OUString(), OUString());
     mpGraphicObject.reset(new GraphicObject(rGraphicObject));
     mpReplacementGraphicObject.reset();
     mpGraphicObject->SetUserData();
@@ -442,6 +483,7 @@ void SdrGrafObj::NbcSetGraphic(const Graphic& rGraphic)
 
 void SdrGrafObj::SetGraphic( const Graphic& rGraphic )
 {
+    SetSvgPictureLink(OUString(), OUString());
     if (!rGraphic.getOriginURL().isEmpty())
     {
         ImpDeregisterLink();
@@ -628,6 +670,50 @@ void SdrGrafObj::ImpDeregisterLink()
         pLinkManager->Remove( m_pGraphicLink );
         m_pGraphicLink=nullptr;
     }
+}
+
+void SdrGrafObj::SetSvgPictureLink(const OUString& rSvgLocation, const OUString& rFirstPictureUrl)
+{
+    ImpDeregisterSvgPictureLink();
+    maSvgLocation = rSvgLocation;
+    maSvgFirstPictureUrl = rFirstPictureUrl;
+    if (IsInserted())
+        ImpRegisterSvgPictureLink();
+}
+
+void SdrGrafObj::ImpRegisterSvgPictureLink()
+{
+    sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
+    if (!pLinkManager || m_pSvgPictureLink || maSvgFirstPictureUrl.isEmpty())
+        return;
+
+    m_pSvgPictureLink = new SdrSvgPictureLink(*this);
+    pLinkManager->InsertFileLink(*m_pSvgPictureLink, sfx2::SvBaseLinkObjectType::ClientFile,
+                                 maSvgFirstPictureUrl);
+}
+
+void SdrGrafObj::ImpDeregisterSvgPictureLink()
+{
+    sfx2::LinkManager* pLinkManager(getSdrModelFromSdrObject().GetLinkManager());
+    if (pLinkManager && m_pSvgPictureLink)
+    {
+        // Remove implicitly deletes the link object
+        pLinkManager->Remove(m_pSvgPictureLink);
+        m_pSvgPictureLink = nullptr;
+    }
+}
+
+void SdrGrafObj::ImpApplySvgLocation()
+{
+    const std::shared_ptr<VectorGraphicData>& rData = GetGraphic().getVectorGraphicData();
+    if (!rData || rData->getType() != VectorGraphicDataType::Svg
+        || rData->getSvgLocation() == maSvgLocation)
+        return;
+
+    NbcSetGraphic(Graphic(std::make_shared<VectorGraphicData>(
+        rData->getBinaryDataContainer(), VectorGraphicDataType::Svg, -1, maSvgLocation)));
+    ActionChanged();
+    BroadcastObjectChange();
 }
 
 void SdrGrafObj::SetGraphicLink(const OUString& rFileName)
@@ -923,6 +1009,7 @@ void SdrGrafObj::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
 
         if( m_pGraphicLink != nullptr )
             ImpDeregisterLink();
+        ImpDeregisterSvgPictureLink();
     }
 
     // call parent
@@ -932,6 +1019,9 @@ void SdrGrafObj::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
     {
         ImpRegisterLink();
     }
+
+    if (bInsert)
+        ImpRegisterSvgPictureLink();
 }
 
 void SdrGrafObj::StartAnimation()

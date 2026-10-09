@@ -53,6 +53,24 @@ interface XSvgParser : ::com::sun::star::uno::XInterface
     any getDrawCommands(
         [in] io::XInputStream xSvgStream,
         [in] string aAbsolutePath);
+
+    /** List the pictures outside the SVG that its image and feImage elements refer to
+
+        Nothing is opened. A picture held in the SVG as a data URL, or a reference to an
+        element of the SVG itself, is not listed.
+
+        @param xSvgStream
+        The file containing the SVG XML data
+
+        @param aAbsolutePath
+        The path containing the SVG XML data. Relative references are resolved against it.
+
+        @returns
+        The absolute URL of each picture outside the SVG, resolved against aAbsolutePath
+     */
+    sequence< string > getExternalImageUrls(
+        [in] io::XInputStream xSvgStream,
+        [in] string aAbsolutePath);
 };
 
 }; }; }; };

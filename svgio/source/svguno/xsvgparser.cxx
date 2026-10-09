@@ -29,12 +29,16 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <svgdocumenthandler.hxx>
+#include <svgfeimagenode.hxx>
+#include <svgimagenode.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <rtl/ref.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 
 #include <svgvisitor.hxx>
+#include <algorithm>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -63,6 +67,10 @@ namespace svgio::svgreader
                 const OUString& aAbsolutePath) override;
 
             virtual uno::Any SAL_CALL getDrawCommands(
+                uno::Reference<io::XInputStream> const & xSvgStream,
+                const OUString& aAbsolutePath) override;
+
+            virtual uno::Sequence<OUString> SAL_CALL getExternalImageUrls(
                 uno::Reference<io::XInputStream> const & xSvgStream,
                 const OUString& aAbsolutePath) override;
 
@@ -173,6 +181,40 @@ namespace svgio::svgreader
             }
 
             return aAnyResult;
+        }
+
+        static void collectExternalImageUrls(const SvgNode& rNode, std::vector<OUString>& rUrls)
+        {
+            OUString aUrl;
+            if (auto pImage = dynamic_cast<const SvgImageNode*>(&rNode))
+                aUrl = pImage->getExternalImageUrl();
+            else if (auto pFeImage = dynamic_cast<const SvgFeImageNode*>(&rNode))
+                aUrl = pFeImage->getExternalImageUrl();
+
+            if (!aUrl.isEmpty() && std::find(rUrls.begin(), rUrls.end(), aUrl) == rUrls.end())
+                rUrls.push_back(aUrl);
+
+            for (std::unique_ptr<SvgNode> const & pChild : rNode.getChildren())
+                collectExternalImageUrls(*pChild, rUrls);
+        }
+
+        uno::Sequence<OUString> XSvgParser::getExternalImageUrls(
+                uno::Reference<io::XInputStream> const & xSvgStream,
+                const OUString& aAbsolutePath)
+        {
+            std::vector<OUString> aUrls;
+
+            if (!xSvgStream.is())
+                return {};
+
+            rtl::Reference<SvgDocHdl> pSvgDocHdl = new SvgDocHdl(aAbsolutePath);
+            parseSvgXML(xSvgStream, pSvgDocHdl);
+
+            const SvgDocument& rDocument = pSvgDocHdl->getSvgDocument();
+            for (std::unique_ptr<SvgNode> const & pCandidate : rDocument.getSvgNodeVector())
+                collectExternalImageUrls(*pCandidate, aUrls);
+
+            return comphelper::containerToSequence(aUrls);
         }
 
         OUString SAL_CALL XSvgParser::getImplementationName()
