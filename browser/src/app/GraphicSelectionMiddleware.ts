@@ -125,6 +125,80 @@ class GraphicSelection {
 		this.updateGraphicSelection();
 	}
 
+	/// True while the client named something to the engine that is no place to stand in, a
+	/// diagram alone, for a command to work on: the report that comes of it is taken as it is.
+	private static nextReportAsItIs: boolean = false;
+
+	/// Takes the engine's next report of the selection as it comes.
+	public static takeTheNextReportAsItIs(): void {
+		this.nextReportAsItIs = true;
+	}
+
+	/// The commands whose state a view that draws from the objects gives itself, from where the
+	/// selection stands, rather than taking the engine's.
+	private static readonly statesGivenHere: string[] = [
+		'.uno:EnterGroup',
+		'.uno:LeaveGroup',
+		'.uno:FormatUngroup',
+	];
+
+	/// The state of each of those last given, so a state is told only when it changes.
+	private static statesGiven: { [command: string]: string } = {};
+
+	/// Whether the state of that command is given here, so the engine's is left aside.
+	public static givesTheState(commandName: string): boolean {
+		return (
+			RenderManager.isVectorRendering() &&
+			GraphicSelection.statesGivenHere.includes(commandName)
+		);
+	}
+
+	/*
+		Tells the states this view gives itself, as the engine tells a state: to the client's
+		widgets, and to the application around it where there is one. Only a state that changed
+		is told.
+	*/
+	public static tellTheStates(): void {
+		if (!RenderManager.isVectorRendering()) return;
+
+		const states = Interaction.context().commandStates();
+		for (const commandName of GraphicSelection.statesGivenHere) {
+			const state = states[commandName] ? 'enabled' : 'disabled';
+			if (GraphicSelection.statesGiven[commandName] === state) continue;
+			GraphicSelection.statesGiven[commandName] = state;
+
+			const json = { commandName: commandName, state: state };
+			app.map.fire('commandstatechanged', json);
+			const host = window as unknown as {
+				ThisIsTheMacOSApp?: boolean;
+				ThisIsTheQtApp?: boolean;
+				ThisIsTheWindowsApp?: boolean;
+				postMobileMessage?: (message: string) => void;
+			};
+			if (
+				host.ThisIsTheMacOSApp ||
+				host.ThisIsTheQtApp ||
+				host.ThisIsTheWindowsApp
+			)
+				host.postMobileMessage?.('COMMANDSTATECHANGED ' + JSON.stringify(json));
+		}
+	}
+
+	/*
+		Runs a command whose meaning a view that draws from the objects gives itself: entering and
+		leaving a group, which are the context's, as Enter, F3 and Ctrl+F3 are, and taking apart
+		what is selected, which in a diagram is the diagram. Answers whether it was run here; one
+		that is not goes to the engine.
+	*/
+	public static takesTheCommand(command: string): boolean {
+		if (!RenderManager.isVectorRendering()) return false;
+		if (command === '.uno:EnterGroup') return Interaction.context().enterKey();
+		if (command === '.uno:LeaveGroup') return Interaction.context().leaveKey();
+		if (command === '.uno:FormatUngroup')
+			return Interaction.context().ungroup();
+		return false;
+	}
+
 	/*
 		Marks the drawing objects with the given unique ids, and nothing else. The engine is told
 		which objects they are rather than where the click was, so what the client hit and what the
@@ -136,6 +210,7 @@ class GraphicSelection {
 		this.rememberWhereItStands(objectIds);
 		if (!objectIds.length) this.stoodAt = null;
 		app.socket.sendMessage('selectobjects ids=' + objectIds.join(','));
+		this.tellTheStates();
 	}
 
 	/*
@@ -240,10 +315,14 @@ class GraphicSelection {
 		this.selectedObjectIDs = objectIds.slice();
 		this.selectionCameFromElsewhere = changed;
 		this.rememberWhereItStands(objectIds);
+		this.tellTheStates();
 
 		// A selection the engine made that is no place to stand, a diagram alone for one, is
-		// taken as the context says, and the engine is told.
-		if (RenderManager.isVectorRendering()) {
+		// taken as the context says, and the engine is told - unless the client named it to the
+		// engine on purpose and waits for what comes of it.
+		const asItIs = this.nextReportAsItIs;
+		this.nextReportAsItIs = false;
+		if (RenderManager.isVectorRendering() && !asItIs) {
 			const wanted = Interaction.context().enteredBy(objectIds);
 			if (
 				wanted.length !== objectIds.length ||
@@ -464,6 +543,7 @@ class GraphicSelection {
 		this.selectedObjectIDs = [edited];
 		this.rememberWhereItStands([edited]);
 		this.updateSelectionSection();
+		this.tellTheStates();
 	}
 
 	/*

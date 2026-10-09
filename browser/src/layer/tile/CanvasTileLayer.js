@@ -2190,6 +2190,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			// when json.commandName is '.uno:RowColSelCount'.
 			// A command may only carry 'enabled' flag (.uno:DatabaseSettings).
 			if (json.commandName && (json.state !== undefined || json.enabled !== undefined)) {
+				// A state the view that draws from the objects gives itself is not taken from here.
+				if (GraphicSelection.givesTheState(json.commandName))
+					return;
 				this._map.fire('commandstatechanged', json);
 				if (window.ThisIsTheMacOSApp || window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {
 					window.postMobileMessage('COMMANDSTATECHANGED ' + JSON.stringify(json));
@@ -2211,6 +2214,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			var index = textMsg.indexOf('=');
 			var commandName = index !== -1 ? textMsg.substr(0, index) : '';
 			var state = index !== -1 ? textMsg.substr(index + 1) : '';
+			// A state the view that draws from the objects gives itself is not taken from here.
+			if (GraphicSelection.givesTheState(commandName))
+				return;
 			const json = {commandName : commandName, state : state};
 			this._map.fire('commandstatechanged', json);
 			if (window.ThisIsTheMacOSApp || window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {

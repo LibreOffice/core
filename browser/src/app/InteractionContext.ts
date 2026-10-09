@@ -63,6 +63,14 @@ interface InteractionContext {
 	/// Ctrl+F3, which leaves a group.
 	leaveKey(): boolean;
 
+	/// Whether the commands whose state the client gives itself may be used where one stands,
+	/// by command name.
+	commandStates(): { [command: string]: boolean };
+
+	/// Ungroup, which takes apart what is selected. Answers whether it was run here; one that is
+	/// not goes to the engine.
+	ungroup(): boolean;
+
 	/// Tab, forwards, or with Shift backwards.
 	tabKey(forwards: boolean): boolean;
 

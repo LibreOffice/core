@@ -411,9 +411,12 @@ window.L.Map.include({
 			console.debug('Cannot execute: ' + command + ' when dialog is opened.');
 			this.dialog.blinkOpenDialog();
 		} else if (this.isEditMode() || isAllowedInReadOnly) {
-			app.socket.sendMessage('uno ' + command + (json ? ' ' + JSON.stringify(json) : ''));
-			if (command === '.uno:EnterGroup')
-				GraphicSelection.takeTheFirstOfTheGroup();
+			// A view that draws from the objects enters and leaves groups itself.
+			if (!GraphicSelection.takesTheCommand(command)) {
+				app.socket.sendMessage('uno ' + command + (json ? ' ' + JSON.stringify(json) : ''));
+				if (command === '.uno:EnterGroup')
+					GraphicSelection.takeTheFirstOfTheGroup();
+			}
 			// user interaction turns off the following of other users
 			if (map.userList && map._docLayer && map._docLayer._viewId)
 				map.userList.followUser(map._docLayer._viewId, /* do instant scroll */ false);

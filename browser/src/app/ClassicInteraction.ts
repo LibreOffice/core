@@ -123,6 +123,37 @@ abstract class ClassicContext implements InteractionContext {
 		return true;
 	}
 
+	/*
+		Enter Group may be used on one selected group that is no diagram, as Enter and F3 enter
+		it; Leave Group wherever one stands in a group or a diagram; Ungroup where a selected
+		object holds others, a group or a diagram among several.
+	*/
+	public commandStates(): { [command: string]: boolean } {
+		const selected = GraphicSelection.selectedObjectIDs;
+		const single = selected.length === 1 ? selected[0] : undefined;
+		const aGroup =
+			single !== undefined &&
+			RenderGeometrySection.holdsObjects(single) &&
+			!RenderGeometrySection.objectOf(single)?.isDiagram;
+
+		return {
+			'.uno:EnterGroup': aGroup,
+			'.uno:LeaveGroup': this.groupStoodIn !== undefined,
+			// A diagram among several is an object like any other, and is taken apart only
+			// selected as a whole on its own.
+			'.uno:FormatUngroup': selected.some(
+				(objectId: number) =>
+					RenderGeometrySection.holdsObjects(objectId) &&
+					!RenderGeometrySection.objectOf(objectId)?.isDiagram,
+			),
+		};
+	}
+
+	/// Ungroup is the engine's, for what is selected.
+	public ungroup(): boolean {
+		return false;
+	}
+
 	/// Ctrl+F3 leaves the group one stands in, selecting it. On the page there is none to leave.
 	public leaveKey(): boolean {
 		if (this.groupStoodIn === undefined) return false;
@@ -437,14 +468,60 @@ class ClassicDiagramContext extends ClassicGroupContext {
 		return this.leave();
 	}
 
-	/// Ctrl+F3 leaves the diagram as well.
+	/// Whether the first object is selected, which stands for the whole diagram: then the
+	/// diagram is what is selected, at the level around it.
+	private wholeSelected(): boolean {
+		return (
+			GraphicSelection.selectedObjectIDs[0] === this.objectsOfTheLevel()[0]
+		);
+	}
+
+	/*
+		Leave Group, and Ctrl+F3, on an object of the diagram go to its first object, the whole
+		diagram, as Escape does. With the whole diagram selected it is an object at the level
+		around it: inside a group they leave that group, selecting it; on the page there is
+		nothing to leave.
+	*/
 	public leaveKey(): boolean {
-		return this.leave();
+		if (!this.wholeSelected()) return this.escape();
+
+		return RenderGeometrySection.parentOf(this.diagram) ? this.leave() : false;
 	}
 
 	/// Enter and F3 are the engine's here, Enter starting the text edit of the object.
 	public enterKey(): boolean {
 		return false;
+	}
+
+	/*
+		A diagram gives no hint of being a group but by Ungroup, which is offered with the whole
+		diagram selected, its first object, as for a group. Enter Group is never offered. Leave
+		Group is offered inside the diagram, on its other objects, and with the whole diagram
+		selected as for any object at the level around it: only where a group holds it.
+	*/
+	public commandStates(): { [command: string]: boolean } {
+		const whole = this.wholeSelected();
+		return {
+			'.uno:EnterGroup': false,
+			'.uno:LeaveGroup':
+				!whole || !!RenderGeometrySection.parentOf(this.diagram),
+			'.uno:FormatUngroup': whole,
+		};
+	}
+
+	/*
+		Ungroup takes the diagram apart, with the whole diagram selected. The engine is named the
+		diagram itself first, which is no place for the client to stand in, so the client's
+		selection stays as it is until the engine reports what taking it apart left selected.
+	*/
+	public ungroup(): boolean {
+		// Only the whole diagram is taken apart; on its other objects there is nothing to do.
+		if (!this.wholeSelected()) return true;
+
+		GraphicSelection.takeTheNextReportAsItIs();
+		app.socket.sendMessage('selectobjects ids=' + this.diagram);
+		app.socket.sendMessage('uno .uno:FormatUngroup');
+		return true;
 	}
 
 	/*
