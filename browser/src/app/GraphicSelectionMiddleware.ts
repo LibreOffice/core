@@ -209,8 +209,7 @@ class GraphicSelection {
 			return;
 		}
 
-		this.selectObjects(wanted);
-		this.updateSelectionSection();
+		this.selectAndShow(wanted);
 	}
 
 	/// The engine was asked to enter the selected group; the context says what is selected then.
@@ -513,6 +512,36 @@ class GraphicSelection {
 			scrolled -= (Math.floor(beforeStart / free) + 1) * free;
 
 		return scrolled;
+	}
+
+	/*
+		Selects those objects and brings them on screen, for a selection that does not come from
+		pressing at a point: a key, a command, or what is left after a deletion. A press always
+		lands on something in view, and the view stays put for it.
+	*/
+	public static selectAndShow(objectIds: number[]): void {
+		this.selectObjects(objectIds);
+		this.updateSelectionSection();
+
+		let box: cool.Range2D | undefined;
+		for (const objectId of objectIds) {
+			const own = RenderGeometrySection.boxOf(objectId);
+			if (own) box = box ? box.union(own) : own;
+		}
+		if (!box) return;
+
+		// The room a handle is drawn in goes round the box, so the handles are on screen too.
+		const room = 1.5 * ShapeHandlesSection.handleSize() * app.pixelsToTwips;
+		const shown = box.expand(room, room);
+
+		GraphicSelection.scrollRectangleIntoView(
+			new cool.SimpleRectangle(
+				shown.minX,
+				shown.minY,
+				shown.width,
+				shown.height,
+			),
+		);
 	}
 
 	/*

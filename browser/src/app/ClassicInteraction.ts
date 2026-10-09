@@ -93,8 +93,7 @@ abstract class ClassicContext implements InteractionContext {
 		const held = RenderGeometrySection.heldBy(selected[0]);
 		if (!held.length) return false;
 
-		GraphicSelection.selectObjects([held[0]]);
-		GraphicSelection.updateSelectionSection();
+		GraphicSelection.selectAndShow([held[0]]);
 		return true;
 	}
 
@@ -102,8 +101,7 @@ abstract class ClassicContext implements InteractionContext {
 	public leaveKey(): boolean {
 		if (this.groupStoodIn === undefined) return false;
 
-		GraphicSelection.selectObjects([this.groupStoodIn]);
-		GraphicSelection.updateSelectionSection();
+		GraphicSelection.selectAndShow([this.groupStoodIn]);
 		return true;
 	}
 
@@ -118,8 +116,14 @@ abstract class ClassicContext implements InteractionContext {
 			: RenderGeometrySection.heldBy(this.groupStoodIn);
 	}
 
-	/// Selects that one object of the level alone.
+	/// Selects that one object alone and brings it on screen, for a key.
 	private selectOnly(objectId: number): boolean {
+		GraphicSelection.selectAndShow([objectId]);
+		return true;
+	}
+
+	/// Selects that one object alone where the mouse is, which is on screen already.
+	private selectOnlyHere(objectId: number): boolean {
 		GraphicSelection.selectObjects([objectId]);
 		GraphicSelection.updateSelectionSection();
 		return true;
@@ -178,10 +182,10 @@ abstract class ClassicContext implements InteractionContext {
 		const at = backwards
 			? order.map(isSelected).lastIndexOf(true)
 			: order.findIndex(isSelected);
-		if (at < 0) return this.selectOnly(order[0]);
+		if (at < 0) return this.selectOnlyHere(order[0]);
 
 		const next = (at + (backwards ? -1 : 1) + order.length) % order.length;
-		return this.selectOnly(order[next]);
+		return this.selectOnlyHere(order[next]);
 	}
 
 	/// Ctrl+Home selects the first object of the level, Ctrl+End the last.
@@ -200,8 +204,7 @@ abstract class ClassicContext implements InteractionContext {
 	public escape(): boolean {
 		if (!GraphicSelection.selectedObjectIDs.length) return false;
 
-		GraphicSelection.selectObjects(this.orTheGroup([]));
-		GraphicSelection.updateSelectionSection();
+		GraphicSelection.selectAndShow(this.orTheGroup([]));
 		return true;
 	}
 
@@ -266,8 +269,7 @@ abstract class ClassicContext implements InteractionContext {
 		const held = RenderGeometrySection.heldBy(selected[0]);
 		if (!held.length) return;
 
-		GraphicSelection.selectObjects([held[0]]);
-		GraphicSelection.updateSelectionSection();
+		GraphicSelection.selectAndShow([held[0]]);
 	}
 
 	/*
