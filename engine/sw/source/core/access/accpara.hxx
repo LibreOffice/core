@@ -158,6 +158,8 @@ class SwAccessibleParagraph :
 
 public:
     bool IsHeading() const;
+    /// whether getAccessibleRole() of a paragraph can return nRole
+    static bool IsParagraphRole(sal_Int16 nRole);
 
 protected:
 

@@ -3278,6 +3278,12 @@ sal_Int16 SwAccessibleParagraph::getAccessibleRole()
         return AccessibleRole::PARAGRAPH;
 }
 
+bool SwAccessibleParagraph::IsParagraphRole(sal_Int16 nRole)
+{
+    return nRole == AccessibleRole::HEADING || nRole == AccessibleRole::BLOCK_QUOTE
+           || nRole == AccessibleRole::PARAGRAPH;
+}
+
 //Get the real heading level, Heading1 ~ Heading10
 sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
 {

@@ -860,8 +860,8 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
         if (aIter != maFrameMap.end())
         {
             rtl::Reference < SwAccessibleContext > xContext( (*aIter).second.get() );
-            if (xContext.is() && (xContext->getAccessibleRole() == AccessibleRole::PARAGRAPH
-                                  || xContext->getAccessibleRole() == AccessibleRole::BLOCK_QUOTE))
+            if (xContext.is()
+                && SwAccessibleParagraph::IsParagraphRole(xContext->getAccessibleRole()))
             {
                 xAccImpl = xContext.get();
             }
@@ -1265,8 +1265,9 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             if (xAccParent.is())
                             {
                                 uno::Reference< XAccessibleContext > xAccContext = xAccParent->getAccessibleContext();
-                                if(xAccContext.is() && (xAccContext->getAccessibleRole() == AccessibleRole::PARAGRAPH ||
-                                                         xAccContext->getAccessibleRole() == AccessibleRole::BLOCK_QUOTE))
+                                if (xAccContext.is()
+                                    && SwAccessibleParagraph::IsParagraphRole(
+                                           xAccContext->getAccessibleRole()))
                                 {
                                     SwAccessibleParagraph* pAccPara = static_cast< SwAccessibleParagraph *>(xAccContext.get());
                                     if(pAccFrame->IsSelectedInDoc())
@@ -1507,8 +1508,9 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
                     if (xPara.is())
                     {
                         uno::Reference< XAccessibleContext > xParaContext = xPara->getAccessibleContext();
-                        if (xParaContext.is() && (xParaContext->getAccessibleRole() == AccessibleRole::PARAGRAPH
-                                                  || xParaContext->getAccessibleRole() == AccessibleRole::BLOCK_QUOTE))
+                        if (xParaContext.is()
+                            && SwAccessibleParagraph::IsParagraphRole(
+                                   xParaContext->getAccessibleRole()))
                         {
                             SwAccessibleParagraph* pAccPara = static_cast< SwAccessibleParagraph *>(xPara.get());
                             if (pAccPara)
@@ -1528,8 +1530,8 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
         {
             uno::Reference< XAccessible > xPara = pAccShape->getAccessibleParent();
             uno::Reference< XAccessibleContext > xParaContext = xPara->getAccessibleContext();
-            if (xParaContext.is() && (xParaContext->getAccessibleRole() == AccessibleRole::PARAGRAPH
-                                      || xParaContext->getAccessibleRole() == AccessibleRole::BLOCK_QUOTE))
+            if (xParaContext.is()
+                && SwAccessibleParagraph::IsParagraphRole(xParaContext->getAccessibleRole()))
             {
                 SwAccessibleParagraph* pAccPara = static_cast< SwAccessibleParagraph *>(xPara.get());
                 if (!m_setParaAdd.contains(pAccPara))

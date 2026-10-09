@@ -7,7 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/awt/Key.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <COKit/COKit.hxx>
 #include <vcl/scheduler.hxx>
 
@@ -16,6 +23,7 @@
 #include <test/a11y/AccessibilityTools.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestBasicStructure)
 {
@@ -99,6 +107,41 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestMenuInsertPageBreak)
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Field", u"Page Number"));
 
     CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH>1</PARAGRAPH><PARAGRAPH>2</PARAGRAPH>"_ustr, collectText());
+}
+
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestTextFrameSelectedHeading)
+{
+    // Given a text frame starting with a heading:
+    loadFromSrc(u"/sw/qa/extras/accessibility/testdocuments/heading-in-frame.fodt"_ustr);
+    auto xContext = getDocumentAccessibleContext();
+    CPPUNIT_ASSERT(xContext.is());
+
+    // When the text of that heading is selected:
+    auto xFrame = mxDocument.queryThrow<text::XTextFramesSupplier>()
+                      ->getTextFrames()
+                      ->getByName(u"Frame1"_ustr)
+                      .get<uno::Reference<text::XTextFrame>>();
+    auto xHeading = xFrame->getText()
+                        .queryThrow<container::XEnumerationAccess>()
+                        ->createEnumeration()
+                        ->nextElement()
+                        .get<uno::Reference<text::XTextRange>>();
+    mxDocument.queryThrow<frame::XModel>()
+        ->getCurrentController()
+        .queryThrow<view::XSelectionSupplier>()
+        ->select(uno::Any(xHeading));
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the frame reports the heading as its selected child:
+    auto xFrameSelection = AccessibilityTools::getAccessibleObjectForRole(
+                               xContext, accessibility::AccessibleRole::TEXT_FRAME)
+                               .queryThrow<accessibility::XAccessibleSelection>();
+    // Without the fix, the frame reported no selected child.
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1), xFrameSelection->getSelectedAccessibleChildCount());
+    CPPUNIT_ASSERT_EQUAL(accessibility::AccessibleRole::HEADING,
+                         xFrameSelection->getSelectedAccessibleChild(0)
+                             ->getAccessibleContext()
+                             ->getAccessibleRole());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

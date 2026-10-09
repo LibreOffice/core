@@ -33,6 +33,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <hints.hxx>
 #include "acctextframe.hxx"
+#include "accpara.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -145,8 +146,7 @@ bool SwAccessibleTextFrame::isAccessibleChildSelected( sal_Int64 nChildIndex )
 
     if( xContext.is() )
     {
-        const sal_Int16 nRole = xContext->getAccessibleRole();
-        if (nRole  == AccessibleRole::PARAGRAPH || nRole == AccessibleRole::BLOCK_QUOTE)
+        if (SwAccessibleParagraph::IsParagraphRole(xContext->getAccessibleRole()))
         {
             uno::Reference< css::accessibility::XAccessibleText >
                 xText(xAcc, uno::UNO_QUERY);
