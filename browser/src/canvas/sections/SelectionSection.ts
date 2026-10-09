@@ -700,6 +700,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 			walking = RenderGeometrySection.parentOf(walking);
 		}
 
+		// The groups a diagram holds are its own business and stay hidden: the band of the
+		// diagram is the last one.
+		const diagram = holding.findIndex(
+			(objectId: number) => RenderGeometrySection.objectOf(objectId)?.isDiagram,
+		);
+		if (diagram >= 0) return holding.slice(0, diagram + 1);
+
 		for (const objectId of objects)
 			if (RenderGeometrySection.holdsObjects(objectId)) holding.push(objectId);
 

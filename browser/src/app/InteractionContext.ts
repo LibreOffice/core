@@ -31,7 +31,7 @@
 type InteractionPlace =
 	| { kind: 'page' }
 	| { kind: 'group'; group: number }
-	| { kind: 'diagram'; group: number };
+	| { kind: 'diagram'; group: number; diagram: number };
 
 /// What one context answers. Each action answers whether it was taken here; one that is not goes
 /// on to the engine.
@@ -72,6 +72,15 @@ interface InteractionContext {
 	/// The engine was asked to enter the group that is selected; selects what that leaves.
 	groupEntered(): void;
 
+	/// The selection to take for that one where taking it as it is would be no place to stand:
+	/// a diagram selected alone, for one. The objects under a press, from the front to the back,
+	/// and the way a key goes help to choose.
+	enteredBy(
+		selection: number[],
+		hits?: number[],
+		backwards?: boolean,
+	): number[];
+
 	/// Objects of the selection were deleted, by this view or another. Answers the selection to
 	/// take instead, from what was selected and the groups it stood in, from its parent up.
 	whatIsLeft(selected: number[], groupsAbove: number[]): number[];
@@ -110,7 +119,7 @@ class Interaction {
 			above = RenderGeometrySection.parentOf(above), ++guard
 		) {
 			if (RenderGeometrySection.objectOf(above)?.isDiagram)
-				return { kind: 'diagram', group: parent };
+				return { kind: 'diagram', group: parent, diagram: above };
 		}
 
 		return { kind: 'group', group: parent };

@@ -237,6 +237,20 @@ class GraphicSelection {
 		this.selectedObjectIDs = objectIds.slice();
 		this.selectionCameFromElsewhere = changed;
 		this.rememberWhereItStands(objectIds);
+
+		// A selection the engine made that is no place to stand, a diagram alone for one, is
+		// taken as the context says, and the engine is told.
+		if (RenderManager.isVectorRendering()) {
+			const wanted = Interaction.context().enteredBy(objectIds);
+			if (
+				wanted.length !== objectIds.length ||
+				wanted.some(
+					(objectId: number, index: number) => objectId !== objectIds[index],
+				)
+			)
+				this.selectObjects(wanted);
+		}
+
 		return changed;
 	}
 

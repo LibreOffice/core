@@ -386,11 +386,18 @@ class RenderGeometrySection extends CanvasSectionObject {
 			if (!cool.VectorHitTest.isInUnitSquare(object.transform, position))
 				continue;
 
-			const hit = cool.VectorHitTest.hit(
-				object.primitives ?? [],
-				position,
-				range,
-			);
+			// The first object of a diagram spans the whole of it and is met wherever the point
+			// lies inside it, drawn there or not, as a fill held only to be hit.
+			const hit =
+				cool.VectorHitTest.hit(object.primitives ?? [], position, range) ??
+				(RenderGeometrySection.spansADiagram(data, id)
+					? {
+							kind: 'fill' as const,
+							hidden: true,
+							editView: false,
+							edge: false,
+						}
+					: undefined);
 			if (!hit) continue;
 
 			hits.push({ id: id, hit: hit });
@@ -398,6 +405,21 @@ class RenderGeometrySection extends CanvasSectionObject {
 		}
 
 		return hits;
+	}
+
+	/// Whether that object is the first a diagram holds, the shape spanning the whole diagram.
+	private static spansADiagram(
+		data: cool.VectorPrimitivesData,
+		objectId: number,
+	): boolean {
+		const parent = data.objects.get(objectId)?.parent;
+		if (!parent || !data.objects.get(parent)?.isDiagram) return false;
+
+		return (
+			data.order.find(
+				(id: number) => data.objects.get(id)?.parent === parent,
+			) === objectId
+		);
 	}
 
 	/*

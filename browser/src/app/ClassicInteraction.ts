@@ -47,9 +47,35 @@ abstract class ClassicContext implements InteractionContext {
 			return false;
 
 		GraphicSelection.selectObjects(
-			this.orTheGroup(this.selectionForPress(objectId, extending)),
+			this.enteredBy(
+				this.orTheGroup(this.selectionForPress(objectId, extending)),
+				hit === undefined ? [] : [hit],
+			),
 		);
 		return true;
+	}
+
+	/*
+		A diagram is never selected on its own, only among several objects: selecting it alone
+		enters it. Of its objects, in the order a walk down it meets them, the one under the press
+		is taken, else the first - the shape that spans the whole diagram - or going backwards the
+		last.
+	*/
+	public enteredBy(
+		selection: number[],
+		hits: number[] = [],
+		backwards: boolean = false,
+	): number[] {
+		if (selection.length !== 1) return selection;
+		if (!RenderGeometrySection.objectOf(selection[0])?.isDiagram)
+			return selection;
+
+		const objects = RenderGeometrySection.theOnesThatDraw(selection);
+		if (!objects.length) return selection;
+
+		const hit = hits.find((objectId: number) => objects.includes(objectId));
+		if (hit !== undefined) return [hit];
+		return [backwards ? objects[objects.length - 1] : objects[0]];
 	}
 
 	/*
@@ -116,15 +142,17 @@ abstract class ClassicContext implements InteractionContext {
 			: RenderGeometrySection.heldBy(this.groupStoodIn);
 	}
 
-	/// Selects that one object alone and brings it on screen, for a key.
-	private selectOnly(objectId: number): boolean {
-		GraphicSelection.selectAndShow([objectId]);
+	/// Selects that one object alone and brings it on screen, for a key going forwards or, with
+	/// backwards set, backwards.
+	protected selectOnly(objectId: number, backwards: boolean = false): boolean {
+		GraphicSelection.selectAndShow(this.enteredBy([objectId], [], backwards));
 		return true;
 	}
 
-	/// Selects that one object alone where the mouse is, which is on screen already.
-	private selectOnlyHere(objectId: number): boolean {
-		GraphicSelection.selectObjects([objectId]);
+	/// Selects that one object alone where the mouse is, which is on screen already, the objects
+	/// under the mouse being those.
+	private selectOnlyHere(objectId: number, hits: number[]): boolean {
+		GraphicSelection.selectObjects(this.enteredBy([objectId], hits));
 		GraphicSelection.updateSelectionSection();
 		return true;
 	}
@@ -142,11 +170,11 @@ abstract class ClassicContext implements InteractionContext {
 			.map((objectId: number) => level.indexOf(objectId))
 			.filter((place: number) => place >= 0);
 		if (!places.length)
-			return this.selectOnly(level[forwards ? 0 : level.length - 1]);
+			return this.selectOnly(level[forwards ? 0 : level.length - 1], !forwards);
 
 		const from = forwards ? Math.max(...places) : Math.min(...places);
 		const to = (from + (forwards ? 1 : -1) + level.length) % level.length;
-		return this.selectOnly(level[to]);
+		return this.selectOnly(level[to], !forwards);
 	}
 
 	/*
@@ -155,20 +183,25 @@ abstract class ClassicContext implements InteractionContext {
 		meets them, a group before what it holds. It selects the one after the selected one, or
 		with Shift the one before it, going round at either end. So a group is selected first, the
 		next press enters it, selecting the member under the press, and after its last member under
-		the press one leaves it for the object behind. A diagram is taken whole, until what a
-		diagram does is defined. With nothing under the press selected, the frontmost is taken.
+		the press one leaves it for the object behind. A diagram's objects under the press are
+		stops of their own, its groups and the diagram itself are none, as a diagram is never
+		selected alone. With nothing under the press selected, the frontmost is taken.
 	*/
 	public altPress(hits: number[], backwards: boolean): boolean {
 		const order: number[] = [];
 		for (const hit of hits) {
-			// The way from the page down to the object met, a diagram ending it.
+			// The way from the page down to the object met; inside a diagram only the object.
 			const way: number[] = [];
 			for (
 				let objectId: number | undefined = hit, guard = 0;
 				objectId && guard < 100;
 				objectId = RenderGeometrySection.parentOf(objectId), ++guard
 			) {
-				if (RenderGeometrySection.objectOf(objectId)?.isDiagram) way.length = 0;
+				if (RenderGeometrySection.objectOf(objectId)?.isDiagram) {
+					way.length = 0;
+					way.push(hit);
+					continue;
+				}
 				way.unshift(objectId);
 			}
 			for (const objectId of way)
@@ -182,10 +215,10 @@ abstract class ClassicContext implements InteractionContext {
 		const at = backwards
 			? order.map(isSelected).lastIndexOf(true)
 			: order.findIndex(isSelected);
-		if (at < 0) return this.selectOnlyHere(order[0]);
+		if (at < 0) return this.selectOnlyHere(order[0], hits);
 
 		const next = (at + (backwards ? -1 : 1) + order.length) % order.length;
-		return this.selectOnlyHere(order[next]);
+		return this.selectOnlyHere(order[next], hits);
 	}
 
 	/// Ctrl+Home selects the first object of the level, Ctrl+End the last.
@@ -193,7 +226,7 @@ abstract class ClassicContext implements InteractionContext {
 		const level = this.objectsOfTheLevel();
 		if (!level.length) return false;
 
-		return this.selectOnly(level[first ? 0 : level.length - 1]);
+		return this.selectOnly(level[first ? 0 : level.length - 1], !first);
 	}
 
 	/*
@@ -335,8 +368,102 @@ class ClassicGroupContext extends ClassicContext {
 	}
 }
 
-/// A diagram one stands in. It does what a group does until it is defined on its own.
-class ClassicDiagramContext extends ClassicGroupContext {}
+/*
+	A diagram one stands in. Whatever groups a diagram holds for its own reasons stay hidden: its
+	objects are one list, in the order a walk down it meets them, the first of them the shape that
+	spans the whole diagram. One of them is selected at a time. Leaving the diagram goes to where
+	it stands, the page or the group holding it, which stands in for the diagram itself, as a
+	diagram is never selected alone.
+*/
+class ClassicDiagramContext extends ClassicGroupContext {
+	private readonly diagram: number;
+
+	constructor(diagram: number) {
+		super(diagram);
+		this.diagram = diagram;
+	}
+
+	/// The diagram's objects, one list without its groups.
+	protected objectsOfTheLevel(): number[] {
+		return RenderGeometrySection.theOnesThatDraw([this.diagram]);
+	}
+
+	/// The context of the place the diagram stands at.
+	private around(): InteractionContext {
+		return Interaction.contextAt(Interaction.placeOf([this.diagram]));
+	}
+
+	/// Leaves the diagram: the group holding it is selected, or nothing on the page.
+	private leave(): boolean {
+		const holder = RenderGeometrySection.parentOf(this.diagram);
+		GraphicSelection.selectAndShow(holder ? [holder] : []);
+		return true;
+	}
+
+	/*
+		A press on an object of the diagram selects it; Shift and Ctrl add nothing, as one object
+		is selected here at a time. A press anywhere else leaves the diagram and is answered as
+		the place around it answers it: another object is selected, empty space selects nothing,
+		or the group holding the diagram.
+	*/
+	public press(hit: number | undefined, modifier: number): boolean {
+		const extending =
+			modifier === app.UNOModifier.SHIFT || modifier === app.UNOModifier.CTRL;
+		if (extending) return true;
+		if (modifier !== 0) return false;
+
+		if (hit !== undefined && this.objectsOfTheLevel().includes(hit)) {
+			GraphicSelection.selectObjects([hit]);
+			return true;
+		}
+
+		return this.around().press(hit, modifier);
+	}
+
+	/// A double press is the engine's here, which starts the text edit of the object.
+	public doublePress(_hit: number | undefined): boolean {
+		return false;
+	}
+
+	/// Escape leaves the diagram.
+	public escape(): boolean {
+		return this.leave();
+	}
+
+	/// Ctrl+F3 leaves the diagram as well.
+	public leaveKey(): boolean {
+		return this.leave();
+	}
+
+	/// Enter and F3 are the engine's here, Enter starting the text edit of the object.
+	public enterKey(): boolean {
+		return false;
+	}
+
+	/*
+		Tab goes to the next object of the diagram, Shift+Tab to the one before; past the last,
+		or before the first, it leaves the diagram for the object after it, or before it, where the
+		diagram stands - entering that one where it is a diagram too.
+	*/
+	public tabKey(forwards: boolean): boolean {
+		const objects = this.objectsOfTheLevel();
+		const at = objects.indexOf(GraphicSelection.selectedObjectIDs[0]);
+		const to = at + (forwards ? 1 : -1);
+		if (at >= 0 && to >= 0 && to < objects.length)
+			return this.selectOnly(objects[to], !forwards);
+
+		const holder = RenderGeometrySection.parentOf(this.diagram);
+		const outside = holder
+			? RenderGeometrySection.heldBy(holder)
+			: RenderGeometrySection.heldByThePage();
+		const place = outside.indexOf(this.diagram);
+		if (place < 0) return false;
+
+		const next =
+			(place + (forwards ? 1 : -1) + outside.length) % outside.length;
+		return this.selectOnly(outside[next], !forwards);
+	}
+}
 
 class ClassicInteractionSet implements InteractionSet {
 	public contextFor(place: InteractionPlace): InteractionContext {
@@ -344,7 +471,7 @@ class ClassicInteractionSet implements InteractionSet {
 			case 'group':
 				return new ClassicGroupContext(place.group);
 			case 'diagram':
-				return new ClassicDiagramContext(place.group);
+				return new ClassicDiagramContext(place.diagram);
 			default:
 				return new ClassicPageContext();
 		}
