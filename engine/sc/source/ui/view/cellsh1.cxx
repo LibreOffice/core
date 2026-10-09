@@ -3739,6 +3739,61 @@ void ErrorOrRunPivotLayoutDialog(TranslateId pSrcErrorId,
     RunPivotLayoutDialog(pScMod, pTabViewShell, pNewDPObject);
 }
 
+// Open the pivot layout dialog for the marked range, shrunk to its data area.
+// Returns false when the mark is not one simple area, then no dialog is shown.
+bool RunPivotLayoutDialogForSelection(ScViewData& rViewData, const ScAddress& rDestPos,
+                                      ScModule* pScMod)
+{
+    //! use database ranges (select before type dialog?)
+    ScRange aRange;
+    ScMarkType eType = rViewData.GetSimpleArea(aRange);
+    if ( (eType & SC_MARK_SIMPLE) != SC_MARK_SIMPLE )
+        return false;
+
+    ScDocument& rDoc = rViewData.GetDocument();
+    ScMarkData& rMark = rViewData.GetMarkData();
+    ScTabViewShell* pTabViewShell = rViewData.GetViewShell();
+    ScAddress aDestPos = rDestPos;
+    TranslateId pSrcErrorId;
+
+    // Shrink the range to the data area.
+    SCCOL nStartCol = aRange.aStart.Col(), nEndCol = aRange.aEnd.Col();
+    SCROW nStartRow = aRange.aStart.Row(), nEndRow = aRange.aEnd.Row();
+    if (rDoc.ShrinkToDataArea(aRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow))
+    {
+        aRange.aStart.SetCol(nStartCol);
+        aRange.aStart.SetRow(nStartRow);
+        aRange.aEnd.SetCol(nEndCol);
+        aRange.aEnd.SetRow(nEndRow);
+        rMark.SetMarkArea(aRange);
+        pTabViewShell->MarkRange(aRange);
+    }
+
+    if ( rDoc.HasSubTotalCells( aRange ) )
+    {
+        //  confirm selection if it contains SubTotal cells
+        std::shared_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
+                                                    VclMessageType::Question, VclButtonsType::YesNo,
+                                                    ScResId(STR_DATAPILOT_SUBTOTAL)));
+        xQueryBox->set_default_response(RET_YES);
+        xQueryBox->runAsync(xQueryBox, [aRange, &rDoc, aDestPos,
+                                        pScMod, pTabViewShell, pSrcErrorId] (int nResult2) mutable {
+            if (nResult2 == RET_NO)
+                return;
+
+            std::unique_ptr<ScDPObject> pNewDPObject;
+            SetupRangeForPivotTableDialog(aRange, aDestPos, &rDoc, pSrcErrorId, pNewDPObject);
+            ErrorOrRunPivotLayoutDialog(pSrcErrorId, aDestPos, pScMod, pTabViewShell, pNewDPObject);
+        });
+        return true;
+    }
+
+    std::unique_ptr<ScDPObject> pNewDPObject;
+    SetupRangeForPivotTableDialog(aRange, aDestPos, &rDoc, pSrcErrorId, pNewDPObject);
+    ErrorOrRunPivotLayoutDialog(pSrcErrorId, aDestPos, pScMod, pTabViewShell, pNewDPObject);
+    return true;
+}
+
 }
 
 void ScCellShell::ExecuteDataPilotDialog()
@@ -3805,7 +3860,7 @@ void ScCellShell::ExecuteDataPilotDialog()
             pTypeDlg->SelectNamedRange(aCursorDBName);
 
         pTypeDlg->StartExecuteAsync([this, pTypeDlg, pTabViewShell,
-                                    pScMod, pFact, &rDoc, &rMark, aDestPos](int nResult) mutable {
+                                    pScMod, pFact, &rDoc, aDestPos](int nResult) mutable {
 
             if (nResult == RET_OK )
             {
@@ -3880,51 +3935,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                     }
                     else        // selection
                     {
-                        //! use database ranges (select before type dialog?)
-                        ScRange aRange;
-                        ScMarkType eType = GetViewData().GetSimpleArea(aRange);
-                        if ( (eType & SC_MARK_SIMPLE) == SC_MARK_SIMPLE )
-                        {
-                            ScDocument* pDoc = &rDoc;
-
-                            // Shrink the range to the data area.
-                            SCCOL nStartCol = aRange.aStart.Col(), nEndCol = aRange.aEnd.Col();
-                            SCROW nStartRow = aRange.aStart.Row(), nEndRow = aRange.aEnd.Row();
-                            if (rDoc.ShrinkToDataArea(aRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow))
-                            {
-                                aRange.aStart.SetCol(nStartCol);
-                                aRange.aStart.SetRow(nStartRow);
-                                aRange.aEnd.SetCol(nEndCol);
-                                aRange.aEnd.SetRow(nEndRow);
-                                rMark.SetMarkArea(aRange);
-                                pTabViewShell->MarkRange(aRange);
-                            }
-
-                            if ( rDoc.HasSubTotalCells( aRange ) )
-                            {
-                                //  confirm selection if it contains SubTotal cells
-                                std::shared_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
-                                                                            VclMessageType::Question, VclButtonsType::YesNo,
-                                                                            ScResId(STR_DATAPILOT_SUBTOTAL)));
-                                xQueryBox->set_default_response(RET_YES);
-                                xQueryBox->runAsync(xQueryBox, [aRange, pDoc, pTypeDlg, aDestPos,
-                                                                pScMod, pTabViewShell, pSrcErrorId] (int nResult2) mutable {
-                                    if (nResult2 == RET_NO)
-                                        return;
-
-                                    std::unique_ptr<ScDPObject> pNewDPObject;
-                                    SetupRangeForPivotTableDialog(aRange, aDestPos, pDoc, pSrcErrorId, pNewDPObject);
-                                    ErrorOrRunPivotLayoutDialog(pSrcErrorId, aDestPos, pScMod, pTabViewShell, pNewDPObject);
-                                });
-
-                                pTypeDlg->disposeOnce();
-                                return;
-                            }
-
-                            std::unique_ptr<ScDPObject> pNewDPObject;
-                            SetupRangeForPivotTableDialog(aRange, aDestPos, pDoc, pSrcErrorId, pNewDPObject);
-                            ErrorOrRunPivotLayoutDialog(pSrcErrorId, aDestPos, pScMod, pTabViewShell, pNewDPObject);
-                        }
+                        RunPivotLayoutDialogForSelection(GetViewData(), aDestPos, pScMod);
                     }
                 }
             }
