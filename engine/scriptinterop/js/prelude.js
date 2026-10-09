@@ -566,6 +566,28 @@ $internal.runGasAddOn = function(
         }
         globalThis.HtmlService = makeHtmlService('');
 
+        // As in GAS, a property value is a string, and a number is written the way Java writes a
+        // double, in decimal from 0.001 up to below 10000000 and in exponent form otherwise, either
+        // with at least one digit after the point, as in "2.0", "1.0E7" and "1.0E-4":
+        function propertyValue(v) {
+            if (v === null) {
+                throw new Error('Invalid argument: value');
+            }
+            if (typeof v !== 'number' || !Number.isFinite(v)) {
+                return String(v);
+            }
+            if (v === 0) {
+                return Object.is(v, -0) ? '-0.0' : '0.0';
+            }
+            const magnitude = Math.abs(v);
+            if (magnitude >= 1e-3 && magnitude < 1e7) {
+                const value = String(v);
+                return value.includes('.') ? value : value + '.0';
+            }
+            const [mantissa, exponent] = v.toExponential().split('e');
+            return (mantissa.includes('.') ? mantissa : mantissa + '.0') + 'E'
+                + exponent.replace('+', '');
+        }
         // Round-tripped over the XClientRuntime proxy so the store lives in the main window's
         // localStorage:
         function userPropsFacade() {
@@ -574,7 +596,7 @@ $internal.runGasAddOn = function(
                     return clientRuntime.userPropGetProperty(String(k));
                 },
                 setProperty: function(k, v) {
-                    clientRuntime.userPropSetProperty(String(k), String(v));
+                    clientRuntime.userPropSetProperty(String(k), propertyValue(v));
                     return f;
                 },
                 deleteProperty: function(k) {
@@ -592,7 +614,7 @@ $internal.runGasAddOn = function(
                 },
                 setProperties: function(o) {
                     for (const k of Object.keys(o)) {
-                        clientRuntime.userPropSetProperty(String(k), String(o[k]));
+                        clientRuntime.userPropSetProperty(String(k), propertyValue(o[k]));
                     }
                     return f;
                 },
