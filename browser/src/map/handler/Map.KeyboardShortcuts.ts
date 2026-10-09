@@ -499,6 +499,11 @@ keyboardShortcuts.definitions.set('default', new Array<ShortcutDescriptor>(
     new ShortcutDescriptor({ docType: 'text', eventType: 'keydown', key: 'F2' }),
     new ShortcutDescriptor({ docType: 'text', eventType: 'keydown', key: 'F3', unoAction: '.uno:ExpandGlossary' }),
     new ShortcutDescriptor({ docType: 'text', eventType: 'keydown', modifier: Mod.CTRL, key: 'F3' }),
+    // browsers fire no keypress for function keys
+    new ShortcutDescriptor({ docType: 'text', eventType: 'keydown', key: 'F4',
+        unoAction: '.uno:GraphicDialog' }),
+    new ShortcutDescriptor({ docType: 'text', eventType: 'keydown', modifier: Mod.SHIFT, key: 'F4',
+        unoAction: '.uno:JumpToNextFrame' }),
     new ShortcutDescriptor({ docType: 'text', eventType: 'keydown', key: 'F5' }),
 
     // Impress.
