@@ -165,7 +165,6 @@ class MenuBarManager final :
                                                 const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
                                                 const OUString& rModuleIdentifier );
         void             AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sItemCommand,sal_uInt16 _nItemId);
-        static sal_uInt16 FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex);
         void             SetHdl();
 
         bool                                                         m_bDeleteMenu;

@@ -983,7 +983,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
     m_aMenuItemHandlerVector.reserve(nItemCount);
     for ( sal_uInt16 i = 0; i < nItemCount; i++ )
     {
-        sal_uInt16 nItemId = FillItemCommand(aItemCommand,pMenu, i );
+        sal_uInt16 nItemId = pMenu->GetItemId( i );
+        aItemCommand = pMenu->GetItemCommand( nItemId );
 
         if (( pMenu->IsMenuBar() || bAccessibilityEnabled ) &&
             ( pMenu->GetItemText( nItemId ).isEmpty() ))
@@ -1563,20 +1564,6 @@ void MenuBarManager::AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sI
                                                 Reference<XDispatch>() ));
     pMenuItemHandler->aMenuItemURL = _sItemCommand;
     m_aMenuItemHandlerVector.push_back( std::move(pMenuItemHandler) );
-}
-
-// static
-sal_uInt16 MenuBarManager::FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex)
-{
-    sal_uInt16 nItemId = _pMenu->GetItemId( _nIndex );
-
-    _rItemCommand = _pMenu->GetItemCommand( nItemId );
-    if ( _rItemCommand.isEmpty() )
-    {
-        _rItemCommand = "slot:" + OUString::number( nItemId );
-        _pMenu->SetItemCommand( nItemId, _rItemCommand );
-    }
-    return nItemId;
 }
 
 void MenuBarManager::SetHdl()
