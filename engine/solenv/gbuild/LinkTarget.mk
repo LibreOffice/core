@@ -1468,6 +1468,16 @@ endif
 
 endef
 
+# An object built from an unpacked tarball rebuilds whenever the tarball is unpacked again, because
+# tar keeps the release dates of the files. The tarball name is the first path element after
+# UnpackedTarball/ in the source file name.
+# call gb_LinkTarget__use_unpacked_source,objecttarget,sourcefile
+define gb_LinkTarget__use_unpacked_source
+$(if $(filter UnpackedTarball/%,$(2)),\
+$(1) : $(call gb_UnpackedTarball_get_final_target,$(firstword $(subst /, ,$(patsubst UnpackedTarball/%,%,$(2))))))
+
+endef
+
 # call gb_LinkTarget_add_generated_c_object,linktarget,sourcefile,cflags,linktargetmakefilename
 define gb_LinkTarget_add_generated_c_object
 $(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS += $(2)
@@ -1479,6 +1489,7 @@ $(call gb_GenCObject_get_target,$(2)) : $(call gb_GenCObject_get_source,$(2),$(1
 # That's why we need this order-only dependency on gb_Helper_MISCDUMMY
 $(call gb_GenCObject_get_source,$(2),$(1)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_GenCObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_LinkTarget__use_unpacked_source,$(call gb_GenCObject_get_target,$(2)),$(2))
 $(call gb_GenCObject_get_target,$(2)) : WARNINGS_NOT_ERRORS := $(true)
 $(call gb_GenCObject_get_target,$(2)) : GEN_C_SOURCE := $(call gb_GenCObject_get_source,$(2),$(1))
 $(call gb_GenCObject_get_target,$(2)) : T_CFLAGS += $(call gb_LinkTarget__get_cflags,$(4)) $(3)
@@ -1505,6 +1516,7 @@ $(call gb_GenCxxObject_get_target,$(2)) : $(call gb_GenCxxObject_get_source,$(2)
 # That's why we need this order-only dependency on gb_Helper_MISCDUMMY
 $(call gb_GenCxxObject_get_source,$(2),$(1)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_GenCxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_LinkTarget__use_unpacked_source,$(call gb_GenCxxObject_get_target,$(2)),$(2))
 $(call gb_GenCxxObject_get_target,$(2)) : WARNINGS_NOT_ERRORS := $(if $(gb_LinkTarget_GENCXX_WERROR_$(call gb_LinkTarget__get_workdir_linktargetname,$(1))),,$(true))
 $(call gb_GenCxxObject_get_target,$(2)) : T_CXXFLAGS += $(call gb_LinkTarget__get_cxxflags,$(4)) $(3) $(5)
 $(call gb_GenCxxObject_get_target,$(2)) : OBJECT_HAS_EXTRA_CXXFLAGS := $(if $(strip $(3)),1)
@@ -1540,6 +1552,7 @@ $(call gb_GenObjCObject_get_target,$(2)) : $(call gb_GenObjCObject_get_source,$(
 # That's why we need this order-only dependency on gb_Helper_MISCDUMMY
 $(call gb_GenObjCObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_GenObjCObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_LinkTarget__use_unpacked_source,$(call gb_GenObjCObject_get_target,$(2)),$(2))
 $(call gb_GenObjCObject_get_target,$(2)) : WARNINGS_NOT_ERRORS := $(true)
 $(call gb_GenObjCObject_get_target,$(2)) : T_OBJCFLAGS += $(call gb_LinkTarget__get_objcflags,$(4)) $(3)
 $(call gb_GenObjCObject_get_target,$(2)) : \
@@ -1565,6 +1578,7 @@ $(call gb_GenAsmObject_get_target,$(2)) : $(call gb_GenAsmObject_get_source,$(2)
 # That's why we need this order-only dependency on gb_Helper_MISCDUMMY
 $(call gb_GenAsmObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_GenAsmObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_LinkTarget__use_unpacked_source,$(call gb_GenAsmObject_get_target,$(2)),$(2))
 $(call gb_GenAsmObject_get_target,$(2)) : T_ASMFLAGS += $(call gb_LinkTarget__get_asmflags,$(4)) $(3)
 $(call gb_GenAsmObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
@@ -1589,6 +1603,7 @@ $(call gb_GenNasmObject_get_target,$(2)) : $(call gb_GenNasmObject_get_source,$(
 # That's why we need this order-only dependency on gb_Helper_MISCDUMMY
 $(call gb_GenNasmObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_GenNasmObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_LinkTarget__use_unpacked_source,$(call gb_GenNasmObject_get_target,$(2)),$(2))
 $(call gb_GenNasmObject_get_target,$(2)) : T_NASMFLAGS += $(call gb_LinkTarget__get_nasmflags,$(4)) $(3)
 $(call gb_GenNasmObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
