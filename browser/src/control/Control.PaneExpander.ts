@@ -24,7 +24,7 @@
  * of larger thumbnails. Pressing Escape returns to the normal layout.
  */
 
-/* global app */
+/* global app _ */
 
 type PaneExpandMode = 'normal' | 'expanded';
 
@@ -97,14 +97,22 @@ class PaneExpander {
 	// Every panel's expand toggle carries the shared class, so one query
 	// keeps them all reflecting the one shared mode.
 	private updateToggles(): void {
-		const pressed = this.mode === 'expanded';
+		const expanded = this.mode === 'expanded';
 		document.querySelectorAll('.navigation-expand-button').forEach((button) => {
-			button.setAttribute('aria-pressed', pressed ? 'true' : 'false');
-			PaneExpander.setToggleIcon(button, pressed);
+			PaneExpander.setToggleState(button, expanded);
 		});
 	}
 
-	public static setToggleIcon(button: Element, expanded: boolean): void {
+	// The toggle keeps one accessible name, and aria-pressed tells whether the panels are
+	// maximized. The tooltip and the icon name the action that a press performs from the given
+	// state.
+	public static setToggleState(button: Element, expanded: boolean): void {
+		button.setAttribute('aria-label', _('Maximize to grid'));
+		button.setAttribute('aria-pressed', expanded ? 'true' : 'false');
+		button.setAttribute(
+			'data-cooltip',
+			expanded ? _('Exit grid') : _('Maximize to grid'),
+		);
 		const img = button.querySelector('img');
 		if (!img) return;
 		const name = expanded ? 'collapse-slides.svg' : 'expand-slides.svg';
@@ -119,6 +127,9 @@ class PaneExpander {
 		if (e.key !== 'Escape' || this.mode === 'normal') return;
 		if (this.isTransientPopupOpen()) return;
 		this.reset();
+		// A tooltip on screen shows the text it read when it opened, which named the action of
+		// the layout just left, so it closes with that layout.
+		if (this.map.tooltip) this.map.tooltip.hide();
 		e.preventDefault();
 		e.stopPropagation();
 	}

@@ -994,29 +994,25 @@ class SlideImportPane {
   // The header carries the slide navigator's header classes, so both panels
   // share one set of header, title and button styles.
   private renderHeader(): HTMLElement {
-    // The rebuilt button carries the icon of the layout in hand, the one
+    // The rebuilt button carries the state of the layout in hand, the one
     // the expander sets on every toggle.
     const expanded =
       this.map.paneExpander && this.map.paneExpander.getMode() === 'expanded';
+    const expandButton = (
+      <button
+        class="navigation-expand-button slide-import-expand"
+        onClick={() => this.toggleExpand()}
+      >
+        <img alt="" />
+      </button>
+    );
+    PaneExpander.setToggleState(expandButton, expanded);
     return (
       <div class="navigation-header">
         <h2 class="navigation-title slide-import-title">
           {_('Import slides')}
         </h2>
-        <button
-          class="navigation-expand-button slide-import-expand"
-          aria-label={_('Expand slide import')}
-          data-cooltip={_('Expand slide import')}
-          aria-pressed={expanded ? 'true' : 'false'}
-          onClick={() => this.toggleExpand()}
-        >
-          <img
-            src={app.LOUtil.getImageURL(
-              expanded ? 'collapse-slides.svg' : 'expand-slides.svg',
-            )}
-            alt=""
-          />
-        </button>
+        {expandButton}
         <div class="close-navigation-wrapper">
           <button
             class="close-navigation-button slide-import-close"
