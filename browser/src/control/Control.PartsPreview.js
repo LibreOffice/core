@@ -1001,6 +1001,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			img._part &&
 			links.isPageConnected(img._part);
 		img._linkBadge.classList.toggle('connected', !!connected);
+		const disconnected =
+			!broken &&
+			!outdated &&
+			linked &&
+			links.getPageSourceState(img._part) === 'disconnected';
+		img._linkBadge.classList.toggle('disconnected', disconnected);
 		this._setPreviewPositionLabels(img, i);
 	},
 

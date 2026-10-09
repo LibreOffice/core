@@ -159,6 +159,9 @@ class SlideLinks {
 		return count;
 	}
 
+	// isPageBroken is only true when the source file is missing, or when
+	// the slide in the source has been removed. No access and could not
+	// open are not factored in, so the badge keeps the link icon for those.
 	public isPageBroken(part: string): boolean {
 		const link = this.pages.get(part);
 		if (!link) return false;

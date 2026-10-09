@@ -231,11 +231,17 @@
 }
 
 .preview-link-badge.outdated::before {
+	background-image: url('images/sc_linkedslideoutdated.svg');
 	box-shadow: 0 0 0 2px var(--color-warning);
 }
 
 .preview-link-badge.broken::before {
+	background-image: url('images/sc_linkedslidebroken.svg');
 	box-shadow: 0 0 0 2px var(--color-error);
+}
+
+.preview-link-badge.disconnected::before {
+	background-image: url('images/sc_linkedslidedisconnected.svg');
 }
 
 .preview-link-badge.connected::before {
@@ -244,6 +250,18 @@
 
 [data-theme='dark'] .preview-link-badge::before {
 	background-image: url('images/dark/sc_linkedslide.svg');
+}
+
+[data-theme='dark'] .preview-link-badge.outdated::before {
+	background-image: url('images/dark/sc_linkedslideoutdated.svg');
+}
+
+[data-theme='dark'] .preview-link-badge.broken::before {
+	background-image: url('images/dark/sc_linkedslidebroken.svg');
+}
+
+[data-theme='dark'] .preview-link-badge.disconnected::before {
+	background-image: url('images/dark/sc_linkedslidedisconnected.svg');
 }
 
 /* Slide section headers - styled to match sidebar expander labels */
