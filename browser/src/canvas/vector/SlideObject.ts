@@ -140,6 +140,9 @@ namespace cool {
 		/// True for a point the object holds as a distance of its own rather than as a share of
 		/// its size: making the object larger leaves such a point where it is.
 		keepsItsDistance?: boolean;
+		/// True for a point a shape makes from its own geometry, which is laid out again with the
+		/// shape whenever that changes, whatever the point says of its sides and its distance.
+		fromTheShape?: boolean;
 		/// The way a connector leaves the object at this point: one side of it, or the two that
 		/// face each other. Absent where the point names none and the way is worked out from
 		/// where the point lies. These six are all a point can hold: the model can hold any mix

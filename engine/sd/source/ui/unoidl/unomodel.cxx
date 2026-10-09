@@ -3807,6 +3807,7 @@ private:
                     aOne.mfX = aOnThePage.getX();
                     aOne.mfY = aOnThePage.getY();
                     aOne.mbShareOfTheSize = rGluePoint.IsPercent();
+                    aOne.mbFromTheShape = !rGluePoint.IsUserDefined();
                     aOne.mnId = rGluePoint.GetId();
 
                     /*
@@ -4559,6 +4560,8 @@ private:
                 rWriter.put("id", sal_Int32(rGluePoint.mnId));
                 if (!rGluePoint.mbShareOfTheSize)
                     rWriter.put("keepsItsDistance", true);
+                if (rGluePoint.mbFromTheShape)
+                    rWriter.put("fromTheShape", true);
                 if (!rGluePoint.maWayOut.isEmpty())
                     rWriter.put("wayOut", rGluePoint.maWayOut);
                 if (!rGluePoint.maFromAcross.isEmpty())

@@ -1133,7 +1133,8 @@ class TiePointHandles extends HandleGroup {
 
 		return own.map((handle: SelectionHandle, at: number) => {
 			const point = held[at];
-			if (!point || !standing[at]) return handle;
+			// A point the shape makes from its geometry goes with the shape's mapping.
+			if (!point || !standing[at] || point.fromTheShape) return handle;
 
 			return {
 				...handle,

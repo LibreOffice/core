@@ -381,13 +381,18 @@ public:
             /// to it names it.
             sal_uInt16 mnId = 0;
 
+            /// True for a point a shape makes from its own geometry, which it lays out again
+            /// with the shape whenever that changes; false for a point given to the object.
+            bool mbFromTheShape = false;
+
             bool operator==(const GluePoint& rOther) const
             {
                 return mfX == rOther.mfX && mfY == rOther.mfY && mnId == rOther.mnId
                        && mbShareOfTheSize == rOther.mbShareOfTheSize
                        && maWayOut == rOther.maWayOut
                        && maFromAcross == rOther.maFromAcross
-                       && maFromDown == rOther.maFromDown;
+                       && maFromDown == rOther.maFromDown
+                       && mbFromTheShape == rOther.mbFromTheShape;
             }
         };
 
