@@ -1392,12 +1392,34 @@ private:
         return result;
     }
 
+    // The children of a container, which a body and a table cell hand out in one go, so that a
+    // walk over the container reads each of their children once:
+    static std::vector<cpo::uno::Reference<scriptinterop::XElement>> childrenOf(
+        cpo::uno::Reference<scriptinterop::XContainerElement> const & container)
+    {
+        cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> all;
+        if (cpo::uno::Reference<scriptinterop::XBody> const body{container, cpo::uno::UNO_QUERY}) {
+            all = body->getChildren();
+        } else if (cpo::uno::Reference<scriptinterop::XTableCell> const cell{
+                       container, cpo::uno::UNO_QUERY})
+        {
+            all = cell->getChildren();
+        } else {
+            std::vector<cpo::uno::Reference<scriptinterop::XElement>> children;
+            auto const n = container->getNumChildren();
+            for (sal_Int32 i = 0; i != n; ++i) {
+                children.push_back(container->getChild(i));
+            }
+            return children;
+        }
+        return {all.begin(), all.end()};
+    }
+
     static void collect(
         cpo::uno::Reference<scriptinterop::XContainerElement> const & container,
         Contents & contents)
     {
-        for (sal_Int32 i = 0; i != container->getNumChildren(); ++i) {
-            auto const child = container->getChild(i);
+        for (auto const & child: childrenOf(container)) {
             if (cpo::uno::Reference<scriptinterop::XParagraph> const paragraph{
                     child, cpo::uno::UNO_QUERY})
             {
