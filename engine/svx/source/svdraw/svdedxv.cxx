@@ -32,6 +32,8 @@
 #include <svx/sdtfchim.hxx>
 #include <svx/selectioncontroller.hxx>
 #include <svx/svdedxv.hxx>
+#include <svx/diagram/DiagramHelper_svx.hxx>
+#include <svx/svdogrp.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdotext.hxx>
@@ -1377,6 +1379,22 @@ bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::W
     SdrTextObj* pObj = DynCastSdrTextObj(pObj_);
     if (!pObj)
         return false; // currently only possible with text objects
+
+    // An object of a diagram that is edited one object at a time becomes the diagram's
+    // sub-selection when its text is edited, as what is done to the diagram next goes by that.
+    if (SdrObject::useAdvancedDiagramFeatures())
+    {
+        for (SdrObject* pAbove = pObj->getParentSdrObjectFromSdrObject(); pAbove;
+             pAbove = pAbove->getParentSdrObjectFromSdrObject())
+        {
+            auto pDiagram = dynamic_cast<SdrObjGroup*>(pAbove);
+            if (pDiagram && pDiagram->isDiagram() && pDiagram->getDiagramHelper())
+            {
+                pDiagram->getDiagramHelper()->markDirectDiagramSubSelection(*pObj);
+                break;
+            }
+        }
+    }
 
     if (bGrabFocus && pWin)
     {
