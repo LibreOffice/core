@@ -70,6 +70,11 @@ void SvgFeImageNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent
     }
 }
 
+OUString SvgFeImageNode::getExternalImageUrl() const
+{
+    return resolveExternalImageUrl(getDocument().getAbsolutePath(), maUrl, maData);
+}
+
 void SvgFeImageNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
                            const SvgFilterNode* pParent) const
 {
@@ -95,7 +100,7 @@ void SvgFeImageNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
     }
     else if (!maUrl.isEmpty())
     {
-        const OUString aAbsUrl = resolveImageUrl(getDocument().getAbsolutePath(), maUrl);
+        const OUString aAbsUrl = getExternalImageUrl();
 
         if (!aAbsUrl.isEmpty())
         {

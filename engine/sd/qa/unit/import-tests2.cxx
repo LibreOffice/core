@@ -32,6 +32,10 @@
 #include <svx/xlnclit.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/svdograf.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <vcl/vectorgraphicdata.hxx>
+#include <drawinglayer/tools/primitive2dxmldump.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
 #include <editeng/editeng.hxx>
@@ -3239,6 +3243,60 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testCustomShapedLayoutPlaceholderNotOnSlide)
     checkLayoutPlaceholders("after a PPTX round trip");
     saveAndReload(TestFilter::ODP);
     checkLayoutPlaceholders("after an ODP round trip");
+}
+
+namespace
+{
+SdrGrafObj* getSvgShape(SdDrawDocument& rDoc)
+{
+    SdrGrafObj* pGraphic
+        = dynamic_cast<SdrGrafObj*>(rDoc.GetSdPage(0, PageKind::Standard)->GetObj(0));
+    CPPUNIT_ASSERT(pGraphic);
+    return pGraphic;
+}
+
+xmlDocUniquePtr dumpSvgShape(const SdrGrafObj& rGraphic)
+{
+    const std::shared_ptr<VectorGraphicData>& rData = rGraphic.GetGraphic().getVectorGraphicData();
+    CPPUNIT_ASSERT(rData);
+    drawinglayer::Primitive2dXmlDump aDumper;
+    xmlDocUniquePtr pXml = aDumper.dumpAndParse(
+        drawinglayer::primitive2d::Primitive2DContainer(rData->getPrimitive2DSequence()));
+    CPPUNIT_ASSERT(pXml);
+    return pXml;
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testSvgLinkedPictureWaitsForLinkUpdates)
+{
+    createSdDrawDoc("svg/linked-picture.svg");
+    SdDrawDocument* pDoc = getSdDocShell()->GetDoc();
+
+    // The picture beside the SVG is not shown yet, and is offered as one link.
+    SdrGrafObj* pGraphic = getSvgShape(*pDoc);
+    assertXPath(dumpSvgShape(*pGraphic), "//bitmap", 0);
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pLinkManager->GetLinks().size());
+
+    // A copy of the shape is an SVG inside the document, so it adds no link.
+    rtl::Reference<SdrObject> xCopy = pGraphic->CloneSdrObject(*pDoc);
+    pDoc->GetSdPage(0, PageKind::Standard)->InsertObject(xCopy.get());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pLinkManager->GetLinks().size());
+
+    // Once link updates are allowed, the picture is shown.
+    getSdDocShell()->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
+    pLinkManager->UpdateAllLinks(false, OUString());
+    assertXPath(dumpSvgShape(*getSvgShape(*pDoc)), "//bitmap", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testSvgWithDataPictureHasNoLink)
+{
+    createSdDrawDoc("svg/data-picture.svg");
+    SdDrawDocument* pDoc = getSdDocShell()->GetDoc();
+
+    // A picture held in the SVG is shown straight away, and nothing is offered as a link.
+    assertXPath(dumpSvgShape(*getSvgShape(*pDoc)), "//bitmap", 1);
+    CPPUNIT_ASSERT(pDoc->GetLinkManager()->GetLinks().empty());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

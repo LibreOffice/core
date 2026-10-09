@@ -132,6 +132,12 @@ namespace svgio::svgreader
         */
         OUString resolveImageUrl(const OUString& rDocumentPath, const OUString& rUrl);
 
+        /** The absolute URL of the picture outside the SVG that an image link shows, or an
+            empty string when the link holds its picture as data or has nothing to resolve.
+        */
+        OUString resolveExternalImageUrl(const OUString& rDocumentPath, const OUString& rUrl,
+                                         std::u16string_view rData);
+
         OUString consolidateContiguousSpace(const OUString& rCandidate);
 
         // #125325# removes block comment of the general form '/* ... */', returns

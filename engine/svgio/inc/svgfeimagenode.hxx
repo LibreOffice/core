@@ -39,6 +39,9 @@ public:
 
     void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
                const SvgFilterNode* pParent) const override;
+
+    /// absolute URL of the picture outside the SVG that this node shows, or empty if none
+    OUString getExternalImageUrl() const;
 };
 
 } // end of namespace svgio::svgreader

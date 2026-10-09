@@ -1407,6 +1407,15 @@ namespace svgio::svgreader
             return aAbsoluteUrl;
         }
 
+        OUString resolveExternalImageUrl(const OUString& rDocumentPath, const OUString& rUrl,
+                                         std::u16string_view rData)
+        {
+            // A picture held in the SVG as data is shown instead of the outside one.
+            if (!rData.empty() || rUrl.isEmpty())
+                return OUString();
+            return resolveImageUrl(rDocumentPath, rUrl);
+        }
+
         // #i125325#
         OUString removeBlockComments(const OUString& rCandidate)
         {
