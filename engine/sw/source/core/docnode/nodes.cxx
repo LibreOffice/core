@@ -2328,6 +2328,17 @@ void SwNodes::ForEach( SwNodeOffset nStart, SwNodeOffset nEnd,
     }
 }
 
+void SwNodes::FileLoadedInitHints()
+{
+    ForEach(
+        [](SwNode* pNode, void*)
+        {
+            if (SwTextNode* pTextNode = pNode->GetTextNode())
+                pTextNode->FileLoadedInitHints();
+            return true;
+        });
+}
+
 void SwNodes::ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
                     FnForEach_SwNodes fnForEach, void* pArgs )
 {

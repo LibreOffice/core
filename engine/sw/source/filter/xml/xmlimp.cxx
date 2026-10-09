@@ -669,6 +669,9 @@ void SwXMLImport::endDocument()
 
         assert(pDoc->IsInReading());
         assert(pDoc->IsInXMLImport());
+        // A flat ODF document is read by this importer alone, so the hints are set up here, the
+        // same way the package reader does after reading.
+        pDoc->GetNodes().FileLoadedInitHints();
         pDoc->SetInReading(false);
         pDoc->SetInXMLImport(false);
         pDoc->SetInXMLImport242(false);

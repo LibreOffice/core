@@ -58,6 +58,8 @@
 #include <IDocumentSettingAccess.hxx>
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
+#include <ndhints.hxx>
+#include <txatbase.hxx>
 #include <swdtflvr.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
@@ -1929,6 +1931,25 @@ CPPUNIT_TEST_FIXTURE(Test, testForeignSettingsFitsTextTheNewWay)
         xFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT(!getProperty<bool>(xSettings, u"TextFittingLegacy"_ustr));
     CPPUNIT_ASSERT(!getProperty<bool>(xSettings, u"LineSpacingBelowBaselineLegacy"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFlatOdfRsidOnlySpanIgnoredForPortions)
+{
+    // Given a flat ODF document with a span whose only attribute is an RSID:
+    createSwDoc("rsid-only-span.fodt");
+
+    // Then that span is marked to be ignored when text portions are merged, as it is after loading
+    // the same document as a package:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT(pTextNode);
+    CPPUNIT_ASSERT(pTextNode->GetpSwpHints());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pTextNode->GetpSwpHints()->Count());
+    const SwTextAttr* pSpan = pTextNode->GetpSwpHints()->Get(0);
+    // Without the fix in place, this test would have failed, the span was not marked, so any later
+    // change to the paragraph left its portions inconsistent.
+    CPPUNIT_ASSERT(pSpan->IsFormatIgnoreStart());
+    CPPUNIT_ASSERT(pSpan->IsFormatIgnoreEnd());
 }
 
 } // end of anonymous namespace

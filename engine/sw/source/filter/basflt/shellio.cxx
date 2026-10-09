@@ -70,15 +70,6 @@
 using namespace ::com::sun::star;
 using namespace ::cpo;
 
-static bool sw_MergePortions(SwNode* pNode, void *)
-{
-    if (pNode->IsTextNode())
-    {
-        pNode->GetTextNode()->FileLoadedInitHints();
-    }
-    return true;
-}
-
 void SwAsciiOptions::Reset()
 {
     m_sFont.clear();
@@ -358,7 +349,7 @@ ErrCodeMsg SwReader::Read( const Reader& rOptions )
     // This is only necessary for formats that may contain RSIDs (ODF,MSO).
     // It's too hard to figure out which nodes were inserted in Insert->File
     // case (redlines, flys, footnotes, header/footer) so just do every node.
-    mxDoc->GetNodes().ForEach(&sw_MergePortions);
+    mxDoc->GetNodes().FileLoadedInitHints();
 
     mxDoc->SetInReading( false );
     mxDoc->SetInXMLImport( false );

@@ -165,6 +165,9 @@ public:
     void ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
                     FnForEach_SwNodes fnForEach, void* pArgs );
 
+    /// Initialize the hints of every text node after file loading, which takes shortcuts.
+    void FileLoadedInitHints();
+
     /// A still empty section.
     SwNode& GetEndOfPostIts() const     { return *m_pEndOfPostIts; }
     /// Section for all footnotes.
