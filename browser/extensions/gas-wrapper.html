@@ -58,6 +58,9 @@
     const templateValues = templateParam === null ? null : JSON.parse(templateParam);
     const baseUrl = new URL(base, location.href);
     const sidebarUrl = new URL(sidebarName, baseUrl);
+    // The project whose files the page includes, which is a library for a page of a library:
+    const libraryDir = /^_cool-gas-libraries\/[^/]+\/[^/]+\//.exec(sidebarName);
+    const projectUrl = libraryDir ? new URL(libraryDir[0], baseUrl) : baseUrl;
     function fetchText(url) {
         return window.cool._postCall({ msgId: 'Extension_GasReadFile', url: String(url) });
     }
@@ -101,7 +104,7 @@
             out += html.substring(last, match.index);
             const name = match[1];
             try {
-                out += await fetchText(new URL(name + '.html', baseUrl));
+                out += await fetchText(new URL(name + '.html', projectUrl));
             } catch (err) {
                 out += '<!-- gas-wrapper: include(' + name + ') failed: '
                     + (err && err.message ? err.message : String(err)) + ' -->';

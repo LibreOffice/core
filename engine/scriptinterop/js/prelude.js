@@ -540,26 +540,31 @@ $internal.runGasAddOn = function(
             Buttons: buttonSetValues
         };
 
-        globalThis.HtmlService = {
-            createHtmlOutputFromFile: makeHtmlOutput,
-            createHtmlOutput: function() { return makeHtmlOutput(); },
-            // The page's scriptlets run in the iframe that shows it, with the properties the
-            // add-on set on the template as their variables, so evaluate() takes a JSON copy of
-            // those properties:
-            createTemplateFromFile: function(name) {
-                const t = {
-                    evaluate: function() {
-                        const values = {};
-                        for (const k of Object.keys(t)) {
-                            if (typeof t[k] !== 'function') values[k] = t[k];
+        // As in GAS, the files of a library are its own, so a library's HtmlService names them
+        // with the directory of the library in front:
+        function makeHtmlService(dir) {
+            return {
+                createHtmlOutputFromFile: function(name) { return makeHtmlOutput(dir + name); },
+                createHtmlOutput: function() { return makeHtmlOutput(); },
+                // The page's scriptlets run in the iframe that shows it, with the properties the
+                // add-on set on the template as their variables, so evaluate() takes a JSON copy of
+                // those properties:
+                createTemplateFromFile: function(name) {
+                    const t = {
+                        evaluate: function() {
+                            const values = {};
+                            for (const k of Object.keys(t)) {
+                                if (typeof t[k] !== 'function') values[k] = t[k];
+                            }
+                            return makeHtmlOutput(dir + name, JSON.parse(JSON.stringify(values)));
                         }
-                        return makeHtmlOutput(name, JSON.parse(JSON.stringify(values)));
-                    }
-                };
-                return t;
-            },
-            SandboxMode: { IFRAME: 'IFRAME', NATIVE: 'NATIVE' }
-        };
+                    };
+                    return t;
+                },
+                SandboxMode: { IFRAME: 'IFRAME', NATIVE: 'NATIVE' }
+            };
+        }
+        globalThis.HtmlService = makeHtmlService('');
 
         // Round-tripped over the XClientRuntime proxy so the store lives in the main window's
         // localStorage:
@@ -917,11 +922,12 @@ $internal.runGasAddOn = function(
                     }
                 }
             }
-            const code = '(function(' + library.libraries.map(l => l.userSymbol).join(', ')
+            const code = '(function(' + ['HtmlService'].concat(
+                library.libraries.map(l => l.userSymbol)).join(', ')
                 + ') {\n' + library.sources.join('\n') + '\nreturn Object.freeze({'
                 + names.map(n => n + ': ' + n).join(', ') + '});\n})';
             return $internal.evalWithSource(code, library.userSymbol + ' library', 0).apply(
-                null, library.libraries.map(loadLibrary));
+                null, [makeHtmlService(library.dir)].concat(library.libraries.map(loadLibrary)));
         }
         for (const library of libraries) {
             globalThis[library.userSymbol] = loadLibrary(library);
