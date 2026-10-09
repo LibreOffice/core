@@ -926,8 +926,18 @@ ul {
   min-width: 0;
 }
 
+/* A cell holds a drawn checkbox with its margins and a label beside it, so
+   it needs more than the 140px of the other grids, or a label of ordinary
+   length, such as a single 14-letter Russian word, runs past its column and the
+   whole panel scrolls sideways. The labels are not translated and may be
+   long single words, so they get hyphenated in their own language where the
+   browser can, instead of spilling out. */
 #lightproof .xcu-settings-grid {
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+#lightproof .checkbox-content__text {
+  hyphens: auto;
 }
 
 .xcu-editor-actions,

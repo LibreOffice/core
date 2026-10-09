@@ -4256,12 +4256,15 @@ class SettingIframe {
 			if (!group) continue;
 			const rendered = this.renderSettingsOption(group, entry.id);
 			rendered.classList.add('xcu-settings-grid');
-			panels.push(
-				this.createFieldsetFor(
-					this.settingLabels[entry.id] || entry.id,
-					rendered,
-				),
+			const panel = this.createFieldsetFor(
+				this.settingLabels[entry.id] || entry.id,
+				rendered,
 			);
+			// The options are worded in the language they check, so the panel
+			// says which one: a screen reader then reads them in that language
+			// and the browser hyphenates a long label by its rules.
+			panel.lang = entry.id.replace('_', '-');
+			panels.push(panel);
 		}
 
 		// A heading over nothing is worse than no heading: with no rule
