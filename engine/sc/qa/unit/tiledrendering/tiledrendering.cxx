@@ -1649,13 +1649,15 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
 
         ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
         if (pTabViewShell)
+        {
             pTabViewShell->SetCursor(4, 4);
+            pTabViewShell->SetKitAuthor(u"Kit User1"_ustr);
+        }
 
         // Add a new comment
         cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
             {u"Text"_ustr, cpo::uno::Any(u"Comment"_ustr)},
-            {u"Author"_ustr, cpo::uno::Any(u"Kit User1"_ustr)},
         }));
         dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -1698,11 +1700,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         // selecting the cell
         if (pTabViewShell)
             pTabViewShell->SetCursor(3, 100);
+        ScTabViewShell* pEditingView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+        CPPUNIT_ASSERT(pEditingView);
+        pEditingView->SetKitAuthor(u"Kit User2"_ustr);
         aArgs = comphelper::InitPropertySequence(
         {
             {u"Id"_ustr, cpo::uno::Any(OUString::createFromAscii(aCommentId))},
             {u"Text"_ustr, cpo::uno::Any(u"Edited comment"_ustr)},
-            {u"Author"_ustr, cpo::uno::Any(u"Kit User2"_ustr)},
         });
         dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
 

@@ -2426,7 +2426,9 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
     {
         const SvxPostItAuthorItem* pAuthorItem = rReq.GetArg(SID_ATTR_POSTIT_AUTHOR);
         OUString sAuthor;
-        if ( pAuthorItem )
+        if (comphelper::COKit::isActive())
+            sAuthor = GetView().GetKitAuthor();
+        else if ( pAuthorItem )
             sAuthor = pAuthorItem->GetValue();
         else
         {

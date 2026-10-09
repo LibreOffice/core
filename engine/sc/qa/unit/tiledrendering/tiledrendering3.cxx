@@ -939,11 +939,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
         typeCharsInCell("ABC", 0, 0, pTabViewShell, pModelObj); // Type "ABC" in A1
 
         pTabViewShell->SetCursor(1, 1);
+        pTabViewShell->SetKitAuthor(u"COKit Client"_ustr);
 
         // Add a new comment
         cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
             { u"Text"_ustr, cpo::uno::Any(u"COKit Comment Cell B2"_ustr) },
-            { u"Author"_ustr, cpo::uno::Any(u"COKit Client"_ustr) },
         }));
         dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -2847,11 +2847,11 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentInsertAndResolve)
         ScTabViewShell* pTabViewShell = aView1.getTabViewShell();
         CPPUNIT_ASSERT(pTabViewShell);
         pTabViewShell->SetCursor(2, 3);
+        pTabViewShell->SetKitAuthor(u"Kit Author"_ustr);
 
         // 1) Insert a threaded comment via .uno:InsertThreadedComment
         cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
             { u"Text"_ustr, cpo::uno::Any(u"Threaded comment text"_ustr) },
-            { u"Author"_ustr, cpo::uno::Any(u"Kit Author"_ustr) },
         }));
         dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgs);
 
