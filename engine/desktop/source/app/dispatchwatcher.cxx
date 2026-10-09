@@ -411,7 +411,6 @@ bool DispatchWatcher::executeDispatchRequests(
         Reference < XPrintable > xDoc;
         if(
             ( aName.startsWith( ".uno" ) )  ||
-            ( aName.startsWith( "slot:" ) )  ||
             ( aName.startsWith( "macro:" ) )  ||
             ( aName.startsWith("vnd.sun.star.script") )
           )
