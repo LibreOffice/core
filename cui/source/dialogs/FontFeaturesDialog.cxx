@@ -33,29 +33,6 @@ FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString aFontName
     , m_xCharacterVariantsGrid(m_xBuilder->weld_grid(u"characterVariantsGrid"_ustr))
     , m_xPreviewWindow(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreviewWindow))
 {
-    initialize();
-}
-
-FontFeaturesDialog::~FontFeaturesDialog() {}
-
-static sal_Int32 makeEnumComboBox(weld::ComboBox& rNameBox,
-                                  vcl::font::FeatureDefinition const& rFeatureDefinition,
-                                  uint32_t nDefault)
-{
-    sal_Int32 nRes = 0;
-    int count = 0;
-    for (vcl::font::FeatureParameter const& rParameter : rFeatureDefinition.getEnumParameters())
-    {
-        rNameBox.append(OUString::number(rParameter.getCode()), rParameter.getDescription());
-        if (rParameter.getCode() == nDefault)
-            nRes = count;
-        ++count;
-    }
-    return nRes;
-}
-
-void FontFeaturesDialog::initialize()
-{
     ScopedVclPtrInstance<VirtualDevice> aVDev(*Application::GetDefaultDevice(),
                                               DeviceFormat::WITH_ALPHA);
     std::vector<vcl::font::Feature> rFontFeatures = getFontFeatureList(m_sFontName, *aVDev);
@@ -87,6 +64,24 @@ void FontFeaturesDialog::initialize()
     }
 
     updateFontPreview();
+}
+
+FontFeaturesDialog::~FontFeaturesDialog() {}
+
+static sal_Int32 makeEnumComboBox(weld::ComboBox& rNameBox,
+                                  vcl::font::FeatureDefinition const& rFeatureDefinition,
+                                  uint32_t nDefault)
+{
+    sal_Int32 nRes = 0;
+    int count = 0;
+    for (vcl::font::FeatureParameter const& rParameter : rFeatureDefinition.getEnumParameters())
+    {
+        rNameBox.append(OUString::number(rParameter.getCode()), rParameter.getDescription());
+        if (rParameter.getCode() == nDefault)
+            nRes = count;
+        ++count;
+    }
+    return nRes;
 }
 
 int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures)

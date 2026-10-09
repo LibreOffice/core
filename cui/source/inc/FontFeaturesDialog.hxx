@@ -73,8 +73,6 @@ private:
     std::unique_ptr<weld::Grid> m_xCharacterVariantsGrid;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWindow;
 
-    void initialize();
-
     // returns the max height of a row
     int fillGrid(std::vector<vcl::font::Feature> const& rFontFeatures);
 
