@@ -425,8 +425,15 @@ class ClassicDiagramContext extends ClassicGroupContext {
 		return false;
 	}
 
-	/// Escape leaves the diagram.
+	/*
+		Escape on an object of the diagram selects its first object, which stands for the whole
+		diagram; Escape on that one leaves the diagram.
+	*/
 	public escape(): boolean {
+		const first = this.objectsOfTheLevel()[0];
+		if (first !== undefined && GraphicSelection.selectedObjectIDs[0] !== first)
+			return this.selectOnly(first);
+
 		return this.leave();
 	}
 
