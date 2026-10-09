@@ -94,6 +94,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <istyleaccess.hxx>
 #include <IDocumentExternalData.hxx>
 #include <DocumentRedlineManager.hxx>
 #include <docufld.hxx>
@@ -2620,7 +2621,8 @@ void SwWW8ImplReader::FinalizeTextNode(SwPosition& rPos, bool bAddNew)
                 items.Put(*pItem);
         }
         SwFormatAutoFormat item(RES_PARATR_LIST_AUTOFMT);
-        item.SetStyleHandle(std::make_shared<SfxItemSet>(items));
+        item.SetStyleHandle(
+            m_rDoc.GetIStyleAccess().getAutomaticStyle(items, IStyleAccess::AUTO_STYLE_CHAR));
         pText->SetAttr(item);
     }
 
