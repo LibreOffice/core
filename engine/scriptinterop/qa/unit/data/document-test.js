@@ -425,6 +425,24 @@ function test() {
         body.getChild(0).asParagraph().getHeading() === DocumentApp.ParagraphHeading.NORMAL);
     console.assert(body.getText() === '');
 
+    // An image goes into the document at its natural size, here 300 by 200 pixels:
+    const png = Utilities.base64Decode(
+        'iVBORw0KGgoAAAANSUhEUgAAASwAAADICAIAAADdvUsCAAABrElEQVR42u3TQQkAAAjAwPUvrTF8eHAJBmsKOCQB'
+        + 'mBBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQ'
+        + 'TAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAgmlABM'
+        + 'CCYETAgmBEwIJgRMCCYETAgmBEwIJgRMCCYETAgmBEwIJgRMCCYETAgmBEwIJgRMCCYETAgmBEwIJgRMCCYETAgm'
+        + 'BEwIJgRMCCYETAgmBEwIJgRMCCYETAgmBEwIJgRMCCYETAgmBEwIJgRMCCYETAgmBEwIJgRMCCYETAgmBBMCJgQT'
+        + 'AiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAiYEEwIm'
+        + 'BBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAiYEEwImBBMCJgQTAhKACcGEgAnBhIAJ'
+        + '4akFT+KDSJWA/YAAAAAASUVORK5CYII=');
+    const appendedImage = body.appendImage(Utilities.newBlob(png, 'image/png'));
+    console.assert(appendedImage.getWidth() === 300);
+    console.assert(appendedImage.getHeight() === 200);
+    const insertedImage = doc.newPosition(body.getChild(0), 0)
+        .insertInlineImage(Utilities.newBlob(png, 'image/png'));
+    console.assert(insertedImage.getWidth() === 300);
+    console.assert(insertedImage.getHeight() === 200);
+
     // Document properties are strings that a missing key reads as null:
     const docProps = PropertiesService.getDocumentProperties();
     docProps.deleteAllProperties();

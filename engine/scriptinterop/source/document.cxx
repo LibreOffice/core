@@ -21,6 +21,7 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -396,6 +397,21 @@ cpo::uno::Reference<css::text::XTextContent> createGraphicFromBlob(
         cpo::uno::UNO_QUERY_THROW);
     cpo::uno::Reference<css::beans::XPropertySet> const props(graphic, cpo::uno::UNO_QUERY_THROW);
     props->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xgraphic));
+    // Same as in GAS, the image has its natural size in pixels, or for a vector graphic without
+    // one its natural size in 1/100 mm:
+    cpo::uno::Reference<css::beans::XPropertySet> const descriptor(
+        xgraphic, cpo::uno::UNO_QUERY_THROW);
+    css::awt::Size size;
+    descriptor->getPropertyValue(u"SizePixel"_ustr) >>= size;
+    if (size.Width != 0 && size.Height != 0) {
+        size = css::awt::Size(pixelsToHundredthMm(size.Width), pixelsToHundredthMm(size.Height));
+    } else {
+        descriptor->getPropertyValue(u"Size100thMM"_ustr) >>= size;
+    }
+    if (size.Width != 0 && size.Height != 0) {
+        props->setPropertyValue(u"Width"_ustr, cpo::uno::Any(size.Width));
+        props->setPropertyValue(u"Height"_ustr, cpo::uno::Any(size.Height));
+    }
     props->setPropertyValue(
         u"AnchorType"_ustr, cpo::uno::Any(css::text::TextContentAnchorType_AS_CHARACTER));
     return graphic;
