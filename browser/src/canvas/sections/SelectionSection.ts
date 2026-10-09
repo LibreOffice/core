@@ -1846,14 +1846,24 @@ abstract class SelectionSection extends CanvasSectionObject {
 			const over = this.handleAt(onCanvas[0], onCanvas[1]);
 
 			// Off a handle but still on the object, the pointer is the object's again, or the
-			// one it left on a handle would stay.
+			// one it left on a handle would stay: over text the text pointer, the hand where the
+			// selection may be carried, the plain pointer where it may not.
+			const onTheObject = this.groups().some((group: HandleGroup) =>
+				group.takesAPress(onCanvas[0], onCanvas[1]),
+			);
+			const inTheDocument = this.inTheDocument(point);
+			const overText =
+				RenderGeometrySection.pointerAt(inTheDocument.x, inTheDocument.y) ===
+				'text';
 			this.context.canvas.style.cursor = over
 				? this.pointerOver(over)
-				: this.groups().some((group: HandleGroup) =>
-							group.takesAPress(onCanvas[0], onCanvas[1]),
-					  )
-					? SelectionSection.grabPointer()
-					: 'default';
+				: !onTheObject
+					? 'default'
+					: overText
+						? 'text'
+						: ObjectHandles.canBeMoved(this.selectedObjects())
+							? SelectionSection.grabPointer()
+							: 'default';
 
 			// The handle under the mouse is marked, so that it is plain which one a press would
 			// take hold of where several lie close together.
