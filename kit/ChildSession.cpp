@@ -1606,6 +1606,10 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
 
+    // A client that draws from tiles again says so, and is sent tiles from here on.
+    if (command == ".uno:DrawFromTiles")
+        _isVectorRendering = false;
+
     if (command == ".uno:DocumentRepair")
     {
         std::string values(getLOKitDocument()->getCommandValues(".uno:Redo"));

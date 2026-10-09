@@ -130,6 +130,12 @@ namespace desktop {
             m_aVectorRenderingModes.insert(nMode);
         }
         bool isVectorRendering() const { return m_bVectorRendering; }
+        // The view paints bitmap tiles again, in no mode from vector primitives.
+        void stopVectorRendering()
+        {
+            m_bVectorRendering = false;
+            m_aVectorRenderingModes.clear();
+        }
 
         DESKTOP_DLLPUBLIC void tilePainted(const OString& rPart, int nMode,
                                            const tools::Rectangle& rRectangle);

@@ -8968,6 +8968,20 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
         return {};
     }
 
+    // The view draws from bitmap tiles again: what asking for primitives recorded is taken back.
+    if (aCommand == ".uno:DrawFromTiles")
+    {
+        if (SfxViewShell* pViewShell = SfxViewShell::Current())
+        {
+            auto it = mpCallbackFlushHandlers.find(pViewShell->GetViewShellId().get());
+            if (it != mpCallbackFlushHandlers.end() && it->second)
+                it->second->stopVectorRendering();
+
+            pViewShell->setDrawsFromObjects(false);
+        }
+        return {};
+    }
+
     if (aCommand.starts_with(".uno:VectorPrimitives"))
     {
         // Record on the view's callback handler that it renders from vector

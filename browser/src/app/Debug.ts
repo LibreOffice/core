@@ -453,6 +453,11 @@ class DebugManager {
 					RenderManager.reinitialize(self._docLayer._docType);
 					DebugManager.updateVectorSections();
 
+					// The engine and the kit took note that this view draws from the objects when
+					// it first asked for them; they are told it draws from tiles again.
+					if (!RenderManager.isVectorRendering())
+						app.socket.sendMessage('commandvalues command=.uno:DrawFromTiles');
+
 					// The manager that draws tiles starts out holding none, and the next
 					// request for them waits for something to change the view. Ask now.
 					if (!RenderManager.isVectorRendering())
