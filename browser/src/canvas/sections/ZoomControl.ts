@@ -153,9 +153,26 @@ class ZoomControl extends CanvasSectionObject {
 		this.zoomAnchor = null;
 	}
 
+	// ---- Ctrl+wheel zoom ------------------------------------------------
+	// Vertical wheel distance in pixels needed for one zoom level. A mouse wheel
+	// notch in pixel mode is about 100 pixels, so it moves one level. A touchpad
+	// pinch arrives as a fast stream of Ctrl+wheel events with deltas of a few
+	// pixels each, so it needs a real finger movement for each level.
+	private static readonly wheelPixelsPerLevel: number = 50;
+	// Shortest time between two zoom level changes from the wheel.
+	private static readonly wheelMinStepIntervalMs: number = 100;
+	// Wheel distance gathered toward the next level. It starts again from zero
+	// when the wheel has been idle for this long.
+	private static readonly wheelIdleResetMs: number = 300;
+
+	private wheelAccumulatedDelta: number = 0;
+	private wheelLastEventTime: number = 0;
+	private wheelLastStepTime: number = 0;
+
 	// Ctrl+wheel zoom. ScrollSection routes the Ctrl+wheel here for Calc
-	// (plain wheel stays scrolling). One notch = one zoom level, pivoting on
-	// the pointer; committed directly (no animation) so notches feel snappy.
+	// (plain wheel stays scrolling). The zoom moves at most one level per step,
+	// pivoting on the pointer; committed directly (no animation) so notches feel
+	// snappy.
 	public onMouseWheel(
 		point: cool.SimplePoint,
 		delta: Array<number>,
@@ -164,8 +181,33 @@ class ZoomControl extends CanvasSectionObject {
 		if (!e.ctrlKey || !this.layout) return;
 		if (!this.inDocumentArea(point)) return;
 
+		const now = performance.now();
+		if (now - this.wheelLastEventTime > ZoomControl.wheelIdleResetMs)
+			this.wheelAccumulatedDelta = 0;
+		this.wheelLastEventTime = now;
+
+		// A wheel that reports lines or pages moves one level per event. Pixel
+		// deltas, from a touchpad pinch or a smooth-scrolling wheel, are added up
+		// until they reach the distance for one level.
+		const threshold = ZoomControl.wheelPixelsPerLevel;
+		if (e.deltaMode === WheelEvent.DOM_DELTA_PIXEL)
+			this.wheelAccumulatedDelta += e.deltaY;
+		else this.wheelAccumulatedDelta = Math.sign(e.deltaY) * threshold;
+
+		if (Math.abs(this.wheelAccumulatedDelta) < threshold) return;
+
+		// The total holds at most one level, so a fast gesture does not queue up
+		// several while the steps are spaced apart below.
+		this.wheelAccumulatedDelta =
+			Math.sign(this.wheelAccumulatedDelta) * threshold;
+		if (now - this.wheelLastStepTime < ZoomControl.wheelMinStepIntervalMs)
+			return;
+
 		// Wheel up (deltaY < 0) zooms in.
-		const step = e.deltaY < 0 ? 1 : -1;
+		const step = this.wheelAccumulatedDelta < 0 ? 1 : -1;
+		this.wheelAccumulatedDelta = 0;
+		this.wheelLastStepTime = now;
+
 		const anchor = this.layout.canvasToDocumentPoint(point);
 		this.zoomTo(app.map.getZoom() + step, anchor, false);
 	}
