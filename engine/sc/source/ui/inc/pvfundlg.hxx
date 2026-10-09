@@ -30,6 +30,23 @@
 
 class ScDPObject;
 
+// Data field functions, in the order of the SCSTR_DPFUNCLISTBOX names.
+inline constexpr PivotFunc ScDPDataFieldFunctions[] =
+{
+    PivotFunc::Sum,
+    PivotFunc::Count,
+    PivotFunc::Average,
+    PivotFunc::Median,
+    PivotFunc::Max,
+    PivotFunc::Min,
+    PivotFunc::Product,
+    PivotFunc::CountNum,
+    PivotFunc::StdDev,
+    PivotFunc::StdDevP,
+    PivotFunc::StdVar,
+    PivotFunc::StdVarP
+};
+
 class ScDPFunctionListBox
 {
 public:

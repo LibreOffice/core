@@ -106,23 +106,6 @@ bool lclFillListBox(weld::TreeView& rLBox, const std::vector<ScDPLabelData::Memb
     return bEmpty;
 }
 
-/** This table represents the order of the strings in the resource string array. */
-const PivotFunc spnFunctions[] =
-{
-    PivotFunc::Sum,
-    PivotFunc::Count,
-    PivotFunc::Average,
-    PivotFunc::Median,
-    PivotFunc::Max,
-    PivotFunc::Min,
-    PivotFunc::Product,
-    PivotFunc::CountNum,
-    PivotFunc::StdDev,
-    PivotFunc::StdDevP,
-    PivotFunc::StdVar,
-    PivotFunc::StdVarP
-};
-
 const sal_uInt16 SC_BASEITEM_PREV_POS = 0;
 const sal_uInt16 SC_BASEITEM_NEXT_POS = 1;
 const sal_uInt16 SC_BASEITEM_USER_POS = 2;
@@ -148,7 +131,7 @@ void ScDPFunctionListBox::SetSelection( PivotFunc nFuncMask )
     {
         for( sal_Int32 nEntry = 0, nCount = m_xControl->n_children(); nEntry < nCount; ++nEntry )
         {
-            if (bool(nFuncMask & spnFunctions[ nEntry ]))
+            if (bool(nFuncMask & ScDPDataFieldFunctions[ nEntry ]))
                 m_xControl->select(nEntry);
             else
                 m_xControl->unselect(nEntry);
@@ -161,7 +144,7 @@ PivotFunc ScDPFunctionListBox::GetSelection() const
     PivotFunc nFuncMask = PivotFunc::NONE;
     std::vector<int> aRows = m_xControl->get_selected_rows();
     for (int nSel : aRows)
-        nFuncMask |= spnFunctions[nSel];
+        nFuncMask |= ScDPDataFieldFunctions[nSel];
     return nFuncMask;
 }
 
@@ -173,7 +156,7 @@ void ScDPFunctionListBox::FillFunctionNames()
     for (size_t nIndex = 0; nIndex < SAL_N_ELEMENTS(SCSTR_DPFUNCLISTBOX); ++nIndex)
         m_xControl->append_text(ScResId(SCSTR_DPFUNCLISTBOX[nIndex]));
     m_xControl->thaw();
-    assert(m_xControl->n_children() == SAL_N_ELEMENTS(spnFunctions));
+    assert(m_xControl->n_children() == SAL_N_ELEMENTS(ScDPDataFieldFunctions));
 }
 
 namespace
