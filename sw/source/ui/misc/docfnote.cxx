@@ -45,10 +45,10 @@ SwFootNoteOptionDlg::SwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rS)
 {
     GetOKButton().connect_clicked(LINK(this, SwFootNoteOptionDlg, OkHdl));
 
-    AddTabPage(u"footnotes"_ustr, TabResId(RID_TAB_FOOTNOTES.aLabel), SwFootNoteOptionPage::Create,
-               RID_L + RID_TAB_FOOTNOTES.sIconName);
-    AddTabPage(u"endnotes"_ustr, TabResId(RID_TAB_ENDNOTES.aLabel), SwEndNoteOptionPage::Create,
-               RID_L + RID_TAB_ENDNOTES.sIconName);
+    AddTabPage(u"footnotes"_ustr, TabResId(RID_TAB_SWFOOTEND_FOOTNOTES), SwFootNoteOptionPage::Create,
+               RID_L + RID_TAB_FOOTNOTES_IMG);
+    AddTabPage(u"endnotes"_ustr, TabResId(RID_TAB_SWFOOTEND_ENDNOTES), SwEndNoteOptionPage::Create,
+               RID_L + RID_TAB_ENDNOTES_IMG);
 }
 
 void SwFootNoteOptionDlg::PageCreated(const OUString& /*rId*/, SfxTabPage &rPage)

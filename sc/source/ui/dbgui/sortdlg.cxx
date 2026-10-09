@@ -31,10 +31,10 @@
 ScSortDlg::ScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
     : SfxTabDialogController(pParent, u"modules/scalc/ui/sortdialog.ui"_ustr, u"SortDialog"_ustr, pArgSet)
 {
-    AddTabPage(u"criteria"_ustr, TabResId(RID_TAB_SORT.aLabel), ScTabPageSortFields::Create,
-               RID_L + RID_TAB_SORT.sIconName);
-    AddTabPage(u"options"_ustr, TabResId(RID_TAB_SORTOPTIONS.aLabel), ScTabPageSortOptions::Create,
-               RID_L + RID_TAB_SORTOPTIONS.sIconName);
+    AddTabPage(u"criteria"_ustr, TabResId(RID_TAB_SCSORT_SORT), ScTabPageSortFields::Create,
+               RID_L + RID_TAB_SORT_IMG);
+    AddTabPage(u"options"_ustr, TabResId(RID_TAB_SCSORT_OPTIONS), ScTabPageSortOptions::Create,
+               RID_L + RID_TAB_SORTOPTIONS_IMG);
 
     // restore dialog size
     SvtViewOptions aDlgOpt(EViewType::Dialog, u"SortDialog"_ustr);

@@ -144,24 +144,24 @@ SdParagraphDlg::SdParagraphDlg(weld::Window* pParent, const SfxItemSet* pAttr)
     : SfxTabDialogController(pParent, u"modules/sdraw/ui/drawparadialog.ui"_ustr,
                              u"DrawParagraphPropertiesDialog"_ustr, pAttr)
 {
-    AddTabPage(u"indents"_ustr, TabResId(RID_TAB_INDENTS.aLabel), RID_SVXPAGE_STD_PARAGRAPH,
-               RID_L + RID_TAB_INDENTS.sIconName);
+    AddTabPage(u"indents"_ustr, TabResId(RID_TAB_SDPARA_INDENTS), RID_SVXPAGE_STD_PARAGRAPH,
+               RID_L + RID_TAB_INDENTS_IMG);
 
     if (SvtCJKOptions::IsAsianTypographyEnabled())
-        AddTabPage(u"asiantypo"_ustr, TabResId(RID_TAB_ASIANTYPO.aLabel), RID_SVXPAGE_PARA_ASIAN,
-                   RID_L + RID_TAB_ASIANTYPO.sIconName);
+        AddTabPage(u"asiantypo"_ustr, TabResId(RID_TAB_SDPARA_ASIANTYPO), RID_SVXPAGE_PARA_ASIAN,
+                   RID_L + RID_TAB_ASIANTYPO_IMG);
 
-    AddTabPage(u"tabs"_ustr, TabResId(RID_TAB_TABS.aLabel), RID_SVXPAGE_TABULATOR,
-               RID_L + RID_TAB_TABS.sIconName);
+    AddTabPage(u"tabs"_ustr, TabResId(RID_TAB_SDPARA_TABS), RID_SVXPAGE_TABULATOR,
+               RID_L + RID_TAB_TABS_IMG);
 
-    AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_ALIGNMENT.aLabel), RID_SVXPAGE_ALIGN_PARAGRAPH,
-               RID_L + RID_TAB_ALIGNMENT.sIconName);
+    AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_SDPARA_ALIGNMENT), RID_SVXPAGE_ALIGN_PARAGRAPH,
+               RID_L + RID_TAB_ALIGNMENT_IMG);
 
     static const bool bShowParaNumbering = (getenv("SD_SHOW_NUMBERING_PAGE") != nullptr);
     if (bShowParaNumbering)
-        AddTabPage(u"numbering"_ustr, TabResId(RID_TAB_NUMBERING.aLabel),
+        AddTabPage(u"numbering"_ustr, TabResId(RID_TAB_SDPARA_NUMBERING),
                    SdParagraphNumTabPage::Create, SdParagraphNumTabPage::GetRanges,
-                   RID_L + RID_TAB_NUMBERING.sIconName);
+                   RID_L + RID_TAB_NUMBERING_IMG);
 }
 
 void SdParagraphDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)

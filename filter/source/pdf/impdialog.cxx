@@ -202,19 +202,19 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     mbSignPDF = maConfigItem.ReadBool( u"SignPDF"_ustr, false );
 
     // queue the tab pages for later creation (created when first shown)
-    AddTabPage(u"general"_ustr, TabResId(RID_TAB_ORGANIZER.aLabel), ImpPDFTabGeneralPage::Create,
-               RID_L + RID_TAB_ORGANIZER.sIconName);
-    AddTabPage(u"initialview"_ustr, TabResId(RID_TAB_PDFINITIAL.aLabel),
-               ImpPDFTabOpnFtrPage::Create, RID_L + RID_TAB_PDFINITIAL.sIconName);
-    AddTabPage(u"userinterface"_ustr, TabResId(RID_TAB_PDFUI.aLabel), ImpPDFTabViewerPage::Create,
-               RID_L + RID_TAB_PDFUI.sIconName);
-    AddTabPage(u"links"_ustr, TabResId(RID_TAB_PDFLINKS.aLabel), ImpPDFTabLinksPage::Create,
-               RID_L + RID_TAB_PDFLINKS.sIconName);
-    AddTabPage(u"security"_ustr, TabResId(RID_TAB_PDFPROTECT.aLabel), ImpPDFTabSecurityPage::Create,
-               RID_L + RID_TAB_PDFPROTECT.sIconName);
+    AddTabPage(u"general"_ustr, TabResId(RID_TAB_PDF_ORGANIZER), ImpPDFTabGeneralPage::Create,
+               RID_L + RID_TAB_ORGANIZER_IMG);
+    AddTabPage(u"initialview"_ustr, TabResId(RID_TAB_PDF_INITIAL),
+               ImpPDFTabOpnFtrPage::Create, RID_L + RID_TAB_INITIAL_IMG);
+    AddTabPage(u"userinterface"_ustr, TabResId(RID_TAB_PDF_UI), ImpPDFTabViewerPage::Create,
+               RID_L + RID_TAB_UI_IMG);
+    AddTabPage(u"links"_ustr, TabResId(RID_TAB_PDF_LINKS), ImpPDFTabLinksPage::Create,
+               RID_L + RID_TAB_LINKS_IMG);
+    AddTabPage(u"security"_ustr, TabResId(RID_TAB_PDF_PROTECT), ImpPDFTabSecurityPage::Create,
+               RID_L + RID_TAB_PROTECT_IMG);
     if (!comphelper::LibreOfficeKit::isActive())
-        AddTabPage(u"digitalsignatures"_ustr, TabResId(RID_TAB_PDFSIGN.aLabel),
-                   ImpPDFTabSigningPage::Create, RID_L + RID_TAB_PDFSIGN.sIconName);
+        AddTabPage(u"digitalsignatures"_ustr, TabResId(RID_TAB_PDF_SIGN),
+                   ImpPDFTabSigningPage::Create, RID_L + RID_TAB_SIGN_IMG);
 
     SetCurPageId(u"general"_ustr);
 

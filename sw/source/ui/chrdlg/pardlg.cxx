@@ -69,19 +69,19 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
     assert(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH)
            && "GetTabPageCreatorFunc fail!");
     assert(pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH) && "GetTabPageRangesFunc fail!");
-    AddTabPage(u"indents"_ustr, TabResId(RID_TAB_INDENTS.aLabel),
+    AddTabPage(u"indents"_ustr, TabResId(RID_TAB_SWPARA_INDENTS),
                pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH),
                pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH),
-               RID_M + RID_TAB_INDENTS.sIconName);
+               RID_M + RID_TAB_INDENTS_IMG);
 
     assert(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH)
            && "GetTabPageCreatorFunc fail!");
     assert(pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH)
            && "GetTabPageRangesFunc fail!");
-    AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_ALIGNMENT.aLabel),
+    AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_SWPARA_ALIGNMENT),
                pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),
                pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),
-               RID_M + RID_TAB_ALIGNMENT.sIconName);
+               RID_M + RID_TAB_ALIGNMENT_IMG);
 
     if (!m_bDrawParaDlg && (!bHtmlMode || officecfg::Office::Common::Filter::HTML::Export::PrintLayout::get()))
     {
@@ -89,10 +89,10 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
                && "GetTabPageCreatorFunc fail!");
         assert(pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH)
                && "GetTabPageRangesFunc fail!");
-        AddTabPage(u"textflow"_ustr, TabResId(RID_TAB_TEXTFLOW.aLabel),
+        AddTabPage(u"textflow"_ustr, TabResId(RID_TAB_SWPARA_TEXTFLOW),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),
                    pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH),
-                   RID_M + RID_TAB_TEXTFLOW.sIconName);
+                   RID_M + RID_TAB_TEXTFLOW_IMG);
     }
 
     if(!bHtmlMode && SvtCJKOptions::IsAsianTypographyEnabled())
@@ -100,18 +100,18 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
         assert(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN)
                && "GetTabPageCreatorFunc fail!");
         assert(pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) && "GetTabPageRangesFunc fail!");
-        AddTabPage(u"asiantypo"_ustr, TabResId(RID_TAB_ASIANTYPO.aLabel),
+        AddTabPage(u"asiantypo"_ustr, TabResId(RID_TAB_SWPARA_ASIANTYPO),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),
                    pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN),
-                   RID_M + RID_TAB_ASIANTYPO.sIconName);
+                   RID_M + RID_TAB_ASIANTYPO_IMG);
     }
 
     if (!m_bDrawParaDlg)
     {
         if(!(nDialogMode & DLG_ENVELOP))
-            AddTabPage(u"outline"_ustr, TabResId(RID_TAB_OUTLINELIST.aLabel),
+            AddTabPage(u"outline"_ustr, TabResId(RID_TAB_SWPARA_OUTLINELIST),
                        SwParagraphNumTabPage::Create, SwParagraphNumTabPage::GetRanges,
-                       RID_M + RID_TAB_OUTLINELIST.sIconName);
+                       RID_M + RID_TAB_OUTLINELIST_IMG);
     }
 
     if(!bHtmlMode)
@@ -119,35 +119,35 @@ SwParaDlg::SwParaDlg(weld::Window *pParent,
         assert(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR)
                && "GetTabPageCreatorFunc fail!");
         assert(pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) && "GetTabPageRangesFunc fail!");
-        AddTabPage(u"tabs"_ustr, TabResId(RID_TAB_TABS.aLabel),
+        AddTabPage(u"tabs"_ustr, TabResId(RID_TAB_SWPARA_TABS),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),
                    pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR),
-                   RID_M + RID_TAB_TABS.sIconName);
+                   RID_M + RID_TAB_TABS_IMG);
     }
 
     if (!m_bDrawParaDlg)
     {
-        AddTabPage(u"dropcaps"_ustr, TabResId(RID_TAB_DROPCAPS.aLabel), SwDropCapsPage::Create,
-                   SwDropCapsPage::GetRanges, RID_M + RID_TAB_DROPCAPS.sIconName);
+        AddTabPage(u"dropcaps"_ustr, TabResId(RID_TAB_SWPARA_DROPCAPS), SwDropCapsPage::Create,
+                   SwDropCapsPage::GetRanges, RID_M + RID_TAB_DROPCAPS_IMG);
 
         assert(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER) && "GetTabPageCreatorFunc fail!");
         assert(pFact->GetTabPageRangesFunc(RID_SVXPAGE_BORDER) && "GetTabPageRangesFunc fail!");
-        AddTabPage(u"borders"_ustr, TabResId(RID_TAB_BORDER.aLabel),
+        AddTabPage(u"borders"_ustr, TabResId(RID_TAB_SWPARA_BORDER),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER),
                    pFact->GetTabPageRangesFunc(RID_SVXPAGE_BORDER),
-                   RID_M + RID_TAB_BORDER.sIconName);
+                   RID_M + RID_TAB_BORDER_IMG);
 
         if(!bHtmlMode || (nHtmlMode & (HTMLMODE_SOME_STYLES|HTMLMODE_FULL_STYLES)))
         {
             // add Area and Transparence TabPages
-            AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel),
+            AddTabPage(u"area"_ustr, TabResId(RID_TAB_SWPARA_AREA),
                        pFact->GetTabPageCreatorFunc(RID_SVXPAGE_AREA),
                        pFact->GetTabPageRangesFunc(RID_SVXPAGE_AREA),
-                       RID_M + RID_TAB_AREA.sIconName);
-            AddTabPage(u"transparence"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel),
+                       RID_M + RID_TAB_AREA_IMG);
+            AddTabPage(u"transparence"_ustr, TabResId(RID_TAB_SWPARA_TRANSPARENCE),
                        pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TRANSPARENCE),
                        pFact->GetTabPageRangesFunc(RID_SVXPAGE_TRANSPARENCE),
-                       RID_M + RID_TAB_TRANSPARENCE.sIconName);
+                       RID_M + RID_TAB_TRANSPARENCE_IMG);
         }
     }
 

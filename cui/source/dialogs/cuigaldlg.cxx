@@ -485,12 +485,12 @@ GalleryThemeProperties::GalleryThemeProperties(weld::Widget* pParent,
                              u"GalleryThemeDialog"_ustr, pItemSet)
     , pData(_pData)
 {
-    AddTabPage(u"general"_ustr, TabResId(RID_TAB_ORGANIZER.aLabel), TPGalleryThemeGeneral::Create,
-               RID_L + RID_TAB_ORGANIZER.sIconName);
+    AddTabPage(u"general"_ustr, TabResId(RID_TAB_CUIGAL_ORGANIZER), TPGalleryThemeGeneral::Create,
+               RID_L + RID_TAB_ORGANIZER_IMG);
     if (!pData->pTheme->IsReadOnly())
     {
-        AddTabPage(u"files"_ustr, TabResId(RID_TAB_FILES.aLabel),
-                   TPGalleryThemeProperties::Create, RID_L + RID_TAB_FILES.sIconName);
+        AddTabPage(u"files"_ustr, TabResId(RID_TAB_CUIGAL_FILES),
+                   TPGalleryThemeProperties::Create, RID_L + RID_TAB_FILES_IMG);
     }
 
     OUString aText = m_xDialog->get_title().replaceFirst( "%1",  pData->pTheme->GetName() );

@@ -56,10 +56,10 @@ UIPickerDialog::UIPickerDialog(weld::Window* pParent)
     , m_xCancelBtn(m_xBuilder->weld_button(u"cancel"_ustr)) // Close
     , m_xResetBtn(m_xBuilder->weld_button(u"reset"_ustr)) // Apply to All
 {
-    AddTabPage("uimode", TabResId(RID_TAB_UIMODE.aLabel), UITabPage::Create,
-               RID_L + RID_TAB_UIMODE.sIconName);
-    AddTabPage("toolbars", TabResId(RID_TAB_TOOLBARS.aLabel), ToolbarTabPage::Create,
-               RID_L + RID_TAB_TOOLBARS.sIconName);
+    AddTabPage("uimode", TabResId(RID_TAB_CUIUIPICK_MODE), UITabPage::Create,
+               RID_L + RID_TAB_UIMODE_IMG);
+    AddTabPage("toolbars", TabResId(RID_TAB_CUIUIPICK_TOOLBARS), ToolbarTabPage::Create,
+               RID_L + RID_TAB_TOOLBARS_IMG);
 
     m_xOKBtn->set_visible(false);
     m_xCancelBtn->set_label(CuiResId(RID_CUISTR_HYPDLG_CLOSEBUT)); // "close"

@@ -1215,16 +1215,16 @@ SwTableTabDlg::SwTableTabDlg(weld::Window* pParent, const SfxItemSet* pItemSet, 
     , m_pShell(pSh)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    AddTabPage(u"table"_ustr, TabResId(RID_TAB_TABLE.aLabel), &SwFormatTablePage::Create,
-               RID_L + RID_TAB_TABLE.sIconName);
-    AddTabPage(u"textflow"_ustr, TabResId(RID_TAB_TEXTFLOW.aLabel), &SwTextFlowPage::Create,
-               RID_L + RID_TAB_TEXTFLOW.sIconName);
-    AddTabPage(u"columns"_ustr, TabResId(RID_TAB_COLUMNS.aLabel), &SwTableColumnPage::Create,
-               RID_L + RID_TAB_COLUMNS.sIconName);
-    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_BORDER.aLabel),
-               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER), RID_L + RID_TAB_BORDER.sIconName);
-    AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
-               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), RID_L + RID_TAB_BACKGROUND.sIconName);
+    AddTabPage(u"table"_ustr, TabResId(RID_TAB_SWTABLE_TABLE), &SwFormatTablePage::Create,
+               RID_L + RID_TAB_TABLE_IMG);
+    AddTabPage(u"textflow"_ustr, TabResId(RID_TAB_SWTABLE_TEXTFLOW), &SwTextFlowPage::Create,
+               RID_L + RID_TAB_TEXTFLOW_IMG);
+    AddTabPage(u"columns"_ustr, TabResId(RID_TAB_SWTABLE_COLUMNS), &SwTableColumnPage::Create,
+               RID_L + RID_TAB_COLUMNS_IMG);
+    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_SWTABLE_BORDER),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER), RID_L + RID_TAB_BORDER_IMG);
+    AddTabPage(u"background"_ustr, TabResId(RID_TAB_SWTABLE_BACKGROUND),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), RID_L + RID_TAB_BACKGROUND_IMG);
 }
 
 void  SwTableTabDlg::PageCreated(const OUString& rId, SfxTabPage& rPage)

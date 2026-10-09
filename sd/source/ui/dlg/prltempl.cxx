@@ -135,55 +135,55 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const* pDocSh,
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
     if (!bBackground)
-        AddTabPage(u"line"_ustr, TabResId(RID_TAB_LINE.aLabel),
-                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_LINE), RID_M + RID_TAB_LINE.sIconName);
-    AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel),
-               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_AREA), RID_M + RID_TAB_AREA.sIconName);
+        AddTabPage(u"line"_ustr, TabResId(RID_TAB_SDPRESSTYLE_LINE),
+                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_LINE), RID_M + RID_TAB_LINE_IMG);
+    AddTabPage(u"area"_ustr, TabResId(RID_TAB_SDPRESSTYLE_AREA),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_AREA), RID_M + RID_TAB_AREA_IMG);
     if (!bBackground)
     {
-        AddTabPage(u"shadowing"_ustr, TabResId(RID_TAB_SHADOW.aLabel),
+        AddTabPage(u"shadowing"_ustr, TabResId(RID_TAB_SDPRESSTYLE_SHADOW),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_SHADOW),
-                   RID_M + RID_TAB_SHADOW.sIconName);
-        AddTabPage(u"transparency"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel),
+                   RID_M + RID_TAB_SHADOW_IMG);
+        AddTabPage(u"transparency"_ustr, TabResId(RID_TAB_SDPRESSTYLE_TRANSPARENCE),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TRANSPARENCE),
-                   RID_M + RID_TAB_TRANSPARENCE.sIconName);
-        AddTabPage(u"font"_ustr, TabResId(RID_TAB_FONT.aLabel),
+                   RID_M + RID_TAB_TRANSPARENCE_IMG);
+        AddTabPage(u"font"_ustr, TabResId(RID_TAB_SDPRESSTYLE_FONT),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME),
-                   RID_M + RID_TAB_FONT.sIconName);
-        AddTabPage(u"fonteffect"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel),
+                   RID_M + RID_TAB_FONT_IMG);
+        AddTabPage(u"fonteffect"_ustr, TabResId(RID_TAB_SDPRESSTYLE_FONTEFFECTS),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS),
-                   RID_M + RID_TAB_FONTEFFECTS.sIconName);
-        AddTabPage(u"indents"_ustr, TabResId(RID_TAB_INDENTS.aLabel),
+                   RID_M + RID_TAB_FONTEFFECTS_IMG);
+        AddTabPage(u"indents"_ustr, TabResId(RID_TAB_SDPRESSTYLE_INDENTS),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH),
-                   RID_M + RID_TAB_INDENTS.sIconName);
-        AddTabPage(u"text"_ustr, TabResId(RID_TAB_TEXT.aLabel),
+                   RID_M + RID_TAB_INDENTS_IMG);
+        AddTabPage(u"text"_ustr, TabResId(RID_TAB_SDPRESSTYLE_TEXT),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TEXTATTR),
-                   RID_M + RID_TAB_TEXT.sIconName);
-        AddTabPage(u"bullets"_ustr, TabResId(RID_TAB_BULLETS.aLabel),
+                   RID_M + RID_TAB_TEXT_IMG);
+        AddTabPage(u"bullets"_ustr, TabResId(RID_TAB_SDPRESSTYLE_BULLETS),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PICK_BULLET),
-                   RID_M + RID_TAB_BULLETS.sIconName);
-        AddTabPage(u"numbering"_ustr, TabResId(RID_TAB_NUMBERING.aLabel),
+                   RID_M + RID_TAB_BULLETS_IMG);
+        AddTabPage(u"numbering"_ustr, TabResId(RID_TAB_SDPRESSTYLE_NUMBERING),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PICK_SINGLE_NUM),
-                   RID_M + RID_TAB_NUMBERING.sIconName);
-        AddTabPage(u"image"_ustr, TabResId(RID_TAB_IMAGE.aLabel),
+                   RID_M + RID_TAB_NUMBERING_IMG);
+        AddTabPage(u"image"_ustr, TabResId(RID_TAB_SDPRESSTYLE_IMAGE),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PICK_BMP),
-                   RID_M + RID_TAB_IMAGE.sIconName);
-        AddTabPage(u"customize"_ustr, TabResId(RID_TAB_CUSTOMIZE.aLabel),
+                   RID_M + RID_TAB_IMAGE_IMG);
+        AddTabPage(u"customize"_ustr, TabResId(RID_TAB_SDPRESSTYLE_CUSTOMIZE),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_NUM_OPTIONS),
-                   RID_M + RID_TAB_CUSTOMIZE.sIconName);
-        AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_ALIGNMENT.aLabel),
+                   RID_M + RID_TAB_CUSTOMIZE_IMG);
+        AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_SDPRESSTYLE_ALIGNMENT),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),
-                   RID_M + RID_TAB_ALIGNMENT.sIconName);
+                   RID_M + RID_TAB_ALIGNMENT_IMG);
         if (SvtCJKOptions::IsAsianTypographyEnabled())
-            AddTabPage(u"asiantypo"_ustr, TabResId(RID_TAB_ASIANTYPO.aLabel),
+            AddTabPage(u"asiantypo"_ustr, TabResId(RID_TAB_SDPRESSTYLE_ASIANTYPO),
                        pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),
-                       RID_M + RID_TAB_ASIANTYPO.sIconName);
-        AddTabPage(u"tabs"_ustr, TabResId(RID_TAB_TABS.aLabel),
+                       RID_M + RID_TAB_ASIANTYPO_IMG);
+        AddTabPage(u"tabs"_ustr, TabResId(RID_TAB_SDPRESSTYLE_TABS),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),
-                   RID_M + RID_TAB_TABS.sIconName);
-        AddTabPage(u"background"_ustr, TabResId(RID_TAB_HIGHLIGHTING.aLabel),
+                   RID_M + RID_TAB_TABS_IMG);
+        AddTabPage(u"background"_ustr, TabResId(RID_TAB_SDPRESSTYLE_HIGHLIGHTING),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG),
-                   RID_M + RID_TAB_HIGHLIGHTING.sIconName);
+                   RID_M + RID_TAB_HIGHLIGHTING_IMG);
     }
 
     // set title and add corresponding pages to dialog

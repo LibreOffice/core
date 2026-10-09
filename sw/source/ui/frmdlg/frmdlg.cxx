@@ -72,40 +72,40 @@ SwFrameDlg::SwFrameDlg(const SfxViewFrame& rViewFrame,
         m_xDialog->set_title(m_xDialog->get_title() + SwResId(STR_FRMUI_COLL_HEADER) + *pStr + ")");
     }
 
-    AddTabPage(u"type"_ustr, TabResId(RID_TAB_POSSIZE.aLabel), SwFramePage::Create,
-               RID_M + RID_TAB_POSSIZE.sIconName);
-    AddTabPage(u"options"_ustr, TabResId(RID_TAB_FRAME_OPTIONS.aLabel), SwFrameAddPage::Create,
-               RID_M + RID_TAB_FRAME_OPTIONS.sIconName);
-    AddTabPage(u"wrap"_ustr, TabResId(RID_TAB_FRAME_WRAP.aLabel), SwWrapTabPage::Create,
-               RID_M + RID_TAB_FRAME_WRAP.sIconName);
-    AddTabPage(u"hyperlink"_ustr, TabResId(RID_TAB_HYPERLINK.aLabel), SwFrameURLPage::Create,
-               RID_M + RID_TAB_HYPERLINK.sIconName);
+    AddTabPage(u"type"_ustr, TabResId(RID_TAB_SWFRAME_POSSIZE), SwFramePage::Create,
+               RID_M + RID_TAB_POSSIZE_IMG);
+    AddTabPage(u"options"_ustr, TabResId(RID_TAB_SWFRAME_FRAMEOPTIONS), SwFrameAddPage::Create,
+               RID_M + RID_TAB_FRAMEOPTIONS_IMG);
+    AddTabPage(u"wrap"_ustr, TabResId(RID_TAB_SWFRAME_FRAMEWRAP), SwWrapTabPage::Create,
+               RID_M + RID_TAB_FRAMEWRAP_IMG);
+    AddTabPage(u"hyperlink"_ustr, TabResId(RID_TAB_SWFRAME_HYPERLINK), SwFrameURLPage::Create,
+               RID_M + RID_TAB_HYPERLINK_IMG);
     if (m_sDlgType == "PictureDialog")
     {
-        AddTabPage(u"picture"_ustr, TabResId(RID_TAB_ROTATION.aLabel), SwGrfExtPage::Create,
-                   RID_M + RID_TAB_ROTATION.sIconName);
-        AddTabPage(u"crop"_ustr, TabResId(RID_TAB_CROP.aLabel), RID_SVXPAGE_GRFCROP,
-                   RID_M + RID_TAB_CROP.sIconName);
+        AddTabPage(u"picture"_ustr, TabResId(RID_TAB_SWFRAME_ROTATION), SwGrfExtPage::Create,
+                   RID_M + RID_TAB_ROTATION_IMG);
+        AddTabPage(u"crop"_ustr, TabResId(RID_TAB_SWFRAME_CROP), RID_SVXPAGE_GRFCROP,
+                   RID_M + RID_TAB_CROP_IMG);
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
     // add Area and Transparence TabPages
-    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_BORDER,
-               RID_M + RID_TAB_BORDER.sIconName);
-    AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel),
+    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_SWFRAME_BORDER), RID_SVXPAGE_BORDER,
+               RID_M + RID_TAB_BORDER_IMG);
+    AddTabPage(u"area"_ustr, TabResId(RID_TAB_SWFRAME_AREA),
                pFact->GetTabPageCreatorFunc(RID_SVXPAGE_AREA),
-               pFact->GetTabPageRangesFunc(RID_SVXPAGE_AREA), RID_M + RID_TAB_AREA.sIconName);
-    AddTabPage(u"transparence"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel),
+               pFact->GetTabPageRangesFunc(RID_SVXPAGE_AREA), RID_M + RID_TAB_AREA_IMG);
+    AddTabPage(u"transparence"_ustr, TabResId(RID_TAB_SWFRAME_TRANSPARENCE),
                pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TRANSPARENCE),
                pFact->GetTabPageRangesFunc(RID_SVXPAGE_TRANSPARENCE),
-               RID_M + RID_TAB_TRANSPARENCE.sIconName);
+               RID_M + RID_TAB_TRANSPARENCE_IMG);
     if (m_sDlgType == "FrameDialog")
     {
-        AddTabPage(u"columns"_ustr, TabResId(RID_TAB_COLUMNS.aLabel), SwColumnPage::Create,
-                   RID_M + RID_TAB_COLUMNS.sIconName);
+        AddTabPage(u"columns"_ustr, TabResId(RID_TAB_SWFRAME_COLUMNS), SwColumnPage::Create,
+                   RID_M + RID_TAB_COLUMNS_IMG);
     }
-    AddTabPage(u"macro"_ustr, TabResId(RID_TAB_MACRO.aLabel), RID_SVXPAGE_MACROASSIGN,
-               RID_M + RID_TAB_MACRO.sIconName);
+    AddTabPage(u"macro"_ustr, TabResId(RID_TAB_SWFRAME_MACRO), RID_SVXPAGE_MACROASSIGN,
+               RID_M + RID_TAB_MACRO_IMG);
 
     if(bHTMLMode)
     {

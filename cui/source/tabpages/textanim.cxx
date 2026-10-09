@@ -45,12 +45,12 @@ SvxTextTabDialog::SvxTextTabDialog(weld::Window* pParent, const SfxItemSet* pAtt
     : SfxTabDialogController(pParent, u"cui/ui/textdialog.ui"_ustr, u"TextDialog"_ustr, pAttr)
     , pView(pSdrView)
 {
-    AddTabPage(u"RID_SVXPAGE_TEXTATTR"_ustr, TabResId(RID_TAB_TEXT.aLabel),
-               SvxTextAttrPage::Create, RID_L + RID_TAB_TEXT.sIconName);
-    AddTabPage(u"RID_SVXPAGE_TEXTANIMATION"_ustr, TabResId(RID_TAB_TEXTANIMATION.aLabel),
-               SvxTextAnimationPage::Create, RID_L + RID_TAB_TEXTANIMATION.sIconName);
-    AddTabPage(u"RID_SVXPAGE_TEXTCOLUMNS"_ustr, TabResId(RID_TAB_COLUMNS.aLabel),
-               SvxTextColumnsPage::Create, RID_L + RID_TAB_COLUMNS.sIconName);
+    AddTabPage(u"RID_SVXPAGE_TEXTATTR"_ustr, TabResId(RID_TAB_CUITEXT_TEXT),
+               SvxTextAttrPage::Create, RID_L + RID_TAB_TEXT_IMG);
+    AddTabPage(u"RID_SVXPAGE_TEXTANIMATION"_ustr, TabResId(RID_TAB_CUITEXT_TEXTANIMATION),
+               SvxTextAnimationPage::Create, RID_L + RID_TAB_TEXTANIMATION_IMG);
+    AddTabPage(u"RID_SVXPAGE_TEXTCOLUMNS"_ustr, TabResId(RID_TAB_CUITEXT_COLUMNS),
+               SvxTextColumnsPage::Create, RID_L + RID_TAB_COLUMNS_IMG);
 }
 
 /*************************************************************************

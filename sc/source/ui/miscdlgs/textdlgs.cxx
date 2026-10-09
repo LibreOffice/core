@@ -38,16 +38,16 @@ ScCharDlg::ScCharDlg(weld::Window* pParent, const SfxItemSet* pAttr, const SfxOb
     , m_rDocShell(*pDocShell)
     , m_bDrawText(bDrawText)
 {
-    AddTabPage(u"font"_ustr, TabResId(RID_TAB_FONT.aLabel), RID_SVXPAGE_CHAR_NAME,
-               RID_L + RID_TAB_FONT.sIconName);
-    AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel), RID_SVXPAGE_CHAR_EFFECTS,
-               RID_L + RID_TAB_FONTEFFECTS.sIconName);
-    AddTabPage(u"position"_ustr, TabResId(RID_TAB_POSITION.aLabel), RID_SVXPAGE_CHAR_POSITION,
-               RID_L + RID_TAB_POSITION.sIconName);
+    AddTabPage(u"font"_ustr, TabResId(RID_TAB_SCCHAR_FONT), RID_SVXPAGE_CHAR_NAME,
+               RID_L + RID_TAB_FONT_IMG);
+    AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_SCCHAR_FONTEFFECTS), RID_SVXPAGE_CHAR_EFFECTS,
+               RID_L + RID_TAB_FONTEFFECTS_IMG);
+    AddTabPage(u"position"_ustr, TabResId(RID_TAB_SCCHAR_POSITION), RID_SVXPAGE_CHAR_POSITION,
+               RID_L + RID_TAB_POSITION_IMG);
 
     if (bDrawText)
-        AddTabPage(u"background"_ustr, TabResId(RID_TAB_HIGHLIGHTING.aLabel), RID_SVXPAGE_BKG,
-                   RID_L + RID_TAB_HIGHLIGHTING.sIconName);
+        AddTabPage(u"background"_ustr, TabResId(RID_TAB_SCCHAR_HIGHLIGHTING), RID_SVXPAGE_BKG,
+                   RID_L + RID_TAB_HIGHLIGHTING_IMG);
 }
 
 void ScCharDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
@@ -77,15 +77,15 @@ void ScCharDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
 ScParagraphDlg::ScParagraphDlg(weld::Window* pParent, const SfxItemSet* pAttr)
     : SfxTabDialogController(pParent, u"modules/scalc/ui/paradialog.ui"_ustr, u"ParagraphDialog"_ustr, pAttr)
 {
-    AddTabPage(u"indents"_ustr, TabResId(RID_TAB_INDENTS.aLabel), RID_SVXPAGE_STD_PARAGRAPH,
-               RID_L + RID_TAB_INDENTS.sIconName);
-    AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_ALIGNMENT.aLabel), RID_SVXPAGE_ALIGN_PARAGRAPH,
-               RID_L + RID_TAB_ALIGNMENT.sIconName);
+    AddTabPage(u"indents"_ustr, TabResId(RID_TAB_SCPARA_INDENTS), RID_SVXPAGE_STD_PARAGRAPH,
+               RID_L + RID_TAB_INDENTS_IMG);
+    AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_SCPARA_ALIGNMENT), RID_SVXPAGE_ALIGN_PARAGRAPH,
+               RID_L + RID_TAB_ALIGNMENT_IMG);
     if (SvtCJKOptions::IsAsianTypographyEnabled())
-        AddTabPage(u"asiantypo"_ustr, TabResId(RID_TAB_ASIANTYPO.aLabel), RID_SVXPAGE_PARA_ASIAN,
-                   RID_L + RID_TAB_ASIANTYPO.sIconName);
-    AddTabPage(u"tabs"_ustr, TabResId(RID_TAB_TABS.aLabel), RID_SVXPAGE_TABULATOR,
-               RID_L + RID_TAB_TABS.sIconName);
+        AddTabPage(u"asiantypo"_ustr, TabResId(RID_TAB_SCPARA_ASIANTYPO), RID_SVXPAGE_PARA_ASIAN,
+                   RID_L + RID_TAB_ASIANTYPO_IMG);
+    AddTabPage(u"tabs"_ustr, TabResId(RID_TAB_SCPARA_TABS), RID_SVXPAGE_TABULATOR,
+               RID_L + RID_TAB_TABS_IMG);
 }
 
 void ScParagraphDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)

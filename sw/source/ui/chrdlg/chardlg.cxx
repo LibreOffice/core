@@ -52,18 +52,18 @@ SwCharDlg::SwCharDlg(weld::Window* pParent, SwView& rView, const SfxItemSet& rCo
     {
         m_xDialog->set_title(m_xDialog->get_title() + SwResId(STR_TEXTCOLL_HEADER) + *pStr + ")");
     }
-    AddTabPage(u"font"_ustr, TabResId(RID_TAB_FONT.aLabel), RID_SVXPAGE_CHAR_NAME,
-               RID_M + RID_TAB_FONT.sIconName);
-    AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel), RID_SVXPAGE_CHAR_EFFECTS,
-               RID_M + RID_TAB_FONTEFFECTS.sIconName);
-    AddTabPage(u"position"_ustr, TabResId(RID_TAB_POSITION.aLabel), RID_SVXPAGE_CHAR_POSITION,
-               RID_M + RID_TAB_POSITION.sIconName);
-    AddTabPage(u"asianlayout"_ustr, TabResId(RID_TAB_ASIANLAYOUT.aLabel), RID_SVXPAGE_CHAR_TWOLINES,
-               RID_M + RID_TAB_ASIANLAYOUT.sIconName);
-    AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel), RID_SVXPAGE_BKG,
-               RID_M + RID_TAB_BACKGROUND.sIconName);
-    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_BORDER,
-               RID_M + RID_TAB_BORDER.sIconName);
+    AddTabPage(u"font"_ustr, TabResId(RID_TAB_SWCHAR_FONT), RID_SVXPAGE_CHAR_NAME,
+               RID_M + RID_TAB_FONT_IMG);
+    AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_SWCHAR_FONTEFFECTS), RID_SVXPAGE_CHAR_EFFECTS,
+               RID_M + RID_TAB_FONTEFFECTS_IMG);
+    AddTabPage(u"position"_ustr, TabResId(RID_TAB_SWCHAR_POSITION), RID_SVXPAGE_CHAR_POSITION,
+               RID_M + RID_TAB_POSITION_IMG);
+    AddTabPage(u"asianlayout"_ustr, TabResId(RID_TAB_SWCHAR_ASIANLAYOUT), RID_SVXPAGE_CHAR_TWOLINES,
+               RID_M + RID_TAB_ASIANLAYOUT_IMG);
+    AddTabPage(u"background"_ustr, TabResId(RID_TAB_SWCHAR_BACKGROUND), RID_SVXPAGE_BKG,
+               RID_M + RID_TAB_BACKGROUND_IMG);
+    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_SWCHAR_BORDER), RID_SVXPAGE_BORDER,
+               RID_M + RID_TAB_BORDER_IMG);
 
     if (m_nDialogMode == SwCharDlgMode::Draw || m_nDialogMode == SwCharDlgMode::Ann)
     {

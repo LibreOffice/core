@@ -208,16 +208,16 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
 {
     SvxConfigPageHelper::InitImageType();
 
-    AddTabPage(u"menus"_ustr, TabResId(RID_TAB_MENUS.aLabel), CreateSvxMenuConfigPage,
-               RID_L + RID_TAB_MENUS.sIconName);
-    AddTabPage(u"toolbars"_ustr, TabResId(RID_TAB_TOOLBARS.aLabel), CreateSvxToolbarConfigPage,
-               RID_L + RID_TAB_TOOLBARS.sIconName);
-    AddTabPage(u"contextmenus"_ustr, TabResId(RID_TAB_CONTEXTMENUS.aLabel),
-               CreateSvxContextMenuConfigPage, RID_L + RID_TAB_CONTEXTMENUS.sIconName);
-    AddTabPage(u"keyboard"_ustr, TabResId(RID_TAB_KEYBOARD.aLabel), CreateKeyboardConfigPage,
-               RID_L + RID_TAB_KEYBOARD.sIconName);
-    AddTabPage(u"events"_ustr, TabResId(RID_TAB_EVENTS.aLabel), CreateSvxEventConfigPage,
-               RID_L + RID_TAB_EVENTS.sIconName);
+    AddTabPage(u"menus"_ustr, TabResId(RID_TAB_CUICUST_MENUS), CreateSvxMenuConfigPage,
+               RID_L + RID_TAB_MENUS_IMG);
+    AddTabPage(u"toolbars"_ustr, TabResId(RID_TAB_CUICUST_TOOLBARS), CreateSvxToolbarConfigPage,
+               RID_L + RID_TAB_TOOLBARS_IMG);
+    AddTabPage(u"contextmenus"_ustr, TabResId(RID_TAB_CUICUST_CONTEXTMENUS),
+               CreateSvxContextMenuConfigPage, RID_L + RID_TAB_CONTEXTMENUS_IMG);
+    AddTabPage(u"keyboard"_ustr, TabResId(RID_TAB_CUICUST_KEYBOARD), CreateKeyboardConfigPage,
+               RID_L + RID_TAB_KEYBOARD_IMG);
+    AddTabPage(u"events"_ustr, TabResId(RID_TAB_CUICUST_EVENTS), CreateSvxEventConfigPage,
+               RID_L + RID_TAB_EVENTS_IMG);
 
     if (const SfxStringItem* pItem = pInSet->GetItem(SID_CONFIG))
     {

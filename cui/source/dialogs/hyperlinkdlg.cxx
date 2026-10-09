@@ -26,17 +26,17 @@
 HyperlinkDialog::HyperlinkDialog(weld::Window* pParent, SfxChildWindow* /*pChildWindow*/)
     : SfxTabDialogController(pParent, u"cui/ui/hyperlinkdlg.ui"_ustr, u"HyperlinkDialog"_ustr)
 {
-    AddTabPage("Internet", TabResId(RID_TAB_HLINTERNET.aLabel), HyperlinkInternetTP::Create,
-               RID_TAB_HLINTERNET.sIconName);
+    AddTabPage("Internet", TabResId(RID_TAB_CUILINK_INTERNET), HyperlinkInternetTP::Create,
+               RID_TAB_LINKINTERNET_IMG);
 
-    AddTabPage("Mail", TabResId(RID_TAB_HLMAIL.aLabel), HyperlinkMailTabPage::Create,
-               RID_TAB_HLMAIL.sIconName);
+    AddTabPage("Mail", TabResId(RID_TAB_CUILINK_MAIL), HyperlinkMailTabPage::Create,
+               RID_TAB_LINKMAIL_IMG);
 
-    AddTabPage("Document", TabResId(RID_TAB_HLDOC.aLabel), HyperlinkDocTabPage::Create,
-               RID_TAB_HLDOC.sIconName);
+    AddTabPage("Document", TabResId(RID_TAB_CUILINK_DOC), HyperlinkDocTabPage::Create,
+               RID_TAB_LINKDOC_IMG);
 
-    AddTabPage("New Document", TabResId(RID_TAB_HLDOCN.aLabel), HyperlinkDocNewTabPage::Create,
-               RID_TAB_HLDOCN.sIconName);
+    AddTabPage("New Document", TabResId(RID_TAB_CUILINK_DOCN), HyperlinkDocNewTabPage::Create,
+               RID_TAB_LINKDOCN_IMG);
 
     SetApplyHandler(LINK(this, HyperlinkDialog, ClickApplyHdl));
 }

@@ -42,39 +42,39 @@ ORptPageDialog::ORptPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, c
 
     if (rDialog == "BackgroundDialog")
     {
-        AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
+        AddTabPage(u"background"_ustr, TabResId(RID_TAB_RPTDLG_BACKGROUND),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG),
-                   RID_L + RID_TAB_BACKGROUND.sIconName);
+                   RID_L + RID_TAB_BACKGROUND_IMG);
     }
     else if (rDialog == "PageDialog")
     {
-        AddTabPage(u"page"_ustr, TabResId(RID_TAB_PAGE.aLabel),
-                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), RID_L + RID_TAB_PAGE.sIconName);
-        AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
+        AddTabPage(u"page"_ustr, TabResId(RID_TAB_RPTDLG_PAGE),
+                   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), RID_L + RID_TAB_PAGE_IMG);
+        AddTabPage(u"background"_ustr, TabResId(RID_TAB_RPTDLG_BACKGROUND),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG),
-                   RID_L + RID_TAB_BACKGROUND.sIconName);
+                   RID_L + RID_TAB_BACKGROUND_IMG);
     }
     else if (rDialog == "CharDialog")
     {
-        AddTabPage(u"font"_ustr, TabResId(RID_TAB_FONT.aLabel),
+        AddTabPage(u"font"_ustr, TabResId(RID_TAB_RPTDLG_FONT),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME),
-                   RID_L + RID_TAB_FONT.sIconName);
-        AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel),
+                   RID_L + RID_TAB_FONT_IMG);
+        AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_RPTDLG_FONTEFFECTS),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS),
-                   RID_L + RID_TAB_FONTEFFECTS.sIconName);
-        AddTabPage(u"position"_ustr, TabResId(RID_TAB_POSITION.aLabel),
+                   RID_L + RID_TAB_FONTEFFECTS_IMG);
+        AddTabPage(u"position"_ustr, TabResId(RID_TAB_RPTDLG_POSITION),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_POSITION),
-                   RID_L + RID_TAB_POSITION.sIconName);
+                   RID_L + RID_TAB_POSITION_IMG);
         if (SvtCJKOptions::IsDoubleLinesEnabled())
-            AddTabPage(u"asianlayout"_ustr, TabResId(RID_TAB_ASIANLAYOUT.aLabel),
+            AddTabPage(u"asianlayout"_ustr, TabResId(RID_TAB_RPTDLG_ASIANLAYOUT),
                        pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_TWOLINES),
-                       RID_L + RID_TAB_ASIANLAYOUT.sIconName);
-        AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
+                       RID_L + RID_TAB_ASIANLAYOUT_IMG);
+        AddTabPage(u"background"_ustr, TabResId(RID_TAB_RPTDLG_BACKGROUND),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG),
-                   RID_L + RID_TAB_BACKGROUND.sIconName);
-        AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_ALIGNMENT.aLabel),
+                   RID_L + RID_TAB_BACKGROUND_IMG);
+        AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_RPTDLG_ALIGNMENT),
                    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGNMENT),
-                   RID_L + RID_TAB_ALIGNMENT.sIconName);
+                   RID_L + RID_TAB_ALIGNMENT_IMG);
     }
     else
         OSL_FAIL("Unknown page id");

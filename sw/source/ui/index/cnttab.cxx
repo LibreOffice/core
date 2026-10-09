@@ -279,16 +279,16 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(weld::Widget* pParent, const SfxItemSet
         }
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    AddTabPage(u"index"_ustr, TabResId(RID_TAB_TOCTYPE.aLabel), SwTOXSelectTabPage::Create,
-               RID_L + RID_TAB_TOCTYPE.sIconName);
-    AddTabPage(u"entries"_ustr, TabResId(RID_TAB_TOCENTRIES.aLabel), SwTOXEntryTabPage::Create,
-               RID_L + RID_TAB_TOCENTRIES.sIconName);
-    AddTabPage(u"styles"_ustr, TabResId(RID_TAB_STYLES.aLabel), SwTOXStylesTabPage::Create,
-               RID_L + RID_TAB_STYLES.sIconName);
-    AddTabPage(u"columns"_ustr, TabResId(RID_TAB_COLUMNS.aLabel), SwColumnPage::Create,
-               RID_L + RID_TAB_COLUMNS.sIconName);
-    AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
-               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), RID_L + RID_TAB_BACKGROUND.sIconName);
+    AddTabPage(u"index"_ustr, TabResId(RID_TAB_SWTOC_TYPE), SwTOXSelectTabPage::Create,
+               RID_L + RID_TAB_TOCTYPE_IMG);
+    AddTabPage(u"entries"_ustr, TabResId(RID_TAB_SWTOC_ENTRIES), SwTOXEntryTabPage::Create,
+               RID_L + RID_TAB_TOCENTRIES_IMG);
+    AddTabPage(u"styles"_ustr, TabResId(RID_TAB_SWTOC_STYLES), SwTOXStylesTabPage::Create,
+               RID_L + RID_TAB_TOCSTYLES_IMG);
+    AddTabPage(u"columns"_ustr, TabResId(RID_TAB_SWTOC_COLUMNS), SwColumnPage::Create,
+               RID_L + RID_TAB_COLUMNS_IMG);
+    AddTabPage(u"background"_ustr, TabResId(RID_TAB_SWTOC_BACKGROUND),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), RID_L + RID_TAB_BACKGROUND_IMG);
     if (!pCurTOX)
         SetCurPageId(u"index"_ustr);
 

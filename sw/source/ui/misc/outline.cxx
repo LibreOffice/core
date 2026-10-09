@@ -169,10 +169,10 @@ SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* 
         SetActNumLevel(nTmp < 0 ? USHRT_MAX : (1 << nTmp));
     }
 
-    AddTabPage(u"numbering"_ustr, TabResId(RID_TAB_NUMBERING.aLabel),
-               &SwOutlineSettingsTabPage::Create, RID_L + RID_TAB_NUMBERING.sIconName);
-    AddTabPage(u"position"_ustr, TabResId(RID_TAB_POSITION.aLabel), &SwNumPositionTabPage::Create,
-               RID_L + RID_TAB_POSITION.sIconName);
+    AddTabPage(u"numbering"_ustr, TabResId(RID_TAB_SWOUTLINE_NUMBERING),
+               &SwOutlineSettingsTabPage::Create, RID_L + RID_TAB_NUMBERING_IMG);
+    AddTabPage(u"position"_ustr, TabResId(RID_TAB_SWOUTLINE_POSITION),
+               &SwNumPositionTabPage::Create, RID_L + RID_TAB_POSITION_IMG);
 
     UIName sHeadline;
     sal_uInt16 i;

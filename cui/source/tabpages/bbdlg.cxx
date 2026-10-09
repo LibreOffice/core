@@ -40,20 +40,20 @@ SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(weld::Window *pParent,
         &rCoreSet)
     , mbEnableBackgroundSelector(bEnableSelector)
 {
-    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_BORDER.aLabel), SvxBorderTabPage::Create,
-               RID_L + RID_TAB_BORDER.sIconName);
+    AddTabPage(u"borders"_ustr, TabResId(RID_TAB_CUIBORDER_BORDER), SvxBorderTabPage::Create,
+               RID_L + RID_TAB_BORDER_IMG);
     if (bEnableDrawingLayerFillStyles)
     {
         // Here we want full DrawingLayer FillStyle access, so add Area and Transparency TabPages
-        AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel), SvxAreaTabPage::Create,
-                   RID_L + RID_TAB_AREA.sIconName);
-        AddTabPage(u"transparence"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel),
-                   SvxTransparenceTabPage::Create, RID_L + RID_TAB_TRANSPARENCE.sIconName);
+        AddTabPage(u"area"_ustr, TabResId(RID_TAB_CUIBORDER_AREA), SvxAreaTabPage::Create,
+                   RID_L + RID_TAB_AREA_IMG);
+        AddTabPage(u"transparence"_ustr, TabResId(RID_TAB_CUIBORDER_TRANSPARENCE),
+                   SvxTransparenceTabPage::Create, RID_L + RID_TAB_TRANSPARENCE_IMG);
     }
     else
     {
-        AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel), SvxBkgTabPage::Create,
-                   RID_L + RID_TAB_BACKGROUND.sIconName);
+        AddTabPage(u"background"_ustr, TabResId(RID_TAB_CUIBORDER_BACKGROUND), SvxBkgTabPage::Create,
+                   RID_L + RID_TAB_BACKGROUND_IMG);
     }
 }
 

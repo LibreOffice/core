@@ -10,10 +10,6 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUString RID_BITMAP_HLDOC = u"res/hldoctp.png"_ustr;
-inline constexpr OUString RID_BITMAP_HLDOCN = u"res/hldocntp.png"_ustr;
-inline constexpr OUString RID_BITMAP_HLMAIL = u"res/hlmailtp.png"_ustr;
-
 inline constexpr OUString RID_FILE_THUMBNAIL_TEXT = u"res/writer128.png"_ustr;
 inline constexpr OUString RID_FILE_THUMBNAIL_SHEET = u"res/calc128.png"_ustr;
 inline constexpr OUString RID_FILE_THUMBNAIL_PRESENTATION = u"res/impress128.png"_ustr;

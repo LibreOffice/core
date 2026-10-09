@@ -15,180 +15,611 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/bitmaps.hlst>
 
-struct TabData
-{
-    TranslateId aLabel;
-    OUString sIconName;
-};
-
-/*
- * Tabs are used on dialogs with a few items, usually <4, where it should be
- * accompanied with larger 32px icons and dialogs with more content using 24px icons;
- * the effective icon is loaded per RID_M + RID_TAB*.sIconName
-*/
-
 inline constexpr OUString RID_M = u"cmd/lc_"_ustr;
 inline constexpr OUString RID_L = u"cmd/32/"_ustr;
 
-inline constexpr TabData RID_TAB_BORDER{ NC_("RID_TAB_BORDER", "Border"), u"borderdialog.png"_ustr };
-inline constexpr TabData RID_TAB_LINE{ NC_("RID_TAB_LINE", "Line"), u"formatline.png"_ustr };
-inline constexpr TabData RID_TAB_LINESTYLE{ NC_("RID_TAB_LINE", "Line Style"), u"linestyle.png"_ustr };
-inline constexpr TabData RID_TAB_ARROWSTYLE{ NC_("RID_TAB_ARROWSTYLE", "Arrow Style"), u"lineendstyle.png"_ustr };
-inline constexpr TabData RID_TAB_AREA{ NC_("RID_TAB_AREA", "Area"), u"backgroundcolor.png"_ustr };
-inline constexpr TabData RID_TAB_TRANSPARENCE{ NC_("RID_TAB_TRANSPARENCE", "Transparency"), u"graftransparence.png"_ustr };
-inline constexpr TabData RID_TAB_FONT{ NC_("RID_TAB_FONT", "Font"), u"fontdialog.png"_ustr };
-inline constexpr TabData RID_TAB_FONTEFFECTS{ NC_("RID_TAB_FONTEFFECTS", "Font Effects"), u"color.png"_ustr };
-inline constexpr TabData RID_TAB_ALIGNMENT{ NC_("RID_TAB_ALIGNMENT", "Alignment"), u"alignblock.png"_ustr };
-inline constexpr TabData RID_TAB_ASIANTYPO{ NC_("RID_TAB_ASIANTYPO", "Asian Typography"), u"defaultcharstyle.png"_ustr };
-inline constexpr TabData RID_TAB_POSITION{ NC_("RID_TAB_POSITION", "Position"), u"fontwork.png"_ustr }; // font
-inline constexpr TabData RID_TAB_HIGHLIGHTING{ NC_("RID_TAB_HIGHLIGHTING", "Highlighting"), u"backcolor.png"_ustr };
-inline constexpr TabData RID_TAB_COLORPALETTE{ NC_("RID_TAB_COLORPALETTE", "Color Palette"), u"colorsettings.png"_ustr };
-inline constexpr TabData RID_TAB_NUMBERS{ NC_("RID_TAB_NUMBERS", "Numbers"), u"numberformatdecimal.png"_ustr };
-inline constexpr TabData RID_TAB_INDENTS{ NC_("RID_TAB_INDENTS", "Indents & Spacing"), u"paraspaceincrease.png"_ustr };
-inline constexpr TabData RID_TAB_TABS{ NC_("RID_TAB_TABS", "Tabs"), u"hangingindent.png"_ustr };
-inline constexpr TabData RID_TAB_ORGANIZER{ NC_("RID_TAB_ORGANIZER", "General"), u"browseview.png"_ustr };
-inline constexpr TabData RID_TAB_FILES{ NC_("RID_TAB_FILES", "Files"), u"open.png"_ustr };
-inline constexpr TabData RID_TAB_BACKGROUND{ NC_("RID_TAB_BACKGROUND", "Background"), u"backgroundcolor.png"_ustr };
-inline constexpr TabData RID_TAB_TEXTFLOW{ NC_("RID_TAB_TEXTFLOW", "Text Flow"), u"hyphenate.png"_ustr };
-inline constexpr TabData RID_TAB_ASIANLAYOUT{ NC_("RID_TAB_ASIANLAYOUT", "Asian Layout"), u"textdirectiontoptobottom.png"_ustr };
-inline constexpr TabData RID_TAB_OUTLINELIST{ NC_("RID_TAB_OUTLINELIST", "Outline & List"), u"setoutline.png"_ustr };
-inline constexpr TabData RID_TAB_DROPCAPS{ NC_("RID_TAB_DROPCAPS", "Drop Caps"), u"smallcaps.png"_ustr };
-inline constexpr TabData RID_TAB_CONDITION{ NC_("RID_TAB_CONDITION", "Condition"), u"developmenttoolsdockingwindow.png"_ustr };
-inline constexpr TabData RID_TAB_HEADER{ NC_("RID_TAB_HEADER", "Header"), u"insertheader.png"_ustr };
-inline constexpr TabData RID_TAB_FOOTER{ NC_("RID_TAB_FOOTER", "Footer"), u"insertfooter.png"_ustr };
-inline constexpr TabData RID_TAB_PAGE{ NC_("RID_TAB_PAGE", "Page"), u"attributepagesize.png"_ustr }; // also Draw/Impress
-inline constexpr TabData RID_TAB_SLIDE{ NC_("RID_TAB_SLIDE", "Slide"), u"attributepagesize.png"_ustr }; // also Draw/Impress
-inline constexpr TabData RID_TAB_COLUMNS{ NC_("RID_TAB_COLUMNS", "Columns"), u"pagecolumntype.png"_ustr };
-inline constexpr TabData RID_TAB_FOOTNOTES{ NC_("RID_TAB_FOOTNOTES", "Footnote"), u"footnotedialog.png"_ustr };
-inline constexpr TabData RID_TAB_ENDNOTES{ NC_("RID_TAB_ENDNOTES", "Endnote"), u"insertendnote.png"_ustr };
-inline constexpr TabData RID_TAB_TEXTGRID{ NC_("RID_TAB_TEXTGRID", "Text Grid"), u"gridvisible.png"_ustr };
-//  list
-inline constexpr TabData RID_TAB_UNOORDERED{ NC_("RID_TAB_UNOORDERED", "Unordered"), u"defaultbullet.png"_ustr };
-inline constexpr TabData RID_TAB_ORDERED{ NC_("RID_TAB_ORDERED", "Ordered"), u"defaultnumbering.png"_ustr };
-// Translators: Outline as in an overview
-inline constexpr TabData RID_TAB_OUTLINE{ NC_("RID_TAB_OUTLINE", "Outline"), u"setoutline.png"_ustr };
-inline constexpr TabData RID_TAB_IMAGE{ NC_("RID_TAB_IMAGE", "Image"), u"imagebutton.png"_ustr };
-inline constexpr TabData RID_TAB_CUSTOMIZE{ NC_("RID_TAB_CUSTOMIZE", "Customize"), u"developmenttoolsdockingwindow.png"_ustr };
-inline constexpr TabData RID_TAB_LIST_POSITION{ NC_("RID_TAB_LIST_POSITION", "Position"), u"hangingindent.png"_ustr };
-// frame
-inline constexpr TabData RID_TAB_FRAME_TYPE{ NC_("RID_TAB_FRAME_TYPE", "Type"), u"toggleanchortype.png"_ustr };
-inline constexpr TabData RID_TAB_FRAME_OPTIONS{ NC_("RID_TAB_FRAME_OPTIONS", "Options"), u"calloutshapes.png"_ustr };
-inline constexpr TabData RID_TAB_FRAME_WRAP{ NC_("RID_TAB_FRAME_WRAP", "Wrap"), u"wrapcontour.png"_ustr };
-inline constexpr TabData RID_TAB_MACRO{ NC_("RID_TAB_MACRO", "Macro"), u"choosemacro.png"_ustr };
-// section
-inline constexpr TabData RID_TAB_SECTION{ NC_("RID_TAB_SECTION", "Section"), u"protectfields.png"_ustr };
-inline constexpr TabData RID_TAB_FOOTENDNOTES{ NC_("RID_TAB_FOOTENDNOTES", "Footnotes/Endnotes"), u"footnotedialog.png"_ustr };
-inline constexpr TabData RID_TAB_INDENTSONLY{ NC_("RID_TAB_INDENTS", "Indents"), u"incrementindent.png"_ustr };
-// ToC
-inline constexpr TabData RID_TAB_TOCTYPE{ NC_("RID_TAB_TOCTYPE", "Type"), u"insertindexesentry.png"_ustr };
-inline constexpr TabData RID_TAB_TOCENTRIES{ NC_("RID_TAB_TOCENTRIES", "Entries"), u"updatecurindex.png"_ustr };
-inline constexpr TabData RID_TAB_STYLES{ NC_("RID_TAB_STYLES", "Styles"), u"editstyle.png"_ustr };
-// table
-inline constexpr TabData RID_TAB_TABLE{ NC_("RID_TAB_TABLE", "Table"), u"tabledialog.png"_ustr };
-// field
-inline constexpr TabData RID_TAB_DOCUMENT{ NC_("RID_TAB_DOCUMENT", "Document"), u"insertreferencefield.png"_ustr };
-inline constexpr TabData RID_TAB_CROSSREF{ NC_("RID_TAB_CROSSREF", "Cross-references"), u"insertbookmark.png"_ustr };
-inline constexpr TabData RID_TAB_FUNCTIONS{ NC_("RID_TAB_FUNCTIONS", "Functions"), u"insertplugin.png"_ustr };
-inline constexpr TabData RID_TAB_DOCINFO{ NC_("RID_TAB_DOCINFO", "DocInformation"), u"insertdoc.png"_ustr };
-inline constexpr TabData RID_TAB_VARIABLES{ NC_("RID_TAB_VARIABLES", "Variables"), u"insertpagenumberfield.png"_ustr };
-inline constexpr TabData RID_TAB_DATABASE{ NC_("RID_TAB_DATABASE", "Database"), u"insertexternaldatasource.png"_ustr };
-// label / business card
-inline constexpr TabData RID_TAB_LABEL{ NC_("RID_TAB_LABEL", "Labels"), u"label.png"_ustr };
-inline constexpr TabData RID_TAB_PRIVATE{ NC_("RID_TAB_PRIVATE", "Private"), u"symbolshapes.moon.png"_ustr };
-inline constexpr TabData RID_TAB_BUSINESS{ NC_("RID_TAB_BUSINESS", "Business"), u"symbolshapes.sun.png"_ustr };
-inline constexpr TabData RID_TAB_FORMAT{ NC_("RID_TAB_FORMAT", "Format"), u"pagemargin.png"_ustr };
-inline constexpr TabData RID_TAB_LABEL_OPTIONS{ NC_("RID_TAB_LABEL_OPTIONS", "Options"), u"printlayout.png"_ustr };
-// draw
-inline constexpr TabData RID_TAB_SHADOW{ NC_("RID_TAB_SHADOW", "Shadowing"), u"fillshadow.png"_ustr };
-inline constexpr TabData RID_TAB_TEXT{ NC_("RID_TAB_TEXT", "Text"), u"text_marquee.png"_ustr };
-inline constexpr TabData RID_TAB_TEXTANIMATION{ NC_("RID_TAB_TEXTANIMATION", "Text Animation"), u"animationeffects.png"_ustr };
-inline constexpr TabData RID_TAB_DIMENSIONING{ NC_("RID_TAB_DIMENSIONING", "Dimensioning"), u"measureline.png"_ustr };
-inline constexpr TabData RID_TAB_CONNECTOR{ NC_("RID_TAB_CONNECTOR", "Connector"), u"connectorcurve.png"_ustr };
-inline constexpr TabData RID_TAB_NUMBERING{ NC_("RID_TAB_NUMBERING", "Numbering"), u"defaultnumbering.png"_ustr };
-inline constexpr TabData RID_TAB_BULLETS{ NC_("RID_TAB_BULLETS", "Bullets"), u"defaultbullet.png"_ustr };
-// calc
-inline constexpr TabData RID_TAB_SHEET{ NC_("RID_TAB_SHEET", "Sheet"), u"printersetup.png"_ustr };
-inline constexpr TabData RID_TAB_PROTECTION{ NC_("RID_TAB_PROTECTION", "Cell Protection"), u"protect.png"_ustr };
-inline constexpr TabData RID_TAB_SORT{ NC_("RID_TAB_SORT", "Sort Criteria"), u"sortascending.png"_ustr };
-inline constexpr TabData RID_TAB_SORTOPTIONS{ NC_("RID_TAB_SORTOPTIONS", "Options"), u"showdependents.png"_ustr };
-inline constexpr TabData RID_TAB_VALIDITY_CRITERIA{ NC_("RID_TAB_VALIDITY_CRITERIA", "Criteria"), u"showinvalid.png"_ustr };
-inline constexpr TabData RID_TAB_VALIDITY_INPUT{ NC_("RID_TAB_VALIDITY_INPUT", "Input Help"), u"calloutshapes.png"_ustr };
-inline constexpr TabData RID_TAB_VALIDITY_ERROR{ NC_("RID_TAB_VALIDITY_ERROR", "Error Alert"), u"showerrors.png"_ustr };
-inline constexpr TabData RID_TAB_SUBTOTAL_1ST{ NC_("RID_TAB_SUBTOTAL_1ST", "1st Group"), u"starshapes.star4.png"_ustr };
-inline constexpr TabData RID_TAB_SUBTOTAL_2ND{ NC_("RID_TAB_SUBTOTAL_2ND", "2nd Group"), u"starshapes.star5.png"_ustr };
-inline constexpr TabData RID_TAB_SUBTOTAL_3RD{ NC_("RID_TAB_SUBTOTAL_3RD", "3rd Group"), u"starshapes.star6.png"_ustr };
-inline constexpr TabData RID_TAB_SUBTOTAL_OPTIONS{ NC_("RID_TAB_SUBTOTAL_OPTIONS", "Options"), u"sortascending.png"_ustr };
-inline constexpr TabData RID_TAB_HEADER_FIRST{ NC_("RID_TAB_HEADER_FIRST", "Header (first)"), u"insertheader.png"_ustr };
-inline constexpr TabData RID_TAB_HEADER_LEFT{ NC_("RID_TAB_HEADER_LEFT", "Header (left)"), u"insertheader.png"_ustr };
-inline constexpr TabData RID_TAB_HEADER_RIGHT{ NC_("RID_TAB_HEADER_RIGHT", "Header (right)"), u"insertheader.png"_ustr };
-inline constexpr TabData RID_TAB_FOOTER_FIRST{ NC_("RID_TAB_FOOTER_FIRST", "Footer (first)"), u"insertfooter.png"_ustr };
-inline constexpr TabData RID_TAB_FOOTER_LEFT{ NC_("RID_TAB_FOOTER_LEFT", "Footer (left)"), u"insertfooter.png"_ustr };
-inline constexpr TabData RID_TAB_FOOTER_RIGHT{ NC_("RID_TAB_FOOTER_RIGHT", "Footer (right)"), u"insertfooter.png"_ustr };
-// picture/frame formatting
-inline constexpr TabData RID_TAB_POSSIZE{ NC_("RID_TAB_POSSIZE", "Position and Size"), u"attributepagesize.png"_ustr };
-inline constexpr TabData RID_TAB_HYPERLINK{ NC_("RID_TAB_HYPERLINK", "Hyperlink"), u"inserthyperlink.png"_ustr };
-inline constexpr TabData RID_TAB_CROP{ NC_("RID_TAB_CROP", "Crop"), u"crop.png"_ustr };
-inline constexpr TabData RID_TAB_ROTATION{ NC_("RID_TAB_ROTATION", "Rotation"), u"toggleobjectrotatemode.png"_ustr };
-inline constexpr TabData RID_TAB_CALLOUT{ NC_("RID_TAB_CALLOUT", "Callout"), u"calloutshapes.png"_ustr };
-inline constexpr TabData RID_TAB_SLANT{ NC_("RID_TAB_SLANT", "Slant & Corner Radius"), u"crookslant.png"_ustr };
-// chart
-inline constexpr TabData RID_TAB_CHART_OPTIONS{ NC_("RID_TAB_CHART_OPTIONS", "Options"), u"diagramtype.png"_ustr };
-inline constexpr TabData RID_TAB_CHART_ERROR_X{ NC_("RID_TAB_CHART_ERROR_X", "X Error Bars"), u"arrowshapes.png"_ustr };
-inline constexpr TabData RID_TAB_CHART_ERROR_Y{ NC_("RID_TAB_CHART_ERROR_Y", "Y Error Bars"), u"arrowshapes.up-down-arrow.png"_ustr };
-inline constexpr TabData RID_TAB_CHART_TREND{ NC_("RID_TAB_CHART_TREND", "Type"), u"bezierconvert.png"_ustr };
-inline constexpr TabData RID_TAB_CHART_TABLE{ NC_("RID_TAB_CHART_TABLE", "Data Table"), u"inserttable.png"_ustr };
-inline constexpr TabData RID_TAB_CHART_LEGENDPOS{ NC_("RID_TAB_CHART_LEGENDPOS", "Position"), u"arrowshapes.quad-arrow.png"_ustr };
-inline constexpr TabData RID_TAB_CHART_DATALABEL{ NC_("RID_TAB_CHART_DATALABEL", "Data Labels"), u"numberformatstandard.png"_ustr };
-inline constexpr TabData RID_TAB_CHART_SCALE{ NC_("RID_TAB_CHART_SCALE", "Scale"), u"diagramaxisxyz.png"_ustr };
-inline constexpr TabData RID_TAB_CHART_POSITIONING{ NC_("RID_TAB_CHART_POSITIONING", "Positioning"), u"grow.png"_ustr };
-inline constexpr TabData RID_TAB_CHART_AXISLABEL{ NC_("RID_TAB_CHART_AXISLABEL", "Label"), u"insertfixedtext.png"_ustr };
-inline constexpr TabData RID_TAB_CHART_LAYOUT{ NC_("RID_TAB_CHART_LAYOUT", "Layout"), u"cyramid.png"_ustr };
-inline constexpr TabData RID_TAB_CHART_PERSPECTIVE{ NC_("RID_TAB_CHART_PERSPECTIVE", "Perspective"), u"window3d.png"_ustr };
-inline constexpr TabData RID_TAB_CHART_APPEARANCE{ NC_("RID_TAB_CHART_APPEARANCE", "Appearance"), u"shell3d.png"_ustr };
-inline constexpr TabData RID_TAB_CHART_ILLUMINATION{ NC_("RID_TAB_CHART_ILLUMINATION", "Illumination"), u"grafluminance.png"_ustr };
-// customization
-inline constexpr TabData RID_TAB_MENUS{ NC_("RID_TAB_MENUS", "Menus"), u"menubar.png"_ustr };
-inline constexpr TabData RID_TAB_TOOLBARS{ NC_("RID_TAB_TOOLBARS", "Toolbars"), u"showtoolbar.png"_ustr };
-inline constexpr TabData RID_TAB_NOTEBOOKBARS{ NC_("RID_TAB_NOTEBOOKBARS", "Notebookbars"), u"toggletabbarvisibility.png"_ustr };
-inline constexpr TabData RID_TAB_CONTEXTMENUS{ NC_("RID_TAB_CONTEXTMENUS", "Context Menus"), u"listbox.png"_ustr };
-inline constexpr TabData RID_TAB_KEYBOARD{ NC_("RID_TAB_KEYBOARD", "Keyboard"), u"shortcutkeysdialog.png"_ustr };
-inline constexpr TabData RID_TAB_EVENTS{ NC_("RID_TAB_EVENTS", "Events"), u"choosemacro.png"_ustr };
-// ui mode
-inline constexpr TabData RID_TAB_UIMODE{ NC_("RID_TAB_UIMODE", "UI Mode"), u"toggletabbarvisibility.png"_ustr };
-inline constexpr TabData RID_TAB_HLINTERNET{ NC_("RID_TAB_HLINTERNET", "~Internet"), u"res/hlinettp.png"_ustr };
-inline constexpr TabData RID_TAB_HLMAIL{ NC_("RID_TAB_HLMAIL", "~Mail"), RID_BITMAP_HLMAIL };
-inline constexpr TabData RID_TAB_HLDOC{ NC_("RID_TAB_HLDOC", "~Document"), RID_BITMAP_HLDOC };
-inline constexpr TabData RID_TAB_HLDOCN{ NC_("RID_TAB_HLDOCN", "~New Document"), RID_BITMAP_HLDOCN };
-// envelope
-inline constexpr TabData RID_TAB_ENVELOPE{ NC_("RID_TAB_ENVELOPE", "Envelope"), u"insertenvelope.png"_ustr };
-inline constexpr TabData RID_TAB_ENV_FORMAT{ NC_("RID_TAB_ENV_FORMAT", "Format"), u"distributeverttop.png"_ustr };
-inline constexpr TabData RID_TAB_PRINTER{ NC_("RID_TAB_PRINTER", "Printer"), u"printlayout.png"_ustr };
-// autocorrect
-inline constexpr TabData RID_TAB_OFA_REPLACE{ NC_("RID_TAB_OFA_REPLACE", "Replace"), u"reload.png"_ustr };
-inline constexpr TabData RID_TAB_OFA_EXCEPTIONS{ NC_("RID_TAB_OFA_EXCEPTIONS", "Exceptions"), u"cancel.png"_ustr };
-inline constexpr TabData RID_TAB_OFA_APPLY{ NC_("RID_TAB_OFA_APPLY", "Options"), u"patternfield.png"_ustr };
-inline constexpr TabData RID_TAB_OFA_OPTIONS{ NC_("RID_TAB_OFA_OPTIONS", "Options"), u"patternfield.png"_ustr };
-inline constexpr TabData RID_TAB_OFA_LOCALIZED{ NC_("RID_TAB_OFA_LOCALIZED", "Localized Options"), u"charmapcontrol.png"_ustr };
-inline constexpr TabData RID_TAB_OFA_WORDCOMPL{ NC_("RID_TAB_OFA_WORDCOMPL", "Word Completion"), u"autocorrectdlg.png"_ustr };
-inline constexpr TabData RID_TAB_OFA_SMARTTAG{ NC_("RID_TAB_OFA_SMARTTAG", "Smart Tags"), u"autopilotmenu.png"_ustr };
-// doc info
-inline constexpr TabData RID_TAB_DESCRIPTION{ NC_("RID_TAB_DESCRIPTION", "Description"), u"objecttitledescription.png"_ustr };
-inline constexpr TabData RID_TAB_CUSTOM{ NC_("RID_TAB_CUSTOM", "Custom Properties"), u"setdocumentproperties.png"_ustr };
-inline constexpr TabData RID_TAB_CMIS{ NC_("RID_TAB_CMIS", "CMIS Properties"), u"browseview.png"_ustr };
-inline constexpr TabData RID_TAB_SECURITY{ NC_("RID_TAB_SECURITY", "Security"), u"protect.png"_ustr };
-inline constexpr TabData RID_TAB_STATISTICS{ NC_("RID_TAB_STATISTICS", "Statistics"), u"autosum.png"_ustr };
-// pdf export
-inline constexpr TabData RID_TAB_PDFGENERAL{ NC_("RID_TAB_PDFGENERAL", "General"), u"exportdialog.pdf"_ustr };
-inline constexpr TabData RID_TAB_PDFINITIAL{ NC_("RID_TAB_PDFINITIAL", "Initial View"), u"showbookview.pdf"_ustr };
-inline constexpr TabData RID_TAB_PDFUI{ NC_("RID_TAB_PDFUI", "User Interface"), u"dbviewaliases.pdf"_ustr };
-inline constexpr TabData RID_TAB_PDFLINKS{ NC_("RID_TAB_PDFLINKS", "Links"), u"inserthyperlinkcontrol.pdf"_ustr };
-inline constexpr TabData RID_TAB_PDFPROTECT{ NC_("RID_TAB_PDFPROTECT", "Security"), u"protect.pdf"_ustr };
-inline constexpr TabData RID_TAB_PDFSIGN{ NC_("RID_TAB_PDFSIGN", "Digital Signatures"), u"signpdf.pdf"_ustr };
+/*
+ * icons for the tabs
+*/
 
+inline constexpr OUString RID_TAB_ALIGNMENT_IMG = u"alignblock.png"_ustr;
+inline constexpr OUString RID_TAB_APPEARANCE_IMG = u"shell3d.png"_ustr;
+inline constexpr OUString RID_TAB_AREA_IMG = u"backgroundcolor.png"_ustr;
+inline constexpr OUString RID_TAB_ARROWSTYLE_IMG = u"lineendstyle.png"_ustr;
+inline constexpr OUString RID_TAB_ASIANLAYOUT_IMG = u"textdirectiontoptobottom.png"_ustr;
+inline constexpr OUString RID_TAB_ASIANTYPO_IMG = u"defaultcharstyle.png"_ustr;
+inline constexpr OUString RID_TAB_AXISLABEL_IMG = u"insertfixedtext.png"_ustr;
+inline constexpr OUString RID_TAB_BACKGROUND_IMG = u"backgroundcolor.png"_ustr;
+inline constexpr OUString RID_TAB_BORDER_IMG = u"borderdialog.png"_ustr;
+inline constexpr OUString RID_TAB_BULLETS_IMG = u"defaultbullet.png"_ustr;
+inline constexpr OUString RID_TAB_BUSINESS_IMG = u"symbolshapes.sun.png"_ustr;
+inline constexpr OUString RID_TAB_CALLOUT_IMG = u"calloutshapes.png"_ustr;
+inline constexpr OUString RID_TAB_COLORPALETTE_IMG = u"colorsettings.png"_ustr;
+inline constexpr OUString RID_TAB_COLUMNS_IMG = u"pagecolumntype.png"_ustr;
+inline constexpr OUString RID_TAB_CMIS_IMG = u"browseview.png"_ustr;
+inline constexpr OUString RID_TAB_CONDITION_IMG = u"developmenttoolsdockingwindow.png"_ustr;
+inline constexpr OUString RID_TAB_CONNECTOR_IMG = u"connectorcurve.png"_ustr;
+inline constexpr OUString RID_TAB_CONTEXTMENUS_IMG = u"listbox.png"_ustr;
+inline constexpr OUString RID_TAB_CROP_IMG = u"crop.png"_ustr;
+inline constexpr OUString RID_TAB_CROSSREF_IMG = u"insertbookmark.png"_ustr;
+inline constexpr OUString RID_TAB_CUSTOM_IMG = u"setdocumentproperties.png"_ustr;
+inline constexpr OUString RID_TAB_CUSTOMIZE_IMG = u"developmenttoolsdockingwindow.png"_ustr;
+inline constexpr OUString RID_TAB_DATABASE_IMG = u"insertexternaldatasource.png"_ustr;
+inline constexpr OUString RID_TAB_DATALABEL_IMG = u"numberformatstandard.png"_ustr;
+inline constexpr OUString RID_TAB_DIMENSIONING_IMG = u"measureline.png"_ustr;
+inline constexpr OUString RID_TAB_DESCRIPTION_IMG = u"objecttitledescription.png"_ustr;
+inline constexpr OUString RID_TAB_DOCINFO_IMG = u"insertdoc.png"_ustr;
+inline constexpr OUString RID_TAB_DOCUMENT_IMG = u"insertreferencefield.png"_ustr;
+inline constexpr OUString RID_TAB_DROPCAPS_IMG = u"smallcaps.png"_ustr;
+inline constexpr OUString RID_TAB_ENDNOTES_IMG = u"insertendnote.png"_ustr;
+inline constexpr OUString RID_TAB_ENVELOPE_IMG = u"insertenvelope.png"_ustr;
+inline constexpr OUString RID_TAB_ENVFORMAT_IMG = u"distributeverttop.png"_ustr;
+inline constexpr OUString RID_TAB_ERROR_X_IMG = u"arrowshapes.png"_ustr;
+inline constexpr OUString RID_TAB_ERROR_Y_IMG = u"arrowshapes.up-down-arrow.png"_ustr;
+inline constexpr OUString RID_TAB_EVENTS_IMG = u"choosemacro.png"_ustr;
+inline constexpr OUString RID_TAB_FILES_IMG = u"open.png"_ustr;
+inline constexpr OUString RID_TAB_FONT_IMG = u"fontdialog.png"_ustr;
+inline constexpr OUString RID_TAB_FONTEFFECTS_IMG = u"color.png"_ustr;
+inline constexpr OUString RID_TAB_FOOTER_IMG = u"insertfooter.png"_ustr;
+inline constexpr OUString RID_TAB_FOOTNOTES_IMG = u"footnotedialog.png"_ustr;
+inline constexpr OUString RID_TAB_FRAMETYPE_IMG = u"toggleanchortype.png"_ustr;
+inline constexpr OUString RID_TAB_FRAMEOPTIONS_IMG = u"calloutshapes.png"_ustr;
+inline constexpr OUString RID_TAB_FRAMEWRAP_IMG = u"wrapcontour.png"_ustr;
+inline constexpr OUString RID_TAB_FUNCTIONS_IMG = u"insertplugin.png"_ustr;
+inline constexpr OUString RID_TAB_HEADER_IMG = u"insertheader.png"_ustr;
+inline constexpr OUString RID_TAB_HIGHLIGHTING_IMG = u"backcolor.png"_ustr;
+inline constexpr OUString RID_TAB_HYPERLINK_IMG = u"inserthyperlink.png"_ustr;
+inline constexpr OUString RID_TAB_ILLUMINATION_IMG = u"grafluminance.png"_ustr;
+inline constexpr OUString RID_TAB_IMAGE_IMG = u"imagebutton.png"_ustr;
+inline constexpr OUString RID_TAB_INDENTS_IMG = u"paraspaceincrease.png"_ustr;
+inline constexpr OUString RID_TAB_INDENTSONLY_IMG = u"incrementindent.png"_ustr;
+inline constexpr OUString RID_TAB_INITIAL_IMG = u"showbookview.png"_ustr;
+inline constexpr OUString RID_TAB_KEYBOARD_IMG = u"shortcutkeysdialog.png"_ustr;
+inline constexpr OUString RID_TAB_LABEL_IMG = u"label.png"_ustr;
+inline constexpr OUString RID_TAB_LABELFORMAT_IMG = u"pagemargin.png"_ustr;
+inline constexpr OUString RID_TAB_LABELOPTIONS_IMG = u"printlayout.png"_ustr;
+inline constexpr OUString RID_TAB_LAYOUT_IMG = u"cyramid.png"_ustr;
+inline constexpr OUString RID_TAB_LINE_IMG = u"formatline.png"_ustr;
+inline constexpr OUString RID_TAB_LINESTYLE_IMG = u"linestyle.png"_ustr;
+inline constexpr OUString RID_TAB_LINKINTERNET_IMG = u"res/hlinettp.png"_ustr;
+inline constexpr OUString RID_TAB_LINKDOC_IMG = u"res/hldoctp.png"_ustr;
+inline constexpr OUString RID_TAB_LINKMAIL_IMG = u"res/hlmailtp.png"_ustr;
+inline constexpr OUString RID_TAB_LINKDOCN_IMG = u"res/hldocntp.png"_ustr;
+inline constexpr OUString RID_TAB_LINKS_IMG = u"inserthyperlinkcontrol.png"_ustr;
+inline constexpr OUString RID_TAB_LIST_POSITION_IMG = u"hangingindent.png"_ustr;
+inline constexpr OUString RID_TAB_LEGENDPOS_IMG = u"arrowshapes.quad-arrow.png"_ustr;
+inline constexpr OUString RID_TAB_MACRO_IMG = u"choosemacro.png"_ustr;
+inline constexpr OUString RID_TAB_MENUS_IMG = u"menubar.png"_ustr;
+inline constexpr OUString RID_TAB_NUMBERS_IMG = u"numberformatdecimal.png"_ustr;
+inline constexpr OUString RID_TAB_NUMBERING_IMG = u"defaultnumbering.png"_ustr;
+inline constexpr OUString RID_TAB_OFAREPLACE_IMG = u"reload.png"_ustr;
+inline constexpr OUString RID_TAB_OFAEXCEPTIONS_IMG = u"cancel.png"_ustr;
+inline constexpr OUString RID_TAB_OFAAPPLY_IMG = u"patternfield.png"_ustr;
+inline constexpr OUString RID_TAB_OFAOPTIONS_IMG = u"patternfield.png"_ustr;
+inline constexpr OUString RID_TAB_OFALOCALIZED_IMG = u"charmapcontrol.png"_ustr;
+inline constexpr OUString RID_TAB_OFAWORDCOMPL_IMG = u"autocorrectdlg.png"_ustr;
+inline constexpr OUString RID_TAB_OFASMARTTAG_IMG = u"autopilotmenu.png"_ustr;
+inline constexpr OUString RID_TAB_OPTIONS_IMG = u"diagramtype.png"_ustr;
+inline constexpr OUString RID_TAB_ORDERED_IMG = u"defaultnumbering.png"_ustr;
+inline constexpr OUString RID_TAB_ORGANIZER_IMG = u"browseview.png"_ustr;
+inline constexpr OUString RID_TAB_OUTLINE_IMG = u"setoutline.png"_ustr;
+inline constexpr OUString RID_TAB_OUTLINELIST_IMG = u"setoutline.png"_ustr;
+inline constexpr OUString RID_TAB_PAGE_IMG = u"attributepagesize.png"_ustr;
+inline constexpr OUString RID_TAB_POSITION_IMG = u"fontwork.png"_ustr;
+inline constexpr OUString RID_TAB_POSITIONING_IMG = u"grow.png"_ustr;
+inline constexpr OUString RID_TAB_POSSIZE_IMG = u"attributepagesize.png"_ustr;
+inline constexpr OUString RID_TAB_PERSPECTIVE_IMG = u"window3d.png"_ustr;
+inline constexpr OUString RID_TAB_PRINTER_IMG = u"printlayout.png"_ustr;
+inline constexpr OUString RID_TAB_PRIVATE_IMG = u"symbolshapes.moon.png"_ustr;
+inline constexpr OUString RID_TAB_PROTECTION_IMG = u"protect.png"_ustr;
+inline constexpr OUString RID_TAB_PROTECT_IMG = u"protect.png"_ustr;
+inline constexpr OUString RID_TAB_ROTATION_IMG = u"toggleobjectrotatemode.png"_ustr;
+inline constexpr OUString RID_TAB_SCALE_IMG = u"diagramaxisxyz.png"_ustr;
+inline constexpr OUString RID_TAB_SECURITY_IMG = u"protect.png"_ustr;
+inline constexpr OUString RID_TAB_SECTION_IMG = u"protectfields.png"_ustr;
+inline constexpr OUString RID_TAB_SHADOW_IMG = u"fillshadow.png"_ustr;
+inline constexpr OUString RID_TAB_SHEET_IMG = u"printersetup.png"_ustr;
+inline constexpr OUString RID_TAB_SIGN_IMG = u"signpdf.png"_ustr;
+inline constexpr OUString RID_TAB_SLANT_IMG = u"crookslant.png"_ustr;
+inline constexpr OUString RID_TAB_SLIDE_IMG = u"attributepagesize.png"_ustr;
+inline constexpr OUString RID_TAB_SORT_IMG = u"sortascending.png"_ustr;
+inline constexpr OUString RID_TAB_SORTOPTIONS_IMG = u"showdependents.png"_ustr;
+inline constexpr OUString RID_TAB_STATISTICS_IMG = u"autosum.png"_ustr;
+inline constexpr OUString RID_TAB_SUBTOTAL_1ST_IMG = u"starshapes.star4.png"_ustr;
+inline constexpr OUString RID_TAB_SUBTOTAL_2ND_IMG = u"starshapes.star5.png"_ustr;
+inline constexpr OUString RID_TAB_SUBTOTAL_3RD_IMG = u"starshapes.star6.png"_ustr;
+inline constexpr OUString RID_TAB_SUBTOTAL_OPTIONS_IMG = u"sortascending.png"_ustr;
+inline constexpr OUString RID_TAB_TABLE_IMG = u"inserttable.png"_ustr;
+inline constexpr OUString RID_TAB_TABS_IMG = u"hangingindent.png"_ustr;
+inline constexpr OUString RID_TAB_TEXT_IMG = u"text_marquee.png"_ustr;
+inline constexpr OUString RID_TAB_TEXTANIMATION_IMG = u"animationeffects.png"_ustr;
+inline constexpr OUString RID_TAB_TEXTFLOW_IMG = u"hyphenate.png"_ustr;
+inline constexpr OUString RID_TAB_TEXTGRID_IMG = u"gridvisible.png"_ustr;
+inline constexpr OUString RID_TAB_TOCENTRIES_IMG = u"updatecurindex.png"_ustr;
+inline constexpr OUString RID_TAB_TOCSTYLES_IMG = u"editstyle.png"_ustr;
+inline constexpr OUString RID_TAB_TOCTYPE_IMG = u"insertindexesentry.png"_ustr;
+inline constexpr OUString RID_TAB_TOOLBARS_IMG = u"showtoolbar.png"_ustr;
+inline constexpr OUString RID_TAB_TRANSPARENCE_IMG = u"graftransparence.png"_ustr;
+inline constexpr OUString RID_TAB_TREND_IMG = u"bezierconvert.png"_ustr;
+inline constexpr OUString RID_TAB_UI_IMG = u"dbviewaliases.png"_ustr;
+inline constexpr OUString RID_TAB_UIMODE_IMG = u"toggletabbarvisibility.png"_ustr;
+inline constexpr OUString RID_TAB_UNORDERED_IMG = u"defaultbullet.png"_ustr;
+inline constexpr OUString RID_TAB_VALIDITY_CRITERIA_IMG = u"showinvalid.png"_ustr;
+inline constexpr OUString RID_TAB_VALIDITY_ERROR_IMG = u"showerrors.png"_ustr;
+inline constexpr OUString RID_TAB_VALIDITY_INPUT_IMG = u"calloutshapes.png"_ustr;
+inline constexpr OUString RID_TAB_VARIABLES_IMG = u"insertpagenumberfield.png"_ustr;
+
+/*
+ * strings for the tabs
+ */
+
+// To translators: chart/AttributeDialog
+// chart2/source/controller/dialogs/dlg_ObjectProperties.cxx
+const TranslateId RID_TAB_CHARTATTR_BORDER = NC_("RID_TAB_CHARTATTR_BORDER", "Border");
+const TranslateId RID_TAB_CHARTATTR_AREA = NC_("RID_TAB_CHARTATTR_AREA", "Area");
+const TranslateId RID_TAB_CHARTATTR_TRANSPARENCE = NC_("RID_TAB_CHARTATTR_TRANSPARENCE", "Transparency");
+const TranslateId RID_TAB_CHARTATTR_FONT = NC_("RID_TAB_CHARTATTR_FONT", "Font");
+const TranslateId RID_TAB_CHARTATTR_FONTEFFECTS = NC_("RID_TAB_CHARTATTR_FONTEFFECTS", "Font Effects");
+const TranslateId RID_TAB_CHARTATTR_ALIGNMENT = NC_("RID_TAB_CHARTATTR_ALIGNMENT", "Alignment");
+const TranslateId RID_TAB_CHARTATTR_ASIANTYPO = NC_("RID_TAB_CHARTATTR_ASIANTYPO", "Asian Typography");
+const TranslateId RID_TAB_CHARTATTR_COLORPALETTE = NC_("RID_TAB_CHARTATTR_COLORPALETTE", "Color Palette");
+const TranslateId RID_TAB_CHARTATTR_LINE = NC_("RID_TAB_CHARTATTR_LINE", "Line");
+const TranslateId RID_TAB_CHARTATTR_NUMBERS = NC_("RID_TAB_CHARTATTR_NUMBERS", "Numbers");
+const TranslateId RID_TAB_CHARTATTR_ERROR_X = NC_("RID_TAB_CHARTATTR_ERROR_X", "X Error Bars");
+const TranslateId RID_TAB_CHARTATTR_ERROR_Y = NC_("RID_TAB_CHARTATTR_ERROR_Y", "Y Error Bars");
+const TranslateId RID_TAB_CHARTATTR_TREND = NC_("RID_TAB_CHARTATTR_TREND", "Type");
+const TranslateId RID_TAB_CHARTATTR_TABLE = NC_("RID_TAB_CHARTATTR_TABLE", "Data Table");
+const TranslateId RID_TAB_CHARTATTR_LEGENDPOS = NC_("RID_TAB_CHARTATTR_LEGENDPOS", "Position");
+const TranslateId RID_TAB_CHARTATTR_DATALABEL = NC_("RID_TAB_CHARTATTR_DATALABEL", "Data Labels");
+const TranslateId RID_TAB_CHARTATTR_SCALE = NC_("RID_TAB_CHARTATTR_SCALE", "Scale");
+const TranslateId RID_TAB_CHARTATTR_POSITIONING = NC_("RID_TAB_CHARTATTR_POSITIONING", "Positioning");
+const TranslateId RID_TAB_CHARTATTR_AXISLABEL = NC_("RID_TAB_CHARTATTR_AXISLABEL", "Label");
+const TranslateId RID_TAB_CHARTATTR_LAYOUT = NC_("RID_TAB_CHARTATTR_LAYOUT", "Layout");
+const TranslateId RID_TAB_CHARTATTR_OPTIONS = NC_("RID_TAB_CHARTATTR_OPTIONS", "Options");
+
+// To translators: chart/CharDialog
+// chart2/source/controller/dialogs/dlg_ShapeFont.cxx
+const TranslateId RID_TAB_CHARTCHAR_FONT = NC_("RID_TAB_CHARTCHAR_FONT", "Font");
+const TranslateId RID_TAB_CHARTCHAR_FONTEFFECTS = NC_("RID_TAB_CHARTCHAR_FONTEFFECTS", "Font Effects");
+const TranslateId RID_TAB_CHARTCHAR_POSITION = NC_("RID_TAB_CHARTCHAR_POSITION", "Position");
+
+// To translators: chart/ParagraphDialog
+// chart2/source/controller/dialogs/dlg_ShapeParagraph.cxx
+const TranslateId RID_TAB_CHARTPARA_INDENTS = NC_("RID_TAB_CHARTPARA_INDENTS", "Indents & Spacing");
+const TranslateId RID_TAB_CHARTPARA_ALIGNMENT = NC_("RID_TAB_CHARTPARA_ALIGNMENT", "Alignment");
+const TranslateId RID_TAB_CHARTPARA_ASIANTYPO = NC_("RID_TAB_CHARTPARA_ASIANTYPO", "Asian Typography");
+const TranslateId RID_TAB_CHARTPARA_TABS = NC_("RID_TAB_CHARTPARA_TABS", "Tabs");
+
+// To translators: chart/3DViewDialog
+// chart2/source/controller/dialogs/dlg_View3D.cxx
+const TranslateId RID_TAB_CHART3D_PERSPECTIVE = NC_("RID_TAB_CHART3D_PERSPECTIVE", "Perspective");
+const TranslateId RID_TAB_CHART3D_APPEARANCE = NC_("RID_TAB_CHART3D_APPEARANCE", "Appearance");
+const TranslateId RID_TAB_CHART3D_ILLUMINATION = NC_("RID_TAB_CHART3D_ILLUMINATION", "Illumination");
+
+// To translators: cui/CustomizeDialog
+// cui/source/customize/cfg.cxx
+const TranslateId RID_TAB_CUICUST_MENUS = NC_("RID_TAB_CUICUST_MENUS", "Menus");
+const TranslateId RID_TAB_CUICUST_TOOLBARS = NC_("RID_TAB_CUICUST_TOOLBARS", "Toolbars");
+const TranslateId RID_TAB_CUICUST_CONTEXTMENUS = NC_("RID_TAB_CUICUST_CONTEXTMENUS", "Context Menus");
+const TranslateId RID_TAB_CUICUST_KEYBOARD = NC_("RID_TAB_CUICUST_KEYBOARD", "Keyboard");
+const TranslateId RID_TAB_CUICUST_EVENTS = NC_("RID_TAB_CUICUST_EVENTS", "Events");
+
+// To translators: cui/UIPickerDialog
+// cui/source/dialogs/uipickerdlg.cxx
+const TranslateId RID_TAB_CUIUIPICK_MODE = NC_("RID_TAB_CUIUIPICK_MODE", "UI Mode");
+const TranslateId RID_TAB_CUIUIPICK_TOOLBARS = NC_("RID_TAB_CUIUIPICK_TOOLBARS", "Toolbars");
+
+// To translators: cui/HyperlinkDialog
+// cui/source/dialogs/hyperlinkdlg.cxx
+const TranslateId RID_TAB_CUILINK_INTERNET = NC_("RID_TAB_CUILINK_INTERNET", "~Internet");
+const TranslateId RID_TAB_CUILINK_MAIL= NC_("RID_TAB_CUILINK_MAIL", "~Mail");
+const TranslateId RID_TAB_CUILINK_DOC = NC_("RID_TAB_CUILINK_DOC", "~Document");
+const TranslateId RID_TAB_CUILINK_DOCN = NC_("RID_TAB_CUILINK_DOCN", "~New Document");
+
+// To translators: cui/AutoCorrectDialog
+// cui/source/tabpages/autocdlg.cxx
+const TranslateId RID_TAB_CUIOFA_REPLACE = NC_("RID_TAB_CUIOFA_REPLACE", "Replace");
+const TranslateId RID_TAB_CUIOFA_EXCEPTIONS = NC_("RID_TAB_CUIOFA_EXCEPTIONS", "Exceptions");
+const TranslateId RID_TAB_CUIOFA_APPLY = NC_("RID_TAB_CUIOFA_APPLY", "Options");
+const TranslateId RID_TAB_CUIOFA_OPTIONS = NC_("RID_TAB_CUIOFA_OPTIONS", "Options");
+const TranslateId RID_TAB_CUIOFA_LOCALIZED = NC_("RID_TAB_CUIOFA_LOCALIZED", "Localized Options");
+const TranslateId RID_TAB_CUIOFA_WORDCOMPL = NC_("RID_TAB_CUIOFA_WORDCOMPL", "Word Completion");
+const TranslateId RID_TAB_CUIOFA_SMARTTAG = NC_("RID_TAB_CUIOFA_SMARTTAG", "Smart Tags");
+
+// To translators: cui/CalloutDialog
+// cui/source/tabpages/labdlg.cxx
+const TranslateId RID_TAB_CUICALL_POSSIZE = NC_("RID_TAB_CUICALL_POSSIZE", "Position and Size");
+const TranslateId RID_TAB_CUICALL_CALLOUT = NC_("RID_TAB_CUICALL_CALLOUT", "Callout");
+
+// To translators: cui/PositionAndSizeDialog
+// cui/source/tabpages/transfrm.cxx
+const TranslateId RID_TAB_CUIPOSSIZE_POSSIZE = NC_("RID_TAB_CUIPOSSIZE_POSSIZE", "Position and Size");
+const TranslateId RID_TAB_CUIPOSSIZE_ROTATION = NC_("RID_TAB_CUIPOSSIZE_ROTATION", "Rotation");
+const TranslateId RID_TAB_CUIPOSSIZE_SLANT = NC_("RID_TAB_CUIPOSSIZE_SLANT", "Slant & Corner Radius");
+
+// To translators: cui/SearchFormatDialog
+// cui/source/dialogs/srchxtra.cxx
+const TranslateId RID_TAB_CUISEARCH_FONT = NC_("RID_TAB_CUISEARCH_FONT", "Font");
+const TranslateId RID_TAB_CUISEARCH_FONTEFFECTS = NC_("RID_TAB_CUISEARCH_FONTEFFECTS", "Font Effects");
+const TranslateId RID_TAB_CUISEARCH_POSITION = NC_("RID_TAB_CUISEARCH_POSITION", "Position");
+const TranslateId RID_TAB_CUISEARCH_ASIANLAYOUT = NC_("RID_TAB_CUISEARCH_ASIANLAYOUT", "Asian Layout");
+const TranslateId RID_TAB_CUISEARCH_INDENTS = NC_("RID_TAB_CUISEARCH_INDENTS", "Indents & Spacing");
+const TranslateId RID_TAB_CUISEARCH_ALIGNMENT = NC_("RID_TAB_CUISEARCH_ALIGNMENT", "Alignment");
+const TranslateId RID_TAB_CUISEARCH_TEXTFLOW = NC_("RID_TAB_CUISEARCH_TEXTFLOW", "Text Flow");
+const TranslateId RID_TAB_CUISEARCH_ASIANTYPO = NC_("RID_TAB_CUISEARCH_ASIANTYPO", "Asian Typography");
+const TranslateId RID_TAB_CUISEARCH_HIGHLIGHTING = NC_("RID_TAB_CUISEARCH_HIGHLIGHTING", "Highlighting");
+
+// To translators: cui/FormatCellsDialog
+// cui/source/dialogs/sdrcelldlg.cxx
+const TranslateId RID_TAB_CUICELLS_FONT = NC_("RID_TAB_CUICELLS_FONT", "Font");
+const TranslateId RID_TAB_CUICELLS_FONTEFFECTS = NC_("RID_TAB_CUICELLS_FONTEFFECTS", "Font Effects");
+const TranslateId RID_TAB_CUICELLS_POSITION = NC_("RID_TAB_CUICELLS_POSITION", "Position"); // font
+const TranslateId RID_TAB_CUICELLS_HIGHLIGHTING = NC_("RID_TAB_CUICELLS_HIGHLIGHTING", "Highlighting");
+const TranslateId RID_TAB_CUICELLS_INDENTS = NC_("RID_TAB_CUICELLS_INDENTS", "Indents & Spacing");
+const TranslateId RID_TAB_CUICELLS_ASIANTYPO = NC_("RID_TAB_CUICELLS_ASIANTYPO", "Asian Typography");
+const TranslateId RID_TAB_CUICELLS_ALIGNMENT = NC_("RID_TAB_CUICELLS_ALIGNMENT", "Alignment");
+const TranslateId RID_TAB_CUICELLS_BORDER = NC_("RID_TAB_CUICELLS_BORDER", "Border");
+const TranslateId RID_TAB_CUICELLS_BACKGROUND = NC_("RID_TAB_CUICELLS_BACKGROUND", "Background");
+const TranslateId RID_TAB_CUICELLS_SHADOW = NC_("RID_TAB_CUICELLS_SHADOW", "Shadowing");
+
+// To translators: cui/BorderAreaTransparencyDialog|BorderBackgroundDialog
+// cui/source/tabpages/bbdlg.cxx
+const TranslateId RID_TAB_CUIBORDER_BORDER = NC_("RID_TAB_CUIBORDER_BORDER", "Border");
+const TranslateId RID_TAB_CUIBORDER_AREA = NC_("RID_TAB_CUIBORDER_AREA", "Area");
+const TranslateId RID_TAB_CUIBORDER_BACKGROUND = NC_("RID_TAB_CUIBORDER_BACKGROUND", "Background");
+const TranslateId RID_TAB_CUIBORDER_TRANSPARENCE = NC_("RID_TAB_CUIBORDER_TRANSPARENCE", "Transparency");
+
+// To translators: cui/LineDialog
+// cui/source/tabpages/tabline.cxx
+const TranslateId RID_TAB_CUILINE_LINE = NC_("RID_TAB_CUILINE_LINE", "Line");
+const TranslateId RID_TAB_CUILINE_SHADOW = NC_("RID_TAB_CUILINE_SHADOW", "Shadowing");
+const TranslateId RID_TAB_CUILINE_LINESTYLE = NC_("RID_TAB_CUILINE_LINESTYLE", "Line Style");
+const TranslateId RID_TAB_CUILINE_ARROWSTYLE = NC_("RID_TAB_CUILINE_ARROWSTYLE", "Arrow Style");
+
+// To translators: cui/AreaDialog
+// cui/source/tabpages/tabarea.cxx
+const TranslateId RID_TAB_CUIAREA_AREA = NC_("RID_TAB_CUIAREA_AREA", "Area");
+const TranslateId RID_TAB_CUIAREA_SHADOW = NC_("RID_TAB_CUIAREA_SHADOW", "Shadowing");
+const TranslateId RID_TAB_CUIAREA_TRANSPARENCE = NC_("RID_TAB_CUIAREA_TRANSPARENCE", "Transparency");
+
+// To translators: cui/TextDialog
+// cui/source/tabpages/textanim.cxx
+const TranslateId RID_TAB_CUITEXT_TEXT = NC_("RID_TAB_CUITEXT_TEXT", "Text");
+const TranslateId RID_TAB_CUITEXT_TEXTANIMATION = NC_("RID_TAB_CUITEXT_TEXTANIMATION", "Text Animation");
+const TranslateId RID_TAB_CUITEXT_COLUMNS = NC_("RID_TAB_CUITEXT_COLUMNS", "Columns");
+
+// To translators: cui/GalleryThemeDialog
+// cui/source/dialogs/cuigaldlg.cxx
+const TranslateId RID_TAB_CUIGAL_ORGANIZER = NC_("RID_TAB_CUIGAL_ORGANIZER", "General");
+const TranslateId RID_TAB_CUIGAL_FILES = NC_("RID_TAB_CUIGAL_FILES", "Files");
+
+// To translators: sc/FormatCellsDialog
+// sc/source/ui/attrdlg/attrdlg.cxx
+const TranslateId RID_TAB_SCCELLS_NUMBERS = NC_("RID_TAB_SCCELLS_NUMBERS", "Numbers");
+const TranslateId RID_TAB_SCCELLS_FONT = NC_("RID_TAB_SCCELLS_FONT", "Font");
+const TranslateId RID_TAB_SCCELLS_FONTEFFECTS = NC_("RID_TAB_SCCELLS_FONTEFFECTS", "Font Effects");
+const TranslateId RID_TAB_SCCELLS_ALIGNMENT = NC_("RID_TAB_SCCELLS_ALIGNMENT", "Alignment");
+const TranslateId RID_TAB_SCCELLS_ASIANTYPO = NC_("RID_TAB_SCCELLS_ASIANTYPO", "Asian Typography");
+const TranslateId RID_TAB_SCCELLS_BORDER = NC_("RID_TAB_SCCELLS_BORDER", "Border");
+const TranslateId RID_TAB_SCCELLS_BACKGROUND = NC_("RID_TAB_SCCELLS_BACKGROUND", "Background");
+const TranslateId RID_TAB_SCCELLS_PROTECTION = NC_("RID_TAB_SCCELLS_PROTECTION", "Cell Protection");
+
+// To translators: sc/ParaTemplateDialog|PageTemplateDialog|DrawTemplateDialog
+// sc/source/ui/styleui/styledlg.cxx
+const TranslateId RID_TAB_SCSTYLE_PAGE = NC_("RID_TAB_SCSTYLE_PAGE", "Page");
+const TranslateId RID_TAB_SCSTYLE_BORDER = NC_("RID_TAB_SCSTYLE_BORDER", "Border");
+const TranslateId RID_TAB_SCSTYLE_BACKGROUND = NC_("RID_TAB_SCSTYLE_BACKGROUND", "Background");
+const TranslateId RID_TAB_SCSTYLE_HEADER = NC_("RID_TAB_SCSTYLE_HEADER", "Header");
+const TranslateId RID_TAB_SCSTYLE_FOOTER = NC_("RID_TAB_SCSTYLE_FOOTER", "Footer");
+const TranslateId RID_TAB_SCSTYLE_SHEET = NC_("RID_TAB_SCSTYLE_SHEET", "Sheet");
+const TranslateId RID_TAB_SCSTYLE_NUMBERS = NC_("RID_TAB_SCSTYLE_NUMBERS", "Numbers");
+const TranslateId RID_TAB_SCSTYLE_FONT = NC_("RID_TAB_SCSTYLE_FONT", "Font");
+const TranslateId RID_TAB_SCSTYLE_FONTEFFECTS = NC_("RID_TAB_SCSTYLE_FONTEFFECTTAB_S", "Font Effects");
+const TranslateId RID_TAB_SCSTYLE_ALIGNMENT = NC_("RID_TAB_SCSTYLE_ALIGNMENT", "Alignment");
+const TranslateId RID_TAB_SCSTYLE_ASIANTYPO = NC_("RID_TAB_SCSTYLE_ASIANTYPO", "Asian Typography");
+const TranslateId RID_TAB_SCSTYLE_PROTECTION = NC_("RID_TAB_SCSTYLE_PROTECTION", "Cell Protection");
+const TranslateId RID_TAB_SCSTYLE_LINE = NC_("RID_TAB_SCSTYLE_LINE", "Line");
+const TranslateId RID_TAB_SCSTYLE_AREA = NC_("RID_TAB_SCSTYLE_AREA", "Area");
+const TranslateId RID_TAB_SCSTYLE_SHADOW = NC_("RID_TAB_SCSTYLE_SHADOW", "Shadowing");
+const TranslateId RID_TAB_SCSTYLE_TRANSPARENCE = NC_("RID_TAB_SCSTYLE_TRANSPARENCE", "Transparency");
+const TranslateId RID_TAB_SCSTYLE_INDENTS = NC_("RID_TAB_SCSTYLE_INDENTS", "Indents & Spacing");
+const TranslateId RID_TAB_SCSTYLE_TEXT = NC_("RID_TAB_SCSTYLE_TEXT", "Text");
+const TranslateId RID_TAB_SCSTYLE_TEXTANIMATION = NC_("RID_TAB_SCSTYLE_TEXTANIMATION", "Text Animation");
+const TranslateId RID_TAB_SCSTYLE_DIMENSIONING = NC_("RID_TAB_SCSTYLE_DIMENSIONING", "Dimensioning");
+const TranslateId RID_TAB_SCSTYLE_TABS = NC_("RID_TAB_SCSTYLE_TABS", "Tabs");
+const TranslateId RID_TAB_SCSTYLE_HIGHLIGHTING = NC_("RID_TAB_SCSTYLE_HIGHLIGHTING", "Highlighting");
+
+// To translators: sc/CharDialog|ParagraphDialog
+// sc/source/ui/miscdlgs/textdlgs.cxx
+const TranslateId RID_TAB_SCCHAR_FONT = NC_("RID_TAB_SCCHAR_FONT", "Font");
+const TranslateId RID_TAB_SCCHAR_FONTEFFECTS = NC_("RID_TAB_SCCHAR_FONTEFFECTS", "Font Effects");
+const TranslateId RID_TAB_SCCHAR_POSITION = NC_("RID_TAB_SCCHAR_POSITION", "Position");
+const TranslateId RID_TAB_SCCHAR_HIGHLIGHTING = NC_("RID_TAB_SCCHAR_HIGHLIGHTING", "Highlighting");
+const TranslateId RID_TAB_SCPARA_INDENTS = NC_("RID_TAB_SCPARA_INDENTS", "Indents & Spacing");
+const TranslateId RID_TAB_SCPARA_ALIGNMENT = NC_("RID_TAB_SCPARA_ALIGNMENT", "Alignment");
+const TranslateId RID_TAB_SCPARA_ASIANTYPO = NC_("RID_TAB_SCPARA_ASIANTYPO", "Asian Typography");
+const TranslateId RID_TAB_SCPARA_TABS = NC_("RID_TAB_SCPARA_TABS", "Tabs");
+
+// To translators: sc/SortDialog
+// sc/source/ui/dbgui/sortdlg.cxx
+const TranslateId RID_TAB_SCSORT_SORT = NC_("RID_TAB_SCSORT_SORT", "Sort Criteria");
+const TranslateId RID_TAB_SCSORT_OPTIONS = NC_("RID_TAB_SCSORT_OPTIONS", "Options");
+
+// To translators: sc/SubTotalDialog
+// sc/source/ui/dbgui/subtdlg.cxx
+const TranslateId RID_TAB_SCSUBTOTAL_1ST = NC_("RID_TAB_SCSUBTOTAL_1ST", "1st Group");
+const TranslateId RID_TAB_SCSUBTOTAL_2ND = NC_("RID_TAB_SCSUBTOTAL_2ND", "2nd Group");
+const TranslateId RID_TAB_SCSUBTOTAL_3RD = NC_("RID_TAB_SCSUBTOTAL_3RD", "3rd Group");
+const TranslateId RID_TAB_SCSUBTOTAL_OPTIONS = NC_("RID_TAB_SCSUBTOTAL_OPTIONS", "Options");
+
+// To translators: sc/HeaderDialog|FooterDialog
+// sc/source/ui/pagedlg/hfedtdlg.cxx
+const TranslateId RID_TAB_SCHFEDIT_HEADER = NC_("RID_TAB_SCHFEDIT_HEADER", "Header");
+const TranslateId RID_TAB_SCHFEDIT_FOOTER = NC_("RID_TAB_SCHFEDIT_FOOTER", "Footer");
+const TranslateId RID_TAB_SCHFEDIT_HEADER_FIRST = NC_("RID_TAB_SCHFEDIT_HEADER_FIRST", "Header (first)");
+const TranslateId RID_TAB_SCHFEDIT_HEADER_LEFT = NC_("RID_TAB_SCHFEDIT_HEADER_LEFT", "Header (left)");
+const TranslateId RID_TAB_SCHFEDIT_HEADER_RIGHT = NC_("RID_TAB_SCHFEDIT_HEADER_RIGHT", "Header (right)");
+const TranslateId RID_TAB_SCHFEDIT_FOOTER_FIRST = NC_("RID_TAB_SCHFEDIT_FOOTER_FIRST", "Footer (first)");
+const TranslateId RID_TAB_SCHFEDIT_FOOTER_LEFT = NC_("RID_TAB_SCHFEDIT_FOOTER_LEFT", "Footer (left)");
+const TranslateId RID_TAB_SCHFEDIT_FOOTER_RIGHT = NC_("RID_TAB_SCHFEDIT_FOOTER_RIGHT", "Footer (right)");
+
+// To translators: sc/ValidationDialog
+// sc/source/ui/dbgui/validate.cxx
+const TranslateId RID_TAB_SCVALID_CRITERIA = NC_("RID_TAB_SCVALID_CRITERIA", "Criteria");
+const TranslateId RID_TAB_SCVALID_INPUT = NC_("RID_TAB_SCVALID_INPUT", "Input Help");
+const TranslateId RID_TAB_SCVALID_ERROR = NC_("RID_TAB_SCVALID_ERROR", "Error Alert");
+
+// To translators: sc/SfxDocumentInfoDialog
+// sc/source/ui/docshell/docsh.cxx
+const TranslateId RID_TAB_SCDOCINFO_STATISTICS = NC_("RID_TAB_SCDOCINFO_STATISTICS", "Statistics");
+
+// To translators: sw/CharacterPropertiesDialog
+// sw/source/ui/chrdlg/chardlg.cxx
+const TranslateId RID_TAB_SWCHAR_FONT = NC_("RID_TAB_FONT", "Font");
+const TranslateId RID_TAB_SWCHAR_FONTEFFECTS = NC_("RID_TAB_FONTEFFECTS", "Font Effects");
+const TranslateId RID_TAB_SWCHAR_POSITION = NC_("RID_TAB_POSITION", "Position");
+const TranslateId RID_TAB_SWCHAR_ASIANLAYOUT = NC_("RID_TAB_ASIANLAYOUT", "Asian Layout");
+const TranslateId RID_TAB_SWCHAR_BACKGROUND = NC_("RID_TAB_BACKGROUND", "Background");
+const TranslateId RID_TAB_SWCHAR_BORDER = NC_("RID_TAB_BORDER", "Border");
+
+// To translators: sw/ParagraphPropertiesDialog
+// sw/source/ui/chrdlg/pardlg.cxx
+const TranslateId RID_TAB_SWPARA_INDENTS = NC_("RID_TAB_INDENTS", "Indents & Spacing");
+const TranslateId RID_TAB_SWPARA_ALIGNMENT = NC_("RID_TAB_ALIGNMENT", "Alignment");
+const TranslateId RID_TAB_SWPARA_TEXTFLOW = NC_("RID_TAB_TEXTFLOW", "Text Flow");
+const TranslateId RID_TAB_SWPARA_ASIANTYPO = NC_("RID_TAB_ASIANTYPO", "Asian Typography");
+const TranslateId RID_TAB_SWPARA_OUTLINELIST = NC_("RID_TAB_OUTLINELIST", "Outline & List");
+const TranslateId RID_TAB_SWPARA_TABS = NC_("RID_TAB_TABS", "Tabs");
+const TranslateId RID_TAB_SWPARA_DROPCAPS = NC_("RID_TAB_DROPCAPS", "Drop Caps");
+const TranslateId RID_TAB_SWPARA_BORDER = NC_("RID_TAB_BORDER", "Border");
+const TranslateId RID_TAB_SWPARA_AREA = NC_("RID_TAB_AREA", "Area");
+const TranslateId RID_TAB_SWPARA_TRANSPARENCE = NC_("RID_TAB_TRANSPARENCE", "Transparency");
+
+// To translators: sw/TemplateDialogX (styles)
+// sw/source/ui/fmtui/tmpdlg.cxx
+const TranslateId RID_TAB_SWSTYLE_FONT = NC_("RID_TAB_SWSTYLE_FONT", "Font");
+const TranslateId RID_TAB_SWSTYLE_FONTEFFECTS = NC_("RID_TAB_SWSTYLE_FONTEFFECTS", "Font Effects");
+const TranslateId RID_TAB_SWSTYLE_POSITION = NC_("RID_TAB_SWSTYLE_POSITION", "Position");
+const TranslateId RID_TAB_SWSTYLE_ASIANLAYOUT = NC_("RID_TAB_SWSTYLE_ASIANLAYOUT", "Asian Layout");
+const TranslateId RID_TAB_SWSTYLE_HIGHLIGHTING = NC_("RID_TAB_SWSTYLE_HIGHLIGHTING", "Highlighting");
+const TranslateId RID_TAB_SWSTYLE_BORDER = NC_("RID_TAB_SWSTYLE_BORDER", "Border");
+const TranslateId RID_TAB_SWSTYLE_TEXTFLOW = NC_("RID_TAB_SWSTYLE_TEXTFLOW", "Text Flow");
+const TranslateId RID_TAB_SWSTYLE_ALIGNMENT = NC_("RID_TAB_SWSTYLE_ALIGNMENT", "Alignment");
+const TranslateId RID_TAB_SWSTYLE_INDENTS = NC_("RID_TAB_SWSTYLE_INDENTS", "Indents & Spacing");
+const TranslateId RID_TAB_SWSTYLE_DROPCAPS = NC_("RID_TAB_SWSTYLE_DROPCAPS", "Drop Caps");
+const TranslateId RID_TAB_SWSTYLE_AREA = NC_("RID_TAB_SWSTYLE_AREA", "Area");
+const TranslateId RID_TAB_SWSTYLE_TRANSPARENCE = NC_("RID_TAB_SWSTYLE_TRANSPARENCE", "Transparency");
+const TranslateId RID_TAB_SWSTYLE_TABS = NC_("RID_TAB_SWSTYLE_TABS", "Tabs");
+const TranslateId RID_TAB_SWSTYLE_OUTLINELIST = NC_("RID_TAB_SWSTYLE_OUTLINELIST", "Outline & List");
+const TranslateId RID_TAB_SWSTYLE_CONDITION = NC_("RID_TAB_SWSTYLE_CONDITION", "Condition");
+const TranslateId RID_TAB_SWSTYLE_ASIANTYPO = NC_("RID_TAB_SWSTYLE_ASIANTYPO", "Asian Typography");
+const TranslateId RID_TAB_SWSTYLE_PAGE = NC_("RID_TAB_SWSTYLE_PAGE", "Page");
+const TranslateId RID_TAB_SWSTYLE_HEADER = NC_("RID_TAB_SWSTYLE_HEADER", "Header");
+const TranslateId RID_TAB_SWSTYLE_FOOTER = NC_("RID_TAB_SWSTYLE_FOOTER", "Footer");
+const TranslateId RID_TAB_SWSTYLE_COLUMNS = NC_("RID_TAB_SWSTYLE_COLUMNS", "Columns");
+const TranslateId RID_TAB_SWSTYLE_FOOTNOTES = NC_("RID_TAB_SWSTYLE_FOOTNOTES", "Footnote");
+const TranslateId RID_TAB_SWSTYLE_TEXTGRID = NC_("RID_TAB_SWSTYLE_TEXTGRID", "Text Grid");
+const TranslateId RID_TAB_SWSTYLE_UNORDERED = NC_("RID_TAB_SWSTYLE_UNORDERED", "Unordered");
+const TranslateId RID_TAB_SWSTYLE_ORDERED = NC_("RID_TAB_SWSTYLE_ORDERED", "Ordered");
+const TranslateId RID_TAB_SWSTYLE_OUTLINE = NC_("RID_TAB_SWSTYLE_OUTLINE", "Outline");
+const TranslateId RID_TAB_SWSTYLE_IMAGE = NC_("RID_TAB_SWSTYLE_IMAGE", "Image");
+const TranslateId RID_TAB_SWSTYLE_LIST_POSITION = NC_("RID_TAB_SWSTYLE_LIST_POSITION", "Position");
+const TranslateId RID_TAB_SWSTYLE_CUSTOMIZE = NC_("RID_TAB_SWSTYLE_CUSTOMIZE", "Customize");
+const TranslateId RID_TAB_SWSTYLE_FRAMETYPE = NC_("RID_TAB_SWSTYLEFRAME_TYPE", "Type");
+const TranslateId RID_TAB_SWSTYLE_FRAMEOPTIONS = NC_("RID_TAB_SWSTYLE_FRAMEOPTIONS", "Options");
+const TranslateId RID_TAB_SWSTYLE_FRAMEWRAP = NC_("RID_TAB_SWSTYLE_FRAMEWRAP", "Wrap");
+const TranslateId RID_TAB_SWSTYLE_MACRO = NC_("RID_TAB_SWSTYLE_MACRO", "Macro");
+
+// To translators: sw/Picture-|Object-|FrameDialog
+// sw/source/ui/frmdlg/frmdlg.cxx
+const TranslateId RID_TAB_SWFRAME_POSSIZE = NC_("RID_TAB_SWFRAME_POSSIZE", "Position and Size");
+const TranslateId RID_TAB_SWFRAME_FRAMEOPTIONS = NC_("RID_TAB_SWFRAME_FRAMEOPTIONS", "Options");
+const TranslateId RID_TAB_SWFRAME_FRAMEWRAP = NC_("RID_TAB_SWFRAME_FRAMEWRAP", "Wrap");
+const TranslateId RID_TAB_SWFRAME_HYPERLINK = NC_("RID_TAB_SWFRAME_HYPERLINK", "Hyperlink");
+const TranslateId RID_TAB_SWFRAME_ROTATION = NC_("RID_TAB_SWFRAME_ROTATION", "Rotation");
+const TranslateId RID_TAB_SWFRAME_CROP = NC_("RID_TAB_SWFRAME_CROP", "Crop");
+const TranslateId RID_TAB_SWFRAME_CALLOUT = NC_("RID_TAB_SWFRAME_CALLOUT", "Callout");
+const TranslateId RID_TAB_SWFRAME_SLANT = NC_("RID_TAB_SWFRAME_SLANT", "Slant & Corner Radius");
+const TranslateId RID_TAB_SWFRAME_BORDER = NC_("RID_TAB_SWFRAME_BORDER", "Border");
+const TranslateId RID_TAB_SWFRAME_AREA = NC_("RID_TAB_SWFRAME_AREA", "Area");
+const TranslateId RID_TAB_SWFRAME_TRANSPARENCE = NC_("RID_TAB_SWFRAME_TRANSPARENCE", "Transparency");
+const TranslateId RID_TAB_SWFRAME_COLUMNS = NC_("RID_TAB_SWFRAME_COLUMNS", "Columns");
+const TranslateId RID_TAB_SWFRAME_MACRO = NC_("RID_TAB_SWFRAME_MACRO", "Macro");
+
+// To translators: sw/FormatTablePage
+// sw/source/ui/table/tabledlg.cxx
+const TranslateId RID_TAB_SWTABLE_TABLE = NC_("RID_TAB_SWTABLE_TABLE", "Table");
+const TranslateId RID_TAB_SWTABLE_TEXTFLOW = NC_("RID_TAB_SWTABLE_TEXTFLOW", "Text Flow");
+const TranslateId RID_TAB_SWTABLE_COLUMNS = NC_("RID_TAB_SWTABLE_COLUMNS", "Columns");
+const TranslateId RID_TAB_SWTABLE_BORDER = NC_("RID_TAB_SWTABLE_BORDER", "Border");
+const TranslateId RID_TAB_SWTABLE_BACKGROUND = NC_("RID_TAB_SWTABLE_BACKGROUND", "Background");
+
+// To translators: sw/OutlineNumberingDialog
+// sw/source/ui/misc/outline.cxx
+const TranslateId RID_TAB_SWOUTLINE_NUMBERING = NC_("RID_TAB_SWOUTLINE_NUMBERING", "Numbering");
+const TranslateId RID_TAB_SWOUTLINE_POSITION = NC_("RID_TAB_SWOUTLINE_POSITION", "Position");
+
+// To translators: sw/TocDialog
+// sw/source/ui/index/cnttab.cxx
+const TranslateId RID_TAB_SWTOC_TYPE = NC_("RID_TAB_SWTOC_TYPE", "Type");
+const TranslateId RID_TAB_SWTOC_ENTRIES = NC_("RID_TAB_SWTOC_ENTRIES", "Entries");
+const TranslateId RID_TAB_SWTOC_STYLES = NC_("RID_TAB_SWTOC_STYLES", "Styles");
+const TranslateId RID_TAB_SWTOC_COLUMNS = NC_("RID_TAB_SWTOC_COLUMNS", "Columns");
+const TranslateId RID_TAB_SWTOC_BACKGROUND = NC_("RID_TAB_SWTOC_BACKGROUND", "Background");
+
+// To translators: sw/InsertSectionDialog|FormatSectionDialog
+// sw/source/ui/dialog/uiregionsw.cxx
+const TranslateId RID_TAB_SWSECT_SECTION = NC_("RID_TAB_SWSECT_SECTION", "Section");
+const TranslateId RID_TAB_SWSECT_COLUMNS = NC_("RID_TAB_SWSECT_COLUMNS", "Columns");
+const TranslateId RID_TAB_SWSECT_INDENTSONLY = NC_("RID_TAB_SWSECT_INDENTSONLY", "Indents");
+const TranslateId RID_TAB_SWSECT_BACKGROUND = NC_("RID_TAB_SWSECT_BACKGROUND", "Background");
+const TranslateId RID_TAB_SWSECT_FOOTENDNOTES = NC_("RID_TAB_SWSECT_FOOTENDNOTES", "Footnotes/Endnotes");
+
+// To translators: sw/EnvDialog
+// sw/source/ui/envelp/envlop1.cxx
+const TranslateId RID_TAB_SWENV_ENVELOPE = NC_("RID_TAB_ENVELOPE", "Envelope");
+const TranslateId RID_TAB_SWENV_FORMAT = NC_("RID_TAB_ENV_FORMAT", "Format");
+const TranslateId RID_TAB_SWENV_PRINTER = NC_("RID_TAB_PRINTER", "Printer");
+
+// To translators: sw/LabelDialog
+// sw/source/ui/envelp/label1.cxx
+const TranslateId RID_TAB_SWLABEL_LABEL = NC_("RID_TAB_SWLABEL_LABEL", "Labels");
+const TranslateId RID_TAB_SWLABEL_PRIVATE = NC_("RID_TAB_SWLABEL_PRIVATE", "Private");
+const TranslateId RID_TAB_SWLABEL_BUSINESS = NC_("RID_TAB_SWLABEL_BUSINESS", "Business");
+const TranslateId RID_TAB_SWLABEL_FORMAT = NC_("RID_TAB_SWLABEL_FORMAT", "Format");
+const TranslateId RID_TAB_SWLABEL_OPTIONS = NC_("RID_TAB_SWLABEL_OPTIONS", "Options");
+
+// To translators: sw/FieldDialog
+// sw/source/ui/fldui/fldtdlg.cxx
+const TranslateId RID_TAB_SWFIELD_DOCUMENT = NC_("RID_TAB_SWFIELD_DOCUMENT", "Document");
+const TranslateId RID_TAB_SWFIELD_CROSSREF = NC_("RID_TAB_SWFIELD_CROSSREF", "Cross-references");
+const TranslateId RID_TAB_SWFIELD_FUNCTIONS = NC_("RID_TAB_SWFIELD_FUNCTIONS", "Functions");
+const TranslateId RID_TAB_SWFIELD_DOCINFO = NC_("RID_TAB_SWFIELD_DOCINFO", "DocInformation");
+const TranslateId RID_TAB_SWFIELD_VARIABLES = NC_("RID_TAB_SWFIELD_VARIABLES", "Variables");
+const TranslateId RID_TAB_SWFIELD_DATABASE = NC_("RID_TAB_SWFIELD_DATABASE", "Database");
+
+// To translators: sw/FootEndnoteDialog
+// sw/source/ui/misc/docfnote.cxx
+const TranslateId RID_TAB_SWFOOTEND_FOOTNOTES = NC_("RID_TAB_SWFOOTEND_FOOTNOTES", "Footnote");
+const TranslateId RID_TAB_SWFOOTEND_ENDNOTES = NC_("RID_TAB_SWFOOTEND_ENDNOTES", "Endnote");
+
+// To translators: sw/BulletsAndNumberingDialog
+// sw/source/ui/misc/num.cxx
+const TranslateId RID_TAB_SWNUMBUL_UNORDERED = NC_("RID_TAB_SWNUMBUL_UNORDERED", "Unordered");
+const TranslateId RID_TAB_SWNUMBUL_ORDERED = NC_("RID_TAB_SWNUMBUL_ORDERED", "Ordered");
+const TranslateId RID_TAB_SWNUMBUL_OUTLINE = NC_("RID_TAB_SWNUMBUL_OUTLINE", "Outline");
+const TranslateId RID_TAB_SWNUMBUL_IMAGE = NC_("RID_TAB_SWNUMBUL_IMAGE", "Image");
+const TranslateId RID_TAB_SWNUMBUL_LIST_POSITION = NC_("RID_TAB_SWNUMBUL_LIST_POSITION", "Position");
+const TranslateId RID_TAB_SWNUMBUL_CUSTOMIZE = NC_("RID_TAB_SWNUMBUL_CUSTOMIZE", "Customize");
+
+// To translators: sw/SfxDocumentInfoDialog
+// sw/source/uibase/app/docsh2.cxx
+const TranslateId RID_TAB_SWDOCINFO_STATISTICS = NC_("RID_TAB_SWDOCINFO_STATISTICS", "Statistics");
+
+// To translators: sd/DrawPRTLDialog / Presentation Styles
+// sd/source/ui/dlg/prltempl.cxx
+const TranslateId RID_TAB_SDPRESSTYLE_LINE = NC_("RID_TAB_SDPRESSTYLE_LINE", "Line");
+const TranslateId RID_TAB_SDPRESSTYLE_AREA = NC_("RID_TAB_SDPRESSTYLE_AREA", "Area");
+const TranslateId RID_TAB_SDPRESSTYLE_SHADOW = NC_("RID_TAB_SDPRESSTYLE_SHADOW", "Shadowing");
+const TranslateId RID_TAB_SDPRESSTYLE_TRANSPARENCE = NC_("RID_TAB_SDPRESSTYLE_TRANSPARENCE", "Transparency");
+const TranslateId RID_TAB_SDPRESSTYLE_FONT = NC_("RID_TAB_SDPRESSTYLE_FONT", "Font");
+const TranslateId RID_TAB_SDPRESSTYLE_FONTEFFECTS = NC_("RID_TAB_SDPRESSTYLE_FONTEFFECTS", "Font Effects");
+const TranslateId RID_TAB_SDPRESSTYLE_INDENTS = NC_("RID_TAB_SDPRESSTYLE_INDENTS", "Indents & Spacing");
+const TranslateId RID_TAB_SDPRESSTYLE_TEXT = NC_("RID_TAB_SDPRESSTYLE_TEXT", "Text");
+const TranslateId RID_TAB_SDPRESSTYLE_BULLETS = NC_("RID_TAB_SDPRESSTYLE_BULLETS", "Bullets");
+const TranslateId RID_TAB_SDPRESSTYLE_NUMBERING = NC_("RID_TAB_SDPRESSTYLE_NUMBERING", "Numbering");
+const TranslateId RID_TAB_SDPRESSTYLE_IMAGE = NC_("RID_TAB_SDPRESSTYLE_IMAGE", "Image");
+const TranslateId RID_TAB_SDPRESSTYLE_CUSTOMIZE = NC_("RID_TAB_SDPRESSTYLE_CUSTOMIZE", "Customize");
+const TranslateId RID_TAB_SDPRESSTYLE_ALIGNMENT = NC_("RID_TAB_SDPRESSTYLE_ALIGNMENT", "Alignment");
+const TranslateId RID_TAB_SDPRESSTYLE_ASIANTYPO = NC_("RID_TAB_SDPRESSTYLE_ASIANTYPO", "Asian Typography");
+const TranslateId RID_TAB_SDPRESSTYLE_TABS = NC_("RID_TAB_SDPRESSTYLE_TABS", "Tabs");
+const TranslateId RID_TAB_SDPRESSTYLE_HIGHLIGHTING = NC_("RID_TAB_SDPRESSTYLE_HIGHLIGHTING", "Highlighting");
+
+// To translators: sd/TemplateDialog / Drawing Styles
+// sd/source/ui/dlg/tabtempl.cxx
+const TranslateId RID_TAB_SDDRWSTYLE_LINE = NC_("RID_TAB_SDDRWSTYLE_LINE", "Line");
+const TranslateId RID_TAB_SDDRWSTYLE_AREA = NC_("RID_TAB_SDDRWSTYLE_AREA", "Area");
+const TranslateId RID_TAB_SDDRWSTYLE_SHADOW = NC_("RID_TAB_SDDRWSTYLE_SHADOW", "Shadowing");
+const TranslateId RID_TAB_SDDRWSTYLE_TRANSPARENCE = NC_("RID_TAB_SDDRWSTYLE_TRANSPARENCE", "Transparency");
+const TranslateId RID_TAB_SDDRWSTYLE_FONT = NC_("RID_TAB_SDDRWSTYLE_FONT", "Font");
+const TranslateId RID_TAB_SDDRWSTYLE_FONTEFFECTS = NC_("RID_TAB_SDDRWSTYLE_FONTEFFECTS", "Font Effects");
+const TranslateId RID_TAB_SDDRWSTYLE_INDENTS = NC_("RID_TAB_SDDRWSTYLE_INDENTS", "Indents & Spacing");
+const TranslateId RID_TAB_SDDRWSTYLE_TEXT = NC_("RID_TAB_SDDRWSTYLE_TEXT", "Text");
+const TranslateId RID_TAB_SDDRWSTYLE_TEXTANIMATION = NC_("RID_TAB_SDDRWSTYLE_TEXTANIMATION", "Text Animation");
+const TranslateId RID_TAB_SDDRWSTYLE_DIMENSIONING = NC_("RID_TAB_SDDRWSTYLE_DIMENSIONING", "Dimensioning");
+const TranslateId RID_TAB_SDDRWSTYLE_CONNECTOR = NC_("RID_TAB_SDDRWSTYLE_CONNECTOR", "Connector");
+const TranslateId RID_TAB_SDDRWSTYLE_ALIGNMENT = NC_("RID_TAB_SDDRWSTYLE_ALIGNMENT", "Alignment");
+const TranslateId RID_TAB_SDDRWSTYLE_ASIANTYPO = NC_("RID_TAB_SDDRWSTYLE_ASIANTYPO", "Asian Typography");
+const TranslateId RID_TAB_SDDRWSTYLE_TABS = NC_("RID_TAB_SDDRWSTYLE_TABS", "Tabs");
+const TranslateId RID_TAB_SDDRWSTYLE_HIGHLIGHTING = NC_("RID_TAB_SDDRWSTYLE_HIGHLIGHTING", "Highlighting");
+
+// To translators: sd/DrawPageDialog
+// sd/source/ui/dlg/dlgpage.cxx
+const TranslateId RID_TAB_SDPAGE_SLIDE = NC_("RID_TAB_SDPAGE_SLIDE", "Slide");
+const TranslateId RID_TAB_SDPAGE_PAGE = NC_("RID_TAB_SDPAGE_PAGE", "Page");
+const TranslateId RID_TAB_SDPAGE_BACKGROUND = NC_("RID_TAB_SDPAGE_BACKGROUND", "Background");
+const TranslateId RID_TAB_SDPAGE_TRANSPARENCE = NC_("RID_TAB_SDPAGE_TRANSPARENCE", "Transparency");
+
+// To translators: sd/DrawParagraphPropertiesDialog
+// sd/source/ui/dlg/paragr.cxx
+const TranslateId RID_TAB_SDPARA_INDENTS = NC_("RID_TAB_SDPARA_INDENTS", "Indents & Spacing");
+const TranslateId RID_TAB_SDPARA_ASIANTYPO = NC_("RID_TAB_SDPARA_ASIANTYPO", "Asian Typography");
+const TranslateId RID_TAB_SDPARA_TABS = NC_("RID_TAB_SDPARA_TABS", "Tabs");
+const TranslateId RID_TAB_SDPARA_ALIGNMENT = NC_("RID_TAB_SDPARA_ALIGNMENT", "Alignment");
+const TranslateId RID_TAB_SDPARA_NUMBERING = NC_("RID_TAB_SDPARA_NUMBERING", "Numbering");
+
+// To translators: sd/DrawCharDialog
+// sd/source/ui/dlg/dlgchar.cxx
+const TranslateId RID_TAB_SDCHAR_FONT = NC_("RID_TAB_SDCHAR_FONT", "Font");
+const TranslateId RID_TAB_SDCHAR_FONTEFFECTS = NC_("RID_TAB_SDCHAR_FONTEFFECTS", "Font Effects");
+const TranslateId RID_TAB_SDCHAR_POSITION = NC_("RID_TAB_SDCHAR_POSITION", "Position");
+const TranslateId RID_TAB_SDCHAR_HIGHLIGHTING = NC_("RID_TAB_SDCHAR_HIGHLIGHTING", "Highlighting");
+
+// To translators: sfx2/DocumentPropertiesDialog
+// sfx2/source/dialog/dinfdlg.cxx
+const TranslateId RID_TAB_SFX2PROP_ORGANIZER = NC_("RID_TAB_SFX2PROP_ORGANIZER", "General");
+const TranslateId RID_TAB_SFX2PROP_DESCRIPTION = NC_("RID_TAB_SFX2PROP_DESCRIPTION", "Description");
+const TranslateId RID_TAB_SFX2PROP_CUSTOM = NC_("RID_TAB_SFX2PROP_CUSTOM", "Custom Properties");
+const TranslateId RID_TAB_SFX2PROP_CMIS = NC_("RID_TAB_SFX2PROP_CMIS", "CMIS Properties");
+const TranslateId RID_TAB_SFX2PROP_SECURITY = NC_("RID_TAB_SFX2PROP_SECURITY", "Security");
+const TranslateId RID_TAB_SFX2PROP_FONT = NC_("RID_TAB_SFX2PROP_FONT", "Font");
+
+// To translators: sfx2/SfxStyleDialogController
+// sfx2/source/dialog/styledlg.cxx
+const TranslateId RID_TAB_SFX2STYLE_ORGANIZER = NC_("RID_TAB_SFX2STYLE_ORGANIZER", "General");
+
+// To translators: filter/PdfOptionsDialog
+// filter/source/pdf/impdialog.cxx
+const TranslateId RID_TAB_PDF_ORGANIZER = NC_("RID_TAB_PDF_ORGANIZER", "General");
+const TranslateId RID_TAB_PDF_INITIAL = NC_("RID_TAB_PDF_INITIAL", "Initial View");
+const TranslateId RID_TAB_PDF_UI = NC_("RID_TAB_PDF_UI", "User Interface");
+const TranslateId RID_TAB_PDF_LINKS = NC_("RID_TAB_PDF_LINKS", "Links");
+const TranslateId RID_TAB_PDF_PROTECT = NC_("RID_TAB_PDF_PROTECT", "Security");
+const TranslateId RID_TAB_PDF_SIGN = NC_("RID_TAB_PDF_SIGN", "Digital Signatures");
+
+// To translators: reportdesign/BackgroundDialog|PageDialog|CharDialog
+// reportdesign/source/ui/dlg/dlgpage.cxx
+const TranslateId RID_TAB_RPTDLG_BACKGROUND = NC_("RID_TAB_RPTDLG_BACKGROUND", "Background");
+const TranslateId RID_TAB_RPTDLG_PAGE = NC_("RID_TAB_RPTDLG_PAGE", "Page");
+const TranslateId RID_TAB_RPTDLG_FONT = NC_("RID_TAB_RPTDLG_FONT", "Font");
+const TranslateId RID_TAB_RPTDLG_FONTEFFECTS = NC_("RID_TAB_RPTDLG_FONTEFFECTS", "Font Effects");
+const TranslateId RID_TAB_RPTDLG_POSITION = NC_("RID_TAB_RPTDLG_POSITION", "Position");
+const TranslateId RID_TAB_RPTDLG_ASIANLAYOUT = NC_("RID_TAB_RPTDLG_ASIANLAYOUT", "Asian Layout");
+const TranslateId RID_TAB_RPTDLG_ALIGNMENT = NC_("RID_TAB_RPTDLG_ALIGNMENT", "Alignment");
+
+// To translators: svx/TextControlCharacterPropertiesDialog
+// svx/source/form/fmtextcontroldialogs.cxx
+const TranslateId RID_TAB_SVXTEXT_FONT = NC_("RID_TAB_SVXTEXT_FONT", "Font");
+const TranslateId RID_TAB_SVXTEXT_FONTEFFECTS = NC_("RID_TAB_SVXTEXT_FONTEFFECTS", "Font Effects");
+const TranslateId RID_TAB_SVXTEXT_POSITION = NC_("RID_TAB_SVXTEXT_POSITION", "Position");
+const TranslateId RID_TAB_SVXTEXT_INDENTS = NC_("RID_TAB_SVXTEXT_INDENTS", "Indents & Spacing");
+const TranslateId RID_TAB_SVXTEXT_ALIGNMENT = NC_("RID_TAB_SVXTEXT_ALIGNMENT", "Alignment");
+const TranslateId RID_TAB_SVXTEXT_ASIANTYPO = NC_("RID_TAB_SVXTEXT_ASIANTYPO", "Asian Typography");
+const TranslateId RID_TAB_SVXTEXT_TABS = NC_("RID_TAB_SVXTEXT_TABS", "Tabs");
 
 static OUString TabResId(TranslateId aId)
 {
-    return Translate::get(aId, Translate::Create("vcl"));
+ return Translate::get(aId, Translate::Create("vcl"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

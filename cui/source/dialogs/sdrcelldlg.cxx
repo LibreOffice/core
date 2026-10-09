@@ -40,32 +40,32 @@ SvxFormatCellsDialog::SvxFormatCellsDialog(weld::Window* pParent, const SfxItemS
     , mpBitmapList(rModel.GetBitmapList())
     , mpPatternList(rModel.GetPatternList())
 {
-    AddTabPage(u"font"_ustr, TabResId(RID_TAB_FONT.aLabel), RID_SVXPAGE_CHAR_NAME,
-               RID_M + RID_TAB_FONT.sIconName);
-    AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel), RID_SVXPAGE_CHAR_EFFECTS,
-               RID_M + RID_TAB_FONTEFFECTS.sIconName);
+    AddTabPage(u"font"_ustr, TabResId(RID_TAB_CUICELLS_FONT), RID_SVXPAGE_CHAR_NAME,
+               RID_M + RID_TAB_FONT_IMG);
+    AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_CUICELLS_FONTEFFECTS), RID_SVXPAGE_CHAR_EFFECTS,
+               RID_M + RID_TAB_FONTEFFECTS_IMG);
     if (bStyle)
     {
-        AddTabPage(u"position"_ustr, TabResId(RID_TAB_POSITION.aLabel), RID_SVXPAGE_CHAR_POSITION,
-                   RID_M + RID_TAB_POSITION.sIconName);
-        AddTabPage(u"highlight"_ustr, TabResId(RID_TAB_HIGHLIGHTING.aLabel), RID_SVXPAGE_BKG,
-                   RID_M + RID_TAB_HIGHLIGHTING.sIconName);
-        AddTabPage(u"indentspacing"_ustr, TabResId(RID_TAB_INDENTS.aLabel),
-                   RID_SVXPAGE_STD_PARAGRAPH, RID_M + RID_TAB_INDENTS.sIconName);
+        AddTabPage(u"position"_ustr, TabResId(RID_TAB_CUICELLS_POSITION), RID_SVXPAGE_CHAR_POSITION,
+                   RID_M + RID_TAB_POSITION_IMG);
+        AddTabPage(u"highlight"_ustr, TabResId(RID_TAB_CUICELLS_HIGHLIGHTING), RID_SVXPAGE_BKG,
+                   RID_M + RID_TAB_HIGHLIGHTING_IMG);
+        AddTabPage(u"indentspacing"_ustr, TabResId(RID_TAB_CUICELLS_INDENTS),
+                   RID_SVXPAGE_STD_PARAGRAPH, RID_M + RID_TAB_INDENTS_IMG);
         if (SvtCJKOptions::IsAsianTypographyEnabled())
-            AddTabPage(u"asian"_ustr, TabResId(RID_TAB_ASIANTYPO.aLabel), RID_SVXPAGE_PARA_ASIAN,
-                       RID_M + RID_TAB_ASIANTYPO.sIconName);
-        AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_ALIGNMENT.aLabel),
+            AddTabPage(u"asian"_ustr, TabResId(RID_TAB_CUICELLS_ASIANTYPO), RID_SVXPAGE_PARA_ASIAN,
+                       RID_M + RID_TAB_ASIANTYPO_IMG);
+        AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_CUICELLS_ALIGNMENT),
                    SvxParaAlignTabPage::Create, SvxParaAlignTabPage::GetSdrRanges,
-                   RID_M + RID_TAB_ALIGNMENT.sIconName);
+                   RID_M + RID_TAB_ALIGNMENT_IMG);
     }
-    AddTabPage(u"border"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_BORDER,
-               RID_M + RID_TAB_BORDER.sIconName);
-    AddTabPage(u"area"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel), RID_SVXPAGE_AREA,
-               RID_M + RID_TAB_BACKGROUND.sIconName);
+    AddTabPage(u"border"_ustr, TabResId(RID_TAB_CUICELLS_BORDER), RID_SVXPAGE_BORDER,
+               RID_M + RID_TAB_BORDER_IMG);
+    AddTabPage(u"area"_ustr, TabResId(RID_TAB_CUICELLS_BACKGROUND), RID_SVXPAGE_AREA,
+               RID_M + RID_TAB_BACKGROUND_IMG);
     if (!bStyle)
-        AddTabPage(u"shadow"_ustr, TabResId(RID_TAB_SHADOW.aLabel), SvxShadowTabPage::Create,
-                   RID_M + RID_TAB_SHADOW.sIconName);
+        AddTabPage(u"shadow"_ustr, TabResId(RID_TAB_CUICELLS_SHADOW), SvxShadowTabPage::Create,
+                   RID_M + RID_TAB_SHADOW_IMG);
 }
 
 void SvxFormatCellsDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)

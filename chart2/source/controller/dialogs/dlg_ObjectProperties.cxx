@@ -345,89 +345,89 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
     switch (eType)
     {
         case OBJECTTYPE_TITLE:
-            AddTabPage(u"border"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_LINE,
-                       RID_M + RID_TAB_BORDER.sIconName);
-            AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel), RID_SVXPAGE_AREA,
-                       RID_M + RID_TAB_AREA.sIconName);
-            AddTabPage(u"transparent"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel), RID_SVXPAGE_TRANSPARENCE,
-                       RID_M + RID_TAB_TRANSPARENCE.sIconName);
-            AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_FONT.aLabel), RID_SVXPAGE_CHAR_NAME,
-                       RID_M + RID_TAB_FONT.sIconName);
-            AddTabPage(u"effects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel), RID_SVXPAGE_CHAR_EFFECTS,
-                       RID_M + RID_TAB_FONTEFFECTS.sIconName);
-            AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_ALIGNMENT.aLabel), SchAlignmentTabPage::Create,
-                       RID_M + RID_TAB_ALIGNMENT.sIconName);
+            AddTabPage(u"border"_ustr, TabResId(RID_TAB_CHARTATTR_BORDER), RID_SVXPAGE_LINE,
+                       RID_M + RID_TAB_BORDER_IMG);
+            AddTabPage(u"area"_ustr, TabResId(RID_TAB_CHARTATTR_AREA), RID_SVXPAGE_AREA,
+                       RID_M + RID_TAB_AREA_IMG);
+            AddTabPage(u"transparent"_ustr, TabResId(RID_TAB_CHARTATTR_TRANSPARENCE), RID_SVXPAGE_TRANSPARENCE,
+                       RID_M + RID_TAB_TRANSPARENCE_IMG);
+            AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_CHARTATTR_FONT), RID_SVXPAGE_CHAR_NAME,
+                       RID_M + RID_TAB_FONT_IMG);
+            AddTabPage(u"effects"_ustr, TabResId(RID_TAB_CHARTATTR_FONTEFFECTS), RID_SVXPAGE_CHAR_EFFECTS,
+                       RID_M + RID_TAB_FONTEFFECTS_IMG);
+            AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_CHARTATTR_ALIGNMENT), SchAlignmentTabPage::Create,
+                       RID_M + RID_TAB_ALIGNMENT_IMG);
             if( SvtCJKOptions::IsAsianTypographyEnabled() )
-                AddTabPage(u"asian"_ustr, TabResId(RID_TAB_ASIANTYPO.aLabel), RID_SVXPAGE_PARA_ASIAN,
-                           RID_M + RID_TAB_ASIANTYPO.sIconName);
+                AddTabPage(u"asian"_ustr, TabResId(RID_TAB_CHARTATTR_ASIANTYPO), RID_SVXPAGE_PARA_ASIAN,
+                           RID_M + RID_TAB_ASIANTYPO_IMG);
             break;
 
         case OBJECTTYPE_LEGEND:
-            AddTabPage(u"border"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_LINE,
-                       RID_M + RID_TAB_BORDER.sIconName);
-            AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel), RID_SVXPAGE_AREA,
-                       RID_M + RID_TAB_AREA.sIconName);
-            AddTabPage(u"transparent"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel), RID_SVXPAGE_TRANSPARENCE,
-                       RID_M + RID_TAB_TRANSPARENCE.sIconName);
-            AddTabPage(u"colorpalette"_ustr, TabResId(RID_TAB_COLORPALETTE.aLabel), ChartColorPaletteTabPage::Create,
-                       RID_M + RID_TAB_COLORPALETTE.sIconName);
-            AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_FONT.aLabel), RID_SVXPAGE_CHAR_NAME,
-                       RID_M + RID_TAB_FONT.sIconName);
-            AddTabPage(u"effects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel), RID_SVXPAGE_CHAR_EFFECTS,
-                       RID_M + RID_TAB_FONTEFFECTS.sIconName);
-            AddTabPage(u"legendpos"_ustr, TabResId(RID_TAB_CHART_LEGENDPOS.aLabel), SchLegendPosTabPage::Create,
-                       RID_M + RID_TAB_CHART_LEGENDPOS.sIconName);
+            AddTabPage(u"border"_ustr, TabResId(RID_TAB_CHARTATTR_BORDER), RID_SVXPAGE_LINE,
+                       RID_M + RID_TAB_BORDER_IMG);
+            AddTabPage(u"area"_ustr, TabResId(RID_TAB_CHARTATTR_AREA), RID_SVXPAGE_AREA,
+                       RID_M + RID_TAB_AREA_IMG);
+            AddTabPage(u"transparent"_ustr, TabResId(RID_TAB_CHARTATTR_TRANSPARENCE), RID_SVXPAGE_TRANSPARENCE,
+                       RID_M + RID_TAB_TRANSPARENCE_IMG);
+            AddTabPage(u"colorpalette"_ustr, TabResId(RID_TAB_CHARTATTR_COLORPALETTE), ChartColorPaletteTabPage::Create,
+                       RID_M + RID_TAB_COLORPALETTE_IMG);
+            AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_CHARTATTR_FONT), RID_SVXPAGE_CHAR_NAME,
+                       RID_M + RID_TAB_FONT_IMG);
+            AddTabPage(u"effects"_ustr, TabResId(RID_TAB_CHARTATTR_FONTEFFECTS), RID_SVXPAGE_CHAR_EFFECTS,
+                       RID_M + RID_TAB_FONTEFFECTS_IMG);
+            AddTabPage(u"legendpos"_ustr, TabResId(RID_TAB_CHARTATTR_LEGENDPOS), SchLegendPosTabPage::Create,
+                       RID_M + RID_TAB_LEGENDPOS_IMG);
             if (SvtCJKOptions::IsAsianTypographyEnabled())
-                AddTabPage(u"asian"_ustr, TabResId(RID_TAB_ASIANTYPO.aLabel), RID_SVXPAGE_PARA_ASIAN,
-                           RID_M + RID_TAB_ASIANTYPO.sIconName);
+                AddTabPage(u"asian"_ustr, TabResId(RID_TAB_CHARTATTR_ASIANTYPO), RID_SVXPAGE_PARA_ASIAN,
+                           RID_M + RID_TAB_ASIANTYPO_IMG);
             break;
 
         case OBJECTTYPE_DATA_SERIES:
         case OBJECTTYPE_DATA_POINT:
             if (m_rParameter.ProvidesSecondaryYAxis() || m_rParameter.ProvidesOverlapAndGapWidth() || m_rParameter.ProvidesMissingValueTreatments())
-                AddTabPage(u"options"_ustr, TabResId(RID_TAB_CHART_OPTIONS.aLabel), SchOptionTabPage::Create,
-                           RID_M + RID_TAB_CHART_OPTIONS.sIconName);
+                AddTabPage(u"options"_ustr, TabResId(RID_TAB_CHARTATTR_OPTIONS), SchOptionTabPage::Create,
+                           RID_M + RID_TAB_OPTIONS_IMG);
             if (m_rParameter.ProvidesStartingAngle())
-                AddTabPage(u"polaroptions"_ustr, TabResId(RID_TAB_CHART_OPTIONS.aLabel), PolarOptionsTabPage::Create,
-                           RID_M + RID_TAB_CHART_OPTIONS.sIconName);
+                AddTabPage(u"polaroptions"_ustr, TabResId(RID_TAB_CHARTATTR_OPTIONS), PolarOptionsTabPage::Create,
+                           RID_M + RID_TAB_OPTIONS_IMG);
             if (m_rParameter.IsPieChartDataPoint())
-                AddTabPage(u"datapointoption"_ustr, TabResId(RID_TAB_CHART_OPTIONS.aLabel), DataPointOptionTabPage::Create,
-                           RID_M + RID_TAB_CHART_OPTIONS.sIconName);
+                AddTabPage(u"datapointoption"_ustr, TabResId(RID_TAB_CHARTATTR_OPTIONS), DataPointOptionTabPage::Create,
+                           RID_M + RID_TAB_OPTIONS_IMG);
 
             if (m_rParameter.HasGeometryProperties())
-                AddTabPage(u"layout"_ustr, TabResId(RID_TAB_CHART_LAYOUT.aLabel), SchLayoutTabPage::Create,
-                           RID_M + RID_TAB_CHART_LAYOUT.sIconName);
+                AddTabPage(u"layout"_ustr, TabResId(RID_TAB_CHARTATTR_LAYOUT), SchLayoutTabPage::Create,
+                           RID_M + RID_TAB_LAYOUT_IMG);
 
             if (m_rParameter.HasAreaProperties())
             {
-                AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel), RID_SVXPAGE_AREA,
-                           RID_M + RID_TAB_AREA.sIconName);
-                AddTabPage(u"transparent"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel), RID_SVXPAGE_TRANSPARENCE,
-                           RID_M + RID_TAB_TRANSPARENCE.sIconName);
-                AddTabPage(u"border"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_LINE,
-                        RID_M + RID_TAB_BORDER.sIconName);
+                AddTabPage(u"area"_ustr, TabResId(RID_TAB_CHARTATTR_AREA), RID_SVXPAGE_AREA,
+                           RID_M + RID_TAB_AREA_IMG);
+                AddTabPage(u"transparent"_ustr, TabResId(RID_TAB_CHARTATTR_TRANSPARENCE), RID_SVXPAGE_TRANSPARENCE,
+                           RID_M + RID_TAB_TRANSPARENCE_IMG);
+                AddTabPage(u"border"_ustr, TabResId(RID_TAB_CHARTATTR_BORDER), RID_SVXPAGE_LINE,
+                        RID_M + RID_TAB_BORDER_IMG);
             }
             else
-                AddTabPage(u"border"_ustr, TabResId(RID_TAB_LINE.aLabel), RID_SVXPAGE_LINE,
-                           RID_M + RID_TAB_LINE.sIconName);
+                AddTabPage(u"border"_ustr, TabResId(RID_TAB_CHARTATTR_LINE), RID_SVXPAGE_LINE,
+                           RID_M + RID_TAB_LINE_IMG);
 
-            AddTabPage(u"colorpalette"_ustr, TabResId(RID_TAB_COLORPALETTE.aLabel), ChartColorPaletteTabPage::Create,
-                       RID_M + RID_TAB_COLORPALETTE.sIconName);
+            AddTabPage(u"colorpalette"_ustr, TabResId(RID_TAB_CHARTATTR_COLORPALETTE), ChartColorPaletteTabPage::Create,
+                       RID_M + RID_TAB_COLORPALETTE_IMG);
             break;
 
         case OBJECTTYPE_DATA_LABEL:
         case OBJECTTYPE_DATA_LABELS:
-            AddTabPage(u"border"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_LINE,
-                       RID_M + RID_TAB_BORDER.sIconName);
-            AddTabPage(u"datalabels"_ustr, TabResId(RID_TAB_CHART_DATALABEL.aLabel), DataLabelsTabPage::Create,
-                       RID_M + RID_TAB_CHART_DATALABEL.sIconName);
-            AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_FONT.aLabel), RID_SVXPAGE_CHAR_NAME,
-                       RID_M + RID_TAB_FONT.sIconName);
-            AddTabPage(u"effects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel), RID_SVXPAGE_CHAR_EFFECTS,
-                       RID_M + RID_TAB_FONTEFFECTS.sIconName);
+            AddTabPage(u"border"_ustr, TabResId(RID_TAB_CHARTATTR_BORDER), RID_SVXPAGE_LINE,
+                       RID_M + RID_TAB_BORDER_IMG);
+            AddTabPage(u"datalabels"_ustr, TabResId(RID_TAB_CHARTATTR_DATALABEL), DataLabelsTabPage::Create,
+                       RID_M + RID_TAB_DATALABEL_IMG);
+            AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_CHARTATTR_FONT), RID_SVXPAGE_CHAR_NAME,
+                       RID_M + RID_TAB_FONT_IMG);
+            AddTabPage(u"effects"_ustr, TabResId(RID_TAB_CHARTATTR_FONTEFFECTS), RID_SVXPAGE_CHAR_EFFECTS,
+                       RID_M + RID_TAB_FONTEFFECTS_IMG);
             if( SvtCJKOptions::IsAsianTypographyEnabled() )
-                AddTabPage(u"asian"_ustr, TabResId(RID_TAB_ASIANTYPO.aLabel), RID_SVXPAGE_PARA_ASIAN,
-                           RID_M + RID_TAB_ASIANTYPO.sIconName);
+                AddTabPage(u"asian"_ustr, TabResId(RID_TAB_CHARTATTR_ASIANTYPO), RID_SVXPAGE_PARA_ASIAN,
+                           RID_M + RID_TAB_ASIANTYPO_IMG);
 
             break;
 
@@ -435,41 +435,41 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
         {
             if (m_rParameter.HasScaleProperties())
             {
-                AddTabPage(u"scale"_ustr, TabResId(RID_TAB_CHART_SCALE.aLabel), ScaleTabPage::Create,
-                           RID_M + RID_TAB_CHART_SCALE.sIconName);
+                AddTabPage(u"scale"_ustr, TabResId(RID_TAB_CHARTATTR_SCALE), ScaleTabPage::Create,
+                           RID_M + RID_TAB_SCALE_IMG);
                 //no positioning page for z axes so far as the tickmarks are not shown so far
-                AddTabPage(u"axispos"_ustr, TabResId(RID_TAB_CHART_POSITIONING.aLabel), AxisPositionsTabPage::Create,
-                           RID_M + RID_TAB_CHART_POSITIONING.sIconName);
+                AddTabPage(u"axispos"_ustr, TabResId(RID_TAB_CHARTATTR_POSITIONING), AxisPositionsTabPage::Create,
+                           RID_M + RID_TAB_POSITIONING_IMG);
             }
-            AddTabPage(u"border"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_LINE,
-                       RID_M + RID_TAB_BORDER.sIconName);
-            AddTabPage(u"axislabel"_ustr, TabResId(RID_TAB_CHART_AXISLABEL.aLabel), SchAxisLabelTabPage::Create,
-                       RID_M + RID_TAB_CHART_AXISLABEL.sIconName);
+            AddTabPage(u"border"_ustr, TabResId(RID_TAB_CHARTATTR_BORDER), RID_SVXPAGE_LINE,
+                       RID_M + RID_TAB_BORDER_IMG);
+            AddTabPage(u"axislabel"_ustr, TabResId(RID_TAB_CHARTATTR_AXISLABEL), SchAxisLabelTabPage::Create,
+                       RID_M + RID_TAB_AXISLABEL_IMG);
             if (m_rParameter.HasNumberProperties())
-                AddTabPage(u"numberformat"_ustr, TabResId(RID_TAB_NUMBERS.aLabel), RID_SVXPAGE_NUMBERFORMAT,
-                           RID_M + RID_TAB_NUMBERS.sIconName);
-            AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_FONT.aLabel), RID_SVXPAGE_CHAR_NAME,
-                       RID_M + RID_TAB_FONT.sIconName);
-            AddTabPage(u"effects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel), RID_SVXPAGE_CHAR_EFFECTS,
-                       RID_M + RID_TAB_FONTEFFECTS.sIconName);
+                AddTabPage(u"numberformat"_ustr, TabResId(RID_TAB_CHARTATTR_NUMBERS), RID_SVXPAGE_NUMBERFORMAT,
+                           RID_M + RID_TAB_NUMBERS_IMG);
+            AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_CHARTATTR_FONT), RID_SVXPAGE_CHAR_NAME,
+                       RID_M + RID_TAB_FONT_IMG);
+            AddTabPage(u"effects"_ustr, TabResId(RID_TAB_CHARTATTR_FONTEFFECTS), RID_SVXPAGE_CHAR_EFFECTS,
+                       RID_M + RID_TAB_FONTEFFECTS_IMG);
             if( SvtCJKOptions::IsAsianTypographyEnabled() )
-                AddTabPage(u"asian"_ustr, TabResId(RID_TAB_ASIANTYPO.aLabel), RID_SVXPAGE_PARA_ASIAN,
-                           RID_M + RID_TAB_ASIANTYPO.sIconName);
+                AddTabPage(u"asian"_ustr, TabResId(RID_TAB_CHARTATTR_ASIANTYPO), RID_SVXPAGE_PARA_ASIAN,
+                           RID_M + RID_TAB_ASIANTYPO_IMG);
             break;
         }
 
         case OBJECTTYPE_DATA_ERRORS_X:
-            AddTabPage(u"xerrorbar"_ustr, TabResId(RID_TAB_CHART_ERROR_X.aLabel), ErrorBarsTabPage::Create,
-                       RID_M  + RID_TAB_CHART_ERROR_X.sIconName);
-            AddTabPage(u"border"_ustr, TabResId(RID_TAB_LINE.aLabel), RID_SVXPAGE_LINE,
-                       RID_M + RID_TAB_LINE.sIconName);
+            AddTabPage(u"xerrorbar"_ustr, TabResId(RID_TAB_CHARTATTR_ERROR_X), ErrorBarsTabPage::Create,
+                       RID_M  + RID_TAB_ERROR_X_IMG);
+            AddTabPage(u"border"_ustr, TabResId(RID_TAB_CHARTATTR_LINE), RID_SVXPAGE_LINE,
+                       RID_M + RID_TAB_LINE_IMG);
             break;
 
         case OBJECTTYPE_DATA_ERRORS_Y:
-            AddTabPage(u"yerrorbar"_ustr, TabResId(RID_TAB_CHART_ERROR_Y.aLabel), ErrorBarsTabPage::Create,
-                       RID_M  + RID_TAB_CHART_ERROR_Y.sIconName);
-            AddTabPage(u"border"_ustr, TabResId(RID_TAB_LINE.aLabel), RID_SVXPAGE_LINE,
-                       RID_M + RID_TAB_LINE.sIconName);
+            AddTabPage(u"yerrorbar"_ustr, TabResId(RID_TAB_CHARTATTR_ERROR_Y), ErrorBarsTabPage::Create,
+                       RID_M  + RID_TAB_ERROR_Y_IMG);
+            AddTabPage(u"border"_ustr, TabResId(RID_TAB_CHARTATTR_LINE), RID_SVXPAGE_LINE,
+                       RID_M + RID_TAB_LINE_IMG);
             break;
 
         case OBJECTTYPE_DATA_ERRORS_Z:
@@ -479,15 +479,15 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
         case OBJECTTYPE_SUBGRID:
         case OBJECTTYPE_DATA_AVERAGE_LINE:
         case OBJECTTYPE_DATA_STOCK_RANGE:
-            AddTabPage(u"border"_ustr, TabResId(RID_TAB_LINE.aLabel), RID_SVXPAGE_LINE,
-                       RID_M + RID_TAB_LINE.sIconName);
+            AddTabPage(u"border"_ustr, TabResId(RID_TAB_CHARTATTR_LINE), RID_SVXPAGE_LINE,
+                       RID_M + RID_TAB_LINE_IMG);
             break;
 
         case OBJECTTYPE_DATA_CURVE:
-            AddTabPage(u"trendline"_ustr, TabResId(RID_TAB_CHART_TREND.aLabel), TrendlineTabPage::Create,
-                       RID_M + RID_TAB_CHART_TREND.sIconName);
-            AddTabPage(u"border"_ustr, TabResId(RID_TAB_LINE.aLabel), RID_SVXPAGE_LINE,
-                       RID_M + RID_TAB_LINE.sIconName);
+            AddTabPage(u"trendline"_ustr, TabResId(RID_TAB_CHARTATTR_TREND), TrendlineTabPage::Create,
+                       RID_M + RID_TAB_TREND_IMG);
+            AddTabPage(u"border"_ustr, TabResId(RID_TAB_CHARTATTR_LINE), RID_SVXPAGE_LINE,
+                       RID_M + RID_TAB_LINE_IMG);
             break;
 
         case OBJECTTYPE_DATA_STOCK_LOSS:
@@ -496,15 +496,15 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
         case OBJECTTYPE_DIAGRAM_FLOOR:
         case OBJECTTYPE_DIAGRAM_WALL:
         case OBJECTTYPE_DIAGRAM:
-            AddTabPage(u"border"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_LINE,
-                       RID_M + RID_TAB_BORDER.sIconName);
-            AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel), RID_SVXPAGE_AREA,
-                       RID_M + RID_TAB_AREA.sIconName);
-            AddTabPage(u"transparent"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel), RID_SVXPAGE_TRANSPARENCE,
-                       RID_M + RID_TAB_TRANSPARENCE.sIconName);
+            AddTabPage(u"border"_ustr, TabResId(RID_TAB_CHARTATTR_BORDER), RID_SVXPAGE_LINE,
+                       RID_M + RID_TAB_BORDER_IMG);
+            AddTabPage(u"area"_ustr, TabResId(RID_TAB_CHARTATTR_AREA), RID_SVXPAGE_AREA,
+                       RID_M + RID_TAB_AREA_IMG);
+            AddTabPage(u"transparent"_ustr, TabResId(RID_TAB_CHARTATTR_TRANSPARENCE), RID_SVXPAGE_TRANSPARENCE,
+                       RID_M + RID_TAB_TRANSPARENCE_IMG);
             if (eType != OBJECTTYPE_DATA_STOCK_LOSS && eType != OBJECTTYPE_DATA_STOCK_GAIN)
-                AddTabPage(u"colorpalette"_ustr, TabResId(RID_TAB_COLORPALETTE.aLabel), ChartColorPaletteTabPage::Create,
-                           RID_M + RID_TAB_COLORPALETTE.sIconName);
+                AddTabPage(u"colorpalette"_ustr, TabResId(RID_TAB_CHARTATTR_COLORPALETTE), ChartColorPaletteTabPage::Create,
+                           RID_M + RID_TAB_COLORPALETTE_IMG);
 
             break;
 
@@ -514,37 +514,37 @@ SchAttribTabDlg::SchAttribTabDlg(weld::Window* pParent,
             // nothing
             break;
         case OBJECTTYPE_DATA_TABLE:
-            AddTabPage(u"datatable"_ustr, TabResId(RID_TAB_CHART_TABLE.aLabel), DataTableTabPage::Create,
-                       RID_M + RID_TAB_CHART_TABLE.sIconName);
-            AddTabPage(u"border"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_LINE,
-                       RID_M + RID_TAB_BORDER.sIconName);
-            AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel), RID_SVXPAGE_AREA,
-                       RID_M + RID_TAB_AREA.sIconName);
-            AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_FONT.aLabel), RID_SVXPAGE_CHAR_NAME,
-                       RID_M + RID_TAB_FONT.sIconName);
-            AddTabPage(u"effects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel), RID_SVXPAGE_CHAR_EFFECTS,
-                       RID_M + RID_TAB_FONTEFFECTS.sIconName);
+            AddTabPage(u"datatable"_ustr, TabResId(RID_TAB_CHARTATTR_TABLE), DataTableTabPage::Create,
+                       RID_M + RID_TAB_TABLE_IMG);
+            AddTabPage(u"border"_ustr, TabResId(RID_TAB_CHARTATTR_BORDER), RID_SVXPAGE_LINE,
+                       RID_M + RID_TAB_BORDER_IMG);
+            AddTabPage(u"area"_ustr, TabResId(RID_TAB_CHARTATTR_AREA), RID_SVXPAGE_AREA,
+                       RID_M + RID_TAB_AREA_IMG);
+            AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_CHARTATTR_FONT), RID_SVXPAGE_CHAR_NAME,
+                       RID_M + RID_TAB_FONT_IMG);
+            AddTabPage(u"effects"_ustr, TabResId(RID_TAB_CHARTATTR_FONTEFFECTS), RID_SVXPAGE_CHAR_EFFECTS,
+                       RID_M + RID_TAB_FONTEFFECTS_IMG);
             break;
         case OBJECTTYPE_DATA_CURVE_EQUATION:
-            AddTabPage(u"border"_ustr, TabResId(RID_TAB_BORDER.aLabel), RID_SVXPAGE_LINE,
-                       RID_M + RID_TAB_BORDER.sIconName);
-            AddTabPage(u"area"_ustr, TabResId(RID_TAB_AREA.aLabel), RID_SVXPAGE_AREA,
-                       RID_M + RID_TAB_AREA.sIconName);
-            AddTabPage(u"transparent"_ustr, TabResId(RID_TAB_TRANSPARENCE.aLabel), RID_SVXPAGE_TRANSPARENCE,
-                       RID_M + RID_TAB_TRANSPARENCE.sIconName);
-            AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_FONT.aLabel), RID_SVXPAGE_CHAR_NAME,
-                       RID_M + RID_TAB_FONT.sIconName);
-            AddTabPage(u"effects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel), RID_SVXPAGE_CHAR_EFFECTS,
-                       RID_M + RID_TAB_FONTEFFECTS.sIconName);
-            AddTabPage(u"numberformat"_ustr, TabResId(RID_TAB_NUMBERS.aLabel), RID_SVXPAGE_NUMBERFORMAT,
-                           RID_M + RID_TAB_NUMBERS.sIconName);
+            AddTabPage(u"border"_ustr, TabResId(RID_TAB_CHARTATTR_BORDER), RID_SVXPAGE_LINE,
+                       RID_M + RID_TAB_BORDER_IMG);
+            AddTabPage(u"area"_ustr, TabResId(RID_TAB_CHARTATTR_AREA), RID_SVXPAGE_AREA,
+                       RID_M + RID_TAB_AREA_IMG);
+            AddTabPage(u"transparent"_ustr, TabResId(RID_TAB_CHARTATTR_TRANSPARENCE), RID_SVXPAGE_TRANSPARENCE,
+                       RID_M + RID_TAB_TRANSPARENCE_IMG);
+            AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_CHARTATTR_FONT), RID_SVXPAGE_CHAR_NAME,
+                       RID_M + RID_TAB_FONT_IMG);
+            AddTabPage(u"effects"_ustr, TabResId(RID_TAB_CHARTATTR_FONTEFFECTS), RID_SVXPAGE_CHAR_EFFECTS,
+                       RID_M + RID_TAB_FONTEFFECTS_IMG);
+            AddTabPage(u"numberformat"_ustr, TabResId(RID_TAB_CHARTATTR_NUMBERS), RID_SVXPAGE_NUMBERFORMAT,
+                           RID_M + RID_TAB_NUMBERS_IMG);
             if (SvtCTLOptions::IsCTLFontEnabled())
             {
                 /*  When rotation is supported for equation text boxes, use
                     SchAlignmentTabPage::Create here. The special
                     SchAlignmentTabPage::CreateWithoutRotation can be deleted. */
-                AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_ALIGNMENT.aLabel), SchAlignmentTabPage::CreateWithoutRotation,
-                           RID_M + RID_TAB_ALIGNMENT.sIconName);
+                AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_CHARTATTR_ALIGNMENT), SchAlignmentTabPage::CreateWithoutRotation,
+                           RID_M + RID_TAB_ALIGNMENT_IMG);
             }
             break;
         default:

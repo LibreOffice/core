@@ -3135,8 +3135,8 @@ std::shared_ptr<SfxDocumentInfoDialog> ScDocShell::CreateDocumentInfoDialog(weld
         ::CreateTabPage ScDocStatPageCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_STAT);
         OSL_ENSURE(ScDocStatPageCreate, "Tabpage create fail!");
         xDlg->AddFontTabPage();
-        xDlg->AddTabPage(u"calcstats"_ustr, TabResId(RID_TAB_STATISTICS.aLabel),
-                         ScDocStatPageCreate, RID_L + RID_TAB_STATISTICS.sIconName);
+        xDlg->AddTabPage(u"calcstats"_ustr, TabResId(RID_TAB_SCDOCINFO_STATISTICS),
+                         ScDocStatPageCreate, RID_L + RID_TAB_STATISTICS_IMG);
     }
     return xDlg;
 }

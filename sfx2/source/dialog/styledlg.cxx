@@ -48,8 +48,8 @@ SfxStyleDialogController::SfxStyleDialogController
     if (!rStyle.HasParentSupport())
         RemoveStandardButton();
 
-    AddTabPage(u"organizer"_ustr, TabResId(RID_TAB_ORGANIZER.aLabel),
-               SfxManageStyleSheetPage::Create, RID_M + RID_TAB_ORGANIZER.sIconName);
+    AddTabPage(u"organizer"_ustr, TabResId(RID_TAB_SFX2STYLE_ORGANIZER),
+               SfxManageStyleSheetPage::Create, RID_M + RID_TAB_ORGANIZER_IMG);
 
     // With new template always set the management page as the current page
     if (rStyle.GetName().isEmpty())

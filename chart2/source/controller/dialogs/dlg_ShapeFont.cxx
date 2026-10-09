@@ -36,12 +36,12 @@ ShapeFontDialog::ShapeFontDialog(weld::Window* pParent, const SfxItemSet* pAttr,
     : SfxTabDialogController(pParent, u"modules/schart/ui/chardialog.ui"_ustr, u"CharDialog"_ustr, pAttr)
     , m_pViewElementListProvider(pViewElementListProvider)
 {
-    AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_FONT.aLabel), RID_SVXPAGE_CHAR_NAME,
-               RID_L + RID_TAB_FONT.sIconName);
-    AddTabPage(u"effects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel), RID_SVXPAGE_CHAR_EFFECTS,
-               RID_L + RID_TAB_FONTEFFECTS.sIconName);
-    AddTabPage(u"position"_ustr, TabResId(RID_TAB_POSITION.aLabel), RID_SVXPAGE_CHAR_POSITION,
-               RID_L + RID_TAB_POSITION.sIconName);
+    AddTabPage(u"fontname"_ustr, TabResId(RID_TAB_CHARTCHAR_FONT), RID_SVXPAGE_CHAR_NAME,
+               RID_L + RID_TAB_FONT_IMG);
+    AddTabPage(u"effects"_ustr, TabResId(RID_TAB_CHARTCHAR_FONTEFFECTS), RID_SVXPAGE_CHAR_EFFECTS,
+               RID_L + RID_TAB_FONTEFFECTS_IMG);
+    AddTabPage(u"position"_ustr, TabResId(RID_TAB_CHARTCHAR_POSITION), RID_SVXPAGE_CHAR_POSITION,
+               RID_L + RID_TAB_POSITION_IMG);
 }
 
 void ShapeFontDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)

@@ -91,12 +91,12 @@ ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSe
     , m_bRefInputting(false)
     , m_xHBox(m_xBuilder->weld_container(u"refinputbox"_ustr))
 {
-    AddTabPage(m_sValuePageId, TabResId(RID_TAB_VALIDITY_CRITERIA.aLabel),
-               ScTPValidationValue::Create, RID_L + RID_TAB_VALIDITY_CRITERIA.sIconName);
-    AddTabPage(u"inputhelp"_ustr, TabResId(RID_TAB_VALIDITY_INPUT.aLabel),
-               ScTPValidationHelp::Create, RID_L + RID_TAB_VALIDITY_INPUT.sIconName);
-    AddTabPage(u"erroralert"_ustr, TabResId(RID_TAB_VALIDITY_ERROR.aLabel),
-               ScTPValidationError::Create, RID_L + RID_TAB_VALIDITY_ERROR.sIconName);
+    AddTabPage(m_sValuePageId, TabResId(RID_TAB_SCVALID_CRITERIA),
+               ScTPValidationValue::Create, RID_L + RID_TAB_VALIDITY_CRITERIA_IMG);
+    AddTabPage(u"inputhelp"_ustr, TabResId(RID_TAB_SCVALID_INPUT),
+               ScTPValidationHelp::Create, RID_L + RID_TAB_VALIDITY_INPUT_IMG);
+    AddTabPage(u"erroralert"_ustr, TabResId(RID_TAB_SCVALID_ERROR),
+               ScTPValidationError::Create, RID_L + RID_TAB_VALIDITY_ERROR_IMG);
 }
 
 void ScValidationDlg::EndDialog(int nResponse)

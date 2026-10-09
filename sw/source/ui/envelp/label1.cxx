@@ -136,20 +136,20 @@ SwLabDlg::SwLabDlg(weld::Window* pParent, const SfxItemSet& rSet,
     if (m_xExampleSet)
         m_xExampleSet->Put(aItem);
 
-    AddTabPage(u"labels"_ustr, TabResId(RID_TAB_LABEL.aLabel), SwLabelPage::Create,
-               RID_L + RID_TAB_LABEL.sIconName);
+    AddTabPage(u"labels"_ustr, TabResId(RID_TAB_SWLABEL_LABEL), SwLabelPage::Create,
+               RID_L + RID_TAB_LABEL_IMG);
     if (!m_bLabel)
     {
-        AddTabPage(u"private"_ustr, TabResId(RID_TAB_PRIVATE.aLabel), SwPrivateDataPage::Create,
-                   RID_L + RID_TAB_PRIVATE.sIconName);
-        AddTabPage(u"business"_ustr, TabResId(RID_TAB_BUSINESS.aLabel), SwBusinessDataPage::Create,
-                   RID_L + RID_TAB_BUSINESS.sIconName);
+        AddTabPage(u"private"_ustr, TabResId(RID_TAB_SWLABEL_PRIVATE), SwPrivateDataPage::Create,
+                   RID_L + RID_TAB_PRIVATE_IMG);
+        AddTabPage(u"business"_ustr, TabResId(RID_TAB_SWLABEL_BUSINESS), SwBusinessDataPage::Create,
+                   RID_L + RID_TAB_BUSINESS_IMG);
         m_xDialog->set_title(m_sBusinessCardDlg);
     }
-    AddTabPage(u"format"_ustr, TabResId(RID_TAB_FORMAT.aLabel), SwLabFormatPage::Create,
-               RID_L + RID_TAB_FORMAT.sIconName);
-    AddTabPage(u"options"_ustr, TabResId(RID_TAB_LABEL_OPTIONS.aLabel), SwLabPrtPage::Create,
-               RID_L + RID_TAB_LABEL_OPTIONS.sIconName);
+    AddTabPage(u"format"_ustr, TabResId(RID_TAB_SWLABEL_FORMAT), SwLabFormatPage::Create,
+               RID_L + RID_TAB_LABELFORMAT_IMG);
+    AddTabPage(u"options"_ustr, TabResId(RID_TAB_SWLABEL_OPTIONS), SwLabPrtPage::Create,
+               RID_L + RID_TAB_LABELOPTIONS_IMG);
     m_sBusinessCardDlg = SwResId(STR_BUSINESS_CARDS);
 }
 

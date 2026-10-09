@@ -36,15 +36,15 @@ ShapeParagraphDialog::ShapeParagraphDialog(weld::Window* pParent,
     const SfxItemSet* pAttr)
     : SfxTabDialogController(pParent, u"modules/schart/ui/paradialog.ui"_ustr, u"ParagraphDialog"_ustr, pAttr)
 {
-    AddTabPage(u"indents"_ustr, TabResId(RID_TAB_INDENTS.aLabel), RID_SVXPAGE_STD_PARAGRAPH,
-               RID_L + RID_TAB_INDENTS.sIconName );
-    AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_ALIGNMENT.aLabel), RID_SVXPAGE_ALIGN_PARAGRAPH,
-               RID_L + RID_TAB_ALIGNMENT.sIconName );
+    AddTabPage(u"indents"_ustr, TabResId(RID_TAB_CHARTPARA_INDENTS), RID_SVXPAGE_STD_PARAGRAPH,
+               RID_L + RID_TAB_INDENTS_IMG );
+    AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_CHARTPARA_ALIGNMENT), RID_SVXPAGE_ALIGN_PARAGRAPH,
+               RID_L + RID_TAB_ALIGNMENT_IMG );
     if (SvtCJKOptions::IsAsianTypographyEnabled())
-        AddTabPage(u"asian"_ustr, TabResId(RID_TAB_ASIANTYPO.aLabel), RID_SVXPAGE_PARA_ASIAN,
-                    RID_L + RID_TAB_ASIANTYPO.sIconName);
-    AddTabPage(u"tabs"_ustr, TabResId(RID_TAB_TABS.aLabel), RID_SVXPAGE_TABULATOR,
-               RID_L + RID_TAB_TABS.sIconName);
+        AddTabPage(u"asian"_ustr, TabResId(RID_TAB_CHARTPARA_ASIANTYPO), RID_SVXPAGE_PARA_ASIAN,
+                    RID_L + RID_TAB_ASIANTYPO_IMG);
+    AddTabPage(u"tabs"_ustr, TabResId(RID_TAB_CHARTPARA_TABS), RID_SVXPAGE_TABULATOR,
+               RID_L + RID_TAB_TABS_IMG);
 }
 
 void ShapeParagraphDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)

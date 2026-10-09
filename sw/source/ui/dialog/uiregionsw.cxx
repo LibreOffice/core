@@ -1397,19 +1397,19 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     const bool bColumn = bWeb ? false : HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode;
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    AddTabPage(u"section"_ustr, TabResId(RID_TAB_SECTION.aLabel), SwInsertSectionTabPage::Create,
-               RID_L + RID_TAB_SECTION.sIconName);
+    AddTabPage(u"section"_ustr, TabResId(RID_TAB_SWSECT_SECTION), SwInsertSectionTabPage::Create,
+               RID_L + RID_TAB_SECTION_IMG);
     if (!bWeb && !bColumn)
-        AddTabPage(u"columns"_ustr, TabResId(RID_TAB_COLUMNS.aLabel), SwColumnPage::Create,
-                   RID_L + RID_TAB_COLUMNS.sIconName);
+        AddTabPage(u"columns"_ustr, TabResId(RID_TAB_SWSECT_COLUMNS), SwColumnPage::Create,
+                   RID_L + RID_TAB_COLUMNS_IMG);
     if (!bWeb)
-        AddTabPage(u"indents"_ustr, TabResId(RID_TAB_INDENTSONLY.aLabel),
-                   SwSectionIndentTabPage::Create, RID_L + RID_TAB_INDENTSONLY.sIconName);
-    AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
-               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), RID_L + RID_TAB_BACKGROUND.sIconName);
+        AddTabPage(u"indents"_ustr, TabResId(RID_TAB_SWSECT_INDENTSONLY),
+                   SwSectionIndentTabPage::Create, RID_L + RID_TAB_INDENTSONLY_IMG);
+    AddTabPage(u"background"_ustr, TabResId(RID_TAB_SWSECT_BACKGROUND),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), RID_L + RID_TAB_BACKGROUND_IMG);
     if (!bWeb)
-        AddTabPage(u"notes"_ustr, TabResId(RID_TAB_FOOTENDNOTES.aLabel),
-                   SwSectionFootnoteEndTabPage::Create, RID_L + RID_TAB_FOOTENDNOTES.sIconName);
+        AddTabPage(u"notes"_ustr, TabResId(RID_TAB_SWSECT_FOOTENDNOTES),
+                   SwSectionFootnoteEndTabPage::Create, RID_L + RID_TAB_FOOTNOTES_IMG);
 
     SetCurPageId(u"section"_ustr);
 }
@@ -2052,16 +2052,16 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     if (!bWeb && !bColumn)
-        AddTabPage(u"columns"_ustr, TabResId(RID_TAB_COLUMNS.aLabel), SwColumnPage::Create,
-                   RID_L + RID_TAB_COLUMNS.sIconName);
+        AddTabPage(u"columns"_ustr, TabResId(RID_TAB_SWSECT_COLUMNS), SwColumnPage::Create,
+                   RID_L + RID_TAB_COLUMNS_IMG);
     if (!bWeb)
-        AddTabPage(u"indents"_ustr, TabResId(RID_TAB_INDENTSONLY.aLabel),
-                   SwSectionIndentTabPage::Create, RID_L + RID_TAB_INDENTSONLY.sIconName);
-    AddTabPage(u"background"_ustr, TabResId(RID_TAB_BACKGROUND.aLabel),
-               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), RID_L + RID_TAB_BACKGROUND.sIconName);
+        AddTabPage(u"indents"_ustr, TabResId(RID_TAB_SWSECT_INDENTSONLY),
+                   SwSectionIndentTabPage::Create, RID_L + RID_TAB_INDENTSONLY_IMG);
+    AddTabPage(u"background"_ustr, TabResId(RID_TAB_SWSECT_BACKGROUND),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG), RID_L + RID_TAB_BACKGROUND_IMG);
     if (!bWeb)
-        AddTabPage(u"notes"_ustr, TabResId(RID_TAB_FOOTENDNOTES.aLabel),
-                   SwSectionFootnoteEndTabPage::Create, RID_L + RID_TAB_FOOTENDNOTES.sIconName);
+        AddTabPage(u"notes"_ustr, TabResId(RID_TAB_SWSECT_FOOTENDNOTES),
+                   SwSectionFootnoteEndTabPage::Create, RID_L + RID_TAB_FOOTNOTES_IMG);
 }
 
 SwSectionPropertyTabDialog::~SwSectionPropertyTabDialog()

@@ -89,20 +89,20 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(weld::Window* pParent, const SfxItemSet* _pSet )
             bActivateOptions = true;
     }
 
-    AddTabPage(u"replace"_ustr, TabResId(RID_TAB_OFA_REPLACE.aLabel), OfaAutocorrReplacePage::Create,
-               RID_L + RID_TAB_OFA_REPLACE.sIconName);
-    AddTabPage(u"exceptions"_ustr, TabResId(RID_TAB_OFA_EXCEPTIONS.aLabel), OfaAutocorrExceptPage::Create,
-               RID_L + RID_TAB_OFA_EXCEPTIONS.sIconName);
-    AddTabPage(u"options"_ustr, TabResId(RID_TAB_OFA_APPLY.aLabel), OfaAutocorrOptionsPage::Create,
-               RID_L + RID_TAB_OFA_APPLY.sIconName);
-    AddTabPage(u"applypage"_ustr, TabResId(RID_TAB_OFA_OPTIONS.aLabel),
-               OfaSwAutoFmtOptionsPage::Create, RID_L + RID_TAB_OFA_OPTIONS.sIconName);
-    AddTabPage(u"localized"_ustr, TabResId(RID_TAB_OFA_LOCALIZED.aLabel), OfaQuoteTabPage::Create,
-               RID_L + RID_TAB_OFA_LOCALIZED.sIconName);
-    AddTabPage(u"wordcompletion"_ustr, TabResId(RID_TAB_OFA_WORDCOMPL.aLabel),
-               OfaAutoCompleteTabPage::Create, RID_L + RID_TAB_OFA_WORDCOMPL.sIconName);
-    AddTabPage(u"smarttags"_ustr, TabResId(RID_TAB_OFA_SMARTTAG.aLabel),
-               OfaSmartTagOptionsTabPage::Create, RID_L + RID_TAB_OFA_SMARTTAG.sIconName);
+    AddTabPage(u"replace"_ustr, TabResId(RID_TAB_CUIOFA_REPLACE), OfaAutocorrReplacePage::Create,
+               RID_L + RID_TAB_OFAREPLACE_IMG);
+    AddTabPage(u"exceptions"_ustr, TabResId(RID_TAB_CUIOFA_EXCEPTIONS), OfaAutocorrExceptPage::Create,
+               RID_L + RID_TAB_OFAEXCEPTIONS_IMG);
+    AddTabPage(u"options"_ustr, TabResId(RID_TAB_CUIOFA_APPLY), OfaAutocorrOptionsPage::Create,
+               RID_L + RID_TAB_OFAAPPLY_IMG);
+    AddTabPage(u"applypage"_ustr, TabResId(RID_TAB_CUIOFA_OPTIONS),
+               OfaSwAutoFmtOptionsPage::Create, RID_L + RID_TAB_OFAOPTIONS_IMG);
+    AddTabPage(u"localized"_ustr, TabResId(RID_TAB_CUIOFA_LOCALIZED), OfaQuoteTabPage::Create,
+               RID_L + RID_TAB_OFALOCALIZED_IMG);
+    AddTabPage(u"wordcompletion"_ustr, TabResId(RID_TAB_CUIOFA_WORDCOMPL),
+               OfaAutoCompleteTabPage::Create, RID_L + RID_TAB_OFAWORDCOMPL_IMG);
+    AddTabPage(u"smarttags"_ustr, TabResId(RID_TAB_CUIOFA_SMARTTAG),
+               OfaSmartTagOptionsTabPage::Create, RID_L + RID_TAB_OFASMARTTAG_IMG);
 
     if (!bShowSWOptions)
     {

@@ -129,12 +129,12 @@ SwEnvDlg::SwEnvDlg(weld::Window* pParent, const SfxItemSet& rSet,
         GetUserButton()->set_label(m_xModify->get_label());
     }
 
-    AddTabPage(u"envelope"_ustr, TabResId(RID_TAB_ENVELOPE.aLabel), SwEnvPage::Create,
-               RID_L + RID_TAB_ENVELOPE.sIconName);
-    AddTabPage(u"format"_ustr, TabResId(RID_TAB_ENV_FORMAT.aLabel), SwEnvFormatPage::Create,
-               RID_L + RID_TAB_ENV_FORMAT.sIconName);
-    AddTabPage(u"printer"_ustr, TabResId(RID_TAB_PRINTER.aLabel), SwEnvPrtPage::Create,
-               RID_L + RID_TAB_PRINTER.sIconName);
+    AddTabPage(u"envelope"_ustr, TabResId(RID_TAB_SWENV_ENVELOPE), SwEnvPage::Create,
+               RID_L + RID_TAB_ENVELOPE_IMG);
+    AddTabPage(u"format"_ustr, TabResId(RID_TAB_SWENV_FORMAT), SwEnvFormatPage::Create,
+               RID_L + RID_TAB_ENVFORMAT_IMG);
+    AddTabPage(u"printer"_ustr, TabResId(RID_TAB_SWENV_PRINTER), SwEnvPrtPage::Create,
+               RID_L + RID_TAB_PRINTER_IMG);
 }
 
 SwEnvDlg::~SwEnvDlg()

@@ -68,15 +68,15 @@ SvxLineTabDialog::SvxLineTabDialog(weld::Window* pParent, const SfxItemSet* pAtt
 
     }
 
-    AddTabPage(u"RID_SVXPAGE_LINE"_ustr, TabResId(RID_TAB_LINE.aLabel),
-               SvxLineTabPage::Create, RID_L + RID_TAB_LINE.sIconName);
+    AddTabPage(u"RID_SVXPAGE_LINE"_ustr, TabResId(RID_TAB_CUILINE_LINE),
+               SvxLineTabPage::Create, RID_L + RID_TAB_LINE_IMG);
     if (bLineOnly)
-        AddTabPage(u"RID_SVXPAGE_SHADOW"_ustr, TabResId(RID_TAB_SHADOW.aLabel),
-                   SvxShadowTabPage::Create, RID_L + RID_TAB_SHADOW.sIconName);
-    AddTabPage(u"RID_SVXPAGE_LINE_DEF"_ustr, TabResId(RID_TAB_LINESTYLE.aLabel),
-               SvxLineDefTabPage::Create, RID_L + RID_TAB_LINESTYLE.sIconName);
-    AddTabPage(u"RID_SVXPAGE_LINEEND_DEF"_ustr, TabResId(RID_TAB_ARROWSTYLE.aLabel),
-               SvxLineEndDefTabPage::Create, RID_L + RID_TAB_ARROWSTYLE.sIconName);
+        AddTabPage(u"RID_SVXPAGE_SHADOW"_ustr, TabResId(RID_TAB_CUILINE_SHADOW),
+                   SvxShadowTabPage::Create, RID_L + RID_TAB_SHADOW_IMG);
+    AddTabPage(u"RID_SVXPAGE_LINE_DEF"_ustr, TabResId(RID_TAB_CUILINE_LINESTYLE),
+               SvxLineDefTabPage::Create, RID_L + RID_TAB_LINESTYLE_IMG);
+    AddTabPage(u"RID_SVXPAGE_LINEEND_DEF"_ustr, TabResId(RID_TAB_CUILINE_ARROWSTYLE),
+               SvxLineEndDefTabPage::Create, RID_L + RID_TAB_ARROWSTYLE_IMG);
 
     weld::Button& rBtnCancel = GetCancelButton();
     rBtnCancel.connect_clicked(LINK(this, SvxLineTabDialog, CancelHdlImpl));

@@ -85,21 +85,21 @@ SvxTransformTabDialog::SvxTransformTabDialog(weld::Window* pParent, const SfxIte
         & (SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page
            | SvxAnchorIds::Fly))
     {
-        AddTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr, TabResId(RID_TAB_POSSIZE.aLabel),
+        AddTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr, TabResId(RID_TAB_CUIPOSSIZE_POSSIZE),
                    SvxSwPosSizeTabPage::Create, SvxSwPosSizeTabPage::GetRanges,
-                   RID_L + RID_TAB_POSSIZE.sIconName);
+                   RID_L + RID_TAB_POSSIZE_IMG);
     }
     else
     {
-        AddTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr, TabResId(RID_TAB_POSSIZE.aLabel),
+        AddTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr, TabResId(RID_TAB_CUIPOSSIZE_POSSIZE),
                    SvxPositionSizeTabPage::Create, SvxPositionSizeTabPage::GetRanges,
-                   RID_L + RID_TAB_POSSIZE.sIconName);
+                   RID_L + RID_TAB_POSSIZE_IMG);
     }
-    AddTabPage(u"RID_SVXPAGE_ANGLE"_ustr, TabResId(RID_TAB_ROTATION.aLabel),
+    AddTabPage(u"RID_SVXPAGE_ANGLE"_ustr, TabResId(RID_TAB_CUIPOSSIZE_ROTATION),
                SvxAngleTabPage::Create, SvxAngleTabPage::GetRanges,
-               RID_L + RID_TAB_ROTATION.sIconName);
-    AddTabPage(u"RID_SVXPAGE_SLANT"_ustr, TabResId(RID_TAB_SLANT.aLabel), SvxSlantTabPage::Create,
-               SvxSlantTabPage::GetRanges, RID_L + RID_TAB_SLANT.sIconName);
+               RID_L + RID_TAB_ROTATION_IMG);
+    AddTabPage(u"RID_SVXPAGE_SLANT"_ustr, TabResId(RID_TAB_CUIPOSSIZE_SLANT), SvxSlantTabPage::Create,
+               SvxSlantTabPage::GetRanges, RID_L + RID_TAB_SLANT_IMG);
 }
 
 void SvxTransformTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)

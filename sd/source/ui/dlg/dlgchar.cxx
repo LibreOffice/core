@@ -40,17 +40,17 @@ SdCharDlg::SdCharDlg(weld::Window* pParent, const SfxItemSet* pAttr,
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-    AddTabPage(u"font"_ustr, TabResId(RID_TAB_FONT.aLabel),
-               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), RID_L + RID_TAB_FONT.sIconName);
-    AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel),
+    AddTabPage(u"font"_ustr, TabResId(RID_TAB_SDCHAR_FONT),
+               pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), RID_L + RID_TAB_FONT_IMG);
+    AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_SDCHAR_FONTEFFECTS),
                pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS),
-               RID_L + RID_TAB_FONTEFFECTS.sIconName);
-    AddTabPage(u"position"_ustr, TabResId(RID_TAB_POSITION.aLabel),
+               RID_L + RID_TAB_FONTEFFECTS_IMG);
+    AddTabPage(u"position"_ustr, TabResId(RID_TAB_SDCHAR_POSITION),
                pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_POSITION),
-               RID_L + RID_TAB_POSITION.sIconName);
-    AddTabPage(u"background"_ustr, TabResId(RID_TAB_HIGHLIGHTING.aLabel),
+               RID_L + RID_TAB_POSITION_IMG);
+    AddTabPage(u"background"_ustr, TabResId(RID_TAB_SDCHAR_HIGHLIGHTING),
                pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BKG),
-               RID_L + RID_TAB_HIGHLIGHTING.sIconName);
+               RID_L + RID_TAB_HIGHLIGHTING_IMG);
 }
 
 void SdCharDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)

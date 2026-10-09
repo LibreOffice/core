@@ -452,21 +452,21 @@ SvxCaptionTabDialog::SvxCaptionTabDialog(weld::Window* pParent, const SdrView* p
         & (SvxAnchorIds::Paragraph | SvxAnchorIds::Character | SvxAnchorIds::Page
            | SvxAnchorIds::Fly))
     {
-        AddTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr, TabResId(RID_TAB_POSSIZE.aLabel),
+        AddTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr, TabResId(RID_TAB_CUICALL_POSSIZE),
                    SvxSwPosSizeTabPage::Create, SvxSwPosSizeTabPage::GetRanges,
-                   RID_L + RID_TAB_POSSIZE.sIconName);
+                   RID_L + RID_TAB_POSSIZE_IMG);
         RemoveTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr);
     }
     else
     {
-        AddTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr, TabResId(RID_TAB_POSSIZE.aLabel),
+        AddTabPage(u"RID_SVXPAGE_POSITION_SIZE"_ustr, TabResId(RID_TAB_CUICALL_POSSIZE),
                    SvxPositionSizeTabPage::Create, SvxPositionSizeTabPage::GetRanges,
-                   RID_L + RID_TAB_POSSIZE.sIconName);
+                   RID_L + RID_TAB_POSSIZE_IMG);
         RemoveTabPage(u"RID_SVXPAGE_SWPOSSIZE"_ustr);
     }
-    AddTabPage(u"RID_SVXPAGE_CAPTION"_ustr, TabResId(RID_TAB_CALLOUT.aLabel),
+    AddTabPage(u"RID_SVXPAGE_CAPTION"_ustr, TabResId(RID_TAB_CUICALL_CALLOUT),
                SvxCaptionTabPage::Create, SvxCaptionTabPage::GetRanges,
-               RID_L + RID_TAB_CALLOUT.sIconName);
+               RID_L + RID_TAB_CALLOUT_IMG);
 }
 
 void SvxCaptionTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)

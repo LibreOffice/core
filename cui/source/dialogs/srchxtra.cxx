@@ -42,26 +42,26 @@
 SvxSearchFormatDialog::SvxSearchFormatDialog(weld::Window* pParent, const SfxItemSet& rSet)
     : SfxTabDialogController(pParent, u"cui/ui/searchformatdialog.ui"_ustr, u"SearchFormatDialog"_ustr, &rSet)
 {
-    AddTabPage(u"font"_ustr, TabResId(RID_TAB_FONT.aLabel), SvxCharNamePage::Create,
-               RID_M + RID_TAB_FONT.sIconName);
-    AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_FONTEFFECTS.aLabel),
-               SvxCharEffectsPage::Create, RID_M + RID_TAB_FONTEFFECTS.sIconName);
-    AddTabPage(u"position"_ustr, TabResId(RID_TAB_POSITION.aLabel), SvxCharPositionPage::Create,
-               RID_M + RID_TAB_POSITION.sIconName);
+    AddTabPage(u"font"_ustr, TabResId(RID_TAB_CUISEARCH_FONT), SvxCharNamePage::Create,
+               RID_M + RID_TAB_FONT_IMG);
+    AddTabPage(u"fonteffects"_ustr, TabResId(RID_TAB_CUISEARCH_FONTEFFECTS),
+               SvxCharEffectsPage::Create, RID_M + RID_TAB_FONTEFFECTS_IMG);
+    AddTabPage(u"position"_ustr, TabResId(RID_TAB_CUISEARCH_POSITION), SvxCharPositionPage::Create,
+               RID_M + RID_TAB_POSITION_IMG);
     if (SvtCJKOptions::IsDoubleLinesEnabled())
-        AddTabPage(u"asianlayout"_ustr, TabResId(RID_TAB_ASIANLAYOUT.aLabel),
-                   SvxCharTwoLinesPage::Create, RID_M + RID_TAB_ASIANLAYOUT.sIconName);
-    AddTabPage(u"indents"_ustr, TabResId(RID_TAB_INDENTS.aLabel), SvxStdParagraphTabPage::Create,
-               RID_M + RID_TAB_INDENTS.sIconName);
-    AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_ALIGNMENT.aLabel), SvxParaAlignTabPage::Create,
-               RID_M + RID_TAB_ALIGNMENT.sIconName);
-    AddTabPage(u"textflow"_ustr, TabResId(RID_TAB_TEXTFLOW.aLabel), SvxExtParagraphTabPage::Create,
-               RID_M + RID_TAB_TEXTFLOW.sIconName);
+        AddTabPage(u"asianlayout"_ustr, TabResId(RID_TAB_CUISEARCH_ASIANLAYOUT),
+                   SvxCharTwoLinesPage::Create, RID_M + RID_TAB_ASIANLAYOUT_IMG);
+    AddTabPage(u"indents"_ustr, TabResId(RID_TAB_CUISEARCH_INDENTS), SvxStdParagraphTabPage::Create,
+               RID_M + RID_TAB_INDENTS_IMG);
+    AddTabPage(u"alignment"_ustr, TabResId(RID_TAB_CUISEARCH_ALIGNMENT), SvxParaAlignTabPage::Create,
+               RID_M + RID_TAB_ALIGNMENT_IMG);
+    AddTabPage(u"textflow"_ustr, TabResId(RID_TAB_CUISEARCH_TEXTFLOW), SvxExtParagraphTabPage::Create,
+               RID_M + RID_TAB_TEXTFLOW_IMG);
     if (SvtCJKOptions::IsAsianTypographyEnabled())
-        AddTabPage(u"asiantypo"_ustr, TabResId(RID_TAB_ASIANTYPO.aLabel), SvxAsianTabPage::Create,
-                   RID_M + RID_TAB_ASIANTYPO.sIconName);
-    AddTabPage(u"background"_ustr, TabResId(RID_TAB_HIGHLIGHTING.aLabel), SvxBkgTabPage::Create,
-               RID_M + RID_TAB_HIGHLIGHTING.sIconName);
+        AddTabPage(u"asiantypo"_ustr, TabResId(RID_TAB_CUISEARCH_ASIANTYPO), SvxAsianTabPage::Create,
+                   RID_M + RID_TAB_ASIANTYPO_IMG);
+    AddTabPage(u"background"_ustr, TabResId(RID_TAB_CUISEARCH_HIGHLIGHTING), SvxBkgTabPage::Create,
+               RID_M + RID_TAB_HIGHLIGHTING_IMG);
 }
 
 SvxSearchFormatDialog::~SvxSearchFormatDialog()
