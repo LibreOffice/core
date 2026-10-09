@@ -1910,7 +1910,9 @@ function showWelcomeSVG() {
 		};
 		this.send = function(msg) {
 			var hadData = this.sendQueue.length > 0;
-			const size = msg instanceof Blob ? msg.size : new TextEncoder().encode(msg).length;
+			// A Blob takes the other binary types as parts too, only their size is read differently.
+			const size = typeof msg === 'string' ? new TextEncoder().encode(msg).length
+				: msg instanceof Blob ? msg.size : msg.byteLength;
 			this.sendQueue.push(
 				'B0x' + this.outSerial.toString(16) + '\n' +
 				'0x' + size.toString(16) + '\n', msg, '\n');
