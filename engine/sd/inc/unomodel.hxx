@@ -456,7 +456,7 @@ public:
 
     /// Names the version space the part versions count in. Two versions stand for the content
     /// of the same model only when they carry the same epoch.
-    sal_Int32 getVectorEpoch() const;
+    SD_DLLPUBLIC sal_Int32 getVectorEpoch() const;
 
     /// Content version of the part that stands for the page, counted up on each object
     /// change. 0 when nothing changed since the document was opened.

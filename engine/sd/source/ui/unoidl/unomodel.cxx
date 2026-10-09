@@ -4992,9 +4992,10 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
             nSinceVersion = aSinceIterator->second.toInt64();
 
         // The epoch names the version space the client's version counts in. A version from
-        // another epoch says nothing about this model, so the client is served the page whole.
+        // another epoch, or one that names no epoch, says nothing about this model, so the client
+        // is served the page whole.
         auto aEpochIterator = aMap.find(u"epoch"_ustr);
-        if (aEpochIterator != aMap.end() && aEpochIterator->second.toInt32() != getVectorEpoch())
+        if (aEpochIterator == aMap.end() || aEpochIterator->second.toInt32() != getVectorEpoch())
             nSinceVersion = -1;
 
         writeVectorPrimitives(rJsonWriter, aPartId, nMode, nSinceVersion, /*bPush*/ false);

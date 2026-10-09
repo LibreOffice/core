@@ -452,7 +452,7 @@ protected:
 
     /// Request for part 0 of the page list nMode names. The raw JSON is
     /// written as a reference. A non-negative nSince asks for a delta against
-    /// that version instead of the full page.
+    /// that version of the document's epoch instead of the full page.
     tools::JsonPath getVectorPrimitives(std::u16string_view sName, sal_Int64 nSince = -1,
                                         sal_Int32 nMode = 0)
     {
@@ -464,7 +464,8 @@ protected:
         OString aCommand = ".uno:VectorPrimitives?partid=" + firstPartId(nMode)
                            + "&mode=" + OString::number(nMode);
         if (nSince >= 0)
-            aCommand = aCommand + "&since=" + OString::number(nSince);
+            aCommand = aCommand + "&since=" + OString::number(nSince)
+                       + "&epoch=" + OString::number(pDoc->getVectorEpoch());
         pDoc->getCommandValues(aJsonWriter,
                                std::string_view(aCommand.getStr(), aCommand.getLength()));
         OString aResult = aJsonWriter.finishAndGetAsOString();
@@ -1185,6 +1186,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartStateFollowsThePage)
     CPPUNIT_ASSERT_EQUAL(size_t(2), oFull->getSize("/objects").value_or(0));
     const sal_Int64 nVersion = oFull->getInt("/version").value_or(-1);
     CPPUNIT_ASSERT(nVersion >= 0);
+    const sal_Int64 nEpoch = oFull->getInt("/epoch").value_or(-1);
 
     // Removing the first slide moves the slide with the rectangle to index 0.
     uno::Reference<drawing::XDrawPage> xFirstSlide(xPages->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -1198,7 +1200,8 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartStateFollowsThePage)
 
     // Nothing on the page changed, so a delta against the version the client holds is empty.
     auto oDelta = requestVectorPrimitives(".uno:VectorPrimitives?partid=" + aPartId
-                                          + "&mode=0&since=" + OString::number(nVersion));
+                                          + "&mode=0&since=" + OString::number(nVersion)
+                                          + "&epoch=" + OString::number(nEpoch));
     CPPUNIT_ASSERT(oDelta.has_value());
     assertNothingMoved(*oDelta, nVersion);
 
@@ -1844,8 +1847,8 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPushAfterAnotherPullStillCarriesTh
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPullAnswersWithWhatTheClientLacks)
 {
     // A client that says which version it holds is answered with the delta from there: a header
-    // alone when nothing changed, the whole page when its version counts in another epoch or is
-    // one this model never served.
+    // alone when nothing changed, the whole page when its version counts in another epoch, names
+    // no epoch, or is one this model never served.
     createBlankDoc();
     addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
 
@@ -1869,8 +1872,15 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPullAnswersWithWhatTheClientLacks)
     assertJsonPath(*oOtherEpoch, "/type", "vectorprimitives");
     CPPUNIT_ASSERT_EQUAL(size_t(2), oOtherEpoch->getSize("/objects").value_or(0));
 
+    // A client whose version names no epoch.
+    auto oNoEpoch = requestVectorPrimitives(aPage + "&since=" + OString::number(nVersion));
+    CPPUNIT_ASSERT(oNoEpoch.has_value());
+    assertJsonPath(*oNoEpoch, "/type", "vectorprimitives");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), oNoEpoch->getSize("/objects").value_or(0));
+
     // A client whose version is one this model never reached.
-    auto oAhead = requestVectorPrimitives(aPage + "&since=" + OString::number(nVersion + 100));
+    auto oAhead = requestVectorPrimitives(aPage + "&since=" + OString::number(nVersion + 100)
+                                          + "&epoch=" + OString::number(nEpoch));
     CPPUNIT_ASSERT(oAhead.has_value());
     assertJsonPath(*oAhead, "/type", "vectorprimitives");
 
