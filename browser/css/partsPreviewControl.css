@@ -220,10 +220,10 @@
 	position: relative;
 	/* Back over the picture: its 10px strip margin, the width of the mark,
 	   and 6px inside the picture's corner. */
-	left: -32px;
+	left: -38px;
 	top: 6px;
-	width: 16px;
-	height: 16px;
+	width: 22px;
+	height: 22px;
 	border-radius: var(--border-radius-s);
 	background: var(--color-background-lighter) url('images/sc_linkedslide.svg') no-repeat center;
 	background-size: 16px 16px;
@@ -460,5 +460,5 @@
 }
 
 .parts-preview-grid .preview-link-badge::before {
-	left: -22px;
+	left: -28px;
 }
