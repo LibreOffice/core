@@ -80,6 +80,20 @@ CPPUNIT_TEST_FIXTURE(Test, testFollowPageTopMargin)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1249), nTopMargin);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testPageMarginsLargerThanPage)
+{
+    // The page is 1000 twips tall, with top and bottom margins of 1080 twips each.
+    loadFromFile(u"page-margins-larger-than-page.rtf");
+    uno::Reference<beans::XPropertySet> xStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    auto nHeight = xStyle->getPropertyValue(u"Height"_ustr).get<sal_Int32>();
+    auto nTopMargin = xStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();
+    auto nBottomMargin = xStyle->getPropertyValue(u"BottomMargin"_ustr).get<sal_Int32>();
+
+    // The margins shrink so that the body keeps a height of its own on the page.
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(0), nHeight - nTopMargin - nBottomMargin);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTableNegativeVerticalPos)
 {
     // Given a document with a table which has a negative vertical position (moves up to overlap
