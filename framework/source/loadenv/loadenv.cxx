@@ -561,7 +561,6 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     if(
         (sURL.isEmpty()                                          ) ||
         (ProtocolCheck::isProtocol(sURL,EProtocol::Uno    )) ||
-        (ProtocolCheck::isProtocol(sURL,EProtocol::Slot   )) ||
         (ProtocolCheck::isProtocol(sURL,EProtocol::Macro  )) ||
         (ProtocolCheck::isProtocol(sURL,EProtocol::Service)) ||
         (ProtocolCheck::isProtocol(sURL,EProtocol::MailTo )) ||

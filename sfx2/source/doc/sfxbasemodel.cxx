@@ -3660,6 +3660,9 @@ static void GetCommandFromSequence( OUString& rCommand, sal_Int32& nIndex, const
     }
 }
 
+// Toolbars stored in OOo 1.x documents name their commands as "slot:N" URLs. N is the numeric id
+// of the command, the SID_ value that the module's .sdi file maps to a ".uno:" name. The numeric
+// form is no longer dispatched, so each one becomes the ".uno:" command of the same id.
 static void ConvertSlotsToCommands( SfxObjectShell const * pDoc, Reference< container::XIndexContainer > const & rToolbarDefinition )
 {
     if ( !pDoc )
@@ -3679,7 +3682,6 @@ static void ConvertSlotsToCommands( SfxObjectShell const * pDoc, Reference< cont
             {
                 const sal_uInt16 nSlot = o3tl::toInt32(aCommand.subView( 5 ));
 
-                // We have to replace the old "slot-Command" with our new ".uno:-Command"
                 const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( nSlot );
                 if ( pSlot )
                 {

@@ -1515,7 +1515,7 @@ bool isMacroCallCommand( std::u16string_view rCommand )
         return false;
     OUString sCommand = rtl::Uri::decode( OUString( rCommand ), rtl_UriDecodeWithCharset,
                                           RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase();
-    if ( !sCommand.startsWith( ".uno:" ) && !sCommand.startsWith( "slot:" ) )
+    if ( !sCommand.startsWith( ".uno:" ) )
     {
         // The shipped key bindings use the findbar command.
         if ( sCommand.startsWith( "vnd.sun.star.findbar:" ) )

@@ -883,7 +883,6 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, bool bIgno
     if (!aUrlName.startsWith("#")
             && !aUrlName.startsWithIgnoreAsciiCase("vnd.sun.star.script:")
             && !aUrlName.startsWithIgnoreAsciiCase("macro:")
-            && !aUrlName.startsWithIgnoreAsciiCase("slot:")
             && !aUrlName.startsWithIgnoreAsciiCase("service:")
             && !aUrlName.startsWithIgnoreAsciiCase(".uno:"))
     {

@@ -41,9 +41,7 @@ namespace framework{
 #define SPECIALPROTOCOL_PRIVATE_STREAM    u"private:stream"
 // indicates creation of empty documents
 #define SPECIALPROTOCOL_PRIVATE_FACTORY   u"private:factory"
-// internal protocol of the sfx project for generic dispatch functionality
-#define SPECIALPROTOCOL_SLOT              u"slot:"
-// external representation of the slot protocol using names instead of IDs
+// generic dispatch of sfx commands by name
 #define SPECIALPROTOCOL_UNO               u".uno:"
 // special sfx protocol to execute macros
 #define SPECIALPROTOCOL_MACRO             u"macro:"
@@ -60,7 +58,6 @@ enum class EProtocol
     PrivateObject,
     PrivateStream,
     PrivateFactory,
-    Slot,
     Uno,
     Macro,
     Service,
@@ -90,9 +87,6 @@ class ProtocolCheck
                 break;
             case EProtocol::PrivateFactory:
                 bRet = o3tl::starts_with(sURL, SPECIALPROTOCOL_PRIVATE_FACTORY);
-                break;
-            case EProtocol::Slot:
-                bRet = o3tl::starts_with(sURL, SPECIALPROTOCOL_SLOT);
                 break;
             case EProtocol::Uno:
                 bRet = o3tl::starts_with(sURL, SPECIALPROTOCOL_UNO);

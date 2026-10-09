@@ -3544,7 +3544,6 @@ namespace
     bool DispatchableCommand(std::u16string_view rName)
     {
         return o3tl::starts_with(rName, u".uno")  ||
-               o3tl::starts_with(rName, u"slot:")  ||
                o3tl::starts_with(rName, u"macro:")  ||
                o3tl::starts_with(rName, u"vnd.sun.star.script");
     }
