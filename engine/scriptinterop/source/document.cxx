@@ -430,6 +430,10 @@ public:
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XRangeElement>> getRangeElements()
         override;
 
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XRangeElement>> getSelectedElements()
+        override
+    { return getRangeElements(); }
+
     OUString getText() override
     {
         OUStringBuffer buf;
@@ -1524,10 +1528,10 @@ public:
         return hundredthMmToPixels(hundredthMm);
     }
 
-    // TODO: siblings within a paragraph would join the paragraph's own child walk once inline
-    // images are placed in reading order alongside their text runs.
+    // TODO: the siblings are the neighbours in the child list of the paragraph, which has the
+    // paragraph's whole Text first and then its inline images, not yet in reading order:
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
-        return {false, {}};
+        return sibling(1);
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
@@ -1535,7 +1539,7 @@ public:
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
-    { return {false, {}}; }
+    { return sibling(-1); }
 
     OUString getText() override {
         auto const title = getAltTitle();
@@ -1580,6 +1584,19 @@ public:
     }
 
 private:
+    css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> sibling(sal_Int32 step) {
+        cpo::uno::Reference<scriptinterop::XContainerElement> const container(
+            parent_, cpo::uno::UNO_QUERY);
+        if (!container.is()) {
+            return {false, {}};
+        }
+        auto const index = container->getChildIndex(this) + step;
+        if (index < 0 || index >= container->getNumChildren()) {
+            return {false, {}};
+        }
+        return {true, container->getChild(index)};
+    }
+
     cpo::uno::Reference<css::beans::XPropertySet> props() {
         if (!content_.is()) {
             throw cpo::uno::RuntimeException(u"InlineImageImpl has no content"_ustr);
@@ -2569,6 +2586,10 @@ public:
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XRangeElement>> getRangeElements()
         override
     { return {new ImageRangeElementImpl(image_)}; }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XRangeElement>> getSelectedElements()
+        override
+    { return getRangeElements(); }
 
     OUString getText() override { return {}; }
 

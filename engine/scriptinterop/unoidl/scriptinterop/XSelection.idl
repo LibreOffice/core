@@ -15,6 +15,9 @@ interface XSelection : XBase
 {
     sequence<XRangeElement> getRangeElements();
 
+    /// @deprecated The same as getRangeElements
+    sequence<XRangeElement> getSelectedElements();
+
     string getText();
 
     void replace([in] string newText);

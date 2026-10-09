@@ -411,6 +411,10 @@ function test() {
     console.assert(selected.getParent().getType() === DocumentApp.ElementType.PARAGRAPH);
     console.assert(selected.getParent().asText().getText() === 'Before');
     console.assert(selected.getParent().getChildIndex(selected) === 1);
+    console.assert(selected.getPreviousSibling().getType() === DocumentApp.ElementType.TEXT);
+    console.assert(selected.getPreviousSibling().asText().getText() === 'Before');
+    console.assert(selected.getNextSibling() === null);
+    console.assert(doc.getSelection().getSelectedElements().length === 1);
     // While there is a selection, there is no cursor:
     console.assert(doc.getCursor() === null);
     // Setting the cursor ends the selection of the image (the cursor itself is not read again here,
