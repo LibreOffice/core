@@ -69,6 +69,9 @@ public:
 
     virtual void        SetMarkStr ( const OUString& aStrMark ) override;
 
+    /// Also takes the selected text as the URL, when that text is a web address and no link is set
+    virtual void        Reset( const SfxItemSet& rItemSet ) override;
+
     virtual void        SetInitFocus() override;
 };
 

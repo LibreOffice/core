@@ -18,6 +18,8 @@
  */
 
 #include <o3tl/string_view.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <hlinettp.hxx>
 #include <hlmarkwn_def.hxx>
@@ -81,6 +83,34 @@ void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
         m_xCbbTarget->set_entry_text(rStrURL);
 
     SetScheme(aStrScheme);
+}
+
+void SvxHyperlinkInternetTp::Reset(const SfxItemSet& rItemSet)
+{
+    SvxHyperlinkTabPageBase::Reset(rItemSet);
+
+    const SvxHyperlinkItem* pHyperlinkItem = rItemSet.GetItem(SID_HYPERLINK_GETLINK);
+    if (!pHyperlinkItem || !pHyperlinkItem->GetURL().isEmpty())
+        return;
+
+    const OUString aText = pHyperlinkItem->GetName().trim();
+    sal_Int32 nBegin = 0;
+    sal_Int32 nEnd = aText.getLength();
+    const OUString aURL = URIHelper::FindFirstURLInText(aText, nBegin, nEnd, SvtSysLocale().GetCharClass());
+    if (aURL.isEmpty() || nBegin != 0 || nEnd != aText.getLength())
+        return;
+
+    // A mail address or a file belongs on another page
+    switch (INetURLObject(aURL).GetProtocol())
+    {
+        case INetProtocol::Http:
+        case INetProtocol::Https:
+        case INetProtocol::Ftp:
+            FillDlgFields(aURL);
+            break;
+        default:
+            break;
+    }
 }
 
 /*************************************************************************

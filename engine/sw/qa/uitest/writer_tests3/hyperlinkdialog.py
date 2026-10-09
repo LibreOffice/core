@@ -105,4 +105,28 @@ class HyperlinkDialog(UITestCase):
                 # i.e. the last used tab in the hyperlink dialog was not remembered
                 self.assertEqual("1", get_state_as_dict(xTab)["CurrPagePos"])
 
+    def test_selected_url_fills_target(self):
+        # The selected text is the expected URL when it is a web address, and only then
+        cases = [
+            ("https://www.collaboraonline.com/", "https://www.collaboraonline.com/"),
+            ("www.libreoffice.org", "http://www.libreoffice.org/"),
+            ("someone@example.org", ""),
+            ("not a link", ""),
+        ]
+        for text, expected in cases:
+            with self.subTest(text=text):
+                with self.ui_test.create_doc_in_start_center("writer") as document:
+                    # Insert rather than type, so autocorrect does not capitalize the text
+                    document.Text.insertString(document.Text.getStart(), text, False)
+                    self.xUITest.executeCommand(".uno:SelectAll")
+
+                    with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog", close_button="cancel") as xDialog:
+                        xtab = xDialog.getChild("tabcontrol")
+                        select_pos(xtab, "0")
+
+                        xtarget = xDialog.getChild("target")
+                        self.assertEqual(get_state_as_dict(xtarget)["Text"], expected)
+                        xindication = xDialog.getChild("indication")
+                        self.assertEqual(get_state_as_dict(xindication)["Text"], text)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
