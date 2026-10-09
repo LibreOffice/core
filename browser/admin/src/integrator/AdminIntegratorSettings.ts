@@ -4299,8 +4299,23 @@ class SettingIframe {
 	private createNextDocumentNote(): HTMLElement {
 		const note = this.createParagraph('');
 		note.className = 'settings-scope-note';
-		this.updateNextDocumentNote();
+		// The note is not in the page yet, so it is written directly: looked
+		// up through the document it would stay an empty, visible box until
+		// the parent next reports a change.
+		this.writeNextDocumentNote(note);
 		return note;
+	}
+
+	private writeNextDocumentNote(note: HTMLElement): void {
+		note.textContent =
+			window.userPresetsApplied === false
+				? _(
+						'This document is using the document settings it was opened with. What you change here applies to the next document you open.',
+					)
+				: _(
+						'This document is open in more than one window, so what you change here applies to the next document you open rather than this one.',
+					);
+		note.hidden = window.documentSettingsLive !== false;
 	}
 
 	/**!
@@ -4311,22 +4326,9 @@ class SettingIframe {
 	 * on saying the opposite of the one beside it.
 	 */
 	private updateNextDocumentNote(): void {
-		const text =
-			window.userPresetsApplied === false
-				? _(
-						'This document is using the document settings it was opened with. What you change here applies to the next document you open.',
-					)
-				: _(
-						'This document is open in more than one window, so what you change here applies to the next document you open rather than this one.',
-					);
-		const hidden = window.documentSettingsLive !== false;
-
 		document
 			.querySelectorAll<HTMLElement>('.settings-scope-note')
-			.forEach((note) => {
-				note.textContent = text;
-				note.hidden = hidden;
-			});
+			.forEach((note) => this.writeNextDocumentNote(note));
 	}
 
 	private createFieldsetFor(

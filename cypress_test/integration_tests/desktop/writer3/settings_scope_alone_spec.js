@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach require expect */
 
 const helper = require('../../common/helper');
 
@@ -25,10 +25,14 @@ describe(['tagdesktop'], 'A user alone gets no settings warning', function() {
 		});
 		cy.cGet('.iframe-settings-wrap').should('be.visible');
 		settingsIframeBody().find('#xcu-editor', { timeout: 30000 }).should('exist');
+		// Every section with a note, not just the first: a section built
+		// after the parent last reported the scope must not keep an empty,
+		// visible note.
 		settingsIframeBody()
 			.find('.settings-scope-note')
 			.should('have.length.at.least', 1)
-			.first()
-			.should('have.prop', 'hidden', true);
+			.each(function(note) {
+				expect(note[0].hidden).to.equal(true);
+			});
 	});
 });
