@@ -51,6 +51,8 @@
 #include <view.hxx>
 #include <ndtxt.hxx>
 #include <numrule.hxx>
+#include <node.hxx>
+#include <swtable.hxx>
 #include <swdtflvr.hxx>
 #include <unotxdoc.hxx>
 #include <UndoManager.hxx>
@@ -1884,9 +1886,45 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableCellChange)
     CPPUNIT_ASSERT_EQUAL(u", edited"_ustr, pRedline->GetText());
 }
 
+namespace
+{
+// Describes each row of the tables in the document: "I" for a row tracked as inserted, "D" for a
+// row tracked as deleted and "-" for any other row. The tables are separated by "|".
+OUString GetTrackedRows(const SwDoc& rDoc)
+{
+    OUStringBuffer aRows;
+    const SwNodes& rNodes = rDoc.GetNodes();
+    for (SwNodeOffset n(0); n < rNodes.Count(); ++n)
+    {
+        const SwTableNode* pTableNode = rNodes[n]->GetTableNode();
+        if (!pTableNode)
+            continue;
+        if (!aRows.isEmpty())
+            aRows.append('|');
+        for (const SwTableLine* pLine : pTableNode->GetTable().GetTabLines())
+        {
+            switch (pLine->GetRedlineType())
+            {
+                case RedlineType::Insert:
+                    aRows.append('I');
+                    break;
+                case RedlineType::Delete:
+                    aRows.append('D');
+                    break;
+                default:
+                    aRows.append('-');
+                    break;
+            }
+        }
+        n = pTableNode->EndOfSectionIndex();
+    }
+    return aRows.makeStringAndClear();
+}
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableRowAdded)
 {
-    // Given a document whose table has one more row than in the old version:
+    // Given a document whose table has one more row at the end than in the old version:
     createSwDoc("compare-table-new-row.fodt");
 
     // When comparing with the old version:
@@ -1896,10 +1934,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableRowAdded)
     };
     dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
 
-    // Then tables of a different shape are still tracked as a whole-table delete and insert:
-    SwDoc* pDoc = getSwDoc();
-    const SwRedlineTable& rRedlines = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
-    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rRedlines.size());
+    // Then only the added row is tracked, as an inserted row:
+    // Without the fix in place, this test would have failed with:
+    // - Expected: --I
+    // - Actual  : III|DD
+    // i.e. the whole new table was tracked as inserted and a copy of the old one as deleted.
+    CPPUNIT_ASSERT_EQUAL(u"--I"_ustr, GetTrackedRows(*getSwDoc()));
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableCellReplacedText)
@@ -2385,6 +2425,293 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableFieldValueChanged)
     // - Actual  : 0
     // i.e. the changed table had no tracked change at all.
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rRedlines.size());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableRowDeleted)
+{
+    // Given a document whose 3-row table lost its middle row compared to the old version:
+    createSwDoc("compare-table-row-deleted-new.fodt");
+    SwDoc* pDoc = getSwDoc();
+    const cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr,
+                                      createFileURL(u"compare-table-row-deleted-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+
+    // When comparing with the old version:
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then the old middle row is back in the table, tracked as a deleted row:
+    // Without the fix in place, this test would have failed with:
+    // - Expected: -D-
+    // - Actual  : II|DDD
+    // i.e. the whole new table was tracked as inserted and a copy of the old one as deleted.
+    CPPUNIT_ASSERT_EQUAL(u"-D-"_ustr, GetTrackedRows(*pDoc));
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(
+        xTablesSupplier->getTextTables()->getByName(u"Table1"_ustr), uno::UNO_QUERY);
+    uno::Reference<text::XText> xCell(xTable->getCellByName(u"B2"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"B2"_ustr, xCell->getString());
+
+    // And accepting the change removes the row:
+    dispatchCommand(mxComponent, u".uno:AcceptAllTrackedChanges"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"--"_ustr, GetTrackedRows(*pDoc));
+
+    // And rejecting the change keeps the row as an ordinary row:
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:RejectAllTrackedChanges"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"---"_ustr, GetTrackedRows(*pDoc));
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
+
+    // And undoing the compare gives back the table of the document as loaded:
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"--"_ustr, GetTrackedRows(*pDoc));
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableEmptyRowAdded)
+{
+    // Given a document whose table has an extra empty row in the middle compared to the old
+    // version:
+    createSwDoc("compare-table-empty-row-new.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr, createFileURL(u"compare-table-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then the empty row is tracked as an inserted row:
+    // Without the fix in place, this test would have failed with:
+    // - Expected: -I-
+    // - Actual  : III|DD
+    CPPUNIT_ASSERT_EQUAL(u"-I-"_ustr, GetTrackedRows(*pDoc));
+
+    // And undoing the compare leaves the cells of that row empty:
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(
+        xTablesSupplier->getTextTables()->getByName(u"Table1"_ustr), uno::UNO_QUERY);
+    uno::Reference<text::XText> xCell(xTable->getCellByName(u"A2"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(), xCell->getString());
+    CPPUNIT_ASSERT_EQUAL(u"---"_ustr, GetTrackedRows(*pDoc));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableColumnAdded)
+{
+    // Given a document whose table has one more column than in the old version:
+    createSwDoc("compare-table-column-new.fodt");
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr, createFileURL(u"compare-table-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then the change is tracked as a whole-table delete and insert:
+    CPPUNIT_ASSERT_EQUAL(u"II|DD"_ustr, GetTrackedRows(*getSwDoc()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableRowNestedTableAtCellStart)
+{
+    // Given a document whose table lost a row compared to the old version, where a cell of that
+    // row starts with a nested table:
+    createSwDoc("compare-table-row-deleted-new.fodt");
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr,
+                                      createFileURL(u"compare-table-nested-at-cell-start-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // When accepting the changes:
+    dispatchCommand(mxComponent, u".uno:AcceptAllTrackedChanges"_ustr, {});
+
+    // Then the table has the rows of the new version only:
+    CPPUNIT_ASSERT_EQUAL(u"--"_ustr, GetTrackedRows(*getSwDoc()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTwoTablesRowAdded)
+{
+    // Given a document where the first of two tables was removed and the second one gained a row,
+    // compared to the old version:
+    createSwDoc("compare-table-two-tables-new.fodt");
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr,
+                                      createFileURL(u"compare-table-two-tables-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then the first table is tracked as deleted, and the second one only gained a row:
+    // Without the fix in place, this test would have failed with:
+    // - Expected: DD|---I
+    // - Actual  : IIII|DD|DDD
+    // i.e. the whole new table was tracked as inserted and a copy of each old table as deleted.
+    CPPUNIT_ASSERT_EQUAL(u"DD|---I"_ustr, GetTrackedRows(*getSwDoc()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableAllCellsReworded)
+{
+    // Given a document with a 2x2 table where the text of every cell was reworded a little compared
+    // to the old version:
+    createSwDoc("compare-table-reworded-new.fodt");
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr,
+                                      createFileURL(u"compare-table-reworded-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then the changes are tracked inside the cells of one table:
+    CPPUNIT_ASSERT_EQUAL(u"--"_ustr, GetTrackedRows(*getSwDoc()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableRowReplacedAmongEditedRows)
+{
+    // Given a document with a 4x3 table where the second row was removed, a new row was added at
+    // the end, and one cell of every other row was edited, compared to the old version:
+    createSwDoc("compare-table-row-replaced-new.fodt");
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr,
+                                      createFileURL(u"compare-table-row-replaced-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then the removed row is tracked as deleted and the new row as inserted:
+    // Without the fix in place, this test would have failed with:
+    // - Expected: -D--I
+    // - Actual  : ----
+    // i.e. the rows were paired by position, and the cells of the last three rows were compared
+    // with the wrong rows.
+    CPPUNIT_ASSERT_EQUAL(u"-D--I"_ustr, GetTrackedRows(*getSwDoc()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableRowsWithEmptyColumn)
+{
+    // Given a document with a 2-column table where the second column is empty, and where the
+    // first two rows of the old version were replaced by one unrelated row:
+    createSwDoc("compare-table-empty-column-new.fodt");
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr,
+                                      createFileURL(u"compare-table-empty-column-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then the new row is tracked as inserted and both old rows as deleted:
+    // Without the fix in place, this test would have failed with:
+    // - Expected: IDD-
+    // - Actual  : -D-
+    // i.e. the new row was paired with an old row only because both have an empty cell.
+    CPPUNIT_ASSERT_EQUAL(u"IDD-"_ustr, GetTrackedRows(*getSwDoc()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableLastRowsDeleted)
+{
+    // Given a document whose 4-row table lost its last two rows compared to the old version:
+    createSwDoc("compare-table-last-rows-deleted-new.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr,
+                                      createFileURL(u"compare-table-last-rows-deleted-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then both old rows are back at the end of the table, in their old order, tracked as deleted
+    // rows:
+    CPPUNIT_ASSERT_EQUAL(u"--DD"_ustr, GetTrackedRows(*pDoc));
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(
+        xTablesSupplier->getTextTables()->getByName(u"Table1"_ustr), uno::UNO_QUERY);
+    uno::Reference<text::XText> xCell(xTable->getCellByName(u"A3"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"A3"_ustr, xCell->getString());
+    xCell.set(xTable->getCellByName(u"B4"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"B4"_ustr, xCell->getString());
+
+    // And accepting the changes removes the rows:
+    dispatchCommand(mxComponent, u".uno:AcceptAllTrackedChanges"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"--"_ustr, GetTrackedRows(*pDoc));
+
+    // And undoing the compare gives back the table of the document as loaded:
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"--"_ustr, GetTrackedRows(*pDoc));
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableLastRowsReplaced)
+{
+    // Given a document whose 4-row table has its last three rows replaced by one unrelated row
+    // compared to the old version:
+    createSwDoc("compare-table-last-rows-replaced-new.fodt");
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr,
+                                      createFileURL(u"compare-table-last-rows-deleted-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then the new row is tracked as inserted, and the old rows follow it, in their old order,
+    // tracked as deleted rows:
+    CPPUNIT_ASSERT_EQUAL(u"-IDDD"_ustr, GetTrackedRows(*getSwDoc()));
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(
+        xTablesSupplier->getTextTables()->getByName(u"Table1"_ustr), uno::UNO_QUERY);
+    uno::Reference<text::XText> xCell(xTable->getCellByName(u"A3"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"A2"_ustr, xCell->getString());
+    xCell.set(xTable->getCellByName(u"A5"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"A4"_ustr, xCell->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTwoTablesLastRowsDeleted)
+{
+    // Given a document with two tables where the first one lost its last two rows and the second
+    // one lost its last row, compared to the old version:
+    createSwDoc("compare-table-two-tables-rows-deleted-new.fodt");
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(
+            u"URL"_ustr, createFileURL(u"compare-table-two-tables-rows-deleted-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then each table gets its own old rows back at its end, in their old order, tracked as deleted
+    // rows:
+    CPPUNIT_ASSERT_EQUAL(u"--DD|--D"_ustr, GetTrackedRows(*getSwDoc()));
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(
+        xTablesSupplier->getTextTables()->getByName(u"Table1"_ustr), uno::UNO_QUERY);
+    uno::Reference<text::XText> xCell(xTable->getCellByName(u"A3"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Pears"_ustr, xCell->getString());
+    xCell.set(xTable->getCellByName(u"A4"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Plums"_ustr, xCell->getString());
+    xTable.set(xTablesSupplier->getTextTables()->getByName(u"Table2"_ustr), uno::UNO_QUERY);
+    xCell.set(xTable->getCellByName(u"A3"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Rome"_ustr, xCell->getString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

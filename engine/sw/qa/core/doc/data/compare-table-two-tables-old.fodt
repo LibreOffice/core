@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p>Before</text:p>
+   <table:table table:name="Table1">
+    <table:table-column table:number-columns-repeated="2"/>
+    <table:table-row>
+     <table:table-cell><text:p>Name</text:p></table:table-cell>
+     <table:table-cell><text:p>Price</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell><text:p>Apples</text:p></table:table-cell>
+     <table:table-cell><text:p>1</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p>Between</text:p>
+   <table:table table:name="Table2">
+    <table:table-column table:number-columns-repeated="2"/>
+    <table:table-row>
+     <table:table-cell><text:p>City</text:p></table:table-cell>
+     <table:table-cell><text:p>Country</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell><text:p>Paris</text:p></table:table-cell>
+     <table:table-cell><text:p>France</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell><text:p>Rome</text:p></table:table-cell>
+     <table:table-cell><text:p>Italy</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p>After</text:p>
+  </office:text>
+ </office:body>
+</office:document>

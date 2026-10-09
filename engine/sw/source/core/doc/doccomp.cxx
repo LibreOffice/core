@@ -20,9 +20,11 @@
 #include <sal/config.h>
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
+#include <i18nutil/unicode.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -52,6 +54,8 @@
 #include <hintids.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <officecfg/Office/Writer.hxx>
+#include <swcrsr.hxx>
+#include <editeng/prntitem.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -61,6 +65,7 @@
 #include <cstddef>
 #include <memory>
 #include <type_traits>
+#include <unordered_map>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -141,6 +146,18 @@ private:
                               sal_Int32 nStart, sal_Int32 nEnd );
     void AppendFormatRedlines( std::size_t nAuthor, const DateTime& rTimeStamp );
 
+    // A row that is in only one of two compared tables. pSrcLine is null for a row of the new
+    // table, which is tracked as inserted. Otherwise pSrcLine is a row of the old table, which is
+    // tracked as deleted, and its copy goes in front of the row pDstLine of the new table, or
+    // behind it when bBehind is true.
+    struct TrackedRow
+    {
+        const SwTableLine* pDstLine;
+        const SwTableLine* pSrcLine;
+        bool bBehind;
+    };
+    vector<TrackedRow> m_aTrackedRows;
+
     // Truncate beginning and end and add all others to the LinesArray
     void CheckRanges( CompareData& );
 
@@ -176,10 +193,19 @@ public:
     void CheckForChangesInLine( const CompareData& rData,
                                     sal_uLong nStt, sal_uLong nEnd,
                                     sal_uLong nThisStt, sal_uLong nThisEnd );
-    // Compares two tables cell by cell. Returns false if the tables have different shapes, if a
-    // cell of either table ends with a nested table, or if no cell has a difference.
+    // Compares two tables cell by cell. Returns false if the tables neither have the same shape nor
+    // have simple rows, if a cell of either table ends with a nested table, or if no cell and no
+    // row has a difference.
     bool CompareTableCells( const CompareData& rData, const SwTableNode& rDstTable,
                             const SwTableNode& rSrcTable );
+    // Pairs the rows of two tables with simple rows, compares the cells of paired rows, and
+    // records the other rows as inserted or deleted. Returns false if no row and no cell has a
+    // difference.
+    bool CompareTableRows( const CompareData& rData, const SwTableNode& rDstTable,
+                           const SwTableNode& rSrcTable );
+    // Compares the content of one cell with the content of the old cell, its formatting included.
+    // Returns whether the cells differ.
+    bool CompareCells( const CompareData& rData, const SwNode& rDstCell, const SwNode& rSrcCell );
 
     // Set non-ambiguous index for a line. Same lines have the same index, even in the other CompareData!
     void SetIndex( size_t nLine, size_t nIndex );
@@ -207,8 +233,15 @@ private:
     void KeepRangeInSection( SwPaM& rPaM );
     // Adjusts the ranges of this comparison and of its cells before they become redlines.
     void PrepareRedlineRanges();
-    // Adds the ranges of this comparison and of its cells.
-    void CollectRedlineRanges( vector<SwPaM*>& rDeletes, vector<SwPaM*>& rInserts );
+    // Adds the ranges and the tracked rows of this comparison and of its cells.
+    void CollectRedlineRanges( vector<SwPaM*>& rDeletes, vector<SwPaM*>& rInserts,
+                               vector<const TrackedRow*>& rRows );
+    // Copies an old row into the new table and tracks it as a deleted row. Returns the copy.
+    const SwTableLine* TrackDeletedRow( const SwTableLine& rAnchor, bool bBehind,
+                                        const SwTableLine& rSrcLine,
+                                        const SwRedlineData& rDeleteData );
+    // Tracks a row of the new table as an inserted row, and adds the ranges of its cells.
+    void TrackInsertedRow( const SwTableLine& rLine, vector<std::unique_ptr<SwPaM>>& rRanges );
 };
 
 class CompareMainText : public CompareData
@@ -319,6 +352,9 @@ public:
     virtual ~ArrayComparator() {}
 };
 
+// The texts of the paragraphs of a table that are not empty, in sorted order, for each table.
+typedef std::unordered_map<const SwTableNode*, vector<OUString>> TableTexts;
+
 /// Consider two lines equal if similar enough (e.g. look like different
 /// versions of the same paragraph)
 class LineArrayComparator : public ArrayComparator
@@ -327,6 +363,9 @@ private:
     int m_nLen1, m_nLen2;
     const CompareData &m_rData1, &m_rData2;
     int m_nFirst1, m_nFirst2;
+    // The texts of the tables that were compared so far. Each table is read once, although it is
+    // compared with many others.
+    mutable TableTexts m_aTableTexts;
 
 public:
     LineArrayComparator( const CompareData &rD1, const CompareData &rD2,
@@ -335,6 +374,39 @@ public:
     virtual bool Compare( int nIdx1, int nIdx2 ) const override;
     virtual int GetLen1() const override { return m_nLen1; }
     virtual int GetLen2() const override { return m_nLen2; }
+};
+
+// The text of each cell of a row, and the words of each cell in sorted order.
+struct RowTexts
+{
+    vector<OUString> aCells;
+    vector<vector<OUString>> aCellWords;
+};
+
+/// Consider two rows of tables with simple rows equal if all their cells have the same text, or
+/// similar if at least half of the cells with words in either row have the same text or at least
+/// half of their words are shared
+class RowArrayComparator : public ArrayComparator
+{
+private:
+    const vector<RowTexts> &m_rRows1, &m_rRows2;
+    int m_nFirst1, m_nLen1, m_nFirst2, m_nLen2;
+    bool m_bSimilar;
+
+public:
+    RowArrayComparator( const vector<RowTexts>& rRows1, int nStt1, int nEnd1,
+                        const vector<RowTexts>& rRows2, int nStt2, int nEnd2,
+                        bool bSimilar )
+        : m_rRows1( rRows1 ), m_rRows2( rRows2 )
+        , m_nFirst1( nStt1 ), m_nLen1( nEnd1 - nStt1 )
+        , m_nFirst2( nStt2 ), m_nLen2( nEnd2 - nStt2 )
+        , m_bSimilar( bSimilar )
+    {
+    }
+
+    bool Compare( int nIdx1, int nIdx2 ) const override;
+    int GetLen1() const override { return m_nLen1; }
+    int GetLen2() const override { return m_nLen2; }
 };
 
 class WordArrayComparator : public ArrayComparator
@@ -1184,6 +1256,12 @@ namespace
         return rLast.IsEndNode() && rLast.StartOfSectionNode()->IsTableNode();
     }
 
+    // Whether the content of the cell that starts at rCellStart starts with a nested table.
+    bool CellStartsWithTable(const SwNode& rCellStart)
+    {
+        return rCellStart.GetNodes()[rCellStart.GetIndex() + 1]->IsTableNode();
+    }
+
     // Same number of rows, the same number of cells in each row, and each pair of cells is split
     // into the same rows and spans the same number of rows, down to the cells with content.
     bool HasSameLinesShape(const SwTableLines& rLines1, const SwTableLines& rLines2)
@@ -1211,6 +1289,183 @@ namespace
     {
         return HasSameLinesShape(rTableNode1.GetTable().GetTabLines(),
                                  rTableNode2.GetTable().GetTabLines());
+    }
+
+    // Every row of both tables has the same number of cells, and no cell is split or spans rows.
+    // The rows of such tables pair up one by one, whatever the number of rows.
+    bool HasSimpleRows(const SwTableNode& rTableNode1, const SwTableNode& rTableNode2)
+    {
+        const SwTableLines& rLines1 = rTableNode1.GetTable().GetTabLines();
+        const SwTableLines& rLines2 = rTableNode2.GetTable().GetTabLines();
+        if (rLines1.empty() || rLines2.empty())
+            return false;
+        const size_t nBoxes = rLines1[0]->GetTabBoxes().size();
+        for (const SwTableLines* pLines : { &rLines1, &rLines2 })
+        {
+            for (const SwTableLine* pLine : *pLines)
+            {
+                const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
+                if (rBoxes.size() != nBoxes
+                    || std::any_of(rBoxes.begin(), rBoxes.end(), [](const SwTableBox* pBox) {
+                           return !pBox->GetSttNd() || pBox->getRowSpan() != 1;
+                       }))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // Whether the cells of the two tables can be compared one by one, instead of the tables as a
+    // whole.
+    bool CanCompareTableCells(const SwTableNode& rTableNode1, const SwTableNode& rTableNode2)
+    {
+        return HasSimpleRows(rTableNode1, rTableNode2)
+               || HasSameTableShape(rTableNode1, rTableNode2);
+    }
+
+    // The texts of the paragraphs of a table that are not empty, in sorted order. They are read
+    // from the table the first time, and from rTableTexts after that.
+    const vector<OUString>& GetSortedParagraphTexts(const SwTableNode& rTableNode,
+                                                    TableTexts& rTableTexts)
+    {
+        auto [aEntry, bInserted] = rTableTexts.try_emplace(&rTableNode);
+        vector<OUString>& rTexts = aEntry->second;
+        if (!bInserted)
+            return rTexts;
+        const SwNodes& rNodes = rTableNode.GetNodes();
+        for (SwNodeOffset n = rTableNode.GetIndex() + 1; n < rTableNode.EndOfSectionIndex(); ++n)
+        {
+            const SwTextNode* pTextNode = rNodes[n]->GetTextNode();
+            if (pTextNode && !pTextNode->GetText().isEmpty())
+                rTexts.push_back(pTextNode->GetText());
+        }
+        std::sort(rTexts.begin(), rTexts.end());
+        return rTexts;
+    }
+
+    // Whether two tables look like two versions of one table. Two tables of the same shape always
+    // do. Otherwise their cells can be compared one by one, and the paragraphs that they share make
+    // up at least half of the paragraphs of the smaller one. A table without any text only looks
+    // like another table without any text.
+    bool IsSimilarTable(const SwTableNode& rTableNode1, const SwTableNode& rTableNode2,
+                        TableTexts& rTableTexts)
+    {
+        if (HasSameTableShape(rTableNode1, rTableNode2))
+            return true;
+        if (!CanCompareTableCells(rTableNode1, rTableNode2))
+            return false;
+        const vector<OUString>& rTexts1 = GetSortedParagraphTexts(rTableNode1, rTableTexts);
+        const vector<OUString>& rTexts2 = GetSortedParagraphTexts(rTableNode2, rTableTexts);
+        if (rTexts1.empty() || rTexts2.empty())
+            return rTexts1.empty() && rTexts2.empty();
+        vector<OUString> aCommon;
+        std::set_intersection(rTexts1.begin(), rTexts1.end(), rTexts2.begin(), rTexts2.end(),
+                              std::back_inserter(aCommon));
+        return 2 * aCommon.size() >= std::min(rTexts1.size(), rTexts2.size());
+    }
+
+    // The words of a text, split at white space, in sorted order.
+    vector<OUString> GetSortedWords(std::u16string_view aText)
+    {
+        vector<OUString> aWords;
+        size_t nStart = 0;
+        for (size_t i = 0; i <= aText.size(); ++i)
+        {
+            if (i < aText.size() && !unicode::isWhiteSpace(aText[i]))
+                continue;
+            if (i > nStart)
+                aWords.emplace_back(aText.substr(nStart, i - nStart));
+            nStart = i + 1;
+        }
+        std::sort(aWords.begin(), aWords.end());
+        return aWords;
+    }
+
+    // The number of words that two sorted lists of words have in common, counting a repeated word
+    // as often as it is in both lists.
+    size_t CountCommonWords(const vector<OUString>& rWords1, const vector<OUString>& rWords2)
+    {
+        size_t nCommon = 0;
+        auto aWord1 = rWords1.begin();
+        auto aWord2 = rWords2.begin();
+        while (aWord1 != rWords1.end() && aWord2 != rWords2.end())
+        {
+            if (*aWord1 < *aWord2)
+                ++aWord1;
+            else if (*aWord2 < *aWord1)
+                ++aWord2;
+            else
+            {
+                ++nCommon;
+                ++aWord1;
+                ++aWord2;
+            }
+        }
+        return nCommon;
+    }
+
+    // The text of each cell of a row, with a newline after each paragraph, and its words.
+    RowTexts GetRowTexts(const SwTableLine& rLine)
+    {
+        RowTexts aRow;
+        vector<OUString>& aTexts = aRow.aCells;
+        for (const SwTableBox* pBox : rLine.GetTabBoxes())
+        {
+            const SwNode& rCellStart = *pBox->GetSttNd();
+            const SwNodes& rNodes = rCellStart.GetNodes();
+            OUStringBuffer aText;
+            for (SwNodeOffset n = rCellStart.GetIndex() + 1; n < rCellStart.EndOfSectionIndex();
+                 ++n)
+            {
+                if (const SwTextNode* pTextNode = rNodes[n]->GetTextNode())
+                    aText.append(pTextNode->GetText() + "\n");
+            }
+            aTexts.push_back(aText.makeStringAndClear());
+            aRow.aCellWords.push_back(GetSortedWords(aTexts.back()));
+        }
+        return aRow;
+    }
+
+    // Pairs rows in [nStt1, nEnd1) of rRows1 with rows in [nStt2, nEnd2) of rRows2, keeping their
+    // order. Each pair holds the two row numbers.
+    vector<std::pair<int, int>> MatchRows(const vector<RowTexts>& rRows1, int nStt1, int nEnd1,
+                                          const vector<RowTexts>& rRows2, int nStt2, int nEnd2,
+                                          bool bSimilar)
+    {
+        vector<std::pair<int, int>> aPairs;
+        RowArrayComparator aCmp(rRows1, nStt1, nEnd1, rRows2, nStt2, nEnd2, bSimilar);
+        const int nMinLen = std::min(aCmp.GetLen1(), aCmp.GetLen2());
+        if (nMinLen == 0)
+            return aPairs;
+        std::unique_ptr<int[]> pLcs1(new int[nMinLen]);
+        std::unique_ptr<int[]> pLcs2(new int[nMinLen]);
+        FastCommonSubseq aSubseq(aCmp);
+        const int nLcsLen = aSubseq.Find(pLcs1.get(), pLcs2.get());
+        for (int i = 0; i < nLcsLen; ++i)
+            aPairs.emplace_back(nStt1 + pLcs1[i], nStt2 + pLcs2[i]);
+        return aPairs;
+    }
+
+    // Sets the property of a row that marks it as inserted or deleted with its tracked content.
+    void SetRowTracked(SwDoc& rDoc, const SwTableLine& rLine, bool bInserted)
+    {
+        SwCursor aCursor(SwPosition(*rLine.GetTabBoxes()[0]->GetSttNd()), nullptr);
+        rDoc.SetRowNotTracked(aCursor, SvxPrintItem(RES_PRINT, false), /*bAll=*/false,
+                              /*bIns=*/bInserted);
+    }
+
+    // The whole text of a cell, from the start of its first paragraph to the end of its last one.
+    std::unique_ptr<SwPaM> GetCellTextRange(const SwTableBox& rBox)
+    {
+        const SwNode& rCellStart = *rBox.GetSttNd();
+        const SwNodes& rNodes = rCellStart.GetNodes();
+        const SwNode& rLast = *rNodes[rCellStart.EndOfSectionIndex() - 1];
+        auto pRange = std::make_unique<SwPaM>(*rNodes[rCellStart.GetIndex() + 1], rLast);
+        if (const SwContentNode* pLastContent = rLast.GetContentNode())
+            pRange->GetPoint()->SetContent(pLastContent->Len());
+        return pRange;
     }
 }
 
@@ -2114,9 +2369,6 @@ void CompareData::AppendFormatRedlines( std::size_t nAuthor, const DateTime& rTi
 bool CompareData::CompareTableCells( const CompareData& rData, const SwTableNode& rDstTable,
                                      const SwTableNode& rSrcTable )
 {
-    if (!HasSameTableShape(rDstTable, rSrcTable))
-        return false;
-
     // Collect all cells first, because comparing a cell can add nodes to the destination table.
     const std::vector<const SwNode*> aDstCells = GetCellStartNodes(rDstTable);
     const std::vector<const SwNode*> aSrcCells = GetCellStartNodes(rSrcTable);
@@ -2130,23 +2382,111 @@ bool CompareData::CompareTableCells( const CompareData& rData, const SwTableNode
     {
         return false;
     }
+
+    // Matching the rows also keeps the other rows paired when one row was removed and another
+    // added. A row counts as tracked when the redlines in its own cells cover all its text, so
+    // the rows of a table where a cell starts with a nested table are not matched.
+    const auto aStartsWithTable = [](const SwNode* pCell) { return CellStartsWithTable(*pCell); };
+    if (HasSimpleRows(rDstTable, rSrcTable)
+        && std::none_of(aDstCells.begin(), aDstCells.end(), aStartsWithTable)
+        && std::none_of(aSrcCells.begin(), aSrcCells.end(), aStartsWithTable))
+    {
+        return CompareTableRows(rData, rDstTable, rSrcTable);
+    }
+    if (!HasSameTableShape(rDstTable, rSrcTable))
+        return false;
+
     // Two tables differ also when only the displayed value of a field differs, which the
     // comparison of the cells does not see. Such tables are compared as a whole.
     bool bCellDiffers = false;
     for (size_t i = 0; i < aDstCells.size(); ++i)
-    {
-        CompareSectionText aSrcCell(rData.m_rDoc, *aSrcCells[i]);
-        auto pDstCell = std::make_unique<CompareSectionText>(m_rDoc, *aDstCells[i]);
-        pDstCell->CompareLines(aSrcCell);
-        sal_uLong nChanges = pDstCell->ShowDiffs(aSrcCell);
-        nChanges += pDstCell->CompareFormatting();
-        if (nChanges)
-        {
-            m_aCellComparisons.push_back(std::move(pDstCell));
-            bCellDiffers = true;
-        }
-    }
+        bCellDiffers |= CompareCells(rData, *aDstCells[i], *aSrcCells[i]);
     return bCellDiffers;
+}
+
+bool CompareData::CompareTableRows( const CompareData& rData, const SwTableNode& rDstTable,
+                                    const SwTableNode& rSrcTable )
+{
+    const SwTableLines& rDstLines = rDstTable.GetTable().GetTabLines();
+    const SwTableLines& rSrcLines = rSrcTable.GetTable().GetTabLines();
+    vector<RowTexts> aDstRows, aSrcRows;
+    for (const SwTableLine* pLine : rDstLines)
+        aDstRows.push_back(GetRowTexts(*pLine));
+    for (const SwTableLine* pLine : rSrcLines)
+        aSrcRows.push_back(GetRowTexts(*pLine));
+    const int nDstRows = aDstRows.size();
+    const int nSrcRows = aSrcRows.size();
+
+    // Rows with the same text in all cells stay as they are. The rows between two of them were
+    // edited, inserted or deleted.
+    vector<std::pair<int, int>> aEqualRows
+        = MatchRows(aDstRows, 0, nDstRows, aSrcRows, 0, nSrcRows, /*bSimilar=*/false);
+    aEqualRows.emplace_back(nDstRows, nSrcRows);
+
+    // Two tables differ also when only the displayed value of a field differs, which the
+    // comparison of the rows and of the cells does not see. Such tables are compared as a whole.
+    bool bDiffers = false;
+    const auto aCompareRowCells = [&](int nDst, int nSrc) {
+        const SwTableBoxes& rDstBoxes = rDstLines[nDst]->GetTabBoxes();
+        const SwTableBoxes& rSrcBoxes = rSrcLines[nSrc]->GetTabBoxes();
+        for (size_t i = 0; i < rDstBoxes.size(); ++i)
+            bDiffers |= CompareCells(rData, *rDstBoxes[i]->GetSttNd(), *rSrcBoxes[i]->GetSttNd());
+    };
+    int nDstFrom = 0, nSrcFrom = 0;
+    for (const auto& [nDstTo, nSrcTo] : aEqualRows)
+    {
+        // The similar rows were edited in place, and the remaining ones were inserted or deleted.
+        // A row that was rewritten completely is a deleted row and an inserted row.
+        vector<std::pair<int, int>> aPairs = MatchRows(aDstRows, nDstFrom, nDstTo, aSrcRows,
+                                                       nSrcFrom, nSrcTo, /*bSimilar=*/true);
+        aPairs.emplace_back(nDstTo, nSrcTo);
+
+        int nDst = nDstFrom, nSrc = nSrcFrom;
+        for (const auto& [nPairDst, nPairSrc] : aPairs)
+        {
+            for (; nDst < nPairDst; ++nDst)
+            {
+                m_aTrackedRows.push_back({ rDstLines[nDst], nullptr, false });
+                bDiffers = true;
+            }
+            // The deleted rows go after the inserted rows, in front of the next row, or behind
+            // the last row at the end of the table.
+            for (; nSrc < nPairSrc; ++nSrc)
+            {
+                if (nPairDst < nDstRows)
+                    m_aTrackedRows.push_back({ rDstLines[nPairDst], rSrcLines[nSrc], false });
+                else
+                    m_aTrackedRows.push_back({ rDstLines[nDstRows - 1], rSrcLines[nSrc], true });
+                bDiffers = true;
+            }
+            if (nPairDst < nDstTo)
+                aCompareRowCells(nPairDst, nPairSrc);
+            nDst = nPairDst + 1;
+            nSrc = nPairSrc + 1;
+        }
+        // The cells of a row with the same text are compared too, because the comparison of cells
+        // also sees the formatting, the nested tables and the paragraph RSIDs, which the text of a
+        // row does not.
+        if (nDstTo < nDstRows)
+            aCompareRowCells(nDstTo, nSrcTo);
+        nDstFrom = nDstTo + 1;
+        nSrcFrom = nSrcTo + 1;
+    }
+    return bDiffers;
+}
+
+bool CompareData::CompareCells( const CompareData& rData, const SwNode& rDstCell,
+                                const SwNode& rSrcCell )
+{
+    CompareSectionText aSrcCell(rData.m_rDoc, rSrcCell);
+    auto pDstCell = std::make_unique<CompareSectionText>(m_rDoc, rDstCell);
+    pDstCell->CompareLines(aSrcCell);
+    sal_uLong nChanges = pDstCell->ShowDiffs(aSrcCell);
+    nChanges += pDstCell->CompareFormatting();
+    if (!nChanges)
+        return false;
+    m_aCellComparisons.push_back(std::move(pDstCell));
+    return true;
 }
 
 void CompareData::KeepRangeInSection( SwPaM& rPaM )
@@ -2235,7 +2575,8 @@ void CompareData::PrepareRedlineRanges()
     }
 }
 
-void CompareData::CollectRedlineRanges( vector<SwPaM*>& rDeletes, vector<SwPaM*>& rInserts )
+void CompareData::CollectRedlineRanges( vector<SwPaM*>& rDeletes, vector<SwPaM*>& rInserts,
+                                        vector<const TrackedRow*>& rRows )
 {
     for (auto& [pRing, rRanges] : { std::pair(m_pDelRing.get(), &rDeletes),
                                      std::pair(m_pInsertRing.get(), &rInserts) })
@@ -2248,8 +2589,104 @@ void CompareData::CollectRedlineRanges( vector<SwPaM*>& rDeletes, vector<SwPaM*>
         } while (pRing != (pTmp = pTmp->GetNext()));
     }
 
+    for (const TrackedRow& rRow : m_aTrackedRows)
+        rRows.push_back(&rRow);
+
     for (const auto& pCellComparison : m_aCellComparisons)
-        pCellComparison->CollectRedlineRanges(rDeletes, rInserts);
+        pCellComparison->CollectRedlineRanges(rDeletes, rInserts, rRows);
+}
+
+const SwTableLine* CompareData::TrackDeletedRow( const SwTableLine& rAnchor, bool bBehind,
+                                                 const SwTableLine& rSrcLine,
+                                                 const SwRedlineData& rDeleteData )
+{
+    IDocumentRedlineAccess& rRedlineAccess = m_rDoc.getIDocumentRedlineAccess();
+    IDocumentUndoRedo& rUndoRedo = m_rDoc.GetIDocumentUndoRedo();
+    const RedlineFlags eOldFlags = rRedlineAccess.GetRedlineFlags();
+
+    // The new row is an ordinary empty row, and its undo action removes it again.
+    SwSelBoxes aBoxes;
+    for (SwTableBox* pBox : rAnchor.GetTabBoxes())
+        aBoxes.insert(pBox);
+    const SwTableLines& rLines = rAnchor.GetTabBoxes()[0]->GetSttNd()->FindTableNode()
+                                     ->GetTable().GetTabLines();
+    rRedlineAccess.SetRedlineFlags_intern(eOldFlags & ~RedlineFlags::On);
+    const bool bInserted = m_rDoc.InsertRow(aBoxes, 1, bBehind, /*bInsertDummy=*/false);
+    rRedlineAccess.SetRedlineFlags_intern(eOldFlags);
+    const sal_uInt16 nAnchorPos = bInserted ? rLines.GetPos(&rAnchor) : USHRT_MAX;
+    if (nAnchorPos == USHRT_MAX)
+    {
+        SAL_WARN("sw.core", "CompareData::TrackDeletedRow: no row to hold the deleted row");
+        return nullptr;
+    }
+    const SwTableLine* pLine = rLines[bBehind ? nAnchorPos + 1 : nAnchorPos - 1];
+
+    // The copied text joins the empty paragraph of each new cell. The undo actions of the tracked
+    // deletions remove the text again, so the copy has none of its own.
+    const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
+    const SwTableBoxes& rSrcBoxes = rSrcLine.GetTabBoxes();
+    {
+        ::sw::UndoGuard const aUndoGuard(rUndoRedo);
+        rRedlineAccess.SetRedlineFlags_intern(eOldFlags & ~RedlineFlags::On);
+        for (size_t i = 0; i < rBoxes.size(); ++i)
+        {
+            if (rSrcBoxes[i]->IsEmpty(/*bWithRemainingNestedTable=*/false))
+                continue;
+            std::unique_ptr<SwPaM> pSrcRange = GetCellTextRange(*rSrcBoxes[i]);
+            SwPosition aInsPos(*rBoxes[i]->GetSttNd(), SwNodeOffset(1));
+            rSrcLine.GetFrameFormat()->GetDoc().GetDocumentContentOperationsManager().CopyRange(
+                *pSrcRange, aInsPos, SwCopyFlags::CheckPosInFly);
+        }
+        // A row without any text is tracked by an invisible character, as when a row is deleted
+        // while recording changes.
+        if (pLine->IsEmpty())
+        {
+            SwPaM aPaM(*rBoxes[0]->GetSttNd(), SwNodeOffset(1));
+            m_rDoc.getIDocumentContentOperations().InsertString(
+                aPaM, OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR));
+        }
+        rRedlineAccess.SetRedlineFlags_intern(eOldFlags);
+    }
+
+    SetRowTracked(m_rDoc, *pLine, /*bInserted=*/false);
+
+    for (const SwTableBox* pBox : rBoxes)
+    {
+        if (pBox->IsEmpty(/*bWithRemainingNestedTable=*/false))
+            continue;
+        std::unique_ptr<SwPaM> pRange = GetCellTextRange(*pBox);
+        rRedlineAccess.DeleteRedline(*pRange, false, RedlineType::Any);
+        if (rUndoRedo.DoesUndo())
+            rUndoRedo.AppendUndo(std::make_unique<SwUndoCompDoc>(*pRange, false));
+        rRedlineAccess.AppendRedline(new SwRangeRedline(rDeleteData, *pRange), true);
+    }
+    return pLine;
+}
+
+void CompareData::TrackInsertedRow( const SwTableLine& rLine,
+                                    vector<std::unique_ptr<SwPaM>>& rRanges )
+{
+    // A row without any text is tracked by an invisible character, as when a row is inserted
+    // while recording changes. Undoing the compare removes the character again.
+    const SwTableBoxes& rBoxes = rLine.GetTabBoxes();
+    if (rLine.IsEmpty())
+    {
+        IDocumentRedlineAccess& rRedlineAccess = m_rDoc.getIDocumentRedlineAccess();
+        const RedlineFlags eOldFlags = rRedlineAccess.GetRedlineFlags();
+        rRedlineAccess.SetRedlineFlags_intern(eOldFlags & ~RedlineFlags::On);
+        SwPaM aPaM(*rBoxes[0]->GetSttNd(), SwNodeOffset(1));
+        m_rDoc.getIDocumentContentOperations().InsertString(
+            aPaM, OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR));
+        rRedlineAccess.SetRedlineFlags_intern(eOldFlags);
+    }
+
+    SetRowTracked(m_rDoc, rLine, /*bInserted=*/true);
+
+    for (const SwTableBox* pBox : rBoxes)
+    {
+        if (!pBox->IsEmpty(/*bWithRemainingNestedTable=*/false))
+            rRanges.push_back(GetCellTextRange(*pBox));
+    }
 }
 
 void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
@@ -2287,16 +2724,57 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
     // The undo actions hold node positions. The ranges of the cells are applied in document order
     // together with the others, so undo, which goes in reverse order, finds each position as it
     // was recorded.
+    // Tracking a row changes the nodes of the table too, so the tracked rows take part in the same
+    // order. A tracked row goes in front of the deletions inside the row next to it.
     vector<SwPaM*> aDeletes, aInserts;
-    CollectRedlineRanges(aDeletes, aInserts);
-    auto aByStart = [](const SwPaM* pA, const SwPaM* pB) { return *pA->Start() < *pB->Start(); };
-    std::stable_sort(aDeletes.begin(), aDeletes.end(), aByStart);
-    std::stable_sort(aInserts.begin(), aInserts.end(), aByStart);
+    vector<const TrackedRow*> aRows;
+    CollectRedlineRanges(aDeletes, aInserts, aRows);
+    struct Step
+    {
+        SwPosition aPos;
+        SwPaM* pDelete;
+        const TrackedRow* pRow;
+    };
+    vector<Step> aSteps;
+    for (SwPaM* pTmp : aDeletes)
+        aSteps.push_back({ *pTmp->Start(), pTmp, nullptr });
+    for (const TrackedRow* pRow : aRows)
+    {
+        const SwTableBoxes& rBoxes = pRow->pDstLine->GetTabBoxes();
+        if (pRow->bBehind)
+            aSteps.push_back({ SwPosition(*rBoxes.back()->GetSttNd()->EndOfSectionNode()),
+                               nullptr, pRow });
+        else
+            aSteps.push_back({ SwPosition(*rBoxes.front()->GetSttNd()), nullptr, pRow });
+    }
+    std::stable_sort(aSteps.begin(), aSteps.end(),
+                     [](const Step& rA, const Step& rB) { return rA.aPos < rB.aPos; });
 
     SwRedlineData aDeleteData( RedlineType::Delete, nAuthor, aTimeStamp, 0,
                                OUString(), nullptr );
-    for (SwPaM* pTmp : aDeletes)
+    vector<std::unique_ptr<SwPaM>> aRowInserts;
+    // Several deleted rows behind the same row go one after the other.
+    const SwTableLine* pBehindAnchor = nullptr;
+    const SwTableLine* pBehindLast = nullptr;
+    for (const Step& rStep : aSteps)
     {
+        if (const TrackedRow* pRow = rStep.pRow)
+        {
+            if (!pRow->pSrcLine)
+                TrackInsertedRow(*pRow->pDstLine, aRowInserts);
+            else if (pRow->bBehind)
+            {
+                const SwTableLine* pAnchor
+                    = pRow->pDstLine == pBehindAnchor ? pBehindLast : pRow->pDstLine;
+                pBehindLast = TrackDeletedRow(*pAnchor, true, *pRow->pSrcLine, aDeleteData);
+                pBehindAnchor = pBehindLast ? pRow->pDstLine : nullptr;
+            }
+            else
+                TrackDeletedRow(*pRow->pDstLine, false, *pRow->pSrcLine, aDeleteData);
+            continue;
+        }
+
+        SwPaM* pTmp = rStep.pDelete;
         m_rDoc.getIDocumentRedlineAccess().DeleteRedline( *pTmp, false, RedlineType::Any );
 
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
@@ -2307,6 +2785,11 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
         m_rDoc.getIDocumentRedlineAccess().AppendRedline(
             new SwRangeRedline( aDeleteData, *pTmp ), true );
     }
+
+    for (const auto& pRange : aRowInserts)
+        aInserts.push_back(pRange.get());
+    auto aByStart = [](const SwPaM* pA, const SwPaM* pB) { return *pA->Start() < *pB->Start(); };
+    std::stable_sort(aInserts.begin(), aInserts.end(), aByStart);
 
     SwRedlineData aInsertData( RedlineType::Insert, nAuthor, aTimeStamp, 0,
                                OUString(), nullptr );
@@ -2702,6 +3185,40 @@ LineArrayComparator::LineArrayComparator( const CompareData &rD1,
     m_nLen2 = nEnd2 - nStt2;
 }
 
+bool RowArrayComparator::Compare( int nIdx1, int nIdx2 ) const
+{
+    if( nIdx1 < 0 || nIdx2 < 0 || nIdx1 >= m_nLen1 || nIdx2 >= m_nLen2 )
+    {
+        SAL_WARN("sw.core", "RowArrayComparator::Compare: index out of range");
+        return false;
+    }
+
+    const RowTexts& rRow1 = m_rRows1[m_nFirst1 + nIdx1];
+    const RowTexts& rRow2 = m_rRows2[m_nFirst2 + nIdx2];
+    if (!m_bSimilar)
+        return rRow1.aCells == rRow2.aCells;
+
+    const size_t nCells = rRow1.aCells.size();
+    // Only the cells with words in either row count for similar rows. A column that is empty in
+    // both rows says nothing about whether the rows are two versions of one row.
+    size_t nTextCells = 0, nEqualTextCells = 0, nCommonWords = 0, nWords = 0;
+    for (size_t i = 0; i < nCells; ++i)
+    {
+        const bool bEqual = rRow1.aCells[i] == rRow2.aCells[i];
+        if (!rRow1.aCellWords[i].empty() || !rRow2.aCellWords[i].empty())
+        {
+            ++nTextCells;
+            if (bEqual)
+                ++nEqualTextCells;
+        }
+        nCommonWords += CountCommonWords(rRow1.aCellWords[i], rRow2.aCellWords[i]);
+        nWords += rRow1.aCellWords[i].size() + rRow2.aCellWords[i].size();
+    }
+    // Each shared word is in both rows, so 2 * nCommonWords of the nWords words are shared.
+    return (nTextCells > 0 && 2 * nEqualTextCells >= nTextCells)
+           || 2 * (2 * nCommonWords) >= nWords;
+}
+
 bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
 {
     if( nIdx1 < 0 || nIdx2 < 0 || nIdx1 >= m_nLen1 || nIdx2 >= m_nLen2 )
@@ -2712,9 +3229,8 @@ bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const
 
     const SwNode& rNode1 = m_rData1.GetLine( m_nFirst1 + nIdx1 ).GetNode();
     const SwNode& rNode2 = m_rData2.GetLine( m_nFirst2 + nIdx2 ).GetNode();
-    // Tables of the same shape count as similar, so their cells can be compared one by one.
     if (rNode1.IsTableNode() && rNode2.IsTableNode())
-        return HasSameTableShape(*rNode1.GetTableNode(), *rNode2.GetTableNode());
+        return IsSimilarTable(*rNode1.GetTableNode(), *rNode2.GetTableNode(), m_aTableTexts);
 
     const SwTextNode *pTextNd1 = rNode1.GetTextNode();
     const SwTextNode *pTextNd2 = rNode2.GetTextNode();

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p>Before</text:p>
+   <table:table table:name="Table1">
+    <table:table-column table:number-columns-repeated="2"/>
+    <table:table-row>
+     <table:table-cell><text:p>Hello and goodbye, that is all I can say</text:p></table:table-cell>
+     <table:table-cell><text:p>It is very hard to find a new way</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell><text:p>Nobody else has walked this road before us</text:p></table:table-cell>
+     <table:table-cell><text:p>Everything that was is still here</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p>After</text:p>
+  </office:text>
+ </office:body>
+</office:document>
