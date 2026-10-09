@@ -245,7 +245,13 @@ CommandLineEvent CheckWebQuery(/* in,out */ OUString& arg, CommandLineEvent curE
 
         stream.Close();
 
-        arg = OStringToOUString(aResult.makeStringAndClear(), osl_getThreadTextEncoding());
+        OUString aURL = OStringToOUString(aResult.makeStringAndClear(), osl_getThreadTextEncoding());
+        // A web query names a web page.
+        INetProtocol eProtocol = INetURLObject(aURL).GetProtocol();
+        if (eProtocol != INetProtocol::Http && eProtocol != INetProtocol::Https)
+            return curEvt;
+
+        arg = aURL;
         return CommandLineEvent::ForceNew;
     }
     catch (...)
