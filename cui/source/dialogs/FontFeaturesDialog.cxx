@@ -27,9 +27,9 @@ FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString aFontName
     , m_xContentWindow(m_xBuilder->weld_scrolled_window(u"contentWindow"_ustr))
     , m_xContentBox(m_xBuilder->weld_container(u"contentBox"_ustr))
     , m_xContentGrid(m_xBuilder->weld_grid(u"contentGrid"_ustr))
-    , m_xStylisticSetsBox(m_xBuilder->weld_container(u"stylisticSetsBox"_ustr))
+    , m_xStylisticSetsFrame(m_xBuilder->weld_frame(u"stylisticSetsFrame"_ustr))
     , m_xStylisticSetsGrid(m_xBuilder->weld_grid(u"stylisticSetsGrid"_ustr))
-    , m_xCharacterVariantsBox(m_xBuilder->weld_container(u"characterVariantsBox"_ustr))
+    , m_xCharacterVariantsFrame(m_xBuilder->weld_frame(u"characterVariantsFrame"_ustr))
     , m_xCharacterVariantsGrid(m_xBuilder->weld_grid(u"characterVariantsGrid"_ustr))
     , m_xPreviewWindow(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreviewWindow))
 {
@@ -74,8 +74,8 @@ void FontFeaturesDialog::initialize()
     int nRowHeight = fillGrid(rFilteredFontFeatures);
 
     auto nFeaturesHeight = m_xContentBox->get_preferred_size().Height()
-                           + m_xStylisticSetsBox->get_preferred_size().Height()
-                           + m_xCharacterVariantsBox->get_preferred_size().Height();
+                           + m_xStylisticSetsFrame->get_preferred_size().Height()
+                           + m_xCharacterVariantsFrame->get_preferred_size().Height();
     m_xContentWindow->set_size_request(
         -1, std::min(std::max(m_xContentWindow->get_preferred_size().Height(), nFeaturesHeight),
                      static_cast<tools::Long>(300L)));
@@ -110,14 +110,14 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
         if (rFontFeature.isStylisticSet())
         {
             nIdx = nStylisticSets++;
-            m_xStylisticSetsBox->set_visible(true);
+            m_xStylisticSetsFrame->set_visible(true);
             m_aFeatureItems.emplace_back(
                 std::make_unique<FontFeatureItem>(m_xStylisticSetsGrid.get()));
         }
         else if (rFontFeature.isCharacterVariant())
         {
             nIdx = nCharacterVariants++;
-            m_xCharacterVariantsBox->set_visible(true);
+            m_xCharacterVariantsFrame->set_visible(true);
             m_aFeatureItems.emplace_back(
                 std::make_unique<FontFeatureItem>(m_xCharacterVariantsGrid.get()));
         }

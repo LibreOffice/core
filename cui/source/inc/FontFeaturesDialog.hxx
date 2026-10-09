@@ -15,6 +15,7 @@
 #include <vcl/weld/CheckButton.hxx>
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/DialogController.hxx>
+#include <vcl/weld/Frame.hxx>
 #include <vcl/weld/Grid.hxx>
 #include <vcl/weld/Label.hxx>
 #include <vcl/weld/ScrolledWindow.hxx>
@@ -66,9 +67,9 @@ private:
     std::unique_ptr<weld::ScrolledWindow> m_xContentWindow;
     std::unique_ptr<weld::Container> m_xContentBox;
     std::unique_ptr<weld::Grid> m_xContentGrid;
-    std::unique_ptr<weld::Container> m_xStylisticSetsBox;
+    std::unique_ptr<weld::Frame> m_xStylisticSetsFrame;
     std::unique_ptr<weld::Grid> m_xStylisticSetsGrid;
-    std::unique_ptr<weld::Container> m_xCharacterVariantsBox;
+    std::unique_ptr<weld::Frame> m_xCharacterVariantsFrame;
     std::unique_ptr<weld::Grid> m_xCharacterVariantsGrid;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWindow;
 
