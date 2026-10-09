@@ -476,7 +476,14 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
     }
     else if ( rMEvt.GetClicks() == 2 && !mpView->IsTextEdit() )
     {
-        MouseEvent aMEvt( mpWindow->GetPointerPosPixel() );
+        // The text edited is that of the object the press met, as when the selection hands a
+        // double press over, and the edit starts where the press was: on a desktop that is where
+        // the pointer is and the first press of the two has told the object already, while
+        // presses that come from elsewhere may bring the second press alone.
+        if (SdrTextObj* pHit = DynCastSdrTextObj(aVEvt.mpObj))
+            mxTextObj = pHit;
+
+        MouseEvent aMEvt( rMEvt.GetPosPixel() );
         SetInEditMode( aMEvt, false );
     }
 
