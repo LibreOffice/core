@@ -855,6 +855,19 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
             Reference<XPropertySet> xProp = getColumnHelper(rTreeView, m_xCurrentlyDisplayed.get(), xSource);
             if(xProp.is())
                 xProp->setPropertyValue(PROPERTY_FORMATKEY,evt.NewValue);
+
+            // update the column of the row set, which e.g. the filter dialogs use to interpret
+            // values, otherwise the old format would be used until the table is reloaded
+            try
+            {
+                Reference<XPropertySet> xField(xSource->getPropertyValue(PROPERTY_BOUNDFIELD), UNO_QUERY);
+                if (xField.is() && xField->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
+                    xField->setPropertyValue(PROPERTY_FORMATKEY, evt.NewValue);
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
+            }
         }
 
         // some table definition properties ?
