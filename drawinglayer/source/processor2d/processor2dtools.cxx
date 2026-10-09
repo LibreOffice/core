@@ -44,9 +44,9 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromScratch(
         return nullptr;
 
 #if USE_HEADLESS_CODE
-    // Linux/Cairo: now globally activated in master. Leave a
-    // possibility to deactivate for easy test/request testing
-    static bool bUsePrimitiveRenderer(nullptr == std::getenv("DISABLE_SYSTEM_DEPENDENT_PRIMITIVE_RENDERER"));
+    // tdf#168910: SDPR currently suffers from some precision issues that are
+    // causing graphical artifacts. Disable it by default.
+    static bool bUsePrimitiveRenderer(nullptr != std::getenv("ENABLE_SYSTEM_DEPENDENT_PRIMITIVE_RENDERER"));
 
     if (bUsePrimitiveRenderer)
     {
@@ -78,9 +78,9 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
 {
 #if USE_HEADLESS_CODE
-    // Linux/Cairo: now globally activated in master. Leave a
-    // possibility to deactivate for easy test/request testing
-    static bool bUsePrimitiveRenderer(nullptr == std::getenv("DISABLE_SYSTEM_DEPENDENT_PRIMITIVE_RENDERER"));
+    // tdf#168910: SDPR currently suffers from some precision issues that are
+    // causing graphical artifacts. Disable it by default.
+    static bool bUsePrimitiveRenderer(nullptr != std::getenv("ENABLE_SYSTEM_DEPENDENT_PRIMITIVE_RENDERER"));
 
     if (bUsePrimitiveRenderer)
     {
