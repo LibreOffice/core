@@ -69,6 +69,8 @@ all_la_unit_tests = \
 	unit-insert-delete.la \
 	unit-slidelink.la \
 	unit-compare-documents-url.la \
+	unit-wopi-compare-documents.la \
+	unit-wopi-compare-documents-engine.la \
 	unit-uno-command.la \
 	unit-collab.la \
 	unit-collab-protocol.la \
@@ -400,6 +402,10 @@ unit_slidelink_la_SOURCES = UnitSlideLink.cpp
 unit_slidelink_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_compare_documents_url_la_SOURCES = UnitCompareDocumentsUrl.cpp
 unit_compare_documents_url_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_wopi_compare_documents_la_SOURCES = UnitWOPICompareDocuments.cpp
+unit_wopi_compare_documents_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_wopi_compare_documents_engine_la_SOURCES = UnitWOPICompareDocumentsEngine.cpp
+unit_wopi_compare_documents_engine_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_close_la_SOURCES = UnitClose.cpp
 unit_close_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_bad_doc_load_la_SOURCES = UnitBadDocLoad.cpp

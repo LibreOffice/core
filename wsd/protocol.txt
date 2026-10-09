@@ -207,8 +207,12 @@ insertfile name=<name> type=<type>
 
         type = 'comparedocuments': The file has been previously uploaded using insertfile POST
 
-        type = 'comparedocumentsurl': The file is supposed to be downloaded by the core
-                                      itself; it does so from the URL provided in 'name'
+        type = 'comparedocumentsurl': The file is downloaded from the URL provided in 'name'.
+                                      coolwsd downloads a URL on the WOPI host of the document
+                                      itself, with the WOPI proof headers, and the core gets the
+                                      downloaded file. coolwsd follows a redirect within that
+                                      host the same way. The core downloads a URL on any other
+                                      host itself, including another WOPI host.
 
 selectbackground name=<name>
 

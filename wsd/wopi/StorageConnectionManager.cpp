@@ -117,6 +117,19 @@ void initHttpRequest(Poco::Net::HTTPRequest& request, const Poco::URI& uri,
     request.set("X-COOL-WOPI-ServerId", Util::getProcessIdentifier());
 }
 
+/// Builds an http::Request for the URI with the headers of the given request, including the
+/// cookies.
+http::Request toHttpRequest(const Poco::URI& uri, const Poco::Net::HTTPRequest& request)
+{
+    http::Request httpRequest(uri.getPathAndQuery());
+    for (const auto& pair : request)
+    {
+        httpRequest.set(pair.first, pair.second);
+    }
+
+    return httpRequest;
+}
+
 bool isAllowedWopiAddress(const std::string& address)
 {
     return HostUtil::allowedWopiHostWithoutCache(address) || net::isLocalAddress(address);
@@ -127,19 +140,23 @@ bool isAllowedWopiAddress(const std::string& address)
 http::Request StorageConnectionManager::createHttpRequest(const Poco::URI& uri,
                                                           const Authorization& auth)
 {
-    http::Request httpRequest(uri.getPathAndQuery());
-
     //FIXME: Hack Hack Hack! Use own version.
     Poco::Net::HTTPRequest request;
     ::initHttpRequest(request, uri, auth);
 
-    // Copy the headers, including the cookies.
-    for (const auto& pair : request)
-    {
-        httpRequest.set(pair.first, pair.second);
-    }
+    return toHttpRequest(uri, request);
+}
 
-    return httpRequest;
+http::Request StorageConnectionManager::createProofSignedRequest(const Poco::URI& uri,
+                                                                 const std::string& accessToken)
+{
+    Poco::Net::HTTPRequest request;
+    request.set("User-Agent", http::getAgentString());
+    addStorageDebugCookie(request);
+    addWopiProof(request, uri, accessToken);
+    request.set("X-COOL-WOPI-ServerId", Util::getProcessIdentifier());
+
+    return toHttpRequest(uri, request);
 }
 
 std::shared_ptr<http::Session>

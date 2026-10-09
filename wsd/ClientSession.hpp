@@ -521,6 +521,17 @@ private:
 
     bool handleSignatureAction(const StringVector& tokens);
 
+    /// Compares the document against one at a URL on the WOPI host of the document. The file is
+    /// downloaded here with the WOPI proof headers and staged in the jail. A URL on any other
+    /// host goes to the kit unchanged.
+    bool handleCompareDocumentsUrl(const std::string& firstLine, const StringVector& tokens,
+                                   const std::shared_ptr<DocumentBroker>& docBroker);
+
+    /// Downloads the document to compare against from a URL on the WOPI host of the document
+    /// into the jail and asks the kit to compare against it. Follows up to redirectLimit
+    /// redirects.
+    void downloadCompareDocument(const Poco::URI& uri, int redirectLimit);
+
     bool handleUpdateViewSettings(const std::string& firstLine);
 
     /// Put back the secrets the browser asked to keep. A secret the user did not

@@ -66,6 +66,12 @@ public:
     /// Create an http::Request with the common headers.
     static http::Request createHttpRequest(const Poco::URI& uri, const Authorization& auth);
 
+    /// Create a GET http::Request for a URI that is not a WOPI endpoint, signed with the WOPI
+    /// proof headers over the given access_token, which may be empty. The request carries no
+    /// Authorization header.
+    static http::Request createProofSignedRequest(const Poco::URI& uri,
+                                                  const std::string& accessToken);
+
     static void initialize();
 
     /// True when the storage client SSL context does no certificate

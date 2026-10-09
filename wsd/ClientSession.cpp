@@ -18,6 +18,7 @@
 
 #include "ClientSession.hpp"
 
+#include <common/Anonymizer.hpp>
 #include <common/Clipboard.hpp>
 #include <common/CommandControl.hpp>
 #include <common/Common.hpp>
@@ -45,6 +46,9 @@
 #include <wsd/COOLWSD.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/FileServer.hpp>
+#if !MOBILEAPP
+#include <wsd/HostUtil.hpp>
+#endif
 #if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
 #include <wsd/AIChatSession.hpp>
 #endif
@@ -57,6 +61,8 @@
 #include <Poco/JSON/Parser.h>
 #include <Poco/MemoryStream.h>
 #include <Poco/Net/HTTPResponse.h>
+#include <Poco/Net/MessageHeader.h>
+#include <Poco/Net/NameValueCollection.h>
 #include <Poco/Path.h>
 #include <Poco/StreamCopier.h>
 #include <Poco/Timestamp.h>
@@ -68,6 +74,7 @@
 #include <cctype>
 #include <chrono>
 #include <cstdint>
+#include <cstdio>
 #include <ios>
 #include <map>
 #include <memory>
@@ -636,6 +643,52 @@ makeSignatureActionSession(std::shared_ptr<ClientSession> clientSession,
     httpSession->setFinishedHandler(std::move(finishedCallback));
     return httpSession;
 }
+
+/// The most redirects followed to download the document to compare against.
+constexpr int CompareRedirectLimit = 5;
+
+/// True when coolwsd downloads the document to compare against from this URL: an http or https
+/// URL on the same allowed WOPI host as the document, whose URL is documentUri.
+bool isCompareDownloadUrl(const Poco::URI& uri, const Poco::URI& documentUri)
+{
+    const std::string scheme = Util::toLower(uri.getScheme());
+    return (scheme == "http" || scheme == "https") &&
+           Util::iequal(uri.getHost(), documentUri.getHost()) &&
+           HostUtil::allowedWopiHost(uri.getHost());
+}
+
+/// The extension of a file name, with its dot, when it is one to ten letters and digits. Empty
+/// otherwise.
+std::string fileExtension(const std::string& fileName)
+{
+    const std::string extension = Poco::Path(fileName).getExtension();
+    if (extension.empty() || extension.size() > 10 ||
+        !std::all_of(extension.begin(), extension.end(),
+                     [](unsigned char c) { return std::isalnum(c); }))
+    {
+        return std::string();
+    }
+
+    return '.' + extension;
+}
+
+/// The extension of the downloaded document: the one of the file name the server gives in
+/// Content-Disposition, or else the one at the end of the path of the URL.
+std::string downloadedFileExtension(const http::Response& response, const Poco::URI& uri)
+{
+    const std::string disposition = response.get("Content-Disposition");
+    if (!disposition.empty())
+    {
+        std::string label;
+        Poco::Net::NameValueCollection parameters;
+        Poco::Net::MessageHeader::splitParameters(disposition, label, parameters);
+        const std::string extension = fileExtension(parameters.get("filename", ""));
+        if (!extension.empty())
+            return extension;
+    }
+
+    return fileExtension(uri.getPath());
+}
 } // namespace
 
 bool ClientSession::handleSignatureAction(const StringVector& tokens)
@@ -690,6 +743,149 @@ bool ClientSession::handleSignatureAction(const StringVector& tokens)
     std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker();
     httpSession->asyncRequest(httpRequest, docBroker->getPoll());
     return true;
+}
+
+bool ClientSession::handleCompareDocumentsUrl(const std::string& firstLine,
+                                              const StringVector& tokens,
+                                              const std::shared_ptr<DocumentBroker>& docBroker)
+{
+    std::string name;
+    if (tokens.size() != 3 || !getTokenString(tokens[1], "name", name))
+        return forwardToChild(firstLine, docBroker);
+
+    Poco::URI uri;
+    try
+    {
+        uri = Poco::URI(Uri::decode(name));
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOG_WRN("The URL of the document to compare against is malformed: " << exc.displayText());
+        return forwardToChild(firstLine, docBroker);
+    }
+
+    // The kit fetches a URL on any host other than the WOPI host of the document.
+    // The engine refuses to compare in a read-only view, so that view downloads nothing here.
+    if (isReadOnly() || !isCompareDownloadUrl(uri, getPublicUri()))
+        return forwardToChild(firstLine, docBroker);
+
+    downloadCompareDocument(uri, CompareRedirectLimit);
+    return true;
+}
+
+void ClientSession::downloadCompareDocument(const Poco::URI& uri, int redirectLimit)
+{
+    const std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker();
+    if (!docBroker)
+        return;
+
+    const std::string stagedName = "compare-" + Util::rng::getHexString(16);
+    const std::string stagedPath = docBroker->jailStagingPath(stagedName);
+    if (stagedPath.empty())
+    {
+        sendTextFrameAndLogError("error: cmd=insertfile kind=failure");
+        return;
+    }
+
+    Poco::File(Poco::Path(stagedPath).parent()).createDirectories();
+
+    // The proof is over the access_token in the URL, which is empty when the URL has none, as a
+    // WOPI host that checks the proof reads it from the URL.
+    std::string accessToken;
+    for (const auto& param : uri.getQueryParameters())
+    {
+        if (param.first == "access_token")
+            accessToken = param.second;
+    }
+
+    const std::string uriAnonym = Anonymizer::anonymizeUrl(uri.toString());
+    http::Session::FinishedCallback finishedCallback =
+        [selfWeak = weak_from_this(), this, uri, redirectLimit, stagedName, stagedPath,
+         uriAnonym](const std::shared_ptr<http::Session>& session)
+    {
+        std::shared_ptr<MessageHandlerInterface> selfLifecycle = selfWeak.lock();
+        const std::shared_ptr<DocumentBroker> broker =
+            selfLifecycle ? getDocumentBroker() : nullptr;
+        if (!broker)
+        {
+            LOG_WRN_S("The session that asked to compare against [" << uriAnonym << "] has ended");
+            FileUtil::removeFile(stagedPath);
+            return;
+        }
+
+        const std::shared_ptr<const http::Response> httpResponse = session->response();
+        const http::StatusCode statusCode = httpResponse->statusLine().statusCode();
+        if (httpResponse->state() == http::Response::State::Complete &&
+            http::isRedirectStatusCode(statusCode) && redirectLimit > 0)
+        {
+            FileUtil::removeFile(stagedPath);
+
+            Poco::URI target(uri);
+            try
+            {
+                target.resolve(httpResponse->get("Location"));
+            }
+            catch (const Poco::Exception& exc)
+            {
+                LOG_ERR("The redirect from [" << uriAnonym
+                                              << "] is malformed: " << exc.displayText());
+                sendTextFrameAndLogError("error: cmd=insertfile kind=failure");
+                return;
+            }
+
+            LOG_INF("The document to compare against at ["
+                    << uriAnonym << "] is redirected to ["
+                    << Anonymizer::anonymizeUrl(target.toString()) << ']');
+
+            // The proof headers go only to the WOPI host of the document, and the kit fetches
+            // from any other host.
+            if (isCompareDownloadUrl(target, getPublicUri()))
+                downloadCompareDocument(target, redirectLimit - 1);
+            else
+                forwardToChild("insertfile name=" + Uri::encode(target.toString()) +
+                                   " type=comparedocumentsurl",
+                               broker);
+            return;
+        }
+
+        if (httpResponse->state() != http::Response::State::Complete ||
+            statusCode != http::StatusCode::OK)
+        {
+            LOG_ERR("Failed to download the document to compare against from ["
+                    << uriAnonym << "]: " << httpResponse->statusLine().reasonPhrase());
+            FileUtil::removeFile(stagedPath);
+            sendTextFrameAndLogError("error: cmd=insertfile kind=failure");
+            return;
+        }
+
+        // The engine detects the type of the file from its extension as well as its content.
+        std::string fileName = stagedName;
+        const std::string extension = downloadedFileExtension(*httpResponse, uri);
+        if (!extension.empty())
+        {
+            if (std::rename(stagedPath.c_str(), (stagedPath + extension).c_str()) == 0)
+                fileName += extension;
+            else
+                LOG_WRN_SYS("Failed to give the document to compare against the extension ["
+                            << extension << ']');
+        }
+
+        forwardToChild("insertfile name=" + fileName + " type=comparedocuments", broker);
+    };
+
+    LOG_DBG("Downloading the document to compare against from [" << uriAnonym << ']');
+    std::shared_ptr<http::Session> httpSession = StorageConnectionManager::getWopiHttpSession(uri);
+    httpSession->setFinishedHandler(std::move(finishedCallback));
+    const http::Request httpRequest =
+        StorageConnectionManager::createProofSignedRequest(uri, accessToken);
+    if (!httpSession->asyncRequest(httpRequest, docBroker->getPoll()))
+    {
+        FileUtil::removeFile(stagedPath);
+        sendTextFrameAndLogError("error: cmd=insertfile kind=failure");
+        return;
+    }
+
+    httpSession->response()->saveBodyToFile(stagedPath);
 }
 #endif
 
@@ -1718,6 +1914,11 @@ bool ClientSession::_handleInput(const char *buffer, int length)
             const std::string dummyFrame = "dummymsg";
             return forwardToChild(dummyFrame, docBroker);
         }
+
+#if !MOBILEAPP
+        if (tokens.equals(0, "insertfile") && tokens.equals(2, "type=comparedocumentsurl"))
+            return handleCompareDocumentsUrl(firstLine, tokens, docBroker);
+#endif
 
         if (tokens.equals(0, "slideshowfollow"))
         {

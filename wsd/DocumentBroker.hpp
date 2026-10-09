@@ -489,6 +489,12 @@ public:
 
     std::string getJailRoot() const;
 
+#if !MOBILEAPP
+    /// The path in the staging area of this document's jail that a file staged under
+    /// the given name sits at. Empty when the jail cannot be reached.
+    std::string jailStagingPath(const std::string& name) const;
+#endif
+
     /// Loads and adds a new session. Returns the new number of sessions.
     std::size_t addSession(const std::shared_ptr<ClientSession>& session,
                            std::unique_ptr<WOPIFileInfo> wopiFileInfo = nullptr);
@@ -915,10 +921,6 @@ private:
 
     /// Start an asynchronous CheckFileInfo request.
     void checkFileInfo(const std::shared_ptr<ClientSession>& uri, int redirectLimit);
-
-    /// The path in the staging area of this document's jail that a file staged under
-    /// the given name sits at. Empty when the jail cannot be reached.
-    std::string jailStagingPath(const std::string& name) const;
 
     /// Writes the presentation a source document wrote into the staging area of this
     /// document's jail. answer is the reply past its message name: a header line and then the
