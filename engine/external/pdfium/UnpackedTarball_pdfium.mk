@@ -29,6 +29,7 @@ endif
 
 # TODO, attempt upstream
 pdfium_patches += ofz451333752.patch
+pdfium_patches += ofz464123310.patch
 pdfium_patches += ofz503815636.patch
 pdfium_patches += container-stream-concepts.patch
 

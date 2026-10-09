@@ -1,0 +1,14 @@
+--- core/fpdfapi/parser/cpdf_document.cpp
++++ core/fpdfapi/parser/cpdf_document.cpp
+@@ -384,6 +384,11 @@
+   }
+ 
+   if (tree_traversal_.empty()) {
++    // A walk that reached kMaxPageLevel recorded every page it could reach,
++    // so walking again finds no more.
++    if (reached_max_page_level_) {
++      return nullptr;
++    }
+     ResetTraversal();
+     tree_traversal_.emplace_back(std::move(pPages));
+   }
