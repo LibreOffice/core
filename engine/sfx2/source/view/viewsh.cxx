@@ -25,6 +25,7 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
+#include <optional>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
@@ -261,6 +262,14 @@ struct TableSizeType
     sal_Int32 nRowCount;
     sal_Int32 nColCount;
 };
+
+OUString getSelectionName(const uno::Reference<accessibility::XAccessibleContext>& xContext)
+{
+    OUString sName = xContext->getAccessibleName().trim();
+    if (sName == "GraphicObjectShape")
+        return u"Graphic"_ustr;
+    return sName;
+}
 }
 
 typedef std::list<uno::Reference<accessibility::XAccessibleTable>> XAccessibleTableList;
@@ -1214,6 +1223,10 @@ class KitDocumentFocusListener :
     bool m_bIsEditingInSelection;
     OUString m_sSelectedCellAddress;
     uno::Reference<accessibility::XAccessible> m_xSelectedObject;
+    // a Writer frame reported as selected, whose deselection Writer does not report
+    std::optional<OUString> m_oSelectedFrameName;
+    // only compared with a NAME_CHANGED source
+    cpo::uno::WeakReference<accessibility::XAccessible> m_xSelectedFrame;
 
 public:
     explicit KitDocumentFocusListener(const SfxViewShell* pViewShell);
@@ -1277,6 +1290,8 @@ public:
     void notifyTextSelectionChanged();
     void notifyFocusedCellChanged(sal_Int32 nOutCount, const std::vector<TableSizeType>& aInList, sal_Int32 nRow, sal_Int32 nCol, sal_Int32 nRowSpan, sal_Int32 nColSpan);
     void notifySelectionChanged(const uno::Reference<accessibility::XAccessible>& xAccObj, const OUString& sAction);
+    void notifySelectionChanged(bool bIsCell, const OUString& sAction, const OUString& sName,
+                                const OUString& sTextContent);
 
     std::string getFocusedParagraph() const;
     tools::Rectangle visibleArea() const;
@@ -1600,10 +1615,7 @@ void KitDocumentFocusListener::notifySelectionChanged(const uno::Reference<acces
     uno::Reference<XAccessibleContext> xContext = xAccObj->getAccessibleContext();
     if (xContext.is())
     {
-        OUString sName = xContext->getAccessibleName();
-        sName = sName.trim();
-        if (sName == "GraphicObjectShape")
-            sName = u"Graphic"_ustr;
+        OUString sName = getSelectionName(xContext);
 
         // check for text content and send it with some limitations:
         // no more than 10 paragraphs, no more than 1000 chars
@@ -1658,21 +1670,29 @@ void KitDocumentFocusListener::notifySelectionChanged(const uno::Reference<acces
             }
         }
 
-        boost::property_tree::ptree aPayloadTree;
-        aPayloadTree.put("cell", bIsCell ? 1 : 0);
-        aPayloadTree.put("action", sAction);
-        aPayloadTree.put("name", sName);
-        if (!sTextContent.isEmpty())
-            aPayloadTree.put("text", sTextContent);
-        std::stringstream aStream;
-        boost::property_tree::write_json(aStream, aPayloadTree);
-        std::string aPayload = aStream.str();
-        if (m_pViewShell)
-        {
-            SAL_INFO("kit.a11y",  "KitDocumentFocusListener::notifySelectionChanged: "
-                                     "action: " << sAction << ", name: " << sName);
-            m_pViewShell->viewCallback(COKitCallbackType::A11Y_SELECTION_CHANGED, OString(aPayload));
-        }
+        notifySelectionChanged(bIsCell, sAction, sName, sTextContent);
+    }
+}
+
+void KitDocumentFocusListener::notifySelectionChanged(bool bIsCell, const OUString& sAction,
+                                                      const OUString& sName,
+                                                      const OUString& sTextContent)
+{
+    boost::property_tree::ptree aPayloadTree;
+    aPayloadTree.put("cell", bIsCell ? 1 : 0);
+    aPayloadTree.put("action", sAction);
+    aPayloadTree.put("name", sName);
+    if (!sTextContent.isEmpty())
+        aPayloadTree.put("text", sTextContent);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aPayloadTree);
+    std::string aPayload = aStream.str();
+    if (m_pViewShell)
+    {
+        SAL_INFO("kit.a11y", "KitDocumentFocusListener::notifySelectionChanged: "
+                             "action: "
+                                 << sAction << ", name: " << sName);
+        m_pViewShell->viewCallback(COKitCallbackType::A11Y_SELECTION_CHANGED, OString(aPayload));
     }
 }
 
@@ -1775,7 +1795,7 @@ void KitDocumentFocusListener::resetParagraphInfo()
 
 // For a presentation document when an accessible event of type SELECTION_CHANGED_XXX occurs
 // the selected (or unselected) object is put in NewValue, instead for a text document
-// the selected object is put in Source.
+// the selected object is put in Source, except for a selected frame.
 // The following function helps to retrieve the selected object independently on where it has been put.
 uno::Reference< accessibility::XAccessible >
 KitDocumentFocusListener::getSelectedObject(const accessibility::AccessibleEventObject& aEvent) const
@@ -1783,7 +1803,11 @@ KitDocumentFocusListener::getSelectedObject(const accessibility::AccessibleEvent
     uno::Reference< accessibility::XAccessible > xSelectedObject;
     if (isText(m_nDocumentType))
     {
-        xSelectedObject.set(aEvent.Source, uno::UNO_QUERY);
+        // Writer reports a selected frame on its parent, with the frame as the new value
+        if (aEvent.EventId == accessibility::AccessibleEventId::SELECTION_CHANGED)
+            aEvent.NewValue >>= xSelectedObject;
+        if (!xSelectedObject.is())
+            xSelectedObject = aEvent.Source.query<accessibility::XAccessible>();
     }
     else
     {
@@ -1805,6 +1829,19 @@ void KitDocumentFocusListener::onShapeSelectionChanged(
         notifyEditingInSelectionState();
     }
     notifySelectionChanged(xSelectedObject, sAction);
+    if (isText(m_nDocumentType))
+    {
+        if (sAction == "create")
+        {
+            m_oSelectedFrameName = getSelectionName(xSelectedObject->getAccessibleContext());
+            m_xSelectedFrame = xSelectedObject;
+        }
+        else
+        {
+            m_oSelectedFrameName.reset();
+            m_xSelectedFrame.clear();
+        }
+    }
 }
 
 void KitDocumentFocusListener::onFocusedParagraphInWriterTable(
@@ -1935,6 +1972,15 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                             }
                             if (isText(m_nDocumentType))
                             {
+                                if (m_oSelectedFrameName)
+                                {
+                                    // the caret is back in the text; the frame may be gone
+                                    notifySelectionChanged(false, u"remove"_ustr,
+                                                           *std::exchange(m_oSelectedFrameName, {}),
+                                                           {});
+                                    m_xSelectedFrame.clear();
+                                    m_xSelectedObject.clear();
+                                }
                                 // check if we are inside a table: in case notify table and current cell info
                                 bool isInsideTable = false;
                                 uno::Reference<XAccessibleTable> xTable;
@@ -2066,6 +2112,14 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                 // it means that the text change has been performed in another view.
                 updateAndNotifyParagraph(xAccText, !isFocused(aEvent), "TEXT_CHANGED");
 
+                break;
+            }
+            case AccessibleEventId::NAME_CHANGED:
+            {
+                // e.g. a title set in the Alt Text dialog; the deselection uses the new name
+                if (uno::Reference<XAccessible> xFrame = m_xSelectedFrame;
+                    xFrame && aEvent.Source == xFrame)
+                    m_oSelectedFrameName = getSelectionName(xFrame->getAccessibleContext());
                 break;
             }
             case AccessibleEventId::ROLE_CHANGED:

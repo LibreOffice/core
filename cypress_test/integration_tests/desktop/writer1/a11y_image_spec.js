@@ -87,4 +87,19 @@ describe(['tagdesktop'], 'Writer images for the reader', { testIsolation: false 
 			expect(input._getSelectionStart(), 'the caret offset').to.equal(length);
 		});
 	});
+
+	it('an image selected from the keyboard is announced by its name', function () {
+		// nothing lies below the last line, so Shift+F4 wraps around to the first image
+		helper.typeIntoDocument('{ctrl}{end}');
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+		cy.realPress(['Shift', 'F4']);
+		cy.cGet('#clipboard-area').should('have.attr', 'aria-description', NAME + ' selected. ');
+		cy.realPress('Escape');
+		// typing is blocked while a selection is held, though not under Cypress
+		cy.cGet('#clipboard-area').should(function () {
+			expect(win.app.map._textInput._hasAnySelection, 'a selection held').to.equal(false);
+		});
+	});
 });

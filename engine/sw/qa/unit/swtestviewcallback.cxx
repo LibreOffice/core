@@ -216,6 +216,13 @@ void SwTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             boost::property_tree::read_json(aStream, m_aA11yFocusedCell);
             break;
         }
+        case COKitCallbackType::A11Y_SELECTION_CHANGED:
+        {
+            m_aA11ySelection.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_aA11ySelection);
+            break;
+        }
         default:
             break;
     }

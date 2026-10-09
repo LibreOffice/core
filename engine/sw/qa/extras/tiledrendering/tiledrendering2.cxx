@@ -30,15 +30,18 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <vcl/jsdialog/executor.hxx>
+#include <vcl/keycodes.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
 #include <vcl/virdev.hxx>
 #include <unotxdoc.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <sfx2/linkmgr.hxx>
 #include <svx/fillbitmaplink.hxx>
 #include <svx/xbtmpit.hxx>
@@ -2013,6 +2016,93 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphImage)
     CPPUNIT_ASSERT_EQUAL(std::string("A red square"), rImage.get<std::string>("name"));
     CPPUNIT_ASSERT_EQUAL(std::string("A small square filled with red"),
                          rImage.get<std::string>("description"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yImageSelection)
+{
+    for (const char* pFile : { "a11y-image.fodt", "a11y-image-at-paragraph.fodt" })
+    {
+        // Given an image anchored as a character or to a paragraph, and the cursor in its
+        // paragraph:
+        SwXTextDocument* pXTextDocument = createDoc(pFile);
+        SwTestViewCallback aView;
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+        pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+        pWrtShell->Down(/*bSelect=*/false);
+        Scheduler::ProcessEventsToIdle();
+
+        // When the image is selected from the keyboard (Shift+F4):
+        dispatchCommand(mxComponent, u".uno:JumpToNextFrame"_ustr, {});
+        Scheduler::ProcessEventsToIdle();
+
+        // Then the selection of the image is reported, by its name:
+        CPPUNIT_ASSERT_MESSAGE(pFile, pWrtShell->IsSelFrameMode());
+        // Without the fix, an image anchored as a character had no selection report.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pFile, std::string("create"),
+                                     aView.m_aA11ySelection.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pFile, std::string("A red square"),
+                                     aView.m_aA11ySelection.get<std::string>("name"));
+
+        // And when the cursor goes back to the text:
+        pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_ESCAPE);
+        pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_ESCAPE);
+        Scheduler::ProcessEventsToIdle();
+
+        // Then the end of the selection is reported, as the client blocks typing until then:
+        CPPUNIT_ASSERT_MESSAGE(pFile, !pWrtShell->IsSelFrameMode());
+        // Without the fix, the end of the selection was never reported.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pFile, std::string("remove"),
+                                     aView.m_aA11ySelection.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pFile, std::string("A red square"),
+                                     aView.m_aA11ySelection.get<std::string>("name"));
+
+        // And when the same image is selected again:
+        aView.m_aA11ySelection.clear();
+        dispatchCommand(mxComponent, u".uno:JumpToNextFrame"_ustr, {});
+        Scheduler::ProcessEventsToIdle();
+
+        // Then that selection is reported too:
+        CPPUNIT_ASSERT_MESSAGE(pFile, pWrtShell->IsSelFrameMode());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pFile, std::string("create"),
+                                     aView.m_aA11ySelection.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pFile, std::string("A red square"),
+                                     aView.m_aA11ySelection.get<std::string>("name"));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yRenamedImageDeselection)
+{
+    for (const char* pFile : { "a11y-image.fodt", "a11y-image-at-paragraph.fodt" })
+    {
+        // Given a selected image, anchored as a character or to a paragraph:
+        SwXTextDocument* pXTextDocument = createDoc(pFile);
+        SwTestViewCallback aView;
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+        pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+        pWrtShell->Down(/*bSelect=*/false);
+        dispatchCommand(mxComponent, u".uno:JumpToNextFrame"_ustr, {});
+        Scheduler::ProcessEventsToIdle();
+        CPPUNIT_ASSERT_MESSAGE(pFile, pWrtShell->IsSelFrameMode());
+
+        // When it gets a new title, as from its Alt Text dialog, and the cursor goes back to the
+        // text:
+        mxComponent.queryThrow<text::XTextGraphicObjectsSupplier>()
+            ->getGraphicObjects()
+            ->getByName(u"Image1"_ustr)
+            .get<Reference<beans::XPropertySet>>()
+            ->setPropertyValue(u"Title"_ustr, Any(u"A blue square"_ustr));
+        Scheduler::ProcessEventsToIdle();
+        pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_ESCAPE);
+        pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_ESCAPE);
+        Scheduler::ProcessEventsToIdle();
+
+        // Then the end of the selection is reported under the new title:
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pFile, std::string("remove"),
+                                     aView.m_aA11ySelection.get<std::string>("action"));
+        // Without the fix, the old title "A red square" was reported.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pFile, std::string("A blue square"),
+                                     aView.m_aA11ySelection.get<std::string>("name"));
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphBlockQuote)

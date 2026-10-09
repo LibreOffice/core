@@ -58,6 +58,8 @@ public:
     boost::property_tree::ptree m_aA11yFocusedParagraph;
     /// Accessibility focused table cell payload.
     boost::property_tree::ptree m_aA11yFocusedCell;
+    /// Accessibility selected object payload.
+    boost::property_tree::ptree m_aA11ySelection;
     std::vector<OString> m_aStateChanges;
     TestKitCallbackWrapper m_callbackWrapper;
     OString m_aExportFile;
