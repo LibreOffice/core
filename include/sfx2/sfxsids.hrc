@@ -525,8 +525,6 @@ class SvxZoomItem;
 #define SID_OBJECTRESIZE                    TypedWhichId<SfxRectangleItem>(SID_SFX_START + 1000)
 
 #define SID_EVENTCONFIG                     TypedWhichId<SfxEventNamesItem>(SID_SFX_START + 1101)
-#define SID_VERB_START                      (SID_SFX_START + 1100)
-#define SID_VERB_END                        (SID_SFX_START + 1121)
 
 #define SID_SIGNATURE                       TypedWhichId<SfxUInt16Item>(SID_SFX_START + 1643)
 

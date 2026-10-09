@@ -431,9 +431,6 @@ public:
     // TODO/CLEANUP: still needed?!
     void SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >& aVerbs);
     const css::uno::Sequence < css::embed::VerbDescriptor >& GetVerbs() const;
-    void                        VerbExec (SfxRequest&);
-    static void                 VerbState (SfxItemSet&);
-    SAL_DLLPRIVATE const SfxSlot* GetVerbSlot_Impl(sal_uInt16 nId) const;
 
     virtual SfxObjectShell*     GetObjectShell();
     void                        SetDisableFlags( SfxDisableFlags nFlags );

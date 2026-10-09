@@ -1563,27 +1563,6 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
     Flush();
     sal_uInt16 nTotCount = xImp->aStack.size();
 
-    // Verb-Slot?
-    if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
-    {
-        for ( sal_uInt16 nShell = 0;; ++nShell )
-        {
-            SfxShell *pSh = GetShell(nShell);
-            if ( pSh == nullptr )
-                return false;
-            if ( dynamic_cast< const SfxViewShell *>( pSh ) !=  nullptr )
-            {
-                const SfxSlot* pSlot = pSh->GetVerbSlot_Impl(nSlot);
-                if ( pSlot )
-                {
-                    rServer.SetShellLevel(nShell);
-                    rServer.SetSlot( pSlot );
-                    return true;
-                }
-            }
-        }
-    }
-
     // SID check against set filter
     SfxSlotFilterState nSlotEnableMode = SfxSlotFilterState::DISABLED;
     if ( xImp->pFrame )
