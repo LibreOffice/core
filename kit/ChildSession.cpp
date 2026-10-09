@@ -1571,23 +1571,6 @@ bool ChildSession::sendZstdFrame(std::string_view headerName, const char* data, 
     return sendBinaryFrame(output.data(), output.size());
 }
 
-std::string ChildSession::vectorPartIdOf(const std::string& json)
-{
-    static constexpr std::string_view key = "\"partId\":";
-    const size_t start = json.find(key);
-    if (start == std::string::npos)
-        return std::string();
-    // The writer puts a space after the colon.
-    size_t begin = json.find_first_not_of(' ', start + key.size());
-    if (begin == std::string::npos || json[begin] != '"')
-        return std::string();
-    ++begin;
-    const size_t end = json.find('"', begin);
-    if (end == std::string::npos)
-        return std::string();
-    return json.substr(begin, end - begin);
-}
-
 void ChildSession::sendVectorDelta(const std::vector<char>& frame, const std::string& payload)
 {
     // Without a compressed frame the JSON goes as a command values text frame.
@@ -1648,10 +1631,15 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
         if (json.empty())
             json = "{}";
 
-        // The part the response serves is one this client holds from here on.
+        // The part the request names is one this client holds from here on. The response
+        // names the same part.
         if (!isFont)
         {
-            const std::string partId = vectorPartIdOf(json);
+            const std::size_t query = command.find('?');
+            std::string partId;
+            if (query != std::string::npos)
+                getTokenString(StringVector::tokenize(command.substr(query + 1), '&'), "partid",
+                               partId);
             if (!partId.empty())
                 _vectorParts.insert(partId);
         }

@@ -1279,7 +1279,7 @@ enum class COKitCallbackType
      * A vector-primitives delta for a slide that changed.
      *
      * Pushed after an invalidation, with the delta for the part that changed.
-     * The payload is the same JSON the
+     * The payload is the id of the part, a newline, and then the same JSON the
      * .uno:VectorPrimitives command returns for a delta: a vectorprimitivesdelta
      * with the part, the version space it counts in, the version it starts from,
      * the version it brings the part to, the object order and the changed

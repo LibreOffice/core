@@ -1685,7 +1685,10 @@ void CallbackFlushHandler::flushVectorPrimitivesDeltas()
         if (aDelta == tools::JsonWriter::EMPTY_DOCUMENT)
             continue;
 
-        m_pCallback(COKitCallbackType::VECTOR_PRIMITIVES_DELTA, aDelta.getStr(), m_pData);
+        // The part id goes on its own line ahead of the JSON, so a reader can tell which part
+        // the delta is for without parsing it.
+        const OString aPayload = rPartId + "\n" + aDelta;
+        m_pCallback(COKitCallbackType::VECTOR_PRIMITIVES_DELTA, aPayload.getStr(), m_pData);
     }
 }
 

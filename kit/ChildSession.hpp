@@ -296,16 +296,10 @@ public:
     /// bytes. Empty when the compression failed.
     static std::vector<char> zstdFrame(std::string_view headerName, const char* data, size_t size);
 
-    /// The id of the part a vector primitives payload describes, read off its header, or an
-    /// empty string when it names none.
-    static std::string vectorPartIdOf(const std::string& json);
-
     /// True when a vector primitives response served this session the part with the given id.
-    /// True for every part when the id is empty, since a delta that names no part is for every
-    /// reader.
     bool holdsVectorPart(const std::string& partId) const
     {
-        return _isVectorRendering && (partId.empty() || _vectorParts.contains(partId));
+        return _isVectorRendering && _vectorParts.contains(partId);
     }
 
     /// Sends a vector primitives delta: the compressed frame when there is one, otherwise the

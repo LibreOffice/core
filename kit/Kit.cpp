@@ -2844,11 +2844,20 @@ void Document::deliverVectorDelta(const std::string& payload)
     if (isBackgroundSaveProcess())
         return;
 
+    // The payload is the id of the part on the first line, then the delta JSON.
+    const std::size_t newline = payload.find('\n');
+    if (newline == std::string::npos)
+    {
+        LOG_WRN("Vector primitives delta without a part id, dropped");
+        return;
+    }
+    const std::string partId = payload.substr(0, newline);
+    const std::string json = payload.substr(newline + 1);
+
     // Every session that holds the part reads the same delta, so it is compressed once, for
     // the first session that takes it, and the frame is handed to each of them. A session that
     // draws bitmap tiles, or was never served this part, has no use for it. An inactive or
     // disconnected session is sent no delta.
-    const std::string partId = ChildSession::vectorPartIdOf(payload);
     std::optional<std::vector<char>> frame;
     for (const auto& it : _sessions)
     {
@@ -2857,9 +2866,9 @@ void Document::deliverVectorDelta(const std::string& payload)
             !session.holdsVectorPart(partId))
             continue;
         if (!frame)
-            frame = ChildSession::zstdFrame("zstdvectorprimitivesdelta:\n", payload.data(),
-                                            payload.size());
-        session.sendVectorDelta(*frame, payload);
+            frame = ChildSession::zstdFrame("zstdvectorprimitivesdelta:\n", json.data(),
+                                            json.size());
+        session.sendVectorDelta(*frame, json);
     }
 }
 

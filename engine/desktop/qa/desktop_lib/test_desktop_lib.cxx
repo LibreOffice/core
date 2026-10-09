@@ -2025,7 +2025,10 @@ void DesktopKitTest::testVectorDeltaPushCoalescing()
 
     CPPUNIT_ASSERT(!aNotificationList.empty());
     CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::VECTOR_PRIMITIVES_DELTA), std::get<0>(aNotificationList.back()));
-    CPPUNIT_ASSERT(std::get<1>(aNotificationList.back()).find("vectorprimitivesdelta") != std::string::npos);
+    // The payload names the part on its first line, and the delta follows.
+    const std::string& rPayload = std::get<1>(aNotificationList.back());
+    CPPUNIT_ASSERT(rPayload.starts_with(std::string(aPartId) + "\n{"));
+    CPPUNIT_ASSERT(rPayload.find("vectorprimitivesdelta") != std::string::npos);
 }
 
 void DesktopKitTest::testTileInvalidationCompression()
