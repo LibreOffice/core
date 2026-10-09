@@ -564,7 +564,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
 void DocumentDigitalSignatures::manageTrustedSources(  )
 {
-    ImplManageMacroSecurity(u"SecurityLevelPage"_ustr);
+    ImplManageMacroSecurity(u"SecurityTrustPage"_ustr);
 }
 
 void DocumentDigitalSignatures::manageMacroSecurity()
