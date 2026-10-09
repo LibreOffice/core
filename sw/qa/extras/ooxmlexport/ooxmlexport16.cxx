@@ -797,12 +797,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf136841, "tdf136841.docx")
     // - Expected: Color: R:228 G:71 B:69 A:0
     // - Actual  : Color: R:0 G:0 B:0 A:0
 
-#if defined(_WIN32) || (defined(MACOSX) && !USE_HEADLESS_CODE)
     CPPUNIT_ASSERT_EQUAL( Color(228,71,69), bitmap.GetPixelColor(38,38));
-#else
+
+    // tdf#168910: CairoSDPR is currently disabled by default. When it is
+    // reenabled, this test will need to be adjusted again.
     // NOTE: For CairoSDPR the Color changes slightly from (228,71,69)
-    CPPUNIT_ASSERT_EQUAL( Color(228,72,70), bitmap.GetPixelColor(38,38));
-#endif
+    // CPPUNIT_ASSERT_EQUAL( Color(228,72,70), bitmap.GetPixelColor(38,38));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138953)
