@@ -202,8 +202,7 @@ inline E & Sequence< E >::operator [] ( sal_Int32 nIndex )
 template< class E >
 inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
 {
-    // silence spurious -Werror=strict-overflow warnings from GCC 4.8.2
-    assert(nIndex >= 0 && static_cast<sal_uInt32>(nIndex) < static_cast<sal_uInt32>(getLength()));
+    assert(nIndex >= 0 && nIndex < getLength());
     return reinterpret_cast< const E * >( _pSequence->elements )[ nIndex ];
 }
 
