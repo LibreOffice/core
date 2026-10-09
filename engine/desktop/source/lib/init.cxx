@@ -1682,7 +1682,7 @@ void CallbackFlushHandler::flushVectorPrimitivesDeltas()
 
         // Nothing is written when the comparison found the part unchanged since it was last
         // pushed. That leaves an empty document, which is not worth a frame of its own.
-        if (aDelta == "{ }")
+        if (aDelta == tools::JsonWriter::EMPTY_DOCUMENT)
             continue;
 
         m_pCallback(COKitCallbackType::VECTOR_PRIMITIVES_DELTA, aDelta.getStr(), m_pData);

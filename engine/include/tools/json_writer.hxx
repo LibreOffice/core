@@ -42,6 +42,9 @@ class TOOLS_DLLPUBLIC JsonWriter
     bool mbClosed; // cannot add to it anymore
 
 public:
+    /// What finishAndGetAsOString returns when nothing was put into the document.
+    static constexpr OString EMPTY_DOCUMENT = "{ }"_ostr;
+
     JsonWriter();
     ~JsonWriter();
 

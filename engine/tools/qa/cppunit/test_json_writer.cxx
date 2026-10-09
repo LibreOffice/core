@@ -24,11 +24,13 @@ public:
     void test1();
     void test2();
     void testArray();
+    void testEmptyDocument();
 
     CPPUNIT_TEST_SUITE(JsonWriterTest);
     CPPUNIT_TEST(test1);
     CPPUNIT_TEST(test2);
     CPPUNIT_TEST(testArray);
+    CPPUNIT_TEST(testEmptyDocument);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -89,6 +91,13 @@ void JsonWriterTest::testArray()
     OString aResult(aJson.finishAndGetAsOString());
 
     CPPUNIT_ASSERT_EQUAL("{ \"items\": [ \"foo\", \"bar\"]}"_ostr, aResult);
+}
+
+void JsonWriterTest::testEmptyDocument()
+{
+    // Finishing a writer that was given nothing yields the empty document.
+    tools::JsonWriter aJson;
+    CPPUNIT_ASSERT_EQUAL(tools::JsonWriter::EMPTY_DOCUMENT, aJson.finishAndGetAsOString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(JsonWriterTest);
