@@ -134,8 +134,21 @@ void ViewObjectContactOfPageBackground::createPrimitive2DSequence(const DisplayI
 
             if(COL_AUTO == aInitColor)
             {
-                const svtools::ColorConfig aColorConfig;
-                aInitColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+                // The document background of the color scheme is for the screen. Print, print
+                // preview and PDF export put a page without a fill of its own, such as a notes
+                // page, on white paper.
+                const bool bToView(!GetObjectContact().isOutputToPrinter()
+                                   && !GetObjectContact().isOutputToPDFFile()
+                                   && !rView.IsPrintPreview());
+                if (bToView)
+                {
+                    const svtools::ColorConfig aColorConfig;
+                    aInitColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+                }
+                else
+                {
+                    aInitColor = COL_WHITE;
+                }
             }
         }
 

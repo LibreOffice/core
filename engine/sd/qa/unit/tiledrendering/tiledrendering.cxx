@@ -27,6 +27,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/hash.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
@@ -54,6 +55,8 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/sdtagitm.hxx>
+#include <svx/sdtfsitm.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
@@ -2949,6 +2952,88 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesPageAutoColorWithDarkSlideMa
     CPPUNIT_ASSERT(pNotesObject);
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, getShapeTextEditAutoColor(pXImpressDocument, pNotesObject,
                                                               pViewShell->GetView()));
+}
+
+// Collects the fill colors of the filled paths and the colors of the text in a PDF page object,
+// also inside the form objects it holds
+static void collectPdfColors(vcl::pdf::PDFiumPageObject& rObject, std::vector<Color>& rPathColors,
+                             std::vector<Color>& rTextColors)
+{
+    switch (rObject.getType())
+    {
+        case vcl::pdf::PDFPageObjectType::Path:
+        {
+            vcl::pdf::PDFFillMode eFillMode;
+            bool bStroke;
+            rObject.getDrawMode(eFillMode, bStroke);
+            if (eFillMode != vcl::pdf::PDFFillMode::None)
+                rPathColors.push_back(rObject.getFillColor());
+            break;
+        }
+        case vcl::pdf::PDFPageObjectType::Text:
+            rTextColors.push_back(rObject.getFillColor());
+            break;
+        case vcl::pdf::PDFPageObjectType::Form:
+            for (int i = 0; i < rObject.getFormObjectCount(); ++i)
+                collectPdfColors(*rObject.getFormObject(i), rPathColors, rTextColors);
+            break;
+        default:
+            break;
+    }
+}
+
+// The notes pages exported to PDF for printing sit on white paper with dark notes text, also
+// while the view has a dark color scheme. A notes page has no fill of its own, and the notes text
+// here is stretched to fit its frame, which lays it out apart from ordinary text.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesPagesPdfOnWhiteWithDarkScheme)
+{
+    // Changing the theme writes the document color of the whole process, so the color that was
+    // in place is put back at the end of the test.
+    ScopedDocumentColor aScopedDocumentColor;
+
+    addScheme(u"Dark"_ustr, Color(0x1c, 0x1c, 0x1c));
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    dispatchThemeCommand(mxComponent, u".uno:ChangeTheme"_ustr, u"Dark"_ustr);
+
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    SdPage* pNotesPage = pDoc->GetSdPage(0, PageKind::Notes);
+    CPPUNIT_ASSERT(pNotesPage);
+    auto pNotesObject = dynamic_cast<SdrTextObj*>(pNotesPage->GetPresObj(PresObjKind::Notes));
+    CPPUNIT_ASSERT(pNotesObject);
+    pNotesObject->SetEmptyPresObj(false);
+    pNotesObject->SetText(u"Speaker notes"_ustr);
+    // Fit to size applies only to a frame that keeps its width
+    pNotesObject->SetMergedItem(makeSdrTextAutoGrowWidthItem(false));
+    pNotesObject->SetMergedItem(SdrTextFitToSizeTypeItem(drawing::TextFitToSizeType_PROPORTIONAL));
+
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { u"ExportNotesPages"_ustr, cpo::uno::Any(true) },
+        { u"ExportOnlyNotesPages"_ustr, cpo::uno::Any(true) },
+    }));
+    comphelper::SequenceAsHashMap aMediaDescriptor;
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    std::vector<Color> aPathColors;
+    std::vector<Color> aTextColors;
+    for (int i = 0; i < pPdfPage->getObjectCount(); ++i)
+        collectPdfColors(*pPdfPage->getObject(i), aPathColors, aTextColors);
+
+    // Every filled area on the page is light, so the page sits on white paper
+    for (const Color& rColor : aPathColors)
+        CPPUNIT_ASSERT_MESSAGE(OString("dark fill " + rColor.AsRGBHexString().toUtf8()).getStr(),
+                               !rColor.IsDark());
+
+    // The stretched notes text is dark, so it reads on the white page
+    CPPUNIT_ASSERT(!aTextColors.empty());
+    for (const Color& rColor : aTextColors)
+        CPPUNIT_ASSERT_MESSAGE(OString("light text " + rColor.AsRGBHexString().toUtf8()).getStr(),
+                               rColor.IsDark());
 }
 
 // Test that changing the theme in one view doesn't change it in the other view
