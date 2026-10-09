@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach expect require */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -111,6 +111,49 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 		// Clearing the field must remove the Outline highlight.
 		cy.cGet('input#navigator-search-input').type('{selectall}{backspace}');
 		cy.cGet('#contenttree .ui-treeview-entry.highlighted').should('not.exist');
+	});
+
+	it('The close button hides the navigator, and the floating icon shows it again', function() {
+		cy.cGet('#navigation-sidebar').should('have.class', 'visible');
+		cy.cGet('#contenttree').should('contain.text', 'Feedback');
+
+		desktopHelper.closeNavigatorSidebar();
+		helper.processToIdle(this.win);
+		cy.cGet('#navigation-sidebar').should('not.have.class', 'visible');
+		// The content tree is gone once core has closed its navigator.
+		cy.cGet('#contenttree').should('not.exist');
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.showNavigator).to.be.false;
+		});
+
+		cy.cGet('#navigator-floating-icon').click();
+		helper.processToIdle(this.win);
+		cy.cGet('#navigation-sidebar').should('have.class', 'visible');
+		cy.cGet('#contenttree').should('contain.text', 'Feedback');
+	});
+
+	it('Saved settings open and close the navigator to match them', function() {
+		cy.cGet('#contenttree').should('contain.text', 'Feedback');
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.showNavigator).to.be.true;
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.settings.applyBrowserSettings({ 'text.ShowNavigator': 'false' });
+			return helper.processToIdle(win);
+		});
+		cy.cGet('#navigation-sidebar').should('not.have.class', 'visible');
+		cy.cGet('#contenttree').should('not.exist');
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.showNavigator).to.be.false;
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.settings.applyBrowserSettings({ 'text.ShowNavigator': 'true' });
+			return helper.processToIdle(win);
+		});
+		cy.cGet('#navigation-sidebar').should('have.class', 'visible');
+		cy.cGet('#contenttree').should('contain.text', 'Feedback');
 	});
 
 	it('Jump to element even when cursor not visible', function() {
