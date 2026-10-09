@@ -384,15 +384,16 @@ extension.
 
 `DocumentApp` and `SpreadsheetApp` (documents, sheets, ranges, the active
 selection and cursor), `HtmlService`, `PropertiesService.getUserProperties`
-(stored in the main window's `localStorage`), `LanguageApp.translate`, `Session`,
+(stored in the main window's `localStorage`) and `getDocumentProperties` (stored
+in one custom document property per add-on), `LanguageApp.translate`, `Session`,
 `Utilities` and `Logger`. A sidebar or dialog that uses `localStorage` itself gets
 the add-on's own entries, which the main window keeps, through the `Storage`
 methods only, and its `sessionStorage` lasts as long as the frame.
 
 `getUi().alert()` records its message rather than blocking on a modal, and the
 message becomes a dismissible banner in the panel once the call returns. Script
-and document properties, `getUi().prompt()`, the dialog calls and installable
-triggers all throw, naming what was missing.
+properties, `getUi().prompt()`, the dialog calls and installable triggers all
+throw, naming what was missing.
 
 Anything else is simply absent, so an add-on that reaches for it fails naming
 the call. That is the point of packaging real add-ons unmodified: what they need

@@ -630,13 +630,81 @@ $internal.runGasAddOn = function(
             return function() {
                 throw new Error(
                     'PropertiesService.' + name + ' is not yet supported in the COOL Apps'
-                        + ' Script wrapper; only getUserProperties is wired up so far.');
+                        + ' Script wrapper; only getUserProperties and getDocumentProperties are'
+                        + ' wired up so far.');
             };
+        }
+        // The document properties of the add-on are one custom document property, named by the
+        // ID of the add-on, whose value is a JSON object of all the add-on's keys, so that they
+        // are saved with the document and can be removed in one go in its properties dialog:
+        function documentPropsFacade() {
+            const custom = cool.getActiveUnoModel().getDocumentProperties()
+                .getUserDefinedProperties();
+            // A value that is not a JSON object, as after a user edited it in the properties
+            // dialog, holds no properties:
+            function read() {
+                if (!custom.getPropertySetInfo().hasPropertyByName(extensionId)) {
+                    return {};
+                }
+                let values;
+                try {
+                    values = JSON.parse(custom.getPropertyValue(extensionId));
+                } catch (e) {
+                    return {};
+                }
+                return values !== null && typeof values === 'object' && !Array.isArray(values)
+                    ? values : {};
+            }
+            function write(values) {
+                const exists = custom.getPropertySetInfo().hasPropertyByName(extensionId);
+                if (Object.keys(values).length === 0) {
+                    if (exists) custom.removeProperty(extensionId);
+                } else if (exists && typeof custom.getPropertyValue(extensionId) === 'string') {
+                    custom.setPropertyValue(extensionId, JSON.stringify(values));
+                } else {
+                    // A property whose type a user changed in the properties dialog takes no
+                    // string value, so it is replaced by a new property of type string:
+                    if (exists) custom.removeProperty(extensionId);
+                    // The flag is com.sun.star.beans.PropertyAttribute.REMOVABLE:
+                    custom.addProperty(extensionId, 128, JSON.stringify(values));
+                }
+            }
+            const f = {
+                getProperty: function(k) {
+                    const values = read();
+                    return Object.hasOwn(values, String(k)) ? values[String(k)] : null;
+                },
+                setProperty: function(k, v) {
+                    const values = read();
+                    values[String(k)] = propertyValue(v);
+                    write(values);
+                    return f;
+                },
+                deleteProperty: function(k) {
+                    const values = read();
+                    delete values[String(k)];
+                    write(values);
+                    return f;
+                },
+                getProperties: function() { return read(); },
+                setProperties: function(o, deleteAllOthers) {
+                    const values = deleteAllOthers ? {} : read();
+                    for (const k of Object.keys(o)) values[k] = propertyValue(o[k]);
+                    write(values);
+                    return f;
+                },
+                deleteAllProperties: function() {
+                    write({});
+                    return f;
+                },
+                getKeys: function() { return Object.keys(read()); }
+            };
+            return f;
         }
         globalThis.PropertiesService = {
             getUserProperties: userPropsFacade,
             getScriptProperties: notYetImplementedScope('getScriptProperties'),
-            getDocumentProperties: notYetImplementedScope('getDocumentProperties')
+            getDocumentProperties: documentPropsFacade
         };
 
         // Hops back to the main window over the XClientRuntime proxy since the kit has no

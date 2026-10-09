@@ -424,4 +424,64 @@ function test() {
     console.assert(
         body.getChild(0).asParagraph().getHeading() === DocumentApp.ParagraphHeading.NORMAL);
     console.assert(body.getText() === '');
+
+    // Document properties are strings that a missing key reads as null:
+    const docProps = PropertiesService.getDocumentProperties();
+    docProps.deleteAllProperties();
+    console.assert(docProps.getProperty('k') === null);
+    docProps.setProperty('k', 'v').setProperties({ a: '1', b: 2 });
+    console.assert(docProps.getProperty('k') === 'v');
+    console.assert(docProps.getProperty('b') === '2.0');
+    console.assert(docProps.setProperty('n', 2.5).getProperty('n') === '2.5');
+    docProps.deleteProperty('n');
+    console.assert(JSON.stringify(docProps.getKeys().sort()) === '["a","b","k"]');
+    if (globalThis.cool) {
+        console.assert(
+            cool.getActiveUnoModel().getDocumentProperties().getUserDefinedProperties()
+                .getPropertyValue('scriptinterop_test') === '{"k":"v","a":"1","b":"2.0"}');
+    }
+    docProps.deleteProperty('a');
+    docProps.setProperties({ c: '3' }, true);
+    console.assert(JSON.stringify(docProps.getProperties()) === '{"c":"3"}');
+
+    // A number is stored the way GAS writes it:
+    console.assert(docProps.setProperty('number', -3).getProperty('number') === '-3.0');
+    console.assert(docProps.setProperty('number', 9999999).getProperty('number') === '9999999.0');
+    console.assert(docProps.setProperty('number', 10000000).getProperty('number') === '1.0E7');
+    console.assert(
+        docProps.setProperty('number', 12345678).getProperty('number') === '1.2345678E7');
+    console.assert(
+        docProps.setProperty('number', 123456789012).getProperty('number') === '1.23456789012E11');
+    console.assert(docProps.setProperty('number', 1e21).getProperty('number') === '1.0E21');
+    console.assert(docProps.setProperty('number', 0.001).getProperty('number') === '0.001');
+    console.assert(docProps.setProperty('number', 0.0001).getProperty('number') === '1.0E-4');
+    console.assert(docProps.setProperty('number', 1e-7).getProperty('number') === '1.0E-7');
+    console.assert(
+        docProps.setProperty('number', 1 / 3).getProperty('number') === '0.3333333333333333');
+    console.assert(docProps.setProperty('number', -0).getProperty('number') === '-0.0');
+    console.assert(docProps.setProperty('number', NaN).getProperty('number') === 'NaN');
+    console.assert(docProps.setProperty('number', Infinity).getProperty('number') === 'Infinity');
+    console.assert(docProps.setProperty('number', true).getProperty('number') === 'true');
+    {
+        let message = null;
+        try {
+            docProps.setProperty('number', null);
+        } catch (e) {
+            message = e.message;
+        }
+        console.assert(message === 'Invalid argument: value');
+    }
+
+    // A property whose type a user changed to a number in the properties dialog holds no
+    // properties, and setting one replaces it:
+    if (globalThis.cool) {
+        const custom = cool.getActiveUnoModel().getDocumentProperties().getUserDefinedProperties();
+        custom.removeProperty('scriptinterop_test');
+        custom.addProperty('scriptinterop_test', 128, 42);
+        console.assert(docProps.getKeys().length === 0);
+        console.assert(docProps.setProperty('k', 'v').getProperty('k') === 'v');
+    }
+
+    docProps.deleteAllProperties();
+    console.assert(docProps.getKeys().length === 0);
 }
