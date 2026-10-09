@@ -756,6 +756,25 @@ std::unique_ptr<SdrModel> SdrExchangeView::CreateMarkedObjModel() const
                 pNewObj = mxSelectionController->GetMarkedSdrObjClone(*pNewModel);
             }
         }
+        else if (pObj->isDiagram() && 1 == aSdrObjects.size()
+                 && SdrObject::useAdvancedDiagramFeatures())
+        {
+            /*
+                A diagram selected through one of its nodes copies that node alone, as a plain
+                object: the locks and the model id the diagram gave it stay behind with the
+                diagram. The background shape stands for the whole diagram, which is copied whole.
+            */
+            SdrObject* pSubSelection(pObj->getDiagramSubSelection());
+            if (nullptr != pSubSelection && pSubSelection != pObj
+                && !pSubSelection->isDiagramBackgroundShape())
+            {
+                pNewObj = pSubSelection->CloneSdrObject(*pNewModel);
+                pNewObj->SetMoveProtect(false);
+                pNewObj->SetResizeProtect(false);
+                pNewObj->SetDeleteProtect(false);
+                pNewObj->setDiagramDataModelID(OUString());
+            }
+        }
 
         if(!pNewObj)
         {
