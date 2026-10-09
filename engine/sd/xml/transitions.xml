@@ -29,6 +29,9 @@
  <anim:par pres:preset-id="wipe-down">
   <anim:transitionFilter smil:type="barWipe" smil:subtype="topToBottom"/>
  </anim:par>
+ <anim:par pres:preset-id="wipe-airplane">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="airplane"/>
+ </anim:par>
  <anim:par pres:preset-id="wheel-clockwise-1-spoke">
   <anim:transitionFilter smil:type="pinWheelWipe" smil:subtype="oneBlade"/>
  </anim:par>

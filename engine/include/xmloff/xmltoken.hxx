@@ -3650,6 +3650,8 @@ namespace xmloff::token {
         XML_REFLECTION_END_TRANSPARENCY,
         XML_REFLECTION_END_POSITION,
 
+        XML_AIRPLANE,
+
         XML_TOKEN_END
     };
 

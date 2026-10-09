@@ -1698,6 +1698,11 @@
           <value xml:lang="en-US">Top to Bottom</value>
         </prop>
       </node>
+      <node oor:name="airplane" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Airplane</value>
+        </prop>
+      </node>
       <node oor:name="top-right-bottom-left" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Top Right to Bottom Left</value>
@@ -2349,6 +2354,14 @@
         </prop>
         <prop oor:name="Variant" oor:type="xs:string">
           <value>bottom-top</value>
+        </prop>
+      </node>
+      <node oor:name="wipe-airplane" oor:op="replace">
+        <prop oor:name="Set" oor:type="xs:string">
+          <value>wipe</value>
+        </prop>
+        <prop oor:name="Variant" oor:type="xs:string">
+          <value>airplane</value>
         </prop>
       </node>
       <node oor:name="random-transition" oor:op="replace">
