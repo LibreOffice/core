@@ -3345,62 +3345,6 @@ SfxBoolItem ReadOnly SID_DOC_READONLY
 ]
 
 
-SfxBoolItem MacroRecorder SID_RECORDMACRO
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    NoRecord;
-
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Macro;
-]
-
-
-SfxVoidItem StopRecording SID_STOP_RECORDING
-(SfxBoolItem DontRecord FN_PARAM_1)
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    NoRecord;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Macro;
-]
-
-
-SfxBoolItem MacroRecordingFloat SID_RECORDING_FLOATWINDOW
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    NoRecord;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Macro;
-]
-
-
 SfxStringItem Redo SID_REDO
 ( SfxUInt16Item Redo SID_REDO, SfxBoolItem Repair SID_REPAIRPACKAGE )
 [

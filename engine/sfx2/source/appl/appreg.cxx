@@ -29,7 +29,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <partwnd.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <recfloat.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 
@@ -44,7 +43,6 @@ void SfxApplication::Registrations_Impl()
     SfxViewShell::RegisterInterface();
 
     // ChildWindows
-    SfxRecordingFloatWrapper_Impl::RegisterChildWindow();
     SfxPartChildWnd_Impl::RegisterChildWindow();
     SfxDockingWrapper::RegisterChildWindow();
     SfxInfoBarContainerChild::RegisterChildWindow( true, nullptr, SfxChildWindowFlags::NEVERHIDE );

@@ -146,7 +146,6 @@
             <menu:menuitem menu:id=".uno:ChooseMacro"/>
             <menu:menuitem menu:id=".uno:ModuleDialog"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:MacroRecorder"/>
             <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
         </menu:menupopup>
     </menu:menu>

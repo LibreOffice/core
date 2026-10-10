@@ -1502,25 +1502,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_BASICCHOOSER:
         {
-            const SfxItemSet* pArgs = rReq.GetArgs();
-            const SfxBoolItem* pItem;
-            bool bChooseOnly = false;
-            Reference< XModel > xLimitToModel;
-            if(pArgs && (pItem = pArgs->GetItemIfSet(SID_RECORDMACRO, false)) )
-            {
-                bool bRecord = pItem->GetValue();
-                if ( bRecord )
-                {
-                    // !Hack
-                    bChooseOnly = false;
-                    SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
-                    OSL_ENSURE( pCurrentShell, "macro recording outside an SFX document?" );
-                    if ( pCurrentShell )
-                        xLimitToModel = pCurrentShell->GetModel();
-                }
-            }
-
-            rReq.SetReturnValue(SfxStringItem(rReq.GetSlot(), ChooseMacro(rReq.GetFrameWeld(), xLimitToModel, bChooseOnly)));
+            rReq.SetReturnValue(SfxStringItem(rReq.GetSlot(), ChooseMacro(rReq.GetFrameWeld(), nullptr, false)));
             rReq.Done();
         }
         break;

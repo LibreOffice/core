@@ -5549,19 +5549,6 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value>9</value>
         </prop>
       </node>
-      <node oor:name=".uno:MacroRecorder" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Record Macro</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:StopRecording" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Stop Recording</value>
-        </prop>
-      </node>
       <node oor:name=".uno:SendMailDocAsPDF" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Email as P~DF...</value>

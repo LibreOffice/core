@@ -188,7 +188,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/newstyle \
     sfx2/source/dialog/partwnd \
     sfx2/source/dialog/passwd \
-    sfx2/source/dialog/recfloat \
     sfx2/source/dialog/securitypage \
     sfx2/source/dialog/sfxdlg \
     sfx2/source/dialog/splitwin \

@@ -195,7 +195,6 @@ public:
     SAL_DLLPRIVATE void MiscExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void MiscState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl();
-    SAL_DLLPRIVATE void AddDispatchMacroToBasic_Impl(const OUString& sMacro);
 
     SAL_DLLPRIVATE void Exec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void INetExecute_Impl(SfxRequest &);
