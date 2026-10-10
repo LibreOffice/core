@@ -131,11 +131,6 @@ using namespace css;
 
 
    ; private
-   slot-url = "SLOT:" path ["?" *uric]
-   path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")
-
-
-   ; private
    macro-url = "MACRO:" path ["?" *uric]
    path = *(escaped / alphanum / "!" / "$" / "'" / "(" / ")" / "*" / "+" / "," / "-" / "." / "/" / ":" / ";" / "=" / "@" / "_" / "~")
 
@@ -327,7 +322,6 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
     static constexpr OUString PRIVATE = u"private"_ustr;
     static constexpr OUString VND_HELP = u"vnd.sun.star.help"_ustr;
     static constexpr OUString HTTPS = u"https"_ustr;
-    static constexpr OUString SLOT = u"slot"_ustr;
     static constexpr OUString MACRO = u"macro"_ustr;
     static constexpr OUString JAVASCRIPT = u"javascript"_ustr;
     static constexpr OUString DATA = u"data"_ustr;
@@ -375,9 +369,6 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
         SchemeInfo{
             HTTPS, u"https://"_ustr, true, false, false, false, true, true,
             true, true},
-        SchemeInfo{
-            SLOT, u"slot:"_ustr, false, false, false, false, false, false, false,
-            true},
         SchemeInfo{
             MACRO, u"macro:"_ustr, false, false, false, false, false, false,
             false, true},
@@ -2219,8 +2210,6 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
             { u"private:trashcan:"_ustr, u"staroffice.trashcan:"_ustr,
               INetProtocol::PrivSoffice, PrefixInfo::Kind::Internal },
             { u"sftp:"_ustr, u""_ustr, INetProtocol::Sftp, PrefixInfo::Kind::Official },
-            { u"slot:"_ustr, u"staroffice.slot:"_ustr, INetProtocol::Slot,
-              PrefixInfo::Kind::Internal },
             { u"smb:"_ustr, u""_ustr, INetProtocol::Smb, PrefixInfo::Kind::Official },
             { u"staroffice.component:"_ustr, u".component:"_ustr, INetProtocol::Component,
               PrefixInfo::Kind::External },
@@ -2239,8 +2228,6 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
               PrefixInfo::Kind::External },
             { u"staroffice.searchfolder:"_ustr, u"private:searchfolder:"_ustr,
               INetProtocol::PrivSoffice, PrefixInfo::Kind::External },
-            { u"staroffice.slot:"_ustr, u"slot:"_ustr, INetProtocol::Slot,
-              PrefixInfo::Kind::External },
             { u"staroffice.trashcan:"_ustr, u"private:trashcan:"_ustr,
               INetProtocol::PrivSoffice, PrefixInfo::Kind::External },
             { u"staroffice.uno:"_ustr, u".uno:"_ustr, INetProtocol::Uno,
@@ -3082,7 +3069,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
 
 
         case INetProtocol::PrivSoffice:
-        case INetProtocol::Slot:
         case INetProtocol::Hid:
         case INetProtocol::Macro:
         case INetProtocol::Uno:
