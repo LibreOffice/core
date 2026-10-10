@@ -1683,8 +1683,9 @@ bool ClientSession::_handleInput(const char *buffer, int length)
             // drop the command so the label dialog never opens in core, blocking apply/change/
             // remove together. Dropped here, before forwarding to the child, so the kit/core
             // never sees it regardless of what the client sends.
-            if (tokens.equals(1, ".uno:SecurityLabel") && _wopiFileInfo &&
-                !_wopiFileInfo->getUserCanChangeSecurityLabel())
+            // The engine finds the command by its name in any letter case.
+            if (Util::iequal(COOLProtocol::getUnoCommandName(tokens[1]), "SecurityLabel") &&
+                _wopiFileInfo && !_wopiFileInfo->getUserCanChangeSecurityLabel())
             {
                 LOG_WRN("Blocking .uno:SecurityLabel: host set UserCanChangeSecurityLabel=false");
                 return true;

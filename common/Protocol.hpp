@@ -353,6 +353,17 @@ namespace COOLProtocol
                 token != "userinactive");
     }
 
+    /// The command name in a ".uno:" command: the text after ".uno:" up to the first '?', '#' or
+    /// '.', which start the arguments, a fragment and a sub-command. Empty for any other token.
+    inline std::string_view getUnoCommandName(const std::string_view command)
+    {
+        static constexpr std::string_view prefix = ".uno:";
+        if (!command.starts_with(prefix))
+            return {};
+        const std::string_view name = command.substr(prefix.size());
+        return name.substr(0, name.find_first_of("?#."));
+    }
+
     /// Returns true if the token is a likely document modifying command.
     /// This is never 100% accurate, but it is needed to filter out tokens
     /// that certainly do not modify the document, such as 'load' and 'save'

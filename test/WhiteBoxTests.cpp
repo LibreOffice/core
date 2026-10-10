@@ -224,6 +224,15 @@ void WhiteBoxTests::testCOOLProtocolFunctions()
 
     ints = COOLProtocol::tokenizeInts(std::string(",,,"));
     LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), ints.size());
+
+    // Arguments, a fragment and a sub-command are not part of the command name.
+    LOK_ASSERT_EQUAL_STR("SecurityLabel", COOLProtocol::getUnoCommandName(".uno:SecurityLabel"));
+    LOK_ASSERT_EQUAL_STR("securitylabel",
+                         COOLProtocol::getUnoCommandName(".uno:securitylabel?Type:string=x"));
+    LOK_ASSERT_EQUAL_STR("SecurityLabel", COOLProtocol::getUnoCommandName(".uno:SecurityLabel#x"));
+    LOK_ASSERT_EQUAL_STR("SecurityLabel", COOLProtocol::getUnoCommandName(".uno:SecurityLabel.x"));
+    LOK_ASSERT_EQUAL_STR("", COOLProtocol::getUnoCommandName("slot:1234"));
+    LOK_ASSERT_EQUAL_STR("", COOLProtocol::getUnoCommandName("vnd.sun.star.script:a.py$b"));
 }
 
 void WhiteBoxTests::testSplitting()
