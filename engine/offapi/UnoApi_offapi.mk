@@ -161,8 +161,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/frame,\
 	ContentHandlerFactory \
 	Desktop \
 	DispatchHelper \
-	DispatchRecorder \
-	DispatchRecorderSupplier \
 	DocumentTemplates \
 	Frame \
 	FrameLoaderFactory \
@@ -2350,7 +2348,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	DispatchInformation \
 	DispatchResultEvent \
 	DispatchResultState \
-	DispatchStatement \
 	DoubleInitializationException \
 	FeatureStateEvent \
 	FrameAction \
@@ -2380,8 +2377,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XDispatchProvider \
 	XDispatchProviderInterception \
 	XDispatchProviderInterceptor \
-	XDispatchRecorder \
-	XDispatchRecorderSupplier \
 	XDispatchResultListener \
 	XDocumentTemplates \
 	XExtendedFilterDetection \
@@ -2409,7 +2404,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XModuleManager2 \
 	XNotifyingDispatch \
 	XPopupMenuController \
-	XRecordableDispatch \
 	XSessionManagerClient \
 	XSessionManagerListener \
 	XSessionManagerListener2 \

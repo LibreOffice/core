@@ -7153,22 +7153,6 @@ module com {
      interface ::com::sun::star::frame::XDispatchProvider;
      [optional] interface ::com::sun::star::frame::XDispatchProviderInterception;
     };
-    published interface XDispatchRecorder {
-     interface ::cpo::uno::XInterface;
-     void startRecording([in] ::com::sun::star::frame::XFrame Frame);
-     void endRecording();
-     void recordDispatch([in] ::com::sun::star::util::URL URL, [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments);
-     void recordDispatchAsComment([in] ::com::sun::star::util::URL URL, [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments);
-     string getRecordedMacro();
-    };
-    published service DispatchRecorder: ::com::sun::star::frame::XDispatchRecorder;
-    published interface XDispatchRecorderSupplier {
-     interface ::cpo::uno::XInterface;
-     void setDispatchRecorder([in] ::com::sun::star::frame::XDispatchRecorder Recorder);
-     ::com::sun::star::frame::XDispatchRecorder getDispatchRecorder();
-     void dispatchAndRecord([in] ::com::sun::star::util::URL URL, [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments, [in] ::com::sun::star::frame::XDispatch Dispatcher);
-    };
-    published service DispatchRecorderSupplier: ::com::sun::star::frame::XDispatchRecorderSupplier;
     published struct DispatchResultEvent: ::com::sun::star::lang::EventObject {
      short State;
      any Result;
@@ -7177,13 +7161,6 @@ module com {
      const short DONTKNOW = 2;
      const short FAILURE = 0;
      const short SUCCESS = 1;
-    };
-    published struct DispatchStatement {
-     string aCommand;
-     string aTarget;
-     sequence< ::com::sun::star::beans::PropertyValue > aArgs;
-     long nFlags;
-     boolean bIsComment;
     };
    };
    module ucb {
@@ -7227,7 +7204,6 @@ module com {
      interface ::com::sun::star::task::XStatusIndicatorFactory;
      [attribute, readonly] ::com::sun::star::container::XNameContainer UserDefinedAttributes;
      [attribute] string Title;
-     [attribute] ::com::sun::star::frame::XDispatchRecorderSupplier DispatchRecorderSupplier;
      [attribute] ::cpo::uno::XInterface LayoutManager;
     };
     published service Frame: ::com::sun::star::frame::XFrame2;
@@ -7407,10 +7383,6 @@ module com {
      interface ::cpo::uno::XInterface;
      void initNew() raises (::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
      void load([in] sequence< ::com::sun::star::beans::PropertyValue > lArguments) raises (::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::io::IOException, ::cpo::uno::Exception);
-    };
-    published interface XRecordableDispatch {
-     interface ::cpo::uno::XInterface;
-     void dispatchAndRecord([in] ::com::sun::star::util::URL URL, [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments, [in] ::com::sun::star::frame::XDispatchRecorder Recorder);
     };
     published interface XStorable2 {
      interface ::com::sun::star::frame::XStorable;

@@ -28,19 +28,17 @@ namespace framework{
 // Start counting with 0, so it can be used as direct index into an array too.
 enum class FramePropHandle : sal_Int32
 {
-    DispatchRecorderSupplier = 0,
-    IsHidden = 1,
-    LayoutManager = 2,
-    Title = 3,
-    IndicatorInterception = 4,
-    Url = 5,
+    IsHidden = 0,
+    LayoutManager = 1,
+    Title = 2,
+    IndicatorInterception = 3,
+    Url = 4,
     LAST = Url
 };
 
 /** properties for "Frame" class */
 inline constexpr o3tl::enumarray<FramePropHandle, OUString> FramePropNames =
 {
-    u"DispatchRecorderSupplier"_ustr,
     u"IsHidden"_ustr,
     u"LayoutManager"_ustr,
     u"Title"_ustr,

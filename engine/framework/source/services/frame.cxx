@@ -262,9 +262,6 @@ public:
 
     virtual cpo::uno::Reference < css::container::XNameContainer > getUserDefinedAttributes() override;
 
-    virtual cpo::uno::Reference < css::frame::XDispatchRecorderSupplier > getDispatchRecorderSupplier() override;
-    virtual void setDispatchRecorderSupplier(const cpo::uno::Reference < css::frame::XDispatchRecorderSupplier > & ) override;
-
     virtual cpo::uno::Reference < cpo::uno::XInterface > getLayoutManager() override;
     virtual void setLayoutManager(const cpo::uno::Reference < cpo::uno::XInterface > & ) override;
 
@@ -398,8 +395,6 @@ private:
     /// due to FrameActionEvent
     bool                                                                    m_bConnected;
     sal_Int16                                                               m_nExternalLockCount;
-    /// is used for dispatch recording and will be set/get from outside. Only the frame provides it!
-    cpo::uno::Reference< css::frame::XDispatchRecorderSupplier >            m_xDispatchRecorderSupplier;
     /// ref counted class to support disabling commands defined by configuration file
     SvtCommandOptions                                                       m_aCommandOptions;
     /// in case of CloseVetoException on method close() was thrown by ourselves, we must close ourselves later if no internal processes are running
@@ -513,11 +508,6 @@ void XFrameImpl::initListeners()
 
     // set information about all supported properties
     impl_setPropertyChangeBroadcaster(*this);
-    impl_addPropertyInfo(
-        FramePropNames[FramePropHandle::DispatchRecorderSupplier],
-        FramePropHandle::DispatchRecorderSupplier,
-        cppu::UnoType<css::frame::XDispatchRecorderSupplier>::get(),
-        css::beans::PropertyAttribute::TRANSIENT);
     impl_addPropertyInfo(
         FramePropNames[FramePropHandle::IndicatorInterception],
         FramePropHandle::IndicatorInterception,
@@ -1812,19 +1802,6 @@ cpo::uno::Reference<css::container::XNameContainer> XFrameImpl::getUserDefinedAt
     return nullptr;
 }
 
-cpo::uno::Reference<css::frame::XDispatchRecorderSupplier> XFrameImpl::getDispatchRecorderSupplier()
-{
-    SolarMutexGuard g;
-    return m_xDispatchRecorderSupplier;
-}
-
-void XFrameImpl::setDispatchRecorderSupplier(const cpo::uno::Reference<css::frame::XDispatchRecorderSupplier>& p)
-{
-    checkDisposed();
-    SolarMutexGuard g;
-    m_xDispatchRecorderSupplier.set(p);
-}
-
 cpo::uno::Reference<cpo::uno::XInterface> XFrameImpl::getLayoutManager()
 {
     SolarMutexGuard g;
@@ -2193,7 +2170,6 @@ void XFrameImpl::disposing()
         // These calls should be easy, I hope :-)
         m_xDispatchHelper.clear();
         m_xDropTargetListener.clear();
-        m_xDispatchRecorderSupplier.clear();
         m_xLayoutManager.clear();
         m_xIndicatorFactoryHelper.clear();
 
@@ -2731,10 +2707,6 @@ void XFrameImpl::impl_setPropertyValue(sal_Int32 nHandle,
                 }
                 break;
 
-        case FramePropHandle::DispatchRecorderSupplier :
-                aValue >>= m_xDispatchRecorderSupplier;
-                break;
-
         case FramePropHandle::LayoutManager :
                 {
                     cpo::uno::Reference< css::frame::XLayoutManager > xOldLayoutManager = m_xLayoutManager;
@@ -2786,10 +2758,6 @@ cpo::uno::Any XFrameImpl::impl_getPropertyValue(sal_Int32 nHandle)
     {
         case FramePropHandle::Title :
                 aValue <<= getTitle ();
-                break;
-
-        case FramePropHandle::DispatchRecorderSupplier :
-                aValue <<= m_xDispatchRecorderSupplier;
                 break;
 
         case FramePropHandle::IsHidden :

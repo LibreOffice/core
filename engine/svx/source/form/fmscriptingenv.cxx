@@ -543,7 +543,6 @@ namespace svxform
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.frame.XModel",u"lockControllers"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.frame.XModel",u"unlockControllers"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.frame.XNotifyingDispatch",u"dispatchWithNotification"),
-            pair<std::u16string_view,std::u16string_view>(u"com.sun.star.frame.XRecordableDispatch",u"dispatchAndRecord"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.frame.XSessionManagerClient",u"addSessionManagerListener"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.frame.XSessionManagerClient",u"removeSessionManagerListener"),
             pair<std::u16string_view,std::u16string_view>(u"com.sun.star.frame.XSessionManagerClient",u"queryInteraction"),

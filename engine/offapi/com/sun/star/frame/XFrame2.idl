@@ -92,30 +92,6 @@ published interface XFrame2
      */
     [attribute] string Title;
 
-    /** provides access to the dispatch recorder of the frame
-
-        <p>
-        Such recorder can be used to record dispatch requests.
-        The supplier contains a dispatch recorder and provide the functionality
-        to use it for any dispatch object from outside which supports the interface
-        XDispatch. A supplier is available only, if recording was enabled.
-        That means: if someone wishes to enable recoding on a frame he must set
-        a supplier with a recorder object inside of it. Every user of dispatches
-        has to check then if such supplier is available at this frame property.
-        If value of this property is `NULL` he must call XDispatch::dispatch()
-        on the original dispatch object. If it's a valid value he must use the supplier
-        by calling his method XDispatchRecorderSupplier::dispatchAndRecord()
-        with the original dispatch object as argument.
-        </p>
-
-        <p>
-        Note:<br>
-        It's not recommended to cache an already gotten supplier. Because there exist
-        no possibility to check for enabled/disabled recording then.
-        </p>
-     */
-    [attribute] XDispatchRecorderSupplier DispatchRecorderSupplier;
-
     /** Provides access to the LayoutManager of the frame.
         This is actually of type XLayoutManager, but this API is still experimental (unpublished).
     */
