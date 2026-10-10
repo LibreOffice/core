@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-22 21:46+0200\n"
-"PO-Revision-Date: 2026-10-07 16:42+0000\n"
+"PO-Revision-Date: 2026-10-10 17:57+0000\n"
 "Last-Translator: H2Oufoe <regularwater@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/pt_BR/>\n"
@@ -5911,31 +5911,32 @@ msgstr "Desvincular o slide falhou."
 
 #: src/slideimport/SlideLinks.ts:695 src/slideimport/SlideLinks.ts:756
 msgid "Updating the slides of {0} failed."
-msgstr ""
+msgstr "Atualizando os slides de {0} falhou."
 
 #: src/slideimport/SlideLinks.ts:710
 msgid "No slide of {0} was updated."
-msgstr ""
+msgstr "Nenhum slide de {0} foi atualizado."
 
 #: src/slideimport/SlideLinks.ts:714
 msgid "1 slide updated from {0}."
-msgstr ""
+msgstr "1 slide atualizado a partir de {0}."
 
 #: src/slideimport/SlideLinks.ts:718
 msgid "{0} slides updated from {1}."
-msgstr ""
+msgstr "{0} slides atualizados a partir de {1}."
 
 #: src/slideimport/SlideLinks.ts:747
 msgid "No slide of this presentation is linked to {0}."
-msgstr ""
+msgstr "Nenhum slide dessa apresentação está vinculado a {0}."
 
 #: src/slideimport/SlideLinks.ts:753
 msgid "Another update is still running. Ask for {0} again in a moment."
 msgstr ""
+"Outra atualização ainda está em execução. Solicite {0} novamente em breve."
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
-msgstr ""
+msgstr "Redimensionar painéis"
 
 #: src/control/Control.Scroll.Annotation.js:19
 msgid "Scroll up annotations"
@@ -5947,11 +5948,11 @@ msgstr "Percorrer anotações para baixo"
 
 #: src/control/Control.ServerAuditDialog.ts:63
 msgid "No problems with SSL verification detected"
-msgstr ""
+msgstr "Nenhum problema com a verificação SSL foi detectado"
 
 #: src/control/Control.ServerAuditDialog.ts:78
 msgid "Each document is securely contained (landlock)"
-msgstr ""
+msgstr "Cada documento está contido com segurança (landlock)"
 
 #: src/control/Control.ServerAuditDialog.ts:83
 msgid "Each document is securely contained (Linux namespaces)"
