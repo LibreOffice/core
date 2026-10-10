@@ -165,30 +165,30 @@
     </message>
     <message>
         <source>New Document Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка Нового документа</translation>
     </message>
     <message>
         <source>Could not create a new document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося створити новий документ.</translation>
     </message>
     <message>
         <source>Supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Підтримувані файли</translation>
     </message>
 </context>
 <context>
     <name>TabManager</name>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрити</translation>
     </message>
     <message>
         <source>Close Others</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрити інші</translation>
     </message>
     <message>
         <source>Move Tab to New Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Перемістити вкладку в нове вікно</translation>
     </message>
 </context>
 <context>
