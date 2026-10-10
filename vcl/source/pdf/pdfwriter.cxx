@@ -17,7 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/mapunit.hxx>
+#include <unotools/tempfile.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/svapp.hxx>
 
 #include <pdf/pdfwriter_impl.hxx>
 #include <vcl/pdf/PDFEncryptionInitialization.hxx>
@@ -477,6 +480,36 @@ std::set< PDFWriter::ErrorCode > const & PDFWriter::GetErrors() const
 void PDFWriter::PlayMetafile( const GDIMetaFile& i_rMTF, const vcl::PDFWriter::PlayMetafileContext& i_rPlayContext, PDFExtOutDevData* i_pData )
 {
     xImplementation->playMetafile( i_rMTF, i_pData, i_rPlayContext );
+}
+
+int TestFontPDFExport(const void* data, sal_uInt32 size)
+{
+    utl::TempFileNamed aFontFile(u"", true, u".ttf");
+    aFontFile.EnableKillingFile();
+    SvStream* pFontStream = aFontFile.GetStream(StreamMode::WRITE);
+    pFontStream->WriteBytes(data, size);
+    aFontFile.CloseStream();
+
+    utl::TempFileNamed aPDFFile;
+    aPDFFile.EnableKillingFile();
+    PDFWriter::PDFWriterContext aContext;
+    aContext.URL = aPDFFile.GetURL();
+    PDFWriter aWriter(aContext, {});
+
+    // The font is registered on the writer's own device, under this family name whatever name
+    // it has itself.
+    const OUString aFontName(u"SftFuzzer"_ustr);
+    OutputDevice* pDevice = aWriter.GetReferenceDevice();
+    if (pDevice->AddTempDevFont(aFontFile.GetURL(), aFontName))
+    {
+        aWriter.NewPage(595, 842);
+        aWriter.SetMapMode(MapMode(MapUnit::MapPoint));
+        aWriter.SetFont(vcl::Font(aFontName, Size(0, 24)));
+        aWriter.DrawText(Point(50, 50), u"The quick brown fox jumps over the lazy dog 0123456789"_ustr);
+        aWriter.Emit();
+        pDevice->RemoveTempDevFont(aFontFile.GetURL(), aFontName);
+    }
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

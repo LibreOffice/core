@@ -1319,6 +1319,8 @@ public:
 
 } // end namespace vcl
 
+int VCL_DLLPUBLIC TestFontPDFExport(const void* data, sal_uInt32 size);
+
 #endif // INCLUDED_VCL_PDFWRITER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
