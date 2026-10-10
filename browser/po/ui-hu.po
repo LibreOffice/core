@@ -8,20 +8,20 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-22 21:46+0200\n"
-"PO-Revision-Date: 2026-06-27 10:05+0000\n"
+"PO-Revision-Date: 2026-10-10 17:57+0000\n"
 "Last-Translator: Andras Timar <andras.timar@collabora.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/hu/>\n"
-"Language: \n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/hu/>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
-msgstr "Adminisztrátori konzol"
+msgstr "Kezelői konzol"
 
 #: admin/admin.strings.js:16
 msgid "Settings"
@@ -495,38 +495,40 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:585
 msgid "Invalid request"
-msgstr ""
+msgstr "Érvénytelen kérés"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:586
 #: src/control/Control.AIChatSidebar.ts:2187
 msgid "Invalid API key"
-msgstr ""
+msgstr "Érvénytelen API-kulcs"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:587
 #: src/control/Control.AIChatSidebar.ts:2188
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "Az API-kulcsnak nincs megfelelő jogosultsága"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:590
 msgid ""
 "This AI host is not in the server's allowed host list (lok_allow.host). Ask "
 "your administrator to permit it."
 msgstr ""
+"Ez az AI-kiszolgáló nincs a kiszolgáló engedélyezett gépeinek listáján "
+"(lok_allow.host). Kérje meg a rendszergazdát, hogy engedélyezze."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
 #: src/control/Control.AIChatSidebar.ts:2192
 msgid "Rate limited - please wait a moment and retry"
-msgstr ""
+msgstr "Túl sok kérés - várjon egy kicsit, majd próbálja újra"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.AIChatSidebar.ts:2193
 msgid "API server error - try again later"
-msgstr ""
+msgstr "API-kiszolgálóhiba - próbálja újra később"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:594
 #: src/control/Control.AIChatSidebar.ts:2194
 msgid "Service temporarily unavailable"
-msgstr ""
+msgstr "A szolgáltatás átmenetileg nem érhető el"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:652
 msgid "Signature Certificate"
@@ -590,7 +592,7 @@ msgstr "Automatikus helyesírás-ellenőrzés"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:670
 msgid "Use this server's zoom settings"
-msgstr ""
+msgstr "A kiszolgáló nagyítási beállításainak használata"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:671
 msgid "Smart Zoom"
@@ -830,19 +832,19 @@ msgstr "Brosúra jobbról balra"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:731
 msgid "English"
-msgstr ""
+msgstr "Angol"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:732
 msgid "Hungarian"
-msgstr ""
+msgstr "Magyar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:733
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portugál (Brazília)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:734
 msgid "Russian"
-msgstr ""
+msgstr "Orosz"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1293
 msgid "Invalid JSON file"
@@ -925,17 +927,20 @@ msgstr "Bővítmény feltöltése"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1366
 msgid "Security policies"
-msgstr ""
+msgstr "Biztonsági házirendek"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1368
 msgid ""
 "Upload SPIF security policies (.xml). These define the classifications and "
 "categories available when applying a security label to a document."
 msgstr ""
+"Töltsön fel SPIF biztonsági házirendeket (.xml). Ezek határozzák meg a "
+"dokumentum biztonsági címkéjének alkalmazásakor választható minősítéseket és "
+"kategóriákat."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1374
 msgid "Upload Security Policy"
-msgstr ""
+msgstr "Biztonsági házirend feltöltése"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1463
 msgid "Settings are only available to signed-in users."
@@ -963,13 +968,16 @@ msgstr "Állítsa be a felhasználói felületet."
 #: admin/src/integrator/AdminIntegratorSettings.ts:1753
 #: admin/src/integrator/AdminIntegratorSettings.ts:3998
 msgid "Zoom Behaviour"
-msgstr ""
+msgstr "Nagyítás viselkedése"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1898
 msgid ""
 "When on, text documents open at the zoom this server chooses. Turn it off "
 "to choose the zoom yourself."
 msgstr ""
+"Ha be van kapcsolva, a szöveges dokumentumok a kiszolgáló által választott "
+"nagyítással nyílnak meg. Kapcsolja ki, ha saját maga szeretné megválasztani "
+"a nagyítást."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1904
 msgid ""
@@ -1190,23 +1198,29 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3898
 msgid "Lightproof Sentence Checker"
-msgstr ""
+msgstr "Lightproof mondatellenőrző"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3901
 msgid "Choose what the sentence checker looks for as you type."
-msgstr ""
+msgstr "Válassza ki, mit keressen a mondatellenőrző gépelés közben."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3941
 msgid ""
 "This document is using the document settings it was opened with. What you "
 "change here applies to the next document you open."
 msgstr ""
+"Ez a dokumentum azokat a dokumentumbeállításokat használja, amelyekkel "
+"megnyitották. Az itt végzett módosítások a következő megnyitott dokumentumra "
+"lesznek érvényesek."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3944
 msgid ""
 "This document is open in more than one window, so what you change here "
 "applies to the next document you open rather than this one."
 msgstr ""
+"Ez a dokumentum több ablakban is meg van nyitva, ezért az itt végzett "
+"módosítások nem erre, hanem a következő megnyitott dokumentumra lesznek "
+"érvényesek."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4032
 #: admin/src/integrator/Xcu.ts:439
@@ -1502,11 +1516,11 @@ msgstr "Táblázatstílusok"
 
 #: src/app/TableStylesService.ts:355
 msgid "Set as Default"
-msgstr ""
+msgstr "Beállítás alapértelmezettként"
 
 #: src/app/TableStylesService.ts:361
 msgid "Duplicate Style"
-msgstr ""
+msgstr "Stílus duplikálása"
 
 #: src/canvas/sections/CommentListSection.ts:2069
 #: src/canvas/sections/CommentListSection.ts:2082
@@ -2135,189 +2149,202 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2144
 msgid "Request too large"
-msgstr ""
+msgstr "A kérés túl nagy"
 
 #: src/control/Control.AIChatSidebar.ts:2145
 msgid "Invalid request format"
-msgstr ""
+msgstr "Érvénytelen kérésformátum"
 
 #: src/control/Control.AIChatSidebar.ts:2146
 msgid "Request superseded by a newer request"
-msgstr ""
+msgstr "A kérést egy újabb kérés felülírta"
 
 #: src/control/Control.AIChatSidebar.ts:2147
 msgid "No messages provided"
-msgstr ""
+msgstr "Nincs megadva üzenet"
 
 #: src/control/Control.AIChatSidebar.ts:2148
 msgid "Message too long"
-msgstr ""
+msgstr "Az üzenet túl hosszú"
 
 #: src/control/Control.AIChatSidebar.ts:2149
 msgid "AI features are disabled by the administrator"
-msgstr ""
+msgstr "A rendszergazda letiltotta az AI-funkciókat"
 
 #: src/control/Control.AIChatSidebar.ts:2150
 msgid "AI is not available for guests"
-msgstr ""
+msgstr "Az AI nem érhető el vendégek számára"
 
 #: src/control/Control.AIChatSidebar.ts:2152
 msgid "AI features are disabled for this document"
-msgstr ""
+msgstr "Az AI-funkciók le vannak tiltva ehhez a dokumentumhoz"
 
 #: src/control/Control.AIChatSidebar.ts:2153
 msgid "AI settings not configured"
-msgstr ""
+msgstr "Az AI-beállítások nincsenek megadva"
 
 #: src/control/Control.AIChatSidebar.ts:2155
 msgid "The AI provider URL is invalid, check the AI settings"
-msgstr ""
+msgstr "Az AI-szolgáltató URL-je érvénytelen, ellenőrizze az AI-beállításokat"
 
 #: src/control/Control.AIChatSidebar.ts:2157
 msgid "The AI image provider URL is invalid, check the AI settings"
 msgstr ""
+"Az AI-képszolgáltató URL-je érvénytelen, ellenőrizze az AI-beállításokat"
 
 #: src/control/Control.AIChatSidebar.ts:2160
 msgid ""
 "Host \"{0}\" is not in the allowed host list, contact your administrator"
 msgstr ""
+"A(z) „{0}” gép nincs az engedélyezett gépek listáján, forduljon a "
+"rendszergazdához"
 
 #: src/control/Control.AIChatSidebar.ts:2162
 msgid "Network error - please check your connection"
-msgstr ""
+msgstr "Hálózati hiba - ellenőrizze a kapcsolatot"
 
 #: src/control/Control.AIChatSidebar.ts:2164
 msgid "Could not connect to the AI provider"
-msgstr ""
+msgstr "Nem sikerült kapcsolódni az AI-szolgáltatóhoz"
 
 #: src/control/Control.AIChatSidebar.ts:2165
 msgid "No response from AI"
-msgstr ""
+msgstr "Nincs válasz az AI-tól"
 
 #: src/control/Control.AIChatSidebar.ts:2166
 msgid "AI used too many tool steps"
-msgstr ""
+msgstr "Az AI túl sok eszközlépést használt"
 
 #: src/control/Control.AIChatSidebar.ts:2169
 msgid ""
 "The model ran out of tokens before producing output. Try a shorter input or "
 "a model with a larger output budget."
 msgstr ""
+"A modell tokenkerete elfogyott, mielőtt kimenetet adott volna. Próbáljon "
+"rövidebb bemenetet vagy nagyobb kimeneti kerettel rendelkező modellt."
 
 #: src/control/Control.AIChatSidebar.ts:2173
 msgid ""
 "The model returned an empty response (no tokens generated). This is usually "
 "a temporary provider issue - please retry, or try a different model."
 msgstr ""
+"A modell üres választ adott (nem generált tokeneket). Ez általában a "
+"szolgáltató átmeneti hibája - próbálja újra, vagy próbáljon másik modellt."
 
 #: src/control/Control.AIChatSidebar.ts:2175
 msgid "Image generation failed: no prompt from model"
-msgstr ""
+msgstr "A képgenerálás sikertelen: a modell nem adott promptot"
 
 #: src/control/Control.AIChatSidebar.ts:2176
 msgid "Document not available"
-msgstr ""
+msgstr "A dokumentum nem érhető el"
 
 #: src/control/Control.AIChatSidebar.ts:2177
 msgid "The edited outline is not valid: {0}"
-msgstr ""
+msgstr "A szerkesztett vázlat érvénytelen: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2179
 msgid "Could not build any slides from the outline. Please try again."
-msgstr ""
+msgstr "Nem sikerült diákat készíteni a vázlatból. Próbálja újra."
 
 #: src/control/Control.AIChatSidebar.ts:2180
 msgid "AI image settings not configured"
-msgstr ""
+msgstr "Az AI-képbeállítások nincsenek megadva"
 
 #: src/control/Control.AIChatSidebar.ts:2181
 msgid "Image model not configured"
-msgstr ""
+msgstr "Nincs beállítva képmodell"
 
 #: src/control/Control.AIChatSidebar.ts:2182
 msgid "Image generation failed: {0}"
-msgstr ""
+msgstr "A képgenerálás sikertelen: {0}"
 
 #: src/control/Control.AIChatSidebar.ts:2183
 msgid "No image generated"
-msgstr ""
+msgstr "Nem készült kép"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "Failed to parse the AI response"
-msgstr ""
+msgstr "Az AI válaszának feldolgozása sikertelen"
 
 #: src/control/Control.AIChatSidebar.ts:2186
 msgid "The AI provider rejected the request as invalid"
-msgstr ""
+msgstr "Az AI-szolgáltató érvénytelenként elutasította a kérést"
 
 #: src/control/Control.AIChatSidebar.ts:2195
 msgid "API error ({0})"
-msgstr ""
+msgstr "API-hiba ({0})"
 
 #: src/control/Control.AIChatSidebar.ts:2224
 msgid "Extracting link targets..."
-msgstr ""
+msgstr "Hivatkozáscélok kinyerése..."
 
 #: src/control/Control.AIChatSidebar.ts:2225
 msgid "Evaluating formula..."
-msgstr ""
+msgstr "Képlet kiértékelése..."
 
 #: src/control/Control.AIChatSidebar.ts:2226
 msgid "Loading function catalog..."
-msgstr ""
+msgstr "Függvénykatalógus betöltése..."
 
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Thinking..."
-msgstr ""
+msgstr "Gondolkodás..."
 
 #: src/control/Control.AIChatSidebar.ts:2228
 msgid "Working..."
-msgstr ""
+msgstr "Feldolgozás..."
 
 #: src/control/Control.AIChatSidebar.ts:2229
 msgid "Setting formulas..."
-msgstr ""
+msgstr "Képletek beállítása..."
 
 #: src/control/Control.AIChatSidebar.ts:2230
 msgid "Building slide {0} of {1}..."
-msgstr ""
+msgstr "{0}/{1} dia készítése..."
 
 #: src/control/Control.AIChatSidebar.ts:2231
 msgid "Skipping slide {0}..."
-msgstr ""
+msgstr "{0}. dia kihagyása..."
 
 #: src/control/Control.AIChatSidebar.ts:2232
 msgid "Generating image {0} of {1}..."
-msgstr ""
+msgstr "{0}/{1} kép generálása..."
 
 #: src/control/Control.AIChatSidebar.ts:2252
 msgid ""
 "This document is too large to read in full. Pick a section to focus on:"
 msgstr ""
+"Ez a dokumentum túl nagy ahhoz, hogy teljes egészében beolvasható legyen. "
+"Válasszon egy szakaszt, amelyre fókuszálni szeretne:"
 
 #: src/control/Control.AIChatSidebar.ts:2260
 msgid "This sheet is too large to read in full. To narrow it down, you can:"
 msgstr ""
+"Ez a munkalap túl nagy ahhoz, hogy teljes egészében beolvasható legyen. A "
+"szűkítéshez a következőket teheti:"
 
 #: src/control/Control.AIChatSidebar.ts:2264
 msgid "Select a range of cells in the sheet, then ask your question again"
 msgstr ""
+"Jelöljön ki egy cellatartományt a munkalapon, majd tegye fel újra a kérdését"
 
 #: src/control/Control.AIChatSidebar.ts:2267
 msgid "Reply with a range to focus on, like `A1:D100`"
 msgstr ""
+"Válaszoljon egy tartománnyal, amelyre fókuszálni szeretne, például `A1:D100`"
 
 #: src/control/Control.AIChatSidebar.ts:2272
 msgid "Your deck is ready: {0} slides built from the approved outline."
-msgstr ""
+msgstr "A bemutató elkészült: {0} dia készült a jóváhagyott vázlatból."
 
 #: src/control/Control.AIChatSidebar.ts:2280
 msgid "{0} slide(s) could not be built and were skipped."
-msgstr ""
+msgstr "{0} diát nem sikerült elkészíteni, ezek kimaradtak."
 
 #: src/control/Control.AIChatSidebar.ts:2288
 msgid "{0} image(s) could not be generated and show a placeholder."
-msgstr ""
+msgstr "{0} képet nem sikerült generálni, ezek helyén helykitöltő látható."
 
 #: src/control/Control.AIChatSidebar.ts:2328
 #: src/control/Control.AIChatSidebar.ts:3839
@@ -2766,28 +2793,28 @@ msgstr ""
 #: src/control/Control.CleanupSidebar.ts:259
 msgid "%1 byte"
 msgid_plural "%1 bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 bájt"
+msgstr[1] "%1 bájt"
 
 #: src/control/Control.CleanupSidebar.ts:267
 msgid "%1 KB"
-msgstr ""
+msgstr "%1 KB"
 
 #: src/control/Control.CleanupSidebar.ts:272
 msgid "%1 MB"
-msgstr ""
+msgstr "%1 MB"
 
 #: src/control/Control.CleanupSidebar.ts:278
 msgid "Fix %1"
-msgstr ""
+msgstr "Javítás: %1"
 
 #: src/control/Control.CleanupSidebar.ts:331
 msgid "Master slide"
-msgstr ""
+msgstr "Diasablon"
 
 #: src/control/Control.CleanupSidebar.ts:332
 msgid "Master slide, image %1"
-msgstr ""
+msgstr "Diasablon, %1. kép"
 
 #: src/control/Control.CleanupSidebar.ts:335
 #: src/control/Control.PartsPreview.js:944
@@ -2796,165 +2823,167 @@ msgstr "%1. dia"
 
 #: src/control/Control.CleanupSidebar.ts:336
 msgid "Slide %1, image %2"
-msgstr ""
+msgstr "%1. dia, %2. kép"
 
 #: src/control/Control.CleanupSidebar.ts:340
 msgid "Slide %1 is hidden and can be removed"
-msgstr ""
+msgstr "A(z) %1. dia rejtett, eltávolítható"
 
 #: src/control/Control.CleanupSidebar.ts:342
 msgid "Master slide '%1' is not used by any slide"
-msgstr ""
+msgstr "A(z) „%1” diasablont egyetlen dia sem használja"
 
 #: src/control/Control.CleanupSidebar.ts:347
 msgid "Slide %1 has speaker notes"
-msgstr ""
+msgstr "A(z) %1. diához előadói jegyzetek tartoznak"
 
 #: src/control/Control.CleanupSidebar.ts:350
 msgid "Slide %1: embedded object"
-msgstr ""
+msgstr "%1. dia: beágyazott objektum"
 
 #: src/control/Control.CleanupSidebar.ts:351
 msgid "Slide %1: embedded object, no image to replace it with"
-msgstr ""
+msgstr "%1. dia: beágyazott objektum, nincs kép, amellyel helyettesíthető lenne"
 
 #: src/control/Control.CleanupSidebar.ts:365
 msgid "%1 DPI"
-msgstr ""
+msgstr "%1 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:367
 msgid "%1 at %2 DPI"
-msgstr ""
+msgstr "%1, %2 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:426
 msgid "Leave images alone"
-msgstr ""
+msgstr "Képek változatlanul hagyása"
 
 #: src/control/Control.CleanupSidebar.ts:427
 msgid "96 DPI"
-msgstr ""
+msgstr "96 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:428
 msgid "150 DPI"
-msgstr ""
+msgstr "150 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:429
 msgid "220 DPI"
-msgstr ""
+msgstr "220 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:430
 msgid "300 DPI"
-msgstr ""
+msgstr "300 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:454
 msgid "Scanning..."
-msgstr ""
+msgstr "Vizsgálat..."
 
 #: src/control/Control.CleanupSidebar.ts:456
 msgid "Measuring images..."
-msgstr ""
+msgstr "Képek mérése..."
 
 #: src/control/Control.CleanupSidebar.ts:458
 msgid "Preparing cleanup..."
-msgstr ""
+msgstr "Tisztítás előkészítése..."
 
 #: src/control/Control.CleanupSidebar.ts:460
 msgid "Cleaning up..."
-msgstr ""
+msgstr "Tisztítás..."
 
 #: src/control/Control.CleanupSidebar.ts:472
 msgid "Images over %1 DPI (%2)"
-msgstr ""
+msgstr "%1 DPI feletti képek (%2)"
 
 #: src/control/Control.CleanupSidebar.ts:476
 msgid "Hidden slides (%1)"
-msgstr ""
+msgstr "Rejtett diák (%1)"
 
 #: src/control/Control.CleanupSidebar.ts:478
 msgid "Unused master slides (%1)"
-msgstr ""
+msgstr "Nem használt diasablonok (%1)"
 
 #: src/control/Control.CleanupSidebar.ts:480
 msgid "Speaker notes (%1)"
-msgstr ""
+msgstr "Előadói jegyzetek (%1)"
 
 #: src/control/Control.CleanupSidebar.ts:482
 msgid "Embedded objects (%1)"
-msgstr ""
+msgstr "Beágyazott objektumok (%1)"
 
 #: src/control/Control.CleanupSidebar.ts:490
 msgid "Saved %1"
-msgstr ""
+msgstr "Megtakarítva: %1"
 
 #: src/control/Control.CleanupSidebar.ts:493
 msgid "Estimated saving: %1"
-msgstr ""
+msgstr "Becsült megtakarítás: %1"
 
 #: src/control/Control.CleanupSidebar.ts:500
 msgid "%1 thing to clean up"
 msgid_plural "%1 things to clean up"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 tisztítandó elem"
+msgstr[1] "%1 tisztítandó elem"
 
 #: src/control/Control.CleanupSidebar.ts:525
 msgid "Image resolution"
-msgstr ""
+msgstr "Képfelbontás"
 
 #: src/control/Control.CleanupSidebar.ts:547
 msgid "JPEG quality in %"
-msgstr ""
+msgstr "JPEG-minőség %-ban"
 
 #: src/control/Control.CleanupSidebar.ts:572
 msgid "Prepare for sharing"
-msgstr ""
+msgstr "Előkészítés megosztásra"
 
 #: src/control/Control.CleanupSidebar.ts:601
 msgid "%1 of %2"
-msgstr ""
+msgstr "%1/%2"
 
 #: src/control/Control.CleanupSidebar.ts:614
 msgid "Cleanup progress"
-msgstr ""
+msgstr "Tisztítás folyamata"
 
 #: src/control/Control.CleanupSidebar.ts:647
 msgid "Stop"
-msgstr ""
+msgstr "Leállítás"
 
 #: src/control/Control.CleanupSidebar.ts:668
 msgid "Scan"
-msgstr ""
+msgstr "Vizsgálat"
 
 #: src/control/Control.CleanupSidebar.ts:701
 msgid "Fix all"
-msgstr ""
+msgstr "Összes javítása"
 
 #: src/control/Control.CleanupSidebar.ts:726
 msgid "This document cannot be changed here, so there is nothing to clean up."
-msgstr ""
+msgstr "Ez a dokumentum itt nem módosítható, így nincs mit kitisztítani."
 
 #: src/control/Control.CleanupSidebar.ts:730
 msgid ""
 "Choose a target resolution, then press Scan to find what can be cleaned up."
 msgstr ""
+"Válasszon célfelbontást, majd nyomja meg a Vizsgálat gombot, hogy megtudja, "
+"mit lehet kitisztítani."
 
 #: src/control/Control.CleanupSidebar.ts:733
 msgid "Nothing to clean up."
-msgstr ""
+msgstr "Nincs mit kitisztítani."
 
 #: src/control/Control.CleanupSidebar.ts:791
 msgid "saves %1"
-msgstr ""
+msgstr "%1 megtakarítás"
 
 #: src/control/Control.CleanupSidebar.ts:801
 msgid "Fix"
-msgstr ""
+msgstr "Javítás"
 
 #: src/control/Control.CleanupSidebar.ts:901
 #: src/control/Control.Menubar.ts:657
 #: src/control/Control.NotebookbarImpress.js:2184
 #: src/control/Control.NotebookbarImpress.js:2185
 msgid "Clean Up"
-msgstr ""
+msgstr "Tisztítás"
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3069,7 +3098,7 @@ msgstr "Aláírás"
 
 #: src/control/Control.BackstageView.ts:213
 msgid "Quit"
-msgstr ""
+msgstr "Kilépés"
 
 #: src/control/Control.BackstageView.ts:220 src/control/Control.Menubar.ts:143
 #: src/control/Control.Menubar.ts:484 src/control/Control.Menubar.ts:692
@@ -3166,7 +3195,7 @@ msgstr "Üres bemutató"
 
 #: src/control/Control.BackstageView.ts:1029
 msgid "Blank Drawing"
-msgstr ""
+msgstr "Üres rajz"
 
 #: src/control/Control.BackstageView.ts:1034
 msgid "Blank Document"
@@ -3337,15 +3366,15 @@ msgstr "Dokumentum neve"
 
 #: src/control/Control.DocumentNameInput.js:39
 msgid "A document name cannot contain a slash or a backslash."
-msgstr ""
+msgstr "A dokumentum neve nem tartalmazhat perjelet vagy fordított perjelet."
 
 #: src/control/Control.DocumentNameInput.js:42 src/app/Socket.ts:2531
 msgid "Please enter a valid document name."
-msgstr ""
+msgstr "Adjon meg egy érvényes dokumentumnevet."
 
 #: src/control/Control.DocumentNameInput.js:55
 msgid "Invalid document name"
-msgstr ""
+msgstr "Érvénytelen dokumentumnév"
 
 #: src/control/Control.DocumentRepair.js:27
 #: src/control/Control.DocumentRepair.js:28
@@ -4181,17 +4210,17 @@ msgstr "Diák és jegyzetek"
 #: src/control/Control.Menubar.ts:523
 #: src/control/Control.NotebookbarImpress.js:743
 msgid "View Notes"
-msgstr ""
+msgstr "Jegyzetek megtekintése"
 
 #: src/control/Control.Menubar.ts:524
 #: src/control/Control.NotebookbarImpress.js:745
 msgid "Bottom Panel"
-msgstr ""
+msgstr "Alsó panel"
 
 #: src/control/Control.Menubar.ts:525
 #: src/control/Control.NotebookbarImpress.js:746
 msgid "Handout Page"
-msgstr ""
+msgstr "Emlékeztető oldal"
 
 #: src/control/Control.Menubar.ts:526
 #: src/control/Control.NotebookbarImpress.js:747
@@ -4218,11 +4247,11 @@ msgstr "Elosztás"
 
 #: src/control/Control.Menubar.ts:635
 msgid "Insert Slides from File..."
-msgstr ""
+msgstr "Diák beszúrása fájlból..."
 
 #: src/control/Control.Menubar.ts:637
 msgid "Update Linked Slides..."
-msgstr ""
+msgstr "Csatolt diák frissítése..."
 
 #: src/control/Control.Menubar.ts:644 src/control/Control.Menubar.ts:1269
 #: src/control/Control.PresentationBar.js:143
@@ -4461,7 +4490,7 @@ msgstr "Táblázattervező"
 
 #: src/control/Notebookbar.CalcTableTab.ts:105
 msgid "Tools"
-msgstr ""
+msgstr "Eszközök"
 
 #: src/control/Notebookbar.CalcTableTab.ts:190
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:121
@@ -4652,36 +4681,35 @@ msgstr "Védelem"
 #: src/control/Control.NotebookbarWriter.js:2891
 #: src/control/Control.NotebookbarWriter.js:3269
 msgid "Caption"
-msgstr ""
+msgstr "Felirat"
 
 #: src/control/Sidebar.FromNotebookbarPanel.ts:154
 msgid "Animations"
 msgstr "Animációk"
 
 #: src/control/Control.Notebookbar.js:634
-#, fuzzy
 msgid "Start:"
-msgstr "Indítás"
+msgstr "Kezdőpont:"
 
 #: src/control/Control.Notebookbar.js:634
 msgid "End:"
-msgstr ""
+msgstr "Végpont:"
 
 #: src/control/Control.Notebookbar.js:647
 msgid "Start arrowhead style"
-msgstr ""
+msgstr "Kezdőpont nyílhegyének stílusa"
 
 #: src/control/Control.Notebookbar.js:647
 msgid "End arrowhead style"
-msgstr ""
+msgstr "Végpont nyílhegyének stílusa"
 
 #: src/control/Control.Notebookbar.js:722
 msgid "Line Width"
-msgstr ""
+msgstr "Vonalvastagság"
 
 #: src/control/Control.Notebookbar.js:755
 msgid "Line Transparency:"
-msgstr ""
+msgstr "Vonal átlátszósága:"
 
 #: src/control/Control.NotebookbarBuilder.js:202
 #: src/control/Control.NotebookbarBuilder.js:604
@@ -4805,7 +4833,7 @@ msgstr "Előzmények megtekintése"
 #: src/control/Control.NotebookbarImpress.js:444
 #: src/control/Control.NotebookbarWriter.js:390
 msgid "Security label"
-msgstr ""
+msgstr "Biztonsági címke"
 
 #: src/control/Control.NotebookbarCalc.js:406
 #: src/control/Control.NotebookbarDraw.js:403
@@ -5178,7 +5206,7 @@ msgstr "Változáskövetés"
 
 #: src/control/Control.NotebookbarCalc.js:2850
 msgid "Comment on Change"
-msgstr ""
+msgstr "Megjegyzés a változtatáshoz"
 
 #: src/control/Control.NotebookbarCalc.js:2861
 msgid "Protection"
@@ -5340,11 +5368,11 @@ msgstr "Térköz és színek"
 
 #: src/control/Control.NotebookbarImpress.js:1584
 msgid "Import Slides"
-msgstr ""
+msgstr "Diák importálása"
 
 #: src/control/Control.NotebookbarImpress.js:1592
 msgid "Update Links"
-msgstr ""
+msgstr "Csatolások frissítése"
 
 #: src/control/Control.NotebookbarImpress.js:1943
 msgid "Master Slide Templates"
@@ -5385,6 +5413,8 @@ msgstr "Offline üzemmódba váltás"
 #: src/control/Control.NotebookbarWriter.js:481
 msgid "Lets a screen reader follow the cursor and read the document"
 msgstr ""
+"Lehetővé teszi, hogy a képernyőolvasó kövesse a kurzort és felolvassa a "
+"dokumentumot"
 
 #: src/control/Control.NotebookbarWriter.js:605
 msgid "Validate Sidebar"
@@ -5442,11 +5472,11 @@ msgstr "Változások megtekintése"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
-msgstr ""
+msgstr "Váltás szerkesztésre"
 
 #: src/control/Control.PartsPreview.js:451
 msgid "Show everyone on this slide"
-msgstr ""
+msgstr "Mindenki megjelenítése ezen a dián"
 
 #: src/control/Control.PartsPreview.js:597
 #: src/control/Control.PartsPreview.js:672 src/map/Clipboard.js:1546
@@ -5454,9 +5484,8 @@ msgid "Paste"
 msgstr "Beillesztés"
 
 #: src/control/Control.PartsPreview.js:736
-#, fuzzy
 msgid "Unlink Slide"
-msgstr "Üres dia"
+msgstr "Dia csatolásának megszüntetése"
 
 #: src/control/Control.PartsPreview.js:758
 msgid "Add Section"
@@ -5465,34 +5494,34 @@ msgstr "Szakasz hozzáadása"
 #: src/control/Control.PartsPreview.js:875
 msgid "with 1 other"
 msgid_plural "with %n others"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "itt: 1 másik felhasználó"
+msgstr[1] "itt: %n másik felhasználó"
 
 #: src/control/Control.PartsPreview.js:885
 msgid "with %1"
-msgstr ""
+msgstr "itt: %1"
 
 #: src/control/Control.PartsPreview.js:886
 msgid "with %1 and 1 other"
 msgid_plural "with %1 and %n others"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "itt: %1 és még 1 másik"
+msgstr[1] "itt: %1 és még %n másik"
 
 #: src/control/Control.PartsPreview.js:916
 msgid "preview of page %1, linked to %2 in %3"
-msgstr ""
+msgstr "%1. oldal előnézete, csatolva ehhez: %2 (%3)"
 
 #: src/control/Control.PartsPreview.js:920
 msgid "Slide %1, linked to %2 in %3"
-msgstr ""
+msgstr "%1. dia, csatolva ehhez: %2 (%3)"
 
 #: src/control/Control.PartsPreview.js:930
 msgid "preview of page %1, linked to %2"
-msgstr ""
+msgstr "%1. oldal előnézete, csatolva ehhez: %2"
 
 #: src/control/Control.PartsPreview.js:934
 msgid "Slide %1, linked to %2"
-msgstr ""
+msgstr "%1. dia, csatolva ehhez: %2"
 
 #: src/control/Control.PartsPreview.js:940
 msgid "preview of page %1"
@@ -5539,262 +5568,261 @@ msgstr "Írja be az új szakasznevet:"
 
 #: src/control/Control.PresentationBar.js:99
 msgid "Import your slides"
-msgstr ""
+msgstr "Importálja a diáit"
 
 #: src/control/Control.SlideImportPane.tsx:673
 msgid "Checking..."
-msgstr ""
+msgstr "Ellenőrzés..."
 
 #: src/control/Control.SlideImportPane.tsx:675
 #: src/control/Control.SlideLinkToolbar.tsx:165
 msgid "Missing"
-msgstr ""
+msgstr "Hiányzik"
 
 #: src/control/Control.SlideImportPane.tsx:677
 #: src/control/Control.SlideLinkToolbar.tsx:163
 msgid "No access"
-msgstr ""
+msgstr "Nincs hozzáférés"
 
 #: src/control/Control.SlideImportPane.tsx:679
 msgid "Could not open"
-msgstr ""
+msgstr "Nem nyitható meg"
 
 #: src/control/Control.SlideImportPane.tsx:685
 msgid "{0} changed"
-msgstr ""
+msgstr "{0} módosult"
 
 #: src/control/Control.SlideImportPane.tsx:687
 #: src/control/Control.SlideLinkToolbar.tsx:115
 msgid "Linked"
-msgstr ""
+msgstr "Csatolva"
 
 #: src/control/Control.SlideImportPane.tsx:689
 msgid "Not checked"
-msgstr ""
+msgstr "Nincs ellenőrizve"
 
 #: src/control/Control.SlideImportPane.tsx:690
 #: src/control/Control.SlideImportPane.tsx:1392
 msgid "Not linked"
-msgstr ""
+msgstr "Nincs csatolva"
 
 #: src/control/Control.SlideImportPane.tsx:733
 #: src/control/Control.SlideImportPane.tsx:742
 msgid "Reading the slides..."
-msgstr ""
+msgstr "Diák beolvasása..."
 
 #: src/control/Control.SlideImportPane.tsx:736
 msgid ""
 "The slides are in this presentation. The file they came from is no longer "
 "here."
 msgstr ""
+"A diák ebben a bemutatóban vannak. A fájl, amelyből származnak, már nincs "
+"itt."
 
 #: src/control/Control.SlideImportPane.tsx:739
 msgid "This file is here. You do not have permission to open it."
-msgstr ""
+msgstr "Ez a fájl itt van. Nincs jogosultsága a megnyitásához."
 
 #: src/control/Control.SlideImportPane.tsx:741
 msgid "This file could not be read this time."
-msgstr ""
+msgstr "Ezt a fájlt most nem sikerült beolvasni."
 
 #: src/control/Control.SlideImportPane.tsx:750
 #: src/control/Control.SlideImportPane.tsx:1251
 msgid "Locate file"
-msgstr ""
+msgstr "Fájl megkeresése"
 
 #: src/control/Control.SlideImportPane.tsx:756
 #: src/control/Control.SlideImportPane.tsx:1270
 msgid "Reload slides"
-msgstr ""
+msgstr "Diák újratöltése"
 
 #: src/control/Control.SlideImportPane.tsx:814
 msgid "1 slide inserted"
-msgstr ""
+msgstr "1 dia beszúrva"
 
 #: src/control/Control.SlideImportPane.tsx:815
 msgid "{0} slides inserted"
-msgstr ""
+msgstr "{0} dia beszúrva"
 
 #: src/control/Control.SlideImportPane.tsx:822
 msgid "Slide {0}"
-msgstr ""
+msgstr "{0}. dia"
 
 #: src/control/Control.SlideImportPane.tsx:827
-#, fuzzy
 msgid "Insert slides"
-msgstr "Alakzatok beszúrása"
+msgstr "Diák beszúrása"
 
 #: src/control/Control.SlideImportPane.tsx:835
 msgid "Insert {0} from {1}"
-msgstr ""
+msgstr "{0} beszúrása innen: {1}"
 
 #: src/control/Control.SlideImportPane.tsx:838
-#, fuzzy
 msgid "Insert 1 slide"
-msgstr "%n dia beszúrása"
+msgstr "1 dia beszúrása"
 
 #: src/control/Control.SlideImportPane.tsx:839
-#, fuzzy
 msgid "Insert {0} slides"
-msgstr "Alakzatok beszúrása"
+msgstr "{0} dia beszúrása"
 
 #: src/control/Control.SlideImportPane.tsx:871
 msgid "{0} of {1}"
-msgstr ""
+msgstr "{0}/{1}"
 
 #: src/control/Control.SlideImportPane.tsx:874
 #: src/control/Control.SlideImportPane.tsx:1638
 msgid "{0} slides"
-msgstr ""
+msgstr "{0} dia"
 
 #: src/control/Control.SlideImportPane.tsx:881
 msgid "Inserts at the end"
-msgstr ""
+msgstr "Beszúrás a végére"
 
 #: src/control/Control.SlideImportPane.tsx:882
 msgid "Inserts after slide {0}"
-msgstr ""
+msgstr "Beszúrás a(z) {0}. dia után"
 
 #: src/control/Control.SlideImportPane.tsx:886
 msgid "Opening file..."
-msgstr ""
+msgstr "Fájl megnyitása..."
 
 #: src/control/Control.SlideImportPane.tsx:887
 msgid "Inserting slides..."
-msgstr ""
+msgstr "Diák beszúrása..."
 
 #: src/control/Control.SlideImportPane.tsx:961
-#, fuzzy
 msgid "Import slides"
-msgstr "Alakzatok beszúrása"
+msgstr "Diák importálása"
 
 #: src/control/Control.SlideImportPane.tsx:965
 #: src/control/Control.SlideImportPane.tsx:966
 msgid "Expand slide import"
-msgstr ""
+msgstr "Diaimportálás kibontása"
 
 #: src/control/Control.SlideImportPane.tsx:980
 #: src/control/Control.SlideImportPane.tsx:981
 msgid "Close slide import"
-msgstr ""
+msgstr "Diaimportálás bezárása"
 
 #: src/control/Control.SlideImportPane.tsx:996
-#, fuzzy
 msgid "Add presentation…"
-msgstr "Diavetítés befejezése"
+msgstr "Bemutató hozzáadása…"
 
 #: src/control/Control.SlideImportPane.tsx:1011
 msgid "No presentations yet"
-msgstr ""
+msgstr "Még nincsenek bemutatók"
 
 #: src/control/Control.SlideImportPane.tsx:1015
 msgid ""
 "Add a presentation to browse its slides and insert them into this deck."
 msgstr ""
+"Adjon hozzá egy bemutatót, hogy böngészhesse a diáit, és beszúrhassa őket "
+"ebbe a bemutatóba."
 
 #: src/control/Control.SlideImportPane.tsx:1048
 msgid "Hide all slides"
-msgstr ""
+msgstr "Minden dia elrejtése"
 
 #: src/control/Control.SlideImportPane.tsx:1048
 msgid "Show all slides"
-msgstr ""
+msgstr "Minden dia megjelenítése"
 
 #: src/control/Control.SlideImportPane.tsx:1080
 #: src/control/Control.SlideImportPane.tsx:1081
 msgid "Filter presentations"
-msgstr ""
+msgstr "Bemutatók szűrése"
 
 #: src/control/Control.SlideImportPane.tsx:1109
 msgid "Slide sources"
-msgstr ""
+msgstr "Diaforrások"
 
 #: src/control/Control.SlideImportPane.tsx:1117
 msgid "Presentations to import from"
-msgstr ""
+msgstr "Bemutatók, amelyekből importálhat"
 
 #: src/control/Control.SlideImportPane.tsx:1185
 msgid "{0} picked"
-msgstr ""
+msgstr "{0} kiválasztva"
 
 #: src/control/Control.SlideImportPane.tsx:1223
 msgid "Actions for {0}"
-msgstr ""
+msgstr "Műveletek: {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1261
 msgid "Hide slides"
-msgstr ""
+msgstr "Diák elrejtése"
 
 #: src/control/Control.SlideImportPane.tsx:1261
 msgid "Show slides"
-msgstr ""
+msgstr "Diák megjelenítése"
 
 #: src/control/Control.SlideImportPane.tsx:1277
 msgid "Select all slides"
-msgstr ""
+msgstr "Minden dia kijelölése"
 
 #: src/control/Control.SlideImportPane.tsx:1285
 msgid "Update the slides linked to this file"
-msgstr ""
+msgstr "Az ehhez a fájlhoz csatolt diák frissítése"
 
 #: src/control/Control.SlideImportPane.tsx:1292
 msgid "Remove from list"
-msgstr ""
+msgstr "Eltávolítás a listából"
 
 #: src/control/Control.SlideImportPane.tsx:1377
 msgid "Slides in {0}"
-msgstr ""
+msgstr "A(z) {0} diái"
 
 #: src/control/Control.SlideImportPane.tsx:1391
 msgid "Original design"
-msgstr ""
+msgstr "Eredeti megjelenés"
 
 #: src/control/Control.SlideImportPane.tsx:1394
 msgid "Linked, follows the slide number"
-msgstr ""
+msgstr "Csatolva, a diaszámot követi"
 
 #: src/control/Control.SlideImportPane.tsx:1395
 msgid "Linked, follows the slide"
-msgstr ""
+msgstr "Csatolva, a diát követi"
 
 #: src/control/Control.SlideImportPane.tsx:1432
 msgid "Keep original design"
-msgstr ""
+msgstr "Eredeti megjelenés megtartása"
 
 #: src/control/Control.SlideImportPane.tsx:1446
 msgid "Stay linked to the source file"
-msgstr ""
+msgstr "Maradjon csatolva a forrásfájlhoz"
 
 #: src/control/Control.SlideImportPane.tsx:1484
 msgid "Follow the slide, wherever it moves"
-msgstr ""
+msgstr "A dia követése, bárhová kerül"
 
 #: src/control/Control.SlideImportPane.tsx:1486
 msgid "Follow the slide number"
-msgstr ""
+msgstr "A diaszám követése"
 
 #: src/control/Control.SlideImportPane.tsx:1644
 msgid "Select the slides of {0}"
-msgstr ""
+msgstr "A(z) {0} diáinak kijelölése"
 
 #: src/control/Control.SlideLinkToolbar.tsx:102
 msgid "Linked to {0} in {1}"
-msgstr ""
+msgstr "Csatolva ehhez: {0} ({1})"
 
 #: src/control/Control.SlideLinkToolbar.tsx:126
 msgid "Hide the actions for this linked slide"
-msgstr ""
+msgstr "A csatolt dia műveleteinek elrejtése"
 
 #: src/control/Control.SlideLinkToolbar.tsx:127
 msgid "Show the actions for this linked slide"
-msgstr ""
+msgstr "A csatolt dia műveleteinek megjelenítése"
 
 #: src/control/Control.SlideLinkToolbar.tsx:137
 msgid "Unlink"
-msgstr ""
+msgstr "Csatolás megszüntetése"
 
 #: src/control/Control.SlideLinkToolbar.tsx:161
 msgid "Not available"
-msgstr ""
+msgstr "Nem érhető el"
 
 #: src/control/SlideSectionHeader.tsx:68
 msgid "Toggle section %1"
@@ -5802,86 +5830,91 @@ msgstr "Váltás: szakasz %1"
 
 #: src/slideimport/SlideImportSession.ts:257
 msgid "The slides of the source could not be read."
-msgstr ""
+msgstr "A forrás diáit nem sikerült beolvasni."
 
 #: src/slideimport/SlideImportSession.ts:308
 #: src/slideimport/SlideImportSession.ts:317
 msgid "Inserting the slides failed."
-msgstr ""
+msgstr "A diák beszúrása sikertelen."
 
 #: src/slideimport/SlideImportSession.ts:326
 msgid "Importing slides failed."
-msgstr ""
+msgstr "A diák importálása sikertelen."
 
 #: src/slideimport/SlideLinks.ts:237
 msgid "No slide of this presentation is linked to another file."
-msgstr ""
+msgstr "Ennek a bemutatónak egyetlen diája sincs másik fájlhoz csatolva."
 
 #: src/slideimport/SlideLinks.ts:275
 msgid "This slide is not linked to another file."
-msgstr ""
+msgstr "Ez a dia nincs másik fájlhoz csatolva."
 
 #: src/slideimport/SlideLinks.ts:426 src/slideimport/SlideLinks.ts:738
 msgid ""
 "{0} is not one of the documents this one is related to, so the server "
 "cannot read it."
 msgstr ""
+"A(z) {0} nem tartozik az ehhez a dokumentumhoz kapcsolódó dokumentumok közé, "
+"ezért a kiszolgáló nem tudja beolvasni."
 
 #: src/slideimport/SlideLinks.ts:438
 msgid "These slides come from {0} which is currently not accessible."
-msgstr ""
+msgstr "Ezek a diák innen származnak: {0}, amely jelenleg nem érhető el."
 
 #: src/slideimport/SlideLinks.ts:462
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
-msgstr ""
+msgstr "Nincs hozzáférése ehhez: {0}, ezért az oldalai nem frissíthetők."
 
 #: src/slideimport/SlideLinks.ts:463 src/slideimport/SlideLinks.ts:741
 msgid "{0} could not be read."
-msgstr ""
+msgstr "A(z) {0} nem olvasható be."
 
 #: src/slideimport/SlideLinks.ts:562
 msgid "Cannot update the slides of {0}: source lacks the matching slides"
 msgstr ""
+"A(z) {0} diái nem frissíthetők: a forrásban nincsenek meg a megfelelő diák"
 
 #: src/slideimport/SlideLinks.ts:565 src/slideimport/SlideLinks.ts:744
 msgid "The slides of {0} could not be read into this presentation."
-msgstr ""
+msgstr "A(z) {0} diáit nem sikerült beolvasni ebbe a bemutatóba."
 
 #: src/slideimport/SlideLinks.ts:669
 msgid "Cannot update slide {0}: the source lacks matching slide"
-msgstr ""
+msgstr "A(z) {0}. dia nem frissíthető: a forrásban nincs meg a megfelelő dia"
 
 #: src/slideimport/SlideLinks.ts:684
 msgid "Unlinking the slide failed."
-msgstr ""
+msgstr "A dia csatolásának megszüntetése sikertelen."
 
 #: src/slideimport/SlideLinks.ts:695 src/slideimport/SlideLinks.ts:756
 msgid "Updating the slides of {0} failed."
-msgstr ""
+msgstr "A(z) {0} diáinak frissítése sikertelen."
 
 #: src/slideimport/SlideLinks.ts:710
 msgid "No slide of {0} was updated."
-msgstr ""
+msgstr "A(z) {0} egyetlen diája sem frissült."
 
 #: src/slideimport/SlideLinks.ts:714
 msgid "1 slide updated from {0}."
-msgstr ""
+msgstr "1 dia frissült innen: {0}."
 
 #: src/slideimport/SlideLinks.ts:718
 msgid "{0} slides updated from {1}."
-msgstr ""
+msgstr "{0} dia frissült innen: {1}."
 
 #: src/slideimport/SlideLinks.ts:747
 msgid "No slide of this presentation is linked to {0}."
-msgstr ""
+msgstr "Ennek a bemutatónak egyetlen diája sincs ehhez csatolva: {0}."
 
 #: src/slideimport/SlideLinks.ts:753
 msgid "Another update is still running. Ask for {0} again in a moment."
 msgstr ""
+"Egy másik frissítés még fut. Kérje újra a(z) {0} frissítését egy pillanat "
+"múlva."
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
-msgstr ""
+msgstr "Panelek átméretezése"
 
 #: src/control/Control.Scroll.Annotation.js:19
 msgid "Scroll up annotations"
@@ -5896,17 +5929,17 @@ msgid "No problems with SSL verification detected"
 msgstr "Az SSL-ellenőrzés során nem volt probléma"
 
 #: src/control/Control.ServerAuditDialog.ts:78
-#, fuzzy
 msgid "Each document is securely contained (landlock)"
-msgstr "Minden dokumentum biztonságosan el van szeparálva a többitől"
+msgstr "Minden dokumentum biztonságosan el van különítve (landlock)"
 
 #: src/control/Control.ServerAuditDialog.ts:83
 msgid "Each document is securely contained (Linux namespaces)"
-msgstr ""
+msgstr "Minden dokumentum biztonságosan el van különítve (Linux névterek)"
 
 #: src/control/Control.ServerAuditDialog.ts:88
 msgid "Each document is securely contained (capabilities and chroot)"
 msgstr ""
+"Minden dokumentum biztonságosan el van különítve (capabilities és chroot)"
 
 #: src/control/Control.ServerAuditDialog.ts:102
 msgid "System call security filtering enabled"
@@ -5922,7 +5955,7 @@ msgstr "A Kit jail elkészítése gyors, bind mount segítségével"
 
 #: src/control/Control.ServerAuditDialog.ts:133
 msgid "Fast kit jail setup with landlock, nothing to copy or mount"
-msgstr ""
+msgstr "Gyors kit-jail beállítás landlockkal, nincs mit másolni vagy csatolni"
 
 #: src/control/Control.ServerAuditDialog.ts:146
 msgid "Poorly performing proxying of all network requests."
@@ -6053,7 +6086,7 @@ msgstr ""
 
 #: src/control/Control.StatusBar.js:295
 msgid "Fit the page to the window width."
-msgstr ""
+msgstr "Az oldal igazítása az ablak szélességéhez."
 
 #: src/control/Control.StatusBar.js:300
 msgid "Status Bar Menu"
@@ -6134,19 +6167,19 @@ msgstr "Adja meg az új munkalapnevet"
 
 #: src/control/Control.Tabs.js:759
 msgid "Protect Sheet"
-msgstr ""
+msgstr "Munkalap védelme"
 
 #: src/control/Control.Tabs.js:759
 msgid "Enter a password to protect the sheet"
-msgstr ""
+msgstr "Adjon meg egy jelszót a munkalap védelméhez"
 
 #: src/control/Control.Tabs.js:763
 msgid "Unprotect Sheet"
-msgstr ""
+msgstr "Munkalap védelmének feloldása"
 
 #: src/control/Control.Tabs.js:763
 msgid "Enter the password to unprotect the sheet"
-msgstr ""
+msgstr "Adja meg a jelszót a munkalap védelmének feloldásához"
 
 #: src/control/Control.Toolbar.js:1035
 msgid ""
@@ -6158,11 +6191,11 @@ msgstr ""
 
 #: src/control/Control.Toolbar.js:1070
 msgid "Sheet recalculated in %1 ms"
-msgstr ""
+msgstr "A munkalap újraszámolva %1 ms alatt"
 
 #: src/control/Control.Toolbar.js:1071
 msgid "Document recalculated in %1 ms"
-msgstr ""
+msgstr "A dokumentum újraszámolva %1 ms alatt"
 
 #: src/control/Control.TopToolbar.js:145
 msgid "Active Sheet"
@@ -6186,13 +6219,12 @@ msgid "Insert connectors"
 msgstr "Összekötők beszúrása"
 
 #: src/control/Control.UIManager.ts:116
-#, fuzzy
 msgid "Main"
-msgstr "Min"
+msgstr "Főmenü"
 
 #: src/control/Control.UIManager.ts:245
 msgid "You are currently in View mode, press {0} to edit"
-msgstr ""
+msgstr "Jelenleg megtekintés módban van, a szerkesztéshez nyomja meg: {0}"
 
 #: src/control/Control.UIManager.ts:650
 msgid "Enter new name"
@@ -6216,11 +6248,11 @@ msgstr ""
 
 #: src/control/Control.UIManager.ts:2810
 msgid "Confirm password"
-msgstr ""
+msgstr "Jelszó megerősítése"
 
 #: src/control/Control.UIManager.ts:2856
 msgid "The confirmation does not match the password"
-msgstr ""
+msgstr "A megerősítés nem egyezik a jelszóval"
 
 #: src/control/Control.UIManager.ts:3074
 msgid "Copy error details"
@@ -6498,9 +6530,8 @@ msgid "Wrong password provided. Please try again."
 msgstr "A megadott jelszó nem jó. Próbálja újra."
 
 #: src/control/Permission.js:193
-#, fuzzy
 msgid "Document requires a password to edit."
-msgstr "A dokumentum megnyitásához jelszó szükséges."
+msgstr "A dokumentum szerkesztéséhez jelszó szükséges."
 
 #: src/control/Permission.js:238
 msgid "Enter a file name"
@@ -7133,59 +7164,59 @@ msgstr "Jegyzet beszúrása"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
-msgstr ""
+msgstr "Sötét 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:37
 msgid "Light 1"
-msgstr ""
+msgstr "Világos 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:38
 msgid "Dark 2"
-msgstr ""
+msgstr "Sötét 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:39
 msgid "Light 2"
-msgstr ""
+msgstr "Világos 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:40
 msgid "Accent 1"
-msgstr ""
+msgstr "Kiemelés 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:41
 msgid "Accent 2"
-msgstr ""
+msgstr "Kiemelés 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:42
 msgid "Accent 3"
-msgstr ""
+msgstr "Kiemelés 3"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:43
 msgid "Accent 4"
-msgstr ""
+msgstr "Kiemelés 4"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:44
 msgid "Accent 5"
-msgstr ""
+msgstr "Kiemelés 5"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:45
 msgid "Accent 6"
-msgstr ""
+msgstr "Kiemelés 6"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
-msgstr ""
+msgstr "Hiperhivatkozás"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:47
 msgid "Followed Hyperlink"
-msgstr ""
+msgstr "Követett hiperhivatkozás"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:56
 msgid "%1, %2% Lighter"
-msgstr ""
+msgstr "%1, %2% világosabb"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:60
 msgid "%1, %2% Darker"
-msgstr ""
+msgstr "%1, %2% sötétebb"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:79
 #: src/control/jsdialog/Widget.ColorPicker.ts:186
@@ -7376,11 +7407,11 @@ msgstr "Szerkesztőmód"
 
 #: src/control/jsdialog/Widget.LineWidthCustom.ts:70
 msgid "Last Custom Value"
-msgstr ""
+msgstr "Utolsó egyéni érték"
 
 #: src/control/jsdialog/Widget.LineWidthCustom.ts:134
 msgid "Custom Line Thickness:"
-msgstr ""
+msgstr "Egyéni vonalvastagság:"
 
 #: src/control/jsdialog/Widget.MobileBorderSelector.js:111
 msgid "Cell borders"
@@ -7388,11 +7419,11 @@ msgstr "Cellaszegélyek"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:101
 msgid "New Table Style..."
-msgstr ""
+msgstr "Új táblázatstílus..."
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:112
 msgid "Clear Style"
-msgstr ""
+msgstr "Stílus törlése"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:137
 msgid "Open Styles Sidebar"
@@ -7565,11 +7596,11 @@ msgstr "Csak a dokumentum tulajdonosa módosíthatja a jelszót."
 
 #: src/app/Socket.ts:2664
 msgid "You do not have permission to edit this document."
-msgstr ""
+msgstr "Nincs jogosultsága a dokumentum szerkesztésére."
 
 #: src/app/Socket.ts:2665
 msgid "The document could not be made editable."
-msgstr ""
+msgstr "A dokumentumot nem sikerült szerkeszthetővé tenni."
 
 #: src/app/Socket.ts:2735 src/app/Socket.ts:2746
 msgid "Missing Fonts"
@@ -7603,7 +7634,7 @@ msgstr "A kiszolgáló leáll"
 
 #: src/docdispatcher.ts:659
 msgid "AI is not configured, contact your administrator"
-msgstr ""
+msgstr "Az AI nincs beállítva, forduljon a rendszergazdához"
 
 #: src/docdispatcher.ts:926
 msgid "Are you sure you want to delete this slide?"
@@ -7702,13 +7733,15 @@ msgstr ""
 
 #: src/errormessages.ts:39
 msgid "Your session will end in {time}. Refresh the page to continue."
-msgstr ""
+msgstr "A munkamenet {time} múlva lejár. A folytatáshoz frissítse az oldalt."
 
 #: src/errormessages.ts:42
 msgid ""
 "Your session has ended. Further changes to the document might not be saved. "
 "Refresh the page to continue."
 msgstr ""
+"A munkamenet lejárt. A dokumentum további módosításai lehet, hogy nem "
+"kerülnek mentésre. A folytatáshoz frissítse az oldalt."
 
 #: src/errormessages.ts:45
 msgid ""
@@ -7874,9 +7907,8 @@ msgid "Document cannot be exported. Please try again."
 msgstr "A dokumentum nem exportálható. Kérjük, próbálja meg újra."
 
 #: src/layer/marker/A11yTextInput.js:84
-#, fuzzy
 msgid "Slide"
-msgstr "Diák"
+msgstr "Dia"
 
 #: src/layer/marker/A11yTextInput.js:354
 msgid "Out of table"
@@ -8254,26 +8286,24 @@ msgid "End Show"
 msgstr "Bemutató vége"
 
 #: src/slideshow/engine/SlideShowHandler.ts:123
-#, fuzzy
 msgid "Paused"
-msgstr "Szünet"
+msgstr "Szüneteltetve"
 
 #: src/slideshow/engine/SlideShowHandler.ts:124
-#, fuzzy
 msgid "Resumed"
-msgstr "Folytatás"
+msgstr "Folytatva"
 
 #: src/slideshow/engine/SlideShowHandler.ts:394
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "Animáció: {0}, {1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:398
 msgid "Animation: {0}"
-msgstr ""
+msgstr "Animáció: {0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:545
 msgid "Transition: {0}"
-msgstr ""
+msgstr "Átmenet: {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -8384,7 +8414,7 @@ msgstr "Követés megszüntetése"
 
 #: src/control/Control.Extension.ts:597 src/control/Control.Extension.ts:686
 msgid "Extension command failed: %1"
-msgstr ""
+msgstr "A bővítményparancs sikertelen: %1"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
@@ -8392,7 +8422,7 @@ msgstr "Modern üzleti levél (sans-serif)"
 
 #: templates/templates.js:10 templates/templates.js:20
 msgid "Modern Business Letter"
-msgstr ""
+msgstr "Modern üzleti levél"
 
 #: templates/templates.js:16
 msgid "Modern Business Letter (serif)"
