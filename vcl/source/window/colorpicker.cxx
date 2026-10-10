@@ -613,10 +613,13 @@ ColorPickerDialog::ColorPickerDialog(weld::Window* pParent, const Color& rColor,
     , m_xMFYellow(m_xBuilder->weld_metric_spin_button(u"yellowSpinbutton"_ustr, FieldUnit::PERCENT))
     , m_xMFKey(m_xBuilder->weld_metric_spin_button(u"keySpinbutton"_ustr, FieldUnit::PERCENT))
     , meMode( DefaultMode )
+    , maUpdateMarkersIdle("ColorPickerDialog maUpdateMarkersIdle")
 {
     m_aColorField.SetModifyHdl( LINK( this, ColorPickerDialog, ColorFieldControlModifydl ) );
     m_aColorSlider.SetModifyHdl( LINK( this, ColorPickerDialog, ColorSliderControlModifyHdl ) );
     m_aColorSlider.SetResizeHdl(LINK(this, ColorPickerDialog, ColorSliderResizeHdl));
+    maUpdateMarkersIdle.SetPriority(TaskPriority::POST_PAINT);
+    maUpdateMarkersIdle.SetInvokeHandler(LINK(this, ColorPickerDialog, UpdateMarkersHdl));
 
     int nMargin = (m_xFISliderLeft->get_preferred_size().Height() + 1) / 2;
     m_xColorSlider->set_margin_top(nMargin);
@@ -843,7 +846,12 @@ IMPL_LINK_NOARG(ColorPickerDialog, ColorSliderControlModifyHdl, ColorSliderContr
 
 IMPL_LINK_NOARG(ColorPickerDialog, ColorSliderResizeHdl, ColorSliderControl&, void)
 {
-    // tdf#171730 - sync slider markers with current slider level
+    // tdf#171730 - update slider markers after the layout is done
+    maUpdateMarkersIdle.Start();
+}
+
+IMPL_LINK_NOARG(ColorPickerDialog, UpdateMarkersHdl, Timer*, void)
+{
     m_xFISliderLeft->set_margin_top(m_aColorSlider.GetLevel());
     m_xFISliderRight->set_margin_top(m_aColorSlider.GetLevel());
 }

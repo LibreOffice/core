@@ -22,6 +22,7 @@
 #include <vcl/ColorDialog.hxx>
 #include <vcl/weld/Entry.hxx>
 #include <vcl/hexcolorcontrol.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld/DialogController.hxx>
 #include <vcl/weld/MetricSpinButton.hxx>
@@ -210,6 +211,8 @@ private:
     double mdHue, mdSat, mdBri;
     double mdCyan, mdMagenta, mdYellow, mdKey;
 
+    Idle maUpdateMarkersIdle;
+
 public:
     ColorPickerDialog(weld::Window* pParent, const Color& rColor, vcl::ColorPickerMode eDialogMode);
 
@@ -226,6 +229,7 @@ private:
     DECL_LINK(ColorFieldControlModifydl, ColorFieldControl&, void);
     DECL_LINK(ColorSliderControlModifyHdl, ColorSliderControl&, void);
     DECL_LINK(ColorSliderResizeHdl, ColorSliderControl&, void);
+    DECL_LINK(UpdateMarkersHdl, Timer*, void);
     DECL_LINK(ColorModifyMetricHdl, weld::MetricSpinButton&, void);
     DECL_LINK(ColorModifySpinHdl, weld::SpinButton&, void);
     DECL_LINK(ColorModifyEditHdl, weld::Entry&, void);
