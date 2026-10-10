@@ -270,6 +270,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(filter iOS MACOSX,$(OS)), \
 		MacOSXSpell \
 	) \
+	$(if $(filter WNT,$(OS)), \
+		WinSpell \
+	) \
 ))
 endif
 

@@ -21,7 +21,9 @@
 #define INCLUDED_LINGUCOMPONENT_SOURCE_LINGUTIL_LINGUTIL_HXX
 
 #include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 
+#include <set>
 #include <vector>
 
 #define OU2ENC(rtlOUString, rtlEncoding) \
@@ -42,6 +44,14 @@ OString Win_AddLongPathPrefix( const OString &rPathName );
 // using configuration entries are fully implemented and provided
 std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char * pDicType );
 void MergeNewStyleDicsAndOldStyleDics( std::vector< SvtLinguConfigDictionaryEntry > &rNewStyleDics, const std::vector< SvtLinguConfigDictionaryEntry > &rOldStyleDics );
+
+// The spelling dictionaries registered for the hunspell backend: the ones with
+// configuration entries, plus the old style ones that add a locale none of those names.
+std::vector< SvtLinguConfigDictionaryEntry > GetSpellDics();
+
+// The BCP-47 names of the locales those dictionaries cover. Only a dictionary whose first
+// file exists counts, and only the languages allowed for this process are kept.
+std::set< OUString > GetSpellDicLocaleNames( const std::vector< SvtLinguConfigDictionaryEntry > &rDics );
 
 //Find an encoding from a charset string, using
 //rtl_getTextEncodingFromMimeCharset and falling back to

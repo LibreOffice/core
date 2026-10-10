@@ -19,6 +19,7 @@
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/lingucfg.hxx>
 
 using namespace ::com::sun::star;
@@ -132,6 +133,53 @@ CPPUNIT_TEST_FIXTURE(SpellCheckTest, testAddedWordStaysInItsLocale)
     CPPUNIT_ASSERT(xSpell->isValid(u"bar"_ustr, aItalian, {}));
     CPPUNIT_ASSERT(xSpell->isValid(u"bar"_ustr, aSwissItalian, {}));
 }
+
+#ifdef _WIN32
+// The Windows backend claims only the locales no hunspell dictionary covers, so for any one
+// locale at most one of the two services answers. The dictionary registered in setUp covers
+// it-IT and it-CH; a bundled-dictionaries build covers many more.
+CPPUNIT_TEST_FIXTURE(SpellCheckTest, testWindowsBackendClaimsOnlyUncoveredLocales)
+{
+    uno::Reference<linguistic2::XSpellChecker> xHunspell(
+        m_xSFactory->createInstance(u"org.openoffice.lingu.MySpellSpellChecker"_ustr),
+        uno::UNO_QUERY_THROW);
+    uno::Reference<linguistic2::XSpellChecker> xWinSpell(
+        m_xSFactory->createInstance(u"cpo.lingu.WinSpellChecker"_ustr), uno::UNO_QUERY_THROW);
+
+    for (const lang::Locale& rLocale : xWinSpell->getLocales())
+    {
+        CPPUNIT_ASSERT_MESSAGE(
+            OUStringToOString(LanguageTag::convertToBcp47(rLocale), RTL_TEXTENCODING_UTF8).getStr(),
+            !xHunspell->hasLocale(rLocale));
+    }
+    for (const lang::Locale& rLocale : xHunspell->getLocales())
+    {
+        CPPUNIT_ASSERT_MESSAGE(
+            OUStringToOString(LanguageTag::convertToBcp47(rLocale), RTL_TEXTENCODING_UTF8).getStr(),
+            !xWinSpell->hasLocale(rLocale));
+    }
+
+    // Windows spells English on a machine with the English Basic typing feature when no
+    // English hunspell dictionary is registered, so the words really go to Windows then.
+    const lang::Locale aEnglish(u"en"_ustr, u"US"_ustr, OUString());
+    if (!xWinSpell->hasLocale(aEnglish))
+        return;
+
+    CPPUNIT_ASSERT(xWinSpell->isValid(u"receive"_ustr, aEnglish, {}));
+    CPPUNIT_ASSERT(!xWinSpell->isValid(u"recieve"_ustr, aEnglish, {}));
+    uno::Reference<linguistic2::XSpellAlternatives> xAlternatives
+        = xWinSpell->spell(u"recieve"_ustr, aEnglish, {});
+    CPPUNIT_ASSERT(xAlternatives.is());
+    CPPUNIT_ASSERT(xAlternatives->getAlternatives().hasElements());
+
+    // The hunspell protocol for adding words is not spoken here, so its probe is declined
+    // and nothing is sent to Windows for it.
+    CPPUNIT_ASSERT(!xWinSpell->isValid(u"<?xml?>"_ustr, aEnglish, {}));
+    CPPUNIT_ASSERT(
+        !xWinSpell->spell(u"<?xml?><query type='add'><word>x</word></query>"_ustr, aEnglish, {})
+             .is());
+}
+#endif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

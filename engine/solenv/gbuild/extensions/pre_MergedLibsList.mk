@@ -97,6 +97,7 @@ gb_MERGE_LIBRARY_LIST := \
 		macab1 \
 	) \
 	$(if $(filter iOS MACOSX,$(OS)),MacOSXSpell) \
+	$(if $(filter WNT,$(OS)),WinSpell) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mozbootstrap) \
 	$(call gb_Helper_optional,SCRIPTING,msforms) \
 	msfilter \

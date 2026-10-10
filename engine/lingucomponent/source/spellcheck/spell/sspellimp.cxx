@@ -18,18 +18,15 @@
  */
 
 #include <cpo/uno/Reference.h>
+#include <cpo/uno/XComponentContext.hpp>
 
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
-#include <comphelper/kit.hxx>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
 #include <lingutil.hxx>
 #include <hunspell.hxx>
@@ -136,66 +133,12 @@ Sequence< Locale > SpellChecker::getLocales()
     // dictionaries.
     if (m_DictItems.empty())
     {
-        SvtLinguConfig aLinguCfg;
-
-        // get list of extension dictionaries-to-use
-        // (or better speaking: the list of dictionaries using the
-        // new configuration entries).
-        std::vector< SvtLinguConfigDictionaryEntry > aDics;
-        cpo::uno::Sequence< OUString > aFormatList;
-        aLinguCfg.GetSupportedDictionaryFormatsFor( u"SpellCheckers"_ustr,
-                u"org.openoffice.lingu.MySpellSpellChecker"_ustr, aFormatList );
-        for (auto const& format : aFormatList)
-        {
-            std::vector< SvtLinguConfigDictionaryEntry > aTmpDic(
-                    aLinguCfg.GetActiveDictionariesByFormat(format) );
-            aDics.insert( aDics.end(), aTmpDic.begin(), aTmpDic.end() );
-        }
-
-        //!! for compatibility with old dictionaries (the ones not using extensions
-        //!! or new configuration entries, but still using the dictionary.lst file)
-        //!! Get the list of old style spell checking dictionaries to use...
-        std::vector< SvtLinguConfigDictionaryEntry > aOldStyleDics(
-                GetOldStyleDics( "DICT" ) );
-
-        // to prefer dictionaries with configuration entries we will only
-        // use those old style dictionaries that add a language that
-        // is not yet supported by the list of new style dictionaries
-        MergeNewStyleDicsAndOldStyleDics( aDics, aOldStyleDics );
+        std::vector< SvtLinguConfigDictionaryEntry > aDics( GetSpellDics() );
 
         if (!aDics.empty())
         {
-            uno::Reference< lang::XMultiServiceFactory > xServiceFactory(comphelper::getProcessServiceFactory());
-            uno::Reference< ucb::XSimpleFileAccess > xAccess(xServiceFactory->createInstance(u"com.sun.star.ucb.SimpleFileAccess"_ustr), uno::UNO_QUERY);
             // get supported locales from the dictionaries-to-use...
-            std::set<OUString> aLocaleNamesSet;
-            for (auto const& dict : aDics)
-            {
-                const cpo::uno::Sequence< OUString > aLocaleNames( dict.aLocaleNames );
-                cpo::uno::Sequence< OUString > aLocations( dict.aLocations );
-                SAL_WARN_IF(
-                    aLocaleNames.hasElements() && !aLocations.hasElements(),
-                    "lingucomponent", "no locations");
-                if (aLocations.hasElements())
-                {
-                    if (xAccess.is() && xAccess->exists(aLocations[0]))
-                    {
-                        for (auto const& locale : aLocaleNames)
-                        {
-                            if (!comphelper::COKit::isAllowlistedLanguage(locale))
-                                continue;
-
-                            aLocaleNamesSet.insert(locale);
-                        }
-                    }
-                    else
-                    {
-                        SAL_WARN(
-                            "lingucomponent",
-                            "missing <" << aLocations[0] << ">");
-                    }
-                }
-            }
+            std::set<OUString> aLocaleNamesSet( GetSpellDicLocaleNames( aDics ) );
             // ... and add them to the resulting sequence
             m_aSuppLocales.realloc( aLocaleNamesSet.size() );
             std::transform(

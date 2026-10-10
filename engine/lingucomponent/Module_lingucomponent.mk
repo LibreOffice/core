@@ -39,6 +39,7 @@ endif
 
 $(eval $(call gb_Module_add_targets,lingucomponent,\
 	$(if $(filter iOS MACOSX,$(OS)),Library_MacOSXSpell) \
+	$(if $(filter WNT,$(OS)),Library_WinSpell) \
 	CustomTarget_lightproof \
 	Library_lightproof \
 	Library_numbertext \
