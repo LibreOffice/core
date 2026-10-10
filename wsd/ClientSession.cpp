@@ -1662,6 +1662,19 @@ bool ClientSession::_handleInput(const char *buffer, int length)
 #if !MOBILEAPP
         if (tokens.equals(0, "uno"))
         {
+            if (tokens.startsWith(1, "vnd.sun.star.script:"))
+            {
+                if (!ConfigUtil::getConfigValue<bool>("security.enable_macros_execution", false))
+                {
+                    LOG_WRN("Dropping script command because macro execution is disabled");
+                    return true;
+                }
+            }
+            else if (!tokens.startsWith(1, ".uno:"))
+            {
+                LOG_WRN("Dropping uno command that is not a .uno: or script command");
+                return true;
+            }
             if (tokens.equals(1, ".uno:PrepareSignature") || tokens.equals(1, ".uno:DownloadSignature"))
             {
                 return handleSignatureAction(tokens);
