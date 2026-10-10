@@ -118,12 +118,11 @@ bool coda::invokeOnBridge(unsigned appDocId, std::function<void(Bridge&)> fn)
     return true;
 }
 
-Bridge::Bridge(QObject* parent, WebView* owner, coda::DocumentData& document, QWidget* window,
+Bridge::Bridge(QObject* parent, WebView* owner, coda::DocumentData& document,
                QWebEngineView* webView)
     : QObject(parent)
     , _document(document)
     , _owner(owner)
-    , _window(window)
     , _webView(webView)
     , _closeNotificationPipeForForwardingThread{ -1, -1 }
 {
@@ -244,8 +243,6 @@ void Bridge::createAndStartMessagePumpThread()
                 if (WebView* owner = _owner.data())
                     QMetaObject::invokeMethod(owner, [owner]() { owner->requestClose(); },
                                               Qt::QueuedConnection);
-                else if (_window)
-                    QMetaObject::invokeMethod(_window, "close", Qt::QueuedConnection);
             }
         });
 }
@@ -279,8 +276,6 @@ void Bridge::retryLoadAfterUnloading()
         if (WebView* owner = _owner.data())
             QMetaObject::invokeMethod(
                 owner, [owner]() { owner->requestClose(); }, Qt::QueuedConnection);
-        else if (_window)
-            QMetaObject::invokeMethod(_window, "close", Qt::QueuedConnection);
         return;
     }
 
@@ -1006,12 +1001,9 @@ QVariant Bridge::cool(const QString& messageStr)
         // drive another save-if-dirty round-trip through it.
         _readyToClose = true;
         QPointer<WebView> owner = _owner;
-        QPointer<QWidget> window = _window;
-        QTimer::singleShot(0, [owner, window, quitApp]() {
+        QTimer::singleShot(0, [owner, quitApp]() {
             if (owner)
                 owner->requestClose();
-            else if (window)
-                window->close();
             if (quitApp)
                 QApplication::quit();
         });
@@ -1148,12 +1140,9 @@ QVariant Bridge::cool(const QString& messageStr)
         // Defer: requestClose() may delete this WebView and Bridge, and we are
         // still running inside the bridge here.
         QPointer<WebView> owner = _owner;
-        QPointer<QWidget> window = _window;
-        QTimer::singleShot(0, [owner, window]() {
+        QTimer::singleShot(0, [owner]() {
             if (owner)
                 owner->requestClose();
-            else if (window)
-                window->close();
         });
     }
     else if (message == "uno .uno:NextDocumentTab" ||
@@ -1374,9 +1363,6 @@ QVariant Bridge::cool(const QString& messageStr)
         if (WebView* owner = _owner.data())
             QMetaObject::invokeMethod(
                 owner, [owner]() { owner->requestClose(); }, Qt::QueuedConnection);
-        else if (_window)
-            QMetaObject::invokeMethod(
-                _window, "close", Qt::QueuedConnection);
     }
     else if (_requiresSaveAs && tokens.equals(0, "save"))
     {

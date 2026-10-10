@@ -11,31 +11,17 @@
 
 #pragma once
 
-#include <qt/Document.hpp>
-
 #include <QMainWindow>
 #include <QString>
-#include <QUrl>
-#include <QUrlQuery>
 
 #include <functional>
 
-class Bridge;
-class QCloseEvent;
 class QWebEngineProfile;
 class QWebEngineView;
 
-/// Shows an integrator's web UI in a QWebEngineView, and (when the
-/// integrator implements the X-Collab-Frame-Origin protocol) morphs
-/// into the embedded document editor in-place once the user picks a
-/// document.  Because the same window is both the picker and the
-/// editor, it inherits from QMainWindow rather than QDialog: that
-/// way the close-with-unsaved-changes prompt and other editor-window
-/// semantics match the open-in-new-window flow's WebView.
-///
-/// In the non-embed flow (integrator does not echo our header),
-/// WOPI params are extracted from the intercepted iframe URL and
-/// the wopiSelected() signal is emitted; the caller is expected to
+/// Shows an integrator's web UI in a QWebEngineView.  WOPI params
+/// are extracted from the intercepted iframe URL and the
+/// wopiSelected() signal is emitted; the caller is expected to
 /// read wopiSrc()/accessToken()/coolServer()/coolPath(), then
 /// close() the picker so a separate WebView opens for the editor.
 class IntegratorFilePicker : public QMainWindow
@@ -54,13 +40,10 @@ public:
     friend class InterceptPage;
 
 signals:
-    /// Emitted in the non-embed flow after the picker has extracted
-    /// the WOPI params from the integrator's intercepted iframe nav.
-    /// The caller reads them off the picker and then close()s it.
+    /// Emitted after the picker has extracted the WOPI params from
+    /// the integrator's intercepted iframe nav.  The caller reads
+    /// them off the picker and then close()s it.
     void wopiSelected();
-
-protected:
-    void closeEvent(QCloseEvent* event) override;
 
 private:
     void extractAccessToken();
@@ -69,28 +52,12 @@ private:
     /// value (empty string on failure).
     void extractAccessTokenAsync(
         std::function<void(const QString&)> then);
-    /// Embed-mode download-and-attach: fetches the document via
-    /// /co/collab, populates _document, attaches a Bridge to the
-    /// picker page, and navigates the picker to the local-server
-    /// cool.html.  origQuery carries through the UI hints NC set on
-    /// the intercepted iframe URL (lang, closebutton, ...).
-    void attachEmbeddedDocument(const QString& wopiSrc,
-                                const QString& accessToken,
-                                const QString& coolServer,
-                                const QString& coolPath,
-                                QUrlQuery origQuery);
 
     QWebEngineView* _webView;
     QString _wopiSrc;
     QString _accessToken;
     QString _coolServer;
     QString _coolPath;
-    /// Port of the embed-mode HTTP server (0 when embed mode is off).
-    quint16 _embedPort = 0;
-    /// Embed-mode: populated document + Bridge, owned by the picker
-    /// for the lifetime of the dialog.
-    coda::DocumentData _document;
-    Bridge* _bridge = nullptr;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

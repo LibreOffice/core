@@ -760,11 +760,10 @@ class QtAppInitializer extends MobileAppInitializer {
 			messageQueue.length = 0;
 
 			// Pull the full persistent pref set from the native side
-			// in one shot and prime the pref cache.  Per-origin
-			// localStorage can't be trusted under the embed-mode
-			// HTTP server's ephemeral port; the bridge-backed store
-			// is origin-independent.  After this lands, every
-			// prefs.get() hits the cache and stays synchronous.
+			// in one shot and prime the pref cache.  The
+			// bridge-backed store is origin-independent.  After
+			// this lands, every prefs.get() hits the cache and
+			// stays synchronous.
 			bridge.getAllPrefs((jsonStr) => {
 				try {
 					const obj = JSON.parse(jsonStr || '{}');
@@ -2886,10 +2885,10 @@ function showWelcomeSVG() {
 		// avatar URLs to a server-hosted /co/collab/avatar?...
 		// proxy, but as a site-absolute path).  Works as-is when
 		// cool.html is hosted on the cool server itself (COWASM),
-		// but for CODA (page on file:// or the embed HTTPS server)
-		// the relative URL would resolve against the page's origin
-		// and 404, so prepend _collabCoolServer when set.  Applies
-		// to every user-bearing message shape the broker emits.
+		// but for CODA (page on file://) the relative URL would
+		// resolve against the page's origin and 404, so prepend
+		// _collabCoolServer when set.  Applies to every
+		// user-bearing message shape the broker emits.
 		var rebaseAvatar = function(user) {
 			if (user && typeof user.avatar === 'string'
 				&& user.avatar.startsWith('/')
@@ -2943,10 +2942,10 @@ function showWelcomeSVG() {
 	// server-based collaborative editing without reloading cool.html:
 	// tear down the local-edit plumbing, then point app.socket at a real
 	// /cool/ws on the cool server.  Covers both COWASM (page hosted on
-	// the cool server itself) and CODA (page hosted on file:// or the
-	// embed HTTPS server, with the per-document WOPI params published
-	// on window._codaRemoteInfo by the platform-specific bootstrap in
-	// main.js; currently the QtApp branch).
+	// the cool server itself) and CODA (page hosted on file://, with the
+	// per-document WOPI params published on window._codaRemoteInfo by the
+	// platform-specific bootstrap in main.js; currently the QtApp
+	// branch).
 	global.switchToServerMode = function() {
 		// CODA-only: clear save tracking on the native side before we
 		// mute postMobileMessage below.  saveCompleted() is a direct
@@ -3008,10 +3007,10 @@ function showWelcomeSVG() {
 
 		// Build the /cool/ws URL.  Two flavours depending on whether
 		// cool.html itself lives on the cool server (COWASM) or on a
-		// different origin (CODA: file:// or the embed HTTPS server).
-		// _codaRemoteInfo, set by main.js's CODA bootstrap from the
-		// bridge's getRemoteInfo slot (currently the QtApp branch via
-		// Bridge::getRemoteInfo), is the CODA signal.
+		// different origin (CODA: file://).  _codaRemoteInfo, set by
+		// main.js's CODA bootstrap from the bridge's getRemoteInfo
+		// slot (currently the QtApp branch via Bridge::getRemoteInfo),
+		// is the CODA signal.
 		var ri = window._codaRemoteInfo;
 		var wsURI;
 		if (ri) {
@@ -3042,9 +3041,7 @@ function showWelcomeSVG() {
 				+ '&access_token_ttl=0&permission=edit&compat=/ws';
 			// Repoint global.host (and the derived global.webserver) at the COOL server
 			// so subsequent Socket.ts reconnects via getWebSocketBaseURI build their
-			// URLs there (without this, the embed-server origin (where cool.html ifself
-			// is hosted) would still be used and reconnect attempts would 404 against
-			// the local static file server:
+			// URLs there. Until then, global.host names the page's file:// address.
 			global.host = coolWsScheme + coolHost;
 			global.webserver = ri.coolServer.replace(/\/*$/, ''); // Remove trailing slash.
 			// Static asset URLs, icons included, carry the server's version hash between

@@ -42,17 +42,13 @@ class QUrl;
 namespace coda
 {
 /// Create a QWebChannel on page, construct a Bridge bound to document
-/// (with owner WebView and/or host window/webview), register the
-/// Bridge as "bridge" on the channel, and attach the channel to the
-/// page.  Shared between the normal open-in-a-tab flow and the
-/// embed-mode flow.  owner is null for pages not hosted by a WebView
-/// (e.g. the IntegratorFilePicker's QDialog); window is the fallback
-/// host used in that case.
+/// and its owner WebView, register the Bridge as "bridge" on the
+/// channel, and attach the channel to the page.
 /// Ownership: Bridge is parented on the channel (which is parented on
 /// the page), so everything lives as long as the page.
 Bridge* attachRemoteBridge(QWebEnginePage* page,
                            coda::DocumentData& document,
-                           WebView* owner, QWidget* window,
+                           WebView* owner,
                            QWebEngineView* webView);
 
 /// Add the CODA-local query parameters the Qt-flavored cool.html

@@ -10,8 +10,6 @@
 #include <memory>
 
 #include <QApplication>
-#include <QSslCertificate>
-#include <QSslKey>
 #include <QWebEngineProfile>
 #include "common/Prefs.hpp"
 #include "common/RecentFiles.hpp"
@@ -37,12 +35,6 @@ private:
     static QWebEngineProfile* globalProfile;
     static RecentFiles recentFiles;
     static std::unique_ptr<Prefs> prefs;
-    /// Constructing a QSslKey or QSslCertificate reaches into Qt Network's
-    /// TLS backend registry, which is a Q_APPLICATION_STATIC, so it has to
-    /// happen after the QApplication is up.  Function-local statics keep it
-    /// out of static initialization.
-    static QSslKey& embedKeyRef();
-    static QSslCertificate& embedCertRef();
 
 public:
     static void initialize();
@@ -57,13 +49,6 @@ public:
     static void deleteAccountProfile(const QString& accountId);
     static RecentFiles& getRecentFiles();
     static Prefs& getPrefs();
-    /// Self-signed cert/key for the embed-mode HTTPS server.  Both
-    /// freshly generated at process start, valid for localhost /
-    /// 127.0.0.1 / ::1.  Trusted programmatically by the picker
-    /// page's certificateError handler; never installed in any
-    /// system or browser trust store.
-    static const QSslKey& getEmbedKey();
-    static const QSslCertificate& getEmbedCert();
 };
 
 namespace

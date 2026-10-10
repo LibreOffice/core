@@ -14,37 +14,16 @@
 #include <qt/IntegratorFilePicker.hpp>
 
 #include <common/Log.hpp>
-#include <common/MobileApp.hpp>
-#include <net/FakeSocket.hpp>
-#include <qt/bridge.hpp>
-#include <qt/qt.hpp>
-#include <qt/RemoteOpen.hpp>
-#include <qt/WebView.hpp>
 
-#include <QApplication>
-#include <QDir>
 #include <QEventLoop>
-#include <QFile>
-#include <QFileInfo>
-#include <QGuiApplication>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QMetaObject>
-#include <QMimeDatabase>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QScreen>
-#include <QSslConfiguration>
-#include <QSslServer>
-#include <QSslSocket>
-#include <QTcpSocket>
-#include <QCloseEvent>
 #include <QTimer>
 #include <QUrlQuery>
 #include <QWebEnginePage>
-#include <QWebEngineUrlRequestInfo>
-#include <QWebEngineUrlRequestInterceptor>
 #include <QWebEngineView>
 
 /// Custom page that intercepts iframe navigations to detect the COOL
@@ -61,58 +40,8 @@ protected:
         const QUrl& url, NavigationType type, bool isMainFrame) override
     {
         QUrlQuery q(url);
-        // Once a Bridge has been attached, the picker's webview is
-        // the document editor; subsequent WOPISrc navigations (e.g.
-        // the one switchToServerMode triggers when the local editor
-        // hands off to server-mode collab) must pass through, not
-        // get reinterpreted as a fresh document open.
-        if (q.hasQueryItem("WOPISrc") && picker->_bridge == nullptr)
+        if (q.hasQueryItem("WOPISrc"))
         {
-            if (picker->_embedPort != 0)
-            {
-                // URL is already pointing at our local HTTP server
-                // (second acceptNavigationRequest after our defer):
-                // let it proceed so cool.html loads in the picker.
-                if (url.host() == "localhost"
-                    && url.port() == picker->_embedPort)
-                    return true;
-
-                // Extract WOPI params.  If the iframe URL did not
-                // carry the access_token (e.g. NC richdocuments
-                // leaves it in a POST form), fall back to the same
-                // integrator-specific DOM scrape used by the non-
-                // embed flow.  Defer the actual download + Bridge
-                // attach: we must not run a nested event loop
-                // inside acceptNavigationRequest.
-                IntegratorFilePicker* p = picker;
-                QString wopiSrc = q.queryItemValue(
-                    "WOPISrc", QUrl::FullyDecoded);
-                QString accessToken = q.queryItemValue(
-                    "access_token", QUrl::FullyDecoded);
-                QString coolServer = url.scheme() + "://" + url.host()
-                    + (url.port(-1) != -1
-                        ? ":" + QString::number(url.port())
-                        : QString());
-                QString coolPath = url.path();
-                QUrlQuery origQuery(url);
-                auto proceed =
-                    [p, wopiSrc, coolServer, coolPath, origQuery]
-                    (const QString& token) {
-                        QMetaObject::invokeMethod(p,
-                            [p, wopiSrc, token, coolServer, coolPath,
-                             origQuery]() {
-                                p->attachEmbeddedDocument(
-                                    wopiSrc, token, coolServer,
-                                    coolPath, origQuery);
-                            }, Qt::QueuedConnection);
-                    };
-                if (accessToken.isEmpty())
-                    picker->extractAccessTokenAsync(std::move(proceed));
-                else
-                    proceed(accessToken);
-                return false;
-            }
-
             LOG_TRC("IntegratorFilePicker: intercepted COOL URL: "
                     << url.toString().toStdString());
 
@@ -152,212 +81,6 @@ protected:
 
 namespace
 {
-/// Probe whether the integrator at serverUrl implements the
-/// X-Collab-Frame-Origin protocol: send a GET carrying the header
-/// with our candidate embed origin and check whether the response's
-/// Content-Security-Policy mentions that origin (which the
-/// integrator's CSP listener is expected to echo into frame-src).
-/// On success, the picker can safely switch into embed mode;
-/// otherwise we fall back to the open-in-new-window flow.  Runs
-/// synchronously with a short timeout so the picker opens promptly
-/// on integrators that don't implement the protocol.
-bool probeFrameOriginProtocol(const QString& serverUrl, quint16 port)
-{
-    const QByteArray origin =
-        "https://localhost:" + QByteArray::number(port);
-
-    QNetworkAccessManager nam;
-    QEventLoop loop;
-    QNetworkRequest req{QUrl(serverUrl)};
-    req.setRawHeader("X-Collab-Frame-Origin", origin);
-    req.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
-                     QNetworkRequest::NoLessSafeRedirectPolicy);
-    req.setMaximumRedirectsAllowed(5);
-    QNetworkReply* reply = nam.get(req);
-    QObject::connect(reply, &QNetworkReply::finished,
-                     &loop, &QEventLoop::quit);
-    QTimer::singleShot(3000, &loop, &QEventLoop::quit);
-    loop.exec();
-
-    bool supported = false;
-    if (reply->isFinished()
-        && reply->error() == QNetworkReply::NoError)
-    {
-        const QByteArray csp =
-            reply->rawHeader("Content-Security-Policy");
-        if (csp.contains(origin))
-            supported = true;
-    }
-    reply->deleteLater();
-    return supported;
-}
-
-/// Trivial static-file HTTPS server on 127.0.0.1:<ephemeral>.
-/// Serves browser/dist/ so cool.html and its assets can be reached
-/// under an origin the integrator's `frame-src` allowlist admits
-/// (see the test-env's richdocuments patch).  Uses TLS with the
-/// process-wide ephemeral self-signed cert from
-/// Application::getEmbedCert(): this avoids the
-/// upgrade-insecure-requests CSP directive forcibly rewriting our
-/// advertised origin to https and breaking the iframe load.  The
-/// picker page programmatically trusts this cert via its
-/// certificateError handler; nothing is ever installed in any
-/// system or external trust store.  GET only, no keep-alive, no
-/// thread pool - fine for the POC.
-class EmbedHttpServer : public QObject
-{
-public:
-    EmbedHttpServer(const QString& rootDir, QObject* parent)
-        : QObject(parent)
-        , _root(QDir(rootDir).absolutePath())
-        , _server(new QSslServer(this))
-    {
-        QSslConfiguration cfg = QSslConfiguration::defaultConfiguration();
-        cfg.setLocalCertificate(Application::getEmbedCert());
-        cfg.setPrivateKey(Application::getEmbedKey());
-        cfg.setPeerVerifyMode(QSslSocket::VerifyNone);
-        // Pin ALPN to HTTP/1.1 so Chromium doesn't try to speak
-        // HTTP/2 to a server that only handles HTTP/1.1 GETs:
-        cfg.setAllowedNextProtocols({QByteArray("http/1.1")});
-        _server->setSslConfiguration(cfg);
-
-        // QSslServer fires newConnection at TCP-accept time, before
-        // the TLS handshake; pendingConnectionAvailable fires after
-        // the handshake completes, which is when nextPendingConnection
-        // actually has a QSslSocket to hand back.
-        QObject::connect(_server, &QTcpServer::pendingConnectionAvailable,
-                         this, &EmbedHttpServer::onNewConnection);
-        QObject::connect(_server, &QSslServer::sslErrors,
-                         this, [](QSslSocket*,
-                                  const QList<QSslError>& errors) {
-                             for (const auto& e : errors)
-                                 LOG_WRN("EmbedHttpServer: sslError "
-                                         << e.errorString().toStdString());
-                         });
-    }
-
-    bool listen() { return _server->listen(QHostAddress::LocalHost, 0); }
-    quint16 port() const { return _server->serverPort(); }
-
-private:
-    void onNewConnection()
-    {
-        while (QTcpSocket* client = _server->nextPendingConnection())
-        {
-            QObject::connect(client, &QTcpSocket::readyRead,
-                             client, [this, client] { serve(client); });
-            QObject::connect(client, &QTcpSocket::disconnected,
-                             client, &QObject::deleteLater);
-        }
-    }
-
-    void serve(QTcpSocket* client)
-    {
-        QByteArray buf = client->peek(client->bytesAvailable());
-        int sep = buf.indexOf("\r\n\r\n");
-        if (sep < 0)
-            return;
-        client->read(sep + 4);
-
-        int nl = buf.indexOf("\r\n");
-        QList<QByteArray> parts = buf.left(nl).split(' ');
-        if (parts.size() < 2 || parts[0] != "GET")
-        {
-            sendError(client, 405, "Method Not Allowed");
-            return;
-        }
-
-        QByteArray rawPath = parts[1];
-        int q = rawPath.indexOf('?');
-        if (q >= 0)
-            rawPath = rawPath.left(q);
-        QString path = QUrl::fromPercentEncoding(rawPath);
-
-        QFileInfo fi(_root + path);
-        QString canonical = fi.canonicalFilePath();
-        if (canonical.isEmpty() || !canonical.startsWith(_root))
-        {
-            LOG_WRN("EmbedHttpServer: 404 for " << path.toStdString()
-                    << " (resolved: " << canonical.toStdString() << ')');
-            sendError(client, 404, "Not Found");
-            return;
-        }
-
-        QFile f(canonical);
-        if (!f.open(QIODevice::ReadOnly))
-        {
-            LOG_WRN("EmbedHttpServer: 404 opening "
-                    << canonical.toStdString());
-            sendError(client, 404, "Not Found");
-            return;
-        }
-        LOG_TRC("EmbedHttpServer: 200 " << path.toStdString()
-                << " -> " << canonical.toStdString());
-
-        QMimeDatabase db;
-        QByteArray mime = db.mimeTypeForFile(canonical).name().toUtf8();
-        QByteArray body = f.readAll();
-        QByteArray resp;
-        resp += "HTTP/1.1 200 OK\r\n";
-        resp += "Content-Type: " + mime + "\r\n";
-        resp += "Content-Length: " + QByteArray::number(body.size()) + "\r\n";
-        resp += "Connection: close\r\n\r\n";
-        resp += body;
-        client->write(resp);
-        client->disconnectFromHost();
-    }
-
-    void sendError(QTcpSocket* client, int code, const char* text)
-    {
-        QByteArray resp = "HTTP/1.1 " + QByteArray::number(code) + ' '
-                          + text + "\r\nContent-Length: 0\r\n"
-                            "Connection: close\r\n\r\n";
-        client->write(resp);
-        client->disconnectFromHost();
-    }
-
-    QString _root;
-    QSslServer* _server;
-};
-
-/// Attaches an X-Collab-Frame-Origin header to top-level document
-/// navigations from the picker page, carrying the origin of our
-/// local HTTPS server (https://localhost:<embed-port>).  The
-/// integrator's CSP listener is expected to read it and add that
-/// single origin to frame-src, so the integrator does not have to
-/// allowlist all of localhost:*.  Piggybacks on the normal request
-/// flow so no extra endpoint or handshake is needed.
-class FrameOriginInterceptor
-    : public QWebEngineUrlRequestInterceptor
-{
-public:
-    FrameOriginInterceptor(quint16 port, QObject* parent)
-        : QWebEngineUrlRequestInterceptor(parent)
-        , _headerValue(
-            ("https://localhost:" + QString::number(port)).toUtf8())
-    {
-    }
-
-    void interceptRequest(QWebEngineUrlRequestInfo& info) override
-    {
-        const bool isMainFrame = info.resourceType()
-            == QWebEngineUrlRequestInfo::ResourceTypeMainFrame;
-        if (isMainFrame)
-        {
-            info.setHttpHeader(
-                "X-Collab-Frame-Origin", _headerValue);
-        }
-        LOG_TRC("FrameOriginInterceptor: "
-                << (isMainFrame ? "stamped" : "skipped")
-                << " resourceType=" << int(info.resourceType())
-                << " url="
-                << info.requestUrl().toString().toStdString());
-    }
-
-private:
-    QByteArray _headerValue;
-};
-
 /// Probe serverUrl and, when the integrator is recognized, return a
 /// URL that drops the user straight onto the files view instead of
 /// the default landing page.  Returns serverUrl unchanged otherwise.
@@ -412,95 +135,7 @@ IntegratorFilePicker::IntegratorFilePicker(const QString& serverUrl,
 
     setCentralWidget(_webView);
 
-    // Optimistically start the embed HTTP server so we have a
-    // candidate local origin to advertise; activate embed mode only
-    // if the integrator's CSP response echoes that origin back,
-    // signalling it implements the X-Collab-Frame-Origin protocol.
-    // Falls back to the open-in-new-window flow otherwise.
-    QString distRoot = QString::fromStdString(getBrowserDistDir());
-    auto* httpServer = new EmbedHttpServer(distRoot, this);
-    if (httpServer->listen()
-        && probeFrameOriginProtocol(serverUrl, httpServer->port()))
-    {
-        _embedPort = httpServer->port();
-        LOG_INF("IntegratorFilePicker: embed mode on, serving "
-                << distRoot.toStdString() << " at "
-                << "https://localhost:" << _embedPort);
-        // Advertise the port to the integrator via a custom request
-        // header on every main-frame navigation, so its CSP listener
-        // allowlists exactly our origin in frame-src:
-        page->setUrlRequestInterceptor(
-            new FrameOriginInterceptor(_embedPort, this));
-        // The QWebChannel + real Bridge are installed in
-        // attachEmbeddedDocument(), once we have a DocumentData.
-    }
-    else
-    {
-        LOG_INF("IntegratorFilePicker: integrator does not echo "
-                "X-Collab-Frame-Origin; falling back to "
-                "open-in-new-window");
-        httpServer->deleteLater();
-    }
-
     _webView->load(QUrl(resolveLandingUrl(serverUrl)));
-}
-
-void IntegratorFilePicker::attachEmbeddedDocument(
-    const QString& wopiSrc, const QString& accessToken,
-    const QString& coolServer, const QString& coolPath,
-    QUrlQuery origQuery)
-{
-    LOG_TRC("IntegratorFilePicker::attachEmbeddedDocument: "
-            << "wopiSrc=" << wopiSrc.toStdString()
-            << " coolServer=" << coolServer.toStdString());
-
-    auto remoteInfo = std::make_shared<coda::RemoteDocInfo>();
-    remoteInfo->wopiSrc = wopiSrc;
-    remoteInfo->accessToken = accessToken;
-    remoteInfo->coolServer = coolServer;
-    remoteInfo->coolPath = coolPath;
-
-    _document = {
-        ._fileURL = Poco::URI(),
-        ._fakeClientFd = fakeSocketSocket(),
-        ._appDocId = coda::generateNewAppDocId(),
-        ._remoteInfo = std::move(remoteInfo),
-    };
-
-    _bridge = coda::attachRemoteBridge(
-        _webView->page(), _document, /*owner=*/nullptr, this, _webView);
-
-    // Build the URL we rewrite the iframe to: our local HTTPS server's
-    // /cool-qt.html with CODA-local params added.  Preserve the UI
-    // hints (lang, closebutton, revisionhistory) from the original
-    // NC iframe URL, but drop WOPISrc and access_token: their
-    // presence on the URL is what makes main.js set isWopi=true and
-    // the JS render the integrator-iframe minimal chrome (no top
-    // menu bar, smaller toolbar) instead of the local-edit chrome
-    // we want here.  Both values are kept separately on
-    // _document._remoteInfo for the page-JS bootstrap (via
-    // Bridge::getRemoteInfo) and for switchToServerMode to rebuild
-    // the server-mode URL later.
-    QUrlQuery embedQuery(origQuery);
-    embedQuery.removeAllQueryItems("WOPISrc");
-    embedQuery.removeAllQueryItems("access_token");
-    QUrl target;
-    target.setScheme("https");
-    target.setHost("localhost");
-    target.setPort(_embedPort);
-    target.setPath("/cool-qt.html");
-    target.setQuery(embedQuery);
-    coda::addRemoteCoolParams(target, _document);
-
-    LOG_TRC("IntegratorFilePicker: navigating picker to "
-            << target.toString().toStdString());
-    _webView->setUrl(target);
-
-    // Window title is generic until the page-JS resolves the doc
-    // filename via /co/collab/fetch.
-    setWindowTitle(APP_NAME);
-    const QRect available = QGuiApplication::primaryScreen()->availableGeometry();
-    resize(available.width(), available.height());
 }
 
 void IntegratorFilePicker::extractAccessTokenAsync(
@@ -539,61 +174,6 @@ void IntegratorFilePicker::extractAccessToken()
             _accessToken = val;
         emit wopiSelected();
     });
-}
-
-void IntegratorFilePicker::closeEvent(QCloseEvent* ev)
-{
-    LOG_TRC("IntegratorFilePicker::closeEvent: "
-            << "_bridge=" << _bridge
-            << " isSaveInFlight="
-            << (_bridge ? _bridge->isSaveInFlight() : false));
-    // Defer the close until any in-flight save's upload round-trip has finished, otherwise
-    // tearing down the page would interrupt the JS-side collabUploadFile POST that is
-    // pushing the just-saved bytes back to the integrator, and those bytes would be lost:
-    if (_bridge && _bridge->isSaveInFlight())
-    {
-        LOG_TRC("IntegratorFilePicker::closeEvent: save in flight, "
-                "deferring close");
-        // Acknowledge the close-click visually with a busy cursor for immediate feedback (the
-        // in-page modal that we re-fire below has a 700ms paint delay - see
-        // Control.UIManager.ts openBusyPopup - so on a fast finish it might never appear, but
-        // the cursor change happens instantly):
-        QApplication::setOverrideCursor(Qt::WaitCursor);
-        if (_bridge)
-            _bridge->evalJS(
-                "if (window.app && window.app.map)"
-                "  window.app.map.fire('showbusy',"
-                "    {label: window._('Saving...')});");
-        _bridge->onSaveComplete([this]() {
-            QApplication::restoreOverrideCursor();
-            if (_bridge)
-                _bridge->markReadyToClose();
-            this->close();
-        });
-        ev->ignore();
-        return;
-    }
-    // First close click on a dirty doc in embed-mode editor role:
-    // hand off to JS to save (uploads via collabUploadFile for the
-    // remote-doc case) and post CLOSE_WINDOW on completion, which
-    // trips _readyToClose so the re-entry below proceeds with
-    // teardown.  Picker-only mode (no _bridge attached) skips this.
-    if (_bridge && !_bridge->isReadyToClose())
-    {
-        LOG_TRC("IntegratorFilePicker::closeEvent: "
-                "save-if-dirty round-trip");
-        _bridge->saveAndClose();
-        ev->ignore();
-        return;
-    }
-    // Tell the per-document collab broker we are leaving voluntarily
-    // before tearing the window down.  Must happen here rather than
-    // in Bridge's destructor, because by the time the destructor
-    // runs the QMainWindow's value-typed _document (which the bridge
-    // holds a reference to) has already been destroyed.
-    if (_bridge)
-        _bridge->sendCollabBye();
-    QMainWindow::closeEvent(ev);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

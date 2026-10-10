@@ -26,7 +26,6 @@
 
 #include <QDir>
 #include <QEventLoop>
-#include <QFile>
 #include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -34,13 +33,8 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QProcess>
 #include <QRegularExpression>
-#include <QSslCertificate>
-#include <QSslKey>
 #include <QStandardPaths>
-#include <QStringList>
-#include <QTemporaryFile>
 #include <QUrl>
 #include <QWebEngineCookieStore>
 #include <QWebEnginePage>
@@ -134,118 +128,10 @@ QWebEngineProfile* Application::globalProfile = nullptr;
 RecentFiles Application::recentFiles;
 std::unique_ptr<Prefs> Application::prefs;
 
-QSslKey& Application::embedKeyRef()
-{
-    static QSslKey key;
-    return key;
-}
-
-QSslCertificate& Application::embedCertRef()
-{
-    static QSslCertificate cert;
-    return cert;
-}
-
-namespace
-{
-/// Generate an ephemeral self-signed RSA cert + key valid for
-/// loopback hosts, into the supplied @keyOut and @certOut, and
-/// fill @spkiHashB64 with the base64-encoded SHA-256 of the cert's
-/// SubjectPublicKeyInfo (the form Chromium's
-/// --ignore-certificate-errors-spki-list flag wants).  Shells out
-/// to the openssl CLI; OpenSSL is a transitive dependency of CODA's
-/// existing TLS/HTTPS code so the binary is always present at
-/// runtime on the platforms we ship to.
-void generateEmbedCert(QSslKey& keyOut, QSslCertificate& certOut,
-                       QByteArray& spkiHashB64)
-{
-    QTemporaryFile keyFile;
-    QTemporaryFile certFile;
-    if (!keyFile.open() || !certFile.open())
-    {
-        LOG_ERR("Application: cannot open tmp file for embed cert");
-        return;
-    }
-    const QString keyPath = keyFile.fileName();
-    const QString certPath = certFile.fileName();
-    keyFile.close();
-    certFile.close();
-
-    QProcess openssl;
-    openssl.start(QStringLiteral("openssl"), QStringList()
-        << "req" << "-x509" << "-newkey" << "rsa:3072"
-        << "-keyout" << keyPath << "-out" << certPath
-        << "-days" << "1" << "-nodes"
-        << "-subj" << "/CN=localhost"
-        << "-addext"
-        << "subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1"
-        // Chromium requires EKU=serverAuth for HTTPS server certs;
-        // a cert without it is rejected at handshake time, before
-        // QWebEnginePage::certificateError gets a chance to override.
-        << "-addext" << "extendedKeyUsage=serverAuth"
-        << "-addext" << "basicConstraints=CA:FALSE"
-        << "-addext" << "keyUsage=digitalSignature,keyEncipherment");
-    if (!openssl.waitForFinished(10000) || openssl.exitCode() != 0)
-    {
-        LOG_ERR("Application: openssl failed generating embed cert: "
-                << openssl.readAllStandardError().toStdString());
-        QFile::remove(keyPath);
-        QFile::remove(certPath);
-        return;
-    }
-
-    QFile k(keyPath);
-    QFile c(certPath);
-    if (k.open(QIODevice::ReadOnly) && c.open(QIODevice::ReadOnly))
-    {
-        keyOut = QSslKey(k.readAll(), QSsl::Rsa);
-        certOut = QSslCertificate(c.readAll(), QSsl::Pem);
-    }
-
-    // Compute base64(sha256(DER-encoded SubjectPublicKeyInfo)) of
-    // the cert.  QSslCertificate has no direct accessor for the
-    // SPKI, so chain a few openssl invocations.
-    QProcess sh;
-    sh.start(QStringLiteral("bash"), QStringList() << "-c" << QString(
-        "openssl x509 -in '%1' -pubkey -noout | "
-        "openssl pkey -pubin -outform DER | "
-        "openssl dgst -sha256 -binary | base64").arg(certPath));
-    if (sh.waitForFinished(10000) && sh.exitCode() == 0)
-        spkiHashB64 = sh.readAllStandardOutput().trimmed();
-    else
-        LOG_ERR("Application: SPKI hash pipeline failed: "
-                << sh.readAllStandardError().toStdString());
-
-    QFile::remove(keyPath);
-    QFile::remove(certPath);
-
-    if (keyOut.isNull() || certOut.isNull() || spkiHashB64.isEmpty())
-        LOG_ERR("Application: embed cert/key/spki parse failed");
-}
-}
-
 void Application::initialize()
 {
     if (!globalProfile)
     {
-        // Generate the embed cert + SPKI hash and tell Chromium to
-        // ignore cert errors for that specific cert via the SPKI
-        // allowlist.  Must be set before the first profile/page is
-        // created (which is what triggers Chromium init).  Scoped to
-        // our cert only - the integrator's HTTPS origin is still
-        // validated against the system trust store as normal.
-        QByteArray spkiHash;
-        generateEmbedCert(embedKeyRef(), embedCertRef(), spkiHash);
-        if (!spkiHash.isEmpty())
-        {
-            // Append, so the switches the environment already carries stay in force.
-            QByteArray chromiumFlags = qgetenv("QTWEBENGINE_CHROMIUM_FLAGS");
-            if (!chromiumFlags.isEmpty())
-                chromiumFlags += ' ';
-            chromiumFlags += "--ignore-certificate-errors-spki-list=" + spkiHash;
-            qputenv("QTWEBENGINE_CHROMIUM_FLAGS", chromiumFlags);
-        }
-
         // Keep the WebEngine's persistent data (localStorage, cookies) under the
         // same directory as our settings instead of a separate data location.
         QString configData = QString::fromStdString(Desktop::getConfigPath().toString());
@@ -257,7 +143,7 @@ void Application::initialize()
         globalProfile->installUrlSchemeHandler(
             "cool", new CoolUrlSchemeHandler(globalProfile));
 
-        // The non-embed remote-doc flow loads cool.html via file://
+        // The remote-doc flow loads cool.html via file://
         // so its page-side JS can fetch() the cool server's
         // /co/collab/fetch and POST to /co/collab/put.  Chromium
         // blocks file://-origin pages from accessing remote URLs by
@@ -426,9 +312,5 @@ void Application::deleteAccountProfile(const QString& accountId)
 RecentFiles& Application::getRecentFiles() { return recentFiles; }
 
 Prefs& Application::getPrefs() { return *prefs; }
-
-const QSslKey& Application::getEmbedKey() { return embedKeyRef(); }
-
-const QSslCertificate& Application::getEmbedCert() { return embedCertRef(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

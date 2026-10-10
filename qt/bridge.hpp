@@ -22,25 +22,17 @@
 #include "Document.hpp"
 #include "WebView.hpp"
 
-class QWidget;
-
 // Qt ⇄ JavaScript bridge.  Bridge is attached to a QWebEnginePage
 // (via QWebChannel) and brokers messages between the page's JS and
-// the rest of CODA.  The host window/webview are taken as the base
-// Qt types so that Bridge can attach to any page (e.g., the
-// IntegratorFilePicker's QDialog + QWebEngineView); CODA-specific
-// methods (presentation full-screen, monitor exchange) are reached
-// via qobject_cast at their call sites.
+// the rest of CODA.  The web view is taken as the base Qt type;
+// CODA-specific methods (presentation full-screen, monitor exchange)
+// are reached via qobject_cast at their call sites.
 class Bridge : public QObject
 {
     Q_OBJECT
 
     coda::DocumentData& _document;
-    // The owning document view; null for bridges attached to other hosts
-    // (e.g. the IntegratorFilePicker's QDialog).
     QPointer<WebView> _owner;
-    // Fallback host window for pages not owned by a WebView.
-    QWidget* _window;
     QWebEngineView* _webView;
     int _closeNotificationPipeForForwardingThread[2];
     std::thread _app2js;
@@ -95,7 +87,7 @@ class Bridge : public QObject
 
 public:
     explicit Bridge(QObject* parent, WebView* owner, coda::DocumentData& document,
-                    QWidget* window, QWebEngineView* webView);
+                    QWebEngineView* webView);
 
     ~Bridge() override;
 

@@ -992,7 +992,7 @@ void WebView::restoreDiscardedView()
     QWebChannel* channel = new QWebChannel(_webView->page());
 
     assert(_bridge == nullptr);
-    _bridge = new Bridge(channel, this, _document, nullptr, _webView.get());
+    _bridge = new Bridge(channel, this, _document, _webView.get());
     // The page's HULLO takes a fresh socket to the document still loaded under this
     // appDocId, rather than loading the file again.
     _bridge->markDetached();
@@ -1170,7 +1170,7 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
     QWebChannel* channel = new QWebChannel(_webView->page());
 
     assert(_bridge == nullptr);
-    _bridge = new Bridge(channel, this, _document, nullptr, _webView.get());
+    _bridge = new Bridge(channel, this, _document, _webView.get());
     if (requiresSaveAs)
         _bridge->setRequiresSaveAs(true);
     if (newFile)
@@ -1239,11 +1239,11 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
 
 Bridge* coda::attachRemoteBridge(QWebEnginePage* page,
                                  coda::DocumentData& document,
-                                 WebView* owner, QWidget* window,
+                                 WebView* owner,
                                  QWebEngineView* webView)
 {
     QWebChannel* channel = new QWebChannel(page);
-    Bridge* bridge = new Bridge(channel, owner, document, window, webView);
+    Bridge* bridge = new Bridge(channel, owner, document, webView);
     channel->registerObject("bridge", bridge);
     page->setWebChannel(channel);
     return bridge;
@@ -1293,7 +1293,7 @@ void WebView::loadRemote(std::shared_ptr<coda::RemoteDocInfo> remoteInfo)
 
     assert(_bridge == nullptr);
     _bridge = coda::attachRemoteBridge(
-        _webView->page(), _document, this, nullptr, _webView.get());
+        _webView->page(), _document, this, _webView.get());
 
     Poco::Path coolHtmlPath(getBrowserDistDir());
     coolHtmlPath.append("cool-qt.html");
