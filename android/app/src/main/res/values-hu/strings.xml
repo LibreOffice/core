@@ -112,4 +112,5 @@
     <string name="pref_user_name_info">Megjegyzés hozzáadásakor használatos</string>
     <string name="pref_user_name">Felhasználó neve</string>
     <string name="pref_user_name_guest">Vendég felhasználó</string>
+    <string name="app_version_and_hash">Verzió: %1$s\ngit-hash: %2$s</string>
 </resources>
