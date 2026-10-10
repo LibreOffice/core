@@ -32,6 +32,10 @@ $(eval $(call gb_Library_use_libraries,MacOSXSpell,\
 	utl \
 ))
 
+$(eval $(call gb_Library_use_static_libraries,MacOSXSpell,\
+	ulingu \
+))
+
 $(eval $(call gb_Library_use_system_darwin_frameworks,MacOSXSpell,\
 	Cocoa \
 ))

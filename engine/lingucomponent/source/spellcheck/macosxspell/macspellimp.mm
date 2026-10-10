@@ -31,13 +31,17 @@
 
 #include "macspellimp.hxx"
 
+#include <i18nlangtag/languagetag.hxx>
 #include <linguistic/spelldta.hxx>
+#include <unotools/lingucfg.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+
+#include <set>
 
 using namespace utl;
 using namespace osl;
@@ -307,6 +311,13 @@ Sequence< Locale > MacSpellChecker::getLocales()
             //first add the user dictionaries
             //TODO for MAC?
 
+            // The languages an installed hunspell dictionary covers stay with hunspell. This
+            // service claims only the rest, so the two are never chained for one locale, where
+            // a word one of them forbids on purpose would be accepted by the other.
+            std::set<LanguageType> aHunspellLanguages;
+            for (const OUString& rName : GetSpellDicLocaleNames(GetSpellDics()))
+                aHunspellLanguages.insert(LanguageTag(rName).getLanguageType());
+
             // now add the shared dictionaries
             for (i = 0; i < numshr; i++) {
                 NSDictionary *aLocDict = [ NSLocale componentsFromLocaleIdentifier:postspdict[i] ];
@@ -315,6 +326,8 @@ Sequence< Locale > MacSpellChecker::getLocales()
                 OUString lang([aLang cStringUsingEncoding: NSUTF8StringEncoding], [aLang length], aEnc);
                 OUString country([ aCountry cStringUsingEncoding: NSUTF8StringEncoding], [aCountry length], aEnc);
                 Locale nLoc( lang, country, OUString() );
+                if (aHunspellLanguages.count(LanguageTag(nLoc).getLanguageType()))
+                    continue;
                 newloc = 1;
                 //eliminate duplicates (is this needed for MacOS?)
                 for (j = 0; j < numlocs; j++) {
