@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-22 21:46+0200\n"
-"PO-Revision-Date: 2026-10-09 10:31+0000\n"
+"PO-Revision-Date: 2026-10-10 03:12+0000\n"
 "Last-Translator: dukezas <dukezas@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/lt/>\n"
@@ -5574,80 +5574,82 @@ msgstr "Importuoti savo skaidres"
 
 #: src/control/Control.SlideImportPane.tsx:673
 msgid "Checking..."
-msgstr ""
+msgstr "Tikrinama..."
 
 #: src/control/Control.SlideImportPane.tsx:675
 #: src/control/Control.SlideLinkToolbar.tsx:165
 msgid "Missing"
-msgstr ""
+msgstr "Trūksta"
 
 #: src/control/Control.SlideImportPane.tsx:677
 #: src/control/Control.SlideLinkToolbar.tsx:163
 msgid "No access"
-msgstr ""
+msgstr "Prieigos nėra"
 
 #: src/control/Control.SlideImportPane.tsx:679
 msgid "Could not open"
-msgstr ""
+msgstr "Negaliu atidaryti"
 
 #: src/control/Control.SlideImportPane.tsx:685
 msgid "{0} changed"
-msgstr ""
+msgstr "{0} pakeitimų"
 
 #: src/control/Control.SlideImportPane.tsx:687
 #: src/control/Control.SlideLinkToolbar.tsx:115
 msgid "Linked"
-msgstr ""
+msgstr "Susietas"
 
 #: src/control/Control.SlideImportPane.tsx:689
 msgid "Not checked"
-msgstr ""
+msgstr "Netikrinta"
 
 #: src/control/Control.SlideImportPane.tsx:690
 #: src/control/Control.SlideImportPane.tsx:1392
 msgid "Not linked"
-msgstr ""
+msgstr "Nesusietas"
 
 #: src/control/Control.SlideImportPane.tsx:733
 #: src/control/Control.SlideImportPane.tsx:742
 msgid "Reading the slides..."
-msgstr ""
+msgstr "Skaitau skaidres..."
 
 #: src/control/Control.SlideImportPane.tsx:736
 msgid ""
 "The slides are in this presentation. The file they came from is no longer "
 "here."
 msgstr ""
+"Skaidrės yra šioje prezentacijoje. Failo, iš kurio jos buvo gautos, čia "
+"nebėra."
 
 #: src/control/Control.SlideImportPane.tsx:739
 msgid "This file is here. You do not have permission to open it."
-msgstr ""
+msgstr "Failas yra čia. Jūs neturite leidimo jo atidaryti."
 
 #: src/control/Control.SlideImportPane.tsx:741
 msgid "This file could not be read this time."
-msgstr ""
+msgstr "Šiuo metu nepavyko nuskaityti šio failo."
 
 #: src/control/Control.SlideImportPane.tsx:750
 #: src/control/Control.SlideImportPane.tsx:1251
 msgid "Locate file"
-msgstr ""
+msgstr "Rasti failą"
 
 #: src/control/Control.SlideImportPane.tsx:756
 #: src/control/Control.SlideImportPane.tsx:1270
 msgid "Reload slides"
-msgstr ""
+msgstr "Perkrauti skaidres"
 
 #: src/control/Control.SlideImportPane.tsx:814
 msgid "1 slide inserted"
-msgstr ""
+msgstr "Įterpta 1 skaidrė"
 
 #: src/control/Control.SlideImportPane.tsx:815
 msgid "{0} slides inserted"
-msgstr ""
+msgstr "Įterpta {0} skaidrių"
 
 #: src/control/Control.SlideImportPane.tsx:822
 msgid "Slide {0}"
-msgstr ""
+msgstr "Skaidrė {0}"
 
 #: src/control/Control.SlideImportPane.tsx:827
 msgid "Insert slides"
@@ -5655,7 +5657,7 @@ msgstr "Įterpti skaidres"
 
 #: src/control/Control.SlideImportPane.tsx:835
 msgid "Insert {0} from {1}"
-msgstr ""
+msgstr "Įterpti {0} iš {1}"
 
 #: src/control/Control.SlideImportPane.tsx:838
 msgid "Insert 1 slide"
@@ -5667,28 +5669,28 @@ msgstr "Įterpti {0} skaidres"
 
 #: src/control/Control.SlideImportPane.tsx:871
 msgid "{0} of {1}"
-msgstr ""
+msgstr "{0} iš {1}"
 
 #: src/control/Control.SlideImportPane.tsx:874
 #: src/control/Control.SlideImportPane.tsx:1638
 msgid "{0} slides"
-msgstr ""
+msgstr "{0} skaidrės"
 
 #: src/control/Control.SlideImportPane.tsx:881
 msgid "Inserts at the end"
-msgstr ""
+msgstr "Įterpimai gale"
 
 #: src/control/Control.SlideImportPane.tsx:882
 msgid "Inserts after slide {0}"
-msgstr ""
+msgstr "Įterpimai po skaidrės {0}"
 
 #: src/control/Control.SlideImportPane.tsx:886
 msgid "Opening file..."
-msgstr ""
+msgstr "Atidaromas failas..."
 
 #: src/control/Control.SlideImportPane.tsx:887
 msgid "Inserting slides..."
-msgstr ""
+msgstr "Įterpiamos skaidrės..."
 
 #: src/control/Control.SlideImportPane.tsx:961
 msgid "Import slides"
@@ -5697,12 +5699,12 @@ msgstr "Importuoti skaidres"
 #: src/control/Control.SlideImportPane.tsx:965
 #: src/control/Control.SlideImportPane.tsx:966
 msgid "Expand slide import"
-msgstr ""
+msgstr "Išplėsti skaidrių importą"
 
 #: src/control/Control.SlideImportPane.tsx:980
 #: src/control/Control.SlideImportPane.tsx:981
 msgid "Close slide import"
-msgstr ""
+msgstr "Uždaryti skaidrių importą"
 
 #: src/control/Control.SlideImportPane.tsx:996
 msgid "Add presentation…"
@@ -5710,69 +5712,71 @@ msgstr "Pridėti prezentaciją…"
 
 #: src/control/Control.SlideImportPane.tsx:1011
 msgid "No presentations yet"
-msgstr ""
+msgstr "Kolkas nėra prezentacijų"
 
 #: src/control/Control.SlideImportPane.tsx:1015
 msgid ""
 "Add a presentation to browse its slides and insert them into this deck."
 msgstr ""
+"Pridėkite prezentaciją, kad galėtumėte naršyti jos skaidres ir įterpti jas į "
+"šį rinkinį."
 
 #: src/control/Control.SlideImportPane.tsx:1048
 msgid "Hide all slides"
-msgstr ""
+msgstr "Slėpti visas skaidres"
 
 #: src/control/Control.SlideImportPane.tsx:1048
 msgid "Show all slides"
-msgstr ""
+msgstr "Rodyti visas skaidres"
 
 #: src/control/Control.SlideImportPane.tsx:1080
 #: src/control/Control.SlideImportPane.tsx:1081
 msgid "Filter presentations"
-msgstr ""
+msgstr "Filtruoti prezentacijas"
 
 #: src/control/Control.SlideImportPane.tsx:1109
 msgid "Slide sources"
-msgstr ""
+msgstr "Skaidrių šaltiniai"
 
 #: src/control/Control.SlideImportPane.tsx:1117
 msgid "Presentations to import from"
-msgstr ""
+msgstr "Prezentacijos iš kurių importuoti"
 
 #: src/control/Control.SlideImportPane.tsx:1185
 msgid "{0} picked"
-msgstr ""
+msgstr "{0} pasirinkta"
 
 #: src/control/Control.SlideImportPane.tsx:1223
 msgid "Actions for {0}"
-msgstr ""
+msgstr "Veiksmai skirti {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1261
 msgid "Hide slides"
-msgstr ""
+msgstr "Slėpti skaidres"
 
 #: src/control/Control.SlideImportPane.tsx:1261
 msgid "Show slides"
-msgstr ""
+msgstr "Rodyti skaidres"
 
 #: src/control/Control.SlideImportPane.tsx:1277
 msgid "Select all slides"
-msgstr ""
+msgstr "Pasirinkti visas skaidres"
 
 #: src/control/Control.SlideImportPane.tsx:1285
 msgid "Update the slides linked to this file"
-msgstr ""
+msgstr "Atnaujinti skaidres susietas su šiuo failu"
 
 #: src/control/Control.SlideImportPane.tsx:1292
 msgid "Remove from list"
-msgstr ""
+msgstr "Pašalinti iš sąrašo"
 
 #: src/control/Control.SlideImportPane.tsx:1377
 msgid "Slides in {0}"
-msgstr ""
+msgstr "Skaidrės esančios {0}"
 
 #: src/control/Control.SlideImportPane.tsx:1391
 msgid "Original design"
-msgstr ""
+msgstr "Originalus dizainas"
 
 #: src/control/Control.SlideImportPane.tsx:1394
 msgid "Linked, follows the slide number"
@@ -5784,43 +5788,43 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:1432
 msgid "Keep original design"
-msgstr ""
+msgstr "Išsaugoti originalų dizainą"
 
 #: src/control/Control.SlideImportPane.tsx:1446
 msgid "Stay linked to the source file"
-msgstr ""
+msgstr "Likt susietu su šaltinio failu"
 
 #: src/control/Control.SlideImportPane.tsx:1484
 msgid "Follow the slide, wherever it moves"
-msgstr ""
+msgstr "Sekti skaidrę, kad ir kur ji judėtų"
 
 #: src/control/Control.SlideImportPane.tsx:1486
 msgid "Follow the slide number"
-msgstr ""
+msgstr "Sekti skaidrės numerį"
 
 #: src/control/Control.SlideImportPane.tsx:1644
 msgid "Select the slides of {0}"
-msgstr ""
+msgstr "Pasirinkti skaidres iš {0}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:102
 msgid "Linked to {0} in {1}"
-msgstr ""
+msgstr "Susieta su {0} iš {1}"
 
 #: src/control/Control.SlideLinkToolbar.tsx:126
 msgid "Hide the actions for this linked slide"
-msgstr ""
+msgstr "Slėpti šios susietos skaidrės veiksmus"
 
 #: src/control/Control.SlideLinkToolbar.tsx:127
 msgid "Show the actions for this linked slide"
-msgstr ""
+msgstr "Rodyti šios susietos skaidrės veiksmus"
 
 #: src/control/Control.SlideLinkToolbar.tsx:137
 msgid "Unlink"
-msgstr ""
+msgstr "Atsieti"
 
 #: src/control/Control.SlideLinkToolbar.tsx:161
 msgid "Not available"
-msgstr ""
+msgstr "Negalimas"
 
 #: src/control/SlideSectionHeader.tsx:68
 msgid "Toggle section %1"
@@ -5828,46 +5832,49 @@ msgstr "Perjungti skyrių %1"
 
 #: src/slideimport/SlideImportSession.ts:257
 msgid "The slides of the source could not be read."
-msgstr ""
+msgstr "Nepavyko perskaityti skaidrių iš šaltinio."
 
 #: src/slideimport/SlideImportSession.ts:308
 #: src/slideimport/SlideImportSession.ts:317
 msgid "Inserting the slides failed."
-msgstr ""
+msgstr "Nepavyko įterpti skaidrių."
 
 #: src/slideimport/SlideImportSession.ts:326
 msgid "Importing slides failed."
-msgstr ""
+msgstr "Nepavyko importuoti skaidrių."
 
 #: src/slideimport/SlideLinks.ts:237
 msgid "No slide of this presentation is linked to another file."
-msgstr ""
+msgstr "Nei viena skaidrė iš šios prezentacijos nėra susieta su kitu failu."
 
 #: src/slideimport/SlideLinks.ts:275
 msgid "This slide is not linked to another file."
-msgstr ""
+msgstr "Ši skaidrė nėra susieta su kitu failu."
 
 #: src/slideimport/SlideLinks.ts:426 src/slideimport/SlideLinks.ts:738
 msgid ""
 "{0} is not one of the documents this one is related to, so the server "
 "cannot read it."
 msgstr ""
+"{0} nėra vienas iš dokumentų, su kuriais šis dokumentas susijęs, todėl "
+"serveris negali jo nuskaityti."
 
 #: src/slideimport/SlideLinks.ts:438
 msgid "These slides come from {0} which is currently not accessible."
-msgstr ""
+msgstr "Šios skaidrės yra iš {0} kuris šiuoo metu yra nepasiekiamas."
 
 #: src/slideimport/SlideLinks.ts:462
 msgid "You do not have access to {0}, so its pages cannot be refreshed."
-msgstr ""
+msgstr "Neturite prieigos prie {0} taigi negalima atnaujinti jo puslapių."
 
 #: src/slideimport/SlideLinks.ts:463 src/slideimport/SlideLinks.ts:741
 msgid "{0} could not be read."
-msgstr ""
+msgstr "Negalima perskaityti {0}."
 
 #: src/slideimport/SlideLinks.ts:562
 msgid "Cannot update the slides of {0}: source lacks the matching slides"
 msgstr ""
+"Nepavyksta atnaujinti {0} skaidrių: šaltinyje trūksta atitinkančių skaidrių"
 
 #: src/slideimport/SlideLinks.ts:565 src/slideimport/SlideLinks.ts:744
 msgid "The slides of {0} could not be read into this presentation."
@@ -5876,38 +5883,39 @@ msgstr ""
 #: src/slideimport/SlideLinks.ts:669
 msgid "Cannot update slide {0}: the source lacks matching slide"
 msgstr ""
+"Nepavyksta atnaujinti skaidrės {0}: šaltinyje trūksta atitinkamos skaidrės"
 
 #: src/slideimport/SlideLinks.ts:684
 msgid "Unlinking the slide failed."
-msgstr ""
+msgstr "Skaidrės atsiejimas nepavyko."
 
 #: src/slideimport/SlideLinks.ts:695 src/slideimport/SlideLinks.ts:756
 msgid "Updating the slides of {0} failed."
-msgstr ""
+msgstr "Nepavyko atnaujinti {0} skaidrių."
 
 #: src/slideimport/SlideLinks.ts:710
 msgid "No slide of {0} was updated."
-msgstr ""
+msgstr "Neatnaujinta nė viena {0} skaidrė."
 
 #: src/slideimport/SlideLinks.ts:714
 msgid "1 slide updated from {0}."
-msgstr ""
+msgstr "Atnaujinta 1 {0} skaidrė."
 
 #: src/slideimport/SlideLinks.ts:718
 msgid "{0} slides updated from {1}."
-msgstr ""
+msgstr "Atnaujinta {0} {1} skaidrės(-ių)."
 
 #: src/slideimport/SlideLinks.ts:747
 msgid "No slide of this presentation is linked to {0}."
-msgstr ""
+msgstr "Šios prezentacijos skaidrės nėra susietos su {0}."
 
 #: src/slideimport/SlideLinks.ts:753
 msgid "Another update is still running. Ask for {0} again in a moment."
-msgstr ""
+msgstr "Dar vis vyksta kitas atnaujinimas. Po kurio laiko vėl užklauskite {0}."
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
-msgstr ""
+msgstr "Keisti skydelių dydį"
 
 #: src/control/Control.Scroll.Annotation.js:19
 msgid "Scroll up annotations"
@@ -5927,11 +5935,11 @@ msgstr "Kiekvienas dokumentas yra laikomas saugiai (užrakintas)"
 
 #: src/control/Control.ServerAuditDialog.ts:83
 msgid "Each document is securely contained (Linux namespaces)"
-msgstr ""
+msgstr "Kiekvienas dokumentas yra saugiai laikomas (Linux vardų erdvės)"
 
 #: src/control/Control.ServerAuditDialog.ts:88
 msgid "Each document is securely contained (capabilities and chroot)"
-msgstr ""
+msgstr "Kiekvienas dokumentas yra saugiai laikomas (funkcijos ir chroot)"
 
 #: src/control/Control.ServerAuditDialog.ts:102
 msgid "System call security filtering enabled"
@@ -6079,7 +6087,7 @@ msgstr ""
 
 #: src/control/Control.StatusBar.js:295
 msgid "Fit the page to the window width."
-msgstr ""
+msgstr "Pritaikykite puslapį prie lango pločio."
 
 #: src/control/Control.StatusBar.js:300
 msgid "Status Bar Menu"
@@ -6143,7 +6151,7 @@ msgstr "Kopijuoti lapą..."
 
 #: src/control/Control.Tabs.js:364
 msgid "{0}, protected"
-msgstr ""
+msgstr "{0}, apsaugotas"
 
 #: src/control/Control.Tabs.js:710
 msgid "Are you sure you want to delete sheet, {sheet}?"
@@ -6159,19 +6167,19 @@ msgstr "Įveskite naują lakšto pavadinimą"
 
 #: src/control/Control.Tabs.js:759
 msgid "Protect Sheet"
-msgstr ""
+msgstr "Apsaugoti lapą"
 
 #: src/control/Control.Tabs.js:759
 msgid "Enter a password to protect the sheet"
-msgstr ""
+msgstr "Įveskite slaptažodį lapo apsaugai"
 
 #: src/control/Control.Tabs.js:763
 msgid "Unprotect Sheet"
-msgstr ""
+msgstr "Nuimti lapo apsaugą"
 
 #: src/control/Control.Tabs.js:763
 msgid "Enter the password to unprotect the sheet"
-msgstr ""
+msgstr "Įveskite slaptažodį, kad nuimti lapo apsaugą"
 
 #: src/control/Control.Toolbar.js:1035
 msgid ""
@@ -6183,11 +6191,11 @@ msgstr ""
 
 #: src/control/Control.Toolbar.js:1070
 msgid "Sheet recalculated in %1 ms"
-msgstr ""
+msgstr "Lapas perskaičiuotas per %1 ms"
 
 #: src/control/Control.Toolbar.js:1071
 msgid "Document recalculated in %1 ms"
-msgstr ""
+msgstr "Dokumentas perskaičiuotas per %1 ms"
 
 #: src/control/Control.TopToolbar.js:145
 msgid "Active Sheet"
@@ -6216,7 +6224,7 @@ msgstr "Pagrindinis"
 
 #: src/control/Control.UIManager.ts:245
 msgid "You are currently in View mode, press {0} to edit"
-msgstr ""
+msgstr "Šiuo metu esate peržiūros režime, nuspauskite {0} redagavimui"
 
 #: src/control/Control.UIManager.ts:650
 msgid "Enter new name"
@@ -6235,14 +6243,16 @@ msgid ""
 "An embedded script uses the legacy com.sun.star UNO API, which may be "
 "removed in future releases."
 msgstr ""
+"Įterptasis skriptas naudoja senąją „com.sun.star UNO“ API sąsają, kuri gali "
+"būti pašalinta būsimose versijose."
 
 #: src/control/Control.UIManager.ts:2810
 msgid "Confirm password"
-msgstr ""
+msgstr "Patvirtinti slaptažodį"
 
 #: src/control/Control.UIManager.ts:2856
 msgid "The confirmation does not match the password"
-msgstr ""
+msgstr "Patvirtinimas nesutampa su slaptažodžiu"
 
 #: src/control/Control.UIManager.ts:3074
 msgid "Copy error details"
@@ -6526,7 +6536,7 @@ msgstr "Įveskite failo pavadinimą"
 
 #: src/control/Permission.js:435 src/control/Permission.js:598
 msgid "How would you like to edit?"
-msgstr ""
+msgstr "Kaip norėtumėt redaguoti?"
 
 #: src/control/Permission.js:436
 msgid ""
