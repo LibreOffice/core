@@ -838,6 +838,7 @@ inline constexpr OUString UNO_NAME_ALLOW_LINK_UPDATE = u"AllowLinkUpdate"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_AUTO_STYLE_NAME = u"CharAutoStyleName"_ustr;
 inline constexpr OUString UNO_NAME_PARA_AUTO_STYLE_NAME = u"ParaAutoStyleName"_ustr;
 inline constexpr OUString UNO_NAME_LAYOUT_SIZE = u"LayoutSize"_ustr;
+inline constexpr OUString UNO_NAME_LAYOUT_POSITION = u"LayoutPosition"_ustr;
 inline constexpr OUString UNO_NAME_HELP = u"Help"_ustr;
 inline constexpr OUString UNO_NAME_TOOLTIP = u"Tooltip"_ustr;
 inline constexpr OUString UNO_NAME_DIALOG_LIBRARIES = u"DialogLibraries"_ustr;

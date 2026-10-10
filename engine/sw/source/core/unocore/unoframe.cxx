@@ -2219,7 +2219,7 @@ cpo::uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 aAny <<= pOleNode->GetOLEObj().GetOleRef();
             }
         }
-        else if(WID_LAYOUT_SIZE == pEntry->nWID)
+        else if(WID_LAYOUT_SIZE == pEntry->nWID || WID_LAYOUT_POSITION == pEntry->nWID)
         {
             // format document completely in order to get correct value (no EditShell for ole embedded case)
             if (SwEditShell* pEditShell = pFormat->GetDoc().GetEditShell())
@@ -2230,8 +2230,13 @@ cpo::uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             {
                 OSL_ENSURE( pTmpFrame->isFrameAreaDefinitionValid(), "frame not valid" );
                 const SwRect& rRect = pTmpFrame->getFrameArea();
-                aAny <<= awt::Size(rRect.getWidth().as_hmm<sal_Int32>(),
-                                   rRect.getHeight().as_hmm<sal_Int32>());
+                if (WID_LAYOUT_SIZE == pEntry->nWID)
+                    aAny <<= awt::Size(rRect.getWidth().as_hmm<sal_Int32>(),
+                                       rRect.getHeight().as_hmm<sal_Int32>());
+                else
+                    // The top left corner of the first frame, in document coordinates.
+                    aAny <<= awt::Point(convertTwipToMm100(rRect.Left()),
+                                        convertTwipToMm100(rRect.Top()));
             }
         }
         else if(pEntry->nWID == FN_UNO_PARENT_TEXT)
@@ -2292,7 +2297,8 @@ cpo::uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     {
         if ( ! m_pDoc )
             throw cpo::uno::RuntimeException();
-        if(WID_LAYOUT_SIZE != pEntry->nWID)  // there is no LayoutSize in a descriptor
+        // there is no LayoutSize and no LayoutPosition in a descriptor
+        if(WID_LAYOUT_SIZE != pEntry->nWID && WID_LAYOUT_POSITION != pEntry->nWID)
         {
             if (const cpo::uno::Any* pAny = m_pProps->GetProperty(pEntry->nWID, nMemberId))
                 aAny = *pAny;

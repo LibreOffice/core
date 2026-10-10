@@ -18,6 +18,11 @@
 #include <vcl/pdf/PDFPageObjectType.hxx>
 #include <vcl/scheduler.hxx>
 #include <svl/srchitem.hxx>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <unotools/streamwrap.hxx>
+#include <tools/stream.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -1453,6 +1458,48 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testSelectImagesAgainAfterUndoOfDeletion)
         CPPUNIT_ASSERT_EQUAL(DynCastSwVirtFlyDrawObj(pObject)->GetFlyFrame(),
                              pWrtShell->GetSelectedFlyFrame());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testSelectionPictureOfSeveralImages)
+{
+    // The SVG picture of a selection that holds two images shows both images at the places
+    // they have in the layout, and each image reports that place as its layout position.
+    createSwDoc("two-images.fodt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0)));
+    CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), SW_ADD_SELECT, pPage->GetObj(1)));
+    std::vector<SwFlyFrame*> aFlyFrames = pWrtShell->GetSelectedFlyFrames();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aFlyFrames.size());
+
+    for (size_t nImage = 0; nImage < 2; ++nImage)
+    {
+        const SwRect& rArea = aFlyFrames[nImage]->getFrameArea();
+        const awt::Point aPosition
+            = getProperty<awt::Point>(getShape(nImage + 1), u"LayoutPosition"_ustr);
+        CPPUNIT_ASSERT_EQUAL(o3tl::convert(rArea.Left(), o3tl::Length::twip, o3tl::Length::mm100),
+                             static_cast<tools::Long>(aPosition.X));
+        CPPUNIT_ASSERT_EQUAL(o3tl::convert(rArea.Top(), o3tl::Length::twip, o3tl::Length::mm100),
+                             static_cast<tools::Long>(aPosition.Y));
+    }
+
+    // Export the selection the way the selection picture is made.
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOutput = new utl::OOutputStreamWrapper(aStream);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    xStorable->storeToURL(u"private:stream"_ustr,
+                          { comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_svg_Export"_ustr),
+                            comphelper::makePropertyValue(u"SelectionOnly"_ustr, true),
+                            comphelper::makePropertyValue(u"OutputStream"_ustr, xOutput) });
+    aStream.Seek(0);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // The picture holds one graphic per image, the second to the right of the first.
+    assertXPath(pXmlDoc, "//*[@class='Graphic']", 2);
+    const sal_Int32 nFirstX = getXPath(pXmlDoc, "(//*[@class='BoundingBox'])[1]", "x").toInt32();
+    const sal_Int32 nSecondX = getXPath(pXmlDoc, "(//*[@class='BoundingBox'])[2]", "x").toInt32();
+    CPPUNIT_ASSERT(nSecondX > nFirstX);
 }
 
 } // end of anonymous namespace

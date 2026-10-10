@@ -22,6 +22,7 @@
 #include <svx/unomid.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

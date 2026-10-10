@@ -379,6 +379,7 @@
     { UNO_NAME_TOOLTIP, FN_UNO_TOOLTIP, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0}, \
     { UNO_NAME_DESCRIPTION, FN_UNO_DESCRIPTION, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0}, \
     { UNO_NAME_LAYOUT_SIZE, WID_LAYOUT_SIZE, cppu::UnoType<css::awt::Size>::get(), PropertyAttribute::MAYBEVOID | PropertyAttribute::READONLY, 0 }, \
+    { UNO_NAME_LAYOUT_POSITION, WID_LAYOUT_POSITION, cppu::UnoType<css::awt::Point>::get(), PropertyAttribute::MAYBEVOID | PropertyAttribute::READONLY, 0 }, \
     { UNO_NAME_LINE_STYLE, RES_BOX, cppu::UnoType<css::drawing::LineStyle>::get(),  0, LINE_STYLE }, \
     { UNO_NAME_LINE_WIDTH, RES_BOX, cppu::UnoType<sal_Int32>::get(),  0, LINE_WIDTH |CONVERT_TWIPS }, \
     { u"Decorative"_ustr, RES_DECORATIVE, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 }, \

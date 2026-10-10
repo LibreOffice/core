@@ -566,18 +566,13 @@ bool SVGFilter::filterWriterOrCalc( const Sequence< PropertyValue >& rDescriptor
     mSelectedPages.resize( 1 );
     mSelectedPages[0].set(xDrawPages->getByIndex(0), uno::UNO_QUERY);
 
-    bool bGotSelection = xSelection->getSelection() >>= maShapeSelection;
-
+    // A Writer image or embedded object, alone or several images together, is drawn from
+    // its graphic. Any other selection is a collection of shapes.
+    bool bGotSelection = mbWriterFilter && implExportWriterTextGraphic(xSelection);
     if (!bGotSelection)
-    {
-        if (mbWriterFilter)
-        {
-            // For Writer we might have a non-shape graphic
-            bGotSelection = implExportWriterTextGraphic(xSelection);
-        }
-        if (!bGotSelection)
-            return false;
-    }
+        bGotSelection = xSelection->getSelection() >>= maShapeSelection;
+    if (!bGotSelection)
+        return false;
 
     return implExport( rDescriptor );
 }

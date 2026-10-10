@@ -36,6 +36,9 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/ShapeCollection.hpp>
 
 #include <rtl/bootstrap.hxx>
@@ -827,30 +830,26 @@ bool SVGFilter::implExportWriterOrCalc( const Reference< XOutputStream >& rxOStm
     return bRet;
 }
 
-bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSupplier >& xSelectionSupplier )
+namespace
 {
-    cpo::uno::Any selection = xSelectionSupplier->getSelection();
-    uno::Reference<lang::XServiceInfo> xSelection;
-    selection >>= xSelection;
-    if (!xSelection)
-        return true;
+// The graphic that a Writer image or embedded object is drawn from, in the form the SVG needs.
+// Returns an empty reference for any other object.
+Reference< graphic::XGraphic > lcl_getWriterObjectGraphic( const Reference< lang::XServiceInfo >& rxObject,
+                                                           bool bPreview )
+{
+    const bool bIsGraphic = rxObject->supportsService( u"com.sun.star.text.TextGraphicObject"_ustr );
+    const bool bIsEmbedded = !bIsGraphic
+        && rxObject->supportsService( u"com.sun.star.text.TextEmbeddedObject"_ustr );
+    if ( !bIsGraphic && !bIsEmbedded )
+        return nullptr;
 
-    const bool bIsGraphic
-        = xSelection->supportsService(u"com.sun.star.text.TextGraphicObject"_ustr);
-    const bool bIsEmbedded
-        = !bIsGraphic
-          && xSelection->supportsService(u"com.sun.star.text.TextEmbeddedObject"_ustr);
-    if (!bIsGraphic && !bIsEmbedded)
-        return true;
-
-    uno::Reference<graphic::XGraphic> xOriginalGraphic;
-
-    if (bIsGraphic)
+    Reference< graphic::XGraphic > xOriginalGraphic;
+    if ( bIsGraphic )
     {
         // Graphic frames (images) expose the source bitmap on the "Graphic"
         // property.
-        uno::Reference<beans::XPropertySet> xGraphicPropertySet(xSelection, uno::UNO_QUERY);
-        xGraphicPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xOriginalGraphic;
+        Reference< beans::XPropertySet > xGraphicPropertySet( rxObject, UNO_QUERY );
+        xGraphicPropertySet->getPropertyValue( u"Graphic"_ustr ) >>= xOriginalGraphic;
     }
     else
     {
@@ -858,40 +857,63 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
         // their replacement metafile through XEmbeddedObjectSupplier2.
         // Reading "Graphic" via XPropertySet on a non-graphic fly throws
         // because that path is implemented only for SwGrfNode.
-        uno::Reference<document::XEmbeddedObjectSupplier2> xEmbedSupplier(
-            xSelection, uno::UNO_QUERY);
-        if (xEmbedSupplier.is())
+        Reference< document::XEmbeddedObjectSupplier2 > xEmbedSupplier( rxObject, UNO_QUERY );
+        if ( xEmbedSupplier.is() )
             xOriginalGraphic = xEmbedSupplier->getReplacementGraphic();
     }
+    if ( !xOriginalGraphic.is() || !bIsGraphic )
+        return xOriginalGraphic;
 
-    if (!xOriginalGraphic.is())
-        return false;
-    const Graphic aOriginalGraphic(xOriginalGraphic);
+    // TransformedGraphic / GraphicPreview are graphic-shape only.
+    Reference< beans::XPropertySet > xGraphicPropertySet( rxObject, UNO_QUERY );
+    Reference< graphic::XGraphic > xTransformedGraphic;
+    xGraphicPropertySet->getPropertyValue( bPreview ? u"GraphicPreview"_ustr : u"TransformedGraphic"_ustr )
+        >>= xTransformedGraphic;
+    if ( !xTransformedGraphic.is() )
+        return nullptr;
 
-    Graphic aGraphic = aOriginalGraphic;
-    uno::Reference<graphic::XGraphic> xGraphic = xOriginalGraphic;
+    const Graphic aOriginalGraphic( xOriginalGraphic );
+    const Graphic aTransformedGraphic( xTransformedGraphic );
+    const bool bSameGraphic = aTransformedGraphic == aOriginalGraphic
+        || aOriginalGraphic.GetChecksum() == aTransformedGraphic.GetChecksum();
+    return bSameGraphic ? xOriginalGraphic : xTransformedGraphic;
+}
+}
 
-    if (bIsGraphic)
+bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSupplier >& xSelectionSupplier )
+{
+    // One selected image or embedded object comes on its own. Several selected images come
+    // as a collection.
+    const cpo::uno::Any aSelection = xSelectionSupplier->getSelection();
+    std::vector< Reference< lang::XServiceInfo > > aObjects;
+    Reference< container::XIndexAccess > xCollection;
+    if ( aSelection >>= xCollection )
     {
-        // TransformedGraphic / GraphicPreview are graphic-shape only.
-        uno::Reference<beans::XPropertySet> xGraphicPropertySet(xSelection, uno::UNO_QUERY);
-        uno::Reference<graphic::XGraphic> xTransformedGraphic;
-        xGraphicPropertySet->getPropertyValue(
-            mbIsPreview ? u"GraphicPreview"_ustr : u"TransformedGraphic"_ustr)
-                >>= xTransformedGraphic;
-
-        if (!xTransformedGraphic.is())
-            return false;
-        const Graphic aTransformedGraphic(xTransformedGraphic);
-        const bool bSameGraphic = aTransformedGraphic == aOriginalGraphic ||
-            aOriginalGraphic.GetChecksum() == aTransformedGraphic.GetChecksum();
-        aGraphic = bSameGraphic ? aOriginalGraphic : aTransformedGraphic;
-        xGraphic = bSameGraphic ? xOriginalGraphic : xTransformedGraphic;
+        for ( sal_Int32 i = 0; i < xCollection->getCount(); ++i )
+        {
+            Reference< lang::XServiceInfo > xObject( xCollection->getByIndex( i ), UNO_QUERY );
+            if ( xObject.is() )
+                aObjects.push_back( xObject );
+        }
     }
+    else
+    {
+        Reference< lang::XServiceInfo > xObject;
+        aSelection >>= xObject;
+        if ( xObject.is() )
+            aObjects.push_back( xObject );
+    }
+    if ( aObjects.empty() )
+        return false;
 
-    // Calculate size from Graphic
-    Point aPos( OutputDevice::LogicToLogic(aGraphic.GetPrefMapMode().GetOrigin(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
-    Size  aSize( OutputDevice::LogicToLogic(aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)) );
+    std::vector< Reference< graphic::XGraphic > > aGraphics;
+    for ( const auto& rxObject : aObjects )
+    {
+        Reference< graphic::XGraphic > xGraphic = lcl_getWriterObjectGraphic( rxObject, mbIsPreview );
+        if ( !xGraphic.is() )
+            return false;
+        aGraphics.push_back( xGraphic );
+    }
 
     assert(mSelectedPages.size() == 1);
     SvxDrawPage* pSvxDrawPage(comphelper::getFromUnoTunnel<SvxDrawPage>(mSelectedPages[0]));
@@ -908,17 +930,42 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
             rModel.EnableUndo(false);
     });
 
-    rtl::Reference<SdrGrafObj> pGraphicObj = new SdrGrafObj(rModel, aGraphic, tools::Rectangle( aPos, aSize ));
-    uno::Reference< drawing::XShape > xShape = GetXShapeForSdrObject(pGraphicObj.get());
-    uno::Reference< XPropertySet > xShapePropSet(xShape, uno::UNO_QUERY);
-    xShapePropSet->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xGraphic));
-
     maShapeSelection = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
-    maShapeSelection->add(xShape);
+    for ( size_t i = 0; i < aObjects.size(); ++i )
+    {
+        const Graphic aGraphic( aGraphics[i] );
+        tools::Rectangle aRectangle;
+        if ( aObjects.size() == 1 )
+        {
+            // A single object fills the picture, so its own size is the picture.
+            const Point aPos( OutputDevice::LogicToLogic( aGraphic.GetPrefMapMode().GetOrigin(),
+                                                          aGraphic.GetPrefMapMode(), MapMode( MapUnit::Map100thMM ) ) );
+            const Size aSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
+                                                          aGraphic.GetPrefMapMode(), MapMode( MapUnit::Map100thMM ) ) );
+            aRectangle = tools::Rectangle( aPos, aSize );
+        }
+        else
+        {
+            // Several objects keep the places they have in the layout, so the picture shows
+            // them the way the document does.
+            Reference< beans::XPropertySet > xObjectPropertySet( aObjects[i], UNO_QUERY );
+            css::awt::Point aLayoutPosition;
+            css::awt::Size aLayoutSize;
+            xObjectPropertySet->getPropertyValue( u"LayoutPosition"_ustr ) >>= aLayoutPosition;
+            xObjectPropertySet->getPropertyValue( u"LayoutSize"_ustr ) >>= aLayoutSize;
+            aRectangle = tools::Rectangle( Point( aLayoutPosition.X, aLayoutPosition.Y ),
+                                           Size( aLayoutSize.Width, aLayoutSize.Height ) );
+        }
+
+        rtl::Reference<SdrGrafObj> pGraphicObj = new SdrGrafObj(rModel, aGraphic, aRectangle);
+        uno::Reference< drawing::XShape > xShape = GetXShapeForSdrObject(pGraphicObj.get());
+        uno::Reference< XPropertySet > xShapePropSet(xShape, UNO_QUERY);
+        xShapePropSet->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(aGraphics[i]));
+        maShapeSelection->add(xShape);
+    }
 
     return true;
 }
-
 
 Reference< XWriter > SVGFilter::implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm )
 {

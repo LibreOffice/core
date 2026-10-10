@@ -300,6 +300,7 @@ class SfxItemPropertySet;
 #define WID_DOC_VBA_DOCOBJ                      1106
 
 #define WID_DOC_ALLOW_LINK_UPDATE               1107
+#define WID_LAYOUT_POSITION                     1108
 
 // AutoText
 #define WID_GROUP_PATH                          0
