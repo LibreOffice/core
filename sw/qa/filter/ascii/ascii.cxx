@@ -182,6 +182,34 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162180)
 
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual.trim());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf165714_selectedTextTable)
+{
+    // Given a document with a 1x2 table
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/1, /*nCols=*/2);
+
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
+    pWrtShell->Insert(u"A"_ustr);
+    pWrtShell->GoNextCell(false);
+    pWrtShell->Insert(u"B"_ustr);
+
+    // Select the cells of the table
+    pWrtShell->SelTable();
+    CPPUNIT_ASSERT(pWrtShell->IsTableMode());
+
+    // Get the selected text like for the font preview of the paragraph style dialog
+    OUString aActual;
+    pWrtShell->GetSelectedText(aActual);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: A\tB
+    // - Actual  : A䈉
+    // i.e. the cell separator shifted the following characters
+    CPPUNIT_ASSERT_EQUAL(u"A\tB"_ustr, aActual.trim());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
