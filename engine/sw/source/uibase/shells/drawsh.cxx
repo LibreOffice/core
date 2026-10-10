@@ -216,7 +216,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
                     pSdrView->ModelHasChanged();
                 }
                 else
-                    pSdrView->MoveShapeHandle(handleNum, mPoint, OrdNum ? OrdNum->GetValue() : -1);
+                    rSh.MoveShapeHandle(handleNum, mPoint, OrdNum ? OrdNum->GetValue() : -1);
             }
         }
         break;

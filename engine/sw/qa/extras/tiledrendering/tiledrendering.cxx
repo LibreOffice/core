@@ -4499,6 +4499,51 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSelectImagesAgainAfterUndoOfDelet
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pWrtShell->GetSelectedFlyFrames().size());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testResizeSeveralImagesIsOneUndoStep)
+{
+    // Dragging a handle of a selection of two images resizes both as one undo step, and that
+    // step brings both images back.
+    createDoc("two-images.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0));
+    pWrtShell->SelectObj(Point(), SW_ADD_SELECT, pPage->GetObj(1));
+    Scheduler::ProcessEventsToIdle();
+    std::vector<SwFlyFrame*> aFlyFrames = pWrtShell->GetSelectedFlyFrames();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aFlyFrames.size());
+    const SwRect aOldFirst(aFlyFrames[0]->getFrameArea());
+    const SwRect aOldSecond(aFlyFrames[1]->getFrameArea());
+    sw::UndoManager& rUndoManager = pWrtShell->GetDoc()->GetUndoManager();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rUndoManager.GetUndoActionCount());
+
+    // Drag the upper left handle of the selection up and to the left, the way the browser
+    // sends a handle drag.
+    CPPUNIT_ASSERT(!m_ShapeSelection.isEmpty());
+    sal_Int32 nHandle, nX, nY;
+    lcl_extractHandleParameters(m_ShapeSelection, nHandle, nX, nY);
+    comphelper::dispatchCommand(u".uno:MoveShapeHandle"_ustr,
+                                comphelper::InitPropertySequence(
+                                    { { u"HandleNum"_ustr, cpo::uno::Any(nHandle) },
+                                      { u"NewPosX"_ustr, cpo::uno::Any(nX - 500) },
+                                      { u"NewPosY"_ustr, cpo::uno::Any(nY - 500) } }));
+    Scheduler::ProcessEventsToIdle();
+
+    aFlyFrames = pWrtShell->GetSelectedFlyFrames();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aFlyFrames.size());
+    CPPUNIT_ASSERT(aFlyFrames[0]->getFrameArea().Width() > aOldFirst.Width());
+    CPPUNIT_ASSERT(aFlyFrames[1]->getFrameArea().Width() > aOldSecond.Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
+
+    pWrtShell->Undo();
+    aFlyFrames = pWrtShell->GetSelectedFlyFrames();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aFlyFrames.size());
+    CPPUNIT_ASSERT_EQUAL(aOldFirst.Width(), aFlyFrames[0]->getFrameArea().Width());
+    CPPUNIT_ASSERT_EQUAL(aOldSecond.Width(), aFlyFrames[1]->getFrameArea().Width());
+    CPPUNIT_ASSERT_EQUAL(aOldFirst.Left(), aFlyFrames[0]->getFrameArea().Left());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rUndoManager.GetUndoActionCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

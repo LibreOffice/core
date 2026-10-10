@@ -832,6 +832,24 @@ void SwFEShell::Drag( const Point *pPt, bool )
     }
 }
 
+bool SwFEShell::MoveShapeHandle( sal_uInt32 nHandleIndex, const Point& rPoint, sal_Int32 nOrdNum )
+{
+    OSL_ENSURE( Imp()->HasDrawView(), "MoveShapeHandle without DrawView?" );
+    SdrView* pView = Imp()->GetDrawView();
+
+    // The drag changes the size and the position of every selected object. All of it is one
+    // undo step. A fly frame switches drawing layer undo off while it moves, so the flag goes
+    // back to what it was.
+    const bool bDrawUndo = GetDoc()->GetIDocumentUndoRedo().DoesDrawUndo();
+    StartAllAction();
+    StartUndo( SwUndoId::START );
+    const bool bRet = pView->MoveShapeHandle( nHandleIndex, rPoint, nOrdNum );
+    GetDoc()->GetIDocumentUndoRedo().DoDrawUndo( bDrawUndo );
+    EndUndo( SwUndoId::END );
+    EndAllAction();
+    return bRet;
+}
+
 void SwFEShell::EndDrag()
 {
     OSL_ENSURE( Imp()->HasDrawView(), "EndDrag without DrawView?" );
