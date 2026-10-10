@@ -64,7 +64,7 @@ namespace framework{
 namespace {
 
 enum PropHandle {
-    ActiveFrame, DispatchRecorderSupplier, IsPlugged, SuspendQuickstartVeto,
+    ActiveFrame, IsPlugged, SuspendQuickstartVeto,
     Title };
 
 }
@@ -1282,13 +1282,6 @@ bool Desktop::convertFastPropertyValue(       cpo::uno::Any&   aConvertedValue ,
                     aOldValue,
                     aConvertedValue);
                 break;
-        case PropHandle::DispatchRecorderSupplier :
-                bReturn = PropHelper::willPropertyBeChanged(
-                    cpo::uno::Any(m_xDispatchRecorderSupplier),
-                    aValue,
-                    aOldValue,
-                    aConvertedValue);
-                break;
         case PropHandle::Title :
                 bReturn = PropHelper::willPropertyBeChanged(
                     cpo::uno::Any(m_sTitle),
@@ -1327,8 +1320,6 @@ void Desktop::setFastPropertyValue_NoBroadcast(       sal_Int32        nHandle ,
     {
         case PropHandle::SuspendQuickstartVeto:    aValue >>= m_bSuspendQuickstartVeto;
                                                     break;
-        case PropHandle::DispatchRecorderSupplier:    aValue >>= m_xDispatchRecorderSupplier;
-                                                    break;
         case PropHandle::Title:    aValue >>= m_sTitle;
                                                     break;
     }
@@ -1362,8 +1353,6 @@ void Desktop::getFastPropertyValue( cpo::uno::Any& aValue  ,
                                                     break;
         case PropHandle::SuspendQuickstartVeto:    aValue <<= m_bSuspendQuickstartVeto;
                                                     break;
-        case PropHandle::DispatchRecorderSupplier:    aValue <<= m_xDispatchRecorderSupplier;
-                                                    break;
         case PropHandle::Title:    aValue <<= m_sTitle;
                                                     break;
     }
@@ -1378,10 +1367,6 @@ void Desktop::getFastPropertyValue( cpo::uno::Any& aValue  ,
                   cppu::UnoType<css::lang::XComponent>::get(),
                   (css::beans::PropertyAttribute::TRANSIENT
                    | css::beans::PropertyAttribute::READONLY)},
-                 {u"DispatchRecorderSupplier"_ustr,
-                  PropHandle::DispatchRecorderSupplier,
-                  cppu::UnoType<css::frame::XDispatchRecorderSupplier>::get(),
-                  css::beans::PropertyAttribute::TRANSIENT},
                  {u"IsPlugged"_ustr,
                   PropHandle::IsPlugged, cppu::UnoType<bool>::get(),
                   (css::beans::PropertyAttribute::TRANSIENT

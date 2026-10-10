@@ -238,14 +238,6 @@
     constructor="framework_LanguageSelectionMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.DispatchRecorder"
-    constructor="framework_DispatchRecorder_get_implementation">
-    <service name="com.sun.star.frame.DispatchRecorder"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.framework.DispatchRecorderSupplier"
-    constructor="framework_DispatchRecorderSupplier_get_implementation">
-    <service name="com.sun.star.frame.DispatchRecorderSupplier"/>
-  </implementation>
   <implementation name="com.sun.star.comp.framework.FontMenuController"
     constructor="framework_FontMenuController_get_implementation">
     <service name="com.sun.star.frame.PopupMenuController"/>

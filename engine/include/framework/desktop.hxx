@@ -35,7 +35,6 @@
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 
 #include <comphelper/multicontainer2.hxx>
@@ -394,7 +393,6 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         std::unique_ptr<SvtCommandOptions>                              m_xCommandOptions;        /// ref counted class to support disabling commands defined by configuration file
         OUString                                                        m_sName;
         OUString                                                        m_sTitle;
-        cpo::uno::Reference< css::frame::XDispatchRecorderSupplier >    m_xDispatchRecorderSupplier;
 
         /** special terminate listener to close pipe and block external requests
           * during/after termination process is/was running

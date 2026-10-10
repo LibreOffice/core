@@ -21,8 +21,6 @@
 -o fwl.SubstituteVariables
 #i113245 -o fwl.TypeDetection
 #i84346 -o fwl.PathSettings
--o fwk.DispatchRecorder
--o fwk.DispatchRecorderSupplier
 -o fwk.FooterMenuController
 -o fwk.StatusBarControllerFactory
 -o fwk.ToolBarsMenuController

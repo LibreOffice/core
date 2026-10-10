@@ -151,8 +151,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/layoutmanager/uielement \
     framework/source/loadenv/loadenv \
     framework/source/loadenv/targethelper \
-    framework/source/recording/dispatchrecorder \
-    framework/source/recording/dispatchrecordersupplier \
     framework/source/services/ContextChangeEventMultiplexer \
     framework/source/services/desktop \
     framework/source/services/dispatchhelper \
