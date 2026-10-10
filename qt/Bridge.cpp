@@ -1185,7 +1185,16 @@ QVariant Bridge::cool(const QString& messageStr)
     {
         std::string accountId;
         COOLProtocol::getTokenString(tokens, "account", accountId);
-        Application::deleteAccountProfile(QString::fromStdString(accountId));
+        const QString account = QString::fromStdString(accountId);
+
+        // Documents opened from this account use its profile to stay signed in.
+        if (Application::countAccountProfileViews(account) > 0)
+        {
+            LOG_WRN("removecloudaccount: refused, the account still has open documents");
+            return QStringLiteral("refused");
+        }
+
+        Application::deleteAccountProfile(account);
     }
     else if (message == "uno .uno:Open")
     {

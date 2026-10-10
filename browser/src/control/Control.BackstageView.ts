@@ -595,8 +595,8 @@ class BackstageView extends window.L.Class {
 				},
 				onDelete: provider
 					? () =>
-							this.showRemoveConfirmDialog(provider, () => {
-								this.removeCloudProvider(provider.id);
+							this.showRemoveConfirmDialog(provider, async () => {
+								if (!(await this.removeCloudProvider(provider.id))) return;
 								close();
 								this.renderOpenView();
 							})
@@ -708,7 +708,23 @@ class BackstageView extends window.L.Class {
 		}
 	}
 
-	private removeCloudProvider(id: string): void {
+	// Returns false when the app keeps the account because it still has open documents.
+	private async removeCloudProvider(id: string): Promise<boolean> {
+		window.app.console.debug('Backstage: removing account ' + id);
+		const answer = await window.postMobileCall(
+			'removecloudaccount account=' + id,
+		);
+		if (answer === 'refused') {
+			this.map.uiManager.showInfoModal(
+				'cloud-account-in-use',
+				_('Account in use'),
+				_('Close the documents of this account before you remove it.'),
+				'',
+				_('OK'),
+			);
+			return false;
+		}
+
 		const providers = this.getRegisteredCloudProviders().filter(
 			(p) => p.id !== id,
 		);
@@ -720,8 +736,7 @@ class BackstageView extends window.L.Class {
 		} catch (e) {
 			console.error('Failed to remove cloud provider:', e);
 		}
-		window.app.console.debug('Backstage: removing account ' + id);
-		window.postMobileMessage('removecloudaccount account=' + id);
+		return true;
 	}
 
 	private openCloudProvider(provider: CloudProvider): void {
