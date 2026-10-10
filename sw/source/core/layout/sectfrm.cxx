@@ -2709,7 +2709,11 @@ bool SwSectionFrame::IsDescendantFrom( const SwSectionFormat* pFormat ) const
 
 void SwSectionFrame::CalcFootnoteAtEndFlag()
 {
-    SwSectionFormat *pFormat = GetSection()->GetFormat();
+    SwSection* pSection = GetSection();
+    if (!pSection)
+        return;
+
+    SwSectionFormat *pFormat = pSection->GetFormat();
     sal_uInt16 nVal = pFormat->GetFootnoteAtTextEnd( false ).GetValue();
     m_bFootnoteAtEnd = FTNEND_ATPGORDOCEND != nVal;
     m_bOwnFootnoteNum = FTNEND_ATTXTEND_OWNNUMSEQ == nVal ||
@@ -2732,12 +2736,19 @@ void SwSectionFrame::CalcFootnoteAtEndFlag()
 
 bool SwSectionFrame::IsEndnoteAtMyEnd() const
 {
+    if (!m_pSection)
+        return false;
+
     return m_pSection->GetFormat()->GetEndAtTextEnd( false ).IsAtEnd();
 }
 
 void SwSectionFrame::CalcEndAtEndFlag()
 {
-    SwSectionFormat *pFormat = GetSection()->GetFormat();
+    SwSection* pSection = GetSection();
+    if (!pSection)
+        return;
+
+    SwSectionFormat *pFormat = pSection->GetFormat();
     m_bEndnAtEnd = pFormat->GetEndAtTextEnd( false ).IsAtEnd();
     while( !m_bEndnAtEnd )
     {
@@ -2769,7 +2780,11 @@ static void InvalidateFramesInSection(SwFrame * pFrame)
 
 void SwSectionFrame::Notify(SfxHint const& rHint)
 {
-    SwSectionFormat *const pFormat(GetSection()->GetFormat());
+    SwSection* pSection = GetSection();
+    if (!pSection)
+        return;
+
+    SwSectionFormat *const pFormat(pSection->GetFormat());
     assert(pFormat);
     SwClientNotify(*pFormat, rHint);
 }
