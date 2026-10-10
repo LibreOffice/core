@@ -776,21 +776,18 @@ Reference< XStorageBasedLibraryContainer > SfxObjectShell::GetDialogContainer()
 Reference< XStorageBasedLibraryContainer > SfxObjectShell::GetBasicContainer()
 {
 #if HAVE_FEATURE_SCRIPTING
-    if (!comphelper::IsFuzzing())
+    try
     {
-        try
-        {
-            if ( !pImpl->m_bNoBasicCapabilities )
-                return lcl_getOrCreateLibraryContainer( true, pImpl->xBasicLibraries, GetModel() );
+        if ( !pImpl->m_bNoBasicCapabilities )
+            return lcl_getOrCreateLibraryContainer( true, pImpl->xBasicLibraries, GetModel() );
 
-            BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
-            if ( pBasMgr )
-                return pBasMgr->GetScriptLibraryContainer();
-        }
-        catch (const css::ucb::ContentCreationException&)
-        {
-            TOOLS_WARN_EXCEPTION("sfx.doc", "");
-        }
+        BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
+        if ( pBasMgr )
+            return pBasMgr->GetScriptLibraryContainer();
+    }
+    catch (const css::ucb::ContentCreationException&)
+    {
+        TOOLS_WARN_EXCEPTION("sfx.doc", "");
     }
     SAL_WARN("sfx.doc", "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?");
 #endif
