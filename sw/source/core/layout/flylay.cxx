@@ -953,9 +953,13 @@ void SwPageFrame::AppendFlyToPage( SwFlyFrame *pNew )
 
 void SwPageFrame::RemoveFlyFromPage( SwFlyFrame *pToRemove )
 {
-    const sal_uInt32 nOrdNum = pToRemove->GetVirtDrawObj()->GetOrdNum();
-    getRootFrame()->GetDrawPage()->RemoveObject( nOrdNum );
-    pToRemove->GetVirtDrawObj()->ReferencedObj().SetOrdNum( nOrdNum );
+    // tdf#125846 - the virtual object may already be removed by SwRootFrame::RemoveVirtFlyDrawObjs
+    if (pToRemove->GetVirtDrawObj()->getSdrPageFromSdrObject())
+    {
+        const sal_uInt32 nOrdNum = pToRemove->GetVirtDrawObj()->GetOrdNum();
+        getRootFrame()->GetDrawPage()->RemoveObject( nOrdNum );
+        pToRemove->GetVirtDrawObj()->ReferencedObj().SetOrdNum( nOrdNum );
+    }
 
     if ( GetUpper() )
     {

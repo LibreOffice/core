@@ -28,6 +28,7 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <dflyobj.hxx>
+#include <flyfrm.hxx>
 #include <frmtool.hxx>
 #include "virtoutp.hxx"
 #include <notxtfrm.hxx>
@@ -532,6 +533,9 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
 
 void SwRootFrame::DestroyImpl()
 {
+    // tdf#125846 - remove the virtual fly draw objects at once before the flys are destroyed
+    RemoveVirtFlyDrawObjs();
+
     mbTurboAllowed = false;
     mpTurbo = nullptr;
 
@@ -583,6 +587,24 @@ void SwRootFrame::RemoveMasterObjs( SdrPage *pPg )
         SdrObject* pObj = pPg->GetObj( --i );
         if (pObj->GetObjIdentifier() == SdrObjKind::SwFlyDrawObjIdentifier && !pObj->IsSwVirtFlyDrawObj())
             pPg->RemoveObject( i );
+    }
+}
+
+void SwRootFrame::RemoveVirtFlyDrawObjs()
+{
+    // tdf#125846 - removing the objects one by one in SwFlyFrame::FinitDrawObj renumbers
+    // all remaining objects every time. Remove them here at once, but don't delete them,
+    // since they still belong to their flys. Iterate backwards to keep the indices valid.
+    for (size_t i = mpDrawPage ? mpDrawPage->GetObjCount() : 0; i;)
+    {
+        // Only remove virtual fly objects that belong to this layout
+        SwVirtFlyDrawObj* pVirtObj = dynamic_cast<SwVirtFlyDrawObj*>(mpDrawPage->GetObj(--i));
+        if (pVirtObj && pVirtObj->GetFlyFrame()->getRootFrame() == this)
+        {
+            mpDrawPage->RemoveObject(i);
+            // Keep the position for the master object like SwPageFrame::RemoveFlyFromPage
+            pVirtObj->ReferencedObj().SetOrdNum(i);
+        }
     }
 }
 
