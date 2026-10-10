@@ -3279,6 +3279,11 @@ void WW8Export::StoreDoc1()
     }
     delete[] pLastSprms;
 
+    // The CHPX bin table must cover the same text as the PAPX one, including the final
+    // paragraph mark. A paragraph mark is normally covered only by the CHPX entry of
+    // the next run, so the last one would be left out, and get dropped by Word
+    m_pChpPlc->AppendFkpEntry(Strm().Tell());
+
     m_pSepx->Finish( Fc2Cp( Strm().Tell() ));// Text + Footnote + HdFt as section end
     m_pMagicTable->Finish( Fc2Cp( Strm().Tell() ),0);
 
