@@ -121,7 +121,7 @@ def _SF_FileSystem__CompareFiles(filename1: str, filename2: str, comparecontents
         return False
 
 
-def _SF_FileSystem__CompressToZip(filename: str, mode: str, folder: str, rootfolder: str = None) -> tuple[bool, str]:
+def _SF_FileSystem__CompressToZip(filename: str, mode: str, folder: str, rootfolder: str | None = None) -> tuple[bool, str]:
     # used by SF_FileSystem.CompressToZip() Basic method
     """
         Stores the content of folder, including its subfolders, into a zip archive.
@@ -133,7 +133,7 @@ def _SF_FileSystem__CompressToZip(filename: str, mode: str, folder: str, rootfol
             if not zipfile.is_zipfile(filename):
                 return False, "File is not a zip archive: '%s'" % filename
         directory = pathlib.Path(folder)
-        # Write compressed files under root or under the given root folder. Normal slashes are required, also in Windows..
+        # Write compressed files under root or under the given root folder. Normal slashes are required, also in Windows.
         topfolder = (None if rootfolder is None else pathlib.PurePosixPath(rootfolder + '/'))
         with zipfile.ZipFile(filename, mode, strict_timestamps = False) as archive:
             for filepath in directory.rglob('*'):

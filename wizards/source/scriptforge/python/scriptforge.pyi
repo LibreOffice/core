@@ -982,7 +982,7 @@ class SFScriptForge:
                 Files existing already in the archive are not overwritten.
                     Args
                         ``filename``: a string representing the zip file.
-                        If it does not exist, the archive is created, oncluding its parent folders.
+                        If it does not exist, the archive is created, including its parent folders.
                         All files present in the archive are kept untouched.
 
                         ``foldername``: the folder to compress, as a string. All files and subfolders are included.
@@ -1123,7 +1123,7 @@ class SFScriptForge:
                         When the folder or a subfolder does not exist, it is created.
 
                         ``source``: a single string or a tuple of strings with valid names of files contained in
-                        the zip file. When Source is omitted, is an empty tuple or an empty string,
+                        the zip file. When ``source`` is omitted, is an empty tuple or an empty string,
                         all the files and folders are extracted.
                     Returns
                         ``True`` when successful. When ``False``, the reason might be found in the console.
@@ -1161,13 +1161,13 @@ class SFScriptForge:
 
         def FilesInZip(self, filename: FILE, pattern: str = ...) -> tuple[str, ...]:
             """
-                Returns The list of the files contained in a zip container. The list of names may optionally
+                Returns the list of the files contained in a zip container. The list of names may optionally
                 be filtered.
                     Args
                         ``filename``: a string representing the zip archive.
 
                         ``pattern``: a pattern as a not case-sensitive string containing 0 or more wildcards.
-                        Admitted wildcard are: the "?" represents any single character,
+                        Admitted wildcards are: the "?" represents any single character,
                         the "*" represents zero, one, or multiple characters.
                     Returns
                         An unordered tuple of file names without a heading slash. The path separator is always

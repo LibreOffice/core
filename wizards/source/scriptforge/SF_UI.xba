@@ -616,7 +616,7 @@ Try:
 	&apos;	Compute dialog control size
 	lControlHeight = TEXTHEIGHT
 	Select Case UCase(ValueType)
-		Case &quot;STRING&quot;&apos;, &quot;PASSWORD&quot;
+		Case &quot;STRING&quot;
 			lControlWidth = TEXTWIDTH * MAXTEXTLENGTH
 		Case &quot;PASSWORD&quot;
 			lControlWidth = TEXTWIDTH * MAXPASSWORDLENGTH + TEXTOFFSET + PASSWORDWIDTH
@@ -1882,7 +1882,7 @@ Private Function _Repr() As String
 End Function	&apos;	ScriptForge.SF_UI._Repr
 
 REM -----------------------------------------------------------------------------
-Private Sub _RunPasswordButton(ByRef Optional poEvent As Object)
+Private Sub _RunPasswordButton(Optional ByRef poEvent As Object)
 &apos;&apos;&apos;	Activated by clicking on the password button defined in the EnterValue dialog box
 &apos;&apos;&apos;	Enable/Disable the echo character of the password control
 &apos;&apos;&apos;		Changing dynamically the EchoChar property in the model, view or peer has no effect,

@@ -56,7 +56,7 @@ Option Explicit
 &apos;&apos;&apos;
 &apos;&apos;&apos;		The FileSystem service provides also simple methods to extract files from or load files
 &apos;&apos;&apos;		into archive (zip) files.
-&apos;&apos;&apos;		.odf and .oxt files being compressed files, direct vreation or update of such files (with care !) is made easy.
+&apos;&apos;&apos;		.odf and .oxt files being compressed files, direct creation or update of such files (with care !) is made easy.
 &apos;&apos;&apos;		Note that multipart and encrypted zip files are not supported.
 &apos;&apos;&apos;
 &apos;&apos;&apos;		The service provides symbolic names for a number of system folders (home, LibreOffice install, ...)
@@ -397,7 +397,7 @@ Public Function CompressToZip(Optional ByVal FileName As Variant _
 &apos;&apos;&apos;	The method is not supported for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: A string representing the zip file.
-&apos;&apos;&apos;			If it does not exist, the archive is created, oncluding its parent folders.
+&apos;&apos;&apos;			If it does not exist, the archive is created, including its parent folders.
 &apos;&apos;&apos;			All files present in the archive are kept untouched.
 &apos;&apos;&apos;		FolderName: The folder to compress, as a string.
 &apos;&apos;&apos;			All files and subfolders are included. The Folder itself is not.
@@ -411,7 +411,7 @@ Public Function CompressToZip(Optional ByVal FileName As Variant _
 &apos;&apos;&apos;		NOTAFOLDERERROR				The folder is a file, not a folder
 &apos;&apos;&apos;		FILESYSTEMERROR				The method is not applicable on document&apos;s file systems
 &apos;&apos;&apos;	Example:
-&apos;&apos;&apos;		a = SF_FileSystem.CompressToZip(&quot;C:\archive.zip&quot;, Folder := &quot;C:\Downloads&quot;)
+&apos;&apos;&apos;		a = SF_FileSystem.CompressToZip(&quot;C:\archive.zip&quot;, FolderName := &quot;C:\Downloads&quot;)
 
 Dim bCompress As Boolean			&apos;	Return value
 Dim vCompress As Variant			&apos;	Returned from Python (True/False, error message)
@@ -845,7 +845,7 @@ Public Function ExtractFromZip(Optional ByVal FileName As Variant _
 &apos;&apos;&apos;		UNKNOWNFILEERROR	The file does not exist or is a folder
 &apos;&apos;&apos;		FILESYSTEMERROR		The method is not applicable on document&apos;s file systems
 &apos;&apos;&apos;	Example:
-&apos;&apos;&apos;		a = SF_FileSystem.ExtractFromZip(&quot;C:\writerdoc.odt&quot;, Source := Array(&quot;content.xml&quot;, &quot;meta.xml&quot;), Desctination := &quot;C:\TEMP&quot;)
+&apos;&apos;&apos;		a = SF_FileSystem.ExtractFromZip(&quot;C:\writerdoc.odt&quot;, Source := Array(&quot;content.xml&quot;, &quot;meta.xml&quot;), Destination := &quot;C:\TEMP&quot;)
 
 Dim bExtract As Boolean				&apos;	Return value
 Dim vExtract As Variant				&apos;	Returned from Python (True/False, error message)
@@ -1010,13 +1010,13 @@ REM ----------------------------------------------------------------------------
 Public Function FilesInZip(Optional ByVal FileName As Variant _
 							, Optional ByVal Pattern As Variant _
 							) As Variant
-&apos;&apos;&apos;	Returns The list of the files contained in a zip container.
+&apos;&apos;&apos;	Returns the list of the files contained in a zip container.
 &apos;&apos;&apos;	The list of names may optionally be filtered.
 &apos;&apos;&apos;	The method is not supported for document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		FileName: A string representing a zip file
 &apos;&apos;&apos;		Pattern: A pattern as a not case-sensitive string containing 0 or more wildcards
-&apos;&apos;&apos;			Admitted wildcard are:	the &quot;?&quot; represents any single character
+&apos;&apos;&apos;			Admitted wildcards are:	the &quot;?&quot; represents any single character
 &apos;&apos;&apos;									the &quot;*&quot; represents zero, one, or multiple characters
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		An unordered array of file names without a heading slash.
@@ -1739,7 +1739,7 @@ End Function    &apos;   ScriptForge.SF_FileSystem.MoveFolder
 REM -----------------------------------------------------------------------------
 Public Function Normalize(Optional ByVal FileName As Variant) As String
 &apos;&apos;&apos;	Normalize a pathname by collapsing redundant separators and up-level references
-&apos;&apos;&apos;	so that A//B, A/B/, A/./B and A/foo/../B all become A/B. 
+&apos;&apos;&apos;	so that A//B, A/B/, A/./B and A/foo/../B all become A/B.
 &apos;&apos;&apos;	On Windows, it converts forward slashes to backward slashes.
 &apos;&apos;&apos;	The method returns the input string when the file is from a document&apos;s internal file systems.
 &apos;&apos;&apos;	Args:
