@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-22 21:46+0200\n"
-"PO-Revision-Date: 2026-10-09 17:02+0000\n"
+"PO-Revision-Date: 2026-10-10 17:57+0000\n"
 "Last-Translator: geonetor <geonetor@yahoo.gr>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/el/>\n"
@@ -826,11 +826,11 @@ msgstr "Δεξιές σελίδες"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:725
 msgid "Brochure"
-msgstr ""
+msgstr "Τρίπτυχο"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:726
 msgid "Brochure Right to Left"
-msgstr ""
+msgstr "Τρίπτυχο δεξιά προς αριστερά"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:731
 msgid "English"
@@ -899,6 +899,8 @@ msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Μεταφορτώστε προσαρμοσμένα θέματα εγγράφου (.theme). Αυτά ορίζουν τις "
+"διαθέσιμες παλέτες χρωμάτων στο Μενού Μορφήη > Θέμα."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1345
 msgid "Upload Theme"
@@ -941,79 +943,89 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1374
 msgid "Upload Security Policy"
-msgstr ""
+msgstr "Πολιτική Ασφαλείας Μεταφόρτωσης"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1463
 msgid "Settings are only available to signed-in users."
-msgstr ""
+msgstr "Οι ρυθμίσεις είναι διαθέσιμες μόνο σε συνδεδεμένους χρήστες."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1472
 msgid "Something went wrong. Please try to refresh the page."
-msgstr ""
+msgstr "Κάτι πήγε στραβά. Δοκιμάστε να ανανεώσετε τη σελίδα."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1661
 msgid ""
 "Something went wrong while fetching wordbook. Please try to refresh the "
 "page."
 msgstr ""
+"Κάτι πήγε στραβά κατά την ανάκτηση του λεξικού. Παρακαλώ δοκιμάστε να "
+"ανανεώσετε τη σελίδα."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1675
 #: admin/src/integrator/AdminIntegratorSettings.ts:3993
 msgid "Interface Settings"
-msgstr ""
+msgstr "Ρυθμίσεις διεπαφής"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1677
 msgid "Set default interface preferences."
-msgstr ""
+msgstr "Ορίστε τις προεπιλεγμένες προτιμήσεις διεπαφής."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1753
 #: admin/src/integrator/AdminIntegratorSettings.ts:3998
 msgid "Zoom Behaviour"
-msgstr ""
+msgstr "Συμπεριφορά ζουμ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1898
 msgid ""
 "When on, text documents open at the zoom this server chooses. Turn it off "
 "to choose the zoom yourself."
 msgstr ""
+"Όταν είναι ενεργοποιημένο, τα έγγραφα κειμένου ανοίγουν στο ζουμ που "
+"επιλέγει αυτός ο διακομιστής. Απενεργοποιήστε το για να επιλέξετε μόνοι σας "
+"το ζουμ."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1904
 msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Όταν είναι ενεργοποιημένο, το Writer προσαρμόζει το έγγραφο στο πλάτος της "
+"θύρας προβολής στο ανοιχτό. Όταν είναι απενεργοποιημένο, το έγγραφο ανοίγει "
+"στο προεπιλεγμένο επίπεδο ζουμ που έχει οριστεί παρακάτω."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1957
 #: admin/src/integrator/Xcu.ts:483
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Δεν υπάρχουν διαθέσιμες ρυθμίσεις για {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1969
 msgid "Select a tab to browser settings."
-msgstr ""
+msgstr "Επιλέξτε μια καρτέλα για τις ρυθμίσεις του προγράμματος περιήγησης."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1986
 #: admin/src/integrator/Xcu.ts:505
 msgid "Reset to default Document settings"
-msgstr ""
+msgstr "Επαναφορά στις προεπιλεγμένες ρυθμίσεις εγγράφου"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1990
 #: admin/src/integrator/Xcu.ts:519
 msgid "Are you sure you want to reset Document settings?"
-msgstr ""
+msgstr "Είστε βέβαιοι ότι θέλετε να επαναφέρετε τις ρυθμίσεις του εγγράφου;"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2007
 #: admin/src/integrator/Xcu.ts:534
 msgid "Save Document settings"
-msgstr ""
+msgstr "Αποθήκευση ρυθμίσεων εγγράφου"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2320
 msgid "(Warning: Server accessibility must be enabled to toggle)"
 msgstr ""
+"(Προειδοποίηση: Η προσβασιμότητα διακομιστή πρέπει να είναι ενεργοποιημένη "
+"για εναλλαγή)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2509
 msgid "Notebookbar view"
-msgstr ""
+msgstr "Προβολή γραμμής σημειωματάριου"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2516
 #: src/control/Control.NotebookbarCalc.js:1662
@@ -1026,6 +1038,8 @@ msgstr "Συμπαγής προβολή"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2631
 msgid "Something went wrong while uploading the file. Please try again."
 msgstr ""
+"Παρουσιάστηκε κάποιο πρόβλημα κατά τη μεταφόρτωση του αρχείου. Δοκιμάστε "
+"ξανά."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2707
 #: src/canvas/sections/CommentSection.ts:1633
@@ -1044,6 +1058,8 @@ msgid ""
 "Something went wrong while deleting the file. Please try refreshing the "
 "page."
 msgstr ""
+"Παρουσιάστηκε κάποιο πρόβλημα κατά τη διαγραφή του αρχείου. Δοκιμάστε να "
+"ανανεώσετε τη σελίδα."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2733
 #: src/control/Control.BackstageView.ts:868
@@ -1055,29 +1071,33 @@ msgid ""
 "To use Zotero specify your API key here. You can create your API key in "
 "your "
 msgstr ""
+"Για να χρησιμοποιήσετε το Zotero, καθορίστε το κλειδί API σας εδώ. Μπορείτε "
+"να δημιουργήσετε το κλειδί API στο δικό σας "
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2760
 msgid "Zotero account API settings"
-msgstr ""
+msgstr "Ρυθμίσεις API λογαριασμού Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2785
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Ρυθμίσεις Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2817
 #: admin/src/integrator/AdminIntegratorSettings.ts:4158
 msgid "Document Signing"
-msgstr ""
+msgstr "Υπογραφή εγγράφων"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2821
 msgid ""
 "To use document signing, specify your signing certificate, key and CA chain "
 "here."
 msgstr ""
+"Για να χρησιμοποιήσετε την υπογραφή εγγράφων, καθορίστε εδώ το πιστοποιητικό "
+"υπογραφής, το κλειδί και την αλυσίδα ΑΠ."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2842
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Ρυθμίσεις υπογραφής εγγράφων"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2880
 #: admin/src/integrator/AdminIntegratorSettings.ts:2897
@@ -1099,19 +1119,21 @@ msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Ρυθμίστε τα διαπιστευτήρια του παρόχου AI και το μοντέλο. Τα μοντέλα "
+"ανακτώνται αυτόματα όταν αλλάζουν τα διαπιστευτήρια."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2985
 msgid "Text Generation"
-msgstr ""
+msgstr "Δημιουργία κειμένου"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3035
 #: admin/src/integrator/AdminIntegratorSettings.ts:3161
 msgid "e.g."
-msgstr ""
+msgstr "π.χ."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3046
 msgid "Leave empty if your server does not require one"
-msgstr ""
+msgstr "Αφήστε κενό αν ο διακομιστής σας δεν απαιτεί ένα"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3065
 msgid ""
@@ -1119,44 +1141,48 @@ msgid ""
 "function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without "
 "it (e.g. base llama3, gemma) can still chat but cannot use document tools."
 msgstr ""
+"Για ενέργειες με έγγραφα (έλεγχος και επεξεργασία), επιλέξτε ένα μοντέλο με "
+"εγγενή κλήση λειτουργιών/εργαλείων, όπως gpt-4o, llama3.1 ή qwen2.5. Τα "
+"μοντέλα χωρίς αυτή τη δυνατότητα (π.χ. base llama3, gemma) μπορούν ακόμα να "
+"συνομιλούν αλλά δεν μπορούν να χρησιμοποιήσουν εργαλεία εγγράφων."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3103
 msgid "Image Generation"
-msgstr ""
+msgstr "Δημιουργία εικόνων"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3108
 msgid "Same as Text AI"
-msgstr ""
+msgstr "Ίδιο με το Text AI"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3178
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "Αφήστε κενό για να χρησιμοποιήσετε το πλήκτρο Text AI"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3483
 #: admin/src/integrator/AdminIntegratorSettings.ts:3601
 msgid "Fetching models..."
-msgstr ""
+msgstr "Ανάκτηση μοντέλων..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3530
 #: admin/src/integrator/AdminIntegratorSettings.ts:3545
 #: admin/src/integrator/AdminIntegratorSettings.ts:3643
 #: admin/src/integrator/AdminIntegratorSettings.ts:3657
 msgid "No models found"
-msgstr ""
+msgstr "Δε βρέθηκαν μοντέλα"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3555
 #: admin/src/integrator/AdminIntegratorSettings.ts:3667
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "Τα μοντέλα ανακτήθηκαν με επιτυχία"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3561
 #: admin/src/integrator/AdminIntegratorSettings.ts:3673
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Αποτυχία ανάκτησης μοντέλων"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3571
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Μη έγκυρη διαμόρφωση παρόχου"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3708
 msgid "None (disable image generation)"
@@ -1164,16 +1190,20 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3725
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Ανάκτηση μοντέλων για επιλογή"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3776
 #: src/control/Control.AIChatSidebar.ts:2190
 msgid "API quota exceeded - check your plan and billing details"
 msgstr ""
+"Το όριο του API ξεπεράστηκε - ελέγξτε το πρόγραμμα και τις λεπτομέρειες "
+"χρέωσης σας"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3781
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
 msgstr ""
+"Δεν ήταν δυνατή η λήψη των μοντέλων (HTTP {0}). Ελέγξτε το URL του παρόχου "
+"και το κλειδί API."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3898
 msgid "Lightproof Sentence Checker"
@@ -1182,23 +1212,29 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:3901
 msgid "Choose what the sentence checker looks for as you type."
 msgstr ""
+"Επιλέξτε τι αναζητά το πρόγραμμα ελέγχου προτάσεων καθώς πληκτρολογείτε."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3941
 msgid ""
 "This document is using the document settings it was opened with. What you "
 "change here applies to the next document you open."
 msgstr ""
+"Αυτό το έγγραφο χρησιμοποιεί τις ρυθμίσεις του εγγράφου με τις οποίες "
+"άνοιξε. Οι αλλαγές που κάνετε εδώ εφαρμόζονται στο επόμενο έγγραφο που θα "
+"ανοίξετε."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3944
 msgid ""
 "This document is open in more than one window, so what you change here "
 "applies to the next document you open rather than this one."
 msgstr ""
+"Αυτό το έγγραφο είναι ανοιχτό σε περισσότερα από ένα παράθυρα, οπότε ό,τι "
+"αλλάζετε εδώ εφαρμόζεται στο επόμενο έγγραφο που θα ανοίξετε και όχι σε αυτό."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4032
 #: admin/src/integrator/Xcu.ts:439
 msgid "Document Settings"
-msgstr ""
+msgstr "Ρυθμίσεις εγγράφου"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4201
 msgid "Upload Xcu"
@@ -1206,72 +1242,72 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4362
 msgid "Enter {0}"
-msgstr ""
+msgstr "Εισάγετε {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4420
 msgid "Reset"
-msgstr ""
+msgstr "Επαναφορά"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4421
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Επαναφορά στην προεπιλογή του {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4425
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Είστε βέβαιοι ότι θέλετε να επαναφέρετε το {0};"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4441
 msgid "Save {0}"
-msgstr ""
+msgstr "Αποθήκευση {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
-msgstr ""
+msgstr "Τυπικό λεξικό"
 
 #: admin/src/integrator/WordBook.ts:118
 msgid "Words are ignored by the spell checker"
-msgstr ""
+msgstr "Οι λέξεις αγνοούνται από τον ορθογραφικό έλεγχο"
 
 #: admin/src/integrator/WordBook.ts:122
 msgid "Dictionary of exceptions"
-msgstr ""
+msgstr "Λεξικό εξαιρέσεων"
 
 #: admin/src/integrator/WordBook.ts:123
 msgid "Exception words are underlined while checking spelling"
-msgstr ""
+msgstr "Οι εξαιρούμενες λέξεις υπογραμμίζονται κατά τον ορθογραφικό έλεγχο"
 
 #: admin/src/integrator/WordBook.ts:132
 msgid "Loading Wordbook..."
-msgstr ""
+msgstr "Φόρτωση λεξικού..."
 
 #: admin/src/integrator/WordBook.ts:333
 msgid "Type to add a word"
-msgstr ""
+msgstr "Πληκτρολογήστε για να προσθέσετε μια λέξη"
 
 #: admin/src/integrator/WordBook.ts:338
 #: src/control/Notebookbar.ImpressAnimationTab.ts:67
 msgid "Add"
-msgstr ""
+msgstr "Προσθήκη"
 
 #: admin/src/integrator/WordBook.ts:463
 msgid "Invalid dictionary format. Please check the file."
-msgstr ""
+msgstr "Μη έγκυρη μορφή λεξικού. Ελέγξτε το αρχείο."
 
 #: admin/src/integrator/WordBook.ts:480
 msgid "Something went wrong while uploading dictionary file"
-msgstr ""
+msgstr "Παρουσιάστηκε κάποιο πρόβλημα κατά τη μεταφόρτωση του αρχείου λεξικού"
 
 #: admin/src/integrator/Xcu.ts:253 admin/src/integrator/Xcu.ts:265
 msgid "Something went wrong while loading Document settings."
-msgstr ""
+msgstr "Κάτι πήγε στραβά κατά τη φόρτωση των ρυθμίσεων του εγγράφου."
 
 #: admin/src/integrator/Xcu.ts:443
 msgid "Adjust how office documents behave."
-msgstr ""
+msgstr "Προσαρμόστε τον τρόπο συμπεριφοράς των εγγράφων γραφείου."
 
 #: admin/src/integrator/Xcu.ts:492
 msgid "Select a tab to view settings."
-msgstr ""
+msgstr "Επιλέξτε μια καρτέλα για να δείτε τις ρυθμίσεις."
 
 #: admin/src/Util.js:26
 msgid "kB"
@@ -1326,14 +1362,17 @@ msgid ""
 "The system is currently adjusting resources. Please wait a moment while we "
 "retry your request..."
 msgstr ""
+"Το σύστημα προσαρμόζει αυτήν τη στιγμή τους πόρους. Παρακαλώ περιμένετε λίγο "
+"ενώ προσπαθούμε ξανά να επεξεργαστούμε το αίτημά σας..."
 
 #: js/global.js:2066
 msgid "The document is being migrated to a new server. Retrying shortly..."
 msgstr ""
+"Γίνεται μετεγκατάσταση του εγγράφου σε νέο διακομιστή. Επανάληψη σε λίγο..."
 
 #: js/global.js:2068
 msgid "Failed to get RouteToken from controller"
-msgstr ""
+msgstr "Αποτυχία λήψης RouteToken από τον ελεγκτή"
 
 #: src/app/Debug.ts:164
 msgid "Debug Tools"
@@ -1346,6 +1385,8 @@ msgstr "Ctrl+Shift+Alt+D για έξοδο"
 #: src/app/Debug.ts:1665
 msgid "Event handling has been delayed for an unexpectedly long time: {0}ms"
 msgstr ""
+"Ο χειρισμός συμβάντων έχει καθυστερήσει για απροσδόκητα μεγάλο χρονικό "
+"διάστημα: {0}ms"
 
 #: src/app/ExportFormats.ts:50 src/control/Control.NotebookbarDraw.js:345
 msgid "PDF Document (.pdf)"
@@ -1381,7 +1422,7 @@ msgstr "Αρχείο HTML (.html)"
 
 #: src/app/ExportFormats.ts:70
 msgid "Markdown (.md)"
-msgstr ""
+msgstr "Αρχείο Markdown (.md)"
 
 #: src/app/ExportFormats.ts:76 src/control/Control.Menubar.ts:851
 #: src/control/Control.NotebookbarBuilder.js:433
@@ -1423,27 +1464,27 @@ msgstr "Σχέδιο ODF (.odp)"
 
 #: src/app/ExportFormats.ts:90
 msgid "HTML Document (.html)"
-msgstr ""
+msgstr "Εγγραφο HTML (.html)"
 
 #: src/app/ExportFormats.ts:95
 msgid "Scalable Vector Graphics (.svg)"
-msgstr ""
+msgstr "Κλιμακόμενα διανυσματικά γραφικά (.svg)"
 
 #: src/app/ExportFormats.ts:96
 msgid "Current slide as Bitmap (.bmp)"
-msgstr ""
+msgstr "Τρέχουσα διαφάνεια ως Bitmap (.bmp)"
 
 #: src/app/ExportFormats.ts:99
 msgid "Current slide as Graphics Interchange Format (.gif)"
-msgstr ""
+msgstr "Τρέχουσα διαφάνεια ως Graphics Interchange Format (.gif)"
 
 #: src/app/ExportFormats.ts:103
 msgid "Current slide as Portable Network Graphics (.png)"
-msgstr ""
+msgstr "Τρέχουσα διαφάνεια ως Portable Network Graphics (.png)"
 
 #: src/app/ExportFormats.ts:107
 msgid "Current slide as Tag Image File Format (.tiff)"
-msgstr ""
+msgstr "Τρέχουσα διαφάνεια ως Tag Image File Format (.tiff)"
 
 #: src/app/ExportFormats.ts:122
 msgid "Image (.png)"
@@ -1451,7 +1492,7 @@ msgstr "Εικόνα (.png)"
 
 #: src/app/LOUtil.ts:1144
 msgid "{0} website, opens in new tab"
-msgstr ""
+msgstr "{0} ιστότοπος, ανοίγει σε νέα καρτέλα"
 
 #: src/app/LOUtil.ts:1147
 msgid "file type icon"
@@ -1463,16 +1504,16 @@ msgstr "Φωτεινό"
 
 #: src/app/TableStylesService.ts:108
 msgid "Medium"
-msgstr ""
+msgstr "Μεσαίο"
 
 #: src/app/TableStylesService.ts:110
 msgid "Dark"
-msgstr ""
+msgstr "Σκοτεινό"
 
 #: src/app/TableStylesService.ts:112
 #: src/control/jsdialog/Widget.ColorPicker.ts:367
 msgid "Custom"
-msgstr ""
+msgstr "Προσαρμοσμένο"
 
 #: src/app/TableStylesService.ts:251 src/app/TableStylesService.ts:263
 #: src/app/TableStylesService.ts:266 src/app/ImpressTableStylesService.ts:71
@@ -1481,15 +1522,15 @@ msgstr ""
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:265
 #: src/control/Notebookbar.ImpressTableDesignTab.ts:266
 msgid "Table Styles"
-msgstr ""
+msgstr "Στυλ Πίνακα"
 
 #: src/app/TableStylesService.ts:355
 msgid "Set as Default"
-msgstr ""
+msgstr "Ορισμός ως προεπιλογή"
 
 #: src/app/TableStylesService.ts:361
 msgid "Duplicate Style"
-msgstr ""
+msgstr "Διπλότυπο στυλ"
 
 #: src/canvas/sections/CommentListSection.ts:2069
 #: src/canvas/sections/CommentListSection.ts:2082
@@ -1524,7 +1565,7 @@ msgstr "Επεξεργασία σχολίου"
 
 #: src/canvas/sections/CommentSection.ts:46
 msgid "Reply comment"
-msgstr ""
+msgstr "Απάντηση στο σχόλιο"
 
 #: src/canvas/sections/CommentSection.ts:47
 msgid "Open menu"
@@ -1539,7 +1580,7 @@ msgstr "Απάντηση"
 
 #: src/canvas/sections/CommentSection.ts:531
 msgid "Press Ctrl + Enter to post"
-msgstr ""
+msgstr "Πατήστε Ctrl + Enter για να δημοσιεύσετε"
 
 #: src/canvas/sections/CommentSection.ts:605
 #: src/canvas/sections/CommentSection.ts:606
@@ -1610,7 +1651,7 @@ msgstr "Άνοιγμα σε πλήρη προβολή"
 
 #: src/canvas/sections/CommentSection.ts:1336
 msgid "Show in navigator"
-msgstr ""
+msgstr "Εμφάνιση στον περιηγητή"
 
 #: src/canvas/sections/CommentSection.ts:1632
 #: src/canvas/sections/CommentSection.ts:1637
@@ -1620,27 +1661,27 @@ msgstr "Αποθηκεύθηκε"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:118
 msgid "Last edited by %1 on %2"
-msgstr ""
+msgstr "Τελευταία επεξεργασία από %1 στο %2"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:199
 msgid "%1: Initial Version"
-msgstr ""
+msgstr "%1: Αρχική έκδοση"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:203
 msgid "%1: Current Version"
-msgstr ""
+msgstr "%1: Τρέχουσα έκδοση"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:210
 msgid "Initial Version"
-msgstr ""
+msgstr "Αρχική έκδοση"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:214
 msgid "Current Version"
-msgstr ""
+msgstr "Τρέχουσα έκδοση"
 
 #: src/canvas/sections/OtherViewCellCursorSection.ts:185
 msgid "%n more"
-msgstr ""
+msgstr "%n ακόμα"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:538
 msgid "Document contains unsupported media"
@@ -1660,43 +1701,47 @@ msgstr "Αφαίρεση συνδέσμου"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
-msgstr ""
+msgstr "Ανάπτυξη"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:80
 msgid "Help on this error"
-msgstr ""
+msgstr "Βοήθεια για αυτό το σφάλμα"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:85
 msgid "Inspect with Function Wizard"
-msgstr ""
+msgstr "Επιθεώρηση με τον Οδηγό Λειτουργιών"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:90
 msgid "Edit in Formula Bar"
-msgstr ""
+msgstr "Επεξεργασία στη Γραμμή Τύπων"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:98
 msgid "Help fix this error with AI"
-msgstr ""
+msgstr "Βοηθήστε να διορθώσετε αυτό το σφάλμα με AI"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:152
 msgid "Header"
-msgstr ""
+msgstr "Κεφαλίδα"
 
 #: src/canvas/sections/HeaderFooterBoundarySection.ts:160
 msgid "Footer"
-msgstr ""
+msgstr "Υποσέλιδο"
 
 #: src/control/CalcNotifications.ts:48
 msgid "A formula range was not extended to include the inserted cells."
 msgstr ""
+"Ένα εύρος τύπου δεν επεκτάθηκε για να συμπεριλάβει τα κελιά που έχουν "
+"εισαχθεί."
 
 #: src/control/CalcNotifications.ts:65
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
 msgstr ""
+"Η διαγραφή δημιούργησε σφάλματα #REF! σε άλλους τύπους. Αναίρεση για "
+"επαναφορά."
 
 #: src/control/CalcNotifications.ts:66
 msgid "Find First"
-msgstr ""
+msgstr "Βρείτε πρώτα"
 
 #: src/control/ColorPicker.ts:269
 msgid "No color"
@@ -1709,7 +1754,7 @@ msgstr "Αυτόματο χρώμα"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:831
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(ανοίγει σε νέα καρτέλα)"
 
 #: src/control/Control.AboutDialog.ts:155
 msgid "Served by: "
@@ -1717,7 +1762,7 @@ msgstr "Εξυπηρετούμενο από "
 
 #: src/control/Control.AboutDialog.ts:178
 msgid "View widgets"
-msgstr ""
+msgstr "Προβολή γραφικών στοιχείων"
 
 #: src/control/Control.AboutDialog.ts:213
 msgid "\"Slow Proxy\""
@@ -1725,7 +1770,7 @@ msgstr "\"Αργός μεσολαβητής\""
 
 #: src/control/Control.AboutDialog.ts:220
 msgid "Time zone:"
-msgstr ""
+msgstr "Ζώνη ώρας:"
 
 #: src/control/Control.AboutDialog.ts:275
 msgid "Copy all version information in English"
@@ -1733,7 +1778,7 @@ msgstr "Αντιγράψτε όλες τις πληροφορίες έκδοση
 
 #: src/control/Control.AboutDialog.ts:393
 msgid "Version information has been copied"
-msgstr ""
+msgstr "Οι πληροφορίες έκδοσης έχουν αντιγραφεί"
 
 #: src/control/Control.AboutDialog.ts:437
 msgid "Version:"
@@ -1746,31 +1791,31 @@ msgstr "διεύθυνση κελιού"
 #: src/control/Control.AddressInputField.ts:72
 #: src/control/Control.AddressInputField.ts:124
 msgid "Name Box"
-msgstr ""
+msgstr "Πεδίο ονόματος"
 
 #: src/control/Control.AIChatSidebar.ts:136
 msgid "Make the following text more concise"
-msgstr ""
+msgstr "Κάνε το παρακάτω κείμενο πιο συνοπτικό"
 
 #: src/control/Control.AIChatSidebar.ts:137
 msgid "Make it more concise"
-msgstr ""
+msgstr "Κάντε το πιο συνοπτικό"
 
 #: src/control/Control.AIChatSidebar.ts:140
 msgid "Summarize the key points of this text"
-msgstr ""
+msgstr "Σύνοψη των βασικών σημείων αυτού του κειμένου"
 
 #: src/control/Control.AIChatSidebar.ts:141
 msgid "Summarize this text"
-msgstr ""
+msgstr "Σύνοψη αυτού του κειμένου"
 
 #: src/control/Control.AIChatSidebar.ts:144
 msgid "Expand and add more detail to this text"
-msgstr ""
+msgstr "Επέκτεινε και πρόσθεσε περισσότερες λεπτομέρειες σε αυτό το κείμενο"
 
 #: src/control/Control.AIChatSidebar.ts:145
 msgid "Expand this text"
-msgstr ""
+msgstr "Αναπτύξτε αυτό το κείμενο"
 
 #: src/control/Control.AIChatSidebar.ts:148
 msgid "Fix grammar, spelling, and punctuation errors"
