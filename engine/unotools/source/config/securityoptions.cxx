@@ -152,8 +152,6 @@ bool isSecureMacroUri(
             // is considered safe:
             return true;
         }
-        [[fallthrough]];
-    case INetProtocol::Slot:
         return referer.equalsIgnoreAsciiCase("private:user")
             || isTrustedLocationUri(referer);
     default:
