@@ -255,6 +255,8 @@ void SvMetaType::WriteSfxItem(
     // Under linux, weak declarations must be public, and const declarations default to private,
     // so add an extern to mark it as public.
     rOutStm.WriteOString( "__attribute__((__weak__)) extern" ) << endl;
+#elif defined(_WIN32)
+    rOutStm.WriteOString( "__declspec(selectany)" ) << endl;
 #endif
     rOutStm.WriteOString( "constinit const " ).WriteOString( aTypeName ).WriteOString( aVarName )
            .WriteOString( " = " ) << endl;

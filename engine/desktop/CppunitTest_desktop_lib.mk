@@ -23,7 +23,6 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_lib, \
 	i18nlangtag \
 	sal \
 	sc \
-	scfilt \
 	sfx \
 	sofficeapp \
 	subsequenttest \

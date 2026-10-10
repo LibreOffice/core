@@ -43,7 +43,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_filters_test, \
     salhelper \
     sax \
     sc \
-    scfilt \
     scqahelper \
     sfx \
     sot \
@@ -100,7 +99,6 @@ $(eval $(call gb_CppunitTest_use_components,sc_filters_test,\
     scaddins/source/analysis/analysis \
     scaddins/source/datefunc/date \
     sc/util/sc \
-    sc/util/scfilt \
 	scripting/source/vbaevents/vbaevents \
     sfx2/util/sfx \
     sot/util/sot \

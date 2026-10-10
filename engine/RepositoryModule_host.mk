@@ -213,7 +213,6 @@ endef
 # the default goal is build (see Module.mk)
 ifeq (,$(filter-out build check unitcheck slowcheck screenshot subsequentcheck uicheck coverage,$(MAKECMDGOALS)))
 $(eval $(call repositorymodule_serialize,\
-	scfilt \
 	$(call gb_Helper_optional,SCRIPTING,vbaobj) \
 	sc \
 	$(call gb_Helper_optional,DESKTOP,swui) \

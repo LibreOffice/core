@@ -56,6 +56,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc$(1), \
     fwk \
     i18nlangtag \
     i18nutil \
+    msfilter \
+    oox \
 	$(call gb_Helper_optional,OPENCL, \
 		opencl) \
     sal \

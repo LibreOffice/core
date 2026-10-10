@@ -33,7 +33,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_oox_helpers_test, \
     salhelper \
     sax \
     sc \
-    scfilt \
     scqahelper \
     sfx \
     subsequenttest \

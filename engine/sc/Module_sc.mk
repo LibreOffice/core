@@ -18,7 +18,6 @@ $(eval $(call gb_Module_Module,sc))
 $(eval $(call gb_Module_add_targets,sc,\
 	Library_sc \
 	Library_scd \
-	Library_scfilt \
 	Library_scui \
 	Library_solver \
 	$(call gb_Helper_optional,OPENCL,Package_opencl) \

@@ -414,7 +414,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                pfnImport = load(u"libscfiltlo.so", "TestImportXLS");
+                pfnImport = load(u"libsclo.so", "TestImportXLS");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -424,7 +424,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                pfnImport = load(u"libscfiltlo.so", "TestImportWKS");
+                pfnImport = load(u"libsclo.so", "TestImportWKS");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -484,7 +484,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                pfnImport = load(u"libscfiltlo.so", "TestImportQPW");
+                pfnImport = load(u"libsclo.so", "TestImportQPW");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -504,7 +504,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                pfnImport = load(u"libscfiltlo.so", "TestImportDIF");
+                pfnImport = load(u"libsclo.so", "TestImportDIF");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -514,7 +514,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                pfnImport = load(u"libscfiltlo.so", "TestImportCalcRTF");
+                pfnImport = load(u"libsclo.so", "TestImportCalcRTF");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));
@@ -524,7 +524,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
-                pfnImport = load(u"libscfiltlo.so", "TestImportCalcHTML");
+                pfnImport = load(u"libsclo.so", "TestImportCalcHTML");
             }
             SvFileStream aFileStream(out, StreamMode::READ);
             ret = static_cast<int>((*pfnImport)(aFileStream));

@@ -260,7 +260,7 @@ void ScDLL::Init()
 extern "C" SAL_DLLPUBLIC_EXPORT
 void kit_preload_hook()
 {
-    // scfilt
+    // sc
     ScFormatFilter::Get();
     // scui
     ScAbstractDialogFactory::Create();

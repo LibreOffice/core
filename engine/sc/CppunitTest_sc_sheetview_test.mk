@@ -30,7 +30,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_sheetview_test, \
     svt \
     svxcore \
     sc \
-    scfilt \
     scui \
     scqahelper \
     subsequenttest \

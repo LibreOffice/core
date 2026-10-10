@@ -155,7 +155,6 @@ fuzzer_calc_libraries = \
     analysis \
     date \
     pricing \
-    scfilt \
     scd \
     $(call gb_Helper_optional,SCRIPTING, \
         vbaevents \

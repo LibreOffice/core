@@ -24,7 +24,6 @@
 #include <sfx2/mieclip.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
-#include <osl/module.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <global.hxx>
@@ -2720,43 +2719,12 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
     return bOk;
 }
 
-#ifndef DISABLE_DYNLOADING
-
-extern "C" { static void thisModule() {} }
-
-#else
-
-extern "C" {
-ScFormatFilterPlugin* ScFilterCreate();
-}
-
-#endif
-
 typedef ScFormatFilterPlugin * (*FilterFn)();
 ScFormatFilterPlugin &ScFormatFilter::Get()
 {
     static ScFormatFilterPlugin *plugin = []()
     {
-#ifndef DISABLE_DYNLOADING
-        OUString sFilterLib(SVLIBRARY("scfilt"));
-        static ::osl::Module aModule;
-        bool bLoaded = aModule.is();
-        if (!bLoaded)
-            bLoaded = aModule.loadRelative(&thisModule, sFilterLib);
-        if (!bLoaded)
-            bLoaded = aModule.load(sFilterLib);
-        if (bLoaded)
-        {
-            oslGenericFunction fn = aModule.getFunctionSymbol( "ScFilterCreate" );
-            aModule.release();
-            if (fn != nullptr)
-                return reinterpret_cast<FilterFn>(fn)();
-        }
-        assert(false);
-        return static_cast<ScFormatFilterPlugin*>(nullptr);
-#else
         return ScFilterCreate();
-#endif
     }();
 
     return *plugin;

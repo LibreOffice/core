@@ -207,7 +207,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
 	pricing \
 	sc \
 	scd \
-	scfilt \
 	wpftcalc \
 	solver \
 	$(call gb_Helper_optional,SCRIPTING,vbaobj) \

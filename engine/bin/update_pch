@@ -77,7 +77,6 @@ DEFAULTS = \
     'package.xstor'                     : ( 2, EXCLUDE, INCLUDE, EXCLUDE), #   3.8
     'sal.sal'                           : ( 2, EXCLUDE, EXCLUDE, INCLUDE), #   4.2
     'sc.sc'                             : (12, EXCLUDE, INCLUDE, INCLUDE), #  92.6
-    'sc.scfilt'                         : ( 4, EXCLUDE, EXCLUDE, INCLUDE), #  39.9
     'sc.scui'                           : ( 1, EXCLUDE, EXCLUDE, INCLUDE), #  15.0
     'sc.vbaobj'                         : ( 1, EXCLUDE, EXCLUDE, INCLUDE), #  17.3
     'sd.sd'                             : ( 4, EXCLUDE, EXCLUDE, INCLUDE), #  47.4

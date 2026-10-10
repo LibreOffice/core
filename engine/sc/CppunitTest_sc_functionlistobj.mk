@@ -59,7 +59,6 @@ $(eval $(call gb_CppunitTest_use_components,sc_functionlistobj,\
     scripting/util/scriptframe \
     sc/util/sc \
     sc/util/scd \
-    sc/util/scfilt \
     $(call gb_Helper_optional,SCRIPTING, sc/util/vbaobj) \
     sfx2/util/sfx \
     sot/util/sot \

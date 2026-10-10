@@ -628,12 +628,11 @@ calc_constructor_list = [
     "Calc_XMLOasisSettingsImporter_get_implementation",
     "Calc_XMLOasisStylesImporter_get_implementation",
     "Calc_ScSpreadsheetSettings_get_implementation",
+    "com_sun_star_comp_oox_xls_ExcelFilter_get_implementation",
+    "com_sun_star_comp_oox_xls_FormulaParser_get_implementation",
 # sc/util/scd.component
     "com_sun_star_comp_calc_ExcelBiffFormatDetector_get_implementation",
     "com_sun_star_comp_calc_FormatDetector_get_implementation",
-# sc/util/scfilt.component
-    "com_sun_star_comp_oox_xls_ExcelFilter_get_implementation",
-    "com_sun_star_comp_oox_xls_FormulaParser_get_implementation",
 # sc/util/vbaobj.component
     ("Calc_ScVbaApplication_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
     ("ScVbaEventsHelper_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),

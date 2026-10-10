@@ -93,7 +93,6 @@ $(eval $(call gb_CppunitTest_use_components,chart2_pivot_chart_test,\
     sax/source/expatwrap/expwrap \
     sc/util/sc \
     sc/util/scd \
-    sc/util/scfilt \
     sw/util/sw \
     sw/util/swd \
     sd/util/sd \
