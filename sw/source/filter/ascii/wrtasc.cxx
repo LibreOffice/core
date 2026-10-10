@@ -259,8 +259,10 @@ void SwASCWriter::WriteTable(SwTableNode* pTableNd, SwTextNode* pNd)
                 pNd = m_pCurrentPam->GetPoint()->GetNode().GetTextNode();
                 pTableBox = pNd->GetTableBox();
             }
+            // tdf#165714 - write the cell separator in the stream's encoding, otherwise a single
+            // byte would shift all following characters in a UCS2 stream
             if (pBox != pLine->GetTabBoxes().back())
-                Strm().WriteUChar( 0x9 );
+                Strm().WriteUnicodeOrByteText(u"\t");
 
             if (pBox == pEndTabBox)
                 this->m_sLineEnd = sPreLineEnd;
