@@ -37,7 +37,7 @@ INTRODOCS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class KeyDerivationTest(unittest.TestCase):
-    """Parity cases K1..K22 (keep in sync with test_l10ntranslate.cxx)."""
+    """Parity cases K1..K24 (keep in sync with test_l10ntranslate.cxx)."""
 
     CASES = [
         ("K1",
@@ -64,7 +64,7 @@ class KeyDerivationTest(unittest.TestCase):
         ("K9", "<text:p>_a<text:tab/>b</text:p>", FORBIDDEN, ""),
         ("K10", "<text:p>_a<text:line-break/>b</text:p>", FORBIDDEN, ""),
         ("K11", '<text:p>_a<text:a xlink:href="http://x/">link</text:a></text:p>',
-         FORBIDDEN, ""),
+         MARKED, "a<1>link</1>"),
         ("K12",
          '<text:p><text:span text:style-name="T1">_a'
          '<text:span text:style-name="T2">nested</text:span></text:span></text:p>',
@@ -88,6 +88,12 @@ class KeyDerivationTest(unittest.TestCase):
          '<text:p>_x<text:span text:style-name="T1">a<!-- c -->b</text:span></text:p>',
          MARKED, "x<1>ab</1>"),
         ("K22", "<text:p>_a<![CDATA[b]]>c</text:p>", MARKED, "abc"),
+        ("K23", '<text:p><text:a xlink:href="http://x/">_Check it out</text:a></text:p>',
+         MARKED, "Check it out"),
+        ("K24",
+         '<text:p>_a<text:a xlink:href="http://x/">'
+         '<text:span text:style-name="T1">link</text:span></text:a></text:p>',
+         FORBIDDEN, ""),
     ]
 
     def test_cases(self):
@@ -352,6 +358,37 @@ class AnalyzeDocumentTest(unittest.TestCase):
         self.assertEqual([], errors)
         self.assertTrue(any("untranslated attribute" in warning for warning in warnings),
                         warnings)
+
+    def test_unmarked_visible_text_is_a_warning(self):
+        # content.xml: a paragraph with text and no marker is reported,
+        # unless it is the formatted value of a non-string cell
+        _, errors, warnings = self.analyze_fixture(content_xml=CONTENT_XML.replace(
+            "</table:table-row>",
+            '<table:table-cell office:value-type="string">'
+            "<text:p>Forgotten text</text:p></table:table-cell>"
+            '<table:table-cell office:value-type="float" office:value="5">'
+            "<text:p>5</text:p></table:table-cell>"
+            "</table:table-row>"))
+        self.assertEqual([], errors)
+        self.assertEqual(1, len(warnings), warnings)
+        self.assertIn("unmarked paragraph", warnings[0])
+        self.assertIn("'Forgotten text'", warnings[0])
+        # styles.xml: master page placeholders and field stand-ins are
+        # expected to be unmarked
+        _, errors, warnings = self.analyze_fixture(styles_xml=STYLES_XML.replace(
+            "</office:master-styles>",
+            "<text:p>Click to edit the title text format</text:p></office:master-styles>"))
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
+
+    def test_link_is_a_run(self):
+        units, errors, warnings = self.analyze_fixture(styles_xml=STYLES_XML.replace(
+            "<text:p>_Master text</text:p>",
+            '<text:p>_See <text:a xlink:href="http://x/">the tutorials</text:a></text:p>'
+            .replace("<text:p>", '<text:p xmlns:xlink="http://www.w3.org/1999/xlink">')))
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
+        self.assertIn("See <1>the tutorials</1>", [unit.key for unit in units])
 
     def test_formula_with_marked_sheets_is_an_error(self):
         _, errors, _ = self.analyze_fixture(content_xml=CONTENT_XML.replace(

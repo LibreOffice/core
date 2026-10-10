@@ -29,6 +29,12 @@ msgid ""
 "Stock\"."
 msgstr ""
 
+#. content.xml (validation help message)
+msgid ""
+"For High Stock use condition \"Values greater than: 80\" and style \"High "
+"Stock\"."
+msgstr ""
+
 #. content.xml (validation title)
 msgid "Use other options"
 msgstr ""
@@ -187,13 +193,8 @@ msgstr ""
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
-#. (sheet '📊 Charts')
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Laptop"
-msgstr ""
-
-#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
-#. Tables'); content.xml (sheet '📊 Charts')
-msgid "5"
 msgstr ""
 
 #. content.xml (sheet '✚ Formulas & Functions')
@@ -202,14 +203,8 @@ msgstr ""
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
-#. (sheet '📊 Charts')
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Mouse"
-msgstr ""
-
-#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
-#. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
-#. (sheet '📊 Charts')
-msgid "20"
 msgstr ""
 
 #. content.xml (sheet '✚ Formulas & Functions')
@@ -219,14 +214,8 @@ msgstr ""
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
-#. (sheet '📊 Charts')
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Notebook"
-msgstr ""
-
-#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
-#. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
-#. (sheet '📊 Charts')
-msgid "50"
 msgstr ""
 
 #. content.xml (sheet '✚ Formulas & Functions')
@@ -286,6 +275,20 @@ msgid ""
 msgstr ""
 
 #. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"<1>Functions are organised into categories such as Database, </1><2>Date & "
+"Time, Financial, Information, Logical, Mathematical, Array, Statistical, "
+"Spreadsheet, Text </2><3>and</3><4> Add-in</4><5>, making it easier to find "
+"the function you need.</5>"
+msgstr ""
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"<1>You can access these functions through the Function Library or by using "
+"the </1><2>Function Wizard.</2>"
+msgstr ""
+
+#. content.xml (sheet '✚ Formulas & Functions')
 msgid "Next Chapter: 📋 Tables"
 msgstr ""
 
@@ -334,11 +337,11 @@ msgid ""
 "1. Select the range of cells that contains your data (including headers)"
 msgstr ""
 
-#. content.xml (sheet '📋 Tables')
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Electronics"
 msgstr ""
 
-#. content.xml (sheet '📋 Tables')
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Dell"
 msgstr ""
 
@@ -346,7 +349,7 @@ msgstr ""
 msgid "<1>2. Open the </1><2>Insert tab</2><3> in the toolbar</3>"
 msgstr ""
 
-#. content.xml (sheet '📋 Tables')
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Logitech"
 msgstr ""
 
@@ -354,11 +357,11 @@ msgstr ""
 msgid "<1>3. Click </1><2>Table</2>"
 msgstr ""
 
-#. content.xml (sheet '📋 Tables')
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Office supplies"
 msgstr ""
 
-#. content.xml (sheet '📋 Tables')
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Staples"
 msgstr ""
 
@@ -367,12 +370,9 @@ msgid "<1>4. Click </1><2>OK</2>"
 msgstr ""
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
-#. Formatting'); content.xml (sheet '📊 Charts')
+#. Formatting'); content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data &
+#. filtering')
 msgid "Keyboard"
-msgstr ""
-
-#. content.xml (sheet '📋 Tables'); content.xml (sheet '📊 Charts')
-msgid "10"
 msgstr ""
 
 #. content.xml (sheet '📋 Tables')
@@ -380,16 +380,12 @@ msgid "5. Your data is now organised as a table"
 msgstr ""
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
-#. Formatting'); content.xml (sheet '📊 Charts')
+#. Formatting'); content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data &
+#. filtering')
 msgid "Pen"
 msgstr ""
 
-#. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
-#. Formatting'); content.xml (sheet '📊 Charts')
-msgid "100"
-msgstr ""
-
-#. content.xml (sheet '📋 Tables')
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Bic"
 msgstr ""
 
@@ -429,6 +425,12 @@ msgstr ""
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
+"These features help you keep your table organised, highlight important "
+"information, and work more efficiently with your data."
+msgstr ""
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
 "<1>➜Try it: </1><2>Select your table, open tab Tables that appears in "
 "toolbar and explore.</2>"
 msgstr ""
@@ -443,6 +445,13 @@ msgid ""
 "compare, and analyse large amounts of data. You can view different summaries"
 " of the source data, you can display the details of areas of interest, and "
 "you can create reports."
+msgstr ""
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"A table that has been created as a pivot table is an interactive table. Data"
+" can be arranged, rearranged or summarised according to different points of "
+"view."
 msgstr ""
 
 #. content.xml (sheet '📋 Tables')
@@ -468,6 +477,12 @@ msgid ""
 "Format your data to make it clearer and easier to understand. You can "
 "highlight important values, show patterns, and improve readability using "
 "colours, styles, and rules."
+msgstr ""
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"Conditional formatting automatically changes how cells look based on their "
+"values, helping you quickly spot trends or important data."
 msgstr ""
 
 #. content.xml (sheet '🎨 Conditional Formatting')
@@ -507,6 +522,29 @@ msgstr ""
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid "➜Try it: Inventory stock overview"
+msgstr ""
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"Highlight important inventory data to quickly identify products that are "
+"running low on stock."
+msgstr ""
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"<1>Low Stock</1><2> (less than 20 pcs) → </2><3>Red</3><4> background</4>"
+msgstr ""
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"<1>Medium Stock</1><2> (between 20 and 80 pcs)→ </2><3>Orange</3><4> "
+"background</4>"
+msgstr ""
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"<1>High Stock </1><2>(more than</2><3> </3><4>80 pcs)→ </4><5>Green</5><6> "
+"background</6>"
 msgstr ""
 
 #. content.xml (sheet '🎨 Conditional Formatting')
@@ -552,15 +590,7 @@ msgid "Price per piece [£]"
 msgstr ""
 
 #. content.xml (sheet '📊 Charts')
-msgid "900"
-msgstr ""
-
-#. content.xml (sheet '📊 Charts')
 msgid "<1>2. Open the </1><2>Insert tab </2><3>in the toolbar</3>"
-msgstr ""
-
-#. content.xml (sheet '📊 Charts')
-msgid "15"
 msgstr ""
 
 #. content.xml (sheet '📊 Charts')
@@ -568,23 +598,11 @@ msgid "<1>3. Click </1><2>Chart</2>"
 msgstr ""
 
 #. content.xml (sheet '📊 Charts')
-msgid "3"
-msgstr ""
-
-#. content.xml (sheet '📊 Charts')
 msgid "4. Choose the chart type and style that best fits your data"
 msgstr ""
 
 #. content.xml (sheet '📊 Charts')
-msgid "40"
-msgstr ""
-
-#. content.xml (sheet '📊 Charts')
 msgid "<1>5. Click </1><2>Finish</2><3> to insert the chart</3>"
-msgstr ""
-
-#. content.xml (sheet '📊 Charts')
-msgid "1"
 msgstr ""
 
 #. content.xml (sheet '📊 Charts')
@@ -636,6 +654,13 @@ msgid ""
 msgstr ""
 
 #. content.xml (sheet '📊 Charts')
+msgid ""
+"You can add or adjust chart elements such as titles, axes, and labels, as "
+"well as change the data range or chart type. These tools allow you to "
+"customise the chart and better present your data."
+msgstr ""
+
+#. content.xml (sheet '📊 Charts')
 msgid "Next Chapter:🔍 Data & filtering"
 msgstr ""
 
@@ -673,7 +698,16 @@ msgid "➜Try it: Find low stock items"
 msgstr ""
 
 #. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"Sort the Quantity [pcs] column to see which items have the lowest stock."
+msgstr ""
+
+#. content.xml (sheet '🔍 Data & filtering')
 msgid "➜Try it: Show only Electronics items"
+msgstr ""
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "Use the filter in the Category column and select Electronics."
 msgstr ""
 
 #. content.xml (sheet '🔍 Data & filtering')
@@ -689,6 +723,26 @@ msgstr ""
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Additional filtering options give you more control over your data."
+msgstr ""
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"<1>Auto Filter</1><2> lets you quickly filter data directly in the table "
+"using simple selections.</2>"
+msgstr ""
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"<1>Standard Filter</1><2> allows you to define ranges that contain values in"
+" specific data fields. You can also combine conditions using logical AND or "
+"OR operators.</2>"
+msgstr ""
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"<1>Advanced Filter</1><2> allows you to define up to eight filter "
+"conditions. You can enter these conditions directly into the sheet for more "
+"precise and flexible filtering.</2>"
 msgstr ""
 
 #. content.xml (sheet '🔍 Data & filtering')
@@ -718,6 +772,14 @@ msgid ""
 msgstr ""
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Each user is assigned a unique colour, so you can easily see who is editing "
+"what. You can click on a user’s name or avatar to jump directly to their "
+"cursor and follow their activity in the document. Notifications also inform "
+"you when someone joins or leaves."
+msgstr ""
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Start sharing your document"
 msgstr ""
 
@@ -738,7 +800,20 @@ msgid "➜Try it: Internal shares"
 msgstr ""
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Share files within your organisation. People who already have access to the "
+"document can use the link for quick and easy access."
+msgstr ""
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "➜Try it: External shares"
+msgstr ""
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Share files with others outside your organisation via public links and email"
+" addresses. You can also share to Nextcloud accounts on other instances "
+"using their federated cloud ID."
 msgstr ""
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
@@ -770,4 +845,8 @@ msgid ""
 "additional features. These videos offer quick guidance and help you build on"
 " what you’ve learned, so you can become more confident and efficient in your"
 " work."
+msgstr ""
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "Check out video tutorials"
 msgstr ""

@@ -55,6 +55,7 @@ public:
     void testXmlSafeText();
     void testL10nStreamParsing();
     void testTranslateFull();
+    void testTranslateSetsTextLanguage();
     void testTranslateMissAndUnmatchedLocale();
     void testIllegalXmlCharacterInTranslation();
     void testRetranslateInPlace();
@@ -77,6 +78,7 @@ public:
     CPPUNIT_TEST(testXmlSafeText);
     CPPUNIT_TEST(testL10nStreamParsing);
     CPPUNIT_TEST(testTranslateFull);
+    CPPUNIT_TEST(testTranslateSetsTextLanguage);
     CPPUNIT_TEST(testTranslateMissAndUnmatchedLocale);
     CPPUNIT_TEST(testIllegalXmlCharacterInTranslation);
     CPPUNIT_TEST(testRetranslateInPlace);
@@ -97,7 +99,7 @@ public:
 
 void L10nTranslateTest::testKeyDerivation()
 {
-    // Parity cases K1..K22 (keep in sync with test_l10n_tooling.py)
+    // Parity cases K1..K24 (keep in sync with test_l10n_tooling.py)
     static const struct
     {
         const char* pId;
@@ -130,7 +132,7 @@ void L10nTranslateTest::testKeyDerivation()
         { "K9", "<text:p>_a<text:tab/>b</text:p>", UnitState::Forbidden, "" },
         { "K10", "<text:p>_a<text:line-break/>b</text:p>", UnitState::Forbidden, "" },
         { "K11", "<text:p>_a<text:a xlink:href=\"http://x/\">link</text:a></text:p>",
-          UnitState::Forbidden, "" },
+          UnitState::Marked, "a<1>link</1>" },
         { "K12",
           "<text:p><text:span text:style-name=\"T1\">_a"
           "<text:span text:style-name=\"T2\">nested</text:span></text:span></text:p>",
@@ -153,6 +155,12 @@ void L10nTranslateTest::testKeyDerivation()
         { "K21", "<text:p>_x<text:span text:style-name=\"T1\">a<!-- c -->b</text:span></text:p>",
           UnitState::Marked, "x<1>ab</1>" },
         { "K22", "<text:p>_a<![CDATA[b]]>c</text:p>", UnitState::Marked, "abc" },
+        { "K23", "<text:p><text:a xlink:href=\"http://x/\">_Check it out</text:a></text:p>",
+          UnitState::Marked, "Check it out" },
+        { "K24",
+          "<text:p>_a<text:a xlink:href=\"http://x/\">"
+          "<text:span text:style-name=\"T1\">link</text:span></text:a></text:p>",
+          UnitState::Forbidden, "" },
     };
 
     for (const auto& rCase : aCases)
@@ -363,10 +371,20 @@ constexpr std::string_view aContentXml
       " xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\""
       " xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\""
       " xmlns:calcext=\"urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0\""
+      " xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\""
+      " xmlns:xlink=\"http://www.w3.org/1999/xlink\""
       " office:version=\"1.3\">"
       "<office:automatic-styles>"
       "<style:style style:name=\"cond1\" style:family=\"table-cell\">"
       "<style:map style:base-cell-address=\"'_Try it'.A1\"/>"
+      "</style:style>"
+      "<style:style style:name=\"T5\" style:family=\"text\">"
+      "<style:text-properties fo:language=\"en\" fo:country=\"GB\""
+      " style:language-asian=\"zh\" style:country-asian=\"CN\""
+      " style:language-complex=\"hi\" style:country-complex=\"IN\"/>"
+      "</style:style>"
+      "<style:style style:name=\"T9\" style:family=\"text\">"
+      "<style:text-properties fo:language=\"zxx\" fo:country=\"none\"/>"
       "</style:style>"
       "</office:automatic-styles>"
       "<office:body><office:spreadsheet>"
@@ -402,6 +420,10 @@ constexpr std::string_view aContentXml
       "<table:table-cell office:value-type=\"string\">"
       "<text:p>_Decorated</text:p>"
       "</table:table-cell>"
+      "<table:table-cell office:value-type=\"string\">"
+      "<text:p>_See <text:a xlink:href=\"http://x/\" xlink:type=\"simple\">the tutorials"
+      "</text:a> now</text:p>"
+      "</table:table-cell>"
       "</table:table-row>"
       "<calcext:conditional-formats>"
       "<calcext:conditional-format"
@@ -414,7 +436,12 @@ constexpr std::string_view aStylesXml
     = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
       "<office:document-styles"
       " xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\""
-      " xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\">"
+      " xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\""
+      " xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\""
+      " xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\">"
+      "<office:styles><style:default-style style:family=\"paragraph\">"
+      "<style:text-properties fo:language=\"en\" fo:country=\"US\"/>"
+      "</style:default-style></office:styles>"
       "<office:master-styles><text:p>_Master text</text:p></office:master-styles>"
       "</office:document-styles>\n";
 
@@ -451,7 +478,10 @@ constexpr std::string_view aL10nStream = "# supported locales\n"
                                          "de\tHallowelt\n"
                                          "\n"
                                          "Decorated\n"
-                                         "de\t<1>Verziert</1>\n";
+                                         "de\t<1>Verziert</1>\n"
+                                         "\n"
+                                         "See <1>the tutorials</1> now\n"
+                                         "de\tJetzt <1>die Anleitungen</1> ansehen\n";
 
 const sal_uInt8 aBlobBytes[] = { 0x00, 0xff, 0x10, 0x20, 0x00, 0x00, 0x7f, 0x42 };
 
@@ -646,8 +676,69 @@ void L10nTranslateTest::testTranslateFull()
     // validation help message: title attribute and body paragraph
     assertContains(aContent, "table:title=\"Formatierung testen\"");
     assertContains(aContent, "<text:p>Entdecke den Format-Tab</text:p>");
+    // a link is a run like a span: the element and its attributes stay,
+    // only the text inside changes, here moved along with the tag
+    assertContains(aContent, "<text:p>Jetzt <text:a xlink:href=\"http://x/\""
+                             " xlink:type=\"simple\">die Anleitungen</text:a> ansehen</text:p>");
     // styles.xml is rewritten too
     assertContains(entryText(aEntries, "styles.xml"), "<text:p>Mastertext</text:p>");
+
+    osl::File::remove(aIn);
+    osl::File::remove(aOut);
+}
+
+void L10nTranslateTest::testTranslateSetsTextLanguage()
+{
+    const OUString aIn = tempFileUrl("lang-in.ods");
+    const OUString aOut = tempFileUrl("lang-out.ods");
+    std::vector<zip::Entry> aEntries;
+
+    // T1: a western translation moves fo:language and fo:country, in both
+    // members, with the country of the bare "de" filled in; the Asian and
+    // complex groups and the "zxx" (no language) style stay as they are
+    CPPUNIT_ASSERT(zip::writeArchive(aIn, makeFixtureEntries(true)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(TranslateResult::Translated),
+                         static_cast<int>(translateDocument(aIn, aOut, u"de-DE"_ustr)));
+    CPPUNIT_ASSERT(zip::readArchive(aOut, aEntries));
+    OString aContent = entryText(aEntries, "content.xml");
+    assertContains(aContent, "<style:text-properties fo:language=\"de\" fo:country=\"DE\""
+                             " style:language-asian=\"zh\" style:country-asian=\"CN\""
+                             " style:language-complex=\"hi\" style:country-complex=\"IN\"/>");
+    assertContains(aContent, "<style:text-properties fo:language=\"zxx\" fo:country=\"none\"/>");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aContent.indexOf("fo:country=\"GB\""));
+    assertContains(entryText(aEntries, "styles.xml"),
+                   "<style:text-properties fo:language=\"de\" fo:country=\"DE\"/>");
+
+    // T2: no locale match: the markers come off and the languages stay
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(TranslateResult::CopiedUntranslated),
+                         static_cast<int>(translateDocument(aIn, aOut, u"tr-TR"_ustr)));
+    CPPUNIT_ASSERT(zip::readArchive(aOut, aEntries));
+    aContent = entryText(aEntries, "content.xml");
+    assertContains(aContent, "fo:language=\"en\" fo:country=\"GB\"");
+    assertContains(entryText(aEntries, "styles.xml"), "fo:language=\"en\" fo:country=\"US\"");
+
+    // T3: an Asian translation sets the Asian group and leaves the western
+    // one alone; the Latin fragments of the Chinese text stay English
+    CPPUNIT_ASSERT(zip::writeArchive(
+        aIn, makeFixtureEntriesWithStream("de,zh-Hans\n\nTry it\nzh-Hans\t\xe8\xaf\x95\n")));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(TranslateResult::Translated),
+                         static_cast<int>(translateDocument(aIn, aOut, u"zh-Hans"_ustr)));
+    CPPUNIT_ASSERT(zip::readArchive(aOut, aEntries));
+    aContent = entryText(aEntries, "content.xml");
+    assertContains(aContent, "fo:language=\"en\" fo:country=\"GB\""
+                             " style:language-asian=\"zh\" style:country-asian=\"CN\"");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aContent.indexOf("rfc-language-tag"));
+
+    // T4: a complex-script translation sets the complex group
+    CPPUNIT_ASSERT(zip::writeArchive(
+        aIn, makeFixtureEntriesWithStream("ar\n\nTry it\nar\t\xd8\xac\xd8\xb1\xd8\xa8\n")));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(TranslateResult::Translated),
+                         static_cast<int>(translateDocument(aIn, aOut, u"ar-EG"_ustr)));
+    CPPUNIT_ASSERT(zip::readArchive(aOut, aEntries));
+    aContent = entryText(aEntries, "content.xml");
+    assertContains(aContent, "fo:language=\"en\" fo:country=\"GB\""
+                             " style:language-asian=\"zh\" style:country-asian=\"CN\""
+                             " style:language-complex=\"ar\" style:country-complex=\"");
 
     osl::File::remove(aIn);
     osl::File::remove(aOut);

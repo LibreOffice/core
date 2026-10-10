@@ -11,16 +11,19 @@ The rules:
 - A translation unit is a text:p / text:h whose first text segment starts
   with "_", a table:table sheet name starting with "_", or a
   table:help-message title starting with "_".
-- Runs are one per non-empty text:span child and one per stretch of bare
-  text.  Nodes that render nothing (comments, PIs, empty spans) do not
-  split bare text, so a multi-run unit always contains a span.  Empty text
-  contributes no run.  Exactly one leading "_" is stripped from the first
-  run, dropping it if it becomes empty.
+- Runs are one per non-empty text:span or text:a child and one per
+  stretch of bare text.  Nodes that render nothing (comments, PIs, empty
+  spans) do not split bare text, so a multi-run unit always contains a span
+  or a link.  Empty text contributes no run.  Exactly one leading "_" is
+  stripped from the first run, dropping it if it becomes empty.
 - One run: the key is the bare text (an untagged translation takes that
-  run's formatting).  Two or more: spans are tagged in span order as
-  <1>..</1><2>..</2>; bare text stays untagged.
-- Marked paragraphs may contain only spans and bare text (no text:s, tabs,
-  line breaks, fields, links, nested spans).
+  run's formatting).  Two or more: spans and links are tagged in document
+  order as <1>..</1><2>..</2>; bare text stays untagged.
+- Marked paragraphs may contain only spans, links and bare text (no text:s,
+  tabs, line breaks, fields, nested spans, no span inside a link).
+- Only marked paragraphs are translated; every other paragraph with visible
+  text in content.xml is reported as a warning, since it is usually a
+  missing marker.
 """
 
 import re
@@ -28,6 +31,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 TEXT_NS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+OFFICE_NS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0"
 TABLE_NS = "urn:oasis:names:tc:opendocument:xmlns:table:1.0"
 STYLE_NS = "urn:oasis:names:tc:opendocument:xmlns:style:1.0"
 CALCEXT_NS = "urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0"
@@ -37,11 +41,15 @@ XLINK_NS = "http://www.w3.org/1999/xlink"
 TEXT_P = f"{{{TEXT_NS}}}p"
 TEXT_H = f"{{{TEXT_NS}}}h"
 TEXT_SPAN = f"{{{TEXT_NS}}}span"
+TEXT_A = f"{{{TEXT_NS}}}a"
 TABLE_TABLE = f"{{{TABLE_NS}}}table"
+TABLE_CELL = f"{{{TABLE_NS}}}table-cell"
+TABLE_COVERED_CELL = f"{{{TABLE_NS}}}covered-table-cell"
 TABLE_NAME = f"{{{TABLE_NS}}}name"
 TABLE_HELP_MESSAGE = f"{{{TABLE_NS}}}help-message"
 TABLE_TITLE = f"{{{TABLE_NS}}}title"
 TABLE_FORMULA = f"{{{TABLE_NS}}}formula"
+OFFICE_VALUE_TYPE = f"{{{OFFICE_NS}}}value-type"
 TABLE_NAMED_EXPRESSIONS = f"{{{TABLE_NS}}}named-expressions"
 DRAW_PAGE = f"{{{DRAW_NS}}}page"
 DRAW_PAGE_NAME = f"{{{DRAW_NS}}}name"
@@ -103,6 +111,7 @@ def _pretty_tag(tag):
         ns, local = tag[1:].split("}", 1)
         prefix = {
             TEXT_NS: "text",
+            OFFICE_NS: "office",
             TABLE_NS: "table",
             STYLE_NS: "style",
             CALCEXT_NS: "calcext",
@@ -142,13 +151,15 @@ def collect_runs(para):
     for child in para:
         if _is_comment_or_pi(child):
             pass  # invisible; its tail below is a separate bare text node
-        elif child.tag == TEXT_SPAN:
-            # a span's text is its direct text nodes: leading text plus the
-            # tail of every (comment-only) child; element children are banned
+        elif child.tag in (TEXT_SPAN, TEXT_A):
+            # a span's (or link's) text is its direct text nodes: leading
+            # text plus the tail of every (comment-only) child; element
+            # children are banned
             text = child.text or ""
             for grand in child:
                 if not _is_comment_or_pi(grand):
-                    note_forbidden(f"{_pretty_tag(grand.tag)} inside a span")
+                    note_forbidden(
+                        f"{_pretty_tag(grand.tag)} inside a {_pretty_tag(child.tag)}")
                 text += grand.tail or ""
             if text:
                 segments.append(Run(text, True))
@@ -349,7 +360,7 @@ def _key_lint(key, run_texts, where, errors):
         errors.append(f"{where}: key longer than {KEY_MAX_LENGTH} characters")
 
 
-def _analyze_paragraph(para, where, units, errors, warnings):
+def _analyze_paragraph(para, where, units, errors, warnings, translatable):
     result = collect_runs(para)
 
     # an underscore is a marker only as the paragraph's first character;
@@ -365,10 +376,18 @@ def _analyze_paragraph(para, where, units, errors, warnings):
     if result.state == FORBIDDEN:
         errors.append(
             f"{where}: {result.forbidden} inside a marked paragraph - marked "
-            "paragraphs may only contain plain text and text:span runs"
+            "paragraphs may only contain plain text, text:span and text:a runs"
         )
         return
     if result.state != MARKED:
+        # visible text without a marker is almost always an oversight: the
+        # author marked the first paragraph of a cell or text box and not
+        # the rest.  Only content.xml counts: styles.xml holds master page
+        # placeholders and header/footer field stand-ins.
+        text = "".join(segment.text for segment in result.segments)
+        if translatable and text.strip():
+            warnings.append(
+                f"{where}: unmarked paragraph, not translated: {text.strip()!r}")
         return
     if not result.runs:
         errors.append(f"{where}: marker-only paragraph ('_' with no text)")
@@ -402,17 +421,24 @@ def _context_for(el, context):
     return context
 
 
-def _walk(el, member, context, units, errors, warnings):
+def _walk(el, member, context, units, errors, warnings, translatable):
+    """translatable is False below a non-string cell (its paragraph is the
+    formatted value, not text to translate) and in styles.xml, where
+    unmarked text is expected."""
     for child in el:
         if _is_comment_or_pi(child):
             continue
         if child.tag in (TEXT_P, TEXT_H):
             _analyze_paragraph(
                 child, f"{member} ({context})" if context else member,
-                units, errors, warnings)
+                units, errors, warnings, translatable)
             continue  # paragraphs are leaves of the walk, like in the engine
         child_context = _context_for(child, context)
         where = f"{member} ({child_context})" if child_context else member
+        child_translatable = translatable
+        if child.tag in (TABLE_CELL, TABLE_COVERED_CELL):
+            child_translatable = translatable and child.get(
+                OFFICE_VALUE_TYPE, "string") == "string"
 
         if child.tag == TABLE_TABLE:
             name = child.get(TABLE_NAME, "")
@@ -433,7 +459,8 @@ def _walk(el, member, context, units, errors, warnings):
                     _key_lint(key, [key], where + " [validation title]", errors)
                     units.append(Unit(key, "help-title", f"{member} (validation title)"))
 
-        _walk(child, member, child_context, units, errors, warnings)
+        _walk(child, member, child_context, units, errors, warnings,
+              child_translatable)
 
 
 def _iter_elements(root):
@@ -530,7 +557,8 @@ def analyze_document(odf_path):
             if member not in names:
                 continue
             root = parse_xml_bytes(zf.read(member))
-            _walk(root, member, "", units, errors, warnings)
+            _walk(root, member, "", units, errors, warnings,
+                  member == "content.xml")
             _lint_marked_attributes(root, member, warnings)
             _lint_sheet_rename_envelope(root, member, errors)
 

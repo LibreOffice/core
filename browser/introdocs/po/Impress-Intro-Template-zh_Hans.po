@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: Impress-Intro-Template.odp\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2026-09-19 07:22+0000\n"
-"Last-Translator: QuietCedar47 <quietcedar47@users.noreply.hosted.weblate.org>"
-"\n"
+"Last-Translator: QuietCedar47 <quietcedar47@users.noreply.hosted.weblate."
+"org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/impress-intro-template/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -24,8 +24,8 @@ msgid ""
 "<1>Collabora Office </1><2>presentation</2><3> is a </3><4>tool</4><5> that "
 "lets you create, edit, and deliver presentations in a simple way. You can "
 "work alone on a document, or collaboratively as part of a team. This "
-"introduction template will help you get started and explore some of the main"
-" features of the product.</5>"
+"introduction template will help you get started and explore some of the main "
+"features of the product.</5>"
 msgstr ""
 "<1>Collabora Office </1><2>演示文稿</2><3>是一个</3><4>工具</4><5>，可让帮助"
 "您以简单的方式创建、编辑和放映演示文稿。您可以独自处理文档，也可以团队协作。"
@@ -68,12 +68,37 @@ msgstr "🤝 效率与协作"
 msgid "Every presentation is a sequence of slides."
 msgstr "每个演示文稿都是由一系列幻灯片组成的。"
 
+#. content.xml (slide 'page2')
+msgid ""
+"<1>Use the </1><2>Slide navigation</2><3> on the left to reorder them by "
+"dragging, or remove ones you don’t need.</3>"
+msgstr ""
+
+#. content.xml (slide 'page2')
+msgid ""
+"<1>Each slide can use a </1><2>different layout </2><3>– a predefined "
+"arrangement of placeholders for titles, text, and images. Pick the layout "
+"that fits the slide’s purpose.</3>"
+msgstr ""
+
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default')
 msgid "<1>➜</1><2>Try it:</2>"
 msgstr "<1>➜</1><2>动手试试：</2>"
+
+#. content.xml (slide 'page2')
+msgid "Add a new slide clicking “New” in Notebook bar."
+msgstr ""
+
+#. content.xml (slide 'page2')
+msgid "Choose a layout for it from the layout chooser."
+msgstr ""
+
+#. content.xml (slide 'page2')
+msgid "Start editing your slide."
+msgstr ""
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); styles.xml (master page
@@ -85,7 +110,8 @@ msgstr "实用提示"
 msgid ""
 "When you’re unsure which layout to pick, start with “Title, Content” – it "
 "works for almost any slide."
-msgstr "当您不确定选择哪种版式时，建议从“标题，内容”开始，它几乎适用于任何幻灯片。"
+msgstr ""
+"当您不确定选择哪种版式时，建议从“标题，内容”开始，它几乎适用于任何幻灯片。"
 
 #. content.xml (slide 'page2')
 msgid "Next Chapter: 🎨 Design & Master Slides"
@@ -98,8 +124,8 @@ msgid ""
 "</3><4>Change</4><5> </5><6>the master, and every slide updates at once. "
 "</6><7>This makes master slides the fastest way to keep a deck consistent. "
 "Set the look once (fonts, colours, logo, footer) and every new slide picks "
-"it up automatically. When you need to rebrand or tweak the design later, you"
-" change the master, not 30 slides.</7>"
+"it up automatically. When you need to rebrand or tweak the design later, you "
+"change the master, not 30 slides.</7>"
 msgstr ""
 "<1></1><2>母版幻灯片</2><3>是每张幻灯片背后的模板。它定义了颜色、字体、背景以"
 "及标题和页脚的位置。</3><4>修改</4><5> </5><6>母版，所有幻灯片都会立即同步更"
@@ -108,13 +134,29 @@ msgstr ""
 "或调整设计时，只需修改母版，而无需逐一修改 30 张幻灯片。</7>"
 
 #. content.xml (slide 'page3')
+msgid "Open the View tab in the Notebook bar."
+msgstr ""
+
+#. content.xml (slide 'page3')
+msgid "Click “Master View” and edit your master design."
+msgstr ""
+
+#. content.xml (slide 'page3')
+msgid "Once your master design is ready, click \"Close Master View\"."
+msgstr ""
+
+#. content.xml (slide 'page3')
+msgid "Now your master is set and ready to use across all slides."
+msgstr ""
+
+#. content.xml (slide 'page3')
 msgid ""
 "If a single slide needs a different look, create a second master slide and "
 "apply it just to that slide. The rest of your deck stays on the original "
 "master."
 msgstr ""
-"如果某张幻灯片需要不同的外观，可以创建第二张母版幻灯片并仅将其应用到该幻灯片"
-"。演示文稿的其他部分将继续保持原有的母版。"
+"如果某张幻灯片需要不同的外观，可以创建第二张母版幻灯片并仅将其应用到该幻灯"
+"片。演示文稿的其他部分将继续保持原有的母版。"
 
 #. content.xml (slide 'page3')
 msgid "Next Chapter: ✏️ Style & Visual"
@@ -130,6 +172,23 @@ msgstr ""
 "<1>有两种方法可以让幻灯片脱颖而出。第一，</1><2>格式化文本</2><3>以建立结构并"
 "突出重点——字体、字号、字重和颜色能引导读者理解您传达的信息。第二，</3><4>添加"
 "视觉元素</4><5>——图片、形状、图标、图表——来辅助您的讲述。</5>"
+
+#. content.xml (slide 'page4')
+msgid ""
+"In the Notebook bar, open the Insert tab and add an object, image, table, or "
+"any other element that supports your content."
+msgstr ""
+
+#. content.xml (slide 'page4')
+msgid ""
+"Click on it to select it, then resize and reposition it to fit your layout."
+msgstr ""
+
+#. content.xml (slide 'page4')
+msgid ""
+"For editable objects like shapes or images, a contextual tab appears in the "
+"Notebook bar with all the available actions."
+msgstr ""
 
 #. content.xml (slide 'page4')
 msgid ""
@@ -154,6 +213,24 @@ msgstr ""
 "对内容的注意力。</3>"
 
 #. content.xml (slide 'page5')
+msgid "Click Transition tab in Notebook bar."
+msgstr ""
+
+#. content.xml (slide 'page5')
+msgid "Pick a transition style you would like to use."
+msgstr ""
+
+#. content.xml (slide 'page5')
+msgid ""
+"Adjust other properties – set the duration, pick a variant, or choose timing."
+msgstr ""
+
+#. content.xml (slide 'page5')
+msgid ""
+"Click \"Apply to All Slides\" to use the same transition across your deck."
+msgstr ""
+
+#. content.xml (slide 'page5')
 msgid ""
 "Use one transition across your whole deck to keep things consistent. Save a "
 "different transition for the slides you really want to stand out."
@@ -176,14 +253,30 @@ msgstr ""
 "前幻灯片、下一张预告、计时器以及演讲者备注，而听众只能看到幻灯片本身。</3>"
 
 #. content.xml (slide 'page6')
+msgid "Switch to the View tab in the Notebook bar and open “Notes view”."
+msgstr ""
+
+#. content.xml (slide 'page6')
+msgid "Add a speaker note to your slides."
+msgstr ""
+
+#. content.xml (slide 'page6')
+msgid "When you're ready to present, open the Slide Show tab."
+msgstr ""
+
+#. content.xml (slide 'page6')
+msgid "Pick a slide show option to start presenting."
+msgstr ""
+
+#. content.xml (slide 'page6')
 msgid "Next Chapter: 🤝 Productivity & Collaboration"
 msgstr "下一章：🤝 效率与协作"
 
 #. content.xml (slide 'page7')
 msgid ""
 "<1>A range of features helps you </1><2>stay productive</2><3> and "
-"</3><4>collaborate with others</4><5>, making it easier to work together and"
-" share your decks.</5>"
+"</3><4>collaborate with others</4><5>, making it easier to work together and "
+"share your decks.</5>"
 msgstr ""
 "<1>一系列功能可帮助您</1><2>保持高效</2><3>并</3><4>与他人协作</4><5>，使团队"
 "分工与共享演示文稿变得更加轻松。</5>"
@@ -222,8 +315,13 @@ msgid ""
 "Want to keep learning? Short video introductions cover additional features "
 "and help you build on what you’ve learned."
 msgstr ""
-"想深入学习？简短的介绍视频涵盖了更多扩展功能，帮助您在现有基础上提升使用技能"
-"。"
+"想深入学习？简短的介绍视频涵盖了更多扩展功能，帮助您在现有基础上提升使用技"
+"能。"
+
+#. content.xml (slide 'page7')
+#, fuzzy
+msgid "Check out video tutorials."
+msgstr "▶️ 视频教程"
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default')

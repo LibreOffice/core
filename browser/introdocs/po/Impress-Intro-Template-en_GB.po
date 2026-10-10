@@ -23,8 +23,8 @@ msgid ""
 "<1>Collabora Office </1><2>presentation</2><3> is a </3><4>tool</4><5> that "
 "lets you create, edit, and deliver presentations in a simple way. You can "
 "work alone on a document, or collaboratively as part of a team. This "
-"introduction template will help you get started and explore some of the main"
-" features of the product.</5>"
+"introduction template will help you get started and explore some of the main "
+"features of the product.</5>"
 msgstr ""
 "<1>Collabora Office </1><2>presentation</2><3> is a </3><4>tool</4><5> that "
 "lets you create, edit, and deliver presentations in a simple way. You can "
@@ -69,12 +69,37 @@ msgstr "🤝 Productivity & Collaboration"
 msgid "Every presentation is a sequence of slides."
 msgstr "Every presentation is a sequence of slides."
 
+#. content.xml (slide 'page2')
+msgid ""
+"<1>Use the </1><2>Slide navigation</2><3> on the left to reorder them by "
+"dragging, or remove ones you don’t need.</3>"
+msgstr ""
+
+#. content.xml (slide 'page2')
+msgid ""
+"<1>Each slide can use a </1><2>different layout </2><3>– a predefined "
+"arrangement of placeholders for titles, text, and images. Pick the layout "
+"that fits the slide’s purpose.</3>"
+msgstr ""
+
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default')
 msgid "<1>➜</1><2>Try it:</2>"
 msgstr "<1>➜</1><2>Try it:</2>"
+
+#. content.xml (slide 'page2')
+msgid "Add a new slide clicking “New” in Notebook bar."
+msgstr ""
+
+#. content.xml (slide 'page2')
+msgid "Choose a layout for it from the layout chooser."
+msgstr ""
+
+#. content.xml (slide 'page2')
+msgid "Start editing your slide."
+msgstr ""
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); styles.xml (master page
@@ -101,16 +126,32 @@ msgid ""
 "</3><4>Change</4><5> </5><6>the master, and every slide updates at once. "
 "</6><7>This makes master slides the fastest way to keep a deck consistent. "
 "Set the look once (fonts, colours, logo, footer) and every new slide picks "
-"it up automatically. When you need to rebrand or tweak the design later, you"
-" change the master, not 30 slides.</7>"
+"it up automatically. When you need to rebrand or tweak the design later, you "
+"change the master, not 30 slides.</7>"
 msgstr ""
 "<1>A </1><2>master slide</2><3> is the template behind every slide. It "
-"defines the colours, fonts, background, and where titles and footers go. </3>"
-"<4>Change</4><5> </5><6>the master, and every slide updates at once. </6><7>"
-"This makes master slides the fastest way to keep a deck consistent. Set the "
-"look once (fonts, colours, logo, footer) and every new slide picks it up "
-"automatically. When you need to rebrand or tweak the design later, you "
+"defines the colours, fonts, background, and where titles and footers go. "
+"</3><4>Change</4><5> </5><6>the master, and every slide updates at once. "
+"</6><7>This makes master slides the fastest way to keep a deck consistent. "
+"Set the look once (fonts, colours, logo, footer) and every new slide picks "
+"it up automatically. When you need to rebrand or tweak the design later, you "
 "change the master, not 30 slides.</7>"
+
+#. content.xml (slide 'page3')
+msgid "Open the View tab in the Notebook bar."
+msgstr ""
+
+#. content.xml (slide 'page3')
+msgid "Click “Master View” and edit your master design."
+msgstr ""
+
+#. content.xml (slide 'page3')
+msgid "Once your master design is ready, click \"Close Master View\"."
+msgstr ""
+
+#. content.xml (slide 'page3')
+msgid "Now your master is set and ready to use across all slides."
+msgstr ""
 
 #. content.xml (slide 'page3')
 msgid ""
@@ -140,6 +181,23 @@ msgstr ""
 
 #. content.xml (slide 'page4')
 msgid ""
+"In the Notebook bar, open the Insert tab and add an object, image, table, or "
+"any other element that supports your content."
+msgstr ""
+
+#. content.xml (slide 'page4')
+msgid ""
+"Click on it to select it, then resize and reposition it to fit your layout."
+msgstr ""
+
+#. content.xml (slide 'page4')
+msgid ""
+"For editable objects like shapes or images, a contextual tab appears in the "
+"Notebook bar with all the available actions."
+msgstr ""
+
+#. content.xml (slide 'page4')
+msgid ""
 "Less is more. One strong visual, a clear headline, and a few well-formatted "
 "lines will always beat a slide packed with text and decorations."
 msgstr ""
@@ -161,6 +219,24 @@ msgstr ""
 "and professional, while the wrong one distracts from your message.</3>"
 
 #. content.xml (slide 'page5')
+msgid "Click Transition tab in Notebook bar."
+msgstr ""
+
+#. content.xml (slide 'page5')
+msgid "Pick a transition style you would like to use."
+msgstr ""
+
+#. content.xml (slide 'page5')
+msgid ""
+"Adjust other properties – set the duration, pick a variant, or choose timing."
+msgstr ""
+
+#. content.xml (slide 'page5')
+msgid ""
+"Click \"Apply to All Slides\" to use the same transition across your deck."
+msgstr ""
+
+#. content.xml (slide 'page5')
 msgid ""
 "Use one transition across your whole deck to keep things consistent. Save a "
 "different transition for the slides you really want to stand out."
@@ -179,10 +255,26 @@ msgid ""
 "next one coming up, a timer, and your speaker notes, while your audience "
 "sees only the slide.</3>"
 msgstr ""
-"<1>When you're ready to present, start your slide show and the </1><2>"
-"Presenter Console</2><3> opens. You'll see your current slide, the next one "
-"coming up, a timer, and your speaker notes, while your audience sees only "
-"the slide.</3>"
+"<1>When you're ready to present, start your slide show and the "
+"</1><2>Presenter Console</2><3> opens. You'll see your current slide, the "
+"next one coming up, a timer, and your speaker notes, while your audience "
+"sees only the slide.</3>"
+
+#. content.xml (slide 'page6')
+msgid "Switch to the View tab in the Notebook bar and open “Notes view”."
+msgstr ""
+
+#. content.xml (slide 'page6')
+msgid "Add a speaker note to your slides."
+msgstr ""
+
+#. content.xml (slide 'page6')
+msgid "When you're ready to present, open the Slide Show tab."
+msgstr ""
+
+#. content.xml (slide 'page6')
+msgid "Pick a slide show option to start presenting."
+msgstr ""
 
 #. content.xml (slide 'page6')
 msgid "Next Chapter: 🤝 Productivity & Collaboration"
@@ -191,12 +283,12 @@ msgstr "Next Chapter: 🤝 Productivity & Collaboration"
 #. content.xml (slide 'page7')
 msgid ""
 "<1>A range of features helps you </1><2>stay productive</2><3> and "
-"</3><4>collaborate with others</4><5>, making it easier to work together and"
-" share your decks.</5>"
+"</3><4>collaborate with others</4><5>, making it easier to work together and "
+"share your decks.</5>"
 msgstr ""
-"<1>A range of features helps you </1><2>stay productive</2><3> and </3><4>"
-"collaborate with others</4><5>, making it easier to work together and share "
-"your decks.</5>"
+"<1>A range of features helps you </1><2>stay productive</2><3> and "
+"</3><4>collaborate with others</4><5>, making it easier to work together and "
+"share your decks.</5>"
 
 #. content.xml (slide 'page7')
 msgid "📤 Document sharing"
@@ -235,6 +327,11 @@ msgid ""
 msgstr ""
 "Want to keep learning? Short video introductions cover additional features "
 "and help you build on what you’ve learned."
+
+#. content.xml (slide 'page7')
+#, fuzzy
+msgid "Check out video tutorials."
+msgstr "▶️ Video tutorials"
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default')

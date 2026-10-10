@@ -61,11 +61,36 @@ msgstr ""
 msgid "Every presentation is a sequence of slides."
 msgstr ""
 
+#. content.xml (slide 'page2')
+msgid ""
+"<1>Use the </1><2>Slide navigation</2><3> on the left to reorder them by "
+"dragging, or remove ones you don’t need.</3>"
+msgstr ""
+
+#. content.xml (slide 'page2')
+msgid ""
+"<1>Each slide can use a </1><2>different layout </2><3>– a predefined "
+"arrangement of placeholders for titles, text, and images. Pick the layout "
+"that fits the slide’s purpose.</3>"
+msgstr ""
+
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default')
 msgid "<1>➜</1><2>Try it:</2>"
+msgstr ""
+
+#. content.xml (slide 'page2')
+msgid "Add a new slide clicking “New” in Notebook bar."
+msgstr ""
+
+#. content.xml (slide 'page2')
+msgid "Choose a layout for it from the layout chooser."
+msgstr ""
+
+#. content.xml (slide 'page2')
+msgid "Start editing your slide."
 msgstr ""
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
@@ -96,6 +121,22 @@ msgid ""
 msgstr ""
 
 #. content.xml (slide 'page3')
+msgid "Open the View tab in the Notebook bar."
+msgstr ""
+
+#. content.xml (slide 'page3')
+msgid "Click “Master View” and edit your master design."
+msgstr ""
+
+#. content.xml (slide 'page3')
+msgid "Once your master design is ready, click \"Close Master View\"."
+msgstr ""
+
+#. content.xml (slide 'page3')
+msgid "Now your master is set and ready to use across all slides."
+msgstr ""
+
+#. content.xml (slide 'page3')
 msgid ""
 "If a single slide needs a different look, create a second master slide and "
 "apply it just to that slide. The rest of your deck stays on the original "
@@ -116,6 +157,23 @@ msgstr ""
 
 #. content.xml (slide 'page4')
 msgid ""
+"In the Notebook bar, open the Insert tab and add an object, image, table, or"
+" any other element that supports your content."
+msgstr ""
+
+#. content.xml (slide 'page4')
+msgid ""
+"Click on it to select it, then resize and reposition it to fit your layout."
+msgstr ""
+
+#. content.xml (slide 'page4')
+msgid ""
+"For editable objects like shapes or images, a contextual tab appears in the "
+"Notebook bar with all the available actions."
+msgstr ""
+
+#. content.xml (slide 'page4')
+msgid ""
 "Less is more. One strong visual, a clear headline, and a few well-formatted "
 "lines will always beat a slide packed with text and decorations."
 msgstr ""
@@ -129,6 +187,24 @@ msgid ""
 "<1>A </1><2>transition</2><3> controls how one slide moves to the next "
 "during your slide show. The right transition makes your deck feel polished "
 "and professional, while the wrong one distracts from your message.</3>"
+msgstr ""
+
+#. content.xml (slide 'page5')
+msgid "Click Transition tab in Notebook bar."
+msgstr ""
+
+#. content.xml (slide 'page5')
+msgid "Pick a transition style you would like to use."
+msgstr ""
+
+#. content.xml (slide 'page5')
+msgid ""
+"Adjust other properties – set the duration, pick a variant, or choose "
+"timing."
+msgstr ""
+
+#. content.xml (slide 'page5')
+msgid "Click \"Apply to All Slides\" to use the same transition across your deck."
 msgstr ""
 
 #. content.xml (slide 'page5')
@@ -147,6 +223,22 @@ msgid ""
 "</1><2>Presenter Console</2><3> opens. You'll see your current slide, the "
 "next one coming up, a timer, and your speaker notes, while your audience "
 "sees only the slide.</3>"
+msgstr ""
+
+#. content.xml (slide 'page6')
+msgid "Switch to the View tab in the Notebook bar and open “Notes view”."
+msgstr ""
+
+#. content.xml (slide 'page6')
+msgid "Add a speaker note to your slides."
+msgstr ""
+
+#. content.xml (slide 'page6')
+msgid "When you're ready to present, open the Slide Show tab."
+msgstr ""
+
+#. content.xml (slide 'page6')
+msgid "Pick a slide show option to start presenting."
 msgstr ""
 
 #. content.xml (slide 'page6')
@@ -189,6 +281,10 @@ msgstr ""
 msgid ""
 "Want to keep learning? Short video introductions cover additional features "
 "and help you build on what you’ve learned."
+msgstr ""
+
+#. content.xml (slide 'page7')
+msgid "Check out video tutorials."
 msgstr ""
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page

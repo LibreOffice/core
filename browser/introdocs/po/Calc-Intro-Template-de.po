@@ -32,13 +32,18 @@ msgid ""
 "Stock\"."
 msgstr ""
 
+#. content.xml (validation help message)
+msgid ""
+"For High Stock use condition \"Values greater than: 80\" and style \"High "
+"Stock\"."
+msgstr ""
+
 #. content.xml (validation title)
 msgid "Use other options"
 msgstr "Andere Optionen verwenden"
 
 #. content.xml (validation help message)
-msgid ""
-"Use Standard or Advanced Filter to narrow down your data more precisely"
+msgid "Use Standard or Advanced Filter to narrow down your data more precisely"
 msgstr ""
 
 #. content.xml (validation title)
@@ -80,8 +85,8 @@ msgstr "Berechnungen (Formeln & Funktionen)"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
-"Use built-in functions to perform calculations on your data. Create formulas"
-" easily and get help with the Function Wizard."
+"Use built-in functions to perform calculations on your data. Create formulas "
+"easily and get help with the Function Wizard."
 msgstr ""
 
 #. content.xml (sheet '👋 Introduction')
@@ -100,8 +105,8 @@ msgstr "Diagramme"
 
 #. content.xml (sheet '👋 Introduction')
 msgid ""
-"Visualise your data with different chart types. Quickly create and customise"
-" charts to better understand trends and comparisons."
+"Visualise your data with different chart types. Quickly create and customise "
+"charts to better understand trends and comparisons."
 msgstr ""
 
 #. content.xml (sheet '👋 Introduction')
@@ -157,8 +162,8 @@ msgstr "✚Einfache Funktionen verwenden"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
-"We will look at a practical case to learn how to use basic Calc features and"
-" simple functions."
+"We will look at a practical case to learn how to use basic Calc features and "
+"simple functions."
 msgstr ""
 
 #. content.xml (sheet '✚ Formulas & Functions')
@@ -167,8 +172,8 @@ msgstr "Schritt-für-Schritt-Anleitung – Werte hinzufügen"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
-"In this example we want to calculate the total number of items in stock. The"
-" SUM function allows you to quickly add numbers together."
+"In this example we want to calculate the total number of items in stock. The "
+"SUM function allows you to quickly add numbers together."
 msgstr ""
 
 #. content.xml (sheet '✚ Formulas & Functions')
@@ -193,14 +198,9 @@ msgstr "1. Klicken Sie auf die Zelle unterhalb der Anzahl-Spalte"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
-#. (sheet '📊 Charts')
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Laptop"
 msgstr "Laptop"
-
-#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
-#. Tables'); content.xml (sheet '📊 Charts')
-msgid "5"
-msgstr "5"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "<1>2. Type the formula </1><2>=SUM(E9:E11)</2>"
@@ -208,15 +208,9 @@ msgstr "<1>2. Geben Sie die Formel </1><2>=SUMME(E9:E11)</2><1> ein</1>"
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
-#. (sheet '📊 Charts')
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Mouse"
 msgstr "Maus"
-
-#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
-#. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
-#. (sheet '📊 Charts')
-msgid "20"
-msgstr "20"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
@@ -225,15 +219,9 @@ msgstr ""
 
 #. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
 #. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
-#. (sheet '📊 Charts')
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
 msgid "Notebook"
 msgstr ""
-
-#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
-#. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
-#. (sheet '📊 Charts')
-msgid "50"
-msgstr "50"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Inserting formula via Formulas tab – Formula wizard"
@@ -275,9 +263,9 @@ msgstr ""
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
-"<1>Formulas in Calc always start with the equals sign </1><2>=</2><3>. After"
-" that comes the function name (for example </3><4>sum</4><5>), which defines"
-" what type of calculation will be performed. The </5><6>brackets</6><7> "
+"<1>Formulas in Calc always start with the equals sign </1><2>=</2><3>. After "
+"that comes the function name (for example </3><4>sum</4><5>), which defines "
+"what type of calculation will be performed. The </5><6>brackets</6><7> "
 "contain the cells that the formula will use for its calculation.</7>"
 msgstr ""
 
@@ -289,6 +277,20 @@ msgstr ""
 msgid ""
 "Collabora Office Calc provides a large library of built-in functions that "
 "help you perform different types of calculations and data analysis."
+msgstr ""
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"<1>Functions are organised into categories such as Database, </1><2>Date & "
+"Time, Financial, Information, Logical, Mathematical, Array, Statistical, "
+"Spreadsheet, Text </2><3>and</3><4> Add-in</4><5>, making it easier to find "
+"the function you need.</5>"
+msgstr ""
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"<1>You can access these functions through the Function Library or by using "
+"the </1><2>Function Wizard.</2>"
 msgstr ""
 
 #. content.xml (sheet '✚ Formulas & Functions')
@@ -342,11 +344,11 @@ msgstr ""
 "1. Wählen Sie den Bereich der Zellen aus, der Ihre Daten enthält "
 "(einschließlich der Überschriften)"
 
-#. content.xml (sheet '📋 Tables')
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Electronics"
 msgstr "Elektronik"
 
-#. content.xml (sheet '📋 Tables')
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Dell"
 msgstr "Dell"
 
@@ -354,7 +356,7 @@ msgstr "Dell"
 msgid "<1>2. Open the </1><2>Insert tab</2><3> in the toolbar</3>"
 msgstr ""
 
-#. content.xml (sheet '📋 Tables')
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Logitech"
 msgstr "Logitech"
 
@@ -362,11 +364,11 @@ msgstr "Logitech"
 msgid "<1>3. Click </1><2>Table</2>"
 msgstr "<1>3. Klicken Sie auf </1><2>Tabelle</2>"
 
-#. content.xml (sheet '📋 Tables')
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Office supplies"
 msgstr "Bürobedarf"
 
-#. content.xml (sheet '📋 Tables')
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Staples"
 msgstr ""
 
@@ -375,29 +377,22 @@ msgid "<1>4. Click </1><2>OK</2>"
 msgstr "<1>4. Klicken Sie auf </1><2>OK</2>"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
-#. Formatting'); content.xml (sheet '📊 Charts')
+#. Formatting'); content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data &
+#. filtering')
 msgid "Keyboard"
 msgstr "Tastatur"
-
-#. content.xml (sheet '📋 Tables'); content.xml (sheet '📊 Charts')
-msgid "10"
-msgstr "10"
 
 #. content.xml (sheet '📋 Tables')
 msgid "5. Your data is now organised as a table"
 msgstr "5. Ihre Daten sind nun in einer Tabelle angeordnet"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
-#. Formatting'); content.xml (sheet '📊 Charts')
+#. Formatting'); content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data &
+#. filtering')
 msgid "Pen"
 msgstr "Stift"
 
-#. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
-#. Formatting'); content.xml (sheet '📊 Charts')
-msgid "100"
-msgstr "100"
-
-#. content.xml (sheet '📋 Tables')
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Bic"
 msgstr ""
 
@@ -433,8 +428,14 @@ msgid ""
 "These tools allow you to customise and manage your table more easily. You "
 "can apply different table styles to improve the visual appearance of your "
 "data. You can also enable or disable options such as header rows, banded "
-"rows, and filter buttons, depending on how you want to display and work with"
-" your data."
+"rows, and filter buttons, depending on how you want to display and work with "
+"your data."
+msgstr ""
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"These features help you keep your table organised, highlight important "
+"information, and work more efficiently with your data."
 msgstr ""
 
 #. content.xml (sheet '📋 Tables')
@@ -450,9 +451,16 @@ msgstr "Pivot-Tabelle"
 #. content.xml (sheet '📋 Tables')
 msgid ""
 "The pivot table (formerly known as DataPilot) allows you to combine, "
-"compare, and analyse large amounts of data. You can view different summaries"
-" of the source data, you can display the details of areas of interest, and "
+"compare, and analyse large amounts of data. You can view different summaries "
+"of the source data, you can display the details of areas of interest, and "
 "you can create reports."
+msgstr ""
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"A table that has been created as a pivot table is an interactive table. Data "
+"can be arranged, rearranged or summarised according to different points of "
+"view."
 msgstr ""
 
 #. content.xml (sheet '📋 Tables')
@@ -482,9 +490,14 @@ msgstr ""
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
+"Conditional formatting automatically changes how cells look based on their "
+"values, helping you quickly spot trends or important data."
+msgstr ""
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
 "In this example, we will apply conditional formatting to highlight key "
-"values in the data and make important information easier to spot at a "
-"glance."
+"values in the data and make important information easier to spot at a glance."
 msgstr ""
 
 #. content.xml (sheet '🎨 Conditional Formatting')
@@ -524,6 +537,29 @@ msgstr "➜Probieren Sie es aus: Lagerbestandsübersicht"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
+"Highlight important inventory data to quickly identify products that are "
+"running low on stock."
+msgstr ""
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"<1>Low Stock</1><2> (less than 20 pcs) → </2><3>Red</3><4> background</4>"
+msgstr ""
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"<1>Medium Stock</1><2> (between 20 and 80 pcs)→ </2><3>Orange</3><4> "
+"background</4>"
+msgstr ""
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"<1>High Stock </1><2>(more than</2><3> </3><4>80 pcs)→ </4><5>Green</5><6> "
+"background</6>"
+msgstr ""
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
 "<1>💡Useful tip: </1><2>To remove formatting, use </2><3>Clear Direct "
 "Formatting</3><4> in the </4><5>Home tab</5><6> or manage and remove rules "
 "in </6><7>Manage Conditional Formatting</7><8> from the </8><9>Format "
@@ -545,8 +581,8 @@ msgstr "📊Diagramm erstellen"
 #. content.xml (sheet '📊 Charts')
 msgid ""
 "Collabora Office lets you present data graphically in a chart so that you "
-"can visually compare data series and view trends in the data. You can insert"
-" charts into spreadsheets, text documents, drawings and presentations."
+"can visually compare data series and view trends in the data. You can insert "
+"charts into spreadsheets, text documents, drawings and presentations."
 msgstr ""
 
 #. content.xml (sheet '📊 Charts')
@@ -565,26 +601,14 @@ msgid "Price per piece [£]"
 msgstr "Preis pro Stück [€]"
 
 #. content.xml (sheet '📊 Charts')
-msgid "900"
-msgstr "900"
-
-#. content.xml (sheet '📊 Charts')
 msgid "<1>2. Open the </1><2>Insert tab </2><3>in the toolbar</3>"
 msgstr ""
 "<1>2. Öffnen Sie die </1><2>Registerkarte „Einfügen“ </2><3>in der "
 "Symbolleiste</3>"
 
 #. content.xml (sheet '📊 Charts')
-msgid "15"
-msgstr "15"
-
-#. content.xml (sheet '📊 Charts')
 msgid "<1>3. Click </1><2>Chart</2>"
 msgstr "<1>3. Klicken Sie auf </1><2>Diagramm</2>"
-
-#. content.xml (sheet '📊 Charts')
-msgid "3"
-msgstr "3"
 
 #. content.xml (sheet '📊 Charts')
 msgid "4. Choose the chart type and style that best fits your data"
@@ -593,18 +617,10 @@ msgstr ""
 "passt"
 
 #. content.xml (sheet '📊 Charts')
-msgid "40"
-msgstr "40"
-
-#. content.xml (sheet '📊 Charts')
 msgid "<1>5. Click </1><2>Finish</2><3> to insert the chart</3>"
 msgstr ""
 "<1>5. Klicken Sie auf </1><2>Fertigstellen</2><3>, um das Diagramm "
 "einzufügen</3>"
-
-#. content.xml (sheet '📊 Charts')
-msgid "1"
-msgstr "1"
 
 #. content.xml (sheet '📊 Charts')
 msgid "6. Your data is now displayed as a chart"
@@ -655,14 +671,21 @@ msgstr "Diagramme bearbeiten"
 
 #. content.xml (sheet '📊 Charts')
 msgid ""
-"To edit a chart, double click on it to activate editing mode. Once selected,"
-" you can use the options in the sidebar or open the context menu (right "
+"To edit a chart, double click on it to activate editing mode. Once selected, "
+"you can use the options in the sidebar or open the context menu (right "
 "click) to modify the chart."
 msgstr ""
 "Um ein Diagramm zu bearbeiten, doppelklicken Sie darauf, um den "
 "Bearbeitungsmodus zu aktivieren. Sobald das Diagramm ausgewählt ist, können "
 "Sie die Optionen in der Seitenleiste nutzen oder das Kontextmenü "
 "(Rechtsklick) öffnen, um das Diagramm zu ändern."
+
+#. content.xml (sheet '📊 Charts')
+msgid ""
+"You can add or adjust chart elements such as titles, axes, and labels, as "
+"well as change the data range or chart type. These tools allow you to "
+"customise the chart and better present your data."
+msgstr ""
 
 #. content.xml (sheet '📊 Charts')
 msgid "Next Chapter:🔍 Data & filtering"
@@ -675,8 +698,8 @@ msgstr "🔍 Daten & Filterung"
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
 "Data and filtering tools help you organise and explore your data more "
-"efficiently. You can quickly sort information or apply filters to focus only"
-" on the data that matters."
+"efficiently. You can quickly sort information or apply filters to focus only "
+"on the data that matters."
 msgstr ""
 "Mit Daten- und Filterungswerkzeugen können Sie Ihre Daten effizienter "
 "organisieren und auswerten. Sie können Informationen schnell sortieren oder "
@@ -710,8 +733,17 @@ msgid "➜Try it: Find low stock items"
 msgstr "➜Probieren Sie es aus: Artikel mit geringem Lagerbestand finden"
 
 #. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"Sort the Quantity [pcs] column to see which items have the lowest stock."
+msgstr ""
+
+#. content.xml (sheet '🔍 Data & filtering')
 msgid "➜Try it: Show only Electronics items"
 msgstr "➜Probieren Sie es aus: Nur Elektronikartikel anzeigen"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "Use the filter in the Category column and select Electronics."
+msgstr ""
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -720,8 +752,8 @@ msgid ""
 "Filter</5><6>. All data will be visible again.</6>"
 msgstr ""
 "<1>💡Nützlicher Tipp: </1><2>Um den Filter zu deaktivieren, wählen Sie eine "
-"beliebige Zelle innerhalb der gefilterten Daten aus, wechseln Sie dann zur</"
-"2><3> Registerkarte „Daten“</3><4> und klicken Sie auf </4><5>„Filter "
+"beliebige Zelle innerhalb der gefilterten Daten aus, wechseln Sie dann "
+"zur</2><3> Registerkarte „Daten“</3><4> und klicken Sie auf </4><5>„Filter "
 "zurücksetzen“</5><6>. Alle Daten sind dann wieder sichtbar.</6>"
 
 #. content.xml (sheet '🔍 Data & filtering')
@@ -732,6 +764,26 @@ msgstr "Weitere Filterungsoptionen"
 msgid "Additional filtering options give you more control over your data."
 msgstr ""
 "Zusätzliche Filterungsoptionen bieten Ihnen mehr Kontrolle über Ihre Daten."
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"<1>Auto Filter</1><2> lets you quickly filter data directly in the table "
+"using simple selections.</2>"
+msgstr ""
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"<1>Standard Filter</1><2> allows you to define ranges that contain values in "
+"specific data fields. You can also combine conditions using logical AND or "
+"OR operators.</2>"
+msgstr ""
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"<1>Advanced Filter</1><2> allows you to define up to eight filter "
+"conditions. You can enter these conditions directly into the sheet for more "
+"precise and flexible filtering.</2>"
+msgstr ""
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Last Chapter: 🤝 Productivity & collaboration"
@@ -766,6 +818,14 @@ msgstr ""
 "Überprüfung von Änderungen und die Abstimmung untereinander erleichtert."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Each user is assigned a unique colour, so you can easily see who is editing "
+"what. You can click on a user’s name or avatar to jump directly to their "
+"cursor and follow their activity in the document. Notifications also inform "
+"you when someone joins or leaves."
+msgstr ""
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Start sharing your document"
 msgstr "Beginnen Sie mit dem Teilen Ihres Dokuments"
 
@@ -787,8 +847,21 @@ msgid "➜Try it: Internal shares"
 msgstr "➜Probieren Sie es aus: Interne Freigaben"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Share files within your organisation. People who already have access to the "
+"document can use the link for quick and easy access."
+msgstr ""
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "➜Try it: External shares"
 msgstr "➜Probieren Sie es aus: Externe Freigaben"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Share files with others outside your organisation via public links and email "
+"addresses. You can also share to Nextcloud accounts on other instances using "
+"their federated cloud ID."
+msgstr ""
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Shortcuts"
@@ -816,7 +889,42 @@ msgstr "⏯Video-Tutorials"
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
 "To continue learning, explore short video introductions that cover "
-"additional features. These videos offer quick guidance and help you build on"
-" what you’ve learned, so you can become more confident and efficient in your"
-" work."
+"additional features. These videos offer quick guidance and help you build on "
+"what you’ve learned, so you can become more confident and efficient in your "
+"work."
 msgstr ""
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+#, fuzzy
+msgid "Check out video tutorials"
+msgstr "⏯Video-Tutorials"
+
+#~ msgid "5"
+#~ msgstr "5"
+
+#~ msgid "20"
+#~ msgstr "20"
+
+#~ msgid "50"
+#~ msgstr "50"
+
+#~ msgid "10"
+#~ msgstr "10"
+
+#~ msgid "100"
+#~ msgstr "100"
+
+#~ msgid "900"
+#~ msgstr "900"
+
+#~ msgid "15"
+#~ msgstr "15"
+
+#~ msgid "3"
+#~ msgstr "3"
+
+#~ msgid "40"
+#~ msgstr "40"
+
+#~ msgid "1"
+#~ msgstr "1"

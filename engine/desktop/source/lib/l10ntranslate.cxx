@@ -16,6 +16,8 @@
 #include <osl/file.hxx>
 #include <rtl/strbuf.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -33,6 +35,7 @@ namespace
 constexpr const char* TEXT_NS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
 constexpr const char* TABLE_NS = "urn:oasis:names:tc:opendocument:xmlns:table:1.0";
 constexpr const char* STYLE_NS = "urn:oasis:names:tc:opendocument:xmlns:style:1.0";
+constexpr const char* FO_NS = "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0";
 constexpr const char* CALCEXT_NS
     = "urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0";
 
@@ -433,7 +436,7 @@ OString getNsAttr(xmlNodePtr pNode, const char* pNsHref, const char* pLocalName)
 
 struct RunNode
 {
-    xmlNodePtr pNode; // the text node (bare run) or span element
+    xmlNodePtr pNode; // the text node (bare run) or span / link element
     bool bIsSpan;
     OString aText;
 };
@@ -466,7 +469,10 @@ UnitState collectRuns(xmlNodePtr pPara, std::vector<RunNode>& rRuns)
             case XML_PI_NODE:
                 break; // invisible: must not split the surrounding bare text
             case XML_ELEMENT_NODE:
-                if (isElement(pChild, TEXT_NS, "span"))
+                // a span and a link (text:a) are both one formatted run: the
+                // element is kept with its attributes and only its text is
+                // replaced
+                if (isElement(pChild, TEXT_NS, "span") || isElement(pChild, TEXT_NS, "a"))
                 {
                     OStringBuffer aText;
                     for (xmlNodePtr pGrand = pChild->children; pGrand; pGrand = pGrand->next)
@@ -480,7 +486,7 @@ UnitState collectRuns(xmlNodePtr pPara, std::vector<RunNode>& rRuns)
                         rRuns.push_back({ pChild, true, aText.makeStringAndClear() });
                 }
                 else
-                    bForbidden = true; // text:s, text:tab, text:a, fields, ...
+                    bForbidden = true; // text:s, text:tab, fields, ...
                 break;
             default:
                 bForbidden = true;
@@ -569,8 +575,9 @@ void rebuildParagraph(xmlNodePtr pPara, const std::vector<RunNode>& rRuns,
 {
     xmlDocPtr pDoc = pPara->doc;
 
-    // <N> addresses the N-th span; untagged text is bare paragraph text,
-    // except in a single-run paragraph, where it takes that run's formatting
+    // <N> addresses the N-th span or link; untagged text is bare paragraph
+    // text, except in a single-run paragraph, where it takes that run's
+    // formatting
     const bool bSingleRun = rRuns.size() == 1;
     std::vector<const RunNode*> aSpanRuns;
     for (const RunNode& rRun : rRuns)
@@ -864,6 +871,114 @@ void rewriteSheetRefAttrs(xmlNodePtr pNode, const std::vector<SheetRename>& rRen
     }
 }
 
+// Text language: the translation is in another language than the source,
+// and the spell checker goes by the language the styles name.
+
+/// One script's language attribute group on style:text-properties, as
+/// xmloff reads it.
+struct LanguageAttrs
+{
+    const char* pNsHref; ///< namespace of the language, country and script attributes
+    const char* pLanguage;
+    const char* pCountry;
+    const char* pScript;
+    const char* pRfcTag; ///< style namespace: the full tag when it is more than language-country
+};
+
+constexpr LanguageAttrs WESTERN_LANGUAGE_ATTRS{ FO_NS, "language", "country", "script",
+                                                "rfc-language-tag" };
+constexpr LanguageAttrs ASIAN_LANGUAGE_ATTRS{ STYLE_NS, "language-asian", "country-asian",
+                                              "script-asian", "rfc-language-tag-asian" };
+constexpr LanguageAttrs COMPLEX_LANGUAGE_ATTRS{ STYLE_NS, "language-complex", "country-complex",
+                                                "script-complex", "rfc-language-tag-complex" };
+
+/// The language a translation is in, as text-properties attribute values.
+struct TextLanguage
+{
+    const LanguageAttrs* pAttrs = nullptr; ///< the group of the script the language is written in
+    OString aLanguage;
+    OString aCountry;
+    OString aScript; ///< empty for a plain language-country locale
+    OString aRfcTag; ///< empty for a plain language-country locale
+};
+
+/// The attribute values for the stream locale rLocale.  A bare language
+/// gets its usual country ("de" becomes de-DE), so the spell checker has a
+/// dictionary to look up; the group is that of the script the language is
+/// written in, so a Chinese translation sets the Asian language and an
+/// Arabic one the complex one.
+bool textLanguageFor(std::string_view rLocale, TextLanguage& rOut)
+{
+    LanguageTag aTag(OStringToOUString(rLocale, RTL_TEXTENCODING_UTF8));
+    aTag.makeFallback();
+    const OUString aLanguage = aTag.getLanguage();
+    if (aLanguage.isEmpty())
+        return false;
+    switch (MsLangId::getScriptType(aTag.getLanguageType()))
+    {
+        case css::i18n::ScriptType::ASIAN:
+            rOut.pAttrs = &ASIAN_LANGUAGE_ATTRS;
+            break;
+        case css::i18n::ScriptType::COMPLEX:
+            rOut.pAttrs = &COMPLEX_LANGUAGE_ATTRS;
+            break;
+        default:
+            rOut.pAttrs = &WESTERN_LANGUAGE_ATTRS;
+            break;
+    }
+    rOut.aLanguage = OUStringToOString(aLanguage, RTL_TEXTENCODING_UTF8);
+    rOut.aCountry = OUStringToOString(aTag.getCountry(), RTL_TEXTENCODING_UTF8);
+    rOut.aScript.clear();
+    rOut.aRfcTag.clear();
+    if (!aTag.isIsoLocale())
+    {
+        rOut.aScript = OUStringToOString(aTag.getScript(), RTL_TEXTENCODING_UTF8);
+        rOut.aRfcTag = OUStringToOString(aTag.getBcp47(), RTL_TEXTENCODING_UTF8);
+    }
+    return true;
+}
+
+void setOrUnsetNsProp(xmlNodePtr pNode, xmlNsPtr pNs, const char* pName, std::string_view rValue)
+{
+    if (rValue.empty())
+        xmlUnsetNsProp(pNode, pNs, BAD_CAST pName);
+    else if (pNs)
+        xmlSetNsProp(pNode, pNs, BAD_CAST pName, BAD_CAST OString(rValue).getStr());
+}
+
+/// Point every text-properties element below pNode that names a language
+/// of rTarget's script at rTarget: the paragraphs keep their styles, so
+/// without this the spell checker would go on checking the translation
+/// against the source language and underline nearly every word.  Only the
+/// target script's group changes; the Latin fragments of a Chinese
+/// translation keep the language the source gave them.  "zxx" (no
+/// linguistic content) is an authoring choice, kept as it is.
+void rewriteTextLanguage(xmlNodePtr pNode, const TextLanguage& rTarget)
+{
+    for (xmlNodePtr pChild = pNode->children; pChild; pChild = pChild->next)
+    {
+        if (pChild->type != XML_ELEMENT_NODE)
+            continue;
+        if (!isElement(pChild, STYLE_NS, "text-properties"))
+        {
+            rewriteTextLanguage(pChild, rTarget);
+            continue;
+        }
+        const LanguageAttrs& rAttrs = *rTarget.pAttrs;
+        xmlAttrPtr pLanguage
+            = xmlHasNsProp(pChild, BAD_CAST rAttrs.pLanguage, BAD_CAST rAttrs.pNsHref);
+        if (!pLanguage || !pLanguage->ns
+            || getNsAttr(pChild, rAttrs.pNsHref, rAttrs.pLanguage) == "zxx")
+            continue;
+        xmlNsPtr pNs = pLanguage->ns;
+        xmlNsPtr pStyleNs = xmlSearchNsByHref(pChild->doc, pChild, BAD_CAST STYLE_NS);
+        xmlSetNsProp(pChild, pNs, BAD_CAST rAttrs.pLanguage, BAD_CAST rTarget.aLanguage.getStr());
+        setOrUnsetNsProp(pChild, pNs, rAttrs.pCountry, rTarget.aCountry);
+        setOrUnsetNsProp(pChild, pNs, rAttrs.pScript, rTarget.aScript);
+        setOrUnsetNsProp(pChild, pStyleNs, rAttrs.pRfcTag, rTarget.aRfcTag);
+    }
+}
+
 bool rewriteXmlMember(const std::vector<sal_uInt8>& rIn, const L10nStream& rStream,
                       std::vector<sal_uInt8>& rOut, std::vector<SheetRename>& rRenames)
 {
@@ -890,6 +1005,9 @@ bool rewriteXmlMember(const std::vector<sal_uInt8>& rIn, const L10nStream& rStre
         rewriteSheetRefAttrs(pRoot, rRenames);
     translateHelpMessageTitles(pRoot, rStream);
     walkParagraphs(pRoot, rStream);
+    TextLanguage aTextLanguage;
+    if (!rStream.aMatchedLocale.isEmpty() && textLanguageFor(rStream.aMatchedLocale, aTextLanguage))
+        rewriteTextLanguage(pRoot, aTextLanguage);
 
     xmlChar* pOut = nullptr;
     int nOut = 0;

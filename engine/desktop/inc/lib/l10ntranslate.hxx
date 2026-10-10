@@ -44,7 +44,10 @@ enum class TranslateResult
     - No "l10n" zip member: byte-identical copy (a no-op in place).
     - Locale matched: marked paragraphs, sheet names and validation
       help-message titles are rewritten with the translations; every "_"
-      marker is stripped.
+      marker is stripped.  The text language the styles name (fo:language
+      and fo:country, or the Asian or complex equivalents for a language of
+      that script) becomes the matched locale's, so spell checking follows
+      the translation.
     - No locale match, an empty rBcp47Language, or a stream that cannot be
       read: only the markers are stripped.
     - Translated before and edited since: the file is left exactly as it is
@@ -78,12 +81,12 @@ enum class UnitState
 /** Derive the translation key from a paragraph given as a standalone XML
     snippet (namespace prefixes "text" and "xlink" are predeclared).
 
-    Runs are one per non-empty text:span child and one per stretch of bare
-    text; a node that renders nothing (a comment, a PI, an empty span) does
-    not split bare text.  Empty text contributes no run.  Exactly one
-    leading "_" is stripped from the first run, dropping it if it becomes
-    empty.  One run yields the bare text as
-    key; with two or more runs, each span is wrapped in span order as
+    Runs are one per non-empty text:span or text:a child and one per
+    stretch of bare text; a node that renders nothing (a comment, a PI, an
+    empty span) does not split bare text.  Empty text contributes no run.
+    Exactly one leading "_" is stripped from the first run, dropping it if
+    it becomes empty.  One run yields the bare text as key; with two or more
+    runs, each span or link is wrapped in document order as
     &lt;1&gt;..&lt;/1&gt;&lt;2&gt;..&lt;/2&gt; while bare text stays untagged.
     A paragraph that is only "_" yields Marked with an empty key.  rKey is
     UTF-8. */
