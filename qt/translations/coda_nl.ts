@@ -184,7 +184,7 @@
     </message>
     <message>
         <source>Close Others</source>
-        <translation>Andere sluiten</translation>
+        <translation>Overige sluiten</translation>
     </message>
     <message>
         <source>Move Tab to New Window</source>
