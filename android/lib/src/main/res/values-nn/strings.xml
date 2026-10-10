@@ -1,3 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="temp_file_saving_disabled">Delt som skriveverna av kjeldeappen. Bruk «Rediger ei kopi» for å gjera endringar.</string>
+    <string name="file_chromeos_read_only">Denne fila kan ikkje lagrast på denne staden, og vert opna skriveverna. Flytt ho til «Play files» for full lese- og skrivetilgang.</string>
+    <string name="storage_permission_required">Det krevst løyve til lagring</string>
+    <string name="all_files_access_title">Opna i skrivevern-modus</string>
+    <string name="all_files_access_message">Appen som delte denne fila, tillét ikkje at endringar vart lagra tilbake til ho.\n\nGje «Tilgang til alle filer» slik at denne appen kan skriva fila der ho er lagra, og du kan redigera ho her.</string>
+    <string name="all_files_access_grant">Tillat tilgang</string>
+    <string name="do_not_ask_again">Ikkje spør igjen</string>
+    <string name="failed_to_save_file">Klarte ikkje lagra endringane i fila</string>
+    <string name="failed_to_load_file">Klarte ikkje finna fila som skal lastast</string>
+    <string name="failed_to_insert_image">Klarte ikkje setja inn bilete</string>
+    <string name="cannot_open_file_chooser">Kan ikkje opna filvelgjaren</string>
+    <string name="preparing_for_the_first_start_after_an_update">Førebur første oppstart etter ei oppdatering.</string>
+    <string name="rate_now">Vurder no</string>
+    <string name="later">Seinare</string>
+    <string name="rate_our_app_title">Takk for at du bruker %1$s!</string>
+    <string name="rate_our_app_text">Viss du likar han, gje oss 5 stjerner i Google Play. Gode omtalar er den beste motivasjonen vår.</string>
+    <string name="loading">Lastar …</string>
+    <string name="exiting">Avsluttar …</string>
+    <string name="restarting">Startar på nytt …</string>
+    <string name="cant_open_the_document">Klarte ikkje opna dokumentet</string>
+    <string name="view_only">Berre vising</string>
+    <string name="edit_copy">Rediger ei kopi</string>
+    <string name="ask_for_copy">Dette dokumentet er skriveverna. Vil du laga ei kopi for redigering?</string>
+    <string name="use_text">Bruk tekstformat</string>
+    <string name="use_odf">Bruk ODF-format</string>
+    <string name="ask_for_convert_odf">Stadfest filformat</string>
+    <string name="convert_odf_message">Dette dokumentet kan innehalda formatering eller innhald som ikkje kan lagrast i det valde filformatet «Tekst».</string>
 </resources>
