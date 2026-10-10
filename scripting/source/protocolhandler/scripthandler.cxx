@@ -19,6 +19,10 @@
 
 #include "scripthandler.hxx"
 
+#include <cstdlib>
+
+#include <comphelper/configuration.hxx>
+
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -257,6 +261,8 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                 std::exception_ptr aFirstCaughtException;
                 try
                 {
+                    if (comphelper::IsFuzzing())
+                        std::abort();
                     invokeResult = xFunc->invoke( inArgs, outIndex, outArgs );
                     aState = css::frame::DispatchResultState::SUCCESS;
                     break;

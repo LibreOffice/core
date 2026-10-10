@@ -19,8 +19,11 @@
 
 #include <config_features.h>
 
+#include <cstdlib>
+
 #include <tools/debug.hxx>
 #include <tools/inetmsg.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -1563,6 +1566,8 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
                 xProps->setPropertyValue(u"Caller"_ustr, uno::Any( aArgs ) );
             }
         }
+        if (comphelper::IsFuzzing())
+            std::abort();
         aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );
     }
     catch ( const uno::Exception& )

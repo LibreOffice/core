@@ -18,9 +18,11 @@
  */
 
 
+#include <cstdlib>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
+#include <comphelper/configuration.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <basic/codecompletecache.hxx>
@@ -1081,6 +1083,9 @@ namespace
 // Run a Basic-subprogram
 void SbModule::Run( SbMethod* pMeth )
 {
+    if (comphelper::IsFuzzing())
+        std::abort();
+
     SAL_INFO("basic","About to run " << pMeth->GetName() << ", vba compatmode is " << mbVBASupport );
 
     static sal_uInt16 nMaxCallLevel = 0;
