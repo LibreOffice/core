@@ -1330,15 +1330,15 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
 #ifndef DISABLE_DYNLOADING
 
-typedef rtl_uString* (*basicide_choose_macro)(void*, void*, bool);
+typedef rtl_uString* (*basicide_choose_macro)(void*, bool);
 
 #else
 
-extern "C" rtl_uString* basicide_choose_macro(void*, void*, bool);
+extern "C" rtl_uString* basicide_choose_macro(void*, bool);
 
 #endif
 
-static OUString ChooseMacro(weld::Window* pParent, const Reference<XModel>& rxLimitToDocument, bool bChooseOnly)
+static OUString ChooseMacro(weld::Window* pParent, bool bChooseOnly)
 {
 #ifndef DISABLE_DYNLOADING
     basicide_choose_macro pSymbol = reinterpret_cast<basicide_choose_macro>(sfx2::getBasctlFunction("basicide_choose_macro"));
@@ -1347,7 +1347,7 @@ static OUString ChooseMacro(weld::Window* pParent, const Reference<XModel>& rxLi
 #endif
 
     // call basicide_choose_macro in basctl
-    rtl_uString* pScriptURL = pSymbol(pParent, rxLimitToDocument.get(), bChooseOnly);
+    rtl_uString* pScriptURL = pSymbol(pParent, bChooseOnly);
     OUString aScriptURL( pScriptURL );
     rtl_uString_release( pScriptURL );
     return aScriptURL;
@@ -1502,7 +1502,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_BASICCHOOSER:
         {
-            rReq.SetReturnValue(SfxStringItem(rReq.GetSlot(), ChooseMacro(rReq.GetFrameWeld(), nullptr, false)));
+            rReq.SetReturnValue(SfxStringItem(rReq.GetSlot(), ChooseMacro(rReq.GetFrameWeld(), false)));
             rReq.Done();
         }
         break;

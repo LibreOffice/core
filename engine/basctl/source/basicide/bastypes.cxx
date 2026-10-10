@@ -757,11 +757,6 @@ bool QueryDelMacro( std::u16string_view rName, weld::Widget* pParent )
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMACRO ), pParent );
 }
 
-bool QueryReplaceMacro( std::u16string_view rName, weld::Widget* pParent )
-{
-    return QueryDel( rName, IDEResId( RID_STR_QUERYREPLACEMACRO ), pParent );
-}
-
 bool QueryDelDialog( std::u16string_view rName, weld::Widget* pParent )
 {
     EnsureIde();

@@ -41,7 +41,6 @@ public:
     enum Mode {
         All = 1,
         ChooseOnly = 2,
-        Recording = 3,
     };
 
 private:
@@ -80,8 +79,6 @@ private:
     std::unique_ptr<weld::Button> m_xDelButton;
     std::unique_ptr<weld::Button> m_xNewButton;
     std::unique_ptr<weld::Button> m_xOrganizeButton;
-    std::unique_ptr<weld::Button> m_xNewLibButton;
-    std::unique_ptr<weld::Button> m_xNewModButton;
 public:
     MacroChooser(weld::Window *pParent);
     virtual ~MacroChooser() override;
@@ -93,7 +90,6 @@ public:
     virtual short       run() override;
 
     void                SetMode (Mode);
-    Mode                GetMode () const { return nMode; }
 };
 
 } // namespace basctl

@@ -70,8 +70,6 @@ MacroChooser::MacroChooser(weld::Window* pParnt)
     , m_xDelButton(m_xBuilder->weld_button(u"delete"_ustr))
     , m_xNewButton(m_xBuilder->weld_button(u"new"_ustr))
     , m_xOrganizeButton(m_xBuilder->weld_button(u"organize"_ustr))
-    , m_xNewLibButton(m_xBuilder->weld_button(u"newlibrary"_ustr))
-    , m_xNewModButton(m_xBuilder->weld_button(u"newmodule"_ustr))
 {
     m_xBasicBox->set_size_request(m_xBasicBox->get_approximate_digit_width() * 30, m_xBasicBox->get_height_rows(18));
     m_xMacroBox->set_size_request(m_xMacroBox->get_approximate_digit_width() * 30, m_xMacroBox->get_height_rows(18));
@@ -84,13 +82,7 @@ MacroChooser::MacroChooser(weld::Window* pParnt)
     m_xDelButton->connect_clicked( LINK( this, MacroChooser, ButtonHdl ) );
     m_xNewButton->connect_clicked( LINK( this, MacroChooser, ButtonHdl ) );
     m_xOrganizeButton->connect_clicked( LINK( this, MacroChooser, ButtonHdl ) );
-
-    // Buttons only for MacroChooser::Recording
-    m_xNewLibButton->connect_clicked( LINK( this, MacroChooser, ButtonHdl ) );
-    m_xNewModButton->connect_clicked( LINK( this, MacroChooser, ButtonHdl ) );
-    m_xNewLibButton->hide();       // default
-    m_xNewModButton->hide();       // default
-    m_xMacroLibsFrame->set_label(IDEResId(RID_STR_MACRO_FROM)); // default
+    m_xMacroLibsFrame->set_label(IDEResId(RID_STR_MACRO_FROM));
 
     m_xMacroNameEdit->connect_changed( LINK( this, MacroChooser, EditModifyHdl ) );
 
@@ -224,7 +216,7 @@ void MacroChooser::EnableButton(weld::Button& rButton, bool bEnable)
 {
     if ( bEnable )
     {
-        if (nMode == ChooseOnly || nMode == Recording)
+        if (nMode == ChooseOnly)
             rButton.set_sensitive(&rButton == m_xRunButton.get());
         else
             rButton.set_sensitive(true);
@@ -389,14 +381,11 @@ void MacroChooser::CheckButtons()
         }
     }
 
-    if (nMode != Recording)
-    {
-        // Run...
-        bool bEnable = pMethod != nullptr;
-        if (nMode != ChooseOnly && StarBASIC::IsRunning())
-            bEnable = false;
-        EnableButton(*m_xRunButton, bEnable);
-    }
+    // Run...
+    bool bEnableRun = pMethod != nullptr;
+    if (nMode != ChooseOnly && StarBASIC::IsRunning())
+        bEnableRun = false;
+    EnableButton(*m_xRunButton, bEnableRun);
 
     // organising still possible?
 
@@ -425,16 +414,6 @@ void MacroChooser::CheckButtons()
             m_xDelButton->hide();
         }
     }
-
-    if (nMode == Recording)
-    {
-        // save button
-        m_xRunButton->set_sensitive(!bProtected && !bReadOnly && !bShare);
-        // new library button
-        m_xNewLibButton->set_sensitive(!bShare);
-        // new module button
-        m_xNewModButton->set_sensitive(!bProtected && !bReadOnly && !bShare);
-    }
 }
 
 IMPL_LINK_NOARG(MacroChooser, MacroDoubleClickHdl, weld::TreeView&, bool)
@@ -454,12 +433,6 @@ IMPL_LINK_NOARG(MacroChooser, MacroDoubleClickHdl, weld::TreeView&, bool)
     }
 
     StoreMacroDescription();
-    if (nMode == Recording)
-    {
-        if (pMethod && !QueryReplaceMacro(pMethod->GetName(), m_xDialog.get()))
-            return true;
-    }
-
     m_xDialog->response(Macro_OkRun);
     return true;
 }
@@ -563,7 +536,7 @@ IMPL_LINK_NOARG(MacroChooser, EditModifyHdl, weld::Entry&, void)
 
 IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
 {
-    // apart from New/Record the Description is done by LoseFocus
+    // apart from New the Description is done by LoseFocus
     if (&rButton == m_xRunButton.get())
     {
         StoreMacroDescription();
@@ -586,22 +559,6 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
                     return;
                 }
             }
-        }
-        else if (nMode == Recording )
-        {
-            if ( !IsValidSbxName(m_xMacroNameEdit->get_text()) )
-            {
-                std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(m_xDialog.get(),
-                                                            VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_BADSBXNAME)));
-                xError->run();
-                m_xMacroNameEdit->select_region(0, -1);
-                m_xMacroNameEdit->grab_focus();
-                return;
-            }
-
-            SbMethod* pMethod = GetMacro();
-            if (pMethod && !QueryReplaceMacro(pMethod->GetName(), m_xDialog.get()))
-                return;
         }
 
         m_xDialog->response(Macro_OkRun);
@@ -698,29 +655,6 @@ IMPL_LINK(MacroChooser, ButtonHdl, weld::Button&, rButton, void)
             }
         }
     }
-    else if (&rButton == m_xNewLibButton.get())
-    {
-        if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()) && !m_xBasicBox->get_iter_first(*m_xBasicBoxIter))
-        {
-            SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
-            return;
-        }
-        EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
-        const ScriptDocument& aDocument( aDesc.GetDocument() );
-        createLibImpl(m_xDialog.get(), aDocument, nullptr, m_xBasicBox.get());
-    }
-    else if (&rButton == m_xNewModButton.get())
-    {
-        if (!m_xBasicBox->get_cursor(m_xBasicBoxIter.get()) && !m_xBasicBox->get_iter_first(*m_xBasicBoxIter))
-        {
-            SAL_WARN("basctl.basicide", "neither cursor set nor root entry to use as fallback");
-            return;
-        }
-        EntryDescriptor aDesc = m_xBasicBox->GetEntryDescriptor(m_xBasicBoxIter.get());
-        const ScriptDocument& aDocument( aDesc.GetDocument() );
-        const OUString& aLibName( aDesc.GetLibName() );
-        createModImpl(m_xDialog.get(), aDocument, *m_xBasicBox, aLibName, OUString(), true);
-    }
     else if (&rButton == m_xOrganizeButton.get())
     {
         StoreMacroDescription();
@@ -800,25 +734,6 @@ void MacroChooser::SetMode (Mode nM)
             EnableButton(*m_xDelButton, false);
             EnableButton(*m_xNewButton, false);
             EnableButton(*m_xOrganizeButton, false);
-            break;
-        }
-
-        case Recording:
-        {
-            m_xRunButton->set_label(IDEResId(RID_STR_RECORD));
-            EnableButton(*m_xDelButton, false);
-            EnableButton(*m_xNewButton, false);
-            EnableButton(*m_xOrganizeButton, false);
-
-            m_xEditButton->hide();
-            m_xDelButton->hide();
-            m_xNewButton->hide();
-            m_xOrganizeButton->hide();
-
-            m_xNewLibButton->show();
-            m_xNewModButton->show();
-            m_xMacroLibsFrame->set_label(IDEResId(RID_STR_SAVE_MACRO_IN));
-
             break;
         }
     }

@@ -26,7 +26,7 @@
 #include <strings.hrc>
 #include "baside2.hxx"
 
-#include <com/sun/star/document/XScriptInvocationContext.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 
 #include <basic/sbmeth.hxx>
 #include <comphelper/processfactory.hxx>
@@ -53,10 +53,9 @@ using namespace ::cpo::uno;
 using namespace ::com::sun::star::container;
 
 extern "C" {
-    SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro(void* pParent, void* pOnlyInDocument_AsXModel, bool bChooseOnly )
+    SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro(void* pParent, bool bChooseOnly )
     {
-        Reference< frame::XModel > aDocument( static_cast< frame::XModel* >( pOnlyInDocument_AsXModel ) );
-        OUString aScriptURL = basctl::ChooseMacro(static_cast<weld::Window*>(pParent), aDocument, bChooseOnly);
+        OUString aScriptURL = basctl::ChooseMacro(static_cast<weld::Window*>(pParent), bChooseOnly);
         rtl_uString* pScriptURL = aScriptURL.pData;
         rtl_uString_acquire( pScriptURL );
 
@@ -225,9 +224,7 @@ namespace
     }
 }
 
-OUString ChooseMacro(weld::Window* pParent,
-                     const uno::Reference< frame::XModel >& rxLimitToDocument,
-                     bool bChooseOnly)
+OUString ChooseMacro(weld::Window* pParent, bool bChooseOnly)
 {
     EnsureIde();
 
@@ -240,12 +237,6 @@ OUString ChooseMacro(weld::Window* pParent,
     if (bChooseOnly || !SvtModuleOptions::IsBasicIDEInstalled())
         aChooser.SetMode(MacroChooser::ChooseOnly);
 
-    if ( !bChooseOnly && rxLimitToDocument.is() )
-    {
-        // Hack!
-        aChooser.SetMode(MacroChooser::Recording);
-    }
-
     short nRetValue = aChooser.run();
 
     GetExtraData()->ChoosingMacro() = false;
@@ -254,12 +245,7 @@ OUString ChooseMacro(weld::Window* pParent,
     {
         case Macro_OkRun:
         {
-            bool bError = false;
-
             pMethod = aChooser.GetMacro();
-            if ( !pMethod && aChooser.GetMode() == MacroChooser::Recording )
-                pMethod = aChooser.CreateMacro();
-
             if ( !pMethod )
                 break;
 
@@ -294,37 +280,6 @@ OUString ChooseMacro(weld::Window* pParent,
             {
                 // document basic
                 aLocation = u"document"_ustr ;
-
-                if ( rxLimitToDocument.is() )
-                {
-                    uno::Reference< frame::XModel > xLimitToDocument( rxLimitToDocument );
-
-                    uno::Reference< document::XEmbeddedScripts > xScripts( rxLimitToDocument, UNO_QUERY );
-                    if ( !xScripts.is() )
-                    {   // the document itself does not support embedding scripts
-                        uno::Reference< document::XScriptInvocationContext > xContext( rxLimitToDocument, UNO_QUERY );
-                        if ( xContext.is() )
-                            xScripts = xContext->getScriptContainer();
-                        if ( xScripts.is() )
-                        {   // but it is able to refer to a document which actually does support this
-                            xLimitToDocument.set( xScripts, UNO_QUERY );
-                            if ( !xLimitToDocument.is() )
-                            {
-                                SAL_WARN_IF(!xLimitToDocument.is(), "basctl.basicide", "basctl::ChooseMacro: a script container which is no document!?" );
-                                xLimitToDocument = rxLimitToDocument;
-                            }
-                        }
-                    }
-
-                    if ( xLimitToDocument != aDocument.getDocument() )
-                    {
-                        // error
-                        bError = true;
-                        std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(nullptr,
-                                                                    VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_ERRORCHOOSEMACRO)));
-                        xError->run();
-                    }
-                }
             }
             else
             {
@@ -333,18 +288,12 @@ OUString ChooseMacro(weld::Window* pParent,
             }
 
             // script URL
-            if ( !bError )
-            {
-                aScriptURL = "vnd.sun.star.script:" + aName + "?language=Basic&location=" + aLocation;
-            }
+            aScriptURL = "vnd.sun.star.script:" + aName + "?language=Basic&location=" + aLocation;
 
-            if ( !rxLimitToDocument.is() )
-            {
-                MacroExecutionData* pExecData = new MacroExecutionData;
-                pExecData->aDocument = std::move(aDocument);
-                pExecData->xMethod = pMethod;   // keep alive until the event has been processed
-                Application::PostUserEvent( LINK( nullptr, MacroExecution, ExecuteMacroEvent ), pExecData );
-            }
+            MacroExecutionData* pExecData = new MacroExecutionData;
+            pExecData->aDocument = std::move(aDocument);
+            pExecData->xMethod = pMethod;   // keep alive until the event has been processed
+            Application::PostUserEvent( LINK( nullptr, MacroExecution, ExecuteMacroEvent ), pExecData );
         }
         break;
     }

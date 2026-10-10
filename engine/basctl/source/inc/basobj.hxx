@@ -68,11 +68,9 @@ namespace basctl
 
     // new methods for macros
 
-    OUString        ChooseMacro(weld::Window* pParent,
-        const cpo::uno::Reference< css::frame::XModel >& rxLimitToDocument,
-        bool bChooseOnly );
-    inline OUString ChooseMacro(weld::Window* pParent, const cpo::uno::Reference<css::frame::XModel>& rLimitToDocument)
-    { return ChooseMacro(pParent, rLimitToDocument, false/*bChooseOnly*/); }
+    OUString        ChooseMacro(weld::Window* pParent, bool bChooseOnly);
+    inline OUString ChooseMacro(weld::Window* pParent)
+    { return ChooseMacro(pParent, false/*bChooseOnly*/); }
 
     /// @throws css::container::NoSuchElementException
     /// @throws cpo::uno::RuntimeException

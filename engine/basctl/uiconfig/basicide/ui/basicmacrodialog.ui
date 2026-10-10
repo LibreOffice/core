@@ -371,44 +371,6 @@
                         <property name="position">4</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkButton" id="newlibrary">
-                        <property name="label" translatable="yes" context="basicmacrodialog|newlibrary">New Library</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="no-show-all">True</property>
-                        <property name="use-underline">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="newlibrary-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|newlibrary">Saves the recorded macro in a new library.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="newmodule">
-                        <property name="label" translatable="yes" context="basicmacrodialog|newmodule">New Module</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="no-show-all">True</property>
-                        <property name="use-underline">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="newmodule-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="basicmacrodialog|extended_tip|newmodule">Saves the recorded macro in a new module.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">6</property>
-                      </packing>
-                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">2</property>
