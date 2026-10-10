@@ -27,6 +27,7 @@
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
+#include <svx/svdpagv.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <com/sun/star/text/XText.hpp>
@@ -1412,6 +1413,46 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testSelectSeveralImages)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pWrtShell->GetSelectedFlyFrames().size());
     CPPUNIT_ASSERT_EQUAL(DynCastSwVirtFlyDrawObj(pSecond)->GetFlyFrame(),
                          pWrtShell->GetSelectedFlyFrame());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testSelectImagesAgainAfterUndoOfDeletion)
+{
+    // After two selected images are deleted with the Delete key and the deletion is undone,
+    // each image can be selected again, by its object and by a click at its centre.
+    createSwDoc("two-images.fodt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrView* pView = pWrtShell->GetDrawView();
+
+    CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0)));
+    CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), SW_ADD_SELECT, pPage->GetObj(1)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pWrtShell->GetSelectedFlyFrames().size());
+
+    pWrtShell->DelRight();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
+
+    pWrtShell->Do(SwWrtShell::UNDO);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pPage->GetObjCount());
+
+    for (size_t nObject = 0; nObject < 2; ++nObject)
+    {
+        SdrObject* pObject = pPage->GetObj(nObject);
+        CPPUNIT_ASSERT(pObject->IsInserted());
+        CPPUNIT_ASSERT(pView->GetSdrPageView()->IsObjMarkable(pObject));
+
+        CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), 0, pObject));
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pWrtShell->GetSelectedFlyFrames().size());
+        CPPUNIT_ASSERT_EQUAL(DynCastSwVirtFlyDrawObj(pObject)->GetFlyFrame(),
+                             pWrtShell->GetSelectedFlyFrame());
+
+        // A click at the centre of the image selects it as well.
+        pWrtShell->UnSelectFrame();
+        CPPUNIT_ASSERT(!pWrtShell->IsFrameSelected());
+        CPPUNIT_ASSERT(pWrtShell->SelectObj(pObject->GetSnapRect().Center()));
+        CPPUNIT_ASSERT_EQUAL(DynCastSwVirtFlyDrawObj(pObject)->GetFlyFrame(),
+                             pWrtShell->GetSelectedFlyFrame());
+    }
 }
 
 } // end of anonymous namespace

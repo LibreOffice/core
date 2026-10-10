@@ -45,6 +45,7 @@ describe(['tagdesktop'], 'Writer multi image selection', function() {
 		const first = {};
 		const second = {};
 		const both = {};
+		const bothAgain = {};
 
 		// The first image is selected right after it is inserted.
 		desktopHelper.insertImage();
@@ -94,5 +95,23 @@ describe(['tagdesktop'], 'Writer multi image selection', function() {
 		cy.cGet('#document-container svg g').should('not.exist');
 		clickAt(win, second);
 		cy.cGet('#document-container svg g').should('not.exist');
+
+		// Undo brings both images back, and they can be selected together again.
+		helper.typeIntoDocument('{ctrl}z');
+		cy.then(function() {
+			return helper.processToIdle(win);
+		});
+		cy.cGet('#document-container svg g').should('exist');
+		clickAt(win, first);
+		cy.cGet('#test-div-shapeHandlesSection').should('exist');
+		cy.then(function() {
+			return helper.waitForTimers(win, 'clicktimer');
+		});
+		clickAt(win, second, { shiftKey: true });
+		readSelectionRect(bothAgain);
+		cy.then(function() {
+			expect(bothAgain.top).to.be.closeTo(both.top, 5);
+			expect(bothAgain.bottom).to.be.closeTo(both.bottom, 5);
+		});
 	});
 });

@@ -3925,6 +3925,14 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     m_rView.AttrChangedNotify(nullptr);
                                     g_bFrameDrag = false;
                                 }
+                                else
+                                {
+                                    // The object has joined the selection, and a drag of the
+                                    // whole selection may start from here, the same as after
+                                    // a click that selects an object. The click is complete.
+                                    ArmFrameDrag(rSh, aDocPos);
+                                    return;
+                                }
                             }
                             else
                             {   if ( rSh.SelectObj( aDocPos ) )

@@ -53,6 +53,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/keycodes.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/ITiledRenderable.hxx>
@@ -4443,6 +4444,59 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSeveralImagesGraphicSelection)
     CPPUNIT_ASSERT_EQUAL(aSelection.Top() + nDeltaY, aMovedSelection.Top());
     CPPUNIT_ASSERT_EQUAL(aSelection.GetWidth(), aMovedSelection.GetWidth());
     CPPUNIT_ASSERT_EQUAL(aSelection.GetHeight(), aMovedSelection.GetHeight());
+}
+
+namespace
+{
+// Clicks at a point in the document the way the browser does, with the given modifier keys.
+void lcl_click(SwXTextDocument& rDocument, const Point& rPoint, int nModifier)
+{
+    rDocument.postMouseEvent(COKitMouseEventType::BUTTONDOWN, rPoint.getX(), rPoint.getY(), 1,
+                             MOUSE_LEFT, nModifier);
+    rDocument.postMouseEvent(COKitMouseEventType::BUTTONUP, rPoint.getX(), rPoint.getY(), 1,
+                             MOUSE_LEFT, nModifier);
+    Scheduler::ProcessEventsToIdle();
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSelectImagesAgainAfterUndoOfDeletion)
+{
+    // After two selected images are deleted and the deletion is undone, each image can be
+    // selected again with a click, and the second one can join with a shift-click.
+    SwXTextDocument* pXTextDocument = createDoc("two-images.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    const Point aFirstCenter(pPage->GetObj(0)->GetSnapRect().Center());
+    const Point aSecondCenter(pPage->GetObj(1)->GetSnapRect().Center());
+
+    lcl_click(*pXTextDocument, aFirstCenter, 0);
+    lcl_click(*pXTextDocument, aSecondCenter, KEY_SHIFT);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pWrtShell->GetSelectedFlyFrames().size());
+
+    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pPage->GetObjCount());
+
+    // The image that the undo did not select on its own.
+    m_ShapeSelection.clear();
+    lcl_click(*pXTextDocument, aSecondCenter, 0);
+    std::vector<SwFlyFrame*> aFlyFrames = pWrtShell->GetSelectedFlyFrames();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aFlyFrames.size());
+    CPPUNIT_ASSERT(aFlyFrames[0]->getFrameArea().Contains(aSecondCenter));
+    CPPUNIT_ASSERT(!m_ShapeSelection.isEmpty());
+    CPPUNIT_ASSERT(m_ShapeSelection != "EMPTY");
+
+    lcl_click(*pXTextDocument, aFirstCenter, 0);
+    aFlyFrames = pWrtShell->GetSelectedFlyFrames();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aFlyFrames.size());
+    CPPUNIT_ASSERT(aFlyFrames[0]->getFrameArea().Contains(aFirstCenter));
+
+    lcl_click(*pXTextDocument, aSecondCenter, KEY_SHIFT);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pWrtShell->GetSelectedFlyFrames().size());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
