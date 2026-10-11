@@ -23,7 +23,9 @@
 /* global JSDialog $ */
 
 
-function _panelTabsHandler(parentContainer, data, builder, tabTooltip, isTabControl) {
+// pages: the tab control JSON and the page position of each tab, undefined for panels
+function _panelTabsHandler(parentContainer, data, builder, tabTooltip, pages) {
+	const isTabControl = pages !== undefined;
 	if (!builder.options.useSetTabs)
 		console.warn('mobile panelTabsHandler: setTabs will be used ignoring useSetTabs property');
 
@@ -75,6 +77,11 @@ function _panelTabsHandler(parentContainer, data, builder, tabTooltip, isTabCont
 		contentDivs[tabIdx] = contentDiv;
 	}
 
+	// The engine shows its selected page, so that tab opens first.
+	let openTab = isTabControl ? pages.positions.indexOf(pages.selected) : -1;
+	if (openTab === -1)
+		openTab = 0;
+
 	if (builder.wizard) {
 		builder.wizard.setTabs(tabsContainer, builder);
 
@@ -84,10 +91,22 @@ function _panelTabsHandler(parentContainer, data, builder, tabTooltip, isTabCont
 				builder, t, tabs, contentDivs, labels);
 			$(tabs[t]).click(fn);
 		}
+
+		if (isTabControl && !pages.control.noCoreEvents) {
+			for (let tab = 0; tab < tabs.length; tab++) {
+				$(tabs[tab]).click(function() {
+					// A tap on the open tab leaves the engine on the page it already shows.
+					if (tab === openTab)
+						return;
+					openTab = tab;
+					builder.callback('tabcontrol', 'selecttab', pages.control, pages.positions[tab], builder);
+				});
+			}
+		}
 	} else {
 		window.app.console.debug('Builder used outside of mobile wizard: please implement the click handler');
 	}
-	$(tabs[0]).click();
+	$(tabs[openTab]).click();
 	builder.wizard.goLevelDown(contentsContainer);
 
 	return false;
@@ -105,11 +124,14 @@ function _tabsToPanelConverter(parentContainer, data, builder, tabTooltip) {
 	}
 	var isMultiTabJSON = tabs > 1;
 
+	const pagePositions = [];
+	let selectedPage;
+
 	if (data.tabs) {
 		for (tabIdx = 0; data.tabs && tabIdx < data.tabs.length; tabIdx++) {
 			var isSelectedTab = data.selected == data.tabs[tabIdx].id;
 			if (isSelectedTab) {
-				var singleTabId = tabIdx;
+				selectedPage = tabIdx;
 			}
 		}
 	}
@@ -123,6 +145,7 @@ function _tabsToPanelConverter(parentContainer, data, builder, tabTooltip) {
 				continue;
 
 			tabObjects[tabId].text = data.tabs[tabId].text;
+			pagePositions.push(tabId);
 			tabId++;
 		}
 	} else {
@@ -132,12 +155,14 @@ function _tabsToPanelConverter(parentContainer, data, builder, tabTooltip) {
 			if (tab.type !== 'tabpage' && !data.vertical)
 				continue;
 
-			tabObjects[singleTabId].text = data.tabs[singleTabId].text;
+			tabObjects[0].text = data.tabs[selectedPage].text;
+			pagePositions.push(selectedPage);
 			break;
 		}
 	}
 
-	_panelTabsHandler(parentContainer, tabObjects, builder, tabTooltip, true);
+	_panelTabsHandler(parentContainer, tabObjects, builder, tabTooltip,
+		{ control: data, positions: pagePositions, selected: selectedPage });
 
 	return false;
 }
