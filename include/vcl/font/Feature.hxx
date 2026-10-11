@@ -111,8 +111,8 @@ struct Feature
     OUString getCodeNumericPart() const
     {
         if (hasCodeNumericPart())
-            return OUStringChar(char((m_nCode >> 8) & 0xFF))
-                   + OUStringChar(char((m_nCode >> 0) & 0xFF));
+            return OUString::number((((m_nCode >> 8) & 0xFF) - '0') * 10
+                                    + (((m_nCode >> 0) & 0xFF) - '0'));
         return OUString();
     }
 
