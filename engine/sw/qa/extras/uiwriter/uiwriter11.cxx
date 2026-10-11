@@ -21,6 +21,11 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+#include <cppuhelper/implbase.hxx>
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
@@ -1572,6 +1577,74 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testAccessibleSelectionOfSeveralImages)
     }
     CPPUNIT_ASSERT(xParagraphSelection.is());
     CPPUNIT_ASSERT_EQUAL(sal_Int64(0), xParagraphSelection->getSelectedAccessibleChildCount());
+}
+
+// Collects the children that an accessible context reports as newly selected.
+class SelectionEventListener : public cppu::WeakImplHelper<accessibility::XAccessibleEventListener>
+{
+public:
+    std::vector<uno::Reference<accessibility::XAccessible>> m_aSelectedChildren;
+
+    void notifyEvent(const accessibility::AccessibleEventObject& rEvent) override
+    {
+        if (rEvent.EventId != accessibility::AccessibleEventId::SELECTION_CHANGED)
+            return;
+        uno::Reference<accessibility::XAccessible> xChild;
+        rEvent.NewValue >>= xChild;
+        m_aSelectedChildren.push_back(xChild);
+    }
+
+    void disposing(const lang::EventObject&) override {}
+};
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testAccessibleEventForImageJoiningSelection)
+{
+    // An image that joins the selection is announced to the document's accessible as a newly
+    // selected child, the same as the first selected image.
+    createSwDoc("two-images.fodt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+
+    uno::Reference<accessibility::XAccessibleContext> xDocumentContext
+        = pWrtShell->GetView().GetEditWin().GetAccessible()->getAccessibleContext();
+    uno::Reference<accessibility::XAccessible> xLeftImage;
+    uno::Reference<accessibility::XAccessible> xRightImage;
+    for (sal_Int64 nIndex = 0; nIndex < xDocumentContext->getAccessibleChildCount(); ++nIndex)
+    {
+        uno::Reference<accessibility::XAccessible> xChild = xDocumentContext->getAccessibleChild(nIndex);
+        if (xChild->getAccessibleContext()->getAccessibleRole() != accessibility::AccessibleRole::GRAPHIC)
+            continue;
+        uno::Reference<accessibility::XAccessibleComponent> xComponent(xChild->getAccessibleContext(),
+                                                                       uno::UNO_QUERY_THROW);
+        if (!xLeftImage.is() || xComponent->getBounds().X < uno::Reference<accessibility::XAccessibleComponent>(
+                xLeftImage->getAccessibleContext(), uno::UNO_QUERY_THROW)->getBounds().X)
+        {
+            xRightImage = xLeftImage;
+            xLeftImage = xChild;
+        }
+        else
+            xRightImage = xChild;
+    }
+    CPPUNIT_ASSERT(xLeftImage.is());
+    CPPUNIT_ASSERT(xRightImage.is());
+
+    rtl::Reference<SelectionEventListener> xListener(new SelectionEventListener);
+    uno::Reference<accessibility::XAccessibleEventBroadcaster> xBroadcaster(xDocumentContext,
+                                                                             uno::UNO_QUERY_THROW);
+    xBroadcaster->addAccessibleEventListener(xListener);
+
+    CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0)));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), xListener->m_aSelectedChildren.size());
+    CPPUNIT_ASSERT_EQUAL(xLeftImage.get(), xListener->m_aSelectedChildren[0].get());
+
+    CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), SW_ADD_SELECT, pPage->GetObj(1)));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), xListener->m_aSelectedChildren.size());
+    CPPUNIT_ASSERT_EQUAL(xRightImage.get(), xListener->m_aSelectedChildren[1].get());
+
+    xBroadcaster->removeAccessibleEventListener(xListener);
 }
 
 } // end of anonymous namespace

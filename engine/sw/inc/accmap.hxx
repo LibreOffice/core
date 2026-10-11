@@ -109,6 +109,9 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
     std::unique_ptr<SwAccPreviewData> mpPreview;
 
     unotools::WeakReference< SwAccessibleContext > mxCursorContext;
+    /// The accessible contexts of the selected fly frames beyond the first one, which the cursor
+    /// context stands for. Each of them is told when it joins or leaves the selection.
+    std::vector< unotools::WeakReference< SwAccessibleContext > > maOtherSelectedFlyContexts;
 
     bool mbShapeSelected;
 

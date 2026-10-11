@@ -2316,31 +2316,59 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
     const bool bOldShapeSelected = mbShapeSelected;
     mbShapeSelected = bShapeSelected;
 
+    // The context of a frame, created on the way when nothing has asked for it so far.
+    auto lcl_getOrCreateContext = [this](const SwFrame* pFrame) -> rtl::Reference<SwAccessibleContext>
+    {
+        SwAccessibleContextMap::iterator aIter = maFrameMap.find(pFrame);
+        if (aIter != maFrameMap.end())
+            return (*aIter).second;
+
+        SwRect rcEmpty;
+        const SwTabFrame* pTabFrame = pFrame->FindTabFrame();
+        if (pTabFrame)
+        {
+            InvalidatePosOrSize(pTabFrame, nullptr, nullptr, rcEmpty);
+        }
+        else
+        {
+            InvalidatePosOrSize(pFrame, nullptr, nullptr, rcEmpty);
+        }
+
+        aIter = maFrameMap.find(pFrame);
+        if (aIter != maFrameMap.end())
+            return (*aIter).second;
+        return nullptr;
+    };
+
+    // The fly frames selected beside the first one. Each one that joined and each one that left
+    // is told below, the first one through the cursor context.
+    std::vector<rtl::Reference<SwAccessibleContext>> aOldOtherFlyAccs;
+    for (const auto& rxWeak : maOtherSelectedFlyContexts)
+    {
+        rtl::Reference<SwAccessibleContext> xOther(rxWeak);
+        if (xOther.is())
+            aOldOtherFlyAccs.push_back(xOther);
+    }
+    maOtherSelectedFlyContexts.clear();
+    std::vector<rtl::Reference<SwAccessibleContext>> aOtherFlyAccs;
+    if (auto pFESh = dynamic_cast<const SwFEShell*>(&rVSh))
+    {
+        const std::vector<SwFlyFrame*> aFlyFrames = pFESh->GetSelectedFlyFrames();
+        for (size_t i = 1; i < aFlyFrames.size(); ++i)
+        {
+            rtl::Reference<SwAccessibleContext> xOther = lcl_getOrCreateContext(aFlyFrames[i]);
+            if (xOther.is())
+            {
+                aOtherFlyAccs.push_back(xOther);
+                maOtherSelectedFlyContexts.emplace_back(xOther.get());
+            }
+        }
+    }
+
     rtl::Reference <SwAccessibleContext> xAcc;
     if (pAccFrame)
     {
-        SwAccessibleContextMap::iterator aIter = maFrameMap.find(pAccFrame);
-        if (aIter != maFrameMap.end())
-            xAcc = (*aIter).second;
-        else
-        {
-            SwRect rcEmpty;
-            const SwTabFrame* pTabFrame = pAccFrame->FindTabFrame();
-            if (pTabFrame)
-            {
-                InvalidatePosOrSize(pTabFrame, nullptr, nullptr, rcEmpty);
-            }
-            else
-            {
-                InvalidatePosOrSize(pAccFrame, nullptr, nullptr, rcEmpty);
-            }
-
-            aIter = maFrameMap.find(pAccFrame);
-            if (aIter != maFrameMap.end())
-            {
-                xAcc = (*aIter).second;
-            }
-        }
+        xAcc = lcl_getOrCreateContext(pAccFrame);
 
         // For cells, some extra thoughts are necessary,
         // because invalidating the cursor for one cell
@@ -2446,6 +2474,16 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
         InvalidateCursorPosition( xOldAcc );
     if( bOldShapeSelected || bShapeSelected )
         InvalidateShapeSelection();
+    for (const auto& rxOldOther : aOldOtherFlyAccs)
+    {
+        if (rxOldOther != xAcc
+            && std::find(aOtherFlyAccs.begin(), aOtherFlyAccs.end(), rxOldOther) == aOtherFlyAccs.end()
+            && rxOldOther->GetFrame())
+            InvalidateCursorPosition( rxOldOther );
+    }
+    for (const auto& rxOther : aOtherFlyAccs)
+        InvalidateCursorPosition( rxOther );
+    // The first selected fly frame comes last, so that it stays the cursor context.
     if( xAcc.is() )
         InvalidateCursorPosition( xAcc );
 
