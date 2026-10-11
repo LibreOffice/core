@@ -30,8 +30,8 @@
 namespace vcl
 {
     //= WizardPageImplData
-    OWizardPage::OWizardPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID)
-        : BuilderPage(pPage, pController, rUIXMLDescription, rID)
+    OWizardPage::OWizardPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID, bool bMobile)
+        : BuilderPage(pPage, pController, rUIXMLDescription, rID, bMobile)
     {
     }
 

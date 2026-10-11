@@ -72,7 +72,7 @@ namespace vcl
     class VCL_DLLPUBLIC OWizardPage : public BuilderPage, public IWizardPageController
     {
     public:
-        OWizardPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID);
+        OWizardPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rID, bool bMobile = false);
         virtual ~OWizardPage() override;
 
         // IWizardPageController overridables
