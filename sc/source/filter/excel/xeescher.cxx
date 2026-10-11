@@ -166,7 +166,7 @@ void lcl_SetFromToClamped( sal_Int32 nRow, sal_Int32 nCol, sal_Int32 nColOff, sa
 void lcl_GetFromTo( const XclExpRoot& rRoot, const tools::Rectangle &aRect, sal_Int32 nTab, tools::Rectangle &aFrom, tools::Rectangle &aTo, bool bInEMU = false )
 {
     sal_Int32 nCol = 0, nRow = 0;
-    sal_Int32 nColOff = 0, nRowOff= 0;
+    sal_Int32 nColOff = 0, nRowOff = 0;
 
     const bool bRTL = rRoot.GetDoc().IsNegativePage( nTab );
     if (!bRTL)
@@ -1897,7 +1897,7 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
         // TODO: get the correct chart number
     }
 
-    pDrawing->singleElement( FSNS( XML_xdr, XML_clientData)
+    pDrawing->singleElement( FSNS( XML_xdr, XML_clientData )
             // OOXTODO: XML_fLocksWithSheet
             // OOXTODO: XML_fPrintsWithSheet
     );
@@ -2014,7 +2014,7 @@ void XclExpNote::Save( XclExpStream& rStrm )
     {
         case EXC_BIFF5:
         {
-            // write the NOTE record directly, there may be the need to create more than one
+            // write the NOTE record directly, there may be a need to create more than one
             const char* pcBuffer = maNoteText.getStr();
             sal_uInt16 nCharsLeft = static_cast< sal_uInt16 >( maNoteText.getLength() );
 

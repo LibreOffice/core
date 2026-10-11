@@ -937,7 +937,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf146066)
 
     uno::Reference<drawing::XShape> xYAxisShape = getShapeByName(
         xShapes, u"CID/D=0:CS=0:Axis=1,0"_ustr, // Y Axis
-        // Axis occurs twice in chart xshape representation so need to get the one related to labels
+        // Axis occurs twice in chart xshape representation so we need to get the one related to labels
         [](const uno::Reference<drawing::XShape>& rXShape) -> bool {
             uno::Reference<drawing::XShapes> xAxisShapes(rXShape, uno::UNO_QUERY);
             CPPUNIT_ASSERT(xAxisShapes.is());
@@ -1073,7 +1073,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testAngleUnits)
         CPPUNIT_ASSERT(xAxis.is());
         lcl_assertAngles(xAxis, fExpYAxisLabelAngle, fExpYAxisTitleAngle);
 
-        //z-axis
+        // z-axis
         xAxis = getAxisFromDoc(xChartDoc, 0, 2, 0);
         CPPUNIT_ASSERT(xAxis.is());
         lcl_assertAngles(xAxis, fExpZAxisLabelAngle, fExpZAxisTitleAngle);
@@ -1085,7 +1085,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf166428)
     // The file was generated in ODF 1.3 by LO 24.8
     loadFromFile(u"ods/tdf166428_Low_High_StockChart_LO248.ods");
 
-    // The attribute table:cell-range-address does not exist in ODF 1.4. and therefore may not
+    // The attribute table:cell-range-address does not exist in ODF 1.4 and therefore may not
     // be written.
     saveAndReload(TestFilter::ODS);
     xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/content.xml"_ustr);
