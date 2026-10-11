@@ -297,6 +297,10 @@
      e.g. Are you sure you want to delete the 3 selected sheets? */
 #define STR_QUERY_DELTAB                        NNC_("STR_QUERY_DELTAB", "Are you sure you want to delete the selected sheet?", "Are you sure you want to delete the %d selected sheets?")
 #define STR_QUERY_DELSCENARIO                   NC_("STR_QUERY_DELSCENARIO", "Are you sure you want to delete the selected scenario?")
+/* To translators: %d will be replaced by the number of hidden sheets
+     e.g. Additionally, 3 hidden sheets are also selected. */
+#define STR_HIDDEN_SHEETS_SELECTED              NNC_("STR_HIDDEN_SHEETS_SELECTED", "Additionally, a hidden sheet is selected.", "Additionally, %d hidden sheets are selected.")
+#define STR_SELECTALLSHEETS_TITLE               NC_("STR_SELECTALLSHEETS_TITLE", "Select All Sheets")
 #define STR_EXPORT_ASCII                        NC_("STR_EXPORT_ASCII", "Export Text File")
 #define STR_IMPORT_LOTUS                        NC_("STR_IMPORT_LOTUS", "Import Lotus files")
 #define STR_IMPORT_DBF                          NC_("STR_IMPORT_DBF", "Import dBASE files")

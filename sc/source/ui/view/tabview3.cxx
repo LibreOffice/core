@@ -2036,6 +2036,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         rMark.SelectOneTable( nTab );
         rBindings.Invalidate( FID_FILL_TAB );
         rBindings.Invalidate( FID_TAB_DESELECTALL );
+        aViewData.GetViewShell()->RemoveInfoBarSelectAllSheets();
     }
 
     bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;

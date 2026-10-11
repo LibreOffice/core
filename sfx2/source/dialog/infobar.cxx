@@ -490,6 +490,8 @@ bool SfxInfoBarContainerWindow::isInfobarEnabled(std::u16string_view sId)
         return officecfg::Office::UI::Infobar::Enabled::AutoCorrLeadTrail::get();
     if (sId == u"VCL_gen")
         return officecfg::Office::UI::Infobar::Enabled::WarnGenericVCL::get();
+    if (sId == u"selectallsheets_hiddensheets")
+        return officecfg::Office::UI::Infobar::Enabled::HiddenSheetsSelected::get();
 
     return true;
 }

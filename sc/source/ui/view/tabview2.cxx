@@ -1314,8 +1314,24 @@ void ScTabView::SelectAllTables()
 
     if (nCount>1)
     {
+        SCTAB nHiddenSheetsCount = 0;
         for (SCTAB i=0; i<nCount; i++)
-            rMark.SelectTable( i, true );
+        {
+            if ( rDoc.IsVisible( i ) )
+            {
+                rMark.SelectTable( i, true );
+            }
+            else
+            {
+                rMark.SelectTable( i, true );
+                ++nHiddenSheetsCount;
+            }
+        }
+        // if some hidden sheets are selected, warn user
+        if ( nHiddenSheetsCount > 0 )
+        {
+            aViewData.GetViewShell()->AppendInfoBarSelectAllSheets( nHiddenSheetsCount );
+        }
 
         aViewData.GetDocShell()->PostPaintExtras();
         SfxBindings& rBind = aViewData.GetBindings();
@@ -1333,6 +1349,7 @@ void ScTabView::DeselectAllTables()
 
     for (SCTAB i=0; i<nCount; i++)
         rMark.SelectTable( i, ( i == nTab ) );
+    aViewData.GetViewShell()->RemoveInfoBarSelectAllSheets();
 
     aViewData.GetDocShell()->PostPaintExtras();
     SfxBindings& rBind = aViewData.GetBindings();

@@ -232,6 +232,7 @@ private:
     DECL_LINK( FormControlActivated, LinkParamNone*, void );
     DECL_LINK( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
     DECL_LINK( GoToRefErrorHdl, weld::Button&, void );
+    DECL_LINK( DontShowAgainHdl, weld::Button&, void );
 
 protected:
     virtual void    Activate(bool bMDI) override;
@@ -497,6 +498,9 @@ public:
     const std::shared_ptr<ScCondFormatDlgData>& getScCondFormatDlgData() const { return m_pScCondFormatDlgData; }
 
     void SetInsertWizardUndoMark();
+
+    void AppendInfoBarSelectAllSheets( const SCTAB nHiddenSheetsCount );
+    void RemoveInfoBarSelectAllSheets();
 
 private:
     void ExecuteMoveTable( SfxRequest& rReq );

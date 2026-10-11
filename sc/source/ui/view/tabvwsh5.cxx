@@ -26,6 +26,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <osl/diagnose.h>
+#include <vcl/svapp.hxx>
 
 #include <tabvwsh.hxx>
 #include <global.hxx>
@@ -40,7 +41,10 @@
 #include <svl/sharedstring.hxx>
 #include <sfx2/infobar.hxx>
 #include <officecfg/Office/Calc.hxx>
+#include <officecfg/Office/UI/Infobar.hxx>
+#include <globstr.hrc>
 #include <strings.hrc>
+#include <sfx2/strings.hrc>
 #include <scresid.hxx>
 #include <brdcst.hxx>
 
@@ -450,6 +454,38 @@ IMPL_LINK_NOARG(ScTabViewShell, GoToRefErrorHdl, weld::Button&, void)
     SetTabNo(m_aRefErrorCell.Tab());
     AlignToCursor(m_aRefErrorCell.Col(), m_aRefErrorCell.Row(), SC_FOLLOW_JUMP);
     SetCursor(m_aRefErrorCell.Col(), m_aRefErrorCell.Row());
+}
+
+void ScTabViewShell::AppendInfoBarSelectAllSheets( const SCTAB nHiddenSheetsCount )
+{
+    OUString sHiddenSheetsCount = Application::GetSettings().GetUILocaleDataWrapper().getNum( nHiddenSheetsCount, 0 );
+    OUString sInfoMsg = ScResId( STR_HIDDEN_SHEETS_SELECTED, nHiddenSheetsCount ).replaceAll( "%d", sHiddenSheetsCount );
+    auto pInfoBar = GetViewFrame().AppendInfoBar(
+                        u"selectallsheets_hiddensheets"_ustr,
+                        ScResId( STR_SELECTALLSHEETS_TITLE ),
+                        sInfoMsg,
+                        InfobarType::INFO,
+                        true);
+    if (pInfoBar) // pInfoBar is null if InfoBar is not enabled
+    {
+        weld::Button& rBtnNoShowAgain = pInfoBar->addButton();
+        rBtnNoShowAgain.set_label( ScResId( STR_NOSHOWAGAIN ) );
+        rBtnNoShowAgain.connect_clicked( LINK( this, ScTabViewShell, DontShowAgainHdl ) );
+    }
+}
+
+IMPL_LINK_NOARG(ScTabViewShell, DontShowAgainHdl, weld::Button&, void)
+{
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::UI::Infobar::Enabled::HiddenSheetsSelected::set(false, batch);
+    batch->commit();
+    RemoveInfoBarSelectAllSheets();
+}
+
+void ScTabViewShell::RemoveInfoBarSelectAllSheets()
+{
+    GetViewFrame().RemoveInfoBar( u"selectallsheets_hiddensheets" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

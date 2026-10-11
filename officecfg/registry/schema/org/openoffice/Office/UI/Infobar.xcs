@@ -78,6 +78,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="HiddenSheetsSelected" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Whether an Infobar is shown when hidden sheets are selected.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>
