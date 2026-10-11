@@ -26,6 +26,7 @@
 #include <unobaseclass.hxx>
 #include <fmtanchr.hxx>
 #include <flyfrm.hxx>
+#include <frameformats.hxx>
 #include <svx/svdview.hxx>
 #include <ndtxt.hxx>
 #include <txtfld.hxx>
@@ -442,6 +443,10 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
                 mxDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
                 for (SwFlyFrameFormat* pFlyFormat : aFormats)
                 {
+                    // A deletion with change tracking may rewrite anchors, so a format
+                    // collected above is used only while the document still holds it.
+                    if (!mxDoc->GetSpzFrameFormats()->IsAlive(pFlyFormat))
+                        continue;
                     SwFlyFrame* pFlyFrame = pFlyFormat->GetFrame();
                     if (!pFlyFrame)
                         continue;
