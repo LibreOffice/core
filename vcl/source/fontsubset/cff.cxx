@@ -1995,6 +1995,8 @@ bool CffContext::convertOneTypeOp()
                 {
                     if (!nMaskBit)
                     {
+                        if (mpReadPtr >= mpReadEnd)
+                            return false;
                         nMaskByte = *(mpReadPtr++);
                         nMaskBit = 0x80;
                     }
@@ -2021,6 +2023,8 @@ bool CffContext::convertOneTypeOp()
                 {
                     if (!nMaskBit)
                     {
+                        if (mpReadPtr >= mpReadEnd)
+                            return false;
                         nMaskByte = *(mpReadPtr++);
                         nMaskBit = 0x80;
                     }
