@@ -65,7 +65,6 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(rReq.GetFrameWeld(), &aNewAttr, pView));
             auto xRequest = std::make_shared<SfxRequest>(rReq);
-            rReq.Ignore(); // the 'old' request is not relevant any more
             pDlg->StartExecuteAsync(
                 [pDlg, xRequest=std::move(xRequest), pView, pSh] (sal_Int32 nResult)->void
                 {

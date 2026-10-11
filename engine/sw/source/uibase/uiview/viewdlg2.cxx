@@ -69,7 +69,6 @@ void SwView::ExecDlgExt(SfxRequest& rReq)
             VclPtr<AbstractSignatureLineDialog> pDialog(pFact->CreateSignatureLineDialog(
                 GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_SIGNATURELINE));
             auto xRequest = std::make_shared<SfxRequest>(rReq);
-            rReq.Ignore(); // the 'old' request is not relevant any more
             pDialog->StartExecuteAsync(
                 [pDialog, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
                 {

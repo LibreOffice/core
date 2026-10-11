@@ -41,7 +41,6 @@ requires(std::is_invocable_v<Fn, sal_Int32, SfxRequest&>) void ExecDialogPerRequ
                 endDialogFn(result, *pRequest);
                 dlg->disposeOnce();
             });
-        req.Ignore();
     }
 }
 }

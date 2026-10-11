@@ -142,10 +142,6 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
             }
             if( bDone )
                 rReq.Done();
-            else
-            {
-                rReq.Ignore();
-            }
         }
         break;
 
@@ -178,7 +174,6 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           SwResId(STR_SCAN_NOSOURCE)));
                 xBox->run();
-                rReq.Ignore();
             }
             else
             {

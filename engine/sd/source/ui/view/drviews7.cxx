@@ -1936,7 +1936,6 @@ void DrawViewShell::Execute (SfxRequest& rReq)
                 pViewFrame->ToggleChildWindow(SID_SPELL_DIALOG);
 
             pViewFrame->GetBindings().Invalidate(SID_SPELL_DIALOG);
-            rReq.Ignore ();
         }
         break;
 

@@ -519,9 +519,6 @@ const cpo::uno::Reference< css::frame::XFrame >&  SfxFrame::GetFrameInterface() 
 void SfxFrame::SetFrameInterface_Impl( const cpo::uno::Reference< css::frame::XFrame >& rFrame )
 {
     m_pImpl->xFrame = rFrame;
-    cpo::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
-    if ( !rFrame.is() && GetCurrentViewFrame() )
-        GetCurrentViewFrame()->GetBindings().SetRecorder_Impl( xRecorder );
 }
 
 void SfxFrame::Appear()

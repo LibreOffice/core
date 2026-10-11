@@ -224,7 +224,6 @@ void ScTabViewShell::ExecGoToTab( SfxRequest& rReq, SfxBindings& rBindings )
     else            // command from Menu: ask for nTab
     {
         auto xRequest = std::make_shared<SfxRequest>(rReq);
-        rReq.Ignore();
 
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
@@ -261,10 +260,6 @@ void ScTabViewShell::ExecGoToTab( SfxRequest& rReq, SfxBindings& rBindings )
                         xRequest->Done();
                 }
             }
-            else
-            {
-                xRequest->Ignore();
-            }
             pDlg->disposeOnce();
         });
     }
@@ -295,7 +290,6 @@ void ScTabViewShell::ExecProtectTable( SfxRequest& rReq )
             bNewProtection = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         if( bNewProtection == bOldProtection )
         {
-            rReq.Ignore();
             return;
         }
 
@@ -318,8 +312,6 @@ void ScTabViewShell::ExecProtectTable( SfxRequest& rReq )
                 pNewProtect->setPassword(aPassword);
                 ProtectSheet(nTab, *pNewProtect);
             }
-            // Skip recording, so that the password does not end up in a recorded macro.
-            rReq.Ignore();
             FinishProtectTable();
             return;
         }
@@ -336,7 +328,6 @@ void ScTabViewShell::ExecProtectTable( SfxRequest& rReq )
             if (!pReqArgs)
             {
                 xRequest = std::make_shared<SfxRequest>(rReq);
-                rReq.Ignore(); // the 'old' request is not relevant any more
             }
 
             OUString aText( ScResId(SCSTR_PASSWORDOPT) );
@@ -381,7 +372,6 @@ void ScTabViewShell::ExecProtectTable( SfxRequest& rReq )
         if (!pReqArgs)
         {
             xRequest = std::make_shared<SfxRequest>(rReq);
-            rReq.Ignore(); // the 'old' request is not relevant any more
         }
 
         auto pDlg = std::make_shared<ScTableProtectionDlg>(GetFrameWeld());
@@ -718,9 +708,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                     if( bNothing )
                     {
-                        if (rReq.IsAPI())
-                            rReq.Ignore();      // if macro, then nothing
-                        else
+                        if (!rReq.IsAPI())
                             rReq.Done();        // then at least paint it
                     }
                     else
@@ -812,7 +800,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if ( bFound )
                     pViewFrame->GetFrame().Appear();
 
-                rReq.Ignore();//XXX is handled by SFX
             }
             break;
 
@@ -1425,8 +1412,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     pDlg.disposeAndClear();
                     rReq.AppendItem( SfxIntegerListItem( SID_SELECT_TABLES, std::vector(aIndexList) ) );
                 }
-                else
-                    rReq.Ignore();
             }
 
             if ( !aIndexList.empty() )
@@ -1559,7 +1544,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 // by every view of the sheet, so such a view can read it but not move it.
                 if (IsKitReadOnlyView() || GetViewData().GetDocShell()->IsReadOnly())
                 {
-                    rReq.Ignore();
                     break;
                 }
 
@@ -1676,7 +1660,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if( pReqArgs->HasItem( FID_PROTECT_DOC, &pItem ) &&
                         static_cast<const SfxBoolItem*>(pItem)->GetValue() == rDoc.IsDocProtected() )
                     {
-                        rReq.Ignore();
                         break;
                     }
                 }
@@ -1782,7 +1765,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 }
             });
 
-            rReq.Ignore();
         }
         break;
 

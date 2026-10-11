@@ -503,7 +503,6 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     bRes = rVFrame.GetChildWindow( nSlot ) != nullptr;
                     Invalidate(rReq.GetSlot());
                     Invalidate(FN_INSERT_FIELD_CTRL);
-                    rReq.Ignore();
                 }
             }
             rReq.SetReturnValue(SfxBoolItem( nSlot, bRes ));
@@ -521,7 +520,6 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             SwFieldDlgWrapper *pWrp = static_cast<SwFieldDlgWrapper*>(rVFrame.GetChildWindow(nId));
             if (pWrp)
                 pWrp->ShowReferencePage();
-            rReq.Ignore();
         }
         break;
         case FN_DELETE_COMMENT:
@@ -853,8 +851,6 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 rSh.SetUndoNoResetModified();
                 rReq.Done();
             }
-            else
-                rReq.Ignore();
         }
         break;
 

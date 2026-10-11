@@ -3921,12 +3921,9 @@ SfxRectangleItem::PutValue(cpo::uno::Any const&, unsigned char)
 SfxRectangleItem::QueryValue(cpo::uno::Any&, unsigned char) const
 SfxRectangleItem::SfxRectangleItem()
 SfxRectangleItem::operator==(SfxPoolItem const&) const
-SfxRequest::AllowRecording(bool)
-SfxRequest::AllowsRecording() const
 SfxRequest::ForgetAllArgs()
 SfxRequest::GetCallMode() const
 SfxRequest::GetKitViewId() const
-SfxRequest::GetMacroRecorder(SfxViewFrame const&)
 SfxRequest::IsCancelled() const
 SfxRequest::IsSynchronCall() const
 SfxRequest::ReleaseArgs()

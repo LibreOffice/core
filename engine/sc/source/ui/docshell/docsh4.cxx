@@ -413,8 +413,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                     //  UpdateImport also updates the internal operations
                 }
-                else
-                    rReq.Ignore();
 
                 if ( bMakeArea && bUndo)
                     GetUndoManager()->LeaveListAction();
@@ -454,7 +452,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 ScViewData* pViewData = GetViewData();
                 if ( !pViewData )
                 {
-                    rReq.Ignore();
                     break;
                 }
 
@@ -488,7 +485,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         }
                     }
                 }
-                rReq.Ignore();
             }
             break;
         case FID_RECALC:
@@ -554,7 +550,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     getEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
                     CheckPendingLinkUpdateInfobar();
-                    rReq.Ignore();
                 }
                 else if (nSet == LM_ON_DEMAND)
                 {
@@ -637,8 +632,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                 if (bDone)
                     rReq.Done();
-                else
-                    rReq.Ignore();
             }
             break;
 
@@ -894,8 +887,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         rReq.AppendItem( SfxBoolItem( FID_CHG_RECORD, bActivateTracking ) );
                     rReq.Done();
                 }
-                else
-                    rReq.Ignore();
             }
             break;
 
@@ -906,8 +897,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     rReq.Done();
                     SetDocumentModified();
                 }
-                else
-                    rReq.Ignore();
             }
             break;
 
@@ -934,7 +923,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
                 if ( !bDo )
                 {
-                    rReq.Ignore();
                     break;
                 }
                 SfxApplication* pApp = SfxGetpApp();
@@ -1186,7 +1174,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 ScViewData* pViewData = GetViewData();
                 if ( !pViewData )
                 {
-                    rReq.Ignore();
                     break;
                 }
 
@@ -1723,7 +1710,6 @@ void ScDocShell::ExecuteChartSource(SfxRequest& rReq)
             bRowHeaders = aChartPositioner.HasRowHeaders();
 
         auto xRequest = std::make_shared<SfxRequest>(rReq);
-        rReq.Ignore(); // the 'old' request is not relevant any more
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         VclPtr<AbstractScColRowLabelDlg> pDlg(pFact->CreateScColRowLabelDlg(pParent, bRowHeaders, bColHeaders));
         pDlg->StartExecuteAsync(
@@ -2263,7 +2249,6 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                         VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScStyleDlg(GetActiveDialogParent(), *pStyleSheet, true));
 
                         auto xRequest = std::make_shared<SfxRequest>(rReq);
-                        rReq.Ignore(); // the 'old' request is not relevant any more
                         pDlg->StartExecuteAsync([this, pDlg, xRequest=std::move(xRequest), pStyleSheet,
                                                  xOldData=std::move(xOldData), aOldName, &rStyleSet,
                                                  nCurTab, &rCaller, bUndo](sal_Int32 nResult) {
@@ -2425,7 +2410,6 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                                                                                 aStr,
                                                                                 nResId));
                         auto xRequest = std::make_shared<SfxRequest>(rReq);
-                        rReq.Ignore(); // the 'old' request is not relevant any more
                         pDlg->StartExecuteAsync([this, pDlg, pStyleSheet, xRequest=std::move(xRequest)](sal_Int32 nResult){
                             if ( nResult == RET_OK )
                             {

@@ -153,7 +153,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 #if HAVE_FEATURE_SCRIPTING
                     StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
 #endif
-                    rReq.Ignore ();
                     break;
                 }
                 else if (meEditMode != EditMode::MasterPage)
@@ -163,7 +162,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 #if HAVE_FEATURE_SCRIPTING
                         StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
 #endif
-                        rReq.Ignore ();
                         break;
                     }
 
@@ -176,7 +174,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 #if HAVE_FEATURE_SCRIPTING
                 StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif
-                rReq.Ignore ();
                 break;
             }
 
@@ -312,7 +309,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             vcl::Window* pWin = GetActiveWindow();
             VclPtr<AbstractHeaderFooterDialog> pDlg(pFact->CreateHeaderFooterDialog(*this, pWin ? pWin->GetFrameWeld() : nullptr, *GetDoc(), mpActualPage));
             auto xRequest = std::make_shared<SfxRequest>(rReq);
-            rReq.Ignore(); // the 'old' request is not relevant any more
             pDlg->StartExecuteAsync([this, pDlg, xRequest=std::move(xRequest)](sal_Int32 /*nResult*/){
                 GetActiveWindow()->Invalidate();
                 UpdatePreview( mpActualPage );
@@ -370,7 +366,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     }
                 }
             }
-            rReq.Ignore ();
             break;
         }
 

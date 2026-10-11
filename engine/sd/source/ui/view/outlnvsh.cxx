@@ -502,7 +502,6 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                 }
             }
 
-            rReq.Ignore ();
         }
         break;
         case SID_DELETE:

@@ -403,7 +403,6 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                             GetView().GetFrameWeld(),
                             &aNewAttr, m_pSdrView ));
                 auto xRequest = std::make_shared<SfxRequest>(rReq);
-                rReq.Ignore(); // the 'old' request is not relevant any more
                 pDlg->StartExecuteAsync(
                     [this, pDlg, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
                     {

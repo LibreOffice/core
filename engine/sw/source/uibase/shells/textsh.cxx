@@ -23,7 +23,6 @@
 #include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <svl/globalnameitem.hxx>
-#include <sfx2/bindings.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
@@ -480,7 +479,6 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         {
             GetView().InsFrameMode(nCols);
         }
-        rReq.Ignore();
     }
     break;
     case FN_INSERT_FRAME:
@@ -539,7 +537,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                                                   GetView().GetViewFrame(),
                                                   GetView().GetFrameWeld(),
                                                   *xSet));
-            pDlg->StartExecuteAsync([xSet=std::move(xSet), pDlg, nSlot, this](sal_Int32 nResult) {
+            pDlg->StartExecuteAsync([xSet=std::move(xSet), pDlg, this](sal_Int32 nResult) {
                 if (nResult == RET_OK && pDlg->GetOutputItemSet())
                 {
                     SwFlyFrameAttrMgr aAttrMgr( true, GetShellPtr(), Frmmgr_Type::TEXT, nullptr );
@@ -566,19 +564,6 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         rShell.DelRight();
 
                     aAttrMgr.InsertFlyFrame();
-
-                    uno::Reference< frame::XDispatchRecorder > xRecorder =
-                    GetView().GetViewFrame().GetBindings().GetRecorder();
-                    if ( xRecorder.is() )
-                    {
-                        //FN_INSERT_FRAME
-                        sal_uInt16 nAnchor = static_cast<sal_uInt16>(aAttrMgr.GetAnchor());
-                        SfxRequest aReq(GetView().GetViewFrame(), FN_INSERT_FRAME);
-                        aReq.AppendItem(SfxUInt16Item(nSlot, nAnchor));
-                        aReq.AppendItem(SfxPointItem(FN_PARAM_1, rShell.GetObjAbsPos()));
-                        aReq.AppendItem(SvxSizeItem(FN_PARAM_2, rShell.GetObjSize()));
-                        aReq.Done();
-                    }
 
                     GetView().AutoCaption(FRAME_CAP);
 

@@ -224,7 +224,6 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                         GetViewFrame().GetDispatcher()->ExecuteList(
                                     FN_QRY_MERGE, SfxCallMode::ASYNCHRON,
                                     { &aBool });
-                        rReq.Ignore();
                     }
                     return;
                 }

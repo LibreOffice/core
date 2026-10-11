@@ -68,7 +68,6 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         aTabDlg->StartExecuteAsync([aTabDlg](sal_Int32 /*nResult*/){
             aTabDlg->disposeOnce();
         });
-        rReq.Ignore();
     }
     else
     {

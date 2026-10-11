@@ -218,7 +218,6 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
             InsertTableImpl(pShell, pView, nColumns, nRows, sTableStyle);
         }
 
-        rReq.Ignore();
         SfxViewShell* pViewShell = GetViewShell();
         assert(pViewShell!=nullptr);
         SfxBindings& rBindings = pViewShell->GetViewFrame().GetBindings();

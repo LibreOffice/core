@@ -1075,7 +1075,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                      std::move(xRegisterThatDlgExists) });
 
                     auto xRequest = std::make_shared<SfxRequest>(rReq);
-                    rReq.Ignore(); // the 'old' request is not relevant any more
                     SfxTabDialogController::runAsync(
                         xDlg,
                         [&rDoc, xRequest=std::move(xRequest), xAuxData=std::move(xAuxData),

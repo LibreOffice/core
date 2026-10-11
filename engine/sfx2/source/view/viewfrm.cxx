@@ -31,8 +31,6 @@
 #include <sfx2/pageids.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/DispatchRecorder.hpp>
-#include <com/sun/star/frame/DispatchRecorderSupplier.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -66,7 +64,6 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
@@ -2853,12 +2850,8 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                             rReq.AppendItem( SfxBoolItem( SID_WIN_FULLSCREEN, bNewFullScreenMode ) );
                         rReq.Done();
                     }
-                    else
-                        rReq.Ignore();
                 }
             }
-            else
-                rReq.Ignore();
 
             GetDispatcher()->Update_Impl( true );
             break;
@@ -3021,12 +3014,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
 
     GetBindings().Invalidate( nSID );
 
-    // Record if possible.
-    if ( nSID == SID_HYPERLINK_DIALOG || nSID == SID_SEARCH_DLG )
-    {
-        rReq.Ignore();
-    }
-    else
+    if ( nSID != SID_HYPERLINK_DIALOG && nSID != SID_SEARCH_DLG )
     {
         rReq.AppendItem( SfxBoolItem( nSID, bShow ) );
         rReq.Done();

@@ -274,7 +274,7 @@ void SfxShell::Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId )
     }
 }
 
-void SfxShell::HandleOpenXmlFilterSettings(SfxRequest & rReq)
+void SfxShell::HandleOpenXmlFilterSettings()
 {
     try
     {
@@ -300,7 +300,6 @@ void SfxShell::HandleOpenXmlFilterSettings(SfxRequest & rReq)
     catch (const cpo::uno::Exception&)
     {
     }
-    rReq.Ignore ();
 }
 
 void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, bool bMDI )

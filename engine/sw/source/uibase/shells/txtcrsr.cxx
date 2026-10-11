@@ -23,8 +23,6 @@
 
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/bindings.hxx>
 #include <osl/diagnose.h>
 
 #include <view.hxx>
@@ -78,13 +76,6 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
             break;
     }
 
-    uno::Reference< frame::XDispatchRecorder > xRecorder =
-            GetView().GetViewFrame().GetBindings().GetRecorder();
-    if ( xRecorder.is() )
-    {
-        rReq.AppendItem( SfxInt32Item(FN_PARAM_MOVE_COUNT, nCount) );
-        rReq.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, bSelect) );
-    }
     const sal_uInt16 nSlot = rReq.GetSlot();
     rReq.Done();
     // Get EditWin before calling the move functions (shell change may occur!)
@@ -167,8 +158,6 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
 
     if ( bRet )
         rReq.Done();
-    else
-        rReq.Ignore();
 
     //#i42732# - notify the edit window that from now on we do not use the input language
     rTmpEditWin.SetUseInputLanguage( false );

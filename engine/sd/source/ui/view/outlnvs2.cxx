@@ -257,7 +257,6 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
                 Cancel();
             }
 
-            rReq.Ignore ();
         }
         break;
 
@@ -286,7 +285,6 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             pDlg->Execute();
 
             Cancel();
-            rReq.Ignore ();
         }
         break;
     }
@@ -350,7 +348,6 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
             }
 
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -382,7 +379,6 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         {
             SetCurrentFunction( FuThesaurus::Create( *this, GetActiveWindow(), pOlView.get(), *GetDoc(), rReq ) );
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -528,7 +524,6 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
             pFieldItem.reset();
 
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -584,7 +579,6 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
             }
 
             Cancel();
-            rReq.Ignore ();
         }
         break;
     }

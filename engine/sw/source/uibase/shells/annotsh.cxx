@@ -481,7 +481,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         break;
         case SID_OPEN_XML_FILTERSETTINGS:
         {
-            HandleOpenXmlFilterSettings(rReq);
+            HandleOpenXmlFilterSettings();
         }
         break;
         case FN_WORDCOUNT_DIALOG:
@@ -526,7 +526,6 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 }
 
                 auto xRequest = std::make_shared<SfxRequest>(rReq);
-                rReq.Ignore(); // the 'old' request is not relevant any more
                 pDlg->StartExecuteAsync(
                     [this, pDlg, xRequest=std::move(xRequest), nEEWhich,
                      aNewAttr2=std::move(aNewAttr), pOLV] (sal_Int32 nResult) mutable ->void

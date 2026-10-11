@@ -192,7 +192,6 @@ void SwFrameShell::Execute(SfxRequest &rReq)
     // commands are written for a single fly frame, so with several selected they do nothing.
     if (rSh.IsMultipleFlyFramesSelected() && nSlot != SID_ATTR_TRANSFORM)
     {
-        rReq.Ignore();
         return;
     }
 
@@ -320,7 +319,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         }
         case SID_OPEN_XML_FILTERSETTINGS:
         {
-            HandleOpenXmlFilterSettings(rReq);
+            HandleOpenXmlFilterSettings();
         }
         break;
         case FN_WORDCOUNT_DIALOG:

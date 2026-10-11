@@ -139,7 +139,6 @@ void TableObjectBar::Execute( SfxRequest& rReq )
         case SID_TABLE_INSERT_COL_DLG:
         {
             auto xRequest = std::make_shared<SfxRequest>(rReq);
-            rReq.Ignore(); // the 'old' request is not relevant any more
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             vcl::Window* pWin = mpView->GetViewShell()->GetParentWindow();
             VclPtr<SvxAbstractInsRowColDlg> pDlg( pFact->CreateSvxInsRowColDlg(pWin ? pWin->GetFrameWeld() : nullptr,

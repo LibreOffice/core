@@ -27,7 +27,6 @@
 #include <svl/eitem.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/docfilt.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docinsert.hxx>
@@ -55,9 +54,7 @@
 #include <cmdid.h>
 #include <strings.hrc>
 #include <bitmaps.hlst>
-#include <sfx2/bindings.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
 #include <memory>
@@ -1445,36 +1442,6 @@ short SwInsertSectionTabDialog::Ok()
     OSL_ENSURE(m_pSectionData, "SwInsertSectionTabDialog: no SectionData?");
     const SfxItemSet* pOutputItemSet = GetOutputItemSet();
     m_rWrtSh.InsertSection(*m_pSectionData, pOutputItemSet);
-    SfxViewFrame& rViewFrame = m_rWrtSh.GetView().GetViewFrame();
-    uno::Reference< frame::XDispatchRecorder > xRecorder =
-            rViewFrame.GetBindings().GetRecorder();
-    if ( xRecorder.is() )
-    {
-        SfxRequest aRequest(rViewFrame, FN_INSERT_REGION);
-        if(const SwFormatCol* pCol = pOutputItemSet->GetItemIfSet(RES_COL, false))
-        {
-            aRequest.AppendItem(SfxUInt16Item(SID_ATTR_COLUMNS,
-                pCol->GetColumns().size()));
-        }
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_REGION_NAME,
-                    m_pSectionData->GetSectionName().toString()));
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_REGION_CONDITION,
-                    m_pSectionData->GetCondition()));
-        aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_HIDDEN,
-                    m_pSectionData->IsHidden()));
-        aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_PROTECT,
-                    m_pSectionData->IsProtectFlag()));
-        // edit in readonly sections
-        aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_EDIT_IN_READONLY,
-                    m_pSectionData->IsEditInReadonlyFlag()));
-
-        const OUString sLinkFileName( m_pSectionData->GetLinkFileName() );
-        sal_Int32 n = 0;
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_1, sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n )));
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_2, sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n )));
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_3, sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n )));
-        aRequest.Done();
-    }
     return nRet;
 }
 

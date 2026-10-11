@@ -443,7 +443,6 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 VclPtr<AbstractSignatureLineDialog> pDialog(pFact->CreateSignatureLineDialog(
                     pWin->GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_SIGNATURELINE));
                 auto xRequest = std::make_shared<SfxRequest>(rReq);
-                rReq.Ignore(); // the 'old' request is not relevant any more
                 pDialog->StartExecuteAsync(
                     [pDialog, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
                     {
@@ -538,7 +537,6 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
                 VclPtr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog(pWin->GetFrameWeld(), rDoc.GetLinkManager()));
                 auto xRequest = std::make_shared<SfxRequest>(rReq);
-                rReq.Ignore(); // the 'old' request is not relevant any more
                 pDlg->StartExecuteAsync(
                     [this, pDlg, xRequest=std::move(xRequest)] (sal_Int32 /*nResult*/)->void
                     {
@@ -607,7 +605,6 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
         case SID_FONTWORK_GALLERY_FLOATER:
             svx::FontworkBar::execute(*pView, rReq, GetViewFrame().GetBindings());
-            rReq.Ignore();
             break;
     }
 }

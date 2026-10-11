@@ -143,7 +143,6 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
                         pSh->GetObjAttr(aSet);
 
                         auto xRequest = std::make_shared<SfxRequest>(rReq);
-                        rReq.Ignore(); // the 'old' request is not relevant any more
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                         VclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwWrapDlg(GetView().GetFrameWeld(), aSet, pSh));
                         pDlg->StartExecuteAsync(

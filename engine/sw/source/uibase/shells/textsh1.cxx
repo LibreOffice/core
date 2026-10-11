@@ -241,7 +241,6 @@ static void sw_CharDialog(SwWrtShell& rWrtSh, bool bUseDialog, bool bApplyToPara
         if (pReq)
         {
             pRequest = std::make_shared<SfxRequest>(*pReq);
-            pReq->Ignore(); // the 'old' request is not relevant any more
         }
         pDlg->StartExecuteAsync([pDlg, &rWrtSh, pCoreSet=std::move(pCoreSet), bSel,
                                  bSelectionPut, bApplyToParagraph,
@@ -1161,7 +1160,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     pDlg->disposeOnce();
                 }
             );
-            rReq.Ignore();
         }
         break;
         case FN_FORMAT_FOOTNOTE_DLG:
@@ -1435,7 +1433,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             auto xRequest = std::make_shared<SfxRequest>(rReq);
-            rReq.Ignore(); // the 'old' request is not relevant any more
             VclPtr<AbstractSwModalRedlineAcceptDlg> pDlg(pFact->CreateSwModalRedlineAcceptDlg(GetView().GetEditWin().GetFrameWeld()));
             pDlg->StartExecuteAsync(
                 [pDlg, xRequest=std::move(xRequest)] (sal_Int32 /*nResult*/)->void
@@ -1484,7 +1481,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             VclPtr<AbstractSwSortDlg> pDlg(pFact->CreateSwSortingDialog(GetView().GetFrameWeld(), rWrtSh));
             auto xRequest = std::make_shared<SfxRequest>(rReq);
-            rReq.Ignore(); // the 'old' request is not relevant any more
             pDlg->StartExecuteAsync(
                 [pDlg, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
                 {
@@ -1582,7 +1578,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rVFrame.ToggleChildWindow( nId );
                 if( !rVFrame.HasChildWindow( nId ) )
                     rVFrame.GetBindings().InvalidateAll( true );
-                rReq.Ignore();
             }
         }
 
@@ -1803,7 +1798,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             else if (pDlg)
             {
                 auto pRequest = std::make_shared<SfxRequest>(rReq);
-                rReq.Ignore(); // the 'old' request is not relevant any more
 
                 auto vCursors = CopyPaMRing(*pPaM); // tdf#134439 make a copy to use at later apply
                 pDlg->StartExecuteAsync([pDlg, &rWrtSh, pDrawModel, pRequest=std::move(pRequest), nDefDist, vCursors=std::move(vCursors)](sal_Int32 nResult){
@@ -2065,7 +2059,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             SfxRequest aReq(SID_HYPERLINK_DIALOG, SfxCallMode::SLOT, SfxGetpApp()->GetPool());
             GetView().GetViewFrame().ExecuteSlot( aReq);
-            rReq.Ignore();
         }
         break;
         case SID_RUBY_DIALOG:
@@ -2073,7 +2066,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             SfxRequest aReq(nSlot, SfxCallMode::SLOT, SfxGetpApp()->GetPool());
             GetView().GetViewFrame().ExecuteSlot( aReq);
-            rReq.Ignore();
         }
         break;
     case FN_INSERT_PAGEHEADER:
@@ -2191,7 +2183,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     break;
     case SID_OPEN_XML_FILTERSETTINGS:
     {
-        HandleOpenXmlFilterSettings(rReq);
+        HandleOpenXmlFilterSettings();
     }
     break;
     case FN_FORMAT_APPLY_HEAD1:
@@ -2249,7 +2241,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             VclPtr<AbstractDropDownFormFieldDialog> pDlg(pFact->CreateDropDownFormFieldDialog(rWrtSh.GetView().GetFrameWeld(), pFieldBM));
             auto xRequest = std::make_shared<SfxRequest>(rReq);
-            rReq.Ignore(); // the 'old' request is not relevant any more
             auto pWrtSh = &rWrtSh;
             pDlg->StartExecuteAsync(
                 [pDlg, pFieldBM, pWrtSh, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
@@ -2273,7 +2264,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             VclPtr<AbstractDateFormFieldDialog> pDlg(pFact->CreateDateFormFieldDialog(rWrtSh.GetView().GetFrameWeld(), pDateField, *GetView().GetDocShell()->GetDoc()));
             auto pWrtSh = &rWrtSh;
             auto xRequest = std::make_shared<SfxRequest>(rReq);
-            rReq.Ignore(); // the 'old' request is not relevant any more
             pDlg->StartExecuteAsync(
                 [pDlg, pWrtSh, pDateField, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
                 {

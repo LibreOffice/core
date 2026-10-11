@@ -432,12 +432,6 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 break;
             }
 
-            uno::Reference< frame::XDispatchRecorder > xRecorder =
-                    GetViewFrame().GetBindings().GetRecorder();
-            //prevent additional dialogs in recorded macros
-            if ( xRecorder.is() )
-                rReq.AppendItem(SfxBoolItem(SID_SEARCH_QUIET, true));
-
             rReq.Done();
             m_eLastSearchCommand = s_pSrchItem->GetCommand();
             SwView::SetMoveType(nMoveType);

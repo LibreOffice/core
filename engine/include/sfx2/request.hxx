@@ -28,14 +28,12 @@
 
 class SfxPoolItem;
 class SfxItemPool;
-class SfxShell;
 class SfxSlot;
 class SfxViewFrame;
 struct SfxRequest_Impl;
 enum class SfxCallMode : sal_uInt16;
 
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::frame { class XDispatchRecorder; }
 namespace cpo::uno { template <class E> class Sequence; }
 namespace weld { class Window; }
 
@@ -46,13 +44,6 @@ friend struct SfxRequest_Impl;
     sal_uInt16          nSlot;
     std::unique_ptr<SfxAllItemSet>        pArgs;
     std::unique_ptr< SfxRequest_Impl >    pImpl;
-
-public:
-    SAL_DLLPRIVATE void Record_Impl( SfxShell &rSh, const SfxSlot &rSlot,
-                                     const cpo::uno::Reference< css::frame::XDispatchRecorder >& xRecorder,
-                                     SfxViewFrame* );
-private:
-    SAL_DLLPRIVATE void Done_Impl( const SfxItemSet *pSet );
 
 public:
                         SfxRequest( SfxViewFrame&, sal_uInt16 nSlotId );
@@ -97,11 +88,7 @@ public:
     void                SetReturnValue(const SfxPoolItem &);
     const SfxPoolItemHolder& GetReturnValue() const;
 
-    static cpo::uno::Reference< css::frame::XDispatchRecorder > GetMacroRecorder(const SfxViewFrame& rFrame);
-    static bool         HasMacroRecorder(const SfxViewFrame& rFrame);
     SfxCallMode         GetCallMode() const;
-    void                AllowRecording( bool );
-    bool                AllowsRecording() const;
     bool                IsAPI() const;
     bool                IsSynchronCall() const;
     void                SetSynchronCall( bool bSynchron );
@@ -109,7 +96,6 @@ public:
     bool                IsDone() const;
     void                Done( bool bRemove = false );
 
-    void                Ignore();
     void                Cancel();
     bool                IsCancelled() const;
     void                Done(const SfxItemSet &);

@@ -659,7 +659,6 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rNam
         pDlg->SetCurPageId(rName);
 
     auto xRequest = std::make_shared<SfxRequest>(rReq);
-    rReq.Ignore(); // the 'old' request is not relevant any more
 
     pDlg->StartExecuteAsync([pDlg, xOldSet=std::move(xOldSet), xRequest=std::move(xRequest), this](sal_Int32 nResult){
         bInFormatDialog = false;
@@ -1086,7 +1085,6 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
 
                     auto xDlg = std::make_shared<SfxNewStyleDlg>(pDialogParent, *pStylePool, eFamily);
                     auto xRequest = std::make_shared<SfxRequest>(rReq);
-                    rReq.Ignore();
                     weld::GenericDialogController::runAsync(xDlg,[xDlg, xRequest, lambda](sal_Int32 nResult){
                         if (nResult == RET_OK) {
                             lambda(*xRequest, xDlg->GetName());
@@ -1649,7 +1647,6 @@ void ScTabViewShell::ExecuteStyleEdit(SfxRequest& rReq, SfxStyleSheetBase* pStyl
         pDlg = pFact->CreateScStyleDlg(pDialogParent, *pStyleSheet, bPage);
 
     auto xRequest = std::make_shared<SfxRequest>(rReq);
-    rReq.Ignore(); // the 'old' request is not relevant any more
     pDlg->StartExecuteAsync(
         [this, pDlg, xRequest=std::move(xRequest), pStyleSheet,
             nRetMask, xOldSet=std::move(xOldSet), nSlotId, bAddUndo, bUndo,

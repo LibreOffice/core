@@ -111,7 +111,6 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     assert(pDlg && "there must be a dialog at this point");
 
     auto xRequest = std::make_shared<SfxRequest>(rReq);
-    rReq.Ignore(); // the 'old' request is not relevant any more
 
     rtl::Reference<FuTransform> xThis(this); // prevent premature release during async processing
     pDlg->StartExecuteAsync([bWelded, pDlg, xRequest=std::move(xRequest), xThis=std::move(xThis)](sal_Int32 nResult){

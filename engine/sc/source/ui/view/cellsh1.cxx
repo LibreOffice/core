@@ -548,7 +548,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             pDlg->DisableObjects();
 
                         auto xRequest = std::make_shared<SfxRequest>(rReq);
-                        rReq.Ignore(); // the 'old' request is not relevant any more
 
                         pDlg->StartExecuteAsync([pDlg, pTabViewShell, xRequest=std::move(xRequest)](sal_Int32 nResult){
                             if (nResult == RET_OK)
@@ -1694,7 +1693,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             }
 
                             auto xRequest = std::make_shared<SfxRequest>(rReq);
-                            rReq.Ignore(); // the 'old' request is not relevant any more
 
                             pDlg->StartExecuteAsync([pDlg, pTabViewShell, pOwnClip, xTransferable,
                                                      bOtherDoc, this, xRequest=std::move(xRequest)](sal_Int32 nResult) {
@@ -1832,7 +1830,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pObj->SetOverwriting(true);
 
                     auto xRequest = std::make_shared<SfxRequest>(rReq);
-                    rReq.Ignore(); // the 'old' request is not relevant any more
 
                     pDlg->StartExecuteAsync(
                             [pDlg, pObj, format, sStrBuffer, xRequest=std::move(xRequest)](sal_Int32 nResult){
@@ -1854,7 +1851,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             if (!bSuccess)
             {
                 rReq.SetReturnValue(SfxInt16Item(nSlot, 0)); // 0 = fail
-                rReq.Ignore();
             }
         }
         break;
@@ -1943,7 +1939,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             pDlg->PreGetFormat(*xDatahelper);
 
                             auto xRequest = std::make_shared<SfxRequest>(rReq);
-                            rReq.Ignore(); // the 'old' request is not relevant any more
                             pDlg->StartExecuteAsync(
                                 [pDlg, xDatahelper, xRequest, pTabViewShell, bDraw, nSlot](sal_Int32 nResult) {
                                     SotClipboardFormatId nFormat = (nResult == RET_OK)
@@ -1966,7 +1961,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                     else
                                     {
                                         xRequest->SetReturnValue(SfxInt16Item(nSlot, 0)); // 0 = fail
-                                        xRequest->Ignore();
                                     }
                                     pDlg->disposeOnce();
                                 });
@@ -2090,7 +2084,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     rViewFrame.ToggleChildWindow( SID_SPELL_DIALOG );
 
                 rViewFrame.GetBindings().Invalidate( SID_SPELL_DIALOG );
-                rReq.Ignore();
             }
             break;
 
@@ -2237,7 +2230,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     if (!pDesc)
                     {
-                        rReq.Ignore();
                         break;
                     }
 
@@ -2297,7 +2289,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             }
                         }
                     }
-                    rReq.Ignore();
                     break;
                 }
 
@@ -2316,7 +2307,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     pScMod->ActivateInputWindow();
                 }
-                rReq.Ignore();      // only SID_ENTER_STRING is recorded
             }
             break;
 
@@ -2810,8 +2800,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     rReq.Done();
                     rBindings.Invalidate( FID_NOTE_VISIBLE );
                 }
-                else
-                    rReq.Ignore();
             }
             break;
 
@@ -2874,8 +2862,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         rReq.Done();
                         rBindings.Invalidate( nSlot );
                     }
-                    else
-                         rReq.Ignore();
                 }
 
             }
@@ -3135,8 +3121,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pTabViewShell->InsertURL( sLinkText, rURL, rTarget, nType );
                     rReq.Done();
                 }
-                else
-                    rReq.Ignore();
             }
             break;
 
@@ -3651,8 +3635,6 @@ void ScCellShell::ExecuteExternalSource(
                                             aLinkRange, _nRefreshDelaySeconds, bMove, false );
         _rRequest.Done();
     }
-    else
-        _rRequest.Ignore();
 }
 
 namespace {

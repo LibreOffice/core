@@ -2612,7 +2612,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
             }
             Cancel();
-            rReq.Ignore();
         }
         break;
 
@@ -2629,7 +2628,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -2822,13 +2820,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 Size aSize (pWidth->GetValue (), pHeight->GetValue ());
 
                 SetupPage (aSize, 0, 0, 0, 0, true, false, pScaleAll->GetValue ());
-                rReq.Ignore ();
                 break;
             }
 #if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif
-            rReq.Ignore ();
             break;
         }
 
@@ -2849,13 +2845,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SetupPage (aEmptySize, pLeft->GetValue (), pRight->GetValue (),
                            pUpper->GetValue (), pLower->GetValue (),
                            false, true, pScaleAll->GetValue ());
-                rReq.Ignore ();
                 break;
             }
 #if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif
-            rReq.Ignore ();
             break;
         }
 
@@ -2917,7 +2911,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         OSL_FAIL("sd::DrawViewShell::FuTemporary(), SvxZoomType::PAGEWIDTH_NOBORDER not handled!" );
                         break;
                 }
-                rReq.Ignore ();
             }
             else
             {
@@ -2973,7 +2966,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 GetViewFrame()->GetDispatcher()->Execute(SID_SWITCH_POINTEDIT,
                                         SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
             }
-            rReq.Ignore ();
             break;
 
         case SID_CONVERT_TO_CONTOUR:
@@ -2999,7 +2991,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             Cancel();
 
-            rReq.Ignore ();
             break;
 
         case SID_CONVERT_TO_METAFILE:
@@ -3217,7 +3208,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 pPV->DeleteHelpLine( nHelpLine );
             }
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -3225,13 +3215,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_DELETE_MASTER_PAGE:
             DeleteActualPage();
             Cancel();
-            rReq.Ignore ();
         break;
 
         case SID_DELETE_LAYER:
             DeleteActualLayer();
             Cancel();
-            rReq.Ignore ();
         break;
 
         case SID_ORIGINAL_SIZE:
@@ -3299,7 +3287,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     }
             }
             Cancel();
-            rReq.Ignore();
         }
         break;
 
@@ -3319,7 +3306,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     }
             }
             Cancel();
-            rReq.Ignore();
         }
         break;
 
@@ -3350,7 +3336,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
             }
             Cancel();
-            rReq.Ignore();
         }
         break;
 
@@ -3361,7 +3346,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             aDialog.run();
 
             Cancel();
-            rReq.Ignore();
         }
         break;
 
@@ -3507,7 +3491,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             SetCurrentFunction( FuInsertClipboard::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq ) );
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -3517,7 +3500,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SetCurrentFunction( FuInsertGraphic::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq,
                                                          nSId == SID_CHANGE_PICTURE ) );
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -3526,7 +3508,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SetCurrentFunction( FuInsertAVMedia::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq ) );
 
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -3543,7 +3524,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (dynamic_cast<FuSelection*>( GetOldFunction().get() ) == nullptr)
                 SetOldFunction( FuSelection::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq ) );
             Cancel();
-            rReq.Ignore ();
         }
         break;
         case SID_CLASSIFICATION_APPLY:
@@ -3572,7 +3552,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SAL_WARN("sd.ui", "missing parameter for SID_CLASSIFICATION_APPLY");
 
             Cancel();
-            rReq.Ignore();
         }
         break;
 
@@ -3596,7 +3575,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             Cancel();
-            rReq.Ignore();
         }
         break;
 
@@ -3619,7 +3597,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SetCurrentFunction( FuCopy::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq ) );
             }
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -3641,7 +3618,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             SetCurrentFunction( FuPage::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq ) );
             Cancel();
-            rReq.Ignore (); // we generate independent macros !!
         }
         break;
 
@@ -3699,7 +3675,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             SetCurrentFunction( FuLink::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq ) );
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -3707,7 +3682,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             SetCurrentFunction( FuThesaurus::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq ) );
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -3717,7 +3691,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 mpDrawView->SdrEndTextEdit();
             SetCurrentFunction( FuTextAttrDlg::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq ) );
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -3725,7 +3698,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             SetCurrentFunction( FuMeasureDlg::Create( *this, GetActiveWindow(), mpDrawView.get(), *GetDoc(), rReq ) );
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -3897,7 +3869,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     pDlg.disposeAndClear();
                     Cancel();
-                    rReq.Ignore ();
                     break;
                 }
                 else
@@ -3915,7 +3886,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                  StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif
                  Cancel();
-                 rReq.Ignore ();
                  break;
             }
             else
@@ -3979,7 +3949,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 OSL_ENSURE(false, "No LayerTabBar (!)");
                 Cancel();
-                rReq.Ignore();
                 break;
             }
 
@@ -4067,7 +4036,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     default :
                         pDlg.disposeAndClear();
-                        rReq.Ignore ();
                         Cancel ();
                         return;
                 }
@@ -4090,7 +4058,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif
                 Cancel ();
-                rReq.Ignore ();
                 break;
             }
 
@@ -4137,7 +4104,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             GetDoc()->SetChanged();
 
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -4158,7 +4124,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -4292,7 +4257,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -4492,7 +4456,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             pFieldItem.reset();
 
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -4562,7 +4525,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -4579,7 +4541,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -4646,7 +4607,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             Cancel();
-            rReq.Ignore();
             break;
         }
 
@@ -4684,7 +4644,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             Cancel();
-            rReq.Ignore();
             break;
         }
 
@@ -4715,7 +4674,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
             }
             Cancel();
-            rReq.Ignore();
             break;
         }
 
@@ -5177,7 +5135,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 if( pStyleSheet == nullptr )
                 {
-                    rReq.Ignore();
                     break;
                 }
 
@@ -5207,7 +5164,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             }
                             Cancel();
                         });
-                    rReq.Ignore();
                     break;
                 }
 
@@ -5225,7 +5181,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else if( rReq.GetSlot() == SID_STYLE_APPLY )
                 GetViewFrame()->GetDispatcher()->Execute( SID_STYLE_DESIGNER, SfxCallMode::ASYNCHRON );
-            rReq.Ignore ();
         }
         break;
 
@@ -5244,7 +5199,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -5279,7 +5233,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             GetViewFrame()->GetBindings().Invalidate(SID_FONTWORK);
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -5293,7 +5246,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             GetViewFrame()->GetBindings().Invalidate(SID_COLOR_CONTROL);
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -5316,7 +5268,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_EXTRUSION_DEPTH_DIALOG:
             svx::ExtrusionBar::execute( mpDrawView.get(), rReq, GetViewFrame()->GetBindings() );
             Cancel();
-            rReq.Ignore ();
             break;
 
         case SID_FONTWORK_SHAPE:
@@ -5331,7 +5282,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_FONTWORK_CHARACTER_SPACING_DIALOG:
             svx::FontworkBar::execute(*mpDrawView, rReq, GetViewFrame()->GetBindings());
             Cancel();
-            rReq.Ignore ();
             break;
 
         case SID_BMPMASK:
@@ -5340,7 +5290,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             GetViewFrame()->GetBindings().Invalidate( SID_BMPMASK );
 
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -5355,7 +5304,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             GetViewFrame()->GetBindings().Invalidate(SID_NAVIGATOR);
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -5399,7 +5347,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             GetViewFrame()->GetBindings().Invalidate(SID_ANIMATION_OBJECTS);
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -5414,7 +5361,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             GetViewFrame()->GetBindings().Invalidate( SID_3D_WIN );
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -5430,7 +5376,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 GetActiveWindow()->EnterWait();
             mpDrawView->End3DCreation(true);
             Cancel();
-            rReq.Ignore();
             if(GetActiveWindow())
                 GetActiveWindow()->LeaveWait();
         }
@@ -5471,7 +5416,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             GetViewFrame()->ToggleChildWindow( ::avmedia::MediaPlayer::GetChildWindowId() );
             GetViewFrame()->GetBindings().Invalidate( SID_AVMEDIA_PLAYER );
             Cancel();
-            rReq.Ignore ();
         }
         break;
 #endif
@@ -5513,7 +5457,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             pDlg->Execute();
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -5528,7 +5471,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 pDlg->disposeOnce();
             });
             Cancel();
-            rReq.Ignore ();
         }
         break;
 
@@ -5552,7 +5494,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             });
 
             Cancel();
-            rReq.Ignore();
         }
         break;
 
@@ -5577,7 +5518,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             });
 
             Cancel();
-            rReq.Ignore();
         }
         break;
 
@@ -5652,7 +5592,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             SAL_WARN( "sd.ui", "Slot without function" );
             Cancel();
-            rReq.Ignore ();
         }
         break;
     }

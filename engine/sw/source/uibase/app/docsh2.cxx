@@ -1158,8 +1158,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
             rReq.SetReturnValue(SfxBoolItem( nWhich, bDone ));
             if (bDone)
                 rReq.Done();
-            else
-                rReq.Ignore();
             break;
 
         case SID_ATTR_YEAR2000:

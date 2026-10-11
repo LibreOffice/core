@@ -785,7 +785,6 @@ void NotesPanelViewShell::FuTemporary(SfxRequest& rReq)
                 Cancel();
             }
 
-            rReq.Ignore();
         }
         break;
 
@@ -815,7 +814,6 @@ void NotesPanelViewShell::FuTemporary(SfxRequest& rReq)
             pDlg->Execute();
 
             Cancel();
-            rReq.Ignore();
         }
         break;
 
@@ -824,7 +822,6 @@ void NotesPanelViewShell::FuTemporary(SfxRequest& rReq)
             SetCurrentFunction(FuInsertClipboard::Create(*this, GetActiveWindow(),
                                                          mpNotesPanelView.get(), *GetDoc(), rReq));
             Cancel();
-            rReq.Ignore();
         }
         break;
     }
@@ -868,7 +865,6 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
             }
 
             Cancel();
-            rReq.Ignore();
         }
         break;
 
@@ -924,7 +920,6 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
             SetCurrentFunction(FuThesaurus::Create(*this, GetActiveWindow(), mpNotesPanelView.get(),
                                                    *GetDoc(), rReq));
             Cancel();
-            rReq.Ignore();
         }
         break;
 
@@ -1067,7 +1062,6 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
             pFieldItem.reset();
 
             Cancel();
-            rReq.Ignore();
         }
         break;
 
@@ -1126,7 +1120,6 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
             }
 
             Cancel();
-            rReq.Ignore();
         }
         break;
     }
@@ -1218,7 +1211,6 @@ void NotesPanelViewShell::FuSupport(SfxRequest& rReq)
                 }
             }
 
-            rReq.Ignore();
         }
         break;
         case SID_DELETE:

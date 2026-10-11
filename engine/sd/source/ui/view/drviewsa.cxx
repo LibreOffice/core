@@ -413,7 +413,7 @@ bool DrawViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
     polyline from the gathered points.
 */
 
-void DrawViewShell::CheckLineTo(SfxRequest& rReq)
+void DrawViewShell::CheckLineTo([[maybe_unused]] SfxRequest& rReq)
 {
 #ifdef DBG_UTIL
     if(rReq.IsAPI())
@@ -425,7 +425,6 @@ void DrawViewShell::CheckLineTo(SfxRequest& rReq)
     }
 #endif
 
-    rReq.Ignore ();
 }
 
 /**

@@ -483,7 +483,6 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     }
     else    // Abort
     {
-        rReq.Ignore();
 
         xDocSh->DoClose();
         --nTitleNo;

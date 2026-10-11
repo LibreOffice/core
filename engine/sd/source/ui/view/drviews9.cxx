@@ -784,7 +784,6 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
     }
 
     mpDrawView->SetAttributes (aAttr);
-    rReq.Ignore ();
 }
 
 /**

@@ -177,7 +177,6 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
                 ::sfx2::sidebar::Sidebar::ShowPanel(
                     u"SdSlideTransitionPanel",
                     pFrame->GetFrame().GetFrameInterface());
-                rRequest.Ignore ();
             }
             break;
         }
@@ -191,7 +190,6 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
                 ::sfx2::sidebar::Sidebar::ShowPanel(
                     u"SdAllMasterPagesPanel",
                     pFrame->GetFrame().GetFrameInterface());
-                rRequest.Ignore ();
             }
             break;
         }

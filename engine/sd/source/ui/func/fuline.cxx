@@ -50,7 +50,6 @@ rtl::Reference<FuPoor> FuLine::Create( ViewShell& rViewSh, ::sd::Window* pWin, :
 
 void FuLine::DoExecute( SfxRequest& rReq )
 {
-    rReq.Ignore();
 
     const SfxItemSet* pArgs = rReq.GetArgs();
     if (pArgs)

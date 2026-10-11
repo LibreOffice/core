@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/stritem.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <dbfld.hxx>
 #include <flddat.hxx>
 #include <fmtfld.hxx>
@@ -35,7 +32,6 @@
 #include "fldpage.hxx"
 #include <docufld.hxx>
 #include <cmdid.h>
-#include <sfx2/bindings.hxx>
 #include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
@@ -132,44 +128,6 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
         //#i26566# provide parent for SwWrtShell::StartInputFieldDlg
         aData.m_pParent = &GetDialogController()->GetOKButton();
         m_aMgr.InsertField( aData );
-
-        uno::Reference< frame::XDispatchRecorder > xRecorder =
-                pView->GetViewFrame().GetBindings().GetRecorder();
-        if ( xRecorder.is() )
-        {
-            bool bRecordDB = SwFieldTypesEnum::Database == nTypeId ||
-                            SwFieldTypesEnum::DatabaseSetNumber == nTypeId ||
-                            SwFieldTypesEnum::DatabaseNumberSet == nTypeId ||
-                            SwFieldTypesEnum::DatabaseNextSet == nTypeId ||
-                            SwFieldTypesEnum::DatabaseName == nTypeId ;
-
-            SfxRequest aReq(pView->GetViewFrame(),
-                    bRecordDB ? FN_INSERT_DBFIELD : FN_INSERT_FIELD);
-            if(bRecordDB)
-            {
-                sal_Int32 nIdx{ 0 };
-                aReq.AppendItem(SfxStringItem
-                        (FN_INSERT_DBFIELD,rPar1.getToken(0, DB_DELIM, nIdx)));
-                aReq.AppendItem(SfxStringItem
-                        (FN_PARAM_1,rPar1.getToken(0, DB_DELIM, nIdx)));
-                aReq.AppendItem(SfxInt32Item
-                        (TypedWhichId<SfxInt32Item>(FN_PARAM_3), o3tl::toInt32(o3tl::getToken(rPar1, 0, DB_DELIM, nIdx))));
-                aReq.AppendItem(SfxStringItem
-                        (FN_PARAM_2,rPar1.getToken(0, DB_DELIM, nIdx)));
-            }
-            else
-            {
-                aReq.AppendItem(SfxStringItem(FN_INSERT_FIELD, rPar1));
-                aReq.AppendItem(SfxStringItem
-                        (FN_PARAM_3, OUString(cSeparator)));
-                aReq.AppendItem(SfxUInt16Item(FN_PARAM_FIELD_SUBTYPE, nSubType));
-            }
-            aReq.AppendItem(SfxUInt16Item(FN_PARAM_FIELD_TYPE   , static_cast<sal_uInt16>(nTypeId)));
-            aReq.AppendItem(SfxStringItem(FN_PARAM_FIELD_CONTENT, rPar2));
-            aReq.AppendItem(SfxUInt32Item(FN_PARAM_FIELD_FORMAT , nFormatId));
-            aReq.Done();
-        }
-
     }
     else    // change field
     {

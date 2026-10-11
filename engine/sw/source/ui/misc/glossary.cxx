@@ -24,10 +24,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
-#include <svl/stritem.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/pathoptions.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfilt.hxx>
 #include <osl/diagnose.h>
@@ -370,22 +368,6 @@ SwGlossaryDlg::~SwGlossaryDlg()
 {
 }
 
-namespace
-{
-
-OUString getCurrentGlossary()
-{
-    const OUString& sTemp{ ::GetCurrGlosGroup() };
-
-    // the zeroth path is not being recorded!
-    if (o3tl::starts_with(o3tl::getToken(sTemp, 1, GLOS_DELIM), u"0"))
-        return sTemp.getToken(0, GLOS_DELIM);
-
-    return sTemp;
-}
-
-}
-
 // select new group
 IMPL_LINK(SwGlossaryDlg, GrpSelect, weld::TreeView&, rBox, void)
 {
@@ -424,12 +406,6 @@ IMPL_LINK(SwGlossaryDlg, GrpSelect, weld::TreeView&, rBox, void)
         ShowAutoText(u""_ustr, u""_ustr);
     // update controls
     NameModify(*m_xShortNameEdit);
-    if (SfxRequest::HasMacroRecorder(m_pShell->GetView().GetViewFrame()))
-    {
-        SfxRequest aReq(m_pShell->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY);
-        aReq.AppendItem(SfxStringItem(FN_SET_ACT_GLOSSARY, getCurrentGlossary()));
-        aReq.Done();
-    }
 }
 
 void SwGlossaryDlg::Apply()
@@ -438,13 +414,6 @@ void SwGlossaryDlg::Apply()
     if (!aGlosName.isEmpty())
     {
         m_pGlossaryHdl->InsertGlossary(aGlosName);
-    }
-    if (SfxRequest::HasMacroRecorder(m_pShell->GetView().GetViewFrame()))
-    {
-        SfxRequest aReq(m_pShell->GetView().GetViewFrame(), FN_INSERT_GLOSSARY);
-        aReq.AppendItem(SfxStringItem(FN_INSERT_GLOSSARY, getCurrentGlossary()));
-        aReq.AppendItem(SfxStringItem(FN_PARAM_1, aGlosName));
-        aReq.Done();
     }
 }
 
@@ -595,15 +564,6 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OUString&, rItemIdent, void)
             m_xNameED->set_text(aStr);
             m_xShortNameEdit->set_text(aShortName);
             NameModify(*m_xNameED);       // for toggling the buttons
-
-            if (SfxRequest::HasMacroRecorder(m_pShell->GetView().GetViewFrame()))
-            {
-                SfxRequest aReq(m_pShell->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
-                aReq.AppendItem(SfxStringItem(FN_NEW_GLOSSARY, getCurrentGlossary()));
-                aReq.AppendItem(SfxStringItem(FN_PARAM_1, aShortName));
-                aReq.AppendItem(SfxStringItem(FN_PARAM_2, aStr));
-                aReq.Done();
-            }
         }
     }
     else if (rItemIdent == "copy")

@@ -848,15 +848,11 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_CLEAR_UNDO_STACK:
         {
             GetDocSh()->ClearUndoBuffer();
-            rReq.Ignore ();
         }
         break;
 
         case SID_PRESENTATION_END:
-        {
-            rReq.Ignore ();
-        }
-        break;
+            break;
 
         case SID_BEZIER_EDIT:
         {
@@ -872,7 +868,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
 
             Invalidate(SID_BEZIER_EDIT);
-            rReq.Ignore();
         }
         break;
 
@@ -924,7 +919,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     mpDrawView->DoCut();
                 }
             }
-            rReq.Ignore ();
         }
         break;
 
@@ -948,7 +942,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     mpDrawView->DoCopy();
                 }
             }
-            rReq.Ignore ();
         }
         break;
 
@@ -965,7 +958,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 mpDrawView->DoPaste();
             }
 
-            rReq.Ignore ();
         }
         break;
 
@@ -1041,7 +1033,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 }
             }
 
-            rReq.Ignore ();
         }
         break;
 
@@ -1101,7 +1092,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 mpDrawView->EndTextEditAllViews();
                 FuDeleteSelectedObjects();
             }
-            rReq.Ignore ();
         }
         break;
 
@@ -1121,7 +1111,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             framework::FrameworkHelper::Instance(GetViewShellBase())->HandleModeChangeSlot(
                 nSId,
                 rReq);
-            rReq.Ignore ();
             break;
 
         case SID_MASTERPAGE:          // BASIC

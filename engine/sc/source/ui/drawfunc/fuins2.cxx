@@ -407,8 +407,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
             OSL_FAIL( "May need error handling here!" );
         }
     }
-    else
-        rReq.Ignore();
 }
 
 FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,

@@ -481,7 +481,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     bool bVis = comphelper::COKit::isActive() || pWnd == nullptr;
                     pScMod->SetRefDialog( nId, bVis );
                 }
-                rReq.Ignore();
             }
             break;
 

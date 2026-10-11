@@ -710,7 +710,6 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
 
         default:
             // Ignore any other slot.
-            rRequest.Ignore ();
             break;
     }
 }

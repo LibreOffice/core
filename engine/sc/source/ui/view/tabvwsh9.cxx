@@ -136,7 +136,6 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
                 }
             }
 
-            rReq.Ignore();
         }
         break;
 

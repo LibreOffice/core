@@ -49,7 +49,6 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
     {
         case FN_GLOSSARY_DLG:
             pGlosHdl->GlossaryDlg(); // async dialog
-            rReq.Ignore();
             break;
         case FN_EXPAND_GLOSSARY:
         {

@@ -30,7 +30,6 @@
 
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <cpo/uno/XComponentContext.hpp>
@@ -216,7 +215,7 @@ bool SfxDispatcher::IsAppDispatcher() const
 /** Helper function to check whether a slot can be executed and
     check the execution itself
 */
-void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq, bool bRecord)
+void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq)
 {
     SFX_STACK(SfxDispatcher::Call_Impl);
 
@@ -224,26 +223,6 @@ void SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
     if ( !rSlot.IsMode(SfxSlotMode::FASTCALL) && !rShell.CanExecuteSlot_Impl(rSlot) && !rShell.IsConditionalFastCall(rReq) )
         return;
 
-    if ( GetFrame() )
-    {
-        // Recording may start
-        cpo::uno::Reference< css::beans::XPropertySet > xSet(
-                GetFrame()->GetFrame().GetFrameInterface(),
-                cpo::uno::UNO_QUERY);
-
-        if ( xSet.is() )
-        {
-            cpo::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
-            cpo::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
-            cpo::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
-            aProp >>= xSupplier;
-            if(xSupplier.is())
-                xRecorder = xSupplier->getDispatchRecorder();
-
-            if ( bRecord && xRecorder.is() && !rSlot.IsMode(SfxSlotMode::NORECORD) )
-                rReq.Record_Impl( rShell, rSlot, xRecorder, GetFrame() );
-        }
-    }
     // Get all that is needed, because the slot may not have survived the
     // Execute if it is a 'pseudo slot' for macros or verbs.
     bool bAutoUpdate = rSlot.IsMode(SfxSlotMode::AUTOUPDATE);
@@ -747,15 +726,13 @@ void SfxDispatcher::Execute_(SfxShell& rShell, const SfxSlot& rSlot,
         {
             if ( &rShell == *(xImp->aStack.rbegin() + n) )
             {
-                if ( bool(eCallMode & SfxCallMode::RECORD) )
-                    rReq.AllowRecording( true );
                 xImp->xPoster->Post(std::make_unique<SfxRequest>(rReq));
                 return;
             }
         }
     }
     else
-        Call_Impl( rShell, rSlot, rReq, SfxCallMode::RECORD==(eCallMode&SfxCallMode::RECORD) );
+        Call_Impl( rShell, rSlot, rReq );
 }
 
 /** Helper function to put from rItem below the Which-ID in the pool of the
@@ -991,7 +968,7 @@ void SfxDispatcher::PostMsgHandler(std::unique_ptr<SfxRequest> pReq)
                 // When the pSlot is a "Pseudoslot" for macros or Verbs, it can
                 // be destroyed in the Call_Impl, thus do not use it anymore!
                 pReq->SetSynchronCall( false );
-                Call_Impl( *pSh, *pSlot, *pReq, pReq->AllowsRecording() ); //! why bRecord?
+                Call_Impl( *pSh, *pSlot, *pReq );
             }
         }
     }

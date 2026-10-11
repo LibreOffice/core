@@ -1731,7 +1731,6 @@ void SmViewShell::Execute(SfxRequest& rReq)
                                                 GetViewFrame().GetFrame().GetFrameInterface());
             GetViewFrame().GetBindings().Invalidate( SID_ELEMENTSDOCKINGWINDOW );
 
-            rReq.Ignore ();
         }
         break;
 
@@ -1874,7 +1873,6 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     GetViewFrame().GetBindings().Invalidate( SID_ELEMENTSDOCKINGWINDOW );
                 }
                 Broadcast(SfxHint(SfxHintId::SmNewUserFormula));
-                rReq.Ignore ();
             }
             pDlg.disposeAndClear();
         }

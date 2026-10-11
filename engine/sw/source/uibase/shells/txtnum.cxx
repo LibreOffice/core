@@ -269,7 +269,6 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             pDlg->SetCurPageId( pPageItem->GetValue() );
 
         auto xRequest = std::make_shared<SfxRequest>(rReq);
-        rReq.Ignore(); // the 'old' request is not relevant any more
 
         pDlg->StartExecuteAsync([pDlg, pNumRuleAtCurrentSelection, xRequest=std::move(xRequest), this](sal_Int32 nResult){
             if (RET_OK == nResult)

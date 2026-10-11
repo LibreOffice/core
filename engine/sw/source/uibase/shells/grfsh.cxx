@@ -117,7 +117,6 @@ void SwGrfShell::Execute(SfxRequest &rReq)
     // disabled and every request is ignored.
     if (rSh.IsMultipleFlyFramesSelected())
     {
-        rReq.Ignore();
         return;
     }
 

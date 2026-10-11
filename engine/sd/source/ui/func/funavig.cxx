@@ -153,7 +153,6 @@ void FuNavigation::DoExecute( SfxRequest& rReq )
                     sLabel = SdResId(STR_SLIDE_NAME) + ":";
                 }
                 std::shared_ptr<SfxRequest> xRequest = std::make_shared<SfxRequest>(rReq);
-                rReq.Ignore(); // the 'old' request is not relevant any more
 
                 auto xDialog = std::make_shared<svx::GotoPageDlg>(pDrawViewShell->GetFrameWeld(), sTitle, sLabel,
                     pDrawViewShell->GetCurPagePos() + 1,

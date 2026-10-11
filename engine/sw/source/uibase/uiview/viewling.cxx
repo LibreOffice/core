@@ -99,7 +99,6 @@ void SwView::ExecLingu(SfxRequest &rReq)
     {
         case SID_THESAURUS:
             StartThesaurus();
-            rReq.Ignore();
             break;
         case SID_HANGUL_HANJA_CONVERSION:
             StartTextConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, nullptr,

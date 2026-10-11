@@ -37,7 +37,6 @@
 
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XDispatchProvider; }
-namespace com::sun::star::frame { class XDispatchRecorder; }
 namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::util { struct URL; }
 
@@ -172,7 +171,6 @@ public:
     void             Release( SfxControllerItem& rBinding );
     SfxDispatcher*   GetDispatcher() const
                      { return pDispatcher; }
-    const cpo::uno::Reference< css::frame::XDispatchRecorder >& GetRecorder() const;
     cpo::uno::Reference < css::frame::XDispatch >
                     GetDispatch( const SfxSlot*, const css::util::URL& aURL, bool bMasterCommand );
     SAL_DLLPRIVATE void ContextChanged_Impl();
@@ -185,7 +183,6 @@ public:
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl() const;
     SAL_DLLPRIVATE void SetWorkWindow_Impl( std::unique_ptr<SfxWorkWindow> );
     SAL_DLLPRIVATE SfxBindings* GetSubBindings_Impl() const;
-    SAL_DLLPRIVATE void SetRecorder_Impl( cpo::uno::Reference< css::frame::XDispatchRecorder > const & );
     SAL_DLLPRIVATE void InvalidateSlotsInMap_Impl();
     SAL_DLLPRIVATE void AddSlotToInvalidateSlotsMap_Impl( sal_uInt16 nId );
     Timer& GetTimer();

@@ -443,7 +443,6 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aSet->Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
 
         std::shared_ptr<SfxRequest> xRequest = std::make_shared<SfxRequest>(rReq);
-        rReq.Ignore(); // the 'old' request is not relevant any more
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         VclPtr<SfxAbstractDialog> pDlg( pFact->CreatSdActionDialog(mrViewShell.GetFrameWeld(), *aSet, mpView) );

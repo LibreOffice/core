@@ -764,7 +764,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             const SfxStringItem* pPrinterItem = rReq.GetArg(SID_PRINTER_NAME);
             if (!pPrinterItem)
             {
-                rReq.Ignore();
                 break;
             }
             // use PrinterName parameter to create a printer
@@ -774,7 +773,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if (!pPrinter->IsKnown())
             {
                 pPrinter.disposeAndClear();
-                rReq.Ignore();
                 break;
             }
             SetPrinter(pPrinter, SfxPrinterChangeFlags::PRINTER);
@@ -864,9 +862,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 }
             }
 
-            // no recording of PrinterSetup except printer name (is printer dependent)
-            rReq.Ignore();
-
             if (nDialogRet == RET_OK)
             {
                 if (pPrinter->GetName() != pDlgPrinter->GetName())
@@ -889,7 +884,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 // PrinterDialog is used to transfer information on printing,
                 // so it will only be deleted here if dialog was cancelled
                 pDlgPrinter.disposeAndClear();
-                rReq.Ignore();
             }
             break;
         }

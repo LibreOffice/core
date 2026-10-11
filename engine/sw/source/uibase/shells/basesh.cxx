@@ -473,19 +473,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     // Temporary variables, because the shell could already be
                     // destroyed after the paste.
                     SwView* pView = &m_rView;
-                    rReq.Ignore();
                     bIgnore = true;
-                    if(SwTransferable::PasteUnformatted( rSh, aDataHelper ))
-                    {
-                        SfxViewFrame& rViewFrame = pView->GetViewFrame();
-                        uno::Reference< frame::XDispatchRecorder > xRecorder =
-                            rViewFrame.GetBindings().GetRecorder();
-                        if(xRecorder.is()) {
-                            SfxRequest aReq(rViewFrame, SID_CLIPBOARD_FORMAT_ITEMS);
-                            aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, static_cast<sal_uInt32>(SotClipboardFormatId::STRING) ) );
-                            aReq.Done();
-                        }
-                    }
+                    SwTransferable::PasteUnformatted( rSh, aDataHelper );
 
                     if (rSh.IsFrameSelected() || rSh.GetSelectedObjCount())
                         rSh.EnterSelFrameMode();
@@ -509,7 +498,6 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     && SwTransferable::IsPaste( rSh, *aDataHelper )
                     && !rSh.CursorInsideInputField() )
                 {
-                    rReq.Ignore();
                     bIgnore = true;
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -528,23 +516,10 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                                 // Temporary variables, because the shell could already be
                                 // destroyed after the paste.
                                 SwView* pView = &m_rView;
-                                bool bRet = false;
                                 SotClipboardFormatId nFormatId = pDlg->GetFormatOnly();
 
                                 if( nFormatId != SotClipboardFormatId::NONE )
-                                    bRet = SwTransferable::PasteFormat( rSh, *aDataHelper, nFormatId );
-
-                                if (bRet)
-                                {
-                                    SfxViewFrame& rViewFrame = pView->GetViewFrame();
-                                    uno::Reference< frame::XDispatchRecorder > xRecorder =
-                                            rViewFrame.GetBindings().GetRecorder();
-                                    if(xRecorder.is()) {
-                                        SfxRequest aReq(rViewFrame, SID_CLIPBOARD_FORMAT_ITEMS);
-                                        aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, static_cast<sal_uInt32>(nFormatId) ) );
-                                        aReq.Done();
-                                    }
-                                }
+                                    SwTransferable::PasteFormat( rSh, *aDataHelper, nFormatId );
 
                                 if (rSh.IsFrameSelected() || rSh.GetSelectedObjCount())
                                     rSh.EnterSelFrameMode();
@@ -1272,24 +1247,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 //Shell change!
                 SwView& rSaveView = m_rView;
                 bool bInserted = false;
-                //recording:
-                SfxViewFrame& rViewFrame = GetView().GetViewFrame();
-                if (SfxRequest::HasMacroRecorder(rViewFrame))
-                {
-                    SfxRequest aReq(rViewFrame, nSlot);
-                    aReq.AppendItem( SfxStringItem( FN_PARAM_1, OUString(cDelim) ));
-                    if(bToTable)
-                    {
-                        if(pTAFormat)
-                            aReq.AppendItem( SfxStringItem( FN_PARAM_2, pTAFormat->GetName().toString()));
-                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_3, bool(aInsTableOpts.mnInsMode & SwInsertTableFlags::Headline)));
-                        aReq.AppendItem( SfxInt16Item( FN_PARAM_4, static_cast<short>(aInsTableOpts.mnRowsToRepeat) ));
-                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_5, bool(aInsTableOpts.mnInsMode & SwInsertTableFlags::DefaultBorder) ));
-                        aReq.AppendItem( SfxBoolItem ( FN_PARAM_6, !(aInsTableOpts.mnInsMode & SwInsertTableFlags::SplitLayout)));
-                    }
-                    aReq.Done();
-                }
-
                 if( !bToTable )
                     rSh.TableToText( cDelim );
                 else
@@ -2833,7 +2790,6 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         }
         default:
         {
-            rReq.Ignore();
             OSL_FAIL("unknown message in ExecuteAttr!" );
             return;
         }

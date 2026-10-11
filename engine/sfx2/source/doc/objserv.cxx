@@ -665,7 +665,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
     if ( !GetMedium() && nId != SID_CLOSEDOC )
     {
-        rReq.Ignore();
         return;
     }
 
@@ -774,11 +773,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         }
                         rRequest.Done();
                     }
-                    else
-                    {
-                        // nothing done; no recording
-                        rRequest.Ignore();
-                    }
                 };
 
                 if (!rReq.IsSynchronCall())
@@ -788,7 +782,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     {
                         aFunc(nResult, *xReq);
                     });
-                    rReq.Ignore();
                 }
                 else
                 {
@@ -1328,7 +1321,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             ExecFile_Impl( aSaveACopyReq );
             if ( !aSaveACopyReq.IsDone() )
             {
-                rReq.Ignore();
                 return;
             }
             break;
@@ -1350,7 +1342,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 #if HAVE_FEATURE_SCRIPTING
                         SbxBase::SetError( ERRCODE_BASIC_WRONG_ARGS );
 #endif
-                        rReq.Ignore();
                         return;
                     }
                     SfxAllItemSet aArgs( GetPool() );
@@ -1360,7 +1351,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     ExecFile_Impl( aSaveAsReq );
                     if ( !aSaveAsReq.IsDone() )
                     {
-                        rReq.Ignore();
                         return;
                     }
                 }
@@ -1434,7 +1424,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     if ( rReq.IsAPI() )
         GetMedium()->SetUpdatePickList( false );
 
-    // Ignore()-branches have already returned
     rReq.Done();
 }
 

@@ -308,7 +308,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         break;
         case SID_OPEN_XML_FILTERSETTINGS:
         {
-            HandleOpenXmlFilterSettings(rReq);
+            HandleOpenXmlFilterSettings();
         }
         break;
         case FN_WORDCOUNT_DIALOG:
@@ -334,7 +334,6 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         case SID_EXTRUSION_SURFACE_FLOATER:
         case SID_EXTRUSION_DEPTH_DIALOG:
             svx::ExtrusionBar::execute( pSdrView, rReq, rBnd );
-            rReq.Ignore ();
             break;
 
         case SID_FONTWORK_SHAPE:
@@ -347,7 +346,6 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         case SID_FONTWORK_ALIGNMENT_FLOATER:
         case SID_FONTWORK_CHARACTER_SPACING_DIALOG:
             svx::FontworkBar::execute(*pSdrView, rReq, rBnd);
-            rReq.Ignore ();
             break;
 
         case SID_INSERT_GRAPHIC:

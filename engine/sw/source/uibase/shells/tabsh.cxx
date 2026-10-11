@@ -712,7 +712,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     pDlg->SetCurPageId(static_cast<const SfxStringItem *>(pItem)->GetValue());
 
                 auto xRequest = std::make_shared<SfxRequest>(rReq);
-                rReq.Ignore(); // the 'old' request is not relevant any more
 
                 const bool bTableMode = rSh.IsTableMode();
                 SwPaM* pCursor = bTableMode ? rSh.GetTableCrs() : rSh.GetCursor(); // tdf#142165 use table cursor if in table mode
@@ -1085,7 +1084,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if ( FN_TABLE_INSERT_ROW_DLG != nSlot || !rSh.IsInRepeatedHeadline())
             {
                 auto xRequest = std::make_shared<SfxRequest>(rReq);
-                rReq.Ignore(); // the 'old' request is not relevant any more
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 VclPtr<SvxAbstractInsRowColDlg> pDlg(pFact->CreateSvxInsRowColDlg(GetView().GetFrameWeld(),
                                                                                         nSlot == FN_TABLE_INSERT_COL_DLG, pSlot->GetCommand()));
@@ -1158,8 +1156,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 rSh.SplitTab(!bHorizontal, static_cast< sal_uInt16 >( nCount-1 ), bProportional );
                 bCallDone = true;
             }
-            else
-                rReq.Ignore();
             break;
         }
 
@@ -1196,7 +1192,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
                     pDlg->disposeOnce();
                 });
-                rReq.Ignore(); // We're already handling the request in our async bit
             }
             break;
         }

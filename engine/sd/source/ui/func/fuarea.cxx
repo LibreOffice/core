@@ -45,7 +45,6 @@ rtl::Reference<FuPoor> FuArea::Create( ViewShell& rViewSh, ::sd::Window* pWin, :
 
 void FuArea::DoExecute( SfxRequest& rReq )
 {
-    rReq.Ignore ();
 
     const SfxItemSet* pArgs = rReq.GetArgs();
     if (pArgs)

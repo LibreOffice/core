@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/bindings.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/request.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -179,19 +176,6 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
                 if(pColumnItem)
                     aData.m_aDBColumn = pColumnItem->GetValue();
                 aFieldMgr.InsertField(aData);
-                SfxViewFrame& rViewFrame = GetView().GetViewFrame();
-                uno::Reference< XDispatchRecorder > xRecorder =
-                        rViewFrame.GetBindings().GetRecorder();
-                if ( xRecorder.is() )
-                {
-                    SfxRequest aReq(rViewFrame, FN_INSERT_DBFIELD);
-                    aReq.AppendItem( SfxUInt16Item(FN_PARAM_FIELD_TYPE, static_cast<sal_uInt16>(SwFieldTypesEnum::Database)));
-                    aReq.AppendItem( SfxStringItem( FN_INSERT_DBFIELD, sDBName ));
-                    aReq.AppendItem( SfxStringItem( FN_PARAM_1, sCommandArg ));
-                    aReq.AppendItem( SfxStringItem( FN_PARAM_2, sColumnName ));
-                    aReq.AppendItem( SfxInt32Item( FN_PARAM_3, nCommandTypeArg));
-                    aReq.Done();
-                }
             }
             break;
 

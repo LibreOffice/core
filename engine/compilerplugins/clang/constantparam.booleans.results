@@ -1136,10 +1136,6 @@ include/sfx2/request.hxx:63
     void SfxRequest::SfxRequest(unsigned short,enum SfxCallMode,const class SfxAllItemSet &,const class SfxAllItemSet &)
     enum SfxCallMode nCallMode
     1
-include/sfx2/request.hxx:103
-    void SfxRequest::AllowRecording(_Bool)
-    _Bool 
-    1
 include/sfx2/sfxdlg.hxx:142
     class VclPtr<class VclAbstractDialog> SfxAbstractDialogFactory::CreateEditObjectDialog(class weld::Window *,const class rtl::OUString &,const class cpo::uno::Reference<class com::sun::star::embed::XEmbeddedObject> &)
     class weld::Window * pParent

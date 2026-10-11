@@ -61,7 +61,6 @@ void FuTextAttrDlg::DoExecute( SfxRequest& rReq )
     VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(rReq.GetFrameWeld(), &aNewAttr, mpView));
 
     auto xRequest = std::make_shared<SfxRequest>(rReq);
-    rReq.Ignore(); // the 'old' request is not relevant any more
     auto pView = mpView; // copy vars we need, FuTextAttrDlg object will be gone by the time the dialog completes
     pDlg->StartExecuteAsync(
         [pDlg, xRequest=std::move(xRequest), pView] (sal_Int32 nResult)->void

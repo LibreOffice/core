@@ -2800,7 +2800,6 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                                                                          VclMessageType::Info, VclButtonsType::Ok,
                                                                          SfxResId(STR_ERROR_SEND_MAIL)));
                 xBox->run();
-                rReq.Ignore();
             }
             else
                 rReq.Done();
@@ -2823,7 +2822,6 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                                                                          VclMessageType::Info, VclButtonsType::Ok,
                                                                          SfxResId(STR_BLUETOOTH_SEND_ERROR)));
                 xBox->run();
-                rReq.Ignore();
             }
             else
                 rReq.Done();

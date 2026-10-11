@@ -186,7 +186,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         }
                         pDlg->disposeOnce();
                     });
-                    rReq.Ignore();
                 }
             }
             break;
@@ -762,7 +761,6 @@ void ScTabViewShell::ExecuteMoveTable( SfxRequest& rReq )
                 }
                 pDlg->disposeOnce();
             });
-            rReq.Ignore();
         }
         else
         {
@@ -826,7 +824,6 @@ void ScTabViewShell::ExecuteMoveTable( SfxRequest& rReq )
         pDlg->EnableRenameTable(nTabSelCount == 1);
 
         auto xRequest = std::make_shared<SfxRequest>(rReq);
-        rReq.Ignore(); // the 'old' request is not relevant any more
         pDlg->StartExecuteAsync(
             [this, pDlg, xRequest=std::move(xRequest)] (sal_Int32 nResult)->void
             {
@@ -1151,7 +1148,6 @@ void ScTabViewShell::ExecuteAppendOrRenameTable(SfxRequest& rReq)
             sHelpId));
 
         auto xRequest = std::make_shared<SfxRequest>(rReq);
-        rReq.Ignore(); // the 'old' request is not relevant any more
         ExecuteAppendOrRenameTableDialog(pDlg, xRequest, nSlot);
     }
 }
@@ -1329,7 +1325,6 @@ void ScTabViewShell::ExecuteSetTableBackgroundCol(SfxRequest& rReq)
                                                     aTabBgColor));
 
         auto xRequest = std::make_shared<SfxRequest>(rReq);
-        rReq.Ignore(); // the 'old' request is not relevant any more
         ExecuteTableBackgroundDialog(pDlg, xRequest, aTabBgColor, nSlot);
     }
 }
