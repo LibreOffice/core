@@ -16,13 +16,18 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Chart tests.', function() {
 	function insertChart() {
 		mobileHelper.openInsertionWizard();
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Chart...').click();
-		cy.cGet('.leaflet-drag-transform-marker').should('have.length', 32);
-		cy.cGet('svg .OLE2').should('exist');
-		cy.cGet('svg .OLE2 g g path').should('have.length', 40);
+		cy.cGet('.mobile-wizard #ChartWizard').should('exist');
+		cy.cGet('#mobile-wizard').invoke('outerHeight').should('be.gt', 500);
+	}
+
+	function closeChartDialog() {
+		cy.cGet('.mobile-wizard #ChartWizard #ok.ui-pushbutton-wrapper').click();
+		cy.cGet('#mobile-wizard').should('not.be.visible');
+		cy.cGet('#test-div-shapeHandlesSection').should('exist');
 	}
 
 	function stepIntoChartEditing() {
-		cy.cGet('.leaflet-drag-transform-marker').should('exist');
+		cy.cGet('#test-div-shapeHandlesSection').should('exist');
 
 		// Double click onto the chart shape
 		cy.cGet('svg g svg')
@@ -35,7 +40,7 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Chart tests.', function() {
 				cy.cGet('body').dblclick(XPos, YPos);
 			});
 
-		cy.cGet('.leaflet-drag-transform-marker').should('not.exist');
+		cy.cGet('#test-div-shapeHandlesSection').should('not.exist');
 	}
 
 	function exitChartEditing() {
@@ -52,10 +57,41 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Chart tests.', function() {
 				cy.cGet('body').click(XPos, YPos);
 			});
 
-		cy.cGet('.leaflet-drag-transform-marker').should('be.visible');
+		cy.cGet('#test-div-shapeHandlesSection').should('exist');
 	}
 
+	it('Insert a column chart.', function() {
+		cy.cGet('.mobile-wizard .ui-tab').contains('Data').click();
+		cy.cGet('.mobile-wizard #ED_RANGE-input').should('have.value', '$Sheet1.$A$1:$A$3');
+		cy.cGet('.mobile-wizard #IB_RANGE').should('not.be.visible');
+		closeChartDialog();
+		cy.cGet('svg .OLE2').should('exist');
+		cy.cGet('svg .OLE2 g g path').should('have.length', 40);
+	});
+
+	it('Cancel removes the chart.', function() {
+		cy.cGet('#mobile-wizard-dialog-dismiss').click();
+		cy.cGet('#mobile-wizard').should('not.be.visible');
+		cy.cGet('#test-div-shapeHandlesSection').should('not.exist');
+		cy.cGet('svg .OLE2').should('not.exist');
+	});
+
+	it('Pick a pie chart.', function() {
+		cy.cGet('.mobile-wizard #charttype .ui-treeview-entry').contains('Pie').click();
+		closeChartDialog();
+		cy.cGet('svg .OLE2 g g path').should('have.length', 7);
+	});
+
+	it('Give the chart a title.', function() {
+		cy.cGet('.mobile-wizard .ui-tab').contains('Elements').click();
+		cy.cGet('.mobile-wizard #maintitle-input').type('Hello{enter}');
+		closeChartDialog();
+		cy.cGet('svg .OLE2').should('exist');
+		cy.cGet('svg .OLE2 text').contains('Hello').should('exist');
+	});
+
 	it.skip('Change chart type.', function() {
+		closeChartDialog();
 		stepIntoChartEditing();
 		mobileHelper.openMobileWizard();
 		cy.cGet('#ChartTypePanel').click();

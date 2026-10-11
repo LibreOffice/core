@@ -29,8 +29,8 @@
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <rtl/ref.hxx>
 
-#include "dlg_CreationWizard.hxx"
 #include <tools/link.hxx>
+#include <vcl/weld.hxx>
 
 namespace com::sun::star::awt { class XWindow; }
 namespace cpo::uno { class XComponentContext; }
@@ -104,7 +104,7 @@ private:
     cpo::uno::Reference< cpo::uno::XComponentContext>    m_xCC;
     cpo::uno::Reference< css::awt::XWindow >             m_xParentWindow;
 
-    std::shared_ptr<CreationWizard> m_xDialog;
+    std::shared_ptr<weld::DialogController> m_xDialog;
     bool            m_bUnlockControllersOnExecute;
 };
 

@@ -19,6 +19,8 @@
 
 #include <dlg_CreationWizard_UNO.hxx>
 #include <dlg_CreationWizard.hxx>
+#include <dlg_CreationWizardMobile.hxx>
+#include <KitDevice.hxx>
 #include <ChartModel.hxx>
 #include <TimerTriggeredControllerLock.hxx>
 #include <utility>
@@ -180,7 +182,10 @@ void CreationWizardUnoDlg::createDialogOnDemand()
     uno::Reference< XComponent > xKeepAlive( this );
     if( m_xChartModel.is() )
     {
-        m_xDialog = std::make_shared<CreationWizard>(pParent, m_xChartModel, m_xCC);
+        if (isKitMobilePhone())
+            m_xDialog = std::make_shared<CreationWizardMobile>(pParent, m_xChartModel, m_xCC);
+        else
+            m_xDialog = std::make_shared<CreationWizard>(pParent, m_xChartModel, m_xCC);
     }
 }
 

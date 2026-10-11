@@ -43,6 +43,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/chardialog \
 	chart2/uiconfig/ui/chartdatadialog \
 	chart2/uiconfig/ui/charttypedialog \
+	chart2/uiconfig/ui/chartwizard-mobile \
 	chart2/uiconfig/ui/columnfragment \
 	chart2/uiconfig/ui/combobox \
 	chart2/uiconfig/ui/datarangedialog \
@@ -75,6 +76,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/tp_ChartColorPalette \
 	chart2/uiconfig/ui/tp_ChartGradients \
 	chart2/uiconfig/ui/tp_ChartType \
+	chart2/uiconfig/ui/tp_ChartType-mobile \
 	chart2/uiconfig/ui/tp_DataLabel \
 	chart2/uiconfig/ui/tp_DataPointOption \
 	chart2/uiconfig/ui/tp_DataSource \

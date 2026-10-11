@@ -16,7 +16,7 @@
 /* global app $ _ */
 
 /// Dialogs shown full screen.
-const fullScreenDialogs = [];
+const fullScreenDialogs = ['ChartWizard'];
 
 window.L.Control.MobileWizardWindow = window.L.Control.extend({
 	options: {

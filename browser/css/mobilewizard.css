@@ -950,6 +950,13 @@ div#enablecontour + label, #arrangelabel, #SetMinimalRowHeight {clear: both;}
 label[disabled] {
 	color: var(--color-text-light) !important;
 }
+#mobile-wizard .mobile-wizard.ui-text[disabled] {
+	color: var(--color-text-light) !important;
+}
+#mobile-wizard input.ui-edit:disabled {
+	background-color: var(--color-background-dark);
+	border-color: var(--color-border-lighter);
+}
 
 .ui-checkbox.mobile-wizard {
 	margin-top: 25px;
@@ -1221,6 +1228,18 @@ label[disabled] {
 .unotoolbutton.mobile-wizard .unobutton img {
 	width: 24px;
 	height: 24px;
+}
+
+/* Chart wizard */
+#mobile-wizard #ChartWizard #charttype {
+	max-height: 180px;
+}
+#mobile-wizard #ChartWizard #subtype_iconview {
+	width: auto;
+	margin: 10px 5% 0;
+	grid-template-columns: repeat(4, max-content);
+	justify-content: start;
+	gap: var(--spacing-s);
 }
 
 #mobile-wizard-tabs.has-dismiss {

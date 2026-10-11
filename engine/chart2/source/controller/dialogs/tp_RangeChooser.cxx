@@ -30,6 +30,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
+#include <KitDevice.hxx>
 
 namespace
 {
@@ -122,7 +123,8 @@ void RangeChooserTabPage::Activate()
 {
     OWizardPage::Activate();
     initControlsFromModel();
-    m_xED_Range->grab_focus();
+    if (!isKitMobilePhone())
+        m_xED_Range->grab_focus();
 }
 
 void RangeChooserTabPage::initControlsFromModel()
@@ -166,9 +168,9 @@ void RangeChooserTabPage::Deactivate()
     vcl::OWizardPage::Deactivate();
 }
 
-void RangeChooserTabPage::commitPage()
+bool RangeChooserTabPage::commitPage()
 {
-    commitPage(::vcl::WizardTypes::eFinish);
+    return commitPage(::vcl::WizardTypes::eFinish);
 }
 
 bool RangeChooserTabPage::commitPage( ::vcl::WizardTypes::CommitPageReason /*eReason*/ )
@@ -303,7 +305,8 @@ bool RangeChooserTabPage::isValid()
         m_xCB_FirstColumnAsLabel->set_sensitive( bIsValid );
     }
 
-    bool bShowIB = m_rDialogModel.getRangeSelectionHelper()->hasRangeSelection();
+    bool bShowIB = m_rDialogModel.getRangeSelectionHelper()->hasRangeSelection()
+        && !isKitMobilePhone();
     lcl_ShowChooserButton( *m_xIB_Range, bShowIB );
 
     return bIsValid;

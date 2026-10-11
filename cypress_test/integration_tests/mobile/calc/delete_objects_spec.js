@@ -54,6 +54,8 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Delete Objects',function() 
 	it('Delete Chart' , function() {
 		mobileHelper.openInsertionWizard();
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Chart').click();
+		cy.cGet('.mobile-wizard #ChartWizard #ok.ui-pushbutton-wrapper').click();
+		cy.cGet('#mobile-wizard').should('not.be.visible');
 		cy.cGet('#document-container svg g').should('exist');
 
 		//deletion

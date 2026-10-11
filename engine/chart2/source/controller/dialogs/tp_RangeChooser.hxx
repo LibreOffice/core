@@ -46,7 +46,7 @@ public:
 
     virtual void Activate() override;
 
-    void commitPage();
+    bool commitPage();
 
 private:
 

@@ -112,6 +112,7 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/controller/dialogs/dlg_ChartType \
     chart2/source/controller/dialogs/dlg_ChartType_UNO \
     chart2/source/controller/dialogs/dlg_CreationWizard \
+    chart2/source/controller/dialogs/dlg_CreationWizardMobile \
     chart2/source/controller/dialogs/dlg_CreationWizard_UNO \
     chart2/source/controller/dialogs/dlg_DataEditor \
     chart2/source/controller/dialogs/dlg_DataSource \
