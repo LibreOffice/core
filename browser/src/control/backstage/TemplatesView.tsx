@@ -49,12 +49,20 @@ namespace BackstageTemplates {
       .filter(Boolean)
       .join(' ');
 
+    // a localized preview that does not exist steps on to the next one
+    const fallbacks = (template.previewFallbacks || []).slice();
+    const nextPreview = (ev: Event) => {
+      const next = fallbacks.shift();
+      if (next) (ev.target as HTMLImageElement).src = next;
+    };
+
     return (
       <div class={cls} id={template.id} onClick={onClick}>
         <div class="template-thumbnail">
           <img
             alt={template.name}
             src={template.preview || defaultPreview(template.type)}
+            onError={nextPreview}
           />
         </div>
         <div class="template-name">{template.name}</div>

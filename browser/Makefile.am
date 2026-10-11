@@ -1172,6 +1172,9 @@ if ENABLE_DEBUG
 		test -f $(DIST_FOLDER)/welcome/welcome.svg || cp $(srcdir)/welcome/welcome.svg $(DIST_FOLDER)/welcome/welcome.svg ; \
 	fi
 endif
+# The previews are the committed renderings from introdocs/render_previews.py, the English one
+# and one per translated language; a document without them shows the thumbnail embedded in
+# the file.
 	@if test "$(ENABLE_QTAPP)" = true || test "$(ENABLE_MACOSAPP)" = true || test "$(ENABLE_WINDOWSAPP)" = true ; then \
 		echo "Generating localized introductory documents"; \
 		mkdir -p $(DIST_FOLDER)/introdocs/preview ; \
@@ -1179,7 +1182,11 @@ endif
 		for doc in Calc-Intro-Template.ods Impress-Intro-Template.odp ; do \
 			cp $(srcdir)/introdocs/$$doc $(DIST_FOLDER)/introdocs/$$doc && \
 			$(PYTHON) $(srcdir)/introdocs/create_l10n_intro_docs.py $(srcdir)/introdocs/po $(DIST_FOLDER)/introdocs/$$doc >/dev/null || exit 1 ; \
-			unzip -p $(DIST_FOLDER)/introdocs/$$doc Thumbnails/thumbnail.png > $(DIST_FOLDER)/introdocs/preview/$${doc%.*}.png 2>/dev/null || echo "  (no embedded thumbnail in $$doc)" ; \
+			if test -f $(srcdir)/introdocs/preview/$${doc%.*}.png ; then \
+				cp $(srcdir)/introdocs/preview/$${doc%.*}*.png $(DIST_FOLDER)/introdocs/preview/ ; \
+			else \
+				unzip -p $(DIST_FOLDER)/introdocs/$$doc Thumbnails/thumbnail.png > $(DIST_FOLDER)/introdocs/preview/$${doc%.*}.png 2>/dev/null || echo "  (no embedded thumbnail in $$doc)" ; \
+			fi ; \
 		done ; \
 	fi
 

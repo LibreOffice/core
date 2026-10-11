@@ -54,6 +54,8 @@ interface TemplateData {
 	path?: string;
 	basename?: string;
 	preview?: string;
+	// Images to try in turn when the preview fails to load.
+	previewFallbacks?: string[];
 	featured?: boolean;
 	searchText: string;
 }

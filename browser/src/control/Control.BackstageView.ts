@@ -777,18 +777,51 @@ class BackstageView extends window.L.Class {
 			// once the localization table is loaded.
 			const name = _(entry.name);
 			const id = entry.id || this.slugify(entry.name + path);
+			const previews = this.localizedPreviews(entry.preview);
 			docs.push({
 				id,
 				name,
 				type,
 				path,
 				basename: entry.basename ? _(entry.basename) : undefined,
-				preview: entry.preview || undefined,
+				preview: previews[0],
+				previewFallbacks: previews.slice(1),
 				searchText: [name, type, path].join(' ').toLowerCase(),
 			});
 		});
 
 		return docs;
+	}
+
+	// The build ships the English preview of an intro document as
+	// introdocs/preview/<Doc>.png and a rendering per translated language as
+	// <Doc>-<bcp47>.png (see introdocs/render_previews.py). Lists the files
+	// to try for the UI language, most specific first, ending with the
+	// English one.
+	private localizedPreviews(preview: string | null | undefined): string[] {
+		if (!preview) return [];
+		const match = /^(.*)\.png$/.exec(preview);
+		if (!match) return [preview];
+
+		const candidates: string[] = [];
+		for (const tag of this.previewLanguageTags())
+			candidates.push(match[1] + '-' + tag + '.png');
+		candidates.push(preview);
+		return candidates;
+	}
+
+	// The tags the engine matches the UI language against when it
+	// translates the document, in its order: the full tag, then the
+	// language alone. English is the source language and has no file of
+	// its own.
+	private previewLanguageTags(): string[] {
+		const lang = String((window as any).LANG || '').replace(/_/g, '-');
+		if (!lang || lang === 'en-US') return [];
+
+		const tags = [lang];
+		const language = lang.split('-')[0];
+		if (language !== lang) tags.push(language);
+		return tags;
 	}
 
 	private renderInfoView(): void {
