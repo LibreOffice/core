@@ -27,6 +27,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <map>
 
+using namespace svtools;
 namespace
 {
 struct StringPair
@@ -168,8 +169,8 @@ void SvxAppearanceTabPage::ImplDestroy()
     if (m_bRestartRequired)
     {
         pColorConfig->SetupTheme();
-        ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(), GetFrameWeld(),
-                                        svtools::RESTART_REASON_THEME_CHANGE);
+        ::executeRestartDialog(comphelper::getProcessComponentContext(), GetFrameWeld(),
+                               RESTART_REASON_THEME_CHANGE);
     }
 }
 
