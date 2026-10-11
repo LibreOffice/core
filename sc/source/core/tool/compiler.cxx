@@ -520,7 +520,7 @@ void ScCompiler::SetFormulaLanguage( const ScCompiler::OpCodeMapPtr & xMap )
 
     // The difference is needed for an uppercase() call that usually does not
     // result in different strings but for a few languages like Turkish;
-    // though even de-DE and de-CH may differ in ß/SS handling..
+    // though even de-DE and de-CH may differ in ß/SS handling...
     // At least don't care if both are English.
     // The current locale is more likely to not be "en" so check first.
     const LanguageTag& rLT1 = ScGlobal::getCharClass().getLanguageTag();
@@ -4988,7 +4988,7 @@ Label_Rewind:
                 if (ParseDBRange( aUpper ))
                     return true;
 
-                // If followed by '(' (with or without space inbetween) it can not be a
+                // If followed by '(' (with or without space in between) it can not be a
                 // column/row label. Prevent arbitrary content detection.
                 if (!bParenFollows && ParseColRowName( aUpper ))
                     return true;
@@ -5110,7 +5110,7 @@ Label_Rewind:
             }
             if (ParseDBRange( aUpper ))
                 return true;
-            // If followed by '(' (with or without space inbetween) it can not be a
+            // If followed by '(' (with or without space in between) it can not be a
             // column/row label. Prevent arbitrary content detection.
             if (!bParenFollows && ParseColRowName( aUpper ))
                 return true;

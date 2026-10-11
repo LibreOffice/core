@@ -145,7 +145,7 @@ public:
             if ( xNext.is() )
             {
                 m_windows.push_back( xNext );
-                // that the spreadsheetdocument is a xmodel is a given
+                // that the spreadsheetdocument is an XModel is a given
                 rtl::Reference<ScModelObj> xModel = dynamic_cast<ScModelObj*>(xNext.get());
                 if (!xModel)
                     throw uno::RuntimeException();

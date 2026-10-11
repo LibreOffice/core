@@ -2085,7 +2085,7 @@ FormulaToken* ScTokenArray::MergeArray( )
             break;
 
             case ocArrayClose :
-                // not possible with the , but check just in case
+                // not possible with the current syntax, but check just in case
                 // something changes in the future
                 if( i != (nLen-1))
                 {

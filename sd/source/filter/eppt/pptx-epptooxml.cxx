@@ -3635,7 +3635,7 @@ Reference<XShape> PowerPointExport::GetReferencedPlaceholderXShape(const Placeho
         SdrPage* pPage;
         if (ePageType == LAYOUT)
         {
-            // since Layout pages do not have drawpages themselves - mXDrawPage is still the master they reference to..
+            // since Layout pages do not have drawpages themselves - mXDrawPage is still the master they reference to.
             pPage = SdPage::getImplementation(mXDrawPage);
         }
         else

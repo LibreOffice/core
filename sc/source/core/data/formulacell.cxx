@@ -2319,7 +2319,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
         // format may change for different runs, e.g. =IF(B1,B1) with first
         // B1:0 boolean FALSE next B1:23 numeric 23, we don't want the 23
         // displayed as TRUE. Do not force a general format though if
-        // mbNeedsNumberFormat is set (because there was a general format..).
+        // mbNeedsNumberFormat is set (because there was a general format...).
         // Note that nFormatType may be out of sync here if a format was
         // applied or cleared after the last run, but obtaining the current
         // format always just to check would be expensive. There may be

@@ -129,7 +129,7 @@ void OutlineView::Paint(const ::tools::Rectangle& rRect, ::sd::Window const * pW
         // use TextHierarchyBreakupOutliner to get all geometry (text,
         // Icons at LineStart for OutlinerView) embedded to the
         // TextHierarchy.*Primitive2D groupings for better processing, plus
-        // the correct paragraph countings
+        // the correct paragraph counts
         TextHierarchyBreakupOutliner aHelper(GetOutliner());
         GetOutliner().StripPortions(aHelper);
         maTextContent = aHelper.getTextPortionPrimitives();

@@ -4260,8 +4260,8 @@ ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xC
     // qualifier then it's a shortcut for ActiveSheet.Range
     // however, similarly Application.Range is apparently also a
     // shortcut for ActiveSheet.Range
-    // The is however a subtle behavioural difference I've come across
-    // wrt to named ranges.
+    // There is however a subtle behavioural difference I've come across
+    // wrt named ranges.
     // If a named range "test" exists { Sheet1!$A1 } and the active sheet
     // is Sheet2 then the following will fail
     // msgbox ActiveSheet.Range("test").Address ' fails
@@ -4374,8 +4374,8 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, const uno::Ref
     // table of translation of criteria text to FilterOperators
     // <>searchtext - NOT_EQUAL
     //  =searchtext - EQUAL
-    //  *searchtext - startwith
-    //  <>*searchtext - doesn't startwith
+    //  *searchtext - starts with
+    //  <>*searchtext - doesn't start with
     //  *searchtext* - contains
     //  <>*searchtext* - doesn't contain
     // [>|>=|<=|...]searchtext for GREATER_value, GREATER_EQUAL_value etc.

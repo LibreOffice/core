@@ -6873,7 +6873,7 @@ void ChartExport::exportView3D()
         mAny >>= nRotationX;
         if(eChartType == chart::TYPEID_PIE)
         {
-            /* In OOXML we get value in 0..90 range for pie chart X rotation , whereas we expect it to be in -90..90 range,
+            /* In OOXML we get a value in the 0..90 range for pie chart X rotation, whereas we expect it to be in -90..90 range,
                so we convert that during import. It is modified in View3DConverter::convertFromModel()
                here we convert it back to 0..90 as we received in import */
             if( nRotationX < 0 )
