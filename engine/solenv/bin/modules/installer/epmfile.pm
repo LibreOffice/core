@@ -224,7 +224,8 @@ sub create_epm_header
     if ( ! $onepackage->{'packageversion'} ) { installer::exiter::exit_program("ERROR: No packageversion defined for package: $onepackage->{'module'}!", "create_epm_header"); }
     $installer::globals::packageversion = $onepackage->{'packageversion'};
     installer::packagelist::resolve_packagevariables(\$installer::globals::packageversion, $variableshashref, 0);
-    if ( $variableshashref->{'PACKAGEREVISION'} ) { $installer::globals::packagerevision = $variableshashref->{'PACKAGEREVISION'}; }
+    # PACKAGEREVISION is the fourth component of the version number and can be 0
+    if ( defined($variableshashref->{'PACKAGEREVISION'}) && $variableshashref->{'PACKAGEREVISION'} ne '' ) { $installer::globals::packagerevision = $variableshashref->{'PACKAGEREVISION'}; }
 
     $line = "%version" . " " . $installer::globals::packageversion . "\n";
     push(@epmheader, $line);
