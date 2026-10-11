@@ -23,7 +23,6 @@
 
 #define STR_FONT_FEATURE_ID_AALT          NC_("STR_FONT_FEATURE_ID_AALT", "Access All Alternates")
 #define STR_FONT_FEATURE_ID_AFRC          NC_("STR_FONT_FEATURE_ID_AFRC", "Alternative (Vertical) Fractions")
-#define STR_FONT_FEATURE_ID_ALIG          NC_("STR_FONT_FEATURE_ID_ALIG", "Ancient Ligatures")
 #define STR_FONT_FEATURE_ID_C2PC          NC_("STR_FONT_FEATURE_ID_C2PC", "Capitals to Petite Capitals")
 #define STR_FONT_FEATURE_ID_C2SC          NC_("STR_FONT_FEATURE_ID_C2SC", "Capitals to Small Capitals")
 #define STR_FONT_FEATURE_ID_CALT          NC_("STR_FONT_FEATURE_ID_CALT", "Contextual Alternates")
@@ -33,10 +32,8 @@
 #define STR_FONT_FEATURE_ID_CPSP          NC_("STR_FONT_FEATURE_ID_CPSP", "Capital Spacing")
 #define STR_FONT_FEATURE_ID_CSWH          NC_("STR_FONT_FEATURE_ID_CSWH", "Contextual Swash")
 #define STR_FONT_FEATURE_ID_CVXX          NC_("STR_FONT_FEATURE_ID_CVXX", "Character Variant %1")
-#define STR_FONT_FEATURE_ID_DCAP          NC_("STR_FONT_FEATURE_ID_DCAP", "Drop Caps")
 #define STR_FONT_FEATURE_ID_DLIG          NC_("STR_FONT_FEATURE_ID_DLIG", "Discretionary Ligatures")
 #define STR_FONT_FEATURE_ID_DNOM          NC_("STR_FONT_FEATURE_ID_DNOM", "Denominators")
-#define STR_FONT_FEATURE_ID_DPNG          NC_("STR_FONT_FEATURE_ID_DPNG", "Diphthongs (Obsolete)")
 #define STR_FONT_FEATURE_ID_EXPT          NC_("STR_FONT_FEATURE_ID_EXPT", "Expert Forms")
 #define STR_FONT_FEATURE_ID_FALT          NC_("STR_FONT_FEATURE_ID_FALT", "Final Glyph on Line Alternates")
 #define STR_FONT_FEATURE_ID_FRAC          NC_("STR_FONT_FEATURE_ID_FRAC", "Fraction style")

@@ -43,7 +43,6 @@ constexpr auto constFeatureCodeToTranslationID
     = frozen::make_unordered_map<sal_uInt32, TranslateId>({
         { featureCode("aalt"), STR_FONT_FEATURE_ID_AALT },
         { featureCode("afrc"), STR_FONT_FEATURE_ID_AFRC },
-        { featureCode("alig"), STR_FONT_FEATURE_ID_ALIG },
         { featureCode("c2pc"), STR_FONT_FEATURE_ID_C2PC },
         { featureCode("c2sc"), STR_FONT_FEATURE_ID_C2SC },
         { featureCode("calt"), STR_FONT_FEATURE_ID_CALT },
@@ -52,10 +51,8 @@ constexpr auto constFeatureCodeToTranslationID
         { featureCode("cpct"), STR_FONT_FEATURE_ID_CPCT },
         { featureCode("cpsp"), STR_FONT_FEATURE_ID_CPSP },
         { featureCode("cswh"), STR_FONT_FEATURE_ID_CSWH },
-        { featureCode("dcap"), STR_FONT_FEATURE_ID_DCAP },
         { featureCode("dlig"), STR_FONT_FEATURE_ID_DLIG },
         { featureCode("dnom"), STR_FONT_FEATURE_ID_DNOM },
-        { featureCode("dpng"), STR_FONT_FEATURE_ID_DPNG },
         { featureCode("expt"), STR_FONT_FEATURE_ID_EXPT },
         { featureCode("falt"), STR_FONT_FEATURE_ID_FALT },
         { featureCode("frac"), STR_FONT_FEATURE_ID_FRAC },
