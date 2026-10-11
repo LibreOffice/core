@@ -172,6 +172,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
+	$(if $(filter-out EMSCRIPTEN MACOSX WNT,$(OS)),l10ntranslate) \
 	$(if $(filter WNT,$(OS)),,uri-encode) \
 	$(if $(filter WNT,$(OS)), \
 		senddoc \

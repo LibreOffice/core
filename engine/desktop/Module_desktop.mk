@@ -23,6 +23,7 @@ $(eval $(call gb_Module_add_l10n_targets,desktop,\
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
+    $(if $(filter-out EMSCRIPTEN MACOSX WNT,$(OS)),Executable_l10ntranslate) \
     Executable_soffice_bin \
     Package_scripts \
 ))
