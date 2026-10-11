@@ -233,7 +233,7 @@ public:
 
     bool    GetThousandsSep() const;
     void    SetThousandsSep(bool _bUseSeparator);
-        // the is no check if the current format is numeric, so be cautious when calling these functions
+        // there is no check if the current format is numeric, so be cautious when calling these functions
 
     void    DisableRemainderFactor();
     bool    GetDisableRemainderFactor() const { return m_bDisableRemainderFactor; }

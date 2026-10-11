@@ -40,7 +40,7 @@ published service DateTime
      */
     [property] boolean IsDate;
 
-    /** the is the content of this field.
+    /** this is the content of this field.
     */
     [optional, property] com::sun::star::util::DateTime DateTimeValue;
 

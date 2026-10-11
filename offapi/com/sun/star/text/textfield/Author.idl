@@ -33,7 +33,7 @@ published service Author
      */
     [optional, property] boolean IsFixed;
 
-    /** the is the content of this field
+    /** this is the content of this field
     */
     [optional, property] string Content;
 

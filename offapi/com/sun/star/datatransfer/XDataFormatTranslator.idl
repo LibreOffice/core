@@ -39,7 +39,7 @@ published interface XDataFormatTranslator : com::sun::star::uno::XInterface
         @returns
         A system dependent data transfer type for the given DataFlavor
         if there is one available.
-        <p>If the is no system dependent data type for a given DataFlavor
+        <p>If there is no system dependent data type for a given DataFlavor
         the returned any is empty.</p>
     */
     any getSystemDataTypeFromDataFlavor( [in] DataFlavor aDataFlavor );

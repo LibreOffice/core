@@ -506,7 +506,7 @@ OControlModel::OControlModel(
     // the native look is ugly...
     // #i37342#
 {
-    if (_rUnoControlModelTypeName.isEmpty())  // the is a model we have to aggregate
+    if (_rUnoControlModelTypeName.isEmpty())  // this is a model we have to aggregate
         return;
 
     osl_atomic_increment(&m_refCount);

@@ -92,7 +92,7 @@ interface XConnectionTools
             the owner which controls their life time is transferred to this parameter upon return.<br/>
             Your fields live as long as this component lives.<br/>
             Additionally, you are encouraged to dispose this component as soon as you don't need the fields anymore.
-            It depends on the connection's implementation if this is necessary, but the is no guarantee, so to
+            It depends on the connection's implementation if this is necessary, but there is no guarantee, so to
             be on the safe side with respect to resource leaks, you should dispose the component.
 
         @return

@@ -182,11 +182,11 @@ All sizes are in 1/10 typographic point (pt).
 The passed FontList must be retained until the next fill call.
 
 Additionally it supports a relative mod, which allows entering
-percentage values. This, eg., can be useful for template dialogs.
+percentage values. This, e.g., can be useful for template dialogs.
 This mode can only be enabled, but not disabled again.
 
 For DontKnow the FontSizeBox should be filled FontMetric(), so it will
-contain a list with the standard sizes. Th currently shown size
+contain a list with the standard sizes. The currently shown size
 probably needs to be reset by the application.
 
 See also
