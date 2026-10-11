@@ -1267,6 +1267,8 @@ bool CffContext::convertOneTypeOp()
         U8 nMaskByte = 0;
         for( i = 0; i < mnHintSize; i+=2, nMaskBit>>=1) {
             if( !nMaskBit) {
+                if( mpReadPtr >= mpReadEnd)
+                    return false;
                 nMaskByte = *(mpReadPtr++);
                 nMaskBit = 0x80;
             }
@@ -1291,6 +1293,8 @@ bool CffContext::convertOneTypeOp()
         int const MASK_BITS = 8*sizeof(nHintMask);
         for( i = 0; i < mnHintSize; i+=2, nMaskBit>>=1) {
             if( !nMaskBit) {
+                if( mpReadPtr >= mpReadEnd)
+                    return false;
                 nMaskByte = *(mpReadPtr++);
                 nMaskBit = 0x80;
             }
