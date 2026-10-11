@@ -123,6 +123,28 @@ static bool lcl_getSelectedState(const SwAccessibleChild& aChild,
     return false;
 }
 
+std::vector<sw::access::SwAccessibleChild> SwAccessibleSelectionHelper::getSelectedFlyChildren(const SwFEShell& rShell) const
+{
+    std::vector<SwAccessibleChild> aChildren;
+    const bool bPreview = m_rContext.IsInPagePreview();
+    for (const SwFlyFrame* pFlyFrame : rShell.GetSelectedFlyFrames())
+    {
+        const SwFrame* pParent = SwAccessibleFrame::GetParent(SwAccessibleChild(pFlyFrame), bPreview);
+        if (pParent == m_rContext.GetFrame())
+        {
+            aChildren.emplace_back(pFlyFrame);
+            continue;
+        }
+        const SwFrameFormat* pFormat = pFlyFrame->GetFormat();
+        if (pParent && pFormat && pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR
+            && SwAccessibleFrame::GetParent(SwAccessibleChild(pParent), bPreview) == m_rContext.GetFrame())
+        {
+            aChildren.emplace_back(pParent);
+        }
+    }
+    return aChildren;
+}
+
 bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
     sal_Int64 nChildIndex )
 {
@@ -143,10 +165,9 @@ bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
     {
         if ( aChild.GetSwFrame() != nullptr )
         {
-            // Any number of fly frames may be selected together.
-            for (const SwFlyFrame* pFlyFrame : pFEShell->GetSelectedFlyFrames())
+            for (const SwAccessibleChild& rSelected : getSelectedFlyChildren(*pFEShell))
             {
-                if (pFlyFrame == aChild.GetSwFrame())
+                if (rSelected.GetSwFrame() == aChild.GetSwFrame())
                     bRet = true;
             }
         }
@@ -198,10 +219,11 @@ sal_Int64 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
     if (!pFEShell)
         return 0;
 
-    // Every selected fly frame counts, and only fly frames are selectable children.
-    const std::vector<SwFlyFrame*> aFlyFrames = pFEShell->GetSelectedFlyFrames();
-    if ( !aFlyFrames.empty() )
-        return aFlyFrames.size();
+    // The selected fly frames of this context count, and only fly frames are selectable
+    // children.
+    const std::vector<SwAccessibleChild> aSelectedFlys = getSelectedFlyChildren(*pFEShell);
+    if ( !aSelectedFlys.empty() )
+        return aSelectedFlys.size();
 
     sal_Int64 nCount = 0;
     std::list<SwAccessibleChild> aChildren = m_rContext.GetChildren(*(m_rContext.GetMap()));
@@ -238,38 +260,19 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
 {
     SolarMutexGuard aGuard;
 
-    // The index is relative to the selected children. With fly frames selected it picks one
-    // of them, and a selection must exist, otherwise we have to throw an
+    // The index is relative to the selected children. With fly frames of this context
+    // selected it picks one of them, and a selection must exist, otherwise we have to throw an
     // lang::IndexOutOfBoundsException
     SwFEShell* pFEShell = GetFEShell();
     if (!pFEShell)
         throwIndexOutOfBoundsException();
 
     SwAccessibleChild aChild;
-    const std::vector<SwFlyFrame*> aFlyFrames = pFEShell->GetSelectedFlyFrames();
-    if( !aFlyFrames.empty() )
+    const std::vector<SwAccessibleChild> aSelectedFlys = getSelectedFlyChildren(*pFEShell);
+    if( !aSelectedFlys.empty() )
     {
-        if( nSelectedChildIndex >= 0 && o3tl::make_unsigned(nSelectedChildIndex) < aFlyFrames.size() )
-        {
-            const SwFlyFrame* pFlyFrame = aFlyFrames[nSelectedChildIndex];
-            if(SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrame), m_rContext.IsInPagePreview()) == m_rContext.GetFrame() )
-            {
-                aChild = pFlyFrame;
-            }
-            else
-            {
-                const SwFrameFormat *pFrameFormat = pFlyFrame->GetFormat();
-                if (pFrameFormat)
-                {
-                    const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-                    if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
-                    {
-                        const SwFrame *pParaFrame = SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrame), m_rContext.IsInPagePreview() );
-                        aChild = pParaFrame;
-                    }
-                }
-            }
-        }
+        if( nSelectedChildIndex >= 0 && o3tl::make_unsigned(nSelectedChildIndex) < aSelectedFlys.size() )
+            aChild = aSelectedFlys[nSelectedChildIndex];
     }
     else
     {

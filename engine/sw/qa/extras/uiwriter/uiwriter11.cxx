@@ -19,6 +19,8 @@
 #include <vcl/scheduler.hxx>
 #include <svl/srchitem.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
@@ -1524,6 +1526,52 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTransformStaysEnabledForSeveralImages
                    != SfxItemState::DISABLED);
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED,
                          rView.GetViewFrame().GetBindings().QueryState(FN_FORMAT_FRAME_DLG, pItem));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testAccessibleSelectionOfSeveralImages)
+{
+    // Every accessible context counts only the selected images that are its own children, and
+    // hands out exactly those by index.
+    createSwDoc("two-images.fodt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0)));
+    CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), SW_ADD_SELECT, pPage->GetObj(1)));
+    CPPUNIT_ASSERT(pWrtShell->IsMultipleFlyFramesSelected());
+
+    uno::Reference<accessibility::XAccessible> xDocumentAccessible
+        = pWrtShell->GetView().GetEditWin().GetAccessible();
+    uno::Reference<accessibility::XAccessibleContext> xDocumentContext
+        = xDocumentAccessible->getAccessibleContext();
+    uno::Reference<accessibility::XAccessibleSelection> xDocumentSelection(xDocumentContext,
+                                                                           uno::UNO_QUERY_THROW);
+    // Both images hang below the document, so both are its selected children.
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(2), xDocumentSelection->getSelectedAccessibleChildCount());
+    for (sal_Int64 nIndex = 0; nIndex < 2; ++nIndex)
+    {
+        uno::Reference<accessibility::XAccessible> xChild
+            = xDocumentSelection->getSelectedAccessibleChild(nIndex);
+        CPPUNIT_ASSERT(xChild.is());
+        CPPUNIT_ASSERT_EQUAL(accessibility::AccessibleRole::GRAPHIC,
+                             xChild->getAccessibleContext()->getAccessibleRole());
+    }
+
+    // The paragraph holds neither image, so it has no selected child. Before, it reported two
+    // and threw for the first index.
+    uno::Reference<accessibility::XAccessibleSelection> xParagraphSelection;
+    for (sal_Int64 nIndex = 0; nIndex < xDocumentContext->getAccessibleChildCount(); ++nIndex)
+    {
+        uno::Reference<accessibility::XAccessibleContext> xChildContext
+            = xDocumentContext->getAccessibleChild(nIndex)->getAccessibleContext();
+        if (xChildContext->getAccessibleRole() == accessibility::AccessibleRole::PARAGRAPH)
+        {
+            xParagraphSelection.set(xChildContext, uno::UNO_QUERY);
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(xParagraphSelection.is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), xParagraphSelection->getSelectedAccessibleChildCount());
 }
 
 } // end of anonymous namespace

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCSELECTIONHELPER_HXX
 #define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCSELECTIONHELPER_HXX
 
+#include <vector>
 #include <sal/types.h>
 #include <cpo/uno/Reference.h>
 
@@ -27,6 +28,8 @@ namespace com::sun::star::accessibility { class XAccessible; }
 
 class SwAccessibleContext;
 class SwFEShell;
+
+namespace sw::access { class SwAccessibleChild; }
 
 class SwAccessibleSelectionHelper
 {
@@ -38,6 +41,12 @@ class SwAccessibleSelectionHelper
 
     /// @throws css::lang::IndexOutOfBoundsException
     void throwIndexOutOfBoundsException();
+
+    /// The accessible children of the context that stand for the selected fly frames: a fly
+    /// frame whose accessible parent is the context, or, for a fly frame anchored as
+    /// character, the paragraph that holds it where that paragraph is a child of the context.
+    /// Selected fly frames that belong to another context are left out.
+    std::vector<sw::access::SwAccessibleChild> getSelectedFlyChildren(const SwFEShell& rShell) const;
 
 public:
     SwAccessibleSelectionHelper( SwAccessibleContext& rContext );
