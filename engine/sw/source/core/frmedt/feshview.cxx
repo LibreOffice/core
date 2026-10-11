@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <algorithm>
 #include <svx/constructhelper.hxx>
 #include <svx/strings.hrc>
 #include <svx/sdrobjectfilter.hxx>
@@ -181,6 +182,10 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
     SwFlyFrame* pOldSelFly = nullptr;
     const Point aOldPos( pDView->GetAllMarkedRect().TopLeft() );
 
+    // The fly frames selected before this call. Each one that leaves the selection and shows an
+    // animation is repainted below, so the animation runs again.
+    const std::vector<SwFlyFrame*> aPreviouslySelectedFlys = GetSelectedFlyFrames();
+
     // A graphic fly frame may join a selection that holds only graphic fly frames. Every other
     // combination replaces the old selection.
     bool bAddGraphic = false;
@@ -259,12 +264,6 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                 if( bUnLockView )
                     LockView( false );
             }
-            if ( nType & CNT_GRF &&
-                 static_cast<SwNoTextFrame*>(pOldSelFly->Lower())->HasAnimation() )
-            {
-                GetWin()->Invalidate( pOldSelFly->getFrameArea().SVRect() );
-            }
-
             bUnmark = true;
         }
         // Cancel crop mode
@@ -319,6 +318,22 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
     }
 
     const bool bRet = 0 != rMrkList.GetMarkCount();
+
+    // An animated image stands still while it is selected, so every one that left the
+    // selection is repainted and animates again.
+    if ( !aPreviouslySelectedFlys.empty() && GetWin() )
+    {
+        const std::vector<SwFlyFrame*> aSelectedFlys = GetSelectedFlyFrames();
+        for ( SwFlyFrame* pPreviousFly : aPreviouslySelectedFlys )
+        {
+            if ( std::find( aSelectedFlys.begin(), aSelectedFlys.end(), pPreviousFly ) != aSelectedFlys.end() )
+                continue;
+            const SwFrame* pLower = pPreviousFly->Lower();
+            if ( pLower && pLower->IsNoTextFrame() &&
+                 static_cast<const SwNoTextFrame*>(pLower)->HasAnimation() )
+                GetWin()->Invalidate( pPreviousFly->getFrameArea().SVRect() );
+        }
+    }
 
     if ( rMrkList.GetMarkCount() > 1 && !::IsGraphicFlyMarkList( rMrkList ) )
     {
