@@ -771,16 +771,18 @@ class BackstageView extends window.L.Class {
 			const type = this.normalizeTemplateType(entry.type, path);
 			if (!type) return;
 
-			const name = entry.name;
-			if (!name) return;
+			if (!entry.name) return;
 
-			const id = entry.id || this.slugify(name + path);
+			// The manifest marks its strings with N_(), so translate them here,
+			// once the localization table is loaded.
+			const name = _(entry.name);
+			const id = entry.id || this.slugify(entry.name + path);
 			docs.push({
 				id,
 				name,
 				type,
 				path,
-				basename: entry.basename || undefined,
+				basename: entry.basename ? _(entry.basename) : undefined,
 				preview: entry.preview || undefined,
 				searchText: [name, type, path].join(' ').toLowerCase(),
 			});
@@ -907,10 +909,12 @@ class BackstageView extends window.L.Class {
 			const type = this.normalizeTemplateType(entry.type, absolutePath);
 			if (!type) return;
 
-			const name = entry.name;
-			if (!name) return;
+			if (!entry.name) return;
 
-			const id = entry.id || this.slugify(name + absolutePath);
+			// The manifest marks its strings with N_(), so translate them here,
+			// once the localization table is loaded.
+			const name = _(entry.name);
+			const id = entry.id || this.slugify(entry.name + absolutePath);
 			const searchComponents = [name, type, absolutePath];
 
 			templates.push({
@@ -918,7 +922,7 @@ class BackstageView extends window.L.Class {
 				name,
 				type,
 				path: absolutePath,
-				basename: entry.basename || undefined,
+				basename: entry.basename ? _(entry.basename) : undefined,
 				preview: entry.preview || undefined,
 				featured: !!entry.featured,
 				searchText: searchComponents.join(' ').toLowerCase(),

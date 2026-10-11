@@ -2313,6 +2313,14 @@ function showWelcomeSVG() {
 		return string.toLocaleString();
 	};
 
+	// Marks a string for extraction into the pot and returns it untranslated.
+	// For tables that are built before the localization table is loaded, such
+	// as the template manifests; the reader translates each entry with _()
+	// when it uses it.
+	global.N_ = function (string) {
+		return string;
+	};
+
 	// Some global variables are defined in cool.html, among them:
 	// global.host: the host URL, with ws(s):// protocol
 	// global.serviceRoot: an optional root path on the server, typically blank.

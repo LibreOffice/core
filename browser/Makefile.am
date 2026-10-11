@@ -1190,7 +1190,7 @@ endif
 
 # Stands in for the whole templates subdirectory.
 # Just copy all of it to dist/templates.
-$(TEMPLATE_MANIFEST):
+$(TEMPLATE_MANIFEST): $(srcdir)/templates/templates.js
 	mkdir -p $(dir $@)
 	cp -r $(srcdir)/templates $(DIST_FOLDER)
 
@@ -1594,7 +1594,7 @@ libs:
 	&& $(call npm_source,$(NODE_MODULES_SRC))
 
 pot:
-	xgettext --from-code=UTF-8 --language=JavaScript --keyword=_ --keyword=_n:1,2 --add-comments=TRANSLATORS: --output=po/templates/cool-ui.pot \
+	xgettext --from-code=UTF-8 --language=JavaScript --keyword=_ --keyword=_n:1,2 --keyword=N_ --add-comments=TRANSLATORS: --output=po/templates/cool-ui.pot \
 		admin/admin.strings.js \
 		admin/src/AdminClusterOverview.js \
 		admin/src/AdminSocketAnalytics.js \
