@@ -246,6 +246,9 @@ static const int CODA_WM_ACTIVATEADJACENTTAB = WM_APP + 6;
 // Pops up the menu for the tab named in the wParam, at the point of the window's client area in
 // the lParam. Posted, so the menu's modal loop does not run inside a callback of the strip.
 static const int CODA_WM_SHOWTABMENU = WM_APP + 7;
+// Moves the tab named in the wParam into a new window of its own, placed at the point of the screen
+// in the lParam. Posted, so the web views change windows outside a callback of the strip.
+static const int CODA_WM_MOVETABTONEWWINDOW = WM_APP + 8;
 
 // One file pick the engine asked for, posted as CODA_WM_SHOWFILEPICKER to the hidden owner
 // window; the wide strings own the dialog's title and filter text.
@@ -388,6 +391,8 @@ static void closeTab(WindowState& window, int tabId);
 static void activateAdjacentTab(WindowState& window, int direction);
 
 static void showTabContextMenu(HWND hWnd, int tabId, POINT point);
+
+static void moveTabToNewWindow(HWND hWnd, int tabId, const POINT* dropPoint = nullptr);
 
 static void layoutTabs(WindowState& window);
 
@@ -2141,6 +2146,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                                { (short)LOWORD(lParam), (short)HIWORD(lParam) });
             break;
 
+        case CODA_WM_MOVETABTONEWWINDOW:
+        {
+            const POINT point = { (short)LOWORD(lParam), (short)HIWORD(lParam) };
+            moveTabToNewWindow(hWnd, (int)wParam, &point);
+            break;
+        }
+
         case WM_TIMER:
             if (wParam == TIMER_ID_DROP_OVERLAY)
             {
@@ -3041,8 +3053,6 @@ static void activateAdjacentTab(WindowState& window, int direction)
     activateTab(window, window.tabIds[((index + direction) % count + count) % count]);
 }
 
-static void moveTabToNewWindow(HWND hWnd, int tabId);
-
 // The menu a right click on a tab brings up.
 static void showTabContextMenu(HWND hWnd, int tabId, POINT point)
 {
@@ -3201,12 +3211,32 @@ static void processStripMessage(WindowState& window, const std::string& message)
     {
         LOG_DBG("From the tab strip: " << args->getElement<std::string>(0));
     }
-    else if (call == "tabDragStarted" || call == "tabDragEnded" || call == "targetDragOver" ||
+    else if (call == "tabDragEnded" && argCount >= 2)
+    {
+        // A drop on the strip has already reordered the tabs. The page sees no difference between
+        // a drag cancelled with Escape and a drop that nothing took, so the key is checked here.
+        if (args->getElement<bool>(1) || (GetAsyncKeyState(VK_ESCAPE) & 0x8000))
+            return;
+
+        // A tab released over the desktop, or over another application, moves out into a window
+        // of its own, as with the context menu. Released over one of the app's own windows, it
+        // stays where it is. The drop overlay belongs to the document window that owns it.
+        POINT point;
+        if (!GetCursorPos(&point))
+            return;
+        const HWND root = GetAncestor(WindowFromPoint(point), GA_ROOT);
+        if (root && (findWindow(root) || findWindow(GetWindow(root, GW_OWNER))))
+            return;
+
+        PostMessageW(window.hWnd, CODA_WM_MOVETABTONEWWINDOW, (WPARAM)args->getElement<int>(0),
+                     MAKELPARAM(point.x, point.y));
+    }
+    else if (call == "tabDragStarted" || call == "targetDragOver" ||
              call == "tabAdoptFromOtherWindow")
     {
         // Dragging a tab from one window to another, which CODA-W does not do. A drag that stays
-        // inside the strip arrives as tabReordered, and the context menu moves a tab out into a
-        // window of its own.
+        // inside the strip arrives as tabReordered, and one that ends outside the app's windows
+        // as tabDragEnded.
     }
     else
     {
@@ -3674,15 +3704,37 @@ static void defaultWindowSize(int& width, int& height)
     }
 }
 
-// A new window that shows documents as tabs. It goes once its last tab closes.
-static WindowState& createTabbedWindow()
+// A new window that shows documents as tabs. It goes once its last tab closes. Given a point of the
+// screen, the window comes up with that point on its title bar, and inside the work area of the
+// monitor the point is on.
+static WindowState& createTabbedWindow(const POINT* titleBarPoint = nullptr)
 {
     int width, height;
     defaultWindowSize(width, height);
 
+    int x = CW_USEDEFAULT, y = CW_USEDEFAULT;
+    if (titleBarPoint)
+    {
+        x = titleBarPoint->x - width / 2;
+        y = titleBarPoint->y - GetSystemMetrics(SM_CYSIZEFRAME) -
+            GetSystemMetrics(SM_CXPADDEDBORDER) - GetSystemMetrics(SM_CYCAPTION) / 2;
+
+        // The default size is taken from the primary monitor, which can be larger than this one.
+        MONITORINFO monitorInfo;
+        monitorInfo.cbSize = sizeof(monitorInfo);
+        if (GetMonitorInfoW(MonitorFromPoint(*titleBarPoint, MONITOR_DEFAULTTONEAREST),
+                            &monitorInfo))
+        {
+            const RECT& work = monitorInfo.rcWork;
+            width = std::min(width, static_cast<int>(work.right - work.left));
+            height = std::min(height, static_cast<int>(work.bottom - work.top));
+            x = std::clamp(x, static_cast<int>(work.left), static_cast<int>(work.right) - width);
+            y = std::clamp(y, static_cast<int>(work.top), static_cast<int>(work.bottom) - height);
+        }
+    }
+
     WindowState& window = createAppWindow(Util::string_to_wide_string(APP_NAME),
-                                          WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
-                                          width, height);
+                                          WS_OVERLAPPEDWINDOW, x, y, width, height);
     window.isTabbed = true;
     tabbedWindow = window.hWnd;
 
@@ -3701,16 +3753,17 @@ static WindowState& getOrCreateTabbedWindow()
     return createTabbedWindow();
 }
 
-// Take a document out of its window, and show it in a new tabbed window of its own. The WebView2
-// moves with it, so the document stays loaded as it is.
-static void moveTabToNewWindow(HWND hWnd, int tabId)
+// Take a document out of its window, and show it in a new tabbed window of its own, with the title
+// bar at the drop point when there is one. The WebView2 moves with it, so the document stays
+// loaded as it is.
+static void moveTabToNewWindow(HWND hWnd, int tabId, const POINT* dropPoint)
 {
     WindowState* source = findWindow(hWnd);
     DocumentTab* tab = findTab(tabId);
     if (!source || !tab || tab->hWnd != hWnd || source->tabIds.size() < 2)
         return;
 
-    WindowState& target = createTabbedWindow();
+    WindowState& target = createTabbedWindow(dropPoint);
 
     removeTabFromWindow(*source, tabId);
 
