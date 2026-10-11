@@ -507,6 +507,13 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                     const SdrMark& rMark = *rMrkList.GetMark( i );
                     pObj = rMark.GetMarkedSdrObj();
                     assert(pObj);
+                    // The fly frames above left the mark list as their frames were destroyed.
+                    // This block handles draw objects, whose contact is a SwDrawContact.
+                    if( DynCastSwVirtFlyDrawObj( pObj ) != nullptr )
+                    {
+                        assert(!"a fly frame is still marked after its deletion");
+                        continue;
+                    }
                     SwDrawContact *pContact = static_cast<SwDrawContact*>(pObj->GetUserCall());
                     if( pContact ) // of course not for grouped objects
                     {
