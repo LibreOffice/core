@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-22 21:46+0200\n"
-"PO-Revision-Date: 2026-10-10 03:12+0000\n"
+"PO-Revision-Date: 2026-10-11 03:58+0000\n"
 "Last-Translator: dukezas <dukezas@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/lt/>\n"
@@ -5780,11 +5780,11 @@ msgstr "Originalus dizainas"
 
 #: src/control/Control.SlideImportPane.tsx:1394
 msgid "Linked, follows the slide number"
-msgstr ""
+msgstr "Susietas(a), seka skaidrės numerį"
 
 #: src/control/Control.SlideImportPane.tsx:1395
 msgid "Linked, follows the slide"
-msgstr ""
+msgstr "Susietas(a), seka skaidrę"
 
 #: src/control/Control.SlideImportPane.tsx:1432
 msgid "Keep original design"
@@ -5878,7 +5878,7 @@ msgstr ""
 
 #: src/slideimport/SlideLinks.ts:565 src/slideimport/SlideLinks.ts:744
 msgid "The slides of {0} could not be read into this presentation."
-msgstr ""
+msgstr "Skaidrių iš {0} negalima įskaityti į šią prezentaciją."
 
 #: src/slideimport/SlideLinks.ts:669
 msgid "Cannot update slide {0}: the source lacks matching slide"
@@ -5956,6 +5956,8 @@ msgstr "Įjungtas greitas „Kit jail“ tipo tvirtinimas"
 #: src/control/Control.ServerAuditDialog.ts:133
 msgid "Fast kit jail setup with landlock, nothing to copy or mount"
 msgstr ""
+"\"Fast kit jail\" nustatymai su \"landlock\", nėra nieko kopijavimui ar "
+"pririšimui"
 
 #: src/control/Control.ServerAuditDialog.ts:146
 msgid "Poorly performing proxying of all network requests."
@@ -6541,15 +6543,15 @@ msgstr "Kaip norėtumėt redaguoti?"
 #: src/control/Permission.js:436
 msgid ""
 "Other users are viewing this document. Choose how you'd like to continue:"
-msgstr ""
+msgstr "Kiti naudotojai peržiūri šį dokumentą. Pasirinkite, kaip norite tęsti:"
 
 #: src/control/Permission.js:441
 msgid "Edit locally"
-msgstr ""
+msgstr "Redaguoti lokaliai"
 
 #: src/control/Permission.js:442
 msgid "Changes sync when you save"
-msgstr ""
+msgstr "Pakeitimai sinchronizuojami išsaugant"
 
 #: src/control/Permission.js:448
 msgid "Collaborative editing"
@@ -6557,42 +6559,42 @@ msgstr "Bendradarbiavimas redaguojant"
 
 #: src/control/Permission.js:449 src/control/Permission.js:481
 msgid "Edit together in real-time"
-msgstr ""
+msgstr "Redaguoti kartu realiam laike"
 
 #: src/control/Permission.js:471
 msgid "Keep viewing local copy"
-msgstr ""
+msgstr "Tęsti lokalios kopijos peržiūrą"
 
 #: src/control/Permission.js:472
 msgid "Continue with your version"
-msgstr ""
+msgstr "Tęsti savo versiją"
 
 #: src/control/Permission.js:480
 msgid "Join collaborative editing"
-msgstr ""
+msgstr "Prisijungti prie bendro redagavimo"
 
 #: src/control/Permission.js:506
 msgid "Waiting for changes to be saved..."
-msgstr ""
+msgstr "Laukiama kol bus išsaugoti pakeitimai..."
 
 #: src/control/Permission.js:599
 msgid ""
 "Other users are editing this document. Choose how you'd like to continue:"
-msgstr ""
+msgstr "Kiti naudotojai redaguoja šį dokumentą. Pasirinkite, kaip norite tęsti:"
 
 #: src/control/Permission.js:615
 msgid "started editing"
-msgstr ""
+msgstr "pradėjo redagavimą"
 
 #: src/control/Permission.js:616
 msgid "{0} started editing"
-msgstr ""
+msgstr "{0} pradėjo redagavimą"
 
 #: src/control/Permission.js:617
 msgid ""
 "Someone else is now editing this document. Choose how you'd like to "
 "continue:"
-msgstr ""
+msgstr "Kažkas šiuo metu redaguoja šį dokumentą. Pasirinkite kaip norite tęsti:"
 
 #: src/control/Permission.js:650
 msgid "Save as ODF format"
@@ -6742,7 +6744,7 @@ msgstr "Pervadinimas..."
 
 #: src/control/Toolbar.js:860
 msgid "Unable to share"
-msgstr ""
+msgstr "Neįmanoma dalintis"
 
 #: src/control/VRuler.ts:198 src/control/VRuler.ts:425
 msgid "Top Margin"
@@ -6978,7 +6980,7 @@ msgstr "Labai išplėstas"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1806
 msgid "Copy Markdown"
-msgstr ""
+msgstr "Kopijuoti \"Markdown\""
 
 #: src/control/jsdialog/Definitions.Menu.ts:1834
 msgid "Inline"
@@ -7006,15 +7008,15 @@ msgstr "Viršaus/apačios taisyklės"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
-msgstr ""
+msgstr "Spalvų skalė"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1989
 msgid "Data Bar"
-msgstr ""
+msgstr "Duomenų juosta"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1994
 msgid "Icon Set"
-msgstr ""
+msgstr "Ikonų rinkinys"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2011
 msgid "No Borders"
@@ -7156,59 +7158,59 @@ msgstr "Įterpti pastabą"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
-msgstr ""
+msgstr "Tamsus 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:37
 msgid "Light 1"
-msgstr ""
+msgstr "Šviesus 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:38
 msgid "Dark 2"
-msgstr ""
+msgstr "Tamsus 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:39
 msgid "Light 2"
-msgstr ""
+msgstr "Šviesus 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:40
 msgid "Accent 1"
-msgstr ""
+msgstr "Akcentas 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:41
 msgid "Accent 2"
-msgstr ""
+msgstr "Akcentas 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:42
 msgid "Accent 3"
-msgstr ""
+msgstr "Akcentas 3"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:43
 msgid "Accent 4"
-msgstr ""
+msgstr "Akcentas 4"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:44
 msgid "Accent 5"
-msgstr ""
+msgstr "Akcentas 5"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:45
 msgid "Accent 6"
-msgstr ""
+msgstr "Akcentas 6"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
-msgstr ""
+msgstr "Hipersaitas (nuoroda)"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:47
 msgid "Followed Hyperlink"
-msgstr ""
+msgstr "Sekamas hipersaitas"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:56
 msgid "%1, %2% Lighter"
-msgstr ""
+msgstr "%1, %2% Šviesiau"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:60
 msgid "%1, %2% Darker"
-msgstr ""
+msgstr "%1, %2% Tamsiau"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:79
 #: src/control/jsdialog/Widget.ColorPicker.ts:186
@@ -7371,11 +7373,11 @@ msgstr "Lentelės langelių funkcijos"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Size of selected shape"
-msgstr ""
+msgstr "Pasirinktos formos dydis"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Shape Size"
-msgstr ""
+msgstr "Formos dydis"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
 msgid "Sheet Navigation"
@@ -7399,11 +7401,11 @@ msgstr "Redagavimo režimas"
 
 #: src/control/jsdialog/Widget.LineWidthCustom.ts:70
 msgid "Last Custom Value"
-msgstr ""
+msgstr "Paskutinė pasirinkta reikšmė"
 
 #: src/control/jsdialog/Widget.LineWidthCustom.ts:134
 msgid "Custom Line Thickness:"
-msgstr ""
+msgstr "Pasirinktinis linijos storis:"
 
 #: src/control/jsdialog/Widget.MobileBorderSelector.js:111
 msgid "Cell borders"
@@ -7411,11 +7413,11 @@ msgstr "Langeliu kraštai"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:101
 msgid "New Table Style..."
-msgstr ""
+msgstr "Naujas lentelės stilius..."
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:112
 msgid "Clear Style"
-msgstr ""
+msgstr "Aiškus stilius"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:137
 msgid "Open Styles Sidebar"
@@ -7587,11 +7589,11 @@ msgstr "Tik dokumento savininkas gali keisti slaptažodį."
 
 #: src/app/Socket.ts:2664
 msgid "You do not have permission to edit this document."
-msgstr ""
+msgstr "Neturite leidimo šio dokumento redagavimui."
 
 #: src/app/Socket.ts:2665
 msgid "The document could not be made editable."
-msgstr ""
+msgstr "Negalima padaryti dokumento redaguojamu."
 
 #: src/app/Socket.ts:2735 src/app/Socket.ts:2746
 msgid "Missing Fonts"
@@ -7625,7 +7627,7 @@ msgstr "Serveris išsijungia"
 
 #: src/docdispatcher.ts:659
 msgid "AI is not configured, contact your administrator"
-msgstr ""
+msgstr "DI nesukonfiguruotas, prašom kreiptis į savo administratorių"
 
 #: src/docdispatcher.ts:926
 msgid "Are you sure you want to delete this slide?"
@@ -7722,13 +7724,15 @@ msgstr ""
 
 #: src/errormessages.ts:39
 msgid "Your session will end in {time}. Refresh the page to continue."
-msgstr ""
+msgstr "Jūsų sesija baigsis po {time}. Atnaujinkite puslapį tęsimui."
 
 #: src/errormessages.ts:42
 msgid ""
 "Your session has ended. Further changes to the document might not be saved. "
 "Refresh the page to continue."
 msgstr ""
+"Jūsų sesija baigėsi. Sekantys pakeitimai dokumente gali būti neišsaugoti. "
+"Atnaujinkite puslapį tęsimui."
 
 #: src/errormessages.ts:45
 msgid ""
@@ -7902,22 +7906,22 @@ msgstr "Už lentelės ribų"
 #: src/layer/marker/A11yTextInput.js:359
 msgid "%n row"
 msgid_plural "%n rows"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%n eilutė"
+msgstr[1] "%n eilutės"
+msgstr[2] "%n eilučių"
 
 #: src/layer/marker/A11yTextInput.js:360
 msgid "%n column"
 msgid_plural "%n columns"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%n stulpelis"
+msgstr[1] "%n stulpeliai"
+msgstr[2] "%n stulpelių"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
 #: src/layer/marker/A11yTextInput.js:363
 msgid "Table with {0} and {1}"
-msgstr ""
+msgstr "Lentekė su {0} ir {1}"
 
 #: src/layer/marker/A11yTextInput.js:368
 msgid "Row {0} through {1}"
@@ -8012,7 +8016,7 @@ msgstr ""
 
 #: src/map/Clipboard.js:203
 msgid "Copying from the document has been disabled by your administrator"
-msgstr ""
+msgstr "Administratorius uždraudė kopijavimą iš dokumento"
 
 #: src/map/Clipboard.js:316
 msgid "warning: copy/paste request timed out"
@@ -8162,7 +8166,7 @@ msgstr "Lange rodomas pristatymas: "
 #: src/map/handler/Map.SlideShow.js:210
 #: src/slideshow/SlideShowPresenter.ts:1253
 msgid "Presenting in another window"
-msgstr ""
+msgstr "Pateikiama kitame lange"
 
 #: src/map/handler/Map.SlideShow.js:211
 #: src/slideshow/SlideShowPresenter.ts:1254
@@ -8231,7 +8235,7 @@ msgstr "Pasisveikinimo dialogas"
 
 #: src/map/handler/Map.Settings.ts:276
 msgid "Settings saved. Add an API key to use the AI assistant."
-msgstr ""
+msgstr "Nustatymai išsaugoti. Naudojimuisi DI aistentu pridėkite API raktą."
 
 #: src/map/handler/Map.Settings.ts:281
 msgid "Settings saved"
@@ -8281,15 +8285,15 @@ msgstr "Tęsiamas"
 
 #: src/slideshow/engine/SlideShowHandler.ts:394
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "Animacija: {0}, {1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:398
 msgid "Animation: {0}"
-msgstr ""
+msgstr "Animacija: {0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:545
 msgid "Transition: {0}"
-msgstr ""
+msgstr "Perėjimas: {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -8344,11 +8348,11 @@ msgstr "Atitolinti"
 
 #: src/slideshow/PresenterConsole.js:47
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Esamos skaidrės peržiūra"
 
 #: src/slideshow/PresenterConsole.js:48
 msgid "Preview of the next slide"
-msgstr ""
+msgstr "Sekančios skaidrės peržiūra"
 
 #: src/slideshow/PresenterConsole.js:211
 msgid "Preview Slide {1}"
@@ -8356,11 +8360,11 @@ msgstr "Peržiūrėti skaidrę {1}"
 
 #: src/slideshow/PresenterConsole.js:834
 msgid "You are leaving the presentation."
-msgstr ""
+msgstr "Jūs išeinate iš prezentacijos."
 
 #: src/slideshow/PresenterConsole.js:835
 msgid "The link is not valid."
-msgstr ""
+msgstr "Nuoroda neteisinga."
 
 #: src/slideshow/PresenterConsole.js:1167
 #: src/slideshow/SlideShowPresenter.ts:952
@@ -8401,7 +8405,7 @@ msgstr "Sustabdyti Sekimą"
 
 #: src/control/Control.Extension.ts:597 src/control/Control.Extension.ts:686
 msgid "Extension command failed: %1"
-msgstr ""
+msgstr "Plėtinio komanda nepavyko: %1"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
@@ -8409,7 +8413,7 @@ msgstr "Šiuolaikinis verslo laiškas (sans-serif)"
 
 #: templates/templates.js:10 templates/templates.js:20
 msgid "Modern Business Letter"
-msgstr ""
+msgstr "Šiuolaikinis verslo laiškas"
 
 #: templates/templates.js:16
 msgid "Modern Business Letter (serif)"
@@ -8525,11 +8529,11 @@ msgstr "Geltona idėja"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Sveiki atvykę į skaičiuoklę"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Sveiki atvykę į prezentaciją"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
