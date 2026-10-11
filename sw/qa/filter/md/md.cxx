@@ -157,6 +157,56 @@ CPPUNIT_TEST_FIXTURE(Test, testList)
     CPPUNIT_ASSERT_EQUAL(OUString("Unordered"), getParagraph(2)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf172529)
+{
+    setImportFilterName(TestFilter::MD);
+    createSwDoc("tdf172529.md");
+
+    // The list in the attachment starts at 2, not 1.
+    CPPUNIT_ASSERT_EQUAL(u"2."_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"3."_ustr,
+                         getProperty<OUString>(getParagraph(2), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"4."_ustr,
+                         getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testOrderedListStart)
+{
+    setImportFilterName(TestFilter::MD);
+    createSwDoc("ordered-list-start.md");
+
+    // A nested list has its own start value, and sibling lists may restart at another value.
+    CPPUNIT_ASSERT_EQUAL(u"3."_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"7."_ustr,
+                         getProperty<OUString>(getParagraph(2), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"8."_ustr,
+                         getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"4."_ustr,
+                         getProperty<OUString>(getParagraph(4), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"2."_ustr,
+                         getProperty<OUString>(getParagraph(5), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"3."_ustr,
+                         getProperty<OUString>(getParagraph(6), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"5."_ustr,
+                         getProperty<OUString>(getParagraph(7), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"1."_ustr,
+                         getProperty<OUString>(getParagraph(8), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"2."_ustr,
+                         getProperty<OUString>(getParagraph(9), u"ListLabelString"_ustr));
+
+    // Zero is a valid start, and a subsequent top-level list must not inherit it.
+    CPPUNIT_ASSERT_EQUAL(u"0."_ustr,
+                         getProperty<OUString>(getParagraph(11), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"1."_ustr,
+                         getProperty<OUString>(getParagraph(12), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"5."_ustr,
+                         getProperty<OUString>(getParagraph(14), u"ListLabelString"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"6."_ustr,
+                         getProperty<OUString>(getParagraph(15), u"ListLabelString"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testExportingRedlines)
 {
     // Given a document with some redlines

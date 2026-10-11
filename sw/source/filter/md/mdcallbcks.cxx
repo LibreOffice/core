@@ -53,7 +53,8 @@ int SwMarkdownParser::enter_block_callback(MD_BLOCKTYPE type, void* detail, void
             parser->StartNumberedBulletList(type);
             break;
         case MD_BLOCK_OL:
-            parser->StartNumberedBulletList(type);
+            parser->StartNumberedBulletList(type,
+                                            static_cast<const MD_BLOCK_OL_DETAIL*>(detail)->start);
             break;
         case MD_BLOCK_LI:
             parser->StartNumberedBulletListItem(*static_cast<const MD_BLOCK_LI_DETAIL*>(detail));
