@@ -34,6 +34,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -1500,6 +1501,29 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testSelectionPictureOfSeveralImages)
     const sal_Int32 nFirstX = getXPath(pXmlDoc, "(//*[@class='BoundingBox'])[1]", "x").toInt32();
     const sal_Int32 nSecondX = getXPath(pXmlDoc, "(//*[@class='BoundingBox'])[2]", "x").toInt32();
     CPPUNIT_ASSERT(nSecondX > nFirstX);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTransformStaysEnabledForSeveralImages)
+{
+    // With two images selected, moving and resizing them stays available while the commands
+    // that act on one image are disabled.
+    createSwDoc("two-images.fodt");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0)));
+    CPPUNIT_ASSERT(pWrtShell->SelectObj(Point(), SW_ADD_SELECT, pPage->GetObj(1)));
+    CPPUNIT_ASSERT(pWrtShell->IsMultipleFlyFramesSelected());
+    // The view switches to the frame shell on a timer after a selection change, so do that
+    // switch here.
+    SwView& rView = pWrtShell->GetView();
+    rView.SelectShell();
+
+    std::unique_ptr<SfxPoolItem> pItem;
+    CPPUNIT_ASSERT(rView.GetViewFrame().GetBindings().QueryState(SID_ATTR_TRANSFORM, pItem)
+                   != SfxItemState::DISABLED);
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED,
+                         rView.GetViewFrame().GetBindings().QueryState(FN_FORMAT_FRAME_DLG, pItem));
 }
 
 } // end of anonymous namespace

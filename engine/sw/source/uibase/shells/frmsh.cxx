@@ -836,10 +836,17 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
     if (!rSh.IsFrameSelected())
         return;
 
-    // The frame commands act on one fly frame, so with several selected they are all disabled.
+    // The frame commands act on one fly frame, so with several selected they are disabled.
+    // Moving and resizing the whole selection stays available, so the transform slot keeps
+    // its default state.
     if (rSh.IsMultipleFlyFramesSelected())
     {
-        StateDisableItems(rSet);
+        SfxWhichIter aIter( rSet );
+        for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
+        {
+            if (nWhich != SID_ATTR_TRANSFORM)
+                rSet.DisableItem(nWhich);
+        }
         return;
     }
 
