@@ -834,10 +834,20 @@ function showWelcomeSVG() {
 	const initializer = getInitializerClass();
 	initializer.afterInitialization();
 
+	// True when global.socket is an open WebSocket, IndirectSocket or
+	// ProxySocket, so a message can be passed straight to its send().
+	global.isRawSocketOpen = function () {
+		return !!global.socket &&
+			(global.socket instanceof WebSocket ||
+			 global.socket instanceof global.IndirectSocket ||
+			 global.socket instanceof global.ProxySocket) &&
+			global.socket.readyState === 1;
+	};
+
 	global.logServer = function (log) {
 		if (global.ThisIsAMobileApp) {
 			global.postMobileError(log);
-		} else if (global.socket && (global.socket instanceof WebSocket || global.socket instanceof global.IndirectSocket) && global.socket.readyState === 1) {
+		} else if (global.isRawSocketOpen()) {
 			global.socket.send(log);
 		} else if (global.socket && global.L && global.app.definitions.Socket &&
 			   (global.socket instanceof global.app.definitions.Socket) && global.socket.connected()) {
@@ -1179,7 +1189,7 @@ function showWelcomeSVG() {
 			}
 
 			const isEmpty = (obj) => Object.keys(obj).length === 0;
-			if (browserSettingEnabled && !isEmpty(global.prefs._settingUpdateJSON) && global.socket && (global.socket instanceof WebSocket || global.socket instanceof global.IndirectSocket) && global.socket.readyState === 1) {
+			if (browserSettingEnabled && !isEmpty(global.prefs._settingUpdateJSON) && global.isRawSocketOpen()) {
 				clearTimeout(global.prefs._pendingSettingUpdate);
 				global.prefs._pendingSettingUpdate = setTimeout(L.bind(this.sendPendingBrowserSettingsUpdate, this), this._settingUpdateDebounceMs());
 			}
@@ -1190,7 +1200,7 @@ function showWelcomeSVG() {
 			if (global.prefs.useBrowserSetting) {
 				const oldValue = global.prefs._userBrowserSetting[key];
 				global.prefs._userBrowserSetting[key] = value;
-				if (global.socket && (global.socket instanceof WebSocket || global.socket instanceof global.IndirectSocket) && global.socket.readyState === 1 && oldValue !== value) {
+				if (global.isRawSocketOpen() && oldValue !== value) {
 					global.prefs._settingUpdateJSON[key] = value;
 					clearTimeout(global.prefs._pendingSettingUpdate);
 					global.prefs._pendingSettingUpdate = setTimeout(L.bind(this.sendPendingBrowserSettingsUpdate, this), this._settingUpdateDebounceMs());
