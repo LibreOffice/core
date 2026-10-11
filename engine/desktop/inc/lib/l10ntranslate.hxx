@@ -44,20 +44,22 @@ enum class TranslateResult
     - No "l10n" zip member: byte-identical copy (a no-op in place).
     - Locale matched: marked paragraphs, sheet names and validation
       help-message titles are rewritten with the translations; every "_"
-      marker is stripped.  The text language the styles name (fo:language
-      and fo:country, or the Asian or complex equivalents for a language of
-      that script) becomes the matched locale's, so spell checking follows
-      the translation.
+      marker is stripped.  The active sheet and the per-sheet view settings
+      in settings.xml follow a renamed sheet.  The text language the styles
+      name (fo:language and fo:country, or the Asian or complex equivalents
+      for a language of that script) becomes the matched locale's, so spell
+      checking follows the translation.
     - No locale match, an empty rBcp47Language, or a stream that cannot be
       read: only the markers are stripped.
     - Translated before and edited since: the file is left exactly as it is
       and reported as CopiedUntranslated, because the change is the user's
       own work.
 
-    content.xml and styles.xml are rewritten from their marked sources: the
-    embedded l10n templates "l10n_template.xml" and
-    "l10n_template_styles.xml" when present and readable, the members
-    themselves otherwise.  All other members - the stream and templates
+    content.xml, styles.xml and settings.xml are rewritten from their marked
+    sources: the embedded l10n templates "l10n_template.xml",
+    "l10n_template_styles.xml" and "l10n_template_settings.xml" when present
+    and readable, the members themselves otherwise.  All other members - the
+    stream and templates
     included - are preserved byte-for-byte, in order, so "mimetype" stays
     first and STORED and the file can be translated again on a later open;
     the first user save rewrites the package and drops the machinery.

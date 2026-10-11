@@ -283,6 +283,22 @@ STYLES_XML = """<?xml version="1.0" encoding="UTF-8"?>
 </office:document-styles>
 """
 
+SETTINGS_XML = """<?xml version="1.0" encoding="UTF-8"?>
+<office:document-settings
+ xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0">
+<office:settings><config:config-item-set config:name="ooo:view-settings">
+<config:config-item-map-indexed config:name="Views"><config:config-item-map-entry>
+<config:config-item-map-named config:name="Tables">
+<config:config-item-map-entry config:name="_Try it">
+<config:config-item config:name="CursorPositionX" config:type="int">3</config:config-item>
+</config:config-item-map-entry>
+</config:config-item-map-named>
+<config:config-item config:name="ActiveTable" config:type="string">_Try it</config:config-item>
+</config:config-item-map-entry></config:config-item-map-indexed>
+</config:config-item-set></office:settings></office:document-settings>
+"""
+
 MANIFEST_XML = """<?xml version="1.0" encoding="UTF-8"?>
 <manifest:manifest
  xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"
@@ -291,11 +307,13 @@ MANIFEST_XML = """<?xml version="1.0" encoding="UTF-8"?>
  manifest:media-type="application/vnd.oasis.opendocument.spreadsheet"/>
 <manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/>
 <manifest:file-entry manifest:full-path="styles.xml" manifest:media-type="text/xml"/>
+<manifest:file-entry manifest:full-path="settings.xml" manifest:media-type="text/xml"/>
 </manifest:manifest>
 """
 
 
-def write_fixture_ods(path, content_xml=CONTENT_XML, styles_xml=STYLES_XML):
+def write_fixture_ods(path, content_xml=CONTENT_XML, styles_xml=STYLES_XML,
+                      settings_xml=SETTINGS_XML):
     with zipfile.ZipFile(path, "w") as odf:
         mimetype = zipfile.ZipInfo("mimetype")
         odf.writestr(mimetype, "application/vnd.oasis.opendocument.spreadsheet")
@@ -303,6 +321,8 @@ def write_fixture_ods(path, content_xml=CONTENT_XML, styles_xml=STYLES_XML):
         odf.writestr("content.xml", content_xml)
         if styles_xml is not None:
             odf.writestr("styles.xml", styles_xml)
+        if settings_xml is not None:
+            odf.writestr("settings.xml", settings_xml)
 
 
 class AnalyzeDocumentTest(unittest.TestCase):
@@ -483,6 +503,9 @@ class ScriptEndToEndTest(unittest.TestCase):
                                  odf.read("l10n_template.xml"))
                 self.assertEqual(odf.read("styles.xml"),
                                  odf.read("l10n_template_styles.xml"))
+                # the view settings name the marked sheet, so they get one
+                self.assertEqual(odf.read("settings.xml"),
+                                 odf.read("l10n_template_settings.xml"))
             self.assertTrue(stream.startswith("# supported locales\n"), stream)
             self.assertIn("\nde\n", stream)  # locale list
             self.assertIn("\nTry it\nde\tProbier's\n", stream)
@@ -498,6 +521,30 @@ class ScriptEndToEndTest(unittest.TestCase):
             self.assertIn('manifest:full-path="l10n"', manifest)
             self.assertIn('manifest:full-path="l10n_template.xml"', manifest)
             self.assertIn('manifest:full-path="l10n_template_styles.xml"', manifest)
+            self.assertIn('manifest:full-path="l10n_template_settings.xml"', manifest)
+
+    def test_embed_without_settings_or_marked_sheets_adds_no_settings_template(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            # no settings.xml: nothing to copy, and nothing in the manifest
+            ods = os.path.join(tmp, "Fixture-Template.ods")
+            write_fixture_ods(ods, settings_xml=None)
+            result = self.run_script("create_l10n_intro_docs.py", tmp, ods)
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            with zipfile.ZipFile(ods) as odf:
+                self.assertNotIn("l10n_template_settings.xml", odf.namelist())
+                manifest = odf.read("META-INF/manifest.xml").decode("utf-8")
+            self.assertNotIn("l10n_template_settings.xml", manifest)
+
+            # no marked sheet: the settings name nothing that gets renamed
+            unmarked = os.path.join(tmp, "Unmarked-Template.ods")
+            write_fixture_ods(unmarked, content_xml=CONTENT_XML.replace(
+                "_Try it", "Try it"), settings_xml=SETTINGS_XML.replace(
+                "_Try it", "Try it"))
+            result = self.run_script("create_l10n_intro_docs.py", tmp, unmarked)
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            with zipfile.ZipFile(unmarked) as odf:
+                self.assertIn("l10n_template.xml", odf.namelist())
+                self.assertNotIn("l10n_template_settings.xml", odf.namelist())
 
     def test_embed_without_po_files_writes_placeholder_locale(self):
         with tempfile.TemporaryDirectory() as tmp:

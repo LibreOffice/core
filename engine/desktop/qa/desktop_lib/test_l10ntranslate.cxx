@@ -64,6 +64,7 @@ public:
     void testEmptyLanguageStripsMarkers();
     void testRegionLocaleWinsOverBase();
     void testUnusableSheetNameKeepsSource();
+    void testSettingsFollowSheetRename();
     void testEmptyTranslationKeepsSource();
     void testTextlessTranslationKeepsSource();
     void testEditedFileIsLeftAlone();
@@ -87,6 +88,7 @@ public:
     CPPUNIT_TEST(testEmptyLanguageStripsMarkers);
     CPPUNIT_TEST(testRegionLocaleWinsOverBase);
     CPPUNIT_TEST(testUnusableSheetNameKeepsSource);
+    CPPUNIT_TEST(testSettingsFollowSheetRename);
     CPPUNIT_TEST(testEmptyTranslationKeepsSource);
     CPPUNIT_TEST(testTextlessTranslationKeepsSource);
     CPPUNIT_TEST(testEditedFileIsLeftAlone);
@@ -337,6 +339,8 @@ constexpr std::string_view aManifestXml
       " manifest:media-type=\"text/xml\"/>"
       "<manifest:file-entry manifest:full-path=\"styles.xml\""
       " manifest:media-type=\"text/xml\"/>"
+      "<manifest:file-entry manifest:full-path=\"settings.xml\""
+      " manifest:media-type=\"text/xml\"/>"
       // the embedder registers the stream and the l10n templates
       // in the manifest; unlisted members make the package validation
       // reject the document as inconsistent
@@ -345,6 +349,8 @@ constexpr std::string_view aManifestXml
       "<manifest:file-entry manifest:full-path=\"l10n_template.xml\""
       " manifest:media-type=\"text/xml\"/>"
       "<manifest:file-entry manifest:full-path=\"l10n_template_styles.xml\""
+      " manifest:media-type=\"text/xml\"/>"
+      "<manifest:file-entry manifest:full-path=\"l10n_template_settings.xml\""
       " manifest:media-type=\"text/xml\"/>"
       "</manifest:manifest>\n";
 
@@ -357,9 +363,13 @@ constexpr std::string_view aSmokeManifestXml
       " manifest:media-type=\"application/vnd.oasis.opendocument.spreadsheet\"/>"
       "<manifest:file-entry manifest:full-path=\"content.xml\""
       " manifest:media-type=\"text/xml\"/>"
+      "<manifest:file-entry manifest:full-path=\"settings.xml\""
+      " manifest:media-type=\"text/xml\"/>"
       "<manifest:file-entry manifest:full-path=\"l10n\""
       " manifest:media-type=\"text/plain\"/>"
       "<manifest:file-entry manifest:full-path=\"l10n_template.xml\""
+      " manifest:media-type=\"text/xml\"/>"
+      "<manifest:file-entry manifest:full-path=\"l10n_template_settings.xml\""
       " manifest:media-type=\"text/xml\"/>"
       "</manifest:manifest>\n";
 
@@ -445,6 +455,53 @@ constexpr std::string_view aStylesXml
       "<office:master-styles><text:p>_Master text</text:p></office:master-styles>"
       "</office:document-styles>\n";
 
+// the view settings name the marked sheet twice: as the active sheet and
+// as the key of its per-sheet entry
+OString settingsXmlFor(std::string_view aActiveSheet)
+{
+    return OString::Concat("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
+           + "<office:document-settings"
+             " xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\""
+             " xmlns:config=\"urn:oasis:names:tc:opendocument:xmlns:config:1.0\""
+             " office:version=\"1.3\">"
+             "<office:settings>"
+             "<config:config-item-set config:name=\"ooo:view-settings\">"
+             // the import applies the views only with a visible area
+             "<config:config-item config:name=\"VisibleAreaTop\" config:type=\"int\">0"
+             "</config:config-item>"
+             "<config:config-item config:name=\"VisibleAreaLeft\" config:type=\"int\">0"
+             "</config:config-item>"
+             "<config:config-item config:name=\"VisibleAreaWidth\" config:type=\"int\">10000"
+             "</config:config-item>"
+             "<config:config-item config:name=\"VisibleAreaHeight\" config:type=\"int\">5000"
+             "</config:config-item>"
+             "<config:config-item-map-indexed config:name=\"Views\">"
+             "<config:config-item-map-entry>"
+             "<config:config-item config:name=\"ViewId\" config:type=\"string\">view1"
+             "</config:config-item>"
+             "<config:config-item-map-named config:name=\"Tables\">"
+             "<config:config-item-map-entry config:name=\"_Try it\">"
+             "<config:config-item config:name=\"CursorPositionX\" config:type=\"int\">3"
+             "</config:config-item>"
+             "</config:config-item-map-entry>"
+             "<config:config-item-map-entry config:name=\"_Second\">"
+             "<config:config-item config:name=\"CursorPositionX\" config:type=\"int\">0"
+             "</config:config-item>"
+             "</config:config-item-map-entry>"
+             "<config:config-item-map-entry config:name=\"Other\">"
+             "<config:config-item config:name=\"CursorPositionX\" config:type=\"int\">0"
+             "</config:config-item>"
+             "</config:config-item-map-entry>"
+             "</config:config-item-map-named>"
+             "<config:config-item config:name=\"ActiveTable\" config:type=\"string\">"
+           + aActiveSheet
+           + "</config:config-item>"
+             "</config:config-item-map-entry>"
+             "</config:config-item-map-indexed>"
+             "</config:config-item-set>"
+             "</office:settings></office:document-settings>\n";
+}
+
 constexpr std::string_view aL10nStream = "# supported locales\n"
                                          "de,fr\n"
                                          "# strings and their translations\n"
@@ -505,16 +562,23 @@ constexpr std::string_view aSmokeContentXml
       "</table:table-cell>"
       "</table:table-row>"
       "</table:table>"
+      "<table:table table:name=\"_Second\">"
+      "<table:table-column/>"
+      "<table:table-row><table:table-cell/></table:table-row>"
+      "</table:table>"
       "</office:spreadsheet></office:body></office:document-content>\n";
 
 std::vector<zip::Entry> makeSmokeFixtureEntries()
 {
+    const OString aSettings = settingsXmlFor("_Second");
     std::vector<zip::Entry> aEntries;
     aEntries.push_back({ "mimetype"_ostr, 0, toBytes(aMimetype), {} });
     aEntries.push_back({ "META-INF/manifest.xml"_ostr, 8, toBytes(aSmokeManifestXml), {} });
     aEntries.push_back({ "content.xml"_ostr, 8, toBytes(aSmokeContentXml), {} });
+    aEntries.push_back({ "settings.xml"_ostr, 8, toBytes(aSettings), {} });
     aEntries.push_back({ "l10n"_ostr, 8, toBytes(aL10nStream), {} });
     aEntries.push_back({ "l10n_template.xml"_ostr, 8, toBytes(aSmokeContentXml), {} });
+    aEntries.push_back({ "l10n_template_settings.xml"_ostr, 8, toBytes(aSettings), {} });
     return aEntries;
 }
 
@@ -525,6 +589,7 @@ std::vector<zip::Entry> makeFixtureEntries(bool bWithStream)
     aEntries.push_back({ "META-INF/manifest.xml"_ostr, 8, toBytes(aManifestXml), {} });
     aEntries.push_back({ "content.xml"_ostr, 8, toBytes(aContentXml), {} });
     aEntries.push_back({ "styles.xml"_ostr, 8, toBytes(aStylesXml), {} });
+    aEntries.push_back({ "settings.xml"_ostr, 8, toBytes(settingsXmlFor("_Try it")), {} });
     aEntries.push_back({ "media/blob.bin"_ostr,
                          0,
                          std::vector<sal_uInt8>(aBlobBytes, aBlobBytes + sizeof(aBlobBytes)),
@@ -535,6 +600,8 @@ std::vector<zip::Entry> makeFixtureEntries(bool bWithStream)
         // the marked l10n templates the rewrite reads from
         aEntries.push_back({ "l10n_template.xml"_ostr, 8, toBytes(aContentXml), {} });
         aEntries.push_back({ "l10n_template_styles.xml"_ostr, 8, toBytes(aStylesXml), {} });
+        aEntries.push_back(
+            { "l10n_template_settings.xml"_ostr, 8, toBytes(settingsXmlFor("_Try it")), {} });
     }
     return aEntries;
 }
@@ -1141,7 +1208,7 @@ void L10nTranslateTest::testZipFidelity()
     {
         CPPUNIT_ASSERT_EQUAL(aInEntries[i].aName, aOutEntries[i].aName);
         if (aInEntries[i].aName == "content.xml" || aInEntries[i].aName == "styles.xml"
-            || aInEntries[i].aName == "l10n")
+            || aInEntries[i].aName == "settings.xml" || aInEntries[i].aName == "l10n")
             continue;
         // untouched members: same method and byte-identical raw payload
         CPPUNIT_ASSERT_EQUAL(aInEntries[i].nMethod, aOutEntries[i].nMethod);
@@ -1157,6 +1224,70 @@ void L10nTranslateTest::testZipFidelity()
     osl::File::remove(aOut);
 }
 
+void L10nTranslateTest::testSettingsFollowSheetRename()
+{
+    const OUString aFile = tempFileUrl("settings.ods");
+    CPPUNIT_ASSERT(zip::writeArchive(aFile, makeFixtureEntries(true)));
+
+    // the active sheet and the per-sheet entry follow the renamed sheet;
+    // an entry that is no marked sheet is left alone
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(TranslateResult::Translated),
+                         static_cast<int>(translateDocument(aFile, aFile, u"de-DE"_ustr)));
+    std::vector<zip::Entry> aEntries;
+    CPPUNIT_ASSERT(zip::readArchive(aFile, aEntries));
+    OString aSettings = entryText(aEntries, "settings.xml");
+    assertContains(aSettings, "config:name=\"ActiveTable\" config:type=\"string\">Probier's"
+                              "</config:config-item>");
+    assertContains(aSettings, "<config:config-item-map-entry config:name=\"Probier's\">");
+    assertContains(aSettings, "<config:config-item-map-entry config:name=\"Other\">");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSettings.indexOf("_Try it"));
+    // the template keeps the marked names for the next translation
+    assertContains(entryText(aEntries, "l10n_template_settings.xml"), ">_Try it<");
+
+    // a later open under a locale without a translation for the sheet name
+    // takes the stripped English name, from the template
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(TranslateResult::Translated),
+                         static_cast<int>(translateDocument(aFile, aFile, u"fr-FR"_ustr)));
+    aEntries.clear();
+    CPPUNIT_ASSERT(zip::readArchive(aFile, aEntries));
+    aSettings = entryText(aEntries, "settings.xml");
+    assertContains(aSettings, "config:type=\"string\">Try it</config:config-item>");
+    assertContains(aSettings, "<config:config-item-map-entry config:name=\"Try it\">");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aSettings.indexOf("Probier"));
+
+    // without a settings template the member itself is the source, so the
+    // first translation still renames; and with no locale at all the marked
+    // names only lose their marker, like the sheets themselves
+    std::vector<zip::Entry> aNoTemplate = makeFixtureEntries(true);
+    aNoTemplate.erase(std::remove_if(aNoTemplate.begin(), aNoTemplate.end(),
+                                     [](const zip::Entry& rEntry) {
+                                         return rEntry.aName == "l10n_template_settings.xml";
+                                     }),
+                      aNoTemplate.end());
+    const OUString aIn = tempFileUrl("settings-notmpl-in.ods");
+    const OUString aOut = tempFileUrl("settings-notmpl-out.ods");
+    CPPUNIT_ASSERT(zip::writeArchive(aIn, aNoTemplate));
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(TranslateResult::Translated),
+                         static_cast<int>(translateDocument(aIn, aOut, u"de-DE"_ustr)));
+    aEntries.clear();
+    CPPUNIT_ASSERT(zip::readArchive(aOut, aEntries));
+    assertContains(entryText(aEntries, "settings.xml"),
+                   "config:type=\"string\">Probier's</config:config-item>");
+    const OUString aPlain = tempFileUrl("settings-plain-out.ods");
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(TranslateResult::CopiedUntranslated),
+                         static_cast<int>(translateDocument(aIn, aPlain, OUString())));
+    aEntries.clear();
+    CPPUNIT_ASSERT(zip::readArchive(aPlain, aEntries));
+    aSettings = entryText(aEntries, "settings.xml");
+    assertContains(aSettings, "config:type=\"string\">Try it</config:config-item>");
+    assertContains(aSettings, "<config:config-item-map-entry config:name=\"Try it\">");
+
+    osl::File::remove(aFile);
+    osl::File::remove(aIn);
+    osl::File::remove(aOut);
+    osl::File::remove(aPlain);
+}
+
 void L10nTranslateTest::testLoadTranslatedSmoke()
 {
     const OUString aIn = tempFileUrl("smoke-in.ods");
@@ -1166,6 +1297,12 @@ void L10nTranslateTest::testLoadTranslatedSmoke()
     // French translations are in document order, so the cell reads naturally
     CPPUNIT_ASSERT_EQUAL(static_cast<int>(TranslateResult::Translated),
                          static_cast<int>(translateDocument(aIn, aOut, u"fr-FR"_ustr)));
+    // the view settings name the sheets too, and the package still loads
+    // with them rewritten to the stripped name
+    std::vector<zip::Entry> aEntries;
+    CPPUNIT_ASSERT(zip::readArchive(aOut, aEntries));
+    assertContains(entryText(aEntries, "settings.xml"),
+                   "config:name=\"ActiveTable\" config:type=\"string\">Second</config:config-item>");
 
     loadFromURL(aOut);
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);

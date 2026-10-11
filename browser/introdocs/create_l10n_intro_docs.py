@@ -20,6 +20,9 @@ Every member with markers is also embedded a second time, unchanged, as an
 l10n template (content.xml -> l10n_template.xml, styles.xml ->
 l10n_template_styles.xml) for the engine to rewrite from, so the file
 re-translates on later opens until the first user save drops the machinery.
+settings.xml gets one too (l10n_template_settings.xml) when sheets are
+marked: it names them as the active sheet and in the per-sheet view
+settings, which follow the rename.
 """
 
 import os
@@ -46,6 +49,7 @@ SHEET_NAME_FORBIDDEN = set("[]*?:/\\")
 TEMPLATE_MEMBERS = {
     "content.xml": "l10n_template.xml",
     "styles.xml": "l10n_template_styles.xml",
+    "settings.xml": "l10n_template_settings.xml",
 }
 
 
@@ -164,10 +168,13 @@ def add_l10n_to_odf(odf_path, l10n_content, template_members):
     """Add (or replace) the 'l10n' stream and the l10n templates of
     template_members ({member: template_name}) in the ODF file, registering
     everything in the manifest and preserving all other members in order."""
-    added = dict(template_members)
-    replaced = {"l10n", "META-INF/manifest.xml", *added.values()}
-
     with zipfile.ZipFile(odf_path, "r") as zip_read:
+        # a member the document does not have gets no template
+        added = {member: template_name
+                 for member, template_name in template_members.items()
+                 if member in zip_read.namelist()}
+        replaced = {"l10n", "META-INF/manifest.xml", *added.values()}
+
         manifest_ns = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0"
         ET.register_namespace("manifest", manifest_ns)
         root = ET.fromstring(zip_read.read("META-INF/manifest.xml"))
@@ -250,6 +257,10 @@ def main():
     locales = sorted(translations_by_locale)
     content = build_l10n_content(locales, translations_by_locale)
     marked_members = {unit.where.split(" ")[0] for unit in units}
+    # the view settings name the marked sheets, as the active sheet and as
+    # the keys of the per-sheet entries, and follow the rename
+    if any(unit.kind == "sheet-name" for unit in units):
+        marked_members.add("settings.xml")
     template_members = {member: TEMPLATE_MEMBERS[member]
                         for member in sorted(marked_members)
                         if member in TEMPLATE_MEMBERS}

@@ -38,6 +38,7 @@ constexpr const char* STYLE_NS = "urn:oasis:names:tc:opendocument:xmlns:style:1.
 constexpr const char* FO_NS = "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0";
 constexpr const char* CALCEXT_NS
     = "urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0";
+constexpr const char* CONFIG_NS = "urn:oasis:names:tc:opendocument:xmlns:config:1.0";
 
 // The closed set of attributes that may reference a sheet by name; renaming a
 // marked sheet rewrites exactly these (the extractor lint in online enforces
@@ -871,6 +872,78 @@ void rewriteSheetRefAttrs(xmlNodePtr pNode, const std::vector<SheetRename>& rRen
     }
 }
 
+// settings.xml names sheets as plain strings: the active sheet, and the
+// per-sheet view settings keyed by sheet name in the "Tables" map.  Both are
+// matched against the marked name exactly, with no quoting involved.
+void renameSheetsInSettings(xmlNodePtr pNode, const std::vector<SheetRename>& rRenames,
+                            bool bInTables)
+{
+    for (xmlNodePtr pChild = pNode->children; pChild; pChild = pChild->next)
+    {
+        if (pChild->type != XML_ELEMENT_NODE)
+            continue;
+        bool bTables = bInTables;
+        if (isElement(pChild, CONFIG_NS, "config-item")
+            && getNsAttr(pChild, CONFIG_NS, "name") == "ActiveTable")
+        {
+            xmlChar* pText = xmlNodeGetContent(pChild);
+            const OString aOld(pText ? reinterpret_cast<const char*>(pText) : "");
+            xmlFree(pText);
+            for (const SheetRename& rRename : rRenames)
+            {
+                if (rRename.aOld != aOld)
+                    continue;
+                xmlNodeSetContent(pChild, nullptr);
+                xmlNodeAddContent(pChild, BAD_CAST rRename.aNew.getStr());
+                break;
+            }
+        }
+        else if (isElement(pChild, CONFIG_NS, "config-item-map-named"))
+            bTables = getNsAttr(pChild, CONFIG_NS, "name") == "Tables";
+        else if (bInTables && isElement(pChild, CONFIG_NS, "config-item-map-entry"))
+        {
+            const OString aName = getNsAttr(pChild, CONFIG_NS, "name");
+            for (const SheetRename& rRename : rRenames)
+            {
+                if (rRename.aOld != aName)
+                    continue;
+                xmlNsPtr pNs = xmlSearchNsByHref(pChild->doc, pChild, BAD_CAST CONFIG_NS);
+                xmlSetNsProp(pChild, pNs, BAD_CAST "name", BAD_CAST rRename.aNew.getStr());
+                break;
+            }
+        }
+        renameSheetsInSettings(pChild, rRenames, bTables);
+    }
+}
+
+bool rewriteSettingsMember(const std::vector<sal_uInt8>& rIn,
+                           const std::vector<SheetRename>& rRenames, std::vector<sal_uInt8>& rOut)
+{
+    xmlDocPtr pDoc
+        = xmlReadMemory(reinterpret_cast<const char*>(rIn.data()), static_cast<int>(rIn.size()),
+                        "settings.xml", nullptr, XML_PARSE_NONET);
+    if (!pDoc)
+        return false;
+    xmlNodePtr pRoot = xmlDocGetRootElement(pDoc);
+    if (!pRoot)
+    {
+        xmlFreeDoc(pDoc);
+        return false;
+    }
+
+    renameSheetsInSettings(pRoot, rRenames, false);
+
+    xmlChar* pOut = nullptr;
+    int nOut = 0;
+    xmlDocDumpMemory(pDoc, &pOut, &nOut);
+    xmlFreeDoc(pDoc);
+    if (!pOut)
+        return false;
+    rOut.assign(pOut, pOut + nOut);
+    xmlFree(pOut);
+    return true;
+}
+
 // Text language: the translation is in another language than the source,
 // and the spell checker goes by the language the styles name.
 
@@ -1430,6 +1503,37 @@ TranslateResult translateDocument(const OUString& rInputPathOrUrl, const OUStrin
             return TranslateResult::Error;
         }
         aReplacements[OString(rPair.pTarget)] = std::move(aRepl);
+    }
+
+    // The view settings name the sheets too - the active sheet and the
+    // per-sheet entries - so they follow a rename, rewritten from their own
+    // template like the members above.  Settings that cannot be rewritten
+    // cost the active sheet, not the translation.
+    if (!aRenames.empty())
+    {
+        if (const ZipEntryInfo* pTarget = aArchive.find("settings.xml"))
+        {
+            const ZipEntryInfo* pSource = aArchive.find("l10n_template_settings.xml");
+            std::vector<sal_uInt8> aIn;
+            Replacement aRepl;
+            if (pSource
+                && !(aArchive.readEntry(*pSource, aIn)
+                     && rewriteSettingsMember(aIn, aRenames, aRepl.aData)))
+            {
+                SAL_WARN("desktop.lib", "l10n: cannot rewrite from l10n_template_settings.xml, "
+                                        "using settings.xml");
+                pSource = nullptr;
+                aIn.clear();
+                aRepl.aData.clear();
+            }
+            if (!pSource
+                && !(aArchive.readEntry(*pTarget, aIn)
+                     && rewriteSettingsMember(aIn, aRenames, aRepl.aData)))
+                SAL_WARN("desktop.lib", "l10n: cannot rewrite settings.xml in "
+                                            << rInputPathOrUrl << ", the active sheet stays");
+            else
+                aReplacements["settings.xml"_ostr] = std::move(aRepl);
+        }
     }
 
     const TranslateResult eResult = aStream.aMatchedLocale.isEmpty()
