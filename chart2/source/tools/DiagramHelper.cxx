@@ -204,7 +204,7 @@ void lcl_switchToDateCategories( const rtl::Reference< ChartModel >& xChartDoc, 
     ScaleData aScale( xAxis->getScaleData() );
     if( xChartDoc->hasInternalDataProvider() )
     {
-        //remove all content the is not of type double and remove multiple level
+        //remove all content that is not of type double and remove multiple level
         Reference< XAnyDescriptionAccess > xDataAccess( xChartDoc->getDataProvider(), uno::UNO_QUERY );
         if( xDataAccess.is() )
         {

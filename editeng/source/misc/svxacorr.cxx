@@ -3253,7 +3253,7 @@ SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *pFnd,
             rStt = nCalcStt;
             if (!left_wildcard)
             {
-                // fdo#33899 avoid "1/2", "1/3".. to be replaced by fractions in dates, eg. 1/2/14
+                // fdo#33899 avoid "1/2", "1/3"... to be replaced by fractions in dates, e.g. 1/2/14
                 if (static_cast<sal_Int32>(rTxt.size()) > nEndPos && rTxt[nEndPos] == '/' && rChk.indexOf('/') != -1)
                 {
                     return std::nullopt;

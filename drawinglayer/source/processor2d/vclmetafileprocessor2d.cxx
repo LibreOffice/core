@@ -368,7 +368,7 @@ double VclMetafileProcessor2D::getTransformedLineWidth(double fWidth) const
     // and also inside the SvtGraphicStroke and needs transforming into
     // the same space as its coordinates here cf. fdo#61789
     // This is a partial fix. When an object transformation is used which
-    // e.g. contains a scaleX != scaleY, an unproportional scaling will happen.
+    // e.g. contains a scaleX != scaleY, a non-proportional scaling will happen.
     const basegfx::B2DVector aDiscreteUnit(maCurrentTransformation
                                            * basegfx::B2DVector(fWidth, 0.0));
 
@@ -503,7 +503,7 @@ std::unique_ptr<SvtGraphicStroke> VclMetafileProcessor2D::impTryToCreateSvtGraph
 
         // #i101734# apply current object transformation to created geometry.
         // This is a partial fix. When an object transformation is used which
-        // e.g. contains a scaleX != scaleY, an unproportional scaling would
+        // e.g. contains a scaleX != scaleY, a non-proportional scaling would
         // have to be applied to the evtl. existing fat line. The current
         // concept of PDF export and SvtGraphicStroke usage does simply not
         // allow handling such definitions. The only clean way would be to
@@ -621,7 +621,7 @@ VclMetafileProcessor2D::~VclMetafileProcessor2D()
     is rendered by VCL (and thus fragmented to polygon color actions and others). On that base, e.g.
     the Metafile to SdrObject import creates its gradient objects.
     Best (and safest) way to support it here is to use PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D,
-    map it back to the corresponding tools tools::PolyPolygon and the Gradient and just call
+    map it back to the corresponding tools::PolyPolygon and the Gradient and just call
     OutputDevice::DrawGradient which creates the necessary compatible actions.
 
     XPATHFILL_SEQ_BEGIN, XPATHFILL_SEQ_END:

@@ -479,7 +479,7 @@ namespace basic
         // initialize the containers
         impl_initDocLibraryContainers_nothrow( xBasicLibs, xDialogLibs );
 
-        // so that also dialogs etc. could be 'qualified' addressed
+        // so that also dialogs etc. can be addressed in a qualified way
         _out_rpBasicManager->GetLib(0)->SetParent( pAppBasic );
 
         // global properties in the document's Basic

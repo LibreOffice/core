@@ -1171,7 +1171,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                                         }
                                         else
                                         {
-                                            //even the 1. char does not fit..
+                                            //even the 1. char does not fit...
                                             //this means the field should start on next line
                                             //except if the actual line is a full line already
                                             if (nLineStartX < 0 || nStartX > nStartXNextLine)
