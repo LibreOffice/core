@@ -302,10 +302,13 @@ against the CPE dictionary — or leave it empty, which is safe.
 
 **Bumping a bundled component.** Edit `engine/download.lst` (tarball and
 SHA256); everything downstream — the SBOM version, the source URL, the CPE —
-follows automatically. If the component is not on the LibreOffice mirror, add
-or update its bucket in `engine/Makefile.fetch`; the SBOM takes the source
-URL from there. Record the CVEs the bump fixes in the commit message, from
-upstream's changelog.
+follows automatically. The tarball itself has to be on Collabora's Gerrit
+mirror, which is where both buckets in `engine/Makefile.fetch` point; the SBOM
+takes the source URL from the bucket the variable belongs to, so a component
+that belongs in the `extern` bucket rather than `src` — OpenSymbol and the
+validator JARs are the ones there today — needs that file updated too.
+Record the CVEs the bump fixes in the commit message, from upstream's
+changelog.
 
 **Checking the whole chain.** `make sbom-check`, `make sbom-audit`,
 `make sbom-freshness`, then regenerate and scan as above.
