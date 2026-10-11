@@ -85,23 +85,24 @@ describe(['tagdesktop'], 'Writer multi image selection', function() {
 			expect(both.right).to.be.closeTo(Math.max(first.right, second.right), 5);
 		});
 
-		// Delete removes both images.
+		// Delete removes both images: the handles go, and a click where each image was selects
+		// nothing.
 		helper.typeIntoDocument('{del}');
-		cy.cGet('#document-container svg g').should('not.exist');
+		cy.cGet('#test-div-shapeHandlesSection').should('not.exist');
 		cy.then(function() {
 			return helper.waitForTimers(win, 'clicktimer');
 		});
 		clickAt(win, first);
-		cy.cGet('#document-container svg g').should('not.exist');
+		cy.cGet('#test-div-shapeHandlesSection').should('not.exist');
 		clickAt(win, second);
-		cy.cGet('#document-container svg g').should('not.exist');
+		cy.cGet('#test-div-shapeHandlesSection').should('not.exist');
 
 		// Undo brings both images back, and they can be selected together again.
 		helper.typeIntoDocument('{ctrl}z');
 		cy.then(function() {
 			return helper.processToIdle(win);
 		});
-		cy.cGet('#document-container svg g').should('exist');
+		cy.cGet('#test-div-shapeHandlesSection').should('exist');
 		clickAt(win, first);
 		cy.cGet('#test-div-shapeHandlesSection').should('exist');
 		cy.then(function() {
