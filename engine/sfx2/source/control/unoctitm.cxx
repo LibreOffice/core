@@ -1565,7 +1565,9 @@ static void InterceptKitStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
         u"TransformDialog",        u"NameGroup",              u"ObjectTitleDescription",
         u"DistributeHorzLeft",     u"DistributeHorzCenter",   u"DistributeHorzDistance",
         u"DistributeHorzRight",    u"DistributeVertTop",      u"DistributeVertCenter",
-        u"DistributeVertDistance", u"DistributeVertBottom",   u"DistributeSelection"
+        u"DistributeVertDistance", u"DistributeVertBottom",   u"DistributeSelection",
+        u"FlipHorizontal",         u"FlipVertical",           u"ChangeBezier",
+        u"FormatArea",             u"FormatLine"
     };
     if (pViewShell->drawsFromObjects()
         && std::find(std::begin(aGivenByTheView), std::end(aGivenByTheView),
