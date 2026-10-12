@@ -1471,7 +1471,7 @@ class CanvasSectionContainer {
 		var point = this.convertPositionToCanvasLocale(e);
 		var delta: Array<number>;
 
-		if (e.deltaMode === 1)
+		if (e.deltaMode === WheelEvent.DOM_DELTA_LINE)
 			delta = [e.deltaX * this.scrollLineHeight, e.deltaY * this.scrollLineHeight];
 		else
 			delta = [e.deltaX, e.deltaY];
