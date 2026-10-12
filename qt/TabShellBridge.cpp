@@ -48,6 +48,14 @@ void TabShellBridge::tabAdoptFromOtherWindow(int srcTabId, int insertAt)
 
 void TabShellBridge::targetDragOver(int insertAt) { _manager->onTargetDragOver(insertAt); }
 
+void TabShellBridge::tabHoverStarted(int tabId, int x, int y, const QString& background,
+                                     const QString& text, const QString& border)
+{
+    _manager->onTabHoverStarted(tabId, x, y, background, text, border);
+}
+
+void TabShellBridge::tabHoverEnded() { _manager->hideHoverCard(); }
+
 void TabShellBridge::debug(const QString& message)
 {
     LOG_TRC_NOFILE("[tabstrip] " << message.toStdString());

@@ -15,6 +15,7 @@
 
 #include <QElapsedTimer>
 #include <QObject>
+#include <QPoint>
 #include <QPointer>
 #include <QString>
 
@@ -23,6 +24,8 @@
 #include <vector>
 
 class QEvent;
+class QFrame;
+class QLabel;
 class QStackedWidget;
 class QTimer;
 class QWebEngineProfile;
@@ -99,6 +102,12 @@ public:
 
     void showTabContextMenu(int tabId, int x, int y);
 
+    // Show the tab's name and current view in a card below it, after a short delay. x and y
+    // are the tab's bottom left corner in the strip, the colours are CSS colour strings.
+    void onTabHoverStarted(int tabId, int x, int y, const QString& background,
+                           const QString& text, const QString& border);
+    void hideHoverCard();
+
 signals:
     void requestWindowClose();
 
@@ -155,6 +164,9 @@ private:
     std::vector<Entry>::const_iterator findTab(int tabId) const;
     QString currentTabsJson() const;
 
+    void onThumbnailChanged(WebView* wv, bool isFirstThumbnail);
+    void showHoverCard();
+
     // The strip page has no keyboard handling, so bounce focus back to the
     // active document when the strip would take it - keeps shortcuts working.
     void attachStripFocusFilter();
@@ -179,6 +191,17 @@ private:
     QTimer* _liveViewLimitTimer;
     // Single-shot, and holds the pending view build for the active tab.
     QTimer* _viewRestoreTimer;
+
+    // A tooltip window, so it may extend below the strip over the document.
+    QFrame* _hoverCard;
+    QLabel* _hoverCardTitle;
+    QLabel* _hoverCardImage;
+    // Single-shot, and holds the delay between the pointer resting on a tab and its card.
+    QTimer* _hoverCardTimer;
+    // The tab the card is for, or -1 when no tab is hovered.
+    int _hoverCardTabId = -1;
+    // The hovered tab's bottom left corner, in strip coordinates.
+    QPoint _hoverCardPosition;
 
     // One drag at a time, so process-wide; the QPointers self-null if a
     // window dies mid-drag. s_lastHover* hold the strip a DragLeave demoted

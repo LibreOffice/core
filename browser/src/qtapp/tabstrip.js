@@ -140,6 +140,23 @@
 		});
 	}
 
+	// Ask the app for the tab's hover card, placed below the tab and drawn in the strip's
+	// theme colours.
+	function startHover(tab, id) {
+		if (!bridge) return;
+		const rect = tab.getBoundingClientRect();
+		const style = getComputedStyle(document.documentElement);
+		const color = (name) => style.getPropertyValue(name).trim();
+		bridge.tabHoverStarted(
+			id,
+			Math.round(rect.left),
+			Math.round(rect.bottom),
+			color('--color-main-background'),
+			color('--color-main-text'),
+			color('--color-border-dark'),
+		);
+	}
+
 	// Rebuilt whole on every tabsChanged: matches the Qt-side push rate and
 	// keeps no stale drag state.
 	function render() {
@@ -156,7 +173,16 @@
 			tab.setAttribute('role', 'tab');
 			const doctype = docTypeAttr[t.docType];
 			if (doctype) tab.setAttribute('data-doctype', doctype);
-			tab.title = t.title || '';
+			// A background tab with a preview gets the app's hover card, which shows the name too.
+			// The active tab keeps the plain title tooltip.
+			if (t.hasThumbnail && t.id !== activeId) {
+				tab.addEventListener('mouseenter', () => startHover(tab, t.id));
+				tab.addEventListener('mouseleave', () => {
+					if (bridge) bridge.tabHoverEnded();
+				});
+			} else {
+				tab.title = t.title || '';
+			}
 
 			const icon = el('span');
 			icon.className = 'icon';
@@ -264,6 +290,8 @@
 		'tabDragEnded',
 		'tabAdoptFromOtherWindow',
 		'targetDragOver',
+		'tabHoverStarted',
+		'tabHoverEnded',
 		'requestSync',
 		'debug',
 	];

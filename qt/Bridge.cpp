@@ -973,6 +973,12 @@ QVariant Bridge::cool(const QString& messageStr)
     {
         return Desktop::getUIZoomPercent();
     }
+    else if (tokens.equals(0, "TABTHUMBNAIL"))
+    {
+        if (WebView* owner = _owner.data())
+            owner->updateThumbnail(tokens.substrFromToken(1));
+        return {};
+    }
     else if (tokens.equals(0, "FETCHAIMODELS"))
     {
         return QString::fromStdString(Desktop::fetchAIModels(tokens.substrFromToken(1)));

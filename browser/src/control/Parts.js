@@ -343,6 +343,32 @@ window.L.Map.include({
 		this._processPreviewQueue();
 	},
 
+	// Give the desktop app a copy of what a Writer or Calc document shows, for the thumbnail on its
+	// tab. The document canvas is cropped from its centre to the thumbnail's 218 x 170 shape.
+	requestTabThumbnail: function () {
+		const docLayer = this._docLayer;
+		if (!window.ThisIsTheQtApp || !docLayer || !(docLayer.isWriter() || docLayer.isCalc()))
+			return;
+		const source = document.getElementById('document-canvas');
+		if (!source || !source.width || !source.height)
+			return;
+
+		const width = Math.round(218 * window.devicePixelRatio);
+		const height = Math.round(170 * window.devicePixelRatio);
+		const scale = Math.max(width / source.width, height / source.height);
+		const cropWidth = width / scale;
+		const cropHeight = height / scale;
+
+		const thumbnail = document.createElement('canvas');
+		thumbnail.width = width;
+		thumbnail.height = height;
+		const context = thumbnail.getContext('2d');
+		context.imageSmoothingQuality = 'high';
+		context.drawImage(source, (source.width - cropWidth) / 2, (source.height - cropHeight) / 2,
+			cropWidth, cropHeight, 0, 0, width, height);
+		window.postMobileMessage('TABTHUMBNAIL ' + thumbnail.toDataURL('image/png'));
+	},
+
 	_resolveCurrentPage: function (page, currentPage, pageRects) {
 		if ((page !== 'prev' && page !== 'next') || this.isEditMode() || !pageRects || pageRects.length === 0) {
 			return currentPage;

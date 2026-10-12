@@ -1041,6 +1041,23 @@ void WebView::onDocumentModifiedStatusChanged(bool modified)
         _onModifiedStatusChange(modified);
 }
 
+void WebView::updateThumbnail(const std::string& dataUrl)
+{
+    constexpr std::string_view prefix = "data:image/png;base64,";
+    if (!dataUrl.starts_with(prefix))
+        return;
+
+    QImage image;
+    const QByteArray base64 = QByteArray::fromStdString(dataUrl.substr(prefix.size()));
+    if (!image.loadFromData(QByteArray::fromBase64(base64), "PNG"))
+        return;
+
+    const bool isFirstThumbnail = _thumbnail.isNull();
+    _thumbnail = std::move(image);
+    if (_onThumbnailChange)
+        _onThumbnailChange(isFirstThumbnail);
+}
+
 QString WebView::composedWindowTitle() const
 {
     return _docTitle.isEmpty() ? QStringLiteral(APP_NAME)

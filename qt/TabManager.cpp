@@ -40,10 +40,16 @@
 #include <QJsonObject>
 #include <QMenu>
 #include <QAction>
+#include <QColor>
+#include <QFontMetrics>
+#include <QFrame>
+#include <QLabel>
+#include <QPixmap>
 #include <QStackedWidget>
 #include <QString>
 #include <QTimer>
 #include <QUrl>
+#include <QVBoxLayout>
 #include <QWebChannel>
 #include <QWebEnginePage>
 #include <QWebEngineProfile>
@@ -78,6 +84,19 @@ constexpr qint64 kReleaseUnwindGraceMs = 250;
 constexpr int kLiveViewLimitDelayMilliseconds = 1000;
 // How long a tab has to stay the active one before its view is built again.
 constexpr int kViewRestoreDelayMilliseconds = 250;
+// How long the pointer has to rest on a tab before its hover card shows.
+constexpr int kHoverCardDelayMilliseconds = 500;
+// The frame of the image in the hover card, in device independent pixels.
+constexpr int kHoverCardImageWidth = 218;
+constexpr int kHoverCardImageHeight = 170;
+
+// A CSS colour string from the strip as a colour name Qt style sheets accept, or the fallback
+// when Qt cannot read it.
+QString styleColor(const QString& cssColor, const char* fallback)
+{
+    const QColor color = QColor::fromString(cssColor.trimmed());
+    return color.isValid() ? color.name() : QString::fromLatin1(fallback);
+}
 
 // The strip page only makes tabs draggable, so the source view identifies a
 // tab drag. The text/x-coda-tab type is invisible to QMimeData: Chromium
@@ -107,11 +126,32 @@ TabManager::TabManager(TabbedWindow* window, QWebEngineProfile* profile)
     , _shellBridge(new TabShellBridge(this))
     , _liveViewLimitTimer(new QTimer(this))
     , _viewRestoreTimer(new QTimer(this))
+    , _hoverCard(new QFrame(window, Qt::ToolTip | Qt::FramelessWindowHint))
+    , _hoverCardTitle(new QLabel(_hoverCard))
+    , _hoverCardImage(new QLabel(_hoverCard))
+    , _hoverCardTimer(new QTimer(this))
 {
     _liveViewLimitTimer->setSingleShot(true);
     connect(_liveViewLimitTimer, &QTimer::timeout, this, &TabManager::enforceLiveViewLimit);
     _viewRestoreTimer->setSingleShot(true);
     connect(_viewRestoreTimer, &QTimer::timeout, this, &TabManager::restoreActiveTabView);
+    _hoverCardTimer->setSingleShot(true);
+    connect(_hoverCardTimer, &QTimer::timeout, this, &TabManager::showHoverCard);
+
+    // The card only shows what the pointer rests on, so it never takes focus or clicks.
+    _hoverCard->setObjectName(QStringLiteral("tabHoverCard"));
+    _hoverCard->setAttribute(Qt::WA_ShowWithoutActivating);
+    _hoverCard->setAttribute(Qt::WA_TransparentForMouseEvents);
+    _hoverCard->setFocusPolicy(Qt::NoFocus);
+    QVBoxLayout* cardLayout = new QVBoxLayout(_hoverCard);
+    cardLayout->setContentsMargins(8, 6, 8, 8);
+    cardLayout->setSpacing(6);
+    cardLayout->addWidget(_hoverCardTitle);
+    cardLayout->addWidget(_hoverCardImage);
+    // Every card is the same size. An image of another shape is fitted inside and centred.
+    _hoverCardImage->setFixedSize(kHoverCardImageWidth, kHoverCardImageHeight);
+    _hoverCardImage->setAlignment(Qt::AlignCenter);
+    _hoverCard->hide();
 
     _shellView->setFixedHeight(kShellHeight);
     // setPage() destroys the default page, so install ours before wiring the channel.
@@ -385,6 +425,8 @@ int TabManager::registerTab(std::unique_ptr<WebView> wv, int insertAt)
     });
     raw->setOnTitleChange([this, raw](const QString& title) { onWebViewTitleChanged(raw, title); });
     raw->setOnModifiedStatusChange([this](bool) { emitTabsChangedNow(); });
+    raw->setOnThumbnailChange([this, raw](bool isFirstThumbnail)
+                              { onThumbnailChanged(raw, isFirstThumbnail); });
     // A document whose content has just reached the disk can be dropped now, so the limit
     // does not have to wait for the next tab activation to notice.
     raw->setOnUnmodified([this]() { scheduleLiveViewLimit(kLiveViewLimitDelayMilliseconds); });
@@ -416,6 +458,8 @@ std::unique_ptr<WebView> TabManager::detachAt(std::vector<Entry>::iterator it)
     it->webView->endPresentation();
     const int detachedIndex = static_cast<int>(std::distance(_tabs.begin(), it));
     const int detachedId = it->id;
+    if (detachedId == _hoverCardTabId)
+        hideHoverCard();
     QWidget* stackWidget = stackWidgetFor(*it);
     QWidget* placeholder = it->placeholder;
     std::unique_ptr<WebView> wv = std::move(it->webView);
@@ -426,6 +470,7 @@ std::unique_ptr<WebView> TabManager::detachAt(std::vector<Entry>::iterator it)
     wv->setOnCloseRequest({});
     wv->setOnTitleChange({});
     wv->setOnModifiedStatusChange({});
+    wv->setOnThumbnailChange({});
     wv->setOnUnmodified({});
 
     // activateTab() below already emits; only emit here if it did not run.
@@ -605,6 +650,13 @@ void TabManager::activateTab(int tabId)
     auto it = findTab(tabId);
     if (it == _tabs.end())
         return;
+    hideHoverCard();
+    // The tab the user leaves sends an image of its visible area, for its thumbnail.
+    auto previous = findTab(_activeTabId);
+    if (previous != _tabs.end() && previous != it && !previous->webView->isViewDiscarded())
+        previous->webView->evalJS(
+            "if (window.app && window.app.map && window.app.map.requestTabThumbnail)"
+            "  window.app.map.requestTabThumbnail();");
     _activeTabId = tabId;
     it->lastActiveTick = ++_activationTick;
     // The user is on this tab again, so the limit may ask it to save once more when it
@@ -676,6 +728,8 @@ void TabManager::onWebViewTitleChanged(WebView* wv, const QString& title)
 
 void TabManager::onWindowActiveChanged(bool active)
 {
+    if (!active)
+        hideHoverCard();
     for (const Entry& e : _tabs)
         e.webView->onWindowActiveChanged(active);
 }
@@ -691,6 +745,7 @@ QString TabManager::currentTabsJson() const
         obj["docType"] = e.webView->documentType();
         obj["modified"] = e.webView->isDocumentModified();
         obj["active"] = (e.id == _activeTabId);
+        obj["hasThumbnail"] = !e.webView->thumbnail().isNull();
         arr.append(obj);
     }
     return QString::fromUtf8(QJsonDocument(arr).toJson(QJsonDocument::Compact));
@@ -699,6 +754,8 @@ QString TabManager::currentTabsJson() const
 void TabManager::emitTabsChangedNow()
 {
     _shellView->setVisible(_tabs.size() > 1);
+    if (_tabs.size() < 2)
+        hideHoverCard();
     emit _shellBridge->tabsChanged(currentTabsJson());
 }
 
@@ -721,6 +778,7 @@ void TabManager::showTabContextMenu(int tabId, int x, int y)
     if (it == _tabs.end())
         return;
 
+    hideHoverCard();
     QMenu menu(_shellView);
 
     QAction* closeAction = menu.addAction(tr("Close"));
@@ -749,12 +807,73 @@ void TabManager::showTabContextMenu(int tabId, int x, int y)
     menu.exec(globalPos);
 }
 
+void TabManager::onThumbnailChanged(WebView* wv, bool isFirstThumbnail)
+{
+    // The strip only needs to know that a tab has an image, so later images skip the push.
+    if (isFirstThumbnail)
+        emitTabsChangedNow();
+    if (_hoverCard->isVisible() && tabIdForWebView(wv) == _hoverCardTabId)
+        showHoverCard();
+}
+
+void TabManager::onTabHoverStarted(int tabId, int x, int y, const QString& background,
+                                   const QString& text, const QString& border)
+{
+    _hoverCardTabId = tabId;
+    _hoverCardPosition = QPoint(x, y);
+    _hoverCard->setStyleSheet(
+        QStringLiteral("#tabHoverCard { background: %1; border: 1px solid %3; }"
+                       "#tabHoverCard QLabel { color: %2; background: transparent; }")
+            .arg(styleColor(background, "#f8f9fa"), styleColor(text, "#333333"),
+                 styleColor(border, "#949494")));
+
+    // Moving from one tab to the next while a card is up swaps the card at once.
+    if (_hoverCard->isVisible())
+        showHoverCard();
+    else
+        _hoverCardTimer->start(kHoverCardDelayMilliseconds);
+}
+
+void TabManager::hideHoverCard()
+{
+    _hoverCardTimer->stop();
+    _hoverCardTabId = -1;
+    _hoverCard->hide();
+}
+
+void TabManager::showHoverCard()
+{
+    // The active tab shows the document itself, so it gets no card.
+    WebView* wv = webViewForTab(_hoverCardTabId);
+    if (!wv || wv->thumbnail().isNull() || _hoverCardTabId == _activeTabId)
+    {
+        _hoverCard->hide();
+        return;
+    }
+
+    const QString title = wv->documentTitle();
+    const qreal pixelRatio = _window->devicePixelRatioF();
+    QImage image = wv->thumbnail().scaled(qRound(kHoverCardImageWidth * pixelRatio),
+                                          qRound(kHoverCardImageHeight * pixelRatio),
+                                          Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    image.setDevicePixelRatio(pixelRatio);
+    _hoverCardImage->setPixmap(QPixmap::fromImage(image));
+    _hoverCardTitle->setText(
+        _hoverCardTitle->fontMetrics().elidedText(title, Qt::ElideMiddle, kHoverCardImageWidth));
+    _hoverCard->setAccessibleName(tr("Preview of %1").arg(title));
+
+    _hoverCard->adjustSize();
+    _hoverCard->move(_shellView->mapToGlobal(_hoverCardPosition));
+    _hoverCard->show();
+}
+
 void TabManager::onSourceDragStarted(int tabId)
 {
     // A tabsChanged rebuild can destroy the drag source mid-drag and Chromium
     // then never fires its dragend, so the previous drag's hover state can
     // still be set here.
     LOG_TRC("TabManager::onSourceDragStarted: tab " << tabId << ", clearing hover state");
+    hideHoverCard();
     s_dragHoverTarget = nullptr;
     s_dragHoverInsertAt = -1;
     s_lastHoverTarget = nullptr;

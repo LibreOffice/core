@@ -192,6 +192,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 					this._focusedCurrentPart = selectedPart;
 					if (currentPartMoved && (this.hasSlideFocus() || this.partsFocused))
 						this.focusCurrentSlide();
+					this._sendTabThumbnail();
 				}
 				this._updateSelectedSection();
 			}
@@ -1867,8 +1868,20 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				tile.src = e.tile.src;
 				tile.fetched = true;
 				window.app.console.debug('PREVIEW: part fetched : ' + parseInt(e.id));
+				this._sendTabThumbnail();
 			}
 		}
+	},
+
+	// Give the desktop app the image of the current slide, for the hover card on the document tab.
+	_sendTabThumbnail: function () {
+		if (!window.ThisIsTheQtApp || app.file.fileBasedView)
+			return;
+		const tile = this._previewTiles[this._map._docLayer._selectedPart];
+		if (!tile || !tile.fetched || tile.src === this._lastTabThumbnail)
+			return;
+		this._lastTabThumbnail = tile.src;
+		window.postMobileMessage('TABTHUMBNAIL ' + tile.src);
 	},
 
 	_insertPreview: function (e) {

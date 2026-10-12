@@ -16,6 +16,7 @@
 #include <Poco/URI.h>
 
 #include <QElapsedTimer>
+#include <QImage>
 #include <QList>
 #include <QMainWindow>
 #include <QObject>
@@ -139,6 +140,7 @@ public:
     using TitleChangeFn = std::function<void(const QString&)>;
     using UnmodifiedFn = std::function<void()>;
     using ModifiedStatusChangeFn = std::function<void(bool)>;
+    using ThumbnailChangeFn = std::function<void(bool isFirstThumbnail)>;
 
     explicit WebView(QWebEngineProfile* profile, bool isWelcome = false);
     ~WebView() override;
@@ -160,11 +162,17 @@ public:
     // Runs each time the document stops holding a change that is not on disk.
     void setOnUnmodified(UnmodifiedFn cb) { _onUnmodified = std::move(cb); }
     void setOnModifiedStatusChange(ModifiedStatusChangeFn cb) { _onModifiedStatusChange = std::move(cb); }
+    // Runs each time the image of the document's current view changes.
+    void setOnThumbnailChange(ThumbnailChangeFn cb) { _onThumbnailChange = std::move(cb); }
     void requestClose();
     void updateTitle(const QString& title);
     /// The document reported that it holds no change that is not on disk.
     void onDocumentUnmodified();
     void onDocumentModifiedStatusChanged(bool modified);
+    /// Takes the current view as a "data:image/png;base64," URL. Anything else is ignored.
+    void updateThumbnail(const std::string& dataUrl);
+    // The document's current view, or a null image until the page has sent one.
+    const QImage& thumbnail() const { return _thumbnail; }
     QString composedWindowTitle() const;
 
     QString documentTitle() const { return _docTitle; }
@@ -281,6 +289,7 @@ private:
     QString _docTitle;
     QString _docType;
     bool _isWelcome;
+    QImage _thumbnail;
     Bridge* _bridge;
     // Holds the temporary copy of a template while it is open as a new document,
     // so the copy is removed when the window closes.
@@ -290,6 +299,7 @@ private:
     TitleChangeFn _onTitleChange;
     UnmodifiedFn _onUnmodified;
     ModifiedStatusChangeFn _onModifiedStatusChange;
+    ThumbnailChangeFn _onThumbnailChange;
 
     static std::vector<WebView*> s_instances;
 };
