@@ -1,0 +1,36 @@
+# Collabora Online with a Grammalecte server beside it. Collabora reaches the
+# checker over a network of its own, which is where the checker stays: it
+# answers anyone who can reach it, with no password.
+#
+#   docker compose up
+#
+# Then open a Writer document, set the language of the text to French and
+# the checker underlines the grammar errors as you type.
+
+services:
+  collabora:
+    image: collabora/code:latest
+    ports:
+      - "9980:9980"
+    environment:
+      # Your hosts, as for any Collabora Online container.
+      - aliasgroup1=https://my-wopi-host.example.com:443
+      - extra_params=--o:ssl.enable=false --o:ssl.termination=true --o:grammalecte.enabled=true --o:grammalecte.base_url=http://grammalecte:8080
+    networks:
+      - web
+      - checkers
+    depends_on:
+      grammalecte:
+        condition: service_healthy
+    restart: unless-stopped
+
+  grammalecte:
+    build: .
+    networks:
+      - checkers
+    restart: unless-stopped
+
+networks:
+  web:
+  checkers:
+    internal: true

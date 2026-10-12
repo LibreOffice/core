@@ -1,0 +1,51 @@
+Grammalecte for Collabora Online
+
+Grammalecte is a grammar checker for French. Collabora Online talks to it
+over HTTP, the way it talks to LanguageTool and the Duden Korrekturserver,
+and underlines what it finds as you type. This directory builds the service
+and shows how to run it next to Collabora Online.
+
+Nothing of Grammalecte is in this repository. The Dockerfile fetches the
+release archive from grammalecte.net while the image builds, checks its
+SHA-256, and runs the server it contains as the user "grammalecte".
+Grammalecte is released under the GPL 3; the licence text is in the
+archive and in the image.
+
+Build and try it:
+
+    docker build -t grammalecte docker/grammalecte
+    docker run --rm -p 8080:8080 grammalecte
+    curl -d 'text=Il%20sont%20parti.' http://127.0.0.1:8080/gc_text/fr
+
+The answer lists an agreement error on "sont parti".
+
+Running it next to Collabora Online:
+
+    cd docker/grammalecte
+    docker compose up
+
+compose.yaml starts the collabora/code image with the checker enabled and
+pointed at the service, on a network the service shares with nothing else.
+In coolwsd.xml the same two settings are
+
+    <grammalecte>
+        <enabled>true</enabled>
+        <base_url>http://grammalecte:8080</base_url>
+    </grammalecte>
+
+allowed_languages, which limits the local writing aids loaded at start,
+does not come into it: a remote checker checks every language it is
+configured for.
+
+The service has no authentication and no TLS. Anyone who can reach it can
+send it text, so keep it on an internal network, as compose.yaml does, and
+never on a public address.
+
+What the checker looks for is chosen per user in the Options dialog, under
+the Grammalecte section: each rule family of the checker is a switch there.
+The server settings themselves show in that dialog only where the
+administrator allows it, with allow_user_settings in coolwsd.xml.
+
+Collabora Office, the desktop application, has the same checker and is
+configured in its own Options dialog. Packaging Grammalecte with the
+desktop application is a later step.
