@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-22 21:46+0200\n"
-"PO-Revision-Date: 2026-10-12 17:18+0000\n"
+"PO-Revision-Date: 2026-10-13 04:01+0000\n"
 "Last-Translator: Joan Montané <jmontane@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ca/>\n"
@@ -2779,19 +2779,19 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:427
 msgid "96 DPI"
-msgstr ""
+msgstr "96 PPP"
 
 #: src/control/Control.CleanupSidebar.ts:428
 msgid "150 DPI"
-msgstr ""
+msgstr "150 PPP"
 
 #: src/control/Control.CleanupSidebar.ts:429
 msgid "220 DPI"
-msgstr ""
+msgstr "220 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:430
 msgid "300 DPI"
-msgstr ""
+msgstr "300 PPP"
 
 #: src/control/Control.CleanupSidebar.ts:454
 msgid "Scanning..."
@@ -2803,11 +2803,11 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:458
 msgid "Preparing cleanup..."
-msgstr ""
+msgstr "S'està preparant la neteja..."
 
 #: src/control/Control.CleanupSidebar.ts:460
 msgid "Cleaning up..."
-msgstr ""
+msgstr "S'està netejant..."
 
 #: src/control/Control.CleanupSidebar.ts:472
 msgid "Images over %1 DPI (%2)"
@@ -2815,7 +2815,7 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:476
 msgid "Hidden slides (%1)"
-msgstr ""
+msgstr "Diapositives ocultes (%1)"
 
 #: src/control/Control.CleanupSidebar.ts:478
 msgid "Unused master slides (%1)"
@@ -2827,7 +2827,7 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:482
 msgid "Embedded objects (%1)"
-msgstr ""
+msgstr "Objectes incrustats (%1)"
 
 #: src/control/Control.CleanupSidebar.ts:490
 msgid "Saved %1"
@@ -2845,11 +2845,11 @@ msgstr[1] ""
 
 #: src/control/Control.CleanupSidebar.ts:525
 msgid "Image resolution"
-msgstr ""
+msgstr "Resolució de la imatge"
 
 #: src/control/Control.CleanupSidebar.ts:547
 msgid "JPEG quality in %"
-msgstr ""
+msgstr "Qualitat JPEG en %"
 
 #: src/control/Control.CleanupSidebar.ts:572
 msgid "Prepare for sharing"
@@ -2857,19 +2857,19 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:601
 msgid "%1 of %2"
-msgstr ""
+msgstr "%1 de %2"
 
 #: src/control/Control.CleanupSidebar.ts:614
 msgid "Cleanup progress"
-msgstr ""
+msgstr "Progrés de neteja"
 
 #: src/control/Control.CleanupSidebar.ts:647
 msgid "Stop"
-msgstr ""
+msgstr "Atura"
 
 #: src/control/Control.CleanupSidebar.ts:668
 msgid "Scan"
-msgstr ""
+msgstr "Escaneja"
 
 #: src/control/Control.CleanupSidebar.ts:701
 msgid "Fix all"
@@ -2901,7 +2901,7 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:2184
 #: src/control/Control.NotebookbarImpress.js:2185
 msgid "Clean Up"
-msgstr ""
+msgstr "Neteja"
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3114,7 +3114,7 @@ msgstr "Presentació buida"
 
 #: src/control/Control.BackstageView.ts:1029
 msgid "Blank Drawing"
-msgstr ""
+msgstr "Dibuix en blanc"
 
 #: src/control/Control.BackstageView.ts:1034
 msgid "Blank Document"
@@ -3286,14 +3286,15 @@ msgstr "Nom del document"
 #: src/control/Control.DocumentNameInput.js:39
 msgid "A document name cannot contain a slash or a backslash."
 msgstr ""
+"Un nom de document no pot contenir una barra inclinada o una barra inversa."
 
 #: src/control/Control.DocumentNameInput.js:42 src/app/Socket.ts:2531
 msgid "Please enter a valid document name."
-msgstr ""
+msgstr "Introduïu un nom de document vàlid."
 
 #: src/control/Control.DocumentNameInput.js:55
 msgid "Invalid document name"
-msgstr ""
+msgstr "El nom del document no és vàlid"
 
 #: src/control/Control.DocumentRepair.js:27
 #: src/control/Control.DocumentRepair.js:28
@@ -4130,7 +4131,7 @@ msgstr "Pàgines de notes"
 #: src/control/Control.Menubar.ts:523
 #: src/control/Control.NotebookbarImpress.js:743
 msgid "View Notes"
-msgstr ""
+msgstr "Mostra les notes"
 
 #: src/control/Control.Menubar.ts:524
 #: src/control/Control.NotebookbarImpress.js:745
@@ -5409,18 +5410,18 @@ msgstr "Afegeix una secció"
 #: src/control/Control.PartsPreview.js:875
 msgid "with 1 other"
 msgid_plural "with %n others"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "amb 1 altre"
+msgstr[1] "amb %n altres"
 
 #: src/control/Control.PartsPreview.js:885
 msgid "with %1"
-msgstr ""
+msgstr "amb %1"
 
 #: src/control/Control.PartsPreview.js:886
 msgid "with %1 and 1 other"
 msgid_plural "with %1 and %n others"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "amb %1 i 1 més"
+msgstr[1] "amb %1 i %n altres"
 
 #: src/control/Control.PartsPreview.js:916
 msgid "preview of page %1, linked to %2 in %3"
@@ -5487,7 +5488,7 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:673
 msgid "Checking..."
-msgstr ""
+msgstr "S'està comprovant..."
 
 #: src/control/Control.SlideImportPane.tsx:675
 #: src/control/Control.SlideLinkToolbar.tsx:165
@@ -5501,11 +5502,11 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:679
 msgid "Could not open"
-msgstr ""
+msgstr "No s'ha pogut obrir"
 
 #: src/control/Control.SlideImportPane.tsx:685
 msgid "{0} changed"
-msgstr ""
+msgstr "{0} ha canviat"
 
 #: src/control/Control.SlideImportPane.tsx:687
 #: src/control/Control.SlideLinkToolbar.tsx:115
@@ -5514,7 +5515,7 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:689
 msgid "Not checked"
-msgstr ""
+msgstr "No s'ha comprovat"
 
 #: src/control/Control.SlideImportPane.tsx:690
 #: src/control/Control.SlideImportPane.tsx:1392
@@ -5583,7 +5584,7 @@ msgstr "Insereix formes"
 
 #: src/control/Control.SlideImportPane.tsx:871
 msgid "{0} of {1}"
-msgstr ""
+msgstr "{0} de {1}"
 
 #: src/control/Control.SlideImportPane.tsx:874
 #: src/control/Control.SlideImportPane.tsx:1638
@@ -5637,11 +5638,11 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:1048
 msgid "Hide all slides"
-msgstr ""
+msgstr "Amaga totes les diapositives"
 
 #: src/control/Control.SlideImportPane.tsx:1048
 msgid "Show all slides"
-msgstr ""
+msgstr "Mostra totes les diapositives"
 
 #: src/control/Control.SlideImportPane.tsx:1080
 #: src/control/Control.SlideImportPane.tsx:1081
@@ -5690,7 +5691,7 @@ msgstr ""
 
 #: src/control/Control.SlideImportPane.tsx:1391
 msgid "Original design"
-msgstr ""
+msgstr "Disseny original"
 
 #: src/control/Control.SlideImportPane.tsx:1394
 msgid "Linked, follows the slide number"
