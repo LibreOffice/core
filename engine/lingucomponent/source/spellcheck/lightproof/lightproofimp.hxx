@@ -124,8 +124,10 @@ private:
     // Takes the package's option flags from the configuration, falling back
     // to the defaults the rule file carries for anything it does not answer.
     void loadOptions(Package& rPackage);
-    // Rereads every loaded package's options and asks for a re-check.
+    // Rereads every loaded package's options.
     void reloadOptions();
+    // Asks the documents to check again.
+    void broadcastProofreadAgain();
 
     // The morphological analyses a word has already been asked about, kept
     // for the life of the checker the way the rules expect.

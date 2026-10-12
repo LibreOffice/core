@@ -23,22 +23,20 @@ $(eval $(call gb_Library_use_libraries,LanguageTool,\
 	comphelper \
 	cppu \
 	cppuhelper \
-	fwk \
 	i18nlangtag \
-	svt \
 	lng \
 	sal \
+	svt \
 	tl \
 	utl \
 ))
 
 $(eval $(call gb_Library_use_static_libraries,LanguageTool,\
-	ulingu \
+	ulinguremote \
 ))
 
 $(eval $(call gb_Library_use_externals,LanguageTool,\
 	boost_headers \
-	icuuc \
 	curl \
 ))
 

@@ -24,6 +24,20 @@
                     <value>ar ast-ES be-BY br-FR ca-ES ca-ES-valencia zh-CN da-DK nl nl-BE en en-AU en-CA en-GB en-NZ en-ZA en-US fr gl-ES de de-AT de-DE de-CH el-GR ga-IE it ja-JP km-KH nb no fa pl-PL pt pt-AO pt-BR pt-MZ pt-PT ro-RO ru-RU de-DE-x-simple-language sk-SK sl-SI es es-AR sv tl-PH ta-IN uk-UA</value>
                 </prop>
             </node>
+            <!-- The languages the Duden Korrekturserver checks itself. A server
+                 with Hunspell dictionaries installed serves more; add them here.
+                 In the lists below it comes first for German, as Grammalecte does
+                 for French; everywhere else LanguageTool is preferred. -->
+            <node oor:name="cpo.lingu.Duden" oor:op="fuse">
+                <prop oor:name="Locales" oor:type="oor:string-list">
+                    <value>de-DE de-AT de-CH en-GB en-US fr it es</value>
+                </prop>
+            </node>
+            <node oor:name="cpo.lingu.Grammalecte" oor:op="fuse">
+                <prop oor:name="Locales" oor:type="oor:string-list">
+                    <value>fr</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="GrammarCheckerList">
             <prop oor:name="ar" oor:op="fuse" oor:type="oor:string-list">
@@ -66,7 +80,7 @@
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker cpo.lingu.Lightproof</value>
             </prop>
             <prop oor:name="en-GB" oor:op="fuse" oor:type="oor:string-list">
-                <value>org.openoffice.lingu.LanguageToolGrammarChecker cpo.lingu.Lightproof</value>
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker cpo.lingu.Duden cpo.lingu.Lightproof</value>
             </prop>
             <prop oor:name="en-NZ" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker cpo.lingu.Lightproof</value>
@@ -75,10 +89,10 @@
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker cpo.lingu.Lightproof</value>
             </prop>
             <prop oor:name="en-US" oor:op="fuse" oor:type="oor:string-list">
-                <value>org.openoffice.lingu.LanguageToolGrammarChecker cpo.lingu.Lightproof</value>
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker cpo.lingu.Duden cpo.lingu.Lightproof</value>
             </prop>
             <prop oor:name="fr" oor:op="fuse" oor:type="oor:string-list">
-                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+                <value>cpo.lingu.Grammalecte org.openoffice.lingu.LanguageToolGrammarChecker cpo.lingu.Duden</value>
             </prop>
             <prop oor:name="gl-ES" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
@@ -87,13 +101,13 @@
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
             <prop oor:name="de-AT" oor:op="fuse" oor:type="oor:string-list">
-                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+                <value>cpo.lingu.Duden org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
             <prop oor:name="de-DE" oor:op="fuse" oor:type="oor:string-list">
-                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+                <value>cpo.lingu.Duden org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
             <prop oor:name="de-CH" oor:op="fuse" oor:type="oor:string-list">
-                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+                <value>cpo.lingu.Duden org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
             <prop oor:name="el-GR" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
@@ -105,7 +119,7 @@
                 <value>cpo.lingu.Lightproof</value>
             </prop>
             <prop oor:name="it" oor:op="fuse" oor:type="oor:string-list">
-                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker cpo.lingu.Duden</value>
             </prop>
             <prop oor:name="ja-JP" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
@@ -156,7 +170,7 @@
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
             </prop>
             <prop oor:name="es" oor:op="fuse" oor:type="oor:string-list">
-                <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+                <value>org.openoffice.lingu.LanguageToolGrammarChecker cpo.lingu.Duden</value>
             </prop>
             <prop oor:name="es-AR" oor:op="fuse" oor:type="oor:string-list">
                 <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>

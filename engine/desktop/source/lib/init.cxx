@@ -72,6 +72,9 @@
 #include <limits>
 #include <memory>
 #include <vector>
+#include <optional>
+#include <set>
+#include <map>
 #include <iostream>
 #include <mutex>
 #include <string_view>
@@ -130,6 +133,7 @@
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
@@ -315,7 +319,6 @@ extern "C" {
 
 #endif
 
-using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
 
 
 static COKitImpl *gImpl = nullptr;
@@ -1043,84 +1046,267 @@ void hideSidebar()
         SetLastExceptionMsg(u"No view shell or sidebar"_ustr);
 }
 
-cpo::uno::Sequence<css::lang::Locale> setLanguageToolConfig()
+// What the settings dialog and the kit know about a remote checker: the
+// configuration group, the kit's environment variables, and whether it
+// marks misspellings too, in which case the local spell checker gives way
+// to it for its languages.
+struct RemoteChecker
 {
-    cpo::uno::Sequence<css::lang::Locale> aLTLocales;
+    const char* pId;
+    OUString aImplementationName;
+    const char* pEnvPrefix;
+    // The group under GrammarChecking in the linguistic configuration that
+    // holds the checker's settings.
+    OUString aConfigGroup;
+    bool bChecksSpelling;
+};
 
-    const char* pEnabled = ::getenv("LANGUAGETOOL_ENABLED");
-    const char* pBaseUrlString = ::getenv("LANGUAGETOOL_BASEURL");
+using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
+using DudenCfg = officecfg::Office::Linguistic::GrammarChecking::Duden;
+using GrammalecteCfg = officecfg::Office::Linguistic::GrammarChecking::Grammalecte;
 
-    if (pEnabled && pBaseUrlString)
+const RemoteChecker aRemoteCheckers[] = {
+    { "languagetool", u"org.openoffice.lingu.LanguageToolGrammarChecker"_ustr, "LANGUAGETOOL",
+      u"LanguageTool"_ustr, true },
+    { "duden", u"cpo.lingu.Duden"_ustr, "DUDEN", u"Duden"_ustr, true },
+    { "grammalecte", u"cpo.lingu.Grammalecte"_ustr, "GRAMMALECTE",
+      u"Grammalecte"_ustr, false },
+};
+
+std::optional<OUString> envString(const char* pPrefix, const char* pName)
+{
+    const char* pValue = ::getenv(OString(OString::Concat(pPrefix) + "_" + pName).getStr());
+    if (!pValue)
+        return std::nullopt;
+    return OStringToOUString(pValue, RTL_TEXTENCODING_UTF8);
+}
+
+std::optional<bool> envBool(const char* pPrefix, const char* pName)
+{
+    const std::optional<OUString> oValue = envString(pPrefix, pName);
+    if (!oValue)
+        return std::nullopt;
+    return *oValue == "true";
+}
+
+std::optional<cpo::uno::Sequence<OUString>> envList(const char* pPrefix, const char* pName)
+{
+    const std::optional<OUString> oValue = envString(pPrefix, pName);
+    if (!oValue)
+        return std::nullopt;
+    std::vector<OUString> aItems;
+    for (sal_Int32 nIndex = 0; nIndex >= 0;)
     {
-        const char* pUsername = ::getenv("LANGUAGETOOL_USERNAME");
-        const char* pApikey = ::getenv("LANGUAGETOOL_APIKEY");
-        const char* pSSLVerification = ::getenv("LANGUAGETOOL_SSL_VERIFICATION");
-        const char* pRestProtocol = ::getenv("LANGUAGETOOL_RESTPROTOCOL");
+        const OUString aItem(o3tl::trim(o3tl::getToken(*oValue, 0, ' ', nIndex)));
+        if (!aItem.isEmpty())
+            aItems.push_back(aItem);
+    }
+    return comphelper::containerToSequence(aItems);
+}
 
-        OUString aEnabled = OStringToOUString(pEnabled, RTL_TEXTENCODING_UTF8);
-        if (aEnabled != "true")
-            return aLTLocales;
-        OUString aBaseUrl = OStringToOUString(pBaseUrlString, RTL_TEXTENCODING_UTF8);
-        try
+// Whether a user's own settings for a remote checker are applied from their
+// document settings. The server says; where there is no server, as in the
+// desktop app, there is nobody else on the document and the answer is yes.
+bool allowsUserSettings(const char* pPrefix)
+{
+    return envBool(pPrefix, "ALLOW_USER_SETTINGS").value_or(true);
+}
+
+// What each remote checker's server answered when it was asked about
+// itself, by checker id. Filled once per process: the kit forks after
+// asking, and the answer is good for the forks.
+std::map<std::string, cpo::uno::Sequence<css::beans::PropertyValue>> gRemoteCheckerProbes;
+
+cpo::uno::Sequence<css::beans::PropertyValue> probeRemoteChecker(const RemoteChecker& rChecker)
+{
+    const std::map<std::string, cpo::uno::Sequence<css::beans::PropertyValue>>::const_iterator
+        aKnown = gRemoteCheckerProbes.find(rChecker.pId);
+    if (aKnown != gRemoteCheckerProbes.end())
+        return aKnown->second;
+
+    cpo::uno::Sequence<css::beans::PropertyValue> aAnswer;
+    try
+    {
+        cpo::uno::Reference<css::beans::XPropertyAccess> xChecker(
+            xContext->getServiceManager()->createInstanceWithContext(
+                rChecker.aImplementationName, xContext),
+            uno::UNO_QUERY_THROW);
+        aAnswer = xChecker->getPropertyValues();
+    }
+    catch (const cpo::uno::Exception& rException)
+    {
+        SAL_WARN("kit", "cannot ask " << rChecker.pId << " about its server: " << rException.Message);
+    }
+    gRemoteCheckerProbes[rChecker.pId] = aAnswer;
+    return aAnswer;
+}
+
+bool isRemoteCheckerReachable(const RemoteChecker& rChecker)
+{
+    for (const css::beans::PropertyValue& rValue : probeRemoteChecker(rChecker))
+    {
+        bool bReachable = false;
+        if (rValue.Name == "IsReachable" && (rValue.Value >>= bReachable))
+            return bReachable;
+    }
+    return false;
+}
+
+constexpr OUString REMOTE_CHECKER_CONFIG_PATH = u"/org.openoffice.Office.Linguistic/GrammarChecking"_ustr;
+
+// A checker's settings group, read-only and live: each call sees what the
+// configuration holds at that moment. Empty when the configuration cannot
+// be reached, which the readers below take as the defaults.
+cpo::uno::Reference<css::container::XNameAccess> getRemoteCheckerConfig(const RemoteChecker& rChecker)
+{
+    try
+    {
+        cpo::uno::Reference<css::lang::XMultiServiceFactory> xProvider(
+            css::configuration::theDefaultProvider::get(xContext));
+        const css::beans::NamedValue aPath(
+            u"nodepath"_ustr, cpo::uno::Any(REMOTE_CHECKER_CONFIG_PATH + "/" + rChecker.aConfigGroup));
+        return cpo::uno::Reference<css::container::XNameAccess>(
+            xProvider->createInstanceWithArguments(
+                u"com.sun.star.configuration.ConfigurationAccess"_ustr, { cpo::uno::Any(aPath) }),
+            uno::UNO_QUERY);
+    }
+    catch (const cpo::uno::Exception& rException)
+    {
+        SAL_WARN("kit", "cannot read the settings of " << rChecker.pId << ": " << rException.Message);
+        return {};
+    }
+}
+
+// A setting of the group, or the default where the group has no such
+// setting or it is unset.
+template <typename T>
+T getRemoteCheckerSetting(const cpo::uno::Reference<css::container::XNameAccess>& xGroup,
+                          const OUString& rName, const T& rDefault)
+{
+    T aValue = rDefault;
+    if (xGroup.is() && xGroup->hasByName(rName))
+        xGroup->getByName(rName) >>= aValue;
+    return aValue;
+}
+
+bool isRemoteCheckerEnabled(const RemoteChecker& rChecker)
+{
+    return getRemoteCheckerSetting(getRemoteCheckerConfig(rChecker), u"IsEnabled"_ustr, false);
+}
+
+// Takes the remote checker settings from the environment the server set
+// up, and switches the local spell checker off for the languages a
+// reachable remote checker spell checks itself. One that does not answer
+// keeps the local spell checker: a language without any spell checking
+// would be worse than one with two. Returns the languages that were handed
+// over.
+cpo::uno::Sequence<css::lang::Locale> setRemoteCheckerConfig()
+{
+    std::vector<css::lang::Locale> aRemoteLocales;
+
+    try
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+
+        // A profile that drove the Duden Korrekturserver through the
+        // LanguageTool group, with RestProtocol set to "duden", has its server
+        // moved to the Duden group, once; the environment below, where there
+        // is one, has the last word.
+        if (LanguageToolCfg::RestProtocol::get().value_or(OUString()) == "duden")
         {
-            using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
-            auto batch(comphelper::ConfigurationChanges::create());
-
-            LanguageToolCfg::BaseURL::set(aBaseUrl, batch);
-            LanguageToolCfg::IsEnabled::set(true, batch);
-            if (pSSLVerification)
+            if (DudenCfg::BaseURL::get().value_or(OUString()).isEmpty())
             {
-                OUString aSSLVerification = OStringToOUString(pSSLVerification, RTL_TEXTENCODING_UTF8);
-                LanguageToolCfg::SSLCertVerify::set(aSSLVerification == "true", batch);
+                DudenCfg::BaseURL::set(LanguageToolCfg::BaseURL::get().value_or(OUString()), batch);
+                DudenCfg::ApiKey::set(LanguageToolCfg::ApiKey::get().value_or(OUString()), batch);
+                DudenCfg::SSLCertVerify::set(LanguageToolCfg::SSLCertVerify::get(), batch);
+                DudenCfg::IsEnabled::set(LanguageToolCfg::IsEnabled::get(), batch);
             }
-            if (pRestProtocol)
-            {
-                OUString aRestProtocol = OStringToOUString(pRestProtocol, RTL_TEXTENCODING_UTF8);
-                LanguageToolCfg::RestProtocol::set(aRestProtocol, batch);
-            }
-            if (pUsername && pApikey)
-            {
-                OUString aUsername = OStringToOUString(pUsername, RTL_TEXTENCODING_UTF8);
-                OUString aApiKey = OStringToOUString(pApikey, RTL_TEXTENCODING_UTF8);
-                LanguageToolCfg::Username::set(aUsername, batch);
-                LanguageToolCfg::ApiKey::set(aApiKey, batch);
-            }
-            batch->commit();
-
-            uno::Reference<linguistic2::XProofreader> xGC(
-                xContext->getServiceManager()->createInstanceWithContext(u"org.openoffice.lingu.LanguageToolGrammarChecker"_ustr, xContext),
-                uno::UNO_QUERY_THROW);
-            uno::Reference<linguistic2::XSupportedLocales> xSuppLoc(xGC, uno::UNO_QUERY_THROW);
-
-            cpo::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
-                css::linguistic2::LinguServiceManager::create(xContext);
-            if (xLangSrv.is())
-            {
-                cpo::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
-                if (xSpell.is())
-                {
-                    Sequence<OUString> aEmpty;
-                    Sequence<css::lang::Locale> aLocales = xSpell->getLocales();
-
-                    for (int itLocale = 0; itLocale < aLocales.getLength(); itLocale++)
-                    {
-                        // turn off spell checker if LanguageTool supports the locale already
-                        if (xSuppLoc->hasLocale(aLocales[itLocale]))
-                            xLangSrv->setConfiguredServices(
-                                SN_SPELLCHECKER, aLocales[itLocale], aEmpty);
-                    }
-                }
-            }
-
-            aLTLocales = xSuppLoc->getLocales();
+            LanguageToolCfg::IsEnabled::set(false, batch);
+            LanguageToolCfg::RestProtocol::set(OUString(), batch);
         }
-        catch(cpo::uno::Exception const& rException)
-        {
-            SAL_WARN("kit", "Failed to set LanguageTool API settings: " << rException.Message);
-        }
+
+        if (const std::optional<bool> oEnabled = envBool("LANGUAGETOOL", "ENABLED"))
+            LanguageToolCfg::IsEnabled::set(*oEnabled, batch);
+        if (const std::optional<OUString> oValue = envString("LANGUAGETOOL", "BASEURL"))
+            LanguageToolCfg::BaseURL::set(*oValue, batch);
+        if (const std::optional<bool> oValue = envBool("LANGUAGETOOL", "SSL_VERIFICATION"))
+            LanguageToolCfg::SSLCertVerify::set(*oValue, batch);
+        if (const std::optional<OUString> oValue = envString("LANGUAGETOOL", "USERNAME"))
+            LanguageToolCfg::Username::set(*oValue, batch);
+        if (const std::optional<OUString> oValue = envString("LANGUAGETOOL", "APIKEY"))
+            LanguageToolCfg::ApiKey::set(*oValue, batch);
+
+        if (const std::optional<bool> oEnabled = envBool("DUDEN", "ENABLED"))
+            DudenCfg::IsEnabled::set(*oEnabled, batch);
+        if (const std::optional<OUString> oValue = envString("DUDEN", "BASEURL"))
+            DudenCfg::BaseURL::set(*oValue, batch);
+        if (const std::optional<bool> oValue = envBool("DUDEN", "SSL_VERIFICATION"))
+            DudenCfg::SSLCertVerify::set(*oValue, batch);
+        if (const std::optional<OUString> oValue = envString("DUDEN", "APIKEY"))
+            DudenCfg::ApiKey::set(*oValue, batch);
+        if (const std::optional<OUString> oValue = envString("DUDEN", "SPELLCHECKING_LEVEL"))
+            DudenCfg::SpellcheckingLevel::set(oValue->toInt32(), batch);
+        if (const std::optional<OUString> oValue = envString("DUDEN", "ORTHOGRAPHY_STANDARD"))
+            DudenCfg::OrthographyStandard::set(*oValue, batch);
+        if (const std::optional<cpo::uno::Sequence<OUString>> oValue = envList("DUDEN", "PROPERTY_SETS"))
+            DudenCfg::PropertySets::set(*oValue, batch);
+        if (const std::optional<cpo::uno::Sequence<OUString>> oValue = envList("DUDEN", "DICTIONARIES"))
+            DudenCfg::Dictionaries::set(*oValue, batch);
+
+        if (const std::optional<bool> oEnabled = envBool("GRAMMALECTE", "ENABLED"))
+            GrammalecteCfg::IsEnabled::set(*oEnabled, batch);
+        if (const std::optional<OUString> oValue = envString("GRAMMALECTE", "BASEURL"))
+            GrammalecteCfg::BaseURL::set(*oValue, batch);
+        if (const std::optional<bool> oValue = envBool("GRAMMALECTE", "SSL_VERIFICATION"))
+            GrammalecteCfg::SSLCertVerify::set(*oValue, batch);
+
+        batch->commit();
+    }
+    catch (const cpo::uno::Exception& rException)
+    {
+        SAL_WARN("kit", "Failed to set the remote checker settings: " << rException.Message);
+        return {};
     }
 
-    return aLTLocales;
+    try
+    {
+        cpo::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
+            css::linguistic2::LinguServiceManager::create(xContext);
+        cpo::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
+        if (!xSpell.is())
+            return {};
+        const cpo::uno::Sequence<css::lang::Locale> aSpellLocales = xSpell->getLocales();
+
+        for (const RemoteChecker& rChecker : aRemoteCheckers)
+        {
+            if (!rChecker.bChecksSpelling || !isRemoteCheckerEnabled(rChecker))
+                continue;
+            if (!isRemoteCheckerReachable(rChecker))
+            {
+                std::cerr << "Remote checker " << rChecker.pId
+                          << " is not answering; keeping the local spell checker\n";
+                continue;
+            }
+
+            cpo::uno::Reference<css::linguistic2::XSupportedLocales> xRemote(
+                xContext->getServiceManager()->createInstanceWithContext(
+                    rChecker.aImplementationName, xContext),
+                uno::UNO_QUERY_THROW);
+            for (const css::lang::Locale& rLocale : aSpellLocales)
+            {
+                if (xRemote->hasLocale(rLocale))
+                    xLangSrv->setConfiguredServices(SN_SPELLCHECKER, rLocale, {});
+            }
+            for (const css::lang::Locale& rLocale : xRemote->getLocales())
+                aRemoteLocales.push_back(rLocale);
+        }
+    }
+    catch (const cpo::uno::Exception& rException)
+    {
+        SAL_WARN("kit", "Failed to hand languages to the remote checkers: " << rException.Message);
+    }
+
+    return comphelper::containerToSequence(aRemoteLocales);
 }
 
 }  // end anonymous namespace
@@ -5734,7 +5920,7 @@ static void updateConfig(const OUString& rConfigPath)
                 // wsd/DocumentBroker.cpp (the upload side). No shared symbol
                 // exists across the kit<->wsd boundary, so edits here need
                 // the mirror edit there.
-                const cpo::uno::Sequence<OUString> aAllowedSubset{
+                std::vector<OUString> aAllowedSubset{
                     u"/org.openoffice.Office.Calc/Grid"_ustr,
                     u"/org.openoffice.Office.Calc/Print"_ustr,
                     u"/org.openoffice.Office.Calc/Content/Display/ObjectGraphic"_ustr,
@@ -5754,12 +5940,26 @@ static void updateConfig(const OUString& rConfigPath)
                     u"/org.openoffice.Office.Common/BulletsNumbering"_ustr,
                     u"/org.openoffice.Office.Common/I18N/CTL"_ustr,
 
-                    // Only the sentence-checking subtree: its sibling
-                    // GrammarChecking/LanguageTool holds an API key and a
-                    // user name, which must not round-trip to the host.
-                    u"/org.openoffice.Office.Linguistic/GrammarChecking/SentenceChecking"_ustr
+                    u"/org.openoffice.Office.Linguistic/GrammarChecking/SentenceChecking"_ustr,
+                    // What a user asks a remote checker to look for is
+                    // theirs to choose; the checker's server, account and
+                    // key are not, unless the server allows it below.
+                    // None of these go back to the host: the upload side
+                    // stops at SentenceChecking.
+                    u"/org.openoffice.Office.Linguistic/GrammarChecking/Grammalecte/Options"_ustr,
+                    u"/org.openoffice.Office.Linguistic/GrammarChecking/Duden/Style"_ustr,
                 };
-                xUpdate->insertModificationXcuFile(xcustat.getFileURL(), aAllowedSubset, {});
+                // The kit is shared by everyone on the document, so one user
+                // may point a checker at a server of their own only where
+                // the server allows it.
+                if (allowsUserSettings("LANGUAGETOOL"))
+                    aAllowedSubset.push_back(u"/org.openoffice.Office.Linguistic/GrammarChecking/LanguageTool"_ustr);
+                if (allowsUserSettings("DUDEN"))
+                    aAllowedSubset.push_back(u"/org.openoffice.Office.Linguistic/GrammarChecking/Duden"_ustr);
+                if (allowsUserSettings("GRAMMALECTE"))
+                    aAllowedSubset.push_back(u"/org.openoffice.Office.Linguistic/GrammarChecking/Grammalecte"_ustr);
+                xUpdate->insertModificationXcuFile(xcustat.getFileURL(),
+                                                   comphelper::containerToSequence(aAllowedSubset), {});
             }
         }
         else if (sFileName == "wordbook")
@@ -8335,6 +8535,126 @@ static std::string getSentenceCheckingPackages()
     return aJson.finishAndGetAsStdString();
 }
 
+// The settings dialog's name for a setting: the configuration's, with a
+// small first letter, except for the switch and the certificate check, which
+// keep the names the dialog has had for them.
+static std::string getSettingName(std::u16string_view rName)
+{
+    if (rName == u"IsEnabled")
+        return "enabled";
+    if (rName == u"SSLCertVerify")
+        return "sslVerify";
+    const OUString aName = OUString(rName.substr(0, 1)).toAsciiLowerCase() + rName.substr(1);
+    return std::string(OUStringToOString(aName, RTL_TEXTENCODING_UTF8));
+}
+
+// Writes a configuration value as JSON: a group as an object holding its
+// settings under their own names, a string list as an array, an unset
+// string as an empty one.
+static void putConfigValue(tools::JsonWriter& rJson, const std::string& rName,
+                           const cpo::uno::Any& rValue)
+{
+    bool bValue = false;
+    sal_Int32 nValue = 0;
+    OUString aString;
+    cpo::uno::Sequence<OUString> aStrings;
+    cpo::uno::Reference<css::container::XNameAccess> xGroup;
+    if (rValue >>= bValue)
+        rJson.put(rName, bValue);
+    else if (rValue >>= nValue)
+        rJson.put(rName, nValue);
+    else if (rValue >>= aString)
+        rJson.put(rName, aString);
+    else if (rValue >>= aStrings)
+    {
+        auto aArray = rJson.startArray(rName);
+        for (const OUString& rItem : aStrings)
+            rJson.putSimpleValue(rItem);
+    }
+    else if (rValue >>= xGroup)
+    {
+        auto aNode = rJson.startNode(rName);
+        for (const OUString& rChild : xGroup->getElementNames())
+            putConfigValue(rJson, std::string(OUStringToOString(rChild, RTL_TEXTENCODING_UTF8)),
+                           xGroup->getByName(rChild));
+    }
+    else if (!rValue.hasValue())
+        rJson.put(rName, "");
+}
+
+// A checker's settings group as the dialog takes it. The API key stays
+// here: the dialog learns that there is one.
+static void putRemoteCheckerSettings(tools::JsonWriter& rJson,
+                                     const cpo::uno::Reference<css::container::XNameAccess>& xGroup)
+{
+    bool bKeySeen = false;
+    if (xGroup.is())
+    {
+        for (const OUString& rName : xGroup->getElementNames())
+        {
+            const cpo::uno::Any aValue = xGroup->getByName(rName);
+            if (rName == "ApiKey")
+            {
+                OUString aKey;
+                aValue >>= aKey;
+                rJson.put("hasCredentials", !aKey.isEmpty());
+                bKeySeen = true;
+                continue;
+            }
+            putConfigValue(rJson, getSettingName(rName), aValue);
+        }
+    }
+    if (!bKeySeen)
+        rJson.put("hasCredentials", false);
+}
+
+// The remote sentence checkers as the settings dialog needs them: how each
+// is set up, which languages it serves, and what its server offers to
+// choose from. The API keys stay here. The servers are not asked here:
+// what they answered when they were asked is reported.
+static std::string getRemoteGrammarCheckers()
+{
+    tools::JsonWriter aJson;
+    aJson.put("commandName", ".uno:RemoteGrammarCheckers");
+    {
+        auto aCheckers = aJson.startArray("commandValues");
+        for (const RemoteChecker& rChecker : aRemoteCheckers)
+        {
+            auto aChecker = aJson.startStruct();
+            aJson.put("id", rChecker.pId);
+            aJson.put("allowUserSettings", allowsUserSettings(rChecker.pEnvPrefix));
+            aJson.put("checksSpelling", rChecker.bChecksSpelling);
+
+            {
+                cpo::uno::Sequence<OUString> aLocales;
+                SvtLinguConfig().GetLocaleListFor(u"GrammarCheckers"_ustr, rChecker.aImplementationName, aLocales);
+                auto aLocaleArray = aJson.startArray("locales");
+                for (const OUString& rLocale : aLocales)
+                    aJson.putSimpleValue(rLocale);
+            }
+
+            putRemoteCheckerSettings(aJson, getRemoteCheckerConfig(rChecker));
+
+            // What the server offers, when it has been asked and answered:
+            // each list in its answer, as "available" and the list's name.
+            if (!isRemoteCheckerEnabled(rChecker))
+                continue;
+            const std::map<std::string, cpo::uno::Sequence<css::beans::PropertyValue>>::const_iterator
+                aKnown = gRemoteCheckerProbes.find(rChecker.pId);
+            if (aKnown == gRemoteCheckerProbes.end())
+                continue;
+            for (const css::beans::PropertyValue& rValue : aKnown->second)
+            {
+                cpo::uno::Sequence<OUString> aNames;
+                if (rValue.Name != "IsReachable" && (rValue.Value >>= aNames))
+                    putConfigValue(aJson, "available" + std::string(OUStringToOString(rValue.Name, RTL_TEXTENCODING_UTF8)),
+                                   rValue.Value);
+            }
+        }
+    }
+    return aJson.finishAndGetAsStdString();
+}
+
 static std::string getDocReadOnly(COKitDocument* pThis)
 {
     SfxObjectShell* pObjectShell = getSfxObjectShell(pThis);
@@ -8462,30 +8782,42 @@ static void addLocale(boost::property_tree::ptree& rValues, css::lang::Locale co
     rValues.push_back(std::make_pair("", aChild));
 }
 
+// Adds a locale to the list unless it is on it already.
+static void addLocaleOnce(std::vector<css::lang::Locale>& rLocales, std::set<OUString>& rSeen,
+                          const css::lang::Locale& rLocale)
+{
+    if (rSeen.insert(LanguageTag::convertToBcp47(rLocale, false)).second)
+        rLocales.push_back(rLocale);
+}
+
+// The languages that have a spell checker: the local one's, and those of
+// the remote checkers that spell check too. A language served by both is
+// listed once.
 static std::string getLanguages(const char* pCommand)
 {
-    cpo::uno::Sequence< css::lang::Locale > aLocales;
-    cpo::uno::Sequence< css::lang::Locale > aGrammarLocales;
+    std::vector<css::lang::Locale> aLocales;
+    std::set<OUString> aSeen;
 
     if (xContext.is())
     {
-        // SpellChecker
         cpo::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
         if (xLangSrv.is())
         {
             cpo::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
             if (xSpell.is())
-                aLocales = xSpell->getLocales();
+                for (const css::lang::Locale& rLocale : xSpell->getLocales())
+                    addLocaleOnce(aLocales, aSeen, rLocale);
         }
 
-        // LanguageTool
-        if (LanguageToolCfg::IsEnabled::get())
+        for (const RemoteChecker& rChecker : aRemoteCheckers)
         {
-            uno::Reference< linguistic2::XProofreader > xGC(
-                    xContext->getServiceManager()->createInstanceWithContext(u"org.openoffice.lingu.LanguageToolGrammarChecker"_ustr, xContext),
+            if (!rChecker.bChecksSpelling || !isRemoteCheckerEnabled(rChecker))
+                continue;
+            uno::Reference< linguistic2::XSupportedLocales > xRemote(
+                    xContext->getServiceManager()->createInstanceWithContext(rChecker.aImplementationName, xContext),
                     uno::UNO_QUERY_THROW );
-            uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xGC, uno::UNO_QUERY_THROW );
-            aGrammarLocales = xSuppLoc->getLocales();
+            for (const css::lang::Locale& rLocale : xRemote->getLocales())
+                addLocaleOnce(aLocales, aSeen, rLocale);
         }
     }
 
@@ -8493,8 +8825,6 @@ static std::string getLanguages(const char* pCommand)
     aTree.put("commandName", pCommand);
     boost::property_tree::ptree aValues;
     for (css::lang::Locale const& rLocale : aLocales)
-        addLocale(aValues, rLocale);
-    for (css::lang::Locale const& rLocale : aGrammarLocales)
         addLocale(aValues, rLocale);
     aTree.add_child("commandValues", aValues);
     std::stringstream aStream;
@@ -9029,6 +9359,10 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
     else if (aCommand == ".uno:SentenceCheckingPackages")
     {
         return getSentenceCheckingPackages();
+    }
+    else if (aCommand == ".uno:RemoteGrammarCheckers")
+    {
+        return getRemoteGrammarCheckers();
     }
     else if (aCommand == ".uno:HasPasswordToModify")
     {
@@ -10333,8 +10667,8 @@ static void preloadData()
     (void)OUStringToOString(u"arbitrary string", RTL_TEXTENCODING_MS_1250);
     std::cerr << "\n";
 
-    // setup LanguageTool config before spell checking init
-    cpo::uno::Sequence<css::lang::Locale> aLTLocales = setLanguageToolConfig();
+    // setup the remote checkers before spell checking init
+    cpo::uno::Sequence<css::lang::Locale> aLTLocales = setRemoteCheckerConfig();
     if (aLTLocales.getLength())
     {
         std::cerr << "Remote linguistic service languages: ";
@@ -10999,7 +11333,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
     setHelpRootURL();
     setCertificateDir();
     setDeeplConfig();
-    setLanguageToolConfig();
+    setRemoteCheckerConfig();
 
     if (bNotebookbar)
     {

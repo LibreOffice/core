@@ -32,7 +32,10 @@ endif
 ifeq ($(ENABLE_CURL),TRUE)
 ifneq ($(ENABLE_WASM_STRIP_LANGUAGETOOL),TRUE)
 $(eval $(call gb_Module_add_targets,lingucomponent,\
+	Library_Duden \
+	Library_Grammalecte \
 	Library_LanguageTool \
+	StaticLibrary_ulinguremote \
 ))
 endif
 endif

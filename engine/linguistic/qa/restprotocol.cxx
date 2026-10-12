@@ -47,22 +47,47 @@ public:
             return;
         }
 
-        sal_Int32 nReadBytes;
-        Sequence<sal_Int8> aBuffer(512);
         sal_Int32 nTcpNoDelay = sal_Int32(true);
         m_aStreamSocket.setOption(osl_Socket_OptionTcpNoDelay, &nTcpNoDelay, sizeof(nTcpNoDelay),
                                   osl_Socket_LevelTcp);
 
-        nReadBytes = m_aStreamSocket.recv(aBuffer.getArray(), aBuffer.getLength());
-        if (nReadBytes)
+        // Read the whole request, as far as Content-Length says: closing
+        // the socket with part of it unread resets the connection, and the
+        // client then reports the reset instead of the answer.
+        std::string aText;
+        size_t nHeaderEnd = std::string::npos;
+        size_t nContentLength = 0;
+        while (true)
         {
-            std::string aText(reinterpret_cast<const char*>(aBuffer.getConstArray()), nReadBytes);
+            char aBuffer[1024];
+            const sal_Int32 nRead = m_aStreamSocket.recv(aBuffer, sizeof(aBuffer));
+            if (nRead <= 0)
+                break;
+            aText.append(aBuffer, nRead);
+            if (nHeaderEnd == std::string::npos)
+            {
+                nHeaderEnd = aText.find("\r\n\r\n");
+                if (nHeaderEnd == std::string::npos)
+                    continue;
+                const size_t nField = aText.find("Content-Length: ");
+                if (nField != std::string::npos && nField < nHeaderEnd)
+                    nContentLength = std::stoul(aText.substr(nField + 16));
+            }
+            if (aText.size() >= nHeaderEnd + 4 + nContentLength)
+                break;
+        }
+        if (!aText.empty())
+        {
 
             if (aText.find("POST /api/check") == std::string::npos)
             {
                 NotFound();
             }
             else if (aText.find("Content-Type: application/json") == std::string::npos)
+            {
+                NotFound();
+            }
+            else if (aText.find("access_token: hcvhcvhcv") == std::string::npos)
             {
                 NotFound();
             }
@@ -84,7 +109,8 @@ public:
             "{\"check-positions\":[{\"offset\":15,\"length\":6,\"errorcode\":4711,\"type\":"
             "\"orth\","
             "\"severity\":1,\"proposals\":[\"Entwurf\",\"Entw\u00fcrfe\"]},"
-            "{\"offset\":22,\"length\":3,\"errorcode\":8221,\"type\":\"orth\",\"severity\":1}]}"_ostr);
+            "{\"offset\":22,\"length\":3,\"errorcode\":8221,\"type\":\"orth\",\"severity\":1}],"
+            "\"messages\":{\"4711\":\"Dieses Wort korrigieren?\"}}"_ostr);
 
         m_aStreamSocket.write(aResponse.getStr(), aResponse.getLength());
         m_aStreamSocket.close();
@@ -139,28 +165,35 @@ private:
 void TestRestProtocol::testProofreading()
 {
     css::lang::Locale aLocale(u"en"_ustr, u"US"_ustr, u""_ustr);
-    using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
-    auto batch(comphelper::ConfigurationChanges::create());
+    using DudenCfg = officecfg::Office::Linguistic::GrammarChecking::Duden;
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-    LanguageToolCfg::BaseURL::set("http://127.0.0.1:2022/api", batch);
-    LanguageToolCfg::Username::set("hcastro", batch);
-    LanguageToolCfg::ApiKey::set("hcvhcvhcv", batch);
-    LanguageToolCfg::IsEnabled::set(true, batch);
-    LanguageToolCfg::SSLCertVerify::set(false, batch);
-    LanguageToolCfg::RestProtocol::set("duden", batch);
+    DudenCfg::BaseURL::set("http://127.0.0.1:2022/api", batch);
+    DudenCfg::ApiKey::set("hcvhcvhcv", batch);
+    DudenCfg::IsEnabled::set(true, batch);
+    DudenCfg::SSLCertVerify::set(false, batch);
 
     batch->commit();
 
-    CPPUNIT_ASSERT_EQUAL(u"duden"_ustr, *LanguageToolCfg::RestProtocol::get());
-
+    // By implementation name: more than one service implements the
+    // proofreader, and this is about the Duden one.
     Reference<css::linguistic2::XProofreader> xProofreader(
-        m_xSFactory->createInstance(u"com.sun.star.linguistic2.Proofreader"_ustr), UNO_QUERY);
+        m_xSFactory->createInstance(u"cpo.lingu.Duden"_ustr), UNO_QUERY);
     CPPUNIT_ASSERT(xProofreader.is());
 
     css::linguistic2::ProofreadingResult aResult
         = xProofreader->doProofreading(u"id"_ustr, u"ths is a tst"_ustr, aLocale, 0, 0, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aResult.aErrors.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(15), aResult.aErrors[0].nErrorStart);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aResult.aErrors[0].nErrorLength);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aResult.aErrors[0].aSuggestions.getLength());
+    CPPUNIT_ASSERT_EQUAL(u"Entwurf"_ustr, aResult.aErrors[0].aSuggestions[0]);
+    // The error code is the rule to ignore.
+    CPPUNIT_ASSERT_EQUAL(u"4711"_ustr, aResult.aErrors[0].aRuleIdentifier);
+    // The server's message for the code, when it sent one.
+    CPPUNIT_ASSERT_EQUAL(u"Dieses Wort korrigieren?"_ustr, aResult.aErrors[0].aShortComment);
+    CPPUNIT_ASSERT(aResult.aErrors[1].aShortComment != "Dieses Wort korrigieren?");
 }
 
 void TestRestProtocol::setUp()

@@ -17,62 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #pragma once
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceDisplayName.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/linguistic2/XProofreader.hpp>
-#include <com/sun/star/linguistic2/ProofreadingResult.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValues.hpp>
-#include <cpo/uno/XComponentContext.hpp>
-#include <linguistic/misc.hxx>
-#include <string_view>
-#include <o3tl/lru_map.hxx>
-#include <tools/long.hxx>
 
-class LanguageToolGrammarChecker
-    : public cppu::WeakImplHelper<css::linguistic2::XProofreader, css::lang::XInitialization,
-                                  css::lang::XServiceInfo, css::lang::XServiceDisplayName>
+#include <remotechecker.hxx>
+
+// The LanguageTool HTTP API: a form-encoded POST to /check, answered with a
+// "matches" array.
+class LanguageToolGrammarChecker final : public lingucomponent::remote::CheckerBase
 {
-    cpo::uno::Sequence<css::lang::Locale> m_aSuppLocales;
-    o3tl::lru_map<OString, cpo::uno::Sequence<css::linguistic2::SingleProofreadingError>>
-        mCachedResults;
-    cpo::uno::Reference<cpo::uno::XComponentContext> mxContext;
-    OUString maLastErrorCheckerURL;
-    LanguageToolGrammarChecker(const LanguageToolGrammarChecker&) = delete;
-    LanguageToolGrammarChecker& operator=(const LanguageToolGrammarChecker&) = delete;
-
 public:
-    LanguageToolGrammarChecker(const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext);
-    virtual ~LanguageToolGrammarChecker() override;
-
-    // XSupportedLocales
-    virtual cpo::uno::Sequence<css::lang::Locale> getLocales() override;
-    virtual bool hasLocale(const css::lang::Locale& rLocale) override;
-
-    // XProofReader
-    virtual bool isSpellChecker() override;
-    virtual css::linguistic2::ProofreadingResult
-    doProofreading(const OUString& aDocumentIdentifier, const OUString& aText,
-                   const css::lang::Locale& aLocale, sal_Int32 nStartOfSentencePosition,
-                   sal_Int32 nSuggestedBehindEndOfSentencePosition,
-                   const cpo::uno::Sequence<css::beans::PropertyValue>& aProperties) override;
-
-    virtual void ignoreRule(const OUString& aRuleIdentifier,
-                                     const css::lang::Locale& aLocale) override;
-    virtual void resetIgnoreRules() override;
+    LanguageToolGrammarChecker();
 
     // XServiceDisplayName
-    virtual OUString getServiceDisplayName(const css::lang::Locale& rLocale) override;
-
-    // XInitialization
-    virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    OUString getServiceDisplayName(const css::lang::Locale& rLocale) override;
 
     // XServiceInfo
-    virtual OUString getImplementationName() override;
-    virtual bool supportsService(const OUString& rServiceName) override;
-    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
+    OUString getImplementationName() override;
+
+private:
+    bool isEnabled() override;
+    std::vector<OUString> configuredLocales() override;
+    std::optional<lingucomponent::remote::Request>
+    buildRequest(const OUString& rText, const css::lang::Locale& rLocale) override;
+    std::vector<css::linguistic2::SingleProofreadingError>
+    parseResponse(const std::string& rBody, const OUString& rText,
+                  const css::lang::Locale& rLocale) override;
+    cpo::uno::Sequence<css::beans::PropertyValue> probe() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

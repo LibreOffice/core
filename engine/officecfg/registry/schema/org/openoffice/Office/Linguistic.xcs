@@ -408,10 +408,364 @@
           </prop>
           <prop oor:name="RestProtocol" oor:type="xs:string">
             <info>
-              <desc>LanguageTool Grammar Checker REST API protocol</desc>
+              <desc>Deprecated. The string "duden" once drove the Duden Korrekturserver
+              through this group; such settings move to the Duden group at start.</desc>
               <label>REST API protocol</label>
             </info>
           </prop>
+      </group>
+      <group oor:name="Duden">
+        <info>
+          <desc>The Duden Korrekturserver, a remote spelling, grammar and
+          style checker. The locales it serves are listed under
+          ServiceManager/GrammarCheckers.</desc>
+        </info>
+          <prop oor:name="BaseURL" oor:type="xs:string">
+            <info>
+              <desc>The server's API root, ending in /api. The checker appends /check.</desc>
+            </info>
+          </prop>
+          <prop oor:name="ApiKey" oor:type="xs:string">
+            <info>
+              <desc>API token, sent in the server's access_token header.</desc>
+            </info>
+          </prop>
+          <prop oor:name="IsEnabled" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Enable or disable the Duden Korrekturserver checker</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="SSLCertVerify" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Enable or disable SSL certificate verification for HTTPS requests</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="SpellcheckingLevel" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>0 none, 1 single words, 2 standard, 3 standard with grammar.</desc>
+            </info>
+            <value>3</value>
+          </prop>
+          <prop oor:name="OrthographyStandard" oor:type="xs:string" oor:nillable="false">
+            <info>
+              <desc>German spelling variant: duden, conservative, progressive, extended or press.</desc>
+            </info>
+            <value>duden</value>
+          </prop>
+          <prop oor:name="MessageLevel" oor:type="xs:int" oor:nillable="false">
+            <info>
+              <desc>How much the server says about an error: 0 nothing, 1 a short message,
+              2 a long one, 3 a long one with an example.</desc>
+            </info>
+            <value>1</value>
+          </prop>
+          <prop oor:name="PropertySets" oor:type="oor:string-list" oor:nillable="false">
+            <info>
+              <desc>Names of the correction profiles to apply, in order.</desc>
+            </info>
+            <value/>
+          </prop>
+          <prop oor:name="Dictionaries" oor:type="oor:string-list" oor:nillable="false">
+            <info>
+              <desc>Names of the server's supplementary dictionaries to use.</desc>
+            </info>
+            <value/>
+          </prop>
+          <group oor:name="Style">
+            <info>
+              <desc>The style checks, which the server runs for German only.</desc>
+            </info>
+          <prop oor:name="Foreign" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Point out foreign and technical words that have a German equivalent.</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="Old" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Point out archaic words.</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="Regional" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Point out regional and dialect words.</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="Colloquial" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Point out colloquial and vulgar words.</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="Fillers" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Point out filler words.</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="Offensive" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Point out offensive and discriminatory wording.</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="GenderInclusive" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Suggest gender-inclusive wording.</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="Complexity" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Point out overly complex sentences. Needs spellchecking level 3.</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          </group>
+      </group>
+      <group oor:name="Grammalecte">
+        <info>
+          <desc>Grammalecte, a remote grammar checker for French. The locales it
+          serves are listed under ServiceManager/GrammarCheckers.</desc>
+        </info>
+          <prop oor:name="BaseURL" oor:type="xs:string">
+            <info>
+              <desc>The server's root. The checker appends /gc_text/fr.</desc>
+            </info>
+          </prop>
+          <prop oor:name="IsEnabled" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Enable or disable the Grammalecte checker</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="SSLCertVerify" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Enable or disable SSL certificate verification for HTTPS requests</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <group oor:name="Options">
+            <info>
+              <desc>The rule families the server is asked to run, by the
+              server's own option ids. The defaults are those of its
+              Writer profile.</desc>
+            </info>
+          <prop oor:name="typo" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Typographical signs</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="apos" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Typographical apostrophe</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="eepi" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Epicene writing</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="esp" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Superfluous spaces</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="tab" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Superfluous tabulations</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="nbsp" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Non-breaking spaces</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="unit" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Non-breaking spaces before units of measurement</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="tu" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Hyphens and junctions</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="maj" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Capitals</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="minis" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Capitals in the names of ministries</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="num" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Numbers</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="nf" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>French standards</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="virg" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Commas</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="poncfin" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Final punctuation</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="ocr" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>OCR errors</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="chim" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Chemistry</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="liga" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Typographical ligatures</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="mapos" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Missing apostrophe after single letters</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="conf" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Confusions and false friends</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="loc" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Locutions</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="gn" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Gender and number agreement</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="infi" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Infinitive</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="conj" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Conjugation</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="ppas" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Past participles and adjectives</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="imp" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Imperative</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="inte" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Interrogative</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="vmode" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Verbal modes</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="bs" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Popular language</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="pleo" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Pleonasms</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="eleu" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Elisions and euphony</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="neg" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Negation adverb</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="redon1" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Repetitions in the paragraph</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="redon2" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Repetitions in the sentence</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="date" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Date validity</desc>
+            </info>
+            <value>true</value>
+          </prop>
+          <prop oor:name="mc" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Compound words</desc>
+            </info>
+            <value>false</value>
+          </prop>
+          </group>
       </group>
       <group oor:name="SentenceChecking">
         <info>

@@ -279,7 +279,7 @@ endif
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
     avmedia \
-	$(if $(ENABLE_CURL),LanguageTool) \
+	$(if $(ENABLE_CURL),Duden Grammalecte LanguageTool) \
 	lightproof \
     $(call gb_Helper_optional,AVMEDIA, \
 	$(if $(filter MACOSX,$(OS)),\

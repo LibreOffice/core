@@ -35,6 +35,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <unotools/weakref.hxx>
 
 #include <unicode/locid.h>
 #include <unicode/regex.h>
@@ -230,33 +231,37 @@ std::vector<OUString> splitAlternatives(const OUString& rText)
 }
 
 // Watches the option node so a change made in the Options dialog reaches a
-// document without reloading it. Holds the checker weakly, by raw pointer,
-// which ~Lightproof clears before it removes the listener.
+// document without reloading it. Holds the checker weakly, so a notification
+// that arrives while the checker is going away finds nothing rather than a
+// dangling pointer, and the checker lives for as long as the notification
+// is being handled.
 class ConfigurationListener final : public cppu::WeakImplHelper<css::util::XChangesListener>
 {
 public:
     explicit ConfigurationListener(Lightproof* pOwner)
-        : m_pOwner(pOwner)
+        : m_xOwner(rtl::Reference<Lightproof>(pOwner))
     {
     }
 
-    void detach() { m_pOwner = nullptr; }
-
+    // The options are reread under the mutex; the documents are told
+    // without it, because the iterator that listens takes a lock of its own
+    // under which it asks this checker for its locales from another thread.
     void changesOccurred(const css::util::ChangesEvent&) override
     {
-        osl::MutexGuard aGuard(linguistic::GetLinguMutex());
-        if (m_pOwner)
-            m_pOwner->reloadOptions();
+        const rtl::Reference<Lightproof> xOwner = m_xOwner.get();
+        if (!xOwner)
+            return;
+        {
+            osl::MutexGuard aGuard(linguistic::GetLinguMutex());
+            xOwner->reloadOptions();
+        }
+        xOwner->broadcastProofreadAgain();
     }
 
-    void disposing(const lang::EventObject&) override
-    {
-        osl::MutexGuard aGuard(linguistic::GetLinguMutex());
-        m_pOwner = nullptr;
-    }
+    void disposing(const lang::EventObject&) override { m_xOwner.clear(); }
 
 private:
-    Lightproof* m_pOwner;
+    unotools::WeakReference<Lightproof> m_xOwner;
 };
 
 Lightproof::Lightproof() = default;
@@ -265,7 +270,6 @@ Lightproof::~Lightproof()
 {
     if (!m_xConfigListener)
         return;
-    static_cast<ConfigurationListener*>(m_xConfigListener.get())->detach();
     try
     {
         uno::Reference<util::XChangesNotifier> xNotifier(m_xConfigNode, uno::UNO_QUERY);
@@ -347,11 +351,17 @@ void Lightproof::reloadOptions()
 {
     for (const std::pair<const OUString, std::unique_ptr<Package>>& rEntry : m_aPackages)
         loadOptions(*rEntry.second);
+}
 
+void Lightproof::broadcastProofreadAgain()
+{
     const linguistic2::LinguServiceEvent aEvent(
         static_cast<cppu::OWeakObject*>(this), linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN);
-    const std::vector<uno::Reference<linguistic2::XLinguServiceEventListener>> aListeners(
-        m_aEventListeners);
+    std::vector<uno::Reference<linguistic2::XLinguServiceEventListener>> aListeners;
+    {
+        osl::MutexGuard aGuard(linguistic::GetLinguMutex());
+        aListeners = m_aEventListeners;
+    }
     for (const uno::Reference<linguistic2::XLinguServiceEventListener>& rListener : aListeners)
     {
         try
