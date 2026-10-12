@@ -364,9 +364,7 @@ std::set< OUString > GetSpellDicLocaleNames( const std::vector< SvtLinguConfigDi
             }
             else
             {
-                SAL_WARN(
-                    "lingucomponent",
-                    "missing <" << aLocations[0] << ">");
+                SAL_WARN("lingucomponent", "missing <" << aLocations[0] << ">");
             }
         }
     }

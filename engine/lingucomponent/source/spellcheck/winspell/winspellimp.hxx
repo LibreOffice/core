@@ -49,8 +49,8 @@ class WinSpellChecker
         OUString m_aTag;
     };
 
-    // Keeps the COM apartment of the thread that first used the service alive for as long as
-    // the factory and the checkers created from it are held.
+    // Keeps the COM apartment of the main thread, the one every call comes in on, alive for
+    // as long as the factory and the checkers created from it are held.
     std::optional<sal::systools::CoInitializeGuard> m_oCoInit;
     sal::systools::COMReference<ISpellCheckerFactory> m_xFactory;
     // The checker of each tag, created on first use. An entry holding nothing records that
@@ -86,42 +86,42 @@ class WinSpellChecker
 
 public:
     WinSpellChecker();
-    virtual ~WinSpellChecker() override;
+    ~WinSpellChecker() override;
 
     // XSupportedLocales (for XSpellChecker)
-    virtual cpo::uno::Sequence<css::lang::Locale> getLocales() override;
-    virtual bool hasLocale(const css::lang::Locale& rLocale) override;
+    cpo::uno::Sequence<css::lang::Locale> getLocales() override;
+    bool hasLocale(const css::lang::Locale& rLocale) override;
 
     // XSpellChecker
-    virtual bool isValid(const OUString& rWord, const css::lang::Locale& rLocale,
-                         const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties) override;
-    virtual cpo::uno::Reference<css::linguistic2::XSpellAlternatives>
+    bool isValid(const OUString& rWord, const css::lang::Locale& rLocale,
+                 const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties) override;
+    cpo::uno::Reference<css::linguistic2::XSpellAlternatives>
     spell(const OUString& rWord, const css::lang::Locale& rLocale,
           const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties) override;
 
     // XLinguServiceEventBroadcaster
-    virtual bool addLinguServiceEventListener(
+    bool addLinguServiceEventListener(
         const cpo::uno::Reference<css::linguistic2::XLinguServiceEventListener>& rxLstnr) override;
-    virtual bool removeLinguServiceEventListener(
+    bool removeLinguServiceEventListener(
         const cpo::uno::Reference<css::linguistic2::XLinguServiceEventListener>& rxLstnr) override;
 
     // XServiceDisplayName
-    virtual OUString getServiceDisplayName(const css::lang::Locale& rLocale) override;
+    OUString getServiceDisplayName(const css::lang::Locale& rLocale) override;
 
     // XInitialization
-    virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XComponent
-    virtual void dispose() override;
-    virtual void
+    void dispose() override;
+    void
     addEventListener(const cpo::uno::Reference<css::lang::XEventListener>& rxListener) override;
-    virtual void
+    void
     removeEventListener(const cpo::uno::Reference<css::lang::XEventListener>& rxListener) override;
 
     // XServiceInfo
-    virtual OUString getImplementationName() override;
-    virtual bool supportsService(const OUString& rServiceName) override;
-    virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
+    OUString getImplementationName() override;
+    bool supportsService(const OUString& rServiceName) override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

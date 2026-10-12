@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
+#include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
 
 #include <lingutil.hxx>
@@ -82,7 +83,9 @@ WinSpellChecker::~WinSpellChecker()
 {
     if (m_pPropHelper)
         m_pPropHelper->RemoveAsPropListener();
-    // The checkers go before the factory, and both before the apartment they live in.
+    // The checkers go before the factory, and both before the apartment they live in, which
+    // has to be left on the thread that entered it in ReadLocales.
+    DBG_TESTSOLARMUTEX();
     m_aCheckers.clear();
     m_xFactory.clear();
     m_oCoInit.reset();
@@ -106,6 +109,9 @@ PropertyHelper_Spelling& WinSpellChecker::GetPropHelper_Impl()
 void WinSpellChecker::ReadLocales()
 {
     m_bLocalesRead = true;
+
+    // The apartment is tied to this thread, and the destructor leaves it on the same one.
+    DBG_TESTSOLARMUTEX();
 
     std::vector<OUString> aTags;
     try
@@ -216,8 +222,6 @@ sal_Int16 WinSpellChecker::GetSpellFailure(const OUString& rWord, const Locale& 
 
     try
     {
-        CoInitializeGuard aCoInit(COINIT_APARTMENTTHREADED);
-
         COMReference<IEnumSpellingError> xErrors;
         ThrowIfFailed(pChecker->Check(o3tl::toW(rWord.getStr()), &xErrors),
                       "ISpellChecker::Check failed");
@@ -307,8 +311,6 @@ WinSpellChecker::GetProposals(const OUString& rWord, const Locale& rLocale, sal_
     {
         try
         {
-            CoInitializeGuard aCoInit(COINIT_APARTMENTTHREADED);
-
             COMReference<IEnumString> xSuggestions;
             ThrowIfFailed(pChecker->Suggest(o3tl::toW(rWord.getStr()), &xSuggestions),
                           "ISpellChecker::Suggest failed");
