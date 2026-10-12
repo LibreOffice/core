@@ -668,16 +668,14 @@ class SlideImportPane {
   }
 
   // What the pane says of a source: whether pages of this document are
-  // linked to it, and when it cannot be reached, why.
-  // What the pane knows of a source. The colour says good, neutral or bad
-  // and the word says which; the marker is hollow while the pane has not
-  // reached the file, so Not checked and Not linked never share both a
-  // colour and a shape.
+  // linked to it, and when it cannot be reached, why. A linked source shows
+  // the icon that the link badge on its slides shows, and red is kept for a
+  // source that cannot be reached.
   private sourceBadge(source: SlideImportPaneSource): {
     kind: string;
     label: string;
   } {
-    if (source.opening) return { kind: 'unchecked', label: _('Checking...') };
+    if (source.opening) return { kind: 'checking', label: _('Checking...') };
     if (source.state === 'missing')
       return { kind: 'missing', label: _('Missing') };
     if (source.state === 'noaccess')
@@ -691,6 +689,8 @@ class SlideImportPane {
           kind: 'outdated',
           label: _('{0} changed').replace('{0}', String(changed)),
         };
+      if (source.state === 'disconnected')
+        return { kind: 'disconnected', label: _('Disconnected') };
       return { kind: 'linked', label: _('Linked') };
     }
     if (!source.asked) return { kind: 'unchecked', label: _('Not checked') };
@@ -1210,7 +1210,7 @@ class SlideImportPane {
     const panelId = 'slide-import-panel-' + source.id;
     const chip = (
       <span class={'slide-import-source-badge ' + badge.kind}>
-        <span class="slide-import-source-dot" aria-hidden="true" />
+        <span class="slide-import-source-badge-icon" aria-hidden="true" />
         {badge.label}
       </span>
     );

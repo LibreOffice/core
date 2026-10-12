@@ -309,50 +309,83 @@
 	opacity: 0.5;
 }
 
-/* What the pane says of a source: a dot and a word, in the colour of what it
- * says. It reports and does nothing, so a click on it reaches the row. */
+/* What the pane says of a source: an icon and a word. A linked source has the
+ * icon of the link badge on its slides, and only a source that cannot be
+ * reached is red. It reports and does nothing, so a click on it reaches the
+ * row. */
 .slide-import-source-badge {
 	flex-shrink: 0;
 	pointer-events: none;
 	display: inline-flex;
 	align-items: center;
-	gap: var(--spacing-s);
-	padding-inline: var(--spacing-m);
+	gap: 6px;
+	padding-inline: 10px;
 	height: var(--btn-size-m);
 	box-sizing: border-box;
 	border: 1px solid currentColor;
-	border-radius: var(--border-radius-pill);
+	border-radius: var(--border-radius-s);
 	background: var(--color-background-lighter);
-	color: var(--color-status-neutral);
+	color: var(--color-main-text);
 	font-weight: 500;
 	white-space: nowrap;
 }
 
-/* Colour says good, neutral or bad and the word says which. The marker adds
- * a third channel: filled when the pane has checked the file, hollow when it
- * has not, so Not checked and Not linked never share both colour and shape. */
-.slide-import-source-dot {
-	width: 6px;
-	height: 6px;
+.slide-import-source-badge-icon {
+	display: none;
+	width: 14px;
+	height: 14px;
 	flex-shrink: 0;
-	border-radius: 50%;
-	background: currentColor;
+	background: no-repeat center;
+	background-size: 14px 14px;
 }
 
-.slide-import-source-badge.unchecked .slide-import-source-dot {
-	width: 8px;
-	height: 8px;
+.slide-import-source-badge.linked .slide-import-source-badge-icon,
+.slide-import-source-badge.outdated .slide-import-source-badge-icon,
+.slide-import-source-badge.missing .slide-import-source-badge-icon,
+.slide-import-source-badge.disconnected .slide-import-source-badge-icon,
+.slide-import-source-badge.checking .slide-import-source-badge-icon {
+	display: block;
+}
+
+.slide-import-source-badge.linked .slide-import-source-badge-icon {
+	background-image: url('images/sc_linkedslide.svg');
+}
+
+.slide-import-source-badge.outdated .slide-import-source-badge-icon {
+	background-image: url('images/sc_linkedslideoutdated.svg');
+}
+
+.slide-import-source-badge.missing .slide-import-source-badge-icon {
+	background-image: url('images/sc_linkedslidebroken.svg');
+}
+
+.slide-import-source-badge.disconnected .slide-import-source-badge-icon {
+	background-image: url('images/sc_linkedslidedisconnected.svg');
+}
+
+/* Checking has no state yet, so it shows a ring instead of an icon. */
+.slide-import-source-badge.checking .slide-import-source-badge-icon {
+	width: 10px;
+	height: 10px;
 	box-sizing: border-box;
 	border: 2px solid currentColor;
-	background: none;
+	border-radius: 50%;
 }
 
-.slide-import-source-badge.linked {
-	color: var(--color-status-linked);
+[data-theme='dark'] .slide-import-source-badge.linked .slide-import-source-badge-icon {
+	background-image: url('images/dark/sc_linkedslide.svg');
 }
 
-.slide-import-source-badge.outdated {
-	color: var(--color-status-warning);
+[data-theme='dark'] .slide-import-source-badge.outdated .slide-import-source-badge-icon {
+	background-image: url('images/dark/sc_linkedslideoutdated.svg');
+}
+
+[data-theme='dark'] .slide-import-source-badge.missing .slide-import-source-badge-icon {
+	background-image: url('images/dark/sc_linkedslidebroken.svg');
+}
+
+[data-theme='dark'] .slide-import-source-badge.disconnected .slide-import-source-badge-icon {
+	background-image: url('images/dark/sc_linkedslidedisconnected.svg');
 }
 
 .slide-import-source-badge.missing {
