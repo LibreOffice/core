@@ -1053,8 +1053,9 @@ def add_dependencies(files_by_package, files_by_package_extra_deps):
             if found is None:
                 found = file
             else:
-                # special case for Python `_ssl` on Windows...
-                if dep.lower() in ("libcrypto-3.dll", "libssl-3.dll"):
+                # special case for Python `_ssl` and `_sqlite3` on Windows: Python ships
+                # its own copies next to its modules, NSS has its sqlite3.dll in program/
+                if dep.lower() in ("libcrypto-3.dll", "libssl-3.dll", "sqlite3.dll"):
                     if instpath and os.path.dirname(instpath).lower() == os.path.dirname(found["instpath"]).lower():
                         continue
                     elif instpath and os.path.dirname(instpath).lower() == os.path.dirname(file["instpath"]).lower():
