@@ -1,26 +1,19 @@
-/* global describe expect it cy before require */
+/* global describe expect it cy before beforeEach require */
 
 const helper = require('../../common/helper');
 
 const options = { testIsolation: false };
 
 describe(['tagdesktop'], 'Writer link popup from the keyboard', options, function () {
-	let win;
 	const LINK_URL = 'https://www.collaboraonline.com/';
-
-	const expectFocusOutsidePopup = function () {
-		cy.cGet('#hyperlink-pop-up').should(function ($link) {
-			const popup = $link[0].closest('.hyperlink-pop-up-container');
-			expect(popup.contains(win.document.activeElement), 'the focus in the popup')
-				.to.equal(false);
-		});
-	};
 
 	before(function () {
 		helper.setupAndLoadDocument('writer/a11y_hyperlink.fodt');
+	});
 
-		cy.getFrameWindow().then(function (frameWindow) {
-			win = frameWindow;
+	beforeEach(function () {
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
 		});
 	});
 
@@ -42,14 +35,23 @@ describe(['tagdesktop'], 'Writer link popup from the keyboard', options, functio
 		cy.cGet('#hyperlink-pop-up-edit').should('have.css', 'height', '26px')
 			.and('have.css', 'width', '26px').and('have.css', 'border-top-style', 'none');
 
+		// the popup at the left edge of the view stays shown, and keeps the focus, when the view moves
+		cy.then(() => {
+			this.win.app.sectionContainer.onNewDocumentTopLeft();
+		});
+		cy.cGet('#hyperlink-pop-up').should('be.visible').and('have.focus');
+
 		cy.realPress('F6');
-		expectFocusOutsidePopup();
+		cy.cGet('#sidebar-dock-wrapper').should(($sidebar) => {
+			expect($sidebar[0].contains(this.win.document.activeElement), 'the focus in the sidebar')
+				.to.equal(true);
+		});
 		cy.realPress(['Shift', 'F6']);
 		cy.cGet('#hyperlink-pop-up').should('have.focus');
 
 		let paragraph;
-		cy.then(function () {
-			paragraph = win.document.getElementById('clipboard-area').textContent;
+		cy.then(() => {
+			paragraph = this.win.document.getElementById('clipboard-area').textContent;
 		});
 		// Tab moves between the popup controls
 		cy.realPress('Tab');
@@ -71,22 +73,22 @@ describe(['tagdesktop'], 'Writer link popup from the keyboard', options, functio
 
 	it('Enter on the link of the popup asks before it opens', function () {
 		let location;
-		cy.then(function () {
-			location = win.location.href;
-			win.__opened = [];
-			win.open = function (url) { win.__opened.push(String(url)); return null; };
+		cy.then(() => {
+			location = this.win.location.href;
+			this.win.__opened = [];
+			this.win.open = (url) => { this.win.__opened.push(String(url)); return null; };
 		});
 		cy.realPress('F6');
 		cy.cGet('#hyperlink-pop-up').should('have.focus');
 		cy.realPress('Enter');
 		cy.cGet('#modal-dialog-openlink').should('be.visible');
-		cy.then(function () {
-			expect(win.location.href, 'the page, not followed').to.equal(location);
-			expect(win.__opened, 'nothing opened before the answer').to.deep.equal([]);
+		cy.then(() => {
+			expect(this.win.location.href, 'the page, not followed').to.equal(location);
+			expect(this.win.__opened, 'nothing opened before the answer').to.deep.equal([]);
 		});
 		cy.cGet('#openlink-response-button').click();
-		cy.then(function () {
-			expect(win.__opened, 'the link opened').to.deep.equal([LINK_URL]);
+		cy.then(() => {
+			expect(this.win.__opened, 'the link opened').to.deep.equal([LINK_URL]);
 		});
 	});
 });
