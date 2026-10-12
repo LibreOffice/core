@@ -523,7 +523,7 @@ public class LOActivity extends AppCompatActivity {
         // only set it to false if it returns false otherwise it can break previous controls
         if (!canDocumentBeExported())
             isDocEditable = false;
-        if (mTempFile != null)
+        if (urlToLoad != null)
         {
             mWebView = (COWebView) findViewById(R.id.browser);
 
