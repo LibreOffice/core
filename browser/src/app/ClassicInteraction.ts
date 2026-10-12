@@ -132,6 +132,9 @@ abstract class ClassicContext implements InteractionContext {
 		- Group with two objects or more; aligning, arranging and the position and size with one
 		  or more; naming with exactly one; spreading out with three or more. As the office does,
 		  a part inside a 3D scene is neither aligned nor arranged.
+		- Bringing to the front and forward where what is selected does not stand at the front
+		  of its level already, sending to the back and backward where it does not stand at the
+		  back.
 	*/
 	public commandStates(): { [command: string]: boolean } {
 		const selected = GraphicSelection.selectedObjectIDs;
@@ -160,6 +163,28 @@ abstract class ClassicContext implements InteractionContext {
 		for (const command of Interaction.commandsForOneOrMore)
 			states[command] =
 				count >= 1 && (command === '.uno:TransformDialog' || !inAScene);
+
+		// The places are counted only where every selected object is found at the level.
+		if (count >= 1) {
+			const level = this.objectsOfTheLevelOf(selected[0]);
+			const places = selected
+				.map((objectId: number) => level.indexOf(objectId))
+				.filter((place: number) => place >= 0)
+				.sort((a: number, b: number) => a - b);
+			const atTheBack = places.every(
+				(place: number, at: number) => place === at,
+			);
+			const atTheFront = places.every(
+				(place: number, at: number) =>
+					place === level.length - places.length + at,
+			);
+			if (places.length === count) {
+				if (atTheFront)
+					states['.uno:BringToFront'] = states['.uno:ObjectForwardOne'] = false;
+				if (atTheBack)
+					states['.uno:SendToBack'] = states['.uno:ObjectBackOne'] = false;
+			}
+		}
 
 		for (const command of Interaction.commandsForOne)
 			states[command] = count === 1;
@@ -190,6 +215,15 @@ abstract class ClassicContext implements InteractionContext {
 		return this.groupStoodIn === undefined
 			? RenderGeometrySection.heldByThePage()
 			: RenderGeometrySection.heldBy(this.groupStoodIn);
+	}
+
+	/// The objects at the level of that one, in the order the page draws them, from the back to
+	/// the front.
+	protected objectsOfTheLevelOf(objectId: number): number[] {
+		const parent = RenderGeometrySection.parentOf(objectId);
+		return parent
+			? RenderGeometrySection.heldBy(parent)
+			: RenderGeometrySection.heldByThePage();
 	}
 
 	/// Selects that one object alone and brings it on screen, for a key going forwards or, with
