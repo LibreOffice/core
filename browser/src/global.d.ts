@@ -235,6 +235,8 @@ interface AppInterface {
 	languages: Array<{ translated: string; neutral: string; iso: string }>;
 	// The sentence checking rule packages the engine reports as installed.
 	sentenceCheckingPackages?: Array<{ id: string; locale: string }>;
+	// The remote sentence checkers as the engine has them set up.
+	remoteGrammarCheckers?: Array<any>;
 	// Whether this document is running with this user's own document
 	// settings. It is running with whoever opened it first's.
 	userPresetsApplied?: boolean;

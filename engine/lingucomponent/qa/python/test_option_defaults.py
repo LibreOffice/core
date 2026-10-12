@@ -122,6 +122,56 @@ class OptionDefaults(unittest.TestCase):
             groups[match.group(1)] = flags
         return groups
 
+    # Grammalecte's rule families are switches too, written down in the
+    # schema and in the dialog, with nothing generated from anything. The
+    # dialog knows them by name alone: their values come from the engine.
+    def schema_group(self, name):
+        path = os.path.join(engine_dir(), "officecfg", "registry", "schema", "org",
+                            "openoffice", "Office", "Linguistic.xcs")
+        tree = ET.parse(path)
+        oor = "{http://openoffice.org/2001/registry}"
+        for group in tree.iter("group"):
+            if group.get(oor + "name") != name:
+                continue
+            flags = {}
+            for prop in group.findall("prop"):
+                value = prop.find("value")
+                self.assertIsNotNone(
+                    value, "%s has no default" % prop.get(oor + "name"))
+                flags[prop.get(oor + "name")] = value.text.strip() == "true"
+            return flags
+        self.fail("the schema has no %s group" % name)
+
+    def dialog_object(self, marker):
+        path = os.path.join(engine_dir(), os.pardir, "browser", "admin", "src",
+                            "integrator", "Xcu.ts")
+        with open(path, encoding="utf-8") as source:
+            text = source.read()
+        start = text.find(marker)
+        self.assertNotEqual(start, -1, "Xcu.ts has no %s defaults" % marker)
+        opened = text.index("{", start)
+        depth = 0
+        for at in range(opened, len(text)):
+            if text[at] == "{":
+                depth += 1
+            elif text[at] == "}":
+                depth -= 1
+                if depth == 0:
+                    block = text[opened + 1:at]
+                    return dict(re.findall(r"(\w+): (true|false|null),", block))
+        self.fail("Xcu.ts never closes its %s defaults" % marker)
+
+    def test_grammalecte_options_agree(self):
+        schema = self.schema_group("Options")
+        dialog = self.dialog_object("Options: {")
+        self.assertTrue(schema, "the schema has no Grammalecte options")
+        self.assertEqual(sorted(schema), sorted(dialog),
+                         "the schema and the dialog disagree on the Grammalecte "
+                         "options")
+        self.assertEqual(set(dialog.values()), {"null"},
+                         "the dialog is not to carry defaults for the Grammalecte "
+                         "options: it shows what the engine runs with")
+
     def test_dialog_matches_the_packages(self):
         groups = self.dialog_groups()
         self.assertEqual(sorted(groups), sorted(self.packages),

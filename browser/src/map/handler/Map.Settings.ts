@@ -29,6 +29,8 @@ window.L.Map.Settings = window.L.Handler.extend({
 	_url: '',
 	_sentenceCheckingAsked: null as Promise<void> | null,
 	_resolveSentenceChecking: null as (() => void) | null,
+	_remoteCheckersAsked: null as Promise<void> | null,
+	_resolveRemoteCheckers: null as (() => void) | null,
 
 	_getLocalSettingsUrl: function (): string {
 		const settingsLocation: string = app.LOUtil.getURL(
@@ -50,6 +52,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 		// Asked for once the document is up, so the answer is in hand by the
 		// time anyone opens the dialog.
 		this._map.on('doclayerinit', this.askForSentenceChecking, this);
+		this._map.on('doclayerinit', this.askForRemoteCheckers, this);
 	},
 
 	removeHooks: function (): void {
@@ -57,6 +60,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 		this._map.off('commandvalues', this.onCommandValues, this);
 		this._map.off('documentsettingsscope', this.sendSettingsScope, this);
 		this._map.off('doclayerinit', this.askForSentenceChecking, this);
+		this._map.off('doclayerinit', this.askForRemoteCheckers, this);
 	},
 
 	// Resolves when the engine answers, so the dialog can wait for a late
@@ -80,16 +84,45 @@ window.L.Map.Settings = window.L.Handler.extend({
 		return this._sentenceCheckingAsked;
 	},
 
+	// The remote sentence checkers, as the engine has them set up, with the
+	// same timeout as above: the dialog shows their sections from this.
+	askForRemoteCheckers: function (): Promise<void> {
+		if (this._remoteCheckersAsked) return this._remoteCheckersAsked;
+		this._remoteCheckersAsked = new Promise<void>((resolve) => {
+			this._resolveRemoteCheckers = resolve;
+			app.socket.sendMessage(
+				'commandvalues command=.uno:RemoteGrammarCheckers',
+			);
+			setTimeout(() => {
+				if (!this._resolveRemoteCheckers) return; // answered in time
+				this._resolveRemoteCheckers = null;
+				this._remoteCheckersAsked = null;
+				resolve();
+			}, 2000);
+		});
+		return this._remoteCheckersAsked;
+	},
+
 	// Which sentence checking rule packages the engine has. A language with no
-	// package installed gets no panel in the dialog.
+	// package installed gets no panel in the dialog. And how the remote
+	// checkers are set up.
 	onCommandValues: function (e: any): void {
-		if (e.commandName !== '.uno:SentenceCheckingPackages') return;
-		app.sentenceCheckingPackages = Array.isArray(e.commandValues)
-			? e.commandValues
-			: [];
-		if (this._resolveSentenceChecking) {
-			this._resolveSentenceChecking();
-			this._resolveSentenceChecking = null;
+		if (e.commandName === '.uno:SentenceCheckingPackages') {
+			app.sentenceCheckingPackages = Array.isArray(e.commandValues)
+				? e.commandValues
+				: [];
+			if (this._resolveSentenceChecking) {
+				this._resolveSentenceChecking();
+				this._resolveSentenceChecking = null;
+			}
+		} else if (e.commandName === '.uno:RemoteGrammarCheckers') {
+			app.remoteGrammarCheckers = Array.isArray(e.commandValues)
+				? e.commandValues
+				: [];
+			if (this._resolveRemoteCheckers) {
+				this._resolveRemoteCheckers();
+				this._resolveRemoteCheckers = null;
+			}
 		}
 	},
 
@@ -105,6 +138,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 		// never came is asked for again here, rather than leaving the
 		// sentence checker out of the dialog for the rest of the session.
 		if (!app.sentenceCheckingPackages) await this.askForSentenceChecking();
+		if (!app.remoteGrammarCheckers) await this.askForRemoteCheckers();
 
 		if (this._iframeDialog && this._iframeDialog.hasLoaded())
 			this.removeIframe();
@@ -131,6 +165,11 @@ window.L.Map.Settings = window.L.Handler.extend({
 			// dialog offers a panel for each and none for the rest.
 			{
 				sentence_checking: JSON.stringify(app.sentenceCheckingPackages || []),
+			},
+			// The remote sentence checkers as the engine runs them, so the
+			// dialog can show what is in force and which of it may be changed.
+			{
+				remote_checkers: JSON.stringify(app.remoteGrammarCheckers || []),
 			},
 			// Whether the document settings this document is running with are
 			// this user's own, and whether a change made now would be felt

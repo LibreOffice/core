@@ -15,7 +15,10 @@ interface XcuObject {
 	[app: string]: any;
 }
 
-type XcuValue = string | boolean | XcuTree;
+// null marks a value the dialog knows of but has not been given: it is
+// read from the file when the file has it and is never written otherwise,
+// so a setting left alone falls to whatever the server or the schema says.
+type XcuValue = string | boolean | null | XcuTree;
 
 interface XcuTree {
 	[key: string]: XcuValue;
@@ -102,6 +105,81 @@ const defaultXcuObj: Record<string, any> = {
 	},
 	Linguistic: {
 		GrammarChecking: {
+			// The remote sentence checkers. Every value is null until the user
+			// sets it, see XcuValue: the dialog starts from what the engine
+			// reports and writes only what the user changed. The Grammalecte
+			// option ids are checked against the schema by
+			// lingucomponent/qa/python/test_option_defaults.py.
+			LanguageTool: {
+				IsEnabled: null,
+				BaseURL: null,
+				Username: null,
+				ApiKey: null,
+				SSLCertVerify: null,
+			},
+			Duden: {
+				IsEnabled: null,
+				BaseURL: null,
+				ApiKey: null,
+				SSLCertVerify: null,
+				SpellcheckingLevel: null,
+				OrthographyStandard: null,
+				MessageLevel: null,
+				PropertySets: null,
+				Dictionaries: null,
+				Style: {
+					Foreign: null,
+					Old: null,
+					Regional: null,
+					Colloquial: null,
+					Fillers: null,
+					Offensive: null,
+					GenderInclusive: null,
+					Complexity: null,
+				},
+			},
+			Grammalecte: {
+				IsEnabled: null,
+				BaseURL: null,
+				SSLCertVerify: null,
+				Options: {
+					typo: null,
+					apos: null,
+					eepi: null,
+					esp: null,
+					tab: null,
+					nbsp: null,
+					unit: null,
+					tu: null,
+					maj: null,
+					minis: null,
+					num: null,
+					nf: null,
+					virg: null,
+					poncfin: null,
+					ocr: null,
+					chim: null,
+					liga: null,
+					mapos: null,
+					conf: null,
+					loc: null,
+					gn: null,
+					infi: null,
+					conj: null,
+					ppas: null,
+					imp: null,
+					inte: null,
+					vmode: null,
+					bs: null,
+					pleo: null,
+					eleu: null,
+					neg: null,
+					redon1: null,
+					redon2: null,
+					date: null,
+					mc: null,
+				},
+			},
 			SentenceChecking: {
 				en: {
 					grammar: false,
@@ -316,12 +394,20 @@ class Xcu {
 					value = false;
 				}
 
-				if (typeof value === 'boolean') {
-					if (propName === 'VisibleGrid') {
-						gridLevel['ShowGrid'] = value;
-					} else {
-						currentLevel[propName] = value;
-					}
+				// A list is written as its items, one per line, and read back
+				// the same way; what is not true or false stays a string.
+				if (typeof value === 'boolean' && propName === 'VisibleGrid') {
+					gridLevel['ShowGrid'] = value;
+				} else if (typeof value === 'boolean') {
+					currentLevel[propName] = value;
+				} else {
+					const itemElements = prop.getElementsByTagName('it');
+					currentLevel[propName] =
+						itemElements.length > 0
+							? Array.from(itemElements)
+									.map((it) => it.textContent || '')
+									.join(' ')
+							: value;
 				}
 			});
 		});
@@ -345,7 +431,7 @@ class Xcu {
 			}
 			const def = defaults[key];
 			const parsedValue = overrideTree ? overrideTree[key] : undefined;
-			if (typeof def === 'object') {
+			if (typeof def === 'object' && def !== null) {
 				result[key] = this.mergeDefaults(def, parsedValue);
 			} else {
 				result[key] = parsedValue === undefined ? def : parsedValue;
@@ -364,11 +450,9 @@ class Xcu {
 			for (const key in node) {
 				if (Object.prototype.hasOwnProperty.call(node, key)) {
 					const value = node[key];
-					if (
-						value !== null &&
-						typeof value === 'object' &&
-						!Array.isArray(value)
-					) {
+					if (value === null) {
+						// Not set: the file says nothing about it.
+					} else if (typeof value === 'object' && !Array.isArray(value)) {
 						nestedKeys.push(key);
 					} else {
 						leafProps[key] = value;
@@ -391,8 +475,16 @@ class Xcu {
 						let valueStr = '';
 						if (typeof value === 'boolean') {
 							valueStr = value ? 'true' : 'false';
+						} else if (Xcu.LIST_PROPS.includes(propName)) {
+							// A list: one item per name, the names separated
+							// by spaces in the dialog.
+							valueStr = String(value)
+								.split(/\s+/)
+								.filter((item) => item !== '')
+								.map((item) => `<it>${Xcu.escapeXml(item)}</it>`)
+								.join('');
 						} else {
-							valueStr = String(value);
+							valueStr = Xcu.escapeXml(String(value));
 						}
 						propsXml += `\n    <prop oor:name="${propName}" oor:op="fuse"><value>${valueStr}</value></prop>`;
 					}
@@ -424,6 +516,24 @@ class Xcu {
 			itemsXml.join('\n') +
 			`\n</oor:items>`;
 		return xcuXml;
+	}
+
+	// The properties written as lists of strings rather than as one string.
+	private static readonly LIST_PROPS = ['PropertySets', 'Dictionaries'];
+
+	private static escapeXml(text: string): string {
+		return text
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;');
+	}
+
+	// The settings of one remote checker: LanguageTool, Duden or
+	// Grammalecte, or null when the xcu has none.
+	public getRemoteCheckerGroup(id: string): any {
+		const linguistic = this.xcuDataObj ? this.xcuDataObj['Linguistic'] : null;
+		const grammar = linguistic ? linguistic['GrammarChecking'] : null;
+		return grammar ? grammar[id] || null : null;
 	}
 
 	// The option group of one rule package, or null when the xcu has none.

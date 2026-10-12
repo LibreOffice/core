@@ -29,6 +29,8 @@ interface Window {
 	disableAISettings?: boolean;
 	wopiSettingBaseUrl?: string;
 	sentenceCheckingPackages?: Array<{ id: string; locale: string }>;
+	// The remote sentence checkers as the engine runs them.
+	remoteCheckers?: Array<RemoteCheckerInfo>;
 	iframeType?: string;
 	cssVars?: string;
 	serviceRoot?: string;
@@ -46,6 +48,32 @@ interface Window {
 
 	Xcu: typeof Xcu;
 	SettingIframe: typeof SettingIframe;
+}
+
+// What the engine says about one remote sentence checker: how it is set
+// up, whether the user may change that, and what its server offers. The API
+// key never comes; hasCredentials says there is one.
+interface RemoteCheckerInfo {
+	id: 'languagetool' | 'duden' | 'grammalecte';
+	enabled: boolean;
+	baseURL: string;
+	username?: string;
+	hasCredentials: boolean;
+	sslVerify: boolean;
+	allowUserSettings: boolean;
+	checksSpelling: boolean;
+	locales: string[];
+	spellcheckingLevel?: number;
+	orthographyStandard?: string;
+	messageLevel?: number;
+	propertySets?: string[];
+	dictionaries?: string[];
+	availablePropertySets?: string[];
+	availableDictionaries?: string[];
+	// The switches the user chooses, as the engine runs them: the Duden style
+	// checks by their names, the Grammalecte rule families by the server's ids.
+	style?: Record<string, boolean>;
+	options?: Record<string, boolean>;
 }
 
 interface ConfigItem {
@@ -796,6 +824,11 @@ class SettingIframe {
 		Brochure: _('Brochure'),
 		BrochureRightToLeft: _('Brochure Right to Left'),
 
+		// The remote checkers go by the names of their projects.
+		languagetool: 'LanguageTool',
+		duden: 'Duden Korrekturserver',
+		grammalecte: 'Grammalecte',
+
 		// The sentence checker panels are titled by the language they check.
 		// The names of the languages are translated; what is inside a panel
 		// is not, see settingTitles below.
@@ -821,6 +854,131 @@ class SettingIframe {
 	 * cut the label short.
 	 */
 	private readonly settingTitles: Record<string, [string, string]> = {
+		// Grammalecte, which checks French. The ids are the server's; the
+		// wording is this dialog's own.
+		'grammalecte-typo': [
+			'Signes typographiques',
+			'Guillemets, tirets, points de suspension et autres signes.',
+		],
+		'grammalecte-apos': [
+			'Apostrophe typographique',
+			'Signale les apostrophes droites.',
+		],
+		'grammalecte-eepi': [
+			'Écriture épicène',
+			'Normalise l’écriture épicène avec points médians.',
+		],
+		'grammalecte-esp': [
+			'Espaces en trop',
+			'Espaces inutiles entre les mots, en début et en fin de ligne.',
+		],
+		'grammalecte-tab': [
+			'Tabulations en trop',
+			'Tabulations inutiles en début et en fin de ligne.',
+		],
+		'grammalecte-nbsp': [
+			'Espaces insécables',
+			'Espaces insécables devant les ponctuations ! ? : ;',
+		],
+		'grammalecte-unit': [
+			'Espaces insécables devant les unités',
+			'Espace insécable entre un nombre et son unité de mesure.',
+		],
+		'grammalecte-tu': [
+			'Traits d’union et soudures',
+			'Traits d’union manquants ou inutiles.',
+		],
+		'grammalecte-maj': [
+			'Majuscules',
+			'Emploi des majuscules et des minuscules.',
+		],
+		'grammalecte-minis': [
+			'Majuscules des ministères',
+			'Majuscules dans les intitulés des ministères.',
+		],
+		'grammalecte-num': [
+			'Nombres',
+			'Espaces insécables dans les grands nombres, O à la place de 0.',
+		],
+		'grammalecte-nf': ['Normes françaises', 'Écriture conforme aux normes.'],
+		'grammalecte-virg': [
+			'Virgules',
+			'Virgules manquantes devant mais, car et etc.',
+		],
+		'grammalecte-poncfin': [
+			'Ponctuation finale',
+			'Ponctuation manquante en fin de paragraphe.',
+		],
+		'grammalecte-ocr': [
+			'Erreurs de numérisation',
+			'Erreurs typiques de la reconnaissance de caractères. Beaucoup de faux positifs.',
+		],
+		'grammalecte-chim': ['Chimie', 'Typographie des formules chimiques.'],
+		'grammalecte-liga': [
+			'Ligatures typographiques',
+			'Signale les ligatures fi, fl, ff, ffi, ffl, ft, st.',
+		],
+		'grammalecte-mapos': [
+			'Apostrophe manquante après une lettre isolée',
+			'Après l, d, s, n, c, j, m, t, ç. Déconseillé pour les textes scientifiques.',
+		],
+		'grammalecte-conf': [
+			'Confusions et faux amis',
+			'Erreurs dues à l’homonymie, comme faîte et faite.',
+		],
+		'grammalecte-loc': ['Locutions', 'Écriture des locutions usuelles.'],
+		'grammalecte-gn': [
+			'Accords en genre et en nombre',
+			'Accords des noms et des adjectifs.',
+		],
+		'grammalecte-infi': [
+			'Infinitif',
+			'Confusions entre l’infinitif et d’autres formes.',
+		],
+		'grammalecte-conj': ['Conjugaison', 'Accord des verbes avec leur sujet.'],
+		'grammalecte-ppas': [
+			'Participes passés et adjectifs',
+			'Accords des participes passés et des adjectifs.',
+		],
+		'grammalecte-imp': [
+			'Impératif',
+			'Deuxième personne du singulier, par exemple vas, prend, manges.',
+		],
+		'grammalecte-inte': [
+			'Interrogatif',
+			'Formes interrogatives et liaison des pronoms aux verbes.',
+		],
+		'grammalecte-vmode': ['Modes verbaux', 'Emploi des modes verbaux.'],
+		'grammalecte-bs': [
+			'Langage populaire',
+			'Tournures courantes mais fautives, comme malgré que.',
+		],
+		'grammalecte-pleo': [
+			'Pléonasmes',
+			'Redondances comme au jour d’aujourd’hui ou monter en haut.',
+		],
+		'grammalecte-eleu': [
+			'Élisions et euphonie',
+			'Élisions incorrectes et tournures dysphoniques.',
+		],
+		'grammalecte-neg': [
+			'Adverbe de négation',
+			'Ne … pas, ne … jamais, et les autres.',
+		],
+		'grammalecte-redon1': [
+			'Répétitions dans le paragraphe',
+			'Hors mots grammaticaux, mots en majuscule, être et avoir.',
+		],
+		'grammalecte-redon2': [
+			'Répétitions dans la phrase',
+			'Hors mots grammaticaux, être et avoir.',
+		],
+		'grammalecte-date': ['Validité des dates', 'Dates impossibles.'],
+		'grammalecte-mc': [
+			'Mots composés',
+			'Mots à trait d’union absents du dictionnaire.',
+		],
+
 		// en
 		'en-grammar': ['Possible mistakes', 'Check more grammar errors.'],
 		'en-cap': ['Capitalization', 'Check missing capitalization of sentences.'],
@@ -1109,6 +1267,7 @@ class SettingIframe {
 	private _accessibilitySection: HTMLElement | null = null;
 	private _xcuSection: HTMLElement | null = null;
 	private _sentenceCheckerSection: HTMLElement | null = null;
+	private _remoteCheckerSection: HTMLElement | null = null;
 	private _aiSection: HTMLElement | null = null;
 	private _docSigningSection: HTMLElement | null = null;
 	private _zoteroSection: HTMLElement | null = null;
@@ -1346,6 +1505,13 @@ class SettingIframe {
 			);
 		} catch {
 			window.sentenceCheckingPackages = [];
+		}
+		try {
+			window.remoteCheckers = JSON.parse(
+				read('remoteCheckers', 'remote_checkers') || '[]',
+			);
+		} catch {
+			window.remoteCheckers = [];
 		}
 		window.wopiSettingBaseUrl = read(
 			'wopiSettingBaseUrl',
@@ -4397,6 +4563,453 @@ class SettingIframe {
 	}
 
 	/**!
+	 * The remote sentence checkers: LanguageTool, the Duden Korrekturserver
+	 * and Grammalecte, one panel each.
+	 *
+	 * The engine says how each is set up. What a checker looks for, the
+	 * Duden style checks and the Grammalecte rule families, is always the
+	 * user's to choose. The server, the account and the key are shown
+	 * where the server allows it, and always in the desktop app, which has
+	 * no other place to set them: in Online one process checks the document
+	 * for everyone who has it open, so one user must not be able to send
+	 * everyone's text to a server of their choosing.
+	 *
+	 * A field that was never touched is not written: the engine keeps what
+	 * the server, or the schema, gave it. The engine's value is shown as the
+	 * field's starting value, and the first edit makes it the user's own.
+	 */
+	private createRemoteCheckerSection(): HTMLElement | null {
+		if (!this.xcuEditor) return null;
+		const infos = window.remoteCheckers || [];
+
+		const panels: HTMLElement[] = [];
+		for (const info of infos) {
+			const groupName = {
+				languagetool: 'LanguageTool',
+				duden: 'Duden',
+				grammalecte: 'Grammalecte',
+			}[info.id];
+			if (!groupName) continue;
+			const group = this.xcuEditor.getRemoteCheckerGroup(groupName);
+			if (!group) continue;
+			const panel = this.createRemoteCheckerPanel(info, group);
+			if (panel) panels.push(panel);
+		}
+		if (!panels.length) return null;
+
+		const section = document.createElement('div');
+		section.id = 'remote-checkers';
+		section.className = 'section';
+		section.appendChild(this.createHeading(_('Remote Sentence Checkers')));
+		section.appendChild(
+			this.createParagraph(
+				_(
+					'Checkers that run on a server. The text of the document is sent there to be checked.',
+				),
+			),
+		);
+		section.appendChild(this.createNextDocumentNote());
+		for (const panel of panels) section.appendChild(panel);
+		return section;
+	}
+
+	private createRemoteCheckerPanel(
+		info: RemoteCheckerInfo,
+		group: any,
+	): HTMLElement | null {
+		const canEditServer = isCODesktop || info.allowUserSettings;
+		// Nothing to choose for a checker that is off and cannot be turned on
+		// from here, nor for LanguageTool where the server is not theirs to
+		// set: the style checks and the rule families are the other two's.
+		const hasOwnChoices = info.id !== 'languagetool';
+		if (!canEditServer && (!info.enabled || !hasOwnChoices)) return null;
+
+		const content = document.createElement('div');
+		content.classList.add('remote-checker');
+		// The settings of a checker take room only while it is on; the
+		// toggle alone stands for one that is off.
+		const details = document.createElement('div');
+		details.classList.add('remote-checker-details');
+
+		if (canEditServer) {
+			const isOn = group.IsEnabled === null ? info.enabled : !!group.IsEnabled;
+			details.hidden = !isOn;
+			content.appendChild(
+				this.createRemoteToggle(
+					info,
+					group,
+					'IsEnabled',
+					_('Enabled'),
+					info.enabled,
+					(checked) => {
+						details.hidden = !checked;
+					},
+				),
+			);
+			details.appendChild(
+				this.createRemoteTextField(
+					info,
+					group,
+					'BaseURL',
+					_('Server URL'),
+					info.baseURL,
+				),
+			);
+			// LanguageTool's premium API takes an account name with the key;
+			// the Duden Korrekturserver takes a token alone.
+			if (info.id === 'languagetool') {
+				details.appendChild(
+					this.createRemoteTextField(
+						info,
+						group,
+						'Username',
+						_('Username'),
+						info.username || '',
+					),
+				);
+			}
+			if (info.id !== 'grammalecte') {
+				details.appendChild(
+					this.createRemoteTextField(
+						info,
+						group,
+						'ApiKey',
+						_('API key'),
+						'',
+						true,
+					),
+				);
+			}
+			details.appendChild(
+				this.createRemoteToggle(
+					info,
+					group,
+					'SSLCertVerify',
+					_('Verify the server certificate'),
+					info.sslVerify,
+				),
+			);
+		} else {
+			// What the server set up, which is not theirs to change.
+			details.appendChild(
+				this.createParagraph(
+					_('Enabled on this server for: {0}').replace(
+						'{0}',
+						(info.locales || []).join(', '),
+					),
+				),
+			);
+		}
+
+		if (info.id === 'duden') {
+			if (canEditServer) {
+				details.appendChild(
+					this.createRemoteSelect(
+						info,
+						group,
+						'SpellcheckingLevel',
+						_('Checking level'),
+						[
+							{ value: '0', label: _('None') },
+							{ value: '1', label: _('Single words') },
+							{ value: '2', label: _('Spelling') },
+							{ value: '3', label: _('Spelling and grammar') },
+						],
+						String(info.spellcheckingLevel ?? 3),
+					),
+				);
+				details.appendChild(
+					this.createRemoteSelect(
+						info,
+						group,
+						'OrthographyStandard',
+						_('German spelling'),
+						[
+							{ value: 'duden', label: _('Duden recommendation') },
+							{ value: 'conservative', label: _('Conservative') },
+							{ value: 'progressive', label: _('Progressive') },
+							{ value: 'extended', label: _('Tolerant') },
+							{ value: 'press', label: _('Press agencies') },
+						],
+						info.orthographyStandard || 'duden',
+					),
+				);
+				details.appendChild(
+					this.createRemoteSelect(
+						info,
+						group,
+						'MessageLevel',
+						_('Explanations'),
+						[
+							{ value: '0', label: _('None') },
+							{ value: '1', label: _('Short') },
+							{ value: '2', label: _('Long') },
+							{ value: '3', label: _('Long, with an example') },
+						],
+						String(info.messageLevel ?? 1),
+					),
+				);
+				details.appendChild(
+					this.createRemoteNameList(
+						info,
+						group,
+						'PropertySets',
+						_('Correction profiles'),
+						info.propertySets || [],
+						info.availablePropertySets || [],
+					),
+				);
+				details.appendChild(
+					this.createRemoteNameList(
+						info,
+						group,
+						'Dictionaries',
+						_('Dictionaries'),
+						info.dictionaries || [],
+						info.availableDictionaries || [],
+					),
+				);
+			}
+			const styleLabels: Record<string, string> = {
+				Foreign: _('Foreign words with a German equivalent'),
+				Old: _('Archaic words'),
+				Regional: _('Regional words'),
+				Colloquial: _('Colloquial and vulgar words'),
+				Fillers: _('Filler words'),
+				Offensive: _('Offensive wording'),
+				GenderInclusive: _('Gender-inclusive wording'),
+				Complexity: _('Complex sentences'),
+			};
+			// A switch the user has not set shows what the engine runs with.
+			const styleGrid = document.createElement('div');
+			styleGrid.classList.add('xcu-settings-grid');
+			for (const key of Object.keys(styleLabels)) {
+				styleGrid.appendChild(
+					this.createCheckbox(
+						`duden-Style-${key}`,
+						!!(group.Style[key] ?? info.style?.[key]),
+						styleLabels[key],
+						(inputCheckbox, checkboxWrapper) => {
+							checkboxWrapper.classList.toggle(
+								'checkbox-radio-switch--checked',
+								!inputCheckbox.checked,
+							);
+							group.Style[key] = inputCheckbox.checked;
+						},
+					),
+				);
+			}
+			details.appendChild(
+				this.createFieldsetFor(_('Style checks (German only)'), styleGrid),
+			);
+		}
+
+		if (info.id === 'grammalecte') {
+			// The server's own grouping of its rule families.
+			const families: Array<[string, string[]]> = [
+				[
+					'Typographie',
+					[
+						'typo',
+						'apos',
+						'eepi',
+						'esp',
+						'tab',
+						'nbsp',
+						'unit',
+						'tu',
+						'maj',
+						'minis',
+						'num',
+						'nf',
+						'virg',
+						'poncfin',
+						'ocr',
+						'chim',
+						'liga',
+						'mapos',
+					],
+				],
+				['Noms et adjectifs', ['conf', 'loc', 'gn']],
+				['Verbes', ['infi', 'conj', 'ppas', 'imp', 'inte', 'vmode']],
+				['Style', ['bs', 'pleo', 'eleu', 'neg', 'redon1', 'redon2']],
+				['Divers', ['date', 'mc']],
+			];
+			const options = group.Options;
+			for (const [title, ids] of families) {
+				const grid = document.createElement('div');
+				grid.classList.add('xcu-settings-grid');
+				for (const id of ids) {
+					if (!(id in options)) continue;
+					grid.appendChild(
+						this.createCheckboxToggle(
+							id,
+							!!(options[id] ?? info.options?.[id]),
+							`grammalecte-${id}`,
+							options,
+						),
+					);
+				}
+				const family = this.createFieldsetFor(title, grid);
+				// Worded in French, like the options of the checker.
+				family.lang = 'fr';
+				details.appendChild(family);
+			}
+		}
+
+		content.appendChild(details);
+		const panel = this.createFieldsetFor(
+			this.settingLabels[info.id] || info.id,
+			content,
+		);
+		panel.id = `remote-checker-${info.id}`;
+		return panel;
+	}
+
+	// A toggle for a boolean of a remote checker's group. The engine's value
+	// is shown until the user sets their own.
+	private createRemoteToggle(
+		info: RemoteCheckerInfo,
+		group: any,
+		key: string,
+		label: string,
+		effective: boolean,
+		onChange?: (checked: boolean) => void,
+	): HTMLElement {
+		const value = group[key] === null ? effective : !!group[key];
+		return this.createCheckbox(
+			`${info.id}-${key}`,
+			value,
+			label,
+			(inputCheckbox, checkboxWrapper) => {
+				checkboxWrapper.classList.toggle(
+					'checkbox-radio-switch--checked',
+					!inputCheckbox.checked,
+				);
+				group[key] = inputCheckbox.checked;
+				if (onChange) onChange(inputCheckbox.checked);
+			},
+		);
+	}
+
+	// A text field for a string of a remote checker's group. A secret is
+	// never shown: a saved one is a masked placeholder, and the field stays
+	// empty until the user types a new one.
+	private createRemoteTextField(
+		info: RemoteCheckerInfo,
+		group: any,
+		key: string,
+		label: string,
+		effective: string,
+		isSecret: boolean = false,
+	): HTMLElement {
+		const container = document.createElement('div');
+		container.id = `${info.id}-${key}container`;
+		container.classList.add('view-input-container');
+		const heading = this.createHeading(label);
+		heading.classList.add('view-setting-small-label');
+		container.appendChild(heading);
+
+		const own = group[key] !== null && group[key] !== undefined;
+		const placeholder =
+			isSecret && !own && info.hasCredentials
+				? '********'
+				: _('Enter {0}').replace('{0}', label);
+		const input = this.createTextInput(
+			`${info.id}-${key}`,
+			placeholder,
+			own ? String(group[key]) : isSecret ? '' : effective,
+			(inputElement) => {
+				group[key] = inputElement.value;
+			},
+		);
+		if (isSecret) input.type = 'password';
+		container.appendChild(input);
+		return container;
+	}
+
+	private createRemoteSelect(
+		info: RemoteCheckerInfo,
+		group: any,
+		key: string,
+		label: string,
+		options: Array<{ value: string; label: string }>,
+		effective: string,
+	): HTMLElement {
+		const own = group[key] !== null && group[key] !== undefined;
+		return this.createSelectField(
+			`${info.id}-${key}container`,
+			label,
+			`${info.id}-${key}`,
+			options,
+			own ? String(group[key]) : effective,
+			(selectEl) => {
+				group[key] = selectEl.value;
+			},
+		);
+	}
+
+	// A list of names the server knows: a multiple choice when the server
+	// has said what it offers, a text field of names separated by spaces
+	// when it has not.
+	private createRemoteNameList(
+		info: RemoteCheckerInfo,
+		group: any,
+		key: string,
+		label: string,
+		effective: string[],
+		available: string[],
+	): HTMLElement {
+		const own = group[key] !== null && group[key] !== undefined;
+		const current: string[] = own
+			? String(group[key])
+					.split(/\s+/)
+					.filter((name) => name !== '')
+			: effective;
+		if (!available.length) {
+			const field = this.createRemoteTextField(
+				info,
+				group,
+				key,
+				label,
+				effective.join(' '),
+			);
+			return field;
+		}
+
+		const container = document.createElement('div');
+		container.id = `${info.id}-${key}container`;
+		container.classList.add('view-input-container');
+		const heading = this.createHeading(label);
+		heading.classList.add('view-setting-small-label');
+		container.appendChild(heading);
+
+		const select = document.createElement('select');
+		select.id = `${info.id}-${key}`;
+		select.multiple = true;
+		select.size = Math.min(available.length, 5);
+		// A name in use that the server no longer lists stays selectable,
+		// so opening the dialog does not drop it.
+		for (const name of [
+			...available,
+			...current.filter((name) => !available.includes(name)),
+		]) {
+			const option = document.createElement('option');
+			option.value = name;
+			option.textContent = name;
+			option.selected = current.includes(name);
+			select.appendChild(option);
+		}
+		select.addEventListener('change', () => {
+			group[key] = Array.from(select.selectedOptions)
+				.map((option) => option.value)
+				.join(' ');
+		});
+		container.appendChild(select);
+		return container;
+	}
+
+	/**!
 	 * Said only when a change would not be felt in the document in front of
 	 * them, which is the case that needs explaining. Alone with a document
 	 * running on their own settings they get no note, because saving applies
@@ -4604,6 +5217,18 @@ class SettingIframe {
 				} else {
 					this._sentenceCheckerSection?.remove();
 					this._sentenceCheckerSection = null;
+				}
+
+				const remoteCheckers = this.createRemoteCheckerSection();
+				if (remoteCheckers) {
+					this._remoteCheckerSection = this.mountConfigSection(
+						settingsContainer,
+						this._remoteCheckerSection,
+						remoteCheckers,
+					);
+				} else {
+					this._remoteCheckerSection?.remove();
+					this._remoteCheckerSection = null;
 				}
 			}
 		}

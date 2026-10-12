@@ -932,8 +932,24 @@ ul {
   overflow: auto;
 }
 
-#lightproof .xcu-settings-fieldset {
+#lightproof .xcu-settings-fieldset,
+#remote-checkers .xcu-settings-fieldset {
   min-width: 0;
+}
+
+#remote-checkers .view-input-container {
+  margin: 8px 0;
+}
+
+#remote-checkers select[multiple] {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 400px;
+  padding: 4px 8px;
+  border: 1px solid var(--settings-border);
+  border-radius: 4px;
+  color: var(--settings-text);
+  background-color: var(--settings-input-background);
 }
 
 /* A cell holds a drawn checkbox with its margins and a label beside it, so
@@ -942,11 +958,13 @@ ul {
    whole panel scrolls sideways. The labels are not translated and may be
    long single words, so they get hyphenated in their own language where the
    browser can, instead of spilling out. */
-#lightproof .xcu-settings-grid {
+#lightproof .xcu-settings-grid,
+#remote-checkers .xcu-settings-grid {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 }
 
-#lightproof .checkbox-content__text {
+#lightproof .checkbox-content__text,
+#remote-checkers .checkbox-content__text {
   hyphens: auto;
 }
 
