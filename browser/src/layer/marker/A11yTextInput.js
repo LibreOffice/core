@@ -379,7 +379,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 	onAccessibilityFocusChanged: function(content, pos, start, end, listPrefixLength, force, before, after,
 		beforeRects, afterRects, headingLevel, beforeLevels, afterLevels, links, beforeLinks,
-		afterLinks, images, beforeImages, afterImages, comments, beforeComments, afterComments) {
+		afterLinks, images, beforeImages, afterImages, comments, beforeComments, afterComments, list) {
 		this._listPrefixLength = listPrefixLength;
 		this._setHeadingLevel(headingLevel);
 		this._endContextJump();
@@ -387,6 +387,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._setContextParagraphs(before, after, beforeRects, afterRects, beforeLevels,
 			afterLevels, beforeLinks, afterLinks, beforeImages, afterImages, beforeComments,
 			afterComments);
+		this._setContextList(list);
 		this._requestHeadings();
 		if (!this.hasFocus() || (this._isComposing && !force)) {
 			this._log('onAccessibilityFocusChanged: skipped updating: '
@@ -407,7 +408,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 	setA11yFocusedParagraph: function(content, pos, start, end, before, after, beforeRects, afterRects, headingLevel,
 		beforeLevels, afterLevels, links, beforeLinks, afterLinks, images, beforeImages,
-		afterImages, comments, beforeComments, afterComments) {
+		afterImages, comments, beforeComments, afterComments, list) {
 		this._contextPending = Math.max(0, (this._contextPending || 0) - 1);
 		this._setHeadingLevel(headingLevel);
 		this._keepCommentDetails(comments, beforeComments, afterComments);
@@ -425,6 +426,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._setContextParagraphs(before, after, beforeRects, afterRects, beforeLevels,
 			afterLevels, beforeLinks, afterLinks, beforeImages, afterImages, beforeComments,
 			afterComments);
+		this._setContextList(list);
 	},
 
 	// getPlainTextContent() reads the whole editable, and every caret offset is
@@ -444,6 +446,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 		this._headingsAbove = createContextRegion('a11y-headings-above');
 		this._contextBefore = createContextRegion('a11y-context-before');
+		this._contextList = createContextRegion('a11y-context-list');
 		this._contextAfter = createContextRegion('a11y-context-after');
 		this._headingsBelow = createContextRegion('a11y-headings-below');
 		for (const region of [this._contextBefore, this._contextAfter]) {
@@ -453,8 +456,41 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		}
 		this._container.insertBefore(this._headingsAbove, this._textArea);
 		this._container.insertBefore(this._contextBefore, this._textArea);
+		this._container.insertBefore(this._contextList, this._textArea);
 		this._container.insertBefore(this._contextAfter, this._textArea.nextSibling);
 		this._container.insertBefore(this._headingsBelow, this._contextAfter.nextSibling);
+	},
+
+	_setContextList: function(list) {
+		this._initContextRegions();
+		if (!this._contextList)
+			return;
+
+		this._contextList.replaceChildren();
+		if (!list || !Array.isArray(list.items) || list.items.length === 0)
+			return;
+
+		const levels = list.items.map(function (item) {
+			return parseInt(item.level);
+		});
+		const root = document.createElement('ul');
+		const stack = [{ level: Math.min.apply(null, levels), element: root }];
+		list.items.forEach(function (item, index) {
+			const level = levels[index];
+			while (stack.length > 1 && stack[stack.length - 1].level > level)
+				stack.pop();
+			let top = stack[stack.length - 1];
+			if (level > top.level) {
+				const nested = document.createElement('ul');
+				(top.element.lastElementChild || top.element).appendChild(nested);
+				top = { level: level, element: nested };
+				stack.push(top);
+			}
+			const li = document.createElement('li');
+			li.textContent = item.text;
+			top.element.appendChild(li);
+		});
+		this._contextList.appendChild(root);
 	},
 
 	_requestHeadings: function() {
@@ -1025,6 +1061,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			paragraph.beforeLevels, paragraph.afterLevels, paragraph.beforeLinks,
 			paragraph.afterLinks, paragraph.beforeImages, paragraph.afterImages,
 			paragraph.beforeComments, paragraph.afterComments);
+		this._setContextList(paragraph.list);
 		this._setFocusedParagraph(paragraph.content, parseInt(paragraph.position),
 			parseInt(paragraph.start), parseInt(paragraph.end), paragraph.links, paragraph.images,
 			paragraph.comments);

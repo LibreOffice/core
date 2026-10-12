@@ -623,6 +623,11 @@ div.leaflet-cursor-container:hover > .leaflet-cursor-header {
 	display: flow-root;
 }
 
+/* each item's text starts with Writer's own bullet or number */
+.clipboard-container .a11y-context ul {
+	list-style: none;
+}
+
 input.clipboard {
 	width: 1px;
 	height: 1px;
