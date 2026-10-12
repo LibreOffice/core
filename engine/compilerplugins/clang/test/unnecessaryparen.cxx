@@ -37,10 +37,8 @@ template <> struct typed_flags<BrowseMode> : is_typed_flags<BrowseMode, 0xf>
 
 void f(char const *);
 char const * operator ""_s1(char const *, std::size_t);
-#if __cplusplus >= 202002L
 struct Str { constexpr Str(char const *) {} };
 template<Str> char const * operator ""_s2();
-#endif
 
 int main()
 {
@@ -132,12 +130,10 @@ int main()
     (void) ("foo" "bar"_s1);
     f(("foo"_s1)); // expected-error {{parentheses immediately inside single-arg call [loplugin:unnecessaryparen]}}
     f(("foo" "bar"_s1));
-#if __cplusplus >= 202002L
     (void) ("foo"_s2); //TODO: expected error {{unnecessary parentheses around single-token string literal [loplugin:unnecessaryparen]}}
     (void) ("foo" "bar"_s2);
     f(("foo"_s2)); // TODO: expected error {{parentheses immediately inside single-arg call [loplugin:unnecessaryparen]}}
     f(("foo" "bar"_s2));
-#endif
 };
 
 struct B { operator bool() const; };

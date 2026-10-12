@@ -77,7 +77,7 @@ extern "C" {
 
 #endif
 
-#if defined __cplusplus && __cplusplus >= 201703L
+#if defined __cplusplus
 #define UNIXWRAPPERS_H_MAYBE_UNUSED [[maybe_unused]]
 #else
 #define UNIXWRAPPERS_H_MAYBE_UNUSED

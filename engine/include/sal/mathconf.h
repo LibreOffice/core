@@ -20,16 +20,12 @@
 
 #include <osl/endian.h>
 
-#if defined(__cplusplus) && ( defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L )
+#if defined(__cplusplus)
 #include <cmath>
 #endif
 
-#if defined(IOS)
-#if defined(__cplusplus)
-#include <cmath>
-#else
+#if defined(IOS) && !defined(__cplusplus)
 #include <math.h>
-#endif
 #endif
 
 #if defined __cplusplus
@@ -54,11 +50,7 @@ extern "C" {
 
 
 /* SAL_MATH_FINITE(d): test double d on INFINITY, NaN et al. */
-#if !defined ANDROID \
-                     && defined(__cplusplus) \
-                     && ( defined(__GXX_EXPERIMENTAL_CXX0X__) \
-                          || __cplusplus >= 201103L \
-                          || defined(IOS) )
+#if !defined ANDROID && defined(__cplusplus)
 #define SAL_MATH_FINITE(d) std::isfinite(d)
 #elif defined __APPLE__ && !(defined __i386__ || defined __x86_64__)
 #define SAL_MATH_FINITE(d) isfinite(d)

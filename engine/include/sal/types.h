@@ -320,11 +320,7 @@ typedef struct _sal_Sequence
     This is a macro so it can expand to nothing in C code.
 */
 #if defined __cplusplus
-#if __cplusplus >= 201103L
 #define SAL_THROW_EXTERN_C() noexcept
-#else
-#define SAL_THROW_EXTERN_C() throw ()
-#endif
 #else
 #define SAL_THROW_EXTERN_C()
 #endif
