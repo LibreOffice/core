@@ -124,7 +124,8 @@ public:
     SfxInfoBarContainerWindow(vcl::Window* pParent, SfxInfoBarContainerChild* pChildWin);
     virtual ~SfxInfoBarContainerWindow() override;
 
-    /// Run when the bars have changed height, for a container without a child window.
+    /// Run, for a container without a child window, when the bars may have changed height. It lays
+    /// the container out to its current width with Resize, then lays out the host around it.
     void SetLayoutChangedHandler(const Link<LinkParamNone*, void>& rHandler)
     {
         m_aLayoutChangedHandler = rHandler;

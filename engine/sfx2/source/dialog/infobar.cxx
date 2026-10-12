@@ -460,10 +460,7 @@ void SfxInfoBarContainerWindow::removeInfoBar(VclPtr<SfxInfoBarWindow> const& pI
     if (m_pChildWin)
         m_pChildWin->Update();
     else
-    {
-        Resize();
         m_aLayoutChangedHandler.Call(nullptr);
-    }
 }
 
 bool SfxInfoBarContainerWindow::isInfobarEnabled(std::u16string_view sId)
