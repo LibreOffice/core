@@ -147,7 +147,6 @@ class FontPrevWin_Impl
     SvxFont maCTLFont;
     OUString maText;
     OUString maScriptText;
-    std::optional<Color> mxColor;
     std::optional<Color> mxBackColor;
     std::optional<Color> mxTextLineColor;
     std::optional<Color> mxOverlineColor;
@@ -667,17 +666,6 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
             Color aFillCol = rRenderContext.GetFillColor();
             rRenderContext.SetLineColor();
             rRenderContext.SetFillColor(*m_pImpl->mxBackColor);
-            rRenderContext.DrawRect(aRect);
-            rRenderContext.SetLineColor(aLineCol);
-            rRenderContext.SetFillColor(aFillCol);
-        }
-        if (m_pImpl->mxColor)
-        {
-            tools::Rectangle aRect(Point(nX, nY), aTxtSize);
-            Color aLineCol = rRenderContext.GetLineColor();
-            Color aFillCol = rRenderContext.GetFillColor();
-            rRenderContext.SetLineColor();
-            rRenderContext.SetFillColor(*m_pImpl->mxColor);
             rRenderContext.DrawRect(aRect);
             rRenderContext.SetLineColor(aLineCol);
             rRenderContext.SetFillColor(aFillCol);

@@ -54,8 +54,6 @@ public:
     void setFinalized(int layer);
     int getFinalized() const { return finalized_;}
 
-    void setDescription(OUString const& description) { description_ = description; };
-
     rtl::Reference< Node > getMember(OUString const & name);
 
 protected:
@@ -66,7 +64,6 @@ protected:
 private:
     int layer_;
     int finalized_;
-    OUString description_;
     static bool CreateStaticizedNodes;
 };
 

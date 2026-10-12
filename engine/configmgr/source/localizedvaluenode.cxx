@@ -30,11 +30,11 @@
 namespace configmgr {
 
 LocalizedValueNode::LocalizedValueNode(int layer, cpo::uno::Any value):
-    Node(layer), value_(std::move(value)), modified_(false)
+    Node(layer), value_(std::move(value))
 {}
 
 LocalizedValueNode::LocalizedValueNode(int layer):
-    Node(layer), modified_(false)
+    Node(layer)
 {}
 
 rtl::Reference< Node > LocalizedValueNode::clone(bool) const {
@@ -46,10 +46,9 @@ OUString LocalizedValueNode::getTemplateName() const {
 }
 
 
-void LocalizedValueNode::setValue(int layer, cpo::uno::Any const & value, bool bIsUserModification)
+void LocalizedValueNode::setValue(int layer, cpo::uno::Any const & value)
 {
     setLayer(layer);
-    modified_ = bIsUserModification;
     if (&value != &value_)
         value_ = value;
 }

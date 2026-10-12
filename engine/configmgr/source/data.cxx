@@ -296,7 +296,7 @@ NodeMap & Data::getComponents() const {
 }
 
 Additions * Data::addExtensionXcuAdditions(
-    OUString const & url, int layer)
+    OUString const & url)
 {
     rtl::Reference item(new ExtensionXcu);
     ExtensionXcuAdditions::iterator i(
@@ -307,7 +307,6 @@ Additions * Data::addExtensionXcuAdditions(
             "already added extension xcu " + url);
     }
     i->second = item;
-    item->layer = layer;
     return &item->additions;
 }
 

@@ -45,8 +45,8 @@ public:
 
     cpo::uno::Any const & getValue(Components & components);
 
-    void setValue(int layer, cpo::uno::Any const & value, bool bIsUserModification);
-    cpo::uno::Any *getValuePtr(int layer, bool bIsUserModification);
+    void setValue(int layer, cpo::uno::Any const & value);
+    cpo::uno::Any *getValuePtr(int layer);
 
     void setExternal(int layer, OUString const & descriptor);
 
@@ -64,8 +64,6 @@ private:
         // TYPE_HEXBINARY_LIST; not TYPE_ERROR or TYPE_NIL)
     bool nillable_;
     bool extension_;
-    /// Whether the property was modified by the user:
-    bool modified_;
     OUString externalDescriptor_;
     cpo::uno::Any value_;
 };

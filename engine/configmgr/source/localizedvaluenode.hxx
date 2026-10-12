@@ -38,14 +38,13 @@ public:
     virtual OUString getTemplateName() const override;
 
     const cpo::uno::Any& getValue() const { return value_; }
-    cpo::uno::Any* getValuePtr(int layer, bool bIsUserModification)
+    cpo::uno::Any* getValuePtr(int layer)
     {
         setLayer(layer);
-        modified_ = bIsUserModification;
         return &value_;
     }
 
-    void setValue(int layer, cpo::uno::Any const& value, bool bIsUserModification);
+    void setValue(int layer, cpo::uno::Any const& value);
 
 private:
     LocalizedValueNode(LocalizedValueNode const&) = default;
@@ -55,7 +54,6 @@ private:
     virtual Kind kind() const override;
 
     cpo::uno::Any value_;
-    bool modified_;
 };
 }
 

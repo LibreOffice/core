@@ -312,11 +312,7 @@ void XcsParser::endElement(xmlreader::XmlReader const & reader) {
                 || top.node->kind() == Node::KIND_LOCALIZED_PROPERTY)
             {
                 // Remove whitespace from description_ resulting from line breaks/indentation in xml files
-                OUString desc(description_.makeStringAndClear());
-                desc = desc.trim();
-                while (desc.indexOf("  ") != -1)
-                    desc = desc.replaceAll("  ", " ");
-                top.node->setDescription(desc);
+                description_.setLength(0);
             }
             if (elements_.empty()) {
                 switch (state_) {

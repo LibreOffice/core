@@ -332,7 +332,7 @@ void Components::insertExtensionXcuFile(
 {
     assert(modifications != nullptr);
     int layer = getExtensionLayer() + 1;
-    Additions * adds = data_.addExtensionXcuAdditions(fileUri, layer);
+    Additions * adds = data_.addExtensionXcuAdditions(fileUri);
     try {
         parseXcuFile(fileUri, layer, data_, nullptr, modifications, adds);
     } catch (css::container::NoSuchElementException & e) {
@@ -648,7 +648,7 @@ void Components::parseFileList(
         if (!url.isEmpty()) {
             Additions * adds = nullptr;
             if (recordAdditions) {
-                adds = data_.addExtensionXcuAdditions(url, layer);
+                adds = data_.addExtensionXcuAdditions(url);
             }
             try {
                 parseFileLeniently(parseFile, url, layer, nullptr, nullptr, adds);

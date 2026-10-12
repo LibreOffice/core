@@ -40,7 +40,6 @@ struct Data {
     enum { NO_LAYER = INT_MAX };
 
     struct ExtensionXcu: public salhelper::SimpleReferenceObject {
-        int layer;
         Additions additions;
     };
 
@@ -75,7 +74,7 @@ struct Data {
     NodeMap & getComponents() const;
 
     Additions * addExtensionXcuAdditions(
-        OUString const & url, int layer);
+        OUString const & url);
 
     rtl::Reference< ExtensionXcu > removeExtensionXcuAdditions(
         OUString const & url);
