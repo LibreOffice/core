@@ -1845,9 +1845,13 @@ void KitDocumentFocusListener::onShapeSelectionChanged(
     notifySelectionChanged(xSelectedObject, sAction);
     if (isText(m_nDocumentType))
     {
-        if (sAction == "create")
+        uno::Reference<accessibility::XAccessibleContext> xContext;
+        if (sAction == "create" && xSelectedObject.is())
+            xContext = xSelectedObject->getAccessibleContext();
+        // notifySelectionChanged() reports nothing without a context either
+        if (xContext.is())
         {
-            m_oSelectedFrameName = getSelectionName(xSelectedObject->getAccessibleContext());
+            m_oSelectedFrameName = getSelectionName(xContext);
             m_xSelectedFrame = xSelectedObject;
         }
         else
