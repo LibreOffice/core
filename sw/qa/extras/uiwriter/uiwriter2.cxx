@@ -9,9 +9,11 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <officecfg/Office/Writer.hxx>
@@ -2558,6 +2560,49 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloating)
             sFailureMessage.getStr(), SwFrameType::Tab,
             pWrtShell->GetLayout()->GetLower()->GetNext()->GetLower()->GetLower()->GetType());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf170672)
+{
+    createSwDoc("tdf170672.docx");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    // The reporter starts with the cursor inside the floating table.
+    CPPUNIT_ASSERT(pWrtShell->GotoTable(UIName(u"Table1"_ustr)));
+
+    // Reproduce the reporter's steps: select the document, cut it, then undo.
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    auto pPage1 = pWrtShell->GetLayout()->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    SwFlyFrame* pPage1FlyFrame = (*pPage1->GetSortedObjs())[0]->DynCastFlyFrame();
+    CPPUNIT_ASSERT(pPage1FlyFrame);
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    SwFlyFrame* pPage2FlyFrame = (*pPage2->GetSortedObjs())[0]->DynCastFlyFrame();
+    CPPUNIT_ASSERT(pPage2FlyFrame);
+    CPPUNIT_ASSERT(pWrtShell->GotoPage(2, true));
+    SdrObject* pObj = pPage2FlyFrame->GetFormat()->FindRealSdrObject();
+    CPPUNIT_ASSERT(pObj);
+    pWrtShell->SelectObj(Point(), 0, pObj);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pPage2FlyFrame->IsShowUnfloatButton(pWrtShell));
+
+    // Update the selection's frame controls, then click the same welded button
+    // that the user clicks in the document window.
+    pPage2FlyFrame->SelectionHasChanged(pWrtShell);
+    pPage2FlyFrame->ActiveUnfloatButton(pWrtShell);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTables = xTablesSupplier->getTextTables();
+    CPPUNIT_ASSERT(xTables->hasByName(u"Table1"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRTLparaStyle_LocaleArabic)

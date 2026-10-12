@@ -1877,6 +1877,14 @@ void SwRootFrame::InsertEmptyFly(SwFlyFrame* pDel)
     mpFlyDestroy->insert(pDel);
 }
 
+void SwRootFrame::RemoveEmptyFly(SwFlyFrame* pFly)
+{
+    if (mpFlyDestroy)
+    {
+        mpFlyDestroy->erase(pFly);
+    }
+}
+
 SwLayoutFrame* SwFrame::GetPrevFlyLeaf()
 {
     auto pFly = dynamic_cast<SwFlyAtContentFrame*>(FindFlyFrame());

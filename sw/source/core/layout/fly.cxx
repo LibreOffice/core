@@ -349,6 +349,13 @@ void SwFlyFrame::InsertColumns()
 
 void SwFlyFrame::DestroyImpl()
 {
+    // A queued empty fly may be destroyed through another path before
+    // DeleteEmptyFlys_() processes it. Do not leave a dangling queue entry.
+    if (SwRootFrame* pRootFrame = getRootFrame())
+    {
+        pRootFrame->RemoveEmptyFly(this);
+    }
+
     // Accessible objects for fly frames will be destroyed in this destructor.
     // For frames bound as char or frames that don't have an anchor we have
     // to do that ourselves. For any other frame the call RemoveFly at the
