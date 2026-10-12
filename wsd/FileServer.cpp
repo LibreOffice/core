@@ -1725,6 +1725,21 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
                                          "/color-palette-dark.css\" />"
                                    : std::string());
 
+    // Also set a property for showing/hiding the close button so it can be
+    // handled fully in the mobile CSS without a flash
+    const std::string closeButtonEnabled = requestDetails.getParam("closebutton");
+    std::string closeButtonEnabledData;
+    // as in global.js:parseBool
+    if (closeButtonEnabled == "1" || closeButtonEnabled == "true" || closeButtonEnabled == "yes" || closeButtonEnabled == "on") {
+        closeButtonEnabledData = "true";
+    } else if (closeButtonEnabled == "0" || closeButtonEnabled == "false" || closeButtonEnabled == "no" || closeButtonEnabled == "off") {
+        closeButtonEnabledData = "false";
+    } else {
+        closeButtonEnabledData = "default";
+    }
+    Poco::replaceInPlace(preprocess, std::string("%CLOSE_BUTTON_ENABLED_ATTR%"),
+                         " data-close-button-enabled=\"" + closeButtonEnabledData + "\"");
+
     std::string enableMacrosExecution = stringifyBoolFromConfig(config, "security.enable_macros_execution", false);
     Poco::replaceInPlace(preprocess, std::string("%ENABLE_MACROS_EXECUTION%"), enableMacrosExecution);
 

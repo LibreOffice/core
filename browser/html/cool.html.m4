@@ -27,7 +27,7 @@ m4_ifelse(IOSAPP,[true],
 <!-- Related to issue #5841: the iOS app sets the base text direction via the "dir" parameter -->
 <html dir="" data-app-type="mobile"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" data-theme="%UI_THEME%">
 ,
-<html %UI_RTL_SETTINGS%m4_ifelse(APP,[],[%DARK_THEME_ATTR%],[ data-app-type="mobile"])><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html %UI_RTL_SETTINGS%m4_ifelse(APP,[],[%DARK_THEME_ATTR%],[ data-app-type="mobile"]) %CLOSE_BUTTON_ENABLED_ATTR%><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 )m4_dnl
 <!--
   SPDX-License-Identifier: MPL-2.0
