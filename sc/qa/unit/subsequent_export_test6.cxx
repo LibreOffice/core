@@ -68,6 +68,19 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testXlStartupExternalXLSX)
     assertXPath(pExternalRel, "/rels:Relationships/rels:Relationship", "Target", u"personal.xls");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testInvalidFileNameExternalLink)
+{
+    createScDoc("xls/tdf171084.xls");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pExternalRel
+        = parseExport(u"xl/externalLinks/_rels/externalLink1.xml.rels"_ustr);
+    CPPUNIT_ASSERT(pExternalRel);
+
+    assertXPath(pExternalRel, "/rels:Relationships/rels:Relationship", "Target",
+                u"file://501200.xls");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testShapeMacroExtRef)
 {
     createScDoc("xlsx/shape-macro-ext-ref.xlsx");
