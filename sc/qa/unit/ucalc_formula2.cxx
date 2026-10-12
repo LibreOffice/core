@@ -162,6 +162,52 @@ protected:
     void testExtRefConcat(ScDocument* pDoc, ScDocument& rExtDoc);
 };
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testNumericPairTraversal)
+{
+    ScMatrixRef x = new ScMatrix(3, 4, 0.0);
+    ScMatrixRef y = new ScMatrix(3, 4, 0.0);
+    for (SCSIZE i = 0; i < 12; ++i)
+    {
+        x->PutDouble(i + 1, i);
+        y->PutDouble(100 + i, i);
+    }
+    auto& pool = m_pDoc->GetSharedStringPool();
+    x->PutString(pool.intern(u"skip"_ustr), 1);
+    y->PutEmpty(2);
+    x->PutEmptyPath(0, 3);
+    y->PutEmptyResultVector(1, 1, 0);
+    x->PutBoolean(true, 1, 1);
+    y->PutBoolean(false, 1, 1);
+    x->PutString(pool.intern(u""_ustr), 6);
+    x->PutError(FormulaError::DivisionByZero, 1, 3);
+    y->PutError(FormulaError::NoValue, 2, 0);
+    x->PutDouble(0.0, 9);
+    x->PutDouble(-3.0, 10);
+
+    std::vector<std::pair<double, double>> pairs;
+    x->IterateNumericPairs(*y, [&](double a, double b) { pairs.emplace_back(a, b); });
+    CPPUNIT_ASSERT_EQUAL(size_t(7), pairs.size());
+    CPPUNIT_ASSERT_EQUAL(1.0, pairs[0].first);
+    CPPUNIT_ASSERT_EQUAL(100.0, pairs[0].second);
+    CPPUNIT_ASSERT_EQUAL(1.0, pairs[1].first);
+    CPPUNIT_ASSERT_EQUAL(0.0, pairs[1].second);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::DivisionByZero, GetDoubleErrorValue(pairs[2].first));
+    CPPUNIT_ASSERT_EQUAL(107.0, pairs[2].second);
+    CPPUNIT_ASSERT_EQUAL(9.0, pairs[3].first);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, GetDoubleErrorValue(pairs[3].second));
+    CPPUNIT_ASSERT_EQUAL(0.0, pairs[4].first);
+    CPPUNIT_ASSERT_EQUAL(109.0, pairs[4].second);
+    CPPUNIT_ASSERT_EQUAL(-3.0, pairs[5].first);
+    CPPUNIT_ASSERT_EQUAL(110.0, pairs[5].second);
+    CPPUNIT_ASSERT_EQUAL(12.0, pairs[6].first);
+    CPPUNIT_ASSERT_EQUAL(111.0, pairs[6].second);
+
+    // Empty matrices must not attempt to initialize a storage position.
+    x = new ScMatrix(0, 0);
+    y = new ScMatrix(0, 0);
+    x->IterateNumericPairs(*y, [](double, double) { CPPUNIT_FAIL("unexpected pair"); });
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncIF)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.

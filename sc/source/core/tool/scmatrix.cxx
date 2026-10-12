@@ -352,6 +352,9 @@ public:
     void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
             ScInterpreterContext& rContext, svl::SharedStringPool& rPool);
 
+    void IterateNumericPairs(const ScMatrixImpl& rOther,
+                             const std::function<void(double, double)>& rFunc) const;
+
     void ExecuteBinaryOp(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrix& rInputMat1, const ScMatrix& rInputMat2,
             ScInterpreter* pInterpreter, const ScMatrix::CalculateOpFunction& op);
     bool IsValueOrEmpty( const MatrixImplType::const_position_type & rPos ) const;
@@ -3043,6 +3046,35 @@ bool ScMatrixImpl::IsStringOrEmpty(const MatrixImplType::const_position_type & r
             ;
     }
     return false;
+}
+
+void ScMatrixImpl::IterateNumericPairs(const ScMatrixImpl& rOther,
+                                     const std::function<void(double, double)>& rFunc) const
+{
+    const SCSIZE nElements = GetElementCount();
+    assert(nElements == rOther.GetElementCount());
+    if (!nElements)
+        return;
+    auto aPos1 = maMat.position(0, 0);
+    auto aPos2 = rOther.maMat.position(0, 0);
+    for (SCSIZE i = 0; i < nElements; ++i)
+    {
+        if (!IsStringOrEmpty(aPos1) && !rOther.IsStringOrEmpty(aPos2))
+        {
+            // Preserve x-before-y interpreter error propagation.
+            const double fX = GetDouble(aPos1);
+            const double fY = rOther.GetDouble(aPos2);
+            rFunc(fX, fY);
+        }
+        aPos1 = MatrixImplType::next_position(aPos1);
+        aPos2 = MatrixImplType::next_position(aPos2);
+    }
+}
+
+void ScMatrix::IterateNumericPairs(const ScMatrix& rOther,
+                                 const std::function<void(double, double)>& rFunc) const
+{
+    pImpl->IterateNumericPairs(*rOther.pImpl, rFunc);
 }
 
 void ScMatrixImpl::ExecuteBinaryOp(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrix& rInputMat1, const ScMatrix& rInputMat2,
