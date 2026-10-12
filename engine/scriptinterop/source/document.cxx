@@ -683,20 +683,7 @@ public:
         cpo::uno::Reference<css::text::XTextContent> const & content,
         scriptinterop::ElementType reportedType):
         parent_(parent), content_(content), reportedType_(reportedType)
-    {
-        if (cpo::uno::Reference<css::container::XEnumerationAccess> const ea{
-                content_, cpo::uno::UNO_QUERY})
-        {
-            auto const en = ea->createEnumeration();
-            while (en.is() && en->hasMoreElements()) {
-                cpo::uno::Reference<css::text::XTextRange> portion;
-                en->nextElement() >>= portion;
-                if (portion.is()) {
-                    runs_.push_back(portion);
-                }
-            }
-        }
-    }
+    {}
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return content_; }
 
@@ -782,10 +769,11 @@ public:
 
     // GAS guarantees at least one attribute index for any text (uniform text has one index at 0):
     cpo::uno::Sequence<sal_Int32> getTextAttributeIndices() override {
+        auto const runs = this->runs();
         std::vector<sal_Int32> v;
-        v.reserve(runs_.empty() ? 1 : runs_.size());
+        v.reserve(runs.empty() ? 1 : runs.size());
         sal_Int32 off = 0;
-        for (auto const & r: runs_) {
+        for (auto const & r: runs) {
             // A footnote reference is a run without text:
             auto const length = textOf(r).getLength();
             if (length != 0) {
@@ -962,19 +950,38 @@ public:
     }
 
 private:
+    // The text portions of the paragraph as the document has them now:
+    std::vector<cpo::uno::Reference<css::text::XTextRange>> runs() {
+        std::vector<cpo::uno::Reference<css::text::XTextRange>> runs;
+        if (cpo::uno::Reference<css::container::XEnumerationAccess> const ea{
+                content_, cpo::uno::UNO_QUERY})
+        {
+            auto const en = ea->createEnumeration();
+            while (en.is() && en->hasMoreElements()) {
+                cpo::uno::Reference<css::text::XTextRange> portion;
+                en->nextElement() >>= portion;
+                if (portion.is()) {
+                    runs.push_back(portion);
+                }
+            }
+        }
+        return runs;
+    }
+
     cpo::uno::Reference<css::text::XTextRange> runAt(sal_Int32 offset) {
-        if (runs_.empty()) {
+        auto const runs = this->runs();
+        if (runs.empty()) {
             throw cpo::uno::RuntimeException(u"the text has no content at this offset"_ustr);
         }
         sal_Int32 start = 0;
-        for (auto const & r: runs_) {
+        for (auto const & r: runs) {
             auto const len = textOf(r).getLength();
             if (offset < start + len) {
                 return r;
             }
             start += len;
         }
-        return runs_.back();
+        return runs.back();
     }
 
     std::optional<cpo::uno::Any> getProp(
@@ -1102,7 +1109,6 @@ private:
     cpo::uno::Reference<scriptinterop::XElement> parent_;
     cpo::uno::Reference<css::text::XTextContent> content_;
     scriptinterop::ElementType reportedType_;
-    std::vector<cpo::uno::Reference<css::text::XTextRange>> runs_;
 };
 
 // As in GAS, the text of a container joins the texts of all the paragraphs in it, also those in

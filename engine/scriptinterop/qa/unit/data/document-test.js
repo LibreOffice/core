@@ -220,10 +220,14 @@ function test() {
     console.assert(bodyText.getText().endsWith('\nAppended'));
     console.assert(body.getNumChildren() === 7);
 
-    // Exercise the setBold overload group:
+    // Exercise the setBold overload group, which a Text of the paragraph taken before already
+    // shows:
+    const appendedText = appended.editAsText();
     appended.editAsText().setBold(true).setBold(0, 3, false);
     console.assert(appended.editAsText().isBold(0) === false);
     console.assert(appended.editAsText().isBold(4) === true);
+    console.assert(appendedText.isBold(4) === true);
+    console.assert(JSON.stringify(appendedText.getTextAttributeIndices()) === '[0,4]');
 
     // Exercise the Text mutation methods; each returns Text so the calls chain:
     appended.editAsText().setText('foo').appendText('bar').insertText(3, '-');
