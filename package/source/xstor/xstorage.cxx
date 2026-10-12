@@ -4687,7 +4687,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelati
     std::vector< uno::Sequence< beans::StringPair > > aResult;
     aResult.reserve(aSeq.getLength());
 
-    std::copy_if(aSeq.begin(), aSeq.end(), std::back_inserter(aResult),
+    std::ranges::copy_if(aSeq, std::back_inserter(aResult),
         [&sType](const uno::Sequence<beans::StringPair>& rRel) {
             auto pRel = lcl_findPairByName(rRel, u"Type"_ustr);
             return pRel != rRel.end()
@@ -4775,7 +4775,7 @@ void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno:
     aResult.reserve(aEntry.getLength() + 1);
 
     aResult.push_back(aIDRel);
-    std::copy_if(aEntry.begin(), aEntry.end(), std::back_inserter(aResult),
+    std::ranges::copy_if(aEntry, std::back_inserter(aResult),
         [](const beans::StringPair& rPair) { return rPair.First != "Id"; });
 
     *pResult = comphelper::containerToSequence(aResult);
@@ -4837,7 +4837,7 @@ void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence
     std::vector< uno::Sequence<beans::StringPair> > aResultVec;
     aResultVec.reserve(aSeq.getLength() + aEntries.getLength());
 
-    std::copy_if(aSeq.begin(), aSeq.end(), std::back_inserter(aResultVec),
+    std::ranges::copy_if(aSeq, std::back_inserter(aResultVec),
         [&aIDTag, &aEntries, bReplace](const uno::Sequence<beans::StringPair>& rTargetRel) {
             auto pTargetPair = lcl_findPairByName(rTargetRel, aIDTag);
             if (pTargetPair == rTargetRel.end())
