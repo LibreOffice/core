@@ -36,12 +36,16 @@ public:
     bool mbShowCloseButton;
 };
 
+class SfxInfoBarContainerWindow;
+
 /** SfxChildWindow for positioning the InfoBar in the view.
   */
 class SFX2_DLLPUBLIC SfxInfoBarContainerChild final : public SfxChildWindow
 {
 private:
     SfxBindings* m_pBindings;
+
+    DECL_DLLPRIVATE_LINK(LayoutChangedHdl, SfxInfoBarContainerWindow&, void);
 
 public:
     SfxInfoBarContainerChild(vcl::Window* pParent, sal_uInt16 nId, SfxBindings* pBindings,
@@ -111,8 +115,7 @@ private:
 class SFX2_DLLPUBLIC SfxInfoBarContainerWindow final : public vcl::Window
 {
 private:
-    SfxInfoBarContainerChild* m_pChildWin;
-    Link<LinkParamNone*, void> m_aLayoutChangedHandler;
+    Link<SfxInfoBarContainerWindow&, void> m_aLayoutChangedHandler;
     std::vector<VclPtr<SfxInfoBarWindow>> m_pInfoBars;
     Idle m_aLayoutIdle;
     bool m_bResizing;
@@ -120,13 +123,12 @@ private:
     DECL_LINK(DoUpdateLayout, Timer*, void);
 
 public:
-    /// pChildWin is null for a host that has no child window and lays the container out itself.
-    SfxInfoBarContainerWindow(vcl::Window* pParent, SfxInfoBarContainerChild* pChildWin);
+    explicit SfxInfoBarContainerWindow(vcl::Window* pParent);
     virtual ~SfxInfoBarContainerWindow() override;
 
-    /// Run, for a container without a child window, when the bars may have changed height. It lays
-    /// the container out to its current width with Resize, then lays out the host around it.
-    void SetLayoutChangedHandler(const Link<LinkParamNone*, void>& rHandler)
+    /// Run when the bars may have changed height. It lays the container out to its current width
+    /// with Resize, then lays out the host around it.
+    void SetLayoutChangedHandler(const Link<SfxInfoBarContainerWindow&, void>& rHandler)
     {
         m_aLayoutChangedHandler = rHandler;
     }

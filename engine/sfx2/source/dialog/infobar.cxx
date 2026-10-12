@@ -379,10 +379,8 @@ IMPL_LINK_NOARG(SfxInfoBarWindow, CloseHandler, const OUString&, void)
     static_cast<SfxInfoBarContainerWindow*>(GetParent())->removeInfoBar(this);
 }
 
-SfxInfoBarContainerWindow::SfxInfoBarContainerWindow(vcl::Window* pParent,
-                                                     SfxInfoBarContainerChild* pChildWin)
+SfxInfoBarContainerWindow::SfxInfoBarContainerWindow(vcl::Window* pParent)
     : Window(pParent, WB_DIALOGCONTROL)
-    , m_pChildWin(pChildWin)
     , m_aLayoutIdle("SfxInfoBarContainerWindow m_aLayoutIdle")
     , m_bResizing(false)
 {
@@ -392,10 +390,7 @@ SfxInfoBarContainerWindow::SfxInfoBarContainerWindow(vcl::Window* pParent,
 
 IMPL_LINK_NOARG(SfxInfoBarContainerWindow, DoUpdateLayout, Timer*, void)
 {
-    if (m_pChildWin)
-        m_pChildWin->Update();
-    else
-        m_aLayoutChangedHandler.Call(nullptr);
+    m_aLayoutChangedHandler.Call(*this);
 }
 
 SfxInfoBarContainerWindow::~SfxInfoBarContainerWindow() { disposeOnce(); }
@@ -457,10 +452,7 @@ void SfxInfoBarContainerWindow::removeInfoBar(VclPtr<SfxInfoBarWindow> const& pI
         m_pInfoBars.erase(it);
     }
 
-    if (m_pChildWin)
-        m_pChildWin->Update();
-    else
-        m_aLayoutChangedHandler.Call(nullptr);
+    m_aLayoutChangedHandler.Call(*this);
 }
 
 bool SfxInfoBarContainerWindow::isInfobarEnabled(std::u16string_view sId)
@@ -541,7 +533,9 @@ SfxInfoBarContainerChild::SfxInfoBarContainerChild(vcl::Window* _pParent, sal_uI
     : SfxChildWindow(_pParent, nId)
     , m_pBindings(pBindings)
 {
-    SetWindow(VclPtr<SfxInfoBarContainerWindow>::Create(_pParent, this));
+    auto xContainer = VclPtr<SfxInfoBarContainerWindow>::Create(_pParent);
+    xContainer->SetLayoutChangedHandler(LINK(this, SfxInfoBarContainerChild, LayoutChangedHdl));
+    SetWindow(xContainer);
     GetWindow()->SetPosSizePixel(Point(0, 0), Size(_pParent->GetSizePixel().getWidth(), 0));
     GetWindow()->Show();
 
@@ -554,6 +548,11 @@ SfxChildWinInfo SfxInfoBarContainerChild::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
     return aInfo;
+}
+
+IMPL_LINK_NOARG(SfxInfoBarContainerChild, LayoutChangedHdl, SfxInfoBarContainerWindow&, void)
+{
+    Update();
 }
 
 void SfxInfoBarContainerChild::Update()
