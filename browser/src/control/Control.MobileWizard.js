@@ -139,6 +139,7 @@ window.L.Control.MobileWizard = window.L.Control.extend({
 
 		if (this.map.uiManager.sheetsBar)
 			this.map.uiManager.sheetsBar.show();
+		this.map.uiManager.setMobileFormulaBarVisible(true);
 	},
 
 	isOpen: function() {

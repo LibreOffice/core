@@ -160,8 +160,8 @@ textarea.cool-annotation-textarea {
 	z-index: auto !important;
 	flex-direction: column;
 }
-.main-nav:not(.readonly) #toolbar-wrapper.mobile #formulabar-row {
-	z-index: 11;
+body > #formulabar-row {
+	z-index: 1001; /* above the sheet tabs */
 }
 .toolbar-row {
 	display: flex;
@@ -672,6 +672,10 @@ div#fontstyletoolbox + div#style.mobile-wizard {
 		}
 
 		#spreadsheet-toolbar {
+			display: none !important;
+		}
+
+		body > #formulabar-row {
 			display: none !important;
 		}
 	}

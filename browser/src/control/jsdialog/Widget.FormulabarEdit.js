@@ -452,6 +452,7 @@ function _addLongPressContextMenu(
 				true,
 				'',
 			);
+		menuData.keepFormulabarVisible = true;
 		window.contextMenuWizard = true;
 		builder.map.fire('mobilewizard', { data: menuData });
 	}

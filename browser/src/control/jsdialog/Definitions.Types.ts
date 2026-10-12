@@ -267,6 +267,7 @@ interface PopupData extends JSDialogJSON {
 	clickToCloseElement?: HTMLElement; // clickToClose resolved to a DOM element by addHandlers
 	clickToCloseText?: string; // clickToClose text when the closing element is a treeview entry
 	persistKeyboard?: boolean;
+	keepFormulabarVisible?: boolean; // keep the formula bar row shown with the popup
 	serverSyncSelection?: boolean;
 	posx: number;
 	posy: number;

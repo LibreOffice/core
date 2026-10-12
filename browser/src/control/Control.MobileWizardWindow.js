@@ -195,6 +195,8 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 
 		if (this.map.uiManager.sheetsBar)
 			this.map.uiManager.sheetsBar.hide();
+		if (!this.keepFormulabarVisible && !this.isAutoCompletePopup && !this.isPopupPartialScreen)
+			this.map.uiManager.setMobileFormulaBarVisible(false);
 
 		if (!document.getElementById('document-container').classList.contains('landscape')) {
 			var pcw = document.getElementById('presentation-controls-wrapper');
@@ -586,6 +588,7 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 			this.isAutoCompletePopup = data.isAutoCompletePopup;
 			this.isPopupPartialScreen = data.isPopupPartialScreen;
 			this.persistKeyboard = data.persistKeyboard;
+			this.keepFormulabarVisible = data.keepFormulabarVisible;
 
 			this._showWizard();
 			if (this.map._docLayer && !this.map._docLayer.isCalc() && !this.persistKeyboard) {

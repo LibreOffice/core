@@ -919,7 +919,12 @@ class UIManager extends window.L.Control {
 			const formulabarRow = document.getElementById('formulabar-row');
 			const spreadsheetToolbar = document.getElementById('spreadsheet-toolbar');
 			spreadsheetToolbar?.classList?.remove('hidden');
-			formulabarRow?.classList?.remove('hidden');
+			if (window.mode.isSmallScreenDevice() && formulabarRow && spreadsheetToolbar) {
+				document.body.insertBefore(formulabarRow, spreadsheetToolbar);
+				this.setMobileFormulaBarVisible(true);
+			} else {
+				formulabarRow?.classList?.remove('hidden');
+			}
 			this.map.formulabar = JSDialog.FormulaBar(this.map);
 			JSDialog.MessageRouter.flushPending('formulabar');
 			this.map.addressInputField = JSDialog.AddressInputField(this.map);
@@ -2184,6 +2189,13 @@ class UIManager extends window.L.Control {
 	 */
 	isStatusBarVisible(): boolean {
 		return document.getElementById('toolbar-down')?.style?.display !== 'none';
+	}
+
+	setMobileFormulaBarVisible(visible: boolean): void {
+		const formulabarRow = document.getElementById('formulabar-row');
+		if (!formulabarRow || formulabarRow.parentElement !== document.body)
+			return;
+		formulabarRow.classList.toggle('hidden', !visible);
 	}
 
 	/**

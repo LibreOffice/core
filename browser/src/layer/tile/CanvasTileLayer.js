@@ -1439,11 +1439,14 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			if (window.mode.isSmallScreenDevice()) {
 				this._closeMobileWizard();
 
+				// The formula bar stays on screen with the list, so the typed formula is
+				// visible while the user picks a function.
 				var data = {
 					id: 'funclist',
 					type: '',
 					text: _('Functions'),
 					enabled: true,
+					keepFormulabarVisible: true,
 					children: []
 				};
 
