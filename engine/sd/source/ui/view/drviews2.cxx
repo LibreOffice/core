@@ -606,6 +606,22 @@ std::vector<DesignTemplateMaster> CollectDesignTemplateMasters(SdDrawDocument& r
 
 namespace {
 
+/*
+    The object a name, a title or a description is given to: the marked object, or for a diagram
+    edited one object at a time the object it works on, its sub-selection. The background shape
+    stands for the whole diagram, which is then named itself.
+*/
+SdrObject* objectToName(SdrObject* pMarked)
+{
+    if (nullptr == pMarked || !SdrObject::useAdvancedDiagramFeatures())
+        return pMarked;
+
+    SdrObject* pSubSelection(pMarked->getDiagramSubSelection());
+    if (nullptr == pSubSelection || pSubSelection->isDiagramBackgroundShape())
+        return pMarked;
+    return pSubSelection;
+}
+
 const SvxFieldItem* findField(editeng::Section const & rSection)
 {
     for (SfxPoolItem const * pPool: rSection.maAttributes)
@@ -4600,7 +4616,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if(1 == rMarkList.GetMarkCount())
             {
                 // #i68101#
-                rtl::Reference<SdrObject> pSelected = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                rtl::Reference<SdrObject> pSelected
+                    = objectToName(rMarkList.GetMark(0)->GetMarkedSdrObj());
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aName(pSelected->GetName());
 
@@ -4638,7 +4655,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if(1 == rMarkList.GetMarkCount())
             {
-                rtl::Reference<SdrObject> pSelected = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                rtl::Reference<SdrObject> pSelected
+                    = objectToName(rMarkList.GetMark(0)->GetMarkedSdrObj());
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aTitle(pSelected->GetTitle());
                 OUString aDescription(pSelected->GetDescription());
