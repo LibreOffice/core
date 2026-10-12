@@ -140,9 +140,8 @@ ProviderCache::populateCache()
             if ( serviceNames.hasElements() )
             {
                 auto pName = std::find_if(serviceNames.begin(), serviceNames.end(),
-                    [this](const OUString& rName) {
-                        return rName.startsWith("com.sun.star.script.provider.ScriptProviderFor")
-                            && !isInDenyList(rName);
+                    [](const OUString& rName) {
+                        return rName.startsWith("com.sun.star.script.provider.ScriptProviderFor");
                     });
                 if (pName != serviceNames.end())
                 {
@@ -183,11 +182,6 @@ ProviderCache::createProvider( ProviderDetails& details )
     return details.provider;
 }
 
-bool
-ProviderCache::isInDenyList( const OUString& serviceName ) const
-{
-    return comphelper::findValue(m_sDenyList, serviceName) != -1;
-}
 } //end namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -62,8 +62,6 @@ private:
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Reference< css::script::provider::XScriptProvider >
         createProvider( ProviderDetails& details );
-    bool isInDenyList( const OUString& serviceName ) const;
-    cpo::uno::Sequence< OUString >  m_sDenyList;
     ProviderDetails_hash  m_hProviderDetailsCache;
     std::mutex m_mutex;
     cpo::uno::Sequence< cpo::uno::Any >  m_Sctx;
