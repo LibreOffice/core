@@ -66,7 +66,8 @@ $(DIST_FOLDER)/l10n-all.js : $(wildcard $(srcdir)/po/ui-*.po) $(wildcard $(srcdi
 		if test -f $(srcdir)/po/help-$$lang.po; then $(PYTHON) $(srcdir)/util/po2json.py --quiet $(srcdir)/po/help-$$lang.po -o $(srcdir)/po/help-$$lang.po.json || exit 1; fi; \
 	done
 	@mkdir -p $(dir $@)
-	$(PYTHON) $(srcdir)/util/create-l10n-all-js.py >$@
+	$(PYTHON) $(srcdir)/util/create-l10n-all-js.py >$@.tmp
+	@mv $@.tmp $@
 	@find $(srcdir)/po -name 'ui-*.po.json' -delete
 	@find $(srcdir)/po -name 'help-*.po.json' -delete
 
@@ -84,7 +85,8 @@ $(SETTINGS_L10N_JS): \
 		$(wildcard $(srcdir)/po/ui-*.po) \
 		$(srcdir)/util/create-settings-l10n-js.py
 	@mkdir -p $(dir $@)
-	$(PYTHON) $(srcdir)/util/create-settings-l10n-js.py --srcdir $(srcdir) >$@
+	$(PYTHON) $(srcdir)/util/create-settings-l10n-js.py --srcdir $(srcdir) >$@.tmp
+	@mv $@.tmp $@
 
 QUIET_TSC = $(QUIET_TSC_$(V))
 QUIET_TSC_ = $(QUIET_TSC_$(AM_DEFAULT_VERBOSITY))
