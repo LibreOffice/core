@@ -2018,6 +2018,76 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphImage)
                          rImage.get<std::string>("description"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphComments)
+{
+    // Given a comment without a range, a range comment, and a range over two paragraphs:
+    createDoc("a11y-comment.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the paragraph after the caret reports its comment:
+    boost::property_tree::ptree aComments
+        = aView.m_aA11yFocusedParagraph.get_child("afterComments").begin()->second;
+    // Without the fix, there was no "afterComments" node.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aComments.size());
+
+    // And when the cursor moves into that paragraph:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the comment is the character standing for it, with its author and text:
+    CPPUNIT_ASSERT_EQUAL(std::string("Before \xef\xbf\xbc" "after."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content"));
+    aComments = aView.m_aA11yFocusedParagraph.get_child("comments");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aComments.size());
+    boost::property_tree::ptree aComment = aComments.begin()->second;
+    CPPUNIT_ASSERT_EQUAL(7, aComment.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(8, aComment.get<int>("end"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Alice"), aComment.get<std::string>("author"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Check this word."), aComment.get<std::string>("text"));
+
+    // And when the cursor moves into the paragraph with the range comment:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the range ends after the character of its anchor:
+    CPPUNIT_ASSERT_EQUAL(std::string("A marked range\xef\xbf\xbc here."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content"));
+    aComments = aView.m_aA11yFocusedParagraph.get_child("comments");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aComments.size());
+    aComment = aComments.begin()->second;
+    CPPUNIT_ASSERT_EQUAL(2, aComment.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(15, aComment.get<int>("end"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Bob"), aComment.get<std::string>("author"));
+
+    // And when the cursor moves into the paragraph where a range starts:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the range runs to the end of the paragraph:
+    aComments = aView.m_aA11yFocusedParagraph.get_child("comments");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aComments.size());
+    aComment = aComments.begin()->second;
+    CPPUNIT_ASSERT_EQUAL(5, aComment.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(8, aComment.get<int>("end"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Carol"), aComment.get<std::string>("author"));
+    const std::string aId = aComment.get<std::string>("id");
+
+    // And in the paragraph where it ends, it starts at the start of the paragraph:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+    aComments = aView.m_aA11yFocusedParagraph.get_child("comments");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aComments.size());
+    aComment = aComments.begin()->second;
+    CPPUNIT_ASSERT_EQUAL(0, aComment.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(11, aComment.get<int>("end"));
+    CPPUNIT_ASSERT_EQUAL(aId, aComment.get<std::string>("id"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yImageSelection)
 {
     for (const char* pFile : { "a11y-image.fodt", "a11y-image-at-paragraph.fodt" })

@@ -1049,7 +1049,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 						obj.afterLinks,
 						obj.images,
 						obj.beforeImages,
-						obj.afterImages);
+						obj.afterImages,
+						obj.comments,
+						obj.beforeComments,
+						obj.afterComments);
 				}
 			}
 			else if (textMsg.startsWith('a11ycaretchanged:')) {
@@ -1088,7 +1091,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 					obj.content, parseInt(obj.position), parseInt(obj.start), parseInt(obj.end),
 					obj.before, obj.after, obj.beforeRects, obj.afterRects, obj.headingLevel,
 					obj.beforeLevels, obj.afterLevels, obj.links, obj.beforeLinks, obj.afterLinks,
-					obj.images, obj.beforeImages, obj.afterImages);
+					obj.images, obj.beforeImages, obj.afterImages, obj.comments,
+					obj.beforeComments, obj.afterComments);
 			}
 			else if (textMsg.startsWith('a11ycaretposition:')) {
 				var pos = textMsg.substring('a11ycaretposition:'.length + 1);

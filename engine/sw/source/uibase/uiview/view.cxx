@@ -95,6 +95,7 @@
 #include <swdtflvr.hxx>
 #include <prtopt.hxx>
 #include <unotxdoc.hxx>
+#include <accmap.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/scanner/ScannerContext.hpp>
@@ -2155,6 +2156,12 @@ tools::Rectangle SwView::getKitVisibleArea() const
         return pVwSh->getKitVisibleArea();
     else
         return tools::Rectangle();
+}
+
+std::vector<SfxParagraphComment> SwView::getKitParagraphComments(
+    const uno::Reference<css::accessibility::XAccessibleText>& xText) const
+{
+    return SwAccessibleMap::GetParagraphComments(xText);
 }
 
 void SwView::flushPendingKitInvalidateTiles()

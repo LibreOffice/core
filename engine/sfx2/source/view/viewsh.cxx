@@ -789,6 +789,22 @@ collectImages(const uno::Reference<css::accessibility::XAccessibleText>& xAccTex
     return aResult;
 }
 
+boost::property_tree::ptree makeCommentsTree(const std::vector<SfxParagraphComment>& rComments)
+{
+    boost::property_tree::ptree aComments;
+    for (const SfxParagraphComment& rComment : rComments)
+    {
+        boost::property_tree::ptree aComment;
+        aComment.put("start", rComment.nStart);
+        aComment.put("end", rComment.nEnd);
+        aComment.put("id", rComment.nId);
+        aComment.put("author", rComment.aAuthor.toUtf8().getStr());
+        aComment.put("text", rComment.aText.toUtf8().getStr());
+        aComments.push_back(std::make_pair("", aComment));
+    }
+    return aComments;
+}
+
 boost::property_tree::ptree makeImagesTree(const std::vector<ParagraphImage>& rImages)
 {
     boost::property_tree::ptree aImages;
@@ -810,9 +826,11 @@ struct ContextParagraph
     sal_Int32 nLevel = 0;
     std::vector<ParagraphLink> aLinks;
     std::vector<ParagraphImage> aImages;
+    std::vector<SfxParagraphComment> aComments;
 };
 
-ContextParagraph contextParagraph(const uno::Reference<accessibility::XAccessibleContext>& xContext,
+ContextParagraph contextParagraph(const SfxViewShell* pViewShell,
+                                  const uno::Reference<accessibility::XAccessibleContext>& xContext,
                                   const css::awt::Point& rParentOnScreen)
 {
     ContextParagraph aParagraph;
@@ -823,6 +841,8 @@ ContextParagraph contextParagraph(const uno::Reference<accessibility::XAccessibl
         aParagraph.nLevel = getHeadingLevel(xText);
         aParagraph.aLinks = collectLinks(xText);
         aParagraph.aImages = collectImages(xText);
+        if (pViewShell)
+            aParagraph.aComments = pViewShell->getKitParagraphComments(xText);
     }
     uno::Reference<accessibility::XAccessibleComponent> xComponent(xContext, uno::UNO_QUERY);
     if (xComponent.is())
@@ -837,7 +857,8 @@ ContextParagraph contextParagraph(const uno::Reference<accessibility::XAccessibl
     return aParagraph;
 }
 
-void walkParagraphFlow(const uno::Reference<accessibility::XAccessibleContext>& xStart,
+void walkParagraphFlow(const SfxViewShell* pViewShell,
+                       const uno::Reference<accessibility::XAccessibleContext>& xStart,
                        bool bBackward, const uno::Reference<accessibility::XAccessible>& xParent,
                        const css::awt::Point& rParentOnScreen,
                        const css::awt::Point& rOriginOnScreen, bool bByArea, sal_Int32 nTop,
@@ -861,7 +882,7 @@ void walkParagraphFlow(const uno::Reference<accessibility::XAccessibleContext>& 
         else if (static_cast<sal_Int32>(rOut.size()) >= nRadius)
             break;
         if (isSiblingParagraph(xContext, xParent))
-            rOut.push_back(contextParagraph(xContext, rOriginOnScreen));
+            rOut.push_back(contextParagraph(pViewShell, xContext, rOriginOnScreen));
     }
     if (bBackward)
         std::reverse(rOut.begin(), rOut.end());
@@ -926,7 +947,8 @@ paragraphInWindow(const uno::Reference<accessibility::XAccessible>& xParent, sal
     return {};
 }
 
-void collectParagraphWindow(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+void collectParagraphWindow(const SfxViewShell* pViewShell,
+                            const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
                             sal_Int32 nRadius, const tools::Rectangle& rVisibleTwips,
                             std::vector<ContextParagraph>& rBefore,
                             std::vector<ContextParagraph>& rAfter)
@@ -952,10 +974,10 @@ void collectParagraphWindow(const uno::Reference<css::accessibility::XAccessible
     const bool bByArea = !rVisibleTwips.IsEmpty() && xParentComponent.is() && xComponent.is();
     if (!bByArea)
     {
-        walkParagraphFlow(xContext, true, xParent, aParentOnScreen, aOriginOnScreen, false, 0, 0,
-                          nRadius, rBefore);
-        walkParagraphFlow(xContext, false, xParent, aParentOnScreen, aOriginOnScreen, false, 0, 0,
-                          nRadius, rAfter);
+        walkParagraphFlow(pViewShell, xContext, true, xParent, aParentOnScreen, aOriginOnScreen,
+                          false, 0, 0, nRadius, rBefore);
+        walkParagraphFlow(pViewShell, xContext, false, xParent, aParentOnScreen, aOriginOnScreen,
+                          false, 0, 0, nRadius, rAfter);
         return;
     }
 
@@ -970,10 +992,10 @@ void collectParagraphWindow(const uno::Reference<css::accessibility::XAccessible
     const WindowSide eCaretSide = windowSide(xContext, aParentOnScreen, nTop, nBottom);
     if (eCaretSide != WindowSide::Above && eCaretSide != WindowSide::Below)
     {
-        walkParagraphFlow(xContext, true, xParent, aParentOnScreen, aOriginOnScreen, true, nTop,
-                          nBottom, 0, rBefore);
-        walkParagraphFlow(xContext, false, xParent, aParentOnScreen, aOriginOnScreen, true, nTop,
-                          nBottom, 0, rAfter);
+        walkParagraphFlow(pViewShell, xContext, true, xParent, aParentOnScreen, aOriginOnScreen,
+                          true, nTop, nBottom, 0, rBefore);
+        walkParagraphFlow(pViewShell, xContext, false, xParent, aParentOnScreen, aOriginOnScreen,
+                          true, nTop, nBottom, 0, rAfter);
         return;
     }
 
@@ -983,20 +1005,20 @@ void collectParagraphWindow(const uno::Reference<css::accessibility::XAccessible
                             aVisiblePx.Top() - nShift, aVisiblePx.Bottom() - nShift);
     if (!xAnchor.is())
     {
-        walkParagraphFlow(xContext, eCaretSide == WindowSide::Below, xParent, aParentOnScreen,
-                          aOriginOnScreen, true, nTop, nBottom, 0,
+        walkParagraphFlow(pViewShell, xContext, eCaretSide == WindowSide::Below, xParent,
+                          aParentOnScreen, aOriginOnScreen, true, nTop, nBottom, 0,
                           eCaretSide == WindowSide::Below ? rBefore : rAfter);
         return;
     }
 
     std::vector<ContextParagraph>& rOut = eCaretSide == WindowSide::Below ? rBefore : rAfter;
-    walkParagraphFlow(xAnchor, true, xParent, aParentOnScreen, aOriginOnScreen, true, nTop, nBottom,
-                      0, rOut);
+    walkParagraphFlow(pViewShell, xAnchor, true, xParent, aParentOnScreen, aOriginOnScreen, true,
+                      nTop, nBottom, 0, rOut);
     if (isSiblingParagraph(xAnchor, xParent))
-        rOut.push_back(contextParagraph(xAnchor, aOriginOnScreen));
+        rOut.push_back(contextParagraph(pViewShell, xAnchor, aOriginOnScreen));
     std::vector<ContextParagraph> aFollowing;
-    walkParagraphFlow(xAnchor, false, xParent, aParentOnScreen, aOriginOnScreen, true, nTop,
-                      nBottom, 0, aFollowing);
+    walkParagraphFlow(pViewShell, xAnchor, false, xParent, aParentOnScreen, aOriginOnScreen, true,
+                      nTop, nBottom, 0, aFollowing);
     rOut.insert(rOut.end(), aFollowing.begin(), aFollowing.end());
 }
 
@@ -1227,6 +1249,7 @@ class KitDocumentFocusListener :
     sal_Int32 m_nHeadingLevel;
     std::vector<ParagraphLink> m_aFocusedLinks;
     std::vector<ParagraphImage> m_aFocusedImages;
+    std::vector<SfxParagraphComment> m_aFocusedComments;
     mutable std::vector<ContextParagraph> m_aParagraphsBefore;
     mutable std::vector<ContextParagraph> m_aParagraphsAfter;
     uno::Reference<accessibility::XAccessibleText> m_xFocusedText;
@@ -1356,6 +1379,8 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
         aPayloadTree.add_child("links", makeLinksTree(m_aFocusedLinks));
     if (!m_aFocusedImages.empty())
         aPayloadTree.add_child("images", makeImagesTree(m_aFocusedImages));
+    if (!m_aFocusedComments.empty())
+        aPayloadTree.add_child("comments", makeCommentsTree(m_aFocusedComments));
     if (!m_aParagraphsBefore.empty() || !m_aParagraphsAfter.empty())
     {
         auto toArray = [](const std::vector<ContextParagraph>& rParagraphs, auto aValue) {
@@ -1398,6 +1423,14 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
         };
         aPayloadTree.add_child("beforeImages", toImages(m_aParagraphsBefore));
         aPayloadTree.add_child("afterImages", toImages(m_aParagraphsAfter));
+        auto toComments = [](const std::vector<ContextParagraph>& rParagraphs) {
+            boost::property_tree::ptree aArray;
+            for (const ContextParagraph& rParagraph : rParagraphs)
+                aArray.push_back(std::make_pair("", makeCommentsTree(rParagraph.aComments)));
+            return aArray;
+        };
+        aPayloadTree.add_child("beforeComments", toComments(m_aParagraphsBefore));
+        aPayloadTree.add_child("afterComments", toComments(m_aParagraphsAfter));
     }
     if (force)
         aPayloadTree.put("force", 1);
@@ -1431,7 +1464,8 @@ std::string KitDocumentFocusListener::getFocusedParagraph() const
     }
     else if (m_xFocusedText.is())
     {
-        collectParagraphWindow(m_xFocusedText, PARAGRAPH_WINDOW, visibleArea(), m_aParagraphsBefore, m_aParagraphsAfter);
+        collectParagraphWindow(m_pViewShell, m_xFocusedText, PARAGRAPH_WINDOW, visibleArea(),
+                               m_aParagraphsBefore, m_aParagraphsAfter);
 
     }
 
@@ -1759,14 +1793,20 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
         // In case only caret position or text selection are different we can rely on specific events.
         std::vector<ParagraphLink> aLinks = collectLinks(xAccText);
         std::vector<ParagraphImage> aImages = collectImages(xAccText);
+        std::vector<SfxParagraphComment> aComments
+            = m_pViewShell ? m_pViewShell->getKitParagraphComments(xAccText)
+                           : std::vector<SfxParagraphComment>();
         if (m_sFocusedParagraph != sText || m_nHeadingLevel != nHeadingLevel
-            || m_aFocusedLinks != aLinks || m_aFocusedImages != aImages)
+            || m_aFocusedLinks != aLinks || m_aFocusedImages != aImages
+            || m_aFocusedComments != aComments)
         {
             m_sFocusedParagraph = sText;
             m_nHeadingLevel = nHeadingLevel;
             m_aFocusedLinks = std::move(aLinks);
             m_aFocusedImages = std::move(aImages);
-            collectParagraphWindow(xAccText, PARAGRAPH_WINDOW, visibleArea(), m_aParagraphsBefore, m_aParagraphsAfter);
+            m_aFocusedComments = std::move(aComments);
+            collectParagraphWindow(m_pViewShell, xAccText, PARAGRAPH_WINDOW, visibleArea(),
+                                   m_aParagraphsBefore, m_aParagraphsAfter);
             bNotify = true;
         }
     }
@@ -1802,6 +1842,7 @@ void KitDocumentFocusListener::resetParagraphInfo()
     m_nHeadingLevel = 0;
     m_aFocusedLinks.clear();
     m_aFocusedImages.clear();
+    m_aFocusedComments.clear();
     m_aParagraphsBefore.clear();
     m_aParagraphsAfter.clear();
     m_xFocusedText.clear();

@@ -94,6 +94,9 @@
 #include <flddat.hxx>
 #include "../../uibase/inc/fldmgr.hxx"
 #include <fldbas.hxx>      // SwField
+#include <txtannotationfld.hxx>
+#include <annotationmark.hxx>
+#include <IDocumentMarkAccess.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -3282,6 +3285,85 @@ bool SwAccessibleParagraph::IsParagraphRole(sal_Int16 nRole)
 {
     return nRole == AccessibleRole::HEADING || nRole == AccessibleRole::BLOCK_QUOTE
            || nRole == AccessibleRole::PARAGRAPH;
+}
+
+std::vector<SfxParagraphComment> SwAccessibleParagraph::GetComments()
+{
+    SolarMutexGuard aGuard;
+
+    const SwTextFrame* const pFrame = GetTextFrame();
+    if (!pFrame)
+        return {};
+
+    // a paragraph split across pages has a frame, and an accessible paragraph, per page
+    const TextFrameIndex nFrameStart = pFrame->GetOffset();
+    const SwTextFrame* const pFollow = pFrame->GetFollow();
+    const TextFrameIndex nFrameEnd
+        = pFollow ? pFollow->GetOffset() : TextFrameIndex(pFrame->GetText().getLength());
+    const SwPosition aFrameStart = pFrame->MapViewToModelPos(nFrameStart);
+    const SwPosition aFrameEnd = pFrame->MapViewToModelPos(nFrameEnd);
+    SwAccessiblePortionData& rPortions = GetPortionData();
+    auto toAccessible = [&](const SwPosition& rPos) {
+        if (rPos < aFrameStart)
+            return rPortions.GetAccessiblePosition(nFrameStart);
+        if (rPos > aFrameEnd)
+            return rPortions.GetAccessiblePosition(nFrameEnd);
+        // e.g. in a deleted table of a paragraph merged over hidden changes
+        if (!rPos.GetNode().IsTextNode())
+            return rPortions.GetAccessiblePosition(nFrameStart);
+        return rPortions.GetAccessiblePosition(pFrame->MapModelToViewPos(rPos));
+    };
+    auto toComment = [](const SwFormatField& rFormatField, sal_Int32 nStart,
+                        sal_Int32 nEnd) -> SfxParagraphComment {
+        const auto pField = static_cast<const SwPostItField*>(rFormatField.GetField());
+        return { .nStart = nStart,
+                 .nEnd = nEnd,
+                 .nId = pField->GetPostItId(),
+                 .aAuthor = pField->GetPar1(),
+                 .aText = pField->GetText() };
+    };
+
+    // the U+FFFC anchors in this frame; a range comment's mark ends after its anchor
+    std::vector<SfxParagraphComment> aComments;
+    sw::MergedAttrIter aIter(*pFrame);
+    SwTextNode const* pNode = nullptr;
+    while (SwTextAttr const* const pHt = aIter.NextAttr(&pNode))
+    {
+        if (pHt->Which() != RES_TXTATR_ANNOTATION)
+            continue;
+        const TextFrameIndex nAnchor = pFrame->MapModelToView(pNode, pHt->GetStart());
+        if (nAnchor < nFrameStart || nAnchor >= nFrameEnd)
+            continue;
+        const sal_Int32 nAnchorStart = rPortions.GetAccessiblePosition(nAnchor);
+        const sal_Int32 nAnchorEnd = rPortions.GetAccessiblePosition(nAnchor + TextFrameIndex(1));
+        if (const sw::mark::AnnotationMark* pMark
+            = static_txtattr_cast<const SwTextAnnotationField*>(pHt)->GetAnnotationMark())
+            aComments.push_back(
+                toComment(pHt->GetFormatField(), toAccessible(pMark->GetMarkStart()), nAnchorEnd));
+        else
+            aComments.push_back(toComment(pHt->GetFormatField(), nAnchorStart, nAnchorEnd));
+    }
+
+    // the ranges anchored after this frame
+    const IDocumentMarkAccess& rMarks = *pFrame->GetDoc().getIDocumentMarkAccess();
+    for (auto it = rMarks.getAnnotationMarksBegin(); it != rMarks.getAnnotationMarksEnd(); ++it)
+    {
+        const sw::mark::AnnotationMark& rMark = **it;
+        if (rMark.GetMarkStart() >= aFrameEnd || rMark.GetMarkEnd() <= aFrameEnd)
+            continue;
+        // a search of all comments by name
+        const SwFormatField* pFormatField = rMark.GetAnnotationFormatField();
+        if (!pFormatField)
+            continue;
+        aComments.push_back(toComment(*pFormatField, toAccessible(rMark.GetMarkStart()),
+                                      rPortions.GetAccessiblePosition(nFrameEnd)));
+    }
+    // in hidden text, or starting in hidden changes before a page break
+    std::erase_if(aComments, [](const SfxParagraphComment& rComment) {
+        return rComment.nStart >= rComment.nEnd;
+    });
+    std::ranges::stable_sort(aComments, {}, &SfxParagraphComment::nStart);
+    return aComments;
 }
 
 //Get the real heading level, Heading1 ~ Heading10

@@ -50,7 +50,12 @@ class SwAccPreviewData;
 class SwFEShell;
 struct PreviewPage;
 namespace vcl { class Window; }
-namespace com::sun::star::accessibility { class XAccessible; }
+namespace com::sun::star::accessibility
+{
+class XAccessible;
+class XAccessibleText;
+}
+struct SfxParagraphComment;
 
 enum class AccessibleStates
 {
@@ -176,6 +181,9 @@ public:
         return m_rViewShell;
     }
     static bool IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFESh);
+    /// The comments on an accessible paragraph, see SfxViewShell::getKitParagraphComments()
+    static std::vector<SfxParagraphComment>
+    GetParagraphComments(const cpo::uno::Reference<css::accessibility::XAccessibleText>& xText);
     void AddShapeContext(const SdrObject *pObj,
                              rtl::Reference < ::accessibility::AccessibleShape > const & xAccShape);
 

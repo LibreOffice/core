@@ -64,6 +64,10 @@ class CalendarWrapper;
 namespace rtl { class OStringBuffer; }
 namespace vcl { class PrinterController; }
 
+namespace com::sun::star::accessibility
+{
+class XAccessibleText;
+}
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::datatransfer::clipboard { class XClipboardListener; }
 namespace com::sun::star::datatransfer::clipboard { class XClipboardNotifier; }
@@ -158,6 +162,18 @@ template<class T> bool checkSfxViewShell(const SfxViewShell& pShell)
 }
 
 typedef std::unordered_map<OUString, std::pair<Color, int>> StylesSpotlightColorMap;
+
+/// A comment on a paragraph, by its range in the accessible text of the paragraph
+struct SfxParagraphComment
+{
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
+    sal_uInt32 nId;
+    OUString aAuthor;
+    OUString aText;
+
+    bool operator==(const SfxParagraphComment&) const = default;
+};
 
 /**
  * One SfxViewShell more or less represents one edit window for a document, there can be multiple
@@ -531,6 +547,12 @@ public:
     bool isKitMobilePhone() const { return maKitDeviceFormFactor == KitDeviceFormFactor::MOBILE; }
 
     virtual tools::Rectangle getKitVisibleArea() const { return tools::Rectangle(); }
+    /// The comments on an accessible paragraph of this view, which the accessibility API lacks
+    virtual std::vector<SfxParagraphComment>
+    getKitParagraphComments(const cpo::uno::Reference<css::accessibility::XAccessibleText>&) const
+    {
+        return {};
+    }
 
     // Blocked Command view settings
     void setBlockedCommandList(const char* blockedCommandList);

@@ -31,6 +31,7 @@
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include "accselectionhelper.hxx"
 #include <unordered_map>
+#include <vector>
 #include <svl/lstner.hxx>
 
 class SwTextFrame;
@@ -40,6 +41,7 @@ class SwAccessibleHyperTextData;
 class SwRangeRedline;
 class SwXTextPortion;
 class SwParaChangeTrackingInfo; //#i108125#
+struct SfxParagraphComment;
 
 namespace com::sun::star {
     namespace i18n { struct Boundary; }
@@ -160,6 +162,8 @@ public:
     bool IsHeading() const;
     /// whether getAccessibleRole() of a paragraph can return nRole
     static bool IsParagraphRole(sal_Int16 nRole);
+    /// the comments on this paragraph, by positions in its accessible text
+    std::vector<SfxParagraphComment> GetComments();
 
 protected:
 

@@ -393,8 +393,8 @@ window.L.TextInput = window.L.Layer.extend({
 		return 	this._textArea.innerHTML;
 	},
 
-	_wrapContent: function(content, links, images) {
-		const escapedContent = this._escapeWithLinks(content, links, images);
+	_wrapContent: function(content, links, images, comments) {
+		const escapedContent = this._escapeWithLinks(content, links, images, comments);
 		const wrappedContent = this.hasAccessibilitySupport()
 			? '<span id="readable-content" role="presentation">' + escapedContent + '</span>'
 			: escapedContent;
@@ -406,7 +406,8 @@ window.L.TextInput = window.L.Layer.extend({
 	// links: { start, end, url } ranges of content, in order
 	// images: { position, name, description } of U+FFFC (OBJECT REPLACEMENT CHARACTER) characters
 	// in content, in order
-	_createLinkedNodes: function(content, links, images) {
+	// comments: { start, end, id } ranges of content, in order
+	_createLinkedNodes: function(content, links, images, comments) {
 		const nodes = [];
 		let pos = 0;
 		for (const link of links || []) {
@@ -414,14 +415,54 @@ window.L.TextInput = window.L.Layer.extend({
 			const end = parseInt(link.end);
 			if (start < pos || end <= start || end > content.length)
 				continue;
-			nodes.push(...this._createImageNodes(content, pos, start, images));
+			nodes.push(...this._createCommentNodes(content, pos, start, images, comments));
 			const anchor = document.createElement('a');
 			anchor.setAttribute('href', window.sanitizeUrl(link.url));
-			anchor.append(...this._createImageNodes(content, start, end, images));
+			anchor.append(...this._createCommentNodes(content, start, end, images, comments));
 			nodes.push(anchor);
 			pos = end;
 		}
-		nodes.push(...this._createImageNodes(content, pos, content.length, images));
+		nodes.push(...this._createCommentNodes(content, pos, content.length, images, comments));
+		return nodes;
+	},
+
+	// the text between start and end, with its commented ranges; a range ends after the U+FFFC of
+	// its anchor, and a comment without a range is that character alone
+	_createCommentNodes: function(content, start, end, images, comments) {
+		const ranges = (comments || []).map(function (comment) {
+			return { id: comment.id, start: Math.max(start, parseInt(comment.start)),
+				end: Math.min(end, parseInt(comment.end)) };
+		}).filter(function (range) { return range.start < range.end; });
+		return this._createMarkNodes(content, start, end, images, ranges);
+	},
+
+	// a range inside another one, e.g. a reply repeating the range of its comment, is a mark in its
+	// mark; one partly inside is split at the end of the outer mark
+	_createMarkNodes: function(content, start, end, images, ranges) {
+		ranges.sort(function (a, b) { return a.start - b.start || b.end - a.end; });
+		const nodes = [];
+		let pos = start;
+		while (ranges.length) {
+			const range = ranges.shift();
+			const inner = [];
+			while (ranges.length && ranges[0].start < range.end) {
+				const next = ranges.shift();
+				if (next.end > range.end) {
+					ranges.push({ id: next.id, start: range.end, end: next.end });
+					ranges.sort(function (a, b) { return a.start - b.start || b.end - a.end; });
+				}
+				inner.push({ id: next.id, start: next.start, end: Math.min(next.end, range.end) });
+			}
+			nodes.push(...this._createImageNodes(content, pos, range.start, images));
+			const mark = document.createElement('span');
+			mark.setAttribute('role', 'mark');
+			mark.setAttribute('aria-roledescription', _('Comment'));
+			mark.dataset.commentId = range.id;
+			mark.append(...this._createMarkNodes(content, range.start, range.end, images, inner));
+			nodes.push(mark);
+			pos = range.end;
+		}
+		nodes.push(...this._createImageNodes(content, pos, end, images));
 		return nodes;
 	},
 
@@ -452,9 +493,9 @@ window.L.TextInput = window.L.Layer.extend({
 		return nodes;
 	},
 
-	_escapeWithLinks: function(content, links, images) {
+	_escapeWithLinks: function(content, links, images, comments) {
 		const span = document.createElement('span');
-		span.append(...this._createLinkedNodes(content, links, images));
+		span.append(...this._createLinkedNodes(content, links, images, comments));
 		return span.innerHTML;
 	},
 

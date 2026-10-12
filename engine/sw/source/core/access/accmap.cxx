@@ -78,6 +78,7 @@
 #include <undobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
+#include <sfx2/viewsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -1840,6 +1841,14 @@ bool SwAccessibleMap::IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFES
     if (pFESh)
         return pFESh->IsObjSameLevelWithMarked(pObj);
     return false;
+}
+
+std::vector<SfxParagraphComment>
+SwAccessibleMap::GetParagraphComments(const uno::Reference<XAccessibleText>& xText)
+{
+    if (auto pParagraph = dynamic_cast<SwAccessibleParagraph*>(xText.get()))
+        return pParagraph->GetComments();
+    return {};
 }
 
 void SwAccessibleMap::AddShapeContext(const SdrObject *pObj, rtl::Reference < ::accessibility::AccessibleShape > const & xAccShape)
