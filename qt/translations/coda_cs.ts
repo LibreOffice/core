@@ -121,19 +121,19 @@
     </message>
     <message>
         <source>Export Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Chyba exportu</translation>
     </message>
     <message>
         <source>Failed to export the document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokument se nepodařilo exportovat.</translation>
     </message>
     <message>
         <source>Cannot open remote document</source>
-        <translation type="unfinished"></translation>
+        <translation>Vzdálený dokument nelze otevřít</translation>
     </message>
     <message>
         <source>the Collabora Online server</source>
-        <translation type="unfinished"></translation>
+        <translation>server Collabora Online</translation>
     </message>
     <message>
         <source>Save File</source>
@@ -157,38 +157,38 @@
     </message>
     <message>
         <source>Template Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Chyba šablony</translation>
     </message>
     <message>
         <source>Could not create a new document from this template.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ze šablony se nepodařilo vytvořit nový dokument.</translation>
     </message>
     <message>
         <source>New Document Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Chyba při vytváření dokumentu</translation>
     </message>
     <message>
         <source>Could not create a new document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nový dokument se nepodařilo vytvořit.</translation>
     </message>
     <message>
         <source>Supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Podporované soubory</translation>
     </message>
 </context>
 <context>
     <name>TabManager</name>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Zavřít</translation>
     </message>
     <message>
         <source>Close Others</source>
-        <translation type="unfinished"></translation>
+        <translation>Zavřít ostatní</translation>
     </message>
     <message>
         <source>Move Tab to New Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Přesunout kartu do nového okna</translation>
     </message>
 </context>
 <context>
