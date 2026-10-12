@@ -139,8 +139,10 @@ void SdStyleSheetBulletWatcher::Watch(SfxStyleSheetBasePool& rPool)
     std::unique_ptr<SfxStyleSheetIterator> pIterator = rPool.CreateIterator(SfxStyleFamily::All);
     for (SfxStyleSheetBase* pStyle = pIterator->First(); pStyle; pStyle = pIterator->Next())
     {
+        // The walk reaches each sheet once, so every call here adds a new entry to the list
+        // of broadcasters this listener holds.
         if (SfxStyleSheet* pSheet = dynamic_cast<SfxStyleSheet*>(pStyle))
-            StartListening(*pSheet);
+            StartListening(*pSheet, DuplicateHandling::Allow);
     }
 }
 
