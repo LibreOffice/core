@@ -444,6 +444,7 @@ class DebugManager {
 					self.vectorOn = true;
 					RenderManager.reinitialize(self._docLayer._docType);
 					DebugManager.updateVectorSections();
+					GraphicSelection.drawingSwitched();
 					self.setDependentToolsEnabled('Vector', true);
 					app.sectionContainer.requestReDraw();
 				},
@@ -452,6 +453,7 @@ class DebugManager {
 					self.vectorOn = false;
 					RenderManager.reinitialize(self._docLayer._docType);
 					DebugManager.updateVectorSections();
+					GraphicSelection.drawingSwitched();
 
 					// The engine and the kit took note that this view draws from the objects when
 					// it first asked for them; they are told it draws from tiles again.

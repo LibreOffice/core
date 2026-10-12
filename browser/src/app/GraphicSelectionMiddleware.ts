@@ -551,6 +551,26 @@ class GraphicSelection {
 	}
 
 	/*
+		The view switched between drawing from tiles and drawing from the objects. The selection
+		ends, the engine's included, with all that shows it: the handles drawn from the engine's
+		message, the section that draws it, and the button of a diagram.
+	*/
+	public static drawingSwitched(): void {
+		if (this.handlesSection) {
+			this.handlesSection.removeSubSections();
+			app.sectionContainer.removeSection(this.handlesSection.name);
+			this.handlesSection = null;
+		}
+		if (this.diagramButton) {
+			app.sectionContainer.removeSection(this.diagramButton.name);
+			this.diagramButton = null;
+		}
+		this.rectangle = null;
+		this.selectObjects([]);
+		this.updateSelectionSection();
+	}
+
+	/*
 		Makes the section that draws what is selected, or takes it away again. A single object
 		has a section of its own, which knows the object by its id; several of them are held
 		together by one section that frames them all.
