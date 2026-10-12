@@ -823,9 +823,10 @@ void RemoteDocumentBroker::subscribe(const RemoteDocumentRequest& request)
     auto it = _remoteDocuments.find(key);
     if (it == _remoteDocuments.end())
     {
+        // 0 means no limit.
         const size_t maxRemoteDocuments =
-            ConfigUtil::getConfigValue<int>("remote_links.max_remote_docs", 16);
-        if (_remoteDocuments.size() >= maxRemoteDocuments)
+            ConfigUtil::getConfigValue<unsigned int>("remote_links.max_remote_docs", 0);
+        if (maxRemoteDocuments > 0 && _remoteDocuments.size() >= maxRemoteDocuments)
         {
             LOG_WRN("RemoteDoc: rejecting the subscription of ["
                     << request.localDocKey << "] to [" << docKey << "]: already have "

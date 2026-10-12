@@ -530,12 +530,13 @@ void RemoteLinks::handleSubscribe(DocumentBroker& docBroker, const std::string& 
     if (itSubscription != view.subscriptions.end() && isLive(itSubscription->second))
         return;
 
+    // 0 means no limit.
     const size_t maxLinks =
-        ConfigUtil::getConfigValue<int>("remote_links.max_links_per_document", 4);
+        ConfigUtil::getConfigValue<unsigned int>("remote_links.max_links_per_document", 0);
     const size_t liveLinks =
         std::count_if(view.subscriptions.begin(), view.subscriptions.end(),
                       [&isLive](const auto& it) { return isLive(it.second); });
-    if (liveLinks >= maxLinks)
+    if (maxLinks > 0 && liveLinks >= maxLinks)
     {
         LOG_ERR("Remote document subscribe by view ["
                 << tag << "] rejected: the view already holds " << liveLinks

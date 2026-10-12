@@ -1418,6 +1418,7 @@ public:
         // Room for several remote documents at once, so the per-view link limit is the one
         // limit exercised here.
         config.setInt("remote_links.max_remote_docs", 16);
+        config.setInt("remote_links.max_links_per_document", 4);
     }
 
     void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
