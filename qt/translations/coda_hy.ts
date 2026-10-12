@@ -165,30 +165,30 @@
     </message>
     <message>
         <source>New Document Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Նոր փաստաթղթի սխալ</translation>
     </message>
     <message>
         <source>Could not create a new document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Հնարավոր չէ ստեղծել նոր փաստաթուղթ։</translation>
     </message>
     <message>
         <source>Supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Աջակցվող նիշքեր</translation>
     </message>
 </context>
 <context>
     <name>TabManager</name>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Փակել</translation>
     </message>
     <message>
         <source>Close Others</source>
-        <translation type="unfinished"></translation>
+        <translation>Փակել մյուսները</translation>
     </message>
     <message>
         <source>Move Tab to New Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Տեղափոխել ներդիրը նոր պատուհան</translation>
     </message>
 </context>
 <context>
