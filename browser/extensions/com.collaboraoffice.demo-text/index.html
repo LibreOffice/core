@@ -52,9 +52,9 @@ function apply() {
     doc.getBody().getChild(0).editAsText().insertText(0, greeting);
     if (colorize) {
       for (const para of doc.getBody().getChildren()) {
-        const color = Math.floor(Math.random() * 0xffffff);
+        const color = '#' + Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, '0');
         try {
-          para.uno.setPropertyValue('CharColor', color);
+          para.editAsText().setForegroundColor(color);
         } catch (e) {
           console.log('caught:', e);
         }
@@ -81,16 +81,15 @@ async function pickAndColorize() {
   s.style.background = picked.color;
   el.appendChild(s);
   el.appendChild(document.createTextNode('applying ' + picked.name + ' (' + picked.color + ')...'));
-  const rgb = parseInt(picked.color.slice(1), 16); // color value is "#rrggbb"
-  await cool.callRemote(function (rgb) {
+  await cool.callRemote(function (color) {
     for (const para of DocumentApp.getActiveDocument().getBody().getChildren()) {
       try {
-        para.uno.setPropertyValue('CharColor', rgb);
+        para.editAsText().setForegroundColor(color);
       } catch (e) {
         console.log('caught:', e);
       }
     }
-  }, rgb);
+  }, picked.color);
   el.lastChild.textContent = picked.name + ' (' + picked.color + ') applied';
 }
 

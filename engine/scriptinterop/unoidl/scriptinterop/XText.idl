@@ -20,6 +20,11 @@ interface XText: XElement {
 
     com::sun::star::beans::Optional<string> getFontFamily([in] long offset);
 
+    [overload getForegroundColor] com::sun::star::beans::Optional<string> getForegroundColor();
+
+    [overload getForegroundColor] com::sun::star::beans::Optional<string> getForegroundColorAt(
+        [in] long offset);
+
     com::sun::star::beans::Optional<string> getLinkUrl([in] long offset);
 
     com::sun::star::beans::Optional<TextAlignment> getTextAlignment([in] long offset);
@@ -45,6 +50,11 @@ interface XText: XElement {
 
     [overload setFontFamily] XText setFontFamilyRange(
         [in] long startOffset, [in] long endOffsetInclusive, [in] string fontFamilyName);
+
+    [overload setForegroundColor] XText setForegroundColor([in] string color);
+
+    [overload setForegroundColor] XText setForegroundColorRange(
+        [in] long startOffset, [in] long endOffsetInclusive, [in] string color);
 
     [overload setItalic] XText setItalic([in] boolean value);
 

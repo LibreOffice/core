@@ -72,7 +72,9 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
@@ -100,6 +102,7 @@
 #include <scriptinterop/XTableCell.hpp>
 #include <scriptinterop/XTableRow.hpp>
 #include <scriptinterop/XText.hpp>
+#include <tools/color.hxx>
 
 #include "document.hxx"
 
@@ -363,6 +366,26 @@ sal_Int32 hundredthMmToPixels(sal_Int32 hundredthMm) {
 
 sal_Int32 pixelsToHundredthMm(sal_Int32 pixels) {
     return o3tl::convert(pixels, o3tl::Length::px, o3tl::Length::mm100);
+}
+
+// A color, which GAS gives as "#rrggbb" (in either case on input):
+sal_Int32 parseColor(OUString const & hex) {
+    if (hex.getLength() != 7 || hex[0] != '#'
+        || !std::all_of(
+            hex.getStr() + 1, hex.getStr() + 7,
+            [](sal_Unicode c) { return rtl::isAsciiHexDigit(c); }))
+    {
+        // Same exception message as GAS:
+        throw cpo::uno::RuntimeException(u"Invalid color value."_ustr);
+    }
+    return o3tl::toInt32(hex.subView(1), 16);
+}
+
+OUString formatColor(sal_Int32 color) {
+    // Just take the RGB part, ignoring any transparency value (and the leading 1 makes number give
+    // seven digits, of which the subView drops that 1 again):
+    OUString const digits(OUString::number(0x1000000 | (color & 0xFFFFFF), 16));
+    return OUString::Concat("#") + digits.subView(1);
 }
 
 cpo::uno::Reference<css::text::XTextContent> createGraphicFromBlob(
@@ -724,6 +747,35 @@ public:
         return {true, name};
     }
 
+    css::beans::Optional<OUString> getForegroundColor() override {
+        // Same as in GAS, the color of the whole text is null when its runs differ:
+        std::optional<sal_Int32> color;
+        for (auto const & r: runs()) {
+            if (textOf(r).isEmpty()) {
+                continue;
+            }
+            auto const runColor = colorOn(r);
+            // Colors count as the same if their RGB parts are, as a GAS color has no transparency:
+            if (!runColor || (color && (*color & 0xFFFFFF) != (*runColor & 0xFFFFFF))) {
+                return {false, {}};
+            }
+            color = runColor;
+        }
+        if (!color) {
+            return {false, {}};
+        }
+        return {true, formatColor(*color)};
+    }
+
+    css::beans::Optional<OUString> getForegroundColorAt(sal_Int32 offset) override {
+        checkOffset(offset);
+        auto const color = colorOn(runAt(offset));
+        if (!color) {
+            return {false, {}};
+        }
+        return {true, formatColor(*color)};
+    }
+
     css::beans::Optional<OUString> getLinkUrl(sal_Int32 offset) override {
         auto const any = getProp(runAt(offset), u"getLinkUrl", u"link URL", u"HyperLinkURL"_ustr);
         if (!any) {
@@ -877,6 +929,26 @@ public:
     {
         setFontFamilyOn(
             subRange(u"setFontFamily", startOffset, endOffsetInclusive), fontFamilyName);
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XText> setForegroundColor(OUString const & color) override {
+        auto const value = parseColor(color);
+        auto const whole = wholeRange();
+        // The color goes on all the text of the paragraph, over the colors that parts of it
+        // already have:
+        setForegroundColorOn(whole->getText()->createTextCursorByRange(whole), value);
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XText> setForegroundColorRange(
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, OUString const & color) override
+    {
+        auto const value = parseColor(color);
+        checkOffset(startOffset);
+        checkOffset(endOffsetInclusive);
+        setForegroundColorOn(
+            subRange(u"setForegroundColor", startOffset, endOffsetInclusive), value);
         return this;
     }
 
@@ -1058,6 +1130,38 @@ private:
         setProp(range, u"CharFontName"_ustr, cpo::uno::Any(fontFamilyName));
     }
 
+    static void setForegroundColorOn(
+        cpo::uno::Reference<css::text::XTextRange> const & range, sal_Int32 color)
+    {
+        setProp(range, u"CharColor"_ustr, cpo::uno::Any(color));
+    }
+
+    // A run set to Writer's automatic color, COL_AUTO, reads as having no color, the same as a run
+    // without one:
+    std::optional<sal_Int32> colorOn(cpo::uno::Reference<css::text::XTextRange> const & range) {
+        auto const any = getProp(
+            range, u"getForegroundColor", u"foreground color", u"CharColor"_ustr);
+        sal_Int32 color;
+        if (!any || !(*any >>= color) || Color(ColorTransparency, color) == COL_AUTO) {
+            return {};
+        }
+        return color;
+    }
+
+    void checkOffset(sal_Int32 offset) {
+        // Same exception messages as GAS:
+        if (offset < 0) {
+            throw cpo::uno::RuntimeException(
+                "Index (" + OUString::number(offset) + ") value must be greater or equal to zero.");
+        }
+        auto const length = getText().getLength();
+        if (offset >= length) {
+            throw cpo::uno::RuntimeException(
+                "Index (" + OUString::number(offset) + ") must be less than the content length ("
+                + OUString::number(length) + ").");
+        }
+    }
+
     static void setItalicOn(cpo::uno::Reference<css::text::XTextRange> const & range, bool value) {
         setProp(range, u"CharPosture"_ustr, cpo::uno::Any(
             value ? css::awt::FontSlant_ITALIC : css::awt::FontSlant_NONE));
@@ -1174,6 +1278,29 @@ public:
         return text->getFontFamily(inner);
     }
 
+    css::beans::Optional<OUString> getForegroundColor() override {
+        std::optional<css::beans::Optional<OUString>> color;
+        for (auto const & paragraph: contents().paragraphs) {
+            if (paragraph.length == 0) {
+                continue;
+            }
+            auto const paragraphColor = paragraph.text->getForegroundColor();
+            if (!color) {
+                color = paragraphColor;
+            } else if (color->IsPresent != paragraphColor.IsPresent
+                       || color->Value != paragraphColor.Value)
+            {
+                return {false, {}};
+            }
+        }
+        return color ? *color : css::beans::Optional<OUString>();
+    }
+
+    css::beans::Optional<OUString> getForegroundColorAt(sal_Int32 offset) override {
+        auto const [text, inner] = at(offset);
+        return text->getForegroundColorAt(inner);
+    }
+
     css::beans::Optional<OUString> getLinkUrl(sal_Int32 offset) override {
         auto const [text, inner] = at(offset);
         return text->getLinkUrl(inner);
@@ -1276,6 +1403,24 @@ public:
             u"setFontFamily", startOffset, endOffsetInclusive,
             [&fontFamilyName](auto const & text, sal_Int32 start, sal_Int32 end) {
                 text->setFontFamilyRange(start, end, fontFamilyName);
+            });
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XText> setForegroundColor(OUString const & color) override {
+        for (auto const & paragraph: contents().paragraphs) {
+            paragraph.text->setForegroundColor(color);
+        }
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XText> setForegroundColorRange(
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, OUString const & color) override
+    {
+        forRange(
+            u"setForegroundColor", startOffset, endOffsetInclusive,
+            [&color](auto const & text, sal_Int32 start, sal_Int32 end) {
+                text->setForegroundColorRange(start, end, color);
             });
         return this;
     }

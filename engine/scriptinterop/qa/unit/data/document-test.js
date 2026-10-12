@@ -229,6 +229,64 @@ function test() {
     console.assert(appendedText.isBold(4) === true);
     console.assert(JSON.stringify(appendedText.getTextAttributeIndices()) === '[0,4]');
 
+    // Exercise the foreground color, which is null where it is not set:
+    const coloredText = appended.editAsText();
+    console.assert(coloredText.getForegroundColor() === null);
+    console.assert(coloredText.getForegroundColor(0) === null);
+    coloredText.setForegroundColor('#FF0000');
+    console.assert(coloredText.getForegroundColor() === '#ff0000');
+    coloredText.setForegroundColor(0, 3, '#0000ff');
+    console.assert(coloredText.getForegroundColor() === null);
+    console.assert(coloredText.getForegroundColor(0) === '#0000ff');
+    console.assert(coloredText.getForegroundColor(4) === '#ff0000');
+    {
+        let message = null;
+        try {
+            coloredText.setForegroundColor('red');
+        } catch (e) {
+            message = e.message;
+        }
+        console.assert(message === 'Invalid color value.');
+    }
+    {
+        let message = null;
+        try {
+            coloredText.setForegroundColor('#abc');
+        } catch (e) {
+            message = e.message;
+        }
+        console.assert(message === 'Invalid color value.');
+    }
+    {
+        let message = null;
+        try {
+            coloredText.getForegroundColor(8);
+        } catch (e) {
+            message = e.message;
+        }
+        console.assert(message === 'Index (8) must be less than the content length (8).');
+    }
+    {
+        let message = null;
+        try {
+            coloredText.getForegroundColor(-1);
+        } catch (e) {
+            message = e.message;
+        }
+        console.assert(message === 'Index (-1) value must be greater or equal to zero.');
+    }
+    {
+        let message = null;
+        try {
+            coloredText.setForegroundColor(0, 8, '#0000ff');
+        } catch (e) {
+            message = e.message;
+        }
+        console.assert(message === 'Index (8) must be less than the content length (8).');
+    }
+    body.editAsText().setForegroundColor('#123456');
+    console.assert(body.editAsText().getForegroundColor() === '#123456');
+
     // Exercise the Text mutation methods; each returns Text so the calls chain:
     appended.editAsText().setText('foo').appendText('bar').insertText(3, '-');
     console.assert(appended.getText() === 'foo-bar');
