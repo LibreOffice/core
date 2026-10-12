@@ -50,7 +50,7 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 				$(if $(filter LINUX,$(OS)),-fvisibility=hidden)' \
 			LDFLAGS="$(call gb_ExternalProject_get_link_flags,harfbuzz)" \
 			MAKE=$(MAKE) \
-		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE) lib) \
+		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE) lib libharfbuzz-subset.la) \
 	)
 	$(call gb_Trace_EndRange,harfbuzz,EXTERNAL)
 

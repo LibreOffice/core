@@ -11224,19 +11224,19 @@ HARFBUZZ_CFLAGS_internal="-I${WORKDIR}/UnpackedTarball/harfbuzz/src"
 case "$_os" in
     Linux)
         GRAPHITE_LIBS_internal="${WORKDIR}/LinkTarget/StaticLibrary/libgraphite.a"
-        HARFBUZZ_LIBS_internal="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.a"
+        HARFBUZZ_LIBS_internal="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz-subset.a ${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.a"' $(GRAPHITE_LIBS)'
         ;;
     *)
         GRAPHITE_LIBS_internal="-L${WORKDIR}/LinkTarget/StaticLibrary -lgraphite"
-        HARFBUZZ_LIBS_internal="-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz"
+        HARFBUZZ_LIBS_internal="-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz-subset -lharfbuzz"' $(GRAPHITE_LIBS)'
         ;;
 esac
 libo_CHECK_SYSTEM_MODULE([graphite],[GRAPHITE],[graphite2 >= 0.9.3])
-libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= $harfbuzz_required_version])
+libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= $harfbuzz_required_version harfbuzz-subset >= $harfbuzz_required_version])
 
 if test "$COM" = "MSC"; then # override the above
     GRAPHITE_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/graphite.lib"
-    HARFBUZZ_LIBS="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.lib"
+    HARFBUZZ_LIBS="${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz-subset.lib ${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs/libharfbuzz.lib"' $(GRAPHITE_LIBS)'
 fi
 
 if test "$with_system_harfbuzz" = "yes"; then
