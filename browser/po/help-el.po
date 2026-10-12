@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-22 21:46+0200\n"
-"PO-Revision-Date: 2026-10-09 10:30+0000\n"
-"Last-Translator: geonetor <geonetor@yahoo.gr>\n"
+"PO-Revision-Date: 2026-10-12 15:04+0000\n"
+"Last-Translator: geonetor <geonetor@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/collabora-online/"
 "help/el/>\n"
 "Language: el\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -36,7 +36,7 @@ msgstr "Αποκοπή"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:17-38
 msgid "Copy"
-msgstr ""
+msgstr "Αντιγραφή"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:17-69
 #, fuzzy
@@ -76,7 +76,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-48
 msgid "Open"
-msgstr ""
+msgstr "Άνοιγμα"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-79
 #, fuzzy
@@ -95,11 +95,11 @@ msgstr "Εκτύπωση"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:23-54
 msgid "Find"
-msgstr ""
+msgstr "Εύρεση"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:24-67
 msgid "Find and Replace"
-msgstr ""
+msgstr "Εύρεση και αντικατάσταση"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:25-72
 msgid "Display the Keyboard shortcuts help"
