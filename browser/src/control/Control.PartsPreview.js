@@ -932,30 +932,17 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				return values[token];
 			});
 		};
-		if (link && link.name) {
-			const values = { '%1': position, '%2': link.name, '%3': link.source };
-			img.setAttribute(
-				'alt',
-				withPeople(fill(_('preview of page %1, linked to %2 in %3'), values)),
-			);
-			img.setAttribute(
-				'data-cooltip',
-				withPeople(fill(_('Slide %1, linked to %2 in %3'), values)),
-			);
-			return;
-		}
 		if (link) {
-			// The slide is tracked by the identifier of the slide it came
-			// from, so it names no slide of the source.
-			const values = { '%1': position, '%2': link.source };
-			img.setAttribute(
-				'alt',
-				withPeople(fill(_('preview of page %1, linked to %2'), values)),
-			);
-			img.setAttribute(
-				'data-cooltip',
-				withPeople(fill(_('Slide %1, linked to %2'), values)),
-			);
+			// A slide tracked by the identifier of the slide it came from
+			// names no slide of the source, so %2 is the source then.
+			const values = {
+				'%1': position,
+				'%2': link.name || link.source,
+				'%3': link.source,
+			};
+			const labels = this._linkLabels(img, link);
+			img.setAttribute('alt', withPeople(fill(labels[0], values)));
+			img.setAttribute('data-cooltip', withPeople(fill(labels[1], values)));
 			return;
 		}
 		img.setAttribute(
@@ -966,6 +953,57 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			'data-cooltip',
 			withPeople(_('Slide %1').replace('%1', position)),
 		);
+	},
+
+	// The alt text and the tooltip of a linked slide, naming what the badge
+	// shows, or what is wrong with the source when it cannot be read.
+	_linkLabels: function (img, link) {
+		const links = this._map.slideLinks;
+		const state = links.getPageSourceState(img._part);
+		if (state === 'missing')
+			return [
+				_('preview of page %1, %3 is missing'),
+				_('Slide %1, %3 is missing'),
+			];
+		if (links.isPageMissing(img._part))
+			return [
+				_('preview of page %1, not found in %3'),
+				_('Slide %1, not found in %3'),
+			];
+		if (state === 'noaccess')
+			return [
+				_('preview of page %1, no access to %3'),
+				_('Slide %1, no access to %3'),
+			];
+		if (state === 'failed')
+			return [
+				_('preview of page %1, could not open %3'),
+				_('Slide %1, could not open %3'),
+			];
+		if (links.isPageOutdated(img._part))
+			return link.name
+				? [
+						_('preview of page %1, %2 changed in %3'),
+						_('Slide %1, %2 changed in %3'),
+					]
+				: [
+						_('preview of page %1, changed in %3'),
+						_('Slide %1, changed in %3'),
+					];
+		if (state === 'disconnected')
+			return [
+				_('preview of page %1, %3 is disconnected'),
+				_('Slide %1, %3 is disconnected'),
+			];
+		return link.name
+			? [
+					_('preview of page %1, linked to %2 in %3'),
+					_('Slide %1, linked to %2 in %3'),
+				]
+			: [
+					_('preview of page %1, linked to %2'),
+					_('Slide %1, linked to %2'),
+				];
 	},
 
 	// The source document a slide is linked to and the slide of that document
