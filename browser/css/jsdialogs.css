@@ -2854,6 +2854,12 @@ img.ui-combobox-value-preview {
 	justify-content: center;
 }
 
+/* The whole box opens the menu, border and padding included, so it shows the hand cursor. A
+ * split button has its two targets inside, and they carry the cursor themselves. */
+.jsdialog.menubutton:not(.splitbutton):not([disabled]) {
+	cursor: pointer;
+}
+
 /* A menu button that asks for its content at one end shows it there, the way a
  * list box shows its text. The arrow stays at the far end of the button. */
 .jsdialog.menubutton.content-start {

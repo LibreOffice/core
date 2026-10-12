@@ -187,20 +187,16 @@ function _menubuttonControl(
 			}
 		};
 
-		// make it possible to setup separate callbacks for split button
+		// A split button applies its command from the button and opens the menu from the arrow.
 		if (isSplitButton) {
 			jsdialog.AddOnClick(control.button, applyCallback);
+			if (control.arrow) jsdialog.AddOnClick(control.arrow, clickFunction);
 		} else {
-			jsdialog.AddOnClick(control.button, clickFunction);
-			// Only wire the label separately when it isn't a descendant of
-			// the button - otherwise a click on the label fires both
-			// handlers (its own and the button's via bubbling), and any
-			// toggle-style action ends up firing twice.
-			if (control.label && !control.button.contains(control.label))
-				jsdialog.AddOnClick(control.label, clickFunction);
+			// The container handles the click, so its border and padding belong to the hit area,
+			// and a click on the inner button, its label or the arrow bubbles up to this one
+			// handler.
+			jsdialog.AddOnClick(control.container, clickFunction);
 		}
-
-		if (control.arrow) jsdialog.AddOnClick(control.arrow, clickFunction);
 
 		builder._preventDocumentLosingFocusOnClick(control.container);
 

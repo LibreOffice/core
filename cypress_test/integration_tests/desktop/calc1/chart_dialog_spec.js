@@ -8,6 +8,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart dialog tests', funct
 	beforeEach(function() {
 		helper.setupAndLoadDocument('calc/chart_dialog.ods');
 		cy.viewport(1920, 720);
+		cy.getFrameWindow().then(function(win) {
+			this.win = win;
+		}.bind(this));
 	});
 
 	it('Chart format axis(scale) manual min test', function() {
@@ -64,5 +67,46 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart dialog tests', funct
 			.should('be.visible')
 			.invoke('width')
 			.should('be.greaterThan', 380).and('be.lessThan', 450);
+	});
+
+	it('Data series icon menu button opens from its whole box', function() {
+		// Select the chart and enter chart edit mode.
+		calcHelper.clickAtOffset(10, 10);
+		helper.typeIntoDocument('{enter}');
+		helper.processToIdle(this.win);
+
+		// Walk the chart object hierarchy with the keyboard: Tab selects the
+		// first top-level object, the diagram, and Enter goes one level down
+		// to its first child, the data series.
+		helper.assertFocus('className', 'clipboard');
+		cy.realPress('Tab');
+		helper.processToIdle(this.win);
+		cy.realPress('Enter');
+		helper.processToIdle(this.win);
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.sendUnoCommand('.uno:FormatDataSeries');
+		});
+		cy.cGet('#AttributeDialog').should('be.visible');
+		helper.processToIdle(this.win);
+
+		// The Line tab is the tab page named border.
+		cy.cGet('#AttributeDialog #tabcontrol button#border').click();
+		cy.cGet('#AttributeDialog #tabcontrol button#border').should('have.attr', 'aria-selected', 'true');
+		helper.processToIdle(this.win);
+
+		// The menu button under Icon shows the hand cursor over its whole box.
+		cy.cGet('#MB_SYMBOL_BITMAP').should('be.visible').and('not.have.attr', 'disabled');
+		cy.cGet('#MB_SYMBOL_BITMAP').should('have.css', 'cursor', 'pointer');
+
+		// A click 2px inside the top-left corner lands on the border and
+		// padding of the box, outside the inner button, and opens the menu.
+		cy.cGet('#MB_SYMBOL_BITMAP').click(2, 2);
+		cy.cGet('#MB_SYMBOL_BITMAP-dropdown').should('be.visible');
+		cy.cGet('body').type('{esc}');
+		cy.cGet('#MB_SYMBOL_BITMAP-dropdown').should('not.exist');
+
+		cy.cGet('#AttributeDialog #cancel-button').click();
+		cy.cGet('.lokdialog_container').should('not.exist');
 	});
 });
