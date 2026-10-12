@@ -862,7 +862,9 @@ void walkParagraphFlow(const SfxViewShell* pViewShell,
                        bool bBackward, const uno::Reference<accessibility::XAccessible>& xParent,
                        const css::awt::Point& rParentOnScreen,
                        const css::awt::Point& rOriginOnScreen, bool bByArea, sal_Int32 nTop,
-                       sal_Int32 nBottom, sal_Int32 nRadius, std::vector<ContextParagraph>& rOut)
+                       sal_Int32 nBottom, sal_Int32 nRadius,
+                       const std::vector<uno::Reference<accessibility::XAccessibleContext>>& rSkip,
+                       std::vector<ContextParagraph>& rOut)
 {
     const accessibility::AccessibleRelationType eType
         = bBackward ? accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM
@@ -881,7 +883,8 @@ void walkParagraphFlow(const SfxViewShell* pViewShell,
         }
         else if (static_cast<sal_Int32>(rOut.size()) >= nRadius)
             break;
-        if (isSiblingParagraph(xContext, xParent))
+        if (isSiblingParagraph(xContext, xParent)
+            && std::ranges::find(rSkip, xContext) == rSkip.end())
             rOut.push_back(contextParagraph(pViewShell, xContext, rOriginOnScreen));
     }
     if (bBackward)
@@ -947,11 +950,12 @@ paragraphInWindow(const uno::Reference<accessibility::XAccessible>& xParent, sal
     return {};
 }
 
-void collectParagraphWindow(const SfxViewShell* pViewShell,
-                            const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
-                            sal_Int32 nRadius, const tools::Rectangle& rVisibleTwips,
-                            std::vector<ContextParagraph>& rBefore,
-                            std::vector<ContextParagraph>& rAfter)
+void collectParagraphWindow(
+    const SfxViewShell* pViewShell,
+    const uno::Reference<css::accessibility::XAccessibleText>& xAccText, sal_Int32 nRadius,
+    const tools::Rectangle& rVisibleTwips,
+    const std::vector<uno::Reference<accessibility::XAccessibleContext>>& rSkip,
+    std::vector<ContextParagraph>& rBefore, std::vector<ContextParagraph>& rAfter)
 {
     rBefore.clear();
     rAfter.clear();
@@ -975,9 +979,9 @@ void collectParagraphWindow(const SfxViewShell* pViewShell,
     if (!bByArea)
     {
         walkParagraphFlow(pViewShell, xContext, true, xParent, aParentOnScreen, aOriginOnScreen,
-                          false, 0, 0, nRadius, rBefore);
+                          false, 0, 0, nRadius, rSkip, rBefore);
         walkParagraphFlow(pViewShell, xContext, false, xParent, aParentOnScreen, aOriginOnScreen,
-                          false, 0, 0, nRadius, rAfter);
+                          false, 0, 0, nRadius, rSkip, rAfter);
         return;
     }
 
@@ -993,9 +997,9 @@ void collectParagraphWindow(const SfxViewShell* pViewShell,
     if (eCaretSide != WindowSide::Above && eCaretSide != WindowSide::Below)
     {
         walkParagraphFlow(pViewShell, xContext, true, xParent, aParentOnScreen, aOriginOnScreen,
-                          true, nTop, nBottom, 0, rBefore);
+                          true, nTop, nBottom, 0, rSkip, rBefore);
         walkParagraphFlow(pViewShell, xContext, false, xParent, aParentOnScreen, aOriginOnScreen,
-                          true, nTop, nBottom, 0, rAfter);
+                          true, nTop, nBottom, 0, rSkip, rAfter);
         return;
     }
 
@@ -1006,20 +1010,108 @@ void collectParagraphWindow(const SfxViewShell* pViewShell,
     if (!xAnchor.is())
     {
         walkParagraphFlow(pViewShell, xContext, eCaretSide == WindowSide::Below, xParent,
-                          aParentOnScreen, aOriginOnScreen, true, nTop, nBottom, 0,
+                          aParentOnScreen, aOriginOnScreen, true, nTop, nBottom, 0, rSkip,
                           eCaretSide == WindowSide::Below ? rBefore : rAfter);
         return;
     }
 
     std::vector<ContextParagraph>& rOut = eCaretSide == WindowSide::Below ? rBefore : rAfter;
     walkParagraphFlow(pViewShell, xAnchor, true, xParent, aParentOnScreen, aOriginOnScreen, true,
-                      nTop, nBottom, 0, rOut);
-    if (isSiblingParagraph(xAnchor, xParent))
+                      nTop, nBottom, 0, rSkip, rOut);
+    if (isSiblingParagraph(xAnchor, xParent) && std::ranges::find(rSkip, xAnchor) == rSkip.end())
         rOut.push_back(contextParagraph(pViewShell, xAnchor, aOriginOnScreen));
     std::vector<ContextParagraph> aFollowing;
     walkParagraphFlow(pViewShell, xAnchor, false, xParent, aParentOnScreen, aOriginOnScreen, true,
-                      nTop, nBottom, 0, aFollowing);
+                      nTop, nBottom, 0, rSkip, aFollowing);
     rOut.insert(rOut.end(), aFollowing.begin(), aFollowing.end());
+}
+
+// Writer reports a level only for a paragraph that carries a bullet or a number.
+sal_Int16 getListLevel(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
+{
+    if (!xAccText.is())
+        return -1;
+
+    sal_Int16 nLevel = -1;
+    try
+    {
+        const cpo::uno::Sequence<css::beans::PropertyValue> aAttributes
+            = xAccText->getCharacterAttributes(0, { UNO_NAME_NUMBERING_LEVEL });
+        for (const auto& rAttribute : aAttributes)
+        {
+            if (rAttribute.Name == UNO_NAME_NUMBERING_LEVEL)
+                rAttribute.Value >>= nLevel;
+        }
+    }
+    catch (const lang::IndexOutOfBoundsException&)
+    {
+        return -1;
+    }
+    return nLevel;
+}
+
+struct ListItemText
+{
+    sal_Int16 nLevel;
+    OUString sText;
+};
+
+struct ListWindow
+{
+    std::vector<ListItemText> aItems;
+    std::vector<uno::Reference<accessibility::XAccessibleContext>> aParagraphs;
+};
+
+// The run of list paragraphs around the caret's one, in the flow of the text it is in.
+void collectListWindow(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+                       sal_Int32 nRadius, ListWindow& rList)
+{
+    rList = ListWindow();
+
+    uno::Reference<accessibility::XAccessibleContext> xContext(xAccText, uno::UNO_QUERY);
+    if (!xContext.is())
+        return;
+
+    const sal_Int16 nCaretLevel = getListLevel(xAccText);
+    if (nCaretLevel < 0)
+        return;
+
+    uno::Reference<accessibility::XAccessible> xParent = textRoot(xContext);
+    if (!xParent.is())
+        return;
+
+    auto walk = [&xContext, &xParent, nRadius](accessibility::AccessibleRelationType eType,
+                                               ListWindow& rOut) {
+        for (uno::Reference<accessibility::XAccessibleContext> xNext
+             = flowNeighbour(xContext, eType);
+             xNext.is() && static_cast<sal_Int32>(rOut.aItems.size()) < nRadius;
+             xNext = flowNeighbour(xNext, eType))
+        {
+            if (!isSiblingParagraph(xNext, xParent))
+                break;
+            uno::Reference<accessibility::XAccessibleText> xText(xNext, uno::UNO_QUERY);
+            const sal_Int16 nLevel = getListLevel(xText);
+            if (nLevel < 0)
+                break;
+            rOut.aItems.push_back({ nLevel, xText->getText() });
+            rOut.aParagraphs.push_back(xNext);
+        }
+    };
+
+    ListWindow aBefore;
+    walk(accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM, aBefore);
+    rList.aItems.assign(std::make_move_iterator(aBefore.aItems.rbegin()),
+                        std::make_move_iterator(aBefore.aItems.rend()));
+    rList.aParagraphs.assign(aBefore.aParagraphs.rbegin(), aBefore.aParagraphs.rend());
+
+    rList.aItems.push_back({ nCaretLevel, xAccText->getText() });
+    rList.aParagraphs.push_back(xContext);
+
+    ListWindow aAfter;
+    walk(accessibility::AccessibleRelationType_CONTENT_FLOWS_TO, aAfter);
+    std::move(aAfter.aItems.begin(), aAfter.aItems.end(), std::back_inserter(rList.aItems));
+    rList.aParagraphs.insert(rList.aParagraphs.end(), aAfter.aParagraphs.begin(),
+                             aAfter.aParagraphs.end());
 }
 
 // A deleted paragraph outlives its frame, and Writer reads its markup through
@@ -1237,6 +1329,7 @@ class KitDocumentFocusListener :
 {
     static constexpr sal_Int64 MAX_ATTACHABLE_CHILDREN = 100;
     static constexpr sal_Int32 PARAGRAPH_WINDOW = 10;
+    static constexpr sal_Int32 LIST_ITEM_WINDOW = 25;
 
     const SfxViewShell* m_pViewShell;
     sal_Int16 m_nDocumentType;
@@ -1252,6 +1345,7 @@ class KitDocumentFocusListener :
     std::vector<SfxParagraphComment> m_aFocusedComments;
     mutable std::vector<ContextParagraph> m_aParagraphsBefore;
     mutable std::vector<ContextParagraph> m_aParagraphsAfter;
+    mutable ListWindow m_aList;
     uno::Reference<accessibility::XAccessibleText> m_xFocusedText;
     uno::Reference<accessibility::XAccessibleTable> m_xLastTable;
     OUString m_sSelectedText;
@@ -1332,6 +1426,8 @@ public:
 
     std::string getFocusedParagraph() const;
     tools::Rectangle visibleArea() const;
+    void
+    collectContextWindow(const uno::Reference<css::accessibility::XAccessibleText>& xAccText) const;
     int getCaretPosition() const;
 
 private:
@@ -1432,6 +1528,20 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
         aPayloadTree.add_child("beforeComments", toComments(m_aParagraphsBefore));
         aPayloadTree.add_child("afterComments", toComments(m_aParagraphsAfter));
     }
+    if (!m_aList.aItems.empty())
+    {
+        boost::property_tree::ptree aItems;
+        for (const ListItemText& rItem : m_aList.aItems)
+        {
+            boost::property_tree::ptree aNode;
+            aNode.put("level", rItem.nLevel);
+            aNode.put("text", rItem.sText.toUtf8().getStr());
+            aItems.push_back(std::make_pair("", aNode));
+        }
+        boost::property_tree::ptree aList;
+        aList.add_child("items", aItems);
+        aPayloadTree.add_child("list", aList);
+    }
     if (force)
         aPayloadTree.put("force", 1);
 }
@@ -1450,6 +1560,17 @@ tools::Rectangle KitDocumentFocusListener::visibleArea() const
     return m_pViewShell ? m_pViewShell->getKitVisibleArea() : tools::Rectangle();
 }
 
+void KitDocumentFocusListener::collectContextWindow(
+    const uno::Reference<css::accessibility::XAccessibleText>& xAccText) const
+{
+    if (isText(m_nDocumentType))
+        collectListWindow(xAccText, LIST_ITEM_WINDOW, m_aList);
+    else
+        m_aList = ListWindow();
+    collectParagraphWindow(m_pViewShell, xAccText, PARAGRAPH_WINDOW, visibleArea(),
+                           m_aList.aParagraphs, m_aParagraphsBefore, m_aParagraphsAfter);
+}
+
 std::string KitDocumentFocusListener::getFocusedParagraph() const
 {
     aboutView("KitDocumentFocusListener::getFocusedParagraph", this, m_pViewShell);
@@ -1461,12 +1582,11 @@ std::string KitDocumentFocusListener::getFocusedParagraph() const
     {
         m_aParagraphsBefore.clear();
         m_aParagraphsAfter.clear();
+        m_aList = ListWindow();
     }
     else if (m_xFocusedText.is())
     {
-        collectParagraphWindow(m_pViewShell, m_xFocusedText, PARAGRAPH_WINDOW, visibleArea(),
-                               m_aParagraphsBefore, m_aParagraphsAfter);
-
+        collectContextWindow(m_xFocusedText);
     }
 
     std::string aPayload;
@@ -1805,8 +1925,11 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
             m_aFocusedLinks = std::move(aLinks);
             m_aFocusedImages = std::move(aImages);
             m_aFocusedComments = std::move(aComments);
-            collectParagraphWindow(m_pViewShell, xAccText, PARAGRAPH_WINDOW, visibleArea(),
-                                   m_aParagraphsBefore, m_aParagraphsAfter);
+            collectContextWindow(xAccText);
+            // Writer announces no new child for a paragraph the context walk created first.
+            for (const auto& xItem : m_aList.aParagraphs)
+                attachRecursive(uno::Reference<accessibility::XAccessible>(xItem, uno::UNO_QUERY),
+                                xItem, xItem->getAccessibleStateSet());
             bNotify = true;
         }
     }
@@ -1845,6 +1968,7 @@ void KitDocumentFocusListener::resetParagraphInfo()
     m_aFocusedComments.clear();
     m_aParagraphsBefore.clear();
     m_aParagraphsAfter.clear();
+    m_aList = ListWindow();
     m_xFocusedText.clear();
 }
 
