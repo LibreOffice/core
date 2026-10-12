@@ -165,30 +165,30 @@
     </message>
     <message>
         <source>New Document Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Earráid maidir le Doiciméad Nua</translation>
     </message>
     <message>
         <source>Could not create a new document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Níorbh fhéidir doiciméad nua a chruthú.</translation>
     </message>
     <message>
         <source>Supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Comhaid a dtacaítear leo</translation>
     </message>
 </context>
 <context>
     <name>TabManager</name>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Dún</translation>
     </message>
     <message>
         <source>Close Others</source>
-        <translation type="unfinished"></translation>
+        <translation>Daoine atá gar duit</translation>
     </message>
     <message>
         <source>Move Tab to New Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Bog an Cluaisín go Fuinneog Nua</translation>
     </message>
 </context>
 <context>
