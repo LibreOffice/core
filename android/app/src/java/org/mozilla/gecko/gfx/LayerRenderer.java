@@ -32,10 +32,10 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     private static final String LOGTAG = "GeckoLayerRenderer";
 
     private final LayerView mView;
-    private final SingleTileLayer mBackgroundLayer;
-    private final NinePatchTileLayer mShadowLayer;
-    private final ScrollbarLayer mHorizScrollLayer;
-    private final ScrollbarLayer mVertScrollLayer;
+    private SingleTileLayer mBackgroundLayer;
+    private NinePatchTileLayer mShadowLayer;
+    private ScrollbarLayer mHorizScrollLayer;
+    private ScrollbarLayer mVertScrollLayer;
     private final FadeRunnable mFadeRunnable;
     private ByteBuffer mCoordByteBuffer;
     private FloatBuffer mCoordBuffer;
@@ -95,7 +95,15 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
     public LayerRenderer(LayerView view) {
         mView = view;
+        mFadeRunnable = new FadeRunnable();
+        // Initialize the FloatBuffer that will be used to store all vertices and texture
+        // coordinates in draw() commands.
+        mCoordByteBuffer = DirectBufferAllocator.allocate(COORD_BUFFER_SIZE * 4);
+        mCoordByteBuffer.order(ByteOrder.nativeOrder());
+        mCoordBuffer = mCoordByteBuffer.asFloatBuffer();
+    }
 
+    private void createLayers(LayerView view) {
         CairoImage backgroundImage = new BufferedCairoImage(view.getBackgroundPattern());
         mBackgroundLayer = new SingleTileLayer(true, backgroundImage);
 
@@ -104,13 +112,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
         mHorizScrollLayer = ScrollbarLayer.create(this, false);
         mVertScrollLayer = ScrollbarLayer.create(this, true);
-        mFadeRunnable = new FadeRunnable();
-
-        // Initialize the FloatBuffer that will be used to store all vertices and texture
-        // coordinates in draw() commands.
-        mCoordByteBuffer = DirectBufferAllocator.allocate(COORD_BUFFER_SIZE * 4);
-        mCoordByteBuffer.order(ByteOrder.nativeOrder());
-        mCoordBuffer = mCoordByteBuffer.asFloatBuffer();
     }
 
     @Override
@@ -128,14 +129,28 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         DirectBufferAllocator.free(mCoordByteBuffer);
         mCoordByteBuffer = null;
         mCoordBuffer = null;
-        mBackgroundLayer.destroy();
-        mShadowLayer.destroy();
-        mHorizScrollLayer.destroy();
-        mVertScrollLayer.destroy();
+        destroyLayers();
+    }
+
+    private void destroyLayers() {
+        if(mBackgroundLayer != null) {
+            mBackgroundLayer.destroy();
+        }
+        if(mShadowLayer != null) {
+            mShadowLayer.destroy();
+        }
+        if(mHorizScrollLayer != null) {
+            mHorizScrollLayer.destroy();
+        }
+        if(mVertScrollLayer != null) {
+            mVertScrollLayer.destroy();
+        }
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        destroyLayers();
+        createLayers(mView);
         createDefaultProgram();
         activateDefaultProgram();
     }
