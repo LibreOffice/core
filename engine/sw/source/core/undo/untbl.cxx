@@ -714,7 +714,7 @@ SwUndoTextToTable::SwUndoTextToTable( const SwPaM& rRg,
                                 sal_Unicode cCh, sal_uInt16 nAdj,
                                 const SwTableAutoFormat* pAFormat )
     : SwUndo( SwUndoId::TEXTTOTABLE, rRg.GetDoc() ), SwUndRng( rRg ), m_aInsertTableOpts( rInsTableOpts ),
-      m_pHistory( nullptr ), m_cSeparator( cCh ), m_nAdjust( nAdj )
+      m_cSeparator( cCh ), m_nAdjust( nAdj )
 {
     if( pAFormat )
         m_pAutoFormat.reset( new SwTableAutoFormat( *pAFormat ) );
@@ -745,12 +745,6 @@ void SwUndoTextToTable::UndoImpl(::sw::UndoRedoContext & rContext)
     RemoveIdxFromSection( rDoc, nTableNd );
 
     m_sTableName = pTNd->GetTable().GetFrameFormat()->GetName();
-
-    if( m_pHistory )
-    {
-        m_pHistory->TmpRollback( rDoc, 0 );
-        m_pHistory->SetTmpEnd( m_pHistory->Count() );
-    }
 
     if( !mvDelBoxes.empty() )
     {

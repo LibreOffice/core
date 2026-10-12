@@ -87,7 +87,6 @@ class SwUndoTextToTable final : public SwUndo, public SwUndRng
     SwInsertTableOptions m_aInsertTableOpts;
     std::vector<SwNodeOffset> mvDelBoxes;
     std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
-    SwHistory* m_pHistory;
     sal_Unicode m_cSeparator;
     sal_uInt16 m_nAdjust;
     bool m_bSplitEnd : 1;
