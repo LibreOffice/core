@@ -401,6 +401,7 @@ private:
 
     /// The bullets the slides and the master slides use, as the last walk over them found
     /// them. Empty until something asks for them, and dropped whenever the document changes.
+    /// A style sheet change leaves it alone, since a style sheet is no part of the walk.
     mutable std::optional<std::vector<SvxDocumentBullet>> moUsedBullets;
     /// How many times the walk behind moUsedBullets has run.
     mutable sal_uInt32 mnUsedBulletWalks = 0;
@@ -1250,13 +1251,19 @@ public:
     std::vector<SvxDocumentBullet> GetUsedBullets(const SdrOutliner* pActiveOutliner
                                                   = nullptr) const;
 
-    /** Drops every remembered bullet, so the next caller walks the document again.
+    /** Drops the bullets remembered from the slides, so the next caller walks them again.
      */
     SAL_DLLPRIVATE void ForgetUsedBullets();
 
-    /** Drops the bullets remembered from the style sheets alone.
+    /** Drops the bullets remembered from the style sheets.
      */
     SAL_DLLPRIVATE void ForgetStyleSheetBullets() const;
+
+    /** Listens to the style sheet pool for the changes that bring a bullet in or take one away,
+        and drops the bullets remembered from the style sheets when the pool holds other sheets
+        than the ones already listened to.
+     */
+    SAL_DLLPRIVATE void WatchStyleSheetsForBulletChanges() const;
 
     /** Every bullet the slides and the master slides use, once each.
      */

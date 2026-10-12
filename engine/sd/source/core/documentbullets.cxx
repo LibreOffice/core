@@ -131,12 +131,16 @@ SdStyleSheetBulletWatcher::SdStyleSheetBulletWatcher(const SdDrawDocument& rDocu
 {
 }
 
-void SdStyleSheetBulletWatcher::Watch(SfxStyleSheetBasePool& rPool)
+bool SdStyleSheetBulletWatcher::Watch(SfxStyleSheetBasePool& rPool)
 {
+    std::unique_ptr<SfxStyleSheetIterator> pIterator = rPool.CreateIterator(SfxStyleFamily::All);
+    const sal_Int32 nSheets = pIterator->Count();
+    if (nSheets == mnWatchedSheets)
+        return false;
+
     EndListeningAll();
     StartListening(rPool);
 
-    std::unique_ptr<SfxStyleSheetIterator> pIterator = rPool.CreateIterator(SfxStyleFamily::All);
     for (SfxStyleSheetBase* pStyle = pIterator->First(); pStyle; pStyle = pIterator->Next())
     {
         // The walk reaches each sheet once, so every call here adds a new entry to the list
@@ -144,20 +148,48 @@ void SdStyleSheetBulletWatcher::Watch(SfxStyleSheetBasePool& rPool)
         if (SfxStyleSheet* pSheet = dynamic_cast<SfxStyleSheet*>(pStyle))
             StartListening(*pSheet, DuplicateHandling::Allow);
     }
+
+    mnWatchedSheets = nSheets;
+    return true;
 }
 
-void SdStyleSheetBulletWatcher::Notify(SfxBroadcaster& /*rBroadcaster*/, const SfxHint& /*rHint*/)
+void SdStyleSheetBulletWatcher::Notify(SfxBroadcaster& /*rBroadcaster*/, const SfxHint& rHint)
 {
+    switch (rHint.GetId())
+    {
+        case SfxHintId::StyleSheetChanged:
+        case SfxHintId::StyleSheetErased:
+        case SfxHintId::StyleSheetInDestruction:
+        case SfxHintId::Dying:
+            // The pool holds other sheets than the ones listened to, so the listening is set up
+            // again before the next answer.
+            mnWatchedSheets = -1;
+            break;
+        default:
+            break;
+    }
+
     mrDocument.ForgetStyleSheetBullets();
 }
 
-void SdDrawDocument::ForgetUsedBullets()
-{
-    moUsedBullets.reset();
-    moStyleSheetBullets.reset();
-}
+void SdDrawDocument::ForgetUsedBullets() { moUsedBullets.reset(); }
 
 void SdDrawDocument::ForgetStyleSheetBullets() const { moStyleSheetBullets.reset(); }
+
+void SdDrawDocument::WatchStyleSheetsForBulletChanges() const
+{
+    SdStyleSheetPool* pStyleSheetPool = GetSdStyleSheetPool();
+    if (!pStyleSheetPool)
+        return;
+
+    if (!mpStyleSheetBulletWatcher)
+        mpStyleSheetBulletWatcher.reset(new SdStyleSheetBulletWatcher(*this));
+
+    // Listening set up afresh means the pool holds sheets the last walk did not see, so what
+    // that walk left behind is dropped.
+    if (mpStyleSheetBulletWatcher->Watch(*pStyleSheetPool))
+        moStyleSheetBullets.reset();
+}
 
 std::vector<SvxDocumentBullet> SdDrawDocument::WalkStyleSheetsForUsedBullets() const
 {
@@ -167,10 +199,6 @@ std::vector<SvxDocumentBullet> SdDrawDocument::WalkStyleSheetsForUsedBullets() c
     SdStyleSheetPool* pStyleSheetPool = GetSdStyleSheetPool();
     if (!pStyleSheetPool)
         return aBullets;
-
-    if (!mpStyleSheetBulletWatcher)
-        mpStyleSheetBulletWatcher.reset(new SdStyleSheetBulletWatcher(*this));
-    mpStyleSheetBulletWatcher->Watch(*pStyleSheetPool);
 
     // The pool's own First and Next share one cached iterator, so this walk creates its own.
     std::unique_ptr<SfxStyleSheetIterator> pIterator
@@ -198,6 +226,7 @@ SdDrawDocument::GetUsedBullets(const SdrOutliner* pActiveOutliner) const
     // The outline styles of every slide layout live in the style sheet pool, so a bullet that a
     // master slide defines is found here whether or not a slide uses it. The result is kept
     // until a style sheet announces a change.
+    WatchStyleSheetsForBulletChanges();
     if (!moStyleSheetBullets)
     {
         moStyleSheetBullets = WalkStyleSheetsForUsedBullets();

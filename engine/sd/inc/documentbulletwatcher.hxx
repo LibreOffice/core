@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <sal/types.h>
 #include <svl/lstner.hxx>
 
 class SdDrawDocument;
@@ -24,13 +25,18 @@ class SdStyleSheetBulletWatcher final : public SfxListener
 public:
     explicit SdStyleSheetBulletWatcher(const SdDrawDocument& rDocument);
 
-    /// Listens to the pool and to every style sheet it holds.
-    void Watch(SfxStyleSheetBasePool& rPool);
+    /** Listens to the pool and to every style sheet it holds, and returns whether that listening
+        was set up afresh. A pool that holds the same number of sheets as the last time is already
+        listened to whole, so it is left alone.
+     */
+    bool Watch(SfxStyleSheetBasePool& rPool);
 
     virtual void Notify(SfxBroadcaster& rBroadcaster, const SfxHint& rHint) override;
 
 private:
     const SdDrawDocument& mrDocument;
+    /// How many style sheets the pool held when the listening was last set up, or -1 for none.
+    sal_Int32 mnWatchedSheets = -1;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

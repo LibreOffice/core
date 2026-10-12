@@ -877,8 +877,8 @@ rtl::Reference<SdrPage> SdDrawDocument::AllocPage(bool bMasterPage)
 // When the model has changed
 void SdDrawDocument::SetChanged(bool bFlag)
 {
-    // A change to the document can bring a bullet in or take one away, so the remembered list
-    // is dropped. Marking the document as saved leaves its bullets unchanged.
+    // A change to the document can bring a bullet in or take one away, so the bullets remembered
+    // from the slides are dropped. Marking the document as saved leaves its bullets unchanged.
     if (bFlag)
         ForgetUsedBullets();
 

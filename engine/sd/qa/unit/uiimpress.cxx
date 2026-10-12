@@ -6837,6 +6837,32 @@ SvxDocumentBullet lcl_SetImageBullet(SdrTextObj& rObject)
     return aBullet;
 }
 
+/// Gives rStyle a character bullet and announces the change the way sd does.
+void lcl_SetStyleSheetBulletCharacter(SfxStyleSheetBase& rStyle, sal_UCS4 cBullet)
+{
+    vcl::Font aFont;
+    aFont.SetFamilyName(u"OpenSymbol"_ustr);
+    SvxNumberFormat aFormat(SVX_NUM_CHAR_SPECIAL);
+    aFormat.SetBulletFont(&aFont);
+    aFormat.SetBulletChar(cBullet);
+
+    SvxNumRule aRule(SvxNumRuleFlags::NONE, SVX_MAX_NUM, false);
+    aRule.SetLevel(0, aFormat);
+    rStyle.GetItemSet().Put(SvxNumBulletItem(std::move(aRule), EE_PARA_NUMBULLET));
+    static_cast<SfxStyleSheet&>(rStyle).Broadcast(SfxHint(SfxHintId::DataChanged));
+}
+
+/// Whether rDocument offers cBullet as a character bullet.
+bool lcl_OffersBulletCharacter(SdDrawDocument& rDocument, std::u16string_view aBullet)
+{
+    for (const SvxDocumentBullet& rBullet : rDocument.GetUsedBullets())
+    {
+        if (!rBullet.IsGraphic() && rBullet.aBulletCharacter == aBullet)
+            return true;
+    }
+    return false;
+}
+
 /// The first text object that any master slide of rDocument holds, or nullptr when there is none.
 SdrTextObj* lcl_MasterSlideTextObject(SdDrawDocument& rDocument)
 {
@@ -7176,13 +7202,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletFollowsAStyleSheetChange
     // presentation offers.
     lcl_SetOutlineStyleBulletCharacter(mxComponent, u"outline1"_ustr, u"\u2756"_ustr);
 
-    bool bFound = false;
-    for (const SvxDocumentBullet& rBullet : pDocument->GetUsedBullets())
-    {
-        if (!rBullet.IsGraphic() && rBullet.aBulletCharacter == u"\u2756"_ustr)
-            bFound = true;
-    }
-    CPPUNIT_ASSERT_EQUAL(true, bFound);
+    CPPUNIT_ASSERT_EQUAL(true, lcl_OffersBulletCharacter(*pDocument, u"\u2756"));
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStyleBulletsAreWalkedOnceUntilAStyleChanges)
@@ -7220,24 +7240,48 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletFollowsAStyleNoShapeFoll
 
     // A style sheet carries its bullet whether or not a shape follows it. The style sheet
     // announces the change itself, which is what the presentation style dialog relies on.
-    vcl::Font aFont;
-    aFont.SetFamilyName(u"OpenSymbol"_ustr);
-    SvxNumberFormat aFormat(SVX_NUM_CHAR_SPECIAL);
-    aFormat.SetBulletFont(&aFont);
-    aFormat.SetBulletChar(0x2767);
+    lcl_SetStyleSheetBulletCharacter(rStyle, 0x2767);
 
-    SvxNumRule aRule(SvxNumRuleFlags::NONE, SVX_MAX_NUM, false);
-    aRule.SetLevel(0, aFormat);
-    rStyle.GetItemSet().Put(SvxNumBulletItem(std::move(aRule), EE_PARA_NUMBULLET));
-    static_cast<SfxStyleSheet&>(rStyle).Broadcast(SfxHint(SfxHintId::DataChanged));
+    CPPUNIT_ASSERT_EQUAL(true, lcl_OffersBulletCharacter(*pDocument, u"\u2767"));
+}
 
-    bool bFound = false;
-    for (const SvxDocumentBullet& rBullet : pDocument->GetUsedBullets())
-    {
-        if (!rBullet.IsGraphic() && rBullet.aBulletCharacter == u"\u2767"_ustr)
-            bFound = true;
-    }
-    CPPUNIT_ASSERT_EQUAL(true, bFound);
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletFollowsAStyleMadeAfterTheFirstWalk)
+{
+    createSdImpressDoc("document-bullets.odp");
+    SdDrawDocument* pDocument = getSdDocShell()->GetDoc();
+
+    pDocument->GetUsedBullets();
+
+    SdStyleSheetPool* pStyleSheetPool = pDocument->GetSdStyleSheetPool();
+    CPPUNIT_ASSERT(pStyleSheetPool);
+    SfxStyleSheetBase& rStyle = pStyleSheetPool->Make(u"bullet holder"_ustr, SfxStyleFamily::Para);
+
+    // A style sheet made after the presentation was read for its bullets carries its own, so the
+    // presentation offers them from the moment the sheet is given them.
+    lcl_SetStyleSheetBulletCharacter(rStyle, 0x2767);
+
+    CPPUNIT_ASSERT_EQUAL(true, lcl_OffersBulletCharacter(*pDocument, u"\u2767"));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStyleBulletsSurviveASlideChange)
+{
+    createSdImpressDoc("document-bullets.odp");
+    SdDrawDocument* pDocument = getSdDocShell()->GetDoc();
+
+    pDocument->GetUsedBullets();
+    const sal_uInt32 nStyleWalks = pDocument->GetStyleSheetBulletWalkCount();
+    const sal_uInt32 nPageWalks = pDocument->GetUsedBulletWalkCount();
+    CPPUNIT_ASSERT(nStyleWalks > 0);
+
+    SdrTextObj* pMasterSlideObject = lcl_MasterSlideTextObject(*pDocument);
+    CPPUNIT_ASSERT(pMasterSlideObject);
+    lcl_SetImageBullet(*pMasterSlideObject);
+
+    // A shape carries its bullets itself, so changing one leaves the style sheets as they were
+    // and the walk over them is not repeated.
+    pDocument->GetUsedBullets();
+    CPPUNIT_ASSERT_EQUAL(nStyleWalks, pDocument->GetStyleSheetBulletWalkCount());
+    CPPUNIT_ASSERT_EQUAL(nPageWalks + 1, pDocument->GetUsedBulletWalkCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetBulletToDocumentCharacter)
