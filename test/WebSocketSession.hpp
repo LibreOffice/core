@@ -324,6 +324,48 @@ public:
         }
     }
 
+    /// Closes the connection without a close frame. The peer sees the connection end the way a
+    /// broken network ends it.
+    void dropWS()
+    {
+        const auto poller = _socketPoll.lock();
+        if (poller && poller->isAlive())
+        {
+            std::weak_ptr<WebSocketSession> weakSession
+                = std::static_pointer_cast<WebSocketSession>(shared_from_this());
+            poller->addCallback([weakSession=std::move(weakSession)]() {
+                auto session = weakSession.lock();
+                if (session)
+                    session->dropConnection();
+            });
+        }
+        else
+        {
+            dropConnection();
+        }
+    }
+
+    /// Closes the connection with status USER_EXIT, as a browser does when the user closes the
+    /// document.
+    void exitWS()
+    {
+        const auto poller = _socketPoll.lock();
+        if (poller && poller->isAlive())
+        {
+            std::weak_ptr<WebSocketSession> weakSession
+                = std::static_pointer_cast<WebSocketSession>(shared_from_this());
+            poller->addCallback([weakSession=std::move(weakSession)]() {
+                auto session = weakSession.lock();
+                if (session)
+                    session->shutdown(StatusCodes::USER_EXIT);
+            });
+        }
+        else
+        {
+            shutdown(StatusCodes::USER_EXIT);
+        }
+    }
+
     /// Flags to shutdown after sending all the data.
     void asyncShutdown()
     {

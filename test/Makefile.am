@@ -64,6 +64,8 @@ all_la_unit_tests = \
 	unit-crash.la \
 	unit-integration.la \
 	unit-timeout.la \
+	unit-reconnect.la \
+	unit-reconnect-wopi.la \
 	unit-wopi-save-on-exit.la \
 	unit-initial-load-fail.la \
 	unit-insert-delete.la \
@@ -298,6 +300,10 @@ unit_join_disconnect_la_SOURCES = UnitJoinDisconnect.cpp
 unit_join_disconnect_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_timeout_la_SOURCES = UnitTimeout.cpp
 unit_timeout_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_reconnect_la_SOURCES = UnitReconnect.cpp
+unit_reconnect_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_reconnect_wopi_la_SOURCES = UnitReconnectWopi.cpp
+unit_reconnect_wopi_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_socket_failure_la_SOURCES = UnitSocketFailure.cpp
 unit_socket_failure_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_prefork_la_SOURCES = UnitPrefork.cpp

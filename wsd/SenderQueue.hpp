@@ -99,6 +99,14 @@ public:
         return _queue.empty();
     }
 
+    /// Drops every queued item.
+    void clear()
+    {
+        std::lock_guard<std::mutex> lock(_mutex);
+        _queue.clear();
+        _totalBytes = 0;
+    }
+
     void dumpState(std::ostream& os)
     {
         std::lock_guard<std::mutex> lock(_mutex);

@@ -687,6 +687,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "exportas") ||
                tokens.equals(0, "useractive") ||
                tokens.equals(0, "userinactive") ||
+               tokens.equals(0, "viewparked") ||
                tokens.equals(0, "windowcommand") ||
                tokens.equals(0, "asksignaturestatus") ||
                tokens.equals(0, "rendershapeselection") ||
@@ -974,6 +975,16 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         {
             setIsActive(false);
             _docManager->trimIfInactive();
+        }
+        else if (tokens.equals(0, "viewparked"))
+        {
+            int value = 0;
+            if (tokens.size() != 2 || !getTokenInteger(tokens[1], "value", value))
+            {
+                sendTextFrameAndLogError("error: cmd=viewparked kind=syntax");
+                return false;
+            }
+            _docManager->setViewParked(_viewId, value != 0);
         }
         else if (tokens.equals(0, "windowcommand"))
         {

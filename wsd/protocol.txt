@@ -392,7 +392,7 @@ load <pathname>
 
     Deprecated.
 
-load [part=<part>] url=<url> [timestamp=<time>] [lang=<locale>] [deviceFormFactor=<device type>] [timezone=<timezone>] [options=<options>]
+load [part=<part>] url=<url> [timestamp=<time>] [lang=<locale>] [deviceFormFactor=<device type>] [timezone=<timezone>] [reconnect=true] [options=<options>]
 
     part is an optional parameter. <part> is a page identifier, or the
     part's index in document order written in decimal form. The view opens
@@ -408,6 +408,13 @@ load [part=<part>] url=<url> [timestamp=<time>] [lang=<locale>] [deviceFormFacto
     it can be one of the following: 'desktop', 'tablet', 'mobile'
 
     timestamp is in tzfile(5) format. For example: Pacific/Auckland.
+
+    reconnect=true says that the client keeps the token of the
+    'reconnecttoken:' message and presents it as the ReconnectToken URL
+    parameter when it connects again. Only then does the server send that
+    message, and only then does the server keep the view for a while when
+    the connection ends. A close frame with status 4000 says that the client
+    left on purpose, so the server removes the view at once.
 
     options are the whole rest of the line, not URL-encoded, and must be valid JSON.
 
@@ -468,6 +475,13 @@ mouse type=<type> x=<x> y=<y> count=<count> [buttons=<buttons>] [modifier=<modif
 ping
 
     requests a 'pong' server message.
+
+debugdropconnection
+
+    Debug builds only. The server closes this connection without a close
+    frame, the way a broken network does, so that a test can watch what the
+    server does with a browser that vanished. A release build answers
+    'error: cmd=debugdropconnection kind=unknown'.
 
 
 resetselection
@@ -714,6 +728,15 @@ userinactive
     It should throttle updates until the user is active again.
 
     See 'useractive'.
+
+viewparked value=<0|1>
+
+    Sent by coolwsd for its own view, never by a client. value=1 says that the
+    browser's connection was lost and the session is kept for the browser to
+    reconnect to. value=0 says that the browser is back. Every view then
+    receives a fresh 'viewinfo:' with the 'parked' field of this view changed.
+    On value=0 this view also receives its 'canonicalidchange:' again, since the
+    browser rebuilt its tile layer and fetches no tiles until it has the id.
 
 closedocument
 
@@ -980,6 +1003,15 @@ clipboardkey: <token>
     Send access token for web clipboard use, may arrive periodically
     Current and previous hash remain valid for that period, always use
     the latest.
+
+reconnecttoken: <token>
+
+    Sent after a load with reconnect=true, again every few minutes, and
+    again after the client reconnected. <token> is 64 lowercase hex digits. The
+    current and the previous token are both accepted, so keep only the
+    latest. A connection whose URL has the parameter ReconnectToken=<token>
+    takes over the view that the token belongs to, with its view id, cursor
+    and undo stack, instead of loading a new view.
 
 linktoken: <token>
 
@@ -1386,6 +1418,10 @@ viewinfo: <payload>
     Message is sent everytime there is any change in view information.
     <payload> consists of an array of JSON objects. Structure of JSON
     objects is like : {"id": <viewid>, "username": <Full Name of the user>}
+
+    Each object also carries "parked": "true" or "false" (literal strings).
+    "true" means the view's browser lost its connection and the server is
+    holding the view for that browser to come back to.
 
 redlinetablechanged:
 

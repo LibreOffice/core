@@ -39,6 +39,7 @@
 #include <common/Util.hpp>
 #include <net/HttpHelper.hpp>
 #include <net/HttpServer.hpp>
+#include <net/WebSocketHandler.hpp>
 #include <wsd/wopi/StorageConnectionManager.hpp>
 #if !MOBILEAPP
 #include <wsd/Admin.hpp>
@@ -103,6 +104,8 @@ const int ClipboardTokenLengthBytes = 16;
 const int LinkTokenLengthBytes = 32;
 // home-use, disabled by default.
 const int ProxyAccessTokenLengthBytes = 32;
+// The token that lets a new connection take over a view, sent to the browser that asked for one.
+constexpr int ReconnectTokenLengthBytes = 32;
 
 namespace
 {
@@ -133,6 +136,7 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
     , _tokenRefreshAttempts(0)
     , _docBroker(docBroker)
     , _lastStateTime(std::chrono::steady_clock::now())
+    , _parkedSince()
     , _clientVisibleArea(0, 0, 0, 0)
     , _visibleAreaMode(0)
     , _keyEvents(1)
@@ -156,6 +160,8 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
     , _sentBrowserSetting(false)
     , _isConvertTo(false)
     , _isRemoteDocumentConnection(requestDetails.isRemoteDocument())
+    , _resyncOnNextLoad(false)
+    , _reconnectable(false)
 {
     const std::size_t curConnections = ++COOLWSD::NumConnections;
     LOG_INF("ClientSession ctor [" << getName() << "] for URI: [" << _uriPublic.toString()
@@ -281,6 +287,41 @@ void ClientSession::rotateLinkToken(bool notifyClient)
     _linkToken = Util::rng::getHexString(LinkTokenLengthBytes);
     if (notifyClient)
         sendTextFrame("linktoken: " + _linkToken);
+}
+
+void ClientSession::rotateReconnectToken(bool notifyClient)
+{
+    // A parked view keeps its tokens, so the browser's token still matches when it comes back.
+    if (!_reconnectable || _state == SessionState::WAIT_DISCONNECT || isParked())
+        return;
+
+    _reconnectTokens[1] = _reconnectTokens[0];
+    _reconnectTokens[0] = Util::toLower(Util::rng::getHexString(2 * ReconnectTokenLengthBytes));
+    if (notifyClient)
+        sendTextFrame("reconnecttoken: " + _reconnectTokens[0]);
+}
+
+bool ClientSession::matchesReconnectToken(std::string_view token) const
+{
+    // The time taken depends only on the lengths of the two tokens.
+    const auto equalConstantTime = [](std::string_view a, std::string_view b)
+    {
+        if (a.size() != b.size())
+            return false;
+
+        unsigned char diff = 0;
+        for (std::size_t i = 0; i < a.size(); ++i)
+            diff |= static_cast<unsigned char>(a[i]) ^ static_cast<unsigned char>(b[i]);
+        return diff == 0;
+    };
+
+    if (token.empty())
+        return false;
+
+    bool matches = false;
+    for (const std::string& it : _reconnectTokens)
+        matches |= !it.empty() && equalConstantTime(it, token);
+    return matches;
 }
 
 std::string ClientSession::getClipboardURI(bool encode)
@@ -1147,6 +1188,12 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     {
         if (!getDocURL().empty())
         {
+            if (_resyncOnNextLoad)
+            {
+                _resyncOnNextLoad = false;
+                return resyncAfterReconnect(tokens, docBroker);
+            }
+
             sendTextFrameAndLogError("error: cmd=load kind=docalreadyloaded");
             return false;
         }
@@ -1216,6 +1263,15 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         sendTextFrame("pong rendercount=" + count);
         return true;
     }
+#if ENABLE_DEBUG
+    else if (tokens.equals(0, "debugdropconnection"))
+    {
+        // A test needs a connection that dies the way a broken network kills one.
+        if (const auto ws = std::dynamic_pointer_cast<WebSocketHandler>(_protocol))
+            ws->dropConnection();
+        return true;
+    }
+#endif
     else if (tokens.equals(0, "status") || tokens.equals(0, "statusupdate"))
     {
         assert(firstLine.size() == static_cast<std::size_t>(length));
@@ -2687,6 +2743,35 @@ void ClientSession::restoreLastViewSelection(const std::shared_ptr<DocumentBroke
     }
 }
 
+bool ClientSession::resyncAfterReconnect(const StringVector& tokens,
+                                         const std::shared_ptr<DocumentBroker>& docBroker)
+{
+    LOG_INF("Browser of session [" << getId() << "] is back, resyncing its view");
+
+    // The part the browser was on when it lost the connection.
+    std::string part;
+    for (std::size_t i = 1; i < tokens.size(); ++i)
+        if (getTokenString(tokens[i], "part", part))
+            break;
+
+    if (!_isTextDocument && !part.empty() && isValidPartId(part))
+    {
+        _clientSelectedPart = part;
+        docBroker->forwardToChild(client_from_this(), "setclientpart part=" + part);
+    }
+
+    // A fresh status carries the view id the browser's document layer is rebuilt around.
+    docBroker->forwardToChild(client_from_this(), "status");
+
+    // useractive makes the kit send everyone a new viewinfo, this view its current part, and the
+    // invalidations that fetch the tiles the browser threw away.
+    docBroker->forwardToChild(client_from_this(), "useractive");
+
+    // The reconnect token was seen on the new socket URL, so the browser gets a new one.
+    rotateReconnectToken(true);
+    return true;
+}
+
 bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
                                  const StringVector& tokens,
                                  const std::shared_ptr<DocumentBroker>& docBroker)
@@ -2719,6 +2804,13 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             if (name == "timestamp")
             {
                 // The browser sends the document's timestamp, and nothing reads it.
+                continue;
+            }
+
+            if (name == "reconnect")
+            {
+                // The app builds have no network between the browser and the server to lose.
+                _reconnectable = !Util::isMobileApp() && value == "true";
                 continue;
             }
 
@@ -3002,6 +3094,9 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             sendTextFrame("slideshowfollow effect {\"currentEffect\": " + std::to_string(docBroker->getLeaderEffect()) +"}");
             sendTextFrame("slideshowfollow slideshowfollowon");
         }
+
+        // A load with reconnect=true gets its first reconnect token here.
+        rotateReconnectToken(true);
 
         return forwardToChild(oss.str(), docBroker);;
     }
@@ -4675,6 +4770,12 @@ void ClientSession::enqueueSendMessage(const std::shared_ptr<Message>& data)
         return;
     }
 
+    if (isParked())
+    {
+        LOG_TRC("Session parked, dropping message " << data->id());
+        return;
+    }
+
     const std::shared_ptr<DocumentBroker> docBroker = _docBroker.lock();
     LOG_CHECK_RET(docBroker && "Null DocumentBroker instance", );
     docBroker->ASSERT_CORRECT_THREAD();
@@ -4798,6 +4899,12 @@ void ClientSession::onDisconnect()
     std::shared_ptr<ClientSession> session = client_from_this();
     try
     {
+        if (shouldPark(docBroker))
+        {
+            docBroker->parkSession(session);
+            return;
+        }
+
         // Connection terminated. Destroy session.
         LOG_DBG("on docKey [" << docKey << "] terminated. Cleaning up");
 
@@ -4845,6 +4952,91 @@ void ClientSession::onDisconnect()
     }
 }
 
+bool ClientSession::shouldPark(const std::shared_ptr<DocumentBroker>& docBroker) const
+{
+#if MOBILEAPP
+    (void)docBroker;
+    return false;
+#else
+    if (!_reconnectable || _reconnectTokens[0].empty() || _state != SessionState::LIVE ||
+        isParked() || docBroker->isUnloading() || SigUtil::getShutdownRequestFlag() ||
+        SigUtil::getTerminationFlag())
+        return false;
+
+    if (ConfigUtil::getConfigValue<int>("net.session_park_timeout_secs", 5) <= 0)
+        return false;
+
+    const auto ws = std::dynamic_pointer_cast<WebSocketHandler>(_protocol);
+    if (!ws)
+        return false; // The proxy protocol has no socket of its own to lose.
+
+    // A proxy can send a Close frame of its own, so only a client that left on purpose, or a close
+    // from this side, ends the session at once.
+    const WebSocketHandler::CloseOrigin origin = ws->closeOrigin();
+    return origin != WebSocketHandler::CloseOrigin::UserExit &&
+           origin != WebSocketHandler::CloseOrigin::Local;
+#endif
+}
+
+void ClientSession::park()
+{
+    const std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker();
+    LOG_CHECK_RET(docBroker && "Null DocumentBroker instance", );
+    docBroker->ASSERT_CORRECT_THREAD();
+
+    LOG_INF("Parking session [" << getId() << "] of docKey [" << docBroker->getDocKey()
+                                << "] until its browser reconnects");
+
+    // The dead connection's handler forgets us, so its socket going away later is silent.
+    if (_protocol)
+    {
+        _protocol->dispose();
+        _protocol.reset();
+    }
+
+    // The browser rebuilds its document layer from a fresh status, so nothing queued for the old
+    // connection is worth keeping.
+    _senderQueue.clear();
+    _tilesOnFly.clear();
+    _parkedSince = std::chrono::steady_clock::now();
+}
+
+void ClientSession::adopt(const std::shared_ptr<ProtocolHandlerInterface>& ws,
+                          const Poco::URI& uriPublic)
+{
+    const std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker();
+    LOG_CHECK_RET(docBroker && "Null DocumentBroker instance", );
+    docBroker->ASSERT_CORRECT_THREAD();
+    LOG_ASSERT_MSG(ws, "Need a connection to adopt");
+
+    if (!isParked())
+    {
+        // The browser came back before this side noticed its old connection was gone. That
+        // connection is closed and forgotten, and the new one takes its place.
+        LOG_INF("Session [" << getId() << "] takes a new connection while its old one is open");
+        const std::shared_ptr<ProtocolHandlerInterface> old = _protocol;
+        park();
+        if (const auto oldWs = std::dynamic_pointer_cast<WebSocketHandler>(old))
+            oldWs->shutdown(WebSocketHandler::StatusCodes::ENDPOINT_GOING_AWAY,
+                            "replaced by a reconnect", /*hardShutdown=*/true);
+    }
+    else
+    {
+        LOG_INF("Session [" << getId() << "] of docKey [" << docBroker->getDocKey()
+                            << "] gets its browser back after "
+                            << std::chrono::duration_cast<std::chrono::seconds>(
+                                   std::chrono::steady_clock::now() - _parkedSince));
+    }
+
+    _protocol = ws;
+    ws->setMessageHandler(shared_from_this());
+    _parkedSince = std::chrono::steady_clock::time_point();
+    // The host may have renewed the access token while the browser was away. The new request
+    // carries the current one, so uploads from now on use it.
+    _auth = Authorization::create(uriPublic);
+    _resyncOnNextLoad = true;
+}
+
 void ClientSession::dumpState(std::ostream& os)
 {
     Session::dumpState(os);
@@ -4880,6 +5072,14 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tproxy access:: " << _proxyAccess
        << "\n\t\tlinkToken set: " << !_linkToken.empty()
        << "\n\t\tisRemoteDocumentConnection: " << _isRemoteDocumentConnection
+       << "\n\t\treconnectable: " << _reconnectable
+       << "\n\t\treconnectTokens: " << (_reconnectTokens[0].empty() ? "absent" : "present")
+       << "\n\t\tparked: " << isParked()
+       << "\n\t\tparkedFor: "
+       << (isParked() ? std::chrono::duration_cast<std::chrono::seconds>(
+                            std::chrono::steady_clock::now() - _parkedSince).count()
+                      : 0)
+       << " s\n\t\tresyncOnNextLoad: " << _resyncOnNextLoad
        << "\n\t\tclientSelectedMode: " << _clientSelectedMode
        << "\n\t\tvisibleAreaMode: " << _visibleAreaMode
        << "\n\t\trequestedTiles: " << getRequestedTiles().size()
@@ -4909,6 +5109,16 @@ void ClientSession::dumpState(std::ostream& os)
     _senderQueue.dumpState(os);
 
     // FIXME: need to dump other bits ...
+}
+
+bool ClientSession::isValidReconnectToken(std::string_view token)
+{
+    if (token.size() != 2 * ReconnectTokenLengthBytes)
+        return false;
+    for (const char c : token)
+        if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')))
+            return false;
+    return true;
 }
 
 const std::string &ClientSession::getOrCreateProxyAccess()

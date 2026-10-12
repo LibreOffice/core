@@ -58,6 +58,7 @@
 class Admin;
 class PrisonerRequestDispatcher;
 class CheckFileInfo;
+class WebSocketHandler;
 class DocumentBroker;
 class LockContext;
 class PresetsInstallTask;
@@ -501,6 +502,19 @@ public:
 
     /// Removes a session by ID. Returns the new number of sessions.
     std::size_t removeSession(const std::shared_ptr<ClientSession>& session);
+
+    /// Keep a session whose connection ended without the client leaving on purpose, for its browser
+    /// to reconnect to.
+    void parkSession(const std::shared_ptr<ClientSession>& session);
+
+    /// The session the browser with this token has in this document, parked or not. Null when there
+    /// is none.
+    std::shared_ptr<ClientSession> findSessionByToken(std::string_view reconnectToken);
+
+    /// Hand a session the browser's new connection and its authorization, and tell the kit the view
+    /// is back.
+    void adoptSession(const std::shared_ptr<ClientSession>& session,
+                      const std::shared_ptr<WebSocketHandler>& ws, const Poco::URI& uriPublic);
 
     /// Add a callback to be invoked in our polling thread.
     void addCallback(const SocketPoll::CallbackFn& fn);

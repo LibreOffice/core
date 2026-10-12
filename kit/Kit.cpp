@@ -1953,6 +1953,7 @@ void Document::notifyViewInfo()
                 oss << "\"userextrainfo\":" << itView->second.getUserExtraInfo() << ',';
             const bool readonly = itView->second.isReadOnly();
             oss << "\"readonly\":\"" << readonly << "\",";
+            oss << "\"parked\":\"" << (itView->second.isParked() ? "true" : "false") << "\",";
             const auto it = viewColorsMap.find(username);
             if (it != viewColorsMap.end())
             {
@@ -2015,6 +2016,34 @@ void Document::notifyViewInfo()
     }
 }
 
+void Document::setViewParked(int viewId, bool parked)
+{
+    const auto it = _sessionUserInfo.find(viewId);
+    if (it == _sessionUserInfo.end())
+    {
+        LOG_WRN("No user info for view [" << viewId << "] to mark "
+                                          << (parked ? "parked" : "unparked"));
+        return;
+    }
+
+    it->second.setParked(parked);
+    notifyViewInfo();
+
+    // The browser that came back rebuilt its tile layer and starts fetching tiles once it knows its
+    // canonical view id. The id did not change, so it has to be sent again on purpose.
+    if (!parked)
+    {
+        for (const auto& session : _sessions)
+        {
+            if (session.second->getViewId() == viewId)
+            {
+                sendCanonicalIdChange(session.second);
+                break;
+            }
+        }
+    }
+}
+
 void Document::notifyViewPart(int viewId, const std::string& partId)
 {
     std::ostringstream oss;
@@ -2072,6 +2101,11 @@ void Document::invalidateCanonicalId(const std::string& sessionId)
     }
     // The session took this id over, so it is no longer one that was left.
     _retiredCanonicalIds.erase(newCanonicalId);
+    sendCanonicalIdChange(session);
+}
+
+void Document::sendCanonicalIdChange(const std::shared_ptr<ChildSession>& session)
+{
     std::string viewRenderedState = session->getViewRenderState();
     std::string stateName;
     if (!viewRenderedState.empty())
@@ -2083,7 +2117,7 @@ void Document::invalidateCanonicalId(const std::string& sessionId)
         stateName = "Empty";
     }
     std::string message = "canonicalidchange: viewid=" + std::to_string(session->getViewId()) +
-        " canonicalid=" + std::to_string(to_underlying(newCanonicalId)) +
+        " canonicalid=" + std::to_string(to_underlying(session->getCanonicalViewId())) +
         " viewrenderedstate=" + stateName;
     session->sendTextFrame(message);
 }
@@ -3260,7 +3294,8 @@ void Document::dumpState(std::ostream& oss)
             << " userName: " << Anonymizer::anonymize(it.second.getUserName())
             << " userExtraInfo: " << it.second.getUserExtraInfo()
             << " readOnly: " << it.second.isReadOnly()
-            << " connected: " << it.second.isConnected();
+            << " connected: " << it.second.isConnected()
+            << " parked: " << it.second.isParked();
     }
     oss << '\n';
 

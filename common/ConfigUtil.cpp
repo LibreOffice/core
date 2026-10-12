@@ -151,6 +151,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "memproportion", "80.0" },
     { "mount_jail_tree", "true" },
     { "net.client_pong_timeout_secs", "60" },
+    { "net.session_park_timeout_secs", "5" },
     { "net.connection_timeout_secs", "30" },
     { "net.content_security_policy", "" },
     { "net.frame_ancestors", "" },

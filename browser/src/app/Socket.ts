@@ -11,6 +11,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 
 class Socket {
+	// Close status for a connection that the browser ends on purpose, for example because the
+	// user closed the document.
+	private static readonly UserExitCode: number = 4000;
 	private ProtocolVersionNumber: string = '0.1';
 	private ReconnectCount: number = 0;
 	private WasShownLimitDialog: boolean = false;
@@ -397,7 +400,7 @@ class Socket {
 		this.socket.onmessage = window.ThisIsAMobileApp
 			? this._onShellEventWhileClosed.bind(this)
 			: function () {};
-		this.socket.close();
+		this.socket.close(code ?? Socket.UserExitCode, reason);
 
 		// Reset wopi's app loaded so that reconnecting again informs outerframe about initialization
 		this._map['wopi'].resetAppLoaded();

@@ -87,6 +87,7 @@ struct UserInfo
     UserInfo()
         : _readOnly(false)
         , _connected(false)
+        , _parked(false)
     {
     }
 
@@ -98,6 +99,7 @@ struct UserInfo
         , _userPrivateInfo(userPrivateInfo)
         , _readOnly(readOnly)
         , _connected(true)
+        , _parked(false)
     {
     }
 
@@ -115,6 +117,10 @@ struct UserInfo
 
     void setDisconnected() { _connected = false; }
 
+    bool isParked() const { return _parked; }
+
+    void setParked(bool parked) { _parked = parked; }
+
 private:
     std::string _userId;
     std::string _userName;
@@ -122,6 +128,8 @@ private:
     std::string _userPrivateInfo;
     bool _readOnly;
     bool _connected;
+    /// True while the view's browser is away but expected back.
+    bool _parked;
 };
 
 /// We have two types of password protected documents
@@ -381,12 +389,18 @@ public:
     /// Notify all views of viewId and their associated usernames
     void notifyViewInfo();
 
+    /// Record whether the view's browser is away but expected back, and tell every view.
+    void setViewParked(int viewId, bool parked);
+
     /// Tell the other views which part the given view switched to.
     void notifyViewPart(int viewId, const std::string& partId);
 
     std::shared_ptr<ChildSession> findSessionByViewId(int viewId);
 
     void invalidateCanonicalId(const std::string& sessionId);
+
+    /// Tells the session its canonical view id and view render state.
+    static void sendCanonicalIdChange(const std::shared_ptr<ChildSession>& session);
 
     static std::string getViewProps(const std::shared_ptr<ChildSession>& session);
 

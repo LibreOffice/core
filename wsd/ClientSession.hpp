@@ -102,6 +102,36 @@ public:
     /// Integer id of the view in the kit process, or -1 if unknown
     int getKitViewId() const { return _kitViewId; }
 
+    /// A token is 32 random bytes as 64 lowercase hex digits. Anything else is ignored.
+    static bool isValidReconnectToken(std::string_view token);
+
+    /// True when the token is this view's current or previous reconnect token. Never true for a
+    /// view whose browser did not ask to reconnect.
+    bool matchesReconnectToken(std::string_view token) const;
+
+    /// Make a new reconnect token and keep the old one as the previous token, sending the new one
+    /// to the browser when notifyClient is set.
+    void rotateReconnectToken(bool notifyClient);
+
+    /// True while the browser's connection is gone and the session waits for it to come back. A
+    /// session that is leaving, with its close frame set or in WAIT_DISCONNECT, is not parked any
+    /// more.
+    bool isParked() const
+    {
+        return _state == SessionState::LIVE && !isCloseFrame() &&
+               _parkedSince != std::chrono::steady_clock::time_point();
+    }
+
+    std::chrono::steady_clock::time_point parkedSince() const { return _parkedSince; }
+
+    /// Keep the session and its kit view after the connection ended without the client leaving on
+    /// purpose.
+    void park();
+
+    /// Give the session the browser's new connection and the authorization that came with it. A
+    /// live connection it still holds is closed first.
+    void adopt(const std::shared_ptr<ProtocolHandlerInterface>& ws, const Poco::URI& uriPublic);
+
     /// Disconnect the session and do final cleanup, @returns true if we should not wait.
     bool disconnectFromKit();
 
@@ -511,6 +541,13 @@ private:
     /// SocketHandler: disconnection event.
     void onDisconnect() override;
 
+    /// True when the connection that just ended is to be kept for a reconnect.
+    bool shouldPark(const std::shared_ptr<DocumentBroker>& docBroker) const;
+
+    /// The load a reconnected browser sends refreshes its view instead of loading again.
+    bool resyncAfterReconnect(const StringVector& tokens,
+                              const std::shared_ptr<DocumentBroker>& docBroker);
+
     /// Does SocketHandler: have messages to send ?
     bool hasQueuedMessages() const override { return !_senderQueue.empty(); }
 
@@ -645,6 +682,10 @@ private:
     /// /cool/links for this view. Empty until the first is generated.
     std::string _linkToken;
 
+    /// The current and the previous token that lets a new connection take over this view, as 64 hex
+    /// digits. Both are empty until the browser's load asks for reconnect=true.
+    std::string _reconnectTokens[2];
+
     /// Store last sent payload of form field button, so we can filter out redundant messages.
     std::string _lastSentFormFielButtonMessage;
 
@@ -655,6 +696,10 @@ private:
 
     /// Time of last state transition
     std::chrono::steady_clock::time_point _lastStateTime;
+
+    /// When the browser's connection was lost, while the session waits for it to come back. The
+    /// zero time point while the session has a connection.
+    std::chrono::steady_clock::time_point _parkedSince;
 
     /// Wopi FileInfo object
     std::unique_ptr<WopiStorage::WOPIFileInfo> _wopiFileInfo;
@@ -767,6 +812,12 @@ private:
 
     /// Whether this session is the headless connection
     bool _isRemoteDocumentConnection;
+
+    /// True after a reconnect, until the browser's next load has refreshed the view.
+    bool _resyncOnNextLoad;
+
+    /// True when the load message had reconnect=true.
+    bool _reconnectable;
 
     Poco::SharedPtr<Poco::JSON::Object> _viewSettingsJSON;
 

@@ -965,6 +965,7 @@ bool SocketDisposition::execute()
 void WebSocketHandler::dumpState(std::ostream& os, const std::string& indent) const
 {
     os << (_shuttingDown ? "shutd " : "alive ");
+    os << "closeOrigin " << static_cast<int>(_closeOrigin) << ' ';
     os << std::setw(5) << _pingTimeUs/1000. << "ms ";
     if (_closeOnPongTimeout)
         os << "last pong "

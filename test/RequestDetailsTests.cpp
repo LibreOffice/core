@@ -53,6 +53,7 @@ class RequestDetailsTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testAuthorizationIsValid);
     CPPUNIT_TEST(testAuthorizationDumpState);
     CPPUNIT_TEST(testSanitizePercent);
+    CPPUNIT_TEST(testReconnectToken);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -78,6 +79,7 @@ class RequestDetailsTests : public CPPUNIT_NS::TestFixture
     void testAuthorizationIsValid();
     void testAuthorizationDumpState();
     void testSanitizePercent();
+    void testReconnectToken();
 };
 
 void RequestDetailsTests::testDownloadURI()
@@ -1819,6 +1821,50 @@ void RequestDetailsTests::testSanitizePercent()
     {
         Poco::URI result = RequestDetails::sanitizeLocalPath("/tmp/hello%25world.odt");
         LOK_ASSERT_EQUAL(std::string("/tmp/hello%25world.odt"), result.getPath());
+    }
+}
+
+void RequestDetailsTests::testReconnectToken()
+{
+    constexpr std::string_view testname = __func__;
+
+    static const std::string Root = "localhost:9980";
+    static const std::string Token =
+        "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+
+    // The compact URL carries the token next to the WOPISrc.
+    {
+        const std::string URI =
+            "/cool/ws?WOPISrc=http%3A%2F%2Flocalhost%2Fwopi%2Ffiles%2F1&access_token=abc"
+            "&ReconnectToken=" + Token + "&compat=";
+
+        Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, URI,
+                                       Poco::Net::HTTPMessage::HTTP_1_1);
+        request.setHost(Root);
+        request.set("Upgrade", "websocket");
+
+        RequestDetails details(request, "");
+        LOK_ASSERT(details.isCool2());
+        LOK_ASSERT_EQUAL(Token, details.getParam("ReconnectToken"));
+        LOK_ASSERT_EQUAL(std::string("http://localhost/wopi/files/1?access_token=abc"),
+                         details.getDocumentURI());
+        LOK_ASSERT_EQUAL_STR("", details.getField(RequestDetails::Field::SessionId));
+    }
+
+    // The legacy URL carries the token after the /ws segment.
+    {
+        const std::string URI = "/cool/file%3A%2F%2F%2Ftmp%2Fhello.odt/ws?ReconnectToken=" + Token;
+
+        Poco::Net::HTTPRequest request(Poco::Net::HTTPRequest::HTTP_GET, URI,
+                                       Poco::Net::HTTPMessage::HTTP_1_1);
+        request.setHost(Root);
+        request.set("Upgrade", "websocket");
+
+        RequestDetails details(request, "");
+        LOK_ASSERT(!details.isCool2());
+        LOK_ASSERT_EQUAL(Token, details.getParam("ReconnectToken"));
+        LOK_ASSERT_EQUAL(std::string("file:///tmp/hello.odt"), details.getDocumentURI());
+        LOK_ASSERT(details.equals(2, "ws"));
     }
 }
 

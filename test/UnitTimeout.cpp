@@ -671,6 +671,8 @@ class UnitTimeoutPong : public UnitTimeoutBase0
 
     void configure(Poco::Util::LayeredConfiguration& config) override
     {
+        // A frozen client's view goes when the pong times out, so parking is off.
+        config.setInt("net.session_park_timeout_secs", 0);
         UnitWSD::configure(config);
 
         // Set every net::Defaults field this suite reads. The fields are global and shared by all

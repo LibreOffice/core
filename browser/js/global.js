@@ -2095,10 +2095,10 @@ function showWelcomeSVG() {
 			}
 		};
 
-		this.close = function() {
+		this.close = function(code, reason) {
 			this.stopRouteTokenRequest();
 			if (this.innerSocket)
-				this.innerSocket.close();
+				this.innerSocket.close(code, reason);
 			else
 				this.readyState = 3;
 		};

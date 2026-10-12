@@ -30,6 +30,7 @@
 #include <Poco/Net/HTTPResponse.h>
 
 #include <chrono>
+#include <cstdint>
 #include <cstring>
 #include <memory>
 #include <string>
@@ -40,6 +41,18 @@
 /// connection goes in net::Defaults, not in a member.
 class WebSocketHandler : public ProtocolHandlerInterface
 {
+public:
+    /// Who ended the WebSocket: the client on purpose, the peer with any other Close frame, this
+    /// side, the pong timeout, or nobody.
+    enum class CloseOrigin : std::uint8_t
+    {
+        None, ///< Nothing closed on purpose: a TCP EOF or reset, or a silent drop.
+        Peer, ///< A Close frame came with a status other than USER_EXIT. A proxy can send one too.
+        UserExit, ///< A Close frame came with status USER_EXIT. The client left on purpose.
+        Local, ///< We sent a Close frame on purpose.
+        Timeout ///< We closed because the peer left a ping unanswered.
+    };
+
 private:
     // The embedded app exchanges length-prefixed messages and leaves the framing state below at
     // its initial values, so both flavours agree on the class layout.
@@ -57,6 +70,7 @@ private:
     bool _inFragmentBlock;
     [[maybe_unused]] unsigned char _lastFlags; ///< The flags in the last frame.
     std::atomic<bool> _shuttingDown;
+    CloseOrigin _closeOrigin;
     // Consulted only by the !MOBILEAPP paths and by asserts.
     [[maybe_unused]] const bool _isClient;
     /// True when the peer counts as gone once net::Defaults.pongTimeout passes without a pong.
@@ -95,6 +109,7 @@ public:
         , _inFragmentBlock(false)
         , _lastFlags(0)
         , _shuttingDown(false)
+        , _closeOrigin(CloseOrigin::None)
         , _isClient(isClient)
         , _closeOnPongTimeout(false)
         , _unit(UnitBase::isUnitTesting() ? &UnitBase::get() : nullptr)
@@ -138,7 +153,10 @@ public:
         PAYLOAD_TOO_BIG         = 1009,
         EXTENSION_REQUIRED      = 1010,
         UNEXPECTED_CONDITION    = 1011,
-        RESERVED_TLS_FAILURE    = 1015
+        RESERVED_TLS_FAILURE    = 1015,
+        /// From the range that RFC 6455 leaves to applications. The client ended the connection on
+        /// purpose, for example because the user closed the document.
+        USER_EXIT               = 4000
     };
 
     /// Returns the Web-Socket Security Key generated for this instance.
@@ -275,6 +293,15 @@ public:
                      std::string_view(), true /* hard async shutdown & close */, false);
     }
 
+    /// Closes the connection without a Close frame, as a broken network would. The peer sees an
+    /// abnormal close and nothing is recorded as closing on purpose.
+    void dropConnection()
+    {
+        ASSERT_CORRECT_THREAD();
+        shutdownImpl(_socket.lock(), WebSocketHandler::StatusCodes::POLICY_VIOLATION /* ignored */,
+                     std::string_view(), true /* hard async shutdown and close */, true);
+    }
+
     /// Closes the connection once net::Defaults.pongTimeout passes without a pong. Servers only. A
     /// client never sends pings.
     void closeOnPongTimeout() { _closeOnPongTimeout = true; }
@@ -286,19 +313,18 @@ public:
         return socket && socket->isOpen();
     }
 
-private:
-    void shutdownSilent(const std::shared_ptr<StreamSocket>& socket)
-    {
-        shutdownImpl(socket, WebSocketHandler::StatusCodes::POLICY_VIOLATION /* ignored */,
-                     std::string_view(), true /* hard async shutdown & close */, true);
-    }
+    /// Who ended the connection, or None while it is open or ended without a Close frame.
+    CloseOrigin closeOrigin() const { return _closeOrigin; }
 
+private:
     void shutdownImpl(const std::shared_ptr<StreamSocket>& socket, const StatusCodes statusCode,
                       const std::string_view statusMessage, bool hardShutdown, bool silentShutdown)
     {
         if (socket)
         {
             const bool silent = _shuttingDown || silentShutdown;
+            if (!silent && _closeOrigin == CloseOrigin::None)
+                _closeOrigin = CloseOrigin::Local;
             LOGA_TRC(WebSocket, "Shutdown: Closing Connection " << (silent ? "(silent)" : "(coop)"));
             if (!silent)
                 sendCloseFrame(statusCode, statusMessage);
@@ -467,6 +493,9 @@ private:
                                     message.assign(&ctrlPayload[2], &ctrlPayload[2] + ctrlPayload.size() - 2);
                             }
 
+                            _closeOrigin = statusCode == StatusCodes::USER_EXIT
+                                               ? CloseOrigin::UserExit
+                                               : CloseOrigin::Peer;
                             LOG_TRC("Peer initiated socket shutdown. Code: "
                                     << static_cast<int>(statusCode));
                         }
@@ -708,6 +737,7 @@ public:
                             << std::chrono::duration_cast<std::chrono::milliseconds>(
                                    now - _lastPongTime)
                             << ", closing #" << socket->getFD());
+                    _closeOrigin = CloseOrigin::Timeout;
                     shutdown(StatusCodes::ENDPOINT_GOING_AWAY, "pong timeout",
                              /*hardShutdown=*/true);
                     return true;

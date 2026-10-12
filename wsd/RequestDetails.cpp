@@ -306,6 +306,7 @@ void RequestDetails::processURI()
         _docUriParams = _params;
         _docUriParams.erase("WOPISrc"); // Remove circular reference.
         _docUriParams.erase("compat"); // This is internal (for proxies), not for the host.
+        _docUriParams.erase("ReconnectToken"); // Names the browser's session to coolwsd only.
         std::string docUri;
         docUri.reserve(_fields[Field::WOPISrc].size() + _docUriParams.size());
         docUri = _fields[Field::WOPISrc];
@@ -322,6 +323,9 @@ void RequestDetails::processURI()
         _fields[Field::DocumentURI] = std::move(docUri);
     }
 
+    // The rest is the proxy code path. A client that polls over HTTP instead of keeping a WebSocket
+    // open sends /<sessionId>/<command>/<serial> in the compat parameter, or after the last /ws of
+    // the legacy URL.
     // &compat=
     std::string compat = getParam("compat");
     std::string lastWS = compat;
