@@ -292,11 +292,11 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageRtf)
         xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(u"Standard"_ustr),
                                                    uno::UNO_QUERY);
-    bool bNoFirstHeader;
-    bool bShareFirstHeader;
-    xPageStyle->getPropertyValue(u"FirstIsShared"_ustr) >>= bShareFirstHeader;
+    bool bNoFirstHeader = {};
+    bool bShareFirstHeader = {};
+    CPPUNIT_ASSERT(xPageStyle->getPropertyValue(u"FirstIsShared"_ustr) >>= bShareFirstHeader);
     CPPUNIT_ASSERT(!bShareFirstHeader);
-    xPageStyle->getPropertyValue(u"HeaderNoFirst"_ustr) >>= bNoFirstHeader;
+    CPPUNIT_ASSERT(xPageStyle->getPropertyValue(u"HeaderNoFirst"_ustr) >>= bNoFirstHeader);
     CPPUNIT_ASSERT(bNoFirstHeader);
 
     SwDocShell* pDocShell = getSwDocShell();
@@ -327,11 +327,11 @@ CPPUNIT_TEST_FIXTURE(Test, emptyHeaderFirstPageDocx)
         xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(u"Standard"_ustr),
                                                    uno::UNO_QUERY);
-    bool bNoFirstHeader;
-    bool bShareFirstHeader;
-    xPageStyle->getPropertyValue(u"FirstIsShared"_ustr) >>= bShareFirstHeader;
+    bool bNoFirstHeader = {};
+    bool bShareFirstHeader = {};
+    CPPUNIT_ASSERT(xPageStyle->getPropertyValue(u"FirstIsShared"_ustr) >>= bShareFirstHeader);
     CPPUNIT_ASSERT(!bShareFirstHeader);
-    xPageStyle->getPropertyValue(u"HeaderNoFirst"_ustr) >>= bNoFirstHeader;
+    CPPUNIT_ASSERT(xPageStyle->getPropertyValue(u"HeaderNoFirst"_ustr) >>= bNoFirstHeader);
     CPPUNIT_ASSERT(bNoFirstHeader);
 
     SwDocShell* pDocShell = getSwDocShell();
