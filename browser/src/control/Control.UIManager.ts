@@ -3448,6 +3448,16 @@ class UIManager extends window.L.Control {
 	}
 
 	/**
+	 * Retrieves a preference for the current document type.
+	 * @param name - Preference name.
+	 * @param defaultValue - Default value if not set.
+	 */
+	getDocTypePref(name: string, defaultValue?: any): any {
+		const docType = this.map.getDocType();
+		return window.prefs.get(`${docType}.${name}`, defaultValue);
+	}
+
+	/**
 	 * Retrieves a boolean preference for the current document type.
 	 * @param name - Preference name.
 	 * @param defaultValue - Default value if not set.

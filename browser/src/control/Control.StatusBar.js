@@ -279,7 +279,7 @@ class StatusBar extends JSDialog.Toolbar {
 			{type: 'spacer',  id: 'permissionspacer'},
 			this._generateHtmlItem('documentstatus', 2),					// spreadsheet, text, presentation, drawing
 			{type: 'customtoolitem',  id: 'multi-page-view', command: 'multipageview', text: _('Multi Page View'), dataPriority: 10, visible: false,
-				configLabel: _('Multi Page View')},		
+				configLabel: _('Multi Page View')},
 			{type: 'customtoolitem',  id: 'prevpage', command: 'prev', text: _UNO('.uno:PageUp', 'text'), pressAndHold: true, dataPriority: 9,
 				configLabel: JSDialog.getStatusbarItemConfigLabel('prevpage'), configPeers: ['nextpage', 'prevnextbreak']},
 			{type: 'customtoolitem',  id: 'nextpage', command: 'next', text: _UNO('.uno:PageDown', 'text'), pressAndHold: true, dataPriority: 9},
@@ -343,21 +343,28 @@ class StatusBar extends JSDialog.Toolbar {
 		this._openConfigMenu(this._getAnchorAtCursor(e));
 	}
 
-	_openConfigMenu(anchor) {
-		const items = this.getToolItems();
-		const menuEntries = [];
-		const visible = {};
-
-		for (let i = 0; i < items.length; i++) {
-			const item = items[i];
+	// The status bar entries the user can hide, one per configuration menu entry.
+	_configurableItems() {
+		const result = [];
+		const seen = {};
+		for (const item of this.getToolItems()) {
 			if (!item.configLabel)
 				continue;
 
 			const configId = item.configId || item.id;
-			if (visible[configId])
+			if (seen[configId])
 				continue;
-			visible[configId] = true;
+			seen[configId] = true;
+			result.push(item);
+		}
+		return result;
+	}
 
+	_openConfigMenu(anchor) {
+		const menuEntries = [];
+
+		for (const item of this._configurableItems()) {
+			const configId = item.configId || item.id;
 			const targetId = item.configTargetId || item.id;
 			const el = document.getElementById(targetId)
 				|| this.parentContainer.querySelector('[modelid="' + item.id + '"]');
@@ -393,7 +400,7 @@ class StatusBar extends JSDialog.Toolbar {
 
 			const newHidden = !this.isItemUserHidden(entry.itemId);
 			this._applyUserHidden(entry.itemId, entry.targetId, entry.peers, newHidden);
-			this.map.uiManager.setDocTypePref('StatusbarUserHidden.' + entry.id, newHidden);
+			this._storeHiddenItems();
 		};
 
 		JSDialog.OpenDropdown('statusbar-context-menu', anchor, menuEntries, callback, 'top', false);
@@ -409,22 +416,40 @@ class StatusBar extends JSDialog.Toolbar {
 		}
 	}
 
+	// The hidden entries are kept per document type as one JSON array of configuration menu
+	// entry ids, for example ["prevpage","rowcolselcount"].
+	_storeHiddenItems() {
+		const hidden = this._configurableItems()
+			.filter((item) => this.isItemUserHidden(item.id))
+			.map((item) => item.configId || item.id);
+		this.map.uiManager.setDocTypePref('StatusbarHiddenItems', JSON.stringify(hidden));
+	}
+
+	_storedHiddenItems() {
+		const stored = this.map.uiManager.getDocTypePref('StatusbarHiddenItems');
+		if (stored === undefined)
+			return this._legacyHiddenItems();
+
+		try {
+			const parsed = JSON.parse(stored);
+			return Array.isArray(parsed) ? parsed : [];
+		} catch (e) {
+			return [];
+		}
+	}
+
+	// Backward compatibility with the old per-entry StatusbarUserHidden.<id> keys; remove later.
+	_legacyHiddenItems() {
+		return this._configurableItems()
+			.map((item) => item.configId || item.id)
+			.filter((configId) => this.map.uiManager.getBooleanDocTypePref(
+				'StatusbarUserHidden.' + configId, false));
+	}
+
 	_restoreUserHiddenState() {
-		const items = this.getToolItems();
-		const visible = {};
-		for (let i = 0; i < items.length; i++) {
-			const item = items[i];
-			if (!item.configLabel)
-				continue;
-
-			const configId = item.configId || item.id;
-			if (visible[configId])
-				continue;
-			visible[configId] = true;
-
-			const hide = this.map.uiManager.getBooleanDocTypePref(
-				'StatusbarUserHidden.' + configId, false);
-			if (!hide)
+		const hidden = this._storedHiddenItems();
+		for (const item of this._configurableItems()) {
+			if (!hidden.includes(item.configId || item.id))
 				continue;
 
 			this._applyUserHidden(item.id, item.configTargetId, item.configPeers, true);
