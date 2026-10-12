@@ -20,6 +20,8 @@
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XAudio.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
+#include <com/sun/star/animations/TransitionSubType.hpp>
+#include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -482,6 +484,44 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testLegacyAnimationSoundNotFetched)
     CPPUNIT_ASSERT(!xmloff::getSoundAllowed(xAudio->getSource()));
 
     saveAndReload(TestFilter::PPT);
+}
+
+CPPUNIT_TEST_FIXTURE(SdExportTest2, testAirplaneTransitionODFRoundTrip)
+{
+    // Given an ODP file with an airplane transition, which has no SMIL name, so it's written as
+    // loext:subtype, with a SMIL fallback in smil:subtype:
+    createSdImpressDoc("odp/airplane-transition.odp");
+
+    // When loading that document:
+    uno::Reference<beans::XPropertySet> xPage(getPage(1), uno::UNO_QUERY);
+
+    // Then make sure the extension attribute wins over the fallback:
+    CPPUNIT_ASSERT_EQUAL(animations::TransitionType::MISCSHAPEWIPE,
+                         xPage->getPropertyValue(u"TransitionType"_ustr).get<sal_Int16>());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 120 (AIRPLANE)
+    // - Actual  : 1 (LEFTTORIGHT)
+    // i.e. loext:subtype was ignored.
+    CPPUNIT_ASSERT_EQUAL(animations::TransitionSubType::AIRPLANE,
+                         xPage->getPropertyValue(u"TransitionSubtype"_ustr).get<sal_Int16>());
+
+    // And when saving it back to ODP:
+    save(TestFilter::ODP);
+
+    // Then make sure that the extension attribute has the subtype, with a SMIL fallback:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: leftToRight
+    // - Actual  : airplane
+    // i.e. smil:subtype had a non-SMIL value.
+    CPPUNIT_ASSERT_EQUAL(u"leftToRight"_ustr,
+                         getXPathContent(pXmlDoc, "//anim:transitionFilter/@smil:subtype"));
+    CPPUNIT_ASSERT_EQUAL(u"airplane"_ustr,
+                         getXPathContent(pXmlDoc, "//anim:transitionFilter/@loext:subtype"));
+    CPPUNIT_ASSERT_EQUAL(
+        u"leftToRight"_ustr,
+        getXPathContent(
+            pXmlDoc, "//style:drawing-page-properties[@smil:type='miscShapeWipe']/@smil:subtype"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

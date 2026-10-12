@@ -35,6 +35,9 @@ extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_AdditiveMode[];
 extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransformType[];
 extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransitionType[];
 extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransitionSubType[];
+extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransitionSubTypeExt[];
+/// Returns the subtype to write as smil:subtype, for subtypes that have no SMIL name.
+sal_Int16 getTransitionSubTypeFallback(sal_Int16 nSubtype);
 extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_EventTrigger[];
 extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_EffectPresetClass[];
 extern const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_EffectNodeType[];

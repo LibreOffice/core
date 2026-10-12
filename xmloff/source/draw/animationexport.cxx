@@ -330,10 +330,45 @@ const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransitionSubType[] =
     { XML_FROMTOPRIGHT,         TransitionSubType::FROMTOPRIGHT },
     { XML_FROMBOTTOMLEFT,       TransitionSubType::FROMBOTTOMLEFT },
     { XML_FROMBOTTOMRIGHT,      TransitionSubType::FROMBOTTOMRIGHT },
+
+    { XML_TOKEN_INVALID, 0 }
+};
+// Subtypes that have no SMIL name: these are written as loext:subtype, with a fallback in smil:subtype.
+const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_TransitionSubTypeExt[] =
+{
     { XML_AIRPLANE,             TransitionSubType::AIRPLANE },
 
     { XML_TOKEN_INVALID, 0 }
 };
+
+sal_Int16 getTransitionSubTypeFallback(sal_Int16 nSubtype)
+{
+    switch (nSubtype)
+    {
+        case TransitionSubType::AIRPLANE:
+            // Fall: the sheet falls over instead of flying away.
+            return TransitionSubType::LEFTTORIGHT;
+    }
+    return nSubtype;
+}
+
+namespace
+{
+void exportTransitionSubType(SvXMLExport& rExport, sal_Int16 nSubtype)
+{
+    OUStringBuffer sTmp;
+    OUString aExtSubtype;
+    if (SvXMLUnitConverter::convertEnum(sTmp, nSubtype, aAnimations_EnumMap_TransitionSubTypeExt))
+        aExtSubtype = sTmp.makeStringAndClear();
+
+    SvXMLUnitConverter::convertEnum(sTmp, getTransitionSubTypeFallback(nSubtype),
+                                    aAnimations_EnumMap_TransitionSubType);
+    rExport.AddAttribute(XML_NAMESPACE_SMIL, XML_SUBTYPE, sTmp.makeStringAndClear());
+
+    if (!aExtSubtype.isEmpty() && (rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
+        rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_SUBTYPE, aExtSubtype);
+}
+}
 const SvXMLEnumMapEntry<sal_Int16> aAnimations_EnumMap_EventTrigger[] =
 {
     { XML_ONBEGIN,          EventTrigger::ON_BEGIN },
@@ -600,10 +635,7 @@ void AnimationsExporterImpl::exportTransitionNode()
         mxExport->AddAttribute( XML_NAMESPACE_SMIL, XML_TYPE, sTmp.makeStringAndClear() );
 
         if( nSubtype != TransitionSubType::DEFAULT )
-        {
-            SvXMLUnitConverter::convertEnum( sTmp, nSubtype, aAnimations_EnumMap_TransitionSubType );
-            mxExport->AddAttribute( XML_NAMESPACE_SMIL, XML_SUBTYPE, sTmp.makeStringAndClear() );
-        }
+            exportTransitionSubType( *mxExport, nSubtype );
 
         if( !bDirection )
             mxExport->AddAttribute( XML_NAMESPACE_SMIL, XML_DIRECTION, XML_REVERSE );
@@ -1331,10 +1363,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
 
             sal_Int16 nSubtype = xTransitionFilter->getSubtype();
             if( nSubtype != TransitionSubType::DEFAULT )
-            {
-                SvXMLUnitConverter::convertEnum( sTmp, nSubtype, aAnimations_EnumMap_TransitionSubType );
-                mxExport->AddAttribute( XML_NAMESPACE_SMIL, XML_SUBTYPE, sTmp.makeStringAndClear() );
-            }
+                exportTransitionSubType( *mxExport, nSubtype );
 
             bTemp = xTransitionFilter->getMode();
             if( !bTemp )

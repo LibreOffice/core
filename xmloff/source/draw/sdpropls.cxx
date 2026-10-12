@@ -1014,6 +1014,31 @@ public:
 
 namespace
 {
+/// Writes the SMIL fallback for transition subtypes that have no SMIL name. The page style has no
+/// extension attribute for them: the slide's transition filter in the animations has it, and that
+/// is what import uses.
+class XMLTransitionSubtypeHdl : public XMLEnumPropertyHdl
+{
+public:
+    XMLTransitionSubtypeHdl()
+        : XMLEnumPropertyHdl(xmloff::aAnimations_EnumMap_TransitionSubType)
+    {
+    }
+
+    bool exportXML(OUString& rStrExpValue, const uno::Any& rValue,
+                   const SvXMLUnitConverter& rUnitConverter) const override
+    {
+        sal_Int16 nSubtype = 0;
+        if (!(rValue >>= nSubtype))
+            return false;
+        return XMLEnumPropertyHdl::exportXML(
+            rStrExpValue, uno::Any(xmloff::getTransitionSubTypeFallback(nSubtype)), rUnitConverter);
+    }
+};
+}
+
+namespace
+{
 class XMLLatheEndAngleHdl : public XMLDoublePropHdl
 {
 public:
@@ -1366,7 +1391,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLEnumPropertyHdl( xmloff::aAnimations_EnumMap_TransitionType );
                 break;
             case XML_SD_TYPE_TRANSTIION_SUBTYPE:
-                pHdl = new XMLEnumPropertyHdl( xmloff::aAnimations_EnumMap_TransitionSubType );
+                pHdl = new XMLTransitionSubtypeHdl;
                 break;
             case XML_SD_TYPE_TRANSTIION_DIRECTION:
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_FORWARD), GetXMLToken(XML_REVERSE) );

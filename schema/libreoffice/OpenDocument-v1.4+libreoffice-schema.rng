@@ -2209,6 +2209,46 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         </rng:zeroOrMore>
       </rng:element>
     </rng:define>
+
+    <rng:define name="anim-transition-filter-attlist">
+      <rng:interleave>
+        <rng:attribute name="smil:type">
+          <rng:ref name="string"/>
+        </rng:attribute>
+        <rng:optional>
+          <rng:attribute name="smil:subtype">
+            <rng:ref name="string"/>
+          </rng:attribute>
+        </rng:optional>
+        <!-- A subtype that has no SMIL name, e.g. airplane: smil:subtype has a fallback then. -->
+        <rng:optional>
+          <rng:attribute name="loext:subtype">
+            <rng:ref name="string"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="smil:direction">
+            <rng:choice>
+              <rng:value>forward</rng:value>
+              <rng:value>reverse</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="smil:fadeColor">
+            <rng:ref name="color"/>
+          </rng:attribute>
+        </rng:optional>
+        <rng:optional>
+          <rng:attribute name="smil:mode">
+            <rng:choice>
+              <rng:value>in</rng:value>
+              <rng:value>out</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+      </rng:interleave>
+    </rng:define>
   </rng:include>
 
     <!-- TODO no proposal -->
