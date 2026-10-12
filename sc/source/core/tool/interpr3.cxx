@@ -5183,18 +5183,11 @@ void ScInterpreter::ScForecast()
     KahanSum fSumX          = 0.0;
     KahanSum fSumY          = 0.0;
 
-    for (SCSIZE i = 0; i < nC1; i++)
-    {
-        for (SCSIZE j = 0; j < nR1; j++)
-        {
-            if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
-            {
-                fSumX += pMat1->GetDouble(i,j);
-                fSumY += pMat2->GetDouble(i,j);
-                fCount++;
-            }
-        }
-    }
+    pMat1->IterateNumericPairs(*pMat2, [&](double fValX, double fValY) {
+        fSumX += fValX;
+        fSumY += fValY;
+        fCount++;
+    });
     if (fCount < 1.0)
         PushNoValue();
     else
@@ -5203,19 +5196,10 @@ void ScInterpreter::ScForecast()
         KahanSum fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
         double fMeanX = fSumX.get() / fCount;
         double fMeanY = fSumY.get() / fCount;
-        for (SCSIZE i = 0; i < nC1; i++)
-        {
-            for (SCSIZE j = 0; j < nR1; j++)
-            {
-                if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
-                {
-                    double fValX = pMat1->GetDouble(i,j);
-                    double fValY = pMat2->GetDouble(i,j);
-                    fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
-                    fSumSqrDeltaX    += (fValX - fMeanX) * (fValX - fMeanX);
-                }
-            }
-        }
+        pMat1->IterateNumericPairs(*pMat2, [&](double fValX, double fValY) {
+            fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
+            fSumSqrDeltaX += (fValX - fMeanX) * (fValX - fMeanX);
+        });
         if (fSumSqrDeltaX == 0.0)
             PushError( FormulaError::DivisionByZero);
         else
