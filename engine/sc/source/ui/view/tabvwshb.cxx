@@ -156,6 +156,9 @@ public:
 
 void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
 {
+    if (IsKitReadOnlyView())
+        return;
+
     // Do not leave the hint message box on top of the object
     RemoveHintWindow();
 
