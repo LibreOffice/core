@@ -462,12 +462,20 @@ SwSpellPopup::SwSpellPopup(
     if (bUseImagesInMenus)
     {
         // The icon beside the message tells which checker found the error:
-        // the sentence checker has an icon of its own, any other checker
-        // gets the generic info icon.
+        // each checker has an icon of its own, any other one gets the
+        // generic info icon.
         // An image that did not load still takes the icon column, drawing an
         // empty box beside the message.
-        Image aInfoImage(StockImage::Yes,
-            aProofreaderName == "cpo.lingu.Lightproof" ? BMP_LIGHTPROOF_16 : BMP_INFO_16);
+        OUString aIcon = BMP_INFO_16;
+        if (aProofreaderName == "cpo.lingu.Lightproof")
+            aIcon = BMP_LIGHTPROOF_16;
+        else if (aProofreaderName == "org.openoffice.lingu.LanguageToolGrammarChecker")
+            aIcon = BMP_LANGUAGETOOL_16;
+        else if (aProofreaderName == "cpo.lingu.Duden")
+            aIcon = BMP_DUDEN_16;
+        else if (aProofreaderName == "cpo.lingu.Grammalecte")
+            aIcon = BMP_GRAMMALECTE_16;
+        Image aInfoImage(StockImage::Yes, aIcon);
         if (!!aInfoImage)
             m_xPopupMenu->SetItemImage(MN_SHORT_COMMENT, aInfoImage);
     }

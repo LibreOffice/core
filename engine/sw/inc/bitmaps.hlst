@@ -57,6 +57,9 @@ inline constexpr OUString RID_BMP_PROT_NO_HIDE = u"sw/res/re04.png"_ustr;
 
 inline constexpr OUString BMP_INFO_16 = u"res/info_16.png"_ustr;
 inline constexpr OUString BMP_LIGHTPROOF_16 = u"cmd/sc_lightproof.png"_ustr;
+inline constexpr OUString BMP_LANGUAGETOOL_16 = u"cmd/sc_languagetool.png"_ustr;
+inline constexpr OUString BMP_DUDEN_16 = u"cmd/sc_duden.png"_ustr;
+inline constexpr OUString BMP_GRAMMALECTE_16 = u"cmd/sc_grammalecte.png"_ustr;
 
 inline constexpr OUString RID_BMP_RIBBAR_TBL = u"sw/res/sr20002.png"_ustr;
 inline constexpr OUString RID_BMP_RIBBAR_FRM = u"sw/res/sr20003.png"_ustr;
