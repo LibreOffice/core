@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <optional>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/SoundReference.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -560,6 +561,7 @@ void AnimationNodeContext::init_node(  const cpo::uno::Reference< css::xml::sax:
         std::string_view aKeyTimes;
         bool bHaveXmlId( false );
         OUString sXmlId;
+        std::optional<sal_Int16> oExtSubtype;
 
         sal_Int16 nEnum;
         for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
@@ -1041,6 +1043,16 @@ void AnimationNodeContext::init_node(  const cpo::uno::Reference< css::xml::sax:
             }
             break;
 
+            case XML_ELEMENT(CO_EXT, XML_SUBTYPE):
+            {
+                // Applied after all attributes, so it wins over the smil:subtype fallback.
+                if (xTransitionFilter.is()
+                    && SvXMLUnitConverter::convertEnum(nEnum, aIter.toView(),
+                                                       aAnimations_EnumMap_TransitionSubTypeExt))
+                    oExtSubtype = nEnum;
+            }
+            break;
+
             case XML_ELEMENT(SMIL, XML_MODE):
             case XML_ELEMENT(SMIL_COMPAT, XML_MODE):
             case XML_ELEMENT(SMIL_SO52, XML_MODE):
@@ -1146,6 +1158,9 @@ void AnimationNodeContext::init_node(  const cpo::uno::Reference< css::xml::sax:
             }
             }
         }
+
+        if (oExtSubtype)
+            xTransitionFilter->setSubtype(*oExtSubtype);
 
         if (!sXmlId.isEmpty())
         {
