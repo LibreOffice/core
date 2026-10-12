@@ -44,6 +44,7 @@ class URLPopUpSection extends HTMLObjectSection {
 
 		this.sectionProperties.documentPosition = documentPosition.clone();
 		this.getHTMLObject().style.pointerEvents = '';
+		this.interactable = false; // the popup's own elements take the mouse
     }
 
 	adjustHTMLObjectPosition() {
@@ -262,6 +263,7 @@ class URLPopUpSection extends HTMLObjectSection {
 
 		if (checkLeft < 0) originalLeft = app.activeDocument.activeLayout.viewedRectangle.pX1;
 
+		section.size = [section.getPopUpWidth() * app.dpiScale, section.getPopUpHeight() * app.dpiScale];
 		section.setPosition(originalLeft, originalTop);
 		section.adjustHTMLObjectPosition();
 		section.containerObject.requestReDraw();
