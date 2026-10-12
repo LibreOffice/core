@@ -4231,7 +4231,7 @@ reg_get_value()
         regvalue=$($WSL_LO_HELPER --read-registry $1 "$2/$3" 2>/dev/null)
         return
     elif test -n "$WSL_ONLY_AS_HELPER"; then
-        regvalue=$(reg.exe query "$(echo $2 | tr '/' '\\')" /v "$3" /reg:$1 |sed -ne "s|\s*$3.*REG_SZ\s*\(.*\)[\s\r]*$|\1|p")
+        regvalue=$(reg.exe query "$(echo $2 | tr '/' '\\')" /v "$3" /reg:$1 2>/dev/null |sed -ne "s|\s*$3.*REG_SZ\s*\(.*\)[\s\r]*$|\1|p")
         return
     fi
 
