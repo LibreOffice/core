@@ -124,29 +124,48 @@ abstract class ClassicContext implements InteractionContext {
 	}
 
 	/*
-		Enter Group may be used on one selected group that is no diagram, as Enter and F3 enter
-		it; Leave Group wherever one stands in a group or a diagram; Ungroup where a selected
-		object holds others, a group or a diagram among several.
+		The states of the commands the client gives itself, from what is selected where one
+		stands:
+		- Enter Group on one selected group that is no diagram, as Enter and F3 enter it; Leave
+		  Group wherever one stands in a group; Ungroup where a selected group can be taken apart,
+		  a diagram among several being an object like any other.
+		- Group with two objects or more; aligning, arranging and the position and size with one
+		  or more; naming with exactly one; spreading out with three or more. As the office does,
+		  a part inside a 3D scene is neither aligned nor arranged.
 	*/
 	public commandStates(): { [command: string]: boolean } {
 		const selected = GraphicSelection.selectedObjectIDs;
-		const single = selected.length === 1 ? selected[0] : undefined;
+		const count = selected.length;
+		const single = count === 1 ? selected[0] : undefined;
 		const aGroup =
 			single !== undefined &&
 			RenderGeometrySection.holdsObjects(single) &&
 			!RenderGeometrySection.objectOf(single)?.isDiagram;
+		// The kinds of the parts of a 3D scene, which sit between the scene's and the polygon's.
+		const inAScene = selected.some((objectId: number) => {
+			const kind = RenderGeometrySection.objectOf(objectId)?.objectKind ?? 0;
+			return kind > 202 && kind <= 209;
+		});
 
-		return {
+		const states: { [command: string]: boolean } = {
 			'.uno:EnterGroup': aGroup,
 			'.uno:LeaveGroup': this.groupStoodIn !== undefined,
-			// A diagram among several is an object like any other, and is taken apart only
-			// selected as a whole on its own.
 			'.uno:FormatUngroup': selected.some(
 				(objectId: number) =>
 					RenderGeometrySection.holdsObjects(objectId) &&
 					!RenderGeometrySection.objectOf(objectId)?.isDiagram,
 			),
+			'.uno:FormatGroup': count >= 2,
 		};
+		for (const command of Interaction.commandsForOneOrMore)
+			states[command] =
+				count >= 1 && (command === '.uno:TransformDialog' || !inAScene);
+
+		for (const command of Interaction.commandsForOne)
+			states[command] = count === 1;
+		for (const command of Interaction.commandsForThreeOrMore)
+			states[command] = count >= 3;
+		return states;
 	}
 
 	/// Ungroup is the engine's, for what is selected.
@@ -516,16 +535,25 @@ class ClassicDiagramContext extends ClassicGroupContext {
 		A diagram gives no hint of being a group but by Ungroup, which is offered with the whole
 		diagram selected, its first object, as for a group. Enter Group is never offered. Leave
 		Group is offered inside the diagram, on its other objects, and with the whole diagram
-		selected as for any object at the level around it: only where a group holds it.
+		selected as for any object at the level around it: only where a group holds it. The
+		whole diagram is moved and arranged as an object; its other objects take no geometry,
+		so nothing that moves, arranges or groups is offered on them, while naming them is.
 	*/
 	public commandStates(): { [command: string]: boolean } {
+		const states = super.commandStates();
 		const whole = this.wholeSelected();
-		return {
-			'.uno:EnterGroup': false,
-			'.uno:LeaveGroup':
-				!whole || !!RenderGeometrySection.parentOf(this.diagram),
-			'.uno:FormatUngroup': whole,
-		};
+		states['.uno:EnterGroup'] = false;
+		states['.uno:LeaveGroup'] =
+			!whole || !!RenderGeometrySection.parentOf(this.diagram);
+		states['.uno:FormatUngroup'] = whole;
+		if (!whole) {
+			states['.uno:FormatGroup'] = false;
+			for (const command of Interaction.commandsForOneOrMore)
+				states[command] = false;
+			for (const command of Interaction.commandsForThreeOrMore)
+				states[command] = false;
+		}
+		return states;
 	}
 
 	/*

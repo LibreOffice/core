@@ -134,23 +134,21 @@ class GraphicSelection {
 		this.nextReportAsItIs = true;
 	}
 
-	/// The commands whose state a view that draws from the objects gives itself, from where the
-	/// selection stands, rather than taking the engine's.
-	private static readonly statesGivenHere: string[] = [
-		'.uno:EnterGroup',
-		'.uno:LeaveGroup',
-		'.uno:FormatUngroup',
-	];
-
 	/// The state of each of those last given, so a state is told only when it changes.
 	private static statesGiven: { [command: string]: string } = {};
 
-	/// Whether the state of that command is given here, so the engine's is left aside.
+	/*
+		Whether the state of that command is given here, so the engine's is left aside. One the
+		engine sends before or after the view draws from the objects reaches the widgets, and what
+		was given here for it last is forgotten, so the next state given here is told whatever it
+		is.
+	*/
 	public static givesTheState(commandName: string): boolean {
-		return (
-			RenderManager.isVectorRendering() &&
-			GraphicSelection.statesGivenHere.includes(commandName)
-		);
+		if (!Interaction.statesGivenHere.includes(commandName)) return false;
+		if (RenderManager.isVectorRendering()) return true;
+
+		delete GraphicSelection.statesGiven[commandName];
+		return false;
 	}
 
 	/*
@@ -162,7 +160,7 @@ class GraphicSelection {
 		if (!RenderManager.isVectorRendering()) return;
 
 		const states = Interaction.context().commandStates();
-		for (const commandName of GraphicSelection.statesGivenHere) {
+		for (const commandName of Interaction.statesGivenHere) {
 			const state = states[commandName] ? 'enabled' : 'disabled';
 			if (GraphicSelection.statesGiven[commandName] === state) continue;
 			GraphicSelection.statesGiven[commandName] = state;

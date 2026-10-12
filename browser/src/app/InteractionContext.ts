@@ -100,6 +100,53 @@ interface InteractionSet {
 }
 
 class Interaction {
+	/// The commands that move or arrange what is selected, which need one object or more.
+	public static readonly commandsForOneOrMore: string[] = [
+		'.uno:ObjectAlignLeft',
+		'.uno:AlignCenter',
+		'.uno:ObjectAlignRight',
+		'.uno:AlignUp',
+		'.uno:AlignMiddle',
+		'.uno:AlignDown',
+		'.uno:ObjectAlign',
+		'.uno:BringToFront',
+		'.uno:ObjectForwardOne',
+		'.uno:ObjectBackOne',
+		'.uno:SendToBack',
+		'.uno:TransformDialog',
+	];
+
+	/// The commands that name one object, which need exactly one.
+	public static readonly commandsForOne: string[] = [
+		'.uno:NameGroup',
+		'.uno:ObjectTitleDescription',
+	];
+
+	/// The commands that spread objects out, which need three or more.
+	public static readonly commandsForThreeOrMore: string[] = [
+		'.uno:DistributeSelection',
+		'.uno:DistributeHorzLeft',
+		'.uno:DistributeHorzCenter',
+		'.uno:DistributeHorzDistance',
+		'.uno:DistributeHorzRight',
+		'.uno:DistributeVertTop',
+		'.uno:DistributeVertCenter',
+		'.uno:DistributeVertDistance',
+		'.uno:DistributeVertBottom',
+	];
+
+	/// Every command whose state a view that draws from the objects gives itself, from where the
+	/// selection stands, rather than taking the engine's.
+	public static readonly statesGivenHere: string[] = [
+		'.uno:EnterGroup',
+		'.uno:LeaveGroup',
+		'.uno:FormatUngroup',
+		'.uno:FormatGroup',
+		...Interaction.commandsForOneOrMore,
+		...Interaction.commandsForOne,
+		...Interaction.commandsForThreeOrMore,
+	];
+
 	/// The set in use. It is the classic one for now; which set to use is to become a setting.
 	private static setInUse: InteractionSet | null = null;
 
