@@ -15,6 +15,8 @@
 #include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
@@ -1267,6 +1269,50 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testCorrelationCircleODSRoundtrip)
         CPPUNIT_ASSERT_EQUAL(u"$Sheet1.$E$2:$E$6"_ustr,
                              xSecondDimension->getSourceRangeRepresentation());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testCorrelationCircleKeepsOneValueColumn)
+{
+    // A column chart of names beside one value column, turned into a correlation circle and
+    // back again, the way the chart wizard does it while a user tries each type in turn.
+    loadFromFile(u"fods/column-chart-one-value-column.fods");
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    uno::Reference<lang::XMultiServiceFactory> xTemplateManager(xChartDoc->getChartTypeManager(),
+                                                                UNO_QUERY_THROW);
+    uno::Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+
+    auto lclChangeTo = [&xTemplateManager, &xDiagram](const OUString& rTemplateName) {
+        uno::Reference<chart2::XChartTypeTemplate> xTemplate(
+            xTemplateManager->createInstance(rTemplateName), UNO_QUERY_THROW);
+        xTemplate->changeDiagram(xDiagram);
+    };
+
+    lclChangeTo(u"com.sun.star.chart2.template.CorrelationCircle"_ustr);
+
+    // One value column is too few for a point. It stays in the diagram as a dimension.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getNumberOfDataSeries(xChartDoc));
+    uno::Reference<chart2::data::XDataSequence> xDimension
+        = getDataSequenceFromDocByRole(xChartDoc, u"values-y");
+    CPPUNIT_ASSERT(xDimension.is());
+    CPPUNIT_ASSERT_EQUAL(u"$Sheet1.$B$1:$B$4"_ustr, xDimension->getSourceRangeRepresentation());
+
+    lclChangeTo(u"com.sun.star.chart2.template.Column"_ustr);
+
+    // The column chart gets its value column back.
+    uno::Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0);
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.chart2.ColumnChartType"_ustr, xChartType->getChartType());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getNumberOfDataSeries(xChartDoc));
+    uno::Reference<chart2::data::XDataSequence> xValues
+        = getDataSequenceFromDocByRole(xChartDoc, u"values-y");
+    CPPUNIT_ASSERT(xValues.is());
+    CPPUNIT_ASSERT_EQUAL(u"$Sheet1.$B$1:$B$4"_ustr, xValues->getSourceRangeRepresentation());
+    const std::vector<std::vector<double>> aYValues = getDataSeriesYValuesFromChartType(xChartType);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(1), aYValues.size());
+    const std::vector<double> aExpectedValues{ 200.0, 350.0, 500.0, 320.0 };
+    CPPUNIT_ASSERT_EQUAL(aExpectedValues.size(), aYValues[0].size());
+    for (std::size_t nIndex = 0; nIndex < aExpectedValues.size(); ++nIndex)
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aExpectedValues[nIndex], aYValues[0][nIndex], 1e-9);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testHistogramXLSXRoundtrip)

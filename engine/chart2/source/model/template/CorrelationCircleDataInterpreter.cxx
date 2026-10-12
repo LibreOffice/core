@@ -81,14 +81,46 @@ InterpretedData CorrelationCircleDataInterpreter::interpretDataSource(
 
     std::vector<rtl::Reference<DataSeries>> aSeriesVec;
 
-    // Two dimension columns and one feature column are the smallest input that
-    // yields a single point.
-    if (aData.size() >= 3)
+    // The last two columns are the dimensions. With a single column, that column is the second
+    // dimension, so the roles are filled from the end in both cases.
+    uno::Reference<chart2::data::XLabeledDataSequence> xValuesX;
+    uno::Reference<chart2::data::XLabeledDataSequence> xValuesY;
+    if (aData.size() >= 2)
     {
-        uno::Reference<chart2::data::XLabeledDataSequence> xValuesX(aData[aData.size() - 2]);
-        uno::Reference<chart2::data::XLabeledDataSequence> xValuesY(aData[aData.size() - 1]);
+        xValuesX = aData[aData.size() - 2];
+        xValuesY = aData[aData.size() - 1];
         aData.resize(aData.size() - 2);
+    }
+    else if (aData.size() == 1)
+    {
+        xValuesY = aData[0];
+        aData.clear();
+    }
 
+    if (aData.empty())
+    {
+        // Without a feature column there is no point to draw, so one series holds the dimension
+        // columns on their own. The diagram keeps every column that way, and the next chart type
+        // gets all of them back.
+        if (xValuesX.is() || xValuesY.is())
+        {
+            std::vector<uno::Reference<chart2::data::XLabeledDataSequence>> aNewData;
+            if (xValuesX.is())
+                aNewData.push_back(lcl_shareWithSeries(xValuesX, u"values-x"_ustr, 0));
+            if (xValuesY.is())
+                aNewData.push_back(lcl_shareWithSeries(xValuesY, u"values-y"_ustr, 0));
+
+            rtl::Reference<DataSeries> xSeries;
+            if (!aSeriesToReUse.empty())
+                xSeries = aSeriesToReUse[0];
+            else
+                xSeries = new DataSeries;
+            xSeries->setData(aNewData);
+            aSeriesVec.push_back(xSeries);
+        }
+    }
+    else
+    {
         aSeriesVec.reserve(aData.size());
 
         for (std::size_t nIndex = 0; nIndex < aData.size(); ++nIndex)
