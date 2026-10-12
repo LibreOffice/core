@@ -2255,9 +2255,12 @@ const std::vector<std::string>& getUploadableXcuPaths()
         "/org.openoffice.Office.Common/BulletsNumbering",
         "/org.openoffice.Office.Common/I18N/CTL",
 
-        // Only the sentence-checking subtree: its sibling
-        // GrammarChecking/LanguageTool holds an API key and a user name,
-        // which must not round-trip to the host.
+        // Only the sentence-checking subtree: its siblings
+        // GrammarChecking/LanguageTool, GrammarChecking/Duden and
+        // GrammarChecking/Grammalecte hold the servers, accounts and API
+        // keys of the remote checkers, which must not round-trip to the
+        // host. The kit applies them from the user's own xcu, where the
+        // server allows it, but never sends them back.
         "/org.openoffice.Office.Linguistic/GrammarChecking/SentenceChecking",
     };
     return sPaths;

@@ -91,6 +91,15 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "deepl.auth_key", "" },
     { "deepl.enabled", "false" },
     { "document_signing.enable", "true" },
+    { "duden.allow_user_settings", "false" },
+    { "duden.api_key", "" },
+    { "duden.base_url", "" },
+    { "duden.dictionaries", "" },
+    { "duden.enabled", "false" },
+    { "duden.orthography_standard", "duden" },
+    { "duden.property_sets", "" },
+    { "duden.spellchecking_level", "3" },
+    { "duden.ssl_verification", "true" },
     { "enable_websocket_urp", "false" },
     { "experimental_features", "false" },
     { "extra_export_formats.impress_bmp", "false" },
@@ -119,6 +128,10 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "fetch_update_check", "10" },
     { "fonts_missing.handling", "log" },
     { "file_server_root_path", "browser/.." },
+    { "grammalecte.allow_user_settings", "false" },
+    { "grammalecte.base_url", "" },
+    { "grammalecte.enabled", "false" },
+    { "grammalecte.ssl_verification", "true" },
     { "hexify_embedded_urls", "false" },
     { "hide_legacy_script_warning", "false" },
     { "home_mode.enable", "false" },
@@ -128,6 +141,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "indirection_endpoint.migration_timeout_secs", "180" },
     { "indirection_endpoint.server_name", "" },
     { "indirection_endpoint.url", "" },
+    { "languagetool.allow_user_settings", "false" },
     { "languagetool.api_key", "" },
     { "languagetool.base_url", "" },
     { "languagetool.enabled", "false" },
@@ -471,7 +485,8 @@ std::string getLoggableConfig(const Poco::Util::AbstractConfiguration& config)
         {
             if (pair.first == "admin_console.username" || pair.first == "admin_console.password" ||
                 pair.first == "admin_console.secure_password" ||
-                pair.first == "languagetool.api_key" || pair.first == "deepl.auth_key" ||
+                pair.first == "languagetool.api_key" || pair.first == "duden.api_key" ||
+                pair.first == "deepl.auth_key" ||
                 pair.first == "ai.api_key" || pair.first == "ai.image_api_key" ||
                 pair.first == "logging.anonymize.anonymization_salt" || pair.first == "support_key")
             {

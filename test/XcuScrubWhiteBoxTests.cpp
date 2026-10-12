@@ -95,6 +95,15 @@ void XcuScrubWhiteBoxTests::testIsAllowedXcuPath()
     // An ancestor of an allowed root is not itself allowed.
     LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Common"));
 
+    // The sentence checker options go up; the remote checkers' servers,
+    // accounts and keys beside them never do.
+    LOK_ASSERT(isAllowedXcuPath("/org.openoffice.Office.Linguistic/GrammarChecking/SentenceChecking/en"));
+    LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Linguistic/GrammarChecking/LanguageTool"));
+    LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Linguistic/GrammarChecking/Duden"));
+    LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Linguistic/GrammarChecking/Duden/Style"));
+    LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Linguistic/GrammarChecking/Grammalecte"));
+    LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Linguistic/GrammarChecking/Grammalecte/Options"));
+
     // Unrelated roots and the empty string are rejected.
     LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Recovery/RecoveryList"));
     LOK_ASSERT(!isAllowedXcuPath(""));
@@ -110,13 +119,17 @@ void XcuScrubWhiteBoxTests::testScrubKeepsAllowedDropsTheRest()
     const std::string raw = writeTempXcu(
         dir, xcuItem("/org.openoffice.Office.Common/BulletsNumbering") +
                  xcuItem("/org.openoffice.Office.Recovery/RecoveryList") +
+                 xcuItem("/org.openoffice.Office.Linguistic/GrammarChecking/LanguageTool") +
+                 xcuItem("/org.openoffice.Office.Linguistic/GrammarChecking/Duden/Style") +
+                 xcuItem("/org.openoffice.Office.Linguistic/GrammarChecking/Grammalecte/Options") +
                  xcuItem("/org.openoffice.Office.Writer/Grid"));
 
     const std::string scrubbed = scrubXcuForUpload(raw);
     LOK_ASSERT(!scrubbed.empty());
     FileUtil::OwnedFile scrubbedCleanup(scrubbed);
 
-    // Only the two allowed items survive, in their original order. The
+    // Only the two allowed items survive, in their original order; the
+    // remote checker settings between them are dropped. The
     // BulletsNumbering item surviving also proves the oor:path attribute is
     // read back through Poco's namespace-aware DOM, not dropped.
     const std::vector<std::string> kept = itemPaths(scrubbed);

@@ -2366,24 +2366,76 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
     }
 #endif
 
-    // LanguageTool configuration
-    bool enableLanguageTool = ConfigUtil::getConfigValue<bool>(conf, "languagetool.enabled", false);
-    setenv("LANGUAGETOOL_ENABLED", enableLanguageTool ? "true" : "false", 1);
-    const std::string baseAPIUrl =
-        ConfigUtil::getConfigValue<std::string>(conf, "languagetool.base_url", "");
-    setenv("LANGUAGETOOL_BASEURL", baseAPIUrl.c_str(), 1);
-    const std::string userName =
-        ConfigUtil::getConfigValue<std::string>(conf, "languagetool.user_name", "");
-    setenv("LANGUAGETOOL_USERNAME", userName.c_str(), 1);
-    const std::string apiKey =
-        ConfigUtil::getConfigValue<std::string>(conf, "languagetool.api_key", "");
-    setenv("LANGUAGETOOL_APIKEY", apiKey.c_str(), 1);
-    bool sslVerification =
-        ConfigUtil::getConfigValue<bool>(conf, "languagetool.ssl_verification", true);
-    setenv("LANGUAGETOOL_SSL_VERIFICATION", sslVerification ? "true" : "false", 1);
-    const std::string restProtocol =
-        ConfigUtil::getConfigValue<std::string>(conf, "languagetool.rest_protocol", "");
-    setenv("LANGUAGETOOL_RESTPROTOCOL", restProtocol.c_str(), 1);
+    // The remote sentence checkers. The kit reads them from the environment,
+    // one cluster of variables per checker.
+    const auto exportRemoteChecker = [&conf](const std::string& block, const char* prefix,
+                                             const std::vector<std::pair<const char*, const char*>>& keys)
+    {
+        for (const std::pair<const char*, const char*>& key : keys)
+        {
+            const std::string name = std::string(prefix) + '_' + key.second;
+            const std::string path = block + '.' + key.first;
+            // The booleans go as "true"/"false", whatever the file spells.
+            if (path.ends_with(".enabled") || path.ends_with(".ssl_verification") ||
+                path.ends_with(".allow_user_settings"))
+            {
+                const bool value = ConfigUtil::getConfigValue<bool>(conf, path, false);
+                setenv(name.c_str(), value ? "true" : "false", 1);
+            }
+            else
+            {
+                const std::string value = ConfigUtil::getConfigValue<std::string>(conf, path, "");
+                setenv(name.c_str(), value.c_str(), 1);
+            }
+        }
+    };
+    const std::vector<std::pair<const char*, const char*>> serverKeys = {
+        { "enabled", "ENABLED" },
+        { "base_url", "BASEURL" },
+        { "user_name", "USERNAME" },
+        { "api_key", "APIKEY" },
+        { "ssl_verification", "SSL_VERIFICATION" },
+        { "allow_user_settings", "ALLOW_USER_SETTINGS" },
+    };
+    exportRemoteChecker("languagetool", "LANGUAGETOOL", serverKeys);
+    // The Duden Korrekturserver takes an API token, not an account name.
+    exportRemoteChecker("duden", "DUDEN",
+                        { { "enabled", "ENABLED" },
+                          { "base_url", "BASEURL" },
+                          { "api_key", "APIKEY" },
+                          { "ssl_verification", "SSL_VERIFICATION" },
+                          { "allow_user_settings", "ALLOW_USER_SETTINGS" },
+                          { "spellchecking_level", "SPELLCHECKING_LEVEL" },
+                          { "orthography_standard", "ORTHOGRAPHY_STANDARD" },
+                          { "property_sets", "PROPERTY_SETS" },
+                          { "dictionaries", "DICTIONARIES" } });
+    exportRemoteChecker("grammalecte", "GRAMMALECTE",
+                        { { "enabled", "ENABLED" },
+                          { "base_url", "BASEURL" },
+                          { "ssl_verification", "SSL_VERIFICATION" },
+                          { "allow_user_settings", "ALLOW_USER_SETTINGS" } });
+
+    // The Duden Korrekturserver used to be driven through the languagetool
+    // block with rest_protocol set to "duden". Such a file still works: its
+    // values, the switch among them, go to the Duden checker and
+    // LanguageTool stays off.
+    if (ConfigUtil::getConfigValue<std::string>(conf, "languagetool.rest_protocol", "") == "duden")
+    {
+        LOG_WRN("languagetool.rest_protocol=duden is deprecated; move the settings to the "
+                "duden block of coolwsd.xml");
+        if (!ConfigUtil::getConfigValue<bool>(conf, "duden.enabled", false))
+        {
+            for (const char* key :
+                 { "ENABLED", "BASEURL", "APIKEY", "SSL_VERIFICATION", "ALLOW_USER_SETTINGS" })
+            {
+                const std::string from = std::string("LANGUAGETOOL_") + key;
+                const std::string to = std::string("DUDEN_") + key;
+                if (const char* value = getenv(from.c_str()))
+                    setenv(to.c_str(), value, 1);
+            }
+        }
+        setenv("LANGUAGETOOL_ENABLED", "false", 1);
+    }
 
     // DeepL configuration
     const std::string apiURL = ConfigUtil::getConfigValue<std::string>(conf, "deepl.api_url", "");
