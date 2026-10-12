@@ -8,12 +8,21 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+import argparse
 import json
 import os
 import sys
 
 # Base path: two levels up from this script 
 BASE_PATH = os.path.dirname(os.path.dirname(__file__)) + "/"
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--po-json-dir",
+    default=os.path.join(BASE_PATH, "po"),
+    help="directory of the ui-*.po.json and help-*.po.json files (default: po/)",
+)
+PO_JSON_DIR = os.path.abspath(parser.parse_args().po_json_dir)
 
 
 def readwhole(file_path):
@@ -140,14 +149,14 @@ for lang in simple:
     print(
         "    window.LOCALIZATIONS = "
         + insert(
-            f"po/ui-{lang}.po.json",
+            os.path.join(PO_JSON_DIR, f"ui-{lang}.po.json"),
             f"l10n/uno/{lang_hyphen}.json",
         )
         + ";"
     )
     print(
         "    window.LOCALIZATIONS_HELP = "
-        + insert(f"po/help-{lang}.po.json")
+        + insert(os.path.join(PO_JSON_DIR, f"help-{lang}.po.json"))
         + ";"
     )
     print("}")
@@ -162,14 +171,14 @@ for lang in sorted(aliases.keys()):
     print(
         "    window.LOCALIZATIONS = "
         + insert(
-            f"po/ui-{lang}.po.json",
+            os.path.join(PO_JSON_DIR, f"ui-{lang}.po.json"),
             f"l10n/uno/{lang_hyphen}.json",
         )
         + ";"
     )
     print(
         "    window.LOCALIZATIONS_HELP = "
-        + insert(f"po/help-{lang}.po.json")
+        + insert(os.path.join(PO_JSON_DIR, f"help-{lang}.po.json"))
         + ";"
     )
     print("}")

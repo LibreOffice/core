@@ -60,16 +60,18 @@ L10N_ALL_JS = $(DIST_FOLDER)/l10n-all.js
 L10N_ALL_JS_ENTRY = l10n-all.js
 endif
 
+L10N_PO_JSON_DIR = $(INTERMEDIATE_DIR)/po-json
+
 $(DIST_FOLDER)/l10n-all.js : $(wildcard $(srcdir)/po/ui-*.po) $(wildcard $(srcdir)/po/help-*.po) $(UNO_GENERATED_STAMP) $(shell find $(srcdir)/l10n -name '*.*') $(srcdir)/util/create-l10n-all-js.py
+	@mkdir -p $(L10N_PO_JSON_DIR)
 	@for lang in $(L10N_LANGS); do \
-		$(PYTHON) $(srcdir)/util/po2json.py --quiet $(srcdir)/po/ui-$$lang.po -o $(srcdir)/po/ui-$$lang.po.json || exit 1; \
-		if test -f $(srcdir)/po/help-$$lang.po; then $(PYTHON) $(srcdir)/util/po2json.py --quiet $(srcdir)/po/help-$$lang.po -o $(srcdir)/po/help-$$lang.po.json || exit 1; fi; \
+		$(PYTHON) $(srcdir)/util/po2json.py --quiet $(srcdir)/po/ui-$$lang.po -o $(L10N_PO_JSON_DIR)/ui-$$lang.po.json || exit 1; \
+		if test -f $(srcdir)/po/help-$$lang.po; then $(PYTHON) $(srcdir)/util/po2json.py --quiet $(srcdir)/po/help-$$lang.po -o $(L10N_PO_JSON_DIR)/help-$$lang.po.json || exit 1; fi; \
 	done
 	@mkdir -p $(dir $@)
-	$(PYTHON) $(srcdir)/util/create-l10n-all-js.py >$@.tmp
+	$(PYTHON) $(srcdir)/util/create-l10n-all-js.py --po-json-dir $(L10N_PO_JSON_DIR) >$@.tmp
 	@mv $@.tmp $@
-	@find $(srcdir)/po -name 'ui-*.po.json' -delete
-	@find $(srcdir)/po -name 'help-*.po.json' -delete
+	@rm -rf $(L10N_PO_JSON_DIR)
 
 # Scoped translations for the Options (integrator settings) dialog, which runs
 # in a file:// iframe where the <link rel="localizations"> loader does not work.
