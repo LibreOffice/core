@@ -13,7 +13,11 @@
  * window.L.Control.MobileWizardWindow - contains one unique window instance inside mobile-wizard
  */
 
-/* global app $ */
+/* global app $ _ */
+
+/// Dialogs shown full screen.
+const fullScreenDialogs = [];
+
 window.L.Control.MobileWizardWindow = window.L.Control.extend({
 	options: {
 		maxHeight: '45vh',
@@ -105,6 +109,7 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 	_softReset: function() {
 		this._setupBackButton();
 		this.tabsContainer.children().detach();
+		this.tabsContainer.removeClass('has-dismiss');
 		this.tabsContainer.hide();
 		this.titleBar.css('top', '0px');
 		this.titleBar.show();
@@ -216,8 +221,33 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 		this.tabsContainer.show();
 		this.tabsContainer.children().detach();
 		this.tabsContainer.append(tabs);
+		if (this._isFullScreenDialog())
+			this._addDialogDismissButton();
 		this.titleBar.hide();
 		this._isTabMode = true;
+	},
+
+	_isFullScreenDialog: function() {
+		return fullScreenDialogs.indexOf(this._dialogid) !== -1;
+	},
+
+	/// A tabbed dialog has no title bar, so the close control sits in the tab strip.
+	_addDialogDismissButton: function() {
+		const that = this;
+		const dismiss = window.L.DomUtil.create('div', '', this.tabsContainer.get(0));
+		dismiss.id = 'mobile-wizard-dialog-dismiss';
+		dismiss.setAttribute('role', 'button');
+		dismiss.setAttribute('aria-label', _('Close'));
+		dismiss.onclick = function() {
+			that._dismissDialog();
+		};
+		this.tabsContainer.addClass('has-dismiss');
+	},
+
+	_dismissDialog: function() {
+		const cancel = this.content.querySelector('#cancel-button');
+		if (cancel)
+			cancel.click();
 	},
 
 	/// for restoring the tabs by manager
@@ -294,10 +324,19 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 		this._inMainMenu = false;
 
 		this._currentPath.push(title);
+
+		if (this._isFullScreenDialog())
+			$(this.content).find('.ui-button-box').hide();
 	},
 
 	goLevelUp: function() {
 		this._currentPath.pop();
+
+		if (this._isFullScreenDialog() && this._isTabMode && this._currentDepth == 1) {
+			this._dismissDialog();
+			return;
+		}
+
 		if (this._inMainMenu || (this._isTabMode && this._currentDepth == 1
 			&& !this.map.dialog.hasDialogInMobilePanelOpened)) {
 			this.parent.removeWindow(this);
@@ -366,6 +405,9 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 			if (window.commentWizard === true) {
 				app.sectionContainer.getSectionWithName(app.CSections.CommentList.name).removeHighlighters();
 			}
+
+			if (this._isFullScreenDialog() && this._currentDepth <= 1)
+				$(this.content).find('.ui-button-box').show();
 		}
 	},
 
@@ -595,6 +637,9 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 				document.getElementById('mobile-wizard').style.height = '100vh';
 				$('#mobile-wizard').css('top', $('#document-container').css('top'));
 				this.isFunctionMenu = true;
+			} else if (this._isFullScreenDialog()) {
+				document.getElementById('mobile-wizard').style.height = '100vh';
+				$('#mobile-wizard').css('top', $('#document-container').css('top'));
 			}
 			else if (data.id === 'modal-dialog-about-dialog-box' || data.id === 'modal-dialog-unlock-features-popup') {
 				isPopup = true;

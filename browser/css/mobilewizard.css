@@ -1222,3 +1222,20 @@ label[disabled] {
 	width: 24px;
 	height: 24px;
 }
+
+#mobile-wizard-tabs.has-dismiss {
+	display: flex;
+	align-items: center;
+}
+#mobile-wizard-tabs.has-dismiss .ui-tabs {
+	flex: 1;
+}
+#mobile-wizard-dialog-dismiss {
+	flex: none;
+	width: 48px;
+	height: 42px;
+	background: url('images/closedoc.svg') no-repeat center / 24px;
+}
+[data-theme='dark'] #mobile-wizard-dialog-dismiss {
+	background-image: url('images/dark/closedoc.svg');
+}
