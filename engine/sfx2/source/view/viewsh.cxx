@@ -709,6 +709,7 @@ boost::property_tree::ptree makeLinksTree(const std::vector<ParagraphLink>& rLin
     return aLinks;
 }
 
+// An image anchored as a character, by its position in the paragraph text
 struct ParagraphImage
 {
     sal_Int32 nPosition;
@@ -732,26 +733,39 @@ std::vector<ParagraphImage>
 collectImages(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
 {
     const OUString aText = xAccText->getText();
-    std::vector<std::pair<sal_Int32, css::awt::Rectangle>> aCharacters;
-    for (sal_Int32 nPos = aText.indexOf(u'\xfffc'); nPos >= 0;
-         nPos = aText.indexOf(u'\xfffc', nPos + 1))
-        aCharacters.emplace_back(nPos, xAccText->getCharacterBounds(nPos));
+    if (aText.indexOf(u'\xfffc') < 0)
+        return {};
     const auto xContext = xAccText.query<accessibility::XAccessibleContext>();
-    if (aCharacters.empty() || !xContext.is())
+    if (!xContext.is())
         return {};
 
-    std::vector<ParagraphImage> aResult;
+    std::vector<uno::Reference<accessibility::XAccessibleContext>> aGraphics;
     const sal_Int64 nChildren = xContext->getAccessibleChildCount();
     for (sal_Int64 i = 0; i < nChildren; ++i)
     {
         const uno::Reference<accessibility::XAccessible> xChild = xContext->getAccessibleChild(i);
         if (!xChild.is())
             continue;
-        const uno::Reference<accessibility::XAccessibleContext> xChildContext
+        uno::Reference<accessibility::XAccessibleContext> xChildContext
             = xChild->getAccessibleContext();
-        const auto xComponent = xChildContext.query<accessibility::XAccessibleComponent>();
-        if (!xComponent.is()
-            || xChildContext->getAccessibleRole() != accessibility::AccessibleRole::GRAPHIC)
+        if (xChildContext.is()
+            && xChildContext->getAccessibleRole() == accessibility::AccessibleRole::GRAPHIC)
+            aGraphics.push_back(std::move(xChildContext));
+    }
+    // each getCharacterBounds() is a layout query, and fields and comments are U+FFFC too
+    if (aGraphics.empty())
+        return {};
+
+    std::vector<std::pair<sal_Int32, css::awt::Rectangle>> aCharacters;
+    for (sal_Int32 nPos = aText.indexOf(u'\xfffc'); nPos >= 0;
+         nPos = aText.indexOf(u'\xfffc', nPos + 1))
+        aCharacters.emplace_back(nPos, xAccText->getCharacterBounds(nPos));
+
+    std::vector<ParagraphImage> aResult;
+    for (const auto& xGraphic : aGraphics)
+    {
+        const auto xComponent = xGraphic.query<accessibility::XAccessibleComponent>();
+        if (!xComponent.is())
             continue;
 
         // a comment or an empty field is U+FFFC too, and may touch the image
@@ -768,8 +782,8 @@ collectImages(const uno::Reference<css::accessibility::XAccessibleText>& xAccTex
         }
         if (nPosition >= 0)
             aResult.push_back({ .nPosition = nPosition,
-                                .aName = xChildContext->getAccessibleName(),
-                                .aDescription = xChildContext->getAccessibleDescription() });
+                                .aName = xGraphic->getAccessibleName(),
+                                .aDescription = xGraphic->getAccessibleDescription() });
     }
     std::ranges::stable_sort(aResult, {}, &ParagraphImage::nPosition);
     return aResult;
