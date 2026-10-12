@@ -23,4 +23,9 @@
     <string name="ask_for_convert_odf">Potvrdit formát souboru</string>
     <string name="use_odf">Použít formát ODF</string>
     <string name="use_text">Použít textový formát</string>
+    <string name="all_files_access_title">Otevřeno v režimu jen pro čtení</string>
+    <string name="all_files_access_message">Aplikace, která tento soubor sdílela, nepovolila ukládání změn do původního souboru.\n\nUdělte oprávnění „Přístup ke všem souborům“, aby tato aplikace mohla zapisovat do souboru v jeho umístění a vy jste jej zde mohli upravovat.</string>
+    <string name="all_files_access_grant">Povolit přístup</string>
+    <string name="do_not_ask_again">Znovu se neptat</string>
+    <string name="failed_to_save_file">Změny se nepodařilo uložit do souboru</string>
 </resources>
