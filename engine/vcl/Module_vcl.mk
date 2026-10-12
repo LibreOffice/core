@@ -29,7 +29,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
         StaticLibrary_vclmain \
         $(if $(or $(DISABLE_GUI),$(DISABLE_DYNLOADING)), \
         , \
-            $(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
+            $(if $(filter LINUX MACOSX WNT %BSD,$(OS)), \
                 Executable_vcldemo \
                 Executable_svdemo \
                 Executable_minvcl \

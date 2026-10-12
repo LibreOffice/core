@@ -23,10 +23,6 @@
 #include <math.h>
 #include <unistd.h>
 
-#if defined(__sun)
-#include <osl/module.h>
-#endif
-
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/XKBlib.h>
@@ -34,9 +30,6 @@
 #include <X11/cursorfont.h>
 #include <unx/x11_cursors/salcursors.h>
 #include <unx/x11_cursors/invert50.h>
-#ifdef __sun
-#define XK_KOREAN
-#endif
 #include <X11/keysym.h>
 #include <X11/Xatom.h>
 #include <X11/extensions/Xinerama.h>

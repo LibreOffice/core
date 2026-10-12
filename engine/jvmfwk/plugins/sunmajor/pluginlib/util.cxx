@@ -1120,17 +1120,6 @@ bool makeDriveLetterSame(OUString * fileURL)
 }
 
 #ifdef UNX
-#ifdef __sun
-
-void addJavaInfosDirScan(
-    std::vector<rtl::Reference<VendorBase>> & allInfos,
-    std::vector<rtl::Reference<VendorBase>> & addedInfos)
-{
-    SAL_INFO("jfw.level2", "Checking /usr/jdk/latest");
-    getAndAddJREInfoByPath("file:////usr/jdk/latest", allInfos, addedInfos);
-}
-
-#else
 void addJavaInfosDirScan(
     std::vector<rtl::Reference<VendorBase>> & allInfos,
     std::vector<rtl::Reference<VendorBase>> & addedInfos)
@@ -1273,7 +1262,6 @@ void addJavaInfosDirScan(
     }
 #endif // MACOSX
 }
-#endif // ifdef __sun
 #endif // ifdef UNX
 }
 

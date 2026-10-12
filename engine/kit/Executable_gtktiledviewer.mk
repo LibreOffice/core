@@ -45,7 +45,7 @@ $(eval $(call gb_Executable_use_libraries,gtktiledviewer,\
     kitgtk \
 ))
 
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+ifeq ($(OS), $(filter LINUX %BSD, $(OS)))
 $(eval $(call gb_Executable_add_libs,gtktiledviewer,\
     -lm $(UNIX_DLAPI_LIBS) \
 ))

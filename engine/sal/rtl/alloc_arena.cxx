@@ -960,17 +960,6 @@ void * rtl_machdep_alloc(
 
     assert(pArena == gp_machdep_arena);
 
-#if defined(__sun) && defined(SPARC)
-    /* see @ mmap(2) man pages */
-    size += (pArena->m_quantum + pArena->m_quantum); /* "red-zone" pages */
-    if (size > (4 << 20))
-        size = RTL_MEMORY_P2ROUNDUP(size, (4 << 20));
-    else if (size > (512 << 10))
-        size = RTL_MEMORY_P2ROUNDUP(size, (512 << 10));
-    else
-        size = RTL_MEMORY_P2ROUNDUP(size, (64 << 10));
-    size -= (pArena->m_quantum + pArena->m_quantum); /* "red-zone" pages */
-#else
     /* default allocation granularity */
     if (pArena->m_quantum < (64 << 10))
     {
@@ -980,7 +969,6 @@ void * rtl_machdep_alloc(
     {
         size = RTL_MEMORY_P2ROUNDUP(size, pArena->m_quantum);
     }
-#endif
 
 #if defined(SAL_UNX)
     addr = mmap (nullptr, static_cast<size_t>(size), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);

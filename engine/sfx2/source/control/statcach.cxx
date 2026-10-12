@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#ifdef __sun
-#include <ctime>
-#endif
-
 #include <framework/dispatchhelper.hxx>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

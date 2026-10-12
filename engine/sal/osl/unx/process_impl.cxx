@@ -330,26 +330,8 @@ oslProcessError osl_setEnvironment(rtl_uString* pustrEnvVar, rtl_uString* pustrV
 
     if (pstr_env_var != nullptr && pstr_val != nullptr)
     {
-#if defined (__sun)
-        rtl_String * pBuffer = NULL;
-
-        sal_Int32 nCapacity = rtl_stringbuffer_newFromStringBuffer( &pBuffer,
-            rtl_string_getLength(pstr_env_var) + rtl_string_getLength(pstr_val) + 1,
-            pstr_env_var );
-        rtl_stringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length, "=", 1);
-        rtl_stringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length,
-            rtl_string_getStr(pstr_val), rtl_string_getLength(pstr_val) );
-
-        rtl_string_acquire(pBuffer); // argument to putenv must leak on success
-
-        if (putenv(rtl_string_getStr(pBuffer)) == 0)
-            result = osl_Process_E_None;
-        else
-            rtl_string_release(pBuffer);
-#else
         if (setenv(rtl_string_getStr(pstr_env_var), rtl_string_getStr(pstr_val), 1) == 0)
             result = osl_Process_E_None;
-#endif
     }
 
     if (pstr_val)
@@ -376,20 +358,7 @@ oslProcessError osl_clearEnvironment(rtl_uString* pustrEnvVar)
 
     if (pstr_env_var)
     {
-#if defined (__sun)
-        rtl_String * pBuffer = NULL;
-
-        sal_Int32 nCapacity = rtl_stringbuffer_newFromStringBuffer( &pBuffer,
-            rtl_string_getLength(pstr_env_var) + 1, pstr_env_var );
-        rtl_stringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length, "=", 1);
-
-        rtl_string_acquire(pBuffer); // argument to putenv must leak on success
-
-        if (putenv(rtl_string_getStr(pBuffer)) == 0)
-            result = osl_Process_E_None;
-        else
-            rtl_string_release(pBuffer);
-#elif (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
+#if (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
         // MacOSX baseline is 10.4, which has an old-school void return
         // for unsetenv.
         // See: http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/10.4/man3/unsetenv.3.html?useVersion=10.4

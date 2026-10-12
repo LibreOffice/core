@@ -55,12 +55,4 @@ $(eval $(call gb_Executable_add_libs,oosplash,\
 ))
 endif
 
-ifeq ($(OS),SOLARIS)
-
-$(eval $(call gb_Executable_add_libs,oosplash,\
-    -lsocket \
-))
-
-endif
-
 # vim: set ts=4 sw=4 et:

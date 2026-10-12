@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,kit))
 
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+ifeq ($(OS), $(filter LINUX %BSD, $(OS)))
 
 $(eval $(call gb_Module_add_check_targets,kit, \
 ))

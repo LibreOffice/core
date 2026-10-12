@@ -20,10 +20,8 @@
 #include <config_global.h>
 #include <osl/interlck.h>
 
-#if  ( defined (__sun) || defined ( NETBSD ) ) && defined ( SPARC )
+#if defined ( NETBSD ) && defined ( SPARC )
 #error please use asm/interlck_sparc.s
-#elif defined (__sun) && defined ( X86 )
-#error please use asm/interlck_x86.s
 #elif HAVE_GCC_BUILTIN_ATOMIC
 oslInterlockedCount osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {

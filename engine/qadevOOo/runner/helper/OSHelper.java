@@ -27,20 +27,6 @@ public class OSHelper
         {
             return System.getProperty("os.name").toLowerCase().startsWith("windows");
         }
-    public static boolean isSolarisIntel()
-        {
-            String sOSName = System.getProperty("os.name");
-            return ( sOSName.toLowerCase().startsWith("solaris") ||
-                sOSName.toLowerCase().startsWith("sunos") ) &&
-                System.getProperty("os.arch").equals("x86");
-        }
-    public static boolean isSolarisSparc()
-        {
-            String sOSName = System.getProperty("os.name");
-            return ( sOSName.toLowerCase().startsWith("solaris") ||
-                sOSName.toLowerCase().startsWith("sunos") ) &&
-                System.getProperty("os.arch").equals("sparc");
-        }
     public static boolean isLinuxIntel()
         {
             return System.getProperty("os.name").toLowerCase().startsWith("linux") &&

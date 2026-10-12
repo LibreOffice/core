@@ -35,11 +35,6 @@ OPENSSL_PLATFORM := \
       )\
     )\
   ,\
-    $(if $(filter SOLARIS,$(OS)),\
-      $(if $(filter INTEL,$(CPUNAME)),solaris-x86-cc,\
-        $(if $(filter X86_64,$(CPUNAME)),solaris64-x86_64-cc,solaris-sparcv9-cc)\
-      )\
-    ,\
       $(if $(filter iOS,$(OS)),\
         $(if $(filter TRUE,$(ENABLE_IOS_SIMULATOR)),\
           $(if $(filter X86_64,$(CPUNAME)),iossimulator-x86_64-xcrun,iossimulator-arm64-xcrun)\
@@ -60,7 +55,6 @@ OPENSSL_PLATFORM := \
           )\
         )\
       )\
-    )\
   )
 
 ifeq ($(COM),MSC)
@@ -83,7 +77,7 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 	$(call gb_Trace_StartRange,openssl,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		unset MAKEFLAGS && \
-		$(if $(filter LINUX MACOSX FREEBSD ANDROID SOLARIS iOS,$(OS)), \
+		$(if $(filter LINUX MACOSX FREEBSD ANDROID iOS,$(OS)), \
 			./Configure, \
 		$(if $(filter WNT,$(OS)), \
 			$(PERL) Configure, \

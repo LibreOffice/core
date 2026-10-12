@@ -34,13 +34,6 @@
  *      - cleanup of resource transfer
  */
 
-#if defined(__sun)
-  // The procfs may only be used without LFS in 32bits.
-# ifdef _FILE_OFFSET_BITS
-#   undef   _FILE_OFFSET_BITS
-# endif
-#endif
-
 #if defined(FREEBSD) || defined(NETBSD) || defined(DRAGONFLY)
 #include <machine/param.h>
 #endif
@@ -51,9 +44,6 @@
 
 #include "system.hxx"
 #include "unixerrnostring.hxx"
-#if defined(__sun)
-# include <sys/procfs.h>
-#endif
 #include <osl/diagnose.h>
 #include <osl/mutex.h>
 #include <osl/process.h>
@@ -1014,46 +1004,7 @@ oslProcessError osl_getProcessInfo(oslProcess Process, oslProcessData Fields, os
 
     if (Fields & (osl_Process_HEAPUSAGE | osl_Process_CPUTIMES))
     {
-
-#if defined(__sun)
-
-        int  fd;
-        char name[PATH_MAX + 1];
-
-        snprintf(name, sizeof(name), "/proc/%ld", (long)pid);
-
-        if ((fd = open(name, O_RDONLY)) >= 0)
-        {
-            prstatus_t prstatus;
-
-            if (ioctl(fd, PIOCSTATUS, &prstatus) >= 0)
-            {
-                if (Fields & osl_Process_CPUTIMES)
-                {
-                    pInfo->UserTime.Seconds   = prstatus.pr_utime.tv_sec;
-                    pInfo->UserTime.Nanosec   = prstatus.pr_utime.tv_nsec;
-                    pInfo->SystemTime.Seconds = prstatus.pr_stime.tv_sec;
-                    pInfo->SystemTime.Nanosec = prstatus.pr_stime.tv_nsec;
-
-                    pInfo->Fields |= osl_Process_CPUTIMES;
-                }
-
-                if (Fields & osl_Process_HEAPUSAGE)
-                {
-                    pInfo->HeapUsage = prstatus.pr_brksize;
-
-                    pInfo->Fields |= osl_Process_HEAPUSAGE;
-                }
-
-                close(fd);
-
-                return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
-            }
-            else
-                close(fd);
-        }
-
-#elif defined(LINUX)
+#if defined(LINUX)
 
         if ( (Fields & osl_Process_CPUTIMES) || (Fields & osl_Process_HEAPUSAGE) )
         {

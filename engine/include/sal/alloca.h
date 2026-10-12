@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#if defined(__sun) || defined(LINUX) || defined(ANDROID) || defined(HAIKU) || defined(MACOSX)      \
+#if defined(LINUX) || defined(ANDROID) || defined(HAIKU) || defined(MACOSX)      \
     || defined(IOS) || defined(__EMSCRIPTEN__)
 
 #ifndef INCLUDED_ALLOCA_H

@@ -64,12 +64,4 @@ $(eval $(call gb_Library_use_system_win32_libs,ucpdav1,\
 ))
 endif
 
-ifeq ($(OS),SOLARIS)
-$(eval $(call gb_Library_add_libs,ucpdav1,\
-	-ldl \
-	-lnsl \
-	-lsocket \
-))
-endif
-
 # vim: set noet sw=4 ts=4:

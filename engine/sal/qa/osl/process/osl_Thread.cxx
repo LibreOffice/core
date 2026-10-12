@@ -1373,12 +1373,10 @@ namespace osl_Thread
             }
 
         CPPUNIT_TEST_SUITE(setPriority);
-#ifndef __sun
         CPPUNIT_TEST(setPriority_002);
         CPPUNIT_TEST(setPriority_003);
         CPPUNIT_TEST(setPriority_004);
         CPPUNIT_TEST(setPriority_005);
-#endif
         CPPUNIT_TEST(setPriority_001_1);
         CPPUNIT_TEST(setPriority_001_2);
         CPPUNIT_TEST(setPriority_001_3);
@@ -1408,7 +1406,7 @@ namespace osl_Thread
                 ThreadHelper::outputPriority(aPriority);
 
 // LLA: Priority settings may not work within some OS versions.
-#if defined(_WIN32) || defined(__sun)
+#if defined(_WIN32)
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(
                     "getPriority",
                     osl_Thread_PriorityHighest, aPriority

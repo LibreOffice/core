@@ -680,26 +680,11 @@ bool SvtURLBox_Impl::TildeParsing([[maybe_unused]] OUString& aText,
             sal_Int32 nNameEnd = aText.indexOf( '/' );
             OUString aUserName = aText.copy( 1, ( nNameEnd != -1 ) ? nNameEnd : ( aText.getLength() - 1 ) );
 
-            struct passwd* pPasswd = nullptr;
-#ifdef __sun
-            Sequence< sal_Int8 > sBuf( 1024 );
-            struct passwd aTmp;
-            sal_Int32 nRes = getpwnam_r( OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US ).getStr(),
-                                  &aTmp,
-                                  (char*)sBuf.getArray(),
-                                  1024,
-                                  &pPasswd );
-            if( !nRes && pPasswd )
-                aParseTilde = OUString::createFromAscii(pPasswd->pw_dir);
-            else
-                return false; // no such user
-#else
-            pPasswd = getpwnam( OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            struct passwd* pPasswd = getpwnam( OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US ).getStr() );
             if( pPasswd )
                 aParseTilde = OUString::createFromAscii(pPasswd->pw_dir);
             else
                 return false; // no such user
-#endif
 
             // in case the path is "~username" then there should
             // be no trailing slash at the end

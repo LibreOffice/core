@@ -18,10 +18,6 @@ $(eval $(call gb_CppunitTest_add_libs,sal_osl_file_details, \
         -ldl \
         -lrt \
     ) \
-    $(if $(filter SOLARIS,$(OS)), \
-        -lnsl \
-        -lsocket \
-    ) \
     $(if $(filter HAIKU,$(OS)), \
         -lnetwork \
     ) \

@@ -37,7 +37,7 @@ $(call gb_ExternalProject_get_state_target,libxslt,build):
 			$(gb_CONFIGURE_DEPENDENCY_TRACKING) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			LDFLAGS="$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN" -Wl$(COMMA)-noinhibit-exec) \
-			$(if $(SYSBASE),$(if $(filter SOLARIS LINUX,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
+			$(if $(SYSBASE),$(if $(filter LINUX,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
 			$(if $(SYSBASE),CPPFLAGS="-I$(SYSBASE)/usr/include") \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)), \
 			$(if $(filter iOS,$(OS)),LIBS="-liconv") \

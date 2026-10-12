@@ -18,10 +18,6 @@
  */
 
 
-#ifdef __sun
-#include <ctime>
-#endif
-
 #include <cpo/uno/Reference.h>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XWindow.hpp>

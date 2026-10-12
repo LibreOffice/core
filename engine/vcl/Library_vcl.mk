@@ -665,7 +665,7 @@ $(eval $(call gb_Library_add_libs,vcl,\
 ))
 endif # USING_X11
 
-ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+ifeq ($(OS), $(filter LINUX %BSD, $(OS)))
 $(eval $(call gb_Library_add_libs,vcl,\
 	-lm $(UNIX_DLAPI_LIBS) \
 ))
@@ -684,7 +684,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
         vcl/skia/zone \
         vcl/skia/gdiimpl \
     ) \
-    $(if $(filter LINUX SOLARIS %BSD,$(OS)), \
+    $(if $(filter LINUX %BSD,$(OS)), \
 	vcl/unx/generic/window/sessioninhibitor \
     ) \
 ))
@@ -729,7 +729,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 
 $(eval $(call gb_Library_add_libs,vcl,\
-    $(if $(filter LINUX %BSD SOLARIS,$(OS)), \
+    $(if $(filter LINUX %BSD,$(OS)), \
         -lm \
         $(if $(DISABLE_DYNLOADING),,$(UNIX_DLAPI_LIBS)) \
     ) \

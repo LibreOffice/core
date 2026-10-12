@@ -41,7 +41,7 @@
 
 #endif /* defined _WIN32 */
 
-#if defined(__sun) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD)    \
+#if defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD)    \
     || defined(DRAGONFLY) || defined(ANDROID) || defined(HAIKU)
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".so"

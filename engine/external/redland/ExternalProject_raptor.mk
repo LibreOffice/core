@@ -33,7 +33,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 			$(if $(filter GCCLINUXPOWERPC64,$(COM)$(OS)$(CPUNAME)),-mminimal-toc)" \
 		LDFLAGS='$(strip \
 		    $(if $(filter LINUX FREEBSD,$(OS)),$(strip -Wl,-z,origin -Wl,-rpath,\$$$$ORIGIN -Wl,-rpath-link,$(INSTROOT)/$(LIBO_URE_LIB_FOLDER))) \
-		    $(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl)))' \
+		    $(if $(SYSBASE),$(if $(filter LINUX,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl)))' \
 		CPPFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include) $(gb_EMSCRIPTEN_CPPFLAGS)" \
 		ICU_LIBS='$(if $(filter-out MACOSX,$(OS)),$(ICU_LIBS))' \
 		$(gb_RUN_CONFIGURE) ./configure --disable-gtk-doc \

@@ -56,13 +56,6 @@ extern "C" {
 #   elif defined _BIG_ENDIAN
 #       define OSL_BIGENDIAN
 #   endif
-#elif defined __sun
-#   include <sys/isa_defs.h>
-#   if defined _LITTLE_ENDIAN
-#       define OSL_LITENDIAN
-#   elif defined _BIG_ENDIAN
-#       define OSL_BIGENDIAN
-#   endif
 #elif defined __EMSCRIPTEN__
 #   define OSL_LITENDIAN
 #else

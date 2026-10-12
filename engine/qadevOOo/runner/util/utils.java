@@ -296,7 +296,7 @@ public class utils {
         // is the last character a '/' or a '\'?
         boolean lastCharSet = dir.endsWith("/") || dir.endsWith("\\");
 
-        if (idx < 0) { // linux or solaris
+        if (idx < 0) { // linux
             dir = "/" + dir;
             dir += lastCharSet ? "" : "/";
         } else {  // windows

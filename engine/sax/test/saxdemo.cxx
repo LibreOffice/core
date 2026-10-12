@@ -463,10 +463,6 @@ void OFileWriter::closeOutput()
 }
 
 
-// Needed to switch on solaris threads
-#ifdef __sun
-extern "C" void ChangeGlobalInit();
-#endif
 int main (int argc, char **argv)
 {
 
@@ -474,10 +470,6 @@ int main (int argc, char **argv)
         printf( "usage : saxdemo inputfile outputfile\n" );
         exit( 0 );
     }
-#ifdef __sun
-    // switch on threads in solaris
-    ChangeGlobalInit();
-#endif
 
     // create service manager
     Reference< XMultiServiceFactory > xSMgr = createRegistryServiceFactory(

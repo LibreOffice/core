@@ -17,10 +17,7 @@
 #if USING_X11
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
-
-#if !defined(__sun)
 #include <X11/extensions/dpms.h>
-#endif
 #endif
 
 #include <config_gio.h>
@@ -306,7 +303,6 @@ void SessionManagerInhibitor::inhibitXAutoLock( bool bInhibit, Display* pDisplay
 
 void SessionManagerInhibitor::inhibitDPMS( bool bInhibit, Display* pDisplay )
 {
-#if !defined(__sun)
     int dummy;
     // This won't change while X11 is running, hence
     // we can evaluate only once and store as static
@@ -341,7 +337,6 @@ void SessionManagerInhibitor::inhibitDPMS( bool bInhibit, Display* pDisplay )
                          mnDPMSSuspendTimeout,
                          mnDPMSOffTimeout );
     }
-#endif // !defined(__sun)
 }
 #endif // USING_X11
 

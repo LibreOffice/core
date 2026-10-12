@@ -36,7 +36,6 @@ $(call gb_ExternalProject_get_state_target,liblangtag,build):
 		LIBXML2_LIBS="$(LIBXML_LIBS)" \
 		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		$(if $(filter-out LINUX FREEBSD,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath,\\"\$$\$$ORIGIN) \
-		$(if $(filter-out SOLARIS,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-R$(COMMA)\\"\$$\$$ORIGIN) \
 		&& $(if $(verbose),V=1) \
 		   $(MAKE) \
                 LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(gb_UnpackedTarball_workdir)/liblangtag/liblangtag/.libs)))' \

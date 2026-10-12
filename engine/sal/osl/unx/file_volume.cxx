@@ -43,13 +43,7 @@
 #define FREEBSD 1
 #endif
 
-#if defined(__sun)
-
-#include <sys/mnttab.h>
-#include <sys/statvfs.h>
-#define  HAVE_STATFS_H
-
-#elif defined(LINUX)
+#if defined(LINUX)
 #include <sys/statfs.h>
 #define  HAVE_STATFS_H
 
@@ -161,20 +155,6 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 #   define OSL_detail_STATFS_IS_CASE_SENSITIVE_FS(a)  ((OSL_detail_MSDOS_SUPER_MAGIC != (a).f_type) && (OSL_detail_NTFS_SUPER_MAGIC != (a).f_type))
 #   define OSL_detail_STATFS_IS_CASE_PRESERVING_FS(a) ((OSL_detail_MSDOS_SUPER_MAGIC != (a).f_type))
 #endif /* LINUX */
-
-#if defined(__sun)
-#   define OSL_detail_STATFS_STRUCT                   struct statvfs
-#   define OSL_detail_STATFS(dir, sfs)                statvfs((dir), (sfs))
-#   define OSL_detail_STATFS_BLKSIZ(a)                ((sal_uInt64)((a).f_frsize))
-#   define OSL_detail_STATFS_TYPENAME(a)              ((a).f_basetype)
-#   define OSL_detail_STATFS_ISREMOTE(a)              (rtl_str_compare((a).f_basetype, "nfs") == 0)
-
-/* always return true if queried for the properties of
-   the file system. If you think this is wrong under any
-   of the target platforms fix it!!!! */
-#   define OSL_detail_STATFS_IS_CASE_SENSITIVE_FS(a)  (true)
-#   define OSL_detail_STATFS_IS_CASE_PRESERVING_FS(a) (true)
-#endif /* __sun */
 
 #   define OSL_detail_STATFS_INIT(a)         (memset(&(a), 0, sizeof(OSL_detail_STATFS_STRUCT)))
 

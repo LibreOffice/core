@@ -66,10 +66,6 @@ $(eval $(call gb_Library_add_libs,sal,\
 		-ldl \
 		-lrt \
 	) \
-	$(if $(filter SOLARIS,$(OS)), \
-		-lnsl \
-		-lsocket \
-	) \
 	$(if $(filter HAIKU,$(OS)), \
 		-lnetwork \
 	) \

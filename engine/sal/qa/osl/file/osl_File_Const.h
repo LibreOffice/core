@@ -188,11 +188,7 @@ OUString aTypeURL3( u"" FILE_PREFIX ""_ustr );
 
 #if ( defined UNX )                                     //          Unix
 OUString aVolURL1( u"" FILE_PREFIX  ""_ustr);            //ufs       Solaris/Linux
-#ifdef __sun
-OUString aVolURL2( u"" FILE_PREFIX  "dev/fd"_ustr );     //fd        Solaris
-#else
 OUString aVolURL2( u"" FILE_PREFIX  "dev/floppy/0u1440"_ustr );  //fd0       Linux
-#endif
 OUString aVolURL3( u"" FILE_PREFIX  "proc"_ustr );       //proc      Solaris/Linux
 OUString aVolURL4( u"" FILE_PREFIX  "staroffice"_ustr ); //nfs       Solaris/Linux
 OUString aVolURL5( u"" FILE_PREFIX  "tmp"_ustr );        //tmpfs     Solaris

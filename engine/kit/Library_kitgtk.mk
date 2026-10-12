@@ -34,7 +34,7 @@ $(eval $(call gb_Library_add_defs,kitgtk,\
 	-DKIT_DOC_VIEW_IMPLEMENTATION \
 ))
 
-ifeq ($(OS),$(filter LINUX %BSD SOLARIS, $(OS)))
+ifeq ($(OS),$(filter LINUX %BSD, $(OS)))
 $(eval $(call gb_Library_add_libs,kitgtk,\
     $(UNIX_DLAPI_LIBS) -lm \
 ))

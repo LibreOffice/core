@@ -30,7 +30,7 @@
 #include "nlsupport.hxx"
 
 // these share a lot, so use one define
-#if defined(LINUX) || defined(__EMSCRIPTEN__) || defined(__sun) || \
+#if defined(LINUX) || defined(__EMSCRIPTEN__) || \
     defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY) || defined(NETBSD)
 #define LO_COMMON_NLS_ARCHS 1
 #else
@@ -239,50 +239,7 @@ static rtl_Locale * parse_locale( const char * locale )
  * to be completely upper or lowercase.
  */
 
-#if defined(__sun)
-
-/* The values in the below list can be obtained with a script like
- *  #!/bin/sh
- *  for i in `locale -a`; do
- *    LC_ALL=$i locale -k code_set_name
- *  done
- */
-static const Pair nl_language_list[] = {
-    { "5601",           RTL_TEXTENCODING_EUC_KR         }, /* ko_KR.EUC */
-    { "646",            RTL_TEXTENCODING_ISO_8859_1     }, /* fake: ASCII_US */
-    { "ANSI-1251",      RTL_TEXTENCODING_MS_1251        }, /* ru_RU.ANSI1251 */
-    { "BIG5",           RTL_TEXTENCODING_BIG5           }, /* zh_CN.BIG5 */
-    { "BIG5-HKSCS",     RTL_TEXTENCODING_BIG5_HKSCS     }, /* zh_CN.BIG5HK */
-    { "CNS11643",       RTL_TEXTENCODING_EUC_TW         }, /* zh_TW.EUC */
-    { "EUCJP",          RTL_TEXTENCODING_EUC_JP         }, /* ja_JP.eucjp */
-    { "GB18030",        RTL_TEXTENCODING_GB_18030       }, /* zh_CN.GB18030 */
-    { "GB2312",         RTL_TEXTENCODING_GB_2312        }, /* zh_CN */
-    { "GBK",            RTL_TEXTENCODING_GBK            }, /* zh_CN.GBK */
-    { "ISO8859-1",      RTL_TEXTENCODING_ISO_8859_1     },
-    { "ISO8859-10",     RTL_TEXTENCODING_ISO_8859_10    },
-    { "ISO8859-13",     RTL_TEXTENCODING_ISO_8859_13    }, /* lt_LT lv_LV */
-    { "ISO8859-14",     RTL_TEXTENCODING_ISO_8859_14    },
-    { "ISO8859-15",     RTL_TEXTENCODING_ISO_8859_15    },
-    { "ISO8859-2",      RTL_TEXTENCODING_ISO_8859_2     },
-    { "ISO8859-3",      RTL_TEXTENCODING_ISO_8859_3     },
-    { "ISO8859-4",      RTL_TEXTENCODING_ISO_8859_4     },
-    { "ISO8859-5",      RTL_TEXTENCODING_ISO_8859_5     },
-    { "ISO8859-6",      RTL_TEXTENCODING_ISO_8859_6     },
-    { "ISO8859-7",      RTL_TEXTENCODING_ISO_8859_7     },
-    { "ISO8859-8",      RTL_TEXTENCODING_ISO_8859_8     },
-    { "ISO8859-9",      RTL_TEXTENCODING_ISO_8859_9     },
-    { "KOI8-R",         RTL_TEXTENCODING_KOI8_R         },
-    { "KOI8-U",         RTL_TEXTENCODING_KOI8_U         },
-    { "PCK",            RTL_TEXTENCODING_MS_932         },
-    { "SUN_EU_GREEK",   RTL_TEXTENCODING_ISO_8859_7     }, /* 8859-7 + Euro */
-    { "TIS620.2533",    RTL_TEXTENCODING_MS_874         }, /* th_TH.TIS620 */
-    { "UTF-8",          RTL_TEXTENCODING_UTF8           }
-};
-
-/* XXX MS-874 is an extension to tis620, so this is not
- * really equivalent */
-
-#elif defined(LINUX) || defined(__EMSCRIPTEN__)
+#if defined(LINUX) || defined(__EMSCRIPTEN__)
 
 #if !defined(CODESET)
 #define CODESET _NL_CTYPE_CODESET_NAME

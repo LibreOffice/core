@@ -40,11 +40,6 @@ using namespace ::com::sun::star::test;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-// Needed to switch on solaris threads
-#ifdef __sun
-extern "C" void ChangeGlobalInit();
-#endif
-
 int main (int argc, char **argv)
 {
 
@@ -52,10 +47,6 @@ int main (int argc, char **argv)
         printf( "usage : testcomponent service dll [additional dlls]\n" );
         exit( 0 );
     }
-#ifdef __sun
-    // switch on threads in solaris
-    ChangeGlobalInit();
-#endif
 
     // create service manager
     Reference< XMultiServiceFactory > xSMgr =

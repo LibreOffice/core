@@ -1032,32 +1032,6 @@ host_cpu_for_clang="$host_cpu"
 default_with_system_libxml=no
 case "$host_os" in
 
-solaris*)
-    using_freetype_fontconfig=yes
-    using_x11=yes
-    build_skia=yes
-    _os=SunOS
-
-    dnl ===========================================================
-    dnl Check whether we're using Solaris 10 - SPARC or Intel.
-    dnl ===========================================================
-    AC_MSG_CHECKING([the Solaris operating system release])
-    _os_release=`echo $host_os | $SED -e s/solaris2\.//`
-    if test "$_os_release" -lt "10"; then
-        AC_MSG_ERROR([use Solaris >= 10 to build Collabora Office])
-    else
-        AC_MSG_RESULT([ok ($_os_release)])
-    fi
-
-    dnl Check whether we're using a SPARC or i386 processor
-    AC_MSG_CHECKING([the processor type])
-    if test "$host_cpu" = "sparc" -o "$host_cpu" = "i386"; then
-        AC_MSG_RESULT([ok ($host_cpu)])
-    else
-        AC_MSG_ERROR([only SPARC and i386 processors are supported])
-    fi
-    ;;
-
 linux-gnu*|k*bsd*-gnu*|linux-musl*)
     using_freetype_fontconfig=yes
     using_x11=yes
@@ -2162,7 +2136,7 @@ AC_ARG_WITH(gcc-home,
 
 AC_ARG_WITH(gnu-patch,
     AS_HELP_STRING([--with-gnu-patch],
-        [Specify location of GNU patch on Solaris or FreeBSD.]),
+        [Specify location of GNU patch on FreeBSD.]),
 ,)
 
 AC_ARG_WITH(build-platform-configure-options,
@@ -2172,7 +2146,7 @@ AC_ARG_WITH(build-platform-configure-options,
 
 AC_ARG_WITH(gnu-cp,
     AS_HELP_STRING([--with-gnu-cp],
-        [Specify location of GNU cp on Solaris or FreeBSD.]),
+        [Specify location of GNU cp on FreeBSD.]),
 ,)
 
 AC_ARG_WITH(external-tar,
@@ -5574,35 +5548,6 @@ openbsd*)
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         PLATFORMID=openbsd_x86_64
-        ;;
-    *)
-        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
-        ;;
-    esac
-    SOLARINC="$SOLARINC -I/usr/local/include"
-    ;;
-
-solaris*)
-    COM=GCC
-    OS=SOLARIS
-    RTL_OS=Solaris
-    P_SEP=:
-
-    case "$host_cpu" in
-    i*86)
-        CPUNAME=INTEL
-        RTL_ARCH=x86
-        PLATFORMID=solaris_x86
-        ;;
-    sparc)
-        CPUNAME=SPARC
-        RTL_ARCH=SPARC
-        PLATFORMID=solaris_sparc
-        ;;
-    sparc64)
-        CPUNAME=SPARC64
-        RTL_ARCH=SPARC64
-        PLATFORMID=solaris_sparc64
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
@@ -9196,11 +9141,6 @@ if test -n "$ENABLE_JAVA" -a -z "$JAVAINC"; then
         test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
 
-    solaris*)
-        JAVAINC="-I$JAVA_HOME/include"
-        JAVAINC="$JAVAINC -I$JAVA_HOME/include/solaris"
-        test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
-        ;;
     esac
 fi
 SOLARINC="$SOLARINC $JAVAINC"
@@ -9744,7 +9684,7 @@ else
                   esac
                 fi
               ;;
-              solaris* | sunos* | sysv* | sco*)
+              sunos* | sysv* | sco*)
                 case "$host_cpu" in
                   x86_64)
                     objfmt='ELF64'
@@ -11383,7 +11323,7 @@ if test -z "$PATCH"; then
     AC_MSG_ERROR(["patch" not found in \$PATH, install it])
 fi
 
-dnl On Solaris or macOS, check if --with-gnu-patch was used
+dnl On macOS, check if --with-gnu-patch was used
 if test "$_os" = "SunOS" -o "$_os" = "Darwin" -o "$_os" = "FreeBSD"; then
     if test -z "$with_gnu_patch"; then
         GNUPATCH=$PATCH
@@ -13930,12 +13870,6 @@ else
         fi
         ;;
 
-    solaris*)
-        pathmunge "/usr/css/bin" "before"
-        if test "$ENABLE_JAVA" != ""; then
-            pathmunge "$JAVA_HOME/bin" "after"
-        fi
-        ;;
     esac
 fi
 

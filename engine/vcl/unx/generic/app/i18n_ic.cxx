@@ -134,12 +134,6 @@ SalI18N_InputContext::SalI18N_InputContext(X11SalFrame* pFrame) :
         mpStatusAttributes( nullptr ),
         mpPreeditAttributes( nullptr )
 {
-#ifdef __sun
-    static const char* pIIIMPEnable = getenv( "SAL_DISABLE_OWN_IM_STATUS" );
-    if( pIIIMPEnable && *pIIIMPEnable )
-        mnSupportedStatusStyle &= ~XIMStatusCallbacks;
-#endif
-
     memset(&maPreeditStartCallback, 0, sizeof(maPreeditStartCallback));
     memset(&maPreeditDoneCallback, 0, sizeof(maPreeditDoneCallback));
     memset(&maPreeditDrawCallback, 0, sizeof(maPreeditDrawCallback));

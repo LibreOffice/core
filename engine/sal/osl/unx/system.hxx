@@ -22,14 +22,7 @@
 #include <errno.h>
 #include <grp.h>
 
-/* Make sockets of type AF_UNIX use underlying FS rights */
-#if defined(__sun) && !defined(_XOPEN_SOURCE)
-#   define _XOPEN_SOURCE 500
-#   include <sys/socket.h>
-#   undef _XOPEN_SOURCE
-#else
-#   include <sys/socket.h>
-#endif
+#include <sys/socket.h>
 
 #ifdef SYSV
 #   include <sys/utsname.h>
@@ -157,20 +150,6 @@
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #endif
 
-#ifdef __sun
-#   include <shadow.h>
-#   include <sys/un.h>
-#   include <stropts.h>
-#   include <pthread.h>
-#   include <netinet/tcp.h>
-#   include <sys/filio.h>
-#   include <dlfcn.h>
-#   include <sys/isa_defs.h>
-#   define  IORESOURCE_TRANSFER_SYSV
-#   define  IOCHANNEL_TRANSFER_BSD
-#   define  LIBPATH "LD_LIBRARY_PATH"
-#endif
-
 #ifdef MACOSX
 #define TimeValue CFTimeValue      // Do not conflict with TimeValue in sal/inc/osl/time.h
 #undef TimeValue
@@ -228,7 +207,7 @@ int macxp_resolveAlias(char *path, int buflen);
 
 #if !defined(_WIN32)  && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && \
-    !defined(__sun) && !defined(MACOSX) && \
+    !defined(MACOSX) && \
     !defined(OPENBSD) && !defined(DRAGONFLY) && \
     !defined(IOS) && !defined(ANDROID) && \
     !defined(HAIKU) && !defined(__EMSCRIPTEN__)

@@ -26,7 +26,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 		CFLAGS="$(CFLAGS) $(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden) $(call gb_ExternalProject_get_build_flags,rasqal) $(gb_EMSCRIPTEN_CPPFLAGS)" \
 		LDFLAGS=" \
 			$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN") \
-			$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
+			$(if $(SYSBASE),$(if $(filter LINUX,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
 		$(if $(SYSBASE),CPPFLAGS="-I$(SYSBASE)/usr/include") \
 		PKG_CONFIG="" \
 		RAPTOR2_CFLAGS="-I$(gb_UnpackedTarball_workdir)/raptor/src" \

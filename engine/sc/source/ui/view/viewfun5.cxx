@@ -658,16 +658,6 @@ bool ScViewFunc::PasteDataFormatSource( SotClipboardFormatId nFormatId,
                 Graphic aGraphic;
                 SotClipboardFormatId nGrFormat = SotClipboardFormatId::NONE;
 
-// (for Selection Manager in Trusted Solaris)
-#ifndef __sun
-                if( rDataHelper.GetGraphic( SotClipboardFormatId::SVXB, aGraphic ) )
-                    nGrFormat = SotClipboardFormatId::SVXB;
-                else if( rDataHelper.GetGraphic( SotClipboardFormatId::GDIMETAFILE, aGraphic ) )
-                    nGrFormat = SotClipboardFormatId::GDIMETAFILE;
-                else if( rDataHelper.GetGraphic( SotClipboardFormatId::BITMAP, aGraphic ) )
-                    nGrFormat = SotClipboardFormatId::BITMAP;
-#endif
-
                 // insert replacement image ( if there is one ) into the object helper
                 if ( nGrFormat != SotClipboardFormatId::NONE )
                 {

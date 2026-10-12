@@ -19,11 +19,7 @@
 
 #include <cstddef>
 #include <stdio.h>
-#ifdef __sun
-#include <strings.h>
-#else
 #include <string.h>
-#endif
 
 #include <sal/types.h>
 #include "fontmap.hxx"

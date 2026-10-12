@@ -67,8 +67,8 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	$(if $(filter-out ANDROID iOS WNT,$(OS)), \
         fftester \
         svpclient ) \
-	$(if $(filter LINUX %BSD SOLARIS,$(OS)), tilebench) \
-	$(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)),icontest) \
+	$(if $(filter LINUX %BSD,$(OS)), tilebench) \
+	$(if $(filter LINUX MACOSX WNT %BSD,$(OS)),icontest) \
 	vcldemo \
 	svdemo \
 	minvcl \
@@ -78,7 +78,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	visualbackendtest \
 	listfonts \
 	listglyphs \
-	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), gtktiledviewer) \
+	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD,$(OS))), gtktiledviewer) \
 	$(if $(and $(ENABLE_GTKTILEDVIEWER), $(filter WNT,$(OS))), gtktiledviewer) \
 	$(if $(filter MACOSX,$(OS)),QuickLookPreview) \
 	$(if $(filter MACOSX,$(OS)),QuickLookThumbnail) \
@@ -521,7 +521,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbpool2) \
 	embobj \
 	i18nutil \
-	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), kitgtk) \
+	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD,$(OS))), kitgtk) \
 	$(if $(and $(ENABLE_GTKTILEDVIEWER), $(filter WNT,$(OS))), kitgtk) \
 	$(if $(ENABLE_JAVA), \
 		$(if $(filter $(OS),MACOSX),,officebean) \
@@ -626,7 +626,7 @@ $(eval $(call gb_Helper_register_packages_for_install,calc,\
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,kit,\
-	$(if $(filter LINUX %BSD SOLARIS, $(OS)),kit_selectionhandles) \
+	$(if $(filter LINUX %BSD, $(OS)),kit_selectionhandles) \
 	$(if $(and $(ENABLE_GTKTILEDVIEWER), $(filter WNT,$(OS))), kit_selectionhandles) \
 ))
 

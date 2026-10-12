@@ -179,12 +179,6 @@ endif
 
 endif # !$(ENABLE_NSS)
 
-ifeq ($(OS),SOLARIS)
-$(eval $(call gb_Library_add_libs,xsec_xmlsec,\
-	-ldl \
-))
-endif
-
 endif # !$(OS),WNT
 
 # vim: set noet sw=4 ts=4:

@@ -49,7 +49,6 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________NONE) \
 			$(if $(filter WNT,$(OS)),LDFLAGS="-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2") \
-			$(if $(filter SOLARIS,$(OS)),LIBS="-lm") \
 			$(if $(filter ANDROID,$(OS)),LIBS="$(gb_STDLIBS)") \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \

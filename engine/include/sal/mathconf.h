@@ -20,10 +20,6 @@
 
 #include <osl/endian.h>
 
-#if defined __sun
-#include <ieeefp.h>
-#endif /* __sun */
-
 #if defined(__cplusplus) && ( defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L )
 #include <cmath>
 #endif
@@ -58,7 +54,7 @@ extern "C" {
 
 
 /* SAL_MATH_FINITE(d): test double d on INFINITY, NaN et al. */
-#if !defined __sun && !defined ANDROID \
+#if !defined ANDROID \
                      && defined(__cplusplus) \
                      && ( defined(__GXX_EXPERIMENTAL_CXX0X__) \
                           || __cplusplus >= 201103L \

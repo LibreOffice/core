@@ -369,17 +369,7 @@ void PrinterInfoManager::initialize()
                     aValue = aConfig.ReadKey( "Command"_ostr );
                     // no printer without a command
                     if (aValue.isEmpty())
-                    {
-                        /*  TODO:
-                        *  porters: please append your platform to the Solaris
-                        *  case if your platform has SystemV printing per default.
-                        */
-                        #if defined __sun
-                        aValue = "lp";
-                        #else
                         aValue = "lpr"_ostr;
-                        #endif
-                    }
                     aPrinter.m_aInfo.m_aCommand = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
                 }
 

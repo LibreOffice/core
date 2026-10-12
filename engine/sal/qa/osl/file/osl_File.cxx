@@ -1611,23 +1611,6 @@ namespace osl_FileStatus
 
         void getFileType_007()
         {
-#if defined(__sun) // Special file is different in Windows
-            auto nError1 = DirectoryItem::get(aTypeURL2, m_aSpecialItem);
-            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
-
-            // check for File type
-            FileStatus   rFileStatus(osl_FileStatus_Mask_Type);
-            nError1 = m_aSpecialItem.getFileStatus(rFileStatus);
-            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, nError1);
-
-            if (rFileStatus.isValid(osl_FileStatus_Mask_Type))
-            {
-                osl::FileStatus::Type eType = rFileStatus.getFileType();
-
-                CPPUNIT_ASSERT_MESSAGE("test for getFileType function: Special, Solaris version ",
-                                        (eType == FileStatus::Special));
-            }
-#endif
         }
 
         CPPUNIT_TEST_SUITE(getFileType);
@@ -4626,14 +4609,7 @@ namespace osl_Directory
             deleteTestDirectory(aTmpName3);
             OString sError = "test for remove function: try to remove a directory that is not empty." +
                 errorToStr(nError1);
-#if defined(__sun)
-            // on UNX, the implementation uses rmdir(), which EEXIST is thrown on Solaris when the directory is not empty, refer to: 'man -s 2 rmdir', while on linux, ENOTEMPTY is thrown.
-            // EEXIST The directory contains entries other than those for "." and "..".
-            printf("#Solaris test\n");
-            CPPUNIT_ASSERT_MESSAGE(sError.getStr(), (osl::FileBase::E_EXIST == nError1));
-#else
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sError.getStr(), osl::FileBase::E_NOTEMPTY, nError1);
-#endif
         }
 
         CPPUNIT_TEST_SUITE(remove);

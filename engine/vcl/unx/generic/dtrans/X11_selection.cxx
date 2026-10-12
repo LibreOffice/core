@@ -564,16 +564,6 @@ OString SelectionManager::convertToCompound( const OUString& rText )
     {
         aRet = OString(reinterpret_cast<char*>(aProp.value));
         XFree( aProp.value );
-#ifdef __sun
-        /*
-         *  for currently unknown reasons XmbTextListToTextProperty on Solaris returns
-         *  no data in ISO8859-n encodings (at least for n = 1, 15)
-         *  in these encodings the directly converted text does the
-         *  trick, also.
-         */
-        if( aRet.isEmpty() && !rText.isEmpty() )
-            aRet = OUStringToOString( rText, osl_getThreadTextEncoding() );
-#endif
     }
     else
         aRet.clear();

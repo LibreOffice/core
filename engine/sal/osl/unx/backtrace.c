@@ -23,19 +23,15 @@
 
 #include <sal/types.h>
 
-#ifdef __sun /* Solaris */
-
-#include "backtrace_solaris.c"
-
-#elif defined FREEBSD || defined NETBSD || defined OPENBSD || defined(DRAGONFLY)
+#if defined FREEBSD || defined NETBSD || defined OPENBSD || defined(DRAGONFLY)
 
 #include "backtrace_bsd.c"
 
-#else /* not GNU/BSD/Solaris */
+#else /* not GNU/BSD */
 
 #include "backtrace_other.c"
 
-#endif /* not GNU/BSD/Solaris */
+#endif /* not GNU/BSD */
 
 #endif /* ! HAVE_FEATURE_BACKTRACE */
 

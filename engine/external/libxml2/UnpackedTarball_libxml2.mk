@@ -17,7 +17,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libxml2,2))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libxml2,\
 	external/libxml2/libxml2-dont-export-dllmain.patch.0 \
-	$(if $(filter SOLARIS,$(OS)),external/libxml2/libxml2-global-symbols.patch) \
 	external/libxml2/libxml2-XMLCALL-redefine.patch.0 \
 	$(if $(filter ANDROID,$(OS)),external/libxml2/libxml2-android.patch) \
 ))

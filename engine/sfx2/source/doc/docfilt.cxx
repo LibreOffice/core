@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef __sun
-#include <ctime>
-#endif
-
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
 #include <comphelper/fileformat.h>

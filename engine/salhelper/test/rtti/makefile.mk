@@ -62,10 +62,6 @@ DEF1EXPORTFILE=	exports.dxp
 
 DEF1NAME=	$(SHL1TARGET)
 
-.IF "$(OS)$(CPUNAME)"=="SOLARISSPARC"
-SHL1VERSIONMAP=	sols.map
-.ENDIF
-
 
 # ------------------------------------------------------------------
 

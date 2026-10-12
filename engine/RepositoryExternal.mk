@@ -1477,12 +1477,6 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 $(call gb_LinkTarget_use_external_project,$(1),openssl)
 $(call gb_Helper_LinkTarget_use_external,$(1),openssl)
-ifeq ($(OS),SOLARIS)
-$(call gb_LinkTarget_add_libs,$(1),\
-	-lnsl \
-	-lsocket \
-)
-endif
 endif
 
 endef

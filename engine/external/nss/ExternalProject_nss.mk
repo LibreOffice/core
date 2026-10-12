@@ -160,7 +160,6 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 			MACOS_SDK_DIR=$(MACOSX_SDK_PATH) \
 			NSS_USE_SYSTEM_SQLITE=1) \
 		$(if $(filter LINUX,$(OS)),$(if $(ENABLE_DBGUTIL),,BUILD_OPT=1)) \
-		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
 		$(if $(filter ARM,$(CPUNAME)),NSS_DISABLE_ARM32_NEON=1) \
 		NSPR_CONFIGURE_OPTS="$(gb_CONFIGURE_PLATFORMS)" \
 		$(if $(CROSS_COMPILING),CROSS_COMPILE=1) \

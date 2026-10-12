@@ -1491,14 +1491,10 @@ oslFileError osl_mapFile(
         // OS simultaneously pages in the rest); on other platforms, it remains
         // to be evaluated whether madvise or equivalent is available and
         // actually useful:
-#if defined MACOSX || (defined(__sun) && (!defined(__XOPEN_OR_POSIX) || defined(_XPG6) || defined(__EXTENSIONS__)))
+#if defined MACOSX
         int e = posix_madvise(p, nLength, POSIX_MADV_WILLNEED);
         if (e != 0)
             SAL_INFO("sal.file", "posix_madvise(..., POSIX_MADV_WILLNEED) failed with " << e);
-
-#elif defined __sun
-        if (madvise(static_cast< caddr_t >(p), nLength, MADV_WILLNEED) != 0)
-            SAL_INFO("sal.file", "madvise(..., MADV_WILLNEED) failed with " << UnixErrnoString(errno));
 #endif
     }
 
