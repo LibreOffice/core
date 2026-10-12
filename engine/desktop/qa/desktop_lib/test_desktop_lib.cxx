@@ -193,6 +193,7 @@ public:
     void testContextMenuCalc();
     void testContextMenuWriter();
     void testNotificationCompression();
+    void testPaintedAreaOutlivesTheLastView();
     void testVectorDeltaPushCoalescing();
     void testTileInvalidationCompression();
     void testPartInInvalidation();
@@ -291,6 +292,7 @@ public:
     CPPUNIT_TEST(testContextMenuCalc);
     CPPUNIT_TEST(testContextMenuWriter);
     CPPUNIT_TEST(testNotificationCompression);
+    CPPUNIT_TEST(testPaintedAreaOutlivesTheLastView);
     CPPUNIT_TEST(testVectorDeltaPushCoalescing);
     CPPUNIT_TEST(testTileInvalidationCompression);
     CPPUNIT_TEST(testPartInInvalidation);
@@ -1944,6 +1946,47 @@ void DesktopKitTest::testNotificationCompression()
 
     CPPUNIT_ASSERT_EQUAL(int(COKitCallbackType::STATE_CHANGED), std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:AssignLayout=1"), std::get<1>(notifs[i++]));
+}
+
+void DesktopKitTest::testPaintedAreaOutlivesTheLastView()
+{
+    // A view that painted no tile gets no invalidation, its own edits included.
+    // The document keeps what its views painted, for the next one to start from.
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+
+    std::vector<std::tuple<int, std::string>> aNotificationList;
+    pDocument->registerCallback(&callbackCompressionTest, &aNotificationList);
+
+    const int nFirstView = KitHelper::getCurrentView();
+    CallbackFlushHandler* pFirstHandler = pDocument->mpCallbackFlushHandlers[nFirstView].get();
+    CPPUNIT_ASSERT(pFirstHandler);
+    // The invalidation below is cropped against this, so keep it wider.
+    pFirstHandler->tilePainted("-1"_ostr, 0, tools::Rectangle(0, 0, 15000, 15000));
+
+    // The document is left loaded with no view at all.
+    pDocument->registerCallback(nullptr, nullptr);
+    CPPUNIT_ASSERT(pDocument->mpCallbackFlushHandlers.empty());
+
+    // The view coming back has no live view to take the area from.
+    aNotificationList.clear();
+    pDocument->registerCallback(&callbackCompressionTest, &aNotificationList);
+
+    const int nSecondView = KitHelper::getCurrentView();
+    CallbackFlushHandler* pSecondHandler = pDocument->mpCallbackFlushHandlers[nSecondView].get();
+    CPPUNIT_ASSERT(pSecondHandler);
+    tools::Rectangle aInvalidated(0, 0, 1000, 1000);
+    pSecondHandler->viewInvalidateTilesCallback(&aInvalidated, -1, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Registering a view notifies of other things too, so count only these.
+    // Without the area kept on the document this one is dropped.
+    size_t nInvalidations = 0;
+    for (const auto& rNotification : aNotificationList)
+    {
+        if (std::get<0>(rNotification) == int(COKitCallbackType::INVALIDATE_TILES))
+            ++nInvalidations;
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), nInvalidations);
 }
 
 void DesktopKitTest::testVectorDeltaPushCoalescing()

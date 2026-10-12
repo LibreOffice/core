@@ -4946,10 +4946,23 @@ void COKitDocumentImpl::registerCallback(COKitCallback pCallback, void* pData)
             }
         }
 
-        if (mpCallbackFlushHandlers.find(nView) != mpCallbackFlushHandlers.end())
+        const auto it = mpCallbackFlushHandlers.find(nView);
+        if (it != mpCallbackFlushHandlers.end())
         {
-            mpCallbackFlushHandlers[nView]->setViewId(-1);
-            mpCallbackFlushHandlers.erase(nView);
+            const auto& pHandler = it->second;
+
+            // The view is going, so add the area it painted to what the document holds.
+            // Add rather than replace. An EMPTY invalidation clears a view's area, so
+            // this one can hold less than the document already has.
+            auto& rTarget = maPaintedAreaByRenderState[pHandler->getViewRenderState()];
+            for (const auto& [rPartId, rAreaByPartMode] : pHandler->getPaintedTiles())
+            {
+                for (const auto& [nPartMode, rArea] : rAreaByPartMode)
+                    rTarget[rPartId][nPartMode].Union(rArea);
+            }
+
+            pHandler->setViewId(-1);
+            mpCallbackFlushHandlers.erase(it);
         }
 
         // With the last such reader gone there is nothing to broadcast for.
@@ -5015,13 +5028,25 @@ void COKitDocumentImpl::registerCallback(COKitCallback pCallback, void* pData)
         // Try to take info about already painted tiles from another view that has the same
         // CanonicalViewId.
         const OString& rViewRenderState = pCallbackFlushHandler->getViewRenderState();
+        bool bFoundLiveView = false;
         for (const auto& rHandler : mpCallbackFlushHandlers)
         {
             if (rHandler.second->getViewRenderState() == rViewRenderState && rHandler.first != nId)
             {
                 pCallbackFlushHandler->setPaintedTiles(rHandler.second->getPaintedTiles());
+                bFoundLiveView = true;
                 break;
             }
+        }
+
+        // No live view to copy from, so this document was loaded with none. Take
+        // what it kept instead. A view with no painted area gets no invalidations
+        // at all, not even for its own edits.
+        if (!bFoundLiveView)
+        {
+            const auto it = maPaintedAreaByRenderState.find(rViewRenderState);
+            if (it != maPaintedAreaByRenderState.end())
+                pCallbackFlushHandler->setPaintedTiles(it->second);
         }
     }
 }

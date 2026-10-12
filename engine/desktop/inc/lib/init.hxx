@@ -311,6 +311,10 @@ namespace desktop {
         // touching the possibly-disposed model. See comphelper::COKit.
         OUString maOriginalDocumentUrlKey;
 
+        // Area that has had tiles painted, by view render state.
+        std::map<OString, std::map<OString, std::map<int, tools::Rectangle>>>
+            maPaintedAreaByRenderState;
+
         explicit COKitDocumentImpl(cpo::uno::Reference<css::lang::XComponent> xComponent,
                                     int nDocumentId);
         ~COKitDocumentImpl();
