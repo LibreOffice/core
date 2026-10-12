@@ -8978,6 +8978,9 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
                 it->second->stopVectorRendering();
 
             pViewShell->setDrawsFromObjects(false);
+
+            // The states such a view gave itself are the engine's again: all are sent anew.
+            pViewShell->GetViewFrame().GetBindings().InvalidateAll(true);
         }
         return {};
     }

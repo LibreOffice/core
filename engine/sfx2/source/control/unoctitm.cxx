@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 #include <config_java.h>
 
 #include <tools/debug.hxx>
@@ -1555,9 +1556,21 @@ static void InterceptKitStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
 
     // A view that draws from the objects gives the state of these itself, from where its
     // selection stands.
+    static constexpr std::u16string_view aGivenByTheView[] = {
+        u"EnterGroup",             u"LeaveGroup",             u"FormatUngroup",
+        u"FormatGroup",            u"ObjectAlignLeft",        u"AlignCenter",
+        u"ObjectAlignRight",       u"AlignUp",                u"AlignMiddle",
+        u"AlignDown",              u"ObjectAlign",            u"BringToFront",
+        u"ObjectForwardOne",       u"ObjectBackOne",          u"SendToBack",
+        u"TransformDialog",        u"NameGroup",              u"ObjectTitleDescription",
+        u"DistributeHorzLeft",     u"DistributeHorzCenter",   u"DistributeHorzDistance",
+        u"DistributeHorzRight",    u"DistributeVertTop",      u"DistributeVertCenter",
+        u"DistributeVertDistance", u"DistributeVertBottom",   u"DistributeSelection"
+    };
     if (pViewShell->drawsFromObjects()
-        && (aEvent.FeatureURL.Path == "EnterGroup" || aEvent.FeatureURL.Path == "LeaveGroup"
-            || aEvent.FeatureURL.Path == "FormatUngroup"))
+        && std::find(std::begin(aGivenByTheView), std::end(aGivenByTheView),
+                     aEvent.FeatureURL.Path)
+               != std::end(aGivenByTheView))
         return;
 
     const std::map<std::u16string_view, KitUnoCommand>& rUnoCommandList = GetKitUnoCommandList();
