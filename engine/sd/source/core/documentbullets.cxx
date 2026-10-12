@@ -20,6 +20,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/svxenum.hxx>
+#include <i18nutil/unicode.hxx>
 #include <svl/style.hxx>
 #include <svx/documentbullets.hxx>
 #include <svx/svditer.hxx>
@@ -49,6 +50,12 @@ void lcl_AddBulletsOfNumRule(const SvxNumRule& rRule, std::vector<SvxDocumentBul
                 continue;
 
             const sal_UCS4 cBullet = rFormat.GetBulletChar();
+
+            // A bullet is a mark the reader sees in front of the paragraph, so the characters
+            // that draw nothing, the spaces and the control characters, are no bullets.
+            if (unicode::isSpace(cBullet) || unicode::isControl(cBullet))
+                continue;
+
             aBullet.aBulletCharacter = OUString(&cBullet, 1);
             aBullet.aFontName = rFormat.GetBulletFont()->GetFamilyName();
         }

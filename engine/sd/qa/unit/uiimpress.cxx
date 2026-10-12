@@ -7263,6 +7263,22 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletFollowsAStyleMadeAfterTh
     CPPUNIT_ASSERT_EQUAL(true, lcl_OffersBulletCharacter(*pDocument, u"\u2767"));
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentBulletLeavesOutABlankCharacter)
+{
+    createSdImpressDoc("document-bullets.odp");
+    SdDrawDocument* pDocument = getSdDocShell()->GetDoc();
+
+    SdStyleSheetPool* pStyleSheetPool = pDocument->GetSdStyleSheetPool();
+    CPPUNIT_ASSERT(pStyleSheetPool);
+    SfxStyleSheetBase& rStyle = pStyleSheetPool->Make(u"blank bullet"_ustr, SfxStyleFamily::Para);
+
+    // A space in front of a paragraph is a bullet the reader cannot see, so the presentation
+    // offers the characters that draw a mark and leaves the blank one out.
+    lcl_SetStyleSheetBulletCharacter(rStyle, u' ');
+
+    CPPUNIT_ASSERT_EQUAL(false, lcl_OffersBulletCharacter(*pDocument, u" "));
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStyleBulletsSurviveASlideChange)
 {
     createSdImpressDoc("document-bullets.odp");
