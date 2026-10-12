@@ -40,11 +40,13 @@
 
 #include <vcl/metric.hxx>
 #include <vcl/fontcharmap.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 
 #include <fontsubset.hxx>
 #include <impfont.hxx>
+#include <font/FallbackLanguage.hxx>
 #include <font/FontMetricData.hxx>
 #include <font/fontsubstitution.hxx>
 #include <font/PhysicalFontCollection.hxx>
@@ -89,6 +91,41 @@ bool FontHasCharacter(CTFontRef pFont, const OUString& rString, sal_Int32 nIndex
     return CTFontGetGlyphsForCharacters(pFont, reinterpret_cast<const UniChar*>(rString.getStr() + nIndex), glyphs.get(), nLen);
 }
 
+// CoreText takes a fallback font from the cascade list of the font, which by
+// default follows the language preferences of the system. This is a copy of
+// pFont with the cascade list for the language of the text instead.
+CTFontRef CreateFontWithCascadeListForLanguage(CTFontRef pFont, const LanguageTag& rLanguageTag)
+{
+    CTFontRef pResult = nullptr;
+    CFStringRef pLang = CreateCFString(rLanguageTag.getBcp47());
+    if (pLang)
+    {
+        const void* pLangs[] = { pLang };
+        CFArrayRef pLangArray = CFArrayCreate(nullptr, pLangs, 1, &kCFTypeArrayCallBacks);
+        CFArrayRef pCascade = CTFontCopyDefaultCascadeListForLanguages(pFont, pLangArray);
+        if (pCascade)
+        {
+            const void* pKeys[] = { kCTFontCascadeListAttribute };
+            const void* pValues[] = { pCascade };
+            CFDictionaryRef pAttributes
+                = CFDictionaryCreate(nullptr, pKeys, pValues, 1, &kCFTypeDictionaryKeyCallBacks,
+                                     &kCFTypeDictionaryValueCallBacks);
+            CTFontDescriptorRef pDescriptor = CTFontDescriptorCreateWithAttributes(pAttributes);
+            pResult = CTFontCreateCopyWithAttributes(pFont, 0.0, nullptr, pDescriptor);
+            CFRelease(pDescriptor);
+            CFRelease(pAttributes);
+            CFRelease(pCascade);
+        }
+        CFRelease(pLangArray);
+        CFRelease(pLang);
+    }
+    if (!pResult)
+    {
+        CFRetain(pFont);
+        pResult = pFont;
+    }
+    return pResult;
+}
 }
 
 bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSelectPattern& rPattern, LogicalFontInstance* pLogicalFont,
@@ -99,7 +136,18 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSele
     CFStringRef pStr = CreateCFString(rMissingChars);
     if (pStr)
     {
-        CTFontRef pFallback = CTFontCreateForString(pFont->GetCTFont(), pStr, CFRangeMake(0, CFStringGetLength(pStr)));
+        // the language of the text, or one guessed from the missing chars when
+        // they are never written in that language
+        LanguageTag aLanguageTag(rPattern.meLanguage);
+        if (rPattern.meLanguage == LANGUAGE_DONTKNOW)
+            aLanguageTag = Application::GetSettings().GetUILanguageTag();
+        aLanguageTag = vcl::font::getLanguageForMissingChars(aLanguageTag, rMissingChars);
+
+        CTFontRef pLookupFont
+            = CreateFontWithCascadeListForLanguage(pFont->GetCTFont(), aLanguageTag);
+        CTFontRef pFallback
+            = CTFontCreateForString(pLookupFont, pStr, CFRangeMake(0, CFStringGetLength(pStr)));
+        CFRelease(pLookupFont);
         if (pFallback)
         {
             bFound = true;
