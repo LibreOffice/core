@@ -341,6 +341,9 @@ SmartArtDiagram::SmartArtDiagram(std::u16string_view rLayout, std::u16string_vie
         rtl::Reference< core::FragmentHandler > xRefLayout(new ColorFragmentHandler(*xPPTImport, u"internal"_ustr, maColors));
         xPPTImport->importFragment(xRefLayout, xSerializer);
     }
+
+    // link the Connections to their Points
+    mpData->buildDiagramDataModel(false);
 }
 
 SmartArtDiagram::~SmartArtDiagram()

@@ -26,6 +26,7 @@
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdtagitm.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <osl/process.h>
 #include <oox/drawingml/drawingmltypes.hxx>
@@ -2442,6 +2443,29 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNodeTakesTheShapeThatHoldsTextWhe
 
     for (size_t a(0); a < aExpected.size(); a++)
         CPPUNIT_ASSERT_EQUAL(aExpected[a], aTexts[a]);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testNodeTextsAfterOdpRoundTrip)
+{
+    // The node texts the Diagram dialog lists come back from ODP too, where the Diagram is built
+    // from the data it saved.
+    osl_setEnvironment(u"ACTIVATE_ADVANCED_DIAGRAM_FEATURES"_ustr.pData, u"1"_ustr.pData);
+    comphelper::ScopeGuard aGuard(
+        [] { osl_clearEnvironment(u"ACTIVATE_ADVANCED_DIAGRAM_FEATURES"_ustr.pData); });
+    createSdImpressDoc("pptx/smartart-snake-rows.pptx");
+    saveAndReload(TestFilter::ODP);
+
+    uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
+    SdrObject* pDiagram(SdrObject::getSdrObjectFromXShape(xDiagram));
+    CPPUNIT_ASSERT(nullptr != pDiagram);
+    const std::shared_ptr<svx::diagram::DiagramHelper_svx>& rHelper(pDiagram->getDiagramHelper());
+    CPPUNIT_ASSERT(rHelper);
+
+    std::vector<OUString> aTexts;
+    collectDiagramTexts(*rHelper, OUString(), aTexts);
+    CPPUNIT_ASSERT_EQUAL(size_t(12), aTexts.size());
+    CPPUNIT_ASSERT_EQUAL(u"Parent 1"_ustr, aTexts[0]);
+    CPPUNIT_ASSERT_EQUAL(u"Child 6"_ustr, aTexts[11]);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

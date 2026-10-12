@@ -262,19 +262,12 @@ bool SdrObject::isDiagram() const
 
 bool SdrObject::useAdvancedDiagramFeatures()
 {
-    static bool bChecked(false);
-    static bool bUse(false);
-
-    if (!bChecked)
-    {
-        // NOTE: We could also use
-        //     officecfg::Office::Common::Misc::ExperimentalMode::get()
-        // but for now env var will do...
-        bUse = (nullptr != std::getenv("ACTIVATE_ADVANCED_DIAGRAM_FEATURES"));
-        bChecked = true;
-    }
-
-    return bUse;
+    // NOTE: We could also use
+    //     officecfg::Office::Common::Misc::ExperimentalMode::get()
+    // but for now env var will do...
+    // The variable is read on each call, so a change of it during the
+    // process takes effect at once.
+    return nullptr != std::getenv("ACTIVATE_ADVANCED_DIAGRAM_FEATURES");
 }
 
 void SdrObject::setDiagramDataModelID(const OUString& /*rID*/)
