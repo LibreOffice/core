@@ -2614,11 +2614,8 @@ std::set<OUString> SwDoc::GetUsedBullets()
             {
                 continue;
             }
-            vcl::Font aFont(*rFormat.GetBulletFont());
             sal_UCS4 cBullet = rFormat.GetBulletChar();
-            OUString sBullet(&cBullet, 1);
-            OUString sFontName(aFont.GetFamilyName());
-            aUsedBullets.emplace(sBullet + sFontName);
+            aUsedBullets.emplace(OUString(&cBullet, 1) + rFormat.GetBulletFont()->GetFamilyName());
         }
     }
     return aUsedBullets;
