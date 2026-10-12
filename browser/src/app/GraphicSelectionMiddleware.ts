@@ -67,10 +67,14 @@ class GraphicSelection {
 	}
 
 	/// Whether what is selected is a diagram, asked of the object while the document is drawn
-	/// from objects and of the selection message otherwise.
+	/// from objects and of the selection message otherwise. While drawn from objects, objects
+	/// selected inside a diagram, its first one for the whole of it, count as the diagram.
 	public static isADiagram(): boolean {
 		if (RenderManager.isVectorRendering())
-			return this.theOneSelected()?.isDiagram === true;
+			return (
+				this.theOneSelected()?.isDiagram === true ||
+				Interaction.placeOf(this.selectedObjectIDs).kind === 'diagram'
+			);
 
 		return this.extraInfo?.isDiagram === true;
 	}
@@ -382,7 +386,9 @@ class GraphicSelection {
 		this.selectionSection?.refresh();
 
 		// The button of a diagram stands beside the selection, so it follows it wherever the
-		// objects take it, as does the player of a video.
+		// objects take it, as does the player of a video. Whether it is there at all is asked
+		// of the objects too, which may arrive after the selection.
+		this.checkDiagramData();
 		this.diagramButton?.follow();
 		this.followThePlayer();
 	}
@@ -550,6 +556,17 @@ class GraphicSelection {
 		together by one section that frames them all.
 	*/
 	public static updateSelectionSection(): void {
+		this.makeSelectionSection();
+
+		// The button of a diagram stands beside the band the section draws, so it is placed
+		// once the section stands for the selection as it is now.
+		if (RenderManager.isVectorRendering()) {
+			this.checkDiagramData();
+			this.diagramButton?.follow();
+		}
+	}
+
+	private static makeSelectionSection(): void {
 		const objectIds = this.selectedObjectIDs;
 		const several = objectIds.length > 1;
 		const wanted =
