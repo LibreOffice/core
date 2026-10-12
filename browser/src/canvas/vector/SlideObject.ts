@@ -268,6 +268,11 @@ namespace cool {
 		cannotBeMirrored?: boolean;
 		/// True where the object cannot hold a shear at all, a text frame for one.
 		cannotBeSheared?: boolean;
+		/// True where the object may not be turned over across or down as a whole, a text frame or
+		/// a caption for one.
+		cannotBeFlipped?: boolean;
+		/// True where the object cannot be changed into curves, a measurement for one.
+		cannotBeChangedToCurves?: boolean;
 		gluePoints?: ObjectGluePoint[];
 		/** The four glue points the object has at the middles of its sides - the upper, the
 		 * right, the lower and the left one - where they lie on the object, as gluePoints are

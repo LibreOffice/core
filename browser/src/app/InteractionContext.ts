@@ -135,6 +135,15 @@ class Interaction {
 		'.uno:DistributeVertBottom',
 	];
 
+	/// The commands that depend on the kind of the objects selected and on what they allow.
+	public static readonly commandsByKind: string[] = [
+		'.uno:FlipHorizontal',
+		'.uno:FlipVertical',
+		'.uno:ChangeBezier',
+		'.uno:FormatArea',
+		'.uno:FormatLine',
+	];
+
 	/// Every command whose state a view that draws from the objects gives itself, from where the
 	/// selection stands, rather than taking the engine's.
 	public static readonly statesGivenHere: string[] = [
@@ -145,6 +154,7 @@ class Interaction {
 		...Interaction.commandsForOneOrMore,
 		...Interaction.commandsForOne,
 		...Interaction.commandsForThreeOrMore,
+		...Interaction.commandsByKind,
 	];
 
 	/// The set in use. It is the classic one for now; which set to use is to become a setting.

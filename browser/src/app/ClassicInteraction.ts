@@ -135,6 +135,12 @@ abstract class ClassicContext implements InteractionContext {
 		- Bringing to the front and forward where what is selected does not stand at the front
 		  of its level already, sending to the back and backward where it does not stand at the
 		  back.
+		- By the kind of the objects and what they allow: flipping where none is held in place
+		  and each may be turned over; changing to curves for one object that may be and is no
+		  curve yet, or for several of which one may be; the area unless each object is a line
+		  or a table and one at least is a line, a picture having a fill behind what it shows;
+		  the line where no table is selected.
+		  With nothing selected the area and the line are offered, for the objects drawn next.
 	*/
 	public commandStates(): { [command: string]: boolean } {
 		const selected = GraphicSelection.selectedObjectIDs;
@@ -190,7 +196,47 @@ abstract class ClassicContext implements InteractionContext {
 			states[command] = count === 1;
 		for (const command of Interaction.commandsForThreeOrMore)
 			states[command] = count >= 3;
+
+		const objects = this.objectsTheCommandsGoTo()
+			.map((objectId: number) => RenderGeometrySection.objectOf(objectId))
+			.filter((object): object is cool.SlideObject => object !== undefined);
+		const kinds = objects.map(
+			(object: cool.SlideObject) => object.objectKind ?? 0,
+		);
+
+		const flip =
+			objects.length >= 1 &&
+			objects.every(
+				(object: cool.SlideObject) =>
+					!object.cannotBeMoved && !object.cannotBeFlipped,
+			);
+		states['.uno:FlipHorizontal'] = flip;
+		states['.uno:FlipVertical'] = flip;
+
+		// The kinds 10 and 11 are the open and the closed curve.
+		states['.uno:ChangeBezier'] =
+			objects.length === 1
+				? !objects[0].cannotBeChangedToCurves &&
+					kinds[0] !== 10 &&
+					kinds[0] !== 11
+				: objects.some(
+						(object: cool.SlideObject) => !object.cannotBeChangedToCurves,
+					);
+
+		// The kinds with no area: the line, the arc, the polyline, the open curve, the freehand
+		// line and the connector. The table, kind 35, fills its cells with an area of their own.
+		const withNoArea = [2, 6, 9, 10, 12, 24];
+		states['.uno:FormatArea'] = !(
+			kinds.some((kind: number) => withNoArea.includes(kind)) &&
+			kinds.every((kind: number) => withNoArea.includes(kind) || kind === 35)
+		);
+		states['.uno:FormatLine'] = !kinds.includes(35);
 		return states;
+	}
+
+	/// The objects the commands go to, which are the ones selected.
+	protected objectsTheCommandsGoTo(): number[] {
+		return GraphicSelection.selectedObjectIDs;
 	}
 
 	/// Ungroup is the engine's, for what is selected.
@@ -571,7 +617,8 @@ class ClassicDiagramContext extends ClassicGroupContext {
 		Group is offered inside the diagram, on its other objects, and with the whole diagram
 		selected as for any object at the level around it: only where a group holds it. The
 		whole diagram is moved and arranged as an object; its other objects take no geometry,
-		so nothing that moves, arranges or groups is offered on them, while naming them is.
+		so nothing that moves, arranges, groups, flips or changes them to curves is offered on
+		them, while naming them and their area and line are.
 	*/
 	public commandStates(): { [command: string]: boolean } {
 		const states = super.commandStates();
@@ -586,8 +633,18 @@ class ClassicDiagramContext extends ClassicGroupContext {
 				states[command] = false;
 			for (const command of Interaction.commandsForThreeOrMore)
 				states[command] = false;
+			states['.uno:FlipHorizontal'] = false;
+			states['.uno:FlipVertical'] = false;
+			states['.uno:ChangeBezier'] = false;
 		}
 		return states;
+	}
+
+	/// The whole diagram, where its first object stands for it, or the object of it selected.
+	protected objectsTheCommandsGoTo(): number[] {
+		return this.wholeSelected()
+			? [this.diagram]
+			: GraphicSelection.selectedObjectIDs;
 	}
 
 	/*
