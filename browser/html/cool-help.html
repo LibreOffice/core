@@ -402,13 +402,10 @@
     <p><span class="def">The document area:</span> The application area shows the document contents, either spreadsheets, presentations or text documents.</p>
   </div>
   <div class="sub-section">
-    <p><span class="def">The menu bar:</span> The main menu is at the top and includes many options, such as commands for printing, editing, viewing, and other advanced commands. You can hide the menu bar by clicking the hide icon <span class="w2ui-icon fold icon-size" role="img" aria-label="hide menu bar" title="Hide menu bar"></span> on the far right. To show it again, click the show icon <span class="w2ui-icon unfold icon-size" role="img" aria-label="show menu bar" title="Show menu bar"></span>.</p>
+    <p><span class="def">The tabs:</span> The commands are grouped on tabs at the top: <span class="ui">File</span>, <span class="ui">Home</span>, <span class="ui">Insert</span>, <span class="ui">Review</span>, <span class="ui">View</span> and others, depending on the document type. Click the selected tab again to collapse the tab bar and gain space for the document. Click any tab to expand it again.</p>
   </div>
   <div class="sub-section">
     <p><span class="def">Context menus:</span> On clicking with the right mouse button, a menu appears with commands associated with the underlying object.</p>
-  </div>
-  <div class="sub-section">
-    <p><span class="def">The toolbar:</span> The toolbar contains the most used options for daily editing. Toolbar buttons are dynamic, meaning that their state (on or off) depends on different factors.</p>
   </div>
   <div class="sub-section">
     <p><span class="def">The status bar:</span> The status bar is shown in the bottom, and contains several useful options and features.</p>
@@ -425,11 +422,7 @@
   <div class="sub-section">
     <p><span class="def">The zoom bar:</span> The zoom bar includes buttons to reset zoom to 100%, zoom out and zoom in. The zoom applies to the document area, the user interface is not affected. The current level of zoom is shown in this area.</p>
     <p>Text, charts, shapes and svg images will stay sharp, when zooming in, you will only see pixels appear at inserted images, such as jpg’s or png’s.</p>
-    <p>Using the browser zoom affects the document and user interface areas.</p>
-  </div>
-  <div class="sub-section">
-    <p><span class="def">The information bar:</span> The information bar displays details about the current document. The actual information depends on the nature of the document.</p>
-    <div class="screenshot" id="help-informationbar"><img alt="Information bar showing page navigation arrows, zoom controls, and zoom level" src="images/help/en/information-bar.png"/></div>
+    <p class="webBasedCOOLOnly">Using the browser zoom affects the document and user interface areas.</p>
   </div>
 </div>
     <div class="section webBasedCOOLOnly">
@@ -442,33 +435,37 @@
     <div class="sub-section"><p>When closing a document, it is automatically saved if it has been changed.</p></div>
     </div>
 
-    <!-- FIXME: We need an official term for the "Backstage". Below I
-         just tediously use "the page shown from the File menu bar
-         button"
-      -->
     <div class="section mobileAppAndCODAOnly">
     <h3 id="1335B" class="section-header">Opening, closing, saving and printing documents</h3>
     <div class="sub-section">
       <p>To open a document, either open it in <span class="productname">{productname}</span>
-        from your platform's file manager or use the <span class="ui">Open</span> button
-        on the page shown from the <span class="ui">File</span> menu bar button.
+        from your platform's file manager or use <span class="ui">Open</span>
+        on the <span class="ui">File</span> tab.
       </p>
     </div>
     <div class="sub-section">
-      <p>To save the document in a different format use the <span class="ui">Save as</span>
-        button on the page shown from the <span class="ui">File</span> menu bar button.
+      <p>An existing document opens in view mode, so that you can read it without
+        changing it by accident. To start editing, click the edit button (the pencil)
+        in the bottom right corner. New documents and documents created from a
+        template open ready to edit.
+      </p>
+      <p>If the document is locked by another application, it stays in view mode.
       </p>
     </div>
     <div class="sub-section">
-      <p>Documents are automatically saved perdiodically,
-        but if you want a document to be saved right away you can use the
-        <span class="ui">Save</span> button on the page shown from the
-        <span class="ui">File</span> menu bar button.
+      <p>To save the document in a different format use <span class="ui">Save As</span>
+        on the <span class="ui">File</span> tab.
       </p>
     </div>
     <div class="sub-section">
-      <p>To print the document, use the <span class="ui">Print</span> button
-        on the page shown from the <span class="ui">File</span> menu bar button.
+      <p>Documents are automatically saved periodically,
+        but if you want a document to be saved right away you can use
+        <span class="ui">Save</span> on the <span class="ui">File</span> tab.
+      </p>
+    </div>
+    <div class="sub-section">
+      <p>To print the document, use <span class="ui">Print</span>
+        on the <span class="ui">File</span> tab.
       </p>
     </div>
     <div class="sub-section">
@@ -482,28 +479,30 @@
     <p>Document editing should be familiar to everyone that has used an office application before, but here are some distinctive features:</p>
     <div class="sub-section">
     <h4>Copy and Paste</h4>
-    <p>Rich content copy/cut and paste is supported, not only within a given document, but also across documents on the same or different <span class="productname">{productname}</span>. For these internal uses, users can copy/cut content, including images and mixed content, on PC by using the keyboard shortcuts directly (<kbd>Ctrl</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>V</kbd>). For security reasons it is necessary to use <kbd>Ctrl</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>V</kbd> to paste on PC, but context menus can be used for cut and copy. On Android or iOS selecting text by double tapping, and using a long-tap to access copy/cut/paste via the context menu is required.</p>
-    <p>To copy larger pieces of content to other applications on your device, users need to press the <span class="ui">Start download</span> button, and then re-copy this to their clipboard in order to make it available to the target application to read. This is possible via a tiny widget that pops up in the bottom-right corner, and is only necessary to export the content for pasting in external applications. This step also converts complex object types into static images.</p>
+    <p>Rich content copy/cut and paste is supported, including images and mixed content, using the keyboard shortcuts (<kbd>Ctrl</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>V</kbd>). On Android or iOS selecting text by double tapping, and using a long-tap to access copy/cut/paste via the context menu is required.</p>
+    <p class="webBasedCOOLOnly">For security reasons it is necessary to use <kbd>Ctrl</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>V</kbd> to paste content that comes from outside the document, but context menus can be used for cut and copy.</p>
+    <p class="webBasedCOOLOnly">When you copy a selection that contains images or other objects, a <span class="ui">Download Selection</span> widget pops up in the bottom-right corner. Press <span class="ui">Download</span>, then copy again, to make the content available to applications outside <span class="productname">{productname}</span>. This step also converts complex object types into static images.</p>
     </div>
     <div class="sub-section">
     <h4>Document repair</h4>
-    <p>When multiple people edit the same document concurrently, it is possible for their changes to conflict and this can cause some confusion. The Document Repair function allows users to undo other editor’s changes to the document to a previous state.</p>
-    <p>To jump back to the selected state, select it with the mouse and hit <span class="ui">Jump to state</span>.</p>
+    <p class="webBasedCOOLOnly">When multiple people edit the same document concurrently, it is possible for their changes to conflict and this can cause some confusion. The Document Repair function allows users to undo other editor’s changes to the document to a previous state.</p>
+    <p><span class="ui">Repair</span> on the <span class="ui">File</span> tab lists the recent changes to the document and lets you take the document back to an earlier state.</p>
+    <p>To jump back to the selected state, select it with the mouse and hit <span class="ui">OK</span>.</p>
     <div class="screenshot" id="help-document-repair"><img alt="Repair Document dialog listing past document states with columns for action type, author, and timestamp" src="images/help/en/repair-document.png"/></div>
-    <p>This is particularly useful – say when a colleague inadvertently selected all text in the document with <kbd>Ctrl</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>A</kbd> and proceeded to type over it destroying it – while you were concurrently editing.</p>
+    <p class="webBasedCOOLOnly">This is particularly useful – say when a colleague inadvertently selected all text in the document with <kbd>Ctrl</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>A</kbd> and proceeded to type over it destroying it – while you were concurrently editing.</p>
     </div>
-    <div class="sub-section">
-    <h4>Inactive document</h4>
-    <p>When <span class="productname">{productname}</span> detects that there has not been any activity in the browser for a while, it puts the document in an “Inactive” state. The document is shown with a transparent gray overlay, with the message “Inactive document – please click to resume editing”.</p>
+    <div class="sub-section webBasedCOOLOnly">
+    <h4>Idle document</h4>
+    <p>When <span class="productname">{productname}</span> detects that there has not been any activity in the browser for a while, it puts the document in an “Idle” state. The document is shown with a transparent gray overlay, with the message “Idle document – please click to reload and resume editing”.</p>
     <div class="screenshot" id="help-inactive-document"><img alt="Idle document overlay with the message: Idle document - please click to reload and resume editing" src="images/help/en/inactive-document.png"/></div>
     <p>To continue editing, click on the document and the layover and message disappear. Any changes that may have been made by other users – while collaboratively editing the document – are re-loaded.</p>
     </div>
     <div class="sub-section">
     <h4>Pasting</h4>
-    <p>When you paste content copied from within the same document, the format and elements are maintained. If you copy from another document, in another tab or browser window, or from outside of the browser, the pasted content will preserve rich text.</p>
+    <p class="webBasedCOOLOnly">When you paste content copied from within the same document, the format and elements are maintained. If you copy from another document, in another tab or browser window, or from outside of the browser, the pasted content will preserve rich text.</p>
     <p>You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>Shift</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>V</kbd></p>
     <p>When you paste text from within the document, formatting will be respected. You can also paste objects, such as images, if they are copied from the document you are working in.</p>
-    <p>When you paste text from outside of the document (another browser window or a desktop application), it will be pasted as rich text.</p>
+    <p class="webBasedCOOLOnly">When you paste text from outside of the document (another browser window or a desktop application), it will be pasted as rich text.</p>
     <p>When you have internal cut or copied content, you can paste this content using the context menu.</p>
     </div>
     </div>
@@ -515,7 +514,7 @@
     <ol>
       <li>Select a table in text document, a range in a spreadsheet or a table in a presentation.</li>
       <li>
-        Choose <span class="ui">Insert</span> → <span class="ui">Charts</span>. Customize your chart on the sidebar:
+        Choose <span class="ui">Insert</span> → <span class="ui">Chart</span>. Customize your chart on the sidebar:
       </li>
       <div class="screenshot" id="help-chartwizard"><img alt="Chart Wizard dialog with chart type list on the left, chart style previews, 3D and shape options" src="images/help/en/chart-wizard.png"/></div>
       <li>If no table or range was selected, a prototype chart is displayed.</li>
@@ -527,9 +526,9 @@
   <div class="sub-section"><p><span class="def">Data series formatting:</span> Open the context menu and choose <span class="ui">Format data series</span>.</p></div>
   <div class="sub-section">
     <h4>Handling images</h4>
-    <p><span class="productname">{productname}</span> inserts images in the text document from your local computer or from your cloud storage. Inserted images are always embedded in the document.</p>
-    <p><span class="def">Insert image:</span> Clicking on the <span class="ui">Insert image</span> icon allows you to choose an image from the cloud storage's folders and shares.</p>
-    <p><span class="def">Insert local image:</span> opens the browser file picker to upload the image from your local computer and insert it into the document.</p>
+    <p class="webBasedCOOLOnly"><span class="productname">{productname}</span> inserts images in the text document from your local computer or from your cloud storage. Inserted images are always embedded in the document.</p>
+    <p class="webBasedCOOLOnly"><span class="def">Insert image:</span> Clicking on the <span class="ui">Insert image</span> icon allows you to choose an image from the cloud storage's folders and shares.</p>
+    <p><span class="def">Insert local image:</span> Choose <span class="ui">Insert</span> → <span class="ui">Image</span> to pick an image from your computer and insert it into the document.</p>
     <p>Images can be resized, rotated and anchored. Text can be wrapped around the image. Select the image and open the context menu. Use the images handles to resize the image with the mouse.</p>
   </div>
   <div class="sub-section">
@@ -542,7 +541,7 @@
     <h4>Spellchecking</h4>
     <p><span class="productname">{productname}</span> can check spelling in text documents, spreadsheets and presentations. A red wavy underline indicates misspelled words. Click on the right mouse button to open a context menu with suggested misspelling corrections.</p>
     <div class="screenshot" id="help-spell-checking"><img alt="Text with a red wavy underline beneath a misspelled word" src="images/help/en/red-wavy-underline.png"/></div>
-    <p>To systematically spell-check the whole document use the <span class="ui">Tools</span> menu’s <span class="ui">Spelling</span> option.</p>
+    <p>To systematically spell-check the whole document use <span class="ui">Spelling</span> on the <span class="ui">Review</span> tab.</p>
   </div>
 </div>
 <div class="spreadsheet hide">
@@ -588,7 +587,7 @@
     <p><span class="def">Data validation:</span> For each cell, you can define entries to be valid. Invalid entries to a cell will be rejected. To enable data validation:</p>
     <ol>
       <li>
-        Choose <span class="ui">Validity</span> from the <span class="ui">Data</span> menu. The <span class="ui">Validity</span> dialog opens.
+        Choose <span class="ui">Validity</span> on the <span class="ui">Data</span> tab. The <span class="ui">Validity</span> dialog opens.
       </li>
       <div class="screenshot" id="help-data-validation"><img alt="Validity dialog on the Criteria tab with Allow set to List, showing options for empty cells, selection list, and entry values" src="images/help/en/data-validation.png"/></div>
       <li>Select the validity criterion in the <span class="ui">Allow</span> drop-box list. Depending on the criterion, more options show. Fill the required data.</li>
@@ -604,7 +603,7 @@
     <div class="screenshot" id="help-cell-comment"><img alt="Spreadsheet cell with a comment popup showing the author, date, comment text, and Save/Cancel buttons" src="images/help/en/cell-comment.png"/></div>
     </div>
     <div class="sub-section">
-    <p><span class="def">Conditional formatting:</span> <span class="productname">{productname}</span> adds symbols to each cell of a range based on cells conditions. Select the cell range and click the <span class="ui">Conditional Formatting</span> icon on the toolbar. Select the symbol set to apply on the range.</p>
+    <p><span class="def">Conditional formatting:</span> <span class="productname">{productname}</span> adds symbols to each cell of a range based on cells conditions. Select the cell range and click <span class="ui">Conditional</span> on the <span class="ui">Home</span> tab. Select the symbol set to apply on the range.</p>
     <div class="screenshot" id="help-conditional-formatting"><img alt="Conditional formatting icon set picker showing arrows, circles, traffic lights, stars, smiley faces, and bar chart symbol sets" src="images/help/en/conditional-formatting.png"/></div>
     </div>
     </div>
@@ -627,7 +626,7 @@
     </div>
     <div class="sub-section"><p><span class="def">Direct formatting:</span> You can format text document objects by formatting directly from the menus, toolbar or context menus. Direct formatting applies only to the current object selected.</p></div>
     <div class="sub-section">
-    <p><span class="def">Style formatting:</span> <span class="productname">{productname}</span> supports paragraph styles. You can apply an existing paragraph style to a paragraph. Choose menu <span class="ui">Edit</span> → <span class="ui">Edit styles</span> to change style.</p>
+    <p><span class="def">Style formatting:</span> <span class="productname">{productname}</span> supports paragraph styles. You can apply an existing paragraph style to a paragraph. Select the style in the style list on the <span class="ui">Home</span> tab.</p>
     <div class="screenshot" id="help-paragraph-dialog"><img alt="Paragraph dialog on the Indents and Spacing tab with settings for indent, spacing, and line spacing, and a preview on the right" src="images/help/en/paragraph-dialog.png"/></div>
     </div>
     </div>
@@ -635,11 +634,11 @@
     <h3 id="1383" class="section-header">Advanced text document editor features</h3>
     <div class="sub-section">
     <h4>Handling Tables</h4>
-    <p>Insert tables with proper icon in the toolbar. Select the initial number of rows and columns. Add rows and columns with the cell context menu. Merge cells with the <span class="ui">Table</span> menu. The default paragraph style inside cells is “Table contents”.</p>
+    <p>Insert tables with <span class="ui">Insert</span> → <span class="ui">Table</span>. Select the initial number of rows and columns. Add rows and columns with the cell context menu. Merge cells from the <span class="ui">Table</span> tab. The default paragraph style inside cells is “Table contents”.</p>
     <div class="screenshot" id="help-insert-table"><img alt="Insert Table picker showing a grid to select the number of rows and columns, currently showing 5 by 3" src="images/help/en/insert-table.png"/></div>
     </div>
     <div class="sub-section">
-    <p><span class="def">Formatting cells:</span> Click in the cell or range of cells and choose menu <span class="ui">Table</span> → <span class="ui">Properties</span>. Fine tune the table with the properties dialog.</p>
+    <p><span class="def">Formatting cells:</span> Click in the cell or range of cells, open the context menu and choose <span class="ui">Table Properties</span>. Fine tune the table with the properties dialog.</p>
     </div>
     <div class="sub-section">
     <h4>Track changes</h4>
@@ -696,12 +695,12 @@
     <h4>What are the document file formats supported by <span class="productname">{productname}</span>?</h4>
     <p><span class="productname">{productname}</span> supports both reading and writing for the following file formats:</p>
     <ul>
-      <li>Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT</li>
-      <li>Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS</li>
+      <li>Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT. Plain text TXT and Markdown MD</li>
+      <li>Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS. Comma separated values CSV</li>
       <li>Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP</li>
     </ul>
   </div>
-  <div class="sub-section">
+  <div class="sub-section webBasedCOOLOnly">
     <h4>How do I save a document with another name?</h4>
     <ol>
       <li>Hover the mouse on the document name in the menu bar.</li>
@@ -710,8 +709,9 @@
     <p>A copy of the document is saved with the new name in the same folder.</p>
   </div>
   <div class="sub-section">
-    <h3>How can I quit <span class="productname">{productname}</span> without saving my edits?</h3>
-    <p><span class="productname">{productname}</span> saves the document in the background regularly, you can't just close without saving it. To abandon your changes, you must either undo them, or use the <span class="ui">Revision History </span> in the <span class="ui">File</span> menu.</p>
+    <h4>How can I quit <span class="productname">{productname}</span> without saving my edits?</h4>
+    <p class="webBasedCOOLOnly"><span class="productname">{productname}</span> saves the document in the background regularly, you can't just close without saving it. To abandon your changes, you must either undo them, or use the <span class="ui">Revision History </span> in the <span class="ui">File</span> menu.</p>
+    <p class="mobileAppAndCODAOnly"><span class="productname">{productname}</span> saves the document in the background regularly, you can't just close without saving it. To abandon your changes, undo them.</p>
   </div>
   <div class="sub-section">
     <h4>Can <span class="productname">{productname}</span> open a password-protected document?</h4>
@@ -719,11 +719,11 @@
   </div>
   <div class="sub-section">
     <h4>How can I check spelling in my language?</h4>
-    <p>Choose menu <span class="ui">Tools</span> → <span class="ui">Languages</span> and select the language for the whole document. Optionally you can set languages for the selected text and for the current paragraph.</p>
+    <p>Choose <span class="ui">Review</span> → <span class="ui">Language</span> and select the language for the whole document. Optionally you can set languages for the selected text and for the current paragraph.</p>
   </div>
   <div class="sub-section">
     <h4>How can I remove the red wavy lines in my document?</h4>
-    <p>Choose menu <span class="ui">Tools</span> and uncheck <span class="ui">Automatic Spell Checking</span>.</p>
+    <p>On the <span class="ui">Review</span> tab, open <span class="ui">Spelling</span> and uncheck <span class="ui">Auto Spell Check</span>.</p>
   </div>
   <div class="sub-section">
     <h4>What is the blue wavy underline in some words in the text?</h4>
@@ -731,12 +731,12 @@
   </div>
   <div class="sub-section">
     <h4>Is there a thesaurus?</h4>
-    <p>Yes. Click in the word you want and choose <span class="ui">Tools</span> → <span class="ui">Thesaurus</span>. A dialog opens with many suggestions for replacements.</p>
+    <p>Yes. Click in the word you want and choose <span class="ui">Review</span> → <span class="ui">Thesaurus</span>. A dialog opens with many suggestions for replacements.</p>
     <div class="screenshot" id="help-thesaurus"><img alt="Thesaurus dialog for the word company, listing alternatives such as institution, establishment, and troupe, with a Replace with field" src="images/help/en/thesaurus.png"/></div>
   </div>
   <div class="sub-section">
     <h4>What are the blue <span class="blue">¶</span> symbols and how can I remove them from my text document?</h4>
-    <p>The <span class="blue">¶</span> symbol is a formatting mark. It is used to help text alignment and editing and is not printed. To toggle it in the document display, choose menu <span class="ui">View</span> → <span class="ui">Formatting mark</span>.</p>
+    <p>The <span class="blue">¶</span> symbol is a formatting mark. It is used to help text alignment and editing and is not printed. To toggle it in the document display, choose <span class="ui">View</span> → <span class="ui">Formatting Marks</span>.</p>
       </div>
     </div>
 <div class="text hide">
@@ -744,7 +744,7 @@
     <h3 id="1407" class="section-header">Text documents</h3>
     <div class="sub-section">
     <h4>How do I get a word count of my document?</h4>
-    <p>Word count is available in <span class="ui">Tools</span> → <span class="ui">Word count</span>. A dialog shows word counts for selection and for the whole document.</p>
+    <p>Word count is available in <span class="ui">Review</span> → <span class="ui">Word Count</span>. A dialog shows word counts for selection and for the whole document.</p>
     <div class="screenshot" id="help-word-count"><img alt="Word Count dialog showing word and character counts for the current selection and for the whole document" src="images/help/en/word-count.png"/></div>
     <p>Word count is also displayed in the status bar. If no text is selected the word count is for the whole document. Otherwise the word count is for the selected text.</p>
     </div>
@@ -754,7 +754,7 @@
     <ol>
       <li>Place the cursor in the position to insert the character.</li>
       <li>
-        Choose <span class="ui">Insert</span> → <span class="ui">Special Characters </span> or click the corresponding icon in the toolbar. A dialog opens.
+        Choose <span class="ui">Insert</span> → <span class="ui">Special Character</span>. A dialog opens.
       </li>
       <div class="screenshot" id="help-special-character"><img alt="Special Characters dialog with a character grid, search and font fields, hexadecimal and decimal code inputs, and recent and favorite characters at the bottom" src="images/help/en/special-character.png"/></div>
       <li>You can either browse the characters displayed with the drop lists or type a search key in the <span class="ui">Search</span> box. If you know the Unicode numeric code of the special character, enter in the boxes on the right.</li>
@@ -763,7 +763,7 @@
     </div>
     <div class="sub-section">
     <h4>Why can't I delete text? It just gets a strike-through?</h4>
-    <p>You have the Track Changes feature enabled for the document. Track Changes records all changes in the text and shows the edits for later revision. Useful for marking changes in text and spreadsheets. Track changes are enabled choosing <span class="ui">Edit</span> → <span class="ui">Track Changes </span> → <span class="ui">Record</span>.</p>
+    <p>You have the Track Changes feature enabled for the document. Track Changes records all changes in the text and shows the edits for later revision. Useful for marking changes in text and spreadsheets. Track changes are enabled choosing <span class="ui">Review</span> → <span class="ui">Record</span>.</p>
     <p>With track changes enabled your document is shown in the following manner:</p>
     <ul>
       <li>Deletions are marked with colored strike-through characters.</li>
@@ -773,8 +773,8 @@
     </ul>
     <div class="screenshot" id="help-track-changes-comment"><img alt="Tracked change shown as a comment box beside the document with author name, date, and change description" src="images/help/en/track-changes-comment.png"/></div>
     <p>The color assigned to the changes depends on the user that changes the document.</p>
-    <p>To display or hide track changes choose <span class="ui">Edit</span> → <span class="ui">Track Changes </span> → <span class="ui">Show</span>. Beware that if track changes are enabled but hidden, you still record changes and may inadvertently leave unwanted text available in the document.</p>
-    <p>Changes can be accepted or rejected. To accept or reject changes, click on the corresponding icons in the comment box on the right of the document. Alternatively, choose <span class="ui">Edit</span> → <span class="ui">Track Changes </span> → <span class="ui">Accept</span> or <span class="ui">Reject</span>. Furthermore, if you need to filter changes before accepting or rejecting, choose <span class="ui">Edit</span> → <span class="ui">Track Changes </span> → <span class="ui">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog buttons accordingly.</p>
+    <p>To display or hide track changes choose <span class="ui">Review</span> → <span class="ui">View Changes</span> → <span class="ui">Show</span>. Beware that if track changes are enabled but hidden, you still record changes and may inadvertently leave unwanted text available in the document.</p>
+    <p>Changes can be accepted or rejected. To accept or reject changes, click on the corresponding icons in the comment box on the right of the document. Alternatively, choose <span class="ui">Review</span> → <span class="ui">Accept</span> or <span class="ui">Reject</span>. Furthermore, if you need to filter changes before accepting or rejecting, choose <span class="ui">Review</span> → <span class="ui">Accept</span> → <span class="ui">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog buttons accordingly.</p>
     <div class="screenshot" id="help-manage-changes"><img alt="Manage Changes dialog with a list of tracked changes showing action, author, date, and comment columns, and Accept, Reject, Accept All, Reject All buttons" src="images/help/en/manage-changes.png"/></div>
     </div>
     <div class="sub-section">
@@ -782,7 +782,7 @@
     <p>Using the ruler drag the leftmost edge of the ruler to adjust the left margin, or the rightmost for the right margin.</p>
     <p>Using the page style</p>
     <ol>
-      <li>Choose <span class="ui">Format</span> → <span class="ui">Page</span> and select the <span class="ui">Page</span> tab</li>
+      <li>Choose <span class="ui">Format</span> → <span class="ui">Page Style</span> and select the <span class="ui">Page</span> tab</li>
       <li>Set the page margins in the dialog.</li>
     </ol>
     <div class="screenshot" id="help-page-style"><img alt="Page Style dialog on the Organizer tab showing style name, next style, inherit from, and category fields, with a summary of page properties" src="images/help/en/page-style.png"/></div>
@@ -803,7 +803,7 @@
     <p>Directly:</p>
     <ol>
       <li>Select the text with the existing format</li>
-      <li id="help-format-paintbrush">Click on the clone formatting icon <img alt="format paintbrush" class="icon-size" src="images/lc_formatpaintbrush.svg"/>. The mouse pointer turns to a paint bucket.</li>
+      <li id="help-format-paintbrush">Click on the <span class="ui">Clone Formatting</span> icon <img alt="format paintbrush" class="icon-size" src="images/lc_formatpaintbrush.svg"/> on the <span class="ui">Home</span> tab. The mouse pointer turns to a paint bucket.</li>
       <li>Select the text you want to apply the new format.</li>
     </ol>
     </div>
@@ -816,7 +816,7 @@
     </div>
     <div class="sub-section">
     <h4>Why did the text I just typed change automatically? How can I revert it?</h4>
-    <p>You have the AutoCorrection enabled. AutoCorrection compares the text just typed to an internal table of text. In most cases, AutoCorrection corrects typos while you type. If AutoCorrection is not necessary, disable it in <span class="ui">Tools</span> → <span class="ui">AutoCorrection</span> → <span class="ui">While typing</span>.</p>
+    <p>You have the AutoCorrection enabled. AutoCorrection compares the text just typed to an internal table of text. In most cases, AutoCorrection corrects typos while you type. To revert a correction, press <kbd>Ctrl</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>Z</kbd> right after it was applied.</p>
     </div>
     </div>
 </div>
@@ -825,7 +825,7 @@
     <h3 id="1409" class="section-header">Spreadsheets</h3>
     <div class="sub-section">
     <h4>How can I select data to print?</h4>
-    <p>Insert column and row breaks in the spreadsheet to narrow the print range and print the document to download. On printing the PDF, select the pages of interest.</p>
+    <p>Insert column and row breaks in the spreadsheet to narrow the print range. When printing, select the pages of interest.</p>
     </div>
     <div class="sub-section">
     <h4>How can I import CSV data?</h4>
@@ -833,7 +833,7 @@
       <li>Load your CSV data in some native tool to your platform, select and copy it to the clipboard</li>
       <li>Activate the <span class="productname">{productname}</span> spreadsheet window.</li>
       <li>
-        Paste from the browser <span class="ui">Edit</span> → <span class="ui">Paste</span> or press <kbd>Ctrl</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>V</kbd>. The <span class="ui">Text Import</span> dialog opens to let you describe the precise format of the CSV data.
+        Press <kbd>Ctrl</kbd><span class="kbd--plus" aria-hidden="true">+</span><kbd>V</kbd>. The <span class="ui">Text Import</span> dialog opens to let you describe the precise format of the CSV data.
       </li>
       <div class="screenshot" id="help-text-import"><img alt="Text Import dialog with character set, locale, separator options, and a preview of the imported CSV data" src="images/help/en/text-import.png"/></div>
       <li>Select the character set, language and separator options for the CSV file.</li>
@@ -842,16 +842,16 @@
     </div>
     <div class="sub-section">
     <h4>How can I copy the formatting of existing cells to new ones?</h4>
-    <p>This is easy to do using the Paintbrush tool in the toolbar.</p>
+    <p>This is easy to do using <span class="ui">Clone Formatting</span> on the <span class="ui">Home</span> tab.</p>
     <ol>
       <li>Format the source cell with the font, color background and more.</li>
-      <li id="help-format-paintbrush">Click on the clone formatting icon <img alt="format paintbrush" class="icon-size" src="images/lc_formatpaintbrush.svg"/>. The mouse pointer turns to a paint bucket.</li>
+      <li id="help-format-paintbrush">Click on the <span class="ui">Clone Formatting</span> icon <img alt="format paintbrush" class="icon-size" src="images/lc_formatpaintbrush.svg"/> on the <span class="ui">Home</span> tab. The mouse pointer turns to a paint bucket.</li>
       <li>Select the cells you want to format. Release the mouse button.</li>
     </ol>
     </div>
     <div class="sub-section">
     <h4>What is “Clear Direct Formatting” icon?</h4>
-    <p>Direct formatting is formatting applied directly to the selected contents of a paragraph or a spreadsheet cell, and overlaps its assigned style formatting. To restore the formatting to the style settings, select the text or spreadsheet cell and choose <span class="ui">Format</span> → <span class="ui">Clear Direct Formatting</span> or use the button in the toolbar.</p>
+    <p>Direct formatting is formatting applied directly to the selected contents of a paragraph or a spreadsheet cell, and overlaps its assigned style formatting. To restore the formatting to the style settings, select the text or spreadsheet cell and choose <span class="ui">Home</span> → <span class="ui">Clear Direct Formatting</span>.</p>
     </div>
     <div class="sub-section">
     <h4>How do I rename a sheet?</h4>
@@ -866,7 +866,7 @@
     <h4>How can I run my slide show?</h4>
     <ol>
       <li>Open the presentation in <span class="productname">{productname}</span></li>
-      <li id="help-slide-show">Either choose <span class="ui">Slide Show</span> → <span class="ui">Full Screen Presentation</span> or click on the left-most icon in the bottom of the slide panel: <img alt="slide show" class="icon-size" src="images/lc_dia.svg"></li>
+      <li id="help-slide-show">Either choose <span class="ui">Slide Show</span> → <span class="ui">From Beginning</span> or click on the left-most icon in the bottom of the slide panel: <img alt="slide show" class="icon-size" src="images/lc_dia.svg"></li>
     </ol>
     </div>
     <div class="sub-section">
