@@ -23,6 +23,7 @@
 #include <undomanager.hxx>
 #include <broadcast.hxx>
 #include <kahan.hxx>
+#include <stringutil.hxx>
 
 #include <svl/broadcast.hxx>
 #include <sfx2/docfile.hxx>
@@ -688,6 +689,106 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLEN)
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(1, 2, 0)));
 
     m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf161592)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+    ScSetStringParam aParam;
+    aParam.meStartListening = sc::NoListening;
+
+    // The search visits the middle of a long chain of dependent formulas before
+    // its predecessors have been recalculated.
+    for (SCROW nLastRow : { 812, 813, 1013, 1613 })
+    {
+        {
+            sc::AutoCalcSwitch aDisableCalc(*m_pDoc, false);
+            m_pDoc->SetValue(1, 0, 0, 50000);
+            m_pDoc->SetValue(1, 1, 0, 2000);
+            m_pDoc->SetString(1, 10, 0, u"=$B$1"_ustr, &aParam);
+            for (SCROW nRow = 11; nRow < nLastRow; ++nRow)
+                m_pDoc->SetString(1, nRow, 0, u"=B"_ustr + OUString::number(nRow) + u"*1.03-$B$2",
+                                  &aParam);
+            OUString aFormula = u"=MATCH(0;B11:B"_ustr + OUString::number(nLastRow) + u";-1)";
+            m_pDoc->SetString(1, 2, 0, aFormula, &aParam);
+            m_pDoc->SetString(1, 3, 0, aFormula, &aParam);
+            m_pDoc->StartAllListeners(ScRange(1, 2, 0, 1, nLastRow - 1, 0));
+        }
+        m_pDoc->CalcAll();
+
+        struct Check
+        {
+            double nPayment;
+            double nMatch;
+        };
+        for (const auto& rCheck :
+             { Check{ 15000, 4 }, Check{ 7000, 9 }, Check{ 19000, 3 }, Check{ 17000, 4 } })
+        {
+            m_pDoc->SetValue(1, 1, 0, rCheck.nPayment);
+            CPPUNIT_ASSERT_EQUAL(rCheck.nMatch, m_pDoc->GetValue(1, 2, 0));
+            CPPUNIT_ASSERT_EQUAL(rCheck.nMatch, m_pDoc->GetValue(1, 3, 0));
+        }
+    }
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testLookupRecursionCache)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    ScSetStringParam aParam;
+    aParam.meStartListening = sc::NoListening;
+    const OUString aFormulas[] = {
+        u"=MATCH(50000;A11:A1613;1)"_ustr,
+        u"=LOOKUP(50000;A11:A1613;B11:B1613)"_ustr,
+        u"=VLOOKUP(50000;A11:B1613;2;1)"_ustr,
+    };
+    for (const auto& rFormula : aFormulas)
+    {
+        m_pDoc->InsertTab(0, u"Test"_ustr);
+        {
+            sc::AutoCalcSwitch aDisableCalc(*m_pDoc, false);
+            m_pDoc->SetValue(0, 0, 0, 60000);
+            m_pDoc->SetValue(0, 1, 0, 100);
+            m_pDoc->SetString(0, 10, 0, u"=$A$1"_ustr, &aParam);
+            m_pDoc->SetValue(1, 10, 0, 1);
+            for (SCROW nRow = 11; nRow < 1613; ++nRow)
+            {
+                m_pDoc->SetString(0, nRow, 0, u"=A"_ustr + OUString::number(nRow) + u"+$A$2",
+                                  &aParam);
+                m_pDoc->SetValue(1, nRow, 0, nRow - 9);
+            }
+            // Register the complete chain once, as insertRangeData() does.
+            // Growing the shared group one cell at a time otherwise repeatedly
+            // unregisters and registers all its listeners (costly with debug STL).
+            m_pDoc->StartAllListeners(ScRange(0, 10, 0, 0, 1612, 0));
+        }
+        m_pDoc->CalcAll();
+        m_pDoc->SetString(2, 2, 0, rFormula);
+        m_pDoc->SetString(2, 3, 0, rFormula);
+        CPPUNIT_ASSERT_EQUAL(FormulaError::NotAvailable, m_pDoc->GetErrCode(ScAddress(2, 2, 0)));
+
+        // A provisional "not found" must not remain cached after the chain is
+        // recalculated. Also exercise repeated found/not-found transitions.
+        for (double nPrincipal : { 10000, 60000, 20000, 60000, 10000 })
+        {
+            m_pDoc->SetValue(0, 0, 0, nPrincipal);
+            for (SCROW nRow : { 2, 3 })
+            {
+                if (nPrincipal > 50000)
+                    CPPUNIT_ASSERT_EQUAL(FormulaError::NotAvailable,
+                                         m_pDoc->GetErrCode(ScAddress(2, nRow, 0)));
+                else
+                {
+                    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE,
+                                         m_pDoc->GetErrCode(ScAddress(2, nRow, 0)));
+                    CPPUNIT_ASSERT_EQUAL((50000 - nPrincipal) / 100 + 1,
+                                         m_pDoc->GetValue(2, nRow, 0));
+                }
+            }
+        }
+        m_pDoc->DeleteTab(0);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLOOKUP)

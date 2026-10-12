@@ -60,6 +60,7 @@
 #include <jumpmatrix.hxx>
 #include <cellkeytranslator.hxx>
 #include <lookupcache.hxx>
+#include <recursionhelper.hxx>
 #include <rangenam.hxx>
 #include <rangeutl.hxx>
 #include <compiler.hxx>
@@ -14557,7 +14558,12 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
             case ScLookupCache::CRITERIA_DIFFERENT :
                 bFound = lcl_LookupQuery( o_rResultPos, mrDoc, mrContext, rParam, rEntry,
                     pMyFormulaCell, refData, nSearchMode, nOpCode );
-                if (eCacheResult == ScLookupCache::NOT_CACHED)
+                // Like ScFormulaCell::InterpretTail(), discard results obtained
+                // while dependency calculation is suspended or being aborted.
+                // Otherwise its retry would reuse a provisional lookup result.
+                if (eCacheResult == ScLookupCache::NOT_CACHED
+                    && !mrDoc.GetRecursionHelper().IsInReturn()
+                    && !mrDoc.GetRecursionHelper().IsAbortingDependencyComputation())
                     rCache.insert( o_rResultPos, aCriteria, aPos, bFound);
                 break;
             case ScLookupCache::FOUND :
