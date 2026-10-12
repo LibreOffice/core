@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-22 21:46+0200\n"
-"PO-Revision-Date: 2026-10-12 17:01+0000\n"
+"PO-Revision-Date: 2026-10-12 17:18+0000\n"
 "Last-Translator: Joan Montané <jmontane@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ca/>\n"
@@ -2300,7 +2300,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2474
 msgid "Error: "
-msgstr ""
+msgstr "Error: "
 
 #: src/control/Control.AIChatSidebar.ts:2504
 msgid "Generated image"
@@ -2312,37 +2312,37 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2533
 msgid "The AI assistant"
-msgstr ""
+msgstr "L'assistent d'IA"
 
 #: src/control/Control.AIChatSidebar.ts:2572
 msgid "insert %n slide"
 msgid_plural "insert %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "insereix %n diapositiva"
+msgstr[1] "insereix %n diapositives"
 
 #: src/control/Control.AIChatSidebar.ts:2575
 msgid "delete %n slide"
 msgid_plural "delete %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "suprimeix %n diapositiva"
+msgstr[1] "suprimeix %n diapositives"
 
 #: src/control/Control.AIChatSidebar.ts:2580
 msgid "duplicate %n slide"
 msgid_plural "duplicate %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "duplica %n diapositiva"
+msgstr[1] "duplica %n diapositives"
 
 #: src/control/Control.AIChatSidebar.ts:2586
 msgid "move %n slide"
 msgid_plural "move %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "mou %n diapositiva"
+msgstr[1] "mou %n diapositives"
 
 #: src/control/Control.AIChatSidebar.ts:2589
 msgid "rename %n slide"
 msgid_plural "rename %n slides"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Canvia el nom d'%n diapositiva"
+msgstr[1] "Canvia el nom de %n diapositives"
 
 #: src/control/Control.AIChatSidebar.ts:2594
 msgid "change %n layout"
@@ -2363,10 +2363,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/control/Control.AIChatSidebar.ts:2614
-#, fuzzy
 msgid "generate %n image"
 msgid_plural "generate %n images"
-msgstr[0] "Imatge generada"
+msgstr[0] "genera %n imatge"
+msgstr[1] "genera %n imatges"
 
 #: src/control/Control.AIChatSidebar.ts:2622
 msgid "run %n document command"
@@ -2382,7 +2382,7 @@ msgstr[1] ""
 
 #: src/control/Control.AIChatSidebar.ts:2661
 msgid "apply the design template '%1'"
-msgstr ""
+msgstr "aplica la plantilla de disseny «%1»"
 
 #: src/control/Control.AIChatSidebar.ts:2664
 msgid "This will: %1."
@@ -2390,15 +2390,15 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:2678
 msgid "Do you want to proceed?"
-msgstr ""
+msgstr "Voleu continuar?"
 
 #: src/control/Control.AIChatSidebar.ts:2681
 msgid "%1 wants to inspect your document. Do you want to proceed?"
-msgstr ""
+msgstr "%1 vol inspeccionar el document. Voleu continuar?"
 
 #: src/control/Control.AIChatSidebar.ts:2685
 msgid "Modify document structure"
-msgstr ""
+msgstr "Modifica l'estructura del document"
 
 #: src/control/Control.AIChatSidebar.ts:2691
 msgid "%1 wants to modify your document:"
@@ -2445,7 +2445,7 @@ msgstr "S'estan aplicant els canvis…"
 
 #: src/control/Control.AIChatSidebar.ts:2767
 msgid "Change rejected"
-msgstr ""
+msgstr "Canvi rebutjat"
 
 #: src/control/Control.AIChatSidebar.ts:2874
 msgid "Use section: "
@@ -2461,15 +2461,15 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3218
 msgid "Design (optional):"
-msgstr ""
+msgstr "Disseny (opcional):"
 
 #: src/control/Control.AIChatSidebar.ts:3235
 msgid "No design"
-msgstr ""
+msgstr "Sense disseny"
 
 #: src/control/Control.AIChatSidebar.ts:3236
 msgid "Continue without a design template"
-msgstr ""
+msgstr "Continua sense una plantilla de disseny"
 
 #: src/control/Control.AIChatSidebar.ts:3302
 msgid ""
@@ -2487,11 +2487,11 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3397
 msgid "Slide %1 title"
-msgstr ""
+msgstr "Títol de la diapositiva %1"
 
 #: src/control/Control.AIChatSidebar.ts:3403
 msgid "Slide %1 description"
-msgstr ""
+msgstr "Descripció de la diapositiva %1"
 
 #: src/control/Control.AIChatSidebar.ts:3409
 msgid "Remove slide %1"
@@ -2570,7 +2570,7 @@ msgstr "Fórmula"
 
 #: src/control/Control.AIChatSidebar.ts:3696
 msgid "Referenced cells"
-msgstr ""
+msgstr "Cel·les referenciades"
 
 #: src/control/Control.AIChatSidebar.ts:3702
 msgid "Please diagnose why this formula produces the"
@@ -2578,7 +2578,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3706
 msgid "error."
-msgstr ""
+msgstr "error."
 
 #: src/control/Control.AIChatSidebar.ts:3708
 msgid "Explain the root cause and suggest how to fix it."
@@ -3098,7 +3098,7 @@ msgstr "Mode"
 
 #: src/control/Control.BackstageView.ts:868
 msgid "View Only"
-msgstr ""
+msgstr "Només vista"
 
 #: src/control/Control.BackstageView.ts:875
 msgid "File Name"
@@ -3130,7 +3130,7 @@ msgstr "S'estan carregant les plantilles…"
 
 #: src/control/backstage/Common.tsx:65
 msgid "Recently opened documents will appear here"
-msgstr ""
+msgstr "Els documents oberts recentment apareixeran aquí"
 
 #: src/control/backstage/Sidebar.tsx:87 src/control/backstage/Sidebar.tsx:88
 msgid "Close backstage"
@@ -3194,19 +3194,19 @@ msgstr ""
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Edit account"
-msgstr ""
+msgstr "Edita el compte"
 
 #: src/control/backstage/CloudDialogs.tsx:90
 msgid "Add new account"
-msgstr ""
+msgstr "Afegeix un compte nou"
 
 #: src/control/backstage/CloudDialogs.tsx:104
 msgid "Server URL"
-msgstr ""
+msgstr "URL del servidor"
 
 #: src/control/backstage/CloudDialogs.tsx:109
 msgid "Enter server URL"
-msgstr ""
+msgstr "Introduïu l'URL del servidor"
 
 #: src/control/backstage/CloudDialogs.tsx:117
 msgid "Display name"
@@ -3222,7 +3222,7 @@ msgstr ""
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Save changes"
-msgstr ""
+msgstr "Desa els canvis"
 
 #: src/control/backstage/CloudDialogs.tsx:143
 msgid "Add Account"
@@ -3230,15 +3230,15 @@ msgstr ""
 
 #: src/control/backstage/CloudDialogs.tsx:183
 msgid "Remove account"
-msgstr ""
+msgstr "Elimina el compte"
 
 #: src/control/backstage/CloudDialogs.tsx:185
 msgid "Disconnects this cloud"
-msgstr ""
+msgstr "Desconnecta aquest núvol"
 
 #: src/control/backstage/CloudDialogs.tsx:213
 msgid "New account successfully added"
-msgstr ""
+msgstr "El compte nou s'ha afegit correctament"
 
 #: src/control/backstage/CloudDialogs.tsx:218
 msgid "You can now access your files from this cloud."
@@ -3250,7 +3250,7 @@ msgstr ""
 
 #: src/control/backstage/CloudDialogs.tsx:267
 msgid "Remove this account?"
-msgstr ""
+msgstr "Voleu suprimir aquest compte?"
 
 #: src/control/backstage/CloudDialogs.tsx:272
 msgid "You'll be disconnected from this cloud account."
@@ -4501,7 +4501,7 @@ msgstr "Transicions"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:73
 msgid "Variant"
-msgstr ""
+msgstr "Variant"
 
 #: src/control/Notebookbar.ImpressTransitionTab.ts:89
 msgid "Duration"
@@ -4708,7 +4708,7 @@ msgstr "Imatge"
 #: src/control/Control.NotebookbarImpress.js:150
 #: src/control/Control.NotebookbarWriter.js:96
 msgid "Chart"
-msgstr ""
+msgstr "Diagrama"
 
 #: src/control/Control.NotebookbarCalc.js:99
 #: src/control/Control.NotebookbarDraw.js:129
@@ -4871,7 +4871,7 @@ msgstr "Dolent"
 #: src/control/Control.NotebookbarCalc.js:1101
 #: src/control/PermissionMode.ts:219
 msgid "Editing"
-msgstr ""
+msgstr "Edició"
 
 #: src/control/Control.NotebookbarCalc.js:1125
 #: src/control/Control.NotebookbarDraw.js:1243
@@ -4928,7 +4928,7 @@ msgstr "Suprimeix les columnes"
 #: src/control/Control.NotebookbarWriter.js:2708
 #: src/control/Control.NotebookbarWriter.js:3077
 msgid "Align"
-msgstr ""
+msgstr "Alinea"
 
 #: src/control/Control.NotebookbarCalc.js:1418
 #: src/control/Control.NotebookbarCalc.js:3200
@@ -4953,7 +4953,7 @@ msgstr "Visualització per defecte"
 
 #: src/control/Control.NotebookbarCalc.js:1511
 msgid "Open Views List"
-msgstr ""
+msgstr "Obre la llista de vistes"
 
 #: src/control/Control.NotebookbarCalc.js:1518
 msgid "New Sheet View"
@@ -5026,7 +5026,7 @@ msgstr "Els estils de taula només estan disponibles en fitxers .xlsx"
 
 #: src/control/Control.NotebookbarCalc.js:1856
 msgid "Insert a styled table"
-msgstr ""
+msgstr "Insereix una taula amb estil"
 
 #: src/control/Control.NotebookbarCalc.js:1859
 msgid "Select an editable cell range to insert a styled table"
@@ -5071,11 +5071,11 @@ msgstr "Suma automàtica"
 
 #: src/control/Control.NotebookbarCalc.js:2184
 msgid "Financial"
-msgstr ""
+msgstr "Financer"
 
 #: src/control/Control.NotebookbarCalc.js:2202
 msgid "Logical"
-msgstr ""
+msgstr "Lògic"
 
 #: src/control/Control.NotebookbarCalc.js:2232
 msgid "Date & Time"
@@ -5109,7 +5109,7 @@ msgstr ""
 #: src/control/Control.NotebookbarImpress.js:2130
 #: src/control/Control.NotebookbarWriter.js:2331
 msgid "Auto Spell Check"
-msgstr ""
+msgstr "Verificació ortogràfica automàtica"
 
 #: src/control/Control.NotebookbarCalc.js:2757
 #: src/control/Control.NotebookbarImpress.js:2160
@@ -5215,7 +5215,7 @@ msgstr ""
 
 #: src/control/Control.NotebookbarImpress.js:559
 msgid "Shows your notes, next slide, and a timer"
-msgstr ""
+msgstr "Mostra les notes, la diapositiva següent i un temporitzador"
 
 #: src/control/Control.NotebookbarImpress.js:574
 msgid "Present"
@@ -5261,7 +5261,7 @@ msgstr "Ajusta a la graella"
 #: src/control/Control.NotebookbarImpress.js:926
 #: src/control/Control.NotebookbarImpress.js:2006
 msgid "Slide Layout"
-msgstr ""
+msgstr "Disposició de diapositives"
 
 #: src/control/Control.NotebookbarImpress.js:948
 #: src/control/Control.NotebookbarImpress.js:2016
@@ -5292,7 +5292,7 @@ msgstr ""
 
 #: src/control/Control.NotebookbarImpress.js:1943
 msgid "Master Slide Templates"
-msgstr ""
+msgstr "Plantilles de diapositives mestres"
 
 #: src/control/Control.NotebookbarImpress.js:1955
 msgid "This Presentation"
@@ -5374,7 +5374,7 @@ msgstr "Amplada de la pàgina"
 
 #: src/control/Control.NotebookbarWriter.js:2306
 msgid "Spellcheck"
-msgstr ""
+msgstr "Verificació ortogràfica"
 
 #: src/control/Control.NotebookbarWriter.js:2319
 msgid "Spelling Options"
@@ -5382,7 +5382,7 @@ msgstr "Opcions d'ortografia"
 
 #: src/control/Control.NotebookbarWriter.js:2444
 msgid "View Changes"
-msgstr ""
+msgstr "Visualitza els canvis"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
@@ -6567,11 +6567,11 @@ msgstr "Diapositiva de títol"
 
 #: src/control/Styles.js:20 src/control/jsdialog/Definitions.Menu.ts:2267
 msgid "Title, Content"
-msgstr ""
+msgstr "Títol, contingut"
 
 #: src/control/Styles.js:21 src/control/jsdialog/Definitions.Menu.ts:2268
 msgid "Title and 2 Content"
-msgstr ""
+msgstr "Títol i contingut 2"
 
 #: src/control/Styles.js:22 src/control/jsdialog/Definitions.Menu.ts:2269
 msgid "Title Only"
@@ -6587,7 +6587,7 @@ msgstr "Text centrat"
 
 #: src/control/Styles.js:25 src/control/jsdialog/Definitions.Menu.ts:2272
 msgid "Title, Content and 2 Content"
-msgstr ""
+msgstr "Títol, contingut i 2 continguts"
 
 #: src/control/Styles.js:26 src/control/jsdialog/Definitions.Menu.ts:2271
 msgid "Title, 2 Content and Content"
@@ -6639,7 +6639,7 @@ msgstr ""
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "Bloca la selecció"
 
 #: src/control/Toolbar.js:170 src/control/Toolbar.js:183
 msgid "Downloading..."
@@ -6656,7 +6656,7 @@ msgstr "S'està canviant el nom..."
 
 #: src/control/Toolbar.js:860
 msgid "Unable to share"
-msgstr ""
+msgstr "No es pot compartir"
 
 #: src/control/VRuler.ts:198 src/control/VRuler.ts:425
 msgid "Top Margin"
@@ -6772,7 +6772,7 @@ msgstr "B4 (ISO)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1540
 msgid "Letter"
-msgstr ""
+msgstr "Carta"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1541
 msgid "Legal"
@@ -7174,11 +7174,11 @@ msgstr ""
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:436
 msgid "Line number"
-msgstr ""
+msgstr "Número de línia"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:451
 msgid "Column {index}"
-msgstr ""
+msgstr "Columna {index}"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
@@ -7186,7 +7186,7 @@ msgstr ""
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:100
 msgid "People & gestures"
-msgstr ""
+msgstr "Persones i gestos"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:136
 msgid "Objects"
@@ -7194,7 +7194,7 @@ msgstr "Objectes"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:218
 msgid "Nature & food"
-msgstr ""
+msgstr "Natura i menjar"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:364
 msgid "Recently used"
@@ -7359,7 +7359,7 @@ msgstr "respostes"
 
 #: src/control/jsdialog/Widget.SpinField.ts:275
 msgid "Increment value"
-msgstr ""
+msgstr "Incrementa el valor"
 
 #: src/control/jsdialog/Widget.SpinField.ts:284
 msgid "Decrement value"
@@ -7372,15 +7372,15 @@ msgstr "Més opcions per a {1}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1743
 msgid "Cell value"
-msgstr ""
+msgstr "Valor de la cel·la"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1747
 msgid "row %1"
-msgstr ""
+msgstr "fila %1"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1756
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2527
 msgid "Headings and objects that you add to the document will appear here"
@@ -7472,7 +7472,7 @@ msgstr "El servidor és incorrecte; s'està tornant a connectar..."
 
 #: src/app/Socket.ts:2125
 msgid "Unsupported version."
-msgstr ""
+msgstr "Versió no admesa."
 
 #: src/app/Socket.ts:2126
 msgid "Unsupported server version."
