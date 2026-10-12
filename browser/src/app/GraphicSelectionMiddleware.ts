@@ -163,6 +163,15 @@ class GraphicSelection {
 	public static tellTheStates(): void {
 		if (!RenderManager.isVectorRendering()) return;
 
+		// The states are worked out from the selected objects, so they wait until every one of
+		// them is there: an update of the objects may take one away for a moment.
+		if (
+			this.selectedObjectIDs.some(
+				(objectId: number) => !RenderGeometrySection.objectOf(objectId),
+			)
+		)
+			return;
+
 		const states = Interaction.context().commandStates();
 		for (const commandName of Interaction.statesGivenHere) {
 			const state = states[commandName] ? 'enabled' : 'disabled';
@@ -391,6 +400,10 @@ class GraphicSelection {
 		this.checkDiagramData();
 		this.diagramButton?.follow();
 		this.followThePlayer();
+
+		// The states depend on the objects as well as on the selection: their order at the level,
+		// and what each allows.
+		this.tellTheStates();
 	}
 
 	/*
