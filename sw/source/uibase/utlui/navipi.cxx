@@ -519,8 +519,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
 
     m_xContentTree->ShowTree();
     m_xContent6ToolBox->set_item_active(u"listbox"_ustr, true);
-    m_xContent6ToolBox->set_item_sensitive(u"listbox"_ustr, bFloatingNavigator);
-
+    m_xContent6ToolBox->set_visible(bFloatingNavigator);
 //  TreeListBox for global document
     m_xGlobalTree->set_selection_mode(SelectionMode::Multiple);
 
@@ -972,7 +971,7 @@ void SwNavigationPI::UpdateInitShow()
     // its size, the sidebar can not, and the navigator would just waste
     // space. Therefore disable this button.
     bool bParentIsFloatingWindow(ParentIsFloatingWindow(m_xNavigatorDlg));
-    m_xContent6ToolBox->set_item_sensitive(u"listbox"_ustr, bParentIsFloatingWindow);
+    m_xContent6ToolBox->set_visible(bParentIsFloatingWindow);
     // show content if docked
     if (!bParentIsFloatingWindow && IsZoomedIn())
         ZoomOut();
