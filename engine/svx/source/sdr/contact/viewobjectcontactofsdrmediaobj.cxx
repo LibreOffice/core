@@ -21,6 +21,7 @@
 
 #include <sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <sdr/contact/viewcontactofsdrmediaobj.hxx>
+#include <svx/svdomedia.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
@@ -28,6 +29,18 @@
 #include "sdrmediawindow.hxx"
 
 namespace sdr::contact {
+
+#if HAVE_FEATURE_AVMEDIA
+namespace
+{
+// Media outside the document waits for link updates to be allowed, like a linked graphic.
+bool isWaitingForLinkUpdate(const SdrMediaObj& rMediaObj)
+{
+    return rMediaObj.getTempURL().isEmpty() && !rMediaObj.getURL().isEmpty()
+           && !rMediaObj.isLinkAllowed();
+}
+}
+#endif
 
 ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& rObjectContact,
                                                                 ViewContact& rViewContact,
@@ -87,6 +100,14 @@ Size ViewObjectContactOfSdrMediaObj::getPreferredSize() const
 void ViewObjectContactOfSdrMediaObj::ActionChanged()
 {
     ViewObjectContactOfSdrObj::ActionChanged();
+#if HAVE_FEATURE_AVMEDIA
+    // A window left empty while its media waited for link updates gets the media once allowed.
+    const SdrMediaObj& rMediaObj
+        = static_cast<ViewContactOfSdrMediaObj&>(GetViewContact()).GetSdrMediaObj();
+    if (mpMediaWindow && mpMediaWindow->getURL().isEmpty() && !rMediaObj.getURL().isEmpty()
+        && !isWaitingForLinkUpdate(rMediaObj))
+        executeMediaItem(rMediaObj.getMediaProperties());
+#endif
     updateMediaWindow(false);
 }
 
@@ -154,6 +175,10 @@ void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rIte
 void ViewObjectContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaItem& rItem )
 {
 #if HAVE_FEATURE_AVMEDIA
+    if (isWaitingForLinkUpdate(
+            static_cast<ViewContactOfSdrMediaObj&>(GetViewContact()).GetSdrMediaObj()))
+        return;
+
     if( mpMediaWindow )
     {
         ::avmedia::MediaItem aUpdatedItem;
