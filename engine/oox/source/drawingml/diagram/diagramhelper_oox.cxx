@@ -129,6 +129,26 @@ DiagramHelper_oox::DiagramHelper_oox(std::u16string_view rLayout, std::u16string
 
 DiagramHelper_oox::~DiagramHelper_oox() {}
 
+namespace
+{
+// Hands the name, the title, the description and the decorative mark of rOldShape to rNewShape,
+// the new version of the same shape. They are laid on with the undo recording off: the
+// re-creation as a whole is the step that is undone, and undoing it runs the re-creation again.
+void moveNamingFromOldToNewShape(SdrObject& rOldShape, SdrObject& rNewShape)
+{
+    SdrModel& rModel(rNewShape.getSdrModelFromSdrObject());
+    const bool bUndoWasEnabled(rModel.IsUndoEnabled());
+    rModel.EnableUndo(false);
+
+    rNewShape.SetName(rOldShape.GetName());
+    rNewShape.SetTitle(rOldShape.GetTitle());
+    rNewShape.SetDescription(rOldShape.GetDescription());
+    rNewShape.SetDecorative(rOldShape.IsDecorative());
+
+    rModel.EnableUndo(bUndoWasEnabled);
+}
+}
+
 void DiagramHelper_oox::moveDiagramModelDataFromOldToNewXShape(
     const uno::Reference<drawing::XShape>& xOldShape,
     const uno::Reference<drawing::XShape>& xNewShape, tools::Long nOldHeight)
@@ -419,6 +439,10 @@ void DiagramHelper_oox::reLayout()
                         moveDiagramModelDataFromOldToNewXShape(
                             rOldShape, rNewShape,
                             aOldHeightForModelID.end() == aOldHeight ? 0 : aOldHeight->second);
+
+                        // A name belongs to one shape alone, so it goes from the old version
+                        // to the new one, and a new node made after a template takes none.
+                        moveNamingFromOldToNewShape(*pOldShape, *pNewShape);
                         break;
                     }
                 }
