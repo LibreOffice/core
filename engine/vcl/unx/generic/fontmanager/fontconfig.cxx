@@ -31,13 +31,11 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <font/FontSelectPattern.hxx>
+#include <font/FallbackLanguage.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <i18nutil/unicode.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <unicode/uchar.h>
-#include <unicode/uscript.h>
 #include <officecfg/Office/Common.hxx>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <config_fonts.h>
@@ -995,69 +993,6 @@ namespace
 
         return OString();
     }
-
-    bool isEmoji(sal_uInt32 nCurrentChar)
-    {
-        return u_hasBinaryProperty(nCurrentChar, UCHAR_EMOJI);
-    }
-
-    //returns true if the given code-point couldn't possibly be in rLangTag.
-    bool isImpossibleCodePointForLang(const LanguageTag &rLangTag, sal_uInt32 currentChar)
-    {
-        //a non-default script is set, let's believe it
-        if (rLangTag.hasScript())
-            return false;
-
-        int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
-        UScriptCode eScript = static_cast<UScriptCode>(script);
-        bool bIsImpossible = false;
-        OUString sLang = rLangTag.getLanguage();
-        switch (eScript)
-        {
-            //http://en.wiktionary.org/wiki/Category:Oriya_script_languages
-            case USCRIPT_ORIYA:
-                bIsImpossible =
-                    sLang != "or" &&
-                    sLang != "kxv";
-                break;
-            //http://en.wiktionary.org/wiki/Category:Telugu_script_languages
-            case USCRIPT_TELUGU:
-                bIsImpossible =
-                    sLang != "te" &&
-                    sLang != "gon" &&
-                    sLang != "kfc";
-                break;
-            //http://en.wiktionary.org/wiki/Category:Bengali_script_languages
-            case USCRIPT_BENGALI:
-                bIsImpossible =
-                    sLang != "bn" &&
-                    sLang != "as" &&
-                    sLang != "bpy" &&
-                    sLang != "ctg" &&
-                    sLang != "sa";
-                break;
-            default:
-                break;
-        }
-        SAL_WARN_IF(bIsImpossible, "vcl.fonts", "In glyph fallback throwing away the language property of "
-            << sLang << " because the detected script for '0x"
-            << OUString::number(currentChar, 16)
-            << "' is " << uscript_getName(eScript)
-            << " and that language doesn't make sense. Autodetecting instead.");
-        return bIsImpossible;
-    }
-
-    OUString getExemplarLangTagForCodePoint(sal_uInt32 currentChar)
-    {
-        if (isEmoji(currentChar))
-            return u"und-zsye"_ustr;
-        int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
-        UScriptCode eScript = static_cast<UScriptCode>(script);
-        OStringBuffer aBuf(unicode::getExemplarLanguageForUScriptCode(eScript));
-        if (const char* pScriptCode = uscript_getShortName(eScript))
-            aBuf.append(OStringChar('-') + pScriptCode);
-        return OStringToOUString(aBuf, RTL_TEXTENCODING_UTF8);
-    }
 }
 
 IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
@@ -1133,12 +1068,14 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
             FcCharSetAddChar( codePoints, nCode );
             //if the codepoint is impossible for this lang tag, then clear it
             //and autodetect something useful
-            if (!aLangAttrib.isEmpty() && (isImpossibleCodePointForLang(aLangTag, nCode) || isEmoji(nCode)))
+            if (!aLangAttrib.isEmpty()
+                && (vcl::font::isImpossibleCodePointForLang(aLangTag, nCode)
+                    || vcl::font::isEmoji(nCode)))
                 aLangAttrib.clear();
             //#i105784#/rhbz#527719  improve selection of fallback font
             if (aLangAttrib.isEmpty())
             {
-                aLangTag.reset(getExemplarLangTagForCodePoint(nCode));
+                aLangTag.reset(vcl::font::getExemplarLangTagForCodePoint(nCode));
                 aLangAttrib = mapToFontConfigLangTag(aLangTag);
             }
         }
@@ -1282,7 +1219,8 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
                         //scripts to default to a given language.
                         for (sal_Int32 i = 0; i < nRemainingLen; ++i)
                         {
-                            LanguageTag aOurTag(getExemplarLangTagForCodePoint(pRemainingCodes[i]));
+                            LanguageTag aOurTag(
+                                vcl::font::getExemplarLangTagForCodePoint(pRemainingCodes[i]));
                             OString sTag = OUStringToOString(aOurTag.getBcp47(), RTL_TEXTENCODING_UTF8);
                             if (!m_aPreviousLangSupportRequests.insert(sTag).second)
                                 continue;

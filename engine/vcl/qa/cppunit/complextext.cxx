@@ -25,6 +25,9 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<double>
 #include <vcl/virdev.hxx>
 // workaround MSVC2015 issue with std::unique_ptr
 #include <sallayout.hxx>
+#include <font/LogicalFontInstance.hxx>
+#include <font/PhysicalFontFace.hxx>
+#include <i18nlangtag/lang.h>
 #include <tools/mapunit.hxx>
 
 
@@ -513,6 +516,43 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf153440)
             CPPUNIT_ASSERT_EQUAL(bRTL, pGlyphItem->IsRTLGlyph());
         }
     }
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testHanFallbackWithWesternLanguage)
+{
+#if HAVE_MORE_FONTS && !defined(MACOSX) && !defined(IOS)
+#if !defined _WIN32 || USE_HEADLESS_CODE
+    // Han text tagged with a Western language in a font without Han glyphs.
+    // The fallback has to be a Chinese font, not whichever of the Chinese,
+    // Japanese and Korean fonts happens to come first in the font list.
+    vcl::Font aFont(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 72));
+    aFont.SetLanguage(LANGUAGE_ENGLISH_US);
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(aFont);
+
+    OUString aText(u"\u4e2d\u6587"_ustr);
+    std::unique_ptr<SalLayout> pLayout = pOutDev->ImplLayout(aText, 0, -1, Point(0, 0), 0, {}, {});
+    CPPUNIT_ASSERT(pLayout);
+
+    int nStart = 0;
+    int nGlyphs = 0;
+    basegfx::B2DPoint aPos;
+    const GlyphItem* pGlyphItem;
+    const LogicalFontInstance* pGlyphFont = nullptr;
+    while (pLayout->GetNextGlyph(&pGlyphItem, aPos, nStart, &pGlyphFont))
+    {
+        ++nGlyphs;
+        // glyph 0 would mean that no fallback font was found at all
+        CPPUNIT_ASSERT(pGlyphItem->glyphId());
+        CPPUNIT_ASSERT(pGlyphFont);
+        OUString aFamily = pGlyphFont->GetFontFace()->GetFamilyName();
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(aFamily, RTL_TEXTENCODING_UTF8).getStr(),
+                               aFamily.startsWith("Noto Sans SC"));
+    }
+    CPPUNIT_ASSERT_EQUAL(2, nGlyphs);
+#endif
 #endif
 }
 
