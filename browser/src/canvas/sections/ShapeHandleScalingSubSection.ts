@@ -223,6 +223,20 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 				shapeRecProps.width, shapeRecProps.height
 			]);
 
+			if (GraphicSelection.inPlaceActive) {
+				parentHandlerSection.sectionProperties.inPlaceResizeRectangle = null;
+				GraphicSelection.sendInPlaceArea(tempRectangle);
+				parentHandlerSection.hideSVG();
+				return;
+			}
+
+			if (GraphicSelection.hasDarkOverlay()) {
+				parentHandlerSection.sectionProperties.inPlaceResizeRectangle = null;
+				GraphicSelection.sendElementArea(tempRectangle);
+				parentHandlerSection.hideSVG();
+				return;
+			}
+
 			const committedHandleId = HandleScaling.committedHandle(handleId, keepRatio);
 			const newPoint = HandleScaling.positionOfHandle(committedHandleId, tempRectangle);
 
@@ -277,6 +291,16 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 			subSection.setPosition(x - halfWidth, y - halfHeight);
 		}
 
+		if (GraphicSelection.inPlaceActive || GraphicSelection.hasDarkOverlay()) {
+			const width = Math.abs(shapeRecProps.width);
+			const height = Math.abs(shapeRecProps.height);
+			this.sectionProperties.parentHandlerSection.sectionProperties.inPlaceResizeRectangle = cool.SimpleRectangle.fromCorePixels([
+				shapeRecProps.center.pX - width * 0.5,
+				shapeRecProps.center.pY - height * 0.5,
+				width, height
+			]);
+		}
+
 		if (!this.sectionProperties.cropModeEnabled)
 			this.sectionProperties.parentHandlerSection.scalePreviewTo(shapeRecProps);
 	}
@@ -289,11 +313,20 @@ class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 			if (!this.sectionProperties.cropModeEnabled && GraphicSelection.extraInfo?.isResizable === false)
 				return;
 
-			this.sectionProperties.parentHandlerSection.sectionProperties.svg.style.opacity = 0.5;
+			const parentSVG =
+				this.sectionProperties.parentHandlerSection.sectionProperties.svg;
+			if (parentSVG) parentSVG.style.opacity = 0.5;
+
+			const parentProperties = this.sectionProperties.parentHandlerSection.sectionProperties;
+			const snapPosition = [
+				this.mouseToDocX(point) - parentProperties.handleWidth * 0.5,
+				point.pY + this.position[1] - parentProperties.handleHeight * 0.5
+			];
+
 			this.moveHandlesOnDrag(point, e);
 
 			// Here we are checking a point, so the size 0. dragDistance is also 0 because we already set the new position (moveHandlesOnDrag).
-			this.sectionProperties.parentHandlerSection.checkHelperLinesAndSnapPoints([0, 0], this.position, [0, 0]);
+			this.sectionProperties.parentHandlerSection.checkHelperLinesAndSnapPoints([0, 0], snapPosition, [0, 0]);
 
 			this.containerObject.requestReDraw();
 			this.sectionProperties.parentHandlerSection.showSVG();

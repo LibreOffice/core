@@ -157,16 +157,16 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             if (pArgs && pArgs->Count () >= 3)
             {
                 const SfxUInt32Item* handleNumItem = rReq.GetArg<SfxUInt32Item>(FN_PARAM_1);
-                const SfxUInt32Item* newPosXTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_2);
-                const SfxUInt32Item* newPosYTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_3);
+                const SfxInt32Item* newPosXTwips = rReq.GetArg<SfxInt32Item>(FN_PARAM_2);
+                const SfxInt32Item* newPosYTwips = rReq.GetArg<SfxInt32Item>(FN_PARAM_3);
                 const SfxInt32Item* OrdNum = rReq.GetArg<SfxInt32Item>(FN_PARAM_4);
 
                 const sal_uLong handleNum = handleNumItem->GetValue();
-                const sal_uLong newPosX = convertTwipToMm100(newPosXTwips->GetValue());
-                const sal_uLong newPosY = convertTwipToMm100(newPosYTwips->GetValue());
+                const tools::Long newPosX = convertTwipToMm100(newPosXTwips->GetValue());
+                const tools::Long newPosY = convertTwipToMm100(newPosYTwips->GetValue());
 
                 bool bNegateX = comphelper::COKit::isActive() && rViewData.GetDocument().IsLayoutRTL(rViewData.CurrentTabForData());
-                pView->MoveShapeHandle(handleNum, Point(bNegateX ? -static_cast<tools::Long>(newPosX) : newPosX, newPosY), OrdNum ? OrdNum->GetValue() : -1);
+                pView->MoveShapeHandle(handleNum, Point(bNegateX ? -newPosX : newPosX, newPosY), OrdNum ? OrdNum->GetValue() : -1);
             }
         }
         break;

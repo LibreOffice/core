@@ -96,6 +96,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		this.sectionProperties.svg = null; // This is for preview of modifications.
 		this.sectionProperties.hasVideo = false; // Don't hide svg when there is video content.
 		this.sectionProperties.shapeRectangleProperties = null; // Not null when there are scaling handles.
+		this.sectionProperties.inPlaceResizeRectangle = null;
 		this.sectionProperties.lastDragDistance = [0, 0];
 		// What the drag could line up with on the page, and the lines that mark it.
 		this.sectionProperties.snap = new SelectionSnap();
@@ -149,16 +150,17 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		const kinds = this.sectionProperties.info?.handles?.kinds;
 		if (!kinds) return;
 
+		if (this.sectionProperties.info.handlesInTileTwips) return;
+		this.sectionProperties.info.handlesInTileTwips = true;
+
 		// Core can send handle X coordinates as negative print twips in RTL
-		// (its internal sign convention). Normalize to positive so the
-		// downstream print->tile conversion and doc->view mapping work.
+		// (its internal sign convention), so normalize to positive first.
+		// Handles arrive coincident with the selection rectangle sent next to
+		// them, so they take the same translation the rectangle got.
+		const offset = GraphicSelection.tileTwipsOffset;
 		const normalize = (entry: any): void => {
-			const rawX = parseInt(entry.point.x);
-			const rawY = parseInt(entry.point.y);
-			const point = new cool.SimplePoint(Math.abs(rawX), rawY);
-			app.map._docLayer.sheetGeometry.convertToTileTwips(point);
-			entry.point.x = point.x;
-			entry.point.y = point.y;
+			entry.point.x = Math.abs(parseInt(entry.point.x)) + offset[0];
+			entry.point.y = parseInt(entry.point.y) + offset[1];
 		};
 
 		// Core groups handles into rectangle / poly / custom / anchor / others
@@ -171,10 +173,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			for (const handles of Object.values(group)) {
 				if (!Array.isArray(handles)) continue;
 				for (const handle of handles) {
-					const point = new cool.SimplePoint(Math.abs(parseInt(handle.point.x)), parseInt(handle.point.y));
-					app.map._docLayer.sheetGeometry.convertToTileTwips(point);
-					handle.point.x = point.x;
-					handle.point.y = point.y;
+					handle.point.x = Math.abs(parseInt(handle.point.x)) + offset[0];
+					handle.point.y = parseInt(handle.point.y) + offset[1];
 				}
 			}
 		}
@@ -865,6 +865,21 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		let x = corner[0];
 		const y = corner[1];
 
+		if (GraphicSelection.inPlaceActive) {
+			GraphicSelection.sendInPlaceArea(
+				cool.SimpleRectangle.fromCorePixels([
+					x,
+					y,
+					this.size[0],
+					this.size[1],
+				]),
+				true,
+			);
+			app.map._docLayer.requestNewFiledBasedViewTiles();
+			this.sectionProperties.lastDragDistance = [0, 0];
+			return;
+		}
+
 		const docLayer = app.map._docLayer;
 
 		if (docLayer.isCalcRTL())
@@ -879,7 +894,13 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			yTwips -= verticalOffset;
 		}
 
-		if (docLayer._docType === 'spreadsheet' && docLayer.sheetGeometry) {
+		if (docLayer._docType === 'spreadsheet' && GraphicSelection.inPlaceArea) {
+			// what is inside an open object is shown where the object is
+			const sign = xTwips < 0 ? -1 : 1;
+			xTwips = sign * (Math.abs(xTwips) - GraphicSelection.inPlaceTileOffset[0]);
+			yTwips -= GraphicSelection.inPlaceTileOffset[1];
+		}
+		else if (docLayer._docType === 'spreadsheet' && docLayer.sheetGeometry) {
 			// we keep the shape in tile twips, core reads these as print twips
 			const sign = xTwips < 0 ? -1 : 1;
 			const printTwips = docLayer.sheetGeometry.getPrintTwipsPointFromTile(
@@ -1120,7 +1141,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	}
 
 	onMouseMove(position: cool.SimplePoint, dragDistance: number[]) {
-		let canDrag = !app.file.textCursor.visible && GraphicSelection.extraInfo?.isDraggable !== false;
+		let canDrag = (GraphicSelection.inPlaceActive || !app.file.textCursor.visible) && GraphicSelection.extraInfo?.isDraggable !== false;
 
 		if (canDrag && app.map.getDocType() === 'presentation') {
 			// Tables get selected when multiple cells are selected. In this case, we check if DeleteRows is disabled.
@@ -1221,11 +1242,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		const left = GraphicSelection.rectangle.v1X;
 		const top = GraphicSelection.rectangle.v1Y;
 
-		const leftAddition = this.containerObject.getDocumentAnchor()[0];
-		const topAddition = this.containerObject.getDocumentAnchor()[1];
-
-		this.sectionProperties.svg.style.left = Math.round((left + leftAddition) / app.dpiScale) + 'px';
-		this.sectionProperties.svg.style.top = Math.round((top + topAddition) / app.dpiScale) + 'px';
+		this.sectionProperties.svg.style.left = Math.round(left / app.dpiScale) + 'px';
+		this.sectionProperties.svg.style.top = Math.round(top / app.dpiScale) + 'px';
 		this.sectionProperties.svgPosition = [left, top];
 	}
 
@@ -1249,6 +1267,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			rectangle.pY1 += this.sectionProperties.lastDragDistance[1];
 			this.drawViewRectangle(rectangle);
 		}
+		else if (this.containerObject.isDraggingSomething() && this.sectionProperties.inPlaceResizeRectangle)
+			this.drawViewRectangle(this.sectionProperties.inPlaceResizeRectangle);
 		else
 			this.drawViewRectangle(this.boundingRectangle);
 
@@ -1277,8 +1297,13 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		if (!svg) return;
 
 		const shape = this.sectionProperties.shapeRectangleProperties;
-		const scaleX = shapeRecProps.width / shape.width;
-		const scaleY = shapeRecProps.height / shape.height;
+		let scaleX = shapeRecProps.width / shape.width;
+		let scaleY = shapeRecProps.height / shape.height;
+
+		if (GraphicSelection.extraInfo?.typeString === 'ole2') {
+			scaleX = Math.abs(scaleX);
+			scaleY = Math.abs(scaleY);
+		}
 
 		const diffX = (shapeRecProps.center.pX - shape.center.pX) / app.dpiScale;
 		const diffY = (shapeRecProps.center.pY - shape.center.pY) / app.dpiScale;

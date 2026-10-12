@@ -60,6 +60,9 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
+#include <tools/globname.hxx>
+#include <sot/exchange.hxx>
+#include <sfx2/kit/componenthelpers.hxx>
 #include <svtools/soerr.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
@@ -124,6 +127,7 @@ public:
     bool                            m_bUIActive;            // set and cleared when notification for UI (de)activation is sent
     bool                            m_bResizeNoScale;
     bool                            m_bNegativeX;
+    bool                            m_bInPlaceReported = false;
     bool                            m_bHasGridOffset;
 
     uno::Reference < embed::XEmbeddedObject > m_xObject;
@@ -140,6 +144,12 @@ public:
     {}
 
     void SizeHasChanged();
+    /// The area the object holds, in the twips a COKit client works in.
+    tools::Rectangle inPlaceSelectionArea() const;
+    bool isMathObject() const;
+    void sendInPlaceSelection();
+    /// Negotiates an area with the container and takes the result, in container units.
+    void applyNewObjectArea(tools::Rectangle aNewLogicRect);
     DECL_LINK(TimerHdl, Timer *, void);
     uno::Reference < frame::XFrame > const & GetFrame() const;
 
@@ -344,28 +354,49 @@ bool SfxInPlaceClient_Impl::canInplaceActivate()
 }
 
 
+tools::Rectangle SfxInPlaceClient_Impl::inPlaceSelectionArea() const
+{
+    // The scaled area is where the object sits on the page.
+    tools::Rectangle aRect(m_pClient->GetScaledObjArea());
+
+    if (m_pClient->GetEditWin())
+    {
+        if (m_pClient->GetEditWin()->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+            aRect = o3tl::convert(aRect, o3tl::Length::mm100, o3tl::Length::twip);
+    }
+
+    return m_bNegativeX ? lcl_negateRectX(aRect) : aRect;
+}
+
+
+bool SfxInPlaceClient_Impl::isMathObject() const
+{
+    return m_xObject.is() && SotExchange::IsMath( SvGlobalName( m_xObject->getClassID() ) );
+}
+
+
+void SfxInPlaceClient_Impl::sendInPlaceSelection()
+{
+    if ( !comphelper::COKit::isActive() )
+        return;
+
+    if ( SfxViewShell* pViewShell = m_pClient ? m_pClient->GetViewShell() : nullptr )
+    {
+        OString str = inPlaceSelectionArea().toString() + ", \"INPLACE\"";
+        if ( isMathObject() )
+            str += ", { \"isMathObject\": true }";
+        pViewShell->viewCallback( COKitCallbackType::GRAPHIC_SELECTION, str );
+    }
+}
+
+
 void SfxInPlaceClient_Impl::activatingInplace()
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw cpo::uno::RuntimeException();
 
-    if ( !comphelper::COKit::isActive() )
-        return;
-
-    if ( SfxViewShell* pViewShell = m_pClient->GetViewShell() )
-    {
-        tools::Rectangle aRect(m_pClient->GetObjArea());
-
-        if (m_pClient->GetEditWin())
-        {
-            if (m_pClient->GetEditWin()->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
-                aRect = o3tl::convert(aRect, o3tl::Length::mm100, o3tl::Length::twip);
-        }
-
-        OString str = (m_bNegativeX ? lcl_negateRectX(aRect) : aRect).toString() + ", \"INPLACE\"";
-        pViewShell->viewCallback( COKitCallbackType::GRAPHIC_SELECTION, str );
-    }
-
+    m_bInPlaceReported = true;
+    sendInPlaceSelection();
 }
 
 
@@ -384,6 +415,8 @@ void SfxInPlaceClient_Impl::deactivatedInplace()
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw cpo::uno::RuntimeException();
+
+    m_bInPlaceReported = false;
 
     if ( comphelper::COKit::isActive() )
     {
@@ -527,8 +560,12 @@ void SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPosRect )
         return;
 
     // new scaled object area
-    tools::Rectangle aNewLogicRect = m_pClient->GetEditWin()->PixelToLogic( aNewPixelRect );
+    applyNewObjectArea( m_pClient->GetEditWin()->PixelToLogic( aNewPixelRect ) );
+}
 
+
+void SfxInPlaceClient_Impl::applyNewObjectArea( tools::Rectangle aNewLogicRect )
+{
     // all the size changes in this method should happen without scaling
     // SfxBooleanFlagGuard aGuard( m_bResizeNoScale, true );
 
@@ -616,6 +653,8 @@ void SfxInPlaceClient_Impl::SizeHasChanged()
             }
 
             xInplace->setObjectRectangles( getPlacement(), getClipRectangle() );
+            if ( m_bInPlaceReported )
+                sendInPlaceSelection();
         }
     }
     catch( cpo::uno::Exception& )
@@ -776,6 +815,34 @@ bool SfxInPlaceClient::SetObjArea( const tools::Rectangle& rArea )
 const tools::Rectangle& SfxInPlaceClient::GetObjArea() const
 {
     return m_xImp->m_aObjArea;
+}
+
+
+void SfxInPlaceClient::RequestCOKitObjectArea( const tools::Rectangle& rArea )
+{
+    if ( !m_pEditWin || !m_pViewSh )
+        return;
+
+    if ( rArea == m_xImp->inPlaceSelectionArea() )
+        return;
+
+    // undo what sendInPlaceSelection() does
+    tools::Rectangle aArea( IsNegativeX() ? lcl_negateRectX( rArea ) : rArea );
+
+    if ( m_pEditWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM )
+        aArea = o3tl::convert( aArea, o3tl::Length::twip, o3tl::Length::mm100 );
+
+    m_xImp->applyNewObjectArea( aArea );
+
+    m_xImp->sendInPlaceSelection();
+
+    // cursor should follow formula
+    if ( m_xImp->isMathObject() )
+    {
+        uno::Reference< frame::XModel > xModel( m_xImp->m_xObject->getComponent(), uno::UNO_QUERY );
+        if ( SfxViewShell* pSmViewShell = xModel.is() ? SfxViewShell::Get( xModel->getCurrentController() ) : nullptr )
+            KitStarMathHelper::SendCaret( *pSmViewShell );
+    }
 }
 
 tools::Rectangle SfxInPlaceClient::GetScaledObjArea() const

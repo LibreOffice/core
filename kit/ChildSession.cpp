@@ -681,6 +681,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "selecttext") ||
                tokens.equals(0, "windowselecttext") ||
                tokens.equals(0, "selectgraphic") ||
+               tokens.equals(0, "inplaceobjectarea") ||
                tokens.equals(0, "resetselection") ||
                tokens.equals(0, "saveas") ||
                tokens.equals(0, "exportas") ||
@@ -934,6 +935,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "selectgraphic"))
         {
             return selectGraphic(tokens);
+        }
+        else if (tokens.equals(0, "inplaceobjectarea"))
+        {
+            return setInPlaceObjectArea(tokens);
         }
         else if (tokens.equals(0, "resetselection"))
         {
@@ -4558,6 +4563,27 @@ bool ChildSession::selectGraphic(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
 
     getLOKitDocument()->setGraphicSelection(type, x, y);
+
+    return true;
+}
+
+bool ChildSession::setInPlaceObjectArea(const StringVector& tokens)
+{
+    int x, y, width, height;
+    if (tokens.size() != 5 ||
+        !getTokenInteger(tokens[1], "x", x) ||
+        !getTokenInteger(tokens[2], "y", y) ||
+        !getTokenInteger(tokens[3], "width", width) ||
+        !getTokenInteger(tokens[4], "height", height) ||
+        width <= 0 || height <= 0)
+    {
+        sendTextFrameAndLogError("error: cmd=inplaceobjectarea kind=syntax");
+        return false;
+    }
+
+    getLOKitDocument()->setView(_viewId);
+
+    getLOKitDocument()->setInPlaceObjectArea(x, y, width, height);
 
     return true;
 }

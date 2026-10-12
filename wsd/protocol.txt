@@ -469,6 +469,17 @@ selectgraphic type=<type> x=<x> y=<y>
 
     <type> is 'start' or 'end' <x> and <y> are numbers.
 
+inplaceobjectarea x=<x> y=<y> width=<width> height=<height>
+
+    Moves and resizes the object that is currently active for in-place editing, for
+    instance a chart opened for editing by double-clicking it. All four are numbers in
+    twips, the same unit the 'graphicselection:' message reports with "INPLACE".
+
+    The area is a request, not an instruction: core narrows it for an object protected
+    against moving or resizing, and clamps it to the page. The area finally taken comes
+    back as a fresh 'graphicselection:' "INPLACE" message, so the client should take its
+    handles from that rather than from what it asked for.
+
 setclientpart part=<partNumber>
 
     Informs the server that the client changed to part <partNumber>.

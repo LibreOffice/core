@@ -187,6 +187,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/ipclient.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -4980,8 +4981,24 @@ void COKitDocumentImpl::registerCallback(COKitCallback pCallback, void* pData)
         return;
     }
 
+    std::shared_ptr<CallbackFlushHandler> pOldCallbackFlushHandler;
+    if (auto it = mpCallbackFlushHandlers.find(nView); it != mpCallbackFlushHandlers.end())
+        pOldCallbackFlushHandler = it->second;
+
     auto pCallbackFlushHandler = std::make_shared<CallbackFlushHandler>(this, pCallback, pData);
     mpCallbackFlushHandlers[nView] = pCallbackFlushHandler;
+
+    if (pOldCallbackFlushHandler)
+    {
+        CoKitCallbackInterface* pNewCallback = pCallback ? pCallbackFlushHandler.get() : nullptr;
+        for (SfxViewShell* pOther = SfxViewShell::GetFirst(false); pOther;
+             pOther = SfxViewShell::GetNext(*pOther, false))
+        {
+            if (pOther != pViewShell
+                && pOther->getCOKitViewCallback() == pOldCallbackFlushHandler.get())
+                pOther->setCOKitViewCallback(pNewCallback);
+        }
+    }
 
     if (pCallback != nullptr)
     {
@@ -6117,7 +6134,8 @@ void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArgume
         {
             if (aPropertyValuesVector[0].Name != "Action")
             {
-                tools::Rectangle aChartBB = aChartHelper.GetChartBoundingBox();
+                // The position is in print twips.
+                tools::Rectangle aChartBB = aChartHelper.GetChartBoundingBox(false);
 
                 int nLeft = o3tl::convert(aChartBB.Left(), o3tl::Length::twip, o3tl::Length::mm100);
                 int nTop = o3tl::convert(aChartBB.Top(), o3tl::Length::twip, o3tl::Length::mm100);
@@ -8139,6 +8157,34 @@ void COKitDocumentImpl::setGraphicSelection(COKitSetGraphicSelectionType eType, 
     }
 
     pDoc->setGraphicSelection(eType, nX, nY);
+}
+
+void COKitDocumentImpl::setInPlaceObjectArea(int nX, int nY, int nWidth, int nHeight)
+{
+    comphelper::ProfileZone aZone("COKitDocumentImpl::setInPlaceObjectArea");
+
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (pViewShell && pViewShell->IsKitReadOnlyView())
+        return;
+
+    SfxInPlaceClient* pIPClient = pViewShell ? pViewShell->GetIPClient() : nullptr;
+
+    // GetIPClient() also answers for an object activated out of place, which has no area
+    // on the page to move.
+    if (!pIPClient || !pIPClient->IsObjectInPlaceActive())
+    {
+        SetLastExceptionMsg(u"No object is active for in-place editing"_ustr);
+        return;
+    }
+
+    // The area is reported with tools::Rectangle::toString(), whose width is right - left,
+    // so take the edges from the width rather than going through a Size, which would knock
+    // a unit off every request.
+    pIPClient->RequestCOKitObjectArea(
+        tools::Rectangle(nX, nY, nX + nWidth, nY + nHeight));
 }
 
 void COKitDocumentImpl::resetSelection()

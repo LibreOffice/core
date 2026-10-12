@@ -167,6 +167,7 @@ void ScClient::ObjectAreaChanged()
 
     pDrawObj->SetLogicRect( aNewRectangle );
     pDrawObj->setSuppressSetVisAreaSize(false);
+    pViewSh->UpdateInPlaceClientGridOffset();
 
     //  set document modified (SdrModel::SetChanged is not used)
     pViewSh->GetViewData().GetDocShell()->SetDrawModified();

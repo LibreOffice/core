@@ -2277,16 +2277,7 @@ std::optional<OString> SmViewShell::getKitPayload(COKitCallbackType eType, int n
 
 void SmViewShell::SendCaretToKit() const
 {
-    const int nViewId = sal_Int32(GetViewShellId());
-    if (const auto payload = getKitPayload(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, nViewId))
-    {
-        viewCallbackWithViewId(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR,
-                                             *payload, nViewId);
-    }
-    if (const auto payload = getKitPayload(COKitCallbackType::TEXT_SELECTION, nViewId))
-    {
-        viewCallback(COKitCallbackType::TEXT_SELECTION, *payload);
-    }
+    KitStarMathHelper::SendCaret(*this);
 }
 
 void SmViewShell::InvalidateSlots()

@@ -1639,6 +1639,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
              tokens.equals(0, "saveas") ||
              tokens.equals(0, "exportas") ||
              tokens.equals(0, "selectgraphic") ||
+             tokens.equals(0, "inplaceobjectarea") ||
              tokens.equals(0, "selecttext") ||
              tokens.equals(0, "windowselecttext") ||
              tokens.equals(0, "setpage") ||

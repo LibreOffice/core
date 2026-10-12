@@ -379,6 +379,7 @@ namespace COOLProtocol
         if (tokens.equals(0, "key") || tokens.equals(0, "outlinestate") ||
             tokens.equals(0, "paste") || tokens.equals(0, "insertfile") ||
             tokens.equals(0, "slideimport") ||
+            tokens.equals(0, "inplaceobjectarea") ||
             tokens.equals(0, "textinput") || tokens.equals(0, "windowkey") ||
             tokens.equals(0, "windowmouse") || tokens.equals(0, "windowgesture"))
         {

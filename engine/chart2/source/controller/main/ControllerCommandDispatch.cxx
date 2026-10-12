@@ -639,6 +639,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
         m_aCommandAvailability[u".uno:XLineColor"_ustr] = bFormatObjectAvailable;
         m_aCommandAvailability[u".uno:LineWidth"_ustr] = bFormatObjectAvailable;
         m_aCommandAvailability[u".uno:FillGradient"_ustr] = bFormatObjectAvailable;
+        m_aCommandAvailability[u".uno:KitTransform"_ustr] = bIsWritable && bControllerStateIsValid && m_apControllerState->bHasSelectedObject;
+        m_aCommandAvailability[u".uno:KitSetTextSelection"_ustr] = bIsWritable;
     }
 
     m_aCommandAvailability[ u".uno:DiagramType"_ustr ] = bIsWritable;

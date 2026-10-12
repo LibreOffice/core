@@ -18,6 +18,7 @@
  */
 
 #include <svx/svdoole2.hxx>
+#include <svx/svdtrans.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -1745,7 +1746,17 @@ void SdrOle2Obj::NbcResize(const Point& rRef, double xFact, double yFact)
         }
     }
 
-    SdrRectObj::NbcResize(rRef,xFact,yFact);
+    // some objects should not be mirrored eg. chart in Calc
+    if ((xFact < 0 || yFact < 0) && maGeo.m_nRotationAngle == 0_deg100
+        && maGeo.m_nShearAngle == 0_deg100)
+    {
+        tools::Rectangle aRect(getRectangle());
+        ResizeRect(aRect, rRef, xFact, yFact);
+        aRect.Normalize();
+        SdrRectObj::NbcSetLogicRect(aRect);
+    }
+    else
+        SdrRectObj::NbcResize(rRef,xFact,yFact);
 
     if( !getSdrModelFromSdrObject().isLocked() )
         ImpSetVisAreaSize();

@@ -72,6 +72,7 @@
 #include <frmatr.hxx>
 #include <fmtsrnd.hxx>
 #include <ndole.hxx>
+#include <comphelper/kit.hxx>
 #include <fefly.hxx>
 #include <fmtcnct.hxx>
 #include <frameformats.hxx>
@@ -2302,7 +2303,20 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
 
     const SwFormatVertOrient &rVert = pFrameFormat->GetVertOrient();
     SwFormatVertOrient aVert( rVert );
-    aVert.setPosition( gfx::Length::twip(-nBaseline) );
+
+    // keep move made while formula is being edited
+    SwTwips nPosition = -nBaseline;
+    SwFrame* pLower = pFly->Lower();
+    SwOLENode* pOLENode = pLower && pLower->IsNoTextFrame()
+        ? static_cast<SwNoTextFrame*>(pLower)->GetNode()->GetOLENode() : nullptr;
+    if ( comphelper::COKit::isActive() && pOLENode )
+    {
+        const std::optional<SwTwips>& oLastPos = pOLENode->GetFormulaBaselinePos();
+        if ( oLastPos && rVert.GetVertOrient() == css::text::VertOrientation::NONE )
+            nPosition += rVert.getPosition().as_twip<SwTwips>() - *oLastPos;
+        pOLENode->SetFormulaBaselinePos( -nBaseline );
+    }
+    aVert.setPosition( gfx::Length::twip(nPosition) );
     aVert.SetVertOrient( css::text::VertOrientation::NONE );
 
     pFrameFormat->LockModify();

@@ -272,6 +272,7 @@ private:
     bool editWithPassword(const StringVector& tokens);
     bool selectText(const StringVector& tokens, LokEventTargetEnum target);
     bool selectGraphic(const StringVector& tokens);
+    bool setInPlaceObjectArea(const StringVector& tokens);
     bool renderNextSlideLayer(SlideCompressor& scomp, unsigned width, unsigned height,
                               double devicePixelRatio, bool& done, const std::string& cacheKey,
                               bool isCompressed);

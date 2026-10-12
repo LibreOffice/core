@@ -41,7 +41,9 @@ public:
 
     cpo::uno::Reference<css::frame::XController>& GetXController() const;
     vcl::Window* GetWindow();
-    tools::Rectangle GetChartBoundingBox();
+    /// Where the chart is on the tiles, or with bWithGridOffset false, in print twips: in Calc
+    /// these differ by the grid offset.
+    tools::Rectangle GetChartBoundingBox(bool bWithGridOffset = true);
     void Invalidate();
 
     void Dispatch(const OUString& cmd, const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
@@ -74,6 +76,9 @@ public:
     tools::Rectangle GetBoundingBox() const;
 
     static const SfxViewShell* FindContainerViewShell(const SfxViewShell* pSmViewShell);
+
+    /// Sends the cursor and selection of a Math view to its COKit client.
+    static void SendCaret(const SfxViewShell& rSmViewShell);
 
     void Dispatch(const OUString& cmd, const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
 

@@ -86,7 +86,7 @@ vcl::Window* KitChartHelper::GetWindow()
     return mpWindow.get();
 }
 
-tools::Rectangle KitChartHelper::GetChartBoundingBox()
+tools::Rectangle KitChartHelper::GetChartBoundingBox(bool bWithGridOffset)
 {
     tools::Rectangle aBBox;
     if (mpViewShell)
@@ -96,7 +96,7 @@ tools::Rectangle KitChartHelper::GetChartBoundingBox()
         if (pRootWin)
         {
             tools::Rectangle aArea = pIPClient->GetObjArea();
-            if (pIPClient->HasGridOffset()) // Calc has gridOffset.
+            if (bWithGridOffset && pIPClient->HasGridOffset()) // Calc has gridOffset.
             {
                 // In RTL Calc both the object area and the grid offset are
                 // already in the mirrored negative X draw space, which matches

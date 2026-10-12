@@ -19,6 +19,8 @@
 
 #include <ChartController.hxx>
 
+#include <algorithm>
+
 #include <DrawViewWrapper.hxx>
 #include <PositionAndSizeHelper.hxx>
 #include <ChartModel.hxx>
@@ -120,6 +122,8 @@ void ChartController::executeDispatch_PositionAndSize(const ::cpo::uno::Sequence
     try
     {
         SfxItemSet aItemSet = m_pDrawViewWrapper->getPositionAndSizeItemSetFromMarkedObject();
+        const SfxItemSet aMarkedItemSet(aItemSet);
+        const bool bResizable = m_aSelection.isResizeableObjectSelected();
         const SfxItemSet* pOutItemSet = nullptr;
         if (!pArgs)
         {
@@ -145,6 +149,11 @@ void ChartController::executeDispatch_PositionAndSize(const ::cpo::uno::Sequence
             if (!pPool)
                 return;
 
+            // Only what the dialog would offer: elements that can be positioned, and a
+            // size only for those that can be resized.
+            if (eObjectType == OBJECTTYPE_DATA_POINT || !ObjectIdentifier::isDragableObject(aCID))
+                return;
+
             for (const auto& aProp: *pArgs)
             {
                 sal_Int32 nValue = 0;
@@ -155,10 +164,10 @@ void ChartController::executeDispatch_PositionAndSize(const ::cpo::uno::Sequence
                 else if (aProp.Name == "TransformPosY") {
                     aItemSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_Y, nValue));
                 }
-                else if (aProp.Name == "TransformWidth") {
+                else if (aProp.Name == "TransformWidth" && bResizable) {
                     aItemSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_WIDTH, static_cast<sal_uInt32>(nValue)));
                 }
-                else if (aProp.Name == "TransformHeight") {
+                else if (aProp.Name == "TransformHeight" && bResizable) {
                     aItemSet.Put(SfxUInt32Item(SID_ATTR_TRANSFORM_HEIGHT, static_cast<sal_uInt32>(nValue)));
                 }
             }
@@ -174,6 +183,42 @@ void ChartController::executeDispatch_PositionAndSize(const ::cpo::uno::Sequence
             lcl_getPositionAndSizeFromItemSet( aItemSet, aNewObjectRect, ToSize(aOldObjectRect) );
             awt::Size aPageSize( getChartModel()->getPageSize() );
             awt::Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
+
+            // A position given by arguments has not been limited to the page the way a
+            // drag with the mouse is, so keep the object inside it, together with what it
+            // shows around the area it is positioned by, like the axes of a diagram
+            if (pArgs)
+            {
+                awt::Rectangle aMarkedRect;
+                lcl_getPositionAndSizeFromItemSet(aMarkedItemSet, aMarkedRect, ToSize(aOldObjectRect));
+                const sal_Int32 nMinX = std::max(aMarkedRect.X - aOldObjectRect.X, sal_Int32(0));
+                const sal_Int32 nMinY = std::max(aMarkedRect.Y - aOldObjectRect.Y, sal_Int32(0));
+                const sal_Int32 nMaxX = aPageSize.Width
+                    - std::max(aOldObjectRect.X + aOldObjectRect.Width - aMarkedRect.X - aMarkedRect.Width, sal_Int32(0));
+                const sal_Int32 nMaxY = aPageSize.Height
+                    - std::max(aOldObjectRect.Y + aOldObjectRect.Height - aMarkedRect.Y - aMarkedRect.Height, sal_Int32(0));
+
+                const bool bResize = bResizable && std::any_of(pArgs->begin(), pArgs->end(),
+                    [](const beans::PropertyValue& rProp) {
+                        return rProp.Name == "TransformWidth" || rProp.Name == "TransformHeight";
+                    });
+                if (bResize)
+                {
+                    const sal_Int32 nLeft = std::max(aNewObjectRect.X, nMinX);
+                    const sal_Int32 nTop = std::max(aNewObjectRect.Y, nMinY);
+                    const sal_Int32 nRight = std::min(aNewObjectRect.X + aNewObjectRect.Width, nMaxX);
+                    const sal_Int32 nBottom = std::min(aNewObjectRect.Y + aNewObjectRect.Height, nMaxY);
+                    aNewObjectRect = awt::Rectangle(nLeft, nTop, std::max(nRight - nLeft, sal_Int32(1)),
+                                                    std::max(nBottom - nTop, sal_Int32(1)));
+                }
+                else
+                {
+                    aNewObjectRect.Width = std::max(std::min(aNewObjectRect.Width, nMaxX - nMinX), sal_Int32(1));
+                    aNewObjectRect.Height = std::max(std::min(aNewObjectRect.Height, nMaxY - nMinY), sal_Int32(1));
+                    aNewObjectRect.X = std::clamp(aNewObjectRect.X, nMinX, std::max(nMaxX - aNewObjectRect.Width, nMinX));
+                    aNewObjectRect.Y = std::clamp(aNewObjectRect.Y, nMinY, std::max(nMaxY - aNewObjectRect.Height, nMinY));
+                }
+            }
 
             bool bChanged = false;
             if ( eObjectType == OBJECTTYPE_LEGEND )

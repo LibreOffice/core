@@ -3383,8 +3383,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (pArgs && pArgs->Count () >= 3)
             {
                 const SfxUInt32Item* handleNumItem = rReq.GetArg<SfxUInt32Item>(FN_PARAM_1);
-                const SfxUInt32Item* newPosXTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_2);
-                const SfxUInt32Item* newPosYTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_3);
+                const SfxInt32Item* newPosXTwips = rReq.GetArg<SfxInt32Item>(FN_PARAM_2);
+                const SfxInt32Item* newPosYTwips = rReq.GetArg<SfxInt32Item>(FN_PARAM_3);
                 const SfxInt32Item* OrdNum = rReq.GetArg<SfxInt32Item>(FN_PARAM_4);
                 const SfxBoolItem* pPreview = rReq.GetArg<SfxBoolItem>(FN_PARAM_5);
                 // A caller that works the handles out for itself says which handle it means by

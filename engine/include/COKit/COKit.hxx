@@ -2166,6 +2166,21 @@ struct COKitDocument
     virtual void setGraphicSelection(COKitSetGraphicSelectionType eType, int nX, int nY) = 0;
 
     /**
+     * Moves and resizes the object that is currently active for in-place editing.
+     *
+     * The area is in the same twips the "INPLACE" graphic selection reports, so a
+     * client can hand back the rectangle it was given. The container may narrow the
+     * request, for instance for an object protected against moving or resizing, or one
+     * pushed past the edge of the page. Does nothing when no object is in-place active.
+     *
+     * @param nX horizontal position in document coordinates
+     * @param nY vertical position in document coordinates
+     * @param nWidth width in document coordinates
+     * @param nHeight height in document coordinates
+     */
+    virtual void setInPlaceObjectArea(int nX, int nY, int nWidth, int nHeight) = 0;
+
+    /**
      * Gets rid of any text or graphic selection.
      */
     virtual void resetSelection() = 0;

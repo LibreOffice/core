@@ -47,6 +47,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/ipclient.hxx>
+#include <sot/exchange.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
@@ -3214,7 +3215,10 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         s_pQuickHlpData->Stop( rSh );
     s_pQuickHlpData->m_bAppendSpace = false;
 
-    if( rSh.FinishOLEObj() )
+    const bool bLeavingFormula = comphelper::COKit::isActive() && bIsOleActive
+                                 && pIPClient->GetObject().is()
+                                 && SotExchange::IsMath(pIPClient->GetObject()->getClassID());
+    if( rSh.FinishOLEObj() && !bLeavingFormula )
         return; // end InPlace and the click doesn't count anymore
 
     CurrShell aCurr( &rSh );

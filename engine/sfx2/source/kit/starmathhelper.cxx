@@ -155,6 +155,23 @@ const SfxViewShell* KitStarMathHelper::FindContainerViewShell(const SfxViewShell
     });
 }
 
+void KitStarMathHelper::SendCaret(const SfxViewShell& rSmViewShell)
+{
+    const SfxViewShell* pContainerViewShell = FindContainerViewShell(&rSmViewShell);
+    const int nViewId = sal_Int32(
+        (pContainerViewShell ? *pContainerViewShell : rSmViewShell).GetViewShellId());
+    if (const auto payload
+        = rSmViewShell.getKitPayload(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, nViewId))
+    {
+        rSmViewShell.viewCallbackWithViewId(COKitCallbackType::INVALIDATE_VISIBLE_CURSOR, *payload,
+                                            nViewId);
+    }
+    if (const auto payload = rSmViewShell.getKitPayload(COKitCallbackType::TEXT_SELECTION, nViewId))
+    {
+        rSmViewShell.viewCallback(COKitCallbackType::TEXT_SELECTION, *payload);
+    }
+}
+
 tools::Rectangle KitStarMathHelper::GetBoundingBox() const
 {
     if (mpIPClient)

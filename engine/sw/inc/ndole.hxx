@@ -23,6 +23,8 @@
 #include <svtools/embedhlp.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <rtl/ref.hxx>
+#include <optional>
+#include "swtypes.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 class SvxDrawPage;
@@ -105,6 +107,8 @@ class SW_DLLPUBLIC SwOLENode final: public SwNoTextNode
     // updates are allowed
     cpo::uno::Sequence<css::beans::PropertyValue> maDeferredMediaDescriptor;
 
+    std::optional<SwTwips> moFormulaBaselinePos;
+
     SwOLENode(  const SwNode& rWhere,
                 const svt::EmbeddedObjectRef&,
                 SwGrfFormatColl *pGrfColl,
@@ -121,6 +125,9 @@ class SW_DLLPUBLIC SwOLENode final: public SwNoTextNode
     using SwNoTextNode::GetGraphic;
 
 public:
+    const std::optional<SwTwips>& GetFormulaBaselinePos() const { return moFormulaBaselinePos; }
+    void SetFormulaBaselinePos(SwTwips nPos) { moFormulaBaselinePos = nPos; }
+
     const SwOLEObj& GetOLEObj() const { return maOLEObj; }
           SwOLEObj& GetOLEObj()       { return maOLEObj; }
     virtual ~SwOLENode() override;

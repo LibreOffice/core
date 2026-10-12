@@ -29,6 +29,12 @@ class GraphicSelection {
 	public static rectangle: cool.SimpleRectangle | null = null;
 	public static extraInfo: any = null;
 	public static selectionAngle: number = 0;
+	public static inPlaceActive: boolean = false;
+	public static tileTwipsOffset: number[] = [0, 0];
+	public static inPlaceArea: number[] | null = null;
+	public static inPlaceMath: boolean = false;
+	public static inPlaceTileOffset: number[] = [0, 0];
+	private static selectionEdges: number[] | null = null;
 	public static handlesSection: ShapeHandlesSection = null;
 	public static chartContextToolbarSelectStyle: ChartContextButtonSection =
 		null;
@@ -451,6 +457,7 @@ class GraphicSelection {
 		GraphicSelection.travel()?.leave();
 		this.rectangle = null;
 		this.extraInfo = null;
+		this.inPlaceActive = false;
 
 		if (this.handlesSection) {
 			this.handlesSection.removeSubSections();
@@ -596,6 +603,205 @@ class GraphicSelection {
 		}
 	}
 
+	static inPlaceExtraInfo(messageJSON: any): any {
+		const x1 = messageJSON[0];
+		const y1 = messageJSON[1];
+		const x2 = x1 + messageJSON[2];
+		const y2 = y1 + messageJSON[3];
+		const xs = [x1, (x1 + x2) / 2, x2];
+		const ys = [y1, (y1 + y2) / 2, y2];
+		const columns = [0, 1, 2, 0, 2, 0, 1, 2];
+		const rows = [0, 0, 0, 1, 1, 2, 2, 2];
+
+		const rectangle: any = {};
+		for (let i = 0; i < 8; i++) {
+			rectangle[String(i + 1)] = [
+				{
+					id: String(i),
+					kind: String(i + 1),
+					point: { x: xs[columns[i]], y: ys[rows[i]] },
+				},
+			];
+		}
+
+		return {
+			id: 'inplace',
+			handles: { kinds: { rectangle: rectangle } },
+			isDraggable: true,
+			isResizable: !this.inPlaceMath,
+			isRotatable: false,
+			isMathObject: this.inPlaceMath,
+		};
+	}
+
+	static parseMessage(textMsg: string): any[] {
+		return JSON.parse('[' + textMsg.substr('graphicselection:'.length) + ']');
+	}
+
+	static isMathSelection(msgData: any[]): boolean {
+		return msgData.length > 5 && msgData[5]?.isMathObject === true;
+	}
+
+	// Core mirrors a left edge in a right-to-left sheet, and mirroring it again undoes that.
+	static coreLeft(left: number, width: number): number {
+		return app.map._docLayer.isCalcRTL() ? -(left + width) : left;
+	}
+
+	static selectsInPlaceObject(textMsg: string): boolean {
+		try {
+			const msgData = this.parseMessage(textMsg);
+			if (msgData.length <= 5) return false;
+
+			if (msgData[5]?.isChartPage === true) return true;
+
+			const area = this.inPlaceArea;
+			return (
+				msgData[0] === area[0] &&
+				msgData[1] === area[1] &&
+				msgData[2] === area[2] &&
+				msgData[3] === area[3]
+			);
+		} catch (error) {
+			return false;
+		}
+	}
+
+	static showInPlaceFrame() {
+		const msgData: any[] = this.inPlaceArea.slice();
+		msgData[4] = 0;
+		msgData[5] = this.inPlaceExtraInfo(msgData);
+		this.transformGraphicSelection(msgData);
+		this.extractAndSetGraphicSelection(msgData);
+		this.inPlaceTileOffset = this.tileTwipsOffset.slice();
+		this.selectionAngle = 0;
+		this.inPlaceActive = true;
+		if (this.handlesSection) this.handlesSection.interactable = true;
+		if (this.rectangle && this.hasDarkOverlay()) this.renderDarkOverlay();
+	}
+
+	private static toInPlaceEdges(
+		rectangle: cool.SimpleRectangle,
+		insideObject: boolean = false,
+	): number[] {
+		const docLayer = app.map._docLayer;
+		const verticalOffset = docLayer.getFiledBasedViewVerticalOffset() || 0;
+		let left = rectangle.x1;
+		let top = rectangle.y1 - verticalOffset;
+		let right = rectangle.x2;
+		let bottom = rectangle.y2 - verticalOffset;
+
+		if (docLayer._docType === 'spreadsheet' && insideObject) {
+			const offset = this.inPlaceTileOffset;
+			left = Math.abs(left) - offset[0];
+			top -= offset[1];
+			right = Math.abs(right) - offset[0];
+			bottom -= offset[1];
+		} else if (docLayer._docType === 'spreadsheet' && docLayer.sheetGeometry) {
+			const topLeft = docLayer.sheetGeometry.getPrintTwipsPointFromTile(
+				new cool.Point(Math.abs(left), top),
+			);
+			const bottomRight = docLayer.sheetGeometry.getPrintTwipsPointFromTile(
+				new cool.Point(Math.abs(right), bottom),
+			);
+			left = topLeft.x;
+			top = topLeft.y;
+			right = bottomRight.x;
+			bottom = bottomRight.y;
+		}
+
+		if (right < left) [left, right] = [right, left];
+		if (bottom < top) [top, bottom] = [bottom, top];
+
+		return [left, top, right, bottom];
+	}
+
+	private static keepUnmovedInPlaceEdges(edges: number[]): number[] {
+		const area = this.inPlaceArea;
+		const areaWidth = Math.abs(area[2]);
+		const areaLeft = this.coreLeft(area[0], areaWidth);
+		return this.keepUnmovedEdges(edges, [
+			areaLeft,
+			area[1],
+			areaLeft + areaWidth,
+			area[1] + area[3],
+		]);
+	}
+
+	private static keepUnmovedEdges(
+		edges: number[],
+		core: number[],
+		insideObject: boolean = false,
+	): number[] {
+		const frame = this.toInPlaceEdges(this.rectangle, insideObject);
+
+		return edges.map((edge, index) => {
+			const axis = index % 2;
+			for (const frameIndex of [axis, axis + 2]) {
+				if (Math.abs(edge - frame[frameIndex]) <= 2 * app.pixelsToTwips)
+					return core[frameIndex];
+			}
+			return edge;
+		});
+	}
+
+	public static sendElementArea(rectangle: cool.SimpleRectangle): void {
+		let [left, top, right, bottom] = this.toInPlaceEdges(rectangle, true);
+		if (this.selectionEdges && this.rectangle)
+			[left, top, right, bottom] = this.keepUnmovedEdges(
+				[left, top, right, bottom],
+				this.selectionEdges,
+				true,
+			);
+		const width = Math.round(right - left);
+		const height = Math.round(bottom - top);
+		if (width <= 0 || height <= 0) return;
+
+		app.map.sendUnoCommand('.uno:TransformDialog', {
+			TransformPosX: { type: 'long', value: Math.round(left) },
+			TransformPosY: { type: 'long', value: Math.round(top) },
+			TransformWidth: { type: 'long', value: width },
+			TransformHeight: { type: 'long', value: height },
+		});
+	}
+
+	public static sendInPlaceArea(
+		rectangle: cool.SimpleRectangle,
+		keepSize: boolean = false,
+	): void {
+		let [left, top, right, bottom] = this.toInPlaceEdges(rectangle);
+		if (!keepSize && !this.inPlaceMath && this.inPlaceArea && this.rectangle)
+			[left, top, right, bottom] = this.keepUnmovedInPlaceEdges([
+				left,
+				top,
+				right,
+				bottom,
+			]);
+
+		let width = Math.round(right - left);
+		let height = Math.round(bottom - top);
+		if (keepSize && this.inPlaceArea) {
+			width = Math.abs(this.inPlaceArea[2]);
+			height = this.inPlaceArea[3];
+		}
+		if (this.inPlaceMath && this.inPlaceArea) left = this.inPlaceArea[0];
+		if (width <= 0 || height <= 0) return;
+
+		left = this.coreLeft(left, width);
+
+		app.socket.sendMessage(
+			'inplaceobjectarea x=' +
+				Math.round(left) +
+				' y=' +
+				Math.round(top) +
+				' width=' +
+				width +
+				' height=' +
+				height,
+		);
+
+		this.updateGraphicSelection();
+	}
+
 	static extractAndSetGraphicSelection(messageJSON: any) {
 		var hasExtraInfo = messageJSON.length > 5;
 		var hasGridOffset = false;
@@ -627,19 +833,36 @@ class GraphicSelection {
 			rawWidth,
 			messageJSON[3],
 		);
+		this.selectionEdges = [
+			rectX,
+			messageJSON[1],
+			rectX + rawWidth,
+			messageJSON[1] + messageJSON[3],
+		];
 
 		if (hasGridOffset) {
-			this.rectangle.moveBy([
+			this.tileTwipsOffset = [
 				app.map._docLayer._shapeGridOffset.x,
 				app.map._docLayer._shapeGridOffset.y,
-			]);
+			];
+			this.rectangle.moveBy(this.tileTwipsOffset);
 		} else if (app.map._docLayer._docType === 'spreadsheet') {
 			const tl = new cool.SimplePoint(
 				Math.abs(this.rectangle.x1),
 				this.rectangle.y1,
 			);
-			app.map._docLayer.sheetGeometry.convertToTileTwips(tl);
+			// What is inside an open object is shown where the object is.
+			if (this.inPlaceArea && extraInfo?.id !== 'inplace') {
+				tl.x += this.inPlaceTileOffset[0];
+				tl.y += this.inPlaceTileOffset[1];
+			} else app.map._docLayer.sheetGeometry.convertToTileTwips(tl);
+			this.tileTwipsOffset = [
+				tl.x - Math.abs(this.rectangle.x1),
+				tl.y - this.rectangle.y1,
+			];
 			this.rectangle.moveTo(tl.toArray());
+		} else {
+			this.tileTwipsOffset = [0, 0];
 		}
 
 		this.extraInfo = extraInfo;
@@ -855,16 +1078,26 @@ class GraphicSelection {
 
 		if (textMsg.match('EMPTY')) {
 			this.resetSelectionRanges();
+			if (this.inPlaceArea) this.showInPlaceFrame();
 		} else if (textMsg.match('INPLACE EXIT')) {
 			app.map._docLayer._oleCSelections.clear();
 			this.darkOverlayRectangle = null;
+			this.inPlaceActive = false;
+			this.inPlaceArea = null;
+			this.inPlaceMath = false;
 		} else if (textMsg.match('INPLACE')) {
-			const startingInPlaceEditing = app.map._docLayer._oleCSelections.empty();
-
-			textMsg = '[' + textMsg.substr('graphicselection:'.length) + ']';
 			try {
-				var msgData = JSON.parse(textMsg);
-				if (msgData.length > 1) this.extractAndSetGraphicSelection(msgData);
+				var msgData = this.parseMessage(textMsg);
+				const isMathObject = this.isMathSelection(msgData);
+				if (isMathObject && app.map._docLayer._docType !== 'text') {
+					this.inPlaceArea = null;
+					this.inPlaceActive = false;
+					this.extractAndSetGraphicSelection(msgData.slice(0, 4));
+				} else if (msgData.length > 1) {
+					this.inPlaceMath = isMathObject;
+					this.inPlaceArea = msgData.slice(0, 4);
+					this.showInPlaceFrame();
+				}
 			} catch (error) {
 				window.app.console.warn('cannot parse graphicselection command');
 			}
@@ -873,11 +1106,16 @@ class GraphicSelection {
 			// message replayed for a new zoom level has to redo that conversion.
 			if (this.rectangle) this.renderDarkOverlay();
 
-			this.rectangle = null;
-			if (startingInPlaceEditing) this.updateGraphicSelection();
+			if (!this.inPlaceArea) this.rectangle = null;
+		} else if (this.inPlaceArea && this.selectsInPlaceObject(textMsg)) {
+			this.showInPlaceFrame();
+			if (!window.ThisIsTheiOSApp && !this.inPlaceMath)
+				app.socket.sendMessage('rendershapeselection mimetype=image/svg+xml');
 		} else {
-			textMsg = '[' + textMsg.substr('graphicselection:'.length) + ']';
-			msgData = JSON.parse(textMsg);
+			this.inPlaceActive = false;
+			msgData = this.parseMessage(textMsg);
+
+			const isMathObject = this.isMathSelection(msgData);
 
 			this.transformGraphicSelection(msgData);
 
@@ -897,8 +1135,13 @@ class GraphicSelection {
 
 			// Update the dark overlay on zooming & scrolling
 			if (!app.map._docLayer._oleCSelections.empty()) {
+				// A formula is its own frame and changes shape as it is typed, so the
+				// overlay follows the selection
+				const framed = isMathObject
+					? this.rectangle
+					: (this.darkOverlayRectangle ?? this.rectangle);
 				app.map._docLayer._oleCSelections.clear();
-				this.renderDarkOverlay();
+				this.renderDarkOverlay(framed);
 			}
 
 			this.selectionAngle = msgData.length > 4 ? msgData[4] : 0;
@@ -1038,8 +1281,8 @@ class GraphicSelection {
 		if (event.detail.visible) GraphicSelection.travel()?.leave();
 
 		if (this.hasActiveSelection() && this.handlesSection) {
-			if (event.detail.visible) this.handlesSection.interactable = false;
-			else this.handlesSection.interactable = true;
+			this.handlesSection.interactable =
+				!event.detail.visible || this.inPlaceActive;
 		}
 	}
 }

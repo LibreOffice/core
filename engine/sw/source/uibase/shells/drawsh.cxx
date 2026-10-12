@@ -196,13 +196,13 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             if (pArgs && pArgs->Count() >= 3)
             {
                 const SfxUInt32Item* handleNumItem = rReq.GetArg<SfxUInt32Item>(FN_PARAM_1);
-                const SfxUInt32Item* newPosXTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_2);
-                const SfxUInt32Item* newPosYTwips = rReq.GetArg<SfxUInt32Item>(FN_PARAM_3);
+                const SfxInt32Item* newPosXTwips = rReq.GetArg<SfxInt32Item>(FN_PARAM_2);
+                const SfxInt32Item* newPosYTwips = rReq.GetArg<SfxInt32Item>(FN_PARAM_3);
                 const SfxInt32Item* OrdNum = rReq.GetArg<SfxInt32Item>(FN_PARAM_4);
 
                 const sal_uLong handleNum = handleNumItem->GetValue();
-                const sal_uLong newPosX = newPosXTwips->GetValue();
-                const sal_uLong newPosY = newPosYTwips->GetValue();
+                const tools::Long newPosX = newPosXTwips->GetValue();
+                const tools::Long newPosY = newPosYTwips->GetValue();
                 const Point mPoint(newPosX, newPosY);
                 const SdrHdl* handle = pSdrView->GetHdlList().GetHdl(handleNum);
                 if (!handle)

@@ -1504,7 +1504,8 @@ void SwFlyFrame::ChgRelPos( const Point &rNewPos )
         aHori.setPosition(gfx::Length::twip(nTmpX));
         aSet.Put( aHori );
     }
-    SetCurrRelPos( rNewPos );
+    if ( !IsFlyInContentFrame() )
+        SetCurrRelPos( rNewPos );
     pFormat->GetDoc().SetAttr( aSet, *pFormat );
 
 }

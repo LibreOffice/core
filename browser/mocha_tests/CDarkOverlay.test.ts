@@ -71,6 +71,10 @@ describe('CDarkOverlay', function () {
 			);
 		}
 
+		// The chart being edited also gets a frame to move it by. Outside edit mode
+		// that frame has no handles, so it needs nothing beyond these stubs.
+		let isAnyInputFocused: Function;
+
 		function setupAppStubs(): void {
 			setZoomScale(defaultScale);
 
@@ -84,17 +88,37 @@ describe('CDarkOverlay', function () {
 					// leaves it in the twips the message carried, so the expected pixel
 					// values follow from the message alone.
 					sheetGeometry: { convertToTileTwips: function () {} },
+					getFiledBasedViewVerticalOffset: function () {
+						return 0;
+					},
 					_updateCursorAndOverlay: function () {},
 					_onMessage: function () {},
 					_oleCSelections: createOleSelections(),
 				},
+				isSearching: function () {
+					return false;
+				},
+				focus: function () {},
+				isEditMode: function () {
+					return false;
+				},
 			} as any;
+
+			isAnyInputFocused = JSDialog.IsAnyInputFocused;
+			JSDialog.IsAnyInputFocused = function () {
+				return false;
+			};
 
 			GraphicSelection.rectangle = null;
 			GraphicSelection.extraInfo = null;
+			GraphicSelection.inPlaceArea = null;
 		}
 
 		this.beforeEach(setupAppStubs);
+
+		this.afterEach(function () {
+			JSDialog.IsAnyInputFocused = isAnyInputFocused;
+		});
 
 		function dimmingBands(): CRectangle[] {
 			const selections: any = app.map._docLayer._oleCSelections;

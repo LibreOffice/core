@@ -50,6 +50,7 @@
 #include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
+#include <sfx2/ipclient.hxx>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/string.hxx>
 #include <osl/diagnose.h>
@@ -246,11 +247,15 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         if (m_aLastKitRect != aRect)
             m_nLastKitCursorEditorViewId = m_nPendingKitCursorEditorViewId;
         m_aLastKitRect = aRect;
+        // An object edited in place shows its own cursor in this view.
+        const SfxInPlaceClient* pIPClient = pNotifyViewShell->GetIPClient();
+        const bool bOwnCursorShown = !pIPClient || !pIPClient->IsObjectInPlaceActive();
         if (pViewShell)
         {
             if (pViewShell == pNotifyViewShell)
             {
-                KitHelper::notifyUpdatePerViewId(*pViewShell, COKitCallbackType::INVALIDATE_VISIBLE_CURSOR);
+                if (bOwnCursorShown)
+                    KitHelper::notifyUpdatePerViewId(*pViewShell, COKitCallbackType::INVALIDATE_VISIBLE_CURSOR);
             }
             else
             {
@@ -260,7 +265,8 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         }
         else
         {
-            KitHelper::notifyUpdatePerViewId(*pNotifyViewShell, COKitCallbackType::INVALIDATE_VISIBLE_CURSOR);
+            if (bOwnCursorShown)
+                KitHelper::notifyUpdatePerViewId(*pNotifyViewShell, COKitCallbackType::INVALIDATE_VISIBLE_CURSOR);
             KitHelper::notifyOtherViewsUpdatePerViewId(pNotifyViewShell, COKitCallbackType::INVALIDATE_VIEW_CURSOR);
         }
     }
