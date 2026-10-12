@@ -242,7 +242,8 @@ $(icons_js): Makefile.am Makefile $(BACKSTAGE_SVGS)
 	    echo "\","; \
 	  done; \
 	  echo "};"; \
-	} > "$@"
+	} > "$@.tmp"
+	@mv "$@.tmp" "$@"
 
 COOL_ADMIN_TS = \
 	admin/src/ModalDialogCreator.ts \
@@ -332,7 +333,8 @@ $(DIST_FOLDER)/src/app/TaskWorker.js: \
 		-DNODE_MODULES_JS=$(subst $(SPACE),$(COMMA),$(WORKER_NODE_MODULES_JS)) \
 		-DTILEUTILS_JS=$(DIST_FOLDER)/src/layer/tile/CanvasTileUtils.js \
 		-DWORKER_JS=$(srcdir)/src/app/TaskWorkerSrc.js \
-		$(srcdir)/src/app/TaskWorker.js.m4 > $@
+		$(srcdir)/src/app/TaskWorker.js.m4 > $@.tmp
+	@mv $@.tmp $@
 
 NODE_MODULES_JS =\
 	$(if $(IS_SEPARATE),node_modules/hammerjs/hammer.js,node_modules/hammerjs/hammer.min.js) \
@@ -1000,7 +1002,8 @@ define bundle_cool
 			-DVERSION=$(COOL_VERSION) \
 			-DCOPYRIGHT=$(srcdir)/src/copyright.js \
 			-DCOOL_JS=$(subst $(SPACE),$(COMMA),$(patsubst src/%,$(DIST_FOLDER)/src/%,$(COOL_JS_BUNDLE))) \
-			$(srcdir)/cool-src.js.m4 > $@)
+			$(srcdir)/cool-src.js.m4 > $@.tmp
+		@mv $@.tmp $@)
 endef
 
 define prereq_cool
@@ -1011,7 +1014,8 @@ define bundle_css
 	$(if $(IS_SEPARATE),\
 		@touch $@,\
 		@echo "Uglify cool css files..."
-		@$(NODE) node_modules/uglifycss/uglifycss $(COOL_CSS_DST) > $@)
+		@$(NODE) node_modules/uglifycss/uglifycss $(COOL_CSS_DST) > $@.tmp
+		@mv $@.tmp $@)
 endef
 
 define prereq_css
@@ -1219,7 +1223,8 @@ $(INTERMEDIATE_DIR)/admin-src.js: $(COOL_ADMIN_TS_JS) $(COOL_ADMIN_JS)
 	@mkdir -p $(dir $@)
 	$(call run_eslint_check,--ignore-pattern $(COOL_ADMIN_TS_JS) $(srcdir)/admin/src)
 	$(call run_prettier_check,--debug-check $(srcdir)/admin/src)
-	@awk 'FNR == 1 {print ""} 1' $(COOL_ADMIN_TS_JS) $(patsubst %.js,$(srcdir)/%.js,$(COOL_ADMIN_JS)) > $@
+	@awk 'FNR == 1 {print ""} 1' $(COOL_ADMIN_TS_JS) $(patsubst %.js,$(srcdir)/%.js,$(COOL_ADMIN_JS)) > $@.tmp
+	@mv $@.tmp $@
 
 eslint.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
 	$(call run_eslint_check,$(srcdir)/src $(srcdir)/js)
@@ -1345,16 +1350,19 @@ cool_html_defines = -PE -I $(INTERMEDIATE_DIR) \
 # define that differs.
 $(DIST_FOLDER)/cool.html: $(cool_html_prereqs) | $(DIST_FOLDER)/bundle.js
 	$(QUIET_M4) m4 $(cool_html_defines) -DQTAPP=false \
-		$(srcdir)/html/cool.html.m4 > $@
+		$(srcdir)/html/cool.html.m4 > $@.tmp
+	@mv $@.tmp $@
 
 $(DIST_FOLDER)/cool-qt.html: $(cool_html_prereqs) | $(DIST_FOLDER)/bundle.js
 	$(QUIET_M4) m4 $(cool_html_defines) -DQTAPP=true \
-		$(srcdir)/html/cool.html.m4 > $@
+		$(srcdir)/html/cool.html.m4 > $@.tmp
+	@mv $@.tmp $@
 
 # cool-preview.html is for the interactive preview. It defines PREVIEW.
 $(DIST_FOLDER)/cool-preview.html: $(cool_html_prereqs) | $(DIST_FOLDER)/bundle.js
 	$(QUIET_M4) m4 $(cool_html_defines) -DQTAPP=false -DPREVIEW=true \
-		$(srcdir)/html/cool.html.m4 > $@
+		$(srcdir)/html/cool.html.m4 > $@.tmp
+	@mv $@.tmp $@
 
 if ENABLE_TABSTRIP
 $(DIST_FOLDER)/qtapp-tabstrip.html: $(srcdir)/html/qtapp-tabstrip.html.m4
@@ -1368,7 +1376,8 @@ $(DIST_FOLDER)/qtapp-tabstrip.html: $(srcdir)/html/qtapp-tabstrip.html.m4
 		-DANDROIDAPP=$(ENABLE_ANDROIDAPP) \
 		-DEMSCRIPTENAPP=$(ENABLE_EMSCRIPTENAPP) \
 		-DMOBILEAPPNAME="$(APP_NAME)" \
-		$< > $@
+		$< > $@.tmp
+	@mv $@.tmp $@
 
 $(DIST_FOLDER)/qtapp-tabstrip.css: $(srcdir)/css/qtapp-tabstrip.css
 	@mkdir -p $(DIST_FOLDER)
@@ -1421,7 +1430,7 @@ update-shrinkpack:
 $(DIST_FOLDER)/device-%.css: $(srcdir)/css/device-%.css
 	@mkdir -p $(dir $@)
 	@if test -z '$(ENABLE_BROWSERSYNC)'; then \
-		$(NODE) node_modules/uglifycss/uglifycss $< > $@ ; \
+		$(NODE) node_modules/uglifycss/uglifycss $< > $@.tmp && mv $@.tmp $@ ; \
 	else \
 		ln -sf $(abs_srcdir)/$< $@ ; \
 	fi
