@@ -2425,7 +2425,11 @@ void SwDocStyleSheet::Create()
                     m_rDoc.MakeNumRule( UIName(sTmpNm), nullptr,
                                       // #i89178#
                                       numfunc::GetDefaultPositionAndSpaceMode() ) ];
-                pRule->SetAutoRule( false );
+                if (!m_rDoc.IsInMergedPaste())
+                {
+                    // Merged paste creates "direct formatting", i.e. automatic numbering rules.
+                    pRule->SetAutoRule( false );
+                }
                 if( aName.isEmpty() )
                 {
                     // #i91400#

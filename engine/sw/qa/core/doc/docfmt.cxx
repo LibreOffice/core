@@ -15,6 +15,7 @@
 #include <docsh.hxx>
 #include <fmtcol.hxx>
 #include <ndtxt.hxx>
+#include <numrule.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -68,6 +69,41 @@ CPPUNIT_TEST_FIXTURE(Test, testMergedPasteParaStyle)
     // - Actual  : Title and Content~LT~Gliederung 1
     // i.e. the unwanted paragraph style was pasted.
     CPPUNIT_ASSERT_EQUAL(u"Default Paragraph Style"_ustr, pColl->GetName().toString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testMergedPasteListAnonymous)
+{
+    // Given an empty Writer document with the merged-paste flag on:
+    createSwDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    pDoc->SetInMergedPaste(true);
+    comphelper::ScopeGuard g([pDoc] { pDoc->SetInMergedPaste(false); });
+
+    // When importing an RTF file whose paragraphs are bulleted:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"Name"_ustr,
+                                          createFileURL(u"merged-paste-style.rtf")) };
+    dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aArgs);
+
+    // Then the pasted bullet's numrule is anonymous, so a named list style
+    // (WWNum1) is not forced on the destination:
+    SwTextNode* pTextNode = nullptr;
+    SwNodes& rNodes = pDoc->GetNodes();
+    for (SwNodeOffset i(0); i < rNodes.Count(); ++i)
+    {
+        SwTextNode* pCandidate = rNodes[i]->GetTextNode();
+        if (pCandidate && pCandidate->GetText() == u"First")
+        {
+            pTextNode = pCandidate;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pTextNode);
+    const SwNumRule* pRule = pTextNode->GetNumRule();
+    CPPUNIT_ASSERT(pRule);
+    // Without the accompanying fix in place, this failed, the pasted bullet
+    // was on the WWNum1 named list style instead.
+    CPPUNIT_ASSERT(pRule->IsAutoRule());
 }
 }
 

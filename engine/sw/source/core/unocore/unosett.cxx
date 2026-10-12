@@ -1040,7 +1040,12 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
         }
     }
     if(m_pDoc)
+    {
+        // Connect the num rule to the doc, so per-doc flags can be read later.
+        m_pNumRule->SetDoc(m_pDoc);
+
         m_pImpl->StartListening(GetPageDescNotifier(m_pDoc));
+    }
     for(sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
         m_sNewCharStyleNames[i] = UIName(aInvalidStyle);

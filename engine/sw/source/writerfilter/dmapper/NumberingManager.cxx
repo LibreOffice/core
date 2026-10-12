@@ -44,6 +44,8 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
+#include <doc.hxx>
+#include <docsh.hxx>
 #include <unotxdoc.hxx>
 #include <unoxstyle.hxx>
 #include <unostyle.hxx>
@@ -430,11 +432,21 @@ const OUString & ListDef::GetStyleName(sal_Int32 const nId,
     {
         OUString sStyleName = "WWNum" + OUString::number( nId );
 
+        bool bMergedPaste = false;
+        if (SwXTextDocument* pTextDoc = rDMapper.GetTextDocument().get())
+        {
+            if (SwDocShell* pShell = pTextDoc->GetDocShell())
+            {
+                bMergedPaste = pShell->GetDoc()->IsInMergedPaste();
+            }
+        }
+
         while (xStyles->hasByName(sStyleName)) // unique
         {
-            if (!rDMapper.IsNewDoc())
+            if (!rDMapper.IsNewDoc() && !bMergedPaste)
             {
                 // When pasting, don't rename our style, just use the existing one.
+                // Merged paste creates direct formatting, so use a nominally unique "style name".
                 break;
             }
 
