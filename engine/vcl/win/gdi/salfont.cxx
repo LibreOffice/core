@@ -55,6 +55,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/windowserrorstring.hxx>
 
+#include <font/FallbackLanguage.hxx>
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
@@ -189,6 +190,10 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSelectPat
     // fall back to default UI locale if the font language is inconclusive
     if( eLang == LANGUAGE_DONTKNOW )
         aLanguageTag = Application::GetSettings().GetUILanguageTag();
+
+    // a language whose text is never written with the script of a missing
+    // char says nothing about the font to try, the char itself does
+    aLanguageTag = vcl::font::getLanguageForMissingChars(aLanguageTag, rMissingChars);
 
     // first level fallback:
     // try use the locale specific default fonts defined in VCL.xcu
