@@ -179,6 +179,8 @@ gdb.txt
 
 # Cscope
 *.out
+*.out.in
+*.out.po
 
 # Sublime Specific
 *.sublime-project
