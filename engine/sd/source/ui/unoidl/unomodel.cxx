@@ -3880,6 +3880,8 @@ private:
         aContent.mbCanBeResizedFreely = aWhatItAllows.bResizeFreeAllowed;
         aContent.mbCanBeMirrored = aWhatItAllows.bMirrorFreeAllowed;
         aContent.mbCanBeSheared = aWhatItAllows.bShearAllowed;
+        aContent.mbCanBeFlipped = aWhatItAllows.bMirror90Allowed;
+        aContent.mbCanBeChangedToCurves = aWhatItAllows.bCanConvToPath;
 
         aContent.maPaintedBox = paintedRectangleInTwips(rObject, aContent.maPrimitives);
         aContent.maTransformation = transformationInTwips(rObject);
@@ -4536,6 +4538,10 @@ private:
             rWriter.put("cannotBeMirrored", true);
         if (!rContent.mbCanBeSheared)
             rWriter.put("cannotBeSheared", true);
+        if (!rContent.mbCanBeFlipped)
+            rWriter.put("cannotBeFlipped", true);
+        if (!rContent.mbCanBeChangedToCurves)
+            rWriter.put("cannotBeChangedToCurves", true);
 
         if (rContent.mbTiedAtStart)
             rWriter.put("tiedAtStart", true);

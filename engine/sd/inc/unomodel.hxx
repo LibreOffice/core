@@ -245,6 +245,11 @@ public:
         /// such an object with two different factors is held to the ratio while it stands off
         /// the right angles, since the shear it would bring in has nowhere to go.
         bool mbCanBeSheared = true;
+        /// False where the object may not be turned over across or down as a whole, a text
+        /// frame or a caption for one.
+        bool mbCanBeFlipped = true;
+        /// False where the object cannot be changed into curves, a measurement for one.
+        bool mbCanBeChangedToCurves = true;
 
         /** True where the object is a diagram, which is a set of shapes the office lays out
             from data it holds beside them, and the file name ending of the picture an object
@@ -451,6 +456,8 @@ public:
                    && mbCanBeResizedFreely == rOther.mbCanBeResizedFreely
                    && mbCanBeMirrored == rOther.mbCanBeMirrored
                    && mbCanBeSheared == rOther.mbCanBeSheared
+                   && mbCanBeFlipped == rOther.mbCanBeFlipped
+                   && mbCanBeChangedToCurves == rOther.mbCanBeChangedToCurves
                    && mbTiedAtStart == rOther.mbTiedAtStart
                    && mbTiedAtEnd == rOther.mbTiedAtEnd
                    && mnTiedToAtStart == rOther.mnTiedToAtStart
