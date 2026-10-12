@@ -314,6 +314,66 @@ describe('LOUtil', function () {
 		});
 	});
 
+	describe('getIconNameOfCommand()', function () {
+		const styleApplyFile =
+			'lc_styleapply3fstyle3astring3dbad26familyname3astring3dcellstyles.svg';
+
+		it('a plain command maps to its icon file', function () {
+			nodeassert.strictEqual(
+				'lc_bold.svg',
+				LOUtil.getIconNameOfCommand('.uno:Bold'),
+			);
+		});
+
+		it('an icon theme link name maps to the same file as its command', function () {
+			nodeassert.strictEqual(
+				'lc_bold.svg',
+				LOUtil.getIconNameOfCommand('lc_bold.svg'),
+			);
+			nodeassert.strictEqual(
+				'lc_bold.svg',
+				LOUtil.getIconNameOfCommand('lc_bold.svg', true),
+			);
+			nodeassert.strictEqual(
+				'lc_bold.svg',
+				LOUtil.getIconNameOfCommand('sc_bold.svg', true),
+			);
+		});
+
+		it('a parameterized command maps to its icon file', function () {
+			nodeassert.strictEqual(
+				styleApplyFile,
+				LOUtil.getIconNameOfCommand(
+					'.uno:StyleApply?Style:string=Bad&FamilyName:string=CellStyles',
+				),
+			);
+		});
+
+		it('the engine link name of a parameterized command maps to the same file', function () {
+			const linkName =
+				'lc_styleapply%3fstyle%3astring%3dbad&familyname%3astring%3dcellstyles.svg';
+			nodeassert.strictEqual(
+				styleApplyFile,
+				LOUtil.getIconNameOfCommand(linkName),
+			);
+			nodeassert.strictEqual(
+				styleApplyFile,
+				LOUtil.getIconNameOfCommand(linkName, true),
+			);
+			nodeassert.strictEqual(
+				styleApplyFile,
+				LOUtil.getIconNameOfIcon(linkName),
+			);
+		});
+
+		it('a link name with a stray percent sign is kept as sent', function () {
+			nodeassert.strictEqual(
+				'lc_foo25bar.svg',
+				LOUtil.getIconNameOfCommand('lc_foo%bar.svg'),
+			);
+		});
+	});
+
 	describe('openTemplatesFromDocumentLogo()', function () {
 		function setUpLogo() {
 			const logo = document.createElement('a');

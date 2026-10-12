@@ -488,22 +488,38 @@ class LOUtil {
 		var alreadyClean = noCommad;
 		var cleanName = name;
 
-		if (!alreadyClean || alreadyClean !== true) {
-			var prefixLength = '.uno:'.length;
-			if (name.substr(0, prefixLength) == '.uno:')
-				cleanName = name.substr(prefixLength);
-			cleanName = encodeURIComponent(cleanName).replace(/%/g, '');
-			cleanName = cleanName.toLowerCase();
-		}
-
 		// An icon theme link name can arrive here in place of a command name:
 		// the engine sends the .ui icon-name of its toolbar items as e.g.
 		// 'lc_insertfooter.svg'. Reduce it to the bare name, so that the skip
 		// rules and the alias table below see the same thing they would see
 		// for a command. Only the lc_/sc_ prefix marks such a link name, our
 		// own icon files (e.g. statusbarmenu.svg) must not be touched here.
-		if (cleanName.startsWith('lc_') || cleanName.startsWith('sc_'))
-			cleanName = LOUtil.stripName(cleanName);
+		//
+		// The engine builds the link name of a parameterized command from the
+		// command itself, escaping only a few characters, so e.g.
+		// '.uno:StyleApply?Style:string=Bad&FamilyName:string=CellStyles'
+		// arrives as 'lc_styleapply%3fstyle%3astring%3dbad&familyname%3astring%3dcellstyles.svg'.
+		// Undo that escaping and send the result through the same encoding
+		// as the command, so both end at the one file we ship for it.
+		if (name.startsWith('lc_') || name.startsWith('sc_')) {
+			cleanName = LOUtil.stripName(name.substring(3));
+			if (cleanName.indexOf('%') >= 0) {
+				try {
+					cleanName = decodeURIComponent(cleanName);
+				} catch (e) {
+					// not a valid escape sequence, keep the name as sent
+				}
+				alreadyClean = false;
+			}
+		}
+
+		if (!alreadyClean || alreadyClean !== true) {
+			var prefixLength = '.uno:'.length;
+			if (cleanName.substr(0, prefixLength) == '.uno:')
+				cleanName = cleanName.substr(prefixLength);
+			cleanName = encodeURIComponent(cleanName).replace(/%/g, '');
+			cleanName = cleanName.toLowerCase();
+		}
 
 		// Skip icon lookup for numeric-only IDs (JSDialog artifacts like 1, 5, 65535),
 		// core sr*/sc* resource IDs (like sr20006, sc20177), and JSDialog submenu
