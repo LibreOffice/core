@@ -700,6 +700,23 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testBulletOnTextBaseline)
     CPPUNIT_ASSERT_EQUAL(3, nBullets);
 }
 
+
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testJumpingBullet)
+{
+    createSdImpressDoc("odp/jumping_bullet.odp");
+    xmlDocUniquePtr pXmlDoc = parseLayout();
+
+    const OString aBase = "/metafile/push[1]/push[1]/textarray"_ostr;
+    // bullet of paragraph H and bullet of the trailing empty paragraph
+    sal_Int32 nBullet4 = getXPath(pXmlDoc, aBase + "[4]", "y").toInt32();
+    sal_Int32 nBullet6 = getXPath(pXmlDoc, aBase + "[6]", "y").toInt32();
+    sal_Int32 nBullet8 = getXPath(pXmlDoc, aBase + "[8]", "y").toInt32();
+    sal_Int32 nBullet10 = getXPath(pXmlDoc, aBase + "[10]", "y").toInt32();
+
+    // the empty paragraph's bullet must use the same line pitch as the others
+    CPPUNIT_ASSERT_EQUAL(nBullet6 - nBullet4, nBullet10 - nBullet8);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
