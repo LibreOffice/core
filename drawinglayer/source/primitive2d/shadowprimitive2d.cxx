@@ -107,19 +107,12 @@ bool ShadowPrimitive2D::prepareValuesAndcheckValidity(
     if (rViewInformation.getObjectToViewTransformation().isIdentity())
         return false;
 
-    // get fully embedded ShadowPrimitive
-    Primitive2DContainer aEmbedded;
-    getFullyEmbeddedShadowPrimitives(aEmbedded);
-
-    // get geometry range that defines area that needs to be pixelated
-    rBlurRange = aEmbedded.getB2DRange(rViewInformation);
+    // The area to pixelate is the shadow's own range, already grown by the blur radius.
+    rBlurRange = getB2DRange(rViewInformation);
 
     // no range of geometry, done
     if (rBlurRange.isEmpty())
         return false;
-
-    // extend range by BlurRadius in all directions
-    rBlurRange.grow(getShadowBlur());
 
     // initialize ClippedRange to full BlurRange -> all is visible
     rClippedRange = rBlurRange;
