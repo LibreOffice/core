@@ -1522,7 +1522,9 @@ bool isMacroCallCommand( std::u16string_view rCommand )
     std::u16string_view aArguments = std::u16string_view( sCommand ).substr( nArguments + 1 );
     return aArguments.find( u"macro:" ) != std::u16string_view::npos
            || aArguments.find( u"vnd.sun.star.script:" ) != std::u16string_view::npos
-           || aArguments.find( u"referer" ) != std::u16string_view::npos;
+           || aArguments.find( u"referer" ) != std::u16string_view::npos
+           || aArguments.find( u"macroexecutionmode" ) != std::u16string_view::npos
+           || aArguments.find( u"updatedocmode" ) != std::u16string_view::npos;
 }
 
 void setDocumentMacroCallsAllowed( const Reference< XUIConfigurationManager2 >& rxManager,
