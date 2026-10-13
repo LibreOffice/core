@@ -178,6 +178,50 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf171022)
     CPPUNIT_ASSERT_EQUAL("Standard"_ostr, aLinkTypes[3]);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testOutlineItemAtDocumentStart)
+{
+    // a heading in the first paragraph, where the cursor stands before any jump
+    createSwDoc();
+    cpo::uno::Reference<css::text::XTextRange> xParagraph = getParagraph(1);
+    xParagraph->setString(u"Heading"_ustr);
+    cpo::uno::Reference<css::beans::XPropertySet> xProperties(xParagraph, cpo::uno::UNO_QUERY);
+    xProperties->setPropertyValue(u"ParaStyleName"_ustr, cpo::uno::Any(u"Heading 1"_ustr));
+
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
+                                    comphelper::makePropertyValue(u"SelectPdfVersion"_ustr,
+                                                                  sal_Int32(20)) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    std::vector<OString> aOutlineTypes;
+    for (auto* pObject : aDocument.GetObjects())
+    {
+        if (!pObject->Lookup("Title"_ostr))
+            continue;
+        // Without the fix this item had a plain /Dest, which fails ISO 14289-2 8.8
+        auto pAction = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("A"_ostr));
+        CPPUNIT_ASSERT(pAction);
+        auto pStructure
+            = dynamic_cast<vcl::filter::PDFArrayElement*>(pAction->LookupElement("SD"_ostr));
+        CPPUNIT_ASSERT(pStructure);
+        CPPUNIT_ASSERT(!pStructure->GetElements().empty());
+        auto pStructureRef
+            = dynamic_cast<vcl::filter::PDFReferenceElement*>(pStructure->GetElements()[0]);
+        CPPUNIT_ASSERT(pStructureRef);
+        CPPUNIT_ASSERT(pStructureRef->LookupObject());
+        auto pStructureS = dynamic_cast<vcl::filter::PDFNameElement*>(
+            pStructureRef->LookupObject()->Lookup("S"_ostr));
+        CPPUNIT_ASSERT(pStructureS);
+        aOutlineTypes.push_back(pStructureS->GetValue());
+    }
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aOutlineTypes.size());
+    CPPUNIT_ASSERT_EQUAL("H1"_ostr, aOutlineTypes[0]);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFootnoteNoteType)
 {
     createSwDoc("footnote-tag.fodt");
