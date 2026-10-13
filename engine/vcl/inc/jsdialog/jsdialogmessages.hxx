@@ -29,6 +29,7 @@ enum MessageType
     Popup,
     PopupClose,
     Menu,
+    Redraw,
 };
 }
 
@@ -113,6 +114,7 @@ private:
     void send(const OString& sMsg);
     OString generateFullUpdate() const;
     OString generateWidgetUpdate(const VclPtr<vcl::Window>& pWindow) const;
+    OString generateRedrawMessage(const VclPtr<vcl::Window>& pWindow) const;
     OString generateCloseMessage() const;
     OString generateActionMessage(const VclPtr<vcl::Window>& pWindow,
                                   std::unique_ptr<jsdialog::ActionDataMap> pData) const;

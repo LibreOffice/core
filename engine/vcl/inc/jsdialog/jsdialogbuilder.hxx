@@ -711,6 +711,8 @@ public:
 
 class JSDrawingArea final : public JSWidget<SalInstanceDrawingArea, VclDrawingArea>
 {
+    void sendRedraw();
+
 public:
     JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingArea,
                   SalInstanceBuilder* pBuilder,

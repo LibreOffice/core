@@ -58,6 +58,7 @@ public:
     void sendFullUpdate(bool bForce = false);
     void sendClose();
     void sendUpdate(const VclPtr<vcl::Window>& pWindow, bool bForce = false);
+    void sendRedraw(const VclPtr<vcl::Window>& pWindow);
     void sendAction(const VclPtr<vcl::Window>& pWindow,
                     std::unique_ptr<jsdialog::ActionDataMap> pData);
     void sendPopup(const VclPtr<vcl::Window>& pWindow, const OUString& sParentId,

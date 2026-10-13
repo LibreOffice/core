@@ -1687,16 +1687,22 @@ JSDrawingArea::JSDrawingArea(JSDialogSender* pSender, VclDrawingArea* pDrawingAr
 {
 }
 
+void JSDrawingArea::sendRedraw()
+{
+    if (!m_nFreezeCounter && m_pSender)
+        m_pSender->sendRedraw(m_xWidget);
+}
+
 void JSDrawingArea::queue_draw()
 {
     SalInstanceDrawingArea::queue_draw();
-    sendUpdate();
+    sendRedraw();
 }
 
 void JSDrawingArea::queue_draw_area(int x, int y, int width, int height)
 {
     SalInstanceDrawingArea::queue_draw_area(x, y, width, height);
-    sendUpdate();
+    sendRedraw();
 }
 
 JSToolbar::JSToolbar(JSDialogSender* pSender, ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder,

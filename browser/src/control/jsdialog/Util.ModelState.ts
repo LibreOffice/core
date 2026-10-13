@@ -170,6 +170,8 @@ class JSDialogModelState {
 			else if (data.data.action_type === 'hide') found.visible = false;
 			else if (data.data.action_type === 'rename' && data.data.new_id)
 				found.id = data.data.new_id;
+			else if (data.data.action_type === 'redraw' && data.data.control)
+				this.widgetUpdate(data.data.control);
 		}
 	}
 

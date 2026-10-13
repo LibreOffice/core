@@ -219,7 +219,22 @@ function _drawingAreaControl (parentContainer, data, builder) {
 		_setupDrawingAreaKeyboardEvents(image, container, builder);
 	}
 
+	// data is shared with the dialog model, which takes a new state before it is shown here.
+	const shownData = Object.assign({}, data);
+	container.onRedraw = function (newData) {
+		if (!newData.image || !_isUnchangedApartFrom(shownData, newData, ['image']))
+			return false;
+		container.querySelector('img').src = newData.image.replace(/\\/g, '');
+		Object.assign(shownData, newData);
+		return true;
+	};
+
 	return false;
+}
+
+function _isUnchangedApartFrom(shownData, newData, keysAppliedInPlace) {
+	return Object.keys(newData).every((key) => keysAppliedInPlace.includes(key)
+		|| JSON.stringify(shownData[key]) === JSON.stringify(newData[key]));
 }
 
 function _showBorders(wrapper, checkboxes, data) {

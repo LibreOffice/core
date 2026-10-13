@@ -116,6 +116,28 @@ OString JSDialogNotifyIdle::generateWidgetUpdate(const VclPtr<vcl::Window>& pWin
     return aJsonWriter.finishAndGetAsOString();
 }
 
+// An action whose data carries the whole widget under "control", the same content an update has.
+OString JSDialogNotifyIdle::generateRedrawMessage(const VclPtr<vcl::Window>& pWindow) const
+{
+    if (!pWindow || !m_aNotifierWindow)
+        return OString();
+
+    tools::JsonWriter aJsonWriter;
+
+    aJsonWriter.put("jsontype", m_sTypeOfJSON);
+    aJsonWriter.put("action", "action");
+    aJsonWriter.put("id", m_aNotifierWindow->GetKitWindowId());
+    {
+        auto aDataNode = aJsonWriter.startNode("data");
+        aJsonWriter.put("control_id", pWindow->get_id());
+        aJsonWriter.put(ACTION_TYPE, "redraw");
+        auto aControlNode = aJsonWriter.startNode("control");
+        pWindow->DumpAsPropertyTree(aJsonWriter);
+    }
+
+    return aJsonWriter.finishAndGetAsOString();
+}
+
 OString JSDialogNotifyIdle::generateCloseMessage() const
 {
     tools::JsonWriter aJsonWriter;
@@ -274,6 +296,10 @@ void JSDialogNotifyIdle::Invoke()
                     send(generateWidgetUpdate(rMessage.m_pWindow));
                     break;
 
+                case jsdialog::MessageType::Redraw:
+                    send(generateRedrawMessage(rMessage.m_pWindow));
+                    break;
+
                 case jsdialog::MessageType::Close:
                     send(generateCloseMessage());
                     break;
@@ -359,6 +385,15 @@ void JSDialogSender::sendUpdate(const VclPtr<vcl::Window>& pWindow, bool bForce)
         mpIdleNotify->forceUpdate();
 
     mpIdleNotify->sendMessage(jsdialog::MessageType::WidgetUpdate, pWindow);
+    mpIdleNotify->Start();
+}
+
+void JSDialogSender::sendRedraw(const VclPtr<vcl::Window>& pWindow)
+{
+    if (!mpIdleNotify)
+        return;
+
+    mpIdleNotify->sendMessage(jsdialog::MessageType::Redraw, pWindow);
     mpIdleNotify->Start();
 }
 
