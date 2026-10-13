@@ -505,6 +505,10 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 // We restored cell definitions, clear these now.
                 // This is necessary, as later cell definitions want to overwrite the restored ones.
                 resetTableRowProperties();
+
+            // The backup only recovers a reset within this row. A later row without a
+            // definition must inherit the previous row, not an obsolete table's cells.
+            m_BackupTopLevelTableRow.reset();
         }
         break;
         case RTFKeyword::COLUMN:

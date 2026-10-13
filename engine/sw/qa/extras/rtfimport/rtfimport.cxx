@@ -7,10 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <algorithm>
 #include <memory>
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -63,6 +65,51 @@ public:
     {
     }
 };
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf173728RowInheritance)
+{
+    createSwDoc("tdf173728.rtf");
+    uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextTable> xTable(xSupplier->getTextTables()->getByName(u"Table3"_ustr),
+                                            uno::UNO_QUERY_THROW);
+
+    // After a nested table, a row without \trowd must inherit the preceding four-cell row,
+    // rather than restoring the obsolete two-cell definition of the earlier outer table.
+    auto aNames = xTable->getCellNames();
+    CPPUNIT_ASSERT_EQUAL(std::ptrdiff_t(4),
+                         std::count_if(aNames.begin(), aNames.end(),
+                                       [](const OUString& rName) { return rName.endsWith(u"3"); }));
+    uno::Reference<text::XTextRange> xC3(xTable->getCellByName(u"C3"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextRange> xD3(xTable->getCellByName(u"D3"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"0,042"_ustr, xC3->getString());
+    CPPUNIT_ASSERT_EQUAL(u"40"_ustr, xD3->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf173728LastCellFormatting)
+{
+    createSwDoc("tdf173728.rtf");
+    uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextTable> xTable(xSupplier->getTextTables()->getByName(u"Table3"_ustr),
+                                            uno::UNO_QUERY_THROW);
+
+    // The last column must retain its character properties and the header's subscript.
+    uno::Reference<text::XText> xD1(xTable->getCellByName(u"D1"_ustr), uno::UNO_QUERY_THROW);
+    auto xHeader = getParagraphOfText(1, xD1);
+    CPPUNIT_ASSERT_EQUAL(u"Verdana"_ustr,
+                         getProperty<OUString>(getRun(xHeader, 1), u"CharFontName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(-14000),
+                         getProperty<sal_Int16>(getRun(xHeader, 2), u"CharEscapement"_ustr));
+
+    uno::Reference<text::XText> xD2(xTable->getCellByName(u"D2"_ustr), uno::UNO_QUERY_THROW);
+    auto xValue = getRun(getParagraphOfText(1, xD2), 1);
+    CPPUNIT_ASSERT_EQUAL(u"50"_ustr, xValue->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Verdana"_ustr, getProperty<OUString>(xValue, u"CharFontName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(8.0f, getProperty<float>(xValue, u"CharHeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xValue, u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                         getProperty<awt::FontSlant>(xValue, u"CharPosture"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0000ff), getProperty<sal_Int32>(xValue, u"CharColor"_ustr));
+}
 
 CPPUNIT_TEST_FIXTURE(Test, testN695479)
 {
