@@ -162,7 +162,7 @@ const ScPatternAttr& CellAttributeHelper::getDefaultCellAttribute() const
     // SCDOCMODE_FUNCTIONACCESS (!)
     if (!mpDefaultCellAttribute)
     {
-        // GetRscString only works after ScGlobal::Init (indicated by the EmptyBrushItem)
+        // ScResId only works after ScGlobal::Init (indicated by the EmptyBrushItem)
         // TODO: Write additional method ScGlobal::IsInit() or somesuch
         //       or detect whether this is the Secondary Pool for a MessagePool
         if (ScGlobal::GetEmptyBrushItem())

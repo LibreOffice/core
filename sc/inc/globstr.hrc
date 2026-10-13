@@ -26,10 +26,9 @@
 /*
  * This file is reserved for string IDs of permanently loaded resident string
  * resources for faster access in core and filter code (and some UI like
- * Undo/Redo or strings displayed in the status bar), they reside in resource
- * RID_GLOBSTR and are meant to be accessed via ScGlobal::GetRscString(). All
- * other string IDs of strings used in message boxes and elsewhere go into
- * sc/inc/strings.hrc
+ * Undo/Redo or strings displayed in the status bar). They are meant to be
+ * accessed via ScResId(). All other string IDs of strings used in message boxes
+ * and elsewhere go into sc/inc/strings.hrc
  */
 
 #define STR_UNDO_INSERTCELLS                    NC_("STR_UNDO_INSERTCELLS", "Insert")
