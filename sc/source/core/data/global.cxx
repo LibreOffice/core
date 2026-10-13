@@ -48,6 +48,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <comphelper/doublecheckedinit.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/scripturl.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -881,8 +882,7 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, bool bIgno
     // Also don't mess around with a vnd.sun.star.script or service or other
     // internal "URI".
     if (!aUrlName.startsWith("#")
-            && !aUrlName.startsWithIgnoreAsciiCase("vnd.sun.star.script:")
-            && !aUrlName.startsWithIgnoreAsciiCase("macro:")
+            && !comphelper::isScriptURL(aUrlName)
             && !aUrlName.startsWithIgnoreAsciiCase("service:")
             && !aUrlName.startsWithIgnoreAsciiCase(".uno:"))
     {
