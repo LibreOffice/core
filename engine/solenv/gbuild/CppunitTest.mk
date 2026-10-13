@@ -37,12 +37,14 @@ endif
 
 ifneq ($(strip $(CPPUNITTRACE)),)
 ifneq ($(filter gdb,$(CPPUNITTRACE)),)
+# Set before loading symbols; use GDB_INDEX_CACHE=off to disable caching.
+export GDB_INDEX_CACHE ?= on
 # sneak (a) setting the LD_LIBRARY_PATH, and (b) setting malloc debug flags, into the "gdb --args" command line
 gb_CppunitTest_GDBTRACE := $(subst gdb,\
-	gdb -return-child-result -ex "add-auto-load-safe-path $(INSTDIR)" -ex "set environment $(subst =, ,$(gb_CppunitTest_CPPTESTPRECOMMAND))" $(if $(PYTHONWARNINGS),-ex 'set environment PYTHONWARNINGS $(PYTHONWARNINGS)') $(gb_CppunitTest_malloc_check) $(gb_CppunitTest_DEBUGCPPUNIT),\
+	gdb -return-child-result -iex "set index-cache enabled $(GDB_INDEX_CACHE)" -ex "add-auto-load-safe-path $(INSTDIR)" -ex "set environment $(subst =, ,$(gb_CppunitTest_CPPTESTPRECOMMAND))" $(if $(PYTHONWARNINGS),-ex 'set environment PYTHONWARNINGS $(PYTHONWARNINGS)') $(gb_CppunitTest_malloc_check) $(gb_CppunitTest_DEBUGCPPUNIT),\
 	$(CPPUNITTRACE))
 gb_PythonTest_GDBTRACE := $(subst gdb,\
-	gdb -return-child-result -ex "add-auto-load-safe-path $(INSTDIR)" -ex "set environment $(subst =, ,$(gb_PythonTest_PRECOMMAND))" $(if $(PYTHONWARNINGS),-ex 'set environment PYTHONWARNINGS $(PYTHONWARNINGS)') $(gb_CppunitTest_malloc_check) $(gb_CppunitTest_DEBUGCPPUNIT),\
+	gdb -return-child-result -iex "set index-cache enabled $(GDB_INDEX_CACHE)" -ex "add-auto-load-safe-path $(INSTDIR)" -ex "set environment $(subst =, ,$(gb_PythonTest_PRECOMMAND))" $(if $(PYTHONWARNINGS),-ex 'set environment PYTHONWARNINGS $(PYTHONWARNINGS)') $(gb_CppunitTest_malloc_check) $(gb_CppunitTest_DEBUGCPPUNIT),\
 	$(CPPUNITTRACE))
 else ifneq ($(filter lldb,$(CPPUNITTRACE)),)
 gb_CppunitTest_GDBTRACE := $(subst lldb,\

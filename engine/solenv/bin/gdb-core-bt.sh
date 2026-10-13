@@ -12,6 +12,8 @@
 EXECUTABLE=${1}
 COREDIR=${2}
 EXITCODE=${3}
+# Match the test launchers, including their explicit opt-out.
+GDB_INDEX_CACHE=${GDB_INDEX_CACHE:-on}
 
 if command -v gdb >/dev/null
 then
@@ -29,7 +31,8 @@ then
             GDBCOMMANDFILE=$(mktemp)
             printf "info registers\nthread apply all backtrace full\n" \
                 >"$GDBCOMMANDFILE"
-            PYTHONWARNINGS=default gdb -iex "add-auto-load-safe-path ${INSTDIR?}" \
+            PYTHONWARNINGS=default gdb -iex "set index-cache enabled $GDB_INDEX_CACHE" \
+                -iex "add-auto-load-safe-path ${INSTDIR?}" \
                 -x "$GDBCOMMANDFILE" --batch "$guess" "$COREFILE" && found=x
             rm "$GDBCOMMANDFILE"
             echo
@@ -53,7 +56,8 @@ then
                 printf 'info registers\nthread apply all backtrace full\n' >"$GDBCOMMANDFILE"
                 PYTHONWARNINGS=default $COREDUMPCTL debug \
                     COREDUMP_USER_UNIT="$LIBO_TEST_UNIT".scope COREDUMP_PID="$i" \
-                    --debugger-arguments="-iex 'add-auto-load-safe-path ${INSTDIR?}' \
+                    --debugger-arguments="-iex 'set index-cache enabled $GDB_INDEX_CACHE' \
+                        -iex 'add-auto-load-safe-path ${INSTDIR?}' \
                         -x '$GDBCOMMANDFILE' --batch"
                 rm "$GDBCOMMANDFILE"
                 found=x
@@ -83,7 +87,8 @@ then
             printf '\nIt looks like %s generated %s\nBacktraces:\n' "$guess" "$TEMPCOREFILE"
             GDBCOMMANDFILE=$(mktemp)
             printf 'info registers\nthread apply all backtrace full\n' >"$GDBCOMMANDFILE"
-            PYTHONWARNINGS=default gdb -iex "add-auto-load-safe-path ${INSTDIR?}" \
+            PYTHONWARNINGS=default gdb -iex "set index-cache enabled $GDB_INDEX_CACHE" \
+                -iex "add-auto-load-safe-path ${INSTDIR?}" \
                 -x "$GDBCOMMANDFILE" --batch "$guess" "$TEMPCOREFILE"
             rm "$GDBCOMMANDFILE"
             rm "$TEMPCOREFILE"
