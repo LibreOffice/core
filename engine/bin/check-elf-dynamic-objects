@@ -95,7 +95,6 @@ gdbusallowlist="libdbus-glib-1.so.2 libdbus-1.so.3 libgmodule-2.0.so.0 libgthrea
 gioallowlist="libgio-2.0.so.0 ${gdbusallowlist}"
 gtk3allowlist="libgtk-3.so.0 libgdk-3.so.0 libcairo-gobject.so.2 libpangocairo-1.0.so.0 libfribidi.so.0 libatk-1.0.so.0 libcairo.so.2 libpangoft2-1.0.so.0 libpango-1.0.so.0 libfontconfig.so.1 libfreetype.so.6 libgdk_pixbuf-2.0.so.0 libharfbuzz.so.0 ${gioallowlist}"
 kerberosallowlist="libgssapi_krb5.so.2 libcom_err.so.2 libkrb5.so.3"
-dconfallowlist="libdconf.so.1 libgio-2.0.so.0 ${gobjectallowlist}"
 
 check_one_file()
 {
@@ -144,13 +143,8 @@ local file="$1"
                 allowlist="${allowlist} ${kerberosallowlist}"
             fi
         ;;
-        */libconfigmgrlo.so)
-            if [ "$ENABLE_DCONF" = TRUE ]; then
-                allowlist="${allowlist} ${dconfallowlist}"
-            fi
-        ;;
         */libmergedlo.so)
-            allowlist="${allowlist} ${x11allowlist} ${gioallowlist} ${kerberosallowlist} ${dconfallowlist} libcups.so.2 libcairo.so.2"
+            allowlist="${allowlist} ${x11allowlist} ${gioallowlist} ${kerberosallowlist} libcups.so.2 libcairo.so.2"
         ;;
         */libunitedlo.so)
             allowlist="${allowlist} ${x11allowlist} ${gioallowlist} ${kerberosallowlist} ${dconfallowlist} libcups.so.2 libcairo.so.2"

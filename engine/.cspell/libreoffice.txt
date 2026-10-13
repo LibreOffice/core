@@ -18,7 +18,6 @@ cppu
 CPPUHELPER
 dbgutil
 dbus
-dconf
 distro
 documentfoundation
 Emscripten

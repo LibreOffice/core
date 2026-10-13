@@ -159,7 +159,6 @@ parts:
       ./autogen.sh \
         --prefix=$(pwd)/inst \
         --disable-dbus \
-        --disable-dconf \
         --disable-epm \
         --disable-gio \
         --disable-gtk3 \

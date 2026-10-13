@@ -148,7 +148,7 @@ private:
 
     class WriteThread;
 
-    enum class ModificationTarget { None, File, Dconf };
+    enum class ModificationTarget { None, File };
 
     cpo::uno::Reference< cpo::uno::XComponentContext >
         context_;

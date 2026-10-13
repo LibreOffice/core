@@ -2068,10 +2068,6 @@ AC_ARG_ENABLE(library-bin-tar,
         for the next time.]),
 )
 
-AC_ARG_ENABLE(dconf,
-    AS_HELP_STRING([--enable-dconf],
-        [Enable the dconf configuration backend.]))
-
 libo_FUZZ_ARG_ENABLE(formula-logger,
     AS_HELP_STRING(
         [--enable-formula-logger],
@@ -2970,7 +2966,6 @@ if test "$enable_wasm_strip" = "yes"; then
     enable_cups=no
     enable_database_connectivity=no
     enable_dbus=no
-    enable_dconf=no
     test "${enable_dynamic_loading+set}" = set -o "$_os" != Emscripten || enable_dynamic_loading=no
     enable_gio=no
     enable_nss=no
@@ -11633,30 +11628,6 @@ if test $_os != iOS -a $_os != Android -a "$ENABLE_FUZZERS" != "TRUE" -a "$enabl
     AC_DEFINE(HAVE_FEATURE_OPENCL)
 fi
 
-dnl =================================================
-dnl Check whether to build with dconf support.
-dnl =================================================
-
-if test $_os != Android -a $_os != iOS -a "$enable_dconf" = yes; then
-    PKG_CHECK_MODULES([DCONF], [dconf >= 0.40.0], [], [
-        AC_MSG_ERROR([dconf not found])
-        ])
-fi
-AC_MSG_CHECKING([whether to enable dconf])
-if test $_os = Android -o $_os = iOS -o "$enable_dconf" != yes; then
-    DCONF_CFLAGS=
-    DCONF_LIBS=
-    ENABLE_DCONF=
-    AC_MSG_RESULT([no])
-else
-    ENABLE_DCONF=TRUE
-    AC_DEFINE(ENABLE_DCONF)
-    AC_MSG_RESULT([yes])
-fi
-AC_SUBST([DCONF_CFLAGS])
-AC_SUBST([DCONF_LIBS])
-AC_SUBST([ENABLE_DCONF])
-
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import feature])
 ENABLE_PDFIMPORT=
@@ -14087,7 +14058,6 @@ AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_cpdb.h])
 AC_CONFIG_HEADERS([config_host/config_crypto.h])
 AC_CONFIG_HEADERS([config_host/config_cups.h])
-AC_CONFIG_HEADERS([config_host/config_dconf.h])
 AC_CONFIG_HEADERS([config_host/config_eot.h])
 AC_CONFIG_HEADERS([config_host/config_cairo_rgba.h])
 AC_CONFIG_HEADERS([config_host/config_collab.h])

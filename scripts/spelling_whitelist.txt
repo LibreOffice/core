@@ -3086,7 +3086,6 @@ dbt
 dbtools
 dbui
 dbus
-dconf
 dcontact
 dcs
 dcterms

@@ -42,13 +42,11 @@ $(eval $(call gb_Library_add_exception_objects,configmgr, \
     configmgr/source/xcsparser \
     configmgr/source/xcuparser \
     configmgr/source/xmldata \
-    $(if $(ENABLE_DCONF),configmgr/source/dconf) \
     $(if $(filter $(OS),WNT),configmgr/source/winreg) \
 ))
 
 $(eval $(call gb_Library_use_externals,configmgr, \
     boost_headers \
-    dconf \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,configmgr))

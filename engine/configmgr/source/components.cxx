@@ -40,7 +40,6 @@
 #include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/XInterface.hpp>
 #include <cppuhelper/exc_hlp.hxx>
-#include <config_dconf.h>
 #include <config_folders.h>
 #include <osl/conditn.hxx>
 #include <osl/file.hxx>
@@ -69,10 +68,6 @@
 #include "xcdparser.hxx"
 #include "xcuparser.hxx"
 #include "xcsparser.hxx"
-
-#if ENABLE_DCONF
-#include "dconf.hxx"
-#endif
 
 #if defined(_WIN32)
 #include "winreg.hxx"
@@ -303,11 +298,6 @@ void Components::writeModifications() {
         }
         writeThread_->trigger();
         break;
-    case ModificationTarget::Dconf:
-#if ENABLE_DCONF
-        dconf::writeModifications(*this, data_);
-#endif
-        break;
     }
 }
 
@@ -473,20 +463,6 @@ Components::Components(
             parseResLayer(layer, url);
             SAL_INFO("configmgr", "parseResLayer() took " << (osl_getGlobalTimer() - nStartTime) << " ms");
             ++layer;
-#if ENABLE_DCONF
-        } else if (type == "dconf") {
-            if (url == "!") {
-                modificationTarget_ = ModificationTarget::Dconf;
-                dconf::readLayer(data_, Data::NO_LAYER);
-            } else if (url == "*") {
-                dconf::readLayer(data_, layer);
-            } else {
-                throw cpo::uno::RuntimeException(
-                    "CONFIGURATION_LAYERS: unknown \"dconf\" kind \"" + url
-                    + "\"");
-            }
-            ++layer;
-#endif
 #if defined(_WIN32)
         } else if (type == "winreg") {
             WinRegType eType;
@@ -520,30 +496,11 @@ Components::Components(
                 throw cpo::uno::RuntimeException(
                     u"CONFIGURATION_LAYERS: empty \"user\" URL"_ustr);
             }
-            bool ignore = false;
-#if ENABLE_DCONF
             if (write) {
-                OUString token(
-                    expand(u"${SYSUSERCONFIG}/libreoffice/dconfwrite"_ustr));
-                osl::DirectoryItem it;
-                osl::FileBase::RC e = osl::DirectoryItem::get(token, it);
-                ignore = e == osl::FileBase::E_None;
-                SAL_INFO(
-                    "configmgr",
-                    "dconf write (<" << token << "> " << +e << "): "
-                        << int(ignore));
-                if (ignore) {
-                    modificationTarget_ = ModificationTarget::Dconf;
-                }
+                modificationTarget_ = ModificationTarget::File;
+                modificationFileUrl_ = url;
             }
-#endif
-            if (!ignore) {
-                if (write) {
-                    modificationTarget_ = ModificationTarget::File;
-                    modificationFileUrl_ = url;
-                }
-                parseModificationLayer(write ? Data::NO_LAYER : layer, url);
-            }
+            parseModificationLayer(write ? Data::NO_LAYER : layer, url);
             ++layer;
         } else {
             throw cpo::uno::RuntimeException(

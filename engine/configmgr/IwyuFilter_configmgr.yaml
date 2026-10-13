@@ -4,9 +4,6 @@ excludelist:
     configmgr/source/nodemap.hxx:
     # Needed for direct member access
     - node.hxx
-    configmgr/source/dconf.cxx:
-    # Generic wrapper for dconf
-    - dconf/dconf.h
     configmgr/source/broadcaster.cxx:
     # Needed for template
     - com/sun/star/beans/XPropertiesChangeListener.hpp

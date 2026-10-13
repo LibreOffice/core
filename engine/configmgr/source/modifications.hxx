@@ -26,7 +26,6 @@
 #include <rtl/ustring.hxx>
 
 #include <boost/unordered_map.hpp>
-#include <config_dconf.h>
 
 namespace configmgr
 {
@@ -45,10 +44,6 @@ public:
     ~Modifications();
 
     void add(std::vector<OUString> const& path);
-
-#if ENABLE_DCONF
-    void clear() { root_.children.clear(); }
-#endif
 
     bool empty() const { return root_.children.empty(); }
 

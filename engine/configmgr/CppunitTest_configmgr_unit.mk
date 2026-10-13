@@ -58,6 +58,5 @@ $(eval $(call gb_CppunitTest_use_components,configmgr_unit,\
 
 $(eval $(call gb_CppunitTest_use_externals,configmgr_unit,\
     boost_headers \
-    dconf \
     icu_headers \
 ))

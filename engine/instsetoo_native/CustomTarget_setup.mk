@@ -51,7 +51,6 @@ $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,fu
 		&& echo 'BRAND_SHARE_RESOURCE_SUBDIR=$(LIBO_SHARE_RESOURCE_FOLDER)' \
 		&& echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/$(LIBO_SHARE_FOLDER)/registry' \
                 'res:$${BRAND_BASE_DIR}/$(LIBO_SHARE_FOLDER)/registry' \
-                $(if $(ENABLE_DCONF),'dconf:* ') \
                 $(if $(filter WNT,$(OS)),'winreg:LOCAL_MACHINE ') \
                 'sharedext:$${BRAND_BASE_DIR}/$(LIBO_SHARE_FOLDER)/registry/sharedext.ini' \
                 $(if $(filter WNT,$(OS)),'winreg:CURRENT_USER ') \

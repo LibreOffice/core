@@ -3139,15 +3139,6 @@ endef
 
 endif # SYSTEM_NSS
 
-define gb_LinkTarget__use_dconf
-$(call gb_LinkTarget_set_include,$(1),\
-		$$(INCLUDE) \
-		$(DCONF_CFLAGS) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),$(DCONF_LIBS))
-endef
-
 ### Jars ############################################################
 
 # As a guide, Java-Websocket was packaged for Fedora 35

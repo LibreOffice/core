@@ -694,7 +694,6 @@
 		BE7D6A2123FA9C2300C2E605 /* winreg.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = winreg.cxx; path = "../lobuilddir-symlink/configmgr/source/winreg.cxx"; sourceTree = "<group>"; };
 		BE7D6A2223FA9C2300C2E605 /* propertynode.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = propertynode.hxx; path = "../lobuilddir-symlink/configmgr/source/propertynode.hxx"; sourceTree = "<group>"; };
 		BE7D6A2323FA9C2300C2E605 /* childaccess.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = childaccess.hxx; path = "../lobuilddir-symlink/configmgr/source/childaccess.hxx"; sourceTree = "<group>"; };
-		BE7D6A2523FA9C2300C2E605 /* dconf.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dconf.cxx; path = "../lobuilddir-symlink/configmgr/source/dconf.cxx"; sourceTree = "<group>"; };
 		BE7D6A2623FA9C2300C2E605 /* type.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = type.cxx; path = "../lobuilddir-symlink/configmgr/source/type.cxx"; sourceTree = "<group>"; };
 		BE7D6A2723FA9C2300C2E605 /* parsemanager.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = parsemanager.hxx; path = "../lobuilddir-symlink/configmgr/source/parsemanager.hxx"; sourceTree = "<group>"; };
 		BE7D6A2823FA9C2300C2E605 /* rootnode.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = rootnode.hxx; path = "../lobuilddir-symlink/configmgr/source/rootnode.hxx"; sourceTree = "<group>"; };
@@ -712,7 +711,6 @@
 		BE7D6A3423FA9C2400C2E605 /* localizedvaluenode.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = localizedvaluenode.hxx; path = "../lobuilddir-symlink/configmgr/source/localizedvaluenode.hxx"; sourceTree = "<group>"; };
 		BE7D6A3523FA9C2400C2E605 /* xcdparser.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xcdparser.cxx; path = "../lobuilddir-symlink/configmgr/source/xcdparser.cxx"; sourceTree = "<group>"; };
 		BE7D6A3623FA9C2400C2E605 /* localizedpropertynode.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = localizedpropertynode.cxx; path = "../lobuilddir-symlink/configmgr/source/localizedpropertynode.cxx"; sourceTree = "<group>"; };
-		BE7D6A3723FA9C2400C2E605 /* dconf.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = dconf.hxx; path = "../lobuilddir-symlink/configmgr/source/dconf.hxx"; sourceTree = "<group>"; };
 		BE7D6A3823FA9C2400C2E605 /* valueparser.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = valueparser.hxx; path = "../lobuilddir-symlink/configmgr/source/valueparser.hxx"; sourceTree = "<group>"; };
 		BE7D6A3923FA9C2400C2E605 /* update.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = update.cxx; path = "../lobuilddir-symlink/configmgr/source/update.cxx"; sourceTree = "<group>"; };
 		BE7D6A3A23FA9C2400C2E605 /* xcsparser.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xcsparser.cxx; path = "../lobuilddir-symlink/configmgr/source/xcsparser.cxx"; sourceTree = "<group>"; };
@@ -2453,8 +2451,6 @@
 				BE7D6A5A23FA9C2600C2E605 /* configurationregistry.cxx */,
 				BE7D6A4523FA9C2500C2E605 /* data.cxx */,
 				BE7D6A5B23FA9C2600C2E605 /* data.hxx */,
-				BE7D6A2523FA9C2300C2E605 /* dconf.cxx */,
-				BE7D6A3723FA9C2400C2E605 /* dconf.hxx */,
 				BE7D6A4023FA9C2400C2E605 /* defaultprovider.cxx */,
 				BE7D6A6523FA9C2700C2E605 /* defaultprovider.hxx */,
 				BE7D6A3223FA9C2400C2E605 /* groupnode.cxx */,

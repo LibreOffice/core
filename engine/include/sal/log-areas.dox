@@ -626,7 +626,6 @@ certain functionality.
 @li @c binaryurp
 @li @c cli
 @li @c configmgr
-@li @c configmgr.dconf
 @li @c cppcanvas
 @li @c cppcanvas.emf
 @li @c helpcompiler
