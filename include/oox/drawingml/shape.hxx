@@ -372,6 +372,9 @@ protected:
     Shape3DPropertiesPtr        mp3DPropertiesPtr;
     EffectPropertiesPtr         mpEffectPropertiesPtr;
     EffectPropertiesPtr         mpShapeRefEffectPropPtr;
+    /// The outer shadow this shape gets from its group, or null when the group has no shadow or
+    /// the shape lies within an opaque rectangle of the group.
+    EffectPropertiesPtr         mpGroupShadowPtr;
     PropertyMap                 maShapeProperties;
     PropertyMap                 maDefaultShapeProperties;
     TextListStylePtr            mpMasterTextListStyle;

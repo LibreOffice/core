@@ -113,6 +113,8 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <officecfg/Office/Common.hxx>
@@ -623,6 +625,34 @@ private:
     Reference<document::XActionLockable> m_xLockable;
 };
 
+/// The outer shadow among the effects, or null when they have none.
+EffectPropertiesPtr lcl_getOuterShadow(const EffectProperties& rEffects)
+{
+    for (auto const& pEffect : rEffects.m_Effects)
+    {
+        if (pEffect->msName == "outerShdw")
+        {
+            auto pShadow = std::make_shared<EffectProperties>();
+            pShadow->maShadow.assignUsed(rEffects.maShadow);
+            pShadow->m_Effects.push_back(std::make_unique<Effect>(*pEffect));
+            return pShadow;
+        }
+    }
+    return nullptr;
+}
+
+/// Whether the shadow is scaled or skewed, so its size differs from the shape that casts it.
+bool lcl_isScaledOrSkewed(const Effect& rShadow)
+{
+    auto differs = [&rShadow](const OUString& rName, sal_Int32 nDefault) {
+        auto it = rShadow.maAttribs.find(rName);
+        sal_Int32 nValue = nDefault;
+        return it != rShadow.maAttribs.end() && (it->second >>= nValue) && nValue != nDefault;
+    };
+    return differs(u"sx"_ustr, 100000) || differs(u"sy"_ustr, 100000) || differs(u"kx"_ustr, 0)
+           || differs(u"ky"_ustr, 0);
+}
+
 }
 
 // for group shapes, the following method is also adding each child
@@ -634,8 +664,53 @@ void Shape::addChildren(
         ShapeIdMap* pShapeMap,
         const basegfx::B2DHomMatrix& aTransformation )
 {
+    // A group shape takes no properties, so the shadow set on a group goes to each shape in it.
+    // A group inside the group passes the shadow on to its own shapes, unless it has a shadow of
+    // its own, which then replaces the outer one. A scaled or skewed shadow takes its size and
+    // position from the bounds of the whole group, so a copy on each shape would be wrong.
+    EffectPropertiesPtr pGroupShadow
+        = lcl_getOuterShadow(rMaster.getActualEffectProperties(pTheme));
+    if (pGroupShadow && lcl_isScaledOrSkewed(*pGroupShadow->m_Effects.front()))
+        pGroupShadow = nullptr;
+    // The shadow of a group follows the outline of the whole group. A shape that lies within an
+    // opaque rectangle drawn before it in the group adds nothing to that outline, so it casts no
+    // shadow, and neither do the shapes of a group that lies within one.
+    std::vector<basegfx::B2DRange> aOpaqueRectangles;
     for (auto const& child : rMaster.maChildren)
     {
+        if (!pGroupShadow)
+        {
+            child->mpGroupShadowPtr = nullptr;
+        }
+        else
+        {
+            basegfx::B2DRange aBounds(child->maPosition.X, child->maPosition.Y,
+                                      child->maPosition.X + child->maSize.Width,
+                                      child->maPosition.Y + child->maSize.Height);
+            if (child->mnRotation != 0)
+                aBounds.transform(basegfx::utils::createRotateAroundPoint(
+                    aBounds.getCenter(), basegfx::deg2rad<60000>(child->mnRotation)));
+
+            const bool bCovered = std::any_of(
+                aOpaqueRectangles.begin(), aOpaqueRectangles.end(),
+                [&aBounds](const basegfx::B2DRange& rOpaque) { return rOpaque.isInside(aBounds); });
+            child->mpGroupShadowPtr = bCovered ? nullptr : pGroupShadow;
+
+            // A rectangle turned by a multiple of 90 degrees covers exactly its bounds. A fill
+            // color from the theme takes its transparency from the color of the fill reference.
+            const FillProperties aFill
+                = child->getActualFillProperties(pTheme, &getFillProperties());
+            const ShapeStyleRef* pFillRef = child->getShapeStyleRef(XML_fillRef);
+            const bool bOpaqueColor
+                = aFill.maFillColor.isUsed() && !aFill.maFillColor.hasTransparency()
+                  && (!aFill.maFillColor.isPlaceHolder() || !pFillRef
+                      || !pFillRef->maPhClr.hasTransparency());
+            if (!child->mbHidden && child->mnRotation % (90 * 60000) == 0
+                && child->mpCustomShapePropertiesPtr
+                && child->mpCustomShapePropertiesPtr->getShapePresetType() == XML_rect
+                && aFill.moFillType.value_or(XML_noFill) == XML_solidFill && bOpaqueColor)
+                aOpaqueRectangles.push_back(aBounds);
+        }
         child->setMasterTextListStyle( mpMasterTextListStyle );
         child->addShape( rFilterBase, pTheme, rxShapes, aTransformation, getFillProperties(), pShapeMap, rMaster.shared_from_this());
     }
@@ -3118,6 +3193,21 @@ EffectProperties Shape::getActualEffectProperties(const Theme* pTheme) const
 
     // Properties specified directly for this shape
     aEffectProperties.assignUsed ( getEffectProperties() );
+
+    // The shadow of the group the shape is in, when the shape casts none of its own. CT_EffectList
+    // orders its effects, and an outer shadow comes before a preset shadow, a reflection and a soft
+    // edge, so the stored effects keep that order.
+    if (mpGroupShadowPtr && !lcl_getOuterShadow(aEffectProperties))
+    {
+        aEffectProperties.maShadow.assignUsed(mpGroupShadowPtr->maShadow);
+        auto& rEffects = aEffectProperties.m_Effects;
+        auto itLater = std::find_if(rEffects.begin(), rEffects.end(), [](auto const& pEffect) {
+            return pEffect->msName == "prstShdw" || pEffect->msName == "reflection"
+                   || pEffect->msName == "softEdge";
+        });
+        for (auto const& pEffect : mpGroupShadowPtr->m_Effects)
+            itLater = std::next(rEffects.insert(itLater, std::make_unique<Effect>(*pEffect)));
+    }
 
     return aEffectProperties;
 }

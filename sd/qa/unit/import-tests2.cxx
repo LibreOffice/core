@@ -1393,6 +1393,73 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf115394PPT)
     CPPUNIT_ASSERT_EQUAL(1.0, fTransitionDuration);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testGroupShadowPPTXImport)
+{
+    // The shadow of a group shows on the shapes in the group, also in a group inside it.
+    createSdImpressDoc("pptx/group-shadow.pptx");
+
+    uno::Reference<drawing::XShapes> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShapes> xInnerGroup(xGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    const std::pair<const char*, uno::Reference<beans::XPropertySet>> aInGroup[] = {
+        { "In group", uno::Reference<beans::XPropertySet>(xGroup->getByIndex(0), uno::UNO_QUERY) },
+        { "In inner group",
+          uno::Reference<beans::XPropertySet>(xInnerGroup->getByIndex(0), uno::UNO_QUERY) },
+    };
+    auto getShadowColor = [](const uno::Reference<beans::XPropertySet>& xShape) {
+        Color aColor;
+        xShape->getPropertyValue(u"ShadowColor"_ustr) >>= aColor;
+        return aColor;
+    };
+    for (auto const & [ pName, xShape ] : aInGroup)
+    {
+        CPPUNIT_ASSERT_MESSAGE(pName, xShape->getPropertyValue(u"Shadow"_ustr).get<bool>());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pName, COL_BLACK, getShadowColor(xShape));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            pName, sal_Int16(60),
+            xShape->getPropertyValue(u"ShadowTransparence"_ustr).get<sal_Int16>());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(pName, sal_Int32(141),
+                                     xShape->getPropertyValue(u"ShadowBlur"_ustr).get<sal_Int32>());
+    }
+
+    // A shape in the group with a shadow of its own keeps that shadow.
+    uno::Reference<beans::XPropertySet> xOwnShadow(xGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xOwnShadow->getPropertyValue(u"Shadow"_ustr).get<bool>());
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), getShadowColor(xOwnShadow));
+
+    // The group shadow follows the outline of the group, so a shape on an opaque rectangle of the
+    // group casts none, but a shape on a half transparent rectangle does.
+    auto hasShadow = [](const uno::Any& rShape) {
+        uno::Reference<beans::XPropertySet> xShape(rShape, uno::UNO_QUERY_THROW);
+        return xShape->getPropertyValue(u"Shadow"_ustr).get<bool>();
+    };
+    CPPUNIT_ASSERT(!hasShadow(xGroup->getByIndex(3)));
+    CPPUNIT_ASSERT(hasShadow(xGroup->getByIndex(5)));
+    uno::Reference<drawing::XShapes> xGroupOnOpaque(xGroup->getByIndex(6), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!hasShadow(xGroupOnOpaque->getByIndex(0)));
+    // The rectangle takes its fill from the theme, and the fill reference makes it half
+    // transparent.
+    CPPUNIT_ASSERT(hasShadow(xGroup->getByIndex(9)));
+
+    // A scaled group shadow has the size of the whole group, so the shapes in it get no copy.
+    uno::Reference<drawing::XShapes> xScaledGroup(getShapeFromPage(1, 0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(!hasShadow(xScaledGroup->getByIndex(0)));
+
+    uno::Reference<beans::XPropertySet> xOutside(getShapeFromPage(2, 0));
+    CPPUNIT_ASSERT(!xOutside->getPropertyValue(u"Shadow"_ustr).get<bool>());
+
+    // A shape with a reflection of its own also gets the group shadow, and the export writes the
+    // shadow before the reflection, in the order of CT_EffectList.
+    CPPUNIT_ASSERT(hasShadow(xGroup->getByIndex(7)));
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPathNodeName(pXmlDoc,
+                        "//p:sp[p:nvSpPr/p:cNvPr/@name='Own reflection']/p:spPr/a:effectLst/*[1]",
+                        "outerShdw");
+    assertXPathNodeName(pXmlDoc,
+                        "//p:sp[p:nvSpPr/p:cNvPr/@name='Own reflection']/p:spPr/a:effectLst/*[2]",
+                        "reflection");
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testBulletMarginIndentMapping)
 {
     createSdImpressDoc("pptx/bullet-indent.pptx");
