@@ -1723,7 +1723,9 @@ bool ImpEdgeHdl::IsHorzDrag() const
     }
     else if (eEdgeKind==SdrEdgeKind::ThreeLines)
     {
-        tools::Long nAngle=m_nObjHdlNum==2 ? rInfo.m_nAngle1 : rInfo.m_nAngle2;
+        // The handle moves the line at the end it belongs to, and that end's angle says the way.
+        tools::Long nAngle
+            = m_eLineCode == SdrEdgeLineCode::Obj1Line2 ? rInfo.m_nAngle1 : rInfo.m_nAngle2;
         return nAngle==0 || nAngle==18000;
     }
     return false;
