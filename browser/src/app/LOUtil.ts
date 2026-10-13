@@ -27,6 +27,17 @@ interface IconNameMap {
 	[key: string]: string;
 }
 
+interface ThemedIcon {
+	element: WeakRef<HTMLImageElement | HTMLElement>;
+	name: string;
+	imageIsLayoutCritical?: boolean;
+}
+
+interface ThemedIconSet {
+	icons: Set<ThemedIcon>;
+	byElement: WeakMap<HTMLImageElement | HTMLElement, ThemedIcon>;
+}
+
 declare var DOMPurify: any;
 
 // cool: URLs are used by mobile/derivative apps (iOS, Android, CODA-W,
@@ -449,25 +460,68 @@ class LOUtil {
 			});
 	}
 
+	// The icons that follow the theme, for each map. Each set holds its elements through a WeakRef.
+	private static themedIconSets = new WeakMap<any, ThemedIconSet>();
+
+	// Takes the entry of an icon out of its set when the element is garbage collected.
+	private static themedIconCleanup = new FinalizationRegistry(
+		(entry: { icons: Set<ThemedIcon>; icon: ThemedIcon }) =>
+			entry.icons.delete(entry.icon),
+	);
+
+	private static showIcon(
+		element: HTMLImageElement | HTMLElement,
+		name: string,
+		imageIsLayoutCritical?: boolean,
+	): void {
+		const url = LOUtil.getImageURL(name);
+		if (element instanceof HTMLImageElement) {
+			element.src = url;
+			LOUtil.publishIconURL(element, url);
+			LOUtil.checkIfImageExists(element, imageIsLayoutCritical);
+		} else {
+			element.style.backgroundImage = 'url("' + url + '")';
+		}
+	}
+
+	private static refreshThemedIcons(iconSet: ThemedIconSet): void {
+		for (const icon of iconSet.icons) {
+			const element = icon.element.deref();
+			if (element)
+				LOUtil.showIcon(element, icon.name, icon.imageIsLayoutCritical);
+			else iconSet.icons.delete(icon);
+		}
+	}
+
 	public static setImage(
 		element: HTMLImageElement | HTMLElement,
 		name: string,
 		map: any,
 		imageIsLayoutCritical?: boolean,
 	): void {
-		const setupIcon = function () {
-			const url = LOUtil.getImageURL(name);
-			if (element instanceof HTMLImageElement) {
-				element.src = url;
-				LOUtil.publishIconURL(element, url);
-				LOUtil.checkIfImageExists(element, imageIsLayoutCritical);
-			} else {
-				element.style.backgroundImage = 'url("' + url + '")';
-			}
-		};
-		setupIcon();
+		LOUtil.showIcon(element, name, imageIsLayoutCritical);
 
-		map.on('themechanged', setupIcon);
+		let iconSet = LOUtil.themedIconSets.get(map);
+		if (!iconSet) {
+			const newSet: ThemedIconSet = {
+				icons: new Set(),
+				byElement: new WeakMap(),
+			};
+			map.on('themechanged', () => LOUtil.refreshThemedIcons(newSet));
+			LOUtil.themedIconSets.set(map, newSet);
+			iconSet = newSet;
+		}
+
+		const known = iconSet.byElement.get(element);
+		if (known) {
+			known.name = name;
+			known.imageIsLayoutCritical = imageIsLayoutCritical;
+			return;
+		}
+		const icon = { element: new WeakRef(element), name, imageIsLayoutCritical };
+		iconSet.icons.add(icon);
+		iconSet.byElement.set(element, icon);
+		LOUtil.themedIconCleanup.register(element, { icons: iconSet.icons, icon });
 	}
 
 	public static setUserImage(

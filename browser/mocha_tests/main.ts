@@ -9,6 +9,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+// The tests build for an older language level than the browser code. Add the WeakRef and
+// FinalizationRegistry types, which Node provides at run time.
+/// <reference lib="es2021.weakref" />
+
 // Load the interfaces first.
 /// <reference path="../src/control/jsdialog/Definitions.Types.ts" />
 /// <reference path="../src/app/iface/Clipboard.Interface.ts" />

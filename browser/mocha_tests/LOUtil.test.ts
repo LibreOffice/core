@@ -420,4 +420,119 @@ describe('LOUtil', function () {
 			nodeassert.deepEqual([], setup.tabsShown);
 		});
 	});
+
+	describe('setImage()', function () {
+		let dom: any;
+		let dark: boolean;
+		let realGetImageURL: any;
+		let realHTMLImageElement: any;
+		let realImage: any;
+
+		// A map with the on and fire of Evented, enough for themechanged.
+		function makeMap(): any {
+			const listeners: Array<() => void> = [];
+			return {
+				listenerCount: () => listeners.length,
+				on: (name: string, callback: () => void) => {
+					if (name === 'themechanged') listeners.push(callback);
+				},
+				fireThemeChanged: () => {
+					dark = !dark;
+					listeners.slice().forEach((callback) => callback());
+				},
+			};
+		}
+
+		before(function () {
+			dom = new jsdom.JSDOM('<html><body></body></html>');
+			realHTMLImageElement = (globalThis as any).HTMLImageElement;
+			realImage = (globalThis as any).Image;
+			(globalThis as any).HTMLImageElement = dom.window.HTMLImageElement;
+			(globalThis as any).Image = dom.window.Image;
+			realGetImageURL = LOUtil.getImageURL;
+			LOUtil.getImageURL = (name: string) =>
+				'http://host/images/' + (dark ? 'dark/' : '') + name;
+		});
+
+		after(function () {
+			LOUtil.getImageURL = realGetImageURL;
+			(globalThis as any).HTMLImageElement = realHTMLImageElement;
+			(globalThis as any).Image = realImage;
+		});
+
+		beforeEach(function () {
+			dark = false;
+		});
+
+		it('every icon follows a theme change', function () {
+			const map = makeMap();
+			const first = dom.window.document.createElement('img');
+			const second = dom.window.document.createElement('img');
+			LOUtil.setImage(first, 'lc_bold.svg', map);
+			LOUtil.setImage(second, 'lc_italic.svg', map);
+
+			map.fireThemeChanged();
+
+			nodeassert.strictEqual(first.src, 'http://host/images/dark/lc_bold.svg');
+			nodeassert.strictEqual(
+				second.src,
+				'http://host/images/dark/lc_italic.svg',
+			);
+		});
+
+		it('all icons of a map share one theme listener', function () {
+			const map = makeMap();
+			for (let i = 0; i < 50; i++)
+				LOUtil.setImage(
+					dom.window.document.createElement('img'),
+					'lc_bold.svg',
+					map,
+				);
+
+			nodeassert.strictEqual(map.listenerCount(), 1);
+		});
+
+		it('an icon set up again shows its latest name after a theme change', function () {
+			const map = makeMap();
+			const image = dom.window.document.createElement('img');
+			LOUtil.setImage(image, 'lc_bold.svg', map);
+			LOUtil.setImage(image, 'lc_italic.svg', map);
+
+			map.fireThemeChanged();
+
+			nodeassert.strictEqual(
+				image.src,
+				'http://host/images/dark/lc_italic.svg',
+			);
+		});
+
+		it('an icon set up five times is loaded once per theme change', function () {
+			const map = makeMap();
+			const image = dom.window.document.createElement('img');
+			for (let i = 0; i < 5; i++) LOUtil.setImage(image, 'lc_bold.svg', map);
+
+			let loads = 0;
+			const stub = LOUtil.getImageURL;
+			LOUtil.getImageURL = (name: string) => {
+				loads++;
+				return stub(name);
+			};
+			map.fireThemeChanged();
+			LOUtil.getImageURL = stub;
+
+			nodeassert.strictEqual(loads, 1);
+		});
+
+		it('an element with a background image follows a theme change', function () {
+			const map = makeMap();
+			const div = dom.window.document.createElement('div');
+			LOUtil.setImage(div, 'lc_bold.svg', map);
+
+			map.fireThemeChanged();
+
+			nodeassert.ok(
+				div.style.backgroundImage.includes('images/dark/lc_bold.svg'),
+			);
+		});
+	});
 });
