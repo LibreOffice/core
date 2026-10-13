@@ -419,6 +419,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapFastScaleFilter \
     vcl/source/bitmap/BitmapScaleSuperFilter \
     vcl/source/bitmap/BitmapScaleConvolutionFilter \
+    vcl/source/bitmap/BitmapScaleConvolutionRows \
     vcl/source/bitmap/BitmapSymmetryCheck \
     vcl/source/bitmap/BitmapColorQuantizationFilter \
     vcl/source/bitmap/BitmapSimpleColorQuantizationFilter \
@@ -601,6 +602,10 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/jsdialog/jsdialogregister \
     vcl/jsdialog/jsdialogsender \
     vcl/jsdialog/executor \
+))
+
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/bitmap/BitmapScaleConvolutionRowsAVX2, $(CXXFLAGS_INTRINSICS_AVX2) \
 ))
 
 $(eval $(call gb_Library_add_cobjects,vcl,\
