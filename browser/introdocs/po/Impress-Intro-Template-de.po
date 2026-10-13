@@ -115,11 +115,11 @@ msgstr "Nächstes Kapitel: 🎨 Design & Folienmaster"
 #. content.xml (slide 'page3')
 msgid ""
 "<1>A </1><2>master slide</2><3> is the template behind every slide. It "
-"defines the colours, fonts, background, and where titles and footers go. "
-"</3><4>Change</4><5> </5><6>the master, and every slide updates at once. "
-"</6><7>This makes master slides the fastest way to keep a deck consistent. "
-"Set the look once (fonts, colours, logo, footer) and every new slide picks "
-"it up automatically. When you need to rebrand or tweak the design later, you "
+"defines the colours, fonts, background, and where titles and footers go. </"
+"3><4>Change</4><5> </5><6>the master, and every slide updates at once. </"
+"6><7>This makes master slides the fastest way to keep a deck consistent. Set "
+"the look once (fonts, colours, logo, footer) and every new slide picks it up "
+"automatically. When you need to rebrand or tweak the design later, you "
 "change the master, not 30 slides.</7>"
 msgstr ""
 
@@ -232,10 +232,10 @@ msgstr "Nächstes Kapitel: 🎤 Präsentieren"
 
 #. content.xml (slide 'page6')
 msgid ""
-"<1>When you're ready to present, start your slide show and the "
-"</1><2>Presenter Console</2><3> opens. You'll see your current slide, the "
-"next one coming up, a timer, and your speaker notes, while your audience "
-"sees only the slide.</3>"
+"<1>When you're ready to present, start your slide show and the </"
+"1><2>Presenter Console</2><3> opens. You'll see your current slide, the next "
+"one coming up, a timer, and your speaker notes, while your audience sees "
+"only the slide.</3>"
 msgstr ""
 
 #. content.xml (slide 'page6')
@@ -260,8 +260,8 @@ msgstr "Nächstes Kapitel: 🤝 Produktivität & Zusammenarbeit"
 
 #. content.xml (slide 'page7')
 msgid ""
-"<1>A range of features helps you </1><2>stay productive</2><3> and "
-"</3><4>collaborate with others</4><5>, making it easier to work together and "
+"<1>A range of features helps you </1><2>stay productive</2><3> and </"
+"3><4>collaborate with others</4><5>, making it easier to work together and "
 "share your decks.</5>"
 msgstr ""
 
@@ -286,8 +286,8 @@ msgid ""
 "tab in </1><2>Keyboard shortcuts</2>"
 msgstr ""
 "<1>Tastenkombinationen beschleunigen Ihren Arbeitsablauf. Die vollständige "
-"Liste finden Sie auf der Registerkarte Hilfe unter "
-"</1><2>Tastenkombinationen</2>"
+"Liste finden Sie auf der Registerkarte Hilfe unter </"
+"1><2>Tastenkombinationen</2>"
 
 #. content.xml (slide 'page7')
 msgid "▶️ Video tutorials"
