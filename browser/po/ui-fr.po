@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-08 10:49+0000\n"
-"Last-Translator: Méven Car <meven.car@collabora.com>\n"
+"PO-Revision-Date: 2026-10-13 13:17+0000\n"
+"Last-Translator: Méven Car <meven@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/fr/>\n"
-"Language: \n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -1100,7 +1100,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2867
 msgid "As per system"
-msgstr ""
+msgstr "Conformément au système"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2902
 msgid ""
@@ -1129,6 +1129,8 @@ msgid ""
 "Credentials for the electronic signature service. They are shared by "
 "everyone on this server."
 msgstr ""
+"informations d'identification au service de signature électronique. Ils sont "
+"partagés par tous sur ce serveur."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3060
 #: admin/src/integrator/AdminIntegratorSettings.ts:4719
@@ -1166,7 +1168,7 @@ msgstr "Réinitialiser"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3140
 msgid "Use the AI provider set on the server"
-msgstr ""
+msgstr "Utilisez le fournisseur IA défini par le serveur"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3190
 #, fuzzy
@@ -1175,35 +1177,42 @@ msgstr "Fournisseur"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3193
 msgid "Managed by your admin"
-msgstr ""
+msgstr "Géré par votre administrateur"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3199
 msgid "No providers added yet"
-msgstr ""
+msgstr "Aucun fournisseur ajouté"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3205
 msgid ""
 "Add a provider to start using AI for text generation, image generation, or "
 "both. Your administrator's provider is filled in for you."
 msgstr ""
+"Ajoutez un fournisseur pour commencer à utiliser l'IA pour la génération de "
+"texte, la génération d'images ou les deux. Le fournisseur de votre "
+"administrateur est sélectionné pour vous."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3213
 msgid "Add provider..."
-msgstr ""
+msgstr "Ajouter le fournisseur..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3233
 msgid "Choose the AI provider to use for text and image generation."
 msgstr ""
+"Choisissez le fournisseur d'IA à utiliser pour la production de texte et "
+"d'images."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3235
 msgid ""
 "Use your own AI provider instead of the one set up by your administrator. "
 "This applies only to you."
 msgstr ""
+"Utilisez votre propre fournisseur d'IA au lieu de celui mis en place par "
+"votre administrateur. Cela ne s'applique qu'à vous."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3390
 msgid "seconds"
-msgstr ""
+msgstr "secondes"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3399
 #, fuzzy
@@ -1233,6 +1242,9 @@ msgid ""
 "Models without it (e.g. base llama3, gemma) can still chat but cannot use "
 "document tools."
 msgstr ""
+"Pour modifier les documents, choisissez un modèle avec appel d'outils, p.ex. "
+"gpt-4o ou llama3.1. Les modèles sans (p. ex. llama3, gemma de base) peuvent "
+"encore discuter mais ne peuvent pas utiliser des outils de document."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3491
 #, fuzzy
@@ -1241,15 +1253,15 @@ msgstr "Génération image"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3499
 msgid "Same as text provider"
-msgstr ""
+msgstr "Même que le fournisseur de texte"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3854
 msgid "Required for this provider"
-msgstr ""
+msgstr "Requis pour ce fournisseur"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3947
 msgid "Enter an API key for this provider to list its models."
-msgstr ""
+msgstr "Entrez une clé API pour ce fournisseur pour lister ses modèles."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3963
 #: admin/src/integrator/AdminIntegratorSettings.ts:4085
@@ -1266,7 +1278,7 @@ msgstr "Pas de modèle trouvé"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4035
 #: admin/src/integrator/AdminIntegratorSettings.ts:4151
 msgid "Connected"
-msgstr ""
+msgstr "Connecté"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4041
 #: admin/src/integrator/AdminIntegratorSettings.ts:4157
@@ -1336,7 +1348,7 @@ msgstr "Entrez {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4991
 msgid "Delete {0}"
-msgstr ""
+msgstr "Supprimer {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5054
 msgid "Reset to default {0}"
@@ -2717,6 +2729,8 @@ msgstr "Délai dépassé de décodage de la formule"
 #: src/control/Control.AIChatSidebar.ts:3636
 msgid "Select the content you want the assistant to work on first."
 msgstr ""
+"Sélectionnez le contenu sur lequel vous voulez que l'assistant travaille "
+"d'abord."
 
 #: src/control/Control.AIChatSidebar.ts:3651
 msgid "Analyzing formula dependencies..."
@@ -2857,10 +2871,12 @@ msgid ""
 "Describe the image you want to generate. For example: \"A watercolour of a "
 "mountain lake at sunrise\"."
 msgstr ""
+"Décrivez l'image que vous voulez générer. Par exemple : \"Une aquarelle d'un "
+"lac de montagne au lever du soleil\"."
 
 #: src/control/Control.AIChatSidebar.ts:3916
 msgid "Write speaker notes for the current slide."
-msgstr ""
+msgstr "Écrivez des notes de présentateur pour la diapositive actuelle."
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid ""
@@ -2940,18 +2956,21 @@ msgstr ""
 #: src/control/Control.CleanupSidebar.ts:204
 msgid "Images stored with more detail than a slide can show"
 msgstr ""
+"Les images stockées avec plus de détails qu'une diapositive peut afficher"
 
 #: src/control/Control.CleanupSidebar.ts:207
 msgid "Images stored at more than %1 DPI, more detail than a slide can show"
 msgstr ""
+"Images stockées à plus de %1 PPP, plus de détails qu'une diapositive peut "
+"afficher"
 
 #: src/control/Control.CleanupSidebar.ts:224
 msgid "High-resolution images"
-msgstr ""
+msgstr "Images en haute résolution"
 
 #: src/control/Control.CleanupSidebar.ts:230
 msgid "Cropped images"
-msgstr ""
+msgstr "Images rognées"
 
 #: src/control/Control.CleanupSidebar.ts:236
 #: src/control/Control.BackstageView.ts:891
@@ -2974,11 +2993,11 @@ msgstr "Diapositives maître inutilisées (%1)"
 
 #: src/control/Control.CleanupSidebar.ts:252
 msgid "For sharing"
-msgstr ""
+msgstr "Pour le partage"
 
 #: src/control/Control.CleanupSidebar.ts:254
 msgid "Speaker notes"
-msgstr ""
+msgstr "Notes de présentateur"
 
 #: src/control/Control.CleanupSidebar.ts:258
 #, fuzzy
@@ -2987,19 +3006,19 @@ msgstr "Objets embarqués (%1)"
 
 #: src/control/Control.CleanupSidebar.ts:359
 msgid "images left alone"
-msgstr ""
+msgstr "images sans modification"
 
 #: src/control/Control.CleanupSidebar.ts:361
 msgid "%1 DPI, quality %2 %"
-msgstr ""
+msgstr "%1 PPP, qualité %2 %"
 
 #: src/control/Control.CleanupSidebar.ts:374
 msgid "%1 can be cleaned up"
-msgstr ""
+msgstr "%1 peut être nettoyé"
 
 #: src/control/Control.CleanupSidebar.ts:376
 msgid "%1 (%2%) can be cleaned up"
-msgstr ""
+msgstr "%1 (%2 %) peut être nettoyé"
 
 #: src/control/Control.CleanupSidebar.ts:384
 msgid "Fix"
@@ -3021,7 +3040,7 @@ msgstr "%1 Mo"
 
 #: src/control/Control.CleanupSidebar.ts:479
 msgid "Remove %1"
-msgstr ""
+msgstr "Supprimer %1"
 
 #: src/control/Control.CleanupSidebar.ts:481
 msgid "Fix %1"
@@ -3075,11 +3094,11 @@ msgstr "%1 à %2 PPP"
 #: src/control/Control.CleanupSidebar.ts:586
 #, javascript-format
 msgid "%1% cropped away"
-msgstr ""
+msgstr "%1% réduit par rognage"
 
 #: src/control/Control.CleanupSidebar.ts:588
 msgid "%1, %2% cropped away"
-msgstr ""
+msgstr "%1, %2% réduit par rognage"
 
 #: src/control/Control.CleanupSidebar.ts:655
 msgid "Leave images alone"
@@ -3181,7 +3200,7 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:1013
 msgid "Find what makes this presentation large, and clean it up here."
-msgstr ""
+msgstr "Trouvez ce qui rend cette présentation lourde, et nettoyer ici."
 
 #: src/control/Control.CleanupSidebar.ts:1077
 #, fuzzy
@@ -3202,7 +3221,7 @@ msgstr "Nettoyez"
 
 #: src/control/Control.CleanupSidebar.ts:2439
 msgid "The cleanup did not answer. Please try again."
-msgstr ""
+msgstr "Le nettoyage n'a pas répondu. Veuillez réessayer."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3561,92 +3580,107 @@ msgstr "Rejeter"
 
 #: src/control/onboarding/OnboardingSteps.ts:25
 msgid "Welcome to Collabora Online"
-msgstr ""
+msgstr "Bienvenue sur Collabora Online"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "This short tour points out the parts of the screen you will use most."
 msgstr ""
+"Cette courte visite indique les parties de l'écran que vous utiliserez le "
+"plus."
 
 #: src/control/onboarding/OnboardingSteps.ts:32
 msgid "The document name"
-msgstr ""
+msgstr "Le nom du document"
 
 #: src/control/onboarding/OnboardingSteps.ts:34
 msgid ""
 "Select the name to rename the document. Every change is saved as you work."
 msgstr ""
+"Sélectionnez le nom pour renommer le document. Chaque changement est sauvé "
+"au fil du temps que vous travaillez."
 
 #: src/control/onboarding/OnboardingSteps.ts:40
 msgid "The tabs"
-msgstr ""
+msgstr "Les onglets"
 
 #: src/control/onboarding/OnboardingSteps.ts:42
 msgid ""
 "Each tab gathers the tools for one kind of work, such as inserting or "
 "reviewing."
 msgstr ""
+"Chaque onglet rassemble les outils pour une sorte de travail, comme "
+"l'insertion ou les révisions."
 
 #: src/control/onboarding/OnboardingSteps.ts:49
 msgid "The menus"
-msgstr ""
+msgstr "Les menus"
 
 #: src/control/onboarding/OnboardingSteps.ts:50
 msgid "Every command of the editor is in one of these menus."
-msgstr ""
+msgstr "Chaque commande de l'éditeur est dans l'un de ces menus."
 
 #: src/control/onboarding/OnboardingSteps.ts:56
 msgid "The tools"
-msgstr ""
+msgstr "Les outils"
 
 #: src/control/onboarding/OnboardingSteps.ts:57
 msgid "The buttons of the tab you selected appear along this row."
 msgstr ""
+"Les boutons de l'onglet que vous avez sélectionnés apparaissent le long de "
+"cette ligne."
 
 #: src/control/onboarding/OnboardingSteps.ts:63
 msgid "The toolbar"
-msgstr ""
+msgstr "La barre d'outils"
 
 #: src/control/onboarding/OnboardingSteps.ts:64
 msgid "The buttons you need most often sit here, under the menus."
 msgstr ""
+"Les boutons dont vous avez le plus besoin sont présents ici, dans les menus."
 
 #: src/control/onboarding/OnboardingSteps.ts:70
 msgid "The formula bar"
-msgstr ""
+msgstr "La barre de formule"
 
 #: src/control/onboarding/OnboardingSteps.ts:72
 msgid ""
 "The contents of the selected cell appear here. Type an equals sign to start "
 "a formula."
 msgstr ""
+"Le contenu de la cellule sélectionnée apparaît ici. Tapez un signe égal pour "
+"commencer une formule."
 
 #: src/control/onboarding/OnboardingSteps.ts:79
 msgid "The slide panel"
-msgstr ""
+msgstr "Le panneau de diapositive"
 
 #: src/control/onboarding/OnboardingSteps.ts:81
 msgid ""
 "Every slide or page of the document is listed here. Select one to work on "
 "it."
 msgstr ""
+"Chaque diapositive ou page du document est listée ici. Sélectionnez une pour "
+"travailler dessus."
 
 #: src/control/onboarding/OnboardingSteps.ts:89
 msgid "The sidebar"
-msgstr ""
+msgstr "La barre latérale"
 
 #: src/control/onboarding/OnboardingSteps.ts:91
 msgid ""
 "The sidebar holds the settings for whatever you have selected, such as "
 "text, a shape or a cell."
 msgstr ""
+"La barre latérale contient les paramètres de ce que vous avez sélectionné, "
+"comme le texte, une forme ou une cellule."
 
 #: src/control/onboarding/OnboardingSteps.ts:98
 msgid "The people in the document"
-msgstr ""
+msgstr "Les personnes dans le document"
 
 #: src/control/onboarding/OnboardingSteps.ts:99
 msgid "See who else is editing and share the document."
-msgstr ""
+msgstr "Voyez qui d'autre édite et partager le document."
 
 #: src/control/onboarding/OnboardingSteps.ts:109
 #, fuzzy
@@ -3658,23 +3692,24 @@ msgid ""
 "The state of the document, the language of the text and the zoom level are "
 "along the bottom."
 msgstr ""
+"L'état du document, la langue du texte et le niveau de zoom sont en bas."
 
 #: src/control/onboarding/OnboardingSteps.ts:118
 msgid "You are ready to work"
-msgstr ""
+msgstr "Vous êtes prêt à travailler"
 
 #: src/control/onboarding/OnboardingSteps.ts:119
 msgid "You can walk through this tour again from the Help menu."
-msgstr ""
+msgstr "Vous pouvez à nouveau parcourir cette visite depuis le menu Aide."
 
 #: src/control/onboarding/Control.OnboardingTour.ts:245
 #: src/slideshow/engine/SlideShowHandler.ts:116
 msgid "Skip"
-msgstr ""
+msgstr "Passer"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:251
 msgid "Back"
-msgstr ""
+msgstr "Retour"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
 #, fuzzy
@@ -4494,7 +4529,7 @@ msgstr "Aide en ligne"
 #: src/control/Control.Menubar.ts:834 src/control/Control.Menubar.ts:1152
 #: src/control/Control.NotebookbarWriter.js:541
 msgid "Show tour"
-msgstr ""
+msgstr "Tour de démonstration"
 
 #: src/control/Control.Menubar.ts:455 src/control/Control.Menubar.ts:668
 #: src/control/Control.Menubar.ts:836 src/control/Control.Menubar.ts:1154
