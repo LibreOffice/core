@@ -222,7 +222,7 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
 
                 mpDocSh->CallXScript(aMacro, aParams, aRet, aOutArgsIndex, aOutArgs);
             }
-            else
+            else if (SfxObjectShell::isScriptAccessAllowed(mpDocSh->GetModel()))
             {
                 // aMacro has got following format:
                 // "Macroname.Modulname.Libname.Documentname" or
