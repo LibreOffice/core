@@ -19,11 +19,14 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <comphelper/base64.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/string_view.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include <libxml/xpathInternals.h>
 
@@ -70,6 +73,36 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
     // i.e. the SVG export result re-compressed the image as PNG, even if the original and the
     // transformed image is the same, so there is no need for that.
     CPPUNIT_ASSERT(aAttributeValue.startsWith("data:image/jpeg"));
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreviewDownscalesJpg)
+{
+// On Windows, SVGFilter::filterWriterOrCalc can't get current frame to obtain selection
+#if !defined(MACOSX) && !defined(_WIN32)
+    // The image is a 2560x1920 pixel JPEG, larger than a preview needs.
+    loadFromFile(u"preview-large-jpg.fodt");
+    dispatchCommand(mxComponent, u".uno:JumpToNextFrame"_ustr, {});
+
+    save(TestFilter::SVG_WRITER, { comphelper::makePropertyValue(u"SelectionOnly"_ustr, true),
+                                   comphelper::makePropertyValue(u"IsPreview"_ustr, true) });
+
+    // The preview holds a JPEG scaled down to fit 1280x720 pixels.
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+    OUString aHref = getXPath(pXmlDoc, "//svg:image", "href");
+    static constexpr OUString aPrefix(u"data:image/jpeg;base64,"_ustr);
+    CPPUNIT_ASSERT(aHref.startsWith(aPrefix));
+    uno::Sequence<sal_Int8> aData;
+    comphelper::Base64::decode(aData, aHref.subView(aPrefix.getLength()));
+    SvMemoryStream aStream(aData.getArray(), aData.getLength(), StreamMode::READ);
+    Graphic aGraphic;
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
+                         GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, u"", aStream));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 960x720
+    // - Actual  : 2560x1920
+    // i.e. the preview carried the original JPEG at full size.
+    CPPUNIT_ASSERT_EQUAL(Size(960, 720), aGraphic.GetSizePixel());
 #endif
 }
 

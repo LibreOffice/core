@@ -30,6 +30,7 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_svg, \
     unotest \
     utl \
     tl \
+    vcl \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,filter_svg))

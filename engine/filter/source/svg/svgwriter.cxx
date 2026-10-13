@@ -3026,6 +3026,26 @@ void SVGActionWriter::ImplWriteBmp( const Bitmap& rBmp,
     if( aBmp.IsEmpty() )
         return;
 
+    const Bitmap* pBitmap = &rBmp;
+    Bitmap aNewBitmap;
+
+    // for preview we generate downscaled images (1280x720 max)
+    if (mbIsPreview)
+    {
+        Size aSize = rBmp.GetSizePixel();
+        double fX = static_cast<double>(aSize.getWidth()) / 1280;
+        double fY = static_cast<double>(aSize.getHeight()) / 720;
+        double fFactor = fX > fY ? fX : fY;
+        if (fFactor > 1.0)
+        {
+            aSize.setWidth(aSize.getWidth() / fFactor);
+            aSize.setHeight(aSize.getHeight() / fFactor);
+            aNewBitmap = rBmp;
+            aNewBitmap.Scale(aSize);
+            pBitmap = &aNewBitmap;
+        }
+    }
+
     SvMemoryStream aOStm( 65535, 65535 );
 
     bool bCached = false;
@@ -3049,7 +3069,7 @@ void SVGActionWriter::ImplWriteBmp( const Bitmap& rBmp,
                 {
                     bJPG = true;
                 }
-                if (bPNG || bJPG)
+                if ((bPNG || bJPG) && pBitmap == &rBmp)
                 {
                     aOStm.WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
                     bCached = true;
@@ -3058,27 +3078,9 @@ void SVGActionWriter::ImplWriteBmp( const Bitmap& rBmp,
         }
     }
 
-    const Bitmap* pBitmap = &rBmp;
-    Bitmap aNewBitmap;
-
-    // for preview we generate downscaled images (1280x720 max)
-    if (mbIsPreview)
-    {
-        Size aSize = rBmp.GetSizePixel();
-        double fX = static_cast<double>(aSize.getWidth()) / 1280;
-        double fY = static_cast<double>(aSize.getHeight()) / 720;
-        double fFactor = fX > fY ? fX : fY;
-        if (fFactor > 1.0)
-        {
-            aSize.setWidth(aSize.getWidth() / fFactor);
-            aSize.setHeight(aSize.getHeight() / fFactor);
-            aNewBitmap = rBmp;
-            aNewBitmap.Scale(aSize);
-            pBitmap = &aNewBitmap;
-        }
-    }
-
-    if( !(bCached || GraphicConverter::Export( aOStm, *pBitmap, ConvertDataFormat::PNG ) == ERRCODE_NONE) )
+    // A downscaled photo stays a JPEG, which is far smaller than a PNG of it.
+    const ConvertDataFormat eFormat = bJPG ? ConvertDataFormat::JPG : ConvertDataFormat::PNG;
+    if( !(bCached || GraphicConverter::Export( aOStm, *pBitmap, eFormat ) == ERRCODE_NONE) )
         return;
 
     Point                    aPt;
