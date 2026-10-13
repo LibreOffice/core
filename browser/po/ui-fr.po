@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-13 13:17+0000\n"
+"PO-Revision-Date: 2026-10-13 18:14+0000\n"
 "Last-Translator: Méven Car <meven@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/fr/>\n"
@@ -4861,47 +4861,47 @@ msgstr ""
 #: src/control/Notebookbar.AIAssistantTab.ts:79
 #: src/control/Notebookbar.AIAssistantTab.ts:122
 msgid "Text Tools"
-msgstr ""
+msgstr "Outils de texte"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:93
 msgid "Slide Tools"
-msgstr ""
+msgstr "Outils de diapositive"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:106
 msgid "Formula Tools"
-msgstr ""
+msgstr "Outils de Formule"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:116
 msgid "Data Tools"
-msgstr ""
+msgstr "Outils de données"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:143
 msgid "Shorten"
-msgstr ""
+msgstr "Raccourcir"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:145
 msgid "Rewrite the selected text so it is shorter."
-msgstr ""
+msgstr "Réécrire le texte sélectionné afin qu'il soit plus court."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:150
 msgid "Formalize"
-msgstr ""
+msgstr "Formaliser"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:152
 msgid "Rewrite the selected text in a formal tone."
-msgstr ""
+msgstr "Réécrire le texte sélectionné dans un ton formel."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:157
 msgid "Casualize"
-msgstr ""
+msgstr "Rendre informel"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:159
 msgid "Rewrite the selected text in a casual, friendly tone."
-msgstr ""
+msgstr "Réécrire le texte sélectionné dans un ton décontracté et convivial."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:164
 msgid "Summarize"
-msgstr ""
+msgstr "Résumer"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:166
 #, fuzzy
@@ -4910,27 +4910,29 @@ msgstr "Résumer les points clés de ce texte"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:171
 msgid "Expand"
-msgstr ""
+msgstr "Étendre"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:173
 msgid "Expand the selected text and add more detail."
-msgstr ""
+msgstr "Étendre le texte sélectionné et ajouter plus de détail."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:178
 msgid "Fix Grammar"
-msgstr ""
+msgstr "Corriger la grammaire"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:181
 msgid "Fix grammar, spelling, and punctuation errors in the selected text."
 msgstr ""
+"Corriger les erreurs de grammaire, d'orthographe et de ponctuation dans le "
+"texte sélectionné."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:187
 msgid "Make Bullets"
-msgstr ""
+msgstr "Faire une liste à puces"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:189
 msgid "Rewrite the selected text as short bullet points."
-msgstr ""
+msgstr "Réécrire le texte sélectionné sous forme de liste à puces."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:194
 #, fuzzy
@@ -4944,7 +4946,7 @@ msgstr "Image générée par IA"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
-msgstr ""
+msgstr "Générer les notes de présentateur"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:215
 #, fuzzy
@@ -4953,27 +4955,27 @@ msgstr "Créer une formule"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:222
 msgid "Explain Formula"
-msgstr ""
+msgstr "Expliquer la formule"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:224
 msgid "Explain the formula in the selected cell."
-msgstr ""
+msgstr "Expliquez la formule dans la cellule sélectionnée."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:229
 msgid "Fix Formula Error"
-msgstr ""
+msgstr "Corriger l'erreur de formule"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:236
 msgid "Clean Up Data"
-msgstr ""
+msgstr "Nettoyez les données"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:243
 msgid "Suggest Chart"
-msgstr ""
+msgstr "Suggérer un graphique"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:245
 msgid "Suggest a chart for the selected data."
-msgstr ""
+msgstr "Proposer un graphique pour les données sélectionnées."
 
 #: src/control/Notebookbar.CalcTableTab.ts:45
 #: src/control/Notebookbar.TableDesignTabBase.ts:54
@@ -5182,7 +5184,7 @@ msgstr "Animations"
 #: src/control/Control.Notebookbar.js:650
 #: src/control/Control.NotebookbarWriter.js:3077
 msgid "Fill Color (Transparent Pictures Only)"
-msgstr ""
+msgstr "Couleur de remplissage (Photos transparentes seulement)"
 
 #: src/control/Control.Notebookbar.js:661
 #, fuzzy
@@ -5195,11 +5197,11 @@ msgstr "Largeur de ligne"
 
 #: src/control/Control.Notebookbar.js:737
 msgid "Transparency:"
-msgstr ""
+msgstr "Transparence :"
 
 #: src/control/Control.Notebookbar.js:756
 msgid "Thickness:"
-msgstr ""
+msgstr "Épaisseur :"
 
 #: src/control/Control.NotebookbarBuilder.js:205
 #: src/control/Control.NotebookbarBuilder.js:610
@@ -5832,7 +5834,7 @@ msgstr "Aligner sur la grille"
 
 #: src/control/Control.NotebookbarImpress.js:823
 msgid "Shapes Sidebar"
-msgstr ""
+msgstr "Barre latérale des formes"
 
 #: src/control/Control.NotebookbarImpress.js:924
 #: src/control/Control.NotebookbarImpress.js:2005
@@ -5963,7 +5965,7 @@ msgstr "Voir les Changements"
 
 #: src/control/Control.NotebookbarWriter.js:2656
 msgid "Element categories"
-msgstr ""
+msgstr "Catégories d'éléments"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
@@ -6105,19 +6107,23 @@ msgstr "Lecture des diapositives..."
 
 #: src/control/Control.SlideImportPane.tsx:742
 msgid "Looking for the file..."
-msgstr ""
+msgstr "Recherche du fichier..."
 
 #: src/control/Control.SlideImportPane.tsx:745
 msgid ""
 "The slides are in this presentation. You do not have permission to open the "
 "file they came from."
 msgstr ""
+"Les diapositives sont dans cette présentation. Vous n'avez pas la permission "
+"d'ouvrir le fichier source."
 
 #: src/control/Control.SlideImportPane.tsx:749
 msgid ""
 "The slides are in this presentation. Looking for the file they came from "
 "did not work this time."
 msgstr ""
+"Les diapositives sont dans cette présentation. La recherche du dossier dont "
+"ils sont venus n'a pas fonctionné pas cette fois."
 
 #: src/control/Control.SlideImportPane.tsx:752
 msgid ""
@@ -6138,7 +6144,7 @@ msgstr "Ce fichier n'a pas pu être lu cette fois."
 #: src/control/Control.SlideImportPane.tsx:769
 #: src/control/Control.SlideImportPane.tsx:1292
 msgid "Look again"
-msgstr ""
+msgstr "Recherche à nouveau"
 
 #: src/control/Control.SlideImportPane.tsx:774
 #: src/control/Control.SlideImportPane.tsx:1297
@@ -6433,7 +6439,7 @@ msgstr "Maximiser en grille"
 
 #: src/control/Control.PaneExpander.ts:115
 msgid "Exit grid"
-msgstr ""
+msgstr "Quitter la grille"
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
@@ -7106,15 +7112,15 @@ msgstr ""
 
 #: src/control/Permission.js:607
 msgid "opened this document"
-msgstr ""
+msgstr "a ouvert ce document"
 
 #: src/control/Permission.js:608
 msgid "{0} opened this document"
-msgstr ""
+msgstr "{0} a ouvert ce document"
 
 #: src/control/Permission.js:609 src/control/Permission.js:625
 msgid "Choose how you'd like to continue:"
-msgstr ""
+msgstr "Choisissez comment vous souhaitez continuer :"
 
 #: src/control/Permission.js:619
 msgid "started editing"
@@ -7275,7 +7281,7 @@ msgstr "Bloquer la sélection"
 
 #: src/control/Toolbar.js:70
 msgid "The current font is not available and will be substituted."
-msgstr ""
+msgstr "La police actuelle n'est pas disponible et sera remplacée."
 
 #: src/control/Toolbar.js:205 src/control/Toolbar.js:218
 msgid "Downloading..."
@@ -7292,7 +7298,7 @@ msgstr "Renommage..."
 
 #: src/control/Toolbar.js:907
 msgid "Unable to share"
-msgstr ""
+msgstr "Incapable de partager"
 
 #: src/control/VRuler.ts:198 src/control/VRuler.ts:425
 msgid "Top Margin"
@@ -7327,7 +7333,7 @@ msgstr "Visualisation"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:333
 msgid "Save Image to Server"
-msgstr ""
+msgstr "Enregistrer l'image sur le serveur"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:435
 msgid "Paste Special"
@@ -7416,7 +7422,7 @@ msgstr "Légal"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1542
 msgid "Long Bond"
-msgstr ""
+msgstr "Liaison longue"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1543
 msgid "Tabloid"
@@ -7439,15 +7445,15 @@ msgstr "B4 (ISO)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1547
 msgid "16 Kai"
-msgstr ""
+msgstr "16 Kai"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1548
 msgid "32 Kai"
-msgstr ""
+msgstr "32 Kai"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1549
 msgid "Big 32 Kai"
-msgstr ""
+msgstr "Big 32 Kai"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1550
 msgid "User"
@@ -7480,7 +7486,7 @@ msgstr "Enveloppe C6"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1563
 msgid "#7¾ (Monarch) Envelope"
-msgstr ""
+msgstr "Enveloppe 7¾ (Monarch)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1566
 msgid "#9 Envelope"
@@ -7532,15 +7538,15 @@ msgstr "Très lâche"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1806
 msgid "Copy Markdown"
-msgstr ""
+msgstr "Copier en Markdown"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1834
 msgid "Inline"
-msgstr ""
+msgstr "En-ligne"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1841
 msgid "Side by Side"
-msgstr ""
+msgstr "Côte à côte"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1861
 msgid "This user"
@@ -7562,15 +7568,15 @@ msgstr "Règles de premiers/derniers..."
 
 #: src/control/jsdialog/Definitions.Menu.ts:1984
 msgid "Color Scale"
-msgstr ""
+msgstr "Échelle de couleur"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1989
 msgid "Data Bar"
-msgstr ""
+msgstr "Barre de donnée"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1994
 msgid "Icon Set"
-msgstr ""
+msgstr "Jeu d'icônes"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2011
 msgid "No Borders"
@@ -7714,59 +7720,59 @@ msgstr "Insérer une date"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:36
 msgid "Dark 1"
-msgstr ""
+msgstr "Sombre 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:37
 msgid "Light 1"
-msgstr ""
+msgstr "Clair 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:38
 msgid "Dark 2"
-msgstr ""
+msgstr "Sombre 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:39
 msgid "Light 2"
-msgstr ""
+msgstr "Clair 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:40
 msgid "Accent 1"
-msgstr ""
+msgstr "Accent 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:41
 msgid "Accent 2"
-msgstr ""
+msgstr "Accent 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:42
 msgid "Accent 3"
-msgstr ""
+msgstr "Accent 3"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:43
 msgid "Accent 4"
-msgstr ""
+msgstr "Accent 4"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:44
 msgid "Accent 5"
-msgstr ""
+msgstr "Accent 5"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:45
 msgid "Accent 6"
-msgstr ""
+msgstr "Accent 6"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
-msgstr ""
+msgstr "Hyperlien"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:47
 msgid "Followed Hyperlink"
-msgstr ""
+msgstr "Hyperlien suivi"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:56
 msgid "%1, %2% Lighter"
-msgstr ""
+msgstr "%1, %2% plus clair"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:60
 msgid "%1, %2% Darker"
-msgstr ""
+msgstr "%1, %2% plus sombre"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:79
 #: src/control/jsdialog/Widget.ColorPicker.ts:186
@@ -7783,7 +7789,7 @@ msgstr "Automatique"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:286
 msgid "Palette"
-msgstr ""
+msgstr "Palette"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:301
 msgid "Color palette"
@@ -7796,57 +7802,59 @@ msgstr "Ouvrir le lien"
 
 #: src/control/jsdialog/Widget.Combobox.js:498
 msgid "Filter entries"
-msgstr ""
+msgstr "Filtrer les entrées"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:64
 msgid "Position {n}, split set"
-msgstr ""
+msgstr "Position {n}, lot séparé"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:65
 msgid "Position {n}, no split"
-msgstr ""
+msgstr "Position {n}, non séparée"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:228
 msgid ""
 "Column split ruler. Use the arrow keys to move the cursor and Space to "
 "toggle a split."
 msgstr ""
+"Règle de séparation de colonnes. Utilisez les touches flèches pour déplacer "
+"le curseur et l'espace pour basculer une fraction."
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:414
 msgid "CSV import preview"
-msgstr ""
+msgstr "Aperçu de l'importation CSV"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:436
 msgid "Line number"
-msgstr ""
+msgstr "Numéros de ligne"
 
 #: src/control/jsdialog/Widget.CsvGrid.ts:451
 msgid "Column {index}"
-msgstr ""
+msgstr "Colonne {index}"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:54
 msgid "Smileys"
-msgstr ""
+msgstr "Émoticônes"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:100
 msgid "People & gestures"
-msgstr ""
+msgstr "Personnes et mouvements"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:136
 msgid "Objects"
-msgstr ""
+msgstr "Objets"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:218
 msgid "Nature & food"
-msgstr ""
+msgstr "Nature et nourriture"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:364
 msgid "Recently used"
-msgstr ""
+msgstr "Récemment utilisés"
 
 #: src/control/jsdialog/Widget.EmojiPicker.ts:384
 msgid "No emojis match \"{0}\""
-msgstr ""
+msgstr "Pas d'émoticônes correspondantes \"{0}\""
 
 #: src/control/jsdialog/Widget.PageMarginEntry.ts:139
 msgid "Top: {top}"
@@ -7898,7 +7906,7 @@ msgstr "Plage de cellules sélectionnées"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:44
 msgid "Cell Selection"
-msgstr ""
+msgstr "Sélection de cellule"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:48
 msgid "Entering text mode"
@@ -7924,11 +7932,11 @@ msgstr "Choix des fonctions"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:68
 msgid "Table Cell Functions"
-msgstr ""
+msgstr "Fonctions de la cellule de table"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:72
 msgid "Size of selected shape"
-msgstr ""
+msgstr "Taille de la forme sélectionnée"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Shape Size"
