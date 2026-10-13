@@ -393,21 +393,20 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		}
 
 		// sent from the server
-		var i;
 		if (!this._allowedOrigins && window.frameAncestors)
-		{
-			var ancestors = window.frameAncestors.trim().split(' ');
-			this._allowedOrigins = ancestors;
-			// convert to JS regexps from localhost:* to https*://localhost:.*
-			for (i = 0; i < ancestors.length; i++) {
-				this._allowedOrigins[i] = '^(http|https)://' + ancestors[i].replace(/:\*/, ':?.*') + '$';
-			}
-		}
+			this._allowedOrigins = window.frameAncestors.trim().split(' ');
 
 		if (this._allowedOrigins)
 		{
-			for (i = 0; i < this._allowedOrigins.length; i++) {
-				if (e.origin.match(this._allowedOrigins[i]))
+			var origin = new URL(e.origin);
+			var isWeb = origin.protocol === 'http:' || origin.protocol === 'https:';
+			for (var i = 0; i < this._allowedOrigins.length; i++) {
+				// An entry is a host, where a host ending in ":*" accepts any port.
+				var ancestor = this._allowedOrigins[i];
+				var matches = ancestor.endsWith(':*') ?
+					origin.hostname === ancestor.slice(0, -2) :
+					origin.host === ancestor;
+				if (isWeb && matches)
 				{
 					this._cachedGoodOrigin = e.origin;
 					return true;
