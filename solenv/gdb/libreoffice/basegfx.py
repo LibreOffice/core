@@ -57,14 +57,16 @@ class B2DPolygonPrinter(object):
             return "%s %s" % ('bezier curve' if self._hasCurves() else 'straight line',
                               self.typename)
 
+    def children(self):
+        return iter(())
+
     def _count(self):
         # It's a call into the inferior (being debugged) process.
         # Will not work with core dumps and can cause a deadlock.
-        if self.value.__str__() == "<unavailable>":
+        if self._isUnavailable():
             return 0
-        else:
-            return int(gdb.parse_and_eval(
-                    "(('basegfx::B2DPolygon' *) {})->count()".format(self.value.address)))
+        return int(gdb.parse_and_eval(
+            "(('basegfx::B2DPolygon' *) {})->count()".format(self.value.address)))
 
     def _isEmpty(self):
         return self._count() == 0
@@ -72,11 +74,16 @@ class B2DPolygonPrinter(object):
     def _hasCurves(self):
         # It's a call into the inferior (being debugged) process.
         # Will not work with core dumps and can cause a deadlock.
-        if self.value.__str__() == "<unavailable>":
+        if self._isUnavailable():
             return False
-        else:
-            return int(gdb.parse_and_eval(
-                    "(('basegfx::B2DPolygon' *) {})->areControlPointsUsed()".format(self.value.address))) != 0
+        return int(gdb.parse_and_eval(
+            "(('basegfx::B2DPolygon' *) {})->areControlPointsUsed()".format(self.value.address))) != 0
+
+    def _isUnavailable(self):
+        try:
+            return (getattr(self.value, "is_unavailable", False) or self.value.is_optimized_out)
+        except gdb.error:
+            return True
 
     def _children(self):
         if self._hasCurves():
@@ -98,10 +105,6 @@ class B2DPolygonPrinter(object):
                 raise StopIteration()
             points = self.value['mpPolygon']['m_pimpl'].dereference()['m_value']['maPoints']['maVector']
             currPoint = (points['_M_impl']['_M_start'] + self.index).dereference()
-            # doesn't work?
-            #currPoint = gdb.parse_and_eval(
-            #        '((basegfx::B2DPolygon*)%d)->getB2DPoint(%d)' % (
-            #          self.value.address, self.index))
             self.index += 1
             return ('point %d' % (self.index-1),
                     '(%15f, %15f)' % (currPoint['mnX'], currPoint['mnY']))
@@ -116,7 +119,10 @@ class B2DPolygonPrinter(object):
             return self
 
         def __next__(self):
-            if self.value.__str__() == "<unavailable>":
+            try:
+                if getattr(self.value, "is_unavailable", False) or self.value.is_optimized_out:
+                    raise StopIteration()
+            except gdb.error:
                 raise StopIteration()
             if self.index >= self.count:
                 raise StopIteration()
@@ -148,6 +154,13 @@ class B2DPolyPolygonPrinter(object):
         self.typename = typename
         self.value = value
 
+    def _isUnavailable(self):
+        try:
+            return (getattr(self.value, "is_unavailable", False) or self.value.is_optimized_out)
+        except gdb.error:
+            return True
+
+
     def to_string(self):
         if self._isEmpty():
             return "empty %s" % (self.typename)
@@ -159,35 +172,46 @@ class B2DPolyPolygonPrinter(object):
     def _count(self):
         # It's a call into the inferior (being debugged) process.
         # Will not work with core dumps and can cause a deadlock.
-        if self.value.__str__() == "<unavailable>":
+        if self._isUnavailable():
             return 0
         else:
-            return int(gdb.parse_and_eval(
-                    "(('basegfx::B2DPolyPolygon' *) {})->count()".format(self.value.address)))
+            try:
+                return int(gdb.parse_and_eval(
+                         "(('basegfx::B2DPolyPolygon' *) {})->count()".format(self.value.address)))
+            except (gdb.error, RuntimeError):
+                return 0
 
     def _isClosed(self):
         # It's a call into the inferior (being debugged) process.
         # Will not work with core dumps and can cause a deadlock.
-        if self.value.__str__() == "<unavailable>":
+        if self._isUnavailable():
             return True
         else:
-            return int(gdb.parse_and_eval(
-                    "(('basegfx::B2DPolyPolygon' *) {})->isClosed()".format(self.value.address))) != 0
+            try:
+                return int(gdb.parse_and_eval(
+                        "(('basegfx::B2DPolyPolygon' *) {})->isClosed()".format(self.value.address))) != 0
+            except (gdb.error, RuntimeError):
+                return True
 
     def _isEmpty(self):
         return self._count() == 0
 
     def children(self):
-        if self.value['mpPolyPolygon']['m_pimpl'].type.code in (gdb.TYPE_CODE_PTR, gdb.TYPE_CODE_MEMBERPTR):
-            if self.value['mpPolyPolygon']['m_pimpl']:
-                try:
-                    vector = self.value['mpPolyPolygon']['m_pimpl'].dereference()['m_value']['maPolygons']
-                    import libstdcxx.v6.printers as std
-                    return std.StdVectorPrinter("std::vector", vector).children()
-                except RuntimeError:
-                    gdb.write("Cannot access memory at address " + str(self.value['mpPolyPolygon']['m_pimpl'].address))
+        try:
+            if self._isUnavailable():
+                return iter(())
 
-        return None
+            pimpl = self.value['mpPolyPolygon']['m_pimpl']
+            if pimpl.type.code not in (gdb.TYPE_CODE_PTR, gdb.TYPE_CODE_MEMBERPTR):
+                return iter(())
+            if not pimpl:
+                return iter(())
+
+            vector = pimpl.dereference()['m_value']['maPolygons']
+            import libstdcxx.v6.printers as std
+            return std.StdVectorPrinter("std::vector", vector).children()
+        except (gdb.error, RuntimeError):
+            return iter(())
 
 printer = None
 
