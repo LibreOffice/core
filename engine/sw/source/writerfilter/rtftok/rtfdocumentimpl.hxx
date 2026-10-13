@@ -839,6 +839,7 @@ private:
     void setNeedSect(bool bNeedSect);
     void checkTableStart();
     void checkTableEnd();
+    void resetTableRowCellDefaults();
     void resetTableRowProperties();
     void backupTableRowProperties();
     void restoreTableRowProperties();

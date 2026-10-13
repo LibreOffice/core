@@ -2037,6 +2037,14 @@ void RTFDocumentImpl::restoreTableRowProperties()
     m_TopLevelTableRow = m_BackupTopLevelTableRow;
 }
 
+void RTFDocumentImpl::resetTableRowCellDefaults()
+{
+    // The scope of the table cell defaults is one row.
+    m_aDefaultState.getTableCellSprms().clear();
+    m_aStates.top().getTableCellSprms() = m_aDefaultState.getTableCellSprms();
+    m_aStates.top().getTableCellAttributes() = m_aDefaultState.getTableCellAttributes();
+}
+
 void RTFDocumentImpl::resetTableRowProperties()
 {
     m_aStates.top().getTableRowSprms() = m_aDefaultState.getTableRowSprms();

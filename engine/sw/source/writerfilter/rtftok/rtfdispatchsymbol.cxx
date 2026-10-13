@@ -477,10 +477,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             replayRowBuffer(m_aTableBufferStack.back(), m_TopLevelTableRow.cellSprms,
                             m_TopLevelTableRow.cellAttributes, nCells);
 
-            // The scope of the table cell defaults is one row.
-            m_aDefaultState.getTableCellSprms().clear();
-            m_aStates.top().getTableCellSprms() = m_aDefaultState.getTableCellSprms();
-            m_aStates.top().getTableCellAttributes() = m_aDefaultState.getTableCellAttributes();
+            resetTableRowCellDefaults();
 
             writerfilter::Reference<Properties>::Pointer_t paraProperties;
             writerfilter::Reference<Properties>::Pointer_t frameProperties;
