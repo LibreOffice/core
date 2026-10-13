@@ -226,9 +226,10 @@ describe(['tagdesktop'], 'Options view toggles persist across reload', function 
 
 		// The server keeps its own copy of the settings file and writes it out
 		// again on the next preference change made in the document, so the save
-		// has to reach that copy too, shared settings included. The zoom index
-		// arrives as a number, as the dialog wrote it to the file, so the copy
-		// the server writes out later still reads back as that zoom.
+		// has to reach that copy too, shared settings included. Every value
+		// arrives as text, the zoom index included, which is how the dialog
+		// wrote the file, so the copy the server writes out later has the same
+		// shape as the file the dialog saved.
 		cy.get('@socketSend').should(function (send) {
 			var pattern = /^browsersetting action=update (upload=false )?json=(.*)$/;
 			var updates = send.args
@@ -240,7 +241,7 @@ describe(['tagdesktop'], 'Options view toggles persist across reload', function 
 			var json = JSON.parse(updates[updates.length - 1].match(pattern)[2]);
 			expect(json.smoothScroll).to.eq('false');
 			expect(json.smartZoom).to.eq('false');
-			expect(json.defaultZoom).to.eq(13);
+			expect(json.defaultZoom).to.eq('13');
 		});
 	});
 
@@ -253,8 +254,10 @@ describe(['tagdesktop'], 'Options view toggles persist across reload', function 
 			.find('#bs-tab-spreadsheet.active', { timeout: 20000 })
 			.should('exist');
 
-		// The settings file outlives the earlier tests, so the zoom they chose
-		// may still be there: follow the server whatever the file holds.
+		// The shared cypress user's settings uploads are not persisted (see
+		// skipPersist in test/TestWopiFileServer.hpp), so the dialog opens from
+		// the defaults, not from the zoom the earlier test chose. Checking the
+		// box, rather than clicking it, ends up checked whatever its default is.
 		settingsIframeBody()
 			.find('#common-followServerZoom-input')
 			.check({ force: true });

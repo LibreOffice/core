@@ -1149,6 +1149,7 @@ function showWelcomeSVG() {
 			const canSend = global.socket && global.socket.readyState === 1;
 			if (canSend && !isEmpty(global.prefs._settingUpdateJSON)) {
 				const uploadToken = upload ? '' : 'upload=false ';
+				// Every preference is text here, and the settings file holds them as text too.
 				global.socket.send('browsersetting action=update ' + uploadToken + 'json=' + JSON.stringify(global.prefs._settingUpdateJSON));
 				global.prefs._settingUpdateJSON = {};
 			}

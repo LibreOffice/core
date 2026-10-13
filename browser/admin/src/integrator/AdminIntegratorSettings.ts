@@ -206,10 +206,10 @@ interface SaveAllResult {
 	// freshly entered secret is not lost.
 	viewSettings: ViewSettings;
 	// The Interface Settings as they were written to browsersetting.json, with
-	// flat dotted keys ("text.ShowAnnotations": "false"). A toggle is the string
-	// "true" or "false", the zoom index stays a number. Null when the dialog
-	// shows no Interface Settings section.
-	browserSettings: Record<string, string | number> | null;
+	// flat dotted keys ("text.ShowAnnotations": "false"). Every value is text,
+	// the zoom index included ("13"). Null when the dialog shows no Interface
+	// Settings section.
+	browserSettings: Record<string, string> | null;
 }
 
 // Visual state of an AI model-fetch status line. 'hidden' (or an empty message)
@@ -1395,7 +1395,7 @@ class SettingIframe {
 		const saves: Promise<void>[] = [];
 
 		// Browser settings
-		let browserSettings: Record<string, string | number> | null = null;
+		let browserSettings: Record<string, string> | null = null;
 		if (this._browserSettingSection) {
 			const payload = this.browserSettingsPayload();
 			browserSettings = this.flattenBrowserSettings(JSON.parse(payload));
@@ -2662,20 +2662,17 @@ class SettingIframe {
 		return merged;
 	}
 
-	// The Interface Settings as flat, dotted keys, the shape a browser preference
-	// has: {"text.ShowAnnotations": "false"}. A toggle becomes the string "true"
-	// or "false", the way the document records it. A number such as the zoom
-	// index stays a number, so the file keeps the same value whichever side
-	// writes it.
-	private flattenBrowserSettings(
+	// The settings with every value turned into text, the way browsersetting.json
+	// holds them: a toggle is "true" or "false", a number such as the zoom index
+	// is its digits, a list is its JSON.
+	private static asStoredText(
 		settings: Record<string, any>,
-		parentKey: string = '',
-		flattened: Record<string, string | number> = {},
-	): Record<string, string | number> {
+	): Record<string, any> {
+		const text: Record<string, any> = {};
+
 		for (const [key, entry] of Object.entries(settings)) {
-			const fullKey = parentKey ? `${parentKey}.${key}` : key;
 			if (SettingIframe.isSettingGroup(entry)) {
-				this.flattenBrowserSettings(entry, fullKey, flattened);
+				text[key] = SettingIframe.asStoredText(entry);
 				continue;
 			}
 
@@ -2684,11 +2681,38 @@ class SettingIframe {
 				entry !== null && typeof entry === 'object' && !Array.isArray(entry);
 			const value = isWidget ? entry.value : entry;
 
-			if (Array.isArray(value)) flattened[fullKey] = JSON.stringify(value);
-			else if (typeof value === 'boolean')
-				flattened[fullKey] = value ? 'true' : 'false';
-			else if (typeof value === 'number') flattened[fullKey] = value;
-			else flattened[fullKey] = String(value);
+			if (Array.isArray(value)) text[key] = JSON.stringify(value);
+			else if (typeof value === 'boolean') text[key] = value ? 'true' : 'false';
+			else if (typeof value === 'number') text[key] = String(value);
+			else if (typeof value === 'string') text[key] = value;
+			else {
+				// Any other type is reported, and goes into the file as its own text
+				// form when it has one.
+				console.warn(
+					'Unexpected value of type ' + typeof value + ' for setting ' + key,
+				);
+				text[key] =
+					value && typeof value.toString === 'function'
+						? value.toString()
+						: value;
+			}
+		}
+
+		return text;
+	}
+
+	// The stored settings as flat, dotted keys, the shape a browser preference
+	// has: {"text.ShowAnnotations": "false"}.
+	private flattenBrowserSettings(
+		settings: Record<string, any>,
+		parentKey: string = '',
+		flattened: Record<string, string> = {},
+	): Record<string, string> {
+		for (const [key, entry] of Object.entries(settings)) {
+			const fullKey = parentKey ? `${parentKey}.${key}` : key;
+			if (SettingIframe.isSettingGroup(entry))
+				this.flattenBrowserSettings(entry, fullKey, flattened);
+			else flattened[fullKey] = String(entry);
 		}
 
 		return flattened;
@@ -2699,7 +2723,9 @@ class SettingIframe {
 	private browserSettingsPayload(): string {
 		this.collectBrowserSettingsFromUI();
 
-		const settings = this.withStoredExtras(this.browserSettingOptions);
+		const settings = SettingIframe.asStoredText(
+			this.withStoredExtras(this.browserSettingOptions),
+		);
 
 		const followServerZoomCheckbox =
 			this._zoomSection?.querySelector<HTMLInputElement>(
@@ -5806,8 +5832,23 @@ class SettingIframe {
 		for (const key in defaults) {
 			const value = defaults[key];
 			let override = overrides?.[key];
+			// The file holds every value as text, so the type of the default says
+			// what the text stands for. An empty string is "not chosen" and keeps
+			// the default.
+			const defaultNumber =
+				typeof value === 'number' ||
+				(typeof value === 'object' &&
+					value !== null &&
+					typeof value.value === 'number');
 			if (override === 'true') override = true;
 			else if (override === 'false') override = false;
+			else if (
+				defaultNumber &&
+				typeof override === 'string' &&
+				override.trim() !== '' &&
+				Number.isFinite(Number(override))
+			)
+				override = Number(override);
 			if (
 				typeof value === 'boolean' ||
 				(typeof value === 'object' && value !== null && 'customType' in value)

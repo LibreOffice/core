@@ -2535,8 +2535,7 @@ void ClientSession::updateBrowserSettingsJSON(const std::string& json)
     const auto& extractedObject = result.extract<Poco::JSON::Object::Ptr>();
     for (const auto& key : extractedObject->getNames())
     {
-        // The value keeps the type it has in the message, so a number such as the
-        // zoom index is written back to the file as a number.
+        // Every value in the message is text, and it is written to the file as that text.
         const Poco::Dynamic::Var value = extractedObject->get(key);
         std::vector<std::string> vec = Util::splitStringToVector(key, '.');
         if (vec.size() == 2)

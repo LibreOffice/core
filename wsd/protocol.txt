@@ -967,8 +967,9 @@ browsersetting action=update [upload=false] json=<JSON>
     applied to every copy.
 
     - json=<JSON> : An object of the changed settings, with flat dotted keys
-      ("text.ShowAnnotations": "false"). A toggle is the string "true" or
-      "false", a number such as the zoom index is a number.
+      ("text.ShowAnnotations": "false"). Every value is text, the way the
+      settings file holds it: a toggle is "true" or "false", the zoom index
+      is its digits ("13").
     - upload=false : The file already holds these settings, so the server
       does not write it out again. Without this token, the server writes
       the file out with the changes.

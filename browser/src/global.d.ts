@@ -428,9 +428,7 @@ interface Window {
 		remove(key: string): void;
 		setMultiple(prefs: Record<string, string>): void;
 		sendPendingBrowserSettingsUpdate(): void;
-		recordStoredBrowserSettings(
-			settings: Record<string, string | number>,
-		): void;
+		recordStoredBrowserSettings(settings: Record<string, string>): void;
 		canPersist: boolean;
 		prefersDarkOS(): boolean;
 		hasExplicitDarkModePref(): boolean;

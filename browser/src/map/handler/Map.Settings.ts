@@ -308,9 +308,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 	// applying at the next open. The layout goes first: switching it builds
 	// the toolbars again and restores the sidebar from the preferences, and
 	// the view toggles are then applied to the toolbars that are left.
-	applyBrowserSettings: function (
-		settings: Record<string, string | number>,
-	): void {
+	applyBrowserSettings: function (settings: Record<string, string>): void {
 		// The record step below replaces the stored theme, so take the one in use now
 		// while get() still returns it.
 		const wasDark = window.prefs.getBoolean('darkTheme');
