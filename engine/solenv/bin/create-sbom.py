@@ -1463,7 +1463,7 @@ def sbom_add_files(files_by_package, externals_by_package):
             add_external(external)
 
         for file in files_by_package[package]:
-            file_spdx_id = make_spdx_id(f"File-{file["instpath"]}")
+            file_spdx_id = make_spdx_id(f'File-{file["instpath"]}')
             parent = add_external(file["external"])
 
             def get_flags(flags):
