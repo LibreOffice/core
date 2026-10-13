@@ -446,7 +446,7 @@ const OUString& DiagramData_svx::getBackgroundShapeModelID() const
 const uno::Reference< frame::XModel >& DiagramData_svx::accessRootModel() const
 {
     SdrObject* pObj(SdrObject::getSdrObjectFromXShape(accessRootShape()));
-    SAL_WARN_IF(!pObj, "oox.drawingml", "DiagramData_svx::accessRootModel(): no XModel");
+    assert(pObj && "DiagramData_svx::accessRootModel(): no XModel");
     return pObj->getSdrModelFromSdrObject().getUnoModel();
 }
 
