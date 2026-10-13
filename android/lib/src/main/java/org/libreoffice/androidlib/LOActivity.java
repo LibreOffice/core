@@ -1525,7 +1525,9 @@ public class LOActivity extends AppCompatActivity {
             case "uno":
                 switch (messageAndParam[1]) {
                     case ".uno:Paste":
-                        return performPaste();
+                        return performPaste(false);
+                    case ".uno:PasteSpecial":
+                        return performPaste(true);
                     default:
                         break;
                 }
@@ -1991,7 +1993,8 @@ public class LOActivity extends AppCompatActivity {
     }
 
     /// Do the paste, and return true if we should short-circuit the paste locally (ie. let the core handle that)
-    private final boolean performPaste()
+    /// With chooseFormat, foreign content goes to the kit clipboard whole, for the Paste Special dialog.
+    private final boolean performPaste(boolean chooseFormat)
     {
         clipData = clipboardManager.getPrimaryClip();
         if (clipData == null)
@@ -2021,28 +2024,19 @@ public class LOActivity extends AppCompatActivity {
             // couldn't read the clipboard file, try a standard paste...
         }
 
+        if (chooseFormat && !isClipboardFromThisApp())
+            return offerSystemClipboardToKit();
+
         // Choose a representation from the clipboard that we prefer rather than going with the
         // first one by default ... ideally we'd eventually change this so that we have a native
         // clipboard handler in VCL so everything is done like in the other apps...
         for (int i = 0; i < clipDesc.getMimeTypeCount(); ++i) {
             if (clipDesc.getMimeType(i).startsWith("image/")) {
                 Log.d(TAG, "Pasting image mime: " + clipDesc.getMimeType(i));
-                ClipData.Item item = clipData.getItemAt(0);
-                Uri uri = item.getUri();
-                try {
-                    InputStream imageStream = getContentResolver().openInputStream(uri);
-                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-                    int nRead;
-                    byte[] data = new byte[16384];
-                    while ((nRead = imageStream.read(data, 0, data.length)) != -1) {
-                        buffer.write(data, 0, nRead);
-                    }
-
-                    LOActivity.this.paste(clipDesc.getMimeType(i), buffer.toByteArray());
+                byte[] image = readUriContent(clipData.getItemAt(0).getUri());
+                if (image != null) {
+                    LOActivity.this.paste(clipDesc.getMimeType(i), image);
                     return false;
-                } catch (Exception e) {
-                    Log.d(TAG, "Failed to paste image: " + e.getMessage());
                 }
             }
         }
@@ -2071,11 +2065,14 @@ public class LOActivity extends AppCompatActivity {
                         if (clipboardData != null) {
                             LOActivity.this.setClipboardContent(clipboardData);
                             return true;
-                        } else {
-                            // Couldn't get data from the clipboard file, but we can still paste html
-                            byte[] htmlByteArray = html.getBytes(Charset.forName("UTF-8"));
-                            LOActivity.this.paste("text/html", htmlByteArray);
                         }
+
+                        // Couldn't get data from the clipboard file, but we can still paste html
+                        if (chooseFormat)
+                            return offerSystemClipboardToKit();
+
+                        byte[] htmlByteArray = html.getBytes(Charset.forName("UTF-8"));
+                        LOActivity.this.paste("text/html", htmlByteArray);
                         return false;
                     }
                 } else {
@@ -2103,6 +2100,100 @@ public class LOActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    private boolean isClipboardFromThisApp()
+    {
+        CharSequence label = clipData.getDescription().getLabel();
+        if (label != null && label.toString().startsWith(CLIPBOARD_COOL_SIGNATURE))
+            return true;
+
+        for (int i = 0; i < clipData.getItemCount(); ++i) {
+            String html = clipData.getItemAt(i).getHtmlText();
+            if (html != null && html.contains(CLIPBOARD_COOL_SIGNATURE))
+                return true;
+        }
+        return false;
+    }
+
+    /// Hand the system clipboard to the kit. Returns false when there was nothing to hand over.
+    private boolean offerSystemClipboardToKit()
+    {
+        LokClipboardData clipboardData = new LokClipboardData();
+        for (int i = 0; i < clipData.getItemCount(); ++i) {
+            ClipData.Item item = clipData.getItemAt(i);
+
+            String html = item.getHtmlText();
+            if (html != null)
+                addClipboardEntry(clipboardData, "text/html",
+                                  html.getBytes(Charset.forName("UTF-8")));
+
+            CharSequence text = item.getText();
+            if (text != null)
+                addClipboardEntry(clipboardData, "text/plain;charset=utf-8",
+                                  text.toString().getBytes(Charset.forName("UTF-8")));
+
+            Uri uri = item.getUri();
+            if (uri != null) {
+                String mimeType = imageMimeTypeOf(uri);
+                if (mimeType != null) {
+                    byte[] image = readUriContent(uri);
+                    if (image != null)
+                        addClipboardEntry(clipboardData, mimeType, image);
+                }
+            }
+        }
+
+        if (clipboardData.clipboardEntries.isEmpty()) {
+            Log.i(TAG, "system clipboard has no html, text or image to hand to the kit");
+            return false;
+        }
+
+        LOActivity.this.setClipboardContent(clipboardData);
+        return true;
+    }
+
+    /// Image mime type of a clipboard uri, or null when it is not an image.
+    private String imageMimeTypeOf(Uri uri)
+    {
+        String mimeType = getContentResolver().getType(uri);
+        if (mimeType != null && mimeType.startsWith("image/"))
+            return mimeType;
+
+        ClipDescription clipDesc = clipData.getDescription();
+        for (int i = 0; i < clipDesc.getMimeTypeCount(); ++i) {
+            if (clipDesc.getMimeType(i).startsWith("image/"))
+                return clipDesc.getMimeType(i);
+        }
+        return null;
+    }
+
+    private static void addClipboardEntry(LokClipboardData clipboardData, String mimeType,
+                                          byte[] data)
+    {
+        LokClipboardEntry entry = new LokClipboardEntry();
+        entry.mime = mimeType;
+        entry.data = data;
+        clipboardData.clipboardEntries.add(entry);
+    }
+
+    /// Read the whole uri content, or null when that fails.
+    private byte[] readUriContent(Uri uri)
+    {
+        try (InputStream stream = getContentResolver().openInputStream(uri)) {
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+            int nRead;
+            byte[] data = new byte[16384];
+            while ((nRead = stream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+
+            return buffer.toByteArray();
+        } catch (Exception e) {
+            Log.d(TAG, "Failed to read clipboard content: " + e.getMessage());
+            return null;
+        }
     }
 }
 
