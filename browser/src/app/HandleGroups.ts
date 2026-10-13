@@ -925,6 +925,13 @@ class ShapingHandles extends HandlesMovedOneByOne {
 		the places stay right while the object is dragged, since they move with it.
 	*/
 	public holdInside(handle: SelectionHandle, at: cool.Point): cool.Point {
+		// A handle that moves a line of a connector moves across that line only.
+		const line = this.selection.howTheLineHandleMoves(handle);
+		if (line)
+			return line.movesAcross
+				? new cool.Point(at.x, handle.point.y)
+				: new cool.Point(handle.point.x, at.y);
+
 		const rails = handle.rails;
 		if (!rails) return at;
 

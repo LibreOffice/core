@@ -294,6 +294,17 @@ class ConnectorRouter {
 		startNode: cool.RouteNode | undefined,
 		endNode: cool.RouteNode | undefined,
 	): cool.ObjectPathPoint[] | undefined {
+		const track = ConnectorRouter.routeTrack(routing, startNode, endNode);
+		return track ? ConnectorRouter.asPath(track.points) : undefined;
+	}
+
+	/// The run as the engine builds it, points and weights alike, with what the routing learnt
+	/// about it. Nothing for a run that was set from outside.
+	private static routeTrack(
+		routing: cool.ConnectorRouting,
+		startNode: cool.RouteNode | undefined,
+		endNode: cool.RouteNode | undefined,
+	): { points: TrackPoint[]; info: RouteInfo } | undefined {
 		if (routing.trackUserDefined) return undefined;
 
 		const placeOf = (tie: cool.ConnectorTie): cool.Point =>
@@ -317,15 +328,10 @@ class ConnectorRouter {
 		// The deltas a user dragged in, laid on the lines the first pass found.
 		const deltas = routing.lineDeltas;
 		if (routing.kind === 'ortho' || routing.kind === 'bezier') {
-			let n = 0;
-			const lay = (code: LineCode) => {
-				if (n < 3) info.setLineOffset(code, track.points, deltas[n++] ?? 0);
-			};
-			if (info.obj1Lines >= 2) lay(LineCode.Obj1Line2);
-			if (info.obj1Lines >= 3) lay(LineCode.Obj1Line3);
-			if (info.middleLineAt !== undefined) lay(LineCode.MiddleLine);
-			if (info.obj2Lines >= 3) lay(LineCode.Obj2Line3);
-			if (info.obj2Lines >= 2) lay(LineCode.Obj2Line2);
+			ConnectorRouter.linesWithDeltas(info).forEach(
+				(code: LineCode, n: number) =>
+					info.setLineOffset(code, track.points, deltas[n] ?? 0),
+			);
 		} else if (routing.kind === 'three') {
 			const horizontal1 = info.angle1 === 0 || info.angle1 === 18000;
 			const horizontal2 = info.angle2 === 0 || info.angle2 === 18000;
@@ -345,7 +351,133 @@ class ConnectorRouter {
 				info,
 			);
 
-		return ConnectorRouter.asPath(track.points);
+		return track;
+	}
+
+	/// The lines of an orthogonal run the user's deltas belong to, in the order the deltas are
+	/// given: the lines at the start, the middle line, the lines at the end. There are three
+	/// deltas at most.
+	private static linesWithDeltas(info: RouteInfo): LineCode[] {
+		const codes: LineCode[] = [];
+		if (info.obj1Lines >= 2) codes.push(LineCode.Obj1Line2);
+		if (info.obj1Lines >= 3) codes.push(LineCode.Obj1Line3);
+		if (info.middleLineAt !== undefined) codes.push(LineCode.MiddleLine);
+		if (info.obj2Lines >= 3) codes.push(LineCode.Obj2Line3);
+		if (info.obj2Lines >= 2) codes.push(LineCode.Obj2Line2);
+		return codes.slice(0, 3);
+	}
+
+	/*
+		The line a handle of an orthogonal run moves, by the number the engine gives the handle:
+		from 2 on, the lines at the start, then the lines at the end, then the middle line, as far
+		as the run has them.
+	*/
+	private static lineOfTheHandle(
+		info: RouteInfo,
+		handleNumber: number,
+	): LineCode | undefined {
+		let at = handleNumber - 2;
+		if (at < 0) return undefined;
+
+		const atTheStart = Math.max(info.obj1Lines - 1, 0);
+		if (at < atTheStart)
+			return at === 0 ? LineCode.Obj1Line2 : LineCode.Obj1Line3;
+		at -= atTheStart;
+
+		const atTheEnd = Math.max(info.obj2Lines - 1, 0);
+		if (at < atTheEnd)
+			return at === 0 ? LineCode.Obj2Line2 : LineCode.Obj2Line3;
+		at -= atTheEnd;
+
+		return at === 0 && info.middleLineAt !== undefined
+			? LineCode.MiddleLine
+			: undefined;
+	}
+
+	/*
+		Which way a handle that moves a line of a connector's run goes, and which of the user's
+		deltas it changes, worked out from the run as it stands now, as the engine works it out
+		when such a handle is dragged. A line of an orthogonal or curved run moves across itself,
+		so a handle on a line that runs down moves across, and one on a line that runs across
+		moves down. A line connector moves the line at each end across where the run leaves
+		that end to a side, and down where it leaves upwards or downwards. Nothing for a handle
+		that moves no line, and for a run set from outside.
+	*/
+	public static lineHandle(
+		data: cool.VectorPrimitivesData,
+		connector: cool.SlideObject,
+		handleNumber: number,
+	): { movesAcross: boolean; delta: number } | undefined {
+		const routing = connector.routing;
+		if (!routing) return undefined;
+
+		const track = ConnectorRouter.routeTrack(
+			routing,
+			ConnectorRouter.nodeOfTheTied(data, connector.tiedToAtStart),
+			ConnectorRouter.nodeOfTheTied(data, connector.tiedToAtEnd),
+		);
+		if (!track) return undefined;
+		const info = track.info;
+
+		if (routing.kind === 'three') {
+			if (handleNumber !== 2 && handleNumber !== 3) return undefined;
+			const angle = handleNumber === 2 ? info.angle1 : info.angle2;
+			return {
+				movesAcross: angle === 0 || angle === 18000,
+				delta: handleNumber - 2,
+			};
+		}
+
+		if (routing.kind !== 'ortho' && routing.kind !== 'bezier') return undefined;
+
+		const code = ConnectorRouter.lineOfTheHandle(info, handleNumber);
+		if (code === undefined) return undefined;
+
+		const delta = ConnectorRouter.linesWithDeltas(info).indexOf(code);
+		if (delta < 0) return undefined;
+
+		return { movesAcross: !info.isHorizontalLine(code, track.points), delta };
+	}
+
+	/*
+		The run of a connector with the line that handle moves taken that far: the user's delta
+		for that line grows by the part of the way that runs across the line, and the run is laid
+		out anew from it, as the engine does at the end of such a drag. Nothing where the handle
+		moves no line.
+	*/
+	public static routeWithALineMoved(
+		data: cool.VectorPrimitivesData,
+		connector: cool.SlideObject,
+		handleNumber: number,
+		by: cool.Point,
+	): cool.ObjectPathPoint[] | undefined {
+		const routing = connector.routing;
+		const handle = ConnectorRouter.lineHandle(data, connector, handleNumber);
+		if (!routing || !handle) return undefined;
+
+		const deltas = [...routing.lineDeltas];
+		while (deltas.length <= handle.delta) deltas.push(0);
+		deltas[handle.delta] += handle.movesAcross ? by.x : by.y;
+
+		return ConnectorRouter.route(
+			{
+				...routing,
+				lineDeltas: deltas,
+				lineDeltaCount: Math.max(routing.lineDeltaCount, handle.delta + 1),
+			},
+			ConnectorRouter.nodeOfTheTied(data, connector.tiedToAtStart),
+			ConnectorRouter.nodeOfTheTied(data, connector.tiedToAtEnd),
+		);
+	}
+
+	/// The node of the object an end of a connector is tied to, or nothing for a free end.
+	private static nodeOfTheTied(
+		data: cool.VectorPrimitivesData,
+		objectId: number | undefined,
+	): cool.RouteNode | undefined {
+		return objectId === undefined
+			? undefined
+			: ConnectorRouter.nodeOf(data.objects.get(objectId));
 	}
 
 	/*

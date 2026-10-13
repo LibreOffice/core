@@ -529,10 +529,35 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/*
-		The run a drag of a line handle of a connector shows of itself: the current run with the
-		line the handle sits on moved by what the drag moved, across the line, which is what the
-		engine does with such a drag. The line is the one whose middle the handle stood on.
-		Nothing for anything else.
+		Which way a handle that moves a line of the selected connector goes, worked out from the
+		connector's run as it stands now. Nothing for an end of the connector, for anything that
+		is not a connector, and for a run that was set from outside.
+	*/
+	public howTheLineHandleMoves(
+		handle: SelectionHandle,
+	): { movesAcross: boolean } | undefined {
+		const connector = this.theConnector();
+		if (
+			connector === undefined ||
+			handle.kind !== '9' ||
+			SelectionSection.connectorEnds.includes(handle.name)
+		)
+			return undefined;
+
+		const data = RenderGeometrySection.currentPart();
+		const object = data?.objects.get(connector);
+		const number = Number(handle.name.split('.')[2]);
+		if (!data || !object || !(number >= 2)) return undefined;
+
+		return ConnectorRouter.lineHandle(data, object, number);
+	}
+
+	/*
+		The run a drag of a line handle of a connector shows of itself. Where the client routes
+		the connector, the run is laid out anew with that line moved across itself by what the
+		drag moved, which is what the engine does with such a drag. Otherwise it is the current
+		run with the line the handle sits on moved, the line being the one whose middle the
+		handle stood on. Nothing for anything else.
 	*/
 	public runWhileALineIsDragged(
 		handle: SelectionHandle,
@@ -545,6 +570,22 @@ abstract class SelectionSection extends CanvasSectionObject {
 			SelectionSection.connectorEnds.includes(handle.name)
 		)
 			return null;
+
+		const data = RenderGeometrySection.currentPart();
+		const routedFrom = data?.objects.get(connector);
+		const number = Number(handle.name.split('.')[2]);
+		const startedAt = this.known.find(
+			(one: SelectionHandle) => one.name === handle.name,
+		);
+		if (data && routedFrom && startedAt && number >= 2) {
+			const routed = ConnectorRouter.routeWithALineMoved(
+				data,
+				routedFrom,
+				number,
+				new cool.Point(at.x - startedAt.point.x, at.y - startedAt.point.y),
+			);
+			if (routed) return [{ closed: false, points: routed }];
+		}
 
 		const object = RenderGeometrySection.objectOf(connector);
 		const run = object ? ConnectorRouter.trackOf(object) : undefined;
