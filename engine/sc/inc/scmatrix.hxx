@@ -408,6 +408,14 @@ public:
     void DivOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
     void PowOp(bool bFlag, double fVal, const ScMatrix& rMat) ;
 
+    /** Visit numeric/boolean pairs in column-major order, excluding a pair
+        if either element is string or empty. Encoded errors are propagated
+        as with GetDouble(), reading this matrix before rOther.
+        Both matrices must have equal element counts. Callers validate shapes.
+        The callback must not modify either matrix. */
+    void IterateNumericPairs(const ScMatrix& rOther,
+                             const std::function<void(double, double)>& rFunc) const;
+
     KahanIterateResultMultiple CollectKahan(const std::vector<sc::op::kOp>& aOp) ;
 
     void ExecuteOperation(const std::pair<size_t, size_t>& rStartPos, const std::pair<size_t, size_t>& rEndPos,

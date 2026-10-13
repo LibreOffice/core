@@ -5024,18 +5024,11 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
     KahanSum fSumX          = 0.0;
     KahanSum fSumY          = 0.0;
 
-    for (SCSIZE i = 0; i < nC1; i++)
-    {
-        for (SCSIZE j = 0; j < nR1; j++)
-        {
-            if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
-            {
-                fSumX += pMat1->GetDouble(i,j);
-                fSumY += pMat2->GetDouble(i,j);
-                fCount++;
-            }
-        }
-    }
+    pMat1->IterateNumericPairs(*pMat2, [&](double fValX, double fValY) {
+        fSumX += fValX;
+        fSumY += fValY;
+        fCount++;
+    });
     if (fCount < (_bStexy ? 3.0 : (_bSample ? 2.0 : 1.0)))
         PushNoValue();
     else
@@ -5045,23 +5038,14 @@ void ScInterpreter::CalculatePearsonCovar( bool _bPearson, bool _bStexy, bool _b
         KahanSum fSumSqrDeltaY    = 0.0; // sum of (ValY-MeanY)^2
         const double fMeanX = fSumX.get() / fCount;
         const double fMeanY = fSumY.get() / fCount;
-        for (SCSIZE i = 0; i < nC1; i++)
-        {
-            for (SCSIZE j = 0; j < nR1; j++)
+        pMat1->IterateNumericPairs(*pMat2, [&](double fValX, double fValY) {
+            fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
+            if ( _bPearson )
             {
-                if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
-                {
-                    const double fValX = pMat1->GetDouble(i,j);
-                    const double fValY = pMat2->GetDouble(i,j);
-                    fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
-                    if ( _bPearson )
-                    {
-                        fSumSqrDeltaX    += (fValX - fMeanX) * (fValX - fMeanX);
-                        fSumSqrDeltaY    += (fValY - fMeanY) * (fValY - fMeanY);
-                    }
-                }
+                fSumSqrDeltaX += (fValX - fMeanX) * (fValX - fMeanX);
+                fSumSqrDeltaY += (fValY - fMeanY) * (fValY - fMeanY);
             }
-        }
+        });
         if ( _bPearson )
         {
             // tdf#94962 - Values below the numerical limit lead to unexpected results
