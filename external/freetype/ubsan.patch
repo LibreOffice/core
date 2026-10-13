@@ -16,12 +16,12 @@
        adjustment_amount = 64 - min_distance;
 --- src/truetype/ttgxvar.c
 +++ src/truetype/ttgxvar.c
-@@ -1217,7 +1217,7 @@
+@@ -1242,7 +1242,7 @@
        per_region_size *= 2;
      }
  
 -    bytes = varData->deltaSet + per_region_size * innerIndex;
 +    bytes = varData->deltaSet ? varData->deltaSet + per_region_size * innerIndex : NULL;
  
-     /* outer loop steps through master designs to be blended */
-     for ( master = 0; master < varData->regionIdxCount; master++ )
+     /* The region scalars depend only on the normalized coordinates, which */
+     /* are constant while glyphs are loaded; yet this function is called   */
