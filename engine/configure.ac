@@ -2328,11 +2328,6 @@ AC_ARG_WITH(system-openjpeg,
         [Use the OpenJPEG library already on system.]),,
     [with_system_openjpeg="$with_system_libs"])
 
-AC_ARG_WITH(system-jfreereport,
-    AS_HELP_STRING([--with-system-jfreereport],
-        [Use JFreeReport already on system.]),,
-    [with_system_jfreereport="$with_system_jars"])
-
 AC_ARG_WITH(system-odbc,
     AS_HELP_STRING([--with-system-odbc],
         [Use the odbc headers already on system.]),,

@@ -74,9 +74,6 @@ def get_library_list(fileName):
         decodedName = lib.decode("utf-8")
         variableName = decodedName.split("=")[0]
 
-        if "JFREEREPORT_" in variableName:
-            continue
-
         # FIXME
         if "FONT_" in variableName and "REEM" not in variableName:
             continue
