@@ -2985,9 +2985,12 @@ Label_MaskStateMachine:
                 cGroupSep != cArrayColSep && cGroupSep != cArrayRowSep &&
                 cGroupSep != cDecSep && cGroupSep != cDecSepAlt &&
                 cGroupSep != cSheetPrefix && cGroupSep != cSheetSep);
-        // If a numeric context triggered bi18n then use the default locale's
-        // CharClass, this may accept group separator as well.
-        const CharClass* pMyCharClass = (ScGlobal::getCharClass().isDigit( OUString(pStart[nSrcPos]), 0) ?
+        // A numeric context may need the default locale's group separator.
+        // Repeated decimals in English grammar must retain its CharClass:
+        // a comma-decimal locale would split 1.2e-3. across the minus sign.
+        const bool bUseLocalNumericClass = !mxSymbols->isEnglishLocale() || nDecSeps < 2;
+        const CharClass* pMyCharClass = (bUseLocalNumericClass
+                && ScGlobal::getCharClass().isDigit( OUString(pStart[nSrcPos]), 0) ?
                 &ScGlobal::getCharClass() : pCharClass);
         OUStringBuffer aSymbol;
         mnRangeOpPosInSymbol = -1;
@@ -3019,6 +3022,18 @@ Label_MaskStateMachine:
             }
             else
             {
+                // The i18n parser can skip whitespace that the ASCII fast
+                // path did not recognize. Keep that boundary in the existing
+                // whitespace tokens instead of letting ParseValue discard it.
+                // Whitespace inside a compound reference belongs to its symbol.
+                if (aRes.TokenType && aSymbol.isEmpty() && aRes.LeadingWhiteSpace)
+                {
+                    Whitespace aIgnoredSpace;
+                    const sal_Int32 nEnd = nSrcPos + aRes.LeadingWhiteSpace;
+                    while (nSrcPos < nEnd)
+                        addWhitespace(vSpaces, aIgnoredSpace, pStart[nSrcPos++]);
+                    vSpaces.emplace_back(aIgnoredSpace);
+                }
                 // When having parsed a second reference part, ensure that the
                 // i18n parser did not mistakenly parse a number that included
                 // a separator which happened to be meant as a parameter
@@ -5321,11 +5336,43 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
     short nBrackets = 0;
     bool bInArray = false;
     meLastOp = ocOpen;
+    std::u16string_view aPreviousNumber;
+    sal_uInt16 nPreviousNumber = 0;
     while( NextNewToken( bInArray ) )
     {
-        const OpCode eOp = maRawToken.GetOpCode();
-        if (eOp == ocSkip)
+        if (maRawToken.GetOpCode() == ocSkip)
             continue;
+
+        // Numeric tokens normally store just the value. At a missing-operator
+        // boundary, normalization can change the spelling or even make invalid
+        // input valid on reparse (e.g. 1.2e3. becomes 1200.). Keep the source
+        // spelling of the adjacent numbers through the existing ocBad tokens.
+        const bool bNumber = maRawToken.GetType() == svDouble;
+        std::u16string_view aNumber;
+        if (bNumber)
+        {
+            const sal_Int32 nLength = rtl_ustr_getLength(cSymbol);
+            aNumber = aFormula.subView(nSrcPos - nLength, nLength);
+        }
+        const bool bExpectsOperand = meLastOp == ocOpen || meLastOp == ocSep
+            || meLastOp == ocArrayOpen || meLastOp == ocArrayColSep
+            || meLastOp == ocArrayRowSep || isOperatorExpectingOperand(meLastOp);
+        if (!bExpectsOperand && (bNumber || maRawToken.GetOpCode() == ocBad))
+        {
+            if (!aPreviousNumber.empty())
+            {
+                auto aSS = rDoc.GetSharedStringPool().intern(OUString(aPreviousNumber));
+                mpArr->ReplaceToken(nPreviousNumber, new FormulaStringOpToken(ocBad, aSS),
+                                    FormulaTokenArray::ReplaceMode::CODE_ONLY);
+            }
+            if (bNumber)
+            {
+                auto aSS = rDoc.GetSharedStringPool().intern(OUString(aNumber));
+                maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
+                maRawToken.NewOpCode(ocBad);
+            }
+        }
+        const OpCode eOp = maRawToken.GetOpCode();
 
         switch (eOp)
         {
@@ -5608,6 +5655,10 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
             }
         }
         meLastOp = maRawToken.GetOpCode();
+        // Any significant non-number ends the adjacency; in particular, array
+        // merging must not leave a saved index pointing into the merged array.
+        aPreviousNumber = maRawToken.GetType() == svDouble ? aNumber : std::u16string_view();
+        nPreviousNumber = mpArr->GetLen() - 1;
         if ( mbAutoCorrect )
             maCorrectedFormula += maCorrectedSymbol;
         mIsInBinding = (!maBindings.empty() && maBindings.front().nBracketPos + 1 == nBrackets);

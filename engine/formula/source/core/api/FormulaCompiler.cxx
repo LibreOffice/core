@@ -59,15 +59,6 @@ class FormulaCompilerRecursionGuard
         ~FormulaCompilerRecursionGuard() { --rRecursion; }
 };
 
-// True when the opcode needs an operand after it: the prefix unary
-// and binary operators. The postfix # is excluded, as its operand
-// comes before it, so a binary operator may follow it.
-bool isOperatorExpectingOperand(OpCode eOp)
-{
-    return (isBinaryOperatorOpCode(eOp) || isUnaryOperatorOpCode(eOp))
-           && eOp != ocSpill;
-}
-
 SvNumFormatType lcl_GetRetFormat( OpCode eOpCode )
 {
     switch (eOpCode)

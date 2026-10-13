@@ -604,6 +604,13 @@ constexpr bool isBinaryOperatorOpCode(OpCode eOp)
     return ocStartBinaryOperators <= eOp && eOp < ocStopBinaryOperators;
 }
 
+// Prefix unary and binary operators require a following operand. The postfix
+// spill operator takes its operand before it.
+constexpr bool isOperatorExpectingOperand(OpCode eOp)
+{
+    return (isBinaryOperatorOpCode(eOp) || isUnaryOperatorOpCode(eOp)) && eOp != ocSpill;
+}
+
 // Only to be used for debugging output. No guarantee of stability of the
 // return value.
 

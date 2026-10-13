@@ -16,6 +16,7 @@
 #include <global.hxx>
 #include <docfunc.hxx>
 #include <tokenstringcontext.hxx>
+#include <tokenuno.hxx>
 #include <dbdata.hxx>
 #include <scmatrix.hxx>
 #include <docoptio.hxx>
@@ -31,9 +32,15 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sheet/FormulaLanguage.hpp>
+#include <com/sun/star/sheet/FormulaMapGroup.hpp>
+#include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
 
 #include <cmath>
 #include <memory>
+#include <optional>
 #include <functional>
 #include <set>
 #include <algorithm>
@@ -155,6 +162,30 @@ protected:
     template <size_t DataSize, size_t FormulaSize, int Type>
     void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[DataSize],
                                 const StrStrCheck aChecks[FormulaSize]);
+
+    void checkMalformedFormula(const ScAddress& rPosition, const OUString& rFormula,
+                               FormulaGrammar::Grammar eGrammar,
+                               std::optional<FormulaError> oExpectedError = std::nullopt)
+    {
+        const OString aMessage
+            = OUStringToOString(rFormula, RTL_TEXTENCODING_UTF8)
+              + " grammar=" + OString::number(static_cast<int>(eGrammar)) + " locale="
+              + OUStringToOString(SvtSysLocaleOptions().GetLanguageTag().getBcp47(),
+                                  RTL_TEXTENCODING_UTF8);
+        OUString aFormula = rFormula;
+        for (int nPass = 0; nPass < 2; ++nPass)
+        {
+            m_pDoc->SetFormula(rPosition, aFormula, eGrammar);
+            if (oExpectedError)
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), *oExpectedError,
+                                             m_pDoc->GetErrCode(rPosition));
+            else
+                CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(),
+                                       m_pDoc->GetErrCode(rPosition) != FormulaError::NONE);
+            aFormula = m_pDoc->GetFormulaCell(rPosition)->GetFormula(eGrammar);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), rFormula, aFormula);
+        }
+    }
 
     void testExtRefFuncT(ScDocument* pDoc, ScDocument& rExtDoc);
     void testExtRefFuncOFFSET(ScDocument* pDoc, ScDocument& rExtDoc);
@@ -8783,6 +8814,279 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testAReferenceListTakesAFunctionResult)
     m_pDoc->SetString(ScAddress(3, 0, 0), u"=SUM((INDEX(A1:A2;2);B1))"_ustr);
     CPPUNIT_ASSERT_EQUAL(600.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
 
+    m_pDoc->DeleteTab(0);
+}
+
+// Malformed adjacent numbers must keep their source spelling in saved formulas.
+CPPUNIT_TEST_FIXTURE(TestFormula2, testMalformedAdjacentNumbersPreserveTheirSpelling)
+{
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    const ScAddress aPosition(0, 0, 0);
+
+    // Adjacent decimal numbers are invalid, but must not acquire another zero
+    // when the tokens are converted back to formula text.
+    for (const OUString& rFormula :
+         { u"=11.3.5"_ustr,   u"=11.3.50"_ustr,   u"=11.3.5.7"_ustr,  u"=11.3.5e-2"_ustr,
+           u"=1..5"_ustr,     u"=1.2e3.5"_ustr,   u"=1.2e-3.5"_ustr,  u"=(1).5"_ustr,
+           u"=SUM(1).5"_ustr, u"=\"str\".5"_ustr, u"=1%.5"_ustr,      u"=1.2e3."_ustr,
+           u"=1.e3."_ustr,    u"=1.2e3.e2"_ustr,  u"=1.2e3.e-2"_ustr, u"=1.."_ustr,
+           u"=1.2e-3."_ustr,  u"=1.2e3..5"_ustr,  u"=1.2e3.٥"_ustr,   u"=1.2e3.５"_ustr })
+        checkMalformedFormula(aPosition, rFormula, FormulaGrammar::GRAM_ENGLISH,
+                              FormulaError::OperatorExpected);
+
+    // A leading decimal after an operator is still an ordinary number.
+    m_pDoc->SetFormula(aPosition, u"=11.3+.5"_ustr, FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, m_pDoc->GetErrCode(aPosition));
+    ASSERT_DOUBLES_EQUAL(11.8, m_pDoc->GetValue(aPosition));
+    CPPUNIT_ASSERT_EQUAL(u"=11.3+0.5"_ustr, m_pDoc->GetFormulaCell(aPosition)->GetFormula(
+                                                FormulaGrammar::GRAM_ENGLISH));
+    // Invalid array contents retain their tokens when array merging fails.
+    for (const OUString& rFormula :
+         { u"={11.3.5;1}"_ustr, u"={1.2e3.5;1}"_ustr, u"={1.2e3.;1}"_ustr })
+        checkMalformedFormula(aPosition, rFormula, FormulaGrammar::GRAM_ENGLISH,
+                              FormulaError::BadArrayContent);
+    m_pDoc->SetFormula(aPosition, u"={.5;1}"_ustr, FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, m_pDoc->GetErrCode(aPosition));
+    CPPUNIT_ASSERT_EQUAL(u"={0.5;1}"_ustr, m_pDoc->GetFormulaCell(aPosition)->GetFormula(
+                                               FormulaGrammar::GRAM_ENGLISH));
+    for (const OUString& rFormula : { u"=SUM(1.2e3.;1)"_ustr, u"=IF(1;1.2e3.;2)"_ustr })
+        checkMalformedFormula(aPosition, rFormula, FormulaGrammar::GRAM_ENGLISH);
+    for (const OUString& rFormula : { u"=1.2e3"_ustr, u"=1200."_ustr })
+    {
+        m_pDoc->SetFormula(aPosition, rFormula, FormulaGrammar::GRAM_ENGLISH);
+        CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, m_pDoc->GetErrCode(aPosition));
+        ASSERT_DOUBLES_EQUAL(1200.0, m_pDoc->GetValue(aPosition));
+    }
+    m_pDoc->DeleteTab(0);
+}
+
+// API-supplied function and array separators take precedence over decimal scanning.
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFormulaParserHonorsMappedSeparators)
+{
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xFactory(
+        m_xDocShell->SfxObjectShell::GetModel(), cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::sheet::XFormulaOpCodeMapper> xMapper(
+        xFactory->createInstance(u"com.sun.star.sheet.FormulaOpCodeMapper"_ustr),
+        cpo::uno::UNO_QUERY_THROW);
+    const auto aOriginalMap = xMapper->getAvailableMappings(
+        css::sheet::FormulaLanguage::ENGLISH, css::sheet::FormulaMapGroup::ALL_EXCEPT_SPECIAL);
+    cpo::uno::Reference<css::sheet::XFormulaParser> xParser(
+        xFactory->createInstance(u"com.sun.star.sheet.FormulaParser"_ustr),
+        cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xProperties(xParser, cpo::uno::UNO_QUERY_THROW);
+    xProperties->setPropertyValue(u"CompileEnglish"_ustr, cpo::uno::Any(true));
+    const ScAddress aPosition(0, 0, 0);
+    const css::table::CellAddress aReference;
+    // The scanner gives actual argument/array separators precedence over
+    // decimals, including in API-supplied formula languages.
+    for (const OpCode eSeparator : { ocSep, ocArrayColSep, ocArrayRowSep })
+    {
+        auto aMap = aOriginalMap;
+        for (auto& rEntry : asNonConstRange(aMap))
+            if (rEntry.Token.OpCode == eSeparator)
+                rEntry.Name = u"."_ustr;
+        xProperties->setPropertyValue(u"OpCodeMap"_ustr, cpo::uno::Any(aMap));
+        const OUString aFormula = eSeparator == ocSep ? u"=SUM(1.2)"_ustr : u"=SUM({1.2})"_ustr;
+        auto aTokens = xParser->parseFormula(aFormula, aReference);
+        auto pCode = std::make_unique<ScTokenArray>(*m_pDoc);
+        CPPUNIT_ASSERT(ScTokenConversion::ConvertToTokenArray(*m_pDoc, *pCode, aTokens));
+        m_pDoc->SetFormulaCell(aPosition, new ScFormulaCell(*m_pDoc, aPosition, std::move(pCode)));
+        CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, m_pDoc->GetErrCode(aPosition));
+        ASSERT_DOUBLES_EQUAL(3.0, m_pDoc->GetValue(aPosition));
+        CPPUNIT_ASSERT_EQUAL(aFormula.copy(1), xParser->printFormula(aTokens, aReference));
+    }
+    m_pDoc->DeleteTab(0);
+}
+
+// Malformed formulas must round-trip across locales and formula grammars.
+CPPUNIT_TEST_FIXTURE(TestFormula2, testMalformedFormulaRoundTripsAcrossLocales)
+{
+    SvtSysLocaleOptions aLocaleOptions;
+    const OUString aPreviousLocale = aLocaleOptions.GetLanguageTag().getBcp47();
+    comphelper::ScopeGuard aLocaleGuard([&aLocaleOptions, &aPreviousLocale] {
+        aLocaleOptions.SetLocaleConfigString(aPreviousLocale);
+        aLocaleOptions.Commit();
+    });
+
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    const ScAddress aPosition(0, 0, 0);
+    for (const OUString& rLocale : { u"fr-FR"_ustr, u"de-DE"_ustr })
+    {
+        aLocaleOptions.SetLocaleConfigString(rLocale);
+        aLocaleOptions.Commit();
+        // This is the formula obtained by replacing + with PLUS in =1+2,5.
+        m_pDoc->SetFormula(aPosition, u"=1PLUS2,5"_ustr, FormulaGrammar::GRAM_NATIVE);
+        CPPUNIT_ASSERT_EQUAL(FormulaError::OperatorExpected, m_pDoc->GetErrCode(aPosition));
+        const OUString aReconstructed
+            = m_pDoc->GetFormulaCell(aPosition)->GetFormula(FormulaGrammar::GRAM_NATIVE);
+        CPPUNIT_ASSERT_EQUAL(u"=1plus2,5"_ustr, aReconstructed);
+        m_pDoc->SetFormula(aPosition, aReconstructed, FormulaGrammar::GRAM_NATIVE);
+        CPPUNIT_ASSERT_EQUAL(FormulaError::OperatorExpected, m_pDoc->GetErrCode(aPosition));
+        CPPUNIT_ASSERT_EQUAL(u"=1plus2,5"_ustr, m_pDoc->GetFormulaCell(aPosition)->GetFormula(
+                                                    FormulaGrammar::GRAM_NATIVE));
+
+        // The preceding operand can also be a reference, string, parenthesized
+        // expression or a percentage, rather than only a number or bad name.
+        for (const OUString& rFormula :
+             { u"=A1,5"_ustr, u"=\"str\",5"_ustr, u"=(1),5"_ustr, u"=1%,5"_ustr, u"=1,,5"_ustr,
+               u"=1,2e3,5"_ustr, u"=1,2e-3,5"_ustr, u"=1,2e3,"_ustr, u"=1,2e3,e2"_ustr,
+               u"=1,,"_ustr })
+            checkMalformedFormula(aPosition, rFormula, FormulaGrammar::GRAM_NATIVE,
+                                  FormulaError::OperatorExpected);
+
+        m_pDoc->SetFormula(aPosition, u"=1+2,5"_ustr, FormulaGrammar::GRAM_NATIVE);
+        CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, m_pDoc->GetErrCode(aPosition));
+        ASSERT_DOUBLES_EQUAL(3.5, m_pDoc->GetValue(aPosition));
+
+        m_pDoc->SetFormula(aPosition, u"=1\u202f234"_ustr, FormulaGrammar::GRAM_NATIVE);
+        CPPUNIT_ASSERT(m_pDoc->GetErrCode(aPosition) != FormulaError::NONE);
+        CPPUNIT_ASSERT_EQUAL(u"=1\u202f234"_ustr, m_pDoc->GetFormulaCell(aPosition)->GetFormula(
+                                                      FormulaGrammar::GRAM_NATIVE));
+        if (rLocale == u"fr-FR")
+        {
+            // This locale accepts NBSP grouping; it is part of one number,
+            // rather than whitespace skipped between separate operands.
+            m_pDoc->SetFormula(aPosition, u"=1\u00a0234"_ustr, FormulaGrammar::GRAM_NATIVE);
+            CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, m_pDoc->GetErrCode(aPosition));
+            ASSERT_DOUBLES_EQUAL(1234.0, m_pDoc->GetValue(aPosition));
+        }
+
+        // English grammar still uses English numeric tokenization when a
+        // repeated decimal separator requires the i18n scanner fallback.
+        for (const OUString& rFormula :
+             { u"=1.2e-3."_ustr, u"=1.2e-3.e2"_ustr, u"=SUM(1.2e-3.;1)"_ustr })
+            checkMalformedFormula(aPosition, rFormula, FormulaGrammar::GRAM_ENGLISH);
+        m_pDoc->SetFormula(aPosition, u"=1.2e-3"_ustr, FormulaGrammar::GRAM_ENGLISH);
+        CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, m_pDoc->GetErrCode(aPosition));
+        ASSERT_DOUBLES_EQUAL(0.0012, m_pDoc->GetValue(aPosition));
+        m_pDoc->SetFormula(aPosition, u"=1,234"_ustr, FormulaGrammar::GRAM_ENGLISH);
+        CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, m_pDoc->GetErrCode(aPosition));
+        ASSERT_DOUBLES_EQUAL(1234.0, m_pDoc->GetValue(aPosition));
+    }
+    m_pDoc->DeleteTab(0);
+}
+
+// Valid NBSP formula whitespace must be omitted by ODF formula serialization.
+CPPUNIT_TEST_FIXTURE(TestFormula2, testValidNBSPFormulasSerializeSafelyAsODFF)
+{
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    const ScAddress aPosition(0, 0, 0);
+    sc::CompileFormulaContext aOdfContext(*m_pDoc, FormulaGrammar::GRAM_ODFF);
+    aOdfContext.setODFSavingVersion(SvtSaveOptions::ODFSVER_014_EXTENDED);
+    for (const OUString& rFormula : { u"=1+\u00a02"_ustr, u"=SUM(\u00a01;2)"_ustr })
+    {
+        m_pDoc->SetFormula(aPosition, rFormula, FormulaGrammar::GRAM_ENGLISH);
+        CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, m_pDoc->GetErrCode(aPosition));
+        ASSERT_DOUBLES_EQUAL(3.0, m_pDoc->GetValue(aPosition));
+        const OUString aODFF = m_pDoc->GetFormulaCell(aPosition)->GetFormula(aOdfContext);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aODFF.indexOf(u'\u00a0'));
+        m_pDoc->SetFormula(aPosition, aODFF, FormulaGrammar::GRAM_ODFF);
+        CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, m_pDoc->GetErrCode(aPosition));
+        ASSERT_DOUBLES_EQUAL(3.0, m_pDoc->GetValue(aPosition));
+    }
+
+    // Ordinary ASCII whitespace remains in the ODFF formula.
+    m_pDoc->SetFormula(aPosition, u"=1+ 2"_ustr, FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL(u"=1+ 2"_ustr, m_pDoc->GetFormulaCell(aPosition)->GetFormula(aOdfContext));
+    m_pDoc->DeleteTab(0);
+}
+
+// Malformed numbers must keep their original spelling when formulas are rebuilt.
+CPPUNIT_TEST_FIXTURE(TestFormula2, testMalformedNumericSpelling)
+{
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    const ScAddress aPosition(1, 0, 0);
+    for (const OUString& rFormula :
+         { u"=1E03 .50"_ustr, u"=1e3\t002.5000"_ustr, u"=1e3.50"_ustr, u"=1.2e-3."_ustr,
+           u"=1e3.e2"_ustr, u"=SUM(1E03 .50;2)"_ustr, u"={1E03 .50;2}"_ustr })
+        checkMalformedFormula(aPosition, rFormula, FormulaGrammar::GRAM_ENGLISH);
+
+    // Preserve only malformed boundaries. Operators end adjacency, and valid
+    // inline arrays still merge into matrices and normalize their numbers.
+    m_pDoc->SetFormula(aPosition, u"=1e3+bad"_ustr, FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL(u"=1000+bad"_ustr, m_pDoc->GetFormulaCell(aPosition)->GetFormula(
+                                                FormulaGrammar::GRAM_ENGLISH));
+    m_pDoc->SetFormula(aPosition, u"=SUM({1e3;2};3 .50)"_ustr, FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL(
+        u"=SUM({1000;2};3 .50)"_ustr,
+        m_pDoc->GetFormulaCell(aPosition)->GetFormula(FormulaGrammar::GRAM_ENGLISH));
+    for (const OUString& rFormula : { u"=@.5"_ustr, u"=LAMBDA(x;x)(.5)"_ustr })
+    {
+        m_pDoc->SetFormula(aPosition, rFormula, FormulaGrammar::GRAM_ENGLISH);
+        CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, m_pDoc->GetErrCode(aPosition));
+        ASSERT_DOUBLES_EQUAL(0.5, m_pDoc->GetValue(aPosition));
+    }
+    m_pDoc->DeleteTab(0);
+}
+
+// Malformed operands separated by Unicode whitespace must keep that separator.
+CPPUNIT_TEST_FIXTURE(TestFormula2, testMalformedNumericWhitespace)
+{
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    const ScAddress aPosition(1, 0, 0);
+    for (const OUString& rFormula :
+         { u"=1\u202f234"_ustr, u"=1\u00a0234"_ustr, u"=1E03\u202f002.5000"_ustr,
+           u"=SUM(1\u202f234;2)"_ustr, u"={1\u202f234;2}"_ustr, u"=1\u202f\u00a0\u202f234"_ustr })
+        checkMalformedFormula(aPosition, rFormula, FormulaGrammar::GRAM_ENGLISH);
+    m_pDoc->DeleteTab(0);
+}
+
+// UNO-parsed malformed formulas must retain source text through token round-trips.
+CPPUNIT_TEST_FIXTURE(TestFormula2, testMalformedNumericTokenRoundTrip)
+{
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    const ScAddress aPosition(1, 0, 0);
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xFactory(
+        m_xDocShell->SfxObjectShell::GetModel(), cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::sheet::XFormulaParser> xParser(
+        xFactory->createInstance(u"com.sun.star.sheet.FormulaParser"_ustr),
+        cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xProperties(xParser, cpo::uno::UNO_QUERY_THROW);
+    xProperties->setPropertyValue(u"CompileEnglish"_ustr, cpo::uno::Any(true));
+    const css::table::CellAddress aReference(0, aPosition.Col(), aPosition.Row());
+    for (const OUString& rFormula :
+         { u"=1E03 .50"_ustr, u"=1e3\u202f002.5000"_ustr, u"=A1\u202f.50"_ustr })
+    {
+        // The UNO parser returns source tokens without running the RPN compiler.
+        const auto aTokens = xParser->parseFormula(rFormula, aReference);
+        CPPUNIT_ASSERT_EQUAL(rFormula.copy(1), xParser->printFormula(aTokens, aReference));
+        auto pCode = std::make_unique<ScTokenArray>(*m_pDoc);
+        CPPUNIT_ASSERT(ScTokenConversion::ConvertToTokenArray(*m_pDoc, *pCode, aTokens));
+        m_pDoc->SetFormulaCell(aPosition, new ScFormulaCell(*m_pDoc, aPosition, std::move(pCode)));
+        CPPUNIT_ASSERT(m_pDoc->GetErrCode(aPosition) != FormulaError::NONE);
+        CPPUNIT_ASSERT_EQUAL(
+            rFormula, m_pDoc->GetFormulaCell(aPosition)->GetFormula(FormulaGrammar::GRAM_ENGLISH));
+    }
+
+    // Copying, moving and cloning must preserve source spelling and references.
+    const OUString aRepresentative = u"=A1\u202f.50"_ustr;
+    m_pDoc->SetFormula(aPosition, aRepresentative, FormulaGrammar::GRAM_ENGLISH);
+    const ScTokenArray* pOriginal = m_pDoc->GetFormulaCell(aPosition)->GetCode();
+    ScTokenArray aCopy(*pOriginal);
+    ScTokenArray aMoved(std::move(aCopy));
+    auto pClone = pOriginal->Clone();
+    for (ScTokenArray* pArray : { &aMoved, pClone.get() })
+    {
+        ScCompiler aCompiler(*m_pDoc, aPosition, *pArray, FormulaGrammar::GRAM_ENGLISH);
+        OUStringBuffer aBuffer;
+        aCompiler.CreateStringFromTokenArray(aBuffer);
+        CPPUNIT_ASSERT_EQUAL(aRepresentative.copy(1), aBuffer.makeStringAndClear());
+    }
+
+    // Preserve references as references, including in an erroneous formula.
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(aPosition), &aClipDoc);
+    const ScAddress aDestination(1, 1, 0);
+    pasteOneCellFromClip(m_pDoc, ScRange(aDestination), &aClipDoc);
+    CPPUNIT_ASSERT_EQUAL(
+        u"=A2\u202f.50"_ustr,
+        m_pDoc->GetFormulaCell(aDestination)->GetFormula(FormulaGrammar::GRAM_ENGLISH));
+    ScCompiler aCompiler(*m_pDoc, aDestination, *m_pDoc->GetFormulaCell(aDestination)->GetCode(),
+                         FormulaGrammar::GRAM_ODFF);
+    OUStringBuffer aBuffer;
+    aCompiler.CreateStringFromTokenArray(aBuffer);
+    CPPUNIT_ASSERT_EQUAL(u"[.A2]\u202f.50"_ustr, aBuffer.makeStringAndClear());
     m_pDoc->DeleteTab(0);
 }
 
