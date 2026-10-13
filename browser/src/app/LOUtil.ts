@@ -394,12 +394,50 @@ class LOUtil {
 		return url;
 	}
 
-	// Forced colours cannot reach the colours inside an <img>, so an icon that is
-	// a plain shape publishes its URL for the stylesheet to use as a mask.
+	// Forced colours cannot reach the colours inside an <img>, so an SVG icon
+	// publishes a URL for the stylesheet to use as a mask. A light icon draws
+	// its line work over a light fill and masks as a solid block, the dark one
+	// is line work alone, so the dark one is the mask whenever it exists.
 	public static publishIconURL(element: HTMLImageElement, url: string): void {
 		if (!url || !url.endsWith('.svg')) return;
-		element.style.setProperty('--icon-url', 'url("' + url + '")');
+		const lightURL = url.replace(/(^|\/)images\/dark\//, '$1images/');
+		LOUtil.setIconMaskURL(element, lightURL);
 		element.classList.add('icon-maskable');
+		LOUtil.followForcedColors();
+
+		if (!window.matchMedia?.('(forced-colors: active)').matches) return;
+		const darkURL = lightURL.replace(/(^|\/)images\//, '$1images/dark/');
+		const probe = new Image();
+		probe.addEventListener('load', function () {
+			if (element.style.getPropertyValue('--icon-url').includes(lightURL))
+				LOUtil.setIconMaskURL(element, darkURL);
+		});
+		probe.src = darkURL;
+	}
+
+	private static setIconMaskURL(element: HTMLImageElement, url: string): void {
+		element.style.setProperty('--icon-url', 'url("' + url + '")');
+	}
+
+	private static followingForcedColors = false;
+
+	// Forced colours can be switched on after the icons are published, so
+	// every icon is published again then to pick up its dark mask.
+	private static followForcedColors(): void {
+		if (LOUtil.followingForcedColors || !window.matchMedia) return;
+		LOUtil.followingForcedColors = true;
+		window
+			.matchMedia('(forced-colors: active)')
+			.addEventListener('change', LOUtil.onForcedColorsChange);
+	}
+
+	private static onForcedColorsChange(event: MediaQueryListEvent): void {
+		if (!event.matches) return;
+		document
+			.querySelectorAll<HTMLImageElement>('img.icon-maskable')
+			.forEach(function (element) {
+				LOUtil.publishIconURL(element, element.src);
+			});
 	}
 
 	public static setImage(
