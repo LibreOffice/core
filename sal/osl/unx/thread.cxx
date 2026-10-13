@@ -580,7 +580,7 @@ const auto HashSize = std::ssize(HashTable);
 
 static std::mutex HashLock;
 
-#if ! ((defined LINUX && !defined __FreeBSD_kernel__) || defined MACOSX || defined IOS)
+#if ! (defined LINUX && !defined __FreeBSD_kernel__)
 static oslThreadIdentifier LastIdent = 0;
 #endif
 
@@ -647,15 +647,6 @@ static oslThreadIdentifier insertThreadId (pthread_t hThread)
         }
 #endif
         pEntry->Ident = tid;
-#elif defined MACOSX || defined IOS
-        // currently the value of pthread_threadid_np is the same then
-        // syscall(SYS_thread_selfid), which returns an int as the TID.
-        // may change, as the syscall interface was deprecated.
-        uint64_t mac_tid;
-        pthread_threadid_np(nullptr, &mac_tid);
-        if (mac_tid > SAL_MAX_UINT32)
-            std::abort();
-        pEntry->Ident = mac_tid;
 #else
         ++LastIdent;
         if (0 == LastIdent)
