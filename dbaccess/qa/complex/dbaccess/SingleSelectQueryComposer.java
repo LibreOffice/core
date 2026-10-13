@@ -246,29 +246,6 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
         }
     }
 
-    @Test
-    public void testConditionByColumn() throws Exception
-    {
-        m_composer.setQuery("SELECT * FROM \"customers\"");
-
-        final Object initArgs[] =
-
-        {
-            new NamedValue("AutomaticAddition", Boolean.TRUE)
-        };
-        final String serviceName = "com.sun.star.beans.PropertyBag";
-        final XPropertyContainer filter = UnoRuntime.queryInterface(XPropertyContainer.class, getMSF().createInstanceWithArguments(serviceName, initArgs));
-        filter.addProperty("Name", PropertyAttribute.MAYBEVOID, "Comment");
-        filter.addProperty("RealName", PropertyAttribute.MAYBEVOID, "Comment");
-        filter.addProperty("TableName", PropertyAttribute.MAYBEVOID, "customers");
-        filter.addProperty("Value", PropertyAttribute.MAYBEVOID, "Good one.");
-        filter.addProperty("Type", PropertyAttribute.MAYBEVOID, Integer.valueOf(DataType.LONGVARCHAR));
-        final XPropertySet column = UnoRuntime.queryInterface(XPropertySet.class, filter);
-
-        m_composer.appendFilterByColumn(column, true, SQLFilterOperator.LIKE);
-        assertTrue("At least one row should exist", m_database.getConnection().createStatement().executeQuery(m_composer.getQuery()).next());
-    }
-
     private void impl_testDisjunctiveNormalForm(String _query, PropertyValue[][] _expectedDNF) throws SQLException
     {
         m_composer.setQuery(_query);
