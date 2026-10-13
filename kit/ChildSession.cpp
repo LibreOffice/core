@@ -158,10 +158,18 @@ ChildSession::~ChildSession()
         _docManager->getLOKit()->stopURP(_urpContext);
     }
 
-    // The iframe that would have answered any in-flight proxy listener calls is gone:
+    // The iframe that would have answered this session's in-flight proxy listener calls is gone:
     if (_docManager != nullptr)
     {
-        _docManager->getLOKit()->cancelProxyCalls();
+        std::set<std::string> callIds;
+        {
+            std::scoped_lock lock(_pendingProxyCallIdsMutex);
+            callIds.swap(_pendingProxyCallIds);
+        }
+        for (const std::string& callId : callIds)
+        {
+            _docManager->getLOKit()->cancelProxyCall(callId);
+        }
     }
 }
 
@@ -5108,8 +5116,15 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
         },
         this,
         [](void * data, std::string_view payload) {
-            static_cast<ChildSession *>(data)->sendTextFrame(
-                std::string("proxycall: ").append(payload));
+            auto const session = static_cast<ChildSession *>(data);
+            // A call that waits for its result has a callId:
+            Poco::JSON::Object::Ptr object;
+            if (JsonUtil::parseJSON(payload, object) && object->has("callId"))
+            {
+                std::scoped_lock lock(session->_pendingProxyCallIdsMutex);
+                session->_pendingProxyCallIds.insert(object->getValue<std::string>("callId"));
+            }
+            session->sendTextFrame(std::string("proxycall: ").append(payload));
         },
         this);
 
@@ -5158,8 +5173,12 @@ bool ChildSession::proxyReturn(char const * buffer, int length) {
         sendTextFrameAndLogError("error: cmd=proxyreturn kind=syntax");
         return false;
     }
-    _docManager->getLOKit()->deliverProxyResult(
-        full.substr(prefix.size(), idEnd - prefix.size()), full.substr(idEnd + 1));
+    std::string_view const callId = full.substr(prefix.size(), idEnd - prefix.size());
+    {
+        std::scoped_lock lock(_pendingProxyCallIdsMutex);
+        _pendingProxyCallIds.erase(std::string(callId));
+    }
+    _docManager->getLOKit()->deliverProxyResult(callId, full.substr(idEnd + 1));
     return true;
 }
 

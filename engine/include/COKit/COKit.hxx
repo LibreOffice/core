@@ -1859,13 +1859,15 @@ struct COKit
     virtual void deliverProxyResult(std::string_view callId, std::string_view jsonValue) = 0;
 
     /**
-     * Cancel all in-flight JS-UNO proxy listener calls by unblocking any
-     * ProxyInvocation::invoke currently waiting in Application::Yield, treating each pending
-     * call as if the iframe had returned an empty value.  Intended to be called from
-     * ChildSession destruction so the kit's main thread can't end up spinning on a
-     * synchronous proxy result that will never come.
+     * Cancel one in-flight JS-UNO proxy listener call by unblocking the
+     * ProxyInvocation::invoke waiting for it in Application::Yield, treating the call as if the
+     * iframe had returned an empty value.
+     *
+     * Spurious callIds (no matching pending invoke) are silently ignored.
+     *
+     * @param callId opaque token matching one previously delivered to proxyCallback.
      */
-    virtual void cancelProxyCalls() = 0;
+    virtual void cancelProxyCall(std::string_view callId) = 0;
 
     /**
      * Whether the current thread is inside a window where it has explicitly opted into a kitPoll

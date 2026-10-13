@@ -515,7 +515,7 @@ namespace desktop {
                            void (*proxyCallback) (void * data, std::string_view payload),
                            void * proxyCallbackData) override;
         void deliverProxyResult(std::string_view callId, std::string_view jsonValue) override;
-        void cancelProxyCalls() override;
+        void cancelProxyCall(std::string_view callId) override;
         bool isExpectedReentry() override;
         bool takeLegacyUnoApiUseFlag() override;
         void
