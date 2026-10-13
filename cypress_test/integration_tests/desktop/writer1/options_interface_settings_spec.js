@@ -3,17 +3,17 @@
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 
+function settingsIframeBody() {
+	return cy.cframe()
+		.find('.iframe-settings-modal')
+		.its('0.contentDocument').should('exist')
+		.its('body').should('not.be.empty')
+		.then(cy.wrap);
+}
+
 describe(['tagdesktop'], 'Options view toggles persist across reload', function () {
 	var newFilePath;
 	var win;
-
-	function settingsIframeBody() {
-		return cy.cframe()
-			.find('.iframe-settings-modal')
-			.its('0.contentDocument').should('exist')
-			.its('body').should('not.be.empty')
-			.then(cy.wrap);
-	}
 
 	beforeEach(function () {
 		newFilePath = helper.setupAndLoadDocument('writer/annotation.odt');
@@ -241,6 +241,80 @@ describe(['tagdesktop'], 'Options view toggles persist across reload', function 
 			expect(json.smoothScroll).to.eq('false');
 			expect(json.smartZoom).to.eq('false');
 			expect(json.defaultZoom).to.eq(13);
+		});
+	});
+
+	it('reads the zoom the server set once the dialog follows the server', function () {
+		cy.then(function () {
+			win.app.map.settings.showSettingsDialog('browser-setting');
+		});
+		cy.cGet('.iframe-settings-wrap').should('be.visible');
+		settingsIframeBody()
+			.find('#bs-tab-spreadsheet.active', { timeout: 20000 })
+			.should('exist');
+
+		// The settings file outlives the earlier tests, so the zoom they chose
+		// may still be there: follow the server whatever the file holds.
+		settingsIframeBody()
+			.find('#common-followServerZoom-input')
+			.check({ force: true });
+
+		cy.cGet('#iframe-settings-save').click();
+
+		// Following the server is written out as an empty zoom. An empty value is
+		// no choice, so a read of the zoom goes back to the one the server set,
+		// in the document already open as well.
+		cy.getFrameWindow()
+			.its('prefs._userBrowserSetting.defaultZoom')
+			.should('eq', '');
+		cy.then(function () {
+			expect(win.prefs.get('defaultZoom')).to.eq(win.uiDefaults.defaultZoom);
+		});
+	});
+});
+
+describe(['taga11yenabled'], 'Options dialog and screen reading', function () {
+	var win;
+
+	beforeEach(function () {
+		helper.setupAndLoadDocument('writer/annotation.odt');
+		cy.getFrameWindow().then(function (w) {
+			win = w;
+		});
+		cy.cGet('div.leaflet-layer').should('exist');
+	});
+
+	it('turns screen reading on as soon as the Options dialog is saved', function () {
+		// Start from screen reading off, the state the Help menu toggle leaves.
+		cy.then(function () {
+			win.app.map.setAccessibilityState(false);
+			expect(win.app.map._textInput.hasAccessibilitySupport()).to.eq(false);
+		});
+
+		cy.then(function () {
+			win.app.map.settings.showSettingsDialog('browser-setting');
+		});
+		cy.cGet('.iframe-settings-wrap').should('be.visible');
+		settingsIframeBody()
+			.find('#bs-tab-spreadsheet.active', { timeout: 20000 })
+			.should('exist');
+
+		// The dialog stores the In-document Screen Reader choice as the screen
+		// reading state as well.
+		settingsIframeBody()
+			.find('#common-lockAccessibilityOn-input')
+			.should('not.be.checked')
+			.click({ force: true });
+
+		cy.cGet('#iframe-settings-save').click();
+
+		// Screen reading comes on with the save, no reload needed.
+		cy.getFrameWindow()
+			.its('prefs')
+			.invoke('getBoolean', 'accessibilityState', false)
+			.should('eq', true);
+		cy.then(function () {
+			expect(win.app.map._textInput.hasAccessibilitySupport()).to.eq(true);
 		});
 	});
 });

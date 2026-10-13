@@ -301,16 +301,19 @@ window.L.Map.Settings = window.L.Handler.extend({
 	// Every setting, shared ones included, becomes this session's browser
 	// settings and is handed to the server, which keeps a copy. The view toggles
 	// of each document type are also kept as this browser's preferences, and
-	// the open document takes on the ones of its own type at once. The layout
-	// and the theme are switched through the same calls their own buttons make,
-	// so each is recorded the way the button records it. The zoom and scrolling
-	// settings are read as a document opens and go on applying at the next
-	// open. The layout goes first: switching it builds the toolbars again and
-	// restores the sidebar from the preferences, and the view toggles are then
-	// applied to the toolbars that are left.
+	// the open document takes on the ones of its own type at once. The layout,
+	// the theme and screen reading are switched through the same calls their
+	// own buttons make, so each is recorded the way the button records it. The
+	// zoom and scrolling settings are read as a document opens and go on
+	// applying at the next open. The layout goes first: switching it builds
+	// the toolbars again and restores the sidebar from the preferences, and
+	// the view toggles are then applied to the toolbars that are left.
 	applyBrowserSettings: function (
 		settings: Record<string, string | number>,
 	): void {
+		// The record step below replaces the stored theme, so take the one in use now
+		// while get() still returns it.
+		const wasDark = window.prefs.getBoolean('darkTheme');
 		window.prefs.recordStoredBrowserSettings(settings);
 
 		const viewToggles: Record<string, string> = {};
@@ -331,8 +334,16 @@ window.L.Map.Settings = window.L.Handler.extend({
 		}
 		if (settings.darkTheme !== undefined) {
 			const dark = settings.darkTheme === 'true';
-			if (dark !== window.prefs.getBoolean('darkTheme'))
-				uiManager.applyDarkMode(dark, true);
+			if (dark !== wasDark) uiManager.applyDarkMode(dark, true);
+		}
+		// Screen reading forced on by the server stays on whatever the dialog
+		// saved.
+		if (
+			window.enableAccessibility &&
+			settings.accessibilityState !== undefined &&
+			!this._map._lockAccessibilityOn
+		) {
+			this._map.setAccessibilityState(settings.accessibilityState === 'true');
 		}
 		uiManager.applyViewPreferences(layoutSwitched);
 	},

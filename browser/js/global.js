@@ -1167,6 +1167,14 @@ function showWelcomeSVG() {
 			for (const [key, value] of Object.entries(settings)) {
 				global.prefs._userBrowserSetting[key] = value;
 				global.prefs._settingUpdateJSON[key] = value;
+				// The cached value is replaced right away, so a read of the key
+				// returns the value the dialog saved. An empty value is no choice:
+				// its key leaves the cache, and a read then falls through to the
+				// defaults, as it does for an empty stored value.
+				if (value === '')
+					delete global.prefs._localStorageCache[key];
+				else
+					global.prefs._localStorageCache[key] = value;
 			}
 			global.prefs._sendBrowserSettingsUpdate(upload);
 		},

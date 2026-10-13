@@ -491,7 +491,12 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	setAccessibilityState: function(enable) {
-		if (window.prefs.getBoolean('accessibilityState') === enable)
+		// The preference can already hold the new value while the text input still has the
+		// old state, so both are compared. With no text input yet, the preference alone
+		// carries the state.
+		const inputMatches =
+			!this._textInput || this._textInput.hasAccessibilitySupport() === enable;
+		if (inputMatches && window.prefs.getBoolean('accessibilityState') === enable)
 			return;
 
 		window.prefs.set('accessibilityState', enable);
