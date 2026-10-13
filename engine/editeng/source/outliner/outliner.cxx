@@ -608,7 +608,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj, bool bAppend )
 
 OUString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor, std::optional<FontLineStyle>& rpFldLineStyle )
 {
-    if ( !aCalcFieldValueHdl.IsSet() )
+    if ( !maCalcFieldValueHdl.IsSet() && !maSdrCalcFieldValueHdl.IsSet() )
         return OUString( ' ' );
 
     EditFieldInfo aFldInfo( this, rField, nPara, nPos );
@@ -616,7 +616,13 @@ OUString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, 
     if ( rpFldColor )
         aFldInfo.SetFieldColor( *rpFldColor );
 
-    aCalcFieldValueHdl.Call( &aFldInfo );
+    if (maSdrCalcFieldValueHdl.IsSet())
+        maSdrCalcFieldValueHdl.Call( &aFldInfo );
+
+    // if the SdrOutliner handler did not generate a result, and the other handler exists, call it
+    if (aFldInfo.GetRepresentation().isEmpty() && maCalcFieldValueHdl.IsSet())
+        maCalcFieldValueHdl.Call( &aFldInfo );
+
     if ( aFldInfo.GetTextColor() )
     {
         rpTxtColor = *aFldInfo.GetTextColor();

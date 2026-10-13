@@ -44,9 +44,9 @@ public:
     void setVisualizedPage(const SdrPage* pPage);
     const SdrPage* getVisualizedPage() const { return mpVisualizedPage; }
 
-    virtual OUString CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rpTxtColor, std::optional<Color>& rpFldColor, std::optional<FontLineStyle>& rpFldLineStyle) override;
-
     bool hasEditViewCallbacks() const;
+private:
+    DECL_LINK(CalcFieldValueHdl, EditFieldInfo*, void);
 };
 
 class TextHierarchyBreakupBlockText : public TextHierarchyBreakupOutliner
