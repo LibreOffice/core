@@ -117,12 +117,14 @@ struct DocChainInfo
  */
 struct HWPSummary
 {
-    unsigned short    title[56];
-    unsigned short    subject[56];
-    unsigned short    author[56];
-    unsigned short    date[56];
-    unsigned short    keyword[2][56];
-    unsigned short    etc[3][56];
+    static constexpr size_t nFieldLength = 56;
+
+    unsigned short    title[nFieldLength];
+    unsigned short    subject[nFieldLength];
+    unsigned short    author[nFieldLength];
+    unsigned short    date[nFieldLength];
+    unsigned short    keyword[2][nFieldLength];
+    unsigned short    etc[3][nFieldLength];
 
     bool Read(HWPFile &);
 };
