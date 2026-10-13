@@ -307,8 +307,8 @@ public:
  */
 struct XMLError {
     XML_Error m_eCode;    ///< the error code
-    std::size_t m_nLine; ///< error line number
-    std::size_t m_nColumn; ///< error column number
+    std::uint64_t m_nLine; ///< error line number
+    std::uint64_t m_nColumn; ///< error column number
     OString m_sMessage;    ///< readable error message
 };
 
