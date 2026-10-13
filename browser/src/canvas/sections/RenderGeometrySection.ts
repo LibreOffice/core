@@ -560,6 +560,81 @@ class RenderGeometrySection extends CanvasSectionObject {
 		}
 	}
 
+	/*
+		Gives each run of text under a change only the part of it that moves and turns. The
+		engine lays text out anew in the changed frame at its own font size, upright and never
+		turned over, so the glyphs keep their size and read the right way round. Until it
+		answers, a run keeps its glyphs as they are and goes where the change takes its middle,
+		turned with the change where the change keeps the sense of turning and not turned where
+		it turns the object over.
+
+		Each run is drawn through the wrap around everything, the transforms it hangs under
+		inside that wrap, and its own matrix. The run's own matrix is set so that the three
+		together draw it where it is wanted, with the wrap as it is after the change.
+	*/
+	private static keepTheTextAsLaidOut(
+		primitives: cool.Primitive[],
+		change: cool.Matrix2D,
+		wrapBefore: cool.Matrix2D,
+		wrapAfter: cool.Matrix2D,
+		inside: cool.Matrix2D,
+	): void {
+		const angle =
+			change.a * change.d - change.b * change.c > 0
+				? Math.atan2(change.b - change.c, change.a + change.d)
+				: 0;
+
+		for (const primitive of primitives) {
+			if (
+				primitive.type === cool.TextSimplePortionPrimitive.type ||
+				primitive.type === cool.TextDecoratedPortionPrimitive.type
+			) {
+				const run = primitive as cool.TextSimplePortionPrimitive;
+				const own = cool.Matrix2D.fromArray(run.matrix);
+				if (!own) continue;
+
+				const drawnBy = own.then(inside).then(wrapBefore);
+
+				/*
+					The middle of the run, on the run's own matrix: that matrix scales by the font
+					size, and the advances are given in twips, so half their sum over the font size
+					is half way along. A third of the font size above the baseline is half way up.
+				*/
+				const fontSize = run.fontSize ?? 12;
+				const length = run.advances?.length
+					? run.advances.reduce((sum: number, one: number) => sum + one, 0)
+					: (run.textLength ?? run.text?.length ?? 0) * fontSize * 0.5;
+				const middle = drawnBy.apply(length / 2 / fontSize, -0.35);
+				const to = change.apply(middle.x, middle.y);
+				const movedAndTurned = cool.Matrix2D.IDENTITY.rotateAround(
+					middle.x,
+					middle.y,
+					angle,
+				).translate(to.x - middle.x, to.y - middle.y);
+
+				const under = inside.then(wrapAfter).invert();
+				if (under)
+					run.matrix = drawnBy.then(movedAndTurned).then(under).toArray();
+				continue;
+			}
+
+			if (!primitive.children) continue;
+
+			const transform = cool.Matrix2D.fromArray(
+				(primitive as cool.TransformPrimitive).matrix,
+			);
+			RenderGeometrySection.keepTheTextAsLaidOut(
+				primitive.children,
+				change,
+				wrapBefore,
+				wrapAfter,
+				primitive.type === cool.TransformPrimitive.type && transform
+					? transform.then(inside)
+					: inside,
+			);
+		}
+	}
+
 	/// Lays the change over that object, which is what changing one comes down to.
 	public static layOverTheObject(
 		object: cool.SlideObject,
@@ -581,6 +656,15 @@ class RenderGeometrySection extends CanvasSectionObject {
 				: undefined;
 
 		const under = cool.Matrix2D.fromArray(only?.matrix);
+		const wrapBefore = under ?? cool.Matrix2D.IDENTITY;
+		RenderGeometrySection.keepTheTextAsLaidOut(
+			only && under ? (only.children ?? []) : drawn,
+			matrix,
+			wrapBefore,
+			wrapBefore.then(matrix),
+			cool.Matrix2D.IDENTITY,
+		);
+
 		if (only && under) only.matrix = under.then(matrix).toArray();
 		else if (drawn.length)
 			object.primitives = [
