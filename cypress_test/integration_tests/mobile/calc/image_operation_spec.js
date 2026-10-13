@@ -19,15 +19,13 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Image Operation Tests', fun
 	it('Delete Image', function() {
 		mobileHelper.insertImage();
 
-		cy.cGet('#document-container').then(function(items) {
-			const rect = items[0].getBoundingClientRect();
-			const centerX = rect.left + rect.width / 2;
-			const centerY = rect.top + rect.height / 2;
+		// The inserted image is selected. A right click on it opens the context
+		// menu of the image, which has a plain Delete entry.
+		helper.getShapeSVGCenter().then(function(pos) {
+			cy.cGet('#document-canvas').rightclick(pos.x, pos.y);
+		});
 
-			cy.cGet('#document-container').rightclick(centerX, centerY);
-		})
-
-		cy.cGet('body').contains('.menu-entry-with-icon', 'Delete')
+		cy.cGet('body').contains('.menu-entry-with-icon', /^Delete$/)
 			.should('be.visible').click();
 
 		cy.cGet('#document-container svg g').should('not.exist');
