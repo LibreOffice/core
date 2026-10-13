@@ -55,6 +55,7 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,freetype,\
 		src/cid/type1cid \
 		src/dlg/dlg \
 		src/gzip/ftgzip \
+		src/hvf/hvf \
 		src/lzw/ftlzw \
 		src/pcf/pcf \
 		src/pfr/pfr \
