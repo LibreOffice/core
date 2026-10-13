@@ -91,7 +91,6 @@ void XMLTableShapeImportHelper::finishShape(
 
             sal_Int32 nEndX(-1);
             sal_Int32 nEndY(-1);
-            std::optional<OUString> xRangeList;
             SdrLayerID nLayerID = SDRLAYER_NOTFOUND;
             for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
             {
@@ -127,9 +126,6 @@ void XMLTableShapeImportHelper::finishShape(
                         if (IsXMLToken(aIter, XML_TRUE))
                             nLayerID = SC_LAYER_BACK;
                         break;
-                    case XML_ELEMENT(DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES):
-                        xRangeList = aIter.toString();
-                        break;
                     default: ;
                 }
             }
@@ -144,16 +140,6 @@ void XMLTableShapeImportHelper::finishShape(
                 }
                 else
                     ScDrawLayer::SetPageAnchored(*pSdrObj);
-            }
-
-            if (xRangeList)
-            {
-                // #i78086# If there are notification ranges, the ChartListener must be created
-                // also when anchored to the sheet
-                // -> call AddOLE with invalid cell position (checked in ScMyShapeResizer::ResizeShapes)
-
-                if (ScMyTables::IsOLE(rShape))
-                    rTables.AddOLE(rShape, *xRangeList);
             }
         }
         else // shape is annotation
@@ -222,6 +208,22 @@ void XMLTableShapeImportHelper::finishShape(
 
     if (!bNote)
     {
+        if (ScMyTables::IsOLE(rShape))
+        {
+            OUString aRangeList;
+            for (auto& rAttribute : sax_fastparser::castToFastAttributeList(xAttrList))
+            {
+                if (rAttribute.getToken() == XML_ELEMENT(DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES))
+                {
+                    aRangeList = rAttribute.toString();
+                    break;
+                }
+            }
+            // Register dependencies for grouped charts too, and recover them
+            // from the chart if the optional notification metadata is absent.
+            rTables.AddOLE(rShape, aRangeList);
+        }
+
         // any shape other than a note prevents copying the sheet
         ScSheetSaveData* pSheetData = static_cast<ScXMLImport&>(mrImporter).GetScModel()->GetSheetSaveData();
         pSheetData->BlockSheet( rTables.GetCurrentSheet() );

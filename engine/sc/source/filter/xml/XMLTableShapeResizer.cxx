@@ -29,6 +29,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <memory>
 #include <vector>
@@ -55,16 +56,19 @@ void ScMyOLEFixer::CreateChartListener(ScDocument& rDoc,
     const OUString& rName,
     std::u16string_view rRangeList)
 {
-    if (rRangeList.empty())
-    {
-        rDoc.AddOLEObjectToCollection(rName);
-        return;
-    }
-
     OUString aRangeStr;
     ScRangeStringConverter::GetStringFromXMLRangeString(aRangeStr, rRangeList, rDoc);
     if (aRangeStr.isEmpty())
     {
+        // The optional notification metadata may be absent. Load only these
+        // charts to recover their ranges and register their UNO data sequences
+        // before any reference update; charts with metadata stay lazy.
+        uno::Reference<chart2::XChartDocument> xChart = rDoc.GetChartByName(rName);
+        if (xChart.is() && !xChart->hasInternalDataProvider())
+        {
+            rDoc.RestoreChartListener(rName);
+            return;
+        }
         rDoc.AddOLEObjectToCollection(rName);
         return;
     }
