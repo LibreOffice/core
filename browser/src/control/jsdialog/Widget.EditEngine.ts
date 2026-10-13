@@ -40,6 +40,8 @@ interface EditEngineContainer extends HTMLElement {
 	// The last selection sent to the engine, so a pointer gesture that lands on the same caret is
 	// not reported twice. Held on the element so it goes away when the widget does.
 	editEngineLastSelection?: string;
+	// Paste text for a pending paste event's clipboardData.
+	editEnginePendingPasteText?: string;
 }
 
 const EDITENGINE_PARAGRAPH_CLASS = 'ui-editengine-paragraph';
@@ -353,7 +355,11 @@ function editEngineAttachHandlers(container: EditEngineContainer): void {
 
 	container.addEventListener('paste', (e: ClipboardEvent) => {
 		e.preventDefault();
-		const text = e.clipboardData ? e.clipboardData.getData('text/plain') : '';
+		// Get the pasted text: either what we remembered or from the event.
+		const pending = container.editEnginePendingPasteText;
+		container.editEnginePendingPasteText = undefined;
+		const text =
+			pending || (e.clipboardData ? e.clipboardData.getData('text/plain') : '');
 		if (text) editEngineSendAction(container, 'text', { text: text });
 	});
 

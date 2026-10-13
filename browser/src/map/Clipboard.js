@@ -1364,6 +1364,8 @@ window.L.Clipboard = window.L.Class.extend({
 		if (editengine && ev.clipboardData) {
 			const text = ev.clipboardData.getData('text/plain');
 			if (text) {
+				// Store the text in 'editengine' as well, Firefox strips the event.
+				editengine.editEnginePendingPasteText = text;
 				const dt = new DataTransfer();
 				dt.setData('text/plain', text);
 				const evt = new ClipboardEvent('paste', {
