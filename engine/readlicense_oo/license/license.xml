@@ -2557,12 +2557,13 @@
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">Jump to GNU GPL version 2.0</a></p>
         <h3>Hyphenation patterns</h3>
+        <!-- Name: dict-sq-hyph, Vendor:, Source: sq_AL, URL:, PURL:, Declared: GPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Albanian hyphenation patterns. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__MPL_version_2">Jump to MPL Version 2</a></p>
         <h2>Arabic</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-ar-spell, Vendor:, Source: ar, URL:, PURL:, Declared: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1 OR MPL 2.0, Concluded: MPL-2.0 -->
+        <!-- Name: dict-ar-spell, Vendor:, Source: ar, URL:, PURL:, Declared: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1 OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Arabic spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p>Author of Hunspell-ar, the arabic dictionary for Hunspell (spellchecker): 2006-2008, Mohamed Kebdani,
@@ -2576,7 +2577,7 @@
         either express or implied. See the licenses for the specific language governing rights and limitations under
         the licenses.</p>
         <h3>Thesaurus</h3>
-        <!-- Name: dict-ar-thes, Vendor:, Source: ar, URL:, PURL:, Declared: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1 OR MPL 2.0, Concluded: MPL-2.0 -->
+        <!-- Name: dict-ar-thes, Vendor:, Source: ar, URL:, PURL:, Declared: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1 OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Arabic thesaurus. Use of any of this software is
         governed by the terms of the license below:</p>
         <p>2006-2009, Taha Zerrouki, taha_zerrouki at gawab.com</p>
@@ -2624,7 +2625,7 @@
         <p><a href="#a__GPL_version_2">Jump to GNU GPL version 2.0</a></p>
         <h2>Bosnian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-bs-spell, Vendor:, Source: bs_BA, URL:, PURL:, Declared: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1 OR MPL 2.0, Concluded: MPL-2.0 -->
+        <!-- Name: dict-bs-spell, Vendor:, Source: bs_BA, URL:, PURL:, Declared: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1 OR MPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Bosnian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
         <p><a href="#a__GPL_version_2">GPL 2.0</a>/<a href="#a__LGPL_version_2_1">LGPL 2.1</a>/<a href="#a__MPL_version_1_1">MPL 1.1</a>
@@ -3699,8 +3700,8 @@
         <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
         <p><a href="#a__MPL_version_1_1">Jump to MPL Version 1.1</a></p>
         <h3>Thesaurus</h3>
-        <p>The following software may be included in this product: Portuguese (Brazilian) thesaurus. Use of
         <!-- Name: dict-pt-BR-thes, Vendor:, Source: pt_BR, URL:, PURL:, Declared: BSD-3-Clause, Concluded: MPL-2.0 -->
+        <p>The following software may be included in this product: Portuguese (Brazilian) thesaurus. Use of
         any of this software is governed by the terms of the license below:</p>
         <p>Copyright 2003 Kevin B. Hendricks, Stratford, Ontario, Canada
         And Contributors.  All rights reserved.</p>
