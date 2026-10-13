@@ -989,6 +989,8 @@ ifeq (depcache:,$(filter depcache,$(.FEATURES)):$(gb_PARTIAL_BUILD))
 else
 -include $(call gb_LinkTarget_get_dep_target,$(1))
 endif
+# An object moved in from another link target already has a dep file older than this one.
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
 $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCOBJECTS :=
