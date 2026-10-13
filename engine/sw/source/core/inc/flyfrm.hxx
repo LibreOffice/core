@@ -317,7 +317,7 @@ public:
 
     void InvalidateContentPos();
 
-    void SelectionHasChanged(SwFEShell* pShell);
+    SW_DLLPUBLIC void SelectionHasChanged(SwFEShell* pShell);
     SW_DLLPUBLIC bool IsShowUnfloatButton(SwWrtShell* pWrtSh) const;
 
     // For testing only (see uiwriter)
