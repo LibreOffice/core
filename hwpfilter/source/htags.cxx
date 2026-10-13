@@ -22,6 +22,7 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <unotools/tempfile.hxx>
 
+#include <iterator>
 #include <string.h>
 
 #include "hwplib.h"
@@ -47,6 +48,8 @@ bool HyperText::Read(HWPFile& hwpf)
                 break;
         }
     }
+    filename[std::size(filename) - 1] = 0;
+    bookmark[std::size(bookmark) - 1] = 0;
     return nRead == 617;
 }
 
@@ -66,6 +69,8 @@ bool EmPicture::Read(HWPFile & hwpf)
         return false;
     hwpf.ReadBlock(name, 16);
     hwpf.ReadBlock(type, 16);
+    name[std::size(name) - 1] = 0;
+    type[std::size(type) - 1] = 0;
     name[0] = 'H';
     name[1] = 'W';
     name[2] = 'P';
