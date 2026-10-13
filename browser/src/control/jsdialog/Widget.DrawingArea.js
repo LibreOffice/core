@@ -156,24 +156,14 @@ function _drawingAreaControl (parentContainer, data, builder) {
 			sendFocusEvent('focus_out');
 		});
 
-		var activeBorderId = null;
+		var checkboxes = new Map();
 		for (var i = 0; i < data.borders.length; i++) {
-			var border = data.borders[i];
-			var checkboxId = container.id + '-border-' + border.type;
 			var checkbox = window.L.DomUtil.create('span', 'visuallyhidden', wrapper);
-			checkbox.id = checkboxId;
+			checkbox.id = container.id + '-border-' + data.borders[i].type;
 			checkbox.setAttribute('role', 'checkbox');
-			checkbox.setAttribute('aria-checked', border.dontcare ? 'mixed' : border.show ? 'true' : 'false');
-			checkbox.textContent = border.name;
-
-			if (border.selected && activeBorderId === null) {
-				activeBorderId = checkboxId;
-			}
+			checkboxes.set(data.borders[i].type, checkbox);
 		}
-
-		if (activeBorderId) {
-			wrapper.setAttribute('aria-activedescendant', activeBorderId);
-		}
+		_showBorders(wrapper, checkboxes, data);
 	} else {
 		var image = window.L.DomUtil.create('img', builder.options.cssClass + ' ui-drawing-area', container);
 		image.id = imageId;
@@ -230,6 +220,25 @@ function _drawingAreaControl (parentContainer, data, builder) {
 	}
 
 	return false;
+}
+
+function _showBorders(wrapper, checkboxes, data) {
+	let activeBorderId = null;
+	for (const border of data.borders) {
+		const checkbox = checkboxes.get(border.type);
+		if (!checkbox)
+			continue;
+		checkbox.setAttribute('aria-checked', border.dontcare ? 'mixed' : border.show ? 'true' : 'false');
+		checkbox.textContent = border.name;
+
+		if (border.selected && activeBorderId === null) {
+			activeBorderId = checkbox.id;
+		}
+	}
+
+	if (activeBorderId) {
+		wrapper.setAttribute('aria-activedescendant', activeBorderId);
+	}
 }
 
 function _setDescription(wrapper, data, imageId) {
