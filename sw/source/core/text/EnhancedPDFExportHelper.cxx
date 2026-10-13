@@ -3319,7 +3319,6 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(
                 const sal_Int32 nParent = aOutlineStack.top().second;
 
                 // Destination rectangle
-                const SwPosition aBeforeJump(*mrSh.GetCursor_()->GetPoint());
                 mrSh.GotoOutline(i);
                 const SwRect& rDestRect = mrSh.GetCharRect();
 
@@ -3332,8 +3331,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(
                 if ( -1 != nDestPageNum )
                 {
                     // Destination Export
+                    // the heading is known, and the cursor may already stand on it
                     const sal_Int32 nDestId
-                        = CreateDestination(pCurrPage, rDestRect, nDestPageNum, aBeforeJump);
+                        = CreateDestination(pCurrPage, rDestRect, nDestPageNum, pTNd);
 
                     // Outline entry text
                     const OUString aEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText(
