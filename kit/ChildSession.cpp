@@ -1608,13 +1608,16 @@ bool ChildSession::sendZstdFrame(std::string_view headerName, const char* data, 
     return sendBinaryFrame(output.data(), output.size());
 }
 
-void ChildSession::sendVectorDelta(const std::vector<char>& compressed, const std::string& payload)
+void ChildSession::sendVectorDelta(const std::vector<char>& compressed, std::string_view payload)
 {
     bool sent;
     if (compressed.empty())
     {
         // Without a compressed delta the JSON goes as a command values text frame.
-        sent = sendTextFrame("commandvalues:" + inputSequenceToken() + ' ' + payload);
+        std::string message = "commandvalues:" + inputSequenceToken() + ' ';
+        message.reserve(message.size() + payload.size());
+        message.append(payload);
+        sent = sendTextFrame(message);
     }
     else
     {

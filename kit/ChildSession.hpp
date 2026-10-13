@@ -306,7 +306,7 @@ public:
 
     /// Sends a vector primitives delta: the compressed delta behind this session's own header
     /// line when there is one, otherwise the payload as a command values text frame.
-    void sendVectorDelta(const std::vector<char>& compressed, const std::string& payload);
+    void sendVectorDelta(const std::vector<char>& compressed, std::string_view payload);
 
 private:
     bool askSignatureStatus(const char* buffer, int length, const StringVector& tokens);

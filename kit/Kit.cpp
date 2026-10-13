@@ -109,6 +109,7 @@ Util::LoadTimings KitLoadTimings;
 #include <optional>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <thread>
 #include <utility>
 
@@ -2905,7 +2906,7 @@ void Document::deliverVectorDelta(const std::string& payload)
         return;
     }
     const std::string partId = payload.substr(0, newline);
-    const std::string json = payload.substr(newline + 1);
+    const std::string_view json = std::string_view(payload).substr(newline + 1);
 
     // Every session that holds the part reads the same delta, so it is compressed once and the
     // bytes are handed to each session. A session that draws bitmap tiles or was never served this
