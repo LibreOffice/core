@@ -352,17 +352,17 @@ void SvxFieldItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SvxDateField::SvxDateField()
 {
-    nFixDate = Date( Date::SYSTEM ).GetDate();
-    eType = SvxDateType::Var;
-    eFormat = SvxDateFormat::StdSmall;
+    m_nFixDate = Date( Date::SYSTEM ).GetDate();
+    m_eType = SvxDateType::Var;
+    m_eFormat = SvxDateFormat::StdSmall;
 }
 
 
 SvxDateField::SvxDateField( const Date& rDate, SvxDateType eT, SvxDateFormat eF )
 {
-    nFixDate = rDate.GetDate();
-    eType = eT;
-    eFormat = eF;
+    m_nFixDate = rDate.GetDate();
+    m_eType = eT;
+    m_eFormat = eF;
 }
 
 
@@ -378,9 +378,9 @@ bool SvxDateField::operator==( const SvxFieldData& rOther ) const
         return false;
 
     const SvxDateField& rOtherFld = static_cast<const SvxDateField&>(rOther);
-    return ( ( nFixDate == rOtherFld.nFixDate ) &&
-                ( eType == rOtherFld.eType ) &&
-                ( eFormat == rOtherFld.eFormat ) );
+    return ( ( m_nFixDate == rOtherFld.m_nFixDate ) &&
+                ( m_eType == rOtherFld.m_eType ) &&
+                ( m_eFormat == rOtherFld.m_eFormat ) );
 }
 
 
@@ -388,12 +388,12 @@ bool SvxDateField::operator==( const SvxFieldData& rOther ) const
 OUString SvxDateField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
 {
     Date aDate( Date::EMPTY );
-    if ( eType == SvxDateType::Fix )
-        aDate.SetDate( nFixDate );
+    if ( m_eType == SvxDateType::Fix )
+        aDate.SetDate( m_nFixDate );
     else
         aDate = Date( Date::SYSTEM ); // current date
 
-    return GetFormatted( aDate, eFormat, rFormatter, eLang );
+    return GetFormatted( aDate, m_eFormat, rFormatter, eLang );
 }
 
 OUString SvxDateField::GetFormatted( Date const & aDate, SvxDateFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLang )
