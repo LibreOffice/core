@@ -2274,9 +2274,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf164718)
 
     // The problem was, that layout refused to split the multiline field across the columns, which
     // resulted in a layout loop, ending up in a new page creation, where that section had height
-    // equal to zero (invisible). The interesting part is, that splitting of the field, which is
-    // reasonable, is later undone currently; but that is a separate issue (related to orphan and
-    // widow control).
+    // equal to zero (invisible). After that, the split was undone by widow control, because the
+    // zero-length rest lines of the field were not counted as lines.
 
     // Check that there is only one page, it has the leading paragraph, the section, and the
     // trailing paragraph:
@@ -2287,12 +2286,53 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf164718)
     assertXPathNodeName(pXmlDoc, "//page/body/*[3]", "section");
     assertXPathNodeName(pXmlDoc, "//page/body/*[4]", "txt");
 
-    // Check that the section's height is not zero (which it was before the fix). Currently, in my
-    // testing it is 3588. This height is likely to change at some point, when the split will not
-    // be undone, and lines 8-13 of the field will end up in column 2; then it will be around 1932:
+    // Check that the field is split across both columns: lines 8-13 are in column 2, and the
+    // section is about 7 lines (1932) high, not 13 lines (3588):
+    assertXPath(pXmlDoc, "//page/body/section/column[1]/body/txt", 1);
+    assertXPath(pXmlDoc, "//page/body/section/column[2]/body/txt", 1);
     auto height = getXPath(pXmlDoc, "//page/body/section/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(sal_Int32(1500), height);
-    CPPUNIT_ASSERT_LESS(sal_Int32(4000), height);
+    CPPUNIT_ASSERT_LESS(sal_Int32(2500), height);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf164718_lineBreaks)
+{
+    // A 9-line string variable (lines separated by line feeds) in a two-column section, with
+    // widows and orphans of 2:
+    createSwDoc("multiline-field-linebreaks.fodt");
+    Scheduler::ProcessEventsToIdle();
+    auto pXmlDoc = parseLayoutDump();
+
+    // Without the fix, the whole field stayed in column 1:
+    assertXPath(pXmlDoc, "//page", 1);
+    assertXPath(pXmlDoc, "//page/body/section/column[1]/body/txt", 1);
+    assertXPath(pXmlDoc, "//page/body/section/column[2]/body/txt", 1);
+    // 5 lines in column 1, 4 in column 2:
+    assertXPath(pXmlDoc, "//page/body/section/column[1]/body/txt/SwParaPortion/SwLineLayout", 5);
+    assertXPath(pXmlDoc, "//page/body/section/column[2]/body/txt/SwParaPortion/SwLineLayout", 4);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf164718_mixedLines)
+{
+    // An 8-line string variable with several characters per line, one of them long enough to
+    // wrap, in a two-column section, with widows and orphans of 2:
+    createSwDoc("multiline-field-mixed-lines.fodt");
+    Scheduler::ProcessEventsToIdle();
+    auto pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//page", 1);
+    assertXPath(pXmlDoc, "//page/body/section/column[1]/body/txt", 1);
+    assertXPath(pXmlDoc, "//page/body/section/column[2]/body/txt", 1);
+    // 5 lines in column 1, 4 in column 2; the column break falls inside the wrapped fifth line:
+    OString aCol1 = "//page/body/section/column[1]/body/txt/SwParaPortion/SwLineLayout"_ostr;
+    OString aCol2 = "//page/body/section/column[2]/body/txt/SwParaPortion/SwLineLayout"_ostr;
+    assertXPath(pXmlDoc, aCol1, 5);
+    assertXPath(pXmlDoc, aCol2, 4);
+    assertXPath(pXmlDoc, aCol1 + "[1]/SwFieldPortion", "expand", u"Line one");
+    assertXPath(pXmlDoc, aCol1 + "[5]/SwFieldPortion", "expand",
+                u"This fifth line is long enough that it has to wrap ");
+    assertXPath(pXmlDoc, aCol2 + "[1]/SwFieldPortion", "expand", u"inside the narrow column");
+    assertXPath(pXmlDoc, aCol2 + "[4]/SwFieldPortion", "expand", u"Line eight");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf169158)

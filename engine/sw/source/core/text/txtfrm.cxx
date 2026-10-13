@@ -2917,11 +2917,14 @@ void SwTextFrame::PrepWidows( const sal_uInt16 nNeed, bool bNotify )
     SwTextMargin aLine( this, &aInf );
     aLine.Bottom();
     TextFrameIndex nTmpLen = aLine.GetCurr()->GetLen();
+    // The rest of a multiline field has no length, but can be yielded too
+    bool bTmpRest = aLine.GetCurr()->IsRest();
     while( nHave && aLine.PrevLine() )
     {
-        if( nTmpLen )
+        if( nTmpLen || bTmpRest )
             --nHave;
         nTmpLen = aLine.GetCurr()->GetLen();
+        bTmpRest = aLine.GetCurr()->IsRest();
     }
 
     // If it's certain that we can yield lines, the Master needs
