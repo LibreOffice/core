@@ -469,6 +469,9 @@ class LOUtil {
 			entry.icons.delete(entry.icon),
 	);
 
+	// The images that have the error fallback, with the latest layout-critical flag of each.
+	private static imagesWithFallback = new WeakMap<HTMLImageElement, boolean>();
+
 	private static showIcon(
 		element: HTMLImageElement | HTMLElement,
 		name: string,
@@ -930,6 +933,10 @@ class LOUtil {
 		imageElement: HTMLImageElement,
 		imageIsLayoutCritical?: boolean,
 	): void {
+		const hasFallback = LOUtil.imagesWithFallback.has(imageElement);
+		LOUtil.imagesWithFallback.set(imageElement, !!imageIsLayoutCritical);
+		if (hasFallback) return;
+
 		imageElement.addEventListener('error', function (e: any) {
 			if (e.loUtilProcessed) {
 				return;
@@ -963,7 +970,7 @@ class LOUtil {
 				return;
 			}
 
-			if (imageIsLayoutCritical) {
+			if (LOUtil.imagesWithFallback.get(imageElement)) {
 				imageElement.src =
 					'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 				// We cannot set visibility: hidden because that would hide

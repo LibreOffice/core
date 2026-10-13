@@ -535,4 +535,49 @@ describe('LOUtil', function () {
 			);
 		});
 	});
+
+	describe('checkIfImageExists()', function () {
+		let dom: any;
+
+		before(function () {
+			dom = new jsdom.JSDOM('<html><body></body></html>');
+		});
+
+		it('an image checked many times gets one error handler', function () {
+			const image = dom.window.document.createElement('img');
+			let errorHandlers = 0;
+			const add = image.addEventListener.bind(image);
+			image.addEventListener = (type: string, listener: any, options?: any) => {
+				if (type === 'error') errorHandlers++;
+				add(type, listener, options);
+			};
+
+			for (let i = 0; i < 3; i++) LOUtil.checkIfImageExists(image);
+
+			nodeassert.strictEqual(errorHandlers, 1);
+		});
+
+		it('a missing dark icon falls back to the light icon', function () {
+			const image = dom.window.document.createElement('img');
+			LOUtil.checkIfImageExists(image);
+			LOUtil.checkIfImageExists(image);
+			image.src = 'http://host/images/dark/lc_bold.svg';
+
+			image.dispatchEvent(new dom.window.Event('error'));
+
+			nodeassert.strictEqual(image.src, 'http://host/images/lc_bold.svg');
+		});
+
+		it('the latest layout-critical flag decides the fallback', function () {
+			const image = dom.window.document.createElement('img');
+			LOUtil.checkIfImageExists(image, false);
+			LOUtil.checkIfImageExists(image, true);
+			image.src = 'http://host/images/lc_bold.svg';
+
+			image.dispatchEvent(new dom.window.Event('error'));
+
+			nodeassert.ok(image.src.startsWith('data:image/png;base64,'));
+			nodeassert.notStrictEqual(image.style.display, 'none');
+		});
+	});
 });
