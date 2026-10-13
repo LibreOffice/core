@@ -63,6 +63,8 @@ pkgs.mkShell {
     git
     gperf
     libtool
+    libxml2
+    libxslt
     ninja
     nodejs_latest
     perl
