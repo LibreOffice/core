@@ -699,7 +699,8 @@ namespace basegfx::utils
 
         B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate)
         {
-            if (rCandidate.count() > 1000)
+            constexpr sal_uInt32 nMaxPolygons(1000);
+            if (rCandidate.count() > nMaxPolygons)
             {
                 SAL_WARN("basegfx", "this poly is too large, " << rCandidate.count() << " elements, to be able to process timeously, falling back to ignoring the winding rule, which is likely to cause rendering artifacts");
                 return rCandidate;
@@ -722,6 +723,14 @@ namespace basegfx::utils
 
             // remove all polygons which have the same orientation as the polygon they are directly contained in
             const sal_uInt32 nCount(aCandidate.count());
+
+            // comparing every part with every other is quadratic, and a few polygons that cross
+            // themselves often can resolve into thousands of parts
+            if (nCount > nMaxPolygons)
+            {
+                SAL_WARN("basegfx", "resolving crossovers gave " << nCount << " polygons, too many to process timeously, falling back to ignoring the winding rule, which is likely to cause rendering artifacts");
+                return rCandidate;
+            }
 
             if(nCount > 1)
             {
