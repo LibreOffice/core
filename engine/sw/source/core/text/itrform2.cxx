@@ -135,11 +135,7 @@ SwTextFormatter::~SwTextFormatter()
 {
     // Extremely unlikely, but still possible
     // e.g.: field splits up, widows start to matter
-    if( GetInfo().GetRest() )
-    {
-        delete GetInfo().GetRest();
-        GetInfo().SetRest(nullptr);
-    }
+    GetInfo().DiscardRest();
 }
 
 void SwTextFormatter::Insert( SwLineLayout *pLay )
@@ -2178,12 +2174,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
                 GetInfo().ResetMaxWidthDiff();
                 GetInfo().SetExtraSpace(0);
 
-                // delete old rest
-                if ( GetInfo().GetRest() )
-                {
-                    delete GetInfo().GetRest();
-                    GetInfo().SetRest( nullptr );
-                }
+                GetInfo().DiscardRest();
 
                 // set original rest portion
                 if ( xSaveField )

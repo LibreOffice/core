@@ -2033,12 +2033,7 @@ void SwTextFrame::FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf
         ++nGo;
         rInf.Init();
         rLine.Top();
-        // Stale rest of the previous pass
-        if (rInf.GetRest())
-        {
-            delete rInf.GetRest();
-            rInf.SetRest(nullptr);
-        }
+        rInf.DiscardRest(); // Stale rest of the previous pass
         if( !rLine.GetDropFormat() )
             rLine.SetOnceMore( false );
         SwCharRange aRange(TextFrameIndex(0), TextFrameIndex(rInf.GetText().getLength()));

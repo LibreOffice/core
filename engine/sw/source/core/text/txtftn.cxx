@@ -1469,11 +1469,7 @@ bool SwQuoVadisPortion::Format( SwTextFormatInfo &rInf )
             Width(rInf.Width() - rInf.X());
 
         // No multiline Fields for QuoVadis and ErgoSum
-        if( rInf.GetRest() )
-        {
-            delete rInf.GetRest();
-            rInf.SetRest( nullptr );
-        }
+        rInf.DiscardRest();
     }
     return bFull;
 }
@@ -1534,11 +1530,8 @@ bool SwErgoSumPortion::Format( SwTextFormatInfo &rInf )
     rInf.SetErgoDone( true );
 
     // No multiline Fields for QuoVadis and ErgoSum
-    if( bFull && rInf.GetRest() )
-    {
-        delete rInf.GetRest();
-        rInf.SetRest( nullptr );
-    }
+    if (bFull)
+        rInf.DiscardRest();
 
     // We return false in order to get some text into the current line,
     // even if it's full (better than looping)
