@@ -50,7 +50,7 @@
 from __future__ import annotations
 import datetime
 import time
-from typing import Any, Literal, NewType, overload, TypeVar
+from typing import Any, Iterable, Literal, NewType, overload, TypeVar
 
 # List the available service types
 #   SFScriptForge
@@ -133,7 +133,7 @@ SQL_ACTION = TypeVar('SQL_ACTION', str, str)
 """ A SQL command containing an action statement (CREATE TABLE, INSERT, DELETE, ...).
 Table- and field names may be surrounded by square brackets. """
 SCALAR = int | float | str | datetime.datetime
-VECTOR = tuple[SCALAR]
+VECTOR = tuple[SCALAR] | Iterable[SCALAR]
 MATRIX = tuple[VECTOR]
 
 #   Define the used UNO types
@@ -1112,7 +1112,11 @@ class SFScriptForge:
                 """
             ...
 
-        def ExtractFromZip(self, filename: FILE, destination: FILE, source: str | tuple[str, ...] = ...) -> bool:
+        def ExtractFromZip(self,
+                           filename: FILE,
+                           destination: FILE,
+                           source: str | tuple[str, ...] | Iterable[str] = ...
+                           ) -> bool:
             """
                 Extracts a list of files contained in a zip archive and stores them in a folder.
                     Args
@@ -2196,7 +2200,8 @@ class SFScriptForge:
 
         def StoreValue(self,
                        variablename: str,
-                       value: Any | datetime.datetime | UNO | tuple[int | float | str | bool, ...],
+                       value: Any | datetime.datetime | UNO |
+                              tuple[int | float | str | bool, ...] | Iterable[int | float | str | bool, ...],
                        ) -> bool:
             """
                 Store in the shared and persistent storage area the given value. Later retrieval will be done thanks
@@ -2679,7 +2684,7 @@ class SFScriptForge:
                        'DATE', 'TIME', 'DATETIME', 'COMBO', 'LIST', 'RADIO'] = ...,
                        default: str | bool | int | float | datetime.datetime = ...,
                        title: str = ...,
-                       choices: tuple[str, ...] = ...,
+                       choices: tuple[str, ...] | Iterable[str] = ...,
                        format: str = ...,
                        ) -> str | bool | int | float | datetime.datetime:
             r"""
@@ -4346,7 +4351,10 @@ class SFDialogs:
                 """
             ...
 
-        def OrderTabs(self, tabslist: tuple[str], start: int = ..., increment: int = ...) -> bool:
+        def OrderTabs(self, tabslist: tuple[str] | Iterable[str],
+                      start: int = ...,
+                      increment: int = ...,
+                      ) -> bool:
             """
                 Set the tabulation index of a series of controls.
 
@@ -4903,7 +4911,7 @@ class SFDocuments:
                 """
             ...
 
-        def DeleteStyles(self, family: str, styleslist: str | tuple[str]) -> None:
+        def DeleteStyles(self, family: str, styleslist: str | tuple[str] | Iterable[str]) -> None:
             """
                 Suppresses a single style or a list of styles given by their names within a specific styles family.
                 Only user-defined styles may be deleted, built-in styles are ignored.
@@ -5852,9 +5860,9 @@ class SFDocuments:
                              pivottablename: str,
                              sourcerange: RANGE,
                              targetcell: RANGE,
-                             datafields: tuple[str, ...] | str = ...,
-                             rowfields: tuple[str, ...] | str = ...,
-                             columnfields: tuple[str, ...] | str = ...,
+                             datafields: tuple[str, ...] | Iterable[str] | str = ...,
+                             rowfields: tuple[str, ...] | Iterable[str] | str = ...,
+                             columnfields: tuple[str, ...] | Iterable[str] | str = ...,
                              filterbutton: bool = ...,
                              rowtotals: bool = ...,
                              columntotals: bool = ...,
@@ -6214,7 +6222,7 @@ class SFDocuments:
 
         def ImportStylesFromFile(self,
                                  filename: FILE,
-                                 families: str | tuple[str, ...] = ...,
+                                 families: str | tuple[str, ...] | Iterable[str] = ...,
                                  overwrite: bool = ...
                                  ):
             """
@@ -7363,7 +7371,7 @@ class SFDocuments:
 
         def ImportStylesFromFile(self,
                                  filename: FILE,
-                                 families: str | tuple[str, ...] = ...,
+                                 families: str | tuple[str, ...] | Iterable[str] = ...,
                                  overwrite: bool = ...
                                  ):
             """

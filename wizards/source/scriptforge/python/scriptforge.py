@@ -77,6 +77,7 @@ import datetime
 import time
 import os
 from typing import TypeVar
+from collections.abc import Iterable
 
 
 class _Singleton(type):
@@ -355,11 +356,12 @@ class ScriptForge(object, metaclass = _Singleton):
         cstNoArgs = '+++NOARGS+++'
         cstValue, cstVarType, cstDims, cstClass, cstType, cstService, cstName = 0, 1, 2, 2, 3, 4, 5
 
-        def ConvertDictArgs():
+        def ConvertArgs():
             """
-                Convert dictionaries in arguments to sets of property values
+                Convert dictionaries in arguments to sets of property values.
+                Convert iterable arguments (like range(...)) to tuples.
                 """
-            argslist = list(args)
+            argslist = list(args)   # A list is editable
             for i in range(len(args)):
                 arg = argslist[i]
                 if isinstance(arg, dict):
@@ -367,13 +369,16 @@ class ScriptForge(object, metaclass = _Singleton):
                     if not isinstance(argdict, SFScriptForge.SF_Dictionary):
                         argdict = CreateScriptService('ScriptForge.Dictionary', arg)
                     argslist[i] = argdict.ConvertToPropertyValues()
+                elif isinstance(arg, Iterable) and not isinstance(arg, (tuple, list, str)):
+                    argslist[i] = tuple(arg)
             return tuple(argslist)
 
         # Intercept flags is a tuple
         flag = (flags[0] if isinstance(flags, tuple) else flags)
-        # Intercept dictionary arguments
-        if flag & SFServices.flgDictArg == SFServices.flgDictArg:  # Bits comparison
-            args = ConvertDictArgs()
+        # Intercept dictionary and iterable arguments
+        if flag & SFServices.flgDictArg == SFServices.flgDictArg\
+                or flag & SFServices.flgIterArg == SFServices.flgIterArg:  # Bits comparisons
+            args = ConvertArgs()
         #
         # Run the basic script
         # The targeted script has a ParamArray argument. Do not change next 4 lines except if you know what you do !
@@ -573,11 +578,12 @@ class SFServices(object):
     flgPost = 16  # The method or the property implies a hardcoded post-processing
     flgDictArg = 32  # Invoked service method may contain a dict argument
     flgDateArg = 64  # Invoked service method may contain a date argument
-    flgDateRet = 128  # Invoked service method can return a date
-    flgUno = 256  # Invoked service method/property can return a UNO object
-    flgObject = 512  # N-th argument may be a Basic object
+    flgIterArg = 128  # Invoked service method may contain an iterable argument
+    flgDateRet = 256  # Invoked service method can return a date
+    flgUno = 512  # Invoked service method/property can return a UNO object
+    flgObject = 1024  # N-th argument may be a Basic object
                      # N (default = 0) can be passed as companion in a tuple
-    flgHardCode = 1024  # Force hardcoded call to method, avoid CallByName()
+    flgHardCode = 2048  # Force hardcoded call to method, avoid CallByName()
     # Basic class type
     moduleClass, moduleStandard = 2, 1
     #
@@ -1245,7 +1251,7 @@ class SFScriptForge:
             return self.ExecMethod(self.vbMethod, 'ExtensionFolder', extension)
 
         def ExtractFromZip(self, filename, destination, source = ''):
-            return self.ExecMethod(self.vbMethod, 'ExtractFromZip', filename, destination, source)
+            return self.ExecMethod(self.vbMethod + self.flgIterArg, 'ExtractFromZip', filename, destination, source)
 
         def FileExists(self, filename):
             return self.ExecMethod(self.vbMethod, 'FileExists', filename)
@@ -1703,7 +1709,7 @@ class SFScriptForge:
             if isinstance(value, datetime.datetime):
                 value = SFScriptForge.SF_Basic.CDateToUnoDateTime(value)
                 return self.ExecMethod(self.vbMethod + self.flgDateArg, 'StoreValue', variablename, value)
-            return self.ExecMethod(self.vbMethod, 'StoreValue', variablename, value)
+            return self.ExecMethod(self.vbMethod + self.flgIterArg, 'StoreValue', variablename, value)
 
     # #########################################################################
     # SF_String CLASS
@@ -1871,9 +1877,10 @@ class SFScriptForge:
         def EnterValue(self, prompt = '', valuetype = 'STRING', default = '', title = '', choices = (), format = ''):
             if isinstance(default, (datetime.datetime, datetime.time)):
                 default = SFScriptForge.SF_Basic.CDateToUnoDateTime(default)
-            flag = self.flgDateArg + self.flgDateRet if valuetype.upper() in ('DATE', 'TIME', 'DATETIME') else 0
-            return self.ExecMethod(self.vbMethod + flag, 'EnterValue', prompt, valuetype, default, title,
-                                   choices, format)
+            flag1 = (self.flgDateArg + self.flgDateRet if valuetype.upper() in ('DATE', 'TIME', 'DATETIME') else 0)
+            flag2 = (self.flgIterArg if valuetype.upper() in ('COMBO', 'LIST', 'RADIO') else 0)
+            return self.ExecMethod(self.vbMethod + flag1 + flag2, 'EnterValue', prompt, valuetype,
+                                   default, title, choices, format)
 
         def GetDocument(self, windowname = ''):
             return self.ExecMethod(self.vbMethod, 'GetDocument', windowname)
@@ -2303,7 +2310,7 @@ class SFDialogs:
                                    controlname, page, offsetx, offsety, includeonproperties)
 
         def OrderTabs(self, tabslist, start = 1, increment = 1):
-            return self.ExecMethod(self.vbMethod, 'OrderTabs', tabslist, start, increment)
+            return self.ExecMethod(self.vbMethod + self.flgIterArg, 'OrderTabs', tabslist, start, increment)
 
         def Resize(self, left = -99999, top = -99999, width = -1, height = -1):
             return self.ExecMethod(self.vbMethod, 'Resize', left, top, width, height)
@@ -2458,7 +2465,7 @@ class SFDocuments:
             # Exclude Base, FormDocument and Math
             doctype = self.DocumentType
             if doctype in ('Calc', 'Writer', 'Draw', 'Impress'):
-                return self.ExecMethod(self.vbMethod, 'DeleteStyles', family, styleslist)
+                return self.ExecMethod(self.vbMethod + self.flgIterArg, 'DeleteStyles', family, styleslist)
             raise RuntimeError('The \'DeleteStyles\' method is not applicable to {0} documents'.format(doctype))
 
         def Echo(self, echoon = True, hourglass = False):
@@ -2707,8 +2714,9 @@ class SFDocuments:
         def CreatePivotTable(self, pivottablename, sourcerange, targetcell, datafields = ScriptForge.cstSymEmpty,
                              rowfields = ScriptForge.cstSymEmpty, columnfields = ScriptForge.cstSymEmpty,
                              filterbutton = True, rowtotals = True, columntotals = True):
-            return self.ExecMethod(self.vbMethod, 'CreatePivotTable', pivottablename, sourcerange, targetcell,
-                                   datafields, rowfields, columnfields, filterbutton, rowtotals, columntotals)
+            return self.ExecMethod(self.vbMethod + self.flgIterArg, 'CreatePivotTable', pivottablename, sourcerange,
+                                   targetcell, datafields, rowfields, columnfields, filterbutton,
+                                   rowtotals, columntotals)
 
         def CreateShapeFromFile(self, shapename, imagefile, range = '~.~', aslink = False):
             return self.ExecMethod(self.vbMethod, 'CreateShapeFromFile', shapename, imagefile, range, aslink)
@@ -2764,7 +2772,7 @@ class SFDocuments:
                                    destinationcell, sqlcommand, directsql)
 
         def ImportStylesFromFile(self, filename = '', families = '', overwrite = False):
-            return self.ExecMethod(self.vbMethod, 'ImportStylesFromFile', filename, families, overwrite)
+            return self.ExecMethod(self.vbMethod + self.flgIterArg, 'ImportStylesFromFile', filename, families, overwrite)
 
         def InsertSheet(self, sheetname, beforesheet = 32768):
             return self.ExecMethod(self.vbMethod, 'InsertSheet', sheetname, beforesheet)
@@ -2801,7 +2809,7 @@ class SFDocuments:
             return self.ExecMethod(self.vbMethod, 'RenameSheet', sheetname, newname)
 
         def SetArray(self, targetcell, value):
-            return self.ExecMethod(self.vbMethod, 'SetArray', targetcell, value)
+            return self.ExecMethod(self.vbMethod + self.flgIterArg, 'SetArray', targetcell, value)
 
         def SetCellStyle(self, targetrange, style, filterformula = '', filterscope = ''):
             return self.ExecMethod(self.vbMethod, 'SetCellStyle', targetrange, style, filterformula, filterscope)
@@ -2810,7 +2818,7 @@ class SFDocuments:
             return self.ExecMethod(self.vbMethod, 'SetFormula', targetrange, formula)
 
         def SetValue(self, targetrange, value):
-            return self.ExecMethod(self.vbMethod, 'SetValue', targetrange, value)
+            return self.ExecMethod(self.vbMethod + self.flgIterArg, 'SetValue', targetrange, value)
 
         def Shapes(self, sheetname, shapename = ''):
             return self.ExecMethod(self.vbMethod, 'Shapes', sheetname, shapename)
@@ -3056,7 +3064,7 @@ class SFDocuments:
             return self.ExecMethod(self.vbMethod, 'Forms', form)
 
         def ImportStylesFromFile(self, filename = '', families = '', overwrite = False):
-            return self.ExecMethod(self.vbMethod, 'ImportStylesFromFile', filename, families, overwrite)
+            return self.ExecMethod(self.vbMethod + self.flgIterArg, 'ImportStylesFromFile', filename, families, overwrite)
 
         def PrintOut(self, pages = '', copies = 1, printbackground = True, printblankpages = False,
                      printevenpages = True, printoddpages = True, printimages = True):

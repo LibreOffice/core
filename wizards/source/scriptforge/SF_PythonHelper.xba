@@ -654,11 +654,12 @@ Const vbGet = 2, vbLet = 4, vbMethod = 1, vbSet = 8
 Const cstPost = 16			&apos;	Requires a hardcoded post-processing
 Const cstDictArg = 32		&apos;	May contain a Dictionary argument
 Const cstDateArg = 64		&apos;	May contain a date argument
-Const cstDateRet = 128		&apos;	Return value can be a date
-Const cstUno = 256			&apos;	Return value can be a UNO object
-Const cstObject = 512		&apos;	n-th argument is a Basic object when numeric
+Const cstIterArg = 128		&apos;	May contain an iterable argument (unused in Basic)
+Const cstDateRet = 256		&apos;	Return value can be a date
+Const cstUno = 512			&apos;	Return value can be a UNO object
+Const cstObject = 1024		&apos;	n-th argument is a Basic object when numeric
 							&apos;	n (default = 0) can be passed as companion in an array
-Const cstHardCode = 1024	&apos;	Method must not be executed with CallByName()
+Const cstHardCode = 2048	&apos;	Method must not be executed with CallByName()
 &apos;	Returned object nature
 Const objMODULE = 1, objCLASS = 2, objDICT = 3, objUNO = 4
 
