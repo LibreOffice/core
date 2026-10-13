@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-22 21:46+0200\n"
-"PO-Revision-Date: 2026-10-12 15:04+0000\n"
+"PO-Revision-Date: 2026-10-13 11:59+0000\n"
 "Last-Translator: geonetor <geonetor@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/collabora-online/"
 "help/el/>\n"
@@ -107,7 +107,7 @@ msgstr "Εμφάνιση της βοήθειας για τις συντομεύ�
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:26-38
 msgid "Focus to notebookbar menu"
-msgstr ""
+msgstr "Εστίαση στο μενού της γραμμής σημειωματάριου"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:26-90
 #, fuzzy
@@ -121,15 +121,15 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:27-38
 msgid "Focus to document from menu"
-msgstr ""
+msgstr "Εστίαση στο έγγραφο από το μενού"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:27-92
 msgid "ESC"
-msgstr ""
+msgstr "ESC"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:28-38
 msgid "Focus to selected comment's menu"
-msgstr ""
+msgstr "Εστίαση στο επιλεγμένο μενού σχολίων"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:28-97
 #, fuzzy
@@ -140,7 +140,7 @@ msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Del"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-38
 msgid "Open the context menu at the cursor or the selected cell"
-msgstr ""
+msgstr "Ανοίξτε το μενού περιβάλλοντος στον κέρσορα ή στο επιλεγμένο κελί"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
@@ -156,14 +156,16 @@ msgid ""
 "Move focus to the next area of the application (menu bar, formula bar, "
 "document, sidebar, sheet tabs, status bar)"
 msgstr ""
+"Μετακίνηση εστίασης στην επόμενη περιοχή της εφαρμογής (γραμμή μενού, γραμμή "
+"τύπων, έγγραφο, πλαϊνή γραμμή, καρτέλες φύλλων, γραμμή κατάστασης)"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-178
 msgid "F6"
-msgstr ""
+msgstr "F6"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-38
 msgid "Move focus to the previous area of the application"
-msgstr ""
+msgstr "Μετακινήστε την εστίαση στην προηγούμενη περιοχή της εφαρμογής"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
 #, fuzzy
@@ -1116,6 +1118,8 @@ msgid ""
 "Selects cells from the current cell up to one page in the current column or "
 "extends the existing selection one page up."
 msgstr ""
+"Επιλέγει κελιά από το τρέχον κελί έως και μία σελίδα στην τρέχουσα στήλη ή "
+"επεκτείνει την υπάρχουσα επιλογή μία σελίδα προς τα πάνω."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-184
 #, fuzzy
@@ -1129,6 +1133,8 @@ msgid ""
 "Selects cells from the current cell down to one page in the current column "
 "or extends the existing selection one page down."
 msgstr ""
+"Επιλέγει κελιά από το τρέχον κελί μέχρι μία σελίδα προς τα κάτω στην "
+"τρέχουσα στήλη ή επεκτείνει την υπάρχουσα επιλογή μία σελίδα προς τα κάτω."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:152-188
 #, fuzzy
@@ -1143,6 +1149,10 @@ msgid ""
 "to the left of the cell that contains the cursor is empty, the cursor moves "
 "to the next column to the left that contains data"
 msgstr ""
+"Μετακινεί τον δείκτη στην αριστερή άκρη της τρέχουσας περιοχής δεδομένων. "
+"Εάν η στήλη στα αριστερά του κελιού που περιέχει τον δείκτη είναι κενή, ο "
+"δείκτης μετακινείται στην επόμενη στήλη προς τα αριστερά που περιέχει "
+"δεδομένα"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-265
 #, fuzzy
@@ -1157,6 +1167,9 @@ msgid ""
 "to the right of the cell that contains the cursor is empty, the cursor moves "
 "to the next column to the right that contains data."
 msgstr ""
+"Μετακινεί τον κέρσορα στο δεξιό άκρο της τρέχουσας περιοχής δεδομένων. Εάν η "
+"στήλη δεξιά από το κελί που περιέχει τον κέρσορα είναι κενή, ο κέρσορας "
+"μετακινείται στην επόμενη στήλη δεξιά που περιέχει δεδομένα."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-269
 #, fuzzy
@@ -1171,6 +1184,9 @@ msgid ""
 "the cell that contains the cursor is empty, the cursor moves up to the next "
 "row that contains data."
 msgstr ""
+"Μετακινεί τον δείκτη στην πάνω άκρη της τρέχουσας περιοχής δεδομένων. Αν η "
+"σειρά πάνω από το κελί που περιέχει τον δείκτη είναι κενή, ο δείκτης "
+"μετακινείται προς τα πάνω στην επόμενη σειρά που περιέχει δεδομένα."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-241
 #, fuzzy
@@ -1185,6 +1201,9 @@ msgid ""
 "below the cell that contains the cursor is empty, the cursor moves down to "
 "the next row that contains data."
 msgstr ""
+"Μετακινεί τον δείκτη στο κάτω όριο της τρέχουσας περιοχής δεδομένων. Εάν η "
+"σειρά κάτω από το κελί που περιέχει τον δείκτη είναι κενή, ο δείκτης "
+"μετακινείται προς τα κάτω στην επόμενη σειρά που περιέχει δεδομένα."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-246
 #, fuzzy
@@ -1195,7 +1214,7 @@ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-38
 msgid "Go to next sheet."
-msgstr ""
+msgstr "Μετάβαση στο επόμενο φύλλο."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-82
 #, fuzzy
@@ -1209,7 +1228,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-38
 msgid "Go to previous sheet."
-msgstr ""
+msgstr "Μετάβαση στο προηγούμενο φύλλο."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-86
 #, fuzzy
@@ -1228,6 +1247,10 @@ msgid ""
 "used to select rows and columns together, a rectangular cell range is "
 "selected."
 msgstr ""
+"Επιλέγει όλα τα κελιά που περιέχουν δεδομένα από το τρέχον κελί μέχρι το "
+"τέλος της συνεχούς περιοχής των κελιών δεδομένων, προς την κατεύθυνση του "
+"βέλους που πατήθηκε. Εάν χρησιμοποιείται για την επιλογή σειρών και στηλών "
+"μαζί, επιλέγεται μια ορθογώνια περιοχή κελιών."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:159-292
 #, fuzzy
@@ -1267,6 +1290,10 @@ msgid ""
 "sheets in a spreadsheet are selected, this shortcut key combination only "
 "selects the previous sheet. Makes the previous sheet the current sheet."
 msgstr ""
+"Προσθέτει το προηγούμενο φύλλο στην τρέχουσα επιλογή φύλλων. Αν όλα τα φύλλα "
+"σε ένα υπολογιστικό φύλλο είναι επιλεγμένα, ο συνδυασμός πλήκτρων "
+"συντόμευσης επιλέγει μόνο το προηγούμενο φύλλο. Κάνει το προηγούμενο φύλλο "
+"το τρέχον φύλλο."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:162-280
 #, fuzzy
@@ -1284,6 +1311,9 @@ msgid ""
 "a spreadsheet are selected, this shortcut key combination only selects the "
 "next sheet. Makes the next sheet the current sheet."
 msgstr ""
+"Προσθέτει το επόμενο φύλλο στην τρέχουσα επιλογή φύλλων. Εάν όλα τα φύλλα σε "
+"ένα υπολογιστικό φύλλο είναι επιλεγμένα, ο συνδυασμός αυτού του πλήκτρου "
+"επιλέγει μόνο το επόμενο φύλλο. Κάνει το επόμενο φύλλο το τρέχον φύλλο."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:163-268
 #, fuzzy
@@ -1297,7 +1327,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-38
 msgid "Selects the entire column of the current cell."
-msgstr ""
+msgstr "Επιλέγει ολόκληρη τη στήλη του τρέχοντος κελιού."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
 #, fuzzy
@@ -1308,7 +1338,7 @@ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Tab"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
 msgid "Selects the entire row of the current cell."
-msgstr ""
+msgstr "Επιλέγει ολόκληρη τη σειρά του τρέχοντος κελιού."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
 #, fuzzy
@@ -1322,12 +1352,17 @@ msgid ""
 "Opens the context menu of the focused sheet tab (insert, rename, delete, "
 "hide, move, and more)."
 msgstr ""
+"Ανοίγει το μενού περιβάλλοντος της καρτέλας του εστιασμένου φύλλου "
+"(εισαγωγή, μετονομασία, διαγραφή, απόκρυψη, μετακίνηση και άλλα)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
 msgid ""
 "With a whole column or row selected, opens the matching column or row header "
 "context menu (insert, delete, width or height, hide, and more)."
 msgstr ""
+"Με επιλεγμένη μια ολόκληρη στήλη ή σειρά, ανοίγει το αντίστοιχο μενού "
+"περιβάλλοντος της κεφαλίδας στήλης ή σειράς (εισαγωγή, διαγραφή, πλάτος ή "
+"ύψος, απόκρυψη και άλλα)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid ""
@@ -1335,6 +1370,10 @@ msgid ""
 "data range that contains the cursor. A range is a contiguous cell range that "
 "contains data and is bounded by empty row and columns."
 msgstr ""
+"όπου (*) είναι το σύμβολο πολλαπλασιασμού στο αριθμητικό πληκτρολόγιο. "
+"Επιλέγει το εύρος δεδομένων που περιέχει τον δρομέα. Ένα εύρος είναι ένα "
+"συνεχόμενο εύρος κελιών που περιέχει δεδομένα και οριοθετείται από κενές "
+"γραμμές και στήλες."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-269
 #, fuzzy
@@ -1348,6 +1387,8 @@ msgid ""
 "where (/) is the division sign on the numeric key pad. Selects the matrix "
 "formula range that contains the cursor."
 msgstr ""
+"όπου (/) είναι το σύμβολο διαίρεσης στο αριθμητικό πληκτρολόγιο. Επιλέγει "
+"την περιοχή τύπου πίνακα που περιέχει τον δείκτη."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-178
 #, fuzzy
@@ -1358,7 +1399,7 @@ msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Z"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-38
 msgid "Insert cells (as in menu Insert - Cells)"
-msgstr ""
+msgstr "Εισαγωγή κελιών (όπως στο μενού Εισαγωγή - Κελιά)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-105
 #, fuzzy
@@ -1438,7 +1479,7 @@ msgstr "Εισαγωγή"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:202-38
 msgid "Insert date"
-msgstr ""
+msgstr "Εισάγετε ημερομηνία"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:202-76
 #, fuzzy
@@ -1573,7 +1614,7 @@ msgstr "Άνοιγμα, κλείσιμο, αποθήκευση, εκτύπωση
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
 #: html/cool-help.html%2Bdiv.div.h3:450-5
 msgid "Opening, closing, saving and printing documents"
-msgstr ""
+msgstr "Άνοιγμα, κλείσιμο, αποθήκευση και εκτύπωση εγγράφων"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
 #: html/cool-help.html%2Bdiv.div.h3:481-5
@@ -1773,6 +1814,9 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Η γραμμή κατάστασης εμφανίζει αριθμό σελίδας, αριθμό λέξεων, λειτουργία "
+"εισαγωγής, λειτουργία επιλογής, γλώσσα, λειτουργία επεξεργασίας, πλοήγηση, "
+"ζουμ και αναζήτηση"
 
 #: html/cool-help.html%2Bdiv.div.div.p:418-5
 msgid ""
@@ -1840,6 +1884,8 @@ msgstr ""
 msgid ""
 "Information bar showing page navigation arrows, zoom controls, and zoom level"
 msgstr ""
+"Γραμμή πληροφοριών που δείχνει τα βέλη πλοήγησης της σελίδας, τους ελέγχους "
+"ζουμ και το επίπεδο ζουμ"
 
 #: html/cool-help.html%2Bdiv.div.p:437-5
 msgid ""
@@ -2021,6 +2067,9 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Παράθυρο διαλόγου Επιδιόρθωσης Εγγράφου που εμφανίζει προηγούμενες "
+"καταστάσεις εγγράφου με στήλες για τον τύπο ενέργειας, τον συντάκτη και τη "
+"χρονοσφραγίδα"
 
 #: html/cool-help.html%2Bdiv.div.div.p:493-5
 msgid ""
@@ -2056,6 +2105,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Επικάλυψη αδρανούς εγγράφου με το μήνυμα: Αδρανές έγγραφο - παρακαλώ κάντε "
+"κλικ για επαναφόρτωση και συνέχιση της επεξεργασίας"
 
 #: html/cool-help.html%2Bdiv.div.div.p:499-5
 msgid ""
@@ -2155,6 +2206,8 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"Παράθυρο διαλόγου Οδηγού Διαγράμματος με λίστα τύπων διαγραμμάτων στα "
+"αριστερά, προεπισκοπήσεις στυλ διαγράμματος, επιλογές 3D και σχήματος"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:521-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2165,6 +2218,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Γράφημα στηλών με ομαδοποιημένες ράβδους που εμφανίζει δεδομένα για τέσσερις "
+"σειρές σε τρεις στήλες"
 
 #: html/cool-help.html%2Bdiv.div.div.p:525-28
 msgid ""
@@ -2260,12 +2315,16 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
+"Πλαίσιο σχολίου που εμφανίζει το όνομα του συντάκτη, την ημερομηνία και το "
+"κείμενο του σχολίου, εμφανιζόμενο δίπλα στο έγγραφο"
 
 #: html/cool-help.html%2Bdiv.div.div.p:539-5
 msgid ""
 "Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
 " icon to reply, move and delete comments."
 msgstr ""
+"Κάντε κλικ στο εικονίδιο υπομενού (<span class=\"cool-annotation-menu icon-"
+"size\"></span>) για να απαντήσετε, να μετακινήσετε και να διαγράψετε σχόλια."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:542-5
 msgid "Spellchecking"
@@ -2287,6 +2346,7 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:544-54
 msgid "Text with a red wavy underline beneath a misspelled word"
 msgstr ""
+"Κείμενο με μια κόκκινη κυματιστή υπογράμμιση κάτω από μια ανορθόγραφη λέξη"
 
 #: html/cool-help.html%2Bdiv.div.div.p:545-5
 msgid ""
@@ -2337,6 +2397,8 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
+"Η γραμμή τύπων που εμφανίζει την αναφορά κελιού B1, το εικονίδιο οδηγού "
+"συναρτήσεων και τον τύπο =SIN(PI()*A1/10)"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:560-5
 #, fuzzy
@@ -2376,6 +2438,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"Παράθυρο διαλόγου Μορφοποίηση Κελιών στην καρτέλα Αριθμοί με λίστα "
+"κατηγοριών, επιλογές μορφοποίησης, δεκαδικά ψηφία και κωδικό μορφοποίησης"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:572-30
 msgid ""
@@ -2416,6 +2480,9 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"Αναπτυσσόμενο μενού αυτόματου φίλτρου σε μια στήλη υπολογιστικού φύλλου με "
+"ταξινόμηση, φίλτρο ανά χρώμα, φίλτρο κατά συνθήκη και πλαίσια ελέγχου για "
+"μεμονωμένες τιμές"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:579-7
 msgid ""
@@ -2455,6 +2522,8 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Υπολογιστικό φύλλο με στοιχεία ελέγχου ομαδοποίησης σειρών και στηλών που "
+"εμφανίζει κουμπιά επιπέδου περιγράμματος και εναλλαγές σύμπτυξης/ανάπτυξης"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:588-5
 msgid ""
@@ -2479,6 +2548,9 @@ msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
+"Διάλογος εγκυρότητας στην καρτέλα Κριτήρια με Να επιτρέπεται ορίζεται σε "
+"Λίστα, εμφανίζοντας επιλογές για κενά κελιά, λίστα επιλογής και τιμές "
+"καταχώρισης"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
 msgid ""
@@ -2506,6 +2578,8 @@ msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
+"Μενού επιλογής κελιού που εμφανίζει επαληθευμένες καταχωρήσεις όπως Μήλο, "
+"Αχλάδι, Μπανάνα, Κίνι και Λεμόνι"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:599-7
 msgid ""
@@ -2535,6 +2609,9 @@ msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
+"Κελλί υπολογιστικού φύλλου με ένα αναδυόμενο παράθυρο σχολίου που δείχνει "
+"τον συγγραφέα, την ημερομηνία, το κείμενο σχολίου και τα κουμπιά Αποθήκευση/"
+"Ακύρωση"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:607-5
 msgid ""
@@ -2555,6 +2632,8 @@ msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+"Επιλογέας σετ εικονιδίων μορφοποίησης υπό όρους που εμφανίζει βέλη, κύκλους, "
+"φανάρια, αστέρια, πρόσωπα με χαμόγελο και σύμβολα γραφημάτων ράβδων"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:616-30
 msgid ""
@@ -2653,6 +2732,8 @@ msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
+"Διάλογος παραγράφου στην καρτέλα Εσοχές και Διάστιχο με ρυθμίσεις για την "
+"εσοχή, το διάστιχο και το διάκενο γραμμής, και μια προεπισκόπηση στα δεξιά"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:637-5
 msgid "Handling Tables"
@@ -2676,6 +2757,8 @@ msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
+"Εισαγωγή εργαλείου επιλογής πίνακα που δείχνει ένα πλέγμα για να επιλέξετε "
+"τον αριθμό των γραμμών και στηλών, που επί του παρόντος εμφανίζει 5 επί 3"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:642-5
 msgid ""
@@ -2708,6 +2791,8 @@ msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
+"Η παρακολουθούμενη αλλαγή εμφανίζεται ως πλαίσιο σχολίου δίπλα στο έγγραφο "
+"με το όνομα του συγγραφέα, την ημερομηνία και την περιγραφή της αλλαγής"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:648-5
 msgid ""
@@ -2846,6 +2931,8 @@ msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
+"Πίνακας ιδιοτήτων διαφάνειας που εμφανίζει μορφή, προσανατολισμό, φόντο και "
+"ρυθμίσεις κύριας διαφάνειας, με μια συλλογή διατάξεων μικρογραφιών παρακάτω"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:687-30
 msgid ""
@@ -3040,6 +3127,8 @@ msgid ""
 "Thesaurus dialog for the word company, listing alternatives such as "
 "institution, establishment, and troupe, with a Replace with field"
 msgstr ""
+"Διάλογος λεξικού συνωνύμων για τη λέξη εταιρεία, καταγράφοντας εναλλακτικές "
+"όπως ίδρυμα, εγκατάσταση και θίασος, με πεδίο Αντικατάσταση με"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:738-5
 msgid ""
@@ -3081,6 +3170,8 @@ msgid ""
 "Word Count dialog showing word and character counts for the current "
 "selection and for the whole document"
 msgstr ""
+"Διάλογος Καταμέτρηση λέξεων που εμφανίζει μετρήσεις λέξεων και χαρακτήρων "
+"για την τρέχουσα επιλογή και για ολόκληρο το έγγραφο"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:749-5
 msgid ""
@@ -3127,6 +3218,9 @@ msgid ""
 "hexadecimal and decimal code inputs, and recent and favorite characters at "
 "the bottom"
 msgstr ""
+"Διάλογος ειδικών χαρακτήρων με πλέγμα χαρακτήρων, πεδία αναζήτησης και "
+"γραμματοσειράς, εισαγωγές δεκαεξαδικού και δεκαδικού κώδικα και πρόσφατους "
+"και αγαπημένους χαρακτήρες στο κάτω μέρος"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:760-7
 msgid ""
@@ -3240,6 +3334,9 @@ msgid ""
 "Manage Changes dialog with a list of tracked changes showing action, author, "
 "date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
+"Παράθυρο διαλόγου Διαχείρισης Αλλαγών με λίστα παρακολουθούμενων αλλαγών που "
+"εμφανίζει στήλες ενέργεια, συγγραφέας, ημερομηνία και σχόλιο, και κουμπιά "
+"Αποδοχή, Απόρριψη, Αποδοχή Όλων, Απόρριψη Όλων"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:781-5
 msgid "How do I set the margins of the document?"
@@ -3274,6 +3371,9 @@ msgid ""
 "Page Style dialog on the Organizer tab showing style name, next style, "
 "inherit from, and category fields, with a summary of page properties"
 msgstr ""
+"Παράθυρο διαλόγου Στυλ σελίδας στην καρτέλα Organizer που εμφανίζει το όνομα "
+"στυλ, το επόμενο στυλ, τα πεδία κληρονομιάς και κατηγορίας, με μια σύνοψη "
+"των ιδιοτήτων σελίδας"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:791-5
 msgid "How do I change the page orientation to landscape inside my document?"
@@ -3440,6 +3540,8 @@ msgid ""
 "Text Import dialog with character set, locale, separator options, and a "
 "preview of the imported CSV data"
 msgstr ""
+"Παράθυρο διαλόγου εισαγωγής κειμένου με επιλογές συνόλου χαρακτήρων, τοπικής "
+"ρύθμισης, διαχωριστικού και προεπισκόπηση των εισαγόμενων δεδομένων CSV"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:839-7
 msgid ""
@@ -3559,6 +3661,9 @@ msgid ""
 "Area dialog on the Color tab with a color palette, active and new color "
 "previews, RGB value fields, and a custom palette section"
 msgstr ""
+"Παράθυρο διαλόγου περιοχής στην καρτέλα Χρώμα με παλέτα χρωμάτων, "
+"προεπισκοπήσεις ενεργού και νέου χρώματος, πεδία τιμών RGB και τμήμα "
+"προσαρμοσμένης παλέτας"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:880-7
 msgid "Set the properties of the element of the object."
