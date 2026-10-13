@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-03-10 23:16+0100\n"
-"Last-Translator: Andras Timar <andras.timar@collabora.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/"
-"collabora-online/help/hu/>\n"
+"PO-Revision-Date: 2026-10-13 18:14+0000\n"
+"Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
+"online/help/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -1827,6 +1827,12 @@ msgid ""
 "selected tab again to collapse the tab bar and gain space for the document. "
 "Click any tab to expand it again."
 msgstr ""
+"<span class=\"def\">A lapok:</span> A parancsok a felső lapokon vannak "
+"csoportosítva: <span class=\"ui\">Fájl</span>, <span class=\"ui\">Kezdőlap</"
+"span>, <span class=\"ui\">Beszúrás</span>, <span class=\"ui\">Véleményezés</"
+"span>, <span class=\"ui\">Nézet</span> és továbbiak, a dokumentum típusától "
+"függően. Kattintson újra a kiválasztott lapra a lapsáv összecsukásához, hogy "
+"több hely jusson a dokumentumnak. Bármelyik lapra kattintva újra kibonthatja."
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
 msgid ""
@@ -1964,16 +1970,15 @@ msgid ""
 msgstr "A dokumentum bezárásakor az automatikusan mentődik, ha módosult."
 
 #: html/cool-help.html%2Bdiv.div.div.p:441-7
-#, fuzzy
 msgid ""
 "To open a document, either open it in <span class=\"productname\""
 ">{productname}</span> from your platform's file manager or use <span class="
 "\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
-"Dokumentum megnyitásához vagy nyissa meg a <span class=\"productname\""
-">{productname}</span> alkalmazásban a rendszere fájlkezelőjéből, vagy "
-"használja a <span class=\"ui\">Megnyitás</span> gombot a <span class=\"ui\""
-">Fájl</span> menüsorgombbal megnyitható lapon."
+"Dokumentum megnyitásához vagy nyissa meg a <span class=\"productname\">"
+"{productname}</span> alkalmazásban a rendszere fájlkezelőjéből, vagy "
+"használja a <span class=\"ui\">Fájl</span> lap <span class=\"ui\">Megnyitás</"
+"span> gombját."
 
 #: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
@@ -1982,35 +1987,42 @@ msgid ""
 " in the bottom right corner. New documents and documents created from a "
 "template open ready to edit."
 msgstr ""
+"A meglévő dokumentumok megtekintés módban nyílnak meg, így elolvashatja őket "
+"anélkül, hogy véletlenül módosítaná. A szerkesztés megkezdéséhez kattintson "
+"a jobb alsó sarokban lévő szerkesztés gombra (a ceruzára). Az új és a "
+"sablonból létrehozott dokumentumok szerkesztésre készen nyílnak meg."
 
 #: html/cool-help.html%2Bdiv.div.div.p:452-7
 msgid ""
 "If the document is locked by another application, it stays in view mode."
 msgstr ""
+"Ha a dokumentumot egy másik alkalmazás zárolta, megtekintés módban marad."
 
 #: html/cool-help.html%2Bdiv.div.div.p:456-7
 msgid ""
 "To save the document in a different format use <span class=\"ui\">Save As</"
 "span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
+"A dokumentum más formátumban való mentéséhez használja a <span class=\"ui\">"
+"Fájl</span> lap <span class=\"ui\">Mentés másként</span> gombját."
 
 #: html/cool-help.html%2Bdiv.div.div.p:461-7
-#, fuzzy
 msgid ""
 "Documents are automatically saved periodically, but if you want a document "
 "to be saved right away you can use <span class=\"ui\">Save</span> on the "
 "<span class=\"ui\">File</span> tab."
 msgstr ""
 "A dokumentumok rendszeres időközönként automatikusan mentődnek, de ha "
-"azonnal menteni szeretne egy dokumentumot, használja a <span class=\"ui\""
-">Mentés</span> gombot a <span class=\"ui\">Fájl</span> menüsorgombbal "
-"megnyitható lapon."
+"azonnal menteni szeretne egy dokumentumot, használja a <span class=\"ui\">"
+"Fájl</span> lap <span class=\"ui\">Mentés</span> gombját."
 
 #: html/cool-help.html%2Bdiv.div.div.p:467-7
 msgid ""
 "To print the document, use <span class=\"ui\">Print</span> on the <span "
 "class=\"ui\">File</span> tab."
 msgstr ""
+"A dokumentum nyomtatásához használja a <span class=\"ui\">Fájl</span> lap "
+"<span class=\"ui\">Nyomtatás</span> gombját."
 
 #: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
@@ -2034,6 +2046,14 @@ msgid ""
 "Android or iOS selecting text by double tapping, and using a long-tap to "
 "access copy/cut/paste via the context menu is required."
 msgstr ""
+"A formázott tartalom másolása/kivágása és beillesztése támogatott, beleértve "
+"a képeket és a vegyes tartalmat is, a billentyűparancsokkal (<kbd>Ctrl</kbd>"
+"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>"
+", <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"V</kbd>). Androidon és iOS-en a szöveget dupla koppintással kell kijelölni, "
+"a másolás/kivágás/beillesztés pedig hosszú koppintással, a helyi menüből "
+"érhető el."
 
 #: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
@@ -2042,6 +2062,10 @@ msgid ""
 "comes from outside the document, but context menus can be used for cut and "
 "copy."
 msgstr ""
+"Biztonsági okokból a dokumentumon kívülről származó tartalom beillesztéséhez "
+"a <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"V</kbd> billentyűparancsot kell használni, a kivágáshoz és másoláshoz "
+"azonban a helyi menük is használhatók."
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2052,6 +2076,12 @@ msgid ""
 ">{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
+"Ha olyan kijelölést másol, amely képeket vagy más objektumokat tartalmaz, a "
+"jobb alsó sarokban megjelenik a <span class=\"ui\">Kijelölés letöltése</"
+"span> ablak. Nyomja meg a <span class=\"ui\">Letöltés</span> gombot, majd "
+"másoljon újra, hogy a tartalom a <span class=\"productname\">{productname}</"
+"span> alkalmazáson kívüli alkalmazások számára is elérhető legyen. Ez a "
+"lépés az összetett objektumtípusokat statikus képekké is alakítja."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:487-5
 msgid "Document repair"
@@ -2075,15 +2105,17 @@ msgid ""
 "lists the recent changes to the document and lets you take the document back "
 "to an earlier state."
 msgstr ""
+"A <span class=\"ui\">Fájl</span> lap <span class=\"ui\">Helyreállítás</span> "
+"gombja felsorolja a dokumentum legutóbbi módosításait, és lehetővé teszi a "
+"dokumentum visszaállítását egy korábbi állapotba."
 
 #: html/cool-help.html%2Bdiv.div.div.p:490-5
-#, fuzzy
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
 "class=\"ui\">OK</span>."
 msgstr ""
 "A kiválasztott állapothoz való visszaugráshoz jelölje ki az egérrel, és "
-"kattintson az <span class=\"ui\">Ugrás az állapothoz</span> gombra."
+"kattintson az <span class=\"ui\">OK</span> gombra."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:491-55
 msgid ""
@@ -2107,10 +2139,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:495-5
 msgid "Idle document"
-msgstr ""
+msgstr "Inaktív dokumentum"
 
 #: html/cool-help.html%2Bdiv.div.div.p:496-5
-#, fuzzy
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
@@ -2119,8 +2150,9 @@ msgid ""
 msgstr ""
 "Ha a <span class=\"productname\">{productname}</span> észleli, hogy egy "
 "ideje nem volt tevékenység a böngészőben, a dokumentumot „Inaktív” állapotba "
-"helyezi. A dokumentum áttetsző szürke takarással jelenik meg, a következő "
-"üzenettel: „Inaktív dokumentum – a szerkesztés folytatásához kattintson”."
+"helyezi. A dokumentum áttetsző szürke réteggel takarva jelenik meg, a "
+"következő üzenettel: „Inaktív dokumentum – kattintson az újratöltéshez és "
+"szerkesztés folytatásához”."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
 msgid ""
@@ -2214,13 +2246,12 @@ msgstr ""
 "munkafüzetben vagy egy táblázatot bemutatóban."
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Chart</span>. "
 "Customize your chart on the sidebar:"
 msgstr ""
-"Válassza a <span class=\"ui\">Beszúrás</span> → <span class=\"ui\""
-">Diagramok</span> menüpontot. Testreszabhatja a diagramot az oldalsávon:"
+"Válassza a <span class=\"ui\">Beszúrás</span> → <span class=\"ui\">Diagram</"
+"span> menüpontot. Szabja testre a diagramot az oldalsávon:"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:519-53
 msgid ""
@@ -2303,6 +2334,9 @@ msgid ""
 ">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
 "computer and insert it into the document."
 msgstr ""
+"<span class=\"def\">Helyi kép beszúrása:</span> Válassza a <span "
+"class=\"ui\">Beszúrás</span> → <span class=\"ui\">Kép</span> menüpontot, "
+"hogy kiválasszon egy képet a számítógépéről, és beszúrja a dokumentumba."
 
 #: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
@@ -2367,14 +2401,13 @@ msgid "Text with a red wavy underline beneath a misspelled word"
 msgstr "Szöveg piros hullámos aláhúzással egy elgépelt szó alatt"
 
 #: html/cool-help.html%2Bdiv.div.div.p:544-5
-#, fuzzy
 msgid ""
 "To systematically spell-check the whole document use <span class=\"ui\""
 ">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
-"A teljes dokumentum szisztematikus helyesírás-ellenőrzéséhez használja az "
-"<span class=\"ui\">Eszközök</span> menü <span class=\"ui\">Helyesírás</span> "
-"parancsát."
+"A teljes dokumentum szisztematikus helyesírás-ellenőrzéséhez használja a "
+"<span class=\"ui\">Véleményezés</span> lap <span class=\"ui\">Helyesírás</"
+"span> gombját."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
@@ -2549,14 +2582,13 @@ msgstr ""
 "lesznek utasítva. Az adatérvényesítés engedélyezéséhez:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:589-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Validity</span> on the <span class=\"ui\">Data</"
 "span> tab. The <span class=\"ui\">Validity</span> dialog opens."
 msgstr ""
-"Válassza az <span class=\"ui\">Érvényesítés</span> lehetőséget az <span "
-"class=\"ui\">Adatok</span> menüből. Megnyílik az <span class=\"ui\""
-">Érvényesítés</span> párbeszédablak."
+"Válassza az <span class=\"ui\">Adatok</span> lap <span class=\"ui\">"
+"Érvényesség</span> gombját. Megnyílik az <span class=\"ui\">Érvényesség</"
+"span> párbeszédablak."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:592-57
 msgid ""
@@ -2629,7 +2661,6 @@ msgstr ""
 "megjegyzés szövegét, valamint a Mentés/Mégse gombokat jeleníti meg"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:606-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
@@ -2637,11 +2668,12 @@ msgid ""
 "span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
 "apply on the range."
 msgstr ""
-"<span class=\"def\">Feltételes formázás:</span> A <span class=\"productname\""
-">{productname}</span> szimbólumokat ad minden cellához egy tartományban a "
-"cellák feltételei alapján. Jelölje ki a cellatartományt, és kattintson a "
-"<span class=\"ui\">Feltételes formázás</span> ikonra az eszköztáron. "
-"Válassza ki az alkalmazni kívánt szimbólumkészletet a tartományra."
+"<span class=\"def\">Feltételes formázás:</span> A <span "
+"class=\"productname\">{productname}</span> szimbólumokat ad egy tartomány "
+"minden cellájához a cellák feltételei alapján. Jelölje ki a cellatartományt, "
+"és kattintson a <span class=\"ui\">Kezdőlap</span> lap <span class=\"ui\">"
+"Feltételes</span> gombjára. Válassza ki a tartományra alkalmazandó "
+"szimbólumkészletet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
@@ -2729,18 +2761,16 @@ msgstr ""
 "vonatkozik."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
 "paragraph style to a paragraph. Select the style in the style list on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
-"<span class=\"def\">Stílusformázás:</span> A <span class=\"productname\""
-">{productname}</span> támogatja a bekezdésstílusokat. Alkalmazhat egy "
-"meglévő bekezdésstílust egy bekezdésre. Válassza a <span class=\"ui\""
-">Szerkesztés</span> → <span class=\"ui\">Stílusok szerkesztése</span> "
-"menüpontot a stílus módosításához."
+"<span class=\"def\">Stílusformázás:</span> A <span class=\"productname\">"
+"{productname}</span> támogatja a bekezdésstílusokat. Alkalmazhat egy meglévő "
+"bekezdésstílust egy bekezdésre. Válassza ki a stílust a <span class=\"ui\">"
+"Kezdőlap</span> lap stíluslistájából."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
@@ -2755,7 +2785,6 @@ msgid "Handling Tables"
 msgstr "Táblázatok kezelése"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:637-5
-#, fuzzy
 msgid ""
 "Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
 ">Table</span>. Select the initial number of rows and columns. Add rows and "
@@ -2763,10 +2792,11 @@ msgid ""
 ">Table</span> tab. The default paragraph style inside cells is “Table "
 "contents”."
 msgstr ""
-"Szúrjon be táblázatokat az eszköztár megfelelő ikonjával. Válassza ki a "
-"sorok és oszlopok kezdeti számát. Adjon hozzá sorokat és oszlopokat a cella "
-"helyi menüjével. Egyesítsen cellákat a <span class=\"ui\">Táblázat</span> "
-"menüvel. A cellák alapértelmezett bekezdésstílusa a „Táblázat tartalma”."
+"Táblázatokat a <span class=\"ui\">Beszúrás</span> → <span class=\"ui\">"
+"Táblázat</span> menüponttal szúrhat be. Válassza ki a sorok és oszlopok "
+"kezdeti számát. Sorokat és oszlopokat a cella helyi menüjével adhat hozzá. "
+"Cellákat a <span class=\"ui\">Táblázat</span> lapon egyesíthet. A cellák "
+"alapértelmezett bekezdésstílusa a „Táblázat tartalma”."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
@@ -2777,16 +2807,15 @@ msgstr ""
 "kiválasztásához, jelenleg 5×3 méretet mutatva"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:641-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
 "cells, open the context menu and choose <span class=\"ui\">Table Properties</"
 "span>. Fine tune the table with the properties dialog."
 msgstr ""
 "<span class=\"def\">Cellák formázása:</span> Kattintson a cellába vagy a "
-"cellatartományba, és válassza a <span class=\"ui\">Táblázat</span> → <span "
-"class=\"ui\">Tulajdonságok</span> menüpontot. Finomhangolja a táblázatot a "
-"tulajdonságok párbeszédablakkal."
+"cellatartományba, nyissa meg a helyi menüt, és válassza a <span class=\"ui\">"
+"Táblázat tulajdonságai</span> menüpontot. Finomhangolja a táblázatot a "
+"tulajdonságok párbeszédablakban."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
@@ -3006,12 +3035,16 @@ msgid ""
 "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT. "
 "Plain text TXT and Markdown MD"
 msgstr ""
+"Szöveges dokumentumok: Microsoft DOC, DOCX, RTF formátumok. OpenDocument "
+"formátum ODT. Egyszerű szöveg TXT és Markdown MD"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:699-7
 msgid ""
 "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS. Comma "
 "separated values CSV"
 msgstr ""
+"Munkafüzetek: Microsoft XLS, XLSX formátumok, OpenDocument formátum ODS. "
+"Vesszővel elválasztott értékek CSV"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:700-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
@@ -3063,6 +3096,9 @@ msgid ""
 "background regularly, you can't just close without saving it. To abandon "
 "your changes, undo them."
 msgstr ""
+"A <span class=\"productname\">{productname}</span> rendszeresen menti a "
+"dokumentumot a háttérben, így nem lehet egyszerűen mentés nélkül bezárni. A "
+"módosítások elvetéséhez vonja vissza őket."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:717-5
 msgid ""
@@ -3087,16 +3123,15 @@ msgid "How can I check spelling in my language?"
 msgstr "Hogyan ellenőrizhetem a helyesírást a saját nyelvemen?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
 "and select the language for the whole document. Optionally you can set "
 "languages for the selected text and for the current paragraph."
 msgstr ""
-"Válassza az <span class=\"ui\">Eszközök</span> → <span class=\"ui\">Nyelvek</"
-"span> menüpontot, és válassza ki a nyelvet a teljes dokumentumhoz. "
-"Opcionálisan beállíthatja a nyelvet a kijelölt szöveghez és az aktuális "
-"bekezdéshez is."
+"Válassza a <span class=\"ui\">Véleményezés</span> → <span class=\"ui\">"
+"Nyelv</span> menüpontot, és válassza ki a teljes dokumentum nyelvét. "
+"Opcionálisan a kijelölt szöveghez és az aktuális bekezdéshez is beállíthat "
+"nyelvet."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:725-5
 msgid "How can I remove the red wavy lines in my document?"
@@ -3107,6 +3142,9 @@ msgid ""
 "On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
 ">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
+"A <span class=\"ui\">Véleményezés</span> lapon nyissa meg a <span "
+"class=\"ui\">Helyesírás</span> menüt, és szüntesse meg az <span class=\"ui\">"
+"Automatikus ellenőrzés</span> bejelölését."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
 msgid "What is the blue wavy underline in some words in the text?"
@@ -3129,15 +3167,14 @@ msgid "Is there a thesaurus?"
 msgstr "Van szókincstár?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
-#, fuzzy
 msgid ""
 "Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
 " <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
-"Igen. Kattintson a kívánt szóba, és válassza az <span class=\"ui\">Eszközök</"
-"span> → <span class=\"ui\">Szókincstár</span> menüpontot. Megnyílik egy "
-"párbeszédablak számos helyettesítési javaslattal."
+"Igen. Kattintson a kívánt szóba, és válassza a <span class=\"ui\">"
+"Véleményezés</span> → <span class=\"ui\">Szókincstár</span> menüpontot. "
+"Megnyílik egy párbeszédablak számos helyettesítési javaslattal."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:735-49
 msgid ""
@@ -3157,7 +3194,6 @@ msgstr ""
 "távolíthatom el őket a szöveges dokumentumomból?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
-#, fuzzy
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
@@ -3165,25 +3201,24 @@ msgid ""
 ">Formatting Marks</span>."
 msgstr ""
 "A <span class=\"blue\">¶</span> szimbólum egy formázási jel. A "
-"szövegigazítás és a szerkesztés segítésére szolgál, és nem kerül "
-"nyomtatásra. A dokumentummegjelenítésben való be- és kikapcsolásához "
-"válassza a <span class=\"ui\">Nézet</span> → <span class=\"ui\">Formázási "
-"jel</span> menüpontot."
+"szövegigazítást és a szerkesztést segíti, és nem kerül nyomtatásra. A "
+"dokumentum megjelenítésében való be- és kikapcsolásához válassza a <span "
+"class=\"ui\">Nézet</span> → <span class=\"ui\">Bekezdésjelek</span> "
+"menüpontot."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:746-5
 msgid "How do I get a word count of my document?"
 msgstr "Hogyan kaphatom meg a dokumentum szavainak számát?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
-#, fuzzy
 msgid ""
 "Word count is available in <span class=\"ui\">Review</span> → <span class="
 "\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
 "the whole document."
 msgstr ""
-"A szószám az <span class=\"ui\">Eszközök</span> → <span class=\"ui\">Szavak "
-"száma</span> menüpontban érhető el. Egy párbeszédablak mutatja a kijelölés "
-"és a teljes dokumentum szószámát."
+"A szavak száma a <span class=\"ui\">Véleményezés</span> → <span class=\"ui\">"
+"Szavak száma</span> menüpontban érhető el. Egy párbeszédablak mutatja a "
+"kijelölés és a teljes dokumentum szószámát."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:748-50
 msgid ""
@@ -3228,6 +3263,8 @@ msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
 "Character</span>. A dialog opens."
 msgstr ""
+"Válassza a <span class=\"ui\">Beszúrás</span> → <span class=\"ui\">"
+"Különleges karakter</span> menüpontot. Megnyílik egy párbeszédablak."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:759-59
 msgid ""
@@ -3264,7 +3301,6 @@ msgid "Why can't I delete text? It just gets a strike-through?"
 msgstr "Miért nem tudom törölni a szöveget? Miért csak áthúzás lesz rajta?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:766-5
-#, fuzzy
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
@@ -3272,12 +3308,12 @@ msgid ""
 "enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\""
 ">Record</span>."
 msgstr ""
-"A Változások követése funkció be van kapcsolva a dokumentumban. A Változások "
+"A dokumentumban be van kapcsolva a Változások követése funkció. A Változások "
 "követése rögzíti a szöveg összes módosítását, és megjeleníti a "
-"szerkesztéseket későbbi felülvizsgálathoz. Hasznos a szöveges dokumentumok "
-"és munkafüzetek módosításainak jelöléséhez. A változások követése a <span "
-"class=\"ui\">Szerkesztés</span> → <span class=\"ui\">Változások követése</"
-"span> → <span class=\"ui\">Rögzítés</span> menüponttal kapcsolható be."
+"szerkesztéseket a későbbi átnézéshez. Hasznos a szövegek és munkafüzetek "
+"módosításainak jelöléséhez. A változások követése a <span class=\"ui\">"
+"Véleményezés</span> → <span class=\"ui\">Rögzítés</span> menüponttal "
+"kapcsolható be."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:767-5
 msgid ""
@@ -3311,22 +3347,20 @@ msgstr ""
 "A módosításokhoz rendelt szín a dokumentumot módosító felhasználótól függ."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:776-5
-#, fuzzy
 msgid ""
 "To display or hide track changes choose <span class=\"ui\">Review</span> → "
 "<span class=\"ui\">View Changes</span> → <span class=\"ui\">Show</span>. "
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
-"A változások követésének megjelenítéséhez vagy elrejtéséhez válassza a <span "
-"class=\"ui\">Szerkesztés</span> → <span class=\"ui\">Változások követése</"
-"span> → <span class=\"ui\">Megjelenítés</span> menüpontot. Ne feledje, hogy "
-"ha a változások követése be van kapcsolva, de el van rejtve, a módosítások "
-"továbbra is rögzítődnek, és véletlenül nem kívánt szöveg maradhat a "
-"dokumentumban."
+"A követett változások megjelenítéséhez vagy elrejtéséhez válassza a <span "
+"class=\"ui\">Véleményezés</span> → <span class=\"ui\">Változások "
+"megtekintése</span> → <span class=\"ui\">Megjelenítés</span> menüpontot. Ne "
+"feledje, hogy ha a változások követése be van kapcsolva, de el van rejtve, a "
+"módosítások továbbra is rögzítődnek, és véletlenül nem kívánt szöveg "
+"maradhat elérhető a dokumentumban."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:777-5
-#, fuzzy
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
@@ -3339,14 +3373,14 @@ msgid ""
 msgstr ""
 "A módosítások elfogadhatók vagy elutasíthatók. A módosítások elfogadásához "
 "vagy elutasításához kattintson a megfelelő ikonokra a dokumentum jobb "
-"oldalán található megjegyzésmezőben. Alternatívaként válassza a <span class="
-"\"ui\">Szerkesztés</span> → <span class=\"ui\">Változások követése</span> → "
-"<span class=\"ui\">Elfogadás</span> vagy <span class=\"ui\">Elutasítás</"
-"span> menüpontot. Továbbá, ha szűrnie kell a módosításokat az elfogadás vagy "
-"elutasítás előtt, válassza a <span class=\"ui\">Szerkesztés</span> → <span "
-"class=\"ui\">Változások követése</span> → <span class=\"ui\">Kezelés</span> "
-"menüpontot. Egy párbeszédablak megjeleníti az összes nyomon követett "
-"módosítás listáját. Használja a párbeszédablak gombjait megfelelően."
+"oldalán található megjegyzésmezőben. Alternatívaként válassza a <span "
+"class=\"ui\">Véleményezés</span> → <span class=\"ui\">Elfogadás</span> vagy "
+"<span class=\"ui\">Elutasítás</span> menüpontot. Ha a módosításokat az "
+"elfogadás vagy elutasítás előtt szűrni szeretné, válassza a <span "
+"class=\"ui\">Véleményezés</span> → <span class=\"ui\">Elfogadás</span> → "
+"<span class=\"ui\">Kezelés</span> menüpontot. Egy párbeszédablak megjeleníti "
+"az összes követett módosítás listáját. Használja a párbeszédablak gombjait "
+"ennek megfelelően."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:778-54
 msgid ""
@@ -3375,13 +3409,13 @@ msgid "Using the page style"
 msgstr "Az oldalstílus használata"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page Style</"
 "span> and select the <span class=\"ui\">Page</span> tab"
 msgstr ""
-"Válassza a <span class=\"ui\">Formátum</span> → <span class=\"ui\">Oldal</"
-"span> menüpontot, és válassza az <span class=\"ui\">Oldal</span> lapot"
+"Válassza a <span class=\"ui\">Formátum</span> → <span class=\"ui\">"
+"Oldalstílus</span> menüpontot, és válassza az <span class=\"ui\">Oldal</"
+"span> lapot"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:786-7
 msgid "Set the page margins in the dialog."
@@ -3461,6 +3495,10 @@ msgid ""
 "svg\" /> on the <span class=\"ui\">Home</span> tab. The mouse pointer turns "
 "to a paint bucket."
 msgstr ""
+"Kattintson a <span class=\"ui\">Kezdőlap</span> lap <span class=\"ui\">"
+"Formátumecset</span> ikonjára <img alt=\"formátumecset\" class=\"icon-size\" "
+"src=\"images/lc_formatpaintbrush.svg\" />. Az egérmutató festékesvödörré "
+"változik."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
 msgid "Select the text you want to apply the new format."
@@ -3497,6 +3535,12 @@ msgid ""
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after it "
 "was applied."
 msgstr ""
+"Az Automatikus javítás be van kapcsolva. Az Automatikus javítás az éppen "
+"beírt szöveget egy belső szövegtáblázattal veti össze. A legtöbb esetben az "
+"Automatikus javítás gépelés közben kijavítja az elütéseket. A javítás "
+"visszavonásához közvetlenül az alkalmazása után nyomja meg a <kbd>Ctrl</kbd>"
+"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> "
+"billentyűkombinációt."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
@@ -3507,6 +3551,8 @@ msgid ""
 "Insert column and row breaks in the spreadsheet to narrow the print range. "
 "When printing, select the pages of interest."
 msgstr ""
+"Szúrjon be oszlop- és sortöréseket a munkafüzetbe a nyomtatási tartomány "
+"szűkítéséhez. Nyomtatáskor válassza ki a kívánt oldalakat."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:831-5
 msgid "How can I import CSV data?"
@@ -3534,6 +3580,10 @@ msgid ""
 ">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog "
 "opens to let you describe the precise format of the CSV data."
 msgstr ""
+"Nyomja meg a <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
+"+</span><kbd>V</kbd> billentyűkombinációt. Megnyílik a <span class=\"ui\">"
+"Szöveg importálása</span> párbeszédablak, amelyben megadhatja a CSV-adatok "
+"pontos formátumát."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
 msgid ""
@@ -3567,6 +3617,8 @@ msgid ""
 "This is easy to do using <span class=\"ui\">Clone Formatting</span> on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
+"Ez könnyen elvégezhető a <span class=\"ui\">Kezdőlap</span> lap <span "
+"class=\"ui\">Formátumecset</span> gombjával."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:847-7
 msgid "Format the source cell with the font, color background and more."
@@ -3581,7 +3633,6 @@ msgid "What is “Clear Direct Formatting” icon?"
 msgstr "Mi az a „Közvetlen formázás törlése” ikon?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:854-5
-#, fuzzy
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
@@ -3592,9 +3643,8 @@ msgstr ""
 "A közvetlen formázás a bekezdés vagy munkafüzetcella kijelölt tartalmára "
 "közvetlenül alkalmazott formázás, amely felülírja a hozzárendelt stílus "
 "formázását. A formázás stílusbeállításokra való visszaállításához jelölje ki "
-"a szöveget vagy a munkafüzetcellát, és válassza a <span class=\"ui\""
-">Formátum</span> → <span class=\"ui\">Közvetlen formázás törlése</span> "
-"menüpontot, vagy használja az eszköztár gombját."
+"a szöveget vagy a cellát, és válassza a <span class=\"ui\">Kezdőlap</span> → "
+"<span class=\"ui\">Közvetlen formázás törlése</span> menüpontot."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:857-5
 msgid "How do I rename a sheet?"
@@ -3622,15 +3672,14 @@ msgstr ""
 "alkalmazásban"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:869-7
-#, fuzzy
 msgid ""
 "Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">From "
 "Beginning</span> or click on the left-most icon in the bottom of the slide "
 "panel:"
 msgstr ""
-"Válassza a <span class=\"ui\">Diavetítés</span> → <span class=\"ui\">Teljes "
-"képernyős bemutató</span> menüpontot, vagy kattintson a diapanel alján "
-"található bal szélső ikonra:"
+"Válassza a <span class=\"ui\">Diavetítés</span> → <span class=\"ui\">"
+"Elölről</span> menüpontot, vagy kattintson a diapanel alján található bal "
+"szélső ikonra:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-187
 msgid "slide show"
