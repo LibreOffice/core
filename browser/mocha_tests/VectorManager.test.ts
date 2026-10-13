@@ -397,6 +397,8 @@ describe('VectorManager', function () {
 	it('asks what changed on a cached page when it is drawn after being away', function () {
 		const manager = new VectorManager();
 		manager.handleVectorPrimitivesResponse(cachedSlide(0));
+		const answers: (number[] | undefined)[] = [];
+		manager.onVectorChanged((answered) => answers.push(answered));
 
 		const { sent, fired } = recording(() => {
 			manager.revalidateCachedParts();
@@ -407,6 +409,9 @@ describe('VectorManager', function () {
 			manager.requestPart(0, cool.VectorMode.Slides);
 		});
 
+		// Marking the cache as stale brings nothing from the engine, so the
+		// views draw again with no object answered.
+		nodeassert.deepStrictEqual(answers, [[]]);
 		nodeassert.deepStrictEqual(fired, ['vectorcontentstale']);
 		nodeassert.strictEqual(sent.length, 1);
 		nodeassert.ok(
@@ -607,6 +612,19 @@ describe('VectorManager', function () {
 		manager.offVectorChanged(listener);
 		manager.setHiddenLayers([2]);
 		nodeassert.strictEqual(notified, 1);
+	});
+
+	// Hiding a layer and replacing the page list change nothing at the
+	// engine, so the listeners hear that no object was answered rather
+	// than that a whole part arrived.
+	it('answers no object when a layer is hidden or the page list changes', function () {
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse(cachedSlide(0));
+		const answers: (number[] | undefined)[] = [];
+		manager.onVectorChanged((answered) => answers.push(answered));
+		manager.setHiddenLayers([1]);
+		manager.partListChanged();
+		nodeassert.deepStrictEqual(answers, [[], []]);
 	});
 
 	// The page rectangle rides on the page entry rather than on a field of

@@ -255,7 +255,8 @@ class VectorManager extends RenderManagerBase {
 			ids.every((id) => this._hiddenLayers.has(id));
 		if (same) return;
 		this._hiddenLayers = next;
-		this._fireChanged();
+		// Hiding a layer changes nothing at the engine, so no object is answered.
+		this._fireChanged([]);
 	}
 
 	isLayerVisible(layer: number): boolean {
@@ -1631,7 +1632,8 @@ class VectorManager extends RenderManagerBase {
 		image.onload = () => {
 			this._bitmaps.setLoaded(values.checksum, image);
 			this._redrawPartsUsing(this._bitmaps.partsFor(values.checksum));
-			this._fireChanged();
+			// A decoded bitmap changes nothing at the engine, so no object is answered.
+			this._fireChanged([]);
 		};
 		image.onerror = () => {
 			this._markBitmapUnavailable(
@@ -1702,7 +1704,8 @@ class VectorManager extends RenderManagerBase {
 				(document as unknown as { fonts: Set<FontFace> }).fonts.add(face);
 				this._fonts.setLoaded(fontId, face);
 				this._redrawPartsUsing(this._fonts.partsFor(fontId));
-				this._fireChanged();
+				// A loaded font changes nothing at the engine, so no object is answered.
+				this._fireChanged([]);
 			})
 			.catch(() => {
 				this._fonts.setUnavailable(fontId);
@@ -1721,7 +1724,8 @@ class VectorManager extends RenderManagerBase {
 	/// keyed by page id and stay. The change listeners are notified.
 	partListChanged(): void {
 		this._missingParts.clear();
-		this._fireChanged();
+		// The list brings no object from the engine, so no object is answered.
+		this._fireChanged([]);
 	}
 
 	/// Mark every cached part as stale. A client that was away while a part changed has
@@ -1730,7 +1734,7 @@ class VectorManager extends RenderManagerBase {
 	/// when nothing changed. A part that is not drawn is not asked for until it is.
 	revalidateCachedParts(): void {
 		for (const partId of this._cache.keys()) this._staleParts.add(partId);
-		this._fireChanged();
+		this._fireChanged([]);
 		app.map.fire('vectorcontentstale');
 	}
 
