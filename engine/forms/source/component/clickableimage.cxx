@@ -44,6 +44,7 @@
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scripturl.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <svtools/imageresourceaccess.hxx>
@@ -288,6 +289,10 @@ using namespace cpo::uno;
                     aURL.Complete = xModel->getURL();
                     aURL.Complete += aURL.Mark;
                 }
+
+                if (comphelper::isScriptURL(aURL.Complete)
+                    && !SfxObjectShell::isDocumentScriptAllowed(aURL.Complete, xModel))
+                    return;
 
                 bool bDispatchUrlInternal = false;
                 xSet->getPropertyValue(PROPERTY_DISPATCHURLINTERNAL) >>= bDispatchUrlInternal;
