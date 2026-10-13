@@ -110,7 +110,6 @@ const MenuCommands: MenuCommandsInterface = {
 
 	mobileDenylist: [
 		// general
-		'PasteSpecial',
 		'TransformDialog', 'FormatLine', 'FormatArea',
 		'InsertTitles', 'InsertRemoveAxes',
 		'DiagramType', 'DataRanges',
