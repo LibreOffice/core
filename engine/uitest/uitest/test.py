@@ -262,15 +262,21 @@ class UITest(object):
         if self.use_dispose:
             component.dispose()
         else:
-            if component.isModified():
-                with self.execute_dialog_through_command('.uno:CloseDoc', close_button="discard"):
-                    pass
-                # execute_dialog_through_command will end up dispatching the command asynchronously
-                # on the main thread. The Base code seems to have a few race conditions so to avoid
-                # that let’s wait to make sure the close completes before continuing
-                Toolkit.create(self._xContext).waitUntilAllIdlesDispatched()
-            else:
-                self._xUITest.executeCommand(".uno:CloseDoc")
+            # Pending edits or document events can modify the document during close preparation.
+            # Dispatch asynchronously so an unexpected save prompt cannot block the test runner.
+            with EventListener(self._xContext, ["DialogExecute", "OnViewClosed", "OnUnload"]) as event:
+                if not self._xUITest.executeDialog(".uno:CloseDoc"):
+                    raise Exception("CloseDoc not executed")
+                deadline = time.monotonic() + 30
+                while not event.executed:
+                    if time.monotonic() >= deadline:
+                        raise TimeoutError("CloseDoc did not close the view or open a save prompt")
+                    time.sleep(DEFAULT_SLEEP)
+                if event.hasExecuted("DialogExecute"):
+                    self.close_dialog_through_button("discard")
+            # Closing happens asynchronously on the main thread. In particular, Base needs the
+            # close to finish before the next document is opened.
+            Toolkit.create(self._xContext).waitUntilAllIdlesDispatched()
         frames = desktop.getFrames()
         if frames:
             frames[0].activate()
