@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-10 17:57+0000\n"
-"Last-Translator: Andras Timar <andras.timar@collabora.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/hu/>\n"
-"Language: \n"
+"PO-Revision-Date: 2026-10-13 18:14+0000\n"
+"Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/hu/>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -550,7 +550,6 @@ msgstr "Szolgáltató"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:723
 #: admin/src/integrator/AdminIntegratorSettings.ts:727
-#, fuzzy
 msgid "API key"
 msgstr "API-kulcs"
 
@@ -565,7 +564,6 @@ msgid "Base URL"
 msgstr "Alap URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:730
-#, fuzzy
 msgid "Image size"
 msgstr "Képméret"
 
@@ -575,11 +573,11 @@ msgstr "Kérés időtúllépése"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:734
 msgid "Client ID"
-msgstr ""
+msgstr "Ügyfél-azonosító"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:735
 msgid "Secret"
-msgstr ""
+msgstr "Titkos kulcs"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:738
 msgid "In-document Screen Reader"
@@ -1072,19 +1070,19 @@ msgstr "Szerkesztés"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2849
 #: admin/src/integrator/AdminIntegratorSettings.ts:4485
 msgid "Accessibility"
-msgstr "Akadálymentesítés"
+msgstr "Akadálymentesség"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2856
 msgid "User interface zoom"
-msgstr ""
+msgstr "Felhasználói felület nagyítása"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2861
 msgid "Magnify the whole window, including the document and the menus."
-msgstr ""
+msgstr "A teljes ablak nagyítása, a dokumentummal és a menükkel együtt."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2867
 msgid "As per system"
-msgstr ""
+msgstr "A rendszer szerint"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2902
 msgid ""
@@ -1104,15 +1102,16 @@ msgstr "Zotero-beállítások"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3005
 #: admin/src/integrator/AdminIntegratorSettings.ts:3033
-#, fuzzy
 msgid "Electronic Signature"
-msgstr "Elektronikus aláírás..."
+msgstr "Elektronikus aláírás"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3008
 msgid ""
 "Credentials for the electronic signature service. They are shared by "
 "everyone on this server."
 msgstr ""
+"Az elektronikus aláírási szolgáltatás hitelesítő adatai. Ezeket a kiszolgáló "
+"minden felhasználója közösen használja."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3060
 #: admin/src/integrator/AdminIntegratorSettings.ts:4719
@@ -1150,49 +1149,52 @@ msgstr "Alapállapot"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3140
 msgid "Use the AI provider set on the server"
-msgstr ""
+msgstr "A kiszolgálón beállított AI-szolgáltató használata"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3190
-#, fuzzy
 msgid "Providers"
-msgstr "Szolgáltató"
+msgstr "Szolgáltatók"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3193
 msgid "Managed by your admin"
-msgstr ""
+msgstr "A rendszergazda kezeli"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3199
 msgid "No providers added yet"
-msgstr ""
+msgstr "Még nincs hozzáadva szolgáltató"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3205
 msgid ""
 "Add a provider to start using AI for text generation, image generation, or "
 "both. Your administrator's provider is filled in for you."
 msgstr ""
+"Adjon hozzá egy szolgáltatót, hogy az AI-t szöveggenerálásra, képgenerálásra "
+"vagy mindkettőre használhassa. A rendszergazda által beállított szolgáltató "
+"már ki van töltve."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3213
 msgid "Add provider..."
-msgstr ""
+msgstr "Szolgáltató hozzáadása..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3233
 msgid "Choose the AI provider to use for text and image generation."
-msgstr ""
+msgstr "Válassza ki a szöveg- és képgeneráláshoz használt AI-szolgáltatót."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3235
 msgid ""
 "Use your own AI provider instead of the one set up by your administrator. "
 "This applies only to you."
 msgstr ""
+"Saját AI-szolgáltató használata a rendszergazda által beállított helyett. Ez "
+"csak Önre vonatkozik."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3390
 msgid "seconds"
-msgstr ""
+msgstr "másodperc"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3399
-#, fuzzy
 msgid "Text generation"
-msgstr "Szöveg létrehozása"
+msgstr "Szöveggenerálás"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3409
 #: src/control/Control.NotebookbarCalc.js:1048
@@ -1217,23 +1219,26 @@ msgid ""
 "Models without it (e.g. base llama3, gemma) can still chat but cannot use "
 "document tools."
 msgstr ""
+"A dokumentumok szerkesztéséhez válasszon eszközhívást támogató modellt, "
+"például gpt-4o vagy llama3.1. Az ezt nem támogató modellek (például az alap "
+"llama3, gemma) tudnak csevegni, de nem használhatják a dokumentumeszközöket."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3491
-#, fuzzy
 msgid "Image generation"
-msgstr "Kép létrehozása"
+msgstr "Képgenerálás"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3499
 msgid "Same as text provider"
-msgstr ""
+msgstr "Ugyanaz, mint a szövegszolgáltató"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3854
 msgid "Required for this provider"
-msgstr ""
+msgstr "Ehhez a szolgáltatóhoz kötelező"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3947
 msgid "Enter an API key for this provider to list its models."
 msgstr ""
+"Adjon meg egy API-kulcsot ehhez a szolgáltatóhoz a modelljei listázásához."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3963
 #: admin/src/integrator/AdminIntegratorSettings.ts:4085
@@ -1250,7 +1255,7 @@ msgstr "Nem találhatóak modellek"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4035
 #: admin/src/integrator/AdminIntegratorSettings.ts:4151
 msgid "Connected"
-msgstr ""
+msgstr "Kapcsolódva"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4041
 #: admin/src/integrator/AdminIntegratorSettings.ts:4157
@@ -1322,7 +1327,7 @@ msgstr "Adja meg: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4991
 msgid "Delete {0}"
-msgstr ""
+msgstr "{0} törlése"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5054
 msgid "Reset to default {0}"
@@ -2677,6 +2682,7 @@ msgstr "A képletelemzés időtúllépése"
 #: src/control/Control.AIChatSidebar.ts:3636
 msgid "Select the content you want the assistant to work on first."
 msgstr ""
+"Először jelölje ki a tartalmat, amellyel az asszisztensnek dolgoznia kell."
 
 #: src/control/Control.AIChatSidebar.ts:3651
 msgid "Analyzing formula dependencies..."
@@ -2810,10 +2816,12 @@ msgid ""
 "Describe the image you want to generate. For example: \"A watercolour of a "
 "mountain lake at sunrise\"."
 msgstr ""
+"Írja le a létrehozni kívánt képet. Például: „Akvarell egy hegyi tóról "
+"napfelkeltekor”."
 
 #: src/control/Control.AIChatSidebar.ts:3916
 msgid "Write speaker notes for the current slide."
-msgstr ""
+msgstr "Írjon előadói jegyzeteket az aktuális diához."
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid ""
@@ -2892,19 +2900,21 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:204
 msgid "Images stored with more detail than a slide can show"
-msgstr ""
+msgstr "A dián megjeleníthetőnél részletesebben tárolt képek"
 
 #: src/control/Control.CleanupSidebar.ts:207
 msgid "Images stored at more than %1 DPI, more detail than a slide can show"
 msgstr ""
+"%1 DPI-nél nagyobb felbontással tárolt képek, részletesebbek, mint amit egy "
+"dia meg tud jeleníteni"
 
 #: src/control/Control.CleanupSidebar.ts:224
 msgid "High-resolution images"
-msgstr ""
+msgstr "Nagy felbontású képek"
 
 #: src/control/Control.CleanupSidebar.ts:230
 msgid "Cropped images"
-msgstr ""
+msgstr "Körülvágott képek"
 
 #: src/control/Control.CleanupSidebar.ts:236
 #: src/control/Control.BackstageView.ts:891
@@ -2916,43 +2926,40 @@ msgid "Slides"
 msgstr "Diák"
 
 #: src/control/Control.CleanupSidebar.ts:241
-#, fuzzy
 msgid "Hidden slides"
-msgstr "Diák elrejtése"
+msgstr "Rejtett diák"
 
 #: src/control/Control.CleanupSidebar.ts:246
-#, fuzzy
 msgid "Unused master slides"
-msgstr "Nem használt diasablonok (%1)"
+msgstr "Nem használt diasablonok"
 
 #: src/control/Control.CleanupSidebar.ts:252
 msgid "For sharing"
-msgstr ""
+msgstr "Megosztáshoz"
 
 #: src/control/Control.CleanupSidebar.ts:254
 msgid "Speaker notes"
-msgstr ""
+msgstr "Előadói jegyzetek"
 
 #: src/control/Control.CleanupSidebar.ts:258
-#, fuzzy
 msgid "Embedded objects"
-msgstr "Beágyazott objektumok (%1)"
+msgstr "Beágyazott objektumok"
 
 #: src/control/Control.CleanupSidebar.ts:359
 msgid "images left alone"
-msgstr ""
+msgstr "a képek változatlanok maradnak"
 
 #: src/control/Control.CleanupSidebar.ts:361
 msgid "%1 DPI, quality %2 %"
-msgstr ""
+msgstr "%1 DPI, %2 % minőség"
 
 #: src/control/Control.CleanupSidebar.ts:374
 msgid "%1 can be cleaned up"
-msgstr ""
+msgstr "%1 tisztítható ki"
 
 #: src/control/Control.CleanupSidebar.ts:376
 msgid "%1 (%2%) can be cleaned up"
-msgstr ""
+msgstr "%1 (%2%) tisztítható ki"
 
 #: src/control/Control.CleanupSidebar.ts:384
 msgid "Fix"
@@ -2974,7 +2981,7 @@ msgstr "%1 MB"
 
 #: src/control/Control.CleanupSidebar.ts:479
 msgid "Remove %1"
-msgstr ""
+msgstr "Eltávolítás: %1"
 
 #: src/control/Control.CleanupSidebar.ts:481
 msgid "Fix %1"
@@ -3028,11 +3035,11 @@ msgstr "%1, %2 DPI"
 #: src/control/Control.CleanupSidebar.ts:586
 #, javascript-format
 msgid "%1% cropped away"
-msgstr ""
+msgstr "%1% körülvágva"
 
 #: src/control/Control.CleanupSidebar.ts:588
 msgid "%1, %2% cropped away"
-msgstr ""
+msgstr "%1, %2% körülvágva"
 
 #: src/control/Control.CleanupSidebar.ts:655
 msgid "Leave images alone"
@@ -3098,9 +3105,8 @@ msgid "Image resolution"
 msgstr "Képfelbontás"
 
 #: src/control/Control.CleanupSidebar.ts:805
-#, fuzzy
 msgid "JPEG quality (%)"
-msgstr "JPEG-minőség %-ban"
+msgstr "JPEG-minőség (%)"
 
 #: src/control/Control.CleanupSidebar.ts:830
 msgid "Prepare for sharing"
@@ -3119,9 +3125,8 @@ msgid "Stop"
 msgstr "Leállítás"
 
 #: src/control/Control.CleanupSidebar.ts:926
-#, fuzzy
 msgid "Scan presentation"
-msgstr "Üres bemutató"
+msgstr "Bemutató vizsgálata"
 
 #: src/control/Control.CleanupSidebar.ts:962
 msgid "Fix all"
@@ -3133,7 +3138,7 @@ msgstr "Ez a dokumentum itt nem módosítható, így nincs mit kitisztítani."
 
 #: src/control/Control.CleanupSidebar.ts:1013
 msgid "Find what makes this presentation large, and clean it up here."
-msgstr ""
+msgstr "Derítse ki, mitől nagy ez a bemutató, és tisztítsa ki itt."
 
 #: src/control/Control.CleanupSidebar.ts:1077
 msgid "saves %1"
@@ -3153,7 +3158,7 @@ msgstr "Tisztítás"
 
 #: src/control/Control.CleanupSidebar.ts:2439
 msgid "The cleanup did not answer. Please try again."
-msgstr ""
+msgstr "A tisztítás nem válaszolt. Próbálja újra."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3507,111 +3512,122 @@ msgstr "Bezárás"
 
 #: src/control/onboarding/OnboardingSteps.ts:25
 msgid "Welcome to Collabora Online"
-msgstr ""
+msgstr "Üdvözli a Collabora Online"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "This short tour points out the parts of the screen you will use most."
 msgstr ""
+"Ez a rövid ismertető a képernyő leggyakrabban használt részeit mutatja meg."
 
 #: src/control/onboarding/OnboardingSteps.ts:32
 msgid "The document name"
-msgstr ""
+msgstr "A dokumentum neve"
 
 #: src/control/onboarding/OnboardingSteps.ts:34
 msgid ""
 "Select the name to rename the document. Every change is saved as you work."
 msgstr ""
+"A dokumentum átnevezéséhez kattintson a nevére. Minden módosítás munka "
+"közben mentődik."
 
 #: src/control/onboarding/OnboardingSteps.ts:40
 msgid "The tabs"
-msgstr ""
+msgstr "A lapok"
 
 #: src/control/onboarding/OnboardingSteps.ts:42
 msgid ""
 "Each tab gathers the tools for one kind of work, such as inserting or "
 "reviewing."
 msgstr ""
+"Minden lap egy-egy munkatípus eszközeit gyűjti össze, például a beszúrásét "
+"vagy a véleményezését."
 
 #: src/control/onboarding/OnboardingSteps.ts:49
 msgid "The menus"
-msgstr ""
+msgstr "A menük"
 
 #: src/control/onboarding/OnboardingSteps.ts:50
 msgid "Every command of the editor is in one of these menus."
-msgstr ""
+msgstr "A szerkesztő minden parancsa megtalálható ezekben a menükben."
 
 #: src/control/onboarding/OnboardingSteps.ts:56
 msgid "The tools"
-msgstr ""
+msgstr "Az eszközök"
 
 #: src/control/onboarding/OnboardingSteps.ts:57
 msgid "The buttons of the tab you selected appear along this row."
-msgstr ""
+msgstr "A kiválasztott lap gombjai ebben a sorban jelennek meg."
 
 #: src/control/onboarding/OnboardingSteps.ts:63
 msgid "The toolbar"
-msgstr ""
+msgstr "Az eszköztár"
 
 #: src/control/onboarding/OnboardingSteps.ts:64
 msgid "The buttons you need most often sit here, under the menus."
-msgstr ""
+msgstr "A leggyakrabban használt gombok itt találhatók, a menük alatt."
 
 #: src/control/onboarding/OnboardingSteps.ts:70
 msgid "The formula bar"
-msgstr ""
+msgstr "A képletsor"
 
 #: src/control/onboarding/OnboardingSteps.ts:72
 msgid ""
 "The contents of the selected cell appear here. Type an equals sign to start "
 "a formula."
 msgstr ""
+"Itt jelenik meg a kijelölt cella tartalma. Képlet megkezdéséhez írjon be egy "
+"egyenlőségjelet."
 
 #: src/control/onboarding/OnboardingSteps.ts:79
 msgid "The slide panel"
-msgstr ""
+msgstr "A diapanel"
 
 #: src/control/onboarding/OnboardingSteps.ts:81
 msgid ""
 "Every slide or page of the document is listed here. Select one to work on "
 "it."
 msgstr ""
+"Itt látható a dokumentum minden diája vagy oldala. Válasszon ki egyet a "
+"szerkesztéséhez."
 
 #: src/control/onboarding/OnboardingSteps.ts:89
 msgid "The sidebar"
-msgstr ""
+msgstr "Az oldalsáv"
 
 #: src/control/onboarding/OnboardingSteps.ts:91
 msgid ""
 "The sidebar holds the settings for whatever you have selected, such as "
 "text, a shape or a cell."
 msgstr ""
+"Az oldalsávon a kijelölt elem, például szöveg, alakzat vagy cella "
+"beállításai találhatók."
 
 #: src/control/onboarding/OnboardingSteps.ts:98
 msgid "The people in the document"
-msgstr ""
+msgstr "A dokumentumban lévő személyek"
 
 #: src/control/onboarding/OnboardingSteps.ts:99
 msgid "See who else is editing and share the document."
-msgstr ""
+msgstr "Nézze meg, ki más szerkeszt még, és ossza meg a dokumentumot."
 
 #: src/control/onboarding/OnboardingSteps.ts:109
-#, fuzzy
 msgid "The status bar"
-msgstr "Állapotsor megjelenítése"
+msgstr "Az állapotsor"
 
 #: src/control/onboarding/OnboardingSteps.ts:111
 msgid ""
 "The state of the document, the language of the text and the zoom level are "
 "along the bottom."
 msgstr ""
+"A dokumentum állapota, a szöveg nyelve és a nagyítás mértéke alul látható."
 
 #: src/control/onboarding/OnboardingSteps.ts:118
 msgid "You are ready to work"
-msgstr ""
+msgstr "Kezdheti a munkát"
 
 #: src/control/onboarding/OnboardingSteps.ts:119
 msgid "You can walk through this tour again from the Help menu."
-msgstr ""
+msgstr "Ezt az ismertetőt a Súgó menüből bármikor újra végignézheti."
 
 #: src/control/onboarding/Control.OnboardingTour.ts:245
 #: src/slideshow/engine/SlideShowHandler.ts:116
@@ -3620,12 +3636,11 @@ msgstr "Kihagyás"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:251
 msgid "Back"
-msgstr ""
+msgstr "Vissza"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
-#, fuzzy
 msgid "Done"
-msgstr "Nincs"
+msgstr "Kész"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
 #: src/control/Control.Zotero.js:270 src/control/Control.Zotero.js:469
@@ -4438,7 +4453,7 @@ msgstr "Online súgó"
 #: src/control/Control.Menubar.ts:834 src/control/Control.Menubar.ts:1152
 #: src/control/Control.NotebookbarWriter.js:541
 msgid "Show tour"
-msgstr ""
+msgstr "Ismertető megjelenítése"
 
 #: src/control/Control.Menubar.ts:455 src/control/Control.Menubar.ts:668
 #: src/control/Control.Menubar.ts:836 src/control/Control.Menubar.ts:1154
@@ -4768,119 +4783,116 @@ msgstr "Írja be a keresőmezőbe a dokumentumban keresett kifejezést"
 #: src/control/Notebookbar.AIAssistantTab.ts:79
 #: src/control/Notebookbar.AIAssistantTab.ts:122
 msgid "Text Tools"
-msgstr ""
+msgstr "Szövegeszközök"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:93
 msgid "Slide Tools"
-msgstr ""
+msgstr "Diaeszközök"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:106
 msgid "Formula Tools"
-msgstr ""
+msgstr "Képleteszközök"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:116
 msgid "Data Tools"
-msgstr ""
+msgstr "Adateszközök"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:143
 msgid "Shorten"
-msgstr ""
+msgstr "Rövidítés"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:145
 msgid "Rewrite the selected text so it is shorter."
-msgstr ""
+msgstr "A kijelölt szöveg átírása rövidebbre."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:150
 msgid "Formalize"
-msgstr ""
+msgstr "Hivatalos stílus"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:152
 msgid "Rewrite the selected text in a formal tone."
-msgstr ""
+msgstr "A kijelölt szöveg átírása hivatalos hangnemben."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:157
 msgid "Casualize"
-msgstr ""
+msgstr "Közvetlen stílus"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:159
 msgid "Rewrite the selected text in a casual, friendly tone."
-msgstr ""
+msgstr "A kijelölt szöveg átírása közvetlen, barátságos hangnemben."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:164
 msgid "Summarize"
-msgstr ""
+msgstr "Összefoglalás"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:166
-#, fuzzy
 msgid "Summarize the key points of the selected text."
-msgstr "Összegezze a szöveg fő gondolatait"
+msgstr "A kijelölt szöveg fő gondolatainak összefoglalása."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:171
 msgid "Expand"
-msgstr ""
+msgstr "Bővítés"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:173
 msgid "Expand the selected text and add more detail."
-msgstr ""
+msgstr "A kijelölt szöveg bővítése további részletekkel."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:178
 msgid "Fix Grammar"
-msgstr ""
+msgstr "Nyelvtan javítása"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:181
 msgid "Fix grammar, spelling, and punctuation errors in the selected text."
 msgstr ""
+"A nyelvtani, helyesírási és központozási hibák javítása a kijelölt szövegben."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:187
 msgid "Make Bullets"
-msgstr ""
+msgstr "Felsorolás készítése"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:189
 msgid "Rewrite the selected text as short bullet points."
-msgstr ""
+msgstr "A kijelölt szöveg átírása rövid felsoroláspontokká."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:194
-#, fuzzy
 msgid "Create Slides"
 msgstr "Diák létrehozása"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:201
-#, fuzzy
 msgid "Generate Image"
-msgstr "Generált kép"
+msgstr "Kép generálása"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
-msgstr ""
+msgstr "Előadói jegyzetek generálása"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:215
-#, fuzzy
 msgid "Create Formula"
 msgstr "Képlet létrehozása"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:222
 msgid "Explain Formula"
-msgstr ""
+msgstr "Képlet magyarázata"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:224
 msgid "Explain the formula in the selected cell."
-msgstr ""
+msgstr "A kijelölt cellában lévő képlet magyarázata."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:229
 msgid "Fix Formula Error"
-msgstr ""
+msgstr "Képlethiba javítása"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:236
 msgid "Clean Up Data"
-msgstr ""
+msgstr "Adatok tisztítása"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:243
 msgid "Suggest Chart"
-msgstr ""
+msgstr "Diagram javaslata"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:245
 msgid "Suggest a chart for the selected data."
-msgstr ""
+msgstr "Diagram javaslata a kijelölt adatokhoz."
 
 #: src/control/Notebookbar.CalcTableTab.ts:45
 #: src/control/Notebookbar.TableDesignTabBase.ts:54
@@ -5089,12 +5101,11 @@ msgstr "Animációk"
 #: src/control/Control.Notebookbar.js:650
 #: src/control/Control.NotebookbarWriter.js:3077
 msgid "Fill Color (Transparent Pictures Only)"
-msgstr ""
+msgstr "Kitöltés színe (csak átlátszó képeknél)"
 
 #: src/control/Control.Notebookbar.js:661
-#, fuzzy
 msgid "Line"
-msgstr "Hivatkozás"
+msgstr "Vonal"
 
 #: src/control/Control.Notebookbar.js:704
 msgid "Line Width"
@@ -5102,11 +5113,11 @@ msgstr "Vonalvastagság"
 
 #: src/control/Control.Notebookbar.js:737
 msgid "Transparency:"
-msgstr ""
+msgstr "Átlátszóság:"
 
 #: src/control/Control.Notebookbar.js:756
 msgid "Thickness:"
-msgstr ""
+msgstr "Vastagság:"
 
 #: src/control/Control.NotebookbarBuilder.js:205
 #: src/control/Control.NotebookbarBuilder.js:610
@@ -5736,7 +5747,7 @@ msgstr "Illesztés a rácshoz"
 
 #: src/control/Control.NotebookbarImpress.js:823
 msgid "Shapes Sidebar"
-msgstr ""
+msgstr "Alakzatok oldalsáv"
 
 #: src/control/Control.NotebookbarImpress.js:924
 #: src/control/Control.NotebookbarImpress.js:2005
@@ -5868,7 +5879,7 @@ msgstr "Változások megtekintése"
 
 #: src/control/Control.NotebookbarWriter.js:2656
 msgid "Element categories"
-msgstr ""
+msgstr "Elemkategóriák"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
@@ -6009,19 +6020,23 @@ msgstr "Diák beolvasása..."
 
 #: src/control/Control.SlideImportPane.tsx:742
 msgid "Looking for the file..."
-msgstr ""
+msgstr "A fájl keresése..."
 
 #: src/control/Control.SlideImportPane.tsx:745
 msgid ""
 "The slides are in this presentation. You do not have permission to open the "
 "file they came from."
 msgstr ""
+"A diák ebben a bemutatóban vannak. Nincs jogosultsága megnyitni a fájlt, "
+"amelyből származnak."
 
 #: src/control/Control.SlideImportPane.tsx:749
 msgid ""
 "The slides are in this presentation. Looking for the file they came from "
 "did not work this time."
 msgstr ""
+"A diák ebben a bemutatóban vannak. A fájl, amelyből származnak, ezúttal nem "
+"volt megtalálható."
 
 #: src/control/Control.SlideImportPane.tsx:752
 msgid ""
@@ -6042,7 +6057,7 @@ msgstr "Ezt a fájlt most nem sikerült beolvasni."
 #: src/control/Control.SlideImportPane.tsx:769
 #: src/control/Control.SlideImportPane.tsx:1292
 msgid "Look again"
-msgstr ""
+msgstr "Keresés újra"
 
 #: src/control/Control.SlideImportPane.tsx:774
 #: src/control/Control.SlideImportPane.tsx:1297
@@ -6327,7 +6342,7 @@ msgstr "Maximalizálás rácsnézetbe"
 
 #: src/control/Control.PaneExpander.ts:115
 msgid "Exit grid"
-msgstr ""
+msgstr "Kilépés a rácsból"
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
@@ -6993,15 +7008,15 @@ msgstr ""
 
 #: src/control/Permission.js:607
 msgid "opened this document"
-msgstr ""
+msgstr "megnyitotta ezt a dokumentumot"
 
 #: src/control/Permission.js:608
 msgid "{0} opened this document"
-msgstr ""
+msgstr "{0} megnyitotta ezt a dokumentumot"
 
 #: src/control/Permission.js:609 src/control/Permission.js:625
 msgid "Choose how you'd like to continue:"
-msgstr ""
+msgstr "Válassza ki, hogyan szeretné folytatni:"
 
 #: src/control/Permission.js:619
 msgid "started editing"
@@ -7160,7 +7175,7 @@ msgstr "Blokk-kijelölés"
 
 #: src/control/Toolbar.js:70
 msgid "The current font is not available and will be substituted."
-msgstr ""
+msgstr "A jelenlegi betűkészlet nem érhető el, helyettesítve lesz."
 
 #: src/control/Toolbar.js:205 src/control/Toolbar.js:218
 msgid "Downloading..."
@@ -7870,7 +7885,7 @@ msgstr "Tartomány kijelölése"
 
 #: src/control/jsdialog/Widget.ProgressDots.tsx:57
 msgid "Step %1 of %2"
-msgstr ""
+msgstr "%1/%2. lépés"
 
 #: src/control/jsdialog/Widget.Comment.ts:151
 msgid "reply"
@@ -8065,28 +8080,27 @@ msgstr "Az AI nincs beállítva, forduljon a rendszergazdához"
 
 #: src/docdispatcher.ts:979
 msgid "Delete section"
-msgstr ""
+msgstr "Szakasz törlése"
 
 #: src/docdispatcher.ts:986
 msgid "Delete slides"
-msgstr ""
+msgstr "Diák törlése"
 
 #: src/docdispatcher.ts:987
-#, fuzzy
 msgid "Delete %n slide?"
 msgid_plural "Delete %n slides?"
-msgstr[0] "%n dia törlése"
-msgstr[1] "%n dia törlése"
+msgstr[0] "Töröl %n diát?"
+msgstr[1] "Töröl %n diát?"
 
 #: src/docdispatcher.ts:991
 msgid "Delete pages"
-msgstr ""
+msgstr "Oldalak törlése"
 
 #: src/docdispatcher.ts:992
 msgid "Delete %n page?"
 msgid_plural "Delete %n pages?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Töröl %n oldalt?"
+msgstr[1] "Töröl %n oldalt?"
 
 #: src/docstate.ts:154
 msgid "Standard"
@@ -8356,7 +8370,7 @@ msgstr "Dia"
 
 #: src/layer/marker/A11yTextInput.js:348
 msgid "Heading level {0}"
-msgstr ""
+msgstr "{0}. szintű címsor"
 
 #: src/layer/marker/A11yTextInput.js:884
 msgid "Out of table"
@@ -8866,7 +8880,7 @@ msgstr "Üzleti levél"
 
 #: templates/templates.js:16 templates/templates.js:20
 msgid "Classic Business Letter"
-msgstr ""
+msgstr "Klasszikus üzleti levél"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
