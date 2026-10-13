@@ -562,8 +562,8 @@ msgstr ""
 msgid ""
 "<1>💡Useful tip: </1><2>To remove formatting, use </2><3>Clear Direct "
 "Formatting</3><4> in the </4><5>Home tab</5><6> or manage and remove rules "
-"in </6><7>Manage Conditional Formatting</7><8> from the </8><9>Format "
-"tab</9><10>.</10>"
+"in </6><7>Manage Conditional Formatting</7><8> from the </8><9>Format tab</"
+"9><10>.</10>"
 msgstr ""
 
 #. content.xml (sheet '🎨 Conditional Formatting')
@@ -752,8 +752,8 @@ msgid ""
 "Filter</5><6>. All data will be visible again.</6>"
 msgstr ""
 "<1>💡Nützlicher Tipp: </1><2>Um den Filter zu deaktivieren, wählen Sie eine "
-"beliebige Zelle innerhalb der gefilterten Daten aus, wechseln Sie dann "
-"zur</2><3> Registerkarte „Daten“</3><4> und klicken Sie auf </4><5>„Filter "
+"beliebige Zelle innerhalb der gefilterten Daten aus, wechseln Sie dann zur</"
+"2><3> Registerkarte „Daten“</3><4> und klicken Sie auf </4><5>„Filter "
 "zurücksetzen“</5><6>. Alle Daten sind dann wieder sichtbar.</6>"
 
 #. content.xml (sheet '🔍 Data & filtering')
@@ -877,9 +877,9 @@ msgstr ""
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
-"<1>💡Useful tip: </1><2>To find a list of all shortcuts, go to the "
-"</2><3>Help tab</3><4> and click on </4><5>Keyboard shortcuts</5><6>. You "
-"can also use the search option to quickly find specific shortcuts.</6>"
+"<1>💡Useful tip: </1><2>To find a list of all shortcuts, go to the </"
+"2><3>Help tab</3><4> and click on </4><5>Keyboard shortcuts</5><6>. You can "
+"also use the search option to quickly find specific shortcuts.</6>"
 msgstr ""
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
