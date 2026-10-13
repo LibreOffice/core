@@ -504,11 +504,19 @@ bool SfxObjectShell::DoInitNew()
 
     if ( InitNew( nullptr ) )
     {
-        // empty documents always get their macros from the user, so there is no reason to restrict access
-        pImpl->aMacroMode.allowMacroExecution();
-        pImpl->m_bMacroCallsAllowed = true;
         if ( SfxObjectCreateMode::EMBEDDED == eCreateMode )
+        {
+            // An embedded object starts with macros disallowed, the same as one loaded from its own
+            // storage.
+            pImpl->aMacroMode.disallowMacroExecution();
             SetTitle(SfxResId(STR_NONAME));
+        }
+        else
+        {
+            // empty documents always get their macros from the user, so there is no reason to restrict access
+            pImpl->aMacroMode.allowMacroExecution();
+            pImpl->m_bMacroCallsAllowed = true;
+        }
 
         uno::Reference< frame::XModel >  xModel = GetModel();
         if ( xModel.is() )
