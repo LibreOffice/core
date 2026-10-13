@@ -14,6 +14,10 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress hyperlink popup te
 	function enterShapeTextEdit() {
 		impressHelper.selectTextShapeInTheCenter();
 		impressHelper.dblclickOnSelectedShape();
+
+		// dblclickOnSelectedShape is satisfied by the cursor container, which is always there,
+		// so a key sent next could reach the core before the text edit has started, and be lost.
+		cy.then(() => helper.processToIdle(win));
 	}
 
 	// Every test reads the same text, so the shape holds "before <hyperlink>
