@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt"/>
+  </style:default-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="P1" style:family="paragraph">
+   <style:paragraph-properties fo:widows="2"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="215.9mm" fo:page-height="279.4mm" fo:margin-top="20mm" fo:margin-bottom="20mm" fo:margin-left="20mm" fo:margin-right="20mm"/>
+   <style:header-style/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1">
+   <style:header>
+    <text:p/>
+   </style:header>
+   <style:header-first>
+    <text:p><draw:frame text:anchor-type="paragraph" svg:width="10mm" svg:height="5mm"><draw:text-box/></draw:frame></text:p>
+   </style:header-first>
+  </style:master-page>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:user-field-decls>
+    <text:user-field-decl office:value-type="string" office:string-value="01.2026&#9;Item 1&#9;100,00&#10;01.2026&#9;Item 2&#9;110,00&#10;01.2026&#9;Item 3&#9;120,00&#10;01.2026&#9;Item 4&#9;130,00&#10;&#9;Total 01.2026&#9;&#9;401,00&#10;&#10;&#10;02.2026&#9;Item 1&#9;100,00&#10;02.2026&#9;Item 2&#9;110,00&#10;02.2026&#9;Item 3&#9;120,00&#10;02.2026&#9;Item 4&#9;130,00&#10;&#9;Total 02.2026&#9;&#9;402,00&#10;&#10;&#10;03.2026&#9;Item 1&#9;100,00&#10;03.2026&#9;Item 2&#9;110,00&#10;03.2026&#9;Item 3&#9;120,00&#10;03.2026&#9;Item 4&#9;130,00&#10;&#9;Total 03.2026&#9;&#9;403,00&#10;&#10;&#10;04.2026&#9;Item 1&#9;100,00&#10;04.2026&#9;Item 2&#9;110,00&#10;04.2026&#9;Item 3&#9;120,00&#10;04.2026&#9;Item 4&#9;130,00&#10;&#9;Total 04.2026&#9;&#9;404,00&#10;&#10;&#10;05.2026&#9;Item 1&#9;100,00&#10;05.2026&#9;Item 2&#9;110,00&#10;05.2026&#9;Item 3&#9;120,00&#10;05.2026&#9;Item 4&#9;130,00&#10;&#9;Total 05.2026&#9;&#9;405,00&#10;&#10;&#10;06.2026&#9;Item 1&#9;100,00&#10;06.2026&#9;Item 2&#9;110,00&#10;06.2026&#9;Item 3&#9;120,00&#10;06.2026&#9;Item 4&#9;130,00&#10;&#9;Total 06.2026&#9;&#9;406,00&#10;&#10;&#10;07.2026&#9;Item 1&#9;100,00&#10;07.2026&#9;Item 2&#9;110,00&#10;07.2026&#9;Item 3&#9;120,00&#10;07.2026&#9;Item 4&#9;130,00&#10;&#9;Total 07.2026&#9;&#9;407,00&#10;&#10;&#10;08.2026&#9;Item 1&#9;100,00&#10;08.2026&#9;Item 2&#9;110,00&#10;08.2026&#9;Item 3&#9;120,00&#10;08.2026&#9;Item 4&#9;130,00&#10;&#9;Total 08.2026&#9;&#9;408,00&#10;&#10;&#10;09.2026&#9;Item 1&#9;100,00&#10;09.2026&#9;Item 2&#9;110,00&#10;09.2026&#9;Item 3&#9;120,00&#10;09.2026&#9;Item 4&#9;130,00&#10;&#9;Total 09.2026&#9;&#9;409,00&#10;&#10;&#10;10.2026&#9;Item 1&#9;100,00&#10;10.2026&#9;Item 2&#9;110,00&#10;10.2026&#9;Item 3&#9;120,00&#10;10.2026&#9;Item 4&#9;130,00&#10;&#9;Total 10.2026&#9;&#9;410,00&#10;&#10;" text:name="Table"/>
+   </text:user-field-decls>
+   <text:section text:name="Section1">
+    <text:p/>
+    <text:p/>
+    <text:p/>
+    <text:p/>
+    <text:p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</text:p>
+    <text:p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</text:p>
+    <text:p/>
+    <text:p/>
+    <text:p/>
+    <text:p/>
+    <text:p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</text:p>
+    <text:p/>
+    <text:p/>
+    <text:p text:style-name="P1"><text:user-field-get text:name="Table"/></text:p>
+    <text:p/>
+    <table:table>
+     <table:table-row/>
+    </table:table>
+   </text:section>
+  </office:text>
+ </office:body>
+</office:document>
