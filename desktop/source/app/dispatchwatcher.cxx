@@ -52,6 +52,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scripturl.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -418,8 +419,7 @@ bool DispatchWatcher::executeDispatchRequests(
         if(
             ( aName.startsWith( ".uno" ) )  ||
             ( aName.startsWith( "slot:" ) )  ||
-            ( aName.startsWith( "macro:" ) )  ||
-            ( aName.startsWith("vnd.sun.star.script") )
+            comphelper::isScriptURL(aName)
           )
         {
             // Attention: URL must be parsed full. Otherwise some detections on it will fail!
