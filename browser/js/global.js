@@ -2686,6 +2686,60 @@ function showWelcomeSVG() {
 	// also rebased onto this origin if the server returns them as
 	// site-absolute paths (e.g. "/co/collab/fetch?token=...").
 	global.collabFetchFile = function(wopiSrc, accessToken, coolServer) {
+		return global.collabConnect(wopiSrc, accessToken, coolServer).then(function() {
+			return new Promise(function(resolve, reject) {
+
+				const listener = function(msg) {
+					if (msg.type === 'fetch_url' && msg.requestId === 'wasm-init') {
+						clearTimeout(timeoutId);
+						global.removeCollabNotificationListener(listener);
+						if (msg.url) {
+							var url = msg.url;
+							// CollabSocketHandler returns site-absolute
+							// URLs (e.g. /co/collab/fetch?token=...).
+							// When cool.html is hosted on a different
+							// origin than the cool server, rebase onto
+							// _collabCoolServer so fetch() hits the
+							// right host.
+							if (url.startsWith('/') && global._collabCoolServer)
+								url = global._collabCoolServer + url;
+							global.app.console.log('Collab fetch URL: ' + url);
+							resolve({url: url, filename: msg.filename});
+						} else {
+							global.collabWs.close();
+							reject(new Error('Collab fetch response missing URL'));
+						}
+					} else if (msg.type === 'fetch_error') {
+						clearTimeout(timeoutId);
+						global.removeCollabNotificationListener(listener);
+						global.collabWs.close();
+						reject(new Error('Collab fetch error: ' + (msg.error || 'Unknown error')));
+					}
+				};
+
+				const onTimeout = function() {
+					global.removeCollabNotificationListener(listener);
+					if (global.collabWs)
+						global.collabWs.close();
+					reject(new Error('Collab fetch timeout'));
+				};
+
+				const timeoutId = setTimeout(onTimeout, 30000);
+				global.addCollabNotificationListener(listener);
+
+				// Request file contents
+				global.collabWs.send(JSON.stringify({
+					type: 'fetch',
+					stream: 'contents',
+					requestId: 'wasm-init'
+				}));
+			});
+		});
+	};
+
+	// Open the /co/collab WebSocket and sign in with accessToken.
+	// The arguments are as for collabFetchFile above.
+	global.collabConnect = function(wopiSrc, accessToken, coolServer) {
 		// Stash for collabUploadFile so it can rebase upload_url
 		// against the same cool server.  Cleared on socket close.
 		global._collabCoolServer = coolServer || '';
@@ -2710,7 +2764,6 @@ function showWelcomeSVG() {
 				return;
 			}
 
-			var authenticated = false;
 			var timeoutId = setTimeout(function() {
 				if (global.collabWs.readyState !== WebSocket.CLOSED) {
 					global.collabWs.close();
@@ -2731,45 +2784,19 @@ function showWelcomeSVG() {
 					var msg = JSON.parse(data);
 
 					if (msg.type === 'authenticated') {
-						authenticated = true;
-						// Request file contents
-						global.collabWs.send(JSON.stringify({
-							type: 'fetch',
-							stream: 'contents',
-							requestId: 'wasm-init'
-						}));
-					} else if (msg.type === 'fetch_url' && msg.requestId === 'wasm-init') {
 						clearTimeout(timeoutId);
-						if (msg.url) {
-							var url = msg.url;
-							// CollabSocketHandler returns site-absolute
-							// URLs (e.g. /co/collab/fetch?token=...).
-							// When cool.html is hosted on a different
-							// origin than the cool server, rebase onto
-							// _collabCoolServer so fetch() hits the
-							// right host.
-							if (url.startsWith('/') && global._collabCoolServer)
-								url = global._collabCoolServer + url;
-							global.app.console.log('Collab fetch URL: ' + url);
-							// Switch to notification handler for ongoing messages
-							global.collabWs.onmessage = global._collabNotificationHandler;
-							global.collabWs.onerror = function() {
-								global.app.console.log('Collab notification WebSocket error');
-							};
-							global.collabWs.onclose = function() {
-								global.app.console.log('Collab notification WebSocket closed');
-								global.collabWs = null;
-								global._collabCoolServer = '';
-							};
-							resolve({url: url, filename: msg.filename});
-						} else {
-							global.collabWs.close();
-							reject(new Error('Collab fetch response missing URL'));
-						}
-					} else if (msg.type === 'fetch_error') {
-						clearTimeout(timeoutId);
-						global.collabWs.close();
-						reject(new Error('Collab fetch error: ' + (msg.error || 'Unknown error')));
+
+						// Switch to notification handler for ongoing messages
+						global.collabWs.onmessage = global._collabNotificationHandler;
+						global.collabWs.onerror = function() {
+							global.app.console.log('Collab notification WebSocket error');
+						};
+						global.collabWs.onclose = function() {
+							global.app.console.log('Collab notification WebSocket closed');
+							global.collabWs = null;
+							global._collabCoolServer = '';
+						};
+						resolve();
 					} else if (msg.type === 'error') {
 						clearTimeout(timeoutId);
 						global.collabWs.close();
@@ -2777,8 +2804,8 @@ function showWelcomeSVG() {
 					} else {
 						// Dispatch other messages (user_list, user_joined,
 						// user_left, editing_started) through the
-						// notification handler even during the initial
-						// fetch phase, so they are not lost.
+						// notification handler even before sign-in
+						// finishes, so they are not lost.
 						global._collabNotificationHandler(event);
 					}
 				} catch (e) {
@@ -2798,9 +2825,7 @@ function showWelcomeSVG() {
 
 			global.collabWs.onclose = function() {
 				clearTimeout(timeoutId);
-				if (!authenticated) {
-					reject(new Error('Collab WebSocket closed before authentication'));
-				}
+				reject(new Error('Collab WebSocket closed before authentication'));
 			};
 		});
 	};
