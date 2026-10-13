@@ -179,18 +179,38 @@ static void StrArrToList_Impl( TypedWhichId<SfxStringListItem> nId, const std::v
 }
 
 SearchAttrItemList::SearchAttrItemList( SearchAttrItemList&& rList ) noexcept :
-    SrchAttrInfoList(std::move(rList))
+    SrchAttrInfoList(std::move(rList)),
+    m_xPool(std::move(rList.m_xPool))
 {
 }
 
-SearchAttrItemList::SearchAttrItemList( const SearchAttrItemList& rList ) :
-    SrchAttrInfoList(rList)
+SearchAttrItemList::SearchAttrItemList( const SearchAttrItemList& rList )
+    : SrchAttrInfoList()
 {
+    reserve(rList.size());
+    for (const auto& rAttr : rList)
+    {
+        if (!rAttr.aItemPtr)
+        {
+            push_back(rAttr);
+            continue;
+        }
+        if (!m_xPool)
+            m_xPool = rAttr.aItemPtr.getPool().Clone();
+        emplace_back(rAttr.nSlot, SfxPoolItemHolder(*m_xPool, rAttr.aItemPtr.getItem()));
+    }
 }
 
 SearchAttrItemList::~SearchAttrItemList()
 {
     Clear();
+    // Detach the owned clone's chain while each secondary pool is still alive.
+    while (m_xPool)
+    {
+        rtl::Reference<SfxItemPool> xNext(m_xPool->GetSecondaryPool());
+        m_xPool->SetSecondaryPool(nullptr);
+        m_xPool = std::move(xNext);
+    }
 }
 
 void SearchAttrItemList::Put( const SfxItemSet& rSet )

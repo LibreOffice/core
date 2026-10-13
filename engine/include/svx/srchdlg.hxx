@@ -25,6 +25,7 @@
 #include <svl/srchdefs.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/timer.hxx>
 #include <memory>
@@ -56,6 +57,10 @@ typedef std::vector<SearchAttrInfo> SrchAttrInfoList;
 
 class SVX_DLLPUBLIC SearchAttrItemList : private SrchAttrInfoList
 {
+    // Copies may outlive the document whose pool supplied their items.
+    // The destructor clears the holders before releasing this pool.
+    rtl::Reference<SfxItemPool> m_xPool;
+
 public:
     SearchAttrItemList() {}
     SearchAttrItemList( const SearchAttrItemList& rList );

@@ -698,6 +698,7 @@ public:
     SAL_DLLPRIVATE virtual std::unique_ptr<SfxTabPage> CreatePrintOptionsPage(weld::Container* pPage, weld::DialogController* pController,
                                                     const SfxItemSet& rSet) override;
     static SvxSearchItem* GetSearchItem() { return s_pSrchItem; }
+    static void ClearSearchAttributes();
 
     /// See SfxViewShell::getPart().
     int getPart() const override;

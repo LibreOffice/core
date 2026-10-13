@@ -27,6 +27,7 @@
 #include <globdoc.hxx>
 #include <initui.hxx>
 #include <swmodule.hxx>
+#include <view.hxx>
 #include <init.hxx>
 #include <dobjfac.hxx>
 
@@ -166,6 +167,8 @@ SwDLL::~SwDLL() COVERITY_NOEXCEPT_FALSE
 
     m_pFilters.reset();
 
+    // Remembered attribute lists own pools using these item-info packages.
+    SwView::ClearSearchAttributes();
     SwModule::get()->RemoveItemInfoPackageSwAttributes();
 
     ::FinitUI();

@@ -141,6 +141,12 @@ static bool lcl_IsNotTextSearch(const SvxSearchItem* pSearchItem)
     return pSearchItem->GetPattern(); // paragraph style search
 }
 
+void SwView::ClearSearchAttributes()
+{
+    s_xSearchList.reset();
+    s_xReplaceList.reset();
+}
+
 void SwView::ExecSearch(SfxRequest& rReq)
 {
     GetWrtShell().addCurrentPosition();

@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,svx_unit, \
 	svx/qa/unit/framelinkarray \
     svx/qa/unit/gluepointTest \
 	svx/qa/unit/sdr \
+	svx/qa/unit/srchdlg \
 	svx/qa/unit/svdraw \
 	svx/qa/unit/table \
 	svx/qa/unit/unodraw \
@@ -46,6 +47,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svx_unit, \
 	drawinglayercore \
     editeng \
 	sal \
+    salhelper \
     subsequenttest \
 	sfx \
     svl \
