@@ -61,8 +61,10 @@
 #include <document.hxx>
 #include <docuno.hxx>
 #include <editutil.hxx>
+#include <tabprotection.hxx>
 #include <undomanager.hxx>
 #include <docsh.hxx>
+#include <docfunc.hxx>
 #include <tabvwsh.hxx>
 #include <gridwin.hxx>
 #include <drwlayer.hxx>
@@ -2561,6 +2563,44 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFreezeStateInReadOnlyView)
     pColumnPoint = dynamic_cast<SfxPointItem*>(pColumn.get());
     CPPUNIT_ASSERT(pColumnPoint);
     CPPUNIT_ASSERT_EQUAL(tools::Long(1), pColumnPoint->GetValue().X());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testReadOnlyViewKeepsDocument)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocSh);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    for (SCROW nRow = 0; nRow < 3; ++nRow)
+        pDoc->SetValue(ScAddress(0, nRow, 0), nRow + 1);
+    pDocSh->GetDocFunc().InsertTable(1, u"Second"_ustr, false, true);
+    ScDocProtection aProtection;
+    aProtection.setProtected(true);
+    pDoc->SetDocProtection(&aProtection);
+    pModelObj->setModified(false);
+    pDoc->GetUndoManager()->Clear();
+
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$1:$A$3"_ustr) };
+    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aArgs);
+    KitHelper::setViewReadOnly(KitHelper::getCurrentView(), true);
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, u".uno:DeleteRows"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:ClearContents"_ustr, {});
+    aArgs = { comphelper::makePropertyValue(u"StringName"_ustr, u"changed"_ustr) };
+    dispatchCommand(mxComponent, u".uno:EnterString"_ustr, aArgs);
+    aArgs = { comphelper::makePropertyValue(u"ScenarioName"_ustr, u"Second"_ustr) };
+    dispatchCommand(mxComponent, u".uno:DeleteScenario"_ustr, aArgs);
+    dispatchCommand(mxComponent, u".uno:ToolProtectionDocument"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    for (SCROW nRow = 0; nRow < 3; ++nRow)
+        CPPUNIT_ASSERT_EQUAL(double(nRow + 1), pDoc->GetValue(ScAddress(0, nRow, 0)));
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), pDoc->GetTableCount());
+    CPPUNIT_ASSERT(pDoc->IsDocProtected());
+    CPPUNIT_ASSERT(!pDocSh->IsModified());
+    CPPUNIT_ASSERT_EQUAL(std::size_t(0), pDoc->GetUndoManager()->GetUndoActionCount());
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorVisibilityAfterPaste)
