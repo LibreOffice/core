@@ -1288,8 +1288,8 @@ if test "$enable_iosapp" = "yes"; then
 
     if test -n "$with_iosapp_bundle_version" -a "$with_iosapp_bundle_version" != "no"; then
         case "$with_iosapp_bundle_version" in
-            ''|*@<:@!0-9@:>@*)
-                AC_MSG_ERROR([--with-iosapp-bundle-version must be a number if provided, got "$with_iosapp_bundle_version"])
+            ''|*@<:@!0-9.@:>@*)
+                AC_MSG_ERROR([--with-iosapp-bundle-version must be integers optionally separated by periods if provided, got "$with_iosapp_bundle_version"])
                 ;;
         esac
         IOSAPP_BUNDLE_VERSION=$with_iosapp_bundle_version
