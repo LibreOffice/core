@@ -174,15 +174,18 @@ void HWPInfo::Read(HWPFile & hwpf)
 
 bool HWPSummary::Read(HWPFile & hwpf)
 {
-    hwpf.Read2b(title, 56);
-    hwpf.Read2b(subject, 56);
-    hwpf.Read2b(author, 56);
-    hwpf.Read2b(date, 56);
-    hwpf.Read2b(keyword[0], 56);
-    hwpf.Read2b(keyword[1], 56);
-    hwpf.Read2b(etc[0], 56);
-    hwpf.Read2b(etc[1], 56);
-    hwpf.Read2b(etc[2], 56);
+    hwpf.Read2b(title, nFieldLength);
+    hwpf.Read2b(subject, nFieldLength);
+    hwpf.Read2b(author, nFieldLength);
+    hwpf.Read2b(date, nFieldLength);
+    hwpf.Read2b(keyword[0], nFieldLength);
+    hwpf.Read2b(keyword[1], nFieldLength);
+    hwpf.Read2b(etc[0], nFieldLength);
+    hwpf.Read2b(etc[1], nFieldLength);
+    hwpf.Read2b(etc[2], nFieldLength);
+
+    for (auto* pField : { title, subject, author, date, keyword[0], keyword[1], etc[0], etc[1], etc[2] })
+        pField[nFieldLength - 1] = 0;
 
     return (!hwpf.State());
 }
