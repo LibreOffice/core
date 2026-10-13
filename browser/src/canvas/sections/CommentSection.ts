@@ -147,6 +147,8 @@ export class Comment extends CanvasSectionObject {
 		this.sectionProperties.cancelButton = null;
 		this.sectionProperties.replyButton = null;
 		this.sectionProperties.cancelReplyButton = null;
+		this.sectionProperties.statusNode = null;
+		this.sectionProperties.statusTimer = null;
 		this.sectionProperties.contentText = null;
 		this.sectionProperties.lastContentRaw = '';
 		this.sectionProperties.nodeReply = null;
@@ -206,6 +208,8 @@ export class Comment extends CanvasSectionObject {
 		button = window.L.DomUtil.create('div', '', this.sectionProperties.nodeReply);
 		this.sectionProperties.cancelReplyButton = this.createButton(button, 'annotation-cancel-reply-' + this.sectionProperties.data.id, 'annotation-button button', _('Cancel'), this.handleCancelCommentButton);
 		this.sectionProperties.replyButton = this.createButton(button, 'annotation-reply-' + this.sectionProperties.data.id, 'annotation-button button button-primary', _('Reply'), this.handleReplyCommentButton);
+		this.sectionProperties.statusNode = window.L.DomUtil.create('div', 'visuallyhidden', this.sectionProperties.container);
+		this.sectionProperties.statusNode.setAttribute('role', 'status');
 		window.L.DomEvent.disableScrollPropagation(this.sectionProperties.container);
 
 		// Since this is a late called function, if the width is enough, we shouldn't collapse the comments.
@@ -1432,6 +1436,9 @@ export class Comment extends CanvasSectionObject {
 			return;
 		}
 
+		if (e.keyCode !== 27)
+			this.clearStatus(); // the Escape hint is stale after any other key
+
 		if (this.isCtrlEnter(e)) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -1446,13 +1453,19 @@ export class Comment extends CanvasSectionObject {
 
 		if (e.keyCode === 27 /* Esc */) {
 			// When a comment is being edited and focus is in the textbox,
-			// Esc should not close it but mark it with attention.
-			const editingComment = Comment.isAnyEdit();
+			// Esc should not close it but mark it with attention, unless
+			// closing it discards nothing.
+			const editingComment = this.isEdit() ? this : Comment.isAnyEdit();
 			if (editingComment) {
 				e.preventDefault();
 				e.stopPropagation();
+				if (!editingComment.hasUnsavedText()) {
+					editingComment.handleCancelCommentButton(e);
+					return;
+				}
 				this.sectionProperties.commentListSection
 					.addCommentAttention(editingComment);
+				editingComment.announceUnsavedText();
 			}
 			return;
 		}
@@ -1618,6 +1631,38 @@ export class Comment extends CanvasSectionObject {
 		const brElements = element.querySelectorAll('br');
 		if (brElements.length > 0)
 			brElements[brElements.length-1].remove();
+	}
+
+	private hasUnsavedText(): boolean {
+		// Cancel deletes an autosaved new comment and reverts an autosaved edit
+		if (cool.CommentSection.autoSavedComment || cool.CommentSection.commentWasAutoAdded)
+			return true;
+		const props = this.sectionProperties;
+		if (props.nodeReply.style.display !== 'none')
+			return props.nodeReplyText.innerText.trim() !== '';
+		const node = props.nodeModifyText.cloneNode(true) as HTMLElement;
+		this.removeLastBRTag(node);
+		// a new comment has no original text; a posted one may have only HTML
+		const origHTML = props.contentText.origHTML || '';
+		if (origHTML)
+			return origHTML !== node.innerHTML;
+		return (props.contentText.origText || '').trim() !== node.innerText.trim();
+	}
+
+	private announceUnsavedText(): void {
+		const props = this.sectionProperties;
+		const cancel = props.nodeReply.style.display !== 'none' ? props.cancelReplyButton : props.cancelButton;
+		const status = props.statusNode;
+		// a live region is announced on a change, so empty it for a repeated Escape
+		this.clearStatus();
+		props.statusTimer = setTimeout(() => {
+			status.textContent = _('Press Ctrl + Enter to post, or %1 to discard').replace('%1', cancel.value);
+		}, 100);
+	}
+
+	private clearStatus(): void {
+		clearTimeout(this.sectionProperties.statusTimer);
+		this.sectionProperties.statusNode.textContent = '';
 	}
 
 	private isNodeEmpty(): boolean {

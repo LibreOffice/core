@@ -371,6 +371,41 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('#annotation-save-new:focus-visible');
 	});
 
+	it('Escape cancels a new comment without text', function() {
+		desktopHelper.insertComment('x', false);
+		cy.cGet('.cool-annotation .modify-annotation .cool-annotation-textarea').type('{backspace}');
+
+		cy.realPress('Escape');
+		cy.cGet('.cool-annotation .modify-annotation .cool-annotation-textarea').should('not.exist');
+		cy.cGet('div.clipboard').should('have.focus');
+	});
+
+	it('Escape keeps a comment with text and announces how to leave it', function() {
+		desktopHelper.insertComment(undefined, false);
+
+		cy.realPress('Escape');
+		cy.cGet('.cool-annotation .modify-annotation .cool-annotation-textarea').should('have.focus');
+		cy.cGet('.cool-annotation-inedit').should('exist');
+		cy.cGet('.cool-annotation [role="status"]')
+			.should('have.text', 'Press Ctrl + Enter to post, or Cancel to discard');
+
+		// stale after any other key
+		cy.realType('a');
+		cy.cGet('.cool-annotation [role="status"]').should('have.text', '');
+	});
+
+	it('Escape leaves an unchanged comment', function() {
+		desktopHelper.insertComment();
+		cy.cGet('#comment-annotation-menu-1').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
+		cy.cGet('#annotation-modify-textarea-1').should('have.focus');
+
+		cy.realPress('Escape');
+		cy.cGet('#annotation-modify-textarea-1').should('not.be.visible');
+		cy.cGet('#annotation-content-area-1').should('contain', 'some text0');
+		cy.cGet('div.clipboard').should('have.focus');
+	});
+
 	it('Global opreations without doc focused', function () {
 		cy.getFrameWindow().then(function (win) {
 			cy.spy(win.app.socket, 'sendMessage').as('sendMessage');
@@ -1147,6 +1182,18 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		helper.reloadDocument(newFilePath);
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
 		cy.cGet('#annotation-content-area-1').should('have.text','some text0');
+	});
+
+	it('Escape keeps an autosaved comment', function() {
+		desktopHelper.insertComment(undefined, false);
+		cy.cGet('#map').focus();
+		cy.cGet('.annotation-button-autosaved').should('be.visible');
+		cy.cGet('#annotation-modify-textarea-1').click();
+
+		cy.realPress('Escape');
+		cy.cGet('#comment-container-1').should('exist');
+		cy.cGet('#annotation-modify-textarea-1').should('be.visible').and('have.text', 'some text0');
+		cy.cGet('#comment-container-1 [role="status"]').should('contain', 'to discard');
 	});
 
 	it('Insert autosave save', function() {
