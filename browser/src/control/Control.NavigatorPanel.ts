@@ -727,6 +727,25 @@ class NavigatorPanel extends SidebarBase {
 			return;
 		}
 
+		// The core drops its results on every change, so pass on only a real one: keys that
+		// leave the text alone, like the arrows, still send a change, and moving in the field
+		// should keep the results. After a real change, say the results are gone now, rather
+		// than waiting for the core's update to hide the next button, so the next search starts
+		// anew even if that update has not arrived yet.
+		if (eventType === 'change') {
+			if (searchTerm === this.highlightTerm) return;
+			this.highlightTerm = searchTerm;
+			this.searchResultsStale = true;
+			super.callback(
+				objectType,
+				eventType,
+				{ id: 'Find' },
+				searchTerm,
+				builder,
+			);
+			return;
+		}
+
 		const termChanged = searchTerm !== this.highlightTerm;
 		this.highlightTerm = searchTerm;
 		const newSearch =

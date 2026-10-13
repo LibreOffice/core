@@ -75,6 +75,19 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching via quickfind in
         writerHelper.assertQuickFindMatches(2);
     });
 
+    it('Moving in the search field keeps the results', function() {
+        writerHelper.searchInQuickFind('a');
+        writerHelper.assertQuickFindMatches(2);
+
+        // The arrow keys leave the search term alone, so the results stay.
+        cy.cGet('input#navigator-search-input').type('{leftarrow}{rightarrow}');
+        cy.getFrameWindow().then(function(win) {
+            return helper.processToIdle(win);
+        });
+
+        writerHelper.assertQuickFindMatches(2);
+    });
+
     it('Search still finds matches after the browser settings arrive again', function() {
         writerHelper.searchInQuickFind('a');
         writerHelper.assertQuickFindMatches(2);
