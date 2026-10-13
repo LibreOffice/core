@@ -943,6 +943,10 @@ namespace cool {
 			const children = primitive.children;
 			if (!children) return;
 
+			// Blend modes do gray and invert exactly, so these two have their
+			// own path with a filter fallback. The other modifiers go through
+			// a scratch canvas, and draw the original colors only when none
+			// can be had.
 			if (primitive.modifier === 'gray' || primitive.modifier === 'invert') {
 				this._renderGrayOrInvert(
 					context,
