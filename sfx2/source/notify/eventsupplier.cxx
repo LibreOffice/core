@@ -186,13 +186,11 @@ void SfxEvents_Impl::Execute( css::uno::Sequence < css::beans::PropertyValue > c
     if (aScript.isEmpty())
         return;
 
-    if (!SfxObjectShell::isScriptURLAllowed(aScript))
-        return;
-
     if (!pDoc)
         pDoc = SfxObjectShell::Current();
 
-    if (pDoc && !SfxObjectShell::isScriptAccessAllowed(pDoc->GetModel()))
+    if (pDoc ? !SfxObjectShell::isDocumentScriptAllowed(aScript, pDoc->GetModel())
+             : !SfxObjectShell::isScriptURLAllowed(aScript))
         return;
 
     if (aType == STAR_BASIC)

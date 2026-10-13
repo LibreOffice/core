@@ -1545,6 +1545,13 @@ bool SfxObjectShell::isScriptAccessAllowed( const Reference< XInterface >& _rxSc
     return false;
 }
 
+bool SfxObjectShell::isDocumentScriptAllowed(const OUString& rScriptURL,
+                                             const Reference<XInterface>& rxDocument)
+{
+    return isScriptURLAllowed(rScriptURL) && isScriptAccessAllowed(rxDocument)
+           && !UnTrustedScript(rScriptURL);
+}
+
 // don't allow LibreLogo to be used with our mouseover/etc dom-alike events
 bool SfxObjectShell::UnTrustedScript(const OUString& rScriptURL)
 {

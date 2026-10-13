@@ -461,6 +461,11 @@ public:
 
     static bool                 isScriptAccessAllowed(const css::uno::Reference<css::uno::XInterface>& rScriptContext);
 
+    /// Whether a script URL that rxDocument binds may run: the URL is allowed, the document may
+    /// run macros, and the script is not an untrusted one
+    static bool                 isDocumentScriptAllowed(const OUString& rScriptURL,
+                                    const css::uno::Reference<css::uno::XInterface>& rxDocument);
+
     SvKeyValueIterator*         GetHeaderAttributes();
     void                        ClearHeaderAttributesForSourceViewHack();
     void                        SetHeaderAttributesForSourceViewHack();
