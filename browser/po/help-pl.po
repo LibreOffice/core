@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-08-06 13:27+0000\n"
-"Last-Translator: Matthaiks <kitynska@gmail.com>\n"
+"PO-Revision-Date: 2026-10-13 13:17+0000\n"
+"Last-Translator: Matthaiks <kityn@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/collabora-online/"
 "help/pl/>\n"
 "Language: pl\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -1833,6 +1833,12 @@ msgid ""
 "selected tab again to collapse the tab bar and gain space for the document. "
 "Click any tab to expand it again."
 msgstr ""
+"<span class=\"def\">Karty:</span> polecenia są zgrupowane na kartach u góry: "
+"<span class=\"ui\">Plik</span>, <span class=\"ui\">Główne</span>, <span "
+"class=\"ui\">Wstaw</span>, <span class=\"ui\">Recenzja</span>, <span "
+"class=\"ui\">Widok</span> i inne, w zależności od typu dokumentu. Kliknij "
+"ponownie wybraną kartę, aby zwinąć pasek kart i uzyskać więcej miejsca na "
+"dokument. Kliknij dowolną kartę, aby go ponownie rozwinąć."
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
 msgid ""
@@ -1968,17 +1974,15 @@ msgid ""
 msgstr "Dokument jest automatycznie zapisywany jeśli dokonano w nim zmian."
 
 #: html/cool-help.html%2Bdiv.div.div.p:441-7
-#, fuzzy
 msgid ""
 "To open a document, either open it in <span class=\"productname\""
 ">{productname}</span> from your platform's file manager or use <span class="
 "\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
-"Aby otworzyć dokument, otwórz go w <span class=\"productname\""
-">{productname}</span> z poziomu menedżera plików swojej platformy lub "
-"skorzystaj z przycisku <span class=\"ui\">Otwórz</span> na stronie "
-"wyświetlonej po kliknięciu przycisku paska menu <span class=\"ui\""
-">Plik</span>."
+"Aby otworzyć dokument, otwórz go w <span class=\"productname\">{productname}"
+"</span> z poziomu menedżera plików swojej platformy lub skorzystaj z "
+"przycisku <span class=\"ui\">Otwórz</span> na stronie wyświetlonej po "
+"kliknięciu przycisku paska menu <span class=\"ui\">Plik</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
@@ -1987,20 +1991,27 @@ msgid ""
 " in the bottom right corner. New documents and documents created from a "
 "template open ready to edit."
 msgstr ""
+"Istniejący dokument otwiera się w trybie podglądu, co pozwala na jego "
+"czytanie bez ryzyka przypadkowej zmiany. Aby rozpocząć edycję, kliknij "
+"przycisk edycji (ikonę ołówka) w prawym dolnym rogu. Nowe dokumenty oraz te "
+"utworzone na podstawie szablonu otwierają się w trybie gotowym do edycji."
 
 #: html/cool-help.html%2Bdiv.div.div.p:452-7
 msgid ""
 "If the document is locked by another application, it stays in view mode."
 msgstr ""
+"Jeśli dokument jest zablokowany przez inną aplikację, pozostaje w trybie "
+"podglądu."
 
 #: html/cool-help.html%2Bdiv.div.div.p:456-7
 msgid ""
 "To save the document in a different format use <span class=\"ui\">Save As</"
 "span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
+"Aby zapisać dokument w innym formacie, użyj opcji <span class=\"ui\">Zapisz "
+"jako</span> na karcie <span class=\"ui\">Plik</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:461-7
-#, fuzzy
 msgid ""
 "Documents are automatically saved periodically, but if you want a document "
 "to be saved right away you can use <span class=\"ui\">Save</span> on the "
@@ -2008,14 +2019,16 @@ msgid ""
 msgstr ""
 "Dokumenty są automatycznie zapisywane okresowo, ale jeśli chcesz zapisać "
 "dokument od razu, możesz użyć przycisku <span class=\"ui\">Zapisz</span> na "
-"stronie wyświetlanej po kliknięciu przycisku paska menu <span class=\"ui\""
-">Plik</span>."
+"stronie wyświetlanej po kliknięciu przycisku paska menu <span class=\"ui\">"
+"Plik</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:467-7
 msgid ""
 "To print the document, use <span class=\"ui\">Print</span> on the <span "
 "class=\"ui\">File</span> tab."
 msgstr ""
+"Aby wydrukować dokument, użyj opcji <span class=\"ui\">Drukuj</span> na "
+"karcie <span class=\"ui\">Plik</span>."
 
 #: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
@@ -2039,6 +2052,15 @@ msgid ""
 "Android or iOS selecting text by double tapping, and using a long-tap to "
 "access copy/cut/paste via the context menu is required."
 msgstr ""
+"Obsługiwane jest kopiowanie, wycinanie i wklejanie treści sformatowanych (w "
+"tym obrazów i elementów mieszanych) za pomocą skrótów klawiszowych (<kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>"
+", <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"C</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>V</kbd>). W systemach Android lub iOS tekst zaznacza się poprzez "
+"dwukrotne stuknięcie, a dostęp do funkcji kopiowania, wycinania i wklejania "
+"uzyskuje się, przytrzymując palec na tekście (długie naciśnięcie) i "
+"korzystając z menu kontekstowego."
 
 #: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
@@ -2047,6 +2069,10 @@ msgid ""
 "comes from outside the document, but context menus can be used for cut and "
 "copy."
 msgstr ""
+"Ze względów bezpieczeństwa wklejanie zawartości spoza dokumentu wymaga "
+"użycia skrótu <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
+"+</span><kbd>V</kbd>, jednak do wycinania i kopiowania można używać menu "
+"kontekstowych."
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2057,6 +2083,12 @@ msgid ""
 ">{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
+"Gdy kopiujesz zaznaczenie zawierające obrazy lub inne obiekty, w prawym "
+"dolnym rogu pojawia się widżet <span class=\"ui\">Pobierz zaznaczenie</span>"
+". Naciśnij <span class=\"ui\">Pobierz</span>, a następnie skopiuj ponownie, "
+"aby udostępnić zawartość aplikacjom spoza programu <span "
+"class=\"productname\">{productname}</span>. Krok ten powoduje również "
+"przekształcenie złożonych typów obiektów w statyczne obrazy."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:487-5
 msgid "Document repair"
@@ -2080,15 +2112,17 @@ msgid ""
 "lists the recent changes to the document and lets you take the document back "
 "to an earlier state."
 msgstr ""
+"Opcja <span class=\"ui\">Napraw</span> na karcie <span class=\"ui\">Plik</"
+"span> wyświetla listę ostatnich zmian wprowadzonych w dokumencie i umożliwia "
+"przywrócenie go do wcześniejszego stanu."
 
 #: html/cool-help.html%2Bdiv.div.div.p:490-5
-#, fuzzy
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
 "class=\"ui\">OK</span>."
 msgstr ""
-"Aby skoczyć do wybranego stanu, wybierz go za pomocą myszy i naciśnij <span "
-"class=\"ui\">Skocz do stanu</span>."
+"Aby powrócić do wybranego stanu, zaznacz go myszą i kliknij <span "
+"class=\"ui\">OK</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:491-55
 msgid ""
@@ -2112,20 +2146,19 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:495-5
 msgid "Idle document"
-msgstr ""
+msgstr "Nieaktywny dokument"
 
 #: html/cool-help.html%2Bdiv.div.div.p:496-5
-#, fuzzy
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
 "“Idle” state. The document is shown with a transparent gray overlay, with "
 "the message “Idle document – please click to reload and resume editing”."
 msgstr ""
-"Kiedy <span class=\"productname\">{productname}</span> wykryje brak "
-"aktywności w przeglądarce przez dłuższy czas, ustawi dokument w stan "
-"nieaktywny. Dokument jest wyświetlany z półprzezroczystą szarą nakładką, z "
-"wiadomością \"Nieaktywny dokument - kliknij aby powrócić do edycji\"."
+"Gdy <span class=\"productname\">{productname}</span> wykryje brak aktywności "
+"w przeglądarce przez dłuższy czas, przełącza dokument w stan bezczynności. "
+"Dokument zostaje wówczas przesłonięty półprzezroczystą szarą warstwą z "
+"komunikatem: „Nieaktywny dokument - kliknij, aby odświeżyć i wznowić edycję”."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
 msgid ""
@@ -2217,13 +2250,12 @@ msgstr ""
 "prezentacji."
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Chart</span>. "
 "Customize your chart on the sidebar:"
 msgstr ""
 "Wybierz <span class=\"ui\">Wstaw</span> → <span class=\"ui\">Wykres</span>. "
-"Modyfikuj wykres za pomocą panelu bocznego:"
+"Dostosuj wykres na panelu bocznym:"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:519-53
 msgid ""
@@ -2304,6 +2336,9 @@ msgid ""
 ">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
 "computer and insert it into the document."
 msgstr ""
+"<span class=\"def\">Wstawianie obrazu lokalnego:</span> Wybierz <span "
+"class=\"ui\">Wstaw</span> → <span class=\"ui\">Obraz</span>, aby wybrać "
+"obraz z komputera i wstawić go do dokumentu."
 
 #: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
@@ -2366,13 +2401,12 @@ msgid "Text with a red wavy underline beneath a misspelled word"
 msgstr "Tekst z czerwonym, falistym podkreśleniem pod błędnie napisanym słowem"
 
 #: html/cool-help.html%2Bdiv.div.div.p:544-5
-#, fuzzy
 msgid ""
 "To systematically spell-check the whole document use <span class=\"ui\""
 ">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
-"Aby systematycznie sprawdzać pisownię w całym dokumencie użyj menu <span "
-"class=\"ui\">Narzędzia</span> → <span class=\"ui\">Pisownia</span>."
+"Aby systematycznie sprawdzić pisownię w całym dokumencie, użyj opcji <span "
+"class=\"ui\">Pisownia</span> na karcie <span class=\"ui\">Recenzja</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
@@ -2542,14 +2576,13 @@ msgstr ""
 "komórki zostaną odrzucone. Aby włączyć sprawdzanie poprawności danych:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:589-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Validity</span> on the <span class=\"ui\">Data</"
 "span> tab. The <span class=\"ui\">Validity</span> dialog opens."
 msgstr ""
-"Wybierz <span class=\"ui\">Poprawność danych...</span> z menu <span class="
-"\"ui\">Dane</span>. Otworzy się okno <span class=\"ui\">Poprawność "
-"danych</span>."
+"Wybierz <span class=\"ui\">Poprawność</span> na karcie <span class=\"ui\">"
+"Dane</span>. Zostanie otwarte okno dialogowe <span class=\"ui\">Poprawność</"
+"span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:592-57
 msgid ""
@@ -2619,7 +2652,6 @@ msgstr ""
 "datę, tekst komentarza i przyciski Zapisz/Anuluj"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:606-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
@@ -2627,11 +2659,11 @@ msgid ""
 "span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
 "apply on the range."
 msgstr ""
-"<span class=\"def\">Formatowanie warunkowe:</span> <span class=\"productname"
-"\">{productname}</span> dodaje symbole do każdej komórki z zakresu bazując "
-"na warunkach komórki. Wybierz zakres komórek i kliknij ikonę <span class=\"ui"
-"\">Formatowanie warunkowe</span> na pasku narzędzi. Wybierz zestaw symboli "
-"aby zastosować na zakresie."
+"<span class=\"def\">Formatowanie warunkowe:</span> <span "
+"class=\"productname\">{productname}</span> dodaje symbole do każdej komórki "
+"w zakresie na podstawie warunków dotyczących komórek. Zaznacz zakres komórek "
+"i kliknij <span class=\"ui\">Warunkowe</span> na karcie <span class=\"ui\">"
+"Główne</span>. Wybierz zestaw symboli do zastosowania dla tego zakresu."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
@@ -2716,17 +2748,16 @@ msgstr ""
 "do aktualnie wybranych obiektów."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
 "paragraph style to a paragraph. Select the style in the style list on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
-"<span class=\"def\">Formatowanie stylów:</span> <span class=\"productname\""
-">{productname}</span> wspiera style akapitów. Możesz zastosować istniejący "
-"styl do akapitu. Wybierz z menu <span class=\"ui\">Edycja</span> → <span "
-"class=\"ui\">Edycja stylu...</span> aby zmienić styl."
+"<span class=\"def\">Formatowanie stylów:</span> <span class=\"productname\">"
+"{productname}</span> obsługuje style akapitów. Możesz zastosować istniejący "
+"styl akapitu do akapitu. Wybierz styl z listy stylów na karcie <span "
+"class=\"ui\">Główne</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
@@ -2741,7 +2772,6 @@ msgid "Handling Tables"
 msgstr "Obsługa tabel"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:637-5
-#, fuzzy
 msgid ""
 "Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
 ">Table</span>. Select the initial number of rows and columns. Add rows and "
@@ -2749,10 +2779,11 @@ msgid ""
 ">Table</span> tab. The default paragraph style inside cells is “Table "
 "contents”."
 msgstr ""
-"Wstaw tabele za pomocą odpowiedniej ikony z paska narzędzi. Wybierz "
-"początkową ilość wierszy i kolumn. Dodaj wiersze i kolumny za pomocą menu "
-"kontekstowego. Łącz komórki za pomocą menu <span class=\"ui\">Tabela</span>. "
-"Standardowy styl akapitu w komórkach tabeli to „Zawartość tabeli”."
+"Wstawiaj tabele za pomocą poleceń <span class=\"ui\">Wstaw</span> → <span "
+"class=\"ui\">Tabela</span>. Wybierz początkową liczbę wierszy i kolumn. "
+"Dodawaj wiersze i kolumny, korzystając z menu kontekstowego komórki. Scalaj "
+"komórki na karcie <span class=\"ui\">Tabela</span>. Domyślnym stylem akapitu "
+"wewnątrz komórek jest „Zawartość tabeli”."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
@@ -2763,15 +2794,14 @@ msgstr ""
 "wierszy i kolumn, obecnie wyświetlającą 5 na 3"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:641-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
 "cells, open the context menu and choose <span class=\"ui\">Table Properties</"
 "span>. Fine tune the table with the properties dialog."
 msgstr ""
-"<span class=\"def\">Formatowanie komórek:</span> Kliknij komórkę lub zakres "
-"komórek i wybierz z menu <span class=\"ui\">Tabela</span> → <span class=\"ui"
-"\">Właściwości</span>. Dostosuj tabelę w oknie właściwości."
+"<span class=\"def\">Formatowanie komórek:</span> Kliknij w komórce lub "
+"zaznacz zakres komórek, otwórz menu kontekstowe i wybierz <span class=\"ui\">"
+"Właściwości tabeli</span>. Dostosuj ustawienia tabeli w oknie właściwości."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
@@ -2991,12 +3021,16 @@ msgid ""
 "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT. "
 "Plain text TXT and Markdown MD"
 msgstr ""
+"Dokumenty tekstowe: formaty Microsoft DOC, DOCX, RTF. Format OpenDocument "
+"ODT. Zwykły tekst TXT i Markdown MD"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:699-7
 msgid ""
 "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS. Comma "
 "separated values CSV"
 msgstr ""
+"Arkusze kalkulacyjne: formaty Microsoft XLS i XLSX, format OpenDocument ODS. "
+"Wartości rozdzielane przecinkami (CSV)"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:700-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
@@ -3044,6 +3078,9 @@ msgid ""
 "background regularly, you can't just close without saving it. To abandon "
 "your changes, undo them."
 msgstr ""
+"<span class=\"productname\">{productname}</span> regularnie zapisuje "
+"dokument w tle, więc nie można go po prostu zamknąć bez zapisu. Aby odrzucić "
+"wprowadzone zmiany, należy je cofnąć."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:717-5
 msgid ""
@@ -3067,15 +3104,14 @@ msgid "How can I check spelling in my language?"
 msgstr "Jak mogę sprawdzić pisownię w moim języku?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
 "and select the language for the whole document. Optionally you can set "
 "languages for the selected text and for the current paragraph."
 msgstr ""
-"Z menu <span class=\"ui\">Narzędzia</span> → <span class=\"ui\">Język</span> "
-"wybierz język dla całego dokumentu. Opcjonalnie możesz wybrać język dla "
-"zaznaczonego tekstu lub aktualnego akapitu."
+"Wybierz <span class=\"ui\">Recenzja</span> → <span class=\"ui\">Język</span> "
+"i określ język dla całego dokumentu. Opcjonalnie możesz ustawić język dla "
+"zaznaczonego tekstu oraz dla bieżącego akapitu."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:725-5
 msgid "How can I remove the red wavy lines in my document?"
@@ -3086,6 +3122,9 @@ msgid ""
 "On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
 ">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
+"Na karcie <span class=\"ui\">Recenzja</span> otwórz sekcję <span "
+"class=\"ui\">Pisownia</span> i usuń zaznaczenie opcji <span class=\"ui\">"
+"Automatyczne sprawdzanie pisowni</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
 msgid "What is the blue wavy underline in some words in the text?"
@@ -3109,15 +3148,14 @@ msgid "Is there a thesaurus?"
 msgstr "Czy jest słownik wyrazów bliskoznacznych?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
-#, fuzzy
 msgid ""
 "Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
 " <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
-"Tak. Kliknij słowo, które Cię interesuje i wybierz <span class=\"ui\""
-">Narzędzia</span> → <span class=\"ui\">Wyrazy bliskoznaczne...</span>. "
-"Pojawi się okno z sugerowanymi słowami zastępczymi."
+"Tak. Kliknij wybrane słowo i wybierz <span class=\"ui\">Recenzja</span> → "
+"<span class=\"ui\">Słownik wyrazów bliskoznacznych</span>. Otworzy się okno "
+"dialogowe z wieloma propozycjami zamienników."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:735-49
 msgid ""
@@ -3136,33 +3174,30 @@ msgstr ""
 "mojego dokumentu?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
-#, fuzzy
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
 "document display, choose <span class=\"ui\">View</span> → <span class=\"ui\""
 ">Formatting Marks</span>."
 msgstr ""
-"Symbol <span class=\"blue\">¶</span> jest znacznikiem formatowania. Jest "
-"używany w celu ułatwienia edycji i formatowania tekstu. Symbol ten nie jest "
-"drukowany. Aby zmienić widoczność znaczników formatowania, wybierz z menu "
-"<span class=\"ui\">Widok</span> → <span class=\"ui\">Znaczniki "
-"formatowania</span>."
+"Symbol <span class=\"blue\">¶</span> to znacznik formatowania. Ułatwia on "
+"wyrównywanie i edycję tekstu i nie jest drukowany. Aby włączyć lub wyłączyć "
+"jego wyświetlanie w dokumencie, wybierz <span class=\"ui\">Widok</span> → "
+"<span class=\"ui\">Znaczniki formatowania</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:746-5
 msgid "How do I get a word count of my document?"
 msgstr "Jak uzyskać liczbę słów w moim dokumencie?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
-#, fuzzy
 msgid ""
 "Word count is available in <span class=\"ui\">Review</span> → <span class="
 "\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
 "the whole document."
 msgstr ""
-"Licznik słów jest dostępny w <span class=\"ui\">Narzędzia</span> → <span "
-"class=\"ui\">Licznik słów</span>. Okno dialogowe pokaże licznik słów dla "
-"zaznaczenia i dla całego dokumentu."
+"Liczbę słów można sprawdzić w sekcji <span class=\"ui\">Recenzja</span> → "
+"<span class=\"ui\">Liczba słów</span>. W oknie dialogowym wyświetlana jest "
+"liczba słów dla zaznaczonego fragmentu oraz dla całego dokumentu."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:748-50
 msgid ""
@@ -3206,6 +3241,8 @@ msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
 "Character</span>. A dialog opens."
 msgstr ""
+"Wybierz <span class=\"ui\">Wstaw</span> → <span class=\"ui\">Znak specjalny</"
+"span>. Zostanie otwarte okno dialogowe."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:759-59
 msgid ""
