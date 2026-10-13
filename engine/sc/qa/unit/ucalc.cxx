@@ -6929,6 +6929,59 @@ CPPUNIT_TEST_FIXTURE(Test, testSetFormula)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testForecastLinearArrayOrientations)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    // Known x and y values arranged in vertical, horizontal and mixed shapes.
+    for (SCROW i = 0; i < 4; ++i)
+    {
+        m_pDoc->SetValue(ScAddress(0, i, 0), 100.0 * (i + 1));
+        m_pDoc->SetValue(ScAddress(1, i, 0), i + 1.0);
+        m_pDoc->SetValue(ScAddress(10, i, 0), 100.0 * (i + 1));
+    }
+    for (SCCOL i = 0; i < 4; ++i)
+    {
+        m_pDoc->SetValue(ScAddress(2 + i, 0, 0), 100.0 * (i + 1));
+        m_pDoc->SetValue(ScAddress(6 + i, 0, 0), i + 1.0);
+        m_pDoc->SetValue(ScAddress(11 + i, 0, 0), i + 1.0);
+    }
+    m_pDoc->SetString(ScAddress(12, 0, 0), u"skip"_ustr);
+
+    const char* aFormulas[] = {
+        "=FORECAST.LINEAR(150, B1:B4, A1:A4)",
+        "=FORECAST.LINEAR(150, G1:J1, C1:F1)",
+        "=FORECAST.LINEAR(150, G1:J1, A1:A4)",
+        "=FORECAST.LINEAR(150, B1:B4, C1:F1)",
+        // Non-numeric pairs remain aligned after transposing the y vector.
+        "=FORECAST.LINEAR(150, L1:O1, K1:K4)",
+    };
+
+    for (size_t i = 0; i < std::size(aFormulas); ++i)
+    {
+        ScAddress aPos(0, 10 + i, 0);
+        m_pDoc->SetFormula(aPos, OUString::createFromAscii(aFormulas[i]),
+                           formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aFormulas[i], FormulaError::NONE, m_pDoc->GetErrCode(aPos));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(aFormulas[i], 1.5, m_pDoc->GetValue(aPos), 1e-12);
+    }
+
+    // ODF FORECAST requires the known_x and known_y arrays to have the same
+    // dimensions.  The Excel extension above accepts a transposed vector.
+    ScAddress aOdfPos(0, std::size(aFormulas) + 10, 0);
+    m_pDoc->SetFormula(aOdfPos, u"=FORECAST(150, G1:J1, A1:A4)"_ustr,
+                       formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::IllegalArgument, m_pDoc->GetErrCode(aOdfPos));
+
+    // Transposition must not make vectors of different lengths compatible.
+    ScAddress aUnequalPos(0, std::size(aFormulas) + 11, 0);
+    m_pDoc->SetFormula(aUnequalPos, u"=FORECAST.LINEAR(150, G1:J1, A1:A3)"_ustr,
+                       formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+    CPPUNIT_ASSERT_EQUAL(FormulaError::IllegalArgument, m_pDoc->GetErrCode(aUnequalPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testMultipleDataCellsInRange)
 {
     m_pDoc->InsertTab(0, u"Test"_ustr);

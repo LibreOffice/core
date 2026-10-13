@@ -1037,7 +1037,7 @@ public:
     bool CheckMatrix(bool _bLOG,sal_uInt8& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX,SCSIZE& nRY,SCSIZE& M,SCSIZE& N,ScMatrixRef& pMatX,ScMatrixRef& pMatY);
     void ScLinest();
     void ScLogest();
-    void ScForecast();
+    void ScForecast(bool bAllowTransposedArrays);
     void ScForecast_Ets( ScETSType eETSType );
     void ScFourier();
     void ScNoName();

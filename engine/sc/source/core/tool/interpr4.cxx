@@ -4286,8 +4286,8 @@ void ScInterpreter::DispatchOpCode( OpCode eOp )
         case ocGrowth           : ScGrowth();                   break;
         case ocLinest           : ScLinest();                   break;
         case ocLogest           : ScLogest();                   break;
-        case ocForecast_LIN     :
-        case ocForecast         : ScForecast();                   break;
+        case ocForecast_LIN     : ScForecast(true);                break;
+        case ocForecast         : ScForecast(false);               break;
         case ocForecast_ETS_ADD : ScForecast_Ets( etsAdd );       break;
         case ocForecast_ETS_SEA : ScForecast_Ets( etsSeason );    break;
         case ocForecast_ETS_MUL : ScForecast_Ets( etsMult );      break;

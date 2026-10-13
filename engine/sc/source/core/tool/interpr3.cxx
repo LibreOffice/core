@@ -5148,7 +5148,7 @@ void ScInterpreter::ScIntercept()
     CalculateSlopeIntercept(false);
 }
 
-void ScInterpreter::ScForecast()
+void ScInterpreter::ScForecast(bool bAllowTransposedArrays)
 {
     if ( !MustHaveParamCount( GetByte(), 3 ) )
         return;
@@ -5163,7 +5163,10 @@ void ScInterpreter::ScForecast()
     SCSIZE nR1, nR2;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
-    if (nR1 != nR2 || nC1 != nC2)
+    const bool bTransposedArrays = bAllowTransposedArrays && nC1 == nR2 && nR1 == nC2
+                                   && (nC1 == 1 || nR1 == 1)
+                                   && (nC2 == 1 || nR2 == 1);
+    if ((nR1 != nR2 || nC1 != nC2) && !bTransposedArrays)
     {
         PushIllegalArgument();
         return;
@@ -5174,7 +5177,29 @@ void ScInterpreter::ScForecast()
     KahanSum fSumX          = 0.0;
     KahanSum fSumY          = 0.0;
 
-    pMat1->IterateNumericPairs(*pMat2, [&](double fValX, double fValY) {
+    const auto aIterateNumericPairs = [&](const auto& rFunc) {
+        if (bTransposedArrays)
+        {
+            for (SCSIZE i = 0; i < nC1; i++)
+            {
+                for (SCSIZE j = 0; j < nR1; j++)
+                {
+                    const SCSIZE nCol2 = j;
+                    const SCSIZE nRow2 = i;
+                    if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(nCol2,nRow2))
+                    {
+                        const double fValX = pMat1->GetDouble(i,j);
+                        const double fValY = pMat2->GetDouble(nCol2,nRow2);
+                        rFunc(fValX, fValY);
+                    }
+                }
+            }
+        }
+        else
+            pMat1->IterateNumericPairs(*pMat2, rFunc);
+    };
+
+    aIterateNumericPairs([&](double fValX, double fValY) {
         fSumX += fValX;
         fSumY += fValY;
         fCount++;
@@ -5187,7 +5212,7 @@ void ScInterpreter::ScForecast()
         KahanSum fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
         double fMeanX = fSumX.get() / fCount;
         double fMeanY = fSumY.get() / fCount;
-        pMat1->IterateNumericPairs(*pMat2, [&](double fValX, double fValY) {
+        aIterateNumericPairs([&](double fValX, double fValY) {
             fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
             fSumSqrDeltaX += (fValX - fMeanX) * (fValX - fMeanX);
         });
