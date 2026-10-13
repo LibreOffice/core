@@ -2907,7 +2907,6 @@ lib/collaboraoffice/share/config/soffice.cfg/sfx/ui/editdocumentdialog.ui
 lib/collaboraoffice/share/config/soffice.cfg/sfx/ui/editdurationdialog.ui
 lib/collaboraoffice/share/config/soffice.cfg/sfx/ui/errorfindemaildialog.ui
 lib/collaboraoffice/share/config/soffice.cfg/sfx/ui/extrabutton.ui
-lib/collaboraoffice/share/config/soffice.cfg/sfx/ui/floatingrecord.ui
 lib/collaboraoffice/share/config/soffice.cfg/sfx/ui/helpbookmarkpage.ui
 lib/collaboraoffice/share/config/soffice.cfg/sfx/ui/helpcontentpage.ui
 lib/collaboraoffice/share/config/soffice.cfg/sfx/ui/helpcontrol.ui

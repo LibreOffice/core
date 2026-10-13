@@ -457,8 +457,6 @@ class SvxZoomItem;
 #define SID_CURSOREND                       (SID_SFX_START + 746)
 #define SID_UNICODE_NOTATION_TOGGLE         (SID_SFX_START + 792)
 
-// default-ids for macros
-
 // Paste Special
 #define SID_PASTE_ONLY_TEXT                 (SID_SFX_START + 802)
 #define SID_PASTE_ONLY_FORMULA              (SID_SFX_START + 803)
