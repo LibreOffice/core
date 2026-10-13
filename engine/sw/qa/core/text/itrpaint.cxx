@@ -394,6 +394,44 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineRenderModeIME)
     rEditWin.PostExtTextInputEvent(VclEventId::ExtTextInput, u"a"_ustr);
     rEditWin.PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFormatRedlineRenderModeOmitInsertDelete)
+{
+    // Given a document where "world" was underlined, and then the underline was removed with
+    // change tracking on:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"Hello world"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, u".uno:Underline"_ustr, {});
+    pDocShell->SetChangeRecording(/*bActivate=*/true);
+    dispatchCommand(mxComponent, u".uno:Underline"_ustr, {});
+
+    // When painting the old side of a side by side comparison:
+    SwViewOption aOpt(*pWrtShell->GetViewOptions());
+    aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitInserts);
+    pWrtShell->ApplyViewOptions(aOpt);
+    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    // Then the word is painted as it was before the change:
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    OString aWorldFont = "//textarray[substring(text, @index + 1, @length) = 'world']"
+                         "/preceding-sibling::font[1]"_ostr;
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the old side showed the new formatting.
+    assertXPath(pXmlDoc, aWorldFont, "underline", u"1");
+
+    // And the new side paints the new formatting:
+    aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitDeletes);
+    pWrtShell->ApplyViewOptions(aOpt);
+    xMetaFile = pDocShell->GetPreviewMetaFile();
+    pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    assertXPath(pXmlDoc, aWorldFont, "underline", u"0");
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -91,6 +91,7 @@ private:
     void Clear_( SwFont* pFnt );
     bool ChkSpecialUnderline_() const;
     void FillHints(std::size_t nAuthor, RedlineType eType, SwRedlineRenderMode eRenderMode);
+    void FillOldFormatting(const SwRangeRedline& rRedline, SwNodeOffset nNode);
     short EnterExtend(SwFont& rFnt, SwNodeOffset const nNode, sal_Int32 const nNew)
     {
         if (m_pExt) return m_pExt->Enter(rFnt, nNode, nNew);

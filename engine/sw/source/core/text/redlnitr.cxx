@@ -55,6 +55,8 @@
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <officecfg/Office/Writer.hxx>
+#include <charfmt.hxx>
+#include <fchrfmt.hxx>
 #include <viewopt.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
@@ -961,6 +963,10 @@ short SwRedlineItr::Seek(SwFont& rFnt,
                     if( 1 < pRed->GetStackCount() )
                         FillHints(pRed->GetAuthor(1), pRed->GetType(1), eRenderMode);
                     FillHints(pRed->GetAuthor(), pRed->GetType(), eRenderMode);
+                    // The old side of a side by side comparison shows the text as it was.
+                    if (eRenderMode == SwRedlineRenderMode::OmitInserts
+                        && pRed->GetType() == RedlineType::Format)
+                        FillOldFormatting(*pRed, nNode);
 
                     SfxWhichIter aIter( *m_pSet );
 
@@ -1055,10 +1061,45 @@ void SwRedlineItr::FillHints( std::size_t nAuthor, RedlineType eType, SwRedlineR
         case RedlineType::Format:
         case RedlineType::FmtColl:
         case RedlineType::ParagraphFormat:
+            // The author mark of a format change can be bold, italic or a case change, which
+            // change the width of the text. The two sides of a side by side view share one line
+            // layout, so the mark is the same in every render mode.
             SwModule::get()->GetFormatAuthorAttr(nAuthor, *m_pSet);
             break;
         default:
             break;
+    }
+}
+
+void SwRedlineItr::FillOldFormatting(const SwRangeRedline& rRedline, SwNodeOffset nNode)
+{
+    const auto* pExtraData
+        = dynamic_cast<const SwRedlineExtraData_FormatColl*>(rRedline.GetExtraData());
+    const SwTextNode* pTextNode = m_rDoc.GetNodes()[nNode]->GetTextNode();
+    if (!pExtraData || !pTextNode)
+        return;
+
+    const std::shared_ptr<SfxItemSet>& pOldSet = pExtraData->GetItemSet();
+    const SwCharFormat* pOldCharFormat = nullptr;
+    if (pOldSet)
+        if (const SwFormatCharFormat* pItem = pOldSet->GetItemIfSet(RES_TXTATR_CHARFMT, false))
+            pOldCharFormat = pItem->GetCharFormat();
+
+    // These attributes leave the width of the text as it is. Both sides of a side by side view
+    // share one line layout, which was formatted in either render mode, so an old weight, posture,
+    // case, font or size would not fit it. Each value comes from the formatting before the change,
+    // then from its character style, then from the paragraph and its style. A pool default cannot
+    // be a text attribute, so each value goes in as a copy.
+    static constexpr sal_uInt16 aPaintedAttributes[]
+        = { RES_CHRATR_COLOR, RES_CHRATR_UNDERLINE, RES_CHRATR_CROSSEDOUT, RES_CHRATR_BACKGROUND };
+    for (sal_uInt16 nWhich : aPaintedAttributes)
+    {
+        const SfxPoolItem* pItem = pOldSet ? pOldSet->GetItem(nWhich, false) : nullptr;
+        if (!pItem && pOldCharFormat)
+            pItem = pOldCharFormat->GetAttrSet().GetItem(nWhich, false);
+        if (!pItem)
+            pItem = &pTextNode->GetSwAttrSet().Get(nWhich);
+        m_pSet->Put(std::unique_ptr<SfxPoolItem>(pItem->Clone()));
     }
 }
 
