@@ -247,4 +247,35 @@ void g()
 }
 }
 
+namespace test11
+{
+struct S
+{
+    int n;
+};
+
+S f1()
+{
+    // expected-error@+1 {{redundant functional cast from 'S' to 'S' [loplugin:redundantfcast]}}
+    return S{ .n = 0 };
+}
+
+auto f2() { return S{ .n = 0 }; }
+
+void g()
+{
+    (void)[] { return S{ .n = 0 }; };
+    (void)[]()->S
+    {
+        // expected-error@+1 {{redundant functional cast from 'S' to 'S' [loplugin:redundantfcast]}}
+        return S{ .n = 0 };
+    };
+}
+
+struct A
+{
+    operator auto() { return S{ .n = 0 }; }
+};
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

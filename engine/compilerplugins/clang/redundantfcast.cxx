@@ -55,6 +55,9 @@ public:
         {
             return true;
         }
+        // the cast specifies the deduced return type
+        if (!m_DeducedReturnTypes.empty() && m_DeducedReturnTypes.back())
+            return true;
         if (m_Seen.insert(cxxFunctionalCastExpr->getExprLoc()).second)
         {
             if (suppressWarningAt(cxxFunctionalCastExpr->getBeginLoc()))
@@ -336,6 +339,103 @@ public:
         return true;
     }
 
+    static bool hasDeducedReturnType(FunctionDecl const* decl)
+    {
+        return decl->getDeclaredReturnType()->getContainedAutoType() != nullptr;
+    }
+
+    bool PreTraverseFunctionDecl(FunctionDecl* decl)
+    {
+        m_DeducedReturnTypes.push_back(hasDeducedReturnType(decl));
+        return true;
+    }
+
+    bool PostTraverseFunctionDecl(FunctionDecl*, bool)
+    {
+        m_DeducedReturnTypes.pop_back();
+        return true;
+    }
+
+    bool TraverseFunctionDecl(FunctionDecl* decl)
+    {
+        bool ret = true;
+        if (PreTraverseFunctionDecl(decl))
+        {
+            ret = FilteringPlugin::TraverseFunctionDecl(decl);
+            PostTraverseFunctionDecl(decl, ret);
+        }
+        return ret;
+    }
+
+    bool PreTraverseCXXMethodDecl(CXXMethodDecl* decl)
+    {
+        m_DeducedReturnTypes.push_back(hasDeducedReturnType(decl));
+        return true;
+    }
+
+    bool PostTraverseCXXMethodDecl(CXXMethodDecl*, bool)
+    {
+        m_DeducedReturnTypes.pop_back();
+        return true;
+    }
+
+    bool TraverseCXXMethodDecl(CXXMethodDecl* decl)
+    {
+        bool ret = true;
+        if (PreTraverseCXXMethodDecl(decl))
+        {
+            ret = FilteringPlugin::TraverseCXXMethodDecl(decl);
+            PostTraverseCXXMethodDecl(decl, ret);
+        }
+        return ret;
+    }
+
+    bool PreTraverseCXXConversionDecl(CXXConversionDecl* decl)
+    {
+        m_DeducedReturnTypes.push_back(hasDeducedReturnType(decl));
+        return true;
+    }
+
+    bool PostTraverseCXXConversionDecl(CXXConversionDecl*, bool)
+    {
+        m_DeducedReturnTypes.pop_back();
+        return true;
+    }
+
+    bool TraverseCXXConversionDecl(CXXConversionDecl* decl)
+    {
+        bool ret = true;
+        if (PreTraverseCXXConversionDecl(decl))
+        {
+            ret = FilteringPlugin::TraverseCXXConversionDecl(decl);
+            PostTraverseCXXConversionDecl(decl, ret);
+        }
+        return ret;
+    }
+
+    bool PreTraverseLambdaExpr(LambdaExpr* expr)
+    {
+        m_DeducedReturnTypes.push_back(hasDeducedReturnType(expr->getCallOperator()));
+        return true;
+    }
+
+    bool PostTraverseLambdaExpr(LambdaExpr*, bool)
+    {
+        m_DeducedReturnTypes.pop_back();
+        return true;
+    }
+
+    bool TraverseLambdaExpr(LambdaExpr* expr)
+    {
+        bool ret = true;
+        if (PreTraverseLambdaExpr(expr))
+        {
+            ret = FilteringPlugin::TraverseLambdaExpr(expr);
+            PostTraverseLambdaExpr(expr, ret);
+        }
+        return ret;
+    }
+
     bool preRun() override
     {
         if (!compiler.getLangOpts().CPlusPlus)
@@ -350,6 +450,7 @@ public:
     }
 
     std::unordered_set<SourceLocation> m_Seen;
+    std::vector<bool> m_DeducedReturnTypes;
 };
 
 static loplugin::Plugin::Registration<RedundantFCast> redundantfcast("redundantfcast");

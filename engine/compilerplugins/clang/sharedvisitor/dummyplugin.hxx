@@ -50,11 +50,13 @@ public:
     bool TraverseFunctionDecl( FunctionDecl* ) { return complain(); }
     bool TraverseCXXMethodDecl( CXXMethodDecl* ) { return complain(); }
     bool TraverseCXXConstructorDecl( CXXConstructorDecl* ) { return complain(); }
+    bool TraverseCXXConversionDecl(CXXConversionDecl*) { return complain(); }
     bool TraverseSwitchStmt( SwitchStmt* ) { return complain(); }
     bool TraverseImplicitCastExpr( ImplicitCastExpr* ) { return complain(); }
     bool TraverseCStyleCastExpr( CStyleCastExpr* ) { return complain(); }
     bool TraverseCXXStaticCastExpr( CXXStaticCastExpr* ) { return complain(); }
     bool TraverseCXXFunctionalCastExpr( CXXFunctionalCastExpr* ) { return complain(); }
+    bool TraverseLambdaExpr(LambdaExpr*) { return complain(); }
     bool TraverseFriendDecl( FriendDecl* ) { return complain(); }
     bool TraverseTypeLoc( TypeLoc ) { return complain(); }
     bool TraverseAlignedAttr( AlignedAttr* ) { return complain(); }
