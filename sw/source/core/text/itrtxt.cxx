@@ -122,7 +122,8 @@ const SwLineLayout *SwTextIter::Next()
         m_bPrev = true;
         m_nStart = m_nStart + m_pCurr->GetLen();
         m_nY += GetLineHeight();
-        if( m_pCurr->GetLen() || ( m_nLineNr>1 && !m_pCurr->IsDummy() ) )
+        // A field's rest lines count, too
+        if (!m_pCurr->IsDummy() && (m_pCurr->GetLen() || m_pCurr->IsRest() || m_nLineNr > 1))
             ++m_nLineNr;
         m_pCurr = m_pCurr->GetNext();
         if (m_pFrame->GetDoc().getIDocumentSettingAccess().get(

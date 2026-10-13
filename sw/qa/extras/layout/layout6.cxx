@@ -2789,6 +2789,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTableStyleContextualSpacingRowsBefore)
     CPPUNIT_ASSERT_LESS(nParaSpacing, nRowHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf173897)
+{
+    // A user field with a multi-line value, in a paragraph with widow control, split across a
+    // page break. Without the fix, the layout never finished, adding pages one by one.
+    createSwDoc("multiline-field-widows.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page", 2);
+    assertXPath(
+        pXmlDoc,
+        "/root/page[1]/body/section/txt[14]/SwParaPortion/SwLineLayout[1]/SwFieldPortion[1]",
+        "expand", u"01.2026");
+    // The second part continues after the first one, past two empty lines
+    assertXPath(pXmlDoc,
+                "/root/page[2]/body/section/txt[1]/SwParaPortion/SwLineLayout[3]/SwFieldPortion[1]",
+                "expand", u"06.2026");
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
