@@ -124,7 +124,7 @@ class SwMarkdownParser
     void StartHeading(sal_uInt8 nLvl);
     void EndHeading();
 
-    void StartNumberedBulletList(MD_BLOCKTYPE aListType);
+    void StartNumberedBulletList(MD_BLOCKTYPE aListType, unsigned nStart = 1);
     void EndNumberedBulletList();
     void StartNumberedBulletListItem(MD_BLOCK_LI_DETAIL aDetail);
     void EndNumberedBulletListItem();
