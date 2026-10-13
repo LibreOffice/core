@@ -742,6 +742,7 @@ QString TabManager::currentTabsJson() const
         QJsonObject obj;
         obj["id"] = e.id;
         obj["title"] = e.webView->documentTitle();
+        obj["path"] = e.webView->documentPath();
         obj["docType"] = e.webView->documentType();
         obj["modified"] = e.webView->isDocumentModified();
         obj["active"] = (e.id == _activeTabId);

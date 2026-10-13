@@ -181,7 +181,9 @@
 					if (bridge) bridge.tabHoverEnded();
 				});
 			} else {
-				tab.title = t.title || '';
+				// The tooltip shows where the document is, the tab itself
+				// only its name.
+				tab.title = t.path || t.title || '';
 			}
 
 			const icon = el('span');

@@ -176,6 +176,9 @@ public:
     QString composedWindowTitle() const;
 
     QString documentTitle() const { return _docTitle; }
+    // The full path of the local file the document is in. Empty for the starter screen, the
+    // welcome slideshow and a remote document.
+    QString documentPath() const;
     // "writer" / "calc" / "impress" / "draw" / "starter" / "welcome" / "other"
     QString documentType() const { return _docType; }
 

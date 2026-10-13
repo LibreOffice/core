@@ -2857,6 +2857,10 @@ static std::string currentTabsJson(const WindowState& window)
         Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
         entry->set("id", tab->tabId);
         entry->set("title", tab->filenameAndUri.filename);
+        // The full path of the document file. The starter backstage and the welcome slideshow
+        // have none.
+        if (tab->mode != DocumentMode::STARTER && tab->mode != DocumentMode::WELCOME)
+            entry->set("path", fileUriToWindowsPath(tab->filenameAndUri.uri));
         entry->set("docType", tab->docType);
         entry->set("modified", tab->isModified);
         entry->set("active", tab->tabId == window.activeTabId);

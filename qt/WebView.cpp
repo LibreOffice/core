@@ -1058,6 +1058,14 @@ void WebView::updateThumbnail(const std::string& dataUrl)
         _onThumbnailChange(isFirstThumbnail);
 }
 
+QString WebView::documentPath() const
+{
+    if (isStarterScreen() || _isWelcome || _document._remoteInfo
+        || _document._fileURL.getScheme() != "file")
+        return QString();
+    return QString::fromStdString(Poco::Path(_document._fileURL.getPath()).toString());
+}
+
 QString WebView::composedWindowTitle() const
 {
     return _docTitle.isEmpty() ? QStringLiteral(APP_NAME)
