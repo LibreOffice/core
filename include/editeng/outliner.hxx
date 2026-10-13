@@ -390,12 +390,15 @@ public:
     const SvxFieldItem& GetField() const { return rFldItem; }
 
     std::optional<Color> const & GetTextColor() const { return mxTxtColor; }
+    std::optional<Color>& GetTextColor() { return mxTxtColor; }
     void            SetTextColor( std::optional<Color> xCol ) { mxTxtColor = xCol; }
 
     std::optional<Color> const & GetFieldColor() const { return mxFldColor; }
+    std::optional<Color>& GetFieldColor() { return mxFldColor; }
     void            SetFieldColor( std::optional<Color> xCol ) { mxFldColor = xCol; }
 
     std::optional<FontLineStyle> const& GetFontLineStyle() const { return mxFldLineStyle; }
+    std::optional<FontLineStyle>& GetFontLineStyle() { return mxFldLineStyle; }
     void            SetFontLineStyle( std::optional<FontLineStyle> xLineStyle ) { mxFldLineStyle = xLineStyle; }
 
     sal_Int32       GetPara() const { return nPara; }
@@ -439,6 +442,7 @@ public:
     struct ParagraphHdlParam { Outliner* pOutliner; sal_Int32 nParaPos; bool bIsPage; };
     struct DepthChangeHdlParam { Outliner* pOutliner; ParaFlag nPrevFlags; sal_Int32 nParaPos; };
     struct MoveParagraphsHdlParam { Outliner* pOutliner; sal_Int32 nStartPara; sal_Int32 nEndPara; sal_Int32 nDestPara; };
+
 private:
     friend class OutlinerView;
     friend class EditEngine;
@@ -463,7 +467,8 @@ private:
     Link<MoveParagraphsHdlParam,void> aEndMovingHdl;
     Link<OutlinerView*,bool>       aIndentingPagesHdl;
     Link<OutlinerView*,bool>       aRemovingPagesHdl;
-    Link<EditFieldInfo*,void>      aCalcFieldValueHdl;
+    Link<EditFieldInfo*,void>      maCalcFieldValueHdl;
+    Link<EditFieldInfo*,void>      maSdrCalcFieldValueHdl;
     Link<PaintFirstLineInfo*,void> maPaintFirstLineHdl;
     Link<PasteOrDropInfos*,void>   maBeginPasteOrDropHdl;
     Link<PasteOrDropInfos*,void>   maEndPasteOrDropHdl;
@@ -635,8 +640,8 @@ public:
     // valid only in the two upper handlers
     SAL_DLLPRIVATE sal_Int32       GetSelPageCount() const { return nDepthChangedHdlPrevDepth; }
 
-    SAL_DLLPRIVATE void            SetCalcFieldValueHdl(const Link<EditFieldInfo*,void>& rLink ) { aCalcFieldValueHdl= rLink; }
-    SAL_DLLPRIVATE const Link<EditFieldInfo*,void>& GetCalcFieldValueHdl() const { return aCalcFieldValueHdl; }
+    SAL_DLLPRIVATE void            SetCalcFieldValueHdl(const Link<EditFieldInfo*,void>& rLink ) { maCalcFieldValueHdl= rLink; }
+    SAL_DLLPRIVATE const Link<EditFieldInfo*,void>& GetCalcFieldValueHdl() const { return maCalcFieldValueHdl; }
 
     SAL_DLLPRIVATE void            SetPaintFirstLineHdl(const Link<PaintFirstLineInfo*,void>& rLink) { maPaintFirstLineHdl = rLink; }
 
@@ -735,7 +740,7 @@ public:
     bool            UpdateFields();
     void            RemoveFields( const std::function<bool ( const SvxFieldData* )>& isFieldData = [] (const SvxFieldData* ){return true;} );
 
-    virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rTxtColor, std::optional<Color>& rFldColor, std::optional<FontLineStyle>& rFldLineStyle );
+    OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rTxtColor, std::optional<Color>& rFldColor, std::optional<FontLineStyle>& rFldLineStyle );
 
     void            SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 > const &xSpeller );
     css::uno::Reference< css::linguistic2::XSpellChecker1 > const &
@@ -840,6 +845,10 @@ public:
 
     // return FirstParaIsEmpty state
     bool getFirstParaIsEmpty() const { return bFirstParaIsEmpty; }
+
+protected:
+    // called from SdrOutliner
+    void SetSdrCalcFieldValueHdl(const Link<EditFieldInfo*,void>& rLink ) { maSdrCalcFieldValueHdl = rLink; }
 };
 
 #endif
