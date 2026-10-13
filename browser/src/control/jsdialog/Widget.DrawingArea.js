@@ -129,7 +129,7 @@ function _drawingAreaControl (parentContainer, data, builder) {
 		}
 	} else if (data.borders) {
 		var wrapper = _createDrawingAreaWrapper(container, data, builder, imageId, true);
-		wrapper.setAttribute('role', 'group');
+		wrapper.setAttribute('role', 'application');
 
 		var previousWrapper = document.getElementById(imageId);
 		var isNavigating = previousWrapper && previousWrapper === document.activeElement;
@@ -163,7 +163,7 @@ function _drawingAreaControl (parentContainer, data, builder) {
 			var checkbox = window.L.DomUtil.create('span', 'visuallyhidden', wrapper);
 			checkbox.id = checkboxId;
 			checkbox.setAttribute('role', 'checkbox');
-			checkbox.setAttribute('aria-checked', border.show ? 'true' : 'false');
+			checkbox.setAttribute('aria-checked', border.dontcare ? 'mixed' : border.show ? 'true' : 'false');
 			checkbox.textContent = border.name;
 
 			if (border.selected && activeBorderId === null) {

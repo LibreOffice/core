@@ -1350,6 +1350,7 @@ IMPL_LINK(FrameSelector, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWriter,
         auto borderNode = rJsonWriter.startStruct();
         rJsonWriter.put("type", static_cast<int>(eBorder));
         rJsonWriter.put("show", GetFrameBorderState(eBorder) == FrameBorderState::Show);
+        rJsonWriter.put("dontcare", GetFrameBorderState(eBorder) == FrameBorderState::DontCare);
         rJsonWriter.put("selected", IsBorderSelected(eBorder));
 
         OUString sName = SvxResId(RID_SVXSTR_FRMSEL_TEXTS[static_cast<sal_uInt32>(eBorder)].first);
