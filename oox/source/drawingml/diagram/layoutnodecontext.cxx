@@ -59,7 +59,14 @@ public:
             {
                 const sal_Int32 nIndex(rAttribs.getInteger(XML_idx, 1));
                 const double fValue(rAttribs.getDouble(XML_val, 0.0));
-                const sal_Int32 nScaled(static_cast<sal_Int32>(fValue * 100000.0));
+                // An angle is stated in degrees, "adj idx 1 val 270" on Segmented_Cycle's pie,
+                // and the preset takes it in 60000ths of a degree, 16200000 there, as the
+                // drawing of the file writes it. A part of one is stated as such, 0.5, and the
+                // preset takes it in parts of a hundred thousand.
+                const bool bAngle(CustomShapeProperties::isAngleAdjustment(
+                    mpShape->getCustomShapeProperties()->getShapePresetType(), nIndex));
+                const sal_Int32 nScaled(
+                    static_cast<sal_Int32>(fValue * (bAngle ? 60000.0 : 100000.0)));
                 mpShape->getCustomShapeProperties()->getAdjustmentGuideList().push_back(
                     { "adj" + OUString::number(nIndex),
                                       OUString::number(nScaled) });
@@ -120,6 +127,9 @@ public:
                             break;
                         case XML_srcNode:
                         case XML_dstNode:
+                        case XML_pyraAcctBkgdNode:
+                        case XML_pyraAcctTxNode:
+                        case XML_pyraLvlNode:
                             mpNode->addNamedParam(nType, rAttribs.getStringDefaulted(XML_val));
                             break;
                         default:
