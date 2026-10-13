@@ -3,15 +3,15 @@
 <plist version="1.0">
 <dict>
   <key>method</key>
-  <string>release-testing</string>
+  <string>app-store-connect</string>
   <key>uploadSymbols</key>
   <true/>
   <key>provisioningProfiles</key>
   <dict>
-    <key>com.collabora.office.Mobile</key>
-    <string>Browserstack distribution</string>
-    <key>com.collabora.office.Mobile.FakeQuickLook</key>
-    <string>Browserstack fakequicklook</string>
+    <key>com.collabora.office.Mobile.CI</key>
+    <string>Collabora Office Mobile CI</string>
+    <key>com.collabora.office.Mobile.CI.FakeQuickLook</key>
+    <string>Collabora Office Mobile CI FakeQuickLook</string>
   </dict>
 </dict>
 </plist>
