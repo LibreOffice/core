@@ -37,10 +37,9 @@ msgid ""
 "and now it's on Android, enhancing your possibilities to work on mobile and "
 "for collaboration."
 msgstr ""
-"كولابورا أوفيس هو محرر للنصوص، و لجداول الأعمال، و للعروض مبنى على ليبر أوفس،"
-" و الذي هو أشهر حزمة تطبيقات مكتبية مفتوحة المصدر- وهو متوفر حاليّاً على "
-"الأندرويد كذلك؛ ممّا يعزز من إمكانية العمل التعاوني عن بعد وعبر الهاتف "
-"النقال."
+"كولابورا أوفيس هو محرر للنصوص، و لجداول الأعمال، و للعروض مبنى على ليبر "
+"أوفس، و الذي هو أشهر حزمة تطبيقات مكتبية مفتوحة المصدر- وهو متوفر حاليّاً على "
+"الأندرويد كذلك؛ ممّا يعزز من إمكانية العمل التعاوني عن بعد وعبر الهاتف النقال."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:17-1
@@ -61,17 +60,17 @@ msgstr "تنسيقات المستندات المفتوحة (.odt, .odp, .ods, .o
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:27-5
 msgid ""
-"Microsoft Office 2007/2010/2013/2016/2019 (.docx, .pptx, .xlsx, .dotx, ."
-"xltx, .ppsx)"
+"Microsoft Office 2007/2010/2013/2016/2019 "
+"(.docx, .pptx, .xlsx, .dotx, .xltx, .ppsx)"
 msgstr ""
-"مايكروسوفت أوفيس 2019/2016/2013/2010/2007 للتنسيقات (.docx, .pptx, .xlsx, ."
-"dotx, .xltx, .ppsx)"
+"مايكروسوفت أوفيس 2019/2016/2013/2010/2007 للتنسيقات "
+"(.docx, .pptx, .xlsx, .dotx, .xltx, .ppsx)"
 
 #: descriptions/google-play.html%2Bhtml.body.ul.li:28-5
 msgid "Microsoft Office 97/2000/XP/2003 (.doc, .ppt, .xls, .dot, .xlt, .pps)"
 msgstr ""
-"مايكروسوفت أوفيس 2000/97/XP/2003 للتنسيقات (.doc, .ppt, .xls, .dot, .xlt, ."
-"pps)"
+"مايكروسوفت أوفيس 2000/97/XP/2003 للتنسيقات "
+"(.doc, .ppt, .xls, .dot, .xlt, .pps)"
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:31-1
@@ -81,13 +80,13 @@ msgstr "التبليغ عن إشكاليات:"
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:35-1
 msgid ""
-"Use the bugtracker and attach any files that caused problems via <a href="
-"\"https://col.la/android\"> https://col.la/android</a>. Please note that "
-"anything you enter in the bugtracker will be public."
+"Use the bugtracker and attach any files that caused problems via <a "
+"href=\"https://col.la/android\"> https://col.la/android</a>. Please note "
+"that anything you enter in the bugtracker will be public."
 msgstr ""
-"استعمل متتبع الأخطاء و قم بإرفاق الملفات التي تسببت في الإشكال عبر <a href="
-"\"https://col.la/android\"> https://col.la/android</a>. يرجى ملاحظة أن جميع "
-"ما ستضعه في متتبع الأخطاء سيبصح متاحاً للعموم."
+"استعمل متتبع الأخطاء و قم بإرفاق الملفات التي تسببت في الإشكال عبر <a "
+"href=\"https://col.la/android\"> https://col.la/android</a>. يرجى ملاحظة أن "
+"جميع ما ستضعه في متتبع الأخطاء سيبصح متاحاً للعموم."
 
 #. Long description
 #: descriptions/google-play.html%2Bhtml.body.p:40-1
