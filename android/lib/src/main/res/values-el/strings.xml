@@ -23,4 +23,7 @@
     <string name="use_odf">Χρήση μορφής ODF</string>
     <string name="use_text">Χρήση μορφής κειμένου</string>
     <string name="convert_odf_message">Αυτό το έγγραφο μπορεί να περιέχει μορφοποίηση ή περιεχόμενο που δεν μπορεί να αποθηκευτεί στην τρέχουσα επιλεγμένη μορφή αρχείου \"Κείμενο\".</string>
+    <string name="all_files_access_grant">Επιτρέψτε την πρόσβαση</string>
+    <string name="do_not_ask_again">Μην ξαναρωτήσετε</string>
+    <string name="failed_to_save_file">Δεν ήταν δυνατή η αποθήκευση των αλλαγών στο αρχείο</string>
 </resources>
