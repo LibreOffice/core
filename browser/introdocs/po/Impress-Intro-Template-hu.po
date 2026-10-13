@@ -3,18 +3,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Impress-Intro-Template.odp\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-10-13 18:14+0000\n"
+"Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
+"online/impress-intro-template/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #. content.xml (slide 'page1')
 msgid "👋 Introduction"
-msgstr ""
+msgstr "👋 Bevezetés"
 
 #. content.xml (slide 'page1')
 msgid ""
@@ -24,49 +26,56 @@ msgid ""
 "introduction template will help you get started and explore some of the main"
 " features of the product.</5>"
 msgstr ""
+"<1>A Collabora Office </1><2>bemutatókészítő</2><3> egy olyan </3><4>eszköz</"
+"4><5>, amellyel egyszerűen készíthet, szerkeszthet és tarthat bemutatókat. "
+"Dolgozhat egyedül egy dokumentumon, vagy együttműködve egy csapat tagjaként. "
+"Ez a bevezető sablon segít az első lépésekben, és bemutatja a termék néhány "
+"fő funkcióját.</5>"
 
 #. content.xml (slide 'page1'); styles.xml (master page
 #. 'Introduction_20_slide')
 msgid "Next Chapter: 🖼 Slides & Layouts"
-msgstr ""
+msgstr "Következő fejezet: 🖼 Diák és elrendezések"
 
 #. content.xml (slide 'page1')
 msgid "Here's what you'll discover"
-msgstr ""
+msgstr "Ezeket fedezheti fel"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page2')
 msgid "🖼 Slides & Layouts"
-msgstr ""
+msgstr "🖼 Diák és elrendezések"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page3')
 msgid "🎨 Design & Master Slides"
-msgstr ""
+msgstr "🎨 Tervezés és diasablonok"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page4')
 msgid "✏️ Style & Visual"
-msgstr ""
+msgstr "✏️ Stílus és megjelenés"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page5')
 msgid "🎬 Slide Transitions"
-msgstr ""
+msgstr "🎬 Diaátmenetek"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page6')
 msgid "🎤 Presenting"
-msgstr ""
+msgstr "🎤 Előadás"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page7')
 msgid "🤝 Productivity & Collaboration"
-msgstr ""
+msgstr "🤝 Hatékonyság és együttműködés"
 
 #. content.xml (slide 'page2')
 msgid "Every presentation is a sequence of slides."
-msgstr ""
+msgstr "Minden bemutató diák sorozata."
 
 #. content.xml (slide 'page2')
 msgid ""
 "<1>Use the </1><2>Slide navigation</2><3> on the left to reorder them by "
 "dragging, or remove ones you don’t need.</3>"
 msgstr ""
+"<1>A bal oldali </1><2>Dianavigáció</2><3> segítségével húzással "
+"átrendezheti, vagy eltávolíthatja a felesleges diákat.</3>"
 
 #. content.xml (slide 'page2')
 msgid ""
@@ -74,41 +83,46 @@ msgid ""
 "arrangement of placeholders for titles, text, and images. Pick the layout "
 "that fits the slide’s purpose.</3>"
 msgstr ""
+"<1>Minden dia </1><2>más elrendezést </2><3>használhat – ez a címek, "
+"szövegek és képek helyőrzőinek előre meghatározott elrendezése. Válassza a "
+"dia céljához illő elrendezést.</3>"
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default')
 msgid "<1>➜</1><2>Try it:</2>"
-msgstr ""
+msgstr "<1>➜</1><2>Próbálja ki:</2>"
 
 #. content.xml (slide 'page2')
 msgid "Add a new slide clicking “New” in Notebook bar."
-msgstr ""
+msgstr "Adjon hozzá egy új diát a menüszalag „Új” gombjával."
 
 #. content.xml (slide 'page2')
 msgid "Choose a layout for it from the layout chooser."
-msgstr ""
+msgstr "Válasszon hozzá elrendezést az elrendezésválasztóból."
 
 #. content.xml (slide 'page2')
 msgid "Start editing your slide."
-msgstr ""
+msgstr "Kezdje el szerkeszteni a diát."
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); styles.xml (master page
 #. 'Content_20_slide'); styles.xml (master page 'Default')
 msgid "Useful tip"
-msgstr ""
+msgstr "Hasznos tipp"
 
 #. content.xml (slide 'page2')
 msgid ""
 "When you’re unsure which layout to pick, start with “Title, Content” – it "
 "works for almost any slide."
 msgstr ""
+"Ha nem biztos benne, melyik elrendezést válassza, kezdje a „Cím, tartalom” "
+"elrendezéssel – szinte bármilyen diához megfelel."
 
 #. content.xml (slide 'page2')
 msgid "Next Chapter: 🎨 Design & Master Slides"
-msgstr ""
+msgstr "Következő fejezet: 🎨 Tervezés és diasablonok"
 
 #. content.xml (slide 'page3')
 msgid ""
@@ -120,22 +134,31 @@ msgid ""
 "it up automatically. When you need to rebrand or tweak the design later, you"
 " change the master, not 30 slides.</7>"
 msgstr ""
+"<1>A </1><2>diasablon</2><3> a minden dia mögött álló sablon. Meghatározza a "
+"színeket, a betűkészleteket, a hátteret, valamint a címek és láblécek "
+"helyét. </3><4>Módosítsa</4><5> </5><6>a diasablont, és minden dia egyszerre "
+"frissül. </6><7>Ezért a diasablon a leggyorsabb módja annak, hogy a bemutató "
+"egységes maradjon. Állítsa be egyszer a megjelenést (betűkészletek, színek, "
+"logó, lábléc), és minden új dia automatikusan átveszi. Ha később újra kell "
+"márkázni vagy finomítani kell a tervet, a diasablont módosítja, nem 30 "
+"diát.</7>"
 
 #. content.xml (slide 'page3')
 msgid "Open the View tab in the Notebook bar."
-msgstr ""
+msgstr "Nyissa meg a Nézet lapot a menüszalagon."
 
 #. content.xml (slide 'page3')
 msgid "Click “Master View” and edit your master design."
-msgstr ""
+msgstr "Kattintson a „Mintanézet” gombra, és szerkessze a diasablon tervét."
 
 #. content.xml (slide 'page3')
 msgid "Once your master design is ready, click \"Close Master View\"."
 msgstr ""
+"Ha a diasablon terve elkészült, kattintson a „Mintanézet bezárása” gombra."
 
 #. content.xml (slide 'page3')
 msgid "Now your master is set and ready to use across all slides."
-msgstr ""
+msgstr "A diasablon most be van állítva, és minden dián használható."
 
 #. content.xml (slide 'page3')
 msgid ""
@@ -143,10 +166,13 @@ msgid ""
 "apply it just to that slide. The rest of your deck stays on the original "
 "master."
 msgstr ""
+"Ha egyetlen diának más megjelenésre van szüksége, hozzon létre egy második "
+"diasablont, és alkalmazza csak arra a diára. A bemutató többi része az "
+"eredeti diasablonon marad."
 
 #. content.xml (slide 'page3')
 msgid "Next Chapter: ✏️ Style & Visual"
-msgstr ""
+msgstr "Következő fejezet: ✏️ Stílus és megjelenés"
 
 #. content.xml (slide 'page4')
 msgid ""
@@ -155,33 +181,46 @@ msgid ""
 "colours guide the reader through your message. Second, </3><4>add visual "
 "elements</4><5> – images, shapes, icons, charts – to support your story.</5>"
 msgstr ""
+"<1>Kétféleképpen teheti feltűnővé a diát. Először, </1><2>formázza a "
+"szöveget</2><3>, hogy szerkezetet és hangsúlyt kapjon – a betűkészletek, "
+"méretek, vastagságok és színek vezetik végig az olvasót az üzeneten. "
+"Másodszor, </3><4>adjon hozzá vizuális elemeket</4><5> – képeket, "
+"alakzatokat, ikonokat, diagramokat – a mondanivaló alátámasztására.</5>"
 
 #. content.xml (slide 'page4')
 msgid ""
 "In the Notebook bar, open the Insert tab and add an object, image, table, or"
 " any other element that supports your content."
 msgstr ""
+"A menüszalagon nyissa meg a Beszúrás lapot, és adjon hozzá egy objektumot, "
+"képet, táblázatot vagy bármilyen más elemet, amely alátámasztja a tartalmat."
 
 #. content.xml (slide 'page4')
 msgid ""
 "Click on it to select it, then resize and reposition it to fit your layout."
 msgstr ""
+"Kattintson rá a kijelöléséhez, majd méretezze át és helyezze el úgy, hogy "
+"illeszkedjen az elrendezéshez."
 
 #. content.xml (slide 'page4')
 msgid ""
 "For editable objects like shapes or images, a contextual tab appears in the "
 "Notebook bar with all the available actions."
 msgstr ""
+"A szerkeszthető objektumokhoz, például alakzatokhoz vagy képekhez, egy "
+"környezetfüggő lap jelenik meg a menüszalagon az összes elérhető művelettel."
 
 #. content.xml (slide 'page4')
 msgid ""
 "Less is more. One strong visual, a clear headline, and a few well-formatted "
 "lines will always beat a slide packed with text and decorations."
 msgstr ""
+"A kevesebb több. Egy erős vizuális elem, egy világos cím és néhány jól "
+"formázott sor mindig jobb, mint egy szöveggel és díszítésekkel zsúfolt dia."
 
 #. content.xml (slide 'page4')
 msgid "Next Chapter: 🎬 Slide Transitions"
-msgstr ""
+msgstr "Következő fejezet: 🎬 Diaátmenetek"
 
 #. content.xml (slide 'page5')
 msgid ""
@@ -189,34 +228,44 @@ msgid ""
 "during your slide show. The right transition makes your deck feel polished "
 "and professional, while the wrong one distracts from your message.</3>"
 msgstr ""
+"<1>Az </1><2>átmenet</2><3> határozza meg, hogyan vált egyik dia a másikra a "
+"diavetítés során. A megfelelő átmenet csiszolttá és professzionálissá teszi "
+"a bemutatót, a rossz viszont eltereli a figyelmet az üzenetről.</3>"
 
 #. content.xml (slide 'page5')
 msgid "Click Transition tab in Notebook bar."
-msgstr ""
+msgstr "Kattintson az Átmenet lapra a menüszalagon."
 
 #. content.xml (slide 'page5')
 msgid "Pick a transition style you would like to use."
-msgstr ""
+msgstr "Válassza ki a használni kívánt átmenetstílust."
 
 #. content.xml (slide 'page5')
 msgid ""
 "Adjust other properties – set the duration, pick a variant, or choose "
 "timing."
 msgstr ""
+"Állítsa be a többi tulajdonságot – adja meg az időtartamot, válasszon "
+"változatot vagy időzítést."
 
 #. content.xml (slide 'page5')
 msgid "Click \"Apply to All Slides\" to use the same transition across your deck."
 msgstr ""
+"Kattintson az „Alkalmazás az összes diára” gombra, hogy ugyanazt az "
+"átmenetet használja az egész bemutatóban."
 
 #. content.xml (slide 'page5')
 msgid ""
 "Use one transition across your whole deck to keep things consistent. Save a "
 "different transition for the slides you really want to stand out."
 msgstr ""
+"Használjon egyetlen átmenetet az egész bemutatóban az egységesség érdekében. "
+"Más átmenetet csak azokhoz a diákhoz tartogasson, amelyeket valóban ki "
+"szeretne emelni."
 
 #. content.xml (slide 'page5')
 msgid "Next Chapter: 🎤 Presenting"
-msgstr ""
+msgstr "Következő fejezet: 🎤 Előadás"
 
 #. content.xml (slide 'page6')
 msgid ""
@@ -225,26 +274,31 @@ msgid ""
 "next one coming up, a timer, and your speaker notes, while your audience "
 "sees only the slide.</3>"
 msgstr ""
+"<1>Amikor készen áll az előadásra, indítsa el a diavetítést, és megnyílik az "
+"</1><2>Előadói konzol</2><3>. Látni fogja az aktuális diát, a következőt, "
+"egy időzítőt és az előadói jegyzeteit, miközben a közönség csak a diát "
+"látja.</3>"
 
 #. content.xml (slide 'page6')
 msgid "Switch to the View tab in the Notebook bar and open “Notes view”."
 msgstr ""
+"Váltson a menüszalag Nézet lapjára, és nyissa meg a „Jegyzetek” nézetet."
 
 #. content.xml (slide 'page6')
 msgid "Add a speaker note to your slides."
-msgstr ""
+msgstr "Adjon előadói jegyzetet a diáihoz."
 
 #. content.xml (slide 'page6')
 msgid "When you're ready to present, open the Slide Show tab."
-msgstr ""
+msgstr "Amikor készen áll az előadásra, nyissa meg a Diavetítés lapot."
 
 #. content.xml (slide 'page6')
 msgid "Pick a slide show option to start presenting."
-msgstr ""
+msgstr "Válasszon egy diavetítési lehetőséget az előadás megkezdéséhez."
 
 #. content.xml (slide 'page6')
 msgid "Next Chapter: 🤝 Productivity & Collaboration"
-msgstr ""
+msgstr "Következő fejezet: 🤝 Hatékonyság és együttműködés"
 
 #. content.xml (slide 'page7')
 msgid ""
@@ -252,10 +306,13 @@ msgid ""
 "</3><4>collaborate with others</4><5>, making it easier to work together and"
 " share your decks.</5>"
 msgstr ""
+"<1>Számos funkció segít </1><2>hatékonynak maradni</2><3> és </3><4>"
+"együttműködni másokkal</4><5>, megkönnyítve a közös munkát és a bemutatók "
+"megosztását.</5>"
 
 #. content.xml (slide 'page7')
 msgid "📤 Document sharing"
-msgstr ""
+msgstr "📤 Dokumentum megosztása"
 
 #. content.xml (slide 'page7')
 msgid ""
@@ -263,50 +320,57 @@ msgid ""
 "presentation at once. Click the </1><2>Share button</2><3> in the top right "
 "to share your document with your colleagues.</3>"
 msgstr ""
+"<1>Dolgozzanak együtt valós időben. Többen egyszerre szerkeszthetik ugyanazt "
+"a bemutatót. Kattintson a jobb felső sarokban lévő </1><2>Megosztás gombra</"
+"2><3>, hogy megossza a dokumentumot a kollégáival.</3>"
 
 #. content.xml (slide 'page7')
 msgid "⌨️ Shortcuts"
-msgstr ""
+msgstr "⌨️ Gyorsbillentyűk"
 
 #. content.xml (slide 'page7')
 msgid ""
 "<1>Keyboard shortcuts speed up your workflow. Find the full list under Help "
 "tab in </1><2>Keyboard shortcuts</2>"
 msgstr ""
+"<1>A gyorsbillentyűk felgyorsítják a munkát. A teljes lista a Súgó lapon "
+"található, itt: </1><2>Gyorsbillentyűk</2>"
 
 #. content.xml (slide 'page7')
 msgid "▶️ Video tutorials"
-msgstr ""
+msgstr "▶️ Oktatóvideók"
 
 #. content.xml (slide 'page7')
 msgid ""
 "Want to keep learning? Short video introductions cover additional features "
 "and help you build on what you’ve learned."
 msgstr ""
+"Szeretne tovább tanulni? Rövid bemutatóvideók ismertetik a további "
+"funkciókat, és segítenek a tanultakra építeni."
 
 #. content.xml (slide 'page7')
 msgid "Check out video tutorials."
-msgstr ""
+msgstr "Nézze meg az oktatóvideókat."
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default')
 msgid "Title"
-msgstr ""
+msgstr "Cím"
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default'); styles.xml (master page 'Introduction_20_slide')
 msgid "Text"
-msgstr ""
+msgstr "Szöveg"
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default'); styles.xml (master page 'Introduction_20_slide')
 msgid "Next Chapter: name of next chapter"
-msgstr ""
+msgstr "Következő fejezet: a következő fejezet neve"
 
 #. styles.xml (master page 'Introduction_20_slide')
 msgid "👋Introduction"
-msgstr ""
+msgstr "👋Bevezetés"
 
 #. styles.xml (master page 'Introduction_20_slide')
 msgid "Text title"
-msgstr ""
+msgstr "Szövegcím"
