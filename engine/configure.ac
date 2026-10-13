@@ -2058,9 +2058,8 @@ AC_ARG_ENABLE(library-bin-tar,
 )
 
 AC_ARG_ENABLE(dconf,
-    AS_HELP_STRING([--disable-dconf],
-        [Disable the dconf configuration backend (enabled by default where
-         available).]))
+    AS_HELP_STRING([--enable-dconf],
+        [Enable the dconf configuration backend.]))
 
 libo_FUZZ_ARG_ENABLE(formula-logger,
     AS_HELP_STRING(
@@ -11627,16 +11626,13 @@ dnl =================================================
 dnl Check whether to build with dconf support.
 dnl =================================================
 
-if test $_os != Android -a $_os != iOS -a "$enable_dconf" != no; then
+if test $_os != Android -a $_os != iOS -a "$enable_dconf" = yes; then
     PKG_CHECK_MODULES([DCONF], [dconf >= 0.40.0], [], [
-        if test "$enable_dconf" = yes; then
-            AC_MSG_ERROR([dconf not found])
-        else
-            enable_dconf=no
-        fi])
+        AC_MSG_ERROR([dconf not found])
+        ])
 fi
 AC_MSG_CHECKING([whether to enable dconf])
-if test $_os = Android -o $_os = iOS -o "$enable_dconf" = no; then
+if test $_os = Android -o $_os = iOS -o "$enable_dconf" != yes; then
     DCONF_CFLAGS=
     DCONF_LIBS=
     ENABLE_DCONF=
