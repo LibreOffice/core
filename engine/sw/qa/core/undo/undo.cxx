@@ -10,6 +10,15 @@
 #include <swmodeltestbase.hxx>
 
 #include <comphelper/kit.hxx>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/style/BreakType.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <editeng/tstpitem.hxx>
@@ -515,6 +524,97 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTdf148703CopyFooterAcrossDocuments)
 
     // Avoid the source document's window leaking past DeInitVCL().
     xSrcComponent->dispose();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTdf170671CopyFooterWithFlyAcrossDocuments)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    const auto nOriginalNodes = pDoc->GetNodes().Count();
+    uno::Reference<lang::XComponent> xSource
+        = loadFromDesktop(createFileURL(u"tdf148703-src.odt"), OUString(), {});
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xSource, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextContent> xFrame(
+        xFactory->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xFrameProperties(xFrame, uno::UNO_QUERY_THROW);
+    xFrameProperties->setPropertyValue(u"AnchorType"_ustr,
+                                       uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    xFrameProperties->setPropertyValue(u"Width"_ustr, uno::Any(sal_Int32(2000)));
+    xFrameProperties->setPropertyValue(u"Height"_ustr, uno::Any(sal_Int32(1000)));
+    uno::Reference<text::XTextDocument> xSourceText(xSource, uno::UNO_QUERY_THROW);
+    xSourceText->getText()->insertTextContent(xSourceText->getText()->getStart(), xFrame, false);
+    uno::Reference<style::XStyleFamiliesSupplier> xFamilies(xSource, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xPageStyles(
+        xFamilies->getStyleFamilies()->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPageStyle(xPageStyles->getByName(u"Untitled1"_ustr),
+                                                   uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xFooter;
+    xPageStyle->getPropertyValue(u"FooterText"_ustr) >>= xFooter;
+    CPPUNIT_ASSERT(xFooter);
+    uno::Reference<text::XTextContent> xFooterFrame(
+        xFactory->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xFooterFrameProperties(xFooterFrame, uno::UNO_QUERY_THROW);
+    xFooterFrameProperties->setPropertyValue(u"AnchorType"_ustr,
+                                             uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    uno::Reference<container::XNamed>(xFooterFrame, uno::UNO_QUERY_THROW)
+        ->setName(u"FooterFrame"_ustr);
+    xFooter->insertTextContent(xFooter->getStart(), xFooterFrame, false);
+    uno::Reference<text::XText>(xFooterFrame, uno::UNO_QUERY_THROW)
+        ->setString(u"Footer frame content"_ustr);
+
+    dispatchCommand(xSource, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(xSource, u".uno:Copy"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    const auto nPastedNodes = pDoc->GetNodes().Count();
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+
+    // The section undo must own its footer frame, including restoring it on
+    // redo. Separate fly undo actions otherwise operate on a deleted format.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(nOriginalNodes, pDoc->GetNodes().Count());
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(nPastedNodes, pDoc->GetNodes().Count());
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+    uno::Reference<text::XTextFramesSupplier> xFrames(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xRestoredFooterFrame(
+        xFrames->getTextFrames()->getByName(u"FooterFrame"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"Footer frame content"_ustr, xRestoredFooterFrame->getString());
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(nOriginalNodes, pDoc->GetNodes().Count());
+    xSource->dispose();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTdf170671PasteUndo)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    const auto nOriginalNodes = pDoc->GetNodes().Count();
+    uno::Reference<lang::XComponent> xSource
+        = loadFromDesktop(createFileURL(u"tdf170671.docx"), OUString(), {});
+    dispatchCommand(xSource, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(xSource, u".uno:Copy"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    const auto nPastedNodes = pDoc->GetNodes().Count();
+    const auto nPastedFormats = pDoc->GetSpzFrameFormats()->size();
+    uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY_THROW);
+    const OUString aPastedText = xDocument->getText()->getString();
+    CPPUNIT_ASSERT(!aPastedText.isEmpty());
+    CPPUNIT_ASSERT_GREATER(size_t(0), nPastedFormats);
+
+    // Removing body fly content moves the later header/footer sections. Undo
+    // must use their tracked start nodes, not their original numeric offsets.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(nOriginalNodes, pDoc->GetNodes().Count());
+    CPPUNIT_ASSERT(pDoc->GetSpzFrameFormats()->empty());
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(nPastedNodes, pDoc->GetNodes().Count());
+    CPPUNIT_ASSERT_EQUAL(nPastedFormats, pDoc->GetSpzFrameFormats()->size());
+    CPPUNIT_ASSERT_EQUAL(aPastedText, xDocument->getText()->getString());
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(nOriginalNodes, pDoc->GetNodes().Count());
+    CPPUNIT_ASSERT(pDoc->GetSpzFrameFormats()->empty());
+    xSource->dispose();
 }
 
 static const SwPageDesc* lcl_getLastPagePageDesc(SwDoc& rDoc)

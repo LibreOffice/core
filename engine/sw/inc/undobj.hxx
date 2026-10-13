@@ -301,7 +301,8 @@ public:
 /// is just left in the doc nodes.
 class SwUndoCopyHeaderFooter final : public SwUndo, private SwUndoSaveSection
 {
-    SwNodeOffset m_aOff;
+    // Copied fly content can move this section before the paste is undone.
+    SwNodeIndex m_aStart;
     UIName m_aFmtName;
 
     bool m_bIsHeader;

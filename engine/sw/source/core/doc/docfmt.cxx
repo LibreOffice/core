@@ -1459,7 +1459,12 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
             const SwNode& rCSttNd = pContent->GetContentIdx()->GetNode();
             SwNodeRange aRg( rCSttNd, SwNodeOffset(0), *rCSttNd.EndOfSectionNode() );
             rSrcNds.Copy_( aRg, *pSttNd->EndOfSectionNode() );
-            rSrcFormat.GetDoc().GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRg, nullptr, *pSttNd);
+            {
+                // The section undo owns its anchored objects too. Separate fly
+                // undos would retain formats already deleted by SaveSection.
+                ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+                rSrcFormat.GetDoc().GetDocumentContentOperationsManager().CopyFlyInFlyImpl(aRg, nullptr, *pSttNd);
+            }
             // TODO: investigate calling CopyWithFlyInFly?
 
             if( GetIDocumentUndoRedo().DoesUndo() )

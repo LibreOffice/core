@@ -490,7 +490,7 @@ SwUndoCpyDoc::SwUndoCpyDoc( const SwPaM& rPam )
 
 SwUndoCopyHeaderFooter::SwUndoCopyHeaderFooter(const SwDoc& rDoc, const SwNode& rSttNd, const UIName& rFmtName)
     : SwUndo(SwUndoId::COPY_HEADER_FOOTER, rDoc)
-    , m_aOff(rSttNd.GetIndex())
+    , m_aStart(rSttNd)
     , m_aFmtName(rFmtName)
     , m_bIsHeader(false)
     , m_bIsMaster(false)
@@ -540,32 +540,31 @@ void SwUndoCopyHeaderFooter::UndoImpl(::sw::UndoRedoContext& rContext)
     // We have to initialize these here because the PageDesc doesn't have the content of its
     // frames set at the time that this class is constructed.
 
-    m_bIsMaster = lcl_checkMatchesFormat(pPgDesc->GetMaster(), true, m_aOff);
-    m_bIsLeft = lcl_checkMatchesFormat(pPgDesc->GetLeft(), true, m_aOff);
-    m_bIsFirstMaster = lcl_checkMatchesFormat(pPgDesc->GetFirstMaster(), true, m_aOff);
-    m_bIsFirstLeft = lcl_checkMatchesFormat(pPgDesc->GetFirstLeft(), true, m_aOff);
+    m_bIsMaster = lcl_checkMatchesFormat(pPgDesc->GetMaster(), true, m_aStart.GetIndex());
+    m_bIsLeft = lcl_checkMatchesFormat(pPgDesc->GetLeft(), true, m_aStart.GetIndex());
+    m_bIsFirstMaster = lcl_checkMatchesFormat(pPgDesc->GetFirstMaster(), true, m_aStart.GetIndex());
+    m_bIsFirstLeft = lcl_checkMatchesFormat(pPgDesc->GetFirstLeft(), true, m_aStart.GetIndex());
 
     m_bIsHeader = m_bIsMaster || m_bIsLeft || m_bIsFirstMaster || m_bIsFirstLeft;
 
     if (!m_bIsHeader)
     {
-        m_bIsMaster = lcl_checkMatchesFormat(pPgDesc->GetMaster(), false, m_aOff);
-        m_bIsLeft = lcl_checkMatchesFormat(pPgDesc->GetLeft(), false, m_aOff);
-        m_bIsFirstMaster = lcl_checkMatchesFormat(pPgDesc->GetFirstMaster(), false, m_aOff);
-        m_bIsFirstLeft = lcl_checkMatchesFormat(pPgDesc->GetFirstLeft(), false, m_aOff);
+        m_bIsMaster = lcl_checkMatchesFormat(pPgDesc->GetMaster(), false, m_aStart.GetIndex());
+        m_bIsLeft = lcl_checkMatchesFormat(pPgDesc->GetLeft(), false, m_aStart.GetIndex());
+        m_bIsFirstMaster = lcl_checkMatchesFormat(pPgDesc->GetFirstMaster(), false, m_aStart.GetIndex());
+        m_bIsFirstLeft = lcl_checkMatchesFormat(pPgDesc->GetFirstLeft(), false, m_aStart.GetIndex());
     }
 
-    SaveSection(SwNodeIndex(rDoc.GetNodes(), m_aOff));
+    SaveSection(m_aStart);
 }
 
 void SwUndoCopyHeaderFooter::RedoImpl(::sw::UndoRedoContext& rContext)
 {
     SwDoc& rDoc = rContext.GetDoc();
 
-    if (m_bIsHeader)
-        RestoreSection(rDoc, nullptr, SwHeaderStartNode);
-    else
-        RestoreSection(rDoc, nullptr, SwFooterStartNode);
+    RestoreSection(rDoc, &m_aStart, m_bIsHeader ? SwHeaderStartNode : SwFooterStartNode);
+    if (GetHistory())
+        GetHistory()->Rollback(rDoc);
 
     SwPageDesc* pPgDesc = rDoc.FindPageDesc(m_aFmtName);
 
@@ -590,7 +589,7 @@ void SwUndoCopyHeaderFooter::RedoImpl(::sw::UndoRedoContext& rContext)
     assert(pHdFtFormat);
 
     if (pHdFtFormat->GetAttrSet().GetItemIfSet(RES_CNTNT, false))
-        pHdFtFormat->SetFormatAttr(SwFormatContent(static_cast<SwStartNode*>(rDoc.GetNodes()[m_aOff])));
+        pHdFtFormat->SetFormatAttr(SwFormatContent(m_aStart.GetNode().GetStartNode()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
