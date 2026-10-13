@@ -847,14 +847,14 @@ void ScViewFunc::PasteFromSystem(bool useSavedPrefs)
                     PasteFromSystem(SotClipboardFormatId::BITMAP);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::HTML_SIMPLE))
                     PasteFromSystem(SotClipboardFormatId::HTML_SIMPLE);
-                else if (aDataHelper.HasFormat(SotClipboardFormatId::MARKDOWN))
-                    PasteFromSystem(SotClipboardFormatId::MARKDOWN);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::SYLK))
                     PasteFromSystem(SotClipboardFormatId::SYLK);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::STRING_TSVC))
                     PasteFromSystem(SotClipboardFormatId::STRING_TSVC);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::STRING))
                     PasteFromSystem(SotClipboardFormatId::STRING);
+                else if (aDataHelper.HasFormat(SotClipboardFormatId::MARKDOWN))
+                    PasteFromSystem(SotClipboardFormatId::MARKDOWN);
                 // xxx_OLE formats come last, like in SotExchange tables
                 else if (aDataHelper.HasFormat( SotClipboardFormatId::EMBED_SOURCE_OLE ))
                     PasteFromSystem( SotClipboardFormatId::EMBED_SOURCE_OLE );

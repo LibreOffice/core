@@ -15,6 +15,11 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/table/CellContentType.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/XReschedule.hpp>
@@ -177,6 +182,7 @@ public:
     void testPasteWriter();
     void testPasteWriterJPEG();
     void testClipboardMarkdownFlavor();
+    void testPasteCalcPlainTextAsValue();
     void testPasteFromRemoteClipboard();
     void testPasteFromRemoteClipboardFallsBackToHtml();
     void testUndoWriter();
@@ -276,6 +282,7 @@ public:
     CPPUNIT_TEST(testPasteWriter);
     CPPUNIT_TEST(testPasteWriterJPEG);
     CPPUNIT_TEST(testClipboardMarkdownFlavor);
+    CPPUNIT_TEST(testPasteCalcPlainTextAsValue);
     CPPUNIT_TEST(testPasteFromRemoteClipboard);
     CPPUNIT_TEST(testPasteFromRemoteClipboardFallsBackToHtml);
     CPPUNIT_TEST(testUndoWriter);
@@ -1090,6 +1097,32 @@ void DesktopKitTest::testPasteFromRemoteClipboardFallsBackToHtml()
     const std::string aText = pDocument->getTextSelection("text/plain;charset=utf-8");
     CPPUNIT_ASSERT_MESSAGE(aText, std::string::npos != aText.find("Hello"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(aText, std::string::npos, aText.find("rich"));
+}
+
+void DesktopKitTest::testPasteCalcPlainTextAsValue()
+{
+    // Given a Calc document and a plain text clipboard:
+    COKitDocumentImpl* pDocument = loadDoc("empty.ods");
+    OString aText("2026-10-26"_ostr);
+    const char* pInMimeTypes[] = { "text/plain;charset=utf-8" };
+    const size_t pInSizes[] = { static_cast<size_t>(aText.getLength()) };
+    const char* pInStreams[] = { aText.getStr() };
+    CPPUNIT_ASSERT(pDocument->setClipboard(1, pInMimeTypes, pInSizes, pInStreams));
+
+    // When pasting into A1:
+    pDocument->postUnoCommand(".uno:Paste", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the text is recognised as a date value:
+    uno::Reference<sheet::XSpreadsheetDocument> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSheets(xDocument->getSheets(), uno::UNO_QUERY);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xSheets->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XCell> xCell = xSheet->getCellByPosition(0, 0);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the text was pasted as markdown into an edit text cell.
+    CPPUNIT_ASSERT_EQUAL(table::CellContentType_VALUE, xCell->getType());
 }
 
 void DesktopKitTest::testUndoWriter()
