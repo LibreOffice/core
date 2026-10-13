@@ -2549,6 +2549,26 @@ bool ChildSession::setClipboard(const StringVector& tokens)
     return false;
 }
 
+namespace
+{
+/// Returns true when every entry in the body of a text/uri-list is a web address. In that format
+/// an empty line or a line starting with '#' is a comment, so those lines are skipped.
+bool uriListHasOnlyWebAddresses(const std::string_view body)
+{
+    for (const std::string& line : Util::splitStringToVector(std::string(body), '\n'))
+    {
+        const std::string entry =
+            Util::toLower(std::string(Util::trimmed(Util::rtrim(line, '\r'))));
+        if (entry.empty() || entry[0] == '#')
+            continue;
+        if (!entry.starts_with("http"))
+            return false;
+    }
+
+    return true;
+}
+}
+
 bool ChildSession::paste(const char* buffer, int length, const StringVector& tokens)
 {
     std::string mimeType;
@@ -2589,6 +2609,18 @@ bool ChildSession::paste(const char* buffer, int length, const StringVector& tok
     // which keeps it.
     if (size > 0 && mimeType == "image/gif")
         return insertPastedGif(data, size);
+
+    // The browser puts only web addresses on a uri-list and never offers a file name format, so a
+    // paste in the server build accepts exactly that. The app build reads the system clipboard
+    // through its own provider and does not pass through here for files.
+    if (!Util::isMobileApp() &&
+        (mimeType.starts_with("application/x-openoffice-file") ||
+         (mimeType.starts_with("text/uri-list") &&
+          !uriListHasOnlyWebAddresses(std::string_view(data, size)))))
+    {
+        sendTextFrameAndLogError("error: cmd=paste kind=syntax");
+        return false;
+    }
 
     bool success = false;
     std::string result = "pasteresult: ";

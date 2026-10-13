@@ -849,6 +849,10 @@ void ScViewFunc::PasteFromSystem(bool useSavedPrefs)
                     PasteFromSystem(SotClipboardFormatId::HTML_SIMPLE);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::SYLK))
                     PasteFromSystem(SotClipboardFormatId::SYLK);
+                else if (aDataHelper.HasFormat(SotClipboardFormatId::FILE_LIST))
+                    PasteFromSystem(SotClipboardFormatId::FILE_LIST);
+                else if (aDataHelper.HasFormat(SotClipboardFormatId::SIMPLE_FILE))
+                    PasteFromSystem(SotClipboardFormatId::SIMPLE_FILE);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::STRING_TSVC))
                     PasteFromSystem(SotClipboardFormatId::STRING_TSVC);
                 else if (aDataHelper.HasFormat(SotClipboardFormatId::STRING))

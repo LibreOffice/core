@@ -71,6 +71,30 @@ void UnitPaste::invokeWSDTest()
         LOK_ASSERT_EQUAL(expected, selection);
     }
 
+    // A uri-list carries only web addresses; a local path in it is rejected.
+    helpers::assertErrorReply(socket, "paste mimetype=text/uri-list\nfile:///etc/hosts\r\n",
+                              "paste", "syntax", testname);
+    helpers::assertErrorReply(socket,
+                              "paste mimetype=text/uri-list\n# comment\nhttps://example.com/a.png\n"
+                              "/etc/hosts\n",
+                              "paste", "syntax", testname);
+
+    // The single file name format is never offered by the browser, so it is rejected as well.
+    helpers::assertErrorReply(socket,
+                              "paste mimetype=application/x-openoffice-file;"
+                              "windows_formatname=\"FileNameW\"\n/etc/hosts",
+                              "paste", "syntax", testname);
+
+    // Ordinary text still pastes after the rejected attempts.
+    helpers::sendTextFrame(socket, "uno .uno:SelectAll", testname);
+    helpers::sendTextFrame(socket, "uno .uno:Delete", testname);
+    helpers::sendTextFrame(socket, "paste mimetype=text/plain;charset=utf-8\nstill pasting",
+                           testname);
+    helpers::sendTextFrame(socket, "uno .uno:SelectAll", testname);
+    helpers::sendTextFrame(socket, "gettextselection mimetype=text/plain;charset=utf-8", testname);
+    LOK_ASSERT_EQUAL(std::string("textselectioncontent: still pasting"),
+                     helpers::assertResponseString(socket, "textselectioncontent:", testname));
+
     exitTest(TestResult::Ok);
 }
 
