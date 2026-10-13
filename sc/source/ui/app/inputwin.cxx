@@ -1317,7 +1317,7 @@ void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangl
     if (m_xEditEngine)
     {
         // tdf#97354 - use disabled text color while a modeless ref dialog owns reference input
-        Color aTxtColor = ScModule::get()->IsRefDialogOpen() ? rStyleSettings.GetDisableColor()
+        Color aTxtColor = ScModule::get()->IsRefDialogOpen() ? rStyleSettings.GetDisableTextColor()
                                                              : rStyleSettings.GetWindowTextColor();
         if (aTextFont.GetColor() != aTxtColor)
         {

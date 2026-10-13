@@ -1629,7 +1629,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     bool bSelected = maEntryList.IsEntryPosSelected(nPos);
     if (bSelected)
     {
-        rRenderContext.SetTextColor(!IsEnabled() ? rStyleSettings.GetDisableColor() : rStyleSettings.GetListBoxWindowHighlightTextColor());
+        rRenderContext.SetTextColor(!IsEnabled() ? rStyleSettings.GetDisableTextColor() : rStyleSettings.GetListBoxWindowHighlightTextColor());
         rRenderContext.SetFillColor(rStyleSettings.GetListBoxWindowHighlightColor());
         rRenderContext.SetLineColor();
         rRenderContext.DrawRect(aRect);
@@ -1638,7 +1638,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     {
         ApplySettings(rRenderContext);
         if (!IsEnabled())
-            rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
+            rRenderContext.SetTextColor(rStyleSettings.GetDisableTextColor());
     }
     rRenderContext.SetTextFillColor();
 
@@ -2653,7 +2653,7 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
         }
         else // Disabled
         {
-            rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
+            rRenderContext.SetTextColor(rStyleSettings.GetDisableTextColor());
             if (!bNativeOK)
                 rRenderContext.Erase(maFocusRect);
         }

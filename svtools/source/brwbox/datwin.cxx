@@ -67,7 +67,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 
         Color aOldColor = rDev.GetTextColor();
         if (m_bDrawDisabled)
-            rDev.SetTextColor(rSettings.GetDisableColor());
+            rDev.SetTextColor(rSettings.GetDisableTextColor());
 
         rDev.DrawText( Point(
             ( aInnerRect.Left() + aInnerRect.Right() ) / 2 - ( rDev.GetTextWidth(aVal) / 2 ),

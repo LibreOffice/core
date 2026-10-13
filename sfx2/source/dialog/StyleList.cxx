@@ -766,7 +766,7 @@ static void FillBox_Impl(weld::TreeView& rBox, StyleTreeArr_Impl& rTreeArray,
             }
             if (pStyle && pStyle->IsHidden())
                 rBox.set_font_color(
-                    rIter, Application::GetSettings().GetStyleSettings().GetDisableColor());
+                    rIter, Application::GetSettings().GetStyleSettings().GetDisableTextColor());
         },
         pParent, nullptr, /*bGoingToSetText*/ true,
         /*ForceForwardInsert*/ bSpotlightFill ? true : false);
@@ -1319,7 +1319,7 @@ void StyleList::FillFlatTreeView()
                 }
                 if (pChildStyle && pChildStyle->IsHidden())
                     m_xFmtLb->set_font_color(
-                        rIter, Application::GetSettings().GetStyleSettings().GetDisableColor());
+                        rIter, Application::GetSettings().GetStyleSettings().GetDisableTextColor());
             },
             nullptr, nullptr, /*bGoingToSetText*/ true, /*ForceForwardInsert*/ true);
     }
@@ -1334,7 +1334,7 @@ void StyleList::FillFlatTreeView()
                 auto pStyle = m_pStyleSheetPool->Find(rName, eFam);
                 if (pStyle && pStyle->IsHidden())
                     m_xFmtLb->set_font_color(
-                        rIter, Application::GetSettings().GetStyleSettings().GetDisableColor());
+                        rIter, Application::GetSettings().GetStyleSettings().GetDisableTextColor());
             },
             nullptr, nullptr, /*bGoingToSetText*/ true);
     }
@@ -1752,7 +1752,7 @@ IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, voi
                 auto popIt2 = rRenderContext.ScopedPush(vcl::PushFlags::ALL);
                 // tdf#119919 - show "hidden" styles as disabled to not move children onto root node
                 if (pStyleSheet->IsHidden())
-                    rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
+                    rRenderContext.SetTextColor(rStyleSettings.GetDisableTextColor());
 
                 sal_Int32 nSize = aRect.GetHeight();
                 std::unique_ptr<sfx2::StylePreviewRenderer> pStylePreviewRenderer(

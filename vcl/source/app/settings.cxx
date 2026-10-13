@@ -120,6 +120,7 @@ struct ColorSet
     Color                           maDialogColor;
     Color                           maDialogTextColor;
     Color                           maDisableColor;
+    Color                           maDisableTextColor;
     Color                           maFaceColor;
     Color                           maFieldColor;
     Color                           maFieldTextColor;
@@ -565,6 +566,7 @@ void ImplStyleData::SetStandardStyles()
     maColors.maTabRolloverTextColor      = COL_BLACK;
     maColors.maTabHighlightTextColor     = COL_BLACK;
     maColors.maDisableColor              = COL_GRAY;
+    maColors.maDisableTextColor          = COL_GRAY;
     maColors.maHelpColor                 = Color( 0xFF, 0xFF, 0xE0 );
     maColors.maHelpTextColor             = COL_BLACK;
     maColors.maLinkColor                 = COL_BLUE;
@@ -1137,6 +1139,18 @@ const Color&
 StyleSettings::GetDisableColor() const
 {
     return mxData->maColors.maDisableColor;
+}
+
+void
+StyleSettings::SetDisableTextColor( const Color& rColor )
+{
+    mxData->maColors.maDisableTextColor = rColor;
+}
+
+const Color&
+StyleSettings::GetDisableTextColor() const
+{
+    return mxData->maColors.maDisableTextColor;
 }
 
 void

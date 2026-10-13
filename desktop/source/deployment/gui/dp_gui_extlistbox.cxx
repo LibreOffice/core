@@ -372,7 +372,7 @@ void ExtensionBox::DrawRow(vcl::RenderContext& rRenderContext, const tools::Rect
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
     else if ((rEntry->m_eState != PackageState::REGISTERED)
              && (rEntry->m_eState != PackageState::NOT_AVAILABLE))
-        rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
+        rRenderContext.SetTextColor(rStyleSettings.GetDisableTextColor());
     else
         rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
 

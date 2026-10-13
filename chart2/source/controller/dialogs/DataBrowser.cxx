@@ -1042,7 +1042,7 @@ void DataBrowser::PaintCell(
     bool bEnabled = IsEnabled();
     Color aOriginalColor = rDev.GetTextColor();
     if( ! bEnabled )
-        rDev.SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
+        rDev.SetTextColor( GetSettings().GetStyleSettings().GetDisableTextColor() );
 
     // draw the text
     rDev.DrawText( aPos, aText );

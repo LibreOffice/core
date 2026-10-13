@@ -464,7 +464,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     if (!IsEnabled() || bPaintPlaceholderText)
-        rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
+        rRenderContext.SetTextColor(rStyleSettings.GetDisableTextColor());
 
     // Set background color of the normal text
     if (mbForceControlBackground && IsControlBackground())
@@ -1758,7 +1758,7 @@ void Edit::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags nFla
         if ( !IsEnabled() )
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            rDev.SetTextColor(rStyleSettings.GetDisableColor());
+            rDev.SetTextColor(rStyleSettings.GetDisableTextColor());
         }
         else
         {

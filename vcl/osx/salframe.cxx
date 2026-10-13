@@ -1561,6 +1561,7 @@ static void lcl_LoadColorsFromTheme(StyleSettings& rStyleSet)
     rStyleSet.SetActiveTabColor(rThemeColors.GetWindowColor());
     rStyleSet.SetInactiveTabColor(rThemeColors.GetBaseColor());
     rStyleSet.SetDisableColor(rThemeColors.GetDisabledColor()); // tab outline
+    rStyleSet.SetDisableTextColor(rThemeColors.GetDisabledTextColor());
     // Highlight related colors
     rStyleSet.SetAccentColor(rThemeColors.GetAccentColor());
     rStyleSet.SetHighlightColor(rThemeColors.GetAccentColor());

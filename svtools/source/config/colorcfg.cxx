@@ -472,6 +472,7 @@ static Color lcl_GetDefaultUIColor(ColorConfigEntry eEntry)
         case DISABLEDCOLOR:
             return rStyleSettings.GetDisableColor();
         case DISABLEDTEXTCOLOR:
+            return rStyleSettings.GetDisableTextColor();
         case SHADECOLOR:
             return rStyleSettings.GetShadowColor();
         case SEPARATORCOLOR:
@@ -722,6 +723,7 @@ void ColorConfig_Impl::UpdateSettings()
     aStyleSettings.SetFieldColor(aColor);
 
     aStyleSettings.SetDisableColor(GetColorValue(DISABLEDCOLOR, true).nColor);
+    aStyleSettings.SetDisableTextColor(GetColorValue(DISABLEDTEXTCOLOR, true).nColor);
 
     aColor = GetColorValue(ACCENTCOLOR, true).nColor;
     aStyleSettings.SetAccentColor(aColor);

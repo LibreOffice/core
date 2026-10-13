@@ -125,7 +125,7 @@ constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | BrowserMo
         bool bEnabled = IsEnabled();
         Color aOriginalColor = _rDev.GetTextColor();
         if (!bEnabled)
-            _rDev.SetTextColor(GetSettings().GetStyleSettings().GetDisableColor());
+            _rDev.SetTextColor(GetSettings().GetStyleSettings().GetDisableTextColor());
 
         // draw the text
         _rDev.DrawText(aPos, aText);

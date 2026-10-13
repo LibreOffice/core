@@ -362,6 +362,9 @@ public:
     void                            SetDisableColor( const Color& rColor );
     const Color&                    GetDisableColor() const;
 
+    void                            SetDisableTextColor( const Color& rColor );
+    const Color&                    GetDisableTextColor() const;
+
     void                            SetWarningColor( const Color& rColor );
     const Color&                    GetWarningColor() const;
 

@@ -1206,7 +1206,7 @@ void ComboBox::Draw(OutputDevice& rDev, const Point& rPos, SystemTextColorFlags 
             if ( !IsEnabled() )
             {
                 const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-                rDev.SetTextColor(rStyleSettings.GetDisableColor());
+                rDev.SetTextColor(rStyleSettings.GetDisableTextColor());
             }
             else
             {

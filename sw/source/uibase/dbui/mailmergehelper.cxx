@@ -386,7 +386,8 @@ void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
 
     weld::SetPointFont(rRenderContext, GetDrawingArea()->get_font());
     vcl::Font aFont(rRenderContext.GetFont());
-    aFont.SetColor(aPaintColor);
+    aFont.SetColor(IsEnabled() ? rSettings.GetWindowTextColor()
+                               : rSettings.GetDisableTextColor());
     rRenderContext.SetFont(aFont);
 
     Size aSize(GetOutputSizePixel());

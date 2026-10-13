@@ -1500,7 +1500,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         {
             // draw disabled text always without shadow
             // as it fits better with native look
-            rTargetDevice.SetTextColor( rTargetDevice.GetSettings().GetStyleSettings().GetDisableColor() );
+            rTargetDevice.SetTextColor( rTargetDevice.GetSettings().GetStyleSettings().GetDisableTextColor() );
         }
     }
 
@@ -2031,7 +2031,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         else if( bHighContrastWhite )
             SetTextColor( COL_LIGHTGREEN );
         else
-            SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
+            SetTextColor( GetSettings().GetStyleSettings().GetDisableTextColor() );
     }
 
     DrawText(rPos, aStr, nCorrectedIndex, nCorrectedLen, pVector, pDisplayText, pGlyphs);
@@ -2301,7 +2301,7 @@ void OutputDevice::SetSystemTextColor(SystemTextColorFlags nFlags, bool bEnabled
         if (!bEnabled)
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            SetTextColor(rStyleSettings.GetDisableColor());
+            SetTextColor(rStyleSettings.GetDisableTextColor());
         }
     }
 }

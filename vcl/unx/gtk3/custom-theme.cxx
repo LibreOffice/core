@@ -129,7 +129,7 @@ OString CreateStyleString()
         "}"
 
         "treeview.view.expander:disabled {"
-        "  color: #" + aThemeColors.GetDisabledColor().AsRGBHexString() + ";"
+        "  color: #" + aThemeColors.GetDisabledTextColor().AsRGBHexString() + ";"
         "}"
 
         // this part is still left

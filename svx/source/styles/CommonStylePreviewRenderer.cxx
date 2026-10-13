@@ -372,7 +372,7 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
             mrOutputDev.SetFont(*oFont);
 
         if (mpStyle->IsHidden())
-            mrOutputDev.SetTextColor(Application::GetSettings().GetStyleSettings().GetDisableColor());
+            mrOutputDev.SetTextColor(Application::GetSettings().GetStyleSettings().GetDisableTextColor());
         else if (maFontColor != COL_AUTO)
             mrOutputDev.SetTextColor(maFontColor);
         else

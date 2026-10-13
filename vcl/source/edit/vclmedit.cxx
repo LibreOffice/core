@@ -940,7 +940,7 @@ void VclMultiLineEdit::ApplySettings(vcl::RenderContext& rRenderContext)
         aTextColor = GetControlForeground();
 
     if (!IsEnabled())
-        aTextColor = rStyleSettings.GetDisableColor();
+        aTextColor = rStyleSettings.GetDisableTextColor();
 
     vcl::Font aFont = rStyleSettings.GetFieldFont();
     aFont.SetTransparent(IsPaintTransparent());
@@ -988,7 +988,7 @@ void VclMultiLineEdit::ImplInitSettings(bool bBackground)
     if (IsControlForeground())
         aTextColor = GetControlForeground();
     if (!IsEnabled())
-        aTextColor = rStyleSettings.GetDisableColor();
+        aTextColor = rStyleSettings.GetDisableTextColor();
 
     vcl::Font aFont = rStyleSettings.GetFieldFont();
     aFont.SetTransparent(IsPaintTransparent());

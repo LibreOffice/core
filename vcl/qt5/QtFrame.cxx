@@ -999,8 +999,9 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
         style.SetTabRolloverTextColor(aButn);
         style.SetTabHighlightTextColor(aButn);
 
-        // Disable color
+        // Disable colors
         style.SetDisableColor(toColor(pal.color(QPalette::Disabled, QPalette::WindowText)));
+        style.SetDisableTextColor(toColor(pal.color(QPalette::Disabled, QPalette::WindowText)));
 
         // Background
         style.BatchSetBackgrounds(aBack);
