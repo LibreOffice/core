@@ -2817,9 +2817,7 @@ function showWelcomeSVG() {
 
 			var listener;
 			var timeoutId = setTimeout(function() {
-				global._collabNotificationCallbacks =
-					global._collabNotificationCallbacks.filter(
-						function(c) { return c !== listener; });
+				global.removeCollabNotificationListener(listener);
 				reject(new Error('Collab upload timeout'));
 			}, 30000);
 
@@ -2829,9 +2827,7 @@ function showWelcomeSVG() {
 
 				if (msg.type === 'upload_url') {
 					clearTimeout(timeoutId);
-					global._collabNotificationCallbacks =
-						global._collabNotificationCallbacks.filter(
-							function(c) { return c !== listener; });
+					global.removeCollabNotificationListener(listener);
 					if (!msg.url) {
 						reject(new Error('Collab upload response missing URL'));
 						return;
@@ -2855,14 +2851,12 @@ function showWelcomeSVG() {
 					}).then(resolve).catch(reject);
 				} else if (msg.type === 'upload_error') {
 					clearTimeout(timeoutId);
-					global._collabNotificationCallbacks =
-						global._collabNotificationCallbacks.filter(
-							function(c) { return c !== listener; });
+					global.removeCollabNotificationListener(listener);
 					reject(new Error('Collab upload error: '
 						+ (msg.error || 'Unknown error')));
 				}
 			};
-			global._collabNotificationCallbacks.push(listener);
+			global.addCollabNotificationListener(listener);
 
 			ws.send(JSON.stringify({
 				type: 'upload',
@@ -2930,6 +2924,12 @@ function showWelcomeSVG() {
 	// Register a callback for collab notifications.
 	global.addCollabNotificationListener = function(callback) {
 		global._collabNotificationCallbacks.push(callback);
+	};
+
+	global.removeCollabNotificationListener = function(callback) {
+		global._collabNotificationCallbacks =
+			global._collabNotificationCallbacks.filter(
+				function(c) { return c !== callback; });
 	};
 
 	// Send a message on the collab WebSocket (if open).
