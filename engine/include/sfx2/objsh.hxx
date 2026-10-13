@@ -462,6 +462,11 @@ public:
 
     static bool                 isScriptAccessAllowed(const cpo::uno::Reference<cpo::uno::XInterface>& rScriptContext);
 
+    /// Whether a script URL that rxDocument binds may run: the URL is allowed, the document may
+    /// run macros, and the script is not an untrusted one
+    static bool                 isDocumentScriptAllowed(const OUString& rScriptURL,
+                                    const cpo::uno::Reference<cpo::uno::XInterface>& rxDocument);
+
     SvKeyValueIterator*         GetHeaderAttributes();
     void                        ClearHeaderAttributesForSourceViewHack();
     void                        SetHeaderAttributesForSourceViewHack();

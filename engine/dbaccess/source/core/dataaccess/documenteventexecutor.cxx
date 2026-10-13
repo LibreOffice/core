@@ -168,14 +168,7 @@ namespace dbaccess
 
             if ( bDispatchScriptURL && bNonEmptyScript )
             {
-                // the same three tests an office document takes before a bound script runs
-                if ( !SfxObjectShell::isScriptURLAllowed( sScript ) )
-                    return;
-
-                if ( !SfxObjectShell::isScriptAccessAllowed( cppu::getXWeak( xDocument.get() ) ) )
-                    return;
-
-                if ( SfxObjectShell::UnTrustedScript( sScript ) )
+                if ( !SfxObjectShell::isDocumentScriptAllowed( sScript, cppu::getXWeak( xDocument.get() ) ) )
                     return;
 
                 lcl_dispatchScriptURL_throw( mxDocument, mxURLTransformer, sScript, Event );
