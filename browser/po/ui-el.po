@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-22 21:46+0200\n"
-"PO-Revision-Date: 2026-10-12 15:04+0000\n"
+"PO-Revision-Date: 2026-10-13 11:59+0000\n"
 "Last-Translator: geonetor <geonetor@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/el/>\n"
@@ -2905,49 +2905,49 @@ msgstr "Σάρωση..."
 
 #: src/control/Control.CleanupSidebar.ts:456
 msgid "Measuring images..."
-msgstr ""
+msgstr "Μέτρηση εικόνων..."
 
 #: src/control/Control.CleanupSidebar.ts:458
 msgid "Preparing cleanup..."
-msgstr ""
+msgstr "Προετοιμασία καθαρισμού..."
 
 #: src/control/Control.CleanupSidebar.ts:460
 msgid "Cleaning up..."
-msgstr ""
+msgstr "Καθαρισμός..."
 
 #: src/control/Control.CleanupSidebar.ts:472
 msgid "Images over %1 DPI (%2)"
-msgstr ""
+msgstr "Εικόνες πάνω από %1 DPI (%2)"
 
 #: src/control/Control.CleanupSidebar.ts:476
 msgid "Hidden slides (%1)"
-msgstr ""
+msgstr "Κρυφές διαφάνειες (%1)"
 
 #: src/control/Control.CleanupSidebar.ts:478
 msgid "Unused master slides (%1)"
-msgstr ""
+msgstr "Μη χρησιμοποιημένες κύριες διαφάνειες (%1)"
 
 #: src/control/Control.CleanupSidebar.ts:480
 msgid "Speaker notes (%1)"
-msgstr ""
+msgstr "Σημειώσεις ομιλητή (%1)"
 
 #: src/control/Control.CleanupSidebar.ts:482
 msgid "Embedded objects (%1)"
-msgstr ""
+msgstr "Ενσωματωμένα αντικείμενα (%1)"
 
 #: src/control/Control.CleanupSidebar.ts:490
 msgid "Saved %1"
-msgstr ""
+msgstr "Αποθηκεύτηκε %1"
 
 #: src/control/Control.CleanupSidebar.ts:493
 msgid "Estimated saving: %1"
-msgstr ""
+msgstr "Εκτιμώμενη εξοικονόμηση: %1"
 
 #: src/control/Control.CleanupSidebar.ts:500
 msgid "%1 thing to clean up"
 msgid_plural "%1 things to clean up"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 αντικείμενο για εκκαθάριση"
+msgstr[1] "%1 αντικείμενα για εκκαθάριση"
 
 #: src/control/Control.CleanupSidebar.ts:525
 msgid "Image resolution"
@@ -3250,7 +3250,7 @@ msgstr "Κλείστε τα παρασκήνια"
 
 #: src/control/backstage/Sidebar.tsx:113 src/control/backstage/Sidebar.tsx:114
 msgid "Back to document"
-msgstr ""
+msgstr "Επιστροφή στο έγγραφο"
 
 #: src/control/backstage/HomeView.tsx:52 src/control/backstage/HomeView.tsx:55
 msgid "More Templates"
@@ -4587,7 +4587,7 @@ msgstr "Κατηγορία"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:120
 msgid "Start"
-msgstr "Εκκίνηση"
+msgstr "Έναρξη"
 
 #: src/control/Notebookbar.ImpressAnimationTab.ts:140
 msgid "Effect"
@@ -7131,67 +7131,67 @@ msgstr "Στυλ γραμμής"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2100
 msgid "Hairline (0.05 pt)"
-msgstr ""
+msgstr "Λεπτότατη (0.05 pt)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2109
 msgid "Very thin (0.50 pt)"
-msgstr ""
+msgstr "Πολύ λεπτή (0.50 pt)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2118
 msgid "Thin (0.75 pt)"
-msgstr ""
+msgstr "Λεπτή (0.75 pt)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2127
 msgid "Medium (1.50 pt)"
-msgstr ""
+msgstr "Μέτρια (1.50 pt)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2136
 msgid "Thick (2.25 pt)"
-msgstr ""
+msgstr "Παχιά (2.25 pt)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2145
 msgid "Extra thick (4.50 pt)"
-msgstr ""
+msgstr "Πολύ παχιά (4.50 pt)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2154
 msgid "Double Hairline (1.10 pt)"
-msgstr ""
+msgstr "Διπλή λεπτότατη (1.10 pt)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2163
 msgid "Double Hairline (2.35 pt)"
-msgstr ""
+msgstr "Διπλή λεπτότατη (2.35 pt)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2172
 msgid "Thin/Medium (3.00 pt)"
-msgstr ""
+msgstr "Λεπτή/Μέτρια (3.00 pt)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2181
 msgid "Medium/Hairline (3.05 pt)"
-msgstr ""
+msgstr "Μέτρια/Λεπτότατη (3.05 pt)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2190
 msgid "Medium/Medium (4.50 pt)"
-msgstr ""
+msgstr "Μέτρια/Μέτρια (4.50 pt)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2250
 msgid "Standard (4:3)"
-msgstr ""
+msgstr "Τυπική (4:3)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2255
 msgid "Widescreen (16:9)"
-msgstr ""
+msgstr "Ευρεία οθόνη (16:9)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2415
 msgid "Grayscale"
-msgstr ""
+msgstr "Κλίμακα του γκρι"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2420
 msgid "Black/White"
-msgstr ""
+msgstr "Μαύρο/Άσπρο"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2425
 msgid "Watermark"
-msgstr ""
+msgstr "Υδατογράφημα"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2433
 msgid "Insert comment"
@@ -7229,43 +7229,43 @@ msgstr "Φωτεινό 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:40
 msgid "Accent 1"
-msgstr ""
+msgstr "Τονισμός 1"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:41
 msgid "Accent 2"
-msgstr ""
+msgstr "Τονισμός 2"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:42
 msgid "Accent 3"
-msgstr ""
+msgstr "Τονισμός 3"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:43
 msgid "Accent 4"
-msgstr ""
+msgstr "Τονισμός 4"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:44
 msgid "Accent 5"
-msgstr ""
+msgstr "Τονισμός 5"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:45
 msgid "Accent 6"
-msgstr ""
+msgstr "Τονισμός 6"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:46
 msgid "Hyperlink"
-msgstr ""
+msgstr "Υπερσύνδεσμος"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:47
 msgid "Followed Hyperlink"
-msgstr ""
+msgstr "Ακολουθούμενος υπερσύνδεσμος"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:56
 msgid "%1, %2% Lighter"
-msgstr ""
+msgstr "%1, %2% πιο φωτεινό"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:60
 msgid "%1, %2% Darker"
-msgstr ""
+msgstr "%1, %2% πιο σκούρο"
 
 #: src/control/jsdialog/Widget.ColorPicker.ts:79
 #: src/control/jsdialog/Widget.ColorPicker.ts:186
@@ -7647,11 +7647,11 @@ msgstr "Μόνο ο κάτοχος του εγγράφου μπορεί να α�
 
 #: src/app/Socket.ts:2664
 msgid "You do not have permission to edit this document."
-msgstr ""
+msgstr "Δεν έχετε άδεια να επεξεργαστείτε αυτό το έγγραφο."
 
 #: src/app/Socket.ts:2665
 msgid "The document could not be made editable."
-msgstr ""
+msgstr "Δεν ήταν δυνατή η επεξεργασία του εγγράφου."
 
 #: src/app/Socket.ts:2735 src/app/Socket.ts:2746
 msgid "Missing Fonts"
@@ -7687,7 +7687,7 @@ msgstr "Ο διακομιστής τερματίζεται"
 
 #: src/docdispatcher.ts:659
 msgid "AI is not configured, contact your administrator"
-msgstr ""
+msgstr "Το AI δεν έχει διαμορφωθεί, επικοινωνήστε με τον διαχειριστή σας"
 
 #: src/docdispatcher.ts:926
 msgid "Are you sure you want to delete this slide?"
@@ -7699,7 +7699,7 @@ msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε 
 
 #: src/docstate.ts:154
 msgid "Standard"
-msgstr ""
+msgstr "Τυπικό"
 
 #: src/docstate.ts:299
 msgid "Theme colors"
@@ -7711,7 +7711,7 @@ msgstr "Χρώματα εγγράφων"
 
 #: src/docstatefunctions.js:247
 msgid ", cluster configuration error: mis-matching serverid"
-msgstr ""
+msgstr ", σφάλμα διαμόρφωσης συστάδας: μη αντιστοιχία serverid"
 
 #: src/dom/NotebookbarAccessibility.js:327
 msgid "{0} tab selected"
@@ -7719,7 +7719,7 @@ msgstr "Επιλέχθηκε η καρτέλα {0}"
 
 #: src/errormessages.ts:16
 msgid "No disk space left."
-msgstr ""
+msgstr "Δεν υπάρχει διαθέσιμος χώρος στο δίσκο."
 
 #: src/errormessages.ts:17
 msgid "No disk space left on server."
@@ -7787,12 +7787,15 @@ msgstr ""
 #: src/errormessages.ts:39
 msgid "Your session will end in {time}. Refresh the page to continue."
 msgstr ""
+"Η συνεδρία σας θα λήξει σε {time}. Ανανέωσε τη σελίδα για να συνεχίσετε."
 
 #: src/errormessages.ts:42
 msgid ""
 "Your session has ended. Further changes to the document might not be saved. "
 "Refresh the page to continue."
 msgstr ""
+"Η συνεδρία σας έληξε. Περαιτέρω αλλαγές στο έγγραφο ενδέχεται να μην "
+"αποθηκευτούν. Ανανεώστε τη σελίδα για να συνεχίσετε."
 
 #: src/errormessages.ts:45
 msgid ""
@@ -7842,6 +7845,13 @@ msgid ""
 "storage and/or copy/paste problems. Expected serverId {0} for routeToken "
 "{1} but connected to serverId {2}"
 msgstr ""
+"Το σύμπλεγμα {productname} φαίνεται να έχει ρυθμιστεί εσφαλμένα ή να "
+"κλιμακώνεται γρήγορα - επικοινωνήστε με τον διαχειριστή του συστήματός σας. "
+"Η συνέχιση της επεξεργασίας μπορεί να έχει ως αποτέλεσμα πολλοί χρήστες να "
+"μην βλέπουν ο ένας τον άλλον, να υπάρχουν διενέξεις στην αποθήκευση εγγράφων "
+"και/ή προβλήματα αντιγραφής/επικόλλησης. Αναμενόμενο αναγνωριστικό "
+"διακομιστή {0} για το διακριτικό διαδρομής {1} αλλά συνδέεται με το "
+"αναγνωριστικό διακομιστή {2}"
 
 #: src/errormessages.ts:62
 msgid ""
@@ -7850,12 +7860,18 @@ msgid ""
 "administrator. For more info on proxy configuration please checkout https://"
 "sdk.collaboraonline.com/docs/installation/Proxy_settings.html"
 msgstr ""
+"Αποτυχία δημιουργίας σύνδεσης socket ή η σύνδεση socket έκλεισε απροσδόκητα. "
+"Ο reverse proxy ενδέχεται να είναι διαμορφωμένος εσφαλμένα, παρακαλώ "
+"επικοινωνήστε με τον διαχειριστή. Για περισσότερες πληροφορίες σχετικά με τη "
+"διαμόρφωση του proxy, παρακαλώ επισκεφθείτε το https://"
+"sdk.collaboraonline.com/docs/installation/Proxy_settings.html"
 
 #: src/errormessages.ts:65
 msgid ""
 "Failed to establish socket connection or socket connection closed "
 "unexpectedly."
 msgstr ""
+"Απέτυχε η δημιουργία σύνδεσης πρίζας ή η σύνδεση πρίζας έκλεισε απροσδόκητα."
 
 #: src/errormessages.ts:68
 msgid "Uploading file to server failed, file not found."
@@ -7949,7 +7965,7 @@ msgstr "Δεν είναι δυνατή η εξαγωγή του εγγράφου
 
 #: src/layer/marker/A11yTextInput.js:84
 msgid "Slide"
-msgstr ""
+msgstr "Διαφάνεια"
 
 #: src/layer/marker/A11yTextInput.js:354
 msgid "Out of table"
@@ -7958,20 +7974,20 @@ msgstr "Εκτός πίνακα"
 #: src/layer/marker/A11yTextInput.js:359
 msgid "%n row"
 msgid_plural "%n rows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n σειρά"
+msgstr[1] "%n σειρές"
 
 #: src/layer/marker/A11yTextInput.js:360
 msgid "%n column"
 msgid_plural "%n columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n στήλη"
+msgstr[1] "%n στήλες"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
 #: src/layer/marker/A11yTextInput.js:363
 msgid "Table with {0} and {1}"
-msgstr ""
+msgstr "Πίνακας με {0} και {1}"
 
 #: src/layer/marker/A11yTextInput.js:368
 msgid "Row {0} through {1}"
@@ -8033,15 +8049,15 @@ msgstr "Ελέγξτε επίσης την εναλλαγή φωνής στο {p
 
 #: src/layer/marker/TextInput.js:510
 msgid "the Help tab"
-msgstr ""
+msgstr "η καρτέλα Βοήθεια"
 
 #: src/layer/marker/TextInput.js:510
 msgid "the View menu"
-msgstr ""
+msgstr "το μενού Προβολή"
 
 #: src/layer/tile/CanvasTileLayer.js:334
 msgid "Online Editor"
-msgstr ""
+msgstr "Επεξεργαστής Online"
 
 #: src/layer/tile/CanvasTileLayer.js:1406
 msgid "Functions"
@@ -8049,7 +8065,7 @@ msgstr "Λειτουργίες"
 
 #: src/layer/tile/CanvasTileLayer.js:1703
 msgid "Named Range"
-msgstr ""
+msgstr "Ονομασμένο εύρος"
 
 #: src/layer/tile/CanvasTileLayer.js:3617
 msgid "No Comments"
@@ -8067,7 +8083,7 @@ msgstr "Για επικόλληση εκτός του {productname}, πατήσ�
 
 #: src/map/Clipboard.js:203
 msgid "Copying from the document has been disabled by your administrator"
-msgstr ""
+msgstr "Η αντιγραφή από το έγγραφο έχει απενεργοποιηθεί από τον διαχειριστή σας"
 
 #: src/map/Clipboard.js:316
 msgid "warning: copy/paste request timed out"
@@ -8079,23 +8095,27 @@ msgstr "Αποτυχία λήψης του προχείρου, ξαναντιγ�
 
 #: src/map/Clipboard.js:400
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Αποτυχία μεταφόρτωσης του πρόχειρου"
 
 #: src/map/Clipboard.js:1506
 msgid ""
 "Your browser has very limited access to the clipboard, so please use the "
 "paste buttons on your on-screen keyboard instead."
 msgstr ""
+"Το πρόγραμμα περιήγησής σας έχει πολύ περιορισμένη πρόσβαση στο πρόχειρο, "
+"επομένως χρησιμοποιήστε τα κουμπιά επικόλλησης στο πληκτρολόγιο οθόνης σας."
 
 #: src/map/Clipboard.js:1512
 msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
 msgstr ""
+"Το πρόγραμμα περιήγησής σας έχει πολύ περιορισμένη πρόσβαση στο πρόχειρο, "
+"επομένως χρησιμοποιήστε αυτές τις συντομεύσεις πληκτρολογίου:"
 
 #: src/map/Clipboard.js:1546
 msgid "Cut"
-msgstr ""
+msgstr "Αποκοπή"
 
 #: src/map/Clipboard.js:1562
 msgid ""
@@ -8180,21 +8200,21 @@ msgstr "Αποτυχία αποστολής αρχείου στον διακομ
 
 #: src/map/handler/Map.FileInserter.js:285
 msgid "Failed to read the selected file."
-msgstr ""
+msgstr "Αποτυχία ανάγνωσης του επιλεγμένου αρχείου."
 
 #: src/map/handler/Map.Print.js:44
 msgid "Print dialog"
-msgstr ""
+msgstr "Παράθυρο διαλόγου εκτύπωσης"
 
 #: src/map/handler/Map.SlideShow.js:59
 #: src/slideshow/SlideShowPresenter.ts:1416
 msgid "Empty Slide Show"
-msgstr ""
+msgstr "Κενή προβολή διαφανειών"
 
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1417
 msgid "All slides are hidden!"
-msgstr ""
+msgstr "Όλες οι διαφάνειες είναι κρυφές!"
 
 #: src/map/handler/Map.SlideShow.js:175
 #: src/slideshow/SlideShowPresenter.ts:1444
@@ -8220,7 +8240,7 @@ msgstr "Παρουσίαση σε παράθυρο: "
 #: src/map/handler/Map.SlideShow.js:210
 #: src/slideshow/SlideShowPresenter.ts:1253
 msgid "Presenting in another window"
-msgstr ""
+msgstr "Παρουσίαση σε άλλο παράθυρο"
 
 #: src/map/handler/Map.SlideShow.js:211
 #: src/slideshow/SlideShowPresenter.ts:1254
@@ -8229,7 +8249,7 @@ msgstr "Κλείσιμο παρουσίασης"
 
 #: src/map/handler/Map.SlideShow.js:238
 msgid "Presenting in fullscreen"
-msgstr ""
+msgstr "Παρουσίαση σε πλήρη οθόνη"
 
 #: src/map/handler/Map.SlideShow.js:239
 msgid "End Presentation"
@@ -8238,7 +8258,7 @@ msgstr "Τερματισμός παρουσίασης"
 #: src/map/handler/Map.SlideShow.js:303
 #: src/slideshow/SlideShowPresenter.ts:1431
 msgid "Already presenting"
-msgstr ""
+msgstr "Παρουσιάζεται ήδη"
 
 #: src/map/handler/Map.SlideShow.js:304
 #: src/slideshow/SlideShowPresenter.ts:1432
@@ -8257,11 +8277,11 @@ msgstr "Η λειτουργία παρουσίασης έχει απενεργο
 
 #: src/map/handler/Map.StateChanges.js:137
 msgid "Apply this order to your presentation?"
-msgstr ""
+msgstr "Εφαρμογή αυτής της σειράς στην παρουσίασή σας;"
 
 #: src/map/handler/Map.StateChanges.js:137
 msgid "Update Slides"
-msgstr ""
+msgstr "Ενημέρωση διαφανειών"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -8275,7 +8295,7 @@ msgstr "Δημιουργία νέου αρχείου από πρότυπο..."
 
 #: src/map/handler/Map.WOPI.js:302
 msgid "Compare Document..."
-msgstr ""
+msgstr "Σύγκριση εγγράφου..."
 
 #: src/map/handler/Map.WOPI.js:878
 msgid "File name should contain an extension."
@@ -8292,26 +8312,28 @@ msgstr "Διάλογος καλωσορίσματος"
 #: src/map/handler/Map.Settings.ts:276
 msgid "Settings saved. Add an API key to use the AI assistant."
 msgstr ""
+"Οι ρυθμίσεις αποθηκεύτηκαν. Προσθέστε ένα κλειδί API για να χρησιμοποιήσετε "
+"τον βοηθό AI."
 
 #: src/map/handler/Map.Settings.ts:281
 msgid "Settings saved"
-msgstr ""
+msgstr "Οι ρυθμίσεις αποθηκεύτηκαν"
 
 #: src/slideshow/engine/SlideShowHandler.ts:115
 msgid "Skip"
-msgstr ""
+msgstr "Παράλειψη"
 
 #: src/slideshow/engine/SlideShowHandler.ts:116
 msgid "First"
-msgstr ""
+msgstr "Πρώτη"
 
 #: src/slideshow/engine/SlideShowHandler.ts:117
 msgid "Skip All"
-msgstr ""
+msgstr "Παράλειψη όλων"
 
 #: src/slideshow/engine/SlideShowHandler.ts:118
 msgid "First Slide"
-msgstr ""
+msgstr "Πρώτη διαφάνεια"
 
 #: src/slideshow/engine/SlideShowHandler.ts:119
 #: src/slideshow/PresenterConsole.js:32
@@ -8329,7 +8351,7 @@ msgstr "Τελευταία διαφάνεια"
 #: src/slideshow/engine/SlideShowHandler.ts:122
 #: src/slideshow/SlideShowPresenter.ts:904
 msgid "End Show"
-msgstr ""
+msgstr "Τέλος Παρουσίασης"
 
 #: src/slideshow/engine/SlideShowHandler.ts:123
 msgid "Paused"
@@ -8341,15 +8363,15 @@ msgstr "Σε συνέχεια"
 
 #: src/slideshow/engine/SlideShowHandler.ts:394
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "Κινούμενα σχέδια: {0}, {1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:398
 msgid "Animation: {0}"
-msgstr ""
+msgstr "Κινούμενα σχέδια: {0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:545
 msgid "Transition: {0}"
-msgstr ""
+msgstr "Μετάβαση: {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -8363,12 +8385,12 @@ msgstr "Τρέχουσα διαφάνεια"
 #: src/slideshow/SlideShowPresenter.ts:940
 #: src/slideshow/SlideShowPresenter.ts:953
 msgid "Disable Animations"
-msgstr ""
+msgstr "Απενεργοποίηση κινούμενων εικόνων"
 
 #: src/slideshow/PresenterConsole.js:38
 #: src/slideshow/SlideShowPresenter.ts:969
 msgid "Exchange"
-msgstr ""
+msgstr "Ανταλλαγή"
 
 #: src/slideshow/PresenterConsole.js:39
 msgid "Pause"
@@ -8392,7 +8414,7 @@ msgstr "Έξοδος"
 
 #: src/slideshow/PresenterConsole.js:44
 msgid "Go Back"
-msgstr ""
+msgstr "Πήγαινε πίσω"
 
 #: src/slideshow/PresenterConsole.js:45
 msgid "Zoom In"
@@ -8404,7 +8426,7 @@ msgstr "Σμίκρυνση"
 
 #: src/slideshow/PresenterConsole.js:47
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Προεπισκόπηση της τρέχουσας διαφάνειας"
 
 #: src/slideshow/PresenterConsole.js:48
 msgid "Preview of the next slide"
@@ -8448,23 +8470,23 @@ msgstr "Κάντε κλικ για έξοδο από την παρουσίαση
 
 #: src/slideshow/SlideShowPresenter.ts:868
 msgid "You are on the first slide"
-msgstr ""
+msgstr "Είστε στην πρώτη διαφάνεια"
 
 #: src/slideshow/SlideShowPresenter.ts:876
 msgid "Waiting for presenter to advance"
-msgstr ""
+msgstr "Αναμονή για να προχωρήσει ο παρουσιαστής"
 
 #: src/slideshow/SlideShowPresenter.ts:1669
 msgid "Stop Following"
-msgstr ""
+msgstr "Σταματήστε να ακολουθείτε"
 
 #: src/control/Control.Extension.ts:597 src/control/Control.Extension.ts:686
 msgid "Extension command failed: %1"
-msgstr ""
+msgstr "Η εντολή επέκτασης απέτυχε: %1"
 
 #: templates/templates.js:6
 msgid "Modern Business Letter (sans-serif)"
-msgstr ""
+msgstr "Σύγχρονη επιχειρηματική επιστολή sans-serif)"
 
 #: templates/templates.js:10 templates/templates.js:20
 msgid "Modern Business Letter"
@@ -8472,67 +8494,67 @@ msgstr "Σύγχρονη επιχειρηματική επιστολή"
 
 #: templates/templates.js:16
 msgid "Modern Business Letter (serif)"
-msgstr ""
+msgstr "Σύγχρονη επιχειρηματική επιστολή (serif)"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
-msgstr ""
+msgstr "CV"
 
 #: templates/templates.js:36
 msgid "Resume (one-page)"
-msgstr ""
+msgstr "Βιογραφικό (μια σελίδα)"
 
 #: templates/templates.js:56 templates/templates.js:60
 msgid "Modern Style"
-msgstr ""
+msgstr "Μοντέρνο στυλ"
 
 #: templates/templates.js:66 templates/templates.js:70
 msgid "Simple Style"
-msgstr ""
+msgstr "Απλό στυλ"
 
 #: templates/templates.js:76 templates/templates.js:80
 msgid "Beehive"
-msgstr ""
+msgstr "Κυψέλη"
 
 #: templates/templates.js:86 templates/templates.js:90
 msgid "Blue Curve"
-msgstr ""
+msgstr "Μπλε καμπύλη"
 
 #: templates/templates.js:96 templates/templates.js:100
 msgid "Blueprint Plans"
-msgstr ""
+msgstr "Πλάνα σχεδίων"
 
 #: templates/templates.js:106 templates/templates.js:110
 msgid "Candy"
-msgstr ""
+msgstr "Καραμέλα"
 
 #: templates/templates.js:116 templates/templates.js:120
 msgid "DNA"
-msgstr ""
+msgstr "DNA"
 
 #: templates/templates.js:126 templates/templates.js:130
 msgid "Focus"
-msgstr ""
+msgstr "Συγκέντρωση"
 
 #: templates/templates.js:136 templates/templates.js:140
 msgid "Forestbird"
-msgstr ""
+msgstr "Πουλί του δάσους"
 
 #: templates/templates.js:146 templates/templates.js:150
 msgid "Freshes"
-msgstr ""
+msgstr "Φρέσκα"
 
 #: templates/templates.js:156 templates/templates.js:160
 msgid "Grey Elegant"
-msgstr ""
+msgstr "Κομψό γκρι"
 
 #: templates/templates.js:166 templates/templates.js:170
 msgid "Growing Liberty"
-msgstr ""
+msgstr "Αυξανόμενη ελευθερία"
 
 #: templates/templates.js:176 templates/templates.js:180
 msgid "Inspiration"
-msgstr ""
+msgstr "Έμπνευση"
 
 #: templates/templates.js:186 templates/templates.js:190
 msgid "Lights"
@@ -8540,55 +8562,55 @@ msgstr "Φώτα"
 
 #: templates/templates.js:196 templates/templates.js:200
 msgid "Metropolis"
-msgstr ""
+msgstr "Μητρόπολη"
 
 #: templates/templates.js:206 templates/templates.js:210
 msgid "Midnight Blue"
-msgstr ""
+msgstr "Μεσονύχτιο μπλε"
 
 #: templates/templates.js:216 templates/templates.js:220
 msgid "Nature Illustration"
-msgstr ""
+msgstr "Εικονογράφηση φύσης"
 
 #: templates/templates.js:226 templates/templates.js:230
 msgid "Pencil"
-msgstr ""
+msgstr "Μολύβι"
 
 #: templates/templates.js:236 templates/templates.js:240
 msgid "Piano"
-msgstr ""
+msgstr "Πιάνο"
 
 #: templates/templates.js:246 templates/templates.js:250
 msgid "Portfolio"
-msgstr ""
+msgstr "Χαρτοφυλάκιο"
 
 #: templates/templates.js:256 templates/templates.js:260
 msgid "Progress"
-msgstr ""
+msgstr "Πρόοδος"
 
 #: templates/templates.js:266 templates/templates.js:270
 msgid "Sunset"
-msgstr ""
+msgstr "Ηλιοβασίλεμα"
 
 #: templates/templates.js:276 templates/templates.js:279
 msgid "Vintage"
-msgstr ""
+msgstr "Ρετρό"
 
 #: templates/templates.js:286 templates/templates.js:290
 msgid "Vivid"
-msgstr ""
+msgstr "Ζωηρό"
 
 #: templates/templates.js:296 templates/templates.js:300
 msgid "Yellow Idea"
-msgstr ""
+msgstr "Κίτρινη ιδέα"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Καλώς ήρθατε στο Υπολογιστικό φύλλο"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Καλώς ήρθατε στην Παρουσίαση"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
@@ -8596,10 +8618,11 @@ msgstr "Καλώς ήρθατε στο Collabora Online"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:26-7
 msgid "Explore The New {coolversion}"
-msgstr "Εξερευνήστε τη Νέα {coolversion}"
+msgstr "Εξερευνήστε το νέο {coolversion}"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:27-7
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:38-7
+#, fuzzy
 msgid "Collabora Online Development Edition"
 msgstr "Collabora Online Development Edition"
 
@@ -8669,6 +8692,10 @@ msgid ""
 "translate=\"true\">2</a> <a id=\"slide-3-indicator\" href=\"#slide-3\" data-"
 "translate=\"true\">3</a>"
 msgstr ""
+"<a id=\"slide-1-indicator\" class=\"active\" href=\"#slide-1\" data-"
+"translate=\"true\">1</a> <a id=\"slide-2-indicator\" href=\"#slide-2\" data-"
+"translate=\"true\">2</a> <a id=\"slide-3-indicator\" href=\"#slide-3\" data-"
+"translate=\"true\">3</a>"
 
 #, fuzzy
 #~ msgid "Tables"
