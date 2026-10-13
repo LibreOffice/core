@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 21:46+0200\n"
+"POT-Creation-Date: 2026-10-13 14:06+0200\n"
 "PO-Revision-Date: 2026-06-23 14:20+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/collabora-online/"
@@ -1661,47 +1661,47 @@ msgid "<span class=\"productname\">{productname}</span> user interface"
 msgstr "<span class=\"productname\"> {productname} </span> பயனர் இடைமுகம்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:343-13
-#: html/cool-help.html%2Bdiv.div.h3:436-5
+#: html/cool-help.html%2Bdiv.div.h3:429-5
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr ""
 "ஆவணங்களைத் திறத்தல், மூடுவது, சேமித்தல், அச்சிடுதல் மற்றும் பதிவிறக்குதல்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
-#: html/cool-help.html%2Bdiv.div.h3:450-5
+#: html/cool-help.html%2Bdiv.div.h3:439-5
 msgid "Opening, closing, saving and printing documents"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
-#: html/cool-help.html%2Bdiv.div.h3:481-5
+#: html/cool-help.html%2Bdiv.div.h3:478-5
 msgid "Editing documents"
 msgstr "ஆவணங்களைத் திருத்துதல்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:346-13
 #: html/cool-help.html%2Bdiv.nav.ul.li:352-13
 #: html/cool-help.html%2Bdiv.nav.ul.li:365-13
-#: html/cool-help.html%2Bdiv.div.h3:511-3
-#: html/cool-help.html%2Bdiv.div.div.h3:571-5
-#: html/cool-help.html%2Bdiv.div.div.h3:682-5
+#: html/cool-help.html%2Bdiv.div.h3:510-3
+#: html/cool-help.html%2Bdiv.div.div.h3:570-5
+#: html/cool-help.html%2Bdiv.div.div.h3:681-5
 msgid "Advanced features"
 msgstr "மேம்பட்ட நற்பொருத்தங்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:348-13
-#: html/cool-help.html%2Bdiv.div.h3:549-5
+#: html/cool-help.html%2Bdiv.div.h3:548-5
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
 msgstr "<span class=\"productname\"> {productname} </span> விரிதாள்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:349-13
-#: html/cool-help.html%2Bdiv.div.div.h3:551-5
+#: html/cool-help.html%2Bdiv.div.div.h3:550-5
 msgid "Editing spreadsheets"
 msgstr "விரிதாள்களைத் திருத்துதல்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:350-13
-#: html/cool-help.html%2Bdiv.div.div.h3:555-5
+#: html/cool-help.html%2Bdiv.div.div.h3:554-5
 msgid "Formulas"
 msgstr "சூத்திரங்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:351-13
-#: html/cool-help.html%2Bdiv.div.div.h3:564-5
+#: html/cool-help.html%2Bdiv.div.div.h3:563-5
 msgid "Formatting spreadsheets"
 msgstr "விரிதாள்களை வடிவமைத்தல்"
 
@@ -1711,22 +1711,22 @@ msgid "Spreadsheets"
 msgstr "விரிதாள்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:355-13
-#: html/cool-help.html%2Bdiv.div.h3:613-5
+#: html/cool-help.html%2Bdiv.div.h3:612-5
 msgid "<span class=\"productname\">{productname}</span> text documents"
 msgstr "<span class=\"productname\"> {productname} </span> உரை ஆவணங்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:356-13
-#: html/cool-help.html%2Bdiv.div.div.h3:615-5
+#: html/cool-help.html%2Bdiv.div.div.h3:614-5
 msgid "Editing text documents"
 msgstr "உரை ஆவணங்களைத் திருத்துதல்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:357-13
-#: html/cool-help.html%2Bdiv.div.div.h3:619-5
+#: html/cool-help.html%2Bdiv.div.div.h3:618-5
 msgid "Context menus"
 msgstr "சூழல் மெனுக்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:358-13
-#: html/cool-help.html%2Bdiv.div.div.h3:635-5
+#: html/cool-help.html%2Bdiv.div.div.h3:634-5
 msgid "Advanced text document editor features"
 msgstr "மேம்பட்ட உரை ஆவண ஆசிரியர் நற்பொருத்தங்கள்"
 
@@ -1736,22 +1736,22 @@ msgid "Text documents"
 msgstr "உரை ஆவணங்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:361-13
-#: html/cool-help.html%2Bdiv.div.h3:662-5
+#: html/cool-help.html%2Bdiv.div.h3:661-5
 msgid "<span class=\"productname\">{productname}</span> presentations"
 msgstr "<span class=\"productname\"> {productname} </span> விளக்கக்காட்சிகள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:362-13
-#: html/cool-help.html%2Bdiv.div.div.h3:664-5
+#: html/cool-help.html%2Bdiv.div.div.h3:663-5
 msgid "Editing presentations"
 msgstr "விளக்கக்காட்சிகளைத் திருத்துதல்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:363-13
-#: html/cool-help.html%2Bdiv.div.div.h3:668-5
+#: html/cool-help.html%2Bdiv.div.div.h3:667-5
 msgid "Slide show"
 msgstr "ச்லைடு சோ"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:364-13
-#: html/cool-help.html%2Bdiv.div.div.h3:675-5
+#: html/cool-help.html%2Bdiv.div.div.h3:674-5
 msgid "Slide pane"
 msgstr "ச்லைடு பலகம்"
 
@@ -1761,7 +1761,7 @@ msgid "Presentations"
 msgstr "விளக்கக்காட்சிகள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:368-13
-#: html/cool-help.html%2Bdiv.div.h3:694-5
+#: html/cool-help.html%2Bdiv.div.h3:693-5
 msgid "Frequently Asked Questions"
 msgstr "அடிக்கடி கேட்கப்படும் கேள்விகள்"
 
@@ -1826,22 +1826,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:405-5
 msgid ""
-"<span class=\"def\">The menu bar:</span> The main menu is at the top and "
-"includes many options, such as commands for printing, editing, viewing, and "
-"other advanced commands. You can hide the menu bar by clicking the hide icon "
-"<span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide menu "
-"bar\" title=\"Hide menu bar\"></span> on the far right. To show it again, "
-"click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
-"aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
+"<span class=\"def\">The tabs:</span> The commands are grouped on tabs at the "
+"top: <span class=\"ui\">File</span>, <span class=\"ui\">Home</span>, <span "
+"class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span class="
+"\"ui\">View</span> and others, depending on the document type. Click the "
+"selected tab again to collapse the tab bar and gain space for the document. "
+"Click any tab to expand it again."
 msgstr ""
-"<span class=\"def\">மெனு பட்டி:</span> முதன்மை பட்டியல் மேலே உள்ளது மற்றும் "
-"அச்சிடுதல், திருத்துதல், பார்ப்பது மற்றும் பிற மேம்பட்ட கட்டளைகளுக்கான "
-"கட்டளைகள் போன்ற பல விருப்பங்களை உள்ளடக்கியது. வலதுபுறத்தில் உள்ள மறை icon "
-"<span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide "
-"பட்டியல் bar\" title=\"Hide பட்டியல் bar\"></span> ஐக் சொடுக்கு செய்வதன் "
-"மூலம் பட்டியல் பட்டியை மறைக்கலாம். அதை மீண்டும் காட்ட, சோ ஐகானைக் சொடுக்கு "
-"செய்யவும் <span class=\"w2ui-icon unfold icon-size\" role=\"img\" aria-label="
-"\"show பட்டியல் bar\" title=\"Show பட்டியல் bar\"></span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
 msgid ""
@@ -1854,24 +1845,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:411-5
 msgid ""
-"<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
-"options for daily editing. Toolbar buttons are dynamic, meaning that their "
-"state (on or off) depends on different factors."
-msgstr ""
-"<span class=\"def\"> கருவிப்பட்டி: </span> கருவிப்பட்டியில் நாள்தோறும் "
-"திருத்துதல் மிகவும் பயன்படுத்தப்பட்ட விருப்பங்கள் உள்ளன. கருவிப்பட்டி "
-"பொத்தான்கள் மாறும், அதாவது அவற்றின் நிலை (ஆன் அல்லது ஆஃப்) வெவ்வேறு "
-"காரணிகளைப் பொறுத்தது."
-
-#: html/cool-help.html%2Bdiv.div.div.p:414-5
-msgid ""
 "<span class=\"def\">The status bar:</span> The status bar is shown in the "
 "bottom, and contains several useful options and features."
 msgstr ""
 "<span class=\"def\"> நிலை பட்டி: </span> நிலை பட்டி கீழே காட்டப்பட்டுள்ளது, "
 "மேலும் பல பயனுள்ள விருப்பங்கள் மற்றும் அம்சங்களைக் கொண்டுள்ளது."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:415-49
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:412-49
 msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
@@ -1879,7 +1859,7 @@ msgstr ""
 "பக்க எண், சொல் எண்ணிக்கை, செருகும் முறை, தேர்வு முறை, மொழி, திருத்தும் முறை, "
 "வழிசெலுத்தல், பெரிதாக்குதல் மற்றும் தேடல் ஆகியவற்றைக் காட்டும் நிலைப் பட்டி"
 
-#: html/cool-help.html%2Bdiv.div.div.p:418-5
+#: html/cool-help.html%2Bdiv.div.div.p:415-5
 msgid ""
 "<span class=\"def\">The search bar:</span> Searching starts automatically "
 "when content is inserted in the search box, and the document window "
@@ -1891,19 +1871,19 @@ msgstr ""
 "காணப்படும் முதல் நிகழ்வுக்கு நகரும். தேடுவது வழக்கு உணர்திறன் அல்ல. தேடல் "
 "பெட்டிக்கு அடுத்ததாக மூன்று பொத்தான்கள் உள்ளன:"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:420-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:417-7
 msgid "Search backwards"
 msgstr "பின்னோக்கி தேடுங்கள்"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:421-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:418-7
 msgid "Search forward"
 msgstr "முன்னோக்கி தேடுங்கள்"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:422-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:419-7
 msgid "Cancel the search (appears only when a text has been searched)"
 msgstr "தேடலை ரத்துசெய் (ஒரு உரை தேடப்பட்டால் மட்டுமே தோன்றும்)"
 
-#: html/cool-help.html%2Bdiv.div.div.p:426-5
+#: html/cool-help.html%2Bdiv.div.div.p:423-5
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
@@ -1915,7 +1895,7 @@ msgstr ""
 "பயனர் இடைமுகம் பாதிக்கப்படாது. இந்த பகுதியில் தற்போதைய சூம் நிலை "
 "காட்டப்பட்டுள்ளது."
 
-#: html/cool-help.html%2Bdiv.div.div.p:427-5
+#: html/cool-help.html%2Bdiv.div.div.p:424-5
 msgid ""
 "Text, charts, shapes and svg images will stay sharp, when zooming in, you "
 "will only see pixels appear at inserted images, such as jpg’s or png’s."
@@ -1924,28 +1904,12 @@ msgstr ""
 ", பெரிதாக்கும்போது, சே.பி.சி.எச் அல்லது பி.என்.சி.எச் போன்ற செருகப்பட்ட "
 "படங்களில் மட்டுமே படப்புள்ளிகள் தோன்றுவதை நீங்கள் காண்பீர்கள்."
 
-#: html/cool-help.html%2Bdiv.div.div.p:428-5
+#: html/cool-help.html%2Bdiv.div.div.p:425-5
 msgid "Using the browser zoom affects the document and user interface areas."
 msgstr ""
 "உலாவி சூம் பயன்படுத்துவது ஆவணம் மற்றும் பயனர் இடைமுக பகுதிகளை பாதிக்கிறது."
 
-#: html/cool-help.html%2Bdiv.div.div.p:431-5
-msgid ""
-"<span class=\"def\">The information bar:</span> The information bar displays "
-"details about the current document. The actual information depends on the "
-"nature of the document."
-msgstr ""
-"<span class=\"def\">தகவல் பட்டி:</span> செய்தி பட்டி தற்போதைய ஆவணம் பற்றிய "
-"விவரங்களைக் காட்டுகிறது. உண்மையான செய்தி ஆவணத்தின் தன்மையைப் பொறுத்தது."
-
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:432-54
-msgid ""
-"Information bar showing page navigation arrows, zoom controls, and zoom level"
-msgstr ""
-"பக்க வழிசெலுத்தல் அம்புகள், சூம் கட்டுப்பாடுகள் மற்றும் சூம் நிலை ஆகியவற்றைக்"
-" காட்டும் செய்தி பட்டி"
-
-#: html/cool-help.html%2Bdiv.div.p:437-5
+#: html/cool-help.html%2Bdiv.div.p:430-5
 msgid ""
 "Your documents are stored and managed in the cloud storage that is "
 "integrated with <span class=\"productname\">{productname}</span>."
@@ -1954,7 +1918,7 @@ msgstr ""
 "ஒருங்கிணைக்கப்பட்ட மேகக்கணி சேமிப்பகத்தில் சேமிக்கப்பட்டு "
 "நிர்வகிக்கப்படுகின்றன."
 
-#: html/cool-help.html%2Bdiv.div.div.p:438-30
+#: html/cool-help.html%2Bdiv.div.div.p:431-30
 msgid ""
 "To download a document download it from the <span class=\"productname\""
 ">{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
@@ -1966,7 +1930,7 @@ msgstr ""
 "பதிவிறக்கவும். கிடைக்கும் பதிவிறக்க வடிவங்கள் பயன்பாட்டைப் பொறுத்தது. அனைத்து"
 " பயன்பாடுகளும் PDF வடிவத்தில் ஆவணங்களை ஏற்றுமதி செய்கின்றன."
 
-#: html/cool-help.html%2Bdiv.div.div.p:439-30
+#: html/cool-help.html%2Bdiv.div.div.p:432-30
 msgid ""
 "To open document, click on the file to open the <span class=\"productname\""
 ">{productname}</span> module associated to the document format."
@@ -1974,7 +1938,7 @@ msgstr ""
 "ஆவணத்தைத் திறக்க, <span class=\"productname\"> {productname} </span> ஆவண "
 "வடிவமைப்போடு தொடர்புடைய தொகுதியைத் திறக்க கோப்பைக் சொடுக்கு செய்க."
 
-#: html/cool-help.html%2Bdiv.div.div.p:440-30
+#: html/cool-help.html%2Bdiv.div.div.p:433-30
 msgid ""
 "Documents in <span class=\"productname\">{productname}</span> save "
 "automatically, but if you are concerned that a document is synchronized as "
@@ -1986,7 +1950,7 @@ msgstr ""
 "ுஐ\"> கோப்பைப் பயன்படுத்தி சேமிப்பையும் கட்டாயப்படுத்தலாம் </span> மெனுவின் "
 "<span class=\"Ui\"> சேமி </span> நுழைவு."
 
-#: html/cool-help.html%2Bdiv.div.div.p:441-30
+#: html/cool-help.html%2Bdiv.div.div.p:434-30
 msgid ""
 "Depending on the capabilities of your browser, the print window may appear "
 "or a “Download PDF export?” popup appears. You can print this PDF in your "
@@ -1996,41 +1960,52 @@ msgstr ""
 "ஏற்றுமதியைப் பதிவிறக்குங்கள்?” பாப்அப் காட்சிகள். உங்களுக்கு பிடித்த PDF "
 "வாசகரில் இந்த PDF ஐ அச்சிடலாம்."
 
-#: html/cool-help.html%2Bdiv.div.div.p:442-30
-#: html/cool-help.html%2Bdiv.div.div.p:475-7
+#: html/cool-help.html%2Bdiv.div.div.p:435-30
+#: html/cool-help.html%2Bdiv.div.div.p:472-7
 msgid ""
 "When closing a document, it is automatically saved if it has been changed."
 msgstr "ஒரு ஆவணத்தை மூடும்போது, அது மாற்றப்பட்டால் தானாகவே சேமிக்கப்படும்."
 
-#: html/cool-help.html%2Bdiv.div.div.p:452-7
+#: html/cool-help.html%2Bdiv.div.div.p:441-7
 msgid ""
 "To open a document, either open it in <span class=\"productname\""
-">{productname}</span> from your platform's file manager or use the <span "
-"class=\"ui\">Open</span> button on the page shown from the <span class=\"ui\""
-">File</span> menu bar button."
+">{productname}</span> from your platform's file manager or use <span class="
+"\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:458-7
+#: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
-"To save the document in a different format use the <span class=\"ui\">Save "
-"as</span> button on the page shown from the <span class=\"ui\">File</span> "
-"menu bar button."
+"An existing document opens in view mode, so that you can read it without "
+"changing it by accident. To start editing, click the edit button (the pencil)"
+" in the bottom right corner. New documents and documents created from a "
+"template open ready to edit."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:463-7
+#: html/cool-help.html%2Bdiv.div.div.p:452-7
 msgid ""
-"Documents are automatically saved perdiodically, but if you want a document "
-"to be saved right away you can use the <span class=\"ui\">Save</span> button "
-"on the page shown from the <span class=\"ui\">File</span> menu bar button."
+"If the document is locked by another application, it stays in view mode."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:470-7
+#: html/cool-help.html%2Bdiv.div.div.p:456-7
 msgid ""
-"To print the document, use the <span class=\"ui\">Print</span> button on the "
-"page shown from the <span class=\"ui\">File</span> menu bar button."
+"To save the document in a different format use <span class=\"ui\">Save As</"
+"span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.p:482-5
+#: html/cool-help.html%2Bdiv.div.div.p:461-7
+msgid ""
+"Documents are automatically saved periodically, but if you want a document "
+"to be saved right away you can use <span class=\"ui\">Save</span> on the "
+"<span class=\"ui\">File</span> tab."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:467-7
+msgid ""
+"To print the document, use <span class=\"ui\">Print</span> on the <span "
+"class=\"ui\">File</span> tab."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
 "Document editing should be familiar to everyone that has used an office "
 "application before, but here are some distinctive features:"
@@ -2038,63 +2013,44 @@ msgstr ""
 "ஆவண திருத்துதல் இதற்கு முன்பு அலுவலக பயன்பாட்டைப் பயன்படுத்திய அனைவருக்கும் "
 "தெரிந்திருக்க வேண்டும், ஆனால் இங்கே சில தனித்துவமான நற்பொருத்தங்கள் உள்ளன:"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:484-5
+#: html/cool-help.html%2Bdiv.div.div.h4:481-5
 msgid "Copy and Paste"
 msgstr "நகலெடுத்து ஒட்டவும்"
 
-#: html/cool-help.html%2Bdiv.div.div.p:485-5
+#: html/cool-help.html%2Bdiv.div.div.p:482-5
 msgid ""
-"Rich content copy/cut and paste is supported, not only within a given "
-"document, but also across documents on the same or different <span class="
-"\"productname\">{productname}</span>. For these internal uses, users can "
-"copy/cut content, including images and mixed content, on PC by using the "
-"keyboard shortcuts directly (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class="
-"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). For security "
-"reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>V</kbd> to paste on PC, but context menus can "
-"be used for cut and copy. On Android or iOS selecting text by double "
-"tapping, and using a long-tap to access copy/cut/paste via the context menu "
-"is required."
+"Rich content copy/cut and paste is supported, including images and mixed "
+"content, using the keyboard shortcuts (<kbd>Ctrl</kbd><span class=\"kbd--"
+"plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class="
+"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). On "
+"Android or iOS selecting text by double tapping, and using a long-tap to "
+"access copy/cut/paste via the context menu is required."
 msgstr ""
-"கொடுக்கப்பட்ட ஆவணத்திற்குள் மட்டுமல்லாமல், ஒரே அல்லது வேறுபட்ட <span class="
-"\"productname\">{productname} </span> இல் உள்ள ஆவணங்கள் முழுவதும் பணக்கார "
-"உள்ளடக்க நகல்/வெட்டு மற்றும் பேச்ட் ஆதரிக்கப்படுகிறது. இந்த உள் "
-"பயன்பாடுகளுக்கு, விசைப்பலகை குறுக்குவழிகளை நேரடியாக (<kbd>கட்டு</kbd> <span "
-"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>ஓ</kbd>, <kbd>கட்டு</"
-"kbd> <span class=\"kbd-plus\">+</span><kbd>சி</kbd>, <kbd>கட்டு</kbd > <span "
-"class=\"kbd-plus\">+</span><kbd>வி</kbd>). பாதுகாப்பு "
-"காரணங்களுக்காக<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>வி</kbd> ஐ பிசி மீது ஒட்டுவது தேவை, ஆனால் சூழல் மெனுக்கள் "
-"இருக்கலாம் வெட்டு மற்றும் நகலுக்குப் பயன்படுத்தப்படுகிறது. ஆண்ட்ராய்டு அல்லது"
-" ஐஇமு இல் இரட்டை தட்டுவதன் மூலம் உரையைத் தேர்ந்தெடுப்பது, மற்றும் சூழல் "
-"பட்டியல் வழியாக நகல்/வெட்டு/ஒட்டுதல் ஆகியவற்றை அணுக நீண்ட TAP ஐப் "
-"பயன்படுத்துவது தேவை. ........."
 
-#: html/cool-help.html%2Bdiv.div.div.p:486-5
+#: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
-"To copy larger pieces of content to other applications on your device, users "
-"need to press the <span class=\"ui\">Start download</span> button, and then "
-"re-copy this to their clipboard in order to make it available to the target "
-"application to read. This is possible via a tiny widget that pops up in the "
-"bottom-right corner, and is only necessary to export the content for pasting "
-"in external applications. This step also converts complex object types into "
+"For security reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd"
+"--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> to paste content that "
+"comes from outside the document, but context menus can be used for cut and "
+"copy."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:484-5
+msgid ""
+"When you copy a selection that contains images or other objects, a <span "
+"class=\"ui\">Download Selection</span> widget pops up in the bottom-right "
+"corner. Press <span class=\"ui\">Download</span>, then copy again, to make "
+"the content available to applications outside <span class=\"productname\""
+">{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
-"உங்கள் சாதனத்தில் உள்ள பிற பயன்பாடுகளுக்கு பெரிய உள்ளடக்கங்களை நகலெடுக்க, "
-"பயனர்கள் <span class=\"Ui\"> ஐ பதிவிறக்கம் </span> பொத்தானைத் தொடங்க வேண்டும்"
-", பின்னர் கிடைக்கச் செய்வதற்காக இதை அவற்றின் கிளிப்போர்டில் மீண்டும் நகலெடுக்"
-"க வேண்டும் படிக்க இலக்கு பயன்பாடு. இது கீழ்-வலது மூலையில் தோன்றும் ஒரு சிறிய "
-"விட்செட் வழியாக சாத்தியமாகும், மேலும் வெளிப்புற பயன்பாடுகளில் ஒட்டுவதற்கு "
-"உள்ளடக்கத்தை ஏற்றுமதி செய்ய மட்டுமே இது தேவை. இந்த படி சிக்கலான பொருள் வகைகளை"
-" நிலையான படங்களாக மாற்றுகிறது."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:489-5
+#: html/cool-help.html%2Bdiv.div.div.h4:487-5
 msgid "Document repair"
 msgstr "ஆவண பழுது"
 
-#: html/cool-help.html%2Bdiv.div.div.p:490-5
+#: html/cool-help.html%2Bdiv.div.div.p:488-5
 msgid ""
 "When multiple people edit the same document concurrently, it is possible for "
 "their changes to conflict and this can cause some confusion. The Document "
@@ -2106,15 +2062,23 @@ msgstr ""
 "பழுதுபார்க்கும் செயல்பாடு பயனர்கள் ஆவணத்தில் மற்ற எடிட்டரின் மாற்றங்களை "
 "முந்தைய நிலைக்கு செயல்தவிர்க்க அனுமதிக்கிறது."
 
-#: html/cool-help.html%2Bdiv.div.div.p:491-5
+#: html/cool-help.html%2Bdiv.div.div.p:489-5
+msgid ""
+"<span class=\"ui\">Repair</span> on the <span class=\"ui\">File</span> tab "
+"lists the recent changes to the document and lets you take the document back "
+"to an earlier state."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:490-5
+#, fuzzy
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
-"class=\"ui\">Jump to state</span>."
+"class=\"ui\">OK</span>."
 msgstr ""
 "தேர்ந்தெடுக்கப்பட்ட நிலைக்குத் திரும்பிச் செல்ல, அதைச் சுட்டியுடன் "
 "தேர்ந்தெடுத்து <span class=\"ui\"> மாநிலத்திற்குச் செல்லவும் </span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:492-55
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:491-55
 msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
@@ -2122,7 +2086,7 @@ msgstr ""
 "செயல் வகை, ஆசிரியர் மற்றும் நேர முத்திரைக்கான நெடுவரிசைகளுடன் கடந்த கால ஆவண "
 "நிலைகளைப் பட்டியலிடும் ஆவண உரையாடல் சரிசெய்தல்"
 
-#: html/cool-help.html%2Bdiv.div.div.p:493-5
+#: html/cool-help.html%2Bdiv.div.div.p:492-5
 msgid ""
 "This is particularly useful – say when a colleague inadvertently selected "
 "all text in the document with <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
@@ -2134,23 +2098,24 @@ msgstr ""
 ">+</span><kbd>அ</kbd> அதை அழிக்க அதைத் தட்டச்சு செய்தது - நீங்கள் ஒரே "
 "நேரத்தில் திருத்தும்போது."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:496-5
-msgid "Inactive document"
-msgstr "செயலற்ற ஆவணம்"
+#: html/cool-help.html%2Bdiv.div.div.h4:495-5
+msgid "Idle document"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:497-5
+#: html/cool-help.html%2Bdiv.div.div.p:496-5
+#, fuzzy
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
-"“Inactive” state. The document is shown with a transparent gray overlay, "
-"with the message “Inactive document – please click to resume editing”."
+"“Idle” state. The document is shown with a transparent gray overlay, with "
+"the message “Idle document – please click to reload and resume editing”."
 msgstr ""
 "<span class=\"productname\"> {productname} </span> உலாவியில் சிறிது நேரம் எந்"
 "த செயலும் இல்லை என்பதைக் கண்டறிந்தால், அது ஆவணத்தை ஒரு “செயலற்ற” நிலையில் "
 "வைக்கிறது. “செயலற்ற ஆவணம் - மீண்டும் திருத்துதல் செய்ய சொடுக்கு செய்க” என்ற "
 "செய்தியுடன், வெளிப்படையான சாம்பல் மேலடுக்கு மூலம் ஆவணம் காட்டப்பட்டுள்ளது."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:498-57
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
 msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
@@ -2158,7 +2123,7 @@ msgstr ""
 "செய்தியுடன் செயலற்ற ஆவண மேலடுக்கு: செயலற்ற ஆவணம் - மறுஏற்றம் செய்ய சொடுக்கு "
 "செய்து, திருத்துவதை மீண்டும் தொடங்கவும்"
 
-#: html/cool-help.html%2Bdiv.div.div.p:499-5
+#: html/cool-help.html%2Bdiv.div.div.p:498-5
 msgid ""
 "To continue editing, click on the document and the layover and message "
 "disappear. Any changes that may have been made by other users – while "
@@ -2168,11 +2133,11 @@ msgstr ""
 "மறைந்துவிடும். பிற பயனர்களால் செய்யப்பட்ட ஏதேனும் மாற்றங்கள்-ஆவணத்தை "
 "ஒத்துழைப்புடன் திருத்தும் போது-மீண்டும் ஏற்றப்படுகின்றன."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:502-5
+#: html/cool-help.html%2Bdiv.div.div.h4:501-5
 msgid "Pasting"
 msgstr "ஒட்டுதல்"
 
-#: html/cool-help.html%2Bdiv.div.div.p:503-5
+#: html/cool-help.html%2Bdiv.div.div.p:502-5
 msgid ""
 "When you paste content copied from within the same document, the format and "
 "elements are maintained. If you copy from another document, in another tab "
@@ -2184,7 +2149,7 @@ msgstr ""
 "அல்லது உலாவி சாளரத்தில் அல்லது உலாவிக்கு வெளியே இருந்து நகலெடுத்தால், "
 "ஒட்டப்பட்ட உள்ளடக்கம் பணக்கார உரையை பாதுகாக்கும்."
 
-#: html/cool-help.html%2Bdiv.div.div.p:504-5
+#: html/cool-help.html%2Bdiv.div.div.p:503-5
 msgid ""
 "You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
@@ -2195,7 +2160,7 @@ msgstr ""
 "\">+</span><kbd>உயர்த்து</kbd> <span class=\"kbd- -பிலச் \""
 ">+</span><kbd>வி</kbd>"
 
-#: html/cool-help.html%2Bdiv.div.div.p:505-5
+#: html/cool-help.html%2Bdiv.div.div.p:504-5
 msgid ""
 "When you paste text from within the document, formatting will be respected. "
 "You can also paste objects, such as images, if they are copied from the "
@@ -2205,7 +2170,7 @@ msgstr ""
 "பணிபுரியும் ஆவணத்திலிருந்து நகலெடுக்கப்பட்டால், படங்கள் போன்ற பொருள்களையும் "
 "ஒட்டலாம்."
 
-#: html/cool-help.html%2Bdiv.div.div.p:506-5
+#: html/cool-help.html%2Bdiv.div.div.p:505-5
 msgid ""
 "When you paste text from outside of the document (another browser window or "
 "a desktop application), it will be pasted as rich text."
@@ -2213,7 +2178,7 @@ msgstr ""
 "ஆவணத்திற்கு வெளியே இருந்து உரையை ஒட்டும்போது (மற்றொரு உலாவி சாளரம் அல்லது "
 "டெச்க்டாப் பயன்பாடு), அது பணக்கார உரையாக ஒட்டப்படும்."
 
-#: html/cool-help.html%2Bdiv.div.div.p:507-5
+#: html/cool-help.html%2Bdiv.div.div.p:506-5
 msgid ""
 "When you have internal cut or copied content, you can paste this content "
 "using the context menu."
@@ -2221,11 +2186,11 @@ msgstr ""
 "உங்களிடம் உள் வெட்டு அல்லது நகலெடுக்கப்பட்ட உள்ளடக்கம் இருக்கும்போது, சூழல் "
 "மெனுவைப் பயன்படுத்தி இந்த உள்ளடக்கத்தை ஒட்டலாம்."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:513-5
+#: html/cool-help.html%2Bdiv.div.div.h4:512-5
 msgid "Adding charts"
 msgstr "விளக்கப்படங்களைச் சேர்ப்பது"
 
-#: html/cool-help.html%2Bdiv.div.div.p:514-5
+#: html/cool-help.html%2Bdiv.div.div.p:513-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports inserting and "
 "visualization of charts in documents. To add a chart:"
@@ -2234,7 +2199,7 @@ msgstr ""
 " செருகுவதற்கும் காட்சிப்படுத்துவதற்கும் ஆதரிக்கிறது. ஒரு விளக்கப்படத்தைச் "
 "சேர்க்க:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:515-7
 msgid ""
 "Select a table in text document, a range in a spreadsheet or a table in a "
 "presentation."
@@ -2242,16 +2207,17 @@ msgstr ""
 "உரை ஆவணத்தில் ஒரு அட்டவணையைத் தேர்ந்தெடுக்கவும், ஒரு விரிதாளில் ஒரு வரம்பு "
 "அல்லது விளக்கக்காட்சியில் ஒரு அட்டவணை."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:517-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Charts</span>. "
+"Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Chart</span>. "
 "Customize your chart on the sidebar:"
 msgstr ""
 "<span class=\"ui\"> செருகு </span> → <span class=\"ui\"> விளக்கப்படங்கள் </"
 "span> ஐத் தேர்வுசெய்க. பக்கப்பட்டியில் உங்கள் விளக்கப்படத்தைத் "
 "தனிப்பயனாக்குங்கள்:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:520-53
+#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:519-53
 msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
@@ -2259,13 +2225,13 @@ msgstr ""
 "விளக்கப்பட வழிகாட்டி உரையாடல், இடதுபுறத்தில் விளக்கப்பட வகைப் பட்டியல், "
 "விளக்கப்பட நடை மாதிரிக்காட்சிகள், 3D மற்றும் வடிவ விருப்பங்கள்"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:521-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:520-7
 msgid "If no table or range was selected, a prototype chart is displayed."
 msgstr ""
 "அட்டவணை அல்லது வரம்பு எதுவும் தேர்ந்தெடுக்கப்படவில்லை என்றால், ஒரு முன்மாதிரி"
 " விளக்கப்படம் காட்டப்படும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:523-51
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:522-51
 msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
@@ -2273,7 +2239,7 @@ msgstr ""
 "மூன்று நெடுவரிசைகளில் நான்கு வரிசைகளுக்கான தரவைக் காட்டும் குழுவாக்கப்பட்ட "
 "பார்கள் கொண்ட நெடுவரிசை விளக்கப்படம்"
 
-#: html/cool-help.html%2Bdiv.div.div.p:525-28
+#: html/cool-help.html%2Bdiv.div.div.p:524-28
 msgid ""
 "<span class=\"def\">Chart editing:</span> Double click the chart to select. "
 "Use context menus to add chart elements such as title, axis, and other. "
@@ -2287,7 +2253,7 @@ msgstr ""
 "வரம்பு </span> மற்றும் <span class=\"யுஐ\"> விளக்கப்படம் வகை </span> ஐத் "
 "தேர்வுசெய்க."
 
-#: html/cool-help.html%2Bdiv.div.div.p:526-28
+#: html/cool-help.html%2Bdiv.div.div.p:525-28
 msgid ""
 "<span class=\"def\">Chart formatting:</span> The same context menu brings "
 "you to chart data table and chart type selection."
@@ -2295,7 +2261,7 @@ msgstr ""
 "<span class=\"def\"> விளக்கப்பட வடிவமைப்பு: </span> அதே சூழல் பட்டியல் தரவு "
 "அட்டவணை மற்றும் விளக்கப்பட வகை தேர்வுக்கு உங்களை கொண்டு வருகிறது."
 
-#: html/cool-help.html%2Bdiv.div.div.p:527-28
+#: html/cool-help.html%2Bdiv.div.div.p:526-28
 msgid ""
 "<span class=\"def\">Data series formatting:</span> Open the context menu and "
 "choose <span class=\"ui\">Format data series</span>."
@@ -2303,11 +2269,11 @@ msgstr ""
 "<span class=\"def\"> தரவுத் தொடர் வடிவமைப்பு: </span> சூழல் மெனுவைத் திறந்து "
 "<span class=\"Ui\"> வடிவமைப்பு தரவுத் தொடர் </span> ஐத் தேர்வுசெய்க."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:529-5
+#: html/cool-help.html%2Bdiv.div.div.h4:528-5
 msgid "Handling images"
 msgstr "படங்களை கையாளுதல்"
 
-#: html/cool-help.html%2Bdiv.div.div.p:530-5
+#: html/cool-help.html%2Bdiv.div.div.p:529-5
 msgid ""
 "<span class=\"productname\">{productname}</span> inserts images in the text "
 "document from your local computer or from your cloud storage. Inserted "
@@ -2318,7 +2284,7 @@ msgstr ""
 "படங்களை செருகுகிறது. செருகப்பட்ட படங்கள் எப்போதும் ஆவணத்தில் "
 "பதிக்கப்பட்டுள்ளன."
 
-#: html/cool-help.html%2Bdiv.div.div.p:531-5
+#: html/cool-help.html%2Bdiv.div.div.p:530-5
 msgid ""
 "<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\""
 ">Insert image</span> icon allows you to choose an image from the cloud "
@@ -2328,16 +2294,14 @@ msgstr ""
 "செருகவும் </span> படவுரு முகில் ச்டோரேசின் கோப்புறைகள் மற்றும் "
 "பங்குகளிலிருந்து ஒரு படத்தைத் தேர்வுசெய்ய படவுரு உங்களை அனுமதிக்கிறது."
 
-#: html/cool-help.html%2Bdiv.div.div.p:532-5
+#: html/cool-help.html%2Bdiv.div.div.p:531-5
 msgid ""
-"<span class=\"def\">Insert local image:</span> opens the browser file picker "
-"to upload the image from your local computer and insert it into the document."
+"<span class=\"def\">Insert local image:</span> Choose <span class=\"ui\""
+">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
+"computer and insert it into the document."
 msgstr ""
-"<span class=\"def\"> உள்ளக படத்தை செருகவும்: </span> உங்கள் உள்ளக "
-"கணினியிலிருந்து படத்தை பதிவேற்றி ஆவணத்தில் செருக உலாவி கோப்பு தேர்வாளரைத் "
-"திறக்கிறது."
 
-#: html/cool-help.html%2Bdiv.div.div.p:533-5
+#: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
 "Images can be resized, rotated and anchored. Text can be wrapped around the "
 "image. Select the image and open the context menu. Use the images handles to "
@@ -2347,11 +2311,11 @@ msgstr ""
 "மூடலாம். படத்தைத் தேர்ந்தெடுத்து சூழல் மெனுவைத் திறக்கவும். படத்தை "
 "சுட்டியுடன் மறுஅளவிடுவதற்கு படங்கள் கைப்பிடிகளைப் பயன்படுத்தவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:536-5
+#: html/cool-help.html%2Bdiv.div.div.h4:535-5
 msgid "Comments in documents"
 msgstr "ஆவணங்களில் கருத்துகள்"
 
-#: html/cool-help.html%2Bdiv.div.div.p:537-5
+#: html/cool-help.html%2Bdiv.div.div.p:536-5
 msgid ""
 "Insert comments in <span class=\"productname\">{productname}</span> in "
 "places that need special reader attention. Comments are displayed on the "
@@ -2361,7 +2325,7 @@ msgstr ""
 "{productname} </span> இல் கருத்துகளைச் செருகவும். கருத்துகள் வலதுபுறத்தில் "
 "காட்டப்பட்டு, வழங்குநரின் பெயர் மற்றும் தேதியைக் கொண்டு செல்லுங்கள்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:538-51
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:537-51
 msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
@@ -2369,7 +2333,7 @@ msgstr ""
 "ஆவணத்தின் அருகில் காட்டப்படும் ஆசிரியர் பெயர், தேதி மற்றும் கருத்து உரை "
 "ஆகியவற்றைக் காட்டும் கருத்துப் பெட்டி"
 
-#: html/cool-help.html%2Bdiv.div.div.p:539-5
+#: html/cool-help.html%2Bdiv.div.div.p:538-5
 msgid ""
 "Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
 " icon to reply, move and delete comments."
@@ -2377,11 +2341,11 @@ msgstr ""
 "Purcenu (<span class=\"Coll-annotation-menu icon-size\"> </span>) ஐகானை "
 "பதிலளிக்க, நகர்த்த மற்றும் நீக்க படவுரு என்பதைக் சொடுக்கு செய்க."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:542-5
+#: html/cool-help.html%2Bdiv.div.div.h4:541-5
 msgid "Spellchecking"
 msgstr "எழுத்துப்பிழை"
 
-#: html/cool-help.html%2Bdiv.div.div.p:543-5
+#: html/cool-help.html%2Bdiv.div.div.p:542-5
 msgid ""
 "<span class=\"productname\">{productname}</span> can check spelling in text "
 "documents, spreadsheets and presentations. A red wavy underline indicates "
@@ -2394,21 +2358,22 @@ msgstr ""
 "பரிந்துரைக்கப்பட்ட எழுத்துப்பிழை திருத்தங்களுடன் சூழல் மெனுவைத் திறக்க வலது "
 "சுட்டி பொத்தானைக் சொடுக்கு செய்க."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:544-54
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:543-54
 msgid "Text with a red wavy underline beneath a misspelled word"
 msgstr ""
 "தவறாக எழுதப்பட்ட வார்த்தையின் கீழ் சிவப்பு அலை அலையான அடிக்கோடு கொண்ட உரை"
 
-#: html/cool-help.html%2Bdiv.div.div.p:545-5
+#: html/cool-help.html%2Bdiv.div.div.p:544-5
+#, fuzzy
 msgid ""
-"To systematically spell-check the whole document use the <span class=\"ui\""
-">Tools</span> menu’s <span class=\"ui\">Spelling</span> option."
+"To systematically spell-check the whole document use <span class=\"ui\""
+">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
 "முழு ஆவணத்தையும் முறையாக உச்சரிக்க:<span class=\"ui\"> கருவிகள் </span> "
 "மெனுவின் <span class=\"ui\"> எழுத்துப்பிழை </span> விருப்பத்தைப் "
 "பயன்படுத்தவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:552-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
 "You edit an online spreadsheet in the same way you edit a desktop "
 "spreadsheet. Operations like entering data, selecting ranges, columns, rows "
@@ -2429,18 +2394,18 @@ msgstr ""
 "கலத்திற்கு வலதுபுறமாக நகர்த்தும், மேலும்<kbd>உள்ளிடவும்</kbd> உடன் கீழே உள்ள "
 "கலத்திற்கு எளிதாக தரவு உள்ளீட்டிற்கு."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:557-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:556-5
 msgid ""
 "Formulas are entered in the formula bar. Enter '=' and insert the formula."
 msgstr ""
 "ஃபார்முலாக்கள் ஃபார்முலா பட்டியில் உள்ளிடப்பட்டுள்ளன. '=' உள்ளிட்டு "
 "சூத்திரத்தை செருகவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:558-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:557-5
 msgid "All spreadsheets functions and mathematical rules applies."
 msgstr "அனைத்து விரிதாள்களின் செயல்பாடுகள் மற்றும் கணித விதிகள் பொருந்தும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:559-50
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:558-50
 msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
@@ -2448,7 +2413,7 @@ msgstr ""
 "செல் குறிப்பு B1, செயல்பாட்டு வழிகாட்டி படவுரு மற்றும் தேற்றம் =SIN(PI()*A1/"
 "10) ஆகியவற்றைக் காட்டும் ஃபார்முலா பார்"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:560-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:559-5
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
 "and is specified in great detail in the <a href=\"https://www.oasis-open.org/"
@@ -2460,7 +2425,7 @@ msgstr ""
 ".php/16826/openformula-spec-20060221.html\" target=\"_blank\" rel=\"noopener "
 "noreferrer\"> பாலைவனச் சோலை OpenFormula விவரக்குறிப்பு </a>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:566-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:565-5
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
@@ -2479,7 +2444,7 @@ msgstr ""
 "உரையாடல் சிக்கலான மற்றும் தனிப்பயன் எண் வடிவமைப்பையும், எழுத்துரு, சிக்கலான "
 "எல்லை, பின்னணி, செல் பாதுகாப்பு மற்றும் பிற விருப்பங்களையும் அனுமதிக்கிறது."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:567-51
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:566-51
 msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
@@ -2487,7 +2452,7 @@ msgstr ""
 "வகைப் பட்டியல், வடிவமைப்பு விருப்பங்கள், தசம இடங்கள் மற்றும் வடிவமைப்புக் "
 "குறியீடு ஆகியவற்றுடன் எண்கள் தாவலில் கலங்களின் உரையாடலை வடிவமைக்கவும்"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:572-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:571-30
 msgid ""
 "<span class=\"def\">Sorting data:</span> You can sort a list of numbers or "
 "text ascending or descending. <span class=\"productname\">{productname}</"
@@ -2499,7 +2464,7 @@ msgstr ""
 "\"productname\"> {productname} </span> தேர்வை நீட்டிக்க தலைப்புகள் மற்றும் "
 "அருகிலுள்ள நெடுவரிசைகள் ஆகியவற்றை தானாகவே கண்டறிகிறது."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:573-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:572-30
 msgid ""
 "<span class=\"def\">Filtering data:</span> Filters and advanced filters "
 "allow you to work on certain filtered rows (records) of a data range. In the "
@@ -2512,7 +2477,7 @@ msgstr ""
 "இல் உள்ள விரிதாள்களில் வடிப்பான்களைப் பயன்படுத்துவதற்கு பல்வேறு சாத்தியங்கள் "
 "உள்ளன."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:575-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:574-7
 msgid ""
 "One use for the <span class=\"ui\">AutoFilter</span> function is to quickly "
 "restrict the display to records with identical entries in a data field."
@@ -2521,7 +2486,7 @@ msgstr ""
 "புலத்தில் ஒரே மாதிரியான உள்ளீடுகளுடன் பதிவுகளை விரைவாகக் "
 "கட்டுப்படுத்துவதாகும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:577-55
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:576-55
 msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
@@ -2530,7 +2495,7 @@ msgstr ""
 "வரிசைப்படுத்தவும், வண்ணத்தின் அடிப்படையில் வடிகட்டவும், நிபந்தனையின் "
 "அடிப்படையில் வடிகட்டவும் மற்றும் தனிப்பட்ட மதிப்புகளுக்கான தேர்வுப்பெட்டிகள்"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:579-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:578-7
 msgid ""
 "In the <span class=\"ui\">Standard Filter</span> dialog, you can also define "
 "ranges which contain the values in particular data fields. You can use the "
@@ -2542,7 +2507,7 @@ msgstr ""
 "நிபந்தனைகளை ஒரு தர்க்கரீதியான மற்றும் தர்க்கரீதியான அல்லது ஆபரேட்டருடன் இணைக்"
 "க நிலையான வடிப்பானைப் பயன்படுத்தலாம்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:580-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:579-7
 msgid ""
 "The <span class=\"ui\">Advanced Filter</span> allows up to a total of eight "
 "filter conditions. With advanced filters you enter the conditions directly "
@@ -2552,7 +2517,7 @@ msgstr ""
 "நிலைமைகளை அனுமதிக்கிறது. மேம்பட்ட வடிப்பான்களுடன் நீங்கள் நிபந்தனைகளை நேரடியா"
 "க தாளில் உள்ளிடுகிறீர்கள்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:584-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:583-5
 msgid ""
 "<span class=\"def\">Outlining:</span> You can create an outline of your data "
 "and group rows and columns together so that you can collapse and expand the "
@@ -2563,7 +2528,7 @@ msgstr ""
 "மூலம் நீங்கள் ஒற்றை சொடுக்கு மூலம் குழுக்களை சரிந்து விரிவாக்க முடியும், இது "
 "படிநிலை தரவைக் குறிக்கும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:585-49
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:584-49
 msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
@@ -2571,7 +2536,7 @@ msgstr ""
 "அவுட்லைன் நிலை பொத்தான்கள் மற்றும் சுருக்க/விரிவாக்க நிலைமாற்றங்களைக் "
 "காட்டும் வரிசை மற்றும் நெடுவரிசைக் குழு கட்டுப்பாடுகளுடன் கூடிய விரிதாள்"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:588-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
 "<span class=\"def\">Data validation:</span> For each cell, you can define "
 "entries to be valid. Invalid entries to a cell will be rejected. To enable "
@@ -2581,16 +2546,17 @@ msgstr ""
 "உள்ளீடுகள் செல்லுபடியாகும் என்று நீங்கள் வரையறுக்கலாம். ஒரு கலத்திற்கு தவறான "
 "உள்ளீடுகள் நிராகரிக்கப்படும். தரவு சரிபார்ப்பை இயக்க:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:590-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:589-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Validity</span> from the <span class=\"ui\">Data</"
-"span> menu. The <span class=\"ui\">Validity</span> dialog opens."
+"Choose <span class=\"ui\">Validity</span> on the <span class=\"ui\">Data</"
+"span> tab. The <span class=\"ui\">Validity</span> dialog opens."
 msgstr ""
 "<span class=\"யுஐ\"> செல்லுபடியாகும் </span> ஐ <span class=\"யுஐ\"> தரவு </"
 "span> மெனுவிலிருந்து தேர்வு செய்யவும். <span class=\"ui\"> செல்லுபடியாகும் </"
 "span> உரையாடல் திறக்கிறது."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:593-57
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:592-57
 msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
@@ -2599,7 +2565,7 @@ msgstr ""
 " செல்கள், தேர்வு பட்டியல் மற்றும் நுழைவு மதிப்புகளுக்கான விருப்பங்களைக் "
 "காட்டுகிறது"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:593-7
 msgid ""
 "Select the validity criterion in the <span class=\"ui\">Allow</span> drop-"
 "box list. Depending on the criterion, more options show. Fill the required "
@@ -2609,7 +2575,7 @@ msgstr ""
 "அளவுகோலைத் தேர்ந்தெடுக்கவும். அளவுகோலைப் பொறுத்து, கூடுதல் விருப்பங்கள் "
 "காட்டுகின்றன. தேவையான தரவை நிரப்பவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:595-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
 msgid ""
 "Use the <span class=\"ui\">Input Help</span> and <span class=\"ui\">Error "
 "Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\""
@@ -2619,7 +2585,7 @@ msgstr ""
 " <span class=\"ui\"> பிழை எச்சரிக்கை </span> தாவல்களைப் பயன்படுத்தவும். "
 "உரையாடலை மூட <span class=\"ui\"> சரி </span> என்பதைக் சொடுக்கு செய்க."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:598-56
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:597-56
 msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
@@ -2627,7 +2593,7 @@ msgstr ""
 "ஆப்பிள், பேரிக்காய், வாழைப்பழம், கிவி மற்றும் எலுமிச்சை போன்ற சரிபார்க்கப்பட்"
 "ட உள்ளீடுகளைக் காட்டும் செல் கீழ்தோன்றும் பட்டியல்"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:599-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:598-7
 msgid ""
 "To remove the validity of the cell, open the dialog and set the <span class="
 "\"ui\">Allow</span> list to “All values”."
@@ -2635,7 +2601,7 @@ msgstr ""
 "கலத்தின் செல்லுபடியை அகற்ற, உரையாடலைத் திறந்து <span class=\"யுஐ\"> இசைவு </"
 "span> பட்டியலை “எல்லா மதிப்புகளுக்கும்” அமைக்கவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:603-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:602-5
 msgid ""
 "<span class=\"def\">Comments:</span> In a spreadsheet you can insert one "
 "comment per cell. When you select <span class=\"ui\">Insert comment</span>, "
@@ -2650,7 +2616,7 @@ msgstr ""
 "சிவப்பு புள்ளி காட்டுகிறது. கருத்துகளைக் காண்பிக்க கலத்தில் சுட்டியை "
 "வட்டமிடுங்கள்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:604-52
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:603-52
 msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
@@ -2658,12 +2624,13 @@ msgstr ""
 "ஆசிரியர், தேதி, கருத்து உரை மற்றும் சேமி/ரத்துசெய் பொத்தான்களைக் காட்டும் "
 "கருத்து மேல்தோன்றல் கொண்ட விரிதாள் செல்"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:607-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:606-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
-"conditions. Select the cell range and click the <span class=\"ui\""
-">Conditional Formatting</span> icon on the toolbar. Select the symbol set to "
+"conditions. Select the cell range and click <span class=\"ui\">Conditional</"
+"span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
 "apply on the range."
 msgstr ""
 "<span class=\"def\"> நிபந்தனை வடிவமைப்பு: </span> <span class=\"productName\""
@@ -2673,7 +2640,7 @@ msgstr ""
 "சொடுக்கு செய்க. வரம்பில் விண்ணப்பிக்க குறியீட்டு தொகுப்பைத் "
 "தேர்ந்தெடுக்கவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:608-62
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
@@ -2682,7 +2649,7 @@ msgstr ""
 " மற்றும் பட்டை விளக்கப்படக் குறியீடுகள் ஆகியவற்றைக் காட்டும் நிபந்தனை "
 "வடிவமைத்தல் படவுரு செட் பிக்கர்"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:616-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:615-30
 msgid ""
 "<span class=\"productname\">{productname}</span> edits text documents in the "
 "same way you edit a desktop document. It provides a What You See Is What You "
@@ -2702,7 +2669,7 @@ msgstr ""
 "ஆவணத்துடன் தொடர்பு கொள்ள விசைப்பலகை, மெனுக்கள் மற்றும் கருவிப்பட்டிகளைப் "
 "பயன்படுத்தவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:620-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:619-30
 msgid ""
 "Context menus are available on clicking the right mouse button. The commands "
 "available in the context menu are related - not extensively - to the "
@@ -2712,11 +2679,11 @@ msgstr ""
 "சூழல் பட்டியலில் கிடைக்கும் கட்டளைகள் ஆவணத்தில் உள்ள அடிப்படை பொருளுடன் "
 "தொடர்புடையவை - விரிவாக இல்லை."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:623-5
+#: html/cool-help.html%2Bdiv.div.div.h3:622-5
 msgid "Formatting text"
 msgstr "உரையை வடிவமைத்தல்"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:625-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:624-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports modern techniques "
 "for paragraph formatting through styles. A style is a set of text properties "
@@ -2736,7 +2703,7 @@ msgstr ""
 "ஒரே பாணியைக் கொண்ட அனைத்து பத்திகளும் வடிவமைப்பையும் மாற்றுகின்றன, பல "
 "பத்திகளை தனித்தனியாக வடிவமைப்பதற்கான முயற்சியை எளிதாக்குகின்றன."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:626-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:625-5
 msgid ""
 "In contrast, direct formatting applies formatting to selected excerpts of "
 "the document contents. On a long document, direct formatting must be applied "
@@ -2748,7 +2715,7 @@ msgstr ""
 "பகுதியிலும் நேரடி வடிவமைப்பைப் பயன்படுத்த வேண்டும், பிழைகள் மற்றும் "
 "தாமதங்களுக்கு உட்பட்டு உரை வடிவத்தை ஒரு நீண்ட பணியை மாற்ற வேண்டும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:628-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:627-30
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format text document "
 "objects by formatting directly from the menus, toolbar or context menus. "
@@ -2759,12 +2726,13 @@ msgstr ""
 "வடிவமைக்கலாம். தேர்ந்தெடுக்கப்பட்ட தற்போதைய பொருளுக்கு மட்டுமே நேரடி "
 "வடிவமைப்பு பொருந்தும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:630-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:629-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
-"paragraph style to a paragraph. Choose menu <span class=\"ui\">Edit</span> → "
-"<span class=\"ui\">Edit styles</span> to change style."
+"paragraph style to a paragraph. Select the style in the style list on the "
+"<span class=\"ui\">Home</span> tab."
 msgstr ""
 "<span class=\"def\"> பாணி வடிவமைப்பு: </span><span class=\"productname\""
 ">{productname} </span> பத்தி பாணிகளை ஆதரிக்கிறது. நீங்கள் ஏற்கனவே இருக்கும் "
@@ -2772,7 +2740,7 @@ msgstr ""
 "class=\"ui\"> திருத்து </span> → <span class=\"ui\"> திருத்து பாணிகளைத் "
 "</span>தேர்வுசெய்க."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:631-56
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
@@ -2780,16 +2748,18 @@ msgstr ""
 "உள்தள்ளல், இடைவெளி மற்றும் வரி இடைவெளிக்கான அமைப்புகளுடன் உள்தள்ளல்கள் "
 "மற்றும் இடைவெளி தாவலில் பத்தி உரையாடல் மற்றும் வலதுபுறத்தில் ஒரு முன்னோட்டம்"
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:637-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:636-5
 msgid "Handling Tables"
 msgstr "அட்டவணைகள் கையாளுதல்"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:638-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:637-5
+#, fuzzy
 msgid ""
-"Insert tables with proper icon in the toolbar. Select the initial number of "
-"rows and columns. Add rows and columns with the cell context menu. Merge "
-"cells with the <span class=\"ui\">Table</span> menu. The default paragraph "
-"style inside cells is “Table contents”."
+"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
+">Table</span>. Select the initial number of rows and columns. Add rows and "
+"columns with the cell context menu. Merge cells from the <span class=\"ui\""
+">Table</span> tab. The default paragraph style inside cells is “Table "
+"contents”."
 msgstr ""
 "கருவிப்பட்டியில் சரியான ஐகானுடன் அட்டவணைகளைச் செருகவும். வரிசைகள் மற்றும் "
 "நெடுவரிசைகளின் ஆரம்ப எண்ணைத் தேர்ந்தெடுக்கவும். செல் சூழல் மெனுவுடன் வரிசைகள்"
@@ -2797,7 +2767,7 @@ msgstr ""
 "மெனுவுடன் கலங்களை ஒன்றிணைக்கவும். உயிரணுக்களுக்குள் இயல்புநிலை பத்தி பாணி "
 "“அட்டவணை உள்ளடக்கங்கள்”."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:639-52
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
@@ -2805,21 +2775,22 @@ msgstr ""
 "வரிசைகள் மற்றும் நெடுவரிசைகளின் எண்ணிக்கையைத் தேர்ந்தெடுக்க கட்டத்தைக் "
 "காட்டும் டேபிள் பிக்கரைச் செருகவும், தற்போது 5 ஆல் 3ஐக் காட்டுகிறது"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:642-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:641-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
-"cells and choose menu <span class=\"ui\">Table</span> → <span class=\"ui\""
-">Properties</span>. Fine tune the table with the properties dialog."
+"cells, open the context menu and choose <span class=\"ui\">Table Properties</"
+"span>. Fine tune the table with the properties dialog."
 msgstr ""
 "<span class=\"def\"> வடிவங்கள்: </span> கலங்களின் செல் அல்லது வரம்பில் "
 "சொடுக்கு செய்து பட்டியல் <span class=\"ui\"> அட்டவணை </span> → <span class="
 "\"ui\"> பண்புகள் </span>. பண்புகள் உரையாடலுடன் அட்டவணையை நன்றாக மாற்றவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:645-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
 msgstr "மாற்றங்களை கண்காணிக்கவும்"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:646-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:645-5
 msgid ""
 "When you turn on Track Changes, <span class=\"productname\">{productname}</"
 "span> marks up new changes made to the document. Select this option again to "
@@ -2829,7 +2800,7 @@ msgstr ""
 "{productname} </span> ஆவணத்தில் செய்யப்பட்ட புதிய மாற்றங்களைக் குறிக்கிறது. "
 "இந்த விருப்பத்தை அணைக்க மீண்டும் தேர்ந்தெடுக்கவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:647-61
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:646-61
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:774-61
 msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
@@ -2838,7 +2809,7 @@ msgstr ""
 "ட்ராக் செய்யப்பட்ட மாற்றம், ஆசிரியர் பெயர், தேதி மற்றும் மாற்ற விளக்கத்துடன் "
 "ஆவணத்தின் அருகில் கருத்துப் பெட்டியாகக் காட்டப்பட்டுள்ளது"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:648-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:647-5
 msgid ""
 "Changes made by different people are shown in different colors and each "
 "tracked change can be accepted or rejected, using the box that appears on "
@@ -2849,11 +2820,11 @@ msgstr ""
 "நிராகரிக்கலாம், பெட்டியைப் பயன்படுத்தி வலதுபுறத்தில் தோன்றும். நீங்கள் அங்கே "
 "ஒரு கருத்தையும் சேர்க்கலாம்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:651-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:650-5
 msgid "Other advanced features"
 msgstr "பிற மேம்பட்ட நற்பொருத்தங்கள்"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:652-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:651-5
 msgid ""
 "<span class=\"def\">Comments:</span> Comments are inserted in the text and "
 "displayed on the right side of the screen."
@@ -2861,7 +2832,7 @@ msgstr ""
 "<span class=\"def\"> கருத்துரைகள்: </span> கருத்துகள் உரையில் செருகப்பட்டு "
 "திரையின் வலது பக்கத்தில் காட்டப்படும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:653-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:652-5
 msgid ""
 "<span class=\"def\">Formatting marks:</span> Paragraph, page and unbreakable "
 "spaces are shown as marks to assist text alignment, editing and formatting."
@@ -2870,7 +2841,7 @@ msgstr ""
 "உடைக்க முடியாத இடங்கள் உரை சீரமைப்பு, திருத்துதல் மற்றும் வடிவத்திற்கு "
 "உதவுவதற்கான அடையாளங்களாகக் காட்டப்படுகின்றன."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:654-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:653-5
 msgid ""
 "<span class=\"def\">Fields:</span> A basic set of fields is available to "
 "insert in the document."
@@ -2878,7 +2849,7 @@ msgstr ""
 "<span class=\"def\"> புலங்கள்: </span> ஆவணத்தில் செருக ஒரு அடிப்படை புலங்கள் "
 "கிடைக்கின்றன."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:655-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:654-5
 msgid ""
 "<span class=\"def\">Alphabetical index:</span> Existing alphabetical index "
 "can be updated with new entries."
@@ -2886,7 +2857,7 @@ msgstr ""
 "<span class=\"def\"> அகரவரிசை அட்டவணை: </span> தற்போதுள்ள அகரவரிசை குறியீட்டை"
 " புதிய உள்ளீடுகளுடன் புதுப்பிக்க முடியும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:656-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:655-5
 msgid ""
 "<span class=\"def\">Page header and footer:</span> Headers and footers are "
 "available for the existing page style applied in the document at the cursor "
@@ -2896,7 +2867,7 @@ msgstr ""
 "நிலையில் ஆவணத்தில் பயன்படுத்தப்படும் தற்போதுள்ள பக்க பாணிக்கு தலைப்புகள் "
 "மற்றும் அடிக்குறிப்புகள் கிடைக்கின்றன."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:657-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:656-5
 msgid ""
 "<span class=\"def\">Footnotes and endnotes:</span> Footnotes and endnotes "
 "are supported."
@@ -2904,7 +2875,7 @@ msgstr ""
 "<span class=\"def\"> அடிக்குறிப்புகள் மற்றும் இறுதி குறிப்புகள்: </span> "
 "அடிக்குறிப்புகள் மற்றும் இறுதி குறிப்புகள் ஆதரிக்கப்படுகின்றன."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:665-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:664-30
 msgid ""
 "<span class=\"productname\">{productname}</span> Impress edits presentations "
 "in a way that should be familiar to people. Operations like typing text, "
@@ -2921,7 +2892,7 @@ msgstr ""
 "ஆவணத்தில் செயல்களைச் செய்ய விசைப்பலகை, மெனுக்கள் மற்றும் கருவிப்பட்டிகளைப் "
 "பயன்படுத்தவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:670-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:669-5
 msgid ""
 "<span class=\"productname\">{productname}</span> displays presentation slide "
 "shows, including a subset of slide transitions and object animations. Choose "
@@ -2933,7 +2904,7 @@ msgstr ""
 "காட்டுகிறது. மெனுவிலிருந்து ச்லைடு காட்சியைத் தேர்வுசெய்க அல்லது ச்லைடு "
 "பலகத்தில் உள்ள கீழ் இடது கருவிப்பட்டியில் உள்ள ஐகானைக் சொடுக்கு செய்க."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:671-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:670-5
 msgid ""
 "To exit a <span class=\"productname\">{productname}</span> slide show, press "
 "the <kbd>Esc</kbd> key to return to the presentation edit mode."
@@ -2942,7 +2913,7 @@ msgstr ""
 "வெளியேற, விளக்கக்காட்சி திருத்து பயன்முறைக்குத் திரும்ப<kbd>தப்பி</kbd> "
 "விசையை அழுத்தவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:677-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:676-5
 msgid ""
 "Click on any slide thumbnail in the pane to switch to this slide to view or "
 "edit it."
@@ -2950,7 +2921,7 @@ msgstr ""
 "அதைப் பார்க்க அல்லது திருத்த இந்த ச்லைடிற்கு மாற பலகத்தில் உள்ள எந்த ச்லைடு "
 "சிறு உருவத்தையும் சொடுக்கு செய்க."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:678-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:677-5
 msgid ""
 "Use the slide pane toolbar in the bottom to start the slideshow, add slide, "
 "duplicate or delete the current slide."
@@ -2958,7 +2929,7 @@ msgstr ""
 "ச்லைடுசோவைத் தொடங்க, ச்லைடு சேர்க்க, நகல் அல்லது தற்போதைய ச்லைடை நீக்க கீழே "
 "உள்ள ச்லைடு பேன் கருவிப்பட்டியைப் பயன்படுத்தவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:684-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:683-5
 msgid ""
 "<span class=\"def\">Slide layouts:</span> <span class=\"productname\""
 ">{productname}</span> Impress lets you change the slide layout. Select the "
@@ -2968,7 +2939,7 @@ msgstr ""
 "> {productname} </span> ஈர்க்கும் ச்லைடு தளவமைப்பை மாற்றட்டும். கீழ்தோன்றும் "
 "தளவமைப்பு பட்டியலில் விரும்பிய ச்லைடு தளவமைப்பைத் தேர்ந்தெடுக்கவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:685-53
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:684-53
 msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
@@ -2976,7 +2947,7 @@ msgstr ""
 "வடிவம், நோக்குநிலை, பின்னணி மற்றும் முதன்மை ச்லைடு அமைப்புகளைக் காட்டும் "
 "ச்லைடு பண்புகள் குழு, கீழே சிறுபட விருப்பங்களின் தளவமைப்பு கேலரியுடன்"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:687-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:686-30
 msgid ""
 "<span class=\"def\">Master slide:</span> Select the master slide associated "
 "to the current slide. Format and arrange slide elements in the master slide."
@@ -2985,7 +2956,7 @@ msgstr ""
 "முதன்மை ச்லைடைத் தேர்ந்தெடுக்கவும். மாச்டர் ச்லைடில் ச்லைடு கூறுகளை "
 "வடிவமைத்து ஏற்பாடு செய்யுங்கள்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:688-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:687-30
 msgid ""
 "<span class=\"def\">Slide transitions:</span> <span class=\"productname\""
 ">{productname}</span> Impress provides visual effects when displaying a new "
@@ -2998,7 +2969,7 @@ msgstr ""
 "பயன்முறையில் இருக்கும்போது ச்லைடு மாற்றத்தை அமைக்க பக்க பட்டியைப் "
 "பயன்படுத்தவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:689-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:688-30
 msgid ""
 "<span class=\"def\">Object animation:</span> Individual objects in the slide "
 "can have animations. Use the side bar to configure the slide transition for "
@@ -3008,7 +2979,7 @@ msgstr ""
 "அனிமேசனைக் கொண்டிருக்கலாம். தேர்ந்தெடுக்கப்பட்ட பொருள் அல்லது பொருள்களின் "
 "தொகுப்பிற்கான ச்லைடு மாற்றத்தை உள்ளமைக்க பக்க பட்டியைப் பயன்படுத்தவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:690-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:689-30
 msgid ""
 "<span class=\"def\">Tables:</span> Insert tables in the presentation. Use "
 "the sidebar to select the table theme."
@@ -3016,7 +2987,7 @@ msgstr ""
 "<span class=\"def\"> அட்டவணைகள்: </span> விளக்கக்காட்சியில் அட்டவணைகளைச் "
 "செருகவும். அட்டவணை கருப்பொருள் தேர்ந்தெடுக்க பக்கப்பட்டியைப் பயன்படுத்தவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:696-5
+#: html/cool-help.html%2Bdiv.div.div.h4:695-5
 msgid ""
 "What are the document file formats supported by <span class=\"productname\""
 ">{productname}</span>?"
@@ -3024,7 +2995,7 @@ msgstr ""
 "<span class=\"productname\"> {productname} </span> ஆல் ஆதரிக்கப்படும் "
 "ஆவணங்கள் கோப்பு வடிவங்கள் யாவை?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:697-5
+#: html/cool-help.html%2Bdiv.div.div.p:696-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports both reading and "
 "writing for the following file formats:"
@@ -3032,43 +3003,43 @@ msgstr ""
 "<span class=\"productname\"> {productname} </span> பின்வரும் கோப்பு "
 "வடிவங்களுக்கு வாசிப்பு மற்றும் எழுதுதல் இரண்டையும் ஆதரிக்கிறது:"
 
+#: html/cool-help.html%2Bdiv.div.div.ul.li:698-7
+msgid ""
+"Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT. "
+"Plain text TXT and Markdown MD"
+msgstr ""
+
 #: html/cool-help.html%2Bdiv.div.div.ul.li:699-7
 msgid ""
-"Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
+"Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS. Comma "
+"separated values CSV"
 msgstr ""
-"உரை ஆவணங்கள்: மைக்ரோசாப்ட் டாக், டாக்ஃ, ஆர்.டி.எஃப். Opendocument வடிவம் odt"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:700-7
-msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
-msgstr ""
-"விரிதாள்கள்: நுண்மென் வடிவங்கள் எக்ச்எல்எச், எக்ச்எல்எச்எக்ச், ஓபென்டோகமென்ட்"
-" ஃபார்ம் ஓட்ச்"
-
-#: html/cool-help.html%2Bdiv.div.div.ul.li:701-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
 msgstr ""
 "விளக்கக்காட்சிகள்: நுண்மென் வடிவங்கள் பிபிடி, பிபிடிஎக்ச், ஓபென்டொக்யூமென்ட் "
 "வடிவமைப்பு ODP"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:705-5
+#: html/cool-help.html%2Bdiv.div.div.h4:704-5
 msgid "How do I save a document with another name?"
 msgstr "மற்றொரு பெயருடன் ஒரு ஆவணத்தை எவ்வாறு சேமிப்பது?"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:707-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:706-7
 msgid "Hover the mouse on the document name in the menu bar."
 msgstr "பட்டியல் பட்டியில் ஆவண பெயரில் சுட்டியை வட்டமிடுங்கள்."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:708-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:707-7
 msgid "Type the new file name in the text box and press <kbd>Enter</kbd>."
 msgstr ""
 "உரை பெட்டியில் புதிய கோப்பு பெயரைத் தட்டச்சு செய்து<kbd>உள்ளிடவும்</kbd> ஐ "
 "அழுத்தவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.p:710-5
+#: html/cool-help.html%2Bdiv.div.div.p:709-5
 msgid "A copy of the document is saved with the new name in the same folder."
 msgstr "ஆவணத்தின் நகல் அதே கோப்புறையில் புதிய பெயருடன் சேமிக்கப்படுகிறது."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:713-5
+#: html/cool-help.html%2Bdiv.div.div.h4:712-5
 msgid ""
 "How can I quit <span class=\"productname\">{productname}</span> without "
 "saving my edits?"
@@ -3076,7 +3047,7 @@ msgstr ""
 "எனது திருத்தங்களைச் சேமிக்காமல் <span class=\"productname\"> {productname} </"
 "span> ஐ எவ்வாறு விட்டுவிடலாம்?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:714-5
+#: html/cool-help.html%2Bdiv.div.div.p:713-5
 msgid ""
 "<span class=\"productname\">{productname}</span> saves the document in the "
 "background regularly, you can't just close without saving it. To abandon "
@@ -3088,6 +3059,13 @@ msgstr ""
 "மாற்றங்களைக் கைவிட, நீங்கள் அவற்றைச் செயல்தவிர்க்க வேண்டும், அல்லது<span "
 "class=\"ui\"> திருத்த வரலாறு </span> ஐ <span class=\"ui\"> கோப்பு </span> "
 "பட்டியலில் பயன்படுத்த வேண்டும்."
+
+#: html/cool-help.html%2Bdiv.div.div.p:714-5
+msgid ""
+"<span class=\"productname\">{productname}</span> saves the document in the "
+"background regularly, you can't just close without saving it. To abandon "
+"your changes, undo them."
+msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:717-5
 msgid ""
@@ -3112,9 +3090,10 @@ msgid "How can I check spelling in my language?"
 msgstr "எனது மொழியில் எழுத்துப்பிழை எவ்வாறு சரிபார்க்க முடியும்?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
+#, fuzzy
 msgid ""
-"Choose menu <span class=\"ui\">Tools</span> → <span class=\"ui\">Languages</"
-"span> and select the language for the whole document. Optionally you can set "
+"Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
+"and select the language for the whole document. Optionally you can set "
 "languages for the selected text and for the current paragraph."
 msgstr ""
 "பட்டியல் <span class=\"ui\"> கருவிகள் </span> → <span class=\"ui\"> மொழிகள் "
@@ -3128,11 +3107,9 @@ msgstr "எனது ஆவணத்தில் உள்ள சிவப்ப
 
 #: html/cool-help.html%2Bdiv.div.div.p:726-5
 msgid ""
-"Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
-">Automatic Spell Checking</span>."
+"On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
+">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
-"பட்டியல் <span class=\"ui\"> கருவிகள் </span> ஐத் தேர்வுசெய்க <span class="
-"\"ui\"> தானியங்கி எழுத்துப்பிழை சோதனை </span>."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
 msgid "What is the blue wavy underline in some words in the text?"
@@ -3155,9 +3132,10 @@ msgid "Is there a thesaurus?"
 msgstr "ஒரு சொற்களஞ்சியம் இருக்கிறதா?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
+#, fuzzy
 msgid ""
-"Yes. Click in the word you want and choose <span class=\"ui\">Tools</span> → "
-"<span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
+"Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
+" <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
 "ஆம். நீங்கள் விரும்பும் வார்த்தையில் சொடுக்கு செய்து <span class=\"ui\"> "
@@ -3181,11 +3159,12 @@ msgstr ""
 " நான் எவ்வாறு அகற்றுவது?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
+#, fuzzy
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
-"document display, choose menu <span class=\"ui\">View</span> → <span class="
-"\"ui\">Formatting mark</span>."
+"document display, choose <span class=\"ui\">View</span> → <span class=\"ui\""
+">Formatting Marks</span>."
 msgstr ""
 "<span class=\"நீலம்\"> ¶ </span> அடையாளம் ஒரு வடிவமைப்பு குறி. இது உரை "
 "சீரமைப்பு மற்றும் திருத்துதல் உதவ பயன்படுகிறது மற்றும் அச்சிடப்படவில்லை. ஆவண "
@@ -3197,10 +3176,11 @@ msgid "How do I get a word count of my document?"
 msgstr "எனது ஆவணத்தின் சொல் எண்ணிக்கையை எவ்வாறு பெறுவது?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
+#, fuzzy
 msgid ""
-"Word count is available in <span class=\"ui\">Tools</span> → <span class=\"ui"
-"\">Word count</span>. A dialog shows word counts for selection and for the "
-"whole document."
+"Word count is available in <span class=\"ui\">Review</span> → <span class="
+"\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
+"the whole document."
 msgstr ""
 "சொல் எண்ணிக்கை <span class=\"ui\"> கருவிகள் </span> → <span class=\"ui\"> "
 "சொல் எண்ணிக்கை </span> இல் கிடைக்கிறது. ஒரு உரையாடல் தேர்வு மற்றும் முழு "
@@ -3246,12 +3226,8 @@ msgstr "பாத்திரத்தை செருக கர்சரை ந
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:756-7
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
-"Characters </span> or click the corresponding icon in the toolbar. A dialog "
-"opens."
+"Character</span>. A dialog opens."
 msgstr ""
-"<span class=\"ui\"> செருகு </span> → <span class=\"ui\"> சிறப்பு எழுத்துக்கள்"
-" </span> ஐத் தேர்வுசெய்க அல்லது கருவிப்பட்டியில் தொடர்புடைய ஐகானைக் சொடுக்கு "
-"செய்க. ஒரு உரையாடல் காட்டுகிறது."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:759-59
 msgid ""
@@ -3288,12 +3264,13 @@ msgid "Why can't I delete text? It just gets a strike-through?"
 msgstr "நான் ஏன் உரையை நீக்க முடியாது? இது ஒரு வேலைநிறுத்தத்தைப் பெறுகிறதா?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:766-5
+#, fuzzy
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
 "Useful for marking changes in text and spreadsheets. Track changes are "
-"enabled choosing <span class=\"ui\">Edit</span> → <span class=\"ui\">Track "
-"Changes </span> → <span class=\"ui\">Record</span>."
+"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\""
+">Record</span>."
 msgstr ""
 "ஆவணத்திற்கான டிராக் மாற்றங்கள் நற்பொருத்தம் இயக்கப்பட்டிருக்கும். ட்ராக் "
 "மாற்றங்கள் உரையில் உள்ள அனைத்து மாற்றங்களையும் பதிவு செய்கின்றன மற்றும் "
@@ -3335,9 +3312,10 @@ msgid ""
 msgstr "மாற்றங்களுக்கு ஒதுக்கப்பட்ட வண்ணம் ஆவணத்தை மாற்றும் பயனரைப் பொறுத்தது."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:776-5
+#, fuzzy
 msgid ""
-"To display or hide track changes choose <span class=\"ui\">Edit</span> → "
-"<span class=\"ui\">Track Changes </span> → <span class=\"ui\">Show</span>. "
+"To display or hide track changes choose <span class=\"ui\">Review</span> → "
+"<span class=\"ui\">View Changes</span> → <span class=\"ui\">Show</span>. "
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
@@ -3348,15 +3326,16 @@ msgstr ""
 "கவனக்குறைவாக ஆவணத்தில் கிடைக்கக்கூடிய தேவையற்ற உரையை விடலாம்."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:777-5
+#, fuzzy
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
-"Alternatively, choose <span class=\"ui\">Edit</span> → <span class=\"ui\""
-">Track Changes </span> → <span class=\"ui\">Accept</span> or <span class=\"ui"
-"\">Reject</span>. Furthermore, if you need to filter changes before "
-"accepting or rejecting, choose <span class=\"ui\">Edit</span> → <span class="
-"\"ui\">Track Changes </span> → <span class=\"ui\">Manage</span>. A dialog "
-"shows a list of all tracked changes. Use the dialog buttons accordingly."
+"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\""
+">Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
+"to filter changes before accepting or rejecting, choose <span class=\"ui\""
+">Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\""
+">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
+"buttons accordingly."
 msgstr ""
 "மாற்றங்களை ஏற்கலாம் அல்லது நிராகரிக்கலாம். மாற்றங்களை ஏற்க அல்லது நிராகரிக்"
 "க, ஆவணத்தின் வலது புறத்தில் உள்ள கருத்து பெட்டியில் தொடர்புடைய ஐகான்களைக் "
@@ -3396,9 +3375,10 @@ msgid "Using the page style"
 msgstr "பக்க பாணியைப் பயன்படுத்துதல்"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page</span> and "
-"select the <span class=\"ui\">Page</span> tab"
+"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page Style</"
+"span> and select the <span class=\"ui\">Page</span> tab"
 msgstr ""
 "<span class=\"ui\"> வடிவம் </span> → <span class=\"ui\"> பக்கம் </span> ஐத் "
 "தேர்ந்தெடுத்து <span class=\"யுஐ\"> பக்கம் </span> தாவலைத் தேர்ந்தெடுக்கவும்"
@@ -3474,13 +3454,11 @@ msgstr "இருக்கும் வடிவத்துடன் உரை�
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:806-7
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:848-7
 msgid ""
-"Click on the clone formatting icon <img alt=\"format paintbrush\" class"
-"=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
-"turns to a paint bucket."
+"Click on the <span class=\"ui\">Clone Formatting</span> icon <img alt="
+"\"format paintbrush\" class=\"icon-size\" src=\"images/lc_formatpaintbrush."
+"svg\" /> on the <span class=\"ui\">Home</span> tab. The mouse pointer turns "
+"to a paint bucket."
 msgstr ""
-"நகலி வடிவமைப்பு ஐகானைக் சொடுக்கு செய்யவும் <img alt=\"format paintbrush\" "
-"class=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. மவுச் "
-"பாயிண்டர் பெயிண்ட் வாளியாக மாறுகிறது."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
 msgid "Select the text you want to apply the new format."
@@ -3511,17 +3489,10 @@ msgstr "நான் தட்டச்சு செய்த உரை ஏன�
 msgid ""
 "You have the AutoCorrection enabled. AutoCorrection compares the text just "
 "typed to an internal table of text. In most cases, AutoCorrection corrects "
-"typos while you type. If AutoCorrection is not necessary, disable it in "
-"<span class=\"ui\">Tools</span> → <span class=\"ui\">AutoCorrection</span> → "
-"<span class=\"ui\">While typing</span>."
+"typos while you type. To revert a correction, press <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after it "
+"was applied."
 msgstr ""
-"தானியங்கு திருத்தம் இயக்கப்பட்டுள்ளீர்கள். தானியங்கு திருத்தம் இப்போது "
-"தட்டச்சு செய்த உரையைத் தொடர்புடைய உரையின் உள் அட்டவணையில் மாற்றுகிறது. "
-"பெரும்பாலான சந்தர்ப்பங்களில், நீங்கள் தட்டச்சு செய்யும்போது தானியங்கு "
-"திருத்தம் எழுத்துப்பிழைகளை சரிசெய்கிறது. தானியங்கு திருத்தம் தேவையில்லை "
-"என்றால், அதை <span class=\"ui\">கருவிகள்</span> → <span class=\"ui\">தன்னியக்"
-"க ஒழுங்குமுறை</span> → <span class=\"ui\">தட்டச்சு செய்யும்போது</span> இல் "
-"முடக்கவும்."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
@@ -3529,13 +3500,9 @@ msgstr "அச்சிட தரவை எவ்வாறு தேர்ந்
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:828-5
 msgid ""
-"Insert column and row breaks in the spreadsheet to narrow the print range "
-"and print the document to download. On printing the PDF, select the pages of "
-"interest."
+"Insert column and row breaks in the spreadsheet to narrow the print range. "
+"When printing, select the pages of interest."
 msgstr ""
-"அச்சு வரம்பைக் குறைக்க விரிதாளில் நெடுவரிசை மற்றும் வரிசை இடைவெளிகளைச் "
-"செருகவும், பதிவிறக்கம் செய்ய ஆவணத்தை அச்சிடவும். PDF ஐ அச்சிடும்போது, "
-"ஆர்வத்தின் பக்கங்களைத் தேர்ந்தெடுக்கவும்."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:831-5
 msgid "How can I import CSV data?"
@@ -3559,16 +3526,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:835-7
 msgid ""
-"Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
-">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
-"\"true\">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> "
-"dialog opens to let you describe the precise format of the CSV data."
+"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog "
+"opens to let you describe the precise format of the CSV data."
 msgstr ""
-"உலாவியிலிருந்து ஒட்டவும் <span class=\"ui\">திருத்து</span> → <span class="
-"\"ui\">ஒட்டு</span> அல்லது <kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>வ</kbd> ஐ அழுத்தவும். காபிம தரவின் துல்லியமான "
-"வடிவமைப்பை விவரிக்க உங்களை அனுமதிக்க <span class=\"ui\">உரை இறக்குமதி</span> "
-"உரையாடல் திறக்கிறது."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
 msgid ""
@@ -3599,10 +3560,10 @@ msgstr ""
 "இருக்கும் கலங்களின் வடிவமைப்பை புதியவற்றுக்கு எவ்வாறு நகலெடுக்க முடியும்?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:845-5
-msgid "This is easy to do using the Paintbrush tool in the toolbar."
+msgid ""
+"This is easy to do using <span class=\"ui\">Clone Formatting</span> on the "
+"<span class=\"ui\">Home</span> tab."
 msgstr ""
-"கருவிப்பட்டியில் உள்ள பெயிண்ட் பிரச் கருவியைப் பயன்படுத்தி இதைச் செய்வது "
-"எளிது."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:847-7
 msgid "Format the source cell with the font, color background and more."
@@ -3619,12 +3580,13 @@ msgid "What is “Clear Direct Formatting” icon?"
 msgstr "“தெளிவான நேரடி வடிவமைப்பு” படவுரு என்றால் என்ன?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:854-5
+#, fuzzy
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
 "formatting. To restore the formatting to the style settings, select the text "
-"or spreadsheet cell and choose <span class=\"ui\">Format</span> → <span "
-"class=\"ui\">Clear Direct Formatting</span> or use the button in the toolbar."
+"or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span class="
+"\"ui\">Clear Direct Formatting</span>."
 msgstr ""
 "நேரடி வடிவமைப்பு என்பது ஒரு பத்தி அல்லது ஒரு விரிதாள் கலத்தின் "
 "தேர்ந்தெடுக்கப்பட்ட உள்ளடக்கங்களுக்கு நேரடியாகப் பயன்படுத்தப்படுகிறது, மேலும்"
@@ -3660,16 +3622,17 @@ msgstr ""
 "திறக்கவும்"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:869-7
+#, fuzzy
 msgid ""
-"Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">Full "
-"Screen Presentation</span> or click on the left-most icon in the bottom of "
-"the slide panel:"
+"Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">From "
+"Beginning</span> or click on the left-most icon in the bottom of the slide "
+"panel:"
 msgstr ""
 "<span class=\"ui\"> ச்லைடு சோ </span> → <span class=\"ui\"> முழுத்திரை "
 "விளக்கக்காட்சி </span> ஐத் தேர்வுசெய்க அல்லது ச்லைடு பேனலின் அடிப்பகுதியில் "
 "உள்ள இடது-மிக ஐகானைக் சொடுக்கு செய்க:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-197
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-187
 msgid "slide show"
 msgstr "ச்லைடு சோ"
 
@@ -3705,6 +3668,181 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:880-7
 msgid "Set the properties of the element of the object."
 msgstr "பொருளின் உறுப்பின் பண்புகளை அமைக்கவும்."
+
+#~ msgid ""
+#~ "<span class=\"def\">The menu bar:</span> The main menu is at the top and "
+#~ "includes many options, such as commands for printing, editing, viewing, and "
+#~ "other advanced commands. You can hide the menu bar by clicking the hide icon "
+#~ "<span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide menu "
+#~ "bar\" title=\"Hide menu bar\"></span> on the far right. To show it again, "
+#~ "click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
+#~ "aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
+#~ msgstr ""
+#~ "<span class=\"def\">மெனு பட்டி:</span> முதன்மை பட்டியல் மேலே உள்ளது மற்றும் "
+#~ "அச்சிடுதல், திருத்துதல், பார்ப்பது மற்றும் பிற மேம்பட்ட கட்டளைகளுக்கான "
+#~ "கட்டளைகள் போன்ற பல விருப்பங்களை உள்ளடக்கியது. வலதுபுறத்தில் உள்ள மறை icon "
+#~ "<span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide "
+#~ "பட்டியல் bar\" title=\"Hide பட்டியல் bar\"></span> ஐக் சொடுக்கு செய்வதன் "
+#~ "மூலம் பட்டியல் பட்டியை மறைக்கலாம். அதை மீண்டும் காட்ட, சோ ஐகானைக் சொடுக்கு "
+#~ "செய்யவும் <span class=\"w2ui-icon unfold icon-size\" role=\"img\" aria-label="
+#~ "\"show பட்டியல் bar\" title=\"Show பட்டியல் bar\"></span>."
+
+#~ msgid ""
+#~ "<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
+#~ "options for daily editing. Toolbar buttons are dynamic, meaning that their "
+#~ "state (on or off) depends on different factors."
+#~ msgstr ""
+#~ "<span class=\"def\"> கருவிப்பட்டி: </span> கருவிப்பட்டியில் நாள்தோறும் "
+#~ "திருத்துதல் மிகவும் பயன்படுத்தப்பட்ட விருப்பங்கள் உள்ளன. கருவிப்பட்டி "
+#~ "பொத்தான்கள் மாறும், அதாவது அவற்றின் நிலை (ஆன் அல்லது ஆஃப்) வெவ்வேறு "
+#~ "காரணிகளைப் பொறுத்தது."
+
+#~ msgid ""
+#~ "<span class=\"def\">The information bar:</span> The information bar displays "
+#~ "details about the current document. The actual information depends on the "
+#~ "nature of the document."
+#~ msgstr ""
+#~ "<span class=\"def\">தகவல் பட்டி:</span> செய்தி பட்டி தற்போதைய ஆவணம் பற்றிய "
+#~ "விவரங்களைக் காட்டுகிறது. உண்மையான செய்தி ஆவணத்தின் தன்மையைப் பொறுத்தது."
+
+#~ msgid ""
+#~ "Information bar showing page navigation arrows, zoom controls, and zoom level"
+#~ msgstr ""
+#~ "பக்க வழிசெலுத்தல் அம்புகள், சூம் கட்டுப்பாடுகள் மற்றும் சூம் நிலை ஆகியவற்றைக்"
+#~ " காட்டும் செய்தி பட்டி"
+
+#~ msgid ""
+#~ "Rich content copy/cut and paste is supported, not only within a given "
+#~ "document, but also across documents on the same or different <span class="
+#~ "\"productname\">{productname}</span>. For these internal uses, users can "
+#~ "copy/cut content, including images and mixed content, on PC by using the "
+#~ "keyboard shortcuts directly (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
+#~ "plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class="
+#~ "\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). For security "
+#~ "reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>V</kbd> to paste on PC, but context menus can "
+#~ "be used for cut and copy. On Android or iOS selecting text by double "
+#~ "tapping, and using a long-tap to access copy/cut/paste via the context menu "
+#~ "is required."
+#~ msgstr ""
+#~ "கொடுக்கப்பட்ட ஆவணத்திற்குள் மட்டுமல்லாமல், ஒரே அல்லது வேறுபட்ட <span class="
+#~ "\"productname\">{productname} </span> இல் உள்ள ஆவணங்கள் முழுவதும் பணக்கார "
+#~ "உள்ளடக்க நகல்/வெட்டு மற்றும் பேச்ட் ஆதரிக்கப்படுகிறது. இந்த உள் "
+#~ "பயன்பாடுகளுக்கு, விசைப்பலகை குறுக்குவழிகளை நேரடியாக (<kbd>கட்டு</kbd> <span "
+#~ "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>ஓ</kbd>, <kbd>கட்டு</"
+#~ "kbd> <span class=\"kbd-plus\">+</span><kbd>சி</kbd>, <kbd>கட்டு</kbd > <span "
+#~ "class=\"kbd-plus\">+</span><kbd>வி</kbd>). பாதுகாப்பு "
+#~ "காரணங்களுக்காக<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>வி</kbd> ஐ பிசி மீது ஒட்டுவது தேவை, ஆனால் சூழல் மெனுக்கள் "
+#~ "இருக்கலாம் வெட்டு மற்றும் நகலுக்குப் பயன்படுத்தப்படுகிறது. ஆண்ட்ராய்டு அல்லது"
+#~ " ஐஇமு இல் இரட்டை தட்டுவதன் மூலம் உரையைத் தேர்ந்தெடுப்பது, மற்றும் சூழல் "
+#~ "பட்டியல் வழியாக நகல்/வெட்டு/ஒட்டுதல் ஆகியவற்றை அணுக நீண்ட TAP ஐப் "
+#~ "பயன்படுத்துவது தேவை. ........."
+
+#~ msgid ""
+#~ "To copy larger pieces of content to other applications on your device, users "
+#~ "need to press the <span class=\"ui\">Start download</span> button, and then "
+#~ "re-copy this to their clipboard in order to make it available to the target "
+#~ "application to read. This is possible via a tiny widget that pops up in the "
+#~ "bottom-right corner, and is only necessary to export the content for pasting "
+#~ "in external applications. This step also converts complex object types into "
+#~ "static images."
+#~ msgstr ""
+#~ "உங்கள் சாதனத்தில் உள்ள பிற பயன்பாடுகளுக்கு பெரிய உள்ளடக்கங்களை நகலெடுக்க, "
+#~ "பயனர்கள் <span class=\"Ui\"> ஐ பதிவிறக்கம் </span> பொத்தானைத் தொடங்க வேண்டும்"
+#~ ", பின்னர் கிடைக்கச் செய்வதற்காக இதை அவற்றின் கிளிப்போர்டில் மீண்டும் நகலெடுக்"
+#~ "க வேண்டும் படிக்க இலக்கு பயன்பாடு. இது கீழ்-வலது மூலையில் தோன்றும் ஒரு சிறிய "
+#~ "விட்செட் வழியாக சாத்தியமாகும், மேலும் வெளிப்புற பயன்பாடுகளில் ஒட்டுவதற்கு "
+#~ "உள்ளடக்கத்தை ஏற்றுமதி செய்ய மட்டுமே இது தேவை. இந்த படி சிக்கலான பொருள் வகைகளை"
+#~ " நிலையான படங்களாக மாற்றுகிறது."
+
+#~ msgid "Inactive document"
+#~ msgstr "செயலற்ற ஆவணம்"
+
+#~ msgid ""
+#~ "<span class=\"def\">Insert local image:</span> opens the browser file picker "
+#~ "to upload the image from your local computer and insert it into the document."
+#~ msgstr ""
+#~ "<span class=\"def\"> உள்ளக படத்தை செருகவும்: </span> உங்கள் உள்ளக "
+#~ "கணினியிலிருந்து படத்தை பதிவேற்றி ஆவணத்தில் செருக உலாவி கோப்பு தேர்வாளரைத் "
+#~ "திறக்கிறது."
+
+#~ msgid ""
+#~ "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
+#~ msgstr ""
+#~ "உரை ஆவணங்கள்: மைக்ரோசாப்ட் டாக், டாக்ஃ, ஆர்.டி.எஃப். Opendocument வடிவம் odt"
+
+#~ msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
+#~ msgstr ""
+#~ "விரிதாள்கள்: நுண்மென் வடிவங்கள் எக்ச்எல்எச், எக்ச்எல்எச்எக்ச், ஓபென்டோகமென்ட்"
+#~ " ஃபார்ம் ஓட்ச்"
+
+#~ msgid ""
+#~ "Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
+#~ ">Automatic Spell Checking</span>."
+#~ msgstr ""
+#~ "பட்டியல் <span class=\"ui\"> கருவிகள் </span> ஐத் தேர்வுசெய்க <span class="
+#~ "\"ui\"> தானியங்கி எழுத்துப்பிழை சோதனை </span>."
+
+#~ msgid ""
+#~ "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
+#~ "Characters </span> or click the corresponding icon in the toolbar. A dialog "
+#~ "opens."
+#~ msgstr ""
+#~ "<span class=\"ui\"> செருகு </span> → <span class=\"ui\"> சிறப்பு எழுத்துக்கள்"
+#~ " </span> ஐத் தேர்வுசெய்க அல்லது கருவிப்பட்டியில் தொடர்புடைய ஐகானைக் சொடுக்கு "
+#~ "செய்க. ஒரு உரையாடல் காட்டுகிறது."
+
+#~ msgid ""
+#~ "Click on the clone formatting icon <img alt=\"format paintbrush\" class"
+#~ "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
+#~ "turns to a paint bucket."
+#~ msgstr ""
+#~ "நகலி வடிவமைப்பு ஐகானைக் சொடுக்கு செய்யவும் <img alt=\"format paintbrush\" "
+#~ "class=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. மவுச் "
+#~ "பாயிண்டர் பெயிண்ட் வாளியாக மாறுகிறது."
+
+#~ msgid ""
+#~ "You have the AutoCorrection enabled. AutoCorrection compares the text just "
+#~ "typed to an internal table of text. In most cases, AutoCorrection corrects "
+#~ "typos while you type. If AutoCorrection is not necessary, disable it in "
+#~ "<span class=\"ui\">Tools</span> → <span class=\"ui\">AutoCorrection</span> → "
+#~ "<span class=\"ui\">While typing</span>."
+#~ msgstr ""
+#~ "தானியங்கு திருத்தம் இயக்கப்பட்டுள்ளீர்கள். தானியங்கு திருத்தம் இப்போது "
+#~ "தட்டச்சு செய்த உரையைத் தொடர்புடைய உரையின் உள் அட்டவணையில் மாற்றுகிறது. "
+#~ "பெரும்பாலான சந்தர்ப்பங்களில், நீங்கள் தட்டச்சு செய்யும்போது தானியங்கு "
+#~ "திருத்தம் எழுத்துப்பிழைகளை சரிசெய்கிறது. தானியங்கு திருத்தம் தேவையில்லை "
+#~ "என்றால், அதை <span class=\"ui\">கருவிகள்</span> → <span class=\"ui\">தன்னியக்"
+#~ "க ஒழுங்குமுறை</span> → <span class=\"ui\">தட்டச்சு செய்யும்போது</span> இல் "
+#~ "முடக்கவும்."
+
+#~ msgid ""
+#~ "Insert column and row breaks in the spreadsheet to narrow the print range "
+#~ "and print the document to download. On printing the PDF, select the pages of "
+#~ "interest."
+#~ msgstr ""
+#~ "அச்சு வரம்பைக் குறைக்க விரிதாளில் நெடுவரிசை மற்றும் வரிசை இடைவெளிகளைச் "
+#~ "செருகவும், பதிவிறக்கம் செய்ய ஆவணத்தை அச்சிடவும். PDF ஐ அச்சிடும்போது, "
+#~ "ஆர்வத்தின் பக்கங்களைத் தேர்ந்தெடுக்கவும்."
+
+#~ msgid ""
+#~ "Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
+#~ ">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
+#~ "\"true\">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> "
+#~ "dialog opens to let you describe the precise format of the CSV data."
+#~ msgstr ""
+#~ "உலாவியிலிருந்து ஒட்டவும் <span class=\"ui\">திருத்து</span> → <span class="
+#~ "\"ui\">ஒட்டு</span> அல்லது <kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>வ</kbd> ஐ அழுத்தவும். காபிம தரவின் துல்லியமான "
+#~ "வடிவமைப்பை விவரிக்க உங்களை அனுமதிக்க <span class=\"ui\">உரை இறக்குமதி</span> "
+#~ "உரையாடல் திறக்கிறது."
+
+#~ msgid "This is easy to do using the Paintbrush tool in the toolbar."
+#~ msgstr ""
+#~ "கருவிப்பட்டியில் உள்ள பெயிண்ட் பிரச் கருவியைப் பயன்படுத்தி இதைச் செய்வது "
+#~ "எளிது."
 
 #~ msgid ""
 #~ "<span class=\"productname\">{productname}</span> allows you to create and "

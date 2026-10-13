@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 21:46+0200\n"
+"POT-Creation-Date: 2026-10-13 14:06+0200\n"
 "PO-Revision-Date: 2026-06-03 16:22+0000\n"
 "Last-Translator: Rhoslyn Prys <rprys@posteo.net>\n"
 "Language-Team: Welsh <https://hosted.weblate.org/projects/collabora-online/"
@@ -1647,46 +1647,46 @@ msgid "<span class=\"productname\">{productname}</span> user interface"
 msgstr "<span class=\"productname\">{productname}</span> rhyngwyneb defnyddiwr"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:343-13
-#: html/cool-help.html%2Bdiv.div.h3:436-5
+#: html/cool-help.html%2Bdiv.div.h3:429-5
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr "Agor, cau, cadw, argraffu a llwytho dogfennau i lawr"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
-#: html/cool-help.html%2Bdiv.div.h3:450-5
+#: html/cool-help.html%2Bdiv.div.h3:439-5
 msgid "Opening, closing, saving and printing documents"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
-#: html/cool-help.html%2Bdiv.div.h3:481-5
+#: html/cool-help.html%2Bdiv.div.h3:478-5
 msgid "Editing documents"
 msgstr "Golygu dogfennau"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:346-13
 #: html/cool-help.html%2Bdiv.nav.ul.li:352-13
 #: html/cool-help.html%2Bdiv.nav.ul.li:365-13
-#: html/cool-help.html%2Bdiv.div.h3:511-3
-#: html/cool-help.html%2Bdiv.div.div.h3:571-5
-#: html/cool-help.html%2Bdiv.div.div.h3:682-5
+#: html/cool-help.html%2Bdiv.div.h3:510-3
+#: html/cool-help.html%2Bdiv.div.div.h3:570-5
+#: html/cool-help.html%2Bdiv.div.div.h3:681-5
 msgid "Advanced features"
 msgstr "Nodweddion uwch"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:348-13
-#: html/cool-help.html%2Bdiv.div.h3:549-5
+#: html/cool-help.html%2Bdiv.div.h3:548-5
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
 msgstr "<span class=\"productname\">{productname}</span> taenlenni"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:349-13
-#: html/cool-help.html%2Bdiv.div.div.h3:551-5
+#: html/cool-help.html%2Bdiv.div.div.h3:550-5
 msgid "Editing spreadsheets"
 msgstr "Golygu taenlenni"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:350-13
-#: html/cool-help.html%2Bdiv.div.div.h3:555-5
+#: html/cool-help.html%2Bdiv.div.div.h3:554-5
 msgid "Formulas"
 msgstr "Fformwlâu"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:351-13
-#: html/cool-help.html%2Bdiv.div.div.h3:564-5
+#: html/cool-help.html%2Bdiv.div.div.h3:563-5
 msgid "Formatting spreadsheets"
 msgstr "Fformatio taenlenni"
 
@@ -1696,22 +1696,22 @@ msgid "Spreadsheets"
 msgstr "Taenlenni"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:355-13
-#: html/cool-help.html%2Bdiv.div.h3:613-5
+#: html/cool-help.html%2Bdiv.div.h3:612-5
 msgid "<span class=\"productname\">{productname}</span> text documents"
 msgstr "<span class=\"productname\">{productname}</span> dogfennau testun"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:356-13
-#: html/cool-help.html%2Bdiv.div.div.h3:615-5
+#: html/cool-help.html%2Bdiv.div.div.h3:614-5
 msgid "Editing text documents"
 msgstr "Golygu dogfennau testun"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:357-13
-#: html/cool-help.html%2Bdiv.div.div.h3:619-5
+#: html/cool-help.html%2Bdiv.div.div.h3:618-5
 msgid "Context menus"
 msgstr "Dewislenni cyd-destun"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:358-13
-#: html/cool-help.html%2Bdiv.div.div.h3:635-5
+#: html/cool-help.html%2Bdiv.div.div.h3:634-5
 msgid "Advanced text document editor features"
 msgstr "Nodweddion golygydd dogfen testun uwch"
 
@@ -1721,22 +1721,22 @@ msgid "Text documents"
 msgstr "Dogfennau testun"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:361-13
-#: html/cool-help.html%2Bdiv.div.h3:662-5
+#: html/cool-help.html%2Bdiv.div.h3:661-5
 msgid "<span class=\"productname\">{productname}</span> presentations"
 msgstr "<span class=\"productname\">{productname}</span> cyflwyniadau"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:362-13
-#: html/cool-help.html%2Bdiv.div.div.h3:664-5
+#: html/cool-help.html%2Bdiv.div.div.h3:663-5
 msgid "Editing presentations"
 msgstr "Golygu cyflwyniadau"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:363-13
-#: html/cool-help.html%2Bdiv.div.div.h3:668-5
+#: html/cool-help.html%2Bdiv.div.div.h3:667-5
 msgid "Slide show"
 msgstr "Sioe sleidiau"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:364-13
-#: html/cool-help.html%2Bdiv.div.div.h3:675-5
+#: html/cool-help.html%2Bdiv.div.div.h3:674-5
 msgid "Slide pane"
 msgstr "Paen sleidiau"
 
@@ -1746,7 +1746,7 @@ msgid "Presentations"
 msgstr "Cyflwyniadau"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:368-13
-#: html/cool-help.html%2Bdiv.div.h3:694-5
+#: html/cool-help.html%2Bdiv.div.h3:693-5
 msgid "Frequently Asked Questions"
 msgstr "Cwestiynau Cyffredin"
 
@@ -1810,21 +1810,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:405-5
 msgid ""
-"<span class=\"def\">The menu bar:</span> The main menu is at the top and "
-"includes many options, such as commands for printing, editing, viewing, and "
-"other advanced commands. You can hide the menu bar by clicking the hide icon "
-"<span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide menu "
-"bar\" title=\"Hide menu bar\"></span> on the far right. To show it again, "
-"click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
-"aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
+"<span class=\"def\">The tabs:</span> The commands are grouped on tabs at the "
+"top: <span class=\"ui\">File</span>, <span class=\"ui\">Home</span>, <span "
+"class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span class="
+"\"ui\">View</span> and others, depending on the document type. Click the "
+"selected tab again to collapse the tab bar and gain space for the document. "
+"Click any tab to expand it again."
 msgstr ""
-"<span class=\"def\">Y bar dewislen:</span> Mae'r prif ddewislen ar y brig ac "
-"yn cynnwys llawer o ddewisiadau, fel gorchmynion i argraffu, golygu, gweld a "
-"gorchmynion uwch tebyg. Gallwch guddio'r bar dewislen drwy glicio'r eicon "
-"cuddio <span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label="
-"\"hide menu bar\" title=\"Hide menu bar\"> pendraw'r dde. I'w ddangos eto, "
-"cliciwch yr eicon dangos <span class=\"w2ui-icon unfold icon-size\" role="
-"\"img\" aria-label=\"show menu bar\" title=\"Show menu bar\">."
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
 msgid ""
@@ -1837,24 +1829,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:411-5
 msgid ""
-"<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
-"options for daily editing. Toolbar buttons are dynamic, meaning that their "
-"state (on or off) depends on different factors."
-msgstr ""
-"<span class=\"def\">Bar offer:</span> Mae'r bar offer yn cynnwys y "
-"dewisiadau sy'n cael eu defnyddio fwyaf ar gyfer golygu dyddiol. Mae botymau "
-"bar offer yn ddeinamig, sy'n golygu bod eu cyflwr (ymlaen neu i ffwrdd) yn "
-"dibynnu ar wahanol ffactorau."
-
-#: html/cool-help.html%2Bdiv.div.div.p:414-5
-msgid ""
 "<span class=\"def\">The status bar:</span> The status bar is shown in the "
 "bottom, and contains several useful options and features."
 msgstr ""
 "<span class=\"def\">Bar statws:</span> Mae'r bar statws yn cael ei ddangos "
 "ar y gwaelod, ac mae'n cynnwys sawl dewis a nodwedd ddefnyddiol."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:415-49
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:412-49
 msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
@@ -1862,7 +1843,7 @@ msgstr ""
 "Bar statws yn dangos rhif tudalen, cyfrif geiriau, mewnosod modd, modd "
 "dewis, iaith, modd golygu, llywio, chwyddo, a chwilio"
 
-#: html/cool-help.html%2Bdiv.div.div.p:418-5
+#: html/cool-help.html%2Bdiv.div.div.p:415-5
 msgid ""
 "<span class=\"def\">The search bar:</span> Searching starts automatically "
 "when content is inserted in the search box, and the document window "
@@ -1874,20 +1855,20 @@ msgstr ""
 "ddogfen yn symud yn awtomatig i'r digwyddiad cyntaf a ddarganfuwyd. Nid yw "
 "chwilio yn sensitif i bach/mawr. Mae tri botwm wrth ymyl y blwch chwilio:"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:420-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:417-7
 msgid "Search backwards"
 msgstr "Chwilio nôl"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:421-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:418-7
 msgid "Search forward"
 msgstr "Chwilio ymlaen"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:422-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:419-7
 msgid "Cancel the search (appears only when a text has been searched)"
 msgstr ""
 "Diddymu'r chwilio (dim ond pan fydd testun wedi'i chwilio y mae'n ymddangos)"
 
-#: html/cool-help.html%2Bdiv.div.div.p:426-5
+#: html/cool-help.html%2Bdiv.div.div.p:423-5
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
@@ -1900,7 +1881,7 @@ msgstr ""
 "yn cael ei effeithio. Mae lefel gyfredol y chwyddo'n cael ei ddangos yn yr "
 "ardal hon."
 
-#: html/cool-help.html%2Bdiv.div.div.p:427-5
+#: html/cool-help.html%2Bdiv.div.div.p:424-5
 msgid ""
 "Text, charts, shapes and svg images will stay sharp, when zooming in, you "
 "will only see pixels appear at inserted images, such as jpg’s or png’s."
@@ -1909,30 +1890,13 @@ msgstr ""
 "i mewn, dim ond picseli sy'n ymddangos mewn delweddau wedi'u mewnosod, fel "
 "jpg neu png."
 
-#: html/cool-help.html%2Bdiv.div.div.p:428-5
+#: html/cool-help.html%2Bdiv.div.div.p:425-5
 msgid "Using the browser zoom affects the document and user interface areas."
 msgstr ""
 "Mae defnyddio chwyddo'r porwr yn effeithio ar ardaloedd y ddogfen a'r "
 "rhyngwyneb defnyddiwr."
 
-#: html/cool-help.html%2Bdiv.div.div.p:431-5
-msgid ""
-"<span class=\"def\">The information bar:</span> The information bar displays "
-"details about the current document. The actual information depends on the "
-"nature of the document."
-msgstr ""
-"<span class=\"def\">Y bar gwybodaeth:</span> Mae'r bar gwybodaeth yn dangos "
-"manylion am y ddogfen gyfredol. Mae natur y wybodaeth yn dibynnu ar y "
-"ddogfen ei hun."
-
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:432-54
-msgid ""
-"Information bar showing page navigation arrows, zoom controls, and zoom level"
-msgstr ""
-"Bar gwybodaeth yn dangos saethau llywio tudalennau, rheolyddion chwyddo, a "
-"lefel chwyddo"
-
-#: html/cool-help.html%2Bdiv.div.p:437-5
+#: html/cool-help.html%2Bdiv.div.p:430-5
 msgid ""
 "Your documents are stored and managed in the cloud storage that is "
 "integrated with <span class=\"productname\">{productname}</span>."
@@ -1940,7 +1904,7 @@ msgstr ""
 "Mae eich dogfennau'n cael eu storio a'u rheoli yn y storfa cwmwl sydd wedi'i "
 "hintegreiddio â <span class=\"productname\">{productname}</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:438-30
+#: html/cool-help.html%2Bdiv.div.div.p:431-30
 msgid ""
 "To download a document download it from the <span class=\"productname\""
 ">{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
@@ -1952,7 +1916,7 @@ msgstr ""
 "fformatau llwytho i lawr sydd ar gael yn dibynnu ar y rhaglen. Mae pob "
 "rhaglen yn allforio dogfennau ar ffurf PDF."
 
-#: html/cool-help.html%2Bdiv.div.div.p:439-30
+#: html/cool-help.html%2Bdiv.div.div.p:432-30
 msgid ""
 "To open document, click on the file to open the <span class=\"productname\""
 ">{productname}</span> module associated to the document format."
@@ -1960,7 +1924,7 @@ msgstr ""
 "I agor dogfen, cliciwch ar y ffeil i agor y modiwl yn <span class="
 "\"productname\">{productname}</span> sy'n gysylltiedig â fformat y ddogfen."
 
-#: html/cool-help.html%2Bdiv.div.div.p:440-30
+#: html/cool-help.html%2Bdiv.div.div.p:433-30
 msgid ""
 "Documents in <span class=\"productname\">{productname}</span> save "
 "automatically, but if you are concerned that a document is synchronized as "
@@ -1973,7 +1937,7 @@ msgstr ""
 "<span class=\"ui\">Cadw</span> yn y ddewislen <span class=\"ui\""
 ">Ffeil</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:441-30
+#: html/cool-help.html%2Bdiv.div.div.p:434-30
 msgid ""
 "Depending on the capabilities of your browser, the print window may appear "
 "or a “Download PDF export?” popup appears. You can print this PDF in your "
@@ -1983,41 +1947,52 @@ msgstr ""
 "lamlen “Llwytho i lawr allforio PDF?” ymddangos. Gallwch argraffu'r PDF hwn "
 "yn eich hoff ddarllenydd PDF."
 
-#: html/cool-help.html%2Bdiv.div.div.p:442-30
-#: html/cool-help.html%2Bdiv.div.div.p:475-7
+#: html/cool-help.html%2Bdiv.div.div.p:435-30
+#: html/cool-help.html%2Bdiv.div.div.p:472-7
 msgid ""
 "When closing a document, it is automatically saved if it has been changed."
 msgstr "Wrth gau dogfen, caiff ei chadw'n awtomatig os yw wedi'i newid."
 
-#: html/cool-help.html%2Bdiv.div.div.p:452-7
+#: html/cool-help.html%2Bdiv.div.div.p:441-7
 msgid ""
 "To open a document, either open it in <span class=\"productname\""
-">{productname}</span> from your platform's file manager or use the <span "
-"class=\"ui\">Open</span> button on the page shown from the <span class=\"ui\""
-">File</span> menu bar button."
+">{productname}</span> from your platform's file manager or use <span class="
+"\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:458-7
+#: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
-"To save the document in a different format use the <span class=\"ui\">Save "
-"as</span> button on the page shown from the <span class=\"ui\">File</span> "
-"menu bar button."
+"An existing document opens in view mode, so that you can read it without "
+"changing it by accident. To start editing, click the edit button (the pencil)"
+" in the bottom right corner. New documents and documents created from a "
+"template open ready to edit."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:463-7
+#: html/cool-help.html%2Bdiv.div.div.p:452-7
 msgid ""
-"Documents are automatically saved perdiodically, but if you want a document "
-"to be saved right away you can use the <span class=\"ui\">Save</span> button "
-"on the page shown from the <span class=\"ui\">File</span> menu bar button."
+"If the document is locked by another application, it stays in view mode."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:470-7
+#: html/cool-help.html%2Bdiv.div.div.p:456-7
 msgid ""
-"To print the document, use the <span class=\"ui\">Print</span> button on the "
-"page shown from the <span class=\"ui\">File</span> menu bar button."
+"To save the document in a different format use <span class=\"ui\">Save As</"
+"span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.p:482-5
+#: html/cool-help.html%2Bdiv.div.div.p:461-7
+msgid ""
+"Documents are automatically saved periodically, but if you want a document "
+"to be saved right away you can use <span class=\"ui\">Save</span> on the "
+"<span class=\"ui\">File</span> tab."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:467-7
+msgid ""
+"To print the document, use <span class=\"ui\">Print</span> on the <span "
+"class=\"ui\">File</span> tab."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
 "Document editing should be familiar to everyone that has used an office "
 "application before, but here are some distinctive features:"
@@ -2025,65 +2000,44 @@ msgstr ""
 "Dylai golygu dogfennau fod yn gyfarwydd i bawb sydd wedi defnyddio rhaglen "
 "swyddfa o'r blaen, ond dyma rai nodweddion nodedig:"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:484-5
+#: html/cool-help.html%2Bdiv.div.div.h4:481-5
 msgid "Copy and Paste"
 msgstr "Copïo a Gludo"
 
-#: html/cool-help.html%2Bdiv.div.div.p:485-5
+#: html/cool-help.html%2Bdiv.div.div.p:482-5
 msgid ""
-"Rich content copy/cut and paste is supported, not only within a given "
-"document, but also across documents on the same or different <span class="
-"\"productname\">{productname}</span>. For these internal uses, users can "
-"copy/cut content, including images and mixed content, on PC by using the "
-"keyboard shortcuts directly (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class="
-"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). For security "
-"reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>V</kbd> to paste on PC, but context menus can "
-"be used for cut and copy. On Android or iOS selecting text by double "
-"tapping, and using a long-tap to access copy/cut/paste via the context menu "
-"is required."
+"Rich content copy/cut and paste is supported, including images and mixed "
+"content, using the keyboard shortcuts (<kbd>Ctrl</kbd><span class=\"kbd--"
+"plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class="
+"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). On "
+"Android or iOS selecting text by double tapping, and using a long-tap to "
+"access copy/cut/paste via the context menu is required."
 msgstr ""
-"Mae copïo/torri a gludo cynnwys cyfoethog yn cael ei gefnogi, nid yn unig o "
-"fewn dogfen benodol, ond hefyd ar draws dogfennau ar yr un ddogfen neu "
-"ddogfennau <span class=\"productname\">{productname}</span> gwahanol. Ar "
-"gyfer y defnyddiau mewnol hyn, gall defnyddwyr gopïo/torri cynnwys, gan "
-"gynnwys delweddau a chynnwys cymysg, ar gyfrifiadur personol trwy "
-"ddefnyddio'r llwybrau byr bysellfwrdd yn uniongyrchol ( <kbd>Ctrl</kbd> "
-"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd>X</kbd>, "
-"<kbd>Ctrl</kbd> <span class=\"kbd--plus\" aria-hidden=\"true\">+</span> "
-"<kbd>C</kbd> , <kbd>Ctrl</kbd> <span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span> <kbd>V</kbd> ). Am resymau diogelwch mae angen defnyddio "
-"<kbd>Ctrl</kbd> <span class=\"kbd--plus\" aria-hidden=\"true\">+</span> "
-"<kbd>V</kbd> i gludo ar gyfrifiadur personol, ond mae modd defnyddio "
-"dewislenni cyd-destun ar gyfer torri a chopïo. Ar Android neu iOS mae angen "
-"dewis testun trwy dapio ddwywaith, a defnyddio tap hir i gael mynediad at "
-"gopïo/torri/gludo trwy'r ddewislen gyd-destun."
 
-#: html/cool-help.html%2Bdiv.div.div.p:486-5
+#: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
-"To copy larger pieces of content to other applications on your device, users "
-"need to press the <span class=\"ui\">Start download</span> button, and then "
-"re-copy this to their clipboard in order to make it available to the target "
-"application to read. This is possible via a tiny widget that pops up in the "
-"bottom-right corner, and is only necessary to export the content for pasting "
-"in external applications. This step also converts complex object types into "
+"For security reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd"
+"--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> to paste content that "
+"comes from outside the document, but context menus can be used for cut and "
+"copy."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:484-5
+msgid ""
+"When you copy a selection that contains images or other objects, a <span "
+"class=\"ui\">Download Selection</span> widget pops up in the bottom-right "
+"corner. Press <span class=\"ui\">Download</span>, then copy again, to make "
+"the content available to applications outside <span class=\"productname\""
+">{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
-"I gopïo darnau mwy o gynnwys i raglenni eraill ar eich dyfais, mae angen i "
-"ddefnyddwyr bwyso'r botwm <span class=\"ui\">Dechrau llwytho i lawr</span>, "
-"ac yna ail-gopïo hwn i'w clipfwrdd er mwyn iddo fod ar gael i'r rhaglen "
-"darged ei ddarllen. Mae hyn yn bosibl trwy declyn bach sy'n ymddangos yn y "
-"gornel dde isaf, a dim ond i allforio'r cynnwys i'w gludo mewn rhaglen "
-"allanol y mae ei angen. Mae'r cam hwn hefyd yn trosi mathau cymhleth o "
-"wrthrychau yn ddelweddau statig."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:489-5
+#: html/cool-help.html%2Bdiv.div.div.h4:487-5
 msgid "Document repair"
 msgstr "Trwsio dogfennau"
 
-#: html/cool-help.html%2Bdiv.div.div.p:490-5
+#: html/cool-help.html%2Bdiv.div.div.p:488-5
 msgid ""
 "When multiple people edit the same document concurrently, it is possible for "
 "their changes to conflict and this can cause some confusion. The Document "
@@ -2095,15 +2049,23 @@ msgstr ""
 "swyddogaeth Trwsio Dogfennau yn caniatáu i ddefnyddwyr ddadwneud newidiadau "
 "golygyddion eraill i'r ddogfen i gyflwr blaenorol."
 
-#: html/cool-help.html%2Bdiv.div.div.p:491-5
+#: html/cool-help.html%2Bdiv.div.div.p:489-5
+msgid ""
+"<span class=\"ui\">Repair</span> on the <span class=\"ui\">File</span> tab "
+"lists the recent changes to the document and lets you take the document back "
+"to an earlier state."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:490-5
+#, fuzzy
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
-"class=\"ui\">Jump to state</span>."
+"class=\"ui\">OK</span>."
 msgstr ""
 "I symud yn ôl i'r cyflwr a ddewiswyd, dewiswch ef gyda'r llygoden a chlicio "
 "<span class=\"ui\">Symud i gyflwr</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:492-55
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:491-55
 msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
@@ -2111,7 +2073,7 @@ msgstr ""
 "Trwsio deialog y Ddogfen yn rhestru cyn - ddogfennau yn datgan gyda "
 "cholofnau ar gyfer y math o weithred, awdur, a stamp amser"
 
-#: html/cool-help.html%2Bdiv.div.div.p:493-5
+#: html/cool-help.html%2Bdiv.div.div.p:492-5
 msgid ""
 "This is particularly useful – say when a colleague inadvertently selected "
 "all text in the document with <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
@@ -2123,23 +2085,24 @@ msgstr ""
 "\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd>A</kbd> ac aeth ymlaen i "
 "deipio drosto gan ei ddinistrio – tra roeddech chi'n golygu ar yr un pryd."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:496-5
-msgid "Inactive document"
-msgstr "Dogfen anweithredol"
+#: html/cool-help.html%2Bdiv.div.div.h4:495-5
+msgid "Idle document"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:497-5
+#: html/cool-help.html%2Bdiv.div.div.p:496-5
+#, fuzzy
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
-"“Inactive” state. The document is shown with a transparent gray overlay, "
-"with the message “Inactive document – please click to resume editing”."
+"“Idle” state. The document is shown with a transparent gray overlay, with "
+"the message “Idle document – please click to reload and resume editing”."
 msgstr ""
 "Pan fydd <span class=\"productname\">{productname}</span> yn canfod nad oes "
 "unrhyw weithgarwch wedi bod yn y porwr ers tro, mae'n rhoi'r ddogfen mewn "
 "cyflwr \"Anactif\". Mae'r ddogfen yn cael ei dangos gyda gorchudd llwyd "
 "tryloyw, gyda'r neges \"Dogfen anactif - cliciwch i ailddechrau golygu\"."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:498-57
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
 msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
@@ -2147,7 +2110,7 @@ msgstr ""
 "Troshaen dogfen segur gyda'r neges: Dogfen segur - cliciwch i ail-lwytho ac "
 "ailddechrau golygu"
 
-#: html/cool-help.html%2Bdiv.div.div.p:499-5
+#: html/cool-help.html%2Bdiv.div.div.p:498-5
 msgid ""
 "To continue editing, click on the document and the layover and message "
 "disappear. Any changes that may have been made by other users – while "
@@ -2157,11 +2120,11 @@ msgstr ""
 "diflannu. Bydd unrhyw newidiadau a allai fod wedi'u gwneud gan ddefnyddwyr "
 "eraill – wrth olygu'r ddogfen ar y cyd – yn cael eu hail-lwytho."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:502-5
+#: html/cool-help.html%2Bdiv.div.div.h4:501-5
 msgid "Pasting"
 msgstr "Gludo"
 
-#: html/cool-help.html%2Bdiv.div.div.p:503-5
+#: html/cool-help.html%2Bdiv.div.div.p:502-5
 msgid ""
 "When you paste content copied from within the same document, the format and "
 "elements are maintained. If you copy from another document, in another tab "
@@ -2173,7 +2136,7 @@ msgstr ""
 "mewn tab neu ffenestr porwr arall, neu o'r tu allan i'r porwr, bydd y "
 "cynnwys wedi'i gludo yn cadw testun cyfoethog."
 
-#: html/cool-help.html%2Bdiv.div.div.p:504-5
+#: html/cool-help.html%2Bdiv.div.div.p:503-5
 msgid ""
 "You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
@@ -2184,7 +2147,7 @@ msgstr ""
 "<kbd>Shift</kbd> <span class=\"kbd--plus\" aria-hidden=\"true\">+</span> "
 "<kbd>V</kbd>"
 
-#: html/cool-help.html%2Bdiv.div.div.p:505-5
+#: html/cool-help.html%2Bdiv.div.div.p:504-5
 msgid ""
 "When you paste text from within the document, formatting will be respected. "
 "You can also paste objects, such as images, if they are copied from the "
@@ -2194,7 +2157,7 @@ msgstr ""
 "barchu. Gallwch hefyd gludo gwrthrychau, fel delweddau, os ydyn nhw wedi'u "
 "copïo o'r ddogfen rydych chi'n gweithio ynddi."
 
-#: html/cool-help.html%2Bdiv.div.div.p:506-5
+#: html/cool-help.html%2Bdiv.div.div.p:505-5
 msgid ""
 "When you paste text from outside of the document (another browser window or "
 "a desktop application), it will be pasted as rich text."
@@ -2202,7 +2165,7 @@ msgstr ""
 "Pan fyddwch chi'n gludo testun o'r tu allan i'r ddogfen (ffenestr porwr "
 "arall neu raglen bwrdd gwaith), bydd yn cael ei gludo fel testun cyfoethog."
 
-#: html/cool-help.html%2Bdiv.div.div.p:507-5
+#: html/cool-help.html%2Bdiv.div.div.p:506-5
 msgid ""
 "When you have internal cut or copied content, you can paste this content "
 "using the context menu."
@@ -2210,11 +2173,11 @@ msgstr ""
 "Pan fydd gennych gynnwys wedi'i dorri neu ei gopïo'n fewnol, gallwch ludo'r "
 "cynnwys hwn gan ddefnyddio'r ddewislen cyd-destun."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:513-5
+#: html/cool-help.html%2Bdiv.div.div.h4:512-5
 msgid "Adding charts"
 msgstr "Ychwanegu siartiau"
 
-#: html/cool-help.html%2Bdiv.div.div.p:514-5
+#: html/cool-help.html%2Bdiv.div.div.p:513-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports inserting and "
 "visualization of charts in documents. To add a chart:"
@@ -2222,7 +2185,7 @@ msgstr ""
 "Mae <span class=\"productname\">{productname}</span> yn cefnogi mewnosod a "
 "delweddu siartiau mewn dogfennau. I ychwanegu siart:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:515-7
 msgid ""
 "Select a table in text document, a range in a spreadsheet or a table in a "
 "presentation."
@@ -2230,15 +2193,16 @@ msgstr ""
 "Dewiswch dabl mewn dogfen destun, ystod mewn taenlen neu dabl mewn "
 "cyflwyniad."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:517-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Charts</span>. "
+"Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Chart</span>. "
 "Customize your chart on the sidebar:"
 msgstr ""
 "Dewiswch <span class=\"ui\">Mewnosod</span> → <span class=\"ui\">Siartiau</"
 "span>. Cyfaddaswch eich siart ar y bar ochr:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:520-53
+#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:519-53
 msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
@@ -2246,13 +2210,13 @@ msgstr ""
 "Deialog Dewin Siart gyda rhestr math siart ar y chwith, rhagolygon arddull "
 "siart, opsiynau 3D a siâp"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:521-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:520-7
 msgid "If no table or range was selected, a prototype chart is displayed."
 msgstr ""
 "Os nad ydych wedi dewis tabl nac ystod, mae prototeip siart yn cael ei "
 "dangos."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:523-51
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:522-51
 msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
@@ -2260,7 +2224,7 @@ msgstr ""
 "Siart colofn gyda bariau wedi'u grwpio yn dangos data ar gyfer pedair rhes "
 "ar draws tair colofn"
 
-#: html/cool-help.html%2Bdiv.div.div.p:525-28
+#: html/cool-help.html%2Bdiv.div.div.p:524-28
 msgid ""
 "<span class=\"def\">Chart editing:</span> Double click the chart to select. "
 "Use context menus to add chart elements such as title, axis, and other. "
@@ -2272,7 +2236,7 @@ msgstr ""
 "teitl, echelin, ac eraill. Dewiswch <span class=\"ui\">Ystod Data</span> a "
 "<span class=\"ui\">Math Siart</span> i olygu data siart a dewis math siart."
 
-#: html/cool-help.html%2Bdiv.div.div.p:526-28
+#: html/cool-help.html%2Bdiv.div.div.p:525-28
 msgid ""
 "<span class=\"def\">Chart formatting:</span> The same context menu brings "
 "you to chart data table and chart type selection."
@@ -2280,7 +2244,7 @@ msgstr ""
 "<span class=\"def\">Fformatio siartiau:</span> Mae'r un ddewislen cyd-destun "
 "yn dod â chi i dabl data siart a dewis y math o siart."
 
-#: html/cool-help.html%2Bdiv.div.div.p:527-28
+#: html/cool-help.html%2Bdiv.div.div.p:526-28
 msgid ""
 "<span class=\"def\">Data series formatting:</span> Open the context menu and "
 "choose <span class=\"ui\">Format data series</span>."
@@ -2288,11 +2252,11 @@ msgstr ""
 "<span class=\"def\">Fformatio cyfres ddata:</span> Agorwch y ddewislen cyd-"
 "destun a dewiswch <span class=\"ui\">Fformatio cyfres ddata</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:529-5
+#: html/cool-help.html%2Bdiv.div.div.h4:528-5
 msgid "Handling images"
 msgstr "Trin delweddau"
 
-#: html/cool-help.html%2Bdiv.div.div.p:530-5
+#: html/cool-help.html%2Bdiv.div.div.p:529-5
 msgid ""
 "<span class=\"productname\">{productname}</span> inserts images in the text "
 "document from your local computer or from your cloud storage. Inserted "
@@ -2302,7 +2266,7 @@ msgstr ""
 "yn y ddogfen destun o'ch cyfrifiadur lleol neu o'ch storfa cwmwl. Mae "
 "delweddau a fewnosodwyd bob amser wedi'u hymgorffori yn y ddogfen."
 
-#: html/cool-help.html%2Bdiv.div.div.p:531-5
+#: html/cool-help.html%2Bdiv.div.div.p:530-5
 msgid ""
 "<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\""
 ">Insert image</span> icon allows you to choose an image from the cloud "
@@ -2312,16 +2276,14 @@ msgstr ""
 "class=\"ui\">Mewnosod delwedd</span> yn caniatáu i chi ddewis delwedd o "
 "ffolderi a rhaniadau storfa'r cwmwl."
 
-#: html/cool-help.html%2Bdiv.div.div.p:532-5
+#: html/cool-help.html%2Bdiv.div.div.p:531-5
 msgid ""
-"<span class=\"def\">Insert local image:</span> opens the browser file picker "
-"to upload the image from your local computer and insert it into the document."
+"<span class=\"def\">Insert local image:</span> Choose <span class=\"ui\""
+">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
+"computer and insert it into the document."
 msgstr ""
-"<span class=\"def\">Mewnosod delwedd leol:</span> yn agor y dewisydd "
-"ffeiliau porwr i lwytho'r ddelwedd o'ch cyfrifiadur lleol a'i mewnosod yn y "
-"ddogfen."
 
-#: html/cool-help.html%2Bdiv.div.div.p:533-5
+#: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
 "Images can be resized, rotated and anchored. Text can be wrapped around the "
 "image. Select the image and open the context menu. Use the images handles to "
@@ -2331,11 +2293,11 @@ msgstr ""
 "amgylch y ddelwedd. Dewiswch y ddelwedd ac agorwch y ddewislen cyd-destun. "
 "Defnyddiwch y dolenni delweddau i newid maint y ddelwedd gyda'r llygoden."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:536-5
+#: html/cool-help.html%2Bdiv.div.div.h4:535-5
 msgid "Comments in documents"
 msgstr "Mynd i ddiwedd y ddogfen"
 
-#: html/cool-help.html%2Bdiv.div.div.p:537-5
+#: html/cool-help.html%2Bdiv.div.div.p:536-5
 msgid ""
 "Insert comments in <span class=\"productname\">{productname}</span> in "
 "places that need special reader attention. Comments are displayed on the "
@@ -2345,7 +2307,7 @@ msgstr ""
 "mewn mannau sydd angen sylw arbennig gan y darllenydd. Mae sylwadau'n cael "
 "eu dangos ar y dde ac yn cynnwys enw a dyddiad y cyhoeddwr."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:538-51
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:537-51
 msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
@@ -2353,7 +2315,7 @@ msgstr ""
 "Blwch sylwadau yn dangos enw, dyddiad a thestun y sylw, sy'n cael ei ddangos "
 "wrth ymyl y ddogfen"
 
-#: html/cool-help.html%2Bdiv.div.div.p:539-5
+#: html/cool-help.html%2Bdiv.div.div.p:538-5
 msgid ""
 "Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
 " icon to reply, move and delete comments."
@@ -2361,11 +2323,11 @@ msgstr ""
 "Cliciwch ar eicon yr is-ddewislen (<span class=\"cool-annotation-menu icon-"
 "size\"/>) i ateb, symud a dileu sylwadau."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:542-5
+#: html/cool-help.html%2Bdiv.div.div.h4:541-5
 msgid "Spellchecking"
 msgstr "Gwirio sillafu"
 
-#: html/cool-help.html%2Bdiv.div.div.p:543-5
+#: html/cool-help.html%2Bdiv.div.div.p:542-5
 msgid ""
 "<span class=\"productname\">{productname}</span> can check spelling in text "
 "documents, spreadsheets and presentations. A red wavy underline indicates "
@@ -2377,19 +2339,20 @@ msgstr ""
 "dynodi geiriau sydd wedi'u camsillafu. Cliciwch ar fotwm dde'r llygoden i "
 "agor dewislen gyd-destun gyda chywiriadau camsillafu wedi'u hawgrymu."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:544-54
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:543-54
 msgid "Text with a red wavy underline beneath a misspelled word"
 msgstr "Testun gyda thanlinelliad tonnog coch o dan air wedi'i gamsillafu"
 
-#: html/cool-help.html%2Bdiv.div.div.p:545-5
+#: html/cool-help.html%2Bdiv.div.div.p:544-5
+#, fuzzy
 msgid ""
-"To systematically spell-check the whole document use the <span class=\"ui\""
-">Tools</span> menu’s <span class=\"ui\">Spelling</span> option."
+"To systematically spell-check the whole document use <span class=\"ui\""
+">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
 "I wirio'r sillafu cyfan yn systematig, defnyddiwch y dewis <span class=\"ui\""
 ">Sillafu</span> yn newislen <span class=\"ui\">Offer</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:552-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
 "You edit an online spreadsheet in the same way you edit a desktop "
 "spreadsheet. Operations like entering data, selecting ranges, columns, rows "
@@ -2409,18 +2372,18 @@ msgstr ""
 "gofnodwyd gyda <kbd>Tab</kbd> yn symud y cyrchwr i'r gell nesaf i'r dde, a "
 "chyda <kbd>Enter</kbd> i'r gell isod i fewnbynnu data pellach yn hawdd."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:557-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:556-5
 msgid ""
 "Formulas are entered in the formula bar. Enter '=' and insert the formula."
 msgstr ""
 "Mae fformwlâu yn cael eu nodi yn y bar fformwlâu. Rhowch '=' a mewnosodwch y "
 "fformwla."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:558-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:557-5
 msgid "All spreadsheets functions and mathematical rules applies."
 msgstr "Mae pob swyddogaethau taenlenni a rheolau mathemategol yn berthnasol."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:559-50
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:558-50
 msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
@@ -2428,7 +2391,7 @@ msgstr ""
 "Bar fformiwla yn dangos cyfeirnod celloedd B1, eicon dewin swyddogaeth, a'r "
 "fformiwla = SIN (PI ()*A1/10)"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:560-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:559-5
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
 "and is specified in great detail in the <a href=\"https://www.oasis-open.org/"
@@ -2440,7 +2403,7 @@ msgstr ""
 "committees/download.php/16826/openformula-spec-20060221.html\" target="
 "\"_blank\" rel=\"noopener noreferrer\">manyleb OASIS OpenFormula</a>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:566-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:565-5
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
@@ -2460,7 +2423,7 @@ msgstr ""
 "yn ogystal â ffont, ffin gymhleth, cefndir, amddiffyn celloedd a dewisiadau "
 "eraill."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:567-51
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:566-51
 msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
@@ -2468,7 +2431,7 @@ msgstr ""
 "Fformatio Celloedd deialog ar y tab Rhifau gyda rhestr categori, opsiynau "
 "fformat, lleoedd degol, a chod fformat"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:572-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:571-30
 msgid ""
 "<span class=\"def\">Sorting data:</span> You can sort a list of numbers or "
 "text ascending or descending. <span class=\"productname\">{productname}</"
@@ -2480,7 +2443,7 @@ msgstr ""
 "{productname}</span> yn canfod celloedd sy'n benynnau, a cholofnau cyfagos, "
 "yn awtomatig i ymestyn y detholiad."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:573-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:572-30
 msgid ""
 "<span class=\"def\">Filtering data:</span> Filters and advanced filters "
 "allow you to work on certain filtered rows (records) of a data range. In the "
@@ -2492,7 +2455,7 @@ msgstr ""
 "Yn y taenlenni yn <span class=\"productname\">{productname}</span> mae amryw "
 "o bosibiliadau ar gyfer cymhwyso hidlwyr."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:575-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:574-7
 msgid ""
 "One use for the <span class=\"ui\">AutoFilter</span> function is to quickly "
 "restrict the display to records with identical entries in a data field."
@@ -2501,7 +2464,7 @@ msgstr ""
 "cyfyngu'r dangos i gofnodion cyflym sydd â chofnodion union yr un fath mewn "
 "maes data."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:577-55
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:576-55
 msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
@@ -2509,7 +2472,7 @@ msgstr ""
 "Cwymplen AwtoHidl ar golofn taenlen gyda didoli, hidlo yn ôl lliw, hidlo yn "
 "ôl cyflwr, a blychau gwirio ar gyfer gwerthoedd unigol"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:579-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:578-7
 msgid ""
 "In the <span class=\"ui\">Standard Filter</span> dialog, you can also define "
 "ranges which contain the values in particular data fields. You can use the "
@@ -2521,7 +2484,7 @@ msgstr ""
 "Gallwch ddefnyddio'r hidlydd safonol i gysylltu'r amodau â naill ai "
 "gweithredwr rhesymegol A neu resymegol OR."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:580-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:579-7
 msgid ""
 "The <span class=\"ui\">Advanced Filter</span> allows up to a total of eight "
 "filter conditions. With advanced filters you enter the conditions directly "
@@ -2531,7 +2494,7 @@ msgstr ""
 "wyth cyflwr hidlo. Gyda hidlwyr datblygedig rydych chi'n nodi'r amodau yn "
 "uniongyrchol i'r ddalen."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:584-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:583-5
 msgid ""
 "<span class=\"def\">Outlining:</span> You can create an outline of your data "
 "and group rows and columns together so that you can collapse and expand the "
@@ -2541,7 +2504,7 @@ msgstr ""
 "rhesi grŵp a cholofnau gyda'ch gilydd fel y gallwch leihau ac ehangu'r "
 "grwpiau gydag un clic gan ei gwneud hi'n hawdd cynrychioli data hierarchaidd."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:585-49
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:584-49
 msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
@@ -2549,7 +2512,7 @@ msgstr ""
 "Taenlen gyda rheolaethau grwpio rhesi a cholofnau yn dangos botymau lefel "
 "amlinellol a cau/ehangu toglau"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:588-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
 "<span class=\"def\">Data validation:</span> For each cell, you can define "
 "entries to be valid. Invalid entries to a cell will be rejected. To enable "
@@ -2559,15 +2522,16 @@ msgstr ""
 "cofnodion i fod yn ddilys. Mae cofnodion annilys i gell yn cael eu gwrthod. "
 "Er mwyn galluogi dilysu data:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:590-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:589-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Validity</span> from the <span class=\"ui\">Data</"
-"span> menu. The <span class=\"ui\">Validity</span> dialog opens."
+"Choose <span class=\"ui\">Validity</span> on the <span class=\"ui\">Data</"
+"span> tab. The <span class=\"ui\">Validity</span> dialog opens."
 msgstr ""
 "Dewiswch <span class=\"ui\">Dilysrwydd</span> o'r ddewislen <span class=\"ui"
 "\">Data</span>. Mae'r ddeialog <span class=\"ui\">Dilysrwydd</span> yn agor."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:593-57
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:592-57
 msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
@@ -2575,7 +2539,7 @@ msgstr ""
 "Deialog dilysrwydd ar y tab Meini Prawf gyda Chaniatáu gosod i'r Rhestr, yn "
 "dangos opsiynau ar gyfer celloedd gwag, rhestr ddethol, a gwerthoedd cofnod"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:593-7
 msgid ""
 "Select the validity criterion in the <span class=\"ui\">Allow</span> drop-"
 "box list. Depending on the criterion, more options show. Fill the required "
@@ -2585,7 +2549,7 @@ msgstr ""
 ">Caniatáu</span>. Yn dibynnu ar y maen prawf, mae mwy o ddewisiadau'n "
 "ymddangos. Llenwch y data gofynnol."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:595-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
 msgid ""
 "Use the <span class=\"ui\">Input Help</span> and <span class=\"ui\">Error "
 "Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\""
@@ -2595,7 +2559,7 @@ msgstr ""
 "\"ui\">Rhybudd Gwall</span> i wella rhyngweithio defnyddwyr. Cliciwch <span "
 "class=\"ui\">Iawn</span> i gau'r ddeialog."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:598-56
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:597-56
 msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
@@ -2603,7 +2567,7 @@ msgstr ""
 "Rhestr cwymplen celloedd sy'n dangos cofnodion wedi'u dilysu fel Afal, "
 "Gellyg, Banana, Kiwi, a Lemwn"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:599-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:598-7
 msgid ""
 "To remove the validity of the cell, open the dialog and set the <span class="
 "\"ui\">Allow</span> list to “All values”."
@@ -2611,7 +2575,7 @@ msgstr ""
 "I gael gwared ar ddilysrwydd y gell, agorwch y blwch deialog a gosodwch y "
 "rhestr <span class=\"ui\">Caniatáu</span> i “Pob gwerth”."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:603-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:602-5
 msgid ""
 "<span class=\"def\">Comments:</span> In a spreadsheet you can insert one "
 "comment per cell. When you select <span class=\"ui\">Insert comment</span>, "
@@ -2625,7 +2589,7 @@ msgstr ""
 "dangos ar gornel dde uchaf y gell pan fydd ganddo sylw. Gallwch hofran y "
 "llygoden dros y gell i ddangos sylwadau."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:604-52
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:603-52
 msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
@@ -2633,12 +2597,13 @@ msgstr ""
 "Cell taenlen gyda llamlen sylwadau yn dangos yr awdur, dyddiad, testun "
 "sylwadau, a botymau Cadw/Diddymu"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:607-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:606-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
-"conditions. Select the cell range and click the <span class=\"ui\""
-">Conditional Formatting</span> icon on the toolbar. Select the symbol set to "
+"conditions. Select the cell range and click <span class=\"ui\">Conditional</"
+"span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
 "apply on the range."
 msgstr ""
 "<span class=\"def\">Fformatio amodol:</span> Mae <span class=\"productname\""
@@ -2647,7 +2612,7 @@ msgstr ""
 "eicon <span class=\"ui\">Fformatio Amodol</span> ar y bar offer. Dewiswch y "
 "set symbolau i'w chymhwyso ar yr ystod."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:608-62
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
@@ -2655,7 +2620,7 @@ msgstr ""
 "Dewisydd set eicon fformatio amodol sy'n dangos saethau, cylchoedd, "
 "goleuadau traffig, sêr, wynebau gwenu, a setiau symbolau siart bar"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:616-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:615-30
 msgid ""
 "<span class=\"productname\">{productname}</span> edits text documents in the "
 "same way you edit a desktop document. It provides a What You See Is What You "
@@ -2675,7 +2640,7 @@ msgstr ""
 "Defnyddiwch y bysellfwrdd, y dewislenni a'r bariau offer i ryngweithio â'ch "
 "dogfen."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:620-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:619-30
 msgid ""
 "Context menus are available on clicking the right mouse button. The commands "
 "available in the context menu are related - not extensively - to the "
@@ -2685,11 +2650,11 @@ msgstr ""
 "gorchmynion sydd ar gael yn y ddewislen cyd-destun yn gysylltiedig - ond nid "
 "yn llwyr - â'r gwrthrych sylfaenol yn y ddogfen."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:623-5
+#: html/cool-help.html%2Bdiv.div.div.h3:622-5
 msgid "Formatting text"
 msgstr "Fformatio testun"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:625-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:624-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports modern techniques "
 "for paragraph formatting through styles. A style is a set of text properties "
@@ -2709,7 +2674,7 @@ msgstr ""
 "paragraff gyda'r un arddull yn newid fformatio hefyd, gan symleiddio'r "
 "ymdrech o fformatio llawer o baragraffau yn unigol."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:626-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:625-5
 msgid ""
 "In contrast, direct formatting applies formatting to selected excerpts of "
 "the document contents. On a long document, direct formatting must be applied "
@@ -2721,7 +2686,7 @@ msgstr ""
 "fformatio uniongyrchol ym mhob darn testun, gan droi fformatio testun yn "
 "dasg hir, yn amodol ar wallau ac oedi."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:628-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:627-30
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format text document "
 "objects by formatting directly from the menus, toolbar or context menus. "
@@ -2732,12 +2697,13 @@ msgstr ""
 "offer neu ddewislenni cyd-destun. Mae fformatio uniongyrchol yn berthnasol "
 "i'r gwrthrych cyfredol sy'n cael ei ddewis, yn unig."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:630-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:629-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
-"paragraph style to a paragraph. Choose menu <span class=\"ui\">Edit</span> → "
-"<span class=\"ui\">Edit styles</span> to change style."
+"paragraph style to a paragraph. Select the style in the style list on the "
+"<span class=\"ui\">Home</span> tab."
 msgstr ""
 "<span class=\"def\">Fformatio arddull:</span> Mae <span class=\"productname\""
 ">{productname}</span> yn cefnogi arddulliau paragraff. Gallwch gymhwyso "
@@ -2745,7 +2711,7 @@ msgstr ""
 "class=\"ui\">Golygu</span> → <span class=\"ui\">Golygu arddulliau</span> i "
 "newid yr arddull."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:631-56
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
@@ -2753,16 +2719,18 @@ msgstr ""
 "Deialog paragraff ar y tab Mewnoliad a Bylchu gyda gosodiadau ar gyfer "
 "mewnoliad, bylchau a bylchau llinell, a rhagolwg ar y dde"
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:637-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:636-5
 msgid "Handling Tables"
 msgstr "Trin Tablau"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:638-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:637-5
+#, fuzzy
 msgid ""
-"Insert tables with proper icon in the toolbar. Select the initial number of "
-"rows and columns. Add rows and columns with the cell context menu. Merge "
-"cells with the <span class=\"ui\">Table</span> menu. The default paragraph "
-"style inside cells is “Table contents”."
+"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
+">Table</span>. Select the initial number of rows and columns. Add rows and "
+"columns with the cell context menu. Merge cells from the <span class=\"ui\""
+">Table</span> tab. The default paragraph style inside cells is “Table "
+"contents”."
 msgstr ""
 "Mewnosodwch dablau gyda'r eicon cywir yn y bar offer. Dewiswch nifer "
 "cychwynnol y rhesi a'r colofnau. Ychwanegwch resi a cholofnau gyda'r "
@@ -2770,7 +2738,7 @@ msgstr ""
 ">Tabl</span>. Yr arddull paragraff rhagosodedig y tu mewn i gelloedd yw “"
 "Cynnwys y tabl”."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:639-52
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
@@ -2778,22 +2746,23 @@ msgstr ""
 "Dewisydd mewnosod Tabl yn dangos grid i ddewis nifer y rhesi a cholofnau, "
 "sy'n dangos 5 wrth 3 ar hyn o bryd"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:642-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:641-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
-"cells and choose menu <span class=\"ui\">Table</span> → <span class=\"ui\""
-">Properties</span>. Fine tune the table with the properties dialog."
+"cells, open the context menu and choose <span class=\"ui\">Table Properties</"
+"span>. Fine tune the table with the properties dialog."
 msgstr ""
 "<span class=\"def\">Fformatio celloedd:</span> Cliciwch yn y gell neu'r "
 "ystod o gelloedd a dewiswch y ddewislen <span class=\"ui\">Tabl</span> → "
 "<span class=\"ui\">Priodweddau</span>. Addaswch y bwrdd gyda'r ddeialog "
 "priodweddau."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:645-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
 msgstr "Tracio newidiadau"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:646-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:645-5
 msgid ""
 "When you turn on Track Changes, <span class=\"productname\">{productname}</"
 "span> marks up new changes made to the document. Select this option again to "
@@ -2803,7 +2772,7 @@ msgstr ""
 ">{productname}</span> yn marcio newidiadau newydd a wnaed i'r ddogfen. "
 "Dewiswch y dewis hwn eto i'w ddiffodd."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:647-61
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:646-61
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:774-61
 msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
@@ -2812,7 +2781,7 @@ msgstr ""
 "Newid wedi'i dracio sy'n cael ei ddangos fel blwch sylwadau wrth ymyl y "
 "ddogfen gydag enw awdur, dyddiad a disgrifiad newid"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:648-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:647-5
 msgid ""
 "Changes made by different people are shown in different colors and each "
 "tracked change can be accepted or rejected, using the box that appears on "
@@ -2822,11 +2791,11 @@ msgstr ""
 "gwahanol liwiau ac mae modd derbyn neu wrthod pob newid wedi'i dracio, gan "
 "ddefnyddio'r blwch sy'n ymddangos ar y dde. Gallwch hefyd ychwanegu sylw yno."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:651-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:650-5
 msgid "Other advanced features"
 msgstr "Nodweddion uwch eraill"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:652-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:651-5
 msgid ""
 "<span class=\"def\">Comments:</span> Comments are inserted in the text and "
 "displayed on the right side of the screen."
@@ -2834,7 +2803,7 @@ msgstr ""
 "<span class=\"def\">Sylwadau:</span> Mae sylwadau'n cael eu mewnosod yn y "
 "testun a'u dangos ar ochr dde'r sgrin."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:653-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:652-5
 msgid ""
 "<span class=\"def\">Formatting marks:</span> Paragraph, page and unbreakable "
 "spaces are shown as marks to assist text alignment, editing and formatting."
@@ -2843,7 +2812,7 @@ msgstr ""
 "gofodau nad oes modd eu torri yn cael eu dangos fel marciau i gynorthwyo "
 "aliniad testun, golygu a fformatio."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:654-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:653-5
 msgid ""
 "<span class=\"def\">Fields:</span> A basic set of fields is available to "
 "insert in the document."
@@ -2851,7 +2820,7 @@ msgstr ""
 "<span class=\"def\">Meysydd:</span> Mae set sylfaenol o feysydd ar gael i'w "
 "mewnosod yn y ddogfen."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:655-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:654-5
 msgid ""
 "<span class=\"def\">Alphabetical index:</span> Existing alphabetical index "
 "can be updated with new entries."
@@ -2859,7 +2828,7 @@ msgstr ""
 "<span class=\"def\">Mynegai yn nhrefn yr wyddor</span> Mae modd diweddaru "
 "mynegai trefn yr wyddor presennol gyda chofnodion newydd."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:656-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:655-5
 msgid ""
 "<span class=\"def\">Page header and footer:</span> Headers and footers are "
 "available for the existing page style applied in the document at the cursor "
@@ -2869,7 +2838,7 @@ msgstr ""
 "throedynnau ar gael ar gyfer yr arddull dudalen bresennol sydd wedi'i osod "
 "yn y ddogfen yn safle'r cyrchwr."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:657-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:656-5
 msgid ""
 "<span class=\"def\">Footnotes and endnotes:</span> Footnotes and endnotes "
 "are supported."
@@ -2877,7 +2846,7 @@ msgstr ""
 "<span class=\"def\">Troednodiadau ac ôl-nodiadau:</span> Mae troednodiadau "
 "ac ôl-nodiadau yn cael eu cefnogi."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:665-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:664-30
 msgid ""
 "<span class=\"productname\">{productname}</span> Impress edits presentations "
 "in a way that should be familiar to people. Operations like typing text, "
@@ -2893,7 +2862,7 @@ msgstr ""
 "cyflwyno bwrdd gwaith. Defnyddiwch y bysellfwrdd, y dewislenni a'r bariau "
 "offer i gyflawni gweithredoedd yn eich dogfen."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:670-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:669-5
 msgid ""
 "<span class=\"productname\">{productname}</span> displays presentation slide "
 "shows, including a subset of slide transitions and object animations. Choose "
@@ -2905,7 +2874,7 @@ msgstr ""
 "animeiddiadau gwrthrychau. Dewiswch y sioe sleidiau o'r ddewislen neu "
 "cliciwch ar yr eicon yn y bar offer chwith isaf yn y panel sleidiau."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:671-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:670-5
 msgid ""
 "To exit a <span class=\"productname\">{productname}</span> slide show, press "
 "the <kbd>Esc</kbd> key to return to the presentation edit mode."
@@ -2913,7 +2882,7 @@ msgstr ""
 "I adael sioe sleidiau <span class=\"productname\">{productname}</span>, "
 "pwyswch yr y fysell <kbd>Esc</kbd> i ddychwelyd i'r modd golygu cyflwyniad."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:677-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:676-5
 msgid ""
 "Click on any slide thumbnail in the pane to switch to this slide to view or "
 "edit it."
@@ -2921,7 +2890,7 @@ msgstr ""
 "Cliciwch ar unrhyw sleidiau bach yn y cwarel i newid i'r sleid hon i'w weld "
 "neu ei olygu."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:678-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:677-5
 msgid ""
 "Use the slide pane toolbar in the bottom to start the slideshow, add slide, "
 "duplicate or delete the current slide."
@@ -2929,7 +2898,7 @@ msgstr ""
 "Defnyddiwch y bar offer cwarel sleidiau ar y gwaelod i gychwyn y sioe "
 "sleidiau, ychwanegu sleid, dyblygu neu ddileu'r sleid gyfredol."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:684-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:683-5
 msgid ""
 "<span class=\"def\">Slide layouts:</span> <span class=\"productname\""
 ">{productname}</span> Impress lets you change the slide layout. Select the "
@@ -2939,7 +2908,7 @@ msgstr ""
 ">{productname}</span> Mae Impress yn gadael i chi newid cynllun y sleidiau. "
 "Dewiswch y cynllun sleidiau rydych am eu cael yn y gwymplen."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:685-53
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:684-53
 msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
@@ -2947,7 +2916,7 @@ msgstr ""
 "Panel priodweddau sleidiau yn dangos fformat, cyfeiriadedd, cefndir a "
 "gosodiadau prif sleidiau, gydag oriel cynllun o ddewisiadau mân - luniau isod"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:687-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:686-30
 msgid ""
 "<span class=\"def\">Master slide:</span> Select the master slide associated "
 "to the current slide. Format and arrange slide elements in the master slide."
@@ -2956,7 +2925,7 @@ msgstr ""
 "gysylltiedig â'r sleid gyfredol. Fformatiwch a threfnu elfennau sleidiau yn "
 "y brif sleid."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:688-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:687-30
 msgid ""
 "<span class=\"def\">Slide transitions:</span> <span class=\"productname\""
 ">{productname}</span> Impress provides visual effects when displaying a new "
@@ -2969,7 +2938,7 @@ msgstr ""
 "sleidiau yn eiddo i'r sleid, defnyddiwch y bar ochr i osod y trawsnewidiad "
 "sleidiau pan fyddwch yn y modd golygu."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:689-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:688-30
 msgid ""
 "<span class=\"def\">Object animation:</span> Individual objects in the slide "
 "can have animations. Use the side bar to configure the slide transition for "
@@ -2979,7 +2948,7 @@ msgstr ""
 "sleid gynnwys animeiddiad. Defnyddiwch y bar ochr i ffurfweddu'r "
 "trawsnewidiad sleid ar gyfer gwrthrych neu set o wrthrychau a ddewiswyd."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:690-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:689-30
 msgid ""
 "<span class=\"def\">Tables:</span> Insert tables in the presentation. Use "
 "the sidebar to select the table theme."
@@ -2987,7 +2956,7 @@ msgstr ""
 "<span class=\"def\">Tablau:</span> Mewnosodwch dablau yn y cyflwyniad. "
 "Defnyddiwch y bar ochr i ddewis thema'r tabl."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:696-5
+#: html/cool-help.html%2Bdiv.div.div.h4:695-5
 msgid ""
 "What are the document file formats supported by <span class=\"productname\""
 ">{productname}</span>?"
@@ -2995,7 +2964,7 @@ msgstr ""
 "Pa fformatau ffeiliau dogfennau sy'n cael eu cefnogi gan <span class="
 "\"productname\">{productname}</span> ?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:697-5
+#: html/cool-help.html%2Bdiv.div.div.p:696-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports both reading and "
 "writing for the following file formats:"
@@ -3003,40 +2972,41 @@ msgstr ""
 "Mae <span class=\"productname\">{productname}</span> yn cefnogi darllen ac "
 "ysgrifennu ar gyfer y fformatau ffeil canlynol:"
 
+#: html/cool-help.html%2Bdiv.div.div.ul.li:698-7
+msgid ""
+"Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT. "
+"Plain text TXT and Markdown MD"
+msgstr ""
+
 #: html/cool-help.html%2Bdiv.div.div.ul.li:699-7
 msgid ""
-"Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
+"Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS. Comma "
+"separated values CSV"
 msgstr ""
-"Dogfennau testun: Fformatau Microsoft DOC, DOCX, RTF. Fformat OpenDocument "
-"ODT"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:700-7
-msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
-msgstr "Taenlenni: Fformatau Microsoft XLS, XLSX, Fformat OpenDocument ODS"
-
-#: html/cool-help.html%2Bdiv.div.div.ul.li:701-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
 msgstr "Cyflwyniadau: Fformatau Microsoft PPT, PPTX, Fformat OpenDocument ODP"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:705-5
+#: html/cool-help.html%2Bdiv.div.div.h4:704-5
 msgid "How do I save a document with another name?"
 msgstr "Sut ydw i'n cadw dogfen gydag enw arall?"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:707-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:706-7
 msgid "Hover the mouse on the document name in the menu bar."
 msgstr "Rhowch y cyrchwr dros enw'r ddogfen yn y bar dewislen."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:708-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:707-7
 msgid "Type the new file name in the text box and press <kbd>Enter</kbd>."
 msgstr ""
 "Teipiwch enw'r ffeil newydd yn y blwch testun a phwyswch <kbd>Enter</kbd>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:710-5
+#: html/cool-help.html%2Bdiv.div.div.p:709-5
 msgid "A copy of the document is saved with the new name in the same folder."
 msgstr ""
 "Mae copi o'r ddogfen yn cael ei chadw gyda'r enw newydd yn yr un ffolder."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:713-5
+#: html/cool-help.html%2Bdiv.div.div.h4:712-5
 msgid ""
 "How can I quit <span class=\"productname\">{productname}</span> without "
 "saving my edits?"
@@ -3044,7 +3014,7 @@ msgstr ""
 "Sut ydw i'n gadael <span class=\"productname\">{productname}</span> heb gadw "
 "fy ngolygyddion?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:714-5
+#: html/cool-help.html%2Bdiv.div.div.p:713-5
 msgid ""
 "<span class=\"productname\">{productname}</span> saves the document in the "
 "background regularly, you can't just close without saving it. To abandon "
@@ -3056,6 +3026,13 @@ msgstr ""
 "i'ch newidiadau, rhaid i chi naill ai eu dadwneud, neu ddefnyddio'r <span "
 "class=\"ui\"> Hanes Adolygu </span> yn y ddewislen <span class=\"ui\""
 ">Ffeil</span>."
+
+#: html/cool-help.html%2Bdiv.div.div.p:714-5
+msgid ""
+"<span class=\"productname\">{productname}</span> saves the document in the "
+"background regularly, you can't just close without saving it. To abandon "
+"your changes, undo them."
+msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:717-5
 msgid ""
@@ -3080,9 +3057,10 @@ msgid "How can I check spelling in my language?"
 msgstr "Sut ydw i'n gwirio sillafu yn fy iaith?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
+#, fuzzy
 msgid ""
-"Choose menu <span class=\"ui\">Tools</span> → <span class=\"ui\">Languages</"
-"span> and select the language for the whole document. Optionally you can set "
+"Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
+"and select the language for the whole document. Optionally you can set "
 "languages for the selected text and for the current paragraph."
 msgstr ""
 "Dewiswch <span class=\"ui\">Offer</span> dewislen → <span class=\"ui\""
@@ -3095,11 +3073,9 @@ msgstr "Sut ydw i'n cael gwared ar y llinellau tonnog coch yn fy nogfen?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:726-5
 msgid ""
-"Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
-">Automatic Spell Checking</span>."
+"On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
+">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
-"Dewiswch y ddewislen <span class=\"ui\">Offer</span> a dad-diciwch <span "
-"class=\"ui\">Gwirio Sillafu Awtomatig</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
 msgid "What is the blue wavy underline in some words in the text?"
@@ -3122,9 +3098,10 @@ msgid "Is there a thesaurus?"
 msgstr "Oes yna thesawrws?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
+#, fuzzy
 msgid ""
-"Yes. Click in the word you want and choose <span class=\"ui\">Tools</span> → "
-"<span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
+"Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
+" <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
 "Oes. Cliciwch yn y gair rydych chi ei eisiau a dewis <span class=\"ui\""
@@ -3148,11 +3125,12 @@ msgstr ""
 "dynnu o'm dogfen destun?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
+#, fuzzy
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
-"document display, choose menu <span class=\"ui\">View</span> → <span class="
-"\"ui\">Formatting mark</span>."
+"document display, choose <span class=\"ui\">View</span> → <span class=\"ui\""
+">Formatting Marks</span>."
 msgstr ""
 "Mae'r symbol <span class=\"blue\">¶</span> yn farc fformatio. Mae'n cael ei "
 "ddefnyddio i helpu alinio a golygu testun ac nid yw'n cael ei argraffu. I'w "
@@ -3164,10 +3142,11 @@ msgid "How do I get a word count of my document?"
 msgstr "Sut mae cael cyfrif geiriau o'm dogfen?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
+#, fuzzy
 msgid ""
-"Word count is available in <span class=\"ui\">Tools</span> → <span class=\"ui"
-"\">Word count</span>. A dialog shows word counts for selection and for the "
-"whole document."
+"Word count is available in <span class=\"ui\">Review</span> → <span class="
+"\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
+"the whole document."
 msgstr ""
 "Mae cyfrif geiriau ar gael yn <span class=\"ui\">Offer</span> → <span class="
 "\"ui\">Cyfrif geiriau</span>. Mae deialog yn dangos cyfrif geiriau ar gyfer "
@@ -3213,12 +3192,8 @@ msgstr "Rhowch y cyrchwr yn y safle i fewnosod y cymeriad."
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:756-7
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
-"Characters </span> or click the corresponding icon in the toolbar. A dialog "
-"opens."
+"Character</span>. A dialog opens."
 msgstr ""
-"Dewiswch <span class=\"ui\">Mewnosod</span> → <span class=\"ui\">Nodau "
-"Arbennig</span> neu cliciwch yr eicon cyfatebol yn y bar offer. Mae deialog "
-"yn ymddangos."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:759-59
 msgid ""
@@ -3254,12 +3229,13 @@ msgid "Why can't I delete text? It just gets a strike-through?"
 msgstr "Pam na allaf ddileu testun? Mae taro-drwodd yn ymddangos?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:766-5
+#, fuzzy
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
 "Useful for marking changes in text and spreadsheets. Track changes are "
-"enabled choosing <span class=\"ui\">Edit</span> → <span class=\"ui\">Track "
-"Changes </span> → <span class=\"ui\">Record</span>."
+"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\""
+">Record</span>."
 msgstr ""
 "Mae gennych y nodwedd Tracio Newidiadau wedi'i alluogi ar gyfer y ddogfen. "
 "Mae Tracio Newidiadau yn cofnodi'r holl newidiadau yn y testun ac yn dangos "
@@ -3300,9 +3276,10 @@ msgstr ""
 "newid y ddogfen."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:776-5
+#, fuzzy
 msgid ""
-"To display or hide track changes choose <span class=\"ui\">Edit</span> → "
-"<span class=\"ui\">Track Changes </span> → <span class=\"ui\">Show</span>. "
+"To display or hide track changes choose <span class=\"ui\">Review</span> → "
+"<span class=\"ui\">View Changes</span> → <span class=\"ui\">Show</span>. "
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
@@ -3313,15 +3290,16 @@ msgstr ""
 "byddwch chi'n gadael testun diangen ar gael yn y ddogfen yn anfwriadol."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:777-5
+#, fuzzy
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
-"Alternatively, choose <span class=\"ui\">Edit</span> → <span class=\"ui\""
-">Track Changes </span> → <span class=\"ui\">Accept</span> or <span class=\"ui"
-"\">Reject</span>. Furthermore, if you need to filter changes before "
-"accepting or rejecting, choose <span class=\"ui\">Edit</span> → <span class="
-"\"ui\">Track Changes </span> → <span class=\"ui\">Manage</span>. A dialog "
-"shows a list of all tracked changes. Use the dialog buttons accordingly."
+"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\""
+">Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
+"to filter changes before accepting or rejecting, choose <span class=\"ui\""
+">Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\""
+">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
+"buttons accordingly."
 msgstr ""
 "Mae modd derbyn neu wrthod newidiadau. I dderbyn neu wrthod newidiadau, "
 "cliciwch ar yr eiconau cyfatebol yn y blwch sylwadau ar ochr dde'r ddogfen. "
@@ -3359,9 +3337,10 @@ msgid "Using the page style"
 msgstr "Defnyddio arddull y dudalen"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page</span> and "
-"select the <span class=\"ui\">Page</span> tab"
+"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page Style</"
+"span> and select the <span class=\"ui\">Page</span> tab"
 msgstr ""
 "Dewiswch <span class=\"ui\">Fformat</span> → <span class=\"ui\">Tudalen</"
 "span> a dewiswch y tab <span class=\"ui\">Tudalen</span>"
@@ -3441,13 +3420,11 @@ msgstr "Dewiswch y testun gyda'r fformat presennol"
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:806-7
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:848-7
 msgid ""
-"Click on the clone formatting icon <img alt=\"format paintbrush\" class"
-"=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
-"turns to a paint bucket."
+"Click on the <span class=\"ui\">Clone Formatting</span> icon <img alt="
+"\"format paintbrush\" class=\"icon-size\" src=\"images/lc_formatpaintbrush."
+"svg\" /> on the <span class=\"ui\">Home</span> tab. The mouse pointer turns "
+"to a paint bucket."
 msgstr ""
-"Cliciwch ar yr eicon fformatio eicon <img alt=\"format paintbrush\" class"
-"=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" /> Mae pwyntydd y "
-"llygoden yn troi’n fwced paent."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
 msgid "Select the text you want to apply the new format."
@@ -3479,15 +3456,10 @@ msgstr ""
 msgid ""
 "You have the AutoCorrection enabled. AutoCorrection compares the text just "
 "typed to an internal table of text. In most cases, AutoCorrection corrects "
-"typos while you type. If AutoCorrection is not necessary, disable it in "
-"<span class=\"ui\">Tools</span> → <span class=\"ui\">AutoCorrection</span> → "
-"<span class=\"ui\">While typing</span>."
+"typos while you type. To revert a correction, press <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after it "
+"was applied."
 msgstr ""
-"Mae AwtoGywiro wedi'i alluogi. Mae AwtoGywiro yn newid y testun sydd newydd "
-"ei deipio i dabl mewnol o destun cyfatebol. Yn y rhan fwyaf o achosion, mae "
-"AwtoGywiro yn trwsio gwallau tra'ch bod chi'n teipio. Os nad oes angen "
-"AwtoGywiro, gallwch ei analluogi yn <span class=\"ui\">Offer</span> → <span "
-"class=\"ui\">AwtoGywiro</span> → <span class=\"ui\">Wrth deipio</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
@@ -3495,13 +3467,9 @@ msgstr "Sut ydw i'n dewis data i'w argraffu?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:828-5
 msgid ""
-"Insert column and row breaks in the spreadsheet to narrow the print range "
-"and print the document to download. On printing the PDF, select the pages of "
-"interest."
+"Insert column and row breaks in the spreadsheet to narrow the print range. "
+"When printing, select the pages of interest."
 msgstr ""
-"Mewnosod toriadau colofn a rhes yn y daenlen i gulhau'r ystod argraffu ac "
-"argraffu'r ddogfen i'w llwytho i lawr. Wrth argraffu'r PDF, dewiswch y "
-"tudalennau sydd o ddiddordeb."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:831-5
 msgid "How can I import CSV data?"
@@ -3524,16 +3492,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:835-7
 msgid ""
-"Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
-">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
-"\"true\">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> "
-"dialog opens to let you describe the precise format of the CSV data."
+"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog "
+"opens to let you describe the precise format of the CSV data."
 msgstr ""
-"Gludo o'r porwr <span class=\"ui\">Golygu</span> → <span class=\"ui\">Gludo</"
-"span> neu pwyswch <kbd>Ctrl</kbd> <span class=\"kbd--plus\" aria-hidden="
-"\"true\">+</span> <kbd>V.</kbd> Mae'r blwch deialog <span class=\"ui\""
-">Mewnforio Testun</span> yn agor i adael i chi ddisgrifio union fformat y "
-"data CSV."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
 msgid ""
@@ -3562,9 +3524,10 @@ msgid "How can I copy the formatting of existing cells to new ones?"
 msgstr "Sut ydw i'n copïo fformatio celloedd presennol i rai newydd?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:845-5
-msgid "This is easy to do using the Paintbrush tool in the toolbar."
+msgid ""
+"This is easy to do using <span class=\"ui\">Clone Formatting</span> on the "
+"<span class=\"ui\">Home</span> tab."
 msgstr ""
-"Mae'n hawdd gwneud hyn gan ddefnyddio'r teclyn Brwsh paent yn y bar offer."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:847-7
 msgid "Format the source cell with the font, color background and more."
@@ -3580,12 +3543,13 @@ msgid "What is “Clear Direct Formatting” icon?"
 msgstr "Beth yw eicon “Fformatio Uniongyrchol Clir”?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:854-5
+#, fuzzy
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
 "formatting. To restore the formatting to the style settings, select the text "
-"or spreadsheet cell and choose <span class=\"ui\">Format</span> → <span "
-"class=\"ui\">Clear Direct Formatting</span> or use the button in the toolbar."
+"or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span class="
+"\"ui\">Clear Direct Formatting</span>."
 msgstr ""
 "Mae fformatio uniongyrchol yn fformatio sydd wedi'i osod yn uniongyrchol i "
 "gynnwys dethol paragraff neu gell taenlen, ac mae'n gorgyffwrdd â'r "
@@ -3619,16 +3583,17 @@ msgstr ""
 "Agorwch y cyflwyniad yn <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:869-7
+#, fuzzy
 msgid ""
-"Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">Full "
-"Screen Presentation</span> or click on the left-most icon in the bottom of "
-"the slide panel:"
+"Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">From "
+"Beginning</span> or click on the left-most icon in the bottom of the slide "
+"panel:"
 msgstr ""
 "Dewiswch naill ai <span class=\"ui\">Sioe Sleidiau</span> → <span class=\"ui"
 "\">Cyflwyniad Sgrin Llawn</span> neu cliciwch ar yr eicon mwyaf chwith ar "
 "waelod y panel sleidiau:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-197
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-187
 msgid "slide show"
 msgstr "sioe sleidiau"
 
@@ -3661,6 +3626,179 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:880-7
 msgid "Set the properties of the element of the object."
 msgstr "Gosod priodweddau elfen y gwrthrych."
+
+#~ msgid ""
+#~ "<span class=\"def\">The menu bar:</span> The main menu is at the top and "
+#~ "includes many options, such as commands for printing, editing, viewing, and "
+#~ "other advanced commands. You can hide the menu bar by clicking the hide icon "
+#~ "<span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide menu "
+#~ "bar\" title=\"Hide menu bar\"></span> on the far right. To show it again, "
+#~ "click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
+#~ "aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
+#~ msgstr ""
+#~ "<span class=\"def\">Y bar dewislen:</span> Mae'r prif ddewislen ar y brig ac "
+#~ "yn cynnwys llawer o ddewisiadau, fel gorchmynion i argraffu, golygu, gweld a "
+#~ "gorchmynion uwch tebyg. Gallwch guddio'r bar dewislen drwy glicio'r eicon "
+#~ "cuddio <span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label="
+#~ "\"hide menu bar\" title=\"Hide menu bar\"> pendraw'r dde. I'w ddangos eto, "
+#~ "cliciwch yr eicon dangos <span class=\"w2ui-icon unfold icon-size\" role="
+#~ "\"img\" aria-label=\"show menu bar\" title=\"Show menu bar\">."
+
+#~ msgid ""
+#~ "<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
+#~ "options for daily editing. Toolbar buttons are dynamic, meaning that their "
+#~ "state (on or off) depends on different factors."
+#~ msgstr ""
+#~ "<span class=\"def\">Bar offer:</span> Mae'r bar offer yn cynnwys y "
+#~ "dewisiadau sy'n cael eu defnyddio fwyaf ar gyfer golygu dyddiol. Mae botymau "
+#~ "bar offer yn ddeinamig, sy'n golygu bod eu cyflwr (ymlaen neu i ffwrdd) yn "
+#~ "dibynnu ar wahanol ffactorau."
+
+#~ msgid ""
+#~ "<span class=\"def\">The information bar:</span> The information bar displays "
+#~ "details about the current document. The actual information depends on the "
+#~ "nature of the document."
+#~ msgstr ""
+#~ "<span class=\"def\">Y bar gwybodaeth:</span> Mae'r bar gwybodaeth yn dangos "
+#~ "manylion am y ddogfen gyfredol. Mae natur y wybodaeth yn dibynnu ar y "
+#~ "ddogfen ei hun."
+
+#~ msgid ""
+#~ "Information bar showing page navigation arrows, zoom controls, and zoom level"
+#~ msgstr ""
+#~ "Bar gwybodaeth yn dangos saethau llywio tudalennau, rheolyddion chwyddo, a "
+#~ "lefel chwyddo"
+
+#~ msgid ""
+#~ "Rich content copy/cut and paste is supported, not only within a given "
+#~ "document, but also across documents on the same or different <span class="
+#~ "\"productname\">{productname}</span>. For these internal uses, users can "
+#~ "copy/cut content, including images and mixed content, on PC by using the "
+#~ "keyboard shortcuts directly (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
+#~ "plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class="
+#~ "\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). For security "
+#~ "reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>V</kbd> to paste on PC, but context menus can "
+#~ "be used for cut and copy. On Android or iOS selecting text by double "
+#~ "tapping, and using a long-tap to access copy/cut/paste via the context menu "
+#~ "is required."
+#~ msgstr ""
+#~ "Mae copïo/torri a gludo cynnwys cyfoethog yn cael ei gefnogi, nid yn unig o "
+#~ "fewn dogfen benodol, ond hefyd ar draws dogfennau ar yr un ddogfen neu "
+#~ "ddogfennau <span class=\"productname\">{productname}</span> gwahanol. Ar "
+#~ "gyfer y defnyddiau mewnol hyn, gall defnyddwyr gopïo/torri cynnwys, gan "
+#~ "gynnwys delweddau a chynnwys cymysg, ar gyfrifiadur personol trwy "
+#~ "ddefnyddio'r llwybrau byr bysellfwrdd yn uniongyrchol ( <kbd>Ctrl</kbd> "
+#~ "<span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd>X</kbd>, "
+#~ "<kbd>Ctrl</kbd> <span class=\"kbd--plus\" aria-hidden=\"true\">+</span> "
+#~ "<kbd>C</kbd> , <kbd>Ctrl</kbd> <span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span> <kbd>V</kbd> ). Am resymau diogelwch mae angen defnyddio "
+#~ "<kbd>Ctrl</kbd> <span class=\"kbd--plus\" aria-hidden=\"true\">+</span> "
+#~ "<kbd>V</kbd> i gludo ar gyfrifiadur personol, ond mae modd defnyddio "
+#~ "dewislenni cyd-destun ar gyfer torri a chopïo. Ar Android neu iOS mae angen "
+#~ "dewis testun trwy dapio ddwywaith, a defnyddio tap hir i gael mynediad at "
+#~ "gopïo/torri/gludo trwy'r ddewislen gyd-destun."
+
+#~ msgid ""
+#~ "To copy larger pieces of content to other applications on your device, users "
+#~ "need to press the <span class=\"ui\">Start download</span> button, and then "
+#~ "re-copy this to their clipboard in order to make it available to the target "
+#~ "application to read. This is possible via a tiny widget that pops up in the "
+#~ "bottom-right corner, and is only necessary to export the content for pasting "
+#~ "in external applications. This step also converts complex object types into "
+#~ "static images."
+#~ msgstr ""
+#~ "I gopïo darnau mwy o gynnwys i raglenni eraill ar eich dyfais, mae angen i "
+#~ "ddefnyddwyr bwyso'r botwm <span class=\"ui\">Dechrau llwytho i lawr</span>, "
+#~ "ac yna ail-gopïo hwn i'w clipfwrdd er mwyn iddo fod ar gael i'r rhaglen "
+#~ "darged ei ddarllen. Mae hyn yn bosibl trwy declyn bach sy'n ymddangos yn y "
+#~ "gornel dde isaf, a dim ond i allforio'r cynnwys i'w gludo mewn rhaglen "
+#~ "allanol y mae ei angen. Mae'r cam hwn hefyd yn trosi mathau cymhleth o "
+#~ "wrthrychau yn ddelweddau statig."
+
+#~ msgid "Inactive document"
+#~ msgstr "Dogfen anweithredol"
+
+#~ msgid ""
+#~ "<span class=\"def\">Insert local image:</span> opens the browser file picker "
+#~ "to upload the image from your local computer and insert it into the document."
+#~ msgstr ""
+#~ "<span class=\"def\">Mewnosod delwedd leol:</span> yn agor y dewisydd "
+#~ "ffeiliau porwr i lwytho'r ddelwedd o'ch cyfrifiadur lleol a'i mewnosod yn y "
+#~ "ddogfen."
+
+#~ msgid ""
+#~ "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
+#~ msgstr ""
+#~ "Dogfennau testun: Fformatau Microsoft DOC, DOCX, RTF. Fformat OpenDocument "
+#~ "ODT"
+
+#~ msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
+#~ msgstr "Taenlenni: Fformatau Microsoft XLS, XLSX, Fformat OpenDocument ODS"
+
+#~ msgid ""
+#~ "Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
+#~ ">Automatic Spell Checking</span>."
+#~ msgstr ""
+#~ "Dewiswch y ddewislen <span class=\"ui\">Offer</span> a dad-diciwch <span "
+#~ "class=\"ui\">Gwirio Sillafu Awtomatig</span>."
+
+#~ msgid ""
+#~ "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
+#~ "Characters </span> or click the corresponding icon in the toolbar. A dialog "
+#~ "opens."
+#~ msgstr ""
+#~ "Dewiswch <span class=\"ui\">Mewnosod</span> → <span class=\"ui\">Nodau "
+#~ "Arbennig</span> neu cliciwch yr eicon cyfatebol yn y bar offer. Mae deialog "
+#~ "yn ymddangos."
+
+#~ msgid ""
+#~ "Click on the clone formatting icon <img alt=\"format paintbrush\" class"
+#~ "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
+#~ "turns to a paint bucket."
+#~ msgstr ""
+#~ "Cliciwch ar yr eicon fformatio eicon <img alt=\"format paintbrush\" class"
+#~ "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" /> Mae pwyntydd y "
+#~ "llygoden yn troi’n fwced paent."
+
+#~ msgid ""
+#~ "You have the AutoCorrection enabled. AutoCorrection compares the text just "
+#~ "typed to an internal table of text. In most cases, AutoCorrection corrects "
+#~ "typos while you type. If AutoCorrection is not necessary, disable it in "
+#~ "<span class=\"ui\">Tools</span> → <span class=\"ui\">AutoCorrection</span> → "
+#~ "<span class=\"ui\">While typing</span>."
+#~ msgstr ""
+#~ "Mae AwtoGywiro wedi'i alluogi. Mae AwtoGywiro yn newid y testun sydd newydd "
+#~ "ei deipio i dabl mewnol o destun cyfatebol. Yn y rhan fwyaf o achosion, mae "
+#~ "AwtoGywiro yn trwsio gwallau tra'ch bod chi'n teipio. Os nad oes angen "
+#~ "AwtoGywiro, gallwch ei analluogi yn <span class=\"ui\">Offer</span> → <span "
+#~ "class=\"ui\">AwtoGywiro</span> → <span class=\"ui\">Wrth deipio</span>."
+
+#~ msgid ""
+#~ "Insert column and row breaks in the spreadsheet to narrow the print range "
+#~ "and print the document to download. On printing the PDF, select the pages of "
+#~ "interest."
+#~ msgstr ""
+#~ "Mewnosod toriadau colofn a rhes yn y daenlen i gulhau'r ystod argraffu ac "
+#~ "argraffu'r ddogfen i'w llwytho i lawr. Wrth argraffu'r PDF, dewiswch y "
+#~ "tudalennau sydd o ddiddordeb."
+
+#~ msgid ""
+#~ "Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
+#~ ">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
+#~ "\"true\">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> "
+#~ "dialog opens to let you describe the precise format of the CSV data."
+#~ msgstr ""
+#~ "Gludo o'r porwr <span class=\"ui\">Golygu</span> → <span class=\"ui\">Gludo</"
+#~ "span> neu pwyswch <kbd>Ctrl</kbd> <span class=\"kbd--plus\" aria-hidden="
+#~ "\"true\">+</span> <kbd>V.</kbd> Mae'r blwch deialog <span class=\"ui\""
+#~ ">Mewnforio Testun</span> yn agor i adael i chi ddisgrifio union fformat y "
+#~ "data CSV."
+
+#~ msgid "This is easy to do using the Paintbrush tool in the toolbar."
+#~ msgstr ""
+#~ "Mae'n hawdd gwneud hyn gan ddefnyddio'r teclyn Brwsh paent yn y bar offer."
 
 #~ msgid ""
 #~ "<span class=\"productname\">{productname}</span> allows you to create and "

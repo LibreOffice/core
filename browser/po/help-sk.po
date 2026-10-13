@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 21:46+0200\n"
+"POT-Creation-Date: 2026-10-13 14:06+0200\n"
 "PO-Revision-Date: 2025-08-20 07:51+0000\n"
 "Last-Translator: Pavol Hodas <teachquiz1@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/collabora-online/"
@@ -1640,46 +1640,46 @@ msgid "<span class=\"productname\">{productname}</span> user interface"
 msgstr "<span class=\"productname\">{productname}</span>Používateľské rozhranie"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:343-13
-#: html/cool-help.html%2Bdiv.div.h3:436-5
+#: html/cool-help.html%2Bdiv.div.h3:429-5
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr "Otváranie, zatváranie, ukladanie, tlač a sťahovanie dokumentov"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
-#: html/cool-help.html%2Bdiv.div.h3:450-5
+#: html/cool-help.html%2Bdiv.div.h3:439-5
 msgid "Opening, closing, saving and printing documents"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
-#: html/cool-help.html%2Bdiv.div.h3:481-5
+#: html/cool-help.html%2Bdiv.div.h3:478-5
 msgid "Editing documents"
 msgstr "Úprava dokumentov"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:346-13
 #: html/cool-help.html%2Bdiv.nav.ul.li:352-13
 #: html/cool-help.html%2Bdiv.nav.ul.li:365-13
-#: html/cool-help.html%2Bdiv.div.h3:511-3
-#: html/cool-help.html%2Bdiv.div.div.h3:571-5
-#: html/cool-help.html%2Bdiv.div.div.h3:682-5
+#: html/cool-help.html%2Bdiv.div.h3:510-3
+#: html/cool-help.html%2Bdiv.div.div.h3:570-5
+#: html/cool-help.html%2Bdiv.div.div.h3:681-5
 msgid "Advanced features"
 msgstr "Pokročilé funkcie"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:348-13
-#: html/cool-help.html%2Bdiv.div.h3:549-5
+#: html/cool-help.html%2Bdiv.div.h3:548-5
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
 msgstr "<span class=\"productname\">{productname}</span>Hárky"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:349-13
-#: html/cool-help.html%2Bdiv.div.div.h3:551-5
+#: html/cool-help.html%2Bdiv.div.div.h3:550-5
 msgid "Editing spreadsheets"
 msgstr "Úprava hárkov"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:350-13
-#: html/cool-help.html%2Bdiv.div.div.h3:555-5
+#: html/cool-help.html%2Bdiv.div.div.h3:554-5
 msgid "Formulas"
 msgstr "Vzorce"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:351-13
-#: html/cool-help.html%2Bdiv.div.div.h3:564-5
+#: html/cool-help.html%2Bdiv.div.div.h3:563-5
 msgid "Formatting spreadsheets"
 msgstr "Formátovanie hárkov"
 
@@ -1689,22 +1689,22 @@ msgid "Spreadsheets"
 msgstr "Hárky"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:355-13
-#: html/cool-help.html%2Bdiv.div.h3:613-5
+#: html/cool-help.html%2Bdiv.div.h3:612-5
 msgid "<span class=\"productname\">{productname}</span> text documents"
 msgstr "<span class=\"productname\">{productname}</span>Textové dokumenty"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:356-13
-#: html/cool-help.html%2Bdiv.div.div.h3:615-5
+#: html/cool-help.html%2Bdiv.div.div.h3:614-5
 msgid "Editing text documents"
 msgstr "Úprava textových dokumentov"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:357-13
-#: html/cool-help.html%2Bdiv.div.div.h3:619-5
+#: html/cool-help.html%2Bdiv.div.div.h3:618-5
 msgid "Context menus"
 msgstr "Kontextové menu"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:358-13
-#: html/cool-help.html%2Bdiv.div.div.h3:635-5
+#: html/cool-help.html%2Bdiv.div.div.h3:634-5
 msgid "Advanced text document editor features"
 msgstr "Pokročilé funkcie editora textových dokumentov"
 
@@ -1714,22 +1714,22 @@ msgid "Text documents"
 msgstr "Textové dokumenty"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:361-13
-#: html/cool-help.html%2Bdiv.div.h3:662-5
+#: html/cool-help.html%2Bdiv.div.h3:661-5
 msgid "<span class=\"productname\">{productname}</span> presentations"
 msgstr "<span class=\"productname\">{productname}</span>Prezentácie"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:362-13
-#: html/cool-help.html%2Bdiv.div.div.h3:664-5
+#: html/cool-help.html%2Bdiv.div.div.h3:663-5
 msgid "Editing presentations"
 msgstr "Úprava prezentácií"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:363-13
-#: html/cool-help.html%2Bdiv.div.div.h3:668-5
+#: html/cool-help.html%2Bdiv.div.div.h3:667-5
 msgid "Slide show"
 msgstr "Prezentácia"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:364-13
-#: html/cool-help.html%2Bdiv.div.div.h3:675-5
+#: html/cool-help.html%2Bdiv.div.div.h3:674-5
 msgid "Slide pane"
 msgstr "Panel snímok"
 
@@ -1739,7 +1739,7 @@ msgid "Presentations"
 msgstr "Prezentácie"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:368-13
-#: html/cool-help.html%2Bdiv.div.h3:694-5
+#: html/cool-help.html%2Bdiv.div.h3:693-5
 msgid "Frequently Asked Questions"
 msgstr "Často kladené otázky"
 
@@ -1801,13 +1801,12 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:405-5
 msgid ""
-"<span class=\"def\">The menu bar:</span> The main menu is at the top and "
-"includes many options, such as commands for printing, editing, viewing, and "
-"other advanced commands. You can hide the menu bar by clicking the hide icon "
-"<span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide menu "
-"bar\" title=\"Hide menu bar\"></span> on the far right. To show it again, "
-"click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
-"aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
+"<span class=\"def\">The tabs:</span> The commands are grouped on tabs at the "
+"top: <span class=\"ui\">File</span>, <span class=\"ui\">Home</span>, <span "
+"class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span class="
+"\"ui\">View</span> and others, depending on the document type. Click the "
+"selected tab again to collapse the tab bar and gain space for the document. "
+"Click any tab to expand it again."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
@@ -1821,29 +1820,19 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:411-5
 msgid ""
-"<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
-"options for daily editing. Toolbar buttons are dynamic, meaning that their "
-"state (on or off) depends on different factors."
-msgstr ""
-"<span class=\"def\">Nástrojová lišta:</span> Nástrojová lišta obsahuje "
-"možnosti, ktoré sa pri bežnej práci najviac používajú. Tlačidlá lišty sú "
-"dynamické, tj. ich stav (zapnuté alebo vypnuté) závisí od rôznych okolností."
-
-#: html/cool-help.html%2Bdiv.div.div.p:414-5
-msgid ""
 "<span class=\"def\">The status bar:</span> The status bar is shown in the "
 "bottom, and contains several useful options and features."
 msgstr ""
 "<span class=\"def\">Stavový riadok:</span> Stavový riadok sa zobrazuje v "
 "dolnej časti a obsahuje niekoľko užitočných možností a funkcií."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:415-49
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:412-49
 msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:418-5
+#: html/cool-help.html%2Bdiv.div.div.p:415-5
 msgid ""
 "<span class=\"def\">The search bar:</span> Searching starts automatically "
 "when content is inserted in the search box, and the document window "
@@ -1855,20 +1844,20 @@ msgstr ""
 "dokumentom sa zobrazí miesto prvého nájdeného výskytu. Pri hľadaní nezáleží "
 "na veľkosti písmen. Vpravo od vyhľadávacieho poľa sa nachádzajú tri tlačidlá:"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:420-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:417-7
 #, fuzzy
 msgid "Search backwards"
 msgstr "Hľadať predchádzajúce"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:421-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:418-7
 msgid "Search forward"
 msgstr "Nájsť ďalšie"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:422-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:419-7
 msgid "Cancel the search (appears only when a text has been searched)"
 msgstr "Zrušiť vyhľadávania (zobrazí sa iba vtedy, ak je zadaný text)"
 
-#: html/cool-help.html%2Bdiv.div.div.p:426-5
+#: html/cool-help.html%2Bdiv.div.div.p:423-5
 #, fuzzy
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
@@ -1882,7 +1871,7 @@ msgstr ""
 "neovplyvňuje používateľské rozhranie. V tejto časti sa zobrazuje aj aktuálnu "
 "úroveň priblíženia."
 
-#: html/cool-help.html%2Bdiv.div.div.p:427-5
+#: html/cool-help.html%2Bdiv.div.div.p:424-5
 msgid ""
 "Text, charts, shapes and svg images will stay sharp, when zooming in, you "
 "will only see pixels appear at inserted images, such as jpg’s or png’s."
@@ -1891,25 +1880,13 @@ msgstr ""
 "prípade vložených rastrových obrázkov vo formátoch JPG alebo PNG sa môžu "
 "zobraziť jednotlivé pixely."
 
-#: html/cool-help.html%2Bdiv.div.div.p:428-5
+#: html/cool-help.html%2Bdiv.div.div.p:425-5
 msgid "Using the browser zoom affects the document and user interface areas."
 msgstr ""
 "Ak použijete funkciu priblíženia, ktorá je súčasťou prehliadača, ovplyvnená "
 "bude oblasť dokumentu, ako aj požívateľské rozhranie."
 
-#: html/cool-help.html%2Bdiv.div.div.p:431-5
-msgid ""
-"<span class=\"def\">The information bar:</span> The information bar displays "
-"details about the current document. The actual information depends on the "
-"nature of the document."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:432-54
-msgid ""
-"Information bar showing page navigation arrows, zoom controls, and zoom level"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.p:437-5
+#: html/cool-help.html%2Bdiv.div.p:430-5
 msgid ""
 "Your documents are stored and managed in the cloud storage that is "
 "integrated with <span class=\"productname\">{productname}</span>."
@@ -1917,7 +1894,7 @@ msgstr ""
 "Dokumenty sú uložené a spravované cloudovým úložiskom, v ktorom je "
 "integrovaný <span class=\"productname\">{productname}</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:438-30
+#: html/cool-help.html%2Bdiv.div.div.p:431-30
 msgid ""
 "To download a document download it from the <span class=\"productname\""
 ">{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
@@ -1929,7 +1906,7 @@ msgstr ""
 "formáty sú dostupné na stiahnutie, závisí od aplikácie. Všetky aplikácie "
 "umožňujú exportovanie vo formáte PDF."
 
-#: html/cool-help.html%2Bdiv.div.div.p:439-30
+#: html/cool-help.html%2Bdiv.div.div.p:432-30
 msgid ""
 "To open document, click on the file to open the <span class=\"productname\""
 ">{productname}</span> module associated to the document format."
@@ -1938,7 +1915,7 @@ msgstr ""
 "\"productname\">{productname}</span> asociovaný s príslušným formátom "
 "dokumentu."
 
-#: html/cool-help.html%2Bdiv.div.div.p:440-30
+#: html/cool-help.html%2Bdiv.div.div.p:433-30
 msgid ""
 "Documents in <span class=\"productname\">{productname}</span> save "
 "automatically, but if you are concerned that a document is synchronized as "
@@ -1950,7 +1927,7 @@ msgstr ""
 "položky <span class=\"ui\">Uložiť</span> v menu <span class=\"ui\""
 ">Súbor</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:441-30
+#: html/cool-help.html%2Bdiv.div.div.p:434-30
 msgid ""
 "Depending on the capabilities of your browser, the print window may appear "
 "or a “Download PDF export?” popup appears. You can print this PDF in your "
@@ -1960,41 +1937,52 @@ msgstr ""
 "sa zobrazí kontextové okno „Stiahnuť export do PDF?“. Toto PDF potom môžete "
 "vytlačiť pomocou svojej aplikácie na čítanie PDF."
 
-#: html/cool-help.html%2Bdiv.div.div.p:442-30
-#: html/cool-help.html%2Bdiv.div.div.p:475-7
+#: html/cool-help.html%2Bdiv.div.div.p:435-30
+#: html/cool-help.html%2Bdiv.div.div.p:472-7
 msgid ""
 "When closing a document, it is automatically saved if it has been changed."
 msgstr "Dokument sa pri zatváraní automaticky uloží, ak bol predtým zmenený."
 
-#: html/cool-help.html%2Bdiv.div.div.p:452-7
+#: html/cool-help.html%2Bdiv.div.div.p:441-7
 msgid ""
 "To open a document, either open it in <span class=\"productname\""
-">{productname}</span> from your platform's file manager or use the <span "
-"class=\"ui\">Open</span> button on the page shown from the <span class=\"ui\""
-">File</span> menu bar button."
+">{productname}</span> from your platform's file manager or use <span class="
+"\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:458-7
+#: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
-"To save the document in a different format use the <span class=\"ui\">Save "
-"as</span> button on the page shown from the <span class=\"ui\">File</span> "
-"menu bar button."
+"An existing document opens in view mode, so that you can read it without "
+"changing it by accident. To start editing, click the edit button (the pencil)"
+" in the bottom right corner. New documents and documents created from a "
+"template open ready to edit."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:463-7
+#: html/cool-help.html%2Bdiv.div.div.p:452-7
 msgid ""
-"Documents are automatically saved perdiodically, but if you want a document "
-"to be saved right away you can use the <span class=\"ui\">Save</span> button "
-"on the page shown from the <span class=\"ui\">File</span> menu bar button."
+"If the document is locked by another application, it stays in view mode."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:470-7
+#: html/cool-help.html%2Bdiv.div.div.p:456-7
 msgid ""
-"To print the document, use the <span class=\"ui\">Print</span> button on the "
-"page shown from the <span class=\"ui\">File</span> menu bar button."
+"To save the document in a different format use <span class=\"ui\">Save As</"
+"span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.p:482-5
+#: html/cool-help.html%2Bdiv.div.div.p:461-7
+msgid ""
+"Documents are automatically saved periodically, but if you want a document "
+"to be saved right away you can use <span class=\"ui\">Save</span> on the "
+"<span class=\"ui\">File</span> tab."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:467-7
+msgid ""
+"To print the document, use <span class=\"ui\">Print</span> on the <span "
+"class=\"ui\">File</span> tab."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
 "Document editing should be familiar to everyone that has used an office "
 "application before, but here are some distinctive features:"
@@ -2002,63 +1990,44 @@ msgstr ""
 "S úpravami dokumente si poradí každý, kto je zvyknutý používať kancelársky "
 "balík, nájdeme tu však niekoľko výrazných rozdielov:"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:484-5
+#: html/cool-help.html%2Bdiv.div.div.h4:481-5
 msgid "Copy and Paste"
 msgstr "Kopírovať a Vložiť"
 
-#: html/cool-help.html%2Bdiv.div.div.p:485-5
+#: html/cool-help.html%2Bdiv.div.div.p:482-5
 msgid ""
-"Rich content copy/cut and paste is supported, not only within a given "
-"document, but also across documents on the same or different <span class="
-"\"productname\">{productname}</span>. For these internal uses, users can "
-"copy/cut content, including images and mixed content, on PC by using the "
-"keyboard shortcuts directly (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class="
-"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). For security "
-"reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>V</kbd> to paste on PC, but context menus can "
-"be used for cut and copy. On Android or iOS selecting text by double "
-"tapping, and using a long-tap to access copy/cut/paste via the context menu "
-"is required."
+"Rich content copy/cut and paste is supported, including images and mixed "
+"content, using the keyboard shortcuts (<kbd>Ctrl</kbd><span class=\"kbd--"
+"plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class="
+"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). On "
+"Android or iOS selecting text by double tapping, and using a long-tap to "
+"access copy/cut/paste via the context menu is required."
 msgstr ""
-"Kopírovanie / vystrihovanie a vkladanie formátovaného obsahu je podporované, "
-"a to nielen v rámci dokumentu, ale tiež medzi dokumentmi rovnakej alebo "
-"odlišnej aplikácie <span class=\"productname\">{productname}</span>. Pri "
-"takomto použití možno kopírovať / vystrihovať obsah vrátane obrázkov a "
-"zmiešaného obsahu, a to na PC priamo pomocou klávesových skratiek "
-"(<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
-"\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>V</kbd>). Z bezpečnostných dôvodov je na PC "
-"nevyhnutné vkladať pomocou <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>V</kbd>, na vystrihovanie a kopírovanie však "
-"možno použiť kontextové menu. V systémoch Android a iOS vyberiete text "
-"poklopaním a dlhým kliknutím získate prístup do kontextového menu s príkazmi "
-"Kopírovať / Vystrihnúť / Vložiť."
 
-#: html/cool-help.html%2Bdiv.div.div.p:486-5
+#: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
-"To copy larger pieces of content to other applications on your device, users "
-"need to press the <span class=\"ui\">Start download</span> button, and then "
-"re-copy this to their clipboard in order to make it available to the target "
-"application to read. This is possible via a tiny widget that pops up in the "
-"bottom-right corner, and is only necessary to export the content for pasting "
-"in external applications. This step also converts complex object types into "
+"For security reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd"
+"--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> to paste content that "
+"comes from outside the document, but context menus can be used for cut and "
+"copy."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:484-5
+msgid ""
+"When you copy a selection that contains images or other objects, a <span "
+"class=\"ui\">Download Selection</span> widget pops up in the bottom-right "
+"corner. Press <span class=\"ui\">Download</span>, then copy again, to make "
+"the content available to applications outside <span class=\"productname\""
+">{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
-"Ak chcete kopírovať väčšie časti obsahu do iných aplikácií na svojom "
-"zariadení, je nutné stlačiť tlačidlo <span class=\"ui\">Spustiť preberanie</"
-"span> a potom znovu skopírovať obsah do schránky tohto zariadenia, čím sa "
-"stane pre cieľovú aplikáciu dostupný. Tento export obsahu pre vloženie do "
-"externej aplikácie zabezpečuje vyskakovací prvok v pravom dolnom rohu. V "
-"tomto kroku sa tiež prevedú komplexné objekty na statické obrázky."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:489-5
+#: html/cool-help.html%2Bdiv.div.div.h4:487-5
 msgid "Document repair"
 msgstr "Oprava dokumentu"
 
-#: html/cool-help.html%2Bdiv.div.div.p:490-5
+#: html/cool-help.html%2Bdiv.div.div.p:488-5
 msgid ""
 "When multiple people edit the same document concurrently, it is possible for "
 "their changes to conflict and this can cause some confusion. The Document "
@@ -2069,21 +2038,29 @@ msgstr ""
 "vzájomného konfliktu. Oprava dokumentu umožňuje vrátiť späť zmeny ostatných "
 "používateľov a obnoviť tak predchádzajúci stav dokumentu."
 
-#: html/cool-help.html%2Bdiv.div.div.p:491-5
+#: html/cool-help.html%2Bdiv.div.div.p:489-5
+msgid ""
+"<span class=\"ui\">Repair</span> on the <span class=\"ui\">File</span> tab "
+"lists the recent changes to the document and lets you take the document back "
+"to an earlier state."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:490-5
+#, fuzzy
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
-"class=\"ui\">Jump to state</span>."
+"class=\"ui\">OK</span>."
 msgstr ""
 "Na daný stav prejdete späť tým, že ho vyberiete myšou a stlačíte <span class="
 "\"ui\">Prejsť na stav</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:492-55
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:491-55
 msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:493-5
+#: html/cool-help.html%2Bdiv.div.div.p:492-5
 msgid ""
 "This is particularly useful – say when a colleague inadvertently selected "
 "all text in the document with <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
@@ -2095,29 +2072,30 @@ msgstr ""
 "\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>A</kbd>, pokračoval v písaní "
 "a tým text zmazal."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:496-5
-msgid "Inactive document"
-msgstr "Neaktívny dokument"
+#: html/cool-help.html%2Bdiv.div.div.h4:495-5
+msgid "Idle document"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:497-5
+#: html/cool-help.html%2Bdiv.div.div.p:496-5
+#, fuzzy
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
-"“Inactive” state. The document is shown with a transparent gray overlay, "
-"with the message “Inactive document – please click to resume editing”."
+"“Idle” state. The document is shown with a transparent gray overlay, with "
+"the message “Idle document – please click to reload and resume editing”."
 msgstr ""
 "Keď <span class=\"productname\">{productname}</span> zaznamená, že po nejaký "
 "čas neprebiehala v prehliadači žiadna aktivita, nastaví dokumente stav "
 "„neaktívne“. Dokument sa zobrazí s priehľadným šedým popredím a správou „"
 "Dokument je neaktívny – na pokračovanie v úpravách kliknite“."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:498-57
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
 msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:499-5
+#: html/cool-help.html%2Bdiv.div.div.p:498-5
 msgid ""
 "To continue editing, click on the document and the layover and message "
 "disappear. Any changes that may have been made by other users – while "
@@ -2127,11 +2105,11 @@ msgstr ""
 "úpravách. Do dokumentu sa načítajú všetky zmeny, ktoré počas spolupráce pri "
 "úpravách vytvorili ostatní používatelia."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:502-5
+#: html/cool-help.html%2Bdiv.div.div.h4:501-5
 msgid "Pasting"
 msgstr "Vkladanie"
 
-#: html/cool-help.html%2Bdiv.div.div.p:503-5
+#: html/cool-help.html%2Bdiv.div.div.p:502-5
 msgid ""
 "When you paste content copied from within the same document, the format and "
 "elements are maintained. If you copy from another document, in another tab "
@@ -2143,7 +2121,7 @@ msgstr ""
 "prehliadača, prípadne z aplikácie mimo prehliadača, vo vloženom obsahu sa "
 "zachová formátovanie textu."
 
-#: html/cool-help.html%2Bdiv.div.div.p:504-5
+#: html/cool-help.html%2Bdiv.div.div.p:503-5
 msgid ""
 "You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
@@ -2153,7 +2131,7 @@ msgstr ""
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
 
-#: html/cool-help.html%2Bdiv.div.div.p:505-5
+#: html/cool-help.html%2Bdiv.div.div.p:504-5
 msgid ""
 "When you paste text from within the document, formatting will be respected. "
 "You can also paste objects, such as images, if they are copied from the "
@@ -2163,7 +2141,7 @@ msgstr ""
 "tiež vkladať objekty (napríklad obrázky), ak ich skopírujete z rovnakého "
 "dokumentu, v ktorom pracujete."
 
-#: html/cool-help.html%2Bdiv.div.div.p:506-5
+#: html/cool-help.html%2Bdiv.div.div.p:505-5
 msgid ""
 "When you paste text from outside of the document (another browser window or "
 "a desktop application), it will be pasted as rich text."
@@ -2171,7 +2149,7 @@ msgstr ""
 "Ak vložíte text, ktorý z tohto dokumentu nepochádza (tj. z iného okna "
 "prehliadača alebo z inej aplikácie), vloží sa ako formátovaný text."
 
-#: html/cool-help.html%2Bdiv.div.div.p:507-5
+#: html/cool-help.html%2Bdiv.div.div.p:506-5
 msgid ""
 "When you have internal cut or copied content, you can paste this content "
 "using the context menu."
@@ -2179,11 +2157,11 @@ msgstr ""
 "Ak ste obsah vybrali alebo skopírovali interne, môžete ho vložiť pomocou "
 "kontextového menu."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:513-5
+#: html/cool-help.html%2Bdiv.div.div.h4:512-5
 msgid "Adding charts"
 msgstr "Vkladanie grafov"
 
-#: html/cool-help.html%2Bdiv.div.div.p:514-5
+#: html/cool-help.html%2Bdiv.div.div.p:513-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports inserting and "
 "visualization of charts in documents. To add a chart:"
@@ -2191,7 +2169,7 @@ msgstr ""
 "<span class=\"productname\">{productname}</span> umožňuje vkladať do "
 "dokumentov grafy. Ak chcete graf pridať:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:515-7
 msgid ""
 "Select a table in text document, a range in a spreadsheet or a table in a "
 "presentation."
@@ -2199,31 +2177,32 @@ msgstr ""
 "Vyberte tabuľku v textovom dokumente, oblasť v hárku alebo tabuľku v "
 "prezentácii."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:517-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Charts</span>. "
+"Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Chart</span>. "
 "Customize your chart on the sidebar:"
 msgstr ""
 "Zvoľte <span class=\"ui\">Vložiť</span> → <span class=\"ui\">Graf</span>. "
 "Graf prispôsobte na postrannej lište:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:520-53
+#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:519-53
 msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:521-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:520-7
 msgid "If no table or range was selected, a prototype chart is displayed."
 msgstr "Ak ste nevybrali tabuľku alebo oblasť, zobrazí sa ukážkový graf."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:523-51
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:522-51
 msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:525-28
+#: html/cool-help.html%2Bdiv.div.div.p:524-28
 msgid ""
 "<span class=\"def\">Chart editing:</span> Double click the chart to select. "
 "Use context menus to add chart elements such as title, axis, and other. "
@@ -2235,7 +2214,7 @@ msgstr ""
 "chcete upraviť údaje grafu alebo vybrať jeho typ, vyberte <span class=\"ui\""
 ">Oblasť dát</span> a <span class=\"ui\">Typ grafu</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:526-28
+#: html/cool-help.html%2Bdiv.div.div.p:525-28
 msgid ""
 "<span class=\"def\">Chart formatting:</span> The same context menu brings "
 "you to chart data table and chart type selection."
@@ -2243,7 +2222,7 @@ msgstr ""
 "<span class=\"def\">Formátovanie grafu:</span> Kontextové menu obsahuje "
 "príkazy na výber dát a typu grafu."
 
-#: html/cool-help.html%2Bdiv.div.div.p:527-28
+#: html/cool-help.html%2Bdiv.div.div.p:526-28
 msgid ""
 "<span class=\"def\">Data series formatting:</span> Open the context menu and "
 "choose <span class=\"ui\">Format data series</span>."
@@ -2251,11 +2230,11 @@ msgstr ""
 "<span class=\"def\">Formátovanie dátových radov:</span> Otvorte kontextové "
 "menu a vyberte <span class=\"ui\">Formát dátových radov</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:529-5
+#: html/cool-help.html%2Bdiv.div.div.h4:528-5
 msgid "Handling images"
 msgstr "Práca s obrázkami"
 
-#: html/cool-help.html%2Bdiv.div.div.p:530-5
+#: html/cool-help.html%2Bdiv.div.div.p:529-5
 msgid ""
 "<span class=\"productname\">{productname}</span> inserts images in the text "
 "document from your local computer or from your cloud storage. Inserted "
@@ -2265,7 +2244,7 @@ msgstr ""
 "textových dokumentov z lokálneho počítača alebo cloudového úložiska. "
 "Vkladané obrázky sú vždy uložené v dokumente."
 
-#: html/cool-help.html%2Bdiv.div.div.p:531-5
+#: html/cool-help.html%2Bdiv.div.div.p:530-5
 msgid ""
 "<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\""
 ">Insert image</span> icon allows you to choose an image from the cloud "
@@ -2275,16 +2254,14 @@ msgstr ""
 "\"ui\">Vložiť obrázok</span> umožní výber obrázka z cloudového úložiska "
 "alebo zdieľaného disku."
 
-#: html/cool-help.html%2Bdiv.div.div.p:532-5
+#: html/cool-help.html%2Bdiv.div.div.p:531-5
 msgid ""
-"<span class=\"def\">Insert local image:</span> opens the browser file picker "
-"to upload the image from your local computer and insert it into the document."
+"<span class=\"def\">Insert local image:</span> Choose <span class=\"ui\""
+">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
+"computer and insert it into the document."
 msgstr ""
-"<span class=\"def\">Vložiť miestny obrázok:</span> otvorí súborový dialóg "
-"prehliadača, v ktorom môžete nahrať súbor z počítača a vložiť ho do "
-"dokumentu."
 
-#: html/cool-help.html%2Bdiv.div.div.p:533-5
+#: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
 "Images can be resized, rotated and anchored. Text can be wrapped around the "
 "image. Select the image and open the context menu. Use the images handles to "
@@ -2295,11 +2272,11 @@ msgstr ""
 "obrázka a otvorení kontextového menu. Ak chcete zmeniť veľkosť obrázku "
 "myšou, použite jeho úchyty."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:536-5
+#: html/cool-help.html%2Bdiv.div.div.h4:535-5
 msgid "Comments in documents"
 msgstr "Komentáre v dokumente"
 
-#: html/cool-help.html%2Bdiv.div.div.p:537-5
+#: html/cool-help.html%2Bdiv.div.div.p:536-5
 msgid ""
 "Insert comments in <span class=\"productname\">{productname}</span> in "
 "places that need special reader attention. Comments are displayed on the "
@@ -2309,13 +2286,13 @@ msgstr ""
 "miesta, ktoré vyžadujú od čitateľa osobitnú pozornosť. Zobrazujú sa vpravo "
 "spolu s menom autora a dátumom."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:538-51
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:537-51
 msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:539-5
+#: html/cool-help.html%2Bdiv.div.div.p:538-5
 msgid ""
 "Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
 " icon to reply, move and delete comments."
@@ -2323,11 +2300,11 @@ msgstr ""
 "Kliknutím na ikonu podmenu (<span class=\"cool-annotation-menu icon-size\""
 "></span>) môžete odpovedať na komentáre, presúvať ich alebo mazať."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:542-5
+#: html/cool-help.html%2Bdiv.div.div.h4:541-5
 msgid "Spellchecking"
 msgstr "Kontrola pravopisu"
 
-#: html/cool-help.html%2Bdiv.div.div.p:543-5
+#: html/cool-help.html%2Bdiv.div.div.p:542-5
 msgid ""
 "<span class=\"productname\">{productname}</span> can check spelling in text "
 "documents, spreadsheets and presentations. A red wavy underline indicates "
@@ -2339,19 +2316,20 @@ msgstr ""
 "podčiarknuté červenou vlnovkou. Kliknutím pravým tlačidlom myši otvoríte "
 "kontextové menu s návrhmi na opravu."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:544-54
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:543-54
 msgid "Text with a red wavy underline beneath a misspelled word"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:545-5
+#: html/cool-help.html%2Bdiv.div.div.p:544-5
+#, fuzzy
 msgid ""
-"To systematically spell-check the whole document use the <span class=\"ui\""
-">Tools</span> menu’s <span class=\"ui\">Spelling</span> option."
+"To systematically spell-check the whole document use <span class=\"ui\""
+">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
 "Systematickú kontrolu pravopisu celého dokumentu zahájite voľbou <span class="
 "\"ui\">Kontrola pravopisu</span> z menu <span class=\"ui\">Nástroje</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:552-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
 "You edit an online spreadsheet in the same way you edit a desktop "
 "spreadsheet. Operations like entering data, selecting ranges, columns, rows "
@@ -2371,22 +2349,22 @@ msgstr ""
 "kurzor sa presunie do bunky nasledujúcej vpravo, po stlačení klávesu "
 "<kbd>Enter</kbd> sa presunie do bunky nižšie; tým ľahšie zadáte ďalší záznam."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:557-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:556-5
 msgid ""
 "Formulas are entered in the formula bar. Enter '=' and insert the formula."
 msgstr "Vzorce sa zapisujú do lišty vzorca. Zadajte „=“ a následne vzorec."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:558-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:557-5
 msgid "All spreadsheets functions and mathematical rules applies."
 msgstr "K dispozícii sú všetky funkcie hárku a matematické pravidlá."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:559-50
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:558-50
 msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:560-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:559-5
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
 "and is specified in great detail in the <a href=\"https://www.oasis-open.org/"
@@ -2398,7 +2376,7 @@ msgstr ""
 "download.php/16826/openformula-spec-20060221.html\" target=\"_blank\" rel="
 "\"noopener noreferrer\">OASIS OpenFormula specification</a>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:566-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:565-5
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
@@ -2417,13 +2395,13 @@ msgstr ""
 "komplexné a vlastné formátovanie čísel, písma, ohraničenia, pozadia, ochrany "
 "bunky a ďalších možností."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:567-51
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:566-51
 msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:572-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:571-30
 msgid ""
 "<span class=\"def\">Sorting data:</span> You can sort a list of numbers or "
 "text ascending or descending. <span class=\"productname\">{productname}</"
@@ -2435,7 +2413,7 @@ msgstr ""
 "span> automaticky rozpozná bunky tvoriace hlavičky a susediace bunky, o "
 "ktoré sa výber rozšíri."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:573-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:572-30
 msgid ""
 "<span class=\"def\">Filtering data:</span> Filters and advanced filters "
 "allow you to work on certain filtered rows (records) of a data range. In the "
@@ -2447,7 +2425,7 @@ msgstr ""
 "<span class=\"productname\">{productname}</span> ponúkajú niekoľko možností, "
 "ako filtre používať."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:575-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:574-7
 msgid ""
 "One use for the <span class=\"ui\">AutoFilter</span> function is to quickly "
 "restrict the display to records with identical entries in a data field."
@@ -2456,13 +2434,13 @@ msgstr ""
 "obmedziť dátové záznamy na tie, ktoré sú rovnaké ako položka vybraná v "
 "dátovom poli."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:577-55
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:576-55
 msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:579-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:578-7
 msgid ""
 "In the <span class=\"ui\">Standard Filter</span> dialog, you can also define "
 "ranges which contain the values in particular data fields. You can use the "
@@ -2473,7 +2451,7 @@ msgstr ""
 "určiť rozmedzie, v ktorom sa majú hodnoty určitých dátového poľa nachádzať. "
 "V tomto filtri môžete spájať podmienky logickými operátormi A alebo ALEBO."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:580-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:579-7
 msgid ""
 "The <span class=\"ui\">Advanced Filter</span> allows up to a total of eight "
 "filter conditions. With advanced filters you enter the conditions directly "
@@ -2482,7 +2460,7 @@ msgstr ""
 "<span class=\"ui\">Rozšírený filter</span> umožňuje použiť až osem "
 "podmienok. V tomto filtri zadávate podmienky priamo do hárka."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:584-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:583-5
 msgid ""
 "<span class=\"def\">Outlining:</span> You can create an outline of your data "
 "and group rows and columns together so that you can collapse and expand the "
@@ -2492,13 +2470,13 @@ msgstr ""
 "súhrnu: zoskupíte riadky a stĺpce a potom môžete tieto skupiny rozbaľovať a "
 "zbaľovať jediným kliknutím."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:585-49
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:584-49
 msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:588-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
 "<span class=\"def\">Data validation:</span> For each cell, you can define "
 "entries to be valid. Invalid entries to a cell will be rejected. To enable "
@@ -2508,21 +2486,22 @@ msgstr ""
 "platné položky. Neplatné položky sa do bunky neuložia. Ak chcete platnosť "
 "dát povoliť:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:590-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:589-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Validity</span> from the <span class=\"ui\">Data</"
-"span> menu. The <span class=\"ui\">Validity</span> dialog opens."
+"Choose <span class=\"ui\">Validity</span> on the <span class=\"ui\">Data</"
+"span> tab. The <span class=\"ui\">Validity</span> dialog opens."
 msgstr ""
 "Zvoľte <span class=\"ui\">Platnosť</span> z ponuky <span class=\"ui\">Data</"
 "span>. Otvorí sa dialógové okno <span class=\"ui\">Platnosť</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:593-57
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:592-57
 msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:593-7
 msgid ""
 "Select the validity criterion in the <span class=\"ui\">Allow</span> drop-"
 "box list. Depending on the criterion, more options show. Fill the required "
@@ -2532,7 +2511,7 @@ msgstr ""
 "span>. Podľa zvoleného kritéria sa zobrazia ďalšie možnosti. Vyplňte "
 "požadované údaje."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:595-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
 msgid ""
 "Use the <span class=\"ui\">Input Help</span> and <span class=\"ui\">Error "
 "Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\""
@@ -2542,13 +2521,13 @@ msgstr ""
 ">Pomocník pri vstupe</span> a <span class=\"ui\">Chybové hlásenie</span>. "
 "Dialógové okno zatvoríte kliknutím na <span class=\"ui\">OK</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:598-56
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:597-56
 msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:599-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:598-7
 msgid ""
 "To remove the validity of the cell, open the dialog and set the <span class="
 "\"ui\">Allow</span> list to “All values”."
@@ -2556,7 +2535,7 @@ msgstr ""
 "Ak chcete nastavenie platnosti bunky odstrániť, otvorte toto dialógové okno "
 "a nastavte v zozname <span class=\"ui\">Povoliť</span> „Všetky hodnoty“."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:603-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:602-5
 msgid ""
 "<span class=\"def\">Comments:</span> In a spreadsheet you can insert one "
 "comment per cell. When you select <span class=\"ui\">Insert comment</span>, "
@@ -2570,18 +2549,19 @@ msgstr ""
 "bunka komentár, v jej pravom hornom rohu sa objaví červená bodka. Komentár "
 "zobrazíte nabehnutím myši nad bunku."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:604-52
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:603-52
 msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:607-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:606-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
-"conditions. Select the cell range and click the <span class=\"ui\""
-">Conditional Formatting</span> icon on the toolbar. Select the symbol set to "
+"conditions. Select the cell range and click <span class=\"ui\">Conditional</"
+"span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
 "apply on the range."
 msgstr ""
 "<span class=\"def\">Podmienené formátovanie:</span> <span class=\"productname"
@@ -2590,13 +2570,13 @@ msgstr ""
 "na ikonu <span class=\"ui\">Podmienené formátovanie</span>. Vyberte symbol, "
 "ktorý sa má v oblasti použiť."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:608-62
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:616-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:615-30
 msgid ""
 "<span class=\"productname\">{productname}</span> edits text documents in the "
 "same way you edit a desktop document. It provides a What You See Is What You "
@@ -2615,7 +2595,7 @@ msgstr ""
 "sú podobné ako v bežnom desktopovom textovom procesore. S dokumentom môžete "
 "pracovať pomocou klávesnice, ponúk a nástrojových líšt."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:620-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:619-30
 msgid ""
 "Context menus are available on clicking the right mouse button. The commands "
 "available in the context menu are related - not extensively - to the "
@@ -2624,11 +2604,11 @@ msgstr ""
 "Po kliknutí pravým tlačidlom myši sa zobrazujú kontextové menu. Príkazy v "
 "nich sa spravidla vzťahujú k objektu dokumentu na mieste kurzora myši."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:623-5
+#: html/cool-help.html%2Bdiv.div.div.h3:622-5
 msgid "Formatting text"
 msgstr "Formátovanie textu"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:625-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:624-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports modern techniques "
 "for paragraph formatting through styles. A style is a set of text properties "
@@ -2647,7 +2627,7 @@ msgstr ""
 "vlastností štýlu, zmení sa formát všetkých odsekov daného štýlu. Tým si "
 "ušetríte prácu s formátovaním množstvo jednotlivých odsekov."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:626-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:625-5
 msgid ""
 "In contrast, direct formatting applies formatting to selected excerpts of "
 "the document contents. On a long document, direct formatting must be applied "
@@ -2659,7 +2639,7 @@ msgstr ""
 "príslušnú časť textu. Takéto formátovanie textu je zdĺhavé a náchylné k "
 "chybám."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:628-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:627-30
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format text document "
 "objects by formatting directly from the menus, toolbar or context menus. "
@@ -2670,34 +2650,37 @@ msgstr ""
 "kontextového menu. Priame formátovanie sa uplatňuje len na aktuálne zvolený "
 "objekt."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:630-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:629-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
-"paragraph style to a paragraph. Choose menu <span class=\"ui\">Edit</span> → "
-"<span class=\"ui\">Edit styles</span> to change style."
+"paragraph style to a paragraph. Select the style in the style list on the "
+"<span class=\"ui\">Home</span> tab."
 msgstr ""
 "<span class=\"def\">Formátovanie štýlu:</span> <span class=\"productname\""
 ">{productname}</span> podporuje štýly odseku. Na odsek môžete použiť "
 "akýkoľvek existujúci štýl odseku. Štýl zmeníte voľbou z ponuky <span class="
 "\"ui\">Upraviť</span> → <span class=\"ui\">Upraviť štýl</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:631-56
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:637-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:636-5
 msgid "Handling Tables"
 msgstr "Práca s tabuľkami"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:638-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:637-5
+#, fuzzy
 msgid ""
-"Insert tables with proper icon in the toolbar. Select the initial number of "
-"rows and columns. Add rows and columns with the cell context menu. Merge "
-"cells with the <span class=\"ui\">Table</span> menu. The default paragraph "
-"style inside cells is “Table contents”."
+"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
+">Table</span>. Select the initial number of rows and columns. Add rows and "
+"columns with the cell context menu. Merge cells from the <span class=\"ui\""
+">Table</span> tab. The default paragraph style inside cells is “Table "
+"contents”."
 msgstr ""
 "Tabuľku vložíte pomocou príslušnej ikony na nástrojovej lište. Vyberte "
 "predvolený počet riadkov a stĺpcov. Ďalšie riadky a stĺpce pridáte pomocou "
@@ -2705,27 +2688,28 @@ msgstr ""
 "\"ui\">Tabuľka</span>. Bunky tabuľky majú ako predvolený štýl odseku „Obsah "
 "tabuľky“."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:639-52
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:642-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:641-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
-"cells and choose menu <span class=\"ui\">Table</span> → <span class=\"ui\""
-">Properties</span>. Fine tune the table with the properties dialog."
+"cells, open the context menu and choose <span class=\"ui\">Table Properties</"
+"span>. Fine tune the table with the properties dialog."
 msgstr ""
 "<span class=\"def\">Formátovanie buniek:</span> Kliknite na bunku alebo "
 "oblasť a vyberte z menu <span class=\"ui\">Tabuľka</span> → <span class=\"ui"
 "\">Vlastnosti</span>. V dialógovom okne upravte vlastnosti tabuľky."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:645-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
 msgstr "Sledovanie zmien"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:646-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:645-5
 msgid ""
 "When you turn on Track Changes, <span class=\"productname\">{productname}</"
 "span> marks up new changes made to the document. Select this option again to "
@@ -2735,14 +2719,14 @@ msgstr ""
 "span> označí nové zmeny vykonané v dokumente. Sledovanie vypnete opakovanou "
 "voľbou tejto možnosti."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:647-61
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:646-61
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:774-61
 msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:648-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:647-5
 msgid ""
 "Changes made by different people are shown in different colors and each "
 "tracked change can be accepted or rejected, using the box that appears on "
@@ -2752,11 +2736,11 @@ msgstr ""
 "zmenu možno buď prijať alebo odmietnuť pomocou poľa, ktoré sa zobrazí "
 "vpravo. Do neho tiež môžete pridávať poznámky."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:651-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:650-5
 msgid "Other advanced features"
 msgstr "Ďalšie pokročilé funkcie"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:652-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:651-5
 msgid ""
 "<span class=\"def\">Comments:</span> Comments are inserted in the text and "
 "displayed on the right side of the screen."
@@ -2764,7 +2748,7 @@ msgstr ""
 "<span class=\"def\">Komentáre:</span> Komentáre sa vkladajú do textu a "
 "zobrazujú sa na pravej strane používateľského rozhrania."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:653-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:652-5
 msgid ""
 "<span class=\"def\">Formatting marks:</span> Paragraph, page and unbreakable "
 "spaces are shown as marks to assist text alignment, editing and formatting."
@@ -2773,7 +2757,7 @@ msgstr ""
 "medzery sú vyznačené znakmi, ktoré pomáhajú zarovnávať, upravovať a "
 "formátovať text."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:654-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:653-5
 msgid ""
 "<span class=\"def\">Fields:</span> A basic set of fields is available to "
 "insert in the document."
@@ -2781,7 +2765,7 @@ msgstr ""
 "<span class=\"def\">Polia:</span> Do dokumentu možno vkladať základný súbor "
 "polí."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:655-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:654-5
 msgid ""
 "<span class=\"def\">Alphabetical index:</span> Existing alphabetical index "
 "can be updated with new entries."
@@ -2789,7 +2773,7 @@ msgstr ""
 "<span class=\"def\">Abecedný register:</span> Existujúci abecedný zoznam je "
 "možné rozšíriť o nové položky."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:656-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:655-5
 msgid ""
 "<span class=\"def\">Page header and footer:</span> Headers and footers are "
 "available for the existing page style applied in the document at the cursor "
@@ -2799,7 +2783,7 @@ msgstr ""
 "dostupné v existujúcom štýle strany, ktorý je použitý v dokumente na mieste "
 "kurzora."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:657-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:656-5
 msgid ""
 "<span class=\"def\">Footnotes and endnotes:</span> Footnotes and endnotes "
 "are supported."
@@ -2807,7 +2791,7 @@ msgstr ""
 "<span class=\"def\">Poznámky pod čiarou a koncové poznámky:</span> "
 "Podporované sú poznámky pod čiarou a koncové poznámky."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:665-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:664-30
 msgid ""
 "<span class=\"productname\">{productname}</span> Impress edits presentations "
 "in a way that should be familiar to people. Operations like typing text, "
@@ -2823,7 +2807,7 @@ msgstr ""
 "tabuľkami sú podobné ako v desktopovej aplikácii na vytváranie prezentácií. "
 "S dokumentom môžete pracovať pomocou klávesnice, ponúk a nástrojových líšt."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:670-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:669-5
 msgid ""
 "<span class=\"productname\">{productname}</span> displays presentation slide "
 "shows, including a subset of slide transitions and object animations. Choose "
@@ -2835,7 +2819,7 @@ msgstr ""
 "Prezentáciu spustíte voľbou z menu alebo kliknutím na ikonu na ľavej dolnej "
 "nástrojovej lište na paneli snímok."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:671-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:670-5
 msgid ""
 "To exit a <span class=\"productname\">{productname}</span> slide show, press "
 "the <kbd>Esc</kbd> key to return to the presentation edit mode."
@@ -2843,7 +2827,7 @@ msgstr ""
 "Ak chcete prezentáciu v <span class=\"productname\">{productname}</span> "
 "ukončiť, stlačte <kbd>Esc</kbd>. Vrátite sa tým do režimu úpravy prezentácie."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:677-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:676-5
 msgid ""
 "Click on any slide thumbnail in the pane to switch to this slide to view or "
 "edit it."
@@ -2851,7 +2835,7 @@ msgstr ""
 "Kliknutím na náhľad snímky na paneli sa na túto snímku prepnete, zobrazíte "
 "ju a môžete ju upravovať."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:678-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:677-5
 msgid ""
 "Use the slide pane toolbar in the bottom to start the slideshow, add slide, "
 "duplicate or delete the current slide."
@@ -2859,7 +2843,7 @@ msgstr ""
 "Pomocou nástrojovej lišty v dolnej časti panela snímok môžete spustiť "
 "prezentáciu a vložiť novú snímku alebo duplikovať či zmazať aktuálnu snímku."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:684-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:683-5
 msgid ""
 "<span class=\"def\">Slide layouts:</span> <span class=\"productname\""
 ">{productname}</span> Impress lets you change the slide layout. Select the "
@@ -2869,13 +2853,13 @@ msgstr ""
 ">{productname}</span> umožňuje zmeniť rozloženie snímky. Požadované "
 "rozloženie vyberiete v rozbaľovacom zozname."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:685-53
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:684-53
 msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:687-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:686-30
 msgid ""
 "<span class=\"def\">Master slide:</span> Select the master slide associated "
 "to the current slide. Format and arrange slide elements in the master slide."
@@ -2883,7 +2867,7 @@ msgstr ""
 "<span class=\"def\">Predloha snímky:</span> Vyberte predlohu snímky "
 "priradenú k aktuálnemu snímke. Upravte formát a prvky predlohy."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:688-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:687-30
 msgid ""
 "<span class=\"def\">Slide transitions:</span> <span class=\"productname\""
 ">{productname}</span> Impress provides visual effects when displaying a new "
@@ -2895,7 +2879,7 @@ msgstr ""
 "pri zobrazení novej snímky prezentácie. Prechod medzi snímkami je "
 "vlastnosťou snímky, nastavíte ju v režime úprav na postrannom paneli."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:689-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:688-30
 msgid ""
 "<span class=\"def\">Object animation:</span> Individual objects in the slide "
 "can have animations. Use the side bar to configure the slide transition for "
@@ -2905,7 +2889,7 @@ msgstr ""
 "môžu byť animované. Animáciu vybraného objektu či skupiny objektov nastavíte "
 "na postrannom paneli."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:690-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:689-30
 msgid ""
 "<span class=\"def\">Tables:</span> Insert tables in the presentation. Use "
 "the sidebar to select the table theme."
@@ -2913,7 +2897,7 @@ msgstr ""
 "<span class=\"def\">Tabuľky:</span> Vkladá do prezentácie tabuľky. Motív "
 "vzhľadu tabuľky vyberiete pomocou postranného panelu."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:696-5
+#: html/cool-help.html%2Bdiv.div.div.h4:695-5
 msgid ""
 "What are the document file formats supported by <span class=\"productname\""
 ">{productname}</span>?"
@@ -2921,7 +2905,7 @@ msgstr ""
 "Ktoré formáty súboru sú v <span class=\"productname\">{productname}</span> "
 "podporované?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:697-5
+#: html/cool-help.html%2Bdiv.div.div.p:696-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports both reading and "
 "writing for the following file formats:"
@@ -2929,38 +2913,39 @@ msgstr ""
 "<span class=\"productname\">{productname}</span> podporuje na čítanie a "
 "zápis nasledujúce formáty súboru:"
 
+#: html/cool-help.html%2Bdiv.div.div.ul.li:698-7
+msgid ""
+"Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT. "
+"Plain text TXT and Markdown MD"
+msgstr ""
+
 #: html/cool-help.html%2Bdiv.div.div.ul.li:699-7
 msgid ""
-"Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
+"Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS. Comma "
+"separated values CSV"
 msgstr ""
-"Textové dokumenty: Formáty Microsoft DOC, DOCX, RTF, formát OpenDocument ODT"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:700-7
-msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
-msgstr ""
-"Tabuľkové dokumenty: Formáty Microsoft XLS, XLSX, formát OpenDocument ODS"
-
-#: html/cool-help.html%2Bdiv.div.div.ul.li:701-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
 msgstr "Prezentácie: formát Microsoft PPT, pptx, formát OpenDocument ODP"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:705-5
+#: html/cool-help.html%2Bdiv.div.div.h4:704-5
 msgid "How do I save a document with another name?"
 msgstr "Ako uložím dokument pod iným názvom?"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:707-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:706-7
 msgid "Hover the mouse on the document name in the menu bar."
 msgstr "Prejdite myšou na názov dokumentu v hlavnej ponuke."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:708-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:707-7
 msgid "Type the new file name in the text box and press <kbd>Enter</kbd>."
 msgstr "Zadajte nový názov súboru do textového poľa a stlačte <kbd>Enter</kbd>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:710-5
+#: html/cool-help.html%2Bdiv.div.div.p:709-5
 msgid "A copy of the document is saved with the new name in the same folder."
 msgstr "Kópia dokumentu sa uloží pod novým názvom do toho istého priečinka."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:713-5
+#: html/cool-help.html%2Bdiv.div.div.h4:712-5
 msgid ""
 "How can I quit <span class=\"productname\">{productname}</span> without "
 "saving my edits?"
@@ -2968,7 +2953,7 @@ msgstr ""
 "Ako ukončím <span class=\"productname\">{productname}</span> bez toho, aby "
 "sa uložili úpravy?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:714-5
+#: html/cool-help.html%2Bdiv.div.div.p:713-5
 msgid ""
 "<span class=\"productname\">{productname}</span> saves the document in the "
 "background regularly, you can't just close without saving it. To abandon "
@@ -2979,6 +2964,13 @@ msgstr ""
 "automaticky, nemožno ho preto zatvoriť bez uloženia. Ak chcete svoje zmeny "
 "zrušiť, buď ich musíte vrátiť späť, alebo použiť funkciu <span class=\"ui\""
 ">História revízií</span> v ponuke <span class=\"ui\">Súbor</span>."
+
+#: html/cool-help.html%2Bdiv.div.div.p:714-5
+msgid ""
+"<span class=\"productname\">{productname}</span> saves the document in the "
+"background regularly, you can't just close without saving it. To abandon "
+"your changes, undo them."
+msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:717-5
 msgid ""
@@ -3003,9 +2995,10 @@ msgid "How can I check spelling in my language?"
 msgstr "Ako skontrolujem pravopis vo svojom jazyku?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
+#, fuzzy
 msgid ""
-"Choose menu <span class=\"ui\">Tools</span> → <span class=\"ui\">Languages</"
-"span> and select the language for the whole document. Optionally you can set "
+"Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
+"and select the language for the whole document. Optionally you can set "
 "languages for the selected text and for the current paragraph."
 msgstr ""
 "Zvoľte v ponuke <span class=\"ui\">Nástroje</span> → <span class=\"ui\""
@@ -3018,11 +3011,9 @@ msgstr "Ako odstrániť z dokumentu červené vlnovky?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:726-5
 msgid ""
-"Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
-">Automatic Spell Checking</span>."
+"On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
+">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
-"Zvoľte v ponuke <span class=\"ui\">Nástroje</span> a zrušte zaškrtnutie "
-"príkazu <span class=\"ui\">Automatická kontrola pravopisu</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
 msgid "What is the blue wavy underline in some words in the text?"
@@ -3045,9 +3036,10 @@ msgid "Is there a thesaurus?"
 msgstr "Je k dispozícii slovník synoným?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
+#, fuzzy
 msgid ""
-"Yes. Click in the word you want and choose <span class=\"ui\">Tools</span> → "
-"<span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
+"Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
+" <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
 "Áno. Kliknite na požadované slovo a vyberte <span class=\"ui\">Nástroje</"
@@ -3069,11 +3061,12 @@ msgstr ""
 "textového dokumentu?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
+#, fuzzy
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
-"document display, choose menu <span class=\"ui\">View</span> → <span class="
-"\"ui\">Formatting mark</span>."
+"document display, choose <span class=\"ui\">View</span> → <span class=\"ui\""
+">Formatting Marks</span>."
 msgstr ""
 "Modrý symbol <span class=\"blue\">¶</span> predstavuje formátovací znak. "
 "Napomáha pri zarovnávaní a úpravách textu a netlačí sa. Ak chcete prepnúť "
@@ -3085,10 +3078,11 @@ msgid "How do I get a word count of my document?"
 msgstr "Ako zistím počet slov v dokumente?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
+#, fuzzy
 msgid ""
-"Word count is available in <span class=\"ui\">Tools</span> → <span class=\"ui"
-"\">Word count</span>. A dialog shows word counts for selection and for the "
-"whole document."
+"Word count is available in <span class=\"ui\">Review</span> → <span class="
+"\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
+"the whole document."
 msgstr ""
 "Počet slov je k dispozícii v ponuke <span class=\"ui\">Nástroje</span> → "
 "<span class=\"ui\">Počet slov</span>. Zobrazí sa dialógové okno s počtom "
@@ -3131,12 +3125,8 @@ msgstr "Umiestnite kurzor na miesto, kam chcete znak vložiť."
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:756-7
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
-"Characters </span> or click the corresponding icon in the toolbar. A dialog "
-"opens."
+"Character</span>. A dialog opens."
 msgstr ""
-"Zvoľte <span class=\"ui\">Vložiť</span> → <span class=\"ui\">Špeciálny znak</"
-"span> alebo kliknite na zodpovedajúcu ikonu na nástrojovej lište. Zobrazí sa "
-"dialógové okno."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:759-59
 msgid ""
@@ -3169,12 +3159,13 @@ msgid "Why can't I delete text? It just gets a strike-through?"
 msgstr "Prečo sa text preškrtáva namiesto toho, aby sa zmazal?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:766-5
+#, fuzzy
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
 "Useful for marking changes in text and spreadsheets. Track changes are "
-"enabled choosing <span class=\"ui\">Edit</span> → <span class=\"ui\">Track "
-"Changes </span> → <span class=\"ui\">Record</span>."
+"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\""
+">Record</span>."
 msgstr ""
 "Máte v dokumente zapnuté sledovanie zmien. V dôsledku toho sa zaznamenávajú "
 "všetky zmeny textu a zobrazujú sa, aby si ich bolo možné neskôr prezrieť. "
@@ -3212,9 +3203,10 @@ msgstr ""
 "Farby priradené k zmenám závisia na tom, ktorý používateľ dokument zmenil."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:776-5
+#, fuzzy
 msgid ""
-"To display or hide track changes choose <span class=\"ui\">Edit</span> → "
-"<span class=\"ui\">Track Changes </span> → <span class=\"ui\">Show</span>. "
+"To display or hide track changes choose <span class=\"ui\">Review</span> → "
+"<span class=\"ui\">View Changes</span> → <span class=\"ui\">Show</span>. "
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
@@ -3225,15 +3217,16 @@ msgstr ""
 "nechtiac zanechať nežiaduci text."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:777-5
+#, fuzzy
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
-"Alternatively, choose <span class=\"ui\">Edit</span> → <span class=\"ui\""
-">Track Changes </span> → <span class=\"ui\">Accept</span> or <span class=\"ui"
-"\">Reject</span>. Furthermore, if you need to filter changes before "
-"accepting or rejecting, choose <span class=\"ui\">Edit</span> → <span class="
-"\"ui\">Track Changes </span> → <span class=\"ui\">Manage</span>. A dialog "
-"shows a list of all tracked changes. Use the dialog buttons accordingly."
+"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\""
+">Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
+"to filter changes before accepting or rejecting, choose <span class=\"ui\""
+">Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\""
+">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
+"buttons accordingly."
 msgstr ""
 "Zmeny možno prijať, alebo odmietnuť. Ak chcete tak urobiť, kliknite na "
 "zodpovedajúcu ikonu v okne s komentárom v pravej časti dokumentu. Môžete "
@@ -3267,9 +3260,10 @@ msgid "Using the page style"
 msgstr "Pomocou štýlu stránky"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page</span> and "
-"select the <span class=\"ui\">Page</span> tab"
+"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page Style</"
+"span> and select the <span class=\"ui\">Page</span> tab"
 msgstr ""
 "Zvolte <span class=\"ui\">Formát</span> → <span class=\"ui\">Strana</span> a "
 "vyberte kartu <span class=\"ui\">Strana</span>"
@@ -3342,14 +3336,12 @@ msgstr "Vyberte text s existujúcim formátom"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:806-7
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:848-7
-#, fuzzy
 msgid ""
-"Click on the clone formatting icon <img alt=\"format paintbrush\" class"
-"=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
-"turns to a paint bucket."
+"Click on the <span class=\"ui\">Clone Formatting</span> icon <img alt="
+"\"format paintbrush\" class=\"icon-size\" src=\"images/lc_formatpaintbrush."
+"svg\" /> on the <span class=\"ui\">Home</span> tab. The mouse pointer turns "
+"to a paint bucket."
 msgstr ""
-"Kliknite na ikonu štetca formátu <img class=\"icon-size\" src=\"images"
-"/lc_formatpaintbrush.svg\" />. Kurzor myši sa zmení na vedierko s farbou."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
 msgid "Select the text you want to apply the new format."
@@ -3380,15 +3372,10 @@ msgstr "Prečo sa automaticky zmenil práve napísaný text? Ako túto zmenu zru
 msgid ""
 "You have the AutoCorrection enabled. AutoCorrection compares the text just "
 "typed to an internal table of text. In most cases, AutoCorrection corrects "
-"typos while you type. If AutoCorrection is not necessary, disable it in "
-"<span class=\"ui\">Tools</span> → <span class=\"ui\">AutoCorrection</span> → "
-"<span class=\"ui\">While typing</span>."
+"typos while you type. To revert a correction, press <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after it "
+"was applied."
 msgstr ""
-"Máte povolenú funkciu automatických opráv. Tá mení práve napísaný text podľa "
-"internej tabuľky na zodpovedajúci iný text. Vo väčšine prípadov sa tak počas "
-"písania opravujú preklepy. Ak automatické opravy nepotrebujete, zakážte ich "
-"v <span class=\"ui\">Nástroje</span> → <span class=\"ui\">Automatické "
-"opravy</span> → <span class=\"ui\">Pri písaní</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
@@ -3396,12 +3383,9 @@ msgstr "Ako vyberiem dáta pre tlač?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:828-5
 msgid ""
-"Insert column and row breaks in the spreadsheet to narrow the print range "
-"and print the document to download. On printing the PDF, select the pages of "
-"interest."
+"Insert column and row breaks in the spreadsheet to narrow the print range. "
+"When printing, select the pages of interest."
 msgstr ""
-"Vložte do hárku zalomenie stĺpca a riadku (tým zúžite oblasť tlače) a voľbou "
-"tlače dokument stiahnite. Pri tlači do PDF vyberte požadované strany."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:831-5
 msgid "How can I import CSV data?"
@@ -3424,15 +3408,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:835-7
 msgid ""
-"Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
-">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
-"\"true\">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> "
-"dialog opens to let you describe the precise format of the CSV data."
+"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog "
+"opens to let you describe the precise format of the CSV data."
 msgstr ""
-"Vložte dáta z ponuky prehliadača <span class=\"ui\">Upraviť</span> → <span "
-"class=\"ui\">Vložiť</span> alebo stlačte <kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>. V dialógovom okne <span "
-"class=\"ui\">Import textu</span> presne popíšte formát dát CSV."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
 msgid ""
@@ -3458,8 +3437,10 @@ msgid "How can I copy the formatting of existing cells to new ones?"
 msgstr "Ako môžem skopírovať formátovanie existujúcich buniek na nové?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:845-5
-msgid "This is easy to do using the Paintbrush tool in the toolbar."
-msgstr "Pomocou nástroja štetec formátu na nástrojovej lište to je jednoduché."
+msgid ""
+"This is easy to do using <span class=\"ui\">Clone Formatting</span> on the "
+"<span class=\"ui\">Home</span> tab."
+msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:847-7
 msgid "Format the source cell with the font, color background and more."
@@ -3474,12 +3455,13 @@ msgid "What is “Clear Direct Formatting” icon?"
 msgstr "Čo značí ikona „Odstrániť priame formátovanie“?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:854-5
+#, fuzzy
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
 "formatting. To restore the formatting to the style settings, select the text "
-"or spreadsheet cell and choose <span class=\"ui\">Format</span> → <span "
-"class=\"ui\">Clear Direct Formatting</span> or use the button in the toolbar."
+"or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span class="
+"\"ui\">Clear Direct Formatting</span>."
 msgstr ""
 "Priame formátovanie je také formátovanie, ktoré bolo použité priamo na "
 "vybraný odsek alebo bunku hárku a ktoré prekrýva formátovanie dané štýlom. "
@@ -3512,16 +3494,17 @@ msgid ""
 msgstr "Otvorte v <span class=\"productname\">{productname}</span> prezentáciu"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:869-7
+#, fuzzy
 msgid ""
-"Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">Full "
-"Screen Presentation</span> or click on the left-most icon in the bottom of "
-"the slide panel:"
+"Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">From "
+"Beginning</span> or click on the left-most icon in the bottom of the slide "
+"panel:"
 msgstr ""
 "Buď vyberte <span class=\"ui\">Prezentácia</span> → <span class=\"ui\""
 ">Prezentácia na celú obrazovku</span> alebo kliknite na úplne ľavú ikonu v "
 "spodnej časti panela snímok:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-197
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-187
 #, fuzzy
 msgid "slide show"
 msgstr "Prezentácia"
@@ -3553,6 +3536,141 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:880-7
 msgid "Set the properties of the element of the object."
 msgstr "Nastavte vlastnosti objektu."
+
+#~ msgid ""
+#~ "<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
+#~ "options for daily editing. Toolbar buttons are dynamic, meaning that their "
+#~ "state (on or off) depends on different factors."
+#~ msgstr ""
+#~ "<span class=\"def\">Nástrojová lišta:</span> Nástrojová lišta obsahuje "
+#~ "možnosti, ktoré sa pri bežnej práci najviac používajú. Tlačidlá lišty sú "
+#~ "dynamické, tj. ich stav (zapnuté alebo vypnuté) závisí od rôznych okolností."
+
+#~ msgid ""
+#~ "Rich content copy/cut and paste is supported, not only within a given "
+#~ "document, but also across documents on the same or different <span class="
+#~ "\"productname\">{productname}</span>. For these internal uses, users can "
+#~ "copy/cut content, including images and mixed content, on PC by using the "
+#~ "keyboard shortcuts directly (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
+#~ "plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class="
+#~ "\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). For security "
+#~ "reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>V</kbd> to paste on PC, but context menus can "
+#~ "be used for cut and copy. On Android or iOS selecting text by double "
+#~ "tapping, and using a long-tap to access copy/cut/paste via the context menu "
+#~ "is required."
+#~ msgstr ""
+#~ "Kopírovanie / vystrihovanie a vkladanie formátovaného obsahu je podporované, "
+#~ "a to nielen v rámci dokumentu, ale tiež medzi dokumentmi rovnakej alebo "
+#~ "odlišnej aplikácie <span class=\"productname\">{productname}</span>. Pri "
+#~ "takomto použití možno kopírovať / vystrihovať obsah vrátane obrázkov a "
+#~ "zmiešaného obsahu, a to na PC priamo pomocou klávesových skratiek "
+#~ "(<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
+#~ "\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>V</kbd>). Z bezpečnostných dôvodov je na PC "
+#~ "nevyhnutné vkladať pomocou <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>V</kbd>, na vystrihovanie a kopírovanie však "
+#~ "možno použiť kontextové menu. V systémoch Android a iOS vyberiete text "
+#~ "poklopaním a dlhým kliknutím získate prístup do kontextového menu s príkazmi "
+#~ "Kopírovať / Vystrihnúť / Vložiť."
+
+#~ msgid ""
+#~ "To copy larger pieces of content to other applications on your device, users "
+#~ "need to press the <span class=\"ui\">Start download</span> button, and then "
+#~ "re-copy this to their clipboard in order to make it available to the target "
+#~ "application to read. This is possible via a tiny widget that pops up in the "
+#~ "bottom-right corner, and is only necessary to export the content for pasting "
+#~ "in external applications. This step also converts complex object types into "
+#~ "static images."
+#~ msgstr ""
+#~ "Ak chcete kopírovať väčšie časti obsahu do iných aplikácií na svojom "
+#~ "zariadení, je nutné stlačiť tlačidlo <span class=\"ui\">Spustiť preberanie</"
+#~ "span> a potom znovu skopírovať obsah do schránky tohto zariadenia, čím sa "
+#~ "stane pre cieľovú aplikáciu dostupný. Tento export obsahu pre vloženie do "
+#~ "externej aplikácie zabezpečuje vyskakovací prvok v pravom dolnom rohu. V "
+#~ "tomto kroku sa tiež prevedú komplexné objekty na statické obrázky."
+
+#~ msgid "Inactive document"
+#~ msgstr "Neaktívny dokument"
+
+#~ msgid ""
+#~ "<span class=\"def\">Insert local image:</span> opens the browser file picker "
+#~ "to upload the image from your local computer and insert it into the document."
+#~ msgstr ""
+#~ "<span class=\"def\">Vložiť miestny obrázok:</span> otvorí súborový dialóg "
+#~ "prehliadača, v ktorom môžete nahrať súbor z počítača a vložiť ho do "
+#~ "dokumentu."
+
+#~ msgid ""
+#~ "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
+#~ msgstr ""
+#~ "Textové dokumenty: Formáty Microsoft DOC, DOCX, RTF, formát OpenDocument ODT"
+
+#~ msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
+#~ msgstr ""
+#~ "Tabuľkové dokumenty: Formáty Microsoft XLS, XLSX, formát OpenDocument ODS"
+
+#~ msgid ""
+#~ "Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
+#~ ">Automatic Spell Checking</span>."
+#~ msgstr ""
+#~ "Zvoľte v ponuke <span class=\"ui\">Nástroje</span> a zrušte zaškrtnutie "
+#~ "príkazu <span class=\"ui\">Automatická kontrola pravopisu</span>."
+
+#~ msgid ""
+#~ "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
+#~ "Characters </span> or click the corresponding icon in the toolbar. A dialog "
+#~ "opens."
+#~ msgstr ""
+#~ "Zvoľte <span class=\"ui\">Vložiť</span> → <span class=\"ui\">Špeciálny znak</"
+#~ "span> alebo kliknite na zodpovedajúcu ikonu na nástrojovej lište. Zobrazí sa "
+#~ "dialógové okno."
+
+#, fuzzy
+#~ msgid ""
+#~ "Click on the clone formatting icon <img alt=\"format paintbrush\" class"
+#~ "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
+#~ "turns to a paint bucket."
+#~ msgstr ""
+#~ "Kliknite na ikonu štetca formátu <img class=\"icon-size\" src=\"images"
+#~ "/lc_formatpaintbrush.svg\" />. Kurzor myši sa zmení na vedierko s farbou."
+
+#~ msgid ""
+#~ "You have the AutoCorrection enabled. AutoCorrection compares the text just "
+#~ "typed to an internal table of text. In most cases, AutoCorrection corrects "
+#~ "typos while you type. If AutoCorrection is not necessary, disable it in "
+#~ "<span class=\"ui\">Tools</span> → <span class=\"ui\">AutoCorrection</span> → "
+#~ "<span class=\"ui\">While typing</span>."
+#~ msgstr ""
+#~ "Máte povolenú funkciu automatických opráv. Tá mení práve napísaný text podľa "
+#~ "internej tabuľky na zodpovedajúci iný text. Vo väčšine prípadov sa tak počas "
+#~ "písania opravujú preklepy. Ak automatické opravy nepotrebujete, zakážte ich "
+#~ "v <span class=\"ui\">Nástroje</span> → <span class=\"ui\">Automatické "
+#~ "opravy</span> → <span class=\"ui\">Pri písaní</span>."
+
+#~ msgid ""
+#~ "Insert column and row breaks in the spreadsheet to narrow the print range "
+#~ "and print the document to download. On printing the PDF, select the pages of "
+#~ "interest."
+#~ msgstr ""
+#~ "Vložte do hárku zalomenie stĺpca a riadku (tým zúžite oblasť tlače) a voľbou "
+#~ "tlače dokument stiahnite. Pri tlači do PDF vyberte požadované strany."
+
+#~ msgid ""
+#~ "Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
+#~ ">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
+#~ "\"true\">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> "
+#~ "dialog opens to let you describe the precise format of the CSV data."
+#~ msgstr ""
+#~ "Vložte dáta z ponuky prehliadača <span class=\"ui\">Upraviť</span> → <span "
+#~ "class=\"ui\">Vložiť</span> alebo stlačte <kbd>Ctrl</kbd><span class=\"kbd--"
+#~ "plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>. V dialógovom okne <span "
+#~ "class=\"ui\">Import textu</span> presne popíšte formát dát CSV."
+
+#~ msgid "This is easy to do using the Paintbrush tool in the toolbar."
+#~ msgstr "Pomocou nástroja štetec formátu na nástrojovej lište to je jednoduché."
 
 #~ msgid ""
 #~ "<span class=\"productname\">{productname}</span> allows you to create and "

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.collaboraoffice.librelogo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 19:46+0000\n"
+"POT-Creation-Date: 2026-10-13 12:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,7 +63,7 @@ msgstr ""
 msgid "Could not save %1: %2"
 msgstr ""
 
-#: panel.js:480
+#: panel.js:485
 msgid "Could not start LibreLogo: %1"
 msgstr ""
 
@@ -163,7 +163,7 @@ msgstr ""
 msgid "Program"
 msgstr ""
 
-#: panel.js:472
+#: panel.js:477
 msgid "Program written to the document."
 msgstr ""
 
@@ -232,6 +232,10 @@ msgid ""
 "The document is empty. Type a program in the editor or in the document."
 msgstr ""
 
+#: panel.js:467
+msgid "The editor is empty, so there is no program to write to the document."
+msgstr ""
+
 #: index.html:47
 msgid "To document"
 msgstr ""
@@ -253,7 +257,9 @@ msgid "Using A4 page size: %1"
 msgstr ""
 
 #: index.html:47
-msgid "Write the editor's program to the end of the document"
+msgid ""
+"Write the editor's program into the document, over the selection or at the "
+"cursor"
 msgstr ""
 
 #: index.html:76

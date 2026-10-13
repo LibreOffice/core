@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 21:46+0200\n"
+"POT-Creation-Date: 2026-10-13 14:06+0200\n"
 "PO-Revision-Date: 2026-05-02 20:41+0000\n"
 "Last-Translator: Loc Huynh <huynhloc.contact@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/"
@@ -1639,46 +1639,46 @@ msgid "<span class=\"productname\">{productname}</span> user interface"
 msgstr "<span class=\"productname\">{productname}</span> giao diện người dùng"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:343-13
-#: html/cool-help.html%2Bdiv.div.h3:436-5
+#: html/cool-help.html%2Bdiv.div.h3:429-5
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr "Mở, đóng, lưu, in và tải xuống tài liệu"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
-#: html/cool-help.html%2Bdiv.div.h3:450-5
+#: html/cool-help.html%2Bdiv.div.h3:439-5
 msgid "Opening, closing, saving and printing documents"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
-#: html/cool-help.html%2Bdiv.div.h3:481-5
+#: html/cool-help.html%2Bdiv.div.h3:478-5
 msgid "Editing documents"
 msgstr "Chỉnh sửa tài liệu"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:346-13
 #: html/cool-help.html%2Bdiv.nav.ul.li:352-13
 #: html/cool-help.html%2Bdiv.nav.ul.li:365-13
-#: html/cool-help.html%2Bdiv.div.h3:511-3
-#: html/cool-help.html%2Bdiv.div.div.h3:571-5
-#: html/cool-help.html%2Bdiv.div.div.h3:682-5
+#: html/cool-help.html%2Bdiv.div.h3:510-3
+#: html/cool-help.html%2Bdiv.div.div.h3:570-5
+#: html/cool-help.html%2Bdiv.div.div.h3:681-5
 msgid "Advanced features"
 msgstr "Các tính năng nâng cao"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:348-13
-#: html/cool-help.html%2Bdiv.div.h3:549-5
+#: html/cool-help.html%2Bdiv.div.h3:548-5
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
 msgstr "<span class=\"productname\">{productname}</span> trang tính"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:349-13
-#: html/cool-help.html%2Bdiv.div.div.h3:551-5
+#: html/cool-help.html%2Bdiv.div.div.h3:550-5
 msgid "Editing spreadsheets"
 msgstr "Chỉnh sửa trang tính"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:350-13
-#: html/cool-help.html%2Bdiv.div.div.h3:555-5
+#: html/cool-help.html%2Bdiv.div.div.h3:554-5
 msgid "Formulas"
 msgstr "Công thức"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:351-13
-#: html/cool-help.html%2Bdiv.div.div.h3:564-5
+#: html/cool-help.html%2Bdiv.div.div.h3:563-5
 msgid "Formatting spreadsheets"
 msgstr "Định dạng trang tính"
 
@@ -1688,22 +1688,22 @@ msgid "Spreadsheets"
 msgstr "Trang tính"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:355-13
-#: html/cool-help.html%2Bdiv.div.h3:613-5
+#: html/cool-help.html%2Bdiv.div.h3:612-5
 msgid "<span class=\"productname\">{productname}</span> text documents"
 msgstr "<span class=\"productname\">{productname}</span> tài liệu văn bản"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:356-13
-#: html/cool-help.html%2Bdiv.div.div.h3:615-5
+#: html/cool-help.html%2Bdiv.div.div.h3:614-5
 msgid "Editing text documents"
 msgstr "Chỉnh sửa tài liệu văn bản"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:357-13
-#: html/cool-help.html%2Bdiv.div.div.h3:619-5
+#: html/cool-help.html%2Bdiv.div.div.h3:618-5
 msgid "Context menus"
 msgstr "Menu ngữ cảnh"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:358-13
-#: html/cool-help.html%2Bdiv.div.div.h3:635-5
+#: html/cool-help.html%2Bdiv.div.div.h3:634-5
 msgid "Advanced text document editor features"
 msgstr "Các tính năng trình soạn thảo tài liệu văn bản nâng cao"
 
@@ -1713,22 +1713,22 @@ msgid "Text documents"
 msgstr "Tài liệu văn bản"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:361-13
-#: html/cool-help.html%2Bdiv.div.h3:662-5
+#: html/cool-help.html%2Bdiv.div.h3:661-5
 msgid "<span class=\"productname\">{productname}</span> presentations"
 msgstr "<span class=\"productname\">{productname}</span> bản trình bày"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:362-13
-#: html/cool-help.html%2Bdiv.div.div.h3:664-5
+#: html/cool-help.html%2Bdiv.div.div.h3:663-5
 msgid "Editing presentations"
 msgstr "Chỉnh sửa bản trình bày"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:363-13
-#: html/cool-help.html%2Bdiv.div.div.h3:668-5
+#: html/cool-help.html%2Bdiv.div.div.h3:667-5
 msgid "Slide show"
 msgstr "Trình chiếu"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:364-13
-#: html/cool-help.html%2Bdiv.div.div.h3:675-5
+#: html/cool-help.html%2Bdiv.div.div.h3:674-5
 msgid "Slide pane"
 msgstr "Ngăn trang chiếu"
 
@@ -1738,7 +1738,7 @@ msgid "Presentations"
 msgstr "Bản trình bày"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:368-13
-#: html/cool-help.html%2Bdiv.div.h3:694-5
+#: html/cool-help.html%2Bdiv.div.h3:693-5
 msgid "Frequently Asked Questions"
 msgstr "Các câu hỏi thường gặp"
 
@@ -1802,21 +1802,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:405-5
 msgid ""
-"<span class=\"def\">The menu bar:</span> The main menu is at the top and "
-"includes many options, such as commands for printing, editing, viewing, and "
-"other advanced commands. You can hide the menu bar by clicking the hide icon "
-"<span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide menu "
-"bar\" title=\"Hide menu bar\"></span> on the far right. To show it again, "
-"click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
-"aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
+"<span class=\"def\">The tabs:</span> The commands are grouped on tabs at the "
+"top: <span class=\"ui\">File</span>, <span class=\"ui\">Home</span>, <span "
+"class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span class="
+"\"ui\">View</span> and others, depending on the document type. Click the "
+"selected tab again to collapse the tab bar and gain space for the document. "
+"Click any tab to expand it again."
 msgstr ""
-"<span class=\"def\">Thanh menu:</span> Menu chính nằm ở trên cùng và bao gồm "
-"nhiều tùy chọn, chẳng hạn như các lệnh in, chỉnh sửa, xem và các lệnh nâng "
-"cao khác. Bạn có thể ẩn thanh menu bằng cách nhấp vào biểu tượng ẩn <span "
-"class=\"w2ui-iconfold icon-size\" role=\"img\" aria-label=\"hide menu bar\" "
-"title=\"Ẩn thanh menu\"></span> ở phía ngoài cùng bên phải. Để hiển thị lại, "
-"hãy nhấp vào biểu tượng hiển thị <span class=\"w2ui-icon mở ra icon-size\" "
-"role=\"img\" aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
 msgid ""
@@ -1828,30 +1820,19 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:411-5
 msgid ""
-"<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
-"options for daily editing. Toolbar buttons are dynamic, meaning that their "
-"state (on or off) depends on different factors."
-msgstr ""
-"<span class=\"def\">Thanh công cụ:</span> Thanh công cụ chứa các tùy chọn "
-"được sử dụng nhiều nhất để chỉnh sửa hàng ngày. Nút thanh công cụ là động, "
-"có nghĩa là trạng thái của chúng (bật hoặc tắt) phụ thuộc vào các yếu tố "
-"khác nhau."
-
-#: html/cool-help.html%2Bdiv.div.div.p:414-5
-msgid ""
 "<span class=\"def\">The status bar:</span> The status bar is shown in the "
 "bottom, and contains several useful options and features."
 msgstr ""
 "<span class=\"def\">Thanh trạng thái:</span> Thanh trạng thái được hiển thị "
 "ở phía dưới và chứa một số tùy chọn và tính năng hữu ích."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:415-49
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:412-49
 msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:418-5
+#: html/cool-help.html%2Bdiv.div.div.p:415-5
 msgid ""
 "<span class=\"def\">The search bar:</span> Searching starts automatically "
 "when content is inserted in the search box, and the document window "
@@ -1863,20 +1844,20 @@ msgstr ""
 "xuất hiện đầu tiên được tìm thấy. Tìm kiếm không phân biệt chữ hoa chữ "
 "thường. Có ba nút ngay bên cạnh hộp tìm kiếm:"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:420-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:417-7
 #, fuzzy
 msgid "Search backwards"
 msgstr "Tìm lui"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:421-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:418-7
 msgid "Search forward"
 msgstr "Tìm tiếp"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:422-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:419-7
 msgid "Cancel the search (appears only when a text has been searched)"
 msgstr "Hủy tìm kiếm (chỉ xuất hiện khi một văn bản đã được tìm kiếm)"
 
-#: html/cool-help.html%2Bdiv.div.div.p:426-5
+#: html/cool-help.html%2Bdiv.div.div.p:423-5
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
@@ -1888,7 +1869,7 @@ msgstr ""
 "phóng áp dụng cho khu vực tài liệu, giao diện người dùng không bị ảnh hưởng. "
 "Mức thu phóng hiện tại được hiển thị trong khu vực này."
 
-#: html/cool-help.html%2Bdiv.div.div.p:427-5
+#: html/cool-help.html%2Bdiv.div.div.p:424-5
 msgid ""
 "Text, charts, shapes and svg images will stay sharp, when zooming in, you "
 "will only see pixels appear at inserted images, such as jpg’s or png’s."
@@ -1897,28 +1878,13 @@ msgstr ""
 "bạn sẽ chỉ thấy các điểm ảnh xuất hiện ở các hình ảnh được chèn vào, chẳng "
 "hạn như jpg hoặc png."
 
-#: html/cool-help.html%2Bdiv.div.div.p:428-5
+#: html/cool-help.html%2Bdiv.div.div.p:425-5
 msgid "Using the browser zoom affects the document and user interface areas."
 msgstr ""
 "Sử dụng thu phóng của trình duyệt ảnh hưởng đến các khu vực tài liệu và khu "
 "vực giao diện người dùng."
 
-#: html/cool-help.html%2Bdiv.div.div.p:431-5
-msgid ""
-"<span class=\"def\">The information bar:</span> The information bar displays "
-"details about the current document. The actual information depends on the "
-"nature of the document."
-msgstr ""
-"<span class=\"def\">Thanh thông tin:</span> Thanh thông tin hiển thị chi "
-"tiết về tài liệu hiện tại. Thông tin thực tế phụ thuộc vào bản chất của tài "
-"liệu."
-
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:432-54
-msgid ""
-"Information bar showing page navigation arrows, zoom controls, and zoom level"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.p:437-5
+#: html/cool-help.html%2Bdiv.div.p:430-5
 msgid ""
 "Your documents are stored and managed in the cloud storage that is "
 "integrated with <span class=\"productname\">{productname}</span>."
@@ -1926,7 +1892,7 @@ msgstr ""
 "Tài liệu của bạn được lưu trữ và quản lý trong bộ lưu trữ đám mây được tích "
 "hợp với <span class=\"productname\">{productname}</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:438-30
+#: html/cool-help.html%2Bdiv.div.div.p:431-30
 msgid ""
 "To download a document download it from the <span class=\"productname\""
 ">{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
@@ -1938,7 +1904,7 @@ msgstr ""
 "định dạng tải xuống có sẵn phụ thuộc vào ứng dụng. Tất cả các ứng dụng xuất "
 "tài liệu ở định dạng PDF."
 
-#: html/cool-help.html%2Bdiv.div.div.p:439-30
+#: html/cool-help.html%2Bdiv.div.div.p:432-30
 msgid ""
 "To open document, click on the file to open the <span class=\"productname\""
 ">{productname}</span> module associated to the document format."
@@ -1946,7 +1912,7 @@ msgstr ""
 "Để mở tài liệu, nhấp vào tệp để mở mô-đun <span class=\"productname\""
 ">{productname}</span> được liên kết với định dạng tài liệu."
 
-#: html/cool-help.html%2Bdiv.div.div.p:440-30
+#: html/cool-help.html%2Bdiv.div.div.p:433-30
 msgid ""
 "Documents in <span class=\"productname\">{productname}</span> save "
 "automatically, but if you are concerned that a document is synchronized as "
@@ -1958,7 +1924,7 @@ msgstr ""
 "có thể buộc lưu bằng cách sử dụng mục nhập <span class=\"ui\">Tài liệu</"
 "span> <span class=\"ui\">Lưu</span> của menu."
 
-#: html/cool-help.html%2Bdiv.div.div.p:441-30
+#: html/cool-help.html%2Bdiv.div.div.p:434-30
 msgid ""
 "Depending on the capabilities of your browser, the print window may appear "
 "or a “Download PDF export?” popup appears. You can print this PDF in your "
@@ -1968,43 +1934,54 @@ msgstr ""
 "sổ bật lên \"Tải xuống xuất PDF?\". Bạn có thể in PDF này trong trình đọc "
 "PDF yêu thích của mình."
 
-#: html/cool-help.html%2Bdiv.div.div.p:442-30
-#: html/cool-help.html%2Bdiv.div.div.p:475-7
+#: html/cool-help.html%2Bdiv.div.div.p:435-30
+#: html/cool-help.html%2Bdiv.div.div.p:472-7
 msgid ""
 "When closing a document, it is automatically saved if it has been changed."
 msgstr ""
 "Khi đóng tài liệu, tài liệu sẽ tự động được lưu nếu tài liệu đã được thay "
 "đổi."
 
-#: html/cool-help.html%2Bdiv.div.div.p:452-7
+#: html/cool-help.html%2Bdiv.div.div.p:441-7
 msgid ""
 "To open a document, either open it in <span class=\"productname\""
-">{productname}</span> from your platform's file manager or use the <span "
-"class=\"ui\">Open</span> button on the page shown from the <span class=\"ui\""
-">File</span> menu bar button."
+">{productname}</span> from your platform's file manager or use <span class="
+"\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:458-7
+#: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
-"To save the document in a different format use the <span class=\"ui\">Save "
-"as</span> button on the page shown from the <span class=\"ui\">File</span> "
-"menu bar button."
+"An existing document opens in view mode, so that you can read it without "
+"changing it by accident. To start editing, click the edit button (the pencil)"
+" in the bottom right corner. New documents and documents created from a "
+"template open ready to edit."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:463-7
+#: html/cool-help.html%2Bdiv.div.div.p:452-7
 msgid ""
-"Documents are automatically saved perdiodically, but if you want a document "
-"to be saved right away you can use the <span class=\"ui\">Save</span> button "
-"on the page shown from the <span class=\"ui\">File</span> menu bar button."
+"If the document is locked by another application, it stays in view mode."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:470-7
+#: html/cool-help.html%2Bdiv.div.div.p:456-7
 msgid ""
-"To print the document, use the <span class=\"ui\">Print</span> button on the "
-"page shown from the <span class=\"ui\">File</span> menu bar button."
+"To save the document in a different format use <span class=\"ui\">Save As</"
+"span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.p:482-5
+#: html/cool-help.html%2Bdiv.div.div.p:461-7
+msgid ""
+"Documents are automatically saved periodically, but if you want a document "
+"to be saved right away you can use <span class=\"ui\">Save</span> on the "
+"<span class=\"ui\">File</span> tab."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:467-7
+msgid ""
+"To print the document, use <span class=\"ui\">Print</span> on the <span "
+"class=\"ui\">File</span> tab."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
 "Document editing should be familiar to everyone that has used an office "
 "application before, but here are some distinctive features:"
@@ -2012,63 +1989,44 @@ msgstr ""
 "Tài liệu chỉnh sửa phải quen thuộc với mọi người đã sử dụng ứng dụng văn "
 "phòng trước đây, nhưng dưới đây là một số tính năng đặc biệt:"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:484-5
+#: html/cool-help.html%2Bdiv.div.div.h4:481-5
 msgid "Copy and Paste"
 msgstr "Sao chép và Dán"
 
-#: html/cool-help.html%2Bdiv.div.div.p:485-5
+#: html/cool-help.html%2Bdiv.div.div.p:482-5
 msgid ""
-"Rich content copy/cut and paste is supported, not only within a given "
-"document, but also across documents on the same or different <span class="
-"\"productname\">{productname}</span>. For these internal uses, users can "
-"copy/cut content, including images and mixed content, on PC by using the "
-"keyboard shortcuts directly (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class="
-"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). For security "
-"reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>V</kbd> to paste on PC, but context menus can "
-"be used for cut and copy. On Android or iOS selecting text by double "
-"tapping, and using a long-tap to access copy/cut/paste via the context menu "
-"is required."
+"Rich content copy/cut and paste is supported, including images and mixed "
+"content, using the keyboard shortcuts (<kbd>Ctrl</kbd><span class=\"kbd--"
+"plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class="
+"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). On "
+"Android or iOS selecting text by double tapping, and using a long-tap to "
+"access copy/cut/paste via the context menu is required."
 msgstr ""
-"Hỗ trợ sao chép/cắt và dán nội dung đa dạng thức, không chỉ trong một tài "
-"liệu nhất định mà còn trên các tài liệu trên <span class=\"productname\""
-">{productname}</span> giống nhau hoặc khác nhau. Đối với những mục đích sử "
-"dụng nội bộ này, người dùng có thể sao chép/cắt nội dung, bao gồm hình ảnh "
-"và nội dung hỗn hợp, trên PC bằng cách sử dụng trực tiếp các phím tắt "
-"(<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
-"\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>V</kbd>). Vì lý do bảo mật, cần sử dụng "
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd> để dán trên PC nhưng có thể sử dụng menu ngữ cảnh để "
-"cắt và sao chép. Trên Android hoặc iOS, việc chọn văn bản bằng cách nhấn đúp "
-"và nhấn lâu để truy cập sao chép/cắt/dán qua menu ngữ cảnh là bắt buộc."
 
-#: html/cool-help.html%2Bdiv.div.div.p:486-5
+#: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
-"To copy larger pieces of content to other applications on your device, users "
-"need to press the <span class=\"ui\">Start download</span> button, and then "
-"re-copy this to their clipboard in order to make it available to the target "
-"application to read. This is possible via a tiny widget that pops up in the "
-"bottom-right corner, and is only necessary to export the content for pasting "
-"in external applications. This step also converts complex object types into "
+"For security reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd"
+"--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> to paste content that "
+"comes from outside the document, but context menus can be used for cut and "
+"copy."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:484-5
+msgid ""
+"When you copy a selection that contains images or other objects, a <span "
+"class=\"ui\">Download Selection</span> widget pops up in the bottom-right "
+"corner. Press <span class=\"ui\">Download</span>, then copy again, to make "
+"the content available to applications outside <span class=\"productname\""
+">{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
-"Để sao chép các phần nội dung lớn hơn vào các ứng dụng khác trên thiết bị "
-"của bạn, người dùng cần nhấn nút <span class=\"ui\">Start download </span>, "
-"sau đó sao chép lại phần nội dung này vào khay nhớ tạm để cung cấp cho ứng "
-"dụng đích đọc. Điều này có thể thực hiện được thông qua một tiện ích nhỏ bật "
-"lên ở góc dưới cùng bên phải và chỉ cần thiết để xuất nội dung để dán trong "
-"các ứng dụng bên ngoài. Bước này cũng chuyển đổi các kiểu đối tượng phức tạp "
-"thành hình ảnh tĩnh."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:489-5
+#: html/cool-help.html%2Bdiv.div.div.h4:487-5
 msgid "Document repair"
 msgstr "Sửa chữa tài liệu"
 
-#: html/cool-help.html%2Bdiv.div.div.p:490-5
+#: html/cool-help.html%2Bdiv.div.div.p:488-5
 msgid ""
 "When multiple people edit the same document concurrently, it is possible for "
 "their changes to conflict and this can cause some confusion. The Document "
@@ -2080,21 +2038,29 @@ msgstr ""
 "sửa chữa tài liệu cho phép người dùng hoàn tác các thay đổi của trình chỉnh "
 "sửa khác đối với tài liệu về trạng thái trước đó."
 
-#: html/cool-help.html%2Bdiv.div.div.p:491-5
+#: html/cool-help.html%2Bdiv.div.div.p:489-5
+msgid ""
+"<span class=\"ui\">Repair</span> on the <span class=\"ui\">File</span> tab "
+"lists the recent changes to the document and lets you take the document back "
+"to an earlier state."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:490-5
+#, fuzzy
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
-"class=\"ui\">Jump to state</span>."
+"class=\"ui\">OK</span>."
 msgstr ""
 "Để quay lại trạng thái đã chọn, hãy chọn nó bằng chuột và nhấn <span class="
 "\"ui\">Chuyển đến trạng thái</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:492-55
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:491-55
 msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:493-5
+#: html/cool-help.html%2Bdiv.div.div.p:492-5
 msgid ""
 "This is particularly useful – say when a colleague inadvertently selected "
 "all text in the document with <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
@@ -2106,16 +2072,17 @@ msgstr ""
 "hidden=\"true\">+</span><kbd>A</kbd> và tiếp tục nhập qua nó để hủy nó - "
 "trong khi bạn đang đồng thời chỉnh sửa."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:496-5
-msgid "Inactive document"
-msgstr "Tài liệu không hoạt động"
+#: html/cool-help.html%2Bdiv.div.div.h4:495-5
+msgid "Idle document"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:497-5
+#: html/cool-help.html%2Bdiv.div.div.p:496-5
+#, fuzzy
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
-"“Inactive” state. The document is shown with a transparent gray overlay, "
-"with the message “Inactive document – please click to resume editing”."
+"“Idle” state. The document is shown with a transparent gray overlay, with "
+"the message “Idle document – please click to reload and resume editing”."
 msgstr ""
 "Khi <span class=\"productname\">{productname} </span> phát hiện rằng không "
 "có bất kỳ hoạt động nào trong trình duyệt trong một thời gian, nó sẽ đặt tài "
@@ -2123,13 +2090,13 @@ msgstr ""
 "xám trong suốt, với thông báo “Tài liệu không hoạt động - vui lòng nhấp để "
 "tiếp tục chỉnh sửa”."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:498-57
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
 msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:499-5
+#: html/cool-help.html%2Bdiv.div.div.p:498-5
 msgid ""
 "To continue editing, click on the document and the layover and message "
 "disappear. Any changes that may have been made by other users – while "
@@ -2139,11 +2106,11 @@ msgstr ""
 "biến mất. Mọi thay đổi có thể đã được thực hiện bởi những người dùng khác - "
 "trong khi cộng tác chỉnh sửa tài liệu - đều được tải lại."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:502-5
+#: html/cool-help.html%2Bdiv.div.div.h4:501-5
 msgid "Pasting"
 msgstr "Dán"
 
-#: html/cool-help.html%2Bdiv.div.div.p:503-5
+#: html/cool-help.html%2Bdiv.div.div.p:502-5
 msgid ""
 "When you paste content copied from within the same document, the format and "
 "elements are maintained. If you copy from another document, in another tab "
@@ -2155,7 +2122,7 @@ msgstr ""
 "cửa sổ trình duyệt khác hoặc từ bên ngoài trình duyệt, nội dung được dán sẽ "
 "giữ nguyên văn bản đa dạng thức."
 
-#: html/cool-help.html%2Bdiv.div.div.p:504-5
+#: html/cool-help.html%2Bdiv.div.div.p:503-5
 msgid ""
 "You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
@@ -2166,7 +2133,7 @@ msgstr ""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>V</kbd>"
 
-#: html/cool-help.html%2Bdiv.div.div.p:505-5
+#: html/cool-help.html%2Bdiv.div.div.p:504-5
 msgid ""
 "When you paste text from within the document, formatting will be respected. "
 "You can also paste objects, such as images, if they are copied from the "
@@ -2176,7 +2143,7 @@ msgstr ""
 "cũng có thể dán các đối tượng, chẳng hạn như hình ảnh, nếu chúng được sao "
 "chép từ tài liệu bạn đang làm việc."
 
-#: html/cool-help.html%2Bdiv.div.div.p:506-5
+#: html/cool-help.html%2Bdiv.div.div.p:505-5
 msgid ""
 "When you paste text from outside of the document (another browser window or "
 "a desktop application), it will be pasted as rich text."
@@ -2185,7 +2152,7 @@ msgstr ""
 "một ứng dụng trên máy tính để bàn, văn bản đó sẽ được dán dưới dạng văn bản "
 "có định dạng."
 
-#: html/cool-help.html%2Bdiv.div.div.p:507-5
+#: html/cool-help.html%2Bdiv.div.div.p:506-5
 msgid ""
 "When you have internal cut or copied content, you can paste this content "
 "using the context menu."
@@ -2193,11 +2160,11 @@ msgstr ""
 "Khi bạn có nội dung được cắt hoặc sao chép nội bộ, bạn có thể dán nội dung "
 "này bằng menu ngữ cảnh."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:513-5
+#: html/cool-help.html%2Bdiv.div.div.h4:512-5
 msgid "Adding charts"
 msgstr "Thêm biểu đồ"
 
-#: html/cool-help.html%2Bdiv.div.div.p:514-5
+#: html/cool-help.html%2Bdiv.div.div.p:513-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports inserting and "
 "visualization of charts in documents. To add a chart:"
@@ -2205,7 +2172,7 @@ msgstr ""
 "<span class=\"productname\">{productname} </span> hỗ trợ chèn và hiển thị "
 "biểu đồ trong tài liệu. Để thêm biểu đồ:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:515-7
 msgid ""
 "Select a table in text document, a range in a spreadsheet or a table in a "
 "presentation."
@@ -2213,33 +2180,34 @@ msgstr ""
 "Chọn một bảng trong tài liệu văn bản, một phạm vi trong bảng tính hoặc một "
 "bảng trong bản trình bày."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:517-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Charts</span>. "
+"Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Chart</span>. "
 "Customize your chart on the sidebar:"
 msgstr ""
 "Chọn <span class=\"ui\">Chèn </span> → <span class=\"ui\">Biểu đồ </span>. "
 "Tùy chỉnh biểu đồ của bạn trên thanh bên:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:520-53
+#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:519-53
 msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:521-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:520-7
 msgid "If no table or range was selected, a prototype chart is displayed."
 msgstr ""
 "Nếu không có bảng hoặc phạm vi nào được chọn, biểu đồ nguyên mẫu sẽ được "
 "hiển thị."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:523-51
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:522-51
 msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:525-28
+#: html/cool-help.html%2Bdiv.div.div.p:524-28
 msgid ""
 "<span class=\"def\">Chart editing:</span> Double click the chart to select. "
 "Use context menus to add chart elements such as title, axis, and other. "
@@ -2251,7 +2219,7 @@ msgstr ""
 "Chọn <span class=\"ui\">Dải dữ liệu </span> và <span class=\"ui\">Loại biểu "
 "đồ </span> để chỉnh sửa dữ liệu biểu đồ và chọn loại biểu đồ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:526-28
+#: html/cool-help.html%2Bdiv.div.div.p:525-28
 msgid ""
 "<span class=\"def\">Chart formatting:</span> The same context menu brings "
 "you to chart data table and chart type selection."
@@ -2259,7 +2227,7 @@ msgstr ""
 "<span class=\"def\">Định dạng biểu đồ: </span> Cùng một menu ngữ cảnh đưa "
 "bạn đến bảng dữ liệu biểu đồ và lựa chọn loại biểu đồ."
 
-#: html/cool-help.html%2Bdiv.div.div.p:527-28
+#: html/cool-help.html%2Bdiv.div.div.p:526-28
 msgid ""
 "<span class=\"def\">Data series formatting:</span> Open the context menu and "
 "choose <span class=\"ui\">Format data series</span>."
@@ -2267,11 +2235,11 @@ msgstr ""
 "<span class=\"def\">Định dạng chuỗi dữ liệu: </span> Mở menu ngữ cảnh và "
 "chọn <span class=\"ui\">Định dạng chuỗi dữ liệu</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:529-5
+#: html/cool-help.html%2Bdiv.div.div.h4:528-5
 msgid "Handling images"
 msgstr "Xử lý hình ảnh"
 
-#: html/cool-help.html%2Bdiv.div.div.p:530-5
+#: html/cool-help.html%2Bdiv.div.div.p:529-5
 msgid ""
 "<span class=\"productname\">{productname}</span> inserts images in the text "
 "document from your local computer or from your cloud storage. Inserted "
@@ -2281,7 +2249,7 @@ msgstr ""
 "văn bản từ máy tính cục bộ hoặc từ bộ nhớ đám mây của bạn. Hình ảnh đã chèn "
 "luôn được nhúng trong tài liệu."
 
-#: html/cool-help.html%2Bdiv.div.div.p:531-5
+#: html/cool-help.html%2Bdiv.div.div.p:530-5
 msgid ""
 "<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\""
 ">Insert image</span> icon allows you to choose an image from the cloud "
@@ -2291,16 +2259,14 @@ msgstr ""
 "\"ui\">Chèn hình ảnh </span> cho phép bạn chọn hình ảnh từ các thư mục và "
 "chia sẻ của bộ lưu trữ đám mây."
 
-#: html/cool-help.html%2Bdiv.div.div.p:532-5
+#: html/cool-help.html%2Bdiv.div.div.p:531-5
 msgid ""
-"<span class=\"def\">Insert local image:</span> opens the browser file picker "
-"to upload the image from your local computer and insert it into the document."
+"<span class=\"def\">Insert local image:</span> Choose <span class=\"ui\""
+">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
+"computer and insert it into the document."
 msgstr ""
-"<span class=\"def\">Chèn hình ảnh cục bộ: </span> mở trình chọn tệp của "
-"trình duyệt để tải hình ảnh lên từ máy tính cục bộ của bạn và chèn vào tài "
-"liệu."
 
-#: html/cool-help.html%2Bdiv.div.div.p:533-5
+#: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
 "Images can be resized, rotated and anchored. Text can be wrapped around the "
 "image. Select the image and open the context menu. Use the images handles to "
@@ -2310,11 +2276,11 @@ msgstr ""
 "bao quanh hình ảnh. Chọn hình ảnh và mở menu ngữ cảnh. Sử dụng các nút điều "
 "khiển hình ảnh để thay đổi kích thước hình ảnh bằng chuột."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:536-5
+#: html/cool-help.html%2Bdiv.div.div.h4:535-5
 msgid "Comments in documents"
 msgstr "Nhận xét trong tài liệu"
 
-#: html/cool-help.html%2Bdiv.div.div.p:537-5
+#: html/cool-help.html%2Bdiv.div.div.p:536-5
 msgid ""
 "Insert comments in <span class=\"productname\">{productname}</span> in "
 "places that need special reader attention. Comments are displayed on the "
@@ -2324,13 +2290,13 @@ msgstr ""
 "vị trí cần người đọc chú ý đặc biệt. Bình luận được hiển thị ở bên phải và "
 "mang tên và ngày của người phát hành."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:538-51
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:537-51
 msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:539-5
+#: html/cool-help.html%2Bdiv.div.div.p:538-5
 msgid ""
 "Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
 " icon to reply, move and delete comments."
@@ -2338,11 +2304,11 @@ msgstr ""
 "Nhấp vào biểu tượng menu con (<span class=\"cool-annotation-menu icon-size\""
 "></span>) để trả lời, di chuyển và xóa nhận xét."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:542-5
+#: html/cool-help.html%2Bdiv.div.div.h4:541-5
 msgid "Spellchecking"
 msgstr "Kiểm tra chính tả"
 
-#: html/cool-help.html%2Bdiv.div.div.p:543-5
+#: html/cool-help.html%2Bdiv.div.div.p:542-5
 msgid ""
 "<span class=\"productname\">{productname}</span> can check spelling in text "
 "documents, spreadsheets and presentations. A red wavy underline indicates "
@@ -2354,20 +2320,21 @@ msgstr ""
 "đỏ cho biết các từ sai chính tả. Nhấp vào nút chuột phải để mở menu ngữ cảnh "
 "với các sửa lỗi chính tả được đề xuất."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:544-54
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:543-54
 msgid "Text with a red wavy underline beneath a misspelled word"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:545-5
+#: html/cool-help.html%2Bdiv.div.div.p:544-5
+#, fuzzy
 msgid ""
-"To systematically spell-check the whole document use the <span class=\"ui\""
-">Tools</span> menu’s <span class=\"ui\">Spelling</span> option."
+"To systematically spell-check the whole document use <span class=\"ui\""
+">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
 "Để kiểm tra chính tả một cách có hệ thống toàn bộ tài liệu, hãy sử dụng tùy "
 "chọn <span class=\"ui\">Công cụ </span> của menu <span class=\"ui\">Chính tả "
 "</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:552-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
 "You edit an online spreadsheet in the same way you edit a desktop "
 "spreadsheet. Operations like entering data, selecting ranges, columns, rows "
@@ -2387,23 +2354,23 @@ msgstr ""
 "ô tiếp theo ở bên phải và với <kbd>Enter</kbd> vào ô bên dưới để dễ dàng "
 "nhập dữ liệu hơn."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:557-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:556-5
 msgid ""
 "Formulas are entered in the formula bar. Enter '=' and insert the formula."
 msgstr "Công thức được nhập vào thanh công thức. Nhập '=' và chèn công thức."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:558-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:557-5
 msgid "All spreadsheets functions and mathematical rules applies."
 msgstr ""
 "Tất cả các chức năng của bảng tính và các quy tắc toán học được áp dụng."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:559-50
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:558-50
 msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:560-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:559-5
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
 "and is specified in great detail in the <a href=\"https://www.oasis-open.org/"
@@ -2415,7 +2382,7 @@ msgstr ""
 "committees/download.php/16826/openformula-spec-20060221.html\" target="
 "\"_blank\" rel=\"noopener noreferrer\">đặc tả OASIS OpenFormula</a>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:566-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:565-5
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
@@ -2433,13 +2400,13 @@ msgstr ""
 "phép định dạng số phức tạp và tùy chỉnh, cũng như phông chữ, đường viền phức "
 "tạp, nền, bảo vệ ô và các tùy chọn khác."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:567-51
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:566-51
 msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:572-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:571-30
 msgid ""
 "<span class=\"def\">Sorting data:</span> You can sort a list of numbers or "
 "text ascending or descending. <span class=\"productname\">{productname}</"
@@ -2451,7 +2418,7 @@ msgstr ""
 ">{productname}</span> tự động phát hiện các ô là tiêu đề và cột liền kề, để "
 "mở rộng lựa chọn."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:573-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:572-30
 msgid ""
 "<span class=\"def\">Filtering data:</span> Filters and advanced filters "
 "allow you to work on certain filtered rows (records) of a data range. In the "
@@ -2463,7 +2430,7 @@ msgstr ""
 "Trong các bảng tính trong <span class=\"productname\">{productname} </span>, "
 "có nhiều khả năng áp dụng bộ lọc."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:575-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:574-7
 msgid ""
 "One use for the <span class=\"ui\">AutoFilter</span> function is to quickly "
 "restrict the display to records with identical entries in a data field."
@@ -2472,13 +2439,13 @@ msgstr ""
 "nhanh chóng hạn chế hiển thị đối với các bản ghi có các mục giống nhau trong "
 "trường dữ liệu."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:577-55
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:576-55
 msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:579-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:578-7
 msgid ""
 "In the <span class=\"ui\">Standard Filter</span> dialog, you can also define "
 "ranges which contain the values in particular data fields. You can use the "
@@ -2490,7 +2457,7 @@ msgstr ""
 "thể sử dụng bộ lọc tiêu chuẩn để kết nối các điều kiện với toán tử logic AND "
 "hoặc OR."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:580-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:579-7
 msgid ""
 "The <span class=\"ui\">Advanced Filter</span> allows up to a total of eight "
 "filter conditions. With advanced filters you enter the conditions directly "
@@ -2500,7 +2467,7 @@ msgstr ""
 "bộ lọc. Với các bộ lọc nâng cao, bạn nhập các điều kiện trực tiếp vào trang "
 "tính."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:584-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:583-5
 msgid ""
 "<span class=\"def\">Outlining:</span> You can create an outline of your data "
 "and group rows and columns together so that you can collapse and expand the "
@@ -2510,13 +2477,13 @@ msgstr ""
 "mình và nhóm các hàng và cột lại với nhau để có thể thu gọn và mở rộng các "
 "nhóm chỉ bằng một cú nhấp chuột, giúp dễ dàng trình bày dữ liệu phân cấp."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:585-49
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:584-49
 msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:588-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
 "<span class=\"def\">Data validation:</span> For each cell, you can define "
 "entries to be valid. Invalid entries to a cell will be rejected. To enable "
@@ -2526,21 +2493,22 @@ msgstr ""
 "định các mục nhập là hợp lệ. Các mục nhập không hợp lệ vào một ô sẽ bị từ "
 "chối. Để bật xác thực dữ liệu:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:590-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:589-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Validity</span> from the <span class=\"ui\">Data</"
-"span> menu. The <span class=\"ui\">Validity</span> dialog opens."
+"Choose <span class=\"ui\">Validity</span> on the <span class=\"ui\">Data</"
+"span> tab. The <span class=\"ui\">Validity</span> dialog opens."
 msgstr ""
 "Chọn <span class=\"ui\">Tính hợp lệ </span> từ menu <span class=\"ui\">Dữ "
 "liệu </span>. Hộp thoại <span class=\"ui\">Tính hợp lệ </span> mở ra."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:593-57
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:592-57
 msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:593-7
 msgid ""
 "Select the validity criterion in the <span class=\"ui\">Allow</span> drop-"
 "box list. Depending on the criterion, more options show. Fill the required "
@@ -2550,7 +2518,7 @@ msgstr ""
 "phép</span>. Tùy theo tiêu chí mà hiển thị nhiều lựa chọn hơn. Điền vào dữ "
 "liệu cần thiết."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:595-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
 msgid ""
 "Use the <span class=\"ui\">Input Help</span> and <span class=\"ui\">Error "
 "Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\""
@@ -2560,13 +2528,13 @@ msgstr ""
 ">Cảnh báo lỗi</span> để nâng cao khả năng tương tác của người dùng. Nhấp vào "
 "<span class=\"ui\">OK</span> để đóng hộp thoại."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:598-56
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:597-56
 msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:599-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:598-7
 msgid ""
 "To remove the validity of the cell, open the dialog and set the <span class="
 "\"ui\">Allow</span> list to “All values”."
@@ -2574,7 +2542,7 @@ msgstr ""
 "Để loại bỏ tính hợp lệ của ô, hãy mở hộp thoại và đặt danh sách <span class="
 "\"ui\">Cho phép</span> thành “Tất cả các giá trị”."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:603-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:602-5
 msgid ""
 "<span class=\"def\">Comments:</span> In a spreadsheet you can insert one "
 "comment per cell. When you select <span class=\"ui\">Insert comment</span>, "
@@ -2588,18 +2556,19 @@ msgstr ""
 "chấm màu đỏ hiển thị ở góc trên cùng bên phải của ô khi nó có nhận xét. Di "
 "chuột vào ô để hiển thị nhận xét."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:604-52
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:603-52
 msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:607-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:606-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
-"conditions. Select the cell range and click the <span class=\"ui\""
-">Conditional Formatting</span> icon on the toolbar. Select the symbol set to "
+"conditions. Select the cell range and click <span class=\"ui\">Conditional</"
+"span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
 "apply on the range."
 msgstr ""
 "<span class=\"def\">Định dạng có điều kiện:</span> <span class=\"productname"
@@ -2608,13 +2577,13 @@ msgstr ""
 "có điều kiện</span> trên thanh công cụ. Chọn bộ ký hiệu để áp dụng trên phạm "
 "vi."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:608-62
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:616-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:615-30
 msgid ""
 "<span class=\"productname\">{productname}</span> edits text documents in the "
 "same way you edit a desktop document. It provides a What You See Is What You "
@@ -2632,7 +2601,7 @@ msgstr ""
 "bảng và biểu đồ, tương tự như trình xử lý văn bản trên máy tính để bàn. Sử "
 "dụng bàn phím, menu và thanh công cụ để tương tác với tài liệu của bạn."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:620-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:619-30
 msgid ""
 "Context menus are available on clicking the right mouse button. The commands "
 "available in the context menu are related - not extensively - to the "
@@ -2642,11 +2611,11 @@ msgstr ""
 "menu ngữ cảnh có liên quan - không rộng rãi - với đối tượng cơ bản trong tài "
 "liệu."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:623-5
+#: html/cool-help.html%2Bdiv.div.div.h3:622-5
 msgid "Formatting text"
 msgstr "Định dạng văn bản"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:625-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:624-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports modern techniques "
 "for paragraph formatting through styles. A style is a set of text properties "
@@ -2666,7 +2635,7 @@ msgstr ""
 "cùng kiểu cũng sẽ thay đổi định dạng, giúp đơn giản hóa nỗ lực định dạng "
 "nhiều đoạn riêng lẻ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:626-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:625-5
 msgid ""
 "In contrast, direct formatting applies formatting to selected excerpts of "
 "the document contents. On a long document, direct formatting must be applied "
@@ -2678,7 +2647,7 @@ msgstr ""
 "được áp dụng trong mỗi đoạn trích văn bản, biến việc định dạng văn bản trở "
 "thành một nhiệm vụ dài, dễ xảy ra lỗi và chậm trễ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:628-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:627-30
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format text document "
 "objects by formatting directly from the menus, toolbar or context menus. "
@@ -2689,61 +2658,65 @@ msgstr ""
 "hoặc menu ngữ cảnh. Định dạng trực tiếp chỉ áp dụng cho đối tượng hiện tại "
 "được chọn."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:630-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:629-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
-"paragraph style to a paragraph. Choose menu <span class=\"ui\">Edit</span> → "
-"<span class=\"ui\">Edit styles</span> to change style."
+"paragraph style to a paragraph. Select the style in the style list on the "
+"<span class=\"ui\">Home</span> tab."
 msgstr ""
 "<span class=\"def\">Định dạng kiểu:</span> <span class=\"productname\""
 ">{productname} </span> hỗ trợ kiểu đoạn văn. Bạn có thể áp dụng một kiểu "
 "đoạn văn hiện có cho một đoạn văn. Chọn menu <span class=\"ui\">Chỉnh sửa</"
 "span> → <span class=\"ui\">Chỉnh sửa kiểu</span> để thay đổi kiểu."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:631-56
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:637-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:636-5
 msgid "Handling Tables"
 msgstr "Xử lý bảng"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:638-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:637-5
+#, fuzzy
 msgid ""
-"Insert tables with proper icon in the toolbar. Select the initial number of "
-"rows and columns. Add rows and columns with the cell context menu. Merge "
-"cells with the <span class=\"ui\">Table</span> menu. The default paragraph "
-"style inside cells is “Table contents”."
+"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
+">Table</span>. Select the initial number of rows and columns. Add rows and "
+"columns with the cell context menu. Merge cells from the <span class=\"ui\""
+">Table</span> tab. The default paragraph style inside cells is “Table "
+"contents”."
 msgstr ""
 "Chèn bảng với biểu tượng thích hợp trên thanh công cụ. Chọn số hàng và cột "
 "ban đầu. Thêm hàng và cột bằng menu ngữ cảnh ô. Hợp nhất các ô với menu "
 "<span class=\"ui\">Bảng</span>. Kiểu đoạn văn mặc định bên trong ô là \"Nội "
 "dung bảng\"."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:639-52
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:642-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:641-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
-"cells and choose menu <span class=\"ui\">Table</span> → <span class=\"ui\""
-">Properties</span>. Fine tune the table with the properties dialog."
+"cells, open the context menu and choose <span class=\"ui\">Table Properties</"
+"span>. Fine tune the table with the properties dialog."
 msgstr ""
 "<span class=\"def\">Định dạng ô:</span> Nhấp vào ô hoặc dải ô và chọn menu "
 "<span class=\"ui\">Bảng</span> → <span class=\"ui\">Thuộc tính</span>. Tinh "
 "chỉnh bảng với hộp thoại thuộc tính."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:645-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
 msgstr "Theo dõi các thay đổi"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:646-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:645-5
 msgid ""
 "When you turn on Track Changes, <span class=\"productname\">{productname}</"
 "span> marks up new changes made to the document. Select this option again to "
@@ -2753,14 +2726,14 @@ msgstr ""
 "span> đánh dấu các thay đổi mới được thực hiện đối với tài liệu. Chọn lại "
 "tùy chọn này để tắt."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:647-61
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:646-61
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:774-61
 msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:648-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:647-5
 msgid ""
 "Changes made by different people are shown in different colors and each "
 "tracked change can be accepted or rejected, using the box that appears on "
@@ -2770,11 +2743,11 @@ msgstr ""
 "khác nhau và mỗi thay đổi được theo dõi có thể được chấp nhận hoặc từ chối, "
 "sử dụng hộp xuất hiện ở bên phải. Bạn cũng có thể thêm một bình luận ở đó."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:651-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:650-5
 msgid "Other advanced features"
 msgstr "Các tính năng nâng cao khác"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:652-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:651-5
 msgid ""
 "<span class=\"def\">Comments:</span> Comments are inserted in the text and "
 "displayed on the right side of the screen."
@@ -2782,7 +2755,7 @@ msgstr ""
 "<span class=\"def\">Nhận xét:</span> Nhận xét được chèn vào văn bản và hiển "
 "thị ở bên phải màn hình."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:653-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:652-5
 msgid ""
 "<span class=\"def\">Formatting marks:</span> Paragraph, page and unbreakable "
 "spaces are shown as marks to assist text alignment, editing and formatting."
@@ -2791,7 +2764,7 @@ msgstr ""
 "không ngắt được hiển thị dưới dạng các dấu để hỗ trợ căn chỉnh, chỉnh sửa và "
 "định dạng văn bản."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:654-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:653-5
 msgid ""
 "<span class=\"def\">Fields:</span> A basic set of fields is available to "
 "insert in the document."
@@ -2799,7 +2772,7 @@ msgstr ""
 "<span class=\"def\">Trường:</span> Có sẵn một bộ trường cơ bản để chèn vào "
 "tài liệu."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:655-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:654-5
 msgid ""
 "<span class=\"def\">Alphabetical index:</span> Existing alphabetical index "
 "can be updated with new entries."
@@ -2807,7 +2780,7 @@ msgstr ""
 "<span class=\"def\">Chỉ mục theo bảng chữ cái:</span> Chỉ mục theo bảng chữ "
 "cái hiện tại có thể được cập nhật với các mục mới."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:656-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:655-5
 msgid ""
 "<span class=\"def\">Page header and footer:</span> Headers and footers are "
 "available for the existing page style applied in the document at the cursor "
@@ -2816,7 +2789,7 @@ msgstr ""
 "<span class=\"def\">Đầu trang và chân trang:</span> Đầu trang và chân trang "
 "có sẵn cho kiểu trang hiện có được áp dụng trong tài liệu tại vị trí con trỏ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:657-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:656-5
 msgid ""
 "<span class=\"def\">Footnotes and endnotes:</span> Footnotes and endnotes "
 "are supported."
@@ -2824,7 +2797,7 @@ msgstr ""
 "<span class=\"def\">Chú thích cuối trang và chú thích cuối văn bản:</span> "
 "Chú thích cuối trang và chú thích cuối văn bản được hỗ trợ."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:665-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:664-30
 msgid ""
 "<span class=\"productname\">{productname}</span> Impress edits presentations "
 "in a way that should be familiar to people. Operations like typing text, "
@@ -2840,7 +2813,7 @@ msgstr ""
 "máy tính để bàn. Sử dụng bàn phím, menu và thanh công cụ để thực hiện các "
 "thao tác trong tài liệu của bạn."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:670-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:669-5
 msgid ""
 "<span class=\"productname\">{productname}</span> displays presentation slide "
 "shows, including a subset of slide transitions and object animations. Choose "
@@ -2852,7 +2825,7 @@ msgstr ""
 "ảnh đối tượng. Chọn trình chiếu từ menu hoặc nhấp vào biểu tượng ở thanh "
 "công cụ dưới cùng bên trái trong ngăn trình chiếu."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:671-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:670-5
 msgid ""
 "To exit a <span class=\"productname\">{productname}</span> slide show, press "
 "the <kbd>Esc</kbd> key to return to the presentation edit mode."
@@ -2860,7 +2833,7 @@ msgstr ""
 "Để thoát trình chiếu <span class=\"productname\">{productname} </span>, nhấn "
 "phím <kbd>Esc</kbd> để quay lại chế độ chỉnh sửa bản trình bày."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:677-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:676-5
 msgid ""
 "Click on any slide thumbnail in the pane to switch to this slide to view or "
 "edit it."
@@ -2868,7 +2841,7 @@ msgstr ""
 "Bấm vào bất kỳ hình thu nhỏ trang chiếu nào trong ngăn để chuyển sang trang "
 "chiếu này để xem hoặc chỉnh sửa nó."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:678-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:677-5
 msgid ""
 "Use the slide pane toolbar in the bottom to start the slideshow, add slide, "
 "duplicate or delete the current slide."
@@ -2876,7 +2849,7 @@ msgstr ""
 "Sử dụng thanh công cụ ngăn trang chiếu ở dưới cùng để bắt đầu trình chiếu, "
 "thêm trang chiếu, sao chép hoặc xóa trang chiếu hiện tại."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:684-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:683-5
 msgid ""
 "<span class=\"def\">Slide layouts:</span> <span class=\"productname\""
 ">{productname}</span> Impress lets you change the slide layout. Select the "
@@ -2886,13 +2859,13 @@ msgstr ""
 "\">{productname} </span> cho phép bạn thay đổi bố cục trang trình bày. Chọn "
 "bố cục trang chiếu mong muốn trong danh sách bố cục thả xuống."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:685-53
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:684-53
 msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:687-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:686-30
 msgid ""
 "<span class=\"def\">Master slide:</span> Select the master slide associated "
 "to the current slide. Format and arrange slide elements in the master slide."
@@ -2901,7 +2874,7 @@ msgstr ""
 "liên kết với trang chiếu hiện tại. Định dạng và sắp xếp các thành phần của "
 "trang chiếu trong trang chiếu chính."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:688-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:687-30
 msgid ""
 "<span class=\"def\">Slide transitions:</span> <span class=\"productname\""
 ">{productname}</span> Impress provides visual effects when displaying a new "
@@ -2914,7 +2887,7 @@ msgstr ""
 "tính của trang chiếu, sử dụng thanh bên để đặt chuyển đổi trang chiếu khi ở "
 "chế độ chỉnh sửa."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:689-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:688-30
 msgid ""
 "<span class=\"def\">Object animation:</span> Individual objects in the slide "
 "can have animations. Use the side bar to configure the slide transition for "
@@ -2924,7 +2897,7 @@ msgstr ""
 "trang chiếu có thể có hoạt ảnh. Sử dụng thanh bên để định cấu hình chuyển "
 "đổi trang chiếu cho một đối tượng hoặc tập hợp các đối tượng đã chọn."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:690-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:689-30
 msgid ""
 "<span class=\"def\">Tables:</span> Insert tables in the presentation. Use "
 "the sidebar to select the table theme."
@@ -2932,7 +2905,7 @@ msgstr ""
 "<span class=\"def\">Bảng:</span> Chèn bảng trong bản trình bày. Sử dụng "
 "thanh bên để chọn chủ đề bảng."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:696-5
+#: html/cool-help.html%2Bdiv.div.div.h4:695-5
 msgid ""
 "What are the document file formats supported by <span class=\"productname\""
 ">{productname}</span>?"
@@ -2940,7 +2913,7 @@ msgstr ""
 "Định dạng tệp tài liệu được <span class=\"productname\">{productname} </"
 "span> hỗ trợ là gì?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:697-5
+#: html/cool-help.html%2Bdiv.div.div.p:696-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports both reading and "
 "writing for the following file formats:"
@@ -2948,37 +2921,40 @@ msgstr ""
 "<span class=\"productname\">{productname} </span> hỗ trợ cả đọc và ghi cho "
 "các định dạng tệp sau:"
 
+#: html/cool-help.html%2Bdiv.div.div.ul.li:698-7
+msgid ""
+"Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT. "
+"Plain text TXT and Markdown MD"
+msgstr ""
+
 #: html/cool-help.html%2Bdiv.div.div.ul.li:699-7
 msgid ""
-"Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
-msgstr "Tài liệu văn bản: Định dạng DOC, DOCX, RTF. Định dạng OpenDocument ODT"
+"Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS. Comma "
+"separated values CSV"
+msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:700-7
-msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
-msgstr "Bảng tính: Định dạng Microsoft XLS, XLSX, Định dạng OpenDocument ODS"
-
-#: html/cool-help.html%2Bdiv.div.div.ul.li:701-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
 msgstr ""
 "Bản trình bày: Định dạng Microsoft PPT, PPTX, Định dạng OpenDocument ODP"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:705-5
+#: html/cool-help.html%2Bdiv.div.div.h4:704-5
 msgid "How do I save a document with another name?"
 msgstr "Làm cách nào để lưu tài liệu với tên khác?"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:707-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:706-7
 msgid "Hover the mouse on the document name in the menu bar."
 msgstr "Di chuột vào tên tài liệu trong thanh menu."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:708-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:707-7
 msgid "Type the new file name in the text box and press <kbd>Enter</kbd>."
 msgstr "Nhập tên tệp mới vào hộp văn bản và nhấn <kbd>Enter</kbd>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:710-5
+#: html/cool-help.html%2Bdiv.div.div.p:709-5
 msgid "A copy of the document is saved with the new name in the same folder."
 msgstr "Một bản sao của tài liệu được lưu với tên mới trong cùng một thư mục."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:713-5
+#: html/cool-help.html%2Bdiv.div.div.h4:712-5
 msgid ""
 "How can I quit <span class=\"productname\">{productname}</span> without "
 "saving my edits?"
@@ -2986,7 +2962,7 @@ msgstr ""
 "Làm cách nào để thoát khỏi <span class=\"productname\">{productname} </span> "
 "mà không lưu các chỉnh sửa của mình?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:714-5
+#: html/cool-help.html%2Bdiv.div.div.p:713-5
 msgid ""
 "<span class=\"productname\">{productname}</span> saves the document in the "
 "background regularly, you can't just close without saving it. To abandon "
@@ -2997,6 +2973,13 @@ msgstr ""
 "trong background, bạn không thể đóng mà không lưu. Để từ bỏ các thay đổi của "
 "mình, bạn phải hoàn tác chúng, hoặc sử dụng <span class=\"ui\">Lịch sử sửa "
 "đổi</span> trong menu <span class=\"ui\">Tệp</span>."
+
+#: html/cool-help.html%2Bdiv.div.div.p:714-5
+msgid ""
+"<span class=\"productname\">{productname}</span> saves the document in the "
+"background regularly, you can't just close without saving it. To abandon "
+"your changes, undo them."
+msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:717-5
 msgid ""
@@ -3021,9 +3004,10 @@ msgid "How can I check spelling in my language?"
 msgstr "Làm cách nào để kiểm tra chính tả bằng ngôn ngữ của tôi?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
+#, fuzzy
 msgid ""
-"Choose menu <span class=\"ui\">Tools</span> → <span class=\"ui\">Languages</"
-"span> and select the language for the whole document. Optionally you can set "
+"Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
+"and select the language for the whole document. Optionally you can set "
 "languages for the selected text and for the current paragraph."
 msgstr ""
 "Chọn menu <span class=\"ui\">Công cụ</span> → <span class=\"ui\">Ngôn ngữ</"
@@ -3036,11 +3020,9 @@ msgstr "Làm cách nào để xóa các đường lượn sóng màu đỏ trong
 
 #: html/cool-help.html%2Bdiv.div.div.p:726-5
 msgid ""
-"Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
-">Automatic Spell Checking</span>."
+"On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
+">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
-"Chọn menu <span class=\"ui\">Công cụ</span> và bỏ chọn <span class=\"ui\""
-">Kiểm tra chính tả tự động</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
 msgid "What is the blue wavy underline in some words in the text?"
@@ -3063,9 +3045,10 @@ msgid "Is there a thesaurus?"
 msgstr "Đây có phải là từ điển đồng nghĩa không?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
+#, fuzzy
 msgid ""
-"Yes. Click in the word you want and choose <span class=\"ui\">Tools</span> → "
-"<span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
+"Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
+" <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
 "Đúng. Nhấp vào từ bạn muốn và chọn <span class=\"ui\">Công cụ</span> → <span "
@@ -3087,11 +3070,12 @@ msgstr ""
 "xóa khỏi tài liệu văn bản của tôi?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
+#, fuzzy
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
-"document display, choose menu <span class=\"ui\">View</span> → <span class="
-"\"ui\">Formatting mark</span>."
+"document display, choose <span class=\"ui\">View</span> → <span class=\"ui\""
+">Formatting Marks</span>."
 msgstr ""
 "Ký hiệu <span class=\"blue\">¶</span> là một dấu định dạng. Nó được sử dụng "
 "để giúp căn chỉnh và chỉnh sửa văn bản và không được in ra. Để chuyển đổi "
@@ -3103,10 +3087,11 @@ msgid "How do I get a word count of my document?"
 msgstr "Làm cách nào để tôi biết được số lượng từ trong tài liệu của mình?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
+#, fuzzy
 msgid ""
-"Word count is available in <span class=\"ui\">Tools</span> → <span class=\"ui"
-"\">Word count</span>. A dialog shows word counts for selection and for the "
-"whole document."
+"Word count is available in <span class=\"ui\">Review</span> → <span class="
+"\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
+"the whole document."
 msgstr ""
 "Số lượng từ có sẵn trong <span class=\"ui\">Công cụ</span> → <span class=\"ui"
 "\">Số từ </span>. Hộp thoại hiển thị số lượng từ để lựa chọn và cho toàn bộ "
@@ -3149,12 +3134,8 @@ msgstr "Đặt con trỏ vào vị trí cần chèn ký tự."
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:756-7
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
-"Characters </span> or click the corresponding icon in the toolbar. A dialog "
-"opens."
+"Character</span>. A dialog opens."
 msgstr ""
-"Chọn <span class=\"ui\">Chèn</span> → <span class=\"ui\">Ký tự đặc biệt </"
-"span> hoặc nhấp vào biểu tượng tương ứng trên thanh công cụ. Một hộp thoại "
-"hiển thị."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:759-59
 msgid ""
@@ -3187,12 +3168,13 @@ msgid "Why can't I delete text? It just gets a strike-through?"
 msgstr "Tại sao tôi không thể xóa văn bản? Nó chỉ bị gạch ngang?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:766-5
+#, fuzzy
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
 "Useful for marking changes in text and spreadsheets. Track changes are "
-"enabled choosing <span class=\"ui\">Edit</span> → <span class=\"ui\">Track "
-"Changes </span> → <span class=\"ui\">Record</span>."
+"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\""
+">Record</span>."
 msgstr ""
 "Bạn đã bật tính năng Theo dõi Thay đổi cho tài liệu. Theo dõi Thay đổi ghi "
 "lại tất cả các thay đổi trong văn bản và hiển thị các chỉnh sửa để sửa đổi "
@@ -3233,9 +3215,10 @@ msgstr ""
 "Màu được gán cho các thay đổi phụ thuộc vào người dùng thay đổi tài liệu."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:776-5
+#, fuzzy
 msgid ""
-"To display or hide track changes choose <span class=\"ui\">Edit</span> → "
-"<span class=\"ui\">Track Changes </span> → <span class=\"ui\">Show</span>. "
+"To display or hide track changes choose <span class=\"ui\">Review</span> → "
+"<span class=\"ui\">View Changes</span> → <span class=\"ui\">Show</span>. "
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
@@ -3246,15 +3229,16 @@ msgstr ""
 "không mong muốn trong tài liệu."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:777-5
+#, fuzzy
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
-"Alternatively, choose <span class=\"ui\">Edit</span> → <span class=\"ui\""
-">Track Changes </span> → <span class=\"ui\">Accept</span> or <span class=\"ui"
-"\">Reject</span>. Furthermore, if you need to filter changes before "
-"accepting or rejecting, choose <span class=\"ui\">Edit</span> → <span class="
-"\"ui\">Track Changes </span> → <span class=\"ui\">Manage</span>. A dialog "
-"shows a list of all tracked changes. Use the dialog buttons accordingly."
+"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\""
+">Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
+"to filter changes before accepting or rejecting, choose <span class=\"ui\""
+">Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\""
+">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
+"buttons accordingly."
 msgstr ""
 "Các thay đổi có thể được chấp nhận hoặc bị từ chối. Để chấp nhận hoặc từ "
 "chối các thay đổi, hãy nhấp vào các biểu tượng tương ứng trong hộp nhận xét "
@@ -3289,9 +3273,10 @@ msgid "Using the page style"
 msgstr "Sử dụng kiểu trang"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page</span> and "
-"select the <span class=\"ui\">Page</span> tab"
+"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page Style</"
+"span> and select the <span class=\"ui\">Page</span> tab"
 msgstr ""
 "Chọn <span class=\"ui\">Định dạng</span> → <span class=\"ui\">Trang</span> "
 "và chọn tab <span class=\"ui\">Trang</span>"
@@ -3365,13 +3350,11 @@ msgstr "Chọn văn bản có định dạng hiện có"
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:806-7
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:848-7
 msgid ""
-"Click on the clone formatting icon <img alt=\"format paintbrush\" class"
-"=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
-"turns to a paint bucket."
+"Click on the <span class=\"ui\">Clone Formatting</span> icon <img alt="
+"\"format paintbrush\" class=\"icon-size\" src=\"images/lc_formatpaintbrush."
+"svg\" /> on the <span class=\"ui\">Home</span> tab. The mouse pointer turns "
+"to a paint bucket."
 msgstr ""
-"Nhấp vào biểu tượng định dạng bản sao <img alt=\"format Paintbrush\" class"
-"=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. Con trỏ chuột "
-"chuyển sang thùng sơn."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
 msgid "Select the text you want to apply the new format."
@@ -3404,16 +3387,10 @@ msgstr ""
 msgid ""
 "You have the AutoCorrection enabled. AutoCorrection compares the text just "
 "typed to an internal table of text. In most cases, AutoCorrection corrects "
-"typos while you type. If AutoCorrection is not necessary, disable it in "
-"<span class=\"ui\">Tools</span> → <span class=\"ui\">AutoCorrection</span> → "
-"<span class=\"ui\">While typing</span>."
+"typos while you type. To revert a correction, press <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after it "
+"was applied."
 msgstr ""
-"Bạn đã bật Tự động sửa lỗi. Tự động sửa lỗi so sánh văn bản vừa nhập với "
-"bảng văn bản bên trong. Trong hầu hết các trường hợp, tính năng Tự động sửa "
-"lỗi sẽ sửa lỗi chính tả khi bạn nhập. Nếu không cần thiết phải Tự động sửa "
-"lỗi, hãy tắt tính năng này trong <span class=\"ui\">Công cụ</span> → <span "
-"class=\"ui\">Tự động sửa lỗi</span> → <span class=\"ui\">Trong khi "
-"nhập</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
@@ -3421,12 +3398,9 @@ msgstr "Làm cách nào để chọn dữ liệu để in?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:828-5
 msgid ""
-"Insert column and row breaks in the spreadsheet to narrow the print range "
-"and print the document to download. On printing the PDF, select the pages of "
-"interest."
+"Insert column and row breaks in the spreadsheet to narrow the print range. "
+"When printing, select the pages of interest."
 msgstr ""
-"Chèn các dấu ngắt cột và hàng trong bảng tính để thu hẹp phạm vi in và in "
-"tài liệu để tải xuống. Khi in PDF, hãy chọn các trang quan tâm."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:831-5
 msgid "How can I import CSV data?"
@@ -3449,15 +3423,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:835-7
 msgid ""
-"Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
-">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
-"\"true\">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> "
-"dialog opens to let you describe the precise format of the CSV data."
+"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog "
+"opens to let you describe the precise format of the CSV data."
 msgstr ""
-"Dán từ trình duyệt <span class=\"ui\">Chỉnh sửa</span> → <span class=\"ui\""
-">Dán</span> hoặc nhấn <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
-"\"true\">+</span><kbd>V</kbd>. Hộp thoại <span class=\"ui\">Nhập văn bản</"
-"span> mở ra để cho phép bạn mô tả định dạng chính xác của dữ liệu CSV."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
 msgid ""
@@ -3481,10 +3450,10 @@ msgid "How can I copy the formatting of existing cells to new ones?"
 msgstr "Làm cách nào để sao chép định dạng của các ô hiện có sang các ô mới?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:845-5
-msgid "This is easy to do using the Paintbrush tool in the toolbar."
+msgid ""
+"This is easy to do using <span class=\"ui\">Clone Formatting</span> on the "
+"<span class=\"ui\">Home</span> tab."
 msgstr ""
-"Điều này rất dễ thực hiện bằng cách sử dụng công cụ Paintbrush trên thanh "
-"công cụ."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:847-7
 msgid "Format the source cell with the font, color background and more."
@@ -3499,12 +3468,13 @@ msgid "What is “Clear Direct Formatting” icon?"
 msgstr "Biểu tượng “Xóa định dạng trực tiếp” là gì?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:854-5
+#, fuzzy
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
 "formatting. To restore the formatting to the style settings, select the text "
-"or spreadsheet cell and choose <span class=\"ui\">Format</span> → <span "
-"class=\"ui\">Clear Direct Formatting</span> or use the button in the toolbar."
+"or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span class="
+"\"ui\">Clear Direct Formatting</span>."
 msgstr ""
 "Định dạng trực tiếp là định dạng được áp dụng trực tiếp cho nội dung đã chọn "
 "của đoạn văn hoặc ô bảng tính và chồng lên định dạng kiểu được chỉ định của "
@@ -3537,16 +3507,17 @@ msgstr ""
 "Mở bản trình bày trong <span class=\"productname\">{productname} </span>"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:869-7
+#, fuzzy
 msgid ""
-"Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">Full "
-"Screen Presentation</span> or click on the left-most icon in the bottom of "
-"the slide panel:"
+"Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">From "
+"Beginning</span> or click on the left-most icon in the bottom of the slide "
+"panel:"
 msgstr ""
 "Chọn <span class=\"ui\">Trình chiếu</span> → <span class=\"ui\">Trình bày "
 "toàn màn hình</span> hoặc nhấp vào biểu tượng ngoài cùng bên trái ở cuối "
 "trang trình bày panel:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-197
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-187
 msgid "slide show"
 msgstr "Trình chiếu"
 
@@ -3581,6 +3552,169 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:880-7
 msgid "Set the properties of the element of the object."
 msgstr "Đặt các thuộc tính của phần tử của đối tượng."
+
+#~ msgid ""
+#~ "<span class=\"def\">The menu bar:</span> The main menu is at the top and "
+#~ "includes many options, such as commands for printing, editing, viewing, and "
+#~ "other advanced commands. You can hide the menu bar by clicking the hide icon "
+#~ "<span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide menu "
+#~ "bar\" title=\"Hide menu bar\"></span> on the far right. To show it again, "
+#~ "click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
+#~ "aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
+#~ msgstr ""
+#~ "<span class=\"def\">Thanh menu:</span> Menu chính nằm ở trên cùng và bao gồm "
+#~ "nhiều tùy chọn, chẳng hạn như các lệnh in, chỉnh sửa, xem và các lệnh nâng "
+#~ "cao khác. Bạn có thể ẩn thanh menu bằng cách nhấp vào biểu tượng ẩn <span "
+#~ "class=\"w2ui-iconfold icon-size\" role=\"img\" aria-label=\"hide menu bar\" "
+#~ "title=\"Ẩn thanh menu\"></span> ở phía ngoài cùng bên phải. Để hiển thị lại, "
+#~ "hãy nhấp vào biểu tượng hiển thị <span class=\"w2ui-icon mở ra icon-size\" "
+#~ "role=\"img\" aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
+
+#~ msgid ""
+#~ "<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
+#~ "options for daily editing. Toolbar buttons are dynamic, meaning that their "
+#~ "state (on or off) depends on different factors."
+#~ msgstr ""
+#~ "<span class=\"def\">Thanh công cụ:</span> Thanh công cụ chứa các tùy chọn "
+#~ "được sử dụng nhiều nhất để chỉnh sửa hàng ngày. Nút thanh công cụ là động, "
+#~ "có nghĩa là trạng thái của chúng (bật hoặc tắt) phụ thuộc vào các yếu tố "
+#~ "khác nhau."
+
+#~ msgid ""
+#~ "<span class=\"def\">The information bar:</span> The information bar displays "
+#~ "details about the current document. The actual information depends on the "
+#~ "nature of the document."
+#~ msgstr ""
+#~ "<span class=\"def\">Thanh thông tin:</span> Thanh thông tin hiển thị chi "
+#~ "tiết về tài liệu hiện tại. Thông tin thực tế phụ thuộc vào bản chất của tài "
+#~ "liệu."
+
+#~ msgid ""
+#~ "Rich content copy/cut and paste is supported, not only within a given "
+#~ "document, but also across documents on the same or different <span class="
+#~ "\"productname\">{productname}</span>. For these internal uses, users can "
+#~ "copy/cut content, including images and mixed content, on PC by using the "
+#~ "keyboard shortcuts directly (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
+#~ "plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class="
+#~ "\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). For security "
+#~ "reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>V</kbd> to paste on PC, but context menus can "
+#~ "be used for cut and copy. On Android or iOS selecting text by double "
+#~ "tapping, and using a long-tap to access copy/cut/paste via the context menu "
+#~ "is required."
+#~ msgstr ""
+#~ "Hỗ trợ sao chép/cắt và dán nội dung đa dạng thức, không chỉ trong một tài "
+#~ "liệu nhất định mà còn trên các tài liệu trên <span class=\"productname\""
+#~ ">{productname}</span> giống nhau hoặc khác nhau. Đối với những mục đích sử "
+#~ "dụng nội bộ này, người dùng có thể sao chép/cắt nội dung, bao gồm hình ảnh "
+#~ "và nội dung hỗn hợp, trên PC bằng cách sử dụng trực tiếp các phím tắt "
+#~ "(<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
+#~ "\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>V</kbd>). Vì lý do bảo mật, cần sử dụng "
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>V</kbd> để dán trên PC nhưng có thể sử dụng menu ngữ cảnh để "
+#~ "cắt và sao chép. Trên Android hoặc iOS, việc chọn văn bản bằng cách nhấn đúp "
+#~ "và nhấn lâu để truy cập sao chép/cắt/dán qua menu ngữ cảnh là bắt buộc."
+
+#~ msgid ""
+#~ "To copy larger pieces of content to other applications on your device, users "
+#~ "need to press the <span class=\"ui\">Start download</span> button, and then "
+#~ "re-copy this to their clipboard in order to make it available to the target "
+#~ "application to read. This is possible via a tiny widget that pops up in the "
+#~ "bottom-right corner, and is only necessary to export the content for pasting "
+#~ "in external applications. This step also converts complex object types into "
+#~ "static images."
+#~ msgstr ""
+#~ "Để sao chép các phần nội dung lớn hơn vào các ứng dụng khác trên thiết bị "
+#~ "của bạn, người dùng cần nhấn nút <span class=\"ui\">Start download </span>, "
+#~ "sau đó sao chép lại phần nội dung này vào khay nhớ tạm để cung cấp cho ứng "
+#~ "dụng đích đọc. Điều này có thể thực hiện được thông qua một tiện ích nhỏ bật "
+#~ "lên ở góc dưới cùng bên phải và chỉ cần thiết để xuất nội dung để dán trong "
+#~ "các ứng dụng bên ngoài. Bước này cũng chuyển đổi các kiểu đối tượng phức tạp "
+#~ "thành hình ảnh tĩnh."
+
+#~ msgid "Inactive document"
+#~ msgstr "Tài liệu không hoạt động"
+
+#~ msgid ""
+#~ "<span class=\"def\">Insert local image:</span> opens the browser file picker "
+#~ "to upload the image from your local computer and insert it into the document."
+#~ msgstr ""
+#~ "<span class=\"def\">Chèn hình ảnh cục bộ: </span> mở trình chọn tệp của "
+#~ "trình duyệt để tải hình ảnh lên từ máy tính cục bộ của bạn và chèn vào tài "
+#~ "liệu."
+
+#~ msgid ""
+#~ "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
+#~ msgstr "Tài liệu văn bản: Định dạng DOC, DOCX, RTF. Định dạng OpenDocument ODT"
+
+#~ msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
+#~ msgstr "Bảng tính: Định dạng Microsoft XLS, XLSX, Định dạng OpenDocument ODS"
+
+#~ msgid ""
+#~ "Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
+#~ ">Automatic Spell Checking</span>."
+#~ msgstr ""
+#~ "Chọn menu <span class=\"ui\">Công cụ</span> và bỏ chọn <span class=\"ui\""
+#~ ">Kiểm tra chính tả tự động</span>."
+
+#~ msgid ""
+#~ "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
+#~ "Characters </span> or click the corresponding icon in the toolbar. A dialog "
+#~ "opens."
+#~ msgstr ""
+#~ "Chọn <span class=\"ui\">Chèn</span> → <span class=\"ui\">Ký tự đặc biệt </"
+#~ "span> hoặc nhấp vào biểu tượng tương ứng trên thanh công cụ. Một hộp thoại "
+#~ "hiển thị."
+
+#~ msgid ""
+#~ "Click on the clone formatting icon <img alt=\"format paintbrush\" class"
+#~ "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
+#~ "turns to a paint bucket."
+#~ msgstr ""
+#~ "Nhấp vào biểu tượng định dạng bản sao <img alt=\"format Paintbrush\" class"
+#~ "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. Con trỏ chuột "
+#~ "chuyển sang thùng sơn."
+
+#~ msgid ""
+#~ "You have the AutoCorrection enabled. AutoCorrection compares the text just "
+#~ "typed to an internal table of text. In most cases, AutoCorrection corrects "
+#~ "typos while you type. If AutoCorrection is not necessary, disable it in "
+#~ "<span class=\"ui\">Tools</span> → <span class=\"ui\">AutoCorrection</span> → "
+#~ "<span class=\"ui\">While typing</span>."
+#~ msgstr ""
+#~ "Bạn đã bật Tự động sửa lỗi. Tự động sửa lỗi so sánh văn bản vừa nhập với "
+#~ "bảng văn bản bên trong. Trong hầu hết các trường hợp, tính năng Tự động sửa "
+#~ "lỗi sẽ sửa lỗi chính tả khi bạn nhập. Nếu không cần thiết phải Tự động sửa "
+#~ "lỗi, hãy tắt tính năng này trong <span class=\"ui\">Công cụ</span> → <span "
+#~ "class=\"ui\">Tự động sửa lỗi</span> → <span class=\"ui\">Trong khi "
+#~ "nhập</span>."
+
+#~ msgid ""
+#~ "Insert column and row breaks in the spreadsheet to narrow the print range "
+#~ "and print the document to download. On printing the PDF, select the pages of "
+#~ "interest."
+#~ msgstr ""
+#~ "Chèn các dấu ngắt cột và hàng trong bảng tính để thu hẹp phạm vi in và in "
+#~ "tài liệu để tải xuống. Khi in PDF, hãy chọn các trang quan tâm."
+
+#~ msgid ""
+#~ "Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
+#~ ">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
+#~ "\"true\">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> "
+#~ "dialog opens to let you describe the precise format of the CSV data."
+#~ msgstr ""
+#~ "Dán từ trình duyệt <span class=\"ui\">Chỉnh sửa</span> → <span class=\"ui\""
+#~ ">Dán</span> hoặc nhấn <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
+#~ "\"true\">+</span><kbd>V</kbd>. Hộp thoại <span class=\"ui\">Nhập văn bản</"
+#~ "span> mở ra để cho phép bạn mô tả định dạng chính xác của dữ liệu CSV."
+
+#~ msgid "This is easy to do using the Paintbrush tool in the toolbar."
+#~ msgstr ""
+#~ "Điều này rất dễ thực hiện bằng cách sử dụng công cụ Paintbrush trên thanh "
+#~ "công cụ."
 
 #~ msgid ""
 #~ "<span class=\"productname\">{productname}</span> allows you to create and "

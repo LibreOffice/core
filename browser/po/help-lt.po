@@ -2,18 +2,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 21:46+0200\n"
+"POT-Creation-Date: 2026-10-13 14:06+0200\n"
 "PO-Revision-Date: 2026-10-11 03:58+0000\n"
 "Last-Translator: dukezas <dukezas@gmail.com>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/collabora-"
-"online/help/lt/>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/"
+"collabora-online/help/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"(n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
+"%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Translate Toolkit 3.6.0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -156,8 +156,8 @@ msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F10</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"F10</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>F10</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-38
 msgid ""
@@ -180,8 +180,8 @@ msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F6</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"F6</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>F6</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:36-9
 #: html/cool-help.html%2Bdiv.div.div.h2:208-9
@@ -1375,8 +1375,8 @@ msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Tarpas</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>Tarpas</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
 msgid "Selects the entire row of the current cell."
@@ -1387,8 +1387,8 @@ msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Tarpas</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>Tarpas</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-38
 msgid ""
@@ -1653,47 +1653,47 @@ msgid "<span class=\"productname\">{productname}</span> user interface"
 msgstr "<span class=\"productname\">{productname}</span> vartotojo sąsaja"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:343-13
-#: html/cool-help.html%2Bdiv.div.h3:436-5
+#: html/cool-help.html%2Bdiv.div.h3:429-5
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr ""
 "Dokumentų atidarymas, uždarymas, išsaugojimas, spausdinimas ir atsisiuntimas"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
-#: html/cool-help.html%2Bdiv.div.h3:450-5
+#: html/cool-help.html%2Bdiv.div.h3:439-5
 msgid "Opening, closing, saving and printing documents"
 msgstr "Dokumentų atidarymas, uždarymas, išsaugojimas ir spausdinimas"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
-#: html/cool-help.html%2Bdiv.div.h3:481-5
+#: html/cool-help.html%2Bdiv.div.h3:478-5
 msgid "Editing documents"
 msgstr "Dokumentų redagavimas"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:346-13
 #: html/cool-help.html%2Bdiv.nav.ul.li:352-13
 #: html/cool-help.html%2Bdiv.nav.ul.li:365-13
-#: html/cool-help.html%2Bdiv.div.h3:511-3
-#: html/cool-help.html%2Bdiv.div.div.h3:571-5
-#: html/cool-help.html%2Bdiv.div.div.h3:682-5
+#: html/cool-help.html%2Bdiv.div.h3:510-3
+#: html/cool-help.html%2Bdiv.div.div.h3:570-5
+#: html/cool-help.html%2Bdiv.div.div.h3:681-5
 msgid "Advanced features"
 msgstr "Išplėstinės funkcijos"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:348-13
-#: html/cool-help.html%2Bdiv.div.h3:549-5
+#: html/cool-help.html%2Bdiv.div.h3:548-5
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
 msgstr "<span class=\"productname\">{productname}</span> skaičiuoklės"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:349-13
-#: html/cool-help.html%2Bdiv.div.div.h3:551-5
+#: html/cool-help.html%2Bdiv.div.div.h3:550-5
 msgid "Editing spreadsheets"
 msgstr "Skaičiuoklių redagavimas"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:350-13
-#: html/cool-help.html%2Bdiv.div.div.h3:555-5
+#: html/cool-help.html%2Bdiv.div.div.h3:554-5
 msgid "Formulas"
 msgstr "Formulės"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:351-13
-#: html/cool-help.html%2Bdiv.div.div.h3:564-5
+#: html/cool-help.html%2Bdiv.div.div.h3:563-5
 msgid "Formatting spreadsheets"
 msgstr "Skaičiuoklių formatavimas"
 
@@ -1703,22 +1703,22 @@ msgid "Spreadsheets"
 msgstr "Skaičiuoklės"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:355-13
-#: html/cool-help.html%2Bdiv.div.h3:613-5
+#: html/cool-help.html%2Bdiv.div.h3:612-5
 msgid "<span class=\"productname\">{productname}</span> text documents"
 msgstr "Tekstiniai dokumentai <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:356-13
-#: html/cool-help.html%2Bdiv.div.div.h3:615-5
+#: html/cool-help.html%2Bdiv.div.div.h3:614-5
 msgid "Editing text documents"
 msgstr "Tekstinių dokumentų redagavimas"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:357-13
-#: html/cool-help.html%2Bdiv.div.div.h3:619-5
+#: html/cool-help.html%2Bdiv.div.div.h3:618-5
 msgid "Context menus"
 msgstr "Kontekstiniai meniu"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:358-13
-#: html/cool-help.html%2Bdiv.div.div.h3:635-5
+#: html/cool-help.html%2Bdiv.div.div.h3:634-5
 msgid "Advanced text document editor features"
 msgstr "Išplėstinės teksto dokumentų redaktoriaus funkcijos"
 
@@ -1728,22 +1728,22 @@ msgid "Text documents"
 msgstr "Teksto dokumentai"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:361-13
-#: html/cool-help.html%2Bdiv.div.h3:662-5
+#: html/cool-help.html%2Bdiv.div.h3:661-5
 msgid "<span class=\"productname\">{productname}</span> presentations"
 msgstr "Prezentacijos <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:362-13
-#: html/cool-help.html%2Bdiv.div.div.h3:664-5
+#: html/cool-help.html%2Bdiv.div.div.h3:663-5
 msgid "Editing presentations"
 msgstr "Prezentacijų redagavimas"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:363-13
-#: html/cool-help.html%2Bdiv.div.div.h3:668-5
+#: html/cool-help.html%2Bdiv.div.div.h3:667-5
 msgid "Slide show"
 msgstr "Skaidrių demonstracija"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:364-13
-#: html/cool-help.html%2Bdiv.div.div.h3:675-5
+#: html/cool-help.html%2Bdiv.div.div.h3:674-5
 msgid "Slide pane"
 msgstr "Skaidrės sritis"
 
@@ -1753,7 +1753,7 @@ msgid "Presentations"
 msgstr "Prezentacijos"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:368-13
-#: html/cool-help.html%2Bdiv.div.h3:694-5
+#: html/cool-help.html%2Bdiv.div.h3:693-5
 msgid "Frequently Asked Questions"
 msgstr "Dažnai užduodami klausimai"
 
@@ -1820,22 +1820,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:405-5
 msgid ""
-"<span class=\"def\">The menu bar:</span> The main menu is at the top and "
-"includes many options, such as commands for printing, editing, viewing, and "
-"other advanced commands. You can hide the menu bar by clicking the hide icon "
-"<span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide menu "
-"bar\" title=\"Hide menu bar\"></span> on the far right. To show it again, "
-"click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
-"aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
+"<span class=\"def\">The tabs:</span> The commands are grouped on tabs at the "
+"top: <span class=\"ui\">File</span>, <span class=\"ui\">Home</span>, <span "
+"class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span class="
+"\"ui\">View</span> and others, depending on the document type. Click the "
+"selected tab again to collapse the tab bar and gain space for the document. "
+"Click any tab to expand it again."
 msgstr ""
-"<span class=\"def\">Meniu juosta:</span> Pagrindinis meniu yra viršuje ir "
-"jame yra daug parinkčių, pvz., spausdinimo, redagavimo, peržiūros ir kitos "
-"išplėstinės komandos. Meniu juostą galite paslėpti spustelėdami slėpimo "
-"piktogramą <span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label="
-"\"hide menu bar\" title=\"Hide menu bar\"></span>, esančią tolimajame "
-"dešiniajame kampe. Norėdami ją vėl rodyti, spustelėkite rodymo piktogramą "
-"<span class=\"w2ui-icon unfold icon-size\" role=\"img\" aria-label=\"show "
-"menu bar\" title=\"Show menu bar\"></span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
 msgid ""
@@ -1847,24 +1838,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:411-5
 msgid ""
-"<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
-"options for daily editing. Toolbar buttons are dynamic, meaning that their "
-"state (on or off) depends on different factors."
-msgstr ""
-"<span class=\"def\">Įrankių juosta:</span> Įrankių juostoje yra dažniausiai "
-"naudojamos kasdienio redagavimo parinktys. Įrankių juostos mygtukai yra "
-"dinamiški, o tai reiškia, kad jų būsena (įjungta arba išjungta) priklauso "
-"nuo skirtingų veiksnių."
-
-#: html/cool-help.html%2Bdiv.div.div.p:414-5
-msgid ""
 "<span class=\"def\">The status bar:</span> The status bar is shown in the "
 "bottom, and contains several useful options and features."
 msgstr ""
 "<span class=\"def\">Būsenos juosta:</span> Būsenos juosta rodoma apačioje ir "
 "joje yra keletas naudingų parinkčių bei funkcijų."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:415-49
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:412-49
 msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
@@ -1873,7 +1853,7 @@ msgstr ""
 "režimas, pasirinkimo režimas, kalba, redagavimo režimas, naršymas, mastelio "
 "keitimas ir paieška"
 
-#: html/cool-help.html%2Bdiv.div.div.p:418-5
+#: html/cool-help.html%2Bdiv.div.div.p:415-5
 msgid ""
 "<span class=\"def\">The search bar:</span> Searching starts automatically "
 "when content is inserted in the search box, and the document window "
@@ -1885,19 +1865,19 @@ msgstr ""
 "perkeliamas į pirmą rastą įrašą. Paieška neskiria didžiųjų ir mažųjų "
 "raidžių. Šalia paieškos laukelio yra trys mygtukai:"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:420-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:417-7
 msgid "Search backwards"
 msgstr "Atbulinė paieška"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:421-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:418-7
 msgid "Search forward"
 msgstr "Ieškoti pirmyn"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:422-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:419-7
 msgid "Cancel the search (appears only when a text has been searched)"
 msgstr "Atšaukti paiešką (rodomas tik esant teksto paieškai)"
 
-#: html/cool-help.html%2Bdiv.div.div.p:426-5
+#: html/cool-help.html%2Bdiv.div.div.p:423-5
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
@@ -1909,7 +1889,7 @@ msgstr ""
 "priartinti vaizdą. Mastelio keitimas taikomas dokumento sričiai, vartotojo "
 "sąsajos tai nepaveikia. Dabartinis mastelio lygis rodomas šioje srityje."
 
-#: html/cool-help.html%2Bdiv.div.div.p:427-5
+#: html/cool-help.html%2Bdiv.div.div.p:424-5
 msgid ""
 "Text, charts, shapes and svg images will stay sharp, when zooming in, you "
 "will only see pixels appear at inserted images, such as jpg’s or png’s."
@@ -1917,30 +1897,13 @@ msgstr ""
 "Tekstas, diagramos, formos ir svg vaizdai išliks ryškūs; priartinus matysite "
 "pikselius tik įterptuose vaizduose, pvz., 'jpg' arba 'png'."
 
-#: html/cool-help.html%2Bdiv.div.div.p:428-5
+#: html/cool-help.html%2Bdiv.div.div.p:425-5
 msgid "Using the browser zoom affects the document and user interface areas."
 msgstr ""
 "Naršyklės mastelio keitimo naudojimas paveikia dokumento ir vartotojo "
 "sąsajos sritis."
 
-#: html/cool-help.html%2Bdiv.div.div.p:431-5
-msgid ""
-"<span class=\"def\">The information bar:</span> The information bar displays "
-"details about the current document. The actual information depends on the "
-"nature of the document."
-msgstr ""
-"<span class=\"def\">Informacijos juosta:</span> Informacijos juostoje rodoma "
-"išsami informacija apie dabartinį dokumentą. Tikroji informacija priklauso "
-"nuo dokumento pobūdžio."
-
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:432-54
-msgid ""
-"Information bar showing page navigation arrows, zoom controls, and zoom level"
-msgstr ""
-"Informacijos juosta, kurioje rodomos puslapio naršymo rodyklės, mastelio "
-"keitimo valdikliai ir mastelio lygis"
-
-#: html/cool-help.html%2Bdiv.div.p:437-5
+#: html/cool-help.html%2Bdiv.div.p:430-5
 msgid ""
 "Your documents are stored and managed in the cloud storage that is "
 "integrated with <span class=\"productname\">{productname}</span>."
@@ -1948,7 +1911,7 @@ msgstr ""
 "Jūsų dokumentai saugomi ir tvarkomi debesies saugykloje, kuri integruota su "
 "<span class=\"productname\">{productname}</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:438-30
+#: html/cool-help.html%2Bdiv.div.div.p:431-30
 msgid ""
 "To download a document download it from the <span class=\"productname\""
 ">{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
@@ -1960,7 +1923,7 @@ msgstr ""
 "Galimi atsisiuntimo formatai priklauso nuo programos. Visos programos "
 "eksportuoja dokumentus PDF formatu."
 
-#: html/cool-help.html%2Bdiv.div.div.p:439-30
+#: html/cool-help.html%2Bdiv.div.div.p:432-30
 msgid ""
 "To open document, click on the file to open the <span class=\"productname\""
 ">{productname}</span> module associated to the document format."
@@ -1969,7 +1932,7 @@ msgstr ""
 "dokumento formatu susietą programos <span class=\"productname\""
 ">{productname}</span> modulį."
 
-#: html/cool-help.html%2Bdiv.div.div.p:440-30
+#: html/cool-help.html%2Bdiv.div.div.p:433-30
 msgid ""
 "Documents in <span class=\"productname\">{productname}</span> save "
 "automatically, but if you are concerned that a document is synchronized as "
@@ -1981,7 +1944,7 @@ msgstr ""
 "anksčiau, galite priverstinai išsaugoti naudodami meniu <span class=\"ui\""
 ">Failas</span> opcija <span class=\"ui\">Išsaugoti</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:441-30
+#: html/cool-help.html%2Bdiv.div.div.p:434-30
 msgid ""
 "Depending on the capabilities of your browser, the print window may appear "
 "or a “Download PDF export?” popup appears. You can print this PDF in your "
@@ -1991,55 +1954,62 @@ msgstr ""
 "langas arba iššokantis langas „Atsisiųsti eksportuotą PDF?“. Šį PDF failą "
 "galite atsispausdinti mėgiama PDF programa."
 
-#: html/cool-help.html%2Bdiv.div.div.p:442-30
-#: html/cool-help.html%2Bdiv.div.div.p:475-7
+#: html/cool-help.html%2Bdiv.div.div.p:435-30
+#: html/cool-help.html%2Bdiv.div.div.p:472-7
 msgid ""
 "When closing a document, it is automatically saved if it has been changed."
 msgstr "Uždarius dokumentą, jis automatiškai išsaugomas, jei buvo pakeitimų."
 
-#: html/cool-help.html%2Bdiv.div.div.p:452-7
+#: html/cool-help.html%2Bdiv.div.div.p:441-7
+#, fuzzy
 msgid ""
 "To open a document, either open it in <span class=\"productname\""
-">{productname}</span> from your platform's file manager or use the <span "
-"class=\"ui\">Open</span> button on the page shown from the <span class=\"ui\""
-">File</span> menu bar button."
+">{productname}</span> from your platform's file manager or use <span class="
+"\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
-"Norėdami atidaryti dokumentą, atidarykite jį naudodami <span "
-"class=\"productname\">{productname}</span> savo platformos failų tvarkyklėje "
-"arba naudokite mygtuką <span class=\"ui\">Atidaryti</span> puslapyje, "
-"rodomame meniu juostos mygtuke <span class=\"ui\">Failas</span>."
+"Norėdami atidaryti dokumentą, atidarykite jį naudodami <span class="
+"\"productname\">{productname}</span> savo platformos failų tvarkyklėje arba "
+"naudokite mygtuką <span class=\"ui\">Atidaryti</span> puslapyje, rodomame "
+"meniu juostos mygtuke <span class=\"ui\">Failas</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:458-7
+#: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
-"To save the document in a different format use the <span class=\"ui\">Save "
-"as</span> button on the page shown from the <span class=\"ui\">File</span> "
-"menu bar button."
+"An existing document opens in view mode, so that you can read it without "
+"changing it by accident. To start editing, click the edit button (the pencil)"
+" in the bottom right corner. New documents and documents created from a "
+"template open ready to edit."
 msgstr ""
-"Norėdami išsaugoti dokumentą kitu formatu, naudokite mygtuką <span "
-"class=\"ui\">Įrašyti kaip</span> puslapyje rodomame meniu juostos mygtuke "
-"<span class=\"ui\">Failas</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:463-7
+#: html/cool-help.html%2Bdiv.div.div.p:452-7
 msgid ""
-"Documents are automatically saved perdiodically, but if you want a document "
-"to be saved right away you can use the <span class=\"ui\">Save</span> button "
-"on the page shown from the <span class=\"ui\">File</span> menu bar button."
+"If the document is locked by another application, it stays in view mode."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:456-7
+msgid ""
+"To save the document in a different format use <span class=\"ui\">Save As</"
+"span> on the <span class=\"ui\">File</span> tab."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:461-7
+#, fuzzy
+msgid ""
+"Documents are automatically saved periodically, but if you want a document "
+"to be saved right away you can use <span class=\"ui\">Save</span> on the "
+"<span class=\"ui\">File</span> tab."
 msgstr ""
 "Dokumentai automatiškai išsaugomi periodiškai, bet jei norite, kad "
-"dokumentas būtų išsaugotas iš karto, galite naudoti mygtuką <span "
-"class=\"ui\">Išsaugoti</span> puslapyje rodomame meniu juostos mygtuke <span "
-"class=\"ui\">Failas</span>."
+"dokumentas būtų išsaugotas iš karto, galite naudoti mygtuką <span class=\"ui"
+"\">Išsaugoti</span> puslapyje rodomame meniu juostos mygtuke <span class=\"ui"
+"\">Failas</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:470-7
+#: html/cool-help.html%2Bdiv.div.div.p:467-7
 msgid ""
-"To print the document, use the <span class=\"ui\">Print</span> button on the "
-"page shown from the <span class=\"ui\">File</span> menu bar button."
+"To print the document, use <span class=\"ui\">Print</span> on the <span "
+"class=\"ui\">File</span> tab."
 msgstr ""
-"Norėdami atsispausdinti dokumentą, naudokite mygtuką <span class=\"ui\">"
-"Spausdinti</span> puslapyje parodytame meniu juostos mygtuke <span "
-"class=\"ui\">Failas</span>."
 
-#: html/cool-help.html%2Bdiv.div.p:482-5
+#: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
 "Document editing should be familiar to everyone that has used an office "
 "application before, but here are some distinctive features:"
@@ -2047,65 +2017,44 @@ msgstr ""
 "Dokumentų redagavimas turėtų būti pažįstamas visiems, kurie anksčiau "
 "naudojosi „Office“ programomis, tačiau čia yra keletas išskirtinių savybių:"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:484-5
+#: html/cool-help.html%2Bdiv.div.div.h4:481-5
 msgid "Copy and Paste"
 msgstr "Kopijuoti ir įklijuoti"
 
-#: html/cool-help.html%2Bdiv.div.div.p:485-5
+#: html/cool-help.html%2Bdiv.div.div.p:482-5
 msgid ""
-"Rich content copy/cut and paste is supported, not only within a given "
-"document, but also across documents on the same or different <span class="
-"\"productname\">{productname}</span>. For these internal uses, users can "
-"copy/cut content, including images and mixed content, on PC by using the "
-"keyboard shortcuts directly (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class="
-"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). For security "
-"reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>V</kbd> to paste on PC, but context menus can "
-"be used for cut and copy. On Android or iOS selecting text by double "
-"tapping, and using a long-tap to access copy/cut/paste via the context menu "
-"is required."
+"Rich content copy/cut and paste is supported, including images and mixed "
+"content, using the keyboard shortcuts (<kbd>Ctrl</kbd><span class=\"kbd--"
+"plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class="
+"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). On "
+"Android or iOS selecting text by double tapping, and using a long-tap to "
+"access copy/cut/paste via the context menu is required."
 msgstr ""
-"Palaikomas raiškiojo turinio kopijavimas / iškirpimas ir įklijavimas ne tik "
-"konkrečiame dokumente, bet ir tarp dokumentų tame pačiame ar skirtinguose "
-"<span class=\"productname\">{productname}</span>. Šiems vidiniams tikslams "
-"vartotojai gali kopijuoti / iškirpti turinį, įskaitant vaizdus ir mišrų "
-"turinį, kompiuteryje tiesiogiai naudodami sparčiuosius klavišus (<kbd>Ctrl</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, "
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
-"\"true\">+</span><kbd>V</kbd>). Dėl saugumo priežasčių norint įklijuoti "
-"kompiuteryje, būtina naudoti <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>V</kbd>, tačiau iškirpimui ir kopijavimui "
-"galima naudoti kontekstinius meniu. „Android“ arba „iOS“ sistemose tekstą "
-"reikia pasirinkti dukart spustelėjus, o norint pasiekti kopijavimo / "
-"iškirpimo / įklijavimo funkcijas per kontekstinį meniu, reikia ilgiau "
-"palaikyti paspaudus."
 
-#: html/cool-help.html%2Bdiv.div.div.p:486-5
+#: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
-"To copy larger pieces of content to other applications on your device, users "
-"need to press the <span class=\"ui\">Start download</span> button, and then "
-"re-copy this to their clipboard in order to make it available to the target "
-"application to read. This is possible via a tiny widget that pops up in the "
-"bottom-right corner, and is only necessary to export the content for pasting "
-"in external applications. This step also converts complex object types into "
+"For security reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd"
+"--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> to paste content that "
+"comes from outside the document, but context menus can be used for cut and "
+"copy."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:484-5
+msgid ""
+"When you copy a selection that contains images or other objects, a <span "
+"class=\"ui\">Download Selection</span> widget pops up in the bottom-right "
+"corner. Press <span class=\"ui\">Download</span>, then copy again, to make "
+"the content available to applications outside <span class=\"productname\""
+">{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
-"Norėdami nukopijuoti didesnius turinio fragmentus į kitas įrenginio "
-"programas, vartotojai turi paspausti mygtuką <span class=\"ui\">Pradėti "
-"atsisiuntimą</span> ir dar kartą nukopijuoti šį failą į iškarpinę, kad "
-"tikslinė programa galėtų jį perskaityti. Tai įmanoma naudojant mažytį "
-"valdiklį, kuris iššoka apatiniame dešiniajame kampe, ir jis reikalingas tik "
-"norint eksportuoti turinį įklijavimui į išorines programas. Šis veiksmas "
-"taip pat konvertuoja sudėtingus objektų tipus į statinius vaizdus."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:489-5
+#: html/cool-help.html%2Bdiv.div.div.h4:487-5
 msgid "Document repair"
 msgstr "Dokumento taisymas"
 
-#: html/cool-help.html%2Bdiv.div.div.p:490-5
+#: html/cool-help.html%2Bdiv.div.div.p:488-5
 msgid ""
 "When multiple people edit the same document concurrently, it is possible for "
 "their changes to conflict and this can cause some confusion. The Document "
@@ -2117,15 +2066,23 @@ msgstr ""
 "leidžia vartotojams anuliuoti kitų redaktorių atliktus dokumento pakeitimus "
 "iki ankstesnės būsenos."
 
-#: html/cool-help.html%2Bdiv.div.div.p:491-5
+#: html/cool-help.html%2Bdiv.div.div.p:489-5
+msgid ""
+"<span class=\"ui\">Repair</span> on the <span class=\"ui\">File</span> tab "
+"lists the recent changes to the document and lets you take the document back "
+"to an earlier state."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:490-5
+#, fuzzy
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
-"class=\"ui\">Jump to state</span>."
+"class=\"ui\">OK</span>."
 msgstr ""
 "Norėdami grįžti į pasirinktą būseną, pasirinkite ją pele ir paspauskite "
 "<span class=\"ui\">Pereiti į būseną</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:492-55
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:491-55
 msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
@@ -2133,7 +2090,7 @@ msgstr ""
 "Dokumento taisymo dialogo langas, kuriame pateikiamos ankstesnės dokumento "
 "būsenos su veiksmo tipo, autoriaus ir laiko žymos stulpeliais"
 
-#: html/cool-help.html%2Bdiv.div.div.p:493-5
+#: html/cool-help.html%2Bdiv.div.div.p:492-5
 msgid ""
 "This is particularly useful – say when a colleague inadvertently selected "
 "all text in the document with <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
@@ -2144,23 +2101,24 @@ msgstr ""
 "tekstą naudodamas <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true"
 "\">+</span><kbd>A</kbd> ir jį perrašė, kol jūs tuo metu jį redagavote."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:496-5
-msgid "Inactive document"
-msgstr "Neaktyvus dokumentas"
+#: html/cool-help.html%2Bdiv.div.div.h4:495-5
+msgid "Idle document"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:497-5
+#: html/cool-help.html%2Bdiv.div.div.p:496-5
+#, fuzzy
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
-"“Inactive” state. The document is shown with a transparent gray overlay, "
-"with the message “Inactive document – please click to resume editing”."
+"“Idle” state. The document is shown with a transparent gray overlay, with "
+"the message “Idle document – please click to reload and resume editing”."
 msgstr ""
 "Kai <span class=\"productname\">{productname}</span> aptinka, kad naršyklėje "
 "kurį laiką nebuvo vykdoma jokia veikla, dokumentas perkeliamas į „Neaktyvią“ "
 "būseną. Dokumentas rodomas su permatomu pilku perdengimu ir pranešimu „"
 "Neaktyvus dokumentas – spustelėkite, jei norite tęsti redagavimą“."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:498-57
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
 msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
@@ -2168,7 +2126,7 @@ msgstr ""
 "Neaktyvaus dokumento langas su pranešimu: Neaktyvus dokumentas – "
 "spustelėkite, kad įkeltumėte iš naujo ir tęstumėte redagavimą"
 
-#: html/cool-help.html%2Bdiv.div.div.p:499-5
+#: html/cool-help.html%2Bdiv.div.div.p:498-5
 msgid ""
 "To continue editing, click on the document and the layover and message "
 "disappear. Any changes that may have been made by other users – while "
@@ -2178,11 +2136,11 @@ msgstr ""
 "pranešimas išnyks. Visi pakeitimai, kuriuos galėjo atlikti kiti vartotojai "
 "bendrai redaguodami dokumentą, bus atnaujinti."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:502-5
+#: html/cool-help.html%2Bdiv.div.div.h4:501-5
 msgid "Pasting"
 msgstr "Įklijavimas"
 
-#: html/cool-help.html%2Bdiv.div.div.p:503-5
+#: html/cool-help.html%2Bdiv.div.div.p:502-5
 msgid ""
 "When you paste content copied from within the same document, the format and "
 "elements are maintained. If you copy from another document, in another tab "
@@ -2194,7 +2152,7 @@ msgstr ""
 "lango arba ne iš naršyklės, įklijuotame turinyje išsaugomas raiškusis "
 "tekstas."
 
-#: html/cool-help.html%2Bdiv.div.div.p:504-5
+#: html/cool-help.html%2Bdiv.div.div.p:503-5
 msgid ""
 "You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
@@ -2205,7 +2163,7 @@ msgstr ""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>V</kbd>"
 
-#: html/cool-help.html%2Bdiv.div.div.p:505-5
+#: html/cool-help.html%2Bdiv.div.div.p:504-5
 msgid ""
 "When you paste text from within the document, formatting will be respected. "
 "You can also paste objects, such as images, if they are copied from the "
@@ -2215,7 +2173,7 @@ msgstr ""
 "įklijuoti objektus, pvz., paveikslėlius, jei jie nukopijuoti iš dokumento, "
 "kuriame dirbate."
 
-#: html/cool-help.html%2Bdiv.div.div.p:506-5
+#: html/cool-help.html%2Bdiv.div.div.p:505-5
 msgid ""
 "When you paste text from outside of the document (another browser window or "
 "a desktop application), it will be pasted as rich text."
@@ -2223,7 +2181,7 @@ msgstr ""
 "Kai įklijuosite tekstą iš už dokumento ribų (kito naršyklės lango arba "
 "darbalaukio programos), jis bus įklijuotas raiškiojo teksto formatu."
 
-#: html/cool-help.html%2Bdiv.div.div.p:507-5
+#: html/cool-help.html%2Bdiv.div.div.p:506-5
 msgid ""
 "When you have internal cut or copied content, you can paste this content "
 "using the context menu."
@@ -2231,11 +2189,11 @@ msgstr ""
 "Kai turite vidinį iškirptą arba nukopijuotą turinį, galite jį įklijuoti "
 "naudodami kontekstinį meniu."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:513-5
+#: html/cool-help.html%2Bdiv.div.div.h4:512-5
 msgid "Adding charts"
 msgstr "Diagramų pridėjimas"
 
-#: html/cool-help.html%2Bdiv.div.div.p:514-5
+#: html/cool-help.html%2Bdiv.div.div.p:513-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports inserting and "
 "visualization of charts in documents. To add a chart:"
@@ -2243,7 +2201,7 @@ msgstr ""
 "<span class=\"productname\">{productname}</span> palaiko diagramų įterpimą "
 "ir vizualizavimą dokumentuose. Norėdami pridėti diagramą:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:515-7
 msgid ""
 "Select a table in text document, a range in a spreadsheet or a table in a "
 "presentation."
@@ -2251,15 +2209,16 @@ msgstr ""
 "Pasirinkite lentelę tekstiniame dokumente, diapazoną skaičiuoklėje arba "
 "lentelę prezentacijoje."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:517-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Charts</span>. "
+"Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Chart</span>. "
 "Customize your chart on the sidebar:"
 msgstr ""
 "Pasirinkite <span class=\"ui\">Įterpti</span> → <span class=\"ui\""
 ">Diagramos</span>. Diagramą tinkinkite šoninėje juostoje:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:520-53
+#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:519-53
 msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
@@ -2267,12 +2226,12 @@ msgstr ""
 "Diagramos vedlio dialogo langas su diagramos tipų sąrašu kairėje, diagramos "
 "stilių peržiūromis, 3D ir formos parinktimis"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:521-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:520-7
 msgid "If no table or range was selected, a prototype chart is displayed."
 msgstr ""
 "Jei nepasirinkta jokia lentelė ar diapazonas, rodoma prototipinė diagrama."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:523-51
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:522-51
 msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
@@ -2280,7 +2239,7 @@ msgstr ""
 "Stulpelių diagrama su sugrupuotomis juostomis rodo keturių eilučių duomenis "
 "trijuose stulpeliuose"
 
-#: html/cool-help.html%2Bdiv.div.div.p:525-28
+#: html/cool-help.html%2Bdiv.div.div.p:524-28
 msgid ""
 "<span class=\"def\">Chart editing:</span> Double click the chart to select. "
 "Use context menus to add chart elements such as title, axis, and other. "
@@ -2294,7 +2253,7 @@ msgstr ""
 "tipas</span>, kad redaguotumėte diagramos duomenis ir pasirinktumėte "
 "diagramos tipą."
 
-#: html/cool-help.html%2Bdiv.div.div.p:526-28
+#: html/cool-help.html%2Bdiv.div.div.p:525-28
 msgid ""
 "<span class=\"def\">Chart formatting:</span> The same context menu brings "
 "you to chart data table and chart type selection."
@@ -2303,7 +2262,7 @@ msgstr ""
 "meniu nukreipia jus į diagramos duomenų lentelę ir diagramos tipo "
 "pasirinkimą."
 
-#: html/cool-help.html%2Bdiv.div.div.p:527-28
+#: html/cool-help.html%2Bdiv.div.div.p:526-28
 msgid ""
 "<span class=\"def\">Data series formatting:</span> Open the context menu and "
 "choose <span class=\"ui\">Format data series</span>."
@@ -2312,11 +2271,11 @@ msgstr ""
 "kontekstinį meniu ir pasirinkite <span class=\"ui\">Formatuoti duomenų "
 "seką</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:529-5
+#: html/cool-help.html%2Bdiv.div.div.h4:528-5
 msgid "Handling images"
 msgstr "Paveikslėlių tvarkymas"
 
-#: html/cool-help.html%2Bdiv.div.div.p:530-5
+#: html/cool-help.html%2Bdiv.div.div.p:529-5
 msgid ""
 "<span class=\"productname\">{productname}</span> inserts images in the text "
 "document from your local computer or from your cloud storage. Inserted "
@@ -2326,7 +2285,7 @@ msgstr ""
 "įterpia vaizdus iš jūsų vietinio kompiuterio arba debesies saugyklos. "
 "Įterpti vaizdai visada įdedami į dokumentą."
 
-#: html/cool-help.html%2Bdiv.div.div.p:531-5
+#: html/cool-help.html%2Bdiv.div.div.p:530-5
 msgid ""
 "<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\""
 ">Insert image</span> icon allows you to choose an image from the cloud "
@@ -2336,16 +2295,14 @@ msgstr ""
 "class=\"ui\">Įterpti paveikslėlį</span>, leidžia pasirinkti paveikslėlį iš "
 "debesies saugyklos aplankų ir bendrinamų elementų."
 
-#: html/cool-help.html%2Bdiv.div.div.p:532-5
+#: html/cool-help.html%2Bdiv.div.div.p:531-5
 msgid ""
-"<span class=\"def\">Insert local image:</span> opens the browser file picker "
-"to upload the image from your local computer and insert it into the document."
+"<span class=\"def\">Insert local image:</span> Choose <span class=\"ui\""
+">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
+"computer and insert it into the document."
 msgstr ""
-"<span class=\"def\">Įterpti vietinį vaizdą:</span> atidaro failų naršyklės "
-"dialogą, kad būtų galima įkelti vaizdą iš vietinio kompiuterio ir įterpti jį "
-"į dokumentą."
 
-#: html/cool-help.html%2Bdiv.div.div.p:533-5
+#: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
 "Images can be resized, rotated and anchored. Text can be wrapped around the "
 "image. Select the image and open the context menu. Use the images handles to "
@@ -2355,11 +2312,11 @@ msgstr ""
 "aplink vaizdą. Pasirinkite vaizdą ir atidarykite kontekstinį meniu. Norėdami "
 "pakeisti vaizdo dydį pele, naudokite vaizdo rankenėles."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:536-5
+#: html/cool-help.html%2Bdiv.div.div.h4:535-5
 msgid "Comments in documents"
 msgstr "Komentarai dokumentuose"
 
-#: html/cool-help.html%2Bdiv.div.div.p:537-5
+#: html/cool-help.html%2Bdiv.div.div.p:536-5
 msgid ""
 "Insert comments in <span class=\"productname\">{productname}</span> in "
 "places that need special reader attention. Comments are displayed on the "
@@ -2369,7 +2326,7 @@ msgstr ""
 "vietas, kurioms reikia ypatingo skaitytojo dėmesio. Komentarai rodomi "
 "dešinėje ir juose nurodomas autoriaus vardas ir data."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:538-51
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:537-51
 msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
@@ -2377,7 +2334,7 @@ msgstr ""
 "Komentarų laukelis, kuriame rodomas autoriaus vardas, data ir komentaro "
 "tekstas, rodomas šalia dokumento"
 
-#: html/cool-help.html%2Bdiv.div.div.p:539-5
+#: html/cool-help.html%2Bdiv.div.div.p:538-5
 msgid ""
 "Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
 " icon to reply, move and delete comments."
@@ -2385,11 +2342,11 @@ msgstr ""
 "Norėdami atsakyti, perkelti arba ištrinti komentarus, spustelėkite submeniu ("
 "<span class=\"cool-annotation-menu icon-size\"></span>) piktogramą."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:542-5
+#: html/cool-help.html%2Bdiv.div.div.h4:541-5
 msgid "Spellchecking"
 msgstr "Rašybos tikrinimas"
 
-#: html/cool-help.html%2Bdiv.div.div.p:543-5
+#: html/cool-help.html%2Bdiv.div.div.p:542-5
 msgid ""
 "<span class=\"productname\">{productname}</span> can check spelling in text "
 "documents, spreadsheets and presentations. A red wavy underline indicates "
@@ -2402,19 +2359,20 @@ msgstr ""
 "dešinįjį pelės mygtuką, kad atidarytumėte kontekstinį meniu su siūlomais "
 "klaidų taisymais."
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:544-54
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:543-54
 msgid "Text with a red wavy underline beneath a misspelled word"
 msgstr "Tekstas su raudonu banguotu pabraukimu po neteisingai parašytu žodžiu"
 
-#: html/cool-help.html%2Bdiv.div.div.p:545-5
+#: html/cool-help.html%2Bdiv.div.div.p:544-5
+#, fuzzy
 msgid ""
-"To systematically spell-check the whole document use the <span class=\"ui\""
-">Tools</span> menu’s <span class=\"ui\">Spelling</span> option."
+"To systematically spell-check the whole document use <span class=\"ui\""
+">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
 "Norėdami sistemingai tikrinti viso dokumento rašybą, naudokite <span class="
 "\"ui\">Įrankiai</span> meniu <span class=\"ui\">Rašyba</span> parinktį."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:552-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
 "You edit an online spreadsheet in the same way you edit a desktop "
 "spreadsheet. Operations like entering data, selecting ranges, columns, rows "
@@ -2435,16 +2393,16 @@ msgstr ""
 "paspaudus <kbd>Enter</kbd> – į žemiau esantį langelį, kad būtų lengviau "
 "įvesti sekančius duomenis."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:557-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:556-5
 msgid ""
 "Formulas are entered in the formula bar. Enter '=' and insert the formula."
 msgstr "Formulės įvedamos formulės juostoje. Įveskite „=“ ir įterpkite formulę."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:558-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:557-5
 msgid "All spreadsheets functions and mathematical rules applies."
 msgstr "Taikomos visos skaičiuoklių funkcijos ir matematinės taisyklės."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:559-50
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:558-50
 msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
@@ -2452,7 +2410,7 @@ msgstr ""
 "Formulės juosta, kurioje rodoma langelio nuoroda B1, funkcijos vedlio "
 "piktograma ir formulė =SIN(PI()*A1/10)"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:560-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:559-5
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
 "and is specified in great detail in the <a href=\"https://www.oasis-open.org/"
@@ -2464,7 +2422,7 @@ msgstr ""
 "org/committees/download.php/16826/openformula-spec-20060221.html\" target="
 "\"_blank\" rel=\"noopener noreferrer\">OASIS OpenFormula specifikacijoje</a>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:566-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:565-5
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
@@ -2483,7 +2441,7 @@ msgstr ""
 "pasirinktinį skaičių formatavimą, taip pat šriftą, sudėtingą rėmelį, foną, "
 "langelių apsaugą ir kitas parinktis."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:567-51
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:566-51
 msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
@@ -2491,7 +2449,7 @@ msgstr ""
 "Dialogo langas „Formatuoti langelius“ skirtuke „Skaičiai“ su kategorijų "
 "sąrašu, formatavimo parinktimis, dešimtainiais skaičiais ir formatavimo kodu"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:572-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:571-30
 msgid ""
 "<span class=\"def\">Sorting data:</span> You can sort a list of numbers or "
 "text ascending or descending. <span class=\"productname\">{productname}</"
@@ -2503,7 +2461,7 @@ msgstr ""
 ">{productname}</span> automatiškai aptinka langelius, kurie yra antraštės, "
 "ir gretimus stulpelius, kad išplėstų pasirinkimą."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:573-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:572-30
 msgid ""
 "<span class=\"def\">Filtering data:</span> Filters and advanced filters "
 "allow you to work on certain filtered rows (records) of a data range. In the "
@@ -2515,7 +2473,7 @@ msgstr ""
 "eilutėmis (įrašais). <span class=\"productname\">{productname}</span> "
 "skaičiuoklėse yra įvairių filtrų taikymo galimybių."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:575-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:574-7
 msgid ""
 "One use for the <span class=\"ui\">AutoFilter</span> function is to quickly "
 "restrict the display to records with identical entries in a data field."
@@ -2523,7 +2481,7 @@ msgstr ""
 "Vienas iš <span class=\"ui\">AutoFilter</span> funkcijos panaudojimo būdų "
 "yra greitai apriboti rodymą tik identiškų įrašų su irašais duomenų lauke."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:577-55
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:576-55
 msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
@@ -2532,7 +2490,7 @@ msgstr ""
 "rūšiavimo, filtravimo pagal spalvą, filtravimo pagal sąlygą ir atskirų "
 "reikšmių žymimaisiais langeliais"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:579-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:578-7
 msgid ""
 "In the <span class=\"ui\">Standard Filter</span> dialog, you can also define "
 "ranges which contain the values in particular data fields. You can use the "
@@ -2544,7 +2502,7 @@ msgstr ""
 "Standartinį filtrą galite naudoti sąlygoms sujungti loginiu IR ar ARBA "
 "operatoriumi."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:580-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:579-7
 msgid ""
 "The <span class=\"ui\">Advanced Filter</span> allows up to a total of eight "
 "filter conditions. With advanced filters you enter the conditions directly "
@@ -2554,7 +2512,7 @@ msgstr ""
 "filtro sąlygų. Naudodami išplėstinius filtrus, sąlygas įvedate tiesiai į "
 "lapą."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:584-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:583-5
 msgid ""
 "<span class=\"def\">Outlining:</span> You can create an outline of your data "
 "and group rows and columns together so that you can collapse and expand the "
@@ -2564,7 +2522,7 @@ msgstr ""
 "sugrupuoti eilutes bei stulpelius, kad galėtumėte vienu spustelėjimu "
 "suskleisti ir išskleisti grupes lengvai atvaizduodami hierarchinius duomenis."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:585-49
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:584-49
 msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
@@ -2572,7 +2530,7 @@ msgstr ""
 "Skaičiuoklė su eilučių ir stulpelių grupavimo valdikliais, rodančiais "
 "struktūros lygio mygtukus ir suskleidimo / išskleidimo perjungiklius"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:588-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
 "<span class=\"def\">Data validation:</span> For each cell, you can define "
 "entries to be valid. Invalid entries to a cell will be rejected. To enable "
@@ -2582,16 +2540,17 @@ msgstr ""
 "galite apibrėžti įrašus, kurie yra galiojantys. Neteisingi langelio įrašai "
 "bus atmesti. Norėdami įjungti duomenų patvirtinimą:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:590-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:589-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Validity</span> from the <span class=\"ui\">Data</"
-"span> menu. The <span class=\"ui\">Validity</span> dialog opens."
+"Choose <span class=\"ui\">Validity</span> on the <span class=\"ui\">Data</"
+"span> tab. The <span class=\"ui\">Validity</span> dialog opens."
 msgstr ""
 "Meniu <span class=\"ui\">Duomenys</span> pasirinkite <span class=\"ui\""
 ">Galiojimas</span>. Atsidarys dialogo langas <span class=\"ui\""
 ">Galiojimas</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:593-57
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:592-57
 msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
@@ -2600,7 +2559,7 @@ msgstr ""
 "kaip „Sąrašas“, rodo tuščių langelių, pasirinkimo sąrašo ir įvesties "
 "reikšmių parinktis"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:593-7
 msgid ""
 "Select the validity criterion in the <span class=\"ui\">Allow</span> drop-"
 "box list. Depending on the criterion, more options show. Fill the required "
@@ -2610,7 +2569,7 @@ msgstr ""
 "galiojimo kriterijų. Priklausomai nuo kriterijaus, rodoma daugiau parinkčių. "
 "Užpildykite reikiamus duomenis."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:595-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
 msgid ""
 "Use the <span class=\"ui\">Input Help</span> and <span class=\"ui\">Error "
 "Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\""
@@ -2620,7 +2579,7 @@ msgstr ""
 ">Įvesties pagalba</span> ir <span class=\"ui\">Klaidos įspėjimas</span>. "
 "Spustelėkite <span class=\"ui\">Gerai</span>, kad uždarytumėte dialogo langą."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:598-56
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:597-56
 msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
@@ -2628,7 +2587,7 @@ msgstr ""
 "Langelių išskleidžiamasis sąrašas, kuriame rodomi patvirtinti įrašai, pvz., "
 "„Obuolys“, „Kriaušė“, „Bananas“, „Kivis“ ir „Citrina“"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:599-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:598-7
 msgid ""
 "To remove the validity of the cell, open the dialog and set the <span class="
 "\"ui\">Allow</span> list to “All values”."
@@ -2636,7 +2595,7 @@ msgstr ""
 "Norėdami pašalinti langelio galiojimą, atidarykite dialogo langą ir "
 "nustatykite <span class=\"ui\">Leisti</span> sąrašą į „Visos reikšmės“."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:603-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:602-5
 msgid ""
 "<span class=\"def\">Comments:</span> In a spreadsheet you can insert one "
 "comment per cell. When you select <span class=\"ui\">Insert comment</span>, "
@@ -2651,7 +2610,7 @@ msgstr ""
 "rodomas raudonas taškas. Užveskite pelės žymeklį ant langelio, kad būtų "
 "rodomi komentarai."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:604-52
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:603-52
 msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
@@ -2659,12 +2618,13 @@ msgstr ""
 "Skaičiuoklės langelis su iššokančiu komentaro langu, kuriame rodomas "
 "autorius, data, komentaro tekstas ir mygtukai „Įrašyti / Atšaukti“"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:607-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:606-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
-"conditions. Select the cell range and click the <span class=\"ui\""
-">Conditional Formatting</span> icon on the toolbar. Select the symbol set to "
+"conditions. Select the cell range and click <span class=\"ui\">Conditional</"
+"span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
 "apply on the range."
 msgstr ""
 "<span class=\"def\">Sąlyginis formatavimas:</span> <span class=\"productname"
@@ -2673,7 +2633,7 @@ msgstr ""
 "spustelėkite piktogramą <span class=\"ui\">Sąlyginis formatavimas</span>. "
 "Pasirinkite simbolių rinkinį, kurį norite taikyti diapazone."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:608-62
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
@@ -2682,7 +2642,7 @@ msgstr ""
 "apskritimus, šviesoforus, žvaigždes, besišypsančius veidus ir juostinės "
 "diagramos simbolių rinkinius"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:616-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:615-30
 msgid ""
 "<span class=\"productname\">{productname}</span> edits text documents in the "
 "same way you edit a desktop document. It provides a What You See Is What You "
@@ -2702,7 +2662,7 @@ msgstr ""
 "Norėdami sąveikauti su dokumentu, naudokite klaviatūrą, meniu ir įrankių "
 "juostas."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:620-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:619-30
 msgid ""
 "Context menus are available on clicking the right mouse button. The commands "
 "available in the context menu are related - not extensively - to the "
@@ -2712,11 +2672,11 @@ msgstr ""
 "Kontekstinio meniu komandos yra susijusios (ne pilnai) su dokumente esančiu "
 "objektu."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:623-5
+#: html/cool-help.html%2Bdiv.div.div.h3:622-5
 msgid "Formatting text"
 msgstr "Teksto Formatavimas"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:625-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:624-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports modern techniques "
 "for paragraph formatting through styles. A style is a set of text properties "
@@ -2736,7 +2696,7 @@ msgstr ""
 "ypatybių, visų to paties stiliaus pastraipų formatavimas taip pat pasikeis, "
 "todėl bus lengviau formatuoti daugelį pastraipų atskirai."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:626-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:625-5
 msgid ""
 "In contrast, direct formatting applies formatting to selected excerpts of "
 "the document contents. On a long document, direct formatting must be applied "
@@ -2748,7 +2708,7 @@ msgstr ""
 "taikomas kiekvienai teksto daliai, todėl teksto formatavimas tampa ilga "
 "užduotimi, kurioje gali pasitaikyti klaidų ir vėlavimų."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:628-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:627-30
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format text document "
 "objects by formatting directly from the menus, toolbar or context menus. "
@@ -2759,12 +2719,13 @@ msgstr ""
 "kontekstinio meniu. Tiesioginis formatavimas taikomas tik šiuo metu "
 "pasirinktam objektui."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:630-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:629-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
-"paragraph style to a paragraph. Choose menu <span class=\"ui\">Edit</span> → "
-"<span class=\"ui\">Edit styles</span> to change style."
+"paragraph style to a paragraph. Select the style in the style list on the "
+"<span class=\"ui\">Home</span> tab."
 msgstr ""
 "<span class=\"def\">Stiliaus formatavimas:</span> <span class=\"productname\""
 ">{productname}</span> palaiko pastraipų stilius. Galite pritaikyti turimą "
@@ -2772,7 +2733,7 @@ msgstr ""
 "<span class=\"ui\">Redaguoti</span> → <span class=\"ui\">Redaguoti "
 "stilius</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:631-56
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
@@ -2780,16 +2741,18 @@ msgstr ""
 "Pastraipos dialogo langas skirtuke „Įtraukos ir tarpai“ su įtraukos, tarpų "
 "ir eilučių tarpo nustatymais bei peržiūra dešinėje"
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:637-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:636-5
 msgid "Handling Tables"
 msgstr "Lentelių valdymas"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:638-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:637-5
+#, fuzzy
 msgid ""
-"Insert tables with proper icon in the toolbar. Select the initial number of "
-"rows and columns. Add rows and columns with the cell context menu. Merge "
-"cells with the <span class=\"ui\">Table</span> menu. The default paragraph "
-"style inside cells is “Table contents”."
+"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
+">Table</span>. Select the initial number of rows and columns. Add rows and "
+"columns with the cell context menu. Merge cells from the <span class=\"ui\""
+">Table</span> tab. The default paragraph style inside cells is “Table "
+"contents”."
 msgstr ""
 "Įterpkite lenteles naudodami atitinkamą piktogramą įrankių juostoje. "
 "Pasirinkite pradinį eilučių ir stulpelių skaičių. Pridėkite eilutes ir "
@@ -2797,7 +2760,7 @@ msgstr ""
 "naudodami meniu <span class=\"ui\">Lentelė</span>. Numatytasis pastraipos "
 "stilius langelių viduje yra „Lentelės turinys“."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:639-52
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
@@ -2805,22 +2768,23 @@ msgstr ""
 "Įterpti \"Lentelę\" parinkiklyje rodomas tinklelis eilučių ir stulpelių "
 "skaičiui pasirinkti, šiuo metu rodomas 5 x 3 formatas"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:642-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:641-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
-"cells and choose menu <span class=\"ui\">Table</span> → <span class=\"ui\""
-">Properties</span>. Fine tune the table with the properties dialog."
+"cells, open the context menu and choose <span class=\"ui\">Table Properties</"
+"span>. Fine tune the table with the properties dialog."
 msgstr ""
 "<span class=\"def\">Langelių formatavimas:</span> Spustelėkite langelį arba "
 "langelių diapazoną ir pasirinkite meniu <span class=\"ui\">Lentelė</span> → "
 "<span class=\"ui\">Ypatybės</span>. Daugiau lentelės nustatymo gaimybių "
 "rasite lentelės ypatybių dialogo lange."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:645-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
 msgstr "Sekti pakeitimus"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:646-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:645-5
 msgid ""
 "When you turn on Track Changes, <span class=\"productname\">{productname}</"
 "span> marks up new changes made to the document. Select this option again to "
@@ -2830,7 +2794,7 @@ msgstr ""
 ">{productname}</span> žymi naujus dokumento pakeitimus. Norėdami išjungti "
 "šią parinktį, dar kartą pasirinkite ją."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:647-61
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:646-61
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:774-61
 msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
@@ -2839,7 +2803,7 @@ msgstr ""
 "Pakeitimai rodomi kaip komentarų laukelis šalia dokumento su autoriaus "
 "vardu, data ir pakeitimo aprašymu"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:648-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:647-5
 msgid ""
 "Changes made by different people are shown in different colors and each "
 "tracked change can be accepted or rejected, using the box that appears on "
@@ -2849,11 +2813,11 @@ msgstr ""
 "kiekvieną atliktą pakeitimą galima priimti arba atmesti naudojant dešinėje "
 "esantį langelį. Taip pat ten galite pridėti komentarą."
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:651-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:650-5
 msgid "Other advanced features"
 msgstr "Kitos išplėstinės funkcijos"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:652-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:651-5
 msgid ""
 "<span class=\"def\">Comments:</span> Comments are inserted in the text and "
 "displayed on the right side of the screen."
@@ -2861,7 +2825,7 @@ msgstr ""
 "<span class=\"def\">Komentarai:</span> Komentarai įterpiami į tekstą ir "
 "rodomi dešinėje ekrano pusėje."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:653-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:652-5
 msgid ""
 "<span class=\"def\">Formatting marks:</span> Paragraph, page and unbreakable "
 "spaces are shown as marks to assist text alignment, editing and formatting."
@@ -2870,7 +2834,7 @@ msgstr ""
 "nedalomi tarpai rodomi kaip žymės, padedančios lygiuoti, redaguoti ir "
 "formatuoti tekstą."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:654-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:653-5
 msgid ""
 "<span class=\"def\">Fields:</span> A basic set of fields is available to "
 "insert in the document."
@@ -2878,7 +2842,7 @@ msgstr ""
 "<span class=\"def\">Laukai:</span> Į dokumentą galima įterpti bazinį laukų "
 "rinkinį."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:655-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:654-5
 msgid ""
 "<span class=\"def\">Alphabetical index:</span> Existing alphabetical index "
 "can be updated with new entries."
@@ -2886,7 +2850,7 @@ msgstr ""
 "<span class=\"def\">Abėcėlinė rodyklė:</span> Esamą abėcėlinę rodyklę galima "
 "atnaujinti naujais įrašais."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:656-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:655-5
 msgid ""
 "<span class=\"def\">Page header and footer:</span> Headers and footers are "
 "available for the existing page style applied in the document at the cursor "
@@ -2896,7 +2860,7 @@ msgstr ""
 "poraštės galimos esamam puslapio stiliui, nustatytam dokumentui esamoje "
 "žymeklio vietoje."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:657-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:656-5
 msgid ""
 "<span class=\"def\">Footnotes and endnotes:</span> Footnotes and endnotes "
 "are supported."
@@ -2904,7 +2868,7 @@ msgstr ""
 "<span class=\"def\">Išnašos ir galinės išnašos:</span> Išnašos ir galinės "
 "išnašos yra palaikomos."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:665-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:664-30
 msgid ""
 "<span class=\"productname\">{productname}</span> Impress edits presentations "
 "in a way that should be familiar to people. Operations like typing text, "
@@ -2921,7 +2885,7 @@ msgstr ""
 "pristatymų programą. Norėdami atlikti veiksmus dokumente, naudokite "
 "klaviatūrą, meniu ir įrankių juostas."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:670-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:669-5
 msgid ""
 "<span class=\"productname\">{productname}</span> displays presentation slide "
 "shows, including a subset of slide transitions and object animations. Choose "
@@ -2933,7 +2897,7 @@ msgstr ""
 "Pasirinkite skaidrių demonstraciją iš meniu arba spustelėkite piktogramą "
 "skaidrių srities apatinėje kairėje įrankių juostoje."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:671-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:670-5
 msgid ""
 "To exit a <span class=\"productname\">{productname}</span> slide show, press "
 "the <kbd>Esc</kbd> key to return to the presentation edit mode."
@@ -2942,7 +2906,7 @@ msgstr ""
 "demonstracijos, paspauskite klavišą <kbd>Esc</kbd>, kad grįžtumėte į "
 "pristatymo redagavimo režimą."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:677-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:676-5
 msgid ""
 "Click on any slide thumbnail in the pane to switch to this slide to view or "
 "edit it."
@@ -2950,7 +2914,7 @@ msgstr ""
 "Spustelėkite bet kurią skaidrę miniatiūrų srityje, kad persijungtumėte į šią "
 "skaidrę jos peržiūrai arba redagavimui."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:678-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:677-5
 msgid ""
 "Use the slide pane toolbar in the bottom to start the slideshow, add slide, "
 "duplicate or delete the current slide."
@@ -2959,7 +2923,7 @@ msgstr ""
 "ištrinti dabartinę skaidrę, naudokite apačioje esančią skaidrių srities "
 "įrankių juostą."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:684-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:683-5
 msgid ""
 "<span class=\"def\">Slide layouts:</span> <span class=\"productname\""
 ">{productname}</span> Impress lets you change the slide layout. Select the "
@@ -2969,7 +2933,7 @@ msgstr ""
 ">{productname}</span> „Impress“ leidžia keisti skaidrių išdėstymą. "
 "Išskleidžiamajame išdėstymų sąraše pasirinkite norimą skaidrių išdėstymą."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:685-53
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:684-53
 msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
@@ -2977,7 +2941,7 @@ msgstr ""
 "Skaidrės ypatybių skydelis, kuriame rodomi formato, orientacijos, fono ir "
 "pagrindinės skaidrės nustatymai, o apačioje – miniatiūrų parinkčių galerija"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:687-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:686-30
 msgid ""
 "<span class=\"def\">Master slide:</span> Select the master slide associated "
 "to the current slide. Format and arrange slide elements in the master slide."
@@ -2986,7 +2950,7 @@ msgstr ""
 "skaidre susietą pagrindinę skaidrę. Formatuokite ir išdėstykite skaidrės "
 "elementus pagrindinėje skaidrėje."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:688-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:687-30
 msgid ""
 "<span class=\"def\">Slide transitions:</span> <span class=\"productname\""
 ">{productname}</span> Impress provides visual effects when displaying a new "
@@ -2999,7 +2963,7 @@ msgstr ""
 "savybė, redagavimo režime skaidrių perėjimui nustatyti naudokite šoninę "
 "juostą."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:689-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:688-30
 msgid ""
 "<span class=\"def\">Object animation:</span> Individual objects in the slide "
 "can have animations. Use the side bar to configure the slide transition for "
@@ -3009,7 +2973,7 @@ msgstr ""
 "turėti animacijas. Norėdami konfigūruoti skaidrės perėjimą pasirinktam "
 "objektui arba objektų rinkiniui, naudokite šoninę juostą."
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:690-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:689-30
 msgid ""
 "<span class=\"def\">Tables:</span> Insert tables in the presentation. Use "
 "the sidebar to select the table theme."
@@ -3017,7 +2981,7 @@ msgstr ""
 "<span class=\"def\">Lentelės:</span> Įterpkite lenteles į prezentaciją. "
 "Lentelės temą pasirinkite šoninėje juostoje."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:696-5
+#: html/cool-help.html%2Bdiv.div.div.h4:695-5
 msgid ""
 "What are the document file formats supported by <span class=\"productname\""
 ">{productname}</span>?"
@@ -3025,7 +2989,7 @@ msgstr ""
 "Kokius dokumentų failų formatus palaiko <span class=\"productname\""
 ">{productname}</span>?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:697-5
+#: html/cool-help.html%2Bdiv.div.div.p:696-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports both reading and "
 "writing for the following file formats:"
@@ -3033,41 +2997,41 @@ msgstr ""
 "<span class=\"productname\">{productname}</span> palaiko šių failų formatų "
 "skaitymą ir rašymą:"
 
+#: html/cool-help.html%2Bdiv.div.div.ul.li:698-7
+msgid ""
+"Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT. "
+"Plain text TXT and Markdown MD"
+msgstr ""
+
 #: html/cool-help.html%2Bdiv.div.div.ul.li:699-7
 msgid ""
-"Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
+"Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS. Comma "
+"separated values CSV"
 msgstr ""
-"Tekstiniai dokumentai: „Microsoft“ formatai DOC, DOCX, RTF. „OpenDocument“ "
-"formatas ODT"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:700-7
-msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
-msgstr ""
-"Skaičiuoklės: „Microsoft“ formatai XLS, XLSX, „OpenDocument“ formatas ODS"
-
-#: html/cool-help.html%2Bdiv.div.div.ul.li:701-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
 msgstr ""
 "Pristatymai: „Microsoft“ formatai PPT, PPTX, „OpenDocument“ formatas ODP"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:705-5
+#: html/cool-help.html%2Bdiv.div.div.h4:704-5
 msgid "How do I save a document with another name?"
 msgstr "Kaip išsaugoti dokumentą kitu pavadinimu?"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:707-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:706-7
 msgid "Hover the mouse on the document name in the menu bar."
 msgstr "Užveskite pelės žymeklį ant dokumento pavadinimo meniu juostoje."
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:708-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:707-7
 msgid "Type the new file name in the text box and press <kbd>Enter</kbd>."
 msgstr ""
 "Įveskite naują failo pavadinimą teksto lauke ir paspauskite <kbd>Enter</kbd>."
 
-#: html/cool-help.html%2Bdiv.div.div.p:710-5
+#: html/cool-help.html%2Bdiv.div.div.p:709-5
 msgid "A copy of the document is saved with the new name in the same folder."
 msgstr "Dokumento kopija išsaugoma nauju pavadinimu tame pačiame aplanke."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:713-5
+#: html/cool-help.html%2Bdiv.div.div.h4:712-5
 msgid ""
 "How can I quit <span class=\"productname\">{productname}</span> without "
 "saving my edits?"
@@ -3075,7 +3039,7 @@ msgstr ""
 "Kaip galiu uždaryti <span class=\"productname\">{productname}</span> "
 "neišsaugodamas redagavimų?"
 
-#: html/cool-help.html%2Bdiv.div.div.p:714-5
+#: html/cool-help.html%2Bdiv.div.div.p:713-5
 msgid ""
 "<span class=\"productname\">{productname}</span> saves the document in the "
 "background regularly, you can't just close without saving it. To abandon "
@@ -3086,6 +3050,13 @@ msgstr ""
 "dokumentą fone, todėl negalite tiesiog uždaryti jo neišsaugoję. Norėdami "
 "atšaukti pakeitimus, turite juos anuliuoti arba naudoti <span class=\"ui\""
 ">Taisymų istorija </span>, esančią <span class=\"ui\">Failas</span> meniu."
+
+#: html/cool-help.html%2Bdiv.div.div.p:714-5
+msgid ""
+"<span class=\"productname\">{productname}</span> saves the document in the "
+"background regularly, you can't just close without saving it. To abandon "
+"your changes, undo them."
+msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:717-5
 msgid ""
@@ -3110,9 +3081,10 @@ msgid "How can I check spelling in my language?"
 msgstr "Kaip tikrinti rašybą mano kalba?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
+#, fuzzy
 msgid ""
-"Choose menu <span class=\"ui\">Tools</span> → <span class=\"ui\">Languages</"
-"span> and select the language for the whole document. Optionally you can set "
+"Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
+"and select the language for the whole document. Optionally you can set "
 "languages for the selected text and for the current paragraph."
 msgstr ""
 "Pasirinkite meniu punktą <span class=\"ui\">Įrankiai</span> → <span class="
@@ -3125,11 +3097,9 @@ msgstr "Kaip dokumente pašalinti raudonas banguotas linijas?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:726-5
 msgid ""
-"Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
-">Automatic Spell Checking</span>."
+"On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
+">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
-"Pasirinkite meniu punktą <span class=\"ui\">Įrankiai</span> ir panaikinkite "
-"žymėjimą <span class=\"ui\">Automatinis rašybos tikrinimas</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
 msgid "What is the blue wavy underline in some words in the text?"
@@ -3152,9 +3122,10 @@ msgid "Is there a thesaurus?"
 msgstr "Ar yra tezauras (sinonimų žodynas)?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
+#, fuzzy
 msgid ""
-"Yes. Click in the word you want and choose <span class=\"ui\">Tools</span> → "
-"<span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
+"Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
+" <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
 "Taip. Spustelėkite norimą žodį ir pasirinkite <span class=\"ui\">Įrankiai</"
@@ -3178,11 +3149,12 @@ msgstr ""
 "pašalinti iš teksto dokumento?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
+#, fuzzy
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
-"document display, choose menu <span class=\"ui\">View</span> → <span class="
-"\"ui\">Formatting mark</span>."
+"document display, choose <span class=\"ui\">View</span> → <span class=\"ui\""
+">Formatting Marks</span>."
 msgstr ""
 "Simbolis <span class=\"blue\">¶</span> yra formatavimo žymė. Jis naudojamas "
 "tekstui lygiuoti ir redaguoti ir nėra spausdinamas. Norėdami jį įjungti/"
@@ -3194,10 +3166,11 @@ msgid "How do I get a word count of my document?"
 msgstr "Kaip sužinoti žodžių skaičių mano dokumente?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
+#, fuzzy
 msgid ""
-"Word count is available in <span class=\"ui\">Tools</span> → <span class=\"ui"
-"\">Word count</span>. A dialog shows word counts for selection and for the "
-"whole document."
+"Word count is available in <span class=\"ui\">Review</span> → <span class="
+"\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
+"the whole document."
 msgstr ""
 "Žodžių skaičius rodomas pasirinkus <span class=\"ui\">Įrankiai</span> → "
 "<span class=\"ui\">Žodžių skaičius</span>. Dialogo lange rodomas pasirinktos "
@@ -3242,12 +3215,8 @@ msgstr "Nustatykite žymeklį į vietą, kurioje norite įterpti simbolį."
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:756-7
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
-"Characters </span> or click the corresponding icon in the toolbar. A dialog "
-"opens."
+"Character</span>. A dialog opens."
 msgstr ""
-"Pasirinkite <span class=\"ui\">Įterpti</span> → <span class=\"ui\""
-">Specialieji simboliai </span> arba spustelėkite atitinkamą piktogramą "
-"įrankių juostoje. Atsidarys dialogo langas."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:759-59
 msgid ""
@@ -3284,12 +3253,13 @@ msgid "Why can't I delete text? It just gets a strike-through?"
 msgstr "Kodėl negaliu ištrinti teksto? Jis tiesiog perbraukiamas?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:766-5
+#, fuzzy
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
 "Useful for marking changes in text and spreadsheets. Track changes are "
-"enabled choosing <span class=\"ui\">Edit</span> → <span class=\"ui\">Track "
-"Changes </span> → <span class=\"ui\">Record</span>."
+"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\""
+">Record</span>."
 msgstr ""
 "Dokumente įjungta pakeitimų sekimo funkcija. Pakeitimų sekimo funkcija įrašo "
 "visus teksto pakeitimus ir rodo redagavimus, kad juos būtų galima vėliau "
@@ -3326,9 +3296,10 @@ msgstr ""
 "Pakeitimams priskirta spalva priklauso nuo dokumentą pakeitusio vartotojo."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:776-5
+#, fuzzy
 msgid ""
-"To display or hide track changes choose <span class=\"ui\">Edit</span> → "
-"<span class=\"ui\">Track Changes </span> → <span class=\"ui\">Show</span>. "
+"To display or hide track changes choose <span class=\"ui\">Review</span> → "
+"<span class=\"ui\">View Changes</span> → <span class=\"ui\">Show</span>. "
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
@@ -3339,15 +3310,16 @@ msgstr ""
 "palikti nepageidaujamo teksto."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:777-5
+#, fuzzy
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
-"Alternatively, choose <span class=\"ui\">Edit</span> → <span class=\"ui\""
-">Track Changes </span> → <span class=\"ui\">Accept</span> or <span class=\"ui"
-"\">Reject</span>. Furthermore, if you need to filter changes before "
-"accepting or rejecting, choose <span class=\"ui\">Edit</span> → <span class="
-"\"ui\">Track Changes </span> → <span class=\"ui\">Manage</span>. A dialog "
-"shows a list of all tracked changes. Use the dialog buttons accordingly."
+"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\""
+">Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
+"to filter changes before accepting or rejecting, choose <span class=\"ui\""
+">Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\""
+">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
+"buttons accordingly."
 msgstr ""
 "Pakeitimus galima priimti arba atmesti. Norėdami priimti arba atmesti "
 "pakeitimus, spustelėkite atitinkamas piktogramas komentarų laukelyje, "
@@ -3385,9 +3357,10 @@ msgid "Using the page style"
 msgstr "Lapo stiliaus naudojimas"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page</span> and "
-"select the <span class=\"ui\">Page</span> tab"
+"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page Style</"
+"span> and select the <span class=\"ui\">Page</span> tab"
 msgstr ""
 "Pasirinkite <span class=\"ui\">Formatas</span> → <span class=\"ui\""
 ">Puslapis</span> ir pasirinkite skirtuką <span class=\"ui\">Puslapis</span>"
@@ -3464,13 +3437,11 @@ msgstr "Pasirinkite tekstą su esamu formatu"
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:806-7
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:848-7
 msgid ""
-"Click on the clone formatting icon <img alt=\"format paintbrush\" class"
-"=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
-"turns to a paint bucket."
+"Click on the <span class=\"ui\">Clone Formatting</span> icon <img alt="
+"\"format paintbrush\" class=\"icon-size\" src=\"images/lc_formatpaintbrush."
+"svg\" /> on the <span class=\"ui\">Home</span> tab. The mouse pointer turns "
+"to a paint bucket."
 msgstr ""
-"Spustelėkite formatavimo klonavimo piktogramą <img alt=\"format paintbrush\" "
-"class=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. Pelės "
-"žymeklis virsta dažų kibiru."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
 msgid "Select the text you want to apply the new format."
@@ -3502,15 +3473,10 @@ msgstr ""
 msgid ""
 "You have the AutoCorrection enabled. AutoCorrection compares the text just "
 "typed to an internal table of text. In most cases, AutoCorrection corrects "
-"typos while you type. If AutoCorrection is not necessary, disable it in "
-"<span class=\"ui\">Tools</span> → <span class=\"ui\">AutoCorrection</span> → "
-"<span class=\"ui\">While typing</span>."
+"typos while you type. To revert a correction, press <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after it "
+"was applied."
 msgstr ""
-"Įjungėte automatinį taisymą. Automatinis taisymas lygina ką tik įvestą "
-"tekstą su vidine teksto lentele. Daugeliu atvejų automatinis taisymas "
-"ištaiso rašybos klaidas rašant. Jei automatinis taisymas nebūtinas, "
-"išjunkite jį pasirinkę <span class=\"ui\">Įrankiai</span> → <span class=\"ui"
-"\">Automatinis taisymas</span> → <span class=\"ui\">Rašant</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
@@ -3518,13 +3484,9 @@ msgstr "Kaip galiu pasirinkti duomenis spausdinimui?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:828-5
 msgid ""
-"Insert column and row breaks in the spreadsheet to narrow the print range "
-"and print the document to download. On printing the PDF, select the pages of "
-"interest."
+"Insert column and row breaks in the spreadsheet to narrow the print range. "
+"When printing, select the pages of interest."
 msgstr ""
-"Įterpkite stulpelių ir eilučių skirtukus į skaičiuoklę, kad susiaurintumėte "
-"spausdinimo diapazoną ir atsispausdintumėte dokumentą atsisiuntimui. "
-"Spausdindami PDF failą, pasirinkite jus dominančius puslapius."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:831-5
 msgid "How can I import CSV data?"
@@ -3548,16 +3510,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:835-7
 msgid ""
-"Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
-">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
-"\"true\">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> "
-"dialog opens to let you describe the precise format of the CSV data."
+"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog "
+"opens to let you describe the precise format of the CSV data."
 msgstr ""
-"Įklijuokite iš naršyklės <span class=\"ui\">Redaguoti</span> → <span class="
-"\"ui\">Įklijuoti</span> arba paspauskite <kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>. Atsidarys dialogo langas "
-"<span class=\"ui\">Teksto importavimas</span>, kuriame galėsite nurodyti "
-"tikslų CSV duomenų formatą."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
 msgid ""
@@ -3586,9 +3542,10 @@ msgid "How can I copy the formatting of existing cells to new ones?"
 msgstr "Kaip nukopijuoti esamų langelių formatavimą į naujus?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:845-5
-msgid "This is easy to do using the Paintbrush tool in the toolbar."
+msgid ""
+"This is easy to do using <span class=\"ui\">Clone Formatting</span> on the "
+"<span class=\"ui\">Home</span> tab."
 msgstr ""
-"Tai lengva padaryti naudojant įrankių juostoje esantį įrankį „Teptukas“."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:847-7
 msgid "Format the source cell with the font, color background and more."
@@ -3606,12 +3563,13 @@ msgid "What is “Clear Direct Formatting” icon?"
 msgstr "Kas yra piktograma „Išvalyti tiesioginį formatavimą“?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:854-5
+#, fuzzy
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
 "formatting. To restore the formatting to the style settings, select the text "
-"or spreadsheet cell and choose <span class=\"ui\">Format</span> → <span "
-"class=\"ui\">Clear Direct Formatting</span> or use the button in the toolbar."
+"or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span class="
+"\"ui\">Clear Direct Formatting</span>."
 msgstr ""
 "Tiesioginis formatavimas – tai formatavimas, taikomas tiesiogiai pasirinktam "
 "pastraipos arba skaičiuoklės langelio turiniui ir persidengia su jam "
@@ -3646,16 +3604,17 @@ msgstr ""
 ">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:869-7
+#, fuzzy
 msgid ""
-"Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">Full "
-"Screen Presentation</span> or click on the left-most icon in the bottom of "
-"the slide panel:"
+"Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">From "
+"Beginning</span> or click on the left-most icon in the bottom of the slide "
+"panel:"
 msgstr ""
 "Pasirinkite <span class=\"ui\">Skaidrių demonstravimas</span> → <span class="
 "\"ui\">Viso ekrano pristatymas</span> arba spustelėkite skaidrių skydelio "
 "apačioje esančią kairiausią piktogramą:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-197
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-187
 msgid "slide show"
 msgstr "skaidrių rodymas"
 
@@ -3689,6 +3648,198 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:880-7
 msgid "Set the properties of the element of the object."
 msgstr "Nustatykite objekto elemento savybes."
+
+#~ msgid ""
+#~ "<span class=\"def\">The menu bar:</span> The main menu is at the top and "
+#~ "includes many options, such as commands for printing, editing, viewing, and "
+#~ "other advanced commands. You can hide the menu bar by clicking the hide icon "
+#~ "<span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide menu "
+#~ "bar\" title=\"Hide menu bar\"></span> on the far right. To show it again, "
+#~ "click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
+#~ "aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
+#~ msgstr ""
+#~ "<span class=\"def\">Meniu juosta:</span> Pagrindinis meniu yra viršuje ir "
+#~ "jame yra daug parinkčių, pvz., spausdinimo, redagavimo, peržiūros ir kitos "
+#~ "išplėstinės komandos. Meniu juostą galite paslėpti spustelėdami slėpimo "
+#~ "piktogramą <span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label="
+#~ "\"hide menu bar\" title=\"Hide menu bar\"></span>, esančią tolimajame "
+#~ "dešiniajame kampe. Norėdami ją vėl rodyti, spustelėkite rodymo piktogramą "
+#~ "<span class=\"w2ui-icon unfold icon-size\" role=\"img\" aria-label=\"show "
+#~ "menu bar\" title=\"Show menu bar\"></span>."
+
+#~ msgid ""
+#~ "<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
+#~ "options for daily editing. Toolbar buttons are dynamic, meaning that their "
+#~ "state (on or off) depends on different factors."
+#~ msgstr ""
+#~ "<span class=\"def\">Įrankių juosta:</span> Įrankių juostoje yra dažniausiai "
+#~ "naudojamos kasdienio redagavimo parinktys. Įrankių juostos mygtukai yra "
+#~ "dinamiški, o tai reiškia, kad jų būsena (įjungta arba išjungta) priklauso "
+#~ "nuo skirtingų veiksnių."
+
+#~ msgid ""
+#~ "<span class=\"def\">The information bar:</span> The information bar displays "
+#~ "details about the current document. The actual information depends on the "
+#~ "nature of the document."
+#~ msgstr ""
+#~ "<span class=\"def\">Informacijos juosta:</span> Informacijos juostoje rodoma "
+#~ "išsami informacija apie dabartinį dokumentą. Tikroji informacija priklauso "
+#~ "nuo dokumento pobūdžio."
+
+#~ msgid ""
+#~ "Information bar showing page navigation arrows, zoom controls, and zoom level"
+#~ msgstr ""
+#~ "Informacijos juosta, kurioje rodomos puslapio naršymo rodyklės, mastelio "
+#~ "keitimo valdikliai ir mastelio lygis"
+
+#~ msgid ""
+#~ "To save the document in a different format use the <span class=\"ui\">Save "
+#~ "as</span> button on the page shown from the <span class=\"ui\">File</span> "
+#~ "menu bar button."
+#~ msgstr ""
+#~ "Norėdami išsaugoti dokumentą kitu formatu, naudokite mygtuką <span "
+#~ "class=\"ui\">Įrašyti kaip</span> puslapyje rodomame meniu juostos mygtuke "
+#~ "<span class=\"ui\">Failas</span>."
+
+#~ msgid ""
+#~ "To print the document, use the <span class=\"ui\">Print</span> button on the "
+#~ "page shown from the <span class=\"ui\">File</span> menu bar button."
+#~ msgstr ""
+#~ "Norėdami atsispausdinti dokumentą, naudokite mygtuką <span class=\"ui\">"
+#~ "Spausdinti</span> puslapyje parodytame meniu juostos mygtuke <span "
+#~ "class=\"ui\">Failas</span>."
+
+#~ msgid ""
+#~ "Rich content copy/cut and paste is supported, not only within a given "
+#~ "document, but also across documents on the same or different <span class="
+#~ "\"productname\">{productname}</span>. For these internal uses, users can "
+#~ "copy/cut content, including images and mixed content, on PC by using the "
+#~ "keyboard shortcuts directly (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
+#~ "plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class="
+#~ "\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). For security "
+#~ "reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>V</kbd> to paste on PC, but context menus can "
+#~ "be used for cut and copy. On Android or iOS selecting text by double "
+#~ "tapping, and using a long-tap to access copy/cut/paste via the context menu "
+#~ "is required."
+#~ msgstr ""
+#~ "Palaikomas raiškiojo turinio kopijavimas / iškirpimas ir įklijavimas ne tik "
+#~ "konkrečiame dokumente, bet ir tarp dokumentų tame pačiame ar skirtinguose "
+#~ "<span class=\"productname\">{productname}</span>. Šiems vidiniams tikslams "
+#~ "vartotojai gali kopijuoti / iškirpti turinį, įskaitant vaizdus ir mišrų "
+#~ "turinį, kompiuteryje tiesiogiai naudodami sparčiuosius klavišus (<kbd>Ctrl</"
+#~ "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, "
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
+#~ "\"true\">+</span><kbd>V</kbd>). Dėl saugumo priežasčių norint įklijuoti "
+#~ "kompiuteryje, būtina naudoti <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>V</kbd>, tačiau iškirpimui ir kopijavimui "
+#~ "galima naudoti kontekstinius meniu. „Android“ arba „iOS“ sistemose tekstą "
+#~ "reikia pasirinkti dukart spustelėjus, o norint pasiekti kopijavimo / "
+#~ "iškirpimo / įklijavimo funkcijas per kontekstinį meniu, reikia ilgiau "
+#~ "palaikyti paspaudus."
+
+#~ msgid ""
+#~ "To copy larger pieces of content to other applications on your device, users "
+#~ "need to press the <span class=\"ui\">Start download</span> button, and then "
+#~ "re-copy this to their clipboard in order to make it available to the target "
+#~ "application to read. This is possible via a tiny widget that pops up in the "
+#~ "bottom-right corner, and is only necessary to export the content for pasting "
+#~ "in external applications. This step also converts complex object types into "
+#~ "static images."
+#~ msgstr ""
+#~ "Norėdami nukopijuoti didesnius turinio fragmentus į kitas įrenginio "
+#~ "programas, vartotojai turi paspausti mygtuką <span class=\"ui\">Pradėti "
+#~ "atsisiuntimą</span> ir dar kartą nukopijuoti šį failą į iškarpinę, kad "
+#~ "tikslinė programa galėtų jį perskaityti. Tai įmanoma naudojant mažytį "
+#~ "valdiklį, kuris iššoka apatiniame dešiniajame kampe, ir jis reikalingas tik "
+#~ "norint eksportuoti turinį įklijavimui į išorines programas. Šis veiksmas "
+#~ "taip pat konvertuoja sudėtingus objektų tipus į statinius vaizdus."
+
+#~ msgid "Inactive document"
+#~ msgstr "Neaktyvus dokumentas"
+
+#~ msgid ""
+#~ "<span class=\"def\">Insert local image:</span> opens the browser file picker "
+#~ "to upload the image from your local computer and insert it into the document."
+#~ msgstr ""
+#~ "<span class=\"def\">Įterpti vietinį vaizdą:</span> atidaro failų naršyklės "
+#~ "dialogą, kad būtų galima įkelti vaizdą iš vietinio kompiuterio ir įterpti jį "
+#~ "į dokumentą."
+
+#~ msgid ""
+#~ "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
+#~ msgstr ""
+#~ "Tekstiniai dokumentai: „Microsoft“ formatai DOC, DOCX, RTF. „OpenDocument“ "
+#~ "formatas ODT"
+
+#~ msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
+#~ msgstr ""
+#~ "Skaičiuoklės: „Microsoft“ formatai XLS, XLSX, „OpenDocument“ formatas ODS"
+
+#~ msgid ""
+#~ "Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
+#~ ">Automatic Spell Checking</span>."
+#~ msgstr ""
+#~ "Pasirinkite meniu punktą <span class=\"ui\">Įrankiai</span> ir panaikinkite "
+#~ "žymėjimą <span class=\"ui\">Automatinis rašybos tikrinimas</span>."
+
+#~ msgid ""
+#~ "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
+#~ "Characters </span> or click the corresponding icon in the toolbar. A dialog "
+#~ "opens."
+#~ msgstr ""
+#~ "Pasirinkite <span class=\"ui\">Įterpti</span> → <span class=\"ui\""
+#~ ">Specialieji simboliai </span> arba spustelėkite atitinkamą piktogramą "
+#~ "įrankių juostoje. Atsidarys dialogo langas."
+
+#~ msgid ""
+#~ "Click on the clone formatting icon <img alt=\"format paintbrush\" class"
+#~ "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
+#~ "turns to a paint bucket."
+#~ msgstr ""
+#~ "Spustelėkite formatavimo klonavimo piktogramą <img alt=\"format paintbrush\" "
+#~ "class=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. Pelės "
+#~ "žymeklis virsta dažų kibiru."
+
+#~ msgid ""
+#~ "You have the AutoCorrection enabled. AutoCorrection compares the text just "
+#~ "typed to an internal table of text. In most cases, AutoCorrection corrects "
+#~ "typos while you type. If AutoCorrection is not necessary, disable it in "
+#~ "<span class=\"ui\">Tools</span> → <span class=\"ui\">AutoCorrection</span> → "
+#~ "<span class=\"ui\">While typing</span>."
+#~ msgstr ""
+#~ "Įjungėte automatinį taisymą. Automatinis taisymas lygina ką tik įvestą "
+#~ "tekstą su vidine teksto lentele. Daugeliu atvejų automatinis taisymas "
+#~ "ištaiso rašybos klaidas rašant. Jei automatinis taisymas nebūtinas, "
+#~ "išjunkite jį pasirinkę <span class=\"ui\">Įrankiai</span> → <span class=\"ui"
+#~ "\">Automatinis taisymas</span> → <span class=\"ui\">Rašant</span>."
+
+#~ msgid ""
+#~ "Insert column and row breaks in the spreadsheet to narrow the print range "
+#~ "and print the document to download. On printing the PDF, select the pages of "
+#~ "interest."
+#~ msgstr ""
+#~ "Įterpkite stulpelių ir eilučių skirtukus į skaičiuoklę, kad susiaurintumėte "
+#~ "spausdinimo diapazoną ir atsispausdintumėte dokumentą atsisiuntimui. "
+#~ "Spausdindami PDF failą, pasirinkite jus dominančius puslapius."
+
+#~ msgid ""
+#~ "Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
+#~ ">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
+#~ "\"true\">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> "
+#~ "dialog opens to let you describe the precise format of the CSV data."
+#~ msgstr ""
+#~ "Įklijuokite iš naršyklės <span class=\"ui\">Redaguoti</span> → <span class="
+#~ "\"ui\">Įklijuoti</span> arba paspauskite <kbd>Ctrl</kbd><span class=\"kbd--"
+#~ "plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>. Atsidarys dialogo langas "
+#~ "<span class=\"ui\">Teksto importavimas</span>, kuriame galėsite nurodyti "
+#~ "tikslų CSV duomenų formatą."
+
+#~ msgid "This is easy to do using the Paintbrush tool in the toolbar."
+#~ msgstr ""
+#~ "Tai lengva padaryti naudojant įrankių juostoje esantį įrankį „Teptukas“."
 
 #~ msgid ""
 #~ "<span class=\"productname\">{productname}</span> allows you to create and "

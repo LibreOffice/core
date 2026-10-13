@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-22 21:46+0200\n"
+"POT-Creation-Date: 2026-10-13 14:06+0200\n"
 "PO-Revision-Date: 2026-08-21 03:03+0000\n"
 "Last-Translator: tigran54 <tigran@flib.sci.am>\n"
 "Language-Team: Armenian <https://hosted.weblate.org/projects/"
@@ -1647,46 +1647,46 @@ msgid "<span class=\"productname\">{productname}</span> user interface"
 msgstr "<span class=\"productname\">{productname}</span> օգտվողի միջերես"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:343-13
-#: html/cool-help.html%2Bdiv.div.h3:436-5
+#: html/cool-help.html%2Bdiv.div.h3:429-5
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr "Փաստաթղթերի բացում, փակում, պահպանում, տպում և ներբեռնում"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
-#: html/cool-help.html%2Bdiv.div.h3:450-5
+#: html/cool-help.html%2Bdiv.div.h3:439-5
 msgid "Opening, closing, saving and printing documents"
 msgstr "Փաստաթղթերի բացում, փակում, պահպանում և տպում"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
-#: html/cool-help.html%2Bdiv.div.h3:481-5
+#: html/cool-help.html%2Bdiv.div.h3:478-5
 msgid "Editing documents"
 msgstr "Փաստաթղթերի խմբագրում"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:346-13
 #: html/cool-help.html%2Bdiv.nav.ul.li:352-13
 #: html/cool-help.html%2Bdiv.nav.ul.li:365-13
-#: html/cool-help.html%2Bdiv.div.h3:511-3
-#: html/cool-help.html%2Bdiv.div.div.h3:571-5
-#: html/cool-help.html%2Bdiv.div.div.h3:682-5
+#: html/cool-help.html%2Bdiv.div.h3:510-3
+#: html/cool-help.html%2Bdiv.div.div.h3:570-5
+#: html/cool-help.html%2Bdiv.div.div.h3:681-5
 msgid "Advanced features"
 msgstr "Ընդլայնված գործառույթներ"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:348-13
-#: html/cool-help.html%2Bdiv.div.h3:549-5
+#: html/cool-help.html%2Bdiv.div.h3:548-5
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
 msgstr "<span class=\"productname\">{productname}</span> աղյուսակաթերթեր"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:349-13
-#: html/cool-help.html%2Bdiv.div.div.h3:551-5
+#: html/cool-help.html%2Bdiv.div.div.h3:550-5
 msgid "Editing spreadsheets"
 msgstr "Աղյուսակաթերթերի խմբագրում"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:350-13
-#: html/cool-help.html%2Bdiv.div.div.h3:555-5
+#: html/cool-help.html%2Bdiv.div.div.h3:554-5
 msgid "Formulas"
 msgstr "Բանաձևեր"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:351-13
-#: html/cool-help.html%2Bdiv.div.div.h3:564-5
+#: html/cool-help.html%2Bdiv.div.div.h3:563-5
 msgid "Formatting spreadsheets"
 msgstr "Աղյուսակաթերթիկների ձևաչափում"
 
@@ -1696,22 +1696,22 @@ msgid "Spreadsheets"
 msgstr "Աղյուսակաթերթեր"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:355-13
-#: html/cool-help.html%2Bdiv.div.h3:613-5
+#: html/cool-help.html%2Bdiv.div.h3:612-5
 msgid "<span class=\"productname\">{productname}</span> text documents"
 msgstr "<span class=\"productname\">{productname}</span> տեքստային փաստաթղթեր"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:356-13
-#: html/cool-help.html%2Bdiv.div.div.h3:615-5
+#: html/cool-help.html%2Bdiv.div.div.h3:614-5
 msgid "Editing text documents"
 msgstr "Տեքստային փաստաթղթերի խմբագրում"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:357-13
-#: html/cool-help.html%2Bdiv.div.div.h3:619-5
+#: html/cool-help.html%2Bdiv.div.div.h3:618-5
 msgid "Context menus"
 msgstr "Համատեքստային ընտրացանկեր"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:358-13
-#: html/cool-help.html%2Bdiv.div.div.h3:635-5
+#: html/cool-help.html%2Bdiv.div.div.h3:634-5
 msgid "Advanced text document editor features"
 msgstr "Տեքստային փաստաթղթերի խմբագրիչի խորացված գործառույթներ"
 
@@ -1721,22 +1721,22 @@ msgid "Text documents"
 msgstr "Տեքստային փաստաթղթեր"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:361-13
-#: html/cool-help.html%2Bdiv.div.h3:662-5
+#: html/cool-help.html%2Bdiv.div.h3:661-5
 msgid "<span class=\"productname\">{productname}</span> presentations"
 msgstr "<span class=\"productname\">{productname}</span> շնորհանդեսներ"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:362-13
-#: html/cool-help.html%2Bdiv.div.div.h3:664-5
+#: html/cool-help.html%2Bdiv.div.div.h3:663-5
 msgid "Editing presentations"
 msgstr "Շնորհանդեսների խմբագրում"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:363-13
-#: html/cool-help.html%2Bdiv.div.div.h3:668-5
+#: html/cool-help.html%2Bdiv.div.div.h3:667-5
 msgid "Slide show"
 msgstr "Սահիկահանդես"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:364-13
-#: html/cool-help.html%2Bdiv.div.div.h3:675-5
+#: html/cool-help.html%2Bdiv.div.div.h3:674-5
 msgid "Slide pane"
 msgstr "Սահիկների վահանակ"
 
@@ -1746,7 +1746,7 @@ msgid "Presentations"
 msgstr "Շնորհանդեսներ"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:368-13
-#: html/cool-help.html%2Bdiv.div.h3:694-5
+#: html/cool-help.html%2Bdiv.div.h3:693-5
 msgid "Frequently Asked Questions"
 msgstr "Հաճախակի տրվող հարցեր"
 
@@ -1815,22 +1815,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:405-5
 msgid ""
-"<span class=\"def\">The menu bar:</span> The main menu is at the top and "
-"includes many options, such as commands for printing, editing, viewing, and "
-"other advanced commands. You can hide the menu bar by clicking the hide icon "
-"<span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide menu "
-"bar\" title=\"Hide menu bar\"></span> on the far right. To show it again, "
-"click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
-"aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
+"<span class=\"def\">The tabs:</span> The commands are grouped on tabs at the "
+"top: <span class=\"ui\">File</span>, <span class=\"ui\">Home</span>, <span "
+"class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span class="
+"\"ui\">View</span> and others, depending on the document type. Click the "
+"selected tab again to collapse the tab bar and gain space for the document. "
+"Click any tab to expand it again."
 msgstr ""
-"<span class=\"def\">Ընտրացանկի գոտի:</span> Գլխավոր ցանկը գտնվում է վերևում "
-"և ներառում է բազմաթիվ տարբերակներ, ինչպիսիք են տպագրության, խմբագրման, "
-"դիտման և այլ լրացուցիչ հրամաններ: Դուք կարող եք թաքցնել ընտրացանկի գոտին՝ "
-"սեղմելով թաքցնելու պատկերակը <span class=\"w2ui-icon fold icon-size\" role="
-"\"img\" aria-label=\"hide menu bar\" title=\"Թաքցնել ցանկի գոտին\"></span> "
-"ամենաաջ անկյունում: Այն կրկին ցուցադրելու համար սեղմեք ցուցադրելու պատկերակը "
-"<span class=\"w2ui-icon unfold icon-size\" role=\"img\" aria-label=\"show "
-"menu bar\" title=\"Ցուցադրել ընտրացանկի գոտին\"></span>։"
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
 msgid ""
@@ -1842,24 +1833,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:411-5
 msgid ""
-"<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
-"options for daily editing. Toolbar buttons are dynamic, meaning that their "
-"state (on or off) depends on different factors."
-msgstr ""
-"<span class=\"def\">Գործիքագոտի.</span> Գործիքագոտին պարունակում է ամենօրյա "
-"խմբագրման համար ամենաշատ օգտագործվող տարբերակները: Գործիքագոտու կոճակները "
-"դինամիկ են, ինչը նշանակում է, որ դրանց վիճակը (միացված կամ անջատված) կախված "
-"է տարբեր գործոններից:"
-
-#: html/cool-help.html%2Bdiv.div.div.p:414-5
-msgid ""
 "<span class=\"def\">The status bar:</span> The status bar is shown in the "
 "bottom, and contains several useful options and features."
 msgstr ""
 "<span class=\"def\">Կարգավիճակի գոտի։</span> Կարգավիճակի գոտին ցուցադրվում է "
 "ներքևում և պարունակում է մի քանի օգտակար ընտրանքներ և գործառույթներ։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:415-49
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:412-49
 msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
@@ -1868,7 +1848,7 @@ msgstr ""
 "ռեժիմը, ընտրության ռեժիմը, լեզուն, խմբագրման ռեժիմը, նավիգացիան, մեծացումը և "
 "որոնումը"
 
-#: html/cool-help.html%2Bdiv.div.div.p:418-5
+#: html/cool-help.html%2Bdiv.div.div.p:415-5
 msgid ""
 "<span class=\"def\">The search bar:</span> Searching starts automatically "
 "when content is inserted in the search box, and the document window "
@@ -1880,19 +1860,19 @@ msgstr ""
 "պատուհանը ինքնաշխատ կերպով տեղափոխվում է գտնված առաջին դեպքը։ Որոնումը "
 "զգայուն չէ մեծատառերի նկատմամբ։ Որոնման դաշտի կողքին կան երեք կոճակներ:"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:420-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:417-7
 msgid "Search backwards"
 msgstr "Որոնել հետընթաց"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:421-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:418-7
 msgid "Search forward"
 msgstr "Որոնել առաջ"
 
-#: html/cool-help.html%2Bdiv.div.div.ul.li:422-7
+#: html/cool-help.html%2Bdiv.div.div.ul.li:419-7
 msgid "Cancel the search (appears only when a text has been searched)"
 msgstr "Չեղարկել որոնումը (հայտնվում է միայն այն ժամանակ, երբ տեքստը որոնվել է)"
 
-#: html/cool-help.html%2Bdiv.div.div.p:426-5
+#: html/cool-help.html%2Bdiv.div.div.p:423-5
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
@@ -1904,7 +1884,7 @@ msgstr ""
 "մեծացնել պատկերը: Մեծացումը կիրառվում է փաստաթղթի տարածքում, օգտագործողի "
 "միջերեսը չի տուժում: Այս տարածքում ցուցադրվում է մեծացման ներկայիս մակարդակը:"
 
-#: html/cool-help.html%2Bdiv.div.div.p:427-5
+#: html/cool-help.html%2Bdiv.div.div.p:424-5
 msgid ""
 "Text, charts, shapes and svg images will stay sharp, when zooming in, you "
 "will only see pixels appear at inserted images, such as jpg’s or png’s."
@@ -1913,30 +1893,13 @@ msgstr ""
 "կտեսնեք պիքսելներ միայն տեղադրված պատկերների, օրինակ՝ jpg կամ png նիշքերի "
 "վրա։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:428-5
+#: html/cool-help.html%2Bdiv.div.div.p:425-5
 msgid "Using the browser zoom affects the document and user interface areas."
 msgstr ""
 "Դիտակի խոշորացումը օգտագործելը ազդում է փաստաթղթի և օգտագործողի միջերեսի "
 "տարածքների վրա։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:431-5
-msgid ""
-"<span class=\"def\">The information bar:</span> The information bar displays "
-"details about the current document. The actual information depends on the "
-"nature of the document."
-msgstr ""
-"<span class=\"def\">Տեղեկատվական վահանակ։</span> Տեղեկատվական վահանակը "
-"ցուցադրում է ընթացիկ փաստաթղթի մասին մանրամասներ: Իրական տեղեկատվությունը "
-"կախված է փաստաթղթի բնույթից:"
-
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:432-54
-msgid ""
-"Information bar showing page navigation arrows, zoom controls, and zoom level"
-msgstr ""
-"Տեղեկատվական գոտի, որը ցույց է տալիս էջի նավարկման սլաքները, մեծացման "
-"կառավարման տարրերը և մեծացման մակարդակը"
-
-#: html/cool-help.html%2Bdiv.div.p:437-5
+#: html/cool-help.html%2Bdiv.div.p:430-5
 msgid ""
 "Your documents are stored and managed in the cloud storage that is "
 "integrated with <span class=\"productname\">{productname}</span>."
@@ -1944,7 +1907,7 @@ msgstr ""
 "Ձեր փաստաթղթերը պահվում և կառավարվում են <span class=\"productname\""
 ">{productname}</span>-ի հետ ինտեգրված ամպային պահեստում։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:438-30
+#: html/cool-help.html%2Bdiv.div.div.p:431-30
 msgid ""
 "To download a document download it from the <span class=\"productname\""
 ">{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
@@ -1956,7 +1919,7 @@ msgstr ""
 "Ներբեռնման հասանելի ձևաչափերը կախված են ծրագրից: Բոլոր ծրագրերը փաստաթղթերը "
 "արտահանում են PDF ձևաչափով:"
 
-#: html/cool-help.html%2Bdiv.div.div.p:439-30
+#: html/cool-help.html%2Bdiv.div.div.p:432-30
 msgid ""
 "To open document, click on the file to open the <span class=\"productname\""
 ">{productname}</span> module associated to the document format."
@@ -1964,7 +1927,7 @@ msgstr ""
 "Փաստաթուղթը բացելու համար սեղմեք նիշքի վրա՝ փաստաթղթի ձևաչափին կից <span "
 "class=\"productname\">{productname}</span> մոդուլը բացելու համար։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:440-30
+#: html/cool-help.html%2Bdiv.div.div.p:433-30
 msgid ""
 "Documents in <span class=\"productname\">{productname}</span> save "
 "automatically, but if you are concerned that a document is synchronized as "
@@ -1976,7 +1939,7 @@ msgstr ""
 "կհամաժամեցվի, կարող եք նաև պարտադրել պահպանումը՝ օգտագործելով <span class="
 "\"ui\">Նիշք</span> Ընտրացանկի <span class=\"ui\">Պահպանել</span> գրառումը։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:441-30
+#: html/cool-help.html%2Bdiv.div.div.p:434-30
 msgid ""
 "Depending on the capabilities of your browser, the print window may appear "
 "or a “Download PDF export?” popup appears. You can print this PDF in your "
@@ -1986,55 +1949,63 @@ msgstr ""
 "կամ «Ներբեռնել PDF արտահանումը» ելնող պատուհան։ Դուք կարող եք տպել այս PDF-ը "
 "ձեր նախընտրած PDF ընթերցիչում։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:442-30
-#: html/cool-help.html%2Bdiv.div.div.p:475-7
+#: html/cool-help.html%2Bdiv.div.div.p:435-30
+#: html/cool-help.html%2Bdiv.div.div.p:472-7
 msgid ""
 "When closing a document, it is automatically saved if it has been changed."
 msgstr ""
 "Փաստաթուղթը փակելիս այն ինքնաշխատ կերպով պահպանվում է, եթե այն փոփոխվել է։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:452-7
+#: html/cool-help.html%2Bdiv.div.div.p:441-7
+#, fuzzy
 msgid ""
 "To open a document, either open it in <span class=\"productname\""
-">{productname}</span> from your platform's file manager or use the <span "
-"class=\"ui\">Open</span> button on the page shown from the <span class=\"ui\""
-">File</span> menu bar button."
+">{productname}</span> from your platform's file manager or use <span class="
+"\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
 "Փաստաթուղթը բացելու համար կամ բացեք այն ձեր հարթակի նիշքերի կառավարիչից "
 "<span class=\"productname\">{productname}</span>-ում, կամ օգտագործեք <span "
 "class=\"ui\">Բացել</span> կոճակը <span class=\"ui\">Նիշք</span> ընտրացանկի "
 "կոճակից ցուցադրված էջում։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:458-7
+#: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
-"To save the document in a different format use the <span class=\"ui\">Save "
-"as</span> button on the page shown from the <span class=\"ui\">File</span> "
-"menu bar button."
+"An existing document opens in view mode, so that you can read it without "
+"changing it by accident. To start editing, click the edit button (the pencil)"
+" in the bottom right corner. New documents and documents created from a "
+"template open ready to edit."
 msgstr ""
-"Փաստաթուղթը այլ ձևաչափով պահպանելու համար օգտագործեք <span class=\"ui\""
-">Պահպանել որպես</span> կոճակը <span class=\"ui\">Նիշք</span> ընտրացանկի "
-"կոճակից ցուցադրված էջում։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:463-7
+#: html/cool-help.html%2Bdiv.div.div.p:452-7
 msgid ""
-"Documents are automatically saved perdiodically, but if you want a document "
-"to be saved right away you can use the <span class=\"ui\">Save</span> button "
-"on the page shown from the <span class=\"ui\">File</span> menu bar button."
+"If the document is locked by another application, it stays in view mode."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:456-7
+msgid ""
+"To save the document in a different format use <span class=\"ui\">Save As</"
+"span> on the <span class=\"ui\">File</span> tab."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:461-7
+#, fuzzy
+msgid ""
+"Documents are automatically saved periodically, but if you want a document "
+"to be saved right away you can use <span class=\"ui\">Save</span> on the "
+"<span class=\"ui\">File</span> tab."
 msgstr ""
 "Փաստաթղթերը պարբերաբար պահվում են ինքնաշխատ կերպով, բայց եթե ցանկանում եք, "
 "որ փաստաթուղթը պահպանվի անմիջապես, կարող եք օգտագործել <span class=\"ui\""
 ">Պահպանել</span> կոճակը <span class=\"ui\">Նիշք</span> ընտրացանկի կոճակից "
 "ցուցադրված էջում։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:470-7
+#: html/cool-help.html%2Bdiv.div.div.p:467-7
 msgid ""
-"To print the document, use the <span class=\"ui\">Print</span> button on the "
-"page shown from the <span class=\"ui\">File</span> menu bar button."
+"To print the document, use <span class=\"ui\">Print</span> on the <span "
+"class=\"ui\">File</span> tab."
 msgstr ""
-"Փաստաթուղթը տպելու համար օգտագործեք <span class=\"ui\">Տպել</span> կոճակը "
-"<span class=\"ui\">Նիշք</span> ընտրացանկի կոճակից ցուցադրված էջում։"
 
-#: html/cool-help.html%2Bdiv.div.p:482-5
+#: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
 "Document editing should be familiar to everyone that has used an office "
 "application before, but here are some distinctive features:"
@@ -2043,65 +2014,44 @@ msgstr ""
 "օգտագործել են գրասենյակային ծրագրեր, բայց այս պարագայում առկա են մի քանի "
 "առանձնահատկություններ:"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:484-5
+#: html/cool-help.html%2Bdiv.div.div.h4:481-5
 msgid "Copy and Paste"
 msgstr "Պատճենել և հետ գրել"
 
-#: html/cool-help.html%2Bdiv.div.div.p:485-5
+#: html/cool-help.html%2Bdiv.div.div.p:482-5
 msgid ""
-"Rich content copy/cut and paste is supported, not only within a given "
-"document, but also across documents on the same or different <span class="
-"\"productname\">{productname}</span>. For these internal uses, users can "
-"copy/cut content, including images and mixed content, on PC by using the "
-"keyboard shortcuts directly (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class="
-"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). For security "
-"reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>V</kbd> to paste on PC, but context menus can "
-"be used for cut and copy. On Android or iOS selecting text by double "
-"tapping, and using a long-tap to access copy/cut/paste via the context menu "
-"is required."
+"Rich content copy/cut and paste is supported, including images and mixed "
+"content, using the keyboard shortcuts (<kbd>Ctrl</kbd><span class=\"kbd--"
+"plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class="
+"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). On "
+"Android or iOS selecting text by double tapping, and using a long-tap to "
+"access copy/cut/paste via the context menu is required."
 msgstr ""
-"Հարուստ բովանդակության պատճենումը/կտրում-տեղադրումը աջակցվում է ոչ միայն "
-"տվյալ փաստաթղթի ներսում, այլև նույն կամ տարբեր <span class=\"productname\""
-">{productname}</span> փաստաթղթերի միջև: Այս ներքին օգտագործման համար "
-"օգտատերերը համակարգչում կարող են պատճենել/կտրատել բովանդակությունը, ներառյալ "
-"պատկերները և խառը բովանդակությունը՝ անմիջապես օգտագործելով ստեղնաշարի "
-"դյուրանցումները (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true"
-"\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>)։ Անվտանգության "
-"նկատառումներից ելնելով՝ համակարգչում տեղադրելու համար անհրաժեշտ է օգտագործել "
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>, սակայն կտրելու և պատճենելու համար կարող են "
-"օգտագործվել համատեքստային ցանկեր: Android-ում կամ iOS-ում պահանջվում է "
-"տեքստը կրկնակի սեղմելով ընտրել, իսկ պատճենելու/կտրելու/տեղադրելու համար՝ "
-"երկար սեղմումով, համատեքստային ցանկի միջոցով:"
 
-#: html/cool-help.html%2Bdiv.div.div.p:486-5
+#: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
-"To copy larger pieces of content to other applications on your device, users "
-"need to press the <span class=\"ui\">Start download</span> button, and then "
-"re-copy this to their clipboard in order to make it available to the target "
-"application to read. This is possible via a tiny widget that pops up in the "
-"bottom-right corner, and is only necessary to export the content for pasting "
-"in external applications. This step also converts complex object types into "
+"For security reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd"
+"--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> to paste content that "
+"comes from outside the document, but context menus can be used for cut and "
+"copy."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:484-5
+msgid ""
+"When you copy a selection that contains images or other objects, a <span "
+"class=\"ui\">Download Selection</span> widget pops up in the bottom-right "
+"corner. Press <span class=\"ui\">Download</span>, then copy again, to make "
+"the content available to applications outside <span class=\"productname\""
+">{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
-"Ձեր սարքի վրա այլ հավելվածների բովանդակության ավելի մեծ մասերը պատճենելու "
-"համար օգտատերերը պետք է սեղմեն <span class=\"ui\">Սկսել ներբեռնումը</span> "
-"կոճակը, այնուհետև վերապատճենեն այն իրենց սեղմատախտակին՝ այն թիրախային "
-"հավելվածում հասանելի դարձնելու կարդալու համար: Սա հնարավոր է փոքրիկ վիջեթի "
-"միջոցով, որը հայտնվում է ներքևի աջ անկյունում և անհրաժեշտ է միայն արտաքին "
-"հավելվածներում տեղադրվելու ենթակա բովանդակությունը արտահանելու համար: Այս "
-"քայլը նաև բարդ օբյեկտների տեսակները վերածում է ստատիկ պատկերների:"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:489-5
+#: html/cool-help.html%2Bdiv.div.div.h4:487-5
 msgid "Document repair"
 msgstr "Փաստաթղթի նորոգում"
 
-#: html/cool-help.html%2Bdiv.div.div.p:490-5
+#: html/cool-help.html%2Bdiv.div.div.p:488-5
 msgid ""
 "When multiple people edit the same document concurrently, it is possible for "
 "their changes to conflict and this can cause some confusion. The Document "
@@ -2114,15 +2064,23 @@ msgstr ""
 "չեղարկել այլ խմբագրի կողմից փաստաթղթում կատարված փոփոխությունները և "
 "վերադարձնել այն նախկին վիճակին:"
 
-#: html/cool-help.html%2Bdiv.div.div.p:491-5
+#: html/cool-help.html%2Bdiv.div.div.p:489-5
+msgid ""
+"<span class=\"ui\">Repair</span> on the <span class=\"ui\">File</span> tab "
+"lists the recent changes to the document and lets you take the document back "
+"to an earlier state."
+msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.p:490-5
+#, fuzzy
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
-"class=\"ui\">Jump to state</span>."
+"class=\"ui\">OK</span>."
 msgstr ""
 "Ընտրված վիճակին վերադառնալու համար ընտրեք այն մկնիկով և սեղմեք <span class="
 "\"ui\">Անցնել վիճակին</span>:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:492-55
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:491-55
 msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
@@ -2130,7 +2088,7 @@ msgstr ""
 "«Փաստաթղթի վերականգնման» երկխոսության պատուհան, որը թվարկում է փաստաթղթի "
 "նախկին վիճակները՝ գործողության տեսակի, հեղինակի և ժամանակային նշման սյուներով"
 
-#: html/cool-help.html%2Bdiv.div.div.p:493-5
+#: html/cool-help.html%2Bdiv.div.div.p:492-5
 msgid ""
 "This is particularly useful – say when a colleague inadvertently selected "
 "all text in the document with <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
@@ -2142,16 +2100,17 @@ msgstr ""
 ">+</span><kbd>A</kbd> ստեղներով և շարունակել է այն վերաշարադրել՝ ոչնչացնելով "
 "այն, մինչդեռ դուք միաժամանակ խմբագրում էիք։"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:496-5
-msgid "Inactive document"
-msgstr "Անգործուն փաստաթուղթ"
+#: html/cool-help.html%2Bdiv.div.div.h4:495-5
+msgid "Idle document"
+msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:497-5
+#: html/cool-help.html%2Bdiv.div.div.p:496-5
+#, fuzzy
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
-"“Inactive” state. The document is shown with a transparent gray overlay, "
-"with the message “Inactive document – please click to resume editing”."
+"“Idle” state. The document is shown with a transparent gray overlay, with "
+"the message “Idle document – please click to reload and resume editing”."
 msgstr ""
 "Երբ <span class=\"productname\">{productname}</span>-ը հայտնաբերում է, որ "
 "դիտարկիչում որոշ ժամանակ որևէ գործունեություն չի եղել, այն փաստաթուղթը դնում "
@@ -2159,7 +2118,7 @@ msgstr ""
 "ծածկույթով՝ «Անգործուն փաստաթուղթ – խնդրում ենք սեղմել՝ խմբագրումը "
 "վերսկսելու համար» հաղորդագրությամբ։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:498-57
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
 msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
@@ -2167,7 +2126,7 @@ msgstr ""
 "Անգործուն փաստաթուղթը ծածկվում է հետևյալ հաղորդագրությամբ՝ Անգործուն "
 "փաստաթուղթ - խնդրում ենք սեղմել՝ վերբեռնելու և խմբագրումը վերսկսելու համար"
 
-#: html/cool-help.html%2Bdiv.div.div.p:499-5
+#: html/cool-help.html%2Bdiv.div.div.p:498-5
 msgid ""
 "To continue editing, click on the document and the layover and message "
 "disappear. Any changes that may have been made by other users – while "
@@ -2177,11 +2136,11 @@ msgstr ""
 "հաղորդագրությունը կանհետանան: Փաստաթուղթը համատեղ խմբագրելիս այլ օգտատերերի "
 "կողմից կատարված ցանկացած փոփոխություն կրկին կբեռնվի:"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:502-5
+#: html/cool-help.html%2Bdiv.div.div.h4:501-5
 msgid "Pasting"
 msgstr "Հետ տեղադրում"
 
-#: html/cool-help.html%2Bdiv.div.div.p:503-5
+#: html/cool-help.html%2Bdiv.div.div.p:502-5
 msgid ""
 "When you paste content copied from within the same document, the format and "
 "elements are maintained. If you copy from another document, in another tab "
@@ -2193,7 +2152,7 @@ msgstr ""
 "ներդիրից կամ դիտարկիչի պատուհանից կամ դիտարկիչից դուրս՝ տեղադրված "
 "բովանդակությունը կպահպանի հարուստ տեքստը:"
 
-#: html/cool-help.html%2Bdiv.div.div.p:504-5
+#: html/cool-help.html%2Bdiv.div.div.p:503-5
 msgid ""
 "You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
@@ -2204,7 +2163,7 @@ msgstr ""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>V</kbd>"
 
-#: html/cool-help.html%2Bdiv.div.div.p:505-5
+#: html/cool-help.html%2Bdiv.div.div.p:504-5
 msgid ""
 "When you paste text from within the document, formatting will be respected. "
 "You can also paste objects, such as images, if they are copied from the "
@@ -2214,7 +2173,7 @@ msgstr ""
 "տեղադրել օբյեկտներ, ինչպիսիք են պատկերները, եթե դրանք պատճենված են այն "
 "փաստաթղթից, որի հետ աշխատում եք։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:506-5
+#: html/cool-help.html%2Bdiv.div.div.p:505-5
 msgid ""
 "When you paste text from outside of the document (another browser window or "
 "a desktop application), it will be pasted as rich text."
@@ -2222,7 +2181,7 @@ msgstr ""
 "Երբ դուք տեքստ եք տեղադրում փաստաթղթից դուրս (մեկ այլ դիտարկիչի պատուհանից "
 "կամ աշխատասեղանի ծրագրից), այն կտեղադրվի որպես հարուստ տեքստ։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:507-5
+#: html/cool-help.html%2Bdiv.div.div.p:506-5
 msgid ""
 "When you have internal cut or copied content, you can paste this content "
 "using the context menu."
@@ -2230,11 +2189,11 @@ msgstr ""
 "Երբ ունեք ներքին կտրված կամ պատճենված բովանդակություն, կարող եք տեղադրել այն "
 "համատեքստային ցանկի միջոցով։"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:513-5
+#: html/cool-help.html%2Bdiv.div.div.h4:512-5
 msgid "Adding charts"
 msgstr "Գծապատկերների ավելացում"
 
-#: html/cool-help.html%2Bdiv.div.div.p:514-5
+#: html/cool-help.html%2Bdiv.div.div.p:513-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports inserting and "
 "visualization of charts in documents. To add a chart:"
@@ -2242,7 +2201,7 @@ msgstr ""
 "<span class=\"productname\">{productname}</span>-ը աջակցում է փաստաթղթերում "
 "գծապատկերների ներմուծմանը և վիզուալիզացիային։ Գծապատկեր ավելացնելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:515-7
 msgid ""
 "Select a table in text document, a range in a spreadsheet or a table in a "
 "presentation."
@@ -2250,15 +2209,16 @@ msgstr ""
 "Ընտրեք աղյուսակ տեքստային փաստաթղթում, միջակայք էլեկտրոնային աղյուսակում կամ "
 "աղյուսակ շնորհանդեսի մեջ։"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:517-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Charts</span>. "
+"Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Chart</span>. "
 "Customize your chart on the sidebar:"
 msgstr ""
 "Ընտրեք <span class=\"ui\">Ներդնել</span> → <span class=\"ui\""
 ">Գծապատկերներ</span>: Անհատականացրեք ձեր գծապատկերը կողային վահանակում:"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:520-53
+#: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:519-53
 msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
@@ -2266,12 +2226,12 @@ msgstr ""
 "«Գծապատկերների վարպետ» երկխոսության պատուհան՝ ձախ կողմում գտնվող գծապատկերի "
 "տեսակների ցանկով, գծապատկերի ոճերի նախադիտումներով, եռաչափ և ձևի ընտրանքներով"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:521-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:520-7
 msgid "If no table or range was selected, a prototype chart is displayed."
 msgstr ""
 "Եթե աղյուսակ կամ միջակայք չի ընտրվել, ցուցադրվում է նախատիպային դիագրամ։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:523-51
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:522-51
 msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
@@ -2279,7 +2239,7 @@ msgstr ""
 "Սյունակային դիագրամ՝ խմբավորված սյուներով, որը ցույց է տալիս տվյալները չորս "
 "տողերի համար՝ երեք սյուների վրա"
 
-#: html/cool-help.html%2Bdiv.div.div.p:525-28
+#: html/cool-help.html%2Bdiv.div.div.p:524-28
 msgid ""
 "<span class=\"def\">Chart editing:</span> Double click the chart to select. "
 "Use context menus to add chart elements such as title, axis, and other. "
@@ -2292,7 +2252,7 @@ msgstr ""
 "\"ui\">Տվյալների տիրույթ</span> և <span class=\"ui\">Գծապատկերի տեսակ</span>՝"
 " գծապատկերի տվյալները խմբագրելու և գծապատկերի տեսակը ընտրելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.p:526-28
+#: html/cool-help.html%2Bdiv.div.div.p:525-28
 msgid ""
 "<span class=\"def\">Chart formatting:</span> The same context menu brings "
 "you to chart data table and chart type selection."
@@ -2300,7 +2260,7 @@ msgstr ""
 "<span class=\"def\">Գծապատկերի ձևաչափում.</span> Նույն համատեքստային ցանկը "
 "ձեզ կտանի գծապատկերի տվյալների աղյուսակի և գծապատկերի տեսակի ընտրության:"
 
-#: html/cool-help.html%2Bdiv.div.div.p:527-28
+#: html/cool-help.html%2Bdiv.div.div.p:526-28
 msgid ""
 "<span class=\"def\">Data series formatting:</span> Open the context menu and "
 "choose <span class=\"ui\">Format data series</span>."
@@ -2308,11 +2268,11 @@ msgstr ""
 "<span class=\"def\">Տվյալների շարքի ձևաչափում:</span> Բացեք համատեքստային "
 "ցանկը և ընտրեք <span class=\"ui\">Տվյալների շարքի ձևաչափում</span>."
 
-#: html/cool-help.html%2Bdiv.div.div.h4:529-5
+#: html/cool-help.html%2Bdiv.div.div.h4:528-5
 msgid "Handling images"
 msgstr "Պատկերների մշակում"
 
-#: html/cool-help.html%2Bdiv.div.div.p:530-5
+#: html/cool-help.html%2Bdiv.div.div.p:529-5
 msgid ""
 "<span class=\"productname\">{productname}</span> inserts images in the text "
 "document from your local computer or from your cloud storage. Inserted "
@@ -2322,7 +2282,7 @@ msgstr ""
 "պատկերներ է տեղադրում ձեր տեղական համակարգչից կամ ձեր ամպային պահեստից: "
 "Տեղադրված պատկերները միշտ ներդրվում են փաստաթղթում:"
 
-#: html/cool-help.html%2Bdiv.div.div.p:531-5
+#: html/cool-help.html%2Bdiv.div.div.p:530-5
 msgid ""
 "<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\""
 ">Insert image</span> icon allows you to choose an image from the cloud "
@@ -2332,16 +2292,14 @@ msgstr ""
 "տեղադրում</span> պատկերակի վրա, ձեզ թույլ է տրվում ընտրել պատկեր ամպային "
 "պահեստի պանակներից և համօգտագործվողներից:"
 
-#: html/cool-help.html%2Bdiv.div.div.p:532-5
+#: html/cool-help.html%2Bdiv.div.div.p:531-5
 msgid ""
-"<span class=\"def\">Insert local image:</span> opens the browser file picker "
-"to upload the image from your local computer and insert it into the document."
+"<span class=\"def\">Insert local image:</span> Choose <span class=\"ui\""
+">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
+"computer and insert it into the document."
 msgstr ""
-"<span class=\"def\">Տեղային պատկերի տեղադրում.</span> բացում է դիտարկիչի "
-"նիշքերի ընտրիչը՝ պատկերը ձեր տեղային համակարգչից վերբեռնելու և փաստաթղթում "
-"տեղադրելու համար։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:533-5
+#: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
 "Images can be resized, rotated and anchored. Text can be wrapped around the "
 "image. Select the image and open the context menu. Use the images handles to "
@@ -2351,11 +2309,11 @@ msgstr ""
 "պատկերի շուրջը: Ընտրեք պատկերը և բացեք համատեքստային ցանկը: Օգտագործեք "
 "պատկերների բռնակները՝ մկնիկով պատկերը չափափոխելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:536-5
+#: html/cool-help.html%2Bdiv.div.div.h4:535-5
 msgid "Comments in documents"
 msgstr "Մեկնաբանություններ փաստաթղթերում"
 
-#: html/cool-help.html%2Bdiv.div.div.p:537-5
+#: html/cool-help.html%2Bdiv.div.div.p:536-5
 msgid ""
 "Insert comments in <span class=\"productname\">{productname}</span> in "
 "places that need special reader attention. Comments are displayed on the "
@@ -2366,7 +2324,7 @@ msgstr ""
 "Մեկնաբանությունները ցուցադրվում են աջ կողմում և պարունակում են թողարկողի "
 "անունն ու ամսաթիվը:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:538-51
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:537-51
 msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
@@ -2374,7 +2332,7 @@ msgstr ""
 "Մեկնաբանության դաշտ, որը ցույց է տալիս հեղինակի անունը, ամսաթիվը և "
 "մեկնաբանության տեքստը, որը ցուցադրվում է փաստաթղթի կողքին"
 
-#: html/cool-help.html%2Bdiv.div.div.p:539-5
+#: html/cool-help.html%2Bdiv.div.div.p:538-5
 msgid ""
 "Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
 " icon to reply, move and delete comments."
@@ -2383,11 +2341,11 @@ msgstr ""
 "></span>) պատկերակի վրա՝ մեկնաբանություններին պատասխանելու, տեղափոխելու և "
 "ջնջելու համար։"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:542-5
+#: html/cool-help.html%2Bdiv.div.div.h4:541-5
 msgid "Spellchecking"
 msgstr "Ուղղագրության ստուգում"
 
-#: html/cool-help.html%2Bdiv.div.div.p:543-5
+#: html/cool-help.html%2Bdiv.div.div.p:542-5
 msgid ""
 "<span class=\"productname\">{productname}</span> can check spelling in text "
 "documents, spreadsheets and presentations. A red wavy underline indicates "
@@ -2400,20 +2358,21 @@ msgstr ""
 "կոճակով՝ առաջարկվող ուղղագրական սխալների ուղղումներով համատեքստային ցանկը "
 "բացելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:544-54
+#: html/cool-help.html%2Bdiv.div.div.div.img[alt]:543-54
 msgid "Text with a red wavy underline beneath a misspelled word"
 msgstr "Սխալ գրված բառի տակ կարմիր ալիքավոր ընդգծված տեքստ"
 
-#: html/cool-help.html%2Bdiv.div.div.p:545-5
+#: html/cool-help.html%2Bdiv.div.div.p:544-5
+#, fuzzy
 msgid ""
-"To systematically spell-check the whole document use the <span class=\"ui\""
-">Tools</span> menu’s <span class=\"ui\">Spelling</span> option."
+"To systematically spell-check the whole document use <span class=\"ui\""
+">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
 "Ամբողջ փաստաթղթում ուղղագրության համակարգված ստուգման համար օգտագործեք <span "
 "class=\"ui\">Գործիքներ</span> ցանկի <span class=\"ui\">Ուղղագրություն</span> "
 "տարբերակը։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:552-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
 "You edit an online spreadsheet in the same way you edit a desktop "
 "spreadsheet. Operations like entering data, selecting ranges, columns, rows "
@@ -2434,18 +2393,18 @@ msgstr ""
 "<kbd>Tab</kbd> կտեղափոխի կուրսորը աջ կողմում գտնվող հաջորդ բջիջ, իսկ "
 "<kbd>Enter</kbd>-ով՝ ներքևի բջիջ՝ հետագա տվյալների հեշտ մուտքագրման համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:557-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:556-5
 msgid ""
 "Formulas are entered in the formula bar. Enter '=' and insert the formula."
 msgstr ""
 "Բանաձևերը մուտքագրվում են բանաձևերի վահանակում: Մուտքագրեք '=' և տեղադրեք "
 "բանաձևը:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:558-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:557-5
 msgid "All spreadsheets functions and mathematical rules applies."
 msgstr "Կիրառվում են աղյուսակների բոլոր ֆունկցիաները և մաթեմատիկական կանոնները։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:559-50
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:558-50
 msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
@@ -2453,7 +2412,7 @@ msgstr ""
 "Բանաձևերի գոտի, որը ցույց է տալիս B1 բջջի հղումը, ֆունկցիայի օգնականի "
 "պատկերակը և =SIN(PI()*A1/10) բանաձևը"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:560-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:559-5
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
 "and is specified in great detail in the <a href=\"https://www.oasis-open.org/"
@@ -2466,7 +2425,7 @@ msgstr ""
 "\"_blank\" rel=\"noopener noreferrer\">OASIS OpenFormula specification</a> "
 "-ում:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:566-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:565-5
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
@@ -2485,7 +2444,7 @@ msgstr ""
 "տալիս բարդ և հատուկ թվերի ձևաչափում, ինչպես նաև տառատեսակ, բարդ եզրագիծ, "
 "ֆոն, բջիջների պաշտպանություն և այլ տարբերակներ:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:567-51
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:566-51
 msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
@@ -2493,7 +2452,7 @@ msgstr ""
 "«Ձևաչափել բջիջները» երկխոսության պատուհանը «Թվեր» ներդիրում՝ դասերի ցանկով, "
 "ձևաչափի ընտրանքներով, տասնորդական նիշերով և ձևաչափի կոդով"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:572-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:571-30
 msgid ""
 "<span class=\"def\">Sorting data:</span> You can sort a list of numbers or "
 "text ascending or descending. <span class=\"productname\">{productname}</"
@@ -2506,7 +2465,7 @@ msgstr ""
 "վերնագրեր հանդիսացող բջիջները և հարակից սյունակները՝ ընտրությունը "
 "ընդլայնելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:573-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:572-30
 msgid ""
 "<span class=\"def\">Filtering data:</span> Filters and advanced filters "
 "allow you to work on certain filtered rows (records) of a data range. In the "
@@ -2518,7 +2477,7 @@ msgstr ""
 "վրա: <span class=\"productname\">{productname}</span> աղյուսակներում կան "
 "զտիչներ կիրառելու տարբեր հնարավորություններ:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:575-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:574-7
 msgid ""
 "One use for the <span class=\"ui\">AutoFilter</span> function is to quickly "
 "restrict the display to records with identical entries in a data field."
@@ -2527,7 +2486,7 @@ msgstr ""
 "տվյալների դաշտում նույնական գրառումներ ունեցող գրառումներով արագորեն "
 "սահմանափակելն է։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:577-55
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:576-55
 msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
@@ -2535,7 +2494,7 @@ msgstr ""
 "Աղյուսակի սյունակում AutoFilter իջնող ցանկ՝ տեսակավորելով, զտելով ըստ "
 "գույնի, զտելով ըստ պայմանի և առանձին արժեքների համար նշատուփերով"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:579-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:578-7
 msgid ""
 "In the <span class=\"ui\">Standard Filter</span> dialog, you can also define "
 "ranges which contain the values in particular data fields. You can use the "
@@ -2547,7 +2506,7 @@ msgstr ""
 "արժեքները: Կարող եք օգտագործել ստանդարտ զտիչը՝ պայմանները կապելու "
 "տրամաբանական ԵՎ, կամ տրամաբանական ԿԱՄ օպերատորներից մեկի հետ:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:580-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:579-7
 msgid ""
 "The <span class=\"ui\">Advanced Filter</span> allows up to a total of eight "
 "filter conditions. With advanced filters you enter the conditions directly "
@@ -2557,7 +2516,7 @@ msgstr ""
 "մինչև ութ պայման։ Ընդլայնված զտիչների դեպքում դուք պայմանները մուտքագրում եք "
 "անմիջապես աղյուսակում։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:584-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:583-5
 msgid ""
 "<span class=\"def\">Outlining:</span> You can create an outline of your data "
 "and group rows and columns together so that you can collapse and expand the "
@@ -2568,7 +2527,7 @@ msgstr ""
 "խմբերը ծալել և ընդլայնել մեկ սեղմումով, ինչը հեշտացնում է աստիճանակարգված "
 "տվյալների ներկայացումը:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:585-49
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:584-49
 msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
@@ -2576,7 +2535,7 @@ msgstr ""
 "Էլ․ աղյուսակ՝ տողերի և սյուների խմբավորման կառավարման տարրերով, որոնք ցույց "
 "են տալիս ուրվագծման մակարդակի կոճակները և ծալման/ընդլայնման անջատիչները"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:588-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
 "<span class=\"def\">Data validation:</span> For each cell, you can define "
 "entries to be valid. Invalid entries to a cell will be rejected. To enable "
@@ -2586,16 +2545,17 @@ msgstr ""
 "կարող եք սահմանել վավեր գրառումներ: Բջջի անվավեր գրառումները կմերժվեն: "
 "Տվյալների վավերացումը միացնելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:590-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:589-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Validity</span> from the <span class=\"ui\">Data</"
-"span> menu. The <span class=\"ui\">Validity</span> dialog opens."
+"Choose <span class=\"ui\">Validity</span> on the <span class=\"ui\">Data</"
+"span> tab. The <span class=\"ui\">Validity</span> dialog opens."
 msgstr ""
 "Ընտրեք <span class=\"ui\">Վավերականություն</span> -ը <span class=\"ui\""
 ">Տվյալներ</span> ընտրացանկից: Բացվում է <span class=\"ui\">Վավերականություն</"
 "span> երկխոսության պատուհանը:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:593-57
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:592-57
 msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
@@ -2604,7 +2564,7 @@ msgstr ""
 "«Թույլատրել» կարգավորումով որպես «Ցուցակ» արտահայտությունը ցույց տալով "
 "դատարկ բջիջների, ընտրության ցանկի և մուտքագրման արժեքների տարբերակները"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:593-7
 msgid ""
 "Select the validity criterion in the <span class=\"ui\">Allow</span> drop-"
 "box list. Depending on the criterion, more options show. Fill the required "
@@ -2614,7 +2574,7 @@ msgstr ""
 "ցանկից: Չափանիշից կախված՝ կցուցադրվեն ավելի շատ տարբերակներ: Լրացրեք "
 "պահանջվող տվյալները:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:595-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
 msgid ""
 "Use the <span class=\"ui\">Input Help</span> and <span class=\"ui\">Error "
 "Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\""
@@ -2625,7 +2585,7 @@ msgstr ""
 "բարելավելու համար: Սեղմեք <span class=\"ui\">Լավ</span>՝ երկխոսության "
 "պատուհանը փակելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:598-56
+#: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:597-56
 msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
@@ -2633,7 +2593,7 @@ msgstr ""
 "Բջիջների բացվող ցանկ, որը ցույց է տալիս վավերացված գրառումներ, ինչպիսիք են՝ "
 "խնձոր, տանձ, բանան, կիվի և կիտրոն"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:599-7
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:598-7
 msgid ""
 "To remove the validity of the cell, open the dialog and set the <span class="
 "\"ui\">Allow</span> list to “All values”."
@@ -2641,7 +2601,7 @@ msgstr ""
 "Բջջի վավերականությունը հեռացնելու համար բացեք երկխոսության պատուհանը և <span "
 "class=\"ui\">Թույլատրել</span> ցանկը դարձրեք «Բոլոր արժեքները»։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:603-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:602-5
 msgid ""
 "<span class=\"def\">Comments:</span> In a spreadsheet you can insert one "
 "comment per cell. When you select <span class=\"ui\">Insert comment</span>, "
@@ -2656,7 +2616,7 @@ msgstr ""
 "մեկնաբանություն, վերին աջ անկյունում կարմիր կետ է հայտնվում։ "
 "Մեկնաբանությունները ցուցադրելու համար մկնիկը պահեք բջջի վրա։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:604-52
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:603-52
 msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
@@ -2664,12 +2624,13 @@ msgstr ""
 "Էլ․ աղյուսակի բջիջ՝ մեկնաբանության բացվող պատուհանով, որը ցույց է տալիս "
 "հեղինակին, ամսաթիվը, մեկնաբանության տեքստը և Պահպանել/Չեղարկել կոճակները"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:607-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:606-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
-"conditions. Select the cell range and click the <span class=\"ui\""
-">Conditional Formatting</span> icon on the toolbar. Select the symbol set to "
+"conditions. Select the cell range and click <span class=\"ui\">Conditional</"
+"span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
 "apply on the range."
 msgstr ""
 "<span class=\"def\">Պայմանական ձևաչափում.</span> <span class=\"productname\""
@@ -2678,7 +2639,7 @@ msgstr ""
 "գործիքագոտու վրա գտնվող <span class=\"ui\">Պայմանական ձևաչափում</span> "
 "պատկերակը: Միջակայքում կիրառելու համար ընտրեք նիշերի հավաքածուն:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:608-62
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
@@ -2687,7 +2648,7 @@ msgstr ""
 "սլաքներ, շրջանակներ, լուսացույցեր, աստղեր, ժպտացող դեմքեր և սյունակային "
 "դիագրամի խորհրդանիշների հավաքածուներ"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:616-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:615-30
 msgid ""
 "<span class=\"productname\">{productname}</span> edits text documents in the "
 "same way you edit a desktop document. It provides a What You See Is What You "
@@ -2707,7 +2668,7 @@ msgstr ""
 "գործողություններին: Օգտագործեք ստեղնաշարը, ընտրացանկերը և գործիքագոտիները՝ "
 "ձեր փաստաթղթի հետ փոխազդելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:620-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:619-30
 msgid ""
 "Context menus are available on clicking the right mouse button. The commands "
 "available in the context menu are related - not extensively - to the "
@@ -2717,11 +2678,11 @@ msgstr ""
 "Համատեքստային ցանկում հասանելի հրամանները կապված են՝ ոչ ընդարձակորեն, "
 "փաստաթղթի հիմքում ընկած օբյեկտի հետ։"
 
-#: html/cool-help.html%2Bdiv.div.div.h3:623-5
+#: html/cool-help.html%2Bdiv.div.div.h3:622-5
 msgid "Formatting text"
 msgstr "Տեքստի ձևաչափում"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:625-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:624-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports modern techniques "
 "for paragraph formatting through styles. A style is a set of text properties "
@@ -2742,7 +2703,7 @@ msgstr ""
 "նույնպես կփոխեն ձևաչափումը, ինչը պարզեցնում է բազմաթիվ պարբերություններ "
 "առանձին-առանձին ձևավորելու ջանքերը:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:626-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:625-5
 msgid ""
 "In contrast, direct formatting applies formatting to selected excerpts of "
 "the document contents. On a long document, direct formatting must be applied "
@@ -2754,7 +2715,7 @@ msgstr ""
 "պետք է կիրառվի տեքստի յուրաքանչյուր հատվածում, ինչը տեքստի ձևաչափումը "
 "վերածում է երկար խնդրի, որը կարող է հանգեցնել սխալների և ուշացումների:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:628-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:627-30
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format text document "
 "objects by formatting directly from the menus, toolbar or context menus. "
@@ -2765,12 +2726,13 @@ msgstr ""
 "գործիքագոտուց կամ համատեքստային ընտրացանկերից: Ուղղակի ձևաչափումը վերաբերում "
 "է միայն ընտրված ընթացիկ օբյեկտին:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:630-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:629-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
-"paragraph style to a paragraph. Choose menu <span class=\"ui\">Edit</span> → "
-"<span class=\"ui\">Edit styles</span> to change style."
+"paragraph style to a paragraph. Select the style in the style list on the "
+"<span class=\"ui\">Home</span> tab."
 msgstr ""
 "<span class=\"def\">Ոճերի ձևաչափում:</span> <span class=\"productname\""
 ">{productname}</span>-ը աջակցում է պարբերության ոճերը: Դուք կարող եք կիրառել "
@@ -2778,7 +2740,7 @@ msgstr ""
 "class=\"ui\">Խմբագրել</span> → <span class=\"ui\">Խմբագրել ոճերը</span> ոճը "
 "փոխելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:631-56
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
@@ -2787,16 +2749,18 @@ msgstr ""
 "ելուստների, բացատների և տողերի միջև ընկած տարածության կարգավորումներով, "
 "ինչպես նաև աջ կողմում նախադիտումով"
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:637-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:636-5
 msgid "Handling Tables"
 msgstr "Աղյուսակների մշակում"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:638-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:637-5
+#, fuzzy
 msgid ""
-"Insert tables with proper icon in the toolbar. Select the initial number of "
-"rows and columns. Add rows and columns with the cell context menu. Merge "
-"cells with the <span class=\"ui\">Table</span> menu. The default paragraph "
-"style inside cells is “Table contents”."
+"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
+">Table</span>. Select the initial number of rows and columns. Add rows and "
+"columns with the cell context menu. Merge cells from the <span class=\"ui\""
+">Table</span> tab. The default paragraph style inside cells is “Table "
+"contents”."
 msgstr ""
 "Տեղադրեք աղյուսակները գործիքագոտում համապատասխան պատկերակներով: Ընտրեք "
 "տողերի և սյունակների սկզբնական քանակը: Ավելացրեք տողեր և սյունակներ բջիջների "
@@ -2804,7 +2768,7 @@ msgstr ""
 "span> ցանկի միջոցով: Բջիջների ներսում պարբերության լռելյայն ոճը «Աղյուսակի "
 "պարունակություն» է:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:639-52
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
@@ -2812,22 +2776,23 @@ msgstr ""
 "Տեղադրեք աղյուսակ ընտրիչ, որը ցույց է տալիս ցանց՝ տողերի և սյուների քանակը "
 "ընտրելու համար, ներկայումս ցուցադրվում է 5-ը 3-ի վրա"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:642-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:641-5
+#, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
-"cells and choose menu <span class=\"ui\">Table</span> → <span class=\"ui\""
-">Properties</span>. Fine tune the table with the properties dialog."
+"cells, open the context menu and choose <span class=\"ui\">Table Properties</"
+"span>. Fine tune the table with the properties dialog."
 msgstr ""
 "<span class=\"def\">Բջիջների ձևաչափում:</span> Սեղմեք բջիջի կամ բջիջների "
 "միջակայքի վրա և ընտրեք <span class=\"ui\">Աղյուսակ</span> → <span class=\"ui"
 "\">Հատկություններ</span> ընտրացանկը։ Կարգավորեք աղյուսակը հատկությունների "
 "երկխոսության պատուհանի միջոցով։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:645-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
 msgstr "Հետևեք փոփոխություններին"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:646-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:645-5
 msgid ""
 "When you turn on Track Changes, <span class=\"productname\">{productname}</"
 "span> marks up new changes made to the document. Select this option again to "
@@ -2837,7 +2802,7 @@ msgstr ""
 "\"productname\">{productname}</span>-ը նշում է փաստաթղթում կատարված նոր "
 "փոփոխությունները: Կրկին ընտրեք այս տարբերակը՝ այն անջատելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:647-61
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:646-61
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:774-61
 msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
@@ -2846,7 +2811,7 @@ msgstr ""
 "Հետևված փոփոխությունը ցուցադրվում է որպես մեկնաբանության դաշտ փաստաթղթի "
 "կողքին՝ հեղինակի անունով, ամսաթվով և փոփոխության նկարագրությամբ"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:648-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:647-5
 msgid ""
 "Changes made by different people are shown in different colors and each "
 "tracked change can be accepted or rejected, using the box that appears on "
@@ -2857,11 +2822,11 @@ msgstr ""
 "մերժվել՝ օգտագործելով աջ կողմում հայտնվող վանդակը: Կարող եք նաև "
 "մեկնաբանություն ավելացնել այնտեղ:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.h4:651-5
+#: html/cool-help.html%2Bdiv.div.div.div.h4:650-5
 msgid "Other advanced features"
 msgstr "Այլ առաջադեմ գործառույթներ"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:652-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:651-5
 msgid ""
 "<span class=\"def\">Comments:</span> Comments are inserted in the text and "
 "displayed on the right side of the screen."
@@ -2869,7 +2834,7 @@ msgstr ""
 "<span class=\"def\">Մեկնաբանություններ։</span> Մեկնաբանությունները "
 "տեղադրվում են տեքստում և ցուցադրվում են էկրանի աջ կողմում։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:653-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:652-5
 msgid ""
 "<span class=\"def\">Formatting marks:</span> Paragraph, page and unbreakable "
 "spaces are shown as marks to assist text alignment, editing and formatting."
@@ -2878,7 +2843,7 @@ msgstr ""
 "անբաժանելի բացատները ցուցադրվում են որպես նշաններ՝ տեքստի հավասարեցմանը, "
 "խմբագրմանը և ձևաչափմանը նպաստելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:654-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:653-5
 msgid ""
 "<span class=\"def\">Fields:</span> A basic set of fields is available to "
 "insert in the document."
@@ -2886,7 +2851,7 @@ msgstr ""
 "<span class=\"def\">Դաշտեր։</span> Փաստաթղթում մուտքագրելու համար հասանելի է "
 "դաշտերի հիմնական հավաքածուն։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:655-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:654-5
 msgid ""
 "<span class=\"def\">Alphabetical index:</span> Existing alphabetical index "
 "can be updated with new entries."
@@ -2894,7 +2859,7 @@ msgstr ""
 "<span class=\"def\">Այբբենական ցանկ։</span> Գոյություն ունեցող այբբենական "
 "ցանկը կարող է թարմացվել նոր գրառումներով։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:656-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:655-5
 msgid ""
 "<span class=\"def\">Page header and footer:</span> Headers and footers are "
 "available for the existing page style applied in the document at the cursor "
@@ -2904,7 +2869,7 @@ msgstr ""
 "տողատակերը հասանելի են փաստաթղթում կուրսորի դիրքում կիրառված առկա էջի ոճի "
 "համար։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:657-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:656-5
 msgid ""
 "<span class=\"def\">Footnotes and endnotes:</span> Footnotes and endnotes "
 "are supported."
@@ -2912,7 +2877,7 @@ msgstr ""
 "<span class=\"def\">Տողատակեր և էջատակեր։</span> Տողատակերը ու էջատակերը "
 "աջակցվում են։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:665-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:664-30
 msgid ""
 "<span class=\"productname\">{productname}</span> Impress edits presentations "
 "in a way that should be familiar to people. Operations like typing text, "
@@ -2928,7 +2893,7 @@ msgstr ""
 "աշխատասեղանի շնորհանդեսների ծրագրին: Օգտագործեք ստեղնաշարը, ընտրացանկերը և "
 "գործիքագոտիները՝ ձեր փաստաթղթում գործողություններ կատարելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:670-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:669-5
 msgid ""
 "<span class=\"productname\">{productname}</span> displays presentation slide "
 "shows, including a subset of slide transitions and object animations. Choose "
@@ -2941,7 +2906,7 @@ msgstr ""
 "սահիկացուցադրությունը կամ սեղմեք սահիկների վահանակի ներքևի ձախ գործիքագոտում "
 "գտնվող պատկերակի վրա:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:671-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:670-5
 msgid ""
 "To exit a <span class=\"productname\">{productname}</span> slide show, press "
 "the <kbd>Esc</kbd> key to return to the presentation edit mode."
@@ -2950,7 +2915,7 @@ msgstr ""
 "դուրս գալու համար սեղմեք <kbd>Esc</kbd> ստեղնը՝ շնորհանդեսի խմբագրման "
 "ռեժիմին վերադառնալու համար։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:677-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:676-5
 msgid ""
 "Click on any slide thumbnail in the pane to switch to this slide to view or "
 "edit it."
@@ -2958,7 +2923,7 @@ msgstr ""
 "Սեղմեք վահանակում ցանկացած սահիկի մանրապատկերի վրա՝ այս սահիկին անցնելու և "
 "այն դիտելու կամ խմբագրելու համար։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:678-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:677-5
 msgid ""
 "Use the slide pane toolbar in the bottom to start the slideshow, add slide, "
 "duplicate or delete the current slide."
@@ -2967,7 +2932,7 @@ msgstr ""
 "կրկնօրինակելու կամ ջնջելու համար օգտագործեք սահիկների վահանակի ներքևի մասում "
 "գտնվող գործիքագոտին։"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:684-5
+#: html/cool-help.html%2Bdiv.div.div.div.p:683-5
 msgid ""
 "<span class=\"def\">Slide layouts:</span> <span class=\"productname\""
 ">{productname}</span> Impress lets you change the slide layout. Select the "
@@ -2978,7 +2943,7 @@ msgstr ""
 "դասավորությունը: Ընտրեք սահիկի ցանկալի դասավորությունը՝ դասավորության բացվող "
 "ցանկից:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:685-53
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:684-53
 msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
@@ -2987,7 +2952,7 @@ msgstr ""
 "գլխավոր սահիկի կարգավորումները, իսկ ներքևում պատկերված է մանրապատկերների "
 "ընտրանքների դասավորության պատկերասրահը"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:687-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:686-30
 msgid ""
 "<span class=\"def\">Master slide:</span> Select the master slide associated "
 "to the current slide. Format and arrange slide elements in the master slide."
@@ -2995,7 +2960,7 @@ msgstr ""
 "<span class=\"def\">Գլխավոր սահիկ։</span> Ընտրեք ընթացիկ սահիկին կից գլխավոր "
 "սահիկը: Ձևաչափեք և դասավորեք սահիկի տարրերը գլխավոր սահիկում:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:688-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:687-30
 msgid ""
 "<span class=\"def\">Slide transitions:</span> <span class=\"productname\""
 ">{productname}</span> Impress provides visual effects when displaying a new "
@@ -3008,7 +2973,7 @@ msgstr ""
 "սեփականությունն են, օգտագործեք կողային վահանակը՝ խմբագրման ռեժիմում սահիկի "
 "անցումը կարգավորելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:689-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:688-30
 msgid ""
 "<span class=\"def\">Object animation:</span> Individual objects in the slide "
 "can have animations. Use the side bar to configure the slide transition for "
@@ -3018,7 +2983,7 @@ msgstr ""
 "են ունենալ անիմացիա: Օգտագործեք կողային վահանակը՝ ընտրված օբյեկտի կամ "
 "օբյեկտների հավաքածուի համար սահիկի անցումը կարգավորելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.p:690-30
+#: html/cool-help.html%2Bdiv.div.div.div.p:689-30
 msgid ""
 "<span class=\"def\">Tables:</span> Insert tables in the presentation. Use "
 "the sidebar to select the table theme."
@@ -3026,7 +2991,7 @@ msgstr ""
 "<span class=\"def\">Աղյուսակներ։</span> Տեղադրեք աղյուսակներ շնորհանդեսի մեջ:"
 " Օգտագործեք կողային վահանակը՝ աղյուսակի թեման ընտրելու համար:"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:696-5
+#: html/cool-help.html%2Bdiv.div.div.h4:695-5
 msgid ""
 "What are the document file formats supported by <span class=\"productname\""
 ">{productname}</span>?"
@@ -3034,7 +2999,7 @@ msgstr ""
 "Ի՞նչ փաստաթղթերի նիշքի ձևաչափեր է աջակցում <span class=\"productname\""
 ">{productname}</span>-ը։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:697-5
+#: html/cool-help.html%2Bdiv.div.div.p:696-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports both reading and "
 "writing for the following file formats:"
@@ -3042,41 +3007,41 @@ msgstr ""
 "<span class=\"productname\">{productname}</span>-ը աջակցում է հետևյալ "
 "նիշքերի ձևաչափերի ընթերցումը և գրումը:"
 
+#: html/cool-help.html%2Bdiv.div.div.ul.li:698-7
+msgid ""
+"Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT. "
+"Plain text TXT and Markdown MD"
+msgstr ""
+
 #: html/cool-help.html%2Bdiv.div.div.ul.li:699-7
 msgid ""
-"Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
+"Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS. Comma "
+"separated values CSV"
 msgstr ""
-"Տեքստային փաստաթղթեր՝ Microsoft-ի DOC, DOCX, RTF ձևաչափերով։ OpenDocument "
-"ձևաչափ՝ ODT"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:700-7
-msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
-msgstr ""
-"Աղյուսակաթերթեր։ Microsoft-ի ձևաչափեր՝ XLS, XLSX, OpenDocument ձևաչափ՝ ODS"
-
-#: html/cool-help.html%2Bdiv.div.div.ul.li:701-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
 msgstr ""
 "Շնորհանդեսներ։ Microsoft-ի ձևաչափեր՝ PPT, PPTX, OpenDocument ձևաչափ՝ ODP"
 
-#: html/cool-help.html%2Bdiv.div.div.h4:705-5
+#: html/cool-help.html%2Bdiv.div.div.h4:704-5
 msgid "How do I save a document with another name?"
 msgstr "Ինչպե՞ս եմ ես պահպանում փաստաթուղթը այլ անունով։"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:707-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:706-7
 msgid "Hover the mouse on the document name in the menu bar."
 msgstr "Մկնիկը տատանեք ընտրացանկի տողում գտնվող փաստաթղթի անվան վրա։"
 
-#: html/cool-help.html%2Bdiv.div.div.ol.li:708-7
+#: html/cool-help.html%2Bdiv.div.div.ol.li:707-7
 msgid "Type the new file name in the text box and press <kbd>Enter</kbd>."
 msgstr ""
 "Մուտքագրեք նոր նիշքի անունը տեքստային դաշտում և սեղմեք <kbd>Enter</kbd>:"
 
-#: html/cool-help.html%2Bdiv.div.div.p:710-5
+#: html/cool-help.html%2Bdiv.div.div.p:709-5
 msgid "A copy of the document is saved with the new name in the same folder."
 msgstr "Փաստաթղթի պատճենը նոր անունով պահվում է նույն թղթապանակում։"
 
-#: html/cool-help.html%2Bdiv.div.div.h3:713-5
+#: html/cool-help.html%2Bdiv.div.div.h4:712-5
 msgid ""
 "How can I quit <span class=\"productname\">{productname}</span> without "
 "saving my edits?"
@@ -3084,7 +3049,7 @@ msgstr ""
 "Ինչպե՞ս կարող եմ դուրս գալ <span class=\"productname\""
 ">{productname}</span>-ից՝ առանց իմ փոփոխությունները պահպանելու։"
 
-#: html/cool-help.html%2Bdiv.div.div.p:714-5
+#: html/cool-help.html%2Bdiv.div.div.p:713-5
 msgid ""
 "<span class=\"productname\">{productname}</span> saves the document in the "
 "background regularly, you can't just close without saving it. To abandon "
@@ -3096,6 +3061,13 @@ msgstr ""
 "պահպանելու: Ձեր փոփոխություններից հրաժարվելու համար դուք պետք է կամ չեղարկեք "
 "դրանք, կամ օգտագործեք <span class=\"ui\">Վերանայումների պատմություն </span> "
 "<span class=\"ui\">Նիշք</span> ընտրացանկում։"
+
+#: html/cool-help.html%2Bdiv.div.div.p:714-5
+msgid ""
+"<span class=\"productname\">{productname}</span> saves the document in the "
+"background regularly, you can't just close without saving it. To abandon "
+"your changes, undo them."
+msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:717-5
 msgid ""
@@ -3120,9 +3092,10 @@ msgid "How can I check spelling in my language?"
 msgstr "Ինչպե՞ս կարող եմ ստուգել ուղղագրությունը իմ լեզվով։"
 
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
+#, fuzzy
 msgid ""
-"Choose menu <span class=\"ui\">Tools</span> → <span class=\"ui\">Languages</"
-"span> and select the language for the whole document. Optionally you can set "
+"Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
+"and select the language for the whole document. Optionally you can set "
 "languages for the selected text and for the current paragraph."
 msgstr ""
 "Ընտրեք <span class=\"ui\">Գործիքներ</span> → <span class=\"ui\">Լեզուներ</"
@@ -3135,11 +3108,9 @@ msgstr "Ինչպե՞ս կարող եմ հեռացնել կարմիր ալիքա�
 
 #: html/cool-help.html%2Bdiv.div.div.p:726-5
 msgid ""
-"Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
-">Automatic Spell Checking</span>."
+"On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
+">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
-"Ընտրեք <span class=\"ui\">Գործիքներ</span> ընտրացանկը և ապաընտրեք <span "
-"class=\"ui\">Ինքնաշխատ ուղղագրության ստուգում</span> նշումը։"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
 msgid "What is the blue wavy underline in some words in the text?"
@@ -3162,9 +3133,10 @@ msgid "Is there a thesaurus?"
 msgstr "Կա՞ թեզաուրուս։"
 
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
+#, fuzzy
 msgid ""
-"Yes. Click in the word you want and choose <span class=\"ui\">Tools</span> → "
-"<span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
+"Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
+" <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
 "Այո։ Սեղմեք ցանկալի բառի վրա և ընտրեք <span class=\"ui\">Գործիքներ</span> → "
@@ -3189,11 +3161,12 @@ msgstr ""
 "դրանք հեռացնել իմ տեքստային փաստաթղթից։"
 
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
+#, fuzzy
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
-"document display, choose menu <span class=\"ui\">View</span> → <span class="
-"\"ui\">Formatting mark</span>."
+"document display, choose <span class=\"ui\">View</span> → <span class=\"ui\""
+">Formatting Marks</span>."
 msgstr ""
 "<span class=\"blue\">¶</span> նիշը ձևաչափման նշան է։ Այն օգտագործվում է "
 "տեքստի հավասարեցման և խմբագրման համար և չի տպվում։ Փաստաթղթի ցուցադրման "
@@ -3205,10 +3178,11 @@ msgid "How do I get a word count of my document?"
 msgstr "Ինչպե՞ս կարող եմ իմանալ իմ փաստաթղթի բառերի քանակը։"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
+#, fuzzy
 msgid ""
-"Word count is available in <span class=\"ui\">Tools</span> → <span class=\"ui"
-"\">Word count</span>. A dialog shows word counts for selection and for the "
-"whole document."
+"Word count is available in <span class=\"ui\">Review</span> → <span class="
+"\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
+"the whole document."
 msgstr ""
 "Բառերի քանակը հասանելի է <span class=\"ui\">Գործիքներ</span> → <span class="
 "\"ui\">Բառերի քանակ</span> բաժնում: Երկխոսության պատուհանը ցույց է տալիս "
@@ -3254,12 +3228,8 @@ msgstr "Տեղադրեք կուրսորը այն դիրքում, որտեղ պե
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:756-7
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
-"Characters </span> or click the corresponding icon in the toolbar. A dialog "
-"opens."
+"Character</span>. A dialog opens."
 msgstr ""
-"Ընտրեք <span class=\"ui\">Զետեղել</span> → <span class=\"ui\">Հատուկ նիշեր </"
-"span> կամ սեղմեք գործիքագոտու համապատասխան պատկերակը: Կհայտնվի երկխոսության "
-"պատուհան:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:759-59
 msgid ""
@@ -3295,12 +3265,13 @@ msgid "Why can't I delete text? It just gets a strike-through?"
 msgstr "Ինչո՞ւ չեմ կարողանում ջնջել տեքստը։ Այն պարզապես վրայով գծված է։"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:766-5
+#, fuzzy
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
 "Useful for marking changes in text and spreadsheets. Track changes are "
-"enabled choosing <span class=\"ui\">Edit</span> → <span class=\"ui\">Track "
-"Changes </span> → <span class=\"ui\">Record</span>."
+"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\""
+">Record</span>."
 msgstr ""
 "Դուք միացրել եք «Փոփոխությունների հետևում» գործառույթը փաստաթղթի համար: «"
 "Փոփոխությունների հետևում» գործառույթը գրանցում է տեքստի բոլոր "
@@ -3344,9 +3315,10 @@ msgstr ""
 "օգտատիրոջից։"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:776-5
+#, fuzzy
 msgid ""
-"To display or hide track changes choose <span class=\"ui\">Edit</span> → "
-"<span class=\"ui\">Track Changes </span> → <span class=\"ui\">Show</span>. "
+"To display or hide track changes choose <span class=\"ui\">Review</span> → "
+"<span class=\"ui\">View Changes</span> → <span class=\"ui\">Show</span>. "
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
@@ -3357,15 +3329,16 @@ msgstr ""
 "փոփոխությունները և կարող եք պատահաբար փաստաթղթում թողնել անցանկալի տեքստ:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:777-5
+#, fuzzy
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
-"Alternatively, choose <span class=\"ui\">Edit</span> → <span class=\"ui\""
-">Track Changes </span> → <span class=\"ui\">Accept</span> or <span class=\"ui"
-"\">Reject</span>. Furthermore, if you need to filter changes before "
-"accepting or rejecting, choose <span class=\"ui\">Edit</span> → <span class="
-"\"ui\">Track Changes </span> → <span class=\"ui\">Manage</span>. A dialog "
-"shows a list of all tracked changes. Use the dialog buttons accordingly."
+"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\""
+">Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
+"to filter changes before accepting or rejecting, choose <span class=\"ui\""
+">Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\""
+">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
+"buttons accordingly."
 msgstr ""
 "Փոփոխությունները կարող են ընդունվել կամ մերժվել: Փոփոխությունները ընդունելու "
 "կամ մերժելու համար սեղմեք փաստաթղթի աջ կողմում գտնվող մեկնաբանությունների "
@@ -3405,9 +3378,10 @@ msgid "Using the page style"
 msgstr "Էջի ոճի օգտագործումը"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
+#, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page</span> and "
-"select the <span class=\"ui\">Page</span> tab"
+"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page Style</"
+"span> and select the <span class=\"ui\">Page</span> tab"
 msgstr ""
 "Ընտրեք <span class=\"ui\">Ձևաչափ</span> → <span class=\"ui\">Էջ</span> և "
 "ընտրեք <span class=\"ui\">Էջ</span> ներդիրը"
@@ -3486,13 +3460,11 @@ msgstr "Ընտրեք տեքստը առկա ձևաչափով"
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:806-7
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:848-7
 msgid ""
-"Click on the clone formatting icon <img alt=\"format paintbrush\" class"
-"=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
-"turns to a paint bucket."
+"Click on the <span class=\"ui\">Clone Formatting</span> icon <img alt="
+"\"format paintbrush\" class=\"icon-size\" src=\"images/lc_formatpaintbrush."
+"svg\" /> on the <span class=\"ui\">Home</span> tab. The mouse pointer turns "
+"to a paint bucket."
 msgstr ""
-"Սեղմեք կլոնի ձևաչափման պատկերակի վրա <img alt=\"format paintbrush\" class"
-"=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />: Մկնիկի ցուցիչը "
-"վերածվում է ներկի դույլի:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
 msgid "Select the text you want to apply the new format."
@@ -3525,16 +3497,10 @@ msgstr ""
 msgid ""
 "You have the AutoCorrection enabled. AutoCorrection compares the text just "
 "typed to an internal table of text. In most cases, AutoCorrection corrects "
-"typos while you type. If AutoCorrection is not necessary, disable it in "
-"<span class=\"ui\">Tools</span> → <span class=\"ui\">AutoCorrection</span> → "
-"<span class=\"ui\">While typing</span>."
+"typos while you type. To revert a correction, press <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after it "
+"was applied."
 msgstr ""
-"Դուք միացրել եք Ինքնաշխատ ուղղումը։ Ինքնաշխատ ուղղումը փոխում է նոր "
-"մուտքագրված տեքստը և վերածում ներքին աղյուսակի համապատասխան տեքստի։ Շատ "
-"դեպքերում ինքնաշխատ ուղղումը շտկում է տպագրական սխալները մուտքագրման "
-"ընթացքում։ Եթե ինքնաշխատ ուղղումը անհրաժեշտ չէ, անջատեք այն <span class=\"ui"
-"\">Գործիքներ</span> → <span class=\"ui\">Ինքնաշխատ ուղղում</span> → <span "
-"class=\"ui\">Մուտքագրման ընթացքում</span> բաժնում։"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
@@ -3542,13 +3508,9 @@ msgstr "Ինչպե՞ս կարող եմ տպելու համար ընտրել տվ
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:828-5
 msgid ""
-"Insert column and row breaks in the spreadsheet to narrow the print range "
-"and print the document to download. On printing the PDF, select the pages of "
-"interest."
+"Insert column and row breaks in the spreadsheet to narrow the print range. "
+"When printing, select the pages of interest."
 msgstr ""
-"Տպելու միջակայքը նեղացնելու և ներբեռնվող փաստաթուղթը տպելու համար "
-"աղյուսակաթերթում տեղադրեք սյունակների և տողերի ընդհատումներ: PDF նիշքը "
-"տպելիս ընտրեք ձեզ հետաքրքրող էջերը:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:831-5
 msgid "How can I import CSV data?"
@@ -3572,16 +3534,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:835-7
 msgid ""
-"Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
-">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
-"\"true\">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> "
-"dialog opens to let you describe the precise format of the CSV data."
+"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog "
+"opens to let you describe the precise format of the CSV data."
 msgstr ""
-"Հետ տեղադրեք զննարկչից <span class=\"ui\">Խմբագրել</span> → <span class=\"ui"
-"\">Հետ տեղադրել</span> կամ սեղմեք <kbd>Ctrl</kbd><span class=\"kbd--plus\" "
-"aria-hidden=\"true\">+</span><kbd>V</kbd>: Բացվում է <span class=\"ui\""
-">Տեքստի ներմուծում</span> երկխոսությունը, որը թույլ է տալիս նկարագրել CSV "
-"տվյալների ճշգրիտ ձևաչափը:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
 msgid ""
@@ -3609,8 +3565,10 @@ msgid "How can I copy the formatting of existing cells to new ones?"
 msgstr "Ինչպե՞ս կարող եմ առկա բջիջների ձևաչափումը պատճենել նորերի վրա։"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:845-5
-msgid "This is easy to do using the Paintbrush tool in the toolbar."
-msgstr "Սա հեշտ է անել գործիքագոտում գտնվող Paintbrush գործիքի միջոցով։"
+msgid ""
+"This is easy to do using <span class=\"ui\">Clone Formatting</span> on the "
+"<span class=\"ui\">Home</span> tab."
+msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:847-7
 msgid "Format the source cell with the font, color background and more."
@@ -3627,12 +3585,13 @@ msgid "What is “Clear Direct Formatting” icon?"
 msgstr "Ի՞նչ է «Մաքրել ուղղակի ձևաչափումը» պատկերակը։"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:854-5
+#, fuzzy
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
 "formatting. To restore the formatting to the style settings, select the text "
-"or spreadsheet cell and choose <span class=\"ui\">Format</span> → <span "
-"class=\"ui\">Clear Direct Formatting</span> or use the button in the toolbar."
+"or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span class="
+"\"ui\">Clear Direct Formatting</span>."
 msgstr ""
 "Ուղիղ ձևաչափումը այն է, որը կիրառվում է անմիջապես պարբերության կամ "
 "աղյուսակաթերթի բջջի ընտրված բովանդակության վրա և համընկնում է դրան տրված ոճի "
@@ -3665,16 +3624,17 @@ msgid ""
 msgstr "Բացեք շնորհանդեսը <span class=\"productname\">{productname}</span>-ում"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:869-7
+#, fuzzy
 msgid ""
-"Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">Full "
-"Screen Presentation</span> or click on the left-most icon in the bottom of "
-"the slide panel:"
+"Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">From "
+"Beginning</span> or click on the left-most icon in the bottom of the slide "
+"panel:"
 msgstr ""
 "Կամ ընտրեք <span class=\"ui\">Սահիկադիտում</span> → <span class=\"ui\""
 ">Լիաէկրան ներկայացում</span>, կամ սեղմեք սահիկի վահանակի ներքևի մասում "
 "գտնվող ձախ կողմի պատկերակի վրա:"
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-197
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-187
 msgid "slide show"
 msgstr "սահիկահանդես"
 
@@ -3709,6 +3669,197 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:880-7
 msgid "Set the properties of the element of the object."
 msgstr "Սահմանեք օբյեկտի տարրի հատկությունները։"
+
+#~ msgid ""
+#~ "<span class=\"def\">The menu bar:</span> The main menu is at the top and "
+#~ "includes many options, such as commands for printing, editing, viewing, and "
+#~ "other advanced commands. You can hide the menu bar by clicking the hide icon "
+#~ "<span class=\"w2ui-icon fold icon-size\" role=\"img\" aria-label=\"hide menu "
+#~ "bar\" title=\"Hide menu bar\"></span> on the far right. To show it again, "
+#~ "click the show icon <span class=\"w2ui-icon unfold icon-size\" role=\"img\" "
+#~ "aria-label=\"show menu bar\" title=\"Show menu bar\"></span>."
+#~ msgstr ""
+#~ "<span class=\"def\">Ընտրացանկի գոտի:</span> Գլխավոր ցանկը գտնվում է վերևում "
+#~ "և ներառում է բազմաթիվ տարբերակներ, ինչպիսիք են տպագրության, խմբագրման, "
+#~ "դիտման և այլ լրացուցիչ հրամաններ: Դուք կարող եք թաքցնել ընտրացանկի գոտին՝ "
+#~ "սեղմելով թաքցնելու պատկերակը <span class=\"w2ui-icon fold icon-size\" role="
+#~ "\"img\" aria-label=\"hide menu bar\" title=\"Թաքցնել ցանկի գոտին\"></span> "
+#~ "ամենաաջ անկյունում: Այն կրկին ցուցադրելու համար սեղմեք ցուցադրելու պատկերակը "
+#~ "<span class=\"w2ui-icon unfold icon-size\" role=\"img\" aria-label=\"show "
+#~ "menu bar\" title=\"Ցուցադրել ընտրացանկի գոտին\"></span>։"
+
+#~ msgid ""
+#~ "<span class=\"def\">The toolbar:</span> The toolbar contains the most used "
+#~ "options for daily editing. Toolbar buttons are dynamic, meaning that their "
+#~ "state (on or off) depends on different factors."
+#~ msgstr ""
+#~ "<span class=\"def\">Գործիքագոտի.</span> Գործիքագոտին պարունակում է ամենօրյա "
+#~ "խմբագրման համար ամենաշատ օգտագործվող տարբերակները: Գործիքագոտու կոճակները "
+#~ "դինամիկ են, ինչը նշանակում է, որ դրանց վիճակը (միացված կամ անջատված) կախված "
+#~ "է տարբեր գործոններից:"
+
+#~ msgid ""
+#~ "<span class=\"def\">The information bar:</span> The information bar displays "
+#~ "details about the current document. The actual information depends on the "
+#~ "nature of the document."
+#~ msgstr ""
+#~ "<span class=\"def\">Տեղեկատվական վահանակ։</span> Տեղեկատվական վահանակը "
+#~ "ցուցադրում է ընթացիկ փաստաթղթի մասին մանրամասներ: Իրական տեղեկատվությունը "
+#~ "կախված է փաստաթղթի բնույթից:"
+
+#~ msgid ""
+#~ "Information bar showing page navigation arrows, zoom controls, and zoom level"
+#~ msgstr ""
+#~ "Տեղեկատվական գոտի, որը ցույց է տալիս էջի նավարկման սլաքները, մեծացման "
+#~ "կառավարման տարրերը և մեծացման մակարդակը"
+
+#~ msgid ""
+#~ "To save the document in a different format use the <span class=\"ui\">Save "
+#~ "as</span> button on the page shown from the <span class=\"ui\">File</span> "
+#~ "menu bar button."
+#~ msgstr ""
+#~ "Փաստաթուղթը այլ ձևաչափով պահպանելու համար օգտագործեք <span class=\"ui\""
+#~ ">Պահպանել որպես</span> կոճակը <span class=\"ui\">Նիշք</span> ընտրացանկի "
+#~ "կոճակից ցուցադրված էջում։"
+
+#~ msgid ""
+#~ "To print the document, use the <span class=\"ui\">Print</span> button on the "
+#~ "page shown from the <span class=\"ui\">File</span> menu bar button."
+#~ msgstr ""
+#~ "Փաստաթուղթը տպելու համար օգտագործեք <span class=\"ui\">Տպել</span> կոճակը "
+#~ "<span class=\"ui\">Նիշք</span> ընտրացանկի կոճակից ցուցադրված էջում։"
+
+#~ msgid ""
+#~ "Rich content copy/cut and paste is supported, not only within a given "
+#~ "document, but also across documents on the same or different <span class="
+#~ "\"productname\">{productname}</span>. For these internal uses, users can "
+#~ "copy/cut content, including images and mixed content, on PC by using the "
+#~ "keyboard shortcuts directly (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
+#~ "plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class="
+#~ "\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). For security "
+#~ "reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>V</kbd> to paste on PC, but context menus can "
+#~ "be used for cut and copy. On Android or iOS selecting text by double "
+#~ "tapping, and using a long-tap to access copy/cut/paste via the context menu "
+#~ "is required."
+#~ msgstr ""
+#~ "Հարուստ բովանդակության պատճենումը/կտրում-տեղադրումը աջակցվում է ոչ միայն "
+#~ "տվյալ փաստաթղթի ներսում, այլև նույն կամ տարբեր <span class=\"productname\""
+#~ ">{productname}</span> փաստաթղթերի միջև: Այս ներքին օգտագործման համար "
+#~ "օգտատերերը համակարգչում կարող են պատճենել/կտրատել բովանդակությունը, ներառյալ "
+#~ "պատկերները և խառը բովանդակությունը՝ անմիջապես օգտագործելով ստեղնաշարի "
+#~ "դյուրանցումները (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true"
+#~ "\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+#~ "hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
+#~ "plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>)։ Անվտանգության "
+#~ "նկատառումներից ելնելով՝ համակարգչում տեղադրելու համար անհրաժեշտ է օգտագործել "
+#~ "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
+#~ ">+</span><kbd>V</kbd>, սակայն կտրելու և պատճենելու համար կարող են "
+#~ "օգտագործվել համատեքստային ցանկեր: Android-ում կամ iOS-ում պահանջվում է "
+#~ "տեքստը կրկնակի սեղմելով ընտրել, իսկ պատճենելու/կտրելու/տեղադրելու համար՝ "
+#~ "երկար սեղմումով, համատեքստային ցանկի միջոցով:"
+
+#~ msgid ""
+#~ "To copy larger pieces of content to other applications on your device, users "
+#~ "need to press the <span class=\"ui\">Start download</span> button, and then "
+#~ "re-copy this to their clipboard in order to make it available to the target "
+#~ "application to read. This is possible via a tiny widget that pops up in the "
+#~ "bottom-right corner, and is only necessary to export the content for pasting "
+#~ "in external applications. This step also converts complex object types into "
+#~ "static images."
+#~ msgstr ""
+#~ "Ձեր սարքի վրա այլ հավելվածների բովանդակության ավելի մեծ մասերը պատճենելու "
+#~ "համար օգտատերերը պետք է սեղմեն <span class=\"ui\">Սկսել ներբեռնումը</span> "
+#~ "կոճակը, այնուհետև վերապատճենեն այն իրենց սեղմատախտակին՝ այն թիրախային "
+#~ "հավելվածում հասանելի դարձնելու կարդալու համար: Սա հնարավոր է փոքրիկ վիջեթի "
+#~ "միջոցով, որը հայտնվում է ներքևի աջ անկյունում և անհրաժեշտ է միայն արտաքին "
+#~ "հավելվածներում տեղադրվելու ենթակա բովանդակությունը արտահանելու համար: Այս "
+#~ "քայլը նաև բարդ օբյեկտների տեսակները վերածում է ստատիկ պատկերների:"
+
+#~ msgid "Inactive document"
+#~ msgstr "Անգործուն փաստաթուղթ"
+
+#~ msgid ""
+#~ "<span class=\"def\">Insert local image:</span> opens the browser file picker "
+#~ "to upload the image from your local computer and insert it into the document."
+#~ msgstr ""
+#~ "<span class=\"def\">Տեղային պատկերի տեղադրում.</span> բացում է դիտարկիչի "
+#~ "նիշքերի ընտրիչը՝ պատկերը ձեր տեղային համակարգչից վերբեռնելու և փաստաթղթում "
+#~ "տեղադրելու համար։"
+
+#~ msgid ""
+#~ "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT"
+#~ msgstr ""
+#~ "Տեքստային փաստաթղթեր՝ Microsoft-ի DOC, DOCX, RTF ձևաչափերով։ OpenDocument "
+#~ "ձևաչափ՝ ODT"
+
+#~ msgid "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS"
+#~ msgstr ""
+#~ "Աղյուսակաթերթեր։ Microsoft-ի ձևաչափեր՝ XLS, XLSX, OpenDocument ձևաչափ՝ ODS"
+
+#~ msgid ""
+#~ "Choose menu <span class=\"ui\">Tools</span> and uncheck <span class=\"ui\""
+#~ ">Automatic Spell Checking</span>."
+#~ msgstr ""
+#~ "Ընտրեք <span class=\"ui\">Գործիքներ</span> ընտրացանկը և ապաընտրեք <span "
+#~ "class=\"ui\">Ինքնաշխատ ուղղագրության ստուգում</span> նշումը։"
+
+#~ msgid ""
+#~ "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
+#~ "Characters </span> or click the corresponding icon in the toolbar. A dialog "
+#~ "opens."
+#~ msgstr ""
+#~ "Ընտրեք <span class=\"ui\">Զետեղել</span> → <span class=\"ui\">Հատուկ նիշեր </"
+#~ "span> կամ սեղմեք գործիքագոտու համապատասխան պատկերակը: Կհայտնվի երկխոսության "
+#~ "պատուհան:"
+
+#~ msgid ""
+#~ "Click on the clone formatting icon <img alt=\"format paintbrush\" class"
+#~ "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />. The mouse pointer "
+#~ "turns to a paint bucket."
+#~ msgstr ""
+#~ "Սեղմեք կլոնի ձևաչափման պատկերակի վրա <img alt=\"format paintbrush\" class"
+#~ "=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" />: Մկնիկի ցուցիչը "
+#~ "վերածվում է ներկի դույլի:"
+
+#~ msgid ""
+#~ "You have the AutoCorrection enabled. AutoCorrection compares the text just "
+#~ "typed to an internal table of text. In most cases, AutoCorrection corrects "
+#~ "typos while you type. If AutoCorrection is not necessary, disable it in "
+#~ "<span class=\"ui\">Tools</span> → <span class=\"ui\">AutoCorrection</span> → "
+#~ "<span class=\"ui\">While typing</span>."
+#~ msgstr ""
+#~ "Դուք միացրել եք Ինքնաշխատ ուղղումը։ Ինքնաշխատ ուղղումը փոխում է նոր "
+#~ "մուտքագրված տեքստը և վերածում ներքին աղյուսակի համապատասխան տեքստի։ Շատ "
+#~ "դեպքերում ինքնաշխատ ուղղումը շտկում է տպագրական սխալները մուտքագրման "
+#~ "ընթացքում։ Եթե ինքնաշխատ ուղղումը անհրաժեշտ չէ, անջատեք այն <span class=\"ui"
+#~ "\">Գործիքներ</span> → <span class=\"ui\">Ինքնաշխատ ուղղում</span> → <span "
+#~ "class=\"ui\">Մուտքագրման ընթացքում</span> բաժնում։"
+
+#~ msgid ""
+#~ "Insert column and row breaks in the spreadsheet to narrow the print range "
+#~ "and print the document to download. On printing the PDF, select the pages of "
+#~ "interest."
+#~ msgstr ""
+#~ "Տպելու միջակայքը նեղացնելու և ներբեռնվող փաստաթուղթը տպելու համար "
+#~ "աղյուսակաթերթում տեղադրեք սյունակների և տողերի ընդհատումներ: PDF նիշքը "
+#~ "տպելիս ընտրեք ձեզ հետաքրքրող էջերը:"
+
+#~ msgid ""
+#~ "Paste from the browser <span class=\"ui\">Edit</span> → <span class=\"ui\""
+#~ ">Paste</span> or press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden="
+#~ "\"true\">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> "
+#~ "dialog opens to let you describe the precise format of the CSV data."
+#~ msgstr ""
+#~ "Հետ տեղադրեք զննարկչից <span class=\"ui\">Խմբագրել</span> → <span class=\"ui"
+#~ "\">Հետ տեղադրել</span> կամ սեղմեք <kbd>Ctrl</kbd><span class=\"kbd--plus\" "
+#~ "aria-hidden=\"true\">+</span><kbd>V</kbd>: Բացվում է <span class=\"ui\""
+#~ ">Տեքստի ներմուծում</span> երկխոսությունը, որը թույլ է տալիս նկարագրել CSV "
+#~ "տվյալների ճշգրիտ ձևաչափը:"
+
+#~ msgid "This is easy to do using the Paintbrush tool in the toolbar."
+#~ msgstr "Սա հեշտ է անել գործիքագոտում գտնվող Paintbrush գործիքի միջոցով։"
 
 #~ msgid ""
 #~ "<span class=\"productname\">{productname}</span> allows you to create and "
