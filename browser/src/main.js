@@ -144,6 +144,20 @@ var initUI = function() {
 	}
 };
 
+const _codaUpload = function(fileBytes) {
+	const ws = global.collabWs;
+	const info = window._codaRemoteInfo;
+	if (!info || (ws && ws.readyState !== WebSocket.CLOSED))
+		return global.collabUploadFile(fileBytes);
+
+	return global.collabConnect(info.wopiSrc, info.accessToken, info.coolServer).then(function() {
+		// A restarted coolwsd no longer knows that we are editing.
+		if (!global.collabEditingActive)
+			window.collabSendMessage({type: 'editing_started'}); 
+		return global.collabUploadFile(fileBytes);
+	});
+};
+
 // Local save callback shared by COWASM and CODA remote-doc paths.
 // Both flavours have already saved the document bytes locally; this
 // pushes them up to the integrator via /co/collab/put, then runs any
@@ -151,7 +165,7 @@ var initUI = function() {
 var _codaUploadOnSave = function(fileBytes, tag) {
 	window.app.console.log(tag + ': uploading ' + fileBytes.length + ' bytes');
 	map.fire('showbusy', {label: _('Saving...')});
-	return global.collabUploadFile(fileBytes).then(function() {
+	return _codaUpload(fileBytes).then(function() {
 		window.app.console.log(tag + ': upload completed');
 		map.fire('hidebusy');
 		if (window._switchToServerAfterSave) {
