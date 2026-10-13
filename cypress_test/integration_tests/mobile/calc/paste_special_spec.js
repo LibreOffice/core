@@ -34,4 +34,19 @@ describe(['tagmobile'], 'Paste special.', function() {
 		cy.cGet('#mobile-wizard').should('not.be.visible');
 		cy.cGet('#formulabar').should('contain.text', 'Textx');
 	});
+
+	it('Offers the clipboard formats for external data.', function() {
+		helper.setDummyClipboardForPaste('<p>html content</p>', 'plain text content');
+
+		calcHelper.clickOnFirstCell();
+		cy.cGet('#document-canvas').trigger('contextmenu', 'center');
+		cy.cGet('#mobile-wizard-content').should('be.visible');
+		cy.cGet('body').contains('.context-menu-link', 'Paste Special').click();
+
+		// The text import dialog is left out on a phone.
+		cy.cGet('#mobile-wizard-title').should('have.text', 'Paste Special');
+		cy.cGet('#PasteSpecialDialog .ui-treeview-cell-text:contains("HTML")').should('exist');
+		cy.cGet('#PasteSpecialDialog .ui-treeview-cell-text:contains("Unformatted text")').should('exist');
+		cy.cGet('#PasteSpecialDialog .ui-treeview-cell-text:contains("text import")').should('not.exist');
+	});
 });

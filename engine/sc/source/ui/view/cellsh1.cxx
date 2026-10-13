@@ -1926,12 +1926,17 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 pDlg->Insert( nFormatId, aName );
                             }
 
-                            SfxViewFrame& rViewFrame = pTabViewShell->GetViewFrame();
-                            auto xFrame = rViewFrame.GetFrame().GetFrameInterface();
-                            const OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
-                            auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:PasteTextImportDialog"_ustr, aModuleName);
-                            OUString sLabel(vcl::CommandInfoProvider::GetTooltipLabelForCommand(aProperties));
-                            pDlg->InsertUno(u".uno:PasteTextImportDialog"_ustr, sLabel);
+                            // The text import dialog is too large for a phone, so the entry is left
+                            // out there.
+                            if (!pTabViewShell->isKitMobilePhone())
+                            {
+                                SfxViewFrame& rViewFrame = pTabViewShell->GetViewFrame();
+                                auto xFrame = rViewFrame.GetFrame().GetFrameInterface();
+                                const OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
+                                auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(u".uno:PasteTextImportDialog"_ustr, aModuleName);
+                                OUString sLabel(vcl::CommandInfoProvider::GetTooltipLabelForCommand(aProperties));
+                                pDlg->InsertUno(u".uno:PasteTextImportDialog"_ustr, sLabel);
+                            }
 
                             auto xDatahelper = std::make_shared<TransferableDataHelper>(
                                 std::move(aDataHelper));

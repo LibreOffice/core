@@ -11,33 +11,9 @@ describe(['tagmobile'], 'Paste special.', function() {
 		mobileHelper.enableEditingMobile();
 	});
 
-	function setDummyClipboardForPaste() {
-		helper.setDummyClipboardForCopy();
-		cy.getFrameWindow().then(function(win) {
-			const html = '<p>html content</p>';
-			const plainText = 'plain text content';
-			const clipboardItem = {
-				types: ['text/html', 'text/plain'],
-				getType: function(type) {
-					return {
-						then: function(resolve) {
-							resolve(new Blob([type === 'text/html' ? html : plainText]));
-						},
-					};
-				},
-			};
-			win.app.map._clip._dummyClipboard.read = function() {
-				return {
-					then: function(resolve) {
-						resolve([clipboardItem]);
-					},
-				};
-			};
-		});
-	}
-
 	it('Paste as unformatted text.', function() {
-		setDummyClipboardForPaste();
+		helper.setDummyClipboardForCopy();
+		helper.setDummyClipboardForPaste('<p>html content</p>', 'plain text content');
 
 		// replace the misspelled text, it would give the spelling menu
 		helper.typeIntoDocument('{ctrl}a');

@@ -1294,6 +1294,33 @@ function setDummyClipboardForCopy(type) {
 	});
 }
 
+// Replaces the read side of the dummy clipboard with one item that offers the given HTML and
+// plain text, as if the content had been copied in another application. The copy helper
+// replaces the whole dummy clipboard object, so a test that needs both calls that one first.
+function setDummyClipboardForPaste(html, plainText) {
+	cy.window().then(win => {
+		const app = win['0'].app;
+		const clipboard = app.map._clip;
+		const clipboardItem = {
+			types: ['text/html', 'text/plain'],
+			getType: function(type) {
+				return {
+					then: function(resolve) {
+						resolve(new Blob([type === 'text/html' ? html : plainText]));
+					},
+				};
+			},
+		};
+		clipboard._dummyClipboard.read = function() {
+			return {
+				then: function(resolve) {
+					resolve([clipboardItem]);
+				},
+			};
+		};
+	});
+}
+
 // Clicks the Copy button on the UI.
 function copy() {
 	cy.log('helper.copy()');
@@ -1655,6 +1682,7 @@ module.exports.assertFocus = assertFocus;
 module.exports.getBlinkingCursorPosition = getBlinkingCursorPosition;
 module.exports.clickAt = clickAt;
 module.exports.setDummyClipboardForCopy = setDummyClipboardForCopy;
+module.exports.setDummyClipboardForPaste = setDummyClipboardForPaste;
 module.exports.copy = copy;
 module.exports.getFileName = getFileName;
 module.exports.getSubFolder = getSubFolder;
