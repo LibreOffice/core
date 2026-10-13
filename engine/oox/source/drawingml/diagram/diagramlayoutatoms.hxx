@@ -59,6 +59,15 @@ struct IteratorAttr
     sal_Int32 mnStep;
 };
 
+/// Gives the nodes a layout node states as alike, "h for des ptType=node op=equ" with no
+/// reference, the smallest size among them along that axis. Runs once all shapes have their
+/// size.
+void settleEqualNodeSizes(const SmartArtDiagram& rDgm, const ShapePtr& pRoot);
+
+/// Gives every child whose side is bound both ways to a part of a named shape levels below a
+/// sibling that part of the shape's side. Runs once all shapes have their size.
+void settleSidesBoundToNamedShapes(const SmartArtDiagram& rDgm, const ShapePtr& pRoot);
+
 /// Puts every connector that names the shape it starts at and the one it ends at between those
 /// two across the flow. Runs once all shapes have their place.
 void settleNamedConnectors(const SmartArtDiagram& rDgm);
@@ -209,6 +218,8 @@ public:
     virtual void accept( LayoutAtomVisitor& ) override;
     Rule& getRule()
         { return maRule; }
+    const Rule& getRule() const
+        { return maRule; }
     void parseRule(std::vector<Rule>& rRules) const;
 private:
     Rule maRule;
@@ -280,7 +291,8 @@ typedef std::shared_ptr< AlgAtom > AlgAtomPtr;
 class SnakeAlg
 {
 public:
-    static void layoutShapeChildren(const AlgAtom& rAlg, const ShapePtr& rShape,
+    static void layoutShapeChildren(const SmartArtDiagram& rDgm, const AlgAtom& rAlg,
+                                    const ShapePtr& rShape,
                                     const std::vector<Constraint>& rConstraints);
 
     /// A snake whose transitions are drawn as connectors, a bending process. True when it
@@ -296,7 +308,9 @@ public:
 class PyraAlg
 {
 public:
-    static void layoutShapeChildren(const ShapePtr& rShape);
+    static void layoutShapeChildren(const SmartArtDiagram& rDgm, AlgAtom& rAlg,
+                                    const ShapePtr& rShape,
+                                    const std::vector<Constraint>& rConstraints);
 };
 
 /**

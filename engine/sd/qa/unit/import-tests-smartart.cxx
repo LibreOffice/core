@@ -1103,8 +1103,9 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testPictureStrip)
     // Make sure that aspect ratio is not ignored, i.e. width is not larger than height 3 times.
     awt::Size aFirstPairSize = xFirstPair->getSize();
     // Without the accompanying fix in place, this test would have failed: bad width was 16932, good
-    // width is 12540, but let's accept 12541 as well.
-    CPPUNIT_ASSERT_LESSEQUAL(aFirstPairSize.Height * 3 + 1, aFirstPairSize.Width);
+    // width is 12540. The width and the height round to hundredths of a millimetre each on its
+    // own, so the width may be a hundredth over and three times the height three under.
+    CPPUNIT_ASSERT_LESSEQUAL(aFirstPairSize.Height * 3 + 4, aFirstPairSize.Width);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testInteropGrabBag)
@@ -1573,8 +1574,9 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testLinearRuleVert)
     // - Expected: 2020
     // - Actual  : 10308
     // i.e. the first item on the vertical linear layout used ~all space, the other items were not
-    // visible.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2020), xShape->getSize().Height);
+    // visible. The parent text is stated as 0.82 of the font high, as many millimetres at the
+    // font of 35 points the texts fit at.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2869), xShape->getSize().Height);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAutofitSync)
@@ -1621,11 +1623,11 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testSnakeRows)
     createSdImpressDoc("pptx/smartart-snake-rows.pptx");
 
     uno::Reference<drawing::XShapes> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
-    // Collect position of the background and the real child shapes. First row and background has
-    // the same top position, unless some unexpected spacing happens, since this is a
-    // "left-to-right, then top-to-bottom" snake direction.
+    // Collect the top positions of the real child shapes, the first child being the background
+    // that covers the whole diagram. The rows stand in the middle of the background's height,
+    // so its top is not one of theirs.
     std::set<sal_Int32> aYPositions;
-    for (sal_Int32 nChild = 0; nChild < xDiagram->getCount(); ++nChild)
+    for (sal_Int32 nChild = 1; nChild < xDiagram->getCount(); ++nChild)
     {
         uno::Reference<drawing::XShape> xChild(xDiagram->getByIndex(nChild), uno::UNO_QUERY);
         aYPositions.insert(xChild->getPosition().Y);
@@ -2235,6 +2237,12 @@ BoxAndText readBoxAndText(const uno::Reference<drawing::XShape>& xDiagram, const
     BoxAndText aRetval;
     aRetval.mnHeight = xShape->getSize().Height;
     xProperties->getPropertyValue(u"CharHeight"_ustr) >>= aRetval.mfCharHeight;
+
+    // The text is shown at its size scaled by the shape's own fit to its box.
+    double fFontScale(0.0);
+    xProperties->getPropertyValue(u"TextFitToSizeFontScale"_ustr) >>= fFontScale;
+    if (fFontScale > 0.0)
+        aRetval.mfCharHeight = static_cast<float>(aRetval.mfCharHeight * fFontScale / 100.0);
 
     return aRetval;
 }

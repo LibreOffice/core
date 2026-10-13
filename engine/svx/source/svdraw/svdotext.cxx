@@ -22,6 +22,7 @@
 #include <svl/stritem.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdoashp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/compatflags.hxx>
@@ -1222,11 +1223,21 @@ double SdrTextObj::GetSpacingScale() const
 
 void SdrTextObj::setupAutoFitText(SdrOutliner& rOutliner) const
 {
-    const Size aShapeSize = GetSnapRect().GetSize();
-    Size aSize(aShapeSize.Width() - GetTextLeftDistance() - GetTextRightDistance(),
-               aShapeSize.Height() - GetTextUpperDistance() - GetTextLowerDistance());
+    // The text is fitted into the room it is painted in: the anchor rectangle, with the text
+    // distances taken off, in the unrotated frame of the object. For a custom shape that is the
+    // text area of its geometry, and a text turned against the shape by a quarter, as a Diagram
+    // keeps the text of a node on its side upright, runs along the area's height.
+    tools::Rectangle aAnchorRect;
+    TakeTextAnchorRect(aAnchorRect);
+    Size aRoom(aAnchorRect.GetSize());
+    if (const SdrObjCustomShape* pCustomShape = dynamic_cast<const SdrObjCustomShape*>(this))
+    {
+        const double fTurn(std::fmod(std::fabs(pCustomShape->GetExtraTextRotation(true)), 180.0));
+        if (std::fabs(fTurn - 90.0) < 1.0)
+            aRoom = Size(aRoom.Height(), aRoom.Width());
+    }
 
-    setupAutoFitText(rOutliner, aSize);
+    setupAutoFitText(rOutliner, aRoom);
 }
 void SdrTextObj::setupAutoFitText(SdrOutliner& rOutliner, const Size& rTextBoxSize) const
 {

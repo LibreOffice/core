@@ -190,6 +190,7 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
     // shapes a sideways branch places as a whole all describe the tree this run builds. A run
     // starts with none of them, so a Diagram laid out a second time is measured afresh.
     maUserVariables.clear();
+    maFittedFontSizes.clear();
     maDeferredUserVariables.clear();
     maLaidOutSideways.clear();
     maDeferredSpacers.clear();
@@ -197,14 +198,64 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
     const rtl::Reference<svx::diagram::Point> xRootPoint(mpData->getRootPoint());
     if (bCreate && mpLayout->getNode() && xRootPoint.is())
     {
-        // create Shape hierarchy
-        ShapeCreationVisitor aCreationVisitor(*this, xRootPoint, pParentShape);
-        mpLayout->getNode()->setExistingShape(pParentShape);
-        mpLayout->getNode()->accept(aCreationVisitor);
+        // A text node asks for a font, and the nodes that share a stated size are laid out as
+        // a group at one font: the first pass at the size the layout states, and where a text
+        // of the group did not fit on a pass the shapes are made and laid out again with that
+        // group a point smaller, down to the least the layout's rule allows. A Diagram whose
+        // texts all fit is laid out once.
+        maFontCandidates.clear();
+        maGroupsThatShrank.clear();
+        maContentHeights.clear();
+        // a column of composites takes their heights from the pass before, so one more pass
+        // runs where a column met a composite no pass had measured yet
+        bool bExtraPassTaken(false);
+        for (int nPass = 0; nPass < 80; ++nPass)
+        {
+            maGroupsThatDidNotFit.clear();
+            maNextContentHeights.clear();
+            mbContentHeightMissing = false;
+            maUserVariables.clear();
+            maFittedFontSizes.clear();
+            maDeferredUserVariables.clear();
+            maLaidOutSideways.clear();
+            maDeferredSpacers.clear();
+            mpLayout->getPresPointShapeMap().clear();
+            pParentShape->getChildren().clear();
 
-        // layout shapes - now all shapes are created
-        ShapeLayoutingVisitor aLayoutingVisitor(*this, xRootPoint);
-        mpLayout->getNode()->accept(aLayoutingVisitor);
+            // create Shape hierarchy
+            ShapeCreationVisitor aCreationVisitor(*this, xRootPoint, pParentShape);
+            mpLayout->getNode()->setExistingShape(pParentShape);
+            mpLayout->getNode()->accept(aCreationVisitor);
+
+            // layout shapes - now all shapes are created
+            ShapeLayoutingVisitor aLayoutingVisitor(*this, xRootPoint);
+            mpLayout->getNode()->accept(aLayoutingVisitor);
+
+            // every group whose text did not fit shrinks by a point, and the pass is run
+            // again while any of them can
+            bool bAnyShrank(false);
+            for (const OUString& rGroup : maGroupsThatDidNotFit)
+            {
+                const auto aCandidate = maFontCandidates.find(rGroup);
+                if (aCandidate == maFontCandidates.end()
+                    || aCandidate->second <= mfLeastFont + 1e-6)
+                    continue;
+                aCandidate->second = std::max(mfLeastFont, aCandidate->second - 1.0);
+                maGroupsThatShrank.insert(rGroup);
+                bAnyShrank = true;
+            }
+            const bool bMissing(mbContentHeightMissing && !maNextContentHeights.empty()
+                                && maNextContentHeights != maContentHeights);
+            maContentHeights = maNextContentHeights;
+            if (!bAnyShrank)
+            {
+                if (!bMissing || bExtraPassTaken)
+                    break;
+                bExtraPassTaken = true;
+            }
+        }
+        settleEqualNodeSizes(*this, pParentShape);
+        settleSidesBoundToNamedShapes(*this, pParentShape);
         settleNamedConnectors(*this);
         settleDeferredSpacers(*this);
         sortChildrenByZOrder(pParentShape);

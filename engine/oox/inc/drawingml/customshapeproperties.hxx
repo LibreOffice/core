@@ -178,6 +178,14 @@ private:
     static PresetDataMap maPresetDataMap;
     static void initializePresetDataMap();
 
+public:
+    /// Whether the adjustment nIndex, counted from 1, of the preset nPresetType is an angle, in
+    /// 60000ths of a degree, and not a part of a hundred thousand: the preset's own equations
+    /// clamp an angle to 21599999.
+    static bool isAngleAdjustment( sal_Int32 nPresetType, sal_Int32 nIndex );
+
+private:
+
     sal_Int32 mnArcNum;
     bool mbPathUsesEquations;
     PropertyMap maExtrusionPropertyMap;

@@ -2539,8 +2539,14 @@ Reference< XShape > const & Shape::createAndInsert(
                 if (XML_ellipsis == getTextBody()->getTextProperties().moVertOverflow)
                     putPropertyToGrabBag(u"vertOverflow"_ustr, cpo::uno::Any(u"ellipsis"_ustr));
             }
-            else if (moDiagramTextPreRotation)
-                mpCustomShapePropertiesPtr->setTextPreRotateAngle(-*moDiagramTextPreRotation / 60000);
+            else if (moDiagramTextPreRotation || mnDiagramRotation != 0)
+            {
+                // A shape laid out again has no text body yet; its text turns against the turn
+                // the layout gave the shape as it would with one, so it stays upright.
+                const sal_Int32 nTextPreRotateAngle(moDiagramTextPreRotation.value_or(0)
+                                                    - mnDiagramRotation);
+                mpCustomShapePropertiesPtr->setTextPreRotateAngle(-nTextPreRotateAngle / 60000);
+            }
 
             // Note that the script oox/source/drawingml/customshapes/generatePresetsData.pl looks
             // for these ==cscode== and ==csdata== markers, so don't "clean up" these SAL_INFOs

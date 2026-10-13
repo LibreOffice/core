@@ -67,11 +67,11 @@ class DiagramHelper_oox final : public svx::diagram::DiagramHelper_svx
     bool hasDiagramData() const;
 
     // Hands the fill, line and text attributes of xOldShape, and its text, to xNewShape. The
-    // shape geometry is not changed. nOldHeight is the height that xOldShapehad
-    // sizes alone.
-    static void moveDiagramModelDataFromOldToNewXShape(
+    // shape geometry is not changed; the text keeps its sizes, or takes the font the layout
+    // fitted for the node.
+    void moveDiagramModelDataFromOldToNewXShape(
         const cpo::uno::Reference<css::drawing::XShape>& xOldShape,
-        const cpo::uno::Reference<css::drawing::XShape>& xNewShape, tools::Long nOldHeight);
+        const cpo::uno::Reference<css::drawing::XShape>& xNewShape);
 
 protected:
     // access associated SdrObjGroup/XShape/RootShape

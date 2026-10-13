@@ -131,6 +131,102 @@ bool CustomShapeProperties::representsDefaultShape() const
 
 CustomShapeProperties::PresetDataMap CustomShapeProperties::maPresetDataMap;
 
+bool CustomShapeProperties::isAngleAdjustment( sal_Int32 nPresetType, sal_Int32 nIndex )
+{
+    if (maPresetDataMap.empty())
+        initializePresetDataMap();
+    const auto aPreset = maPresetDataMap.find( nPresetType );
+    if (aPreset == maPresetDataMap.end() || !aPreset->second.hasProperty( PROP_Equations ))
+        return false;
+    Sequence< OUString > aEquations;
+    aPreset->second.getProperty( PROP_Equations ) >>= aEquations;
+    const sal_Int32 nCount( aEquations.getLength() );
+
+    // The preset writes the clamp of an angle as "if(0-$3 ,0,if(21599999-$3 ,$3 ,21599999))":
+    // that is the start and the end of a pie, an arc, a chord and a circular arrow.
+    const OUString aAdjustment( "$" + OUString::number( nIndex - 1 ) );
+    const OUString aClamp( "21599999-" + aAdjustment + " " );
+    std::vector< bool > aClamped( nCount, false );
+    for (sal_Int32 n = 0; n < nCount; ++n)
+    {
+        if (aEquations[n].indexOf( aClamp ) >= 0)
+            return true;
+        if (aEquations[n].indexOf( u"21599999-$" ) >= 0)
+            aClamped[n] = true;
+    }
+
+    // The angle of a circular arrow's head is clamped to what is left of the turn and then
+    // added to the end angle, "?3 +?48 -0", within a few guides of reading the adjustment. A
+    // guide that reads the adjustment is followed through the guides that read it, four steps
+    // at most, and a sum or a difference on that way that holds one of the clamped angles makes
+    // the adjustment an angle. A thickness never enters such a sum, it is multiplied into a
+    // radius, so the arrow's other adjustments stay parts of one.
+    const auto aReferences = []( std::u16string_view rEquation ) {
+        std::vector< sal_Int32 > aOut;
+        size_t nAt( rEquation.find( u'?' ) );
+        while (nAt != std::u16string_view::npos)
+        {
+            size_t nEnd( nAt + 1 );
+            while (nEnd < rEquation.size() && rEquation[nEnd] >= '0' && rEquation[nEnd] <= '9')
+                ++nEnd;
+            if (nEnd > nAt + 1)
+                aOut.push_back( o3tl::toInt32( rEquation.substr( nAt + 1, nEnd - nAt - 1 ) ) );
+            nAt = rEquation.find( u'?', nEnd );
+        }
+        return aOut;
+    };
+    const auto aIsSum = []( const OUString& rEquation ) {
+        // "?3 +?48 -0", "?52 +0-?5 " or "?3 +?48 -?5 ": a guide, a plus, a term, a minus, a term
+        const sal_Int32 nPlus( rEquation.indexOf( " +" ) );
+        const sal_Int32 nMinus( rEquation.indexOf( '-' ) );
+        return rEquation.startsWith( "?" ) && nPlus > 0 && nMinus > nPlus
+               && rEquation.indexOf( '*' ) < 0 && rEquation.indexOf( '/' ) < 0
+               && rEquation.indexOf( '(' ) < 0;
+    };
+    std::vector< bool > aSeen( nCount, false );
+    std::vector< sal_Int32 > aFrontier;
+    for (sal_Int32 n = 0; n < nCount; ++n)
+    {
+        const sal_Int32 nAt( aEquations[n].indexOf( aAdjustment ) );
+        if (nAt < 0)
+            continue;
+        // "$1" and not the start of "$12"
+        const sal_Int32 nAfter( nAt + aAdjustment.getLength() );
+        if (nAfter < aEquations[n].getLength() && aEquations[n][nAfter] >= '0'
+            && aEquations[n][nAfter] <= '9')
+            continue;
+        aSeen[n] = true;
+        aFrontier.push_back( n );
+    }
+    for (int nStep = 0; nStep < 4 && !aFrontier.empty(); ++nStep)
+    {
+        std::vector< sal_Int32 > aNext;
+        for (sal_Int32 n = 0; n < nCount; ++n)
+        {
+            if (aSeen[n])
+                continue;
+            const std::vector< sal_Int32 > aRefs( aReferences( aEquations[n] ) );
+            bool bReads( false );
+            bool bAngle( false );
+            for (sal_Int32 nRef : aRefs)
+            {
+                if (std::find( aFrontier.begin(), aFrontier.end(), nRef ) != aFrontier.end())
+                    bReads = true;
+                if (nRef >= 0 && nRef < nCount && aClamped[nRef])
+                    bAngle = true;
+            }
+            if (!bReads)
+                continue;
+            if (bAngle && aIsSum( aEquations[n] ))
+                return true;
+            aSeen[n] = true;
+            aNext.push_back( n );
+        }
+        aFrontier = std::move( aNext );
+    }
+    return false;
+}
+
 void CustomShapeProperties::pushToPropSet(
     const Reference < XPropertySet >& xPropSet, const awt::Size &aSize )
 {
