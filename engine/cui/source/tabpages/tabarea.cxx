@@ -176,8 +176,6 @@ OUString lcl_GetEffectPageId(FillType eFillType)
             return u"hatch"_ustr;
         case FillType::BITMAP_FILL:
             return u"bitmap"_ustr;
-        case FillType::PATTERN_FILL:
-            return u"pattern"_ustr;
         default:
             return OUString();
     }
@@ -191,7 +189,6 @@ SvxFillEffectsDialog::SvxFillEffectsDialog(weld::Window* pParent, const SfxItemS
                                            XGradientListRef pGradientList,
                                            XHatchListRef pHatchingList,
                                            XBitmapListRef pBitmapList,
-                                           XPatternListRef pPatternList,
                                            ChangeType* pnColorListState)
     : SfxTabDialogController(pParent, u"cui/ui/filleffectsdialog.ui"_ustr,
                              u"FillEffectsDialog"_ustr, &rInAttrs)
@@ -199,14 +196,12 @@ SvxFillEffectsDialog::SvxFillEffectsDialog(weld::Window* pParent, const SfxItemS
     , m_pGradientList(std::move(pGradientList))
     , m_pHatchingList(std::move(pHatchingList))
     , m_pBitmapList(std::move(pBitmapList))
-    , m_pPatternList(std::move(pPatternList))
     , m_pnColorListState(pnColorListState)
 {
     const std::pair<FillType, CreateTabPage> aPages[] = {
         { FillType::GRADIENT_FILL, &SvxGradientTabPage::Create },
         { FillType::HATCH_FILL, &SvxHatchTabPage::Create },
         { FillType::BITMAP_FILL, &SvxBitmapTabPage::Create },
-        { FillType::PATTERN_FILL, &SvxPatternTabPage::Create },
     };
     // The dialog has a tab only for the fills listed in rEffects.
     for (const auto& rPage : aPages)
@@ -245,14 +240,6 @@ void SvxFillEffectsDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
         rBitmapPage.SetBitmapList(m_pBitmapList);
         rBitmapPage.Construct();
     }
-    else if (rId == "pattern")
-    {
-        auto& rPatternPage = static_cast<SvxPatternTabPage&>(rPage);
-        rPatternPage.SetColorList(m_pColorList);
-        rPatternPage.SetPatternList(m_pPatternList);
-        rPatternPage.SetColorChgd(m_pnColorListState);
-        rPatternPage.Construct();
-    }
 }
 
 short SvxFillEffectsDialog::Ok()
@@ -267,8 +254,8 @@ short SvxFillEffectsDialog::Ok()
     pPage->FillItemSet(&*m_oResult);
 
     const OUString sCurrentPage = GetCurPageId();
-    for (FillType eFillType : { FillType::GRADIENT_FILL, FillType::HATCH_FILL,
-                                FillType::BITMAP_FILL, FillType::PATTERN_FILL })
+    for (FillType eFillType :
+         { FillType::GRADIENT_FILL, FillType::HATCH_FILL, FillType::BITMAP_FILL })
     {
         if (lcl_GetEffectPageId(eFillType) == sCurrentPage)
             m_eResult = eFillType;

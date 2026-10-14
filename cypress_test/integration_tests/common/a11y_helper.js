@@ -336,7 +336,7 @@ function traverseTabs(getContainer, win, level, command, isNested = false) {
 								cy.cGet('[id^="buttonMore"][id$="-button"]').filter(':visible').first().should('be.enabled').click();
 								handleDialog(win, level + 1);
 							} else if ((command == '.uno:FormatArea' || command == '.uno:PageDialog' || command == '.uno:PageFormatDialog') && tabAriaControls == 'lbcolor') {
-								// Gradient, Hatch, Image and Pattern are tabs of the Fill Effects dialog
+								// Gradient, Hatch and Image are tabs of the Fill Effects dialog
 								cy.cGet('#moreeffects-button').click();
 								handleDialog(win, level + 1, command + ':FillEffects');
 							} else if (command && command.endsWith(':FillEffects') && tabAriaControls == 'hatch') {

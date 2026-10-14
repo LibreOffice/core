@@ -4648,6 +4648,13 @@ kbd,
 	font-size: 0; /* Hide placeholder text to prevent layout shifts in color palette iconview widgets due to lazy loading */
 }
 
+/* Area - Pattern Style dropdown: the shipped patterns in rows of four */
+
+[id^='patternstylelist'].ui-iconview {
+	grid-template-columns: repeat(4, 1fr);
+	width: max-content;
+}
+
 /* Writer - Format - Character */
 /* Writer - Format - Paragraph */
 /* Writer - Format - Page Style */

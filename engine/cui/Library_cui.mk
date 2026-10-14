@@ -180,6 +180,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/tabpages/tplnedef \
     cui/source/tabpages/tplneend \
     cui/source/tabpages/tppattern \
+    cui/source/tabpages/tppatternstyle \
     cui/source/tabpages/tpshadow \
     cui/source/tabpages/tptrans \
     cui/source/tabpages/transfrm \

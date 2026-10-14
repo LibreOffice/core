@@ -125,6 +125,8 @@ constexpr auto CuiDialogList
         { u"cui/ui/paratabspage.ui" },
         { u"cui/ui/password.ui" },
         { u"cui/ui/pastespecial.ui" },
+        { u"cui/ui/patterndialog.ui" },
+        { u"cui/ui/patternstylepage.ui" },
         { u"cui/ui/patterntabpage.ui" },
         { u"cui/ui/percentdialog.ui" },
         { u"cui/ui/pickbulletpage.ui" },
@@ -470,6 +472,8 @@ constexpr auto PopupList
         { u"modules/schart/ui/chartcolorpalettepopup.ui" },
         { u"modules/schart/ui/chartthemepopup.ui" },
         { u"modules/schart/ui/chartgradientpalettepopup.ui" },
+        // cui
+        { u"cui/ui/patternstylepopup.ui" },
         // svt
         { u"svt/ui/datewindow.ui" },
         { u"svt/ui/linewindow.ui" },

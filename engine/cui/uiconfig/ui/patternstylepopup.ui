@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="cui">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkTreeStore" id="patterns_liststore">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkPopover" id="PatternStylePopup">
+    <property name="can-focus">False</property>
+    <property name="no-show-all">True</property>
+    <property name="border-width">4</property>
+    <property name="constrain-to">none</property>
+    <child>
+      <object class="GtkBox" id="container">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="vscrollbar-policy">automatic</property>
+            <property name="shadow-type">in</property>
+            <property name="overlay-scrolling">False</property>
+            <property name="height-request">180</property>
+            <child>
+              <object class="GtkIconView" id="patternstylelist">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="model">patterns_liststore</property>
+                <property name="pixbuf-column">0</property>
+                <property name="selection-mode">single</property>
+                <property name="item-orientation">horizontal</property>
+                <property name="columns">4</property>
+                <property name="row-spacing">2</property>
+                <property name="column-spacing">2</property>
+                <property name="item-padding">2</property>
+                <property name="activate-on-single-click">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="patternstylelist-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="patternstylepopup|patterns-atkobject">Pattern Style</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="patternstylecustom">
+            <property name="label" translatable="yes" context="patternstylepopup|custom">_Customize...</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="use-underline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="patternstylecustom-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="patternstylepopup|extended_tip|customize">Opens the pattern editor, where a pattern can be drawn and added to the list.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -147,24 +147,6 @@
                 <property name="label" translatable="yes" context="filleffectsdialog|bitmap">Image</property>
               </object>
             </child>
-            <child>
-              <object class="GtkGrid" id="patternpage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="pattern">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="filleffectsdialog|pattern">Pattern</property>
-              </object>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -182,7 +164,7 @@
     </action-widgets>
     <child internal-child="accessible">
       <object class="AtkObject" id="FillEffectsDialog-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="filleffectsdialog|extended_tip|FillEffectsDialog">Fills the area with a gradient, a hatch, an image or a pattern.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="filleffectsdialog|extended_tip|FillEffectsDialog">Fills the area with a gradient, a hatch or an image.</property>
       </object>
     </child>
   </object>

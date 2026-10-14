@@ -146,7 +146,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 	});
 
 	/*
-	 * The Area tab offers None and Color itself. Gradient, Hatch, Image and Pattern are tabs
+	 * The Area tab offers None, Color and Pattern itself. Gradient, Hatch and Image are tabs
 	 * of the Fill Effects dialog that More effects opens, and the effect chosen there is the
 	 * one it opens on next time.
 	 */
@@ -168,7 +168,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 		cy.cGet('[id^="FillEffectsDialog"]').should('be.visible').within(() => {
 			cy.get('[role="tab"]').then(($tabs) => {
 				const labels = $tabs.toArray().map((tab) => tab.textContent.trim());
-				expect(labels).to.deep.equal(['Gradient', 'Hatch', 'Image', 'Pattern']);
+				expect(labels).to.deep.equal(['Gradient', 'Hatch', 'Image']);
 			});
 			cy.get('[role="tab"][aria-controls="gradient"]').should('have.attr', 'aria-selected', 'true');
 			cy.get('[role="tab"][aria-controls="hatch"]').click();
@@ -229,5 +229,63 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 
 		openArea();
 		cy.cGet('#paletteselector-input option:selected').should('have.text', 'None');
+	});
+
+	/*
+	 * Pattern Style opens a grid of None and the shipped patterns, named by their tooltips, with
+	 * Custom below it. The pattern selected there is the fill that the page style keeps, and
+	 * Custom opens the pattern editor in a dialog of its own.
+	 */
+	it('Area tab offers the patterns in Pattern Style', function() {
+		var openArea = () => {
+			desktopHelper.getNbIcon('PageDialog', 'Format').click();
+			helper.processToIdle(this.win);
+			cy.cGet('[id^="TemplateDialog"]').should('be.visible');
+			cy.cGet('button#area.ui-tab').click();
+			helper.processToIdle(this.win);
+		};
+		var openStyleGrid = () => {
+			cy.cGet('button#patternstyle').click();
+			helper.processToIdle(this.win);
+			cy.cGet('#patternstylelist').should('be.visible');
+		};
+
+		cy.cGet('#Format-tab-label').click();
+		openArea();
+		cy.cGet('button#patternstyle').should('contain.text', 'None');
+
+		openStyleGrid();
+		// The entries show only their pattern, and the name is in the tooltip.
+		cy.cGet('#patternstylelist .ui-iconview-entry-title').should('not.exist');
+		cy.cGet('#patternstylelist img[alt="None"]').should('exist');
+		cy.cGet('#patternstylelist .ui-iconview-entry').then(($entries) => {
+			const tops = $entries.toArray().slice(0, 5).map((entry) => entry.offsetTop);
+			expect(tops.slice(0, 4).every((top) => top === tops[0]), 'four in the first row').to.be.true;
+			expect(tops[4], 'the fifth starts a new row').to.be.greaterThan(tops[0]);
+		});
+		cy.cGet('#patternstylelist img[alt="20 Percent"]').click();
+		helper.processToIdle(this.win);
+		cy.cGet('button#patternstyle').should('contain.text', '20 Percent');
+
+		cy.cGet('[id^="TemplateDialog"] #ok-button').click();
+		helper.processToIdle(this.win);
+
+		openArea();
+		cy.cGet('button#patternstyle').should('contain.text', '20 Percent');
+
+		openStyleGrid();
+		cy.cGet('#patternstylecustom-button').click();
+		helper.processToIdle(this.win);
+
+		// The Pattern dialog holds the pattern editor alone, with OK below it and no tab strip.
+		cy.cGet('#BTN_ADD').should('be.visible').closest('.jsdialog-window').within(($dialog) => {
+			cy.get('.ui-dialog-title').should('have.text', 'Pattern');
+			cy.get('[role="tab"]').should('not.exist');
+			cy.get('#CTL_PIXEL').then(($editor) => {
+				const okButton = $dialog[0].querySelector('#ok-button, #ok');
+				expect(okButton.getBoundingClientRect().top, 'OK sits below the editor')
+					.to.be.greaterThan($editor[0].getBoundingClientRect().bottom);
+			});
+		});
 	});
 });

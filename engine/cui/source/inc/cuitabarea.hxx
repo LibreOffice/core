@@ -188,14 +188,13 @@ inline constexpr OUString TABID_USE_BACKGROUND = u"lbusebackground"_ustr;
 
 class SvxColorTabPage;
 
-/// A dialog with a tab for each of the gradient, hatch, image and pattern fills.
+/// A dialog with a tab for each of the gradient, hatch and image fills.
 class SvxFillEffectsDialog final : public SfxTabDialogController
 {
     XColorListRef m_pColorList;
     XGradientListRef m_pGradientList;
     XHatchListRef m_pHatchingList;
     XBitmapListRef m_pBitmapList;
-    XPatternListRef m_pPatternList;
     ChangeType* m_pnColorListState;
 
     std::optional<SfxItemSet> m_oResult;
@@ -209,11 +208,60 @@ public:
                          const std::vector<FillType>& rEffects, std::optional<FillType> oStart,
                          XColorListRef pColorList, XGradientListRef pGradientList,
                          XHatchListRef pHatchingList, XBitmapListRef pBitmapList,
-                         XPatternListRef pPatternList, ChangeType* pnColorListState);
+                         ChangeType* pnColorListState);
 
     /// The fill of the tab in use when OK was pressed.
     const SfxItemSet* GetResult() const { return m_oResult ? &*m_oResult : nullptr; }
     FillType GetEffect() const { return m_eResult; }
+};
+
+class SvxPatternStylePopup;
+
+/// The Pattern Style row of the Area page, built from patternstylepage.ui. Its dropdown shows the
+/// shipped patterns as they are, and Custom opens the pattern editor.
+class SvxPatternStyleBox
+{
+    SfxTabPage& m_rPage;
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Widget> m_xWidget;
+    std::unique_ptr<weld::MenuButton> m_xStyleButton;
+    std::unique_ptr<SvxPatternStylePopup> m_xPopup;
+
+    XColorListRef m_pColorList;
+    XPatternListRef m_pPatternList;
+    ChangeType* m_pnColorListState = nullptr;
+
+    // The 8 by 8 pattern of the fill and its name. Empty when the fill has no pattern.
+    std::optional<Bitmap> m_oBitmap;
+    OUString m_sName;
+
+    Link<SvxPatternStyleBox&, void> m_aChangedHdl;
+
+    void ShowSelection();
+    void OpenPatternDialog();
+
+public:
+    SvxPatternStyleBox(weld::Container* pParent, SfxTabPage& rPage);
+    ~SvxPatternStyleBox();
+
+    weld::Widget& GetWidget() { return *m_xWidget; }
+    void SetLists(const XColorListRef& pColorList, const XPatternListRef& pPatternList,
+                  ChangeType* pnColorListState);
+    const XPatternListRef& GetPatternList() const { return m_pPatternList; }
+    // Called after the user changes the pattern.
+    void SetChangedHdl(const Link<SvxPatternStyleBox&, void>& rLink) { m_aChangedHdl = rLink; }
+
+    // Reads the pattern of a bitmap fill. False when the bitmap is no 8 by 8 pattern.
+    bool Load(const SfxItemSet& rSet);
+    void Clear();
+    bool HasPattern() const { return m_oBitmap.has_value(); }
+    void FillItemSet(SfxItemSet& rSet) const;
+
+    // The preset that the pattern of the fill is, or -1.
+    sal_Int32 FindPreset() const;
+    // Selects a preset, or no pattern for -1.
+    void SelectPreset(sal_Int32 nPreset);
+    void SelectCustom();
 };
 
 class SvxAreaTabPage : public SfxTabPage
@@ -249,6 +297,9 @@ private:
     std::optional<SfxItemSet> m_oEffectSet;
     // True when the fill is None.
     bool m_bNoFill = false;
+    // Empty when the page offers no pattern, or before the Color page is built.
+    std::unique_ptr<SvxPatternStyleBox> m_xPatternStyle;
+    bool m_bOfferPattern = true;
 
 protected:
     std::unique_ptr<weld::Notebook> m_xNotebook;
@@ -261,12 +312,16 @@ protected:
     bool IsBtnClicked() const { return m_bBtnClicked; }
 
     void SetEffects(std::vector<FillType>&& rEffects);
+    void HidePatternStyle();
 
 private:
     DECL_LINK(SwitchPageHdl_Impl, const OUString&, void);
     DECL_LINK(MoreEffectsHdl_Impl, weld::Button&, void);
     DECL_LINK(ColorChangedHdl_Impl, SvxColorTabPage&, void);
     DECL_LINK(NoneSelectedHdl_Impl, SvxColorTabPage&, void);
+    DECL_LINK(PatternChangedHdl_Impl, SvxPatternStyleBox&, void);
+    void CreatePatternStyle();
+    void FillPatternItemSet(SfxItemSet& rSet);
     SvxColorTabPage* getColorTabPage();
     FillType getCurrentFillType();
     void ClearEffect();

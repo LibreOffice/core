@@ -68,6 +68,8 @@ SvxBkgTabPage::SvxBkgTabPage(weld::Container* pPage, weld::DialogController* pCo
                rInAttrs.GetRanges().MergeRange(XATTR_FILL_FIRST, XATTR_FILL_LAST))
 {
     SetEffects({ FillType::BITMAP_FILL });
+    // A background item holds a color or an image, so there is no pattern to offer.
+    HidePatternStyle();
 }
 
 SvxBkgTabPage::~SvxBkgTabPage()
