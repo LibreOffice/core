@@ -2583,7 +2583,12 @@ class TreeViewControl {
 		parent: HTMLElement,
 		selection: { hasSelectedEntry: boolean } = { hasSelectedEntry: false },
 	) {
+		// A menu lists only the actions that apply to the entry it was opened on,
+		// the same as the document context menu, so the loop skips a disabled entry.
+		const isMenu = TreeViewControl.isMenu(data);
+
 		for (const index in entries) {
+			if (isMenu && entries[index].enabled === false) continue;
 			if (entries[index].selected) selection.hasSelectedEntry = true;
 			this.fillEntry(data, entries[index], builder, level, parent, selection);
 		}
