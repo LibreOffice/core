@@ -1335,10 +1335,10 @@ label.notebookbar.ui-checkbox-label {
 
 [id^='elements_'][id$='-iconview-list-dropdown'] .ui-iconview {
 	grid-auto-flow: row;
-	grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
 	grid-template-rows: none;
-	width: 40vw;
-	max-width: 640px;
+	width: max-content;
+	max-width: min(40vw, 640px);
 	overflow-x: hidden;
 }
 
