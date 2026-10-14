@@ -723,6 +723,20 @@ a.leaflet-control-zoom-in {
 	line-height: inherit;
 }
 
+/* modal texts are lines of their own, the info modal title is a heading */
+#mobile-wizard [id^='mobile-wizard-content-modal-dialog-'] .mobile-wizard.ui-text {
+	display: block;
+	border: none;
+	line-height: 1.4;
+	padding: var(--spacing-s) 0;
+}
+
+#mobile-wizard #info-modal-tile-m.mobile-wizard.ui-text {
+	font-size: var(--header-font-size);
+	font-weight: 600;
+	padding-bottom: var(--spacing-m);
+}
+
 #mobile-wizard [id^='info-modal-label'].mobile-wizard.ui-text {
 	border: none;
 	color: var(--color-text-dark) !important;
