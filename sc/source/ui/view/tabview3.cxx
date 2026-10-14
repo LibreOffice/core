@@ -1406,14 +1406,22 @@ void ScTabView::MoveCursorEnd( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, boo
         rDoc.GetPrintArea( nTab, nUsedX, nUsedY );     // get end
 
     if (nMovX < 0)
-        // tdf#107994 - move to the freeze pane splitter position
-        nNewX = aViewData.GetHSplitMode() == SC_SPLIT_FIX ? aViewData.GetFixPosX() : 0;
+    {
+        // tdf#107994 - move to the freeze pane splitter position first
+        const SCCOL nFixX = aViewData.GetHSplitMode() == SC_SPLIT_FIX ? aViewData.GetFixPosX() : 0;
+        // tdf#173894 - move to the first column at the splitter position or within the frozen area
+        nNewX = nCurX > nFixX ? nFixX : 0;
+    }
     else if (nMovX>0)
         nNewX=nUsedX;                                   // last used range
 
     if (nMovY<0)
-        // tdf#107994 - move to the freeze pane splitter position
-        nNewY = aViewData.GetVSplitMode() == SC_SPLIT_FIX ? aViewData.GetFixPosY() : 0;
+    {
+        // tdf#107994 - move to the freeze pane splitter position first
+        const SCROW nFixY = aViewData.GetVSplitMode() == SC_SPLIT_FIX ? aViewData.GetFixPosY() : 0;
+        // tdf#173894 - move to the first row at the splitter position or within the frozen area
+        nNewY = nCurY > nFixY ? nFixY : 0;
+    }
     else if (nMovY>0)
         nNewY=nUsedY;
 
