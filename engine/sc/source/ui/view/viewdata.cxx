@@ -3020,19 +3020,25 @@ void ScViewData::GetPosFromPixel( tools::Long nClickX, tools::Long nClickY, ScSp
     }
 
     //  cells too big?
-    if (rPosX == nStartPosX && nClickX > 0)
+    //  In online mode the click position is relative to the start of the sheet and the loops
+    //  above reach every column and row, so the step past the grid window is a scroll aid for
+    //  the desktop window only.
+    if (!comphelper::COKit::isActive())
     {
-         if (pView)
-            aScrSize.setWidth( pView->GetGridWidth(eHWhich) );
-         if ( nClickX > aScrSize.Width() )
-            ++rPosX;
-    }
-    if (rPosY == nStartPosY && nClickY > 0)
-    {
-        if (pView)
-            aScrSize.setHeight( pView->GetGridHeight(eVWhich) );
-        if ( nClickY > aScrSize.Height() )
-            ++rPosY;
+        if (rPosX == nStartPosX && nClickX > 0)
+        {
+            if (pView)
+                aScrSize.setWidth( pView->GetGridWidth(eHWhich) );
+            if ( nClickX > aScrSize.Width() )
+                ++rPosX;
+        }
+        if (rPosY == nStartPosY && nClickY > 0)
+        {
+            if (pView)
+                aScrSize.setHeight( pView->GetGridHeight(eVWhich) );
+            if ( nClickY > aScrSize.Height() )
+                ++rPosY;
+        }
     }
 
     rPosX = std::clamp(rPosX, SCCOL(0), mrDoc.MaxCol());

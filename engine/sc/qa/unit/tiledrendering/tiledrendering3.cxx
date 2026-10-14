@@ -2303,6 +2303,61 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
     CPPUNIT_ASSERT_EQUAL(SCROW(0), ScDocShell::GetViewData()->GetCurY());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testClickInFirstColumnWidenedByOtherView)
+{
+    // A click in column A selects A even when the click lands further right than the grid
+    // window of the clicking view, which keeps the width of the document from before
+    // another view widened the column.
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    ScViewData* pViewData1 = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData1);
+    ScDocument& rDoc = pViewData1->GetDocument();
+    const double fPPTX = pViewData1->GetPPTX();
+    const int nView1 = KitHelper::getCurrentView();
+    // A small viewport keeps the tiled area, and with it the grid window, narrower than the
+    // widest column the width command accepts.
+    const tools::Rectangle aVisArea(0, 0, 5000, 5000);
+    pModelObj->setClientVisibleArea(aVisArea);
+    Scheduler::ProcessEventsToIdle();
+
+    // The second view joins at the same zoom. Tiles for that zoom are painted through the
+    // first view, so the grid window of this view keeps the width it gets here.
+    KitHelper::createView();
+    const int nView2 = KitHelper::getCurrentView();
+    pModelObj->setClientVisibleArea(aVisArea);
+    Scheduler::ProcessEventsToIdle();
+    ScViewData* pViewData2 = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData2);
+    const tools::Long nGridWidthPx = pViewData2->GetActiveWin()->GetSizePixel().Width();
+
+    // The first view makes column A wider than the area the second view was sized for.
+    KitHelper::setView(nView1);
+    const sal_uInt16 nWidthMm100 = 53000;
+    dispatchCommand(mxComponent, u".uno:ColumnWidth"_ustr,
+                    comphelper::InitPropertySequence(
+                        { { u"ColumnWidth"_ustr, cpo::uno::Any(nWidthMm100) },
+                          { u"Column"_ustr, cpo::uno::Any(sal_Int16(1)) } }));
+    Scheduler::ProcessEventsToIdle();
+    const sal_uInt16 nWidthTwips = rDoc.GetColWidth(0, 0);
+    CPPUNIT_ASSERT(nWidthTwips > 20000);
+    CPPUNIT_ASSERT(nGridWidthPx < ScViewData::ToPixel(nWidthTwips, fPPTX));
+
+    // A click near the right edge of A1 from the second view.
+    KitHelper::setView(nView2);
+    const int nClickX = nWidthTwips - 1000;
+    const int nClickY = 100;
+    pModelObj->postMouseEvent(COKitMouseEventType::BUTTONDOWN, nClickX, nClickY, /*count=*/1,
+                              /*buttons=*/1, /*modifier=*/0);
+    pModelObj->postMouseEvent(COKitMouseEventType::BUTTONUP, nClickX, nClickY, /*count=*/1,
+                              /*buttons=*/1, /*modifier=*/0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pViewData2->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(SCROW(0), pViewData2->GetCurY());
+}
+
 // if we extend the tiled area to the right and bottom we want two resulting area
 // that don't overlap. If they overlap that typically creates an unnecessary full
 // screen invalidation.
