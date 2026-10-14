@@ -16,6 +16,7 @@
 #include <optional>
 
 #include <basegfx/units/Length.hxx>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <oox/mathml/importutils.hxx>
@@ -743,6 +744,8 @@ public:
     const rtl::Reference<SwXTextDocument>& getTextDocument() const { return m_xDstDoc; }
     bool isInBackground();
     void setDestinationText(std::u16string_view rString);
+    /// Import the picture data of the current state, false if there is none yet.
+    bool importPict(css::uno::Reference<css::graphic::XGraphic>& rxGraphic);
     /// Resolve a picture: If not inline, then anchored.
     void resolvePict(bool bInline, css::uno::Reference<css::drawing::XShape> const& rShape);
     /** tdf#167713 defer inserting a built shape into the text, if content is being buffered
@@ -1023,6 +1026,8 @@ private:
     bool m_bFormField;
     /// For the INCLUDEPICTURE field's argument.
     OUString m_aPicturePath;
+    /// The absolute URL of the INCLUDEPICTURE file, inserted as a linked picture.
+    OUString m_aPictureLinkURL;
     // Unicode characters are collected here so we don't have to send them one by one.
     OUStringBuffer m_aUnicodeBuffer{ 512 };
     /// Same for hex characters.

@@ -44,6 +44,7 @@
 
 #include <o3tl/cppunittraitshelper.hxx>
 #include <tools/UnitConversion.hxx>
+#include <vcl/graph.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Linguistic.hxx>
@@ -373,10 +374,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo45190)
 CPPUNIT_TEST_FIXTURE(Test, testTdf59699)
 {
     createSwDoc("tdf59699.rtf");
-    // This resulted in a lang.IndexOutOfBoundsException: the referenced graphic data wasn't imported.
+    // The INCLUDEPICTURE field is imported as a picture linked to the referenced file.
     uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
     auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xImage, u"Graphic"_ustr);
     CPPUNIT_ASSERT(xGraphic.is());
+    CPPUNIT_ASSERT(Graphic(xGraphic).getOriginURL().endsWith("/libreoffice.png"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo52066)
