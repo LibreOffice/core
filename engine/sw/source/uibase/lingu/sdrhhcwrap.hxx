@@ -46,8 +46,10 @@ public:
 
     virtual ~SdrHHCWrapper() override;
 
-    virtual bool ConvertNextDocument() override;
     void    StartTextConversion();
+
+private:
+    DECL_LINK(ConvertNextDocumentHdl, Outliner*, bool);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
