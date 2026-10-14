@@ -4110,6 +4110,38 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoSizeOnCanvasPage)
     CPPUNIT_ASSERT_EQUAL(8930, aTree.get_child("docHeight").get_value<int>());
 }
 
+// Deleting the canvas page removes that page alone, even when other slides are selected too. A
+// second request, made when the view no longer shows a canvas page, leaves the slides alone.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDeleteCanvasSlide)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoTest.odp");
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    const sal_uInt16 nSlideCount = pDocument->GetSdPageCount(PageKind::Standard);
+
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pDocument->HasCanvasPage());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nSlideCount + 1),
+                         pDocument->GetSdPageCount(PageKind::Standard));
+
+    // The first slide is selected as well as the canvas page on screen.
+    pDocument->GetSdPage(1, PageKind::Standard)->SetSelected(true);
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, u".uno:DeleteCanvasSlide"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pDocument->HasCanvasPage());
+    CPPUNIT_ASSERT_EQUAL(nSlideCount, pDocument->GetSdPageCount(PageKind::Standard));
+
+    dispatchCommand(mxComponent, u".uno:DeleteCanvasSlide"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(nSlideCount, pDocument->GetSdPageCount(PageKind::Standard));
+
+}
+
 // Notes with several paragraphs keep the paragraph breaks as newlines.
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoNotesParagraphs)
 {

@@ -1123,6 +1123,14 @@ class Dispatcher {
 			else this.actionsMap['notespanelbottom']();
 		};
 
+		// Show the Overview slide, which the engine creates when there is none, or
+		// delete it when it is already shown.
+		this.actionsMap['overview'] = function () {
+			if (app.impress.hasOverviewPage && app.map._docLayer._selectedPart === 0)
+				app.map.sendUnoCommand('.uno:DeleteCanvasSlide');
+			else app.map.sendUnoCommand('.uno:InsertCanvasSlide');
+		};
+
 		this.actionsMap['notespanelbottom'] = function () {
 			const openPanel = function () {
 				if (!app.map.notesPanel.isVisible()) app.map.notesPanel.toggle();

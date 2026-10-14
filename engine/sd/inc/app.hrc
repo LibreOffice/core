@@ -444,5 +444,6 @@
 #define SID_INSERT_SHAPE_INTO_SLIDE         (SID_SD_START+464)
 #define SID_MOVE_PREVIEW_SHAPE              (SID_SD_START+465)
 #define SID_MOVE_PREVIEW_SHAPE_OUT          (SID_SD_START+466)
+#define SID_DELETE_CANVAS_SLIDE             (SID_SD_START+467)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <functional>
 #include <memory>
 #include "ViewShell.hxx"
 #include "tools/AsynchronousCall.hxx"
@@ -402,6 +403,8 @@ protected:
                     DECL_DLLPRIVATE_LINK( RenameSlideHdl, AbstractSvxNameDialog&, bool );
 
     void            DeleteActualPage();
+    /// Deletes the canvas page of the document, as one undo action.
+    void            DeleteCanvasPage();
     void            DeleteActualLayer();
 
     virtual VclPtr<SvxRuler> CreateHRuler(::sd::Window* pWin) override;
@@ -420,6 +423,10 @@ private:
     DrawViewShell& operator=(const DrawViewShell&) = delete;
 
     void Construct (DrawDocShell* pDocSh, PageKind ePageKind);
+
+    /// Deletes, as one undo action, the pages for which rIsToDelete returns true. It is given
+    /// each page with its position in the tab control.
+    void DeletePages(const std::function<bool(SdPage*, sal_uInt16)>& rIsToDelete);
 
     void ImplDestroy();
 

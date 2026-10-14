@@ -2507,6 +2507,17 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_DELETE_CANVAS_SLIDE:
+        {
+            // Only the canvas page this view shows is deleted. When the view shows another
+            // page, the request does nothing.
+            if (GetActualPage() && GetActualPage()->IsCanvasPage())
+                DeleteCanvasPage();
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
         case SID_ENTER_PREVIEW_EDIT:
         {
             const SfxInt32Item* pPartItem

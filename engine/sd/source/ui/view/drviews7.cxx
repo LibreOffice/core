@@ -908,6 +908,13 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
+    // The canvas page can be deleted only while this view shows it.
+    if (SfxItemState::DEFAULT == rSet.GetItemState(SID_DELETE_CANVAS_SLIDE))
+    {
+        if (!GetActualPage() || !GetActualPage()->IsCanvasPage())
+            rSet.DisableItem(SID_DELETE_CANVAS_SLIDE);
+    }
+
     // is it allowed to delete the current layer?
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_DELETE_LAYER )
         || SfxItemState::DEFAULT == rSet.GetItemState( SID_RENAMELAYER ) )

@@ -1839,16 +1839,17 @@ OString SdDrawDocument::GetHasOverviewPagePayload(bool bHasOverviewPage)
 
 void SdDrawDocument::NotifyKitHasOverviewPage(bool bHasOverviewPage)
 {
-    if (!comphelper::COKit::isActive())
+    if (!comphelper::COKit::isActive() || !mpDocSh)
         return;
-    DrawViewShell* pDrawViewSh = dynamic_cast<DrawViewShell*>(mpDocSh->GetViewShell());
-    if (!pDrawViewSh)
-        return;
-    SfxViewShell* pViewShell = pDrawViewSh->GetViewShell();
-    if (!pViewShell)
-        return;
-    pViewShell->viewCallback(
-        COKitCallbackType::STATE_CHANGED, GetHasOverviewPagePayload(bHasOverviewPage));
+    const OString aPayload = GetHasOverviewPagePayload(bHasOverviewPage);
+    // Every view of the document gets the state, because the overview page belongs to the
+    // document and not to the view that inserted or deleted it.
+    for (SfxViewShell* pViewShell = SfxViewShell::GetFirst(); pViewShell;
+         pViewShell = SfxViewShell::GetNext(*pViewShell))
+    {
+        if (pViewShell->GetObjectShell() == mpDocSh)
+            pViewShell->viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
+    }
 }
 
 sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()

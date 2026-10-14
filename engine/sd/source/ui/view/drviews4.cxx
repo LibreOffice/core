@@ -100,6 +100,25 @@ using namespace ::com::sun::star::drawing;
 
 void DrawViewShell::DeleteActualPage()
 {
+    slidesorter::SlideSorterViewShell* pVShell
+        = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
+    const bool bUseSlideSorter = pVShell != nullptr;
+
+    DeletePages(
+        [this, bUseSlideSorter](SdPage* pPage, sal_uInt16 nPageIndex)
+        {
+            return (bUseSlideSorter && IsSelected(nPageIndex))
+                   || (!bUseSlideSorter && pPage->IsSelected());
+        });
+}
+
+void DrawViewShell::DeleteCanvasPage()
+{
+    DeletePages([](SdPage* pPage, sal_uInt16) { return pPage->IsCanvasPage(); });
+}
+
+void DrawViewShell::DeletePages(const std::function<bool(SdPage*, sal_uInt16)>& rIsToDelete)
+{
     mpDrawView->SdrEndTextEdit();
 
     try
@@ -114,16 +133,12 @@ void DrawViewShell::DeleteActualPage()
 
         GetView()->BegUndo(SdResId(STR_UNDO_DELETEPAGES));
 
-        slidesorter::SlideSorterViewShell* pVShell
-            = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
-        const bool bUseSlideSorter = pVShell != nullptr;
-
         for (sal_uInt16 i = 0; i < nPageCount; i++)
         {
             pPage = GetDoc()->GetSdPage(i, mePageKind);
             sal_uInt16 nPageIndex = maTabControl->GetPagePos(pPage->getPageId());
 
-            if((bUseSlideSorter && IsSelected(nPageIndex)) || (!bUseSlideSorter && pPage->IsSelected()))
+            if (rIsToDelete(pPage, nPageIndex))
             {
                 EndTextEditOnPage(*GetDoc(), pPage->getPageId());
                 Reference< XDrawPage > xPage( xPages->getByIndex( nPageIndex ), UNO_QUERY_THROW );
