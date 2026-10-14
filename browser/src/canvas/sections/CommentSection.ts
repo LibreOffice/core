@@ -1458,6 +1458,14 @@ export class Comment extends CanvasSectionObject {
 			return;
 		}
 
+		if (e.altKey && !e.ctrlKey && !e.shiftKey && !e.metaKey && e.key === 'F12') {
+			// back to the caret, which Alt+F12 and the Navigator leave at the anchor
+			e.preventDefault();
+			e.stopPropagation();
+			app.map.focus();
+			return;
+		}
+
 		if (e.key === 'Tab' && this.isEdit()) {
 			this.cycleEditFocus(e);
 			return;

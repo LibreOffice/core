@@ -125,4 +125,19 @@ describe(['tagdesktop'], 'Writer comments for the reader', { testIsolation: fals
 				cy.cGet('#' + text).should('have.text', 'Check this word.');
 			});
 	});
+
+	it('Alt+F12 in a comment moves the focus back to its anchor', function () {
+		// the focus is in the comment by Alice since the previous test
+		cy.cGet('div.cool-annotation-menu:focus').should('exist');
+		cy.realPress(['Alt', 'F12']);
+		cy.cGet('#clipboard-area').should('have.focus');
+
+		// the caret is still at the anchor: the same comment opens again
+		cy.realPress(['Alt', 'F12']);
+		cy.cGet('div.cool-annotation-menu:focus')
+			.invoke('attr', 'aria-describedby')
+			.then(function (ids) {
+				cy.cGet('#' + ids.split(' ')[1]).should('have.text', 'Check this word.');
+			});
+	});
 });
