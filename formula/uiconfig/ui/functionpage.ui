@@ -2,6 +2,31 @@
 <!-- Generated with glade 3.40.0 -->
 <interface domain="for">
   <requires lib="gtk+" version="3.24"/>
+  <object class="GtkImage" id="imagesearchoptions">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">open-menu-symbolic</property>
+  </object>
+  <object class="GtkMenu" id="searchmenu">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkCheckMenuItem" id="similaritysearch">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="functionpage|similaritysearch">_Similarity search</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="descriptionsearch">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="functionpage|descriptionsearch">Search in _descriptions</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
       <!-- column-name text -->
@@ -34,42 +59,57 @@
       </packing>
     </child>
     <child>
-      <object class="GtkEntry" id="search">
+      <object class="GtkBox">
         <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="activates-default">True</property>
-        <property name="truncate-multiline">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="search-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="functionpage|extended_tip|search">Search for a function name.</property>
+        <property name="can-focus">False</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkEntry" id="search">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="activates-default">True</property>
+            <property name="truncate-multiline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="search-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="functionpage|extended_tip|search">Search for a function name.</property>
+              </object>
+            </child>
           </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="searchoptions">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="image">imagesearchoptions</property>
+            <property name="always-show-image">True</property>
+            <property name="popup">searchmenu</property>
+            <property name="use-popover">False</property>
+            <property name="tooltip-text" translatable="yes" context="functionpage|searchoptions|tooltip_text">Search Options</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="searchoptions-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="functionpage|searchoptions">Search Options</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="functionpage|extended_tip|searchoptions">Search and sort functions by similarity, or also list functions whose description contains the search text.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
         </child>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="position">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkCheckButton" id="similaritysearch">
-        <property name="label" translatable="yes" context="functionpage|similaritysearch">Similar</property>
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">False</property>
-        <property name="use-underline">True</property>
-        <property name="draw-indicator">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="similaritysearch-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="functionpage|extended_tip|similaritysearch">Search and Sort functions by similarity</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
       </packing>
     </child>
     <child>
@@ -84,7 +124,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">3</property>
+        <property name="position">2</property>
       </packing>
     </child>
     <child>
@@ -105,7 +145,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">4</property>
+        <property name="position">3</property>
       </packing>
     </child>
     <child>
@@ -120,7 +160,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">5</property>
+        <property name="position">4</property>
       </packing>
     </child>
     <child>
@@ -168,7 +208,7 @@
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">6</property>
+        <property name="position">5</property>
       </packing>
     </child>
     <child>
@@ -184,7 +224,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">7</property>
+        <property name="position">6</property>
       </packing>
     </child>
     <child internal-child="accessible">

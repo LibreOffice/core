@@ -25,6 +25,7 @@
 #include <vcl/weld/ComboBox.hxx>
 #include <vcl/weld/Container.hxx>
 #include <vcl/weld/Entry.hxx>
+#include <vcl/weld/MenuButton.hxx>
 #include <vcl/weld/TreeView.hxx>
 
 #include <vector>
@@ -51,7 +52,7 @@ private:
     std::unique_ptr<weld::TreeView> m_xLbFunction;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
     std::unique_ptr<weld::Entry> m_xLbFunctionSearchString;
-    std::unique_ptr<weld::CheckButton> m_xSimilaritySearch;
+    std::unique_ptr<weld::MenuButton> m_xSearchOptions;
     std::unique_ptr<weld::Button> m_xHelpButton;
 
     Link<FuncPage&,void>     aDoubleClickLink;
@@ -64,6 +65,8 @@ private:
     ::std::set<std::pair<std::pair<sal_Int32, sal_Int32>, std::pair<OUString, TFunctionDesc>>>
         sFuncScores;
     OUString    m_aHelpId;
+    bool        m_bSimilaritySearch;
+    bool        m_bDescriptionSearch;
 
     // tdf#104487 - remember last used function category
     static sal_Int32 m_nRememberedFunctionCategory;
@@ -77,7 +80,7 @@ private:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ModifyHdl, weld::TextWidget&, void);
     DECL_LINK(SelHelpClickHdl, weld::Button&, void);
-    DECL_LINK(SimilarityToggleHdl, weld::Toggleable&, void);
+    DECL_LINK(SearchOptionsHdl, const OUString&, void);
 
 public:
 
@@ -109,8 +112,6 @@ public:
 
     bool            UpdateFavouritesList();
     void            UpdateFunctionList(const OUString&);
-
-    void            SearchFunction(const OUString&, const OUString&, TFunctionDesc, const bool);
 };
 
 } // formula

@@ -50,9 +50,11 @@ FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionM
     , m_xLbFunction(m_xBuilder->weld_tree_view(u"function"_ustr))
     , m_xScratchIter(m_xLbFunction->make_iterator())
     , m_xLbFunctionSearchString(m_xBuilder->weld_entry(u"search"_ustr))
-    , m_xSimilaritySearch(m_xBuilder->weld_check_button(u"similaritysearch"_ustr))
+    , m_xSearchOptions(m_xBuilder->weld_menu_button(u"searchoptions"_ustr))
     , m_xHelpButton(m_xBuilder->weld_button(u"help"_ustr))
     , m_pFunctionManager(_pFunctionManager)
+    , m_bSimilaritySearch(false)
+    , m_bDescriptionSearch(false)
 {
     m_aHelpId = m_xLbFunction->get_help_id();
 
@@ -79,7 +81,7 @@ FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionM
     m_xLbFunction->connect_item_activated(LINK(this, FuncPage, DblClkHdl));
     m_xLbFunction->connect_key_press(LINK(this, FuncPage, KeyInputHdl));
     m_xLbFunctionSearchString->connect_changed(LINK(this, FuncPage, ModifyHdl));
-    m_xSimilaritySearch->connect_toggled(LINK(this, FuncPage, SimilarityToggleHdl));
+    m_xSearchOptions->connect_selected(LINK(this, FuncPage, SearchOptionsHdl));
     m_xHelpButton->connect_clicked(LINK(this, FuncPage, SelHelpClickHdl));
 
     m_xHelpButton->set_sensitive(false);
@@ -134,19 +136,6 @@ void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory, bool bFill
                                   m_xScratchIter.get());
         }
     }
-}
-
-void FuncPage::SearchFunction(const OUString& rFuncName, const OUString& rSearchString,
-                              TFunctionDesc pDesc, const bool bSimilaritySearch)
-{
-    std::pair<sal_Int32, sal_Int32> score = std::make_pair(0, 0);
-    if (bSimilaritySearch && !utl::TextSearch::SimilaritySearch(rFuncName, rSearchString, score))
-        return;
-    if (!bSimilaritySearch && rFuncName.indexOf(rSearchString) < 0
-        && rSearchString.indexOf(rFuncName) < 0)
-        return;
-
-    sFuncScores.insert(std::make_pair(score, std::make_pair(rFuncName, pDesc)));
 }
 
 //aStr is non-empty when user types in the search box to search some function
@@ -239,6 +228,8 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
         {
             nCatEnd = nCatBeg + 1;
         }
+        // tdf#171886 - list functions found by their description after all name matches
+        const std::pair<sal_Int32, sal_Int32> aDescriptionScore(SAL_MAX_INT32, SAL_MAX_INT32);
         for (sal_uInt32 i = nCatBeg; i < nCatEnd; ++i)
         {
             const IFunctionCategory* pCategory = m_pFunctionManager->getCategory(i);
@@ -247,7 +238,19 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
             {
                 TFunctionDesc pDesc(pCategory->getFunction(j));
                 const OUString aFunction(rCharClass.uppercase(pDesc->getFunctionName()));
-                SearchFunction(aFunction, aSearchStr, pDesc, m_xSimilaritySearch->get_active());
+                std::pair<sal_Int32, sal_Int32> aNameScore(0, 0);
+                const bool bNameMatch
+                    = m_bSimilaritySearch
+                          ? utl::TextSearch::SimilaritySearch(aFunction, aSearchStr, aNameScore)
+                          : (aFunction.indexOf(aSearchStr) >= 0
+                             || aSearchStr.indexOf(aFunction) >= 0);
+                // tdf#171886 - optionally search for the desired function also in the description
+                const bool bDescriptionMatch
+                    = !bNameMatch && m_bDescriptionSearch
+                      && rCharClass.uppercase(pDesc->getDescription()).indexOf(aSearchStr) >= 0;
+                if (bNameMatch || bDescriptionMatch)
+                    sFuncScores.emplace(bNameMatch ? aNameScore : aDescriptionScore,
+                                        std::make_pair(aFunction, pDesc));
             }
         }
 
@@ -336,8 +339,14 @@ IMPL_LINK_NOARG(FuncPage, ModifyHdl, weld::TextWidget&, void)
     UpdateFunctionList(searchStr);
 }
 
-IMPL_LINK_NOARG(FuncPage, SimilarityToggleHdl, weld::Toggleable&, void)
+IMPL_LINK(FuncPage, SearchOptionsHdl, const OUString&, rIdent, void)
 {
+    if (rIdent == "similaritysearch")
+        m_bSimilaritySearch = !m_bSimilaritySearch;
+    else
+        m_bDescriptionSearch = !m_bDescriptionSearch;
+    m_xSearchOptions->set_item_active(u"similaritysearch"_ustr, m_bSimilaritySearch);
+    m_xSearchOptions->set_item_active(u"descriptionsearch"_ustr, m_bDescriptionSearch);
     OUString searchStr = m_xLbFunctionSearchString->get_text();
     UpdateFunctionList(searchStr);
 }
