@@ -169,6 +169,10 @@ describe('ViewLayout', function () {
 				_limitZoom: function (zoom: number) {
 					return zoom;
 				},
+				// A freshly opened document is in view mode.
+				isEditMode: function () {
+					return false;
+				},
 			} as any;
 
 			// sendTileCombineMessage reads app.tile.size.{x,y} and calls
@@ -1648,6 +1652,53 @@ describe('ViewLayout', function () {
 				beyond.length > 0,
 				'no tiles were fetched beyond the visible area after a scroll',
 			);
+		});
+
+		// Soon after a spreadsheet scrolls, the tiles further on in the direction of the
+		// scroll are fetched, before the slower pre-fetch around the view starts. The
+		// timers the scroll arms are run once each: the idle wait among them only arms
+		// the repeating tick of the slower pre-fetch, so any tile asked for here is from
+		// the early fetch ahead of the view.
+		it('Calc: a scroll down soon fetches the tiles below the view', function () {
+			const { layout } = setupCalcForTest();
+			allowPreFetch();
+			const tileManager: any = (RenderManager as any)._instance;
+			const tileCombine = instrumentTileCombineRequests(tileManager);
+			const timers = captureTimers();
+			try {
+				RenderManager.clearPreFetch();
+
+				layout.scroll(0, 400);
+
+				const visibleRows: number[] = layout
+					.getCurrentCoordList()
+					.map((coords: TileCoordData) => {
+						return coords.y;
+					});
+				const lastVisibleRow = Math.max(...visibleRows);
+				const firstVisibleRow = Math.min(...visibleRows);
+
+				tileCombine.sentRequests.length = 0;
+				const armedByTheScroll = timers.pending.splice(0);
+				for (const callback of armedByTheScroll) callback();
+
+				const rows: number[] = [];
+				for (const request of tileCombine.sentRequests)
+					for (const coords of request) rows.push(coords.y);
+
+				nodeassert.ok(
+					rows.some((row) => row > lastVisibleRow),
+					'no tiles below the view were fetched soon after a scroll down',
+				);
+				nodeassert.ok(
+					rows.every((row) => row >= firstVisibleRow),
+					'tiles above the view were fetched soon after a scroll down',
+				);
+			} finally {
+				timers.restore();
+				tileCombine.restore();
+				RenderManager.clearPreFetch();
+			}
 		});
 
 		it('The visible area is sent again after a reset, changed or not', function () {

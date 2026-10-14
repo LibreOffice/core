@@ -130,6 +130,10 @@ class RenderManager {
 		RenderManager.ensureInstance().clearPreFetch();
 	}
 
+	static initPreFetchAdjacentTiles(): void {
+		RenderManager.ensureInstance().initPreFetchAdjacentTiles();
+	}
+
 	static sendProcessedResponse(): void {
 		RenderManager.ensureInstance().sendProcessedResponse();
 	}

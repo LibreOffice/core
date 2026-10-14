@@ -958,7 +958,9 @@ class BitmapTileManager extends RenderManagerBase {
 		}, 100);
 	}
 
-	private initPreFetchAdjacentTiles() {
+	// Shortly after the view moves, request the tiles that a further scroll in the same
+	// direction would show, ahead of the slower pre-fetch that grows around the view.
+	public initPreFetchAdjacentTiles() {
 		if (!this.checkDocLayer()) return;
 
 		this.updateProperties();

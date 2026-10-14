@@ -349,6 +349,9 @@ class ViewLayoutCalc extends ViewLayoutBase {
 		// already-loaded ones current.
 		this.refreshTiles();
 
+		// Then request the tiles ahead of the view in the direction it moved.
+		RenderManager.initPreFetchAdjacentTiles();
+
 		this.onViewMoved();
 		return true;
 	}

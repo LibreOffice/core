@@ -71,6 +71,8 @@ abstract class RenderManagerBase {
 	resetPreFetching(_resetBorder: boolean): void {}
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	clearPreFetch(): void {}
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	initPreFetchAdjacentTiles(): void {}
 
 	// -- memory / cache --
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
