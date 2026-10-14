@@ -123,8 +123,6 @@ public:
     void                ClearController() { xController.reset(); }
     std::shared_ptr<SfxDialogController>& GetController() { return xController; }
     const std::shared_ptr<SfxDialogController>& GetController() const { return xController; }
-    vcl::Window*        GetParent() const
-                        { return m_pParent; }
     SfxChildAlignment   GetAlignment() const
                         { return eChildAlignment; }
     void                SetAlignment(SfxChildAlignment eAlign);

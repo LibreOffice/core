@@ -221,16 +221,6 @@ bool TextSearch::SearchForward( const OUString &rStr,
     return bRet;
 }
 
-bool TextSearch::searchForward( const OUString &rStr )
-{
-    sal_Int32 pStart = 0;
-    sal_Int32 pEnd = rStr.getLength();
-
-    bool bResult = SearchForward(rStr, &pStart, &pEnd);
-
-    return bResult;
-}
-
 bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
                                 sal_Int32* pEnd, SearchResult* pRes )
 {

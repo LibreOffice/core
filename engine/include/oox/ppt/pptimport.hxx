@@ -59,7 +59,6 @@ public:
 
     const SlidePersistPtr&                                  getActualSlidePersist() const { return mpActualSlidePersist; };
     void                                                    setActualSlidePersist(const SlidePersistPtr& pActualSlidePersist) { mpActualSlidePersist = pActualSlidePersist; };
-    std::map< OUString, oox::drawingml::ThemePtr >&         getThemes(){ return maThemes; };
 
     /** Returns the theme that the given fragment holds.
 

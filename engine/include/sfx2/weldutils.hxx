@@ -57,8 +57,6 @@ public:
     cpo::uno::Reference<css::frame::XToolbarController>
     GetControllerForCommand(const OUString& rCommand) const;
 
-    const cpo::uno::Reference<css::frame::XFrame>& GetFrame() const { return m_xFrame; }
-
     void dispose();
     ~ToolbarUnoDispatcher();
 };

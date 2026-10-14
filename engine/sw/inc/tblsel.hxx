@@ -205,8 +205,6 @@ public:
         SwTableLine*    GetLine()           { return m_pLine; }
     const FndBox_*      GetUpper() const    { return m_pUpper; }
         FndBox_*        GetUpper()          { return m_pUpper; }
-
-    void SetUpper( FndBox_* pUp ) { m_pUpper = pUp; }
 };
 
 FndBox_::FndBox_( SwTableBox* pB, FndLine_* pFL ) :

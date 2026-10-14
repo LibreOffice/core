@@ -91,7 +91,6 @@ public:
 
     const OUString& getPackage() const { return m_aPackage; }
     const OUString& getDisplayName() const { return m_aDisplayName; }
-    const OUString& getLicence() const { return m_aLicence; }
 
     const std::vector<OUString>& getLocales() const { return m_aLocales; }
 

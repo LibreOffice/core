@@ -194,13 +194,6 @@ public:
     bool SearchForward( const OUString &rStr,
                         sal_Int32* pStart, sal_Int32* pEnd,
                         css::util::SearchResult* pRes = nullptr );
-    /**
-     * @brief searchForward Search forward beginning from the start to the end
-     *        of the given text
-     * @param rStr The text in which we search
-     * @return True if the search term is found in the text
-     */
-    bool searchForward( const OUString &rStr );
     bool SearchBackward( const OUString &rStr,
                         sal_Int32* pStart, sal_Int32* pEnd,
                         css::util::SearchResult* pRes = nullptr );
