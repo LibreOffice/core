@@ -745,7 +745,7 @@ sal_Int32 ScDPDimensionSaveData::CollectDateParts( const OUString& rBaseDimName 
 }
 
 OUString ScDPDimensionSaveData::CreateGroupDimName(
-    const OUString& rSourceName, const ScDPObject& rObject, bool bAllowSource,
+    const OUString& rSourceName, ScDPObject& rObject, bool bAllowSource,
     const std::vector<OUString>* pDeletedNames )
 {
     // create a name for the new dimension by appending a number to the original
@@ -806,7 +806,7 @@ namespace
 }
 
 OUString ScDPDimensionSaveData::CreateDateGroupDimName(
-    sal_Int32 nDatePart, const ScDPObject& rObject, bool bAllowSource,
+    sal_Int32 nDatePart, ScDPObject& rObject, bool bAllowSource,
     const std::vector<OUString>* pDeletedNames )
 {
     using namespace css::sheet::DataPilotFieldGroupBy;

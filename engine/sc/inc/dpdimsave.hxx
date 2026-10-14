@@ -176,11 +176,11 @@ public:
     void WriteToCache(ScDPCache& rCache) const;
 
     OUString CreateGroupDimName(
-        const OUString& rSourceName, const ScDPObject& rObject, bool bAllowSource,
+        const OUString& rSourceName, ScDPObject& rObject, bool bAllowSource,
         const ::std::vector<OUString>* pDeletedNames );
 
     OUString CreateDateGroupDimName(
-        sal_Int32 nDatePart, const ScDPObject& rObject, bool bAllowSource,
+        sal_Int32 nDatePart, ScDPObject& rObject, bool bAllowSource,
         const ::std::vector<OUString>* pDeletedNames );
 
     SC_DLLPUBLIC void AddGroupDimension( const ScDPSaveGroupDimension& rGroupDim );

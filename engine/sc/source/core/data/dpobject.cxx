@@ -1342,9 +1342,9 @@ void ScDPObject::GetDrillDownData(const ScAddress& rPos, Sequence< Sequence<Any>
     rTableData = xDrillDownData->getDrillDownData(filters);
 }
 
-bool ScDPObject::IsDimNameInUse(std::u16string_view rName) const
+bool ScDPObject::IsDimNameInUse(std::u16string_view rName)
 {
-    if (!mxSource.is())
+    if (!GetSource().is())
         return false;
 
     Reference<container::XNameAccess> xDims = mxSource->getDimensions();
