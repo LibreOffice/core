@@ -1510,8 +1510,9 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
         *oGraphic = rFilter.ImportUnloadedGraphic(*pStream);
         pImage->aURL.clear();
     }
-    else
+    else if (aBaseURL.isEmpty())
     {
+        // aBaseURL is empty if the source is clipboard.
         // The image is fetched from its host, which the kit allows only for the hosts on its
         // allow-list.
         if (comphelper::COKit::isActive() && HostFilter::isForbidden(aGraphicURL.GetHost()))
@@ -1533,8 +1534,11 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
     if ( !(pImage->aSize.Width() && pImage->aSize.Height()) )
     {
         OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-        pImage->aSize = pDefaultDev->LogicToPixel( pImage->oGraphic->GetPrefSize(),
-            pImage->oGraphic->GetPrefMapMode() );
+        if (pImage->oGraphic->IsNone())
+            pImage->aSize = pDefaultDev->LogicToPixel(Size(2000, 1000), MapMode(MapUnit::Map100thMM));
+        else
+            pImage->aSize = pDefaultDev->LogicToPixel( pImage->oGraphic->GetPrefSize(),
+                pImage->oGraphic->GetPrefMapMode() );
     }
     if (mxActEntry->maImageList.empty())
         return;
