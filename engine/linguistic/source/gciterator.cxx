@@ -618,6 +618,18 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
                 }
             }
 
+            if (!bKnown && xGC.is())
+            {
+                m_aGCReferencesByService[ rSvcImplName ] = xGC;
+
+                // Listen before asking: a checker that declines now, because
+                // it is switched off, says so through this listener when it
+                // is switched on, and is then asked again.
+                uno::Reference< linguistic2::XLinguServiceEventBroadcaster > xBC( xGC, uno::UNO_QUERY );
+                if (xBC.is())
+                    xBC->addLinguServiceEventListener( this );
+            }
+
             // XProofreader is an XSupportedLocales, so ask it directly.
             if (!xGC.is() || !xGC->hasLocale( rLocale ))
             {
@@ -625,14 +637,6 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
                 continue;
             }
 
-            if (!bKnown)
-            {
-                m_aGCReferencesByService[ rSvcImplName ] = xGC;
-
-                uno::Reference< linguistic2::XLinguServiceEventBroadcaster > xBC( xGC, uno::UNO_QUERY );
-                if (xBC.is())
-                    xBC->addLinguServiceEventListener( this );
-            }
             xRes = xGC;
             break;
         }
@@ -1046,6 +1050,15 @@ void GrammarCheckingIterator::processLinguServiceEvent(
 {
     if (rLngSvcEvent.nEvent != linguistic2::LinguServiceEventFlags::PROOFREAD_AGAIN)
         return;
+
+    // A checker asking for the documents to be checked again may be one
+    // that was switched on since the last choice for its language was made,
+    // so the choice is made again.
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+        m_xLastGC.clear();
+        m_oLastGCFallback.reset();
+    }
 
     try
     {

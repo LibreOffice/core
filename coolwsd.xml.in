@@ -30,7 +30,7 @@
         <api_key desc="API key provided by LanguageTool account for premium usage." type="string" default=""></api_key>
         <ssl_verification desc="Enable or disable SSL verification. You may have to disable it in test environments with self-signed certificates." type="string" default="true">true</ssl_verification>
         <rest_protocol desc="Deprecated, use the duden block instead: the string 'duden' here still drives the Duden Korrekturserver with the settings of this block." type="string" default=""></rest_protocol>
-        <allow_user_settings desc="Let users change the server and account of this checker in their own settings." type="bool" default="false">false</allow_user_settings>
+        <allow_user_settings desc="Let users change the server and account of this checker in their own settings. Has no effect while enabled is false: a checker switched off here stays off for everyone." type="bool" default="false">false</allow_user_settings>
     </languagetool>
 
     <duden desc="Remote API settings for spell, grammar and style checking with the Duden Korrekturserver">
@@ -42,14 +42,14 @@
         <orthography_standard desc="German spelling variant: duden, conservative, progressive, extended or press." type="string" default="duden">duden</orthography_standard>
         <property_sets desc="Space-separated names of the server's correction profiles to apply, in order." type="string" default=""></property_sets>
         <dictionaries desc="Space-separated names of the server's supplementary dictionaries to use." type="string" default=""></dictionaries>
-        <allow_user_settings desc="Let users change the server, account and profile of this checker in their own settings. The style checks are theirs to choose either way." type="bool" default="false">false</allow_user_settings>
+        <allow_user_settings desc="Let users change the server, account and profile of this checker in their own settings. The style checks are theirs to choose either way. Has no effect while enabled is false: a checker switched off here stays off for everyone." type="bool" default="false">false</allow_user_settings>
     </duden>
 
     <grammalecte desc="Remote API settings for grammar checking of French text with Grammalecte">
         <enabled desc="Enable the Grammalecte checker" type="bool" default="false">false</enabled>
         <base_url desc="The root of the Grammalecte server, e.g. http://grammalecte:8080; the checker appends /gc_text/fr. The service has no authentication, keep it on an internal network. See docker/grammalecte for running one next to this server." type="string" default=""></base_url>
         <ssl_verification desc="Enable or disable SSL verification. You may have to disable it in test environments with self-signed certificates." type="string" default="true">true</ssl_verification>
-        <allow_user_settings desc="Let users change the server of this checker in their own settings. The rule families it runs are theirs to choose either way." type="bool" default="false">false</allow_user_settings>
+        <allow_user_settings desc="Let users change the server of this checker in their own settings. The rule families it runs are theirs to choose either way. Has no effect while enabled is false: a checker switched off here stays off for everyone." type="bool" default="false">false</allow_user_settings>
     </grammalecte>
 
     <ai desc="AI assistant configuration. When enabled with credentials, all users on this instance get AI features without needing to configure them individually. Works with any OpenAI-compatible endpoint, including local/self-hosted models (Ollama, vLLM, LM Studio, etc.). No data is sent anywhere unless explicitly configured. Per-user WOPI settings and View Settings override these defaults.">

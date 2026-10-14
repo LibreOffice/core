@@ -117,7 +117,7 @@ GrammalecteChecker::GrammalecteChecker()
 {
 }
 
-bool GrammalecteChecker::isEnabled() { return GrammalecteCfg::IsEnabled::get(); }
+bool GrammalecteChecker::isEnabled() { return GrammalecteCfg::IsEnabled::get() && !getBaseURL().isEmpty(); }
 
 std::vector<OUString> GrammalecteChecker::configuredLocales()
 {
@@ -232,6 +232,7 @@ cpo::uno::Sequence<css::beans::PropertyValue> GrammalecteChecker::probe()
     Request aRequest;
     aRequest.aURL = getBaseURL() + "/get_options/fr";
     aRequest.bVerifySSL = GrammalecteCfg::SSLCertVerify::get();
+    aRequest.aTimeout = PROBE_TIMEOUT;
     const bool bReachable = !getBaseURL().isEmpty() && get(aRequest).eCode == CURLE_OK;
     return { comphelper::makePropertyValue(u"IsReachable"_ustr, bReachable) };
 }

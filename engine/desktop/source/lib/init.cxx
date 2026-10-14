@@ -73,6 +73,7 @@
 #include <limits>
 #include <memory>
 #include <vector>
+#include <chrono>
 #include <optional>
 #include <set>
 #include <map>
@@ -155,6 +156,8 @@
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
+#include <com/sun/star/util/XChangesListener.hpp>
+#include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/configuration/Update.hpp>
@@ -1109,49 +1112,12 @@ std::optional<cpo::uno::Sequence<OUString>> envList(const char* pPrefix, const c
 // Whether a user's own settings for a remote checker are applied from their
 // document settings. The server says; where there is no server, as in the
 // desktop app, there is nobody else on the document and the answer is yes.
+// A checker the server switched off stays off for everyone: that switch
+// keeps the text in house, and is nobody else's to undo.
 bool allowsUserSettings(const char* pPrefix)
 {
-    return envBool(pPrefix, "ALLOW_USER_SETTINGS").value_or(true);
-}
-
-// What each remote checker's server answered when it was asked about
-// itself, by checker id. Filled once per process: the kit forks after
-// asking, and the answer is good for the forks.
-std::map<std::string, cpo::uno::Sequence<css::beans::PropertyValue>> gRemoteCheckerProbes;
-
-cpo::uno::Sequence<css::beans::PropertyValue> probeRemoteChecker(const RemoteChecker& rChecker)
-{
-    const std::map<std::string, cpo::uno::Sequence<css::beans::PropertyValue>>::const_iterator
-        aKnown = gRemoteCheckerProbes.find(rChecker.pId);
-    if (aKnown != gRemoteCheckerProbes.end())
-        return aKnown->second;
-
-    cpo::uno::Sequence<css::beans::PropertyValue> aAnswer;
-    try
-    {
-        cpo::uno::Reference<css::beans::XPropertyAccess> xChecker(
-            xContext->getServiceManager()->createInstanceWithContext(
-                rChecker.aImplementationName, xContext),
-            uno::UNO_QUERY_THROW);
-        aAnswer = xChecker->getPropertyValues();
-    }
-    catch (const cpo::uno::Exception& rException)
-    {
-        SAL_WARN("kit", "cannot ask " << rChecker.pId << " about its server: " << rException.Message);
-    }
-    gRemoteCheckerProbes[rChecker.pId] = aAnswer;
-    return aAnswer;
-}
-
-bool isRemoteCheckerReachable(const RemoteChecker& rChecker)
-{
-    for (const css::beans::PropertyValue& rValue : probeRemoteChecker(rChecker))
-    {
-        bool bReachable = false;
-        if (rValue.Name == "IsReachable" && (rValue.Value >>= bReachable))
-            return bReachable;
-    }
-    return false;
+    return envBool(pPrefix, "ENABLED").value_or(true)
+           && envBool(pPrefix, "ALLOW_USER_SETTINGS").value_or(true);
 }
 
 constexpr OUString REMOTE_CHECKER_CONFIG_PATH = u"/org.openoffice.Office.Linguistic/GrammarChecking"_ustr;
@@ -1191,21 +1157,237 @@ T getRemoteCheckerSetting(const cpo::uno::Reference<css::container::XNameAccess>
     return aValue;
 }
 
+// Switched on and told where its server is: without the server there is
+// nothing to hand a language to.
 bool isRemoteCheckerEnabled(const RemoteChecker& rChecker)
 {
-    return getRemoteCheckerSetting(getRemoteCheckerConfig(rChecker), u"IsEnabled"_ustr, false);
+    const cpo::uno::Reference<css::container::XNameAccess> xGroup = getRemoteCheckerConfig(rChecker);
+    return getRemoteCheckerSetting(xGroup, u"IsEnabled"_ustr, false)
+           && !getRemoteCheckerSetting(xGroup, u"BaseURL"_ustr, OUString()).isEmpty();
 }
 
-// Takes the remote checker settings from the environment the server set
-// up, and switches the local spell checker off for the languages a
-// reachable remote checker spell checks itself. One that does not answer
-// keeps the local spell checker: a language without any spell checking
-// would be worse than one with two. Returns the languages that were handed
-// over.
-cpo::uno::Sequence<css::lang::Locale> setRemoteCheckerConfig()
+// What a remote checker's server answered when it was asked about itself,
+// and when it was asked.
+struct RemoteCheckerProbe
 {
-    std::vector<css::lang::Locale> aRemoteLocales;
+    cpo::uno::Sequence<css::beans::PropertyValue> aAnswer;
+    bool bReachable = false;
+    std::chrono::steady_clock::time_point aAskedAt;
+};
 
+// A server that did not answer is asked again after this long: it may have
+// been starting up.
+constexpr std::chrono::seconds REMOTE_CHECKER_RETRY(30);
+
+// The answers by checker, server and key: another server, or another key
+// for it, set since is another server to ask. The listener asks without the
+// solar mutex, hence a mutex of its own.
+std::mutex gRemoteCheckerProbeMutex;
+std::map<std::string, RemoteCheckerProbe> gRemoteCheckerProbes;
+
+std::string probeKey(const RemoteChecker& rChecker)
+{
+    const cpo::uno::Reference<css::container::XNameAccess> xGroup = getRemoteCheckerConfig(rChecker);
+    const OUString aURL = getRemoteCheckerSetting(xGroup, u"BaseURL"_ustr, OUString());
+    const OUString aKey = getRemoteCheckerSetting(xGroup, u"ApiKey"_ustr, OUString());
+    return std::string(rChecker.pId) + "|" + OUStringToOString(aURL, RTL_TEXTENCODING_UTF8).getStr()
+           + "|" + OUStringToOString(aKey, RTL_TEXTENCODING_UTF8).getStr();
+}
+
+// An answer that said the server is there stands; a no stands for a while.
+bool isCurrent(const RemoteCheckerProbe& rProbe)
+{
+    return rProbe.bReachable
+           || std::chrono::steady_clock::now() - rProbe.aAskedAt < REMOTE_CHECKER_RETRY;
+}
+
+// The answer on record for the checker's server, current or not; nothing
+// when the server has not been asked.
+std::optional<RemoteCheckerProbe> knownProbe(const RemoteChecker& rChecker)
+{
+    const std::string aKey = probeKey(rChecker);
+    std::lock_guard<std::mutex> aGuard(gRemoteCheckerProbeMutex);
+    const std::map<std::string, RemoteCheckerProbe>::const_iterator aKnown
+        = gRemoteCheckerProbes.find(aKey);
+    if (aKnown == gRemoteCheckerProbes.end())
+        return std::nullopt;
+    return aKnown->second;
+}
+
+// Asks the checker's server about itself, unless a current answer is on
+// record. Waits for the round trip, which the probe's limit keeps short;
+// a server that did not answer is not asked again for a while, so a dead
+// one holds up a caller at most once in that while.
+RemoteCheckerProbe probeRemoteChecker(const RemoteChecker& rChecker)
+{
+    if (const std::optional<RemoteCheckerProbe> oKnown = knownProbe(rChecker))
+    {
+        if (isCurrent(*oKnown))
+            return *oKnown;
+    }
+
+    // The key goes with the answer: the settings may change while the
+    // server is being asked, and then the answer is about the old server.
+    const std::string aKey = probeKey(rChecker);
+    RemoteCheckerProbe aProbe;
+    try
+    {
+        cpo::uno::Reference<css::beans::XPropertyAccess> xChecker(
+            xContext->getServiceManager()->createInstanceWithContext(
+                rChecker.aImplementationName, xContext),
+            uno::UNO_QUERY_THROW);
+        aProbe.aAnswer = xChecker->getPropertyValues();
+    }
+    catch (const cpo::uno::Exception& rException)
+    {
+        SAL_WARN("kit", "cannot ask " << rChecker.pId << " about its server: " << rException.Message);
+    }
+    for (const css::beans::PropertyValue& rValue : aProbe.aAnswer)
+    {
+        if (rValue.Name == "IsReachable")
+            rValue.Value >>= aProbe.bReachable;
+    }
+    aProbe.aAskedAt = std::chrono::steady_clock::now();
+    if (!aProbe.bReachable)
+        std::cerr << "Remote checker " << rChecker.pId
+                  << " has not answered; keeping the local spell checker\n";
+
+    std::lock_guard<std::mutex> aGuard(gRemoteCheckerProbeMutex);
+    gRemoteCheckerProbes[aKey] = aProbe;
+    return aProbe;
+}
+
+// The languages the local spell checker gave up, as BCP 47 tags, with the
+// spell checkers it had for each: the remote checker that took them may be
+// switched off again, and then it gets them back as they were. Under the
+// solar mutex, which every caller of the hand-over takes.
+std::map<OUString, cpo::uno::Sequence<OUString>> gLocalesHandedOver;
+
+void watchRemoteCheckerConfig();
+
+// Asks the servers of the remote checkers that spell check and are switched
+// on, where no current answer is on record.
+void askRemoteCheckers()
+{
+    for (const RemoteChecker& rChecker : aRemoteCheckers)
+    {
+        if (rChecker.bChecksSpelling && isRemoteCheckerEnabled(rChecker))
+            probeRemoteChecker(rChecker);
+    }
+}
+
+// Switches the local spell checker off for the languages a reachable remote
+// checker spell checks itself, and back on for the languages no remote
+// checker holds any more. One that has not answered keeps the local spell
+// checker: a language without any spell checking would be worse than one
+// with two. A server without a current answer on record is asked here.
+void handLanguagesToRemoteCheckers()
+{
+    watchRemoteCheckerConfig();
+
+    try
+    {
+        cpo::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
+            css::linguistic2::LinguServiceManager::create(xContext);
+        std::set<OUString> aClaimed;
+
+        for (const RemoteChecker& rChecker : aRemoteCheckers)
+        {
+            if (!rChecker.bChecksSpelling || !isRemoteCheckerEnabled(rChecker))
+                continue;
+            if (!probeRemoteChecker(rChecker).bReachable)
+                continue;
+
+            cpo::uno::Reference<css::linguistic2::XSupportedLocales> xRemote(
+                xContext->getServiceManager()->createInstanceWithContext(
+                    rChecker.aImplementationName, xContext),
+                uno::UNO_QUERY_THROW);
+            for (const css::lang::Locale& rLocale : xRemote->getLocales())
+                aClaimed.insert(LanguageTag::convertToBcp47(rLocale));
+        }
+
+        for (const OUString& rTag : aClaimed)
+        {
+            if (gLocalesHandedOver.count(rTag))
+                continue;
+            const css::lang::Locale aLocale = LanguageTag::convertToLocale(rTag);
+            // Only a language the local spell checker has is taken from it,
+            // and what it had is kept for when it gets the language back.
+            const cpo::uno::Sequence<OUString> aLocal
+                = xLangSrv->getConfiguredServices(SN_SPELLCHECKER, aLocale);
+            if (!aLocal.hasElements())
+                continue;
+            xLangSrv->setConfiguredServices(SN_SPELLCHECKER, aLocale, {});
+            gLocalesHandedOver[rTag] = aLocal;
+        }
+        for (std::map<OUString, cpo::uno::Sequence<OUString>>::iterator aIt = gLocalesHandedOver.begin();
+             aIt != gLocalesHandedOver.end();)
+        {
+            if (aClaimed.count(aIt->first))
+            {
+                ++aIt;
+                continue;
+            }
+            xLangSrv->setConfiguredServices(SN_SPELLCHECKER,
+                                            LanguageTag::convertToLocale(aIt->first), aIt->second);
+            aIt = gLocalesHandedOver.erase(aIt);
+        }
+    }
+    catch (const cpo::uno::Exception& rException)
+    {
+        SAL_WARN("kit", "Failed to hand languages to the remote checkers: " << rException.Message);
+    }
+}
+
+// Watches the remote checkers' settings, so a checker switched on or off
+// while a document is open takes its languages, or gives them back, at once.
+// A settings file handed in through setOption arrives without the solar
+// mutex: the servers are asked before it is taken, and the hand-over, which
+// changes the spell checker lists the documents hear of, takes it, as the
+// unotools listener does. The watch is set up by the first hand-over.
+class RemoteCheckerConfigListener final : public cppu::WeakImplHelper<css::util::XChangesListener>
+{
+public:
+    void changesOccurred(const css::util::ChangesEvent&) override
+    {
+        askRemoteCheckers();
+        SolarMutexGuard aGuard;
+        handLanguagesToRemoteCheckers();
+    }
+
+    void disposing(const css::lang::EventObject&) override {}
+};
+
+cpo::uno::Reference<css::util::XChangesNotifier> gRemoteCheckerConfigNode;
+
+void watchRemoteCheckerConfig()
+{
+    if (gRemoteCheckerConfigNode.is())
+        return;
+    try
+    {
+        cpo::uno::Reference<css::lang::XMultiServiceFactory> xProvider(
+            css::configuration::theDefaultProvider::get(xContext));
+        const css::beans::NamedValue aPath(
+            u"nodepath"_ustr, cpo::uno::Any(u"/org.openoffice.Office.Linguistic/GrammarChecking"_ustr));
+        gRemoteCheckerConfigNode.set(
+            xProvider->createInstanceWithArguments(
+                u"com.sun.star.configuration.ConfigurationAccess"_ustr, { cpo::uno::Any(aPath) }),
+            uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::util::XChangesListener> xListener(new RemoteCheckerConfigListener);
+        gRemoteCheckerConfigNode->addChangesListener(xListener);
+    }
+    catch (const cpo::uno::Exception& rException)
+    {
+        SAL_WARN("kit", "cannot watch the remote checker settings: " << rException.Message);
+    }
+}
+
+// Takes the remote checker settings from the environment the server set up.
+// The languages are handed over separately: by the forkit, whose kits
+// inherit the servers' answers, and by a kit when it loads a document.
+void setRemoteCheckerConfig()
+{
     try
     {
         std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
@@ -1267,48 +1449,7 @@ cpo::uno::Sequence<css::lang::Locale> setRemoteCheckerConfig()
     catch (const cpo::uno::Exception& rException)
     {
         SAL_WARN("kit", "Failed to set the remote checker settings: " << rException.Message);
-        return {};
     }
-
-    try
-    {
-        cpo::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
-            css::linguistic2::LinguServiceManager::create(xContext);
-        cpo::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
-        if (!xSpell.is())
-            return {};
-        const cpo::uno::Sequence<css::lang::Locale> aSpellLocales = xSpell->getLocales();
-
-        for (const RemoteChecker& rChecker : aRemoteCheckers)
-        {
-            if (!rChecker.bChecksSpelling || !isRemoteCheckerEnabled(rChecker))
-                continue;
-            if (!isRemoteCheckerReachable(rChecker))
-            {
-                std::cerr << "Remote checker " << rChecker.pId
-                          << " is not answering; keeping the local spell checker\n";
-                continue;
-            }
-
-            cpo::uno::Reference<css::linguistic2::XSupportedLocales> xRemote(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    rChecker.aImplementationName, xContext),
-                uno::UNO_QUERY_THROW);
-            for (const css::lang::Locale& rLocale : aSpellLocales)
-            {
-                if (xRemote->hasLocale(rLocale))
-                    xLangSrv->setConfiguredServices(SN_SPELLCHECKER, rLocale, {});
-            }
-            for (const css::lang::Locale& rLocale : xRemote->getLocales())
-                aRemoteLocales.push_back(rLocale);
-        }
-    }
-    catch (const cpo::uno::Exception& rException)
-    {
-        SAL_WARN("kit", "Failed to hand languages to the remote checkers: " << rException.Message);
-    }
-
-    return comphelper::containerToSequence(aRemoteLocales);
 }
 
 }  // end anonymous namespace
@@ -3207,6 +3348,11 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
 
         COKitDocumentImpl* pDocument = new COKitDocumentImpl(xComponent, nThisDocumentId);
         pDocument->maOriginalDocumentUrlKey = aOriginalDocumentUrlKey;
+
+        // A remote checker's server that had not answered when the kit was
+        // forked, or that was set up since, is asked now, and the local spell
+        // checker steps aside for a reachable one.
+        handLanguagesToRemoteCheckers();
 
         if (bSuppressDialogs)
             comphelper::COKit::setDialogsSuppressed(ViewShellDocId(nThisDocumentId));
@@ -8645,11 +8791,10 @@ static std::string getRemoteGrammarCheckers()
             // each list in its answer, as "available" and the list's name.
             if (!isRemoteCheckerEnabled(rChecker))
                 continue;
-            const std::map<std::string, cpo::uno::Sequence<css::beans::PropertyValue>>::const_iterator
-                aKnown = gRemoteCheckerProbes.find(rChecker.pId);
-            if (aKnown == gRemoteCheckerProbes.end())
+            const std::optional<RemoteCheckerProbe> oProbe = knownProbe(rChecker);
+            if (!oProbe)
                 continue;
-            for (const css::beans::PropertyValue& rValue : aKnown->second)
+            for (const css::beans::PropertyValue& rValue : oProbe->aAnswer)
             {
                 cpo::uno::Sequence<OUString> aNames;
                 if (rValue.Name != "IsReachable" && (rValue.Value >>= aNames))
@@ -10674,14 +10819,30 @@ static void preloadData()
     (void)OUStringToOString(u"arbitrary string", RTL_TEXTENCODING_MS_1250);
     std::cerr << "\n";
 
-    // setup the remote checkers before spell checking init
-    cpo::uno::Sequence<css::lang::Locale> aLTLocales = setRemoteCheckerConfig();
-    if (aLTLocales.getLength())
+    // setup the remote checkers before spell checking init. Their servers
+    // are asked here, within the probe's limit, so the kits are forked with
+    // the answers and with the languages already handed over.
+    setRemoteCheckerConfig();
+    handLanguagesToRemoteCheckers();
+    for (const RemoteChecker& rChecker : aRemoteCheckers)
     {
-        std::cerr << "Remote linguistic service languages: ";
-        for (auto &it : std::as_const(aLTLocales))
-            std::cerr << LanguageTag::convertToBcp47(it) << " ";
-        std::cerr << "\n";
+        if (!isRemoteCheckerEnabled(rChecker))
+            continue;
+        try
+        {
+            cpo::uno::Reference<css::linguistic2::XSupportedLocales> xRemote(
+                comphelper::getProcessComponentContext()->getServiceManager()->createInstanceWithContext(
+                    rChecker.aImplementationName, comphelper::getProcessComponentContext()),
+                uno::UNO_QUERY_THROW);
+            std::cerr << "Remote checker " << rChecker.pId << " languages: ";
+            for (const css::lang::Locale& rLocale : xRemote->getLocales())
+                std::cerr << LanguageTag::convertToBcp47(rLocale) << " ";
+            std::cerr << "\n";
+        }
+        catch (const cpo::uno::Exception& rException)
+        {
+            SAL_WARN("kit", "cannot create " << rChecker.pId << ": " << rException.Message);
+        }
     }
 
     // preload all available dictionaries

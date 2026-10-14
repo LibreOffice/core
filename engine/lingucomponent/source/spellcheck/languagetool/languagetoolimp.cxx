@@ -59,7 +59,11 @@ LanguageToolGrammarChecker::LanguageToolGrammarChecker()
 {
 }
 
-bool LanguageToolGrammarChecker::isEnabled() { return LanguageToolCfg::IsEnabled::get(); }
+bool LanguageToolGrammarChecker::isEnabled()
+{
+    return LanguageToolCfg::IsEnabled::get()
+           && !LanguageToolCfg::BaseURL::get().value_or(OUString()).isEmpty();
+}
 
 std::vector<OUString> LanguageToolGrammarChecker::configuredLocales()
 {
@@ -141,6 +145,7 @@ cpo::uno::Sequence<css::beans::PropertyValue> LanguageToolGrammarChecker::probe(
     Request aRequest;
     aRequest.aURL = getBaseURL() + "/languages";
     aRequest.bVerifySSL = LanguageToolCfg::SSLCertVerify::get();
+    aRequest.aTimeout = PROBE_TIMEOUT;
     const bool bReachable = !getBaseURL().isEmpty() && get(aRequest).eCode == CURLE_OK;
     return { comphelper::makePropertyValue(u"IsReachable"_ustr, bReachable) };
 }

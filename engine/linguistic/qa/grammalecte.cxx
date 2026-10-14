@@ -14,6 +14,7 @@
 
 #include <sal/config.h>
 
+#include <chrono>
 #include <string>
 
 #include <rtl/string.hxx>
@@ -23,6 +24,7 @@
 #include <officecfg/Office/Linguistic.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
@@ -165,10 +167,87 @@ public:
 private:
     CPPUNIT_TEST_SUITE(TestGrammalecte);
     CPPUNIT_TEST(testProofreading);
+    CPPUNIT_TEST(testStaysConfiguredWhileOff);
+    CPPUNIT_TEST(testProbeGivesUp);
     CPPUNIT_TEST_SUITE_END();
 
     void testProofreading();
+    void testStaysConfiguredWhileOff();
+    void testProbeGivesUp();
 };
+
+// Asking a server whether it is there is waited for, so it gives up sooner
+// than a check does: a server that never answers is reported as not there
+// within the probe's limits, 3 seconds for the connection and 5 in all,
+// not the check's 10.
+void TestGrammalecte::testProbeGivesUp()
+{
+    // Listens and never accepts: the connection waits in the backlog or
+    // never completes, and no answer comes either way.
+    osl::AcceptorSocket aSilent;
+    aSilent.setOption(osl_Socket_OptionReuseAddr, 1);
+    CPPUNIT_ASSERT(aSilent.bind(osl::SocketAddr(u"localhost"_ustr, 2024)));
+    CPPUNIT_ASSERT(aSilent.listen());
+
+    using GrammalecteCfg = officecfg::Office::Linguistic::GrammarChecking::Grammalecte;
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    GrammalecteCfg::BaseURL::set(u"http://127.0.0.1:2024"_ustr, batch);
+    GrammalecteCfg::IsEnabled::set(true, batch);
+    batch->commit();
+
+    Reference<css::beans::XPropertyAccess> xChecker(
+        m_xSFactory->createInstance(u"cpo.lingu.Grammalecte"_ustr), UNO_QUERY);
+    CPPUNIT_ASSERT(xChecker.is());
+
+    const std::chrono::steady_clock::time_point aStart = std::chrono::steady_clock::now();
+    const Sequence<css::beans::PropertyValue> aAnswer = xChecker->getPropertyValues();
+    const std::chrono::steady_clock::duration aTaken = std::chrono::steady_clock::now() - aStart;
+
+    bool bReachable = true;
+    for (const css::beans::PropertyValue& rValue : aAnswer)
+    {
+        if (rValue.Name == "IsReachable")
+            rValue.Value >>= bReachable;
+    }
+    CPPUNIT_ASSERT(!bReachable);
+    CPPUNIT_ASSERT(aTaken < std::chrono::seconds(8));
+    aSilent.close();
+}
+
+// A checker that is off when the service manager starts reports no locale,
+// which must not cost it its place in the list of checkers for French: the
+// list is what the iterator asks at check time, and the checker may be
+// switched on by then.
+void TestGrammalecte::testStaysConfiguredWhileOff()
+{
+    using GrammalecteCfg = officecfg::Office::Linguistic::GrammarChecking::Grammalecte;
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    GrammalecteCfg::BaseURL::set(u""_ustr, batch);
+    GrammalecteCfg::IsEnabled::set(false, batch);
+    batch->commit();
+
+    Reference<css::linguistic2::XProofreader> xProofreader(
+        m_xSFactory->createInstance(u"cpo.lingu.Grammalecte"_ustr), UNO_QUERY);
+    CPPUNIT_ASSERT(xProofreader.is());
+    const css::lang::Locale aFrench(u"fr"_ustr, u""_ustr, u""_ustr);
+    CPPUNIT_ASSERT(!xProofreader->hasLocale(aFrench));
+
+    Reference<css::linguistic2::XLinguServiceManager2> xManager
+        = css::linguistic2::LinguServiceManager::create(m_xContext);
+    const Sequence<OUString> aConfigured
+        = xManager->getConfiguredServices(u"com.sun.star.linguistic2.Proofreader"_ustr, aFrench);
+    bool bListed = false;
+    for (const OUString& rName : aConfigured)
+        bListed = bListed || rName == "cpo.lingu.Grammalecte";
+    CPPUNIT_ASSERT(bListed);
+
+    // Switched on, it serves French at once.
+    batch = comphelper::ConfigurationChanges::create();
+    GrammalecteCfg::BaseURL::set(u"http://127.0.0.1:2023"_ustr, batch);
+    GrammalecteCfg::IsEnabled::set(true, batch);
+    batch->commit();
+    CPPUNIT_ASSERT(xProofreader->hasLocale(aFrench));
+}
 
 void TestGrammalecte::testProofreading()
 {

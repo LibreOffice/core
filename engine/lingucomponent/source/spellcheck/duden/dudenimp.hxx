@@ -35,7 +35,8 @@ private:
     cpo::uno::Sequence<css::beans::PropertyValue> probe() override;
 
     static lingucomponent::remote::Request makeRequest(std::u16string_view rPath);
-    static std::vector<OUString> fetchNames(std::u16string_view rPath, const char* pNameKey);
+    static std::optional<std::vector<OUString>> fetchNames(std::u16string_view rPath,
+                                                           const char* pNameKey);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

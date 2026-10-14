@@ -198,12 +198,17 @@ std::vector<SingleProofreadingError> DudenChecker::parseResponse(const std::stri
 
 // The names in a list the server publishes: the objects' "name" members, or
 // the plain strings when there is no member name to look for.
-std::vector<OUString> DudenChecker::fetchNames(std::u16string_view rPath, const char* pNameKey)
+// Nothing when the server did not answer. Asked only while probing, so
+// with the probe's shorter limit.
+std::optional<std::vector<OUString>> DudenChecker::fetchNames(std::u16string_view rPath,
+                                                              const char* pNameKey)
 {
     std::vector<OUString> aNames;
-    const Response aResponse = get(makeRequest(rPath));
+    Request aRequest = makeRequest(rPath);
+    aRequest.aTimeout = PROBE_TIMEOUT;
+    const Response aResponse = get(aRequest);
     if (aResponse.eCode != CURLE_OK)
-        return aNames;
+        return std::nullopt;
     const std::optional<boost::property_tree::ptree> oRoot = parseJson(aResponse.aBody);
     if (!oRoot)
         return aNames;
@@ -221,13 +226,22 @@ cpo::uno::Sequence<css::beans::PropertyValue> DudenChecker::probe()
 {
     bool bReachable = false;
     if (!getBaseURL().isEmpty())
-        bReachable = get(makeRequest(u"/version")).eCode == CURLE_OK;
+    {
+        Request aRequest = makeRequest(u"/version");
+        aRequest.aTimeout = PROBE_TIMEOUT;
+        bReachable = get(aRequest).eCode == CURLE_OK;
+    }
     std::vector<OUString> aPropertySets;
     std::vector<OUString> aDictionaries;
+    // A server that stops answering on the way is not asked the rest.
     if (bReachable)
     {
-        aPropertySets = fetchNames(u"/propset", "name");
-        aDictionaries = fetchNames(u"/dictionaries", nullptr);
+        const std::optional<std::vector<OUString>> oPropertySets = fetchNames(u"/propset", "name");
+        if (oPropertySets)
+        {
+            aPropertySets = *oPropertySets;
+            aDictionaries = fetchNames(u"/dictionaries", nullptr).value_or(std::vector<OUString>());
+        }
     }
     return { comphelper::makePropertyValue(u"IsReachable"_ustr, bReachable),
              comphelper::makePropertyValue(u"PropertySets"_ustr,

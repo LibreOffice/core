@@ -62,7 +62,8 @@ https://dev.languagetool.org/finding-errors-using-n-gram-data, and mount
 the directory at /ngrams, as the commented lines in compose.yaml show.
 
 The server settings show in the Options dialog only where the
-administrator allows it, with allow_user_settings in coolwsd.xml.
+administrator allows it, with allow_user_settings in coolwsd.xml, and only
+while the checker is enabled there.
 
 Collabora Office, the desktop application, has the same checker and is
 configured in its own Options dialog.

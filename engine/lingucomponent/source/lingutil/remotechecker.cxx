@@ -95,7 +95,10 @@ Response perform(const Request& rRequest, bool bPost)
     (void)curl_easy_setopt(pCurl.get(), CURLOPT_URL, aURL.getStr());
     (void)curl_easy_setopt(pCurl.get(), CURLOPT_HTTPHEADER, pHeaders.get());
     (void)curl_easy_setopt(pCurl.get(), CURLOPT_FAILONERROR, 1L);
-    (void)curl_easy_setopt(pCurl.get(), CURLOPT_TIMEOUT, 10L);
+    (void)curl_easy_setopt(pCurl.get(), CURLOPT_TIMEOUT,
+                           static_cast<long>(rRequest.aTimeout.count()));
+    (void)curl_easy_setopt(pCurl.get(), CURLOPT_CONNECTTIMEOUT,
+                           static_cast<long>(rRequest.aConnectTimeout.count()));
     (void)curl_easy_setopt(pCurl.get(), CURLOPT_WRITEFUNCTION, writeCallback);
     (void)curl_easy_setopt(pCurl.get(), CURLOPT_WRITEDATA, &aResponse.aBody);
 
@@ -325,13 +328,13 @@ void CheckerBase::broadcastProofreadAgain()
     }
 }
 
+// The locales the checker is configured for, whether or not it is switched
+// on: this is what keeps it on the service manager's lists while it is off.
 cpo::uno::Sequence<css::lang::Locale> CheckerBase::getLocales()
 {
     osl::MutexGuard aGuard(linguistic::GetLinguMutex());
     subscribe();
     if (m_aLocales.hasElements())
-        return m_aLocales;
-    if (!isEnabled())
         return m_aLocales;
 
     std::vector<css::lang::Locale> aLocales;
@@ -341,8 +344,12 @@ cpo::uno::Sequence<css::lang::Locale> CheckerBase::getLocales()
     return m_aLocales;
 }
 
+// Whether the checker serves the locale now: the iterator asks this before
+// it sends a paragraph, and moves on to the next checker on a no.
 bool CheckerBase::hasLocale(const css::lang::Locale& rLocale)
 {
+    if (!isEnabled())
+        return false;
     const cpo::uno::Sequence<css::lang::Locale> aLocales = getLocales();
     return std::find(aLocales.begin(), aLocales.end(), rLocale) != aLocales.end();
 }

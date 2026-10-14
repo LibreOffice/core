@@ -52,7 +52,14 @@ struct Request
     // "user:password" for HTTP Basic authentication, empty for none.
     OString aUserPassword;
     bool bVerifySSL = true;
+    // How long the whole round trip may take, and the connection alone.
+    std::chrono::seconds aTimeout{ 10 };
+    std::chrono::seconds aConnectTimeout{ 3 };
 };
+
+// The round trip allowed when a server is asked whether it is there: the
+// caller waits for the answer, so it is cut shorter than a check.
+constexpr std::chrono::seconds PROBE_TIMEOUT(5);
 
 struct Response
 {
@@ -152,6 +159,9 @@ protected:
     explicit CheckerBase(OUString aConfigNodePath);
     ~CheckerBase() override;
 
+    // Switched on and told where its server is. The checker lists its
+    // locales either way, so the service manager keeps it on its lists, but
+    // declines them while off, so the next checker in line gets the text.
     virtual bool isEnabled() = 0;
     // BCP 47 tags of the locales the checker is configured to serve.
     virtual std::vector<OUString> configuredLocales() = 0;

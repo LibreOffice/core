@@ -4576,7 +4576,9 @@ class SettingIframe {
 	 * where the server allows it, and always in the desktop app, which has
 	 * no other place to set them: in Online one process checks the document
 	 * for everyone who has it open, so one user must not be able to send
-	 * everyone's text to a server of their choosing.
+	 * everyone's text to a server of their choosing. A checker the server
+	 * switched off is not offered at all: that switch keeps the text in
+	 * house, and is nobody else's to undo.
 	 *
 	 * A field that was never touched is not written: the engine keeps what
 	 * the server, or the schema, gave it. The engine's value is shown as the
