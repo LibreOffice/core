@@ -523,7 +523,7 @@ private:
             required.  When all text objects have been processed then
             <FALSE/> is returned.
     */
-    virtual bool SpellNextDocument() override;
+    DECL_LINK(SpellNextDocumentHdl, Outliner*, bool);
 
     /** Find the right parent to use for a message. This function makes sure
         that the otherwise non-modal search or spell dialogs, if visible, are

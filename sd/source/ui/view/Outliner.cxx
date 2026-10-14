@@ -189,6 +189,7 @@ SdOutliner::SdOutliner( SdDrawDocument& rDoc, OutlinerMode nMode )
     SetStyleSheetPool(static_cast<SfxStyleSheetPool*>( mrDrawDocument.GetStyleSheetPool() ));
     SetCalcFieldValueHdl(LINK(SdModule::get(), SdModule, CalcFieldValueHdl));
     SetForbiddenCharsTable( rDoc.GetForbiddenCharsTable() );
+    SetSpellNextDocumentHdl(LINK(this, SdOutliner, SpellNextDocumentHdl));
 
     EEControlBits nCntrl = GetControlWord();
     nCntrl |= EEControlBits::ALLOWBIGOBJS;
@@ -370,7 +371,7 @@ void SdOutliner::EndSpelling()
     mnStartPageIndex = sal_uInt16(-1);
 }
 
-bool SdOutliner::SpellNextDocument()
+IMPL_LINK(SdOutliner, SpellNextDocumentHdl, Outliner*, /*pOutliner*/, bool)
 {
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
     if( nullptr != dynamic_cast< const sd::OutlineViewShell *>( pViewShell.get() ))
