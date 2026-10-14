@@ -530,6 +530,18 @@ SwUndoCompDoc::SwUndoCompDoc( const SwRangeRedline& rRedl )
     }
 }
 
+SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, const SwRedlineData& rRedlineData )
+    : SwUndo( SwUndoId::COMPAREDOC, rRg.GetDoc() ), SwUndRng( rRg ),
+    m_bInsert( true )
+{
+    SwDoc& rDoc = rRg.GetDoc();
+    if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
+    {
+        m_pRedlineData.reset( new SwRedlineData( rRedlineData ) );
+        SetRedlineFlags( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
+    }
+}
+
 SwUndoCompDoc::~SwUndoCompDoc()
 {
     m_pRedlineData.reset();

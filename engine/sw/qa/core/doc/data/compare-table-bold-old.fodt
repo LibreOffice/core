@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:officeooo="http://openoffice.org/2009/office" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+<office:styles>
+<style:style style:name="Strong_20_Emphasis" style:display-name="Strong Emphasis" style:family="text"><style:text-properties fo:font-size="20pt"/></style:style>
+</office:styles>
+<office:automatic-styles>
+</office:automatic-styles>
+<office:body>
+<office:text>
+<text:p>Before</text:p>
+<table:table table:name="Table1"><table:table-column table:number-columns-repeated="2"/><table:table-row><table:table-cell><text:p>A1</text:p></table:table-cell><table:table-cell><text:p>Hello world</text:p></table:table-cell></table:table-row></table:table>
+<text:p>After</text:p>
+</office:text>
+</office:body>
+</office:document>

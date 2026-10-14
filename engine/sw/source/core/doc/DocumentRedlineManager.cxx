@@ -958,7 +958,13 @@ namespace
                 {
                     auto [pStt, pEnd] = pRedl->StartEnd(); // SwPosition*
                     SwPaM aPam(*pStt, *pEnd);
-                    rDoc.ResetAttrs(aPam);
+                    // Only the character formatting is reset. The paragraph attributes and
+                    // hyperlinks in the range stay as they are.
+                    o3tl::sorted_vector<sal_uInt16> aResetAttrsArray;
+                    for (sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; ++i)
+                        aResetAttrsArray.insert(i);
+                    aResetAttrsArray.insert(RES_TXTATR_CHARFMT);
+                    rDoc.ResetAttrs(aPam, true, aResetAttrsArray);
                 }
                 else if ( pRedl->GetType() == RedlineType::ParagraphFormat )
                 {

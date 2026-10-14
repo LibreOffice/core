@@ -2178,6 +2178,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="CompareFormatting" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies whether comparing documents also reports paragraphs with the same text but different character or paragraph formatting.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="Insert">
       <info>

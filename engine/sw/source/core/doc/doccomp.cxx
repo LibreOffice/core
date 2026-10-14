@@ -41,6 +41,17 @@
 #include <modcfg.hxx>
 #include <frameformats.hxx>
 #include <swtable.hxx>
+#include <charfmt.hxx>
+#include <fchrfmt.hxx>
+#include <txatbase.hxx>
+#include <istyleaccess.hxx>
+#include <fmtcol.hxx>
+#include <svx/xdef.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
+#include <hintids.hxx>
+#include <o3tl/sorted_vector.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -109,6 +120,27 @@ private:
     // inside one cell.
     vector<std::unique_ptr<CompareData>> m_aCellComparisons;
 
+    /// Pairs of a paragraph of this document and a paragraph of the other document that have
+    /// the same text.
+    vector<std::pair<const SwTextNode*, const SwTextNode*>> m_aSameTextNodes;
+
+    /// A range of this document whose formatting differs from the other document, with the
+    /// formatting of the other document.
+    struct FormatChange
+    {
+        std::unique_ptr<SwPaM> m_pPaM;
+        RedlineType m_eType;
+        std::unique_ptr<SwRedlineExtraData_FormatColl> m_pExtraData;
+    };
+    vector<FormatChange> m_aFormatChanges;
+
+    void AddSameText( const SwNode& rDstNd, const SwNode& rSrcNd );
+    void CompareParaFormatting( const SwTextNode& rDstNd, const SwTextNode& rSrcNd );
+    void CompareCharFormatting( const SwTextNode& rDstNd, const SwTextNode& rSrcNd );
+    void AddCharFormatChange( const SwTextNode& rDstNd, const SwTextNode& rSrcNd,
+                              sal_Int32 nStart, sal_Int32 nEnd );
+    void AppendFormatRedlines( std::size_t nAuthor, const DateTime& rTimeStamp );
+
     // Truncate beginning and end and add all others to the LinesArray
     void CheckRanges( CompareData& );
 
@@ -134,6 +166,9 @@ public:
     // These are passed the start and end line number.
     // Displaying the actually content is to be handled by the subclass!
     sal_uLong ShowDiffs( const CompareData& rData );
+    /// Finds the formatting differences in the paragraphs whose text is the same in both
+    /// documents. Returns the number of differences.
+    sal_uLong CompareFormatting();
 
     void ShowInsert( sal_uLong nStt, sal_uLong nEnd );
     void ShowDelete( const CompareData& rData, sal_uLong nStt,
@@ -343,6 +378,7 @@ struct CmpOptionsContainer
     SwCompareMode eCmpMode;
     int nIgnoreLen;
     bool bUseRsid;
+    bool bCompareFormatting;
 };
 
 }
@@ -495,6 +531,9 @@ sal_uLong CompareData::ShowDiffs( const CompareData& rData )
 
             ++nCnt;
         }
+        // Here both lines are unchanged, so they have the same text.
+        if( CmpOptions.bCompareFormatting && nStt1 < nLen1 && nStt2 < nLen2 )
+            AddSameText( GetLine( nStt2 ).GetNode(), rData.GetLine( nStt1 ).GetNode() );
         ++nStt1;
         ++nStt2;
     }
@@ -1542,6 +1581,8 @@ void CompareData::CheckRanges( CompareData& rData )
         const SwNode* pDstNd = rDstNds[ nDstSttIdx ];
         if( !SwCompareLine::CompareNode( *pSrcNd, *pDstNd ))
             break;
+        if( CmpOptions.bCompareFormatting )
+            AddSameText( *pDstNd, *pSrcNd );
 
         nSrcSttIdx = NextIdx( pSrcNd );
         nDstSttIdx = NextIdx( pDstNd );
@@ -1555,6 +1596,8 @@ void CompareData::CheckRanges( CompareData& rData )
         const SwNode* pDstNd = rDstNds[ nDstEndIdx ];
         if( !SwCompareLine::CompareNode( *pSrcNd, *pDstNd ))
             break;
+        if( CmpOptions.bCompareFormatting )
+            AddSameText( *pDstNd, *pSrcNd );
 
         nSrcEndIdx = PrevIdx( pSrcNd );
         nDstEndIdx = PrevIdx( pDstNd );
@@ -1735,6 +1778,339 @@ void CompareData::CheckForChangesInLine( const CompareData& rData,
     }
 }
 
+namespace
+{
+    /// The character attributes, from RES_CHRATR_BEGIN up to the end of the text attributes
+    /// that have an end.
+    SfxItemSet lcl_MakeCharFormattingSet(SwDoc& rDoc)
+    {
+        return SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_TXTATR_WITHEND_END - 1>(
+            rDoc.GetAttrPool());
+    }
+
+    /// Puts into rSet the character formatting that applies to all of nStart to nEnd in rNd:
+    /// the paragraph's own character attributes, with the character attributes of its text on
+    /// top. The attributes that mark content rather than formatting it are left out.
+    void lcl_GetCharFormatting(const SwTextNode& rNd, sal_Int32 nStart, sal_Int32 nEnd,
+                               bool bExpandCharFormat, SfxItemSet& rSet)
+    {
+        if (const SwAttrSet* pParaSet = rNd.GetpSwAttrSet())
+            rSet.Put(*pParaSet);
+
+        SfxItemSet aTextSet(*rSet.GetPool(), rSet.GetRanges());
+        rNd.GetParaAttr(aTextSet, nStart, nEnd, /*bOnlyTextAttr=*/true, bExpandCharFormat);
+        aTextSet.ClearInvalidItems();
+        rSet.Put(aTextSet);
+
+        static constexpr sal_uInt16 aNotFormatting[]
+            = { RES_TXTATR_REFMARK,           RES_TXTATR_TOXMARK,    RES_TXTATR_META,
+                RES_TXTATR_METAFIELD,         RES_TXTATR_INETFMT,    RES_TXTATR_CJK_RUBY,
+                RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_INPUTFIELD, RES_TXTATR_CONTENTCONTROL,
+                RES_CHRATR_RSID,              RES_CHRATR_GRABBAG };
+        for (sal_uInt16 nWhich : aNotFormatting)
+            rSet.ClearItem(nWhich);
+        // The contents of an automatic style are in rSet already, as single items.
+        rSet.ClearItem(RES_TXTATR_AUTOFMT);
+    }
+
+    /// Clears the items of rSet that have the value that the paragraph style of rNd gives, so
+    /// that direct formatting with no effect counts the same as no direct formatting.
+    void lcl_ClearItemsSameAsStyle(SfxItemSet& rSet, const SwTextNode& rNd)
+    {
+        const SwTextFormatColl* pStyle = rNd.GetTextColl();
+        if (!pStyle)
+            return;
+        const SwAttrSet& rStyleSet = pStyle->GetAttrSet();
+        SfxWhichIter aIter(rSet);
+        for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
+        {
+            const SfxPoolItem* pItem = nullptr;
+            if (rStyleSet.GetRanges().doesContainWhich(nWhich)
+                && rSet.GetItemState(nWhich, false, &pItem) == SfxItemState::SET
+                && *pItem == rStyleSet.Get(nWhich))
+                rSet.ClearItem(nWhich);
+        }
+    }
+
+    /// The character formatting of nStart to nEnd in rNd, in a form that two documents can
+    /// compare: the character style by its name, and all the other items expanded.
+    struct CharFormatting
+    {
+        SfxItemSet m_aSet;
+        UIName m_aCharFormatName;
+
+        CharFormatting(SwDoc& rDoc, const SwTextNode& rNd, sal_Int32 nStart, sal_Int32 nEnd)
+            : m_aSet(lcl_MakeCharFormattingSet(rDoc))
+        {
+            lcl_GetCharFormatting(rNd, nStart, nEnd, /*bExpandCharFormat=*/true, m_aSet);
+            lcl_ClearItemsSameAsStyle(m_aSet, rNd);
+            if (const SwFormatCharFormat* pItem = m_aSet.GetItemIfSet(RES_TXTATR_CHARFMT, false))
+            {
+                if (const SwCharFormat* pFormat = pItem->GetCharFormat())
+                    m_aCharFormatName = pFormat->GetName();
+                m_aSet.ClearItem(RES_TXTATR_CHARFMT);
+            }
+        }
+
+        bool operator==(const CharFormatting& rOther) const
+        {
+            return m_aCharFormatName == rOther.m_aCharFormatName
+                   && m_aSet.Equals(rOther.m_aSet, /*bComparePool=*/false);
+        }
+    };
+
+    /// The paragraph attributes that change how a paragraph looks, plus the numbering and list
+    /// attributes.
+    SfxItemSet lcl_MakeParaFormattingSet(SwDoc& rDoc)
+    {
+        return SfxItemSet::makeFixedSfxItemSet<
+            RES_PARATR_LINESPACING, RES_PARATR_AUTOFRAMEDIR, RES_PARATR_LIST_BEGIN,
+            RES_PARATR_LIST_END - 1, RES_MARGIN_FIRSTLINE, RES_MARGIN_RIGHT, RES_UL_SPACE,
+            RES_UL_SPACE, RES_BREAK, RES_BREAK, RES_BACKGROUND, RES_SHADOW, RES_KEEP, RES_KEEP,
+            RES_FRAMEDIR, RES_FRAMEDIR, XATTR_FILLSTYLE, XATTR_FILLCOLOR>(rDoc.GetAttrPool());
+    }
+
+    /// The paragraph attributes that rejecting a paragraph formatting change resets, plus the fill
+    /// attributes that the comparison looks at.
+    SfxItemSet lcl_MakeParaResetSet(SwDoc& rDoc)
+    {
+        return SfxItemSet::makeFixedSfxItemSet<RES_PARATR_BEGIN, RES_FRMATR_END - 1,
+                                               XATTR_FILLSTYLE, XATTR_FILLCOLOR>(
+            rDoc.GetAttrPool());
+    }
+
+    /// Whether nWhich is a numbering or list attribute, which the comparison leaves as they are,
+    /// or the drop cap, which refers to a character style of its own document.
+    bool lcl_IsNumberingOrDropCap(sal_uInt16 nWhich)
+    {
+        return nWhich == RES_PARATR_NUMRULE || nWhich == RES_PARATR_DROP
+               || (nWhich >= RES_PARATR_LIST_BEGIN && nWhich < RES_PARATR_LIST_END);
+    }
+
+    /// Clears the numbering and list attributes and the drop cap.
+    void lcl_ClearNumberingAndDropCap(SfxItemSet& rSet)
+    {
+        SfxWhichIter aIter(rSet);
+        for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
+            if (lcl_IsNumberingOrDropCap(nWhich))
+                rSet.ClearItem(nWhich);
+    }
+
+    /// The paragraph formatting of rNd that two documents can compare: the paragraph style by
+    /// its name, and the paragraph's own attributes.
+    struct ParaFormatting
+    {
+        SfxItemSet m_aSet;
+        UIName m_aStyleName;
+
+        ParaFormatting(SwDoc& rDoc, const SwTextNode& rNd)
+            : m_aSet(lcl_MakeParaFormattingSet(rDoc))
+        {
+            if (const SwAttrSet* pParaSet = rNd.GetpSwAttrSet())
+                m_aSet.Put(*pParaSet);
+            lcl_ClearNumberingAndDropCap(m_aSet);
+            lcl_ClearItemsSameAsStyle(m_aSet, rNd);
+            if (const SwTextFormatColl* pStyle = rNd.GetTextColl())
+                m_aStyleName = pStyle->GetName();
+        }
+
+        bool operator==(const ParaFormatting& rOther) const
+        {
+            return m_aStyleName == rOther.m_aStyleName
+                   && m_aSet.Equals(rOther.m_aSet, /*bComparePool=*/false);
+        }
+    };
+
+    /// Adds the start and the end of each text attribute of rNd that has an end.
+    void lcl_AddAttributeBoundaries(const SwTextNode& rNd, o3tl::sorted_vector<sal_Int32>& rBoundaries)
+    {
+        const SwpHints* pHints = rNd.GetpSwpHints();
+        if (!pHints)
+            return;
+        for (size_t i = 0; i < pHints->Count(); ++i)
+        {
+            const SwTextAttr* pHint = pHints->Get(i);
+            if (const sal_Int32* pEnd = pHint->End())
+            {
+                rBoundaries.insert(pHint->GetStart());
+                rBoundaries.insert(*pEnd);
+            }
+        }
+    }
+}
+
+void CompareData::AddSameText( const SwNode& rDstNd, const SwNode& rSrcNd )
+{
+    if( rDstNd.IsTextNode() && rSrcNd.IsTextNode() )
+    {
+        m_aSameTextNodes.emplace_back( rDstNd.GetTextNode(), rSrcNd.GetTextNode() );
+        return;
+    }
+
+    // A table is one line. Its text is the same in both documents, so pair up its paragraphs.
+    const SwNode* pDstStart = rDstNd.IsEndNode() ? rDstNd.StartOfSectionNode() : &rDstNd;
+    const SwNode* pSrcStart = rSrcNd.IsEndNode() ? rSrcNd.StartOfSectionNode() : &rSrcNd;
+    if( !pDstStart->IsTableNode() || !pSrcStart->IsTableNode() )
+        return;
+
+    const SwNodes& rDstNodes = pDstStart->GetNodes();
+    const SwNodes& rSrcNodes = pSrcStart->GetNodes();
+    SwNodeOffset nDstIdx = pDstStart->GetIndex();
+    SwNodeOffset nSrcIdx = pSrcStart->GetIndex();
+    const SwNodeOffset nDstEnd = pDstStart->EndOfSectionIndex();
+    const SwNodeOffset nSrcEnd = pSrcStart->EndOfSectionIndex();
+    for( ; nDstIdx < nDstEnd && nSrcIdx < nSrcEnd; ++nDstIdx, ++nSrcIdx )
+    {
+        const SwTextNode* pDstText = rDstNodes[ nDstIdx ]->GetTextNode();
+        const SwTextNode* pSrcText = rSrcNodes[ nSrcIdx ]->GetTextNode();
+        if( pDstText && pSrcText && pDstText->GetText() == pSrcText->GetText() )
+            m_aSameTextNodes.emplace_back( pDstText, pSrcText );
+    }
+}
+
+sal_uLong CompareData::CompareFormatting()
+{
+    for( const auto& [ pDstNd, pSrcNd ] : m_aSameTextNodes )
+    {
+        CompareParaFormatting( *pDstNd, *pSrcNd );
+        CompareCharFormatting( *pDstNd, *pSrcNd );
+    }
+    m_aSameTextNodes.clear();
+    return m_aFormatChanges.size();
+}
+
+void CompareData::CompareParaFormatting( const SwTextNode& rDstNd, const SwTextNode& rSrcNd )
+{
+    // A paragraph format redline needs some text to cover.
+    if( rDstNd.GetText().isEmpty() )
+        return;
+    ParaFormatting aDst( m_rDoc, rDstNd );
+    ParaFormatting aSrc( m_rDoc, rSrcNd );
+    if( aDst == aSrc )
+        return;
+
+    SwTextFormatColl* pOldStyle = nullptr;
+    if( const SwTextFormatColl* pSrcStyle = rSrcNd.GetTextColl() )
+    {
+        pOldStyle = m_rDoc.FindTextFormatCollByName( pSrcStyle->GetName() );
+        if( !pOldStyle )
+            pOldStyle = m_rDoc.CopyTextColl( *pSrcStyle );
+    }
+
+    // Rejecting the change resets all the paragraph attributes and then sets the old ones. The
+    // old attributes are the compared ones of the old version, and the current value of each
+    // attribute that the comparison leaves alone, such as the numbering, so those stay.
+    auto pOldSet = std::make_shared<SfxItemSet>( lcl_MakeParaResetSet( m_rDoc ) );
+    pOldSet->Put( aSrc.m_aSet );
+    if( const SwAttrSet* pDstParaSet = rDstNd.GetpSwAttrSet() )
+    {
+        for( SfxItemIter aIter( *pDstParaSet ); !aIter.IsAtEnd(); aIter.Next() )
+        {
+            const SfxPoolItem* pItem = aIter.GetCurItem();
+            const sal_uInt16 nWhich = pItem->Which();
+            if( !pOldSet->GetRanges().doesContainWhich( nWhich ) )
+                continue;
+            if( lcl_IsNumberingOrDropCap( nWhich )
+                || !aSrc.m_aSet.GetRanges().doesContainWhich( nWhich ) )
+                pOldSet->Put( *pItem );
+        }
+    }
+
+    SwTextNode& rNd = const_cast<SwTextNode&>( rDstNd );
+    m_aFormatChanges.push_back( { std::make_unique<SwPaM>( rNd, 0, rNd, rNd.GetText().getLength() ),
+                                  RedlineType::ParagraphFormat,
+                                  std::make_unique<SwRedlineExtraData_FormatColl>(
+                                      pOldStyle ? pOldStyle->GetName() : UIName( u""_ustr ),
+                                      SwPoolFormatId::UNKNOWN, pOldSet ) } );
+}
+
+void CompareData::CompareCharFormatting( const SwTextNode& rDstNd, const SwTextNode& rSrcNd )
+{
+    const sal_Int32 nLen = rDstNd.GetText().getLength();
+    o3tl::sorted_vector<sal_Int32> aBoundaries;
+    aBoundaries.insert( 0 );
+    aBoundaries.insert( nLen );
+    lcl_AddAttributeBoundaries( rDstNd, aBoundaries );
+    lcl_AddAttributeBoundaries( rSrcNd, aBoundaries );
+
+    // Between two boundaries, each attribute covers all of the text or none of it. A change
+    // goes on as long as the formatting differs and the old formatting stays the same, because
+    // one redline holds one set of old formatting.
+    std::optional<CharFormatting> oChangeSrc;
+    sal_Int32 nChangeStart = 0;
+    for( size_t i = 1; i < aBoundaries.size(); ++i )
+    {
+        const sal_Int32 nStart = aBoundaries[ i - 1 ];
+        const sal_Int32 nEnd = aBoundaries[ i ];
+        CharFormatting aDst( m_rDoc, rDstNd, nStart, nEnd );
+        CharFormatting aSrc( m_rDoc, rSrcNd, nStart, nEnd );
+        const bool bDiffers = !( aDst == aSrc );
+        if( oChangeSrc && ( !bDiffers || !( *oChangeSrc == aSrc ) ) )
+        {
+            AddCharFormatChange( rDstNd, rSrcNd, nChangeStart, nStart );
+            oChangeSrc.reset();
+        }
+        if( bDiffers && !oChangeSrc )
+        {
+            oChangeSrc.emplace( std::move( aSrc ) );
+            nChangeStart = nStart;
+        }
+    }
+    if( oChangeSrc )
+        AddCharFormatChange( rDstNd, rSrcNd, nChangeStart, nLen );
+}
+
+void CompareData::AddCharFormatChange( const SwTextNode& rDstNd, const SwTextNode& rSrcNd,
+                                       sal_Int32 nStart, sal_Int32 nEnd )
+{
+    // The old formatting as rejecting the change sets it again: the character style itself,
+    // and the other items as direct formatting.
+    SfxItemSet aOldSet( lcl_MakeCharFormattingSet( m_rDoc ) );
+    lcl_GetCharFormatting( rSrcNd, nStart, nEnd, /*bExpandCharFormat=*/false, aOldSet );
+    if( const SwFormatCharFormat* pItem = aOldSet.GetItemIfSet( RES_TXTATR_CHARFMT, false ) )
+    {
+        SwCharFormat* pDstFormat = nullptr;
+        if( const SwCharFormat* pSrcFormat = pItem->GetCharFormat() )
+        {
+            pDstFormat = m_rDoc.FindCharFormatByName( pSrcFormat->GetName() );
+            if( !pDstFormat )
+                pDstFormat = m_rDoc.CopyCharFormat( *pSrcFormat );
+        }
+        aOldSet.ClearItem( RES_TXTATR_CHARFMT );
+        if( pDstFormat )
+            aOldSet.Put( SwFormatCharFormat( pDstFormat ) );
+    }
+    std::shared_ptr<SfxItemSet> pOldStyle
+        = m_rDoc.GetIStyleAccess().getAutomaticStyle( aOldSet, IStyleAccess::AUTO_STYLE_CHAR );
+
+    SwTextNode& rNd = const_cast<SwTextNode&>( rDstNd );
+    m_aFormatChanges.push_back( { std::make_unique<SwPaM>( rNd, nStart, rNd, nEnd ),
+                                  RedlineType::Format,
+                                  std::make_unique<SwRedlineExtraData_FormatColl>(
+                                      UIName( u""_ustr ), SwPoolFormatId::UNKNOWN, pOldStyle ) } );
+}
+
+void CompareData::AppendFormatRedlines( std::size_t nAuthor, const DateTime& rTimeStamp )
+{
+    for (const auto& pCellComparison : m_aCellComparisons)
+        pCellComparison->AppendFormatRedlines(nAuthor, rTimeStamp);
+
+    for( const FormatChange& rChange : m_aFormatChanges )
+    {
+        SwRedlineData aRedlnData( rChange.m_eType, nAuthor, rTimeStamp, 0, OUString(), nullptr );
+        aRedlnData.SetExtraData( rChange.m_pExtraData.get() );
+        if (IDocumentRedlineAccess::AppendResult::APPENDED ==
+                m_rDoc.getIDocumentRedlineAccess().AppendRedline(
+                    new SwRangeRedline( aRedlnData, *rChange.m_pPaM ), true) &&
+            m_rDoc.GetIDocumentUndoRedo().DoesUndo())
+        {
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(
+                std::make_unique<SwUndoCompDoc>( *rChange.m_pPaM, aRedlnData ));
+        }
+    }
+    m_aFormatChanges.clear();
+}
+
 bool CompareData::CompareTableCells( const CompareData& rData, const SwTableNode& rDstTable,
                                      const SwTableNode& rSrcTable )
 {
@@ -1759,7 +2135,9 @@ bool CompareData::CompareTableCells( const CompareData& rData, const SwTableNode
         CompareSectionText aSrcCell(rData.m_rDoc, *aSrcCells[i]);
         auto pDstCell = std::make_unique<CompareSectionText>(m_rDoc, *aDstCells[i]);
         pDstCell->CompareLines(aSrcCell);
-        if (pDstCell->ShowDiffs(aSrcCell))
+        sal_uLong nChanges = pDstCell->ShowDiffs(aSrcCell);
+        nChanges += pDstCell->CompareFormatting();
+        if (nChanges)
             m_aCellComparisons.push_back(std::move(pDstCell));
     }
     return true;
@@ -1937,6 +2315,8 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 std::make_unique<SwUndoCompDoc>( *pTmp, true ));
         }
     }
+
+    AppendFormatRedlines( nAuthor, aTimeStamp );
 }
 
 typedef std::shared_ptr<CompareData> CompareDataPtr;
@@ -2018,6 +2398,7 @@ tools::Long SwDoc::CompareDoc( const SwDoc& rDoc )
         CmpOptions.bUseRsid = getRsidRoot() == rDoc.getRsidRoot() && mod->IsUseRsid();
         CmpOptions.nIgnoreLen = mod->IsIgnorePieces() ? mod->GetPieceLen() : 0;
     }
+    CmpOptions.bCompareFormatting = officecfg::Office::Writer::Comparison::CompareFormatting::get();
 
     GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
     bool bDocWasModified = getIDocumentState().IsModified();
@@ -2036,6 +2417,7 @@ tools::Long SwDoc::CompareDoc( const SwDoc& rDoc )
         CompareData& rD1 = *a.second;
         rD1.CompareLines( rD0 );
         nRet |= rD1.ShowDiffs( rD0 );
+        nRet |= rD1.CompareFormatting();
     }
 
     if( nRet )

@@ -12,6 +12,7 @@
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -22,10 +23,13 @@
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/style/DropCapFormat.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <comphelper/classids.hxx>
 #include <comphelper/configuration.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <tools/globname.hxx>
 #include <svtools/embedhlp.hxx>
 #include <editeng/acorrcfg.hxx>
@@ -81,6 +85,28 @@ public:
     SwCoreDocTest()
         : SwModelTestBase(u"/sw/qa/core/doc/data/"_ustr)
     {
+    }
+
+    /// Compares the loaded document with an older version of it and shows the differences as
+    /// tracked changes.
+    void compareWith(std::u16string_view rOldFile)
+    {
+        uno::Sequence<beans::PropertyValue> aArgs = {
+            comphelper::makePropertyValue(u"URL"_ustr, createFileURL(rOldFile)),
+            comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+        };
+        dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+    }
+
+    /// Counts the tracked changes of the document that have the type eType.
+    size_t countRedlines(RedlineType eType)
+    {
+        const SwRedlineTable& rRedlines
+            = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+        return std::count_if(rRedlines.begin(), rRedlines.end(),
+                             [eType](const SwRangeRedline* pRedline) {
+                                 return pRedline->GetType() == eType;
+                             });
     }
 };
 
@@ -2011,6 +2037,302 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableSplitCellMoved)
     // Then the cells are not paired, and the change is tracked as a whole-table delete and insert:
     const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rRedlines.size());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsBoldWord)
+{
+    // Given a document where "world" in "Hello world" is bold, and an old version where it is
+    // not:
+    createSwDoc("compare-bold-new.fodt");
+
+    // When comparing it with the old version:
+    compareWith(u"compare-bold-old.fodt");
+
+    // Then the bold word is shown as a formatting change:
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. a document that differs only in formatting showed no changes.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    const SwRangeRedline* pRedline = rRedlines[0];
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Format, pRedline->GetType());
+    CPPUNIT_ASSERT_EQUAL(u"world"_ustr, pRedline->GetText());
+
+    // And rejecting the change makes the word normal again:
+    getSwDocShell()->GetWrtShell()->RejectRedline(0);
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Hello world"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xRun, u"CharWeight"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsCharStyle)
+{
+    // Given a document where "world" has a character style with a larger font, and an old
+    // version without the style:
+    createSwDoc("compare-char-style-new.fodt");
+
+    compareWith(u"compare-bold-old.fodt");
+
+    // Then the word with the character style is shown as a formatting change:
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlines[0]->GetType());
+    CPPUNIT_ASSERT_EQUAL(u"world"_ustr, rRedlines[0]->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsSameFormatting)
+{
+    // Given two versions with the same text and the same formatting:
+    createSwDoc("compare-bold-new.fodt");
+
+    compareWith(u"compare-bold-new.fodt");
+
+    // Then nothing is shown as changed:
+    CPPUNIT_ASSERT(getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsOnlyRsid)
+{
+    // Given two versions where only the editing session identifiers of the text differ:
+    createSwDoc("compare-rsid-new.fodt");
+
+    compareWith(u"compare-rsid-old.fodt");
+
+    // Then nothing is shown as changed:
+    CPPUNIT_ASSERT(getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsFormattingOff)
+{
+    // Given the setting to compare formatting turned off:
+    {
+        auto pChanges = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Writer::Comparison::CompareFormatting::set(false, pChanges);
+        pChanges->commit();
+    }
+    comphelper::ScopeGuard aGuard([] {
+        auto pChanges = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Writer::Comparison::CompareFormatting::set(true, pChanges);
+        pChanges->commit();
+    });
+    createSwDoc("compare-bold-new.fodt");
+
+    compareWith(u"compare-bold-old.fodt");
+
+    // Then a difference only in formatting is not shown:
+    CPPUNIT_ASSERT(getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsTextAndFormatting)
+{
+    // Given a document with a word inserted in the first paragraph and a word made bold in the
+    // third one:
+    createSwDoc("compare-text-and-bold-new.fodt");
+
+    compareWith(u"compare-text-and-bold-old.fodt");
+
+    // Then both the text change and the formatting change are shown:
+    CPPUNIT_ASSERT(countRedlines(RedlineType::Insert) > 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), countRedlines(RedlineType::Format));
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    auto it = std::find_if(rRedlines.begin(), rRedlines.end(), [](const SwRangeRedline* p) {
+        return p->GetType() == RedlineType::Format;
+    });
+    CPPUNIT_ASSERT_EQUAL(u"world"_ustr, (*it)->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsTableCellFormatting)
+{
+    // Given a document where a word in a table cell is bold, and an old version where it is
+    // not:
+    createSwDoc("compare-table-bold-new.fodt");
+
+    compareWith(u"compare-table-bold-old.fodt");
+
+    // Then only that word is shown as changed, not the whole table:
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::Format, rRedlines[0]->GetType());
+    CPPUNIT_ASSERT_EQUAL(u"world"_ustr, rRedlines[0]->GetText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsExplicitDefault)
+{
+    // Given a document that sets normal weight and normal posture explicitly, and an old version
+    // that leaves them unset:
+    createSwDoc("compare-explicit-default-new.fodt");
+
+    compareWith(u"compare-bold-old.fodt");
+
+    // Then nothing is shown as changed, because the text looks the same:
+    CPPUNIT_ASSERT(getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsParagraphStyle)
+{
+    // Given a document where the paragraph has the Quote style, and an old version where it has
+    // the default style:
+    createSwDoc("compare-para-style-new.fodt");
+
+    compareWith(u"compare-para-style-old.fodt");
+
+    // Then the style change is shown as a paragraph formatting change:
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. a paragraph style change was not shown.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::ParagraphFormat, rRedlines[0]->GetType());
+
+    // And rejecting the change sets the old style again:
+    getSwDocShell()->GetWrtShell()->RejectRedline(0);
+    CPPUNIT_ASSERT_EQUAL(u"Standard"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsParagraphAlignment)
+{
+    // Given a document where the paragraph is centered by direct formatting, and an old version
+    // where it is not:
+    createSwDoc("compare-para-align-new.fodt");
+
+    compareWith(u"compare-para-style-old.fodt");
+
+    // Then the alignment change is shown as a paragraph formatting change:
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    CPPUNIT_ASSERT_EQUAL(RedlineType::ParagraphFormat, rRedlines[0]->GetType());
+
+    // And rejecting the change aligns the paragraph to the left again:
+    getSwDocShell()->GetWrtShell()->RejectRedline(0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(style::ParagraphAdjust_LEFT),
+                         getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsParagraphAlignmentInList)
+{
+    // Given a numbered paragraph that is centered, and an old version where it is not:
+    createSwDoc("compare-para-list-new.fodt");
+
+    compareWith(u"compare-para-list-old.fodt");
+
+    // Then rejecting the alignment change keeps the numbering:
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    getSwDocShell()->GetWrtShell()->RejectRedline(0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(style::ParagraphAdjust_LEFT),
+                         getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsParagraphExplicitDefault)
+{
+    // Given a document that sets no spacing above and below the paragraph explicitly, and an old
+    // version that leaves the spacing unset:
+    createSwDoc("compare-para-explicit-default-new.fodt");
+
+    compareWith(u"compare-para-style-old.fodt");
+
+    // Then nothing is shown as changed, because the paragraph looks the same:
+    CPPUNIT_ASSERT(getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsWholeParagraphCharFormatting)
+{
+    // Given a centered paragraph whose whole text is red, and an old version where the paragraph
+    // is centered and the text has the default color:
+    createSwDoc("compare-whole-para-color-new.fodt");
+
+    compareWith(u"compare-whole-para-color-old.fodt");
+
+    // When rejecting the color change:
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    getSwDocShell()->GetWrtShell()->RejectRedline(0);
+
+    // Then the paragraph stays centered:
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 3 (CENTER)
+    // - Actual  : 0 (LEFT)
+    // i.e. rejecting a character change over the whole paragraph removed the paragraph
+    // attributes too.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(style::ParagraphAdjust_CENTER),
+                         getProperty<sal_Int16>(getParagraph(1), u"ParaAdjust"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsParagraphChangeKeepsDropCap)
+{
+    // Given a centered paragraph with a drop cap, and an old version with the same drop cap that
+    // is not centered:
+    createSwDoc("compare-para-drop-cap-new.fodt");
+
+    compareWith(u"compare-para-drop-cap-old.fodt");
+
+    // When rejecting the alignment change:
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    getSwDocShell()->GetWrtShell()->RejectRedline(0);
+
+    // Then the paragraph is aligned to the left again and keeps its drop cap:
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(style::ParagraphAdjust_LEFT),
+                         getProperty<sal_Int16>(xParagraph, u"ParaAdjust"_ustr));
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0
+    // i.e. rejecting the alignment change removed the drop cap.
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int8>(2),
+        getProperty<style::DropCapFormat>(xParagraph, u"DropCapFormat"_ustr).Lines);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsCharChangeKeepsHyperlink)
+{
+    // Given a document where the hyperlink "world" is bold, and an old version where the same
+    // hyperlink is not bold:
+    createSwDoc("compare-link-bold-new.fodt");
+
+    compareWith(u"compare-link-bold-old.fodt");
+
+    // When rejecting the bold change:
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+    getSwDocShell()->GetWrtShell()->RejectRedline(0);
+
+    // Then the word is not bold and is still a hyperlink:
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+    uno::Reference<text::XTextCursor> xCursor
+        = xParagraph->getText()->createTextCursorByRange(xParagraph->getStart());
+    xCursor->goRight(6, /*bExpand=*/false);
+    xCursor->goRight(5, /*bExpand=*/true);
+    uno::Reference<beans::XPropertySet> xWord(xCursor, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xWord, u"CharWeight"_ustr));
+    // Without the fix in place, this test would have failed with:
+    // - Expected: https://example.com/
+    // - Actual  :
+    // i.e. rejecting the formatting change removed the hyperlink.
+    CPPUNIT_ASSERT_EQUAL(u"https://example.com/"_ustr,
+                         getProperty<OUString>(xWord, u"HyperLinkURL"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsFormattingInChangedTable)
+{
+    // Given a table where text was added to one cell and a word was made bold in another cell,
+    // compared to the old version:
+    createSwDoc("compare-table-cell-bold-new.fodt");
+
+    compareWith(u"compare-table-cell-bold-old.fodt");
+
+    // Then the cells are compared one by one, and the bold word is shown as a formatting change
+    // next to the added text:
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), countRedlines(RedlineType::Insert));
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the formatting inside the cells of a changed table was not compared.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), countRedlines(RedlineType::Format));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

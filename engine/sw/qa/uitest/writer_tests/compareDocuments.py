@@ -53,8 +53,8 @@ class compareDocuments(UITestCase):
             with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
                 changesList = xTrackDlg.getChild("writerchanges")
 
-                # Check the number of changes
-                self.assertEqual(267, len(changesList.getChildren()))
+                # Check the number of changes, the formatting changes included
+                self.assertEqual(665, len(changesList.getChildren()))
 
                 # Without the fix in place, this test would have crashed here
                 xAccBtn = xTrackDlg.getChild("acceptall")

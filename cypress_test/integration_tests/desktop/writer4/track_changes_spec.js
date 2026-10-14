@@ -487,6 +487,20 @@ describe(['tagdesktop', 'tagnextcloud'], 'Track Changes', function () {
 		cy.cGet('div.cool-annotation').should('have.length', 3);
 
 	});
+
+	it('Compare documents shows a formatting change', function () {
+		// Given a document with some text:
+		helper.typeIntoDocument('Hello world');
+		helper.processToIdle(this.win);
+
+		// When comparing it with an old version where the same text has a bold word:
+		cy.cGet('#comparedocuments[type=file]').attachFile({ filePath: 'desktop/writer/track_changes_format_old.odt', encoding: 'binary' });
+
+		// Then the manage changes dialog lists one formatting change and no text change:
+		cy.cGet('#AcceptRejectChangesDialog img.swresredline_formattedimg').should('have.length', 1);
+		cy.cGet('#AcceptRejectChangesDialog img.swresredline_insertedimg').should('not.exist');
+		cy.cGet('#AcceptRejectChangesDialog img.swresredline_deletedimg').should('not.exist');
+	});
 });
 
 describe(['tagdesktop'], 'Restricted user tracked changes dialog button state', function() {

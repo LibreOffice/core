@@ -144,6 +144,9 @@ class SwUndoCompDoc final : public SwUndo, public SwUndRng
 public:
     SwUndoCompDoc( const SwPaM& rRg, bool bIns );
     SwUndoCompDoc( const SwRangeRedline& rRedl );
+    /// A redline of the given data over text that stays in the document, such as a formatting
+    /// change.
+    SwUndoCompDoc( const SwPaM& rRg, const SwRedlineData& rRedlineData );
 
     virtual ~SwUndoCompDoc() override;
 
