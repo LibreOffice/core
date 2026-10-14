@@ -861,13 +861,14 @@ export class Comment extends CanvasSectionObject {
 	public removeHighlight (): void {
 		if (app.map._docLayer._docType === 'text') {
 			this.sectionProperties.usedTextColor = this.sectionProperties.data.color;
-
-			this.sectionProperties.isHighlighted = false;
 		}
 		else if (app.map._docLayer._docType === 'spreadsheet') {
 			this.backgroundColor = null;
 			this.backgroundOpacity = 1;
 		}
+
+		this.containerObject.requestReDraw();
+		this.sectionProperties.isHighlighted = false;
 	}
 
 	// Paints this comment in the highlight colours.

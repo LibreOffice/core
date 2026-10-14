@@ -1551,6 +1551,8 @@ export class CommentSection extends CanvasSectionObject {
 	public unselect (): void {
 		this.listenForClickOutsideComment(false);
 		if (this.sectionProperties.selectedComment && this.sectionProperties.selectedComment.sectionProperties.data.id != 'new') {
+			if (this.sectionProperties.selectedComment.sectionProperties.isHighlighted)
+				this.sectionProperties.selectedComment.removeHighlight();
 			for (const comment of this.sectionProperties.commentList) {
 				if (window.L.DomUtil.hasClass(comment.sectionProperties.container, 'annotation-active'))
 					window.L.DomUtil.removeClass(comment.sectionProperties.container, 'annotation-active');

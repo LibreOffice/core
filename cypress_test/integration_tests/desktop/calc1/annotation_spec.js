@@ -115,6 +115,32 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('#comment-container-1').should('exist');
 	});
 
+	it('Highlight goes with the selection', function() {
+		// keep a comment open for editing
+		desktopHelper.insertComment('some text0', false);
+		cy.cGet('#annotation-modify-textarea-new').should('be.visible');
+
+		calcHelper.enterCellAddressAndConfirm(this.win, 'B4');
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.insertComment();
+		});
+		cy.getFrameWindow().then(function (win) {
+			var list = win.app.sectionContainer.getSectionWithName(win.app.CSections.CommentList.name);
+			expect(list.sectionProperties.commentList[0].backgroundColor,
+				'comment highlight').to.not.equal(null);
+		});
+
+		cy.cGet('.cool-annotation').last({log: false}).find('[value="Save"]').click();
+		cy.cGet('.cool-annotation').last({log: false}).find('.modify-annotation').should('not.be.visible');
+
+		// saving clears the selection and removes the highlight
+		cy.getFrameWindow().then(function (win) {
+			var list = win.app.sectionContainer.getSectionWithName(win.app.CSections.CommentList.name);
+			expect(list.sectionProperties.commentList[0].backgroundColor,
+				'comment highlight').to.equal(null);
+		});
+	});
+
 	it('Reply should not be possible', function() {
 		desktopHelper.insertComment();
 
