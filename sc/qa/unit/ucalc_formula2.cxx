@@ -10,6 +10,7 @@
 #include "helper/qahelper.hxx"
 #include <clipparam.hxx>
 #include <compiler.hxx>
+#include <interpre.hxx>
 #include <tokenarray.hxx>
 #include <scopetools.hxx>
 #include <formulacell.hxx>
@@ -207,6 +208,43 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testNumericPairTraversal)
     x = new ScMatrix(0, 0);
     y = new ScMatrix(0, 0);
     x->IterateNumericPairs(*y, [](double, double) { CPPUNIT_FAIL("unexpected pair"); });
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testPearsonOperandErrorPrecedence)
+{
+    m_pDoc->InsertTab(0, u"Formula"_ustr);
+
+    auto checkOperandErrorPrecedence = [&](FormulaError xError, FormulaError yError) {
+        ScMatrixRef x = new ScMatrix(2, 2, 0.0);
+        ScMatrixRef y = new ScMatrix(2, 2, 0.0);
+        x->PutError(xError, 0, 0);
+        y->PutError(yError, 0, 0);
+        for (SCSIZE i = 1; i < 4; ++i)
+        {
+            x->PutDouble(i + 1, i);
+            y->PutDouble(i + 3, i);
+        }
+
+        ScTokenArray code(*m_pDoc);
+        code.AddOpCode(ocPearson);
+        code.AddOpCode(ocOpen);
+        code.AddMatrix(y);
+        code.AddOpCode(ocSep);
+        code.AddMatrix(x);
+        code.AddOpCode(ocClose);
+        ScCompiler compiler(*m_pDoc, ScAddress(0, 0, 0), code,
+                            formula::FormulaGrammar::GRAM_ENGLISH);
+        compiler.CompileTokenArray();
+        CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, code.GetCodeError());
+
+        ScInterpreter interpreter(nullptr, *m_pDoc, m_pDoc->GetNonThreadedContext(),
+                                  ScAddress(0, 0, 0), code);
+        CPPUNIT_ASSERT_EQUAL(formula::svError, interpreter.Interpret());
+        CPPUNIT_ASSERT_EQUAL(xError, interpreter.GetError());
+    };
+
+    checkOperandErrorPrecedence(FormulaError::DivisionByZero, FormulaError::NoValue);
+    checkOperandErrorPrecedence(FormulaError::NoValue, FormulaError::DivisionByZero);
 }
 
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncIF)
