@@ -6968,6 +6968,34 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayIsFormula)
     m_pDoc->DeleteTab(0);
 }
 
+namespace
+{
+// Sets the native formula separators while the object lives, and puts
+// the previous separators back when it is destroyed.
+class FormulaSeparatorsSwitch
+{
+    OUString maPreviousSeparator;
+    OUString maPreviousColumnSeparator;
+    OUString maPreviousRowSeparator;
+
+public:
+    FormulaSeparatorsSwitch(const OUString& rSeparator, const OUString& rColumnSeparator,
+                            const OUString& rRowSeparator)
+        : maPreviousSeparator(ScCompiler::GetNativeSymbol(ocSep))
+        , maPreviousColumnSeparator(ScCompiler::GetNativeSymbol(ocArrayColSep))
+        , maPreviousRowSeparator(ScCompiler::GetNativeSymbol(ocArrayRowSep))
+    {
+        ScCompiler::UpdateSeparatorsNative(rSeparator, rColumnSeparator, rRowSeparator);
+    }
+
+    ~FormulaSeparatorsSwitch()
+    {
+        ScCompiler::UpdateSeparatorsNative(maPreviousSeparator, maPreviousColumnSeparator,
+                                           maPreviousRowSeparator);
+    }
+};
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncARRAYTOTEXTBooleanLocale)
 {
     // A boolean lists as TRUE or FALSE in the current locale, so under a
@@ -6980,6 +7008,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncARRAYTOTEXTBooleanLocale)
         aLocaleOptions.SetLocaleConfigString(aPreviousLocale);
         aLocaleOptions.Commit();
     });
+    FormulaSeparatorsSwitch aSeparatorsSwitch(u";"_ustr, u"."_ustr, u";"_ustr);
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
     m_pDoc->InsertTab(0, u"Sheet1"_ustr);
@@ -6994,9 +7023,47 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncARRAYTOTEXTBooleanLocale)
     CPPUNIT_ASSERT_EQUAL(u"WAHR"_ustr, m_pDoc->GetString(ScAddress(1, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(u"FALSCH"_ustr, m_pDoc->GetString(ScAddress(1, 1, 0)));
 
-    // A range lists each boolean, joined in row order with ", ".
+    // A range lists each boolean, joined in row order with "; ".
     m_pDoc->SetString(ScAddress(1, 2, 0), u"=ARRAYTOTEXT(A1:A2)"_ustr);
-    CPPUNIT_ASSERT_EQUAL(u"WAHR, FALSCH"_ustr, m_pDoc->GetString(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"WAHR; FALSCH"_ustr, m_pDoc->GetString(ScAddress(1, 2, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncARRAYTOTEXTFormulaSeparators)
+{
+    // Under a German locale the decimal separator is a comma. ARRAYTOTEXT
+    // separates the values with the formula separators, here the German
+    // defaults: ";" between function arguments, "." between array columns
+    // and ";" between array rows.
+    SvtSysLocaleOptions aLocaleOptions;
+    const OUString aPreviousLocale = aLocaleOptions.GetLanguageTag().getBcp47();
+    aLocaleOptions.SetLocaleConfigString(u"de-DE"_ustr);
+    aLocaleOptions.Commit();
+    comphelper::ScopeGuard aLocaleGuard([&aLocaleOptions, &aPreviousLocale] {
+        aLocaleOptions.SetLocaleConfigString(aPreviousLocale);
+        aLocaleOptions.Commit();
+    });
+    FormulaSeparatorsSwitch aSeparatorsSwitch(u";"_ustr, u"."_ustr, u";"_ustr);
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // A1:B2 holds a decimal number, a text, an integer and a boolean.
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 1.5);
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"x"_ustr);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 2.0);
+    m_pDoc->SetString(ScAddress(1, 1, 0), u"=TRUE()"_ustr);
+
+    // The concise format joins the values in row order with the function
+    // separator and a space.
+    m_pDoc->SetString(ScAddress(3, 0, 0), u"=ARRAYTOTEXT(A1:B2)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"1,5; x; 2; WAHR"_ustr, m_pDoc->GetString(ScAddress(3, 0, 0)));
+
+    // The strict format writes an array constant with the array column and
+    // row separators.
+    m_pDoc->SetString(ScAddress(3, 1, 0), u"=ARRAYTOTEXT(A1:B2;1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"{1,5.\"x\";2.WAHR}"_ustr, m_pDoc->GetString(ScAddress(3, 1, 0)));
 
     m_pDoc->DeleteTab(0);
 }

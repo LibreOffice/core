@@ -10135,17 +10135,25 @@ void ScInterpreter::ScArrayToText()
     }
     const bool bStrict = (nFormat == 1);
 
-    // The concise format joins all values with ", " in row order. The
-    // strict format writes an array constant: braces around the whole
-    // array, "," between columns, ";" between rows, and quoted text.
+    // The concise format joins all values in row order with the function
+    // separator and a space. The strict format writes an array constant:
+    // braces around the whole array, the array column separator between
+    // columns, the array row separator between rows, and quoted text. The
+    // separators are the ones formulas are entered with, and these differ
+    // from the decimal separator of the locale.
     OUStringBuffer aResult;
 
-    auto appendSeparator = [&aResult, bStrict](bool bNewRow)
+    const OUString aFunctionSeparator = ScCompiler::GetNativeSymbol(ocSep) + " ";
+    const OUString aColumnSeparator = ScCompiler::GetNativeSymbol(ocArrayColSep);
+    const OUString aRowSeparator = ScCompiler::GetNativeSymbol(ocArrayRowSep);
+    auto appendSeparator = [&](bool bNewRow)
     {
-        if (bNewRow)
-            aResult.append(bStrict ? u";" : u", ");
+        if (!bStrict)
+            aResult.append(aFunctionSeparator);
+        else if (bNewRow)
+            aResult.append(aRowSeparator);
         else
-            aResult.append(bStrict ? u"," : u", ");
+            aResult.append(aColumnSeparator);
     };
     auto appendText = [&aResult, bStrict](const OUString& rStr)
     {
