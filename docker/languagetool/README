@@ -1,0 +1,68 @@
+LanguageTool for Collabora Online
+
+LanguageTool is a grammar, style and spelling checker for English, French,
+German, Spanish and some thirty other languages. Collabora Online talks to
+it over HTTP, the way it talks to the Duden Korrekturserver and Grammalecte,
+and underlines what it finds as you type. This directory shows how to run
+it next to Collabora Online.
+
+The service is the collabora/languagetool image on Docker Hub, built from
+https://github.com/CollaboraOnline/docker-languagetool from the release
+tag of LanguageTool, since LanguageTool publishes no binary archive after
+version 6.6. The image is free to use, but unsupported, and it is the open
+source LanguageTool: the rules the premium version adds are not in it (see
+https://languagetool.org/premium?a=collabora). LanguageTool is released
+under the LGPL 2.1; the licence text is in the image.
+
+Try it:
+
+    docker run --rm -p 8010:8010 collabora/languagetool
+    curl -d 'text=The%20catt%20sat%20down.&language=en-US' http://127.0.0.1:8010/v2/check
+
+The answer lists a spelling mistake in "catt".
+
+Running it next to Collabora Online:
+
+    cd docker/languagetool
+    docker compose up
+
+compose.yaml starts the collabora/code image with the checker enabled and
+pointed at the service, on a network the service shares with nothing else.
+In coolwsd.xml the same two settings are
+
+    <languagetool>
+        <enabled>true</enabled>
+        <base_url>http://languagetool:8010/v2</base_url>
+    </languagetool>
+
+The base URL ends in /v2, the version of the LanguageTool API; the checker
+appends /check and /languages. A language is checked when the checker's
+language list has it and the server does. allowed_languages in coolwsd.xml
+does not limit this: it only decides which local dictionaries, hyphenation
+patterns, thesauri and Lightproof rules are loaded at start. For the
+languages the server spell checks, it takes over from the local spell
+checker where the local one has the language.
+
+The same settings reach the premium service at languagetool.org, with the
+account's name in user_name and its key in api_key.
+
+The service has no authentication and no TLS, and it answers any origin.
+Anyone who can reach it can send it text, so keep it on an internal
+network, as compose.yaml does, and never on a public address.
+
+The server runs on Java, as the user nobody, and wants half a gigabyte of
+memory or so. The JAVAOPTIONS environment variable goes to the Java
+runtime, as in JAVAOPTIONS=-Xmx768m, and EXTRAOPTIONS to the server; its
+options are listed at https://dev.languagetool.org/http-server. A server
+configuration property is set with an environment variable of its name
+prefixed with LT_, as in LT_maxTextLength=50000. LanguageTool finds more
+confused words with n-gram data, which is large (several gigabytes per
+language) and is not in the image: unpack it on the host, following
+https://dev.languagetool.org/finding-errors-using-n-gram-data, and mount
+the directory at /ngrams, as the commented lines in compose.yaml show.
+
+The server settings show in the Options dialog only where the
+administrator allows it, with allow_user_settings in coolwsd.xml.
+
+Collabora Office, the desktop application, has the same checker and is
+configured in its own Options dialog.

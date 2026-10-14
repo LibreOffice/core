@@ -139,6 +139,18 @@ The base image's own SBOM and VEX are published by ZenDiS, see
 https://gitlab.opencode.de/oci-community/images/zendis/base
 
 
+Writing aids next to Collabora Online
+
+Two subdirectories run a remote sentence checker beside a Collabora Online
+container, with a compose.yaml and a README on how to configure it:
+
+- grammalecte/: Grammalecte, the French grammar checker, built from its
+  release archive.
+
+- languagetool/: LanguageTool, the multilingual grammar, style and spelling
+  checker, from the collabora/languagetool image.
+
+
 Usage
 
 On using the pre-made or self-built Docker images, see Collabora Online SDK:

@@ -1,0 +1,50 @@
+# Collabora Online with a LanguageTool server beside it. Collabora reaches
+# the checker over a network of its own, which is where the checker stays:
+# it answers anyone who can reach it, with no password.
+#
+#   docker compose up
+#
+# Then open a Writer document and the checker underlines what it finds as
+# you type, in every language of its language list that the server has.
+# allowed_languages in coolwsd.xml does not limit it (see the README).
+
+services:
+  collabora:
+    image: collabora/code:latest
+    ports:
+      - "9980:9980"
+    environment:
+      # Your hosts, as for any Collabora Online container.
+      - aliasgroup1=https://my-wopi-host.example.com:443
+      - extra_params=--o:ssl.enable=false --o:ssl.termination=true --o:languagetool.enabled=true --o:languagetool.base_url=http://languagetool:8010/v2
+    networks:
+      - web
+      - checkers
+    depends_on:
+      languagetool:
+        condition: service_healthy
+    restart: unless-stopped
+
+  languagetool:
+    # Built from https://github.com/CollaboraOnline/docker-languagetool.
+    image: collabora/languagetool:latest
+    # The server wants half a gigabyte or so; give the Java runtime what the
+    # host can spare, and more with n-grams.
+    environment:
+      - JAVAOPTIONS=-Xmx768m
+    # The n-gram data, when you have it (see the README):
+    # volumes:
+    #   - /srv/ngrams:/ngrams:ro
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8010/v2/languages"]
+      interval: 30s
+      timeout: 5s
+      start_period: 60s
+    networks:
+      - checkers
+    restart: unless-stopped
+
+networks:
+  web:
+  checkers:
+    internal: true

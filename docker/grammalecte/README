@@ -33,9 +33,10 @@ In coolwsd.xml the same two settings are
         <base_url>http://grammalecte:8080</base_url>
     </grammalecte>
 
-allowed_languages, which limits the local writing aids loaded at start,
-does not come into it: a remote checker checks every language it is
-configured for.
+allowed_languages in coolwsd.xml does not limit the checker: it only
+decides which local dictionaries, hyphenation patterns, thesauri and
+Lightproof rules are loaded at start, and a remote checker checks every
+language it is configured for.
 
 The service has no authentication and no TLS. Anyone who can reach it can
 send it text, so keep it on an internal network, as compose.yaml does, and
