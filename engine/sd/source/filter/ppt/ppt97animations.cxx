@@ -120,9 +120,10 @@ bool Ppt97Animation::HasAfterEffect_DimAfterEffect() const
     return m_aAtom.nAfterEffect == 3;
 }
 #endif
-void Ppt97Animation::SetSoundFileUrl( const OUString& rSoundFileUrl )
+void Ppt97Animation::SetSoundFileUrl( const OUString& rSoundFileUrl, bool bAllowed )
 {
     m_aSoundFileUrl = rSoundFileUrl;
+    m_bSoundFileAllowed = bAllowed;
 }
 
 double Ppt97Animation::GetDelayTimeInSeconds() const
@@ -606,7 +607,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
 
     // set sound effect
     if( HasSoundEffect() )
-        pEffect->createAudio( xmloff::makeSoundSource( m_aSoundFileUrl ) );
+        pEffect->createAudio( xmloff::makeSoundSource( m_aSoundFileUrl, m_bSoundFileAllowed ) );
 
     // text iteration
     pEffect->setIterateType( GetTextAnimationType() );

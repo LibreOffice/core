@@ -255,7 +255,7 @@ public:
 
     bool        IsScaleObjects() const              { return mbScaleObjects; }
 
-    void        SetSoundFile(const OUString& rStr);
+    void        SetSoundFile(const OUString& rStr, bool bAllowed = false);
     const OUString& GetSoundFile() const                { return maSoundLink.getURL(); }
     const SdSoundLink& GetSoundLink() const             { return maSoundLink; }
     void        SetSoundAllowed(bool bAllowed)          { maSoundLink.setAllowed(bAllowed); }

@@ -1194,8 +1194,9 @@ void lcl_registerAudioSoundLinks(
     if (rNode->getType() == css::animations::AnimationNodeType::AUDIO)
     {
         cpo::uno::Reference<css::animations::XAudio> xAudio(rNode, cpo::uno::UNO_QUERY);
-        const OUString aURL = xAudio.is() ? xmloff::getSoundURL(xAudio->getSource()) : OUString();
-        if (SdSoundLink(aURL).isExternalLink())
+        const cpo::uno::Any aSource = xAudio.is() ? xAudio->getSource() : cpo::uno::Any();
+        const OUString aURL = xmloff::getSoundURL(aSource);
+        if (SdSoundLink(aURL).isExternalLink() && !xmloff::getSoundAllowed(aSource))
         {
             rbFound = true;
             if (!lcl_hasSoundLink<SdAnimationSoundLink>(
@@ -1224,7 +1225,9 @@ void lcl_registerAudioSoundLinks(
 
 void SdDrawDocument::RegisterPageSoundLink(SdPage& rPage)
 {
-    if (!m_pLinkManager || !rPage.GetSoundLink().isExternalLink())
+    // An already-allowed sound is the document's own content, not a link.
+    if (!m_pLinkManager || !rPage.GetSoundLink().isExternalLink()
+        || rPage.GetSoundLink().isAllowed())
         return;
     if (lcl_hasSoundLink<SdPageSoundLink>(*m_pLinkManager, [&rPage](const SdPageSoundLink& rLink)
                                           { return rLink.getPage() == &rPage; }))
@@ -1249,7 +1252,8 @@ void SdDrawDocument::RegisterShapeSoundLink(SdrObject& rObject)
         return;
     SdAnimationInfo* pInfo = GetShapeUserData(rObject);
     if (!pInfo || pInfo->meClickAction != css::presentation::ClickAction_SOUND
-        || !SdSoundLink(pInfo->GetBookmark()).isExternalLink())
+        || !SdSoundLink(pInfo->GetBookmark()).isExternalLink()
+        || pInfo->mbClickSoundAllowed)
         return;
     if (lcl_hasSoundLink<SdShapeSoundLink>(*m_pLinkManager, [&rObject](const SdShapeSoundLink& rLink)
                                            { return rLink.getObject() == &rObject; }))

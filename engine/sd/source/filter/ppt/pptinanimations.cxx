@@ -2563,8 +2563,12 @@ void AnimationImporter::importTargetElementContainer( const Atom* pAtom, Any& rT
 
             case 2: // sound
                 {
-                    OUString aSoundURL( mpPPTImport->ReadSound( nRefId ) );
-                    rTarget <<= aSoundURL;
+                    bool bEmbedded;
+                    OUString aSoundURL( mpPPTImport->ReadSound( nRefId, bEmbedded ) );
+                    if (bEmbedded)
+                        rTarget = xmloff::makeSoundSource(aSoundURL, true);
+                    else
+                        rTarget <<= aSoundURL;
                     dump( " srcRef=\"%s\"", aSoundURL );
                 }
                 break;
