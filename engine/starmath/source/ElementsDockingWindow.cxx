@@ -208,7 +208,7 @@ const SmElementDescr s_a5FunctionsList[] =
     {RID_FUNCX, RID_FUNCX_HELP, {}, {}},
 };
 
-const SmElementDescr s_a5OperatorsList[] =
+const SmElementDescr s_a5LimitsList[] =
 {
     {RID_LIMX, RID_LIMX_HELP, {}, {}},
     {RID_LIM_FROMX, RID_LIM_FROMX_HELP, {}, {}},
@@ -229,7 +229,10 @@ const SmElementDescr s_a5OperatorsList[] =
     {RID_HADD_FROMX, RID_HADD_FROMX_HELP, {}, {}},
     {RID_HADD_TOX, RID_HADD_TOX_HELP, {}, {}},
     {RID_HADD_FROMTOX, RID_HADD_FROMTOX_HELP, {}, {}},
-    {},
+};
+
+const SmElementDescr s_a5OperatorsList[] =
+{
     {RID_SUMX, RID_SUMX_HELP, {}, {}},
     {RID_SUM_FROMX, RID_SUM_FROMX_HELP, {}, {}},
     {RID_SUM_TOX, RID_SUM_TOX_HELP, {}, {}},
@@ -250,6 +253,14 @@ const SmElementDescr s_a5OperatorsList[] =
     {RID_COPROD_TOX, RID_COPROD_TOX_HELP, {}, {}},
     {RID_COPROD_FROMTOX, RID_COPROD_FROMTOX_HELP, {}, {}},
     {},
+    {RID_OPERX, RID_OPERX_HELP, u"oper \xE22B <?>", {}},
+    {RID_OPER_FROMX, RID_OPER_FROMX_HELP, u"oper \xE22B from <?> <?>", {}},
+    {RID_OPER_TOX, RID_OPER_TOX_HELP, u"oper \xE22B to <?> <?>", {}},
+    {RID_OPER_FROMTOX, RID_OPER_FROMTOX_HELP, u"oper \xE22B from <?> to <?> <?>", {}},
+};
+
+const SmElementDescr s_a5IntegralsList[] =
+{
     {RID_INTX, RID_INTX_HELP, {}, {}},
     {RID_INT_FROMX, RID_INT_FROMX_HELP, {}, {}},
     {RID_INT_TOX, RID_INT_TOX_HELP, {}, {}},
@@ -279,11 +290,6 @@ const SmElementDescr s_a5OperatorsList[] =
     {RID_LLLINT_FROMX, RID_LLLINT_FROMX_HELP, {}, {}},
     {RID_LLLINT_TOX, RID_LLLINT_TOX_HELP, {}, {}},
     {RID_LLLINT_FROMTOX, RID_LLLINT_FROMTOX_HELP, {}, {}},
-    {},
-    {RID_OPERX, RID_OPERX_HELP, u"oper \xE22B <?>", {}},
-    {RID_OPER_FROMX, RID_OPER_FROMX_HELP, u"oper \xE22B from <?> <?>", {}},
-    {RID_OPER_TOX, RID_OPER_TOX_HELP, u"oper \xE22B to <?> <?>", {}},
-    {RID_OPER_FROMTOX, RID_OPER_FROMTOX_HELP, u"oper \xE22B from <?> to <?> <?>", {}},
 };
 
 const SmElementDescr s_a5AttributesList[] =
@@ -455,7 +461,9 @@ const std::vector<TranslateId> s_a5Categories{
     RID_CATEGORY_RELATIONS,
     RID_CATEGORY_SET_OPERATIONS,
     RID_CATEGORY_FUNCTIONS,
+    RID_CATEGORY_LIMITS,
     RID_CATEGORY_OPERATORS,
+    RID_CATEGORY_INTEGRALS,
     RID_CATEGORY_ATTRIBUTES,
     RID_CATEGORY_BRACKETS,
     RID_CATEGORY_FORMATS,
@@ -475,7 +483,9 @@ const std::vector<std::pair<const SmElementDescr*, size_t>> s_a5CategoryDescript
     { asPair(s_a5RelationsList) },
     { asPair(s_a5SetOperationsList) },
     { asPair(s_a5FunctionsList) },
+    { asPair(s_a5LimitsList) },
     { asPair(s_a5OperatorsList) },
+    { asPair(s_a5IntegralsList) },
     { asPair(s_a5AttributesList) },
     { asPair(s_a5BracketsList) },
     { asPair(s_a5FormatsList) },
@@ -505,22 +515,24 @@ const std::vector<std::vector<TranslateId>> s_a5CategoryGroupNames{
       RID_ELEMENTGROUP_ARABIC_TRIGONOMETRIC_ALT,
       RID_ELEMENTGROUP_INVERSE_FUNCTIONS,
       RID_ELEMENTGROUP_OTHER_FUNCTIONS },
-    // Operators
+    // Limits
     { RID_ELEMENTGROUP_LIMITS,
       RID_ELEMENTGROUP_LIMIT_INFERIOR,
       RID_ELEMENTGROUP_LIMIT_SUPERIOR,
-      RID_ELEMENTGROUP_PERSIAN_LIMITS,
-      RID_ELEMENTGROUP_SUMMATIONS,
+      RID_ELEMENTGROUP_PERSIAN_LIMITS },
+    // Operators
+    { RID_ELEMENTGROUP_SUMMATIONS,
       RID_ELEMENTGROUP_ARABIC_SUMMATIONS,
       RID_ELEMENTGROUP_PRODUCTS,
       RID_ELEMENTGROUP_COPRODUCTS,
-      RID_ELEMENTGROUP_INTEGRALS,
+      RID_ELEMENTGROUP_OTHER_LARGE_OPERATORS },
+    // Integrals
+    { RID_ELEMENTGROUP_INTEGRALS,
       RID_ELEMENTGROUP_DOUBLE_INTEGRALS,
       RID_ELEMENTGROUP_TRIPLE_INTEGRALS,
       RID_ELEMENTGROUP_CONTOUR_INTEGRALS,
       RID_ELEMENTGROUP_SURFACE_INTEGRALS,
-      RID_ELEMENTGROUP_VOLUME_INTEGRALS,
-      RID_ELEMENTGROUP_OTHER_LARGE_OPERATORS },
+      RID_ELEMENTGROUP_VOLUME_INTEGRALS },
     // Attributes
     { RID_ELEMENTGROUP_ACCENTS,
       RID_ELEMENTGROUP_OVERBARS_UNDERBARS,
