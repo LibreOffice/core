@@ -81,7 +81,8 @@ struct COKitFilePickerFilter
 };
 
 /**
- * A native file picker the in-process desktop app provides to the engine.
+ * A file picker the host provides to the engine: a native dialog in an in-process desktop
+ * app, or a request to the browser client in the Online server.
  *
  * When the provider is installed, a command that needs the user to pick a file calls it
  * instead of opening the engine's own file dialog.

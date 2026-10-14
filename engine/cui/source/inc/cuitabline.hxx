@@ -169,8 +169,17 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xSymbolHeightMF;
     std::unique_ptr<weld::CheckButton> m_xSymbolRatioCB;
 
+    /// true while this page exists. The host's file picker answers asynchronously, so the
+    /// completion checks this before it touches the page.
+    std::shared_ptr<bool> m_xAlive;
+
     // handler for gallery popup menu button + size
     DECL_LINK(GraphicHdl_Impl, const OUString&, void);
+    /** Makes pGraphic the symbol shown in the preview and the size fields, or clears the
+        symbol when pGraphic is null. The size comes from the graphic when bResetSize is set;
+        otherwise a square size is kept from the previous symbol. */
+    void ApplySymbolGraphic(const Graphic* pGraphic, bool bResetSize,
+                            tools::Long nPreviousSymbolType);
     DECL_LINK(SizeHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(RatioHdl_Impl, weld::Toggleable&, void);
 

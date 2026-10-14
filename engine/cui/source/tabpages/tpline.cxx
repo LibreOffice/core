@@ -58,6 +58,8 @@
 #include <editeng/brushitem.hxx>
 #include <svx/gallery.hxx>
 #include <sfx2/opengrf.hxx>
+#include <sfx2/cokitfilepicker.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svxids.hrc>
 #include <svx/strings.hrc>
@@ -125,6 +127,7 @@ SvxLineTabPage::SvxLineTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xSymbolWidthMF(m_xBuilder->weld_metric_spin_button(u"MF_SYMBOL_WIDTH"_ustr, FieldUnit::CM))
     , m_xSymbolHeightMF(m_xBuilder->weld_metric_spin_button(u"MF_SYMBOL_HEIGHT"_ustr, FieldUnit::CM))
     , m_xSymbolRatioCB(m_xBuilder->weld_check_button(u"CB_SYMBOL_RATIO"_ustr))
+    , m_xAlive(std::make_shared<bool>(true))
 {
     // This Page requires ExchangeSupport
     SetExchangeSupport();
@@ -202,6 +205,7 @@ void SvxLineTabPage::ShowSymbolControls(bool bOn)
 
 SvxLineTabPage::~SvxLineTabPage()
 {
+    *m_xAlive = false;
     m_xCtlPreview.reset();
     m_xLbEndStyle.reset();
     m_xLbStartStyle.reset();
@@ -1526,7 +1530,6 @@ IMPL_LINK(SvxLineTabPage, GraphicHdl_Impl, const OUString&, rIdent, void)
     const Graphic* pGraphic = nullptr;
     Graphic aGraphic;
     bool bResetSize = false;
-    bool bEnable = true;
     tools::Long nPreviousSymbolType = m_nSymbolType;
 
     std::u16string_view sNumber;
@@ -1552,10 +1555,30 @@ IMPL_LINK(SvxLineTabPage, GraphicHdl_Impl, const OUString&, rIdent, void)
     {
         m_nSymbolType=SVX_SYMBOLTYPE_NONE;
         pGraphic=nullptr;
-        bEnable = false;
     }
     else if (rIdent == "file")
     {
+        // In a COKit app the host's file picker runs instead of the engine's own dialog. It
+        // answers later on the main loop, with the URL of the picked file.
+        if (sfx2::COKitFilePicker::isAvailable())
+        {
+            std::shared_ptr<bool> xAlive = m_xAlive;
+            sfx2::COKitFilePicker::pick(
+                CuiResId(RID_CUISTR_EDIT_GRAPHIC), sfx2::COKitFilePicker::graphicImportFilters(),
+                [this, xAlive](const std::optional<OUString>& roUrl)
+                {
+                    if (!*xAlive || !roUrl)
+                        return;
+                    Graphic aPickedGraphic;
+                    if (GraphicFilter::LoadGraphic(*roUrl, OUString(), aPickedGraphic)
+                        != ERRCODE_NONE)
+                        return;
+                    m_nSymbolType = SVX_SYMBOLTYPE_BRUSHITEM;
+                    ApplySymbolGraphic(&aPickedGraphic, true, m_nSymbolType);
+                });
+            return;
+        }
+
         SvxOpenGraphicDialog aGrfDlg(CuiResId(RID_CUISTR_EDIT_GRAPHIC), GetFrameWeld());
         aGrfDlg.EnableLink(false);
         aGrfDlg.AsLink(false);
@@ -1573,6 +1596,13 @@ IMPL_LINK(SvxLineTabPage, GraphicHdl_Impl, const OUString&, rIdent, void)
             return;
     }
 
+    ApplySymbolGraphic(pGraphic, bResetSize, nPreviousSymbolType);
+}
+
+void SvxLineTabPage::ApplySymbolGraphic(const Graphic* pGraphic, bool bResetSize,
+                                        tools::Long nPreviousSymbolType)
+{
+    bool bEnable = pGraphic != nullptr;
     if (pGraphic)
     {
         Size aSize = SvxNumberFormat::GetGraphicSizeMM100(pGraphic);
@@ -1597,7 +1627,6 @@ IMPL_LINK(SvxLineTabPage, GraphicHdl_Impl, const OUString&, rIdent, void)
     {
         m_aSymbolGraphic=Graphic();
         m_aCtlPreview.SetSymbol(nullptr,m_aSymbolSize);
-        bEnable = false;
     }
     m_aSymbolLastSize=m_aSymbolSize;
     SetMetricValue(*m_xSymbolWidthMF,  m_aSymbolSize.Width(), m_ePoolUnit);
