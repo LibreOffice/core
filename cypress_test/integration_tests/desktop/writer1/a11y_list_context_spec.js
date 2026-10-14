@@ -104,6 +104,108 @@ describe(['tagdesktop'], 'Writer list given to the reader', { testIsolation: fal
 		});
 	});
 
+	function onWindows(windows) {
+		cy.then(function () {
+			win.L.Browser.win = windows;
+		});
+		move('{downarrow}{uparrow}');
+		editing('Apples');
+	}
+
+	function entry(text) {
+		return Array.from(win.document.querySelectorAll('#a11y-context-list li')).find(function (item) {
+			return item.firstChild.textContent.indexOf(text) !== -1;
+		});
+	}
+
+	function backInTheEditable(text) {
+		cy.then(function () {
+			expect(win.app.map._textInput.getPlainTextContent(), 'the editable holds the entry').to.contain(text);
+			return a11yHelper.getFocusedAXNode().then(function (node) {
+				expect(node, 'something holds the focus').to.not.equal(null);
+				expect(node.properties.editable, 'the focus is back in the editable').to.not.equal(undefined);
+			});
+		});
+	}
+
+	// Readers on Windows focus the object under their cursor on leaving browse mode.
+	it('an entry can take the focus only on Windows', function () {
+		let platform;
+		cy.then(function () {
+			platform = win.L.Browser.win;
+		});
+
+		[false, true].forEach(function (windows) {
+			onWindows(windows);
+			cy.then(function () {
+				return a11yHelper.getAXNodesWithin('#a11y-context-list').then(function (nodes) {
+					const entries = nodes.filter(function (node) {
+						return !node.ignored && node.role === 'listitem';
+					});
+					expect(entries, 'the entries').to.have.length(FRUIT.length);
+					entries.forEach(function (node, index) {
+						expect(node.properties.focusable === true, 'entry ' + index + ' focusable, on Windows: ' + windows)
+							.to.equal(windows);
+					});
+				});
+			});
+		});
+
+		cy.then(function () {
+			win.L.Browser.win = platform;
+		});
+	});
+
+	it('focusing an entry puts the caret on it', function () {
+		let platform;
+		cy.then(function () {
+			platform = win.L.Browser.win;
+		});
+		onWindows(true);
+
+		cy.then(function () {
+			entry('Lemons').focus();
+		});
+		cy.then(function () {
+			return a11yHelper.processToIdleWithA11yContext(win);
+		});
+		editing('Lemons');
+		backInTheEditable('Lemons');
+
+		cy.then(function () {
+			win.L.Browser.win = platform;
+		});
+		move('{ctrl}{home}{downarrow}');
+		editing('Apples');
+	});
+
+	// Orca enters focus mode with the focus on the page and the selection where it was reading.
+	[
+		{ from: 'Lemons', key: 'ArrowDown', keyCode: 40, to: 'Oranges' },
+		{ from: 'Lemons', key: 'ArrowUp', keyCode: 38, to: 'Citrus' },
+		{ from: 'Pears', key: 'ArrowDown', keyCode: 40, to: 'Paragraph between.' },
+		{ from: 'Apples', key: 'ArrowUp', keyCode: 38, to: 'Paragraph above.' },
+	].forEach(function (step) {
+		it('a key reaching the page from ' + step.from + ' moves the caret to ' + step.to, function () {
+			cy.then(function () {
+				const element = entry(step.from);
+				win.document.activeElement.blur();
+				win.getSelection().collapse(element.firstChild, 3);
+				expect(win.document.activeElement, 'the focus is on the page').to.equal(win.document.body);
+				win.document.body.dispatchEvent(new win.KeyboardEvent('keydown',
+					{ key: step.key, code: step.key, keyCode: step.keyCode, bubbles: true, cancelable: true }));
+			});
+			cy.then(function () {
+				return a11yHelper.processToIdleWithA11yContext(win);
+			});
+			editing(step.to);
+			backInTheEditable(step.to);
+
+			move('{ctrl}{home}{downarrow}');
+			editing('Apples');
+		});
+	});
+
 	it('the entries are given once, in the list and not around it', function () {
 		move('{downarrow}{downarrow}{downarrow}');
 		editing('Oranges');
