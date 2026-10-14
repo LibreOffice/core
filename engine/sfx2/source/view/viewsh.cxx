@@ -829,6 +829,20 @@ struct ContextParagraph
     std::vector<SfxParagraphComment> aComments;
 };
 
+tools::Rectangle paragraphTwips(const uno::Reference<accessibility::XAccessibleContext>& xContext,
+                                const css::awt::Point& rParentOnScreen)
+{
+    uno::Reference<accessibility::XAccessibleComponent> xComponent(xContext, uno::UNO_QUERY);
+    if (!xComponent.is())
+        return tools::Rectangle();
+    const css::awt::Point aOnScreen = xComponent->getLocationOnScreen();
+    const css::awt::Size aSize = xComponent->getSize();
+    return o3tl::convert(tools::Rectangle(Point(aOnScreen.X - rParentOnScreen.X,
+                                                aOnScreen.Y - rParentOnScreen.Y),
+                                          Size(aSize.Width, aSize.Height)),
+                         o3tl::Length::px, o3tl::Length::twip);
+}
+
 ContextParagraph contextParagraph(const SfxViewShell* pViewShell,
                                   const uno::Reference<accessibility::XAccessibleContext>& xContext,
                                   const css::awt::Point& rParentOnScreen)
@@ -844,16 +858,7 @@ ContextParagraph contextParagraph(const SfxViewShell* pViewShell,
         if (pViewShell)
             aParagraph.aComments = pViewShell->getKitParagraphComments(xText);
     }
-    uno::Reference<accessibility::XAccessibleComponent> xComponent(xContext, uno::UNO_QUERY);
-    if (xComponent.is())
-    {
-        const css::awt::Point aOnScreen = xComponent->getLocationOnScreen();
-        const css::awt::Size aSize = xComponent->getSize();
-        aParagraph.aTwips = o3tl::convert(tools::Rectangle(Point(aOnScreen.X - rParentOnScreen.X,
-                                                                 aOnScreen.Y - rParentOnScreen.Y),
-                                                           Size(aSize.Width, aSize.Height)),
-                                          o3tl::Length::px, o3tl::Length::twip);
-    }
+    aParagraph.aTwips = paragraphTwips(xContext, rParentOnScreen);
     return aParagraph;
 }
 
@@ -1054,6 +1059,7 @@ struct ListItemText
 {
     sal_Int16 nLevel;
     OUString sText;
+    tools::Rectangle aTwips;
 };
 
 struct ListWindow
@@ -1080,8 +1086,14 @@ void collectListWindow(const uno::Reference<css::accessibility::XAccessibleText>
     if (!xParent.is())
         return;
 
-    auto walk = [&xContext, &xParent, nRadius](accessibility::AccessibleRelationType eType,
-                                               ListWindow& rOut) {
+    uno::Reference<accessibility::XAccessibleComponent> xParentComponent(
+        xParent->getAccessibleContext(), uno::UNO_QUERY);
+    const css::awt::Point aOriginOnScreen = getTextDocumentOnScreen(
+        xParent,
+        xParentComponent.is() ? xParentComponent->getLocationOnScreen() : css::awt::Point());
+
+    auto walk = [&xContext, &xParent, &aOriginOnScreen, nRadius](
+                    accessibility::AccessibleRelationType eType, ListWindow& rOut) {
         for (uno::Reference<accessibility::XAccessibleContext> xNext
              = flowNeighbour(xContext, eType);
              xNext.is() && static_cast<sal_Int32>(rOut.aItems.size()) < nRadius;
@@ -1093,7 +1105,8 @@ void collectListWindow(const uno::Reference<css::accessibility::XAccessibleText>
             const sal_Int16 nLevel = getListLevel(xText);
             if (nLevel < 0)
                 break;
-            rOut.aItems.push_back({ nLevel, xText->getText() });
+            rOut.aItems.push_back(
+                { nLevel, xText->getText(), paragraphTwips(xNext, aOriginOnScreen) });
             rOut.aParagraphs.push_back(xNext);
         }
     };
@@ -1104,7 +1117,8 @@ void collectListWindow(const uno::Reference<css::accessibility::XAccessibleText>
                         std::make_move_iterator(aBefore.aItems.rend()));
     rList.aParagraphs.assign(aBefore.aParagraphs.rbegin(), aBefore.aParagraphs.rend());
 
-    rList.aItems.push_back({ nCaretLevel, xAccText->getText() });
+    rList.aItems.push_back(
+        { nCaretLevel, xAccText->getText(), paragraphTwips(xContext, aOriginOnScreen) });
     rList.aParagraphs.push_back(xContext);
 
     ListWindow aAfter;
@@ -1536,6 +1550,7 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
             boost::property_tree::ptree aNode;
             aNode.put("level", rItem.nLevel);
             aNode.put("text", rItem.sText.toUtf8().getStr());
+            aNode.put("rect", rItem.aTwips.toString());
             aItems.push_back(std::make_pair("", aNode));
         }
         boost::property_tree::ptree aList;
