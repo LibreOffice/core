@@ -223,7 +223,7 @@ public:
      */
     bool                IsDataDescriptionCell(const ScAddress& rPos);
 
-    bool                IsDimNameInUse(std::u16string_view rName) const;
+    bool                IsDimNameInUse(std::u16string_view rName);
     SC_DLLPUBLIC OUString GetDimName( tools::Long nDim, bool& rIsDataLayout, sal_Int32* pFlags = nullptr );
     SC_DLLPUBLIC bool   IsDuplicated( tools::Long nDim );
     SC_DLLPUBLIC tools::Long GetDimCount();

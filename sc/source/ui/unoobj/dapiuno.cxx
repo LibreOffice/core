@@ -1520,8 +1520,6 @@ static bool lcl_GetFieldDataByName( ScDPObject* pDPObj, const OUString& rFieldNa
     rFieldId.mnFieldIdx = 0;
     rFieldId.mbDataLayout = rFieldName == SC_DATALAYOUT_NAME;
 
-    pDPObj->GetSource();    // IsDimNameInUse doesn't update source data
-
     // check if the named field exists (not for data layout)
     return rFieldId.mbDataLayout || pDPObj->IsDimNameInUse( rFieldName );
 }
