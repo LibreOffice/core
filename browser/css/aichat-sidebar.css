@@ -61,6 +61,24 @@
    the clipped parts reachable. */
 #aichat-main {
 	--aichat-accent: var(--doc-type, 11, 135, 231);
+	/* Secondary text, mixed from the text and background colours, so it is muted in both
+	   themes. */
+	--aichat-text-muted: color-mix(
+		in srgb,
+		var(--color-main-text) 70%,
+		var(--color-main-background)
+	);
+	/* Red text, darkened in the light theme and lightened in the dark one, so it reads on
+	   either background. */
+	--aichat-error-text: color-mix(
+		in srgb,
+		var(--color-error) 82%,
+		var(--color-main-text)
+	);
+	/* A neutral tint for code, quotes and table headers that shows on both themes. */
+	--aichat-tint: color-mix(in srgb, var(--color-main-text) 7%, transparent);
+	--aichat-font-mono: ui-monospace, 'SFMono-Regular', 'Cascadia Mono',
+		'Liberation Mono', Menlo, monospace;
 	display: flex !important;
 	grid-auto-flow: unset !important;
 	flex-direction: column;
@@ -209,7 +227,7 @@
 }
 
 #aichat-empty-state {
-	color: var(--color-text-light);
+	color: var(--aichat-text-muted);
 	text-align: center;
 	padding: 0 20px;
 	margin: 0;
@@ -233,7 +251,7 @@
 }
 
 #aichat-eu-notice {
-	color: var(--color-text-light);
+	color: var(--aichat-text-muted);
 	text-align: start;
 	font-size: 11px;
 	line-height: 1.4;
@@ -282,8 +300,9 @@
 	font-size: 12px;
 	line-height: 1.5;
 	color: var(--color-warning);
-	background: rgba(236, 167, 0, 0.08);
-	border-top: 1px solid rgba(236, 167, 0, 0.25);
+	background: color-mix(in srgb, var(--color-warning) 8%, transparent);
+	border-top: 1px solid
+		color-mix(in srgb, var(--color-warning) 25%, transparent);
 	flex-shrink: 0;
 }
 
@@ -323,7 +342,7 @@
 /* Context badge inside user bubble */
 [id^='aichat-msg-'].aichat-msg-user [id^='aichat-context-'] {
 	background: rgba(var(--aichat-accent), 0.06);
-	color: var(--color-text-light);
+	color: var(--aichat-text-muted);
 	border-left: 3px solid rgba(var(--aichat-accent), 0.4);
 	border-radius: 4px;
 	font-size: 11.5px;
@@ -346,8 +365,8 @@
 
 [id^='aichat-context-'] {
 	font-size: 11px;
-	color: var(--color-text-light);
-	background-color: rgba(0, 0, 0, 0.04);
+	color: var(--aichat-text-muted);
+	background-color: var(--aichat-tint);
 	padding: 5px 10px;
 	border-left: 3px solid rgba(var(--aichat-accent), 0.5);
 	border-radius: 0 var(--border-radius-s) var(--border-radius-s) 0;
@@ -393,7 +412,7 @@
 
 #aichat-progress-text {
 	font-size: 12px !important;
-	color: var(--color-text-light) !important;
+	color: var(--aichat-text-muted) !important;
 	margin-left: 6px;
 	line-height: normal !important;
 	white-space: nowrap;
@@ -450,7 +469,7 @@
 	gap: var(--spacing-s);
 	font-size: 11px;
 	font-family: var(--cool-font);
-	color: var(--color-text-light);
+	color: var(--aichat-text-muted);
 }
 
 [id^='aichat-actions-'] button.ui-pushbutton img {
@@ -528,7 +547,7 @@
 }
 
 #aichat-input-area .ui-textarea::placeholder {
-	color: var(--color-text-light);
+	color: var(--aichat-text-muted);
 	opacity: 0.7;
 }
 
@@ -684,7 +703,7 @@
 	background: transparent;
 	border: none;
 	padding: 2px 4px;
-	color: var(--color-text-lighter);
+	color: var(--aichat-text-muted);
 	font-size: 12px;
 	cursor: pointer;
 	display: inline-flex;
@@ -813,7 +832,7 @@
 	padding: 6px 2px;
 	height: auto;
 	font-size: 12.5px;
-	color: var(--color-text-lighter);
+	color: var(--aichat-text-muted);
 	cursor: pointer;
 	margin-top: 4px;
 	transition: color var(--duration-fast) ease;
@@ -871,7 +890,7 @@
 #aichat-tone-form-desc-label {
 	font-size: 11.5px;
 	font-weight: 600;
-	color: var(--color-text-lighter);
+	color: var(--aichat-text-muted);
 	letter-spacing: 0.01em;
 	text-transform: uppercase;
 	margin-top: 2px;
@@ -931,7 +950,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 }
 
 #aichat-tone-form-emoji-more button.ui-pushbutton {
-	color: var(--color-text-lighter);
+	color: var(--aichat-text-muted);
 }
 
 #aichat-tone-form-name input.ui-edit {
@@ -990,8 +1009,8 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 #aichat-tone-form-delete button.ui-pushbutton {
 	margin-right: auto;
 	background: transparent;
-	border: 1px solid rgba(220, 38, 38, 0.5);
-	color: rgb(220, 38, 38);
+	border: 1px solid color-mix(in srgb, var(--color-error) 50%, transparent);
+	color: var(--aichat-error-text);
 	border-radius: 999px;
 	padding: 6px 12px;
 	font-size: 12px;
@@ -999,7 +1018,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 }
 
 #aichat-tone-form-delete button.ui-pushbutton:hover {
-	background: rgba(220, 38, 38, 0.08);
+	background: color-mix(in srgb, var(--color-error) 8%, transparent);
 }
 
 #aichat-tone-form-cancel button.ui-pushbutton {
@@ -1057,7 +1076,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 
 #aichat-tone-delete-confirm-desc {
 	font-size: 12.5px;
-	color: var(--color-text-lighter);
+	color: var(--aichat-text-muted);
 }
 
 #aichat-tone-delete-confirm-preview {
@@ -1106,8 +1125,8 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 }
 
 #aichat-tone-delete-confirm-ok button.ui-pushbutton {
-	background: rgb(220, 38, 38);
-	border: 1px solid rgb(220, 38, 38);
+	background: var(--color-error);
+	border: 1px solid var(--color-error);
 	color: #fff;
 	border-radius: 999px;
 	padding: 6px 14px;
@@ -1190,15 +1209,15 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 }
 
 .aichat-msg-assistant code {
-	background: rgba(0, 0, 0, 0.06);
+	background: var(--aichat-tint);
 	padding: 1px 5px;
 	border-radius: 3px;
-	font-family: 'Courier New', Courier, monospace;
+	font-family: var(--aichat-font-mono);
 	font-size: 12px;
 }
 
 .aichat-msg-assistant pre {
-	background: var(--color-black-5);
+	background: var(--aichat-tint);
 	border: 1px solid var(--color-border);
 	border-radius: var(--border-radius);
 	padding: 8px 10px;
@@ -1265,7 +1284,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 }
 
 .aichat-msg-assistant th {
-	background: rgba(0, 0, 0, 0.04);
+	background: var(--aichat-tint);
 	font-weight: 600;
 }
 
@@ -1273,7 +1292,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	border-left: 3px solid var(--color-border);
 	margin: 6px 0;
 	padding: 4px 10px;
-	color: var(--color-text-light);
+	color: var(--aichat-text-muted);
 }
 
 .aichat-msg-assistant del {
@@ -1292,12 +1311,12 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 /* -- Error messages -- */
 
 [id^='aichat-msg-'].aichat-msg-error {
-	border-color: rgba(220, 38, 38, 0.3);
-	background: rgba(220, 38, 38, 0.04);
+	border-color: color-mix(in srgb, var(--color-error) 30%, transparent);
+	background: color-mix(in srgb, var(--color-error) 4%, transparent);
 }
 
 [id^='aichat-msg-'].aichat-msg-error [id^='aichat-msg-text-'] {
-	color: var(--color-error);
+	color: var(--aichat-error-text);
 	font-size: 12px;
 }
 
@@ -1309,8 +1328,8 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 
 [id^='aichat-retry-'] button.ui-pushbutton {
 	font-size: 12px;
-	color: var(--color-error);
-	border: 1px solid rgba(220, 38, 38, 0.3);
+	color: var(--aichat-error-text);
+	border: 1px solid color-mix(in srgb, var(--color-error) 30%, transparent);
 	background: transparent;
 	padding: 4px 12px;
 	border-radius: 12px;
@@ -1319,7 +1338,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 }
 
 [id^='aichat-retry-'] button.ui-pushbutton:hover {
-	background: rgba(220, 38, 38, 0.06);
+	background: color-mix(in srgb, var(--color-error) 6%, transparent);
 	border-color: var(--color-error);
 }
 
@@ -1374,8 +1393,8 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 
 .aichat-reject-btn:hover {
 	border-color: var(--color-error);
-	color: var(--color-error);
-	background: rgba(220, 38, 38, 0.04);
+	color: var(--aichat-error-text);
+	background: color-mix(in srgb, var(--color-error) 4%, transparent);
 }
 
 .aichat-reject-btn:active {
@@ -1546,7 +1565,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 #aichat-messages-list .aichat-outline-num {
 	flex-shrink: 0;
 	font-size: 12px;
-	color: var(--color-text-light);
+	color: var(--aichat-text-muted);
 }
 
 #aichat-messages-list .aichat-outline-eyebrow {
@@ -1554,7 +1573,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	font-size: 0.7em;
 	letter-spacing: 0.06em;
 	text-transform: uppercase;
-	color: var(--color-text-lighter);
+	color: var(--aichat-text-muted);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -1568,7 +1587,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	border: none;
 	border-radius: var(--border-radius);
 	background: transparent;
-	color: var(--color-text-lighter);
+	color: var(--aichat-text-muted);
 	font-size: 15px;
 	line-height: 1;
 	cursor: pointer;
@@ -1578,8 +1597,8 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 
 #aichat-messages-list .aichat-outline-delete:hover,
 #aichat-messages-list .aichat-outline-delete:focus-visible {
-	background: rgba(220, 38, 38, 0.08);
-	color: var(--color-error);
+	background: color-mix(in srgb, var(--color-error) 8%, transparent);
+	color: var(--aichat-error-text);
 }
 
 #aichat-messages-list .aichat-outline-delete:focus-visible {
@@ -1623,7 +1642,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	border-bottom: 1px solid transparent;
 	border-radius: 3px;
 	background: transparent;
-	color: var(--color-text-light);
+	color: var(--aichat-text-muted);
 	font-family: var(--cool-font);
 	font-size: 0.85em;
 	line-height: 1.4;
@@ -1632,7 +1651,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 }
 
 #aichat-messages-list .aichat-outline-gist::placeholder {
-	color: var(--color-text-lighter);
+	color: var(--aichat-text-muted);
 }
 
 #aichat-messages-list .aichat-outline-gist:hover {
@@ -1659,7 +1678,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	border: 1px dashed var(--color-border);
 	border-radius: var(--border-radius);
 	background: transparent;
-	color: var(--color-text-light);
+	color: var(--aichat-text-muted);
 	font-family: var(--cool-font);
 	font-size: 0.9em;
 	cursor: pointer;
@@ -1692,7 +1711,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 #aichat-messages-list .aichat-outline-hint {
 	margin-top: var(--spacing-s);
 	font-size: 0.8em;
-	color: var(--color-text-lighter);
+	color: var(--aichat-text-muted);
 }
 
 .aichat-approve-btn:disabled {
@@ -1737,9 +1756,9 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 
 /* Modify actions get a warning-tinted appearance */
 [id^='aichat-msg-'].aichat-msg-approval-modify {
-	border-color: rgba(236, 167, 0, 0.35);
+	border-color: color-mix(in srgb, var(--color-warning) 35%, transparent);
 	border-left: 3px solid var(--color-warning);
-	background: rgba(236, 167, 0, 0.04);
+	background: color-mix(in srgb, var(--color-warning) 4%, transparent);
 }
 
 /* -- Selection context indicator (attachment chip inside the input box) -- */
@@ -1862,7 +1881,7 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 /* -- Clickable cell references -- */
 
 .aichat-cell-ref {
-	font-family: 'Courier New', Courier, monospace;
+	font-family: var(--aichat-font-mono);
 	color: rgb(var(--aichat-accent));
 	background: rgba(var(--aichat-accent), 0.08);
 	padding: 1px 4px;
