@@ -132,8 +132,12 @@ PHP_PROXY_HTTP_PORT = 9984
 # assets on six connections, so give the parallel cypress processes a few
 # workers each. Requests beyond that only queue up. PHP >= 7.4.
 PHP_CLI_SERVER_WORKERS = 16
-PROXY_PHP_URL = https://raw.githubusercontent.com/CollaboraOnline/richdocumentscode/master/proxy.php
-# A local proxy.php to serve instead of downloading PROXY_PHP_URL.
+PROXY_PHP_BASE_URL = https://raw.githubusercontent.com/CollaboraOnline/richdocumentscode/master
+# proxy.php and the files it includes, as paths in richdocumentscode. Only
+# proxy.php has to exist, so an older proxy.php without includes still works.
+PROXY_PHP_FILES = proxy.php lib/HostFile.php
+# A local proxy.php to serve instead of downloading from PROXY_PHP_BASE_URL. The
+# other PROXY_PHP_FILES are copied from beside it.
 PROXY_PHP =
 PHP_PROXY_ROOT = $(abs_builddir)/workdir/php-proxy
 PHP_PROXY_PID_FILE = $(abs_builddir)/workdir/php-proxy.pid
@@ -856,15 +860,22 @@ endef
 # served by the PHP command line web server on PHP_PROXY_HTTP_PORT, with
 # coolwsd on PHP_PROXY_PORT and its ProxyPrefix support on. -jN and spec= work
 # as for check-desktop. PHP=php82 picks another php binary, PROXY_PHP=<file>
-# serves a local proxy.php instead of downloading PROXY_PHP_URL.
+# serves a local proxy.php instead of downloading PROXY_PHP_FILES.
 check-php-proxy: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	$(V)$(KILL_PHP_PROXY)
 	$(V)rm -rf $(PHP_PROXY_ROOT) $(PHP_PROXY_LOG) && mkdir -p $(PHP_PROXY_ROOT)
-	$(if $(PROXY_PHP),\
-		cp $(PROXY_PHP) $(PHP_PROXY_ROOT)/proxy.php,\
-		curl -sSfL -o $(PHP_PROXY_ROOT)/proxy.php $(PROXY_PHP_URL))
+	$(V)for f in $(PROXY_PHP_FILES); do \
+		mkdir -p $(PHP_PROXY_ROOT)/$$(dirname $$f) && \
+		$(if $(PROXY_PHP),\
+			cp $(dir $(PROXY_PHP))$$f $(PHP_PROXY_ROOT)/$$f,\
+			curl -sSfL -o $(PHP_PROXY_ROOT)/$$f $(PROXY_PHP_BASE_URL)/$$f) || \
+		{ test $$f != proxy.php && rm -f $(PHP_PROXY_ROOT)/$$f && \
+			echo "No $$f, serving proxy.php without it"; } || exit 1; \
+	done
 	$(V)$(PHP) --version | head -n 1
-	$(V)$(PHP) -l $(PHP_PROXY_ROOT)/proxy.php
+	$(V)for f in $(PROXY_PHP_FILES); do \
+		test ! -f $(PHP_PROXY_ROOT)/$$f || $(PHP) -l $(PHP_PROXY_ROOT)/$$f || exit 1; \
+	done
 # get-port-cli hands back another port when the asked one is taken, see FREE_PORT.
 	$(V)test "$$(FORCE_COLOR=0 $(GET_PORT_BINARY) --host=127.0.0.1 $(PHP_PROXY_HTTP_PORT))" = "$(PHP_PROXY_HTTP_PORT)" || \
 		{ echo "CypressError: port $(PHP_PROXY_HTTP_PORT) for the php proxy is unavailable!"; exit 1; }
