@@ -1112,7 +1112,9 @@ void SdrObjList::RemoveObjectFromContainer (
     }
 
     maList.erase(maList.begin()+nObjectPosition);
-    mbObjOrdNumsDirty=true;
+    // Only the objects behind the removed one get a new position
+    if (nObjectPosition < maList.size())
+        mbObjOrdNumsDirty=true;
 }
 
 void SdrObjList::dumpAsXml(xmlTextWriterPtr pWriter) const
