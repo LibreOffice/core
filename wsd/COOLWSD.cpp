@@ -2374,8 +2374,11 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
     }
 #endif
 
+#if !MOBILEAPP
     // The remote sentence checkers. The kit reads them from the environment,
-    // one cluster of variables per checker.
+    // one cluster of variables per checker. The apps have no server
+    // configuration: their checkers are set up in the settings dialog alone,
+    // and nothing here must look like an administrator's choice to the kit.
     const auto exportRemoteChecker = [&conf](const std::string& block, const char* prefix,
                                              const std::vector<std::pair<const char*, const char*>>& keys)
     {
@@ -2444,6 +2447,7 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
         }
         setenv("LANGUAGETOOL_ENABLED", "false", 1);
     }
+#endif
 
     // DeepL configuration
     const std::string apiURL = ConfigUtil::getConfigValue<std::string>(conf, "deepl.api_url", "");
