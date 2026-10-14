@@ -1463,7 +1463,7 @@ void lcl_LoadWordTableStylePresets(std::vector<std::unique_ptr<SwTableAutoFormat
     cpo::uno::Reference<css::document::XImporter> xImporter(xInterface, cpo::uno::UNO_QUERY_THROW);
 
     SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
-    if (!xDocSh->DoInitNew())
+    if (!xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow))
         return;
 
     cpo::uno::Reference<css::lang::XComponent> xDstDoc(xDocSh->GetModel(),

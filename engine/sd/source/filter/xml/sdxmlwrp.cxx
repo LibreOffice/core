@@ -999,7 +999,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODP(SvStream &rStream)
     SdDLL::Init();
 
     sd::DrawDocShellRef xDocSh(new sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress));
-    xDocSh->DoInitNew();
+    xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow);
     uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
@@ -1052,7 +1052,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportPPTX(SvStream &rStream)
     SdDLL::Init();
 
     sd::DrawDocShellRef xDocSh(new sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress));
-    xDocSh->DoInitNew();
+    xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow);
     uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());

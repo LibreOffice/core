@@ -123,7 +123,7 @@ bool SwDOCXReader::ReadGlossaries( SwTextBlocks& rBlocks, bool /* bSaveRelFiles 
     uno::Reference<document::XImporter> xImporter( xFilter, uno::UNO_QUERY_THROW );
 
     SfxObjectShellLock xDocSh( new SwDocShell( SfxObjectCreateMode::INTERNAL ) );
-    if( xDocSh->DoInitNew() )
+    if( xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow) )
     {
         uno::Reference<lang::XComponent> xDstDoc( xDocSh->GetModel(), uno::UNO_QUERY_THROW );
         xImporter->setTargetDocument( xDstDoc );

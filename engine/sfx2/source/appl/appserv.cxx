@@ -1445,7 +1445,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             if ( !pView )
             {
                 SfxObjectShell* pBasicIDE = SfxObjectShell::CreateObject( u"com.sun.star.script.BasicIDE"_ustr );
-                pBasicIDE->DoInitNew();
+                pBasicIDE->DoInitNew(SfxNewDocumentMacros::Allow);
                 pBasicIDE->SetModified( false );
                 try
                 {

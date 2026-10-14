@@ -1100,7 +1100,7 @@ void NewXForms( SfxRequest& rReq )
 
     // create new document
     SwDocShellRef xDocSh( new SwDocShell( SfxObjectCreateMode::STANDARD) );
-    xDocSh->DoInitNew();
+    xDocSh->DoInitNew(SfxNewDocumentMacros::Allow);
 
     // initialize XForms
     xDocSh->GetDoc()->initXForms(true);

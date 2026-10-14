@@ -1773,7 +1773,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODS(SvStream &rStream)
 
     rtl::Reference<ScDocShell> xDocSh(new ScDocShell);
     SfxObjectShellLock xLock(xDocSh.get());
-    xDocSh->DoInitNew();
+    xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow);
     rtl::Reference<ScModelObj> xModel(xDocSh->GetModel());
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
@@ -1827,7 +1827,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODSExportXLS(SvStream &rStream)
 
     rtl::Reference<ScDocShell> xDocSh(new ScDocShell);
     SfxObjectShellLock xLock(xDocSh.get());
-    xDocSh->DoInitNew();
+    xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow);
     rtl::Reference<ScModelObj> xModel(xDocSh->GetModel());
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
@@ -1902,7 +1902,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLSX(SvStream &rStream)
 
     rtl::Reference<ScDocShell> xDocSh(new ScDocShell);
     SfxObjectShellLock xLock(xDocSh.get());
-    xDocSh->DoInitNew();
+    xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow);
     rtl::Reference<ScModelObj> xModel(xDocSh->GetModel());
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());

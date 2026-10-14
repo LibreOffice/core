@@ -294,7 +294,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
             ScDocShellRef aDragShellRef( new ScDocShell );
             aDragShellRef->MakeDrawLayer();
-            aDragShellRef->DoInitNew();
+            aDragShellRef->DoInitNew(SfxNewDocumentMacros::Disallow);
 
             ScDrawLayer* pModel = aDragShellRef->GetDocument().GetDrawLayer();
 

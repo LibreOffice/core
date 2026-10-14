@@ -8759,7 +8759,7 @@ bool SdXImpressDocument::exportPages(const std::vector<sal_Int32>& rPages, const
     rtl::Reference<::sd::DrawDocShell> xShell(
         new ::sd::DrawDocShell(SfxObjectCreateMode::STANDARD, false, mpDoc->GetDocumentType()));
     SfxObjectShellLock xLock(xShell.get());
-    xShell->DoInitNew();
+    xShell->DoInitNew(SfxNewDocumentMacros::Disallow);
     // The shell serves this one write and is closed again whichever way the function ends.
     comphelper::ScopeGuard aCloseShell([&xShell] { xShell->DoClose(); });
 

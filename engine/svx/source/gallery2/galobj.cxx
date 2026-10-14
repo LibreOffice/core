@@ -408,7 +408,7 @@ SvxGalleryDrawModel::SvxGalleryDrawModel()
     if( !mxDoc.Is() )
         return;
 
-    mxDoc->DoInitNew();
+    mxDoc->DoInitNew(SfxNewDocumentMacros::Disallow);
 
     mpFormModel
         = dynamic_cast<FmFormModel*>(comphelper::getFromUnoTunnel<SdrModel>(mxDoc->GetModel()));

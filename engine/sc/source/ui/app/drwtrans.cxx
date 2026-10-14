@@ -676,7 +676,7 @@ void ScDrawTransferObj::InitDocShell()
 
     m_aDocShellRef = new ScDocShell;      // ref must be there before InitNew
 
-    m_aDocShellRef->DoInitNew();
+    m_aDocShellRef->DoInitNew(SfxNewDocumentMacros::Disallow);
 
     ScDocument& rDestDoc = m_aDocShellRef->GetDocument();
     rDestDoc.InitDrawLayer(m_aDocShellRef.get());

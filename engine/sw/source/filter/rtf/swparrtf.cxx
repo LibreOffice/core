@@ -117,7 +117,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportRTF(SvStream& rStream)
     SwGlobals::ensure();
 
     SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
-    xDocSh->DoInitNew();
+    xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow);
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(
         comphelper::getProcessServiceFactory());

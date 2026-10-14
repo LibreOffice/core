@@ -788,7 +788,7 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
 
         pObj = mpCreatingTransferable->GetDocShell().get();
         pNewDocSh = static_cast< ::sd::DrawDocShell*>( pObj );
-        pNewDocSh->DoInitNew();
+        pNewDocSh->DoInitNew(SfxNewDocumentMacros::Disallow);
         pNewModel = pNewDocSh->GetDoc();
 
         // Only necessary for clipboard -
@@ -848,7 +848,7 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
         pDoc->SetAllocDocSh(false);
         pDoc->mxAllocedDocShRef = new ::sd::DrawDocShell(
             SfxObjectCreateMode::EMBEDDED, true, meDocType);
-        pDoc->mxAllocedDocShRef->DoInitNew();
+        pDoc->mxAllocedDocShRef->DoInitNew(SfxNewDocumentMacros::Disallow);
         pNewModel = pDoc->mxAllocedDocShRef->GetDoc();
     }
     else
