@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:p>line 01<text:line-break/>line 02<text:line-break/>line 03<text:line-break/>line 04<text:line-break/>line 05<text:line-break/>line 06<text:line-break/>line 07<text:line-break/>line 08<text:line-break/>line 09<text:line-break/>line 10<text:line-break/>line 11<text:line-break/>line 12<text:line-break/>line 13<text:line-break/>line 14<text:line-break/>line 15<text:line-break/>line 16<text:line-break/>line 17<text:line-break/>line 18<text:line-break/>line 19<text:line-break/>line 20<text:line-break/>line 21<text:line-break/>line 22<text:line-break/>line 23<text:line-break/>line 24<text:line-break/>line 25<text:line-break/>line 26<text:line-break/>line 27<text:line-break/>line 28<text:line-break/>line 29<text:line-break/>line 30<text:line-break/>line 31<text:line-break/>line 32<text:line-break/>line 33<text:line-break/>line 34<text:line-break/>line 35<text:line-break/>line 36<text:line-break/>line 37<text:line-break/>line 38<text:line-break/>line 39<text:line-break/>line 40<text:line-break/>line 41<text:line-break/>line 42<text:line-break/>line 43<text:line-break/>line 44<text:line-break/>line 45<text:line-break/>line 46<text:line-break/>line 47<text:line-break/>line 48<text:line-break/>line 49<text:line-break/>line 50<text:line-break/>line 51<text:line-break/>line 52<text:line-break/>line 53<text:line-break/>line 54<text:line-break/>line 55<text:line-break/>line 56<text:line-break/>line 57<text:line-break/>line 58<text:line-break/>line 59<text:line-break/>line 60<text:line-break/>line 61<text:line-break/>line 62<text:line-break/>line 63<text:line-break/>line 64<text:line-break/>line 65<text:line-break/>line 66<text:line-break/>line 67<text:line-break/>line 68<text:line-break/>line 69<text:line-break/>line 70</text:p>
+  </office:text>
+ </office:body>
+</office:document>

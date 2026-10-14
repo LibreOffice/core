@@ -94,6 +94,13 @@ class SwAccessibleParagraph :
     // get the current caret position
     sal_Int32 GetCaretPos();
 
+    // is the caret inside this object's frame?
+    //
+    // A model node can be laid out in different frames (a paragraph spanning multiple
+    // pages, a repeated page header/footer, or a repeated table heading), so checking the
+    // node alone is not enough to tell those objects apart.
+    bool IsCaretInMyFrame();
+
     // determine the current selection. Fill the values with
     // -1 if there is no selection in the this paragraph
     // @param pSelection (optional) check only Nth selection in ring

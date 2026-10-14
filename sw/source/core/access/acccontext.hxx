@@ -34,6 +34,8 @@ namespace vcl { class Window; }
 class SwCursorShell;
 class SdrObject;
 class SwPaM;
+struct SwPosition;
+class SwTextFrame;
 namespace accessibility {
     class AccessibleShape;
 }
@@ -304,6 +306,12 @@ public:
         return Select( nullptr, pObj, bAdd );
     }
 
+    // Set the cursor to the selection in @p rPaM, resolved in @p rTextFrame.
+    // When a model can be laid out more than once (repeated header, footer,
+    // table heading, paragraph spanning multiple pages), this allows the cursor
+    // shell to resolve the position to the correct frame.
+    bool SelectInFrame( const SwTextFrame& rTextFrame, SwPaM& rPaM );
+
     //This method is used to update the selected state and fire the selected state changed event.
     virtual bool SetSelectedState(bool bSelected);
     bool  IsSelectedInDoc() const { return m_isSelectedInDoc; }
@@ -313,6 +321,10 @@ public:
     static OUString GetResource(TranslateId pResId,
                                 const OUString *pArg1 = nullptr,
                                 const OUString *pArg2 = nullptr);
+
+private:
+    // Make the cursor shell resolve @p rPos to @p rTextFrame.
+    void PinFrameForCursor( const SwTextFrame& rTextFrame, const SwPosition& rPos );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

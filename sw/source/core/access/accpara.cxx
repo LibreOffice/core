@@ -48,6 +48,7 @@
 #include <i18npool/breakiterator.hxx>
 #include "accpara.hxx"
 #include "accportions.hxx"
+#include <crsrsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -118,6 +119,18 @@ OUString const & SwAccessibleParagraph::GetString()
     return GetPortionData().GetAccessibleString();
 }
 
+bool SwAccessibleParagraph::IsCaretInMyFrame()
+{
+    const SwTextFrame* const pTextFrame = GetTextFrame();
+    if (!pTextFrame)
+        return false;
+
+    SwCursorShell* pCursorShell = GetCursorShell();
+    // do not trigger a layout recalculation (and possibly a size change
+    // notification) from a state query
+    return pCursorShell && pCursorShell->GetCurrFrame(false) == pTextFrame;
+}
+
 sal_Int32 SwAccessibleParagraph::GetCaretPos()
 {
     // get the selection's point, and test whether it's in our node
@@ -135,6 +148,10 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
 
     if (!sw::FrameContainsNode(*pTextFrame, pPoint->GetNodeIndex()))
         // not in this paragraph
+        return -1;
+
+    // only report the caret if it is in the current frame
+    if (!IsCaretInMyFrame())
         return -1;
 
     sal_Int32 nRet = -1;
@@ -224,9 +241,8 @@ void SwAccessibleParagraph::GetStates( sal_Int64& rStateSet )
     SwPaM* pCaret = GetCursor( false ); // #i27301# - consider adjusted method signature
     const SwTextFrame* const pFrame = GetTextFrame();
     assert(pFrame);
-    if (pCaret != nullptr &&
-        sw::FrameContainsNode(*pFrame, pCaret->GetPoint()->GetNodeIndex()) &&
-        HasCursor())
+    if (pCaret != nullptr && sw::FrameContainsNode(*pFrame, pCaret->GetPoint()->GetNodeIndex())
+        && IsCaretInMyFrame() && HasCursor())
     {
         vcl::Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() )
@@ -701,17 +717,18 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
     SwPaM *pCursor = GetCursor( false ); // #i27301# - consider new method signature
     const SwTextFrame* pTextFrame = GetTextFrame();
 
-    if (pCursorSh != nullptr &&
-        ( pCursor == nullptr ||
-          !sw::FrameContainsNode(*pTextFrame, pCursor->GetPoint()->GetNodeIndex()) ||
-          !pTextFrame->IsInside(pTextFrame->MapModelToViewPos(*pCursor->GetPoint()))))
+    if (pCursorSh != nullptr
+        && (pCursor == nullptr
+            || !sw::FrameContainsNode(*pTextFrame, pCursor->GetPoint()->GetNodeIndex())
+            || !IsCaretInMyFrame()
+            || !pTextFrame->IsInside(pTextFrame->MapModelToViewPos(*pCursor->GetPoint()))))
     {
         // create pam for selection
         SwPosition const aStartPos(pTextFrame->MapViewToModelPos(pTextFrame->GetOffset()));
         SwPaM aPaM( aStartPos );
 
-        // set PaM at cursor shell
-        Select( aPaM );
+        // set PaM at cursor shell, in the current frame
+        SelectInFrame( *pTextFrame, aPaM );
 
     }
 
@@ -880,8 +897,8 @@ sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
         SwPosition aStartPos(pFrame->MapViewToModelPos(nFrameIndex));
         SwPaM aPaM( aStartPos );
 
-        // set PaM at cursor shell
-        bRet = Select( aPaM );
+        // set PaM at cursor shell, in the current frame
+        bRet = SelectInFrame( *pFrame, aPaM );
     }
 
     return bRet;
@@ -2037,8 +2054,8 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
         aPaM.SetMark();
         *aPaM.GetPoint() = pFrame->MapViewToModelPos(nEnd);
 
-        // set PaM at cursor shell
-        bRet = Select( aPaM );
+        // set PaM at cursor shell, in the current frame
+        bRet = SelectInFrame( *pFrame, aPaM );
     }
 
     return bRet;

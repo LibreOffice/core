@@ -26,6 +26,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 
 #include <rtl/ustrbuf.hxx>
@@ -68,6 +69,43 @@ AccessibilityTools::getAccessibleObjectForPredicate(
     const std::function<bool(const uno::Reference<accessibility::XAccessibleContext>&)>& cPredicate)
 {
     return getAccessibleObjectForPredicate(xAcc->getAccessibleContext(), cPredicate);
+}
+
+static void collectAccessibleObjectsForPredicate(
+    const uno::Reference<accessibility::XAccessibleContext>& xCtx,
+    const std::function<bool(const uno::Reference<accessibility::XAccessibleContext>&)>& cPredicate,
+    std::vector<uno::Reference<accessibility::XAccessibleContext>>& rResult)
+{
+    if (!xCtx.is() || rResult.size() >= AccessibilityTools::MAX_CHILDREN)
+        return;
+
+    if (cPredicate(xCtx))
+        rResult.push_back(xCtx);
+
+    const sal_Int64 nChildCount
+        = std::min<sal_Int64>(xCtx->getAccessibleChildCount(), AccessibilityTools::MAX_CHILDREN);
+    for (sal_Int64 i = 0; i < nChildCount; ++i)
+    {
+        auto xChild = xCtx->getAccessibleChild(i);
+        if (xChild.is())
+        {
+            collectAccessibleObjectsForPredicate(xChild->getAccessibleContext(), cPredicate,
+                                                 rResult);
+        }
+
+        if (rResult.size() >= AccessibilityTools::MAX_CHILDREN)
+            break;
+    }
+}
+
+std::vector<uno::Reference<accessibility::XAccessibleContext>>
+AccessibilityTools::getAccessibleObjectsForPredicate(
+    const uno::Reference<accessibility::XAccessibleContext>& xCtx,
+    const std::function<bool(const uno::Reference<accessibility::XAccessibleContext>&)>& cPredicate)
+{
+    std::vector<uno::Reference<accessibility::XAccessibleContext>> aResult;
+    collectAccessibleObjectsForPredicate(xCtx, cPredicate, aResult);
+    return aResult;
 }
 
 uno::Reference<accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForId(

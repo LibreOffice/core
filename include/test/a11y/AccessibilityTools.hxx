@@ -23,6 +23,7 @@
 
 #include <functional>
 #include <string>
+#include <vector>
 
 #include <cppunit/TestAssert.h>
 
@@ -50,6 +51,18 @@ public:
     static css::uno::Reference<css::accessibility::XAccessibleContext>
     getAccessibleObjectForPredicate(
         const css::uno::Reference<css::accessibility::XAccessible>& xAcc,
+        const std::function<
+            bool(const css::uno::Reference<css::accessibility::XAccessibleContext>&)>& cPredicate);
+
+    /**
+     * @brief Gets all descendants of @p xCtx (including @p xCtx itself) that match @p cPredicate.
+     * @returns The matching objects, at most @c MAX_CHILDREN of them.
+     *
+     * Walks the children returned by XAccessibleContext::getAccessibleChild().
+     */
+    static std::vector<css::uno::Reference<css::accessibility::XAccessibleContext>>
+    getAccessibleObjectsForPredicate(
+        const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
         const std::function<
             bool(const css::uno::Reference<css::accessibility::XAccessibleContext>&)>& cPredicate);
 

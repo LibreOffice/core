@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:style style:name="table" style:family="table">
+   <style:table-properties table:border-model="collapsing"/>
+  </style:style>
+  <style:style style:name="row" style:family="table-row">
+   <style:table-row-properties style:row-height="10cm" style:use-optimal-row-height="false"/>
+  </style:style>
+  <style:style style:name="cell" style:family="table-cell">
+   <style:table-cell-properties fo:border="0.74pt solid #000000" fo:padding="0.1cm"/>
+  </style:style>
+  <style:style style:name="bold" style:family="paragraph">
+   <style:text-properties fo:font-weight="bold"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <table:table table:style-name="table">
+    <table:table-column table:number-columns-repeated="1"/>
+    <table:table-header-rows>
+     <table:table-row table:style-name="row">
+      <table:table-cell table:style-name="cell"><text:p text:style-name="bold">Header 1</text:p></table:table-cell>
+     </table:table-row>
+    </table:table-header-rows>
+    <table:table-row table:style-name="row">
+     <table:table-cell table:style-name="cell"><text:p>Row 1</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="row">
+     <table:table-cell table:style-name="cell"><text:p>Row 2</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:text>
+ </office:body>
+</office:document>

@@ -863,8 +863,8 @@ void SAL_CALL SwAccessibleContext::grabFocus()
                 SwPosition const aStartPos(pTextFrame->MapViewToModelPos(pTextFrame->GetOffset()));
                 SwPaM aPaM( aStartPos );
 
-                // set PaM at cursor shell
-                Select( aPaM );
+                // set PaM at cursor shell, in the current frame
+                SelectInFrame( *pTextFrame, aPaM );
             }
         }
     }
@@ -1263,6 +1263,30 @@ bool SwAccessibleContext::Select( SwPaM *pPaM, SdrObject *pObj,
     }
 
     return bRet;
+}
+
+bool SwAccessibleContext::SelectInFrame( const SwTextFrame& rTextFrame, SwPaM& rPaM )
+{
+    PinFrameForCursor( rTextFrame, *rPaM.GetPoint() );
+    return Select( rPaM );
+}
+
+void SwAccessibleContext::PinFrameForCursor( const SwTextFrame& rTextFrame, const SwPosition& rPos )
+{
+    SwCursorShell* pCursorShell = GetCursorShell();
+    if (!pCursorShell)
+        return;
+
+    SwRect aCharRect;
+    if (rTextFrame.GetCharRect(aCharRect, rPos))
+    {
+        pCursorShell->GetCursorDocPos() = aCharRect.Pos();
+    }
+    else
+    {
+        pCursorShell->GetCursorDocPos()
+            = rTextFrame.getFrameArea().Pos() + rTextFrame.getFramePrintArea().Pos();
+    }
 }
 
 OUString SwAccessibleContext::GetResource(TranslateId pResId,
