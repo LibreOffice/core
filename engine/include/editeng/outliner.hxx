@@ -474,6 +474,7 @@ private:
     Link<PaintFirstLineInfo*,void> maPaintFirstLineHdl;
     Link<PasteOrDropInfos*,void>   maBeginPasteOrDropHdl;
     Link<PasteOrDropInfos*,void>   maEndPasteOrDropHdl;
+    Link<Outliner*,bool>           maSpellNextDocumentHdl;
 
     sal_Int32           nDepthChangedHdlPrevDepth;
     sal_Int16           nMaxDepth;
@@ -765,7 +766,8 @@ public:
 
     EESpellState    HasSpellErrors();
     bool            HasText( const SvxSearchItem& rSearchItem );
-    virtual bool    SpellNextDocument();
+    bool            SpellNextDocument(); // called from EditEngine, will forward to the Hdl
+    void            SetSpellNextDocumentHdl(const Link<Outliner*,bool>& rLnk) { maSpellNextDocumentHdl = rLnk; }
 
     // for text conversion
     bool            HasConvertibleTextPortion( LanguageType nLang );

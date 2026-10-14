@@ -400,6 +400,8 @@ SfxItemPool* Outliner::GetEditEnginePool() const
 
 bool Outliner::SpellNextDocument()
 {
+    if (maSpellNextDocumentHdl.IsSet())
+        return maSpellNextDocumentHdl.Call(this);
     return false;
 }
 
