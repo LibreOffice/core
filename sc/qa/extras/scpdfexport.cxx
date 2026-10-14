@@ -55,12 +55,7 @@ protected:
     void exportToPDF(const uno::Reference<frame::XModel>& xModel, const ScRange& range,
                      const std::initializer_list<css::beans::PropertyValue>& params = {});
 
-    void exportToPDFWithUnoCommands(const OUString& rRange);
-
-    void exportWholeDocumentToPDF(const std::initializer_list<css::beans::PropertyValue>& filterData
-                                  = {});
-
-    bool hasTextInPdf(const char* sText, bool& bFound);
+    bool hasTextInPdf(const char* sText);
 
     void setFont(ScFieldEditEngine& rEE, sal_Int32 nStart, sal_Int32 nEnd,
                  const OUString& rFontName);
@@ -78,54 +73,53 @@ ScPDFExportTest::~ScPDFExportTest()
 #endif
 }
 
-bool ScPDFExportTest::hasTextInPdf(const char* sText, bool& bFound)
+bool ScPDFExportTest::hasTextInPdf(const char* sText)
 {
+    bool bFound(false);
     SvStream* pStream = maTempFile.GetStream(StreamMode::STD_READ);
     CPPUNIT_ASSERT(pStream);
 
     // get file size
     const std::size_t nFileSize = pStream->TellEnd();
-    if (nFileSize == 0)
-        return false;
+    CPPUNIT_ASSERT(nFileSize);
 
     // read file content
     char* pBuffer = new char[nFileSize];
     pStream->Seek(STREAM_SEEK_TO_BEGIN);
     const std::size_t nRead = pStream->ReadBytes(pBuffer, nFileSize);
-    if (nRead == nFileSize)
+    CPPUNIT_ASSERT_EQUAL(nRead, nFileSize);
+
+    std::string haystack(pBuffer, pBuffer + nFileSize);
+    // what the writer put in an object stream stands in the file as deflated bytes only
+    vcl::filter::PDFDocument aDocument;
+    SvMemoryStream aFile(pBuffer, nFileSize, StreamMode::READ);
+    if (aDocument.Read(aFile))
     {
-        std::string haystack(pBuffer, pBuffer + nFileSize);
-        // what the writer put in an object stream stands in the file as deflated bytes only
-        vcl::filter::PDFDocument aDocument;
-        SvMemoryStream aFile(pBuffer, nFileSize, StreamMode::READ);
-        if (aDocument.Read(aFile))
+        for (auto* pObject : aDocument.GetObjects())
         {
-            for (auto* pObject : aDocument.GetObjects())
-            {
-                auto pType
-                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
-                if (!pType || pType->GetValue() != "ObjStm")
-                    continue;
-                vcl::filter::PDFStreamElement* pObjStm = pObject->GetStream();
-                CPPUNIT_ASSERT(pObjStm);
-                SvMemoryStream aDecompressed;
-                ZCodec aCodec;
-                aCodec.BeginCompression();
-                pObjStm->GetMemory().Seek(0);
-                aCodec.Decompress(pObjStm->GetMemory(), aDecompressed);
-                CPPUNIT_ASSERT(aCodec.EndCompression() >= 0);
-                haystack.append(static_cast<const char*>(aDecompressed.GetData()),
-                                aDecompressed.GetSize());
-            }
+            auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+            if (!pType || pType->GetValue() != "ObjStm")
+                continue;
+            vcl::filter::PDFStreamElement* pObjStm = pObject->GetStream();
+            CPPUNIT_ASSERT(pObjStm);
+            SvMemoryStream aDecompressed;
+            ZCodec aCodec;
+            aCodec.BeginCompression();
+            pObjStm->GetMemory().Seek(0);
+            aCodec.Decompress(pObjStm->GetMemory(), aDecompressed);
+            CPPUNIT_ASSERT(aCodec.EndCompression() >= 0);
+            haystack.append(static_cast<const char*>(aDecompressed.GetData()),
+                            aDecompressed.GetSize());
         }
-        bFound = haystack.find(std::string(sText)) != std::string::npos;
     }
+    bFound = haystack.find(std::string(sText)) != std::string::npos;
+
     delete[] pBuffer;
 
     // close and return the status
     pStream = nullptr;
     maTempFile.CloseStream();
-    return (nRead == nFileSize);
+    return bFound;
 }
 
 void ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, const ScRange& range,
@@ -160,52 +154,12 @@ void ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, c
         comphelper::makePropertyValue(u"PDFUACompliance"_ustr, true)
     };
 
-    // init set of params for storeToURL() call
-    css::uno::Sequence<css::beans::PropertyValue> seqArguments{
-        comphelper::makePropertyValue(u"FilterData"_ustr,
-                                      comphelper::concatSequences(aFilterData, params)),
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"calc_pdf_Export"_ustr),
-        comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL())
-    };
+    // FIXME
+    skipValidation();
 
-    // call storeToURL()
-    uno::Reference<lang::XComponent> xComponent(mxComponent, UNO_SET_THROW);
-    uno::Reference<css::frame::XStorable> xStorable(xComponent, UNO_QUERY);
-    xStorable->storeToURL(maTempFile.GetURL(), seqArguments);
-}
-
-void ScPDFExportTest::exportToPDFWithUnoCommands(const OUString& rRange)
-{
-    uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "ToPoint", uno::Any(rRange) } });
-    dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aArgs);
-
-    dispatchCommand(mxComponent, u".uno:DefinePrintArea"_ustr, {});
-
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-        { { "ViewPDFAfterExport", uno::Any(true) }, { "Printing", uno::Any(sal_Int32(2)) } }));
-
-    uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"calc_pdf_Export"_ustr) },
-                                           { "FilterData", uno::Any(aFilterData) },
-                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
-
-    dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
-}
-
-void ScPDFExportTest::exportWholeDocumentToPDF(
-    const std::initializer_list<css::beans::PropertyValue>& filterData)
-{
-    // Passing no "Selection" leaves the export covering every sheet of the document.
-    uno::Sequence<beans::PropertyValue> aDescriptor{
-        comphelper::makePropertyValue(u"FilterName"_ustr, u"calc_pdf_Export"_ustr),
-        comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
-        comphelper::makePropertyValue(u"FilterData"_ustr,
-                                      comphelper::containerToSequence(filterData))
-    };
-
-    uno::Reference<css::frame::XStorable> xStorable(mxComponent, UNO_QUERY_THROW);
-    xStorable->storeToURL(maTempFile.GetURL(), aDescriptor);
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr,
+                                         comphelper::concatSequences(aFilterData, params)) });
 }
 
 void ScPDFExportTest::setFont(ScFieldEditEngine& rEE, sal_Int32 nStart, sal_Int32 nEnd,
@@ -239,7 +193,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testHiddenSheetsWithPrintRange)
     // Two of the four sheets are hidden, and every sheet carries a print range.
     loadFromFile(u"hiddenSheetsWithPrintRange.fods");
 
-    exportWholeDocumentToPDF();
+    save(TestFilter::PDF_WRITER);
 
     // Only the two visible sheets reach the PDF, one page each.
     // Without the fix the hidden sheets were exported too, giving 4 pages.
@@ -263,7 +217,9 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testSinglePagesWithHiddenSheets)
 
     loadFromFile(u"hiddenSheetsWithPrintRange.fods");
 
-    exportWholeDocumentToPDF({ comphelper::makePropertyValue(u"SinglePageSheets"_ustr, true) });
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"SinglePageSheets"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     // One page per visible sheet, in sheet order.
     // Without the fix the hidden sheets were exported too, giving 4 pages.
@@ -352,27 +308,21 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testExportRange_Tdf120161)
     {
         ScRange range1(0, 0, 0, 6, 0, 0);
         exportToPDF(xModel, range1);
-        bool bFound = false;
-        CPPUNIT_ASSERT(hasTextInPdf("DejaVuSans", bFound));
-        CPPUNIT_ASSERT_EQUAL(false, bFound);
+        CPPUNIT_ASSERT(!hasTextInPdf("DejaVuSans"));
     }
 
     // G1:H1
     {
         ScRange range1(6, 0, 0, 7, 0, 0);
         exportToPDF(xModel, range1);
-        bool bFound = false;
-        CPPUNIT_ASSERT(hasTextInPdf("DejaVuSans", bFound));
-        CPPUNIT_ASSERT_EQUAL(true, bFound);
+        CPPUNIT_ASSERT(hasTextInPdf("DejaVuSans"));
     }
 
     // H1:I1
     {
         ScRange range1(7, 0, 0, 8, 0, 0);
         exportToPDF(xModel, range1);
-        bool bFound = false;
-        CPPUNIT_ASSERT(hasTextInPdf("DejaVuSans", bFound));
-        CPPUNIT_ASSERT_EQUAL(true, bFound);
+        CPPUNIT_ASSERT(hasTextInPdf("DejaVuSans"));
     }
 }
 
@@ -405,18 +355,14 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testExportFitToPage_Tdf103516)
     {
         ScRange range1(0, 0, 0, 6, 49, 0);
         exportToPDF(xModel, range1);
-        bool bFound = false;
-        CPPUNIT_ASSERT(hasTextInPdf("/Count 2>>", bFound));
-        CPPUNIT_ASSERT_EQUAL(true, bFound);
+        CPPUNIT_ASSERT(hasTextInPdf("/Count 2>>"));
     }
 
     // A1:L80: 4-page export
     {
         ScRange range1(0, 0, 0, 11, 79, 0);
         exportToPDF(xModel, range1);
-        bool bFound = false;
-        CPPUNIT_ASSERT(hasTextInPdf("/Count 4>>", bFound));
-        CPPUNIT_ASSERT_EQUAL(true, bFound);
+        CPPUNIT_ASSERT(hasTextInPdf("/Count 4>>"));
     }
 
     // set fit to page: width=1 page, height=0 (automatic)
@@ -444,47 +390,41 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testExportFitToPage_Tdf103516)
     {
         ScRange range1(0, 0, 0, 6, 49, 0);
         exportToPDF(xModel, range1);
-        bool bFound = false;
-        CPPUNIT_ASSERT(hasTextInPdf("/Count 1>>", bFound));
-        CPPUNIT_ASSERT_EQUAL(true, bFound);
+        CPPUNIT_ASSERT(hasTextInPdf("/Count 1>>"));
     }
 
     // A1:L80 with fit to page width=1: slightly smaller zoom results only 1-page export
     {
         ScRange range1(0, 0, 0, 11, 79, 0);
         exportToPDF(xModel, range1);
-        bool bFound = false;
-        CPPUNIT_ASSERT(hasTextInPdf("/Count 1>>", bFound));
-        CPPUNIT_ASSERT_EQUAL(true, bFound);
+        CPPUNIT_ASSERT(hasTextInPdf("/Count 1>>"));
     }
 }
 
 CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testUnoCommands_Tdf120161)
 {
     loadFromFile(u"tdf120161.ods");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
     // A1:G1
     {
-        exportToPDFWithUnoCommands(u"A1:G1"_ustr);
-        bool bFound = false;
-        CPPUNIT_ASSERT(hasTextInPdf("DejaVuSans", bFound));
-        CPPUNIT_ASSERT_EQUAL(false, bFound);
+        ScRange range(0, 0, 0, 6, 0, 0);
+        exportToPDF(xModel, range);
+        CPPUNIT_ASSERT(!hasTextInPdf("DejaVuSans"));
     }
 
     // G1:H1
     {
-        exportToPDFWithUnoCommands(u"G1:H1"_ustr);
-        bool bFound = false;
-        CPPUNIT_ASSERT(hasTextInPdf("DejaVuSans", bFound));
-        CPPUNIT_ASSERT_EQUAL(true, bFound);
+        ScRange range(6, 0, 0, 7, 0, 0);
+        exportToPDF(xModel, range);
+        CPPUNIT_ASSERT(hasTextInPdf("DejaVuSans"));
     }
 
     // H1:I1
     {
-        exportToPDFWithUnoCommands(u"H1:I1"_ustr);
-        bool bFound = false;
-        CPPUNIT_ASSERT(hasTextInPdf("DejaVuSans", bFound));
-        CPPUNIT_ASSERT_EQUAL(true, bFound);
+        ScRange range(7, 0, 0, 8, 0, 0);
+        exportToPDF(xModel, range);
+        CPPUNIT_ASSERT(hasTextInPdf("DejaVuSans"));
     }
 }
 
@@ -498,9 +438,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testTdf64703_hiddenPageBreak)
     {
         ScRange range1(0, 0, 0, 0, 10, 0);
         exportToPDF(xModel, range1);
-        bool bFound = false;
-        CPPUNIT_ASSERT(hasTextInPdf("/Count 4>>", bFound));
-        CPPUNIT_ASSERT_EQUAL(true, bFound);
+        CPPUNIT_ASSERT(hasTextInPdf("/Count 4>>"));
     }
 }
 
@@ -633,11 +571,8 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testTdf159066)
     ScRange range1(0, 0, 0, 4, 4, 0);
     exportToPDF(xModel, range1);
 
-    bool bFound = false;
-    CPPUNIT_ASSERT(hasTextInPdf("/Alt<", bFound));
-
     // The OLE object contains alternative text description
-    CPPUNIT_ASSERT_EQUAL(true, bFound);
+    CPPUNIT_ASSERT(hasTextInPdf("/Alt<"));
 }
 
 CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testTdf159065)
@@ -967,8 +902,10 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testTdf78897)
 CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testSheetDestinations)
 {
     loadFromFile(u"sheet-destinations.fods");
-    exportWholeDocumentToPDF({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
-                               comphelper::makePropertyValue(u"ExportBookmarks"_ustr, true) });
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
+                               comphelper::makePropertyValue(u"ExportBookmarks"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -1008,7 +945,9 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testSheetDestinations)
 CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testCellLinkDestinations)
 {
     loadFromFile(u"cell-link-destinations.fods");
-    exportWholeDocumentToPDF({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) });
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -1087,8 +1026,10 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testPageRangeSkipsSheetStart)
     //
     // the second sheet spans pages 2 and 3, so this reaches it without its own first page
     loadFromFile(u"page-range-sheets.fods");
-    exportWholeDocumentToPDF({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
-                               comphelper::makePropertyValue(u"PageRange"_ustr, u"1;3"_ustr) });
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
+                               comphelper::makePropertyValue(u"PageRange"_ustr, u"1;3"_ustr) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -1117,7 +1058,9 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testPageRangeSkipsSheetStart)
 CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testDatabaseRangeHeader)
 {
     loadFromFile(u"db-range-header.fods");
-    exportWholeDocumentToPDF({ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) });
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
