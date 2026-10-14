@@ -28,11 +28,13 @@ class BgSaveWhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST_SUITE(BgSaveWhiteBoxTests);
     CPPUNIT_TEST(testQuickFindDoesNotFailSave);
     CPPUNIT_TEST(testToolbarNotificationsDoNotFailSave);
+    CPPUNIT_TEST(testChangeToOpenDialogDoesNotFailSave);
     CPPUNIT_TEST(testInteractiveDialogFailsSave);
     CPPUNIT_TEST_SUITE_END();
 
     void testQuickFindDoesNotFailSave();
     void testToolbarNotificationsDoNotFailSave();
+    void testChangeToOpenDialogDoesNotFailSave();
     void testInteractiveDialogFailsSave();
 };
 
@@ -61,6 +63,20 @@ void BgSaveWhiteBoxTests::testToolbarNotificationsDoNotFailSave()
 
     LOK_ASSERT_EQUAL(true, BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(
                                "{ \"jsontype\": \"dialog\", \"action\": \"close\"}"));
+}
+
+// A widget shown or updated in a dialog that was open before the fork, such as the Header and
+// Footer dialog, is not a new prompt, so the save goes on.
+void BgSaveWhiteBoxTests::testChangeToOpenDialogDoesNotFailSave()
+{
+    constexpr std::string_view testname = __func__;
+    LOK_ASSERT_EQUAL(true, BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(
+                               "{ \"jsontype\": \"dialog\", \"action\": \"action\", \"id\": 45, "
+                               "\"data\": { \"control_id\": \"labelFT_H_DEFINED\", "
+                               "\"action_type\": \"show\"}}"));
+    LOK_ASSERT_EQUAL(true, BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(
+                               "{ \"jsontype\": \"dialog\", \"action\": \"update\", \"id\": 45, "
+                               "\"control\": { \"id\": \"comboLB_DEFINED\"}}"));
 }
 
 // A dialog that opens is a real interactive prompt during the save, so it must

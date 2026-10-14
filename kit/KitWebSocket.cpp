@@ -358,8 +358,11 @@ bool BgSaveParentWebSocketHandler::isBenignBgSaveJSDialog(const std::string& jsd
     // builds when somebody clicks one.
     if (jsontype == "dialog")
     {
+        // A dialog that opens arrives whole, with no action. An update, an action or a close
+        // changes a dialog that was already open in the Kit before the fork.
         std::string action;
-        return JsonUtil::findJSONValue(object, "action", action) && action == "close";
+        return JsonUtil::findJSONValue(object, "action", action) &&
+               (action == "close" || action == "update" || action == "action");
     }
 
     return jsontype != "unknown";
