@@ -606,7 +606,7 @@ class GraphicSelection {
 
 				// A column of n buttons takes n steps but the space under the last one.
 				const room =
-					band[3] +
+					band.height +
 					HandleLook.reachOfASurround() +
 					GroupButtonSection.spaceBetween * app.dpiScale;
 				const fit = Math.floor(room / GroupButtonSection.step());

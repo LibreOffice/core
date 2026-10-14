@@ -840,15 +840,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 		it has none. Whatever stands beside that band is placed against this box, so that it sits
 		beside what is drawn and not beside something else.
 	*/
-	public bandBox(objectId: number): number[] | undefined {
+	public bandBox(objectId: number): cool.Range2D | undefined {
 		const places = this.surroundPlaces(objectId);
 		if (places.length !== 4) return undefined;
 
-		const box = cool.Range2D.fromPoints(
+		return cool.Range2D.fromPoints(
 			places.map((place) => new cool.Point(place.pX, place.pY)),
 		);
-
-		return [box.minX, box.minY, box.width, box.height];
 	}
 
 	/*
@@ -1475,7 +1473,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		it is worked out from the boxes they carry, which is the same box the handles are worked
 		out from; otherwise it is the one the engine sends with the selection.
 	*/
-	private boxOfTheSelection(): number[] | undefined {
+	private boxOfTheSelection(): cool.Range2D | undefined {
 		const box = this.boxAround(
 			RenderGeometrySection.theOnesThatDraw(this.selectedObjects()),
 		);
@@ -1483,12 +1481,12 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 		const scale = app.twipsToPixels;
 
-		return [
+		return new cool.Range2D(
 			box.minX * scale,
 			box.minY * scale,
-			box.width * scale,
-			box.height * scale,
-		];
+			box.maxX * scale,
+			box.maxY * scale,
+		);
 	}
 
 	/*
@@ -1522,14 +1520,14 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/// the selected objects, or where this section stands while no object is known.
 	public selectionCorner(): number[] {
 		const box = this.boxOfTheSelection();
-		return box ? [box[0], box[1]] : this.position;
+		return box ? [box.minX, box.minY] : this.position;
 	}
 
 	/// How wide and how high the selection is, in core pixels: the box round what is drawn of
 	/// the selected objects, or the size of this section while no object is known.
 	public selectionSize(): number[] {
 		const box = this.boxOfTheSelection();
-		return box ? [box[2], box[3]] : this.size;
+		return box ? [box.width, box.height] : this.size;
 	}
 
 	/*

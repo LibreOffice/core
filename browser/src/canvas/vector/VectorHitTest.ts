@@ -49,7 +49,7 @@ namespace cool {
 			the other way, through the inverse, so this is what puts the geometry that answers back
 			where the caller can use it.
 		*/
-		matrix: number[];
+		matrix: Matrix2D;
 	}
 
 	/// Where a hit test asks, in the coordinates the primitives are written in, and how far from
@@ -60,15 +60,6 @@ namespace cool {
 		y: number;
 		toleranceX: number;
 		toleranceY: number;
-	}
-
-	/// The area an object covers, in the coordinates the primitives are written in. Some
-	/// primitives paint over the whole of it rather than carrying geometry of their own.
-	export interface HitRange {
-		minX: number;
-		minY: number;
-		maxX: number;
-		maxY: number;
 	}
 
 	/** Tells whether a point hits what a JSON primitive tree paints.
@@ -106,7 +97,7 @@ namespace cool {
 		public static hit(
 			primitives: Primitive[] | undefined,
 			position: HitPosition,
-			range?: HitRange,
+			range?: Range2D,
 			walk: HitWalk = VectorHitTest.wholeOf(),
 		): HitResult | undefined {
 			if (!primitives) return undefined;
@@ -130,7 +121,7 @@ namespace cool {
 		public static isHit(
 			primitives: Primitive[] | undefined,
 			position: HitPosition,
-			range?: HitRange,
+			range?: Range2D,
 		): boolean {
 			return VectorHitTest.hit(primitives, position, range) !== undefined;
 		}
@@ -142,7 +133,7 @@ namespace cool {
 		 * paints beyond that square, a wide outline or a shadow, lies outside it.
 		 */
 		public static isInUnitSquare(
-			matrix: number[] | undefined,
+			matrix: Matrix2D | null,
 			position: HitPosition,
 		): boolean {
 			if (!matrix) return false;
@@ -177,7 +168,7 @@ namespace cool {
 		public static hitPrimitive(
 			primitive: Primitive,
 			position: HitPosition,
-			range?: HitRange,
+			range?: Range2D,
 			walk: HitWalk = VectorHitTest.wholeOf(),
 		): HitResult | undefined {
 			if (!primitive || !primitive.type) return undefined;
@@ -199,7 +190,10 @@ namespace cool {
 				case TransformPrimitive.type:
 					return VectorHitTest.hit(
 						primitive.children,
-						VectorHitTest.positionThrough(position, fields.matrix),
+						VectorHitTest.positionThrough(
+							position,
+							Matrix2D.fromArray(fields.matrix),
+						),
 						range,
 						{
 							...walk,
@@ -277,7 +271,9 @@ namespace cool {
 				case LineRectanglePrimitive.type: {
 					if (walk.textOnly) return undefined;
 					// An outlined rectangle is hit along its outline, not inside it.
-					const outline = VectorHitTest.pathOfBounds(fields.bounds);
+					const outline = VectorHitTest.pathOfRange(
+						Range2D.fromArray(fields.bounds),
+					);
 					return VectorHitTest.result(
 						'line',
 						walk,
@@ -304,7 +300,9 @@ namespace cool {
 
 				case FilledRectanglePrimitive.type: {
 					if (walk.textOnly) return undefined;
-					const area = VectorHitTest.pathOfBounds(fields.bounds);
+					const area = VectorHitTest.pathOfRange(
+						Range2D.fromArray(fields.bounds),
+					);
 					return VectorHitTest.fillResult(
 						walk,
 						VectorHitTest.hitFill(area, position),
@@ -317,8 +315,8 @@ namespace cool {
 				case 'fillGraphic': {
 					if (walk.textOnly) return undefined;
 					const covered =
-						VectorHitTest.pathOfBounds(fields.outputRange) ??
-						VectorHitTest.pathOfUnitSquare(fields.matrix ?? []);
+						VectorHitTest.pathOfRange(Range2D.fromArray(fields.outputRange)) ??
+						VectorHitTest.pathOfUnitSquare(Matrix2D.fromArray(fields.matrix));
 					return VectorHitTest.fillResult(
 						walk,
 						VectorHitTest.hitFill(covered, position),
@@ -347,7 +345,9 @@ namespace cool {
 					if (fields.matrix) {
 						if (walk.textOnly) return undefined;
 
-						const image = VectorHitTest.pathOfUnitSquare(fields.matrix);
+						const image = VectorHitTest.pathOfUnitSquare(
+							Matrix2D.fromArray(fields.matrix),
+						);
 						return VectorHitTest.result(
 							'bitmap',
 							walk,
@@ -379,6 +379,123 @@ namespace cool {
 					*/
 					return VectorHitTest.hit(primitive.children, position, range, walk);
 			}
+		}
+
+		/*
+			The outline of what the primitives draw as geometry, in the coordinates they are written
+			in: the boundary of every fill and the course of every line, through the transforms
+			they hang under. Text is left out, so the outline of a shape is not that of the letters
+			in it, and so are shadows and the background that covers the whole object. A fill
+			inside a mask, a gradient or a picture filling a shape, is outlined by the mask, which
+			is what gives it its shape. Nothing where the primitives draw no geometry.
+		*/
+		public static outlineOf(
+			primitives: Primitive[] | undefined,
+		): Path2D | undefined {
+			const outline = new Path2D();
+			let anything = false;
+
+			const add = (path: Path2D | undefined, matrix: Matrix2D): void => {
+				if (!path) return;
+				outline.addPath(path, {
+					a: matrix.a,
+					b: matrix.b,
+					c: matrix.c,
+					d: matrix.d,
+					e: matrix.e,
+					f: matrix.f,
+				});
+				anything = true;
+			};
+
+			const walk = (list: Primitive[] | undefined, matrix: Matrix2D): void => {
+				for (const primitive of list ?? []) {
+					const fields = primitive as HitFields;
+					switch (primitive.type) {
+						case TextSimplePortionPrimitive.type:
+						case TextDecoratedPortionPrimitive.type:
+						case BackgroundColorPrimitive.type:
+						case PointArrayPrimitive.type:
+						case 'shadow':
+							break;
+
+						case TransformPrimitive.type:
+							walk(
+								primitive.children,
+								VectorHitTest.matrixThrough(matrix, fields.matrix),
+							);
+							break;
+
+						case MaskPrimitive.type:
+							if (fields.clip) add(new Path2D(fields.clip), matrix);
+							else walk(primitive.children, matrix);
+							break;
+
+						case PolygonHairlinePrimitive.type:
+						case PolygonStrokePrimitive.type:
+						case PolyPolygonStrokePrimitive.type:
+						case PolyPolygonColorPrimitive.type:
+						case PolyPolygonRGBAPrimitive.type:
+						case 'polyPolygonGradient':
+						case 'polyPolygonAlphaGradient':
+						case 'polyPolygonHatch':
+						case 'polyPolygonGraphic':
+						case 'patternFill':
+							add(VectorHitTest.pathOf(fields.path), matrix);
+							break;
+
+						case SingleLinePrimitive.type: {
+							const line = fields as SingleLinePrimitive;
+							const path = new Path2D();
+							path.moveTo(line.startX ?? 0, line.startY ?? 0);
+							path.lineTo(line.endX ?? 0, line.endY ?? 0);
+							add(path, matrix);
+							break;
+						}
+
+						case LineRectanglePrimitive.type:
+						case FilledRectanglePrimitive.type:
+							add(
+								VectorHitTest.pathOfRange(Range2D.fromArray(fields.bounds)),
+								matrix,
+							);
+							break;
+
+						case 'fillGradient':
+						case 'fillHatch':
+						case 'fillGraphic':
+							add(
+								VectorHitTest.pathOfRange(
+									Range2D.fromArray(fields.outputRange),
+								) ??
+									VectorHitTest.pathOfUnitSquare(
+										Matrix2D.fromArray(fields.matrix),
+									),
+								matrix,
+							);
+							break;
+
+						case BitmapPrimitive.type:
+						case BitmapAlphaPrimitive.type:
+						case GraphicPrimitive.type:
+							if (fields.matrix)
+								add(
+									VectorHitTest.pathOfUnitSquare(
+										Matrix2D.fromArray(fields.matrix),
+									),
+									matrix,
+								);
+							else walk(primitive.children, matrix);
+							break;
+
+						default:
+							walk(primitive.children, matrix);
+					}
+				}
+			};
+
+			walk(primitives, Matrix2D.IDENTITY);
+			return anything ? outline : undefined;
 		}
 
 		private static result(
@@ -420,67 +537,58 @@ namespace cool {
 				textOnly: false,
 				hidden: false,
 				editView: false,
-				matrix: [1, 0, 0, 1, 0, 0],
+				matrix: Matrix2D.IDENTITY,
 			};
 		}
 
 		/// The two matrices as one: what maps a child onto what the walk was asked in.
 		private static matrixThrough(
-			parent: number[],
+			parent: Matrix2D,
 			child: number[] | undefined,
-		): number[] {
-			if (!child || child.length < 6) return parent;
-
-			const [a, b, c, d, e, f] = parent;
-			const [g, h, i, j, k, l] = child;
-
-			return [
-				a * g + c * h,
-				b * g + d * h,
-				a * i + c * j,
-				b * i + d * j,
-				a * k + c * l + e,
-				b * k + d * l + f,
-			];
+		): Matrix2D {
+			const own = Matrix2D.fromArray(child);
+			return own ? own.then(parent) : parent;
 		}
 
 		/// The path in the coordinates the walk was asked in.
 		private static pathThrough(
 			path: Path2D | undefined,
-			matrix: number[],
+			matrix: Matrix2D,
 		): Path2D | undefined {
 			if (!path) return undefined;
 
-			const [a, b, c, d, e, f] = matrix;
 			const mapped = new Path2D();
-			mapped.addPath(path, { a: a, b: b, c: c, d: d, e: e, f: f });
+			mapped.addPath(path, {
+				a: matrix.a,
+				b: matrix.b,
+				c: matrix.c,
+				d: matrix.d,
+				e: matrix.e,
+				f: matrix.f,
+			});
 			return mapped;
 		}
 
 		/// The position and the tolerance in the coordinates a child of the matrix is written in.
 		private static positionThrough(
 			position: HitPosition,
-			matrix: number[] | undefined,
+			matrix: Matrix2D | null,
 		): HitPosition {
-			if (!matrix || matrix.length < 6) return position;
-
-			const [a, b, c, d, e, f] = matrix;
-			const determinant = a * d - b * c;
-			if (determinant === 0) return position;
-
 			// The point goes the other way through the matrix, which is cheaper than putting the
-			// geometry of every child through it.
-			const x = position.x - e;
-			const y = position.y - f;
+			// geometry of every child through it. The tolerance is a distance, so it goes through
+			// the part that turns and scales only.
+			const back = matrix?.invert();
+			if (!back) return position;
 
+			const at = back.apply(position.x, position.y);
 			return {
-				x: (d * x - c * y) / determinant,
-				y: (a * y - b * x) / determinant,
+				x: at.x,
+				y: at.y,
 				toleranceX: Math.abs(
-					(d * position.toleranceX - c * position.toleranceY) / determinant,
+					back.a * position.toleranceX + back.c * position.toleranceY,
 				),
 				toleranceY: Math.abs(
-					(a * position.toleranceY - b * position.toleranceX) / determinant,
+					back.b * position.toleranceX + back.d * position.toleranceY,
 				),
 			};
 		}
@@ -489,32 +597,14 @@ namespace cool {
 			return Math.max(position.toleranceX, position.toleranceY);
 		}
 
-		private static pathOfBounds(
-			bounds: number[] | undefined,
-		): Path2D | undefined {
-			if (!bounds || bounds.length < 4) return undefined;
-
-			const path = new Path2D();
-			path.rect(
-				bounds[0],
-				bounds[1],
-				bounds[2] - bounds[0],
-				bounds[3] - bounds[1],
-			);
-			return path;
-		}
-
 		private static pathOfRange(
-			range: HitRange | undefined,
+			range: Range2D | null | undefined,
 		): Path2D | undefined {
 			if (!range) return undefined;
 
-			return VectorHitTest.pathOfBounds([
-				range.minX,
-				range.minY,
-				range.maxX,
-				range.maxY,
-			]);
+			const path = new Path2D();
+			path.rect(range.minX, range.minY, range.width, range.height);
+			return path;
 		}
 
 		/** The four corners of the unit square put through the matrix.
@@ -522,15 +612,20 @@ namespace cool {
 		 * It is the area an image covers, and the shape of an object as its own transformation
 		 * describes it.
 		 */
-		public static pathOfUnitSquare(matrix: number[]): Path2D | undefined {
-			if (matrix.length < 6) return undefined;
+		public static pathOfUnitSquare(
+			matrix: Matrix2D | null,
+		): Path2D | undefined {
+			if (!matrix) return undefined;
 
-			const [a, b, c, d, e, f] = matrix;
 			const path = new Path2D();
-			path.moveTo(e, f);
-			path.lineTo(a + e, b + f);
-			path.lineTo(a + c + e, b + d + f);
-			path.lineTo(c + e, d + f);
+			[
+				matrix.apply(0, 0),
+				matrix.apply(1, 0),
+				matrix.apply(1, 1),
+				matrix.apply(0, 1),
+			].forEach((corner: cool.Point, at: number) =>
+				at ? path.lineTo(corner.x, corner.y) : path.moveTo(corner.x, corner.y),
+			);
 			path.closePath();
 			return path;
 		}
@@ -604,22 +699,26 @@ namespace cool {
 			const fontSize = primitive.fontSize ?? 0;
 			if (!(fontSize > 0)) return false;
 
-			const [a = fontSize, b = 0, c = 0, d = fontSize, e = 0, f = 0] =
-				primitive.matrix ?? [];
+			const glyphs =
+				Matrix2D.fromArray(primitive.matrix) ??
+				Matrix2D.IDENTITY.scale(fontSize, fontSize);
 
 			/*
 				The matrix carries the font size in its scale, so dividing it out leaves what
 				rotates, shears and flips the glyphs. The point goes the other way through that,
 				which puts it where the glyphs sit on their baseline.
 			*/
-			const local = VectorHitTest.positionThrough(position, [
-				a / fontSize,
-				b / fontSize,
-				c / fontSize,
-				d / fontSize,
-				e,
-				f,
-			]);
+			const local = VectorHitTest.positionThrough(
+				position,
+				new Matrix2D(
+					glyphs.a / fontSize,
+					glyphs.b / fontSize,
+					glyphs.c / fontSize,
+					glyphs.d / fontSize,
+					glyphs.e,
+					glyphs.f,
+				),
+			);
 
 			context.font = `${primitive.italic ? 'italic' : 'normal'} ${fontSize}px "${primitive.familyname ?? 'sans-serif'}"`;
 			const metrics = context.measureText(text);
@@ -635,12 +734,14 @@ namespace cool {
 				none across it, so a point past the end of a short line still counts as that line
 				and a point above it does not.
 			*/
-			const box = VectorHitTest.pathOfBounds([
-				-local.toleranceX,
-				-ascent - local.toleranceY,
-				width + local.toleranceX,
-				descent + local.toleranceY,
-			]);
+			const box = VectorHitTest.pathOfRange(
+				new Range2D(
+					-local.toleranceX,
+					-ascent - local.toleranceY,
+					width + local.toleranceX,
+					descent + local.toleranceY,
+				),
+			);
 
 			return (
 				VectorHitTest.hitFill(box, {

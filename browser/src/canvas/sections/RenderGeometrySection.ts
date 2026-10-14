@@ -229,19 +229,17 @@ class RenderGeometrySection extends CanvasSectionObject {
 		transformed here rather than by the canvas so the line stays one pixel wide whatever the
 		object's scale is.
 	*/
-	public static unitRectangleCorners(transform: number[]): number[][] {
-		const matrix = cool.Matrix2D.fromArray(transform);
+	public static unitRectangleCorners(
+		matrix: cool.Matrix2D | null,
+	): cool.Point[] {
 		if (!matrix) return [];
 
 		return [
-			[0, 0],
-			[1, 0],
-			[1, 1],
-			[0, 1],
-		].map(([x, y]: number[]) => {
-			const corner = matrix.apply(x, y);
-			return [corner.x, corner.y];
-		});
+			matrix.apply(0, 0),
+			matrix.apply(1, 0),
+			matrix.apply(1, 1),
+			matrix.apply(0, 1),
+		];
 	}
 
 	/// The part the view shows, from the vector rendering cache, or nothing while it is on its
@@ -369,12 +367,12 @@ class RenderGeometrySection extends CanvasSectionObject {
 			// The box the object paints into is upright and comes with the entry, so a point
 			// outside it, and outside the tolerance around it, is settled without building a
 			// path. Most objects of a page are settled here.
-			const range: cool.HitRange = {
-				minX: object.x ?? 0,
-				minY: object.y ?? 0,
-				maxX: (object.x ?? 0) + (object.width ?? 0),
-				maxY: (object.y ?? 0) + (object.height ?? 0),
-			};
+			const range = new cool.Range2D(
+				object.x ?? 0,
+				object.y ?? 0,
+				(object.x ?? 0) + (object.width ?? 0),
+				(object.y ?? 0) + (object.height ?? 0),
+			);
 			if (
 				x < range.minX - tolerance ||
 				x > range.maxX + tolerance ||
@@ -383,7 +381,12 @@ class RenderGeometrySection extends CanvasSectionObject {
 			)
 				continue;
 
-			if (!cool.VectorHitTest.isInUnitSquare(object.transform, position))
+			if (
+				!cool.VectorHitTest.isInUnitSquare(
+					cool.Matrix2D.fromArray(object.transform),
+					position,
+				)
+			)
 				continue;
 
 			// The first object of a diagram spans the whole of it and is met wherever the point
@@ -773,12 +776,12 @@ class RenderGeometrySection extends CanvasSectionObject {
 			cool.VectorHitTest.hit(
 				object.primitives ?? [],
 				{ x: x, y: y, toleranceX: tolerance, toleranceY: tolerance },
-				{
-					minX: object.x ?? 0,
-					minY: object.y ?? 0,
-					maxX: (object.x ?? 0) + (object.width ?? 0),
-					maxY: (object.y ?? 0) + (object.height ?? 0),
-				},
+				new cool.Range2D(
+					object.x ?? 0,
+					object.y ?? 0,
+					(object.x ?? 0) + (object.width ?? 0),
+					(object.y ?? 0) + (object.height ?? 0),
+				),
 			) !== undefined
 		);
 	}
@@ -882,7 +885,11 @@ class RenderGeometrySection extends CanvasSectionObject {
 			}
 
 			if (object.transform)
-				this.strokeUnitRectangle(object.transform, xDiff, yDiff);
+				this.strokeUnitRectangle(
+					cool.Matrix2D.fromArray(object.transform),
+					xDiff,
+					yDiff,
+				);
 		}
 	}
 
@@ -900,9 +907,10 @@ class RenderGeometrySection extends CanvasSectionObject {
 	}
 
 	/*
-		Draws around what the pointer found: the geometry the hit test answered with, which for a
-		rounded rectangle or a polygon is that object's own outline, and the object's unit rectangle
-		through its transformation when the answer carries no geometry.
+		Draws around what the pointer found: the outline of the geometry the object draws, fills and
+		lines without the letters of its text, and of every object a group holds. Where the object
+		draws no geometry, the geometry the hit test answered with, and else the object's unit
+		rectangle through its transformation.
 	*/
 	private outlineHitUnderMouse(
 		data: cool.VectorPrimitivesData,
@@ -923,8 +931,22 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const object = data.objects.get(hit.id);
 		if (!object?.transform) return;
 
+		let drawn: Path2D | undefined;
+		for (const objectId of RenderGeometrySection.theOnesThatDraw([hit.id])) {
+			const own = cool.VectorHitTest.outlineOf(
+				RenderGeometrySection.objectOf(objectId)?.primitives,
+			);
+			if (!own) continue;
+			drawn = drawn ?? new Path2D();
+			drawn.addPath(own);
+		}
+
 		const shape =
-			hit.hit.path ?? cool.VectorHitTest.pathOfUnitSquare(object.transform);
+			drawn ??
+			hit.hit.path ??
+			cool.VectorHitTest.pathOfUnitSquare(
+				cool.Matrix2D.fromArray(object.transform),
+			);
 		if (!shape) return;
 
 		// The geometry is in document twips, the drawing is in this section's pixels.
@@ -984,7 +1006,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 	}
 
 	private strokeUnitRectangle(
-		transform: number[],
+		transform: cool.Matrix2D | null,
 		xDiff: number,
 		yDiff: number,
 	): void {
@@ -992,9 +1014,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const corners = RenderGeometrySection.unitRectangleCorners(transform);
 
 		this.context.beginPath();
-		corners.forEach(([x, y]: number[], index: number) => {
-			const pX = xDiff + Math.round(x * scale) + 0.5;
-			const pY = yDiff + Math.round(y * scale) + 0.5;
+		corners.forEach((corner: cool.Point, index: number) => {
+			const pX = xDiff + Math.round(corner.x * scale) + 0.5;
+			const pY = yDiff + Math.round(corner.y * scale) + 0.5;
 			if (index === 0) this.context.moveTo(pX, pY);
 			else this.context.lineTo(pX, pY);
 		});

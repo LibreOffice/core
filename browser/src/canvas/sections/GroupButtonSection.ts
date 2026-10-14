@@ -122,12 +122,11 @@ class GroupButtonSection extends GenericButtonSection {
 
 		return [
 			Math.round(
-				band[0] +
-					band[2] +
+				band.maxX +
 					HandleLook.reachOfASurround() +
 					GroupButtonSection.spaceBetween * app.dpiScale,
 			),
-			Math.round(band[1] + this.slot * GroupButtonSection.step()),
+			Math.round(band.minY + this.slot * GroupButtonSection.step()),
 		];
 	}
 

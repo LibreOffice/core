@@ -31,25 +31,24 @@ describe('RenderGeometrySection', function () {
 	// The outline follows the object's own axes, so a rotated object gets a
 	// rotated rectangle rather than the upright box around it.
 	it('walks the unit rectangle corners through the transform', function () {
-		nodeassert.deepStrictEqual(
-			RenderGeometrySection.unitRectangleCorners([300, 0, 0, 200, 10, 20]),
-			[
-				[10, 20],
-				[310, 20],
-				[310, 220],
-				[10, 220],
-			],
-		);
+		const cornersOf = (values: number[]) =>
+			RenderGeometrySection.unitRectangleCorners(
+				cool.Matrix2D.fromArray(values),
+			).map((corner: cool.Point) => [corner.x, corner.y]);
+
+		nodeassert.deepStrictEqual(cornersOf([300, 0, 0, 200, 10, 20]), [
+			[10, 20],
+			[310, 20],
+			[310, 220],
+			[10, 220],
+		]);
 
 		// A quarter turn of a 100 by 100 square anchored at (100, 0).
-		nodeassert.deepStrictEqual(
-			RenderGeometrySection.unitRectangleCorners([0, 100, -100, 0, 100, 0]),
-			[
-				[100, 0],
-				[100, 100],
-				[0, 100],
-				[0, 0],
-			],
-		);
+		nodeassert.deepStrictEqual(cornersOf([0, 100, -100, 0, 100, 0]), [
+			[100, 0],
+			[100, 100],
+			[0, 100],
+			[0, 0],
+		]);
 	});
 });
