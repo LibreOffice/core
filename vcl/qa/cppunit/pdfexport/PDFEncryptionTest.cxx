@@ -110,10 +110,8 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptedTaggedUsesObjectStreams)
                                comphelper::makePropertyValue(u"EncryptFile"_ustr, true),
                                comphelper::makePropertyValue(u"DocumentOpenPassword"_ustr,
                                                              u"secret"_ustr) };
-    mxComponent.queryThrow<frame::XStorable>()->storeToURL(
-        maTempFile.GetURL(),
-        { comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
-          comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = parsePDFExport(vcl::pdf::PDFiumLibrary::get(), "secret"_ostr);
@@ -204,14 +202,12 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0_PaddingB
     xCursorProperties->setPropertyValue(u"HyperLinkURL"_ustr, uno::Any(aLinkURL));
 
     // Save PDF
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    maMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
         { { "SelectPdfVersion", uno::Any(sal_Int32(20)) },
           { "EncryptFile", uno::Any(true) },
           { "DocumentOpenPassword", uno::Any(u"secret"_ustr) } });
-    maMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
-    xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     // Load the exported result in PDFium and read the link target back
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
