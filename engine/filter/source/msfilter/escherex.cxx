@@ -1619,30 +1619,28 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
             // bitmaps.
             // And check whether the graphic link target is
             // actually supported by mso.
-            INetURLObject   aTmp( aGraphicUrl );
-            GraphicDescriptor aDescriptor(aTmp);
-            (void)aDescriptor.Detect();
-            const GraphicFileFormat nFormat = aDescriptor.GetFileFormat();
-
-            // can MSO handle it?
-            if ( bMirrored || nAngle || nTransparency || nRed || nGreen || nBlue || (1.0 != fGamma) ||
-                 (nFormat != GraphicFileFormat::BMP &&
-                  nFormat != GraphicFileFormat::GIF &&
-                  nFormat != GraphicFileFormat::JPG &&
-                  nFormat != GraphicFileFormat::PNG &&
-                  nFormat != GraphicFileFormat::TIF &&
-                  nFormat != GraphicFileFormat::PCT &&
-                  nFormat != GraphicFileFormat::WMF &&
-                  nFormat != GraphicFileFormat::WMZ &&
-                  nFormat != GraphicFileFormat::EMF &&
-                  nFormat != GraphicFileFormat::EMZ) )
+            // Only the data already loaded for the link is used, so a link that was not loaded
+            // stays a link.
+            const Graphic aLinkedGraphic(xGraphic);
+            if (aLinkedGraphic.IsGfxLink())
             {
-                std::unique_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
-                    aTmp.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
-                if ( pIn )
+                const GfxLink aLink(aLinkedGraphic.GetGfxLink());
+                const GfxLinkType eType = aLink.GetType();
+
+                // can MSO handle it?
+                if ( bMirrored || nAngle || nTransparency || nRed || nGreen || nBlue || (1.0 != fGamma) ||
+                     (eType != GfxLinkType::NativeBmp &&
+                      eType != GfxLinkType::NativeGif &&
+                      eType != GfxLinkType::NativeJpg &&
+                      eType != GfxLinkType::NativePng &&
+                      eType != GfxLinkType::NativeTif &&
+                      eType != GfxLinkType::NativePct &&
+                      eType != GfxLinkType::NativeWmf) )
                 {
+                    SvMemoryStream aStream(const_cast<sal_uInt8*>(aLink.GetData()),
+                                           aLink.GetDataSize(), StreamMode::READ);
                     Graphic aGraphic;
-                    ErrCode nErrCode = GraphicConverter::Import( *pIn, aGraphic );
+                    ErrCode nErrCode = GraphicConverter::Import(aStream, aGraphic);
 
                     if ( nErrCode == ERRCODE_NONE )
                     {
@@ -1653,6 +1651,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
                 }
             }
 
+            INetURLObject   aTmp( aGraphicUrl );
             if (!bConverted && pGraphicProvider )
             {
                 const OUString& rBaseURI( pGraphicProvider->GetBaseURI() );
