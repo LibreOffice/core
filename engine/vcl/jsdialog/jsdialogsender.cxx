@@ -13,6 +13,7 @@
 #include <tools/json_writer.hxx>
 #include <vcl/customwidget.hxx>
 #include <vcl/dockwin.hxx>
+#include <vcl/toolkit/dialog.hxx>
 
 JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
                                        VclPtr<vcl::Window> aContentWindow,
@@ -93,6 +94,15 @@ OString JSDialogNotifyIdle::generateFullUpdate() const
     if (m_aNotifierWindow)
         aJsonWriter.put("id", m_aNotifierWindow->GetKitWindowId());
     aJsonWriter.put("jsontype", m_sTypeOfJSON);
+
+    // A modal dialog names the dialog it was opened from, which takes no input meanwhile.
+    Dialog* pDialog = dynamic_cast<Dialog*>(m_aNotifierWindow.get());
+    if (pDialog && pDialog->GetType() != WindowType::MODELESSDIALOG && pDialog->GetParent())
+    {
+        VclPtr<vcl::Window> pParent = pDialog->GetParent()->GetParentWithKitNotifier();
+        if (dynamic_cast<Dialog*>(pParent.get()) && pParent != m_aNotifierWindow)
+            aJsonWriter.put("parentId", pParent->GetKitWindowId());
+    }
 
     return aJsonWriter.finishAndGetAsOString();
 }

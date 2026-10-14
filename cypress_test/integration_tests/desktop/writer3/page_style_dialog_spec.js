@@ -116,4 +116,32 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 			cy.cGet('#linecolorlb').should('be.visible').invoke('offset').its('left').should('eq', thickness.left);
 		});
 	});
+
+	/*
+	 * The Page Style dialog takes no input while the color picker opened from its Area tab is
+	 * open, so it cannot be closed with the color picker left behind.
+	 */
+	it('Page Style dialog is blocked while the color picker is open', function() {
+		const pageStyleWindow = () => cy.cGet('[id^="TemplateDialog"]').closest('.jsdialog-window');
+
+		cy.cGet('#Format-tab-label').click();
+		desktopHelper.getNbIcon('PageDialog', 'Format').click();
+		helper.processToIdle(this.win);
+		cy.cGet('button#area.ui-tab').click();
+		helper.processToIdle(this.win);
+
+		cy.cGet('#edit-button').click();
+		helper.processToIdle(this.win);
+		cy.cGet('[id^="ColorPicker"]').should('be.visible');
+		pageStyleWindow().should('have.attr', 'inert');
+
+		cy.cGet('[id^="ColorPicker"] #cancel-button').click();
+		helper.processToIdle(this.win);
+		cy.cGet('[id^="ColorPicker"]').should('not.exist');
+		pageStyleWindow().should('not.have.attr', 'inert');
+
+		cy.cGet('[id^="TemplateDialog"] #ok-button').click();
+		helper.processToIdle(this.win);
+		cy.cGet('[id^="TemplateDialog"]').should('not.exist');
+	});
 });

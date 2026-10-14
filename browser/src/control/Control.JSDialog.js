@@ -105,6 +105,19 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		return builder;
 	},
 
+	// A dialog with a modal dialog open over it is inert until that one closes.
+	updateBlockedDialogs: function(closingId) {
+		const parentIds = new Set();
+		for (const [id, dialog] of Object.entries(this.dialogs)) {
+			if (id !== String(closingId) && dialog.parentId !== undefined)
+				parentIds.add(String(dialog.parentId));
+		}
+		for (const [id, dialog] of Object.entries(this.dialogs)) {
+			if (dialog.container)
+				dialog.container.inert = parentIds.has(id);
+		}
+	},
+
 	close: function(id, sendCloseEvent, focusHandled) {
 		if (id !== undefined && this.dialogs[id]) {
 			const dialog = this.dialogs[id];
@@ -158,6 +171,8 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			return;
 		}
 
+		// Unblock the dialog underneath first, so focus can return to it.
+		this.updateBlockedDialogs(id);
 		this.focusToLastElement(id);
 
 		var builder = this.clearDialog(id);
@@ -1375,6 +1390,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 
 				// do in task to apply correct focus when already shown
 				this.addHandlers(instance);
+				this.updateBlockedDialogs();
 
 				// A popped-out dialog is positioned and sized by the shell;
 				// in-page coordinates do not apply to it.
