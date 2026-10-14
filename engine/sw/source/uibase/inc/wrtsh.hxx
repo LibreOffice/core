@@ -56,6 +56,7 @@ struct SwCallMouseEvent;
 class SfxStringListItem;
 enum class SvMacroItemId : sal_uInt16;
 class SwFieldMgr;
+class SwPostItField;
 class SfxRequest;
 enum class SwLineBreakClear;
 enum class SwContentControlType;
@@ -527,6 +528,8 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
 
     /// Inserts a new annotation/comment at the current cursor position / selection.
     void InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq);
+    /// Moves the focus to the given annotation/comment.
+    void FocusPostIt(const SwPostItField& rPostIt);
 
     bool IsOutlineContentVisible(const size_t nPos);
     void MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible = true, bool bSetAttrOutlineVisibility = true);

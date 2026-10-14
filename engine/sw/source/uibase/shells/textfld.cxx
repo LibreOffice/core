@@ -650,6 +650,12 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             rSh.InsertPostIt(aFieldMgr, rReq);
         }
         break;
+        case FN_OPEN_COMMENT:
+        {
+            if (auto pPostIt = dynamic_cast<const SwPostItField*>(rSh.GetCurField()))
+                rSh.FocusPostIt(*pPostIt);
+        }
+        break;
         case SID_EDIT_POSTIT:
         {
             const SvxPostItIdItem* pIdItem = rReq.GetArg(SID_ATTR_POSTIT_ID);
@@ -1828,6 +1834,11 @@ void SwTextShell::StateField( SfxItemSet &rSet )
 
         case FN_REPLY:
             if (!comphelper::COKit::isActive())
+                rSet.DisableItem(nWhich);
+            break;
+
+        case FN_OPEN_COMMENT:
+            if (!dynamic_cast<const SwPostItField*>(rSh.GetCurField()))
                 rSet.DisableItem(nWhich);
             break;
 

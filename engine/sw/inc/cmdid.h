@@ -822,6 +822,7 @@ class SwUINumRuleItem;
 #define FN_RESOLVE_NOTE_THREAD      (FN_NOTES+10)
 #define FN_DELETE_COMMENT_THREAD    (FN_NOTES+11)
 #define FN_PROMOTE_COMMENT          (FN_NOTES+12)
+#define FN_OPEN_COMMENT             (FN_NOTES+13)
 
 // Region: Parameter
 #define FN_PARAM_MOVE_COUNT         TypedWhichId<SfxInt32Item>(FN_PARAM+2)

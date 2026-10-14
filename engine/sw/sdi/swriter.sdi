@@ -7084,6 +7084,21 @@ SfxVoidItem PromoteComment FN_PROMOTE_COMMENT
     GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem OpenComment FN_OPEN_COMMENT
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
+
 SvxViewLayoutItem ViewLayout SID_ATTR_VIEWLAYOUT
 [
         AutoUpdate = FALSE,

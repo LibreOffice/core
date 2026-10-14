@@ -18,10 +18,8 @@
  */
 
 #include <svx/svditer.hxx>
-#include <boost/property_tree/json_parser.hpp>
 #include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
-#include <COKit/COKit.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svl/urlbmk.hxx>
 #include <osl/thread.h>
@@ -7163,20 +7161,10 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
             if (SwFormatField const*const pField{static_cast<const SwPostItContent*>(pCnt)->GetPostIt()})
             {
                 m_pActiveShell->GotoFormatField(*pField);
+                // the desktop Navigator keeps the focus
                 if (comphelper::COKit::isActive())
-                {
-                    const SwPostItField* pPostItField
-                        = static_cast<const SwPostItField*>(pField->GetField());
-                    boost::property_tree::ptree aAnnotation;
-                    aAnnotation.put("action", "Focus");
-                    aAnnotation.put("id", pPostItField->GetPostItId());
-                    boost::property_tree::ptree aTree;
-                    aTree.add_child("comment", aAnnotation);
-                    std::stringstream aStream;
-                    boost::property_tree::write_json(aStream, aTree);
-                    m_pActiveShell->GetView().viewCallback(
-                        COKitCallbackType::COMMENT, OString(aStream.str()));
-                }
+                    m_pActiveShell->FocusPostIt(
+                        *static_cast<const SwPostItField*>(pField->GetField()));
             }
         }
         break;

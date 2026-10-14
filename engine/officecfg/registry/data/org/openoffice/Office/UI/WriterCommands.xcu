@@ -3649,6 +3649,14 @@
           <value xml:lang="en-US">~Format All Comments...</value>
         </prop>
       </node>
+      <node oor:name=".uno:OpenComment" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Open Comment</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:WordCountDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Word Count...</value>

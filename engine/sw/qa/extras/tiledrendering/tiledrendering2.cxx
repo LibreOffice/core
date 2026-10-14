@@ -1380,6 +1380,40 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackedCommentDeletionReject)
                    != static_cast<int>(SwPostItHelper::DELETED));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testOpenComment)
+{
+    // Given "First paragraph", then "Before <comment>after.":
+    createDoc("a11y-comment.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    SwTestViewCallback aView;
+    Scheduler::ProcessEventsToIdle();
+
+    // When opening a comment with no comment right of the caret:
+    int nCallbacks = aView.m_nCommentCallbackCount;
+    comphelper::dispatchCommand(u".uno:OpenComment"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Then no comment callback is emitted:
+    CPPUNIT_ASSERT_EQUAL(nCallbacks, aView.m_nCommentCallbackCount);
+
+    // And when opening the comment right of the caret:
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 7, /*bBasicCall=*/false);
+    auto pPostIt = dynamic_cast<const SwPostItField*>(pWrtShell->GetCurField());
+    CPPUNIT_ASSERT(pPostIt);
+    comphelper::dispatchCommand(u".uno:OpenComment"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Then a Focus callback for that comment is emitted:
+    // Without the fix, there was no such command.
+    CPPUNIT_ASSERT_EQUAL(nCallbacks + 1, aView.m_nCommentCallbackCount);
+    CPPUNIT_ASSERT_EQUAL(std::string("Focus"),
+                         aView.m_aComment.get_child("action").get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(pPostIt->GetPostItId(),
+                         aView.m_aComment.get_child("id").get_value<sal_uInt32>());
+}
+
 // The comment field of the single comment the document is expected to have.
 const SwPostItField* getOnlyPostItField(SwPostItMgr& rPostItMgr)
 {

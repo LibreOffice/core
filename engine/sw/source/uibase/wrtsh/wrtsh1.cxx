@@ -111,6 +111,7 @@
 #include <svx/postattr.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <tools/json_writer.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
@@ -2564,11 +2565,28 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
         return;
 
     if (pPostIt)
+        FocusPostIt(*pPostIt);
+}
+
+void SwWrtShell::FocusPostIt(const SwPostItField& rPostIt)
+{
+    if (comphelper::COKit::isActive())
     {
-        SwFieldType* pType = GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit, OUString(), false);
-        if(auto pFormat = pType->FindFormatForField(pPostIt))
-            pFormat->Broadcast( SwFormatFieldHint( nullptr, SwFormatFieldHintWhich::FOCUS, &GetView() ) );
+        // The client draws the comments
+        tools::JsonWriter aJson;
+        {
+            auto aComment = aJson.startNode("comment");
+            aJson.put("action", "Focus");
+            aJson.put("id", OString::number(rPostIt.GetPostItId()));
+        }
+        GetView().viewCallback(COKitCallbackType::COMMENT, aJson.finishAndGetAsOString());
+        return;
     }
+
+    SwFieldType* pType = GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Postit,
+                                                                           OUString(), false);
+    if (auto pFormat = pType->FindFormatForField(&rPostIt))
+        pFormat->Broadcast(SwFormatFieldHint(nullptr, SwFormatFieldHintWhich::FOCUS, &GetView()));
 }
 
 bool SwWrtShell::IsOutlineContentVisible(const size_t nPos)
