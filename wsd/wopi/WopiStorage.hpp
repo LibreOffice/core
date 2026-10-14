@@ -138,6 +138,9 @@ public:
     TriState getDisableChangeTrackingRecord() const { return _disableChangeTrackingRecord; }
     TriState getHideChangeTrackingControls() const { return _hideChangeTrackingControls; }
 
+    // This is the field returned in WOPI. The name of the software.
+    const std::string& getWopiHostName() const { return _hostName; }
+
 private:
     /// User id of the user accessing the file
     std::string _userId;
@@ -245,6 +248,8 @@ private:
     std::string _restrictedCommands;
     /// Used for directly starting follow me presentation
     std::string _presentationLeader;
+    /// Sent by SharePoint, and maybe others. It is the name of the software.
+    std::string _hostName;
 
     /// The RemoteLinks entries this document may subscribe to
     std::vector<RemoteLink> _remoteLinks;

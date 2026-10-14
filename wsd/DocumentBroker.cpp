@@ -1963,6 +1963,10 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     if (!commentAvatarUrl.empty())
         wopiInfo->set("CommentAvatarUrl", commentAvatarUrl);
 
+    if (!wopiFileInfo->getWopiHostName().empty()) {
+        wopiInfo->set("HostName", wopiFileInfo->getWopiHostName());
+    }
+
     std::ostringstream ossWopiInfo;
     wopiInfo->stringify(ossWopiInfo);
     const std::string wopiInfoString = ossWopiInfo.str();

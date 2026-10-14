@@ -57,6 +57,10 @@ window.L.Map.WOPI = window.L.Handler.extend({
 	DisablePresentation: false,
 	PresentationLeader: '',
 
+	// True if we detect our wopi host is Microsoft SharePoint.
+	// See `_detectSharePoint`.
+	WopiHostIsSharePoint: false,
+
 	_appLoadedConditions: {
 		docloaded: false,
 		updatepermission: false,
@@ -87,6 +91,7 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		// init messages handlers should be available as soon as possible
 		this.postLoadEnable();
 		this._map.on('wopiprops', this._setWopiProps, this);
+		this._map.on('wopiprops', this._detectSharePoint, this);
 	},
 
 	addHooks: function() {
@@ -139,6 +144,12 @@ window.L.Map.WOPI = window.L.Handler.extend({
 	// Since we fall back on Save As for rename isn't supported.
 	_supportsRename: function() {
 		return !!this.SupportsRename || !this.UserCanNotWriteRelative;
+	},
+
+	_detectSharePoint: function(wopiInfo) {
+		let maybeSharePoint = false;
+		maybeSharePoint = maybeSharePoint || (wopiInfo['HostName'] === 'SharePoint');
+		this.WopiHostIsSharePoint = maybeSharePoint;
 	},
 
 	_setWopiProps: function(wopiInfo) {
