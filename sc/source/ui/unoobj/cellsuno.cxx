@@ -3779,6 +3779,8 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
                 pSearchItem->SetSelection( !lcl_WholeSheet(rDoc, aRanges) );
 
                 ScMarkData aMark(*GetMarkData());
+                // SearchAndReplace doesn’t work unless the mark data is multi. tdf#144299
+                aMark.MarkToMulti();
 
                 OUString aDummyUndo;
                 ScRangeList aMatchedRanges;
@@ -3818,6 +3820,8 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
                 pSearchItem->SetSelection( !lcl_WholeSheet(rDoc, aRanges) );
 
                 ScMarkData aMark(*GetMarkData());
+                // SearchAndReplace doesn’t work unless the mark data is multi. tdf#144299
+                aMark.MarkToMulti();
 
                 SCCOL nCol;
                 SCROW nRow;
