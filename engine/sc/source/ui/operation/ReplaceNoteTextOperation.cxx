@@ -52,6 +52,8 @@ bool ReplaceNoteTextOperation::runImplementation()
             = (pDrawLayer && rDoc.IsUndoEnabled()) ? mrDocShell.GetUndoManager() : nullptr;
 
         ScNoteData aOldData;
+        std::unique_ptr<ScThreadedCommentData> pOldThreadedData;
+        std::unique_ptr<ScThreadedCommentData> pNewThreadedData;
         std::unique_ptr<ScPostIt> pOldNote = rDoc.ReleaseNote(aPos);
         sal_uInt32 nNoteId = 0;
         if (pOldNote)
@@ -61,6 +63,9 @@ bool ReplaceNoteTextOperation::runImplementation()
             pOldNote->GetOrCreateCaption(aPos);
             // rescue note data for undo
             aOldData = pOldNote->GetNoteData();
+            // rescue the thread for undo too, it is not part of the note data
+            if (const ScThreadedCommentData* pThreaded = pOldNote->GetThreadedCommentData())
+                pOldThreadedData = std::make_unique<ScThreadedCommentData>(*pThreaded);
         }
 
         // collect drawing undo actions for deleting/inserting caption objects
@@ -81,6 +86,16 @@ bool ReplaceNoteTextOperation::runImplementation()
             if (moDate)
                 pNewNote->SetDate(*moDate);
 
+            // edit changes the root's text and leaves the rest of the thread alone
+            if (pOldThreadedData)
+            {
+                auto pThreaded = std::make_unique<ScThreadedCommentData>(*pOldThreadedData);
+                pThreaded->maRoot.maText = maText;
+                pNewNote->SetThreadedCommentData(std::move(pThreaded));
+                if (const ScThreadedCommentData* pThreadedNow = pNewNote->GetThreadedCommentData())
+                    pNewThreadedData = std::make_unique<ScThreadedCommentData>(*pThreadedNow);
+            }
+
             // rescue note data for undo
             aNewData = pNewNote->GetNoteData();
         }
@@ -88,7 +103,9 @@ bool ReplaceNoteTextOperation::runImplementation()
         // create the undo action
         if (pUndoMgr && (aOldData.mxCaption || aNewData.mxCaption))
             pUndoMgr->AddUndoAction(std::make_unique<ScUndoReplaceNote>(
-                mrDocShell, aPos, aOldData, aNewData, pDrawLayer->GetCalcUndo()));
+                mrDocShell, aPos, std::move(aOldData), std::move(aNewData),
+                pDrawLayer->GetCalcUndo(), std::move(pOldThreadedData),
+                std::move(pNewThreadedData)));
 
         // repaint cell (to make note marker visible)
         mrDocShell.PostPaintCell(aPos);

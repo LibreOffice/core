@@ -3436,6 +3436,67 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentInsertAndResolve)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentStaysThreadedAfterEdit)
+{
+    // Editing a threaded comment leaves it threaded: the text follows the edit,
+    // the thread stays as it was.
+    ScModelObj* pModelObj = createDoc("small.ods");
+    ScTestViewCallback aView;
+
+    ScTabViewShell* pTabViewShell = aView.getTabViewShell();
+    CPPUNIT_ASSERT(pTabViewShell);
+    pTabViewShell->SetCursor(2, 3);
+
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { u"Text"_ustr, cpo::uno::Any(u"Threaded comment text"_ustr) },
+        { u"Author"_ustr, cpo::uno::Any(u"Kit Author"_ustr) },
+    }));
+    dispatchCommand(mxComponent, u".uno:InsertThreadedComment"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(std::string("true"),
+                         aView.m_aCommentCallbackResult.get<std::string>("threaded"));
+    std::string aCommentId = aView.m_aCommentCallbackResult.get<std::string>("id");
+
+    // Change the text the way the client does it.
+    aArgs = comphelper::InitPropertySequence({
+        { u"Id"_ustr, cpo::uno::Any(OUString::createFromAscii(aCommentId)) },
+        { u"Text"_ustr, cpo::uno::Any(u"Edited threaded comment text"_ustr) },
+    });
+    dispatchCommand(mxComponent, u".uno:EditAnnotation"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(std::string("Modify"),
+                         aView.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Edited threaded comment text"),
+                         aView.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT_EQUAL(std::string("true"),
+                         aView.m_aCommentCallbackResult.get<std::string>("threaded"));
+
+    // What the document holds matches what the callback reported.
+    {
+        tools::JsonWriter aJsonWriter;
+        pModelObj->getPostIts(aJsonWriter);
+        std::string aJson(aJsonWriter.finishAndGetAsOString());
+        std::stringstream aStream(aJson);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+
+        auto aComments = aTree.get_child("comments");
+        CPPUNIT_ASSERT_EQUAL(size_t(1), aComments.size());
+        const auto& rComment = aComments.begin()->second;
+        CPPUNIT_ASSERT_EQUAL(std::string("Edited threaded comment text"),
+                             rComment.get<std::string>("text"));
+        CPPUNIT_ASSERT_EQUAL(std::string("true"), rComment.get<std::string>("threaded"));
+    }
+
+    // Undoing the edit brings the earlier text back, still threaded.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(std::string("Threaded comment text"),
+                         aView.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT_EQUAL(std::string("true"),
+                         aView.m_aCommentCallbackResult.get<std::string>("threaded"));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo)
 {
     // Before the fix, .uno:InsertThreadedComment manipulated the note model
