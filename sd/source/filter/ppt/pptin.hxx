@@ -66,7 +66,8 @@ class ImplSdPPTImport : public SdrPowerPointImport
 
 public:
 
-    OUString        ReadSound( sal_uInt32 nSoundRef ) const;
+    /// rEmbedded is true when the returned URL is the copy of sound data stored in the document.
+    OUString        ReadSound( sal_uInt32 nSoundRef, bool& rEmbedded ) const;
     OUString        ReadMedia( sal_uInt32 nMediaRef ) const;
 
     SdDrawDocument& GetDoc() const { return mrDoc; }
