@@ -2668,7 +2668,6 @@ void ScInterpreter::ScTTest()
     double fT, fF;
     SCSIZE nC1, nC2;
     SCSIZE nR1, nR2;
-    SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
     if (fTyp == 1.0)
@@ -2682,20 +2681,12 @@ void ScInterpreter::ScTTest()
         KahanSum fSum1    = 0.0;
         KahanSum fSum2    = 0.0;
         KahanSum fSumSqrD = 0.0;
-        double fVal1, fVal2;
-        for (i = 0; i < nC1; i++)
-            for (j = 0; j < nR1; j++)
-            {
-                if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
-                {
-                    fVal1 = pMat1->GetDouble(i,j);
-                    fVal2 = pMat2->GetDouble(i,j);
-                    fSum1    += fVal1;
-                    fSum2    += fVal2;
-                    fSumSqrD += (fVal1 - fVal2)*(fVal1 - fVal2);
-                    fCount++;
-                }
-            }
+        pMat1->IterateNumericPairs(*pMat2, [&](double fVal1, double fVal2) {
+            fSum1 += fVal1;
+            fSum2 += fVal2;
+            fSumSqrD += (fVal1 - fVal2) * (fVal1 - fVal2);
+            fCount++;
+        });
         if (fCount < 1.0)
         {
             PushNoValue();
@@ -5118,18 +5109,11 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
     KahanSum fSumX          = 0.0;
     KahanSum fSumY          = 0.0;
 
-    for (SCSIZE i = 0; i < nC1; i++)
-    {
-        for (SCSIZE j = 0; j < nR1; j++)
-        {
-            if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
-            {
-                fSumX += pMat1->GetDouble(i,j);
-                fSumY += pMat2->GetDouble(i,j);
-                fCount++;
-            }
-        }
-    }
+    pMat1->IterateNumericPairs(*pMat2, [&](double fValX, double fValY) {
+        fSumX += fValX;
+        fSumY += fValY;
+        fCount++;
+    });
     if (fCount < 1.0)
         PushNoValue();
     else
@@ -5138,19 +5122,10 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
         KahanSum fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
         double fMeanX = fSumX.get() / fCount;
         double fMeanY = fSumY.get() / fCount;
-        for (SCSIZE i = 0; i < nC1; i++)
-        {
-            for (SCSIZE j = 0; j < nR1; j++)
-            {
-                if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
-                {
-                    double fValX = pMat1->GetDouble(i,j);
-                    double fValY = pMat2->GetDouble(i,j);
-                    fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
-                    fSumSqrDeltaX    += (fValX - fMeanX) * (fValX - fMeanX);
-                }
-            }
-        }
+        pMat1->IterateNumericPairs(*pMat2, [&](double fValX, double fValY) {
+            fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
+            fSumSqrDeltaX += (fValX - fMeanX) * (fValX - fMeanX);
+        });
         if (fSumSqrDeltaX == 0.0)
             PushError( FormulaError::DivisionByZero);
         else
@@ -5199,18 +5174,11 @@ void ScInterpreter::ScForecast()
     KahanSum fSumX          = 0.0;
     KahanSum fSumY          = 0.0;
 
-    for (SCSIZE i = 0; i < nC1; i++)
-    {
-        for (SCSIZE j = 0; j < nR1; j++)
-        {
-            if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
-            {
-                fSumX += pMat1->GetDouble(i,j);
-                fSumY += pMat2->GetDouble(i,j);
-                fCount++;
-            }
-        }
-    }
+    pMat1->IterateNumericPairs(*pMat2, [&](double fValX, double fValY) {
+        fSumX += fValX;
+        fSumY += fValY;
+        fCount++;
+    });
     if (fCount < 1.0)
         PushNoValue();
     else
@@ -5219,19 +5187,10 @@ void ScInterpreter::ScForecast()
         KahanSum fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
         double fMeanX = fSumX.get() / fCount;
         double fMeanY = fSumY.get() / fCount;
-        for (SCSIZE i = 0; i < nC1; i++)
-        {
-            for (SCSIZE j = 0; j < nR1; j++)
-            {
-                if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
-                {
-                    double fValX = pMat1->GetDouble(i,j);
-                    double fValY = pMat2->GetDouble(i,j);
-                    fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
-                    fSumSqrDeltaX    += (fValX - fMeanX) * (fValX - fMeanX);
-                }
-            }
-        }
+        pMat1->IterateNumericPairs(*pMat2, [&](double fValX, double fValY) {
+            fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
+            fSumSqrDeltaX += (fValX - fMeanX) * (fValX - fMeanX);
+        });
         if (fSumSqrDeltaX == 0.0)
             PushError( FormulaError::DivisionByZero);
         else
