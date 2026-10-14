@@ -33,13 +33,20 @@ button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not
 }
 
 [data-userinterfacemode='classic'] .main-nav {
+	--header-actions-offset: 3px;
 	display: grid;
 	grid-template-columns: auto minmax(0, 1fr) repeat(5, auto);
-	grid-template-rows: auto auto;
+	grid-template-rows: 24px 24px;
 	align-items: center;
 	column-gap: var(--spacing-s);
 	height: auto;
-	padding-block: var(--spacing-s) 0;
+	padding-block: var(--spacing-s) 1px;
+}
+
+@media (max-width: 900px) {
+	[data-userinterfacemode='classic'] .main-nav {
+		--header-actions-offset: 0px;
+	}
 }
 
 [data-userinterfacemode='classic'] .main-nav::after {
@@ -57,11 +64,11 @@ button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not
 }
 
 [data-userinterfacemode='classic'] .main-nav > #document-header > a.document-logo {
-	width: 48px;
-	height: 48px;
+	width: 44px;
+	height: 44px;
 	padding: 0;
 	margin-inline-start: var(--spacing-s);
-	background-size: 48px !important;
+	background-size: 44px !important;
 }
 
 [data-userinterfacemode='classic'] .main-nav > #document-titlebar {
@@ -84,8 +91,9 @@ button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not
 	font-size: var(--compact-title-font-size) !important;
 	flex: 0 1 auto;
 	width: auto !important;
-	height: 20px !important;
-	margin-top: 8px;
+	box-sizing: border-box;
+	height: 24px !important;
+	margin-top: 0;
 	text-align: start;
 }
 
@@ -117,6 +125,11 @@ button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not
 
 [data-userinterfacemode='classic'] #menu-last-mod {
 	display: none !important;
+}
+
+[data-userinterfacemode='classic'] .main-nav > :is(#userListHeader, #viewMode, #shareAsContainer, #closebuttonwrapper) {
+	position: relative;
+	top: var(--header-actions-offset);
 }
 
 [data-userinterfacemode='classic'] .main-nav > #userListHeader {
@@ -161,7 +174,10 @@ button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not
 [data-userinterfacemode='classic'] .main-nav > #closebuttonwrapper {
 	grid-row: 1;
 	grid-column: 7;
+	width: 24px;
+	height: 24px;
 	margin: 0;
+	margin-inline-end: 2px;
 }
 
 [data-userinterfacemode='classic'] .main-nav > #main-menu {
@@ -169,4 +185,9 @@ button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not
 	grid-column: 2 / -1;
 	margin-inline-start: calc(var(--spacing-xs) - var(--spacing-m));
 	float: none;
+}
+
+[data-userinterfacemode='classic'] .main-nav > #main-menu > li > a {
+	padding-block: 0;
+	line-height: 22px;
 }
