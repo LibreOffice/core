@@ -2127,10 +2127,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTrailingBlankInUntaggedPdf)
     pWrtShell->SetAttrItem(SvxAdjustItem(SvxAdjust::Center, RES_PARATR_ADJUST));
     pWrtShell->SetAttrItem(SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
     pWrtShell->Insert("foo" + RepeatedUChar(' ', 200));
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(
-             u"FilterData"_ustr,
-             comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(false) } })) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(
+                              u"FilterData"_ustr, comphelper::InitPropertySequence(
+                                                      { { "UseTaggedPDF", uno::Any(false) } })) });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdf->openPage(0);
@@ -2169,10 +2168,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf32181)
     // changed to a bundled one. Justification stretches the blank each line ends in, and the blank
     // used to be underlined, so the underline ran off to the right well past the margin.
     createSwDoc("underline-over-margin.odt");
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(
-             u"FilterData"_ustr,
-             comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(false) } })) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(
+                              u"FilterData"_ustr, comphelper::InitPropertySequence(
+                                                      { { "UseTaggedPDF", uno::Any(false) } })) });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport(pPDFium);
     std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdf->openPage(0);

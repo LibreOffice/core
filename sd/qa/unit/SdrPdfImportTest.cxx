@@ -258,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
         uno::Sequence<beans::PropertyValue> aFilterData(
             comphelper::InitPropertySequence({ { "ExportBookmarks", uno::Any(true) } }));
         aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
-        saveAndReload(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+        saveAndReload(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
         // Check PDF for annotations
         auto pPDFDocument = parsePDFExport(pPdfium);

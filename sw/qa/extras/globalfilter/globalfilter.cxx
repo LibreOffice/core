@@ -1412,7 +1412,7 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
         comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     skipValidation();
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     if (std::shared_ptr<vcl::pdf::PDFium> pPDFium
         = vcl::pdf::PDFiumLibrary::get()) // This part will be skipped without PDFium
@@ -1817,7 +1817,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableOfContentLinksHaveContentSet)
         comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     skipValidation();
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
@@ -1876,7 +1876,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
         comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     skipValidation();
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     vcl::filter::PDFDocument aDocument;
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);

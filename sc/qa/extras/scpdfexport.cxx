@@ -157,7 +157,7 @@ void ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, c
     // FIXME
     skipValidation();
 
-    save(TestFilter::PDF_WRITER,
+    save(TestFilter::PDF,
          { comphelper::makePropertyValue(u"FilterData"_ustr,
                                          comphelper::concatSequences(aFilterData, params)) });
 }
@@ -193,7 +193,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testHiddenSheetsWithPrintRange)
     // Two of the four sheets are hidden, and every sheet carries a print range.
     loadFromFile(u"hiddenSheetsWithPrintRange.fods");
 
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Only the two visible sheets reach the PDF, one page each.
     // Without the fix the hidden sheets were exported too, giving 4 pages.
@@ -218,8 +218,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testSinglePagesWithHiddenSheets)
     loadFromFile(u"hiddenSheetsWithPrintRange.fods");
 
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"SinglePageSheets"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     // One page per visible sheet, in sheet order.
     // Without the fix the hidden sheets were exported too, giving 4 pages.
@@ -904,8 +903,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testSheetDestinations)
     loadFromFile(u"sheet-destinations.fods");
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
                                comphelper::makePropertyValue(u"ExportBookmarks"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -946,8 +944,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testCellLinkDestinations)
 {
     loadFromFile(u"cell-link-destinations.fods");
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -1028,8 +1025,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testPageRangeSkipsSheetStart)
     loadFromFile(u"page-range-sheets.fods");
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
                                comphelper::makePropertyValue(u"PageRange"_ustr, u"1;3"_ustr) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -1059,8 +1055,7 @@ CPPUNIT_TEST_FIXTURE(ScPDFExportTest, testDatabaseRangeHeader)
 {
     loadFromFile(u"db-range-header.fods");
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));

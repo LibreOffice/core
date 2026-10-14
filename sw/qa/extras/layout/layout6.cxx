@@ -686,7 +686,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf122607_regression)
 
     // inline the loading because currently properties can't be passed...
     createSwDoc("tdf122607_leerzeile.odt", comphelper::containerToSequence(aFilterOptions));
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // somehow these 2 rows overlapped in the PDF unless CalcLayout() runs
@@ -713,7 +713,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, TestTdf150616)
 
     // inline the loading because currently properties can't be passed...
     createSwDoc("in_056132_mod.odt", comphelper::containerToSequence(aFilterOptions));
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1522,7 +1522,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf156724)
 
     // inline the loading because currently properties can't be passed...
     createSwDoc("fdo56797-2-min.odt", comphelper::containerToSequence(aFilterOptions));
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // both pages have a tab frame and one footnote
@@ -1623,7 +1623,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool16071_footnoteTailKeptWhenTruncate
     createSwDoc("Cool16071_footnoteTailKeptWhenTruncated.fodt");
     // A layout dump would format what it reads, and that alone repairs the frame: measure the
     // export instead.
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdf = parsePDFExport(pPDFium);
 
     // the last word of the last footnote, on its third line

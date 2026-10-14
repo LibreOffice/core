@@ -263,7 +263,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
     // a stream.
     loadFromURL(u"private:factory/swriter"_ustr);
 
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());

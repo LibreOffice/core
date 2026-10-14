@@ -84,7 +84,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf157397)
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"PDF_export_with_formcontrol.fodt");
     skipValidation();
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -411,7 +411,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf135192)
 
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"tdf135192-1.fodp");
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -540,7 +540,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf154955)
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"grouped-shape.fodt");
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -672,7 +672,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf155190)
 
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"tdf155190.odt");
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -759,7 +759,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testMediaShapeAnnot)
 
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"vid.odt");
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -896,7 +896,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testFlyFrameHyperlinkAnnot)
 
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"image-hyperlink-alttext.fodt");
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -1029,7 +1029,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testFormControlAnnot)
 
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"formcontrol.fodt");
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -1161,7 +1161,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf142129)
         comphelper::InitPropertySequence({ { "ExportBookmarks", uno::Any(true) } }));
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     vcl::filter::PDFDocument aDocument;
@@ -1252,7 +1252,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testPdfImageRotate180)
     xText->insertTextContent(xCursor->getStart(), xTextContent, /*bAbsorb=*/false);
 
     // Save as PDF.
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Parse the export result.
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
@@ -1297,7 +1297,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf144222)
 // Assume Windows has the font for U+4E2D
 #ifdef _WIN32
     loadFromFile(u"tdf144222.ods");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
@@ -1338,7 +1338,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf145873)
 {
     // Import the bugdoc and export as PDF.
     loadFromFile(u"tdf145873.pptx");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
@@ -1374,7 +1374,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testPdfImageHyperlink)
     // Given a Draw file, containing a PDF image, which has a hyperlink in it:
     // When saving to PDF:
     loadFromFile(u"pdf-image-hyperlink.odg");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Then make sure that link is preserved:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
@@ -1504,7 +1504,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testURIs)
         xCursorProps->setPropertyValue(u"HyperLinkName"_ustr, uno::Any(u"Testname"_ustr));
 
         // Save as PDF.
-        save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+        save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
         // Use the filter rather than the pdfium route, as per the tdf105093 test, it's
         // easier to parse the annotations
@@ -1554,7 +1554,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testPdfImageAnnots)
     // Given a document with a PDF image that has 2 comments (popup, text) and a hyperlink:
     // When saving to PDF:
     loadFromFile(u"pdf-image-annots.odg");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Then make sure only the hyperlink is kept, since Draw itself has its own comments:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
@@ -1586,7 +1586,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testPdfImageEncryption)
     xText->insertTextContent(xCursor->getStart(), xTextContent, /*bAbsorb=*/false);
 
     // When saving as encrypted PDF:
-    save(TestFilter::PDF_WRITER, /*rParams*/ {}, /*pPassword*/ "secret");
+    save(TestFilter::PDF, /*rParams*/ {}, /*pPassword*/ "secret");
 
     // Then make sure that the image is not lost:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
@@ -1615,7 +1615,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testBitmapScaledown)
     // Given a document with an upscaled and rotated barcode bitmap in it:
     // When saving as PDF:
     loadFromFile(u"bitmap-scaledown.odt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Then verify that the bitmap is not downscaled:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
@@ -1646,7 +1646,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf139627)
 {
 #if HAVE_MORE_FONTS
     loadFromFile(u"justified-arabic-kashida.odt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
@@ -1724,7 +1724,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testRexportRefToKids)
     // Load the PDF and save as PDF
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"ref-to-kids.pdf");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -1762,7 +1762,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testRexportFilterSingletonArray)
     // Load the PDF and save as PDF
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"ref-to-kids.pdf");
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -1808,7 +1808,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testRexportMediaBoxOrigin)
     // Load the PDF and save as PDF
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"ref-to-kids.pdf");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -1868,7 +1868,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testRexportResourceItemReference)
     // Load the PDF and save as PDF
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"ref-to-kids.pdf");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -1912,7 +1912,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf152246)
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"content-control-rtl.docx");
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -1964,7 +1964,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf155161)
 {
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"tdf155161.odt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -1999,7 +1999,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTrueTypeCompositeFont)
     // that the subset no longer needs a cmap of our own making.
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"SimpleTestDocument.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
@@ -2064,7 +2064,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testPDFA1CIDSet)
 
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"tdf171869.odt");
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
@@ -2109,7 +2109,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testNoCIDSetWithoutPDFA1)
     // Not PDF/A-1, so no CIDSet.
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"tdf171869.odt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
     CPPUNIT_ASSERT(aDocument.Read(aStream));
 
@@ -2130,7 +2130,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf171869)
     // Document using an embedded CID-keyed font (a Source Han Sans subset)
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"tdf171869.odt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -2220,7 +2220,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf48707_1)
 {
     // Import the bugdoc and export as PDF.
     loadFromFile(u"tdf48707-1.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Parse the export result with pdfium.
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
@@ -2252,7 +2252,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf48707_2)
 {
     // Import the bugdoc and export as PDF.
     loadFromFile(u"tdf48707-2.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Parse the export result with pdfium.
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
@@ -2286,7 +2286,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf48707_2)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf156528)
 {
     loadFromFile(u"wide_page1.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
@@ -2353,7 +2353,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf113866)
     rDocAccess.setPrintData(aDocPrintData);
 
     // Export to pdf
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Parse the export result with pdfium.
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
@@ -2390,7 +2390,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf159817)
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     loadFromFile(u"tdf159817.fodt");
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
@@ -2466,7 +2466,7 @@ void GetPdfPageTextObjectsAndBounds(std::unique_ptr<vcl::pdf::PDFiumDocument> pP
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf61444)
 {
     loadFromFile(u"tdf61444.odt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -2491,7 +2491,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf61444)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf124116TrackUntrack)
 {
     loadFromFile(u"tdf124116-hebrew-track-untrack.odt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -2525,7 +2525,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf124116TrackUntrack)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf134226)
 {
     loadFromFile(u"tdf134226-shadda-in-hidden-span.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -2560,7 +2560,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf134226)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf71956)
 {
     loadFromFile(u"tdf71956-styled-diacritics.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -2601,7 +2601,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf71956)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf101686)
 {
     loadFromFile(u"tdf101686.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
 
@@ -2648,7 +2648,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testRexportXnViewColorspace)
     // Load the PDF and save as PDF
     vcl::filter::PDFDocument aDocument;
     loadFromFile(u"xnview-colorspace.pdf");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Parse the export result.
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
@@ -2705,7 +2705,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testRexportXnViewColorspace)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf157390)
 {
     loadFromFile(u"tdf157390-overlapping-kanji.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     auto pPdfDocument = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -2759,7 +2759,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf157390)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf162205Ltr)
 {
     loadFromFile(u"tdf162205-ltr.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -2793,7 +2793,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf162205Ltr)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf162205Rtl)
 {
     loadFromFile(u"tdf162205-rtl.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -2827,7 +2827,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf162205Rtl)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf162194SoftHyphen)
 {
     loadFromFile(u"tdf162194-soft-hyphen.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -2846,7 +2846,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf162194SoftHyphen)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf160786)
 {
     loadFromFile(u"tdf160786.fods");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -2874,7 +2874,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf160786)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf151748KashidaSpace)
 {
     loadFromFile(u"tdf151748.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -2913,7 +2913,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf151748KashidaSpace)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf163105SwKashidaSpaceExpansion)
 {
     loadFromFile(u"tdf163105-kashida-spaces.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -2936,7 +2936,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf163105SwKashidaSpaceExpansion)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf163105Writer)
 {
     loadFromFile(u"tdf163105-writer.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -2961,7 +2961,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf163105Writer)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf163105Editeng)
 {
     loadFromFile(u"tdf163105-editeng.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -2984,7 +2984,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf163105Editeng)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf140767SyriacJustification)
 {
     loadFromFile(u"tdf140767.odt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -3012,7 +3012,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf140767SyriacJustification)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf36709FirstLineIndentEm)
 {
     loadFromFile(u"tdf36709.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -3063,7 +3063,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf36709FirstLineIndentEm)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf163913LeftRightMarginEm)
 {
     loadFromFile(u"tdf163913.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -3111,7 +3111,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testFormRoundtrip)
     aMediaDescriptor["FilterData"] <<= aFilterData;
 
     loadFromFile(u"FilledUpForm.pdf");
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the round-tripped document with PDFium
     auto pPdfDocument = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
@@ -3158,7 +3158,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testFormRoundtrip)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf162750SmallCapsLigature)
 {
     loadFromFile(u"tdf162750.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     auto pPdfDocument = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -3195,7 +3195,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf162750SmallCapsLigature)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf164106SplitReorderedClusters)
 {
     loadFromFile(u"tdf164106.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -3232,7 +3232,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testPDFAttachmentsWithEncryptedFile)
     aMediaDescriptor["FilterData"] <<= aFilterData;
 
     loadFromFile(u"SimpleTestDocument.fodt");
-    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList(),
+    save(TestFilter::PDF, aMediaDescriptor.getAsConstPropertyValueList(),
          /*pPassword*/ "secret");
 
     // Parse the round-tripped document with PDFium
@@ -3292,7 +3292,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTextBoxRuby)
     // as the feature is refined.
 
     loadFromFile(u"textbox-ruby.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -3357,7 +3357,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTextBoxRuby)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf166044ContFootnoteOnlyOnePgNum)
 {
     loadFromFile(u"tdf166044-cont-footnote-one-pgnum.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     auto pPdfDocument = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
@@ -3388,7 +3388,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf166044ContFootnoteOnlyOnePgNum)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf118350StartEndParaAlign)
 {
     loadFromFile(u"tdf118350-start-end-para-align.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -3459,7 +3459,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf118350StartEndParaAlign)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf72640LabelAlignIgnoresDirOff)
 {
     loadFromFile(u"tdf72640-label-align-ignores-dir-off.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -3490,7 +3490,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf72640LabelAlignIgnoresDirOff)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf72640LabelAlignIgnoresDirOn)
 {
     loadFromFile(u"tdf72640-label-align-ignores-dir-on.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -3521,7 +3521,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf72640LabelAlignIgnoresDirOn)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, tdf150076BackgroundPdf)
 {
     loadFromFile(u"tdf150076.odt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Parse the export result.
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
@@ -3542,7 +3542,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, tdf150076BackgroundPdf)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf155557UnderlineKashidaPortion)
 {
     loadFromFile(u"tdf155557-underline-kashida-portion.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
@@ -3582,7 +3582,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf155557UnderlineKashidaPortion)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf117941RtlStrikeoutChars)
 {
     loadFromFile(u"tdf117941-rtl-strike-chars.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;
@@ -3620,7 +3620,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest3, testTdf117941RtlStrikeoutChars)
 CPPUNIT_TEST_FIXTURE(PdfExportTest3, testDropCapPaint)
 {
     loadFromFile(u"drop_fly_paint.fodt");
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     std::vector<OUString> aText;
     std::vector<basegfx::B2DRectangle> aRect;

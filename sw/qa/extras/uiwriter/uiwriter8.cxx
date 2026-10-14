@@ -685,9 +685,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf145584)
         comphelper::InitPropertySequence({ { "Selection", uno::Any(true) } }));
 
     // Without the fix in place, this test would have crashed here
-    save(TestFilter::PDF_WRITER, {
-                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
-                                 });
+    save(TestFilter::PDF, {
+                              comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                          });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -718,9 +718,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf131728)
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "ExportBookmarksToPDFDestination", uno::Any(true) } }));
 
-    save(TestFilter::PDF_WRITER, {
-                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
-                                 });
+    save(TestFilter::PDF, {
+                              comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                          });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -757,9 +757,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf95239)
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "ExportBookmarksToPDFDestination", uno::Any(true) } }));
 
-    save(TestFilter::PDF_WRITER, {
-                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
-                                 });
+    save(TestFilter::PDF, {
+                              comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                          });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
@@ -810,9 +810,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf152575)
         comphelper::InitPropertySequence({ { "ExportNotesInMargin", uno::Any(true) } }));
 
     // Without the fix in place, this test would have crashed here
-    save(TestFilter::PDF_WRITER, {
-                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
-                                 });
+    save(TestFilter::PDF, {
+                              comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                          });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(3, pPdfDocument->getPageCount());

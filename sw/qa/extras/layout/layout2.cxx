@@ -1530,7 +1530,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableCellInvalidate)
 
     // inline the loading because currently properties can't be passed...
     createSwDoc("table_cell_overlap.fodt", comphelper::containerToSequence(aFilterOptions));
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // somehow these 2 rows overlapped in the PDF unless CalcLayout() runs

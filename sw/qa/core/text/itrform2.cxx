@@ -161,7 +161,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlHeaderPDFExport)
     createSwDoc("content-control-header.docx");
 
     // When exporting to PDF:
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Then make sure all the expected text is there on page 2:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
@@ -221,7 +221,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckedCheckboxContentControlPDF)
     pWrtShell->GotoContentControl(rFormatContentControl);
 
     // When exporting to PDF:
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Then make sure that a checked checkbox form widget is emitted:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
@@ -259,7 +259,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFFontColor)
     pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
 
     // When exporting that document to PDF:
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Then make sure that the widget in the PDF result has that custom font color:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
@@ -313,7 +313,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFDropDownText)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting that to PDF:
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Then make sure that the custom default is not lost:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
@@ -349,9 +349,9 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFComments)
         comphelper::makePropertyValue(u"ExportNotes"_ustr, false),
         comphelper::makePropertyValue(u"ExportNotesInMargin"_ustr, true),
     };
-    save(TestFilter::PDF_WRITER, {
-                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
-                                 });
+    save(TestFilter::PDF, {
+                              comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                          });
 
     // Then make sure the only widget for the content control has a correct position:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);

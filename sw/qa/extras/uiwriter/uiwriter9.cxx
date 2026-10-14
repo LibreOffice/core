@@ -778,9 +778,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testPDFExportCrash)
     skipValidation();
 
     // Without the fix in place, this test would have crashed here
-    save(TestFilter::PDF_WRITER, {
-                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
-                                 });
+    save(TestFilter::PDF, {
+                              comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                          });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport(pPDFium);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());

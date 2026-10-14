@@ -703,8 +703,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf111880RtlPageCommentsOnLeftSide)
     // Export to PDF with comments in margin
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"ExportNotes"_ustr, false),
                                comphelper::makePropertyValue(u"ExportNotesInMargin"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     if (std::shared_ptr<vcl::pdf::PDFium> pPDFium
         = vcl::pdf::PDFiumLibrary::get()) // This part will be skipped without PDFium

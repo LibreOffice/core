@@ -657,7 +657,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testPageViewDrawLayerClip)
     loadFromFile(u"page-view-draw-layer-clip.docx");
 
     // When saving that document to PDF:
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     // Then make sure that line shape gets clipped:
     std::unique_ptr<vcl::pdf::PDFiumDocument> pDoc = parsePDFExport(pPDFium);

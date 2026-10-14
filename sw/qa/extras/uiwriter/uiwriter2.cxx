@@ -3219,7 +3219,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testConditionalHiddenSectionIssue)
     }
 
     // PDF export
-    save(TestFilter::PDF_WRITER);
+    save(TestFilter::PDF);
 
     auto pPdfDocument = parsePDFExport(pPDFium);
     auto pPdfPage = pPdfDocument->openPage(0);

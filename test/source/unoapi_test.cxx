@@ -123,7 +123,7 @@ void UnoApiTest::validate(TestFilter eFilter)
         eFormat = ValidationFormat::MSBINARY;
     else if (eFilter == TestFilter::PPT)
         eFormat = ValidationFormat::MSBINARY;
-    else if (eFilter == TestFilter::PDF_WRITER)
+    else if (eFilter == TestFilter::PDF)
         eFormat = ValidationFormat::PDF;
     else
     {
@@ -344,7 +344,7 @@ void UnoApiTest::save(TestFilter eFilter, const uno::Sequence<beans::PropertyVal
 
     if (pPassword)
     {
-        if (eFilter == TestFilter::PDF_WRITER)
+        if (eFilter == TestFilter::PDF)
         {
             comphelper::SequenceAsHashMap aFilterData;
             if (aMediaDescriptor.contains(u"FilterData"_ustr))
@@ -375,7 +375,7 @@ void UnoApiTest::save(TestFilter eFilter, const uno::Sequence<beans::PropertyVal
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
-    if (eFilter == TestFilter::PDF_WRITER)
+    if (eFilter == TestFilter::PDF)
     {
         comphelper::SequenceAsHashMap aFilterData;
         if (aMediaDescriptor.contains(u"FilterData"_ustr))

@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_7)
     uno::Sequence<beans::PropertyValue> aFilterData
         = comphelper::InitPropertySequence({ { "SelectPdfVersion", uno::Any(sal_Int32(17)) } });
     maMediaDescriptor["FilterData"] <<= aFilterData;
-    save(TestFilter::PDF_WRITER, maMediaDescriptor.getAsConstPropertyValueList(),
+    save(TestFilter::PDF, maMediaDescriptor.getAsConstPropertyValueList(),
          /*pPassword*/ "secret");
 
     // Load the exported result in PDFium
@@ -110,8 +110,7 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptedTaggedUsesObjectStreams)
                                comphelper::makePropertyValue(u"EncryptFile"_ustr, true),
                                comphelper::makePropertyValue(u"DocumentOpenPassword"_ustr,
                                                              u"secret"_ustr) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = parsePDFExport(vcl::pdf::PDFiumLibrary::get(), "secret"_ostr);
@@ -173,7 +172,7 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0)
     uno::Sequence<beans::PropertyValue> aFilterData
         = comphelper::InitPropertySequence({ { "SelectPdfVersion", uno::Any(sal_Int32(20)) } });
     maMediaDescriptor["FilterData"] <<= aFilterData;
-    save(TestFilter::PDF_WRITER, maMediaDescriptor.getAsConstPropertyValueList(),
+    save(TestFilter::PDF, maMediaDescriptor.getAsConstPropertyValueList(),
          /*pPassword*/ "secret");
 
     // Load the exported result in PDFium
@@ -206,8 +205,7 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0_PaddingB
         { { "SelectPdfVersion", uno::Any(sal_Int32(20)) },
           { "EncryptFile", uno::Any(true) },
           { "DocumentOpenPassword", uno::Any(u"secret"_ustr) } });
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     // Load the exported result in PDFium and read the link target back
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument

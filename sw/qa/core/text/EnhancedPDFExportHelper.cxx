@@ -104,8 +104,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf171022)
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
                                comphelper::makePropertyValue(u"SelectPdfVersion"_ustr,
                                                              sal_Int32(20)) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -188,8 +187,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOutlineItemAtDocumentStart)
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
                                comphelper::makePropertyValue(u"SelectPdfVersion"_ustr,
                                                              sal_Int32(20)) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -235,7 +233,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFootnoteNoteType)
         return OString();
     };
 
-    save(TestFilter::PDF_WRITER,
+    save(TestFilter::PDF,
          { comphelper::makePropertyValue(
              u"FilterData"_ustr,
              uno::Sequence{
@@ -249,7 +247,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFootnoteNoteType)
     // sends it to the PDF 2.0 namespace
     CPPUNIT_ASSERT_EQUAL("FENote"_ostr, aFootnoteType(aPDF20));
 
-    save(TestFilter::PDF_WRITER,
+    save(TestFilter::PDF,
          { comphelper::makePropertyValue(
              u"FilterData"_ustr,
              uno::Sequence{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) }) });
@@ -269,8 +267,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTOCItemRef)
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true),
                                comphelper::makePropertyValue(u"SelectPdfVersion"_ustr,
                                                              sal_Int32(20)) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -312,8 +309,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFormulaAltFromSource)
     saveAndReload(TestFilter::ODT);
 
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     maTempFile.CloseStream();
@@ -342,8 +338,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFormulaPlacement)
     createSwDoc("formula-placement.fodt");
 
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -389,8 +384,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLayoutAttributeUnits)
     createSwDoc("layout-attribute-units.fodt");
 
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     maTempFile.CloseStream();
@@ -449,8 +443,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphLanguage)
     createSwDoc("paragraph-language.fodt");
 
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     // the value the entries below state where they state one, and what the rest inherit
     vcl::filter::PDFDocument aDocument;
@@ -547,8 +540,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkEndsInRuby)
     createSwDoc("link-ends-in-ruby.fodt");
 
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -568,8 +560,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkEndsInRubyVertical)
     createSwDoc("link-ends-in-ruby-vertical.fodt");
 
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -587,8 +578,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkEndsInRubyVerticalWrapped)
     createSwDoc("link-ends-in-ruby-vertical-wrapped.fodt");
 
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -612,8 +602,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkPartRubyOneLine)
     createSwDoc("link-part-ruby-one-line.fodt");
 
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -630,8 +619,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkStartsAfterRuby)
     createSwDoc("link-starts-after-ruby.fodt");
 
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -650,8 +638,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLinkStartsAtAbuttingRuby)
     createSwDoc("link-starts-at-abutting-ruby.fodt");
 
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     vcl::filter::PDFDocument aDocument;
     CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
@@ -669,8 +656,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRubyStructureOrder)
     createSwDoc("ruby-positions.fodt");
 
     uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+    save(TestFilter::PDF, { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
 
     auto pPdfDocument = parsePDFExport(vcl::pdf::PDFiumLibrary::get());
     auto pPdfPage = pPdfDocument->openPage(0);
