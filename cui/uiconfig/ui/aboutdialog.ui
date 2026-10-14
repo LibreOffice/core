@@ -300,7 +300,7 @@
                   <object class="GtkLabel" id="lbVersionString">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label">7.0</property>
+                    <property name="label">VERSION</property>
                     <property name="wrap">True</property>
                     <property name="max-width-chars">40</property>
                     <property name="xalign">0</property>
@@ -320,7 +320,7 @@
                   <object class="GtkLabel" id="lbEnvString">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label">8 cores</property>
+                    <property name="label">X cores</property>
                     <property name="wrap">True</property>
                     <property name="max-width-chars">40</property>
                     <property name="xalign">0</property>
@@ -338,7 +338,7 @@
                 </child>
                 <child>
                   <object class="GtkLinkButton" id="lbBuildString">
-                    <property name="label">0815</property>
+                    <property name="label">COMMIT_HASH</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
@@ -457,7 +457,7 @@
                   <object class="GtkLabel" id="lbUIString">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label">VCL: gtk</property>
+                    <property name="label">VCL: VCLPLUGIN</property>
                     <property name="wrap">True</property>
                     <property name="max-width-chars">40</property>
                     <property name="xalign">0</property>
