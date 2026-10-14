@@ -869,6 +869,7 @@ Document::Document(const std::shared_ptr<COKit>& loKit, const std::string& jailI
     , _hasPasswordToModify(false)
     , _haveDocPasswordToModify(false)
     , _keptViewId(-1)
+    , _nextFilePickId(0)
     , _stop(false)
     , _deltaGen(new DeltaGenerator())
     , _editorId(-1)
@@ -885,6 +886,12 @@ Document::Document(const std::shared_ptr<COKit>& loKit, const std::string& jailI
 #if !MOBILEAPP
     assert(singletonDocument == nullptr);
     singletonDocument = this;
+
+    // The browser is this document's file picker: a dialog that needs a file asks the browser
+    // of the view that is current, and the uploaded file comes back as a URL in the jail.
+    static COKitFilePickerProvider filePickerProvider{};
+    filePickerProvider.pick = pickFile;
+    _loKit->installFilePickerProvider(&filePickerProvider);
 #endif
     // Open file for UI Logging
     if (Log::isLogUIEnabled())
@@ -1515,6 +1522,7 @@ void Document::onUnload(const ChildSession& session)
     }
 
     const int viewId = session.getViewId();
+    cancelFilePicks(viewId);
 
     // Unload the view.
     _loKitDocument->setView(viewId);
@@ -2069,6 +2077,76 @@ std::shared_ptr<ChildSession> Document::findSessionByViewId(int viewId)
     }
 
     return nullptr;
+}
+
+#if !MOBILEAPP
+void Document::pickFile(const char* title, const COKitFilePickerFilter* filters, size_t count,
+                        void (*picked)(void* context, const char* url), void* context)
+{
+    Document* document = singletonDocument;
+    std::shared_ptr<ChildSession> session;
+    if (document && document->_loKitDocument)
+        session = document->findSessionByViewId(document->_loKitDocument->getView());
+
+    if (!session)
+    {
+        LOG_WRN("No session for the current view to ask for a file; the pick is cancelled");
+        picked(context, nullptr);
+        return;
+    }
+
+    const unsigned id = document->_nextFilePickId++;
+    document->_pendingFilePicks[id] = PendingFilePick{ picked, context, session->getViewId() };
+
+    // Each filter is the wildcards of one file type, "*.png;*.jpg", as the engine gave them.
+    std::ostringstream oss;
+    oss << "filepicker: {\"id\":" << id << ",\"title\":\""
+        << JsonUtil::escapeJSONValue(title ? title : "") << "\",\"filters\":[";
+    for (size_t i = 0; i < count; ++i)
+    {
+        if (i > 0)
+            oss << ',';
+        oss << '"' << JsonUtil::escapeJSONValue(filters[i].pWildcards ? filters[i].pWildcards : "")
+            << '"';
+    }
+    oss << "]}";
+
+    LOG_DBG("Asking view [" << session->getViewId() << "] for a file, pick id [" << id << ']');
+    session->sendTextFrame(oss.str());
+}
+#endif // !MOBILEAPP
+
+void Document::completeFilePick(unsigned id, const std::string& url)
+{
+    const auto it = _pendingFilePicks.find(id);
+    if (it == _pendingFilePicks.end())
+    {
+        LOG_WRN("No open file pick with id [" << id << "]; ignoring the answer");
+        return;
+    }
+
+    const PendingFilePick pick = it->second;
+    _pendingFilePicks.erase(it);
+    LOG_DBG("File pick [" << id << "] answered with " << (url.empty() ? "no file" : "a file"));
+    pick.picked(pick.context, url.empty() ? nullptr : url.c_str());
+}
+
+void Document::cancelFilePicks(int viewId)
+{
+    for (auto it = _pendingFilePicks.begin(); it != _pendingFilePicks.end();)
+    {
+        if (it->second.viewId != viewId)
+        {
+            ++it;
+            continue;
+        }
+
+        const PendingFilePick pick = it->second;
+        LOG_DBG("View [" << viewId << "] left with file pick [" << it->first
+                         << "] open; cancelling it");
+        it = _pendingFilePicks.erase(it);
+        pick.picked(pick.context, nullptr);
+    }
 }
 
 void Document::invalidateCanonicalId(const std::string& sessionId)
@@ -3254,6 +3332,7 @@ void Document::dumpState(std::ostream& oss)
         << "\n\teditorChangeWarning: " << _editorChangeWarning
         << "\n\tmobileAppDocId: " << _mobileAppDocId
         << "\n\tkeptViewId: " << _keptViewId
+        << "\n\tpendingFilePicks: " << _pendingFilePicks.size()
         << "\n\tinputProcessingEnabled: " << processInputEnabled()
         << "\n\tduringLoad: " << _duringLoad << "\n\tmodified: " << name(_modified)
         << "\n\tbgSaveProc: " << _isBgSaveProcess << "\n\tbgSaveDisabled: " << _isBgSaveDisabled;

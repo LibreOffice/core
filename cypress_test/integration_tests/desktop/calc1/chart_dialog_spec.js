@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach require expect */
 
 var calcHelper = require('../../common/calc_helper');
 var desktopHelper = require('../../common/desktop_helper')
@@ -69,31 +69,42 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart dialog tests', funct
 			.should('be.greaterThan', 380).and('be.lessThan', 450);
 	});
 
-	it('Data series icon menu button opens from its whole box', function() {
+	// Opens the Format Data Series dialog on the chart's first data series and
+	// switches it to the Line tab.
+	function openDataSeriesLineTab(win) {
 		// Select the chart and enter chart edit mode.
 		calcHelper.clickAtOffset(10, 10);
 		helper.typeIntoDocument('{enter}');
-		helper.processToIdle(this.win);
+		helper.processToIdle(win);
 
 		// Walk the chart object hierarchy with the keyboard: Tab selects the
 		// first top-level object, the diagram, and Enter goes one level down
 		// to its first child, the data series.
 		helper.assertFocus('className', 'clipboard');
 		cy.realPress('Tab');
-		helper.processToIdle(this.win);
+		helper.processToIdle(win);
 		cy.realPress('Enter');
-		helper.processToIdle(this.win);
+		helper.processToIdle(win);
 
-		cy.getFrameWindow().then(function(win) {
-			win.app.map.sendUnoCommand('.uno:FormatDataSeries');
+		openDataSeriesDialogLineTab(win);
+	}
+
+	// Opens the Format Data Series dialog for the selected series on its Line tab.
+	function openDataSeriesDialogLineTab(win) {
+		cy.getFrameWindow().then(function(frameWindow) {
+			frameWindow.app.map.sendUnoCommand('.uno:FormatDataSeries');
 		});
 		cy.cGet('#AttributeDialog').should('be.visible');
-		helper.processToIdle(this.win);
+		helper.processToIdle(win);
 
 		// The Line tab is the tab page named border.
 		cy.cGet('#AttributeDialog #tabcontrol button#border').click();
 		cy.cGet('#AttributeDialog #tabcontrol button#border').should('have.attr', 'aria-selected', 'true');
-		helper.processToIdle(this.win);
+		helper.processToIdle(win);
+	}
+
+	it('Data series icon menu button opens from its whole box', function() {
+		openDataSeriesLineTab(this.win);
 
 		// The menu button under Icon shows the hand cursor over its whole box.
 		cy.cGet('#MB_SYMBOL_BITMAP').should('be.visible').and('not.have.attr', 'disabled');
@@ -105,6 +116,57 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Chart dialog tests', funct
 		cy.cGet('#MB_SYMBOL_BITMAP-dropdown').should('be.visible');
 		cy.cGet('body').type('{esc}');
 		cy.cGet('#MB_SYMBOL_BITMAP-dropdown').should('not.exist');
+
+		cy.cGet('#AttributeDialog #cancel-button').click();
+		cy.cGet('.lokdialog_container').should('not.exist');
+	});
+
+	it('Data series icon comes from a picked image file', function() {
+		openDataSeriesLineTab(this.win);
+
+		// No native file dialog can open under cypress, and the headless browser
+		// answers a programmatic click on the file input with a cancel event at
+		// once. attachFile below stands in for the dialog, so the click does nothing.
+		cy.getFrameWindow().then(function(win) {
+			win.document.getElementById('filepicker').click = function() {};
+		});
+
+		cy.cGet('#MB_SYMBOL_BITMAP').should('be.visible').and('not.have.attr', 'disabled');
+		cy.cGet('#MB_SYMBOL_BITMAP').click();
+		cy.cGet('#MB_SYMBOL_BITMAP-dropdown').should('be.visible');
+		// contains on the dropdown is the frame-aware form of cy.contains(selector, text).
+		cy.cGet('#MB_SYMBOL_BITMAP-dropdown').contains('.ui-combobox-entry', 'From file').click();
+		cy.cGet('#MB_SYMBOL_BITMAP-dropdown').should('not.exist');
+
+		// The engine asks the browser for an image; the hidden file input is
+		// restricted to image types once that request has arrived.
+		cy.cGet('#filepicker[type=file]').should('have.attr', 'accept').and('include', '.png');
+		cy.cGet('#filepicker[type=file]').attachFile('/desktop/writer/image_to_insert.png');
+		helper.processToIdle(this.win);
+
+		// The picked image is 512 by 130 pixels, so the symbol size fields take
+		// its shape. The unit depends on the locale, so compare the two numbers.
+		// Both fields are read in one retried assertion, because the dialog
+		// updates them together once the engine has loaded the image.
+		var pickedWidth = 0;
+		cy.cGet('#AttributeDialog').should(function($dialog) {
+			var width = parseFloat($dialog.find('#MF_SYMBOL_WIDTH-input').val());
+			var height = parseFloat($dialog.find('#MF_SYMBOL_HEIGHT-input').val());
+			expect(height).to.be.greaterThan(0);
+			expect(width / height).to.be.closeTo(512 / 130, 0.1);
+			pickedWidth = width;
+		});
+
+		cy.cGet('#AttributeDialog #ok-button').click();
+		cy.cGet('.lokdialog_container').should('not.exist');
+		helper.processToIdle(this.win);
+
+		// The series keeps the picked symbol: the dialog opens again with the
+		// same symbol size.
+		openDataSeriesDialogLineTab(this.win);
+		cy.cGet('#MF_SYMBOL_WIDTH-input').should(function($width) {
+			expect(parseFloat($width.val())).to.equal(pickedWidth);
+		});
 
 		cy.cGet('#AttributeDialog #cancel-button').click();
 		cy.cGet('.lokdialog_container').should('not.exist');

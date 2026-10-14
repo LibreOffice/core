@@ -397,6 +397,9 @@ public:
 
     std::shared_ptr<ChildSession> findSessionByViewId(int viewId);
 
+    /// Answers the file pick with the given request id. An empty url means the user cancelled.
+    void completeFilePick(unsigned id, const std::string& url);
+
     void invalidateCanonicalId(const std::string& sessionId);
 
     /// Tells the session its canonical view id and view render state.
@@ -525,6 +528,16 @@ public:
 private:
     void postForceModifiedCommand(bool modified);
 
+#if !MOBILEAPP
+    /// The file picker the engine calls: asks the browser of the view that is current for a
+    /// file. The browser's answer comes back as a filepickerresult message.
+    static void pickFile(const char* title, const COKitFilePickerFilter* filters, size_t count,
+                         void (*picked)(void* context, const char* url), void* context);
+#endif
+
+    /// Answers every open file pick of the given view as cancelled.
+    void cancelFilePicks(int viewId);
+
     /// Stops theads, flushes buffers, and exits the process.
     void flushAndExit(int code);
 
@@ -577,6 +590,20 @@ private:
     /// The view kept alive after the session that owned it left, so the document keeps at
     /// least one view. -1 when there is no such view, which is the usual state.
     int _keptViewId;
+
+    /// One file pick the engine asked for and the browser has not answered yet: the completion
+    /// to call with the picked URL, and the view whose browser was asked.
+    struct PendingFilePick
+    {
+        void (*picked)(void* context, const char* url);
+        void* context;
+        int viewId;
+    };
+
+    /// Open file picks by request id. The engine asks and the browser's answer arrives on the
+    /// one thread that drives the document, so the map needs no lock.
+    std::map<unsigned, PendingFilePick> _pendingFilePicks;
+    unsigned _nextFilePickId;
 
     std::atomic<bool> _stop;
 

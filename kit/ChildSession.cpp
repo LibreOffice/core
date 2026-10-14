@@ -714,6 +714,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "setviewreadonly") ||
                tokens.equals(0, "rendersearchresult") ||
                tokens.equals(0, "contentcontrolevent") ||
+               tokens.equals(0, "filepickerresult") ||
                tokens.equals(0, "a11ystate") ||
                tokens.equals(0, "firsttilesent") ||
                tokens.equals(0, "geta11yfocusedparagraph") ||
@@ -1031,6 +1032,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "contentcontrolevent"))
         {
             return contentControlEvent(tokens);
+        }
+        else if (tokens.equals(0, "filepickerresult"))
+        {
+            return filePickerResult(tokens);
         }
         else if (tokens.equals(0, "traceeventrecording"))
         {
@@ -3867,6 +3872,30 @@ bool ChildSession::contentControlEvent(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->sendContentControlEvent(arguments.c_str());
 
+    return true;
+}
+
+bool ChildSession::filePickerResult(const StringVector& tokens)
+{
+    // filepickerresult id=<n> [name=<name>]: the file the browser uploaded for the pick with
+    // request id <n>, or no name when the user cancelled.
+    int id = 0;
+    std::string name;
+    const bool wellFormed = (tokens.size() == 2 || tokens.size() == 3) &&
+                            getTokenInteger(tokens[1], "id", id) && id >= 0 &&
+                            (tokens.size() == 2 || getTokenString(tokens[2], "name", name));
+    if (!wellFormed || name.find('/') != std::string::npos)
+    {
+        sendTextFrameAndLogError("error: cmd=filepickerresult kind=syntax");
+        return false;
+    }
+
+    std::string url;
+    if (!name.empty())
+        url = "file://" + getJailDocRoot() + "insertfile/" + name;
+
+    getLOKitDocument()->setView(_viewId);
+    _docManager->completeFilePick(static_cast<unsigned>(id), url);
     return true;
 }
 

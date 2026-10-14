@@ -19,6 +19,11 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 		this._toInsertURL = {};
 		this._toInsertBackground = {};
 		this._toCompareDocuments = {};
+		this._toFilePicker = {};
+		// The id of the engine's file request the next picked file answers, or null.
+		this._filePickerRequestId = null;
+		this._onFilePickerChange = this._onFilePickerChange.bind(this);
+		this._onFilePickerCancel = this._onFilePickerCancel.bind(this);
 		var parser = document.createElement('a');
 		parser.href = window.host;
 	},
@@ -34,6 +39,12 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 		this._map.on('childid', this._onChildIdMsg, this);
 		this._map.on('selectbackground', this._onSelectBackground, this);
 		this._map.on('comparedocuments', this._onCompareDocuments, this);
+		this._map.on('filepicker', this._onFilePickerRequest, this);
+		const input = document.getElementById('filepicker');
+		if (input) {
+			input.addEventListener('change', this._onFilePickerChange);
+			input.addEventListener('cancel', this._onFilePickerCancel);
+		}
 	},
 
 	removeHooks: function () {
@@ -43,6 +54,71 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 		this._map.off('childid', this._onChildIdMsg, this);
 		this._map.off('selectbackground', this._onSelectBackground, this);
 		this._map.off('comparedocuments', this._onCompareDocuments, this);
+		this._map.off('filepicker', this._onFilePickerRequest, this);
+		const input = document.getElementById('filepicker');
+		if (input) {
+			input.removeEventListener('change', this._onFilePickerChange);
+			input.removeEventListener('cancel', this._onFilePickerCancel);
+		}
+	},
+
+	// The engine needs a file, for example an image for a dialog. The picked
+	// file goes up through the insertfile POST like an inserted image, and the
+	// engine gets its name in a filepickerresult message with the request id.
+	_onFilePickerRequest: function (e) {
+		const input = document.getElementById('filepicker');
+		if (!input) {
+			this._answerFilePicker(e.id, null);
+			return;
+		}
+
+		// One file type filter is "*.png;*.jpg"; the input takes ".png,.jpg".
+		const extensions = [];
+		for (const filter of e.filters || []) {
+			for (const wildcard of filter.split(';')) {
+				const trimmed = wildcard.trim();
+				if (trimmed.startsWith('*.') && trimmed.length > 2 && trimmed !== '*.*')
+					extensions.push(trimmed.substring(1));
+			}
+		}
+		input.accept = extensions.join(',');
+
+		this._filePickerRequestId = e.id;
+		input.click();
+	},
+
+	_onFilePickerChange: function () {
+		const input = document.getElementById('filepicker');
+		const file = input.files && input.files.length > 0 ? input.files[0] : null;
+		// Clear the value so picking the same file again fires change again.
+		input.value = null;
+
+		if (!file) {
+			this._onFilePickerCancel();
+			return;
+		}
+
+		if (!this._childId) {
+			app.socket.sendMessage('getchildid');
+			this._toFilePicker[Date.now()] = file;
+		}
+		else {
+			this._sendFile(Date.now(), file, 'filepicker');
+		}
+	},
+
+	_onFilePickerCancel: function () {
+		this._answerFilePicker(this._filePickerRequestId, null);
+	},
+
+	// Tells the engine which uploaded file answers its request, or that the
+	// request ends with no file when name is null.
+	_answerFilePicker: function (requestId, name) {
+		if (requestId === null || requestId === undefined)
+			return;
+		if (requestId === this._filePickerRequestId)
+			this._filePickerRequestId = null;
+		app.socket.sendMessage('filepickerresult id=' + requestId + (name ? ' name=' + name : ''));
 	},
 
 	_onInsertGraphic: function (e) {
@@ -132,6 +208,11 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 			this._sendFile(name, this._toCompareDocuments[name], 'comparedocuments');
 		}
 		this._toCompareDocuments = {};
+
+		for (name in this._toFilePicker) {
+			this._sendFile(name, this._toFilePicker[name], 'filepicker');
+		}
+		this._toFilePicker = {};
 	},
 
 	_sendFile: async function (name, file, type) {
@@ -139,6 +220,10 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 		var map = this._map;
 		var sectionContainer = app.sectionContainer;
 		var url = this.getWopiUrl(map);
+		const fileInserter = this;
+		// The request this upload answers; the engine hears about a failed
+		// upload too, so its request does not stay open.
+		const filePickerRequestId = type === 'filepicker' ? this._filePickerRequestId : null;
 
 		var size;
 
@@ -205,6 +290,7 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 					: _('The file of type: {0} cannot be uploaded to server since the file is empty');
 			errMsg = errMsg.replace('{0}', file.type);
 			map.fire('error', {msg: errMsg, critical: false});
+			this._answerFilePicker(filePickerRequestId, null);
 			return;
 		}
 
@@ -250,6 +336,8 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 						}
 						if (section && section.sectionProperties.picturePicker && type === 'graphic') {
 							socket.sendMessage('contentcontrolevent type=picture' + ' name=' + name);
+						} else if (type === 'filepicker') {
+							fileInserter._answerFilePicker(filePickerRequestId, name);
 						} else if (type === 'multimedia') {
 							socket.sendMessage('insertfile name=' + name + ' type=' + type + ' width=' + size.width + ' height=' + size.height);
 						} else {
@@ -267,6 +355,8 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 						msg = msg.replace('{0}', xmlHttp.status);
 						map.fire('error', {msg: msg, critical: false});
 					}
+					if (xmlHttp.status !== 200)
+						fileInserter._answerFilePicker(filePickerRequestId, null);
 				}
 			};
 			xmlHttp.open('POST', url, true);
@@ -291,6 +381,7 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 				} catch (e) {
 					map.hideBusy();
 					map.fire('error', {msg: _('Failed to read the selected file.'), critical: false});
+					this._answerFilePicker(filePickerRequestId, null);
 					return;
 				}
 			}

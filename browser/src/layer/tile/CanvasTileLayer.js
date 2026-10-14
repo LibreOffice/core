@@ -665,6 +665,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		else if (textMsg.startsWith('getchildid:')) {
 			this._onGetChildIdMsg(textMsg);
 		}
+		else if (textMsg.startsWith('filepicker:')) {
+			this._map.fire('filepicker', JSON.parse(textMsg.substring('filepicker:'.length + 1)));
+		}
 		else if (textMsg.startsWith('shapeselectioncontent:')) {
 			GraphicSelection.onShapeSelectionContent(textMsg);
 		}

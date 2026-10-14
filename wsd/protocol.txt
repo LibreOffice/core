@@ -218,6 +218,13 @@ selectbackground name=<name>
 
     Inserts a graphic file with the name <name> into the document as background.
 
+filepickerresult id=<n> [name=<name>]
+
+    Answers the 'filepicker:' request with id <n>. <name> is the name of a
+    file previously uploaded using the insertfile POST, and the engine gets
+    it as a file URL inside the jail. Without a name, the user cancelled and
+    the request ends with no file.
+
 slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>]
                    [at=<S>] [keepdesign=<0|1>] [link=<0|1>] [time=<source time>]
                    [sourcepositions=<p0,p1,...>]
@@ -990,6 +997,18 @@ contentcontrolevent <JSON>
 
 server -> client
 ================
+
+filepicker: <JSON>
+
+    The engine needs the user to pick a file, for example an image for a
+    dialog. The client shows its file picker, uploads the chosen file using
+    the insertfile POST and answers with 'filepickerresult'.
+    *Properties:
+    id - the request id to send back in 'filepickerresult'
+    title - the purpose of the pick, translated
+    filters - an array of strings. Each is the wildcards of one file type,
+              separated by semicolons ("*.png;*.jpg"). An empty array means
+              any file.
 
 coolserver <coolwsd version> <coolwsd git hash> <major.minor[-patch]>
 
