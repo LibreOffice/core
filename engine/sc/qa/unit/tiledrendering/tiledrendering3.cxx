@@ -2359,6 +2359,92 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testClickInFirstColumnWidenedByOtherV
     CPPUNIT_ASSERT_EQUAL(SCROW(0), pViewData2->GetCurY());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColumnsKeepPositionAfterDeleteWithFilteredRows)
+{
+    // Deleting a column on a sheet with filtered rows
+    // Browser have to be told that the column geometry changed, on the delete, its undo and its redo.
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScViewData* pViewData1 = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData1);
+    ScDocument& rDoc = pViewData1->GetDocument();
+    const int nView1 = KitHelper::getCurrentView();
+
+    // A wide column A moves every column to its right by a visible amount once it is gone.
+    const sal_uInt16 nWideTwips = 4000;
+    rDoc.SetColWidth(0, 0, nWideTwips);
+    const sal_uInt16 nDefaultTwips = rDoc.GetColWidth(1, 0);
+    CPPUNIT_ASSERT(nDefaultTwips < nWideTwips);
+    // A filtered row inside the selection is what sends a whole-column delete down the
+    // multi-selection path.
+    rDoc.SetRowFiltered(3, 3, 0, true);
+    rDoc.SetRowHidden(3, 3, 0, true);
+
+    KitHelper::createView();
+    const int nView2 = KitHelper::getCurrentView();
+    ScTestViewCallback aView2;
+    ScViewData* pViewData2 = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData2);
+    const tools::Rectangle aVisArea(0, 0, 20000, 5000);
+    pModelObj->setClientVisibleArea(aVisArea);
+    // The header request is how a client viewport makes the view record column position
+    // anchors for this area.
+    {
+        tools::JsonWriter aJsonWriter;
+        pModelObj->getRowColumnHeaders(aVisArea, aJsonWriter);
+        aJsonWriter.finishAndGetAsOString();
+    }
+    Scheduler::ProcessEventsToIdle();
+
+    // The view records a column position anchor at the last visible column; a probe just past
+    // it resolves from that anchor, so a stale anchor shows up as a shifted position.
+    const double fPPTX = pViewData2->GetPPTX();
+    const SCCOL nProbeCol = 14;
+    auto expectedColumnPosition = [&rDoc, fPPTX]() {
+        tools::Long nPixels = 0;
+        for (SCCOL nCol = 0; nCol < nProbeCol; ++nCol)
+            nPixels += ScViewData::ToPixel(rDoc.GetColWidth(nCol, 0), fPPTX);
+        return nPixels;
+    };
+    auto viewColumnPosition = [pViewData2]() {
+        return pViewData2->GetScrPos(nProbeCol, 0, pViewData2->GetActivePart()).X();
+    };
+    CPPUNIT_ASSERT_EQUAL(expectedColumnPosition(), viewColumnPosition());
+
+    // The first view deletes column A.
+    KitHelper::setView(nView1);
+    pViewData1->GetViewShell()->MarkColumns(0, 0);
+    ScRange aMarked;
+    CPPUNIT_ASSERT_EQUAL(SC_MARK_SIMPLE_FILTERED, pViewData1->GetSimpleArea(aMarked));
+    aView2.m_sInvalidateSheetGeometry = ""_ostr;
+    dispatchCommand(mxComponent, u".uno:DeleteColumns"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(nDefaultTwips, rDoc.GetColWidth(0, 0));
+
+    // The other view places the probe column where the document widths put it, and its
+    // client is told to re-read the column geometry.
+    CPPUNIT_ASSERT_EQUAL(expectedColumnPosition(), viewColumnPosition());
+    CPPUNIT_ASSERT_EQUAL("columns"_ostr, aView2.m_sInvalidateSheetGeometry);
+
+    aView2.m_sInvalidateSheetGeometry = ""_ostr;
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(nWideTwips, rDoc.GetColWidth(0, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedColumnPosition(), viewColumnPosition());
+    CPPUNIT_ASSERT_EQUAL("columns"_ostr, aView2.m_sInvalidateSheetGeometry);
+
+    aView2.m_sInvalidateSheetGeometry = ""_ostr;
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(nDefaultTwips, rDoc.GetColWidth(0, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedColumnPosition(), viewColumnPosition());
+    CPPUNIT_ASSERT_EQUAL("columns"_ostr, aView2.m_sInvalidateSheetGeometry);
+
+    KitHelper::setView(nView2);
+    Scheduler::ProcessEventsToIdle();
+}
+
 // if we extend the tiled area to the right and bottom we want two resulting area
 // that don't overlap. If they overlap that typically creates an unnecessary full
 // screen invalidation.

@@ -2154,11 +2154,13 @@ void ScViewFunc::DeleteMulti( bool bRows )
         {
             rDoc.DeleteObjectsInArea(0, nStart, rDoc.MaxCol(), nEnd, aFuncMark, true);
             rDoc.DeleteRow(0, nTab, rDoc.MaxCol(), nTab, nStart, static_cast<SCSIZE>(nEnd - nStart + 1));
+            OnKitInsertDeleteRow(nStart, -1 * (nEnd - nStart + 1));
         }
         else
         {
             rDoc.DeleteObjectsInArea(nStart, 0, nEnd, rDoc.MaxRow(), aFuncMark, true);
             rDoc.DeleteCol(0, nTab, rDoc.MaxRow(), nTab, static_cast<SCCOL>(nStart), static_cast<SCSIZE>(nEnd - nStart + 1));
+            OnKitInsertDeleteColumn(static_cast<SCCOL>(nStart), -1 * (nEnd - nStart + 1));
         }
     }
 
@@ -2209,6 +2211,17 @@ void ScViewFunc::DeleteMulti( bool bRows )
     else
         nCurX = static_cast<SCCOL>(aSpans[0].mnStart);
     SetCursor( nCurX, nCurY );
+
+    if (comphelper::COKit::isActive())
+    {
+        ScTabViewShell* pViewShell = GetViewData().GetViewShell();
+        const SCTAB nViewTab = GetViewData().GetTabNumber();
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, bRows ? ROW_HEADER : COLUMN_HEADER, nViewTab);
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(pViewShell, !bRows /* bColumns */, bRows,
+                                                            true /* bSizes */, true /* bHidden */,
+                                                            true /* bFiltered */, true /* bGroups */,
+                                                            nViewTab);
+    }
 
     SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScAreaLinksChanged ) );
 }

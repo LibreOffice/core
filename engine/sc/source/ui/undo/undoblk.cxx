@@ -748,6 +748,15 @@ void ScUndoDeleteMulti::DoChange() const
         pViewShell->CellContentChanged();
 
     ShowTable( nTab );
+
+    if (pViewShell && comphelper::COKit::isActive())
+    {
+        ScTabViewShell::notifyAllViewsHeaderInvalidation(pViewShell, mbRows ? ROW_HEADER : COLUMN_HEADER, nTab);
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(pViewShell, !mbRows /* bColumns */, mbRows,
+                                                            true /* bSizes */, true /* bHidden */,
+                                                            true /* bFiltered */, true /* bGroups */,
+                                                            nTab);
+    }
 }
 
 void ScUndoDeleteMulti::SetChangeTrack()
@@ -794,15 +803,25 @@ void ScUndoDeleteMulti::Undo()
 
     ScDocument& rDoc = rDocShell.GetDocument();
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+
     // reverse delete -> forward insert
     for (const auto& rSpan : maSpans)
     {
         SCCOLROW nStart = rSpan.mnStart;
         SCCOLROW nEnd = rSpan.mnEnd;
         if (mbRows)
+        {
             rDoc.InsertRow( 0,nTab, rDoc.MaxCol(),nTab, nStart,static_cast<SCSIZE>(nEnd-nStart+1) );
+            if (pViewShell)
+                pViewShell->OnKitInsertDeleteRow(nStart, nEnd - nStart + 1);
+        }
         else
+        {
             rDoc.InsertCol( 0,nTab, rDoc.MaxRow(),nTab, static_cast<SCCOL>(nStart), static_cast<SCSIZE>(nEnd-nStart+1) );
+            if (pViewShell)
+                pViewShell->OnKitInsertDeleteColumn(static_cast<SCCOL>(nStart), nEnd - nStart + 1);
+        }
     }
 
     for (const auto& rSpan : maSpans)
@@ -836,6 +855,8 @@ void ScUndoDeleteMulti::Redo()
 
     ScDocument& rDoc = rDocShell.GetDocument();
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+
     // reverse delete
     std::vector<sc::ColRowSpan>::const_reverse_iterator ri = maSpans.rbegin(), riEnd = maSpans.rend();
     for (; ri != riEnd; ++ri)
@@ -843,9 +864,17 @@ void ScUndoDeleteMulti::Redo()
         SCCOLROW nEnd = ri->mnEnd;
         SCCOLROW nStart = ri->mnStart;
         if (mbRows)
+        {
             rDoc.DeleteRow( 0,nTab, rDoc.MaxCol(),nTab, nStart,static_cast<SCSIZE>(nEnd-nStart+1) );
+            if (pViewShell)
+                pViewShell->OnKitInsertDeleteRow(nStart, -1 * (nEnd - nStart + 1));
+        }
         else
+        {
             rDoc.DeleteCol( 0,nTab, rDoc.MaxRow(),nTab, static_cast<SCCOL>(nStart), static_cast<SCSIZE>(nEnd-nStart+1) );
+            if (pViewShell)
+                pViewShell->OnKitInsertDeleteColumn(static_cast<SCCOL>(nStart), -1 * (nEnd - nStart + 1));
+        }
     }
 
     SetChangeTrack();
