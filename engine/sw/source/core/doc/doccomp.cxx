@@ -40,6 +40,7 @@
 #include <tox.hxx>
 #include <docsh.hxx>
 #include <fmtcntnt.hxx>
+#include <fmthdft.hxx>
 #include <modcfg.hxx>
 #include <frameformats.hxx>
 #include <swtable.hxx>
@@ -56,6 +57,7 @@
 #include <officecfg/Office/Writer.hxx>
 #include <swcrsr.hxx>
 #include <editeng/prntitem.hxx>
+#include <pagedesc.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -2814,9 +2816,37 @@ typedef std::vector<CompareDataPtrPair> Comparators;
 
 namespace
 {
+    const SwNodeIndex* getContentIndex(const SwFormatHeader& rHeader)
+    {
+        const SwFrameFormat* pFormat = rHeader.GetHeaderFormat();
+        if (!rHeader.IsActive() || !pFormat)
+            return nullptr;
+        return pFormat->GetContent().GetContentIdx();
+    }
+
+    const SwNodeIndex* getContentIndex(const SwFormatFooter& rFooter)
+    {
+        const SwFrameFormat* pFormat = rFooter.GetFooterFormat();
+        if (!rFooter.IsActive() || !pFormat)
+            return nullptr;
+        return pFormat->GetContent().GetContentIdx();
+    }
+
     Comparators buildComparators(SwDoc &rSrcDoc, SwDoc &rDestDoc)
     {
         Comparators aComparisons;
+        auto addTextComparator = [&](const SwNodeIndex& rSrcIndex, const SwNodeIndex& rDestIndex)
+        {
+            if (rSrcIndex.GetNodes()[rSrcIndex.GetIndex() + 1]->IsNoTextNode()
+                || rDestIndex.GetNodes()[rDestIndex.GetIndex() + 1]->IsNoTextNode())
+            {
+                return; // tdf#125660 don't redline GrfNode/OLENode
+            }
+            aComparisons.emplace_back(
+                std::make_shared<CompareSectionText>(rSrcDoc, rSrcIndex.GetNode()),
+                std::make_shared<CompareSectionText>(rDestDoc, rDestIndex.GetNode()));
+        };
+
         //compare main text
         aComparisons.emplace_back(std::make_shared<CompareMainText>(rSrcDoc, true),
                                   std::make_shared<CompareMainText>(rDestDoc, true));
@@ -2842,14 +2872,42 @@ namespace
                     continue;
                 if (!pSrcNode || !pDestNode)
                     break;
-                if (pSrcIdx->GetNodes()[pSrcIdx->GetIndex() + 1]->IsNoTextNode()
-                    || pDestIdx->GetNodes()[pDestIdx->GetIndex() + 1]->IsNoTextNode())
-                {
-                    continue; // tdf#125660 don't redline GrfNode/OLENode
-                }
-                aComparisons.emplace_back(
-                    std::make_shared<CompareSectionText>(rSrcDoc, pSrcIdx->GetNode()),
-                    std::make_shared<CompareSectionText>(rDestDoc, pDestIdx->GetNode()));
+                addTextComparator(*pSrcIdx, *pDestIdx);
+            }
+        }
+
+        // Pair headers and footers of the page styles in use by page style name. Shared content is
+        // compared only once.
+        o3tl::sorted_vector<const SwNode*> aComparedDestNodes;
+        auto addHeaderFooterComparator
+            = [&](const SwNodeIndex* pSrcIndex, const SwNodeIndex* pDestIndex)
+        {
+            if (!pSrcIndex || !pDestIndex)
+                return;
+            if (!aComparedDestNodes.insert(&pDestIndex->GetNode()).second)
+                return;
+            addTextComparator(*pSrcIndex, *pDestIndex);
+        };
+        for (size_t i = 0; i < rDestDoc.GetPageDescCnt(); ++i)
+        {
+            const SwPageDesc& rDestDesc = rDestDoc.GetPageDesc(i);
+            if (!rDestDesc.IsUsed())
+                continue;
+            const SwPageDesc* pSrcDesc = rSrcDoc.FindPageDesc(rDestDesc.GetName());
+            if (!pSrcDesc)
+                continue;
+            const std::pair<const SwFrameFormat*, const SwFrameFormat*> aFormats[] = {
+                { &pSrcDesc->GetMaster(), &rDestDesc.GetMaster() },
+                { &pSrcDesc->GetLeft(), &rDestDesc.GetLeft() },
+                { &pSrcDesc->GetFirstMaster(), &rDestDesc.GetFirstMaster() },
+                { &pSrcDesc->GetFirstLeft(), &rDestDesc.GetFirstLeft() },
+            };
+            for (const auto& [pSrcFormat, pDestFormat] : aFormats)
+            {
+                addHeaderFooterComparator(getContentIndex(pSrcFormat->GetHeader()),
+                                          getContentIndex(pDestFormat->GetHeader()));
+                addHeaderFooterComparator(getContentIndex(pSrcFormat->GetFooter()),
+                                          getContentIndex(pDestFormat->GetFooter()));
             }
         }
         return aComparisons;

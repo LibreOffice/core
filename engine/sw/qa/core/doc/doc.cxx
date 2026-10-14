@@ -77,6 +77,9 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/memberids.h>
 #include <editeng/colritem.hxx>
+#include <fmtcntnt.hxx>
+#include <fmthdft.hxx>
+#include <pagedesc.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -2798,6 +2801,43 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testMakeRedlineOverOwnInsertion)
     const SwRedlineTable& rRedlines
         = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rRedlines.size());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsHeaderFooter)
+{
+    // Given a document with a header and a footer whose text differs from an older version, and
+    // an unused page style whose header text differs too:
+    createSwDoc("compare-header-new.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    // When comparing it with the older version:
+    compareWith(u"compare-header-old.fodt");
+
+    // Then make sure the header and the footer both have tracked changes, but the header of the
+    // unused page style has none:
+    const SwPageDesc* pUnusedDesc = pDoc->FindPageDesc(UIName(u"Unused"_ustr));
+    CPPUNIT_ASSERT(pUnusedDesc);
+    const SwFrameFormat* pUnusedHeaderFormat
+        = pUnusedDesc->GetMaster().GetHeader().GetHeaderFormat();
+    const SwNode* pUnusedHeader = &pUnusedHeaderFormat->GetContent().GetContentIdx()->GetNode();
+    const SwRedlineTable& rRedlines = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    bool bHeaderRedline = false;
+    bool bFooterRedline = false;
+    bool bUnusedHeaderRedline = false;
+    for (const SwRangeRedline* pRedline : rRedlines)
+    {
+        const SwNode& rNode = pRedline->Start()->GetNode();
+        const SwStartNode* pHeaderStart = rNode.FindHeaderStartNode();
+        bUnusedHeaderRedline |= pHeaderStart == pUnusedHeader;
+        bHeaderRedline |= pHeaderStart && pHeaderStart != pUnusedHeader;
+        bFooterRedline |= rNode.FindFooterStartNode() != nullptr;
+    }
+    // Without the fix in place, this test would have failed with:
+    // - Expression: bHeaderRedline
+    // i.e. only the body text was compared, so the header and the footer had no tracked changes.
+    CPPUNIT_ASSERT(bHeaderRedline);
+    CPPUNIT_ASSERT(bFooterRedline);
+    CPPUNIT_ASSERT(!bUnusedHeaderRedline);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
