@@ -1342,6 +1342,9 @@ void AnnotationManager::GetAnnotationState(SfxItemSet& rItemSet)
 
 void AnnotationManager::SelectAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, bool bEdit)
 {
+    if (!xAnnotation)
+        return;
+
     mxImpl->SelectAnnotation(xAnnotation, bEdit);
 }
 
