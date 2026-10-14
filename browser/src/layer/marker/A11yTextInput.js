@@ -454,6 +454,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			window.L.DomEvent.on(region, 'click auxclick contextmenu dragstart', this._onLinkEvent,
 				this);
 		}
+		window.L.DomEvent.on(this._contextList, 'focusin', this._onContextFocus, this);
 		this._container.insertBefore(this._headingsAbove, this._textArea);
 		this._container.insertBefore(this._contextBefore, this._textArea);
 		this._container.insertBefore(this._contextList, this._textArea);
@@ -466,16 +467,21 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		if (!this._contextList)
 			return;
 
+		const items = list && Array.isArray(list.items) ? list.items : [];
+		const key = JSON.stringify([window.L.Browser.win, items]);
+		if (key === this._contextListKey)
+			return;
+		this._contextListKey = key;
 		this._contextList.replaceChildren();
-		if (!list || !Array.isArray(list.items) || list.items.length === 0)
+		if (items.length === 0)
 			return;
 
-		const levels = list.items.map(function (item) {
+		const levels = items.map(function (item) {
 			return parseInt(item.level);
 		});
 		const root = document.createElement('ul');
 		const stack = [{ level: Math.min.apply(null, levels), element: root }];
-		list.items.forEach(function (item, index) {
+		items.forEach(function (item, index) {
 			const level = levels[index];
 			while (stack.length > 1 && stack[stack.length - 1].level > level)
 				stack.pop();
@@ -488,6 +494,10 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			}
 			const li = document.createElement('li');
 			li.textContent = item.text;
+			if (window.L.Browser.win)
+				li.tabIndex = -1;
+			if (typeof item.rect === 'string')
+				li.dataset.twips = item.rect;
 			top.element.appendChild(li);
 		});
 		this._contextList.appendChild(root);
@@ -791,7 +801,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		// NVDA focuses a link before activating it, and a jump now would replace the link
 		if (ev.target.closest && ev.target.closest('a'))
 			return;
-		const paragraph = ev.target.closest ? ev.target.closest('.a11y-context > span') : null;
+		const paragraph = ev.target.closest ? ev.target.closest('.a11y-context > span, .a11y-context li') : null;
 		if (paragraph && paragraph.dataset.twips)
 			this._jumpToContextParagraph(paragraph.dataset.twips);
 	},
@@ -811,15 +821,15 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			this._jumpToHeading(parseInt(active.dataset.index), active.dataset.target);
 			return;
 		}
-		const inContext = active
-			&& (this._contextBefore.contains(active) || this._contextAfter.contains(active));
+		const inContext = active && (this._contextBefore.contains(active)
+			|| this._contextList.contains(active) || this._contextAfter.contains(active));
 		if (active !== document.body && !inContext)
 			return;
 		const anchor = window.getSelection() ? window.getSelection().anchorNode : null;
 		const element = anchor && anchor.nodeType === Node.TEXT_NODE ? anchor.parentNode : anchor;
-		let paragraph = element && element.closest ? element.closest('.a11y-context > span') : null;
+		let paragraph = element && element.closest ? element.closest('.a11y-context > span, .a11y-context li') : null;
 		if (!paragraph && inContext) // the link NVDA left the focus on
-			paragraph = active.closest('.a11y-context > span');
+			paragraph = active.closest('.a11y-context > span, .a11y-context li');
 		if (!paragraph || !paragraph.dataset.twips)
 			return;
 
@@ -827,13 +837,17 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		let target = paragraph;
 		if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
 			const down = ev.key === 'ArrowDown';
-			const sibling = down ? paragraph.nextElementSibling : paragraph.previousElementSibling;
-			if (sibling)
-				target = sibling;
-			else if ((paragraph.parentNode === this._contextBefore) === down) {
+			const paragraphs = Array.from(this._contextBefore.children).concat(
+				Array.from(this._contextList.querySelectorAll('li')), Array.from(this._contextAfter.children));
+			const next = paragraphs[paragraphs.indexOf(paragraph) + (down ? 1 : -1)];
+			// in a list the caret's paragraph is one of its items; otherwise it sits between the regions
+			if (!this._contextList.firstChild && (paragraph.parentNode === this._contextBefore) === down
+				&& (!next || next.parentNode !== paragraph.parentNode)) {
 				this._textArea.focus({ preventScroll: true });
 				return;
 			}
+			if (next)
+				target = next;
 		}
 		this._jumpToContextParagraph(target.dataset.twips);
 	},
