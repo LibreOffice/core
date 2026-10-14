@@ -62,31 +62,6 @@
             <property name="vexpand">True</property>
             <property name="show-border">False</property>
 
-            <!-- None Tab -->
-            <child>
-              <object class="GtkGrid" id="gdNone">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">6</property>
-                <property name="margin-end">6</property>
-                <property name="margin-top">6</property>
-                <property name="margin-bottom">6</property>
-                <property name="vexpand">True</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">6</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="lbnone">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="areatabpage|btnnone">None</property>
-              </object>
-            </child>
-
             <!-- Color Tab -->
             <child>
               <object class="GtkGrid" id="gdColor">

@@ -88,9 +88,10 @@ SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* p
         if (m_xNotebook->get_page_index(TABID_USE_BACKGROUND) != -1)
             m_xNotebook->remove_page(TABID_USE_BACKGROUND);
     }
+    // The tabs are shown only when there is more than one fill type to select.
+    m_xNotebook->set_show_tabs(m_xNotebook->get_n_pages() > 1);
 
     maFillTypeMap = {
-        {TABID_NONE, FillType::TRANSPARENT_FILL},
         {TABID_COLOR, FillType::SOLID_FILL},
         {TABID_USE_BACKGROUND, FillType::USE_BACKGROUND_FILL}
     };
@@ -229,13 +230,7 @@ DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
         return DeactivateRC::LeavePage;
     }
 
-    OUString sCurrentPage = m_xNotebook->get_current_page_ident();
-    auto it = maFillTypeMap.find(sCurrentPage);
-    if (it == maFillTypeMap.end())
-        return DeactivateRC::LeavePage;
-
-    FillType eFillType = it->second;
-    switch( eFillType )
+    switch (getCurrentFillType())
     {
         case FillType::TRANSPARENT_FILL:
         {
@@ -286,13 +281,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
         return true;
     }
 
-    OUString sCurrentPage = m_xNotebook->get_current_page_ident();
-    auto it = maFillTypeMap.find(sCurrentPage);
-    if (it == maFillTypeMap.end())
-        return false;
-
-    FillType eFillType = it->second;
-    switch( eFillType )
+    switch (getCurrentFillType())
     {
         case FillType::TRANSPARENT_FILL:
         {
@@ -313,6 +302,17 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
         default:
             return false;
     }
+}
+
+FillType SvxAreaTabPage::getCurrentFillType()
+{
+    auto aFoundType = maFillTypeMap.find(m_xNotebook->get_current_page_ident());
+    if (aFoundType == maFillTypeMap.end())
+        return FillType::TRANSPARENT_FILL;
+    // The Color tab holds the None fill too.
+    if (aFoundType->second == FillType::SOLID_FILL && m_bNoFill)
+        return FillType::TRANSPARENT_FILL;
+    return aFoundType->second;
 }
 
 template< typename TTabPage >
@@ -428,7 +428,9 @@ void SvxAreaTabPage::SelectFillType(FillType eFillType, const SfxItemSet* _pSet)
     if (_pSet)
         m_aFillAttributeSet.Set(*_pSet);
 
-    const OUString pageId = getPageId(lclIsEffect(eFillType) ? FillType::SOLID_FILL : eFillType);
+    // The Color tab stands for None and for the effects too.
+    const bool bColorTab = lclIsEffect(eFillType) || eFillType == FillType::TRANSPARENT_FILL;
+    const OUString pageId = getPageId(bColorTab ? FillType::SOLID_FILL : eFillType);
     if(!pageId.isEmpty())
         m_xNotebook->set_current_page(pageId);
     m_oEffectSet.reset();
@@ -436,6 +438,7 @@ void SvxAreaTabPage::SelectFillType(FillType eFillType, const SfxItemSet* _pSet)
         m_oEffect = eFillType;
     else
         m_oEffect.reset();
+    m_bNoFill = eFillType == FillType::TRANSPARENT_FILL;
 
     // Build all fill pages once; later calls only load the new attributes into them.
     if (m_aFillTabPages.empty())
@@ -448,6 +451,16 @@ void SvxAreaTabPage::SelectFillType(FillType eFillType, const SfxItemSet* _pSet)
         rEntry.second->ActivatePage(m_aFillAttributeSet);
         rEntry.second->Reset(&m_aFillAttributeSet);
     }
+    if (SvxColorTabPage* pColorPage = getColorTabPage())
+        pColorPage->SetNoFill(m_bNoFill);
+}
+
+SvxColorTabPage* SvxAreaTabPage::getColorTabPage()
+{
+    auto aFoundPage = m_aFillTabPages.find(FillType::SOLID_FILL);
+    if (aFoundPage == m_aFillTabPages.end())
+        return nullptr;
+    return static_cast<SvxColorTabPage*>(aFoundPage->second.get());
 }
 
 void SvxAreaTabPage::PageCreated(const SfxAllItemSet& aSet)
@@ -478,9 +491,11 @@ void SvxAreaTabPage::CreatePage(FillType nId, SfxTabPage& rTab)
         rColorTab.SetColorList(m_pColorList);
         rColorTab.SetColorChgd(m_pnColorListState);
         rColorTab.SetColorChangedHdl(LINK(this, SvxAreaTabPage, ColorChangedHdl_Impl));
+        rColorTab.SetNoneSelectedHdl(LINK(this, SvxAreaTabPage, NoneSelectedHdl_Impl));
         rColorTab.Construct();
         rColorTab.ActivatePage(m_aFillAttributeSet);
         rColorTab.Reset(&m_aFillAttributeSet);
+        rColorTab.SetNoFill(m_bNoFill);
         rColorTab.set_visible(true);
     }
 }
@@ -497,11 +512,20 @@ void SvxAreaTabPage::ClearEffect()
     m_oEffectSet.reset();
 }
 
-IMPL_LINK_NOARG(SvxAreaTabPage, ColorChangedHdl_Impl, SvxColorTabPage&, void)
+IMPL_LINK(SvxAreaTabPage, ColorChangedHdl_Impl, SvxColorTabPage&, rColorPage, void)
 {
-    // A color chosen after an effect replaces the effect.
+    // A color chosen after None or an effect replaces it.
     m_bBtnClicked = true;
     ClearEffect();
+    m_bNoFill = false;
+    rColorPage.SetNoFill(false);
+}
+
+IMPL_LINK_NOARG(SvxAreaTabPage, NoneSelectedHdl_Impl, SvxColorTabPage&, void)
+{
+    m_bBtnClicked = true;
+    ClearEffect();
+    m_bNoFill = true;
 }
 
 IMPL_LINK_NOARG(SvxAreaTabPage, MoreEffectsHdl_Impl, weld::Button&, void)
@@ -516,6 +540,9 @@ IMPL_LINK_NOARG(SvxAreaTabPage, MoreEffectsHdl_Impl, weld::Button&, void)
         m_xNotebook->set_current_page(TABID_COLOR);
         m_oEffect = xDialog->GetEffect();
         m_oEffectSet.emplace(*xDialog->GetResult());
+        m_bNoFill = false;
+        if (SvxColorTabPage* pColorPage = getColorTabPage())
+            pColorPage->SetNoFill(false);
         m_aFillAttributeSet.Put(*xDialog->GetResult());
         m_bBtnClicked = true;
     });

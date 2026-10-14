@@ -18,8 +18,6 @@
 window.L.Control.JSDialog = window.L.Control.extend({
 	options: {},
 	dialogs: {},
-	openTabRequests: {},
-	fillTypes: {},
 	draggingObject: null,
 
 	onAdd: function (map) {
@@ -99,8 +97,6 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			window.L.DomUtil.remove(dialogInfo.overlay);
 
 		delete this.dialogs[id];
-		delete this.openTabRequests[id];
-		delete this.fillTypes[id];
 
 		if (dialogInfo.isSnackbar)
 			JSDialog.SnackbarController.onSnackbarRemoved();
@@ -326,48 +322,6 @@ window.L.Control.JSDialog = window.L.Control.extend({
 
 	selectedTab: function() {
 		// nothing to do here
-	},
-
-	rememberOpenTab: function(dialogId, tabControlId, index) {
-		this.openTabRequests[dialogId] = { id: tabControlId, index: index };
-	},
-
-	takeOpenTab: function(dialogId, tabControlId) {
-		const request = this.openTabRequests[dialogId];
-		if (!request || request.id !== tabControlId)
-			return undefined;
-
-		delete this.openTabRequests[dialogId];
-		return request.index;
-	},
-
-	// The fill types of each dialog, by notebook id: the one shown last, and how to open one.
-	_getFillType: function(dialogId, notebookId) {
-		if (!this.fillTypes[dialogId])
-			this.fillTypes[dialogId] = {};
-		if (!this.fillTypes[dialogId][notebookId])
-			this.fillTypes[dialogId][notebookId] = { lastIndex: undefined, open: null };
-		return this.fillTypes[dialogId][notebookId];
-	},
-
-	rememberFillType: function(dialogId, notebookId, index) {
-		this._getFillType(dialogId, notebookId).lastIndex = index;
-	},
-
-	lastFillType: function(dialogId, notebookId) {
-		return this._getFillType(dialogId, notebookId).lastIndex;
-	},
-
-	setFillTypeOpener: function(dialogId, notebookId, open) {
-		this._getFillType(dialogId, notebookId).open = open;
-	},
-
-	openFillType: function(dialogId, notebookId, index) {
-		const open = this._getFillType(dialogId, notebookId).open;
-		if (!open)
-			return false;
-		open(index);
-		return true;
 	},
 
 	_getDefaultButtonId: function(widgets) {
@@ -1514,8 +1468,6 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		if (previousData) {
 			if (data.control.tabControlDepth === undefined)
 				data.control.tabControlDepth = previousData.tabControlDepth;
-			if (data.control.hasEmptyTabPage === undefined)
-				data.control.hasEmptyTabPage = previousData.hasEmptyTabPage;
 		}
 
 		if (model)

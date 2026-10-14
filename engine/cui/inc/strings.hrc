@@ -295,6 +295,7 @@
 #define RID_CUISTR_QRCODEDATALONG                   NC_("RID_SVXSTR_QRCODEDATALONG", "The URL or text is too long for the current error correction level. Either shorten the text or decrease the correction level.")
 #define RID_CUISTR_DELETEUSERCOLOR1                 NC_("RID_SVXSTR_DELETEUSERCOLOR1", "You can only delete user-defined colors")
 #define RID_CUISTR_DELETEUSERCOLOR2                 NC_("RID_SVXSTR_DELETEUSERCOLOR2", "Please select the color to delete")
+#define RID_CUISTR_FILL_NONE                        NC_("RID_CUISTR_FILL_NONE", "None")
 
 #define RID_CUISTR_ADDITIONS_INSTALLBUTTON          NC_("RID_SVXSTR_ADDITIONS_INSTALLBUTTON", "Install")
 #define RID_CUISTR_ADDITIONS_INSTALLEDBUTTON        NC_("RID_SVXSTR_ADDITIONS_INSTALLEDBUTTON", "Installed")

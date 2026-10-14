@@ -2150,6 +2150,8 @@ void TabControl::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("id", get_id());
     rJsonWriter.put("type", "tabcontrol");
     rJsonWriter.put("selected", GetCurPageId());
+    if (!mbShowTabs)
+        rJsonWriter.put("showTabs", false);
 
     {
         auto childrenNode = rJsonWriter.startArray("children");

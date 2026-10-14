@@ -192,4 +192,42 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 		cy.cGet('[id^="FillEffectsDialog"] [role="tab"][aria-controls="hatch"]')
 			.should('have.attr', 'aria-selected', 'true');
 	});
+
+	/*
+	 * None is the first entry of the palette list on the Color tab of the Area page. Selecting
+	 * a color leaves None, and a page style without a fill opens with None selected.
+	 */
+	it('Area tab offers None in the palette list', function() {
+		var openArea = () => {
+			desktopHelper.getNbIcon('PageDialog', 'Format').click();
+			helper.processToIdle(this.win);
+			cy.cGet('[id^="TemplateDialog"]').should('be.visible');
+			cy.cGet('button#area.ui-tab').click();
+			helper.processToIdle(this.win);
+		};
+		var closeWithOk = () => {
+			cy.cGet('[id^="TemplateDialog"] #ok-button').click();
+			helper.processToIdle(this.win);
+		};
+
+		cy.cGet('#Format-tab-label').click();
+		openArea();
+
+		cy.cGet('[role="tab"][aria-controls="lbnone"]').should('not.exist');
+		cy.cGet('#paletteselector-input option').first().should('have.text', 'None');
+
+		cy.cGet('#iconview_colors .ui-iconview-entry').eq(5).click();
+		helper.processToIdle(this.win);
+		cy.cGet('#paletteselector-input option:selected').should('not.have.text', 'None');
+		closeWithOk();
+
+		openArea();
+		cy.cGet('#paletteselector-input option:selected').should('not.have.text', 'None');
+		cy.cGet('#paletteselector-input').select('None');
+		helper.processToIdle(this.win);
+		closeWithOk();
+
+		openArea();
+		cy.cGet('#paletteselector-input option:selected').should('have.text', 'None');
+	});
 });

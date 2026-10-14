@@ -24,39 +24,18 @@
  * threshold is the largest tab count that still reads comfortably as a
  * horizontal row.
  *
- * A dialog holding the empty None fill page gets the rail at any tab count,
- * and tabs inside a tab page stay a row.
+ * Tabs inside a tab page stay a row.
  */
 
 declare var JSDialog: any;
 
 const VERTICAL_TABS_THRESHOLD = 4;
 
-// The None fill type, named after its tab label in cui/uiconfig/ui/areatabpage.ui.
-const NONE_FILL_TAB = 'lbnone';
-
-function setTabEnabled(
-  row: HTMLElement,
-  tab: HTMLButtonElement,
-  tooltip: string,
-  enabled: boolean,
-) {
-  tab.setAttribute('aria-disabled', enabled ? 'false' : 'true');
-  row.setAttribute('data-cooltip', enabled ? '' : tooltip);
-}
-
 interface TabControlItem {
   id: string | number;
   name: string;
   text: string;
   context?: string;
-}
-
-interface PageFill {
-  notebook: TabControlData;
-  noneIndex: number;
-  selectedIndex: number;
-  isNone: boolean;
 }
 
 interface TabControlData {
@@ -67,8 +46,7 @@ interface TabControlData {
   vertical?: boolean;
   noCoreEvents?: boolean;
   tabControlDepth?: number;
-  hasEmptyTabPage?: boolean;
-  requestedTabIndex?: number;
+  showTabs?: boolean; // false when the tab buttons are hidden
 }
 
 // A tabpage child is the content of one tab. The vertical flag asks us to
@@ -77,10 +55,6 @@ interface TabControlData {
 // vertical-tabs notebook, and only changes which children count as content.
 function isTabContent(child: WidgetJSON, data: TabControlData): boolean {
   return child.type === 'tabpage' || !!data.vertical;
-}
-
-function isNoneFillTab(tab: TabControlItem): boolean {
-  return tab.name === NONE_FILL_TAB;
 }
 
 function getTabPages(data: TabControlData): WidgetJSON[] {
@@ -92,37 +66,6 @@ function getTabPages(data: TabControlData): WidgetJSON[] {
 
   return pages;
 }
-
-// The fill types below this widget: the notebook offering a None type, and where it sits.
-function getPageFillTabInfo(widget: WidgetJSON): PageFill | null {
-  const notebook = widget ? (widget as TabControlData) : null;
-  const tabs = notebook && widget.type === 'tabcontrol' ? notebook.tabs : null;
-  const noneIndex = tabs ? tabs.findIndex(isNoneFillTab) : -1;
-
-  if (tabs && noneIndex >= 0) {
-    const selectedIndex = tabs.findIndex(function (tab) {
-      return notebook.selected == tab.id;
-    });
-    return {
-      notebook: notebook,
-      noneIndex: noneIndex,
-      selectedIndex: selectedIndex,
-      isNone: noneIndex === selectedIndex,
-    };
-  }
-
-  const children = widget ? widget.children : null;
-  for (let i = 0; children && i < children.length; i++) {
-    const found = getPageFillTabInfo(children[i]);
-    if (found) return found;
-  }
-
-  return null;
-}
-
-JSDialog.tabControlHasEmptyPage = function (widget: WidgetJSON): boolean {
-  return getPageFillTabInfo(widget) !== null;
-};
 
 JSDialog.tabControl = function (
   parentContainer: HTMLElement,
@@ -137,14 +80,8 @@ JSDialog.tabControl = function (
   const pages = getTabPages(data);
   const isMultiTabJSON = pages.length > 1;
 
-  // Pages line up with tabs one for one, unless core sent only the page that is showing.
-  const tabbedPages = pages.length === data.tabs.length ? pages : [];
-
-  const ownNoneIndex = data.tabs.findIndex(isNoneFillTab);
-
   const useVerticalRail =
-    !data.tabControlDepth &&
-    (data.tabs.length > VERTICAL_TABS_THRESHOLD || !!data.hasEmptyTabPage);
+    !data.tabControlDepth && data.tabs.length > VERTICAL_TABS_THRESHOLD;
 
   const tabs: HTMLButtonElement[] = [];
   const tabIds: string[] = [];
@@ -167,6 +104,9 @@ JSDialog.tabControl = function (
     />
   ) as HTMLElement;
 
+  // The hidden tabs still name their pages for assistive technology.
+  if (data.showTabs === false) tabsContainer.classList.add('hidden');
+
   const contentsContainer = (
     <div class={'ui-tabs-content ' + cssClass} />
   ) as HTMLElement;
@@ -183,98 +123,6 @@ JSDialog.tabControl = function (
     </div>
   ) as HTMLElement;
 
-  // Core keeps reporting a page as the selected one while its fill is None, and that page
-  // opens on nothing, so the rail opens another one instead.
-  let openTabIndex = data.tabs.findIndex(function (item) {
-    return data.selected == item.id;
-  });
-  if (
-    isMultiTabJSON &&
-    data.tabs.length > 1 &&
-    getPageFillTabInfo(tabbedPages[openTabIndex])?.isNone
-  )
-    openTabIndex = openTabIndex === 0 ? 1 : 0;
-
-  // Core dumps the dialog with the tab it held before it answered the checkbox, so a
-  // tab asked for since then is the one to open.
-  if (data.requestedTabIndex !== undefined)
-    openTabIndex = data.requestedTabIndex;
-
-  function selectPage(control: any, index: number) {
-    builder.callback('tabcontrol', 'selecttab', control, index, builder);
-  }
-
-  // The rail row of a page that holds fill types: its tab, and a checkbox for None.
-  function fillTabRow(
-    tab: HTMLButtonElement,
-    title: string,
-    fill: PageFill,
-    tabIndex: number,
-  ): HTMLElement {
-    const checkbox = (
-      <input type="checkbox" class={'ui-checkbox-input ' + cssClass} />
-    ) as HTMLInputElement;
-
-    checkbox.id = tab.id + '-fill-input';
-    checkbox.checked = !fill.isNone;
-    checkbox.setAttribute('aria-label', title);
-
-    const row = (
-      <div class={'ui-tab-row ' + cssClass} role="presentation">
-        {tab}
-        {checkbox}
-      </div>
-    ) as HTMLElement;
-
-    const DISABLED_TAB_TOOLTIP = _('Add a fill to edit the {0}').replace(
-      '{0}',
-      title,
-    );
-
-    window.L.control.attachTooltipEventListener(row, builder.map);
-    setTabEnabled(row, tab, DISABLED_TAB_TOOLTIP, !fill.isNone);
-
-    checkbox.addEventListener('change', function () {
-      const hasFill = checkbox.checked;
-      const lastIndex = builder.wizard.lastFillType(
-        builder.windowId,
-        fill.notebook.id,
-      );
-      const firstFillIndex = fill.noneIndex === 0 ? 1 : 0;
-      const fillIndex = hasFill
-        ? lastIndex !== undefined
-          ? lastIndex
-          : firstFillIndex
-        : fill.noneIndex;
-
-      setTabEnabled(row, tab, DISABLED_TAB_TOOLTIP, hasFill);
-      // Core no longer rebuilds the dialog on a fill switch, so show the type here too.
-      const opened = builder.wizard.openFillType(
-        builder.windowId,
-        fill.notebook.id,
-        fillIndex,
-      );
-      if (!opened) selectPage({ id: fill.notebook.id }, fillIndex);
-
-      // The panel changes here the way a tab click changes it, before core answers.
-      if (!hasFill && selectedTabIdx !== tabIndex) return;
-      const openIndex = hasFill ? tabIndex : tabIndex === 0 ? 1 : 0;
-      if (builder.wizard)
-        builder._createTabClick(
-          builder,
-          openIndex,
-          tabs,
-          contentDivs,
-          tabIds,
-        )();
-      selectedTabIdx = openIndex;
-      builder.wizard.rememberOpenTab(builder.windowId, data.id, openIndex);
-      selectPage(rootContainer, openIndex);
-    });
-
-    return row;
-  }
-
   for (let tabIdx = 0; tabIdx < data.tabs.length; tabIdx++) {
     const item = data.tabs[tabIdx];
     const title = builder._cleanText(item.text);
@@ -285,7 +133,7 @@ JSDialog.tabControl = function (
       ? data.id + '-' + item.id
       : (item.id as string);
 
-    const isSelectedTab = tabIdx === openTabIndex;
+    const isSelectedTab = data.selected == item.id;
 
     const contentDiv = (
       <div
@@ -333,24 +181,7 @@ JSDialog.tabControl = function (
       if (!hasCurrentContext && !hasDefaultContext) tab.classList.add('hidden');
     }
 
-    if (tabIdx === ownNoneIndex) {
-      tab.classList.add('hidden');
-      tab.setAttribute('aria-hidden', 'true');
-      tab.tabIndex = -1;
-    }
-
-    const foundTabInfo = useVerticalRail
-      ? getPageFillTabInfo(tabbedPages[tabIdx])
-      : null;
-    if (foundTabInfo) {
-      if (!foundTabInfo.isNone)
-        builder.wizard.rememberFillType(
-          builder.windowId,
-          foundTabInfo.notebook.id,
-          foundTabInfo.selectedIndex,
-        );
-      tabsContainer.appendChild(fillTabRow(tab, title, foundTabInfo, tabIdx));
-    } else tabsContainer.appendChild(tab);
+    tabsContainer.appendChild(tab);
 
     contentsContainer.appendChild(contentDiv);
 
@@ -371,12 +202,6 @@ JSDialog.tabControl = function (
 
     function openTab(index: number) {
       selectTabs[index]();
-      if (
-        ownNoneIndex >= 0 &&
-        index !== ownNoneIndex &&
-        builder.wizard.rememberFillType
-      )
-        builder.wizard.rememberFillType(builder.windowId, data.id, index);
       if (!data.noCoreEvents)
         builder.callback(
           'tabcontrol',
@@ -397,7 +222,6 @@ JSDialog.tabControl = function (
 
     tabs.forEach(function (tab, index) {
       tab.addEventListener('click', function () {
-        if (tab.getAttribute('aria-disabled') === 'true') return;
         openTab(index);
       });
 
@@ -412,9 +236,6 @@ JSDialog.tabControl = function (
         }
       });
     });
-
-    if (ownNoneIndex >= 0 && builder.wizard.setFillTypeOpener)
-      builder.wizard.setFillTypeOpener(builder.windowId, data.id, openTab);
 
     JSDialog.KeyboardTabNavigation(tabs, contentDivs, useVerticalRail);
   } else {

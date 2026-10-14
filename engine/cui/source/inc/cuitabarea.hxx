@@ -179,7 +179,6 @@ enum class FillType
     USE_BACKGROUND_FILL
 };
 
-inline constexpr OUString TABID_NONE = u"lbnone"_ustr;
 inline constexpr OUString TABID_COLOR = u"lbcolor"_ustr;
 inline constexpr OUString TABID_GRADIENT = u"lbgradient"_ustr;
 inline constexpr OUString TABID_HATCH = u"lbhatch"_ustr;
@@ -248,6 +247,8 @@ private:
     std::optional<FillType> m_oEffect;
     // The items that More effects returned. Empty while the effect is unchanged.
     std::optional<SfxItemSet> m_oEffectSet;
+    // True when the fill is None.
+    bool m_bNoFill = false;
 
 protected:
     std::unique_ptr<weld::Notebook> m_xNotebook;
@@ -265,6 +266,9 @@ private:
     DECL_LINK(SwitchPageHdl_Impl, const OUString&, void);
     DECL_LINK(MoreEffectsHdl_Impl, weld::Button&, void);
     DECL_LINK(ColorChangedHdl_Impl, SvxColorTabPage&, void);
+    DECL_LINK(NoneSelectedHdl_Impl, SvxColorTabPage&, void);
+    SvxColorTabPage* getColorTabPage();
+    FillType getCurrentFillType();
     void ClearEffect();
 
     std::unique_ptr<SfxTabPage> CreateFillStyleTabPage(FillType eFillType);
@@ -705,6 +709,10 @@ private:
 
     // Called after the user changes the color, not when the page loads one.
     Link<SvxColorTabPage&, void> m_aColorChangedHdl;
+    // Called after the user selects None in the palette list. While unset, the list has no None.
+    Link<SvxColorTabPage&, void> m_aNoneSelectedHdl;
+    // The palette whose colors the page shows, which stays the same while None is selected.
+    sal_Int32 m_nPalette = -1;
 
     XColorListRef m_pColorList;
 
@@ -762,6 +770,9 @@ private:
     sal_uInt16  PercentToColor_Impl( sal_uInt16 nPercent );
 
     void FillPaletteLB();
+    // The palette index of the selected list entry, or -1 for None or no entry.
+    sal_Int32 GetSelectedPalette() const;
+    void SelectPalette(sal_Int32 nPalette);
 
     DECL_LINK(ClickAddHdl_Impl, weld::Button&, void);
     void NameDialogHdl_Impl(const OUString& rName);
@@ -805,6 +816,9 @@ public:
 
     void SetColorChgd(ChangeType* pIn) { m_pnColorListState = pIn; }
     void SetColorChangedHdl(const Link<SvxColorTabPage&, void>& rLink) { m_aColorChangedHdl = rLink; }
+    void SetNoneSelectedHdl(const Link<SvxColorTabPage&, void>& rLink) { m_aNoneSelectedHdl = rLink; }
+    // Shows None in the palette list and the preview, or the palette again.
+    void SetNoFill(bool bNoFill);
 
     virtual void FillUserData() override;
 };
