@@ -89,8 +89,13 @@ function searchInQuickFind(text) {
 // Waits until the document status has told the view about every page. The
 // engine reports a Writer document page by page while it lays it out, and a
 // jump past the pages the view knows about stops at the last known page.
+// The status reply to the request below is the newest one the view applies.
 function waitForPageCount(expectedCount) {
 	cy.log('>> waitForPageCount - start');
+
+	cy.getFrameWindow().then(function(win) {
+		win.app.socket.sendMessage('status');
+	});
 
 	cy.getFrameWindow().should(function(win) {
 		expect(win.app.file.writer.pageRectangleList.length, 'pages known to the view')
