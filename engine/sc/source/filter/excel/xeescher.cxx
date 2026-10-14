@@ -830,6 +830,13 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         if(!aDescrText.isEmpty())
             aAltTxt = aDescrText.copy( 0, std::min<sal_Int32>(MSPROP_DESCRIPTION_MAX_LEN, aDescrText.getLength()) );
         aPropOpt.AddOpt( ESCHER_Prop_wzDescription, aAltTxt );
+
+        // A cell anchored control moves with the cells it covers. One that is also set to
+        // resize with the cell grows and shrinks with them. A page anchored control stays
+        // where it is.
+        const ScAnchorType eAnchorType = ScDrawLayer::GetAnchorType( *pSdrObj );
+        mbMoveWithCells = eAnchorType != SCA_PAGE;
+        mbSizeWithCells = eAnchorType == SCA_CELL_RESIZE;
     }
 
     ::Color aBackColor;
@@ -1250,6 +1257,8 @@ public:
                            OUString aLabel, OUString aMacroName, sal_Int16 nState);
     bool m_bLook3d = true;
     bool m_bStroked = false;
+    bool m_bMoveWithCells = true;
+    bool m_bSizeWithCells = false;
     std::optional<Color> m_oBackgroundFill;
     XclFontData m_aFontData;
     sal_uInt16 m_nXclFont = EXC_FONT_APP;
@@ -1370,6 +1379,13 @@ void VmlFormControlExporter::EndShape(sal_Int32 nShapeElement)
             break;
     }
     pVmlDrawing->startElement(FSNS(XML_x, XML_ClientData), XML_ObjectType, aObjectType);
+
+    // These two elements are written empty, which means false, and left out for true
+    if (!m_bMoveWithCells)
+        pVmlDrawing->singleElement(FSNS(XML_x, XML_MoveWithCells));
+    if (!m_bSizeWithCells)
+        pVmlDrawing->singleElement(FSNS(XML_x, XML_SizeWithCells));
+
     OString aAnchor
         = OString::number(m_aAreaFrom.Left()) + ", " + OString::number(m_aAreaFrom.Top()) + ", "
           + OString::number(m_aAreaFrom.Right()) + ", " + OString::number(m_aAreaFrom.Bottom()) + ", "
@@ -1433,6 +1449,8 @@ void XclExpTbxControlObj::SaveVml(XclExpXmlStream& rStrm)
     aFormControlExporter.OverrideShapeIDGen(true, "_x0000_s"_ostr);
     aFormControlExporter.m_bLook3d = !mbFlatButton;
     aFormControlExporter.m_bStroked = mbStroked;
+    aFormControlExporter.m_bMoveWithCells = mbMoveWithCells;
+    aFormControlExporter.m_bSizeWithCells = mbSizeWithCells;
     aFormControlExporter.m_oBackgroundFill = moBackgroundFill;
     aFormControlExporter.m_aFontData = maFontData;
     aFormControlExporter.m_nXclFont = mnXclFont;
@@ -1511,7 +1529,15 @@ void XclExpTbxControlObj::SaveXml( XclExpXmlStream& rStrm )
         FSNS(XML_xmlns, XML_a14), rStrm.getNamespaceURL(OOX_NS(a14)),
         XML_Requires, "a14");
 
-    pDrawing->startElement(FSNS(XML_xdr, XML_twoCellAnchor), XML_editAs, "oneCell");
+    // The editAs attribute carries the anchor. The control moves and grows with the cells it
+    // covers, or it only moves with them, or it keeps the place it has on the page.
+    const char* pEditAs = "absolute";
+    if (mbSizeWithCells)
+        pEditAs = "twoCell";
+    else if (mbMoveWithCells)
+        pEditAs = "oneCell";
+
+    pDrawing->startElement(FSNS(XML_xdr, XML_twoCellAnchor), XML_editAs, pEditAs);
     {
         WriteAnchor(pDrawing, /* bIsDrawing */ true);
 
@@ -1767,7 +1793,8 @@ void XclExpTbxControlObj::SaveSheetXml(XclExpXmlStream& rStrm, const OUString& a
 
             rWorksheet->write(">");
 
-            rWorksheet->startElement(XML_anchor, XML_moveWithCells, "true", XML_sizeWithCells, "false");
+            rWorksheet->startElement(XML_anchor, XML_moveWithCells, ToPsz(mbMoveWithCells),
+                                     XML_sizeWithCells, ToPsz(mbSizeWithCells));
             WriteAnchor(rWorksheet, /* bIsDrawing */ false);
             rWorksheet->endElement(XML_anchor);
 
@@ -1796,8 +1823,8 @@ void XclExpTbxControlObj::SaveSheetXml(XclExpXmlStream& rStrm, const OUString& a
                                      mbPrint ? "true" : "false", XML_autoFill, "0", XML_autoPict,
                                      "0", XML_macro, sax_fastparser::UseIf(aMacroName, !aMacroName.isEmpty()));
 
-            rWorksheet->startElement(XML_anchor, XML_moveWithCells, "true", XML_sizeWithCells,
-                                     "false");
+            rWorksheet->startElement(XML_anchor, XML_moveWithCells, ToPsz(mbMoveWithCells),
+                                     XML_sizeWithCells, ToPsz(mbSizeWithCells));
 
             SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mxShape);
             tools::Rectangle aAreaFrom;

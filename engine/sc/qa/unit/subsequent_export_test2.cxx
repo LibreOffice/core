@@ -98,8 +98,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf166724_cellAnchor)
     const SdrPage* pPage = pDrawLayer->GetPage(0);
 
     ScAnchorType anchorType = ScDrawLayer::GetAnchorType(*pPage->GetObj(0));
-    // VML's x:anchor indicates cell-anchor
-    CPPUNIT_ASSERT_EQUAL(SCA_CELL_RESIZE, anchorType);
+    // VML's x:anchor indicates cell-anchor, and the empty x:SizeWithCells element says that
+    // the checkbox keeps its size when the cells it covers are resized
+    CPPUNIT_ASSERT_EQUAL(SCA_CELL, anchorType);
 
     // VML's x:anchor has too large Offsets: limit to cell B2's edges.
     // Without the fixes, this was X[9040] Y[10257] W[2823] H[742]
@@ -107,7 +108,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf166724_cellAnchor)
     CPPUNIT_ASSERT_EQUAL(tools::Long(1990), aRect.Left());
     CPPUNIT_ASSERT_EQUAL(tools::Long(1058), aRect.Top());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4192), aRect.GetWidth());
-    CPPUNIT_ASSERT_EQUAL(tools::Long(557), aRect.GetHeight());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(560), aRect.GetHeight());
 
     // I did not focus on (minor) round-trip concerns. Just documenting the current results...
     saveAndReload(TestFilter::XLSX);
@@ -117,12 +118,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf166724_cellAnchor)
     pPage = pDrawLayer->GetPage(0);
 
     anchorType = ScDrawLayer::GetAnchorType(*pPage->GetObj(0));
-    CPPUNIT_ASSERT_EQUAL(SCA_CELL_RESIZE, anchorType);
+    CPPUNIT_ASSERT_EQUAL(SCA_CELL, anchorType);
 
     aRect = pPage->GetObj(0)->GetSnapRect();
     CPPUNIT_ASSERT_EQUAL(tools::Long(1990), aRect.Left());
     CPPUNIT_ASSERT_EQUAL(tools::Long(1058), aRect.Top());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4192), aRect.GetWidth());
+    // the height comes back three hundredths of a millimetre short because the VML style
+    // carries it as points with one decimal
     CPPUNIT_ASSERT_EQUAL(tools::Long(557), aRect.GetHeight());
 };
 
@@ -134,7 +137,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf170012_cellAnchor)
 
     const SdrPage* pPage = getScDoc()->GetDrawLayer()->GetPage(0);
     ScAnchorType anchorType = ScDrawLayer::GetAnchorType(*pPage->GetObj(0));
-    CPPUNIT_ASSERT_EQUAL(SCA_CELL_RESIZE, anchorType);
+    CPPUNIT_ASSERT_EQUAL(SCA_CELL, anchorType);
 
     // round-trip cell-anchored controls in ODS format
     //  - this was looping forever, and creating infinite /tmp files - triggered by autoRowHeight
@@ -142,7 +145,44 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf170012_cellAnchor)
 
     pPage = getScDoc()->GetDrawLayer()->GetPage(0);
     anchorType = ScDrawLayer::GetAnchorType(*pPage->GetObj(0));
-    CPPUNIT_ASSERT_EQUAL(SCA_CELL_RESIZE, anchorType);
+    CPPUNIT_ASSERT_EQUAL(SCA_CELL, anchorType);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testCheckboxAnchorsXLSX)
+{
+    // given a document with one checkbox that moves with the cells it covers but keeps its size,
+    // and a second one that stays where it is on the page
+    createScDoc("xlsx/checkboxAnchors.xlsx");
+
+    const SdrPage* pPage = getScDoc()->GetDrawLayer()->GetPage(0);
+    CPPUNIT_ASSERT_EQUAL(SCA_CELL, ScDrawLayer::GetAnchorType(*pPage->GetObj(0)));
+    CPPUNIT_ASSERT_EQUAL(SCA_PAGE, ScDrawLayer::GetAnchorType(*pPage->GetObj(1)));
+
+    save(TestFilter::XLSX);
+
+    // the VML says false by writing the element empty, and true by leaving it out
+    xmlDocUniquePtr pVmlDrawing1 = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
+    assertXPath(pVmlDrawing1, "/xml/v:shape[1]/xx:ClientData/xx:MoveWithCells", 0);
+    assertXPath(pVmlDrawing1, "/xml/v:shape[1]/xx:ClientData/xx:SizeWithCells");
+    assertXPath(pVmlDrawing1, "/xml/v:shape[2]/xx:ClientData/xx:MoveWithCells");
+    assertXPath(pVmlDrawing1, "/xml/v:shape[2]/xx:ClientData/xx:SizeWithCells");
+
+    xmlDocUniquePtr pSheet1 = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    assertXPath(pSheet1, "(//x:control/x:controlPr/x:anchor)[1]", "moveWithCells", u"true");
+    assertXPath(pSheet1, "(//x:control/x:controlPr/x:anchor)[1]", "sizeWithCells", u"false");
+    assertXPath(pSheet1, "(//x:control/x:controlPr/x:anchor)[2]", "moveWithCells", u"false");
+    assertXPath(pSheet1, "(//x:control/x:controlPr/x:anchor)[2]", "sizeWithCells", u"false");
+
+    xmlDocUniquePtr pDrawing1 = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    assertXPath(pDrawing1, "(//xdr:twoCellAnchor)[1]", "editAs", u"oneCell");
+    assertXPath(pDrawing1, "(//xdr:twoCellAnchor)[2]", "editAs", u"absolute");
+
+    // and both checkboxes keep the anchor they had when the document is loaded again
+    saveAndReload(TestFilter::XLSX);
+
+    pPage = getScDoc()->GetDrawLayer()->GetPage(0);
+    CPPUNIT_ASSERT_EQUAL(SCA_CELL, ScDrawLayer::GetAnchorType(*pPage->GetObj(0)));
+    CPPUNIT_ASSERT_EQUAL(SCA_PAGE, ScDrawLayer::GetAnchorType(*pPage->GetObj(1)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testFreezePaneStartCellXLSX)

@@ -311,6 +311,8 @@ private:
     sal_uInt16 mnXclFont = EXC_FONT_APP; /// Font record index of the control label.
     sal_uInt8 mnTextHAlign = EXC_OBJ_HOR_LEFT; /// Horizontal alignment of the control label.
     sal_uInt8 mnTextVAlign = EXC_OBJ_VER_CENTER; /// Vertical alignment of the control label.
+    bool mbMoveWithCells = true; /// True = the control follows the cells it sits on when they move.
+    bool mbSizeWithCells = false; /// True = the control grows and shrinks with those cells.
 };
 
 //#endif
