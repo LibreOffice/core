@@ -247,7 +247,7 @@ bool SwDoc::SplitDoc(sal_uInt16 eDocType, const OUString& rPath, bool bOutline, 
             if( pStartNd->GetIndex() + 1 < aEndIdx.GetIndex() )
             {
                 SfxObjectShellLock xDocSh( new SwDocShell( SfxObjectCreateMode::INTERNAL ));
-                if( xDocSh->DoInitNew() )
+                if( xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow) )
                 {
                     SwDoc* pDoc = static_cast<SwDocShell*>(&xDocSh)->GetDoc();
 

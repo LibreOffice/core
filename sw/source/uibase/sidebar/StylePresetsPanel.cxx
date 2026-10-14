@@ -124,7 +124,7 @@ Bitmap CreatePreview(OUString const & aUrl, OUString const & aName)
     {
         SfxMedium aMedium(aUrl, StreamMode::STD_READWRITE);
         SfxObjectShellLock xTemplDoc = SfxObjectShell::CreateObjectByFactoryName(pObjectShell->GetFactory().GetFactoryName(), SfxObjectCreateMode::ORGANIZER);
-        xTemplDoc->DoInitNew();
+        xTemplDoc->DoInitNew(SfxNewDocumentMacros::Disallow);
         if (xTemplDoc->LoadFrom(aMedium))
             return GenerateStylePreview(*xTemplDoc, aName);
     }

@@ -54,7 +54,7 @@ void NodeTest::setUp()
     mxDocShell = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT |
                                 SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
                                 SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-    mxDocShell->DoInitNew();
+    mxDocShell->DoInitNew(SfxNewDocumentMacros::Disallow);
 }
 
 void NodeTest::tearDown()

@@ -701,7 +701,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
 
     m_aDocShellRef = new ScDocShell; // ref must be there before InitNew
 
-    m_aDocShellRef->DoInitNew();
+    m_aDocShellRef->DoInitNew(SfxNewDocumentMacros::Disallow);
 
     ScDocument& rDestDoc = m_aDocShellRef->GetDocument();
     ScMarkData aDestMark(rDestDoc.GetSheetLimits());
@@ -851,7 +851,7 @@ SfxObjectShell* ScTransferObj::SetDrawClipDoc( bool bAnyOle, const std::shared_p
     if (bAnyOle)
     {
         ScGlobal::xDrawClipDocShellRef = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS, pDoc); // there must be a ref
-        ScGlobal::xDrawClipDocShellRef->DoInitNew();
+        ScGlobal::xDrawClipDocShellRef->DoInitNew(SfxNewDocumentMacros::Disallow);
     }
 
     return ScGlobal::xDrawClipDocShellRef.get();

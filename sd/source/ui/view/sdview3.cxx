@@ -737,7 +737,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         if (std::unique_ptr<SvStream> xStm = rDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING ))
         {
             DrawDocShellRef xShell = new DrawDocShell(SfxObjectCreateMode::INTERNAL, false, DocumentType::Impress);
-            xShell->DoInitNew();
+            xShell->DoInitNew(SfxNewDocumentMacros::Disallow);
 
             SdDrawDocument* pModel = xShell->GetDoc();
             pModel->InsertPage(pModel->AllocPage(false).get());
@@ -1662,7 +1662,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 bool View::PasteRTFTable( SvStream& rStm, SdrPage* pPage, SdrInsertFlags nPasteOptions )
 {
     DrawDocShellRef xShell = new DrawDocShell(SfxObjectCreateMode::INTERNAL, false, DocumentType::Impress);
-    xShell->DoInitNew();
+    xShell->DoInitNew(SfxNewDocumentMacros::Disallow);
 
     SdDrawDocument* pModel = xShell->GetDoc();
     pModel->GetItemPool().SetDefaultMetric(MapUnit::Map100thMM);
@@ -1679,7 +1679,7 @@ bool View::PasteRTFTable( SvStream& rStm, SdrPage* pPage, SdrInsertFlags nPasteO
 bool View::PasteHTMLTable( SvStream& rStm, SdrPage* pPage, SdrInsertFlags nPasteOptions )
 {
     DrawDocShellRef xShell = new DrawDocShell(SfxObjectCreateMode::INTERNAL, false, DocumentType::Impress);
-    xShell->DoInitNew();
+    xShell->DoInitNew(SfxNewDocumentMacros::Disallow);
 
     SdDrawDocument* pModel = xShell->GetDoc();
     pModel->GetItemPool().SetDefaultMetric(MapUnit::Map100thMM);

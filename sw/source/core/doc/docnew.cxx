@@ -945,7 +945,7 @@ rtl::Reference<SfxObjectShell> SwDoc::CreateCopy(bool bCallInitNew, bool bEmpty)
     {
         // it could happen that DoInitNew creates model,
         // that increases the refcount of the object
-        pRetShell->DoInitNew();
+        pRetShell->DoInitNew(SfxNewDocumentMacros::Disallow);
     }
 
     xRet->ReplaceDefaults(*this);

@@ -675,7 +675,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
             //now extract a document from the target document
             // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
             SfxObjectShellLock xTempDocShell( new SwDocShell( SfxObjectCreateMode::STANDARD ) );
-            xTempDocShell->DoInitNew();
+            xTempDocShell->DoInitNew(SfxNewDocumentMacros::Disallow);
             SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, SFX_INTERFACE_NONE );
             SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
             pTargetView->GetWrtShell().StartAction();
@@ -1132,7 +1132,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         //now extract a document from the target document
         // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
         SfxObjectShellLock xTempDocShell( new SwDocShell( SfxObjectCreateMode::STANDARD ) );
-        xTempDocShell->DoInitNew();
+        xTempDocShell->DoInitNew(SfxNewDocumentMacros::Disallow);
         SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, SFX_INTERFACE_NONE );
         SwView* pTempView = static_cast<SwView*>( pTempFrame->GetViewShell() );
         pTargetView->GetWrtShell().StartAction();

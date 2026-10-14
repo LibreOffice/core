@@ -269,7 +269,7 @@ void ScSelectionTransferObj::CreateCellData()
             if ( pDocSh->GetDocument().HasOLEObjectsInArea( aSelRange, &aNewMark ) )
             {
                 aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
-                aDragShellRef->DoInitNew();
+                aDragShellRef->DoInitNew(SfxNewDocumentMacros::Disallow);
             }
             ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );
 
@@ -322,7 +322,7 @@ void ScSelectionTransferObj::CreateDrawData()
             if (bAnyOle)
             {
                 aDragShellRef = new ScDocShell; // Without Ref the DocShell does not live
-                aDragShellRef->DoInitNew();
+                aDragShellRef->DoInitNew(SfxNewDocumentMacros::Disallow);
             }
 
             ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );

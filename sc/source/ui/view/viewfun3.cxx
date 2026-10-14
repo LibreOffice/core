@@ -1128,7 +1128,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         if ( bPasteDraw )
         {
             aTransShellRef = new ScDocShell;        // DocShell needs a Ref immediately
-            aTransShellRef->DoInitNew();
+            aTransShellRef->DoInitNew(SfxNewDocumentMacros::Disallow);
         }
         ScDrawLayer::SetGlobalDrawPersist( aTransShellRef.get() );
 

@@ -144,7 +144,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
     // Create new document (don't show!)
     SfxObjectShellLock xDocSh( new SwDocShell( SfxObjectCreateMode::STANDARD ) );
-    xDocSh->DoInitNew();
+    xDocSh->DoInitNew(SfxNewDocumentMacros::Allow);
     pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, SFX_INTERFACE_NONE );
     pNewView = static_cast<SwView*>( pFrame->GetViewShell());
     pNewView->AttrChangedNotify(nullptr); // so that SelectShell is being called

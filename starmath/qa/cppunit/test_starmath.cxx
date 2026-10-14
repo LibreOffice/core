@@ -118,7 +118,7 @@ void Test::setUp()
         SfxModelFlags::EMBEDDED_OBJECT |
         SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
         SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-    m_xDocShRef->DoInitNew();
+    m_xDocShRef->DoInitNew(SfxNewDocumentMacros::Disallow);
 
     SfxViewFrame *pViewFrame = SfxViewFrame::LoadHiddenDocument(*m_xDocShRef, SFX_INTERFACE_NONE);
 

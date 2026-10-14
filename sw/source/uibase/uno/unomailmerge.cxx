@@ -379,7 +379,7 @@ SwXMailMerge::SwXMailMerge() :
     // create empty document
     // like in: SwModule::InsertEnv (appenv.cxx)
     m_xDocSh = new SwDocShell( SfxObjectCreateMode::STANDARD );
-    m_xDocSh->DoInitNew();
+    m_xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow);
     SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *m_xDocSh, SFX_INTERFACE_NONE );
     SwView *pView = static_cast<SwView*>( pFrame->GetViewShell() );
     pView->AttrChangedNotify(nullptr); //So that SelectShell is called.

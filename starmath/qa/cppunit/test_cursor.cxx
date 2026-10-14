@@ -58,7 +58,7 @@ void Test::setUp()
     SmGlobals::ensure();
 
     xDocShRef = new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT);
-    xDocShRef->DoInitNew();
+    xDocShRef->DoInitNew(SfxNewDocumentMacros::Disallow);
 }
 
 void Test::tearDown()

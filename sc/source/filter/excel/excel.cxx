@@ -464,7 +464,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLS(SvStream& rStream)
                                              SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
                                              SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 
-    xDocShell->DoInitNew();
+    xDocShell->DoInitNew(SfxNewDocumentMacros::Disallow);
     xDocShell->SetInitialLinkUpdate(&aMedium);
 
     ScDocument& rDoc = xDocShell->GetDocument();

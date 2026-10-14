@@ -6221,7 +6221,7 @@ bool TestImportDOC(SvStream &rStream, const OUString &rFltName)
     SwGlobals::ensure();
 
     SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
-    xDocSh->DoInitNew();
+    xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow);
     SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
 
     SwPaM aPaM(pD->GetNodes().GetEndOfContent(), SwNodeOffset(-1));

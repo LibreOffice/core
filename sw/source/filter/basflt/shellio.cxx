@@ -511,7 +511,7 @@ SwDoc* Reader::GetTemplateDoc(SwDoc& rDoc)
             {
                 rtl::Reference<SwDocShell> pDocSh = new SwDocShell(SfxObjectCreateMode::INTERNAL);
                 SfxObjectShellLock xDocSh = pDocSh.get();
-                if (pDocSh->DoInitNew())
+                if (pDocSh->DoInitNew(SfxNewDocumentMacros::Disallow))
                 {
                     mxTemplate = pDocSh->GetDoc();
                     mxTemplate->SetOle2Link( Link<bool,void>() );

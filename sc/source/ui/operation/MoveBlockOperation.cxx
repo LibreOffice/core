@@ -94,7 +94,7 @@ bool MoveBlockOperation::runImplementation()
     if (rDoc.HasOLEObjectsInArea(aSource))
     {
         aDragShellRef = new ScDocShell; // DocShell needs a Ref immediately
-        aDragShellRef->DoInitNew();
+        aDragShellRef->DoInitNew(SfxNewDocumentMacros::Disallow);
     }
     ScDrawLayer::SetGlobalDrawPersist(aDragShellRef.get());
 

@@ -74,7 +74,7 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
     if (bAnyOle)
     {
         aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
-        aDragShellRef->DoInitNew();
+        aDragShellRef->DoInitNew(SfxNewDocumentMacros::Disallow);
     }
     ScDrawLayer::SetGlobalDrawPersist( aDragShellRef.get() );
     std::unique_ptr<SdrModel> pModel(CreateMarkedObjModel());

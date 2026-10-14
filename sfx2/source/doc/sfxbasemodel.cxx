@@ -1912,7 +1912,12 @@ void SAL_CALL SfxBaseModel::initNew()
     if( m_pData->m_pObjectShell->GetMedium() )
         throw frame::DoubleInitializationException();
 
-    bool bRes = m_pData->m_pObjectShell->DoInitNew();
+    // An embedded object starts with macros disallowed, the same as one loaded from its own storage.
+    const SfxNewDocumentMacros eMacros
+        = m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED
+              ? SfxNewDocumentMacros::Disallow
+              : SfxNewDocumentMacros::Allow;
+    bool bRes = m_pData->m_pObjectShell->DoInitNew(eMacros);
     ErrCodeMsg nErrCode = m_pData->m_pObjectShell->GetErrorIgnoreWarning() ?
                        m_pData->m_pObjectShell->GetErrorIgnoreWarning() : ERRCODE_IO_CANTCREATE;
     m_pData->m_pObjectShell->ResetError();

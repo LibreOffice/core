@@ -769,7 +769,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         sal_uInt8 nPara = pDlg->GetPara();
                         SwDoc* pSmryDoc = new SwDoc();
                         SfxObjectShellLock xDocSh(new SwDocShell(*pSmryDoc, SfxObjectCreateMode::STANDARD));
-                        xDocSh->DoInitNew();
+                        xDocSh->DoInitNew(SfxNewDocumentMacros::Allow);
 
                         bool bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
                         m_xDoc->Summary(*pSmryDoc, nLevel, nPara, bImpress);

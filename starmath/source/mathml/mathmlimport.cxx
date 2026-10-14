@@ -2628,7 +2628,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportMML(SvStream& rStream)
     SmGlobals::ensure();
 
     SfxObjectShellLock xDocSh(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT));
-    xDocSh->DoInitNew();
+    xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow);
     uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
 
     uno::Reference<beans::XPropertySet> xInfoSet;

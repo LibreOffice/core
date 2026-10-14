@@ -321,7 +321,7 @@ bool SwOLENode::RestorePersistentData()
             // What happens to this document?
             OSL_ENSURE( false, "Why are we creating a DocShell here?" );
             p = new SwDocShell( GetDoc(), SfxObjectCreateMode::INTERNAL );
-            p->DoInitNew();
+            p->DoInitNew(SfxNewDocumentMacros::Disallow);
         }
 
         uno::Reference < container::XChild > xChild( maOLEObj.m_xOLERef.GetObject(), uno::UNO_QUERY );
@@ -492,7 +492,7 @@ SwContentNode* SwOLENode::MakeCopy( SwDoc& rDoc, SwNode& rIdx, bool) const
         // the created document will be closed by rDoc ( should use SfxObjectShellLock )
         pPersistShell = new SwDocShell( rDoc, SfxObjectCreateMode::INTERNAL );
         rDoc.SetTmpDocShell(pPersistShell.get());
-        pPersistShell->DoInitNew();
+        pPersistShell->DoInitNew(SfxNewDocumentMacros::Disallow);
     }
 
     // We insert it at SvPersist level
@@ -1022,7 +1022,7 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
         // What happens to the document?
         OSL_ENSURE( false, "Why are we creating a DocShell here??" );
         p = new SwDocShell( rDoc, SfxObjectCreateMode::INTERNAL );
-        p->DoInitNew();
+        p->DoInitNew(SfxNewDocumentMacros::Disallow);
     }
 
     OUString aObjName;

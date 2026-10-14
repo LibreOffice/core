@@ -177,7 +177,7 @@ CPPUNIT_TEST_FIXTURE(SwDocTest, testFileNameFields)
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Readable FileName", sExpected, sResult);
     }
 
-    m_xDocShRef->DoInitNew();
+    m_xDocShRef->DoInitNew(SfxNewDocumentMacros::Disallow);
 }
 
 //See http://lists.freedesktop.org/archives/libreoffice/2011-August/016666.html
@@ -1655,7 +1655,7 @@ void SwDocTest::setUp()
     SwGlobals::ensure();
     m_pDoc = new SwDoc;
     m_xDocShRef = new SwDocShell(*m_pDoc, SfxObjectCreateMode::EMBEDDED);
-    m_xDocShRef->DoInitNew();
+    m_xDocShRef->DoInitNew(SfxNewDocumentMacros::Disallow);
 }
 
 void SwDocTest::tearDown()

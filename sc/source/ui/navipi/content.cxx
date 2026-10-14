@@ -1163,7 +1163,7 @@ static bool lcl_DoDragObject( ScDocShell& rSrcShell, std::u16string_view rName, 
             if(SdrObjKind::OLE2 == pObject->GetObjIdentifier())
             {
                 aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
-                aDragShellRef->DoInitNew();
+                aDragShellRef->DoInitNew(SfxNewDocumentMacros::Disallow);
             }
 
             ScDrawLayer::SetGlobalDrawPersist(aDragShellRef.get());

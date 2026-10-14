@@ -3515,7 +3515,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDBF(SvStream &rStream)
                                              SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
                                              SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 
-    xDocShell->DoInitNew();
+    xDocShell->DoInitNew(SfxNewDocumentMacros::Disallow);
 
     ScDocument& rDoc = xDocShell->GetDocument();
 

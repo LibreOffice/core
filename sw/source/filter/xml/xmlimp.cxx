@@ -1799,7 +1799,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODT(SvStream &rStream)
     SwGlobals::ensure();
 
     SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
-    xDocSh->DoInitNew();
+    xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow);
     uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
@@ -2022,7 +2022,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDOCX(SvStream &rStream)
     SwGlobals::ensure();
 
     SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
-    xDocSh->DoInitNew();
+    xDocSh->DoInitNew(SfxNewDocumentMacros::Disallow);
     uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());

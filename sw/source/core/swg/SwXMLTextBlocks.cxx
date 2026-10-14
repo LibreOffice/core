@@ -65,7 +65,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
     , m_nFlags(SwXmlFlags::NONE)
 {
     m_xDocShellRef = new SwDocShell(SfxObjectCreateMode::INTERNAL);
-    if (!m_xDocShellRef->DoInitNew())
+    if (!m_xDocShellRef->DoInitNew(SfxNewDocumentMacros::Disallow))
         return;
     m_bReadOnly = true;
     m_xDoc = m_xDocShellRef->GetDoc();
@@ -106,7 +106,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg
     , m_nFlags(SwXmlFlags::NONE)
 {
     m_xDocShellRef = new SwDocShell(SfxObjectCreateMode::INTERNAL);
-    if (!m_xDocShellRef->DoInitNew())
+    if (!m_xDocShellRef->DoInitNew(SfxNewDocumentMacros::Disallow))
         return;
     m_bReadOnly = false;
     m_xDoc = m_xDocShellRef->GetDoc();

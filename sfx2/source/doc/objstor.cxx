@@ -475,7 +475,7 @@ void SfxObjectShell::DoInitUnitTest()
     pMedium = new SfxMedium;
 }
 
-bool SfxObjectShell::DoInitNew()
+bool SfxObjectShell::DoInitNew(SfxNewDocumentMacros eMacros)
 /*  [Description]
 
     This from SvPersist inherited virtual method is called to initialize
@@ -504,19 +504,15 @@ bool SfxObjectShell::DoInitNew()
 
     if ( InitNew( nullptr ) )
     {
-        if ( SfxObjectCreateMode::EMBEDDED == eCreateMode )
+        if (eMacros == SfxNewDocumentMacros::Allow)
         {
-            // An embedded object starts with macros disallowed, the same as one loaded from its own
-            // storage.
-            pImpl->aMacroMode.disallowMacroExecution();
-            SetTitle(SfxResId(STR_NONAME));
-        }
-        else
-        {
-            // empty documents always get their macros from the user, so there is no reason to restrict access
             pImpl->aMacroMode.allowMacroExecution();
             pImpl->m_bMacroCallsAllowed = true;
         }
+        else
+            pImpl->aMacroMode.disallowMacroExecution();
+        if ( SfxObjectCreateMode::EMBEDDED == eCreateMode )
+            SetTitle(SfxResId(STR_NONAME));
 
         uno::Reference< frame::XModel >  xModel = GetModel();
         if ( xModel.is() )

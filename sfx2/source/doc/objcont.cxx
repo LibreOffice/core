@@ -584,7 +584,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     // styles should be updated, create document in organizer mode to read in the styles
     //TODO: testen!
     SfxObjectShellLock xTemplDoc = CreateObjectByFactoryName( GetFactory().GetFactoryName(), SfxObjectCreateMode::ORGANIZER );
-    xTemplDoc->DoInitNew();
+    xTemplDoc->DoInitNew(SfxNewDocumentMacros::Disallow);
 
     // TODO/MBA: do we need a BaseURL? Then LoadFrom must be extended!
     //xTemplDoc->SetBaseURL( aFoundName );
