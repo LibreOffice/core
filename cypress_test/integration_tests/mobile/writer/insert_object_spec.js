@@ -215,9 +215,31 @@ describe(['tagmobile', 'tagnextcloud'], 'Insert objects via insertion wizard.', 
 		cy.cGet('#target-input').type('www.something.com');
 		// Insert
 		cy.cGet('#ok').click();
-		helper.typeIntoDocument('{leftArrow}');
-		cy.cGet('#hyperlink-pop-up').click();
+		// the dialog leaves the link selected, a tap inside a selection only collapses it
+		helper.typeIntoDocument('{end}');
+		mobileHelper.tapNextToCursor(-20);
+		cy.cGet('#mobile-wizard-title').should('have.text', 'Link');
+		cy.cGet('#mobile-wizard .ui-header-openlink').should('have.text', 'http://www.something.com/');
+		cy.cGet('#mobile-wizard .ui-header-removelink').should('be.visible');
+		cy.cGet('#mobile-wizard .ui-header-openlink').click();
 		cy.cGet('#info-modal-label2').should('have.text', 'http://www.something.com/');
+	});
+
+	it('Link wizard opens for a tap on the link only.', function() {
+		mobileHelper.openInsertionWizard();
+		cy.cGet('body').contains('.menu-entry-with-icon', 'Hyperlink...').click();
+		cy.cGet('#target-input').should('exist');
+		cy.cGet('#indication-input').type('some text');
+		cy.cGet('#target-input').type('www.something.com');
+		cy.cGet('#ok').click();
+		// the keyboard moving into the link opens nothing
+		helper.typeIntoDocument('{leftArrow}');
+		cy.cGet('#mobile-wizard').should('not.be.visible');
+		mobileHelper.tapNextToCursor(-20);
+		cy.cGet('#mobile-wizard .ui-header-openlink').should('have.text', 'http://www.something.com/');
+		// a tap below the text closes it
+		mobileHelper.tapNextToCursor(0, 60);
+		cy.cGet('#mobile-wizard').should('not.be.visible');
 	});
 
 	it('Insert shape.', function() {

@@ -5274,7 +5274,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 if (comphelper::COKit::isActive())
                                 {
                                     OUString val((*static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr)).GetValue());
-                                    if (val.startsWith("#"))
+                                    // a phone has no ctrl, so a plain tap reports the link too
+                                    if (val.startsWith("#") || m_rView.isKitMobilePhone())
                                         bExecHyperlinks = true;
                                 }
                                 if ( bExecHyperlinks && aContentAtPos.aFnd.pAttr )

@@ -48,6 +48,8 @@
 
 #include <svx/svdetc.hxx>
 #include <editeng/editview.hxx>
+#include <comphelper/kit.hxx>
+#include <COKit/COKit.hxx>
 
 #include <sdresid.hxx>
 #include <app.hrc>
@@ -588,6 +590,21 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
     mrViewShell.GetViewFrame()->GetBindings().Invalidate( SidArray );
 
     Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
+
+    // no ctrl on a phone, a tap on a link in the edited text reports it to the client
+    if (comphelper::COKit::isActive() && mpView && rMEvt.IsLeft() && rMEvt.GetClicks() == 1)
+    {
+        SfxViewShell* pViewShell = mrViewShell.GetViewShell();
+        OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+        if (pViewShell && pViewShell->isKitMobilePhone() && pOLV)
+        {
+            const SvxFieldItem* pFieldItem = pOLV->GetEditView().GetField(aPnt);
+            const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+            if (auto pURLField = dynamic_cast<const SvxURLField*>(pField))
+                pViewShell->viewCallback(COKitCallbackType::HYPERLINK_CLICKED,
+                                         pURLField->GetURL().toUtf8());
+        }
+    }
 
     if( (mpView && mpView->MouseButtonUp(rMEvt, mpWindow->GetOutDev())) || rMEvt.GetClicks() == 2 )
         return true; // handle event from SdrView

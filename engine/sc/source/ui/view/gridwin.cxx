@@ -2239,8 +2239,12 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
 
             //      links in the edit cell
 
+    ScTabViewShell* pLinkViewShell = mrViewData.GetViewShell();
+    const bool bLinkTapOnPhone = comphelper::COKit::isActive() && pLinkViewShell
+                                 && pLinkViewShell->isKitMobilePhone();
+
     bool bAlt = rMEvt.IsMod2();
-    if ( !bAlt && rMEvt.IsLeft() && ScGlobal::ShouldOpenURL() &&
+    if ( !bAlt && rMEvt.IsLeft() && (ScGlobal::ShouldOpenURL() || bLinkTapOnPhone) &&
             GetEditUrl(rMEvt.GetPosPixel()) )           // click on link: do not move cursor
     {
         SetPointer( PointerStyle::RefHand );

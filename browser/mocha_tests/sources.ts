@@ -328,6 +328,7 @@
 /// <reference path="../src/control/Notebookbar.TableDesignTabBase.ts" />
 /// <reference path="../src/control/Notebookbar.WriterTableDesignTab.ts" />
 /// <reference path="../src/control/Control.ContextToolbar.ts" />
+/// <reference path="../src/control/Control.HyperlinkWizard.ts" />
 /// <reference path="../src/control/Control.SidebarBase.ts" />
 /// <reference path="../src/control/Control.Sidebar.ts" />
 /// <reference path="../src/control/Notebookbar.ImpressAnimationTab.ts" />

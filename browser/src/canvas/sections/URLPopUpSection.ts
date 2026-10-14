@@ -136,10 +136,50 @@ class URLPopUpSection extends HTMLObjectSection {
 	}
 
 	openLink() {
-		if (!this.sectionProperties.url.startsWith('#'))
-			app.map.fire('warn', {url: this.sectionProperties.url, map: app.map, cmd: 'openlink'});
+		URLPopUpSection.openLink(this.sectionProperties.url);
+	}
+
+	// '#' is a bookmark in the document, anything else opens after a confirmation
+	public static openLink(url: string) {
+		if (!url.startsWith('#'))
+			app.map.fire('warn', {url: url, map: app.map, cmd: 'openlink'});
 		else
-			app.map.sendUnoCommand('.uno:JumpToMark?Bookmark:string=' + encodeURIComponent(this.sectionProperties.url.substring(1)));
+			app.map.sendUnoCommand('.uno:JumpToMark?Bookmark:string=' + encodeURIComponent(url.substring(1)));
+	}
+
+	// in a spreadsheet the link commands take the tap position inside the cell
+	public static commandParameters(linkPosition?: cool.SimplePoint): any {
+		if (!linkPosition)
+			return undefined;
+
+		return {
+			PositionX: {
+				type: 'long',
+				value: linkPosition.x
+			},
+			PositionY: {
+				type: 'long',
+				value: linkPosition.y
+			}
+		};
+	}
+
+	// the native apps copy through the engine to reach the system clipboard
+	public static copyLinkLocation(url: string, params?: any) {
+		if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp
+				|| window.ThisIsTheWindowsApp || window.ThisIsTheQtApp) {
+			app.map._clip.filterExecCopyPaste('.uno:CopyHyperlinkLocation', params);
+		} else if (navigator.clipboard && navigator.clipboard.writeText) {
+			navigator.clipboard.writeText(url);
+		} else {
+			const ta = document.createElement('textarea');
+			ta.value = url;
+			ta.style.cssText = 'position:fixed;opacity:0';
+			document.body.appendChild(ta);
+			ta.select();
+			document.execCommand('copy');
+			document.body.removeChild(ta);
+		}
 	}
 
 	// opened only through openLink(), which shows the confirmation first
@@ -165,38 +205,10 @@ class URLPopUpSection extends HTMLObjectSection {
 			app.map.focus();
 		});
 
-		var params: any;
-		if (linkPosition) {
-			params = {
-				PositionX: {
-					type: 'long',
-					value: linkPosition.x
-				},
-				PositionY: {
-					type: 'long',
-					value: linkPosition.y
-				}
-			};
-		}
+		const params = URLPopUpSection.commandParameters(linkPosition);
 
 		document.getElementById(this.copyButtonId).onclick = () => {
-			if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp
-					|| window.ThisIsTheWindowsApp || window.ThisIsTheQtApp) {
-				app.map._clip.filterExecCopyPaste('.uno:CopyHyperlinkLocation', params);
-			} else {
-				const url = this.sectionProperties.url;
-				if (navigator.clipboard && navigator.clipboard.writeText) {
-					navigator.clipboard.writeText(url);
-				} else {
-					const ta = document.createElement('textarea');
-					ta.value = url;
-					ta.style.cssText = 'position:fixed;opacity:0';
-					document.body.appendChild(ta);
-					ta.select();
-					document.execCommand('copy');
-					document.body.removeChild(ta);
-				}
-			}
+			URLPopUpSection.copyLinkLocation(this.sectionProperties.url, params);
 		};
 
 		document.getElementById(this.editButtonId).onclick = () => {
@@ -270,6 +282,11 @@ class URLPopUpSection extends HTMLObjectSection {
 	}
 
 	public static showURLPopUP(url: string, documentPosition: cool.SimplePoint, linkPosition?: cool.SimplePoint, linkIsClientSide?: boolean) {
+		if (window.mode.isSmallScreenDevice()) {
+			HyperlinkWizard.show(url, linkPosition, linkIsClientSide);
+			return;
+		}
+
 		if (URLPopUpSection.isOpen())
 			URLPopUpSection.closeURLPopUp();
 

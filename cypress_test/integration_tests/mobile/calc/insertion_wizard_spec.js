@@ -72,6 +72,13 @@ describe(['tagmobile', 'tagnextcloud'], 'Calc insertion wizard.', function() {
 		cy.cGet('.blinking-cursor')
 			.should('be.visible');
 
+		// the text sits at the bottom of the tall first row
+		helper.typeIntoDocument('{enter}');
+		calcHelper.clickOnFirstCell(true, false, 'A1', 0.85);
+		cy.cGet('#mobile-wizard .ui-header-openlink').should('have.text', 'http://www.something.com/');
+		cy.cGet('#mobile-wizard-back').click();
+		cy.cGet('#mobile-wizard').should('not.be.visible');
+
 		calcHelper.selectEntireSheet();
 		helper.copy();
 

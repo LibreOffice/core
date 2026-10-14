@@ -50,18 +50,21 @@ function clickAtOffset(offsetX, offsetY, right=false) {
 // dblClick - to do a double click or not. The result of double click is that the cell
 //            editing is triggered both on desktop and mobile.
 // expectedCell - the expected cell address after clicking (default 'A1').
-function clickOnFirstCell(firstClick = true, dblClick = false, expectedCell = 'A1') {
+// verticalPosition - where the click lands inside the cell, as a fraction of the cell
+//                    height from its top edge (default 0.5, the centre).
+function clickOnFirstCell(firstClick = true, dblClick = false, expectedCell = 'A1', verticalPosition = 0.5) {
 	cy.log('>> clickOnFirstCell - start');
 	cy.log('Param - firstClick: ' + firstClick);
 	cy.log('Param - dblClick: ' + dblClick);
 	cy.log('Param - expectedCell: ' + expectedCell);
+	cy.log('Param - verticalPosition: ' + verticalPosition);
 
 	// Flush any pending layouting tasks before clicking
 	cy.getFrameWindow().then(function(win) {
 		helper.processToIdle(win);
 	});
 
-	// Compute the screen position of the centre of the first cell
+	// Compute the screen position of the click inside the first cell
 	cy.getFrameWindow().then(function(win) {
 		var anchor = win.app.sectionContainer.getDocumentAnchor();
 		var dpiScale = win.app.dpiScale;
@@ -71,7 +74,7 @@ function clickOnFirstCell(firstClick = true, dblClick = false, expectedCell = 'A
 		var container = win.document.getElementById('canvas-container');
 		var bcr = container.getBoundingClientRect();
 		var XPos = bcr.left + (anchor[0] + cellWidth / 2) / dpiScale;
-		var YPos = bcr.top + (anchor[1] + cellHeight / 2) / dpiScale;
+		var YPos = bcr.top + (anchor[1] + cellHeight * verticalPosition) / dpiScale;
 		if (dblClick)
 			cy.cGet('body').dblclick(XPos, YPos);
 		else

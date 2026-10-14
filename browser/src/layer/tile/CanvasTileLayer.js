@@ -1811,7 +1811,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (URLPopUpSection.isOpen() && !(obj.hyperlink && obj.hyperlink.link))
 			URLPopUpSection.closeURLPopUp();
 
-		if (obj.hyperlink && obj.hyperlink.link &&
+		// a small screen opens the link from the tap, not from the cursor
+		if (obj.hyperlink && obj.hyperlink.link && !window.mode.isSmallScreenDevice() &&
 			( !URLPopUpSection.isOpen() || updateCursor || isHyperlinkChanged))
 			URLPopUpSection.showURLPopUP(obj.hyperlink.link, new cool.SimplePoint(app.file.textCursor.rectangle.x1, app.file.textCursor.rectangle.y1));
 

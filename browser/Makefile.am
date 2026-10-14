@@ -821,6 +821,7 @@ COOL_JS_LST =\
 	src/control/onboarding/OnboardingSteps.ts \
 	src/control/onboarding/Control.OnboardingTour.ts \
 	src/control/Control.ContextToolbar.ts \
+	src/control/Control.HyperlinkWizard.ts \
 	src/control/Control.SidebarBase.ts \
 	src/control/Control.Sidebar.ts \
 	src/control/Notebookbar.CalcTableTab.ts \
@@ -1723,6 +1724,7 @@ pot:
 		src/control/Control.NotebookbarImpress.js \
 		src/control/Control.NotebookbarWriter.js \
 		src/control/Control.ContextToolbar.ts \
+		src/control/Control.HyperlinkWizard.ts \
 		src/control/Control.PartsPreview.js \
 		src/control/Control.PresentationBar.js \
 		src/control/Control.SaveState.tsx \

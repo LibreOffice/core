@@ -390,6 +390,23 @@ function pressPushButtonOfDialog(name) {
 	cy.log('<< pressPushButtonOfDialog - end');
 }
 
+// Tap the document at the given pixel offset from the text cursor.
+function tapNextToCursor(horizontalOffset, verticalOffset = 0) {
+	cy.log('>> tapNextToCursor - start');
+
+	cy.cGet('.blinking-cursor').should('be.visible').then(function(cursor) {
+		const cursorRect = cursor[0].getBoundingClientRect();
+		cy.cGet('#document-container').then(function(container) {
+			const containerRect = container[0].getBoundingClientRect();
+			cy.cGet('#document-container').click(
+				cursorRect.left - containerRect.left + horizontalOffset,
+				cursorRect.top - containerRect.top + cursorRect.height / 2 + verticalOffset);
+		});
+	});
+
+	cy.log('<< tapNextToCursor - end');
+}
+
 function getCompactIcon(unoCommand) {
 	return cy.cGet('#toolbar-down .uno' + unoCommand + ':visible');
 }
@@ -415,3 +432,4 @@ module.exports.deleteImage = deleteImage;
 module.exports.insertComment = insertComment;
 module.exports.pressPushButtonOfDialog = pressPushButtonOfDialog;
 module.exports.getCompactIcon = getCompactIcon;
+module.exports.tapNextToCursor = tapNextToCursor;

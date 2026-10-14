@@ -124,10 +124,16 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		// Insert
 		cy.cGet('#ok').click();
 
+		// tap on the link at the start of the text
+		impressHelper.dblclickOnSelectedShape();
+		helper.typeIntoDocument('{home}');
+		mobileHelper.tapNextToCursor(20);
+		cy.cGet('#mobile-wizard .ui-header-openlink').should('have.text', 'http://www.something.com/');
+		cy.cGet('#mobile-wizard-back').click();
+		cy.cGet('#mobile-wizard').should('not.be.visible');
 		impressHelper.selectTextOfShape();
 		helper.copy();
 		helper.expectTextForClipboard('some text');
-		cy.cGet('.hyperlink-pop-up-container a').should('have.text', 'http://www.something.com/');
 	});
 
 	it('Insert shape.', function() {
@@ -267,12 +273,17 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		cy.cGet('#target-input').type('www.something.com');
 		// Insert
 		cy.cGet('#ok').click();
+		// tap on the link at the start of the text
+		helper.typeIntoDocument('{home}');
+		mobileHelper.tapNextToCursor(20);
+		cy.cGet('#mobile-wizard .ui-header-openlink').should('have.text', 'http://www.something.com/');
+		cy.cGet('#mobile-wizard-back').click();
+		cy.cGet('#mobile-wizard').should('not.be.visible');
 		// Check the text
-		cy.cGet('body').type('{esc}'); // Make sure to unselect the text before re-selecting it. Or URLPopUp may not show.
+		cy.cGet('body').type('{esc}');
 		impressHelper.selectTextOfShape();
 		helper.copy();
 		helper.expectTextForClipboard('some text');
-		cy.cGet('.hyperlink-pop-up-container a').should('have.text', 'http://www.something.com/');
 	});
 
 	it('Insert date field (fixed) inside existing text shape.', function() {

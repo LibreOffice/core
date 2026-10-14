@@ -452,6 +452,12 @@ p.mobile-wizard.ui-combobox-text.selected {
 .flex-fullwidth {
 	flex-grow: 100;
 }
+/* the first entry of the link wizard is the url, cut it with an ellipsis */
+#mobile-wizard .ui-header-openlink span.menu-entry-with-icon {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 
 .ui-tabs.mobile-wizard {
 	text-align: center;

@@ -14,7 +14,7 @@
  * Collabora Online toolbar
  */
 
-/* global app $ _ _UNO JSDialog URLPopUpSection cool Util */
+/* global app $ _ _UNO JSDialog URLPopUpSection HyperlinkWizard cool Util */
 /*eslint indent: [error, "tab", { "outerIIFEBody": 0 }]*/
 
 (function(global) {
@@ -1214,19 +1214,22 @@ function setupToolbar(e) {
 	});
 
 	map.on('hyperlinkclicked', function (e) {
-		if (e.url) {
-			if (e.coordinates) {
-				// Coordinates contains a list of numbers, 0-1 top-left of the cell with the hyperlink
-				// 2-3 size of the cell, 4-5 number of th cell, 6-7 are the position of the click
-				var strTwips = e.coordinates.match(/\d+/g);
-				var linkPosition;
-				if (strTwips.length > 7) {
-					linkPosition = new cool.SimplePoint(parseInt(strTwips[6]), parseInt(strTwips[7]));
-				}
-				URLPopUpSection.showURLPopUP(e.url, new cool.SimplePoint(parseInt(strTwips[6]), parseInt(strTwips[1])), linkPosition);
-			} else {
-				map.fire('warn', {url: e.url, map: map, cmd: 'openlink'});
-			}
+		if (!e.url)
+			return;
+
+		// Coordinates contains a list of numbers, 0-1 top-left of the cell with the hyperlink
+		// 2-3 size of the cell, 4-5 number of th cell, 6-7 are the position of the click
+		var strTwips = e.coordinates ? e.coordinates.match(/\d+/g) : null;
+		var linkPosition;
+		if (strTwips && strTwips.length > 7)
+			linkPosition = new cool.SimplePoint(parseInt(strTwips[6]), parseInt(strTwips[7]));
+
+		if (window.mode.isSmallScreenDevice()) {
+			HyperlinkWizard.show(e.url, linkPosition);
+		} else if (strTwips) {
+			URLPopUpSection.showURLPopUP(e.url, new cool.SimplePoint(parseInt(strTwips[6]), parseInt(strTwips[1])), linkPosition);
+		} else {
+			map.fire('warn', {url: e.url, map: map, cmd: 'openlink'});
 		}
 	});
 
