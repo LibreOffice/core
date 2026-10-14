@@ -2286,13 +2286,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf164718)
     assertXPathNodeName(pXmlDoc, "//page/body/*[3]", "section");
     assertXPathNodeName(pXmlDoc, "//page/body/*[4]", "txt");
 
-    // Check that the field is split across both columns: lines 8-13 are in column 2, and the
-    // section is about 7 lines (1932) high, not 13 lines (3588):
+    // Check that the field is split across both columns: lines 1-7 are in column 1, and lines
+    // 8-13 are in column 2:
     assertXPath(pXmlDoc, "//page/body/section/column[1]/body/txt", 1);
     assertXPath(pXmlDoc, "//page/body/section/column[2]/body/txt", 1);
-    auto height = getXPath(pXmlDoc, "//page/body/section/infos/bounds", "height").toInt32();
-    CPPUNIT_ASSERT_GREATER(sal_Int32(1500), height);
-    CPPUNIT_ASSERT_LESS(sal_Int32(2500), height);
+    assertXPath(pXmlDoc, "//page/body/section/column[1]/body/txt/SwParaPortion/SwLineLayout", 7);
+    assertXPath(pXmlDoc, "//page/body/section/column[2]/body/txt/SwParaPortion/SwLineLayout", 6);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf164718_lineBreaks)
@@ -2303,7 +2302,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf164718_lineBreaks)
     Scheduler::ProcessEventsToIdle();
     auto pXmlDoc = parseLayoutDump();
 
-    // Without the fix, the whole field stayed in column 1:
+    // Without the fix of tdf#173897, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - In <>, XPath '//page/body/section/column[2]/body/txt' number of nodes is incorrect
+    // i.e. the whole field stayed in column 1.
     assertXPath(pXmlDoc, "//page", 1);
     assertXPath(pXmlDoc, "//page/body/section/column[1]/body/txt", 1);
     assertXPath(pXmlDoc, "//page/body/section/column[2]/body/txt", 1);
