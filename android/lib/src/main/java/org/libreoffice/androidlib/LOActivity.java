@@ -540,6 +540,7 @@ public class LOActivity extends AppCompatActivity {
 
                     return WindowInsets.CONSUMED;
                 });
+                mWebView.requestApplyInsets();
 
                 boolean lightMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_YES) == 0;
                 WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView()).setAppearanceLightStatusBars(lightMode);
