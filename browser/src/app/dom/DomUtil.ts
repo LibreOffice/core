@@ -47,13 +47,29 @@ class DomUtil {
 		return element.offsetHeight;
 	}
 
+	private static durationCache: Map<string, number> | null = null;
+
 	public static getDurationMs(token: string): number {
+		if (!DomUtil.durationCache) {
+			const durationCache = new Map<string, number>();
+			window
+				.matchMedia?.('(prefers-reduced-motion: reduce)')
+				?.addEventListener('change', () => durationCache.clear());
+			DomUtil.durationCache = durationCache;
+		}
+
+		const cached = DomUtil.durationCache.get(token);
+		if (cached !== undefined) return cached;
+
 		const value = getComputedStyle(document.documentElement)
 			.getPropertyValue(token)
 			.trim();
 		const duration = parseFloat(value);
 		if (isNaN(duration)) return 0;
-		return value.endsWith('ms') ? duration : duration * 1000;
+
+		const durationMs = value.endsWith('ms') ? duration : duration * 1000;
+		DomUtil.durationCache.set(token, durationMs);
+		return durationMs;
 	}
 
 	public static create(
