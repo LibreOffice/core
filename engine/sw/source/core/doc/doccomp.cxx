@@ -176,8 +176,8 @@ public:
     void CheckForChangesInLine( const CompareData& rData,
                                     sal_uLong nStt, sal_uLong nEnd,
                                     sal_uLong nThisStt, sal_uLong nThisEnd );
-    // Compares two tables cell by cell. Returns false if the tables have different shapes, or if a
-    // cell of either table ends with a nested table.
+    // Compares two tables cell by cell. Returns false if the tables have different shapes, if a
+    // cell of either table ends with a nested table, or if no cell has a difference.
     bool CompareTableCells( const CompareData& rData, const SwTableNode& rDstTable,
                             const SwTableNode& rSrcTable );
 
@@ -2130,6 +2130,9 @@ bool CompareData::CompareTableCells( const CompareData& rData, const SwTableNode
     {
         return false;
     }
+    // Two tables differ also when only the displayed value of a field differs, which the
+    // comparison of the cells does not see. Such tables are compared as a whole.
+    bool bCellDiffers = false;
     for (size_t i = 0; i < aDstCells.size(); ++i)
     {
         CompareSectionText aSrcCell(rData.m_rDoc, *aSrcCells[i]);
@@ -2138,9 +2141,12 @@ bool CompareData::CompareTableCells( const CompareData& rData, const SwTableNode
         sal_uLong nChanges = pDstCell->ShowDiffs(aSrcCell);
         nChanges += pDstCell->CompareFormatting();
         if (nChanges)
+        {
             m_aCellComparisons.push_back(std::move(pDstCell));
+            bCellDiffers = true;
+        }
     }
-    return true;
+    return bCellDiffers;
 }
 
 void CompareData::KeepRangeInSection( SwPaM& rPaM )

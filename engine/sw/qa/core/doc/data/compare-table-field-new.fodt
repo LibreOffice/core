@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:user-field-decls>
+    <text:user-field-decl office:value-type="string" office:string-value="new value" text:name="Version"/>
+   </text:user-field-decls>
+   <text:p>Before</text:p>
+   <table:table table:name="Table1">
+    <table:table-column table:number-columns-repeated="2"/>
+    <table:table-row>
+     <table:table-cell><text:p>A1</text:p></table:table-cell>
+     <table:table-cell><text:p>B1</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell><text:p>A2</text:p></table:table-cell>
+     <table:table-cell><text:p><text:user-field-get text:name="Version">new value</text:user-field-get></text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p>After</text:p>
+  </office:text>
+ </office:body>
+</office:document>

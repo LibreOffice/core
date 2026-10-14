@@ -2365,6 +2365,28 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsFormattingInChangedTable
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), countRedlines(RedlineType::Format));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareTableFieldValueChanged)
+{
+    // Given a document with a 2x2 table where the last cell holds a user field, and the field
+    // shows "new value" instead of "old value" in the old version:
+    createSwDoc("compare-table-field-new.fodt");
+
+    // When comparing with the old version:
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"URL"_ustr, createFileURL(u"compare-table-field-old.fodt")),
+        comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
+    };
+    dispatchCommand(mxComponent, u".uno:CompareDocuments"_ustr, aArgs);
+
+    // Then the change is tracked as a whole-table delete and insert:
+    const SwRedlineTable& rRedlines = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0
+    // i.e. the changed table had no tracked change at all.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rRedlines.size());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
