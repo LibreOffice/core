@@ -14,6 +14,15 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/table/XColumnRowRange.hpp>
+#include <com/sun/star/sheet/XSubTotalCalculatable.hpp>
+#include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
+#include <com/sun/star/sheet/SubTotalColumn.hpp>
+#include <com/sun/star/sheet/GeneralFunction.hpp>
+#include <com/sun/star/sheet/XSheetOutline.hpp>
+#include <com/sun/star/table/TableOrientation.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/propertysequence.hxx>
@@ -2653,6 +2662,84 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColumnsKeepPositionAfterWholeColu
     CPPUNIT_ASSERT_EQUAL(nWideTwips, rDoc.GetColWidth(2, 0));
     CPPUNIT_ASSERT_EQUAL(expectedColumnPosition(rDoc, fPPTX, 0, nProbeCol), viewColumnPosition());
     CPPUNIT_ASSERT(columnsWereInvalidated());
+
+    KitHelper::setView(nView2);
+    Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowsKeepPositionAfterClearOutlineUndo)
+{
+    // Removing all outlines shows the rows the groups had hidden, and the undo hides them
+    // again. Every view has to drop its cached row positions of that sheet each time and the
+    // clients have to be told that the row geometry changed.
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScViewData* pViewData1 = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData1);
+    ScDocument& rDoc = pViewData1->GetDocument();
+    const int nView1 = KitHelper::getCurrentView();
+
+    // A hidden row group above the probe row, made through the API before any view caches
+    // positions.
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xSheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSheetOutline> xOutline(xSheets->getByIndex(0), uno::UNO_QUERY_THROW);
+    const table::CellRangeAddress aGroup(0, 0, 1, 0, 4);
+    xOutline->group(aGroup, table::TableOrientation_ROWS);
+    xOutline->hideDetail(aGroup);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(rDoc.RowHidden(1, 0));
+    CPPUNIT_ASSERT(rDoc.RowHidden(4, 0));
+
+    KitHelper::createView();
+    const int nView2 = KitHelper::getCurrentView();
+    ScTestViewCallback aView2;
+    ScViewData* pViewData2 = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData2);
+    requestColumnAnchors(pModelObj, tools::Rectangle(0, 0, 10000, 5000));
+    const double fPPTY = pViewData2->GetPPTY();
+    const SCROW nProbeRow = 25;
+    auto expectedRowPosition = [&rDoc, fPPTY]() {
+        tools::Long nPixels = 0;
+        for (SCROW nRow = 0; nRow < nProbeRow; ++nRow)
+            if (sal_uInt16 nHeight = rDoc.GetRowHeight(nRow, 0))
+                nPixels += ScViewData::ToPixel(nHeight, fPPTY);
+        return nPixels;
+    };
+    auto viewRowPosition = [pViewData2]() {
+        return pViewData2->GetScrPos(0, nProbeRow, pViewData2->GetActivePart()).Y();
+    };
+    auto rowsWereInvalidated = [&aView2]() {
+        for (const OString& rPayload : aView2.m_aSheetGeometryInvalidations)
+            if (rPayload.startsWith("all") || rPayload.startsWith("rows"))
+                return true;
+        return false;
+    };
+    CPPUNIT_ASSERT_EQUAL(expectedRowPosition(), viewRowPosition());
+
+    // The first view removes all outlines, which shows the hidden rows.
+    KitHelper::setView(nView1);
+    aView2.m_aSheetGeometryInvalidations.clear();
+    dispatchCommand(mxComponent, u".uno:ClearOutline"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!rDoc.RowHidden(1, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedRowPosition(), viewRowPosition());
+    CPPUNIT_ASSERT(rowsWereInvalidated());
+
+    aView2.m_aSheetGeometryInvalidations.clear();
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(rDoc.RowHidden(1, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedRowPosition(), viewRowPosition());
+    CPPUNIT_ASSERT(rowsWereInvalidated());
+
+    aView2.m_aSheetGeometryInvalidations.clear();
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!rDoc.RowHidden(1, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedRowPosition(), viewRowPosition());
+    CPPUNIT_ASSERT(rowsWereInvalidated());
 
     KitHelper::setView(nView2);
     Scheduler::ProcessEventsToIdle();
