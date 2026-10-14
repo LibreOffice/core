@@ -3045,6 +3045,36 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testCool16080_masterPageOrder)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testMasterOutlineLevelIndents)
+{
+    // The slide master's bodyStyle indents each level 0.5 inch further than the one above it,
+    // starting at 0.25 inch, and includes a hanging indent of 0.25 inch
+    createSdImpressDoc("pptx/master-and-eleven-layouts.pptx");
+
+    uno::Reference<container::XNameAccess> xStyles(
+        mxComponent.queryThrow<style::XStyleFamiliesSupplier>()->getStyleFamilies()->getByName(
+            u"Title and Content"_ustr),
+        uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xOutline1(xStyles->getByName(u"outline1"_ustr),
+                                                  uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xNumRules(
+        xOutline1->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY_THROW);
+
+    for (sal_Int32 nLevel = 0; nLevel < 9; ++nLevel)
+    {
+        comphelper::SequenceAsHashMap aRule(xNumRules->getByIndex(nLevel));
+        const OString aMessage = "level " + OString::number(nLevel + 1);
+        // Without the fix in place, this test would have failed for level 2 with:
+        // - Expected: 1905
+        // - Actual  : 2400
+        // i.e. the levels below the first kept the indents of the Impress default.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), sal_Int32(635 + 1270 * nLevel),
+                                     aRule[u"LeftMargin"_ustr].get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMessage.getStr(), sal_Int32(-635),
+                                     aRule[u"FirstLineOffset"_ustr].get<sal_Int32>());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testCool16083_contentPlaceholderStaysEmpty)
 {
     // Given four slides, each with one content placeholder, differing only in what the slide says
