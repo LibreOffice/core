@@ -102,7 +102,7 @@ void ScUndoWidthOrHeight::Undo()
             break;
 
         if (pViewShell)
-            pViewShell->OnKitSetWidthOrHeight(nStart, bWidth);
+            ScTabViewShell::invalidateAllViewsKitPositions(pViewShell, bWidth, rTab, nStart);
 
         if (bWidth) // Width
         {
@@ -127,10 +127,15 @@ void ScUndoWidthOrHeight::Undo()
     {
         SCTAB nCurrentTab = pViewShell->GetViewData().GetTabNumber();
         bool bAffectsVisibility = (eMode != SC_SIZE_ORIGINAL && eMode != SC_SIZE_VISOPT);
-        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
-                pViewShell, bWidth /* bColumns */, !bWidth /* bRows */,
-                true /* bSizes*/, bAffectsVisibility /* bHidden */, bAffectsVisibility /* bFiltered */,
-                false /* bGroups */, nCurrentTab);
+        for (const auto& rTab : aMarkData)
+        {
+            if (rTab >= nTabCount)
+                break;
+            ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+                    pViewShell, bWidth /* bColumns */, !bWidth /* bRows */,
+                    true /* bSizes*/, bAffectsVisibility /* bHidden */, bAffectsVisibility /* bFiltered */,
+                    false /* bGroups */, rTab);
+        }
         pViewShell->UpdateScrollBars(bWidth ? COLUMN_HEADER : ROW_HEADER);
 
         if ( nCurrentTab < nStartTab || nCurrentTab > nEndTab )

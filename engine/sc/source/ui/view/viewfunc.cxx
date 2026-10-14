@@ -2372,7 +2372,9 @@ void ScViewFunc::SetWidthOrHeight(
     SCCOLROW nStart = rRanges.front().mnStart;
     SCCOLROW nEnd = rRanges.back().mnEnd;
 
-    OnKitSetWidthOrHeight(nStart, bWidth);
+    for (const SCTAB& nTab : aMarkData)
+        ScTabViewShell::invalidateAllViewsKitPositions(GetViewData().GetViewShell(), bWidth,
+                                                       nTab, nStart);
 
     bool bFormula = false;
     if ( eMode == SC_SIZE_OPTIMAL )
@@ -2584,10 +2586,13 @@ void ScViewFunc::SetWidthOrHeight(
         rDoc.UpdatePageBreaks( nTab );
 
     bool bAffectsVisibility = (eMode != SC_SIZE_ORIGINAL && eMode != SC_SIZE_VISOPT);
-    ScTabViewShell::notifyAllViewsSheetGeomInvalidation(GetViewData().GetViewShell(),
-            bWidth /* bColumns */, !bWidth /* bRows */,
-            true /* bSizes*/, bAffectsVisibility /* bHidden */, bAffectsVisibility /* bFiltered */,
-            false /* bGroups */, GetViewData().GetTabNumber());
+    for (const SCTAB& nTab : aMarkData)
+    {
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(GetViewData().GetViewShell(),
+                bWidth /* bColumns */, !bWidth /* bRows */,
+                true /* bSizes*/, bAffectsVisibility /* bHidden */, bAffectsVisibility /* bFiltered */,
+                false /* bGroups */, nTab);
+    }
     GetViewData().GetView()->UpdateScrollBars(bWidth ? COLUMN_HEADER : ROW_HEADER);
 
     {
