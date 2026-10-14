@@ -95,6 +95,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -181,6 +183,9 @@ public class LOActivity extends AppCompatActivity {
     private InputManager.InputDeviceListener mInputDeviceListener = null;
 
     private ValueCallback<Uri[]> valueCallback;
+
+    private View mCurrentFullScreenView = null;
+    private WebChromeClient.CustomViewCallback mCurrentFullScreenCallback = null;
 
     /// Source file path remembered while a REQUEST_EXPORT_FILE intent is in flight.
     private String mPendingExportSourcePath = null;
@@ -375,7 +380,10 @@ public class LOActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (mSlideShowActive) {
+                if (mCurrentFullScreenView != null) {
+                    hideFullScreenView();
+                    return;
+                } else if (mSlideShowActive) {
                     callFakeWebsocketOnMessage("mobile: slideshowback");
                     return;
                 } else if (mMobileWizardVisible) {
@@ -597,6 +605,16 @@ public class LOActivity extends AppCompatActivity {
                     }
                     return true;
                 }
+
+                @Override
+                public void onShowCustomView(View view, WebChromeClient.CustomViewCallback callback) {
+                    showFullScreenView(view, callback);
+                }
+
+                @Override
+                public void onHideCustomView() {
+                    hideFullScreenView();
+                }
             });
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -629,6 +647,37 @@ public class LOActivity extends AppCompatActivity {
             return false;
 
         return !Environment.isExternalStorageManager() && resolveSaveTarget(uri) != null;
+    }
+
+    /** Show something in fullscreen mode. Required to show slideshows (but also, say, videos) in a fullscreen view */
+    private void showFullScreenView(View view, WebChromeClient.CustomViewCallback callback) {
+        if (mCurrentFullScreenView != null) {
+            callback.onCustomViewHidden();
+            return;
+        }
+
+        mCurrentFullScreenView = view;
+        mCurrentFullScreenCallback = callback;
+
+        ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
+        decorView.addView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        WindowInsetsControllerCompat insetsController = WindowCompat.getInsetsController(getWindow(), decorView);
+        insetsController.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        insetsController.hide(WindowInsetsCompat.Type.systemBars());
+    }
+
+    private void hideFullScreenView() {
+        if (mCurrentFullScreenView == null)
+            return;
+
+        ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
+        decorView.removeView(mCurrentFullScreenView);
+        WindowCompat.getInsetsController(getWindow(), decorView).show(WindowInsetsCompat.Type.systemBars());
+
+        mCurrentFullScreenView = null;
+        mCurrentFullScreenCallback.onCustomViewHidden();
+        mCurrentFullScreenCallback = null;
     }
 
     /** Offer the user access to all files, so the document can be saved where it is stored. */
