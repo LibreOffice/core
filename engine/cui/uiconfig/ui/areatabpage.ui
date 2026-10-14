@@ -112,106 +112,6 @@
               </object>
             </child>
 
-            <!-- Gradient Tab -->
-            <child>
-              <object class="GtkGrid" id="gdGradient">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">6</property>
-                <property name="margin-end">6</property>
-                <property name="margin-top">6</property>
-                <property name="margin-bottom">6</property>
-                <property name="vexpand">True</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">6</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="lbgradient">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="areatabpage|btngradient">Gradient</property>
-              </object>
-            </child>
-
-            <!-- Hatch Tab -->
-            <child>
-              <object class="GtkGrid" id="gdHatch">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">6</property>
-                <property name="margin-end">6</property>
-                <property name="margin-top">6</property>
-                <property name="margin-bottom">6</property>
-                <property name="vexpand">True</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">6</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="lbhatch">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="areatabpage|btnhatch">Hatch</property>
-              </object>
-            </child>
-
-            <!-- Bitmap/Image Tab -->
-            <child>
-              <object class="GtkGrid" id="gdBitmap">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">6</property>
-                <property name="margin-end">6</property>
-                <property name="margin-top">6</property>
-                <property name="margin-bottom">6</property>
-                <property name="vexpand">True</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">6</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="lbbitmap">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="areatabpage|btnbitmap">Image</property>
-              </object>
-            </child>
-
-            <!-- Pattern Tab -->
-            <child>
-              <object class="GtkGrid" id="gdPattern">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-start">6</property>
-                <property name="margin-end">6</property>
-                <property name="margin-top">6</property>
-                <property name="margin-bottom">6</property>
-                <property name="vexpand">True</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">6</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="lbpattern">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="areatabpage|btnpattern">Pattern</property>
-              </object>
-            </child>
-
             <!-- Use Background Tab -->
             <child>
               <object class="GtkGrid" id="gdUseBackground">
@@ -241,6 +141,26 @@
             <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="moreeffects">
+            <property name="label" translatable="yes" context="areatabpage|moreeffects">More effects...</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="halign">start</property>
+            <property name="use-underline">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="moreeffects-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|moreeffects">Opens a dialog to fill the area with a gradient, a hatch, an image or a pattern.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>

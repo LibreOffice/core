@@ -351,7 +351,11 @@ function traverseTabs(getContainer, win, level, command, isNested = false) {
 								cy.cGet(toggleId).check({ force: true });
 								cy.cGet('[id^="buttonMore"][id$="-button"]').filter(':visible').first().should('be.enabled').click();
 								handleDialog(win, level + 1);
-							} else if ((command == '.uno:FormatArea' || command == '.uno:PageDialog' || command == '.uno:PageFormatDialog') && tabAriaControls == 'lbhatch') {
+							} else if ((command == '.uno:FormatArea' || command == '.uno:PageDialog' || command == '.uno:PageFormatDialog') && tabAriaControls == 'lbcolor') {
+								// Gradient, Hatch, Image and Pattern are tabs of the Fill Effects dialog
+								cy.cGet('#moreeffects-button').click();
+								handleDialog(win, level + 1, command + ':FillEffects');
+							} else if (command && command.endsWith(':FillEffects') && tabAriaControls == 'hatch') {
 								cy.cGet('button.ui-pushbutton[aria-label="Add"]:visible').click();
 								testNameDialog(win, level);
 							}

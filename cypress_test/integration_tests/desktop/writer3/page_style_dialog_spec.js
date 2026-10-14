@@ -144,4 +144,52 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 		helper.processToIdle(this.win);
 		cy.cGet('[id^="TemplateDialog"]').should('not.exist');
 	});
+
+	/*
+	 * The Area tab offers None and Color itself. Gradient, Hatch, Image and Pattern are tabs
+	 * of the Fill Effects dialog that More effects opens, and the effect chosen there is the
+	 * one it opens on next time.
+	 */
+	it('Area tab opens the other fills in Fill Effects', function() {
+		cy.cGet('#Format-tab-label').click();
+		desktopHelper.getNbIcon('PageDialog', 'Format').click();
+		helper.processToIdle(this.win);
+
+		cy.cGet('[id^="TemplateDialog"]').should('be.visible');
+		cy.cGet('button#area.ui-tab').click();
+		helper.processToIdle(this.win);
+
+		cy.cGet('[role="tab"][aria-controls="lbcolor"]').should('exist');
+		cy.cGet('[role="tab"][aria-controls="lbhatch"]').should('not.exist');
+
+		cy.cGet('#moreeffects-button').should('be.visible').click();
+		helper.processToIdle(this.win);
+
+		cy.cGet('[id^="FillEffectsDialog"]').should('be.visible').within(() => {
+			cy.get('[role="tab"]').then(($tabs) => {
+				const labels = $tabs.toArray().map((tab) => tab.textContent.trim());
+				expect(labels).to.deep.equal(['Gradient', 'Hatch', 'Image', 'Pattern']);
+			});
+			cy.get('[role="tab"][aria-controls="gradient"]').should('have.attr', 'aria-selected', 'true');
+			cy.get('[role="tab"][aria-controls="hatch"]').click();
+		});
+		helper.processToIdle(this.win);
+		cy.cGet('[id^="FillEffectsDialog"] #ok-button').click();
+		helper.processToIdle(this.win);
+
+		cy.cGet('[id^="FillEffectsDialog"]').should('not.exist');
+		cy.cGet('[id^="TemplateDialog"] #ok-button').click();
+		helper.processToIdle(this.win);
+
+		// The Format tab is still selected, so the button is there to click again.
+		desktopHelper.getNbIcon('PageDialog', 'Format').click();
+		helper.processToIdle(this.win);
+		cy.cGet('button#area.ui-tab').click();
+		helper.processToIdle(this.win);
+		cy.cGet('#moreeffects-button').click();
+		helper.processToIdle(this.win);
+
+		cy.cGet('[id^="FillEffectsDialog"] [role="tab"][aria-controls="hatch"]')
+			.should('have.attr', 'aria-selected', 'true');
+	});
 });

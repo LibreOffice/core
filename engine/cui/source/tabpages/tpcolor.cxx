@@ -269,6 +269,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SpinValueHdl_Impl, weld::SpinButton&, void)
     m_aCtlPreviewNew.SetAttributes(m_aFillAttributeSet);
 
     m_aCtlPreviewNew.Invalidate();
+    m_aColorChangedHdl.Call(*this);
 }
 
 IMPL_LINK_NOARG(SvxColorTabPage, MetricSpinValueHdl_Impl, weld::MetricSpinButton&, void)
@@ -284,6 +285,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, MetricSpinValueHdl_Impl, weld::MetricSpinButton
     m_aCtlPreviewNew.SetAttributes(m_aFillAttributeSet);
 
     m_aCtlPreviewNew.Invalidate();
+    m_aColorChangedHdl.Call(*this);
 }
 
 IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl, weld::Entry&, void)
@@ -295,6 +297,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl, weld::Entry&, void)
     m_aCtlPreviewNew.SetAttributes(m_aFillAttributeSet);
 
     m_aCtlPreviewNew.Invalidate();
+    m_aColorChangedHdl.Call(*this);
 }
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
@@ -399,6 +402,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, weld::Button&, void)
             m_aCtlPreviewNew.SetAttributes(m_aFillAttributeSet);
 
             m_aCtlPreviewNew.Invalidate();
+            m_aColorChangedHdl.Call(*this);
         }
     });
 }
@@ -544,6 +548,7 @@ IMPL_LINK(SvxColorTabPage, SelectionChangedHdl, weld::IconView&, rIconView, void
     }
 
     ChangeColor(aNamedColor, false);
+    m_aColorChangedHdl.Call(*this);
 
     if (&rIconView == m_xIconViewColorList.get())
     {

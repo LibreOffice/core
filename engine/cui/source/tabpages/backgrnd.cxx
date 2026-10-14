@@ -67,12 +67,7 @@ SvxBkgTabPage::SvxBkgTabPage(weld::Container* pPage, weld::DialogController* pCo
     m_aAttrSet(*rInAttrs.GetPool(),
                rInAttrs.GetRanges().MergeRange(XATTR_FILL_FIRST, XATTR_FILL_LAST))
 {
-    if (m_xNotebook->get_page_index(TABID_GRADIENT) != -1)
-        m_xNotebook->remove_page(TABID_GRADIENT);
-    if (m_xNotebook->get_page_index(TABID_HATCH) != -1)
-        m_xNotebook->remove_page(TABID_HATCH);
-    if (m_xNotebook->get_page_index(TABID_PATTERN) != -1)
-        m_xNotebook->remove_page(TABID_PATTERN);
+    SetEffects({ FillType::BITMAP_FILL });
 }
 
 SvxBkgTabPage::~SvxBkgTabPage()
@@ -257,8 +252,8 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
             m_bCharBackColor = bool(nFlags & SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR);
         }
     }
-    if (!bShowBitmap && m_xNotebook->get_page_index(TABID_BITMAP) != -1)
-        m_xNotebook->remove_page(TABID_BITMAP);
+    if (!bShowBitmap)
+        SetEffects({});
     SetOptimalSize();
 
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
@@ -276,7 +271,7 @@ void SvxBkgTabPage::PageCreated(const SfxAllItemSet& aSet)
     SetColorList(xColorTable);
 
     // sometimes we have the bitmap page
-    if (m_xNotebook->get_page_index(TABID_BITMAP) != -1)
+    if (bShowBitmap)
     {
         XBitmapListRef xBitmapList;
         if (pObjSh)

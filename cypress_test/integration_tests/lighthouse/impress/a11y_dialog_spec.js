@@ -200,21 +200,22 @@ describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolatio
             .then(() => helper.processToIdle(win))
             .then(() => {
                 cy.cGet('.ui-dialog [role="tab"]').then($tabs => {
-                    let areaTab = null;
-                    let hatchTab = null;
-                    $tabs.each((_i, el) => {
-                        const controls = el.getAttribute('aria-controls') || '';
+                    var areaTab = $tabs.filter((_i, el) => {
                         const label = (el.getAttribute('aria-label') || el.textContent || '').trim();
-                        if (controls === 'RID_SVXPAGE_AREA' || (!areaTab && label === 'Area' && controls !== 'lbhatch'))
-                            areaTab = el;
-                        if (controls === 'lbhatch')
-                            hatchTab = el;
-                    });
-                    expect(areaTab, 'outer Area tab').to.not.be.null;
-                    expect(hatchTab, 'inner Hatch tab').to.not.be.null;
+                        return el.getAttribute('aria-controls') === 'RID_SVXPAGE_AREA' || label === 'Area';
+                    }).get(0);
+                    expect(areaTab, 'Area tab').to.not.be.undefined;
                     areaTab.click();
-                    hatchTab.click();
                 });
+                return helper.processToIdle(win);
+            })
+            .then(() => {
+                cy.cGet('#moreeffects-button').click();
+                return a11yHelper.getActiveDialog(2);
+            })
+            .then(() => helper.processToIdle(win))
+            .then(() => {
+                cy.cGet('.ui-dialog [role="tab"][aria-controls="hatch"]').click();
                 return helper.processToIdle(win);
             })
             .then(() => {
@@ -222,8 +223,9 @@ describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolatio
                 return helper.processToIdle(win);
             });
 
-        a11yHelper.testNameDialog(win, 1);
+        a11yHelper.testNameDialog(win, 2);
 
+        a11yHelper.closeActiveDialog(2);
         a11yHelper.closeActiveDialog(1);
         helper.typeIntoDocument('{esc}');
     });

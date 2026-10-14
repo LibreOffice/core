@@ -91,6 +91,7 @@ constexpr auto CuiDialogList
         { u"cui/ui/dimensionlinestabpage.ui" },
         { u"cui/ui/effectspage.ui" },
         { u"cui/ui/eventassigndialog.ui" },
+        { u"cui/ui/filleffectsdialog.ui" },
         { u"cui/ui/fontfeaturesdialog.ui" },
         { u"cui/ui/fontfragment.ui" },
         { u"cui/ui/formatcellsdialog.ui" },

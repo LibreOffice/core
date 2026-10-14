@@ -23,78 +23,64 @@
     <property name="border-width">6</property>
     <property name="spacing">6</property>
     <child>
-      <object class="GtkFrame" id="Fill Frame">
+      <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label-xalign">0</property>
-        <property name="shadow-type">none</property>
+        <property name="margin-start">12</property>
+        <property name="margin-top">6</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
         <child>
-          <object class="GtkBox" id="box1">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-start">12</property>
-            <property name="margin-top">6</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
+            <property name="can-focus">True</property>
+            <property name="vexpand">True</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="vscrollbar-policy">always</property>
+            <property name="shadow-type">in</property>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkIconView" id="image_iconview">
                 <property name="visible">True</property>
+                <property name="item-padding">2</property>
                 <property name="can-focus">True</property>
+                <property name="hexpand">False</property>
                 <property name="vexpand">True</property>
-                <property name="hscrollbar-policy">never</property>
-                <property name="vscrollbar-policy">always</property>
-                <property name="shadow-type">in</property>
-                <child>
-                  <object class="GtkIconView" id="image_iconview">
-                    <property name="visible">True</property>
-                    <property name="item-padding">2</property>
-                    <property name="can-focus">True</property>
-                    <property name="hexpand">False</property>
-                    <property name="vexpand">True</property>
-                    <property name="model">liststore1</property>
-                    <property name="pixbuf-column">0</property>
-                    <property name="margin">6</property>
-                    <property name="columns">3</property>
-                    <property name="activate-on-single-click">True</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="BTN_IMPORT">
-                <property name="label" translatable="yes" context="imagetabpage|BTN_IMPORT">Add / Import</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
+                <property name="model">liststore1</property>
+                <property name="pixbuf-column">0</property>
+                <property name="margin">6</property>
+                <property name="columns">3</property>
+                <property name="activate-on-single-click">True</property>
                 <child internal-child="accessible">
-                  <object class="AtkObject" id="BTN_IMPORT-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="imagetabpage|extended_tip|BTN_IMPORT">Locate the image that you want to import, and then click Open. The image is added to the end of the list of available images.</property>
+                  <object class="AtkObject" id="image_iconview-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes" context="imagetabpage|label1">Image</property>
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
         </child>
-        <child type="label">
-          <object class="GtkLabel" id="label1">
+        <child>
+          <object class="GtkButton" id="BTN_IMPORT">
+            <property name="label" translatable="yes" context="imagetabpage|BTN_IMPORT">Add / Import</property>
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="imagetabpage|label1">Image</property>
-            <property name="xalign">0</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="BTN_IMPORT-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="imagetabpage|extended_tip|BTN_IMPORT">Locate the image that you want to import, and then click Open. The image is added to the end of the list of available images.</property>
+              </object>
+            </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
         </child>
       </object>
       <packing>
@@ -574,6 +560,24 @@
         <property name="margin-top">6</property>
         <property name="orientation">vertical</property>
         <child>
+          <object class="GtkLabel" id="imagepreviewlabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="imagetabpage|previewlabel">Preview</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">CTL_IMAGE_PREVIEW</property>
+            <property name="xalign">0</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -601,7 +605,7 @@
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>

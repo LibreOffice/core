@@ -25,6 +25,9 @@
 #include <svx/svdview.hxx>
 #include <vcl/hexcolorcontrol.hxx>
 
+#include <optional>
+#include <vector>
+
 class AbstractSvxNameDialog;
 class ColorListBox;
 class Graphic;
@@ -184,6 +187,36 @@ inline constexpr OUString TABID_BITMAP = u"lbbitmap"_ustr;
 inline constexpr OUString TABID_PATTERN = u"lbpattern"_ustr;
 inline constexpr OUString TABID_USE_BACKGROUND = u"lbusebackground"_ustr;
 
+class SvxColorTabPage;
+
+/// A dialog with a tab for each of the gradient, hatch, image and pattern fills.
+class SvxFillEffectsDialog final : public SfxTabDialogController
+{
+    XColorListRef m_pColorList;
+    XGradientListRef m_pGradientList;
+    XHatchListRef m_pHatchingList;
+    XBitmapListRef m_pBitmapList;
+    XPatternListRef m_pPatternList;
+    ChangeType* m_pnColorListState;
+
+    std::optional<SfxItemSet> m_oResult;
+    FillType m_eResult = FillType::GRADIENT_FILL;
+
+    virtual void PageCreated(const OUString& rId, SfxTabPage& rPage) override;
+    virtual short Ok() override;
+
+public:
+    SvxFillEffectsDialog(weld::Window* pParent, const SfxItemSet& rInAttrs,
+                         const std::vector<FillType>& rEffects, std::optional<FillType> oStart,
+                         XColorListRef pColorList, XGradientListRef pGradientList,
+                         XHatchListRef pHatchingList, XBitmapListRef pBitmapList,
+                         XPatternListRef pPatternList, ChangeType* pnColorListState);
+
+    /// The fill of the tab in use when OK was pressed.
+    const SfxItemSet* GetResult() const { return m_oResult ? &*m_oResult : nullptr; }
+    FillType GetEffect() const { return m_eResult; }
+};
+
 class SvxAreaTabPage : public SfxTabPage
 {
     static const WhichRangesContainer pAreaRanges;
@@ -208,6 +241,14 @@ private:
 
     bool m_bBtnClicked = false;
 
+    std::unique_ptr<weld::Button> m_xBtnMoreEffects;
+    // The fills that More effects offers, in tab order. Empty when the page offers no effect.
+    std::vector<FillType> m_aEffects;
+    // The gradient, hatch, image or pattern fill in use, if any.
+    std::optional<FillType> m_oEffect;
+    // The items that More effects returned. Empty while the effect is unchanged.
+    std::optional<SfxItemSet> m_oEffectSet;
+
 protected:
     std::unique_ptr<weld::Notebook> m_xNotebook;
     std::map<OUString, FillType> maFillTypeMap;
@@ -218,8 +259,13 @@ protected:
 
     bool IsBtnClicked() const { return m_bBtnClicked; }
 
+    void SetEffects(std::vector<FillType>&& rEffects);
+
 private:
     DECL_LINK(SwitchPageHdl_Impl, const OUString&, void);
+    DECL_LINK(MoreEffectsHdl_Impl, weld::Button&, void);
+    DECL_LINK(ColorChangedHdl_Impl, SvxColorTabPage&, void);
+    void ClearEffect();
 
     std::unique_ptr<SfxTabPage> CreateFillStyleTabPage(FillType eFillType);
     void createFillTabPages();
@@ -657,6 +703,9 @@ class SvxColorTabPage : public SfxTabPage
 private:
     const SfxItemSet& m_rOutAttrs;
 
+    // Called after the user changes the color, not when the page loads one.
+    Link<SvxColorTabPage&, void> m_aColorChangedHdl;
+
     XColorListRef m_pColorList;
 
     ChangeType* m_pnColorListState;
@@ -755,6 +804,7 @@ public:
     void    SetColorList( const XColorListRef& pColList );
 
     void SetColorChgd(ChangeType* pIn) { m_pnColorListState = pIn; }
+    void SetColorChangedHdl(const Link<SvxColorTabPage&, void>& rLink) { m_aColorChangedHdl = rLink; }
 
     virtual void FillUserData() override;
 };

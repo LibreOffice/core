@@ -42,12 +42,10 @@ const WhichRangesContainer SvxAreaTabPage::pAreaRanges(
 namespace
 {
 
-void lclExtendSize(Size& rSize, const Size& rInputSize)
+bool lclIsEffect(FillType eFillType)
 {
-    if (rSize.Width() < rInputSize.Width())
-        rSize.setWidth( rInputSize.Width() );
-    if (rSize.Height() < rInputSize.Height())
-        rSize.setHeight( rInputSize.Height() );
+    return eFillType == FillType::GRADIENT_FILL || eFillType == FillType::HATCH_FILL
+           || eFillType == FillType::BITMAP_FILL || eFillType == FillType::PATTERN_FILL;
 }
 
 } // end anonymous namespace
@@ -80,6 +78,9 @@ SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* p
     // init with pointers to fixed ChangeType
     , m_pnColorListState(&maFixed_ChangeType)
     , m_aFillAttributeSet(rInAttrs.getPool(), WhichRangesContainer(XATTR_FILL_FIRST, XATTR_FILL_LAST))
+    , m_xBtnMoreEffects(m_xBuilder->weld_button(u"moreeffects"_ustr))
+    , m_aEffects({ FillType::GRADIENT_FILL, FillType::HATCH_FILL, FillType::BITMAP_FILL,
+                   FillType::PATTERN_FILL })
     , m_xNotebook(m_xBuilder->weld_notebook(u"nbFillType"_ustr))
 {
     if (!bSlideBackground)
@@ -91,14 +92,11 @@ SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* p
     maFillTypeMap = {
         {TABID_NONE, FillType::TRANSPARENT_FILL},
         {TABID_COLOR, FillType::SOLID_FILL},
-        {TABID_GRADIENT, FillType::GRADIENT_FILL},
-        {TABID_HATCH, FillType::HATCH_FILL},
-        {TABID_BITMAP, FillType::BITMAP_FILL},
-        {TABID_PATTERN, FillType::PATTERN_FILL},
         {TABID_USE_BACKGROUND, FillType::USE_BACKGROUND_FILL}
     };
 
     m_xNotebook->connect_enter_page(LINK(this, SvxAreaTabPage, SwitchPageHdl_Impl));
+    m_xBtnMoreEffects->connect_clicked(LINK(this, SvxAreaTabPage, MoreEffectsHdl_Impl));
 
     SetExchangeSupport();
 }
@@ -142,22 +140,6 @@ void SvxAreaTabPage::SetOptimalSize()
     Size aColorSize = getPageSize(TABID_COLOR);
     if (aColorSize.Width() > 0)
         aSize = aColorSize;
-
-    Size aGradientSize = getPageSize(TABID_GRADIENT);
-    if (aGradientSize.Width() > 0)
-        lclExtendSize(aSize, aGradientSize);
-
-    Size aBitmapSize = getPageSize(TABID_BITMAP);
-    if (aBitmapSize.Width() > 0)
-        lclExtendSize(aSize, aBitmapSize);
-
-    Size aHatchSize = getPageSize(TABID_HATCH);
-    if (aHatchSize.Width() > 0)
-        lclExtendSize(aSize, aHatchSize);
-
-    Size aPatternSize = getPageSize(TABID_PATTERN);
-    if (aPatternSize.Width() > 0)
-        lclExtendSize(aSize, aPatternSize);
 
     if (aSize.Width() == 0 || aSize.Height() == 0)
     {
@@ -240,6 +222,13 @@ DeactivateRC SvxAreaTabPage::DeactivatePage_Impl( SfxItemSet* _pSet )
 
 DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
+    if (m_oEffect)
+    {
+        if (m_oEffectSet && _pSet)
+            _pSet->Put(*m_oEffectSet);
+        return DeactivateRC::LeavePage;
+    }
+
     OUString sCurrentPage = m_xNotebook->get_current_page_ident();
     auto it = maFillTypeMap.find(sCurrentPage);
     if (it == maFillTypeMap.end())
@@ -263,14 +252,6 @@ DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
         }
         case FillType::SOLID_FILL:
             return DeactivatePage_Impl<SvxColorTabPage>(_pSet);
-        case FillType::GRADIENT_FILL:
-            return DeactivatePage_Impl<SvxGradientTabPage>(_pSet);
-        case FillType::HATCH_FILL:
-            return DeactivatePage_Impl<SvxHatchTabPage>(_pSet);
-        case FillType::BITMAP_FILL:
-            return DeactivatePage_Impl<SvxBitmapTabPage>(_pSet);
-        case FillType::PATTERN_FILL:
-            return DeactivatePage_Impl<SvxPatternTabPage>(_pSet);
         case FillType::USE_BACKGROUND_FILL:
         {
             if ( m_bBtnClicked )
@@ -296,6 +277,15 @@ bool SvxAreaTabPage::FillItemSet_Impl( SfxItemSet* rAttrs)
 
 bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
 {
+    // An effect the document already had is left as it is.
+    if (m_oEffect)
+    {
+        if (!m_oEffectSet)
+            return false;
+        rAttrs->Put(*m_oEffectSet);
+        return true;
+    }
+
     OUString sCurrentPage = m_xNotebook->get_current_page_ident();
     auto it = maFillTypeMap.find(sCurrentPage);
     if (it == maFillTypeMap.end())
@@ -313,22 +303,6 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
         case FillType::SOLID_FILL:
         {
             return FillItemSet_Impl<SvxColorTabPage>( rAttrs );
-        }
-        case FillType::GRADIENT_FILL:
-        {
-            return FillItemSet_Impl<SvxGradientTabPage>( rAttrs );
-        }
-        case FillType::HATCH_FILL:
-        {
-            return FillItemSet_Impl<SvxHatchTabPage>( rAttrs );
-        }
-        case FillType::BITMAP_FILL:
-        {
-            return FillItemSet_Impl<SvxBitmapTabPage>( rAttrs );
-        }
-        case FillType::PATTERN_FILL:
-        {
-            return FillItemSet_Impl<SvxPatternTabPage>( rAttrs );
         }
         case FillType::USE_BACKGROUND_FILL:
         {
@@ -350,6 +324,7 @@ void SvxAreaTabPage::Reset_Impl( const SfxItemSet* rAttrs )
 void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 {
     m_bBtnClicked = false;
+    m_oEffectSet.reset();
 
     // Show the fill that the item set holds, before the page is first shown.
     if (rAttrs)
@@ -366,26 +341,6 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
         case FillType::SOLID_FILL:
         {
             Reset_Impl<SvxColorTabPage>( rAttrs );
-            break;
-        }
-        case FillType::GRADIENT_FILL:
-        {
-            Reset_Impl<SvxGradientTabPage>( rAttrs );
-            break;
-        }
-        case FillType::HATCH_FILL:
-        {
-            Reset_Impl<SvxHatchTabPage>( rAttrs );
-            break;
-        }
-        case FillType::BITMAP_FILL:
-        {
-            Reset_Impl<SvxBitmapTabPage>( rAttrs );
-            break;
-        }
-        case FillType::PATTERN_FILL:
-        {
-            Reset_Impl<SvxPatternTabPage>( rAttrs );
             break;
         }
         default:
@@ -433,6 +388,7 @@ SfxTabPage* SvxAreaTabPage::getCurrentFillTabPage()
 IMPL_LINK_NOARG(SvxAreaTabPage, SwitchPageHdl_Impl, const OUString&, void)
 {
     m_bBtnClicked = true;
+    ClearEffect();
     // every fill page is built already, so the notebook only shows another one
     if (m_aFillTabPages.empty())
         createFillTabPages();
@@ -455,19 +411,7 @@ std::unique_ptr<SfxTabPage> SvxAreaTabPage::CreateFillStyleTabPage(FillType eFil
         case FillType::SOLID_FILL:
             fnCreate = &SvxColorTabPage::Create;
             break;
-        case FillType::GRADIENT_FILL:
-            fnCreate = &SvxGradientTabPage::Create;
-            break;
-        case FillType::HATCH_FILL:
-            fnCreate = &SvxHatchTabPage::Create;
-            break;
-        case FillType::BITMAP_FILL:
-            fnCreate = &SvxBitmapTabPage::Create;
-            break;
-        case FillType::PATTERN_FILL:
-            fnCreate = &SvxPatternTabPage::Create;
-            break;
-        case FillType::USE_BACKGROUND_FILL:
+        default:
             fnCreate = nullptr;
             break;
     }
@@ -484,9 +428,14 @@ void SvxAreaTabPage::SelectFillType(FillType eFillType, const SfxItemSet* _pSet)
     if (_pSet)
         m_aFillAttributeSet.Set(*_pSet);
 
-    const OUString pageId = getPageId(eFillType);
+    const OUString pageId = getPageId(lclIsEffect(eFillType) ? FillType::SOLID_FILL : eFillType);
     if(!pageId.isEmpty())
         m_xNotebook->set_current_page(pageId);
+    m_oEffectSet.reset();
+    if (lclIsEffect(eFillType))
+        m_oEffect = eFillType;
+    else
+        m_oEffect.reset();
 
     // Build all fill pages once; later calls only load the new attributes into them.
     if (m_aFillTabPages.empty())
@@ -528,53 +477,48 @@ void SvxAreaTabPage::CreatePage(FillType nId, SfxTabPage& rTab)
         auto& rColorTab = static_cast<SvxColorTabPage&>(rTab);
         rColorTab.SetColorList(m_pColorList);
         rColorTab.SetColorChgd(m_pnColorListState);
+        rColorTab.SetColorChangedHdl(LINK(this, SvxAreaTabPage, ColorChangedHdl_Impl));
         rColorTab.Construct();
         rColorTab.ActivatePage(m_aFillAttributeSet);
         rColorTab.Reset(&m_aFillAttributeSet);
         rColorTab.set_visible(true);
     }
-    else if(nId == FillType::GRADIENT_FILL)
-    {
-        auto& rGradientTab = static_cast<SvxGradientTabPage&>(rTab);
-        rGradientTab.SetColorList(m_pColorList);
-        rGradientTab.SetGradientList(m_pGradientList);
-        rGradientTab.SetColorChgd(m_pnColorListState);
-        rGradientTab.Construct();
-        rGradientTab.ActivatePage(m_aFillAttributeSet);
-        rGradientTab.Reset(&m_aFillAttributeSet);
-        rGradientTab.set_visible(true);
-    }
-    else if(nId == FillType::HATCH_FILL)
-    {
-        auto& rHatchTab = static_cast<SvxHatchTabPage&>(rTab);
-        rHatchTab.SetColorList(m_pColorList);
-        rHatchTab.SetHatchingList(m_pHatchingList);
-        rHatchTab.SetColorChgd(m_pnColorListState);
-        rHatchTab.Construct();
-        rHatchTab.ActivatePage(m_aFillAttributeSet);
-        rHatchTab.Reset(&m_aFillAttributeSet);
-        rHatchTab.set_visible(true);
-    }
-    else if(nId == FillType::BITMAP_FILL)
-    {
-        auto& rBitmapTab = static_cast<SvxBitmapTabPage&>(rTab);
-        rBitmapTab.SetBitmapList(m_pBitmapList);
-        rBitmapTab.Construct();
-        rBitmapTab.ActivatePage(m_aFillAttributeSet);
-        rBitmapTab.Reset(&m_aFillAttributeSet);
-        rBitmapTab.set_visible(true);
-    }
-    else if(nId == FillType::PATTERN_FILL)
-    {
-        auto& rPatternTab = static_cast<SvxPatternTabPage&>(rTab);
-        rPatternTab.SetColorList(m_pColorList);
-        rPatternTab.SetPatternList(m_pPatternList);
-        rPatternTab.SetColorChgd(m_pnColorListState);
-        rPatternTab.Construct();
-        rPatternTab.ActivatePage(m_aFillAttributeSet);
-        rPatternTab.Reset(&m_aFillAttributeSet);
-        rPatternTab.set_visible(true);
-    }
+}
+
+void SvxAreaTabPage::SetEffects(std::vector<FillType>&& rEffects)
+{
+    m_aEffects = std::move(rEffects);
+    m_xBtnMoreEffects->set_visible(!m_aEffects.empty());
+}
+
+void SvxAreaTabPage::ClearEffect()
+{
+    m_oEffect.reset();
+    m_oEffectSet.reset();
+}
+
+IMPL_LINK_NOARG(SvxAreaTabPage, ColorChangedHdl_Impl, SvxColorTabPage&, void)
+{
+    // A color chosen after an effect replaces the effect.
+    m_bBtnClicked = true;
+    ClearEffect();
+}
+
+IMPL_LINK_NOARG(SvxAreaTabPage, MoreEffectsHdl_Impl, weld::Button&, void)
+{
+    auto xDialog = std::make_shared<SvxFillEffectsDialog>(
+        GetFrameWeld(), m_aFillAttributeSet, m_aEffects, m_oEffect, m_pColorList, m_pGradientList,
+        m_pHatchingList, m_pBitmapList, m_pPatternList, m_pnColorListState);
+    SfxTabDialogController::runAsync(xDialog, [this, xDialog](sal_Int32 nResult) {
+        if (nResult != RET_OK || !xDialog->GetResult())
+            return;
+        // The Color tab stands for the effect, so it is shown before the effect is set.
+        m_xNotebook->set_current_page(TABID_COLOR);
+        m_oEffect = xDialog->GetEffect();
+        m_oEffectSet.emplace(*xDialog->GetResult());
+        m_aFillAttributeSet.Put(*xDialog->GetResult());
+        m_bBtnClicked = true;
+    });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

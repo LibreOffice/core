@@ -21,11 +21,14 @@
 #include <svx/svxids.hrc>
 
 #include <svx/xtable.hxx>
+#include <svx/xdef.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
 #include <cuitabarea.hxx>
 
 #include <vcl/tabs.hrc>
+
+#include <algorithm>
 
 SvxAreaTabDialog::SvxAreaTabDialog
 (
@@ -158,6 +161,119 @@ void SvxAreaTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
         static_cast<SvxTransparenceTabPage&>(rPage).SetPageType( PageType::Area );
         static_cast<SvxTransparenceTabPage&>(rPage).SetDlgType( 0 );
     }
+}
+
+namespace
+{
+// The tab of the Fill Effects dialog that holds each fill.
+OUString lcl_GetEffectPageId(FillType eFillType)
+{
+    switch (eFillType)
+    {
+        case FillType::GRADIENT_FILL:
+            return u"gradient"_ustr;
+        case FillType::HATCH_FILL:
+            return u"hatch"_ustr;
+        case FillType::BITMAP_FILL:
+            return u"bitmap"_ustr;
+        case FillType::PATTERN_FILL:
+            return u"pattern"_ustr;
+        default:
+            return OUString();
+    }
+}
+}
+
+SvxFillEffectsDialog::SvxFillEffectsDialog(weld::Window* pParent, const SfxItemSet& rInAttrs,
+                                           const std::vector<FillType>& rEffects,
+                                           std::optional<FillType> oStart,
+                                           XColorListRef pColorList,
+                                           XGradientListRef pGradientList,
+                                           XHatchListRef pHatchingList,
+                                           XBitmapListRef pBitmapList,
+                                           XPatternListRef pPatternList,
+                                           ChangeType* pnColorListState)
+    : SfxTabDialogController(pParent, u"cui/ui/filleffectsdialog.ui"_ustr,
+                             u"FillEffectsDialog"_ustr, &rInAttrs)
+    , m_pColorList(std::move(pColorList))
+    , m_pGradientList(std::move(pGradientList))
+    , m_pHatchingList(std::move(pHatchingList))
+    , m_pBitmapList(std::move(pBitmapList))
+    , m_pPatternList(std::move(pPatternList))
+    , m_pnColorListState(pnColorListState)
+{
+    const std::pair<FillType, CreateTabPage> aPages[] = {
+        { FillType::GRADIENT_FILL, &SvxGradientTabPage::Create },
+        { FillType::HATCH_FILL, &SvxHatchTabPage::Create },
+        { FillType::BITMAP_FILL, &SvxBitmapTabPage::Create },
+        { FillType::PATTERN_FILL, &SvxPatternTabPage::Create },
+    };
+    // The dialog has a tab only for the fills listed in rEffects.
+    for (const auto& rPage : aPages)
+    {
+        if (std::find(rEffects.begin(), rEffects.end(), rPage.first) != rEffects.end())
+            AddTabPage(lcl_GetEffectPageId(rPage.first), rPage.second, nullptr);
+        else
+            RemoveTabPage(lcl_GetEffectPageId(rPage.first));
+    }
+
+    if (oStart && std::find(rEffects.begin(), rEffects.end(), *oStart) != rEffects.end())
+        SetCurPageId(lcl_GetEffectPageId(*oStart));
+}
+
+void SvxFillEffectsDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
+{
+    if (rId == "gradient")
+    {
+        auto& rGradientPage = static_cast<SvxGradientTabPage&>(rPage);
+        rGradientPage.SetColorList(m_pColorList);
+        rGradientPage.SetGradientList(m_pGradientList);
+        rGradientPage.SetColorChgd(m_pnColorListState);
+        rGradientPage.Construct();
+    }
+    else if (rId == "hatch")
+    {
+        auto& rHatchPage = static_cast<SvxHatchTabPage&>(rPage);
+        rHatchPage.SetColorList(m_pColorList);
+        rHatchPage.SetHatchingList(m_pHatchingList);
+        rHatchPage.SetColorChgd(m_pnColorListState);
+        rHatchPage.Construct();
+    }
+    else if (rId == "bitmap")
+    {
+        auto& rBitmapPage = static_cast<SvxBitmapTabPage&>(rPage);
+        rBitmapPage.SetBitmapList(m_pBitmapList);
+        rBitmapPage.Construct();
+    }
+    else if (rId == "pattern")
+    {
+        auto& rPatternPage = static_cast<SvxPatternTabPage&>(rPage);
+        rPatternPage.SetColorList(m_pColorList);
+        rPatternPage.SetPatternList(m_pPatternList);
+        rPatternPage.SetColorChgd(m_pnColorListState);
+        rPatternPage.Construct();
+    }
+}
+
+short SvxFillEffectsDialog::Ok()
+{
+    // Every page writes its own fill style, so only the tab in use is read.
+    SfxTabPage* pPage = GetCurTabPage();
+    if (!pPage)
+        return RET_CANCEL;
+
+    m_oResult.emplace(GetInputItemSet()->getPool(),
+                      WhichRangesContainer(XATTR_FILL_FIRST, XATTR_FILL_LAST));
+    pPage->FillItemSet(&*m_oResult);
+
+    const OUString sCurrentPage = GetCurPageId();
+    for (FillType eFillType : { FillType::GRADIENT_FILL, FillType::HATCH_FILL,
+                                FillType::BITMAP_FILL, FillType::PATTERN_FILL })
+    {
+        if (lcl_GetEffectPageId(eFillType) == sCurrentPage)
+            m_eResult = eFillType;
+    }
+    return RET_OK;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
