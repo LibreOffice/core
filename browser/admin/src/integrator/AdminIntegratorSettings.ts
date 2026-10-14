@@ -442,6 +442,8 @@ class DesktopSettingsStorage extends SettingsStorage {
 		const result = await (window.parent as any).postMobileCall(
 			'FETCHSETTINGSFILE ' + fileUrl,
 		);
+		// The app replies with nothing when the file has no content.
+		if (!result) return null;
 		return result.content;
 	}
 
