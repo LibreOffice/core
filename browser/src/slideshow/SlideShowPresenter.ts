@@ -56,6 +56,7 @@ interface ClickAction {
 		| 'macro'
 		| 'stoppresentation';
 	bookmark?: string;
+	targetSlide?: string;
 	document?: string;
 	sound?: string;
 	verb?: string;

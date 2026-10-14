@@ -211,18 +211,16 @@ class SlideShowNavigator {
 		this.displaySlide(lastSlide, true);
 	}
 
-	goToSlideAtBookmark(bookmark: string) {
+	goToSlideAtBookmark(targetSlide: string) {
 		NAVDBG.print(
 			'SlideShowNavigator.goToSlideAtBookmark: ' +
-				bookmark +
+				targetSlide +
 				' current index: ' +
 				this.currentSlide,
 		);
+		if (!targetSlide) return;
 		for (let i = 0; i < this.theMetaPres.numberOfSlides; i++) {
-			const slideInfo = this.theMetaPres.getSlideInfo(
-				this.theMetaPres.getSlideHash(i),
-			);
-			if (slideInfo.name == bookmark) {
+			if (this.theMetaPres.getSlideHash(i) === targetSlide) {
 				this.displaySlide(i, true);
 				break;
 			}
@@ -658,7 +656,7 @@ class SlideShowNavigator {
 					this.goToLastSlide();
 					break;
 				case 'bookmark':
-					this.goToSlideAtBookmark(action.bookmark);
+					this.goToSlideAtBookmark(action.targetSlide);
 					break;
 				case 'document':
 					this.openExternalLink(action.document, fromPresenterConsole);

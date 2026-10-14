@@ -550,7 +550,7 @@ class SlideImportPane {
       );
       source.slides = slides.map((s: any, index: number) => ({
         index: index,
-        name: '',
+        name: typeof s.name === 'string' ? s.name : '',
         guid: s.guid || '',
       }));
     } catch (err) {
