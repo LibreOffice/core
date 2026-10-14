@@ -172,6 +172,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 				// that what is shown is the newest state and not a stale answer.
 				RenderGeometrySection.takeUpTheAnswers(answered);
 
+				// The lawn takes in every object, so it is worked out again as they arrive.
+				ViewLayoutVector.takeInTheObjects();
+
 				// The handles of a selection are worked out from the objects, so they follow
 				// what arrives as well.
 				GraphicSelection.refreshLocalHandles();
@@ -439,6 +442,28 @@ class RenderGeometrySection extends CanvasSectionObject {
 
 	/// The box the object takes up on the page, in twips. Nothing for an object the client does
 	/// not hold.
+	/// The box round every drawing object of the part shown, in twips, or nothing where there is
+	/// none.
+	public static boxOfAllObjects(): cool.Range2D | undefined {
+		const data = RenderGeometrySection.currentPart();
+		if (!data) return undefined;
+
+		let box: cool.Range2D | undefined;
+		data.objects.forEach((object: cool.SlideObject) => {
+			if (object.kind !== undefined || object.x === undefined) return;
+			if (object.y === undefined) return;
+
+			const own = new cool.Range2D(
+				object.x,
+				object.y,
+				object.x + (object.width ?? 0),
+				object.y + (object.height ?? 0),
+			);
+			box = box ? box.union(own) : own;
+		});
+		return box;
+	}
+
 	public static boxOf(objectId: number): cool.Range2D | undefined {
 		const object = RenderGeometrySection.objectOf(objectId);
 		if (!object) return undefined;

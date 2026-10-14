@@ -1567,13 +1567,59 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (!ObjectHandles.canBeMoved(this.selectedObjects())) return;
 
 		const step = HandleTravel.stepFor(event);
-		const matrix = cool.Matrix2D.IDENTITY.translate(
-			towards.x * step,
-			towards.y * step,
+		const by = this.heldInsideTheLawn(
+			new cool.Point(towards.x * step, towards.y * step),
 		);
+		if (!by.x && !by.y) return;
+
+		const matrix = cool.Matrix2D.IDENTITY.translate(by.x, by.y);
 
 		SelectionSection.sendTransform(this.selectedObjects(), matrix, 'move');
 		this.layTheChangeOn(matrix);
+
+		// The view follows every step, a key held down included.
+		GraphicSelection.showTheObjects(this.selectedObjects());
+	}
+
+	/*
+		How far the selection may be moved of that much, in twips, so that its box does not go
+		past the lawn the page gives, and no object goes where it cannot be reached. The lawn the
+		view shows grows round objects lying further out, so it is not what is held to, or a
+		move would push it on and on. A move back towards the page is never held: a selection that
+		lies outside already may come in, and is not pulled in by the hold.
+	*/
+	public heldInsideTheLawn(by: cool.Point): cool.Point {
+		const lawn = ViewLayoutVector.lawnOfThePageInView();
+		const box = this.boxAround(
+			RenderGeometrySection.theOnesThatDraw(this.selectedObjects()),
+		);
+		if (!lawn || !box) return by;
+
+		// On an axis where the selection is larger than the lawn it moves freely.
+		const held = (
+			move: number,
+			least: number,
+			most: number,
+			larger: boolean,
+		): number =>
+			larger
+				? move
+				: Math.min(Math.max(move, Math.min(least, 0)), Math.max(most, 0));
+
+		return new cool.Point(
+			held(
+				by.x,
+				lawn.minX - box.minX,
+				lawn.maxX - box.maxX,
+				box.width > lawn.width,
+			),
+			held(
+				by.y,
+				lawn.minY - box.minY,
+				lawn.maxY - box.maxY,
+				box.height > lawn.height,
+			),
+		);
 	}
 
 	/// Lays a change a key made over the objects, as the end of a drag does with its own.

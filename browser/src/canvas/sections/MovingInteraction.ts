@@ -80,10 +80,14 @@ class MovingInteraction extends SelectionInteraction {
 		const corner = this.selection.selectionCorner();
 		const stands = this.applyTheSnap(corner);
 
-		return cool.Matrix2D.IDENTITY.translate(
-			(stands[0] - corner[0]) * app.pixelsToTwips,
-			(stands[1] - corner[1]) * app.pixelsToTwips,
+		// The selection stops at the edge of the lawn, so nothing is moved out of reach.
+		const by = this.selection.heldInsideTheLawn(
+			new cool.Point(
+				(stands[0] - corner[0]) * app.pixelsToTwips,
+				(stands[1] - corner[1]) * app.pixelsToTwips,
+			),
 		);
+		return cool.Matrix2D.IDENTITY.translate(by.x, by.y);
 	}
 
 	/*

@@ -849,7 +849,11 @@ class GraphicSelection {
 	public static selectAndShow(objectIds: number[]): void {
 		this.selectObjects(objectIds);
 		this.updateSelectionSection();
+		this.showTheObjects(objectIds);
+	}
 
+	/// Brings those objects on screen, with the room around them their handles are drawn in.
+	public static showTheObjects(objectIds: number[]): void {
 		let box: cool.Range2D | undefined;
 		for (const objectId of objectIds) {
 			const own = RenderGeometrySection.boxOf(objectId);

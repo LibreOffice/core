@@ -108,9 +108,25 @@ class ViewLayoutVector extends ViewLayoutBase {
 		fresh.showAtTheMiddle(middle);
 	}
 
-	/// The page and the lawn round it, in twips of the document: where the lawn begins, which is
-	/// before the page's origin, and how large it is.
+	/*
+		The page and the lawn round it, in twips of the document: where the lawn begins, which is
+		before the page's origin, and how large it is. It is so many pages across and down, and
+		grows to take in every object of the slide shown with a margin round it, so an object
+		that lies further out, from a file or from another user, can still be reached.
+	*/
 	private lawn(): cool.Range2D {
+		const lawn = this.lawnOfThePage();
+
+		const objects = RenderGeometrySection.boxOfAllObjects();
+		if (!objects) return lawn;
+
+		const margin = Math.max(this.page.x, this.page.y) / 10;
+		return lawn.union(objects.expand(margin, margin));
+	}
+
+	/// The lawn as the page gives it, so many pages across and down round it, before it grows
+	/// to take in the objects.
+	private lawnOfThePage(): cool.Range2D {
 		const across = ViewLayoutVector.lawnWidthInPages;
 		const down = ViewLayoutVector.lawnHeightInPages;
 		const left = (-this.page.x * (across - 1)) / 2;
@@ -121,6 +137,30 @@ class ViewLayoutVector extends ViewLayoutBase {
 			left + this.page.x * across,
 			top + this.page.y * down,
 		);
+	}
+
+	/// The lawn as the page gives it, in twips, or nothing where the view is not drawn from the
+	/// objects.
+	public static lawnOfThePageInView(): cool.Range2D | undefined {
+		const layout = app.activeDocument?.activeLayout;
+		return layout?.type === 'ViewLayoutVector'
+			? (layout as ViewLayoutVector).lawnOfThePage()
+			: undefined;
+	}
+
+	/// Works the lawn out again from the objects as they stand, and the view with it where it
+	/// changed.
+	public static takeInTheObjects(): void {
+		const layout = app.activeDocument?.activeLayout;
+		if (layout?.type !== 'ViewLayoutVector') return;
+
+		const vector = layout as ViewLayoutVector;
+		const lawn = vector.lawn();
+		if (lawn.width === vector._viewSize.x && lawn.height === vector._viewSize.y)
+			return;
+
+		vector._viewSize = new cool.SimplePoint(lawn.width, lawn.height);
+		vector.updateViewData();
 	}
 
 	private middleOfThePage(): cool.SimplePoint {
