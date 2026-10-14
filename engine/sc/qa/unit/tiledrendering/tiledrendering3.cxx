@@ -2592,6 +2592,72 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColumnsKeepPositionAfterWidthChan
     Scheduler::ProcessEventsToIdle();
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColumnsKeepPositionAfterWholeColumnPasteUndo)
+{
+    // Pasting a whole column carries its width. Undo and redo of that paste put the width
+    // back and forth, so every view has to drop its cached column positions of that sheet
+    // each time and the clients have to be told that the column geometry changed.
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScViewData* pViewData1 = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData1);
+    ScDocument& rDoc = pViewData1->GetDocument();
+    const int nView1 = KitHelper::getCurrentView();
+    const sal_uInt16 nWideTwips = 4000;
+    rDoc.SetColWidth(0, 0, nWideTwips);
+    const sal_uInt16 nDefaultTwips = rDoc.GetColWidth(2, 0);
+    CPPUNIT_ASSERT(nDefaultTwips < nWideTwips);
+
+    KitHelper::createView();
+    const int nView2 = KitHelper::getCurrentView();
+    ScTestViewCallback aView2;
+    ScViewData* pViewData2 = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData2);
+    requestColumnAnchors(pModelObj, tools::Rectangle(0, 0, 20000, 5000));
+    const double fPPTX = pViewData2->GetPPTX();
+    const SCCOL nProbeCol = 18;
+    auto viewColumnPosition = [pViewData2]() {
+        return pViewData2->GetScrPos(nProbeCol, 0, pViewData2->GetActivePart()).X();
+    };
+    auto columnsWereInvalidated = [&aView2]() {
+        for (const OString& rPayload : aView2.m_aSheetGeometryInvalidations)
+            if (rPayload.startsWith("all") || rPayload.startsWith("columns"))
+                return true;
+        return false;
+    };
+
+    // The first view copies the wide column A onto column C.
+    KitHelper::setView(nView1);
+    ScTabViewShell* pView1 = pViewData1->GetViewShell();
+    pView1->MarkColumns(0, 0);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    pView1->MarkColumns(2, 0);
+    aView2.m_aSheetGeometryInvalidations.clear();
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(nWideTwips, rDoc.GetColWidth(2, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedColumnPosition(rDoc, fPPTX, 0, nProbeCol), viewColumnPosition());
+    CPPUNIT_ASSERT(columnsWereInvalidated());
+
+    aView2.m_aSheetGeometryInvalidations.clear();
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(nDefaultTwips, rDoc.GetColWidth(2, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedColumnPosition(rDoc, fPPTX, 0, nProbeCol), viewColumnPosition());
+    CPPUNIT_ASSERT(columnsWereInvalidated());
+
+    aView2.m_aSheetGeometryInvalidations.clear();
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(nWideTwips, rDoc.GetColWidth(2, 0));
+    CPPUNIT_ASSERT_EQUAL(expectedColumnPosition(rDoc, fPPTX, 0, nProbeCol), viewColumnPosition());
+    CPPUNIT_ASSERT(columnsWereInvalidated());
+
+    KitHelper::setView(nView2);
+    Scheduler::ProcessEventsToIdle();
+}
+
 // if we extend the tiled area to the right and bottom we want two resulting area
 // that don't overlap. If they overlap that typically creates an unnecessary full
 // screen invalidation.

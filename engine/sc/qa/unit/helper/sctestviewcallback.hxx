@@ -77,6 +77,8 @@ public:
     ScTestTextSelectionMessage m_aTextSelectionResult;
     OString m_sInvalidateHeader;
     OString m_sInvalidateSheetGeometry;
+    /// Every sheet geometry invalidation payload the view received, oldest first.
+    std::vector<OString> m_aSheetGeometryInvalidations;
     OString m_aHyperlinkClicked;
     /// Every mouse pointer name the view sent, oldest first.
     std::vector<OString> m_aMousePointers;

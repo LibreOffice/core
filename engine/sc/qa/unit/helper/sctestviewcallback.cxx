@@ -281,6 +281,7 @@ void ScTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
         case COKitCallbackType::INVALIDATE_SHEET_GEOMETRY:
         {
             m_sInvalidateSheetGeometry = OString(pPayload);
+            m_aSheetGeometryInvalidations.emplace_back(pPayload);
         }
         break;
         case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
