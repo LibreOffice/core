@@ -145,6 +145,13 @@
 	border-color: var(--color-border);
 }
 
+/* The generic disabled button style in btns.css fills and borders the button with
+   !important. A disabled header button keeps the flat look of the enabled ones. */
+#aichat-header button.ui-pushbutton[disabled] {
+	background-color: transparent !important;
+	border-color: transparent !important;
+}
+
 #aichat-header button.ui-pushbutton img {
 	width: 16px;
 	height: 16px;
@@ -453,7 +460,10 @@
 	margin: 0;
 }
 
-[id^='aichat-actions-'] button.ui-pushbutton {
+/* Scoped under the messages list id so these rules outrank the generic button rule in
+   btns.css, which otherwise fills, borders and spaces out the buttons. */
+#aichat-messages-list [id^='aichat-actions-'] button.ui-pushbutton {
+	margin: 0;
 	padding: 3px 8px;
 	width: auto;
 	min-width: 28px;
@@ -472,19 +482,19 @@
 	color: var(--aichat-text-muted);
 }
 
-[id^='aichat-actions-'] button.ui-pushbutton img {
+#aichat-messages-list [id^='aichat-actions-'] button.ui-pushbutton img {
 	width: 14px;
 	height: 14px;
 	opacity: 0.7;
 }
 
-[id^='aichat-actions-'] button.ui-pushbutton:hover {
+#aichat-messages-list [id^='aichat-actions-'] button.ui-pushbutton:hover {
 	border-color: rgba(var(--aichat-accent), 0.2);
 	background: rgba(var(--aichat-accent), 0.08);
 	color: rgb(var(--aichat-accent));
 }
 
-[id^='aichat-actions-'] button.ui-pushbutton:hover img {
+#aichat-messages-list [id^='aichat-actions-'] button.ui-pushbutton:hover img {
 	opacity: 1;
 }
 
@@ -1320,29 +1330,33 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	font-size: 12px;
 }
 
-/* -- Retry button on error messages -- */
+/* -- Retry button on error messages (scoped like the approval buttons) -- */
 
 [id^='aichat-retry-'] {
 	margin-top: 6px;
 }
 
-[id^='aichat-retry-'] button.ui-pushbutton {
+#aichat-messages-list [id^='aichat-retry-'] button.ui-pushbutton {
 	font-size: 12px;
 	color: var(--aichat-error-text);
 	border: 1px solid color-mix(in srgb, var(--color-error) 30%, transparent);
 	background: transparent;
+	height: auto;
+	margin: 0;
 	padding: 4px 12px;
 	border-radius: 12px;
 	cursor: pointer;
 	transition: all var(--duration-fast) ease;
 }
 
-[id^='aichat-retry-'] button.ui-pushbutton:hover {
+#aichat-messages-list [id^='aichat-retry-'] button.ui-pushbutton:hover {
 	background: color-mix(in srgb, var(--color-error) 6%, transparent);
 	border-color: var(--color-error);
 }
 
-/* -- Approval buttons -- */
+/* -- Approval buttons --
+   Scoped under the messages list id so these rules outrank the generic button rule in
+   btns.css, which otherwise turns the buttons grey. */
 
 .aichat-approval-buttons {
 	display: flex;
@@ -1350,8 +1364,10 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	margin-top: 2px;
 }
 
-.aichat-approve-btn,
-.aichat-reject-btn {
+#aichat-messages-list .aichat-approve-btn,
+#aichat-messages-list .aichat-reject-btn {
+	height: auto;
+	margin: 0;
 	padding: 6px 16px;
 	font-size: 12.5px;
 	font-family: var(--cool-font);
@@ -1364,44 +1380,44 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	line-height: 1.4;
 }
 
-.aichat-approve-btn {
+#aichat-messages-list .aichat-approve-btn {
 	background: rgb(var(--aichat-accent));
 	color: var(--color-primary-text);
 	border: 1px solid rgb(var(--aichat-accent));
 }
 
-.aichat-approve-btn:hover {
+#aichat-messages-list .aichat-approve-btn:hover {
 	box-shadow: 0 2px 8px rgba(var(--aichat-accent), 0.3);
 	background: linear-gradient(var(--color-black-10), var(--color-black-10)),
 		rgb(var(--aichat-accent));
 }
 
-.aichat-approve-btn:active {
+#aichat-messages-list .aichat-approve-btn:active {
 	transform: scale(0.97);
 }
 
-.aichat-approve-btn:focus-visible {
+#aichat-messages-list .aichat-approve-btn:focus-visible {
 	outline: 2px solid rgb(var(--aichat-accent));
 	outline-offset: 2px;
 }
 
-.aichat-reject-btn {
+#aichat-messages-list .aichat-reject-btn {
 	background: transparent;
 	color: var(--color-main-text);
 	border: 1px solid var(--color-border);
 }
 
-.aichat-reject-btn:hover {
+#aichat-messages-list .aichat-reject-btn:hover {
 	border-color: var(--color-error);
 	color: var(--aichat-error-text);
 	background: color-mix(in srgb, var(--color-error) 4%, transparent);
 }
 
-.aichat-reject-btn:active {
+#aichat-messages-list .aichat-reject-btn:active {
 	transform: scale(0.97);
 }
 
-.aichat-reject-btn:focus-visible {
+#aichat-messages-list .aichat-reject-btn:focus-visible {
 	outline: 2px solid var(--color-error);
 	outline-offset: 2px;
 }
@@ -1714,12 +1730,12 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	color: var(--aichat-text-muted);
 }
 
-.aichat-approve-btn:disabled {
+#aichat-messages-list .aichat-approve-btn:disabled {
 	opacity: 0.4;
 	cursor: default;
 }
 
-.aichat-approve-btn:disabled:hover {
+#aichat-messages-list .aichat-approve-btn:disabled:hover {
 	box-shadow: none;
 	background: rgb(var(--aichat-accent));
 }
@@ -1931,8 +1947,8 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 		opacity: 0.7;
 	}
 
-	.aichat-approve-btn:active,
-	.aichat-reject-btn:active {
+	#aichat-messages-list .aichat-approve-btn:active,
+	#aichat-messages-list .aichat-reject-btn:active {
 		transform: none;
 	}
 }
