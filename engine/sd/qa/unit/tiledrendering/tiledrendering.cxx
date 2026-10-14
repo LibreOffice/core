@@ -81,6 +81,7 @@
 #include <unomodel.hxx>
 #include <drawdoc.hxx>
 #include <PreviewEditMode.hxx>
+#include <SlideSectionManager.hxx>
 #include <undo/undomanager.hxx>
 #include <sfx2/request.hxx>
 #include <unopage.hxx>
@@ -4140,6 +4141,35 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDeleteCanvasSlide)
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(nSlideCount, pDocument->GetSdPageCount(PageKind::Standard));
 
+}
+
+// The canvas page joins the first section, and every other section keeps its slides.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertCanvasSlideKeepsSections)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoTest.odp");
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT_GREATEREQUAL(sal_uInt16(2), pDocument->GetSdPageCount(PageKind::Standard));
+    sd::SlideSectionManager& rSections = pDocument->GetSectionManager();
+    rSections.AddSection(0, u"First"_ustr);
+    rSections.AddSection(1, u"Second"_ustr);
+
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rSections.GetSection(0).mnStartIndex);
+    // The second section still starts at the slide it started at, now one position further on.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSection(1).mnStartIndex);
+
+    dispatchCommand(mxComponent, u".uno:DeleteCanvasSlide"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rSections.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rSections.GetSection(1).mnStartIndex);
 }
 
 // Notes with several paragraphs keep the paragraph breaks as newlines.

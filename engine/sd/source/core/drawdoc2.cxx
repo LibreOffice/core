@@ -1880,6 +1880,13 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
     sal_uInt16 nCanvasPageNum = 2 * nCanvasPageIndex + 1;
     MovePage(nCanvasPageNum, 1); // Canvas page
     MovePage(nCanvasPageNum + 1, 2); // Canvas notes page
+    // The page was inserted as the last slide, where it shifted no section. As the first slide,
+    // it joins the first section and every later section starts one slide further on. The insertion
+    // of the canvas page itself is not undoable, so this shift records no undo action either.
+    const bool bUndo = IsUndoEnabled();
+    EnableUndo(false);
+    GetSectionManager().OnSlideInserted(0);
+    EnableUndo(bUndo);
 
     const Size aCanvasSize(500000, 500000);
 
