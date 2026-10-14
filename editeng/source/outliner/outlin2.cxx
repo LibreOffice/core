@@ -370,6 +370,8 @@ bool Outliner::HasConvertibleTextPortion( LanguageType nLang )
 
 bool Outliner::ConvertNextDocument()
 {
+    if (maConvertNextDocumentHdl.IsSet())
+        return maConvertNextDocumentHdl.Call(this);
     return false;
 }
 

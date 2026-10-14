@@ -174,7 +174,7 @@ public:
     void EndSpelling();
 
     /** callback for textconversion */
-    bool ConvertNextDocument() override;
+    DECL_LINK(ConvertNextDocumentHdl, Outliner*, bool);
 
     /** Starts the text conversion (hangul/hanja or Chinese simplified/traditional)
     for the current viewshell */

@@ -54,6 +54,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView& rView,
     m_bIsInteractive( bInteractive )
 {
     SetRefDevice( m_rView.GetDocShell()->GetDoc()->getIDocumentDeviceAccess().getPrinter( false ) );
+    SetConvertNextDocumentHdl(LINK(this, SdrHHCWrapper, ConvertNextDocumentHdl));
 
     MapMode aMapMode (MapUnit::MapTwip);
     SetRefMapMode(aMapMode);
@@ -94,7 +95,7 @@ void SdrHHCWrapper::StartTextConversion()
     m_pOutlView->StartTextConversion(m_rView.GetFrameWeld(), m_nSourceLang, m_nTargetLang, m_pTargetFont, m_nOptions, m_bIsInteractive, true);
 }
 
-bool SdrHHCWrapper::ConvertNextDocument()
+IMPL_LINK(SdrHHCWrapper, ConvertNextDocumentHdl, Outliner*, /*pOutliner*/, bool)
 {
     bool bNextDoc = false;
 

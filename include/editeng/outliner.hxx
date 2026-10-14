@@ -471,6 +471,7 @@ private:
     Link<PasteOrDropInfos*,void>   maBeginPasteOrDropHdl;
     Link<PasteOrDropInfos*,void>   maEndPasteOrDropHdl;
     Link<Outliner*,bool>           maSpellNextDocumentHdl;
+    Link<Outliner*,bool>           maConvertNextDocumentHdl;
 
     sal_Int32           nDepthChangedHdlPrevDepth;
     sal_Int16           nMaxDepth;
@@ -761,7 +762,8 @@ public:
 
     // for text conversion
     bool            HasConvertibleTextPortion( LanguageType nLang );
-    virtual bool    ConvertNextDocument();
+    bool            ConvertNextDocument(); // called from EditEngine, will forward to the Hdl
+    void            SetConvertNextDocumentHdl(const Link<Outliner*,bool>& rLnk) { maConvertNextDocumentHdl = rLnk; }
 
     void            SetEditEnginePool( SfxItemPool* pPool );
     SfxItemPool*    GetEditEnginePool() const;
