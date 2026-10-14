@@ -52,6 +52,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Replace Dialog Tests', { t
         // Core keeps the search term for the session, so a reopened dialog can
         // arrive with the term of an earlier search in the field.
         cy.cGet('#searchterm-input-dialog').type('{selectall}{backspace}test').realPress('Enter');
+        // The selection handles are in the page even without a selection, so wait for the
+        // search itself before copying what it selected.
+        helper.processToIdle(this.win);
 
         // Verify text was found and selected
         helper.textSelectionShouldExist();
@@ -67,18 +70,21 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Replace Dialog Tests', { t
         // Go to first instance - Not Bold text
         cy.cGet('#searchterm-input-dialog').type('{selectall}{backspace}test');
         cy.realPress('Enter');
+        helper.processToIdle(this.win);
         helper.textSelectionShouldExist();
         cy.cGet('#copy-paste-container p b').should('not.exist');
 
         // Search forward again to get to second instance - Bold text
         cy.cGet('#searchterm-input-dialog').focus();
         cy.realPress('Enter');
+        helper.processToIdle(this.win);
         helper.copy();
         cy.cGet('#copy-paste-container p b').should('exist'); 
 
         // Now search backward with Shift+Enter - Not Bold text
         cy.cGet('#searchterm-input-dialog').focus();
         cy.realPress('Enter', {shiftKey: true});
+        helper.processToIdle(this.win);
         helper.copy();
         cy.cGet('#copy-paste-container p b').should('not.exist');
     });
