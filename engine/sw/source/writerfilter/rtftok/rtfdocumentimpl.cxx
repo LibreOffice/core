@@ -949,7 +949,7 @@ void RTFDocumentImpl::resolve(Stream& rMapper)
     }
 }
 
-void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XShape> const& rShape)
+bool RTFDocumentImpl::importPict(uno::Reference<graphic::XGraphic>& rxGraphic)
 {
     SvMemoryStream aStream;
     SvStream* pStream = nullptr;
@@ -971,7 +971,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
                 b = b << 4;
                 sal_Int8 parsed = o3tl::convertToHex<sal_Int8>(ch);
                 if (parsed == -1)
-                    return;
+                    return false;
                 b += parsed;
                 count--;
                 if (!count)
@@ -988,7 +988,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
 
     if (!pStream->Tell())
         // No destination text? Then we'll get it later.
-        return;
+        return false;
 
     SvMemoryStream aDIBStream;
     if (m_aStates.top().getPicture().eStyle == RTFBmpStyle::DIBITMAP)
@@ -1031,8 +1031,21 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     if (xServiceInfo.is() && xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))
         pExtHeader = nullptr;
 
-    uno::Reference<graphic::XGraphic> xGraphic
-        = m_pGraphicHelper->importGraphic(xInputStream, pExtHeader);
+    rxGraphic = m_pGraphicHelper->importGraphic(xInputStream, pExtHeader);
+    return true;
+}
+
+void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XShape> const& rShape)
+{
+    uno::Reference<graphic::XGraphic> xGraphic;
+    if (!m_aPictureLinkURL.isEmpty())
+    {
+        Graphic aGraphic{ GraphicExternalLink(m_aPictureLinkURL) };
+        xGraphic = aGraphic.GetXGraphic();
+        m_aPictureLinkURL.clear();
+    }
+    else if (!importPict(xGraphic))
+        return;
 
     if (m_aStates.top().getPicture().eStyle != RTFBmpStyle::NONE)
     {
@@ -2570,43 +2583,23 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
 
             if (!m_aPicturePath.isEmpty())
             {
-                // Read the picture into m_aStates.top().aDestinationText.
+                // The picture is inserted as a link to the file.
                 pushState();
                 dispatchDestination(RTFKeyword::PICT);
-                if (m_aPicturePath.endsWith(".png"))
-                    dispatchFlag(RTFKeyword::PNGBLIP);
                 OUString aFileURL = m_rMediaDescriptor.getUnpackedValueOrDefault(
                     utl::MediaDescriptor::PROP_URL, OUString());
-                OUString aPictureURL;
                 try
                 {
-                    aPictureURL = rtl::Uri::convertRelToAbs(aFileURL, m_aPicturePath);
+                    m_aPictureLinkURL = rtl::Uri::convertRelToAbs(aFileURL, m_aPicturePath);
                 }
                 catch (const rtl::MalformedUriException& rException)
                 {
                     SAL_WARN("writerfilter.rtf",
                              "rtl::Uri::convertRelToAbs() failed: " << rException.getMessage());
                 }
-
-                if (!aPictureURL.isEmpty())
-                {
-                    SvFileStream aStream(aPictureURL, StreamMode::READ);
-                    if (aStream.IsOpen())
-                    {
-                        OUStringBuffer aBuf;
-                        while (aStream.good())
-                        {
-                            unsigned char ch = 0;
-                            aStream.ReadUChar(ch);
-                            if (ch < 16)
-                                aBuf.append("0");
-                            aBuf.append(static_cast<sal_Int32>(ch), 16);
-                        }
-                        m_aStates.top().getDestinationText() = std::move(aBuf);
-                    }
-                }
                 popState();
                 m_aPicturePath.clear();
+                m_aPictureLinkURL.clear();
             }
 
             break;
