@@ -34,6 +34,8 @@
 #include <i18nlangtag/lang.h>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
+#include <tools/mapunit.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
@@ -599,6 +601,99 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
     rOutput.WriteNumberAsString( nDefTabTwps );
     rOutput << endl;
 
+    // Collect one listtable entry per distinct SvxNumRule used by a bulleted paragraph.
+    std::vector<const SvxNumRule*> aListRules;
+    std::unordered_map<const SvxNumRule*, sal_uInt32> aRuleToListIndex;
+    for (sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++)
+    {
+        const SfxInt16Item& rOutlLevelItem = GetParaAttrib(nNode, EE_PARA_OUTLLEVEL);
+        if (rOutlLevelItem.GetValue() < 0)
+            continue;
+        const SvxNumBulletItem& rNumBullet = GetParaAttrib(nNode, EE_PARA_NUMBULLET);
+        const SvxNumRule* pRule = &rNumBullet.GetNumRule();
+        const SvxNumberFormat* pFmt = pRule->Get(rOutlLevelItem.GetValue());
+        if (!pFmt || pFmt->GetNumberingType() != SVX_NUM_CHAR_SPECIAL)
+            continue;
+        if (aRuleToListIndex.contains(pRule))
+            continue;
+        aRuleToListIndex[pRule] = aListRules.size();
+        aListRules.push_back(pRule);
+    }
+
+    if (!aListRules.empty())
+    {
+        rOutput.WriteChar('{')
+            .WriteOString(OOO_STRING_SVTOOLS_RTF_IGNORE)
+            .WriteOString(OOO_STRING_SVTOOLS_RTF_LISTTABLE);
+        rOutput << endl;
+        for (size_t nList = 0; nList < aListRules.size(); nList++)
+        {
+            const SvxNumRule* pRule = aListRules[nList];
+            rOutput.WriteChar('{').WriteOString(OOO_STRING_SVTOOLS_RTF_LIST);
+            rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_LISTTEMPLATEID);
+            rOutput.WriteNumberAsString(nList + 1);
+            for (sal_uInt16 nLevel = 0; nLevel < pRule->GetLevelCount(); nLevel++)
+            {
+                const SvxNumberFormat* pFmt = pRule->Get(nLevel);
+                sal_Unicode cBullet
+                    = (pFmt && pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
+                        ? static_cast<sal_Unicode>(pFmt->GetBulletChar())
+                        : 0x2022;
+                rOutput.WriteChar('{').WriteOString(OOO_STRING_SVTOOLS_RTF_LISTLEVEL);
+                // 23 means bullet.
+                rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELNFC).WriteNumberAsString(23);
+                rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELJC).WriteNumberAsString(0);
+                rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELFOLLOW).WriteNumberAsString(0);
+                rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELSTARTAT).WriteNumberAsString(1);
+                rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELSPACE).WriteNumberAsString(0);
+                rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELINDENT).WriteNumberAsString(0);
+                rOutput.WriteOString("{").WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELTEXT);
+                rOutput.WriteOString(" \\'01");
+                OUString aBullet(&cBullet, 1);
+                RTFOutFuncs::Out_String(rOutput, aBullet, eDestEnc);
+                rOutput.WriteOString(";}");
+                rOutput.WriteOString("{").WriteOString(OOO_STRING_SVTOOLS_RTF_LEVELNUMBERS).WriteOString(";}");
+                sal_Int32 nFi = 0;
+                sal_Int32 nLi = 0;
+                if (pFmt)
+                {
+                    if (pFmt->GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
+                    {
+                        nFi = pFmt->GetFirstLineOffset();
+                        nLi = pFmt->GetAbsLSpace();
+                    }
+                    else
+                    {
+                        nFi = pFmt->GetFirstLineIndent();
+                        nLi = pFmt->GetIndentAt();
+                    }
+                }
+                const o3tl::Length eSrc = MapToO3tlLength(GetRefMapMode().GetMapUnit());
+                nFi = o3tl::convert(nFi, eSrc, o3tl::Length::twip);
+                nLi = o3tl::convert(nLi, eSrc, o3tl::Length::twip);
+                rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_FI).WriteNumberAsString(nFi);
+                rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_LI).WriteNumberAsString(nLi);
+                rOutput.WriteChar('}');
+            }
+            rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_LISTID).WriteNumberAsString(nList + 1);
+            rOutput.WriteChar('}');
+        }
+        rOutput.WriteChar('}') << endl;
+
+        rOutput.WriteChar('{')
+            .WriteOString(OOO_STRING_SVTOOLS_RTF_IGNORE)
+            .WriteOString(OOO_STRING_SVTOOLS_RTF_LISTOVERRIDETABLE);
+        for (size_t nList = 0; nList < aListRules.size(); nList++)
+        {
+            rOutput.WriteChar('{').WriteOString(OOO_STRING_SVTOOLS_RTF_LISTOVERRIDE);
+            rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_LISTID).WriteNumberAsString(nList + 1);
+            rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_LISTOVERRIDECOUNT).WriteNumberAsString(0);
+            rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_LS).WriteNumberAsString(nList + 1);
+            rOutput.WriteChar('}');
+        }
+        rOutput.WriteChar('}') << endl;
+    }
+
     // iterate over the paragraphs ...
     rOutput.WriteChar( '{' ) << endl;
     for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++  )
@@ -652,22 +747,13 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
             // The paragraph has an outline level, check if that is a bullet.
             const SvxNumBulletItem& rNumBullet = GetParaAttrib(nNode, EE_PARA_NUMBULLET);
             const SvxNumberFormat* pFmt = rNumBullet.GetNumRule().Get(nOutlLevel);
-            if (pFmt && pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
+            auto it = aRuleToListIndex.find(&rNumBullet.GetNumRule());
+            if (pFmt && pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL
+                && it != aRuleToListIndex.end())
             {
-                sal_Unicode cBullet = static_cast<sal_Unicode>(pFmt->GetBulletChar());
-                OUString aBullet(&cBullet, 1);
-                rOutput.WriteChar('{').WriteOString(OOO_STRING_SVTOOLS_RTF_PNTEXT).WriteChar(' ');
-                RTFOutFuncs::Out_String(rOutput, aBullet, eDestEnc);
-                rOutput.WriteOString("\\tab}");
-                rOutput.WriteChar('{')
-                    .WriteOString(OOO_STRING_SVTOOLS_RTF_IGNORE)
-                    .WriteOString(OOO_STRING_SVTOOLS_RTF_PN)
-                    .WriteOString(OOO_STRING_SVTOOLS_RTF_PNLVLBLT)
-                    .WriteChar('{')
-                    .WriteOString(OOO_STRING_SVTOOLS_RTF_PNTXTB)
-                    .WriteChar(' ');
-                RTFOutFuncs::Out_String(rOutput, aBullet, eDestEnc);
-                rOutput.WriteOString("}}");
+                // Refer to the list table entry.
+                rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_LS).WriteNumberAsString(it->second + 1);
+                rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_ILVL).WriteNumberAsString(nOutlLevel);
             }
         }
 

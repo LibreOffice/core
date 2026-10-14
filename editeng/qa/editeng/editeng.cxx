@@ -218,31 +218,53 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119192RTFFontAttributesInParagraphScope)
 
 CPPUNIT_TEST_FIXTURE(Test, testRTFBullet)
 {
-    // Given a document with a paragraph that is a bulleted item:
+    // Given a document with an outer and an inner bulleted paragraph, each
+    // have a numbering rule:
     EditEngine aEditEngine(mpItemPool.get());
-    OUString aText = u"mytest"_ustr;
-    aEditEngine.SetText(aText);
-    SfxItemSet aItems(aEditEngine.GetParaAttribs(0));
-    aItems.Put(SfxInt16Item(EE_PARA_OUTLLEVEL, 0));
-    SvxNumRule aRule(SvxNumRuleFlags::BULLET_REL_SIZE, 10, false);
-    SvxNumberFormat aFmt(SVX_NUM_CHAR_SPECIAL);
-    aFmt.SetBulletChar(0x2022); // bullet
-    aRule.SetLevel(0, aFmt);
-    aItems.Put(SvxNumBulletItem(std::move(aRule), EE_PARA_NUMBULLET));
-    aEditEngine.SetParaAttribs(0, aItems);
+    OUString aOuter = u"outer"_ustr;
+    OUString aInner = u"inner"_ustr;
+    aEditEngine.SetText(aOuter + "\n" + aInner);
+
+    SfxItemSet aOuterItems(aEditEngine.GetParaAttribs(0));
+    aOuterItems.Put(SfxInt16Item(EE_PARA_OUTLLEVEL, 0));
+    SvxNumRule aOuterRule(SvxNumRuleFlags::BULLET_REL_SIZE, 10, false);
+    SvxNumberFormat aOuterFmt(SVX_NUM_CHAR_SPECIAL);
+    aOuterFmt.SetBulletChar(0x2022); // bullet
+    aOuterFmt.SetAbsLSpace(600); // 1/100mm, Impress's default for level 0
+    aOuterFmt.SetFirstLineOffset(-600);
+    aOuterRule.SetLevel(0, aOuterFmt);
+    aOuterItems.Put(SvxNumBulletItem(std::move(aOuterRule), EE_PARA_NUMBULLET));
+    aEditEngine.SetParaAttribs(0, aOuterItems);
+
+    SfxItemSet aInnerItems(aEditEngine.GetParaAttribs(1));
+    aInnerItems.Put(SfxInt16Item(EE_PARA_OUTLLEVEL, 1));
+    SvxNumRule aInnerRule(SvxNumRuleFlags::BULLET_REL_SIZE, 10, false);
+    SvxNumberFormat aInnerFmt(SVX_NUM_CHAR_SPECIAL);
+    aInnerFmt.SetBulletChar(0x2022);
+    aInnerFmt.SetAbsLSpace(1200);
+    aInnerFmt.SetFirstLineOffset(-600);
+    aInnerRule.SetLevel(1, aInnerFmt);
+    aInnerItems.Put(SvxNumBulletItem(std::move(aInnerRule), EE_PARA_NUMBULLET));
+    aEditEngine.SetParaAttribs(1, aInnerItems);
 
     // When copying to the clipboard as RTF:
     uno::Reference<datatransfer::XTransferable> xData
-        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, aText.getLength()));
+        = aEditEngine.CreateTransferable(ESelection(0, 0, 1, aInner.getLength()));
 
-    // Then make sure the RTF carries the bullet so a non-editeng reader sees it:
+    // Then make sure the RTF carries the bullets with multiple levels:
     auto pData = dynamic_cast<EditDataObject*>(xData.get());
     SvMemoryStream& rStream = pData->GetRTFStream();
     std::string aCnt{ static_cast<const char*>(rStream.GetData()),
                       static_cast<size_t>(rStream.GetSize()) };
     // Without the accompanying fix in place, this failed, the export wrote
-    // only editeng's own \level0 and \pnlvlblt.
-    CPPUNIT_ASSERT(aCnt.find("\\pnlvlblt") != std::string::npos);
+    // no list table.
+    CPPUNIT_ASSERT(aCnt.find("\\listtable") != std::string::npos);
+    // Outer bullet shows up as \ilvl0.
+    CPPUNIT_ASSERT(aCnt.find("\\ls1\\ilvl0") != std::string::npos);
+    CPPUNIT_ASSERT(aCnt.find("\\fi-600\\li600") != std::string::npos);
+    // Inner bullet shows up as \ilvl1.
+    CPPUNIT_ASSERT(aCnt.find("\\ls2\\ilvl1") != std::string::npos);
+    CPPUNIT_ASSERT(aCnt.find("\\fi-600\\li1200") != std::string::npos);
 }
 }
 
