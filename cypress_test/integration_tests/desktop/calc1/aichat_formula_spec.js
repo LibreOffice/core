@@ -118,3 +118,37 @@ describe(['tagdesktop'], 'Assistant formula approval', function() {
 		});
 	});
 });
+
+describe(['tagdesktop'], 'Assistant suggestions in a spreadsheet', function() {
+	beforeEach(function() {
+		helper.setupAndLoadDocument('calc/aichat_formula.fods');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+			aichatHelper.enableAIAndStubSocket(win, {});
+		});
+		aichatHelper.openAIChat();
+	});
+
+	it('four suggestions show, and See more shows the rest', function() {
+		cy.cGet('#aichat-empty-state').should('contain.text', 'this spreadsheet');
+		cy.cGet('#aichat-chip-formula-diagnosis').should('exist');
+		cy.cGet('#aichat-chip-sanity-check').should('exist');
+		cy.cGet('#aichat-chip-create-formula').should('exist');
+		cy.cGet('#aichat-chip-0').should('exist');
+		cy.cGet('#aichat-chip-3').should('not.exist');
+		cy.cGet('#aichat-see-more button').click();
+		helper.waitUntilLayoutingIsIdle(this.win);
+		cy.cGet('#aichat-chip-3').should('exist');
+		cy.cGet('#aichat-see-more').should('contain.text', 'See less');
+	});
+
+	it('See less hides them again', function() {
+		cy.cGet('#aichat-see-more button').click();
+		helper.waitUntilLayoutingIsIdle(this.win);
+		cy.cGet('#aichat-chip-3').should('exist');
+		cy.cGet('#aichat-see-more button').click();
+		helper.waitUntilLayoutingIsIdle(this.win);
+		cy.cGet('#aichat-chip-3').should('not.exist');
+		cy.cGet('#aichat-see-more').should('contain.text', 'See more');
+	});
+});

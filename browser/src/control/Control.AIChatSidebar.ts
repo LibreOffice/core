@@ -131,23 +131,11 @@ namespace cool {
 		private container: HTMLElement;
 		private wrapper: HTMLElement;
 
-		private readonly PROMPT_CARDS: { label: string; prompt: string }[] = [
-			{
-				label: _('Make the following text more concise'),
-				prompt: _('Make it more concise'),
-			},
-			{
-				label: _('Summarize the key points of this text'),
-				prompt: _('Summarize this text'),
-			},
-			{
-				label: _('Expand and add more detail to this text'),
-				prompt: _('Expand this text'),
-			},
-			{
-				label: _('Fix grammar, spelling, and punctuation errors'),
-				prompt: _('Fix grammar & spelling'),
-			},
+		private readonly PROMPT_CARDS: { prompt: string; icon: string }[] = [
+			{ prompt: _('Make it more concise'), icon: 'lc_aichat_shorten.svg' },
+			{ prompt: _('Summarize this text'), icon: 'lc_aichat_summarize.svg' },
+			{ prompt: _('Expand this text'), icon: 'lc_aichat_expand.svg' },
+			{ prompt: _('Fix grammar & spelling'), icon: 'lc_aichat_fixgrammar.svg' },
 		];
 
 		private readonly TONE_PRESETS: {
@@ -169,7 +157,7 @@ namespace cool {
 			{ id: 'casual', label: _('Casual'), icon: '💬' },
 		];
 
-		private readonly INITIAL_CARDS_SHOWN: number = 3;
+		private readonly INITIAL_CARDS_SHOWN: number = 4;
 		private showAllCards: boolean = false;
 
 		private readonly SELECTION_FETCH_TIMEOUT_MS = 5000;
@@ -692,6 +680,7 @@ namespace cool {
 		private readonly ICON_SEND = 'lc_aichat_send.svg';
 		private readonly ICON_INSERT = 'lc_aichat_insert.svg';
 		private readonly ICON_STOP = 'lc_aichat_stop.svg';
+		private readonly ICON_SPARKLE = 'lc_aichat_sparkle.svg';
 
 		// Keep as data URI: transient success indicator with semantic green color
 		private readonly ICON_CHECK: string =
@@ -705,6 +694,12 @@ namespace cool {
 				type: 'container',
 				horizontal: true,
 				children: [
+					{
+						id: 'aichat-header-icon',
+						type: 'image',
+						image: app.LOUtil.getImageURL(this.ICON_SPARKLE),
+						text: '',
+					},
 					{
 						id: 'aichat-title',
 						type: 'fixedtext',
@@ -729,28 +724,34 @@ namespace cool {
 			};
 		}
 
+		private getEmptyStateQuestion(): string {
+			switch (app.map.getDocType()) {
+				case 'spreadsheet':
+					return _('What would you like to do with this spreadsheet?');
+				case 'presentation':
+					return _('What would you like to do with this presentation?');
+				case 'drawing':
+					return _('What would you like to do with this drawing?');
+				default:
+					return _('What would you like to do with this document?');
+			}
+		}
+
 		private getMessagesListJSON(): any {
 			const children: any[] = [];
 
 			if (this.messages.length === 0) {
 				children.push({
-					id: 'aichat-empty-state-group',
-					type: 'container',
-					vertical: true,
-					children: [
-						{
-							id: 'aichat-empty-state-icon',
-							type: 'image',
-							image: app.LOUtil.getImageURL('lc_aichat_sparkle.svg'),
-							text: '',
-						},
-						{
-							id: 'aichat-empty-state',
-							type: 'fixedtext',
-							text: _('Ask AI anything about your document...'),
-							enabled: true,
-						},
-					],
+					id: 'aichat-empty-state',
+					type: 'fixedtext',
+					text: this.getEmptyStateQuestion(),
+					enabled: true,
+				});
+				children.push({
+					id: 'aichat-empty-state-hint',
+					type: 'fixedtext',
+					text: _('Select some content first to work on just that part.'),
+					enabled: true,
 				});
 				children.push(this.getPromptChipsJSON());
 			} else {
@@ -770,34 +771,17 @@ namespace cool {
 		}
 
 		private getLoadingDotsJSON(): any {
-			const dotsChildren: any[] = [
+			// Until the first progress message arrives, the row says the assistant is thinking.
+			const text = this.progressText || _('Thinking...');
+			const children: any[] = [
 				{
-					id: 'aichat-dot-1',
+					id: 'aichat-progress-text',
 					type: 'fixedtext',
-					text: '\u25CF',
-					enabled: true,
-				},
-				{
-					id: 'aichat-dot-2',
-					type: 'fixedtext',
-					text: '\u25CF',
-					enabled: true,
-				},
-				{
-					id: 'aichat-dot-3',
-					type: 'fixedtext',
-					text: '\u25CF',
+					text: text,
 					enabled: true,
 				},
 			];
-			if (this.progressText) {
-				dotsChildren.push({
-					id: 'aichat-progress-text',
-					type: 'fixedtext',
-					text: this.progressText,
-					enabled: true,
-				});
-			}
+			this.ensureContainerChildren(children, 'aichat-loading-dots');
 			return {
 				id: 'aichat-loading-dots',
 				type: 'container',
@@ -805,8 +789,8 @@ namespace cool {
 				visible: this.isProcessing,
 				allyRole: 'status',
 				ariaLive: 'polite' as const,
-				aria: { label: this.progressText || _('Loading') },
-				children: dotsChildren,
+				aria: { label: text },
+				children: children,
 			};
 		}
 
@@ -910,7 +894,8 @@ namespace cool {
 				children.push({
 					id: `aichat-insert-text-${index}`,
 					type: 'pushbutton',
-					image: this.ICON_INSERT,
+					icon: this.ICON_INSERT,
+					text: _('Insert'),
 					aria: { label: _('Insert at cursor') },
 				});
 			}
@@ -942,7 +927,8 @@ namespace cool {
 					{
 						id: `aichat-insert-img-${index}`,
 						type: 'pushbutton',
-						image: this.ICON_INSERT,
+						icon: this.ICON_INSERT,
+						text: _('Insert'),
 						enabled: true,
 						aria: { label: _('Insert at cursor') },
 					},
@@ -1822,18 +1808,21 @@ namespace cool {
 				cardChildren.push({
 					id: 'aichat-chip-formula-diagnosis',
 					type: 'pushbutton',
+					icon: 'lc_aichat_fix_formula.svg',
 					text: _('Diagnose formula error'),
 					enabled: true,
 				});
 				cardChildren.push({
 					id: 'aichat-chip-sanity-check',
 					type: 'pushbutton',
+					icon: 'lc_aichat_cleanupdata.svg',
 					text: _('Sanity check data'),
 					enabled: true,
 				});
 				cardChildren.push({
 					id: 'aichat-chip-create-formula',
 					type: 'pushbutton',
+					icon: 'lc_aichat_createformula.svg',
 					text: _('Create a formula'),
 					enabled: true,
 				});
@@ -1841,6 +1830,7 @@ namespace cool {
 				cardChildren.push({
 					id: 'aichat-chip-create-slides',
 					type: 'pushbutton',
+					icon: 'lc_aichat_createslides.svg',
 					text: _('Create slides'),
 					enabled: true,
 				});
@@ -1863,7 +1853,8 @@ namespace cool {
 				cardChildren.push({
 					id: 'aichat-chip-' + i,
 					type: 'pushbutton',
-					text: card.label,
+					icon: card.icon,
+					text: card.prompt,
 					enabled: true,
 				});
 			}

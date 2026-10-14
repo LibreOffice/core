@@ -55,14 +55,15 @@ describe(['tagdesktop'], 'AI Chat Sidebar', { testIsolation: false }, function()
 		});
 
 		it('Shows empty state text', function() {
-			cy.cGet('#aichat-empty-state').should('contain.text', 'Ask AI anything');
+			cy.cGet('#aichat-empty-state').should('contain.text', 'What would you like to do with this document?');
 		});
 
-		it('Shows initial prompt chips', function() {
+		it('Shows all four text suggestions without See more', function() {
 			cy.cGet('#aichat-chip-0').should('exist');
 			cy.cGet('#aichat-chip-1').should('exist');
 			cy.cGet('#aichat-chip-2').should('exist');
-			cy.cGet('#aichat-chip-3').should('not.exist');
+			cy.cGet('#aichat-chip-3').should('exist');
+			cy.cGet('#aichat-see-more').should('not.exist');
 		});
 
 		it('Header shows title', function() {
@@ -311,31 +312,6 @@ describe(['tagdesktop'], 'AI Chat Sidebar', { testIsolation: false }, function()
 			cy.cGet('#aichat-msg-0').should('have.class', 'aichat-msg-user');
 			cy.cGet('#aichat-messages-list > [id^="aichat-msg-"]').should('have.length', 2);
 			cy.cGet('.aichat-msg-error').should('not.exist');
-		});
-	});
-
-	describe('See More/Less', function() {
-		beforeEach(function() {
-			aichatHelper.enableAIAndStubSocket(this.win, {});
-			aichatHelper.openAIChat();
-		});
-
-		it('See more expands chips', function() {
-			cy.cGet('#aichat-chip-3').should('not.exist');
-			cy.cGet('#aichat-see-more button').click();
-			helper.waitUntilLayoutingIsIdle(this.win);
-			cy.cGet('#aichat-chip-3').should('exist');
-			cy.cGet('#aichat-see-more').should('contain.text', 'See less');
-		});
-
-		it('See less collapses chips', function() {
-			cy.cGet('#aichat-see-more button').click();
-			helper.waitUntilLayoutingIsIdle(this.win);
-			cy.cGet('#aichat-chip-3').should('exist');
-			cy.cGet('#aichat-see-more button').click();
-			helper.waitUntilLayoutingIsIdle(this.win);
-			cy.cGet('#aichat-chip-3').should('not.exist');
-			cy.cGet('#aichat-see-more').should('contain.text', 'See more');
 		});
 	});
 
