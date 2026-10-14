@@ -1051,8 +1051,10 @@ function getCursorPos(offsetProperty, aliasName, cursorSelector = '.cursor-overl
 function textSelectionShouldExist() {
 	cy.log('>> textSelectionShouldExist - start');
 
-	cy.cGet('.text-selection-handle-start').should('exist');
-	cy.cGet('.text-selection-handle-end').should('exist');
+	// The selection highlight is painted on the canvas, so check the view state instead of the DOM.
+	cy.getFrameWindow().should(function(win) {
+		expect(win.app.activeDocument.activeView.hasTextSelection).to.equal(true);
+	});
 
 	// One of the marker should be visible at least (if not both).
 	doIfOnMobile(function() {

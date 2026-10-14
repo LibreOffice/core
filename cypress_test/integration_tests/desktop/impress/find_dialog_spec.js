@@ -2,6 +2,7 @@
 
 var helper = require('../../common/helper');
 var findHelper = require('../../common/find_helper');
+var impressHelper = require('../../common/impress_helper');
 
 describe(['tagdesktop'], 'Searching via find dialog' ,function() {
 
@@ -31,6 +32,7 @@ describe(['tagdesktop'], 'Searching via find dialog' ,function() {
 
 	it('Search not existing word.', function() {
 		cy.cGet('#document-container').dblclick('center');
+		impressHelper.assertInTextEditMode();
 		helper.selectAllText();
 		helper.textSelectionShouldExist();
 
