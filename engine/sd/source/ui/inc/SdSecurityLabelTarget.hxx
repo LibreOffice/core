@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <sddllapi.h>
 #include <svx/seclabel/SecurityLabelTarget.hxx>
 
 namespace sd
@@ -20,7 +21,7 @@ class DrawViewShell;
 /// as the visible footer text of every standard slide (colour follows the master style),
 /// plus the online banner push. Cover/portion placements and the watermark are Writer-only
 /// (Impress has no native watermark).
-class SdSecurityLabelTarget final : public svx::seclabel::SecurityLabelTarget
+class SD_DLLPUBLIC SdSecurityLabelTarget final : public svx::seclabel::SecurityLabelTarget
 {
     sd::DrawViewShell& m_rViewShell;
 

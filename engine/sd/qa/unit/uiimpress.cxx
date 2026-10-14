@@ -65,6 +65,8 @@
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xlndsit.hxx>
+#include <DrawViewShell.hxx>
+#include <SdSecurityLabelTarget.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <SlideSorter.hxx>
 #include <controller/SlsClipboard.hxx>
@@ -6462,6 +6464,51 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testInsertLargeVideoFitsInsideTheMargins)
         pPage->GetSize().Height() - pPage->GetUpperBorder() - pPage->GetLowerBorder(),
         aSize.Height());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(16.0 / 9.0, aspectRatio(aSize), 0.01);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSecurityLabelFooterFitsMarking)
+{
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    auto pViewShell = dynamic_cast<sd::DrawViewShell*>(pImpressDocument->GetDocShell()->GetViewShell());
+    CPPUNIT_ASSERT(pViewShell);
+
+    SdPage* pMaster = pDoc->GetMasterSdPage(0, PageKind::Standard);
+    SdrObject* pFooter = pMaster->GetPresObj(PresObjKind::Footer);
+    CPPUNIT_ASSERT(pFooter);
+    const tools::Rectangle aOrigRect = pFooter->GetLogicRect();
+    const tools::Long nMaxWidth
+        = pMaster->GetSize().Width() - pMaster->GetLeftBorder() - pMaster->GetRightBorder();
+
+    SdSecurityLabelTarget aTarget(*pViewShell);
+    svx::seclabel::LabelPlacement aPlacement;
+
+    // A short marking fits the default footer: leave the layout alone.
+    aPlacement.aMarking = u"SECRET"_ustr;
+    aTarget.applyMarking(aPlacement);
+    CPPUNIT_ASSERT_EQUAL(aOrigRect, pFooter->GetLogicRect());
+
+    // A longer marking widens the footer (centred, same height) instead of wrapping it.
+    aPlacement.aMarking = u"GBR OFFICIAL-SENSITIVE RELEASABLE TO FVEY"_ustr;
+    aTarget.applyMarking(aPlacement);
+    tools::Rectangle aRect = pFooter->GetLogicRect();
+    // Without the fix, this was the original width and the marking wrapped off the slide.
+    CPPUNIT_ASSERT_GREATER(aOrigRect.GetWidth(), aRect.GetWidth());
+    CPPUNIT_ASSERT_LESS(nMaxWidth, aRect.GetWidth());
+    CPPUNIT_ASSERT_EQUAL(aOrigRect.GetHeight(), aRect.GetHeight());
+    CPPUNIT_ASSERT_EQUAL(aOrigRect.Bottom(), aRect.Bottom());
+    CPPUNIT_ASSERT_LESSEQUAL(tools::Long(1), std::abs(aOrigRect.Center().X() - aRect.Center().X()));
+
+    // A marking that can't fit the page width wraps, growing upwards and staying on the page.
+    for (int i = 0; i < 3; ++i)
+        aPlacement.aMarking += " " + aPlacement.aMarking;
+    aTarget.applyMarking(aPlacement);
+    aRect = pFooter->GetLogicRect();
+    CPPUNIT_ASSERT_EQUAL(nMaxWidth, aRect.GetWidth());
+    CPPUNIT_ASSERT_GREATER(aOrigRect.GetHeight(), aRect.GetHeight());
+    CPPUNIT_ASSERT_EQUAL(aOrigRect.Bottom(), aRect.Bottom());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(pMaster->GetLeftBorder()), aRect.Left());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
