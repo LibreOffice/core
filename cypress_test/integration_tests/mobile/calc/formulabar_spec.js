@@ -216,16 +216,16 @@ describe(['tagmobile', 'tagnextcloud'], 'Formula bar tests.', function() {
 describe(['tagmobile'], 'Formula bar context menu tests.', function() {
 	var textLayerSelector = '#sc_input_window .ui-custom-textarea-text-layer';
 	var selectionSelector = '#sc_input_window .ui-custom-textarea-cursor-layer span.selection';
+	var wrapperSelector = '#sc_input_window .ui-custom-textarea-overflow-wrapper';
 	var cellText = 'long line long line long line';
-	var win;
 
 	beforeEach(function() {
 		helper.setupAndLoadDocument('calc/formulabar.ods');
 
 		mobileHelper.enableEditingMobile();
 
-		cy.getFrameWindow().then(function(frameWindow) {
-			win = frameWindow;
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
 		});
 
 		calcHelper.clickOnFirstCell();
@@ -234,7 +234,7 @@ describe(['tagmobile'], 'Formula bar context menu tests.', function() {
 	// Dispatch the touch sequence of a long press on the formula bar. Chrome
 	// fires contextmenu itself part way through the press, pass false to leave
 	// it out and let the widget's own long press timer trigger instead.
-	function longPressOnFormulabar(withContextMenu = true) {
+	function longPressOnFormulabar(win, withContextMenu = true) {
 		cy.cGet(textLayerSelector).then(function(textLayer) {
 			var element = textLayer[0];
 			var rectangle = element.getBoundingClientRect();
@@ -283,7 +283,7 @@ describe(['tagmobile'], 'Formula bar context menu tests.', function() {
 	}
 
 	// A right click or the context menu key arrives without any touch events.
-	function contextMenuOnFormulabar() {
+	function contextMenuOnFormulabar(win) {
 		cy.cGet(textLayerSelector).then(function(textLayer) {
 			var element = textLayer[0];
 			var rectangle = element.getBoundingClientRect();
@@ -306,7 +306,7 @@ describe(['tagmobile'], 'Formula bar context menu tests.', function() {
 
 	// The selection is drawn from what core reports back, so this also asserts
 	// that core knows about the selection - not just the browser.
-	function assertWholeFormulaSelected() {
+	function assertWholeFormulaSelected(win) {
 		cy.then(function() {
 			return helper.processToIdle(win);
 		});
@@ -314,35 +314,40 @@ describe(['tagmobile'], 'Formula bar context menu tests.', function() {
 			.should('have.length', 1)
 			.should('have.text', cellText)
 			.should('be.visible');
+
+		// The bar is one line high and the text wraps to a second line, so each handle shows
+		// only while its own line is scrolled into view.
+		cy.cGet(wrapperSelector).scrollTo('top');
 		cy.cGet('#sc_input_window .formulabar-selection-handle-start').should('be.visible');
+		cy.cGet(wrapperSelector).scrollTo('bottom');
 		cy.cGet('#sc_input_window .formulabar-selection-handle-end').should('be.visible');
 	}
 
 	it('Long press selects the formula and opens the context menu', function() {
-		longPressOnFormulabar();
+		longPressOnFormulabar(this.win);
 
 		assertContextMenu();
-		assertWholeFormulaSelected();
+		assertWholeFormulaSelected(this.win);
 	});
 
 	it('Copy and Paste from the formula bar', function() {
 		helper.setDummyClipboardForCopy();
 
-		longPressOnFormulabar();
+		longPressOnFormulabar(this.win);
 
 		assertContextMenu();
-		assertWholeFormulaSelected();
+		assertWholeFormulaSelected(this.win);
 
-		cy.then(function() {
-			cy.stub(win.app.idleHandler, '_deactivate');
+		cy.then(() => {
+			cy.stub(this.win.app.idleHandler, '_deactivate');
 		});
 
 		cy.cGet('body').contains('#mobile-wizard-content .menu-entry-with-icon', 'Copy').click();
 
 		// Pasting into the empty cell below shows what the copy really captured.
 		helper.typeIntoInputField(helper.addressInputSelector, 'A2');
-		cy.then(function() {
-			win.app.socket.sendMessage('uno .uno:Paste');
+		cy.then(() => {
+			this.win.app.socket.sendMessage('uno .uno:Paste');
 		});
 
 		calcHelper.assertSheetContents(
@@ -352,10 +357,10 @@ describe(['tagmobile'], 'Formula bar context menu tests.', function() {
 	it('Cut empties the formula bar', function() {
 		helper.setDummyClipboardForCopy('text/plain');
 
-		longPressOnFormulabar();
+		longPressOnFormulabar(this.win);
 
 		assertContextMenu();
-		assertWholeFormulaSelected();
+		assertWholeFormulaSelected(this.win);
 
 		cy.cGet('body').contains('#mobile-wizard-content .menu-entry-with-icon', 'Cut').click();
 
@@ -363,34 +368,34 @@ describe(['tagmobile'], 'Formula bar context menu tests.', function() {
 	});
 
 	it('Long press works without a native contextmenu event', function() {
-		longPressOnFormulabar(false);
+		longPressOnFormulabar(this.win, false);
 
 		assertContextMenu();
-		assertWholeFormulaSelected();
+		assertWholeFormulaSelected(this.win);
 	});
 
 	it('Long press works when the formula bar already has the cursor', function() {
 		cy.cGet(textLayerSelector).click();
-		cy.then(function() {
-			return helper.processToIdle(win);
+		cy.then(() => {
+			return helper.processToIdle(this.win);
 		});
 
-		longPressOnFormulabar();
+		longPressOnFormulabar(this.win);
 
 		assertContextMenu();
-		assertWholeFormulaSelected();
+		assertWholeFormulaSelected(this.win);
 	});
 
 	it('Repeated context menu requests keep opening the menu', function() {
-		contextMenuOnFormulabar();
+		contextMenuOnFormulabar(this.win);
 		assertContextMenu();
 
-		cy.then(function() {
-			win.app.map.fire('closemobilewizard');
+		cy.then(() => {
+			this.win.app.map.fire('closemobilewizard');
 		});
 		cy.cGet('#mobile-wizard-content').should('not.be.visible');
 
-		contextMenuOnFormulabar();
+		contextMenuOnFormulabar(this.win);
 		assertContextMenu();
 	});
 });
