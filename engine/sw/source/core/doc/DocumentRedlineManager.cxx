@@ -1719,7 +1719,6 @@ void DocumentRedlineManager::PreAppendInsertRedline(AppendRedlineContext& rCtx)
                     maRedlineTable.Insert( rCtx.pRedl );
                 }
 
-                rCtx.bMerged = true;
                 bDelete = true;
             }
             else if( (( SwComparePosition::Before == rCtx.eCmpPos &&
@@ -1735,7 +1734,6 @@ void DocumentRedlineManager::PreAppendInsertRedline(AppendRedlineContext& rCtx)
                 maRedlineTable.Remove( rCtx.n );
                 maRedlineTable.Insert( rCtx.pRedl );
 
-                rCtx.bMerged = true;
                 bDelete = true;
             }
             else if ( SwComparePosition::Outside == rCtx.eCmpPos )
@@ -1762,7 +1760,6 @@ void DocumentRedlineManager::PreAppendInsertRedline(AppendRedlineContext& rCtx)
             else if( SwComparePosition::Inside == rCtx.eCmpPos )
             {
                 bDelete = bMaybeNotify = true;
-                rCtx.bMerged = true;
             }
             else if( SwComparePosition::Equal == rCtx.eCmpPos )
                 bDelete = bMaybeNotify = true;
@@ -1772,6 +1769,7 @@ void DocumentRedlineManager::PreAppendInsertRedline(AppendRedlineContext& rCtx)
                 delete rCtx.pNewRedl;
                 rCtx.pNewRedl = nullptr;
                 rCtx.bCompress = true;
+                rCtx.bMerged = true;
 
                 if (bMaybeNotify)
                     MaybeNotifyRedlineModification(*rCtx.pRedl, m_rDoc);
@@ -1840,6 +1838,16 @@ void DocumentRedlineManager::PreAppendInsertRedline(AppendRedlineContext& rCtx)
 
                 MaybeNotifyRedlineModification(*rCtx.pRedl, m_rDoc);
             }
+        }
+        else if ( ( SwComparePosition::Equal == rCtx.eCmpPos ) &&
+                  ( rCtx.pNewRedl->GetContentIdx() == nullptr ) )
+        {
+            // the same text is already inserted by another author: keep that redline, and
+            // report the new one as merged into it
+            delete rCtx.pNewRedl;
+            rCtx.pNewRedl = nullptr;
+            rCtx.bCompress = true;
+            rCtx.bMerged = true;
         }
         break;
     case RedlineType::Delete:
