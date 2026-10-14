@@ -603,8 +603,8 @@ setobjecttransform to=<mappings> as=<what>
     mapping takes the object's own square, whose corners are 0 and 0 and 1 and 1, onto the
     page, in twips: the first corner goes to e and f, and the other four numbers say which way
     and how far its own two axes run. A mapping whose two axes are turned over against each
-    other turns the object over. <what> is "move", "scale" or "turn", and names the step it can
-    be undone with.
+    other turns the object over. <what> is "move", "scale", "turn" or "shear", and names the
+    step it can be undone with.
 
     Gives every one of those objects the mapping named: it keeps what it is and only its place,
     its size, its turn and its shear become what the mapping says. The whole of it is one step to

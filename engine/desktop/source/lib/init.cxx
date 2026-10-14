@@ -6906,6 +6906,7 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
     const OString aWhat(pWhat ? pWhat : "");
     const TranslateId aStep(aWhat == "turn"    ? STR_DragMethRotate
                             : aWhat == "scale" ? STR_DragMethResize
+                            : aWhat == "shear" ? STR_DragMethShear
                                                : STR_DragMethMove);
 
     // The mappings arrive in twips and the model holds the page in its own unit. A mapping takes

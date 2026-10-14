@@ -2833,8 +2833,8 @@ struct COKitDocument
      * a, b, c, d, e and f - all separated by commas. The corner 0 and 0 of the object goes to
      * e and f, in twips, and its own axes are the other four. A mapping whose two axes are
      * turned over against each other turns the object over
-     * @param pWhat what was done, which names the step it can be undone with: "move", "scale" or
-     * "turn"
+     * @param pWhat what was done, which names the step it can be undone with: "move", "scale",
+     * "turn" or "shear"
      */
     virtual void setObjectTransform(const char* pMappings, const char* pWhat) = 0;
 
