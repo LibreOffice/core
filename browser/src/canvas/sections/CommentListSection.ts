@@ -1404,14 +1404,18 @@ export class CommentSection extends CanvasSectionObject {
 		}
 	}
 
-	// Focus the edit icon of the given comment
-	private focusEditIcon(comment: Comment): void {
+	// Focus the edit icon of the given comment, else its menu: only the
+	// author's comments have an edit icon
+	private focusCommentButton(comment: Comment): void {
 		var container = comment.sectionProperties.container;
 		app.layoutingService.appendLayoutingTask(() => {
 			var editIcon = container?.querySelector(
 				'.cool-annotation-menu-edit',
 			) as HTMLElement;
 			if (editIcon) editIcon.focus();
+			// a hidden edit icon does not take the focus
+			if (!editIcon || document.activeElement !== editIcon)
+				comment.sectionProperties.menu?.focus();
 		});
 	}
 
@@ -2185,7 +2189,7 @@ export class CommentSection extends CanvasSectionObject {
 		if (action === 'Focus') {
 			var comment = this.getComment(obj[dataroot].id);
 			if (comment)
-				this.focusEditIcon(comment);
+				this.focusCommentButton(comment);
 			return;
 		}
 

@@ -266,6 +266,7 @@ export class Comment extends CanvasSectionObject {
 		if (this.sectionProperties.data.trackchange) {
 			this.sectionProperties.captionNode = window.L.DomUtil.create('div', 'cool-annotation-caption', this.sectionProperties.wrapper);
 			this.sectionProperties.captionText = window.L.DomUtil.create('div', '', this.sectionProperties.captionNode);
+			this.sectionProperties.captionText.id = 'annotation-caption-text-' + this.sectionProperties.data.id;
 		}
 
 		this.sectionProperties.contentNode = window.L.DomUtil.create('div', 'cool-annotation-content cool-dont-break', this.sectionProperties.wrapper);
@@ -287,6 +288,7 @@ export class Comment extends CanvasSectionObject {
 		this.sectionProperties.nodeModifyText.setAttribute('aria-label', Comment.editCommentLabel);
 		this.sectionProperties.nodeModifyText.id = 'annotation-modify-textarea-' + this.sectionProperties.data.id;
 		this.sectionProperties.contentText = window.L.DomUtil.create('div', '', this.sectionProperties.contentNode);
+		this.sectionProperties.contentText.id = 'annotation-content-text-' + this.sectionProperties.data.id;
 		this.sectionProperties.nodeReply = window.L.DomUtil.create('div', 'cool-annotation-edit' + ' reply-annotation', this.sectionProperties.wrapper);
 		this.sectionProperties.nodeReplyText = window.L.DomUtil.create('div', 'cool-annotation-textarea', this.sectionProperties.nodeReply);
 		this.createReplyHint(this.sectionProperties.nodeReply);
@@ -362,6 +364,7 @@ export class Comment extends CanvasSectionObject {
 
 	private createAuthorTable (): void {
 		this.sectionProperties.author = window.L.DomUtil.create('table', 'cool-annotation-table', this.sectionProperties.wrapper);
+		this.sectionProperties.author.setAttribute('role', 'presentation'); // a layout table
 
 		var tbody = window.L.DomUtil.create('tbody', '', this.sectionProperties.author);
 
@@ -388,11 +391,17 @@ export class Comment extends CanvasSectionObject {
 		this.sectionProperties.authorAvatarImg = imgAuthor;
 		this.sectionProperties.authorAvatartdImg = tdImg;
 		this.sectionProperties.contentAuthor = window.L.DomUtil.create('div', 'cool-annotation-content-author', tdAuthor);
+		this.sectionProperties.contentAuthor.id = 'annotation-content-author-' + this.sectionProperties.data.id;
 	}
 
 	private createMenu (): void {
 		var tdMenu = window.L.DomUtil.create('td', 'cool-annotation-menubar', this.sectionProperties.authorRow);
 		this.sectionProperties.menuBarCell = tdMenu;
+		// describe the buttons by the comment author and text, and the kind of change
+		const id = this.sectionProperties.data.id;
+		const describedBy = 'annotation-content-author-' + id
+			+ (this.sectionProperties.data.trackchange ? ' annotation-caption-text-' + id : '')
+			+ ' annotation-content-text-' + id;
 		if (this.isAuthor()) {
 			const edit = window.L.DomUtil.create('div', 'cool-annotation-menu-edit', tdMenu);
 			edit.id = 'comment-annotation-menu-edit-' + this.sectionProperties.data.id;
@@ -405,6 +414,8 @@ export class Comment extends CanvasSectionObject {
 			edit.onkeypress = this.editOnKeyPress.bind(this);
 			edit.dataset.title = Comment.editCommentLabel;
 			edit.setAttribute('aria-label', Comment.editCommentLabel);
+			edit.setAttribute('role', 'button');
+			edit.setAttribute('aria-describedby', describedBy);
 		}
 
 		this.sectionProperties.menu = window.L.DomUtil.create('div', this.sectionProperties.data.trackchange ? 'cool-annotation-menu-redline' : 'cool-annotation-menu', tdMenu);
@@ -414,6 +425,8 @@ export class Comment extends CanvasSectionObject {
 		this.sectionProperties.menu.onkeypress = this.menuOnKeyPress.bind(this);
 		this.sectionProperties.menu.dataset.title = Comment.openMenuLabel;
 		this.sectionProperties.menu.setAttribute('aria-label', Comment.openMenuLabel);
+		this.sectionProperties.menu.setAttribute('role', 'button');
+		this.sectionProperties.menu.setAttribute('aria-describedby', describedBy);
 	}
 
 	// Returns the final (post-clamp) top in canvas-relative CSS px, so a thread's

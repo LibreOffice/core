@@ -3,19 +3,19 @@
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 
-describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
+function expandSection(name) {
+	cy.getFrameWindow().then((win) => helper.processToIdle(win));
+	cy.cGet('#contenttree')
+		.contains('.jsdialog.sidebar.ui-treeview-cell-text', name)
+		.parent() // .ui-treeview-cell
+		.parent() // div - column
+		.parent() // .ui-treeview-entry
+		.find('.ui-treeview-expander-column')
+		.click();
+	cy.getFrameWindow().then((win) => helper.processToIdle(win));
+}
 
-	function expandSection(name) {
-		cy.getFrameWindow().then((win) => helper.processToIdle(win));
-		cy.cGet('#contenttree')
-			.contains('.jsdialog.sidebar.ui-treeview-cell-text', name)
-			.parent() // .ui-treeview-cell
-			.parent() // div - column
-			.parent() // .ui-treeview-entry
-			.find('.ui-treeview-expander-column')
-			.click();
-		cy.getFrameWindow().then((win) => helper.processToIdle(win));
-	}
+describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 
 	beforeEach(function() {
 		helper.setupAndLoadDocument('writer/navigator.odt');
@@ -258,5 +258,30 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 		desktopHelper.pressKey(7, 'pagedown');
 		desktopHelper.pressKey(1, 'A');
 		cy.cGet('#contenttree').find('.jsdialog.sidebar.ui-treeview-entry.ui-treeview-notexpandable.selected').find('.jsdialog.sidebar.ui-treeview-cell-text').should('have.text','IntroAduction');
+	});
+});
+
+describe(['tagdesktop'], 'Navigator comments', function() {
+
+	beforeEach(function() {
+		helper.setupAndLoadDocument('writer/a11y_comment.fodt');
+		cy.cGet('#navigator-floating-icon').click(); // Ensure it's open
+	});
+
+	it('Jump to a comment of another author focuses its menu', function() {
+		expandSection('Comments');
+		cy.cGet('#contenttree').contains('.jsdialog.sidebar.ui-treeview-cell-text', 'Check this word.').dblclick();
+
+		cy.cGet('div.cool-annotation-menu:focus').should('have.attr', 'role', 'button');
+		// no edit icon on a comment of another author
+		cy.cGet('div.cool-annotation-menu:focus').closest('.cool-annotation-menubar')
+			.find('.cool-annotation-menu-edit').should('not.exist');
+		cy.cGet('div.cool-annotation-menu:focus')
+			.invoke('attr', 'aria-describedby')
+			.then((ids) => {
+				const [author, text] = ids.split(' ');
+				cy.cGet('#' + author).should('have.text', 'Alice');
+				cy.cGet('#' + text).should('have.text', 'Check this word.');
+			});
 	});
 });
