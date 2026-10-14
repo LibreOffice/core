@@ -13,6 +13,11 @@
 #include <osl/module.h>
 #include <config_options.h>
 
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
+
 #if !ENABLE_UNITEDLIBS
 #error(this should only be compiled when in ENABLE_UNITEDLIBS)
 #endif

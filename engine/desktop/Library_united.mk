@@ -30,6 +30,12 @@ $(eval $(call gb_Library_use_static_libraries,united,\
 	ulingu \
 	$(if $(ENABLE_CURL),ulinguremote) \
 ))
+ifeq ($(OS)-$(USE_HEADLESS_CODE),WNT-TRUE)
+$(eval $(call gb_Library_use_static_libraries,united,\
+	fontconfig \
+	freetype \
+))
+endif
 
 $(eval $(call gb_Library_use_externals,united,\
 	abw \
@@ -163,6 +169,41 @@ $(eval $(call gb_Library_add_libs,united,\
 endif
 endif # ENABLE_GEN && USING_X11
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_use_system_win32_libs,united, \
+    activeds \
+    adsiid \
+    advapi32 \
+    comdlg32 \
+    dbghelp \
+    dwrite \
+    gdi32 \
+    mf \
+    mfuuid \
+    mfplat \
+    mfplay \
+    mfreadwrite \
+    mpr \
+    netapi32 \
+    ole32 \
+    oleaut32 \
+    oledlg \
+    propsys \
+    secur32 \
+    shell32 \
+    shlwapi \
+    strmiids \
+    user32 \
+    userenv \
+    uuid \
+    version \
+    wer \
+    winhttp \
+    winmm \
+    ws2_32 \
+))
+endif
+
 # Add no-relax because the sanitized binary is so large we get 32-bit-offset-relocation problems
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(gb_CC)),)
@@ -193,6 +234,11 @@ $(eval $(call gb_Library_add_ldflags,united,\
 ))
 endif
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_ldflags,united,\
+    /DEF:$(gb_CustomTarget_workdir)/desktop/united.map \
+))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,united,\
     desktop/source/app/unitedinit \

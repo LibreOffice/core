@@ -72,7 +72,9 @@ int main()
     line("sal_detail_deinitialize");
 
     // stuff we need when running from online or coda
+#ifdef LINUX
     line("kit_open_urandom");
+#endif
     line("cok_preinit_2");
     line("cokit_hook_2");
     line("kit_preload_hook_sc");
@@ -82,6 +84,7 @@ int main()
     // stuff we need when running the classic UI, i.e. from soffice.bin
     line("soffice_main");
 
+#ifndef _WIN32
     // the language tables from i18npool
     line("getAllCalendars*");
     line("getAllCurrencies*");
@@ -97,6 +100,7 @@ int main()
     line("getLCInfo*");
     line("getOutlineNumberingLevels*");
     line("getReservedWords*");
+#endif
 
     // core_factory_list
     line("i18npool_component_getFactory");
@@ -225,30 +229,38 @@ int main()
     line("com_sun_star_comp_configuration_ReadOnlyAccess_get_implementation");
     line("com_sun_star_comp_configuration_ReadWriteAccess_get_implementation");
     line("com_sun_star_comp_configuration_Update_get_implementation");
+#if HAVE_FEATURE_DBCONNECTIVITY
     // connectivity/source/cpool/dbpool2.component
     line("connectivity_OPoolCollection_get_implementation");
+#endif
     // connectivity/source/dbtools/dbtools.component
     line("connectivity_dbtools_ODatabaseMetaDataResultSet_get_implementation");
     line("connectivity_dbtools_ParameterSubstitution_get_implementation");
-#ifdef _WIN32
+#if defined(_WIN32) && HAVE_FEATURE_DBCONNECTIVITY
     // connectivity/source/drivers/ado/ado.component
     line("connectivity_ado_ODriver_get_implementation");
 #endif
+#if HAVE_FEATURE_DBCONNECTIVITY
     // connectivity/source/drivers/calc/calc.component
     line("connectivity_calc_ODriver");
-#ifndef MACOSX
+#endif
+#ifdef LINUX
     // connectivity/source/drivers/evoab2/evoab.component
     // TODO this needs a config_foo.h entry
     line("connectivity_OEvoabDriver_get_implementation");
 #endif
-    // connectivity/source/drivers/flat/flat.component
+#if HAVE_FEATURE_DBCONNECTIVITY
+   // connectivity/source/drivers/flat/flat.component
     line("connectivity_flat_ODriver");
+#endif
 #ifdef MACOSX
     // connectivity/source/drivers/macab/macab1.component
     line("connectivity_MacabDriver_get_implementation");
 #endif
+#if HAVE_FEATURE_DBCONNECTIVITY
     // connectivity/source/drivers/mozab/bootstrap/mozbootstrap.component
     line("connectivity_moz_MozillaBootstrap_get_implementation");
+#endif
 #if HAVE_FEATURE_DBCONNECTIVITY
     // connectivity/source/drivers/dbase/dbase.component
     line("connectivity_dbase_ODriver");
@@ -330,10 +342,12 @@ int main()
     // extensions/source/config/WinUserInfo/WinUserInfoBe.component
     line("extensions_WinUserInfoBe_get_implementation");
 #endif
+#if HAVE_FEATURE_DBCONNECTIVITY
     // extensions/source/dbpilots/dbp.component
     line("extensions_dbp_OGridWizard_get_implementation");
     line("extensions_dbp_OGroupBoxWizard_get_implementation");
     line("extensions_dbp_OListComboWizard_get_implementation");
+#endif
     // extensions/source/logging/log.component
     line("com_sun_star_comp_extensions_ConsoleHandler");
     line("com_sun_star_comp_extensions_CsvFormatter");
@@ -341,6 +355,7 @@ int main()
     line("com_sun_star_comp_extensions_LoggerPool");
     line("com_sun_star_comp_extensions_PlainTextFormatter");
     line("com_sun_star_comp_extensions_SimpleTextFormatter");
+#if HAVE_FEATURE_DBCONNECTIVITY
     // extensions/source/propctrlr/pcr.component
     line("extensions_propctrlr_StringRepresentation_get_implementation");
     line("extensions_propctrlr_ButtonNavigationHandler_get_implementation");
@@ -362,6 +377,7 @@ int main()
     line("extensions_propctrlr_MasterDetailLinkDialog_get_implementation");
     line("extensions_propctrlr_OControlFontDialog_get_implementation");
     line("extensions_propcrltr_OTabOrderDialog_get_implementation");
+#endif
     // extensions/source/scanner/scn.component
     line("extensions_ScannerManager_get_implementation");
     // filter/source/config/cache/filterconfig1.component
@@ -806,7 +822,7 @@ int main()
     line("com_sun_star_comp_sfx2_SfxMacroLoader_get_implementation");
     line("com_sun_star_sfx2_ClassificationCategoriesController_get_implementation");
     line("com_sun_star_comp_sfx2_InsertSymbolToolBoxControl_get_implementation");
-#if !defined(MACOSX) && !defined(WNT)
+#ifdef LINUX
     // shell/source/backends/desktopbe/desktopbe1.component
     line("shell_DesktopBackend_get_implementation");
 #endif
@@ -819,15 +835,19 @@ int main()
 #ifdef _WIN32
     // shell/source/backends/wininetbe/wininetbe1.component
     line("shell_WinInetBackend_get_implementation");
+#endif
+#ifndef _WIN32
     // shell/source/cmdmail/cmdmail.component
     line("shell_CmdMailSuppl_get_implementation");
 #endif
-#if !defined(MACOSX) && !defined(WNT)
+#if defined(LINUX) && ENABLE_GIO
     // shell/source/sessioninstall/losessioninstall.component
     line("shell_sessioninstall_get_implementation");
 #endif
+#if HAVE_FEATURE_DESKTOP
     // shell/source/unix/exec/syssh.component
     line("shell_ShellExec_get_implementation");
+#endif
 #ifdef _WIN32
     // shell/source/win32/jumplist/jumplist.component
     line("shell_JumpListExec_get_implementation");
@@ -961,8 +981,10 @@ int main()
     line("lo_writer_NextScrollToolboxController_get_implementation");
     line("SwXAutoTextContainer_get_implementation");
     line("SwXMailMerge_get_implementation");
+#if HAVE_FEATURE_DBCONNECTIVITY
     line("lo_writer_MMCurrentEntryController_get_implementation");
     line("lo_writer_MMExcludeEntryController_get_implementation");
+#endif
     line("lo_writer_PageSizeToolBoxControl_get_implementation");
     line("lo_writer_PageColumnToolBoxControl_get_implementation");
     line("lo_writer_PageMarginToolBoxControl_get_implementation");
@@ -1167,15 +1189,13 @@ int main()
     line("com_sun_star_graphic_GraphicObject_get_implementation");
     line("UITest_get_implementation");
     line("vcl_FontIdentificator_get_implementation");
-#ifdef _WIN32
+#if defined(_WIN32) && !USE_HEADLESS_CODE
     // vcl/vclplug_win.component
     line("dtrans_CDataFormatTranslatorUNO_get_implementation");
     line("dtrans_DragSource_get_implementation");
     line("dtrans_DropTarget_get_implementation");
     line("dtrans_ClipboardManager_get_implementation");
     line("dtrans_GenericClipboard_get_implementation");
-    // winaccessibility/source/service/winaccessibility.component
-    line("winaccessibility_MSAAServiceImpl_get_implementation");
 #endif
     // writerperfect/source/calc/wpftcalc.component
     line("com_sun_star_comp_Calc_MSWorksCalcImportFilter_get_implementation");
