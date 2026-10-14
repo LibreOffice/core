@@ -826,7 +826,8 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		//var MAC=1; use this when you encounter a MAC value
 
 		if ((this.modifier == app.UNOModifier.ALT || this.modifier == app.UNOModifier.SHIFT + app.UNOModifier.ALT) &&
-		    keyCode >= this.keyCodes.NUM0[DEFAULT]) {
+		    keyCode >= this.keyCodes.NUM0[DEFAULT] &&
+		    keyCode !== this.keyCodes.F12) { // Alt+F12 opens a comment; Alt+F1-F11 stay as they were
 			// Presumably a Mac or iOS client accessing a "special character". Just ignore the alt modifier.
 			// But don't ignore it for Alt + non-printing keys.
 			this.modifier -= alt;

@@ -1422,6 +1422,34 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testOpenComment)
                          aView.m_aComment.get_child("id").get_value<sal_uInt32>());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testOpenCommentKey)
+{
+    // Given the caret right before a comment anchor:
+    SwXTextDocument* pXTextDocument = createDoc("a11y-comment.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    SwTestViewCallback aView;
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 7, /*bBasicCall=*/false);
+    auto pPostIt = dynamic_cast<const SwPostItField*>(pWrtShell->GetCurField());
+    CPPUNIT_ASSERT(pPostIt);
+    Scheduler::ProcessEventsToIdle();
+    int nCallbacks = aView.m_nCommentCallbackCount;
+
+    // When pressing Alt+F12:
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_F12 | KEY_MOD2);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_F12 | KEY_MOD2);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then a Focus callback for that comment is emitted:
+    // Without the fix, Alt+F12 had no binding.
+    CPPUNIT_ASSERT_EQUAL(nCallbacks + 1, aView.m_nCommentCallbackCount);
+    CPPUNIT_ASSERT_EQUAL(std::string("Focus"),
+                         aView.m_aComment.get_child("action").get_value<std::string>());
+    CPPUNIT_ASSERT_EQUAL(pPostIt->GetPostItId(),
+                         aView.m_aComment.get_child("id").get_value<sal_uInt32>());
+}
+
 // The comment field of the single comment the document is expected to have.
 const SwPostItField* getOnlyPostItField(SwPostItMgr& rPostItMgr)
 {

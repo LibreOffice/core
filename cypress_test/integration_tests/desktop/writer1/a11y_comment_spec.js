@@ -106,4 +106,23 @@ describe(['tagdesktop'], 'Writer comments for the reader', { testIsolation: fals
 				.to.equal('Some outer \ufffcwords\ufffc end.');
 		});
 	});
+
+	it('Alt+F12 before an anchor moves the focus to its comment', function () {
+		// "Before " leads to the anchor of the comment by Alice; {ctrl} stays down for the rest
+		// of a string, so the arrows go in a call of their own
+		helper.typeIntoDocument('{ctrl}{home}');
+		helper.typeIntoDocument('{rightarrow}'.repeat(7));
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+		cy.realPress(['Alt', 'F12']);
+
+		cy.cGet('div.cool-annotation-menu:focus')
+			.invoke('attr', 'aria-describedby')
+			.then(function (ids) {
+				const [author, text] = ids.split(' ');
+				cy.cGet('#' + author).should('have.text', 'Alice');
+				cy.cGet('#' + text).should('have.text', 'Check this word.');
+			});
+	});
 });

@@ -135,9 +135,10 @@ var NotebookbarAccessibility = function() {
 	*/
 	this.mayShowAcceleratorInfoBoxes = false;
 	this.onDocumentKeyDown = function(event) {
-			 if (this.initialized && (event.keyCode === 18 || (event.keyCode === 18 && event.shiftKey))) {
-				this.mayShowAcceleratorInfoBoxes = true;
-			}
+		if (this.initialized && event.keyCode === 18) // Alt
+			this.mayShowAcceleratorInfoBoxes = true;
+		else if (event.keyCode !== 16) // Alt+Shift alone still shows the info boxes; Alt+F12 is a shortcut
+			this.mayShowAcceleratorInfoBoxes = false;
 	};
 
 	// A mouse press while Alt is held makes it an Alt+mouse action, like Alt-drag, so releasing
@@ -155,7 +156,7 @@ var NotebookbarAccessibility = function() {
 				if (event.keyCode === 18)
 					document.body.classList.remove('activate-underlines');
 			}
-			else if (this.mayShowAcceleratorInfoBoxes && (event.keyCode === 18 || (event.keyCode === 18 && event.shiftKey))) { // 18: Alt key.
+			else if (this.mayShowAcceleratorInfoBoxes && event.keyCode === 18) { // Alt
 				this.resetState();
 				this.setTabDescription(this.getCurrentSelectedTab());
 				this.addTabAccelerators();
