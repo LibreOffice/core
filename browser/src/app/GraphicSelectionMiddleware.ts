@@ -467,9 +467,8 @@ class GraphicSelection {
 		}
 
 		// A drag by the mouse owns the selection while it runs, so a key does nothing to it then
-		// and is taken here. Escape stays with the drag, which it calls off.
-		if (this.selectionSection?.isDragged() && event.key !== 'Escape')
-			return true;
+		// and is taken here. Escape goes on to call the drag off, and the selection stays.
+		if (this.selectionSection?.isDragged()) return event.key !== 'Escape';
 
 		// What a key changes goes to the engine once the keys are let go, as the last state of
 		// each thing it changed. It is shown here at once all the same.
