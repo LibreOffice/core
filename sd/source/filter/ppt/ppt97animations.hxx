@@ -101,7 +101,7 @@ public: //public methods
 
     //set methods
     void SetDimColor( Color nDimColor );
-    void SetSoundFileUrl( const OUString& rSoundFileUrl );
+    void SetSoundFileUrl( const OUString& rSoundFileUrl, bool bAllowed );
     void SetAnimateAssociatedShape( bool bAnimate ); //true if the shape should be animated in addition to the text
 
     //action methods
@@ -144,6 +144,7 @@ private: //private member
     //input information:
     Ppt97AnimationInfoAtom  m_aAtom;         ///< pure input from stream
     OUString         m_aSoundFileUrl; ///< this needs to be set in addition from outside as this class has not the knowledge to translate the sound bits to a file url
+    bool             m_bSoundFileAllowed = false; ///< m_aSoundFileUrl is the copy of sound data stored in the document
 
     //cached generated output information:
     mutable bool            m_bDirtyCache;

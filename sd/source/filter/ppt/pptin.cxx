@@ -2180,9 +2180,9 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
                                 if ( nBuildFlags & 16 )
                                 {   // slide with sound effect
                                     pPage->SetSound( true );
-                                    OUString aSoundFile( ReadSound( nSoundRef ) );
-                                    // Embedded in the .ppt, not a link: allow it.
-                                    pPage->SetSoundFile( aSoundFile, /*bAllowed*/true );
+                                    bool bEmbedded;
+                                    OUString aSoundFile( ReadSound( nSoundRef, bEmbedded ) );
+                                    pPage->SetSoundFile( aSoundFile, bEmbedded );
                                 }
                                 if ( nBuildFlags & ( 1 << 6 ) )     // Loop until next sound
                                     pPage->SetLoopSound( true );
@@ -2300,8 +2300,9 @@ INetURLObject getUnusedGalleryURL(const INetURLObject& rFolder, std::u16string_v
 
 // Not only the sounds are imported as string, they are also inserted to
 // the gallery if they are not already there.
-OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
+OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef, bool& rEmbedded) const
 {
+    rEmbedded = false;
     OUString aRetval;
     sal_uInt64 nOldPos = rStCtrl.Tell();
     DffRecordHeader aDocHd;
@@ -2397,6 +2398,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                                 {
                                     GalleryExplorer::InsertURL( GALLERY_THEME_USERSOUNDS, aGalleryUserSound.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
                                     aRetval = aGalleryUserSound.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+                                    rEmbedded = true;
                                 }
                             }
                         }
@@ -2490,11 +2492,13 @@ void ImplSdPPTImport::FillSdAnimationInfo(SdAnimationInfo* pInfo, const PptInter
     // set local information into pInfo
     if( rIAtom.nSoundRef )
     {
-        // Embedded in the .ppt, not a link: allow it. Set the action before the
-        // bookmark so the URL is stored as a click-action sound.
-        pInfo->meClickAction = css::presentation::ClickAction_SOUND;
-        pInfo->mbClickSoundAllowed = true;
-        pInfo->SetBookmark( ReadSound( rIAtom.nSoundRef ) );   // path to sound file in MS DOS notation
+        bool bEmbedded;
+        OUString aSoundFile( ReadSound( rIAtom.nSoundRef, bEmbedded ) );
+        // set the action before the bookmark, so storing the sound URL registers
+        // it as a click-action sound link
+        pInfo->meClickAction = css::presentation::ClickAction_SOUND;           // RunProgramAction
+        pInfo->mbClickSoundAllowed = bEmbedded;
+        pInfo->SetBookmark( aSoundFile );
     }
 
     switch ( rIAtom.nAction )
@@ -3052,7 +3056,11 @@ rtl::Reference<SdrObject> ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData
                                     xAnimation->SetDimColor( MSO_CLR_ToColor(xAnimation->GetDimColor()) );
                                     // translate sound bits to file url
                                     if( xAnimation->HasSoundEffect() )
-                                        xAnimation->SetSoundFileUrl( ReadSound( xAnimation->GetSoundRef() ) );
+                                    {
+                                        bool bEmbedded;
+                                        OUString aSoundFile( ReadSound( xAnimation->GetSoundRef(), bEmbedded ) );
+                                        xAnimation->SetSoundFileUrl( aSoundFile, bEmbedded );
+                                    }
 
                                     bool bDontAnimateInvisibleShape = false;
                                     {
@@ -3113,7 +3121,10 @@ rtl::Reference<SdrObject> ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData
                                             rSt.ReadUInt32( nRef );
                                             OUString aMediaURL( ReadMedia( nRef ) );
                                             if ( aMediaURL.isEmpty() )
-                                                aMediaURL = ReadSound( nRef );
+                                            {
+                                                bool bEmbedded;
+                                                aMediaURL = ReadSound( nRef, bEmbedded );
+                                            }
                                             if ( !aMediaURL.isEmpty() )
                                             {
                                                 rtl::Reference<SdrMediaObj> pMediaObj = new SdrMediaObj(

@@ -1614,8 +1614,11 @@ int AnimationImporter::importAudioContainer( const Atom* pAtom, const Reference<
                     OUString aSoundURL;
                     if( aSource >>= aSoundURL )
                     {
-                        // Embedded in the .ppt, not a link: allow it.
-                        xAudio->setSource( xmloff::makeSoundSource( aSoundURL, /*bAllowed*/true ) );
+                        xAudio->setSource( xmloff::makeSoundSource( aSoundURL ) );
+                        // a sound outside the document package is a link; note it
+                        // on the document so the slide's sound links get registered
+                        if( !xmloff::isPackageSoundURL( aSoundURL ) )
+                            mpPPTImport->GetDoc().SetMaybeHasAnimationSoundLinks( true );
                     }
                     else
                         xAudio->setSource( aSource );
@@ -2205,8 +2208,12 @@ void AnimationImporter::importTargetElementContainer( const Atom* pAtom, Any& rT
 
             case 2: // sound
                 {
-                    OUString aSoundURL( mpPPTImport->ReadSound( nRefId ) );
-                    rTarget <<= aSoundURL;
+                    bool bEmbedded;
+                    OUString aSoundURL( mpPPTImport->ReadSound( nRefId, bEmbedded ) );
+                    if (bEmbedded)
+                        rTarget = xmloff::makeSoundSource(aSoundURL, true);
+                    else
+                        rTarget <<= aSoundURL;
                 }
                 break;
             case 3: // audio object
