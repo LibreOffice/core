@@ -597,8 +597,8 @@ SimpleFillPropertiesContext::SimpleFillPropertiesContext(ContextHandler2Helper c
 
 SimpleFillPropertiesContext::~SimpleFillPropertiesContext()
 {
-    mrColor = getBestSolidColor().createComplexColor(getFilter().getGraphicHelper(), -1);
     mrOOXColor = getBestSolidColor();
+    mrColor = mrOOXColor.createComplexColor(getFilter().getGraphicHelper(), -1);
 }
 
 BlipExtensionContext::BlipExtensionContext(ContextHandler2Helper const & rParent, BlipFillProperties& rBlipProps, model::BlipFill* pBlipFill)
