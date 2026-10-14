@@ -37,6 +37,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -219,6 +220,23 @@ void PPTShape::setTextMasterStyles( const SlidePersist& rSlidePersist, const oox
                                 getTextBody()->ApplyMasterTextStyle(rFilterBase, aXStyle, aCharStyleLvlProps, mpMasterTextListStyle, nLevel - 1);
                             }
                         }
+                    }
+
+                    // The numbering rules of all nine levels belong to outline1, and the other
+                    // outline styles hold none of their own, the indent of each level goes there
+                    Reference<XPropertySet> xOutline1(xFamilies->getByName(aStyle), UNO_QUERY);
+                    Reference<container::XIndexReplace> xNumRules;
+                    if (xOutline1.is()
+                        && (xOutline1->getPropertyValue(u"NumberingRules"_ustr) >>= xNumRules)
+                        && xNumRules.is())
+                    {
+                        TextListStyle aCombinedTextListStyle;
+                        if (mpMasterTextListStyle)
+                            aCombinedTextListStyle.apply(*mpMasterTextListStyle);
+                        aCombinedTextListStyle.apply(getTextBody()->getTextListStyle());
+                        // The first level was set together with its bullet
+                        aCombinedTextListStyle.pushToNumberingRules(xNumRules, 0);
+                        xOutline1->setPropertyValue(u"NumberingRules"_ustr, Any(xNumRules));
                     }
                 }
             }
