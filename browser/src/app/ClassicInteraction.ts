@@ -127,8 +127,9 @@ abstract class ClassicContext implements InteractionContext {
 		The states of the commands the client gives itself, from what is selected where one
 		stands:
 		- Enter Group on one selected group that is no diagram, as Enter and F3 enter it; Leave
-		  Group wherever one stands in a group; Ungroup where a selected group can be taken apart,
-		  a diagram among several being an object like any other.
+		  Group wherever one stands in a group; Ungroup where groups or diagrams are selected,
+		  each of which it takes apart by one level, and otherwise where one stands in a group,
+		  which it takes apart.
 		- Group with two objects or more; aligning, arranging and the position and size with one
 		  or more; naming with exactly one; spreading out with three or more. As the office does,
 		  a part inside a 3D scene is neither aligned nor arranged.
@@ -159,11 +160,11 @@ abstract class ClassicContext implements InteractionContext {
 		const states: { [command: string]: boolean } = {
 			'.uno:EnterGroup': aGroup,
 			'.uno:LeaveGroup': this.groupStoodIn !== undefined,
-			'.uno:FormatUngroup': selected.some(
-				(objectId: number) =>
-					RenderGeometrySection.holdsObjects(objectId) &&
-					!RenderGeometrySection.objectOf(objectId)?.isDiagram,
-			),
+			'.uno:FormatUngroup':
+				this.groupStoodIn !== undefined ||
+				selected.some((objectId: number) =>
+					RenderGeometrySection.holdsObjects(objectId),
+				),
 			'.uno:FormatGroup': count >= 2,
 		};
 		for (const command of Interaction.commandsForOneOrMore)
@@ -239,9 +240,19 @@ abstract class ClassicContext implements InteractionContext {
 		return GraphicSelection.selectedObjectIDs;
 	}
 
-	/// Ungroup is the engine's, for what is selected.
+	/*
+		Ungroup takes apart the groups and diagrams selected, each by one level, which the engine
+		does with what it has marked. With none of them selected it takes apart the group one
+		stands in.
+	*/
 	public ungroup(): boolean {
-		return false;
+		const anySelected = GraphicSelection.selectedObjectIDs.some(
+			(objectId: number) => RenderGeometrySection.holdsObjects(objectId),
+		);
+		if (anySelected || this.groupStoodIn === undefined) return false;
+
+		GraphicSelection.takeApart(this.groupStoodIn);
+		return true;
 	}
 
 	/// Ctrl+F3 leaves the group one stands in, selecting it. On the page there is none to leave.
@@ -403,14 +414,17 @@ abstract class ClassicContext implements InteractionContext {
 
 	/*
 		A drag that begins on something nobody selected takes hold of the outermost object it
-		belongs to, which is the group where it is in one, as long as that may be moved. A drag
-		with a modifier is the engine's.
+		belongs to, which is the group where it is in one, as long as that may be moved. A diagram
+		is taken hold of through its first object, which stands for it, carries the whole of it,
+		and is what the engine reports back. A drag with a modifier is the engine's.
 	*/
 	public takesHoldFor(hit: number, modifier: number): number | undefined {
 		if (modifier !== 0) return undefined;
 
 		const objectId = RenderGeometrySection.outermostOf(hit, this.groupStoodIn);
-		return ObjectHandles.canBeMoved([objectId]) ? objectId : undefined;
+		if (!ObjectHandles.canBeMoved([objectId])) return undefined;
+
+		return this.enteredBy([objectId])[0];
 	}
 
 	/// An arrow key moves what is selected by the step EditSteps gives for the modifier held.
@@ -612,8 +626,8 @@ class ClassicDiagramContext extends ClassicGroupContext {
 	}
 
 	/*
-		A diagram gives no hint of being a group but by Ungroup, which is offered with the whole
-		diagram selected, its first object, as for a group. Enter Group is never offered. Leave
+		A diagram gives no hint of being a group but by Ungroup, which is offered wherever one
+		stands in it and takes the whole diagram apart. Enter Group is never offered. Leave
 		Group is offered inside the diagram, on its other objects, and with the whole diagram
 		selected as for any object at the level around it: only where a group holds it. The
 		whole diagram is moved and arranged as an object; its other objects take no geometry,
@@ -626,7 +640,7 @@ class ClassicDiagramContext extends ClassicGroupContext {
 		states['.uno:EnterGroup'] = false;
 		states['.uno:LeaveGroup'] =
 			!whole || !!RenderGeometrySection.parentOf(this.diagram);
-		states['.uno:FormatUngroup'] = whole;
+		states['.uno:FormatUngroup'] = true;
 		if (!whole) {
 			states['.uno:FormatGroup'] = false;
 			for (const command of Interaction.commandsForOneOrMore)
@@ -647,18 +661,9 @@ class ClassicDiagramContext extends ClassicGroupContext {
 			: GraphicSelection.selectedObjectIDs;
 	}
 
-	/*
-		Ungroup takes the diagram apart, with the whole diagram selected. The engine is named the
-		diagram itself first, which is no place for the client to stand in, so the client's
-		selection stays as it is until the engine reports what taking it apart left selected.
-	*/
+	/// Ungroup takes the diagram apart, whichever of its objects is selected.
 	public ungroup(): boolean {
-		// Only the whole diagram is taken apart; on its other objects there is nothing to do.
-		if (!this.wholeSelected()) return true;
-
-		GraphicSelection.takeTheNextReportAsItIs();
-		app.socket.sendMessage('selectobjects ids=' + this.diagram);
-		app.socket.sendMessage('uno .uno:FormatUngroup');
+		GraphicSelection.takeApart(this.diagram);
 		return true;
 	}
 

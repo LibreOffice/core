@@ -66,19 +66,6 @@ class GraphicSelection {
 			: undefined;
 	}
 
-	/// Whether what is selected is a diagram, asked of the object while the document is drawn
-	/// from objects and of the selection message otherwise. While drawn from objects, objects
-	/// selected inside a diagram, its first one for the whole of it, count as the diagram.
-	public static isADiagram(): boolean {
-		if (RenderManager.isVectorRendering())
-			return (
-				this.theOneSelected()?.isDiagram === true ||
-				Interaction.placeOf(this.selectedObjectIDs).kind === 'diagram'
-			);
-
-		return this.extraInfo?.isDiagram === true;
-	}
-
 	/// The file name ending of the picture what is selected holds, or nothing where it holds
 	/// none. Asked the same two ways.
 	public static graphicExtension(): string | undefined {
@@ -394,11 +381,10 @@ class GraphicSelection {
 		// told whenever they change, whatever kind of handles they are.
 		this.selectionSection?.refresh();
 
-		// The button of a diagram stands beside the selection, so it follows it wherever the
-		// objects take it, as does the player of a video. Whether it is there at all is asked
-		// of the objects too, which may arrive after the selection.
-		this.checkDiagramData();
-		this.diagramButton?.follow();
+		// The buttons beside the bands follow the objects wherever they take them, as does the
+		// player of a video. Which buttons there are is asked of the objects too, which may
+		// arrive after the selection.
+		this.updateGroupButtons();
 		this.followThePlayer();
 
 		// The states depend on the objects as well as on the selection: their order at the level,
@@ -565,7 +551,8 @@ class GraphicSelection {
 	/*
 		The view switched between drawing from tiles and drawing from the objects. The selection
 		ends, the engine's included, with all that shows it: the handles drawn from the engine's
-		message, the section that draws it, and the button of a diagram.
+		message, the section that draws it, the button of a diagram and the buttons beside the
+		bands.
 	*/
 	public static drawingSwitched(): void {
 		if (this.handlesSection) {
@@ -580,6 +567,7 @@ class GraphicSelection {
 		this.rectangle = null;
 		this.selectObjects([]);
 		this.updateSelectionSection();
+		this.updateGroupButtons();
 	}
 
 	/*
@@ -590,12 +578,185 @@ class GraphicSelection {
 	public static updateSelectionSection(): void {
 		this.makeSelectionSection();
 
-		// The button of a diagram stands beside the band the section draws, so it is placed
-		// once the section stands for the selection as it is now.
-		if (RenderManager.isVectorRendering()) {
-			this.checkDiagramData();
-			this.diagramButton?.follow();
+		// The buttons stand beside the bands the section draws, so they are placed once the
+		// section stands for the selection as it is now.
+		this.updateGroupButtons();
+	}
+
+	/// The buttons beside the bands of groups and diagrams, by name.
+	private static groupButtons: Map<string, GroupButtonSection> = new Map();
+
+	/*
+		Makes the columns of buttons beside the bands of groups and diagrams match the selection:
+		which there are, whether each may be pressed, and where it stands now. A column runs down
+		from the top of its band and no further than the band's bottom, so the buttons that do not
+		fit are left out from the bottom up. A view that draws from the tiles has none.
+	*/
+	public static updateGroupButtons(): void {
+		const wanted = new Map<
+			string,
+			{ objectId: number; role: GroupButtonRole; slot: number }
+		>();
+		const section = this.selectionSection;
+
+		if (RenderManager.isVectorRendering() && section) {
+			for (const objectId of section.bandsWithButtons()) {
+				const band = section.bandBox(objectId);
+				if (!band) continue;
+
+				// A column of n buttons takes n steps but the space under the last one.
+				const room =
+					band[3] +
+					HandleLook.reachOfASurround() +
+					GroupButtonSection.spaceBetween * app.dpiScale;
+				const fit = Math.floor(room / GroupButtonSection.step());
+
+				GraphicSelection.buttonsBeside(objectId)
+					.slice(0, fit)
+					.forEach((role: GroupButtonRole, slot: number) =>
+						wanted.set(GroupButtonSection.nameFor(objectId, role), {
+							objectId,
+							role,
+							slot,
+						}),
+					);
+			}
 		}
+
+		for (const [name, button] of this.groupButtons)
+			if (!wanted.has(name)) {
+				app.sectionContainer.removeSection(button.name);
+				this.groupButtons.delete(name);
+			}
+
+		for (const [name, one] of wanted) {
+			let button = this.groupButtons.get(name);
+			if (!button) {
+				button = new GroupButtonSection(one.objectId, one.role, one.slot);
+				app.sectionContainer.addSection(button);
+				this.groupButtons.set(name, button);
+			}
+			button.standAt(
+				one.slot,
+				GraphicSelection.groupButtonIsOn(one.objectId, one.role),
+			);
+		}
+	}
+
+	/// Moves the buttons beside the bands to where their bands are now.
+	public static followTheGroupButtons(): void {
+		for (const button of this.groupButtons.values()) button.follow();
+	}
+
+	/*
+		The buttons beside the band of that group or diagram, from the top down. A diagram takes
+		the one that opens it and Ungroup. A group takes Enter, Leave and Ungroup, and the one
+		that opens a diagram above them where it holds a diagram at any depth, so that its column
+		keeps one shape however the selection moves inside it.
+	*/
+	private static buttonsBeside(objectId: number): GroupButtonRole[] {
+		if (RenderGeometrySection.objectOf(objectId)?.isDiagram)
+			return ['diagram', 'ungroup'];
+
+		const roles: GroupButtonRole[] = ['enter', 'leave', 'ungroup'];
+		return GraphicSelection.holdsADiagram(objectId)
+			? ['diagram', ...roles]
+			: roles;
+	}
+
+	/// Whether that group holds a diagram at any depth.
+	private static holdsADiagram(objectId: number, depth: number = 0): boolean {
+		return RenderGeometrySection.heldBy(objectId).some(
+			(held: number) =>
+				RenderGeometrySection.objectOf(held)?.isDiagram === true ||
+				(depth < 100 && GraphicSelection.holdsADiagram(held, depth + 1)),
+		);
+	}
+
+	/*
+		Whether a button beside the band of that group or diagram may be pressed. Where that one is
+		selected itself, alone or among others, the buttons act on it: Ungroup, Enter for a group
+		and the one that opens a diagram for a diagram. Where the selection sits inside it, they
+		act on the selection as the menu does, with the menu's states, and the one that opens a
+		diagram where the selection stands in a diagram.
+	*/
+	private static groupButtonIsOn(
+		objectId: number,
+		role: GroupButtonRole,
+	): boolean {
+		const selected = this.selectedObjectIDs;
+		if (selected.includes(objectId)) {
+			const aDiagram =
+				RenderGeometrySection.objectOf(objectId)?.isDiagram === true;
+			if (role === 'ungroup') return true;
+			return role === 'diagram' ? aDiagram : role === 'enter' && !aDiagram;
+		}
+
+		switch (role) {
+			case 'diagram':
+				return Interaction.placeOf(selected).kind === 'diagram';
+			case 'enter':
+				return (
+					Interaction.context().commandStates()['.uno:EnterGroup'] === true
+				);
+			case 'leave':
+				return (
+					Interaction.context().commandStates()['.uno:LeaveGroup'] === true
+				);
+			case 'ungroup':
+				return (
+					Interaction.context().commandStates()['.uno:FormatUngroup'] === true
+				);
+		}
+	}
+
+	/*
+		A press on a button beside the band of that group or diagram. Where that one is selected
+		itself, the press acts on it alone: it is selected on its own and opened, entered or taken
+		apart, and taking it apart leaves the others selected. Where the selection sits inside it,
+		the press is the menu's command for the selection.
+	*/
+	public static pressTheGroupButton(
+		objectId: number,
+		role: GroupButtonRole,
+	): void {
+		const itself = this.selectedObjectIDs.includes(objectId);
+
+		switch (role) {
+			case 'diagram':
+				if (itself) {
+					this.selectObjects(Interaction.context().enteredBy([objectId]));
+					this.updateSelectionSection();
+				}
+				app.map.sendUnoCommand('.uno:EditDiagram');
+				return;
+			case 'enter':
+				if (!itself) {
+					app.map.sendUnoCommand('.uno:EnterGroup');
+					return;
+				}
+				this.selectObjects([objectId]);
+				Interaction.context().enterKey();
+				return;
+			case 'leave':
+				app.map.sendUnoCommand('.uno:LeaveGroup');
+				return;
+			case 'ungroup':
+				if (itself) this.takeApart(objectId);
+				else app.map.sendUnoCommand('.uno:FormatUngroup');
+				return;
+		}
+	}
+
+	/*
+		Takes that group or diagram apart on its own. The engine is named the object itself first,
+		which for a diagram is no place for the client to stand in, so the client's selection
+		stays as it is until the engine reports what taking it apart left selected.
+	*/
+	public static takeApart(objectId: number): void {
+		this.takeTheNextReportAsItIs();
+		app.socket.sendMessage('selectobjects ids=' + String(objectId));
+		app.socket.sendMessage('uno .uno:FormatUngroup');
 	}
 
 	private static makeSelectionSection(): void {
@@ -1313,7 +1474,13 @@ class GraphicSelection {
 	}
 
 	private static checkDiagramData() {
-		if (GraphicSelection.isADiagram()) {
+		// A view that draws from the objects has the buttons beside the bands instead.
+		if (RenderManager.isVectorRendering()) {
+			GraphicSelection.updateGroupButtons();
+			return;
+		}
+
+		if (GraphicSelection.extraInfo && GraphicSelection.extraInfo.isDiagram) {
 			if (!GraphicSelection.diagramButton) {
 				// need to create DiagramButtonSection
 				const subSection = this.handlesSection

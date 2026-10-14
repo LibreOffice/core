@@ -271,9 +271,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 	public redraw(): void {
 		this.tellWhoStandsIn();
 
-		// The button of a diagram and the player of a video are things of their own beside the
-		// canvas, so they are moved rather than drawn along with the rest.
-		GraphicSelection.diagramButton?.follow();
+		// The buttons beside the bands and the player of a video are things of their own beside
+		// the canvas, so they are moved rather than drawn along with the rest.
+		GraphicSelection.followTheGroupButtons();
 		GraphicSelection.followThePlayer();
 
 		this.containerObject.requestReDraw();
@@ -765,8 +765,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 		The four places the band round that object goes through, in twips, in the order they go
 		round it. For the object that is itself selected they are the places the framing handles
 		stand on, so its band follows a drag as they do; for one of several selected objects they
-		are the corners of its box with the running drag laid over them, which does the same; for
-		a group holding what is selected they are the corners of the box that group takes up.
+		are the corners of its box with the running drag laid over them, which does the same, as
+		they are for a diagram whose first object is selected; for a group holding what is
+		selected they are the corners of the box that group takes up.
 	*/
 	private surroundPlaces(objectId: number): cool.SimplePoint[] {
 		const objects = this.selectedObjects();
@@ -798,7 +799,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 			new cool.Point(box.maxX, box.maxY),
 			new cool.Point(box.minX, box.maxY),
 		];
-		const drag = objects.includes(objectId)
+		// A diagram whose first object is selected takes the drag as well, since that object
+		// stands for the diagram and a drag of it carries the whole diagram.
+		const drag = RenderGeometrySection.standingFor(objects).includes(objectId)
 			? this.interaction?.ghostTransformation()
 			: null;
 
@@ -809,17 +812,36 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/*
-		The box the band of the diagram goes round, in core pixels, or nothing where the selection
-		sits in no diagram. Whatever stands beside that band is placed against this box, so that
-		it sits beside what is drawn and not beside something else.
+		The groups and diagrams whose bands take a column of buttons beside them. Where the
+		selection sits inside a group or a diagram it is the outermost of those, the one the page
+		holds, whatever the depth. Otherwise it is every selected group and diagram, which then
+		stand side by side on the page.
 	*/
-	public surroundBox(): number[] | undefined {
-		const diagram = this.surroundObjects().find(
-			(objectId: number) => RenderGeometrySection.objectOf(objectId)?.isDiagram,
-		);
-		if (diagram === undefined) return undefined;
+	public bandsWithButtons(): number[] {
+		const objects = this.selectedObjects();
+		if (!objects.length) return [];
 
-		const places = this.surroundPlaces(diagram);
+		let outermost: number | undefined;
+		for (
+			let walking = RenderGeometrySection.parentOf(objects[0]), guard = 0;
+			walking && guard < 100;
+			walking = RenderGeometrySection.parentOf(walking), ++guard
+		)
+			outermost = walking;
+		if (outermost !== undefined) return [outermost];
+
+		return objects.filter((objectId: number) =>
+			RenderGeometrySection.holdsObjects(objectId),
+		);
+	}
+
+	/*
+		The box the band round that group or diagram goes round, in core pixels, or nothing where
+		it has none. Whatever stands beside that band is placed against this box, so that it sits
+		beside what is drawn and not beside something else.
+	*/
+	public bandBox(objectId: number): number[] | undefined {
+		const places = this.surroundPlaces(objectId);
 		if (places.length !== 4) return undefined;
 
 		const box = cool.Range2D.fromPoints(
@@ -2177,6 +2199,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 		this.interaction = null;
 		this.tellWhoStandsIn();
+		GraphicSelection.followTheGroupButtons();
 		this.lastMoved = null;
 		document.removeEventListener('keydown', this.keysChanged, true);
 		document.removeEventListener('keyup', this.keysChanged, true);

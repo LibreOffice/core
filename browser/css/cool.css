@@ -1757,6 +1757,49 @@ body.slideshow-presenting-in-window .jsdialog-window.modalpopup {
 	background: url('images/lc_selecttheme.svg') no-repeat center center /20px;
 }
 
+.group-button {
+	border-radius: var(--border-radius);
+	background: var(--color-insert-marker-background) no-repeat center / 20px;
+	box-shadow: 1px var(--color-box-shadow);
+}
+
+.group-button.hovered {
+	cursor: pointer;
+	background-color: var(--color-insert-marker-background-dark);
+}
+
+.group-button-off {
+	opacity: 0.4;
+}
+
+.group-button-diagram {
+	background-image: url('images/lc_selecttheme.svg');
+}
+
+.group-button-enter {
+	background-image: url('images/lc_entergroup.svg');
+}
+
+.group-button-leave {
+	background-image: url('images/lc_leavegroup.svg');
+}
+
+.group-button-ungroup {
+	background-image: url('images/lc_ungroup.svg');
+}
+
+[data-theme='dark'] .group-button-enter {
+	background-image: url('images/dark/lc_entergroup.svg');
+}
+
+[data-theme='dark'] .group-button-leave {
+	background-image: url('images/dark/lc_leavegroup.svg');
+}
+
+[data-theme='dark'] .group-button-ungroup {
+	background-image: url('images/dark/lc_ungroup.svg');
+}
+
 .chart-save-to-new-theme {
 	border-radius: var(--border-radius);
 	background-color: var(--color-insert-marker-background) !important;
