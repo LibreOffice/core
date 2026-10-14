@@ -276,6 +276,8 @@ export class CommentSection extends CanvasSectionObject {
 	// pass and avoids the extra requestReDraw that updateDOM would trigger.
 	private _commentPositionDirty: boolean = false;
 
+	private pendingSelectedCommentReveal: boolean = false;
+
 	private annotationMinSize: number;
 	private annotationMaxSize: number;
 	escapeListener: (e: KeyboardEvent) => void;
@@ -580,6 +582,53 @@ export class CommentSection extends CanvasSectionObject {
 			type === 'ViewLayoutCompareChanges' ||
 			type === 'ViewLayoutFileBased'
 		);
+	}
+
+	private getCommentColumnX(availableSpace: number): number {
+		// Follow horizontal scroll like the pages do (documentToViewX also
+		// subtracts viewX), so scrolling right brings the comment column into
+		// view instead of leaving it pinned off-screen.
+		if (CommentSection.isMultiColumnLayout())
+			return this.myTopLeft[0] - availableSpace - app.activeDocument.activeLayout.scrollProperties.viewX;
+
+		if (document.documentElement.dir === 'rtl')
+			return availableSpace - this.sectionProperties.commentWidth;
+
+		let x = (app.activeDocument.fileSize.cX - app.activeDocument.activeLayout.viewedRectangle.cX1 - app.sectionContainer.getCanvasBoundingClientRect().x) * app.dpiScale;
+		x += app.map.navigator ? app.map.navigator.navigationPanel.offsetWidth * app.dpiScale : 0;
+		return x;
+	}
+
+	public keepsSelectedCommentBesideThePage(): boolean {
+		return app.map._docLayer._docType === 'text'
+			&& (!CommentSection.isMultiColumnLayout()
+				|| app.activeDocument.activeLayout.type === 'ViewLayoutMultiPage')
+			&& document.documentElement.dir !== 'rtl'
+			&& !this.sectionProperties.showSelectedBigger;
+	}
+
+	private getDocumentCanvasWidth(): number {
+		return parseInt((document.getElementById('document-canvas') as any).style.width);
+	}
+
+	private getSelectedCommentLeft(columnX: number): number {
+		const isRTL = document.documentElement.dir === 'rtl';
+		return Math.round(columnX / app.dpiScale) - this.sectionProperties.deflectionOfSelectedComment * (isRTL ? -1 : 1);
+	}
+
+	private getSelectedCommentOverflow(): number {
+		const commentLeft = this.getSelectedCommentLeft(this.getCommentColumnX(this.calculateAvailableSpace()));
+		const overflow = commentLeft + this.sectionProperties.commentWidth / app.dpiScale - this.getDocumentCanvasWidth();
+		return overflow * app.dpiScale;
+	}
+
+	private scrollSelectedCommentBesideThePage(): boolean {
+		const overflow = Math.round(this.getSelectedCommentOverflow());
+		if (overflow <= 0)
+			return true;
+
+		app.activeDocument.activeLayout.scroll(overflow, 0);
+		return Math.round(this.getSelectedCommentOverflow()) <= 0;
 	}
 
 	// Width of the empty space on one side of the document, in canvas pixels,
@@ -1561,6 +1610,12 @@ export class CommentSection extends CanvasSectionObject {
 				leftTwips * app.twipsToPixels - splitXPixels - paneWidth * 0.05);
 		}
 
+		const besideThePage = this.keepsSelectedCommentBesideThePage();
+		const multiColumn = CommentSection.isMultiColumnLayout();
+
+		if (besideThePage && !multiColumn)
+			scrollX = Math.max(scrollX, Math.round(view.pX1 + this.getSelectedCommentOverflow()));
+
 		if (scrollX !== view.pX1 || scrollY !== view.pY1) {
 			layout.scrollTo(scrollX, scrollY);
 
@@ -1569,6 +1624,9 @@ export class CommentSection extends CanvasSectionObject {
 				rootComment.focus();
 			}
 		}
+
+		if (besideThePage)
+			this.pendingSelectedCommentReveal = !this.scrollSelectedCommentBesideThePage();
 	}
 
 	// Where a document position on one axis sits: the pane that scrolls runs from
@@ -1588,6 +1646,7 @@ export class CommentSection extends CanvasSectionObject {
 	}
 
 	public unselect (): void {
+		this.pendingSelectedCommentReveal = false;
 		this.listenForClickOutsideComment(false);
 		if (this.sectionProperties.selectedComment && this.sectionProperties.selectedComment.sectionProperties.data.id != 'new') {
 			if (this.sectionProperties.selectedComment.sectionProperties.isHighlighted)
@@ -2681,7 +2740,7 @@ export class CommentSection extends CanvasSectionObject {
 	// above its anchor.
 	private layoutDown (subList: any, actualPosition: Array<number>, lastY: number, relayout: boolean = true, followAnchor: boolean = true): number {
 		const selectedComment = subList[0] === this.sectionProperties.selectedComment;
-		const documentCanvasWidth = parseInt((document.getElementById('document-canvas') as any).style.width);
+		const documentCanvasWidth = this.getDocumentCanvasWidth();
 		const isRTL = document.documentElement.dir === 'rtl';
 
 		for (var i = 0; i < subList.length; i++) {
@@ -2692,11 +2751,11 @@ export class CommentSection extends CanvasSectionObject {
 				const commentWidth = (this.sectionProperties.showSelectedBigger ? this.sectionProperties.commentWidthBigger: this.sectionProperties.commentWidth) / app.dpiScale;
 								let posX = (this.sectionProperties.showSelectedBigger ?
 								Math.round((documentCanvasWidth - commentWidth)/2) :
-								Math.round(actualPosition[0] / app.dpiScale) - this.sectionProperties.deflectionOfSelectedComment * (isRTL ? -1 : 1));
+								this.getSelectedCommentLeft(actualPosition[0]));
 				// if on selection full comment is not visible bring it fully inside view, helps in narrow windows and tablets
 				if (isRTL && posX < 0)
 					posX = 0;
-				else if (posX + commentWidth > documentCanvasWidth)
+				else if (posX + commentWidth > documentCanvasWidth && !this.keepsSelectedCommentBesideThePage())
 				{
 					posX = documentCanvasWidth - commentWidth;
 				}
@@ -3322,23 +3381,7 @@ export class CommentSection extends CanvasSectionObject {
 			var topRight: Array<number> = [this.myTopLeft[0], this.myTopLeft[1] + this.sectionProperties.marginY + (new cool.SimplePoint(0, 0)).vY];
 			var yOrigin = 0;
 			var selectedIndex = null;
-			var x = isRTL ? 0 : topRight[0];
-
-			if (CommentSection.isMultiColumnLayout()) {
-				// Follow horizontal scroll like the pages do (documentToViewX also
-				// subtracts viewX), so scrolling right brings the comment column into
-				// view instead of leaving it pinned off-screen.
-				x =
-					topRight[0] -
-					availableSpace -
-					app.activeDocument.activeLayout.scrollProperties.viewX;
-			}
-			else if (isRTL)
-				x = availableSpace - this.sectionProperties.commentWidth;
-			else {
-				x = (app.activeDocument.fileSize.cX - app.activeDocument.activeLayout.viewedRectangle.cX1 - app.sectionContainer.getCanvasBoundingClientRect().x) * app.dpiScale;
-				x += app.map.navigator ? app.map.navigator.navigationPanel.offsetWidth * app.dpiScale : 0;
-			}
+			var x = this.getCommentColumnX(availableSpace);
 
 			if (this.sectionProperties.selectedComment) {
 				selectedIndex = this.getRootIndexOf(this.sectionProperties.selectedComment.sectionProperties.data.id);
@@ -3456,6 +3499,13 @@ export class CommentSection extends CanvasSectionObject {
 			extraWidth,
 			commentBottomY,
 		);
+
+		if (this.pendingSelectedCommentReveal) {
+			if (this.sectionProperties.selectedComment && this.keepsSelectedCommentBesideThePage())
+				this.pendingSelectedCommentReveal = !this.scrollSelectedCommentBesideThePage();
+			else
+				this.pendingSelectedCommentReveal = false;
+		}
 
 		// The layout sets how much of each comment text is shown, so a search match in a comment
 		// is scrolled into view after it.

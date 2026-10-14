@@ -516,7 +516,7 @@ export class Comment extends CanvasSectionObject {
 			}
 
 			const width = this.getCommentWidth() / app.dpiScale;
-			if (left + width > canvasContainerBounds.right) {
+			if (left + width > canvasContainerBounds.right && !this.sectionProperties.commentListSection.keepsSelectedCommentBesideThePage()) {
 				left = canvasContainerBounds.right - width;
 			}
 

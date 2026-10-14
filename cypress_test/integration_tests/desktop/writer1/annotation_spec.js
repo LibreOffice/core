@@ -249,6 +249,8 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		desktopHelper.selectZoomLevel('120', false);
 		cy.cGet('#comment-container-1').should('be.visible');
 
+		// A cursor on the anchor selects the comment and scrolls it into view.
+		helper.typeIntoDocument('{enter}');
 		desktopHelper.selectZoomLevel('150', false);
 		cy.cGet('#comment-container-1').should('be.not.visible');
 	});
@@ -263,6 +265,8 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('#comment-container-1').should('exist');
 		cy.cGet('#comment-container-1').should('be.visible');
 
+		// A cursor on the anchor selects the comment and scrolls it into view.
+		helper.typeIntoDocument('{enter}');
 		desktopHelper.selectZoomLevel('150', false);
 		cy.cGet('#comment-container-1').should('be.not.visible');
 
