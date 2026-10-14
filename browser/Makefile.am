@@ -1402,9 +1402,7 @@ $(DIST_FOLDER)/qtapp-tabstrip.html: $(srcdir)/html/qtapp-tabstrip.html.m4
 		$< > $@.tmp
 	@mv $@.tmp $@
 
-$(DIST_FOLDER)/qtapp-tabstrip.css: $(srcdir)/css/qtapp-tabstrip.css
-	@mkdir -p $(DIST_FOLDER)
-	@cp $< $@
+$(eval $(call css_file_target,$(DIST_FOLDER)/qtapp-tabstrip.css,$(srcdir)/css/qtapp-tabstrip.css))
 
 $(DIST_FOLDER)/qtapp-tabstrip.js: $(srcdir)/src/qtapp/tabstrip.js
 	@mkdir -p $(DIST_FOLDER)

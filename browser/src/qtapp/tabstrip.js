@@ -24,15 +24,6 @@
 		other: 'images/x-office-document.svg',
 	};
 
-	// Doc type -> the data-doctype value color-palette.css keys --doc-type off
-	// of. Unlisted types (starter/welcome/other) fall back to the brand color.
-	const docTypeAttr = {
-		writer: 'text',
-		calc: 'spreadsheet',
-		impress: 'presentation',
-		draw: 'drawing',
-	};
-
 	let bridge = null;
 	let tabs = [];
 	let activeId = -1;
@@ -171,8 +162,6 @@
 			tab.dataset.id = String(t.id);
 			tab.dataset.index = String(idx);
 			tab.setAttribute('role', 'tab');
-			const doctype = docTypeAttr[t.docType];
-			if (doctype) tab.setAttribute('data-doctype', doctype);
 			// A background tab with a preview gets the app's hover card, which shows the name too.
 			// The active tab keeps the plain title tooltip.
 			if (t.hasThumbnail && t.id !== activeId) {
