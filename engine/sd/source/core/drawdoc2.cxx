@@ -51,6 +51,7 @@
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
 #include <SlideSectionManager.hxx>
+#include <UndoSlideSection.hxx>
 #include <sdpage.hxx>
 #include <strings.hrc>
 #include <glob.hxx>
@@ -710,6 +711,14 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 
     FmFormModel::InsertPage(pPage, nPos);
 
+    // A canvas page that comes back, for example when its deletion is undone, is the canvas page
+    // of the document again.
+    if (pSdPage->IsCanvasPage() && mpCanvasPage.get() != pSdPage)
+    {
+        StoreCanvasPage(pSdPage);
+        NotifyKitHasOverviewPage(true);
+    }
+
     pSdPage->ConnectLink();
 
     UpdatePageObjectsInNotes(nPos);
@@ -737,7 +746,9 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
             mpSectionManager->OnSlideInserted(nStandardIndex);
     }
 
-    if (HasCanvasPage())
+    // The previews on a canvas page that comes back are already in place. Its notes page, which
+    // follows it, updates the grid once the page numbers are whole again.
+    if (HasCanvasPage() && !pSdPage->IsCanvasPage())
         updatePagePreviewsGrid(pSdPage);
 }
 
@@ -788,8 +799,17 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
     auto pSdPage = static_cast<SdPage*>(pPage.get());
     if (pSdPage->IsCanvasPage())
     {
-        SdrPage* pMPage = &pPage->TRG_GetMasterPage();
-        RemoveMasterPage(pMPage->GetPageNum());
+        // The master page of the canvas page goes with it. Its removal is recorded after the
+        // removal of the page, so undo inserts the master page first and the page after it. While
+        // an undo or redo runs, the recorded action of the master page removes or inserts it.
+        SfxUndoManager* pUndoManager = mpDocSh ? mpDocSh->GetUndoManager() : nullptr;
+        if (!pUndoManager || !pUndoManager->IsDoing())
+        {
+            SdrPage* pMPage = &pPage->TRG_GetMasterPage();
+            if (IsUndoEnabled() && !mbDestroying)
+                AddUndo(SdrUndoFactory::CreateUndoDeletePage(*pMPage));
+            RemoveMasterPage(pMPage->GetPageNum());
+        }
         if (comphelper::COKit::isActive())
         {
             // Destruction removes the pages after the view shell is gone
@@ -1857,12 +1877,14 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
     if (HasCanvasPage())
         return mpCanvasPage->GetPageNum() / 2;
 
-    // Building the overview page and the master page it needs is scaffolding for the slide
-    // previews rather than a change to the slides, so the whole construction stays off the undo
-    // stack and the stack keeps only the changes the user made to the slides themselves.
-    const bool bWasUndoEnabled = IsUndoEnabled();
+    // The canvas page is built with undo off. One undo action, recorded once the canvas page is
+    // complete, removes and inserts the finished pages and restores the sections.
+    const bool bUndo = IsUndoEnabled();
+    std::vector<sd::SlideSection> aOldSections;
+    if (bUndo)
+        aOldSections = GetSectionManager().GetSectionsSnapshot();
     EnableUndo(false);
-    comphelper::ScopeGuard aUndoGuard([this, bWasUndoEnabled]() { EnableUndo(bWasUndoEnabled); });
+    comphelper::ScopeGuard aUndoGuard([this, bUndo]() { EnableUndo(bUndo); });
 
     sal_uInt16 nLastPageNum = GetSdPageCount(PageKind::Standard);
     SdPage* pLastStandardPage = GetSdPage(nLastPageNum - 1, PageKind::Standard);
@@ -1881,12 +1903,8 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
     MovePage(nCanvasPageNum, 1); // Canvas page
     MovePage(nCanvasPageNum + 1, 2); // Canvas notes page
     // The page was inserted as the last slide, where it shifted no section. As the first slide,
-    // it joins the first section and every later section starts one slide further on. The insertion
-    // of the canvas page itself is not undoable, so this shift records no undo action either.
-    const bool bUndo = IsUndoEnabled();
-    EnableUndo(false);
+    // it joins the first section and every later section starts one slide further on.
     GetSectionManager().OnSlideInserted(0);
-    EnableUndo(bUndo);
 
     const Size aCanvasSize(500000, 500000);
 
@@ -1905,6 +1923,32 @@ sal_uInt16 SdDrawDocument::GetOrInsertCanvasPage()
     populatePagePreviewsGrid();
     connectPagePreviews();
     NotifyKitCanvasPreviewRectangles();
+
+    aUndoGuard.dismiss();
+    EnableUndo(bUndo);
+    if (bUndo)
+    {
+        // Undo runs the actions in reverse order: it removes the notes page, the canvas page and
+        // then its master pages, and restores the sections last. Redo inserts the master pages
+        // before the canvas page, so the canvas page finds its master page in the document.
+        BegUndo(SdResId(STR_INSERTPAGE));
+        AddUndo(std::make_unique<sd::UndoSlideSection>(*this, SdResId(STR_INSERTPAGE),
+                                                       std::move(aOldSections)));
+        AddUndo(SdrUndoFactory::CreateUndoNewPage(*pMasterCanvas));
+        // The master page of the canvas page was created together with a notes master page of the
+        // same layout, which follows it, so undo removes that one too.
+        const sal_uInt16 nNotesMasterNum = pMasterCanvas->GetPageNum() + 1;
+        auto* pNotesMasterCanvas = nNotesMasterNum < GetMasterPageCount()
+                                       ? static_cast<SdPage*>(GetMasterPage(nNotesMasterNum))
+                                       : nullptr;
+        if (pNotesMasterCanvas && pNotesMasterCanvas->GetPageKind() == PageKind::Notes
+            && pNotesMasterCanvas->GetLayoutName() == pMasterCanvas->GetLayoutName())
+            AddUndo(SdrUndoFactory::CreateUndoNewPage(*pNotesMasterCanvas));
+        AddUndo(SdrUndoFactory::CreateUndoNewPage(*pCanvasPage));
+        if (SdrPage* pCanvasNotesPage = GetPage(pCanvasPage->GetPageNum() + 1))
+            AddUndo(SdrUndoFactory::CreateUndoNewPage(*pCanvasNotesPage));
+        EndUndo();
+    }
 
     return pCanvasPage->GetPageNum() / 2;
 }

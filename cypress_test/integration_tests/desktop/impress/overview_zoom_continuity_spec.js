@@ -145,6 +145,10 @@ describe(['tagdesktop'], 'Overview zoom continuity', { testIsolation: false }, f
 		const win = this.win;
 		ensureOverviewPage(win);
 		goToPart(win, 0);
+		// At 50% both previews are in view and neither fills it, so the click finds preview 2
+		// and the fit that follows has to move the view.
+		desktopHelper.selectZoomLevel('50', false);
+		cy.then(() => helper.processToIdle(win));
 		cy.then(function() {
 			const rect = previewRect(win, 2);
 			const point = toClient(win, rect.center[0], rect.center[1]);

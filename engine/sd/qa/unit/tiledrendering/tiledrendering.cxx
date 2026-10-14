@@ -4112,7 +4112,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoSizeOnCanvasPage)
 }
 
 // Deleting the canvas page removes that page alone, even when other slides are selected too. A
-// second request, made when the view no longer shows a canvas page, leaves the slides alone.
+// second request, made when the view no longer shows a canvas page, leaves the slides alone. Undo
+// and redo of the deletion bring back and remove the canvas page together with its master page.
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDeleteCanvasSlide)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoTest.odp");
@@ -4132,15 +4133,37 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDeleteCanvasSlide)
     pDocument->GetSdPage(1, PageKind::Standard)->SetSelected(true);
     Scheduler::ProcessEventsToIdle();
 
+    const sal_uInt16 nMasterCount = pDocument->GetMasterSdPageCount(PageKind::Standard);
+
     dispatchCommand(mxComponent, u".uno:DeleteCanvasSlide"_ustr, {});
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!pDocument->HasCanvasPage());
     CPPUNIT_ASSERT_EQUAL(nSlideCount, pDocument->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nMasterCount - 1),
+                         pDocument->GetMasterSdPageCount(PageKind::Standard));
 
     dispatchCommand(mxComponent, u".uno:DeleteCanvasSlide"_ustr, {});
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(nSlideCount, pDocument->GetSdPageCount(PageKind::Standard));
 
+    // Undo brings back a working canvas page, with its master page.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pDocument->HasCanvasPage());
+    SdPage* pCanvasPage = pDocument->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pCanvasPage->IsCanvasPage());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nSlideCount + 1),
+                         pDocument->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nMasterCount, pDocument->GetMasterSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT(pCanvasPage->TRG_GetMasterPage().IsInserted());
+
+    // Redo deletes the canvas page and its master page again.
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pDocument->HasCanvasPage());
+    CPPUNIT_ASSERT_EQUAL(nSlideCount, pDocument->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nMasterCount - 1),
+                         pDocument->GetMasterSdPageCount(PageKind::Standard));
 }
 
 // The canvas page joins the first section, and every other section keeps its slides.
@@ -4170,6 +4193,55 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertCanvasSlideKeepsSections)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rSections.GetSection(0).mnStartIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rSections.GetSection(1).mnStartIndex);
+}
+
+// Inserting the canvas page is one undo step of the view that inserted it. Undo removes the canvas
+// page with its master pages and gives the sections back their slides. Redo brings all of it back.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testUndoInsertCanvasSlide)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoTest.odp");
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    Scheduler::ProcessEventsToIdle();
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    const sal_uInt16 nSlideCount = pDocument->GetSdPageCount(PageKind::Standard);
+    const sal_uInt16 nMasterCount = pDocument->GetMasterSdPageCount(PageKind::Standard);
+    const sal_uInt16 nNotesMasterCount = pDocument->GetMasterSdPageCount(PageKind::Notes);
+    sd::SlideSectionManager& rSections = pDocument->GetSectionManager();
+    rSections.AddSection(0, u"First"_ustr);
+    rSections.AddSection(1, u"Second"_ustr);
+    SfxUndoManager* pUndoManager = pDocument->GetDocSh()->GetUndoManager();
+    const size_t nUndoCount = pUndoManager->GetUndoActionCount();
+
+    dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pDocument->HasCanvasPage());
+
+    // One undo step, owned by this view, so undoing it is no conflict with another user.
+    CPPUNIT_ASSERT_EQUAL(nUndoCount + 1, pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(SfxViewShell::Current()->GetViewShellId(),
+                         pUndoManager->GetUndoAction(0)->GetViewShellId());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pDocument->HasCanvasPage());
+    CPPUNIT_ASSERT(!pDocument->GetSdPage(0, PageKind::Standard)->IsCanvasPage());
+    CPPUNIT_ASSERT_EQUAL(nSlideCount, pDocument->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nMasterCount, pDocument->GetMasterSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nNotesMasterCount, pDocument->GetMasterSdPageCount(PageKind::Notes));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rSections.GetSection(1).mnStartIndex);
+
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pDocument->HasCanvasPage());
+    SdPage* pCanvasPage = pDocument->GetSdPage(0, PageKind::Standard);
+    CPPUNIT_ASSERT(pCanvasPage->IsCanvasPage());
+    CPPUNIT_ASSERT(pCanvasPage->TRG_GetMasterPage().IsInserted());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nSlideCount + 1),
+                         pDocument->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(nMasterCount + 1),
+                         pDocument->GetMasterSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSection(1).mnStartIndex);
 }
 
 // Notes with several paragraphs keep the paragraph breaks as newlines.
@@ -7795,21 +7867,21 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDragCanvasShapeNotifiesPreviewRec
     CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
 }
 
-CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCanvasSlideKeepsUndoStackClean)
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCanvasSlideUndoStepsAreSeparate)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
     sd::UndoManager* pUndoManager = pDocument->GetUndoManager();
     CPPUNIT_ASSERT_EQUAL(size_t(0), pUndoManager->GetUndoActionCount());
 
-    // Building the overview page is scaffolding for the slide previews, so it leaves the undo
-    // stack as it was.
+    // Adding the overview page is one undo step.
     dispatchCommand(mxComponent, u".uno:InsertCanvasSlide"_ustr, {});
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pDocument->HasCanvasPage());
-    CPPUNIT_ASSERT_EQUAL(size_t(0), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pUndoManager->GetUndoActionCount());
 
-    // An edit made through a preview afterwards is undoable, and undoing it empties the stack.
+    // An edit made through a preview afterwards is an undo step of its own. Undoing it leaves the
+    // overview page and the undo step that added it.
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
         { "ShapeType", cpo::uno::Any(u"rectangle"_ustr) },
         { "Part", cpo::uno::Any(sal_Int32(1)) },
@@ -7823,12 +7895,13 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCanvasSlideKeepsUndoStackClean)
     dispatchCommand(mxComponent, u".uno:InsertShapeIntoSlide"_ustr, aArgs);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(nObjectCount + 1, pSlide->GetObjCount());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pUndoManager->GetUndoActionCount());
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
-    CPPUNIT_ASSERT_EQUAL(size_t(0), pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT(pDocument->HasCanvasPage());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pUndoManager->GetUndoActionCount());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
