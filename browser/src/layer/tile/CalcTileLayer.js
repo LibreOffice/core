@@ -507,7 +507,8 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			this._docType = statusJSON.type;
 			this._parts = statusJSON.partscount;
 
-			if (app.socket._reconnecting) {
+			const reconnecting = app.socket._reconnecting;
+			if (reconnecting) {
 				app.socket.sendMessage('setclientpart part=' + this._selectedPart);
 				this._resetInternalState();
 				window.keyboard.applyOnscreenKeyboardMode();
@@ -523,7 +524,13 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			const mode = (statusJSON.mode !== undefined) ? statusJSON.mode : 0;
 			app.activeDocument.activeModes = [mode];
 
-			if (this.sheetGeometry && this._selectedPart != this.sheetGeometry.getPart()) {
+			if (reconnecting) {
+				// The server view is a new one and the sheet may have changed while the
+				// connection was down, so the whole geometry of the selected sheet is
+				// fetched again. The wait for a first response starts over with it.
+				this._sheetGeomFirstWait = false;
+				this.requestSheetGeometryData();
+			} else if (this.sheetGeometry && this._selectedPart != this.sheetGeometry.getPart()) {
 				// Core initiated sheet switch, need to get full sheetGeometry data for the selected sheet.
 				this.requestSheetGeometryData();
 			}
