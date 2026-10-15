@@ -16,53 +16,52 @@
  * {
  *     id: 'time',
  *     type: 'time',
- *     text: '01:01:01',
- *     value: 3661000
+ *     text: '01:01:01'
  * }
  *
- * value is the time in milliseconds, text is formatted for the document
- * locale and not always something the input accepts.
+ * The text is formatted for the document locale, with its own hour format and
+ * time separator. The field shows that text as it is, and core parses what the
+ * user types.
  */
 
 /* global JSDialog */
 
-function timeFieldValue(data: SpinFieldWidgetJSON): string {
-  const ms = Number(data.value);
-  if (!data.text || !Number.isFinite(ms)) return data.text ?? '';
-  const seconds = Math.floor(ms / 1000);
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return (
-    pad(Math.floor(seconds / 3600)) +
-    ':' +
-    pad(Math.floor(seconds / 60) % 60) +
-    ':' +
-    pad(seconds % 60)
-  );
-}
-
 JSDialog.timeField = function (
   parentContainer: HTMLElement,
-  data: SpinFieldWidgetJSON,
+  data: WidgetJSON,
   builder: JSBuilder,
 ) {
+  // The text core knows, which is what the field showed last or what was sent since.
+  let sentText = data.text ?? '';
+
+  const sendTime = (timefield: HTMLInputElement) => {
+    if (timefield.disabled || timefield.value === sentText) return;
+    sentText = timefield.value;
+    builder.callback(
+      'spinfield',
+      'change',
+      timefield,
+      timefield.value,
+      builder,
+    );
+  };
+
   const inputTimeField = (
     <input
-      type="time"
-      step={1} // forces the display of seconds
+      type="text"
       id={data.id}
-      value={timeFieldValue(data)}
+      value={data.text ?? ''}
       className={builder.options.cssClass + ' ui-timefield'}
       disabled={data.enabled === false}
       onChange={(event: Event & { target: HTMLInputElement }) => {
-        const timefield = event.target;
-        if (!timefield.disabled) {
-          builder.callback(
-            'spinfield',
-            'change',
-            timefield,
-            timefield.value,
-            builder,
-          );
+        sendTime(event.target);
+      }}
+      onKeyDown={(event: KeyboardEvent & { target: HTMLInputElement }) => {
+        // Enter sends an edited time and keeps the dialog open, so the user sees the time
+        // core understood.
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          sendTime(event.target);
         }
       }}
     />

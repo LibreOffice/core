@@ -20,6 +20,7 @@
 #include <vcl/jsdialog/executor.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 
 /// returns true if execution was successful
 using JSWidgetExecutor = bool (*)(weld::Widget&, const StringMap&);
@@ -531,6 +532,12 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
                 {
                     pFormattedField->set_text(rData.at(u"data"_ustr));
                     KitTrigger::trigger_changed(*pFormattedField);
+                    // The browser sends a time when the user leaves the field. As on focus out, the
+                    // field then shows the parsed time, or the last valid one if the text was not
+                    // a time.
+                    Formatter& rFormatter = pFormattedField->GetFormatter();
+                    if (dynamic_cast<weld::TimeFormatter*>(&rFormatter))
+                        rFormatter.EntryLostFocus();
                     KitTrigger::trigger_value_changed(*pFormattedField);
                     return true;
                 }
