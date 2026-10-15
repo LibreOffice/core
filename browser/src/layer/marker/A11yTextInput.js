@@ -239,7 +239,35 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._setLastCursorPosition(pos);
 		this._setCursorPosition(pos);
 		this.update();
+		this._announceCommentAt(pos);
 	} ,
+
+	// Ctrl+Alt+PageDown/PageUp are not reader navigation keys, so no speech follows the move to
+	// a comment; a status message gives the comment reached.
+	_announceCommentAt: function(pos) {
+		// the paragraph refill to come carries the caret
+		if (!this._commentJumpTime || this._pendingFocusedParagraph)
+			return;
+		// a key that moved nothing leaves no claim on a later caret update
+		const recent = performance.now() - this._commentJumpTime < 2000;
+		this._commentJumpTime = 0;
+		const comments = (this._focusedComments || []).filter((c) => parseInt(c.end) - 1 === pos);
+		// a range continuing past this paragraph ends here too, without its anchor here
+		const comment = comments.find((c) => parseInt(c.start) === pos) || comments[0];
+		if (!recent || !comment || !this._commentStatus)
+			return;
+		const status = this._commentStatus;
+		// a live region is announced on a change, so empty it for a repeated message
+		status.textContent = '';
+		clearTimeout(this._commentStatusTimer);
+		this._commentStatusTimer = setTimeout(() => {
+			// functions, as the text may hold "$&" and the like
+			status.textContent = _('Comment by {0}: {1}').replace('{0}', () => comment.author)
+				.replace('{1}', () => comment.text);
+			// kept out of a later reading of the page
+			this._commentStatusTimer = setTimeout(() => { status.textContent = ''; }, 5000);
+		}, 100);
+	},
 
 	_updateSelection: function(pos, start, end, forced) {
 		window.app.console.log('_updateSelection: pos: ' + pos + ', start: ' + start + ', end: ' + end);
@@ -301,6 +329,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 	},
 
 	_fillFocusedParagraph: function(content, pos, start, end, elements) {
+		this._focusedComments = Array.isArray(elements.comments) ? elements.comments : [];
 		this.setHTML(content, elements);
 		this.updateLastContent();
 		this._updateSelection(pos, start, end, true);
@@ -320,6 +349,9 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._flushFocusedParagraph();
 		this._lineNavigation = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(ev.key)
 			|| ((ev.key === 'Home' || ev.key === 'End') && ev.ctrlKey);
+		// Ctrl or, on a Mac, Cmd: the modifier sent as Ctrl to the document
+		this._commentJumpTime = (ev.key === 'PageUp' || ev.key === 'PageDown') && ev.altKey
+			&& !ev.shiftKey && (ev.ctrlKey || ev.metaKey) ? performance.now() : 0;
 		window.L.TextInput.prototype._onKeyDown.call(this, ev);
 	},
 
@@ -451,6 +483,11 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._container.insertBefore(this._contextList, this._textArea);
 		this._container.insertBefore(this._contextAfter, this._textArea.nextSibling);
 		this._container.insertBefore(this._headingsBelow, this._contextAfter.nextSibling);
+
+		// present from the start, as a live region added just before its text can go unheard
+		this._commentStatus = window.L.DomUtil.create('div', 'visuallyhidden', this._container);
+		this._commentStatus.id = 'a11y-jump-status';
+		this._commentStatus.setAttribute('role', 'status');
 	},
 
 	_setContextList: function(list) {

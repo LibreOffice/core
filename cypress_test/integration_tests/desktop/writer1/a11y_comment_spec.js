@@ -107,6 +107,20 @@ describe(['tagdesktop'], 'Writer comments for the reader', { testIsolation: fals
 		});
 	});
 
+	it('Ctrl+Alt+PageDown and PageUp give the comment they reach', function () {
+		helper.typeIntoDocument('{ctrl}{home}');
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+
+		cy.realPress(['Control', 'Alt', 'PageDown']);
+		cy.cGet('#a11y-jump-status').should('have.text', 'Comment by Alice: Check this word.');
+		cy.realPress(['Control', 'Alt', 'PageDown']);
+		cy.cGet('#a11y-jump-status').should('have.text', 'Comment by Bob: About the marked words.');
+		cy.realPress(['Control', 'Alt', 'PageUp']);
+		cy.cGet('#a11y-jump-status').should('have.text', 'Comment by Alice: Check this word.');
+	});
+
 	it('Alt+F12 before an anchor moves the focus to its comment', function () {
 		// "Before " leads to the anchor of the comment by Alice; {ctrl} stays down for the rest
 		// of a string, so the arrows go in a call of their own
