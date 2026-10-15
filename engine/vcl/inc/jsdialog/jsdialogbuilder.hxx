@@ -546,6 +546,8 @@ public:
              bool bTakeOwnership);
     virtual void set_label(const OUString& rText) override;
     virtual void set_from_icon_name(const OUString& rIconName) override;
+    using SalInstanceButton::set_image;
+    virtual void set_image(VirtualDevice* pDevice) override;
 };
 
 class JSLinkButton final : public JSWidget<SalInstanceLinkButton, ::FixedHyperlink>

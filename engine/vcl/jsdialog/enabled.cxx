@@ -80,7 +80,7 @@ constexpr auto CuiDialogList
         { u"cui/ui/calloutpage.ui" },
         { u"cui/ui/cellalignment.ui" },
         { u"cui/ui/charnamepage.ui" },
-        { u"cui/ui/colorpage.ui" },
+        { u"cui/ui/colorfillpage.ui" },
         { u"cui/ui/colorpickerdialog.ui" },
         { u"cui/ui/comment.ui" },
         { u"cui/ui/connectordialog.ui" },

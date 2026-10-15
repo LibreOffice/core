@@ -10,6 +10,7 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, select_pos
+from uitest.uihelper.area import get_fill_caption
 
 #https://bugs.documentfoundation.org/show_bug.cgi?id=128593
 #Bug 128593 - Writer table cell's background color is always black
@@ -28,12 +29,7 @@ class tdf128593(UITestCase):
                 writer_edit.executeAction("SELECT", mkPropertyValues({"END_POS": "0", "START_POS": "0"}))
                 tabcontrol = TablePropertiesDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "4")
-                Rcustom = TablePropertiesDialog.getChild("R_custom")  #255
-                self.assertEqual(get_state_as_dict(Rcustom)["Text"], "255")
-                Gcustom = TablePropertiesDialog.getChild("G_custom")  #255
-                self.assertEqual(get_state_as_dict(Gcustom)["Text"], "255")
-                Bcustom = TablePropertiesDialog.getChild("B_custom")  #0
-                self.assertEqual(get_state_as_dict(Bcustom)["Text"], "0")
+                self.assertIn("#FFFF00", get_fill_caption(TablePropertiesDialog))
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

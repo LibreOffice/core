@@ -118,26 +118,6 @@
             <property name="position">1</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkButton" id="moreeffects">
-            <property name="label" translatable="yes" context="areatabpage|moreeffects">More effects...</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="halign">start</property>
-            <property name="use-underline">True</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="moreeffects-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="areatabpage|extended_tip|moreeffects">Opens a dialog to fill the area with a gradient, a hatch, an image or a pattern.</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
       </object>
       <packing>
         <property name="expand">False</property>

@@ -8,8 +8,7 @@
 #
 
 from uitest.framework import UITestCase
-from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.uihelper.common import select_pos
+from uitest.uihelper.area import set_custom_color
 
 class tdf144843(UITestCase):
 
@@ -24,11 +23,7 @@ class tdf144843(UITestCase):
 
             # Without the fix in place, this test would have crashed here
             with self.ui_test.execute_dialog_through_command(".uno:BackgroundDialog") as xDialog:
-                xFillTypeTabs = xDialog.getChild("nbFillType")
-                select_pos(xFillTypeTabs, "1")
-
-                hex_custom = xDialog.getChild("hex_custom")
-                hex_custom.executeAction("TYPE", mkPropertyValues({"TEXT":"101010"}))
+                set_custom_color(self.ui_test, xDialog, "101010")
 
             self.assertEqual("0x101010", hex(document.TextTables[0].getCellByName("A1").BackColor))
 

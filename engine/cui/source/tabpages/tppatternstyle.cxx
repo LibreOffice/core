@@ -65,16 +65,14 @@ Bitmap lclCreatePreview(const Bitmap* pPattern, const Size& rSize)
 }
 }
 
-/// The dropdown of Pattern Style: None and the shipped patterns in a grid, and Custom.
+/// The dropdown of Pattern Style: None and the shipped patterns in a grid.
 class SvxPatternStylePopup final : public WeldToolbarPopup
 {
     SvxPatternStyleBox& m_rBox;
     std::unique_ptr<weld::IconView> m_xPatterns;
-    std::unique_ptr<weld::Button> m_xBtnCustom;
 
     DECL_LINK(ActivatedHdl, weld::IconView&, bool);
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
-    DECL_LINK(CustomHdl, weld::Button&, void);
 
 public:
     SvxPatternStylePopup(weld::Widget* pParent, SvxPatternStyleBox& rBox);
@@ -89,11 +87,9 @@ SvxPatternStylePopup::SvxPatternStylePopup(weld::Widget* pParent, SvxPatternStyl
                        u"PatternStylePopup"_ustr)
     , m_rBox(rBox)
     , m_xPatterns(m_xBuilder->weld_icon_view(u"patternstylelist"_ustr))
-    , m_xBtnCustom(m_xBuilder->weld_button(u"patternstylecustom"_ustr))
 {
     m_xPatterns->connect_item_activated(LINK(this, SvxPatternStylePopup, ActivatedHdl));
     m_xPatterns->connect_query_tooltip(LINK(this, SvxPatternStylePopup, QueryTooltipHdl));
-    m_xBtnCustom->connect_clicked(LINK(this, SvxPatternStylePopup, CustomHdl));
 }
 
 void SvxPatternStylePopup::Fill()
@@ -149,8 +145,6 @@ IMPL_LINK(SvxPatternStylePopup, QueryTooltipHdl, const weld::TreeIter&, rIter, O
         return OUString();
     return pPatternList->GetBitmap(nPreset)->GetName();
 }
-
-IMPL_LINK_NOARG(SvxPatternStylePopup, CustomHdl, weld::Button&, void) { m_rBox.SelectCustom(); }
 
 SvxPatternStyleBox::SvxPatternStyleBox(weld::Container* pParent, SfxTabPage& rPage)
     : m_rPage(rPage)

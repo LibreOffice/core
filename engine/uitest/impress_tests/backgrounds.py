@@ -9,6 +9,7 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.area import select_fill
 from com.sun.star.awt.GradientStyle import LINEAR
 from com.sun.star.drawing.HatchStyle import SINGLE
 from com.sun.star.drawing.BitmapMode import REPEAT
@@ -115,20 +116,19 @@ class ImpressBackgrounds(UITestCase):
             self.ui_test.close_dialog_through_button(xCancelBtn)
 
             tab_mapping = {
-                'lbbitmap' : "4",
-                'lbcolor' : "1",
-                'lbgradient' : "2",
-                'lbhatch' : "3",
-                'lbpattern' : "5"
+                'lbbitmap' : "image",
+                'lbcolor' : "color",
+                'lbgradient' : "gradient",
+                'lbhatch' : "hatch",
+                'lbpattern' : "pattern"
             }
-            for tab, index in tab_mapping.items():
+            for tab, fill in tab_mapping.items():
                 with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as xPageSetupDlg:
 
                     tabcontrol = xPageSetupDlg.getChild("tabcontrol")
                     select_pos(tabcontrol, "1")
 
-                    xFillTypeTabs = xPageSetupDlg.getChild("nbFillType")
-                    select_pos(xFillTypeTabs, index)
+                    select_fill(self, xPageSetupDlg, fill)
 
                     # tdf#100024: Without the fix in place, this test would have crashed here
                     # changing the background to bitmap
@@ -140,8 +140,7 @@ class ImpressBackgrounds(UITestCase):
                     tabcontrol = xPageSetupDlg.getChild("tabcontrol")
                     select_pos(tabcontrol, "1")
 
-                    xFillTypeTabs = xPageSetupDlg.getChild("nbFillType")
-                    select_pos(xFillTypeTabs, "0")
+                    select_fill(self, xPageSetupDlg, "none")
 
 
                 self.checkDefaultBackground('lbnone')

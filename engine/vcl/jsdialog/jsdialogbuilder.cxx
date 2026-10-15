@@ -1282,6 +1282,12 @@ void JSButton::set_from_icon_name(const OUString& rIconName)
     }
 }
 
+void JSButton::set_image(VirtualDevice* pDevice)
+{
+    SalInstanceButton::set_image(pDevice);
+    sendUpdate();
+}
+
 JSLinkButton::JSLinkButton(JSDialogSender* pSender, ::FixedHyperlink* pButton,
                            SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : JSWidget<SalInstanceLinkButton, ::FixedHyperlink>(pSender, pButton, pBuilder, bTakeOwnership)

@@ -297,6 +297,14 @@
 #define RID_CUISTR_DELETEUSERCOLOR2                 NC_("RID_SVXSTR_DELETEUSERCOLOR2", "Please select the color to delete")
 #define RID_CUISTR_FILL_NONE                        NC_("RID_CUISTR_FILL_NONE", "None")
 #define RID_CUISTR_PATTERN_OWN                      NC_("RID_CUISTR_PATTERN_OWN", "Custom pattern")
+// The caption under the fill preview of the Area page. %1 is the name of the fill.
+#define RID_CUISTR_PREVIEW_COLOR                    NC_("RID_CUISTR_PREVIEW_COLOR", "Color: %1")
+// %1 is the name of the color and %2 its hex value.
+#define RID_CUISTR_PREVIEW_NAMED_COLOR              NC_("RID_CUISTR_PREVIEW_NAMED_COLOR", "Color: %1 (%2)")
+#define RID_CUISTR_PREVIEW_PATTERN                  NC_("RID_CUISTR_PREVIEW_PATTERN", "Pattern: %1")
+#define RID_CUISTR_PREVIEW_GRADIENT                 NC_("RID_CUISTR_PREVIEW_GRADIENT", "Gradient: %1")
+#define RID_CUISTR_PREVIEW_HATCH                    NC_("RID_CUISTR_PREVIEW_HATCH", "Hatch: %1")
+#define RID_CUISTR_PREVIEW_IMAGE                    NC_("RID_CUISTR_PREVIEW_IMAGE", "Image: %1")
 
 #define RID_CUISTR_ADDITIONS_INSTALLBUTTON          NC_("RID_SVXSTR_ADDITIONS_INSTALLBUTTON", "Install")
 #define RID_CUISTR_ADDITIONS_INSTALLEDBUTTON        NC_("RID_SVXSTR_ADDITIONS_INSTALLEDBUTTON", "Installed")

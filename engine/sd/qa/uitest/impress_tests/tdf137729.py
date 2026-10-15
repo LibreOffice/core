@@ -9,6 +9,7 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.area import open_fill_effects, FILL_EFFECT_HATCH
 from com.sun.star.drawing.HatchStyle import SINGLE
 
 class tdf137729(UITestCase):
@@ -26,11 +27,9 @@ class tdf137729(UITestCase):
                 tabcontrol = xPageSetupDlg.getChild("tabcontrol")
                 select_pos(tabcontrol, "1")
 
-                xFillTypeTabs = xPageSetupDlg.getChild("nbFillType")
-                select_pos(xFillTypeTabs, "3")
-
-                xDistance = xPageSetupDlg.getChild('distancemtr')
-                xDistance.executeAction("UP", tuple())
+                with open_fill_effects(self.ui_test, xPageSetupDlg, FILL_EFFECT_HATCH) as xEffects:
+                    xDistance = xEffects.getChild('distancemtr')
+                    xDistance.executeAction("UP", tuple())
 
 
             self.assertEqual(

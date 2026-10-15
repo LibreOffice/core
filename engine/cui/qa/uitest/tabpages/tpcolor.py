@@ -11,7 +11,7 @@ from uitest.uihelper.common import select_by_text
 from uitest.uihelper.common import get_state_as_dict
 
 
-# Test for cui/source/tabpages/tpcolor.cxx.
+# Test for cui/source/tabpages/colorfillpage.cxx.
 class Test(UITestCase):
 
     def testSvxColorTabPageTheme(self):
@@ -51,9 +51,6 @@ class Test(UITestCase):
                 tabControl = xDialog.getChild("tabcontrol")
                 # Area
                 select_pos(tabControl, "0")
-                # Color
-                xFillTypeTabs = xDialog.getChild("nbFillType")
-                select_pos(xFillTypeTabs, "1")
                 paletteSelector = xDialog.getChild("paletteselector")
                 select_by_text(paletteSelector, "Theme colors")
                 colorSelector = xDialog.getChild("iconview_colors")

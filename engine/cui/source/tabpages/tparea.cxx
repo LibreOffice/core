@@ -26,7 +26,11 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xgrscit.hxx>
+#include <colorfillpage.hxx>
 #include <cuitabarea.hxx>
+#include <dialmgr.hxx>
+#include <strings.hrc>
+#include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <unotools/pathoptions.hxx>
@@ -46,6 +50,16 @@ bool lclIsEffect(FillType eFillType)
 {
     return eFillType == FillType::GRADIENT_FILL || eFillType == FillType::HATCH_FILL
            || eFillType == FillType::BITMAP_FILL || eFillType == FillType::PATTERN_FILL;
+}
+
+// The preview caption of a fill. A fill without a name is named by its kind only.
+OUString lclCaption(TranslateId aId, std::u16string_view aName)
+{
+    OUString sCaption = CuiResId(aId);
+    if (!aName.empty())
+        return sCaption.replaceFirst("%1", aName);
+    sCaption = comphelper::string::stripEnd(sCaption.replaceFirst("%1", u""), ' ');
+    return comphelper::string::stripEnd(comphelper::string::stripEnd(sCaption, ':'), ' ');
 }
 
 } // end anonymous namespace
@@ -78,7 +92,6 @@ SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* p
     // init with pointers to fixed ChangeType
     , m_pnColorListState(&maFixed_ChangeType)
     , m_aFillAttributeSet(rInAttrs.getPool(), WhichRangesContainer(XATTR_FILL_FIRST, XATTR_FILL_LAST))
-    , m_xBtnMoreEffects(m_xBuilder->weld_button(u"moreeffects"_ustr))
     , m_aEffects({ FillType::GRADIENT_FILL, FillType::HATCH_FILL, FillType::BITMAP_FILL })
     , m_xNotebook(m_xBuilder->weld_notebook(u"nbFillType"_ustr))
 {
@@ -97,7 +110,6 @@ SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* p
     };
 
     m_xNotebook->connect_enter_page(LINK(this, SvxAreaTabPage, SwitchPageHdl_Impl));
-    m_xBtnMoreEffects->connect_clicked(LINK(this, SvxAreaTabPage, MoreEffectsHdl_Impl));
 
     SetExchangeSupport();
 }
@@ -155,6 +167,8 @@ void SvxAreaTabPage::SetOptimalSize()
 
 SvxAreaTabPage::~SvxAreaTabPage()
 {
+    // Pattern Style sits in the Color page, so it goes first.
+    m_xPatternStyle.reset();
     m_aFillTabPages.clear();
 }
 
@@ -246,7 +260,7 @@ DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
             break;
         }
         case FillType::SOLID_FILL:
-            return DeactivatePage_Impl<SvxColorTabPage>(_pSet);
+            return DeactivatePage_Impl<SvxColorFillTabPage>(_pSet);
         case FillType::PATTERN_FILL:
         {
             if (_pSet)
@@ -297,7 +311,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
         }
         case FillType::SOLID_FILL:
         {
-            return FillItemSet_Impl<SvxColorTabPage>( rAttrs );
+            return FillItemSet_Impl<SvxColorFillTabPage>( rAttrs );
         }
         case FillType::PATTERN_FILL:
         {
@@ -360,7 +374,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
     {
         case FillType::SOLID_FILL:
         {
-            Reset_Impl<SvxColorTabPage>( rAttrs );
+            Reset_Impl<SvxColorFillTabPage>( rAttrs );
             break;
         }
         default:
@@ -429,7 +443,7 @@ std::unique_ptr<SfxTabPage> SvxAreaTabPage::CreateFillStyleTabPage(FillType eFil
             fnCreate = nullptr;
             break;
         case FillType::SOLID_FILL:
-            fnCreate = &SvxColorTabPage::Create;
+            fnCreate = &SvxColorFillTabPage::Create;
             break;
         default:
             fnCreate = nullptr;
@@ -483,28 +497,29 @@ void SvxAreaTabPage::SelectFillType(FillType eFillType, const SfxItemSet* _pSet)
             rEntry.second->Reset(&m_aFillAttributeSet);
         }
     }
-    if (SvxColorTabPage* pColorPage = getColorTabPage())
+    if (SvxColorFillTabPage* pColorPage = getColorTabPage())
+    {
         pColorPage->SetNoFill(m_bNoFill);
+        pColorPage->UpdatePreview();
+    }
 }
 
-void SvxAreaTabPage::CreatePatternStyle()
+void SvxAreaTabPage::CreatePatternStyle(SvxColorFillTabPage& rColorPage)
 {
-    // Pattern Style sits on the Color tab, in the row below the Color page.
-    std::unique_ptr<weld::Grid> xColorGrid(m_xBuilder->weld_grid(u"gdColor"_ustr));
-    m_xPatternStyle = std::make_unique<SvxPatternStyleBox>(xColorGrid.get(), *this);
-    xColorGrid->set_child_top_attach(m_xPatternStyle->GetWidget(), 1);
+    // Pattern Style sits in the panel right of the palette.
+    m_xPatternStyle = std::make_unique<SvxPatternStyleBox>(&rColorPage.GetPatternBox(), *this);
     m_xPatternStyle->SetChangedHdl(LINK(this, SvxAreaTabPage, PatternChangedHdl_Impl));
     m_xPatternStyle->SetLists(m_pColorList, m_pPatternList, m_pnColorListState);
 }
 
 void SvxAreaTabPage::HidePatternStyle() { m_bOfferPattern = false; }
 
-SvxColorTabPage* SvxAreaTabPage::getColorTabPage()
+SvxColorFillTabPage* SvxAreaTabPage::getColorTabPage()
 {
     auto aFoundPage = m_aFillTabPages.find(FillType::SOLID_FILL);
     if (aFoundPage == m_aFillTabPages.end())
         return nullptr;
-    return static_cast<SvxColorTabPage*>(aFoundPage->second.get());
+    return static_cast<SvxColorFillTabPage*>(aFoundPage->second.get());
 }
 
 void SvxAreaTabPage::PageCreated(const SfxAllItemSet& aSet)
@@ -533,25 +548,81 @@ void SvxAreaTabPage::CreatePage(FillType nId, SfxTabPage& rTab)
 {
     if(nId == FillType::SOLID_FILL )
     {
-        auto& rColorTab = static_cast<SvxColorTabPage&>(rTab);
+        auto& rColorTab = static_cast<SvxColorFillTabPage&>(rTab);
         rColorTab.SetColorList(m_pColorList);
         rColorTab.SetColorChgd(m_pnColorListState);
         rColorTab.SetColorChangedHdl(LINK(this, SvxAreaTabPage, ColorChangedHdl_Impl));
         rColorTab.SetNoneSelectedHdl(LINK(this, SvxAreaTabPage, NoneSelectedHdl_Impl));
+        rColorTab.SetUpdatePreviewHdl(LINK(this, SvxAreaTabPage, UpdatePreviewHdl_Impl));
+        weld::Button& rMoreEffects = rColorTab.GetMoreEffectsButton();
+        rMoreEffects.connect_clicked(LINK(this, SvxAreaTabPage, MoreEffectsHdl_Impl));
+        rMoreEffects.set_visible(!m_aEffects.empty());
+        weld::Button& rCustomPattern = rColorTab.GetCustomPatternButton();
+        if (m_bOfferPattern)
+        {
+            CreatePatternStyle(rColorTab);
+            rCustomPattern.connect_clicked(LINK(this, SvxAreaTabPage, CustomPatternHdl_Impl));
+        }
+        else
+            rColorTab.HidePatternControls();
         rColorTab.Construct();
         rColorTab.ActivatePage(m_aFillAttributeSet);
         rColorTab.Reset(&m_aFillAttributeSet);
         rColorTab.SetNoFill(m_bNoFill);
         rColorTab.set_visible(true);
-        if (m_bOfferPattern)
-            CreatePatternStyle();
     }
 }
 
 void SvxAreaTabPage::SetEffects(std::vector<FillType>&& rEffects)
 {
     m_aEffects = std::move(rEffects);
-    m_xBtnMoreEffects->set_visible(!m_aEffects.empty());
+    if (SvxColorFillTabPage* pColorPage = getColorTabPage())
+        pColorPage->GetMoreEffectsButton().set_visible(!m_aEffects.empty());
+}
+
+void SvxAreaTabPage::UpdatePreview()
+{
+    if (SvxColorFillTabPage* pColorPage = getColorTabPage())
+        pColorPage->UpdatePreview();
+}
+
+IMPL_LINK(SvxAreaTabPage, UpdatePreviewHdl_Impl, SvxColorFillTabPage&, rColorPage, void)
+{
+    // The preview shows the whole fill: None, the color, the pattern or the effect.
+    SfxItemSet aFill(rColorPage.GetColorFill());
+    OUString sCaption;
+    if (m_oEffect)
+    {
+        aFill.Put(m_oEffectSet ? *m_oEffectSet : m_aFillAttributeSet);
+        switch (*m_oEffect)
+        {
+            case FillType::GRADIENT_FILL:
+                sCaption = lclCaption(RID_CUISTR_PREVIEW_GRADIENT, aFill.Get(XATTR_FILLGRADIENT).GetName());
+                break;
+            case FillType::HATCH_FILL:
+                sCaption = lclCaption(RID_CUISTR_PREVIEW_HATCH, aFill.Get(XATTR_FILLHATCH).GetName());
+                break;
+            case FillType::PATTERN_FILL:
+                sCaption = lclCaption(RID_CUISTR_PREVIEW_PATTERN, aFill.Get(XATTR_FILLBITMAP).GetName());
+                break;
+            default:
+                sCaption = lclCaption(RID_CUISTR_PREVIEW_IMAGE, aFill.Get(XATTR_FILLBITMAP).GetName());
+                break;
+        }
+    }
+    else if (m_bNoFill)
+    {
+        aFill.Put(XFillStyleItem(drawing::FillStyle_NONE));
+        sCaption = CuiResId(RID_CUISTR_FILL_NONE);
+    }
+    else if (m_xPatternStyle && m_xPatternStyle->HasPattern())
+    {
+        m_xPatternStyle->FillItemSet(aFill);
+        sCaption = lclCaption(RID_CUISTR_PREVIEW_PATTERN, m_xPatternStyle->GetName());
+    }
+    else
+        sCaption = rColorPage.GetColorCaption();
+    rColorPage.ShowPreview(aFill, sCaption);
 }
 
 void SvxAreaTabPage::ClearEffect()
@@ -560,7 +631,7 @@ void SvxAreaTabPage::ClearEffect()
     m_oEffectSet.reset();
 }
 
-IMPL_LINK(SvxAreaTabPage, ColorChangedHdl_Impl, SvxColorTabPage&, rColorPage, void)
+IMPL_LINK(SvxAreaTabPage, ColorChangedHdl_Impl, SvxColorFillTabPage&, rColorPage, void)
 {
     // A color chosen after None, a pattern or an effect replaces it.
     m_bBtnClicked = true;
@@ -571,7 +642,7 @@ IMPL_LINK(SvxAreaTabPage, ColorChangedHdl_Impl, SvxColorTabPage&, rColorPage, vo
         m_xPatternStyle->Clear();
 }
 
-IMPL_LINK_NOARG(SvxAreaTabPage, NoneSelectedHdl_Impl, SvxColorTabPage&, void)
+IMPL_LINK_NOARG(SvxAreaTabPage, NoneSelectedHdl_Impl, SvxColorFillTabPage&, void)
 {
     m_bBtnClicked = true;
     ClearEffect();
@@ -588,9 +659,16 @@ IMPL_LINK(SvxAreaTabPage, PatternChangedHdl_Impl, SvxPatternStyleBox&, rPatternS
     if (rPatternStyle.HasPattern())
     {
         m_bNoFill = false;
-        if (SvxColorTabPage* pColorPage = getColorTabPage())
+        if (SvxColorFillTabPage* pColorPage = getColorTabPage())
             pColorPage->SetNoFill(false);
     }
+    UpdatePreview();
+}
+
+IMPL_LINK_NOARG(SvxAreaTabPage, CustomPatternHdl_Impl, weld::Button&, void)
+{
+    if (m_xPatternStyle)
+        m_xPatternStyle->SelectCustom();
 }
 
 IMPL_LINK_NOARG(SvxAreaTabPage, MoreEffectsHdl_Impl, weld::Button&, void)
@@ -606,12 +684,13 @@ IMPL_LINK_NOARG(SvxAreaTabPage, MoreEffectsHdl_Impl, weld::Button&, void)
         m_oEffect = xDialog->GetEffect();
         m_oEffectSet.emplace(*xDialog->GetResult());
         m_bNoFill = false;
-        if (SvxColorTabPage* pColorPage = getColorTabPage())
+        if (SvxColorFillTabPage* pColorPage = getColorTabPage())
             pColorPage->SetNoFill(false);
         if (m_xPatternStyle)
             m_xPatternStyle->Clear();
         m_aFillAttributeSet.Put(*xDialog->GetResult());
         m_bBtnClicked = true;
+        UpdatePreview();
     });
 }
 

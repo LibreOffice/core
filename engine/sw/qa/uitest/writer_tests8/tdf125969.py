@@ -11,6 +11,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
 from uitest.uihelper.common import select_pos, get_state_as_dict
+from uitest.uihelper.area import open_fill_effects, FILL_EFFECT_IMAGE
 
 # bug 125969: make in-use bitmap-area-fill available for re-use, but ONLY IN THE SAME DOCUMENT
 class tdf125969(UITestCase):
@@ -35,10 +36,12 @@ class tdf125969(UITestCase):
             # The paragraph area has a custom background logo - which we want to become available
             # for re-use everywhere as a background fill
 
-            # visit the paragraph background property - which now auto-adds it to the collection
+            # visit the paragraph background image - which now auto-adds it to the collection
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "8") # area tab
+                with open_fill_effects(self.ui_test, xDialog, FILL_EFFECT_IMAGE, close_button="cancel"):
+                    pass
 
             # test: the paragraph's wasta-offline logo was added and the list box was refreshed
             self.ui_test.wait_until_property_is_updated(imageCollection, "EntryCount", str(number_of_images + 1))
@@ -54,8 +57,8 @@ class tdf125969(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:PageDialog", close_button="ok") as xDialog:
                 tabcontrol = xDialog.getChild("tabcontrol")
                 select_pos(tabcontrol, "2") # area tab
-                xFillTypeTabs = xDialog.getChild("nbFillType")
-                select_pos(xFillTypeTabs, "4") # bitmap tab
+                with open_fill_effects(self.ui_test, xDialog, FILL_EFFECT_IMAGE):
+                    pass
 
             backgroundType = xWriterEdit.getChild('bgselect')
             imageCollection = xWriterEdit.getChild("lbbitmap")

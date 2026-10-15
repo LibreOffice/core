@@ -10,6 +10,7 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.area import get_fill_caption
 
 #Bug 109083 - Updating table style: changes didn't propagate to other tables when selection was over two columns at the moment of updating
 class tdf109083(UITestCase):
@@ -50,13 +51,10 @@ class tdf109083(UITestCase):
                 with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
                     xTabs = xDialog.getChild("tabcontrol")
                     select_pos(xTabs, "4")   #tab Background
-                    xFillTypeTabs = xDialog.getChild("nbFillType")
-                    select_pos(xFillTypeTabs, "1")
-                    hex_custom = xDialog.getChild("hex_custom")
                     if i >= 2:
-                        self.assertEqual(get_state_as_dict(hex_custom)["Text"], "ffff00")
+                        self.assertIn("#FFFF00", get_fill_caption(xDialog))
                     else:
-                        self.assertEqual(get_state_as_dict(hex_custom)["Text"], "ffffff")
+                        self.assertEqual("None", get_fill_caption(xDialog))
                 self.xUITest.executeCommand(".uno:GoRight")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

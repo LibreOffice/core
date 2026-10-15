@@ -155,6 +155,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/tabpages/bbdlg \
     cui/source/tabpages/border \
     cui/source/tabpages/chardlg \
+    cui/source/tabpages/colorfillpage \
     cui/source/tabpages/connect \
     cui/source/tabpages/grfpage \
     cui/source/tabpages/labdlg \

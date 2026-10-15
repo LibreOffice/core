@@ -4617,6 +4617,7 @@ kbd,
 /* Calc - Format - Format Cells - Background - Color */
 /* Format -> Character -> Font Effects -> Font color */
 
+[id^='ColorFillPage'].jsdialog :is([id^='iconview_colors'], [id^='iconview_recent_colors']).ui-iconview,
 [id^='ColorPage'].jsdialog :is([id^='iconview_colors'], [id^='iconview_recent_colors']).ui-iconview,
 :is([id^='colorwindow_iv_colors'], [id^='colorwindow_iv_recentcolors']).ui-iconview {
 	grid-template-columns: repeat(12, 1fr);
@@ -4625,16 +4626,19 @@ kbd,
 	padding: 5px;
 }
 
+[id^='ColorFillPage'].jsdialog [id^='iconview_colors'].ui-iconview,
 [id^='ColorPage'].jsdialog [id^='iconview_colors'].ui-iconview,
 [id^='colorwindow_iv_colors'].ui-iconview {
 	max-height: calc(0.25 * var(--dialog-available-height));
 }
 
+[id^='ColorFillPage'].jsdialog :is([id^='iconview_colors'], [id^='iconview_recent_colors']).ui-iconview .ui-iconview-entry :is(img, span),
 [id^='ColorPage'].jsdialog :is([id^='iconview_colors'], [id^='iconview_recent_colors']).ui-iconview .ui-iconview-entry :is(img, span),
 :is([id^='colorwindow_iv_colors'], [id^='colorwindow_iv_recentcolors']) .ui-iconview-entry img {
 	padding: 1px;
 }
 
+[id^='ColorFillPage'].jsdialog :is([id^='iconview_colors'], [id^='iconview_recent_colors']).ui-iconview .ui-iconview-entry:is(:hover, .selected),
 [id^='ColorPage'].jsdialog :is([id^='iconview_colors'], [id^='iconview_recent_colors']).ui-iconview .ui-iconview-entry:is(:hover, .selected),
 :is([id^='colorwindow_iv_colors'], [id^='colorwindow_iv_recentcolors']) .ui-iconview-entry:is(:hover, .selected) {
 	outline: 2px solid var(--color-primary);
@@ -4643,16 +4647,91 @@ kbd,
 	border-radius: 0;
 }
 
+[id^='ColorFillPage'].jsdialog :is([id^='iconview_colors'], [id^='iconview_recent_colors']).ui-iconview .ui-iconview-entry span,
 [id^='ColorPage'].jsdialog :is([id^='iconview_colors'], [id^='iconview_recent_colors']).ui-iconview .ui-iconview-entry span,
 :is([id^='colorwindow_iv_colors'], [id^='colorwindow_iv_recentcolors']) .ui-iconview-entry span {
 	font-size: 0; /* Hide placeholder text to prevent layout shifts in color palette iconview widgets due to lazy loading */
+}
+
+/* The color column takes the space left of the 242px right column. */
+#colorpanels.ui-grid-cell {
+	grid-template-columns: 1fr 242px;
+}
+
+#paletterow.ui-grid-cell,
+#PatternStylePage.ui-grid-cell,
+#custompalettebox.ui-grid-cell {
+	display: grid;
+}
+
+/* The custom palette buttons are stacked, each as wide as the column, with the label at the start. */
+#custompalettebox .ui-pushbutton-wrapper,
+#custompalettebox .ui-pushbutton {
+	width: 100%;
+	margin: 0;
+	justify-content: start;
+	text-align: start;
+	white-space: nowrap;
+}
+
+#custompalettebox .ui-pushbutton.has-img {
+	gap: var(--spacing-s);
+}
+
+#custompalettehelp {
+	line-height: var(--spacing-xl);
+}
+
+#patternbox #fillbuttonbox {
+	margin-top: var(--spacing-m);
+	margin-bottom: var(--spacing-xl);
+}
+
+#PatternStylePage #patternstyle,
+#fillbuttonbox .ui-pushbutton {
+	margin: 0;
+}
+
+/* The preview id takes a number when another page of the dialog has a preview too. */
+[id^='ColorFillPage'] > .ui-drawing-area-container {
+	width: auto;
+	contain: inline-size;
+	overflow: hidden;
+	border: 1px solid var(--color-border);
+	border-radius: var(--border-radius);
+}
+
+[id^='ColorFillPage'] > .ui-drawing-area-container img {
+	display: block;
+	width: 100%;
+}
+
+/* A row of one button is drawn as the button alone, so Custom color is placed at the start too. */
+#fillbuttonbox.ui-grid-cell,
+#colorbuttonbox.ui-grid-cell,
+[id^='ColorFillPage'] > #customcolor.ui-pushbutton-wrapper {
+	justify-content: start;
+}
+
+[id^='ColorFillPage'] #customcolor-button.has-img {
+	gap: var(--spacing-s);
+}
+
+/* The fill pages start right under their tabs, or at the top when the tabs are hidden. This holds
+   for the tab content of a dialog with an Area page too, so its pages keep one top edge. */
+#nbFillType > .ui-tabs-content,
+[id^='FillEffectsDialog'] #tabcontrol > .ui-tabs-content,
+.ui-tabs-content:has(> .ui-content #nbFillType) {
+	margin-top: 0;
 }
 
 /* Area - Pattern Style dropdown: the shipped patterns in rows of four */
 
 [id^='patternstylelist'].ui-iconview {
 	grid-template-columns: repeat(4, 1fr);
+	gap: var(--spacing-m);
 	width: max-content;
+	padding: 8px;
 }
 
 /* Writer - Format - Character */

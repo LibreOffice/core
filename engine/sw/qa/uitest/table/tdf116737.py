@@ -10,6 +10,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.area import get_fill_caption
 
 #Bug 116737 - INSERT TABLE: Can't select table style (gen/gtk)
 class tdf116737(UITestCase):
@@ -30,16 +31,8 @@ class tdf116737(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "4")   #tab Background
 
-                xFillTypeTabs = xDialog.getChild("nbFillType")
-                select_pos(xFillTypeTabs, "1")
-
-                R_custom = xDialog.getChild("R_custom")
-                G_custom = xDialog.getChild("G_custom")
-                B_custom = xDialog.getChild("B_custom")
                 #"Simple List Shaded" -> header should be black
-                self.assertEqual(get_state_as_dict(R_custom)["Text"], "0")
-                self.assertEqual(get_state_as_dict(G_custom)["Text"], "0")
-                self.assertEqual(get_state_as_dict(B_custom)["Text"], "0")
+                self.assertIn("#000000", get_fill_caption(xDialog))
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

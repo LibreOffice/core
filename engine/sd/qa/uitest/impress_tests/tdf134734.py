@@ -9,6 +9,7 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, select_pos
+from uitest.uihelper.area import select_palette_color
 from com.sun.star.drawing.FillStyle import SOLID
 
 
@@ -39,8 +40,8 @@ class TestClass(UITestCase):
                     spinMargBot.executeAction("UP",tuple())
                 xTabs = DrawPageDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
-                xFillTypeTabs = DrawPageDialog.getChild("nbFillType")
-                select_pos(xFillTypeTabs, "1")
+                # Light Blue 2
+                select_palette_color(DrawPageDialog, "Standard", "56")
 
             self.assertEqual(document.DrawPages[0].Background.FillStyle, SOLID)
             self.assertEqual(document.DrawPages[0].BorderLeft, 1016)

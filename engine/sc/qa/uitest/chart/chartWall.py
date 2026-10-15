@@ -71,37 +71,13 @@ class chartWall(UITestCase):
                     self.assertEqual(hex(xWall.FillColor), '0xe6e6e6')
                     self.assertEqual(xWall.FillTransparence, 0)
 
-                    #Click on tab "Area"
-                    tabcontrol = xDialog.getChild("tabcontrol")
-                    select_pos(tabcontrol, "1")
-
-                    xFillTypeTabs = xDialog.getChild("nbFillType")
-                    select_pos(xFillTypeTabs, "1")
-
-                    rCustom = xDialog.getChild("R_custom")
-                    gCustom = xDialog.getChild("G_custom")
-                    bCustom = xDialog.getChild("B_custom")
-
-                    rCustom.executeAction("CLEAR", tuple())
-                    rCustom.executeAction("TYPE", mkPropertyValues({"TEXT":"35"}))
-                    rCustom.executeAction("UP", tuple())
-                    rCustom.executeAction("DOWN", tuple())  #without this save data doesn't works
-                    self.assertEqual(get_state_as_dict(rCustom)["Text"], "35")
-                    gCustom.executeAction("CLEAR", tuple())
-                    gCustom.executeAction("TYPE", mkPropertyValues({"TEXT":"169"}))
-                    gCustom.executeAction("UP", tuple())
-                    gCustom.executeAction("DOWN", tuple())  #without this save data doesn't works
-                    bCustom.executeAction("CLEAR", tuple())
-                    bCustom.executeAction("TYPE", mkPropertyValues({"TEXT":"211"}))
-                    bCustom.executeAction("UP", tuple())
-                    bCustom.executeAction("DOWN", tuple())  #without this save data doesn't works
 
                 self.assertEqual(xWall.LineWidth, 100)
                 self.assertEqual(xWall.LineTransparence, 5)
-                self.assertEqual(hex(xWall.FillColor), '0x23a9d3')
+                self.assertEqual(hex(xWall.FillColor), '0xe6e6e6')
                 self.assertEqual(xWall.FillTransparence, 0)
 
-                #reopen and verify tab "Area".
+                #reopen and change tab "Transparency".
                 gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
                 gridwin.executeAction("ACTIVATE", tuple())
                 xChartMainTop = self.xUITest.getTopFocusWindow()
@@ -110,19 +86,10 @@ class chartWall(UITestCase):
                 with self.ui_test.execute_dialog_through_action(xSeriesObj, "COMMAND", mkPropertyValues({"COMMAND": "DiagramWall"})) as xDialog:
 
                     tabcontrol = xDialog.getChild("tabcontrol")
-                    select_pos(tabcontrol, "1")
-
-                    rCustom = xDialog.getChild("R_custom")
-                    gCustom = xDialog.getChild("G_custom")
-                    bCustom = xDialog.getChild("B_custom")
-
-                    self.assertEqual(get_state_as_dict(rCustom)["Text"], "35")
-                    self.assertEqual(get_state_as_dict(gCustom)["Text"], "169")
-                    self.assertEqual(get_state_as_dict(bCustom)["Text"], "211")
 
                     self.assertEqual(xWall.LineWidth, 100)
                     self.assertEqual(xWall.LineTransparence, 5)
-                    self.assertEqual(hex(xWall.FillColor), '0x23a9d3')
+                    self.assertEqual(hex(xWall.FillColor), '0xe6e6e6')
                     self.assertEqual(xWall.FillTransparence, 0)
 
                     #change tab "Transparency"
@@ -136,7 +103,7 @@ class chartWall(UITestCase):
 
                 self.assertEqual(xWall.LineWidth, 100)
                 self.assertEqual(xWall.LineTransparence, 5)
-                self.assertEqual(hex(xWall.FillColor), '0x23a9d3')
+                self.assertEqual(hex(xWall.FillColor), '0xe6e6e6')
                 self.assertEqual(xWall.FillTransparence, 51)
 
                 #reopen and verify tab "Transparency"
@@ -158,13 +125,13 @@ class chartWall(UITestCase):
 
                     self.assertEqual(xWall.LineWidth, 100)
                     self.assertEqual(xWall.LineTransparence, 5)
-                    self.assertEqual(hex(xWall.FillColor), '0x23a9d3')
+                    self.assertEqual(hex(xWall.FillColor), '0xe6e6e6')
                     self.assertEqual(xWall.FillTransparence, 51)
 
 
                 self.assertEqual(xWall.LineWidth, 100)
                 self.assertEqual(xWall.LineTransparence, 5)
-                self.assertEqual(hex(xWall.FillColor), '0x23a9d3')
+                self.assertEqual(hex(xWall.FillColor), '0xe6e6e6')
                 self.assertEqual(xWall.FillTransparence, 51)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -9,6 +9,7 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.area import select_palette_color
 
 class tdf122045(UITestCase):
 
@@ -21,8 +22,8 @@ class tdf122045(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "2")
 
-                xFillTypeTabs = xDialog.getChild("nbFillType")
-                select_pos(xFillTypeTabs, "1")
+                # Light Blue 2
+                select_palette_color(xDialog, "Standard", "56")
 
                 xApplyBtn = xDialog.getChild("apply")
                 xApplyBtn.executeAction("CLICK", tuple())

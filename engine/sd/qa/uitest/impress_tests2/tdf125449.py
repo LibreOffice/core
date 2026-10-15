@@ -9,6 +9,7 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.area import open_fill_effects, FILL_EFFECT_GRADIENT
 from com.sun.star.awt.GradientStyle import LINEAR
 
 class tdf125449(UITestCase):
@@ -26,11 +27,9 @@ class tdf125449(UITestCase):
                 tabcontrol = xPageSetupDlg.getChild("tabcontrol")
                 select_pos(tabcontrol, "1")
 
-                xFillTypeTabs = xPageSetupDlg.getChild("nbFillType")
-                select_pos(xFillTypeTabs, "2")
-
-                xAngle = xPageSetupDlg.getChild('anglemtr')
-                xAngle.executeAction("UP", tuple())
+                with open_fill_effects(self.ui_test, xPageSetupDlg, FILL_EFFECT_GRADIENT) as xEffects:
+                    xAngle = xEffects.getChild('anglemtr')
+                    xAngle.executeAction("UP", tuple())
 
 
             self.assertEqual(

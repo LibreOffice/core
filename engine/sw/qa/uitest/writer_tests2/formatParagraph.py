@@ -444,21 +444,6 @@ class formatParagraph(UITestCase):
                     self.assertEqual(get_state_as_dict(xBottom)["Text"], "0.10 cm")
 
 
-    def test_format_paragraph_area(self):
-        with self.ui_test.create_doc_in_start_center("writer"):
-
-            with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog", close_button="cancel") as xDialog:
-                xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "8")
-
-                xFillTypeTabs = xDialog.getChild("nbFillType")
-
-                select_pos(xFillTypeTabs, "1")
-                select_pos(xFillTypeTabs, "2")
-                select_pos(xFillTypeTabs, "3")
-                select_pos(xFillTypeTabs, "4")
-                select_pos(xFillTypeTabs, "5")
-
     def test_format_paragraph_transparency(self):
         with self.ui_test.create_doc_in_start_center("writer"):
 

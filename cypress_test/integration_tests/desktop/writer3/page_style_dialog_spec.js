@@ -130,7 +130,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 		cy.cGet('button#area.ui-tab').click();
 		helper.processToIdle(this.win);
 
-		cy.cGet('#edit-button').click();
+		cy.cGet('#customcolor-button').click();
 		helper.processToIdle(this.win);
 		cy.cGet('[id^="ColorPicker"]').should('be.visible');
 		pageStyleWindow().should('have.attr', 'inert');
@@ -159,25 +159,18 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 		cy.cGet('button#area.ui-tab').click();
 		helper.processToIdle(this.win);
 
-		cy.cGet('[role="tab"][aria-controls="lbcolor"]').should('exist');
-		cy.cGet('[role="tab"][aria-controls="lbhatch"]').should('not.exist');
-
-		cy.cGet('#moreeffects-button').should('be.visible').click();
+		cy.cGet('#moreeffects-button').click();
 		helper.processToIdle(this.win);
 
-		cy.cGet('[id^="FillEffectsDialog"]').should('be.visible').within(() => {
-			cy.get('[role="tab"]').then(($tabs) => {
-				const labels = $tabs.toArray().map((tab) => tab.textContent.trim());
-				expect(labels).to.deep.equal(['Gradient', 'Hatch', 'Image']);
-			});
-			cy.get('[role="tab"][aria-controls="gradient"]').should('have.attr', 'aria-selected', 'true');
-			cy.get('[role="tab"][aria-controls="hatch"]').click();
-		});
+		cy.cGet('[id^="FillEffectsDialog"]').should('be.visible');
+
+		cy.cGet('[id^="FillEffectsDialog"] [role="tab"][aria-controls="hatch"]').click();
 		helper.processToIdle(this.win);
 		cy.cGet('[id^="FillEffectsDialog"] #ok-button').click();
 		helper.processToIdle(this.win);
 
 		cy.cGet('[id^="FillEffectsDialog"]').should('not.exist');
+
 		cy.cGet('[id^="TemplateDialog"] #ok-button').click();
 		helper.processToIdle(this.win);
 
@@ -213,7 +206,6 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 		cy.cGet('#Format-tab-label').click();
 		openArea();
 
-		cy.cGet('[role="tab"][aria-controls="lbnone"]').should('not.exist');
 		cy.cGet('#paletteselector-input option').first().should('have.text', 'None');
 
 		cy.cGet('#iconview_colors .ui-iconview-entry').eq(5).click();
@@ -232,9 +224,8 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 	});
 
 	/*
-	 * Pattern Style opens a grid of None and the shipped patterns, named by their tooltips, with
-	 * Custom below it. The pattern selected there is the fill that the page style keeps, and
-	 * Custom opens the pattern editor in a dialog of its own.
+	 * The pattern selected in Pattern Style is the fill that the page style keeps, and Custom
+	 * pattern opens the pattern editor in a dialog of its own.
 	 */
 	it('Area tab offers the patterns in Pattern Style', function() {
 		var openArea = () => {
@@ -255,14 +246,6 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 		cy.cGet('button#patternstyle').should('contain.text', 'None');
 
 		openStyleGrid();
-		// The entries show only their pattern, and the name is in the tooltip.
-		cy.cGet('#patternstylelist .ui-iconview-entry-title').should('not.exist');
-		cy.cGet('#patternstylelist img[alt="None"]').should('exist');
-		cy.cGet('#patternstylelist .ui-iconview-entry').then(($entries) => {
-			const tops = $entries.toArray().slice(0, 5).map((entry) => entry.offsetTop);
-			expect(tops.slice(0, 4).every((top) => top === tops[0]), 'four in the first row').to.be.true;
-			expect(tops[4], 'the fifth starts a new row').to.be.greaterThan(tops[0]);
-		});
 		cy.cGet('#patternstylelist img[alt="20 Percent"]').click();
 		helper.processToIdle(this.win);
 		cy.cGet('button#patternstyle').should('contain.text', '20 Percent');
@@ -273,19 +256,282 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog tests', 
 		openArea();
 		cy.cGet('button#patternstyle').should('contain.text', '20 Percent');
 
-		openStyleGrid();
-		cy.cGet('#patternstylecustom-button').click();
+		cy.cGet('#custompattern-button').click();
+		helper.processToIdle(this.win);
+		cy.cGet('#CTL_PIXEL').should('be.visible').closest('.jsdialog-window').find('#cancel-button').click();
+		helper.processToIdle(this.win);
+		cy.cGet('#CTL_PIXEL').should('not.exist');
+	});
+
+	/*
+	 * The Color tab has the palette with More colors and More effects below it, Pattern Style to
+	 * the right, and one preview under both. The caption names the fill the preview shows.
+	 */
+	it('Area tab previews the fill under the palette', function() {
+		var caption = () => cy.cGet('#previewcaption');
+		var rect = (selector) => cy.cGet(selector).then(($element) => $element[0].getBoundingClientRect());
+
+		cy.cGet('#Format-tab-label').click();
+		desktopHelper.getNbIcon('PageDialog', 'Format').click();
+		helper.processToIdle(this.win);
+		cy.cGet('button#area.ui-tab').click();
 		helper.processToIdle(this.win);
 
-		// The Pattern dialog holds the pattern editor alone, with OK below it and no tab strip.
-		cy.cGet('#BTN_ADD').should('be.visible').closest('.jsdialog-window').within(($dialog) => {
-			cy.get('.ui-dialog-title').should('have.text', 'Pattern');
-			cy.get('[role="tab"]').should('not.exist');
-			cy.get('#CTL_PIXEL').then(($editor) => {
-				const okButton = $dialog[0].querySelector('#ok-button, #ok');
-				expect(okButton.getBoundingClientRect().top, 'OK sits below the editor')
-					.to.be.greaterThan($editor[0].getBoundingClientRect().bottom);
+		rect('#iconview_colors').then((palette) => {
+			rect('button#patternstyle').then((patternStyle) => {
+				expect(patternStyle.left, 'Pattern Style is right of the palette').to.be.greaterThan(palette.right);
+			});
+			rect('#preview').then((preview) => {
+				expect(preview.top, 'the preview is under the palette').to.be.greaterThan(palette.bottom);
+				expect(preview.width, 'the preview is wider than the palette').to.be.greaterThan(palette.width);
 			});
 		});
+
+		// The page style opens with a color fill.
+		caption().invoke('text').should('match', /^Color: /);
+
+		cy.cGet('#iconview_colors .ui-iconview-entry').eq(5).click();
+		helper.processToIdle(this.win);
+		caption().invoke('text').should('match', /^Color: .+ \(#[0-9A-F]{6}\)$/);
+
+		cy.cGet('button#patternstyle').click();
+		helper.processToIdle(this.win);
+		cy.cGet('#patternstylelist img[alt="20 Percent"]').click();
+		helper.processToIdle(this.win);
+		caption().should('have.text', 'Pattern: 20 Percent');
+
+		cy.cGet('#moreeffects-button').click();
+		helper.processToIdle(this.win);
+		cy.cGet('[id^="FillEffectsDialog"] [role="tab"][aria-controls="hatch"]').click();
+		helper.processToIdle(this.win);
+		cy.cGet('[id^="FillEffectsDialog"] #ok-button').click();
+		helper.processToIdle(this.win);
+		caption().invoke('text').should('match', /^Hatch: /);
+
+		cy.cGet('#paletteselector-input').select('None');
+		helper.processToIdle(this.win);
+		caption().should('have.text', 'None');
+	});
+
+	/*
+	 * Each kind of fill set on the Area tab is the fill the page style keeps: the preview caption
+	 * names it when the dialog opens again.
+	 */
+	it('Area tab sets each kind of fill', function() {
+		var caption = () => cy.cGet('#previewcaption');
+		var openArea = () => {
+			desktopHelper.getNbIcon('PageDialog', 'Format').click();
+			helper.processToIdle(this.win);
+			cy.cGet('[id^="TemplateDialog"]').should('be.visible');
+			cy.cGet('button#area.ui-tab').click();
+			helper.processToIdle(this.win);
+		};
+		var closeWithOk = () => {
+			cy.cGet('[id^="TemplateDialog"] #ok-button').click();
+			helper.processToIdle(this.win);
+			cy.cGet('[id^="TemplateDialog"]').should('not.exist');
+		};
+		var setEffect = (tab) => {
+			cy.cGet('#moreeffects-button').click();
+			helper.processToIdle(this.win);
+			cy.cGet('[id^="FillEffectsDialog"] [role="tab"][aria-controls="' + tab + '"]').click();
+			helper.processToIdle(this.win);
+			cy.cGet('[id^="FillEffectsDialog"] #ok-button').click();
+			helper.processToIdle(this.win);
+			cy.cGet('[id^="FillEffectsDialog"]').should('not.exist');
+		};
+
+		cy.cGet('#Format-tab-label').click();
+
+		openArea();
+		cy.cGet('#paletteselector-input').select('Standard');
+		helper.processToIdle(this.win);
+		cy.cGet('#iconview_colors .ui-iconview-entry').eq(56).click();
+		helper.processToIdle(this.win);
+		closeWithOk();
+		openArea();
+		caption().should('have.text', 'Color: Light Blue 2 (#729FCF)');
+
+		setEffect('gradient');
+		closeWithOk();
+		openArea();
+		caption().should('have.text', 'Gradient: Pastel Bouquet');
+
+		setEffect('hatch');
+		closeWithOk();
+		openArea();
+		caption().should('have.text', 'Hatch: Black 0 Degrees');
+
+		setEffect('bitmap');
+		closeWithOk();
+		openArea();
+		caption().should('have.text', 'Image: Painted White');
+
+		cy.cGet('button#patternstyle').click();
+		helper.processToIdle(this.win);
+		cy.cGet('#patternstylelist img[alt="5 Percent"]').click();
+		helper.processToIdle(this.win);
+		closeWithOk();
+		openArea();
+		caption().should('have.text', 'Pattern: 5 Percent');
+
+		cy.cGet('#paletteselector-input').select('None');
+		helper.processToIdle(this.win);
+		closeWithOk();
+		openArea();
+		caption().should('have.text', 'None');
+	});
+
+	/*
+	 * A color can be selected from any palette, and the last color the page style was filled
+	 * with leads Recent Colors the next time.
+	 */
+	it('Area tab selects colors from each palette and lists the last one in Recent Colors', function() {
+		var caption = () => cy.cGet('#previewcaption');
+
+		cy.cGet('#Format-tab-label').click();
+		desktopHelper.getNbIcon('PageDialog', 'Format').click();
+		helper.processToIdle(this.win);
+		cy.cGet('button#area.ui-tab').click();
+		helper.processToIdle(this.win);
+
+		cy.cGet('#paletteselector-input').select('Chart Palettes');
+		helper.processToIdle(this.win);
+		cy.cGet('#iconview_colors .ui-iconview-entry').eq(1).click();
+		helper.processToIdle(this.win);
+		caption().invoke('text').should('match', /^Color: Chart 2 \(#[0-9A-F]{6}\)$/);
+
+		cy.cGet('#paletteselector-input').select('HTML');
+		helper.processToIdle(this.win);
+		cy.cGet('#iconview_colors .ui-iconview-entry').eq(0).click();
+		helper.processToIdle(this.win);
+		caption().should('have.text', 'Color: White (#FFFFFF)');
+
+		cy.cGet('[id^="TemplateDialog"] #ok-button').click();
+		helper.processToIdle(this.win);
+		cy.cGet('[id^="TemplateDialog"]').should('not.exist');
+
+		desktopHelper.getNbIcon('PageDialog', 'Format').click();
+		helper.processToIdle(this.win);
+		cy.cGet('button#area.ui-tab').click();
+		helper.processToIdle(this.win);
+		// Another color first, so it is the recent color that brings White back.
+		caption().should('have.text', 'Color: White (#FFFFFF)');
+		cy.cGet('#iconview_colors .ui-iconview-entry').eq(1).click();
+		helper.processToIdle(this.win);
+		caption().should('not.have.text', 'Color: White (#FFFFFF)');
+		cy.cGet('#iconview_recent_colors .ui-iconview-entry').first().click();
+		helper.processToIdle(this.win);
+		caption().should('have.text', 'Color: White (#FFFFFF)');
+	});
+
+	/*
+	 * A color typed in Pick a Color is the fill, and stays the fill when the dialog opens again.
+	 */
+	it('Area tab fills with a color typed in Pick a Color', function() {
+		var caption = () => cy.cGet('#previewcaption');
+
+		cy.cGet('#Format-tab-label').click();
+		desktopHelper.getNbIcon('PageDialog', 'Format').click();
+		helper.processToIdle(this.win);
+		cy.cGet('button#area.ui-tab').click();
+		helper.processToIdle(this.win);
+
+		cy.cGet('#customcolor-button').click();
+		helper.processToIdle(this.win);
+		cy.cGet('[id^="ColorPicker"] #hexEntry-input').type('{selectall}{backspace}23a9d3');
+		helper.processToIdle(this.win);
+		cy.cGet('[id^="ColorPicker"] #ok-button').click();
+		helper.processToIdle(this.win);
+		cy.cGet('[id^="ColorPicker"]').should('not.exist');
+		caption().should('have.text', 'Color: #23A9D3');
+
+		cy.cGet('[id^="TemplateDialog"] #ok-button').click();
+		helper.processToIdle(this.win);
+		cy.cGet('[id^="TemplateDialog"]').should('not.exist');
+
+		desktopHelper.getNbIcon('PageDialog', 'Format').click();
+		helper.processToIdle(this.win);
+		cy.cGet('button#area.ui-tab').click();
+		helper.processToIdle(this.win);
+		caption().should('have.text', 'Color: #23A9D3');
+	});
+
+	/*
+	 * Add to Palette shows a swatch of the color it would add, so selecting another color
+	 * changes it.
+	 */
+	it('Add to Palette shows the selected color', function() {
+		cy.cGet('#Format-tab-label').click();
+		desktopHelper.getNbIcon('PageDialog', 'Format').click();
+		helper.processToIdle(this.win);
+		cy.cGet('button#area.ui-tab').click();
+		helper.processToIdle(this.win);
+
+		// The first swatch is read once, after should has waited for it, to compare with the next.
+		cy.cGet('#add-button img').should('have.attr', 'src').then((before) => {
+			cy.cGet('#iconview_colors .ui-iconview-entry').eq(64).click();
+			helper.processToIdle(this.win);
+			cy.cGet('#add-button img').should('have.attr', 'src').and('not.equal', before);
+		});
+	});
+});
+
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog of a page without a fill', function() {
+	beforeEach(function() {
+		cy.viewport(1920, 720);
+		helper.setupAndLoadDocument('writer/focus.odt');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
+	});
+
+	/*
+	 * A page without a fill opens the Area tab on None in the palette list and in Pattern Style,
+	 * with None in the preview. Selecting a color moves the palette list to the palette shown.
+	 */
+	it('Area tab opens on None and leaves it when a color is selected', function() {
+		cy.cGet('#Format-tab-label').click();
+		desktopHelper.getNbIcon('PageDialog', 'Format').click();
+		helper.processToIdle(this.win);
+		cy.cGet('button#area.ui-tab').click();
+		helper.processToIdle(this.win);
+
+		cy.cGet('#paletteselector-input option:selected').should('have.text', 'None');
+		cy.cGet('button#patternstyle').should('contain.text', 'None');
+		cy.cGet('#previewcaption').should('have.text', 'None');
+
+		cy.cGet('#iconview_colors .ui-iconview-entry').eq(5).click();
+		helper.processToIdle(this.win);
+		cy.cGet('#paletteselector-input option:selected').should('have.text', 'Standard');
+		cy.cGet('#previewcaption').invoke('text').should('match', /^Color: /);
+	});
+});
+
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Page Style dialog of a spreadsheet', function() {
+	beforeEach(function() {
+		cy.viewport(1920, 720);
+		helper.setupAndLoadDocument('calc/autofilter.ods');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
+	});
+
+	/*
+	 * The Background tab offers no pattern, so More effects sits in the row of Custom color and
+	 * opens Fill Effects from there.
+	 */
+	it('Background tab opens Fill Effects from beside Custom color', function() {
+		this.win.app.map.sendUnoCommand('.uno:PageFormatDialog');
+		helper.processToIdle(this.win);
+		cy.cGet('button#background.ui-tab').click();
+		helper.processToIdle(this.win);
+
+		cy.cGet('#colorbuttonbox #moreeffects-button').click();
+		helper.processToIdle(this.win);
+		cy.cGet('[id^="FillEffectsDialog"]').should('be.visible');
+		cy.cGet('[id^="FillEffectsDialog"] #cancel-button').click();
+		helper.processToIdle(this.win);
+		cy.cGet('[id^="FillEffectsDialog"]').should('not.exist');
 	});
 });

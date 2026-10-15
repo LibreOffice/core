@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface domain="cui">
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkTreeStore" id="colors_liststore">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="recent_colors_liststore">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkImage" id="customcolorimage">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">res/sc10350.png</property>
+  </object>
+  <object class="GtkBox" id="ColorFillPage">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="border-width">6</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">6</property>
+    <child>
+      <object class="GtkBox" id="colorpanels">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="spacing">12</property>
+        <child>
+          <!-- n-columns=1 n-rows=2 -->
+          <object class="GtkGrid" id="grid2">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="valign">start</property>
+            <property name="row-spacing">6</property>
+            <child>
+              <object class="GtkBox" id="paletterow">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="label21">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="colorfillpage|label21">Theme color:</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">paletteselector</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="paletteselector">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">always</property>
+                <property name="shadow-type">in</property>
+                <property name="height-request">180</property>
+                <child>
+                  <object class="GtkIconView" id="iconview_colors">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="model">colors_liststore</property>
+                    <property name="pixbuf-column">0</property>
+                    <property name="selection-mode">single</property>
+                    <property name="item-orientation">horizontal</property>
+                    <property name="columns">12</property>
+                    <property name="row-spacing">1</property>
+                    <property name="column-spacing">1</property>
+                    <property name="item-padding">3</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="iconview_colors-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes" context="colorfillpage|iconview_colors-atkobject">Colors</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="patternbox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="valign">start</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkBox" id="patternstyleslot">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="fillbuttonbox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkButton" id="custompattern">
+                    <property name="label" translatable="yes" context="colorfillpage|custompattern">Custom _pattern...</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="custompattern-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="colorfillpage|extended_tip|custompattern">Opens the pattern editor, where a pattern can be drawn and added to the list.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="moreeffects">
+                    <property name="label" translatable="yes" context="colorfillpage|moreeffects">More effects...</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="moreeffects-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="colorfillpage|extended_tip|moreeffects">Opens a dialog to fill the area with a gradient, a hatch or an image.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="custompalettebox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-top">12</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">8</property>
+                <child>
+                  <object class="GtkLabel" id="custompalettelabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="colorfillpage|custompalettelabel">Custom palette</property>
+                    <property name="xalign">0</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="custompalettelabel-atkobject">
+                        <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="custompalettehelp">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="colorfillpage|custompalettehelp">Add the selected color here. To remove one, open Custom palette first.</property>
+                    <property name="wrap">True</property>
+                    <property name="max-width-chars">30</property>
+                    <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="custompalettehelp-atkobject">
+                        <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="add">
+                    <property name="label" translatable="yes" context="colorfillpage|add">_Add to Palette</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="add-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="colorfillpage|extended_tip|add">Adds the selected color to the custom palette.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="delete">
+                    <property name="label" translatable="yes" context="colorfillpage|delete">Remove from Palette</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="delete-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="colorfillpage|extended_tip|delete">Deletes the selected element or elements without requiring confirmation.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="box6">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">3</property>
+        <child>
+          <object class="GtkLabel" id="recentcolorlb">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="colorfillpage|label20">Recent Colors</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">iconview_recent_colors</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkIconView" id="iconview_recent_colors">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="model">recent_colors_liststore</property>
+            <property name="pixbuf-column">0</property>
+            <property name="selection-mode">single</property>
+            <property name="item-orientation">horizontal</property>
+            <property name="columns">12</property>
+            <property name="row-spacing">1</property>
+            <property name="column-spacing">1</property>
+            <property name="item-padding">3</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="colorbuttonbox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">start</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkButton" id="customcolor">
+            <property name="label" translatable="yes" context="colorfillpage|customcolor">_Custom color...</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="image">customcolorimage</property>
+            <property name="use-underline">True</property>
+            <property name="always-show-image">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="customcolor-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="colorfillpage|extended_tip|customcolor">Opens the Pick a Color dialog to define a color that is not in the palette.</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="previewlabel">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="colorfillpage|previewlabel">Preview</property>
+        <property name="use-underline">True</property>
+        <property name="mnemonic-widget">preview</property>
+        <property name="xalign">0</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkDrawingArea" id="preview">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="previewcaption">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="xalign">0</property>
+        <property name="ellipsize">end</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="previewcaption-atkobject">
+            <property name="AtkObject::accessible-role">static</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">5</property>
+      </packing>
+    </child>
+  </object>
+</interface>

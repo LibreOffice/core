@@ -339,6 +339,14 @@ function traverseTabs(getContainer, win, level, command, isNested = false) {
 								// Gradient, Hatch and Image are tabs of the Fill Effects dialog
 								cy.cGet('#moreeffects-button').click();
 								handleDialog(win, level + 1, command + ':FillEffects');
+								// Custom pattern opens the pattern editor where the page offers patterns.
+								// The page shows or hides the button once, when it is built, so one read is enough.
+								cy.cGet('body').then($body => {
+									if ($body.find('#custompattern-button:visible').length) {
+										cy.cGet('#custompattern-button').click();
+										handleDialog(win, level + 1, command + ':Pattern');
+									}
+								});
 							} else if (command && command.endsWith(':FillEffects') && tabAriaControls == 'hatch') {
 								cy.cGet('button.ui-pushbutton[aria-label="Add"]:visible').click();
 								testNameDialog(win, level);

@@ -10,6 +10,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, select_pos
 from uitest.uihelper.common import change_measurement_unit
+from uitest.uihelper.area import open_fill_effects, FILL_EFFECT_IMAGE
 
 class tdf152295(UITestCase):
     def test_tdf152295(self):
@@ -22,33 +23,31 @@ class tdf152295(UITestCase):
                 with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
                     xTabs = DrawPageDialog.getChild("tabcontrol")
                     select_pos(xTabs, "1")
-                    xFillTypeTabs = DrawPageDialog.getChild("nbFillType")
-                    select_pos(xFillTypeTabs, "4")
-                    width = xFillTypeTabs.getChild("width")
-                    for _ in range(50):
-                        width.executeAction("UP",tuple())
-                    height = xFillTypeTabs.getChild("height")
-                    for _ in range(50):
-                        height.executeAction("UP",tuple())
+                    with open_fill_effects(self.ui_test, DrawPageDialog, FILL_EFFECT_IMAGE) as xEffects:
+                        width = xEffects.getChild("width")
+                        for _ in range(50):
+                            width.executeAction("UP",tuple())
+                        height = xEffects.getChild("height")
+                        for _ in range(50):
+                            height.executeAction("UP",tuple())
 
                 with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
                     xTabs = DrawPageDialog.getChild("tabcontrol")
                     select_pos(xTabs, "1")
-                    xFillTypeTabs = DrawPageDialog.getChild("nbFillType")
-                    select_pos(xFillTypeTabs, "4")
+                    with open_fill_effects(self.ui_test, DrawPageDialog, FILL_EFFECT_IMAGE):
+                        pass
 
                 with self.ui_test.execute_dialog_through_command(".uno:PageSetup") as DrawPageDialog:
                     xTabs = DrawPageDialog.getChild("tabcontrol")
                     select_pos(xTabs, "1")
-                    xFillTypeTabs = DrawPageDialog.getChild("nbFillType")
-                    select_pos(xFillTypeTabs, "4")
-                    width = xFillTypeTabs.getChild("width")
-                    height = xFillTypeTabs.getChild("height")
+                    with open_fill_effects(self.ui_test, DrawPageDialog, FILL_EFFECT_IMAGE) as xEffects:
+                        width = xEffects.getChild("width")
+                        height = xEffects.getChild("height")
 
-                    # Without the fix in place, this test would have failed with
-                    # AssertionError: '6.00 cm' != '13.55 cm'
-                    # AssertionError: '6.00 cm' != '13.55 cm'
-                    self.assertEqual("6.00 cm", get_state_as_dict(width)['Text'])
-                    self.assertEqual("6.00 cm", get_state_as_dict(height)['Text'])
+                        # Without the fix in place, this test would have failed with
+                        # AssertionError: '6.00 cm' != '13.55 cm'
+                        # AssertionError: '6.00 cm' != '13.55 cm'
+                        self.assertEqual("6.00 cm", get_state_as_dict(width)['Text'])
+                        self.assertEqual("6.00 cm", get_state_as_dict(height)['Text'])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

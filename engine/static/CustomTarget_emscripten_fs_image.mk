@@ -63,6 +63,7 @@ gb_emscripten_fs_image_files := \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/cellalignment.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/chapterfragment.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/charnamepage.ui \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/colorfillpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/colorfragment.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/colorpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/colorpickerdialog.ui \
@@ -80,6 +81,7 @@ gb_emscripten_fs_image_files := \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/embossdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/eventassigndialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/eventassignpage.ui \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/filleffectsdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/fmsearchdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/fontfeaturesdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/fontfragment.ui \
@@ -137,6 +139,9 @@ gb_emscripten_fs_image_files := \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/paratabspage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/password.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/pastespecial.ui \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/patterndialog.ui \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/patternstylepage.ui \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/patternstylepopup.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/patterntabpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/percentdialog.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/pickbulletpage.ui \

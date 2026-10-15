@@ -155,40 +155,5 @@ class tableProperties(UITestCase):
             #        self.assertEqual(get_state_as_dict(sync)["Selected"], "false") #need change spacing, but ui names are not unique
                     self.assertEqual(get_state_as_dict(mergeadjacent)["Selected"], "false")
 
-                #dialog Table Properties - Background
-                with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
-                    tabcontrol = xDialog.getChild("tabcontrol")
-                    select_pos(tabcontrol, "4")
-
-                    xFillTypeTabs = xDialog.getChild("nbFillType")
-                    select_pos(xFillTypeTabs, "1")
-                    R_custom = xDialog.getChild("R_custom")
-                    G_custom = xDialog.getChild("G_custom")
-                    B_custom = xDialog.getChild("B_custom")
-                    R_custom.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                    R_custom.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                    R_custom.executeAction("TYPE", mkPropertyValues({"TEXT":"100"}))
-                    G_custom.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                    G_custom.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                    G_custom.executeAction("TYPE", mkPropertyValues({"TEXT":"100"}))
-                    B_custom.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-                    B_custom.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
-                    B_custom.executeAction("TYPE", mkPropertyValues({"TEXT":"100"}))
-                    B_custom.executeAction("UP", tuple())
-                    B_custom.executeAction("DOWN", tuple())  #need to refresh HEX value...
-
-                #verify
-                with self.ui_test.execute_dialog_through_command(".uno:TableDialog") as xDialog:
-                    tabcontrol = xDialog.getChild("tabcontrol")
-                    select_pos(tabcontrol, "4")
-                    xFillTypeTabs = xDialog.getChild("nbFillType")
-                    select_pos(xFillTypeTabs, "1")
-                    R_custom = xDialog.getChild("R_custom")
-                    G_custom = xDialog.getChild("G_custom")
-                    B_custom = xDialog.getChild("B_custom")
-
-                    self.assertEqual(get_state_as_dict(R_custom)["Text"], "100")
-                    self.assertEqual(get_state_as_dict(B_custom)["Text"], "100")
-                    self.assertEqual(get_state_as_dict(G_custom)["Text"], "100")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

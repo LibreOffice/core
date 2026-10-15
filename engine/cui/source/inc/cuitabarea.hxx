@@ -186,7 +186,7 @@ inline constexpr OUString TABID_BITMAP = u"lbbitmap"_ustr;
 inline constexpr OUString TABID_PATTERN = u"lbpattern"_ustr;
 inline constexpr OUString TABID_USE_BACKGROUND = u"lbusebackground"_ustr;
 
-class SvxColorTabPage;
+class SvxColorFillTabPage;
 
 /// A dialog with a tab for each of the gradient, hatch and image fills.
 class SvxFillEffectsDialog final : public SfxTabDialogController
@@ -262,6 +262,7 @@ public:
     // Selects a preset, or no pattern for -1.
     void SelectPreset(sal_Int32 nPreset);
     void SelectCustom();
+    const OUString& GetName() const { return m_sName; }
 };
 
 class SvxAreaTabPage : public SfxTabPage
@@ -288,7 +289,6 @@ private:
 
     bool m_bBtnClicked = false;
 
-    std::unique_ptr<weld::Button> m_xBtnMoreEffects;
     // The fills that More effects offers, in tab order. Empty when the page offers no effect.
     std::vector<FillType> m_aEffects;
     // The gradient, hatch, image or pattern fill in use, if any.
@@ -317,12 +317,15 @@ protected:
 private:
     DECL_LINK(SwitchPageHdl_Impl, const OUString&, void);
     DECL_LINK(MoreEffectsHdl_Impl, weld::Button&, void);
-    DECL_LINK(ColorChangedHdl_Impl, SvxColorTabPage&, void);
-    DECL_LINK(NoneSelectedHdl_Impl, SvxColorTabPage&, void);
+    DECL_LINK(CustomPatternHdl_Impl, weld::Button&, void);
+    DECL_LINK(ColorChangedHdl_Impl, SvxColorFillTabPage&, void);
+    DECL_LINK(NoneSelectedHdl_Impl, SvxColorFillTabPage&, void);
     DECL_LINK(PatternChangedHdl_Impl, SvxPatternStyleBox&, void);
-    void CreatePatternStyle();
+    DECL_LINK(UpdatePreviewHdl_Impl, SvxColorFillTabPage&, void);
+    void CreatePatternStyle(SvxColorFillTabPage& rColorPage);
+    void UpdatePreview();
     void FillPatternItemSet(SfxItemSet& rSet);
-    SvxColorTabPage* getColorTabPage();
+    SvxColorFillTabPage* getColorTabPage();
     FillType getCurrentFillType();
     void ClearEffect();
 
@@ -762,13 +765,6 @@ class SvxColorTabPage : public SfxTabPage
 private:
     const SfxItemSet& m_rOutAttrs;
 
-    // Called after the user changes the color, not when the page loads one.
-    Link<SvxColorTabPage&, void> m_aColorChangedHdl;
-    // Called after the user selects None in the palette list. While unset, the list has no None.
-    Link<SvxColorTabPage&, void> m_aNoneSelectedHdl;
-    // The palette whose colors the page shows, which stays the same while None is selected.
-    sal_Int32 m_nPalette = -1;
-
     XColorListRef m_pColorList;
 
     ChangeType* m_pnColorListState;
@@ -825,9 +821,6 @@ private:
     sal_uInt16  PercentToColor_Impl( sal_uInt16 nPercent );
 
     void FillPaletteLB();
-    // The palette index of the selected list entry, or -1 for None or no entry.
-    sal_Int32 GetSelectedPalette() const;
-    void SelectPalette(sal_Int32 nPalette);
 
     DECL_LINK(ClickAddHdl_Impl, weld::Button&, void);
     void NameDialogHdl_Impl(const OUString& rName);
@@ -870,10 +863,6 @@ public:
     void    SetColorList( const XColorListRef& pColList );
 
     void SetColorChgd(ChangeType* pIn) { m_pnColorListState = pIn; }
-    void SetColorChangedHdl(const Link<SvxColorTabPage&, void>& rLink) { m_aColorChangedHdl = rLink; }
-    void SetNoneSelectedHdl(const Link<SvxColorTabPage&, void>& rLink) { m_aNoneSelectedHdl = rLink; }
-    // Shows None in the palette list and the preview, or the palette again.
-    void SetNoFill(bool bNoFill);
 
     virtual void FillUserData() override;
 };
