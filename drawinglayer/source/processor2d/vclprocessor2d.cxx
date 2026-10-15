@@ -158,7 +158,8 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
 
             // tdf#153092 Ideally we don't have to scale the font and dxarray, but we might have
             // to nevertheless if dealing with non integer sizes
-            const bool bScaleFont(aFontSize.getY() != std::round(aFontSize.getY())
+            const double fY = aFontSize.getY();
+            const bool bScaleFont(!basegfx::fTools::equal(fY, std::round(fY))
                                   || comphelper::LibreOfficeKit::isActive());
             vcl::Font aFont;
 
