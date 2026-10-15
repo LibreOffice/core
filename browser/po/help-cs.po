@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-08-16 12:12+0000\n"
-"Last-Translator: Michal Várady <miko.vaji@gmail.com>\n"
+"PO-Revision-Date: 2026-10-14 12:57+0000\n"
+"Last-Translator: Michal Várady <majkl82@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collabora-online/"
 "help/cs/>\n"
 "Language: cs\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -1819,6 +1819,12 @@ msgid ""
 "selected tab again to collapse the tab bar and gain space for the document. "
 "Click any tab to expand it again."
 msgstr ""
+"<span class=\"def\">Karty:</span> Příkazy jsou seskupeny na kartách v horní "
+"části: <span class=\"ui\">Soubor</span>, <span class=\"ui\">Domů</span>, "
+"<span class=\"ui\">Vložit</span>, <span class=\"ui\">Revize</span>, <span "
+"class=\"ui\">Zobrazit</span> a dalších podle typu dokumentu. Opětovným "
+"klepnutím na vybranou kartu sbalíte lištu karet a získáte více místa pro "
+"dokument. Klepnutím na libovolnou kartu ji znovu rozbalíte."
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
 msgid ""
@@ -1973,17 +1979,23 @@ msgid ""
 " in the bottom right corner. New documents and documents created from a "
 "template open ready to edit."
 msgstr ""
+"Existující dokument se otevře v režimu prohlížení, abyste jej mohli číst, "
+"aniž byste jej nechtěně změnili. Chcete-li začít s úpravami, klepněte na "
+"tlačítko úprav (tužku) v pravém dolním rohu. Nové dokumenty a dokumenty "
+"vytvořené ze šablony se otevřou připravené k úpravám."
 
 #: html/cool-help.html%2Bdiv.div.div.p:452-7
 msgid ""
 "If the document is locked by another application, it stays in view mode."
-msgstr ""
+msgstr "Pokud je dokument uzamčen jinou aplikací, zůstane v režimu prohlížení."
 
 #: html/cool-help.html%2Bdiv.div.div.p:456-7
 msgid ""
 "To save the document in a different format use <span class=\"ui\">Save As</"
 "span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
+"Chcete-li dokument uložit v jiném formátu, použijte příkaz <span "
+"class=\"ui\">Uložit jako</span> na kartě <span class=\"ui\">Soubor</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:461-7
 #, fuzzy
@@ -2002,6 +2014,8 @@ msgid ""
 "To print the document, use <span class=\"ui\">Print</span> on the <span "
 "class=\"ui\">File</span> tab."
 msgstr ""
+"Chcete-li dokument vytisknout, použijte příkaz <span class=\"ui\">Tisk</"
+"span> na kartě <span class=\"ui\">Soubor</span>."
 
 #: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
@@ -2025,6 +2039,14 @@ msgid ""
 "Android or iOS selecting text by double tapping, and using a long-tap to "
 "access copy/cut/paste via the context menu is required."
 msgstr ""
+"Je podporováno kopírování, vyjímání a vkládání formátovaného obsahu včetně "
+"obrázků a smíšeného obsahu pomocí klávesových zkratek (<kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, "
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"V</kbd>). V systémech Android a iOS je nutné vybrat text dvojitým klepnutím "
+"a dlouhým klepnutím zobrazit místní nabídku s příkazy pro kopírování, "
+"vyjímání a vkládání."
 
 #: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
@@ -2033,6 +2055,9 @@ msgid ""
 "comes from outside the document, but context menus can be used for cut and "
 "copy."
 msgstr ""
+"Z bezpečnostních důvodů je nutné obsah pocházející mimo dokument vkládat "
+"pomocí <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>V</kbd>. Pro vyjímání a kopírování lze však používat místní nabídky."
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2043,6 +2068,12 @@ msgid ""
 ">{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
+"Při kopírování výběru obsahujícího obrázky nebo jiné objekty se v pravém "
+"dolním rohu zobrazí prvek <span class=\"ui\">Stáhnout výběr</span>. "
+"Stiskněte <span class=\"ui\">Stáhnout</span> a poté výběr znovu zkopírujte, "
+"aby byl obsah dostupný aplikacím mimo <span class=\"productname\">"
+"{productname}</span>. Tento krok také převede složité typy objektů na "
+"statické obrázky."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:487-5
 msgid "Document repair"
@@ -2066,6 +2097,9 @@ msgid ""
 "lists the recent changes to the document and lets you take the document back "
 "to an earlier state."
 msgstr ""
+"Příkaz <span class=\"ui\">Opravit</span> na kartě <span class=\"ui\">Soubor</"
+"span> zobrazí poslední změny dokumentu a umožní vrátit dokument do "
+"dřívějšího stavu."
 
 #: html/cool-help.html%2Bdiv.div.div.p:490-5
 #, fuzzy
@@ -2098,7 +2132,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:495-5
 msgid "Idle document"
-msgstr ""
+msgstr "Neaktivní dokument"
 
 #: html/cool-help.html%2Bdiv.div.div.p:496-5
 #, fuzzy
@@ -2290,6 +2324,9 @@ msgid ""
 ">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
 "computer and insert it into the document."
 msgstr ""
+"<span class=\"def\">Vložení místního obrázku:</span> Zvolte <span "
+"class=\"ui\">Vložit</span> → <span class=\"ui\">Obrázek</span>, vyberte "
+"obrázek ze svého počítače a vložte jej do dokumentu."
 
 #: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
@@ -2972,12 +3009,16 @@ msgid ""
 "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT. "
 "Plain text TXT and Markdown MD"
 msgstr ""
+"Textové dokumenty: formáty společnosti Microsoft DOC, DOCX, RTF. Formát "
+"OpenDocument ODT. Prostý text TXT a Markdown MD"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:699-7
 msgid ""
 "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS. Comma "
 "separated values CSV"
 msgstr ""
+"Sešity: formáty společnosti Microsoft XLS, XLSX, formát OpenDocument ODS. "
+"Hodnoty oddělené čárkami CSV"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:700-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
@@ -3026,6 +3067,9 @@ msgid ""
 "background regularly, you can't just close without saving it. To abandon "
 "your changes, undo them."
 msgstr ""
+"<span class=\"productname\">{productname}</span> pravidelně ukládá dokument "
+"na pozadí, nelze jej tedy jednoduše zavřít bez uložení. Chcete-li své změny "
+"zahodit, vraťte je zpět."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:717-5
 msgid ""
@@ -3069,6 +3113,9 @@ msgid ""
 "On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
 ">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
+"Na kartě <span class=\"ui\">Revize</span> otevřete <span class=\"ui\">"
+"Kontrola pravopisu</span> a zrušte zaškrtnutí volby <span class=\"ui\">"
+"Automatická kontrola pravopisu</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
 msgid "What is the blue wavy underline in some words in the text?"
@@ -3185,6 +3232,8 @@ msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
 "Character</span>. A dialog opens."
 msgstr ""
+"Zvolte <span class=\"ui\">Vložit</span> → <span class=\"ui\">Speciální znak</"
+"span>. Otevře se dialogové okno."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:759-59
 msgid ""
@@ -3406,6 +3455,10 @@ msgid ""
 "svg\" /> on the <span class=\"ui\">Home</span> tab. The mouse pointer turns "
 "to a paint bucket."
 msgstr ""
+"Na kartě <span class=\"ui\">Domů</span> klepněte na ikonu <span class=\"ui\">"
+"Štěteček formátu</span> <img alt=\"štěteček formátu\" class=\"icon-size\" "
+"src=\"images/lc_formatpaintbrush.svg\" />. Ukazatel myši se změní na kbelík "
+"s barvou."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
 msgid "Select the text you want to apply the new format."
@@ -3440,6 +3493,11 @@ msgid ""
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after it "
 "was applied."
 msgstr ""
+"Máte zapnuté automatické opravy. Automatické opravy porovnávají právě "
+"napsaný text s interní tabulkou textů. Ve většině případů opravují překlepy "
+"během psaní. Chcete-li opravu vrátit zpět, stiskněte ihned po jejím "
+"provedení <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Z</kbd>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
@@ -3450,6 +3508,8 @@ msgid ""
 "Insert column and row breaks in the spreadsheet to narrow the print range. "
 "When printing, select the pages of interest."
 msgstr ""
+"Vložte do sešitu zalomení sloupců a řádků, abyste zúžili oblast tisku. Při "
+"tisku vyberte požadované stránky."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:831-5
 msgid "How can I import CSV data?"
@@ -3477,6 +3537,9 @@ msgid ""
 ">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog "
 "opens to let you describe the precise format of the CSV data."
 msgstr ""
+"Stiskněte <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>V</kbd>. Otevře se dialogové okno <span class=\"ui\">Import textu</"
+"span>, ve kterém určíte přesný formát dat CSV."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
 msgid ""
@@ -3508,6 +3571,8 @@ msgid ""
 "This is easy to do using <span class=\"ui\">Clone Formatting</span> on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
+"Snadno to provedete pomocí <span class=\"ui\">Štětečku formátu</span> na "
+"kartě <span class=\"ui\">Domů</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:847-7
 msgid "Format the source cell with the font, color background and more."
