@@ -56,6 +56,7 @@
 #include <dbdata.hxx>
 #include <drawview.hxx>
 #include <document.hxx>
+#include <chgtrack.hxx>
 #include <docsh.hxx>
 #include <formulacell.hxx>
 #include <drwlayer.hxx>
@@ -2863,6 +2864,83 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf173709HyperlinkTitleTextBox)
         pOPO->GetTextObject().GetFieldData(0, 0, text::textfield::Type::URL));
     CPPUNIT_ASSERT(pURLField);
     CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr, pURLField->GetTitle());
+}
+
+namespace
+{
+ScChangeActionState lcl_getChangeState(ScDocShell& rDocSh, const ScAddress& rPos)
+{
+    ScChangeAction* pAction = rDocSh.GetChangeAction(rPos);
+    CPPUNIT_ASSERT(pAction);
+    return pAction->GetState();
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testAcceptRejectTrackedChange)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScDocShell* pDocSh = getScDocShell();
+
+    // Given three tracked edits:
+    dispatchCommand(mxComponent, u".uno:TraceChangeMode"_ustr, {});
+    insertStringToCell(u"A1"_ustr, u"a");
+    insertStringToCell(u"A2"_ustr, u"b");
+    insertStringToCell(u"A3"_ustr, u"c");
+
+    // When accepting the one at the cursor, only that one is accepted:
+    goToCell(u"A2"_ustr);
+    dispatchCommand(mxComponent, u".uno:AcceptTrackedChange"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(SC_CAS_ACCEPTED, lcl_getChangeState(*pDocSh, ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"b"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(SC_CAS_VIRGIN, lcl_getChangeState(*pDocSh, ScAddress(0, 0, 0)));
+
+    // When rejecting the one at the cursor, its edit is undone:
+    goToCell(u"A3"_ustr);
+    dispatchCommand(mxComponent, u".uno:RejectTrackedChange"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(SC_CAS_VIRGIN, lcl_getChangeState(*pDocSh, ScAddress(0, 0, 0)));
+
+    // When going to the previous change from below, the one left pending is selected,
+    // the handled ones are skipped:
+    goToCell(u"C5"_ustr);
+    dispatchCommand(mxComponent, u".uno:PreviousTrackedChange"_ustr, {});
+    checkCurrentCursorPosition(*pDocSh, u"A1");
+
+    // and going on wraps around to the same one:
+    dispatchCommand(mxComponent, u".uno:NextTrackedChange"_ustr, {});
+    checkCurrentCursorPosition(*pDocSh, u"A1");
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testAcceptRejectAllTrackedChanges)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScDocShell* pDocSh = getScDocShell();
+
+    dispatchCommand(mxComponent, u".uno:TraceChangeMode"_ustr, {});
+    insertStringToCell(u"A1"_ustr, u"a");
+    insertStringToCell(u"B2"_ustr, u"b");
+    insertStringToCell(u"A3"_ustr, u"c");
+
+    // Accepting and moving on selects the next change in reading order, not in
+    // recording order:
+    goToCell(u"A1"_ustr);
+    dispatchCommand(mxComponent, u".uno:AcceptTrackedChangeToNext"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(SC_CAS_ACCEPTED, lcl_getChangeState(*pDocSh, ScAddress(0, 0, 0)));
+    checkCurrentCursorPosition(*pDocSh, u"B2");
+
+    // Rejecting all undoes every edit still pending:
+    dispatchCommand(mxComponent, u".uno:RejectAllTrackedChanges"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, pDoc->GetString(ScAddress(0, 2, 0)));
+
+    // Accepting all leaves nothing to accept:
+    insertStringToCell(u"C3"_ustr, u"d");
+    dispatchCommand(mxComponent, u".uno:AcceptAllTrackedChanges"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(SC_CAS_ACCEPTED, lcl_getChangeState(*pDocSh, ScAddress(2, 2, 0)));
+    CPPUNIT_ASSERT(pDocSh->GetPendingChangeActions().empty());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -652,6 +652,10 @@ void ScTabView::SelectionChanged(bool bFromPaste)
     rBindings.Invalidate( FID_INS_CELLSRIGHT );
 
     rBindings.Invalidate( FID_CHG_COMMENT );
+    rBindings.Invalidate( FID_CHG_ACCEPT_DIRECT );
+    rBindings.Invalidate( FID_CHG_REJECT_DIRECT );
+    rBindings.Invalidate( FID_CHG_ACCEPT_TONEXT );
+    rBindings.Invalidate( FID_CHG_REJECT_TONEXT );
 
         // only due to  protect cell:
 

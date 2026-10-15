@@ -23,6 +23,7 @@
 #include <sfx2/passwd.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
+#include <svl/intitem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
@@ -55,8 +56,11 @@
 #include <duplicaterecordsdlg.hxx>
 #include <markdata.hxx>
 #include <cellsuno.hxx>
+#include <chgtrack.hxx>
 
 #include <svl/ilstitem.hxx>
+#include <algorithm>
+#include <tuple>
 #include <vector>
 
 #include <svx/zoomslideritem.hxx>
@@ -1640,6 +1644,78 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             }
             break;
 
+        case FID_CHG_ACCEPT_DIRECT:
+        case FID_CHG_REJECT_DIRECT:
+        case FID_CHG_ACCEPT_TONEXT:
+        case FID_CHG_REJECT_TONEXT:
+            {
+                if (!IsChangeManagementAllowed())
+                    break;
+
+                ScDocShell* pDocSh = GetViewData().GetDocShell();
+                std::vector<ScChangeAction*> aActions;
+                const SfxPoolItem* pItem;
+                if (pReqArgs && pReqArgs->GetItemState(nSlot, false, &pItem) == SfxItemState::SET)
+                {
+                    // the client names the change by its action number
+                    ScChangeTrack* pTrack = GetViewData().GetDocument().GetChangeTrack();
+                    ScChangeAction* pAction = pTrack ? pTrack->GetAction(static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : nullptr;
+                    if (pAction && pAction->IsDialogRoot())
+                        aActions.push_back(pAction);
+                }
+                else
+                    aActions = GetSelectedChangeActions();
+
+                bool bAccept = nSlot == FID_CHG_ACCEPT_DIRECT || nSlot == FID_CHG_ACCEPT_TONEXT;
+                pDocSh->AcceptOrRejectChanges(aActions, bAccept);
+                // a rejection changes the cell content back, which the input line shows
+                UpdateInputHandler(true);
+                if (nSlot == FID_CHG_ACCEPT_TONEXT || nSlot == FID_CHG_REJECT_TONEXT)
+                    GotoChangeAction(true);
+                InvalidateChangeActionSlots();
+                rReq.Done();
+            }
+            break;
+
+        case FID_CHG_ACCEPT_ALL:
+        case FID_CHG_REJECT_ALL:
+            {
+                if (!IsChangeManagementAllowed())
+                    break;
+
+                ScDocument& rDoc = GetViewData().GetDocument();
+                bool bSheetInserted = false;
+                for (const ScChangeAction* pAction = rDoc.GetChangeTrack()->GetFirst(); pAction; pAction = pAction->GetNext())
+                    bSheetInserted |= pAction->GetType() == SC_CAT_INSERT_TABS && pAction->IsDialogRoot();
+
+                GetViewData().GetDocShell()->AcceptOrRejectAllChanges(nSlot == FID_CHG_ACCEPT_ALL);
+                UpdateInputHandler(true);
+                // rejecting may have removed the sheet on screen, as the dialog knows
+                if (nSlot == FID_CHG_REJECT_ALL && bSheetInserted)
+                    SetTabNo(0);
+                InvalidateChangeActionSlots();
+                rReq.Done();
+            }
+            break;
+
+        case FID_CHG_NEXT:
+        case FID_CHG_PREV:
+            {
+                const SfxPoolItem* pItem;
+                if (nSlot == FID_CHG_NEXT && pReqArgs
+                    && pReqArgs->GetItemState(nSlot, false, &pItem) == SfxItemState::SET)
+                {
+                    ScChangeTrack* pTrack = GetViewData().GetDocument().GetChangeTrack();
+                    const ScChangeAction* pAction = pTrack ? pTrack->GetAction(static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : nullptr;
+                    if (pAction)
+                        SelectChangeAction(*pAction);
+                }
+                else
+                    GotoChangeAction(nSlot == FID_CHG_NEXT);
+                rReq.Done();
+            }
+            break;
+
         case SID_CREATE_SW_DRAWVIEW:
             //  is called by Forms, when the DrawView has to be created with all
             //  the extras
@@ -1805,6 +1881,101 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             OSL_FAIL("Unknown Slot at ScTabViewShell::Execute");
             break;
     }
+}
+
+bool ScTabViewShell::IsChangeManagementAllowed()
+{
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScDocument& rDoc = GetViewData().GetDocument();
+    ScChangeTrack* pTrack = rDoc.GetChangeTrack();
+    if (!pTrack || pTrack->IsProtected() || pDocSh->IsReadOnly() || pDocSh->IsDocShared()
+        || !rDoc.IsDocEditable())
+        return false;
+    return !IsKitReadOnlyView() || IsAllowManageRedlines();
+}
+
+std::vector<ScChangeAction*> ScTabViewShell::GetSelectedChangeActions()
+{
+    ScViewData& rData = GetViewData();
+    ScDocShell* pDocSh = rData.GetDocShell();
+    const ScMarkData& rMark = rData.GetMarkData();
+    if (rMark.IsMarked() || rMark.IsMultiMarked())
+    {
+        ScRangeList aRanges;
+        rMark.FillRangeListWithMarks(&aRanges, false);
+        return pDocSh->GetPendingChangeActions(&aRanges);
+    }
+
+    // Without a selection take only the change on top, the one Comment on
+    // Change picks too.
+    ScRangeList aCursor(ScRange(rData.GetCurX(), rData.GetCurY(), rData.CurrentTabForData()));
+    std::vector<ScChangeAction*> aActions = pDocSh->GetPendingChangeActions(&aCursor);
+    if (aActions.size() > 1)
+        aActions.erase(aActions.begin(), aActions.end() - 1);
+    return aActions;
+}
+
+void ScTabViewShell::GotoChangeAction(bool bNext)
+{
+    ScViewData& rData = GetViewData();
+    ScDocument& rDoc = rData.GetDocument();
+    std::vector<ScChangeAction*> aActions = rData.GetDocShell()->GetPendingChangeActions();
+    if (aActions.empty())
+        return;
+
+    // in reading order: sheet, then row, then column
+    auto aKey = [&rDoc](const ScChangeAction* pAction) {
+        ScAddress aPos = ScDocShell::GetChangeActionRange(*pAction, rDoc).aStart;
+        return std::tuple(aPos.Tab(), aPos.Row(), aPos.Col());
+    };
+    std::stable_sort(aActions.begin(), aActions.end(),
+                     [&aKey](const ScChangeAction* pA, const ScChangeAction* pB) { return aKey(pA) < aKey(pB); });
+
+    const auto aCursor = std::tuple(rData.CurrentTabForData(), rData.GetCurY(), rData.GetCurX());
+    const ScChangeAction* pTarget;
+    if (bNext)
+    {
+        auto it = std::find_if(aActions.begin(), aActions.end(),
+                               [&](const ScChangeAction* p) { return aCursor < aKey(p); });
+        // past the last one start over at the top, as Writer does
+        pTarget = it != aActions.end() ? *it : aActions.front();
+    }
+    else
+    {
+        auto it = std::find_if(aActions.rbegin(), aActions.rend(),
+                               [&](const ScChangeAction* p) { return aKey(p) < aCursor; });
+        pTarget = it != aActions.rend() ? *it : aActions.back();
+    }
+    SelectChangeAction(*pTarget);
+}
+
+void ScTabViewShell::SelectChangeAction(const ScChangeAction& rAction)
+{
+    ScRange aRange = ScDocShell::GetChangeActionRange(rAction, GetViewData().GetDocument());
+    if (aRange.aStart == aRange.aEnd)
+    {
+        SetTabNo(aRange.aStart.Tab());
+        Unmark();
+        MoveCursorAbs(aRange.aStart.Col(), aRange.aStart.Row(), SC_FOLLOW_JUMP, false, false);
+    }
+    else
+        MarkRange(aRange);
+}
+
+void ScTabViewShell::InvalidateChangeActionSlots()
+{
+    static sal_uInt16 const aSlots[] = {
+        FID_CHG_ACCEPT_DIRECT,
+        FID_CHG_REJECT_DIRECT,
+        FID_CHG_ACCEPT_TONEXT,
+        FID_CHG_REJECT_TONEXT,
+        FID_CHG_ACCEPT_ALL,
+        FID_CHG_REJECT_ALL,
+        FID_CHG_NEXT,
+        FID_CHG_PREV,
+        0
+    };
+    GetViewFrame().GetBindings().Invalidate(aSlots);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

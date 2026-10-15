@@ -2815,6 +2815,52 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 								'type': 'toolbox',
 								'children': [
 									{
+										'id': 'review-next-tracked-change',
+										'type': 'toolitem',
+										'text': _UNO('.uno:NextTrackedChange', 'spreadsheet'),
+										'command': '.uno:NextTrackedChange',
+										'accessibility': { focusBack: true, combination: 'NC', de: null }
+									}
+								]
+							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'review-previous-tracked-change',
+										'type': 'toolitem',
+										'text': _UNO('.uno:PreviousTrackedChange', 'spreadsheet'),
+										'command': '.uno:PreviousTrackedChange',
+										'accessibility': { focusBack: true, combination: 'PV', de: null }
+									}
+								]
+							}
+						],
+						'vertical': 'true'
+					},
+					{
+						'id': 'review-accept-tracked-change:AcceptTrackedChangesMenu',
+						'type': 'menubutton',
+						'text': _UNO('.uno:AcceptTrackedChange', 'spreadsheet'),
+						'applyCallback': '.uno:AcceptTrackedChangeToNext',
+						'command': '.uno:AcceptTrackedChangeToNext',
+						'accessibility': { focusBack: true, combination: 'AC', de: null }
+					},
+					{
+						'id': 'review-reject-tracked-change:RejectTrackedChangesMenu',
+						'type': 'menubutton',
+						'text': _UNO('.uno:RejectTrackedChange', 'spreadsheet'),
+						'applyCallback': '.uno:RejectTrackedChangeToNext',
+						'command': '.uno:RejectTrackedChangeToNext',
+						'accessibility': { focusBack: true, combination: 'JR', de: null }
+					},
+					{
+						'type': 'container',
+						'children': [
+							{
+								'type': 'toolbox',
+								'children': [
+									{
 										'id': 'review-show-changes',
 										'type': 'toolitem',
 										'text': _UNO('.uno:ShowChanges', 'spreadsheet'),

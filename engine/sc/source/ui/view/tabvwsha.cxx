@@ -67,6 +67,7 @@
 #include <inputhdl.hxx>
 #include <inputwin.hxx>
 #include <markdata.hxx>
+#include <chgtrack.hxx>
 #include <patattr.hxx>
 #include <sc.hrc>
 #include <scabstdlg.hxx>
@@ -82,6 +83,7 @@
 #include <futext.hxx>
 
 #include <memory>
+#include <optional>
 
 using namespace com::sun::star;
 
@@ -201,6 +203,10 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
     SCTAB nTabSelCount = rMark.GetSelectCount();
 
+    // The accept and reject slots share one answer, which takes a walk over the whole change
+    // track, so it is worked out on the first of them asked about.
+    std::optional<bool> oCanAcceptOrRejectSelected;
+
     SfxWhichIter    aIter(rSet);
     sal_uInt16          nWhich = aIter.FirstWhich();
 
@@ -215,6 +221,35 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     if ( pDocSh->IsReadOnly() || !pDocSh->GetChangeAction(aPos) || pDocSh->IsDocShared() )
                         rSet.DisableItem( nWhich );
                 }
+                break;
+
+            case FID_CHG_ACCEPT_DIRECT:
+            case FID_CHG_REJECT_DIRECT:
+            case FID_CHG_ACCEPT_TONEXT:
+            case FID_CHG_REJECT_TONEXT:
+                if (!oCanAcceptOrRejectSelected.has_value())
+                    oCanAcceptOrRejectSelected
+                        = IsChangeManagementAllowed() && !GetSelectedChangeActions().empty();
+                if (!*oCanAcceptOrRejectSelected)
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case FID_CHG_ACCEPT_ALL:
+            case FID_CHG_REJECT_ALL:
+                {
+                    bool bPending = false;
+                    if (IsChangeManagementAllowed())
+                        for (const ScChangeAction* p = rDoc.GetChangeTrack()->GetFirst(); p && !bPending; p = p->GetNext())
+                            bPending = p->IsDialogRoot();
+                    if (!bPending)
+                        rSet.DisableItem( nWhich );
+                }
+                break;
+
+            case FID_CHG_NEXT:
+            case FID_CHG_PREV:
+                if (GetViewData().GetDocShell()->GetPendingChangeActions().empty())
+                    rSet.DisableItem( nWhich );
                 break;
 
             case FID_HANDLEDUPLICATERECORDS:

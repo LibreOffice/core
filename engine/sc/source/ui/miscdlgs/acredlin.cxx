@@ -864,11 +864,7 @@ IMPL_LINK( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef, void )
             }
             return false;
         });
-        ScDocShell* pDocSh=pViewData->GetDocShell();
-        pDocSh->PostPaintExtras();
-        pDocSh->PostPaintGridAll();
-        pDocSh->GetUndoManager()->Clear();
-        pDocSh->SetDocumentModified();
+        pViewData->GetDocShell()->ChangesAcceptedOrRejected(true);
         ClearView();
         UpdateView();
     }
@@ -907,10 +903,7 @@ IMPL_LINK( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef, void )
             }
             return false;
         });
-        ScDocShell* pDocSh=pViewData->GetDocShell();
-        pDocSh->PostPaintExtras();
-        pDocSh->PostPaintGridAll();
-        pDocSh->SetDocumentModified();
+        pViewData->GetDocShell()->ChangesAcceptedOrRejected(false);
         ClearView();
         UpdateView();
     }
@@ -920,10 +913,8 @@ IMPL_LINK( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef, void )
 
 bool ScAcceptChgDlg::IsRedlineMgmtBlocked() const
 {
-    if (pViewData->GetDocShell()->IsReadOnly())
-        return true;
     ScTabViewShell* pSh = pViewData->GetViewShell();
-    return pSh && pSh->IsKitReadOnlyView() && !pSh->IsAllowManageRedlines();
+    return !pSh || !pSh->IsChangeManagementAllowed();
 }
 
 void ScAcceptChgDlg::RejectFiltered()
@@ -980,11 +971,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, RejectAllHandle, SvxTPView*, void)
 
         pViewData->SetTabNo(0);
 
-        ScDocShell* pDocSh=pViewData->GetDocShell();
-        pDocSh->PostPaintExtras();
-        pDocSh->PostPaintGridAll();
-        pDocSh->GetUndoManager()->Clear();
-        pDocSh->SetDocumentModified();
+        pViewData->GetDocShell()->ChangesAcceptedOrRejected(true);
         ClearView();
         UpdateView();
     }
@@ -1009,10 +996,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, void)
         else
             pChanges->AcceptAll();
 
-        ScDocShell* pDocSh=pViewData->GetDocShell();
-        pDocSh->PostPaintExtras();
-        pDocSh->PostPaintGridAll();
-        pDocSh->SetDocumentModified();
+        pViewData->GetDocShell()->ChangesAcceptedOrRejected(false);
         ClearView();
         UpdateView();
     }

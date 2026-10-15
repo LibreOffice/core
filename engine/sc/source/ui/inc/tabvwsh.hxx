@@ -47,6 +47,7 @@ class SdrOle2Obj;
 namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::table { struct CellRangeAddress; }
 class ScTableSheetObj;
+class ScChangeAction;
 class SfxAbstractTabDialog;
 class SfxBindings;
 class SfxChildWindow;
@@ -233,6 +234,12 @@ private:
     bool            IsSignatureLineSelected();
     bool            IsSignatureLineSigned();
     bool            IsQRCodeSelected();
+
+    /// The tracked changes in the selection, or the one on top at the cursor.
+    std::vector<ScChangeAction*> GetSelectedChangeActions();
+    void            GotoChangeAction( bool bNext );
+    void            SelectChangeAction( const ScChangeAction& rAction );
+    void            InvalidateChangeActionSlots();
 
     DECL_LINK( SimpleRefClose, const OUString*, void );
     DECL_LINK( SimpleRefDone, const OUString&, void );
@@ -446,6 +453,8 @@ public:
     static void UpdateNumberFormatter( const SvxNumberInfoItem&  rInfoItem );
 
     void    ExecuteCellFormatDlg( SfxRequest& rReq, const OUString &rTabPage);
+    /// Whether this view may accept or reject tracked changes.
+    bool    IsChangeManagementAllowed();
 
     bool    GetFunction( OUString& rFuncStr, FormulaError nErrCode );
 

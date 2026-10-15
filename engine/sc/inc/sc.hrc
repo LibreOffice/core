@@ -654,6 +654,14 @@ static_assert(SID_PREVIEW_END < SID_KEYFUNC_START, "calc slots ids trampling inf
 #define SID_DUPLICATE_TABLE_STYLE   (SID_NEW_SLOTS+132)
 #define SID_SECURITY_LABEL          (SID_NEW_SLOTS+134) /* SPIF/STANAG security label */
 #define SID_SET_CALC_TABLE_RANGE    TypedWhichId<SfxStringItem>(SID_NEW_SLOTS+135)
+#define FID_CHG_ACCEPT_DIRECT       (SID_NEW_SLOTS+136)
+#define FID_CHG_REJECT_DIRECT       (SID_NEW_SLOTS+137)
+#define FID_CHG_ACCEPT_TONEXT       (SID_NEW_SLOTS+138)
+#define FID_CHG_REJECT_TONEXT       (SID_NEW_SLOTS+139)
+#define FID_CHG_ACCEPT_ALL          (SID_NEW_SLOTS+140)
+#define FID_CHG_REJECT_ALL          (SID_NEW_SLOTS+141)
+#define FID_CHG_NEXT                (SID_NEW_SLOTS+142)
+#define FID_CHG_PREV                (SID_NEW_SLOTS+143)
 
 // idl parameter
 

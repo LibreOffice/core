@@ -252,7 +252,15 @@ public:
     void            MergeDocument( ScDocument& rOtherDoc, bool bShared = false, bool bCheckDuplicates = false, sal_uLong nOffset = 0, ScChangeActionMergeMap* pMergeMap = nullptr, bool bInverseMap = false );
     bool            MergeSharedDocument( ScDocShell* pSharedDocShell );
 
-    ScChangeAction* GetChangeAction( const ScAddress& rPos );
+    SC_DLLPUBLIC ScChangeAction* GetChangeAction( const ScAddress& rPos );
+    /// The changes Manage Changes lists as acceptable, in recording order, limited to the
+    /// ones touching pRanges if given.
+    SC_DLLPUBLIC std::vector<ScChangeAction*> GetPendingChangeActions( const ScRangeList* pRanges = nullptr );
+    static ScRange  GetChangeActionRange( const ScChangeAction& rAction, const ScDocument& rDoc );
+    void            AcceptOrRejectChanges( const std::vector<ScChangeAction*>& rActions, bool bAccept );
+    void            AcceptOrRejectAllChanges( bool bAccept );
+    /// Repaints and updates the document after changes were accepted or rejected.
+    void            ChangesAcceptedOrRejected( bool bRejected );
     void            SetChangeComment( ScChangeAction* pAction, const OUString& rComment );
     void            ExecuteChangeCommentDialog( ScChangeAction* pAction, weld::Window* pParent, bool bPrevNext = true );
                     /// Protect/unprotect ChangeTrack and return <TRUE/> if

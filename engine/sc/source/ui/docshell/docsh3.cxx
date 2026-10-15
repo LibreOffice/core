@@ -626,16 +626,9 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
         //! ScViewUtil::IsActionShown( *pAction, *pSettings, *pDoc )...
         if ( pAction->IsVisible() && eType != SC_CAT_DELETE_TABS )
         {
-            const ScBigRange& rBig = pAction->GetBigRange();
-            if ( rBig.aStart.Tab() == nTab )
+            if ( pAction->GetBigRange().aStart.Tab() == nTab )
             {
-                ScRange aRange = rBig.MakeRange( GetDocument() );
-
-                if ( eType == SC_CAT_DELETE_ROWS )
-                    aRange.aEnd.SetRow( aRange.aStart.Row() );
-                else if ( eType == SC_CAT_DELETE_COLS )
-                    aRange.aEnd.SetCol( aRange.aStart.Col() );
-
+                ScRange aRange = GetChangeActionRange( *pAction, GetDocument() );
                 if ( aRange.Contains( rPos ) )
                 {
                     pFound = pAction;       // the last one wins
@@ -656,6 +649,90 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
     }
 
     return const_cast<ScChangeAction*>(pFound);
+}
+
+ScRange ScDocShell::GetChangeActionRange( const ScChangeAction& rAction, const ScDocument& rDoc )
+{
+    ScRange aRange = rAction.GetBigRange().MakeRange( rDoc );
+    // a deleted row or column is marked on the line that took its place
+    if ( rAction.GetType() == SC_CAT_DELETE_ROWS )
+        aRange.aEnd.SetRow( aRange.aStart.Row() );
+    else if ( rAction.GetType() == SC_CAT_DELETE_COLS )
+        aRange.aEnd.SetCol( aRange.aStart.Col() );
+    return aRange;
+}
+
+std::vector<ScChangeAction*> ScDocShell::GetPendingChangeActions( const ScRangeList* pRanges )
+{
+    std::vector<ScChangeAction*> aActions;
+    ScChangeTrack* pTrack = m_pDocument->GetChangeTrack();
+    if (!pTrack)
+        return aActions;
+
+    for (ScChangeAction* pAction = pTrack->GetFirst(); pAction; pAction = pAction->GetNext())
+    {
+        // Sheet insertions and deletions have no cell to stand on, so only
+        // the dialog and the all-at-once commands reach them.
+        ScChangeActionType eType = pAction->GetType();
+        if (!pAction->IsDialogRoot() || eType == SC_CAT_INSERT_TABS || eType == SC_CAT_DELETE_TABS)
+            continue;
+        if (pRanges && !pRanges->Intersects( GetChangeActionRange( *pAction, *m_pDocument ) ))
+            continue;
+        aActions.push_back( pAction );
+    }
+    return aActions;
+}
+
+void ScDocShell::AcceptOrRejectChanges( const std::vector<ScChangeAction*>& rActions, bool bAccept )
+{
+    ScChangeTrack* pTrack = m_pDocument->GetChangeTrack();
+    if (!pTrack)
+        return;
+
+    bool bChanged = false;
+    // Newest first, as the dialog does for a filtered list.
+    for (auto it = rActions.rbegin(); it != rActions.rend(); ++it)
+    {
+        ScChangeAction* pAction = *it;
+        // an earlier one may have taken this one along as its dependent
+        if (!pAction->IsDialogRoot())
+            continue;
+        if (!bAccept)
+            bChanged |= pTrack->Reject( pAction );
+        else if (pAction->GetType() == SC_CAT_CONTENT)
+            bChanged |= pTrack->SelectContent( pAction );
+        else
+            bChanged |= pTrack->Accept( pAction );
+    }
+    if (!bChanged)
+        return;
+
+    ChangesAcceptedOrRejected(!bAccept);
+    UpdateAcceptChangesDialog();
+}
+
+void ScDocShell::AcceptOrRejectAllChanges( bool bAccept )
+{
+    ScChangeTrack* pTrack = m_pDocument->GetChangeTrack();
+    if (!pTrack)
+        return;
+
+    if (bAccept)
+        pTrack->AcceptAll();
+    else
+        pTrack->RejectAll();
+
+    ChangesAcceptedOrRejected(!bAccept);
+    UpdateAcceptChangesDialog();
+}
+
+void ScDocShell::ChangesAcceptedOrRejected( bool bRejected )
+{
+    PostPaintExtras();
+    PostPaintGridAll();
+    if (bRejected)
+        GetUndoManager()->Clear();
+    SetDocumentModified();
 }
 
 void ScDocShell::SetChangeComment( ScChangeAction* pAction, const OUString& rComment )
