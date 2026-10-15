@@ -13,6 +13,7 @@
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart/ChartErrorCategory.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -64,6 +65,62 @@ sal_Int32 getNumberFormat( const Reference<chart2::XChartDocument>& xChartDoc, c
     CPPUNIT_ASSERT(xNumberFormats.is());
 
     return xNumberFormats->queryKey(sFormat, css::lang::Locale(), false);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testLegacyErrorCategory)
+{
+    loadFromFile(u"xlsx/piechart_outside.xlsx");
+    Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0), UNO_QUERY_THROW);
+    Reference<beans::XPropertySet> xProperties(xChartDoc->getDiagram()->getDataRowProperties(0),
+                                               UNO_SET_THROW);
+    xProperties->setPropertyValue(u"ConstantErrorLow"_ustr, Any(1.25));
+    xProperties->setPropertyValue(u"ConstantErrorHigh"_ustr, Any(2.5));
+    xProperties->setPropertyValue(u"PercentageError"_ustr, Any(3.75));
+    xProperties->setPropertyValue(u"ErrorMargin"_ustr, Any(4.5));
+
+    Reference<chart2::XChartDocument> xChart2Doc(xChartDoc, UNO_QUERY_THROW);
+    Reference<beans::XPropertySet> xSeries(getDataSeriesFromDoc(xChart2Doc, 0), UNO_QUERY_THROW);
+
+    const struct
+    {
+        chart::ChartErrorCategory eCategory;
+        sal_Int32 nStyle;
+        double fPositive;
+        double fNegative;
+    } aCases[] = {
+        { chart::ChartErrorCategory_NONE, chart::ErrorBarStyle::NONE, 0.0, 0.0 },
+        { chart::ChartErrorCategory_VARIANCE, chart::ErrorBarStyle::VARIANCE, 0.0, 0.0 },
+        { chart::ChartErrorCategory_STANDARD_DEVIATION, chart::ErrorBarStyle::STANDARD_DEVIATION,
+          0.0, 0.0 },
+        { chart::ChartErrorCategory_CONSTANT_VALUE, chart::ErrorBarStyle::ABSOLUTE, 2.5, 1.25 },
+        { chart::ChartErrorCategory_PERCENT, chart::ErrorBarStyle::RELATIVE, 3.75, 3.75 },
+        { chart::ChartErrorCategory_ERROR_MARGIN, chart::ErrorBarStyle::ERROR_MARGIN, 4.5, 4.5 },
+    };
+    // Repeat the transitions: each category must recover its own saved amounts.
+    for (int nPass = 0; nPass < 2; ++nPass)
+    {
+        for (const auto& rCase : aCases)
+        {
+            // This used to acquire the same nonrecursive mutex a second time.
+            xProperties->setPropertyValue(u"ErrorCategory"_ustr, Any(rCase.eCategory));
+            CPPUNIT_ASSERT_EQUAL(Any(rCase.eCategory),
+                                 xProperties->getPropertyValue(u"ErrorCategory"_ustr));
+            Reference<beans::XPropertySet> xErrorBar;
+            CPPUNIT_ASSERT(xSeries->getPropertyValue(CHART_UNONAME_ERRORBAR_Y) >>= xErrorBar);
+            CPPUNIT_ASSERT(xErrorBar.is());
+            CPPUNIT_ASSERT_EQUAL(Any(rCase.nStyle),
+                                 xErrorBar->getPropertyValue(u"ErrorBarStyle"_ustr));
+            if (rCase.nStyle == chart::ErrorBarStyle::ABSOLUTE
+                || rCase.nStyle == chart::ErrorBarStyle::RELATIVE
+                || rCase.nStyle == chart::ErrorBarStyle::ERROR_MARGIN)
+            {
+                CPPUNIT_ASSERT_EQUAL(Any(rCase.fPositive),
+                                     xErrorBar->getPropertyValue(u"PositiveError"_ustr));
+                CPPUNIT_ASSERT_EQUAL(Any(rCase.fNegative),
+                                     xErrorBar->getPropertyValue(u"NegativeError"_ustr));
+            }
+        }
+    }
 }
 
 // error bar import

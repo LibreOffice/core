@@ -800,37 +800,37 @@ void DataSeriesPointWrapper::setPropertyValue( const OUString& rPropertyName, co
         switch(aNewValue)
         {
             case css::chart::ChartErrorCategory_CONSTANT_VALUE:
-                aHigh = getPropertyValue(u"ConstantErrorHigh"_ustr);
-                aLow = getPropertyValue(u"ConstantErrorLow"_ustr);
+                aHigh = WrappedPropertySet::getPropertyValue(aGuard, u"ConstantErrorHigh"_ustr);
+                aLow = WrappedPropertySet::getPropertyValue(aGuard, u"ConstantErrorLow"_ustr);
                 bSetHighAndLowValues = true;
                 break;
             case css::chart::ChartErrorCategory_PERCENT:
-                aHigh = aLow = getPropertyValue(u"PercentageError"_ustr);
+                aHigh = aLow = WrappedPropertySet::getPropertyValue(aGuard, u"PercentageError"_ustr);
                 bSetHighAndLowValues = true;
                 break;
             case css::chart::ChartErrorCategory_ERROR_MARGIN:
-                aHigh = aLow = getPropertyValue(u"ErrorMargin"_ustr);
+                aHigh = aLow = WrappedPropertySet::getPropertyValue(aGuard, u"ErrorMargin"_ustr);
                 bSetHighAndLowValues = true;
                 break;
             default:
                 break;
         }
 
-        WrappedPropertySet::setPropertyValue( rPropertyName, rValue );
+        WrappedPropertySet::setPropertyValue( aGuard, rPropertyName, rValue );
 
         if(bSetHighAndLowValues)
         {
             switch(aNewValue)
             {
                 case css::chart::ChartErrorCategory_CONSTANT_VALUE:
-                    setPropertyValue(u"ConstantErrorHigh"_ustr,aHigh);
-                    setPropertyValue(u"ConstantErrorLow"_ustr,aLow);
+                    WrappedPropertySet::setPropertyValue(aGuard, u"ConstantErrorHigh"_ustr, aHigh);
+                    WrappedPropertySet::setPropertyValue(aGuard, u"ConstantErrorLow"_ustr, aLow);
                     break;
                 case css::chart::ChartErrorCategory_PERCENT:
-                    setPropertyValue(u"PercentageError"_ustr,aHigh);
+                    WrappedPropertySet::setPropertyValue(aGuard, u"PercentageError"_ustr, aHigh);
                     break;
                 case css::chart::ChartErrorCategory_ERROR_MARGIN:
-                    setPropertyValue(u"ErrorMargin"_ustr,aHigh);
+                    WrappedPropertySet::setPropertyValue(aGuard, u"ErrorMargin"_ustr, aHigh);
                     break;
                 default:
                     break;
