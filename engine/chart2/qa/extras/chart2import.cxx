@@ -14,6 +14,7 @@
 #include <com/sun/star/chart2/DataPointCustomLabelFieldType.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/ChartErrorCategory.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -150,6 +151,30 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testLegacyErrorCategory)
             }
         }
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testLegacyTitlePropertyDefaults)
+{
+    loadFromFile(u"ods/tdf39052.ods");
+    Reference<chart2::XChartDocument> xChart2Doc = getChartDocFromSheet(0);
+    Reference<chart::XChartDocument> xChartDoc(xChart2Doc, UNO_QUERY_THROW);
+    Reference<beans::XPropertySet> xTitle(xChartDoc->getTitle(), UNO_QUERY_THROW);
+    Reference<beans::XPropertyState> xState(xTitle, UNO_QUERY_THROW);
+
+    // The character setter used to call the locking title getter while holding
+    // the same nonrecursive mutex.
+    Any aHeightDefault = xState->getPropertyDefault(u"CharHeight"_ustr);
+    CPPUNIT_ASSERT(aHeightDefault.hasValue());
+    xTitle->setPropertyValue(u"CharHeight"_ustr, Any(28.0f));
+    xState->setPropertyToDefault(u"CharHeight"_ustr);
+    CPPUNIT_ASSERT(xTitle->getPropertyValue(u"CharHeight"_ustr).hasValue());
+
+    // The noncharacter paths used to call locking base-class methods.
+    Any aStringDefault = xState->getPropertyDefault(u"String"_ustr);
+    CPPUNIT_ASSERT_EQUAL(Any(OUString()), aStringDefault);
+    xTitle->setPropertyValue(u"String"_ustr, Any(u"Changed"_ustr));
+    xState->setPropertyToDefault(u"String"_ustr);
+    CPPUNIT_ASSERT_EQUAL(aStringDefault, xTitle->getPropertyValue(u"String"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testLegacyLegendDisposeDuringPropertySet)

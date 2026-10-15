@@ -433,15 +433,21 @@ void TitleWrapper::setPropertyToDefault( const OUString& rPropertyName )
     sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
     {
-        Any aDefault = getPropertyDefault( rPropertyName );
+        Any aDefault = getPropertyDefault( aGuard, rPropertyName );
         setFastCharacterPropertyValue( aGuard, nHandle, aDefault );
     }
     else
-        WrappedPropertySet::setPropertyToDefault( rPropertyName );
+        WrappedPropertySet::setPropertyToDefault( aGuard, rPropertyName );
 }
 Any TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
 {
     std::unique_lock aGuard(m_aMutex);
+    return getPropertyDefault(aGuard, rPropertyName);
+}
+
+Any TitleWrapper::getPropertyDefault( std::unique_lock<std::mutex>& aGuard,
+                                      const OUString& rPropertyName )
+{
     Any aRet;
 
     sal_Int32 nHandle = getInfoHelper(aGuard).getHandleByName( rPropertyName );
@@ -458,7 +464,7 @@ Any TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
         }
     }
     else
-        aRet = WrappedPropertySet::getPropertyDefault( rPropertyName );
+        aRet = WrappedPropertySet::getPropertyDefault( aGuard, rPropertyName );
 
     return aRet;
 }

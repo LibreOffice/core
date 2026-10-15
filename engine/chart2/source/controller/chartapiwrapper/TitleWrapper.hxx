@@ -95,6 +95,8 @@ public:
     virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties() override;
 
 private:
+    cpo::uno::Any getPropertyDefault( std::unique_lock<std::mutex>& rGuard,
+                                     const OUString& rPropertyName );
     cpo::uno::Reference< css::chart2::XTitle > getTitleObject();
 
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;

@@ -371,10 +371,15 @@ Sequence< beans::PropertyState > WrappedPropertySet::getPropertyStates( const Se
 void WrappedPropertySet::setPropertyToDefault( const OUString& rPropertyName )
 {
     std::unique_lock aGuard(m_aMutex);
+    setPropertyToDefault(aGuard, rPropertyName);
+}
+
+void WrappedPropertySet::setPropertyToDefault( std::unique_lock<std::mutex>& rGuard, const OUString& rPropertyName )
+{
     Reference< beans::XPropertyState > xInnerPropertyState( getInnerPropertyState() );
     if( xInnerPropertyState.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( aGuard, rPropertyName );
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( rGuard, rPropertyName );
         if( pWrappedProperty )
             pWrappedProperty->setPropertyToDefault( xInnerPropertyState );
         else
@@ -384,11 +389,16 @@ void WrappedPropertySet::setPropertyToDefault( const OUString& rPropertyName )
 Any WrappedPropertySet::getPropertyDefault( const OUString& rPropertyName )
 {
     std::unique_lock aGuard(m_aMutex);
+    return getPropertyDefault(aGuard, rPropertyName);
+}
+
+Any WrappedPropertySet::getPropertyDefault( std::unique_lock<std::mutex>& rGuard, const OUString& rPropertyName )
+{
     Any aRet;
     Reference< beans::XPropertyState > xInnerPropertyState( getInnerPropertyState() );
     if( xInnerPropertyState.is() )
     {
-        const WrappedProperty* pWrappedProperty = getWrappedProperty( aGuard, rPropertyName );
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( rGuard, rPropertyName );
         if( pWrappedProperty )
             aRet = pWrappedProperty->getPropertyDefault(xInnerPropertyState);
         else

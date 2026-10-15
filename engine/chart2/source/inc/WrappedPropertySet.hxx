@@ -79,7 +79,9 @@ public:
     css::beans::PropertyState getPropertyState( std::unique_lock<std::mutex>& rGuard, const OUString& PropertyName );
     virtual cpo::uno::Sequence< css::beans::PropertyState > getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override;
     virtual void setPropertyToDefault( const OUString& PropertyName ) override;
+    void setPropertyToDefault( std::unique_lock<std::mutex>& rGuard, const OUString& PropertyName );
     virtual cpo::uno::Any getPropertyDefault( const OUString& aPropertyName ) override;
+    cpo::uno::Any getPropertyDefault( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName );
 
     //XMultiPropertyStates
     //getPropertyStates() already declared in XPropertyState
