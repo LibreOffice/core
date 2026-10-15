@@ -1449,7 +1449,7 @@ export class Comment extends CanvasSectionObject {
 			return;
 		}
 
-		if (e.keyCode !== 27)
+		if (e.key !== 'Escape')
 			this.clearStatus(); // the Escape hint is stale after any other key
 
 		if (this.isCtrlEnter(e)) {
@@ -1464,7 +1464,7 @@ export class Comment extends CanvasSectionObject {
 			return;
 		}
 
-		if (e.keyCode === 27 /* Esc */) {
+		if (e.key === 'Escape') {
 			// When a comment is being edited and focus is in the textbox,
 			// Esc should not close it but mark it with attention, unless
 			// closing it discards nothing.
