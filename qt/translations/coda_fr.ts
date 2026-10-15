@@ -121,19 +121,19 @@
     </message>
     <message>
         <source>Export Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;export</translation>
     </message>
     <message>
         <source>Failed to export the document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de l&apos;export du document.</translation>
     </message>
     <message>
         <source>Cannot open remote document</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ouvrir le document distant</translation>
     </message>
     <message>
         <source>the Collabora Online server</source>
-        <translation type="unfinished"></translation>
+        <translation>le serveur Collabora Online</translation>
     </message>
     <message>
         <source>Save File</source>
@@ -157,38 +157,38 @@
     </message>
     <message>
         <source>Template Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de Modèle</translation>
     </message>
     <message>
         <source>Could not create a new document from this template.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de créer un nouveau document à partir de ce modèle.</translation>
     </message>
     <message>
         <source>New Document Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouvelle erreur de document</translation>
     </message>
     <message>
         <source>Could not create a new document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de créer un nouveau document.</translation>
     </message>
     <message>
         <source>Supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers supportés</translation>
     </message>
 </context>
 <context>
     <name>TabManager</name>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermer</translation>
     </message>
     <message>
         <source>Close Others</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermer les Autres</translation>
     </message>
     <message>
         <source>Move Tab to New Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer l&apos;onglet vers une nouvelle fenêtre</translation>
     </message>
 </context>
 <context>

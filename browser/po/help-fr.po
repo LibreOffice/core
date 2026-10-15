@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-07 16:42+0000\n"
-"Last-Translator: Méven Car <meven.car@collabora.com>\n"
+"PO-Revision-Date: 2026-10-15 13:24+0000\n"
+"Last-Translator: Méven Car <meven@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "help/fr/>\n"
 "Language: fr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -147,7 +147,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-38
 msgid "Open the context menu at the cursor or the selected cell"
-msgstr ""
+msgstr "Ouvrez le menu contextuel au curseur ou à la cellule sélectionnée"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
@@ -165,6 +165,9 @@ msgid ""
 "Move focus to the next area of the application (menu bar, formula bar, "
 "document, sidebar, sheet tabs, status bar)"
 msgstr ""
+"Déplacer le focus sur la zone suivante de l'application (barre de menu, "
+"barre de formule, document, barre latérale, onglets de feuille, barre de "
+"statut)"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-178
 msgid "F6"
@@ -172,7 +175,7 @@ msgstr "F6"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-38
 msgid "Move focus to the previous area of the application"
-msgstr ""
+msgstr "Déplacer le focus sur la zone précédente de l'application"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
 #, fuzzy
@@ -1380,7 +1383,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-38
 msgid "Selects the entire column of the current cell."
-msgstr ""
+msgstr "Sélectionne la colonne entière de la cellule actuelle."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
 #, fuzzy
@@ -1393,7 +1396,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
 msgid "Selects the entire row of the current cell."
-msgstr ""
+msgstr "Sélectionne la ligne entière de la cellule actuelle."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
 #, fuzzy
@@ -1409,12 +1412,17 @@ msgid ""
 "Opens the context menu of the focused sheet tab (insert, rename, delete, "
 "hide, move, and more)."
 msgstr ""
+"Ouvre le menu contextuel de l'onglet de la feuille ciblée (insérer, "
+"renommer, supprimer, cacher, déplacer, et plus)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
 msgid ""
 "With a whole column or row selected, opens the matching column or row header "
 "context menu (insert, delete, width or height, hide, and more)."
 msgstr ""
+"Avec une colonne ou une rangée entière sélectionnée, ouvre le menu "
+"contextuel de colonne ou d'en-tête de rangée (insérer, supprimer, largeur ou "
+"hauteur, cacher, et plus)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid ""
@@ -1672,7 +1680,7 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
 #: html/cool-help.html%2Bdiv.div.h3:439-5
 msgid "Opening, closing, saving and printing documents"
-msgstr ""
+msgstr "Ouverture, fermeture, sauvegarde et impression de documents"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
 #: html/cool-help.html%2Bdiv.div.h3:478-5
@@ -1777,6 +1785,12 @@ msgid ""
 ">You can work alone on a document, or collaboratively as part of a "
 "team.</span>"
 msgstr ""
+"<span class=\"productname\">{productname}</span> vous permet de créer et de "
+"modifier des documents de bureau, des documents de texte, des feuilles de "
+"calcul et des présentations, <span class=\"webBasedCOOLOnly\">directement "
+"dans votre navigateur,</span> de manière simple et simple. <span "
+"class=\"webBasedCOOLOnly\">Vous pouvez travailler seul sur un document ou en "
+"collaboration dans le cadre d'une équipe.</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:386-7
 msgid ""
@@ -1838,6 +1852,13 @@ msgid ""
 "selected tab again to collapse the tab bar and gain space for the document. "
 "Click any tab to expand it again."
 msgstr ""
+"<span class=\"def\">Les onglets:</span> Les commandes sont groupées sur les "
+"onglets en haut : <span class=\"ui\">Fichier</span>, <span class=\"ui\">"
+"Accueil</span>, <span class=\"ui\">Insertion</span>, <span class=\"ui\">"
+"Révision</span>, <span class=\"ui\">Affichage</span> et autres, selon le "
+"type de document. Cliquez à nouveau sur l'onglet sélectionné pour effondrer "
+"la barre d'onglet et gagner de l'espace pour le document. Cliquez sur "
+"n'importe quel onglet pour l'étendre à nouveau."
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
 msgid ""
@@ -1861,6 +1882,9 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Barre de statut indiquant le numéro de page, le nombre de mots, le mode "
+"d'insertion, le mode de sélection, la langue, le mode d'édition, la "
+"navigation, le zoom et la recherche"
 
 #: html/cool-help.html%2Bdiv.div.div.p:415-5
 msgid ""
@@ -1984,6 +2008,10 @@ msgid ""
 ">{productname}</span> from your platform's file manager or use <span class="
 "\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
+"Pour ouvrir un document, ouvrez-le soit dans <span class=\"productname\">"
+"{productname}</span> du gestionnaire de fichiers de votre plateforme ou "
+"utilisez <span class=\"ui\">Ouvrir</span> sur l'onglet <span class=\"ui\">"
+"Fichier</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
@@ -1992,17 +2020,27 @@ msgid ""
 " in the bottom right corner. New documents and documents created from a "
 "template open ready to edit."
 msgstr ""
+"Un document existant s'ouvre en mode visualisation, afin que vous puissiez "
+"le lire sans le modifier par accident. Pour commencer l'édition, cliquez sur "
+"le bouton d'édition (le crayon) dans le coin inférieur droit. Les nouveaux "
+"documents et documents créés à partir d'un modèle sont ouverts prêt à "
+"modifier."
 
 #: html/cool-help.html%2Bdiv.div.div.p:452-7
 msgid ""
 "If the document is locked by another application, it stays in view mode."
 msgstr ""
+"Si le document est verrouillé par une autre application, il reste en mode "
+"visualisation."
 
 #: html/cool-help.html%2Bdiv.div.div.p:456-7
 msgid ""
 "To save the document in a different format use <span class=\"ui\">Save As</"
 "span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
+"Pour sauvegarder le document dans un format différent utiliser <span "
+"class=\"ui\">Enregistrer Sous</span> sur l'onglet <span class=\"ui\">"
+"Fichier</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:461-7
 msgid ""
@@ -2010,12 +2048,18 @@ msgid ""
 "to be saved right away you can use <span class=\"ui\">Save</span> on the "
 "<span class=\"ui\">File</span> tab."
 msgstr ""
+"Les documents sont automatiquement sauvegardés périodiquement, mais si vous "
+"voulez qu'un document soit sauvegardé immédiatement, vous pouvez utiliser "
+"<span class=\"ui\">Sauvegarder</span> sur l'onglet <span class=\"ui\">"
+"Fichier</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:467-7
 msgid ""
 "To print the document, use <span class=\"ui\">Print</span> on the <span "
 "class=\"ui\">File</span> tab."
 msgstr ""
+"Pour imprimer le document, utilisez <span class=\"ui\">Imprimer</span> dans "
+"l'onglet <span class=\"ui\">Fichier</span>."
 
 #: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
@@ -2040,6 +2084,14 @@ msgid ""
 "Android or iOS selecting text by double tapping, and using a long-tap to "
 "access copy/cut/paste via the context menu is required."
 msgstr ""
+"La copie/coupe de contenu riche est supportée, y compris les images et le "
+"contenu mixte, en utilisant les raccourcis clavier (<kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>,<kbd>Ctrl</kbd>"
+"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>,<kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</"
+"kbd>) Sur Android ou iOS en sélectionnant le texte en tapant deux fois, et "
+"en utilisant un appui long pour accéder à copier/couper/coller via le menu "
+"contextuel est nécessaire."
 
 #: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
@@ -2048,6 +2100,10 @@ msgid ""
 "comes from outside the document, but context menus can be used for cut and "
 "copy."
 msgstr ""
+"Pour des raisons de sécurité, il est nécessaire d'utiliser <kbd>Ctrl</kbd>"
+"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> pour "
+"coller du contenu provenant de l'extérieur du document, mais les menus "
+"contextuels peuvent être utilisés pour couper et copier."
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2058,6 +2114,12 @@ msgid ""
 ">{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
+"Lorsque vous copiez une sélection contenant des images ou d'autres objets, "
+"un widget <span class=\"ui\">Télécharger la sélection</span> apparaît dans "
+"le coin inférieur droit. Appuyez sur <span class=\"ui\">Télécharger</span>, "
+"puis copier à nouveau, pour rendre le contenu disponible aux applications "
+"extérieures <span class=\"productname\">{name}</span>. Cette étape convertit "
+"également des types d'objets complexes en images statiques."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:487-5
 msgid "Document repair"
@@ -2082,6 +2144,9 @@ msgid ""
 "lists the recent changes to the document and lets you take the document back "
 "to an earlier state."
 msgstr ""
+"<span class=\"ui\">Restaurer</span> dans l'onglet <span class=\"ui\">"
+"Fichier</span> énumère les modifications récentes du document et vous permet "
+"de ramener le document à un état antérieur."
 
 #: html/cool-help.html%2Bdiv.div.div.p:490-5
 #, fuzzy
@@ -2097,6 +2162,8 @@ msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Dialogue de restauration de document listant les états de document passés "
+"avec des colonnes pour type d'action, auteur, et heure"
 
 #: html/cool-help.html%2Bdiv.div.div.p:492-5
 msgid ""
@@ -2113,7 +2180,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:495-5
 msgid "Idle document"
-msgstr ""
+msgstr "Document sans activité"
 
 #: html/cool-help.html%2Bdiv.div.div.p:496-5
 #, fuzzy
@@ -2134,6 +2201,8 @@ msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Fenêtre de document sans activité avec le message : document sans activité - "
+"cliquer pour recharger et reprendre l'édition"
 
 #: html/cool-help.html%2Bdiv.div.div.p:498-5
 msgid ""
@@ -2235,6 +2304,8 @@ msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"Boîte de dialogue assistant de Diagramme avec liste de type graphique à "
+"gauche, prévisualisation de style graphique, options 3D et forme"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:520-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2246,6 +2317,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Graphique de colonne avec barres groupées montrant des données pour quatre "
+"rangées sur trois colonnes"
 
 #: html/cool-help.html%2Bdiv.div.div.p:524-28
 msgid ""
@@ -2309,6 +2382,9 @@ msgid ""
 ">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
 "computer and insert it into the document."
 msgstr ""
+"<span class=\"def\">Insérer une image locale :</span> Choisir <span "
+"class=\"ui\">Insérer</span> → <span class=\"ui\">Image</span> pour choisir "
+"une image de votre ordinateur et l'insérer dans le document."
 
 #: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
@@ -2340,6 +2416,8 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
+"Boîte de commentaire indiquant le nom de l'auteur, la date et le texte de "
+"commentaire, affiché à côté du document"
 
 #: html/cool-help.html%2Bdiv.div.div.p:538-5
 msgid ""
@@ -2368,7 +2446,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:543-54
 msgid "Text with a red wavy underline beneath a misspelled word"
-msgstr ""
+msgstr "Texte avec un rouge ondulé sous un mot mal épelé"
 
 #: html/cool-help.html%2Bdiv.div.div.p:544-5
 #, fuzzy
@@ -2420,6 +2498,8 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
+"Bar de formule montrant l'icône de référence de la cellule B1, et la formule "
+"=SIN(PI()*A1/10)"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:559-5
 msgid ""
@@ -2459,6 +2539,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"Boîte de dialogue Formatage des Cellules dans l'onglet Format avec liste de "
+"catégorie, options de format, lieux décimaux et code de format"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:571-30
 msgid ""
@@ -2499,6 +2581,9 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"Menu déroulant Auto-filtre sur une colonne de feuille de calcul avec tri, "
+"filtre par couleur, filtre par condition, et cases à cocher pour des valeurs "
+"individuelles"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:578-7
 msgid ""
@@ -2538,6 +2623,9 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Feuille de calcul avec les options de regroupement de lignes et de colonnes "
+"montrant les boutons de niveau des contours et de bascule effondrement/"
+"étendre"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
@@ -2564,6 +2652,9 @@ msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
+"Dialogue de validation dans l'onglet Critères avec Autoriser de lister les "
+"options de valeur, montrant les options pour les cellules vides, la liste de "
+"sélection et les valeurs d'entrée"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:593-7
 msgid ""
@@ -2591,6 +2682,8 @@ msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
+"Liste déroulante de cellules indiquant des entrées validées telles que "
+"Apple, Pear, Banana, Kiwi et Lemon"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:598-7
 msgid ""
@@ -2620,6 +2713,8 @@ msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
+"Cellule de feuille de calcul avec une popup de commentaire montrant "
+"l'auteur, la date, le texte du commentaire et les boutons Sauvegarder/Annuler"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:606-5
 #, fuzzy
@@ -2641,6 +2736,9 @@ msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+"Sélectionneur d'icône de formatage conditionnel montrant des flèches, des "
+"cercles, des feux de circulation, des étoiles, des visages souriants et des "
+"groupes de diagramme en barres"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:615-30
 msgid ""

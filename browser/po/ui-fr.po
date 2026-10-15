@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-13 18:14+0000\n"
+"PO-Revision-Date: 2026-10-15 13:25+0000\n"
 "Last-Translator: Méven Car <meven@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/fr/>\n"
@@ -580,15 +580,15 @@ msgstr "Taille image"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:731
 msgid "Request timeout"
-msgstr ""
+msgstr "Délai d'attente dépassé de la requête"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:734
 msgid "Client ID"
-msgstr ""
+msgstr "ID du Client"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:735
 msgid "Secret"
-msgstr ""
+msgstr "Secret"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:738
 msgid "In-document Screen Reader"
@@ -1092,11 +1092,11 @@ msgstr "Accessibilité"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2856
 msgid "User interface zoom"
-msgstr ""
+msgstr "Zoom de l'Interface utilisateur"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2861
 msgid "Magnify the whole window, including the document and the menus."
-msgstr ""
+msgstr "Agrandir toute la fenêtre, y compris le document et les menus."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2867
 msgid "As per system"
@@ -7940,7 +7940,7 @@ msgstr "Taille de la forme sélectionnée"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:73
 msgid "Shape Size"
-msgstr ""
+msgstr "Taille de la forme"
 
 #: src/control/jsdialog/Widget.HTMLContent.ts:79
 #, fuzzy
@@ -7967,7 +7967,7 @@ msgstr "Mode édition"
 
 #: src/control/jsdialog/Widget.LineWidthCustom.ts:77
 msgid "Last Custom Value"
-msgstr ""
+msgstr "Dernière valeur définie"
 
 #: src/control/jsdialog/Widget.MobileBorderSelector.js:111
 msgid "Cell borders"
@@ -7975,15 +7975,15 @@ msgstr "Bordures de cellule"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:107
 msgid "New Table Style..."
-msgstr ""
+msgstr "Nouveau style de tableau..."
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:119
 msgid "Clear Style"
-msgstr ""
+msgstr "Retirer le style"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:145
 msgid "Open Styles Sidebar"
-msgstr ""
+msgstr "Ouvrir le panneau latéral Styles"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:261
 msgid "Scroll up"
@@ -7995,7 +7995,7 @@ msgstr "Faire défiler vers le bas"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:281
 msgid "More options"
-msgstr ""
+msgstr "Plus d’options"
 
 #: src/control/jsdialog/Widget.PushButton.ts:19
 msgid "Select range"
@@ -8003,7 +8003,7 @@ msgstr "Sélectionner la plage"
 
 #: src/control/jsdialog/Widget.ProgressDots.tsx:57
 msgid "Step %1 of %2"
-msgstr ""
+msgstr "Étape %1 de %2"
 
 #: src/control/jsdialog/Widget.Comment.ts:151
 msgid "reply"
@@ -8015,11 +8015,11 @@ msgstr "réponses"
 
 #: src/control/jsdialog/Widget.SpinField.ts:279
 msgid "Increment value"
-msgstr ""
+msgstr "Valeur d'incrément"
 
 #: src/control/jsdialog/Widget.SpinField.ts:288
 msgid "Decrement value"
-msgstr ""
+msgstr "Value de décrément"
 
 #: src/control/jsdialog/Widget.SidebarContainers.tsx:145
 #: src/control/jsdialog/Widget.SidebarContainers.tsx:205
@@ -8028,15 +8028,15 @@ msgstr "Plus d’options pour {1}"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1771
 msgid "Cell value"
-msgstr ""
+msgstr "Valeur de la cellule"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1775
 msgid "row %1"
-msgstr ""
+msgstr "ligne %1"
 
 #: src/control/jsdialog/Widget.TreeView.ts:1784
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: src/control/jsdialog/Widget.TreeView.ts:2558
 msgid "Headings and objects that you add to the document will appear here"
@@ -8060,7 +8060,7 @@ msgstr ""
 
 #: src/app/Socket.ts:676
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "La connexion au document a été perdue."
 
 #: src/app/Socket.ts:677
 msgid "The server has been disconnected."
@@ -8080,11 +8080,11 @@ msgstr "Export réussi : "
 
 #: src/app/Socket.ts:1204
 msgid "This document has links to external content."
-msgstr ""
+msgstr "Ce document a des liens vers du contenu externe."
 
 #: src/app/Socket.ts:1205
 msgid "Allow"
-msgstr ""
+msgstr "Autoriser"
 
 #: src/app/Socket.ts:1880
 msgid "Discard"
@@ -8130,7 +8130,7 @@ msgstr "Un mauvais serveur, reconnecter..."
 
 #: src/app/Socket.ts:2142
 msgid "Unsupported version."
-msgstr ""
+msgstr "Version non prise en charge."
 
 #: src/app/Socket.ts:2143
 msgid "Unsupported server version."
@@ -8158,11 +8158,11 @@ msgstr "Seul le propriétaire du document peut changer le mot de passe."
 
 #: src/app/Socket.ts:2681
 msgid "You do not have permission to edit this document."
-msgstr ""
+msgstr "Vous n'avez pas la permission de modifier ce document."
 
 #: src/app/Socket.ts:2682
 msgid "The document could not be made editable."
-msgstr ""
+msgstr "Le document ne peut être modifié."
 
 #: src/app/Socket.ts:2752 src/app/Socket.ts:2763
 msgid "Missing Fonts"
@@ -8198,15 +8198,15 @@ msgstr "Le serveur est en train de s'arrêter"
 
 #: src/docdispatcher.ts:674
 msgid "AI is not configured, contact your administrator"
-msgstr ""
+msgstr "L'IA n'est pas configuré, contactez votre administrateur"
 
 #: src/docdispatcher.ts:979
 msgid "Delete section"
-msgstr ""
+msgstr "Supprimer la section"
 
 #: src/docdispatcher.ts:986
 msgid "Delete slides"
-msgstr ""
+msgstr "Supprimer les diapositives"
 
 #: src/docdispatcher.ts:987
 #, fuzzy
@@ -8217,13 +8217,13 @@ msgstr[1] "supprimer %n Diapos"
 
 #: src/docdispatcher.ts:991
 msgid "Delete pages"
-msgstr ""
+msgstr "Supprimer des pages"
 
 #: src/docdispatcher.ts:992
 msgid "Delete %n page?"
 msgid_plural "Delete %n pages?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Supprimer la page %n ?"
+msgstr[1] "Supprimer les pages %n ?"
 
 #: src/docstate.ts:154
 msgid "Standard"
@@ -8247,7 +8247,7 @@ msgstr "{0} onglet sélectionné"
 
 #: src/errormessages.ts:16
 msgid "No disk space left."
-msgstr ""
+msgstr "Il ne reste plus d'espace disque disponible."
 
 #: src/errormessages.ts:17
 msgid "No disk space left on server."
@@ -8313,12 +8313,15 @@ msgstr "Paramètre WOPISrc manquant ou faux, veuillez contacter le support."
 #: src/errormessages.ts:39
 msgid "Your session will end in {time}. Refresh the page to continue."
 msgstr ""
+"Votre session se terminera dans {time}. Rafraîchissez la page pour continuer."
 
 #: src/errormessages.ts:42
 msgid ""
 "Your session has ended. Further changes to the document might not be saved. "
 "Refresh the page to continue."
 msgstr ""
+"Votre session s'est terminée. D'autres modifications au document pourraient "
+"ne pas être sauvegardées. Rafraîchissez la page pour continuer."
 
 #: src/errormessages.ts:45
 msgid ""
@@ -8494,7 +8497,7 @@ msgstr "Diapositives"
 
 #: src/layer/marker/A11yTextInput.js:348
 msgid "Heading level {0}"
-msgstr ""
+msgstr "Niveau d'en-tête {0}"
 
 #: src/layer/marker/A11yTextInput.js:884
 msgid "Out of table"
@@ -8503,20 +8506,20 @@ msgstr "Hors de la table"
 #: src/layer/marker/A11yTextInput.js:889
 msgid "%n row"
 msgid_plural "%n rows"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n ligne"
+msgstr[1] "%n lignes"
 
 #: src/layer/marker/A11yTextInput.js:890
 msgid "%n column"
 msgid_plural "%n columns"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n colonne"
+msgstr[1] "%n colonnes"
 
 #. TRANSLATORS: {0} is a row count, {1} a column count, both already
 #. TRANSLATORS: in their plural form, e.g. "3 rows" and "1 column"
 #: src/layer/marker/A11yTextInput.js:893
 msgid "Table with {0} and {1}"
-msgstr ""
+msgstr "Tableau avec {0} et {1}"
 
 #: src/layer/marker/A11yTextInput.js:898
 msgid "Row {0} through {1}"
@@ -8611,7 +8614,7 @@ msgstr ""
 
 #: src/map/Clipboard.js:209
 msgid "Copying from the document has been disabled by your administrator"
-msgstr ""
+msgstr "La copie depuis le document a été désactivée par votre administrateur"
 
 #: src/map/Clipboard.js:322
 msgid "warning: copy/paste request timed out"
@@ -8623,7 +8626,7 @@ msgstr "Échec au téléchargement du presse-papiers, veuillez copier à nouveau
 
 #: src/map/Clipboard.js:406
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Échec du transfert dans le presse-papier"
 
 #: src/map/Clipboard.js:1541
 msgid ""
@@ -8638,10 +8641,12 @@ msgid ""
 "Your browser has very limited access to the clipboard, so use these "
 "keyboard shortcuts:"
 msgstr ""
+"Votre navigateur a un accès très limité au presse-papiers, utilisez ces "
+"raccourcis clavier :"
 
 #: src/map/Clipboard.js:1581
 msgid "Cut"
-msgstr ""
+msgstr "Couper"
 
 #: src/map/Clipboard.js:1597
 msgid ""
@@ -8730,7 +8735,7 @@ msgstr "Le téléversement sur le serveur a échoué avec le statut : {0}"
 
 #: src/map/handler/Map.FileInserter.js:293
 msgid "Failed to read the selected file."
-msgstr ""
+msgstr "Échec de la lecture du fichier sélectionné."
 
 #: src/map/handler/Map.Print.js:44
 msgid "Print dialog"
@@ -8744,7 +8749,7 @@ msgstr "Présentation vide"
 #: src/map/handler/Map.SlideShow.js:60
 #: src/slideshow/SlideShowPresenter.ts:1442
 msgid "All slides are hidden!"
-msgstr ""
+msgstr "Toutes les diapositives sont cachées !"
 
 #: src/map/handler/Map.SlideShow.js:175
 #: src/slideshow/SlideShowPresenter.ts:1469
@@ -8770,7 +8775,7 @@ msgstr "Présentation dans une fenêtre : "
 #: src/map/handler/Map.SlideShow.js:210
 #: src/slideshow/SlideShowPresenter.ts:1277
 msgid "Presenting in another window"
-msgstr ""
+msgstr "Présentation en cours dans une autre fenêtre"
 
 #: src/map/handler/Map.SlideShow.js:211
 #: src/slideshow/SlideShowPresenter.ts:1278
@@ -8807,11 +8812,11 @@ msgstr "Le mode présentation a été désactivé pour ce document"
 
 #: src/map/handler/Map.StateChanges.js:149
 msgid "Apply this order to your presentation?"
-msgstr ""
+msgstr "Appliquez cette commande à votre présentation ?"
 
 #: src/map/handler/Map.StateChanges.js:149
 msgid "Update Slides"
-msgstr ""
+msgstr "Mettre à jour les diapositives"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -8842,18 +8847,19 @@ msgstr "Boîte de dialogue de bienvenue"
 #: src/map/handler/Map.Settings.ts:295
 msgid "Settings saved. Add an API key to use the AI assistant."
 msgstr ""
+"Paramètres sauvegardés. Ajoutez une clé API pour utiliser l'assistant IA."
 
 #: src/map/handler/Map.Settings.ts:300
 msgid "Settings saved"
-msgstr ""
+msgstr "Paramètres enregistrés"
 
 #: src/slideshow/engine/SlideShowHandler.ts:117
 msgid "First"
-msgstr ""
+msgstr "Premier"
 
 #: src/slideshow/engine/SlideShowHandler.ts:118
 msgid "Skip All"
-msgstr ""
+msgstr "Tout ignorer"
 
 #: src/slideshow/engine/SlideShowHandler.ts:119
 #, fuzzy
@@ -8892,15 +8898,15 @@ msgstr "Résumer"
 
 #: src/slideshow/engine/SlideShowHandler.ts:396
 msgid "Animation: {0}, {1}"
-msgstr ""
+msgstr "Animation : {0}, {1}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:400
 msgid "Animation: {0}"
-msgstr ""
+msgstr "Animation : {0}"
 
 #: src/slideshow/engine/SlideShowHandler.ts:547
 msgid "Transition: {0}"
-msgstr ""
+msgstr "Transition : {0}"
 
 #: src/slideshow/PauseTimer.ts:141
 msgid "Pause... ( %SECONDS% )"
@@ -8919,7 +8925,7 @@ msgstr "Désactiver les animations"
 #: src/slideshow/PresenterConsole.js:38
 #: src/slideshow/SlideShowPresenter.ts:997
 msgid "Exchange"
-msgstr ""
+msgstr "Échanger"
 
 #: src/slideshow/PresenterConsole.js:39
 msgid "Pause"
@@ -8957,11 +8963,11 @@ msgstr "Zoom arrière"
 
 #: src/slideshow/PresenterConsole.js:47
 msgid "Preview of the current slide"
-msgstr ""
+msgstr "Aperçu de la diapositive actuelle"
 
 #: src/slideshow/PresenterConsole.js:48
 msgid "Preview of the next slide"
-msgstr ""
+msgstr "Aperçu de la diapositive suivante"
 
 #: src/slideshow/PresenterConsole.js:206
 msgid "Preview Slide {1}"
@@ -8969,11 +8975,11 @@ msgstr "Prévisualiser diapositive {1}"
 
 #: src/slideshow/PresenterConsole.js:829
 msgid "You are leaving the presentation."
-msgstr ""
+msgstr "Vous quittez la présentation."
 
 #: src/slideshow/PresenterConsole.js:830
 msgid "The link is not valid."
-msgstr ""
+msgstr "Le lien n'est pas valide."
 
 #: src/slideshow/PresenterConsole.js:1162
 #: src/slideshow/SlideShowPresenter.ts:980
@@ -9001,11 +9007,11 @@ msgstr "Cliquez pour quitter la présentation …"
 
 #: src/slideshow/SlideShowPresenter.ts:896
 msgid "You are on the first slide"
-msgstr ""
+msgstr "Vous êtes sur la première diapositive"
 
 #: src/slideshow/SlideShowPresenter.ts:904
 msgid "Waiting for presenter to advance"
-msgstr ""
+msgstr "Attendre que le présentateur avance"
 
 #: src/slideshow/SlideShowPresenter.ts:1694
 #, fuzzy
@@ -9014,75 +9020,75 @@ msgstr "Ne plus suivre"
 
 #: src/control/Control.Extension.ts:657 src/control/Control.Extension.ts:745
 msgid "Extension command failed: %1"
-msgstr ""
+msgstr "La commande Extension a échoué : %1"
 
 #: templates/templates.js:6 templates/templates.js:10
 msgid "Business Letter"
-msgstr ""
+msgstr "Lettre commercial"
 
 #: templates/templates.js:16 templates/templates.js:20
 msgid "Classic Business Letter"
-msgstr ""
+msgstr "Lettre Commerciale Classique"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
-msgstr ""
+msgstr "CV"
 
 #: templates/templates.js:36
 msgid "Resume (one-page)"
-msgstr ""
+msgstr "CV (une page)"
 
 #: templates/templates.js:56 templates/templates.js:60
 msgid "Modern Style"
-msgstr ""
+msgstr "Style moderne"
 
 #: templates/templates.js:66 templates/templates.js:70
 msgid "Simple Style"
-msgstr ""
+msgstr "Style simple"
 
 #: templates/templates.js:76 templates/templates.js:80
 msgid "Beehive"
-msgstr ""
+msgstr "Ruche"
 
 #: templates/templates.js:86 templates/templates.js:90
 msgid "Blue Curve"
-msgstr ""
+msgstr "Courbe bleue"
 
 #: templates/templates.js:96 templates/templates.js:100
 msgid "Blueprint Plans"
-msgstr ""
+msgstr "Plans d'ébauche"
 
 #: templates/templates.js:106 templates/templates.js:110
 msgid "Candy"
-msgstr ""
+msgstr "Candy"
 
 #: templates/templates.js:116 templates/templates.js:120
 msgid "DNA"
-msgstr ""
+msgstr "ADN"
 
 #: templates/templates.js:126 templates/templates.js:130
 msgid "Focus"
-msgstr ""
+msgstr "Focus"
 
 #: templates/templates.js:136 templates/templates.js:140
 msgid "Forestbird"
-msgstr ""
+msgstr "Oiseaux en forêt"
 
 #: templates/templates.js:146 templates/templates.js:150
 msgid "Freshes"
-msgstr ""
+msgstr "Nuages"
 
 #: templates/templates.js:156 templates/templates.js:160
 msgid "Grey Elegant"
-msgstr ""
+msgstr "Gris élégant"
 
 #: templates/templates.js:166 templates/templates.js:170
 msgid "Growing Liberty"
-msgstr ""
+msgstr "Accroissement de Liberté"
 
 #: templates/templates.js:176 templates/templates.js:180
 msgid "Inspiration"
-msgstr ""
+msgstr "Inspiration"
 
 #: templates/templates.js:186 templates/templates.js:190
 #, fuzzy
@@ -9091,55 +9097,55 @@ msgstr "Serré"
 
 #: templates/templates.js:196 templates/templates.js:200
 msgid "Metropolis"
-msgstr ""
+msgstr "Metropolis"
 
 #: templates/templates.js:206 templates/templates.js:210
 msgid "Midnight Blue"
-msgstr ""
+msgstr "Bleu Minuit"
 
 #: templates/templates.js:216 templates/templates.js:220
 msgid "Nature Illustration"
-msgstr ""
+msgstr "Illustration de Nature"
 
 #: templates/templates.js:226 templates/templates.js:230
 msgid "Pencil"
-msgstr ""
+msgstr "Crayon"
 
 #: templates/templates.js:236 templates/templates.js:240
 msgid "Piano"
-msgstr ""
+msgstr "Piano"
 
 #: templates/templates.js:246 templates/templates.js:250
 msgid "Portfolio"
-msgstr ""
+msgstr "Portfolio"
 
 #: templates/templates.js:256 templates/templates.js:260
 msgid "Progress"
-msgstr ""
+msgstr "Progrès"
 
 #: templates/templates.js:266 templates/templates.js:270
 msgid "Sunset"
-msgstr ""
+msgstr "Couché de soleil"
 
 #: templates/templates.js:276 templates/templates.js:279
 msgid "Vintage"
-msgstr ""
+msgstr "Vintage"
 
 #: templates/templates.js:286 templates/templates.js:290
 msgid "Vivid"
-msgstr ""
+msgstr "Vif"
 
 #: templates/templates.js:296 templates/templates.js:300
 msgid "Yellow Idea"
-msgstr ""
+msgstr "Idée jaune"
 
 #: introdocs/introdocs.js:5 introdocs/introdocs.js:8
 msgid "Welcome to Spreadsheet"
-msgstr ""
+msgstr "Bienvenue au Tableur"
 
 #: introdocs/introdocs.js:13 introdocs/introdocs.js:16
 msgid "Welcome to Presentation"
-msgstr ""
+msgstr "Bienvenue à la Présentation"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"

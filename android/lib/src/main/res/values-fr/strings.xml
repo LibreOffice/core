@@ -23,4 +23,9 @@
     <string name="ask_for_convert_odf">Confirmer le format du fichier</string>
     <string name="use_odf">Utilisation du format ODF</string>
     <string name="use_text">Utilisez le format Texte</string>
+    <string name="all_files_access_title">Ouvert en mode lecture seule</string>
+    <string name="all_files_access_message">L\'application qui a partagé ce fichier n\'a pas permis que des modifications y soient sauvegardées.\n\nAutoriser « Tous les accès fichiers » pour permettre à cette application d\'écrire le fichier là où il est stocké, afin que vous puissiez l\'éditer ici.</string>
+    <string name="all_files_access_grant">Permettre l\'accès</string>
+    <string name="do_not_ask_again">Ne plus demander</string>
+    <string name="failed_to_save_file">Impossible d\'enregistrer les modifications dans le fichier</string>
 </resources>
