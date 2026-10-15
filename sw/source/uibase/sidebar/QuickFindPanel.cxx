@@ -710,8 +710,16 @@ void QuickFindPanel::FillSearchFindsList()
     m_xSearchFindsList->set_sensitive(bool(nSearchFindFoundTimes));
 
     // set the search term found label number of times found
-    OUString sText(SwResId(STR_SEARCH_KEY_FOUND_TIMES, nSearchFindFoundTimes));
-    sText = sText.replaceFirst("%1", OUString::number(nSearchFindFoundTimes));
+    OUString sText;
+    if (nSearchFindFoundTimes == 0)
+    {
+        sText = SwResId(STR_SEARCH_KEY_NOT_FOUND);
+    }
+    else
+    {
+        sText = SwResId(STR_SEARCH_KEY_FOUND_TIMES, nSearchFindFoundTimes);
+        sText = sText.replaceFirst("%1", OUString::number(nSearchFindFoundTimes));
+    }
     m_xSearchFindFoundTimesLabel->set_label(sText);
 }
 }
