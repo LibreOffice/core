@@ -1353,6 +1353,23 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testMultipleCustomTableStylesReloadXLSX)
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, wholeTableBackground(pTwo));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testNamedRangeErrorReferenceXLSX)
+{
+    // Col_C has the target Sheet1!#REF!. The save keeps that target, and keeps Col_C as one
+    // name for the whole document rather than a copy in each sheet.
+    createScDoc("xlsx/named-range-error-reference.xlsx");
+
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pWorkbook = parseExport(u"xl/workbook.xml"_ustr);
+    CPPUNIT_ASSERT(pWorkbook);
+    assertXPath(pWorkbook, "/x:workbook/x:definedNames/x:definedName[@name='Col_C']", 1);
+    assertXPathContent(pWorkbook, "/x:workbook/x:definedNames/x:definedName[@name='Col_C']",
+                       u"Sheet1!#REF!");
+    assertXPathNoAttribute(pWorkbook, "/x:workbook/x:definedNames/x:definedName[@name='Col_C']",
+                           "localSheetId");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1577,8 +1577,14 @@ struct ConventionXL_OOX : public ConventionXL_A1
 
         if (rRef.Ref1.IsDeleted() || (!bSingleRef && rRef.Ref2.IsDeleted()))
         {
-            // For OOXML write plain "#REF!" instead of detailed sheet/col/row
-            // information.
+            // A reference that kept its sheet and lost its column and row is written as
+            // Sheet1!#REF!. Every other deleted reference is written as a plain #REF!.
+            if (bSingleRef && rRef.Ref1.IsFlag3D() && !rRef.Ref1.IsTabDeleted()
+                && rRef.Ref1.IsColDeleted() && rRef.Ref1.IsRowDeleted()
+                && o3tl::make_unsigned(rRef.Ref1.toAbs(rLimits, rPos).Tab()) < rTabNames.size())
+            {
+                ConventionXL::MakeTabStr(rLimits, rBuf, rPos, rTabNames, rRef, bSingleRef);
+            }
             rBuf.append(rErrRef);
             return;
         }
@@ -3606,7 +3612,9 @@ bool ScCompiler::ParseSingleReference( const OUString& rName, const OUString* pE
         aRef.InitAddress( aAddr );
         aRef.SetColRel(((nFlags & ScRefFlags::COL_ABS) == ScRefFlags::ZERO) && !bErrRef);
         aRef.SetRowRel(((nFlags & ScRefFlags::ROW_ABS) == ScRefFlags::ZERO) && !bErrRef);
-        aRef.SetTabRel( (nFlags & ScRefFlags::TAB_ABS) == ScRefFlags::ZERO );
+        // The parse of Sheet1!#REF! stops at the error value, so the flags carry no absolute
+        // sheet. The sheet of such a reference is absolute, like its column and row.
+        aRef.SetTabRel(((nFlags & ScRefFlags::TAB_ABS) == ScRefFlags::ZERO) && !bErrRef);
         aRef.SetFlag3D( ( nFlags & ScRefFlags::TAB_3D ) != ScRefFlags::ZERO );
         // the reference is really invalid
         if( !( nFlags & ScRefFlags::VALID ) )
