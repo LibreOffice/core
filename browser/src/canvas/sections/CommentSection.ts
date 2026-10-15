@@ -1653,13 +1653,16 @@ export class Comment extends CanvasSectionObject {
 		const props = this.sectionProperties;
 		if (props.nodeReply.style.display !== 'none')
 			return props.nodeReplyText.innerText.trim() !== '';
-		const node = props.nodeModifyText.cloneNode(true) as HTMLElement;
-		this.removeLastBRTag(node);
-		// a new comment has no original text; a posted one may have only HTML
+		// a new comment has no original text; one without HTML, as in Impress, has text only
 		const origHTML = props.contentText.origHTML || '';
-		if (origHTML)
+		if (origHTML) {
+			const node = props.nodeModifyText.cloneNode(true) as HTMLElement;
+			this.removeLastBRTag(node);
 			return origHTML !== node.innerHTML;
-		return (props.contentText.origText || '').trim() !== node.innerText.trim();
+		}
+		// innerText has line breaks and single spaces only where the element is laid out
+		const text = (s: string) => s.replace(/[ \t]+/g, ' ').replace(/ ?\n ?/g, '\n').trim();
+		return text(props.contentText.origText || '') !== text(props.nodeModifyText.innerText);
 	}
 
 	private announceUnsavedText(): void {

@@ -198,6 +198,23 @@ describe(['tagdesktop'], 'Collapsed Annotation Tests', function() {
 		cy.cGet('.annotation-marker').should('not.exist');
 	});
 
+	// A comment here has text only, no HTML, so its line breaks are compared as text.
+	it('Escape closes an unchanged comment of two lines', function() {
+		desktopHelper.insertComment('first line', false);
+		cy.cGet('.cool-annotation').last().find('.modify-annotation .cool-annotation-textarea')
+			.type('{enter}second line');
+		cy.cGet('[id^=annotation-save-]').click();
+		cy.cGet('[id^=annotation-content-area-]').should('contain', 'second line');
+		cy.cGet('.cool-annotation-table .avatar-img').click();
+		cy.cGet('.cool-annotation-menu').click();
+		cy.cGet('body').contains('.ui-combobox-entry.jsdialog.ui-grid-cell', 'Modify').click();
+		cy.cGet('[id^=annotation-modify-textarea-]').should('have.focus');
+
+		cy.realPress('Escape');
+		cy.cGet('[id^=annotation-modify-textarea-]').should('not.be.visible');
+		cy.cGet('[id^=annotation-content-area-]').should('contain', 'first line');
+	});
+
 	// Skipping reply tests in Impress since reply functionality is temporarily disabled.
 	it.skip('Reply',function() {
 		desktopHelper.insertComment();
