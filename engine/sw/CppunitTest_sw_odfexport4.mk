@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_odfexport4, \
     sfx \
     subsequenttest \
     svl \
+    svx \
     sw \
     swqahelper \
     test \

@@ -33,8 +33,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uwriter, \
     cui \
     cppu \
     cppuhelper \
-    $(call gb_Helper_optional,DBCONNECTIVITY, \
-        dbtools) \
+    dbtools \
     docmodel \
     drawinglayer \
     drawinglayercore \

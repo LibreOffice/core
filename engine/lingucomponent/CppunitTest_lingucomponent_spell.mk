@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_libraries,lingucomponent_spell, \
     comphelper \
     cppu \
     cppuhelper \
+    i18nlangtag \
     sal \
     test \
     unotest \
