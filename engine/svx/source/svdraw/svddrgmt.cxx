@@ -2475,8 +2475,12 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
         aNewFract = cos(toRadians(nTmpAngle));
     }
 
-    if (nNewAngle > 8900_deg100)
-        nNewAngle = 8900_deg100;
+    // Upside down the angle is taken back by half a turn and may be negative, so it is held to
+    // the shear an object can hold on both sides.
+    if (nNewAngle > SDRMAXSHEAR)
+        nNewAngle = SDRMAXSHEAR;
+    if (nNewAngle < -SDRMAXSHEAR)
+        nNewAngle = -SDRMAXSHEAR;
 
     if (bNeg)
         nNewAngle=-nNewAngle;
