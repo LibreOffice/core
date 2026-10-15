@@ -23,6 +23,10 @@
 	background-image: url('images/cursor-handler.svg');
 }
 
+html[data-bg-theme='dark'] .cursor-handler {
+	background-image: url('images/dark/cursor-handler.svg');
+}
+
 .html-object-section {
 	display: block;
 	position: absolute;
