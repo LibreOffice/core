@@ -39,6 +39,7 @@
 #include <frmatr.hxx>
 #include <cellfrm.hxx>
 #include <pagefrm.hxx>
+#include <shellres.hxx>
 #include <tabcol.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -4056,7 +4057,12 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes,
     TableStyleName aPrevFormat = pTableNd->GetTable().GetTableStyleName();
     if (pStyleNameToSet)
     {   // tdf#98226 do this here where undo can record it
-        pTableNd->GetTable().SetTableStyleName(*pStyleNameToSet);
+
+        // The 'None' style is special in table styles. Clear the template-name in that case.
+        if (*pStyleNameToSet == SwViewShell::GetShellRes()->aStrNone)
+            pTableNd->GetTable().SetTableStyleName(TableStyleName());
+        else
+            pTableNd->GetTable().SetTableStyleName(*pStyleNameToSet);
     }
 
     const SwTableAutoFormat rStyle = *GetTableStyles().GetResolvedStyle(&rNew);
