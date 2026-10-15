@@ -32,8 +32,6 @@
 
 namespace
 {
-constexpr size_t DEFAULT_STYLE = 0;
-
 class SvxStringInputDlg : public SfxDialogController
 {
 private:
@@ -123,7 +121,7 @@ void SvxTableAutoFmtDlg::Init()
         return;
     }
 
-    mnIndex = DEFAULT_STYLE;
+    mnIndex = 0;
     PopulateFormatList();
     mxLbFormat->select(mnIndex);
     SelFormatHdl(*mxLbFormat);
@@ -158,7 +156,8 @@ void SvxTableAutoFmtDlg::PopulateFormatList()
 
 void SvxTableAutoFmtDlg::UpdateUIState()
 {
-    const bool bCanModify = mnIndex != DEFAULT_STYLE && mnIndex < mpFormat.size();
+    const size_t nDefaultStyle = mbWriter ? 1 : 0;
+    const bool bCanModify = mnIndex > nDefaultStyle && mnIndex < mpFormat.size();
     mxBtnRename->set_sensitive(bCanModify);
     mxBtnRemove->set_sensitive(bCanModify);
     mxBtnEdit->set_sensitive(bCanModify);

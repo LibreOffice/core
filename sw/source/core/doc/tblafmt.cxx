@@ -46,6 +46,7 @@
 #include <editeng/wghtitem.hxx>
 #include <unostyle.hxx>
 #include <names.hxx>
+#include <strings.hrc>
 
 #include <memory>
 #include <utility>
@@ -660,6 +661,13 @@ struct SwTableAutoFormatTable::Impl
 SwTableAutoFormatTable::SwTableAutoFormatTable()
     : m_pImpl(new Impl)
 {
+    // Add 'None'' style as first Writer autoformat table (since table styles don't work well)
+    // Exceptional handling: special name must exactly match SwViewShell::GetShellRes()->aStrNone
+    std::unique_ptr<SwTableAutoFormat> pNoneStyle(
+        new SwTableAutoFormat(TableStyleName(SwResId(STR_TEMPLATE_NONE))));
+    pNoneStyle->DisableAll();
+    m_pImpl->m_AutoFormats.emplace_back(std::move(pNoneStyle));
+
     Load(true);
 
     for (size_t i = 0; i < size(); i++)

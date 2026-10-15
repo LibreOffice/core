@@ -165,7 +165,7 @@ class CheckStyle(unittest.TestCase):
     def test_TableFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xTableStyles = xDoc.StyleFamilies["TableStyles"]
-        vEmptyDocStyles = ["Default Style", "Academic", "Box List Blue","Box List Green", "Box List Red", "Box List Yellow", "Elegant", "Financial", "Simple Grid Columns", "Simple Grid Rows", "Simple List Shaded"]
+        vEmptyDocStyles = ["None", "Default Style", "Academic", "Box List Blue","Box List Green", "Box List Red", "Box List Yellow", "Elegant", "Financial", "Simple Grid Columns", "Simple Grid Rows", "Simple List Shaded"]
         self.__test_StyleFamily(xTableStyles, vEmptyDocStyles, "SwXTextTableStyle")
         self.__test_StyleFamilyIndex(xTableStyles, vEmptyDocStyles, "SwXTextTableStyle")
         self.__test_StyleFamilyInsert(xDoc, xTableStyles, vEmptyDocStyles, "com.sun.star.style.TableStyle", "com.sun.star.style.CharacterStyle")
@@ -209,7 +209,7 @@ class CheckStyle(unittest.TestCase):
     def test_CellFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xCellStyles = xDoc.StyleFamilies["CellStyles"]
-        tableStyles = ["Default Style", "Academic", "Box List Blue","Box List Green", "Box List Red", "Box List Yellow", "Elegant", "Financial", "Simple Grid Columns", "Simple Grid Rows", "Simple List Shaded"]
+        tableStyles = ["None", "Default Style", "Academic", "Box List Blue","Box List Green", "Box List Red", "Box List Yellow", "Elegant", "Financial", "Simple Grid Columns", "Simple Grid Rows", "Simple List Shaded"]
         vEmptyDocStyles = [f"{style}.{num}" for style in tableStyles for num in range(1, 17)]
         self.__test_StyleFamily(xCellStyles, vEmptyDocStyles, "SwXTextCellStyle")
         self.__test_StyleFamilyIndex(xCellStyles, vEmptyDocStyles, "SwXTextCellStyle")

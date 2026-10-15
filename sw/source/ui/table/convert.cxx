@@ -204,7 +204,7 @@ void SwConvertTableDlg::Init()
     m_xLbFormat->connect_selection_changed(LINK(this, SwConvertTableDlg, SelFormatHdl));
 
     size_t nCount = m_xTableTable->size();
-    m_nIndex = -1; // Do NOT select a table style by default. They just don't work well.
+    m_nIndex = 0;
 
     for (size_t i = 0; i < nCount; ++i)
     {

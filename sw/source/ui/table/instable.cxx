@@ -141,7 +141,7 @@ void SwInsTableDlg::InitAutoTableFormat()
         m_xLbFormat->append_text((*m_xTableTable)[i].GetName().toString());
     }
 
-    m_xLbFormat->select(-1); // Do NOT select a table style by default. They just don't work well.
+    m_xLbFormat->select(0);
 
     SelFormatHdl( *m_xLbFormat );
 }

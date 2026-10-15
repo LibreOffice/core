@@ -1339,8 +1339,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableAutoFormats)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
 
-    // Check table styles size, by default we have 11 styles
-    CPPUNIT_ASSERT_EQUAL(size_t(11), pDoc->GetTableStyles().size());
+    // Check table styles size, by default we have 11 styles (plus a None style)
+    CPPUNIT_ASSERT_EQUAL(size_t(12), pDoc->GetTableStyles().size());
 
     // Create new style
     SwTableAutoFormat aNewStyle(TableStyleName(u"TestStyle"_ustr));
@@ -1368,7 +1368,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableAutoFormats)
     pDoc->GetTableStyles().AddAutoFormat(aNewStyle);
 
     // Test the number of styles after adding the new style
-    CPPUNIT_ASSERT_EQUAL(size_t(12), pDoc->GetTableStyles().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(13), pDoc->GetTableStyles().size());
 
     // Save and reload the document
     saveAndReload(TestFilter::ODT);
@@ -1376,7 +1376,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableAutoFormats)
     pDoc = getSwDoc();
 
     // Test whether the new style is added
-    CPPUNIT_ASSERT_EQUAL(size_t(12), pDoc->GetTableStyles().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(13), pDoc->GetTableStyles().size());
 
     // Test that the new styles has all the new properties
     uno::Sequence<beans::PropertyValue> aArgs(

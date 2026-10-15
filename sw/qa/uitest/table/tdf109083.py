@@ -22,7 +22,7 @@ class tdf109083(UITestCase):
             for i in range(0, 2):
                 with self.ui_test.execute_dialog_through_command(".uno:InsertTable") as xDialog:
                     formatlbinstable = xDialog.getChild("formatlbinstable")
-                    entry = formatlbinstable.getChild("0")
+                    entry = formatlbinstable.getChild("1")
                     entry.executeAction("SELECT", tuple())
                 xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE":"RETURN"}))
 
