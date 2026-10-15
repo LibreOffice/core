@@ -1032,6 +1032,36 @@ bool Window::DeleteSurroundingText(const Selection& rSelection)
     return false;
 }
 
+namespace
+{
+bool lcl_showsPart(SfxViewShell& rViewShell, const SfxObjectShell* pDocShell, int nPart,
+                   int nMode)
+{
+    return rViewShell.GetObjectShell() == pDocShell && rViewShell.getPart() == nPart
+           && rViewShell.getEditMode() == nMode;
+}
+
+// Every view showing a slide invalidates it on its own, and exactly one of them passes the
+// invalidation on to the views showing other slides: the current view when it shows the slide,
+// as it is the one making the change, else the first view that shows it. The second case
+// covers a change the current view makes to a slide it does not show.
+bool lcl_passesInvalidationOn(SfxViewShell& rViewShell, int nPart, int nMode)
+{
+    const SfxObjectShell* pDocShell = rViewShell.GetObjectShell();
+    SfxViewShell* pCurrent = SfxViewShell::Current();
+    if (pCurrent && lcl_showsPart(*pCurrent, pDocShell, nPart, nMode))
+        return pCurrent == &rViewShell;
+
+    for (SfxViewShell* pView = SfxViewShell::GetFirst(); pView;
+         pView = SfxViewShell::GetNext(*pView))
+    {
+        if (lcl_showsPart(*pView, pDocShell, nPart, nMode))
+            return pView == &rViewShell;
+    }
+    return false;
+}
+}
+
 void Window::LogicInvalidate(const ::tools::Rectangle* pRectangle)
 {
     DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(mpViewShell);
@@ -1059,10 +1089,12 @@ void Window::LogicInvalidate(const ::tools::Rectangle* pRectangle)
     // A view that shows another page has no window on this page, so this is the only notice it
     // gets of the change. Its client still shows a preview of this page. The views showing this
     // page get the change from their own window.
-    KitHelper::notifyInvalidationViewsInMode(pDrawViewShell->GetDoc()->getUnoModel(),
-                                             rSfxViewShell.getPart(),
-                                             rSfxViewShell.getEditMode(), pResultRectangle,
-                                             /*bSkipViewShowingPart=*/true);
+    const int nPart = pDrawViewShell->GetCurPagePos();
+    const int nMode = rSfxViewShell.getEditMode();
+    if (lcl_passesInvalidationOn(rSfxViewShell, nPart, nMode))
+        KitHelper::notifyInvalidationViewsInMode(pDrawViewShell->GetDoc()->getUnoModel(), nPart,
+                                                 nMode, pResultRectangle,
+                                                 /*bSkipViewShowingPart=*/true);
 }
 
 FactoryFunction Window::GetUITestFactory() const

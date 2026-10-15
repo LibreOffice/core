@@ -882,6 +882,85 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorViews)
     CPPUNIT_ASSERT(aView2.m_bTilesInvalidated);
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewOnOtherSlideGetsEachChangeOnce)
+{
+    // A presentation is open in three views. The first two show the first slide, and the third
+    // one shows the second slide.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    int nView1 = KitHelper::getCurrentView();
+    SdTestViewCallback aView1;
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
+    SdTestViewCallback aView2;
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
+    SdTestViewCallback aView3;
+    pXImpressDocument->setPart(1);
+    Scheduler::ProcessEventsToIdle();
+
+    // The first view types into a shape on the first slide, and the second view shows the
+    // typing as well.
+    KitHelper::setView(nView1);
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::TAB);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, awt::Key::F2);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 0, awt::Key::F2);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(pViewShell->GetView()->IsTextEdit());
+    aView1.m_aInvalidations.clear();
+    aView3.m_aInvalidations.clear();
+    aView3.m_aInvalidationParts.clear();
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::DOWN, 'x', 0);
+    pXImpressDocument->postKeyEvent(COKitKeyEventType::UP, 'x', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // The third view gets the changes of the first slide once, the same ones the first view
+    // gets, and not a second copy from the second view.
+    CPPUNIT_ASSERT(!aView3.m_aInvalidations.empty());
+    for (int nPart : aView3.m_aInvalidationParts)
+        CPPUNIT_ASSERT_EQUAL(0, nPart);
+    CPPUNIT_ASSERT_EQUAL(aView1.m_aInvalidations.size(), aView3.m_aInvalidations.size());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testChangeToUnshownSlideInvalidatesItForCurrentView)
+{
+    // A presentation is open in two views. The first one shows the second slide, and the second
+    // one shows the first slide.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    int nView1 = KitHelper::getCurrentView();
+    SdTestViewCallback aView1;
+    pXImpressDocument->setPart(1);
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
+    SdTestViewCallback aView2;
+    pXImpressDocument->setPart(0);
+    // The second view paints the first slide, the way a client showing it would.
+    std::vector<unsigned char> aPixmap(256 * 256 * 4, 0);
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetOutputSizePixelScaleOffsetAndKitBuffer(Size(256, 256), 1.0, Point(),
+                                                       aPixmap.data());
+    pXImpressDocument->paintTile(*pDevice, 256, 256, 0, 0, 15360, 15360);
+    Scheduler::ProcessEventsToIdle();
+
+    // The first view, which is current, moves a shape on the first slide, a slide it does not
+    // show.
+    KitHelper::setView(nView1);
+    SdPage* pFirstSlide
+        = pXImpressDocument->GetDocShell()->GetDoc()->GetSdPage(0, PageKind::Standard);
+    SdrObject* pObject = pFirstSlide->GetObj(0);
+    aView1.m_aInvalidations.clear();
+    aView1.m_aInvalidationParts.clear();
+    pObject->Move(Size(1000, 1000));
+    Scheduler::ProcessEventsToIdle();
+
+    // The first view is told that the first slide changed, so it can redraw its preview of that
+    // slide.
+    CPPUNIT_ASSERT(std::find(aView1.m_aInvalidationParts.begin(),
+                             aView1.m_aInvalidationParts.end(), 0)
+                   != aView1.m_aInvalidationParts.end());
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_SingleClick)
 {
     // Single-clicking in a text box enters editing only
