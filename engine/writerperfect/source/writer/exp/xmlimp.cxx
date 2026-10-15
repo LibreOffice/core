@@ -41,6 +41,23 @@ using namespace ::cpo;
 
 namespace writerperfect::exp
 {
+OUString GetDefaultMediaDir(const OUString& rDocumentURL)
+{
+    if (rDocumentURL.isEmpty())
+        return OUString();
+
+    INetURLObject aURL(rDocumentURL);
+    try
+    {
+        return rtl::Uri::convertRelToAbs(rDocumentURL, aURL.GetBase());
+    }
+    catch (const rtl::MalformedUriException&)
+    {
+        DBG_UNHANDLED_EXCEPTION("writerperfect");
+    }
+    return OUString();
+}
+
 namespace
 {
 /// Looks up mime type for a given image extension.
@@ -57,13 +74,10 @@ OUString GetMimeType(std::u16string_view rExtension)
     return it == vMimeTypes.end() ? OUString() : it->second;
 }
 
-/// Determines the base directory for cover images, XMP metadata, popup images.
-OUString FindMediaDir(const OUString& rDocumentBaseURL,
-                      const cpo::uno::Sequence<beans::PropertyValue>& rFilterData)
+/// Gives the media directory the filter data names, empty when it names none.
+OUString FindExplicitMediaDir(const cpo::uno::Sequence<beans::PropertyValue>& rFilterData)
 {
     OUString aMediaDir;
-
-    // See if filter data contains a media directory explicitly.
     auto pProp = std::find_if(
         rFilterData.begin(), rFilterData.end(),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "RVNGMediaDir"; });
@@ -71,18 +85,22 @@ OUString FindMediaDir(const OUString& rDocumentBaseURL,
         pProp->Value >>= aMediaDir;
 
     if (!aMediaDir.isEmpty())
-        return aMediaDir + "/";
+        aMediaDir += "/";
+    return aMediaDir;
+}
+
+/// Determines the base directory for cover images and XMP metadata, empty when there is none.
+OUString FindMediaDir(const OUString& rDocumentBaseURL,
+                      const cpo::uno::Sequence<beans::PropertyValue>& rFilterData)
+{
+    OUString aMediaDir = FindExplicitMediaDir(rFilterData);
+    if (!aMediaDir.isEmpty())
+        return aMediaDir;
 
     // Not set explicitly, try to pick it up from the base directory.
-    INetURLObject aURL(rDocumentBaseURL);
-    try
-    {
-        aMediaDir = rtl::Uri::convertRelToAbs(rDocumentBaseURL, aURL.GetBase()) + "/";
-    }
-    catch (const rtl::MalformedUriException&)
-    {
-        DBG_UNHANDLED_EXCEPTION("writerperfect");
-    }
+    aMediaDir = GetDefaultMediaDir(rDocumentBaseURL);
+    if (!aMediaDir.isEmpty())
+        aMediaDir += "/";
     return aMediaDir;
 }
 
@@ -106,13 +124,13 @@ OUString FindCoverImage(const OUString& rDocumentBaseURL, OUString& rMimeType,
         return aRet;
     }
 
-    // Not set explicitly, try to pick it up from the base directory.
-    if (rDocumentBaseURL.isEmpty())
+    // Not set explicitly, try to pick it up from the media directory.
+    OUString aMediaDir = FindMediaDir(rDocumentBaseURL, rFilterData);
+    if (aMediaDir.isEmpty())
         return aRet;
 
     static constexpr std::u16string_view vExtensions[] = { u"gif", u"jpg", u"png", u"svg" };
 
-    OUString aMediaDir = FindMediaDir(rDocumentBaseURL, rFilterData);
     for (const auto& rExtension : vExtensions)
     {
         aRet = aMediaDir + "cover." + rExtension;
@@ -175,11 +193,11 @@ void FindXMPMetadata(const uno::Reference<cpo::uno::XComponentContext>& xContext
         }
     }
 
-    // If not set explicitly, try to pick it up from the base directory.
-    if (rDocumentBaseURL.isEmpty())
+    // If not set explicitly, try to pick it up from the media directory.
+    OUString aMediaDir = FindMediaDir(rDocumentBaseURL, rFilterData);
+    if (aMediaDir.isEmpty())
         return;
 
-    OUString aMediaDir = FindMediaDir(rDocumentBaseURL, rFilterData);
     OUString aURL = aMediaDir + "metadata.xmp";
     SvFileStream aStream(aURL, StreamMode::READ);
     if (!aStream.IsOpen())
@@ -360,7 +378,7 @@ XMLImport::XMLImport(const uno::Reference<cpo::uno::XComponentContext>& xContext
     if (pDescriptor != rDescriptor.end())
         pDescriptor->Value >>= aFilterData;
 
-    maMediaDir = FindMediaDir(rURL, aFilterData);
+    maMediaDir = FindExplicitMediaDir(aFilterData);
 
     OUString aMimeType;
     OUString aCoverImage = FindCoverImage(rURL, aMimeType, aFilterData);
@@ -398,6 +416,27 @@ bool FileURLExists(const OUString& rURL)
     SvFileStream aStream(rURL, StreamMode::READ);
     return aStream.IsOpen();
 }
+
+/// Resolves a popup link against the media directory, empty when the result is outside the folder
+/// of the document.
+OUString ResolvePopupURL(const OUString& rMediaDir, const OUString& rURL)
+{
+    try
+    {
+        OUString aDocumentDir = rtl::Uri::convertRelToAbs(rMediaDir, u"../"_ustr);
+        OUString aAbs = rtl::Uri::convertRelToAbs(rMediaDir, rURL);
+        // An escaped ".." is a parent folder once the URL is a file path.
+        OUString aDecoded = rtl::Uri::decode(aAbs, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8)
+                                .replace('\\', '/');
+        if (aAbs.startsWith(aDocumentDir) && aDecoded.indexOf("/../") == -1
+            && !aDecoded.endsWith("/.."))
+            return aAbs;
+    }
+    catch (const rtl::MalformedUriException&)
+    {
+    }
+    return OUString();
+}
 }
 
 PopupState XMLImport::FillPopupData(const OUString& rURL, librevenge::RVNGPropertyList& rPropList)
@@ -417,13 +456,16 @@ PopupState XMLImport::FillPopupData(const OUString& rURL, librevenge::RVNGProper
     if (bAbsolute)
         return PopupState::NotConsumed;
 
+    if (maMediaDir.isEmpty())
+        return PopupState::Ignore;
+
     // Default case: relative URL, popup data was in the same directory as the
     // document at insertion time.
-    OUString aAbs = maMediaDir + rURL;
+    OUString aAbs = ResolvePopupURL(maMediaDir, rURL);
     if (!FileURLExists(aAbs))
         // Fallback case: relative URL, popup data was in the default media
         // directory at insertion time.
-        aAbs = maMediaDir + "../" + rURL;
+        aAbs = ResolvePopupURL(maMediaDir, "../" + rURL);
 
     if (!FileURLExists(aAbs))
         // Relative link, but points to non-existing file: don't emit that to

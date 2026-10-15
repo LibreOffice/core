@@ -698,7 +698,10 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testFootnote)
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testPopup)
 {
-    createDoc(u"popup.odt", {});
+    // Popup images come from the media directory that the export names.
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+        { { "RVNGMediaDir", cpo::uno::Any(createFileURL(u"popup")) } }));
+    createDoc(u"popup.odt", aFilterData);
 
     xmlDocUniquePtr mpXmlDoc = parseExport(u"OEBPS/sections/section0001.xhtml"_ustr);
     // Test image popup anchor.
@@ -720,7 +723,10 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testPopupMedia)
 {
     // This is the same as testPopup(), but the links point to images in the
     // default media directory, not in the document directory.
-    createDoc(u"popup-media.odt", {});
+    // Popup images come from the media directory that the export names.
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+        { { "RVNGMediaDir", cpo::uno::Any(createFileURL(u"popup-media")) } }));
+    createDoc(u"popup-media.odt", aFilterData);
 
     xmlDocUniquePtr mpXmlDoc = parseExport(u"OEBPS/sections/section0001.xhtml"_ustr);
     // Test image popup anchor. This failed, number of XPath nodes was 0.
