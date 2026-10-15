@@ -78,7 +78,25 @@ class FormulaErrorHelpSection extends HTMLObjectSection {
 
 		// Help on this error
 		this.addMenuItem(menu, _('Help on this error'), () => {
-			window.open('https://help.collaboraoffice.com/', '_blank', 'noopener');
+			// the help site 404s on any locale that is not in this list
+			// prettier-ignore
+			const siteLocales = [
+				'ar', 'ast', 'bg', 'ca', 'ca-valencia',
+				'cs', 'da', 'de', 'el', 'en-GB', 'en-US',
+				'eo', 'es', 'et', 'eu', 'fi', 'fr', 'gl',
+				'he', 'hr', 'hu', 'id', 'is', 'it', 'ja',
+				'ko', 'lo', 'lt', 'lv', 'nb', 'nl', 'nn',
+				'pl', 'pt', 'pt-BR', 'ro', 'ru', 'sk', 'sl',
+				'sq', 'sv', 'tr', 'uk', 'vi', 'zh-CN',
+				'zh-TW',
+			];
+
+			const uiLocale = window.langParam || 'en-US';
+			// the UI locale if the site has it, else its bare language, else English
+			const candidates = [uiLocale, uiLocale.split('-')[0]];
+			const locale = candidates.find((l) => siteLocales.includes(l)) ?? 'en-US';
+			const url = `https://help.collaboraoffice.com/latest/${locale}/text/scalc/05/02140000.html?DbPAR=CALC`;
+			window.open(url, '_blank', 'noopener');
 		});
 
 		// Inspect with Function Wizard
