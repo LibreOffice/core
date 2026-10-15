@@ -411,6 +411,7 @@ public:
 
     void            ConnectObject( const SdrOle2Obj* pObj );
     SC_DLLPUBLIC void ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb);
+    void UpdateKitChangeTrackUser();
     void            SetInPlaceClientGridOffset(SfxInPlaceClient& rClient, SdrObject& rObject);
     void            UpdateInPlaceClientGridOffset();
 

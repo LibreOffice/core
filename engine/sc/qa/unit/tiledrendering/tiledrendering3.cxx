@@ -56,6 +56,7 @@
 
 #include <postit.hxx>
 #include <attrib.hxx>
+#include <chgtrack.hxx>
 #include <patattr.hxx>
 #include <scitems.hxx>
 #include <document.hxx>
@@ -3494,6 +3495,43 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testClickOnStackedCheckBoxesTicksTheT
     // check box underneath, so the one the user sees stayed cleared.
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), lcl_getCheckBoxState(pPage, 0));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), lcl_getCheckBoxState(pPage, 1));
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTrackChangesAuthorFromView)
+{
+    // Each recorded change carries the name of the user who edited in that view.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    pModelObj->initializeForTiledRendering(
+        { comphelper::makePropertyValue(u".uno:Author"_ustr, u"Kit User1"_ustr) });
+    ScTabViewShell* pView1 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView1);
+    int nView1 = KitHelper::getCurrentView();
+    dispatchCommand(mxComponent, u".uno:TraceChangeMode"_ustr,
+                    { comphelper::makePropertyValue(u"TraceChangeMode"_ustr, true) });
+    ScDocument* pDoc = pModelObj->GetDocument();
+    ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+    CPPUNIT_ASSERT(pChangeTrack);
+
+    typeCharsInCell("a", 0, 0, pView1, pModelObj);
+
+    KitHelper::createView();
+    pModelObj->initializeForTiledRendering(
+        { comphelper::makePropertyValue(u".uno:Author"_ustr, u"Kit User2"_ustr) });
+    ScTabViewShell* pView2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView2);
+    typeCharsInCell("b", 0, 1, pView2, pModelObj);
+
+    KitHelper::setView(nView1);
+    typeCharsInCell("c", 0, 2, pView1, pModelObj);
+
+    OUString aUsers;
+    for (const ScChangeAction* pAction = pChangeTrack->GetFirst(); pAction;
+         pAction = pAction->GetNext())
+        aUsers += pAction->GetUser() + ";";
+
+    // Without the accompanying fix in place, this test would have failed: every change was
+    // recorded as Unknown Author, because only the empty user options were asked.
+    CPPUNIT_ASSERT_EQUAL(u"Kit User1;Kit User2;Kit User1;"_ustr, aUsers);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

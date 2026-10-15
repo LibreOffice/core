@@ -1779,7 +1779,10 @@ void ScModelObj::initializeForTiledRendering(const cpo::uno::Sequence<css::beans
         {
             ScViewData* pViewData = ScDocShell::GetViewData();
             if (ScTabViewShell* pTabViewShell = pViewData ? pViewData->GetViewShell() : nullptr)
+            {
                 pTabViewShell->SetKitAuthor(rValue.Value.get<OUString>());
+                pTabViewShell->UpdateKitChangeTrackUser();
+            }
         }
         else if (rValue.Name == ".uno:FocusRingColor" && rValue.Value.has<OUString>())
         {

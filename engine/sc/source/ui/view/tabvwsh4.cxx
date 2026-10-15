@@ -115,10 +115,21 @@ bool inChartOrMathContext(const ScTabViewShell* pViewShell)
 
 } // anonymous namespace
 
+void ScTabViewShell::UpdateKitChangeTrackUser()
+{
+    // Changes are recorded under the document's one change track user, so
+    // switch it to the user of the view that is about to edit.
+    if (!comphelper::COKit::isActive() || GetKitAuthor().isEmpty())
+        return;
+    if (ScChangeTrack* pChangeTrack = GetViewData().GetDocument().GetChangeTrack())
+        pChangeTrack->SetUser(GetKitAuthor());
+}
+
 void ScTabViewShell::Activate(bool bMDI)
 {
     SfxViewShell::Activate(bMDI);
     bIsActive = true;
+    UpdateKitChangeTrackUser();
     // here no GrabFocus, otherwise there will be problems when something is edited inplace!
 
     if ( bMDI )

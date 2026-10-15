@@ -39,6 +39,8 @@
 #include <osl/diagnose.h>
 #include <svl/numformat.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
+#include <comphelper/kit.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/datetime.hxx>
 #include <tools/json_writer.hxx>
@@ -2171,6 +2173,18 @@ void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, Config
 
 void ScChangeTrack::CreateAuthorName()
 {
+    // In COKit the user options are not filled in, the author comes with the view.
+    if (comphelper::COKit::isActive())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (pViewShell && pViewShell->GetObjectShell() == rDoc.GetDocumentShell()
+            && !pViewShell->GetKitAuthor().isEmpty())
+        {
+            SetUser(pViewShell->GetKitAuthor());
+            return;
+        }
+    }
+
     const SvtUserOptions& rUserOptions = ScModule::get()->GetUserOptions();
     OUString aFirstName(rUserOptions.GetFirstName());
     OUString aLastName(rUserOptions.GetLastName());
