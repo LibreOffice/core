@@ -90,6 +90,7 @@ class XMLImport : public cppu::WeakImplHelper<css::xml::sax::XDocumentHandler>
     librevenge::RVNGPropertyList maMetaData;
     const css::uno::Reference<css::uno::XComponentContext>& mxContext;
     css::uno::Reference<css::uri::XUriReferenceFactory> mxUriReferenceFactory;
+    /// Folder that popup images are read from, empty unless the export names one.
     OUString maMediaDir;
     bool mbIsInPageSpan;
     const std::vector<FixedLayoutPage>& mrPageMetafiles;
@@ -145,6 +146,10 @@ public:
     void SAL_CALL
     setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator>& xLocator) override;
 };
+
+/// The default media folder of a document: a folder beside it, named after it. Empty for a
+/// document with no URL.
+OUString GetDefaultMediaDir(const OUString& rDocumentURL);
 
 } // namespace writerperfect::exp
 

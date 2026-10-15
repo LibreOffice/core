@@ -12,6 +12,7 @@
 #include <libepubgen/libepubgen.h>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <comphelper/lok.hxx>
@@ -25,6 +26,7 @@
 #include <vcl/weld/Dialog.hxx>
 
 #include "EPUBExportFilter.hxx"
+#include "exp/xmlimp.hxx"
 
 using namespace com::sun::star;
 
@@ -138,6 +140,9 @@ EPUBExportDialog::EPUBExportDialog(weld::Window* pParent,
 
     m_xCoverButton->connect_clicked(LINK(this, EPUBExportDialog, CoverClickHdl));
 
+    uno::Reference<frame::XModel> xModel(m_xSourceDocument, uno::UNO_QUERY);
+    if (xModel.is())
+        m_xMediaDir->set_text(exp::GetDefaultMediaDir(xModel->getURL()));
     m_xMediaButton->connect_clicked(LINK(this, EPUBExportDialog, MediaClickHdl));
 
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(m_xSourceDocument, uno::UNO_QUERY);

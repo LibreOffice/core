@@ -742,8 +742,14 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testFootnote)
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testPopup)
 {
+    // Popup images come from the media directory that the export names.
+    OUString aMediaDir = createFileURL(u"popup");
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "RVNGMediaDir", uno::Any(aMediaDir) } }));
     loadFromFile(u"popup.odt");
-    save(TestFilter::EPUB);
+    save(TestFilter::EPUB, {
+                               comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                           });
 
     xmlDocUniquePtr mpXmlDoc = parseExport(u"OEBPS/sections/section0001.xhtml"_ustr);
     // Test image popup anchor.
@@ -765,8 +771,14 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testPopupMedia)
 {
     // This is the same as testPopup(), but the links point to images in the
     // default media directory, not in the document directory.
+    // Popup images come from the media directory that the export names.
+    OUString aMediaDir = createFileURL(u"popup-media");
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "RVNGMediaDir", uno::Any(aMediaDir) } }));
     loadFromFile(u"popup-media.odt");
-    save(TestFilter::EPUB);
+    save(TestFilter::EPUB, {
+                               comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                           });
 
     xmlDocUniquePtr mpXmlDoc = parseExport(u"OEBPS/sections/section0001.xhtml"_ustr);
     // Test image popup anchor. This failed, number of XPath nodes was 0.
