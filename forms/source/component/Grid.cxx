@@ -388,7 +388,7 @@ void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps )
     *pProperties++ = css::beans::Property(PROPERTY_ENABLED, PROPERTY_ID_ENABLED, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_ENABLEVISIBLE, PROPERTY_ID_ENABLEVISIBLE, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT);
     *pProperties++ = css::beans::Property(PROPERTY_BORDER, PROPERTY_ID_BORDER, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
-    *pProperties++ = css::beans::Property(PROPERTY_BORDERCOLOR, PROPERTY_ID_BORDERCOLOR, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID);
+    *pProperties++ = css::beans::Property(PROPERTY_BORDERCOLOR, PROPERTY_ID_BORDERCOLOR, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID);
     *pProperties++ = css::beans::Property(PROPERTY_DEFAULTCONTROL, PROPERTY_ID_DEFAULTCONTROL, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
     *pProperties++ = css::beans::Property(PROPERTY_TEXTCOLOR, PROPERTY_ID_TEXTCOLOR, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
     *pProperties++ = css::beans::Property(PROPERTY_BACKGROUNDCOLOR, PROPERTY_ID_BACKGROUNDCOLOR, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEDEFAULT | css::beans::PropertyAttribute::MAYBEVOID);
