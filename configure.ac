@@ -3880,10 +3880,10 @@ if test $_os = Darwin; then
     # we don't target the lower versions anymore, so it doesn't matter that we don't generate the
     # correct version in case such an old SDK is specified, it will be rejected later anyway
     MACOSX_SDK_VERSION=$(echo $macosx_sdk | $AWK -F. '{ print $1*10000+$2*100+$3 }')
-    # we require Xcode 14.2 or later, and thus macOS SDK 13.1 or later/older versions might work
+    # we require Xcode 16.2 or later, and thus macOS SDK 15.2 or later/older versions might work
     # but are untested
-    if test $MACOSX_SDK_VERSION -lt 130300; then
-        AC_MSG_ERROR([macOS SDK $macosx_sdk is not supported, lowest supported version is 13.3])
+    if test $MACOSX_SDK_VERSION -lt 150200; then
+        AC_MSG_ERROR([macOS SDK $macosx_sdk is not supported, lowest supported version is 15.2])
     fi
     AC_MSG_RESULT([macOS SDK $macosx_sdk at $MACOSX_SDK_PATH])
 
@@ -3916,19 +3916,10 @@ if test $_os = Darwin; then
     my_xcode_ver1=$(xcrun xcodebuild -version | head -n 1)
     my_xcode_ver2=${my_xcode_ver1#Xcode }
     my_xcode_ver3=$(printf %s "$my_xcode_ver2" | $AWK -F. '{ print $1*100+($2<100?$2:99) }')
-    if test "$my_xcode_ver3" -ge 1403; then
+    if test "$my_xcode_ver3" -ge 1602; then
         AC_MSG_RESULT([yes ($my_xcode_ver2)])
-        if test $MAC_OS_X_VERSION_MIN_REQUIRED -lt 120000; then
-            if test "$my_xcode_ver3" -eq 1500; then
-                dnl the bug was already fixed on 15.1 and 15.2 still has the same OS requirements as 15.0
-                dnl in other words all affected users could update to a working Xcode version
-                AC_MSG_WARN([Use a current version of XCode or bump the minimum deployment target])
-                AC_MSG_WARN([[see https://developer.apple.com/documentation/xcode-release-notes/xcode-15-release-notes#Linking]])
-                AC_MSG_ERROR([Xcode 15.0 has a bug in the new linker that causes runtime crashes on macOS 11 - aborting])
-            fi
-        fi
     else
-        AC_MSG_ERROR(["$my_xcode_ver1" is too old or unrecognized, must be at least Xcode 14.3])
+        AC_MSG_ERROR(["$my_xcode_ver1" is too old or unrecognized, must be at least Xcode 16.2])
     fi
 
     my_xcode_ver1=$(xcrun xcodebuild -version | tail -n 1)
