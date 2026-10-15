@@ -351,6 +351,12 @@ public:
                   sal_Int32 nStt, sal_Int32 nEnd,
                   const SetAttrMode nMode = SetAttrMode::DEFAULT,
                   SwTextAttr **ppNewTextAttr = nullptr);
+    /// Same as SetAttr(), but can opt out from an active per-doc merged paste.
+    bool SetAttr( const SfxItemSet& rSet,
+                  sal_Int32 nStt, sal_Int32 nEnd,
+                  std::optional<bool> oInMergedPaste,
+                  const SetAttrMode nMode = SetAttrMode::DEFAULT,
+                  SwTextAttr **ppNewTextAttr = nullptr);
     /** Query the attributes of textnode over the range.
        Introduce 4th optional parameter <bMergeIndentValuesOfNumRule>.
        If <bMergeIndentValuesOfNumRule> == true, the indent attributes of

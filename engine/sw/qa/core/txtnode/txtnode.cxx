@@ -884,6 +884,49 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteListIndent)
     CPPUNIT_ASSERT_GREATER(rOuter.GetIndentAt(), rInner.GetIndentAt());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteDestColor)
+{
+    // Given a Writer document with a paragraph that has a non-default font color
+    // and the cursor in the middle of its text:
+    createSwDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SfxItemSetFixed<RES_CHRATR_COLOR, RES_CHRATR_COLOR> aColorSet(pWrtShell->GetAttrPool());
+    Color nOrange(0xffcc00);
+    aColorSet.Put(SvxColorItem(nOrange, RES_CHRATR_COLOR));
+    pWrtShell->SetAttrSet(aColorSet);
+    pWrtShell->Insert(u"AAAZZZ"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+
+    // When merged-pasting an HTML snippet at that cursor position:
+    pDoc->SetInMergedPaste(true);
+    comphelper::ScopeGuard g([pDoc] { pDoc->SetInMergedPaste(false); });
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"Name"_ustr, createFileURL(u"merged-paste.html")) };
+    dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aArgs);
+
+    // Then the destination's own characters before the paste position keep their font color:
+    SwTextNode* pTextNode = nullptr;
+    SwNodes& rNodes = pDoc->GetNodes();
+    for (SwNodeOffset i(0); i < rNodes.Count(); ++i)
+    {
+        SwTextNode* pCandidate = rNodes[i]->GetTextNode();
+        if (pCandidate && pCandidate->GetText().startsWith(u"AAA"))
+        {
+            pTextNode = pCandidate;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pTextNode);
+    SfxItemSetFixed<RES_CHRATR_COLOR, RES_CHRATR_COLOR> aQuery(pDoc->GetAttrPool());
+    pTextNode->GetParaAttr(aQuery, 0, 3);
+    const SvxColorItem* pColor = aQuery.GetItemIfSet(RES_CHRATR_COLOR);
+    // Without the accompanying fix in place, this test would have failed, the
+    // destination's own font color before the paste position was black.
+    CPPUNIT_ASSERT(pColor);
+    CPPUNIT_ASSERT_EQUAL(nOrange, pColor->GetValue());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1184,11 +1184,12 @@ SwTextAttr* MakeTextAttr(
 }
 
 SwTextAttr* MakeTextAttr( SwDoc & rDoc, const SfxItemSet& rSet,
-                        sal_Int32 nStt, sal_Int32 nEnd )
+                        sal_Int32 nStt, sal_Int32 nEnd,
+                        std::optional<bool> oInMergedPaste )
 {
     IStyleAccess& rStyleAccess = rDoc.GetIStyleAccess();
     std::shared_ptr<SfxItemSet> pAutoStyle;
-    if (rDoc.IsInMergedPaste())
+    if (oInMergedPaste.value_or(rDoc.IsInMergedPaste()))
     {
         // Merged paste: keep target character properties and only merge selected properties from
         // source.
@@ -1951,6 +1952,17 @@ bool SwTextNode::SetAttr(
     const SetAttrMode nMode,
     SwTextAttr **ppNewTextAttr )
 {
+    return SetAttr(rSet, nStt, nEnd, std::nullopt, nMode, ppNewTextAttr);
+}
+
+bool SwTextNode::SetAttr(
+    const SfxItemSet& rSet,
+    const sal_Int32 nStt,
+    const sal_Int32 nEnd,
+    std::optional<bool> oInMergedPaste,
+    const SetAttrMode nMode,
+    SwTextAttr **ppNewTextAttr )
+{
     if( !rSet.Count() )
         return false;
 
@@ -1984,7 +1996,7 @@ bool SwTextNode::SetAttr(
             // we want to set them at the paragraph:
             if( aTextSet.Count() != rSet.Count() )
             {
-                const bool bRet = SetAttr( rSet );
+                const bool bRet = SetAttr( rSet, oInMergedPaste );
                 if( !aTextSet.Count() )
                     return bRet;
             }
@@ -2568,9 +2580,11 @@ SwTextNode::impl_FormatToTextAttr(const SfxItemSet& i_rAttrSet)
                 m_pSwpHints->Delete(pAutoStyle);
                 DestroyAttr(pAutoStyle);
             }
+            // Merged paste: no filtering here, this is just moving existing formatting.
             m_pSwpHints->Insert(
                     MakeTextAttr(GetDoc(), aCurSet,
-                        aCurRange->first.first, aCurRange->first.second));
+                        aCurRange->first.first, aCurRange->first.second,
+                        /*oInMergedPaste=*/false));
         }
 
         aCurRange = aRange.second;

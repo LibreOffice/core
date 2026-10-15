@@ -2742,6 +2742,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
         }
 
         // all or just the Char attributes?
+        // Merged paste: no filtering here, this is just moving existing formatting.
         if( nInitSize || hasSwAttrSet ||
             nLen != pDest->GetText().getLength())
         {
@@ -2752,7 +2753,8 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
                  aCharSet( pDest->GetDoc().GetAttrPool() );
             aCharSet.Put( *GetpSwAttrSet() );
             if( aCharSet.Count() )
-                pDest->SetAttr( aCharSet, nDestStart, nDestStart + nLen );
+                pDest->SetAttr( aCharSet, nDestStart, nDestStart + nLen,
+                                /*oInMergedPaste=*/false );
         }
         else
         {
@@ -2763,7 +2765,8 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
                  aCharSet(pDest->GetDoc().GetAttrPool());
             aCharSet.Put(*GetpSwAttrSet());
             if (aCharSet.Count())
-                pDest->SetAttr(aCharSet, nDestStart, nDestStart + nLen);
+                pDest->SetAttr(aCharSet, nDestStart, nDestStart + nLen,
+                               /*oInMergedPaste=*/false);
         }
     }
 
