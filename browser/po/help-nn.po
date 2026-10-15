@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-04 19:18+0000\n"
-"Last-Translator: Roy-Magne Mo <rmo@sunnmore.net>\n"
+"PO-Revision-Date: 2026-10-14 12:57+0000\n"
+"Last-Translator: Roy-Magne Mo <gaupe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Norwegian Nynorsk <https://hosted.weblate.org/projects/"
 "collabora-online/help/nn/>\n"
 "Language: nn\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -1827,6 +1827,12 @@ msgid ""
 "selected tab again to collapse the tab bar and gain space for the document. "
 "Click any tab to expand it again."
 msgstr ""
+"<span class=\"def\">Fanene:</span> Kommandoane er grupperte på faner øvst: "
+"<span class=\"ui\">Fil</span>, <span class=\"ui\">Home</span>, <span "
+"class=\"ui\">Set inn</span>, <span class=\"ui\">Sjå gjennom</span>, <span "
+"class=\"ui\">Vis</span> og andre, alt etter dokumenttypen. Klikk på den "
+"valde fana på nytt for å trekkja saman fanelinja og få meir plass til "
+"dokumentet. Klikk på ei fane for å utvida ho på nytt."
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
 msgid ""
@@ -1958,16 +1964,14 @@ msgid ""
 msgstr "Når du lukkar eit dokument, vert det automatisk lagra om det er endra."
 
 #: html/cool-help.html%2Bdiv.div.div.p:441-7
-#, fuzzy
 msgid ""
 "To open a document, either open it in <span class=\"productname\""
 ">{productname}</span> from your platform's file manager or use <span class="
 "\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
-"For å opna eit dokument opnar du det anten i <span class=\"productname\""
-">{productname}</span> frå filhandsamaren på plattforma di, eller du brukar "
-"knappen <span class=\"ui\">Opna</span> på sida som vert vist frå knappen "
-"<span class=\"ui\">Fil</span> på menylinja."
+"For å opna eit dokument, opna det i <span class=\"productname\">{productname}"
+"</span> frå filbehandlaren på plattforma di eller bruk <span class=\"ui\">"
+"Opna</span> på <span class=\"ui\">Fil</span>-fana."
 
 #: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
@@ -1976,34 +1980,42 @@ msgid ""
 " in the bottom right corner. New documents and documents created from a "
 "template open ready to edit."
 msgstr ""
+"Eit eksisterande dokument opnar i visningsmodus, slik at du kan lesa det "
+"utan at du endrar det ved eit uhell. For å byrja å redigera, klikk på "
+"redigeringsknappen (blyanten) i nedre høgre hjørne. Nye dokument og dokument "
+"laga frå ein mal opnar ferdig til redigering."
 
 #: html/cool-help.html%2Bdiv.div.div.p:452-7
 msgid ""
 "If the document is locked by another application, it stays in view mode."
 msgstr ""
+"Dersom dokumentet er låst av ein annan app, vert det ståande i visningsmodus."
 
 #: html/cool-help.html%2Bdiv.div.div.p:456-7
 msgid ""
 "To save the document in a different format use <span class=\"ui\">Save As</"
 "span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
+"For å lagra dokumentet i eit anna format, brukar du <span class=\"ui\">Lagra "
+"som</span> på <span class=\"ui\">Fil</span>-fana."
 
 #: html/cool-help.html%2Bdiv.div.div.p:461-7
-#, fuzzy
 msgid ""
 "Documents are automatically saved periodically, but if you want a document "
 "to be saved right away you can use <span class=\"ui\">Save</span> on the "
 "<span class=\"ui\">File</span> tab."
 msgstr ""
-"Dokumenta vert lagra automatisk med jamne mellomrom, men om du vil lagra eit "
-"dokument med ein gong, kan du bruka knappen <span class=\"ui\">Lagra</span> "
-"på sida som vert vist frå knappen <span class=\"ui\">Fil</span> på menylinja."
+"Dokument vert automatisk lagra med jamne mellomrom, men om du vil lagra eit "
+"dokument med det same kan du bruka <span class=\"ui\">Lagra</span> på <span "
+"class=\"ui\">Fil</span>-fana."
 
 #: html/cool-help.html%2Bdiv.div.div.p:467-7
 msgid ""
 "To print the document, use <span class=\"ui\">Print</span> on the <span "
 "class=\"ui\">File</span> tab."
 msgstr ""
+"For å skriva ut dokumentet, brukar du <span class=\"ui\">Skriv ut</span> på "
+"<span class=\"ui\">Fil</span>-fana."
 
 #: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
@@ -2027,6 +2039,14 @@ msgid ""
 "Android or iOS selecting text by double tapping, and using a long-tap to "
 "access copy/cut/paste via the context menu is required."
 msgstr ""
+"Rikt innhald kan kopierast/klippast og limast inn, inkludert bilete og "
+"blanda innhald, ved hjelp av tastatursnarvegar (<kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, "
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"V</kbd>). På Android eller iOS må du velja tekst ved å dobbelttrykkja, og "
+"bruka eit langt trykk for å få tilgang til kopiering, klipping og innliming "
+"via sprettoppmenyen."
 
 #: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
@@ -2035,6 +2055,10 @@ msgid ""
 "comes from outside the document, but context menus can be used for cut and "
 "copy."
 msgstr ""
+"Av tryggleiksomsyn er det nødvendig å bruka <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> for å lima inn "
+"innhald som kjem frå utsida av dokumentet, men sprettoppmenyane kan brukast "
+"til klipp og kopiering."
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2045,6 +2069,12 @@ msgid ""
 ">{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
+"Når du kopierer eit utval som inneheld bilete eller andre objekt, dukkar det "
+"opp eit element kalla <span class=\"ui\">Last ned utvalet</span> nede til "
+"høgre. Trykk <span class=\"ui\">Last ned</span>, og kopier på nytt, for å "
+"gjera innhaldet tilgjengeleg for appar utanfor <span class=\"productname\">"
+"{productname}</span>. Dette steget gjer òg om komplekse objekttypar til "
+"statiske bilete."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:487-5
 msgid "Document repair"
@@ -2068,15 +2098,17 @@ msgid ""
 "lists the recent changes to the document and lets you take the document back "
 "to an earlier state."
 msgstr ""
+"<span class=\"ui\">Reparer</span> på <span class=\"ui\">Fil</span>-fana "
+"viser dei siste endringane i dokumentet og lèt deg føra dokumentet tilbake "
+"til ein tidlegare tilstand."
 
 #: html/cool-help.html%2Bdiv.div.div.p:490-5
-#, fuzzy
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
 "class=\"ui\">OK</span>."
 msgstr ""
-"For å gå tilbake til den valde tilstanden merkar du han med musa og trykkjer "
-"<span class=\"ui\">Hopp til tilstand</span>."
+"For å hoppa tilbake til den valde tilstanden, vel han med musa og trykk "
+"<span class=\"ui\">OK</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:491-55
 msgid ""
@@ -2100,20 +2132,20 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:495-5
 msgid "Idle document"
-msgstr ""
+msgstr "Inaktivt dokument"
 
 #: html/cool-help.html%2Bdiv.div.div.p:496-5
-#, fuzzy
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
 "“Idle” state. The document is shown with a transparent gray overlay, with "
 "the message “Idle document – please click to reload and resume editing”."
 msgstr ""
-"Når <span class=\"productname\">{productname}</span> merkar at det ikkje har "
-"vore aktivitet i nettlesaren på ei stund, vert dokumentet sett i tilstanden "
-"«uverksamt». Dokumentet vert vist med eit gjennomsiktig grått lag over og "
-"meldinga «Dokumentet er uverksamt – klikk for å halda fram med redigeringa»."
+"Når <span class=\"productname\">{productname}</span> oppdagar at det ikkje "
+"har vore aktivitet i nettlesaren på ei stund, vert dokumentet sett i "
+"tilstanden «uverksamt». Dokumentet vert vist med eit gjennomsiktig grått lag "
+"og meldinga «Dokumentet er uverksamt – klikk for å lasta det på nytt og "
+"halda fram med redigeringa»."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
 msgid ""
@@ -2206,13 +2238,12 @@ msgstr ""
 "tabell i ein presentasjon."
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Chart</span>. "
 "Customize your chart on the sidebar:"
 msgstr ""
 "Vel <span class=\"ui\">Set inn</span> → <span class=\"ui\">Diagram</span>. "
-"Tilpass diagrammet i sidepanelet:"
+"Tilpass diagrammet ditt i sidepanelet:"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:519-53
 msgid ""
@@ -2294,6 +2325,9 @@ msgid ""
 ">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
 "computer and insert it into the document."
 msgstr ""
+"<span class=\"def\">Set inn lokalt bilete:</span> Vel <span class=\"ui\">Set "
+"inn</span> → <span class=\"ui\">Bilete</span> for å velja eit bilete frå "
+"datamaskina og setja det inn i dokumentet."
 
 #: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
@@ -2356,13 +2390,13 @@ msgid "Text with a red wavy underline beneath a misspelled word"
 msgstr "Tekst med ei raud bølgjelinje under eit feilstava ord"
 
 #: html/cool-help.html%2Bdiv.div.div.p:544-5
-#, fuzzy
 msgid ""
 "To systematically spell-check the whole document use <span class=\"ui\""
 ">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
-"For å kontrollera stavinga i heile dokumentet systematisk brukar du <span "
-"class=\"ui\">Staving</span> i menyen <span class=\"ui\">Verktøy</span>."
+"For å stavekontrollera heile dokumentet systematisk, brukar du <span "
+"class=\"ui\">Stavekontroll</span> på <span class=\"ui\">Sjå gjennom</span>-"
+"fana."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
@@ -2530,13 +2564,12 @@ msgstr ""
 "avviste. Slik slår du på datavalidering:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:589-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Validity</span> on the <span class=\"ui\">Data</"
 "span> tab. The <span class=\"ui\">Validity</span> dialog opens."
 msgstr ""
-"Vel <span class=\"ui\">Validitet</span> i menyen <span class=\"ui\">Data</"
-"span>. Dialogvindauget <span class=\"ui\">Validitet</span> vert opna."
+"Vel <span class=\"ui\">Validitet</span> på <span class=\"ui\">Data</span>-"
+"fana. <span class=\"ui\">Validitet</span>-vindauget vert opna."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:592-57
 msgid ""
@@ -2604,7 +2637,6 @@ msgstr ""
 "merknadstekst og knappane Lagra/Avbryt"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:606-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
@@ -2612,11 +2644,11 @@ msgid ""
 "span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
 "apply on the range."
 msgstr ""
-"<span class=\"def\">Vilkårsformatering:</span> <span class=\"productname\""
-">{productname}</span> legg til symbol i kvar celle i eit område ut frå "
-"vilkår for cellene. Merk celleområdet og klikk på ikonet <span class=\"ui\""
-">Vilkårsformatering</span> på verktøylinja. Vel symbolsettet som skal "
-"brukast på området."
+"<span class=\"def\">Betinga formatering:</span> <span class=\"productname\">"
+"{productname}</span> legg til symbol i kvar celle i eit område ut frå vilkår "
+"i cellene. Vel celleområdet og klikk <span class=\"ui\">Betinga</span> på "
+"<span class=\"ui\">Home</span>-fana. Vel symbolsettet som skal brukast på "
+"området."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
@@ -2701,17 +2733,16 @@ msgstr ""
 "Direkte formatering gjeld berre det objektet som er merkt."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
 "paragraph style to a paragraph. Select the style in the style list on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
-"<span class=\"def\">Stilformatering:</span> <span class=\"productname\""
-">{productname}</span> støttar avsnittsstilar. Du kan bruka ein eksisterande "
-"avsnittsstil på eit avsnitt. Vel menyen <span class=\"ui\">Rediger</span> → "
-"<span class=\"ui\">Rediger stilar</span> for å endra stilen."
+"<span class=\"def\">Stilformatering:</span> <span class=\"productname\">"
+"{productname}</span> støttar avsnittsstilar. Du kan bruka ein avsnittsstil "
+"som allereie finst på eit avsnitt. Vel stilen i stillista på <span "
+"class=\"ui\">Home</span>-fana."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
@@ -2726,7 +2757,6 @@ msgid "Handling Tables"
 msgstr "Handsaming av tabellar"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:637-5
-#, fuzzy
 msgid ""
 "Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
 ">Table</span>. Select the initial number of rows and columns. Add rows and "
@@ -2734,10 +2764,10 @@ msgid ""
 ">Table</span> tab. The default paragraph style inside cells is “Table "
 "contents”."
 msgstr ""
-"Set inn tabellar med det tilhøyrande ikonet på verktøylinja. Vel kor mange "
-"rader og kolonnar tabellen skal ha i starten. Legg til rader og kolonnar med "
-"sprettoppmenyen for cella. Slå saman celler med menyen <span class=\"ui\""
-">Tabell</span>. Standard avsnittsstil i cellene er «Tabellinnhald»."
+"Set inn tabellar med <span class=\"ui\">Set inn</span> → <span class=\"ui\">"
+"Tabell</span>. Vel det fyrste talet på rader og kolonnar. Legg til rader og "
+"kolonnar med cellekontekstmenyen. Slå saman celler frå <span class=\"ui\">"
+"Tabell</span>-fana. Standard avsnittsstil inne i cellene er «Tabellinnhald»."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
@@ -2748,16 +2778,14 @@ msgstr ""
 "kolonnar, no 5 gonger 3"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:641-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
 "cells, open the context menu and choose <span class=\"ui\">Table Properties</"
 "span>. Fine tune the table with the properties dialog."
 msgstr ""
 "<span class=\"def\">Formatering av celler:</span> Klikk i cella eller "
-"celleområdet og vel menyen <span class=\"ui\">Tabell</span> → <span class="
-"\"ui\">Eigenskapar</span>. Finjuster tabellen i dialogvindauget for "
-"eigenskapar."
+"området med celler, opna sprettoppmenyen og vel <span class=\"ui\">"
+"Tabelleigenskapar</span>. Juster tabellen med eigenskapsvindauget."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
@@ -2977,12 +3005,16 @@ msgid ""
 "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT. "
 "Plain text TXT and Markdown MD"
 msgstr ""
+"Tekstdokument: Microsoft-format DOC, DOCX, RTF. OpenDocument-format ODT. "
+"Rein tekst TXT og Markdown MD"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:699-7
 msgid ""
 "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS. Comma "
 "separated values CSV"
 msgstr ""
+"Rekneark: Microsoft-format XLS, XLSX, OpenDocument Format ODS. "
+"Kommaseparerte verdiar CSV"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:700-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
@@ -3030,6 +3062,9 @@ msgid ""
 "background regularly, you can't just close without saving it. To abandon "
 "your changes, undo them."
 msgstr ""
+"<span class=\"productname\">{productname}</span> lagrar dokumentet i "
+"bakgrunnen med jamne mellomrom, du kan ikkje berre lukka utan å lagra det. "
+"For å avbryta endringane dine, angra dei."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:717-5
 msgid ""
@@ -3054,15 +3089,14 @@ msgid "How can I check spelling in my language?"
 msgstr "Korleis kan eg kontrollera stavinga på mitt eige språk?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
 "and select the language for the whole document. Optionally you can set "
 "languages for the selected text and for the current paragraph."
 msgstr ""
-"Vel menyen <span class=\"ui\">Verktøy</span> → <span class=\"ui\">Språk</"
-"span> og vel språket for heile dokumentet. Du kan òg velja språk for den "
-"merkte teksten og for det gjeldande avsnittet."
+"Vel <span class=\"ui\">Sjå gjennom</span> → <span class=\"ui\">Språk</span> "
+"og vel språket for heile dokumentet. Du kan valfritt setja språk for den "
+"markerte teksten og for det noverande avsnittet."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:725-5
 msgid "How can I remove the red wavy lines in my document?"
@@ -3073,6 +3107,9 @@ msgid ""
 "On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
 ">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
+"På <span class=\"ui\">Sjå gjennom</span>-fana, opna <span class=\"ui\">"
+"Stavekontroll</span> og fjern merket for <span class=\"ui\">Automatisk "
+"stavekontroll</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
 msgid "What is the blue wavy underline in some words in the text?"
@@ -3095,15 +3132,14 @@ msgid "Is there a thesaurus?"
 msgstr "Finst det ei synonymordbok?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
-#, fuzzy
 msgid ""
 "Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
 " <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
-"Ja. Klikk i ordet du vil ha og vel <span class=\"ui\">Verktøy</span> → <span "
-"class=\"ui\">Synonymordbok</span>. Eit dialogvindauge med mange forslag til "
-"erstatningar vert opna."
+"Ja. Klikk på ordet du vil og vel <span class=\"ui\">Sjå gjennom</span> → "
+"<span class=\"ui\">Synonymordbok</span>. Eit vindauge opnar seg med mange "
+"forslag til erstatningar."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:735-49
 msgid ""
@@ -3122,32 +3158,30 @@ msgstr ""
 "dei frå tekstdokumentet?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
-#, fuzzy
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
 "document display, choose <span class=\"ui\">View</span> → <span class=\"ui\""
 ">Formatting Marks</span>."
 msgstr ""
-"<span class=\"blue\">¶</span>-symbolet er eit formateringsmerke. Det hjelper "
-"deg med justering og redigering av teksten og vert ikkje skrive ut. For å "
-"slå det av og på i dokumentvisinga vel du menyen <span class=\"ui\">Vis</"
-"span> → <span class=\"ui\">Formateringsmerke</span>."
+"Symbolet <span class=\"blue\">¶</span> er eit formateringsmerke. Det vert "
+"nytta for å hjelpa tekstjustering og redigering og vert ikkje skrive ut. For "
+"å slå det av og på i dokumentvisinga, vel <span class=\"ui\">Vis</span> → "
+"<span class=\"ui\">Formateringsmerke</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:746-5
 msgid "How do I get a word count of my document?"
 msgstr "Korleis får eg vita kor mange ord dokumentet har?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
-#, fuzzy
 msgid ""
 "Word count is available in <span class=\"ui\">Review</span> → <span class="
 "\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
 "the whole document."
 msgstr ""
-"Ordteljinga finn du i <span class=\"ui\">Verktøy</span> → <span class=\"ui\""
-">Ordteljing</span>. Eit dialogvindauge viser talet på ord i det merkte "
-"området og i heile dokumentet."
+"Ordteljing er tilgjengeleg i <span class=\"ui\">Sjå gjennom</span> → <span "
+"class=\"ui\">Ordteljing</span>. Eit vindauge viser ordteljing for utvalet og "
+"for heile dokumentet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:748-50
 msgid ""
@@ -3190,6 +3224,8 @@ msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
 "Character</span>. A dialog opens."
 msgstr ""
+"Vel <span class=\"ui\">Set inn</span> → <span class=\"ui\">Spesialteikn</"
+"span>. Eit vindauge opnar seg."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:759-59
 msgid ""
@@ -3225,7 +3261,6 @@ msgid "Why can't I delete text? It just gets a strike-through?"
 msgstr "Kvifor kan eg ikkje sletta tekst? Han vert berre streka over?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:766-5
-#, fuzzy
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
@@ -3233,12 +3268,11 @@ msgid ""
 "enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\""
 ">Record</span>."
 msgstr ""
-"Du har slått på funksjonen Spor endringar for dokumentet. Spor endringar "
-"registrerer alle endringar i teksten og viser redigeringane slik at dei kan "
-"gåast gjennom seinare. Det er nyttig for å markera endringar i tekst og "
-"rekneark. Spor endringar vert slått på med <span class=\"ui\">Rediger</span> "
-"→ <span class=\"ui\">Spor endringar </span> → <span class=\"ui\""
-">Registrer</span>."
+"Du har slått på sporing av endringar for dokumentet. Sporing av endringar "
+"registrerer alle endringar i teksten og viser redigeringane for seinare "
+"gjennomgang. Nyttig for å merka endringar i tekst og rekneark. Sporing av "
+"endringar vert slått på ved å velja <span class=\"ui\">Sjå gjennom</span> → "
+"<span class=\"ui\">Registrer</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:767-5
 msgid ""
@@ -3269,21 +3303,19 @@ msgstr ""
 "Kva farge endringane får, er avhengig av kva brukar som endrar dokumentet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:776-5
-#, fuzzy
 msgid ""
 "To display or hide track changes choose <span class=\"ui\">Review</span> → "
 "<span class=\"ui\">View Changes</span> → <span class=\"ui\">Show</span>. "
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
-"For å visa eller gøyma spora endringar vel du <span class=\"ui\">Rediger</"
-"span> → <span class=\"ui\">Spor endringar </span> → <span class=\"ui\">Vis</"
-"span>. Merk at om Spor endringar er slått på, men endringane er gøymde, vert "
-"endringane framleis registrerte, og du kan ved ein feil la uønskt tekst bli "
-"verande i dokumentet."
+"For å visa eller gøyma sporing av endringar vel du <span class=\"ui\">Sjå "
+"gjennom</span> → <span class=\"ui\">Vis endringane</span> → <span "
+"class=\"ui\">Vis</span>. Ver merksam på at sjølv om sporing av endringar er "
+"påslått, men gøymd, vert endringar framleis registrerte og du kan utilsikta "
+"la uønskt tekst vera tilgjengeleg i dokumentet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:777-5
-#, fuzzy
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
@@ -3294,15 +3326,14 @@ msgid ""
 ">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
 "buttons accordingly."
 msgstr ""
-"Endringar kan godtakast eller avvisast. For å godta eller avvisa endringar "
-"klikkar du på dei tilhøyrande ikona i merknadsboksen til høgre for "
-"dokumentet. Du kan òg velja <span class=\"ui\">Rediger</span> → <span class="
-"\"ui\">Spor endringar </span> → <span class=\"ui\">Godta</span> eller <span "
-"class=\"ui\">Avvis</span>. Om du må filtrera endringane før du godtek eller "
-"avviser dei, vel du <span class=\"ui\">Rediger</span> → <span class=\"ui\""
-">Spor endringar </span> → <span class=\"ui\">Handsam</span>. Eit "
-"dialogvindauge viser ei liste over alle spora endringar. Bruk knappane i "
-"dialogvindauget."
+"Endringar kan godtakast eller avvisast. For å godta eller avvisa endringar, "
+"klikk på dei aktuelle ikona i kommentarfeltet til høgre for dokumentet. "
+"Eller vel <span class=\"ui\">Sjå gjennom</span> → <span class=\"ui\">Godta</"
+"span> eller <span class=\"ui\">Avvis</span>. Vidare, om du må filtrera "
+"endringar før du godtek eller avviser, vel <span class=\"ui\">Sjå gjennom</"
+"span> → <span class=\"ui\">Godta</span> → <span class=\"ui\">Handsam</span>. "
+"Eit vindauge viser ei liste over alle spora endringar. Bruk knappane i "
+"vindauget etter behov."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:778-54
 msgid ""
@@ -3330,13 +3361,12 @@ msgid "Using the page style"
 msgstr "Med sidestilen"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page Style</"
 "span> and select the <span class=\"ui\">Page</span> tab"
 msgstr ""
-"Vel <span class=\"ui\">Format</span> → <span class=\"ui\">Side</span> og vel "
-"fana <span class=\"ui\">Side</span>"
+"Vel <span class=\"ui\">Format</span> → <span class=\"ui\">Sidestil</span> og "
+"vel <span class=\"ui\">Side</span>-fana"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:786-7
 msgid "Set the page margins in the dialog."
@@ -3413,6 +3443,10 @@ msgid ""
 "svg\" /> on the <span class=\"ui\">Home</span> tab. The mouse pointer turns "
 "to a paint bucket."
 msgstr ""
+"Trykk på <span class=\"ui\">Klon formatering</span>-ikonet <img alt=\"format "
+"paintbrush\" class=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" /> "
+"på <span class=\"ui\">Home</span>-fana. Musepeikaren vert til ei "
+"malingsbøtte."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
 msgid "Select the text you want to apply the new format."
@@ -3449,6 +3483,11 @@ msgid ""
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after it "
 "was applied."
 msgstr ""
+"Du har Autokorrektur slått på. Autokorrektur samanliknar teksten du nettopp "
+"skreiv med ei intern teksttabell. I dei fleste tilfelle rettar Autokorrektur "
+"skrivefeil medan du skriv. For å angra ein korreksjon, trykk <kbd>Ctrl</kbd>"
+"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> rett "
+"etter at han vart brukt."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
@@ -3459,6 +3498,8 @@ msgid ""
 "Insert column and row breaks in the spreadsheet to narrow the print range. "
 "When printing, select the pages of interest."
 msgstr ""
+"Set inn kolonne- og radbrot i reknearket for å snevra inn utskriftsområdet. "
+"Vel sidene du vil skriva ut."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:831-5
 msgid "How can I import CSV data?"
@@ -3485,6 +3526,9 @@ msgid ""
 ">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog "
 "opens to let you describe the precise format of the CSV data."
 msgstr ""
+"Trykk <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>V</kbd>. <span class=\"ui\">Tekstimport</span>-vindauget vert opna slik "
+"at du kan skildra det nøyaktige formatet til CSV-dataa."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
 msgid ""
@@ -3516,6 +3560,8 @@ msgid ""
 "This is easy to do using <span class=\"ui\">Clone Formatting</span> on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
+"Dette er enkelt å gjera ved å bruka <span class=\"ui\">Klon formatering</"
+"span> på <span class=\"ui\">Home</span>-fana."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:847-7
 msgid "Format the source cell with the font, color background and more."
@@ -3530,7 +3576,6 @@ msgid "What is “Clear Direct Formatting” icon?"
 msgstr "Kva er ikonet «Fjern direkte formatering»?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:854-5
-#, fuzzy
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
@@ -3538,12 +3583,11 @@ msgid ""
 "or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span class="
 "\"ui\">Clear Direct Formatting</span>."
 msgstr ""
-"Direkte formatering er formatering som er brukt direkte på det merkte "
-"innhaldet i eit avsnitt eller ei celle i eit rekneark, og som overstyrer "
-"formateringa frå stilen. For å setja formateringa tilbake til "
-"stilinnstillingane merkar du teksten eller cella og vel <span class=\"ui\""
-">Format</span> → <span class=\"ui\">Fjern direkte formatering</span>, eller "
-"du brukar knappen på verktøylinja."
+"Direkte formatering er formatering som vert brukt direkte på det valde "
+"innhaldet i eit avsnitt eller ei reknearkcelle, og overlappar stilen som er "
+"tildelt. For å gjenoppretta formateringa til stilinnstillingane, vel du "
+"teksten eller reknearkcella og vel <span class=\"ui\">Home</span> → <span "
+"class=\"ui\">Fjern direkte formatering</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:857-5
 msgid "How do I rename a sheet?"
@@ -3569,14 +3613,13 @@ msgid ""
 msgstr "Opna presentasjonen i <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:869-7
-#, fuzzy
 msgid ""
 "Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">From "
 "Beginning</span> or click on the left-most icon in the bottom of the slide "
 "panel:"
 msgstr ""
-"Vel anten <span class=\"ui\">Lysbiletframvising</span> → <span class=\"ui\""
-">Fullskjermvising</span> eller klikk på ikonet lengst til venstre nedst i "
+"Vel enten <span class=\"ui\">Lysbiletframvising</span> → <span class=\"ui\">"
+"Frå byrjinga</span> eller klikk på ikonet lengst til venstre nedst i "
 "lysbiletpanelet:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-187
