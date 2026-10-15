@@ -147,10 +147,17 @@ void SearchResultsDlg::FillResults( ScDocument& rDoc, const ScRangeList &rMatche
     }
     else
     {
-        OUString aTotal(ScResId(SCSTR_TOTAL, aList.mnCount));
-        aSearchResultsMsg = aTotal.replaceFirst("%1", OUString::number(aList.mnCount));
-        if (aList.mnCount > ListWrapper::mnMaximum)
-            aSearchResultsMsg += " " + ScGlobal::ReplaceOrAppend( aSkipped, u"%1", OUString::number( ListWrapper::mnMaximum ) );
+        if (aList.mnCount == 0)
+        {
+            aSearchResultsMsg = ScResId(SCSTR_NOT_FOUND);
+        }
+        else
+        {
+            OUString aTotal(ScResId(SCSTR_TOTAL, aList.mnCount));
+            aSearchResultsMsg = aTotal.replaceFirst("%1", OUString::number(aList.mnCount));
+            if (aList.mnCount > ListWrapper::mnMaximum)
+                aSearchResultsMsg += " " + ScGlobal::ReplaceOrAppend( aSkipped, u"%1", OUString::number( ListWrapper::mnMaximum ) );
+        }
     }
     mxSearchResults->set_label(aSearchResultsMsg);
 
