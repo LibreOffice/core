@@ -36,6 +36,8 @@ interface ThemedIcon {
 interface ThemedIconSet {
 	icons: Set<ThemedIcon>;
 	byElement: WeakMap<HTMLImageElement | HTMLElement, ThemedIcon>;
+	// The number of theme changes this set has seen.
+	themeChanges: number;
 }
 
 declare var DOMPurify: any;
@@ -487,13 +489,41 @@ class LOUtil {
 		}
 	}
 
+	// The number of hidden icons that change theme in one task.
+	private static readonly hiddenIconBatchSize = 20;
+
+	// Visible icons change at once. The other icons change in batches, one task for each batch.
 	private static refreshThemedIcons(iconSet: ThemedIconSet): void {
+		const themeChange = ++iconSet.themeChanges;
+		// All visibility checks come before the first icon change, so the style is computed once.
+		const visibleIcons: Array<[HTMLElement, ThemedIcon]> = [];
+		const hiddenIcons: ThemedIcon[] = [];
 		for (const icon of iconSet.icons) {
 			const element = icon.element.deref();
-			if (element)
-				LOUtil.showIcon(element, icon.name, icon.imageIsLayoutCritical);
-			else iconSet.icons.delete(icon);
+			if (!element) iconSet.icons.delete(icon);
+			else if (element.checkVisibility()) visibleIcons.push([element, icon]);
+			else hiddenIcons.push(icon);
 		}
+		for (const [element, icon] of visibleIcons)
+			LOUtil.showIcon(element, icon.name, icon.imageIsLayoutCritical);
+
+		let next = 0;
+		const showHiddenIcons = () => {
+			// A later theme change shows the hidden icons in its own batches, so this one stops.
+			if (themeChange !== iconSet.themeChanges) return;
+			const end = Math.min(
+				next + LOUtil.hiddenIconBatchSize,
+				hiddenIcons.length,
+			);
+			for (; next < end; next++) {
+				const icon = hiddenIcons[next];
+				const element = icon.element.deref();
+				if (element)
+					LOUtil.showIcon(element, icon.name, icon.imageIsLayoutCritical);
+			}
+			if (next < hiddenIcons.length) setTimeout(showHiddenIcons, 0);
+		};
+		if (hiddenIcons.length) setTimeout(showHiddenIcons, 0);
 	}
 
 	public static setImage(
@@ -509,6 +539,7 @@ class LOUtil {
 			const newSet: ThemedIconSet = {
 				icons: new Set(),
 				byElement: new WeakMap(),
+				themeChanges: 0,
 			};
 			map.on('themechanged', () => LOUtil.refreshThemedIcons(newSet));
 			LOUtil.themedIconSets.set(map, newSet);

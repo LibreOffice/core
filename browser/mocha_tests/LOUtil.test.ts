@@ -443,6 +443,19 @@ describe('LOUtil', function () {
 			};
 		}
 
+		// jsdom does not compute visibility, so each icon says whether it is visible.
+		function makeIcon(tag: string, visible: boolean = true): any {
+			const element = dom.window.document.createElement(tag);
+			element.checkVisibility = () => visible;
+			return element;
+		}
+
+		// Runs the tasks that are already queued, and the tasks they queue, up to the given depth.
+		async function runPendingTasks(depth: number = 1): Promise<void> {
+			for (let i = 0; i < depth; i++)
+				await new Promise((resolve) => setTimeout(resolve, 0));
+		}
+
 		before(function () {
 			dom = new jsdom.JSDOM('<html><body></body></html>');
 			realHTMLImageElement = (globalThis as any).HTMLImageElement;
@@ -466,8 +479,8 @@ describe('LOUtil', function () {
 
 		it('every icon follows a theme change', function () {
 			const map = makeMap();
-			const first = dom.window.document.createElement('img');
-			const second = dom.window.document.createElement('img');
+			const first = makeIcon('img');
+			const second = makeIcon('img');
 			LOUtil.setImage(first, 'lc_bold.svg', map);
 			LOUtil.setImage(second, 'lc_italic.svg', map);
 
@@ -483,18 +496,14 @@ describe('LOUtil', function () {
 		it('all icons of a map share one theme listener', function () {
 			const map = makeMap();
 			for (let i = 0; i < 50; i++)
-				LOUtil.setImage(
-					dom.window.document.createElement('img'),
-					'lc_bold.svg',
-					map,
-				);
+				LOUtil.setImage(makeIcon('img'), 'lc_bold.svg', map);
 
 			nodeassert.strictEqual(map.listenerCount(), 1);
 		});
 
 		it('an icon set up again shows its latest name after a theme change', function () {
 			const map = makeMap();
-			const image = dom.window.document.createElement('img');
+			const image = makeIcon('img');
 			LOUtil.setImage(image, 'lc_bold.svg', map);
 			LOUtil.setImage(image, 'lc_italic.svg', map);
 
@@ -508,7 +517,7 @@ describe('LOUtil', function () {
 
 		it('an icon set up five times is loaded once per theme change', function () {
 			const map = makeMap();
-			const image = dom.window.document.createElement('img');
+			const image = makeIcon('img');
 			for (let i = 0; i < 5; i++) LOUtil.setImage(image, 'lc_bold.svg', map);
 
 			let loads = 0;
@@ -525,13 +534,105 @@ describe('LOUtil', function () {
 
 		it('an element with a background image follows a theme change', function () {
 			const map = makeMap();
-			const div = dom.window.document.createElement('div');
+			const div = makeIcon('div');
 			LOUtil.setImage(div, 'lc_bold.svg', map);
 
 			map.fireThemeChanged();
 
 			nodeassert.ok(
 				div.style.backgroundImage.includes('images/dark/lc_bold.svg'),
+			);
+		});
+
+		it('a visible icon follows the theme at once and a hidden icon one task later', async function () {
+			const map = makeMap();
+			const hidden = makeIcon('img', false);
+			const visible = makeIcon('img');
+			LOUtil.setImage(hidden, 'lc_bold.svg', map);
+			LOUtil.setImage(visible, 'lc_italic.svg', map);
+
+			map.fireThemeChanged();
+			const rightAfter = [visible.src, hidden.src];
+			await runPendingTasks();
+
+			nodeassert.deepEqual(rightAfter, [
+				'http://host/images/dark/lc_italic.svg',
+				'http://host/images/lc_bold.svg',
+			]);
+			nodeassert.strictEqual(hidden.src, 'http://host/images/dark/lc_bold.svg');
+		});
+
+		it('many hidden icons all follow the theme', async function () {
+			const map = makeMap();
+			const images: any[] = [];
+			for (let i = 0; i < 45; i++) {
+				images.push(makeIcon('img', false));
+				LOUtil.setImage(images[i], 'lc_bold.svg', map);
+			}
+
+			map.fireThemeChanged();
+			await runPendingTasks(5);
+
+			const stale = images.filter(
+				(image) => image.src !== 'http://host/images/dark/lc_bold.svg',
+			);
+			nodeassert.strictEqual(stale.length, 0);
+		});
+
+		it('a hidden icon ends in the theme of the last of two quick changes', async function () {
+			const map = makeMap();
+			const images: any[] = [];
+			for (let i = 0; i < 45; i++) {
+				images.push(makeIcon('img', false));
+				LOUtil.setImage(images[i], 'lc_bold.svg', map);
+			}
+
+			map.fireThemeChanged();
+			await runPendingTasks();
+			map.fireThemeChanged();
+			await runPendingTasks(5);
+
+			const stale = images.filter(
+				(image) => image.src !== 'http://host/images/lc_bold.svg',
+			);
+			nodeassert.strictEqual(stale.length, 0);
+		});
+
+		it('a quick second change loads each pending hidden icon once', async function () {
+			const map = makeMap();
+			for (let i = 0; i < 45; i++)
+				LOUtil.setImage(makeIcon('img', false), 'icon' + i + '.svg', map);
+
+			map.fireThemeChanged();
+			await runPendingTasks();
+			const loads: string[] = [];
+			const stub = LOUtil.getImageURL;
+			LOUtil.getImageURL = (name: string) => {
+				loads.push(name);
+				return stub(name);
+			};
+			map.fireThemeChanged();
+			await runPendingTasks(5);
+			LOUtil.getImageURL = stub;
+
+			nodeassert.strictEqual(
+				loads.filter((name) => name === 'icon44.svg').length,
+				1,
+			);
+		});
+
+		it('a hidden icon renamed before it follows the theme shows its new name', async function () {
+			const map = makeMap();
+			const image = makeIcon('img', false);
+			LOUtil.setImage(image, 'lc_bold.svg', map);
+
+			map.fireThemeChanged();
+			LOUtil.setImage(image, 'lc_italic.svg', map);
+			await runPendingTasks();
+
+			nodeassert.strictEqual(
+				image.src,
+				'http://host/images/dark/lc_italic.svg',
 			);
 		});
 	});
