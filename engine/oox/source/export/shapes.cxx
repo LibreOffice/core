@@ -1300,9 +1300,12 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
 
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
-    pFS->startElementNS(mnXmlNamespace, XML_style);
-    WriteShapeStyle( rXPropSet );
-    pFS->endElementNS( mnXmlNamespace, XML_style );
+    if (HasShapeStyle(rXPropSet))
+    {
+        pFS->startElementNS(mnXmlNamespace, XML_style);
+        WriteShapeStyle( rXPropSet );
+        pFS->endElementNS( mnXmlNamespace, XML_style );
+    }
 
     // write text
     WriteTextBox( xShape, mnXmlNamespace );
@@ -2069,9 +2072,12 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
 
     // A connector carries the style that names the theme its colors come from, the same way
     // every other shape does.
-    pFS->startElementNS(mnXmlNamespace, XML_style);
-    WriteShapeStyle( rXPropSet );
-    pFS->endElementNS( mnXmlNamespace, XML_style );
+    if (HasShapeStyle(rXPropSet))
+    {
+        pFS->startElementNS(mnXmlNamespace, XML_style);
+        WriteShapeStyle( rXPropSet );
+        pFS->endElementNS( mnXmlNamespace, XML_style );
+    }
 
     // connector shape (cxnSp) cannot contain text (txBody) (according to schema)
     if( nShapeNode != XML_cxnSp )
@@ -2132,9 +2138,12 @@ ShapeExport& ShapeExport::WriteLineShape( const Reference< XShape >& xShape )
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     //write style
-    pFS->startElementNS(mnXmlNamespace, XML_style);
-    WriteShapeStyle( xShapeProps );
-    pFS->endElementNS( mnXmlNamespace, XML_style );
+    if (HasShapeStyle(xShapeProps))
+    {
+        pFS->startElementNS(mnXmlNamespace, XML_style);
+        WriteShapeStyle( xShapeProps );
+        pFS->endElementNS( mnXmlNamespace, XML_style );
+    }
 
     // write text
     WriteTextBox( xShape, mnXmlNamespace );

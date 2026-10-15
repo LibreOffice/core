@@ -558,6 +558,12 @@ public:
                           const bool bClosed);
     OOX_DLLPUBLIC void WriteFill(const cpo::uno::Reference<css::beans::XPropertySet>& xPropSet,
                    const css::awt::Size& rSize = {});
+    /** Whether the shape names any of the theme references a style block is made of.
+
+        A shape that names none of them has no style block, because the four references a block
+        must stand on would then all be made up, and a made-up reference to the font of the theme
+        is read back as text of a colour the shape never stated. */
+    bool HasShapeStyle( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeStyle( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OOX_DLLPUBLIC void WriteShapeEffects( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffect( std::u16string_view sName, const cpo::uno::Sequence< css::beans::PropertyValue >& aEffectProps );

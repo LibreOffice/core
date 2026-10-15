@@ -6459,6 +6459,25 @@ void DrawingML::WriteStyleProperties( sal_Int32 nTokenId, const Sequence< Proper
     }
 }
 
+bool DrawingML::HasShapeStyle( const Reference< XPropertySet >& xPropSet )
+{
+    if ( !GetProperty( xPropSet, u"InteropGrabBag"_ustr ) )
+        return false;
+
+    Sequence< PropertyValue > aGrabBag;
+    mAny >>= aGrabBag;
+    for (const auto& rProp : aGrabBag)
+    {
+        if (rProp.Name != "StyleFillRef" && rProp.Name != "StyleLnRef"
+            && rProp.Name != "StyleEffectRef" && rProp.Name != "StyleFontRef")
+            continue;
+        Sequence< PropertyValue > aReference;
+        if ((rProp.Value >>= aReference) && aReference.hasElements())
+            return true;
+    }
+    return false;
+}
+
 void DrawingML::WriteShapeStyle( const Reference< XPropertySet >& xPropSet )
 {
     // check existence of the grab bag

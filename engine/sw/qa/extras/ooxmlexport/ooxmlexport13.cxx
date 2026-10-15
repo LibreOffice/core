@@ -1446,6 +1446,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128304)
     CPPUNIT_ASSERT_EQUAL(css::text::WritingMode::WritingMode_TB_RL, eMode);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testShapeTextColourStaysAutomatic)
+{
+    // The shape names no theme reference of its own, and the text in it states no colour, so
+    // the colour of that text is the automatic one.
+    createSwDoc("shape-text-colour-automatic.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // Without the fix in place, a style block was written all the same, naming the font of the
+    // theme, and a reader took the colour of the text from there.
+    assertXPath(pXmlDoc, "//wps:style", 0);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: -1
+    // - Actual  : 0
+    // i.e. the automatic colour came back as black.
+    saveAndReload(TestFilter::DOCX);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_AUTO),
+                         getProperty<sal_Int32>(getShape(1), u"CharColor"_ustr));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
