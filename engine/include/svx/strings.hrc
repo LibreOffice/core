@@ -1477,6 +1477,10 @@
 #define RID_SVXSTR_ERR_OLD_PASSWD                           NC_("RID_SVXSTR_ERR_OLD_PASSWD", "Invalid password")
 #define RID_SVXSTR_ERR_REPEAT_PASSWD                        NC_("RID_SVXSTR_ERR_REPEAT_PASSWD", "Passwords do not match")
 
+// To translators: the name a screen reader announces for an entry of the bullet library,
+// where %1 is the position of the entry in that library.
+#define RID_SVXSTR_BULLET_DESCRIPTION                       NC_("RID_SVXSTR_BULLET_DESCRIPTION", "Bullet %1")
+
 // do not translate this; instead describe the nth numbering style (LC_NumberingLevel) defined by your locale
 #define RID_SVXSTR_SINGLENUM_DESCRIPTION_0                  NC_("RID_SVXSTR_SINGLENUM_DESCRIPTION_0", "Number 1) 2) 3)")
 #define RID_SVXSTR_SINGLENUM_DESCRIPTION_1                  NC_("RID_SVXSTR_SINGLENUM_DESCRIPTION_1", "Number 1. 2. 3.")

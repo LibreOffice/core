@@ -30,6 +30,7 @@
 #include <svx/strings.hrc>
 #include <officecfg/Office/Common.hxx>
 #include <svx/gallery.hxx>
+#include <tools/urlobj.hxx>
 #include <vcl/graph.hxx>
 #include <svx/svxbmpnumiconview.hxx>
 
@@ -104,6 +105,7 @@ void SvxBmpNumIconView::PopulateIconView(
             OUString sId = OUString::number(i);
             OUString sText = GetNumberingDescription(ePageType, i);
             pIconView->insert(-1, &sText, &sId, &aBmp, nullptr);
+            pIconView->set_item_accessible_name(pIconView->n_children() - 1, sText);
         }
     }
 }
@@ -512,7 +514,8 @@ OUString SvxBmpNumIconView::GetNumberingDescription(NumberingPageType ePageType,
             break;
         }
         case NumberingPageType::BULLET:
-            return u"Bullet " + OUString::number(nIndex + 1); // convert and display 1-based index
+            return SvxResId(RID_SVXSTR_BULLET_DESCRIPTION)
+                .replaceFirst("%1", OUString::number(nIndex + 1));
         default:
             break;
     }
@@ -623,12 +626,29 @@ void SvxBmpNumIconView::PopulateBitmapIconView(weld::IconView* pIconView)
 
     sal_uInt32 nCount = GalleryExplorer::GetSdrObjCount(GALLERY_THEME_BULLETS);
 
+    std::vector<OUString> aGrfNames;
+    GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
+
     for (sal_uInt32 i = 0; i < std::min(nCount, sal_uInt32(8)); ++i)
     {
         auto pVDev = CreateBitmapBulletPreview(i);
         Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
         OUString sId = OUString::number(i);
         pIconView->insert(-1, nullptr, &sId, &aBmp, nullptr);
+
+        // The gallery names an image by its URL, and the last part of it without the extension
+        // is the name the gallery itself shows.
+        if (i < aGrfNames.size())
+        {
+            OUString sName = aGrfNames[i];
+            INetURLObject aObj(sName);
+            if (aObj.GetProtocol() == INetProtocol::File)
+            {
+                aObj.removeExtension();
+                sName = aObj.GetLastName(INetURLObject::DecodeMechanism::Unambiguous);
+            }
+            pIconView->set_item_accessible_name(pIconView->n_children() - 1, sName);
+        }
     }
 }
 
