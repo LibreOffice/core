@@ -81,6 +81,8 @@ interface DocLayerInterface {
 	_cellSelectionArea?: cool.SimpleRectangle;
 	// The active formula reference in tile twips, or null when there is none on this sheet.
 	getActiveReferenceRectangle(): cool.SimpleRectangle | null;
+	// True while the selection of the edited formula is the reference last picked into it.
+	isPickingFormulaReference(): boolean;
 	// The view scroll offset saved at the start of a reconnect.
 	_savedScrollPos?: cool.SimpleRectangle;
 	// True while that saved offset still needs to be re-applied to the view.

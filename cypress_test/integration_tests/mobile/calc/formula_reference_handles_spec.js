@@ -138,4 +138,75 @@ describe(['tagmobile', 'tagnextcloud'], 'Cell handles on a formula reference.', 
 		cy.cGet(formulaText).should('have.text', '=2*B2+1');
 		expectHandleOnCorner(win, 0, 1);
 	});
+
+	// Scrolls A2, the edited cell, out of the view and taps a cell in view into the formula.
+	// Neither the tap nor the keyboard relayouts around it may scroll the view back to A2.
+	function pickReferenceInScrolledView(win, textBefore, textAfter) {
+		var row;
+		var viewTop;
+
+		function expectViewKept(getText) {
+			cy.then(function() {
+				helper.processToIdle(win);
+			});
+			cy.then(function() {
+				expect(win.app.activeDocument.activeLayout.viewedRectangle.pY1).to.equal(viewTop);
+				cy.cGet(formulaText).should('have.text', getText());
+			});
+		}
+
+		function textBeforeTap() {
+			return textBefore + textAfter;
+		}
+
+		function textAfterTap() {
+			return textBefore + 'B' + (row + 1) + textAfter;
+		}
+
+		cy.then(function() {
+			win.app.sectionContainer.getSectionWithName(win.app.CSections.Scroll.name)
+				.scrollVerticalWithOffset(400 * win.app.dpiScale);
+			helper.processToIdle(win);
+		});
+		cy.then(function() {
+			var geometry = win.app.map._docLayer.sheetGeometry;
+			viewTop = win.app.activeDocument.activeLayout.viewedRectangle.pY1;
+			expect(viewTop).to.be.greaterThan(geometry.getCellSimpleRectangle(0, 1).pY2);
+		});
+		mobileHelper.relayoutForKeyboard(win, function() {
+			expectViewKept(textBeforeTap);
+		});
+
+		cy.then(function() {
+			var geometry = win.app.map._docLayer.sheetGeometry;
+
+			row = 2;
+			while (geometry.getCellSimpleRectangle(1, row).pY1 < viewTop + 40 * win.app.dpiScale)
+				row++;
+			tapOnCell(win, 1, row);
+		});
+		cy.then(function() {
+			expectHandleOnCorner(win, 1, row);
+		});
+		expectViewKept(textAfterTap);
+		mobileHelper.relayoutForKeyboard(win, function() {
+			expectViewKept(textAfterTap);
+		});
+	}
+
+	it('Keep the scrolled view while a reference is picked', function() {
+		startSumInA2();
+		pickReferenceInScrolledView(this.win, '=SUM(', ')');
+	});
+
+	// "=2*" opens no function list, so the edit stays in the cell.
+	it('Keep the scrolled view while a reference is picked in the cell', function() {
+		calcHelper.clickOnFirstCell();
+		helper.typeIntoInputField(helper.addressInputSelector, 'A2');
+		helper.typeIntoDocument('=2*');
+		cy.cGet(formulaText).should('have.text', '=2*');
+		cy.cGet('#mobile-wizard').should('not.be.visible');
+
+		pickReferenceInScrolledView(this.win, '=2*', '');
+	});
 });

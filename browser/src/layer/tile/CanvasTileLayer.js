@@ -2504,6 +2504,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		return reference && reference.part === this._selectedPart ? reference.rectangle : null;
 	},
 
+	isPickingFormulaReference: function () {
+		return this._activeReference() !== null;
+	},
+
 	_onReferencesMsg: function (textMsg) {
 		textMsg = textMsg.substr(textMsg.indexOf(' ') + 1);
 		var marks = JSON.parse(textMsg);
@@ -3946,7 +3950,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		if (!window.mode.isSmallScreenDevice() && !window.mode.isTablet()) return;
 		if (heightIncreased || !this._map._docLoaded) return;
 
-		if (this.isCalc() && !this._viewFollowsOwnCursor())
+		if (this.isCalc() &&
+			(!this._viewFollowsOwnCursor() || this.isPickingFormulaReference()))
 			return;
 
 		const hasVisibleCursor = app.file.textCursor.visible
