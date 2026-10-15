@@ -274,6 +274,9 @@ p.mobile-wizard.ui-combobox-text.selected {
 	background-position-y: center;
 	height: 20px;
 }
+[data-theme='dark'] .mobile-wizard-back {
+	background-image: url('images/dark/lc_closedocmobile.svg');
+}
 
 #mobile-wizard {
 	width: 100%;
@@ -414,6 +417,9 @@ p.mobile-wizard.ui-combobox-text.selected {
 	color: transparent !important;
 	vertical-align: middle;
 	margin-right: 4%;
+}
+[data-theme='dark'] .sub-menu-arrow {
+	background-image: url('images/dark/lc_closedocmobile.svg');
 }
 
 .func-info-icon {
