@@ -240,7 +240,8 @@ namespace cool {
 				matrix[4] += delta / (this.transform.a || 1);
 		}
 
-		// The text runs of a subtree, with their origins in slide twips.
+		// The text runs of a subtree, with their origins in slide twips. A bullet or a numbering
+		// label is text of its own in front of the paragraph, so its runs are left out.
 		static collect(
 			primitives: Primitive[] | undefined,
 			matrix: Matrix2D = Matrix2D.IDENTITY,
@@ -248,6 +249,7 @@ namespace cool {
 		): TextRun[] {
 			if (!primitives) return out;
 			for (const primitive of primitives) {
+				if (primitive.type === TextRun.bulletType) continue;
 				let childMatrix = matrix;
 				if (primitive.type === TransformPrimitive.type) {
 					const transformMatrix = Matrix2D.fromArray(
@@ -264,6 +266,9 @@ namespace cool {
 			}
 			return out;
 		}
+
+		// The node that holds the bullet or the numbering label of a paragraph.
+		private static readonly bulletType = 'textHierarchyBullet';
 
 		private static isTextRun(primitive: Primitive): boolean {
 			return (

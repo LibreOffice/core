@@ -503,6 +503,48 @@ describe('text prediction paragraph wrap', function () {
 		nodeassert.strictEqual(runs[1].lineWidth, 500);
 	});
 
+	it('wraps a bulleted paragraph and leaves the bullet as it is', function () {
+		// The bullet is text of its own at the area's left, in front of "aaa b" at the 200
+		// indent. Typing 'x' overflows the 500 wide line, so the paragraph wraps.
+		const data = makeIndentedSlide(
+			'aaa b',
+			[{ start: 0, length: 5, e: 200, f: 0, indent: 200, width: 500 }],
+			700,
+		);
+		const bullet = {
+			type: 'textSimplePortion',
+			text: '*',
+			textPosition: 0,
+			textLength: 1,
+			matrix: [1, 0, 0, 1, 0, 0],
+			fontSize: 360,
+			familyname: 'Arial',
+			paragraph: 0,
+		};
+		const bulletNode = { type: 'textHierarchyBullet', children: [bullet] };
+		const box = predictionTest.objectAt(data, 0).primitives[0];
+		box.children.unshift(bulletNode);
+
+		const advance = predictionTest.predictTextInsert(
+			data,
+			1700,
+			1800,
+			2050,
+			'x',
+			measure,
+			{
+				paragraph: 0,
+				index: 5,
+			},
+		);
+		nodeassert.strictEqual(advance, 100);
+		const lines = box.children.filter((child: any) => child !== bulletNode);
+		nodeassert.strictEqual(lines.map(cool.visibleText).join('|'), 'aaa|bx');
+		nodeassert.ok(box.children.includes(bulletNode));
+		nodeassert.strictEqual(bullet.text, '*');
+		nodeassert.deepStrictEqual(bullet.matrix, [1, 0, 0, 1, 0, 0]);
+	});
+
 	it('keeps a hanging indent on the lines after the first through a re-wrap', function () {
 		// The first line starts at the area's left with all 700. The second hangs 200 in
 		// with 500. Deleting one 'b' leaves "aaaa bbb" too wide for one line, so the
