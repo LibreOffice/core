@@ -17,6 +17,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -31,6 +32,10 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/qa/XDumper.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <iterator>
 
 #include <com/sun/star/util/Color.hpp>
@@ -51,6 +56,30 @@ public:
 
 protected:
     void testTransparentBackground(std::u16string_view filename);
+};
+
+class DisposeLegacyLegendOnModify final : public cppu::WeakImplHelper<util::XModifyListener>
+{
+    Reference<lang::XComponent> m_xLegend;
+    bool& m_rCalled;
+
+public:
+    DisposeLegacyLegendOnModify(const Reference<lang::XComponent>& xLegend, bool& rCalled)
+        : m_xLegend(xLegend)
+        , m_rCalled(rCalled)
+    {
+    }
+
+    void modified(const lang::EventObject&) override
+    {
+        if (!m_rCalled)
+        {
+            m_rCalled = true;
+            m_xLegend->dispose();
+        }
+    }
+
+    void disposing(const lang::EventObject&) override {}
 };
 
 OUString getShapeDump(cpo::uno::Reference<css::chart::XChartDocument> const& doc)
@@ -121,6 +150,34 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testLegacyErrorCategory)
             }
         }
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testLegacyLegendDisposeDuringPropertySet)
+{
+    loadFromFile(u"ods/tdf86624.ods");
+    Reference<chart2::XChartDocument> xChart2Doc = getChartDocFromSheet(0);
+    Reference<chart2::XLegend> xModelLegend = xChart2Doc->getFirstDiagram()->getLegend();
+    CPPUNIT_ASSERT(xModelLegend.is());
+    Reference<beans::XPropertySet> xModelProperties(xModelLegend, UNO_QUERY_THROW);
+    xModelProperties->setPropertyValue(u"ReferencePageSize"_ustr,
+                                       Any(awt::Size(10000, 10000)));
+
+    Reference<chart::XChartDocument> xChartDoc(xChart2Doc, UNO_QUERY_THROW);
+    Reference<beans::XPropertySet> xLegacyLegend(xChartDoc->getLegend(), UNO_QUERY_THROW);
+    Reference<lang::XComponent> xLegacyComponent(xLegacyLegend, UNO_QUERY_THROW);
+    Reference<util::XModifyBroadcaster> xBroadcaster(xModelLegend, UNO_QUERY_THROW);
+    bool bDisposed = false;
+    Reference<util::XModifyListener> xListener(
+        new DisposeLegacyLegendOnModify(xLegacyComponent, bDisposed));
+    xBroadcaster->addModifyListener(xListener);
+
+    // updateReferenceSize() notifies the listener after the base setter has
+    // unlocked. The listener disposes the wrapper while its property is in use.
+    xLegacyLegend->setPropertyValue(u"CharHeight"_ustr, Any(28.0f));
+    xBroadcaster->removeModifyListener(xListener);
+    CPPUNIT_ASSERT(bDisposed);
+    CPPUNIT_ASSERT_EQUAL(Any(28.0f),
+                         xModelProperties->getPropertyValue(u"CharHeight"_ustr));
 }
 
 // error bar import

@@ -99,9 +99,13 @@ void WrappedPropertySet::setPropertyValue( std::unique_lock<std::mutex>& rGuard,
         Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
         if( pWrappedProperty )
         {
+            // clearWrappedPropertySet() may run in the callback while the
+            // mutex is released. Keep the map, and thus this property, alive.
+            auto xMap = m_pWrappedPropertyMap;
             // some of these call into things that take the solarmutex
             rGuard.unlock();
             pWrappedProperty->setPropertyValue( rValue, xInnerPropertySet );
+            xMap.reset(); // destruct wrapped properties without m_aMutex
             rGuard.lock();
         }
         else if( xInnerPropertySet.is() )

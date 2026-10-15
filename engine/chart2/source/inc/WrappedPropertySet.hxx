@@ -114,7 +114,7 @@ private:
 
     std::unique_ptr<::cppu::OPropertyArrayHelper>       m_pPropertyArrayHelper;//holds all possible outer properties
 
-    std::unique_ptr<tWrappedPropertyMap>                m_pWrappedPropertyMap;//holds all wrapped properties (containing the special mapping from inner to outer properties)
+    std::shared_ptr<tWrappedPropertyMap>                m_pWrappedPropertyMap;//holds all wrapped properties (containing the special mapping from inner to outer properties)
 
     //Container for the XPropertyChangedListener. The listeners are inserted by handle.
     //OMultiTypeInterfaceContainerHelperInt32             m_aBoundListenerContainer;
