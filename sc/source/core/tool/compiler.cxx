@@ -3081,6 +3081,13 @@ Label_MaskStateMachine:
 
 // Convert symbol to token
 
+static bool lcl_ParenthesisFollows( const sal_Unicode* p )
+{
+    while (*p == ' ')
+        p++;
+    return *p == '(';
+}
+
 bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
 {
     OUString aName( rName );
@@ -3089,6 +3096,17 @@ bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
     // name resolves.
     if (mxSymbols->isOOXML() && rName.startsWithIgnoreAsciiCase(u"_xleta."))
         aName = rName.copy(7);
+    // Functions added to OOXML after its first edition carry the _xlfn. prefix, but some producers
+    // write them without it. A bare name that is called like a function and is known only with
+    // the prefix resolves as the prefixed one.
+    if (mxSymbols->isOOXML() && !aName.startsWithIgnoreAsciiCase(u"_xlfn.")
+        && mxSymbols->getHashMap().find(aName) == mxSymbols->getHashMap().end()
+        && lcl_ParenthesisFollows(aFormula.getStr() + nSrcPos))
+    {
+        OUString aPrefixedName(u"_XLFN." + aName.toAsciiUpperCase());
+        if (mxSymbols->getHashMap().find(aPrefixedName) != mxSymbols->getHashMap().end())
+            aName = aPrefixedName;
+    }
     OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap().find( aName));
     bool bFound = (iLook != mxSymbols->getHashMap().end());
     if (bFound)
@@ -3300,13 +3318,6 @@ bool ScCompiler::ParseOpCode2( std::u16string_view rName )
     }
 
     return false;
-}
-
-static bool lcl_ParenthesisFollows( const sal_Unicode* p )
-{
-    while (*p == ' ')
-        p++;
-    return *p == '(';
 }
 
 bool ScCompiler::ParseValue(const OUString& rSym, bool bInArray)
