@@ -288,7 +288,6 @@ export class Comment extends CanvasSectionObject {
 		this.sectionProperties.nodeModifyText.setAttribute('aria-label', Comment.editCommentLabel);
 		this.sectionProperties.nodeModifyText.id = 'annotation-modify-textarea-' + this.sectionProperties.data.id;
 		this.sectionProperties.contentText = window.L.DomUtil.create('div', '', this.sectionProperties.contentNode);
-		this.sectionProperties.contentText.id = 'annotation-content-text-' + this.sectionProperties.data.id;
 		this.sectionProperties.nodeReply = window.L.DomUtil.create('div', 'cool-annotation-edit' + ' reply-annotation', this.sectionProperties.wrapper);
 		this.sectionProperties.nodeReplyText = window.L.DomUtil.create('div', 'cool-annotation-textarea', this.sectionProperties.nodeReply);
 		this.createReplyHint(this.sectionProperties.nodeReply);
@@ -401,7 +400,7 @@ export class Comment extends CanvasSectionObject {
 		const id = this.sectionProperties.data.id;
 		const describedBy = 'annotation-content-author-' + id
 			+ (this.sectionProperties.data.trackchange ? ' annotation-caption-text-' + id : '')
-			+ ' annotation-content-text-' + id;
+			+ ' annotation-content-area-' + id; // not the text, copied into itself by autolinking
 		if (this.isAuthor()) {
 			const edit = window.L.DomUtil.create('div', 'cool-annotation-menu-edit', tdMenu);
 			edit.id = 'comment-annotation-menu-edit-' + this.sectionProperties.data.id;

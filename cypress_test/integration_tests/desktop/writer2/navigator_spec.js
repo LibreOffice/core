@@ -282,6 +282,8 @@ describe(['tagdesktop'], 'Navigator comments', function() {
 				const [author, text] = ids.split(' ');
 				cy.cGet('#' + author).should('have.text', 'Alice');
 				cy.cGet('#' + text).should('have.text', 'Check this word.');
+				// once: autolinking copies the text element into itself
+				cy.cGet('[id="' + text + '"]').should('have.length', 1);
 			});
 	});
 });
