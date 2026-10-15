@@ -3,8 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calc-Intro-Template.ods\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-09-20 07:57+0000\n"
-"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"PO-Revision-Date: 2026-10-14 12:57+0000\n"
+"Last-Translator: Stephan Paternotte <stephan-"
+"p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "calc-intro-template/nl/>\n"
 "Language: nl\n"
@@ -12,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #. content.xml (validation title)
 msgid "Try formatting"
@@ -36,13 +37,12 @@ msgstr ""
 "\"Medium Stock\"."
 
 #. content.xml (validation help message)
-#, fuzzy
 msgid ""
 "For High Stock use condition \"Values greater than: 80\" and style \"High "
 "Stock\"."
 msgstr ""
-"Voor Medium Stock gebruiksvoorwaarde \"Waarden tussen: 20-80\" en stijl "
-"\"Medium Stock\"."
+"Voor High Stock gebruiksvoorwaarde \"Waarden hoger dan: 80\" en stijl \"High "
+"Stock\"."
 
 #. content.xml (validation title)
 msgid "Use other options"
@@ -326,12 +326,18 @@ msgid ""
 "Spreadsheet, Text </2><3>and</3><4> Add-in</4><5>, making it easier to find "
 "the function you need.</5>"
 msgstr ""
+"<1>Functies zijn onderverdeeld in categorieën zoals Database, </1><2>Datum & "
+"Tijd, Financieel, Informatie, Logisch, Wiskundig, Reeksen, Statistisch, "
+"Spreadsheet, Tekst </2><3>en</3><4> Invoegtoepassingen</4><5>, waardoor het "
+"makkelijker wordt om de benodigde functie te vinden.</5>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
 "<1>You can access these functions through the Function Library or by using "
 "the </1><2>Function Wizard.</2>"
 msgstr ""
+"<1>U heeft toegang tot deze functies via de Functiebibliotheek of via de </1>"
+"<2>Functieassistent.–</2>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Next Chapter: 📋 Tables"
@@ -485,6 +491,8 @@ msgid ""
 "These features help you keep your table organised, highlight important "
 "information, and work more efficiently with your data."
 msgstr ""
+"Deze functies helpen u uw tabel georganiseerd te houden, belangrijke "
+"informatie te benadrukken en efficiënter met uw gegevens te werken."
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
@@ -516,6 +524,9 @@ msgid ""
 "can be arranged, rearranged or summarised according to different points of "
 "view."
 msgstr ""
+"Een tabel die als draaitabel is gemaakt, is een interactieve tabel. Gegevens "
+"kunnen vanuit verschillende perspectieven worden gerangschikt, herschikt of "
+"samengevat."
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
@@ -552,6 +563,9 @@ msgid ""
 "Conditional formatting automatically changes how cells look based on their "
 "values, helping you quickly spot trends or important data."
 msgstr ""
+"Voorwaardelijke opmaak verandert automatisch het uiterlijk van cellen op "
+"basis van hun waarden, waardoor u snel trends of belangrijke gegevens kunt "
+"ontdekken."
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
@@ -599,23 +613,31 @@ msgid ""
 "Highlight important inventory data to quickly identify products that are "
 "running low on stock."
 msgstr ""
+"Markeer belangrijke voorraadgegevens om snel producten te identificeren die "
+"bijna op zijn."
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "<1>Low Stock</1><2> (less than 20 pcs) → </2><3>Red</3><4> background</4>"
 msgstr ""
+"<1>Lage voorraad</1><2> (minder dan 20 ex.) → </2><3>Rode</3><4> "
+"achtergrond</4>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "<1>Medium Stock</1><2> (between 20 and 80 pcs)→ </2><3>Orange</3><4> "
 "background</4>"
 msgstr ""
+"<1>Gemiddelde voorraad</1><2> (tussen 20 en 80 ex.)→ </2><3>Oranje</3><4> "
+"achtergrond</4>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "<1>High Stock </1><2>(more than</2><3> </3><4>80 pcs)→ </4><5>Green</5><6> "
 "background</6>"
 msgstr ""
+"<1>Hoge voorraad</1><2> (meer dan</2><3> </3><4>80 ex.)→ </4><5>Groene</5>"
+"<6> achtergrond</6>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
@@ -747,6 +769,9 @@ msgid ""
 "well as change the data range or chart type. These tools allow you to "
 "customise the chart and better present your data."
 msgstr ""
+"U kunt elementen van diagrammen zoals titels, assen en labels toevoegen of "
+"aanpassen, en het gegevensbereik of diagramtype wijzigen. Met deze "
+"hulpmiddelen kunt u het diagram aanpassen en uw gegevens beter presenteren."
 
 #. content.xml (sheet '📊 Charts')
 msgid "Next Chapter:🔍 Data & filtering"
@@ -794,6 +819,8 @@ msgstr "➜Probeer het: Vind artikelen met een lage voorraad"
 msgid ""
 "Sort the Quantity [pcs] column to see which items have the lowest stock."
 msgstr ""
+"Sorteer de kolom Hoeveelheid [ex.] om te zien welke artikelen de laagste "
+"voorraad hebben."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "➜Try it: Show only Electronics items"
@@ -801,7 +828,7 @@ msgstr "➜Probeer het: Toon alleen elektronica-items"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Use the filter in the Category column and select Electronics."
-msgstr ""
+msgstr "Gebruik het filter in de kolom Categorie en selecteer Elektronica."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -827,6 +854,8 @@ msgid ""
 "<1>Auto Filter</1><2> lets you quickly filter data directly in the table "
 "using simple selections.</2>"
 msgstr ""
+"<1>Autom. filter</1><2> laat u snel gegevens rechtstreeks in de tabel "
+"filteren met behulp van eenvoudige selecties.</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -834,6 +863,9 @@ msgid ""
 "specific data fields. You can also combine conditions using logical AND or "
 "OR operators.</2>"
 msgstr ""
+"<1>Standaardfilter</1><2> laat u bereiken definiëren die waarden bevatten in "
+"specifieke gegevensvelden. U kunt voorwaarden ook combineren met behulp van "
+"logische AND- of OR-operatoren.</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -841,6 +873,9 @@ msgid ""
 "conditions. You can enter these conditions directly into the sheet for more "
 "precise and flexible filtering.</2>"
 msgstr ""
+"<1>Geavanceerd filter</1><2> laat u maximaal acht filtervoorwaarden "
+"definiëren. U kunt deze voorwaarden rechtstreeks in het blad invoeren voor "
+"een nauwkeuriger en flexibeler filtering.</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Last Chapter: 🤝 Productivity & collaboration"
@@ -881,6 +916,11 @@ msgid ""
 "cursor and follow their activity in the document. Notifications also inform "
 "you when someone joins or leaves."
 msgstr ""
+"Elke gebruiker krijgt een unieke kleur toegewezen, zodat u gemakkelijk kunt "
+"zien wie wat bewerkt. U kunt op de naam of avatar van een gebruiker klikken "
+"om rechtstreeks naar de cursor te springen en de activiteit ervan in het "
+"document te volgen. Meldingen informeren u ook wanneer iemand zich aansluit "
+"of vertrekt."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Start sharing your document"
@@ -903,13 +943,12 @@ msgid "➜Try it: Internal shares"
 msgstr "➜Probeer het eens: Intern delen"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
-#, fuzzy
 msgid ""
 "Share files within your organisation. People who already have access to the "
 "document can use the link for quick and easy access."
 msgstr ""
-"Deel een directe link met mensen die al toegang hebben tot het document voor "
-"snelle en eenvoudige toegang."
+"Deel bestanden binnen uw organisatie. Personen die al toegang hebben tot het "
+"document kunnen de link gebruiken voor snelle en eenvoudige toegang."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "➜Try it: External shares"
@@ -921,6 +960,9 @@ msgid ""
 "addresses. You can also share to Nextcloud accounts on other instances using "
 "their federated cloud ID."
 msgstr ""
+"Deel bestanden met anderen buiten uw organisatie via openbare links en e-"
+"mailadressen. U kunt ook delen met Nextcloud-accounts op andere instanties "
+"met behulp van hun federatieve cloud-ID."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Shortcuts"
@@ -950,7 +992,7 @@ msgstr ""
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "⏯Video tutorials"
-msgstr "⏯ Video-instructies"
+msgstr "⏯ Instructievideo's"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid ""
@@ -965,9 +1007,8 @@ msgstr ""
 "efficiënter kunt worden in uw werk."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
-#, fuzzy
 msgid "Check out video tutorials"
-msgstr "⏯ Video-instructies"
+msgstr "Bekijk de instructievideo's"
 
 #~ msgid "5"
 #~ msgstr "5"

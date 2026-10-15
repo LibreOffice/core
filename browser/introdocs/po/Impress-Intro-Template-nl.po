@@ -3,8 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Impress-Intro-Template.odp\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-09-19 07:22+0000\n"
-"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"PO-Revision-Date: 2026-10-14 12:57+0000\n"
+"Last-Translator: Stephan Paternotte <stephan-"
+"p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "impress-intro-template/nl/>\n"
 "Language: nl\n"
@@ -12,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #. content.xml (slide 'page1')
 msgid "👋 Introduction"
@@ -74,6 +75,8 @@ msgid ""
 "<1>Use the </1><2>Slide navigation</2><3> on the left to reorder them by "
 "dragging, or remove ones you don’t need.</3>"
 msgstr ""
+"<1>Gebruik de </1><2>Schuifnavigatie</2><3> aan de linkerzijde om te ordenen "
+"d.m.v. slepen, of te verwijderen wat overbodig is.</3>"
 
 #. content.xml (slide 'page2')
 msgid ""
@@ -81,6 +84,9 @@ msgid ""
 "arrangement of placeholders for titles, text, and images. Pick the layout "
 "that fits the slide’s purpose.</3>"
 msgstr ""
+"<1>Elke dia kan een </1><2>andere opmaak </2> gebruiken<3>– een vooraf "
+"gedefinieerde rangschikking van tijdelijke aanduidingen voor titels, tekst "
+"en afbeeldingen. Kies de opmaak die past bij het doel van de dia.</3>"
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
@@ -91,15 +97,15 @@ msgstr "<1>➜</1><2>Probeer het:</2>"
 
 #. content.xml (slide 'page2')
 msgid "Add a new slide clicking “New” in Notebook bar."
-msgstr ""
+msgstr "Voeg een nieuwe dia toe door op “Nieuw” te klikken in de notebookbalk."
 
 #. content.xml (slide 'page2')
 msgid "Choose a layout for it from the layout chooser."
-msgstr ""
+msgstr "Kies er een opmaak voor in de opmaakkiezer."
 
 #. content.xml (slide 'page2')
 msgid "Start editing your slide."
-msgstr ""
+msgstr "Begin met het bewerken van uw dia."
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); styles.xml (master page
@@ -117,7 +123,7 @@ msgstr ""
 
 #. content.xml (slide 'page2')
 msgid "Next Chapter: 🎨 Design & Master Slides"
-msgstr "Volgens hoofdstuk: 🎨 Ontwerp & Diamodellen"
+msgstr "Volgend hoofdstuk: 🎨 Ontwerp & Diamodellen"
 
 #. content.xml (slide 'page3')
 msgid ""
@@ -140,19 +146,19 @@ msgstr ""
 
 #. content.xml (slide 'page3')
 msgid "Open the View tab in the Notebook bar."
-msgstr ""
+msgstr "Open het tabblad Weergave in de Notebookbalk."
 
 #. content.xml (slide 'page3')
 msgid "Click “Master View” and edit your master design."
-msgstr ""
+msgstr "Klik op “Diamodelweergave” en bewerk uw diamodel."
 
 #. content.xml (slide 'page3')
 msgid "Once your master design is ready, click \"Close Master View\"."
-msgstr ""
+msgstr "Wanneer het diamodel klaar is, klikt u op \"Diamodelweergave sluiten\"."
 
 #. content.xml (slide 'page3')
 msgid "Now your master is set and ready to use across all slides."
-msgstr ""
+msgstr "Nu is uw diamodel ingesteld en klaar voor gebruik op alle dia's."
 
 #. content.xml (slide 'page3')
 msgid ""
@@ -187,17 +193,23 @@ msgid ""
 "In the Notebook bar, open the Insert tab and add an object, image, table, or "
 "any other element that supports your content."
 msgstr ""
+"Open in de Notebookbalk het tabblad Invoegen en voeg een object, afbeelding, "
+"tabel of een ander element toe dat uw inhoud ondersteunt."
 
 #. content.xml (slide 'page4')
 msgid ""
 "Click on it to select it, then resize and reposition it to fit your layout."
 msgstr ""
+"Klik erop om het te selecteren, wijzig vervolgens het formaat en positioneer "
+"het zodat het bij uw opmaak past."
 
 #. content.xml (slide 'page4')
 msgid ""
 "For editable objects like shapes or images, a contextual tab appears in the "
 "Notebook bar with all the available actions."
 msgstr ""
+"Voor bewerkbare objecten zoals vormen of afbeeldingen verschijnt er een "
+"contextueel tabblad in de Notebookbalk met alle beschikbare acties."
 
 #. content.xml (slide 'page4')
 msgid ""
@@ -224,21 +236,24 @@ msgstr ""
 
 #. content.xml (slide 'page5')
 msgid "Click Transition tab in Notebook bar."
-msgstr ""
+msgstr "Klik op het tabblad Overgang in de notitieboekbalk."
 
 #. content.xml (slide 'page5')
 msgid "Pick a transition style you would like to use."
-msgstr ""
+msgstr "Kies een overgangsstijl die u wilt toepassen."
 
 #. content.xml (slide 'page5')
 msgid ""
 "Adjust other properties – set the duration, pick a variant, or choose timing."
 msgstr ""
+"Pas andere eigenschappen aan – stel de duur in, kies een variant of timing."
 
 #. content.xml (slide 'page5')
 msgid ""
 "Click \"Apply to All Slides\" to use the same transition across your deck."
 msgstr ""
+"Klik op \"Toepassen op alle dia's\" om dezelfde overgang over uw reeks te "
+"gebruiken."
 
 #. content.xml (slide 'page5')
 msgid ""
@@ -268,18 +283,21 @@ msgstr ""
 #. content.xml (slide 'page6')
 msgid "Switch to the View tab in the Notebook bar and open “Notes view”."
 msgstr ""
+"Schakel over naar het tabblad Weergave in de Notebookbalk en open “"
+"Notitiesweergave”."
 
 #. content.xml (slide 'page6')
 msgid "Add a speaker note to your slides."
-msgstr ""
+msgstr "Voeg sprekernotities toe aan uw dia's."
 
 #. content.xml (slide 'page6')
 msgid "When you're ready to present, open the Slide Show tab."
 msgstr ""
+"Wanneer u klaar bent om te presenteren, opent u het tabblad Diavoorstelling."
 
 #. content.xml (slide 'page6')
 msgid "Pick a slide show option to start presenting."
-msgstr ""
+msgstr "Kies een diavoorstellingsoptie om te beginnen met presenteren."
 
 #. content.xml (slide 'page6')
 msgid "Next Chapter: 🤝 Productivity & Collaboration"
@@ -334,9 +352,8 @@ msgstr ""
 "helpen u voort te bouwen op wat u hebt geleerd."
 
 #. content.xml (slide 'page7')
-#, fuzzy
 msgid "Check out video tutorials."
-msgstr "▶️ Video-instructies"
+msgstr "Bekijk de instructievideo's."
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default')
