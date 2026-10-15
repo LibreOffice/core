@@ -391,12 +391,16 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		const container = dialogInfo.container;
 
 		app.layoutingService.appendLayoutingTask(() => {
+			if (this.dialogs[instance.id] !== dialogInfo)
+				return;
+
 			window.L.DomUtil.addClass(container, 'fadeout');
 
 			let timeoutId = null;
 			const finallyClose = () => {
-				instance.that.close(instance.id, false);
 				app.timerRegistry.clearTimeout(timeoutId);
+				if (this.dialogs[instance.id] === dialogInfo)
+					instance.that.close(instance.id, false, !dialogInfo.canHaveFocus);
 			};
 
 			container.onanimationend = finallyClose;
