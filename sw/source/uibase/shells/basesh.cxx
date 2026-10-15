@@ -3265,12 +3265,6 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                     }
                 }
             }
-            // Use Default Style if no autoformat is provided
-            else
-            {
-                aAutoNameIn = SvxResId(STR_TABSTYLE_DEFAULT);
-                pTAFormatIn.reset(new SwTableAutoFormat(rTableTable[0]));
-            }
 
             if ( pFlags )
                 aInsTableOptsIn.mnInsMode = static_cast<SwInsertTableFlags>(pFlags->GetValue());
