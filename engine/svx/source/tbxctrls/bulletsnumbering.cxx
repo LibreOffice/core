@@ -119,6 +119,11 @@ NumberingPopup::NumberingPopup(NumberingToolBoxControl& rController,
 
     if ( mePageType != NumberingPageType::BULLET )
     {
+        // The label names the grid for a screen reader while it is hidden, so it carries the
+        // name of what this page holds.
+        mxBulletsLabel->set_label(mePageType == NumberingPageType::OUTLINE
+                                      ? SvxResId(RID_SVXSTR_OUTLINE_LIBRARY)
+                                      : SvxResId(RID_SVXSTR_NUMBERING_LIBRARY));
         mxBulletsLabel->hide();
         Reference< XDefaultNumberingProvider > xDefNum = DefaultNumberingProvider::create( mrController.getContext() );
         if ( xDefNum.is() )

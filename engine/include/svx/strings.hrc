@@ -1481,6 +1481,11 @@
 // where %1 is the position of the entry in that library.
 #define RID_SVXSTR_BULLET_DESCRIPTION                       NC_("RID_SVXSTR_BULLET_DESCRIPTION", "Bullet %1")
 
+// To translators: the name a screen reader announces for the grid of a numbering or an
+// outline dropdown, which carries no heading of its own.
+#define RID_SVXSTR_NUMBERING_LIBRARY                        NC_("RID_SVXSTR_NUMBERING_LIBRARY", "Numbering Library")
+#define RID_SVXSTR_OUTLINE_LIBRARY                          NC_("RID_SVXSTR_OUTLINE_LIBRARY", "Outline Library")
+
 // do not translate this; instead describe the nth numbering style (LC_NumberingLevel) defined by your locale
 #define RID_SVXSTR_SINGLENUM_DESCRIPTION_0                  NC_("RID_SVXSTR_SINGLENUM_DESCRIPTION_0", "Number 1) 2) 3)")
 #define RID_SVXSTR_SINGLENUM_DESCRIPTION_1                  NC_("RID_SVXSTR_SINGLENUM_DESCRIPTION_1", "Number 1. 2. 3.")
