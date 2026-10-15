@@ -538,6 +538,7 @@ void SvxBmpNumIconView::SetNumberingSettings(weld::IconView* mxIconView, Size pr
         OUString sId = OUString::number(i);
         OUString sText = GetNumberingDescription(NumberingPageType::SINGLENUM, i);
         mxIconView->insert(-1, &sText, &sId, &aBmp, nullptr);
+        mxIconView->set_item_accessible_name(mxIconView->n_children() - 1, sText);
     }
 }
 
@@ -558,6 +559,7 @@ void SvxBmpNumIconView::SetOutlineNumberingSettings(
         OUString sId = OUString::number(i);
         OUString sText = GetNumberingDescription(NumberingPageType::OUTLINE, i);
         mxIconView->insert(-1, &sText, &sId, &aBmp, nullptr);
+        mxIconView->set_item_accessible_name(mxIconView->n_children() - 1, sText);
     }
 }
 

@@ -1057,6 +1057,7 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage,
         Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
         OUString sId = OUString::number(i);
         m_xExamplesIV->insert(-1, &grfName, &sId, &aBmp, nullptr);
+        m_xExamplesIV->set_item_accessible_name(m_xExamplesIV->n_children() - 1, grfName);
         ++i;
     }
 
@@ -1429,6 +1430,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
         Bitmap aBmp = pVDev->GetBitmap(Point(), pVDev->GetOutputSizePixel());
         OUString sId = OUString::number(i);
         m_xExamplesIV->insert(-1, &grfName, &sId, &aBmp, nullptr);
+        m_xExamplesIV->set_item_accessible_name(m_xExamplesIV->n_children() - 1, grfName);
         ++i;
     }
 
