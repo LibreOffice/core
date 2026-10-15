@@ -411,6 +411,18 @@ function getCompactIcon(unoCommand) {
 	return cy.cGet('#toolbar-down .uno' + unoCommand + ':visible');
 }
 
+// Counts the times the text input stops accepting input, which closes the keyboard on a phone.
+function watchKeyboardClosing(win) {
+	var textInput = win.app.map._textInput;
+	var original = textInput._setAcceptInput;
+	var closings = { count: 0 };
+	textInput._setAcceptInput = function(acceptInput) {
+		if (!acceptInput) closings.count++;
+		return original.call(this, acceptInput);
+	};
+	return closings;
+}
+
 module.exports.enableEditingMobile = enableEditingMobile;
 module.exports.longPressOnDocument = longPressOnDocument;
 module.exports.openHamburgerMenu = openHamburgerMenu;
@@ -433,3 +445,4 @@ module.exports.insertComment = insertComment;
 module.exports.pressPushButtonOfDialog = pressPushButtonOfDialog;
 module.exports.getCompactIcon = getCompactIcon;
 module.exports.tapNextToCursor = tapNextToCursor;
+module.exports.watchKeyboardClosing = watchKeyboardClosing;

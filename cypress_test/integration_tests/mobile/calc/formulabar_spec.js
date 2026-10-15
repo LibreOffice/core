@@ -399,3 +399,74 @@ describe(['tagmobile'], 'Formula bar context menu tests.', function() {
 		assertContextMenu();
 	});
 });
+
+describe(['tagmobile', 'tagnextcloud'], 'The view while a formula is edited.', function() {
+	var formulaText = '#sc_input_window.formulabar .ui-custom-textarea-text-layer';
+
+	beforeEach(function() {
+		helper.setupAndLoadDocument('calc/formulabar.ods');
+		mobileHelper.enableEditingMobile();
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
+
+		// '=2*' opens no function list, so the edit stays in the cell.
+		calcHelper.clickOnFirstCell();
+		helper.typeIntoInputField(helper.addressInputSelector, 'A2');
+		helper.typeIntoDocument('=2*');
+		cy.cGet(formulaText).should('have.text', '=2*');
+	});
+
+	// A one finger pan. The cypress browser has no touch support, so the events go straight
+	// to the section container.
+	function touchPan(win, fromX, fromY, toX, toY) {
+		var canvas = win.document.getElementById('document-canvas');
+		var container = win.app.sectionContainer;
+
+		function touchEvent(type, x, y, ended) {
+			var touch = new win.Touch({identifier: 1, target: canvas, clientX: x, clientY: y});
+			return new win.TouchEvent(type, {
+				touches: ended ? [] : [touch],
+				targetTouches: ended ? [] : [touch],
+				changedTouches: [touch],
+				bubbles: true,
+				cancelable: true,
+			});
+		}
+
+		cy.then(function() {
+			container.onTouchStart(touchEvent('touchstart', fromX, fromY));
+			// A touch shorter than 200ms is a swipe that flings the view on, so date the start back.
+			win.app.sectionContainer.getSectionWithName(win.app.CSections.MouseControl.name)
+				.touchstart = Date.now() - 1000;
+		});
+		cy.then(function() {
+			container.onTouchMove(touchEvent('touchmove', (fromX + toX) / 2, (fromY + toY) / 2));
+			container.onTouchMove(touchEvent('touchmove', toX, toY));
+			container.onTouchEnd(touchEvent('touchend', toX, toY, true));
+			helper.processToIdle(win);
+		});
+	}
+
+	it('The keyboard stays up through a pan', function() {
+		var win = this.win;
+		var viewTop;
+		var closings;
+
+		cy.then(function() {
+			expect(win.app.map.canAcceptKeyboardInput()).to.be.true;
+			closings = mobileHelper.watchKeyboardClosing(win);
+			viewTop = win.app.activeDocument.activeLayout.viewedRectangle.pY1;
+			var canvas = win.document.getElementById('document-canvas').getBoundingClientRect();
+			var x = canvas.left + canvas.width * 0.7;
+			touchPan(win, x, canvas.top + canvas.height * 0.7, x, canvas.top + canvas.height * 0.3);
+		});
+
+		cy.then(function() {
+			expect(win.app.activeDocument.activeLayout.viewedRectangle.pY1).to.be.greaterThan(viewTop);
+			expect(closings.count).to.equal(0);
+			expect(win.app.map.canAcceptKeyboardInput()).to.be.true;
+		});
+		cy.cGet(formulaText).should('have.text', '=2*');
+	});
+});

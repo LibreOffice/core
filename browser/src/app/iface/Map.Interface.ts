@@ -171,6 +171,7 @@ interface MapInterface extends Evented {
 	_cacheSVG: string[];
 	calcInputBarHasFocus(): boolean;
 	hasFocus(): boolean;
+	refocus(): void;
 	lockAccessibilityOn(): void;
 	_partsDirection: number;
 	_docLoaded: boolean;

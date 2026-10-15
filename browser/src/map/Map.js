@@ -874,6 +874,11 @@ window.L.Map = window.L.Evented.extend({
 			this._textInput.focus(acceptInput);
 	},
 
+	// Like focus(), but keeps the keyboard where it is on a phone.
+	refocus: function () {
+		this.focus(this.canAcceptKeyboardInput() ? true : undefined);
+	},
+
 	// just set the keyboard state for mobile
 	// we don't want to change the focus, we know that keyboard is closed
 	// and we are just setting the state here

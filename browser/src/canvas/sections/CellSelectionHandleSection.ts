@@ -24,7 +24,7 @@ class CellSelectionHandle extends CanvasSectionObject {
 	}
 
 	private onDragEnd(point: cool.SimplePoint) {
-		app.map.focus();
+		app.map.refocus();
 		app.map.fire('scrollvelocity', {vx: 0, vy: 0});
 
 		point.pX += this.position[0];

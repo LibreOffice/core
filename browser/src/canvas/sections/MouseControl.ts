@@ -636,7 +636,8 @@ class MouseControl extends CanvasSectionObject {
 		this.mouseDownSent = false;
 		this.lastDragLocalPoint = null;
 
-		if (this.containerObject.isDraggingSomething()) app.map.focus();
+		// A touch pan is a drag too.
+		if (this.containerObject.isDraggingSomething()) app.map.refocus();
 	}
 
 	onMouseEnter(point: cool.SimplePoint, e: MouseEvent): void {
