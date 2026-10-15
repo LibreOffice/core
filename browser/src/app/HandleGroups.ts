@@ -894,41 +894,102 @@ class TurningHandle extends HandleGroup {
 	*/
 	private keyTurn(event: KeyboardEvent, way: number): number {
 		const step = EditSteps.turnSnap(event) ?? EditSteps.keyTurnStep();
-		const square = this.selection.squareNow();
-		if (!square) return step * way;
-
-		// The angle the selection stands at, counted against the clock as the engine counts it,
-		// in steps. A hair is allowed for, so an angle that stands on a step goes to the next.
-		const stands = (-square.rotation() * 180) / Math.PI;
-		const inSteps = stands / step;
-		const next =
-			way > 0 ? Math.floor(inSteps + 1e-6) + 1 : Math.ceil(inSteps - 1e-6) - 1;
-		return next * step - stands;
+		const stands = this.standsNow();
+		return EditSteps.nextStep(stands, step, way) - stands;
 	}
 
-	public moveByKey(
-		_handle: SelectionHandle,
-		towards: cool.Point,
-		event: KeyboardEvent,
-	): cool.Point | null {
-		// The keys shear in the shearing mode, which is still to come.
-		if (this.selection.handleMode() === 'shear') return null;
+	/// The angle the selection stands at, in degrees against the clock as the engine counts it:
+	/// the one the turn keys left it at, where they did, or the one its square stands at.
+	private standsNow(): number {
+		const byKeys = TurningInteraction.keysStillHold(this.selection);
+		if (byKeys) return byKeys.stands;
 
-		const middle = this.selection.middle();
+		const square = this.selection.squareNow();
+		return square ? (-square.rotation() * 180) / Math.PI : 0;
+	}
+
+	/*
+		Turns the selection by a key by that many degrees against the clock, around the middle
+		the turn keys turned it around before where they did, and keeps the angle and the middle
+		for the next key.
+	*/
+	private turnByKey(degrees: number): cool.Matrix2D | null {
+		const byKeys = TurningInteraction.keysStillHold(this.selection);
+		const middle = byKeys?.middle ?? this.selection.middle();
 		if (!middle) return null;
 
-		// The keys that point left and up turn against the clock, the others with it.
-		const against = towards.x < 0 || towards.y < 0;
+		const stands = this.standsNow();
 		const turned = TurningInteraction.turnObjects(
 			this.selection,
 			middle,
-			this.keyTurn(event, against ? 1 : -1),
+			degrees,
 		);
+		TurningInteraction.keysLeftItAt(this.selection, stands + degrees, middle);
+		return turned;
+	}
+
+	/*
+		The keys that point left and up turn or slant against the clock, the others with it. A
+		slant goes on to the next step of the slant there is, counted from nought, of the size a
+		turn takes for the same modifier.
+	*/
+	public moveByKey(
+		handle: SelectionHandle,
+		towards: cool.Point,
+		event: KeyboardEvent,
+	): cool.Point | null {
+		const middle = this.selection.middle();
+		if (!middle) return null;
+
+		const against = towards.x < 0 || towards.y < 0;
+		const changed =
+			this.selection.handleMode() === 'shear'
+				? ShearingInteraction.shearObjects(
+						this.selection,
+						middle,
+						handle.turnedBy ?? 0,
+						(stands: number) =>
+							EditSteps.nextStep(
+								stands,
+								EditSteps.turnSnap(event) ?? EditSteps.keyTurnStep(),
+								against ? -1 : 1,
+							),
+					)
+				: this.turnByKey(this.keyTurn(event, against ? 1 : -1));
 
 		// What the key did is laid on the objects, as the end of a drag lays its own.
-		this.selection.layTheChangeOn(turned);
+		this.selection.layTheChangeOn(changed);
 
 		return null;
+	}
+
+	/*
+		Brings the selection back to nought in the mode the handle is in: standing upright in the
+		turning mode, the shorter way round, and without a slant in the shearing mode.
+	*/
+	public backToNought(handle: SelectionHandle): void {
+		const middle = this.selection.middle();
+		if (!middle) return;
+
+		let changed: cool.Matrix2D | null;
+		if (this.selection.handleMode() === 'shear') {
+			changed = ShearingInteraction.shearObjects(
+				this.selection,
+				middle,
+				handle.turnedBy ?? 0,
+				() => 0,
+			);
+		} else {
+			if (handle.deactivated) return;
+
+			// The angle the selection stands at is turned away the shorter way.
+			const stands = this.standsNow() % 360;
+			const back =
+				stands > 180 ? 360 - stands : stands < -180 ? -360 - stands : -stands;
+			changed = this.turnByKey(back);
+		}
+
+		this.selection.layTheChangeOn(changed);
 	}
 }
 

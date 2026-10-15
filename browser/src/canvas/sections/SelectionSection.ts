@@ -38,16 +38,28 @@ abstract class SelectionSection extends CanvasSectionObject {
 		() => this.handles(),
 		(handle: SelectionHandle, towards: cool.Point, event: KeyboardEvent) =>
 			this.moveHandleBy(handle, towards, event),
-		(handle: SelectionHandle) => this.pressTheHandle(handle),
+		(handle: SelectionHandle, event: KeyboardEvent) =>
+			this.pressTheHandle(handle, event),
 	);
 
 	/*
-		Space or Return on a handle the keyboard is on: on the handle above the selection they
-		switch between turning and shearing, where both are offered, as a click on it does. Other
-		handles take no such key.
+		Space, Return or 0 on a handle the keyboard is on. On the handle above the selection, 0
+		brings the turn or the slant back to nought, and Space and Return switch between turning
+		and shearing, where both are offered, as a click on it does. Other handles take no such
+		key.
 	*/
-	private pressTheHandle(handle: SelectionHandle): boolean {
+	private pressTheHandle(
+		handle: SelectionHandle,
+		event: KeyboardEvent,
+	): boolean {
 		if (handle.kind !== SelectionSection.turningKind) return false;
+
+		if (event.key === '0') {
+			const group = this.groupOf(handle);
+			if (group instanceof TurningHandle) group.backToNought(handle);
+			return true;
+		}
+
 		if (!this.shearingIsOffered()) return false;
 
 		this.switchTheHandleMode();
@@ -1404,6 +1416,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.context.restore();
 
 		this.drawTheMarks();
+		this.drawTheReading();
 	}
 
 	/*
@@ -1413,7 +1426,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 	*/
 	private drawTheMarks(): void {
 		const marks = this.interaction?.marks() ?? [];
-		if (!marks.length && !this.interaction?.reading()) return;
+		if (!marks.length) return;
 
 		this.context.save();
 		this.context.setTransform(1, 0, 0, 1, 0, 0);
@@ -1468,30 +1481,74 @@ abstract class SelectionSection extends CanvasSectionObject {
 			this.context.font = font;
 		}
 
-		this.drawTheReading();
 		this.context.restore();
 	}
 
 	/*
-		Writes what the running interaction reads, such as the angle of a turn, below and to the
-		right of the mouse, where the pointer leaves it free. It has a light edge, so it reads on
-		any page.
+		Writes an angle beside where it is changed, below and to the right, where the pointer
+		leaves it free: what the running interaction reads beside the mouse, and while nothing
+		runs, the turn or the slant beside the handle above the selection when the keyboard is
+		on it. It has a light edge, so it reads on any page. Each of the two can be switched off in
+		the client's preferences: vectorAngleAtMouse and vectorAngleAtHandle.
 	*/
 	private drawTheReading(): void {
-		const reading = this.interaction?.reading();
-		const mouse = this.lastMoved?.at;
-		if (!reading || !mouse) return;
+		let reading: string | null = null;
+		let x = 0;
+		let y = 0;
 
-		const at = new cool.SimplePoint(mouse.x, mouse.y);
-		const x = at.vX + 16 * app.dpiScale;
-		const y = at.vY + 24 * app.dpiScale;
+		if (this.interaction) {
+			const mouse = this.lastMoved?.at;
+			if (!mouse || !window.prefs?.getBoolean('vectorAngleAtMouse', true))
+				return;
+			reading = this.interaction.reading();
+			const at = new cool.SimplePoint(mouse.x, mouse.y);
+			x = at.vX + 16 * app.dpiScale;
+			y = at.vY + 24 * app.dpiScale;
+		} else {
+			const handle = this.travel.activeHandle() as SelectionHandle | undefined;
+			if (
+				handle?.kind !== SelectionSection.turningKind ||
+				handle.deactivated ||
+				!window.prefs?.getBoolean('vectorAngleAtHandle', true)
+			)
+				return;
+			reading = this.readingOfTheHandleAbove(handle);
+			const at = HandleLook.drawnAt(handle);
+			const size = ShapeHandlesSection.handleSize();
+			x = at.vX + size;
+			y = at.vY + size;
+		}
+		if (!reading) return;
+
+		this.context.save();
+		this.context.setTransform(1, 0, 0, 1, 0, 0);
+		this.context.font = Math.round(11 * app.dpiScale) + 'px sans-serif';
 		this.context.textAlign = 'left';
+		this.context.textBaseline = 'middle';
 		this.context.strokeStyle = '#FFFFFF';
 		this.context.lineWidth = 3;
 		this.context.strokeText(reading, x, y);
 		this.context.fillStyle = HandleLook.outlineColour;
 		this.context.fillText(reading, x, y);
-		this.context.lineWidth = 1;
+		this.context.restore();
+	}
+
+	/// The angle of the selection in the mode of the handle above it: the turn as the engine
+	/// counts it, or the slant.
+	private readingOfTheHandleAbove(handle: SelectionHandle): string {
+		return this.handleMode() === 'shear'
+			? ShearingInteraction.readingOf(
+					ShearingInteraction.slantOf(this, handle.turnedBy ?? 0),
+				)
+			: TurningInteraction.readingOf(this.turnOfTheSelection());
+	}
+
+	/// The angle the selection stands at, as the canvas counts angles: the one the turn keys
+	/// left it at, where they did, or the one its square stands at.
+	private turnOfTheSelection(): number {
+		const byKeys = TurningInteraction.keysStillHold(this);
+		if (byKeys) return (-byKeys.stands * Math.PI) / 180;
+		return this.squareNow()?.rotation() ?? 0;
 	}
 
 	/*
@@ -2096,13 +2153,22 @@ abstract class SelectionSection extends CanvasSectionObject {
 		The mapping travels whole rather than as the change alone, because the client is the one
 		that holds what the object is drawn by: the engine would have to read that again and the
 		two could then disagree.
+
+		Where mappings are given for objects, the change is laid over those instead of over what
+		the objects are drawn by now.
 	*/
 	public static sendTransform(
 		objectIds: number[],
 		matrix: cool.Matrix2D,
 		what: string,
+		from?: Map<number, cool.Matrix2D>,
 	): void {
 		if (!SelectionSection.withinReason(objectIds, matrix)) return;
+
+		// A change worked out from what the objects are drawn by now ends a slant keys gave, and
+		// any change ends a turn they gave, which a turn by a key takes up again after it.
+		if (!from) ShearingInteraction.forgetTheKeys();
+		TurningInteraction.forgetTheKeys();
 
 		const mappings: string[] = [];
 
@@ -2115,7 +2181,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 		for (const objectId of RenderGeometrySection.theOnesThatDraw(
 			RenderGeometrySection.standingFor(objectIds),
 		)) {
-			const mapping = RenderGeometrySection.transformOf(objectId);
+			const mapping =
+				from?.get(objectId) ?? RenderGeometrySection.transformOf(objectId);
 			if (!mapping) continue;
 
 			// The change the drag stands for, laid over what the object is drawn by now.
@@ -2629,6 +2696,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 			every handle would jump back with them.
 		*/
 		if (carriedOut && this.interaction) this.keepWhatItDid(this.interaction);
+
+		// A slant keys gave goes on from where the drag left the objects.
+		if (carriedOut) ShearingInteraction.forgetTheKeys();
 
 		this.interaction = null;
 		this.tellWhoStandsIn();

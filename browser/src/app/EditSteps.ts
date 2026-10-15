@@ -115,6 +115,18 @@ class EditSteps {
 		return null;
 	}
 
+	/*
+		The angle on from that one by a key: the next step of that size up for a way of 1, the
+		next one down for -1. A hair is allowed for, so an angle that stands on a step goes on to
+		the next one.
+	*/
+	public static nextStep(angle: number, step: number, way: number): number {
+		const inSteps = angle / step;
+		const next =
+			way > 0 ? Math.floor(inSteps + 1e-6) + 1 : Math.ceil(inSteps - 1e-6) - 1;
+		return next * step;
+	}
+
 	/// The step in degrees a key with no modifier turns to, counted from the page
 	/// (vectorKeyTurnStep).
 	public static keyTurnStep(): number {

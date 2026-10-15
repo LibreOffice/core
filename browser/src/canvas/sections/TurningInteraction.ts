@@ -119,9 +119,71 @@ class TurningInteraction extends SelectionInteraction {
 	/// The angle the selection stands at now, as the engine counts it: against the clock, from
 	/// nought up to a full turn.
 	public reading(): string {
+		return TurningInteraction.readingOf(this.stood + this.turned);
+	}
+
+	/*
+		The turn keys gave, kept between one key and the next: which objects it was, the ones of
+		them that draw, the angle the keys left them at, in degrees as the engine counts it,
+		against the clock, and the middle they turn around, in twips, the one of the first key.
+		The keys count the angle on from there and turn around that middle rather than reading
+		both from the selection again, which for several objects or a group is made anew upright
+		after every change. Any other change sent from here, or one the engine makes on its own
+		such as an undo, ends it.
+	*/
+	private static keys: {
+		objects: string;
+		drawing: Set<number>;
+		stands: number;
+		middle: cool.SimplePoint;
+	} | null = null;
+
+	/// The angle and the middle the turn keys left the selection at, where they were the last to
+	/// change it; nothing otherwise.
+	public static keysStillHold(
+		selection: SelectionSection,
+	): { stands: number; middle: cool.SimplePoint } | null {
+		const keys = TurningInteraction.keys;
+		return keys && keys.objects === selection.selectedObjects().join(',')
+			? { stands: keys.stands, middle: keys.middle }
+			: null;
+	}
+
+	/// Takes in that the turn keys left the selection at that angle, as the engine counts it,
+	/// turned around that middle.
+	public static keysLeftItAt(
+		selection: SelectionSection,
+		stands: number,
+		middle: cool.SimplePoint,
+	): void {
+		const objects = selection.selectedObjects();
+		TurningInteraction.keys = {
+			objects: objects.join(','),
+			drawing: new Set(
+				RenderGeometrySection.theOnesThatDraw(
+					RenderGeometrySection.standingFor(objects),
+				),
+			),
+			stands: stands,
+			middle: middle,
+		};
+	}
+
+	/// Ends the turn keys gave, so the next key starts from the selection as it stands. Given an
+	/// object, only where the keys turned that one.
+	public static forgetTheKeys(objectId?: number): void {
+		const keys = TurningInteraction.keys;
+		if (objectId !== undefined && keys && !keys.drawing.has(objectId)) return;
+		TurningInteraction.keys = null;
+	}
+
+	/// An angle the canvas counts as it is written, as the engine counts it: against the clock,
+	/// in whole degrees from nought up to a full turn.
+	public static readingOf(angle: number): string {
 		const full = Math.PI * 2;
-		const angle = ((-(this.stood + this.turned) % full) + full) % full;
-		const text = SelectionInteraction.degreesOf(angle);
+		const text = SelectionInteraction.degreesOf(
+			((-angle % full) + full) % full,
+		);
 		return text === '360\u00B0' ? '0\u00B0' : text;
 	}
 
@@ -133,7 +195,7 @@ class TurningInteraction extends SelectionInteraction {
 				this.radius,
 				this.from - this.stood,
 				-this.stood,
-				'0',
+				'0\u00B0',
 			),
 		];
 	}

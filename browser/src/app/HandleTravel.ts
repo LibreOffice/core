@@ -234,7 +234,8 @@ class HandleTravel {
 
 	/*
 		What the keyboard does to the handles: travel from one to the next, to either end of them,
-		away from them again, move the one it is on, and press it with Space or Return. Answers whether the key was used up here.
+		away from them again, move the one it is on, and press it with Space, Return or 0. Answers
+		whether the key was used up here.
 		Going to either end and moving work on the handle the keyboard is on, so they are used up
 		only while it is on one; otherwise Ctrl+Home and Ctrl+End are left to the objects.
 	*/
@@ -258,7 +259,7 @@ class HandleTravel {
 		if (event.key === 'Escape') return this.leave();
 
 		if (
-			(event.key === 'Enter' || event.key === ' ') &&
+			(event.key === 'Enter' || event.key === ' ' || event.key === '0') &&
 			!event.ctrlKey &&
 			!event.altKey &&
 			!event.metaKey

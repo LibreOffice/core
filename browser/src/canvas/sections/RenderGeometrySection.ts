@@ -551,12 +551,20 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const objectIds = answered ?? [...RenderGeometrySection.pending.keys()];
 
 		// A whole part arriving may have changed anything, predicted or not.
-		if (!answered) GraphicSelection.unpredictedAnswer();
+		if (!answered) {
+			GraphicSelection.unpredictedAnswer();
+			ShearingInteraction.forgetTheKeys();
+			TurningInteraction.forgetTheKeys();
+		}
 
 		for (const objectId of objectIds) {
 			const laid = RenderGeometrySection.pending.get(objectId);
+			// A change made here that the engine answers otherwise is still the one made here,
+			// so only a change the engine made on its own ends a slant keys gave.
 			if (!laid) {
 				GraphicSelection.unpredictedAnswer(objectId);
+				ShearingInteraction.forgetTheKeys(objectId);
+				TurningInteraction.forgetTheKeys(objectId);
 				continue;
 			}
 

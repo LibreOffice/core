@@ -110,6 +110,124 @@ class ShearingInteraction extends SelectionInteraction {
 		this.slantTo = this.startSlant;
 	}
 
+	/*
+		The slant keys give, kept between one key and the next: the slant as one interaction from
+		the selection as it was before the first key, the mapping each object that draws had
+		then, the change that has been laid on since, and which objects it was. It goes on while
+		nothing else changes those objects, so the keys count the angle on as a drag does and
+		each result is worked out from the start. Any other change sent from here, or one the
+		engine makes on its own such as an undo, ends it, and the next key starts again from what
+		it finds.
+	*/
+	private static keys: {
+		shearing: ShearingInteraction;
+		mappings: Map<number, cool.Matrix2D>;
+		objects: string;
+		laid: cool.Matrix2D;
+	} | null = null;
+
+	/// The slant keys gave the selection where they were the last to change it.
+	private static keysStillHold(
+		selection: SelectionSection,
+	): ShearingInteraction | null {
+		const keys = ShearingInteraction.keys;
+		if (!keys || keys.objects !== selection.selectedObjects().join(','))
+			return null;
+		return keys.shearing;
+	}
+
+	/// Ends the slant keys gave, so the next key starts from the objects as they stand. Given an
+	/// object, only where the keys changed that one.
+	public static forgetTheKeys(objectId?: number): void {
+		const keys = ShearingInteraction.keys;
+		if (objectId !== undefined && keys && !keys.mappings.has(objectId)) return;
+		ShearingInteraction.keys = null;
+	}
+
+	/*
+		Slants the selection around that middle, in the frame turned by that angle, to the slant
+		worked out from the one there is, both in degrees as the canvas counts angles. Where keys
+		gave the slant there is, it goes on from their start. Sends the change and gives it back,
+		or nothing where the slant stays.
+	*/
+	public static shearObjects(
+		selection: SelectionSection,
+		middle: cool.SimplePoint,
+		turnedBy: number,
+		slantFrom: (stands: number) => number,
+	): cool.Matrix2D | null {
+		let shearing = ShearingInteraction.keysStillHold(selection);
+		if (!shearing || !ShearingInteraction.keys) {
+			const objects = selection.selectedObjects();
+			const first = objects.length
+				? RenderGeometrySection.transformOf(objects[0])
+				: null;
+			if (!first) return null;
+
+			shearing = new ShearingInteraction(selection, middle, middle, turnedBy);
+			const mappings = new Map<number, cool.Matrix2D>();
+			for (const objectId of RenderGeometrySection.theOnesThatDraw(
+				RenderGeometrySection.standingFor(objects),
+			)) {
+				const mapping = RenderGeometrySection.transformOf(objectId);
+				if (mapping) mappings.set(objectId, mapping);
+			}
+			ShearingInteraction.keys = {
+				shearing: shearing,
+				mappings: mappings,
+				objects: objects.join(','),
+				laid: cool.Matrix2D.IDENTITY,
+			};
+		}
+		const keys = ShearingInteraction.keys;
+
+		const stands = (shearing.slantTo * 180) / Math.PI;
+		shearing.slantTo = SelectionInteraction.normalAngle(
+			(slantFrom(stands) * Math.PI) / 180,
+		);
+
+		// What is laid on now takes the objects from where the keys left them to the new slant.
+		const wanted = shearing.transformation() ?? cool.Matrix2D.IDENTITY;
+		const back = keys.laid.invert();
+		if (!back) return null;
+		const change = back.then(wanted);
+		if (change.equals(cool.Matrix2D.IDENTITY, 1e-9)) return null;
+
+		const objects = selection.selectedObjects();
+		// The engine is told the slant worked out from the start, since it keeps sizes rounded
+		// and a slant opening up a thin line again would make that rounding grow.
+		SelectionSection.sendTransform(objects, wanted, 'shear', keys.mappings);
+		keys.laid = wanted;
+		return change;
+	}
+
+	/*
+		The slant the selection has, in the frame turned by that angle, as the canvas counts
+		angles: the one keys gave it where they were the last to change it, or the one read from
+		the first object. Near ninety degrees the object's axis says little about the slant, since
+		the shear stays at eighty-nine there.
+	*/
+	public static slantOf(selection: SelectionSection, turnedBy: number): number {
+		const keys = ShearingInteraction.keysStillHold(selection);
+		if (keys) return keys.slantTo;
+
+		const nowhere = new cool.SimplePoint(0, 0);
+		return new ShearingInteraction(selection, nowhere, nowhere, turnedBy)
+			.startSlant;
+	}
+
+	/// A slant as it is written, in whole degrees from minus half a turn to half a turn.
+	public static readingOf(slant: number): string {
+		return SelectionInteraction.degreesOf(
+			SelectionInteraction.normalAngle(slant),
+		);
+	}
+
+	/// An angle in degrees brought into the turn from minus half a turn to half a turn.
+	private static degreesInTheTurn(degrees: number): number {
+		return ((((degrees + 180) % 360) + 360) % 360) - 180;
+	}
+
 	/// The angle from the middle to that point, as the canvas counts angles.
 	private static angleAt(
 		middle: cool.SimplePoint,
@@ -123,19 +241,27 @@ class ShearingInteraction extends SelectionInteraction {
 		SdrDragShear works it out: the upright axis is scaled by the cosine of the angle, which
 		turns it over between ninety and two hundred and seventy degrees, and then sheared by the
 		angle, taken back by half a turn while upside down and held to eighty-nine degrees.
-		Together the upright axis turns by the angle and keeps its length.
+		Together the upright axis turns by the angle and keeps its length, except within a degree
+		of ninety either way, where the held shear makes it shorter.
 	*/
 	public static slant(turned: number): cool.Matrix2D {
-		let degrees = (turned * 180) / Math.PI;
-		degrees = ((((degrees + 180) % 360) + 360) % 360) - 180;
+		const degrees = ShearingInteraction.degreesInTheTurn(
+			(turned * 180) / Math.PI,
+		);
 
 		const negative = degrees < 0;
 		const size = Math.abs(degrees);
 		const upsideDown = size > 90;
 
-		const scale = Math.cos((size * Math.PI) / 180);
+		// Up to ninety degrees the shear stays at eighty-nine and the cosine thins the selection
+		// out. At ninety it keeps a hundredth of its height, so it stands as a thin line that a
+		// further slant opens up again.
+		const cos = Math.cos((size * Math.PI) / 180);
+		const scale = upsideDown ? cos : Math.max(cos, 0.01);
+		// An object holds a shear of eighty-nine degrees at most either way, so the shear is
+		// held there on both sides of ninety, upside down as well.
 		let shear = upsideDown ? size - 180 : size;
-		if (shear > 89) shear = 89;
+		shear = Math.max(-89, Math.min(89, shear));
 		if (negative) shear = -shear;
 
 		// A point is moved across by how far it lies from the middle, the other way from it.
@@ -175,9 +301,7 @@ class ShearingInteraction extends SelectionInteraction {
 
 	/// The slant the selection gets.
 	public reading(): string {
-		return SelectionInteraction.degreesOf(
-			SelectionInteraction.normalAngle(this.slantTo),
-		);
+		return ShearingInteraction.readingOf(this.slantTo);
 	}
 
 	/// The mark of no slant, straight above the middle at a right angle to the upper side.
@@ -188,7 +312,7 @@ class ShearingInteraction extends SelectionInteraction {
 				this.radius,
 				this.upright,
 				0,
-				'0',
+				'0\u00B0',
 			),
 		];
 	}
