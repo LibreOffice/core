@@ -821,6 +821,7 @@ boost::property_tree::ptree makeImagesTree(const std::vector<ParagraphImage>& rI
 
 struct ContextParagraph
 {
+    uno::Reference<accessibility::XAccessibleContext> xContext;
     OUString aText;
     tools::Rectangle aTwips;
     sal_Int32 nLevel = 0;
@@ -848,6 +849,7 @@ ContextParagraph contextParagraph(const SfxViewShell* pViewShell,
                                   const css::awt::Point& rParentOnScreen)
 {
     ContextParagraph aParagraph;
+    aParagraph.xContext = xContext;
     uno::Reference<accessibility::XAccessibleText> xText(xContext, uno::UNO_QUERY);
     if (xText.is())
     {
@@ -1397,6 +1399,10 @@ public:
         const sal_Int64 nStateSet
     );
 
+    // Writer sends no CHILD event when the caret enters a paragraph whose accessible object
+    // already exists, e.g. one kept alive by the accessible object of a shape in it.
+    void attachContextParagraphs();
+
     /// @throws lang::IndexOutOfBoundsException
     /// @throws uno::RuntimeException
     void detachRecursive(
@@ -1438,7 +1444,7 @@ public:
     void notifySelectionChanged(bool bIsCell, const OUString& sAction, const OUString& sName,
                                 const OUString& sTextContent);
 
-    std::string getFocusedParagraph() const;
+    std::string getFocusedParagraph();
     tools::Rectangle visibleArea() const;
     void
     collectContextWindow(const uno::Reference<css::accessibility::XAccessibleText>& xAccText) const;
@@ -1586,7 +1592,7 @@ void KitDocumentFocusListener::collectContextWindow(
                            m_aList.aParagraphs, m_aParagraphsBefore, m_aParagraphsAfter);
 }
 
-std::string KitDocumentFocusListener::getFocusedParagraph() const
+std::string KitDocumentFocusListener::getFocusedParagraph()
 {
     aboutView("KitDocumentFocusListener::getFocusedParagraph", this, m_pViewShell);
     aboutParagraph("KitDocumentFocusListener::getFocusedParagraph",
@@ -1602,6 +1608,7 @@ std::string KitDocumentFocusListener::getFocusedParagraph() const
     else if (m_xFocusedText.is())
     {
         collectContextWindow(m_xFocusedText);
+        attachContextParagraphs();
     }
 
     std::string aPayload;
@@ -1879,6 +1886,22 @@ void KitDocumentFocusListener::notifySelectionChanged(bool bIsCell, const OUStri
     }
 }
 
+void KitDocumentFocusListener::attachContextParagraphs()
+{
+    // a selection reported while attaching resets the paragraphs
+    std::vector<uno::Reference<accessibility::XAccessible>> aParagraphs;
+    for (const auto* pParagraphs : { &m_aParagraphsBefore, &m_aParagraphsAfter })
+    {
+        for (const ContextParagraph& rParagraph : *pParagraphs)
+        {
+            if (auto xAccessible = rParagraph.xContext.query<accessibility::XAccessible>())
+                aParagraphs.push_back(std::move(xAccessible));
+        }
+    }
+    for (const auto& xAccessible : aParagraphs)
+        attachRecursive(xAccessible);
+}
+
 void KitDocumentFocusListener::disposing( const lang::EventObject& aEvent )
 {
     // Unref the object here, but do not remove as listener since the object
@@ -1945,6 +1968,7 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
             for (const auto& xItem : m_aList.aParagraphs)
                 attachRecursive(uno::Reference<accessibility::XAccessible>(xItem, uno::UNO_QUERY),
                                 xItem, xItem->getAccessibleStateSet());
+            attachContextParagraphs();
             bNotify = true;
         }
     }
@@ -2530,7 +2554,8 @@ void KitDocumentFocusListener::attachRecursive(
 
         sal_Int64 nStateSet = xContext->getAccessibleStateSet();
 
-        if (!m_bIsEditingCell)
+        // a shape in a Writer paragraph may be named "Cell..." too
+        if (!m_bIsEditingCell && !isText(m_nDocumentType))
         {
             ::rtl::OUString sName = xContext->getAccessibleName();
             m_bIsEditingCell = sName.startsWith("Cell");
@@ -3619,9 +3644,9 @@ SfxViewShell::~SfxViewShell()
         pFrameWin->ReleaseKitNotifier();
 }
 
-std::string SfxViewShell::getA11yFocusedParagraph() const
+std::string SfxViewShell::getA11yFocusedParagraph()
 {
-    const KitDocumentFocusListener& rDocFocusListener = GetKitDocumentFocusListener();
+    KitDocumentFocusListener& rDocFocusListener = GetKitDocumentFocusListener();
     return rDocFocusListener.getFocusedParagraph();
 }
 

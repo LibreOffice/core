@@ -563,7 +563,7 @@ public:
     StylesSpotlightColorMap& GetStylesSpotlightParaColorMap() { return ParaStylesSpotlightColorMap; }
     StylesSpotlightColorMap& GetStylesSpotlightCharColorMap() { return CharStylesSpotlightColorMap; }
 
-    std::string getA11yFocusedParagraph() const;
+    std::string getA11yFocusedParagraph();
     int getA11yCaretPosition() const;
     void SetSigningCertificate(const svl::crypto::CertificateOrName& rCertificateOrName);
     const svl::crypto::CertificateOrName & GetSigningCertificate() const;

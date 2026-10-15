@@ -2158,6 +2158,51 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphComments)
     CPPUNIT_ASSERT_EQUAL(aId, aComment.get<std::string>("id"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphShape)
+{
+    // Given a shape anchored as a character, in the paragraph after the first one:
+    createDoc("a11y-shape.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the cursor moves into that paragraph:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the paragraph is reported:
+    // Without the fix, no paragraph was reported: its accessible object, kept alive by the shape's,
+    // existed before the cursor came, so Writer sent no CHILD event for it.
+    CPPUNIT_ASSERT_EQUAL(std::string("Before \xef\xbf\xbc after."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphShapeAfterScroll)
+{
+    // Given a shape anchored as a character, in a paragraph farther than the paragraphs given
+    // around the cursor:
+    SwXTextDocument* pXTextDocument = createDoc("a11y-shape-far.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the client asks for the paragraph after a scroll that shows them all, and the cursor
+    // then moves to the last one:
+    pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 12240, 15840));
+    pWrtShell->GetSfxViewShell()->getA11yFocusedParagraph();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then that paragraph is reported:
+    // Without the fix, the paragraphs collected for the client were not listened to, and Writer
+    // sent no CHILD event for the last one, kept alive by the accessible object of its shape.
+    CPPUNIT_ASSERT_EQUAL(std::string("Before \xef\xbf\xbc after."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yImageSelection)
 {
     for (const char* pFile : { "a11y-image.fodt", "a11y-image-at-paragraph.fodt" })
