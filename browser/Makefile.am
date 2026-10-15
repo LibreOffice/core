@@ -577,6 +577,7 @@ COOL_JS_LST =\
 	src/canvas/sections/CropInteraction.ts \
 	src/canvas/sections/CropPanInteraction.ts \
 	src/canvas/sections/TurningInteraction.ts \
+	src/canvas/sections/ShearingInteraction.ts \
 	src/canvas/sections/MovingInteraction.ts \
 	src/canvas/sections/ShapingInteraction.ts \
 	src/canvas/sections/SelectionSection.ts \

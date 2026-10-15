@@ -38,7 +38,21 @@ abstract class SelectionSection extends CanvasSectionObject {
 		() => this.handles(),
 		(handle: SelectionHandle, towards: cool.Point, event: KeyboardEvent) =>
 			this.moveHandleBy(handle, towards, event),
+		(handle: SelectionHandle) => this.pressTheHandle(handle),
 	);
+
+	/*
+		Space or Return on a handle the keyboard is on: on the handle above the selection they
+		switch between turning and shearing, where both are offered, as a click on it does. Other
+		handles take no such key.
+	*/
+	private pressTheHandle(handle: SelectionHandle): boolean {
+		if (handle.kind !== SelectionSection.turningKind) return false;
+		if (!this.shearingIsOffered()) return false;
+
+		this.switchTheHandleMode();
+		return true;
+	}
 
 	/// The handles as they were last worked out from the objects of the selection.
 	private known: SelectionHandle[] = [];
@@ -85,6 +99,258 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	/// The handle the mouse is over, marked so, or null while it is over none.
 	private hovered: string | null = null;
+
+	/*
+		The objects the handle above the selection shears, as a key of their ids in any order, or
+		null while it turns. It is kept apart from the section, which is made anew, and from the
+		order of the ids, which an answer from the engine may change, so the shearing mode stays
+		for as long as the same objects are selected, and any other selection turns.
+	*/
+	private static shearing: string | null = null;
+
+	/// The key of the selected objects, the same for the same objects in any order.
+	private keyOfTheSelection(): string {
+		return SelectionSection.keyOf(this.selectedObjects());
+	}
+
+	private static keyOf(objectIds: number[]): string {
+		return objectIds
+			.slice()
+			.sort((a: number, b: number) => a - b)
+			.join(',');
+	}
+
+	/// Those objects are selected here: where they are not the ones that were sheared, the
+	/// handle turns again, as it does for every new selection.
+	public static selectedHere(objectIds: number[]): void {
+		if (SelectionSection.shearing !== SelectionSection.keyOf(objectIds))
+			SelectionSection.shearing = null;
+	}
+
+	/// The mode the handle above the selection is in. It shears only where every selected object
+	/// may be sheared; otherwise turning is the only mode.
+	public handleMode(): 'turn' | 'shear' {
+		return SelectionSection.shearing === this.keyOfTheSelection() &&
+			this.shearingIsOffered()
+			? 'shear'
+			: 'turn';
+	}
+
+	/// Whether shearing is offered for this selection: where every object in it may be sheared.
+	public shearingIsOffered(): boolean {
+		return ObjectHandles.canBeSheared(this.selectedObjects());
+	}
+
+	/// Switches the handle above the selection to the other mode, where shearing is offered.
+	public switchTheHandleMode(): void {
+		if (!this.shearingIsOffered()) return;
+
+		SelectionSection.shearing =
+			this.handleMode() === 'shear' ? null : this.keyOfTheSelection();
+		this.containerObject.requestReDraw();
+	}
+
+	/// The kind of the handle beside the one above the selection that switches it to the other
+	/// mode.
+	public static readonly otherModeKind: string = 'othermode';
+
+	/*
+		Whether the handle that switches to the other mode is shown beside the one above the
+		selection: while the mouse is on that one and shearing is offered.
+	*/
+	private otherModeShown: boolean = false;
+
+	public showsTheOtherMode(): boolean {
+		return this.otherModeShown;
+	}
+
+	/*
+		The bar behind the handle above the selection and the handle of the other mode while that
+		one is shown, in canvas pixels: the two points its line runs between and how far the bar
+		reaches out from that line. Its ends are half circles around those points, as wide as the
+		bar. The points are the middles of the two handles, and beyond the one that shows the
+		slanted symbol of shearing the line goes on a little, since that symbol is wider than the
+		circle and needs more room to the end. Nothing while the handle of the other mode is not
+		shown.
+	*/
+	private barToTheOtherMode(): {
+		from: cool.Point;
+		to: cool.Point;
+		reach: number;
+	} | null {
+		if (!this.otherModeShown) return null;
+
+		const shown = this.handles();
+		const from = shown.find(
+			(handle: SelectionHandle) => handle.kind === SelectionSection.turningKind,
+		);
+		const to = shown.find(
+			(handle: SelectionHandle) =>
+				handle.kind === SelectionSection.otherModeKind,
+		);
+		if (!from || !to) return null;
+
+		const start = HandleLook.drawnAt(from);
+		const end = HandleLook.drawnAt(to);
+		const a = new cool.Point(start.vX, start.vY);
+		const b = new cool.Point(end.vX, end.vY);
+		const length = b.subtract(a).length();
+		if (!length) return null;
+
+		const size = ShapeHandlesSection.handleSize();
+		const along = b.subtract(a).multiplyBy((0.5 * size) / length);
+		const shearingFirst = this.handleMode() === 'shear';
+		return {
+			from: shearingFirst ? a.subtract(along) : a,
+			to: shearingFirst ? b : b.add(along),
+			reach: 1.25 * size,
+		};
+	}
+
+	/*
+		The middle of the bar to the handle of the other mode, the angle it lies at and its half
+		length, in canvas pixels; the half height is how far it reaches out.
+	*/
+	private static layOfTheBar(bar: {
+		from: cool.Point;
+		to: cool.Point;
+		reach: number;
+	}): { middle: cool.Point; turn: number; halfLength: number } {
+		const way = bar.to.subtract(bar.from);
+		return {
+			middle: bar.from.add(way.multiplyBy(0.5)),
+			turn: Math.atan2(way.y, way.x),
+			halfLength: way.length() / 2 + bar.reach,
+		};
+	}
+
+	/// Whether that point on the canvas lies on the bar to the handle of the other mode: no
+	/// further from the line between the two middles than the bar reaches out.
+	private onTheBarToTheOtherMode(mouse: cool.Point): boolean {
+		const bar = this.barToTheOtherMode();
+		if (!bar) return false;
+
+		const way = bar.to.subtract(bar.from);
+		const length = way.length();
+		if (!length) return false;
+
+		const along = Math.max(
+			0,
+			Math.min(length, mouse.subtract(bar.from).dot(way) / length),
+		);
+		const nearest = bar.from.add(way.multiplyBy(along / length));
+		return mouse.distanceTo(nearest) <= bar.reach;
+	}
+
+	/*
+		Draws the bar to the handle of the other mode, behind the handles, where it is shown: a
+		rectangle along the upper side with half circles for ends, filled and edged as a handle
+		under the mouse is, as both handles on it are drawn.
+	*/
+	private drawTheBarToTheOtherMode(): void {
+		const bar = this.barToTheOtherMode();
+		if (!bar) return;
+
+		const lay = SelectionSection.layOfTheBar(bar);
+		const width = lay.halfLength;
+		const height = bar.reach;
+		const corner = height;
+
+		this.context.save();
+		this.context.translate(lay.middle.x, lay.middle.y);
+		this.context.rotate(lay.turn);
+		this.context.beginPath();
+		this.context.moveTo(-width + corner, -height);
+		this.context.arcTo(width, -height, width, height, corner);
+		this.context.arcTo(width, height, -width, height, corner);
+		this.context.arcTo(-width, height, -width, -height, corner);
+		this.context.arcTo(-width, -height, width, -height, corner);
+		this.context.closePath();
+		this.context.fillStyle = HandleLook.colourOfTheKind.turning;
+		this.context.strokeStyle = SelectionSection.underTheMouse(
+			HandleLook.colourOfTheKind.turning,
+		);
+		this.context.lineWidth = 2 * app.dpiScale;
+		this.context.fill();
+		this.context.stroke();
+		this.context.restore();
+	}
+
+	/// The wait before the handle of the other mode comes up, while it runs.
+	private otherModeWait: any = null;
+
+	/// How long the mouse rests on the handle above the selection before the handle of the other
+	/// mode comes up, in milliseconds (vectorOtherModeDelay).
+	private static otherModeDelay(): number {
+		const delay = window.prefs?.getNumber('vectorOtherModeDelay', 2000) ?? 2000;
+		return delay >= 0 ? delay : 2000;
+	}
+
+	/// Puts the handle of the other mode away, and calls off a wait for it.
+	private dropTheOtherMode(): void {
+		if (this.otherModeWait !== null) {
+			app.timerRegistry.clearTimeout(this.otherModeWait);
+			this.otherModeWait = null;
+		}
+		if (this.otherModeShown) {
+			this.otherModeShown = false;
+			this.containerObject.requestReDraw();
+		}
+	}
+
+	/*
+		Follows the mouse for the switch to the other mode. Once the mouse has rested on the handle
+		above the selection for a while, the handle of the other mode comes up beside it, with a
+		bar behind both, and stays while the mouse is on the bar, given as the point on the
+		canvas. A press on the handle, which begins a drag, comes before that, so a drag starts
+		without the bar. Reaching that handle switches the mode, and it goes again with the bar,
+		so the mouse stands beside the handle and nothing switches again until it comes back onto
+		it. Answers whether the mode was switched.
+	*/
+	private followTheOtherMode(
+		over: SelectionHandle | undefined,
+		mouse?: cool.Point,
+	): boolean {
+		if (over?.kind === SelectionSection.otherModeKind) {
+			this.dropTheOtherMode();
+			this.switchTheHandleMode();
+			return true;
+		}
+
+		const onTheHandle =
+			over?.kind === SelectionSection.turningKind &&
+			!over.deactivated &&
+			!this.interaction &&
+			this.shearingIsOffered();
+
+		if (this.otherModeShown) {
+			const onTheBar =
+				!over &&
+				!!mouse &&
+				!this.interaction &&
+				this.onTheBarToTheOtherMode(mouse);
+			if (!onTheHandle && !onTheBar) this.dropTheOtherMode();
+			return false;
+		}
+
+		if (!onTheHandle) {
+			this.dropTheOtherMode();
+			return false;
+		}
+
+		if (this.otherModeWait === null)
+			this.otherModeWait = app.timerRegistry.setTimeout(
+				'otherMode',
+				() => {
+					this.otherModeWait = null;
+					if (this.interaction) return;
+					this.otherModeShown = true;
+					this.containerObject.requestReDraw();
+				},
+				SelectionSection.otherModeDelay(),
+			);
+		return false;
+	}
 
 	/// What a drag is doing to the selection, null while nothing is being dragged.
 	private interaction: SelectionInteraction | null = null;
@@ -415,6 +681,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 	*/
 	isHit(point: number[]): boolean {
 		if (this.handleAt(point[0], point[1]) !== undefined) return true;
+
+		// The bar to the handle of the other mode belongs to the section while it is shown, so
+		// the mouse stays here on the way along it.
+		if (this.onTheBarToTheOtherMode(new cool.Point(point[0], point[1])))
+			return true;
 
 		return this.groups().some((group: HandleGroup) =>
 			group.takesAPress(point[0], point[1]),
@@ -1066,17 +1337,22 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.context.save();
 		this.context.setTransform(1, 0, 0, 1, 0, 0);
 
+		this.drawTheBarToTheOtherMode();
+
 		const size = ShapeHandlesSection.handleSize();
 		for (const handle of this.handles()) {
 			const group = this.groupOf(handle);
 			if (!group) continue;
 
 			const point = HandleLook.drawnAt(handle);
+			// The handle of the other mode is drawn as one under the mouse, as large as the
+			// handle it stands beside.
 			const hovered =
 				(!handle.deactivated &&
 					handle.name !== '' &&
 					handle.name === this.hovered) ||
-				handle.lit === true;
+				handle.lit === true ||
+				handle.kind === SelectionSection.otherModeKind;
 
 			/*
 				The handle the keyboard is on is drawn a third larger, at the larger half of its
@@ -1126,6 +1402,96 @@ abstract class SelectionSection extends CanvasSectionObject {
 		}
 
 		this.context.restore();
+
+		this.drawTheMarks();
+	}
+
+	/*
+		Draws the marks of a turn or a shear on the circle the handle runs on: a small triangle
+		pointing to the middle, with what it stands for written inside it. They lie over
+		everything else, since the handle is taken to them.
+	*/
+	private drawTheMarks(): void {
+		const marks = this.interaction?.marks() ?? [];
+		if (!marks.length && !this.interaction?.reading()) return;
+
+		this.context.save();
+		this.context.setTransform(1, 0, 0, 1, 0, 0);
+		this.context.lineWidth = 1;
+		const font = Math.round(11 * app.dpiScale) + 'px sans-serif';
+		this.context.font = font;
+		this.context.textAlign = 'center';
+		this.context.textBaseline = 'middle';
+
+		// The mark the mouse is on is marked as a handle under the mouse is: a quarter larger,
+		// grown from its middle, with its edge drawn again in the color kept for it.
+		const mouse = this.lastMoved?.at;
+
+		for (const mark of marks) {
+			const hit = !!mouse && SelectionInteraction.isOnTheMark(mark, mouse);
+			const middle = mark.corners
+				.reduce((sum: cool.Point, corner: cool.Point) => sum.add(corner))
+				.divideBy(mark.corners.length);
+			const corners = mark.corners.map((corner: cool.Point) => {
+				const grown = hit
+					? middle.add(corner.subtract(middle).multiplyBy(1.25))
+					: corner;
+				return new cool.SimplePoint(grown.x, grown.y);
+			});
+
+			this.context.beginPath();
+			corners.forEach((corner: cool.SimplePoint, at: number) =>
+				at
+					? this.context.lineTo(corner.vX, corner.vY)
+					: this.context.moveTo(corner.vX, corner.vY),
+			);
+			this.context.closePath();
+			this.context.fillStyle = HandleLook.colourOfTheKind.turning;
+			this.context.strokeStyle = HandleLook.outlineColour;
+			this.context.fill();
+			this.context.stroke();
+
+			if (hit) {
+				this.context.strokeStyle = SelectionSection.underTheMouse(
+					String(this.context.fillStyle),
+				);
+				this.context.lineWidth = 2 * app.dpiScale;
+				this.context.stroke();
+				this.context.lineWidth = 1;
+			}
+
+			// The label stands upright in the middle of the triangle, in bold on its white fill.
+			const written = new cool.SimplePoint(middle.x, middle.y);
+			this.context.font = 'bold ' + font;
+			this.context.fillStyle = HandleLook.outlineColour;
+			this.context.fillText(mark.label, written.vX, written.vY);
+			this.context.font = font;
+		}
+
+		this.drawTheReading();
+		this.context.restore();
+	}
+
+	/*
+		Writes what the running interaction reads, such as the angle of a turn, below and to the
+		right of the mouse, where the pointer leaves it free. It has a light edge, so it reads on
+		any page.
+	*/
+	private drawTheReading(): void {
+		const reading = this.interaction?.reading();
+		const mouse = this.lastMoved?.at;
+		if (!reading || !mouse) return;
+
+		const at = new cool.SimplePoint(mouse.x, mouse.y);
+		const x = at.vX + 16 * app.dpiScale;
+		const y = at.vY + 24 * app.dpiScale;
+		this.context.textAlign = 'left';
+		this.context.strokeStyle = '#FFFFFF';
+		this.context.lineWidth = 3;
+		this.context.strokeText(reading, x, y);
+		this.context.fillStyle = HandleLook.outlineColour;
+		this.context.fillText(reading, x, y);
+		this.context.lineWidth = 1;
 	}
 
 	/*
@@ -1936,6 +2302,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 		if (this.interaction) {
 			this.lastMoved = null;
+
+			// The handle of the other mode goes with the press, and one waiting to come up.
+			this.dropTheOtherMode();
+
 			document.addEventListener('keydown', this.keysChanged, true);
 			document.addEventListener('keyup', this.keysChanged, true);
 		}
@@ -1950,7 +2320,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 				this.myTopLeft[0] + point.pX,
 				this.myTopLeft[1] + point.pY,
 			];
-			const over = this.handleAt(onCanvas[0], onCanvas[1]);
+			let over = this.handleAt(onCanvas[0], onCanvas[1]);
+			if (
+				this.followTheOtherMode(over, new cool.Point(onCanvas[0], onCanvas[1]))
+			)
+				over = undefined;
 
 			// Off a handle but still on the object, the pointer is the object's again, or the
 			// one it left on a handle would stay: over text the text pointer, the hand where the
@@ -1974,7 +2348,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 			// The handle under the mouse is marked, so that it is plain which one a press would
 			// take hold of where several lie close together.
-			const hovered = over?.name ?? null;
+			// On the bar to the handle of the other mode the one it stands beside stays marked.
+			const hovered =
+				over?.name ??
+				(this.otherModeShown ? SelectionSection.turningKind : null);
 			if (hovered !== this.hovered) {
 				this.hovered = hovered;
 				this.containerObject.requestReDraw();
@@ -2023,7 +2400,18 @@ abstract class SelectionSection extends CanvasSectionObject {
 				handle. It is the short way onto one handle among hundreds - a point of a polygon
 				among them - without walking there from the first.
 			*/
-			if (this.pressedHandle?.name) this.travel.goTo(this.pressedHandle.name);
+			if (
+				this.pressedHandle?.kind === SelectionSection.turningKind &&
+				this.shearingIsOffered()
+			) {
+				// On the handle above the selection a click switches between turning and
+				// shearing instead, where both are offered, and the handle of the other mode
+				// comes up beside it again after the wait.
+				this.switchTheHandleMode();
+				this.interaction = null;
+				this.followTheOtherMode(this.pressedHandle);
+			} else if (this.pressedHandle?.name)
+				this.travel.goTo(this.pressedHandle.name);
 
 			this.interaction = null;
 			return;
@@ -2172,6 +2560,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	/// The mouse has left what is selected, so no handle is under it any more.
 	onMouseLeave(): void {
+		this.followTheOtherMode(undefined);
 		if (this.hovered === null) return;
 
 		this.hovered = null;

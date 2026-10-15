@@ -193,6 +193,7 @@
 /// <reference path="../src/canvas/sections/CropInteraction.ts" />
 /// <reference path="../src/canvas/sections/CropPanInteraction.ts" />
 /// <reference path="../src/canvas/sections/TurningInteraction.ts" />
+/// <reference path="../src/canvas/sections/ShearingInteraction.ts" />
 /// <reference path="../src/canvas/sections/MovingInteraction.ts" />
 /// <reference path="../src/canvas/sections/ShapingInteraction.ts" />
 /// <reference path="../src/canvas/sections/SelectionSection.ts" />

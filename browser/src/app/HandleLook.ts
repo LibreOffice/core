@@ -231,6 +231,43 @@ class HandleLook {
 		Lays the outline of a handle of that kind into the path being built, grown by however much
 		the handle is being shown larger, and answers the color it is filled with.
 	*/
+	/*
+		Lays the handle above the selection in the mode that shears into the path being built: a
+		rectangle slanted by thirty degrees, a little wider than high, a little wider than the
+		circle of the turning mode and less high, turned by that angle with the selection. It is
+		filled and edged as that circle is.
+	*/
+	public static layShearing(
+		context: CanvasRenderingContext2D,
+		at: cool.SimplePoint,
+		grown: number,
+		turnedBy: number = 0,
+	): string {
+		const size = HandleLook.widthOf('turning') + 2 * grown;
+		const wide = size * 0.9;
+		const high = size * 0.75;
+		const slant = high * Math.tan(Math.PI / 6);
+		const corners = cool.Matrix2D.IDENTITY.rotateAround(
+			0,
+			0,
+			turnedBy,
+		).translate(at.vX, at.vY);
+
+		[
+			corners.apply(-wide / 2 + slant / 2, -high / 2),
+			corners.apply(wide / 2 + slant / 2, -high / 2),
+			corners.apply(wide / 2 - slant / 2, high / 2),
+			corners.apply(-wide / 2 - slant / 2, high / 2),
+		].forEach((corner: cool.Point, index: number) =>
+			index
+				? context.lineTo(corner.x, corner.y)
+				: context.moveTo(corner.x, corner.y),
+		);
+		context.closePath();
+
+		return HandleLook.colourOfTheKind.turning;
+	}
+
 	public static lay(
 		context: CanvasRenderingContext2D,
 		kind: HandleKind,

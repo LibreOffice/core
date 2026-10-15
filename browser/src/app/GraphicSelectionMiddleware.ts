@@ -204,6 +204,7 @@ class GraphicSelection {
 	*/
 	public static selectObjects(objectIds: number[]) {
 		this.selectedObjectIDs = objectIds.slice();
+		SelectionSection.selectedHere(objectIds);
 		// Nothing selected by asking for it is where one meant to be; nothing is to follow.
 		this.rememberWhereItStands(objectIds);
 		if (!objectIds.length) this.stoodAt = null;

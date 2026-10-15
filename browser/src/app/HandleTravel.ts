@@ -61,6 +61,13 @@ class HandleTravel {
 	) => cool.SimplePoint | null;
 
 	/*
+		What Space or Return do on a handle, which is the business of whoever owns the handles:
+		on the handle above the selection they switch between turning and shearing. Answers
+		whether the key was used up.
+	*/
+	private pressHandle: (handle: any, event: KeyboardEvent) => boolean;
+
+	/*
 		The handle the keyboard works on, by the name that says what it is, or null while the
 		keyboard is on no handle. A name outlives the handles being built again after every move,
 		where a place in a list would not.
@@ -79,9 +86,11 @@ class HandleTravel {
 			towards: cool.Point,
 			event: KeyboardEvent,
 		) => cool.SimplePoint | null,
+		pressHandle: (handle: any, event: KeyboardEvent) => boolean,
 	) {
 		this.handlesOf = handlesOf;
 		this.moveHandle = moveHandle;
+		this.pressHandle = pressHandle;
 	}
 
 	/// Whether the handle of that name is the one the keyboard is on and is shown large now.
@@ -225,7 +234,7 @@ class HandleTravel {
 
 	/*
 		What the keyboard does to the handles: travel from one to the next, to either end of them,
-		away from them again, and move the one it is on. Answers whether the key was used up here.
+		away from them again, move the one it is on, and press it with Space or Return. Answers whether the key was used up here.
 		Going to either end and moving work on the handle the keyboard is on, so they are used up
 		only while it is on one; otherwise Ctrl+Home and Ctrl+End are left to the objects.
 	*/
@@ -247,6 +256,16 @@ class HandleTravel {
 			return this.travelToEnd(false);
 
 		if (event.key === 'Escape') return this.leave();
+
+		if (
+			(event.key === 'Enter' || event.key === ' ') &&
+			!event.ctrlKey &&
+			!event.altKey &&
+			!event.metaKey
+		) {
+			const handle = this.activeHandle();
+			if (handle && this.pressHandle(handle, event)) return true;
+		}
 
 		if (towards[event.key] && this.activeName !== null)
 			return this.move(towards[event.key], event);

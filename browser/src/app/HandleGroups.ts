@@ -733,7 +733,7 @@ class TurningHandle extends HandleGroup {
 	public readonly name: string = 'turning';
 
 	/// How far above the selection it sits, in core pixels.
-	private static readonly distance: number = 30;
+	public static readonly distance: number = 30;
 
 	public handles(): SelectionHandle[] {
 		return this.placedAbove(
@@ -752,9 +752,12 @@ class TurningHandle extends HandleGroup {
 		return this.placedAbove(shown);
 	}
 
-	/// The handle above the upper side of what those handles frame, or none where they do not
-	/// frame anything. Where the objects say they cannot be turned it is there but dead, so
-	/// the selection looks the same whatever may be done to it.
+	/*
+		The handle above the upper side of what those handles frame, or none where they do not
+		frame anything. It stands out from the middle of that side at a right angle to it, so a
+		slanted selection does not slant the way out to it. Where the objects say they cannot be
+		turned it is there but dead, so the selection looks the same whatever may be done to it.
+	*/
 	private placedAbove(shown: SelectionHandle[]): SelectionHandle[] {
 		const middle = SelectionSection.middleOf(shown);
 		const above = shown.find((one: SelectionHandle) => one.kind === '2');
@@ -772,36 +775,114 @@ class TurningHandle extends HandleGroup {
 
 		const step = cool.SimplePoint.fromCorePixels([away, away]);
 
-		return [
+		// The upper side's own top, which faces the way out, stands at a right angle to it.
+		const turnedBy = TurningHandle.turnOf(shown, out);
+		const up = new cool.Point(Math.sin(turnedBy), -Math.cos(turnedBy));
+
+		const point = new cool.Point(
+			above.point.x + up.x * step.x,
+			above.point.y + up.y * step.y,
+		);
+		const handles: SelectionHandle[] = [
 			{
 				name: SelectionSection.turningKind,
 				kind: SelectionSection.turningKind,
 				pointer: '0',
-				point: new cool.Point(
-					above.point.x + (out.x / length) * step.x,
-					above.point.y + (out.y / length) * step.y,
-				).round(),
+				point: point.round(),
+				turnedBy: turnedBy,
 				deactivated: dead,
 			},
 		];
+
+		/*
+			While the mouse is on it, the handle of the other mode stands beside it along the
+			upper side: to the right of the turning handle, to the left of the shearing one. Both
+			are drawn as large as a handle under the mouse, with a handle between them, and a bar
+			lies behind the two.
+		*/
+		if (this.selection.showsTheOtherMode() && !dead)
+			handles.push({
+				name: SelectionSection.otherModeKind,
+				kind: SelectionSection.otherModeKind,
+				pointer: '0',
+				point: TurningHandle.placeOfTheOtherMode(
+					point,
+					turnedBy,
+					this.selection.handleMode() === 'shear' ? -1 : 1,
+				),
+				turnedBy: turnedBy,
+			});
+
+		return handles;
 	}
 
+	/// Where the handle of the other mode stands beside the handle above the selection at that
+	/// point, in twips, turned by that angle: on its right for a side of 1, on its left for -1.
+	public static placeOfTheOtherMode(
+		point: cool.Point,
+		turnedBy: number,
+		side: number,
+	): cool.Point {
+		const apart = 2.25 * ShapeHandlesSection.handleSize();
+		const across = cool.SimplePoint.fromCorePixels([apart, apart]);
+		return new cool.Point(
+			point.x + side * Math.cos(turnedBy) * across.x,
+			point.y + side * Math.sin(turnedBy) * across.y,
+		).round();
+	}
+
+	/*
+		The angle the handle is drawn turned by: that of the selection's upper side, from its left
+		corner to its right one, which a slant does not change, so a slanted selection turns the
+		symbol only by its own turn. On a mirrored selection that side runs the other way, and
+		the symbol is turned over again, so its top faces away from the selection as the handle
+		does. Where the corners are not known it is the way up to the handle that says it.
+	*/
+	private static turnOf(shown: SelectionHandle[], out: cool.Point): number {
+		const left = shown.find((one: SelectionHandle) => one.kind === '1');
+		const right = shown.find((one: SelectionHandle) => one.kind === '3');
+		if (!left || !right) return Math.atan2(out.y, out.x) + Math.PI / 2;
+
+		const across = right.point.subtract(left.point);
+		const turn = Math.atan2(across.y, across.x);
+
+		// The symbol's top points that way at this turn; it has to point the way the handle is.
+		const top = new cool.Point(Math.sin(turn), -Math.cos(turn));
+		return top.dot(out) < 0 ? turn + Math.PI : turn;
+	}
+
+	/// The handle shows the mode it is in, and the one beside it the other mode: the circle for
+	/// turning, the slanted rectangle for shearing.
 	public shape(
 		context: CanvasRenderingContext2D,
-		_handle: SelectionHandle,
+		handle: SelectionHandle,
 		at: cool.SimplePoint,
 		grown: number,
 	): string {
-		return HandleLook.lay(context, 'turning', at, grown);
+		const shearing = this.selection.handleMode() === 'shear';
+		const other = handle.kind === SelectionSection.otherModeKind;
+		return shearing !== other
+			? HandleLook.layShearing(context, at, grown, handle.turnedBy)
+			: HandleLook.lay(context, 'turning', at, grown);
 	}
 
+	/// A drag turns the selection in the turning mode and shears it in the shearing mode, around
+	/// its middle either way.
 	public interactionFor(
-		_handle: SelectionHandle,
+		handle: SelectionHandle,
 		at: cool.SimplePoint,
 	): SelectionInteraction | null {
 		const middle = this.selection.middle();
+		if (!middle) return null;
 
-		return middle ? new TurningInteraction(this.selection, middle, at) : null;
+		return this.selection.handleMode() === 'shear'
+			? new ShearingInteraction(
+					this.selection,
+					middle,
+					at,
+					handle.turnedBy ?? 0,
+				)
+			: new TurningInteraction(this.selection, middle, at);
 	}
 
 	/*
@@ -830,6 +911,9 @@ class TurningHandle extends HandleGroup {
 		towards: cool.Point,
 		event: KeyboardEvent,
 	): cool.Point | null {
+		// The keys shear in the shearing mode, which is still to come.
+		if (this.selection.handleMode() === 'shear') return null;
+
 		const middle = this.selection.middle();
 		if (!middle) return null;
 

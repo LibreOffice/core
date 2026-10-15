@@ -24,6 +24,13 @@ class TurningInteraction extends SelectionInteraction {
 	/// How far it has turned since, as the canvas counts angles.
 	private turned: number = 0;
 
+	/// How far the press was from the middle, in twips, which is the circle the handle runs on.
+	private radius: number;
+
+	/// The angle the selection stood at when the turn began, as the canvas counts angles, from
+	/// the across axis of its square.
+	private stood: number = 0;
+
 	constructor(
 		selection: SelectionSection,
 		middle: cool.SimplePoint,
@@ -33,6 +40,8 @@ class TurningInteraction extends SelectionInteraction {
 
 		this.middle = middle;
 		this.from = TurningInteraction.angleAt(middle, at);
+		this.radius = Math.hypot(at.x - middle.x, at.y - middle.y);
+		this.stood = selection.squareNow()?.rotation() ?? 0;
 	}
 
 	/// The angle from the middle to that point, as the canvas counts angles.
@@ -80,7 +89,8 @@ class TurningInteraction extends SelectionInteraction {
 		snapped to the step it names, counted from the page and not from where the turn began, so
 		a turned object goes straight back to standing upright. The angle the selection stands at
 		is that of the across axis of its square: an object's own, nought for a frame around
-		several, which then snaps the turn itself.
+		several, which then snaps the turn itself. While the mouse is on one of the marks it is
+		that mark's: standing upright.
 	*/
 	public move(
 		to: cool.SimplePoint,
@@ -98,7 +108,34 @@ class TurningInteraction extends SelectionInteraction {
 			this.turned = snapped - stands;
 		}
 
+		this.turned = SelectionInteraction.heldToTheMarks(
+			this.turned,
+			this.marks(),
+			to,
+		);
 		this.selection.redraw();
+	}
+
+	/// The angle the selection stands at now, as the engine counts it: against the clock, from
+	/// nought up to a full turn.
+	public reading(): string {
+		const full = Math.PI * 2;
+		const angle = ((-(this.stood + this.turned) % full) + full) % full;
+		const text = SelectionInteraction.degreesOf(angle);
+		return text === '360\u00B0' ? '0\u00B0' : text;
+	}
+
+	/// The mark of standing upright, where the handle of the selection without a turn stands.
+	public marks(): AngleMark[] {
+		return [
+			SelectionInteraction.markAt(
+				this.middle,
+				this.radius,
+				this.from - this.stood,
+				-this.stood,
+				'0',
+			),
+		];
 	}
 
 	public finish(

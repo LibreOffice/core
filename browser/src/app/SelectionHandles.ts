@@ -292,6 +292,15 @@ class ObjectHandles implements HandleSource {
 		);
 	}
 
+	/// Whether every one of those objects, and every object the groups among them hold, may be
+	/// sheared.
+	public static canBeSheared(objectIds: number[]): boolean {
+		return ObjectHandles.allOfThem(objectIds).every(
+			(objectId: number) =>
+				RenderGeometrySection.objectOf(objectId)?.cannotBeSheared !== true,
+		);
+	}
+
 	public static canBeTurned(objectIds: number[]): boolean {
 		return ObjectHandles.allOfThem(objectIds).every(
 			(objectId: number) =>
