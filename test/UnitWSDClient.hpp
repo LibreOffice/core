@@ -137,8 +137,17 @@ protected:
     /// Send a command to WSD.
     void sendCommand(int index, const std::string& msg)
     {
-        LOK_ASSERT_SILENT(index >= 0 && static_cast<std::size_t>(index) < _wsList.size());
-        helpers::sendTextFrame(getWsAt(index)->getWebSocket(), msg, getTestname());
+        std::shared_ptr<http::WebSocketSession> ws;
+        {
+            std::lock_guard<std::mutex> guard(_lock);
+            if (index < 0 || static_cast<std::size_t>(index) >= _wsList.size())
+                return;
+            const auto& w = _wsList[index];
+            if (!w)
+                return;
+            ws = w->getWebSocket();
+        }
+        helpers::sendTextFrame(ws, msg, getTestname());
         SocketPoll::wakeupWorld();
     }
 
@@ -169,7 +178,7 @@ private:
     /// The WOPISrc URL.
     std::string _wopiSrc;
 
-    /// Websockets to communicate.
+    /// Websockets to communicate. Protected by UnitBase::_lock.
     std::vector<std::unique_ptr<UnitWebSocket>> _wsList;
 };
 
