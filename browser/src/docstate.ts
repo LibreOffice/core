@@ -101,7 +101,6 @@
 	file: {
 		editComment: false,
 		allowManageRedlines: false,
-		reviewMode: false, // Review mode: editing with change recording on.
 		readOnly: true,
 		permission: 'readonly',
 		modified: false, // Whether the document currently has unsaved changes.
