@@ -1406,10 +1406,21 @@ void ScTabView::MoveCursorEnd( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, boo
         rDoc.GetPrintArea( nTab, nUsedX, nUsedY );     // get end
 
     // tdf#107994 - move to the freeze pane splitter position first
-    const SCCOL nFixX = aViewData.GetHSplitMode() == SC_SPLIT_FIX ? aViewData.GetFixPosX() : 0;
-    const SCROW nFixY = aViewData.GetVSplitMode() == SC_SPLIT_FIX ? aViewData.GetFixPosY() : 0;
-    // tdf#173894 - move to the first column/row once at the splitter position
-    const bool bAtFixPos = (nMovX >= 0 || nCurX == nFixX) && (nMovY >= 0 || nCurY == nFixY);
+    SCCOL nFixX = aViewData.GetHSplitMode() == SC_SPLIT_FIX ? aViewData.GetFixPosX() : 0;
+    SCROW nFixY = aViewData.GetVSplitMode() == SC_SPLIT_FIX ? aViewData.GetFixPosY() : 0;
+    // tdf#173894 - skip hidden, merged or protected cells towards the non-frozen area
+    if (nMovX < 0 && nFixX > 0)
+    {
+        SCROW nTmpY = nMovY < 0 ? nFixY : nCurY;
+        SkipCursorHorizontal(nFixX, nTmpY, nCurX, 1);
+    }
+    if (nMovY < 0 && nFixY > 0)
+    {
+        SCCOL nTmpX = nMovX < 0 ? nFixX : nCurX;
+        SkipCursorVertical(nTmpX, nFixY, nCurY, 1);
+    }
+    // tdf#173894 - move to the first column/row once at the splitter position or within the frozen area
+    const bool bAtFixPos = (nMovX >= 0 || nCurX <= nFixX) && (nMovY >= 0 || nCurY <= nFixY);
 
     if (nMovX < 0)
         nNewX = bAtFixPos ? 0 : nFixX;
