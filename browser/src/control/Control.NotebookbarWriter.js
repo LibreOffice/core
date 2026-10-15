@@ -1260,7 +1260,8 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'id': 'format-format-area',
 				'type': 'bigtoolitem',
 				'text': _UNO('.uno:FormatArea'),
-				'command': '.uno:FormatArea'
+				'command': '.uno:FormatArea',
+				'accessibility': { focusBack: false, combination: 'FA', de: null }
 			},
 			{ type: 'separator', id: 'format-formatarea-break', orientation: 'vertical' },
 			{
@@ -2745,7 +2746,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'vertical': 'true'
 			},
 			{ type: 'separator', id: 'shape-fliphorizontal-break', orientation: 'vertical' },
-			this.getShapeFillColorButton(),
+			this.getShapeAreaSection(),
 			{ type: 'separator', id: 'shape-fillcolor-break', orientation: 'vertical' },
 			this.getShapeLineSection(),
 			{ type: 'separator', id: 'shape-line-break', orientation: 'vertical' },

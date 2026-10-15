@@ -660,6 +660,20 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		};
 	},
 
+	_getAreaSection: function(opts) {
+		return {
+			'type': 'overflowgroup',
+			'id': opts.panelId,
+			'name': _('Area'),
+			'accessibility': { focusBack: false, combination: 'AP', de: null },
+			'more': {
+				'command': '.uno:FormatArea',
+				'accessibility': { focusBack: true, combination: 'AO', de: null }
+			},
+			'children': [this._getFillColorButton(opts)]
+		};
+	},
+
 	_getLineSection: function(opts) {
 		var p = opts.prefix;
 		return {
@@ -799,8 +813,8 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		});
 	},
 
-	getShapeFillColorButton: function() {
-		return this._getFillColorButton({ prefix: 'shape' });
+	getShapeAreaSection: function() {
+		return this._getAreaSection({ prefix: 'shape', panelId: 'shape-area-panel' });
 	},
 
 	getShapeLineSection: function() {

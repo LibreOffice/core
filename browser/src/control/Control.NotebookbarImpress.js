@@ -2655,7 +2655,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'vertical': 'true'
 			},
 			{ type: 'separator', id: 'shape-fliphorizontal-break', orientation: 'vertical' },
-			this.getShapeFillColorButton(),
+			this.getShapeAreaSection(),
 			{ type: 'separator', id: 'shape-fillcolor-break', orientation: 'vertical' },
 			this.getShapeLineSection(),
 			{ type: 'separator', id: 'shape-line-break', orientation: 'vertical' },

@@ -125,7 +125,6 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 		this._toolitemHandlers['.uno:CompressGraphic'] = function() {};
 		this._toolitemHandlers['.uno:GraphicDialog'] = function() {};
 		this._toolitemHandlers['.uno:BorderDialog'] = function() {};
-		this._toolitemHandlers['.uno:FormatArea'] = function() {};
 
 		this._toolitemHandlers['vnd.sun.star.findbar:FocusToFindbar'] = function() {};
 	},
