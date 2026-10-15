@@ -977,18 +977,15 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     {
         // #86265# select entry using list and polygon, not string
         bool bSelected(false);
-        const basegfx::B2DPolyPolygon& rItemPolygon = rAttrs->Get(XATTR_LINESTART).GetLineStartValue();
 
         for(tools::Long a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
         {
-            const XLineEndEntry* pEntry = m_pLineEndList->GetLineEnd(a);
-            const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
-
-            if(rItemPolygon == rEntryPolygon)
+            if (rAttrs->Get(XATTR_LINESTART).GetName() == m_pLineEndList->GetLineEnd(a)->GetName())
             {
                 // select this entry
                 m_xLbStartStyle->set_active(a + 1);
                 bSelected = true;
+                break; // no need to search more
             }
         }
 
@@ -1010,18 +1007,15 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     {
         // #86265# select entry using list and polygon, not string
         bool bSelected(false);
-        const basegfx::B2DPolyPolygon& rItemPolygon = rAttrs->Get(XATTR_LINEEND).GetLineEndValue();
 
         for(tools::Long a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
         {
-            const XLineEndEntry* pEntry = m_pLineEndList->GetLineEnd(a);
-            const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
-
-            if(rItemPolygon == rEntryPolygon)
+            if (rAttrs->Get(XATTR_LINEEND).GetName() == m_pLineEndList->GetLineEnd(a)->GetName())
             {
                 // select this entry
                 m_xLbEndStyle->set_active(a + 1);
                 bSelected = true;
+                break; // no need to search more
             }
         }
 
