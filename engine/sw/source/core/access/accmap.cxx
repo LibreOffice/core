@@ -2326,24 +2326,24 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
     mbShapeSelected = bShapeSelected;
 
     // The context of a frame, created on the way when nothing has asked for it so far.
-    auto lcl_getOrCreateContext = [this](const SwFrame* pFrame) -> rtl::Reference<SwAccessibleContext>
+    auto lcl_getOrCreateContext = [this](const SwFrame* pContextFrame) -> rtl::Reference<SwAccessibleContext>
     {
-        SwAccessibleContextMap::iterator aIter = maFrameMap.find(pFrame);
+        SwAccessibleContextMap::iterator aIter = maFrameMap.find(pContextFrame);
         if (aIter != maFrameMap.end())
             return (*aIter).second;
 
         SwRect rcEmpty;
-        const SwTabFrame* pTabFrame = pFrame->FindTabFrame();
+        const SwTabFrame* pTabFrame = pContextFrame->FindTabFrame();
         if (pTabFrame)
         {
             InvalidatePosOrSize(pTabFrame, nullptr, nullptr, rcEmpty);
         }
         else
         {
-            InvalidatePosOrSize(pFrame, nullptr, nullptr, rcEmpty);
+            InvalidatePosOrSize(pContextFrame, nullptr, nullptr, rcEmpty);
         }
 
-        aIter = maFrameMap.find(pFrame);
+        aIter = maFrameMap.find(pContextFrame);
         if (aIter != maFrameMap.end())
             return (*aIter).second;
         return nullptr;
