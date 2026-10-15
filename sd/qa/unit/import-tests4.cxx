@@ -213,6 +213,15 @@ CPPUNIT_TEST_FIXTURE(SdImportTest4, testTdf149985)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest4, testTdf173869)
+{
+    // Without the fix in place, this test would have failed to load the file
+    createSdImpressDoc("ppt/tdf173869.ppt");
+
+    const SdrPage* pPage = GetPage(1);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest4, testTdf166030)
 {
     // Without the fix in place, no bullet spacing was applied
