@@ -225,7 +225,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xWildcardBtn;
     std::unique_ptr<weld::CheckButton> m_xSimilarityBox;
     std::unique_ptr<weld::Button> m_xSimilarityBtn;
-    std::unique_ptr<weld::CheckButton> m_xLayoutBtn;
+    std::unique_ptr<weld::CheckButton> m_xSearchStylesBtn;
     std::unique_ptr<weld::CheckButton> m_xNotesBtn;
     std::unique_ptr<weld::CheckButton> m_xJapMatchFullHalfWidthCB;
     std::unique_ptr<weld::CheckButton> m_xJapOptionsCB;

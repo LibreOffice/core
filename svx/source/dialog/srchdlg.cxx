@@ -280,7 +280,7 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     , m_xWildcardBtn(m_xBuilder->weld_check_button(u"wildcard"_ustr))
     , m_xSimilarityBox(m_xBuilder->weld_check_button(u"similarity"_ustr))
     , m_xSimilarityBtn(m_xBuilder->weld_button(u"similaritybtn"_ustr))
-    , m_xLayoutBtn(m_xBuilder->weld_check_button(u"layout"_ustr))
+    , m_xSearchStylesBtn(m_xBuilder->weld_check_button(u"searchstyles"_ustr))
     , m_xNotesBtn(m_xBuilder->weld_check_button(u"notes"_ustr))
     , m_xJapMatchFullHalfWidthCB(m_xBuilder->weld_check_button(u"matchcharwidth"_ustr))
     , m_xJapOptionsCB(m_xBuilder->weld_check_button(u"soundslike"_ustr))
@@ -387,7 +387,7 @@ void SvxSearchDialog::Construct_Impl()
     m_sLayoutStr = SvxResId(RID_SVXSTR_SEARCH_STYLES);
     m_sLayoutWriterStr = SvxResId(RID_SVXSTR_WRITER_STYLES);
     m_sLayoutCalcStr = SvxResId(RID_SVXSTR_CALC_STYLES);
-    m_sStylesStr = m_xLayoutBtn->get_label();
+    m_sStylesStr = m_xSearchStylesBtn->get_label();
 
     // Get stored search-strings from the application
     ListToStrArr_Impl(SID_SEARCHDLG_SEARCHSTRINGS, m_aSearchStrings, *m_xSearchLB, m_nRememberSize);
@@ -518,7 +518,7 @@ void SvxSearchDialog::Close()
     aOpt.SetBackwards               ( m_xReplaceBackwardsCB->get_active() );
     aOpt.SetUseRegularExpression    ( m_xRegExpBtn->get_active() );
     aOpt.SetUseWildcard             ( m_xWildcardBtn->get_active() );
-    aOpt.SetSearchForStyles         ( m_xLayoutBtn->get_active() );
+    aOpt.SetSearchForStyles         ( m_xSearchStylesBtn->get_active() );
     aOpt.SetSimilaritySearch        ( m_xSimilarityBox->get_active() );
     aOpt.SetUseAsianOptions         ( m_xJapOptionsCB->get_active() );
     aOpt.SetNotes                   ( m_xNotesBtn->get_active() );
@@ -597,7 +597,7 @@ bool SvxSearchDialog::IsOtherOptionsExpanded() const
     return m_xReplaceBackwardsCB->get_active() ||
            m_xSelectionBtn->get_active() ||
            m_xRegExpBtn->get_active() ||
-           m_xLayoutBtn->get_active() ||
+           m_xSearchStylesBtn->get_active() ||
            m_xSimilarityBox->get_active() ||
            m_xJapMatchFullHalfWidthCB->get_active() ||
            m_xJapOptionsCB->get_active() ||
@@ -669,7 +669,7 @@ void SvxSearchDialog::InitControls_Impl()
     m_xJapMatchFullHalfWidthCB->connect_toggled( aLink3 );
     m_xIncludeDiacritics->connect_toggled( aLink3 );
     m_xIncludeKashida->connect_toggled( aLink3 );
-    m_xLayoutBtn->connect_toggled( LINK( this, SvxSearchDialog, TemplateHdl_Impl ) );
+    m_xSearchStylesBtn->connect_toggled( LINK( this, SvxSearchDialog, TemplateHdl_Impl ) );
     m_xFormatBtn->connect_clicked( LINK( this, SvxSearchDialog, FormatHdl_Impl ) );
     m_xNoFormatBtn->connect_clicked(
         LINK( this, SvxSearchDialog, NoFormatHdl_Impl ) );
@@ -711,7 +711,7 @@ void SvxSearchDialog::ShowOptionalControls_Impl()
         eFactory == SvtModuleOptions::EFactory::WRITERGLOBAL;
     bool bCalcApp = eFactory == SvtModuleOptions::EFactory::CALC;
 
-    m_xLayoutBtn->set_visible(!bDrawApp);
+    m_xSearchStylesBtn->set_visible(!bDrawApp);
     m_xNotesBtn->set_visible(bWriterApp);
     m_xRegExpBtn->set_visible(!bDrawApp);
     m_xWildcardBtn->set_visible(bCalcApp); /* TODO:WILDCARD enable for other apps if hey handle it */
@@ -793,9 +793,9 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     if (!(m_nModifyFlag & ModifyFlags::Wildcard))
         m_xWildcardBtn->set_active(m_pSearchItem->GetWildcard());
     if (!(m_nModifyFlag & ModifyFlags::Layout))
-        m_xLayoutBtn->set_active(m_pSearchItem->GetPattern());
+        m_xSearchStylesBtn->set_active(m_pSearchItem->GetPattern());
     if (m_xNotesBtn->get_active())
-        m_xLayoutBtn->set_sensitive(false);
+        m_xSearchStylesBtn->set_sensitive(false);
     m_xSimilarityBox->set_active(m_pSearchItem->IsLevenshtein());
     if ( m_xJapOptionsCB->get_visible() )
         m_xJapOptionsCB->set_active(m_pSearchItem->IsUseAsianOptions());
@@ -864,7 +864,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
 
             m_xRegExpBtn->hide();
             m_xWildcardBtn->hide();
-            m_xLayoutBtn->hide();
+            m_xSearchStylesBtn->hide();
 
             // only look for formatting in Writer
             m_xFormatBtn->hide();
@@ -1050,10 +1050,10 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         m_xFormatBtn->set_sensitive(false);
     }
 
-    if ( m_xLayoutBtn->get_active() )
+    if ( m_xSearchStylesBtn->get_active() )
     {
         m_pImpl->bSaveToModule = false;
-        TemplateHdl_Impl(*m_xLayoutBtn);
+        TemplateHdl_Impl(*m_xSearchStylesBtn);
         m_pImpl->bSaveToModule = true;
     }
 }
@@ -1151,14 +1151,14 @@ void SvxSearchDialog::ClickHdl_Impl(const weld::Widget* pCtrl)
             m_xWildcardBtn->set_sensitive(false);
             EnableControl_Impl(*m_xWordBtn);
 
-            if ( m_xLayoutBtn->get_active() )
+            if ( m_xSearchStylesBtn->get_active() )
             {
                 EnableControl_Impl(*m_xMatchCaseCB);
-                m_xLayoutBtn->set_active( false );
+                m_xSearchStylesBtn->set_active( false );
             }
             m_xRegExpBtn->set_sensitive(false);
             m_xWildcardBtn->set_sensitive(false);
-            m_xLayoutBtn->set_sensitive(false);
+            m_xSearchStylesBtn->set_sensitive(false);
             m_xFormatBtn->set_sensitive(false);
             m_xNoFormatBtn->set_sensitive(false);
             m_xAttributeBtn->set_sensitive(false);
@@ -1168,7 +1168,7 @@ void SvxSearchDialog::ClickHdl_Impl(const weld::Widget* pCtrl)
             EnableControl_Impl(*m_xRegExpBtn);
             EnableControl_Impl(*m_xWildcardBtn);
             if (!m_xNotesBtn->get_active())
-                EnableControl_Impl(*m_xLayoutBtn);
+                EnableControl_Impl(*m_xSearchStylesBtn);
             EnableControl_Impl(*m_xFormatBtn);
             EnableControl_Impl(*m_xAttributeBtn);
             m_xSimilarityBtn->set_sensitive(false);
@@ -1179,19 +1179,19 @@ void SvxSearchDialog::ClickHdl_Impl(const weld::Widget* pCtrl)
     {
         if (m_xNotesBtn->get_active())
         {
-            m_xLayoutBtn->set_sensitive(false);
+            m_xSearchStylesBtn->set_sensitive(false);
             m_xSearchAllBtn->set_sensitive(false);
             m_xReplaceAllBtn->set_sensitive(false);
         }
         else
         {
-            EnableControl_Impl(*m_xLayoutBtn);
+            EnableControl_Impl(*m_xSearchStylesBtn);
             ModifyHdl_Impl(*m_xSearchLB);
         }
     }
     else
     {
-        if (m_xLayoutBtn->get_active() && !m_bFormat)
+        if (m_xSearchStylesBtn->get_active() && !m_bFormat)
         {
             m_xWordBtn->set_active( false );
             m_xWordBtn->set_sensitive(false);
@@ -1263,7 +1263,7 @@ void SvxSearchDialog::ClickHdl_Impl(const weld::Widget* pCtrl)
 
 IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)
 {
-    bool bInclusive = (m_xLayoutBtn->get_label() == m_sLayoutStr);
+    bool bInclusive = (m_xSearchStylesBtn->get_label() == m_sLayoutStr);
 
     if ( ( &rBtn == m_xSearchBtn.get() )   ||
          (&rBtn == m_xBackSearchBtn.get())  ||
@@ -1271,7 +1271,7 @@ IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)
          ( &rBtn == m_xReplaceBtn.get() )  ||
          ( &rBtn == m_xReplaceAllBtn.get() ) )
     {
-        if ( m_xLayoutBtn->get_active() && !bInclusive )
+        if ( m_xSearchStylesBtn->get_active() && !bInclusive )
         {
             m_pSearchItem->SetSearchString(m_xSearchTmplLB->get_active_text());
             m_pSearchItem->SetReplaceString(m_xReplaceTmplLB->get_active_text());
@@ -1317,7 +1317,7 @@ IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)
         m_pSearchItem->SetBackward(bSetBackwards);
 
         m_pSearchItem->SetNotes(GetCheckBoxValue(*m_xNotesBtn));
-        m_pSearchItem->SetPattern(GetCheckBoxValue(*m_xLayoutBtn));
+        m_pSearchItem->SetPattern(GetCheckBoxValue(*m_xSearchStylesBtn));
         m_pSearchItem->SetSelection(GetCheckBoxValue(*m_xSelectionBtn));
         m_pSearchItem->SetUseAsianOptions(GetCheckBoxValue(*m_xJapOptionsCB));
         TransliterationFlags nFlags = GetTransliterationFlags();
@@ -1365,7 +1365,7 @@ IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)
     }
     else if ( &rBtn == m_xCloseBtn.get() )
     {
-        if ( !m_xLayoutBtn->get_active() || bInclusive )
+        if ( !m_xSearchStylesBtn->get_active() || bInclusive )
         {
             Remember_Impl(true);
             Remember_Impl(false);
@@ -1445,7 +1445,7 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, weld::ComboBox&, rEd, void )
         nReplTxtLen = m_xReplaceLB->get_active_text().getLength();
     sal_Int32 nAttrTxtLen = m_xSearchAttrText->get_label().getLength();
 
-    if (nSrchTxtLen || nReplTxtLen || nAttrTxtLen || m_xLayoutBtn->get_active())
+    if (nSrchTxtLen || nReplTxtLen || nAttrTxtLen || m_xSearchStylesBtn->get_active())
     {
         EnableControl_Impl(*m_xSearchBtn);
         EnableControl_Impl(*m_xBackSearchBtn);
@@ -1477,7 +1477,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, weld::Toggleable&, void)
     OUString sDesc;
     bool bSetOptimalLayoutSize = false;
 
-    if ( m_xLayoutBtn->get_active() )
+    if ( m_xSearchStylesBtn->get_active() )
     {
         if (!m_pFamilyController)
         {
@@ -1559,7 +1559,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, weld::Toggleable&, void)
     }
     m_bSet = true;
     m_pImpl->bSaveToModule = false;
-    FlagHdl_Impl(*m_xLayoutBtn);
+    FlagHdl_Impl(*m_xSearchStylesBtn);
     m_pImpl->bSaveToModule = true;
 
     if (bSetOptimalLayoutSize)
@@ -1719,9 +1719,9 @@ void SvxSearchDialog::EnableControls_Impl( const SearchOptionFlags nFlags )
     else
         m_xSelectionBtn->set_sensitive(false);
     if (SearchOptionFlags::FAMILIES & m_nOptions)
-        m_xLayoutBtn->set_sensitive(true);
+        m_xSearchStylesBtn->set_sensitive(true);
     else
-        m_xLayoutBtn->set_sensitive(false);
+        m_xSearchStylesBtn->set_sensitive(false);
     if (SearchOptionFlags::FORMAT & m_nOptions)
     {
         m_xAttributeBtn->set_sensitive(true);
@@ -1824,9 +1824,9 @@ void SvxSearchDialog::EnableControl_Impl(const weld::Widget& rCtrl)
         m_xSelectionBtn->set_sensitive(true);
         return;
     }
-    if (m_xLayoutBtn.get() == &rCtrl && (SearchOptionFlags::FAMILIES & m_nOptions))
+    if (m_xSearchStylesBtn.get() == &rCtrl && (SearchOptionFlags::FAMILIES & m_nOptions))
     {
-        m_xLayoutBtn->set_sensitive(true);
+        m_xSearchStylesBtn->set_sensitive(true);
         return;
     }
     if (m_xAttributeBtn.get() == &rCtrl && (SearchOptionFlags::FORMAT & m_nOptions)
@@ -1900,7 +1900,7 @@ IMPL_LINK(SvxSearchDialog, FocusHdl_Impl, weld::Widget&, rControl, void)
     ModifyHdl_Impl(rComboBox);
 
     if (m_bFormat && nTxtLen)
-        m_xLayoutBtn->set_label(m_sLayoutStr);
+        m_xSearchStylesBtn->set_label(m_sLayoutStr);
     else
     {
         SvtModuleOptions::EFactory eFactory = getModule(m_rBindings);
@@ -1911,13 +1911,13 @@ IMPL_LINK(SvxSearchDialog, FocusHdl_Impl, weld::Widget&, rControl, void)
         bool bCalcApp = eFactory == SvtModuleOptions::EFactory::CALC;
 
         if (bWriterApp)
-            m_xLayoutBtn->set_label(m_sLayoutWriterStr);
+            m_xSearchStylesBtn->set_label(m_sLayoutWriterStr);
         else
         {
             if (bCalcApp)
-                m_xLayoutBtn->set_label(m_sLayoutCalcStr);
+                m_xSearchStylesBtn->set_label(m_sLayoutCalcStr);
             else
-                m_xLayoutBtn->set_label(m_sStylesStr);
+                m_xSearchStylesBtn->set_label(m_sStylesStr);
         }
     }
 }
@@ -2011,17 +2011,17 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl, weld::Button&, void)
     bool bCalcApp = eFactory == SvtModuleOptions::EFactory::CALC;
 
     if (bCalcApp)
-        m_xLayoutBtn->set_label(m_sLayoutCalcStr);
+        m_xSearchStylesBtn->set_label(m_sLayoutCalcStr);
     else
     {
         if (bWriterApp)
-            m_xLayoutBtn->set_label(m_sLayoutWriterStr);
+            m_xSearchStylesBtn->set_label(m_sLayoutWriterStr);
         else
-            m_xLayoutBtn->set_label(m_sStylesStr);
+            m_xSearchStylesBtn->set_label(m_sStylesStr);
     }
 
     m_bFormat = false;
-    m_xLayoutBtn->set_active( false );
+    m_xSearchStylesBtn->set_active( false );
 
     bool bSetOptimalLayoutSize = false;
 
@@ -2050,7 +2050,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl, weld::Button&, void)
         m_xDialog->resize_to_request();
 
     m_pImpl->bSaveToModule = false;
-    TemplateHdl_Impl(*m_xLayoutBtn);
+    TemplateHdl_Impl(*m_xSearchStylesBtn);
     m_pImpl->bSaveToModule = true;
     m_xNoFormatBtn->set_sensitive(false);
 }
@@ -2220,7 +2220,7 @@ void SvxSearchDialog::SetModifyFlag_Impl( const weld::Widget* pCtrl )
         m_nModifyFlag |= ModifyFlags::Regexp;
     else if ( m_xWildcardBtn.get() == pCtrl )
         m_nModifyFlag |= ModifyFlags::Wildcard;
-    else if ( m_xLayoutBtn.get() == pCtrl )
+    else if ( m_xSearchStylesBtn.get() == pCtrl )
         m_nModifyFlag |= ModifyFlags::Layout;
     else if ( m_xSimilarityBox.get() == pCtrl )
         m_nModifyFlag |= ModifyFlags::Similarity;
@@ -2243,7 +2243,7 @@ void SvxSearchDialog::SaveToModule_Impl()
     if (!m_pSearchItem)
         return;
 
-    if ( m_xLayoutBtn->get_active() )
+    if ( m_xSearchStylesBtn->get_active() )
     {
         m_pSearchItem->SetSearchString(m_xSearchTmplLB->get_active_text());
         m_pSearchItem->SetReplaceString(m_xReplaceTmplLB->get_active_text());
@@ -2268,7 +2268,7 @@ void SvxSearchDialog::SaveToModule_Impl()
     m_pSearchItem->SetWordOnly(GetCheckBoxValue(*m_xWordBtn));
     m_pSearchItem->SetBackward(GetCheckBoxValue(*m_xReplaceBackwardsCB));
     m_pSearchItem->SetNotes(GetCheckBoxValue(*m_xNotesBtn));
-    m_pSearchItem->SetPattern(GetCheckBoxValue(*m_xLayoutBtn));
+    m_pSearchItem->SetPattern(GetCheckBoxValue(*m_xSearchStylesBtn));
     m_pSearchItem->SetSelection(GetCheckBoxValue(*m_xSelectionBtn));
     m_pSearchItem->SetUseAsianOptions(GetCheckBoxValue(*m_xJapOptionsCB));
 

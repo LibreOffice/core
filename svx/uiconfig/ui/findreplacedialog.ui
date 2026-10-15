@@ -837,7 +837,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="layout">
+                              <object class="GtkCheckButton" id="searchstyles">
                                 <property name="label" translatable="yes" context="findreplacedialog|layout">Search for st_yles</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">False</property>
