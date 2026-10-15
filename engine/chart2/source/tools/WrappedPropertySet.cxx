@@ -442,26 +442,39 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap(std::unique_lock<
     if(!m_pWrappedPropertyMap)
     {
         std::vector< std::unique_ptr<WrappedProperty> > aPropList( createWrappedProperties() );
-        auto p = new tWrappedPropertyMap;
-
-        for (auto & elem : aPropList)
+        std::unique_ptr<tWrappedPropertyMap> p;
+        try
         {
-            sal_Int32 nHandle = getInfoHelper(rGuard).getHandleByName( elem->getOuterName() );
+            p = std::make_unique<tWrappedPropertyMap>();
+            for (auto & elem : aPropList)
+            {
+                sal_Int32 nHandle = getInfoHelper(rGuard).getHandleByName( elem->getOuterName() );
 
-            if( nHandle == -1 )
-            {
-                OSL_FAIL( "missing property in property list" );
+                if( nHandle == -1 )
+                {
+                    OSL_FAIL( "missing property in property list" );
+                }
+                else if( p->find( nHandle ) != p->end() )
+                {
+                    //duplicate Wrapped property
+                    OSL_FAIL( "duplicate Wrapped property" );
+                }
+                else
+                    (*p)[ nHandle ] = std::move(elem);
             }
-            else if( p->find( nHandle ) != p->end() )
-            {
-                //duplicate Wrapped property
-                OSL_FAIL( "duplicate Wrapped property" );
-            }
-            else
-                (*p)[ nHandle ] = std::move(elem);
+            m_pWrappedPropertyMap = std::move(p);
         }
-
-        m_pWrappedPropertyMap.reset(p);
+        catch (...)
+        {
+            // Wrapped-property destructors may release UNO references that
+            // require SolarMutex. Dispose of the partial map and remaining
+            // properties without holding m_aMutex, then restore the guard.
+            rGuard.unlock();
+            p.reset();
+            aPropList.clear();
+            rGuard.lock();
+            throw;
+        }
     }
     return *m_pWrappedPropertyMap;
 }
