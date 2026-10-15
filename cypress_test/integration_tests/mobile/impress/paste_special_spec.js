@@ -16,7 +16,7 @@ describe(['tagmobile'], 'Paste special.', function() {
 			helper.waitForTimers(win, 'clicktimer');
 		});
 		cy.cGet('#document-canvas').dblclick('center');
-		cy.wait(500);
+		cy.cGet('.leaflet-cursor-container').should('be.visible');
 
 		helper.typeIntoDocument('Hello world');
 		helper.typeIntoDocument('{shift}{home}');
