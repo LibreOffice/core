@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-09-24 12:52+0000\n"
-"Last-Translator: tigran54 <tigran@flib.sci.am>\n"
-"Language-Team: Armenian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/hy/>\n"
-"Language: \n"
+"PO-Revision-Date: 2026-10-14 12:57+0000\n"
+"Last-Translator: tigran54 <tigran54@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/hy/>\n"
+"Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -551,7 +551,6 @@ msgstr "Մատակարար"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:723
 #: admin/src/integrator/AdminIntegratorSettings.ts:727
-#, fuzzy
 msgid "API key"
 msgstr "API բանալի"
 
@@ -566,7 +565,6 @@ msgid "Base URL"
 msgstr "Հիմնական URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:730
-#, fuzzy
 msgid "Image size"
 msgstr "Պատկերի չափը"
 
@@ -576,11 +574,11 @@ msgstr "Հարցման ժամկետի ավարտ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:734
 msgid "Client ID"
-msgstr ""
+msgstr "Հաճախորդի ID"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:735
 msgid "Secret"
-msgstr ""
+msgstr "Գաղտնիք"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:738
 msgid "In-document Screen Reader"
@@ -1077,15 +1075,15 @@ msgstr "Հասանելիություն"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2856
 msgid "User interface zoom"
-msgstr ""
+msgstr "Օգտագործողի միջերեսի խոշորացում"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2861
 msgid "Magnify the whole window, including the document and the menus."
-msgstr ""
+msgstr "Մեծացրեք ամբողջ պատուհանը, ներառյալ փաստաթուղթը և ընտրացանկերը։"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2867
 msgid "As per system"
-msgstr ""
+msgstr "Ըստ համակարգի"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2902
 msgid ""
@@ -1106,13 +1104,15 @@ msgstr "Zotero-ի կարգավորումներ"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3005
 #: admin/src/integrator/AdminIntegratorSettings.ts:3033
 msgid "Electronic Signature"
-msgstr ""
+msgstr "Էլեկտրոնային ստորագրություն"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3008
 msgid ""
 "Credentials for the electronic signature service. They are shared by "
 "everyone on this server."
 msgstr ""
+"Էլեկտրոնային ստորագրության ծառայության համար նախատեսված լիազորագրեր։ Դրանք "
+"համօգտագործվում են այս կայանի բոլոր անդամների կողմից։"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3060
 #: admin/src/integrator/AdminIntegratorSettings.ts:4719
@@ -1150,47 +1150,49 @@ msgstr "Վերակարգաբերում"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3140
 msgid "Use the AI provider set on the server"
-msgstr ""
+msgstr "Օգտագործեք կայանի վրա սահմանված ԱԲ մատակարարը"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3190
-#, fuzzy
 msgid "Providers"
-msgstr "Մատակարար"
+msgstr "Մատակարարներ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3193
 msgid "Managed by your admin"
-msgstr ""
+msgstr "Կառավարվում է ձեր ադմինիստրատորի կողմից"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3199
 msgid "No providers added yet"
-msgstr ""
+msgstr "Դեռևս մատակարարներ չեն ավելացվել"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3205
 msgid ""
 "Add a provider to start using AI for text generation, image generation, or "
 "both. Your administrator's provider is filled in for you."
 msgstr ""
+"Ավելացրեք մատակարար՝ տեքստերի, պատկերների կամ երկուսի համար ԱԲ-ն "
+"օգտագործելու նպատակով: Ձեր ադմինիստրատորի մատակարարը լրացված է ձեզ համար:"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3213
 msgid "Add provider..."
-msgstr ""
+msgstr "Ավելացրեք մատակարար..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3233
 msgid "Choose the AI provider to use for text and image generation."
-msgstr ""
+msgstr "Ընտրեք տեքստի և պատկերի ստեղծման համար օգտագործվող ԱԲ մատակարարը։"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3235
 msgid ""
 "Use your own AI provider instead of the one set up by your administrator. "
 "This applies only to you."
 msgstr ""
+"Օգտագործեք ձեր սեփական ԱԲ մատակարարը՝ ձեր ադմինիստրատորի կողմից սահմանվածի "
+"փոխարեն: Սա վերաբերում է միայն ձեզ:"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3390
 msgid "seconds"
-msgstr ""
+msgstr "վայրկյաններ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3399
-#, fuzzy
 msgid "Text generation"
 msgstr "Տեքստի գեներացիա"
 
@@ -1217,23 +1219,26 @@ msgid ""
 "Models without it (e.g. base llama3, gemma) can still chat but cannot use "
 "document tools."
 msgstr ""
+"Փաստաթղթերը խմբագրելու համար ընտրեք գործիքի կանչով մոդել, օրինակ՝ gpt-4o կամ "
+"llama3.1: Այն չունեցող մոդելները (օրինակ՝ base llama3, gemma) դեռ կարող են "
+"զրուցել, բայց չեն կարող օգտագործել փաստաթղթի գործիքները:"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3491
-#, fuzzy
 msgid "Image generation"
 msgstr "Պատկերի գեներացիա"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3499
 msgid "Same as text provider"
-msgstr ""
+msgstr "Նույնը, ինչ հաղորդագրությունների մատակարարը"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3854
 msgid "Required for this provider"
-msgstr ""
+msgstr "Պարտադիր է այս մատակարարի համար"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3947
 msgid "Enter an API key for this provider to list its models."
 msgstr ""
+"Մուտքագրեք այս մատակարարի API բանալին՝ նրա մոդելները ցուցակագրելու համար։"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3963
 #: admin/src/integrator/AdminIntegratorSettings.ts:4085
@@ -1250,7 +1255,7 @@ msgstr "Մոդելներ չեն գտնվել"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4035
 #: admin/src/integrator/AdminIntegratorSettings.ts:4151
 msgid "Connected"
-msgstr ""
+msgstr "Միացված է"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4041
 #: admin/src/integrator/AdminIntegratorSettings.ts:4157
@@ -1319,7 +1324,7 @@ msgstr "Մուտքագրեք {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4991
 msgid "Delete {0}"
-msgstr ""
+msgstr "Ջնջել {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5054
 msgid "Reset to default {0}"
@@ -2196,7 +2201,7 @@ msgstr "Ողջամտության ստուգման տվյալներ"
 
 #: src/control/Control.AIChatSidebar.ts:1837
 msgid "Create a formula"
-msgstr "Ստեղծեք բանաձև"
+msgstr "Ստեղծեք բանաձևը"
 
 #: src/control/Control.AIChatSidebar.ts:1844
 msgid "Create slides"
@@ -2673,7 +2678,7 @@ msgstr "Բանաձևի վերլուծության ժամանակի սպառու�
 
 #: src/control/Control.AIChatSidebar.ts:3636
 msgid "Select the content you want the assistant to work on first."
-msgstr ""
+msgstr "Ընտրեք այն բովանդակությունը, որի վրա ուզում եք, որ օգնականը նախ աշխատի։"
 
 #: src/control/Control.AIChatSidebar.ts:3651
 msgid "Analyzing formula dependencies..."
@@ -2807,10 +2812,12 @@ msgid ""
 "Describe the image you want to generate. For example: \"A watercolour of a "
 "mountain lake at sunrise\"."
 msgstr ""
+"Նկարագրեք այն պատկերը, որը ցանկանում եք ստեղծել: Օրինակ՝ «Լեռնային լճի "
+"ջրաներկ արևածագի ժամանակ»:"
 
 #: src/control/Control.AIChatSidebar.ts:3916
 msgid "Write speaker notes for the current slide."
-msgstr ""
+msgstr "Գրեք ելույթ ունեցողի նշումները ընթացիկ սահիկի համար։"
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid ""
@@ -2888,19 +2895,21 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:204
 msgid "Images stored with more detail than a slide can show"
-msgstr ""
+msgstr "Պատկերները պահվում են ավելի մանրամասն, քան սահիկը կարող է ցույց տալ"
 
 #: src/control/Control.CleanupSidebar.ts:207
 msgid "Images stored at more than %1 DPI, more detail than a slide can show"
 msgstr ""
+"Պատկերները պահվում են %1 DPI-ից բարձր որակով, ավելի շատ մանրամասներ, քան "
+"սահիկը կարող է ցույց տալ"
 
 #: src/control/Control.CleanupSidebar.ts:224
 msgid "High-resolution images"
-msgstr ""
+msgstr "Բարձր լուծաչափի պատկերներ"
 
 #: src/control/Control.CleanupSidebar.ts:230
 msgid "Cropped images"
-msgstr ""
+msgstr "Կտրված պատկերներ"
 
 #: src/control/Control.CleanupSidebar.ts:236
 #: src/control/Control.BackstageView.ts:891
@@ -2912,43 +2921,40 @@ msgid "Slides"
 msgstr "Սահիկներ"
 
 #: src/control/Control.CleanupSidebar.ts:241
-#, fuzzy
 msgid "Hidden slides"
-msgstr "Թաքցնել սահիկները"
+msgstr "Թաքցված սահիկներ"
 
 #: src/control/Control.CleanupSidebar.ts:246
-#, fuzzy
 msgid "Unused master slides"
-msgstr "Չօգտագործված գլխավոր սահիկներ (%1)"
+msgstr "Չօգտագործված գլխավոր սահիկներ"
 
 #: src/control/Control.CleanupSidebar.ts:252
 msgid "For sharing"
-msgstr ""
+msgstr "Համօգտագործման համար"
 
 #: src/control/Control.CleanupSidebar.ts:254
 msgid "Speaker notes"
-msgstr ""
+msgstr "Խոսնակի նշումներ"
 
 #: src/control/Control.CleanupSidebar.ts:258
-#, fuzzy
 msgid "Embedded objects"
-msgstr "Ներկառուցած օբյեկտներ (%1)"
+msgstr "Ներկառուցած օբյեկտներ"
 
 #: src/control/Control.CleanupSidebar.ts:359
 msgid "images left alone"
-msgstr ""
+msgstr "պատկերները մնացել են մենակ"
 
 #: src/control/Control.CleanupSidebar.ts:361
 msgid "%1 DPI, quality %2 %"
-msgstr ""
+msgstr "%1 DPI, որակ %2 %"
 
 #: src/control/Control.CleanupSidebar.ts:374
 msgid "%1 can be cleaned up"
-msgstr ""
+msgstr "%1-ը կարող է մաքրվել"
 
 #: src/control/Control.CleanupSidebar.ts:376
 msgid "%1 (%2%) can be cleaned up"
-msgstr ""
+msgstr "%1 (%2%) -ը կարող է մաքրվել"
 
 #: src/control/Control.CleanupSidebar.ts:384
 msgid "Fix"
@@ -2970,7 +2976,7 @@ msgstr "%1 ՄԲ"
 
 #: src/control/Control.CleanupSidebar.ts:479
 msgid "Remove %1"
-msgstr ""
+msgstr "Հեռացնել %1"
 
 #: src/control/Control.CleanupSidebar.ts:481
 msgid "Fix %1"
@@ -3024,11 +3030,11 @@ msgstr "%1՝ %2 DPI-ով"
 #: src/control/Control.CleanupSidebar.ts:586
 #, javascript-format
 msgid "%1% cropped away"
-msgstr ""
+msgstr "%1%-ը կտրված է"
 
 #: src/control/Control.CleanupSidebar.ts:588
 msgid "%1, %2% cropped away"
-msgstr ""
+msgstr "%1, %2% կտրված է"
 
 #: src/control/Control.CleanupSidebar.ts:655
 msgid "Leave images alone"
@@ -3094,9 +3100,8 @@ msgid "Image resolution"
 msgstr "Պատկերի լուծաչափը"
 
 #: src/control/Control.CleanupSidebar.ts:805
-#, fuzzy
 msgid "JPEG quality (%)"
-msgstr "JPEG որակը %-ով"
+msgstr "JPEG որակ (%)"
 
 #: src/control/Control.CleanupSidebar.ts:830
 msgid "Prepare for sharing"
@@ -3115,9 +3120,8 @@ msgid "Stop"
 msgstr "Կանգ առնել"
 
 #: src/control/Control.CleanupSidebar.ts:926
-#, fuzzy
 msgid "Scan presentation"
-msgstr "Դատարկ Շնորհանդես"
+msgstr "Սքանավորել շնորհանդեսը"
 
 #: src/control/Control.CleanupSidebar.ts:962
 msgid "Fix all"
@@ -3129,7 +3133,7 @@ msgstr "Այս փաստաթուղթը հնարավոր չէ փոխել այստ�
 
 #: src/control/Control.CleanupSidebar.ts:1013
 msgid "Find what makes this presentation large, and clean it up here."
-msgstr ""
+msgstr "Գտեք, թե ինչն է այս ներկայացումը դարձնում մեծ, և մաքրեք այն այստեղ։"
 
 #: src/control/Control.CleanupSidebar.ts:1077
 msgid "saves %1"
@@ -3149,7 +3153,7 @@ msgstr "Մաքրում"
 
 #: src/control/Control.CleanupSidebar.ts:2439
 msgid "The cleanup did not answer. Please try again."
-msgstr ""
+msgstr "Մաքրումը չպատասխանեց։ Խնդրում ենք կրկին փորձել։"
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3504,111 +3508,125 @@ msgstr "Վանել"
 
 #: src/control/onboarding/OnboardingSteps.ts:25
 msgid "Welcome to Collabora Online"
-msgstr ""
+msgstr "Բարի գալուստ Collabora Online"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "This short tour points out the parts of the screen you will use most."
 msgstr ""
+"Այս կարճ շրջագայությունը ցույց է տալիս էկրանի այն մասերը, որոնք դուք "
+"ամենաշատն եք օգտագործելու։"
 
 #: src/control/onboarding/OnboardingSteps.ts:32
 msgid "The document name"
-msgstr ""
+msgstr "Փաստաթղթի անունը"
 
 #: src/control/onboarding/OnboardingSteps.ts:34
 msgid ""
 "Select the name to rename the document. Every change is saved as you work."
 msgstr ""
+"Ընտրեք փաստաթուղթը վերանվանելու անունը: Յուրաքանչյուր փոփոխություն "
+"պահպանվում է աշխատանքի ընթացքում:"
 
 #: src/control/onboarding/OnboardingSteps.ts:40
 msgid "The tabs"
-msgstr ""
+msgstr "Ներդիրները"
 
 #: src/control/onboarding/OnboardingSteps.ts:42
 msgid ""
 "Each tab gathers the tools for one kind of work, such as inserting or "
 "reviewing."
 msgstr ""
+"Յուրաքանչյուր ներդիր հավաքում է գործիքներ մեկ տեսակի աշխատանքի համար, "
+"ինչպիսիք են ներմուծումը կամ վերանայումը։"
 
 #: src/control/onboarding/OnboardingSteps.ts:49
 msgid "The menus"
-msgstr ""
+msgstr "Ընտրացանկերը"
 
 #: src/control/onboarding/OnboardingSteps.ts:50
 msgid "Every command of the editor is in one of these menus."
-msgstr ""
+msgstr "Խմբագրի յուրաքանչյուր հրաման գտնվում է այս ընտրացանկերից մեկում։"
 
 #: src/control/onboarding/OnboardingSteps.ts:56
 msgid "The tools"
-msgstr ""
+msgstr "Գործիքները"
 
 #: src/control/onboarding/OnboardingSteps.ts:57
 msgid "The buttons of the tab you selected appear along this row."
-msgstr ""
+msgstr "Ձեր ընտրած ներդիրի կոճակները հայտնվում են այս տողի երկայնքով։"
 
 #: src/control/onboarding/OnboardingSteps.ts:63
 msgid "The toolbar"
-msgstr ""
+msgstr "Գործիքագոտի"
 
 #: src/control/onboarding/OnboardingSteps.ts:64
 msgid "The buttons you need most often sit here, under the menus."
 msgstr ""
+"Ձեզ ամենից հաճախ անհրաժեշտ կոճակները գտնվում են այստեղ՝ ընտրացանկերի տակ։"
 
 #: src/control/onboarding/OnboardingSteps.ts:70
 msgid "The formula bar"
-msgstr ""
+msgstr "Բանաձևերի գոտի"
 
 #: src/control/onboarding/OnboardingSteps.ts:72
 msgid ""
 "The contents of the selected cell appear here. Type an equals sign to start "
 "a formula."
 msgstr ""
+"Ընտրված բջջի պարունակությունը հայտնվում է այստեղ: Մուտքագրեք հավասարության "
+"նշան՝ բանաձևը սկսելու համար:"
 
 #: src/control/onboarding/OnboardingSteps.ts:79
 msgid "The slide panel"
-msgstr ""
+msgstr "Սահիկի վահանակը"
 
 #: src/control/onboarding/OnboardingSteps.ts:81
 msgid ""
 "Every slide or page of the document is listed here. Select one to work on "
 "it."
 msgstr ""
+"Փաստաթղթի յուրաքանչյուր սահիկ կամ էջ ներկայացված է այստեղ։ Ընտրեք մեկը՝ դրա "
+"վրա աշխատելու համար։"
 
 #: src/control/onboarding/OnboardingSteps.ts:89
 msgid "The sidebar"
-msgstr ""
+msgstr "Կողային վահանակ"
 
 #: src/control/onboarding/OnboardingSteps.ts:91
 msgid ""
 "The sidebar holds the settings for whatever you have selected, such as "
 "text, a shape or a cell."
 msgstr ""
+"Կողային վահանակը պարունակում է ձեր ընտրած ցանկացած տարրի կարգավորումները, "
+"ինչպիսիք են տեքստը, ձևը կամ բջիջը։"
 
 #: src/control/onboarding/OnboardingSteps.ts:98
 msgid "The people in the document"
-msgstr ""
+msgstr "Փաստաթղթում նշված մարդիկ"
 
 #: src/control/onboarding/OnboardingSteps.ts:99
 msgid "See who else is editing and share the document."
-msgstr ""
+msgstr "Տեսեք, թե ով է խմբագրում փաստաթուղթը և կիսվեք դրանով։"
 
 #: src/control/onboarding/OnboardingSteps.ts:109
-#, fuzzy
 msgid "The status bar"
-msgstr "Ցուցադրել կարգավիճակի գոտին"
+msgstr "Կարգավիճակի գոտին"
 
 #: src/control/onboarding/OnboardingSteps.ts:111
 msgid ""
 "The state of the document, the language of the text and the zoom level are "
 "along the bottom."
 msgstr ""
+"Փաստաթղթի վիճակը, տեքստի լեզուն և խոշորացման մակարդակը գտնվում են ներքևի "
+"մասում։"
 
 #: src/control/onboarding/OnboardingSteps.ts:118
 msgid "You are ready to work"
-msgstr ""
+msgstr "Դուք պատրաստ եք աշխատել"
 
 #: src/control/onboarding/OnboardingSteps.ts:119
 msgid "You can walk through this tour again from the Help menu."
-msgstr ""
+msgstr "Դուք կարող եք կրկին անցնել այս շրջագայությունը Օգնություն ցանկից։"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:245
 #: src/slideshow/engine/SlideShowHandler.ts:116
@@ -3617,12 +3635,11 @@ msgstr "Բաց թողնել"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:251
 msgid "Back"
-msgstr ""
+msgstr "Հետ"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
-#, fuzzy
 msgid "Done"
-msgstr "Ոչ մեկը"
+msgstr "Կատարված է"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
 #: src/control/Control.Zotero.js:270 src/control/Control.Zotero.js:469
@@ -4435,7 +4452,7 @@ msgstr "Առցանց օգնություն"
 #: src/control/Control.Menubar.ts:834 src/control/Control.Menubar.ts:1152
 #: src/control/Control.NotebookbarWriter.js:541
 msgid "Show tour"
-msgstr ""
+msgstr "Ցույց տալ շրջագայությունը"
 
 #: src/control/Control.Menubar.ts:455 src/control/Control.Menubar.ts:668
 #: src/control/Control.Menubar.ts:836 src/control/Control.Menubar.ts:1154
@@ -4765,119 +4782,116 @@ msgstr "Մուտքագրեք որոնման դաշտում՝ ձեր փաստաթ
 #: src/control/Notebookbar.AIAssistantTab.ts:79
 #: src/control/Notebookbar.AIAssistantTab.ts:122
 msgid "Text Tools"
-msgstr ""
+msgstr "Տեքստային գործիքներ"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:93
 msgid "Slide Tools"
-msgstr ""
+msgstr "Սահիկի գործիքներ"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:106
 msgid "Formula Tools"
-msgstr ""
+msgstr "Բանաձևի գործիքներ"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:116
 msgid "Data Tools"
-msgstr ""
+msgstr "Տվյալների գործիքներ"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:143
 msgid "Shorten"
-msgstr ""
+msgstr "Կարճացնել"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:145
 msgid "Rewrite the selected text so it is shorter."
-msgstr ""
+msgstr "Վերաշարադրեք ընտրված տեքստը, որպեսզի այն ավելի կարճ լինի։"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:150
 msgid "Formalize"
-msgstr ""
+msgstr "Պաշտոնականացնել"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:152
 msgid "Rewrite the selected text in a formal tone."
-msgstr ""
+msgstr "Վերաշարադրեք ընտրված տեքստը պաշտոնական տոնով։"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:157
 msgid "Casualize"
-msgstr ""
+msgstr "Անկանոն դարձնել"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:159
 msgid "Rewrite the selected text in a casual, friendly tone."
-msgstr ""
+msgstr "Վերաշարադրեք ընտրված տեքստը առօրյա, բարեկամական տոնով։"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:164
 msgid "Summarize"
-msgstr ""
+msgstr "Ամփոփել"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:166
-#, fuzzy
 msgid "Summarize the key points of the selected text."
-msgstr "Ամփոփեք այս տեքստի հիմնական կետերը"
+msgstr "Ամփոփեք այս տեքստի հիմնական կետերը:"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:171
 msgid "Expand"
-msgstr ""
+msgstr "Ընդլայնել"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:173
 msgid "Expand the selected text and add more detail."
-msgstr ""
+msgstr "Ընդարձակեք ընտրված տեքստը և ավելացրեք ավելի շատ մանրամասներ։"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:178
 msgid "Fix Grammar"
-msgstr ""
+msgstr "Շտկել քերականությունը"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:181
 msgid "Fix grammar, spelling, and punctuation errors in the selected text."
 msgstr ""
+"Շտկեք ընտրված տեքստում քերականության, ուղղագրության և կետադրական սխալները։"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:187
 msgid "Make Bullets"
-msgstr ""
+msgstr "Պատրաստեք Նշիկներ"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:189
 msgid "Rewrite the selected text as short bullet points."
-msgstr ""
+msgstr "Վերաշարադրեք ընտրված տեքստը կարճ կետերով։"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:194
-#, fuzzy
 msgid "Create Slides"
 msgstr "Ստեղծեք սահիկներ"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:201
-#, fuzzy
 msgid "Generate Image"
-msgstr "Գեներացված պատկեր"
+msgstr "Գեներացրեք պատկեր"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
-msgstr ""
+msgstr "Գեներացրեք խոսնակի նշումներ"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:215
-#, fuzzy
 msgid "Create Formula"
 msgstr "Ստեղծեք բանաձև"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:222
 msgid "Explain Formula"
-msgstr ""
+msgstr "Բացատրեք բանաձևը"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:224
 msgid "Explain the formula in the selected cell."
-msgstr ""
+msgstr "Բացատրեք ընտրված բջջի բանաձևը։"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:229
 msgid "Fix Formula Error"
-msgstr ""
+msgstr "Շտկել բանաձևի սխալը"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:236
 msgid "Clean Up Data"
-msgstr ""
+msgstr "Մաքրել տվյալները"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:243
 msgid "Suggest Chart"
-msgstr ""
+msgstr "Առաջարկել գրաֆիկ"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:245
 msgid "Suggest a chart for the selected data."
-msgstr ""
+msgstr "Առաջարկեք ընտրված տվյալների համար գրաֆիկ։"
 
 #: src/control/Notebookbar.CalcTableTab.ts:45
 #: src/control/Notebookbar.TableDesignTabBase.ts:54
@@ -5086,11 +5100,11 @@ msgstr "Անիմացիաներ"
 #: src/control/Control.Notebookbar.js:650
 #: src/control/Control.NotebookbarWriter.js:3077
 msgid "Fill Color (Transparent Pictures Only)"
-msgstr ""
+msgstr "Լցման գույն (միայն թափանցիկ նկարներ)"
 
 #: src/control/Control.Notebookbar.js:661
 msgid "Line"
-msgstr ""
+msgstr "Գիծ"
 
 #: src/control/Control.Notebookbar.js:704
 msgid "Line Width"
@@ -5098,11 +5112,11 @@ msgstr "Գծի լայնություն"
 
 #: src/control/Control.Notebookbar.js:737
 msgid "Transparency:"
-msgstr ""
+msgstr "Թափանցիկություն:"
 
 #: src/control/Control.Notebookbar.js:756
 msgid "Thickness:"
-msgstr ""
+msgstr "Հաստություն:"
 
 #: src/control/Control.NotebookbarBuilder.js:205
 #: src/control/Control.NotebookbarBuilder.js:610
@@ -5732,7 +5746,7 @@ msgstr "Կապել ցանցին"
 
 #: src/control/Control.NotebookbarImpress.js:823
 msgid "Shapes Sidebar"
-msgstr ""
+msgstr "Ուրվաձևերի կողային վահանակ"
 
 #: src/control/Control.NotebookbarImpress.js:924
 #: src/control/Control.NotebookbarImpress.js:2005
@@ -5862,7 +5876,7 @@ msgstr "Դիտել փոփոխությունները"
 
 #: src/control/Control.NotebookbarWriter.js:2656
 msgid "Element categories"
-msgstr ""
+msgstr "Տարրերի դասեր"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
@@ -6003,19 +6017,23 @@ msgstr "Սահիկների ընթերցում..."
 
 #: src/control/Control.SlideImportPane.tsx:742
 msgid "Looking for the file..."
-msgstr ""
+msgstr "Փնտրում եմ նիշքը..."
 
 #: src/control/Control.SlideImportPane.tsx:745
 msgid ""
 "The slides are in this presentation. You do not have permission to open the "
 "file they came from."
 msgstr ""
+"Սահիկները այս ներկայացման մեջ են։ Դուք թույլտվություն չունեք բացելու այն "
+"նիշքը, որտեղից դրանք վերցված են։"
 
 #: src/control/Control.SlideImportPane.tsx:749
 msgid ""
 "The slides are in this presentation. Looking for the file they came from "
 "did not work this time."
 msgstr ""
+"Սահիկները այս ներկայացման մեջ են։ Այս անգամ չհաջողվեց գտնել այն նիշքը, "
+"որտեղից դրանք վերցված են։"
 
 #: src/control/Control.SlideImportPane.tsx:752
 msgid ""
@@ -6036,7 +6054,7 @@ msgstr "Այս պահին նիշքը հնարավոր չէ կարդալ։"
 #: src/control/Control.SlideImportPane.tsx:769
 #: src/control/Control.SlideImportPane.tsx:1292
 msgid "Look again"
-msgstr ""
+msgstr "Նայեք կրկին"
 
 #: src/control/Control.SlideImportPane.tsx:774
 #: src/control/Control.SlideImportPane.tsx:1297
@@ -6324,7 +6342,7 @@ msgstr "Մեծացնել մինչև ցանց"
 
 #: src/control/Control.PaneExpander.ts:115
 msgid "Exit grid"
-msgstr ""
+msgstr "Դուրս եկեք ցանցից"
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
@@ -6994,15 +7012,15 @@ msgstr ""
 
 #: src/control/Permission.js:607
 msgid "opened this document"
-msgstr ""
+msgstr "բացեց այս փաստաթուղթը"
 
 #: src/control/Permission.js:608
 msgid "{0} opened this document"
-msgstr ""
+msgstr "{0}-ը բացել է այս փաստաթուղթը"
 
 #: src/control/Permission.js:609 src/control/Permission.js:625
 msgid "Choose how you'd like to continue:"
-msgstr ""
+msgstr "Ընտրեք, թե ինչպես եք ցանկանում շարունակել:"
 
 #: src/control/Permission.js:619
 msgid "started editing"
@@ -7161,7 +7179,7 @@ msgstr "Արգելափակել ընտրությունը"
 
 #: src/control/Toolbar.js:70
 msgid "The current font is not available and will be substituted."
-msgstr ""
+msgstr "Ընթացիկ տառատեսակը հասանելի չէ և կփոխարինվի։"
 
 #: src/control/Toolbar.js:205 src/control/Toolbar.js:218
 msgid "Downloading..."
@@ -7870,7 +7888,7 @@ msgstr "Ընտրեք միջակայքը"
 
 #: src/control/jsdialog/Widget.ProgressDots.tsx:57
 msgid "Step %1 of %2"
-msgstr ""
+msgstr "Քայլ %1 ընդ․ %2"
 
 #: src/control/jsdialog/Widget.Comment.ts:151
 msgid "reply"
@@ -8065,28 +8083,27 @@ msgstr "ԱԲ կարգավորված չէ, կապվեք ձեր ադմինիստր
 
 #: src/docdispatcher.ts:979
 msgid "Delete section"
-msgstr ""
+msgstr "Ջնջել բաժինը"
 
 #: src/docdispatcher.ts:986
 msgid "Delete slides"
-msgstr ""
+msgstr "Ջնջել սահիկները"
 
 #: src/docdispatcher.ts:987
-#, fuzzy
 msgid "Delete %n slide?"
 msgid_plural "Delete %n slides?"
-msgstr[0] "ջնջեք %n սահիկը"
-msgstr[1] "ջնջեք %n սահիկները"
+msgstr[0] "ջնջե՞լ %n սահիկը"
+msgstr[1] "ջնջե՞լ %n սահիկները"
 
 #: src/docdispatcher.ts:991
 msgid "Delete pages"
-msgstr ""
+msgstr "Ջնջել էջերը"
 
 #: src/docdispatcher.ts:992
 msgid "Delete %n page?"
 msgid_plural "Delete %n pages?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ջնջե՞լ %n էջը։"
+msgstr[1] "Ջնջե՞լ %n էջերը։"
 
 #: src/docstate.ts:154
 msgid "Standard"
@@ -8358,7 +8375,7 @@ msgstr "Սահիկ"
 
 #: src/layer/marker/A11yTextInput.js:348
 msgid "Heading level {0}"
-msgstr ""
+msgstr "Վերնախորագրի մակարդակ {0}"
 
 #: src/layer/marker/A11yTextInput.js:884
 msgid "Out of table"
@@ -8864,7 +8881,7 @@ msgstr "Գործարար նամակ"
 
 #: templates/templates.js:16 templates/templates.js:20
 msgid "Classic Business Letter"
-msgstr ""
+msgstr "Դասական գործարար նամակ"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
