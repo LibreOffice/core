@@ -449,6 +449,37 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testLambdaBuiltInValueFromOOXML)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testOOXMLFunctionWithoutPrefix)
+{
+    // Some producers write newer functions such as IFS without the _xlfn. prefix. Called as a
+    // function, the bare name works like the prefixed one.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetFormula(ScAddress(0, 0, 0), u"=IFS(1>2,\"a\",2>1,\"b\")"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(u"b"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
+
+    m_pDoc->SetFormula(ScAddress(0, 1, 0), u"=ifs(1>2,\"a\",2>1,\"b\")"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(u"b"_ustr, m_pDoc->GetString(ScAddress(0, 1, 0)));
+
+    // A prefixed function with a special mapping keeps it when written bare.
+    m_pDoc->SetFormula(ScAddress(0, 2, 0), u"=CEILING.MATH(-4.5)"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(-4.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+
+    // A defined name that matches a function name, used without a call, still resolves to the
+    // name.
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"7"_ustr);
+    ScRangeData* pName = new ScRangeData(*m_pDoc, u"IFS"_ustr, u"$B$1"_ustr);
+    m_pDoc->GetRangeName().insert(std::unique_ptr<ScRangeData>(pName));
+    m_pDoc->SetFormula(ScAddress(0, 3, 0), u"=IFS+1"_ustr, formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(ScAddress(0, 3, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testMapPerElementErrorIsolation)
 {
     // MAP gives one result per element, so an element whose lambda errors holds
