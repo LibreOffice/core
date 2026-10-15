@@ -815,8 +815,9 @@ void ClientSession::downloadCompareDocument(const Poco::URI& uri, int redirectLi
 
         const std::shared_ptr<const http::Response> httpResponse = session->response();
         const http::StatusCode statusCode = httpResponse->statusLine().statusCode();
-        if (httpResponse->state() == http::Response::State::Complete &&
-            http::isRedirectStatusCode(statusCode) && redirectLimit > 0)
+        // A redirect needs only its status line and Location header, so its body may end when
+        // the connection closes.
+        if (http::isRedirectStatusCode(statusCode) && redirectLimit > 0)
         {
             FileUtil::removeFile(stagedPath);
 

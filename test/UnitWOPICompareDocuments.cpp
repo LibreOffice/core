@@ -160,7 +160,10 @@ public:
         httpResponse.set("Location", path == RedirectPath
                                          ? std::string(OncePath) + "?testname=" + getTestname()
                                          : std::string(AwayUrl));
-        httpResponse.setContentLength(0);
+        // The redirect within the WOPI host has no Content-Length, so its body ends when the
+        // connection closes, as a server may send it.
+        if (path == AwayPath)
+            httpResponse.setContentLength(0);
         socket->sendAndShutdown(httpResponse);
         return true;
     }
