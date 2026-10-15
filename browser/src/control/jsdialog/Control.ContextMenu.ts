@@ -49,6 +49,8 @@ class ContextMenuControl extends JSControl {
 	private _menuPosEl: HTMLElement | null = null;
 	private _autoFillContextMenu: boolean = false;
 	private _spellingContextMenu: boolean = false;
+	// The editengine widget that had the focus when the menu arrived, or null.
+	private _editEngine: HTMLElement | null = null;
 	public hasContextMenu: boolean = false;
 
 	constructor(options?: Record<string, any>) {
@@ -112,6 +114,9 @@ class ContextMenuControl extends JSControl {
 
 		const keyboardInvoked = obj.mouse === 'false';
 
+		const active = document.activeElement;
+		this._editEngine = active ? active.closest('.ui-editengine') : null;
+
 		if (!map.isEditMode()) {
 			return;
 		}
@@ -167,15 +172,17 @@ class ContextMenuControl extends JSControl {
 		const map = this._map;
 		Util.ensureValue(app.activeDocument);
 		Util.ensureValue(app.activeDocument.mouseControl);
+		const container = document.getElementById('canvas-container');
+		Util.ensureValue(container);
+		// The menu of an editengine widget opens at its caret.
 		// A keyboard-opened menu is placed at the caret or active cell, falling
 		// back to the mouse when there is no visible cursor.
 		const position =
+			(this._editEngine && this._getEditEngineCaretPosition(container)) ||
 			(keyboardInvoked &&
 				app.activeDocument.mouseControl.getCursorCanvasPosition()) ||
 			app.activeDocument.mouseControl.getMouseCanvasPosition();
 		Util.ensureValue(position);
-		const container = document.getElementById('canvas-container');
-		Util.ensureValue(container);
 		if (!this._menuPosEl) {
 			this._menuPosEl = document.createElement('div');
 			this._menuPosEl.id = this._menuPosID;
@@ -221,6 +228,10 @@ class ContextMenuControl extends JSControl {
 				return false;
 			}
 
+			// The command of an editengine menu applies to that widget, so the widget has the
+			// focus again before the command goes out, and keeps it.
+			if (this._editEngine) this._editEngine.focus();
+
 			const unoentry = entry as MenuDefinition;
 			Util.ensureValue(unoentry.uno);
 			const uno =
@@ -234,11 +245,9 @@ class ContextMenuControl extends JSControl {
 				app.map.sendUnoCommand(uno);
 				// For spelling context menu we need to remove selection
 				if (this._spellingContextMenu) app.map._docLayer._clearSelections();
-				// Give the stolen focus back to map
-				app.map.focus();
 			}
 
-			this._map?.focus();
+			if (!this._editEngine) this._map?.focus();
 			return false;
 		};
 
@@ -255,6 +264,25 @@ class ContextMenuControl extends JSControl {
 			// preselected.
 			!keyboardInvoked /* noDefaultSelection? */,
 		);
+	}
+
+	// The bottom left of the caret in the editengine widget, relative to the container.
+	private _getEditEngineCaretPosition(
+		container: HTMLElement,
+	): PositionInterface | null {
+		const selection = window.getSelection();
+		if (!selection || selection.rangeCount === 0) return null;
+
+		const range = selection.getRangeAt(0);
+		let caret = range.getBoundingClientRect();
+		// A caret on an empty line has no box, so the line places the menu.
+		if (!caret.height) {
+			const node = range.startContainer;
+			const line = node instanceof Element ? node : node.parentElement;
+			if (line) caret = line.getBoundingClientRect();
+		}
+		const origin = container.getBoundingClientRect();
+		return { x: caret.left - origin.left, y: caret.bottom - origin.top };
 	}
 
 	private _getMenuEntries(
@@ -307,6 +335,14 @@ class ContextMenuControl extends JSControl {
 	}
 
 	private _amendContextMenuData(obj: any): void {
+		// The menu of an editengine widget leaves out special paste formats and comments.
+		if (this._editEngine) {
+			const excluded = ['.uno:PasteSpecialMenu', '.uno:InsertAnnotation'];
+			obj.menu = obj.menu.filter(
+				(item: MenuEntry) => excluded.indexOf(item.command) === -1,
+			);
+		}
+
 		// Add a 'delete' entry  for graphic selection on desktop and mobile device (in browser or app).
 		if (GraphicSelection.hasActiveSelection()) {
 			const menu: MenuEntry[] = obj.menu;

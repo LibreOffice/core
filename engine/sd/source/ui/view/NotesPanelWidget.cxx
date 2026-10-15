@@ -15,7 +15,9 @@
 #include <ViewShellBase.hxx>
 #include <ViewShellManager.hxx>
 
+#include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <vcl/svapp.hxx>
@@ -38,6 +40,29 @@ class NotesPanelWidgetController final : public EditEngineWidgetController
     void moveToTop(const ViewShell& rViewShell)
     {
         mrNotesPanelViewShell.GetViewShellBase().GetViewShellManager()->MoveToTop(rViewShell);
+    }
+
+    /// Opens the context menu at the caret, the menu a right click there opens on desktop: the
+    /// spelling menu on a misspelled word, and the text menu elsewhere.
+    void executeContextMenu()
+    {
+        // The menu offers edits, so it opens only while this view edits the notes.
+        ::sd::Window* pWindow = mrNotesPanelViewShell.GetActiveWindow();
+        if (!pWindow || !mrNotesPanelView.isInFocus())
+            return;
+
+        // The edit cursor is in document coordinates. The output area shows the document from the
+        // top left of the visible area, and a command event carries window pixels.
+        EditView& rEditView = GetEditView();
+        const tools::Rectangle aCursor = rEditView.GetEditCursor();
+        const Point aWindowPosition
+            = rEditView.GetOutputArea().TopLeft() + Point(aCursor.Left(), aCursor.Center().Y())
+              - rEditView.GetVisArea().TopLeft();
+        const Point aPixelPosition = rEditView.GetOutputDevice().LogicToPixel(aWindowPosition);
+
+        mrNotesPanelViewShell.Command(
+            CommandEvent(aPixelPosition, CommandEventId::ContextMenu, /*bMouseEvent=*/true),
+            pWindow);
     }
 
 public:
@@ -91,6 +116,11 @@ protected:
             if (std::shared_ptr<ViewShell> pMainViewShell
                 = mrNotesPanelViewShell.GetViewShellBase().GetMainViewShell())
                 moveToTop(*pMainViewShell);
+        }
+        else if (rCmd == u"contextmenu")
+        {
+            executeContextMenu();
+            return true;
         }
         else
             return false;

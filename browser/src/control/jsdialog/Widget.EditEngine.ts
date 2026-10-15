@@ -27,7 +27,8 @@
  * Expected JSON payload (in data.data): see EditEngineWidgetJSON.
  *
  * Sent back as 'key' { keyCode, charCode, repeat }, 'text' { text },
- * 'selection' { startPara, startIndex, endPara, endIndex }, and 'focus' and 'blur' with no data.
+ * 'selection' { startPara, startIndex, endPara, endIndex }, and 'focus', 'blur' and 'contextmenu'
+ * with no data.
  */
 
 declare var JSDialog: any;
@@ -37,9 +38,10 @@ interface EditEngineContainer extends HTMLElement {
 	builder: JSBuilder;
 	editEngineHandlersAttached?: boolean;
 	onEditEngineUpdate?: (data: EditEngineWidgetJSON) => void;
-	// The last selection sent to the engine, so a pointer gesture that lands on the same caret is
-	// not reported twice. Held on the element so it goes away when the widget does.
-	editEngineLastSelection?: string;
+	// The selection the engine last reported or was last told about. A pointer gesture that lands
+	// on the same caret is not reported twice. Held on the element so it goes away when the widget
+	// does.
+	editEngineLastSelection?: EditEngineSelection;
 	// Paste text for a pending paste event's clipboardData.
 	editEnginePendingPasteText?: string;
 }
@@ -195,9 +197,9 @@ function editEngineSendSelection(container: EditEngineContainer): void {
 	const selection = editEngineGetSelection(container);
 	if (!selection) return;
 
-	const key = editEngineKey(selection);
-	if (container.editEngineLastSelection === key) return;
-	container.editEngineLastSelection = key;
+	const last = container.editEngineLastSelection;
+	if (last && editEngineKey(last) === editEngineKey(selection)) return;
+	container.editEngineLastSelection = selection;
 
 	editEngineSendAction(container, 'selection', selection);
 }
@@ -340,9 +342,13 @@ function editEngineAttachHandlers(container: EditEngineContainer): void {
 
 	// The engine switches the text in and out of editing on focus changes, for example to clear a
 	// placeholder text on entry and to restore it when the text is left empty.
-	container.addEventListener('focus', () =>
-		editEngineSendAction(container, 'focus', {}),
-	);
+	// The widget shows no selection while it lacks the focus, so the engine's selection comes
+	// back with the focus. A click that gives the focus places its own caret after this.
+	container.addEventListener('focus', () => {
+		if (container.editEngineLastSelection)
+			editEngineApplySelection(container, container.editEngineLastSelection);
+		editEngineSendAction(container, 'focus', {});
+	});
 
 	container.addEventListener('blur', () => {
 		editEngineSendAction(container, 'blur', {});
@@ -391,6 +397,13 @@ function editEngineAttachHandlers(container: EditEngineContainer): void {
 			{ once: true },
 		),
 	);
+
+	// The engine builds the menu for the caret, so the caret the right click placed goes first.
+	container.addEventListener('contextmenu', (e: MouseEvent) => {
+		e.preventDefault();
+		editEngineSendSelection(container);
+		editEngineSendAction(container, 'contextmenu', {});
+	});
 
 	// Keep the notebookbar Copy and Cut button states up to date.
 	document.addEventListener('selectionchange', () =>
@@ -546,7 +559,7 @@ function editEngineUpdateInPlace(
 		endPara: 0,
 		endIndex: 0,
 	};
-	container.editEngineLastSelection = editEngineKey(selection);
+	container.editEngineLastSelection = selection;
 
 	// The engine owns the caret, so its selection is applied as given. The container stays in the
 	// document across the update, so the caret can be placed at once with no wait for a frame.
@@ -605,7 +618,7 @@ function _editEngineControl(
 		endPara: 0,
 		endIndex: 0,
 	};
-	container.editEngineLastSelection = editEngineKey(selection);
+	container.editEngineLastSelection = selection;
 
 	// An update builds into a detached fragment and swaps the node in afterwards, and a caret
 	// cannot be placed on a node that is not in the document yet, so this waits a frame.
