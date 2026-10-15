@@ -3,18 +3,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Impress-Intro-Template.odp\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-10-15 13:59+0000\n"
+"Last-Translator: Roy-Magne Mo <gaupe@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Norwegian Nynorsk <https://hosted.weblate.org/projects/"
+"collabora-online/impress-intro-template/nn/>\n"
 "Language: nn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #. content.xml (slide 'page1')
 msgid "👋 Introduction"
-msgstr ""
+msgstr "👋 Innleiing"
 
 #. content.xml (slide 'page1')
 msgid ""
@@ -24,49 +26,56 @@ msgid ""
 "introduction template will help you get started and explore some of the main"
 " features of the product.</5>"
 msgstr ""
+"<1>Collabora Office </1><2>presentasjon</2><3> er eit </3><4>verktøy</4><5> "
+"som lèt deg laga, redigera og levera presentasjonar på ein enkel måte. Du "
+"kan arbeida åleine på eit dokument, eller samarbeida som del av eit team. "
+"Denne introduksjonsmalen vil hjelpa deg å koma i gang og utforska nokre av "
+"hovudfunksjonane til produktet.</5>"
 
 #. content.xml (slide 'page1'); styles.xml (master page
 #. 'Introduction_20_slide')
 msgid "Next Chapter: 🖼 Slides & Layouts"
-msgstr ""
+msgstr "Neste kapittel: 🖼 Lysbilete og oppsett"
 
 #. content.xml (slide 'page1')
 msgid "Here's what you'll discover"
-msgstr ""
+msgstr "Dette kan du oppdaga"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page2')
 msgid "🖼 Slides & Layouts"
-msgstr ""
+msgstr "🖼 Lysbilete og oppsett"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page3')
 msgid "🎨 Design & Master Slides"
-msgstr ""
+msgstr "🎨 Utforming og hovudlysbilete"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page4')
 msgid "✏️ Style & Visual"
-msgstr ""
+msgstr "✏️ Stil og visuelt"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page5')
 msgid "🎬 Slide Transitions"
-msgstr ""
+msgstr "🎬 Overgangar mellom lysbilete"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page6')
 msgid "🎤 Presenting"
-msgstr ""
+msgstr "🎤 Presentasjon"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page7')
 msgid "🤝 Productivity & Collaboration"
-msgstr ""
+msgstr "🤝 Produktivitet og samarbeid"
 
 #. content.xml (slide 'page2')
 msgid "Every presentation is a sequence of slides."
-msgstr ""
+msgstr "Kvar presentasjon er ei rekkje lysbilete."
 
 #. content.xml (slide 'page2')
 msgid ""
 "<1>Use the </1><2>Slide navigation</2><3> on the left to reorder them by "
 "dragging, or remove ones you don’t need.</3>"
 msgstr ""
+"<1>Bruk </1><2>Lysbiletpanelet</2><3> til venstre for å flytta på dei ved å "
+"dra, eller fjern dei du ikkje treng.</3>"
 
 #. content.xml (slide 'page2')
 msgid ""
@@ -74,41 +83,46 @@ msgid ""
 "arrangement of placeholders for titles, text, and images. Pick the layout "
 "that fits the slide’s purpose.</3>"
 msgstr ""
+"<1>Kvart lysbilete kan bruka eit </1><2>anna oppsett </2><3>– eit "
+"førehandsdefinert oppsett av plasshaldarar for tittlar, tekst og bilete. Vel "
+"det oppsettet som passar til føremålet med lysbiletet.</3>"
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default')
 msgid "<1>➜</1><2>Try it:</2>"
-msgstr ""
+msgstr "<1>➜</1><2>Prøv det:</2>"
 
 #. content.xml (slide 'page2')
 msgid "Add a new slide clicking “New” in Notebook bar."
-msgstr ""
+msgstr "Legg til eit nytt lysbilete ved å klikka på «Ny» i verktøybandet."
 
 #. content.xml (slide 'page2')
 msgid "Choose a layout for it from the layout chooser."
-msgstr ""
+msgstr "Vel eit oppsett for det i oppsettsveljaren."
 
 #. content.xml (slide 'page2')
 msgid "Start editing your slide."
-msgstr ""
+msgstr "Byrj å redigera lysbiletet ditt."
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); styles.xml (master page
 #. 'Content_20_slide'); styles.xml (master page 'Default')
 msgid "Useful tip"
-msgstr ""
+msgstr "Nyttig tips"
 
 #. content.xml (slide 'page2')
 msgid ""
 "When you’re unsure which layout to pick, start with “Title, Content” – it "
 "works for almost any slide."
 msgstr ""
+"Når du er usikker på kva oppsett du skal velja, byrj med «Tittel, Innhald» – "
+"det fungerer for nesten kva lysbilete som helst."
 
 #. content.xml (slide 'page2')
 msgid "Next Chapter: 🎨 Design & Master Slides"
-msgstr ""
+msgstr "Neste kapittel: 🎨 Utforming og hovudlysbilete"
 
 #. content.xml (slide 'page3')
 msgid ""
@@ -120,22 +134,30 @@ msgid ""
 "it up automatically. When you need to rebrand or tweak the design later, you"
 " change the master, not 30 slides.</7>"
 msgstr ""
+"<1>Eit </1><2>hovudlysbilete</2><3> er malen bak kvart lysbilete. Det "
+"definerer fargar, skrifttypar, bakgrunn og kvar titlar og botntekstar skal "
+"stå. </3><4>Endrar</4><5> </5><6>du hovudlysbiletet, vert alle lysbileta "
+"oppdaterte samtidig. </6><7>Dermed er hovudlysbilete den raskaste måten å "
+"halda presentasjonen konsistent på. Set utsjånaden éin gong (skrifttypar, "
+"fargar, logo, botntekst), så får kvart nytt lysbilete han automatisk. Når du "
+"seinare skal endra utforminga, endrar du hovudlysbiletet, ikkje 30 "
+"lysbilete.</7>"
 
 #. content.xml (slide 'page3')
 msgid "Open the View tab in the Notebook bar."
-msgstr ""
+msgstr "Opna fana Vis i verktøybandet."
 
 #. content.xml (slide 'page3')
 msgid "Click “Master View” and edit your master design."
-msgstr ""
+msgstr "Klikk på «Hovudutformingsvising» og rediger hovudutforminga di."
 
 #. content.xml (slide 'page3')
 msgid "Once your master design is ready, click \"Close Master View\"."
-msgstr ""
+msgstr "Når hovudutforminga di er klar, klikk på «Lukk hovudutformingsvising»."
 
 #. content.xml (slide 'page3')
 msgid "Now your master is set and ready to use across all slides."
-msgstr ""
+msgstr "No er hovudlysbiletet sett opp og klart til bruk på alle lysbileta."
 
 #. content.xml (slide 'page3')
 msgid ""
@@ -143,10 +165,13 @@ msgid ""
 "apply it just to that slide. The rest of your deck stays on the original "
 "master."
 msgstr ""
+"Viss eit enkelt lysbilete treng ein annan utsjånad, lag eit andre "
+"hovudlysbilete og bruk det berre på det lysbiletet. Resten av presentasjonen "
+"din vert ståande på det opphavlege hovudlysbiletet."
 
 #. content.xml (slide 'page3')
 msgid "Next Chapter: ✏️ Style & Visual"
-msgstr ""
+msgstr "Neste kapittel: ✏️ Stil og visuelt"
 
 #. content.xml (slide 'page4')
 msgid ""
@@ -155,33 +180,47 @@ msgid ""
 "colours guide the reader through your message. Second, </3><4>add visual "
 "elements</4><5> – images, shapes, icons, charts – to support your story.</5>"
 msgstr ""
+"<1>Det finst to måtar å få eit lysbilete til å skilla seg ut på. Først, </1>"
+"<2>formater teksten din</2><3> for å gje han struktur og vekt – skrifttypar, "
+"storleikar, vekter og fargar rettleier lesaren gjennom meldinga di. "
+"Deretter, </3><4>legg til visuelle element</4><5> – bilete, former, ikon, "
+"diagram – for å støtta forteljinga di.</5>"
 
 #. content.xml (slide 'page4')
 msgid ""
 "In the Notebook bar, open the Insert tab and add an object, image, table, or"
 " any other element that supports your content."
 msgstr ""
+"Opna fana Set inn i verktøybandet og legg til eit objekt, bilete, tabell "
+"eller anna element som støttar innhaldet ditt."
 
 #. content.xml (slide 'page4')
 msgid ""
 "Click on it to select it, then resize and reposition it to fit your layout."
 msgstr ""
+"Klikk på det for å velja det, og endra storleiken og plasseringa slik at det "
+"passar til oppsettet ditt."
 
 #. content.xml (slide 'page4')
 msgid ""
 "For editable objects like shapes or images, a contextual tab appears in the "
 "Notebook bar with all the available actions."
 msgstr ""
+"For redigerbare objekt som former eller bilete dukkar det opp ei "
+"kontekstavhengig fane i verktøybandet med alle tilgjengelege handlingar."
 
 #. content.xml (slide 'page4')
 msgid ""
 "Less is more. One strong visual, a clear headline, and a few well-formatted "
 "lines will always beat a slide packed with text and decorations."
 msgstr ""
+"Mindre er meir. Eitt sterkt bilete, ei tydeleg overskrift og nokre få "
+"velformaterte linjer vil alltid slå eit lysbilete fullt av tekst og "
+"dekorasjonar."
 
 #. content.xml (slide 'page4')
 msgid "Next Chapter: 🎬 Slide Transitions"
-msgstr ""
+msgstr "Neste kapittel: 🎬 Overgangar mellom lysbilete"
 
 #. content.xml (slide 'page5')
 msgid ""
@@ -189,34 +228,44 @@ msgid ""
 "during your slide show. The right transition makes your deck feel polished "
 "and professional, while the wrong one distracts from your message.</3>"
 msgstr ""
+"<1>Ein </1><2>overgang</2><3> styrer korleis eit lysbilete går over til det "
+"neste under lysbiletframvisinga. Den rette overgangen gjer at presentasjonen "
+"verkar profesjonell og polert, medan ein feil overgang tek merksemda bort "
+"frå meldinga di.</3>"
 
 #. content.xml (slide 'page5')
 msgid "Click Transition tab in Notebook bar."
-msgstr ""
+msgstr "Klikk på fana Overgang i verktøybandet."
 
 #. content.xml (slide 'page5')
 msgid "Pick a transition style you would like to use."
-msgstr ""
+msgstr "Vel ein overgangsstil du vil bruka."
 
 #. content.xml (slide 'page5')
 msgid ""
 "Adjust other properties – set the duration, pick a variant, or choose "
 "timing."
 msgstr ""
+"Juster andre eigenskapar – set varigheit, vel ein variant, eller vel "
+"tidspunkt."
 
 #. content.xml (slide 'page5')
 msgid "Click \"Apply to All Slides\" to use the same transition across your deck."
 msgstr ""
+"Klikk på «Bruk på alle lysbileta» for å bruka same overgang i heile "
+"presentasjonen."
 
 #. content.xml (slide 'page5')
 msgid ""
 "Use one transition across your whole deck to keep things consistent. Save a "
 "different transition for the slides you really want to stand out."
 msgstr ""
+"Bruk éin overgang gjennom heile presentasjonen for å halda ting konsekvent. "
+"Spar ein annan overgang til dei lysbileta du verkeleg vil skal skilja seg ut."
 
 #. content.xml (slide 'page5')
 msgid "Next Chapter: 🎤 Presenting"
-msgstr ""
+msgstr "Neste kapittel: 🎤 Presentasjon"
 
 #. content.xml (slide 'page6')
 msgid ""
@@ -225,26 +274,30 @@ msgid ""
 "next one coming up, a timer, and your speaker notes, while your audience "
 "sees only the slide.</3>"
 msgstr ""
+"<1>Når du er klar til å presentera, startar du lysbiletframvisinga og </1><2>"
+"Presentasjonskonsollen</2><3> opnar seg. Du ser det gjeldande lysbiletet, "
+"det neste som kjem, ein tidtakar og talarmerknadane dine, medan publikum "
+"berre ser lysbiletet.</3>"
 
 #. content.xml (slide 'page6')
 msgid "Switch to the View tab in the Notebook bar and open “Notes view”."
-msgstr ""
+msgstr "Byt til fana Vis i verktøybandet og opna «Notatvisning»."
 
 #. content.xml (slide 'page6')
 msgid "Add a speaker note to your slides."
-msgstr ""
+msgstr "Legg til eit talarnotat på lysbileta dine."
 
 #. content.xml (slide 'page6')
 msgid "When you're ready to present, open the Slide Show tab."
-msgstr ""
+msgstr "Når du er klar til å presentera, opna fana Lysbiletframvising."
 
 #. content.xml (slide 'page6')
 msgid "Pick a slide show option to start presenting."
-msgstr ""
+msgstr "Vel eit alternativ for lysbiletframvising for å byrja å presentera."
 
 #. content.xml (slide 'page6')
 msgid "Next Chapter: 🤝 Productivity & Collaboration"
-msgstr ""
+msgstr "Neste kapittel: 🤝 Produktivitet og samarbeid"
 
 #. content.xml (slide 'page7')
 msgid ""
@@ -252,10 +305,13 @@ msgid ""
 "</3><4>collaborate with others</4><5>, making it easier to work together and"
 " share your decks.</5>"
 msgstr ""
+"<1>Ei rekkje funksjonar hjelper deg </1><2>å halda deg produktiv</2><3> og </"
+"3><4>samarbeida med andre</4><5>, slik at det vert lettare å arbeida saman "
+"og dela presentasjonane dine.</5>"
 
 #. content.xml (slide 'page7')
 msgid "📤 Document sharing"
-msgstr ""
+msgstr "📤 Deling av dokument"
 
 #. content.xml (slide 'page7')
 msgid ""
@@ -263,50 +319,57 @@ msgid ""
 "presentation at once. Click the </1><2>Share button</2><3> in the top right "
 "to share your document with your colleagues.</3>"
 msgstr ""
+"<1>Arbeid saman i sanntid. Fleire personar kan redigera den same "
+"presentasjonen samtidig. Klikk på </1><2>Del-knappen</2><3> øvst til høgre "
+"for å dela dokumentet ditt med kollegane dine.</3>"
 
 #. content.xml (slide 'page7')
 msgid "⌨️ Shortcuts"
-msgstr ""
+msgstr "⌨️ Snøggtastar"
 
 #. content.xml (slide 'page7')
 msgid ""
 "<1>Keyboard shortcuts speed up your workflow. Find the full list under Help "
 "tab in </1><2>Keyboard shortcuts</2>"
 msgstr ""
+"<1>Snøggtastar gjer at du arbeider raskare. Finn den fullstendige lista "
+"under Hjelp-fanen i </1><2>Snøggtastar</2>"
 
 #. content.xml (slide 'page7')
 msgid "▶️ Video tutorials"
-msgstr ""
+msgstr "▶️ Videoopplæring"
 
 #. content.xml (slide 'page7')
 msgid ""
 "Want to keep learning? Short video introductions cover additional features "
 "and help you build on what you’ve learned."
 msgstr ""
+"Vil du halda fram med å læra? Korte videoinnføringar dekkjer fleire "
+"funksjonar og hjelper deg å byggja vidare på det du har lært."
 
 #. content.xml (slide 'page7')
 msgid "Check out video tutorials."
-msgstr ""
+msgstr "Sjå videoopplæringane."
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default')
 msgid "Title"
-msgstr ""
+msgstr "Tittel"
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default'); styles.xml (master page 'Introduction_20_slide')
 msgid "Text"
-msgstr ""
+msgstr "Tekst"
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default'); styles.xml (master page 'Introduction_20_slide')
 msgid "Next Chapter: name of next chapter"
-msgstr ""
+msgstr "Neste kapittel: namn på neste kapittel"
 
 #. styles.xml (master page 'Introduction_20_slide')
 msgid "👋Introduction"
-msgstr ""
+msgstr "👋Innleiing"
 
 #. styles.xml (master page 'Introduction_20_slide')
 msgid "Text title"
-msgstr ""
+msgstr "Tittel på tekst"
