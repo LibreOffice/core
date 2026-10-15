@@ -21,6 +21,7 @@
 #include <lokassert.hpp>
 #include <testlog.hpp>
 #include <common/FileUtil.hpp>
+#include <common/JailUtil.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/Process.hpp>
@@ -33,6 +34,7 @@
 #include <mutex>
 #include <sstream>
 #include <string>
+#include <thread>
 #include <utility>
 
 /// This test simulates a crashing kit with modifications.
@@ -414,11 +416,216 @@ public:
     }
 };
 
+/// When a subforkit is too slow to supply a spare kit, it is reset while documents of its
+/// configuration are still open and loading. The shared settings of that configuration stay in
+/// place, so the kits of the next subforkit get them.
+///
+/// The first subforkit is stopped as soon as it connects, so it never forks more than its first
+/// kit, which document A gets. Documents B and C then find no spare kit and the subforkit is
+/// reset, as on a host too busy to fork in time. Both clients create the settings directories
+/// before the reset, and the settings of the second are served only after it, so the next
+/// subforkit starts from what that install leaves behind.
+class UnitSubForKitReset : public WopiTestServer
+{
+    using Base = WopiTestServer;
+
+    STATE_ENUM(Phase, LoadFirst, WaitFirstLoaded, WaitReset, WaitNextLoaded, Done)
+    _phase;
+
+    const std::string _stamp;
+    std::mutex _mutex;
+    std::string _configId;
+    pid_t _firstSubForKitPid;
+    int _subForKitCount;
+    int _settingsRequestsDuringReset;
+    std::string _nextSubForKitMissing;
+
+    std::string presetsPath() const
+    {
+        const std::string sharedPresets =
+            Poco::Path(COOLWSD::ChildRoot, JailUtil::CHILDROOT_TMP_SHARED_PRESETS_PATH).toString();
+        return Poco::Path(sharedPresets, Uri::encode(_configId)).toString();
+    }
+
+    bool firstSubForKitReaped() const
+    {
+        return _firstSubForKitPid > 0 && ::kill(_firstSubForKitPid, 0) != 0 && errno == ESRCH;
+    }
+
+    void loadDocument(int fileId)
+    {
+        initWebsocket("/wopi/files/" + std::to_string(fileId) + "?access_token=anything");
+        WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+    }
+
+public:
+    UnitSubForKitReset()
+        : Base("UnitSubForKitReset")
+        , _phase(Phase::LoadFirst)
+        , _stamp("resetconfigid")
+        , _firstSubForKitPid(0)
+        , _subForKitCount(0)
+        , _settingsRequestsDuringReset(0)
+    {
+    }
+
+    void newSubForKit(const std::shared_ptr<ForKitProcess>& subforkit,
+                      const std::string& configId) override
+    {
+        std::lock_guard<std::mutex> lock(_mutex);
+        ++_subForKitCount;
+        TST_LOG("New SubForKit #" << _subForKitCount << " [" << subforkit->getPid() << "]: "
+                                  << configId);
+        if (_subForKitCount == 1)
+        {
+            _configId = configId;
+            _firstSubForKitPid = subforkit->getPid();
+            // Its first kit is already forked. Stopped, it forks no spare kit after that one.
+            ::kill(_firstSubForKitPid, SIGSTOP);
+            return;
+        }
+
+        // The settings a kit of this subforkit needs, as they are when the subforkit starts.
+        for (const char* entry : { "autotext", "wordbook", "template", "xcu/config.xcu" })
+        {
+            if (!FileUtil::Stat(Poco::Path(presetsPath(), entry).toString()).exists())
+                _nextSubForKitMissing += std::string(_nextSubForKitMissing.empty() ? "" : ", ") +
+                                         entry;
+        }
+    }
+
+    void killSubForKit(const std::string& configId) override
+    {
+        TST_LOG("Killed SubForKit: " << configId);
+        if (_phase == Phase::WaitReset)
+            TRANSITION_STATE(_phase, Phase::WaitNextLoaded);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        if (_phase == Phase::WaitFirstLoaded)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitReset);
+            loadDocument(1);
+            loadDocument(2);
+        }
+        else if (_phase == Phase::WaitNextLoaded)
+        {
+            std::lock_guard<std::mutex> lock(_mutex);
+            TRANSITION_STATE(_phase, Phase::Done);
+            if (_subForKitCount < 2)
+                failTest("The document loaded without a new subforkit");
+            else if (!_nextSubForKitMissing.empty())
+                failTest("The next subforkit started without the shared settings: " +
+                         _nextSubForKitMissing);
+            else
+                passTest("The next subforkit started with the shared settings");
+        }
+
+        return true;
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        Poco::JSON::Object::Ptr sharedSettings = new Poco::JSON::Object();
+        std::string uri = helpers::getTestServerURI() +
+                          "/wopi/settings/sharedconfig.json?testname=UnitSubForKitReset";
+        sharedSettings->set("uri", Util::trim(uri));
+        sharedSettings->set("stamp", _stamp);
+        fileInfo->set("SharedSettings", sharedSettings);
+    }
+
+    std::map<std::string, std::string>
+        parallelizeCheckInfo(const Poco::Net::HTTPRequest& request,
+                             std::istream& /*message*/,
+                             const std::shared_ptr<StreamSocket>& /*socket*/) override
+    {
+        const std::string uri = Uri::decode(request.getURI());
+        std::string wopiSrc = "/wopi/files/0";
+        for (const char* fileId : { "1", "2" })
+        {
+            if (uri.find(std::string("/wopi/files/") + fileId) != std::string::npos)
+                wopiSrc = std::string("/wopi/files/") + fileId;
+        }
+        return std::map<std::string, std::string>{
+            {"wopiSrc", wopiSrc},
+            {"accessToken", "anything"},
+            {"noAuthHeader", ""},
+            {"permission", ""},
+            {"configid", _stamp}
+        };
+    }
+
+    /// The shared settings hold one xcu and nothing else, so an install creates no autotext,
+    /// wordbook or template directory of its own.
+    bool handleHttpGetRequest(const Poco::Net::HTTPRequest& request,
+                              const std::shared_ptr<StreamSocket>& socket) override
+    {
+        const std::string path = Poco::URI(request.getURI()).getPath();
+        if (path == "/wopi/settings/sharedconfig.json")
+        {
+            // Both clients have created the settings directories by the time the second of them
+            // asks for the settings, so the reset removes directories they already made.
+            if (_phase == Phase::WaitReset && ++_settingsRequestsDuringReset == 2)
+            {
+                TST_LOG("Holding the shared settings until the first subforkit is reaped");
+                const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(20);
+                while (!firstSubForKitReaped() && std::chrono::steady_clock::now() < deadline)
+                    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+            }
+
+            const std::string xcuUri =
+                helpers::getTestServerURI() +
+                "/wopi/settings/shared/config.xcu?testname=UnitSubForKitReset";
+            const std::string json =
+                "{\"kind\":\"shared\",\"xcu\":[{\"uri\":\"" + xcuUri + "\",\"stamp\":\"x1\"}]}";
+            http::Response httpResponse(http::StatusCode::OK);
+            httpResponse.setBody(json, "application/json; charset=utf-8");
+            socket->sendAndShutdown(httpResponse);
+            return true;
+        }
+
+        if (path == "/wopi/settings/shared/config.xcu")
+        {
+            const std::string xcu =
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                "<oor:items xmlns:oor=\"http://openoffice.org/2001/registry\" "
+                "xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" "
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"></oor:items>";
+            http::Response httpResponse(http::StatusCode::OK);
+            httpResponse.setBody(xcu, "application/xml; charset=utf-8");
+            socket->sendAndShutdown(httpResponse);
+            return true;
+        }
+
+        return Base::handleHttpGetRequest(request, socket);
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::LoadFirst:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitFirstLoaded);
+                loadDocument(0);
+                break;
+            }
+            case Phase::WaitFirstLoaded:
+            case Phase::WaitReset:
+            case Phase::WaitNextLoaded:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[4]{
-        new UnitSubForKit(), new UnitSubForKitJails(), new UnitSubForKitNested(), nullptr
-    };
+    return new UnitBase*[5]{ new UnitSubForKit(), new UnitSubForKitJails(),
+                             new UnitSubForKitNested(), new UnitSubForKitReset(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

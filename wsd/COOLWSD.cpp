@@ -429,8 +429,10 @@ static void closeSubForKit(const std::string& configId,
 
 namespace {
 
-/// Forget a subforkit. With askToExit, it and its spare kits are asked to exit. Otherwise it is
-/// killed.
+/// Forget a subforkit. With askToExit, no document uses its configuration any more: the subforkit
+/// and its spare kits are asked to exit, and the shared settings of the configuration are removed.
+/// Otherwise the subforkit is killed, and the shared settings stay for the subforkit that replaces
+/// it.
 SubForKitMap::iterator dropSubForKit(SubForKitMap::iterator it, bool askToExit)
 {
     // copy as it will be used after erase()
@@ -442,7 +444,13 @@ SubForKitMap::iterator dropSubForKit(SubForKitMap::iterator it, bool askToExit)
     LastSubForKitSpawnRequestTimes.erase(configId);
 #if !MOBILEAPP
     if (askToExit)
+    {
         closeSubForKit(configId, it->second);
+
+        const std::string sharedPresets =
+            Poco::Path(COOLWSD::ChildRoot, JailUtil::CHILDROOT_TMP_SHARED_PRESETS_PATH).toString();
+        FileUtil::removeFile(Poco::Path(sharedPresets, Uri::encode(configId)).toString(), true);
+    }
 #else
     (void)askToExit;
 #endif
