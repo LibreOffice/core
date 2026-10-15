@@ -2099,6 +2099,24 @@ img.ui-combobox-value-preview {
 	color: var(--color-text-darker) !important;
 }
 
+/* A checked context menu entry shows a check mark at the end of its row, after
+ * the shortcut. */
+[id^='jsd-context-menu'][id$='-entries'] .ui-combobox-entry.context-menu-checked::after {
+	content: '\2713';
+	flex-shrink: 0;
+	margin-inline-start: auto;
+	/* The same spacing as span.shortcut below: 16px from the text, and 20px
+	 * at the end, because .ui-combobox-entry is 15px wider than the menu. */
+	padding-inline: 16px 20px;
+	color: var(--color-primary);
+}
+[id^='jsd-context-menu'][id$='-entries'] .ui-combobox-entry.context-menu-checked > span.shortcut {
+	padding-inline-end: 0;
+}
+[id^='jsd-context-menu'][id$='-entries'] .ui-combobox-entry.context-menu-checked:has(> span.shortcut)::after {
+	margin-inline-start: 0;
+}
+
 .ui-combobox-entry:has(> span.shortcut) > span:not(.shortcut) {
 	width: auto;
 }

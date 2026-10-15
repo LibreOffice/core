@@ -29,6 +29,7 @@ interface CtxtCommandEntry {
 	name: string;
 	isHtmlName: boolean;
 	icon?: string;
+	checked?: boolean;
 	command?: string;
 	items?: Record<string, CtxtValueType>;
 	callback?: () => void;
@@ -308,7 +309,9 @@ class ContextMenuControl extends JSControl {
 					type: 'comboboxentry',
 					text: value.name,
 					img: value.icon || command,
-					class: this._commandClass(command),
+					class:
+						this._commandClass(command) +
+						(value.checked ? ' context-menu-checked' : ''),
 					shortcut: JSDialog.ShortcutsUtil.getShortcutText(command),
 				});
 				continue;
@@ -616,15 +619,12 @@ class ContextMenuControl extends JSControl {
 				// sentence checker's icon on the message of a grammar error.
 				if (item.icon) contextMenu[item.command].icon = item.icon;
 
-				if (item.checktype === 'checkmark') {
-					if (item.checked === 'true') {
-						contextMenu[item.command]['icon'] = 'lo-checkmark';
-					}
-				} else if (item.checktype === 'radio') {
-					if (item.checked === 'true') {
-						contextMenu[item.command]['icon'] = 'radio';
-					}
-				}
+				// A checked entry keeps its icon, the menu marks the state on it.
+				if (
+					(item.checktype === 'checkmark' || item.checktype === 'radio') &&
+					item.checked === 'true'
+				)
+					contextMenu[item.command].checked = true;
 
 				isLastItemText = true;
 			} else if (item.type === 'menu') {

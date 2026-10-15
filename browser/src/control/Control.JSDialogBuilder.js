@@ -2750,7 +2750,7 @@ window.L.Control.JSDialogBuilder.getMenuStructureForMobileWizard = function(menu
 	};
 	if (itemCommand)
 		menuStructure['command'] = itemCommand;
-	if (menu.icon)
+	if (menu.checked)
 		menuStructure['checked'] = true;
 	if (typeof menu._checked === 'function' && menu._checked())
 		menuStructure['checked'] = true;
