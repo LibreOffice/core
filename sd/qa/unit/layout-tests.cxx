@@ -632,7 +632,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010_ODP_disabled)
 
         xmlDocUniquePtr pXml = parseLayout();
         sal_Int32 y = getXPath(pXml, "/metafile['3']/push/push/textarray[3]", "y").toInt32();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(8100, y, 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(7976, y, 100);
         assertXPathContent(pXml, "/metafile['3']/push/push/textarray[3]/text", u"textbox");
     }
 
@@ -644,7 +644,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010_ODP_disabled)
 
         xmlDocUniquePtr pXml = parseLayout();
         sal_Int32 y = getXPath(pXml, "/metafile['4']/push/push/textarray[3]", "y").toInt32();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(8100, y, 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(7976, y, 100);
         assertXPathContent(pXml, "/metafile['4']/push/push/textarray[3]/text", u"textbox");
     }
 }
@@ -662,7 +662,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010_PPTX)
 
         xmlDocUniquePtr pXml = parseLayout();
         sal_Int32 y = getXPath(pXml, "/metafile['5']/push/push/textarray", "y").toInt32();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6512, y, 100);
         assertXPathContent(pXml, "/metafile['5']/push/push/textarray/text", u"textbox");
     }
 
@@ -674,7 +674,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010_PPTX)
 
         xmlDocUniquePtr pXml = parseLayout();
         sal_Int32 y = getXPath(pXml, "/metafile['6']/push/push/textarray", "y").toInt32();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6512, y, 100);
         assertXPathContent(pXml, "/metafile['6']/push/push/textarray/text", u"textbox");
     }
 
@@ -690,7 +690,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf168010_PPTX)
 
         xmlDocUniquePtr pXml = parseLayout();
         sal_Int32 y = getXPath(pXml, "/metafile['7']/push/push/textarray", "y").toInt32();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(6700, y, 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(6512, y, 100);
         assertXPathContent(pXml, "/metafile['7']/push/push/textarray/text", u"textbox");
     }
 }

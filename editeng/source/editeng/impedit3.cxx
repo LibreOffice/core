@@ -1587,15 +1587,29 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     if (nPropLineSpace && nPropLineSpace < 100)
                     {
                         // Adapted code from sw/source/core/text/itrform2.cxx
+                        //
+                        // The max ascent is the baseline position from the top of the
+                        // line (see RecalcFormatterFontMetrics and the text draw
+                        // position, which draws the text with its baseline at the max
+                        // ascent). When the line height is shrunk, the baseline must be
+                        // repositioned or the text is drawn off-center relative to the
+                        // bullet/cursor/selection rectangle.
+                        //
+                        // sw sets the baseline to 80% of the (shrunk) line height when
+                        // applying proportional/fixed line spacing:
+                        //     SwTwips nAsc = (4 * nLineHeight) / 5; // 80%
+                        // so match that here instead of using the full text height,
+                        // which pushes the baseline too low in the shrunk line.
+
                         sal_uInt16 nAscent = pLine->GetMaxAscent();
-                        sal_uInt16 nNewAscent = basegfx::fround(pLine->GetTxtHeight() * fSpacingFactor);
+                        sal_uInt16 nHeight = basegfx::fround(pLine->GetHeight() * fSpacingFactor);
+                        sal_uInt16 nNewAscent = basegfx::fround(4.0 * nHeight / 5.0);
+
                         if (!nAscent || nAscent > nNewAscent)
                             pLine->SetMaxAscent(nNewAscent);
-                        sal_uInt16 nHeight = basegfx::fround(pLine->GetHeight() * fSpacingFactor);
 
                         pLine->SetHeight(nHeight, pLine->GetTxtHeight());
                     }
-
                 }
             }
         }
