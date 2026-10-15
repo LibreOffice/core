@@ -30,10 +30,10 @@
   <draw:marker draw:name="Reversed Arrow" 	svg:viewBox="0 0 20 30" svg:d="M10 30l-10 -30h20z" />
   <draw:marker draw:name="Double Arrow" 	svg:viewBox="0 0 1131 1918" svg:d="M737 1131h394l-564-1131-567 1131h398l-398 787h1131z" />
 
-  <draw:marker draw:name="CF One" 			svg:viewBox="0 0 10 10" svg:d="M0 0 h1 v-40 h-2 v40 h1  M1 0 h-20 v-2 h20 v2   M-1 0 h20 v-2 h-20 v2z" />
-  <draw:marker draw:name="CF Only One" 		svg:viewBox="0 0 10 10" svg:d="M0 0 h1 v-40 h-2 v40 h1  M1 0 h-20 v-2 h20 v2   M-1 0 h20 v-2 h-20 v2   M1 -18 h-20 v-2 h20 v2   M-1 -18 h20 v-2 h-20 v2z" />
-  <draw:marker draw:name="CF Many" 			svg:viewBox="0 0 10 10" svg:d="M1500 0l1500 -2789v-211h-114l-1286 2392v-2392h-200v2392l-1286 -2392h-114v211z" />
-  <draw:marker draw:name="CF Many One" 		svg:viewBox="0 0 10 10" svg:d="M1500 0 h1500 v-200 h-3000 v200   M1500 -200l1500 -2789v-211h-114l-1286 2392v-2392h-200v2392l-1286 -2392h-114v211z" /> 
+  <draw:marker draw:name="CF One"              svg:viewBox="0 0 10 10" svg:d="M19 40 h1 v-40 h-2 v40 h1 M20 40 h-20 v-2 h20 v2 M18 40 h20 v-2 h-20 v2z" />
+  <draw:marker draw:name="CF Only One"         svg:viewBox="0 0 10 10" svg:d="M19 40 h1 v-40 h-2 v40 h1  M20 40 h-20 v-2 h20 v2   M18 40 h20 v-2 h-20 v2   M20 22 h-20 v-2 h20 v2   M18 22 h20 v-2 h-20 v2z" />
+  <draw:marker draw:name="CF Many"             svg:viewBox="0 0 10 10" svg:d="M1500 3000l1500 -2789v-211h-114l-1286 2392v-2392h-200v2392l-1286 -2392h-114v211z" />
+  <draw:marker draw:name="CF Many One"         svg:viewBox="0 0 10 10" svg:d="M1500 3200 h1500 v-200 h-3000 v200   M1500 3000l1500 -2789v-211h-114l-1286 2392v-2392h-200v2392l-1286 -2392h-114v211z" />
   <draw:marker draw:name="CF Zero One" 		svg:viewBox="0 0 10 10" svg:d="M-1500 0 A1500,1500 0 1 1 -1500,1   M-1350 0 A1350,1350 0 1 1 -1350,1    M0 -1500 h100 v-2800 h-200 v2800 h100    M100 -2900 v100 h1500 v-200 h-1500 v100z     M-100 -2900 v100 h-1500 v-200 h1500 v100z" />
   <draw:marker draw:name="CF Zero Many" 	svg:viewBox="0 0 10 10" svg:d="M-1500 0 A1500,1500 0 1 1 -1500,1   M-1350 0 A1350,1350 0 1 1 -1350,1    M0 -1500l1500 -2789v-211h-114l-1286 2392v-2392h-200v2392l-1286 -2392h-114v211z" />
 </office:marker-table>
