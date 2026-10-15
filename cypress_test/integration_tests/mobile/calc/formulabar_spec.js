@@ -469,4 +469,29 @@ describe(['tagmobile', 'tagnextcloud'], 'The view while a formula is edited.', f
 		});
 		cy.cGet(formulaText).should('have.text', '=2*');
 	});
+
+	it('The view stays where it was scrolled when the keyboard relayouts', function() {
+		var win = this.win;
+		var viewTop;
+
+		cy.then(function() {
+			win.app.sectionContainer.getSectionWithName(win.app.CSections.Scroll.name)
+				.scrollVerticalWithOffset(400 * win.app.dpiScale);
+			helper.processToIdle(win);
+		});
+		cy.then(function() {
+			var geometry = win.app.map._docLayer.sheetGeometry;
+			var cellA2 = geometry.getCellSimpleRectangle(0, 1);
+			viewTop = win.app.activeDocument.activeLayout.viewedRectangle.pY1;
+			expect(viewTop).to.be.greaterThan(cellA2.pY2);
+		});
+		mobileHelper.relayoutForKeyboard(win, function() {
+			cy.then(function() {
+				helper.processToIdle(win);
+				var view = win.app.activeDocument.activeLayout.viewedRectangle;
+				expect(view.pY1).to.equal(viewTop);
+			});
+			cy.cGet(formulaText).should('have.text', '=2*');
+		});
+	});
 });

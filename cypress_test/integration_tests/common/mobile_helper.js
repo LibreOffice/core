@@ -423,6 +423,28 @@ function watchKeyboardClosing(win) {
 	return closings;
 }
 
+// Shrink the frame as the keyboard would, then grow it back. expectKept runs after each.
+function relayoutForKeyboard(win, expectKept) {
+	var layout = win.app.activeDocument.activeLayout;
+	var frameHeight;
+
+	cy.then(function() {
+		frameHeight = layout.frameSize.pY;
+	});
+	cy.viewport(375, 500);
+	// The relayout runs from the resize event, after cy.viewport returns.
+	cy.wrap(layout, { log: false }).its('frameSize.pY').should(function(height) {
+		expect(height).to.be.lessThan(frameHeight);
+	});
+	cy.then(function() {
+		helper.processToIdle(win);
+	});
+	expectKept();
+
+	cy.viewport('iphone-6');
+	expectKept();
+}
+
 module.exports.enableEditingMobile = enableEditingMobile;
 module.exports.longPressOnDocument = longPressOnDocument;
 module.exports.openHamburgerMenu = openHamburgerMenu;
@@ -446,3 +468,4 @@ module.exports.pressPushButtonOfDialog = pressPushButtonOfDialog;
 module.exports.getCompactIcon = getCompactIcon;
 module.exports.tapNextToCursor = tapNextToCursor;
 module.exports.watchKeyboardClosing = watchKeyboardClosing;
+module.exports.relayoutForKeyboard = relayoutForKeyboard;

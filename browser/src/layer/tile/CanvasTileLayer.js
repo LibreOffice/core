@@ -1708,6 +1708,11 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		this._onUpdateCellCursor(scrollToCursor, notJump);
 
+		// A tap that moves the cursor into view turns the following on again, so the
+		// keyboard relayout keeps the cell in view. Only a scroll by the user turns it off.
+		if (!sameAddress && app.isFollowingOff() && app.isOwnCursorInView())
+			app.setFollowingUser(this._viewId);
+
 		// Remove the validity input help only when the cursor really moved away
 		// from the cell it belongs to, that is a different address or a hidden
 		// cursor. The kit resends the cellcursor for the unchanged cell on view
@@ -3041,6 +3046,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		return (!this._map._clip || this._map._clip._selectionType !== 'complex');
 	},
 
+	// The followed view id may arrive as a string from the integrator, so compare numbers.
+	_viewFollowsOwnCursor: function() {
+		return app.isFollowingUser() &&
+			parseInt(app.getFollowedViewId()) === parseInt(this._viewId);
+	},
+
 	// Scrolls the view to selected position
 	scrollToPos: function(pos) {
 		// The multipage layout arranges pages in a grid and its scrollTo() takes a
@@ -3151,7 +3162,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 			if (!app.isPointVisibleInTheDisplayedArea(new cool.SimplePoint(correctedCursor.x1, correctedCursor.y1).toArray()) ||
 				!app.isPointVisibleInTheDisplayedArea(new cool.SimplePoint(correctedCursor.x2, correctedCursor.y2).toArray())) {
-				if (app.isFollowingUser() && app.getFollowedViewId() === this._viewId && !this._map.calcInputBarHasFocus()) {
+				if (this._viewFollowsOwnCursor() &&
+					!this._map.calcInputBarHasFocus()) {
 					this.scrollToPos(new cool.SimplePoint(correctedCursor.x1, correctedCursor.y1));
 				}
 			}
@@ -3907,6 +3919,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// We want to keep cursor visible when we show the keyboard on mobile device or tablet
 		if (!window.mode.isSmallScreenDevice() && !window.mode.isTablet()) return;
 		if (heightIncreased || !this._map._docLoaded) return;
+
+		if (this.isCalc() && !this._viewFollowsOwnCursor())
+			return;
 
 		const hasVisibleCursor = app.file.textCursor.visible
 			&& this._map._docLayer._cursorMarker && this._map._docLayer._cursorMarker.isDomAttached();

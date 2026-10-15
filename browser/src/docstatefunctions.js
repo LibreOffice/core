@@ -203,26 +203,31 @@ app.isFollowingEditor = function () {
 	return app.following.mode === 'editor';
 };
 
+// The cell cursor while it is visible, the text cursor otherwise.
+app.isOwnCursorInView = function () {
+	let twipsArray;
+	if (app.calc.cellCursorVisible)
+		twipsArray = [
+			app.calc.cellCursorRectangle.x2,
+			app.calc.cellCursorRectangle.y2,
+		];
+	else if (app.file.textCursor.visible)
+		twipsArray = [
+			app.file.textCursor.rectangle.x2,
+			app.file.textCursor.rectangle.y2,
+		];
+	else return false;
+
+	return app.isPointVisibleInTheDisplayedArea(twipsArray);
+};
+
 app.updateFollowingUsers = function () {
 	app.console.debug('user following: update');
 	var isCellCursorVisible = app.calc.cellCursorVisible;
 	var isTextCursorVisible = app.file.textCursor.visible;
 
 	if (isCellCursorVisible || isTextCursorVisible) {
-		let twipsArray = [];
-		if (isCellCursorVisible)
-			twipsArray = [
-				app.calc.cellCursorRectangle.x2,
-				app.calc.cellCursorRectangle.y2,
-			];
-		else
-			twipsArray = [
-				app.file.textCursor.rectangle.x2,
-				app.file.textCursor.rectangle.y2,
-			];
-
-		const cursorPositionInView =
-			app.isPointVisibleInTheDisplayedArea(twipsArray);
+		const cursorPositionInView = app.isOwnCursorInView();
 
 		if (
 			parseInt(app.getFollowedViewId()) ===
