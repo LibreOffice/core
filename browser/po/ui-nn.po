@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-14 12:57+0000\n"
+"PO-Revision-Date: 2026-10-15 13:29+0000\n"
 "Last-Translator: Roy-Magne Mo <gaupe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Norwegian Nynorsk <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/nn/>\n"
@@ -4441,7 +4441,7 @@ msgstr "Vis omvising"
 #: src/control/Control.Menubar.ts:836 src/control/Control.Menubar.ts:1154
 #: src/control/Control.NotebookbarWriter.js:555
 msgid "Keyboard shortcuts"
-msgstr "Snøggtastar"
+msgstr "Tastatursnarvegar"
 
 #: src/control/Control.Menubar.ts:457 src/control/Control.Menubar.ts:670
 #: src/control/Control.Menubar.ts:838 src/control/Control.Menubar.ts:1156
