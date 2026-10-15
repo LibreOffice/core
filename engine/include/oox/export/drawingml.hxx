@@ -581,7 +581,7 @@ public:
                             const sax_fastparser::FSHelperPtr& pDrawing);
 
     static bool IsGroupShape( const cpo::uno::Reference< css::drawing::XShape >& rXShape );
-    sal_Int32 getBulletMarginIndentation (const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, std::u16string_view propName);
+    OOX_DLLPUBLIC sal_Int32 getBulletMarginIndentation (const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, std::u16string_view propName);
 
     // A Helper to decide the script type for given text in order to call WriteRunProperties.
     static sal_Int16 GetScriptType(const OUString& rStr);

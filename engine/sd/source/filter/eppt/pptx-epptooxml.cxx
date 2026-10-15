@@ -3157,13 +3157,33 @@ void PowerPointExport::WriteTextStyles(const FSHelperPtr& pFS)
 
     PowerPointShapeExport aDML(pFS, &maShapeMap, this);
 
-    auto writeLevel = [&aDML, &pFS, &xStyles](const OUString& rStyleName, sal_Int32 nElement) {
+    // nOutlineLevel is the outline level a body style formats, or -1 for the title
+    auto writeLevel = [&aDML, &pFS, &xStyles](const OUString& rStyleName, sal_Int32 nElement,
+                                              sal_Int16 nOutlineLevel) {
         if (!xStyles->hasByName(rStyleName))
             return;
         uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(rStyleName), uno::UNO_QUERY);
         if (!xStyle.is())
             return;
-        pFS->startElementNS(XML_a, nElement);
+
+        // An outline level is indented by its entry in the numbering rules, which the outline
+        // styles share. A level that states no indent of its own starts at the left edge.
+        sal_Int32 nLeftMargin = 0;
+        sal_Int32 nFirstLineOffset = 0;
+        if (nOutlineLevel >= 0)
+        {
+            nLeftMargin = aDML.getBulletMarginIndentation(xStyle, nOutlineLevel, u"LeftMargin");
+            nFirstLineOffset
+                = aDML.getBulletMarginIndentation(xStyle, nOutlineLevel, u"FirstLineOffset");
+        }
+        pFS->startElementNS(
+            XML_a, nElement, XML_marL,
+            sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)),
+                                  nLeftMargin > 0),
+            XML_indent,
+            sax_fastparser::UseIf(
+                OString::number(oox::drawingml::convertHmmToEmu(nFirstLineOffset)),
+                nFirstLineOffset != 0));
         oox::drawingml::WriteRunInput aInput;
         aDML.WriteRunProperties(xStyle, XML_defRPr, aInput);
         pFS->endElementNS(XML_a, nElement);
@@ -3176,12 +3196,13 @@ void PowerPointExport::WriteTextStyles(const FSHelperPtr& pFS)
     pFS->startElementNS(XML_p, XML_txStyles);
 
     pFS->startElementNS(XML_p, XML_titleStyle);
-    writeLevel(u"title"_ustr, XML_lvl1pPr);
+    writeLevel(u"title"_ustr, XML_lvl1pPr, -1);
     pFS->endElementNS(XML_p, XML_titleStyle);
 
     pFS->startElementNS(XML_p, XML_bodyStyle);
     for (size_t nLevel = 0; nLevel < SAL_N_ELEMENTS(aLevelTokens); ++nLevel)
-        writeLevel("outline" + OUString::number(nLevel + 1), aLevelTokens[nLevel]);
+        writeLevel("outline" + OUString::number(nLevel + 1), aLevelTokens[nLevel],
+                   static_cast<sal_Int16>(nLevel));
     pFS->endElementNS(XML_p, XML_bodyStyle);
 
     pFS->endElementNS(XML_p, XML_txStyles);

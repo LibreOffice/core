@@ -1260,9 +1260,32 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169524)
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
 
-    // Verify that no left margin is exported
-    assertXPathNoAttribute(
-        pXmlDoc, "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl1pPr", "marL");
+    // A slide paragraph without a bullet does not take its indent from the master's outline level,
+    // because that paragraph states its own margin
+    static constexpr OString aFirstLevel
+        = "/p:sldMaster/p:cSld/p:spTree/p:sp[2]/p:txBody/a:lstStyle/a:lvl1pPr"_ostr;
+    // Without the current fix in place this test would have failed that no attribute 'marL' exists
+    assertXPath(pXmlDoc, aFirstLevel, "marL", u"216000");
+    assertXPath(pXmlDoc, aFirstLevel, "indent", u"-216000");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169524_paragraphWithoutBulletIsSavedWithZeroMargin)
+{
+    // The first paragraph of the outline placeholder has no bullet and no margin, and the master's
+    // first outline level is indented by its bullet - the paragraph starts at the left edge
+    createSdImpressDoc("odp/tdf169524.odp");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(pMaster, "/p:sldMaster/p:txStyles/p:bodyStyle/a:lvl1pPr", "marL", u"216000");
+
+    xmlDocUniquePtr pSlide = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    static constexpr OString aFirstParagraph
+        = "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p[1]/a:pPr"_ostr;
+    assertXPath(pSlide, aFirstParagraph + "/a:buNone", 1);
+    // Without the fix in place, this test would have failed that no attribute 'marL' exists
+    // (resulting in the paragraph taking the indent of the first level of the text styles)
+    assertXPath(pSlide, aFirstParagraph, "marL", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf169952)

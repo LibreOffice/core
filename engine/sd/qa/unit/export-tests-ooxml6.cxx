@@ -434,6 +434,24 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testMasterTextStyles)
     assertXPath(pXmlDoc, "/p:sldMaster/p:txStyles/p:bodyStyle/a:lvl9pPr/a:defRPr", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testMasterTextStyleIndents)
+{
+    // The slide master's bodyStyle indents each level 0.5 inch further than the one above it,
+    // starting at 0.25 inch, export counterpart of testMasterOutlineLevelIndents
+    createSdImpressDoc("pptx/master-and-eleven-layouts.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    for (sal_Int32 nLevel = 1; nLevel <= 9; ++nLevel)
+    {
+        const OString aLevel
+            = "/p:sldMaster/p:txStyles/p:bodyStyle/a:lvl" + OString::number(nLevel) + "pPr";
+        // Without the fix in place, this test would have failed: no attribute 'marL' exist
+        assertXPath(pXmlDoc, aLevel, "marL", OUString::number(228600 + 457200 * (nLevel - 1)));
+        assertXPath(pXmlDoc, aLevel, "indent", u"-228600");
+    }
+}
+
 // A form control on a slide is written with the data that makes it a control, and is read back
 // as one.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testFormControlExport)

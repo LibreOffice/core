@@ -3724,9 +3724,10 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     if (nLeftMargin > nMaxMarginVal)
         nLeftMargin = 0;
 
-    bool bIsListStyle = (nElement >= XML_lvl1pPr && nElement <= XML_lvl9pPr);
-
-    if (nParaLeftMargin || bIsListStyle) // For Paragraph or List-Style elements
+    // A paragraph with a left margin of its own writes that margin, otherwise marL and indent
+    // come from the numbering rule of its level, which is where the indent of a bulleted level
+    // is kept. Levels of a list style are written the same way.
+    if (nParaLeftMargin)
         mpFS->startElementNS( XML_a, nElement,
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaLeftMargin)), nParaLeftMargin > 0),
                            XML_lvl, sax_fastparser::UseIf(OString::number(nOutLevel), nOutLevel > 0),
@@ -3736,8 +3737,11 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
                            XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl),
                            XML_hangingPunct, sax_fastparser::UseIf("1", bHangingPunctuation));
     else
+        // A placeholder paragraph with no visible bullet, an empty line, or a level without
+        // numbering writes marL even when it is 0. (same as with indent) A reader takes an omitted
+        // marL from the level in the list styles, and this paragraph is not indented by its level.
         mpFS->startElementNS( XML_a, nElement,
-                           XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)), nLeftMargin > 0),
+                           XML_marL, sax_fastparser::UseIf(OString::number(nLeftMargin > 0 ? oox::drawingml::convertHmmToEmu(nLeftMargin) : 0), nLeftMargin > 0 || bForceZeroIndent),
                            XML_lvl, sax_fastparser::UseIf(OString::number(nOutLevel), nOutLevel > 0),
                            XML_indent, sax_fastparser::UseIf(OString::number(!bForceZeroIndent ? oox::drawingml::convertHmmToEmu(nLineIndentation) : 0), (bForceZeroIndent || ( nLineIndentation != 0))),
                            XML_algn, GetAlignment( nAlignment, mbPlaceholder ),
