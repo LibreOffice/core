@@ -12,6 +12,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
+#include <comphelper/kit.hxx>
 #include <svx/svdpage.hxx>
 
 #include <wrtsh.hxx>
@@ -149,6 +150,61 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testPasteFlyInTextBox)
     // - Actual  : 4
     // i.e. the image was pasted twice.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pDoc->GetSpzFrameFormats()->GetFormatCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testPasteDrawingAtCursorKit)
+{
+    // Given a document with 3 pages in COKit, with a shape anchored on the first page:
+    comphelper::COKit::setActive(true);
+    createSwDoc();
+    getSwTextDoc()->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwDoc* pDoc = pDocShell->GetDoc();
+    pWrtShell->InsertPageBreak();
+    pWrtShell->InsertPageBreak();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(5000, 2000));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+
+    // Copy the shape and keep only the drawing format, the way it arrives from a presentation:
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    pWrtShell->SelectObj(Point(), 0, pPage->GetObj(0));
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
+    pTransfer->Copy();
+    TransferableDataHelper aCopied(pTransfer);
+    cpo::uno::Sequence<sal_Int8> aDrawing
+        = aCopied.GetSequence(SotClipboardFormatId::DRAWING, OUString());
+    CPPUNIT_ASSERT(aDrawing.hasElements());
+    rtl::Reference<TransferDataContainer> pDrawingOnly = new TransferDataContainer;
+    pDrawingOnly->CopyAnyData(SotClipboardFormatId::DRAWING,
+                              reinterpret_cast<const char*>(aDrawing.getConstArray()),
+                              aDrawing.getLength());
+
+    // When pasting it with the cursor at the end of the last page:
+    pWrtShell->UnSelectFrame();
+    pWrtShell->LeaveSelFrameMode();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    SwNodeOffset nCursorNode = pWrtShell->GetCursor()->GetPoint()->GetNodeIndex();
+    sw::FrameFormats<sw::SpzFrameFormat*>& rFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(rFormats[0]->GetAnchor().GetContentAnchor()->GetNodeIndex() != nCursorNode);
+    TransferableDataHelper aHelper(pDrawingOnly);
+    SwTransferable::Paste(*pWrtShell, aHelper);
+
+    // Then the pasted shape is anchored in the paragraph of the cursor:
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
+    const SwPosition* pAnchor = rFormats[1]->GetAnchor().GetContentAnchor();
+    CPPUNIT_ASSERT(pAnchor);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 11
+    // - Actual  : 9
+    // i.e. the shape kept the position it had in the copied model, so it was anchored in the
+    // paragraph on the first page.
+    CPPUNIT_ASSERT_EQUAL(nCursorNode, pAnchor->GetNodeIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextBoxSelectCursorPos)
