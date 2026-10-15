@@ -3246,8 +3246,8 @@ void SwNodes::SplitFloatingTableFrame(SwTableNode & rNewTableNode,
     pNewFlyFormat->CopyAttrs(rFlyFormat);
     pNewFlyFormat->ResetFormatAttr(RES_CHAIN);
 
-    // deleting existing frames for anchor change should not be necessary, and
-    // crashes because it was already added to mpFlyDestroy by FndBox_::DelFrames()
+    // the existing fly frames stay: a fly frame anchored to a paragraph or a
+    // character moves to the frame of its new anchor node on an anchor change
 
     // create new anchor node *before* existing one
     SwTextNode *const pNewAnchorNode{MakeTextNode(rAnchorNode,
