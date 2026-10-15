@@ -8,17 +8,18 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-09-25 21:45+0000\n"
-"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
+"PO-Revision-Date: 2026-10-15 13:25+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin "
+"<aindriu80@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ga/>\n"
-"Language: \n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :("
-"n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -548,7 +549,6 @@ msgstr "Soláthraí"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:723
 #: admin/src/integrator/AdminIntegratorSettings.ts:727
-#, fuzzy
 msgid "API key"
 msgstr "Eochair API"
 
@@ -563,7 +563,6 @@ msgid "Base URL"
 msgstr "Bun-URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:730
-#, fuzzy
 msgid "Image size"
 msgstr "Méid na hÍomhá"
 
@@ -573,11 +572,11 @@ msgstr "Iarratas ar theorainn ama"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:734
 msgid "Client ID"
-msgstr ""
+msgstr "Aitheantas an Chliaint"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:735
 msgid "Secret"
-msgstr ""
+msgstr "Rúnda"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:738
 msgid "In-document Screen Reader"
@@ -1077,15 +1076,16 @@ msgstr "Inrochtaineacht"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2856
 msgid "User interface zoom"
-msgstr ""
+msgstr "Súmáil an chomhéadain úsáideora"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2861
 msgid "Magnify the whole window, including the document and the menus."
 msgstr ""
+"Méadaigh an fhuinneog ar fad, an doiciméad agus na roghchláir san áireamh."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2867
 msgid "As per system"
-msgstr ""
+msgstr "De réir an chórais"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2902
 msgid ""
@@ -1105,15 +1105,16 @@ msgstr "Socruithe Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3005
 #: admin/src/integrator/AdminIntegratorSettings.ts:3033
-#, fuzzy
 msgid "Electronic Signature"
-msgstr "Síniú leictreonach..."
+msgstr "Síniú Leictreonach"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3008
 msgid ""
 "Credentials for the electronic signature service. They are shared by "
 "everyone on this server."
 msgstr ""
+"Dintiúir don tseirbhís sínithe leictreonaigh. Tá siad á roinnt ag gach duine "
+"ar an bhfreastalaí seo."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3060
 #: admin/src/integrator/AdminIntegratorSettings.ts:4719
@@ -1151,49 +1152,53 @@ msgstr "Athshocraigh"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3140
 msgid "Use the AI provider set on the server"
-msgstr ""
+msgstr "Úsáid an soláthraí AI atá socraithe ar an bhfreastalaí"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3190
-#, fuzzy
 msgid "Providers"
-msgstr "Soláthraí"
+msgstr "Soláthraithe"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3193
 msgid "Managed by your admin"
-msgstr ""
+msgstr "Bainistithe ag do riarthóir"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3199
 msgid "No providers added yet"
-msgstr ""
+msgstr "Níl aon soláthraithe curtha leis go fóill"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3205
 msgid ""
 "Add a provider to start using AI for text generation, image generation, or "
 "both. Your administrator's provider is filled in for you."
 msgstr ""
+"Cuir soláthraí leis chun tús a chur le húsáid na hintleachta saorga (AI) "
+"chun téacs nó íomhánna a ghiniúint, nó an dá rud. Tá an soláthraí a "
+"úsáideann do riarthóir líonta isteach duit cheana féin."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3213
 msgid "Add provider..."
-msgstr ""
+msgstr "Cuir soláthraí leis..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3233
 msgid "Choose the AI provider to use for text and image generation."
 msgstr ""
+"Roghnaigh an soláthraí AI atá le húsáid chun téacs agus íomhánna a ghiniúint."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3235
 msgid ""
 "Use your own AI provider instead of the one set up by your administrator. "
 "This applies only to you."
 msgstr ""
+"Úsáid do sholáthraí AI féin in áit an chinn a shocraigh do riarthóir. Ní "
+"bhaineann sé seo ach leat féin."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3390
 msgid "seconds"
-msgstr ""
+msgstr "soicindí"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3399
-#, fuzzy
 msgid "Text generation"
-msgstr "Giniúint Téacs"
+msgstr "Giniúint téacs"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3409
 #: src/control/Control.NotebookbarCalc.js:1048
@@ -1218,23 +1223,27 @@ msgid ""
 "Models without it (e.g. base llama3, gemma) can still chat but cannot use "
 "document tools."
 msgstr ""
+"Chun doiciméid a chur in eagar, roghnaigh múnla a bhfuil an cumas aige "
+"uirlisí a ghlaoch, m.sh. gpt-4o nó llama3.1. Is féidir le múnlaí nach bhfuil "
+"an cumas sin acu (m.sh. an bun-llama3, gemma) comhrá a dhéanamh fós, ach ní "
+"féidir leo uirlisí doiciméad a úsáid."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3491
-#, fuzzy
 msgid "Image generation"
-msgstr "Giniúint Íomhánna"
+msgstr "Giniúint íomhánna"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3499
 msgid "Same as text provider"
-msgstr ""
+msgstr "Mar an gcéanna leis an soláthraí téacs"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3854
 msgid "Required for this provider"
-msgstr ""
+msgstr "Ag teastáil don soláthraí seo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3947
 msgid "Enter an API key for this provider to list its models."
 msgstr ""
+"Cuir isteach eochair API don soláthraí seo chun a chuid samhlacha a liostú."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3963
 #: admin/src/integrator/AdminIntegratorSettings.ts:4085
@@ -1251,7 +1260,7 @@ msgstr "Níor aimsíodh aon mhúnlaí"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4035
 #: admin/src/integrator/AdminIntegratorSettings.ts:4151
 msgid "Connected"
-msgstr ""
+msgstr "Ceangailte"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4041
 #: admin/src/integrator/AdminIntegratorSettings.ts:4157
@@ -1322,7 +1331,7 @@ msgstr "Cuir isteach {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4991
 msgid "Delete {0}"
-msgstr ""
+msgstr "Scrios {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5054
 msgid "Reset to default {0}"
@@ -2716,6 +2725,7 @@ msgstr "Am críochnaithe anailíse foirmle"
 #: src/control/Control.AIChatSidebar.ts:3636
 msgid "Select the content you want the assistant to work on first."
 msgstr ""
+"Roghnaigh an t-ábhar ar mhaith leat go n-oibreodh an cúntóir air ar dtús."
 
 #: src/control/Control.AIChatSidebar.ts:3651
 msgid "Analyzing formula dependencies..."
@@ -2851,10 +2861,12 @@ msgid ""
 "Describe the image you want to generate. For example: \"A watercolour of a "
 "mountain lake at sunrise\"."
 msgstr ""
+"Déan cur síos ar an íomhá is mian leat a ghiniúint. Mar shampla: \"Pictiúr "
+"uiscedhatha de loch sléibhe ag éirí na gréine\"."
 
 #: src/control/Control.AIChatSidebar.ts:3916
 msgid "Write speaker notes for the current slide."
-msgstr ""
+msgstr "Scríobh nótaí cainte don sleamhnán reatha."
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid ""
@@ -2933,18 +2945,22 @@ msgstr ""
 #: src/control/Control.CleanupSidebar.ts:204
 msgid "Images stored with more detail than a slide can show"
 msgstr ""
+"Íomhánna stóráilte a bhfuil níos mó mionsonraí iontu ná mar is féidir le "
+"sleamhnán a thaispeáint"
 
 #: src/control/Control.CleanupSidebar.ts:207
 msgid "Images stored at more than %1 DPI, more detail than a slide can show"
 msgstr ""
+"Íomhánna stóráilte ag níos mó ná %1 DPI — mionsonraí níos mó ná mar is "
+"féidir le sleamhnán a thaispeáint"
 
 #: src/control/Control.CleanupSidebar.ts:224
 msgid "High-resolution images"
-msgstr ""
+msgstr "Íomhánna ardtaifigh"
 
 #: src/control/Control.CleanupSidebar.ts:230
 msgid "Cropped images"
-msgstr ""
+msgstr "Íomhánna bearrtha"
 
 #: src/control/Control.CleanupSidebar.ts:236
 #: src/control/Control.BackstageView.ts:891
@@ -2956,43 +2972,40 @@ msgid "Slides"
 msgstr "Sleamhnáin"
 
 #: src/control/Control.CleanupSidebar.ts:241
-#, fuzzy
 msgid "Hidden slides"
-msgstr "Folaigh na sleamhnáin"
+msgstr "Sleamhnáin fholaithe"
 
 #: src/control/Control.CleanupSidebar.ts:246
-#, fuzzy
 msgid "Unused master slides"
-msgstr "Sleamhnáin mháistir neamhúsáidte (%1)"
+msgstr "Máistirshleamhnáin nár úsáideadh"
 
 #: src/control/Control.CleanupSidebar.ts:252
 msgid "For sharing"
-msgstr ""
+msgstr "Le roinnt"
 
 #: src/control/Control.CleanupSidebar.ts:254
 msgid "Speaker notes"
-msgstr ""
+msgstr "Nótaí an chainteora"
 
 #: src/control/Control.CleanupSidebar.ts:258
-#, fuzzy
 msgid "Embedded objects"
-msgstr "Réada leabaithe (%1)"
+msgstr "Réada leabaithe"
 
 #: src/control/Control.CleanupSidebar.ts:359
 msgid "images left alone"
-msgstr ""
+msgstr "íomhánna fágtha ina n-aonar"
 
 #: src/control/Control.CleanupSidebar.ts:361
 msgid "%1 DPI, quality %2 %"
-msgstr ""
+msgstr "%1 DPI, cáilíocht %2 %"
 
 #: src/control/Control.CleanupSidebar.ts:374
 msgid "%1 can be cleaned up"
-msgstr ""
+msgstr "Is féidir %1 a ghlanadh"
 
 #: src/control/Control.CleanupSidebar.ts:376
 msgid "%1 (%2%) can be cleaned up"
-msgstr ""
+msgstr "Is féidir %1 (%2%) a ghlanadh"
 
 #: src/control/Control.CleanupSidebar.ts:384
 msgid "Fix"
@@ -3017,7 +3030,7 @@ msgstr "%1 MB"
 
 #: src/control/Control.CleanupSidebar.ts:479
 msgid "Remove %1"
-msgstr ""
+msgstr "Bain %1"
 
 #: src/control/Control.CleanupSidebar.ts:481
 msgid "Fix %1"
@@ -3071,11 +3084,11 @@ msgstr "%1 ag %2 DPI"
 #: src/control/Control.CleanupSidebar.ts:586
 #, javascript-format
 msgid "%1% cropped away"
-msgstr ""
+msgstr "%1% bearrtha amach"
 
 #: src/control/Control.CleanupSidebar.ts:588
 msgid "%1, %2% cropped away"
-msgstr ""
+msgstr "%1, %2% bearrtha ar shiúl"
 
 #: src/control/Control.CleanupSidebar.ts:655
 msgid "Leave images alone"
@@ -3144,9 +3157,8 @@ msgid "Image resolution"
 msgstr "Taifeach íomhá"
 
 #: src/control/Control.CleanupSidebar.ts:805
-#, fuzzy
 msgid "JPEG quality (%)"
-msgstr "Cáilíocht JPEG i %"
+msgstr "Cáilíocht JPEG (%)"
 
 #: src/control/Control.CleanupSidebar.ts:830
 msgid "Prepare for sharing"
@@ -3165,9 +3177,8 @@ msgid "Stop"
 msgstr "Stad"
 
 #: src/control/Control.CleanupSidebar.ts:926
-#, fuzzy
 msgid "Scan presentation"
-msgstr "Cur i Láthair Folamh"
+msgstr "Scan an cur i láthair"
 
 #: src/control/Control.CleanupSidebar.ts:962
 msgid "Fix all"
@@ -3182,6 +3193,8 @@ msgstr ""
 #: src/control/Control.CleanupSidebar.ts:1013
 msgid "Find what makes this presentation large, and clean it up here."
 msgstr ""
+"Faigh amach cad a fhágann go bhfuil an cur i láthair seo mór, agus glan suas "
+"é anseo."
 
 #: src/control/Control.CleanupSidebar.ts:1077
 msgid "saves %1"
@@ -3201,7 +3214,7 @@ msgstr "Glanadh suas"
 
 #: src/control/Control.CleanupSidebar.ts:2439
 msgid "The cleanup did not answer. Please try again."
-msgstr ""
+msgstr "Níor fhreagair an glanadh. Déan iarracht arís, le do thoil."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3558,111 +3571,124 @@ msgstr "Ruaig"
 
 #: src/control/onboarding/OnboardingSteps.ts:25
 msgid "Welcome to Collabora Online"
-msgstr ""
+msgstr "Fáilte go Collabora Online"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "This short tour points out the parts of the screen you will use most."
 msgstr ""
+"Taispeánann an turas gairid seo na codanna den scáileán a úsáidfidh tú is "
+"minice."
 
 #: src/control/onboarding/OnboardingSteps.ts:32
 msgid "The document name"
-msgstr ""
+msgstr "Ainm an doiciméid"
 
 #: src/control/onboarding/OnboardingSteps.ts:34
 msgid ""
 "Select the name to rename the document. Every change is saved as you work."
 msgstr ""
+"Roghnaigh an t-ainm chun an doiciméad a athainmniú. Sábháiltear gach athrú "
+"agus tú ag obair."
 
 #: src/control/onboarding/OnboardingSteps.ts:40
 msgid "The tabs"
-msgstr ""
+msgstr "Na cluaisíní"
 
 #: src/control/onboarding/OnboardingSteps.ts:42
 msgid ""
 "Each tab gathers the tools for one kind of work, such as inserting or "
 "reviewing."
 msgstr ""
+"Cruinníonn gach cluaisín na huirlisí le haghaidh cineál amháin oibre, ar nós "
+"ionsá nó athbhreithniú."
 
 #: src/control/onboarding/OnboardingSteps.ts:49
 msgid "The menus"
-msgstr ""
+msgstr "Na roghchláir"
 
 #: src/control/onboarding/OnboardingSteps.ts:50
 msgid "Every command of the editor is in one of these menus."
-msgstr ""
+msgstr "Tá gach ordú den eagarthóir i gceann de na roghchláir seo."
 
 #: src/control/onboarding/OnboardingSteps.ts:56
 msgid "The tools"
-msgstr ""
+msgstr "Na huirlisí"
 
 #: src/control/onboarding/OnboardingSteps.ts:57
 msgid "The buttons of the tab you selected appear along this row."
-msgstr ""
+msgstr "Tá cnaipí an chluaisín a roghnaigh tú le feiceáil feadh an tsraith seo."
 
 #: src/control/onboarding/OnboardingSteps.ts:63
 msgid "The toolbar"
-msgstr ""
+msgstr "An barra uirlisí"
 
 #: src/control/onboarding/OnboardingSteps.ts:64
 msgid "The buttons you need most often sit here, under the menus."
-msgstr ""
+msgstr "Tá na cnaipí a bhíonn uait is minice suite anseo, faoi na roghchláir."
 
 #: src/control/onboarding/OnboardingSteps.ts:70
 msgid "The formula bar"
-msgstr ""
+msgstr "An barra foirmlí"
 
 #: src/control/onboarding/OnboardingSteps.ts:72
 msgid ""
 "The contents of the selected cell appear here. Type an equals sign to start "
 "a formula."
 msgstr ""
+"Tá ábhar na cille roghnaithe le feiceáil anseo. Clóscríobh comhartha "
+"cothromais chun tús a chur le foirmle."
 
 #: src/control/onboarding/OnboardingSteps.ts:79
 msgid "The slide panel"
-msgstr ""
+msgstr "An painéal sleamhnáin"
 
 #: src/control/onboarding/OnboardingSteps.ts:81
 msgid ""
 "Every slide or page of the document is listed here. Select one to work on "
 "it."
 msgstr ""
+"Tá gach sleamhnán nó leathanach den doiciméad liostaithe anseo. Roghnaigh "
+"ceann chun obair air."
 
 #: src/control/onboarding/OnboardingSteps.ts:89
 msgid "The sidebar"
-msgstr ""
+msgstr "An barra taoibh"
 
 #: src/control/onboarding/OnboardingSteps.ts:91
 msgid ""
 "The sidebar holds the settings for whatever you have selected, such as "
 "text, a shape or a cell."
 msgstr ""
+"Tá na socruithe sa bharra taoibh don rud atá roghnaithe agat — téacs, cruth "
+"nó cill, mar shampla."
 
 #: src/control/onboarding/OnboardingSteps.ts:98
 msgid "The people in the document"
-msgstr ""
+msgstr "Na daoine sa doiciméad"
 
 #: src/control/onboarding/OnboardingSteps.ts:99
 msgid "See who else is editing and share the document."
-msgstr ""
+msgstr "Féach cé eile atá ag cur in eagar agus roinn an doiciméad."
 
 #: src/control/onboarding/OnboardingSteps.ts:109
-#, fuzzy
 msgid "The status bar"
-msgstr "Taispeáin barra stádais"
+msgstr "An barra stádais"
 
 #: src/control/onboarding/OnboardingSteps.ts:111
 msgid ""
 "The state of the document, the language of the text and the zoom level are "
 "along the bottom."
 msgstr ""
+"Tá stádas an doiciméid, teanga an téacs agus leibhéal an zúma feadh an "
+"chiumhais íochtair."
 
 #: src/control/onboarding/OnboardingSteps.ts:118
 msgid "You are ready to work"
-msgstr ""
+msgstr "Tá tú réidh le bheith ag obair"
 
 #: src/control/onboarding/OnboardingSteps.ts:119
 msgid "You can walk through this tour again from the Help menu."
-msgstr ""
+msgstr "Is féidir leat dul tríd an turas seo arís ón roghchlár Cabhrach."
 
 #: src/control/onboarding/Control.OnboardingTour.ts:245
 #: src/slideshow/engine/SlideShowHandler.ts:116
@@ -3671,12 +3697,11 @@ msgstr "Léim"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:251
 msgid "Back"
-msgstr ""
+msgstr "Ar ais"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
-#, fuzzy
 msgid "Done"
-msgstr "Ceann ar bith"
+msgstr "Déanta"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
 #: src/control/Control.Zotero.js:270 src/control/Control.Zotero.js:469
@@ -4491,7 +4516,7 @@ msgstr "Cabhair Ar Líne"
 #: src/control/Control.Menubar.ts:834 src/control/Control.Menubar.ts:1152
 #: src/control/Control.NotebookbarWriter.js:541
 msgid "Show tour"
-msgstr ""
+msgstr "Taispeáin an turas"
 
 #: src/control/Control.Menubar.ts:455 src/control/Control.Menubar.ts:668
 #: src/control/Control.Menubar.ts:836 src/control/Control.Menubar.ts:1154
@@ -4819,119 +4844,116 @@ msgstr "Clóscríobh sa bhosca cuardaigh chun aon rud i do dhoiciméad a aimsiú
 #: src/control/Notebookbar.AIAssistantTab.ts:79
 #: src/control/Notebookbar.AIAssistantTab.ts:122
 msgid "Text Tools"
-msgstr ""
+msgstr "Uirlisí Téacs"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:93
 msgid "Slide Tools"
-msgstr ""
+msgstr "Uirlisí Sleamhnán"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:106
 msgid "Formula Tools"
-msgstr ""
+msgstr "Uirlisí Foirmle"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:116
 msgid "Data Tools"
-msgstr ""
+msgstr "Uirlisí Sonraí"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:143
 msgid "Shorten"
-msgstr ""
+msgstr "Giorraigh"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:145
 msgid "Rewrite the selected text so it is shorter."
-msgstr ""
+msgstr "Athscríobh an téacs roghnaithe ionas go mbeidh sé níos giorra."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:150
 msgid "Formalize"
-msgstr ""
+msgstr "Déan foirmiúil"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:152
 msgid "Rewrite the selected text in a formal tone."
-msgstr ""
+msgstr "Athscríobh an téacs roghnaithe i stíl fhoirmiúil."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:157
 msgid "Casualize"
-msgstr ""
+msgstr "Déan neamhfhoirmiúil"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:159
 msgid "Rewrite the selected text in a casual, friendly tone."
-msgstr ""
+msgstr "Athscríobh an téacs roghnaithe ar bhealach neamhfhoirmiúil, cairdiúil."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:164
 msgid "Summarize"
-msgstr ""
+msgstr "Déan achoimre"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:166
-#, fuzzy
 msgid "Summarize the key points of the selected text."
-msgstr "Achoimrigh príomhphointí an téacs seo"
+msgstr "Déan achoimre ar phríomhphointí an téacs roghnaithe."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:171
 msgid "Expand"
-msgstr ""
+msgstr "Leathnaigh"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:173
 msgid "Expand the selected text and add more detail."
-msgstr ""
+msgstr "Leathnaigh an téacs roghnaithe agus cuir tuilleadh sonraí leis."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:178
 msgid "Fix Grammar"
-msgstr ""
+msgstr "Ceartaigh an Gramadach"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:181
 msgid "Fix grammar, spelling, and punctuation errors in the selected text."
 msgstr ""
+"Ceartaigh earráidí gramadaí, litrithe agus poncaíochta sa téacs roghnaithe."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:187
 msgid "Make Bullets"
-msgstr ""
+msgstr "Cruthaigh Pointí"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:189
 msgid "Rewrite the selected text as short bullet points."
-msgstr ""
+msgstr "Athscríobh an téacs roghnaithe mar phointí gonta."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:194
-#, fuzzy
 msgid "Create Slides"
-msgstr "Cruthaigh sleamhnáin"
+msgstr "Cruthaigh Sleamhnáin"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:201
-#, fuzzy
 msgid "Generate Image"
-msgstr "Íomhá ginte"
+msgstr "Gin íomhá"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
-msgstr ""
+msgstr "Gin Nótaí don Chainteoir"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:215
-#, fuzzy
 msgid "Create Formula"
 msgstr "Cruthaigh foirmle"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:222
 msgid "Explain Formula"
-msgstr ""
+msgstr "Mínigh an Fhoirmle"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:224
 msgid "Explain the formula in the selected cell."
-msgstr ""
+msgstr "Mínigh an fhoirmle sa chill roghnaithe."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:229
 msgid "Fix Formula Error"
-msgstr ""
+msgstr "Ceartaigh earráid na foirmle"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:236
 msgid "Clean Up Data"
-msgstr ""
+msgstr "Glan Sonraí"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:243
 msgid "Suggest Chart"
-msgstr ""
+msgstr "Mol Cairt"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:245
 msgid "Suggest a chart for the selected data."
-msgstr ""
+msgstr "Mol cairt don sonraí roghnaithe."
 
 #: src/control/Notebookbar.CalcTableTab.ts:45
 #: src/control/Notebookbar.TableDesignTabBase.ts:54
@@ -5140,12 +5162,11 @@ msgstr "Beochana"
 #: src/control/Control.Notebookbar.js:650
 #: src/control/Control.NotebookbarWriter.js:3077
 msgid "Fill Color (Transparent Pictures Only)"
-msgstr ""
+msgstr "Dath Líonta (Pictiúir Thrédhearcacha Amháin)"
 
 #: src/control/Control.Notebookbar.js:661
-#, fuzzy
 msgid "Line"
-msgstr "Nasc"
+msgstr "Líne"
 
 #: src/control/Control.Notebookbar.js:704
 msgid "Line Width"
@@ -5153,11 +5174,11 @@ msgstr "Leithead Líne"
 
 #: src/control/Control.Notebookbar.js:737
 msgid "Transparency:"
-msgstr ""
+msgstr "Trédhearcacht:"
 
 #: src/control/Control.Notebookbar.js:756
 msgid "Thickness:"
-msgstr ""
+msgstr "Tiús:"
 
 #: src/control/Control.NotebookbarBuilder.js:205
 #: src/control/Control.NotebookbarBuilder.js:610
@@ -5787,7 +5808,7 @@ msgstr "Léim go Greille"
 
 #: src/control/Control.NotebookbarImpress.js:823
 msgid "Shapes Sidebar"
-msgstr ""
+msgstr "Barra Taoibh na gCruthanna"
 
 #: src/control/Control.NotebookbarImpress.js:924
 #: src/control/Control.NotebookbarImpress.js:2005
@@ -5919,7 +5940,7 @@ msgstr "Féach ar Athruithe"
 
 #: src/control/Control.NotebookbarWriter.js:2656
 msgid "Element categories"
-msgstr ""
+msgstr "Catagóirí eilimintí"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
@@ -6069,19 +6090,23 @@ msgstr "Ag léamh na sleamhnán..."
 
 #: src/control/Control.SlideImportPane.tsx:742
 msgid "Looking for the file..."
-msgstr ""
+msgstr "Ag lorg an chomhaid..."
 
 #: src/control/Control.SlideImportPane.tsx:745
 msgid ""
 "The slides are in this presentation. You do not have permission to open the "
 "file they came from."
 msgstr ""
+"Tá na sleamhnáin sa chur i láthair seo. Níl cead agat an comhad as ar "
+"tháinig siad a oscailt."
 
 #: src/control/Control.SlideImportPane.tsx:749
 msgid ""
 "The slides are in this presentation. Looking for the file they came from "
 "did not work this time."
 msgstr ""
+"Tá na sleamhnáin sa chur i láthair seo. Níor éirigh liom an comhad as ar "
+"tháinig siad a aimsiú an uair seo."
 
 #: src/control/Control.SlideImportPane.tsx:752
 msgid ""
@@ -6102,7 +6127,7 @@ msgstr "Níorbh fhéidir an comhad seo a léamh an uair seo."
 #: src/control/Control.SlideImportPane.tsx:769
 #: src/control/Control.SlideImportPane.tsx:1292
 msgid "Look again"
-msgstr ""
+msgstr "Féach arís"
 
 #: src/control/Control.SlideImportPane.tsx:774
 #: src/control/Control.SlideImportPane.tsx:1297
@@ -6388,7 +6413,7 @@ msgstr "Uasmhéadaigh go dtí an eangach"
 
 #: src/control/Control.PaneExpander.ts:115
 msgid "Exit grid"
-msgstr ""
+msgstr "Eangach imeachta"
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
@@ -7060,15 +7085,15 @@ msgstr ""
 
 #: src/control/Permission.js:607
 msgid "opened this document"
-msgstr ""
+msgstr "d’oscail an doiciméad seo"
 
 #: src/control/Permission.js:608
 msgid "{0} opened this document"
-msgstr ""
+msgstr "D'oscail {0} an doiciméad seo"
 
 #: src/control/Permission.js:609 src/control/Permission.js:625
 msgid "Choose how you'd like to continue:"
-msgstr ""
+msgstr "Roghnaigh an chaoi ar mhaith leat leanúint ar aghaidh:"
 
 #: src/control/Permission.js:619
 msgid "started editing"
@@ -7229,7 +7254,7 @@ msgstr "Rogha bloc"
 
 #: src/control/Toolbar.js:70
 msgid "The current font is not available and will be substituted."
-msgstr ""
+msgstr "Níl an cló reatha ar fáil agus cuirfear ceann eile ina áit."
 
 #: src/control/Toolbar.js:205 src/control/Toolbar.js:218
 msgid "Downloading..."
@@ -7939,7 +7964,7 @@ msgstr "Roghnaigh raon"
 
 #: src/control/jsdialog/Widget.ProgressDots.tsx:57
 msgid "Step %1 of %2"
-msgstr ""
+msgstr "Céim %1 de %2"
 
 #: src/control/jsdialog/Widget.Comment.ts:151
 msgid "reply"
@@ -8138,34 +8163,33 @@ msgstr "Níl an AI cumraithe; déan teagmháil le do riarthóir"
 
 #: src/docdispatcher.ts:979
 msgid "Delete section"
-msgstr ""
+msgstr "Scrios an rannán"
 
 #: src/docdispatcher.ts:986
 msgid "Delete slides"
-msgstr ""
+msgstr "Scrios sleamhnáin"
 
 #: src/docdispatcher.ts:987
-#, fuzzy
 msgid "Delete %n slide?"
 msgid_plural "Delete %n slides?"
-msgstr[0] "scrios %n sleamhnán"
-msgstr[1] "scrios %n shleamhnán"
-msgstr[2] "scrios %n sleamhnán"
-msgstr[3] "scrios %n sleamhnán"
-msgstr[4] "scrios %n sleamhnán"
+msgstr[0] "Scrios %n sleamhnán?"
+msgstr[1] "Scrios %n shleamhnán?"
+msgstr[2] "Scrios %n shleamhnán?"
+msgstr[3] "Scrios %n sleamhnáin?"
+msgstr[4] "Scrios %n sleamhnáin?"
 
 #: src/docdispatcher.ts:991
 msgid "Delete pages"
-msgstr ""
+msgstr "Scrios leathanaigh"
 
 #: src/docdispatcher.ts:992
 msgid "Delete %n page?"
 msgid_plural "Delete %n pages?"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
+msgstr[0] "Scrios %n leathanach?"
+msgstr[1] "Scrios %n leathanach?"
+msgstr[2] "Scrios %n leathanach?"
+msgstr[3] "Scrios %n leathanach?"
+msgstr[4] "Scrios %n leathanach?"
 
 #: src/docstate.ts:154
 msgid "Standard"
@@ -8438,7 +8462,7 @@ msgstr "Sleamhnán"
 
 #: src/layer/marker/A11yTextInput.js:348
 msgid "Heading level {0}"
-msgstr ""
+msgstr "Leibhéal ceannteidil {0}"
 
 #: src/layer/marker/A11yTextInput.js:884
 msgid "Out of table"
@@ -8966,7 +8990,7 @@ msgstr "Litir Ghnó"
 
 #: templates/templates.js:16 templates/templates.js:20
 msgid "Classic Business Letter"
-msgstr ""
+msgstr "Litir Ghnó Chlasaiceach"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"

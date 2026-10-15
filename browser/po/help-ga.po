@@ -3,17 +3,18 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-08-06 13:27+0000\n"
-"Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
+"PO-Revision-Date: 2026-10-15 13:24+0000\n"
+"Last-Translator: Aindriú Mac Giolla Eoin "
+"<aindriu80@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "help/ga/>\n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :("
-"n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -1832,6 +1833,13 @@ msgid ""
 "selected tab again to collapse the tab bar and gain space for the document. "
 "Click any tab to expand it again."
 msgstr ""
+"<span class=\"def\">Na cluaisíní:</span> Tá na horduithe grúpáilte ar "
+"chluaisíní ag an mbarr: <span class=\"ui\">Comhad</span>, <span class=\"ui\">"
+"Baile</span>, <span class=\"ui\">Ionsáigh</span>, <span class=\"ui\">"
+"Athbhreithnigh</span>, <span class=\"ui\">Amharc</span> agus eile, ag brath "
+"ar an gcineál doiciméid. Cliceáil an cluaisín atá roghnaithe arís chun an "
+"barra cluaisíní a laghdú agus spás a fháil don doiciméad. Cliceáil aon "
+"chluaisín chun é a leathnú arís."
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
 msgid ""
@@ -1970,16 +1978,14 @@ msgid ""
 msgstr "Nuair a dhúnadh doiciméad, sábhálfar é go huathoibríoch má athraíodh é."
 
 #: html/cool-help.html%2Bdiv.div.div.p:441-7
-#, fuzzy
 msgid ""
 "To open a document, either open it in <span class=\"productname\""
 ">{productname}</span> from your platform's file manager or use <span class="
 "\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
-"Chun doiciméad a oscailt, oscail é i <span class=\"productname\""
-">{productname}</span> ó bhainisteoir comhad d'ardáin nó bain úsáid as an "
-"gcnaipe <span class=\"ui\">Oscail</span> ar an leathanach a thaispeántar ón "
-"gcnaipe barra roghchláir <span class=\"ui\">Comhad</span>."
+"Chun doiciméad a oscailt, oscail é i <span class=\"productname\">"
+"{productname}</span> trí bhainisteoir comhad do ardáin, nó úsáid <span "
+"class=\"ui\">Oscail</span> ar an gcluaisín <span class=\"ui\">Comhad</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
@@ -1988,35 +1994,44 @@ msgid ""
 " in the bottom right corner. New documents and documents created from a "
 "template open ready to edit."
 msgstr ""
+"Osclaítear doiciméad atá ann cheana i mód amhairc, ionas gur féidir leat é a "
+"léamh gan é a athrú de thaisme. Chun tús a chur leis an eagarthóireacht, "
+"cliceáil an cnaipe eagarthóireachta (an peann luaidhe) sa chúinne íochtarach "
+"ar dheis. Osclaítear doiciméid nua, chomh maith le doiciméid a chruthaítear "
+"ó theimpléad, agus iad réidh le haghaidh eagarthóireachta."
 
 #: html/cool-help.html%2Bdiv.div.div.p:452-7
 msgid ""
 "If the document is locked by another application, it stays in view mode."
 msgstr ""
+"Má tá an doiciméad faoi ghlas ag feidhmchlár eile, fanann sé i mód amhairc."
 
 #: html/cool-help.html%2Bdiv.div.div.p:456-7
 msgid ""
 "To save the document in a different format use <span class=\"ui\">Save As</"
 "span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
+"Chun an doiciméad a shábháil i bhformáid dhifriúil, bain úsáid as <span "
+"class=\"ui\">Sábháil Mar</span> ar an gcluaisín <span class=\"ui\">Comhad</"
+"span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:461-7
-#, fuzzy
 msgid ""
 "Documents are automatically saved periodically, but if you want a document "
 "to be saved right away you can use <span class=\"ui\">Save</span> on the "
 "<span class=\"ui\">File</span> tab."
 msgstr ""
-"Sábháiltear doiciméid go huathoibríoch ó am go ham, ach más mian leat "
-"doiciméad a shábháil láithreach is féidir leat an cnaipe <span class=\"ui\""
-">Sábháil</span> a úsáid ar an leathanach a thaispeántar ón gcnaipe barra "
-"roghchláir <span class=\"ui\">Comhad</span>."
+"Sábháiltear doiciméid go huathoibríoch go tréimhsiúil, ach más mian leat "
+"doiciméad a shábháil láithreach, is féidir leat <span class=\"ui\">Sábháil</"
+"span> a úsáid ar an gcluaisín <span class=\"ui\">Comhad</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:467-7
 msgid ""
 "To print the document, use <span class=\"ui\">Print</span> on the <span "
 "class=\"ui\">File</span> tab."
 msgstr ""
+"Chun an doiciméad a phriontáil, úsáid <span class=\"ui\">Priontáil</span> ar "
+"an gcluaisín <span class=\"ui\">Comhad</span>."
 
 #: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
@@ -2040,6 +2055,15 @@ msgid ""
 "Android or iOS selecting text by double tapping, and using a long-tap to "
 "access copy/cut/paste via the context menu is required."
 msgstr ""
+"Tacaítear le cóipeáil, gearradh agus greamú ábhair shaibhir — lena n-"
+"áirítear íomhánna agus ábhar measctha — trí úsáid a bhaint as aicearraí "
+"méarchláir (<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+"hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</kbd><span class=\"kbd--"
+"plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). Ar Android nó iOS, ní mór "
+"téacs a roghnú trí chliceáil faoi dhó air, agus brú fada a dhéanamh chun "
+"rochtain a fháil ar na roghanna cóipeála, gearrtha agus greamaithe tríd an "
+"roghchlár comhthéacsúil."
 
 #: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
@@ -2048,6 +2072,10 @@ msgid ""
 "comes from outside the document, but context menus can be used for cut and "
 "copy."
 msgstr ""
+"Ar chúiseanna slándála, is gá <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+"hidden=\"true\">+</span><kbd>V</kbd> a úsáid chun ábhar a thagann ó lasmuigh "
+"den doiciméad a ghreamú, ach is féidir roghchláir chomhthéacs a úsáid chun "
+"ábhar a ghearradh agus a chóipeáil."
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -2058,6 +2086,13 @@ msgid ""
 ">{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
+"Nuair a chóipeálann tú rogha ina bhfuil íomhánna nó rudaí eile, feicfear "
+"giuirléid <span class=\"ui\">Íoslódáil an Rogha</span> sa chúinne íochtarach "
+"ar dheis. Cliceáil <span class=\"ui\">Íoslódáil</span>, agus déan cóipeáil "
+"arís ina dhiaidh sin, chun an t-ábhar a chur ar fáil d’fheidhmchláir "
+"lasmuigh de <span class=\"productname\">{productname}</span>. Chomh maith "
+"leis sin, tiontaíonn an chéim seo cineálacha casta rudaí ina n-íomhánna "
+"statacha."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:487-5
 msgid "Document repair"
@@ -2082,15 +2117,18 @@ msgid ""
 "lists the recent changes to the document and lets you take the document back "
 "to an earlier state."
 msgstr ""
+"Liostaíonn <span class=\"ui\">Deisigh</span> ar an gcluaisín <span "
+"class=\"ui\">Comhad</span> na hathruithe a rinneadh le déanaí ar an "
+"doiciméad, agus cuireann sé ar do chumas an doiciméad a thabhairt ar ais go "
+"staid a bhí ann roimhe seo."
 
 #: html/cool-help.html%2Bdiv.div.div.p:490-5
-#, fuzzy
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
 "class=\"ui\">OK</span>."
 msgstr ""
-"Chun léim siar go dtí an staid roghnaithe, roghnaigh leis an luch é agus "
-"buail <span class=\"ui\">Léim go dtí an stát</span>."
+"Chun filleadh ar an stát roghnaithe, roghnaigh é leis an luch agus brúigh "
+"<span class=\"ui\">OK</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:491-55
 msgid ""
@@ -2114,10 +2152,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:495-5
 msgid "Idle document"
-msgstr ""
+msgstr "Doiciméad díomhaoin"
 
 #: html/cool-help.html%2Bdiv.div.div.p:496-5
-#, fuzzy
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
@@ -2125,10 +2162,11 @@ msgid ""
 "the message “Idle document – please click to reload and resume editing”."
 msgstr ""
 "Nuair a bhraitheann <span class=\"productname\">{productname}</span> nach "
-"bhfuil aon ghníomhaíocht sa bhrabhsálaí le tamall anuas, cuireann sé an "
-"doiciméad i stát “Neamhghníomhach”. Taispeántar an doiciméad le forleagan "
-"liath trédhearcach, leis an teachtaireacht “Doiciméad Neamhghníomhach - "
-"cliceáil le do thoil chun eagarthóireacht a atosú”."
+"raibh aon ghníomhaíocht sa bhrabhsálaí ar feadh tamaill, cuireann sé an "
+"doiciméad i staid “Neamhghníomhach”. Taispeántar an doiciméad le ciseal "
+"liath trédhearcach air, mar aon leis an teachtaireacht: “Doiciméad "
+"neamhghníomhach – cliceáil le do thoil chun é a athlódáil agus leanúint ar "
+"aghaidh leis an eagarthóireacht”."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
 msgid ""
@@ -2223,13 +2261,12 @@ msgstr ""
 "láthair."
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Chart</span>. "
 "Customize your chart on the sidebar:"
 msgstr ""
-"Roghnaigh <span class=\"ui\">Ionsáigh</span> → <span class=\"ui\""
-">Cairteacha</span>. Saincheap do chairt ar an taobhbharra:"
+"Roghnaigh <span class=\"ui\">Ionsáigh</span> → <span class=\"ui\">Cairt</"
+"span>. Saincheap do chairt sa bharra taoibh:"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:519-53
 msgid ""
@@ -2310,6 +2347,9 @@ msgid ""
 ">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
 "computer and insert it into the document."
 msgstr ""
+"<span class=\"def\">Cuir íomhá áitiúil isteach:</span> Roghnaigh <span "
+"class=\"ui\">Cuir isteach</span> → <span class=\"ui\">Íomhá</span> chun "
+"íomhá a roghnú ó do ríomhaire agus í a chur isteach sa doiciméad."
 
 #: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
@@ -2375,13 +2415,13 @@ msgid "Text with a red wavy underline beneath a misspelled word"
 msgstr "Téacs le líne tonnach dhearg faoi fhocal mílitrithe"
 
 #: html/cool-help.html%2Bdiv.div.div.p:544-5
-#, fuzzy
 msgid ""
 "To systematically spell-check the whole document use <span class=\"ui\""
 ">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
-"Chun litriú a sheiceáil go córasach ar an doiciméad iomlán, úsáid rogha an "
-"roghchláir <span class=\"ui\">Tools</span> <span class=\"ui\">Litriú</span>."
+"Chun an doiciméad ar fad a sheiceáil ó thaobh litrithe de go córasach, úsáid "
+"<span class=\"ui\">Litriú</span> ar an gcluaisín <span class=\"ui\">"
+"Athbhreithniú</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
@@ -2558,13 +2598,13 @@ msgstr ""
 "neamhbhailí i gcill. Chun bailíochtú sonraí a chumasú:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:589-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Validity</span> on the <span class=\"ui\">Data</"
 "span> tab. The <span class=\"ui\">Validity</span> dialog opens."
 msgstr ""
-"Roghnaigh <span class=\"ui\">Bailíocht</span> ón roghchlár <span class=\"ui\""
-">Sonraí</span>. Osclaítear dialóg <span class=\"ui\">Bailíocht</span>."
+"Roghnaigh <span class=\"ui\">Bailíocht</span> ar an gcluaisín <span "
+"class=\"ui\">Sonraí</span>. Osclaítear an bosca dialóige <span class=\"ui\">"
+"Bailíocht</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:592-57
 msgid ""
@@ -2635,7 +2675,6 @@ msgstr ""
 "dáta, téacs na tráchta, agus na cnaipí Sábháil/Cealaigh"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:606-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
@@ -2643,11 +2682,11 @@ msgid ""
 "span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
 "apply on the range."
 msgstr ""
-"<span class=\"def\">Formáidiú coinníollach:</span> <span class=\"productname"
-"\">{productname}</span> cuireann sé siombailí le gach cill de raon bunaithe "
-"ar choinníollacha cealla. Roghnaigh an raon cille agus cliceáil ar an "
-"deilbhín <span class=\"ui\">Formáidiú Coinníollach</span> ar an mbarra "
-"uirlisí. Roghnaigh an tacar siombail le cur i bhfeidhm ar an raon."
+"<span class=\"def\">Formáidiú coinníollach:</span> Cuireann <span "
+"class=\"productname\">{productname}</span> siombailí le gach cill i raon "
+"bunaithe ar choinníollacha na gceall. Roghnaigh an raon ceall agus cliceáil "
+"<span class=\"ui\">Coinníollach</span> ar an gcluaisín <span class=\"ui\">"
+"Baile</span>. Roghnaigh an tacar siombailí le cur i bhfeidhm ar an raon."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
@@ -2736,18 +2775,16 @@ msgstr ""
 "díreach ach leis an réad reatha roghnaithe."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
 "paragraph style to a paragraph. Select the style in the style list on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
-"<span class=\"def\">Formáidiú stíl:</span> Tacaíonn <span class=\"productname"
-"\">{productname}</span> le stíleanna míre. Is féidir leat stíl mhíre atá ann "
-"cheana a chur i bhfeidhm ar mhír. Roghnaigh roghchlár <span class=\"ui\""
-">Eagar</span> → <span class=\"ui\">Eagar stíleanna</span> chun an stíl a "
-"athrú."
+"<span class=\"def\">Formáidiú stíle:</span> Tacaíonn <span "
+"class=\"productname\">{productname}</span> le stíleanna alt. Is féidir leat "
+"stíl alt atá ann cheana a chur i bhfeidhm ar alt. Roghnaigh an stíl sa "
+"liosta stíleanna ar an gcluaisín <span class=\"ui\">Baile</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
@@ -2762,7 +2799,6 @@ msgid "Handling Tables"
 msgstr "Táblaí Láimheála"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:637-5
-#, fuzzy
 msgid ""
 "Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
 ">Table</span>. Select the initial number of rows and columns. Add rows and "
@@ -2770,11 +2806,11 @@ msgid ""
 ">Table</span> tab. The default paragraph style inside cells is “Table "
 "contents”."
 msgstr ""
-"Cuir isteach táblaí a bhfuil an deilbhín cuí orthu sa bharra uirlisí. "
-"Roghnaigh líon tosaigh na sraitheanna agus na gcolún. Cuir sraitheanna agus "
-"colúin leis an roghchlár comhthéacs cille. Cumaisc cealla leis an roghchlár "
-"<span class=\"ui\">Tábla</span>. Is é an stíl réamhshocraithe ailt taobh "
-"istigh de chealla ná “Ábhar an Tábla”."
+"Cuir táblaí isteach trí <span class=\"ui\">Ionsáigh</span> → <span "
+"class=\"ui\">Tábla</span>. Roghnaigh líon tosaigh na sraitheanna agus na "
+"gcolún. Cuir sraitheanna agus colúin leis trí roghchlár comhthéacs na cille. "
+"Cumaisc cealla ón gcluaisín <span class=\"ui\">Tábla</span>. Is é “Ábhar an "
+"tábla” an stíl mhír chaighdeánach laistigh de chealla."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
@@ -2785,16 +2821,15 @@ msgstr ""
 "na gcolún a roghnú, ag taispeáint 5 faoi 3 faoi láthair"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:641-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
 "cells, open the context menu and choose <span class=\"ui\">Table Properties</"
 "span>. Fine tune the table with the properties dialog."
 msgstr ""
-"<span class=\"def\">Formáidiú cealla:</span> Cliceáil sa chill nó sa raon "
-"cealla agus roghnaigh an roghchlár <span class=\"ui\">Tábla</span> → <span "
-"class=\"ui\">Airíonna</span>. Déan an tábla a choigeartú go mín leis an "
-"dialóg airíonna."
+"<span class=\"def\">Cealla a fhormáidiú:</span> Cliceáil sa chill nó sa raon "
+"ceall, oscail an roghchlár comhthéacs agus roghnaigh <span class=\"ui\">"
+"Airíonna an Tábla</span>. Déan mionchoigeartú ar an tábla ag baint úsáide as "
+"an mbosca dialóige airíonna."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
@@ -3022,12 +3057,16 @@ msgid ""
 "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT. "
 "Plain text TXT and Markdown MD"
 msgstr ""
+"Doiciméid téacs: Formáidí Microsoft DOC, DOCX, RTF. Formáid OpenDocument "
+"ODT. Téacs simplí TXT agus Markdown MD"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:699-7
 msgid ""
 "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS. Comma "
 "separated values CSV"
 msgstr ""
+"Bileoga oibre: Formáidí Microsoft XLS, XLSX, Formáid OpenDocument ODS. "
+"Luachanna scartha le camóga CSV"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:700-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
@@ -3078,6 +3117,9 @@ msgid ""
 "background regularly, you can't just close without saving it. To abandon "
 "your changes, undo them."
 msgstr ""
+"Sábhálann <span class=\"productname\">{productname}</span> an doiciméad sa "
+"chúlra go rialta; ní féidir leat é a dhúnadh gan é a shábháil. Chun na "
+"hathruithe a rinne tú a chur ar ceal, bain úsáid as an bhfeidhm cealaithe."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:717-5
 msgid ""
@@ -3102,15 +3144,15 @@ msgid "How can I check spelling in my language?"
 msgstr "Conas is féidir liom litriú a sheiceáil i mo theanga?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
 "and select the language for the whole document. Optionally you can set "
 "languages for the selected text and for the current paragraph."
 msgstr ""
-"Roghnaigh roghchlár <span class=\"ui\">Uirlisí</span> → <span class=\"ui\""
-">Teangacha</span> agus roghnaigh teanga na cáipéise ar fad. Roghnach is "
-"féidir leat teangacha a shocrú don téacs roghnaithe agus don alt reatha."
+"Roghnaigh <span class=\"ui\">Athbhreithniú</span> → <span class=\"ui\">"
+"Teanga</span> agus roghnaigh an teanga don doiciméad ar fad. Is féidir leat "
+"teangacha a shocrú don téacs roghnaithe agus don mhír reatha freisin, más "
+"mian leat."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:725-5
 msgid "How can I remove the red wavy lines in my document?"
@@ -3121,6 +3163,9 @@ msgid ""
 "On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
 ">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
+"Ar an gcluaisín <span class=\"ui\">Athbhreithniú</span>, oscail <span "
+"class=\"ui\">Litriú</span> agus díroghnaigh <span class=\"ui\">Seiceáil "
+"Litrithe Uathoibríoch</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
 msgid "What is the blue wavy underline in some words in the text?"
@@ -3143,15 +3188,14 @@ msgid "Is there a thesaurus?"
 msgstr "An bhfuil teasaurus ann?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
-#, fuzzy
 msgid ""
 "Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
 " <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
-"Tá. Cliceáil ar an bhfocal atá uait agus roghnaigh <span class=\"ui\""
-">Uirlisí</span> → <span class=\"ui\">Thesaurus</span>. Osclaíonn dialóg le "
-"go leor moltaí le haghaidh athsholáthair."
+"Sea. Cliceáil ar an bhfocal atá uait agus roghnaigh <span class=\"ui\">"
+"Athbhreithniú</span> → <span class=\"ui\">Teasáras</span>. Osclófar bosca "
+"dialóige ina mbeidh go leor moltaí le haghaidh athsholáthair."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:735-49
 msgid ""
@@ -3170,7 +3214,6 @@ msgstr ""
 "féidir liom a bhaint de mo dhoiciméad téacs?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
-#, fuzzy
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
@@ -3178,24 +3221,23 @@ msgid ""
 ">Formatting Marks</span>."
 msgstr ""
 "Is marc formáidithe é an tsiombail <span class=\"blue\">¶</span>. Úsáidtear "
-"é chun cabhrú le ailíniú agus eagarthóireacht téacs agus ní phriontáiltear "
-"é. Chun é a scoránaigh sa taispeáint cáipéise, roghnaigh an roghchlár <span "
-"class=\"ui\">Féach</span> → <span class=\"ui\">Marc formáidithe</span>."
+"í chun cabhrú le hailíniú téacs agus le heagar, agus ní phriontáiltear í. "
+"Chun í a thaispeáint nó a cheilt i dtaispeántas na cáipéise, roghnaigh <span "
+"class=\"ui\">Amharc</span> → <span class=\"ui\">Marcanna Formáidithe</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:746-5
 msgid "How do I get a word count of my document?"
 msgstr "Conas a gheobhaidh mé comhaireamh focal de mo dhoiciméad?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
-#, fuzzy
 msgid ""
 "Word count is available in <span class=\"ui\">Review</span> → <span class="
 "\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
 "the whole document."
 msgstr ""
-"Tá comhaireamh focal ar fáil in <span class=\"ui\">Uirlisí</span> → <span "
-"class=\"ui\">Comhaireamh Focal</span>. Taispeánann dialóg comhaireamh focal "
-"don roghnú agus don doiciméad iomlán."
+"Tá líon na bhfocal ar fáil faoi <span class=\"ui\">Athbhreithniú</span> → "
+"<span class=\"ui\">Líon na bhFocal</span>. Taispeánann bosca dialóige líon "
+"na bhfocal don roghnúchán agus don doiciméad ar fad."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:748-50
 msgid ""
@@ -3239,6 +3281,8 @@ msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
 "Character</span>. A dialog opens."
 msgstr ""
+"Roghnaigh <span class=\"ui\">Ionsáigh</span> → <span class=\"ui\">Carachtar "
+"Speisialta</span>. Osclaítear bosca dialóige."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:759-59
 msgid ""
@@ -3277,7 +3321,6 @@ msgstr ""
 "tríd?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:766-5
-#, fuzzy
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
@@ -3285,12 +3328,12 @@ msgid ""
 "enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\""
 ">Record</span>."
 msgstr ""
-"Tá an ghné Rianú Athruithe cumasaithe agat don doiciméad. Taifeadann Rianú "
-"Athruithe gach athrú sa téacs agus taispeánann sé na heagarthóireachtaí le "
-"haghaidh athbhreithnithe níos déanaí. Úsáideach chun athruithe a mharcáil i "
-"dtéacs agus i scarbhileoga. Cumasaítear rianú athruithe trí <span class=\"ui"
-"\">Eagar</span> → <span class=\"ui\">Rianú Athruithe </span> → <span class="
-"\"ui\">Taifead</span> a roghnú."
+"Tá an ghné 'Rianú Athruithe' cumasaithe don doiciméad. Déanann 'Rianú "
+"Athruithe' gach athrú sa téacs a thaifeadadh agus taispeánann sé na "
+"leasuithe chun gur féidir iad a athbhreithniú níos déanaí. Tá sé úsáideach "
+"chun athruithe i dtéacs agus i scarbhileoga a mharcáil. Is féidir 'Rianú "
+"Athruithe' a chumasú trí <span class=\"ui\">Athbhreithnigh</span> → <span "
+"class=\"ui\">Taifead</span> a roghnú."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:767-5
 msgid ""
@@ -3324,22 +3367,20 @@ msgstr ""
 "an doiciméad."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:776-5
-#, fuzzy
 msgid ""
 "To display or hide track changes choose <span class=\"ui\">Review</span> → "
 "<span class=\"ui\">View Changes</span> → <span class=\"ui\">Show</span>. "
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
-"Chun athruithe rianaithe a thaispeáint nó a cheilt, roghnaigh <span class="
-"\"ui\">Eagar</span> → <span class=\"ui\">Rianaigh Athruithe </span> → <span "
-"class=\"ui\">Taispeáin</span>. Tabhair faoi deara, má tá athruithe rianaithe "
-"cumasaithe ach i bhfolach, go ndéanfaidh tú athruithe a thaifeadadh fós agus "
-"go bhféadfadh téacs nach dteastaíonn a fhágáil ar fáil sa doiciméad gan "
-"chuimhneamh."
+"Chun athruithe rianaithe a thaispeáint nó a cheilt, roghnaigh <span "
+"class=\"ui\">Athbhreithniú</span> → <span class=\"ui\">Féach ar Athruithe</"
+"span> → <span class=\"ui\">Taispeáin</span>. Bí ar an eolas, má tá athruithe "
+"rianaithe cumasaithe ach i bhfolach, go ndéanfar na hathruithe a thaifeadadh "
+"mar sin féin; d’fhéadfadh sé tarlú, dá bhrí sin, go bhfágfaí téacs nach "
+"dteastaíonn sa doiciméad gan chuimhneamh."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:777-5
-#, fuzzy
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
@@ -3352,14 +3393,14 @@ msgid ""
 msgstr ""
 "Is féidir glacadh le hathruithe nó iad a dhiúltú. Chun glacadh le hathruithe "
 "nó iad a dhiúltú, cliceáil ar na deilbhíní comhfhreagracha sa bhosca "
-"tuairimí ar dheis an doiciméid. Nó is féidir leat <span class=\"ui\">Eagar</"
-"span> → <span class=\"ui\">Rianaigh Athruithe </span> → <span class=\"ui\""
-">Glac</span> nó <span class=\"ui\">Diúltaigh</span> a roghnú. Ina theannta "
-"sin, más gá duit athruithe a scagadh sula nglactar leo nó sula ndiúltaítear "
-"dóibh, roghnaigh <span class=\"ui\">Eagar</span> → <span class=\"ui\""
-">Rianaigh Athruithe </span> → <span class=\"ui\">Bainistigh</span>. "
-"Taispeánann dialóg liosta de na hathruithe rianaithe go léir. Bain úsáid as "
-"na cnaipí dialóige dá réir."
+"tráchtaireachta ar dheis sa doiciméad. Nó, roghnaigh <span class=\"ui\">"
+"Athbhreithniú</span> → <span class=\"ui\">Glac leis</span> nó <span "
+"class=\"ui\">Diúltaigh</span>. Ina theannta sin, más gá duit athruithe a "
+"scagadh sula nglacann tú leo nó sula ndiúltaíonn tú dóibh, roghnaigh <span "
+"class=\"ui\">Athbhreithniú</span> → <span class=\"ui\">Glac leis</span> → "
+"<span class=\"ui\">Bainistigh</span>. Taispeánann bosca dialóige liosta de "
+"na hathruithe go léir atá á rianú. Úsáid na cnaipí sa bhosca dialóige dá "
+"réir."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:778-54
 msgid ""
@@ -3387,13 +3428,13 @@ msgid "Using the page style"
 msgstr "Úsáid stíl an leathanaigh"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page Style</"
 "span> and select the <span class=\"ui\">Page</span> tab"
 msgstr ""
-"Roghnaigh <span class=\"ui\">Formáid</span> → <span class=\"ui\">Leathanach</"
-"span> agus roghnaigh an cluaisín <span class=\"ui\">Leathanach</span>"
+"Roghnaigh <span class=\"ui\">Formáid</span> → <span class=\"ui\">Stíl "
+"Leathanaigh</span> agus roghnaigh an cluaisín <span class=\"ui\">Leathanach</"
+"span>"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:786-7
 msgid "Set the page margins in the dialog."
@@ -3476,6 +3517,10 @@ msgid ""
 "svg\" /> on the <span class=\"ui\">Home</span> tab. The mouse pointer turns "
 "to a paint bucket."
 msgstr ""
+"Cliceáil ar an deilbhín <span class=\"ui\">Clónáil Formáidithe</span> <img "
+"alt=\"scuab péinte formáidithe\" class=\"icon-size\" src=\"images/"
+"lc_formatpaintbrush.svg\" /> ar an gcluaisín <span class=\"ui\">Baile</span>"
+". Athraíonn an pointeoir luiche ina bhuicéad péinte."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
 msgid "Select the text you want to apply the new format."
@@ -3512,6 +3557,12 @@ msgid ""
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after it "
 "was applied."
 msgstr ""
+"Tá an Ceartú Uathoibríoch cumasaithe agat. Déanann an Ceartú Uathoibríoch "
+"comparáid idir an téacs atá díreach clóscríofa agat agus tábla téacs "
+"inmheánach. I bhformhór na gcásanna, ceartaíonn an Ceartú Uathoibríoch "
+"botúin clóscríofa agus tú ag clóscríobh. Chun ceartú a chealú, brúigh <kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</"
+"kbd> díreach tar éis é a chur i bhfeidhm."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
@@ -3522,6 +3573,9 @@ msgid ""
 "Insert column and row breaks in the spreadsheet to narrow the print range. "
 "When printing, select the pages of interest."
 msgstr ""
+"Cuir briseadh colún agus briseadh ró isteach sa scarbhileog chun an raon "
+"priontála a chúngú. Agus tú ag priontáil, roghnaigh na leathanaigh a bhfuil "
+"suim agat iontu."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:831-5
 msgid "How can I import CSV data?"
@@ -3549,6 +3603,9 @@ msgid ""
 ">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog "
 "opens to let you describe the precise format of the CSV data."
 msgstr ""
+"Brúigh <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>V</kbd>. Osclaítear an bosca dialóige <span class=\"ui\">Iompórtáil "
+"Téacs</span>, a ligeann duit formáid bheacht na sonraí CSV a shonrú."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
 msgid ""
@@ -3584,6 +3641,8 @@ msgid ""
 "This is easy to do using <span class=\"ui\">Clone Formatting</span> on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
+"Tá sé seo éasca a dhéanamh trí úsáid a bhaint as <span class=\"ui\">Clónáil "
+"Formáidithe</span> ar an gcluaisín <span class=\"ui\">Baile</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:847-7
 msgid "Format the source cell with the font, color background and more."
@@ -3599,7 +3658,6 @@ msgid "What is “Clear Direct Formatting” icon?"
 msgstr "Cad é deilbhín “Formáidiú Díreach Soiléir”?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:854-5
-#, fuzzy
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
@@ -3608,11 +3666,11 @@ msgid ""
 "\"ui\">Clear Direct Formatting</span>."
 msgstr ""
 "Is éard is formáidiú díreach ann ná formáidiú a chuirtear i bhfeidhm go "
-"díreach ar inneachar roghnaithe alt nó ar chill scarbhileog, agus forluíonn "
-"sé an fhormáidiú stíle sannta. Chun an fhormáidiú a chur ar ais chuig na "
-"socruithe stíle, roghnaigh an chill téacs nó scarbhileog agus roghnaigh "
-"<span class=\"ui\">Formáid</span> → <span class=\"ui\">Glan Formáidiú "
-"Díreach</span> nó úsáid an cnaipe sa bharra uirlisí."
+"díreach ar ábhar roghnaithe i mír nó i gcill scarbhileoige, agus a sháraíonn "
+"an formáidiú stíle atá sannta dó. Chun an formáidiú a chur ar ais mar a bhí "
+"de réir na socruithe stíle, roghnaigh an téacs nó an chill scarbhileoige "
+"agus roghnaigh <span class=\"ui\">Baile</span> → <span class=\"ui\">Glan "
+"Formáidiú Díreach</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:857-5
 msgid "How do I rename a sheet?"
@@ -3638,15 +3696,14 @@ msgid ""
 msgstr "Oscail an léiriú i <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:869-7
-#, fuzzy
 msgid ""
 "Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">From "
 "Beginning</span> or click on the left-most icon in the bottom of the slide "
 "panel:"
 msgstr ""
-"Roghnaigh <span class=\"ui\">Taispeántas Sleamhnán</span> → <span class=\"ui"
-"\">Léiriú Lánscáileáin</span> nó cliceáil ar an deilbhín is mó ar chlé ag "
-"bun an phainéil sleamhnáin:"
+"Roghnaigh <span class=\"ui\">Taispeántas Sleamhnán</span> → <span "
+"class=\"ui\">Ón tús</span> nó cliceáil ar an deilbhín ar an taobh clé ar fad "
+"ag bun an phainéil sleamhnán:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-187
 msgid "slide show"
