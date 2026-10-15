@@ -393,8 +393,8 @@ window.L.TextInput = window.L.Layer.extend({
 		return 	this._textArea.innerHTML;
 	},
 
-	_wrapContent: function(content, links, images, comments) {
-		const escapedContent = this._escapeWithLinks(content, links, images, comments);
+	_wrapContent: function(content, elements) {
+		const escapedContent = this._escapeWithLinks(content, elements);
 		const wrappedContent = this.hasAccessibilitySupport()
 			? '<span id="readable-content" role="presentation">' + escapedContent + '</span>'
 			: escapedContent;
@@ -403,11 +403,11 @@ window.L.TextInput = window.L.Layer.extend({
 			: this._preSpaceChar + wrappedContent + this._postSpaceChar;
 	},
 
-	// links: { start, end, url } ranges of content, in order
-	// images: { position, name, description } of U+FFFC (OBJECT REPLACEMENT CHARACTER) characters
-	// in content, in order
-	// comments: { start, end, id } ranges of content, in order
-	_createLinkedNodes: function(content, links, images, comments) {
+	// elements: the inline elements of content, see cool.InlineElements
+	_createLinkedNodes: function(content, elements) {
+		const links = elements ? elements.links : undefined;
+		const images = elements ? elements.images : undefined;
+		const comments = elements ? elements.comments : undefined;
 		const nodes = [];
 		let pos = 0;
 		for (const link of links || []) {
@@ -493,9 +493,9 @@ window.L.TextInput = window.L.Layer.extend({
 		return nodes;
 	},
 
-	_escapeWithLinks: function(content, links, images, comments) {
+	_escapeWithLinks: function(content, elements) {
 		const span = document.createElement('span');
-		span.append(...this._createLinkedNodes(content, links, images, comments));
+		span.append(...this._createLinkedNodes(content, elements));
 		return span.innerHTML;
 	},
 

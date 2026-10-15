@@ -163,9 +163,10 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		return true;
 	},
 
-	setHTML: function(content, links, images, comments) {
+	// elements: cool.InlineElements of content
+	setHTML: function(content, elements) {
 		// eslint-disable-next-line no-restricted-syntax -- markup around escaped text
-		this._textArea.innerHTML = this._wrapContent(content, links, images, comments);
+		this._textArea.innerHTML = this._wrapContent(content, elements);
 		this._linkCommentDetails();
 	},
 
@@ -269,7 +270,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			this._textArea.isSelectionNull = !flag;
 	},
 
-	_setFocusedParagraph: function(content, pos, start, end, links, images, comments) {
+	_setFocusedParagraph: function(content, pos, start, end, elements) {
 		window.app.console.log('_setFocusedParagraph:'
 			+ '\n    content "' + content + '"'
 			+ '\n    pos: ' + pos
@@ -285,13 +286,12 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		const current = this.getPlainTextContent();
 		this._pendingFocusedParagraph = null;
 		if (window.L.Browser.win || !this._lineNavigation || current === '' || content === '' || content === current) {
-			this._fillFocusedParagraph(content, pos, start, end, links, images, comments);
+			this._fillFocusedParagraph(content, pos, start, end, elements);
 			return;
 		}
 
 		// Emptied first so Orca hears the new paragraph whole; NVDA would catch the editable empty.
-		const pending = { content: content, pos: pos, start: start, end: end, links: links,
-			images: images, comments: comments };
+		const pending = { content: content, pos: pos, start: start, end: end, elements: elements };
 		this._pendingFocusedParagraph = pending;
 		this.resetContent();
 		requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -300,8 +300,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		}));
 	},
 
-	_fillFocusedParagraph: function(content, pos, start, end, links, images, comments) {
-		this.setHTML(content, links, images, comments);
+	_fillFocusedParagraph: function(content, pos, start, end, elements) {
+		this.setHTML(content, elements);
 		this.updateLastContent();
 		this._updateSelection(pos, start, end, true);
 		this._placeContextRegions();
@@ -313,7 +313,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			return;
 		this._pendingFocusedParagraph = null;
 		this._fillFocusedParagraph(pending.content, pending.pos, pending.start, pending.end,
-			pending.links, pending.images, pending.comments);
+			pending.elements);
 	},
 
 	_onKeyDown: function(ev) {
@@ -327,17 +327,14 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._log('_updateFocusedParagraph');
 		if (this._remoteContent !== undefined) {
 			this._setFocusedParagraph(this._remoteContent, this._remotePosition,
-				this._remoteSelectionStart, this._remoteSelectionEnd, this._remoteLinks,
-				this._remoteImages, this._remoteComments);
+				this._remoteSelectionStart, this._remoteSelectionEnd, this._remoteElements);
 		} else if (this._remoteSelectionEnd !== undefined) {
 			this._updateSelection(this._remotePosition, this._remoteSelectionStart, this._remoteSelectionEnd);
 		} else if (this._remotePosition !== undefined) {
 			this._updateCursorPosition(this._remotePosition);
 		}
 		this._remoteContent = undefined;
-		this._remoteLinks = undefined;
-		this._remoteImages = undefined;
-		this._remoteComments = undefined;
+		this._remoteElements = undefined;
 		this._remotePosition = undefined;
 		this._remoteSelectionStart = undefined;
 		this._remoteSelectionEnd = undefined;
@@ -377,16 +374,15 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._describeCaretState();
 	},
 
+	// elements: cool.ParagraphInlineElements
 	onAccessibilityFocusChanged: function(content, pos, start, end, listPrefixLength, force, before, after,
-		beforeRects, afterRects, headingLevel, beforeLevels, afterLevels, links, beforeLinks,
-		afterLinks, images, beforeImages, afterImages, comments, beforeComments, afterComments, list) {
+		beforeRects, afterRects, headingLevel, beforeLevels, afterLevels, elements, list) {
 		this._listPrefixLength = listPrefixLength;
 		this._setHeadingLevel(headingLevel);
 		this._endContextJump();
-		this._keepCommentDetails(comments, beforeComments, afterComments);
+		this._keepCommentDetails(elements);
 		this._setContextParagraphs(before, after, beforeRects, afterRects, beforeLevels,
-			afterLevels, beforeLinks, afterLinks, beforeImages, afterImages, beforeComments,
-			afterComments);
+			afterLevels, elements);
 		this._setContextList(list);
 		this._requestHeadings();
 		if (!this.hasFocus() || (this._isComposing && !force)) {
@@ -395,37 +391,32 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 				+ '\n  _isComposing: ' + this._isComposing
 				+ '\n  force: ' + force);
 			this._remoteContent = content;
-			this._remoteLinks = links;
-			this._remoteImages = images;
-			this._remoteComments = comments;
+			this._remoteElements = elements.paragraph;
 			this._remotePosition = pos;
 			this._remoteSelectionStart = start;
 			this._remoteSelectionEnd = end;
 		} else {
-			this._setFocusedParagraph(content, pos, start, end, links, images, comments);
+			this._setFocusedParagraph(content, pos, start, end, elements.paragraph);
 		}
 	},
 
+	// elements: cool.ParagraphInlineElements
 	setA11yFocusedParagraph: function(content, pos, start, end, before, after, beforeRects, afterRects, headingLevel,
-		beforeLevels, afterLevels, links, beforeLinks, afterLinks, images, beforeImages,
-		afterImages, comments, beforeComments, afterComments, list) {
+		beforeLevels, afterLevels, elements, list) {
 		this._contextPending = Math.max(0, (this._contextPending || 0) - 1);
 		this._setHeadingLevel(headingLevel);
-		this._keepCommentDetails(comments, beforeComments, afterComments);
+		this._keepCommentDetails(elements);
 		if (this._isComposing) {
 			this._remoteContent = content;
-			this._remoteLinks = links;
-			this._remoteImages = images;
-			this._remoteComments = comments;
+			this._remoteElements = elements.paragraph;
 			this._remotePosition = pos;
 			this._remoteSelectionStart = start;
 			this._remoteSelectionEnd = end;
 		} else {
-			this._setFocusedParagraph(content, pos, start, end, links, images, comments);
+			this._setFocusedParagraph(content, pos, start, end, elements.paragraph);
 		}
 		this._setContextParagraphs(before, after, beforeRects, afterRects, beforeLevels,
-			afterLevels, beforeLinks, afterLinks, beforeImages, afterImages, beforeComments,
-			afterComments);
+			afterLevels, elements);
 		this._setContextList(list);
 	},
 
@@ -632,16 +623,19 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		}.bind(this), 250);
 	},
 
+	// elements: cool.ParagraphInlineElements, of which the paragraphs before and after are used
 	_setContextParagraphs: function(before, after, beforeRects, afterRects, beforeLevels,
-		afterLevels, beforeLinks, afterLinks, beforeImages, afterImages, beforeComments,
-		afterComments) {
+		afterLevels, elements) {
 		this._initContextRegions();
 		if (!this._contextBefore)
 			return;
 
 		// The spans are reused: a reader whose position is on one that goes away looks for
 		// another nearby and leaves focus mode.
-		const fillContextRegion = (region, paragraphs, rects, levels, links, images, comments) => {
+		const fillContextRegion = (region, paragraphs, rects, levels, sideElements) => {
+			const links = sideElements.links;
+			const images = sideElements.images;
+			const comments = sideElements.comments;
 			const texts = Array.isArray(paragraphs) ? paragraphs : [];
 			while (region.children.length > texts.length)
 				region.lastElementChild.remove();
@@ -676,8 +670,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 				if (span.textContent !== text || (span.dataset.links || '[]') !== linksKey
 					|| (span.dataset.images || '[]') !== imagesKey
 					|| (span.dataset.comments || '[]') !== commentsKey) {
-					span.replaceChildren(...this._createLinkedNodes(text, spanLinks, spanImages,
-						spanComments));
+					span.replaceChildren(...this._createLinkedNodes(text, { links: spanLinks,
+						images: spanImages, comments: spanComments }));
 					// a reader still reaches them; Tab does not
 					for (const link of span.querySelectorAll('a'))
 						link.tabIndex = -1;
@@ -707,10 +701,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			});
 		};
 
-		fillContextRegion(this._contextBefore, before, beforeRects, beforeLevels, beforeLinks,
-			beforeImages, beforeComments);
-		fillContextRegion(this._contextAfter, after, afterRects, afterLevels, afterLinks,
-			afterImages, afterComments);
+		fillContextRegion(this._contextBefore, before, beforeRects, beforeLevels, elements.before);
+		fillContextRegion(this._contextAfter, after, afterRects, afterLevels, elements.after);
 		this._linkCommentDetails();
 		this._fillHeadingRegions();
 		this._placeContextRegions();
@@ -718,7 +710,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 	},
 
 	// the marks shown keep their details until the paragraphs given with these replace them
-	_keepCommentDetails: function(comments, beforeComments, afterComments) {
+	// elements: cool.ParagraphInlineElements
+	_keepCommentDetails: function(elements) {
 		const previous = this._commentDetails || new Map();
 		this._commentDetails = new Map();
 		const keep = (id) => {
@@ -730,8 +723,10 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 				keep(mark.dataset.commentId);
 		}
 		// a paragraph not shown yet
-		const pending = this._pendingFocusedParagraph ? this._pendingFocusedParagraph.comments : null;
-		for (const list of [pending, this._remoteComments]) {
+		const pending = this._pendingFocusedParagraph && this._pendingFocusedParagraph.elements
+			? this._pendingFocusedParagraph.elements.comments : null;
+		const remote = this._remoteElements ? this._remoteElements.comments : null;
+		for (const list of [pending, remote]) {
 			for (const comment of Array.isArray(list) ? list : [])
 				keep(String(comment.id));
 		}
@@ -739,8 +734,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			for (const comment of Array.isArray(list) ? list : [])
 				this._commentDetails.set(String(comment.id), comment);
 		};
-		add(comments);
-		for (const paragraphs of [beforeComments, afterComments]) {
+		add(elements.paragraph.comments);
+		for (const paragraphs of [elements.before.comments, elements.after.comments]) {
 			for (const list of Array.isArray(paragraphs) ? paragraphs : [])
 				add(list);
 		}
@@ -1068,17 +1063,14 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 	onAccessibilityFocusedCellChanged: function(outCount, inList, row, col, rowSpan, colSpan, paragraph) {
 		this._endContextJump();
-		this._keepCommentDetails(paragraph.comments, paragraph.beforeComments,
-			paragraph.afterComments);
+		const elements = cool.inlineElements(paragraph);
+		this._keepCommentDetails(elements);
 		this._requestHeadings();
 		this._setContextParagraphs(paragraph.before, paragraph.after, paragraph.beforeRects, paragraph.afterRects,
-			paragraph.beforeLevels, paragraph.afterLevels, paragraph.beforeLinks,
-			paragraph.afterLinks, paragraph.beforeImages, paragraph.afterImages,
-			paragraph.beforeComments, paragraph.afterComments);
+			paragraph.beforeLevels, paragraph.afterLevels, elements);
 		this._setContextList(paragraph.list);
 		this._setFocusedParagraph(paragraph.content, parseInt(paragraph.position),
-			parseInt(paragraph.start), parseInt(paragraph.end), paragraph.links, paragraph.images,
-			paragraph.comments);
+			parseInt(paragraph.start), parseInt(paragraph.end), elements.paragraph);
 		this._setHeadingLevel(paragraph.headingLevel);
 		this._updateTable(outCount, inList, row + 1, col + 1, rowSpan, colSpan);
 	},

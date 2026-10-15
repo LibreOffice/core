@@ -640,6 +640,7 @@ COOL_JS_LST =\
 	src/canvas/sections/HeaderFooterBoundarySection.ts \
 	src/canvas/sections/TooltipAnchorSection.ts \
 	src/layer/marker/ProgressOverlay.js \
+	src/layer/marker/InlineElements.ts \
 	src/layer/marker/TextInput.js \
 	src/layer/marker/A11yTextInput.js \
 	src/geometry/LineUtil.js \

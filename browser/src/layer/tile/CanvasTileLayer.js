@@ -1044,15 +1044,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 						obj.headingLevel,
 						obj.beforeLevels,
 						obj.afterLevels,
-						obj.links,
-						obj.beforeLinks,
-						obj.afterLinks,
-						obj.images,
-						obj.beforeImages,
-						obj.afterImages,
-						obj.comments,
-						obj.beforeComments,
-						obj.afterComments,
+						cool.inlineElements(obj),
 						obj.list);
 				}
 			}
@@ -1091,9 +1083,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				this._map._textInput.setA11yFocusedParagraph(
 					obj.content, parseInt(obj.position), parseInt(obj.start), parseInt(obj.end),
 					obj.before, obj.after, obj.beforeRects, obj.afterRects, obj.headingLevel,
-					obj.beforeLevels, obj.afterLevels, obj.links, obj.beforeLinks, obj.afterLinks,
-					obj.images, obj.beforeImages, obj.afterImages, obj.comments,
-					obj.beforeComments, obj.afterComments, obj.list);
+					obj.beforeLevels, obj.afterLevels, cool.inlineElements(obj), obj.list);
 			}
 			else if (textMsg.startsWith('a11ycaretposition:')) {
 				var pos = textMsg.substring('a11ycaretposition:'.length + 1);
