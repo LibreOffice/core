@@ -16,15 +16,33 @@
  * {
  *     id: 'time',
  *     type: 'time',
- *     text: '01:01:01'
+ *     text: '01:01:01',
+ *     value: 3661000
  * }
+ *
+ * value is the time in milliseconds, text is formatted for the document
+ * locale and not always something the input accepts.
  */
 
 /* global JSDialog */
 
+function timeFieldValue(data: SpinFieldWidgetJSON): string {
+  const ms = Number(data.value);
+  if (!data.text || !Number.isFinite(ms)) return data.text ?? '';
+  const seconds = Math.floor(ms / 1000);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return (
+    pad(Math.floor(seconds / 3600)) +
+    ':' +
+    pad(Math.floor(seconds / 60) % 60) +
+    ':' +
+    pad(seconds % 60)
+  );
+}
+
 JSDialog.timeField = function (
   parentContainer: HTMLElement,
-  data: WidgetJSON,
+  data: SpinFieldWidgetJSON,
   builder: JSBuilder,
 ) {
   const inputTimeField = (
@@ -32,7 +50,7 @@ JSDialog.timeField = function (
       type="time"
       step={1} // forces the display of seconds
       id={data.id}
-      value={data.text}
+      value={timeFieldValue(data)}
       className={builder.options.cssClass + ' ui-timefield'}
       disabled={data.enabled === false}
       onChange={(event: Event & { target: HTMLInputElement }) => {

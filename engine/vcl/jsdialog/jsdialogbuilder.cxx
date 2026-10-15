@@ -20,6 +20,7 @@
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
+#include <vcl/weldutils.hxx>
 #include <verticaltabctrl.hxx>
 #include <messagedialog.hxx>
 #include <tools/json_writer.hxx>
@@ -1524,7 +1525,12 @@ void JSFormattedSpinButton::do_set_text(const OUString& rText)
         return;
 
     disable_notify_events();
-    m_pFmtSpin->SetValueFromString(rText);
+    // A time formatter passes its formatted text, such as 14:05:30. The field shows that text as it
+    // is, and the formatter parses it back into a time.
+    if (dynamic_cast<weld::TimeFormatter*>(&m_pFmtSpin->GetFormatter()))
+        SalInstanceFormattedSpinButton::do_set_text(rText);
+    else
+        m_pFmtSpin->SetValueFromString(rText);
     enable_notify_events();
 
     sendUpdate();
