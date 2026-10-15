@@ -172,6 +172,8 @@
 #define STR_PASSWD_MIN_LEN                      NC_("STR_PASSWD_MIN_LEN", "(Minimum $(MINLEN) characters)")
 #define STR_PASSWD_MIN_LEN1                     NC_("STR_PASSWD_MIN_LEN1", "(Minimum 1 character)")
 #define STR_PASSWD_EMPTY                        NC_("STR_PASSWD_EMPTY", "(The password can be empty)")
+#define STR_PASSWD_SHOW_CHARS                   NC_("STR_PASSWD_SHOW_CHARS", "Show characters")
+#define STR_PASSWD_HIDE_CHARS                   NC_("STR_PASSWD_HIDE_CHARS", "Hide characters")
 #define STR_MODULENOTINSTALLED                  NC_("STR_MODULENOTINSTALLED", "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.")
 
 #define STR_FILTER_NOT_INSTALLED                NC_("STR_FILTER_NOT_INSTALLED", "The selected filter $(FILTER) has not been installed.\nWould you like to do this now?")

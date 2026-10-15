@@ -27,6 +27,17 @@
 #include <vcl/weld.hxx>
 #include <bitmaps.hlst>
 
+namespace
+{
+void lcl_SetPasswordVisible(weld::ToggleButton& rBtn, weld::Entry& rEntry, bool bVisible)
+{
+    rBtn.set_tooltip_text(SfxResId(bVisible ? STR_PASSWD_HIDE_CHARS : STR_PASSWD_SHOW_CHARS));
+    rBtn.set_from_icon_name(bVisible ? RID_SVXBMP_SHOWPASS : RID_SVXBMP_HIDEPASS);
+    rEntry.set_visibility(bVisible);
+    rEntry.grab_focus();
+}
+}
+
 IMPL_LINK_NOARG(SfxPasswordDialog, EditModifyHdl, weld::Entry&, void)
 {
     ModifyHdl();
@@ -149,68 +160,13 @@ IMPL_LINK(SfxPasswordDialog, ShowHdl, weld::Toggleable&, rToggleable, void)
 {
     bool bChecked = rToggleable.get_active();
     if (&rToggleable == m_xBtn1.get())
-    {
-        if (bChecked)
-        {
-            m_xBtn1->set_from_icon_name(RID_SVXBMP_SHOWPASS);
-            m_xPassword1ED->set_visibility(true);
-            m_xPassword1ED->grab_focus();
-        }
-        else
-        {
-            m_xBtn1->set_from_icon_name(RID_SVXBMP_HIDEPASS);
-            m_xPassword1ED->set_visibility(false);
-            m_xPassword1ED->grab_focus();
-        }
-    }
+        lcl_SetPasswordVisible(*m_xBtn1, *m_xPassword1ED, bChecked);
     else if (&rToggleable == m_xBtn2.get())
-    {
-        if (bChecked)
-        {
-            m_xBtn2->set_from_icon_name(RID_SVXBMP_SHOWPASS);
-            m_xConfirm1ED->set_visibility(true);
-            m_xConfirm1ED->grab_focus();
-        }
-        else
-        {
-            m_xBtn2->set_from_icon_name(RID_SVXBMP_HIDEPASS);
-            m_xConfirm1ED->set_visibility(false);
-            m_xConfirm1ED->grab_focus();
-        }
-    }
+        lcl_SetPasswordVisible(*m_xBtn2, *m_xConfirm1ED, bChecked);
     else if (&rToggleable == m_xBtn3.get())
-    {
-        if (bChecked)
-        {
-            m_xBtn3->set_from_icon_name(RID_SVXBMP_SHOWPASS);
-            m_xPassword2ED->set_visibility(true);
-            m_xPassword2ED->grab_focus();
-        }
-        else
-        {
-            m_xBtn3->set_from_icon_name(RID_SVXBMP_HIDEPASS);
-            m_xPassword2ED->set_visibility(false);
-            m_xPassword2ED->grab_focus();
-        }
-    }
+        lcl_SetPasswordVisible(*m_xBtn3, *m_xPassword2ED, bChecked);
     else if (&rToggleable == m_xBtn4.get())
-    {
-        if (bChecked)
-        {
-            m_xBtn4->set_from_icon_name(RID_SVXBMP_SHOWPASS);
-            m_xConfirm2ED->set_visibility(true);
-            m_xConfirm2ED->grab_focus();
-        }
-        else
-        {
-            m_xBtn4->set_from_icon_name(RID_SVXBMP_HIDEPASS);
-            m_xConfirm2ED->set_visibility(false);
-            m_xConfirm2ED->grab_focus();
-        }
-    }
-    else {
-        // should not reach it
-    }
+        lcl_SetPasswordVisible(*m_xBtn4, *m_xConfirm2ED, bChecked);
 }
 
 // CTOR / DTOR -----------------------------------------------------------
