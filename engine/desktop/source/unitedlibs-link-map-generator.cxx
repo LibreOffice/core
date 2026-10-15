@@ -511,8 +511,6 @@ int main()
     line("com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation");
     line("com_sun_star_comp_framework_ResourceMenuController_get_implementation");
     line("framework_LanguageSelectionMenuController_get_implementation");
-    line("framework_DispatchRecorder_get_implementation");
-    line("framework_DispatchRecorderSupplier_get_implementation");
     line("framework_FontMenuController_get_implementation");
     line("framework_FontSizeMenuController_get_implementation");
     line("framework_FooterMenuController_get_implementation");
