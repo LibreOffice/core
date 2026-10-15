@@ -87,41 +87,92 @@ namespace
     geometry states more than this and a difference beyond the cut would otherwise be invisible. */
 constexpr sal_Int32 MAX_VALUE_LEN = 400;
 
-/** How much a number of a given type is allowed to move before it counts as another number. */
+/** How far apart two numbers lie and still count as the same value. */
 enum class Slack
 {
-    /** Anything not stated as one of the number types: a constant group stands for a state, and
-        one step of it is another state. A constant group counts in tens at most, so a number
-        larger than that is a measure written as a whole number and moves like one. */
+    /** A count, a constant or a colour, where one more is a different value. */
     None,
-    /** A length, an integer of twips or hundredths of a millimetre, which a conversion through
-        another unit leaves one off. */
+    /** A measure, which a conversion through another unit leaves one off, and further off the
+        longer it is. */
     Unit,
-    /** A measure carried as a fraction, which a conversion moves by a fraction. */
+    /** A value carried as a fraction, which a conversion moves by a fraction of itself. */
     Fraction
 };
 
 bool numbersEqual(double fLeft, double fRight, Slack eSlack)
 {
-    const double fMagnitude = std::max(std::abs(fLeft), std::abs(fRight));
     if (eSlack == Slack::None)
-        return fLeft == fRight || (fMagnitude >= 100 && std::abs(fLeft - fRight) <= 1.0);
+        return fLeft == fRight;
+    const double fMagnitude = std::max(std::abs(fLeft), std::abs(fRight));
     const double fAllowed
         = eSlack == Slack::Unit ? std::max(1.0, 0.002 * fMagnitude) : 0.002 * fMagnitude;
     return std::abs(fLeft - fRight) <= fAllowed;
 }
 
-/** A value states the type it is of before it states itself, and a value built out of others
-    states the type of each of them, so the type nearest in front of a number is the one it is
-    of. */
-Slack slackOf(std::u16string_view rText, size_t nTypeStart)
+/** Values that measure something. A length written in one unit and read back in another comes
+    back a little moved, and the move grows with the length, because a position carries the
+    rounding of everything in front of it. A point, a size, a rectangle, a matrix, a curve and a
+    crop measure by what they are, whether one of them or a sequence of them; the rest are
+    named. */
+bool measuresSomething(std::u16string_view rValue, std::string_view rName)
 {
+    std::u16string_view aType = rValue;
+    if (aType.starts_with(u'('))
+        aType.remove_prefix(1);
+    while (aType.starts_with(u"[]"))
+        aType.remove_prefix(2);
+    if (aType.starts_with(u"com.sun.star.awt.Point)")
+        || aType.starts_with(u"com.sun.star.awt.Size)")
+        || aType.starts_with(u"com.sun.star.awt.Rectangle)")
+        || aType.starts_with(u"com.sun.star.drawing.HomogenMatrix3)")
+        || aType.starts_with(u"com.sun.star.drawing.PolyPolygonBezierCoords)")
+        || aType.starts_with(u"com.sun.star.text.GraphicCrop)"))
+        return true;
+
+    static const std::set<std::string_view> aMeasured{ "Width",
+                                                       "Height",
+                                                       "RotateAngle",
+                                                       "HoriOrientPosition",
+                                                       "VertOrientPosition",
+                                                       "HoriOrientPositionEMU",
+                                                       "VertOrientPositionEMU",
+                                                       "LeftMargin",
+                                                       "RightMargin",
+                                                       "TopMargin",
+                                                       "BottomMargin",
+                                                       "BorderDistance",
+                                                       "LeftBorderDistance",
+                                                       "RightBorderDistance",
+                                                       "TopBorderDistance",
+                                                       "BottomBorderDistance",
+                                                       "ShadowXDistance",
+                                                       "ShadowYDistance",
+                                                       "FootnoteLineDistance",
+                                                       "FootnoteLineTextDistance",
+                                                       "TableColumnSeparators",
+                                                       "TextLeftDistance",
+                                                       "TextRightDistance",
+                                                       "TextUpperDistance",
+                                                       "TextLowerDistance",
+                                                       "TextMinimumFrameWidth",
+                                                       "TextMinimumFrameHeight",
+                                                       "TextMaximumFrameWidth",
+                                                       "TextMaximumFrameHeight" };
+    return aMeasured.count(rName) != 0;
+}
+
+/** A value states the type it is of before it states itself, and a value built out of others
+    states the type of each of them, so the type nearest in front of a number is the one it is of.
+    The type says how exactly to read a number that measures nothing. */
+Slack slackOf(std::u16string_view rText, size_t nTypeStart, bool bMeasured)
+{
+    if (bMeasured)
+        return Slack::Unit;
     const size_t nEnd = rText.find(u')', nTypeStart);
     if (nEnd == std::u16string_view::npos)
         return Slack::None;
     const std::u16string_view aType = rText.substr(nTypeStart + 1, nEnd - nTypeStart - 1);
-    if (aType == u"long" || aType == u"hyper" || aType == u"unsigned long")
-        return Slack::Unit;
+    // A value carried as a fraction is never written down exactly.
     if (aType == u"float" || aType == u"double")
         return Slack::Fraction;
     return Slack::None;
@@ -696,7 +747,7 @@ struct Diff
 
 /** Compares two values number aware, so that a width converted through another unit and back does
     not read as a difference. */
-bool valuesEqual(std::u16string_view rLeft, std::u16string_view rRight)
+bool valuesEqual(std::u16string_view rLeft, std::u16string_view rRight, bool bMeasured)
 {
     if (rLeft == rRight)
         return true;
@@ -732,7 +783,7 @@ bool valuesEqual(std::u16string_view rLeft, std::u16string_view rRight)
         else if (rLeft[nLeft] == rRight[nRight])
         {
             if (rLeft[nLeft] == '(')
-                eSlack = slackOf(rLeft, nLeft);
+                eSlack = slackOf(rLeft, nLeft, bMeasured);
             ++nLeft;
             ++nRight;
         }
@@ -740,6 +791,14 @@ bool valuesEqual(std::u16string_view rLeft, std::u16string_view rRight)
             return false;
     }
     return nLeft == nLeftLen && nRight == nRightLen;
+}
+
+bool valuesEqual(std::string_view rKey, std::u16string_view rLeft, std::u16string_view rRight)
+{
+    const size_t nAt = rKey.rfind('@');
+    const bool bMeasured
+        = nAt != std::string_view::npos && measuresSomething(rLeft, rKey.substr(nAt + 1));
+    return valuesEqual(rLeft, rRight, bMeasured);
 }
 
 /** Says whether a paragraph or a run that only one side holds tells anything.
@@ -850,8 +909,8 @@ bool paragraphSaysTheSame(const std::map<OString, OUString>& rBefore,
     const auto aRunFirst = rBefore.find(rKey);
     const auto aRunSecond = rAfter.find(rKey);
     return aRunFirst != rBefore.end() && aRunSecond != rAfter.end()
-           && valuesEqual(aRunFirst->second, aFirst->second)
-           && valuesEqual(aRunSecond->second, aSecond->second);
+           && valuesEqual(rKey, aRunFirst->second, aFirst->second)
+           && valuesEqual(rKey, aRunSecond->second, aSecond->second);
 }
 
 std::vector<Diff> compare(const std::map<OString, OUString>& rBefore,
@@ -866,7 +925,7 @@ std::vector<Diff> compare(const std::map<OString, OUString>& rBefore,
             if (sidesCountTheSame(rBefore, rAfter, rEntry.first))
                 aDiffs.push_back({ DiffKind::Lost, rEntry.first, rEntry.second, OUString() });
         }
-        else if (!valuesEqual(rEntry.second, it->second)
+        else if (!valuesEqual(rEntry.first, rEntry.second, it->second)
                  && sidesCountTheSame(rBefore, rAfter, rEntry.first)
                  && !paragraphSaysTheSame(rBefore, rAfter, rEntry.first))
             aDiffs.push_back({ DiffKind::Changed, rEntry.first, rEntry.second, it->second });
