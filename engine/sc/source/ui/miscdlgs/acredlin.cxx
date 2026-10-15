@@ -96,7 +96,7 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     , bNoSelection(false)
     , bHasFilterEntry(false)
     , bUseColor(false)
-    , m_xContentArea(m_xDialog->weld_content_area())
+    , m_xContentArea(m_xBuilder->weld_container(u"container"_ustr))
     , m_xPopup(m_xBuilder->weld_menu(u"calcmenu"_ustr))
     , m_xSortMenu(m_xBuilder->weld_menu(u"calcsortmenu"_ustr))
 {
