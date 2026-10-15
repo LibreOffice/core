@@ -1334,21 +1334,21 @@ label.notebookbar.ui-checkbox-label {
 }
 
 [id^='elements_'][id$='-iconview-list-dropdown'] .ui-iconview {
-	grid-auto-flow: row;
-	grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
-	grid-template-rows: none;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
 	width: max-content;
 	max-width: min(40vw, 640px);
 	overflow-x: hidden;
 }
 
 [id^='elements_'][id$='-iconview-list-dropdown'] .ui-iconview-entry {
-	align-self: center;
+	flex: 0 0 auto;
+	min-width: 72px;
 }
 
 [id^='elements_'][id$='-iconview-list-dropdown'] .ui-iconview-separator {
-	grid-column: 1 / -1;
-	grid-row: auto;
+	flex: 0 0 100%;
 	width: auto;
 	height: 1px;
 	margin: var(--spacing-xs) 0;
