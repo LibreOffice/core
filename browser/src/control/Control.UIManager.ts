@@ -44,7 +44,9 @@ class UIManager extends window.L.Control {
 	mobileWizard: any = null;
 	documentNameInput: any = null;
 	blockedUI: any = false;
-	busyPopupTimer: number | null = null;
+	busyPopupTimer: ReturnType<typeof setTimeout> | null = null;
+	busyPopupShownAt: number | null = null;
+	busyPopupFadeTimer: ReturnType<typeof setTimeout> | null = null;
 	customButtons: any[] = []; // added by WOPI InsertButton
 	hiddenButtons: { [key: string]: boolean } = {};
 	hiddenCommands: { [key: string]: boolean } = {};
@@ -761,34 +763,43 @@ class UIManager extends window.L.Control {
 		if (window.L.Map.versionBar && window.allowUpdateNotification)
 			this.map.addControl(window.L.Map.versionBar);
 
-		var openBusyPopup = (label: string) => {
-			this.busyPopupTimer = window.setTimeout(() => {
-				var json = {
-					id: 'busypopup',
-					jsontype: 'dialog',
-					type: 'modalpopup',
-					children: [
-						{
-							id: 'busycontainer',
-							type: 'container',
-							vertical: 'true',
-							children: [
-								{id: 'busyspinner', type: 'spinnerimg'},
-								{id: 'busylabel', type: 'fixedtext', text: label}
-							]
-						}
-					]
-				};
-				if (app.socket) {
-					var builderCallback = function() { /* Do nothing. */ };
-					app.socket._onMessage({textMsg: 'jsdialog: ' + JSON.stringify(json), callback: builderCallback});
-				}
-			}, 700);
+		const busyPopupOpenDelayMs = 700;
+		const busyPopupMinimumMs = 500;
+
+		var sendBusyPopup = (label: string) => {
+			var json = {
+				id: 'busypopup',
+				jsontype: 'dialog',
+				type: 'modalpopup',
+				children: [
+					{
+						id: 'busycontainer',
+						type: 'container',
+						vertical: 'true',
+						children: [
+							{id: 'busyspinner', type: 'spinnerimg'},
+							{id: 'busylabel', type: 'fixedtext', text: label}
+						]
+					}
+				]
+			};
+			if (app.socket) {
+				var builderCallback = function() { /* Do nothing. */ };
+				app.socket._onMessage({textMsg: 'jsdialog: ' + JSON.stringify(json), callback: builderCallback});
+				if (this.busyPopupShownAt === null)
+					this.busyPopupShownAt = performance.now();
+			}
 		};
 
-		var fadeoutBusyPopup = () => {
-			if (this.busyPopupTimer != null)
-				window.clearTimeout(this.busyPopupTimer);
+		var openBusyPopup = (label: string) => {
+			this.busyPopupTimer = app.timerRegistry.setTimeout('busypopup-open', () => {
+				this.busyPopupTimer = null;
+				sendBusyPopup(label);
+			}, busyPopupOpenDelayMs);
+		};
+
+		var sendBusyPopupFadeout = () => {
+			this.busyPopupShownAt = null;
 			var json = {
 				id: 'busypopup',
 				jsontype: 'dialog',
@@ -799,7 +810,38 @@ class UIManager extends window.L.Control {
 				app.socket._onMessage({textMsg: 'jsdialog: ' + JSON.stringify(json)});
 		};
 
+		var cancelBusyPopupTimers = () => {
+			if (this.busyPopupTimer !== null) {
+				app.timerRegistry.clearTimeout(this.busyPopupTimer);
+				this.busyPopupTimer = null;
+			}
+			if (this.busyPopupFadeTimer !== null) {
+				app.timerRegistry.clearTimeout(this.busyPopupFadeTimer);
+				this.busyPopupFadeTimer = null;
+			}
+		};
+
+		var fadeoutBusyPopup = () => {
+			cancelBusyPopupTimers();
+
+			const shownMs = this.busyPopupShownAt === null ? busyPopupMinimumMs : performance.now() - this.busyPopupShownAt;
+			if (shownMs >= busyPopupMinimumMs) {
+				sendBusyPopupFadeout();
+				return;
+			}
+
+			this.busyPopupFadeTimer = app.timerRegistry.setTimeout('busypopup-minimum', () => {
+				this.busyPopupFadeTimer = null;
+				sendBusyPopupFadeout();
+			}, busyPopupMinimumMs - shownMs);
+		};
+
 		this.map.on('showbusy', (e: any) => {
+			if (this.busyPopupShownAt !== null) {
+				cancelBusyPopupTimers();
+				sendBusyPopup(e.label);
+				return;
+			}
 			fadeoutBusyPopup();
 			openBusyPopup(e.label);
 		});
