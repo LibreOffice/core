@@ -62,6 +62,12 @@
         <api_key desc="Default API key for the AI provider. May be left empty for self-hosted models that do not require authentication." type="string" default=""></api_key>
         <model desc="Default AI model name. For tool use (inspecting and editing the document) the model must support native function/tool calling - e.g. gpt-4o, llama3.1, qwen2.5. Models without it (e.g. base llama3, gemma) can still chat but cannot drive document tools." type="string" default=""></model>
         <image_api_url desc="Default AI image-generation provider base URL (e.g. https://api.openai.com). Leave empty to reuse the text-AI endpoint if the same provider is used. Must support the /v1/images/generations endpoint. While ai.enabled is true, AI requests reach this host without a net.lok_allow entry. Documents that fetch external data from the same host still need one." type="string" default=""></image_api_url>
+        <allowed_hosts desc="Hosts a user may name as their own AI provider, besides the hosts of api_url and image_api_url. Each entry is one host name, matched exactly and ignoring case. The entries shipped here are the built-in providers. Remove one to stop users choosing it, or add the host of another provider. An empty list leaves only api_url and image_api_url. net.lok_allow does not apply to AI requests.">
+            <host desc="The built-in OpenAI provider.">api.openai.com</host>
+            <host desc="The built-in Groq provider.">api.groq.com</host>
+            <host desc="The built-in Together provider.">api.together.xyz</host>
+            <host desc="The built-in Mistral provider.">api.mistral.ai</host>
+        </allowed_hosts>
         <image_api_key desc="Default API key for the image-generation provider. Leave empty to reuse the text-AI key if the same provider is used, or when a self-hosted model needs no authentication." type="string" default=""></image_api_key>
         <image_model desc="Default image-generation model name (e.g. dall-e-3, stable-diffusion-3, flux-schnell)." type="string" default=""></image_model>
         <image_size desc="Default generated image size in WxH pixels (e.g. 1024x1024). Provider-specific - leave empty to let the provider pick." type="string" default=""></image_size>

@@ -2451,8 +2451,8 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
     }
 
     // Ignore the client's baseUrl for non-custom providers so a caller
-    // cannot pair a pre-canned id with an arbitrary url to bypass the KIT
-    // allowlist.
+    // cannot pair a pre-canned id with an arbitrary url to bypass the AI
+    // host allowlist.
     const bool isCustom = provider == "custom";
     if (!isCustom)
     {
@@ -2482,13 +2482,9 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
         return;
     }
 
-    // A built-in provider's host and the hosts of the AI endpoints set in coolwsd.xml are
-    // always allowed; any other host goes through the net.lok_allow allowlist.
-    if (!AIUtil::isPreCannedAIProviderHost(uri.getHost()) &&
-        !AIUtil::isConfiguredAIProviderHost(uri.getHost()) &&
-        HostUtil::isForbiddenKitHost(uri.getHost()))
+    if (!AIUtil::isAllowedAIProviderHost(uri.getHost()))
     {
-        LOG_WRN("Rejected fetch-models request to host not in KIT allowlist ["
+        LOG_WRN("Rejected fetch-models request to a host that is not an allowed AI host ["
                 << Anonymizer::anonymizeUrl(baseUrl) << ']');
         // Use 421 rather than 403 so the browser can tell this local allowlist
         // refusal apart from a genuine 403 forwarded from the upstream provider.

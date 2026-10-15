@@ -16,6 +16,7 @@
 #include <common/ConfigUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/Log.hpp>
+#include <common/Util.hpp>
 
 #include <Poco/Dynamic/Var.h>
 #include <Poco/JSON/Array.h>
@@ -78,7 +79,7 @@ std::string_view preCannedAIProviderBaseUrl(std::string_view id)
     return {};
 }
 
-bool isPreCannedAIProviderHost(std::string_view host)
+static bool isPreCannedAIProviderHost(std::string_view host)
 {
     for (const auto& provider : PreCannedAIProviders)
         if (provider.host == host)
@@ -156,7 +157,7 @@ std::string hostOfBaseUrl(std::string_view baseUrl)
     }
 }
 
-bool isConfiguredAIProviderHost(std::string_view host)
+bool isAllowedAIProviderHost(std::string_view host)
 {
     if (host.empty())
         return false;
@@ -168,6 +169,19 @@ bool isConfiguredAIProviderHost(std::string_view host)
     {
         const std::string url = ConfigUtil::getConfigValue<std::string>(key, "");
         if (!url.empty() && host == hostOfBaseUrl(url))
+            return true;
+    }
+
+    const std::vector<std::string> paths = ConfigUtil::getIndexedKeys("ai.allowed_hosts", "host");
+
+    // A coolwsd.xml from before ai.allowed_hosts existed has no such section, and allows the
+    // built-in providers.
+    if (paths.empty() && !ConfigUtil::has("ai.allowed_hosts"))
+        return isPreCannedAIProviderHost(host);
+
+    for (const std::string& path : paths)
+    {
+        if (host == Util::toLower(ConfigUtil::getString(path, "")))
             return true;
     }
 

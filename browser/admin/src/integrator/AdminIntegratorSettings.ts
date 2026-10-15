@@ -669,7 +669,7 @@ const AI_ERROR_MESSAGES: Record<number, () => string> = {
 	403: () => _('API key lacks permissions'),
 	421: () =>
 		_(
-			"This AI host is not in the server's allowed host list (lok_allow.host). Ask your administrator to permit it.",
+			"This AI host is not in the server's allowed AI host list (ai.allowed_hosts). Ask your administrator to permit it.",
 		),
 	429: () => _('Rate limited - please wait a moment and retry'),
 	500: () => _('API server error - try again later'),

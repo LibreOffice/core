@@ -36,7 +36,6 @@
 #include <wsd/DeckSpec.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/DocumentToolDescriptions.hpp>
-#include <wsd/HostUtil.hpp>
 
 #if !MOBILEAPP
 // The COOL HTTP client stack (http::Session) is server-only; the desktop apps
@@ -1096,12 +1095,9 @@ void AIChatSession::callLLMAPI()
     {
         const std::string host = AIUtil::hostOfBaseUrl(_toolLoop->requestUrl);
 
-        // A built-in provider's host and the hosts of the AI endpoints set in coolwsd.xml are
-        // always allowed; any other host goes through the net.lok_allow allowlist.
-        if (!AIUtil::isPreCannedAIProviderHost(host) && !AIUtil::isConfiguredAIProviderHost(host) &&
-            HostUtil::isForbiddenKitHost(host))
+        if (!AIUtil::isAllowedAIProviderHost(host))
         {
-            LOG_WRN("Rejected AI chat request to host not in KIT allowlist ["
+            LOG_WRN("Rejected AI chat request to a host that is not an allowed AI host ["
                     << Anonymizer::anonymizeUrl(_toolLoop->requestUrl) << ']');
             sendChatError("hostNotAllowed",
                           "Host \"" + host +
@@ -2873,10 +2869,7 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     {
         const std::string host = AIUtil::hostOfBaseUrl(req.requestUrl);
 
-        // A built-in provider's host and the hosts of the AI endpoints set in coolwsd.xml are
-        // always allowed; any other host goes through the net.lok_allow allowlist.
-        if (!AIUtil::isPreCannedAIProviderHost(host) && !AIUtil::isConfiguredAIProviderHost(host) &&
-            HostUtil::isForbiddenKitHost(host))
+        if (!AIUtil::isAllowedAIProviderHost(host))
         {
             req.error =
                 "Host \"" + host + "\" is not in the allowed host list, contact your administrator";

@@ -32,12 +32,6 @@ namespace AIUtil
 /// AI_PROVIDERS in browser/admin/src/integrator/AdminIntegratorSettings.ts.
 std::string_view preCannedAIProviderBaseUrl(std::string_view id);
 
-/// True when the host belongs to one of the built-in AI providers above. These
-/// are fixed public endpoints, so outbound AI requests to them are trusted
-/// without needing an entry in the net.lok_allow host allowlist; a custom
-/// provider's host still goes through that allowlist.
-bool isPreCannedAIProviderHost(std::string_view host);
-
 /// Return the base URL reduced to its bare origin: any trailing slashes and a
 /// single trailing "/v1" segment removed (the "/v1" match is case-insensitive).
 /// An empty input returns empty. This is the canonical form to which a version
@@ -53,9 +47,11 @@ bool buildAIEndpointUri(std::string_view baseUrl, std::string_view versionPath, 
 /// that is empty, unparseable, or has no host part gives an empty string.
 std::string hostOfBaseUrl(std::string_view baseUrl);
 
-/// Whether the host is the host of ai.api_url or ai.image_api_url in coolwsd.xml. False for an
-/// empty host, and false for every host while ai.enabled is false.
-bool isConfiguredAIProviderHost(std::string_view host);
+/// Whether the host is the host of ai.api_url or ai.image_api_url in coolwsd.xml, or one of the
+/// names in ai.allowed_hosts, compared ignoring case. With no ai.allowed_hosts section at all, the
+/// built-in providers' hosts are the list. False for an empty host, and false for every host while
+/// ai.enabled is false.
+bool isAllowedAIProviderHost(std::string_view host);
 
 /// One command of the Impress SlideCommands vocabulary. The table behind
 /// getSlideCommands() is the single source of truth for the vocabulary.
