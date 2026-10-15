@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <svl/lstner.hxx>
+#include <svl/undo.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/customweld.hxx>
@@ -49,8 +50,11 @@ private:
     DECL_LINK(ElementClickHandler, const OUString&, void);
 
     SmViewShell* GetView() const;
+    void ShowCategory(int nCategory);
 
     const SfxBindings& mrBindings;
+    /// the view whose element category this panel shares with its Formula tab
+    ViewShellId mnViewId = ViewShellId(-1);
 
     std::unique_ptr<weld::ComboBox> mxCategoryList;
     std::unique_ptr<SmElementsControl> mxElementsControl;

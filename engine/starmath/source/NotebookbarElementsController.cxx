@@ -35,12 +35,14 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/kit/componenthelpers.hxx>
+#include <sfx2/sidebar/SidebarController.hxx>
 #include <svl/hint.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <svl/itemset.hxx>
 #include <svl/lstner.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/EnumContext.hxx>
+#include <vcl/jsdialog/executor.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
 
@@ -52,6 +54,7 @@
 #include <strings.hrc>
 #include <view.hxx>
 
+#include <map>
 #include <memory>
 #include <set>
 #include <vector>
@@ -65,6 +68,64 @@ std::set<ViewShellId>& ElementsHosts()
 {
     static std::set<ViewShellId> aHosts;
     return aHosts;
+}
+
+std::map<ViewShellId, int>& LastCategories()
+{
+    static std::map<ViewShellId, int> aCategories;
+    return aCategories;
+}
+
+struct CategoryFollower
+{
+    ViewShellId mnViewId;
+    std::function<void(int)> maFollow;
+};
+
+std::map<const void*, CategoryFollower>& CategoryFollowers()
+{
+    static std::map<const void*, CategoryFollower> aFollowers;
+    return aFollowers;
+}
+
+/** Points the sidebar of the host view at the formula edited in place in it,
+    which shows the Elements deck, or back at the host document.
+
+    The sidebar follows the context of every controller it listens to, and a
+    listener added to a controller is told its current context straight away. */
+void PointSidebarAt(SfxViewShell& rHostView, SmViewShell& rFormulaView, bool bFormula)
+{
+    sfx2::sidebar::SidebarController* pSidebar
+        = sfx2::sidebar::SidebarController::GetSidebarControllerForView(&rHostView);
+    if (!pSidebar)
+        return;
+
+    const uno::Reference<frame::XController> xFormula = rFormulaView.GetController();
+    const uno::Reference<frame::XController> xHost = rHostView.GetController();
+    const uno::Reference<ui::XContextChangeEventListener> xListener(pSidebar);
+    try
+    {
+        const uno::Reference<ui::XContextChangeEventMultiplexer> xMultiplexer
+            = css::ui::ContextChangeEventMultiplexer::get(comphelper::getProcessComponentContext());
+        if (!bFormula)
+            xMultiplexer->removeContextChangeEventListener(xListener, xFormula);
+
+        const uno::Reference<frame::XController>& xFocus = bFormula ? xFormula : xHost;
+        xMultiplexer->removeContextChangeEventListener(xListener, xFocus);
+        xMultiplexer->addContextChangeEventListener(xListener, xFocus);
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("starmath", "cannot move the sidebar to the formula context");
+        return;
+    }
+
+    SfxViewShell& rFocusView = bFormula ? static_cast<SfxViewShell&>(rFormulaView) : rHostView;
+    if (SfxObjectShell* pDocShell = rFocusView.GetObjectShell())
+        pSidebar->updateModel(pDocShell->GetModel());
+
+    if (comphelper::COKit::isActive())
+        jsdialog::SendSidebarForView(reinterpret_cast<sal_uInt64>(&rHostView));
 }
 
 /// The group sections of notebookbarelements_math.ui: enough for the category
@@ -252,7 +313,22 @@ void NotebookbarElementsController::notifyContextChangeEvent(
 
 IMPL_LINK(NotebookbarElementsController, InFormulaTabToggledHdl, weld::Toggleable&, rButton, void)
 {
-    sm::notebookbar::SetHostsElements(mnHostViewId, rButton.get_active());
+    const bool bInFormulaTab = rButton.get_active();
+    sm::notebookbar::SetHostsElements(mnHostViewId, bInFormulaTab);
+
+    SmViewShell* pFormulaView = GetView();
+    if (!pFormulaView || !mpBindings || !mpBindings->GetDispatcher()
+        || !mpBindings->GetDispatcher()->GetFrame())
+        return;
+
+    SfxViewShell* pHostView = mpBindings->GetDispatcher()->GetFrame()->GetViewShell();
+    if (!pHostView || pHostView == pFormulaView)
+        return;
+
+    if (bInFormulaTab && maElementsControls.empty())
+        BuildElements();
+
+    PointSidebarAt(*pHostView, *pFormulaView, !bInFormulaTab);
 }
 
 IMPL_LINK_NOARG(NotebookbarElementsController, FormulaEnteredHdl, void*, void)
@@ -287,8 +363,17 @@ void NotebookbarElementsController::BuildElements()
 
     mxCategoryList->connect_changed(
         LINK(this, NotebookbarElementsController, CategorySelectedHandle));
-    mxCategoryList->set_active(0);
-    ShowCategory(0, false);
+
+    // The Formula tab is welded anew on UI change
+    const int nCategory = sm::notebookbar::GetCategory(mnHostViewId);
+    mxCategoryList->set_active(nCategory);
+
+    for (int i = SmElementsControl::groupCount(nCategory); i < nElementGroups; ++i)
+    {
+        if (maGroupSections[i])
+            maGroupSections[i]->show();
+    }
+    ShowCategory(nCategory, false);
 }
 
 void NotebookbarElementsController::ShowCategory(int nCategory, bool bForceBuild)
@@ -325,6 +410,7 @@ void NotebookbarElementsController::Notify(SfxBroadcaster&, const SfxHint& rHint
         return;
 
     mxCategoryList->set_active_text(SmResId(RID_CATEGORY_USERDEFINED));
+    sm::notebookbar::SetCategory(mnHostViewId, mxCategoryList->get_active());
     ShowCategory(mxCategoryList->get_active(), true);
 }
 
@@ -334,6 +420,7 @@ IMPL_LINK(NotebookbarElementsController, CategorySelectedHandle, weld::ComboBox&
     if (nActive == -1)
         return;
 
+    sm::notebookbar::SetCategory(mnHostViewId, nActive);
     ShowCategory(nActive, false);
 }
 
@@ -388,6 +475,35 @@ void SetHostsElements(ViewShellId nViewId, bool bHosts)
     else
         ElementsHosts().erase(nViewId);
 }
+
+int GetCategory(ViewShellId nViewId)
+{
+    const auto it = LastCategories().find(nViewId);
+    if (it == LastCategories().end() || it->second < 0
+        || o3tl::make_unsigned(it->second) >= SmElementsControl::categories().size())
+        return 0;
+    return it->second;
+}
+
+void SetCategory(ViewShellId nViewId, int nCategory)
+{
+    if (nViewId == ViewShellId(-1))
+        return;
+
+    LastCategories()[nViewId] = nCategory;
+    for (const auto& [pOwner, rFollower] : CategoryFollowers())
+    {
+        if (rFollower.mnViewId == nViewId)
+            rFollower.maFollow(nCategory);
+    }
+}
+
+void FollowCategory(const void* pOwner, ViewShellId nViewId, std::function<void(int)> aFollow)
+{
+    CategoryFollowers()[pOwner] = { nViewId, std::move(aFollow) };
+}
+
+void UnfollowCategory(const void* pOwner) { CategoryFollowers().erase(pOwner); }
 
 SfxViewShell* GetHostView(const cpo::uno::Reference<css::frame::XFrame>& xFrame)
 {

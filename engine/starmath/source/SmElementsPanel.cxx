@@ -27,6 +27,7 @@
 #include <svl/hint.hxx>
 
 #include "SmElementsPanel.hxx"
+#include <NotebookbarElements.hxx>
 #include <starmath.hrc>
 #include <smmod.hxx>
 #include <strings.hrc>
@@ -56,10 +57,15 @@ SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBind
     mxCategoryList->set_size_request(-1, -1);
 
     mxCategoryList->connect_changed(LINK(this, SmElementsPanel, CategorySelectedHandle));
-    mxCategoryList->set_active(0);
-
-    mxElementsControl->setElementSetIndex(0);
     mxElementsControl->SetSelectHdl(LINK(this, SmElementsPanel, ElementClickHandler));
+
+    if (const SfxViewShell* pView = mrBindings.GetDispatcher()->GetFrame()->GetViewShell())
+        mnViewId = pView->GetViewShellId();
+    ShowCategory(sm::notebookbar::GetCategory(mnViewId));
+    sm::notebookbar::FollowCategory(this, mnViewId, [this](int nCategory) {
+        if (mxCategoryList->get_active() != nCategory)
+            ShowCategory(nCategory);
+    });
 
     SmViewShell* pViewSh = GetView();
     SAL_WARN_IF(pViewSh, "starmath", "No View for SmElementsPanel to listen to");
@@ -69,6 +75,7 @@ SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBind
 
 SmElementsPanel::~SmElementsPanel()
 {
+    sm::notebookbar::UnfollowCategory(this);
     mxElementsControl.reset();
     mxCategoryList.reset();
 }
@@ -79,6 +86,7 @@ void SmElementsPanel::Notify(SfxBroadcaster&, const SfxHint& rHint)
     {
         mxCategoryList->set_active_text(SmResId(RID_CATEGORY_USERDEFINED));
         mxElementsControl->setElementSetIndex(mxCategoryList->get_active(), true);
+        sm::notebookbar::SetCategory(mnViewId, mxCategoryList->get_active());
     }
 }
 
@@ -87,15 +95,20 @@ IMPL_LINK(SmElementsPanel, CategorySelectedHandle, weld::ComboBox&, rList, void)
     const int nActive = rList.get_active();
     if (nActive == -1)
         return;
-    mxElementsControl->setElementSetIndex(nActive);
+    ShowCategory(nActive);
+    sm::notebookbar::SetCategory(mnViewId, nActive);
+}
+
+void SmElementsPanel::ShowCategory(int nCategory)
+{
+    mxCategoryList->set_active(nCategory);
+    mxElementsControl->setElementSetIndex(nCategory);
     if (SmViewShell* pViewSh = GetView())
         mxElementsControl->setSmSyntaxVersion(pViewSh->GetDoc()->GetSmSyntaxVersion());
 
     // If the "User-defined" category is selected, allow deletion
-    if (mxCategoryList->get_active_text() == SmResId(RID_CATEGORY_USERDEFINED))
-        mxElementsControl->SetAllowDelete(true);
-    else
-        mxElementsControl->SetAllowDelete(false);
+    mxElementsControl->SetAllowDelete(SmElementsControl::categories()[nCategory]
+                                      == RID_CATEGORY_USERDEFINED);
 }
 
 IMPL_LINK(SmElementsPanel, ElementClickHandler, const OUString&, ElementSource, void)
