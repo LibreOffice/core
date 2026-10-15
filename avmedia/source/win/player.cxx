@@ -425,7 +425,19 @@ HRESULT Player::InitializeWindow(bool bAddSoundWindow)
 void SAL_CALL Player::start(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if( g_pPlayer )
+    if (!g_pPlayer)
+    {
+        // tdf#169697: Initialize the player for background sounds.
+        // Part of this work happens in the Windows event loop, so use auto playback
+        // instead of changing the uninitialized player state here.
+        if (SUCCEEDED(InitializeWindow(/*bAddSoundWindow*/ false)))
+        {
+            setAutoPlayBack(true);
+        }
+
+        return;
+    }
+    else
     {
         HRESULT hr = S_OK;
         if (g_bHasVideo || g_bHasAudio)
