@@ -33,5 +33,6 @@ foreach my $member ( $zip->members() ) {
 # file to the original name, should be atomic enough, esp. given that some recipes create zipfiles
 # in multiple steps and are more prone to errors in case the build is killed midway.
 $zip->overwrite() == Archive::Zip::AZ_OK or die "Error writing file $zip_file ($!)\n";
+chmod 0644, $zip_file;
 
 # vim: set noet sw=4 ts=4:
