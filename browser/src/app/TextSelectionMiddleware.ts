@@ -56,12 +56,28 @@ class TextSelections {
 
 		this.active = true;
 		app.map.fire('textselectionchange', { active: this.active });
+		this.refreshHandles();
+	}
 
-		if (this.startRectangle && this.endRectangle) {
-			this.start.setShowSection(true);
-			this.end.setShowSection(true);
-			this.updateMarkers();
-		}
+	// While a formula reference is active the cell handles stand in for the text handles.
+	private static handlesWanted(): boolean {
+		return (
+			this.active &&
+			this.startRectangle !== null &&
+			this.endRectangle !== null &&
+			app.map._docLayer.getActiveReferenceRectangle() === null
+		);
+	}
+
+	public static refreshHandles() {
+		if (!this.start) return;
+
+		const shown = this.handlesWanted();
+		this.start.setShowSection(shown);
+		this.end.setShowSection(shown);
+
+		if (shown) this.updateMarkers();
+		else app.sectionContainer.requestReDraw();
 	}
 
 	public static isActive(): boolean {

@@ -968,6 +968,37 @@ void ScModelObj::setTextSelection(COKitSetTextSelectionType eType, int nX, int n
 
     bool bHandled = false;
 
+    ScRange aReference;
+    if (eType != COKitSetTextSelectionType::RESET && pInputHandler
+        && pInputHandler->GetActiveReference(aReference))
+    {
+        // The cell handles sit on the selected reference. Move its corner to the cell at the point.
+        SCCOL nCol;
+        SCROW nRow;
+        pViewData->GetPosFromPixel(nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY(),
+                                   pViewData->GetActivePart(), nCol, nRow);
+
+        ScAddress& rCorner = eType == COKitSetTextSelectionType::START ? aReference.aStart
+                                                                         : aReference.aEnd;
+        // Most moves of a drag stay in the same cell.
+        if (rCorner.Col() == nCol && rCorner.Row() == nRow)
+            return;
+
+        rCorner.SetCol(nCol);
+        rCorner.SetRow(nRow);
+        aReference.PutInOrder();
+
+        // Keep the ref range of the view in step with the reference.
+        pViewData->SetRefStart(aReference.aStart.Col(), aReference.aStart.Row(),
+                               aReference.aStart.Tab());
+        pViewData->SetRefEnd(aReference.aEnd.Col(), aReference.aEnd.Row(),
+                             aReference.aEnd.Tab());
+
+        pInputHandler->SetReference(aReference, pViewData->GetDocument());
+        pInputHandler->UpdateKitReferenceMarks();
+        return;
+    }
+
     if (pInputHandler && pInputHandler->IsInputMode())
     {
         // forwarding to editeng - we are editing the cell content

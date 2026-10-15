@@ -333,7 +333,12 @@ void ScInputHandler::SendReferenceMarks( const SfxViewShell* pViewShell,
                << rReferenceMarks[i].nWidth << ", "
                << rReferenceMarks[i].nHeight << "\", "
                   "\"color\": \"" << rReferenceMarks[i].aColor.AsRGBHexString() << "\", "
-                  "\"part\": \"" << rReferenceMarks[i].nTab << "\" } ";
+                  "\"part\": \"" << rReferenceMarks[i].nTab << "\"";
+
+            if ( rReferenceMarks[i].bActive )
+                ss << ", \"active\": \"true\"";
+
+            ss << " } ";
 
             bSend = true;
         }
@@ -639,6 +644,15 @@ ReferenceMark ScInputHandler::GetReferenceMark( const ScViewData& rViewData, ScD
                                           rColor );
 }
 
+bool ScInputHandler::GetActiveReference( ScRange& rRange ) const
+{
+    if (!bSelIsRef || !aSelectedReference.IsValid())
+        return false;
+
+    rRange = aSelectedReference;
+    return true;
+}
+
 void ScInputHandler::UpdateKitReferenceMarks()
 {
     if ( !comphelper::COKit::isActive())
@@ -663,6 +677,9 @@ void ScInputHandler::UpdateKitReferenceMarks()
     sal_uInt16 nAdditionalMarks = 0;
     std::vector<ReferenceMark> aReferenceMarks( 1 );
 
+    ScRange aActiveRange;
+    const bool bHasActiveRange = GetActiveReference( aActiveRange );
+
     if (bRefMark)
     {
         nAdditionalMarks = 1;
@@ -684,6 +701,9 @@ void ScInputHandler::UpdateKitReferenceMarks()
         aReferenceMarks[0] = ScInputHandler::GetReferenceMark( rViewData, *pDocSh,
                                                    nX1, nX2, nY1, nY2,
                                                    nTab, aRefColor );
+        // The view keeps the ref range after the pick, so it is active only while its text
+        // is still selected.
+        aReferenceMarks[0].bActive = bHasActiveRange;
     }
 
     sal_uInt16 nCount = pRangeFinder ?
@@ -708,6 +728,9 @@ void ScInputHandler::UpdateKitReferenceMarks()
             aReferenceMarks[i + nAdditionalMarks] = ScInputHandler::GetReferenceMark( rViewData, *pDocSh,
                                                                           nX1, nX2, nY1, nY2,
                                                                           nTab, rData.nColor );
+
+            aReferenceMarks[i + nAdditionalMarks].bActive =
+                !bRefMark && bHasActiveRange && aRef == aActiveRange;
 
             ScInputHandler::SendReferenceMarks( pShell, aReferenceMarks );
         }
@@ -937,6 +960,7 @@ ScInputHandler::ScInputHandler()
         nFormSelEnd( 0 ),
         nCellPercentFormatDecSep( 0 ),
         nAutoPar( 0 ),
+        aSelectedReference( ScAddress::INITIALIZE_INVALID ),
         eMode( SC_INPUT_NONE ),
         bUseTab( false ),
         bTextValid( true ),
@@ -2976,6 +3000,8 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
     if (bSetModified)
         bModified = true;
     bSelIsRef = false;
+    // The edited text is no longer the picked reference.
+    aSelectedReference = ScRange( ScAddress::INITIALIZE_INVALID );
 
     if ( pRangeFindList && !bInRangeUpdate )
         RemoveRangeFinder(); // Delete attributes and labels
@@ -3161,6 +3187,17 @@ void ScInputHandler::RemoveSelection()
         pTableView->SetSelection( aSel );
     if (pTopView)
         pTopView->SetSelection( aSel );
+}
+
+void ScInputHandler::RemoveReferenceSelection()
+{
+    if (!bSelIsRef)
+        return;
+
+    RemoveSelection();
+    bSelIsRef = false;
+    // Resend the marks so that none of them is active.
+    UpdateKitReferenceMarks();
 }
 
 void ScInputHandler::InvalidateAttribs()
@@ -3998,6 +4035,8 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
     }
 
     bSelIsRef = true;
+    // A reference into another document has no range in this one.
+    aSelectedReference = bOtherDoc ? ScRange( ScAddress::INITIALIZE_INVALID ) : rRef;
 }
 
 void ScInputHandler::InsertFunction( const OUString& rFuncName, bool bAddPar )
@@ -4220,11 +4259,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
         HideTip();
         HideTipBelow();
 
-        if (bSelIsRef)
-        {
-            RemoveSelection();
-            bSelIsRef = false;
-        }
+        RemoveReferenceSelection();
 
         UpdateActiveView();
         bool bNewView = DataChanging( nChar );
@@ -4457,11 +4492,7 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
         HideTip();
         HideTipBelow();
 
-        if ( bSelIsRef )
-        {
-            RemoveSelection();
-            bSelIsRef = false;
-        }
+        RemoveReferenceSelection();
 
         UpdateActiveView();
         bool bNewView = DataChanging( 0, true );

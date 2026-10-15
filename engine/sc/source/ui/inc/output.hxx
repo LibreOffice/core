@@ -111,6 +111,8 @@ struct ReferenceMark {
     tools::Long nHeight;
     tools::Long nTab;
     Color aColor;
+    /// True for the reference whose text is selected in the formula being edited.
+    bool bActive = false;
 
     ReferenceMark()
         : nX( 0 )

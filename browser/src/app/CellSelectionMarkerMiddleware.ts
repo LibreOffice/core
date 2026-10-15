@@ -27,22 +27,34 @@ class CellSelectionMarkers {
 		app.sectionContainer.addSection(this.end);
 	}
 
+	// The range the handles sit on, in tile twips: the active formula reference, else the cell
+	// selection, else the cell cursor. Null hides the handles.
+	private static markedRectangle(): cool.SimpleRectangle | null {
+		const docLayer = app.map._docLayer;
+
+		const reference = docLayer.getActiveReferenceRectangle();
+		if (reference) return reference.clone();
+
+		if (docLayer._cellSelectionArea) return docLayer._cellSelectionArea.clone();
+
+		if (app.calc.cellCursorVisible) {
+			Util.ensureValue(app.calc.cellCursorRectangle);
+			return app.calc.cellCursorRectangle.clone();
+		}
+
+		return null;
+	}
+
 	public static update() {
 		if (window.mode.isDesktop()) return; // Not shown on desktop.
 
 		if (!this.initiated) return;
 
-		var showMarkers =
-			app.map._docLayer._cellSelectionArea || app.calc.cellCursorVisible;
+		const cellRectangle = this.markedRectangle();
 
-		if (showMarkers) {
+		if (cellRectangle) {
 			this.start.setShowSection(true);
 			this.end.setShowSection(true);
-
-			Util.ensureValue(app.calc.cellCursorRectangle);
-			var cellRectangle = app.map._docLayer._cellSelectionArea
-				? app.map._docLayer._cellSelectionArea.clone()
-				: app.calc.cellCursorRectangle.clone();
 
 			const posStart = new cool.SimplePoint(cellRectangle.x1, cellRectangle.y1);
 			const posEnd = new cool.SimplePoint(cellRectangle.x2, cellRectangle.y2);

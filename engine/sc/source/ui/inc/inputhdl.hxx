@@ -95,6 +95,8 @@ private:
     sal_uInt16              nAutoPar;                   // autom.parentheses than can be overwritten
 
     ScAddress               aCursorPos;
+    /// The reference last picked into the edited formula. Invalid for another document.
+    ScRange                 aSelectedReference;
     ScInputMode             eMode;
     bool                    bUseTab:1;                    // Scrolling possible
     bool                    bTextValid:1;                 // Text is not in edit engine
@@ -162,6 +164,7 @@ private:
     void            RemoveURLFieldsFromEditEngine();
     void            RestoreURLFieldsInEditEngine();
     void            RemoveSelection();
+    void            RemoveReferenceSelection();
     bool            StartsLikeFormula( std::u16string_view rStr ) const;
     void            UpdateFormulaMode();
     static void     InvalidateAttribs();
@@ -310,6 +313,8 @@ public:
     void            InitRangeFinder(const OUString& rFormula);
 
     void            UpdateKitReferenceMarks();
+    /// The picked reference, while its text is the selection of the edited formula.
+    bool            GetActiveReference( ScRange& rRange ) const;
     static void     SendReferenceMarks( const SfxViewShell* pViewShell,
                          const std::vector<ReferenceMark>& rReferenceMarks );
 

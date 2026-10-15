@@ -2440,9 +2440,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 	},
 
-	// Build the list of {mark, part} references from the marks array of a referencemarks
-	// payload. Each mark becomes a CPolygon that fills the cell range with a translucent
-	// highlight.
+	// Build the list of {mark, part, rectangle, active} references from the marks array of a
+	// referencemarks payload. Each mark becomes a CPolygon that fills the cell range with a
+	// translucent highlight. Active is set on the reference selected in the edited formula.
 	_marksToReferences: function (marks) {
 		var references = [];
 
@@ -2453,6 +2453,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 			if (strTwips != null) {
 				var rectangles = [];
+				var rectangle = null;
 				for (var i = 0; i < strTwips.length; i += 4) {
 					var topLeftTwips = new cool.Point(parseInt(strTwips[i]), parseInt(strTwips[i + 1]));
 					var offset = new cool.Point(parseInt(strTwips[i + 2]), parseInt(strTwips[i + 3]));
@@ -2460,6 +2461,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 						new cool.Bounds(topLeftTwips, topLeftTwips.add(offset)));
 					rectangles.push([boundsTwips.getBottomLeft(), boundsTwips.getBottomRight(),
 						boundsTwips.getTopLeft(), boundsTwips.getTopRight()]);
+					if (!rectangle)
+						rectangle = new cool.SimpleRectangle(boundsTwips.min.x, boundsTwips.min.y,
+							boundsTwips.max.x - boundsTwips.min.x, boundsTwips.max.y - boundsTwips.min.y);
 				}
 
 				var docLayer = this;
@@ -2475,11 +2479,29 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 					weight: 2 * app.dpiScale,
 					opacity: 0.25});
 
-				references.push({mark: reference, part: part});
+				references.push({mark: reference, part: part, rectangle: rectangle,
+					active: marks[mark].active === 'true'});
 			}
 		}
 
 		return references;
+	},
+
+	_activeReference: function () {
+		if (!this._referencesAll)
+			return null;
+
+		for (var i = 0; i < this._referencesAll.length; i++) {
+			if (this._referencesAll[i].active)
+				return this._referencesAll[i];
+		}
+
+		return null;
+	},
+
+	getActiveReferenceRectangle: function () {
+		var reference = this._activeReference();
+		return reference && reference.part === this._selectedPart ? reference.rectangle : null;
 	},
 
 	_onReferencesMsg: function (textMsg) {
@@ -2487,6 +2509,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		var marks = JSON.parse(textMsg);
 		this._referencesAll = this._marksToReferences(marks.marks);
 		this._updateReferenceMarks();
+		CellSelectionMarkers.update();
+		TextSelections.refreshHandles();
 	},
 
 	_getStringPart: function (string) {
@@ -2803,6 +2827,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
             this._referencesAll = this._referencesAll.filter(function(e) { return e.type !== 'focuscell' });
 
 		this._updateReferenceMarks();
+		CellSelectionMarkers.update();
+		TextSelections.refreshHandles();
 	},
 
 	_postMouseEvent: function(type, x, y, count, buttons, modifier) {
