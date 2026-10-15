@@ -17,7 +17,7 @@
 #error(this should only be compiled when in ENABLE_UNITEDLIBS)
 #endif
 
-#if defined(LINUX)
+#if defined(LINUX) || defined(MACOSX)
 
 // This function runs automatically when the library is loaded.
 // [-loplugin:external] [-loplugin:unreffun]

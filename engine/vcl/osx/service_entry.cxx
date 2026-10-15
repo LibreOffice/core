@@ -63,7 +63,7 @@ AquaSalInstance::ImplCreateDragSource(const SystemEnvData& rSysEnv)
 cpo::uno::Reference<css::datatransfer::dnd::XDropTarget>
 AquaSalInstance::ImplCreateDropTarget(const SystemEnvData& rSysEnv)
 {
-    rtl::Reference<DropTarget> xDropTarget = new DropTarget();
+    rtl::Reference<AquaDropTarget> xDropTarget = new AquaDropTarget();
     vcl::OleDnDHelper(xDropTarget, reinterpret_cast<sal_IntPtr>(rSysEnv.mpNSView),
                       vcl::DragOrDrop::Drop);
     return xDropTarget;

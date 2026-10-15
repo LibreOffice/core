@@ -66,7 +66,7 @@ namespace /* private */
 
 @implementation DropTargetHelper
 
--(DropTargetHelper*)initWithDropTarget:(DropTarget*)pdt
+-(DropTargetHelper*)initWithDropTarget:(AquaDropTarget*)pdt
 {
     self = [super init];
 
@@ -96,7 +96,7 @@ namespace /* private */
 -(BOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender
 {
     (void) sender;
-    return DropTarget::prepareForDragOperation();
+    return AquaDropTarget::prepareForDragOperation();
 }
 
 -(BOOL)performDragOperation:(id <NSDraggingInfo>)sender
@@ -112,7 +112,7 @@ namespace /* private */
 
 @end
 
-DropTarget::DropTarget() :
+AquaDropTarget::AquaDropTarget() :
     WeakComponentImplHelper<XInitialization, XDropTarget, XDropTargetDragContext, XDropTargetDropContext, XServiceInfo>(m_aMutex),
     mView(nil),
     mpFrame(nullptr),
@@ -125,14 +125,14 @@ DropTarget::DropTarget() :
     mDataFlavorMapper = std::make_shared<DataFlavorMapper>();
 }
 
-DropTarget::~DropTarget()
+AquaDropTarget::~AquaDropTarget()
 {
     if( AquaSalFrame::isAlive( mpFrame ) )
         [static_cast<id <DraggingDestinationHandler>>(mView) unregisterDraggingDestinationHandler:mDropTargetHelper];
     [mDropTargetHelper release];
 }
 
-sal_Int8 DropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
+sal_Int8 AquaDropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
 {
     sal_Int8 dropAct = dropActions;
     bool srcAndDestEqual = false;
@@ -183,7 +183,7 @@ sal_Int8 DropTarget::determineDropAction(sal_Int8 dropActions, id sender) const
     return dropAct;
 }
 
-NSDragOperation DropTarget::draggingEntered(id sender)
+NSDragOperation AquaDropTarget::draggingEntered(id sender)
 {
     // Initially when DnD will be started no modifier key can be pressed yet
     // thus we are getting all actions that the drag source supports, we save
@@ -229,7 +229,7 @@ NSDragOperation DropTarget::draggingEntered(id sender)
     return OfficeToSystemDragActions(mSelectedDropAction);
 }
 
-NSDragOperation DropTarget::draggingUpdated(id sender)
+NSDragOperation AquaDropTarget::draggingUpdated(id sender)
 {
     sal_Int8 currentDragSourceActions =
     SystemToOfficeDragActions([sender draggingSourceOperationMask]);
@@ -277,7 +277,7 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
     return dragOp;
 }
 
-void DropTarget::draggingExited(id /*sender*/)
+void AquaDropTarget::draggingExited(id /*sender*/)
 {
     DropTargetEvent dte(getXWeak(), 0);
     fire_dragExit(dte);
@@ -286,12 +286,12 @@ void DropTarget::draggingExited(id /*sender*/)
     [[NSCursor arrowCursor] set];
 }
 
-BOOL DropTarget::prepareForDragOperation()
+BOOL AquaDropTarget::prepareForDragOperation()
 {
     return true;
 }
 
-BOOL DropTarget::performDragOperation()
+BOOL AquaDropTarget::performDragOperation()
 {
     bool bSuccess = false;
 
@@ -332,7 +332,7 @@ BOOL DropTarget::performDragOperation()
     return bSuccess;
 }
 
-void DropTarget::concludeDragOperation(id /*sender*/)
+void AquaDropTarget::concludeDragOperation(id /*sender*/)
 {
     mDragSourceSupportedActions = DNDConstants::ACTION_NONE;
     mSelectedDropAction = DNDConstants::ACTION_NONE;
@@ -343,11 +343,11 @@ void DropTarget::concludeDragOperation(id /*sender*/)
 // called from WeakComponentImplHelperX::dispose
 // WeakComponentImplHelper calls disposing before it destroys
 // itself.
-void DropTarget::disposing()
+void AquaDropTarget::disposing()
 {
 }
 
-void DropTarget::initialize(const Sequence< Any >& aArguments)
+void AquaDropTarget::initialize(const Sequence< Any >& aArguments)
 {
     if (aArguments.getLength() < 2)
     {
@@ -382,58 +382,58 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 }
 
-void DropTarget::addDropTargetListener(const uno::Reference<XDropTargetListener>& dtl)
+void AquaDropTarget::addDropTargetListener(const uno::Reference<XDropTargetListener>& dtl)
 {
     rBHelper.addListener(cppu::UnoType<decltype(dtl)>::get(), dtl);
 }
 
-void DropTarget::removeDropTargetListener(const uno::Reference<XDropTargetListener>& dtl)
+void AquaDropTarget::removeDropTargetListener(const uno::Reference<XDropTargetListener>& dtl)
 {
     rBHelper.removeListener(cppu::UnoType<decltype(dtl)>::get(), dtl);
 }
 
-bool DropTarget::isActive(  )
+bool AquaDropTarget::isActive(  )
 {
     return mbActive;
 }
 
-void DropTarget::setActive(bool active)
+void AquaDropTarget::setActive(bool active)
 {
     mbActive = active;
 }
 
-sal_Int8 DropTarget::getDefaultActions()
+sal_Int8 AquaDropTarget::getDefaultActions()
 {
     return mDefaultActions;
 }
 
-void DropTarget::setDefaultActions(sal_Int8 actions)
+void AquaDropTarget::setDefaultActions(sal_Int8 actions)
 {
     OSL_ENSURE( actions < 8, "No valid default actions");
     mDefaultActions= actions;
 }
 
-void DropTarget::acceptDrag(sal_Int8 dragOperation)
+void AquaDropTarget::acceptDrag(sal_Int8 dragOperation)
 {
     mSelectedDropAction = dragOperation;
 }
 
-void DropTarget::rejectDrag()
+void AquaDropTarget::rejectDrag()
 {
     mSelectedDropAction = DNDConstants::ACTION_NONE;
 }
 
-void DropTarget::acceptDrop(sal_Int8 dropOperation)
+void AquaDropTarget::acceptDrop(sal_Int8 dropOperation)
 {
     mSelectedDropAction = dropOperation;
 }
 
-void DropTarget::rejectDrop()
+void AquaDropTarget::rejectDrop()
 {
     mSelectedDropAction = DNDConstants::ACTION_NONE;
 }
 
-void DropTarget::dropComplete(bool success)
+void AquaDropTarget::dropComplete(bool success)
 {
     // Reset the internal transferable used as shortcut in case this is
     // an internal D&D operation
@@ -442,7 +442,7 @@ void DropTarget::dropComplete(bool success)
     DragSource::g_DropSuccess = success;
 }
 
-void DropTarget::fire_drop( const DropTargetDropEvent& dte)
+void AquaDropTarget::fire_drop( const DropTargetDropEvent& dte)
 {
     OInterfaceContainerHelper* pContainer= rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
     if( pContainer)
@@ -458,7 +458,7 @@ void DropTarget::fire_drop( const DropTargetDropEvent& dte)
     }
 }
 
-void DropTarget::fire_dragEnter(const DropTargetDragEnterEvent& e)
+void AquaDropTarget::fire_dragEnter(const DropTargetDragEnterEvent& e)
 {
     OInterfaceContainerHelper* pContainer= rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
     if( pContainer)
@@ -474,7 +474,7 @@ void DropTarget::fire_dragEnter(const DropTargetDragEnterEvent& e)
     }
 }
 
-void DropTarget::fire_dragExit(const DropTargetEvent& dte)
+void AquaDropTarget::fire_dragExit(const DropTargetEvent& dte)
 {
     OInterfaceContainerHelper* pContainer= rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
 
@@ -491,7 +491,7 @@ void DropTarget::fire_dragExit(const DropTargetEvent& dte)
     }
 }
 
-void DropTarget::fire_dragOver(const DropTargetDragEvent& dtde)
+void AquaDropTarget::fire_dragOver(const DropTargetDragEvent& dtde)
 {
     OInterfaceContainerHelper* pContainer= rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
     if( pContainer)
@@ -507,7 +507,7 @@ void DropTarget::fire_dragOver(const DropTargetDragEvent& dtde)
     }
 }
 
-void DropTarget::fire_dropActionChanged(const DropTargetDragEvent& dtde)
+void AquaDropTarget::fire_dropActionChanged(const DropTargetDragEvent& dtde)
 {
     OInterfaceContainerHelper* pContainer= rBHelper.getContainer( cppu::UnoType<XDropTargetListener>::get());
     if( pContainer)
@@ -523,17 +523,17 @@ void DropTarget::fire_dropActionChanged(const DropTargetDragEvent& dtde)
     }
 }
 
-OUString DropTarget::getImplementationName()
+OUString AquaDropTarget::getImplementationName()
 {
     return dropTarget_getImplementationName();
 }
 
-bool DropTarget::supportsService( const OUString& ServiceName )
+bool AquaDropTarget::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > DropTarget::getSupportedServiceNames(  )
+Sequence< OUString > AquaDropTarget::getSupportedServiceNames(  )
 {
     return dropTarget_getSupportedServiceNames();
 }

@@ -37,7 +37,7 @@
 #import <Cocoa/Cocoa.h>
 #include <postmac.h>
 
-class DropTarget;
+class AquaDropTarget;
 class AquaSalFrame;
 
 /* The functions declared in this protocol are actually
@@ -55,10 +55,10 @@ class AquaSalFrame;
 
 @interface DropTargetHelper : NSObject
 {
-  DropTarget* mDropTarget;
+  AquaDropTarget* mDropTarget;
 }
 
--(DropTargetHelper*)initWithDropTarget:(DropTarget*)pdt;
+-(DropTargetHelper*)initWithDropTarget:(AquaDropTarget*)pdt;
 
 -(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender;
 -(NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender;
@@ -69,7 +69,7 @@ class AquaSalFrame;
 
 @end
 
-class DropTarget: public cppu::BaseMutex,
+class AquaDropTarget: public cppu::BaseMutex,
                   public cppu::WeakComponentImplHelper< css::lang::XInitialization,
                                                          css::datatransfer::dnd::XDropTarget,
                                                          css::datatransfer::dnd::XDropTargetDragContext,
@@ -77,10 +77,10 @@ class DropTarget: public cppu::BaseMutex,
                                                          css::lang::XServiceInfo >
 {
 public:
-  DropTarget();
-  virtual ~DropTarget() override;
-  DropTarget(const DropTarget&) = delete;
-  DropTarget& operator=(const DropTarget&) = delete;
+  AquaDropTarget();
+  virtual ~AquaDropTarget() override;
+  AquaDropTarget(const AquaDropTarget&) = delete;
+  AquaDropTarget& operator=(const AquaDropTarget&) = delete;
 
   // Overrides WeakComponentImplHelper::disposing which is called by
   // WeakComponentImplHelper::dispose

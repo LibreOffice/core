@@ -298,7 +298,12 @@ void ImplSalYieldMutexRelease()
 }
 
 extern "C" {
+
+#if ENABLE_UNITEDLIBS
+SAL_DLLPUBLIC_EXPORT SalInstance* create_SalInstanceMac()
+#else
 VCLPLUG_OSX_PUBLIC SalInstance* create_SalInstance()
+#endif
 {
     SalData* pSalData = new SalData;
 

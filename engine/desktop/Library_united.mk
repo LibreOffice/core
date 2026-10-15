@@ -127,12 +127,14 @@ $(eval $(call gb_Library_add_libs,united,\
 	$(if $(filter LINUX,$(OS)),-ldl) \
 ))
 
-
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_system_darwin_frameworks,united, \
+    $(call gb_Helper_optional,DBCONNECTIVITY,AddressBook) \
     AppKit \
     ApplicationServices \
+    AVFoundation \
     CoreFoundation \
+    CoreMedia \
     CoreServices \
     Cocoa \
     Carbon \
@@ -173,7 +175,7 @@ endif # COM_IS_CLANG
 $(call gb_Library_get_linktarget_target,united): \
     $(gb_CustomTarget_workdir)/desktop/united.map
 
-ifneq ($(OS),WNT)
+ifeq ($(OS),LINUX)
 # Add export-dynamic so we can do dlsym() on symbols in the static main binary
 # Add version-script to limit the set of symbols that are exported, to only
 # the ones that we need to dlsym() on.
@@ -181,7 +183,15 @@ $(eval $(call gb_Library_add_ldflags,united,\
     -Wl$(COMMA)--export-dynamic \
     -Wl$(COMMA)--version-script=$(gb_CustomTarget_workdir)/desktop/united.map \
 ))
-endif # ifneq ($(OS),WNT)
+endif # ifeq ($(OS),LINUX)
+
+ifeq ($(OS),MACOSX)
+# Add version-script to limit the set of symbols that are exported, to only
+# the ones that we need to dlsym() on.
+$(eval $(call gb_Library_add_ldflags,united,\
+    -Wl$(COMMA)-exported_symbols_list -Wl$(COMMA)$(gb_CustomTarget_workdir)/desktop/united.map \
+))
+endif
 
 
 $(eval $(call gb_Library_add_exception_objects,united,\

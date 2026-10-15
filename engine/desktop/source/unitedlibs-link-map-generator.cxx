@@ -16,6 +16,7 @@
 #include <config_gio.h>
 #include <config_java.h>
 #include <config_locales.h>
+#include <config_vclplug.h>
 #include <osl/detail/component-mapping.h>
 #include <string>
 #include <iostream>
@@ -33,30 +34,40 @@ TODO: It would be better to generate most of this script by parsing and extracti
  from all of the *.component files.
 */
 
-static void line(std::string_view sym) { std::cout << "        " << sym << ";" << std::endl; }
+static void line(std::string_view sym)
+{
+#ifdef MACOSX
+  std::cout << "_" << sym << std::endl;
+#else
+  std::cout << "        " << sym << ";" << std::endl;
+#endif
+}
 
 int main()
 {
+#ifdef MACOSX
+    // no header, the file is just a plain list of symbols
+#else
     // no need for a name/version string here, since we are using this just to limit symbol visibility.
     std::cout << "{" << std::endl;
     std::cout << "    global:" << std::endl;
+#endif
 
     // other things that are not in .component files
     line("basicide_choose_macro");
+#ifdef LINUX
     line("create_SalInstanceGen");
     line("create_SalInstanceGtk3");
+#endif
+#if defined(MACOSX) && !USE_HEADLESS_CODE
+    line("create_SalInstanceMac");
+#endif
     line("makeNotebookbarToolBox");
     line("sal_getFullTextEncodingData");
     line("unit_kit_process_events_to_idle");
     line("uno_initEnvironment");
     line("uno_ext_getMapping");
     line("CreateUnoWrapper");
-    line("ImportDOC");
-    line("ImportDOCX");
-    line("ImportRTF");
-    line("ExportDOC");
-    line("ExportRTF");
-    line("ScFilterCreate");
     line("sal_detail_initialize");
     line("sal_detail_deinitialize");
 
@@ -233,9 +244,11 @@ int main()
 #endif
     // connectivity/source/drivers/calc/calc.component
     line("connectivity_calc_ODriver");
+#ifndef MACOSX
     // connectivity/source/drivers/evoab2/evoab.component
     // TODO this needs a config_foo.h entry
     line("connectivity_OEvoabDriver_get_implementation");
+#endif
     // connectivity/source/drivers/flat/flat.component
     line("connectivity_flat_ODriver");
 #ifdef MACOSX
@@ -671,9 +684,11 @@ int main()
     line("package_ZipPackage_get_implementation");
     line("package_ManifestReader_get_implementation");
     line("package_ManifestWriter_get_implementation");
+#ifndef MACOSX
     // pyuno/source/loader/pythonloader.component
     // TODO need a config_foo.h define for this
     line("pyuno_Loader_get_implementation");
+#endif
     // remotebridges/source/unourl_resolver/uuresolver.component
     line("remotebridges_ResolverImpl_get_implementation");
     // sax/source/expatwrap/expwrap.component
@@ -799,8 +814,10 @@ int main()
     line("com_sun_star_comp_sfx2_SfxMacroLoader_get_implementation");
     line("com_sun_star_sfx2_ClassificationCategoriesController_get_implementation");
     line("com_sun_star_comp_sfx2_InsertSymbolToolBoxControl_get_implementation");
+#if !defined(MACOSX) && !defined(WNT)
     // shell/source/backends/desktopbe/desktopbe1.component
     line("shell_DesktopBackend_get_implementation");
+#endif
     // shell/source/backends/localebe/localebe1.component
     line("shell_LocaleBackend_get_implementation");
 #ifdef MACOSX
@@ -813,8 +830,10 @@ int main()
     // shell/source/cmdmail/cmdmail.component
     line("shell_CmdMailSuppl_get_implementation");
 #endif
+#if !defined(MACOSX) && !defined(WNT)
     // shell/source/sessioninstall/losessioninstall.component
     line("shell_sessioninstall_get_implementation");
+#endif
     // shell/source/unix/exec/syssh.component
     line("shell_ShellExec_get_implementation");
 #ifdef _WIN32
@@ -1298,7 +1317,11 @@ int main()
     line("com_sun_star_xml_crypto_XMLSignature_get_implementation");
 #endif
 
+#ifdef MACOSX
+    // no trailer, the file is just a plain list of symbols
+#else
     std::cout << std::endl << "    local: *;" << std::endl << "};" << std::endl;
+#endif
 
     return 0;
 }

@@ -206,6 +206,13 @@ SalInstance *CreateSalInstance()
             pInst = fpCreateInst();
         }
 #endif
+#if defined(MACOSX) && !USE_HEADLESS_CODE
+        if (!pInst && (aUsePlugin.isEmpty() || aUsePlugin == "osx"))
+        {
+            auto fpCreateInst = reinterpret_cast<salFactoryProc>(osl::Module(SVLIBRARY("united")).getFunctionSymbol("create_SalInstanceMac"));
+            pInst = fpCreateInst();
+        }
+#endif
         assert(pInst && "no working window system found");
         if (!pInst)
         {
