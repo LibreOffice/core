@@ -3,8 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Impress-Intro-Template.odp\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-06 13:53+0000\n"
-"Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
+"PO-Revision-Date: 2026-10-14 12:57+0000\n"
+"Last-Translator: bittin1ddc447d824349b2 "
+"<bittin1ddc447d824349b2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "impress-intro-template/sv/>\n"
 "Language: sv\n"
@@ -12,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #. content.xml (slide 'page1')
 msgid "👋 Introduction"
@@ -74,6 +75,8 @@ msgid ""
 "<1>Use the </1><2>Slide navigation</2><3> on the left to reorder them by "
 "dragging, or remove ones you don’t need.</3>"
 msgstr ""
+"<1>Använd </1><2>bildnavigeringen</2><3> till vänster för att ändra "
+"ordningen genom att dra, eller ta bort de du inte behöver.</3>"
 
 #. content.xml (slide 'page2')
 msgid ""
@@ -81,6 +84,9 @@ msgid ""
 "arrangement of placeholders for titles, text, and images. Pick the layout "
 "that fits the slide’s purpose.</3>"
 msgstr ""
+"<1>Varje bild kan ha en </1><2>olika layout </2><3>– en fördefinierad "
+"placering av platshållare för rubriker, text och bilder. Välj den layout som "
+"passar bildens syfte.</3>"
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
@@ -91,15 +97,15 @@ msgstr "<1>➜</1><2>Prova det:</2>"
 
 #. content.xml (slide 'page2')
 msgid "Add a new slide clicking “New” in Notebook bar."
-msgstr ""
+msgstr "Lägg till en ny bild genom att klicka på ”Ny” i anteckningsfältet."
 
 #. content.xml (slide 'page2')
 msgid "Choose a layout for it from the layout chooser."
-msgstr ""
+msgstr "Välj en layout för den i layoutväljaren."
 
 #. content.xml (slide 'page2')
 msgid "Start editing your slide."
-msgstr ""
+msgstr "Börja redigera din bild."
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); styles.xml (master page
@@ -140,19 +146,19 @@ msgstr ""
 
 #. content.xml (slide 'page3')
 msgid "Open the View tab in the Notebook bar."
-msgstr ""
+msgstr "Öppna Visa fliken i anteckningsboksfältet."
 
 #. content.xml (slide 'page3')
 msgid "Click “Master View” and edit your master design."
-msgstr ""
+msgstr "Klicka på ”Mastervy” och redigera din huvuddesign."
 
 #. content.xml (slide 'page3')
 msgid "Once your master design is ready, click \"Close Master View\"."
-msgstr ""
+msgstr "När huvuddesignen är klar klickar du på ”Stäng huvudvy”."
 
 #. content.xml (slide 'page3')
 msgid "Now your master is set and ready to use across all slides."
-msgstr ""
+msgstr "Nu är din huvudbild klar och redo att användas på alla bildspelssidor."
 
 #. content.xml (slide 'page3')
 msgid ""
@@ -186,17 +192,24 @@ msgid ""
 "In the Notebook bar, open the Insert tab and add an object, image, table, or "
 "any other element that supports your content."
 msgstr ""
+"I anteckningsblocksfältet öppnar du fliken Infoga och lägger till ett "
+"objekt, en bild, en tabell eller något annat element som stöder ditt "
+"innehåll."
 
 #. content.xml (slide 'page4')
 msgid ""
 "Click on it to select it, then resize and reposition it to fit your layout."
 msgstr ""
+"Klicka på det för att markera det, och ändra sedan storlek och placering så "
+"att det passar din layout."
 
 #. content.xml (slide 'page4')
 msgid ""
 "For editable objects like shapes or images, a contextual tab appears in the "
 "Notebook bar with all the available actions."
 msgstr ""
+"För redigerbara objekt, som former eller bilder, visas en kontextberoende "
+"flik i anteckningsbokfältet med alla tillgängliga åtgärder."
 
 #. content.xml (slide 'page4')
 msgid ""
@@ -223,21 +236,25 @@ msgstr ""
 
 #. content.xml (slide 'page5')
 msgid "Click Transition tab in Notebook bar."
-msgstr ""
+msgstr "Klicka på Övergång fliken i anteckningsboksfältet."
 
 #. content.xml (slide 'page5')
 msgid "Pick a transition style you would like to use."
-msgstr ""
+msgstr "Välj en övergångsstil som du vill använda."
 
 #. content.xml (slide 'page5')
 msgid ""
 "Adjust other properties – set the duration, pick a variant, or choose timing."
 msgstr ""
+"Justera andra egenskaper – ställ in varaktighet, välj en variant eller välj "
+"tidpunkt."
 
 #. content.xml (slide 'page5')
 msgid ""
 "Click \"Apply to All Slides\" to use the same transition across your deck."
 msgstr ""
+"Klicka på ”Använd på alla bilder” för att använda samma övergång i hela "
+"bildspelet."
 
 #. content.xml (slide 'page5')
 msgid ""
@@ -266,19 +283,19 @@ msgstr ""
 
 #. content.xml (slide 'page6')
 msgid "Switch to the View tab in the Notebook bar and open “Notes view”."
-msgstr ""
+msgstr "Växla till Visa i anteckningsbok fliken och öppna ”Anteckningsvy”."
 
 #. content.xml (slide 'page6')
 msgid "Add a speaker note to your slides."
-msgstr ""
+msgstr "Lägg till en talaranteckning till dina bildspel."
 
 #. content.xml (slide 'page6')
 msgid "When you're ready to present, open the Slide Show tab."
-msgstr ""
+msgstr "När du är redo att presentera öppnar du Bildspelsfliken."
 
 #. content.xml (slide 'page6')
 msgid "Pick a slide show option to start presenting."
-msgstr ""
+msgstr "Välj ett bildspelsalternativ för att börja presentera."
 
 #. content.xml (slide 'page6')
 msgid "Next Chapter: 🤝 Productivity & Collaboration"
@@ -333,9 +350,8 @@ msgstr ""
 "funktioner och hjälper dig att bygga vidare på det du redan lärt dig."
 
 #. content.xml (slide 'page7')
-#, fuzzy
 msgid "Check out video tutorials."
-msgstr "▶️ Videoguider"
+msgstr "Kolla in videoguiderna."
 
 #. styles.xml (master page 'Content_20_slide'); styles.xml (master page
 #. 'Default')

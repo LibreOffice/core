@@ -3,8 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calc-Intro-Template.ods\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-06 16:37+0000\n"
-"Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
+"PO-Revision-Date: 2026-10-14 12:57+0000\n"
+"Last-Translator: bittin1ddc447d824349b2 "
+"<bittin1ddc447d824349b2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
 "calc-intro-template/sv/>\n"
 "Language: sv\n"
@@ -12,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #. content.xml (validation title)
 msgid "Try formatting"
@@ -35,13 +36,12 @@ msgstr ""
 "aktie”."
 
 #. content.xml (validation help message)
-#, fuzzy
 msgid ""
 "For High Stock use condition \"Values greater than: 80\" and style \"High "
 "Stock\"."
 msgstr ""
-"För Medium aktie, använd villkoret ”Värden mellan: 20–80” och stilen ”Medium "
-"aktie”."
+"För Högt lager, använd villkoret \"Värden större än: 80\" och formatera "
+"\"Högt lager\"."
 
 #. content.xml (validation title)
 msgid "Use other options"
@@ -322,12 +322,18 @@ msgid ""
 "Spreadsheet, Text </2><3>and</3><4> Add-in</4><5>, making it easier to find "
 "the function you need.</5>"
 msgstr ""
+"<1>Funktioner är indelade i kategorier som Databas, </1><2>Datum och tid, "
+"Finansiell, Information, Logiska, Matematiska, Matris, Statistiska, "
+"Kalkylblad, Text </2><3>och</3><4> Tillägg</4><5>, vilket gör det enklare "
+"att hitta den funktion du behöver.</5>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid ""
 "<1>You can access these functions through the Function Library or by using "
 "the </1><2>Function Wizard.</2>"
 msgstr ""
+"<1>Du kan komma åt dessa funktioner via funktionsbiblioteket eller genom att "
+"använda </1><2>funktionsguiden.</2>"
 
 #. content.xml (sheet '✚ Formulas & Functions')
 msgid "Next Chapter: 📋 Tables"
@@ -480,6 +486,8 @@ msgid ""
 "These features help you keep your table organised, highlight important "
 "information, and work more efficiently with your data."
 msgstr ""
+"Dessa funktioner hjälper dig att hålla ordning på dina tabeller, lyfta fram "
+"viktig information och arbeta mer effektivt med din data."
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
@@ -510,6 +518,8 @@ msgid ""
 "can be arranged, rearranged or summarised according to different points of "
 "view."
 msgstr ""
+"En tabell som har skapats som en pivottabell är en interaktiv tabell. Data "
+"kan ordnas, omorganiseras eller sammanfattas utifrån olika perspektiv."
 
 #. content.xml (sheet '📋 Tables')
 msgid ""
@@ -546,6 +556,9 @@ msgid ""
 "Conditional formatting automatically changes how cells look based on their "
 "values, helping you quickly spot trends or important data."
 msgstr ""
+"Villkorsstyrd formatering ändrar automatiskt cellernas utseende baserat på "
+"deras värden, vilket hjälper dig att snabbt upptäcka trender eller viktig "
+"information."
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
@@ -593,23 +606,29 @@ msgid ""
 "Highlight important inventory data to quickly identify products that are "
 "running low on stock."
 msgstr ""
+"Markera viktig lagerdata för att snabbt identifiera produkter som börjar ta "
+"slut i lager."
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "<1>Low Stock</1><2> (less than 20 pcs) → </2><3>Red</3><4> background</4>"
-msgstr ""
+msgstr "<1>Lågt lager</1><2> (färre än 20 st) → </2><3>Röd</3><4> bakgrund</4>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "<1>Medium Stock</1><2> (between 20 and 80 pcs)→ </2><3>Orange</3><4> "
 "background</4>"
 msgstr ""
+"<1>Medelstort lager</1><2> (mellan 20 och 80 st.)→ </2><3>Orange</3><4> "
+"bakgrund</4>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
 "<1>High Stock </1><2>(more than</2><3> </3><4>80 pcs)→ </4><5>Green</5><6> "
 "background</6>"
 msgstr ""
+"<1>Högt lager </1><2>(fler än </2><3> </3><4>80 st)→ </4><5>Grön </5><6>"
+"bakgrund</6>"
 
 #. content.xml (sheet '🎨 Conditional Formatting')
 msgid ""
@@ -736,6 +755,9 @@ msgid ""
 "well as change the data range or chart type. These tools allow you to "
 "customise the chart and better present your data."
 msgstr ""
+"Du kan lägga till eller justera diagramelement som rubriker, yxor och "
+"etiketter, samt ändra dataområdet eller diagramtypen. Med dessa verktyg kan "
+"du anpassa diagrammet och presentera din data på ett bättre sätt."
 
 #. content.xml (sheet '📊 Charts')
 msgid "Next Chapter:🔍 Data & filtering"
@@ -783,6 +805,8 @@ msgstr "➜Prova det: Hitta produkter med lågt lagersaldo"
 msgid ""
 "Sort the Quantity [pcs] column to see which items have the lowest stock."
 msgstr ""
+"Sortera Antal [st] kolumnen för att se vilka artiklar som har lägst "
+"lagersaldo."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "➜Try it: Show only Electronics items"
@@ -790,7 +814,7 @@ msgstr "➜Prova det: Visa endast elektronik objekt"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Use the filter in the Category column and select Electronics."
-msgstr ""
+msgstr "Använd filtret i Kategori kolumnen och välj Elektronik."
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -815,6 +839,8 @@ msgid ""
 "<1>Auto Filter</1><2> lets you quickly filter data directly in the table "
 "using simple selections.</2>"
 msgstr ""
+"<1>Autofilter</1><2> gör att du snabbt kan filtrera data direkt i tabellen "
+"med hjälp av enkla val.</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -822,6 +848,9 @@ msgid ""
 "specific data fields. You can also combine conditions using logical AND or "
 "OR operators.</2>"
 msgstr ""
+"<1>Standardfilter</1><2> gör att du kan definiera intervall som innehåller "
+"värden i specifika datafält. Du kan även kombinera villkor med hjälp av de "
+"logiska OCH eller ELLER operatorerna.</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid ""
@@ -829,6 +858,9 @@ msgid ""
 "conditions. You can enter these conditions directly into the sheet for more "
 "precise and flexible filtering.</2>"
 msgstr ""
+"<1>Avancerat filter</1><2> gör att du kan definiera upp till åtta "
+"filtervillkor. Du kan ange dessa villkor direkt i kalkylbladet för mer "
+"precis och flexibel filtrering.</2>"
 
 #. content.xml (sheet '🔍 Data & filtering')
 msgid "Last Chapter: 🤝 Productivity & collaboration"
@@ -869,6 +901,10 @@ msgid ""
 "cursor and follow their activity in the document. Notifications also inform "
 "you when someone joins or leaves."
 msgstr ""
+"Varje användare tilldelas en unik färg, så att du enkelt kan se vem som "
+"redigerar vad. Du kan klicka på en användares namn eller avatar för att "
+"hoppa direkt till dennes markör och följa aktiviteten i dokumentet. Du får "
+"även aviseringar när någon ansluter eller lämnar."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Start sharing your document"
@@ -891,13 +927,12 @@ msgid "➜Try it: Internal shares"
 msgstr "➜Prova det: Interna delningar"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
-#, fuzzy
 msgid ""
 "Share files within your organisation. People who already have access to the "
 "document can use the link for quick and easy access."
 msgstr ""
-"Dela en direktlänk med personer som redan har åtkomst till dokumentet för "
-"snabb och enkel åtkomst."
+"Dela filer inom organisationen. Personer som redan har åtkomst till "
+"dokumentet kan använda länken för snabb och enkel åtkomst."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "➜Try it: External shares"
@@ -909,6 +944,9 @@ msgid ""
 "addresses. You can also share to Nextcloud accounts on other instances using "
 "their federated cloud ID."
 msgstr ""
+"Dela filer med personer utanför din organisation via offentliga länkar och e-"
+"postadresser. Du kan även dela filer med Nextcloud-konton på andra instanser "
+"genom att använda deras federerade moln-ID."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
 msgid "Shortcuts"
@@ -954,9 +992,8 @@ msgstr ""
 "arbeta mer effektivt."
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
-#, fuzzy
 msgid "Check out video tutorials"
-msgstr "⏯Videoguider"
+msgstr "Kolla in videoguider"
 
 #~ msgid "5"
 #~ msgstr "5"
