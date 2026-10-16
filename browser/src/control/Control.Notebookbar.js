@@ -226,8 +226,9 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		this.builder.build(this.container, [this.model.getSnapshot()]);
 
 		// build() rebuilds the notebookbar DOM, so re-apply the imperative
-		// item visibility that create() sets up but cannot persist here.
+		// item state and visibility that create() sets up but cannot persist here.
 		this.onDarkModeToggleChange();
+		this.onAccessibilityToggleChange();
 		if (!this.map.serverAuditDialog) {
 			this.hideItem('server-audit');
 			this.hideItem('help-serveraudit-break');
