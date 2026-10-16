@@ -989,7 +989,13 @@ void PPTXAnimationExport::WriteAnimationNodeSeq()
 {
     SAL_INFO("sd.eppt", "write animation node SEQ");
 
-    mpFS->startElementNS(XML_p, XML_seq);
+    // Write sequences with concurrent="1" and nextAc="seek", the same way as PP writes them
+    // With these, a click during the effect moves it to its end state as the next effect starts
+    const sal_Int16 nType = mpContext->getEffectNodeType();
+    const bool bClickSequence
+        = nType == EffectNodeType::MAIN_SEQUENCE || nType == EffectNodeType::INTERACTIVE_SEQUENCE;
+    mpFS->startElementNS(XML_p, XML_seq, XML_concurrent, sax_fastparser::UseIf("1", bClickSequence),
+                         XML_nextAc, sax_fastparser::UseIf("seek", bClickSequence));
 
     WriteAnimationNodeCommonPropsStart();
 

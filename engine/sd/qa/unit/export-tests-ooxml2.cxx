@@ -1361,6 +1361,11 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112280)
                 "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/"
                 "p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:animRot",
                 "by", u"21600000");
+
+    // unrelated, test that 'seq' is written with 'concurrent' and 'nextAc' attributes, as in original
+    static constexpr OString aSeq("/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq"_ostr);
+    assertXPath(pXmlDocContent, aSeq, "concurrent", u"1");
+    assertXPath(pXmlDocContent, aSeq, "nextAc", u"seek");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112088)
