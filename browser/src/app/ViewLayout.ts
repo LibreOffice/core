@@ -336,6 +336,12 @@ class ViewLayoutBase {
 		);
 	}
 
+	// The area the tile pre-fetch grows around, in the core pixels the tiles are
+	// keyed by. By default the viewport, which is in those pixels already.
+	public getPreFetchCorePixelBounds(): cool.Bounds {
+		return this.getViewportCorePixelBounds();
+	}
+
 	public get documentAnchorPosition() {
 		return this._documentAnchorPosition.slice();
 	}
@@ -845,11 +851,12 @@ class ViewLayoutBase {
 		]);
 	}
 
-	// Default commit used by scroll(): rebuild the viewed rectangle and fetch
-	// tiles. Stacked-page layouts override with their own (viewSize recompute
-	// etc.).
+	// Default commit used by scroll(): rebuild the viewed rectangle, fetch the
+	// tiles and request the ones ahead of the view in the direction it moved.
+	// Stacked-page layouts override with their own (viewSize recompute etc.).
 	protected updateViewData(): void {
 		this.commitVisibleAreaAndRequestTiles();
+		RenderManager.initPreFetchAdjacentTiles();
 	}
 
 	// Recompute the visible area, push it to the server and request the tiles

@@ -65,6 +65,8 @@ class BitmapTileManager extends RenderManagerBase {
 	// The tile expansion ratio that the visible tile area will be expanded towards when
 	// updating during scrolling
 	private directionalTileExpansion: number = 2;
+	// Milliseconds between two requests for the tiles ahead of a moving view.
+	private adjacentPreFetchIntervalMs: number = 50;
 	private pausedForCoherency: boolean = false;
 	private dehydratedCurrentTiles: string[] = [];
 	private shrinkCurrentId: any = null;
@@ -531,10 +533,11 @@ class BitmapTileManager extends RenderManagerBase {
 			updated = true;
 		}
 
-		// The layout scrolls itself, not the leaflet map, so read the layout
-		// viewport (core pixels) directly for prefetch and split-pane borders.
+		// The layout scrolls itself, not the leaflet map, so read the area to
+		// pre-fetch around (core pixels) from the layout, for the pre-fetch
+		// borders and the split-pane borders alike.
 		const pixelBounds =
-			app.activeDocument.activeLayout.getViewportCorePixelBounds();
+			app.activeDocument.activeLayout.getPreFetchCorePixelBounds();
 		if (!this._pixelBounds || !pixelBounds.equals(this._pixelBounds)) {
 			this._pixelBounds = pixelBounds;
 			updated = true;
@@ -958,63 +961,60 @@ class BitmapTileManager extends RenderManagerBase {
 		}, 100);
 	}
 
-	// Shortly after the view moves, request the tiles that a further scroll in the same
-	// direction would show, ahead of the slower pre-fetch that grows around the view.
+	// While the view keeps moving, request the tiles that a further scroll in the same direction
+	// would show, ahead of the slower pre-fetch that grows around the view once it rests. The
+	// request goes out at most once per interval; a view that is still moving when the interval
+	// ends gets its request from where it is then, and a view that has come to rest gets one
+	// last request from its final position.
 	public initPreFetchAdjacentTiles() {
 		if (!this.checkDocLayer()) return;
 
-		this.updateProperties();
+		if (this._adjacentTilePreFetcher) return;
 
-		if (this._adjacentTilePreFetcher)
-			clearTimeout(this._adjacentTilePreFetcher);
+		this._adjacentTilePreFetcher = setTimeout(() => {
+			this._adjacentTilePreFetcher = undefined;
 
-		this._adjacentTilePreFetcher = setTimeout(
-			function () {
-				// Extend what we request to include enough to populate a full
-				// scroll in the direction we were going after or before
-				// the current viewport
-				//
-				// request separately from the current viewPort to get
-				// those tiles first.
+			// The view may have moved on since the timer was set, so read where it is now.
+			this.updateProperties();
+			const direction = app.activeDocument.activeLayout.getLastPanDirection();
 
-				const direction = app.activeDocument.activeLayout.getLastPanDirection();
+			// Extend what we request to include enough to populate a full scroll in the
+			// direction we were going after or before the current viewport.
+			//
+			// Request separately from the current viewPort to get those tiles first.
 
-				// Conservatively enlarge the area to round to more tiles:
-				const pixelTopLeft = this._pixelBounds.getTopLeft();
-				pixelTopLeft.y =
-					Math.floor(pixelTopLeft.y / this.tileSize) * this.tileSize;
-				pixelTopLeft.y -= 1;
+			// Conservatively enlarge the area to round to more tiles:
+			const pixelTopLeft = this._pixelBounds.getTopLeft();
+			pixelTopLeft.y =
+				Math.floor(pixelTopLeft.y / this.tileSize) * this.tileSize;
+			pixelTopLeft.y -= 1;
 
-				const pixelBottomRight = this._pixelBounds.getBottomRight();
-				pixelBottomRight.y =
-					Math.ceil(pixelBottomRight.y / this.tileSize) * this.tileSize;
-				pixelBottomRight.y += 1;
+			const pixelBottomRight = this._pixelBounds.getBottomRight();
+			pixelBottomRight.y =
+				Math.ceil(pixelBottomRight.y / this.tileSize) * this.tileSize;
+			pixelBottomRight.y += 1;
 
-				this._pixelBounds = new cool.Bounds(pixelTopLeft, pixelBottomRight);
+			const aheadBounds = new cool.Bounds(pixelTopLeft, pixelBottomRight);
 
-				// Translate the area in the direction we're going.
-				this._pixelBounds.translate(
-					this._pixelBounds.getSize().x * direction[0],
-					this._pixelBounds.getSize().y * direction[1],
+			// Translate the area in the direction we're going.
+			aheadBounds.translate(
+				aheadBounds.getSize().x * direction[0],
+				aheadBounds.getSize().y * direction[1],
+			);
+
+			let queue = this.getMissingTiles(aheadBounds, this._zoom);
+
+			if (this._docLayer.isCalc() || queue.length === 0) {
+				// pre-load more aggressively
+				aheadBounds.translate(
+					(aheadBounds.getSize().x * direction[0]) / 2,
+					(aheadBounds.getSize().y * direction[1]) / 2,
 				);
+				queue = queue.concat(this.getMissingTiles(aheadBounds, this._zoom));
+			}
 
-				var queue = this.getMissingTiles(this._pixelBounds, this._zoom);
-
-				if (this._docLayer.isCalc() || queue.length === 0) {
-					// pre-load more aggressively
-					this._pixelBounds.translate(
-						(this._pixelBounds.getSize().x * direction[0]) / 2,
-						(this._pixelBounds.getSize().y * direction[1]) / 2,
-					);
-					queue = queue.concat(
-						this.getMissingTiles(this._pixelBounds, this._zoom),
-					);
-				}
-
-				if (queue.length !== 0) this.addTiles(queue);
-			}.bind(this),
-			50 /*ms*/,
-		);
+			if (queue.length !== 0) this.addTiles(queue);
+		}, this.adjacentPreFetchIntervalMs);
 	}
 
 	private sendTileCombineMessage(

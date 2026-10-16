@@ -299,6 +299,14 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 		return true;
 	}
 
+	public override getPreFetchCorePixelBounds(): cool.Bounds {
+		const rect = this.viewedRectangle;
+		return new cool.Bounds(
+			new cool.Point(rect.pX1, rect.pY1),
+			new cool.Point(rect.pX2, rect.pY2),
+		);
+	}
+
 	protected refreshVisibleAreaRectangle(): void {
 		this.refreshVisibleAreaRectangleImpl(
 			this.documentRectangles,
