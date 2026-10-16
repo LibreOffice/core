@@ -11,6 +11,7 @@
 
 #include <memory>
 
+#include <editeng/brushitem.hxx>
 #include <o3tl/string_view.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/gdimtf.hxx>
@@ -431,6 +432,44 @@ CPPUNIT_TEST_FIXTURE(Test, testFormatRedlineRenderModeOmitInsertDelete)
     xMetaFile = pDocShell->GetPreviewMetaFile();
     pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     assertXPath(pXmlDoc, aWorldFont, "underline", u"0");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFormatRedlineRenderModeOmitInsertsAddedBackground)
+{
+    // Given a saved document where "world" got a yellow background with change tracking on,
+    // and had no character formatting before:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"Hello world"_ustr);
+    pDocShell->SetChangeRecording(/*bActivate=*/true);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    pWrtShell->SetAttrItem(SvxBrushItem(COL_YELLOW, RES_CHRATR_BACKGROUND));
+    saveAndReload(TestFilter::ODT);
+    pDocShell = getSwDocShell();
+    pWrtShell = pDocShell->GetWrtShell();
+
+    // When painting the old side of a side by side comparison:
+    SwViewOption aOpt(*pWrtShell->GetViewOptions());
+    aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitInserts);
+    pWrtShell->ApplyViewOptions(aOpt);
+    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    // Then the word has no background, as before the change:
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. the old side showed the background that the change added.
+    assertXPath(pXmlDoc, "//fillcolor[@color='#ffff00']", 0);
+
+    // And the new side paints the new background:
+    aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitDeletes);
+    pWrtShell->ApplyViewOptions(aOpt);
+    xMetaFile = pDocShell->GetPreviewMetaFile();
+    pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    assertXPath(pXmlDoc, "//fillcolor[@color='#ffff00']", 1);
 }
 }
 

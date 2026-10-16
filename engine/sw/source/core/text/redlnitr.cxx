@@ -1073,13 +1073,16 @@ void SwRedlineItr::FillHints( std::size_t nAuthor, RedlineType eType, SwRedlineR
 
 void SwRedlineItr::FillOldFormatting(const SwRangeRedline& rRedline, SwNodeOffset nNode)
 {
-    const auto* pExtraData
-        = dynamic_cast<const SwRedlineExtraData_FormatColl*>(rRedline.GetExtraData());
+    // A change without extra data had no character formatting of its own before it, for example
+    // after a document is loaded where the old formatting was empty. Extra data of another type,
+    // such as the one from AutoCorrect, holds no old formatting to paint.
+    const SwRedlineExtraData* pData = rRedline.GetExtraData();
+    const auto* pExtraData = dynamic_cast<const SwRedlineExtraData_FormatColl*>(pData);
     const SwTextNode* pTextNode = m_rDoc.GetNodes()[nNode]->GetTextNode();
-    if (!pExtraData || !pTextNode)
+    if ((pData && !pExtraData) || !pTextNode)
         return;
 
-    const std::shared_ptr<SfxItemSet>& pOldSet = pExtraData->GetItemSet();
+    const SfxItemSet* pOldSet = pExtraData ? pExtraData->GetItemSet().get() : nullptr;
     const SwCharFormat* pOldCharFormat = nullptr;
     if (pOldSet)
         if (const SwFormatCharFormat* pItem = pOldSet->GetItemIfSet(RES_TXTATR_CHARFMT, false))
