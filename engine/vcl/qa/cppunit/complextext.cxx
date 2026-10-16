@@ -28,6 +28,7 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<double>
 #include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <i18nlangtag/lang.h>
+#include <sal/log.hxx>
 #include <tools/mapunit.hxx>
 
 
@@ -530,6 +531,19 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testHanFallbackWithWesternLanguage)
     aFont.SetLanguage(LANGUAGE_ENGLISH_US);
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
+
+    // The Noto CJK fonts only ship with --enable-noto-font: without a Japanese and a Korean
+    // font next to the Chinese one there is nothing to pick the Chinese one over.
+    for (const auto* pFontName : { u"Noto Sans SC", u"Noto Sans JP", u"Noto Sans KR" })
+    {
+        if (!pOutDev->IsFontAvailable(pFontName))
+        {
+            SAL_WARN("vcl", "The Noto CJK fonts are not available, skipping "
+                            "testHanFallbackWithWesternLanguage.");
+            return;
+        }
+    }
+
     pOutDev->SetFont(aFont);
 
     OUString aText(u"\u4e2d\u6587"_ustr);
