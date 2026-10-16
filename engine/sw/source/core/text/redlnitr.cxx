@@ -1097,6 +1097,12 @@ void SwRedlineItr::FillOldFormatting(const SwRangeRedline& rRedline, SwNodeOffse
         = { RES_CHRATR_COLOR, RES_CHRATR_UNDERLINE, RES_CHRATR_CROSSEDOUT, RES_CHRATR_BACKGROUND };
     for (sal_uInt16 nWhich : aPaintedAttributes)
     {
+        // The mark of the change wins over the old formatting, so the old side still shows which
+        // text changed. The old color wins over the color of the mark, which every mark except a
+        // background has.
+        if (nWhich != RES_CHRATR_COLOR && m_pSet->GetItemState(nWhich, false) == SfxItemState::SET)
+            continue;
+
         const SfxPoolItem* pItem = pOldSet ? pOldSet->GetItem(nWhich, false) : nullptr;
         if (!pItem && pOldCharFormat)
             pItem = pOldCharFormat->GetAttrSet().GetItem(nWhich, false);

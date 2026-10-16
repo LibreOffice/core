@@ -11,13 +11,17 @@
 
 #include <memory>
 
+#include <comphelper/configuration.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/colritem.hxx>
 #include <o3tl/string_view.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/vclevent.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 #include <docsh.hxx>
 #include <edtwin.hxx>
@@ -470,6 +474,50 @@ CPPUNIT_TEST_FIXTURE(Test, testFormatRedlineRenderModeOmitInsertsAddedBackground
     xMetaFile = pDocShell->GetPreviewMetaFile();
     pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     assertXPath(pXmlDoc, "//fillcolor[@color='#ffff00']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFormatRedlineRenderModeOmitInsertsKeepsAuthorMark)
+{
+    // Given the setting to mark changed attributes with an underline:
+    {
+        auto pChanges = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Writer::Revision::TextDisplay::ChangedAttribute::Attribute::set(
+            3, pChanges);
+        pChanges->commit();
+    }
+    comphelper::ScopeGuard aGuard([] {
+        auto pChanges = comphelper::ConfigurationChanges::create();
+        officecfg::Office::Writer::Revision::TextDisplay::ChangedAttribute::Attribute::set(
+            1, pChanges);
+        pChanges->commit();
+    });
+    // And a document where the red, not underlined "world" was made bold with change tracking on:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert(u"Hello world"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    pWrtShell->SetAttrItem(SvxColorItem(COL_LIGHTRED, RES_CHRATR_COLOR));
+    pDocShell->SetChangeRecording(/*bActivate=*/true);
+    dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
+
+    // When painting the old side of a side by side comparison:
+    SwViewOption aOpt(*pWrtShell->GetViewOptions());
+    aOpt.SetRedlineRenderMode(SwRedlineRenderMode::OmitInserts);
+    pWrtShell->ApplyViewOptions(aOpt);
+    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+
+    // Then the word is underlined to mark the change, and keeps its old color:
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    OString aWorldFont = "//textarray[substring(text, @index + 1, @length) = 'world']"
+                         "/preceding-sibling::font[1]"_ostr;
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the old formatting replaced the mark of the change.
+    assertXPath(pXmlDoc, aWorldFont, "underline", u"1");
+    assertXPath(pXmlDoc, aWorldFont, "color", u"#ff0000");
 }
 }
 
