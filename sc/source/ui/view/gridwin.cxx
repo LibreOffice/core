@@ -513,10 +513,9 @@ IMPL_LINK( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo&, rInfo, void )
         mrViewData.GetDispatcher().Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
     else //IGNOREWORD, ADDTODICTIONARY, WORDLANGUAGE, PARALANGUAGE
     {
-        // The spelling status of the word has changed. Close the cell to reset the caches
-        ScInputHandler* pHdl = ScModule::get()->GetInputHdl(mrViewData.GetViewShell());
-        if (pHdl)
-            pHdl->EnterHandler();
+        // The spelling status of the word has changed. Reset the caches and update view
+        mrViewData.GetViewShell()->ResetAutoSpell();
+        Invalidate();
     }
 }
 
