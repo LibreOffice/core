@@ -499,6 +499,12 @@ public:
     /// from the document.
     static void invalidateAllViewsKitPositions(const SfxViewShell* pForViewShell, bool bColumns,
                                                SCTAB nTab, SCCOLROW nStart);
+    /// Tells every view on sheet nFirstTab or a later visible sheet that the whole geometry of
+    /// its sheet changed, because a sheet was inserted, deleted or moved and the sheets from
+    /// nFirstTab on carry new indexes. With bInvalidateTiles the tiles of those sheets are
+    /// invalidated for rViewShell as well.
+    static void notifyAllViewsTabsChanged(const ScTabViewShell& rViewShell, const ScDocument& rDoc,
+                                          SCTAB nFirstTab, bool bInvalidateTiles = false);
     /// Drops all cached accumulated column and row positions of every sheet view holder table
     /// of nDefaultViewTab, in every view of the document.
     static void invalidateAllViewsKitSheetViewPositions(ScDocShell& rDocShell,

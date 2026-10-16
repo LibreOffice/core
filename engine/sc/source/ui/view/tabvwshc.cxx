@@ -695,6 +695,25 @@ void ScTabViewShell::invalidateAllViewsKitPositions(const SfxViewShell* pForView
     }
 }
 
+void ScTabViewShell::notifyAllViewsTabsChanged(const ScTabViewShell& rViewShell,
+                                               const ScDocument& rDoc, SCTAB nFirstTab,
+                                               bool bInvalidateTiles)
+{
+    if (!comphelper::COKit::isActive())
+        return;
+
+    for (SCTAB nTabIndex = nFirstTab; nTabIndex < rDoc.GetTableCount(); ++nTabIndex)
+    {
+        if (!rDoc.IsVisible(nTabIndex))
+            continue;
+        if (bInvalidateTiles)
+            rViewShell.viewInvalidateTilesCallback(nullptr, nTabIndex, 0);
+        notifyAllViewsSheetGeomInvalidation(&rViewShell, true /* bColumns */, true /* bRows */,
+                                            true /* bSizes */, true /* bHidden */,
+                                            true /* bFiltered */, true /* bGroups */, nTabIndex);
+    }
+}
+
 void ScTabViewShell::invalidateAllViewsKitSheetViewPositions(ScDocShell& rDocShell,
                                                              SCTAB nDefaultViewTab)
 {

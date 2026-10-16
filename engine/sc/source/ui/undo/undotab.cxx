@@ -61,22 +61,6 @@ using namespace com::sun::star;
 
 namespace
 {
-void lcl_OnTabsChanged(const ScTabViewShell& rViewShell, const ScDocument& rDoc, SCTAB nTab, bool bInvalidateTiles = false)
-{
-    for (SCTAB nTabIndex = nTab; nTabIndex < rDoc.GetTableCount(); ++nTabIndex)
-    {
-        if (!rDoc.IsVisible(nTabIndex))
-            continue;
-        if (bInvalidateTiles)
-            rViewShell.viewInvalidateTilesCallback(nullptr, nTabIndex, 0);
-        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
-            &rViewShell,
-            true /* bColsAffected */, true /* bRowsAffected */,
-            true /* bSizes*/, true /* bHidden */, true /* bFiltered */,
-            true /* bGroups */, nTabIndex);
-    }
-}
-
 template<typename T>
 void lcl_MakeJsonArray(tools::JsonWriter& rJson, const std::vector<T>& v, const char *pArrayName)
 {
@@ -181,7 +165,7 @@ void ScUndoInsertTab::Undo()
     if (comphelper::COKit::isActive())
     {
         ScDocument& rDoc = rDocShell.GetDocument();
-        lcl_OnTabsChanged(*pViewShell, rDoc, nTab);
+        ScTabViewShell::notifyAllViewsTabsChanged(*pViewShell, rDoc, nTab);
         std::vector<SCTAB> aTabs{nTab};
         lcl_UndoCommandResult(*pViewShell, ".uno:Undo", "ScUndoInsertTab", &aTabs);
 
@@ -216,7 +200,7 @@ void ScUndoInsertTab::Redo()
     if (comphelper::COKit::isActive())
     {
         ScDocument& rDoc = rDocShell.GetDocument();
-        lcl_OnTabsChanged(*pViewShell, rDoc, nTab);
+        ScTabViewShell::notifyAllViewsTabsChanged(*pViewShell, rDoc, nTab);
         std::vector<SCTAB> aTabs{nTab};
         lcl_UndoCommandResult(*pViewShell, ".uno:Redo", "ScUndoInsertTab", &aTabs);
     }
@@ -448,7 +432,7 @@ void ScUndoDeleteTab::Undo()
     {
         if (pViewShell)
         {
-            lcl_OnTabsChanged(*pViewShell, rDoc, theTabs[0]);
+            ScTabViewShell::notifyAllViewsTabsChanged(*pViewShell, rDoc, theTabs[0]);
             lcl_UndoCommandResult(*pViewShell, ".uno:Undo", "ScUndoDeleteTab", &theTabs);
         }
     }
@@ -491,7 +475,7 @@ void ScUndoDeleteTab::Redo()
     if (comphelper::COKit::isActive() && !theTabs.empty())
     {
         ScDocument& rDoc = rDocShell.GetDocument();
-        lcl_OnTabsChanged(*pViewShell, rDoc, theTabs[0]);
+        ScTabViewShell::notifyAllViewsTabsChanged(*pViewShell, rDoc, theTabs[0]);
         lcl_UndoCommandResult(*pViewShell, ".uno:Redo", "ScUndoDeleteTab", &theTabs);
     }
 
@@ -651,7 +635,7 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
         const auto newTabsMinIt = std::min_element(mpNewTabs->begin(), mpNewTabs->end());
         const auto oldTabsMinIt = std::min_element(mpOldTabs->begin(), mpOldTabs->end());
         SCTAB nTab = std::min(*newTabsMinIt, *oldTabsMinIt);
-        lcl_OnTabsChanged(*pViewShell, rDoc, nTab, true /* bInvalidateTiles */);
+        ScTabViewShell::notifyAllViewsTabsChanged(*pViewShell, rDoc, nTab, true /* bInvalidateTiles */);
         lcl_UndoCommandResult(*pViewShell, bUndo ? ".uno:Undo" : ".uno:Redo", "ScUndoMoveTab", mpOldTabs.get(), mpNewTabs.get());
     }
 

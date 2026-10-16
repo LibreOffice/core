@@ -199,8 +199,13 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     nNewTab += nTab2;
                 break;
             case SC_TABS_DELETED:
-                if ( nTab1 < nNewTab )
+                if ( nTab1 + nTab2 <= nNewTab )     // deleted before
                     nNewTab -= nTab2;
+                else if ( nTab1 <= nNewTab )        // deleted current
+                {
+                    nNewTab = nTab1;
+                    bStayOnActiveTab = false;
+                }
                 break;
         }
 
@@ -210,6 +215,12 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
         bool bForce = !bStayOnActiveTab;
         SetTabNo( nNewTab, bForce, false, bStayOnActiveTab );
+
+        // The sheet this view showed is gone or hidden, so the view now shows another sheet,
+        // one that may sit at the same index. The client keeps a geometry per index and
+        // fetches the geometry of the sheet it shows now when it is told.
+        if (!bStayOnActiveTab && comphelper::COKit::isActive())
+            viewCallback(COKitCallbackType::INVALIDATE_SHEET_GEOMETRY, "all"_ostr);
     }
     else if (const ScIndexHint* pIndexHint = dynamic_cast<const ScIndexHint*>(&rHint))
     {

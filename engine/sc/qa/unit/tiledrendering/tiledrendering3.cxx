@@ -2745,6 +2745,82 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowsKeepPositionAfterClearOutline
     Scheduler::ProcessEventsToIdle();
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColumnsFollowSheetAfterWatchedSheetDeleted)
+{
+    // Deleting the sheet a view shows moves that view to the sheet that takes its index.
+    // The client of that view keeps a geometry per sheet index, so it has to be told that
+    // the geometry of its sheet changed, on the delete and on its undo.
+    comphelper::COKit::setCompatFlag(comphelper::COKit::Compat::scPrintTwipsMsgs);
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScViewData* pViewData1 = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData1);
+    ScDocShell* pDocSh = pViewData1->GetDocShell();
+    CPPUNIT_ASSERT(pDocSh);
+    ScDocument& rDoc = pViewData1->GetDocument();
+    const int nView1 = KitHelper::getCurrentView();
+    pDocSh->GetDocFunc().InsertTable(1, u"Second"_ustr, false, true);
+    pDocSh->GetDocFunc().InsertTable(2, u"Third"_ustr, false, true);
+    // The watched sheet has a wide column A, the sheet after it keeps the default widths.
+    const sal_uInt16 nWideTwips = 4000;
+    rDoc.SetColWidth(0, 1, nWideTwips);
+    const sal_uInt16 nDefaultTwips = rDoc.GetColWidth(0, 2);
+    CPPUNIT_ASSERT(nDefaultTwips < nWideTwips);
+
+    // The second view shows the second sheet and resolves column positions there.
+    KitHelper::createView();
+    const int nView2 = KitHelper::getCurrentView();
+    ScTestViewCallback aView2;
+    ScViewData* pViewData2 = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData2);
+    pViewData2->GetViewShell()->SetTabNo(1);
+    requestColumnAnchors(pModelObj, tools::Rectangle(0, 0, 20000, 5000));
+    const double fPPTX = pViewData2->GetPPTX();
+    const SCCOL nProbeCol = 18;
+    auto viewColumnPosition = [pViewData2]() {
+        return pViewData2->GetScrPos(nProbeCol, 0, pViewData2->GetActivePart()).X();
+    };
+    CPPUNIT_ASSERT_EQUAL(expectedColumnPosition(rDoc, fPPTX, 1, nProbeCol), viewColumnPosition());
+
+    // A third view shows the third sheet, which only moves to the index of the deleted one.
+    KitHelper::createView();
+    ScTestViewCallback aView3;
+    ScViewData* pViewData3 = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData3);
+    pViewData3->GetViewShell()->SetTabNo(2);
+    Scheduler::ProcessEventsToIdle();
+
+    // The first view deletes the second sheet; the second view lands on the former third
+    // sheet, which now has the index of the deleted one.
+    KitHelper::setView(nView1);
+    aView2.m_sInvalidateSheetGeometry = ""_ostr;
+    aView3.m_sInvalidateSheetGeometry = ""_ostr;
+    CPPUNIT_ASSERT(pDocSh->GetDocFunc().DeleteTable(1, true));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), rDoc.GetTableCount());
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), pViewData2->GetTabNumber());
+    CPPUNIT_ASSERT_EQUAL(nDefaultTwips, rDoc.GetColWidth(0, 1));
+    CPPUNIT_ASSERT_EQUAL(expectedColumnPosition(rDoc, fPPTX, 1, nProbeCol), viewColumnPosition());
+    CPPUNIT_ASSERT_EQUAL("all"_ostr, aView2.m_sInvalidateSheetGeometry);
+
+    // The third view kept its sheet, so its client has nothing to fetch.
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), pViewData3->GetTabNumber());
+    CPPUNIT_ASSERT_EQUAL(""_ostr, aView3.m_sInvalidateSheetGeometry);
+
+    // Undo brings the wide sheet back at the same index.
+    aView2.m_sInvalidateSheetGeometry = ""_ostr;
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(3), rDoc.GetTableCount());
+    CPPUNIT_ASSERT_EQUAL(nWideTwips, rDoc.GetColWidth(0, 1));
+    CPPUNIT_ASSERT_EQUAL(expectedColumnPosition(rDoc, fPPTX, pViewData2->GetTabNumber(), nProbeCol),
+                         viewColumnPosition());
+    CPPUNIT_ASSERT_EQUAL("all"_ostr, aView2.m_sInvalidateSheetGeometry);
+
+    KitHelper::setView(nView2);
+    Scheduler::ProcessEventsToIdle();
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetGeometryDataNamesItsSheet)
 {
     // The geometry reply names the sheet it describes by index and by the hash the status
