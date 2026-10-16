@@ -4378,12 +4378,11 @@ void DrawingML::WriteBodyProps(const css::uno::Reference< css::uno::XInterface >
     bool bRequireInset = GetProperty(rXPropSet, u"IsPresentationObject"_ustr) && rXPropSet->getPropertyValue(u"IsPresentationObject"_ustr).get<bool>();
 
     mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
-                           XML_numCol, sax_fastparser::UseIf(OString::number(nCols), nCols > 0),
-                           XML_spcCol, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nColSpacing)), nCols > 0 && nColSpacing >= 0),
-                           XML_wrap, pWrap,
-                           XML_horzOverflow, sHorzOverflow,
+                           XML_rot, sTextRotateAngleMSUnit,
                            XML_vertOverflow, sVertOverflow,
-                           XML_fromWordArt, sax_fastparser::UseIf("1", bFromWordArt),
+                           XML_horzOverflow, sHorzOverflow,
+                           XML_vert, sWritingMode,
+                           XML_wrap, pWrap,
                            XML_lIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeft)),
                                                            bRequireInset || nLeft != mconstDefaultLeftRightInset),
                            XML_tIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nTop)),
@@ -4392,11 +4391,12 @@ void DrawingML::WriteBodyProps(const css::uno::Reference< css::uno::XInterface >
                                                            bRequireInset || nRight != mconstDefaultLeftRightInset),
                            XML_bIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nBottom)),
                                                            bRequireInset || nBottom != mconstDefaultTopBottomInset),
+                           XML_numCol, sax_fastparser::UseIf(OString::number(nCols), nCols > 0),
+                           XML_spcCol, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nColSpacing)), nCols > 0 && nColSpacing >= 0),
+                           XML_fromWordArt, sax_fastparser::UseIf("1", bFromWordArt),
                            XML_anchor, sAnchor,
                            XML_anchorCtr, sax_fastparser::UseIf("1", bAnchorCtr),
-                           XML_vert, sWritingMode,
-                           XML_upright, isUpright,
-                           XML_rot, sTextRotateAngleMSUnit);
+                           XML_upright, isUpright);
 
     if (bIsFontworkShape)
     {
