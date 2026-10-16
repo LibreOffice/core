@@ -542,11 +542,18 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 				// fetched again. The wait for a first response starts over with it.
 				this._sheetGeomFirstWait = false;
 				this.requestSheetGeometryData();
-			} else if (this.sheetGeometry &&
-				!this.sheetGeometry.isForSheet(this._selectedPart, this._selectedPartHash())) {
-				// The engine switched the sheet, or another sheet took the index of the
-				// selected one, so the whole geometry of the selected sheet is fetched.
-				this.requestSheetGeometryData();
+			} else if (this.sheetGeometry) {
+				const selectedHash = this._selectedPartHash();
+				if (this.sheetGeometry.isSameSheet(selectedHash)) {
+					// The selected sheet only changed its index, because a sheet before
+					// it was deleted or inserted; its geometry stays as it is.
+					this.sheetGeometry.setPart(this._selectedPart);
+				} else if (!this.sheetGeometry.isForSheet(this._selectedPart, selectedHash)) {
+					// The engine switched the sheet, or another sheet took the index of
+					// the selected one, so the whole geometry of the selected sheet is
+					// fetched.
+					this.requestSheetGeometryData();
+				}
 			}
 
 			this._viewId = statusJSON.viewid;

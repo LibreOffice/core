@@ -137,6 +137,25 @@ describe('SheetGeometry', function () {
 				nodeassert.equal(sg.isForSheet(1, undefined), true);
 			});
 
+			it('follows its sheet to a new index without new data', function () {
+				var sg = new cool.SheetGeometry(
+					sgObj,
+					tileWidthTwips,
+					tileHeightTwips,
+					tileSizePx,
+					2,
+					'sheet-c',
+				);
+				// The sheet before it was deleted, so sheet C sits at index 1 now.
+				nodeassert.equal(sg.isSameSheet('sheet-c'), true);
+				nodeassert.equal(sg.isSameSheet('sheet-b'), false);
+				nodeassert.equal(sg.isSameSheet(undefined), false);
+				sg.setPart(1);
+				nodeassert.equal(sg.getPart(), 1);
+				nodeassert.equal(sg.getPartHash(), 'sheet-c');
+				nodeassert.equal(sg.isForSheet(1, 'sheet-c'), true);
+			});
+
 			it('takes the sheet named in the reply over the one the caller passes', function () {
 				var namedObj = Object.assign({ part: '2', hash: 'sheet-c' }, sgObj);
 				var sg = new cool.SheetGeometry(

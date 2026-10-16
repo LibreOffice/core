@@ -229,6 +229,17 @@ export class SheetGeometry {
 		return this._partHash;
 	}
 
+	// Whether the data describes the sheet with this hash, whatever index it has now.
+	public isSameSheet(partHash: string | undefined): boolean {
+		return partHash !== undefined && this._partHash !== undefined && partHash === this._partHash;
+	}
+
+	// The sheet the data describes moved to another index, for example because a sheet
+	// before it was deleted or inserted; the data stays valid and only its index changes.
+	public setPart(part: number): void {
+		this._part = part;
+	}
+
 	// Whether the data describes the sheet that is at index part now. A sheet that took the
 	// index of a deleted, inserted or moved one has another hash, so the index alone is not
 	// enough. Without a hash on either side the index decides.
