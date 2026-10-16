@@ -45,7 +45,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/kit.hxx>
 #include <uno/current_context.hxx>
 #include <vcl/svapp.hxx>
 
@@ -111,7 +110,7 @@ void Default::setPropertyValue(OUString const &, cpo::uno::Any const &)
         getXWeak(), -1);
 }
 
-OUString xdg_user_dir_lookup (const char *type, bool bAllowHomeDir)
+OUString xdg_user_dir_lookup (const char *type)
 {
     size_t nLenType = strlen(type);
     char *config_home;
@@ -202,20 +201,16 @@ OUString xdg_user_dir_lookup (const char *type, bool bAllowHomeDir)
     if (aUserDirBuf.getLength()>0 && !bError)
     {
         aDocumentsDirURL = aUserDirBuf.makeStringAndClear();
-        if ( bAllowHomeDir ||
-             (aDocumentsDirURL != aHomeDirURL && aDocumentsDirURL != Concat2View(aHomeDirURL + "/")) )
-        {
-            osl::Directory aDocumentsDir( aDocumentsDirURL );
-            if( osl::FileBase::E_None == aDocumentsDir.open() )
-                return aDocumentsDirURL;
-        }
+        osl::Directory aDocumentsDir( aDocumentsDirURL );
+        if( osl::FileBase::E_None == aDocumentsDir.open() )
+            return aDocumentsDirURL;
     }
     /* Use fallbacks historical compatibility if nothing else exists */
     return aHomeDirURL + "/" + OUString::createFromAscii(type);
 }
 
-cpo::uno::Any xdgDirectoryIfExists(char const * type, bool bAllowHomeDir) {
-    auto url = xdg_user_dir_lookup(type, bAllowHomeDir);
+cpo::uno::Any xdgDirectoryIfExists(char const * type) {
+    auto url = xdg_user_dir_lookup(type);
     return cpo::uno::Any(
         osl::Directory(url).open() == osl::FileBase::E_None
         ? css::beans::Optional<cpo::uno::Any>(true, cpo::uno::Any(url))
@@ -226,17 +221,13 @@ cpo::uno::Any Default::getPropertyValue(OUString const & PropertyName)
 {
     if (PropertyName == "TemplatePathVariable")
     {
-        // In kit-mode the templates stay in the template directory of the user profile.
-        if (comphelper::COKit::isActive())
-            return cpo::uno::Any(css::beans::Optional<cpo::uno::Any>());
-
-        // Never pick up the HOME directory as the default location of user's templates
-        return xdgDirectoryIfExists("Templates", false);
+        // The templates stay in the template directory of the user profile.
+        return cpo::uno::Any(css::beans::Optional<cpo::uno::Any>());
     }
 
     if (PropertyName == "WorkPathVariable")
     {
-        return xdgDirectoryIfExists("Documents", true);
+        return xdgDirectoryIfExists("Documents");
     }
 
     if ( PropertyName == "ExternalMailer" ||

@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/kit.hxx>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Type.hxx>
+#include <osl/interlck.h>
 #include <svtools/javacontext.hxx>
 #include <svtools/javainteractionhandler.hxx>
 
@@ -65,14 +65,7 @@ Any JavaContext::getValueByName( const OUString& Name)
 
     if ( Name == JAVA_INTERACTION_HANDLER_NAME )
     {
-        if ( !comphelper::COKit::isActive() )
-        {
-            osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
-            if (!m_xHandler.is())
-                m_xHandler.set( new JavaInteractionHandler );
-        }
-        retVal <<= m_xHandler;
-
+        retVal <<= Reference<XInteractionHandler>();
     }
     else if( m_xNextContext.is() )
     {

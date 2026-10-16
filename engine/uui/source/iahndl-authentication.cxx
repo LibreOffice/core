@@ -42,7 +42,6 @@
 #include <vcl/abstdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
-#include <comphelper/kit.hxx>
 
 #include "authfallbackdlg.hxx"
 #include <strings.hrc>
@@ -115,17 +114,9 @@ executeLoginDialog(
     if ( bCanUseSysCreds )
         aDialog.SetUseSystemCredentials( rInfo.GetIsUseSystemCredentials() );
 
-    if (comphelper::COKit::isActive())
-    {
-        // Avoid the password dialog popup in the COKit case: it's not async and the "remember
-        // password" checkbox would not work.
-        rInfo.SetResult(DialogMask::ButtonsCancel);
-    }
-    else
-    {
-        rInfo.SetResult(aDialog.run() == RET_OK ? DialogMask::ButtonsOk :
-                DialogMask::ButtonsCancel);
-    }
+    // The password dialog is not async and its "remember password" checkbox has no effect in
+    // COKit, so the login is cancelled without showing it.
+    rInfo.SetResult(DialogMask::ButtonsCancel);
     rInfo.SetUserName(aDialog.GetName());
     rInfo.SetPassword(aDialog.GetPassword());
     rInfo.SetAccount(aDialog.GetAccount());

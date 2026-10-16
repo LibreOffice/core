@@ -24,8 +24,6 @@
 #include <cpo/uno/XCurrentContext.hpp>
 
 
-namespace com::sun::star::task { class XInteractionHandler; }
-
 namespace svt
 {
 // We cannot derive from  cppu::WeakImplHelper because we would export the inline
@@ -36,11 +34,8 @@ namespace svt
     {
 
     public:
-        /** A message box is
-            only displayed once for a recurring Java error. That is only
-            the first time JavaInteractionHandler.handle is called with a
-            particular Request then the message box is shown. Afterwards
-            nothing happens.
+        /** Answers the Java interaction handler name with an empty reference and looks up
+            all other names in the next context.
          */
         JavaContext( const cpo::uno::Reference< cpo::uno::XCurrentContext> & ctx );
         ~JavaContext();
@@ -62,7 +57,6 @@ namespace svt
 
         oslInterlockedCount                                  m_aRefCount;
         cpo::uno::Reference< cpo::uno::XCurrentContext >     m_xNextContext;
-        cpo::uno::Reference< css::task::XInteractionHandler> m_xHandler;
     };
 }
 
