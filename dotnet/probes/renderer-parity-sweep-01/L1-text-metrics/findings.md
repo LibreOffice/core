@@ -18,7 +18,7 @@ documents have no line-breaking fault of any kind and their divergence is vertic
 
 Every measurement below was taken from the PDFs in `/data/bench/lo/` and `/data/bench/pl/`.
 The reference half carries `Producer: LibreOffice 24.2`, and `soffice --version` in this
-container is **24.2.7.2**. The Paperless tree is developed against **26.2.4.2** —
+container is **24.2.7.2**. The XRay.Office tree is developed against **26.2.4.2** —
 `dotnet/CLAUDE.md`:546 says so, `dotnet/TODO.24-2-7-audit.md` is the list of 50 sites whose
 calibration moved with it, and `dotnet/probes/fidelity-01/results.md`:38-39 records 40 of
 550 fidelity cases changing verdict across the version alone.
@@ -165,7 +165,7 @@ glyph, and that no quantisation grid from 16 to 4000 units reproduces it. My mea
 adds two faces to that picture and does not disturb it. Closing it means reproducing
 FreeType's hinted advance at LibreOffice's ppem inside a stack that reads its own OpenType
 tables and shapes with HarfBuzz scaled to upem
-(`dotnet/src/Paperless.Text/Shaping/HarfBuzzShaper.cs`; `Paperless.Text/TODO.md` — "advances
+(`dotnet/src/XRay.Office.Text/Shaping/HarfBuzzShaper.cs`; `XRay.Office.Text/TODO.md` — "advances
 come back on the design grid unrounded"). That is an architectural change to the metrics
 source, not a rounding patch, and a patch pretending otherwise would be a factor tuned to
 one sample — which `AGENTS.md`'s OOXML policy forbids and which the refuted grid hypothesis
@@ -206,7 +206,7 @@ a different em size from the reference's — almost always by exactly **one poin
 
 ### Where it lives, and why it is not a defect here
 
-`dotnet/src/Paperless.Presentations/Layout/SlideAutofit.cs`:31-38 —
+`dotnet/src/XRay.Office.Presentations/Layout/SlideAutofit.cs`:31-38 —
 
 > *"LibreOffice 25.2 replaced the bisection with a walk down a fixed [ladder]
 > (`constScaleLevels`) … [24.2.7-audit: FIXED 2026-08-20, round slides-r52 — was WRONG: 25.2
@@ -215,7 +215,7 @@ a different em size from the reference's — almost always by exactly **one poin
 
 and :87 *"Measured against the installed 26.2.4.2, not read out of the tree."*
 
-So Paperless deliberately implements **26.2.4.2's** autofit ladder and this sweep's
+So XRay.Office deliberately implements **26.2.4.2's** autofit ladder and this sweep's
 reference is the **24.2.7.2** bisection it replaced. Two different search procedures landing
 one ladder step apart is exactly the ±1 pt signature measured. **Ours is right for the
 project's reference binary; the sweep's reference PDFs are from the superseded one.** Do not
@@ -269,7 +269,7 @@ declared `swiss`. `#019`: **Arial** on 39 runs plus the theme's **Aptos**.
 
 ### Where it lives
 
-`dotnet/src/Paperless.Text/Fonts/SystemFontResolver.cs`:488-527 (this lane's file). The
+`dotnet/src/XRay.Office.Text/Fonts/SystemFontResolver.cs`:488-527 (this lane's file). The
 declared generic is consulted **before** LibreOffice's `SubstFonts` chain, and the comment at
 :490-499 states why and against what:
 
@@ -393,7 +393,7 @@ defect, and not mine.)
 Same lines, same pitch, same band, two more lines per page from page 2 on. The difference is
 therefore **the empty paragraphs**: the reference spends two 27.6 pt gaps that we do not,
 which is what a page-boundary rule about a blank paragraph's space looks like.
-**Verdict: vertical page filling — L2's `Paperless.WordProcessing/Layout` paginator, not
+**Verdict: vertical page filling — L2's `XRay.Office.WordProcessing/Layout` paginator, not
 text metrics.** The case note's "the text measure is wider … and the space between list
 items larger" is half right: the spacing differs, the measure does not.
 
@@ -429,7 +429,7 @@ Our page-1 limit lands in `(499.4, 508.2]`, and **612 − 36 (section 1's left) 
 (section 2's right) = 504.0** falls inside it. That is the arithmetic of laying the text out
 at the *second* section's width from the *first* section's left origin.
 **Verdict: section margin resolution across a `continuous` section break. Cross-lane —
-L2/L3 (`Paperless.WordProcessing`).** Nothing in `Paperless.Text` can cause or fix it: the
+L2/L3 (`XRay.Office.WordProcessing`).** Nothing in `XRay.Office.Text` can cause or fix it: the
 breaker was handed the wrong width and filled to it correctly.
 
 ### #101 · `May 25 bulletin focus on carers in the workplace.docx` — a version divergence in my own file
@@ -454,15 +454,15 @@ the reference's spans at **10.2 / 12.2 / 14.2 pt** where ours are at **10.0 / 12
 — the reference scales the text matrix horizontally and we do not. Our text comes out
 **2.6% narrow** (0.9746 over 4,301 glyphs), which is 1/1.03 plus the tracking we *do* apply
 (`w:spacing` is read and consumed:
-`Paperless.WordProcessing/Ooxml/WordParagraphFormats.cs`:490-493 → `FormattedRun.Tracking`
-→ `Paperless.Text/Layout/MeasuredParagraph.cs`:347-350). Only 3 of its 74 shared line starts
+`XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs`:490-493 → `FormattedRun.Tracking`
+→ `XRay.Office.Text/Layout/MeasuredParagraph.cs`:347-350). Only 3 of its 74 shared line starts
 agree.
 
 `<w:w>` appears **nowhere** in `dotnet/src`: `grep -rn '"w"' --include=*.cs` returns only
 `w:tblW`/`w:tcW`/`gridCol` width *attributes*, `PptxDiagram*` map keys, and EMF+ tracking.
 `WordParagraphFormats.ResolveRunProperty` reads `sz b i lang color vertAlign caps smallCaps
 highlight u strike dstrike kern spacing` — and not `w`. `FormattedRun`
-(`Paperless.Text/Layout/MeasuredParagraph.cs`:63-70) carries `Start Length Face EmSize
+(`XRay.Office.Text/Layout/MeasuredParagraph.cs`:63-70) carries `Start Length Face EmSize
 Shaping MetricEmSize Tracking` and no horizontal scale. The WW8 reader has no
 `sprmCCharScale` (0x4852) either.
 
@@ -492,10 +492,10 @@ given there.
 ECMA-376 §17.3.2.43 `w:w`: the percentage each glyph's *width* is scaled by, independent of
 its height. LibreOffice models it as `SvxCharScaleWidthItem`. To honour it:
 
-1. **`dotnet/src/Paperless.WordProcessing/Ooxml/WordParagraphFormats.cs`** (L2/L3) — resolve
+1. **`dotnet/src/XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs`** (L2/L3) — resolve
    `"w"` alongside `"spacing"` at :490-493, carry it on `WordTextStyle`, hand it to
    `PageRun` (`Layout/PageContent.cs`:877-891).
-2. **`dotnet/src/Paperless.Text/Layout/MeasuredParagraph.cs`** (**mine**) — a `Scale` on
+2. **`dotnet/src/XRay.Office.Text/Layout/MeasuredParagraph.cs`** (**mine**) — a `Scale` on
    `FormattedRun` beside `Tracking`, multiplying each glyph's advance in the prefix table.
    It scales the advance and not the em size, so it must not touch line height: the same
    separation `MetricEmSize` already makes for small capitals.
@@ -504,14 +504,14 @@ its height. LibreOffice models it as `SvxCharScaleWidthItem`. To honour it:
    another. `FormattedRun.EffectiveShaping`'s doc comment records what that cost when it was
    missing for tracking.
 
-**I have not written the `Paperless.Text` half as a patch**, and that is the recommendation
+**I have not written the `XRay.Office.Text` half as a patch**, and that is the recommendation
 rather than an omission: a `Scale` field that no reader sets and no painter honours is
 exactly the "property read but never consumed" pattern the brief says has been the cause
 four times here, and applied alone it would change nothing while looking like a fix. It
 should land as one change across the three files, sequenced by the coordinator. Reach: one
 document decisively (`#106`), two or three marginally, out of 946.
 
-### `Paperless.WordProcessing` — section margins across a `continuous` break (`#091`)
+### `XRay.Office.WordProcessing` — section margins across a `continuous` break (`#091`)
 
 The arithmetic in §8 (`612 − section1.left − section2.right = 504.0`, inside our measured
 bracket) points at the page frame keeping the first section's origin while the text width

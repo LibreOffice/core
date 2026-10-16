@@ -342,7 +342,7 @@ and **all three differ in exactly five bytes, every one of them inside
 final build was a doc-comment change — so the sweep measured the binary this round ships.
 
 Running that check found something else. `render-hash.sh` masks `/CreationDate ([^)]*)` with a
-space before the parenthesis, and `paperless` writes `/CreationDate(D:…)` with none, so **the mask
+space before the parenthesis, and `xray-office` writes `/CreationDate(D:…)` with none, so **the mask
 this round inherited never matched anything**. It cost nothing here because the same script exports
 `SOURCE_DATE_EPOCH`, which pins the date in the ink as well as in the metadata and is what actually
 made the two original-track runs comparable. The banked copy has the pattern corrected, with a note

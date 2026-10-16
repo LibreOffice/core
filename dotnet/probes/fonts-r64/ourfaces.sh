@@ -10,7 +10,7 @@ set -uo pipefail
 OUT="${1:?usage: ourfaces.sh <out.tsv> [workers]}"
 WORKERS="${2:-4}"
 ROOT=/home/user/sample-files
-CLI="${PAPERLESS_CLI:?set PAPERLESS_CLI to the binary you mean to measure}"
+CLI="${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI to the binary you mean to measure}"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1700000000}"

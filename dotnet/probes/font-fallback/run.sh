@@ -42,7 +42,7 @@
 #
 # `--with-shipped` adds the as-shipped 26.2 column, and *mutates the shared install* to get it:
 # it moves the Latin Noto back, renders, and moves it aside again under a trap. Off by default,
-# because other sessions render against that install too. LO24, LO26 and PAPERLESS_CLI override
+# because other sessions render against that install too. LO24, LO26 and XRAY_OFFICE_CLI override
 # the three binaries.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -50,7 +50,7 @@ OUT="${1:-/tmp/fontprobe}"; [ "${OUT#--}" = "$OUT" ] || { OUT=/tmp/fontprobe; se
 WITH_SHIPPED=0; for a in "$@"; do [ "$a" = "--with-shipped" ] && WITH_SHIPPED=1; done
 LO24="${LO24:-soffice}"
 LO26="${LO26:-/opt/libreoffice26.2/program/soffice}"
-CLI="${PAPERLESS_CLI:-$HERE/../../tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli}"
+CLI="${XRAY_OFFICE_CLI:-$HERE/../../tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli}"
 FONTS="${LO26_FONTS:-/opt/libreoffice26.2/share/fonts/truetype}"
 mkdir -p "$OUT/ours" "$OUT/ref24" "$OUT/ref26" "$OUT/ref26shipped"
 

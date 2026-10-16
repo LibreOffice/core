@@ -172,16 +172,16 @@ of **−1** (a document currently passing check 2 by cancelling errors, the `Tha
 Sheets stays **146 of 171**. Naming this plainly because the brief asked: **I expect no verdict
 movement even though this is the one round where the gate could see the change.**
 
-**P4.4 Cross-track.** Any change here is inside `Paperless.Spreadsheets`, which words and slides
+**P4.4 Cross-track.** Any change here is inside `XRay.Office.Spreadsheets`, which words and slides
 cannot reach. That is a static argument, and it is only valid if the diff stays inside that
-project; if it touches `Paperless.Core` or `Paperless.Text` I owe a 534-document sweep.
+project; if it touches `XRay.Office.Core` or `XRay.Office.Text` I owe a 534-document sweep.
 
 **P4.5** I expect to reach **subject 1 fully, subject 2 to a diagnosis, and subject 3 to a
 diagnosis at best**. A precise seat on one beats three gestures, per the brief.
 
 ## P5 — what this round will not be able to see
 
-* **`paperless analyze` and `pdftotext` both read a *token*.** Neither can tell me how many `#`
+* **`xray-office analyze` and `pdftotext` both read a *token*.** Neither can tell me how many `#`
   glyphs are in the text layer versus how many `###` tokens poppler assembled. Any glyph-level
   claim has to come from reading the PDF's own operators, and I will label it as such.
 * **Nothing in the gate can see the grid**, at all. Subject 3's evidence is entirely a stroke

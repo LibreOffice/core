@@ -9,28 +9,28 @@
 set -euo pipefail
 TREE="${1:?worktree}"; LIST="${2:?list}"; OUT="${3:?outroot}"
 BASE="${BASE_COMMIT:-a3700bba2}"
-CLI="$TREE/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI="$TREE/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 
 FILES=(
-  dotnet/src/Paperless.WordProcessing/Model/PageGeometry.cs
-  dotnet/src/Paperless.WordProcessing/Layout/Paginator.cs
-  dotnet/src/Paperless.WordProcessing/Layout/ContinuousPageDescriptors.cs
-  dotnet/src/Paperless.WordProcessing/OpenDocument/OdfPageGeometry.cs
-  dotnet/src/Paperless.WordProcessing/OpenDocument/OdfSectionGeometry.cs
-  dotnet/src/Paperless.WordProcessing/OpenDocument/OdtLayoutSource.cs
-  dotnet/src/Paperless.WordProcessing/OpenDocument/OdtWordDocument.cs
+  dotnet/src/XRay.Office.WordProcessing/Model/PageGeometry.cs
+  dotnet/src/XRay.Office.WordProcessing/Layout/Paginator.cs
+  dotnet/src/XRay.Office.WordProcessing/Layout/ContinuousPageDescriptors.cs
+  dotnet/src/XRay.Office.WordProcessing/OpenDocument/OdfPageGeometry.cs
+  dotnet/src/XRay.Office.WordProcessing/OpenDocument/OdfSectionGeometry.cs
+  dotnet/src/XRay.Office.WordProcessing/OpenDocument/OdtLayoutSource.cs
+  dotnet/src/XRay.Office.WordProcessing/OpenDocument/OdtWordDocument.cs
 )
 
 leg() {
   local name="$1"
-  rm -rf "$TREE"/dotnet/src/Paperless.WordProcessing/{obj,bin}
-  rm -rf "$TREE"/dotnet/tools/Paperless.Cli/{obj,bin}
+  rm -rf "$TREE"/dotnet/src/XRay.Office.WordProcessing/{obj,bin}
+  rm -rf "$TREE"/dotnet/tools/XRay.Office.Cli/{obj,bin}
   # The CLI alone, not the solution: the round's own tests name a type the base leg does not have,
   # and a build that fails takes the whole leg with it.
-  (cd "$TREE/dotnet" && dotnet build tools/Paperless.Cli/Paperless.Cli.csproj -v q -nologo)
+  (cd "$TREE/dotnet" && dotnet build tools/XRay.Office.Cli/XRay.Office.Cli.csproj -v q -nologo)
   rm -rf "${OUT:?}/$name"
-  PAPERLESS_CLI="$CLI" bash "$HERE/render-list.sh" "$LIST" "$OUT/$name" 3
+  XRAY_OFFICE_CLI="$CLI" bash "$HERE/render-list.sh" "$LIST" "$OUT/$name" 3
 }
 
 mkdir -p "$OUT"

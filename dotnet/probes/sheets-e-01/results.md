@@ -12,7 +12,7 @@ Reference: `/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/sheets/` (171 PDFs, per-fo
 > pdftoppm 26.01.0 · pdftotext 26.01.0 · **"Environment is good."** · `df -h /`: 8.8 GB free.
 
 Ours: worktree `/c/sandbox/workdir/wt-sheets-e`, branch `wt-sheets-e`, based on `735e08c525f`;
-`PAPERLESS_CLI` set explicitly on every render; `SOURCE_DATE_EPOCH=1700000000`, `TZ=UTC`.
+`XRAY_OFFICE_CLI` set explicitly on every render; `SOURCE_DATE_EPOCH=1700000000`, `TZ=UTC`.
 
 **Measured** means read out of a PDF or produced by an authored probe against 26.2.4.2.
 **Inferred** means read out of the C++, which is **27.2.0.0.alpha0+ and not the reference
@@ -130,7 +130,7 @@ that was that. The docstring on `SheetGeneralWidth` even states the *reason* the
 
 ## 2. The implementation
 
-`dotnet/src/Paperless.Spreadsheets/Layout/SheetTextLayout.cs`, one file, one project.
+`dotnet/src/XRay.Office.Spreadsheets/Layout/SheetTextLayout.cs`, one file, one project.
 
 * **`Hash` (`:892-914`)** now shapes the shortened `General` text and compares its width against
   the available width, falling back to `###` when it still does not fit. It returns a third
@@ -142,8 +142,8 @@ that was that. The docstring on `SheetGeneralWidth` even states the *reason* the
   answer is a shaped run, so only the run can decide. Counting characters is what produced the
   original defect.
 
-Nothing else in `src/` changed. The whole diff is inside `Paperless.Spreadsheets`, which
-`Paperless.WordProcessing` and `Paperless.Presentations` are siblings of and cannot reach — so
+Nothing else in `src/` changed. The whole diff is inside `XRay.Office.Spreadsheets`, which
+`XRay.Office.WordProcessing` and `XRay.Office.Presentations` are siblings of and cannot reach — so
 P4.4's static cross-track argument holds and no 534-document sweep is owed (the `sheets-d-01`
 distinction: a shared-layer move owes a measurement, a leaf change owes a proof that it is a leaf).
 
@@ -232,7 +232,7 @@ than assumed), so the verdict is decided by pages and words alone.
 | after | **146** | 16 | 4 | 5 |
 
 **Sheets is 146 of 171 before and after.** That reproduces `sheets-d-01`'s scoreboard to the
-digit — 146 / 16 / 5 / 4 — computed here from `paperless analyze` rather than from `pdftotext`,
+digit — 146 / 16 / 5 / 4 — computed here from `xray-office analyze` rather than from `pdftotext`,
 which is a second instrument returning the same four numbers.
 
 **One document's verdict string changes and the scoreboard does not move**, which is exactly
@@ -261,7 +261,7 @@ reference's 9020 … we are emitting more of them than LibreOffice does."*
 
 ### 4.1 We are not emitting more of them. We are emitting exactly as many.
 
-Read with **`paperless analyze`**, one binary over both PDFs in one pass:
+Read with **`xray-office analyze`**, one binary over both PDFs in one pass:
 
 | | `$` characters | `-` characters | raw tokens | letter-or-digit | non-alphanumeric |
 |---|---:|---:|---:|---:|---:|
@@ -312,9 +312,9 @@ The workbook's own `FORMAT` records, read by walking BIFF `0x041E` records:
 The zero section is `_("$"* "-"??_)`. Two blanks decide the `-`'s position, and **we render both
 as a plain space**:
 
-* `?` → `output.Append(' ')` — `Paperless.Core/Numbers/NumberFormatter.cs:559` and `:580`.
+* `?` → `output.Append(' ')` — `XRay.Office.Core/Numbers/NumberFormatter.cs:559` and `:580`.
   LibreOffice reserves a **digit-width** blank.
-* `_x` → `FormatToken.Literal(" ")` — `Paperless.Core/Numbers/NumberFormatSection.cs:155-157`,
+* `_x` → `FormatToken.Literal(" ")` — `XRay.Office.Core/Numbers/NumberFormatSection.cs:155-157`,
   whose own comment says *"There is no column to align to during extraction, so a single space
   stands in"*. LibreOffice reserves the width of `x`.
 
@@ -337,7 +337,7 @@ Three reasons, in order:
 1. **It moves no verdict and cannot.** The corrected gate already scores this document
    `match` — 43 201 letter-or-digit words on both sides. The gap is invisible to the metric by
    construction, because a `$` carries no letter and no digit.
-2. **The fix is in `Paperless.Core`**, not in `Paperless.Spreadsheets`. `Core/Numbers` is reached
+2. **The fix is in `XRay.Office.Core`**, not in `XRay.Office.Spreadsheets`. `Core/Numbers` is reached
    by word processing, presentations and every chart axis, so it owes the 534-document sweep this
    round did not budget for — the `sheets-c-01` rule, applied to myself.
 3. The change needs a *width* where the formatter currently has only a *string*: `_x` and `?` are
@@ -345,7 +345,7 @@ Three reasons, in order:
    `NumberFormatSection.cs:155` already says why the space is there, and it is right for
    extraction; a rendering path needs a second channel rather than a different literal.
 
-Handed over as a `Paperless.Core` item with the measurement attached, which is worth more than a
+Handed over as a `XRay.Office.Core` item with the measurement attached, which is worth more than a
 rushed change to a shared layer.
 
 ## 5. The grid
@@ -445,7 +445,7 @@ diagnosed; recorded as the largest single lead this round produced.
 ## 6. Two instrument findings, both of which cost time
 
 **A batched instrument and a serial one are not the same instrument in practice.** The first
-`gate.py` called `paperless analyze` once per file per bank — 342 process launches. Twenty
+`gate.py` called `xray-office analyze` once per file per bank — 342 process launches. Twenty
 minutes in it had reached the letter C. `analyze` takes many files in one invocation and emits a
 row each; the batched form is the identical measurement and finishes. Recorded because the serial
 version *looked* correct and would have been abandoned as "too slow to measure" rather than
@@ -487,7 +487,7 @@ shape* (before and after equal) with a wrong magnitude.
 | P4.1 | 8–35 renderings change, point estimate 18 | **refuted** — **2** |
 | P4.2 | every changed document moves toward the reference, none overshoots | **right** — 2 closer, 0 further |
 | P4.3 | `ODs-February` words Δ +895 → **−206**, inside the band; verdict string flips; scoreboard does not move | **right**, and the arithmetic to within 2 words (**−204**) |
-| P4.4 | cross-track reach zero by a static argument | **right** — the whole `src/` diff is one file in `Paperless.Spreadsheets` |
+| P4.4 | cross-track reach zero by a static argument | **right** — the whole `src/` diff is one file in `XRay.Office.Spreadsheets` |
 | P4.5 | subject 1 fully, subject 2 to a diagnosis, subject 3 to a diagnosis | **right** |
 
 **The refutation worth carrying forward is P1.9.** I predicted the corpus gap was upstream of the
@@ -501,13 +501,13 @@ every clip-side candidate in one reading.
 
 ## 8. Tests
 
-`tests/Paperless.Spreadsheets.Tests/SheetHashOverflowTests.cs`, **13 cases**, every expectation
+`tests/XRay.Office.Spreadsheets.Tests/SheetHashOverflowTests.cs`, **13 cases**, every expectation
 quoted from 26.2.4.2's own render of an authored fixture
 (`tests/corpus/features/sheet-hash.fods`, generated by `probes/sheets-e-01/mkhash.py`).
 
 ### Verified by reintroduction — all 13, none a drift guard
 
-`verify-test.sh Paperless.Spreadsheets '<mutation>' SheetHashOverflowTests`:
+`verify-test.sh XRay.Office.Spreadsheets '<mutation>' SheetHashOverflowTests`:
 
 | mutation | what it puts back | detected by |
 |---|---|---:|
@@ -538,7 +538,7 @@ docstring was written to prevent.
 
 ## 9. Build and test counts
 
-`dotnet build Paperless.slnx -v q -nologo`: **0 warnings, 0 errors**, and the exit status was
+`dotnet build XRay.Office.slnx -v q -nologo`: **0 warnings, 0 errors**, and the exit status was
 checked (`EXIT=0`) rather than the colour.
 
 | project | briefed | now | Δ |
@@ -555,7 +555,7 @@ checked (`EXIT=0`) rather than the colour.
 | Presentations | 613 | 613 | |
 | **total** | **3596** | **3609** | **+13** |
 
-**0 failed**, projects run individually and totalled by hand. `Paperless.Fidelity.Tests` was not
+**0 failed**, projects run individually and totalled by hand. `XRay.Office.Fidelity.Tests` was not
 run, as instructed.
 
 ## 10. What this round could not see
@@ -593,7 +593,7 @@ run, as instructed.
 2. **`apron-area.xls` page 1** — no grid and three missing border classes, on a document that
    matches the gate (§5.5). The largest single lead here.
 3. **The grid's per-row segmentation and the overflow hole** (§5), sized at 13 documents.
-4. **`?` and `_x` as blanks of a stated width** (§4), a `Paperless.Core/Numbers` item owing a
+4. **`?` and `_x` as blanks of a stated width** (§4), a `XRay.Office.Core/Numbers` item owing a
    534-document sweep.
 5. **The scientific mantissa is one digit short at three widths** (§2.1) — a
    `SheetGeneralWidth.Scientific` budget question, safe in the direction that matters and

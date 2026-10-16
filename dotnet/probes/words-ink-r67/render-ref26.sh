@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Render the 26.2.4.2 reference half for a list of corpus paths. Touches no Paperless binary,
+# Render the 26.2.4.2 reference half for a list of corpus paths. Touches no XRay.Office binary,
 # so it is safe to run beside a build.
 set -uo pipefail
 ROOT=/home/user/sample-files

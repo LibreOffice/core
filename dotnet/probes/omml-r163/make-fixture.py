@@ -9,7 +9,7 @@ centred paragraph of its own.
 
 A `word/settings.xml` part is included -- without one a hand-built DOCX does
 not get LibreOffice's OOXML compatibility defaults and quietly answers a
-different question (see the `paperless-corpus` skill).
+different question (see the `office-corpus` skill).
 
 Usage:  make-fixture.py [OUTPUT.docx]
 """

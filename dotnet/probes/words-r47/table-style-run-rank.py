@@ -125,7 +125,7 @@ def main() -> int:
     here = Path(__file__).resolve()
     ops = here.parents[3] / ".claude/skills/render-comparison/scripts/pdf-ops.py"
     cli = (here.parents[3]
-           / "dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli")
+           / "dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli")
 
     print(f"{'variant':>13} {'LibreOffice':>12} {'ours':>10}  agree  faces")
     for name, (ppr, rpr) in VARIANTS.items():

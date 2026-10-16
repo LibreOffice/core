@@ -11,7 +11,7 @@ awk -F'\t' 'NR>1 && $2!=$3 {print $1}' "$1" | while IFS= read -r doc; do
   out=""
   for leg in base head; do
     d=/home/user/r100-work/mv/$leg; rm -rf "$d"; mkdir -p "$d"
-    SOURCE_DATE_EPOCH=1757462400 /home/user/r100-work/cli-$leg/Paperless.Cli render "$doc" --outdir "$d" >/dev/null 2>&1
+    SOURCE_DATE_EPOCH=1757462400 /home/user/r100-work/cli-$leg/XRay.Office.Cli render "$doc" --outdir "$d" >/dev/null 2>&1
     f=$(ls "$d"/*.pdf 2>/dev/null | head -1)
     if [ -z "$f" ] || ! tail -c 2048 "$f" | grep -q '%%EOF'; then out="$out\tFAILED"; continue; fi
     v=$(python3 "$DIFF" "$f" "$R" 2>/dev/null | awk -F'\t' 'NF>=6 && $1+0>0 {n++; s+=$4; if($6~/MAJOR/) m++} END{printf "%.2f\t%d\t%d", s, n, m+0}')

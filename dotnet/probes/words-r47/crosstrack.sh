@@ -2,7 +2,7 @@
 # Render slides + sheets with our own CLI into $1. No soffice involved.
 set -uo pipefail
 OUT="$1"
-CLI=/home/user/libreoffice-core/.claude/worktrees/words-r47/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+CLI=/home/user/libreoffice-core/.claude/worktrees/words-r47/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 export SOURCE_DATE_EPOCH=1700000000
 mkdir -p "$OUT"
 n=0

@@ -10,7 +10,7 @@ five hundred.
 import os, re, subprocess, sys
 
 REF = "/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/sheets"
-CLI = "/c/sandbox/workdir/wt-sheets-r50/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/c/sandbox/workdir/wt-sheets-r50/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 OUT = "/c/sandbox/workdir/scratch-r57-sheets/witness"
 ENV = dict(os.environ, SOURCE_DATE_EPOCH="1700000000", TZ="UTC")
 

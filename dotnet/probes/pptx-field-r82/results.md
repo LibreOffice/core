@@ -13,7 +13,7 @@ positively and one of them not at all.
 | reference | `/opt/libreoffice26.2/program/soffice` — **LibreOffice 26.2.4.2** `0229ac93fcf0d7cbc6376066c6f35021cef002dc` |
 | `/usr/bin/soffice` | 24.2.7.2 — **not used for anything in this round** |
 | corpus | `/home/user/sample-files`, the original 947; the `.pptx` column is 251 documents |
-| base binary | `/home/user/libreoffice-core/…/Paperless.Cli`, the main checkout at this round's own base commit, built 05:35 and **not rebuilt** — a whole-corpus gate was running from it throughout |
+| base binary | `/home/user/libreoffice-core/…/XRay.Office.Cli`, the main checkout at this round's own base commit, built 05:35 and **not rebuilt** — a whole-corpus gate was running from it throughout |
 | fonts | all five tarball confounds aside, as they have been since 2026-09-07 |
 | workers | 2 for every sweep, as briefed — with two exceptions recorded below |
 
@@ -150,7 +150,7 @@ boundary, and the sheets track is not this round's.
 `PPT_PST_TxInteractiveInfoAtom`'s text range (`filter/source/msfilter/svdfppt.cxx`:6936), splits
 it across the `PPTCharPropSet`s the range covers (`:7069`, `:7090`) and forces the underline bit
 on each (`:7054-7056`) — so the legacy path is the same rule as DrawingML's, reached through
-`m_aHyperList` instead of a relationship. **Paperless's `.ppt` reader has no
+`m_aHyperList` instead of a relationship. **XRay.Office's `.ppt` reader has no
 `InteractiveInfo`/`ExHyperlink` handling of any kind** — `git grep` finds none of those record
 names under `dotnet/src` — so a `.ppt` hyperlink is currently neither a field, nor blue, nor
 underlined. Reach, counted by scanning every `.ppt` for a record header of type 4063 — a byte-pattern
@@ -164,16 +164,16 @@ line, which is why it is not in this round.
 Three files. The first two are read only by the deck reader; the third is shared with the ODF
 path, which is why its confinement is measured rather than argued.
 
-- **`Paperless.Ooxml/DrawingML/DrawingHyperlink.cs`** (new) — `MakesField` answers the question
+- **`XRay.Office.Ooxml/DrawingML/DrawingHyperlink.cs`** (new) — `MakesField` answers the question
   `textrun.cxx`:88 asks, from the element's own attributes, and `StatesItsOwnColour` the one
   `:162` asks. A stated `r:id` is *taken* to resolve, because the layout reader carries no
   relationship table; the approximation is exact on the corpus, where every non-empty `r:id` on a
   text run resolves and the only element that leaves the map empty states `r:id=""` and nothing
   else.
-- **`Paperless.Presentations/Ooxml/PptxTextBody.cs`** — the run is built with
+- **`XRay.Office.Presentations/Ooxml/PptxTextBody.cs`** — the run is built with
   `IsField: DrawingHyperlink.MakesField(hyperlink)`, and the hyperlink colour and the automatic
   underline are gated on the same answer instead of on the element's presence.
-- **`Paperless.Text/Layout/CellBreaks.cs`** — `Merge` also offers the stretch's own start, which
+- **`XRay.Office.Text/Layout/CellBreaks.cs`** — `Merge` also offers the stretch's own start, which
   is `lineBreaksList`'s unconditional first entry and is what carries a whole field down when even
   its first cell does not fit. This is shared with the ODF path, which is why its confinement is
   measured below rather than argued.
@@ -335,7 +335,7 @@ Every project run individually, at this round's head.
 0 failed and 0 skipped everywhere; the twenty-three new ones are `PptxHyperlinkFieldTests` (7),
 `DrawingHyperlinkTests` (15) and `CellBreakTests.TheStretchesOwnStartIsAnOpportunity` (1).
 
-### `Paperless.Fidelity.Tests`
+### `XRay.Office.Fidelity.Tests`
 
 **542 passed / 10 failed of 552, 0 skipped** — the briefed baseline exactly. The run was captured
 as its last thirty lines, so of the ten only the last two names are in the transcript,

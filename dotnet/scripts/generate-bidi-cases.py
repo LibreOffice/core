@@ -211,6 +211,6 @@ out = [
 for text, para, got in cases:
     out.append(f'{escape(text)}\t{para}\t{" ".join(str(v) for v in got)}')
 
-path = '/home/user/wt-text-bidi/dotnet/tests/Paperless.Text.Tests/bidi-cases.txt'
+path = '/home/user/wt-text-bidi/dotnet/tests/XRay.Office.Text.Tests/bidi-cases.txt'
 open(path, 'w', encoding='utf-8').write('\n'.join(out) + '\n')
 print('written ' + path, file=sys.stderr)

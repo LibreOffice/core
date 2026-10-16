@@ -1,6 +1,6 @@
 # Round 92 — the ODF sheet's notes, and the two things that put a row on Calc's *measured* branch
 
-    ours   = Paperless.Cli @ 1184c6316 (base) and @ 1184c6316 + this round's diff (head)
+    ours   = XRay.Office.Cli @ 1184c6316 (base) and @ 1184c6316 + this round's diff (head)
     ref    = /opt/libreoffice26.2/program/soffice — LibreOffice 26.2.4.2 0229ac93fcf0…
     corpus = /home/user/corpus-odf/sheets — 307 `.ods`, 26.2.4.2's own conversion of the corpus
              /home/user/sample-files/sheets — the same 307 documents as `.xlsx`/`.xls`/`.xlsm`
@@ -60,7 +60,7 @@ Reach is **2 of the 307** and both were failing, exactly as the brief said. `RMP
 come out character-exact against the reference and `Hazard`'s within 4 glyphs of 3313 — the same
 four the `.xls` original is short by, so the residual is shared with a row that already passes.
 
-### An instrument note in `Paperless.Spreadsheets/TODO.md` is wrong and is corrected
+### An instrument note in `XRay.Office.Spreadsheets/TODO.md` is wrong and is corrected
 
 > *"LibreOffice's flat-ODS export drops cell annotations entirely … `office:annotation` appears
 > zero times in the `.fods` and twenty-four times in the `.ods` of the same workbook."*
@@ -150,7 +150,7 @@ close it. **74 of the 307 hold a `text:a`.**
 
 ## 3. Reach, cost and confinement
 
-**Confinement, shown rather than asserted.** The whole diff is inside `Paperless.Spreadsheets`.
+**Confinement, shown rather than asserted.** The whole diff is inside `XRay.Office.Spreadsheets`.
 110 words and slides documents — `.docx`/`.doc`/`.pptx`/`.ppt` from the original corpus and
 `.odt`/`.odp` from the converted one, every ninth and every seventeenth path — rendered at both
 binaries under `SOURCE_DATE_EPOCH`, `obj`/`bin` of the changed project cleared before each build:

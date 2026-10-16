@@ -1,4 +1,4 @@
-measuring /home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+measuring /home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 reference /opt/libreoffice26.2/program/soffice -- LibreOffice 26.2.4.2 0229ac93fcf0d7cbc6376066c6f35021cef002dc
 documents: 337
 TOTAL 337  MATCH 329  REF-CANNOT-RENDER 0

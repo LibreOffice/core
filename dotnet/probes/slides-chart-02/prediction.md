@@ -15,7 +15,7 @@ Six behaviours, all in the chart path.
 | # | change | where |
 |---|---|---|
 | 1 | `c:dateAx` resolves a real date scale, and the points are sorted into date order with it | `DrawingChartPlot`, `ChartDateScale.SortByDate` (moved down from `XlsChartReader`) |
-| 2 | `a:prstDash` on a series reaches the stroke | `DrawingChartPlot.DashOf`, `DashPresets` (moved from `Paperless.Presentations` into Core) |
+| 2 | `a:prstDash` on a series reaches the stroke | `DrawingChartPlot.DashOf`, `DashPresets` (moved from `XRay.Office.Presentations` into Core) |
 | 3 | a line series' legend key is a line sample, dashed where the series is, and 1600 wide when it is | `ChartLayout.AddLegend`, `LineKeyWidth` |
 | 4 | `percentStacked` normalises each category by its own total and fixes the axis at 0–1 in ten steps | `ChartPlot.StackTotal`, `ChartLayout.AddBars`/`AddAreas`/`PercentAxis` |
 | 5 | a chart part's `themeOverride` wins over the deck's theme | `PptxSlideLayout.ChartTheme` |
@@ -61,7 +61,7 @@ tree and once with this one — with `SOURCE_DATE_EPOCH` set, and diffing the PD
    package inspection (`8_P-Pavese`, `RPA P4 - Advanced Material`, `171128IPAP`, `3492` for the
    first; `8_P-Pavese`, `RPA P4`, `171128IPAP`, `bitesize-writing-a-report` for the second), and
    at most those 5 distinct documents can move from them.
-7. The change is in `Paperless.Ooxml`, so it reaches `.xlsx` and `.docx` charts too. I predict
+7. The change is in `XRay.Office.Ooxml`, so it reaches `.xlsx` and `.docx` charts too. I predict
    the sheets and words tracks would also move if swept, and I am **not** sweeping them; the
    Fidelity suite is the control that says nothing broke there.
 
@@ -74,7 +74,7 @@ tree and once with this one — with `SOURCE_DATE_EPOCH` set, and diffing the PD
 
 ### D. Tests
 
-9. `Paperless.Fidelity.Tests` reproduces **30 failed of 550, 0 skipped**, both on the pristine
+9. `XRay.Office.Fidelity.Tests` reproduces **30 failed of 550, 0 skipped**, both on the pristine
    HEAD tree and on this one. The baseline is established on HEAD first so the two are comparable.
 10. Every other project stays at **0 failed**, with the counts `slides-b008-01/results.md` records
     — Containers 109, Core 332 (+5 new), Markup 259, OpenDocument 125, Presentations 679 (+8 new),

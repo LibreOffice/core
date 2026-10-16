@@ -10,7 +10,7 @@ Prediction written and committed after the baseline sweep and before any diagnos
 `prediction.md`, commit `e324e07899c`.
 
 **Two defects, both localised by measurement rather than by reading, and the second is not a
-Paperless defect at all — it is a stored figure that stopped reproducing.** The words track goes
+XRay.Office defect at all — it is a stored figure that stopped reproducing.** The words track goes
 from 173 to **174 of 200**, and the two documents the brief named go from **+18 to −2** and from
 **+23 to +1**. Σ|page error| over the whole track falls from **92 to 50**; Σ|word error| from 4672
 to 4174. Reach is **11 of 200** renderings, 1 verdict won and **0 lost**.
@@ -31,7 +31,7 @@ verdicted against the banked references with `probes/lineheight-01/verdict.py`.
 | `words/pagination-001` | 3 match of 10, **7 failing** | 7 failing ✓ |
 | `words/done-*` | 158 match of 159 | one known failure ✓ |
 | whole `words` track | 173 of 200 | — |
-| `Paperless.Fidelity.Tests` | 30 failed of 550, 0 skipped | 30 of 550 ✓ |
+| `XRay.Office.Fidelity.Tests` | 30 failed of 550, 0 skipped | 30 of 550 ✓ |
 
 The seven failing were exactly the seven the previous round left, unchanged by the line-height and
 reference-device merges. The one standing `done-*` mismatch is
@@ -164,11 +164,11 @@ mean error where every 300 dpi rule is above 0.68.
 
 | file | change |
 |---|---|
-| `src/Paperless.Text/Fonts/LineSpacing.cs` | `MetricGrid.Printer` is 600 dpi; the stale 300 dpi prose corrected in four places |
-| `src/Paperless.WordProcessing/Ooxml/WordStyles.cs` | the pool completion is marked, `PoolCompletedSide` |
-| `src/Paperless.WordProcessing/Ooxml/WordParagraphFormats.cs` | `GroupedMargins` — tdf#118521 |
-| `src/Paperless.WordProcessing/Ooxml/{WordCompatibility,DocxLayoutSource}.cs` | prose |
-| `src/Paperless.WordProcessing/Ww8/{Ww8DocumentProperties,DocReader}.cs` | prose |
+| `src/XRay.Office.Text/Fonts/LineSpacing.cs` | `MetricGrid.Printer` is 600 dpi; the stale 300 dpi prose corrected in four places |
+| `src/XRay.Office.WordProcessing/Ooxml/WordStyles.cs` | the pool completion is marked, `PoolCompletedSide` |
+| `src/XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs` | `GroupedMargins` — tdf#118521 |
+| `src/XRay.Office.WordProcessing/Ooxml/{WordCompatibility,DocxLayoutSource}.cs` | prose |
+| `src/XRay.Office.WordProcessing/Ww8/{Ww8DocumentProperties,DocReader}.cs` | prose |
 
 The completion is marked rather than removed because both rules are real and they apply to different
 things: the style keeps Writer's pool row, and a paragraph that sets one margin directly resolves the
@@ -203,7 +203,7 @@ regressed anywhere.
 
 Slides and sheets were re-rendered whole and verdicted: **147 of 163** and **163 of 171**, both
 exactly the figures `lineheight-01` and `refdev-01` recorded. Neither could have moved —
-`MetricGrid.Printer` has no consumer outside `Paperless.WordProcessing` and `WordParagraphFormats` is
+`MetricGrid.Printer` has no consumer outside `XRay.Office.WordProcessing` and `WordParagraphFormats` is
 the DOCX reader — but it is cheaper to check than to argue.
 
 ### `words/done-*`
@@ -308,7 +308,7 @@ the end. Not just the count: 0 new, 0 newly fixed, the sorted lists identical.
 | total | 4842 | 30 | 1 | |
 
 Every project run individually. Build is 0 warnings, 0 errors. No flaky run was seen; every count is
-from a single pass. **One anomaly, seen twice and not in the tests.** `dotnet build Paperless.slnx` died with
+from a single pass. **One anomaly, seen twice and not in the tests.** `dotnet build XRay.Office.slnx` died with
 `Fatal error. Internal CLR error. (0x80131506)` on the first build of the session and again on the
 last, and succeeded unchanged on the immediate retry both times — 0 warnings, 0 errors. Nothing was
 edited between the failure and the success either time. It is the shape `dotnet/CLAUDE.md` records
@@ -418,18 +418,18 @@ uncomfortable pattern `words-pagination-01` recorded as well.
 ## Files
 
 ```
-src/Paperless.Text/Fonts/LineSpacing.cs                     MetricGrid.Printer is 600 dpi
-src/Paperless.WordProcessing/Ooxml/WordStyles.cs            PoolCompletedSide
-src/Paperless.WordProcessing/Ooxml/WordParagraphFormats.cs  GroupedMargins, tdf#118521
-src/Paperless.WordProcessing/Ooxml/WordCompatibility.cs     prose
-src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs      prose
-src/Paperless.WordProcessing/Ww8/Ww8DocumentProperties.cs   prose
-src/Paperless.WordProcessing/Ww8/DocReader.cs               prose
-tests/Paperless.WordProcessing.Tests/DirectOneSidedSpacingTests.cs   9, three fail unfixed
-tests/Paperless.WordProcessing.Tests/PrinterMetricsTests.cs          re-measured, new fixture size
-tests/Paperless.Text.Tests/MetricGridTests.cs                        re-measured throughout
-tests/Paperless.Text.Tests/ReferenceGridTests.cs                     re-measured, second face added
-tests/Paperless.Text.Tests/EastAsianLineScaleTests.cs                the device it travels with
+src/XRay.Office.Text/Fonts/LineSpacing.cs                     MetricGrid.Printer is 600 dpi
+src/XRay.Office.WordProcessing/Ooxml/WordStyles.cs            PoolCompletedSide
+src/XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs  GroupedMargins, tdf#118521
+src/XRay.Office.WordProcessing/Ooxml/WordCompatibility.cs     prose
+src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs      prose
+src/XRay.Office.WordProcessing/Ww8/Ww8DocumentProperties.cs   prose
+src/XRay.Office.WordProcessing/Ww8/DocReader.cs               prose
+tests/XRay.Office.WordProcessing.Tests/DirectOneSidedSpacingTests.cs   9, three fail unfixed
+tests/XRay.Office.WordProcessing.Tests/PrinterMetricsTests.cs          re-measured, new fixture size
+tests/XRay.Office.Text.Tests/MetricGridTests.cs                        re-measured throughout
+tests/XRay.Office.Text.Tests/ReferenceGridTests.cs                     re-measured, second face added
+tests/XRay.Office.Text.Tests/EastAsianLineScaleTests.cs                the device it travels with
 tests/corpus/features/direct-one-sided-spacing.docx                  new fixture
 tests/corpus/features/printer-metrics{,-off}.docx                    rebuilt at 16 pt
 probes/words-p1-01/direct-one-sided-spacing.py            both declaration orders, and why

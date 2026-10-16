@@ -85,7 +85,7 @@ sites in documents the gate calls open :    67 in   4 documents
 | words renderings whose **page count** changes | — | 1 – 5 |
 | extractable words changed | — | 0 – 2 documents |
 | font lists changed | — | 0 |
-| slides / sheets | 200 / 279 | **unchanged by construction** — the diff is confined to `Paperless.WordProcessing/Layout`, which neither track compiles against a code path of |
+| slides / sheets | 200 / 279 | **unchanged by construction** — the diff is confined to `XRay.Office.WordProcessing/Layout`, which neither track compiles against a code path of |
 
 `012` and `015` are predicted **not** to move, and that is a deliberate break with the brief, which
 put all three in one class. Their reference page 2 is not a trailing empty paragraph: `012` draws a

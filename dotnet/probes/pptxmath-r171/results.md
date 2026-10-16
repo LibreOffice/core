@@ -1,6 +1,6 @@
 # r171 — the OMML formulas in a deck are owed and cost nothing
 
-Round 165 gave `Paperless.Ooxml/OfficeMath/OfficeMathBox` the vertical half of `SmNode::Arrange`
+Round 165 gave `XRay.Office.Ooxml/OfficeMath/OfficeMathBox` the vertical half of `SmNode::Arrange`
 and wired it into `DocxLayoutSource`; `PptxTextBody` does not call it, and that was recorded as
 owed from the round.
 

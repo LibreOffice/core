@@ -17,7 +17,7 @@ REF=/tmp/claude-0/-home-user-libreoffice-core/3e093938-a459-5268-987b-74c5270259
 ROOT=/workspace/sample-files
 DIFF=/home/user/libreoffice-core/.claude/skills/render-comparison/scripts/pdf-image-diff.py
 CENSUS="/home/user/libreoffice-core/.claude/worktrees/slides-r29/dotnet/research/probes/slides-r22/size-census-doc.py"
-CLI="$CLIDIR/Paperless.Cli"
+CLI="$CLIDIR/XRay.Office.Cli"
 
 [ -x "$CLI" ] || { echo "no CLI at $CLI" >&2; exit 1; }
 echo "measuring $CLI" >&2

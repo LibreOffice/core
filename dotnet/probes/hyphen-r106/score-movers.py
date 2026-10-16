@@ -3,7 +3,7 @@
 
     score-movers.py <movers.txt> <out.tsv>
 
-For each document it renders our side twice from ONE binary -- PAPERLESS_HYPHEN_DICTS=0 for
+For each document it renders our side twice from ONE binary -- XRAY_OFFICE_HYPHEN_DICTS=0 for
 the hyphenator-off leg and unset for the shipped default -- and compares each against the
 reference PDF banked in /home/user/gate-orig-r83/ref, which was produced by
 /opt/libreoffice26.2/program/soffice (LibreOffice 26.2.4.2).
@@ -18,7 +18,7 @@ the reference, with the gate's max(2%, 15) band.
 """
 import os, re, shutil, subprocess, sys, tempfile
 
-CLI = "/home/user/wt-hyphen/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/wt-hyphen/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 DIFF = "/home/user/wt-hyphen/.claude/skills/render-comparison/scripts/pdf-image-diff.py"
 REF = "/home/user/gate-orig-r83/ref"
 ROOT = "/home/user/sample-files"
@@ -35,7 +35,7 @@ def ident(rel):
 def render(rel, dicts, into):
     env = dict(os.environ)
     env["SOURCE_DATE_EPOCH"] = "1700000000"
-    env["PAPERLESS_HYPHEN_DICTS"] = dicts
+    env["XRAY_OFFICE_HYPHEN_DICTS"] = dicts
     subprocess.run([CLI, "render", "--quiet", "--outdir", into, os.path.join(ROOT, rel)],
                    env=env, capture_output=True, timeout=600)
     pdfs = [f for f in os.listdir(into) if f.endswith(".pdf")]

@@ -140,5 +140,5 @@ and a seventh of one at the 100 dpi this metric uses. Paired renderings at 110 d
 difference as the reference's dark keyline round each letter.
 
 **No corpus document measures it**: all 15 `#_x0000_t136` shapes state `stroked="f"`. Closing it
-means a resolution-independent "hairline" in the drawing IR, which is a `Paperless.Rendering`
+means a resolution-independent "hairline" in the drawing IR, which is a `XRay.Office.Rendering`
 question and reaches every VML border rather than these.

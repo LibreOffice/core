@@ -9,7 +9,7 @@ size change forces its own text record, and that record's pen is the string's ad
 import os, re, subprocess, sys, tempfile, zipfile
 
 REF = "/opt/libreoffice26.2/program/soffice"
-CLI = "/home/user/wt-frames/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/wt-frames/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 OPS = "/home/user/wt-frames/.claude/skills/render-comparison/scripts/pdf-ops.py"
 
 L3_16 = ("road ahead of him before setting out again towards the distant harbour town. "

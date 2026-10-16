@@ -104,7 +104,7 @@ would be reach I cannot measure.
 ## Across both
 
 - **P9 (80%).** Fidelity stays exactly **30 failed of 550**, same tests, none gained or lost.
-- **P10 (70%).** Every other test project stays at zero failures, and `Paperless.WordProcessing`
+- **P10 (70%).** Every other test project stays at zero failures, and `XRay.Office.WordProcessing`
   gains only the new tests.
 - **P11 (60%).** The two fixes together move **10–35 of the 200** words renderings and the track's
   `match` count does not fall.

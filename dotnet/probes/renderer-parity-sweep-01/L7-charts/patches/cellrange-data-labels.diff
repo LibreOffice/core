@@ -1,5 +1,5 @@
---- a/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs
-+++ b/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
 @@ -1189,7 +1189,8 @@
                  LineCap = CapOf(properties),
                  Label = WithSource(LabelOf(seriesLabels, groupLabel, kind, office2007), sourceFormat),
@@ -149,8 +149,8 @@
      /// <summary>
      /// A custom label's runs, or null when the label states no template.
      /// </summary>
---- a/dotnet/src/Paperless.Core/Charts/ChartDataLabel.cs
-+++ b/dotnet/src/Paperless.Core/Charts/ChartDataLabel.cs
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartDataLabel.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartDataLabel.cs
 @@ -77,7 +77,14 @@
  /// <param name="Field">What it stands for.</param>
  /// <param name="Text">

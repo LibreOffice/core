@@ -1,7 +1,7 @@
-using Paperless;
-using Paperless.Core.Documents;
-using Paperless.Core.Extraction;
-using Paperless.Spreadsheets.Layout;
+using XRay.Office;
+using XRay.Office.Core.Documents;
+using XRay.Office.Core.Extraction;
+using XRay.Office.Spreadsheets.Layout;
 using System.Text.Json;
 
 string mode = args[0];
@@ -9,14 +9,14 @@ string mode = args[0];
 if (mode == "break")
 {
     // Does the layouter emit a line for a trailing hard break?
-    var face = Paperless.Spreadsheets.Layout.SheetFonts.For(new SheetCellFormat());
+    var face = XRay.Office.Spreadsheets.Layout.SheetFonts.For(new SheetCellFormat());
     Console.WriteLine($"face={face?.Reference.FaceKey}");
     if (face is null) return;
-    var lay = new Paperless.Text.Layout.ParagraphLayouter(face.Value.Face, shaper: null, breaksOverflowingBlanks: true);
+    var lay = new XRay.Office.Text.Layout.ParagraphLayouter(face.Value.Face, shaper: null, breaksOverflowingBlanks: true);
     foreach (string probe in new[] { "a", "a\n", "a\nb", "a\nb\n", "a\n\n", "a\nb\n\n" })
     {
-        var laid = lay.Layout(probe, emSize: Paperless.Core.Units.Length.FromPoints(11),
-            textAreaWidth: Paperless.Core.Units.Length.FromPoints(200));
+        var laid = lay.Layout(probe, emSize: XRay.Office.Core.Units.Length.FromPoints(11),
+            textAreaWidth: XRay.Office.Core.Units.Length.FromPoints(200));
         Console.WriteLine($"  {System.Text.Json.JsonSerializer.Serialize(probe),-14} lines={laid.Lines.Count}");
     }
     return;
@@ -24,7 +24,7 @@ if (mode == "break")
 
 string path = args[1];
 
-using IPaginatedDocument document = (IPaginatedDocument)PaperlessDocument.Open(path);
+using IPaginatedDocument document = (IPaginatedDocument)OfficeDocument.Open(path);
 SpreadsheetPages pages = (SpreadsheetPages)document.Layout();
 
 if (mode == "rows")

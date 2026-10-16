@@ -44,9 +44,9 @@ a byte scan reported 91 atoms in 17 documents against a record walk's 171 ranges
 
 **[src]**, all three quoted from this tree:
 
-- `Paperless.WordProcessing/Layout/PageContent.cs` — `WidthPerCent` and `IsHorizontallyScaled`,
+- `XRay.Office.WordProcessing/Layout/PageContent.cs` — `WidthPerCent` and `IsHorizontallyScaled`,
   added by round 143, are what a paragraph carries.
-- `Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs` sets `WidthPerCent = text.WidthPerCent`;
+- `XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs` sets `WidthPerCent = text.WidthPerCent`;
   no other layout source does.
 - The three measurement fallbacks round 143 had to reach — `PageParagraph.Measure`,
   `PageDrawing.RunsIn`, and the uniform-paragraph shortcut in `Paginator` and `FlowLayouter` —

@@ -282,7 +282,7 @@ settle — whether ours has a hairline bar stroke lost to downscaling — is set
 
 ## 6. The 24.2.7.2 audit — one site, VERIFIED
 
-`Paperless.WordProcessing/Ooxml/WordStyles.cs` `HasDefaultParagraphPropertiesElement`: *"LibreOffice
+`XRay.Office.WordProcessing/Ooxml/WordStyles.cs` `HasDefaultParagraphPropertiesElement`: *"LibreOffice
 hangs a document-wide default on exactly that presence … `applyDefaults(true)` runs only from the
 `w:pPrDefault` arm of `StyleSheetTable::sprm`"*, measured on 24.2.7.2.
 
@@ -353,11 +353,11 @@ OpenDocument 125   WordProcessing 1231   Spreadsheets 1020   Presentations 872  
 ```
 
 Re-derived project by project rather than quoted. The words delta is
-`Paperless.WordProcessing` **1225 → 1231, +6**, the six `FloatedTableDeadlineTests`; `Core` 376 → 390
+`XRay.Office.WordProcessing` **1225 → 1231, +6**, the six `FloatedTableDeadlineTests`; `Core` 376 → 390
 and `Presentations` 846 → 872 came in with the round-60/61 merge and are not this round's.
 `dotnet build -v q -nologo`: **0 warnings, 0 errors.**
 
-**`Paperless.Vector` reported 21 failures of 302 in the batch run and 0 of 302 alone**, on an
+**`XRay.Office.Vector` reported 21 failures of 302 in the batch run and 0 of 302 alone**, on an
 unmodified project this diff cannot reach. That is the phantom `CLAUDE.md` documents; re-running
 alone is what identifies it, and it is recorded rather than quietly dropped.
 
@@ -383,7 +383,7 @@ the sweep's own rendering, 25 847 bytes, 0 differing — so the double rebuild l
 ## Shared layers
 
 **None.** `git diff 337bc9fe17c..HEAD --name-only` over `dotnet/src` is three files, all under
-`Paperless.WordProcessing`: `Layout/Paginator.cs`, `Ooxml/DocxReader.cs` and `Ooxml/WordStyles.cs`
+`XRay.Office.WordProcessing`: `Layout/Paginator.cs`, `Ooxml/DocxReader.cs` and `Ooxml/WordStyles.cs`
 (a comment only). Nothing in `Core`, `Containers`, `Text`, `Vector`, `Rendering`, `Markup` or
 `Ooxml` was touched, and the same command over those six trees prints nothing. Slides and sheets
 cannot move **by construction**; that is a falsifiable claim for the parent's sweep.
@@ -398,7 +398,7 @@ cannot move **by construction**; that is a falsifiable claim for the parent's sw
   first cut did neither and reported y values in the thousands on a 612 pt page.
 - `autocolour.py` — the four-arm `COL_AUTO` quadruple, with the non-discriminating first cut recorded
   in its docstring.
-- `dotnet/tests/Paperless.WordProcessing.Tests/FloatedTableDeadlineTests.cs` — six tests: the split,
+- `dotnet/tests/XRay.Office.WordProcessing.Tests/FloatedTableDeadlineTests.cs` — six tests: the split,
   the continuation's own position, the legacy overlap, its two single-condition controls, and the
   guard that was kept, which says in its remarks that it pins a known divergence.
 

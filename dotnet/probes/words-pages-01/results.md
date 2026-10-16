@@ -69,7 +69,7 @@ All seven points on the document agree, **including the four that must not inher
 path lays the same document out correctly (`soffice --convert-to fodt` then `FlowProbe`), so the
 layout engine was never implicated: `Ww8DocumentReader.Describe` was.
 
-`EmptyParagraphCharacterLayout`, `src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs`.
+`EmptyParagraphCharacterLayout`, `src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs`.
 
 ### Reach
 
@@ -233,25 +233,25 @@ Every project run individually, counts read rather than colours. Figures are the
 
 | project | passed | failed | skipped | total |
 |---|---:|---:|---:|---:|
-| Paperless.Core.Tests | 313 | 0 | 0 | 313 |
-| Paperless.Containers.Tests | 109 | 0 | 0 | 109 |
-| Paperless.Markup.Tests | 259 | 0 | 0 | 259 |
-| Paperless.OpenDocument.Tests | 125 | 0 | 0 | 125 |
-| Paperless.Presentations.Tests | 631 | 0 | 0 | 631 |
-| Paperless.Rendering.Tests | 148 | 0 | 1 | 149 |
-| Paperless.Spreadsheets.Tests | 747 | 0 | 0 | 747 |
-| Paperless.Text.Tests | 310 | 0 | 0 | 310 |
-| Paperless.Vector.Tests | 295 | 0 | 0 | 295 |
-| Paperless.WordProcessing.Tests | 818 | 0 | 0 | 818 |
-| Paperless.Fidelity.Tests | 520 | **30** | 0 | 550 |
+| XRay.Office.Core.Tests | 313 | 0 | 0 | 313 |
+| XRay.Office.Containers.Tests | 109 | 0 | 0 | 109 |
+| XRay.Office.Markup.Tests | 259 | 0 | 0 | 259 |
+| XRay.Office.OpenDocument.Tests | 125 | 0 | 0 | 125 |
+| XRay.Office.Presentations.Tests | 631 | 0 | 0 | 631 |
+| XRay.Office.Rendering.Tests | 148 | 0 | 1 | 149 |
+| XRay.Office.Spreadsheets.Tests | 747 | 0 | 0 | 747 |
+| XRay.Office.Text.Tests | 310 | 0 | 0 | 310 |
+| XRay.Office.Vector.Tests | 295 | 0 | 0 | 295 |
+| XRay.Office.WordProcessing.Tests | 818 | 0 | 0 | 818 |
+| XRay.Office.Fidelity.Tests | 520 | **30** | 0 | 550 |
 
-`Paperless.Fidelity.Tests` had **31** failures on the pre-merge base and on this branch before the
+`XRay.Office.Fidelity.Tests` had **31** failures on the pre-merge base and on this branch before the
 merge, and has **30** now — one fewer, not one more. **The flip is the integration branch's, not this
 reconciliation's**: built and run on its own, `7756cd67565` also reports 30 of 550, and its failing
 set is identical name for name to the merged tree's. Nothing here added a failure and nothing here
 fixed one. The build is warning-free.
 
-`Paperless.Rendering.Tests` has skipped 1 on every run measured this session, including the
+`XRay.Office.Rendering.Tests` has skipped 1 on every run measured this session, including the
 pre-merge base — it is not new.
 
 ---

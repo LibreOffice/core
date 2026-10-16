@@ -193,7 +193,7 @@ def render(document, outdir, worker):
 
     repo = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
     cli = os.path.join(
-        repo, "dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli")
+        repo, "dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli")
     scratch = os.path.join(outdir, f"t{worker}")
     profile = os.path.join(outdir, f"prof{worker}")
     os.makedirs(scratch, exist_ok=True)

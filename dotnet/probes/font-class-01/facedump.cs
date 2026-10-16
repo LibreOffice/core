@@ -1,4 +1,4 @@
-using Paperless.Text.Fonts;
+using XRay.Office.Text.Fonts;
 
 // Dumps, for every family named on stdin's list: what LibreOffice's own table calls its shape, and
 // what this resolver answers for a bare request naming it. Joined against `lo-faces-26.tsv`, which

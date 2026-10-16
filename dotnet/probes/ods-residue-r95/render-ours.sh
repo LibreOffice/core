@@ -10,7 +10,7 @@ set -eu
 LIST=$1
 OUT=$2
 JOBS=${3:-3}
-CLI=${PAPERLESS_CLI:?set PAPERLESS_CLI to the Paperless.Cli you mean to measure}
+CLI=${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI to the XRay.Office.Cli you mean to measure}
 
 export SOURCE_DATE_EPOCH=1700000000
 mkdir -p "$OUT"

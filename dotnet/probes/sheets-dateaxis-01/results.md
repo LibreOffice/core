@@ -120,7 +120,7 @@ and the threshold from 16.4 pt to 24.9 pt. With the insets we labelled every 37t
 | 5 | our first two labels read `30/12/99` and `02/mm/yy` | `31/12/99` and `02/03/03` — a day late, see §5 | ✘ |
 | 6 | the word gate does not close, best estimate 1520–1590 against 1531 | **1587 against 1531**, band ±34 | ✔ |
 | 7 | the series mark moves to 91.8–100% of plot width | it leaves the baseline at **91.5%** | ✔ |
-| 8 | `Paperless.Fidelity.Tests` stays at 30 failed of 550, the same 30 by name | 30, and the two name lists `diff` clean | ✔ |
+| 8 | `XRay.Office.Fidelity.Tests` stays at 30 failed of 550, the same 30 by name | 30, and the two name lists `diff` clean | ✔ |
 | 9 | batches 001–006 stay at 57/60; 007–009 unchanged | **57/60**, the same three; 007–009 **29/29**; 010 9/10 | ✔ |
 | 10 | the legend stays wrong and moves with the geometry | 406 ink pixels against the reference's 0, was 932 | ✔ |
 
@@ -257,7 +257,7 @@ most useful thing any measurement did in this round, and no number in the gate c
   `8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx`,
   `southern-classic-kennesaw-state-university-final.pptx` — and all three still get a category
   axis. `Core/Charts/ChartDateScale` is reader-agnostic and `ChartPlot.DateAxis` is the only thing
-  `Paperless.Ooxml` would have to fill; the work is in `axisconverter`-equivalent code, not in
+  `XRay.Office.Ooxml` would have to fill; the work is in `axisconverter`-equivalent code, not in
   Core. Left out so that this round's reach stayed measurable on one track.
 - **The legend on page 17.** Still 406 non-white pixels in the reference's own reported legend text
   box against the reference's 0. `sheets-chart-01` left `VLegend`'s `ChartLegendExpansion_CUSTOM`
@@ -282,17 +282,17 @@ Every project run individually. Counts compared against `--list-tests` where the
 
 | project | passed | failed | skipped | note |
 |---|---:|---:|---:|---|
-| `Paperless.Core.Tests` | **332** | 0 | 0 | 332 discovered; +19 from this round |
-| `Paperless.Containers.Tests` | 109 | 0 | 0 | |
-| `Paperless.Markup.Tests` | 259 | 0 | 0 | |
-| `Paperless.OpenDocument.Tests` | 125 | 0 | 0 | |
-| `Paperless.Presentations.Tests` | 679 | 0 | 0 | |
-| `Paperless.Rendering.Tests` | 150 | 0 | 1 | the skip is pre-existing |
-| `Paperless.Spreadsheets.Tests` | **762** | 0 | 0 | 762 discovered; +4 from this round |
-| `Paperless.Text.Tests` | 339 | 0 | 0 | |
-| `Paperless.Vector.Tests` | 295 | 0 | 0 | |
-| `Paperless.WordProcessing.Tests` | 818 | 0 | 0 | |
-| `Paperless.Fidelity.Tests` | 520 | **30** | 0 | 550 discovered, 550 run |
+| `XRay.Office.Core.Tests` | **332** | 0 | 0 | 332 discovered; +19 from this round |
+| `XRay.Office.Containers.Tests` | 109 | 0 | 0 | |
+| `XRay.Office.Markup.Tests` | 259 | 0 | 0 | |
+| `XRay.Office.OpenDocument.Tests` | 125 | 0 | 0 | |
+| `XRay.Office.Presentations.Tests` | 679 | 0 | 0 | |
+| `XRay.Office.Rendering.Tests` | 150 | 0 | 1 | the skip is pre-existing |
+| `XRay.Office.Spreadsheets.Tests` | **762** | 0 | 0 | 762 discovered; +4 from this round |
+| `XRay.Office.Text.Tests` | 339 | 0 | 0 | |
+| `XRay.Office.Vector.Tests` | 295 | 0 | 0 | |
+| `XRay.Office.WordProcessing.Tests` | 818 | 0 | 0 | |
+| `XRay.Office.Fidelity.Tests` | 520 | **30** | 0 | 550 discovered, 550 run |
 
 The fidelity project was run before any change and after, and the two failure lists `diff` with no
 output — 30 names each. The baseline was taken first, as the brief asks, and was 30 of 550.

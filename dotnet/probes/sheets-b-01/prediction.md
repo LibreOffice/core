@@ -1,7 +1,7 @@
 # sheets-b-01 — prediction, committed before measuring
 
 Written after (a) locating the seven documents, (b) rendering the seven reference PDFs, and
-(c) reading `Paperless.Core/Charts/ChartScale.cs` — but **before opening a single PDF, before
+(c) reading `XRay.Office.Core/Charts/ChartScale.cs` — but **before opening a single PDF, before
 running `pdftotext`/`pdffonts`/`pdfimages` on any of them, and before unzipping any `.xlsx`.**
 Nothing below was retrofitted.
 

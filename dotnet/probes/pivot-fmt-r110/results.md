@@ -378,7 +378,7 @@ Ten non-fidelity projects — Containers 109, Core 560, Markup 259, OpenDocument
 Presentations 1107, Rendering 164, Spreadsheets **1342**, Text 728, Vector 309,
 WordProcessing 1938 — **6676 passed, 0 failed, 0 skipped**.
 
-*`Paperless.Vector.Tests` reported 1 failed of 309 on one run and 309 of 309 on the two after it,
+*`XRay.Office.Vector.Tests` reported 1 failed of 309 on one run and 309 of 309 on the two after it,
 with nothing in this round able to reach that project; the failing run was concurrent with another
 session's whole-suite run on the same host. It is the invented-failure-under-load case
 `CLAUDE.md` records, and it is written down rather than left out.*
@@ -387,7 +387,7 @@ session's whole-suite run on the same host. It is the invented-failure-under-loa
 1337 the merged HEAD reports, which is the same 1333 plus `agent/chartinner`'s four — two totals
 agreeing is not two trees agreeing.*
 
-`Paperless.Fidelity.Tests`: **Failed: 10, Passed: 542, Total: 552** — the known ten and no
+`XRay.Office.Fidelity.Tests`: **Failed: 10, Passed: 542, Total: 552** — the known ten and no
 eleventh: `PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt` on
 `paginated.fodt`/`.doc`/`.docx`/`.rtf`,
 `TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop` on

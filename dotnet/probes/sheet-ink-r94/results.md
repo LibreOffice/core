@@ -147,7 +147,7 @@ on either side.
   whose rules are all `containsText`, all unevaluable, or all false paints exactly what it painted.
 
 *Each leg used a frozen copy of the binary outside the tree rather than the tree's own
-`Paperless.Cli`, so the build the round's tests needed could not swap it mid-sweep; `dotnet/CLAUDE.md`'s
+`XRay.Office.Cli`, so the build the round's tests needed could not swap it mid-sweep; `dotnet/CLAUDE.md`'s
 "a sweep and a rebuild must never overlap" is about the tree's binary and that is not what was
 measured.* One refinement landed after the sweep — a rule's range is clamped to a bounded `<col>`
 run as well as to the cells the sheet writes — and it is **inert on the corpus**: all 55 documents

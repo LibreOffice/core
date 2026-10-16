@@ -1,14 +1,14 @@
 // Prints, per sheet, the used range, the printed range and what the first few columns state,
 // so a print-area difference can be attributed to the scan rather than inferred from a page count.
-using Paperless;
-using Paperless.Core.Documents;
-using Paperless.Spreadsheets.Layout;
+using XRay.Office;
+using XRay.Office.Core.Documents;
+using XRay.Office.Spreadsheets.Layout;
 
 string path = args[0];
 string? only = args.Length > 1 && args[1].Length > 0 ? args[1] : null;
 int cols = args.Length > 2 ? int.Parse(args[2]) : 10;
 
-using IDocument doc = PaperlessDocument.Open(path);
+using IDocument doc = OfficeDocument.Open(path);
 var pages = (SpreadsheetPages)((IPaginatedDocument)doc).Layout();
 
 foreach (SheetLayout sheet in pages.Sheets)

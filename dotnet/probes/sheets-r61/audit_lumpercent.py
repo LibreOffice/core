@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """24.2.7.2 audit: is `a:lum`'s brightness read as a WHOLE per cent, truncated?
 
-`Paperless.Ooxml/DrawingML/DrawingFill.cs:115` states, of 24.2.7.2:
+`XRay.Office.Ooxml/DrawingML/DrawingFill.cs:115` states, of 24.2.7.2:
 
     getLimitedValue<sal_Int16>(value / PER_PERCENT, -100, 100)
     (oox/source/drawingml/fillproperties.cxx:799-800)

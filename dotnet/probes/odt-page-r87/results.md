@@ -157,10 +157,10 @@ byte, and neither do the two other ODF columns.
 
 ### Tests
 
-`Paperless.WordProcessing.Tests` **1827 → 1834 passed, 0 failed** (seven new in
+`XRay.Office.WordProcessing.Tests` **1827 → 1834 passed, 0 failed** (seven new in
 `OdtTabSettingsTests`). The other nine non-fidelity projects run individually: 519, 109, 259, 143,
 1044, 164, 1226, 728, 302 passed, 0 failed and 0 skipped throughout.
-`Paperless.Fidelity.Tests` is **542 passed / 10 failed**, and the ten are exactly the expected
+`XRay.Office.Fidelity.Tests` is **542 passed / 10 failed**, and the ten are exactly the expected
 names — `PageDrawingComparisonTests.EveryLineIsDrawn` ×4,
 `TabStopComparisonTests.AListLabelsTabAdvance` ×4, `SheetDrawingComparisonTests.APictureIsDrawn`,
 `JustificationShrinkComparisonTests`. Two of the four `AListLabelsTabAdvance` failures are the

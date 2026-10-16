@@ -9,7 +9,7 @@ this string fit", which is what the residual disagreement is about.
 import os, re, subprocess, sys, tempfile, zipfile, collections
 
 REF = "/opt/libreoffice26.2/program/soffice"
-CLI = "/home/user/wt-frames/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/wt-frames/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 TEXT = ("road ahead of him before setting out again towards the distant harbour town. Every carefully "
         "measured line of this paragraph is set justified so that the blanks between its words carry "
         "whatever slack the margin leaves them.")

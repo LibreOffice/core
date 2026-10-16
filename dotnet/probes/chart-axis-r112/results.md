@@ -20,7 +20,7 @@ source: every arm below is stated either as a source reading of that tree or as 
 | Does it close `027`? | **No.** The label set was one of two terms; the other is the axis length the cap is taken against, which is bracketed at **[125.4, 138) pt** against our 107.2. §2.4 |
 | Is a value axis wired to `ChartAxisLabels.Resolve`? | **Yes**, for a value axis running along the bottom. §3 |
 | Reach | **2 of 176** chart-bearing corpus renderings, `SOURCE_DATE_EPOCH` pinned. A alone moves both; B alone moves one of them, and only in how it sets the labels. Both movers move **toward** the reference. §4 |
-| Tests | 6 added, 2 of them failing at the base. 6740 unit tests pass in ten projects; `Paperless.Fidelity.Tests` **Failed 10, Passed 542, Skipped 0, Total 552**, exactly round 111's ten. §5 |
+| Tests | 6 added, 2 of them failing at the base. 6740 unit tests pass in ten projects; `XRay.Office.Fidelity.Tests` **Failed 10, Passed 542, Skipped 0, Total 552**, exactly round 111's ten. §5 |
 
 ---
 
@@ -58,10 +58,10 @@ is what separates *the freeze* from *the year*.
 python3 probes/chart-axis-r112/freeze-055.py /tmp/probe
 /opt/libreoffice26.2/program/soffice --headless --convert-to pdf --outdir /tmp/probe \
     /tmp/probe/055_static2023.xlsx /tmp/probe/055_static2026.xlsx
-SOURCE_DATE_EPOCH=1700000000 Paperless.Cli render --outdir /tmp/ours /tmp/probe/055_static*.xlsx
+SOURCE_DATE_EPOCH=1700000000 XRay.Office.Cli render --outdir /tmp/ours /tmp/probe/055_static*.xlsx
 ```
 
-| variant | 26.2.4.2 | Paperless |
+| variant | 26.2.4.2 | XRay.Office |
 |---|---|---|
 | as authored | 38 labels, 30-day, turned, `5 Apr`…`19 Apr` | 15 labels, 10-day, upright, `5 Apr`…`23 Aug` |
 | **`static2023`** | **15, 10-day, upright, `5 Apr`…`23 Aug`** | 15, 10-day, upright, `5 Apr`…`23 Aug` |
@@ -113,7 +113,7 @@ on the same UTC day:
 |---|---:|
 | 26.2.4.2, as authored | **1045** |
 | 26.2.4.2, `static2023` and `static2026` (identical) | **934** |
-| Paperless, all three | **960** |
+| XRay.Office, all three | **960** |
 
 * **+111** is the confound: 23 extra date-axis labels the union range gives the reference. Not
   recoverable here.
@@ -258,7 +258,7 @@ export SOURCE_DATE_EPOCH=1700000000
 tail -n +2 probes/chart-fit/census.tsv | cut -f1 > /tmp/chartdocs.txt
 for leg in base aonly after; do
   python3 probes/chart-collide-r110/confine.py --out /tmp/conf-$leg \
-      --cli /tmp/cli-$leg/Paperless.Cli --rows /tmp/rows-$leg.tsv --jobs 3 < /tmp/chartdocs.txt
+      --cli /tmp/cli-$leg/XRay.Office.Cli --rows /tmp/rows-$leg.tsv --jobs 3 < /tmp/chartdocs.txt
 done
 ```
 
@@ -310,7 +310,7 @@ The error halves, 31.68 → 15.83. The residual is §2.4's numerator.
 
 ## 5. Tests
 
-`tests/Paperless.Core.Tests/ChartValueAxisArrangementTests.cs`, five cases over one fixture, plus
+`tests/XRay.Office.Core.Tests/ChartValueAxisArrangementTests.cs`, five cases over one fixture, plus
 one in `ChartDateScaleTests.cs`.
 
 | case | what it holds |
@@ -337,7 +337,7 @@ Rendering  164   Spreadsheets 1352   Text 728   Vector 309   WordProcessing 1938
 Every one of the ten is at or above round 111's, so none is a truncated run; Core is +6, of which 6
 are this round's, and Presentations +22 and Spreadsheets +6 come from rounds merged since.
 
-**`Paperless.Fidelity.Tests`, the one that can skip silently: `Failed: 10, Passed: 542,
+**`XRay.Office.Fidelity.Tests`, the one that can skip silently: `Failed: 10, Passed: 542,
 Skipped: 0, Total: 552`** — 0 skipped, so it covered everything, and the ten are exactly round
 111's, none of them a chart:
 

@@ -255,7 +255,7 @@ question and not a placement one.
 ## 4. Pavese's gradient bars, and the side legend's 30% wrap: **ranked, not re-derived**
 
 Both were priced by round 62 and neither is re-measured here. The gradient is **0.12 of the
-track's 989** against a `Paint` through `Paperless.Core/Charts`, `Paperless.Ooxml` and four
+track's 989** against a `Paint` through `XRay.Office.Core/Charts`, `XRay.Office.Ooxml` and four
 consumers on three tracks; the side-legend wrap (`VLegend.cxx:295-301`) is **three corpus
 documents, one of them on slides**. Both rank below §1 and §2 on value-per-line-changed and below
 the marker-size half of §3 on reach. Recorded so the next round inherits a ranking rather than a
@@ -439,10 +439,10 @@ axis title carries a `c:manualLayout` — the arm the prediction said would be o
 
 ## Shared layers — this diff reaches all three tracks
 
-* **§1** touches `Paperless.Core/Charts` (`ChartLayout.AddTitles`).
-* **§2** touches `Paperless.Core/Charts` (`ChartSeries.MarkerSize`, `ChartLayout.AddLines`,
-  `ChartLayout.Plots.AddRadar`) and `Paperless.Ooxml` (`DrawingChartPlot.MarkerSizeOf`).
-* Nothing touches `Paperless.Vector`, `Text`, `Rendering`, `Markup` or `Containers`.
+* **§1** touches `XRay.Office.Core/Charts` (`ChartLayout.AddTitles`).
+* **§2** touches `XRay.Office.Core/Charts` (`ChartSeries.MarkerSize`, `ChartLayout.AddLines`,
+  `ChartLayout.Plots.AddRadar`) and `XRay.Office.Ooxml` (`DrawingChartPlot.MarkerSizeOf`).
+* Nothing touches `XRay.Office.Vector`, `Text`, `Rendering`, `Markup` or `Containers`.
 
 Census reach outside slides, counted on what the parts state, with the over-counting above:
 
@@ -516,11 +516,11 @@ markers 33 → 34   (VERIFIED 29, FIXED 4, WRONG 1)
 ```
 
 **No new re-check was run this round, and the reason is that this track has none left to run.**
-Every `24.2.7` site in `Paperless.Presentations` and `Paperless.Ooxml` already carries a marker:
+Every `24.2.7` site in `XRay.Office.Presentations` and `XRay.Office.Ooxml` already carries a marker:
 `SlideAutofit.cs` ×4, `SlideDrawing.cs` ×2, `PptxSlideLayout.cs` ×2, `PptxTextStyles.cs`,
 `DrawingFill.cs`. The nine files still carrying the bare string with **no marker at all** are
-`Paperless.WordProcessing` ×4, `Paperless.Spreadsheets` ×3, `Paperless.Text` and
-`Paperless.Rendering` — none of them this track's.
+`XRay.Office.WordProcessing` ×4, `XRay.Office.Spreadsheets` ×3, `XRay.Office.Text` and
+`XRay.Office.Rendering` — none of them this track's.
 
 **And three of those nine are miscounted, in the direction that hides work.**
 `SheetFonts.cs`, `SheetDeviceUnits.cs` and `SheetGeneralWidth.cs` appear in

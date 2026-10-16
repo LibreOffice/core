@@ -241,7 +241,7 @@ exact and state nothing for the clearing to remove. Full hashes in `sheets-sweep
 
 The other two tracks cannot be reached: the change is inside `XlsxPivotGrid`, which only
 `XlsxFile`'s OOXML spreadsheet path enters, and the 64 `.xls` in the sweep go through
-`Paperless.MsBinary` instead.
+`XRay.Office.MsBinary` instead.
 
 ## Tests
 
@@ -252,7 +252,7 @@ Ten non-fidelity projects — Containers 109, Core 560, Markup 259, OpenDocument
 Presentations 1101, Rendering 164, Spreadsheets 1323, Text 728, Vector 309, WordProcessing 1938 —
 **6651 passed, 0 failed**, and the run reached the last of them.
 
-`Paperless.Fidelity.Tests`: **Failed: 10, Passed: 542, Total: 552**, and the ten are the known ten
+`XRay.Office.Fidelity.Tests`: **Failed: 10, Passed: 542, Total: 552**, and the ten are the known ten
 and no eleventh — `PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt` on
 `paginated.fodt`/`.doc`/`.docx`/`.rtf`,
 `TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop` on

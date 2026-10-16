@@ -14,7 +14,7 @@ import zipfile
 from pathlib import Path
 
 SOFFICE = '/opt/libreoffice26.2/program/soffice'
-PROFILE = 'file:///tmp/paperless-lo-r95v'
+PROFILE = 'file:///tmp/xray-office-lo-r95v'
 
 
 def repackage(source, target, edit):

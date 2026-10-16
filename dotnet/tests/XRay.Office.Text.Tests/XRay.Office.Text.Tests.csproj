@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Unit tests for font resolution, metrics, shaping, line breaking and paragraph layout.</Description>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Shouldly" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The generated line-break cases, read at run time so the tests need no Python. -->
+    <None Include="line-break-cases.txt" CopyToOutputDirectory="PreserveNewest" />
+    <!-- The generated bidi cases, likewise, so the tests need neither Python nor ICU. -->
+    <None Include="bidi-cases.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XRay.Office.TestKit\XRay.Office.TestKit.csproj" />
+    <ProjectReference Include="..\..\src\XRay.Office.Text\XRay.Office.Text.csproj" />
+  </ItemGroup>
+
+</Project>

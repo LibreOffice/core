@@ -13,52 +13,52 @@ OUT = pathlib.Path("/data/bench/fix-lanes")
 
 LANES = {
  "L1-text-metrics": dict(
-   owns=["dotnet/src/Paperless.Text/**"],
+   owns=["dotnet/src/XRay.Office.Text/**"],
    title="Text metrics, shaping and line breaking",
    focus="Cases whose only fault is that a line breaks a word early or late: the "
          "glyph advances differ. CLAUDE.md already seats this in the unhinted-vs-"
          "grid-fitted advance and forbids re-deriving the kerning and grid probes."),
  "L2-docx-layout": dict(
-   owns=["dotnet/src/Paperless.WordProcessing/Layout/**"],
+   owns=["dotnet/src/XRay.Office.WordProcessing/Layout/**"],
    title="Word-processing layout: indents, table geometry, page breaking",
    focus="Structural geometry: a block indented to the wrong x, a table column "
          "sized differently, row heights, where the page breaks."),
  "L3-docx-reader": dict(
-   owns=["dotnet/src/Paperless.WordProcessing/Ooxml/**",
-         "dotnet/src/Paperless.WordProcessing/Model/**"],
+   owns=["dotnet/src/XRay.Office.WordProcessing/Ooxml/**",
+         "dotnet/src/XRay.Office.WordProcessing/Model/**"],
    title="DOCX reader: fields, numbering, run properties, borders",
    focus="Values the reader resolves wrongly: TOC field styling, PAGE/NUMPAGES, "
          "STYLEREF running heads, date fields, list counters that advance on "
          "unnumbered rows, run colour and underline, table border properties."),
  "L4-doc-legacy": dict(
-   owns=["dotnet/src/Paperless.WordProcessing/Ww8/**",
-         "dotnet/src/Paperless.WordProcessing/Rtf/**"],
+   owns=["dotnet/src/XRay.Office.WordProcessing/Ww8/**",
+         "dotnet/src/XRay.Office.WordProcessing/Rtf/**"],
    title="Legacy .doc (WW8) reader",
    focus="Everything wrong on a .doc and nothing else: heading fields resolving "
          "to text, revision change-bars, blank paragraphs dropped from table "
          "cells, symbol bullets, CJK list punctuation."),
  "L5-slides": dict(
-   owns=["dotnet/src/Paperless.Presentations/**"],
+   owns=["dotnet/src/XRay.Office.Presentations/**"],
    title="Presentations: bullets, autofit, placeholder measure",
    focus="Bullet glyphs that resolve to nothing or to tofu, numbered and lettered "
          "markers dropped, autofit shrink applied or not, placeholder width."),
  "L6-sheets": dict(
-   owns=["dotnet/src/Paperless.Spreadsheets/**"],
+   owns=["dotnet/src/XRay.Office.Spreadsheets/**"],
    title="Spreadsheets: print pagination and sheet layout",
    focus="Where the printed page breaks, row heights when cell text wraps, "
          "header/footer fields, print titles colliding with the header row, "
          "banding and borders."),
  "L7-charts": dict(
-   owns=["dotnet/src/Paperless.Core/Charts/**",
-         "dotnet/src/Paperless.Ooxml/DrawingML/DrawingChart*.cs"],
+   owns=["dotnet/src/XRay.Office.Core/Charts/**",
+         "dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChart*.cs"],
    title="Charts",
    focus="Series fills drawn as stripes, legends missing, data labels printing "
          "[CELLRANGE] instead of resolving, axis labels dropped or overlapping, "
          "plot-area fill."),
  "L8-drawing": dict(
-   owns=["dotnet/src/Paperless.Ooxml/DrawingML/** (except DrawingChart*.cs)",
-         "dotnet/src/Paperless.Core/Graphics/**",
-         "dotnet/src/Paperless.Rendering/**"],
+   owns=["dotnet/src/XRay.Office.Ooxml/DrawingML/** (except DrawingChart*.cs)",
+         "dotnet/src/XRay.Office.Core/Graphics/**",
+         "dotnet/src/XRay.Office.Rendering/**"],
    title="Drawing: shape presets, fills, backgrounds, pictures",
    focus="Preset shapes falling back to rectangles, page and slide background "
          "gradients not painted, watermarks and logos absent, picture crop and "
@@ -121,7 +121,7 @@ def main():
             lines += [
               f"### #{c['rank']:03d} · {c['name']}",
               f"- corpus path: `{c['dir']}/{c['name']}`",
-              f"- rendered pair (LibreOffice left, Paperless right): "
+              f"- rendered pair (LibreOffice left, XRay.Office right): "
               f"`/data/bench/pairs-view/{c['rank']:03d}.jpg`",
               f"- reference PDF `/data/bench/lo/{c['id']}/out.pdf` · "
               f"ours `/data/bench/pl/{c['id']}/out.pdf`" if "id" in c else "",

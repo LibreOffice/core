@@ -2,7 +2,7 @@
 # Reintroduce one drawing bug and count the rotated-placement cases that fail.
 set -u
 D=/home/user/libreoffice-core/.claude/worktrees/sheets-r26/dotnet
-F=$D/src/Paperless.Spreadsheets/Layout/SheetTextLayout.cs
+F=$D/src/XRay.Office.Spreadsheets/Layout/SheetTextLayout.cs
 cp /tmp/stl.bak "$F"
 
 case "$1" in
@@ -57,7 +57,7 @@ PY
   *) echo "unknown $1" >&2; exit 2 ;;
 esac
 
-out=$(cd "$D" && dotnet test tests/Paperless.Spreadsheets.Tests/Paperless.Spreadsheets.Tests.csproj \
+out=$(cd "$D" && dotnet test tests/XRay.Office.Spreadsheets.Tests/XRay.Office.Spreadsheets.Tests.csproj \
       --filter "FullyQualifiedName~SheetRotatedTextPlacementTests" 2>&1)
 echo "$1: $(echo "$out" | grep -oP 'Failed:\s+\d+, Passed:\s+\d+' | tail -1)${_:-}"
 echo "$out" | grep -c "error CS" | sed 's/^/    build errors: /'

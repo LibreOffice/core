@@ -1,6 +1,6 @@
 # Round 95 — the four seats round 92 left, and two of the four premises were wrong
 
-    ours   = Paperless.Cli @ 9814327c8 (base) and @ 9814327c8 + this round's diff (head)
+    ours   = XRay.Office.Cli @ 9814327c8 (base) and @ 9814327c8 + this round's diff (head)
     ref    = /opt/libreoffice26.2/program/soffice — LibreOffice 26.2.4.2 0229ac93fcf0…
              plus the banked reference PDFs at /home/user/gate-odf-r80/ref (the 307 `.ods`)
              and /home/user/gate-orig-r83/ref (the 947 originals)
@@ -295,7 +295,7 @@ the confinement pair and 128 of 128 on the `.xls` reach pair — because a trunc
 a real difference rather than erroring, and `/` was between 6.6 and 8.2 GB free throughout.
 
 **Tests.** Ten non-fidelity projects, run individually: 109 / 521 / 259 / 146 / 1044 / 164 / 1249 /
-728 / 302 / 1864, **0 failed and 0 skipped in every one**. `Paperless.Fidelity.Tests` is at its
+728 / 302 / 1864, **0 failed and 0 skipped in every one**. `XRay.Office.Fidelity.Tests` is at its
 briefed baseline (§ below). Solution build 0 warnings, 0 errors.
 
 ## Files

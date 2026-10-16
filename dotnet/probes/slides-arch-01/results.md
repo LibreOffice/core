@@ -28,7 +28,7 @@ Area code point, table reading order, three hyphens `pdftotext` de-hyphenates ou
 *reference's* line breaks, and two words (`each layer.`) the **reference** loses off the bottom of
 its page 13.
 
-`paperless extract` returns **2011 words**, exactly matching our rendered PDF. So the model and
+`xray-office extract` returns **2011 words**, exactly matching our rendered PDF. So the model and
 the page agree completely: nothing is missing from either, and the "text extracts but does not
 render" / "renders but does not extract" fork in the `extraction-comparison` skill does not apply.
 
@@ -139,9 +139,9 @@ insisted.
 
 Two files, 53 lines including comments.
 
-- `src/Paperless.Presentations/MsBinary/PptTextReader.cs` — `PptParagraphRun` gains
+- `src/XRay.Office.Presentations/MsBinary/PptTextReader.cs` — `PptParagraphRun` gains
   `ushort BulletFlags`, carrying the shared word whole instead of only its bit 0.
-- `src/Paperless.Presentations/MsBinary/PptTextBody.cs` — the hard-colour flag is read from the
+- `src/XRay.Office.Presentations/MsBinary/PptTextBody.cs` — the hard-colour flag is read from the
   paragraph when its mask names it and from the master's level otherwise, and the colour is passed
   only when it is hard:
 
@@ -246,22 +246,22 @@ against the colour of the output.
 
 | project | before | after |
 |---|---|---|
-| `Paperless.Containers.Tests` | — | 109 passed, 0 failed |
-| `Paperless.Core.Tests` | — | 313 passed, 0 failed |
-| **`Paperless.Fidelity.Tests`** | **30 failed, 520 passed, 550 total, 0 skipped** | **30 failed, 520 passed, 550 total, 0 skipped** |
-| `Paperless.Markup.Tests` | — | 259 passed, 0 failed |
-| `Paperless.OpenDocument.Tests` | — | 125 passed, 0 failed |
-| `Paperless.Presentations.Tests` | 646 | **651** passed, 0 failed (5 added) |
-| `Paperless.Rendering.Tests` | — | 150 passed, 1 skipped |
-| `Paperless.Spreadsheets.Tests` | — | 758 passed, 0 failed |
-| `Paperless.Text.Tests` | — | 310 passed, 0 failed |
-| `Paperless.Vector.Tests` | — | 295 passed, 0 failed |
-| `Paperless.WordProcessing.Tests` | — | 818 passed, 0 failed |
+| `XRay.Office.Containers.Tests` | — | 109 passed, 0 failed |
+| `XRay.Office.Core.Tests` | — | 313 passed, 0 failed |
+| **`XRay.Office.Fidelity.Tests`** | **30 failed, 520 passed, 550 total, 0 skipped** | **30 failed, 520 passed, 550 total, 0 skipped** |
+| `XRay.Office.Markup.Tests` | — | 259 passed, 0 failed |
+| `XRay.Office.OpenDocument.Tests` | — | 125 passed, 0 failed |
+| `XRay.Office.Presentations.Tests` | 646 | **651** passed, 0 failed (5 added) |
+| `XRay.Office.Rendering.Tests` | — | 150 passed, 1 skipped |
+| `XRay.Office.Spreadsheets.Tests` | — | 758 passed, 0 failed |
+| `XRay.Office.Text.Tests` | — | 310 passed, 0 failed |
+| `XRay.Office.Vector.Tests` | — | 295 passed, 0 failed |
+| `XRay.Office.WordProcessing.Tests` | — | 818 passed, 0 failed |
 | **total** | | **4339 run, 30 failed** |
 
 Build is warning-free.
 
-`tests/Paperless.Presentations.Tests/PptBulletColourTests.cs` adds five, and **no test in the tree
+`tests/XRay.Office.Presentations.Tests/PptBulletColourTests.cs` adds five, and **no test in the tree
 asserted a bullet colour before them**. They were checked against the unfixed tree rather than
 merely written: with `PptTextBody.cs` reverted and `PptTextReader.cs` kept, two fail
 (`ABulletWhoseHardColourFlagIsClear…`, `AMastersLevelWithTheFlagClear…`); with both reverted the
@@ -323,11 +323,11 @@ risk the gate is blind to is what caused it to be measured instead of assumed.
 ## 8. Reproducing
 
 ```sh
-export PAPERLESS_CLI=.../dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=.../dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 export SOURCE_DATE_EPOCH=1700000000
 
 # the character-stream check that decides the kind of round — run this first, always
-"$PAPERLESS_CLI" render --outdir /tmp/a slides/batch-007/ppt/architecture6.ppt
+"$XRAY_OFFICE_CLI" render --outdir /tmp/a slides/batch-007/ppt/architecture6.ppt
 pdftotext /tmp/a/architecture6.pdf - | tr -d '[:space:]' | wc -c      # 11048
 pdftotext refpdfs-26.2.4.2-fonts/slides/architecture6__ppt.pdf - | tr -d '[:space:]' | wc -c   # 11038
 

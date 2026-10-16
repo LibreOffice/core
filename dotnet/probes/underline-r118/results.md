@@ -217,7 +217,7 @@ a *filled* rule as nothing too. A stroke census cannot see any rule this tree dr
 
 ## 4. What changed
 
-`src/Paperless.Spreadsheets/Layout/SheetTextLayout.cs` gains `Line(stated, field)` beside the
+`src/XRay.Office.Spreadsheets/Layout/SheetTextLayout.cs` gains `Line(stated, field)` beside the
 existing `Ink(portion, fallback, field)`, and `Decorate`/`DecorateSegment` take the field flag:
 
 ```csharp
@@ -517,14 +517,14 @@ bracket and the direction are recorded so the next round does not re-derive them
 
 ### 9.1 New — thirteen cases over two classes and one new fixture
 
-`tests/Paperless.Spreadsheets.Tests/SheetHyperlinkUnderlineTests.cs` — four cases on the new
+`tests/XRay.Office.Spreadsheets.Tests/SheetHyperlinkUnderlineTests.cs` — four cases on the new
 `tests/corpus/features/sheet-hyperlink-underline.xlsx`: a linked cell with no stated underline is
 ruled and its unlinked twin is not; the rule spans the run and sits under its baseline; a linked
 *double* underline draws one line where its unlinked twin draws two; a hyperlink on a *numeric*
 cell draws neither the rule nor the link colour. Every one of the four is measured on 26.2.4.2
 first — §2.2.
 
-`tests/Paperless.Spreadsheets.Tests/XlsChartLineWidthTests.cs` — nine cases: the four weights and
+`tests/XRay.Office.Spreadsheets.Tests/XlsChartLineWidthTests.cs` — nine cases: the four weights and
 one unrecognised value, an axis line and its grid taking different weights, an automatic series
 outline being single-weight while an automatic axis line stays a hairline, and a line whose
 pattern is `NONE` taking no width at all.

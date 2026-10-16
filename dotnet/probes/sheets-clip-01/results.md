@@ -114,7 +114,7 @@ the file.**
 
 ## 3. What changed
 
-`dotnet/src/Paperless.Spreadsheets/Layout/SheetTextLayout.cs`
+`dotnet/src/XRay.Office.Spreadsheets/Layout/SheetTextLayout.cs`
 
 - **`ClipTo` added.** The port of `AdjustAreaParamClipRect`'s horizontal half: trim the placement's
   left and right to `[BlockLeft, BlockRight]`, and or the fact that it had to trim into the
@@ -123,8 +123,8 @@ the file.**
   cell once the area had been folded into the block.
 - `Draw` now clips to that rectangle instead of to the raw output area.
 
-`dotnet/src/Paperless.Core/Graphics/IDrawingSink.cs` and
-`dotnet/src/Paperless.Rendering/Pdf/PdfContentSink.cs`
+`dotnet/src/XRay.Office.Core/Graphics/IDrawingSink.cs` and
+`dotnet/src/XRay.Office.Rendering/Pdf/PdfContentSink.cs`
 
 - **`ClipPathKeepingText` added**, a default interface method delegating to `ClipPath`, overridden
   in the PDF sink to emit the clip without joining the rectangle that `Hidden` consults. So the ink
@@ -324,7 +324,7 @@ build from a detached checkout. Never `git stash` in a shared clone.
 - `prediction.md` — written and committed before the reach was measured.
 - `dotnet/tests/corpus/features/sheet-clip-block.fods` — the authored probe, with every reference
   figure in its header.
-- `dotnet/tests/Paperless.Spreadsheets.Tests/SheetBlockClipTests.cs` — the four clip rectangles and
+- `dotnet/tests/XRay.Office.Spreadsheets.Tests/SheetBlockClipTests.cs` — the four clip rectangles and
   the text-keeping variant.
-- `dotnet/tests/Paperless.Rendering.Tests/PdfInvisibleTextTests.cs` — two tests for what
+- `dotnet/tests/XRay.Office.Rendering.Tests/PdfInvisibleTextTests.cs` — two tests for what
   `ClipPathKeepingText` does differently in a file, beside the eight that pin the plain clip.

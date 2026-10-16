@@ -1,6 +1,6 @@
 # Round 107 — an Escher pattern fill, a cell hidden one stage too early, and a "row grid" that is a chart
 
-    ours   = Paperless.Cli @ d07a9ce75 (base) and @ d07a9ce75 + this round's diff (head)
+    ours   = XRay.Office.Cli @ d07a9ce75 (base) and @ d07a9ce75 + this round's diff (head)
     ref    = /opt/libreoffice26.2/program/soffice — LibreOffice 26.2.4.2 — and the banked
              reference PDFs at /home/user/gate-orig-r83/ref
     corpus = /home/user/sample-files/sheets — 241 `.xlsx`, 2 `.xlsm` and 64 `.xls`, 307 in all;
@@ -135,7 +135,7 @@ order a vertically symmetric test could not have caught, is among them.
 
 ### 2.5 The fix
 
-- **`EscherPatternFill`** (`Paperless.MsBinary/Escher`) turns a blip's bytes and two colours into
+- **`EscherPatternFill`** (`XRay.Office.MsBinary/Escher`) turns a blip's bytes and two colours into
   the tile. `EscherBlips` already hands a DIB out behind a synthesised `BITMAPFILEHEADER`, so the
   pixels come from `DeviceIndependentBitmap.ReadPixels`, which is arithmetic over a byte array
   and needs no codec; the recolouring is the reference's black test; anything that is not an
@@ -339,7 +339,7 @@ from the sweep, not a rule derived from the source, and it is the one part of §
 null result.
 
 What does change is extraction, and it changes in the right direction
-(`extraction-077.txt`): `paperless extract --format text` on
+(`extraction-077.txt`): `xray-office extract --format text` on
 `077_Inventory_list_with_highlighting` goes from **1545 to 1557 characters**, the twelve added
 being the `1`s of the *For reorder* column — and 26.2.4.2's own `--convert-to csv` of the same
 workbook writes `,1,IN0001,…` for exactly those rows. The reference's text export has always
@@ -360,15 +360,15 @@ rules), and they are what fill the `SheetIcon`/`SheetDataBar` that `HidesValue` 
 
 | file | reachable from |
 |---|---|
-| `Paperless.MsBinary/Escher/EscherPatternFill.cs` (new) | `XlsDrawing` alone |
-| `Paperless.MsBinary/Escher/EscherInk.cs` | `XlsDrawing` alone — `grep EscherInk\.` finds one caller, `XlsDrawing.cs`:418-419 |
-| `Paperless.MsBinary/Escher/EscherRecordTypes.cs` | five new `const`, no code path |
-| `Paperless.Spreadsheets/MsBinary/XlsDrawing.cs` | `.xls` |
-| `Paperless.Spreadsheets/Layout/SheetDrawings.cs` | a new record and a field only `XlsDrawing` sets |
-| `Paperless.Spreadsheets/Layout/SheetShapeInk.cs`, `SheetPageGraphics.cs` | one more parameter, null everywhere but `.xls` |
-| `Paperless.Spreadsheets/Ooxml/XlsxSheetReader.cs`, `XlsxHiddenValues.cs` (deleted) | the `xlsx` family |
+| `XRay.Office.MsBinary/Escher/EscherPatternFill.cs` (new) | `XlsDrawing` alone |
+| `XRay.Office.MsBinary/Escher/EscherInk.cs` | `XlsDrawing` alone — `grep EscherInk\.` finds one caller, `XlsDrawing.cs`:418-419 |
+| `XRay.Office.MsBinary/Escher/EscherRecordTypes.cs` | five new `const`, no code path |
+| `XRay.Office.Spreadsheets/MsBinary/XlsDrawing.cs` | `.xls` |
+| `XRay.Office.Spreadsheets/Layout/SheetDrawings.cs` | a new record and a field only `XlsDrawing` sets |
+| `XRay.Office.Spreadsheets/Layout/SheetShapeInk.cs`, `SheetPageGraphics.cs` | one more parameter, null everywhere but `.xls` |
+| `XRay.Office.Spreadsheets/Ooxml/XlsxSheetReader.cs`, `XlsxHiddenValues.cs` (deleted) | the `xlsx` family |
 
-`Paperless.WordProcessing` and `Paperless.Presentations` reference none of these types, and an
+`XRay.Office.WordProcessing` and `XRay.Office.Presentations` reference none of these types, and an
 `.ods` reaches `SheetShapeInk` with `texture` null because only `XlsDrawing` sets it. So the whole
 diff is the sheets track by construction; the sweeps below measure it there and control it
 elsewhere.
@@ -423,7 +423,7 @@ sheets population: 59 `.docx` + 1 `.doc`, 54 `.pptx` + 6 `.ppt`, and 40 converte
 
 ### 5.5 Tests
 
-Clean build of `Paperless.slnx` from an emptied tree — every `bin/` and `obj/` under the worktree
+Clean build of `XRay.Office.slnx` from an emptied tree — every `bin/` and `obj/` under the worktree
 had been deleted — **0 warnings, 0 errors** under `TreatWarningsAsErrors`.
 
 Each project run on its own and totalled by hand, because a whole-solution run is the one most
@@ -431,18 +431,18 @@ likely to truncate silently (`tests-nonfidelity.log`, `tests-fidelity.log`):
 
 | project | passed | failed | skipped |
 |---|---:|---:|---:|
-| `Paperless.Containers.Tests` | 109 | 0 | 0 |
-| `Paperless.Core.Tests` | 544 | 0 | 0 |
-| `Paperless.Markup.Tests` | 259 | 0 | 0 |
-| `Paperless.OpenDocument.Tests` | 160 | 0 | 0 |
-| `Paperless.Presentations.Tests` | 1081 | 0 | 0 |
-| `Paperless.Rendering.Tests` | 164 | 0 | 0 |
-| `Paperless.Spreadsheets.Tests` | 1308 | 0 | 0 |
-| `Paperless.Text.Tests` | 728 | 0 | 0 |
-| `Paperless.Vector.Tests` | 309 | 0 | 0 |
-| `Paperless.WordProcessing.Tests` | 1938 | 0 | 0 |
+| `XRay.Office.Containers.Tests` | 109 | 0 | 0 |
+| `XRay.Office.Core.Tests` | 544 | 0 | 0 |
+| `XRay.Office.Markup.Tests` | 259 | 0 | 0 |
+| `XRay.Office.OpenDocument.Tests` | 160 | 0 | 0 |
+| `XRay.Office.Presentations.Tests` | 1081 | 0 | 0 |
+| `XRay.Office.Rendering.Tests` | 164 | 0 | 0 |
+| `XRay.Office.Spreadsheets.Tests` | 1308 | 0 | 0 |
+| `XRay.Office.Text.Tests` | 728 | 0 | 0 |
+| `XRay.Office.Vector.Tests` | 309 | 0 | 0 |
+| `XRay.Office.WordProcessing.Tests` | 1938 | 0 | 0 |
 | **ten non-fidelity projects** | **6600** | **0** | **0** |
-| `Paperless.Fidelity.Tests` | **542** | **10** | **0** |
+| `XRay.Office.Fidelity.Tests` | **542** | **10** | **0** |
 
 The ten fidelity failures are exactly the known names and no eleventh:
 `PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt` × 4 (`paginated.fodt`,

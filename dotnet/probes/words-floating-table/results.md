@@ -173,9 +173,9 @@ sees a bordered table running long against this container, this is why.
 ```sh
 python3 position.py <dir>
 for f in <dir>/*.docx; do
-  "$PAPERLESS_CLI" render "$f" --outdir ours
+  "$XRAY_OFFICE_CLI" render "$f" --outdir ours
   soffice --headless --convert-to pdf --outdir ref "$f"
 done
 pdftotext -bbox -f 1 -l 2 <pdf> - | grep '<word'
-python3 ../words-pagination-01/row-min-height-border.py /abs/scratch "$PAPERLESS_CLI"
+python3 ../words-pagination-01/row-min-height-border.py /abs/scratch "$XRAY_OFFICE_CLI"
 ```

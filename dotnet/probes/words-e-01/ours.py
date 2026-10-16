@@ -11,12 +11,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 import sweep as S  # noqa: E402
 
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 ENV = dict(os.environ, SOURCE_DATE_EPOCH="1700000000", TZ="UTC")
 
 
 def ours(docx: Path, out: Path) -> str:
-    # `paperless render` names its output <stem>.pdf in --outdir, which is exactly the name
+    # `xray-office render` names its output <stem>.pdf in --outdir, which is exactly the name
     # soffice used, so ours must go to a directory of its own or one silently overwrites the
     # other and the comparison reads as perfect agreement.
     d = out / "ours"

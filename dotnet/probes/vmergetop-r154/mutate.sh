@@ -5,8 +5,8 @@
 # exactly like an arm that passed.
 set -u
 cd /home/user/libreoffice-core/dotnet || exit 1
-LAY=src/Paperless.WordProcessing/Layout/TableLayouter.cs
-DOCX=src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs
+LAY=src/XRay.Office.WordProcessing/Layout/TableLayouter.cs
+DOCX=src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs
 cp "$LAY" /tmp/claude-0/TableLayouter.cs.before || exit 1
 cp "$DOCX" /tmp/claude-0/DocxLayoutSource.Tables.cs.before || exit 1
 
@@ -25,7 +25,7 @@ assert old in s, 'base text not found: ' + old[:60]
 open(p, 'w').write(s.replace(old, new, 1))
 PY
     touch "$file"
-    out=$(timeout 900 dotnet test tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj \
+    out=$(timeout 900 dotnet test tests/XRay.Office.WordProcessing.Tests/XRay.Office.WordProcessing.Tests.csproj \
             --filter "FullyQualifiedName~TableCoveredCellRuleTests" 2>&1)
     if printf '%s' "$out" | grep -qE 'error [A-Z]+[0-9]+'; then
         echo "$name: DID NOT COMPILE -- arm void"
@@ -53,6 +53,6 @@ run 'the DOCX reader filling either' "$DOCX" \
     '                    coveredTop = Length.Max(coveredTop, Length.Zero);'
 
 restore
-out=$(timeout 900 dotnet test tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj \
+out=$(timeout 900 dotnet test tests/XRay.Office.WordProcessing.Tests/XRay.Office.WordProcessing.Tests.csproj \
         --filter "FullyQualifiedName~TableCoveredCellRuleTests" 2>&1)
 printf '%-34s %s\n' 'base (all five in place):' "$(printf '%s' "$out" | grep -E '^(Passed|Failed)!' | tail -1)"

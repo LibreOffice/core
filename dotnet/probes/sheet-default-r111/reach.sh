@@ -26,7 +26,7 @@ print(sum(1 for c in sys.stdin.read() if c.isalnum()))')
 
 render () {   # render <cli-dir> <document>  ->  "<pages> <glyphs>" or "0 0"
   local d=$W/pv; rm -rf "$d"; mkdir -p "$d"
-  "$1/Paperless.Cli" render --format pdf --outdir "$d" --quiet "$2" >/dev/null 2>&1
+  "$1/XRay.Office.Cli" render --format pdf --outdir "$d" --quiet "$2" >/dev/null 2>&1
   local f; f=$(ls "$d"/*.pdf 2>/dev/null | head -1)
   if [ -z "$f" ] || ! tail -c 2048 "$f" | grep -q '%%EOF'; then echo "0 0"; rm -rf "$d"; return; fi
   glyphs "$f"

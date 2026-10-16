@@ -38,9 +38,9 @@
 set -uo pipefail
 W="${1:?usage: group-scale-census.sh <worktree> <scratch>}"
 S="${2:?}"
-F="$W/dotnet/src/Paperless.Presentations/MsBinary/PptSlideLayout.cs"
+F="$W/dotnet/src/XRay.Office.Presentations/MsBinary/PptSlideLayout.cs"
 
-restore() { git -C "$W" checkout -- dotnet/src/Paperless.Presentations/MsBinary/PptSlideLayout.cs; }
+restore() { git -C "$W" checkout -- dotnet/src/XRay.Office.Presentations/MsBinary/PptSlideLayout.cs; }
 trap restore EXIT
 restore
 
@@ -58,20 +58,20 @@ open(p, 'w').write(t.replace(a, b))
 PY
 
 mkdir -p "$S"
-( cd "$W/dotnet" && dotnet build tools/Paperless.Cli/Paperless.Cli.csproj -c Debug ) > "$S/build.log" 2>&1 \
+( cd "$W/dotnet" && dotnet build tools/XRay.Office.Cli/XRay.Office.Cli.csproj -c Debug ) > "$S/build.log" 2>&1 \
   || { echo "instrumented build failed"; tail -20 "$S/build.log"; exit 1; }
 rm -rf "$S/cli-probe"
-cp -r "$W/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64" "$S/cli-probe"
+cp -r "$W/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64" "$S/cli-probe"
 restore
 # Back to a clean tree *before* anything is measured, and rebuilt: a --no-build run after an
 # instrumentation cycle measures the instrumentation.
-( cd "$W/dotnet" && dotnet build Paperless.slnx -c Debug ) > "$S/rebuild.log" 2>&1 \
+( cd "$W/dotnet" && dotnet build XRay.Office.slnx -c Debug ) > "$S/rebuild.log" 2>&1 \
   || { echo "rebuild failed"; tail -20 "$S/rebuild.log"; exit 1; }
 
 rm -rf "$S/groupscale"; mkdir -p "$S/groupscale/out"
 : > "$S/groupscale/raw.tsv"
 while IFS= read -r f; do
-  timeout 300 "$S/cli-probe/Paperless.Cli" render "$f" --format pdf --outdir "$S/groupscale/out" \
+  timeout 300 "$S/cli-probe/XRay.Office.Cli" render "$f" --format pdf --outdir "$S/groupscale/out" \
     2>&1 >/dev/null | grep '^GROUPSCALE' | sed "s|^|${f##*/}\t|" >> "$S/groupscale/raw.tsv"
   rm -f "$S/groupscale/out"/*.pdf
 done < <(find /workspace/sample-files/slides -type f -iname '*.ppt' | sort)

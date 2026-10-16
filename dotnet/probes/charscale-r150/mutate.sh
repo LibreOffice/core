@@ -8,11 +8,11 @@
 # older than the assembly and MSBuild then SKIPS the project while reporting `0 Error(s)`. Round 150
 # lost two "base" builds to exactly that.
 cd "$(dirname "$0")/../.."
-W=src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
-D=src/Paperless.WordProcessing/Ww8/DocReader.cs
-R=src/Paperless.WordProcessing/Rtf/RtfDocumentReader.cs
-L=src/Paperless.WordProcessing/Rtf/RtfLayoutParagraph.cs
-T=src/Paperless.WordProcessing/Rtf/RtfReader.cs
+W=src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
+D=src/XRay.Office.WordProcessing/Ww8/DocReader.cs
+R=src/XRay.Office.WordProcessing/Rtf/RtfDocumentReader.cs
+L=src/XRay.Office.WordProcessing/Rtf/RtfLayoutParagraph.cs
+T=src/XRay.Office.WordProcessing/Rtf/RtfReader.cs
 
 for f in "$W" "$D" "$R" "$L" "$T"; do cp "$f" "/tmp/r150m.$(basename $f)"; done
 restore() {
@@ -22,7 +22,7 @@ trap restore EXIT
 
 run() {
     printf '\n=== %s ===\n' "$1"
-    dotnet test tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj \
+    dotnet test tests/XRay.Office.WordProcessing.Tests/XRay.Office.WordProcessing.Tests.csproj \
         --filter 'FullyQualifiedName~CharacterScaleFormats' 2>&1 \
         | grep -E '^(Passed!|Failed!|  Failed |.*error [A-Z]+[0-9]+)' || echo 'NO OUTPUT'
     restore

@@ -12,9 +12,9 @@ from pathlib import Path
 
 CORPUS = Path('/home/user/sample-files')
 SOFFICE = '/opt/libreoffice26.2/program/soffice'
-CLI = os.environ.get('PAPERLESS_CLI',
-                     '/home/user/wt-secaxis/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/'
-                     'linux-x64/Paperless.Cli')
+CLI = os.environ.get('XRAY_OFFICE_CLI',
+                     '/home/user/wt-secaxis/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/'
+                     'linux-x64/XRay.Office.Cli')
 
 def render_ref(src, into):
     out = into / (src.stem + '.pdf')

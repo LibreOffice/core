@@ -17,7 +17,7 @@ a 1000-unit glyph, it accumulates along a run, and every fidelity comparison tha
 reference through `pdftotext` measures it. `advance-width.py` measures the same two stacks
 through the `Td` pen instead and finds them equal to a few parts per million.
 
-Usage:  PAPERLESS_CLI=... python3 pdf-width-quantisation.py <workdir> [document...]
+Usage:  XRAY_OFFICE_CLI=... python3 pdf-width-quantisation.py <workdir> [document...]
 """
 
 import math
@@ -122,7 +122,7 @@ def main() -> int:
     out = sys.argv[1]
     documents = sys.argv[2:] or [os.path.abspath(os.path.join(CORPUS, name))
                                  for name in DEFAULT]
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     os.makedirs(out, exist_ok=True)
 
     print('# pdf-width-quantisation. Measured ' + subprocess.run(

@@ -493,14 +493,14 @@ That is the legend, it is one number, and §5 above measures it.
 
 ## Shared layers — this diff reaches all three tracks and the parent must gate the corpus
 
-Three of the four changes are outside `Paperless.Presentations`:
+Three of the four changes are outside `XRay.Office.Presentations`:
 
-* **§1** touches `Paperless.Core/Charts` (`ChartPlot`) and `Paperless.Ooxml`
+* **§1** touches `XRay.Office.Core/Charts` (`ChartPlot`) and `XRay.Office.Ooxml`
   (`DrawingChartPlot`).
-* **§2** touches `Paperless.Ooxml` (`DrawingChartAutoFormat`, `DrawingChartPlot`) and
-  `Paperless.Core/Charts` (`ChartPlot`, `ChartLayout`, `ChartLayout.Plots`).
-* **§3** touches `Paperless.Core/Charts` (`ChartLayout`).
-* Nothing touches `Paperless.Vector`, `Text`, `Rendering`, `Markup` or `Containers`.
+* **§2** touches `XRay.Office.Ooxml` (`DrawingChartAutoFormat`, `DrawingChartPlot`) and
+  `XRay.Office.Core/Charts` (`ChartPlot`, `ChartLayout`, `ChartLayout.Plots`).
+* **§3** touches `XRay.Office.Core/Charts` (`ChartLayout`).
+* Nothing touches `XRay.Office.Vector`, `Text`, `Rendering`, `Markup` or `Containers`.
 
 Census reach outside slides, counted on what the parts state:
 
@@ -536,7 +536,7 @@ word from its own band:
 | `011_advanced_excel_pie.xlsx` | **136 / 140** | 2.80 | `words` | `done` |
 
 Both were checked **at the base commit's own chart sources** — `git checkout 2870991a4dd -- ` the
-two chart directories, build the CLI alone, render, restore, rebuild, and the `Paperless.Core.dll`
+two chart directories, build the CLI alone, render, restore, rebuild, and the `XRay.Office.Core.dll`
 md5 comes back identical — and they read **143 and 136 there too.** Neither number is this round's.
 The gate's rule is `d > b * 0.02 && d > 3`, so `011` fails on the fourth word and would pass on the
 third; `003` matches the reference exactly and the manifest has not been told.
@@ -556,7 +556,7 @@ to each other, so the reference is not it either.
 
 What happened is that `verify-test.sh` — which mutates a source file, **rebuilds**, tests,
 restores and **rebuilds again** — was run while those two sweeps were still going, and its build
-replaced `Paperless.Core.dll` in the CLI's output directory underneath them. Every document the
+replaced `XRay.Office.Core.dll` in the CLI's output directory underneath them. Every document the
 sweeps had not yet reached was rendered by a binary carrying a deliberately introduced defect.
 
 Both cross-track sweeps were re-run from scratch with nothing else touching the tree, and the
@@ -635,6 +635,6 @@ OpenDocument 125   WordProcessing 1188   Spreadsheets 980   Presentations 872   
 
 **4970 = 4941 + 29**, and `cd dotnet && dotnet build -v q -nologo` → **0 warnings, 0 errors**.
 
-**`Paperless.Vector.Tests` reported 20 failures and none of them was real** — run alone, 302 of
+**`XRay.Office.Vector.Tests` reported 20 failures and none of them was real** — run alone, 302 of
 302. Eighth sighting of that pattern. The machine was carrying a concurrent round-61 words agent
 at the time, which is also what produced the two truncated diff reports in the sheets sweep.

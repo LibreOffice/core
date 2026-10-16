@@ -2,7 +2,7 @@
 
 Base commit `e4b9cf255`, verified before measuring. Reference renderer LibreOffice 24.2.7.2.
 Both whole-track sweeps ran against a checksummed copy of the CLI, and the copy's
-`Paperless*.dll` hashes were diffed against the tree's before each run started.
+`XRay.Office*.dll` hashes were diffed against the tree's before each run started.
 
 | file | what it is |
 |---|---|
@@ -212,7 +212,7 @@ reaches a real number.
   on the whole track — all six in the document above.
 - **A chart's text weight.** The reference embeds Carlito-**Bold** on `EHEST` and we do not: its
   chart titles are 18 pt bold and `ChartPlot` carries a family and no weight. Widening it is a
-  `Paperless.Core/Charts` change and reaches all three consumers, so it is not this track's alone.
+  `XRay.Office.Core/Charts` change and reaches all three consumers, so it is not this track's alone.
 - **`CHDATERANGE`.** Untouched; the one document that needs a date axis is the one above.
 
 ## Test counts

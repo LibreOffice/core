@@ -3,7 +3,7 @@
 #   ./measure.sh <work-dir>
 set -uo pipefail
 OUT=${1:?work dir}
-CLI=${PAPERLESS_CLI:-/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli}
+CLI=${XRAY_OFFICE_CLI:-/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli}
 REF=${REF_SOFFICE:-/opt/libreoffice26.2/program/soffice}
 DIFF=${DIFF:-/home/user/libreoffice-core/.claude/skills/render-comparison/scripts/pdf-image-diff.py}
 CORPUS=${CORPUS:-/home/user/sample-files}

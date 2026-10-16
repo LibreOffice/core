@@ -5,7 +5,7 @@
 Latin metric duplicates, its Latin `NotoSans-*`/`NotoSerif-*` and `opens___.ttf` moved aside so it
 resolves the system faces), system fonts from `/usr/share/fonts`, `fc-match "DejaVu Sans"`
 answering `DejaVuSans.ttf` and `fc-match "Liberation Mono"` answering
-`LiberationMono-Regular.ttf`, and `Paperless.Cli` built from this worktree. Corpus at
+`LiberationMono-Regular.ttf`, and `XRay.Office.Cli` built from this worktree. Corpus at
 `/home/user/sample-files`, repository at `/home/user/wt-charttext`.
 
 ## The finding in one line
@@ -144,7 +144,7 @@ unquantised metric. Nothing in the 26.2 release notes, in `chart2`, or in any `t
 em quantisation as intended or as broken — it is the ordinary consequence of formatting against a
 reference device, which LibreOffice does everywhere, with a coarse device.
 
-And **`Paperless.Spreadsheets` has reproduced it since round 62.** `SheetBandText.ChartShape`
+And **`XRay.Office.Spreadsheets` has reproduced it since round 62.** `SheetBandText.ChartShape`
 applies `MetricGrid.Chart.PixelEmScale`, `MetricGrid.Chart` is `new(96, false, MetricUnit.Mm100)`,
 and `SheetChartDeviceMetricTests` already carries the vertical half of the same device from round
 60. The horizontal rule's own remark records what not applying it cost: `003_advanced_excel_pie`'s
@@ -154,12 +154,12 @@ So the seat is not in the metafile and not in `vcl`. It is that **the slides and
 left out of a rule the sheets track already had**, and `SlideChartFaceComparisonTests` is a slide
 chart. Implemented:
 
-- `Paperless.Presentations/Layout/SlideChart.cs` — a new `OnChartDevice` scales the runs
+- `XRay.Office.Presentations/Layout/SlideChart.cs` — a new `OnChartDevice` scales the runs
   `SlideTextLayout` produced, and **both** the measuring path and the drawing path go through that
   one call. They have to: the width the value axis' labels measure is what reserves the plot area
   and right-aligns them against it, and 24.2.7.2 is the worked example of getting that wrong —
   it reserves 18.012 pt for `100` and draws 17.249.
-- `Paperless.WordProcessing/Layout/FrameChart.cs` — `ChartFace.Shape` scales its advances, which
+- `XRay.Office.WordProcessing/Layout/FrameChart.cs` — `ChartFace.Shape` scales its advances, which
   is the same two-line change round 62 made to `SheetBandText.ChartShape`; that one method is both
   paths there already.
 

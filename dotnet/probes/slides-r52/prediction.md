@@ -159,8 +159,8 @@ Written down before the sweep, because an under-reaching census conceals itself.
 
 ## Shared layers
 
-The diff is expected to land in **`Paperless.Presentations` only** —
+The diff is expected to land in **`XRay.Office.Presentations` only** —
 `Layout/SlideAutofit.cs`, possibly `Layout/SlideTextLayout.cs`, and the tests. Nothing in `Core`,
-`Containers`, `Text`, `Vector`, `Rendering` or `Markup`, and nothing in `Paperless.Ooxml`. If that
+`Containers`, `Text`, `Vector`, `Rendering` or `Markup`, and nothing in `XRay.Office.Ooxml`. If that
 changes I will say so and name the affected documents from a census, and the parent runs the
 cross-track sweep.

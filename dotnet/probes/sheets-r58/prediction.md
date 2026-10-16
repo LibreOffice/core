@@ -84,7 +84,7 @@ them through `XlsxTint`, so those four are predicted **unverified by this census
 | `003_advanced_excel_pie` | **0 → 12** scale fills, colours exactly the reference's twelve |
 | the two that declare and resolve to nothing | **0 fills**, before and after |
 | words / slides tracks | **0** — no shared layer touched (see below) |
-| tests | **+6 to +12**, `Paperless.Spreadsheets` only |
+| tests | **+6 to +12**, `XRay.Office.Spreadsheets` only |
 | `MANIFEST.tsv` | no row changes status |
 
 Zero verdict movement is the honest answer and I am stating it as the headline rather than as a
@@ -129,6 +129,6 @@ invisible to all three.
 
 ## Shared layer
 
-**No.** Every file the change touches is in `Paperless.Spreadsheets`. `Paperless.Core` is read
+**No.** Every file the change touches is in `XRay.Office.Spreadsheets`. `XRay.Office.Core` is read
 (`Colour`, `Length`) and not modified. The words and slides tracks cannot see it and no
 cross-track sweep is owed. I will re-derive this from `git diff --stat` before reporting it.

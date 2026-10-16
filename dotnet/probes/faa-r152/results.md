@@ -15,7 +15,7 @@ pairing rather than trusting its numbers.
 | | |
 |---|---|
 | tree | `/home/user/libreoffice-core`, HEAD `b5d46342a` *(A break-only line takes the break run's face, not the neighbour's (O91))* |
-| ours | `dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli`, **mtime 2026-09-18 09:52:33 UTC** |
+| ours | `dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli`, **mtime 2026-09-18 09:52:33 UTC** |
 | reference | `/opt/libreoffice26.2/program/soffice` — **LibreOffice 26.2.4.2 `0229ac93fcf0d7cbc6376066c6f35021cef002dc`** |
 | C++ read | this checkout, `configure.ac` **27.2.0.0.alpha0+** — *not* the reference binary's source |
 | document | `/home/user/sample-files/words/pagination-001/docx/FAA 2025-26 Holdover Tables.docx` |
@@ -341,7 +341,7 @@ stream as well as in the arithmetic** — our surplus page 83 and our missing pa
 
 ### SEAT A — `Escapement.SizeOf` rounds 58% to a twip; 26.2.4.2 rounds it to a tenth of a point
 
-`dotnet/src/Paperless.WordProcessing/Layout/Escapement.cs`:68
+`dotnet/src/XRay.Office.WordProcessing/Layout/Escapement.cs`:68
 
 ```csharp
 public Length SizeOf(Length emSize)
@@ -377,7 +377,7 @@ worse. If only one ships, it must be A.
 
 ### SEAT B — a `w:vMerge` continuation cell's stated top rule is dropped before `OwnTopRule` can see it
 
-`dotnet/src/Paperless.WordProcessing/Layout/TableLayouter.cs`:1181 at HEAD is what answers wrongly:
+`dotnet/src/XRay.Office.WordProcessing/Layout/TableLayouter.cs`:1181 at HEAD is what answers wrongly:
 
 ```csharp
 private static Length OwnTopRule(PageTableRow row)
@@ -389,7 +389,7 @@ private static Length OwnTopRule(PageTableRow row)
 ```
 
 but the cause is upstream, at
-`dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs`:1391, in `Resolved`:
+`dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs`:1391, in `Resolved`:
 
 ```csharp
 if (cell.Merge == VerticalMerge.Continue) continue;   // the cell never reaches PageTableRow.Cells

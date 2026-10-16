@@ -23,7 +23,7 @@ correction to its own witness**, **O13 stays open with a reference-side census i
 Every C++ citation below was opened in this checkout, and every one was opened a second time on
 the re-verification pass. No build overlapped a sweep:
 the base binary was made by copying the three changed sources aside, `git checkout --`,
-`touch`, `rm -rf obj bin` on `Paperless.Presentations` and `Paperless.Cli`, and the head binary the
+`touch`, `rm -rf obj bin` on `XRay.Office.Presentations` and `XRay.Office.Cli`, and the head binary the
 same way afterwards; both are kept whole under `/home/user/r97-slides/cli-{base,head}`.
 
 ---
@@ -67,7 +67,7 @@ The mechanism, read rather than inferred:
   preset's text area is the whole shape.
 
 `PptSlideLayout.Fitted` and `MinimumFrameHeight` are those rules. Nothing in
-`Paperless.Presentations` had any answer for auto-grow-height at all before this — `git grep
+`XRay.Office.Presentations` had any answer for auto-grow-height at all before this — `git grep
 AutoGrow` over `dotnet/src` found two prose mentions and no code.
 
 ## 1.2 The half that made the first cut draw 55.38 pt instead of 103.38
@@ -206,7 +206,7 @@ comparison says nothing.
 ## 1.6 The three tests that fail at the base
 
 Measured, not asserted: the three source files reverted to `61bc19e03` with the head test files
-left in place, rebuilt, and `Paperless.Presentations.Tests` run — **3 failed / 1042 passed of
+left in place, rebuilt, and `XRay.Office.Presentations.Tests` run — **3 failed / 1042 passed of
 1045**, and 1045 of 1045 with the head sources back. The three are named below. *(This section
 said "two" and then listed three; the third is real and the heading was wrong.)*
 
@@ -382,7 +382,7 @@ alone.
 ```
 
 That is 26.2.4.2 itself saying which shapes it makes Fontwork and **which preset name it gives
-each** — and the two names are exactly the ones `Paperless.Ooxml/DrawingML/Fontwork*` is keyed by,
+each** — and the two names are exactly the ones `XRay.Office.Ooxml/DrawingML/Fontwork*` is keyed by,
 which is the strongest statement yet that the engine is not the obstacle and the Escher reader is.
 It also reproduces the two earlier censuses' shape types (136 `mso_sptTextPlainText` and 144
 `mso_sptTextArchUpCurve`) from the other side.
@@ -414,7 +414,7 @@ gradient on page 26 is clipped to the glyphs, and nothing in this tree does that
 pointed at stops at its `== Fidelity` line with a NuGet restore error (`NU1900`, the package
 source unreachable, promoted to an error by `TreatWarningsAsErrors`) and Spreadsheets had failed to
 build in the same pass on a half-deleted `obj`. The number was right; it was asserted, not
-measured. It is measured now, on a clean restore and a clean `dotnet build Paperless.slnx -c
+measured. It is measured now, on a clean restore and a clean `dotnet build XRay.Office.slnx -c
 Release` at **0 warnings, 0 errors** — `tests.log`, kept beside this file:
 
 | project | |
@@ -466,7 +466,7 @@ The container was restarted mid-round; the work was committed unbuilt, untested 
 
 | claim | how it was re-checked |
 |---|---|
-| the build | `dotnet restore` + `dotnet build Paperless.slnx -c Release`: **0 warnings, 0 errors** |
+| the build | `dotnet restore` + `dotnet build XRay.Office.slnx -c Release`: **0 warnings, 0 errors** |
 | the suite | all eleven projects run; Fidelity **542 / 10** with exactly the ten known names (§4) |
 | **witness 103.37 against 103.38** | fresh head build re-rendered `pres_ioc_phuket.ppt`; both fills re-read out of the two content streams |
 | the banner is two 40 pt paragraphs | reference fodp re-read: two `<text:p>`, both `T62` = `fo:font-size="40pt"` Arial Black, on a `gr74` stating `draw:auto-grow-height="true"` |

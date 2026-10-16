@@ -82,7 +82,7 @@ as the finding: it says the seat behind that page is real but sub-visual, which 
 how to spend the next round.
 
 ```bash
-export PAPERLESS_CLI=<the tree you mean to measure>/dotnet/tools/…/Paperless.Cli
+export XRAY_OFFICE_CLI=<the tree you mean to measure>/dotnet/tools/…/XRay.Office.Cli
 export REF_SOFFICE=/opt/libreoffice26.2/program/soffice   # PATH is 24.2.7.2; they disagree
 .claude/skills/page-vision/scripts/pair.sh "<doc>__xlsx" --worst --outdir /abs/pairs
 ```

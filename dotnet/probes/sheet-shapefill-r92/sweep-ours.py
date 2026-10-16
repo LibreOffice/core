@@ -16,7 +16,7 @@ import subprocess
 import sys
 import time
 
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 EPOCH = os.environ.get("SOURCE_DATE_EPOCH", "1757462400")
 
 

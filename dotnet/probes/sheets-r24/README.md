@@ -67,7 +67,7 @@ of the thinning, rotation or staggering in `ChartAxisLabels` happens at all. Not
 record, so `EHEST` drew every second category label where the reference draws all fifty-one.
 
 `ChartPlot.CategoryAxisText` already existed and the OOXML and ODF readers already set it, so this
-is confined to `Paperless.Spreadsheets`. **Nothing in `Paperless.Core` was touched this round.**
+is confined to `XRay.Office.Spreadsheets`. **Nothing in `XRay.Office.Core` was touched this round.**
 
 ### Measured on the two documents
 
@@ -109,7 +109,7 @@ the second figure is the more faithful rendering.
 
 ## The chart-label font gap, and the census the last round asked for
 
-`ChartLabel` (`Paperless.Core/Charts/ChartLayout.cs`) carries no font family, so `SheetChart`,
+`ChartLabel` (`XRay.Office.Core/Charts/ChartLayout.cs`) carries no font family, so `SheetChart`,
 `SlideChart` and `FrameChart` all draw chart text in one hardcoded Liberation Sans.
 Round twenty-three measured its reach on this track as **one document** and recorded it rather
 than fixing it, asking that the other two tracks be censused before anyone sized the work.
@@ -132,7 +132,7 @@ demonstrably draws chart labels the reference sets in Carlito.
 It is also load-bearing on *this* track, which the one-document figure hid: `EHEST` is an `.xls`
 with no chart part, and the face is half of why its plot area is 12% too narrow.
 
-**Not done this round, and deliberately.** Closing it means widening a `Paperless.Core` type and
+**Not done this round, and deliberately.** Closing it means widening a `XRay.Office.Core` type and
 the `IChartTextMeasurer` interface, which is the file two other agents are in concurrently, and it
 needs its own whole-track sweep on all three tracks. Handing over a widened Core type without that
 sweep is the half-built feature the brief forbids.

@@ -86,10 +86,10 @@ survives against a term that runs from 5.6 to 14.6 pt. **The residual is not fit
 | 9 | title baseline on all four pie documents | 601.44 → **592.2 ± 0.1**, reference 591.87 |
 | 10 | regressions among the other **58** `done` sheets documents with a titled chart | **0** — *and this is the number most likely to be wrong* |
 | 11 | page counts changed on our side, anywhere in sheets | **0** |
-| 12 | tests | **+10 to +25**, `Paperless.Core` |
+| 12 | tests | **+10 to +25**, `XRay.Office.Core` |
 | 13 | `MANIFEST.tsv` rows to propose | **2** |
 
-## Shared layer — this diff is `Paperless.Core` and the parent must sweep the other two tracks
+## Shared layer — this diff is `XRay.Office.Core` and the parent must sweep the other two tracks
 
 `ChartLayout.cs` and `ChartLayout.PieLabels.cs` are reached by `SheetChart`, `SlideChart` and
 `FrameChart` alike. `census-piestitles.py`, both readers, all **946** manifest paths, case-folded

@@ -242,7 +242,7 @@ difference.**
 Six in `InlineObjectLineSpacingTests`, verified by reintroduction with `verify-test.sh`:
 
 - reverting the base height to the line's height fails **three** of them and nothing else in
-  `Paperless.Text` — `ProportionalSpacingAddsAShareOfTheTextHeightRatherThanScalingTheLine`,
+  `XRay.Office.Text` — `ProportionalSpacingAddsAShareOfTheTextHeightRatherThanScalingTheLine`,
   `TwiceSpacedAddsTheWholeTextHeight`, `TheLayouterGivesSuchALineTheTextHeightsShareAndNotTheLines`;
 - removing the *at-or-above-100%* guard, so the base height is used at every percentage, fails
   **one** — `BelowFullSpacingTheWholeLineIncludingTheObjectIsScaled` — which is the refuted rule
@@ -255,8 +255,8 @@ reports the two heights apart.
 
 ## The cross-track measurement a shared-layer change owes
 
-`Paperless.Text` is below all three families, and `Paperless.Presentations` and
-`Paperless.Spreadsheets` both reference `ParagraphLayouter` and `MeasuredParagraph`, so "no gate
+`XRay.Office.Text` is below all three families, and `XRay.Office.Presentations` and
+`XRay.Office.Spreadsheets` both reference `ParagraphLayouter` and `MeasuredParagraph`, so "no gate
 input can move" would have been an argument rather than a measurement.
 
 Both other tracks were rendered whole with our own CLI — no `soffice` — at `45fea26c2` and at this
@@ -273,7 +273,7 @@ with an inline object on the line.
 
 ## A trap worth carrying forward: a clean `git status` over a reverted `dotnet/src`
 
-The cross-track measurement a `Paperless.Text` change owes needs the *old* code to render with, so
+The cross-track measurement a `XRay.Office.Text` change owes needs the *old* code to render with, so
 `dotnet/src` was checked out at the base commit to render the slides and sheets tracks. The two
 commits that followed used `git add -A`, and each of them committed that revert; the branch then held
 the round's tests, probes, results and scoreboard with **none of its code**.

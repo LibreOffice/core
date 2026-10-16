@@ -1,4 +1,4 @@
-"""Ink between a Paperless rendering and 26.2.4.2's, per document, over every shared page.
+"""Ink between an XRay.Office rendering and 26.2.4.2's, per document, over every shared page.
 
 Ink is the mean absolute grey difference at 30 dpi, page for page, reported as the mean over
 pages and as the worst page — the same measure as `probes/words-apo-table/inkcheck.py`, from
@@ -6,7 +6,7 @@ which this is taken. The one change is that the reference render is *cached* und
 `--refdir`, because this round measures the same twenty documents several times over and
 `soffice` is the whole cost.
 
-    ink.py --cli <Paperless.Cli> --work <dir> --refdir <dir> < list-of-corpus-relative-paths
+    ink.py --cli <XRay.Office.Cli> --work <dir> --refdir <dir> < list-of-corpus-relative-paths
 """
 import argparse, os, subprocess, sys, tempfile
 from pathlib import Path

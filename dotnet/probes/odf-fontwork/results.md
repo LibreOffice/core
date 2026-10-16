@@ -33,7 +33,7 @@ genuine ODF rather than hand-built.
 `FAAAIandtheArtandScienceofV&Vfinal.pptx` converted to `.odp` carries **8 `draw:text-path="true"`
 shapes** on slides 13 and 14 — the four dial labels twice, `fontwork-arch-up-curve` and
 `fontwork-arch-down-curve`, with `draw:text-path-scale="shape"` and `draw:modifiers` in WordArt
-units. Before this round Paperless read `draw:enhanced-geometry` for the shape but knew nothing
+units. Before this round XRay.Office read `draw:enhanced-geometry` for the shape but knew nothing
 about text-path mode, so it laid the labels out as ordinary text: overlapping, unwarped, and
 tokenised per glyph by the rotation.
 
@@ -78,10 +78,10 @@ its outline and its text.** Fontwork is one leaf of that branch and is not the t
 first.
 
 There is a second reason to leave it, and it is structural rather than a matter of effort. The
-Fontwork model lives in `Paperless.Ooxml.DrawingML`, and `Paperless.OpenDocument` — the only layer
-both Writer and Impress can reach — sits beside `Paperless.Ooxml` rather than above it. So a
+Fontwork model lives in `XRay.Office.Ooxml.DrawingML`, and `XRay.Office.OpenDocument` — the only layer
+both Writer and Impress can reach — sits beside `XRay.Office.Ooxml` rather than above it. So a
 *shared* ODF fontwork reader has nowhere to live under the current layering; the one written this
-round is in `Paperless.Presentations.OpenDocument`, beside the `OdfEnhancedGeometry` it belongs
+round is in `XRay.Office.Presentations.OpenDocument`, beside the `OdfEnhancedGeometry` it belongs
 with, and a Writer implementation would either duplicate it or force that question.
 
 ## What the reader reads, and what it does not

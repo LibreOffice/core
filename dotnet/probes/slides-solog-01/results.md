@@ -6,7 +6,7 @@ fonts 5/6  unembedded 0`.
 
 Reference: `/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/slides/` (banked, LibreOffice 26.2.4.2
 620(Build:2), `fc-match "DejaVu Sans"` → `DejaVuSans.ttf` verified at the start of the round).
-Ours from `dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli` in
+Ours from `dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli` in
 `/c/sandbox/workdir/wt-slides-solog`, with `SOURCE_DATE_EPOCH=1700000000` and `TZ=UTC` on every
 render. Word counts are the corrected metric of `dotnet/probes/gate-01/results.md` — tokens
 carrying at least one Unicode letter or digit.
@@ -79,7 +79,7 @@ whole token to a new line and break it there. On page 8 the reference leaves
 fidelity difference — recorded in §6 as an open finding — but it moves no words, it only moves
 where `pdftotext` decides one token ends.
 
-**Consequence for the scoreboard.** No change to Paperless can manufacture those 15 tokens: they
+**Consequence for the scoreboard.** No change to XRay.Office can manufacture those 15 tokens: they
 exist because the reference's PDF says something ours does not need to say. The row belongs with
 `TODO.raster-ceiling.md`'s 37 as a documented ceiling rather than as a failure. Re-running the
 gate after both fixes confirms it: `15/15 pages, 670/685 words, verdict words`, unchanged.
@@ -124,7 +124,7 @@ measurement landing on the same mechanism is what makes that evidence.
 
 ## 3. Fix 1 — a linked run takes the theme's `hlink` colour and an underline
 
-`src/Paperless.Presentations/Ooxml/PptxTextBody.cs`.
+`src/XRay.Office.Presentations/Ooxml/PptxTextBody.cs`.
 
 The target was already read and handed to extraction as `ContentRun.HyperlinkTarget`; nothing
 decorated the run. The rule is `oox/source/drawingml/textrun.cxx:145-170`:
@@ -172,7 +172,7 @@ page.
 
 ## 4. Fix 2 — a layout's untyped `p:ph` must not take the master's type for that index
 
-`src/Paperless.Presentations/Ooxml/PptxTextStyles.cs`, one argument.
+`src/XRay.Office.Presentations/Ooxml/PptxTextStyles.cs`, one argument.
 
 `PptxPlaceholder.Read` gives an untyped `p:ph` the type of whatever placeholder shares its `idx`
 one level up. **That rule belongs to a slide's placeholder alone.** LibreOffice reaches it
@@ -303,11 +303,11 @@ the `a:sym` typeface with `SYMBOL_CHARSET` (`textrun.cxx:96-120`), Wingdings is 
 substitutes OpenSymbol and recodes the slot. We draw the raw `U+F0E0` in the paragraph's own face.
 
 **The brief's worry that the symbol recode "may have been done on the words path only" is
-refuted.** `Paperless.Presentations` has it: `SlideTextLayout.Recoded` and `PptxTextBody.Marked`
+refuted.** `XRay.Office.Presentations` has it: `SlideTextLayout.Recoded` and `PptxTextBody.Marked`
 implement exactly this rule, including the subtlety that the trigger is the face being *absent*
 rather than the request resolving to OpenSymbol. It is wired **for bullets only**.
-`a:rPr/a:sym` is read nowhere in `Paperless.Presentations` — the only `"sym"` readers in the tree
-are two in `Paperless.WordProcessing`.
+`a:rPr/a:sym` is read nowhere in `XRay.Office.Presentations` — the only `"sym"` readers in the tree
+are two in `XRay.Office.WordProcessing`.
 
 **Reach, resolved rather than declared.** 22 of 163 decks mention `<a:sym>` somewhere; that is the
 declaration count and it is not the answer. Counting only runs on *slide* parts whose `a:t`
@@ -353,17 +353,17 @@ direction.
 
 | project | passed | failed | skipped |
 |---|---:|---:|---:|
-| `Paperless.Core.Tests` | 313 | 0 | 0 |
-| `Paperless.Containers.Tests` | 109 | 0 | 0 |
-| `Paperless.Text.Tests` | 289 | 0 | 0 |
-| `Paperless.Vector.Tests` | 295 | 0 | 0 |
-| `Paperless.Markup.Tests` | 259 | 0 | 0 |
-| `Paperless.Rendering.Tests` | 148 | 0 | 1 |
-| `Paperless.OpenDocument.Tests` | 125 | 0 | 0 |
-| `Paperless.Presentations.Tests` | **646** | 0 | 0 |
-| `Paperless.Spreadsheets.Tests` | 695 | 0 | 0 |
-| `Paperless.WordProcessing.Tests` | 792 | 0 | 0 |
-| `Paperless.Fidelity.Tests` | 519 | **31** | 0 |
+| `XRay.Office.Core.Tests` | 313 | 0 | 0 |
+| `XRay.Office.Containers.Tests` | 109 | 0 | 0 |
+| `XRay.Office.Text.Tests` | 289 | 0 | 0 |
+| `XRay.Office.Vector.Tests` | 295 | 0 | 0 |
+| `XRay.Office.Markup.Tests` | 259 | 0 | 0 |
+| `XRay.Office.Rendering.Tests` | 148 | 0 | 1 |
+| `XRay.Office.OpenDocument.Tests` | 125 | 0 | 0 |
+| `XRay.Office.Presentations.Tests` | **646** | 0 | 0 |
+| `XRay.Office.Spreadsheets.Tests` | 695 | 0 | 0 |
+| `XRay.Office.WordProcessing.Tests` | 792 | 0 | 0 |
+| `XRay.Office.Fidelity.Tests` | 519 | **31** | 0 |
 | **total** | **4190** | **31** | **1** |
 
 `--list-tests` discovers 646, 695, 792 and 550 for the four largest, and each ran its full
@@ -372,7 +372,7 @@ the failing test *names* were captured with the fix in and again with both files
 the two lists are **identical**, so none was added and none was accidentally fixed. Build is
 0 warnings, 0 errors.
 
-15 tests added, both files in `tests/Paperless.Presentations.Tests`:
+15 tests added, both files in `tests/XRay.Office.Presentations.Tests`:
 `SlideHyperlinkDecorationTests` (11) and `PptxLayoutPlaceholderTypeTests` (4).
 
 ---

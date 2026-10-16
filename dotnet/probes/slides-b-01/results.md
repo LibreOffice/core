@@ -70,10 +70,10 @@ gradient did: census says 2 decks / 5 instances, measured visible defect is **1 
   (`curvedUpArrow`), 1 × type 13 (`rightArrow`); `W3_Case_Study…` — 3 × type 103
   (`curvedLeftArrow`). None of them carries `pVertices` (325) or `pSegmentInfo` (326), so
   `PptCustomGeometry.Has` is false and the preset branch is taken —
-  `src/Paperless.Presentations/MsBinary/PptSlideLayout.cs:925` and `:939-943`.
+  `src/XRay.Office.Presentations/MsBinary/PptSlideLayout.cs:925` and `:939-943`.
 - **All 148 names in the table resolve.** Cross-checked every `N => "name"` in
-  `src/Paperless.Presentations/MsBinary/PptShapeGeometry.cs:132-283` against the `s <name>` records
-  in `src/Paperless.Ooxml/DrawingML/PresetShapeGeometry.txt`: 148 entries, 142 distinct names, **0
+  `src/XRay.Office.Presentations/MsBinary/PptShapeGeometry.cs:132-283` against the `s <name>` records
+  in `src/XRay.Office.Ooxml/DrawingML/PresetShapeGeometry.txt`: 148 entries, 142 distinct names, **0
   missing**, out of 187 presets the table holds. The class comment's claim "a name here always
   resolves" is true.
 - **Rendered.** `W3` page 8 and `Fundamentals` page 17 both draw proper arrows in our output —
@@ -138,22 +138,22 @@ rectangles across a corpus and finds only half the cases.
 ### Where it is, and why item 5's answer is "no, but"
 
 - **The `.ppt` path does not apply the crop, and says so.**
-  `src/Paperless.Presentations/MsBinary/PptSlideLayout.cs:1033-1036`, in `Picture`'s remarks:
+  `src/XRay.Office.Presentations/MsBinary/PptSlideLayout.cs:1033-1036`, in `Picture`'s remarks:
   *"The destination is the shape's placed rectangle, with no crop applied. `cropFromTop` and its
   three siblings are recorded in the TODO rather than approximated"*. The method body is
   `:1039-1051` and passes `bounds` straight through.
 - **The arithmetic already exists and is exercised.**
-  `src/Paperless.Presentations/Layout/SlideImages.cs:76-92`, `SlideImages.Uncropped`, is the exact
-  computation measured above, and `src/Paperless.Presentations/Ooxml/PptxSlideLayout.cs:1290-1292`
+  `src/XRay.Office.Presentations/Layout/SlideImages.cs:76-92`, `SlideImages.Uncropped`, is the exact
+  computation measured above, and `src/XRay.Office.Presentations/Ooxml/PptxSlideLayout.cs:1290-1292`
   already calls it for `a:srcRect` on the `pptx` path. The clip half is
-  `src/Paperless.Presentations/Layout/SlideDrawing.cs:428-455`.
+  `src/XRay.Office.Presentations/Layout/SlideDrawing.cs:428-455`.
 - **So the fix on the slide path is a four-property read and one call**, not a feature. The
   property ids are `cropFromTop = 256`, `cropFromBottom = 257`, `cropFromLeft = 258`,
   `cropFromRight = 259` — 16.16 fixed-point fractions, `include/svx/msdffdef.hxx:131` states the
   unit in its own comment, and `filter/source/msfilter/msdffimp.cxx:3781-3833`
   (`lcl_ApplyCropping`) divides each by 65536.0. **Note the `+ 1`**: the reference computes
   `(height + 1) × factor + 0.5` in pixels, not `height × factor`.
-  `EscherPropertyIds` (`src/Paperless.MsBinary/Escher/EscherRecordTypes.cs:137-283`) does not yet
+  `EscherPropertyIds` (`src/XRay.Office.MsBinary/Escher/EscherRecordTypes.cs:137-283`) does not yet
   name these four; it holds `Picture = 260` and `PictureName = 261` and stops.
 
 **Item 5's answer, precisely.** The slide path does *not* have Escher cropping — so it is not a
@@ -161,12 +161,12 @@ ready-made route for words in the sense the handover means. But the part that is
 turning a crop into a larger destination plus a clip, in a drawing IR that has clipping and no
 crop — **is** implemented, proven against the reference on the `pptx` path, and format-neutral. The
 obstacle to reusing it for `.doc` is layering, not logic: `SlideImages` lives in
-`Paperless.Presentations`, a sibling of `Paperless.WordProcessing`, so a word reader cannot reach
+`XRay.Office.Presentations`, a sibling of `XRay.Office.WordProcessing`, so a word reader cannot reach
 it. `Uncropped` and `Inset` depend on nothing but `DocRect` and `Length`, both in
-`Paperless.Core.Geometry`/`Units`, so they pass the project's own stated test for what belongs in
+`XRay.Office.Core.Geometry`/`Units`, so they pass the project's own stated test for what belongs in
 Core (`dotnet/CLAUDE.md`, the `Core/Numbers` rule: *"a thing belongs in Core when it depends on
 nothing above Core, whatever it was written for"*). **Moving those two methods down, then reading
-the four Escher properties once in `Paperless.MsBinary`, serves `.ppt`, `.doc` and `.xls` at
+the four Escher properties once in `XRay.Office.MsBinary`, serves `.ppt`, `.doc` and `.xls` at
 once** — which is the stated reason the Escher library is shared in the first place.
 
 ### Reach
@@ -226,7 +226,7 @@ white `a:ln` around that picture is stroked along a parallelogram whose long sid
   the shape's z-rotation, combining it with the shape's own rotation
   (`nRevolution -= rnMSOShapeRotation`, `:263`) and zeroing it for the legacy-perspective camera
   presets (`:230-234`).
-- **Our side, read:** `src/Paperless.Presentations/Ooxml/PptxSlideLayout.cs:1741-1744`,
+- **Our side, read:** `src/XRay.Office.Presentations/Ooxml/PptxSlideLayout.cs:1741-1744`,
   `Rotation(XElement? transform)`, reads `@rot` off an `a:xfrm` and nothing else. `scene3d` and
   `camera` appear nowhere in the file. Call sites at `:453`, `:622`, `:658`, `:766`.
 
@@ -250,7 +250,7 @@ block-shaped regions. The same defect is on page 3, where the picture's `a:ln w=
 15 pt white frame: the reference's stroked parallelogram sides are `207.72 + 15` and `312 + 15`
 long, the shape's own extent plus the full line width, in both axes.
 
-**Read on our side** — `Line`/`Pen` at `src/Paperless.Presentations/Ooxml/PptxSlideLayout.cs:1646-1689`
+**Read on our side** — `Line`/`Pen` at `src/XRay.Office.Presentations/Ooxml/PptxSlideLayout.cs:1646-1689`
 resolve the width correctly (`Length.FromMm100((Emu(line, "w") + 180) / 360)`, and 444500 EMU →
 1235 mm100 → 35.0079 pt is exact). **Inferred, not read:** the rule that the reference grows the
 outline rectangle by half the line width before stroking it. I measured it on three shapes across
@@ -278,7 +278,7 @@ corner; at 40 dpi the two pages are unmistakably different.
 The branch is explicit and its comment states the refuted claim:
 
 ```
-src/Paperless.Presentations/Ooxml/PptxSlideLayout.cs:1411-1418
+src/XRay.Office.Presentations/Ooxml/PptxSlideLayout.cs:1411-1418
     if (gradient.Path == "circle" && (cx is 0 or 100) && (cy is 0 or 100))
     {
         // The focus is a corner: the reference draws the diagonal linear ramp instead,
@@ -389,12 +389,12 @@ right-alignment, which fits. That is the one loose end on this item.
 
 ### Why we lose the colour — two independent holes, both read
 
-1. **`src/Paperless.Presentations/Ooxml/PptxTextBody.cs:744-755`**, `SolidColour`, is the only
+1. **`src/XRay.Office.Presentations/Ooxml/PptxTextBody.cs:744-755`**, `SolidColour`, is the only
    colour route for a run: `XElement? solid = Drawing.Child(properties, "solidFill"); if (solid is
    null) return null;`. The colour here is an `a:gradFill`, so nothing resolves and the run falls
    back to black. `gradFill` does not appear anywhere in `PptxTextBody.cs`.
 2. Even resolved, the alpha would survive only through the run's colour. The transform machinery
-   *does* support it — `src/Paperless.Ooxml/DrawingML/DrawingColourTransforms.cs:142-144` maps
+   *does* support it — `src/XRay.Office.Ooxml/DrawingML/DrawingColourTransforms.cs:142-144` maps
    `alpha`/`alphaMod`/`alphaOff`, and `:358-366` applies them — so this hole is upstream of a
    working mechanism, not a missing one.
 
@@ -469,7 +469,7 @@ each), the second-worst page in `Thailand17`, and 11 of 15 pages in `OnTrac`.
 
 1. **Escher picture crop on the `.ppt` path** — 16 of 51 decks, 100 shapes, 14 decks unmistakable.
    Four property reads plus one existing call. Move `SlideImages.Uncropped`/`Inset` to
-   `Paperless.Core` in the same change and the word and sheet paths inherit the hard half.
+   `XRay.Office.Core` in the same change and the word and sheet paths inherit the hard half.
 2. **The corner-focus circle gradient** — 1 deck, 4 pages, but the largest per-page divergence in
    the round, and the fix is deleting a special case that already has a correct fall-through.
 3. **A run's colour from `a:gradFill`, and its alpha** — 16 decks each. The alpha machinery exists.

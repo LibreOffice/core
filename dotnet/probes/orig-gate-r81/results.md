@@ -1,6 +1,6 @@
 # The original corpus at `e6be864e4` — seven merges later, unmoved
 
-    ours = Paperless.Cli @ e6be864e4     ref = /usr/bin/soffice, 24.2.7.2
+    ours = XRay.Office.Cli @ e6be864e4     ref = /usr/bin/soffice, 24.2.7.2
     rule = batch-check.sh of 2026-09-05
 
 24.2.7.2 deliberately, and not the calibration target: this run answers *did seven merges break
@@ -28,7 +28,7 @@ Every figure matches `orig-gate-r76` exactly, and the *set* does too:
 
 That matters more than the total here, because two of the seven merges changed code every format
 runs through — `FontSubsetter`'s kept-table set (found while chasing an ODF-only symptom, and
-general) and `CellBreaks` in `Paperless.Text`. Neither moved a single original-corpus row.
+general) and `CellBreaks` in `XRay.Office.Text`. Neither moved a single original-corpus row.
 
 `REF-CANNOT-RENDER 0`, against 13 in the contended converted-corpus sweep of the same morning,
 also says this run was not fighting three rounds for the box — so its zero is a real zero.

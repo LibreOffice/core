@@ -7,7 +7,7 @@ NAS-Infrastructure-Roadmaps-Weather.pptx part census:
   ppt/slides/slide11.xml   a:tbl=0  graphicData uri=.../presentationml/2006/ole
   5 <a:tbl> across all parts of the package.
 
-Rendered with /home/user/gate-r119-cli/Paperless.Cli and 26.2.4.2, then
+Rendered with /home/user/gate-r119-cli/XRay.Office.Cli and 26.2.4.2, then
   pdf-ops.py diff ours.pdf ref.pdf --page N
 counting each reported difference by kind:
 

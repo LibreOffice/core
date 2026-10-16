@@ -4,14 +4,14 @@
 # carries the experiment. `dotnet/CLAUDE.md` records three builds surviving that way.
 set -e
 cd "$(dirname "$0")/../.."
-SRC=src/Paperless.Spreadsheets/OpenDocument/OdsPrintSetup.cs
+SRC=src/XRay.Office.Spreadsheets/OpenDocument/OdsPrintSetup.cs
 cp "$SRC" /tmp/r150.ods
 restore() { cp /tmp/r150.ods "$SRC"; touch "$SRC"; }
 trap restore EXIT
 
 run() {
     printf '\n=== %s ===\n' "$1"
-    dotnet test tests/Paperless.Spreadsheets.Tests/Paperless.Spreadsheets.Tests.csproj \
+    dotnet test tests/XRay.Office.Spreadsheets.Tests/XRay.Office.Spreadsheets.Tests.csproj \
         --filter 'FullyQualifiedName~SheetOdfPrintCentring' 2>&1 \
         | grep -E '^(Passed!|Failed!|  Failed )' || true
     restore

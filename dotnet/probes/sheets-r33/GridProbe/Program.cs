@@ -1,16 +1,16 @@
 // Dumps the geometry a sheet is paginated from: the resolved column widths, the printable
 // page size, and the column/row bands the paginator produced. Written to be diffed against
 // LibreOffice's own answer, read out of a flat-ODF export.
-using Paperless;
-using Paperless.Core.Documents;
-using Paperless.Spreadsheets.Layout;
+using XRay.Office;
+using XRay.Office.Core.Documents;
+using XRay.Office.Spreadsheets.Layout;
 
 string path = args[0];
 string? only = args.Length > 1 && args[1].Length > 0 ? args[1] : null;
 int maxCols = args.Length > 2 ? int.Parse(args[2]) : 80;
 int maxRows = args.Length > 3 ? int.Parse(args[3]) : 400;
 
-using IDocument doc = PaperlessDocument.Open(path);
+using IDocument doc = OfficeDocument.Open(path);
 var pages = (SpreadsheetPages)((IPaginatedDocument)doc).Layout();
 
 foreach (SheetLayout sheet in pages.Sheets)

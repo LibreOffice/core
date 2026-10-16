@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Unit tests for the PDF writer and the Skia rasteriser: file structure, font subsetting, ToUnicode, determinism and pixel geometry.</Description>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Shouldly" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XRay.Office.TestKit\XRay.Office.TestKit.csproj" />
+    <ProjectReference Include="..\..\src\XRay.Office.Rendering\XRay.Office.Rendering.csproj" />
+    <ProjectReference Include="..\..\src\XRay.Office.WordProcessing\XRay.Office.WordProcessing.csproj" />
+
+    <!--
+      The umbrella package, for PdfFontEmbeddingTests: whether a PDF embeds a font program for
+      every face it references is a question about all three families at once, and it was answered
+      wrongly for two of them for as long as this project could only open word-processing
+      documents here.
+    -->
+    <ProjectReference Include="..\..\src\XRay.Office\XRay.Office.csproj" />
+
+    <!--
+      The CLI, for PdfAnalysisTests. `xray-office analyze` reads PDFs back, which is the one thing no
+      src/ library does — XRay.Office writes them — so the reader lives in the tool and is tested from
+      the project that produces the files it reads. Referencing an exe project is fine: the test
+      host takes its own entry point and the reference contributes a library.
+    -->
+    <ProjectReference Include="..\..\tools\XRay.Office.Cli\XRay.Office.Cli.csproj" />
+  </ItemGroup>
+
+</Project>

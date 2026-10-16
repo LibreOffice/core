@@ -7,7 +7,7 @@ before grepping for a table-style id. Reference binary in this container is
 
 The comparison baseline for "did the reference move" is `dotnet/probes/slides-r41/base-parity.tsv`
 (163 rows, `ours/ref` per column, taken at `e5f54617c` against 24.2.7.2). Our column cannot be
-re-measured this round — no package feed, no `Paperless.Cli` — so every verdict figure below is
+re-measured this round — no package feed, no `XRay.Office.Cli` — so every verdict figure below is
 **old ours vs new ref**, which is exactly the quantity that tells us how much of the stored
 scoreboard survives the binary change.
 

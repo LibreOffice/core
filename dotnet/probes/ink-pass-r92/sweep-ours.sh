@@ -1,5 +1,5 @@
 #!/bin/sh
-# Render one track's documents with a given Paperless.Cli into <out>, one directory per
+# Render one track's documents with a given XRay.Office.Cli into <out>, one directory per
 # document (never per worker slot -- two live renders in one directory destroy each other).
 # Reference-free: the banked reference is reused.
 #   sweep-ours.sh <corpus> <family> <cli> <out> <jobs>

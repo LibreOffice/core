@@ -2,7 +2,7 @@
 
 Base commit `4448c2a3f`. Reference renderer LibreOffice 24.2.7.2. Every sweep here ran against a
 checksummed copy of the CLI, so a rebuild during a sweep could not disturb it; the `measuring …`
-line on each run named the copy, and the copy's `Paperless*.dll` hashes were diffed against the
+line on each run named the copy, and the copy's `XRay.Office*.dll` hashes were diffed against the
 tree's before the run started.
 
 | file | what it is |
@@ -92,7 +92,7 @@ text and no chart contributes nothing — or sit in chart substreams that were a
 ## Our PDF writer is reproducible. The clock is what moves.
 
 The brief asked for the source of a non-reproducible PDF writer to be found and fixed, and named
-`Paperless.Rendering`. **It is not in `Paperless.Rendering`, and the writer is not the problem.**
+`XRay.Office.Rendering`. **It is not in `XRay.Office.Rendering`, and the writer is not the problem.**
 
 - `reproducibility-back-to-back.tsv` — every one of the 171 rendered twice in succession by the
   same binary, `/CreationDate`, `/ModDate` and `/ID` masked: **171 same, 0 different.**
@@ -125,9 +125,9 @@ byte-identical between the base CLI and this one.
 
 ### What was touched, and what deliberately was not
 
-`Paperless.Spreadsheets` and one method in `Paperless.Cli`. **`Paperless.Rendering` was not
-touched at all**, and neither was `Paperless.Core`. `BiffRecordReader` lives in
-`Paperless.Spreadsheets.MsBinary` and is not shared with the DOC or PPT readers, so the drawing
+`XRay.Office.Spreadsheets` and one method in `XRay.Office.Cli`. **`XRay.Office.Rendering` was not
+touched at all**, and neither was `XRay.Office.Core`. `BiffRecordReader` lives in
+`XRay.Office.Spreadsheets.MsBinary` and is not shared with the DOC or PPT readers, so the drawing
 change cannot reach the other two tracks either.
 
 ## `batch-010`'s remaining three, characterised
@@ -150,7 +150,7 @@ change cannot reach the other two tracks either.
 So **two of this track's documents are held by the chart-label font**, not the one the round
 twenty-three census reported — that census counted zip containers holding a `chart*.xml` part and
 said so, and `EHEST` is the binary case it could not see. The work itself is unchanged: it widens
-a `Paperless.Core` type and `IChartTextMeasurer`, and it was the slides track's this round.
+a `XRay.Office.Core` type and `IChartTextMeasurer`, and it was the slides track's this round.
 
 ### One new lead, measured and not fixed
 

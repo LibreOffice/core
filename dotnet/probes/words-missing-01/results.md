@@ -125,17 +125,17 @@ Every project run individually on the built tree.
 
 | project | passed | failed | skipped |
 |---|---:|---:|---:|
-| Paperless.Core | 337 | 0 | 0 |
-| Paperless.Containers | 109 | 0 | 0 |
-| Paperless.Text | 367 | 0 | 0 |
-| Paperless.Vector | 295 | 0 | 0 |
-| Paperless.Rendering | 150 | 0 | 1 |
-| Paperless.Markup | 259 | 0 | 0 |
-| Paperless.OpenDocument | 125 | 0 | 0 |
-| Paperless.WordProcessing | 893 | 0 | 0 |
-| Paperless.Spreadsheets | 847 | 0 | 0 |
-| Paperless.Presentations | 710 | 0 | 0 |
-| **Paperless.Fidelity** | **520** | **30** | **0** |
+| XRay.Office.Core | 337 | 0 | 0 |
+| XRay.Office.Containers | 109 | 0 | 0 |
+| XRay.Office.Text | 367 | 0 | 0 |
+| XRay.Office.Vector | 295 | 0 | 0 |
+| XRay.Office.Rendering | 150 | 0 | 1 |
+| XRay.Office.Markup | 259 | 0 | 0 |
+| XRay.Office.OpenDocument | 125 | 0 | 0 |
+| XRay.Office.WordProcessing | 893 | 0 | 0 |
+| XRay.Office.Spreadsheets | 847 | 0 | 0 |
+| XRay.Office.Presentations | 710 | 0 | 0 |
+| **XRay.Office.Fidelity** | **520** | **30** | **0** |
 | total | 4612 | 30 | 1 |
 
 The fidelity figure is the briefed baseline, **30 failed of 550**, unchanged and with 0 skipped —
@@ -145,7 +145,7 @@ so the suite covered everything it should. The one skip is
 
 ### The new tests, and that they fail without the fixes
 
-`tests/Paperless.WordProcessing.Tests/TableCellFootnoteTests.cs` (4 cases) and
+`tests/XRay.Office.WordProcessing.Tests/TableCellFootnoteTests.cs` (4 cases) and
 `LineNumberingTests.cs` (9 cases), both building their DOCX in memory.
 
 Verified by reverting the *behaviour* while keeping the API — the two call sites, so the test
@@ -247,12 +247,12 @@ make it.
 
 ```sh
 export SOURCE_DATE_EPOCH=1700000000 TZ=UTC
-CLI=$PWD/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+CLI=$PWD/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 
 bash probes/words-missing-01/render-words.sh "$CLI" /abs/out/after 6
 python3 probes/words-missing-01/score-against-banked.py /abs/out/after
 
-PAPERLESS_CLI="$CLI" .claude/skills/corpus-batches/scripts/batch-check.sh \
+XRAY_OFFICE_CLI="$CLI" .claude/skills/corpus-batches/scripts/batch-check.sh \
     /c/sandbox/workdir/sample-files 'words/done-*' /abs/out/bc-done 6 > sweep.log 2>&1
 grep '^TOTAL' sweep.log
 ```

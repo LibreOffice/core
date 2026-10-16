@@ -1,4 +1,4 @@
-# ours = Paperless.Cli at 02a57bd85 (this round's three commits on 97628b7fe), rendering
+# ours = XRay.Office.Cli at 02a57bd85 (this round's three commits on 97628b7fe), rendering
 #        /home/user/corpus-odf -- the .odp column of 26.2.4.2's own conversion of the corpus.
 # ref  = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 (TDF tarball), all four
 #        font confounds aside; reference columns reused from probes/odp-master-r70/ref.tsv,

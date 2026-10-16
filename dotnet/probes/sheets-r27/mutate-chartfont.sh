@@ -5,15 +5,15 @@
 # no case means the test does not test it.
 set -uo pipefail
 W=/home/user/libreoffice-core/.claude/worktrees/sheets-r27/dotnet
-R=$W/src/Paperless.Spreadsheets/MsBinary/XlsChartReader.cs
-C=$W/src/Paperless.Spreadsheets/MsBinary/XlsCellFormats.cs
-K=$W/src/Paperless.Spreadsheets/MsBinary/XlsWorkbookReader.cs
+R=$W/src/XRay.Office.Spreadsheets/MsBinary/XlsChartReader.cs
+C=$W/src/XRay.Office.Spreadsheets/MsBinary/XlsCellFormats.cs
+K=$W/src/XRay.Office.Spreadsheets/MsBinary/XlsWorkbookReader.cs
 FILTER="${FILTER:-XlsChartFontTests}"
 
 run() {
   local name="$1"
   local out
-  out=$(cd "$W" && dotnet test tests/Paperless.Spreadsheets.Tests/Paperless.Spreadsheets.Tests.csproj \
+  out=$(cd "$W" && dotnet test tests/XRay.Office.Spreadsheets.Tests/XRay.Office.Spreadsheets.Tests.csproj \
         --filter "FullyQualifiedName~$FILTER" 2>&1)
   local line
   line=$(echo "$out" | grep -oE 'Failed:[[:space:]]+[0-9]+, Passed:[[:space:]]+[0-9]+' | tail -1)
@@ -81,4 +81,4 @@ s=s.replace("        if (_fonts.Count == SkippedFontIndex) _fonts.Add(font);\n",
 open(p,"w").write(s)'
 
 echo "=== rebuilding clean"
-(cd "$W" && dotnet build Paperless.slnx 2>&1 | grep -E "error|Build succeeded" | head -3)
+(cd "$W" && dotnet build XRay.Office.slnx 2>&1 | grep -E "error|Build succeeded" | head -3)

@@ -43,7 +43,7 @@ DRELS = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 </Relationships>'''
 
 # An empty settings part: without one an authored DOCX does not get LibreOffice's OOXML
-# compatibility defaults (paperless-corpus skill).
+# compatibility defaults (office-corpus skill).
 SETTINGS = f'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:settings xmlns:w="{W}"/>'
 
 STYLES = f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>

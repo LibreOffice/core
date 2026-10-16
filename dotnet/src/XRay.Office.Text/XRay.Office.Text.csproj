@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Font resolution and metrics, text shaping, Unicode line breaking and paragraph layout. Shared by every document type.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HarfBuzzSharp" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XRay.Office.Core\XRay.Office.Core.csproj" />
+  </ItemGroup>
+
+  <!--
+    The metric-compatible faces travel with the library. Content rather than an embedded
+    resource, because everything that draws a face opens a path: embedding them would mean
+    extracting 17 MB to a temporary directory on first use to arrive where copying them
+    beside the assembly already is. See Fonts/BundledFonts.cs and Fonts/Bundled/README.md.
+  -->
+  <ItemGroup>
+    <!--
+      Forward slashes: an MSBuild glob written with backslashes does not expand on Linux, and
+      it fails silently. The build stays green and the output directory simply has no fonts.
+      TargetPath rather than Link, because Link is the IDE's display path while TargetPath is
+      what decides where a copied file lands.
+    -->
+    <Content Include="Fonts/Bundled/*.ttf"
+             TargetPath="fonts/%(Filename)%(Extension)"
+             CopyToOutputDirectory="PreserveNewest"
+             Pack="true"
+             PackagePath="contentFiles/any/any/fonts" />
+  </ItemGroup>
+
+</Project>

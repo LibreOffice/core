@@ -2,7 +2,7 @@
 
 Base commit `9f44b2943`, checked with `git log --oneline -1` in the worktree before anything was
 measured. Reference renderer LibreOffice 24.2.7.2. Both whole-track sweeps ran against a
-checksummed copy of the CLI, and the copy's `Paperless.Spreadsheets.dll` hash was diffed against
+checksummed copy of the CLI, and the copy's `XRay.Office.Spreadsheets.dll` hash was diffed against
 the tree's before each run started; each copy was additionally proved to hold the change by
 rendering the one document whose page count it moves.
 
@@ -306,7 +306,7 @@ Every count is the briefed known-good except Spreadsheets, which is 593 plus thi
 
 ## What this round did not touch
 
-Every source change is inside `Paperless.Spreadsheets` — `MsBinary/XlsPrintSetup.cs`,
+Every source change is inside `XRay.Office.Spreadsheets` — `MsBinary/XlsPrintSetup.cs`,
 `Layout/SheetBandHeight.cs`, `Layout/SheetPageDecoration.cs` — so the words and slides tracks
 cannot be reached by it. The one lead that *would* reach them, the `/Widths` rounding above, is
 diagnosed and deliberately unshipped for exactly that reason.

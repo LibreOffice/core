@@ -100,7 +100,7 @@ def main():
     cols = ["pages_ours", "pages_ref", "abs_ink", "signed_ink", "major", "worst_page",
             "worst_ink", "dwords", "note"]
     with out.open("w") as fh:
-        fh.write("# ours: Paperless.Cli from this worktree; ref: /opt/libreoffice26.2 26.2.4.2, "
+        fh.write("# ours: XRay.Office.Cli from this worktree; ref: /opt/libreoffice26.2 26.2.4.2, "
                  "eight Latin duplicate faces aside; corpus /home/user/sample-files words track\n")
         fh.write("# abs_ink = sum of pdf-image-diff.py's per-page UNSIGNED |ink|%; rank on this\n")
         fh.write("id\t" + "\t".join(cols) + "\n")

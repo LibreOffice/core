@@ -1,4 +1,4 @@
-# ours   = Paperless.Cli at base 6ab0681b9
+# ours   = XRay.Office.Cli at base 6ab0681b9
 # ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2
 # fonts  = system fontconfig; ALL FOUR tarball confounds aside, LiberationSansNarrow included
 #          (/opt/libreoffice26.2/share/fonts/truetype/.duplicates-aside, 38 faces, done 2026-09-07)

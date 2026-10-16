@@ -126,7 +126,7 @@ answer to its own coarseness is to stop formatting.
 
 ## 3. What changed
 
-`dotnet/src/Paperless.Spreadsheets/Layout/SheetTextLayout.cs`, and nothing else in the tree.
+`dotnet/src/XRay.Office.Spreadsheets/Layout/SheetTextLayout.cs`, and nothing else in the tree.
 
 - **`SkipOutsideFormat` added**, with `MinimumFormattedLines = 4`. It walks the wrapped lines
   accumulating the pitch, stops after the first line whose cumulative bottom passes the paper
@@ -244,7 +244,7 @@ choice and it costs that one row. It is the same document in both counts and it 
 
 `dotnet/tests/corpus/features/sheet-vclip-row.fods` — a nine-row authored fixture whose header
 carries every reference figure and the arithmetic behind it, and
-`dotnet/tests/Paperless.Spreadsheets.Tests/SheetVerticalOverflowTests.cs`, eight tests against it.
+`dotnet/tests/XRay.Office.Spreadsheets.Tests/SheetVerticalOverflowTests.cs`, eight tests against it.
 
 **Verified to fail against the unfixed tree**: with the call to `SkipOutsideFormat` disabled and
 nothing else changed, **5 of 8 fail** — the top-aligned truncation, the four-line minimum, the
@@ -338,7 +338,7 @@ The prediction's one real miss is 2.4, and it is the harmless direction. Its mos
 - `prediction.md` — committed at `c4f7dc81fda`, before any reach was measured.
 - `dotnet/tests/corpus/features/sheet-vclip-row.fods` — the authored fixture; its header holds
   every reference figure and the arithmetic.
-- `dotnet/tests/Paperless.Spreadsheets.Tests/SheetVerticalOverflowTests.cs` — eight tests, five of
+- `dotnet/tests/XRay.Office.Spreadsheets.Tests/SheetVerticalOverflowTests.cs` — eight tests, five of
   which fail against the unfixed tree.
-- `dotnet/src/Paperless.Spreadsheets/Layout/SheetTextLayout.cs` — `SkipOutsideFormat`,
+- `dotnet/src/XRay.Office.Spreadsheets/Layout/SheetTextLayout.cs` — `SkipOutsideFormat`,
   `MinimumFormattedLines`, `Wrap`'s paragraph starts, and the corrected comment.

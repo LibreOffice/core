@@ -2,7 +2,7 @@
 
 Document: `/home/user/sample-files/words/ceiling-001/docx/ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx`
 Reference: `/opt/libreoffice26.2/program/soffice` — 26.2.4.2, `0229ac93fcf0d7cbc6376066c6f35021cef002dc`.
-Ours: `dotnet/tools/Paperless.Cli/.../Paperless.Cli` (prebuilt Release, used as-is; no C# was changed and
+Ours: `dotnet/tools/XRay.Office.Cli/.../XRay.Office.Cli` (prebuilt Release, used as-is; no C# was changed and
 nothing was built).
 
 Every claim below is marked `[src]` (read from a file) or `[bin]` (measured from a run).
@@ -11,7 +11,7 @@ Every claim below is marked `[src]` (read from a file) or `[bin]` (measured from
 
 ## 1. The divergence, confirmed and corrected
 
-| | reference 26.2.4.2 | Paperless |
+| | reference 26.2.4.2 | XRay.Office |
 |---|---|---|
 | pages | **16** | **14** |
 
@@ -130,7 +130,7 @@ the empty paragraph is pushed off page 6 is each engine's remaining slack:
 | | flips at | page count below / above |
 |---|---|---|
 | reference 26.2.4.2 | **8.50 pt** | 15 → 16 |
-| Paperless | **16.75 pt** | 14 → 15 |
+| XRay.Office | **16.75 pt** | 14 → 15 |
 
 `[bin]` **Difference: 8.25 pt — the same 8.240 pt measured on the page.** The fitting rule is therefore
 *identical*; only the content height differs. The real document supplies 10.008 pt of inherited
@@ -195,14 +195,14 @@ into it is 13.22 pt tall `[bin]`.
 All fixtures are built by copying `word/styles.xml`, `word/settings.xml`, `word/fontTable.xml`,
 `word/numbering.xml` and `word/theme/theme1.xml` **verbatim from the real document**, so they inherit the
 same OOXML compatibility defaults. `unzip -l` confirms `word/settings.xml` is present in each `[bin]` —
-the trap named in `paperless-corpus/SKILL.md`. The `slack/` family is the *whole real document* with one
+the trap named in `office-corpus/SKILL.md`. The `slack/` family is the *whole real document* with one
 attribute changed, so it needs no such validation.
 
 ### Fixture A — `fixtures/breakpara-fillNN.docx` (the blank-page mechanism itself)
 
 `NN` plain paragraphs, then a paragraph holding only `<w:br w:type="page"/>`, then `AFTER`.
 
-| NN | reference | Paperless |
+| NN | reference | XRay.Office |
 |---|---|---|
 | 24–26 | 2 pages, no blank | 2 pages, no blank |
 | **27** | **3 pages, page 2 blank** | **3 pages, page 2 blank** |
@@ -252,7 +252,7 @@ Also noted while aligning `[bin]`: the reference numbers the last two headings `
 
 ### 7a. The fix
 
-**File** `dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs`
+**File** `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs`
 **Method** the paragraph walker's `private void Append(XElement element, int depth)` — the
 `switch (child.Name.LocalName)` at ~line 1918/2065-2250.
 
@@ -271,7 +271,7 @@ case "oMath" or "oMathPara":
 
 placed before `default:`, and no anchor character (the formula's own text already holds the place).
 
-**Supporting change** `dotnet/src/Paperless.WordProcessing/Ooxml/DocxFrames.cs`, `DocxFrames.Read`: accept
+**Supporting change** `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxFrames.cs`, `DocxFrames.Read`: accept
 an `m:oMath` / `m:oMathPara` element and return a `PageFrame` with `Anchor = FrameAnchor.AsCharacter`,
 `InlineExtent = new DocSize(Length.Zero, MathHeight(formula))` and nothing to draw. Zero width, so the
 formula's text keeps its own advance and only the **height** is contributed; `IsTextPortion = true` so
@@ -418,12 +418,12 @@ Raised by the coordinator mid-round. Verified here.
 
 | | |
 |---|---|
-| binary used | `dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/` — `Paperless.Cli` and `Paperless.WordProcessing.dll` both **2026-09-17 06:33** |
+| binary used | `dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/` — `XRay.Office.Cli` and `XRay.Office.WordProcessing.dll` both **2026-09-17 06:33** |
 | HEAD | `bccfeb64b`, **2026-09-20 22:06** |
 | build base (last commit at or before the binary) | `dd9c2baf7`, 2026-09-17 05:11 |
-| `WordParity` in the shipped assembly | **absent** — `strings Paperless.WordProcessing.dll \| grep -c WordParity` → **0** `[bin]` |
+| `WordParity` in the shipped assembly | **absent** — `strings XRay.Office.WordProcessing.dll \| grep -c WordParity` → **0** `[bin]` |
 
-`dd9c2baf7..HEAD` touches **32 files / +2048 −187 lines** in `Paperless.WordProcessing` + `Paperless.Text`.
+`dd9c2baf7..HEAD` touches **32 files / +2048 −187 lines** in `XRay.Office.WordProcessing` + `XRay.Office.Text`.
 
 **So: every number in §1, §4, §5, §6 and §9(b) that describes *our* output is a Sep-17 measurement.**
 Reference-side numbers are unaffected.
@@ -441,7 +441,7 @@ Reference-side numbers are unaffected.
   and no `switch`** in the paragraph walk, and `Layout/PageContent.cs`'s `InlineObjects` and
   `ShapeLineTwip` are untouched. **§7a applies unchanged to HEAD.**
 * **The two `WordParity` commits are inert by default and need no re-measure.** `WordParity` is *not* page
-  parity — it is "which application this reader agrees with", read from `PAPERLESS_LIBREOFFICE_QUIRKS`,
+  parity — it is "which application this reader agrees with", read from `XRAY_OFFICE_LIBREOFFICE_QUIRKS`,
   and `ReproduceLibreOffice` is **false unless that variable is set** `[src]`. So `bccfeb64b` (REF-field
   expansion, `DocxReferenceFields.cs`:64) and `e35a69b16`/`acfa0e973` (TOC template styles,
   `DocxTocStyles.cs`:73) are switched **off** at HEAD and behave as the Sep-17 binary did. This document
@@ -473,7 +473,7 @@ All scripted and idempotent, under this directory:
 
 ```bash
 P=dotnet/probes/blankpage-r163
-CLI=<HEAD build>/Paperless.Cli
+CLI=<HEAD build>/XRay.Office.Cli
 
 # 1. page count + the offset table (§1)
 "$CLI" render --format pdf --outdir $P/ours "<the document>"

@@ -52,7 +52,7 @@ and the `SheetChart` override are **deleted** — the interface method and its d
 | page counts on our side | **0 change** |
 | direction of the change | **strictly more wrapping** everywhere: the limit falls from `spacing × PixelEmScale(size)` (0.975 at 10 pt, 1.023 at 11, 1.031 at 8) to a flat 0.95. So more axes turn 45°, and a turned axis raises our own token count because poppler splits rotated text |
 
-### Cross track — this diff touches `Paperless.Core`
+### Cross track — this diff touches `XRay.Office.Core`
 
 `ChartAxisLabels.Wraps` is shared. Slides and words keep their **unquantised** chart ruler
 (round 62 left them there deliberately; it is item 6 on that round's list and is *not* done here),

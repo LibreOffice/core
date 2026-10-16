@@ -138,7 +138,7 @@ def main():
     written.sort(key=lambda w: (w[1], w[3], w[0]))
     with open(out, "w", encoding="utf-8") as f:
         f.write("# grouped from %s, %s\n" % (os.path.abspath(parity), TODAY.isoformat()))
-        f.write("# ours   = Paperless.Cli at agent/odsgap with the print-range split fixed\n")
+        f.write("# ours   = XRay.Office.Cli at agent/odsgap with the print-range split fixed\n")
         f.write("# ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2\n")
         f.write("# fonts  = system fontconfig; all four tarball confounds aside, "
                 "LiberationSansNarrow included (2026-09-07)\n")

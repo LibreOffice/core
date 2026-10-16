@@ -4,7 +4,7 @@
 (`/usr/bin/soffice`) and **26.2.4.2** (`/opt/libreoffice26.2/program/soffice`, with its Latin
 metric duplicates and its Latin `NotoSans-*`/`NotoSerif-*` moved aside so it resolves the system
 faces), system fonts from `/usr/share/fonts`, corpus at `/home/user/sample-files`, repository at
-`/home/user/wt-chartvert`, `Paperless.Cli` built from this worktree.
+`/home/user/wt-chartvert`, `XRay.Office.Cli` built from this worktree.
 
 ## The finding in one line
 
@@ -90,7 +90,7 @@ right on **3 of 72**, against 72 of 72.
 
 ## Instrument C — our own renderer, before and after
 
-`ours.py` runs the identical variant documents through `Paperless.Cli` and reads them with the
+`ours.py` runs the identical variant documents through `XRay.Office.Cli` and reads them with the
 identical instrument.
 
 | | pitch worst | pitch mean | tick offset worst | offset mean |
@@ -112,13 +112,13 @@ stacks 13.436 pt where `chart2`'s stacks 12.756, and at 10 pt the two are 0.085 
 
 ## What was implemented
 
-- **`Paperless.Presentations`** — `SlideTextBody` gains a `Device`, defaulting to
+- **`XRay.Office.Presentations`** — `SlideTextBody` gains a `Device`, defaulting to
   `MetricGrid.Presentation`, and `SlideTextLayout` reads its two `LineSpacing.Resolve` sites off
   it. `SlideChart.Measurer.Body` sets `MetricGrid.Chart`. Both `SlideTextLayout.Height`, which
   reserves the label's room, and `SlideTextLayout.Place`, which puts its baselines down, take the
   body — so the height a label is measured at and the baseline it is drawn on cannot come from two
   devices, which is the same discipline the horizontal half needed.
-- **`Paperless.WordProcessing`** — `ChartFace` resolves its metrics on `MetricGrid.Chart`, which
+- **`XRay.Office.WordProcessing`** — `ChartFace` resolves its metrics on `MetricGrid.Chart`, which
   is one argument; `AscentAt` and `LineHeightAt` are both paths there already, and
   `ChartFace.Measure` is what `ChartLayout` reserves room from.
 
@@ -212,5 +212,5 @@ They are decorative chart decks — bubble, scatter, doughnut, battery and radar
 | `facemetrics.py` | a face's line metrics by `LineSpacing.Resolve`'s own precedence, and the 96 dpi device's answer at a size — the prediction, with no free parameter |
 | `pitch.py` | three lines of one chart title, three faces × twelve sizes × two binaries × two tracks → `pitch.tsv` |
 | `tickoffset.py` | a value-axis label's baseline against its own tick, read off the path operators → `tickoffset.tsv` |
-| `ours.py` | the same two measurements through `Paperless.Cli` → `ours-before.tsv`, `ours-after.tsv` |
+| `ours.py` | the same two measurements through `XRay.Office.Cli` → `ours-before.tsv`, `ours-after.tsv` |
 | `corpus.py` | the 78 chart-bearing slides and words documents: pages, show operators, turned runs, md5 → `corpus-before.tsv`, `corpus-after.tsv`, `corpus-ref262.tsv` |

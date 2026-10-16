@@ -243,7 +243,7 @@ twice: `--convert-to fods` for the rule the reference thinks it imported
 (`fixture-reference/rules.txt`) and `--convert-to pdf` for which cells it then painted, read back
 as filled rectangles and coloured text spans (`fixture-reference/painted.txt`).
 
-**Sanity-checked against real documents, which the `paperless-corpus` skill requires and which
+**Sanity-checked against real documents, which the `office-corpus` skill requires and which
 matters here.** The two findings a fixture could most easily have invented are the blank rule and
 the anchor, and both were established on a corpus document *first* — the `LEN(TRIM(…))` spelling on
 `Application_Compliance_Checklist`'s 99 rules and the `D491` base cell on the same file's
@@ -260,11 +260,11 @@ reverting the two source files, rebuilding and re-running: `Failed: 5, Passed: 0
 ## 7. Confinement and the suite
 
 - Both sweep legs used a frozen copy of the binary outside the tree; rebuilding the after leg from
-  clean `obj`/`bin` under `SOURCE_DATE_EPOCH` reproduces `Paperless.Spreadsheets.dll` **byte for
+  clean `obj`/`bin` under `SOURCE_DATE_EPOCH` reproduces `XRay.Office.Spreadsheets.dll` **byte for
   byte** (`29b12a3dd7986191df25616bd01c7d38`).
 - 944 of 947 renderings byte-identical, 3 movers, 0 failures either leg.
 - Zero build warnings. Ten non-fidelity projects: 521 + 728 + 109 + 309 + 164 + 259 + 146 + 1260 +
-  1864 + 1044 = **6404 passed, 0 failed, 0 skipped**. `Paperless.Fidelity.Tests`: **542 passed, 10
+  1864 + 1044 = **6404 passed, 0 failed, 0 skipped**. `XRay.Office.Fidelity.Tests`: **542 passed, 10
   failed**, and the ten are exactly the expected set — `PageDrawingComparisonTests.EveryLineIsDrawn`
   ×4, `TabStopComparisonTests.AListLabelsTabAdvance` ×4,
   `SheetDrawingComparisonTests.APictureIsDrawn` and `JustificationShrinkComparisonTests`.

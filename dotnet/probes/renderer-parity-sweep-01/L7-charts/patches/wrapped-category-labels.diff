@@ -1,5 +1,5 @@
---- a/dotnet/src/Paperless.Core/Charts/ChartAxisLabels.cs
-+++ b/dotnet/src/Paperless.Core/Charts/ChartAxisLabels.cs
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartAxisLabels.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartAxisLabels.cs
 @@ -59,11 +59,22 @@
  /// How deep the labels are, measured away from the axis — which is what the plot rectangle has to
  /// give up for them.
@@ -205,8 +205,8 @@
 +        return new DocSize(width, height);
 +    }
  }
---- a/dotnet/src/Paperless.Core/Charts/ChartLayout.cs
-+++ b/dotnet/src/Paperless.Core/Charts/ChartLayout.cs
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
 @@ -1961,6 +1961,15 @@
  
                  label = ChartDataLabel.WriteCategory(plot.Categories[at], plot.CategoryFormat);

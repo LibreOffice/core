@@ -1,15 +1,15 @@
-# Skills for developing Paperless
+# Skills for developing XRay.Office
 
-Six skills covering development of the [Paperless](../../dotnet/) C# libraries against
+Six skills covering development of the [XRay.Office](../../dotnet/) C# libraries against
 headless LibreOffice as the reference implementation.
 
 | Skill | Use it when |
 |---|---|
 | [`libreoffice-reference`](libreoffice-reference/) | You need ground truth: reference PDFs, per-page PNGs, or reference text from a document. Also when `soffice --convert-to` misbehaves. |
-| [`render-comparison`](render-comparison/) | Comparing a Paperless rendering against the reference, and working out *why* it differs. |
+| [`render-comparison`](render-comparison/) | Comparing an XRay.Office rendering against the reference, and working out *why* it differs. |
 | [`page-vision`](page-vision/) | Actually *looking* at a page: getting it in front of a reader at a resolution where the defect survives, delegating the reading to an uncontaminated reviewer, and knowing what a visual reading can and cannot establish. |
 | [`extraction-comparison`](extraction-comparison/) | Comparing extracted text. Also the right first step for a visual bug — parsing bugs are far cheaper to find in text than in pixels. |
-| [`paperless-corpus`](paperless-corpus/) | Building or curating test documents. |
+| [`office-corpus`](office-corpus/) | Building or curating test documents. |
 | [`corpus-batches`](corpus-batches/) | Driving the 541-document sample corpus to parity, batch by batch — the ordering, the regression rule, and how to dispatch parallel agents across the three tracks. |
 
 ## Start here
@@ -26,7 +26,7 @@ most time:
   `Error: source file could not be loaded`.
 - **Wrong font substitution.** If Calibri resolves to DejaVu Sans rather than Carlito,
   advance widths change, so line breaks change, so pagination changes — and every page after
-  the first differs for a reason that has nothing to do with Paperless.
+  the first differs for a reason that has nothing to do with XRay.Office.
 
 ## Scripts
 
@@ -41,7 +41,7 @@ verified against LibreOffice 24.2.7.2 on real files.
 | `render-comparison/scripts/compare-images.py` | Page images → metrics, diagnosis, diff images |
 | `render-comparison/scripts/pdf-image-diff.py` | Two PDFs → page PNGs, diff PNGs, and where each page differs |
 | `extraction-comparison/scripts/compare-text.py` | Text → similarity, first divergence, codepoint diagnostics |
-| `paperless-corpus/scripts/make-corpus.sh` | Generates a test corpus across all 17 formats |
+| `office-corpus/scripts/make-corpus.sh` | Generates a test corpus across all 17 formats |
 | `corpus-batches/scripts/render-corpus.sh` | Renders a whole corpus with LibreOffice — parallel, resumable |
 | `corpus-batches/scripts/pdf-complexity.py` | Scores what each rendered PDF demands of a renderer |
 | `corpus-batches/scripts/make-batches.py` | Orders a corpus by that score and cuts it into per-family batches |

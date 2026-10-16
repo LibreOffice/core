@@ -3,7 +3,7 @@
 #   render-list.sh <list> <outdir> [workers]
 set -uo pipefail
 LIST="${1:?list file}"; OUT="${2:?outdir}"; WORKERS="${3:-3}"
-CLI="${PAPERLESS_CLI:?set PAPERLESS_CLI}"
+CLI="${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI}"
 mkdir -p "$OUT" && OUT="$(cd "$OUT" && pwd)"
 mapfile -t FILES < "$LIST"
 one() {

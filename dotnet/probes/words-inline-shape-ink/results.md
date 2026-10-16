@@ -4,7 +4,7 @@
 references were used throughout and they agree on every figure below except where the table says
 otherwise: the distro's **24.2.7.2** at `/usr/bin/soffice`, and the TDF tarball's **26.2.4.2** at
 `/opt/libreoffice26.2` with its bundled Latin faces moved aside (`fc-match "DejaVu Sans"` resolves to
-DejaVu and `fc-match Calibri` to Carlito). Paperless at `agent/words-draw2`, base `e152bc0b2`.*
+DejaVu and `fc-match Calibri` to Carlito). XRay.Office at `agent/words-draw2`, base `e152bc0b2`.*
 
 ## Why this exists
 
@@ -139,13 +139,13 @@ a *running head*, which this one has not got. See the report for the classificat
 ## Reproducing
 
 ```sh
-export PAPERLESS_CLI=.../tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=.../tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 python3 makeprobe.py /abs/scratch/sifx
 python3 measure.py   /abs/scratch/sifx /abs/scratch/siout
 ```
 
 `measure.py` needs Pillow and `pdftotext`, and renders every fixture through `/usr/bin/soffice`,
-`/opt/libreoffice26.2/program/soffice` and `$PAPERLESS_CLI`, so the version question is re-checked on
+`/opt/libreoffice26.2/program/soffice` and `$XRAY_OFFICE_CLI`, so the version question is re-checked on
 every run rather than taken from this file. `makeprobe.py` writes its own 8×8 PNG with `struct` and
 `zlib`, so the fixture half needs no image library.
 

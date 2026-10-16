@@ -1,6 +1,6 @@
-diff --git a/dotnet/src/Paperless.Spreadsheets/Layout/SheetHeaderFooter.cs b/dotnet/src/Paperless.Spreadsheets/Layout/SheetHeaderFooter.cs
---- a/dotnet/src/Paperless.Spreadsheets/Layout/SheetHeaderFooter.cs
-+++ b/dotnet/src/Paperless.Spreadsheets/Layout/SheetHeaderFooter.cs
+diff --git a/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetHeaderFooter.cs b/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetHeaderFooter.cs
+--- a/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetHeaderFooter.cs
++++ b/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetHeaderFooter.cs
 @@ -385,7 +385,22 @@
                  continue;
              }

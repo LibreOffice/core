@@ -1,5 +1,5 @@
---- a/dotnet/src/Paperless.Core/Charts/ChartLayout.cs
-+++ b/dotnet/src/Paperless.Core/Charts/ChartLayout.cs
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
 @@ -172,12 +172,30 @@
  /// A chart laid out: every mark it draws, in paint order, in the frame's coordinates.
  /// </summary>
@@ -72,8 +72,8 @@
  
                  if (one.LabelAt(at) is { Draws: true } label)
                      AddBarLabel(plot, one, label, at, value, bounds, to >= from, columns, labels);
---- a/dotnet/src/Paperless.Core/Charts/ChartLayout.Plots.cs
-+++ b/dotnet/src/Paperless.Core/Charts/ChartLayout.Plots.cs
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartLayout.Plots.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartLayout.Plots.cs
 @@ -412,7 +412,7 @@
          DocRect area,
          ChartScaleResult scale,

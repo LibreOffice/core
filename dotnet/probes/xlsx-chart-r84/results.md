@@ -232,7 +232,7 @@ carries no such document that also changes a page or a character, which is as fa
 ```sh
 export PATH=/opt/libreoffice26.2/program:$PATH        # 26.2.4.2, never /usr/bin/soffice
 export SOURCE_DATE_EPOCH=1700000000
-CLI=<worktree>/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+CLI=<worktree>/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 
 python3 devolatile.py <workbook> frozen/<workbook>          # 045 needs its serial passed: 44984
 python3 strip-charts.py frozen/<w> nochart/<w>

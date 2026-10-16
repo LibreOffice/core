@@ -4,12 +4,12 @@
 
 | Project | Purpose |
 |---|---|
-| `Paperless.TestKit` | Shared helpers: corpus discovery, the headless LibreOffice driver, comparison utilities |
-| `Paperless.*.Tests` | Unit tests per library |
-| `Paperless.Fidelity.Tests` | The comparison harness against LibreOffice |
+| `XRay.Office.TestKit` | Shared helpers: corpus discovery, the headless LibreOffice driver, comparison utilities |
+| `XRay.Office.*.Tests` | Unit tests per library |
+| `XRay.Office.Fidelity.Tests` | The comparison harness against LibreOffice |
 
 All seven test projects build and run. 128 tests currently pass: 106 in
-`Paperless.Containers.Tests` and 17 in `Paperless.Core.Tests`, plus five remaining
+`XRay.Office.Containers.Tests` and 17 in `XRay.Office.Core.Tests`, plus five remaining
 placeholders. Delete each placeholder as real tests arrive in that project.
 
 ## TestKit
@@ -18,7 +18,7 @@ placeholders. Delete each placeholder as real tests arrive in that project.
       verified: output-name collisions, one user profile per concurrent process, PNG export
       giving only page 1, and font substitution deciding fidelity.
 - [ ] `CheckFontEnvironment` — assert Calibri→Carlito and Cambria→Caladea up front. Without
-      them every OOXML comparison is meaningless, and the failure looks like a Paperless
+      them every OOXML comparison is meaningless, and the failure looks like an XRay.Office
       layout bug.
 - [x] `Corpus` helper: locates `tests/corpus/` by walking up from the test assembly, so the
       files live in one place instead of being copied into every project's output.

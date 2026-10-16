@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>XRay.Office.Cli</RootNamespace>
+    <!--
+      The assembly keeps the project's name, XRay.Office.Cli, so the binary sits at
+      bin/<config>/net10.0/<rid>/XRay.Office.Cli, which is where the skills' scripts look for it.
+      The user-facing command name comes from ToolCommandName below.
+
+      Not packable: the shipped surface is the libraries under src/, and this tool exists for
+      development and the fidelity-comparison skills. PackAsTool stays so that
+      `dotnet pack -p:IsPackable=true` still produces a working `xray-office` global tool.
+    -->
+    <Description>Command-line front end for XRay.Office. Used by humans and by the LibreOffice fidelity-comparison skills.</Description>
+    <IsPackable>false</IsPackable>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>xray-office</ToolCommandName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\XRay.Office\XRay.Office.csproj" />
+    <ProjectReference Include="..\..\src\XRay.Office.Containers\XRay.Office.Containers.csproj" />
+    <!-- The structured-text writers, for the xhtml and markdown output formats of `extract`.
+         They depend on XRay.Office.Core alone, so this adds nothing to the tool's footprint. -->
+    <ProjectReference Include="..\..\src\XRay.Office.Markup\XRay.Office.Markup.csproj" />
+
+    <!-- The rendering backends, for `render`'s pdf, png and jpeg output. -->
+    <ProjectReference Include="..\..\src\XRay.Office.Rendering\XRay.Office.Rendering.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      The PDF reader behind `analyze`, and the tool's only package dependency.
+
+      It is here rather than in a src/ library on purpose. `analyze` reads PDFs, which is the one
+      thing XRay.Office does not do — the libraries write them — so a reader belongs to the tool that
+      compares output, not to the shipped surface. Nothing under src/ gains a dependency.
+
+      The dependency is not free and is taken deliberately: Program.cs notes that argument parsing
+      is hand-rolled to keep this tool dependency-free. What buys it is that the alternative is
+      worse. Shelling out to poppler makes the machine's poppler an undeclared input to every
+      recorded figure, and that has already cost this project a round — see PdfAnalysis.
+    -->
+    <PackageReference Include="PdfPig" />
+  </ItemGroup>
+
+</Project>

@@ -2,7 +2,7 @@
 
 ## Environment
 
-    ours   = Paperless.Cli @ 0c645ceaf (base) and @ 0c645ceaf + this round, Release
+    ours   = XRay.Office.Cli @ 0c645ceaf (base) and @ 0c645ceaf + this round, Release
     ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 (TDF tarball).
              NOT /usr/bin/soffice, which is 24.2.7.2 and cannot reproduce the bank.
     fonts  = system fontconfig, all four tarball confounds aside
@@ -13,7 +13,7 @@
 
 The reference half was **not** re-rendered: `score.py` joins the columns banked in
 `gate-odf-rows.tsv`, which is sound because the whole of this round is confined to
-`dotnet/src/Paperless.WordProcessing/Rtf/` and cannot change what `soffice` made. Our half at
+`dotnet/src/XRay.Office.WordProcessing/Rtf/` and cannot change what `soffice` made. Our half at
 the base commit was rendered fresh and **reproduces the banked verdict on 328 of 328**, so the
 instrument is the scoreboard's.
 

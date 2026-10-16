@@ -116,7 +116,7 @@ leg wholly after its own build.
 | sheets | xlsx / xls / xlsm | 0 | 307 |
 | slides | pptx / ppt | 0 | 302 |
 
-**33 movers, 1894 byte-identical.** This is a `Paperless.Text` change, so slides and sheets *could*
+**33 movers, 1894 byte-identical.** This is a `XRay.Office.Text` change, so slides and sheets *could*
 have moved and did not: no deck or workbook in the corpus holds a break-only run at a size of its
 own. The same documents move in all four word-processing formats, which is what a shared-layer fix
 should look like.

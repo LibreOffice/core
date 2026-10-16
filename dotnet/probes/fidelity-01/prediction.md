@@ -1,7 +1,7 @@
 # fidelity-01 — prediction, committed before measuring
 
 Written after reading the brief, `MISSING_PACKAGES.md`, the Fidelity project layout and
-`Paperless.TestKit/LibreOffice/LibreOfficeRunner.cs`, but **before running the suite even once**.
+`XRay.Office.TestKit/LibreOffice/LibreOfficeRunner.cs`, but **before running the suite even once**.
 
 ## What I already know (measured, not predicted)
 

@@ -11,7 +11,7 @@ SOF="${REF_SOFFICE:-/opt/libreoffice26.2/program/soffice}"
 doc="$1"; out="$2"
 mkdir -p "$out"
 key=$(printf '%s' "$doc$out" | sha256sum | cut -c1-16)
-prof="/tmp/paperless-lo-$key"
+prof="/tmp/xray-office-lo-$key"
 rm -rf "$prof"; mkdir -p "$prof"
 timeout -k 30 240 "$SOF" --headless --norestore --nolockcheck \
     "-env:UserInstallation=file://$prof" \

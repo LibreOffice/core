@@ -3,7 +3,7 @@
 **Reference throughout: `/opt/libreoffice26.2/program/soffice`, LibreOffice 26.2.4.2
 (`0229ac93fcf0d7cbc6376066c6f35021cef002dc`), put FIRST on `PATH` for every call**
 (`sweep.sh` prints the resolved path and version on every run; `/usr/bin/soffice`, 24.2.7.2,
-was never used). Our half is the frozen snapshot `/home/user/cli-frozen-r164/Paperless.Cli`;
+was never used). Our half is the frozen snapshot `/home/user/cli-frozen-r164/XRay.Office.Cli`;
 nothing in the tree was built, and no C# file was changed.
 
 ## Headline
@@ -146,7 +146,7 @@ existing notes on `PageFrame.HasFixedHeight` `[src]`.
 
 ## 6. Our line truncation is already right
 
-`FrameLayout.Content` (`dotnet/src/Paperless.WordProcessing/Layout/FrameLayout.cs`:1264) applies
+`FrameLayout.Content` (`dotnet/src/XRay.Office.WordProcessing/Layout/FrameLayout.cs`:1264) applies
 `FlowLayouter.Truncated(flow, inside.Height)` when `PageFrame.HasFixedHeight` `[src]`, and the
 DrawingML readers set it (`DocxFrames.cs`:338 and :839, `box is not null && !GrowsWithText`).
 Every DrawingML fixture above shows **ours == reference** on the number of lines formatted. On the

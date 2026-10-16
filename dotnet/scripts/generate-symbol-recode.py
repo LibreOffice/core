@@ -30,7 +30,7 @@ import sys
 # worktree regenerates that worktree's table and not some other checkout's.
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SOURCE = os.path.join(ROOT, 'unotools/source/misc/fontcvt.cxx')
-OUT = os.path.join(ROOT, 'dotnet/src/Paperless.Text/Fonts/SymbolFontRecode.Tables.cs')
+OUT = os.path.join(ROOT, 'dotnet/src/XRay.Office.Text/Fonts/SymbolFontRecode.Tables.cs')
 
 # `aStarSymbolRecodeTable`, fontcvt.cxx:1307-1329. Keys are already in the form
 # `GetEnglishSearchFontName` produces, which is what `FontSubstitutions.Normalise` reproduces.
@@ -96,7 +96,7 @@ lines.append('// occupies in OpenSymbol. Indexed by slot - 0x20; a zero is a hol
 lines.append('// Regenerate rather than edit: scripts/generate-symbol-recode.py.')
 lines.append('// </auto-generated>')
 lines.append('')
-lines.append('namespace Paperless.Text.Fonts;')
+lines.append('namespace XRay.Office.Text.Fonts;')
 lines.append('')
 lines.append('public static partial class SymbolFontRecode')
 lines.append('{')

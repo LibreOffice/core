@@ -173,7 +173,7 @@ which is this round's base commit's own output for all 947 documents:
 **Not one of the 35 movers changed a page count, a word count or a glyph count** — checked row by
 row with `compare.py` against `score-bank.py`'s scoring of the base bank. The two untargeted
 tracks are byte-identical document for document, which is what the gating predicts: the diff is
-confined to `Paperless.Spreadsheets` plus one new file in `Paperless.MsBinary/Escher` whose only
+confined to `XRay.Office.Spreadsheets` plus one new file in `XRay.Office.MsBinary/Escher` whose only
 caller is `XlsDrawing`.
 
 ### Marks, before and after
@@ -285,8 +285,8 @@ measure, which is the `w:pgBorders` lesson once more.
   `DrawingEffects` already reads the element for the slide path; nothing on the sheet path asks.
 - **`a:blipFill` and `a:pattFill` on a worksheet shape**, 10 and 0 shapes; and ODF's
   `draw:fill="gradient"` and `"bitmap"`, **32 and 14 shapes**. The ODF gradient cannot be resolved
-  from `Paperless.Spreadsheets` at all: `OdpFills`, which reads the `draw:gradient` and
-  `draw:fill-image` tables, lives in `Paperless.Presentations` and is a sibling rather than a
+  from `XRay.Office.Spreadsheets` at all: `OdpFills`, which reads the `draw:gradient` and
+  `draw:fill-image` tables, lives in `XRay.Office.Presentations` and is a sibling rather than a
   parent. Moving it down is the same test `Core/Numbers` passed.
 - **An arrowhead.** `a:ln/a:tailEnd` is read by `DocxFrames` into `FrameAppearance.TailEnd` and by
   nothing on the sheet path, so every connector in an organisation chart ends bluntly.

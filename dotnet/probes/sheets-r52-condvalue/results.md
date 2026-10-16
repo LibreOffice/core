@@ -76,7 +76,7 @@ extension carries no `showValue` and `ExtCfDataBarRule::importDataBar` never tou
 (`condformatbuffer.cxx:1710-1715`), so the plain element is the only source — which is why `036`'s
 value is hidden although its x14 twin says nothing about it.
 
-New file `Paperless.Spreadsheets/Ooxml/XlsxHiddenValues.cs`, plus one line in
+New file `XRay.Office.Spreadsheets/Ooxml/XlsxHiddenValues.cs`, plus one line in
 `Ooxml/XlsxSheetReader.ReadCell`. A worksheet that states no hiding rule returns a shared empty
 instance without walking its cells.
 
@@ -230,7 +230,7 @@ census row above is why that test exists.
 Round 51 left the hypothesis *a legend whose series carry no `c:tx` loses its entries, and a legend
 with no entries draws nothing*. Tested by authoring two copies of `057_Simple_balance_sheet`
 differing in **one thing** — a `<c:tx><c:v>…</c:v></c:tx>` on each of its two series — and
-rendering both through `soffice` and through Paperless:
+rendering both through `soffice` and through XRay.Office:
 
 | variant | reference legend | our legend |
 |---|---|---|
@@ -238,7 +238,7 @@ rendering both through `soffice` and through Paperless:
 | series carry no `c:tx` (the corpus file) | **`Column C`, `Column D`** | **nothing** |
 
 **Confirmed exactly, and the mechanism is located to a line**: `ChartLayout.Entries`
-(`Paperless.Core/Charts/ChartLayout.cs:3198`) drops a series with no name, and a legend with no
+(`XRay.Office.Core/Charts/ChartLayout.cs:3198`) drops a series with no name, and a legend with no
 entries draws nothing. LibreOffice's names come from the **Calc data provider**, which synthesises
 `STR_COLUMN + " " + column letter` from the series' *values* range
 (`sc/source/ui/unoobj/chart2uno.cxx:3173`) — `$C$…` and `$D$…` give `Column C` and `Column D`.
@@ -253,7 +253,7 @@ a chart that declares a legend and has at least one series without `c:tx` occurs
   its legend enumerates categories rather than series and the `Entries` pie branch already handles
   it; rendered both ways here, its only divergences are URL tokenisation and `Other`/`Others`.
 
-So the change would touch `Paperless.Core` — a shared layer — for **zero verdict gain** and a
+So the change would touch `XRay.Office.Core` — a shared layer — for **zero verdict gain** and a
 non-zero risk to a passing slides deck. Measured and left; the next round has the mechanism and
 the number.
 
@@ -294,8 +294,8 @@ Beyond § 4.1 and § 5:
 
 ## 7. Shared layer — a measurement is owed and here is the census
 
-**Yes.** Change two touches **`Paperless.Ooxml`** (`OoxmlXml.cs`, `OoxmlNamespaces.cs`), used by
-words, slides and sheets. Change one is `Paperless.Spreadsheets` only.
+**Yes.** Change two touches **`XRay.Office.Ooxml`** (`OoxmlXml.cs`, `OoxmlNamespaces.cs`), used by
+words, slides and sheets. Change one is `XRay.Office.Spreadsheets` only.
 
 The reach is keyed on a single literal — the 2010 slicer graphic-data URI — and a byte search of
 every part of all 946 corpus documents finds it in **7 documents, all sheets, 0 words, 0 slides**;
@@ -311,7 +311,7 @@ to the base at 521/31/552, which is corroboration rather than the claim.
 
 Ten non-Fidelity projects, run one at a time and totalled by hand: **4614 passed, 0 failed,
 1 skipped**, against the base's 4604/0/1 — a delta of exactly the **ten** new tests, seven in
-`SheetHiddenValueTests` and three in `OoxmlAlternateContentTests`, all in `Paperless.Spreadsheets`
+`SheetHiddenValueTests` and three in `OoxmlAlternateContentTests`, all in `XRay.Office.Spreadsheets`
 (895 → 905). `Fidelity` is **521 passed, 31 failed, 552 total**, byte-for-byte the base's figure,
 so neither change moves any pre-existing failure.
 

@@ -11,7 +11,7 @@ while IFS= read -r doc; do
   h=()
   for leg in base head; do
     d=$(mktemp -d "$W/sw-XXXXXX")
-    SOURCE_DATE_EPOCH=1700000000 dotnet "$W/cli-$leg/Paperless.Cli.dll" \
+    SOURCE_DATE_EPOCH=1700000000 dotnet "$W/cli-$leg/XRay.Office.Cli.dll" \
         render --format pdf --outdir "$d" --quiet "$doc" >/dev/null 2>&1
     f=$(ls "$d"/*.pdf 2>/dev/null | head -1)
     if [ -z "$f" ] || ! tail -c 2048 "$f" | grep -q '%%EOF'; then

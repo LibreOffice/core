@@ -241,7 +241,7 @@ Ten non-fidelity projects — Containers 109, Core 573, Markup 259, OpenDocument
 Presentations 1114, Rendering 164, Spreadsheets **1352**, Text 728, Vector 309,
 WordProcessing 1938 — **6706 passed, 0 failed, 0 skipped**.
 
-`Paperless.Fidelity.Tests`: **Failed: 10, Passed: 542, Total: 552, Skipped: 0** — the known ten
+`XRay.Office.Fidelity.Tests`: **Failed: 10, Passed: 542, Total: 552, Skipped: 0** — the known ten
 and no eleventh: `PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt` on
 `paginated.fodt`/`.doc`/`.docx`/`.rtf`,
 `TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop` on
@@ -320,7 +320,7 @@ python3 fods-default-cells.py /tmp/fods/*.fods        # which cells land on `Def
 python3 ../pivot-fmt-r110/fods-face.py /tmp/fods/pivot-default-style.fods Plain A1:C1 A7:C7 A13:C13
 
 #  (5) reach
-dotnet publish tools/Paperless.Cli/Paperless.Cli.csproj -c Debug -o <dir>   # once per leg
+dotnet publish tools/XRay.Office.Cli/XRay.Office.Cli.csproj -c Debug -o <dir>   # once per leg
 ./sweep.sh sheets-all.txt <base-cli> <head-cli> sheets-sweep-r111.tsv       # 307, 0 moved
 ./reach.sh witness.txt <base-cli> <head-cli> /home/user/gate-r111/ref reach-r111.tsv
 ```

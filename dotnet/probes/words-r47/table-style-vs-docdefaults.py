@@ -146,7 +146,7 @@ def main() -> int:
     here = Path(__file__).resolve()
     ops = here.parents[3] / ".claude/skills/render-comparison/scripts/pdf-ops.py"
     cli = (here.parents[3]
-           / "dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli")
+           / "dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli")
 
     print(f"{'variant':>19} {'defaults':>9} {'Normal':>7} {'table':>6} "
           f"{'cell pitch LO':>14} {'ours':>7} {'body pitch LO':>14} {'ours':>7}  faces")

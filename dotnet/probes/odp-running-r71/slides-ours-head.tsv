@@ -1,4 +1,4 @@
-# side=ours binary=/home/user/wt-odpfoot/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli version=5ae42934b016bac6a4b3cbb15ee3da95a94bc3c5
+# side=ours binary=/home/user/wt-odpfoot/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli version=5ae42934b016bac6a4b3cbb15ee3da95a94bc3c5
 path	status	rc	pages	words	rawwords	glyphs	fonts	unemb
 slides/ceiling-001/ppt/Fundamentals_Module_1_basics.ppt	OK	0	26	1138	1225	6589	5	0
 slides/ceiling-001/ppt/RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009.ppt	OK	0	27	2477	2666	13921	8	0

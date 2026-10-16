@@ -1,4 +1,4 @@
-# tooling-01 — `paperless analyze`, and what it cost to trust it
+# tooling-01 — `xray-office analyze`, and what it cost to trust it
 
 The gate read every figure it has ever recorded out of three poppler binaries. This round replaces
 them with a verb in our own CLI, pinned in the repository, and then spends most of its length
@@ -37,7 +37,7 @@ unchanged.
 
 ## 2. What was built
 
-`paperless analyze` reads a PDF in process with PdfPig and reports page count, per-page size,
+`xray-office analyze` reads a PDF in process with PdfPig and reports page count, per-page size,
 extractable text and word counts, and every font face with its embedding and subset status. One
 parse answers all three of the gate's questions; the shell version spawned five processes per
 document and read the file five times.
@@ -81,9 +81,9 @@ gate's own one-liner gives 984 / 999.
 - **A stream/`byte[]` API.** The reader takes a path. The gate compares files on disk and the
   test-only cases that want otherwise can write a temp file; a second entry point is surface with no
   caller.
-- **Putting the reader in a `src/` library.** Paperless *writes* PDFs; nothing under `src/` reads
+- **Putting the reader in a `src/` library.** XRay.Office *writes* PDFs; nothing under `src/` reads
   one, so a reader there would add a dependency to redistributable libraries to serve a tool. It
-  lives in `Paperless.Cli`, whose only package reference it is.
+  lives in `XRay.Office.Cli`, whose only package reference it is.
 - **`pdfminer.six`, or any second extractor, as an arbiter.** Recorded because the previous round
   already paid for it: two extractors reading the *same current file* agree by construction and
   discriminate nothing.
@@ -312,7 +312,7 @@ Whole corpus, 534 documents, 16 workers:
 
 | | wall | serial total | median | p95 |
 |---|---:|---:|---:|---:|
-| `paperless analyze` (1 process per document) | **107 s** | 1171 s | 1405 ms | 5226 ms |
+| `xray-office analyze` (1 process per document) | **107 s** | 1171 s | 1405 ms | 5226 ms |
 | poppler (5 processes per document) | **25 s** | 450 s | 424 ms | 2310 ms |
 
 **Poppler is faster and this does not claim otherwise** — roughly 4× on wall, 2.6× serially. Almost
@@ -325,7 +325,7 @@ CLI, so the exchange is a real cost bought for a real property.
 
 ## 8. Tests
 
-**28 test cases in 17 methods**, in `tests/Paperless.Rendering.Tests/PdfAnalysisTests.cs` — the
+**28 test cases in 17 methods**, in `tests/XRay.Office.Rendering.Tests/PdfAnalysisTests.cs` — the
 project that produces the files the reader reads. Six of them are built from hand-assembled PDFs
 with computed offsets and a real cross-reference table, because "this glyph is off the page" and
 "this face has no font program" have to be *inputs*, not hopes.
@@ -388,10 +388,10 @@ only one of them launches a process:
 
 | file | how it reaches poppler | call sites | Fidelity test files |
 |---|---|---:|---:|
-| `tests/Paperless.TestKit/LibreOffice/PdfWords.cs` | `ProcessStartInfo("pdftotext")`, `-bbox` — **the only launch site in the tree** | 30 | 18 |
-| `tests/Paperless.TestKit/LibreOffice/PdfPageSizes.cs` | calls `PdfWords.RunBoundingBoxes` and re-parses the same output | 14 | 7 |
-| `tests/Paperless.TestKit/LibreOffice/PdfTextRuns.cs` | **does not** — inflates content streams itself (`ZLibStream` + regex) | 67 | 27 |
-| `tests/Paperless.TestKit/LibreOffice/PdfFills.cs` | **does not** — same, its own content-stream reader | 21 | 13 |
+| `tests/XRay.Office.TestKit/LibreOffice/PdfWords.cs` | `ProcessStartInfo("pdftotext")`, `-bbox` — **the only launch site in the tree** | 30 | 18 |
+| `tests/XRay.Office.TestKit/LibreOffice/PdfPageSizes.cs` | calls `PdfWords.RunBoundingBoxes` and re-parses the same output | 14 | 7 |
+| `tests/XRay.Office.TestKit/LibreOffice/PdfTextRuns.cs` | **does not** — inflates content streams itself (`ZLibStream` + regex) | 67 | 27 |
+| `tests/XRay.Office.TestKit/LibreOffice/PdfFills.cs` | **does not** — same, its own content-stream reader | 21 | 13 |
 
 So the conversion is **2 files and 1 subprocess launch, reaching 44 call sites across 25 Fidelity
 test files** — 43 of the Fidelity project's files touch at least one of the four, out of 550 tests.
@@ -407,9 +407,9 @@ Three things the next round should know before starting:
 - **`PdfWords`' doc comment records that poppler groups words by vertical position**, so a 22 pt word
   on an 11 pt line is reported apart from its neighbours. The nearest-neighbour grouping does not
   behave that way. Any test that depends on the quirk will move.
-- **The type would have to be reachable from both.** `PdfAnalysis` is `public` in `Paperless.Cli`
-  and `Paperless.Rendering.Tests` already references that project, so the route exists; making
-  `Paperless.TestKit` reference the CLI would put the CLI's dependencies under every test project,
+- **The type would have to be reachable from both.** `PdfAnalysis` is `public` in `XRay.Office.Cli`
+  and `XRay.Office.Rendering.Tests` already references that project, so the route exists; making
+  `XRay.Office.TestKit` reference the CLI would put the CLI's dependencies under every test project,
   which is a decision rather than a detail.
 
 The currently-passing Fidelity tests are the only check on that change, and it is a second change
@@ -420,8 +420,8 @@ with its own risk. **Not attempted this round, by instruction and on the merits.
 ## 10. Two container notes
 
 - **`git status` reports untracked files twice under different casings.** The mount is
-  case-insensitive, so `dotnet/tests/Paperless.Rendering.Tests` and
-  `dotnet/tests/paperless.rendering.tests` are the same directory — same inode — listed twice, and a
+  case-insensitive, so `dotnet/tests/XRay.Office.Rendering.Tests` and
+  `dotnet/tests/xray.office.rendering.tests` are the same directory — same inode — listed twice, and a
   new file appears under both spellings. Stage the correctly-cased path only; a `grep -r` over the
   tree likewise returns every file twice, which inflates any count taken from one. This is a second
   instance of the same family as the symlink trap, and it is the same remedy: stage explicit paths.

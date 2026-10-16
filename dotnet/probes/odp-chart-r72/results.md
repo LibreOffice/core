@@ -2,7 +2,7 @@
 
 ## Environment
 
-    ours   = Paperless.Cli @ 97628b7fe (base) and @ 02a57bd85 (base + this round's three commits)
+    ours   = XRay.Office.Cli @ 97628b7fe (base) and @ 02a57bd85 (base + this round's three commits)
     ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 (TDF tarball)
     fonts  = system fontconfig; all four tarball confounds aside -- the Carlito / Caladea /
              Liberation / DejaVu duplicates, the Latin Noto, and the four LiberationSansNarrow.
@@ -335,11 +335,11 @@ this round inherited, and three of them are reclassified rather than merely rest
 
 ## 5. Verification
 
-- `dotnet build Paperless.slnx -v q -nologo` → **0 warnings, 0 errors**.
+- `dotnet build XRay.Office.slnx -v q -nologo` → **0 warnings, 0 errors**.
 - Ten non-fidelity projects, run individually and totalled by hand: **6046 passed, 0 failed,
   0 skipped** — the 6033 baseline plus this round's 13 new tests (7 axes, 3 text rotation, 3 line
   breaking). No failure appeared on any project, so nothing needed re-running.
-- `Paperless.Fidelity.Tests`: **542 passed, 10 failed, 0 skipped** of 552 — the same ten names as
+- `XRay.Office.Fidelity.Tests`: **542 passed, 10 failed, 0 skipped** of 552 — the same ten names as
   the baseline: `PageDrawingComparisonTests` ×4, `TabStopComparisonTests` ×4,
   `SheetDrawingComparisonTests`, `JustificationShrinkComparisonTests`.
 - Both new rules are pinned by tests that fail without them, checked by mutating the source,

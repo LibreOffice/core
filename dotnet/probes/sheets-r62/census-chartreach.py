@@ -8,7 +8,7 @@ chart part that draws a title, an axis label, a legend entry or a data label, wh
 every chart part at all.  A chart with no text is possible and is counted separately so the
 distinction is visible rather than assumed.
 
-It is implemented in `Paperless.Spreadsheets` only — `SheetBandText` and `SheetChart` — exactly
+It is implemented in `XRay.Office.Spreadsheets` only — `SheetBandText` and `SheetChart` — exactly
 where round 60 put the vertical half, so the slides and words columns are reported to show what a
 later cross-track round would reach and **not** what this one moves.
 

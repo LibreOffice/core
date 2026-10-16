@@ -147,9 +147,9 @@ the same gradient over the same rectangle, (12.00, 491.12)–(693.38, 528.00) ag
 
 The shape is Escher WordArt: its OPT record states **property 192 `gtextUNICODE`** =
 `INTERNATIONAL TSUNAMI HAZARD MITIGATION`, **197 `gtextFont`** = `Impact`, 384 fill type 5, 385
-`0x00FFFF` and 387 `0x3399FF`. `Paperless.Ooxml/DrawingML/Fontwork*.cs` implements the geometry for
+`0x00FFFF` and 387 `0x3399FF`. `XRay.Office.Ooxml/DrawingML/Fontwork*.cs` implements the geometry for
 DrawingML, VML and ODF; **no MS-binary reader reaches it** — there is no `PptFontwork` and
-`git grep Fontwork` finds no hit under `Paperless.Presentations/MsBinary`.
+`git grep Fontwork` finds no hit under `XRay.Office.Presentations/MsBinary`.
 
 **Left, on reach.** `census-gtext.py` walks every OLE2 stream of every `.ppt`, `.doc` and `.xls` for
 an OPT record carrying property 192: **2 shapes in 2 of the 181 MS-binary documents** —
@@ -317,7 +317,7 @@ everywhere**: Containers 109, Core 521, Markup 259, OpenDocument 146, Presentati
 Rendering 164, Spreadsheets 1245, Text 728, **Vector 309**, WordProcessing 1864 — 6389 in all.
 Vector is 302 at r85's baseline and gains seven.
 
-`Paperless.Fidelity.Tests`: **542 passed / 10 failed of 552, 0 skipped** — the briefed baseline
+`XRay.Office.Fidelity.Tests`: **542 passed / 10 failed of 552, 0 skipped** — the briefed baseline
 exactly, and the same ten (`PageDrawingComparisonTests.EveryLineIsDrawn` ×4,
 `TabStopComparisonTests.AListLabelsTabAdvance` ×4, `SheetDrawingComparisonTests.APictureIsDrawn`,
 `JustificationShrinkComparisonTests`).
@@ -334,7 +334,7 @@ fallback because it needs the destination back) and a six-row `[Theory]` pinning
 
 ## 8. Left, with its seat
 
-- **The `.ppt` WordArt path**, §2(a). `Paperless.Ooxml/DrawingML/Fontwork*` is the model; the reader
+- **The `.ppt` WordArt path**, §2(a). `XRay.Office.Ooxml/DrawingML/Fontwork*` is the model; the reader
   side is Escher properties 192, 194–197 and 240; reach 2 of 181.
 - **`pres_ioc_phuket` page 26's dark blue banner**, §2(b): 103.38 pt tall in the reference and 64.88
   in ours, same top and same width. Not characterised.

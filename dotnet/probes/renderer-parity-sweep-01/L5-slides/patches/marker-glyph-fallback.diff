@@ -1,7 +1,7 @@
-diff --git a/dotnet/src/Paperless.Presentations/Layout/SlideTextLayout.cs b/dotnet/src/Paperless.Presentations/Layout/SlideTextLayout.cs
+diff --git a/dotnet/src/XRay.Office.Presentations/Layout/SlideTextLayout.cs b/dotnet/src/XRay.Office.Presentations/Layout/SlideTextLayout.cs
 index 0000000..0000000 100644
---- a/dotnet/src/Paperless.Presentations/Layout/SlideTextLayout.cs
-+++ b/dotnet/src/Paperless.Presentations/Layout/SlideTextLayout.cs
+--- a/dotnet/src/XRay.Office.Presentations/Layout/SlideTextLayout.cs
++++ b/dotnet/src/XRay.Office.Presentations/Layout/SlideTextLayout.cs
 @@ -560,6 +560,33 @@
              text = OutlineNumbers.NormaliseBullet(marker.Text);
          }

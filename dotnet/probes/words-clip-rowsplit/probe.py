@@ -14,7 +14,7 @@ They differ exactly when `w:before <= w:after`, which is the commonest shape in 
 documents (a style stating the same figure for both).
 
 Measured as the distance from the follow part's own top rule to the first baseline on
-page 2, against both installed LibreOffice binaries and, when PAPERLESS_CLI is set, ours.
+page 2, against both installed LibreOffice binaries and, when XRAY_OFFICE_CLI is set, ours.
 
     python3 probe.py <out-dir>
 """
@@ -23,7 +23,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from mkdocx import write
 
 OUT = sys.argv[1]
-CLI = os.environ.get("PAPERLESS_CLI")
+CLI = os.environ.get("XRAY_OFFICE_CLI")
 LO = {"24.2": os.environ.get("LO24", "soffice"),
       "26.2": os.environ.get("LO26", "/opt/libreoffice26.2/program/soffice")}
 os.makedirs(OUT, exist_ok=True)

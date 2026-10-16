@@ -4,7 +4,7 @@
 (`/usr/bin/soffice`) and **26.2.4.2** (`/opt/libreoffice26.2/program/soffice`, with its bundled
 Latin metric duplicates and its Latin `NotoSans-*`/`NotoSerif-*` moved aside so it resolves the
 system faces), system fonts from `/usr/share/fonts`, `fc-match "DejaVu Sans"` answering
-`DejaVuSans.ttf`, and `Paperless.Cli` built from this worktree.
+`DejaVuSans.ttf`, and `XRay.Office.Cli` built from this worktree.
 
 ## The claim under test
 
@@ -72,7 +72,7 @@ Carlito's `hamburgefonstiv`, −0.104% from the unkerned sum in *both* stacks: a
 the reference apply identically.
 
 **So neither stack grid-fits anything, no ppem quantisation is visible at any of eleven sizes,
-and there is nothing to reproduce in `Paperless.Text`.**
+and there is nothing to reproduce in `XRay.Office.Text`.**
 
 ## The control that settles it
 

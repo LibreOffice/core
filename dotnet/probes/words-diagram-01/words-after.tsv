@@ -1,6 +1,6 @@
 # words track re-swept 2026-09-06 at 559c86998 + this round's change
-# ours: Paperless.Cli from /home/user/wt-diagram; reference: /usr/bin/soffice 24.2.7.2 420(Build:2)
-# fonts: system fontconfig (Carlito, Caladea, Liberation, DejaVu, WenQuanYi, IPAGothic); PAPERLESS_BUNDLED_FONTS unset
+# ours: XRay.Office.Cli from /home/user/wt-diagram; reference: /usr/bin/soffice 24.2.7.2 420(Build:2)
+# fonts: system fontconfig (Carlito, Caladea, Liberation, DejaVu, WenQuanYi, IPAGothic); XRAY_OFFICE_BUNDLED_FONTS unset
 # corpus /home/user/sample-files; scored against /home/user/gate-2f47/parity.tsv
 # TOTAL 338  MATCH 313  MISMATCH 25  REF-CANNOT-RENDER 0   (banked: MATCH 312  MISMATCH 26)
 # words = tokens carrying at least one Unicode letter or digit; rawwords = pdftotext | wc -w

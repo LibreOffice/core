@@ -90,7 +90,7 @@ of the line.
 
 * The `OUR.fodp` column is rendered by this tree's ODF reader, so it is only a control for a
   `.ppt`-only change; a change in the shared layout would move both columns and the instrument
-  would go blind. The change in §2 is in `Paperless.Presentations/MsBinary` and cannot reach it.
+  would go blind. The change in §2 is in `XRay.Office.Presentations/MsBinary` and cannot reach it.
 * A page count that differs between the flat ODP and the rendered PDF makes every page index a
   comparison of two different slides. It happens on **6 of the 51** documents (`lnspc.txt` lists
   them); on those six the leg table's own page indices are the *rendered* ones on all four legs,
@@ -198,7 +198,7 @@ holds for 147 of 152, **96.7 %**. Both figures are stated because the exclusion 
 
 ## 2.4 The measurement of the fix, at the block
 
-A temporary diagnostic in `SlideAutofit.Solve`, gated on `PAPERLESS_FIT_DUMP` and **removed before
+A temporary diagnostic in `SlideAutofit.Solve`, gated on `XRAY_OFFICE_FIT_DUMP` and **removed before
 the commit**, printed the walk (`witness-gillikin.txt`):
 
 | row | before | after | box |
@@ -359,7 +359,7 @@ to look and it is not a measurement of anything.
 # 4. The suite
 
 Read out of this run's own output (`tests.log`), not from the briefed number.
-`dotnet build Paperless.slnx -c Release` at **0 warnings, 0 errors**, then each project alone with
+`dotnet build XRay.Office.slnx -c Release` at **0 warnings, 0 errors**, then each project alone with
 `--no-build` — individually rather than as a solution, because a whole-solution run on this box has
 twice lost a project to an out-of-memory kill and reported itself as a pass.
 

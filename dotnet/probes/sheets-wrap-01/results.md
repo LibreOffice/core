@@ -42,7 +42,7 @@ The reference's own lines, read from its PDF:
 | 5 | `alpha bravo …`, plain | `alpha bravo charlie delta echo` ⏐ `foxtrot golf hotel india juliet kilo` ⏐ `lima` |
 | 6 | `alpha bravo …`, **linked** | `alpha bravo charlie delta echo foxtr` ⏐ `ot golf hotel india juliet kilo lima` |
 
-Paperless before the fix drew rows 1, 3 and 5 exactly as above and rows 2, 4 and 6 as **one
+XRay.Office before the fix drew rows 1, 3 and 5 exactly as above and rows 2, 4 and 6 as **one
 unbroken line each**.
 
 ## The rule
@@ -59,7 +59,7 @@ Row 6 is the decisive arm. **A space is not a break opportunity inside a field**
 `foxtrot` in half with a blank one character away. No break-opportunity rule of any kind — Unicode's,
 a URL-aware one, a punctuation-aware one — can produce that. Row 4 is the control: a token with no
 opportunity in it comes out character-identical linked and unlinked, because the chop was all
-either path had. So the character-break fallback in `Paperless.Text` was present and correct all
+either path had. So the character-break fallback in `XRay.Office.Text` was present and correct all
 along, and the seat was the run being treated as atomic.
 
 ### The C++ comment says the opposite of what the binary does
@@ -182,7 +182,7 @@ Rendered every document of all three tracks twice, at HEAD and with the change, 
 | slides | 163 | **0** |
 
 Words and slides were checked and are byte-identical; the change is inside
-`Paperless.Spreadsheets` and reachable only through a spreadsheet cell that resolves to a hyperlink
+`XRay.Office.Spreadsheets` and reachable only through a spreadsheet cell that resolves to a hyperlink
 field.
 
 Gate verdicts against the banked references at `/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/sheets/`,

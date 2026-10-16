@@ -51,7 +51,7 @@ do not read a band label as a difficulty claim on real files.
 **The ordering has since validated itself.** Sweeping all 21 words batches produced a match
 rate that falls almost monotonically with batch number — 9/10 and 8/10 in the first
 batches, 0/10 and 1/10 in the last three. The score is computed from LibreOffice's own
-output and knows nothing about Paperless, so that gradient is evidence the metric measures
+output and knows nothing about XRay.Office, so that gradient is evidence the metric measures
 real difficulty rather than an artefact of how the corpus was assembled. It also means a
 batch number is a usable progress estimate: reaching batch *n* is worth more than *n*/21.
 
@@ -352,7 +352,7 @@ ready, but it is worked after the other two.
 ## Dispatching parallel agents
 
 One agent per track, each in its own git worktree. The tracks touch disjoint corpus files
-and largely disjoint libraries (`Paperless.WordProcessing` vs `Paperless.Presentations`),
+and largely disjoint libraries (`XRay.Office.WordProcessing` vs `XRay.Office.Presentations`),
 so conflicts are confined to the shared layers below them — merge those by *combining*
 both changes, never by picking one side.
 
@@ -512,7 +512,7 @@ lost to this, and both were recovered only because the worktrees happened to sur
 re-derive it.** A restart killed an agent whose two commits looked complete: clean worktree, a
 fix and its probe, the message written as a finding rather than as a `wip:`. Its successor
 cherry-picked them, reproduced every measurement *to the digit*, and then found the commit left
-`Paperless.Core.Tests` at **246 of 247** — an existing test asserted exactly the structure the
+`XRay.Office.Core.Tests` at **246 of 247** — an existing test asserted exactly the structure the
 fix stopped producing. **A salvaged commit has not been through the gate**, however finished it
 reads, and "the tree is clean" says only that nothing was left unstaged.
 
@@ -650,7 +650,7 @@ predict the page" give different answers and only one of them matches.
 ```sh
 .claude/skills/corpus-batches/scripts/verify-test.sh <project> '<mutation command>' [filter]
 
-.claude/skills/corpus-batches/scripts/verify-test.sh Paperless.Core \
+.claude/skills/corpus-batches/scripts/verify-test.sh XRay.Office.Core \
     "sed -i 's/TitleWidthFraction = 0.8/TitleWidthFraction = 9.9/' dotnet/src/…/ChartLayout.cs"
 ```
 
@@ -965,7 +965,7 @@ obvious suspect is the wrong one:
 |---|---|---|
 | LibreOffice C++ source checkout | 1.5 GB | inherent — a worktree copies the whole tree, and the C++ tree dwarfs `dotnet/` |
 | Pinned build output, whole solution | 713 MB | working as designed |
-| Unpinned `runtimes/` under `Paperless.Cli` | 550 MB | should not be there — see below |
+| Unpinned `runtimes/` under `XRay.Office.Cli` | 550 MB | should not be there — see below |
 
 **This is not the RID pin failing.** Verified on this commit: a clean `dotnet build` of the
 CLI, a bare solution `dotnet build`, and a `dotnet publish` each produce **31 MB** with only
@@ -1206,7 +1206,7 @@ foreground shell for it.
 tree.** `batch-check.sh` located the CLI relative to its own path, four levels up — which from
 inside any agent worktree is the *main* checkout, not the agent's. An agent measured another
 session's binary for two sweeps, and the first looked entirely normal because the two trees
-happened to sit near the same commit. It now takes `$PAPERLESS_CLI`, else the git root of `$PWD`,
+happened to sit near the same commit. It now takes `$XRAY_OFFICE_CLI`, else the git root of `$PWD`,
 and prints which binary it is measuring on every run. **Read that line.** The same trap waits for
 any script under `.claude/` that infers a tree from `$BASH_SOURCE`.
 
@@ -1337,7 +1337,7 @@ dotnet test … | grep -oP 'Failed:\s+\d+, Passed:\s+\d+'
 ```
 
 That is enough to *detect* a regression and useless for diagnosing one. Measured: a merge
-reported `Failed: 1, Passed: 290` in `Paperless.Vector.Tests` under load from three concurrent
+reported `Failed: 1, Passed: 290` in `XRay.Office.Vector.Tests` under load from three concurrent
 agents, and eighteen consecutive re-runs then passed 291/291. The failing test's name was gone,
 because only the summary had been kept — so an intermittent failure that is worth naming became
 an anecdote.
@@ -1347,7 +1347,7 @@ may not happen twice:
 
 ```sh
 for p in Core Text …; do
-  dotnet test "tests/Paperless.$p.Tests/Paperless.$p.Tests.csproj" --no-build > "$OUT/$p.txt" 2>&1
+  dotnet test "tests/XRay.Office.$p.Tests/XRay.Office.$p.Tests.csproj" --no-build > "$OUT/$p.txt" 2>&1
   grep -oP 'Failed:\s+\d+, Passed:\s+\d+' "$OUT/$p.txt" | tail -1
 done
 ```
@@ -1390,7 +1390,7 @@ finishes look identical from outside.
 Worse than the lost-detail problem above, and seen twice in one session: `dotnet test` printed
 
 ```
-Passed!  - Failed: 0, Passed:  870, … - Paperless.WordProcessing.Tests.dll
+Passed!  - Failed: 0, Passed:  870, … - XRay.Office.WordProcessing.Tests.dll
 ```
 
 and later, from the same tree, `Passed! - Failed: 0, Passed: 1885`. `--list-tests` says 1885. The

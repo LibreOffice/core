@@ -334,17 +334,17 @@ the rule rests on.
 
 ## 5. What changed
 
-`src/Paperless.Spreadsheets/Layout/SheetPageDecoration.cs`
+`src/XRay.Office.Spreadsheets/Layout/SheetPageDecoration.cs`
 
 - `Dashes` is an instance method taking only the border, and returns
   `DashUnit × table × _scale` where `DashUnit` is ten twips. It no longer sees the drawn width.
 
-`src/Paperless.Ooxml/DrawingML/DrawingChartAutoFormat.cs`
+`src/XRay.Office.Ooxml/DrawingML/DrawingChartAutoFormat.cs`
 
 - New `LineWidth(long emu)` — `Length.FromMm100(Length.FromEmu(emu).Mm100)` — with the two legs of
   §4.2 in its remark. `AutomaticLineWidth` goes through it.
 
-`src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs`
+`src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs`
 
 - `StatedLineWidth`, `LineWidthOf`, `AutoLineWidth` and `AutomaticChartAreaLineWidth` go through it
   too. Those are every width a chart carries in the OOXML reader.
@@ -354,23 +354,23 @@ the rule rests on.
   when the series states no `a:ln` at all. The old code was `StatedLineWidth ?? AutoLineWidth`,
   which has the middle case taking the chart style's 300–700 % multiplier.
 
-`src/Paperless.Spreadsheets/Ooxml/XlsxDrawings.cs`
+`src/XRay.Office.Spreadsheets/Ooxml/XlsxDrawings.cs`
 
 - `Plot` and `ExtendedPlot` take the theme's `DrawingStyleMatrix` and hand it on. The workbook
   reader already read it and already passed it to `XlsxDrawings.Read` for a worksheet shape's
   `xdr:style`; only the two chart call sites dropped it.
 
-`src/Paperless.WordProcessing/Ooxml/DocxPictures.cs`
+`src/XRay.Office.WordProcessing/Ooxml/DocxPictures.cs`
 
 - `LoadChart` passes `_file.ShapeStyles`, which `DocxFile` has read since shapes needed it.
 
-`src/Paperless.Core/Charts/ChartLayout.cs`
+`src/XRay.Office.Core/Charts/ChartLayout.cs`
 
 - The four closed marker shapes — circle, diamond, triangle and the square default — are returned
   with their fill as **both** fill and outline. The cross and the star, which have no fill, keep
   the marker's stated line colour.
 
-Five tests in `Paperless.Presentations.Tests` asserted a chart width as the EMU the file states and
+Five tests in `XRay.Office.Presentations.Tests` asserted a chart width as the EMU the file states and
 now assert the hundredth of a millimetre the reference keeps; each carries the reason inline. They
 are listed in §8 because a changed assertion is not a passing one.
 
@@ -468,7 +468,7 @@ figures are 4 / 188 / 2 / 0 and a mean of 0.0215.
 ### 6.2 Reach, honestly
 
 ```sh
-PAPERLESS_CLI=…/Release/net10.0/linux-x64/Paperless.Cli SOURCE_DATE_EPOCH=1700000000 \
+XRAY_OFFICE_CLI=…/Release/net10.0/linux-x64/XRay.Office.Cli SOURCE_DATE_EPOCH=1700000000 \
   python3 sweep.py /home/user/sample-files '<track>/*/*/*' /home/user/r117-{base,after}/<track> 4
 python3 reach2.py /home/user/r117-base/<track> /home/user/r117-after/<track> moved-<track>.tsv
 ```
@@ -620,12 +620,12 @@ underlined cells over the sheets track, which this round did not build.
 
 **New — thirteen cases over three new fixtures and three of round 115's.**
 
-`tests/Paperless.Spreadsheets.Tests/SheetBorderDashTests.cs` — four cases on
+`tests/XRay.Office.Spreadsheets.Tests/SheetBorderDashTests.cs` — four cases on
 `sheet-border-widths.xlsx`, `sheet-border-widths-scaled.xlsx` and `sheet-border-widths.xls`: the
 five arrays, a thin and a medium dotted border drawing the *same* array, every dash taking the
 print scale, and the BIFF filter giving the same answers as the OOXML one.
 
-`tests/Paperless.Spreadsheets.Tests/SheetChartLineWidthTests.cs` — seven cases. Four on the new
+`tests/XRay.Office.Spreadsheets.Tests/SheetChartLineWidthTests.cs` — seven cases. Four on the new
 `sheet-chart-auto-line.xlsx`: an automatic axis line takes the theme's subtle-line width, none of
 the chart's furniture is stroked at zero, a stated width is kept as a whole hundredth of a
 millimetre, and a filled marker is stroked in its own fill colour. Three on the new
@@ -634,7 +634,7 @@ millimetre, and a filled marker is stroked in its own fill colour. Three on the 
 fourth series — a *bar* stating the same widthless `a:ln` — gets the same 0.9921 the reference
 draws it at.
 
-`tests/Paperless.WordProcessing.Tests/FrameChartLineWidthTests.cs` — two cases on the new
+`tests/XRay.Office.WordProcessing.Tests/FrameChartLineWidthTests.cs` — two cases on the new
 `words-chart-auto-line.docx`, the same chart part in a Writer document, so the two routes are
 pinned separately.
 
@@ -648,7 +648,7 @@ reverted and the tests and fixtures unchanged, **all thirteen fail**: 4 of 4
 control that must hold in both states is round 115's `SheetBorderWidthTests`, which is **8 passed
 of 8 at the base** and 8 of 8 after — the widths are unchanged and only the dashes moved.
 
-**Changed — six existing cases in five files.** Six `Paperless.Presentations.Tests` cases asserted
+**Changed — six existing cases in five files.** Six `XRay.Office.Presentations.Tests` cases asserted
 a chart's width as the EMU the file states. They now assert the hundredth of a millimetre the reference
 keeps, and each carries the reason inline:
 
@@ -673,24 +673,24 @@ Run project by project rather than as a solution, and the counts are the ones th
 
 | project | passed | failed | skipped |
 |---|---:|---:|---:|
-| Paperless.Core | 588 | 0 | 0 |
-| Paperless.Containers | 109 | 0 | 0 |
-| Paperless.Text | 728 | 0 | 0 |
-| Paperless.Vector | 309 | 0 | 0 |
-| Paperless.Rendering | 164 | 0 | 0 |
-| Paperless.Markup | 259 | 0 | 0 |
-| Paperless.OpenDocument | 160 | 0 | 0 |
-| Paperless.WordProcessing | 1940 | 0 | 0 |
-| Paperless.Spreadsheets | 1371 | 0 | 0 |
-| Paperless.Presentations | 1203 | 0 | 0 |
-| Paperless.Fidelity | 542 | **10** | 0 |
+| XRay.Office.Core | 588 | 0 | 0 |
+| XRay.Office.Containers | 109 | 0 | 0 |
+| XRay.Office.Text | 728 | 0 | 0 |
+| XRay.Office.Vector | 309 | 0 | 0 |
+| XRay.Office.Rendering | 164 | 0 | 0 |
+| XRay.Office.Markup | 259 | 0 | 0 |
+| XRay.Office.OpenDocument | 160 | 0 | 0 |
+| XRay.Office.WordProcessing | 1940 | 0 | 0 |
+| XRay.Office.Spreadsheets | 1371 | 0 | 0 |
+| XRay.Office.Presentations | 1203 | 0 | 0 |
+| XRay.Office.Fidelity | 542 | **10** | 0 |
 | **total** | **7373** | **10** | **0** |
 
 Against round 115's totals the additions are exactly the new cases: Spreadsheets 1360 → 1371
 (+4 dash, +7 chart) and WordProcessing 1938 → 1940 (+2). Presentations is unchanged at 1203
 because its six changed cases are edits and not additions.
 
-`Paperless.Fidelity` ran 552 of 552 with **0 skipped**, so LibreOffice was present and the
+`XRay.Office.Fidelity` ran 552 of 552 with **0 skipped**, so LibreOffice was present and the
 project covered what it is meant to. Its ten failures are the same rows round 115 recorded, and
 they fail at this round's base too — the run in §8's mutation control had the identical list:
 

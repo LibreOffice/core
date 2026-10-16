@@ -72,7 +72,7 @@ too broadly.
 Usage
 -----
 
-    PAPERLESS_CLI=... python3 band-clearance.py /abs/workdir
+    XRAY_OFFICE_CLI=... python3 band-clearance.py /abs/workdir
 """
 
 import os
@@ -183,9 +183,9 @@ def marker(pdf, page, word):
 
 def main():
     out = sys.argv[1] if len(sys.argv) > 1 else '/tmp/float-band'
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     if not cli:
-        raise SystemExit('set PAPERLESS_CLI to the tree you mean to measure')
+        raise SystemExit('set XRAY_OFFICE_CLI to the tree you mean to measure')
 
     os.makedirs(os.path.join(out, 'ours'), exist_ok=True)
     docx = os.path.join(out, 'band.docx')

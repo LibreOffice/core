@@ -1,0 +1,852 @@
+using System.Globalization;
+using System.Xml.Linq;
+using XRay.Office.Core.Graphics;
+using XRay.Office.Core.Units;
+using XRay.Office.OpenDocument;
+using XRay.Office.OpenDocument.Styles;
+using XRay.Office.Text.Fonts;
+using XRay.Office.Text.Layout;
+
+namespace XRay.Office.WordProcessing.OpenDocument;
+
+/// <summary>
+/// The character formatting a stretch of a paragraph's text is set in.
+/// </summary>
+/// <remarks>
+/// What layout needs plus the colour drawing needs. The colour rides along rather than being resolved
+/// separately because both come from one walk of the same style cascade, and matching two sets of ranges
+/// back up afterwards would cost more than carrying the field.
+/// </remarks>
+/// <param name="FamilyName">The family the document asks for, before substitution.</param>
+/// <param name="Size">The em size.</param>
+/// <param name="Weight">The weight on the OpenType 1-1000 scale.</param>
+/// <param name="IsItalic">True when the text is italic or oblique.</param>
+/// <param name="Language">A BCP 47 tag, or null when the document states none.</param>
+/// <param name="Colour">The colour the text is drawn in, or null when nothing set one.</param>
+/// <param name="Escapement">
+/// The superscript or subscript <c>style:text-position</c> asks for, unresolved. Kept as the pair of
+/// percentages rather than as a length and a size because the rise is a fraction of the font's
+/// <em>height</em>, which is not known until the face has been loaded — see
+/// <see cref="Layout.Escapement"/>.
+/// </param>
+/// <param name="CaseMap">
+/// The case the text is drawn in, from <c>fo:text-transform</c> and <c>fo:font-variant</c>.
+/// </param>
+/// <param name="Highlight">
+/// The band <c>fo:background-color</c> draws behind the text, or null when nothing sets one. This is
+/// where a Word highlighter lands after a round trip: LibreOffice exports both its character highlight
+/// and its character shading to the one ODF attribute.
+/// </param>
+/// <param name="Underline">
+/// How the run is underlined, from <c>style:text-underline-style</c> and
+/// <c>style:text-underline-type</c> read at one level. See <see cref="TextUnderline"/> and
+/// <c>OdfStyles.ResolveTogether</c> for why the level comes before the attribute.
+/// </param>
+/// <param name="IsStruckThrough">
+/// True when <c>style:text-line-through-style</c> names a style other than <c>none</c>.
+/// </param>
+/// <param name="WidthPerCent">
+/// How far the glyphs are squeezed across, from <c>style:text-scale</c>, as a percentage.
+/// <para>
+/// The same item as <c>w:rPr/w:w</c> and <c>\charscalex</c>: <c>xmloff</c> maps the attribute onto
+/// <c>PROP_CharScaleWidth</c> as an <c>XML_TYPE_PERCENT16</c>
+/// (<c>xmloff/source/text/txtprmap.cxx</c>:253 and :641), which is the property the DOCX importer
+/// fills too, so <see cref="TextWidthScale"/>'s twip truncation applies here unchanged.
+/// </para>
+/// <para>
+/// Measured at 26.2.4.2 on five one-attribute flat-ODF arms, the drawn width read out of a
+/// right-aligned line's own origin rather than from glyph boxes: <c>130%</c> comes out at
+/// <b>1.29981</b> of the unscaled arm and <c>60%</c> at <b>0.59974</b>, while <c>99%</c> at 12 pt
+/// comes out at <b>0.98665</b> — nearer the truncated <b>0.98750</b> than the stated 0.99, which is
+/// the same twip grid the Microsoft formats land on. An absent attribute and <c>100%</c> are
+/// byte-identical. <c>probes/odtscale-r148/</c>.
+/// </para>
+/// </param>
+/// <param name="AutoKerning">
+/// True when pair kerning applies, which for ODF is <em>unless</em> <c>style:letter-kerning</c> says
+/// <c>false</c> — the opposite way round from the three Microsoft formats.
+/// <para>
+/// ODF is the one of the four that states this as the boolean it really is: <c>xmloff</c> maps the
+/// attribute straight onto <c>CharAutoKerning</c> with <c>XML_TYPE_BOOL</c>
+/// (<c>xmloff/source/text/txtprmap.cxx:193</c>), so there is no threshold to discard. What differs is
+/// what a silent document gets. <c>SwDocShell::InitNew</c> sets the document default to <em>true</em>
+/// — "#i16874# AutoKerning as default for new documents",
+/// <c>sw/source/uibase/app/docshini.cxx:304</c> — and the ODF import leaves it alone, while the three
+/// Microsoft importers each state <c>false</c> for themselves.
+/// </para>
+/// <para>
+/// Measured rather than inferred, because the source alone reads the other way: <c>SwDocShell::Load</c>
+/// calls <c>RemoveAllFormatLanguageDependencies</c>, which resets that same default back to the pool's
+/// <c>false</c> (<c>sw/source/core/doc/poolfmt.cxx:322</c>). Rendering one flat-ODF document three
+/// times through the installed <c>soffice</c> settles it: with no attribute the output is
+/// byte-identical to <c>style:letter-kerning="true"</c> and differs from <c>"false"</c> — every word
+/// on the page 0.6 pt further along. Reading the source and stopping there costs fourteen fidelity
+/// comparisons, all of them <c>.fodt</c>.
+/// </para>
+/// </param>
+public readonly record struct OdfTextStyle(
+    string? FamilyName,
+    Length Size,
+    int Weight,
+    bool IsItalic,
+    string? Language,
+    Colour? Colour = null,
+    Layout.Escapement Escapement = default,
+    Layout.PageCaseMap CaseMap = Layout.PageCaseMap.None,
+    Colour? Highlight = null,
+    TextUnderline Underline = TextUnderline.None,
+    bool IsStruckThrough = false,
+    bool AutoKerning = true,
+    int WidthPerCent = 100)
+{
+    /// <summary>The key a face cache is keyed on: what actually decides which font file is loaded.</summary>
+    public (string? Family, int Weight, bool Italic) FaceKey => (FamilyName, Weight, IsItalic);
+}
+
+/// <summary>
+/// Resolves an ODF paragraph style into the layout properties the engine takes.
+/// </summary>
+/// <remarks>
+/// <para>
+/// The style chain is already walked by <see cref="OdfStyles.ResolveProperty(string?, OdfStyleFamily,
+/// OdfPropertyKind, string, string)"/>, which is the point of having built it first: a paragraph's
+/// automatic style, its parent, the named style behind that and the family default are one lookup, and
+/// "set here" stays distinguishable from "defaulted" for the properties where that matters.
+/// </para>
+/// <para>
+/// What is left is the translation, and ODF spells several of these in ways that need care. Line
+/// spacing is spread across three attributes and told apart partly by units — <c>fo:line-height</c>
+/// carries a percentage <em>or</em> a length, and the length means exact. Indents are
+/// <c>fo:margin-left</c> and <c>fo:margin-right</c> rather than anything called an indent, so the same
+/// attribute names mean a paragraph's indents here and a page's margins on a page layout.
+/// </para>
+/// </remarks>
+internal static class OdfParagraphFormats
+{
+    /// <summary>
+    /// The em size used when the document states none anywhere in the chain, and the base a percentage is
+    /// taken of.
+    /// </summary>
+    /// <remarks>
+    /// Twelve points, which is the value in Writer's item pool and therefore what a paragraph style with
+    /// no <c>fo:font-size</c> renders at — measured, by laying out a document whose only text properties
+    /// name a family. A document relying on the default and laid out at anything else breaks its lines in
+    /// different places from its first paragraph onwards.
+    /// </remarks>
+    private static readonly Length DefaultSize = Length.FromPoints(12);
+
+    /// <summary>Resolves a paragraph style's layout properties.</summary>
+    /// <param name="styles">The document's styles.</param>
+    /// <param name="styleName">The paragraph's own style, automatic or named.</param>
+    /// <param name="shrinksJustifiedBlanks">
+    /// True when a justified line in this document may squeeze its blanks below their natural width,
+    /// which the document's <c>JustifyLinesWithShrinking</c> setting decides. See
+    /// <see cref="OdtLayoutSource.ShrinksJustifiedBlanks"/> and
+    /// <see cref="ParagraphFormat.ShrinksJustifiedBlanks"/>.
+    /// </param>
+    /// <param name="tabsRelativeToIndent">
+    /// True when this document's tab stops are measured from the paragraph's own indent, which the
+    /// document's <c>TabsRelativeToIndent</c> setting decides. Writer's own default and therefore this
+    /// one; every <c>.odt</c> LibreOffice exported from a Word file states <c>false</c>. See
+    /// <see cref="OdtLayoutSource.TabsRelativeToIndent(System.Xml.Linq.XElement?)"/> and
+    /// <see cref="ParagraphFormat.TabsRelativeToIndent"/>.
+    /// </param>
+    internal static ParagraphFormat Resolve(
+        OdfStyles styles,
+        string? styleName,
+        bool shrinksJustifiedBlanks = false,
+        bool tabsRelativeToIndent = true)
+    {
+        ArgumentNullException.ThrowIfNull(styles);
+
+        bool rightToLeft = IsRightToLeft(styles, styleName);
+
+        return new ParagraphFormat
+        {
+            IsRightToLeft = rightToLeft,
+            Alignment = Alignment(styles, styleName, rightToLeft),
+
+            // The start and end indents, which is what ODF's margins are: measured from the
+            // paragraph's own start edge, so fo:margin-left is at the *right* of a right-to-left
+            // paragraph. Measured — one with fo:margin-right="3cm" is drawn three centimetres in
+            // from the left margin, and LibreOffice's own RTF export writes that same indent as
+            // \li1701.
+            StartIndent = Measure(styles, styleName, "margin-left"),
+            EndIndent = Measure(styles, styleName, "margin-right"),
+            FirstLineIndent = Measure(styles, styleName, "text-indent"),
+            SpaceBefore = Measure(styles, styleName, "margin-top"),
+            SpaceAfter = Measure(styles, styleName, "margin-bottom"),
+            HasContextualSpacing =
+                Paragraph(styles, styleName, OdfNamespaces.Style, "contextual-spacing")
+                    .AsBoolean() == true,
+            StyleKey = NamedAncestorOf(styles, styleName),
+            LineSpacing = Spacing(styles, styleName),
+
+            // "always" against "auto", not a boolean — ODF spells both out, and treating a missing
+            // attribute as false is right while treating "auto" as true is not.
+            KeepWithNext = Paragraph(styles, styleName, OdfNamespaces.FoCompatible, "keep-with-next")
+                .Is("always"),
+            KeepTogether = Paragraph(styles, styleName, OdfNamespaces.FoCompatible, "keep-together")
+                .Is("always"),
+
+            OrphanLines = Count(styles, styleName, "orphans"),
+            WidowLines = Count(styles, styleName, "widows"),
+            StartsNewPage = StartsNewPage(styles, styleName),
+            TabStops = Tabs(styles, styleName),
+            ClampsTabsAtLineEdge = true,
+            SpillsTrailingNoBreakSpace = true,
+            DefaultTabInterval = TabInterval(styles),
+
+            // A document-wide setting rather than anything the paragraph states; see
+            // OdtLayoutSource.ShrinksJustifiedBlanks for what turns it on and what it costs when it is
+            // read wrongly.
+            ShrinksJustifiedBlanks = shrinksJustifiedBlanks,
+
+            // Also document-wide, and the one flag every Word-family reader in this tree already sets
+            // by hand: an ODF document states it outright, so it is read rather than assumed.
+            TabsRelativeToIndent = tabsRelativeToIndent,
+        };
+    }
+
+    /// <summary>
+    /// The named style a paragraph is really set in, which its automatic style hangs off.
+    /// </summary>
+    /// <remarks>
+    /// An automatic style is direct formatting rather than a style — LibreOffice hands the text node its
+    /// <c>style:parent-style-name</c> as the format collection and keeps the automatic style's own
+    /// properties as hard attributes — so it is the parent that decides whether two paragraphs are "of
+    /// the same style" for contextual spacing. Walking rather than taking one step, because a document
+    /// may chain automatic styles; the walk is bounded because a cycle in a malformed file otherwise is
+    /// not.
+    /// </remarks>
+    private static string? NamedAncestorOf(OdfStyles styles, string? styleName)
+    {
+        string? name = styleName;
+
+        for (int step = 0; name is not null && step < 16; step++)
+        {
+            if (styles.FindNamed(name, OdfStyleFamily.Paragraph) is not null) return name;
+            if (styles.Find(name, OdfStyleFamily.Paragraph) is not { } automatic) return null;
+
+            name = automatic.ParentStyleName;
+        }
+
+        return name;
+    }
+
+    /// <summary>
+    /// Resolves the character formatting a paragraph's text is set in.
+    /// </summary>
+    /// <remarks>
+    /// From the paragraph style's own text properties, which is what a run with no span style of its own
+    /// is set in — so this is the paragraph's baseline, and <see cref="ResolveText(OdfStyles,
+    /// IReadOnlyList{OdfStyleReference})"/> is what a span inside it resolves through.
+    /// </remarks>
+    internal static OdfTextStyle ResolveText(OdfStyles styles, string? styleName)
+        => ResolveText(styles, [new OdfStyleReference(styleName, OdfStyleFamily.Paragraph)]);
+
+    /// <summary>
+    /// Resolves the character formatting a cascade of styles produces.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The cascade runs outermost first — the paragraph style, then each enclosing <c>text:span</c>'s
+    /// style — because ODF has no inline formatting and a span's automatic style is how one bold word is
+    /// written. The innermost style that sets a property wins, and only if none does at all do the family
+    /// defaults apply, which is what <see cref="OdfStyles.ResolveProperty(IReadOnlyList{
+    /// OdfStyleReference}, OdfPropertyKind, string, string)"/> implements.
+    /// </para>
+    /// <para>
+    /// Two properties cannot go through that method. The family has two spellings that mean the same item
+    /// to LibreOffice, so an outer <c>fo:font-family</c> must not beat an inner <c>style:font-name</c> —
+    /// the level has to be decided before the spelling. And a percentage size is relative to the enclosing
+    /// level's, so resolving it means walking outwards multiplying rather than taking one value.
+    /// </para>
+    /// </remarks>
+    /// <param name="styles">The document's styles.</param>
+    /// <param name="cascade">The style references, outermost first.</param>
+    internal static OdfTextStyle ResolveText(
+        OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade)
+    {
+        ArgumentNullException.ThrowIfNull(styles);
+        ArgumentNullException.ThrowIfNull(cascade);
+
+        return new OdfTextStyle(
+            FamilyIn(styles, cascade),
+            SizeIn(styles, cascade),
+            Weight(Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "font-weight").Value),
+            Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "font-style").Value
+                is "italic" or "oblique",
+            LanguageTag(
+                Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "language").Value,
+                Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "country").Value),
+            Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "color").AsColour(),
+            EscapementIn(styles, cascade),
+            CaseMapIn(styles, cascade),
+            Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "background-color").AsColour(),
+            // ODF names the *pattern* rather than switching a flag, so "any value but none" is the
+            // reading — the same one `OdfTextFormat` takes of the same attributes. The width and
+            // colour attributes beside them are not read: nothing below this can draw a rule other than
+            // one text-coloured line per line of the underline, so honouring them would be a promise
+            // the model cannot keep. The underline's *count* is read, and it cannot go through
+            // `Cascaded`: the style and the type are two attributes of one item, so an outer style's
+            // type must not be merged with an inner style's style. See `OdfStyles.ResolveTogether`.
+            OdfTextFormat.UnderlineIn(styles, cascade),
+            IsLineOn(Cascaded(styles, cascade, OdfNamespaces.Style, "text-line-through-style").Value),
+            Cascaded(styles, cascade, OdfNamespaces.Style, "letter-kerning").Value is not "false",
+            ScaleIn(styles, cascade));
+    }
+
+    /// <summary>Whether one of ODF's two line-style attributes asks for a line.</summary>
+    private static bool IsLineOn(string? value) => value is not (null or "none");
+
+    /// <summary>
+    /// The character width <c>style:text-scale</c> asks for, as a percentage.
+    /// </summary>
+    /// <remarks>
+    /// The specification's namespace is the one written: over the 337 converted <c>.odt</c> the
+    /// attribute appears <b>350</b> times as <c>style:text-scale</c> and <b>not once</b> as
+    /// <c>loext:text-scale</c>, which is worth stating because five other ODF attributes in this
+    /// reader are the other way round and <c>dotnet/CLAUDE.md</c> records each of them costing a
+    /// round. Two thirds of those 350 say <c>100%</c> and cost nothing; the reach is the
+    /// <b>111 occurrences in 18 documents</b> that say something else.
+    /// </remarks>
+    private static int ScaleIn(OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade)
+    {
+        string? stated = Cascaded(styles, cascade, OdfNamespaces.Style, "text-scale").Value;
+        if (stated is null) return TextWidthScale.Natural;
+
+        ReadOnlySpan<char> digits = stated.AsSpan().Trim();
+        if (digits.EndsWith("%", StringComparison.Ordinal)) digits = digits[..^1];
+
+        return double.TryParse(digits, NumberStyles.Float, CultureInfo.InvariantCulture,
+                               out double percentage)
+               && percentage > 0
+            ? (int)Math.Round(percentage)
+            : TextWidthScale.Natural;
+    }
+
+    /// <summary>
+    /// The case the cascade draws the text in.
+    /// </summary>
+    /// <remarks>
+    /// ODF splits across two attributes what OOXML and WW8 each state as two toggles of one item.
+    /// <c>fo:text-transform="uppercase"</c> is full capitals and <c>fo:font-variant="small-caps"</c> is
+    /// small ones, and LibreOffice folds both into the single <c>SvxCaseMapItem</c>
+    /// (<c>xmloff/source/style/cdouthdl.cxx</c> and its neighbours), so a document setting both gets one
+    /// answer. <c>lowercase</c> and <c>capitalize</c> are the other two <c>fo:text-transform</c> values and
+    /// are deliberately not mapped: no reader in this tree produces them, so honouring them here would be a
+    /// path only ODF could reach and only ODF could test.
+    /// </remarks>
+    private static Layout.PageCaseMap CaseMapIn(
+        OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade)
+    {
+        if (Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "text-transform").Value
+            is "uppercase")
+        {
+            return Layout.PageCaseMap.Uppercase;
+        }
+
+        return Cascaded(styles, cascade, OdfNamespaces.FoCompatible, "font-variant").Value
+            is "small-caps"
+            ? Layout.PageCaseMap.SmallCaps
+            : Layout.PageCaseMap.None;
+    }
+
+    /// <summary>
+    /// The superscript or subscript the cascade asks for.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>style:text-position</c> carries one or two values: a vertical position and, optionally, the size
+    /// the text is set at as a percentage. The position is either a percentage — positive upwards, so a
+    /// subscript is the negative case rather than a separate one — or one of the keywords <c>super</c> and
+    /// <c>sub</c>, which mean the automatic pair LibreOffice's own character dialogue offers.
+    /// </para>
+    /// <para>
+    /// Both halves are read here, and the size half matters: a span stating <c>super 58%</c> is set at 58%
+    /// of the size it would otherwise take, and a reader that took only the position draws the text full
+    /// size — 11 pt where LibreOffice draws 6.4. It is not folded into <c>SizeIn</c> because that walks the
+    /// cascade multiplying <c>fo:font-size</c> percentages, and this is a different percentage of a
+    /// different thing.
+    /// </para>
+    /// </remarks>
+    private static Layout.Escapement EscapementIn(
+        OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade)
+    {
+        string? stated = Cascaded(styles, cascade, OdfNamespaces.Style, "text-position").Value;
+        if (string.IsNullOrWhiteSpace(stated)) return Layout.Escapement.None;
+
+        string[] parts = stated.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length == 0) return Layout.Escapement.None;
+
+        // An omitted size means the automatic one, which is what the keywords carry with them.
+        // `ParsePercentage` returns a fraction, so both readings scale back to whole percent.
+        int proportion = parts.Length > 1 && OdfValue.ParsePercentage(parts[1]) is { } fraction
+            ? (int)Math.Round(fraction * 100)
+            : Layout.Escapement.AutomaticProportion;
+
+        return parts[0] switch
+        {
+            "super" => new Layout.Escapement(Layout.Escapement.AutomaticPercent, proportion),
+            "sub" => new Layout.Escapement(-Layout.Escapement.AutomaticPercent, proportion),
+            _ => OdfValue.ParsePercentage(parts[0]) is { } percent
+                ? new Layout.Escapement((int)Math.Round(percent * 100), proportion)
+                : Layout.Escapement.None,
+        };
+    }
+
+    /// <summary>
+    /// The family the cascade asks for, deciding the level before the spelling.
+    /// </summary>
+    /// <remarks>
+    /// <c>style:font-name</c> names an <c>office:font-face-decls</c> entry rather than a family, and
+    /// LibreOffice writes that form far more often than <c>fo:font-family</c> — so a reader that only
+    /// looks at the latter finds no font at all in most real documents. A declaration that names no
+    /// family at all is still a family name in practice, since producers use the family as the
+    /// declaration's name.
+    /// </remarks>
+    private static string? FamilyIn(OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade)
+    {
+        for (int i = cascade.Count - 1; i >= 0; i--)
+        {
+            OdfStyleReference at = cascade[i];
+
+            // Both spellings in one walk, so the level decides before the spelling *inside* a
+            // parent chain as well as across the cascade. Asking for them one at a time let a
+            // parent style's `fo:font-family` beat its child's `style:font-name` — the shape
+            // LibreOffice writes whenever an automatic style names a face and the named style it
+            // inherits from states a family.
+            OdfProperty found = styles.ResolveWithoutDefaults(
+                at.Name, at.Family, OdfPropertyKind.Text, FontSpellings, out int matched);
+
+            if (found.HasValue)
+            {
+                return matched == 1
+                    ? FamilyOfDeclaration(styles, found.Value!)
+                    : Unquote(found.Value);
+            }
+        }
+
+        if (Unquote(Defaulted(styles, cascade, OdfNamespaces.FoCompatible, "font-family").Value)
+            is { } fallback)
+        {
+            return fallback;
+        }
+
+        return Defaulted(styles, cascade, OdfNamespaces.Style, "font-name").Value is { } name
+            ? FamilyOfDeclaration(styles, name)
+            : null;
+    }
+
+    /// <summary>The two spellings of a face, in the order one style's own attributes settle.</summary>
+    /// <remarks>
+    /// <c>fo:font-family</c> first: a style stating both is settled by attribute order, and
+    /// LibreOffice writes <c>style:font-name</c> before it, so the <c>fo:</c> value is the second
+    /// write into <c>CTF_FONTFAMILYNAME</c> and the one that stands
+    /// (<c>xmloff/source/text/txtimppr.cxx</c>:58-101).
+    /// </remarks>
+    private static readonly (string Namespace, string Name)[] FontSpellings =
+    [
+        (OdfNamespaces.FoCompatible, "font-family"),
+        (OdfNamespaces.Style, "font-name"),
+    ];
+
+    private static string? FamilyOfDeclaration(OdfStyles styles, string declared)
+        => styles.FontFaces.TryGetValue(declared, out OdfFontFace? face)
+            ? Unquote(face.FontFamily) ?? Unquote(declared)
+            : Unquote(declared);
+
+    /// <summary>
+    /// The em size the cascade asks for.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The innermost level that states a size at all wins, which is ordinary containment inheritance. What
+    /// is not ordinary is the percentage: <c>fo:font-size="150%"</c> is 150% of the <em>item pool's</em>
+    /// twelve points, not of the enclosing text's size and not of the style's parent's either.
+    /// </para>
+    /// <para>
+    /// That is measured, and it is measured because it is surprising. A 150% span inside an 11 pt paragraph
+    /// renders at 18 pt rather than 16.5, and a 150% style whose <c>style:parent-style-name</c> declares
+    /// 20 pt also renders at 18 rather than 30. The cause is where xmloff applies it: a percentage arrives
+    /// as <c>CharPropHeight</c>, and <c>SvxFontHeightItem</c> resolves a proportion against the height the
+    /// item set holds <em>at that moment</em> — which, for a style being built up from nothing, is the pool
+    /// default. The parent chain is resolved later, so it never enters the arithmetic, and nested
+    /// percentages do not compound for the same reason.
+    /// </para>
+    /// </remarks>
+    private static Length SizeIn(OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade)
+    {
+        for (int i = cascade.Count - 1; i >= 0; i--)
+        {
+            OdfProperty stated = Own(styles, cascade[i], OdfNamespaces.FoCompatible, "font-size");
+            if (!stated.HasValue) continue;
+
+            if (stated.AsPercentage() is { } proportion and > 0 and < 100)
+            {
+                return OdfWriterUnits.ToCore(DefaultSize * proportion);
+            }
+
+            if (stated.AsLength() is { } absolute) return OdfWriterUnits.ToCore(absolute);
+        }
+
+        return OdfWriterUnits.ToCore(
+            Defaulted(styles, cascade, OdfNamespaces.FoCompatible, "font-size").AsLength()
+            ?? DefaultSize);
+    }
+
+    /// <summary>
+    /// The absolute size a named character style states, or null when it states none.
+    /// </summary>
+    /// <remarks>
+    /// Distinct from <see cref="ResolveText(OdfStyles, string?)"/>'s size, which always answers — it
+    /// falls back to the family defaults and then to <see cref="DefaultSize"/>, so a style silent about
+    /// size comes back as 12 pt. A caller asking "does this style change the size" needs the silence
+    /// itself, and getting 12 pt instead would resize everything the style is applied to. A percentage
+    /// is not answered either: it is relative to a context this method is not given.
+    /// </remarks>
+    /// <param name="styles">The document's styles.</param>
+    /// <param name="styleName">The character style's name.</param>
+    internal static Length? StatedTextSize(OdfStyles styles, string? styleName)
+    {
+        ArgumentNullException.ThrowIfNull(styles);
+
+        OdfProperty stated = styles.ResolveWithoutDefaults(
+            styleName, OdfStyleFamily.Text, OdfPropertyKind.Text,
+            OdfNamespaces.FoCompatible, "font-size");
+
+        return stated.HasValue && stated.AsLength() is { } absolute
+            ? OdfWriterUnits.ToCore(absolute)
+            : null;
+    }
+
+    /// <summary>
+    /// The posture a named character style states, or null when it states none.
+    /// </summary>
+    /// <remarks>
+    /// The silence is the answer here for the same reason it is in <see cref="StatedTextSize"/>, and
+    /// for one more: a list level's character style stating <c>fo:font-style="normal"</c> draws an
+    /// upright label over an italic paragraph, so <em>stated upright</em> and <em>unstated</em> lead
+    /// to different pictures. Measured on <c>probes/words-r59/label-slant.py</c>'s
+    /// <c>leveloff-markon</c>, whose <c>.odt</c> arm draws the bullet upright over an italic item.
+    /// </remarks>
+    /// <param name="styles">The document's styles.</param>
+    /// <param name="styleName">The character style's name.</param>
+    internal static bool? StatedTextItalic(OdfStyles styles, string? styleName)
+    {
+        ArgumentNullException.ThrowIfNull(styles);
+
+        OdfProperty stated = styles.ResolveWithoutDefaults(
+            styleName, OdfStyleFamily.Text, OdfPropertyKind.Text,
+            OdfNamespaces.FoCompatible, "font-style");
+
+        return stated.HasValue && stated.Value is { Length: > 0 } value
+            ? value is "italic" or "oblique"
+            : null;
+    }
+
+    private static OdfProperty Paragraph(
+        OdfStyles styles, string? styleName, string ns, string name)
+        => styles.ResolveProperty(
+            styleName, OdfStyleFamily.Paragraph, OdfPropertyKind.Paragraph, ns, name);
+
+    private static OdfProperty Text(OdfStyles styles, string? styleName, string ns, string name)
+        => styles.ResolveProperty(
+            styleName, OdfStyleFamily.Paragraph, OdfPropertyKind.Text, ns, name);
+
+    /// <summary>A text property resolved through the whole cascade, defaults included.</summary>
+    private static OdfProperty Cascaded(
+        OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade, string ns, string name)
+        => styles.ResolveProperty(cascade, OdfPropertyKind.Text, ns, name);
+
+    /// <summary>A text property from one level of the cascade and its parents, defaults excluded.</summary>
+    private static OdfProperty Own(
+        OdfStyles styles, OdfStyleReference at, string ns, string name)
+        => styles.ResolveWithoutDefaults(at.Name, at.Family, OdfPropertyKind.Text, ns, name);
+
+    /// <summary>A text property from the cascade's family defaults alone.</summary>
+    private static OdfProperty Defaulted(
+        OdfStyles styles, IReadOnlyList<OdfStyleReference> cascade, string ns, string name)
+    {
+        for (int i = cascade.Count - 1; i >= 0; i--)
+        {
+            OdfProperty found = styles.ResolveFromDefaults(
+                cascade[i].Family, OdfPropertyKind.Text, ns, name);
+            if (found.HasValue) return found;
+        }
+
+        return OdfProperty.Unset;
+    }
+
+    /// <summary>An indent or spacing, on Writer's own whole-twip grid.</summary>
+    private static Length Measure(OdfStyles styles, string? styleName, string name)
+        => OdfWriterUnits.ToCore(
+               Paragraph(styles, styleName, OdfNamespaces.FoCompatible, name).AsLength())
+           ?? Length.Zero;
+
+    private static int Count(OdfStyles styles, string? styleName, string name)
+    {
+        int? value = Paragraph(styles, styleName, OdfNamespaces.FoCompatible, name).AsInt();
+        return value is > 0 and < 100 ? value.Value : 0;
+    }
+
+    /// <summary>
+    /// The alignment, with ODF's own vocabulary rather than CSS's.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>start</c> and <c>end</c> rather than left and right, because ODF states the reading direction
+    /// and not the page side — though it permits <c>left</c> and <c>right</c> too, and producers write
+    /// them. Justified text is <c>justify</c>, and whether its last line is stretched as well is a
+    /// separate attribute (<c>style:justify-single-word</c> is a different question again).
+    /// </para>
+    /// <para>
+    /// The two vocabularies mean different things in a right-to-left paragraph and both are in use, so
+    /// the physical pair is folded onto the logical one here rather than carried further: <c>left</c>
+    /// is the <em>end</em> edge of a right-to-left paragraph. Measured, and confirmed by LibreOffice's
+    /// own conversion — the same paragraph exported to OOXML comes back as <c>w:jc w:val="end"</c>
+    /// beside <c>w:bidi</c>.
+    /// </para>
+    /// </remarks>
+    private static TextAlignment Alignment(
+        OdfStyles styles, string? styleName, bool rightToLeft)
+    {
+        OdfProperty align = Paragraph(styles, styleName, OdfNamespaces.FoCompatible, "text-align");
+
+        return align.Value switch
+        {
+            "end" => TextAlignment.End,
+            "right" => rightToLeft ? TextAlignment.Start : TextAlignment.End,
+            "left" => rightToLeft ? TextAlignment.End : TextAlignment.Start,
+            "center" or "centre" => TextAlignment.Centre,
+            "justify" => Paragraph(styles, styleName, OdfNamespaces.FoCompatible, "text-align-last")
+                    .Is("justify")
+                ? TextAlignment.Distribute
+                : TextAlignment.Justify,
+            _ => TextAlignment.Start,
+        };
+    }
+
+    /// <summary>
+    /// Whether the paragraph reads right to left, from <c>style:writing-mode</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// ODF states a writing mode rather than a direction, so this reads the two horizontal ones and
+    /// leaves the vertical modes alone: <c>rl-tb</c> is the right-to-left paragraph every Hebrew and
+    /// Arabic document is made of, and <c>tb-rl</c> and <c>tb-lr</c> are vertical text, which is a
+    /// separate matter and not yet laid out at all. <c>page</c> means "whatever the page says", which
+    /// resolves to left to right for every page geometry XRay.Office reads.
+    /// </para>
+    /// <para>
+    /// Through the style chain like everything else here, which is not incidental: LibreOffice's own
+    /// export puts the writing mode on the <em>style</em> and leaves the paragraph bare, so a reader
+    /// looking only at the paragraph's own automatic style finds nothing at all.
+    /// </para>
+    /// </remarks>
+    private static bool IsRightToLeft(OdfStyles styles, string? styleName)
+        => Paragraph(styles, styleName, OdfNamespaces.Style, "writing-mode").Value
+            is "rl-tb" or "rl";
+
+    /// <summary>
+    /// The line spacing, from whichever of ODF's three attributes the chain resolves.
+    /// </summary>
+    /// <remarks>
+    /// Checked in the order the specification gives them precedence: an explicit minimum beats a
+    /// leading, and both beat <c>fo:line-height</c>. That last one carries either a percentage or a
+    /// length, and which it is decides the <em>mode</em> and not just the value — <c>150%</c> is
+    /// proportional and <c>0.5cm</c> is exact, so parsing it as a number would silently turn a fixed
+    /// height into a multiple.
+    /// </remarks>
+    private static LineSpacingRule Spacing(OdfStyles styles, string? styleName)
+    {
+        if (Paragraph(styles, styleName, OdfNamespaces.Style, "line-height-at-least").AsLength()
+            is { } atLeast)
+        {
+            return LineSpacingRule.AtLeast(OdfWriterUnits.ToCore(atLeast));
+        }
+
+        if (Paragraph(styles, styleName, OdfNamespaces.Style, "line-spacing").AsLength()
+            is { } leading)
+        {
+            return LineSpacingRule.PlusLeading(OdfWriterUnits.ToCore(leading));
+        }
+
+        OdfProperty height = Paragraph(styles, styleName, OdfNamespaces.FoCompatible, "line-height");
+        if (!height.HasValue || height.Is("normal")) return LineSpacingRule.SingleSpaced;
+
+        if (height.AsPercentage() is { } proportion) return LineSpacingRule.Multiple(proportion);
+        if (height.AsLength() is { } exact)
+        {
+            return LineSpacingRule.Exactly(OdfWriterUnits.ToCore(exact));
+        }
+
+        return LineSpacingRule.SingleSpaced;
+    }
+
+    /// <summary>
+    /// The paragraph's own tab stops.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// From the innermost style in the chain that declares a <c>style:tab-stops</c>, taken whole rather
+    /// than merged with its parent's: the element is a list, and ODF replaces the list rather than adding
+    /// to it — a paragraph that sets one stop has one stop, not its style's four and one more.
+    /// </para>
+    /// <para>
+    /// The types are ODF's own vocabulary, and <c>char</c> is the one that needs care: it means "align on a
+    /// character", with <c>style:char</c> saying which, so it is only a decimal stop when that character is
+    /// a separator. A <c>char</c> stop naming nothing behaves as a right stop, which is what LibreOffice
+    /// renders — verified against its own output rather than assumed.
+    /// </para>
+    /// </remarks>
+    private static List<TabStop> Tabs(OdfStyles styles, string? styleName)
+    {
+        OdfStyle? current = styles.Find(styleName, OdfStyleFamily.Paragraph);
+        HashSet<string> visited = new(StringComparer.Ordinal);
+
+        for (int depth = 0; current is not null && depth < OdfStyles.MaxParentChainDepth; depth++)
+        {
+            if (current.Properties(OdfPropertyKind.Paragraph)?.Child(OdfNamespaces.Style, "tab-stops")
+                is { } declared)
+            {
+                return ReadStops(declared);
+            }
+
+            if (!visited.Add(current.Name)) break;
+            current = styles.Find(current.ParentStyleName, OdfStyleFamily.Paragraph);
+        }
+
+        return styles.GetDefault(OdfStyleFamily.Paragraph)
+                   ?.Properties(OdfPropertyKind.Paragraph)
+                   ?.Child(OdfNamespaces.Style, "tab-stops") is { } fromDefaults
+            ? ReadStops(fromDefaults)
+            : [];
+
+    }
+
+    private static List<TabStop> ReadStops(XElement element)
+    {
+        List<TabStop> stops = [];
+
+        foreach (XElement stop in element.Elements(XName.Get("tab-stop", OdfNamespaces.Style)))
+        {
+            if (OdfValue.ParseLength(stop.Attribute(XName.Get("position", OdfNamespaces.Style))?.Value)
+                is not { } position)
+            {
+                continue;
+            }
+
+            string? type = stop.Attribute(XName.Get("type", OdfNamespaces.Style))?.Value;
+            string? character = stop.Attribute(XName.Get("char", OdfNamespaces.Style))?.Value;
+            string? leader = stop.Attribute(XName.Get("leader-text", OdfNamespaces.Style))?.Value;
+
+            stops.Add(new TabStop(
+                OdfWriterUnits.ToCore(position),
+                type switch
+                {
+                    "center" or "centre" => TabAlignment.Centre,
+                    "right" => TabAlignment.Right,
+                    "char" when character is "." or "," => TabAlignment.DecimalSeparator,
+                    "char" => TabAlignment.Right,
+                    _ => TabAlignment.Left,
+                },
+                leader is { Length: > 0 } ? leader[0] : '\0'));
+        }
+
+        stops.Sort((left, right) => left.Position.Emu.CompareTo(right.Position.Emu));
+        return stops;
+    }
+
+    /// <summary>
+    /// The document's default tab interval.
+    /// </summary>
+    /// <remarks>
+    /// A quarter over a centimetre, which is LibreOffice's own default and not the half inch Word uses —
+    /// measured: a tab in a paragraph declaring no stops lands 709 twips along, not 720. The value lives on
+    /// the default paragraph style rather than in a document setting, which is why it is read from there.
+    /// </remarks>
+    private static Length TabInterval(OdfStyles styles)
+    {
+        OdfProperty declared = styles.ResolveFromDefaults(
+            OdfStyleFamily.Paragraph, OdfPropertyKind.Paragraph,
+            OdfNamespaces.Style, "tab-stop-distance");
+
+        return OdfWriterUnits.ToCore(declared.AsLength()) is { } interval
+               && interval > Length.Zero
+            ? interval
+            : Length.FromMillimetres(12.5);
+    }
+
+    /// <summary>
+    /// Whether the paragraph starts a page.
+    /// </summary>
+    /// <remarks>
+    /// Two spellings mean it, and a document uses whichever its producer preferred:
+    /// <c>fo:break-before="page"</c>, and a <c>style:master-page-name</c> on the paragraph style, which
+    /// changes the page description and therefore has to start a page to do so. Missing the second one
+    /// loses the break at every section change in an ODF document, since that is how ODF has no section
+    /// list.
+    /// </remarks>
+    private static bool StartsNewPage(OdfStyles styles, string? styleName)
+    {
+        if (Paragraph(styles, styleName, OdfNamespaces.FoCompatible, "break-before").Is("page"))
+        {
+            return true;
+        }
+
+        OdfStyle? style = styles.Find(styleName, OdfStyleFamily.Paragraph);
+        return !string.IsNullOrEmpty(style?.MasterPageName);
+    }
+
+    /// <summary>
+    /// A weight keyword or number on the OpenType scale.
+    /// </summary>
+    /// <remarks>
+    /// ODF allows both the CSS keywords and the numeric values, and <c>bold</c> is by far the common
+    /// case. An unrecognised value is regular rather than an error: a document naming a weight nobody
+    /// has still has to render.
+    /// </remarks>
+    private static int Weight(string? value) => value switch
+    {
+        null or "" or "normal" => 400,
+        "bold" => 700,
+        _ => int.TryParse(value, out int numeric) && numeric is >= 1 and <= 1000 ? numeric : 400,
+    };
+
+    /// <summary>
+    /// A BCP 47 tag from ODF's separate language and country attributes.
+    /// </summary>
+    /// <remarks>
+    /// ODF keeps them apart where every other format writes one tag, and a country without a language is
+    /// meaningless — so the language decides whether there is a tag at all.
+    /// </remarks>
+    private static string? LanguageTag(string? language, string? country)
+    {
+        if (string.IsNullOrWhiteSpace(language)) return null;
+        return string.IsNullOrWhiteSpace(country) ? language : $"{language}-{country}";
+    }
+
+    /// <summary>
+    /// Strips the quotes and the fallback list a CSS-style font family carries.
+    /// </summary>
+    /// <remarks>
+    /// <c>fo:font-family</c> is CSS syntax, so a real document says
+    /// <c>'Liberation Serif', 'Times New Roman', serif</c>. Passing that whole string to a font resolver
+    /// matches nothing; taking the first name is what LibreOffice does with it.
+    /// </remarks>
+    private static string? Unquote(string? family)
+    {
+        if (string.IsNullOrWhiteSpace(family)) return null;
+
+        string first = family.Split(',')[0].Trim();
+        if (first.Length >= 2
+            && ((first[0] == '\'' && first[^1] == '\'') || (first[0] == '"' && first[^1] == '"')))
+        {
+            first = first[1..^1];
+        }
+
+        return first.Length > 0 ? first : null;
+    }
+}

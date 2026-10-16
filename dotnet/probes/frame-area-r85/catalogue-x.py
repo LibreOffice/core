@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """The horizontal extent of the ink on one page of the WordArt catalogue.
 
-`Paperless.WordProcessing/TODO.md` recorded `wp:effectExtent` as unread on an inline
+`XRay.Office.WordProcessing/TODO.md` recorded `wp:effectExtent` as unread on an inline
 drawing's *horizontal* position, quoting page 3 of
 `words/drawingset-001/docx/WordArt_Shapes_Arrows_Catalog1.docx` at 200 dpi: ours
 229.68..359.64 pt against the reference's 240.84..370.80, "the same 10.8 pt as their
 `wp:effectExtent`". This reads that same quantity back, against both installed
 references, so the entry can be checked rather than believed.
 
-Usage:  PAPERLESS_CLI=<abs path> python3 catalogue-x.py <workdir> [page|all]
+Usage:  XRAY_OFFICE_CLI=<abs path> python3 catalogue-x.py <workdir> [page|all]
 """
 import os, subprocess, sys
 from pathlib import Path
@@ -18,7 +18,7 @@ from PIL import Image
 
 DOC = Path(os.environ.get("CORPUS", "/home/user/sample-files")) / \
     "words/drawingset-001/docx/WordArt_Shapes_Arrows_Catalog1.docx"
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 LO24 = os.environ.get("LO24", "/usr/bin/soffice")
 LO26 = os.environ.get("LO26", "/opt/libreoffice26.2/program/soffice")
 DPI = 200

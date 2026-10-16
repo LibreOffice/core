@@ -35,7 +35,7 @@ Measured 2026-09-06 against LibreOffice 24.2.7.2 (`/usr/bin/soffice`) and 26.2.4
 (`/opt/libreoffice26.2/program/soffice`, bundled Latin duplicates and Latin Noto aside),
 system fonts from `/usr/share/fonts`.
 
-Usage:  PAPERLESS_CLI=... python3 advance-staircase.py <workdir>
+Usage:  XRAY_OFFICE_CLI=... python3 advance-staircase.py <workdir>
 """
 
 import os
@@ -168,7 +168,7 @@ def main() -> int:
             raise SystemExit(f'{binary} wrote no PDF -- nothing to compare')
         pdfs[label] = pdf
 
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     if cli:
         directory = os.path.join(out, 'ours')
         os.makedirs(directory, exist_ok=True)

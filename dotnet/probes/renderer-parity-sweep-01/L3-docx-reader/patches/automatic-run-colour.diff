@@ -1,6 +1,6 @@
-diff --git a/dotnet/src/Paperless.WordProcessing/Ooxml/WordThemeColour.cs b/dotnet/src/Paperless.WordProcessing/Ooxml/WordThemeColour.cs
---- a/dotnet/src/Paperless.WordProcessing/Ooxml/WordThemeColour.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Ooxml/WordThemeColour.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordThemeColour.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordThemeColour.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordThemeColour.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordThemeColour.cs
 @@ -62,11 +62,42 @@
      /// <c>w:themeColor</c> is what a document written by anything other than Word tends to
      /// carry, and a <c>w:themeColor</c> with no <c>w:val</c> at all is legal.

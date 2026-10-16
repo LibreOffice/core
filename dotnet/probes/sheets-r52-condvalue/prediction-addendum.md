@@ -55,7 +55,7 @@ found in the project's own test rather than in a brief.
 
 Narrowest possible, and the exact mirror of round 50's chartex constant: **a choice whose
 `a:graphicData/@uri` is the 2010 slicer URI loses to a sibling `mc:Fallback`**, whatever its
-`Requires` says. No fallback, no change. `Paperless.Ooxml/OoxmlXml.cs` and
+`Requires` says. No fallback, no change. `XRay.Office.Ooxml/OoxmlXml.cs` and
 `OoxmlNamespaces.cs`, plus the round-50 test rewritten to bind the real namespace.
 
 ## The census, and the cross-track reach
@@ -73,7 +73,7 @@ sibling `mc:Fallback` exists:
 | `…/drawingml/2006/picture` | 1 | words |
 
 Keyed on the last-but-one row and nothing else, so the blast radius is **3 documents, all sheets,
-all `open`, 0 words and 0 slides**. This is a **shared-layer diff** (`Paperless.Ooxml`) and the
+all `open`, 0 words and 0 slides**. This is a **shared-layer diff** (`XRay.Office.Ooxml`) and the
 parent still owes the cross-track sweep; the census says nothing outside sheets can move, and the
 words rows above are the documents to look at if anything does, since they share the code path
 but not the key.

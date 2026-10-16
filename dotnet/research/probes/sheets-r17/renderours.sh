@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # renderours.sh <list> <outdir> — render our side only for each listed corpus document,
 # and report pages and extractable words. The reference does not move for a
-# Paperless-only change, so this is enough to compare two of our own binaries.
+# XRay.Office-only change, so this is enough to compare two of our own binaries.
 set -u
 LIST="$1"; OUT="$2"
 ROOT=/workspace/sample-files
-CLI=/home/user/libreoffice-core/.claude/worktrees/agent-a42a22c09b7b3f134/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+CLI=/home/user/libreoffice-core/.claude/worktrees/agent-a42a22c09b7b3f134/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 : > "$OUT/rows.tsv"
 while IFS= read -r rel; do
   [ -n "$rel" ] || continue

@@ -1,0 +1,591 @@
+using System.Globalization;
+using System.Text;
+using XRay.Office.Core.Units;
+
+namespace XRay.Office.Spreadsheets.Layout;
+
+/// <summary>
+/// A field a header or footer can hold in place of literal text.
+/// </summary>
+/// <remarks>
+/// The set Calc puts in a header, which is <c>ScHeaderFieldData</c>
+/// (<c>sc/source/ui/inc/printfun.hxx:60</c>): the page number, the total, the sheet's name, the
+/// document's title and file name, and the date and time the printout was made. Everything else
+/// a format can write in a header — a picture, a font change, a strikethrough — is formatting
+/// rather than content, and is dropped rather than modelled.
+/// </remarks>
+public enum SheetHeaderField
+{
+    /// <summary>The printed page number: <c>&amp;P</c>, ODF's <c>text:page-number</c>.</summary>
+    PageNumber,
+
+    /// <summary>How many pages the printout has: <c>&amp;N</c>, <c>text:page-count</c>.</summary>
+    PageCount,
+
+    /// <summary>The date the printout was made: <c>&amp;D</c>, <c>text:date</c>.</summary>
+    Date,
+
+    /// <summary>The time it was made: <c>&amp;T</c>, <c>text:time</c>.</summary>
+    Time,
+
+    /// <summary>The sheet's tab name: <c>&amp;A</c>, <c>text:sheet-name</c>.</summary>
+    SheetName,
+
+    /// <summary>The document's file name: <c>&amp;F</c>, <c>text:file-name</c>.</summary>
+    FileName,
+
+    /// <summary>Its full path: <c>&amp;Z</c>, <c>text:file-name</c> with a path display.</summary>
+    FilePath,
+
+    /// <summary>The document's title, which is metadata rather than a name: <c>text:title</c>.</summary>
+    Title,
+}
+
+/// <summary>
+/// One piece of a header: either literal text or a field.
+/// </summary>
+/// <param name="Text">The literal text, or null when this is a field.</param>
+/// <param name="Field">Which field it is, when <paramref name="Text"/> is null.</param>
+/// <param name="Size">
+/// The em size the segment states, or null for the sheet's default cell height. SpreadsheetML
+/// and BIFF write it as <c>&amp;14</c> and it persists until the next such code, which is why it
+/// belongs to the segment rather than to the part: <c>&amp;L&amp;8text&amp;R&amp;14more</c> is
+/// two sizes in one band. ODF states it in a text style and reaches the same place.
+/// </param>
+/// <param name="Family">
+/// The family the segment states, or null for the workbook's own default cell font. Written as
+/// <c>&amp;"Liberation Sans,Bold"</c>, and it persists exactly as <paramref name="Size"/> does.
+/// <see cref="SheetBandHeight"/> has read this code since it was written — the band's <em>height</em>
+/// has always been measured in the face the codes name — while this parser consumed it and threw
+/// it away, so a band was sized in one face and drawn in another.
+/// </param>
+/// <param name="Bold">
+/// Whether the segment is bold, or null for the workbook's own default cell font. Set by the
+/// style half of <c>&amp;"Family,Style"</c> and by the <c>&amp;B</c> toggle, both of which
+/// 26.2.4.2 honours: seven authored workbooks keyed on the PDF's font list rather than on
+/// advance widths, because the Liberation faces are metric-compatible and a bold band is exactly
+/// as wide as an upright one.
+/// </param>
+/// <param name="Italic">Whether it is italic, on the same terms and from <c>&amp;I</c>.</param>
+public readonly record struct SheetHeaderSegment(
+    string? Text,
+    SheetHeaderField Field = default,
+    Length? Size = null,
+    string? Family = null,
+    bool? Bold = null,
+    bool? Italic = null)
+{
+    /// <summary>A run of literal characters.</summary>
+    /// <param name="text">The characters.</param>
+    /// <param name="size">The em size it states, or null for the default.</param>
+    public static SheetHeaderSegment Literal(string text, Length? size = null)
+        => new(text, default, size);
+
+    /// <inheritdoc cref="Literal(string, Length?)"/>
+    /// <param name="text">The characters.</param>
+    /// <param name="size">The em size it states, or null for the default.</param>
+    /// <param name="family">The family it states, or null for the default.</param>
+    /// <param name="bold">Whether it is bold, or null for the default.</param>
+    /// <param name="italic">Whether it is italic, or null for the default.</param>
+    public static SheetHeaderSegment Literal(
+        string text, Length? size, string? family, bool? bold = null, bool? italic = null)
+        => new(text, default, size, family, bold, italic);
+
+    /// <summary>A field, resolved when the page it sits on is known.</summary>
+    /// <param name="field">Which field.</param>
+    /// <param name="size">The em size it states, or null for the default.</param>
+    public static SheetHeaderSegment Of(SheetHeaderField field, Length? size = null)
+        => new(null, field, size);
+
+    /// <inheritdoc cref="Of(SheetHeaderField, Length?)"/>
+    /// <param name="field">Which field.</param>
+    /// <param name="size">The em size it states, or null for the default.</param>
+    /// <param name="family">The family it states, or null for the default.</param>
+    /// <param name="bold">Whether it is bold, or null for the default.</param>
+    /// <param name="italic">Whether it is italic, or null for the default.</param>
+    public static SheetHeaderSegment Of(
+        SheetHeaderField field, Length? size, string? family,
+        bool? bold = null, bool? italic = null)
+        => new(null, field, size, family, bold, italic);
+
+    /// <summary>True when this is a field rather than literal text.</summary>
+    public bool IsField => Text is null;
+}
+
+/// <summary>
+/// One of the three parts a header or footer is divided into.
+/// </summary>
+/// <remarks>
+/// Three, and never more or fewer, in all three formats: Calc draws the left, centre and right
+/// areas as three separate pieces of text in the <em>same</em> rectangle, each with its own
+/// alignment (<c>ScPrintFunc::PrintHF</c>, <c>sc/source/ui/view/printfun.cxx:1874-1912</c>). So
+/// they overlap when they are long, which is what a reference rendering shows and what makes
+/// modelling them as one paragraph with tab stops wrong.
+/// </remarks>
+/// <param name="Segments">The literal runs and fields, in order.</param>
+public sealed record SheetHeaderPart(IReadOnlyList<SheetHeaderSegment> Segments)
+{
+    /// <summary>A part with nothing in it.</summary>
+    public static SheetHeaderPart Empty { get; } = new([]);
+
+    /// <summary>True when the part draws nothing.</summary>
+    public bool IsEmpty => Segments.Count == 0;
+
+    /// <summary>
+    /// The part's text with its fields filled in.
+    /// </summary>
+    /// <param name="context">What the fields resolve to on this page.</param>
+    public string Resolve(SheetHeaderContext context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        if (Segments.Count == 0) return string.Empty;
+
+        StringBuilder text = new();
+        foreach (SheetHeaderSegment segment in Segments)
+            text.Append(segment.Text ?? context.Value(segment.Field));
+
+        return text.ToString();
+    }
+
+    /// <summary>
+    /// The part's lines, each a list of pieces with the size each is drawn at.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <strong>Every format can write a line break into one part, and all of them print.</strong>
+    /// Calc holds each area as an <c>EditTextObject</c> of several paragraphs and draws the whole
+    /// object (<c>ScPrintFunc::PrintHF</c>, <c>sc/source/ui/view/printfun.cxx:1874-1912</c>);
+    /// only the first line was drawn here until round thirty-one. Measured on
+    /// <c>fm-provider-service-measures.xlsx</c>, whose header states three lines and whose footer
+    /// two: 20944 extractable words against the reference's 21458, the whole difference being
+    /// dropped lines.
+    /// </para>
+    /// <para>
+    /// A field never contains a break, so a line boundary can only fall inside a literal —
+    /// which is what lets this split without resolving the fields first.
+    /// </para>
+    /// </remarks>
+    /// <param name="context">What the fields resolve to on this page.</param>
+    public IReadOnlyList<IReadOnlyList<SheetHeaderPiece>> Lines(SheetHeaderContext context)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+
+        List<IReadOnlyList<SheetHeaderPiece>> lines = [];
+        List<SheetHeaderPiece> current = [];
+
+        foreach (SheetHeaderSegment segment in Segments)
+        {
+            if (segment.Text is null)
+            {
+                current.Add(new SheetHeaderPiece(
+                    context.Value(segment.Field), segment.Size, segment.Family,
+                    segment.Bold, segment.Italic));
+                continue;
+            }
+
+            string[] parts = segment.Text.Split('\n');
+            for (int at = 0; at < parts.Length; at++)
+            {
+                if (at > 0)
+                {
+                    lines.Add(current);
+                    current = [];
+                }
+
+                if (parts[at].Length > 0)
+                    current.Add(new SheetHeaderPiece(
+                        parts[at], segment.Size, segment.Family, segment.Bold, segment.Italic));
+            }
+        }
+
+        lines.Add(current);
+
+        // A trailing empty line draws nothing and takes no room; an empty line between two that
+        // do draw is a blank line and keeps its height, which is why only the tail is trimmed.
+        while (lines.Count > 0 && lines[^1].Count == 0) lines.RemoveAt(lines.Count - 1);
+
+        // Neighbouring pieces at one size are one piece. A part is normally a literal, a field
+        // and another literal — "Page ", &P, " of ", &N — and drawing those as four shows splits
+        // the text layer four ways for nothing: a PDF reader infers a word boundary at every
+        // reposition. Only a change of size or of face is a reason to start a new run.
+        for (int at = 0; at < lines.Count; at++) lines[at] = Coalesce(lines[at]);
+
+        return lines;
+    }
+
+    private static IReadOnlyList<SheetHeaderPiece> Coalesce(IReadOnlyList<SheetHeaderPiece> line)
+    {
+        if (line.Count < 2) return line;
+
+        List<SheetHeaderPiece> merged = [];
+        foreach (SheetHeaderPiece piece in line)
+        {
+            if (merged.Count > 0
+                && merged[^1].Size == piece.Size
+                && merged[^1].Family == piece.Family
+                && merged[^1].Bold == piece.Bold
+                && merged[^1].Italic == piece.Italic)
+                merged[^1] = merged[^1] with { Text = merged[^1].Text + piece.Text };
+            else
+                merged.Add(piece);
+        }
+
+        return merged;
+    }
+}
+
+/// <summary>One piece of one line of a header part: its text and the face it is drawn in.</summary>
+/// <param name="Text">The text, fields already resolved.</param>
+/// <param name="Size">The em size it states, or null for the sheet default.</param>
+/// <param name="Family">The family it states, or null for the sheet default.</param>
+/// <param name="Bold">Whether it is bold, or null for the sheet default.</param>
+/// <param name="Italic">Whether it is italic, or null for the sheet default.</param>
+public readonly record struct SheetHeaderPiece(
+    string Text, Length? Size, string? Family = null, bool? Bold = null, bool? Italic = null);
+
+/// <summary>What a header's fields stand for on one printed page.</summary>
+/// <remarks>
+/// Passed in rather than read from ambient state because two of the fields are properties of the
+/// <em>printout</em> and not of the document: <see cref="PageNumber"/> is the number this page
+/// carries after any restart, and <see cref="PageCount"/> is how many pages the whole job has,
+/// which is not knowable until every sheet has been paginated.
+/// </remarks>
+public sealed class SheetHeaderContext
+{
+    /// <summary>The number printed on this page.</summary>
+    public int PageNumber { get; init; } = 1;
+
+    /// <summary>How many pages the printout has in total.</summary>
+    public int PageCount { get; init; } = 1;
+
+    /// <summary>
+    /// True on the first page of the sheet this page belongs to.
+    /// </summary>
+    /// <remarks>
+    /// Not derivable from <see cref="PageNumber"/>, which is the number *printed* — a sheet
+    /// setting <c>firstPageNumber</c> starts at whatever it likes, and a sheet that does not
+    /// restart continues the workbook's count, so page one of the third sheet can print "17".
+    /// </remarks>
+    public bool IsFirstPageOfSheet { get; init; }
+
+    /// <summary>The sheet's tab name.</summary>
+    public string SheetName { get; init; } = string.Empty;
+
+    /// <summary>The document's file name, extension included.</summary>
+    /// <remarks>
+    /// With its extension, which is measurable rather than assumed: LibreOffice's own rendering
+    /// of a footer holding <c>&amp;F</c> prints <c>sheet-decor-ods.ods</c>, not
+    /// <c>sheet-decor-ods</c>.
+    /// </remarks>
+    public string FileName { get; init; } = string.Empty;
+
+    /// <summary>Its full path, when one is known.</summary>
+    public string FilePath { get; init; } = string.Empty;
+
+    /// <summary>The document's title from its metadata, when it states one.</summary>
+    public string Title { get; init; } = string.Empty;
+
+    /// <summary>When the printout was made.</summary>
+    /// <remarks>
+    /// One instant for the whole job, not one per page: <c>&amp;T</c> on a fifty-page workbook
+    /// prints the time the printout started on every page of it, which is what
+    /// <c>ScHeaderFieldData</c> holds and what reading the clock in each page's constructor
+    /// would not give. See <see cref="SheetPrintInstant"/> for where the value comes from.
+    /// </remarks>
+    public DateTime Printed { get; init; } = SheetPrintInstant.Now();
+
+    /// <summary>The text one field expands to.</summary>
+    /// <param name="field">The field.</param>
+    public string Value(SheetHeaderField field) => field switch
+    {
+        SheetHeaderField.PageNumber => PageNumber.ToString(CultureInfo.CurrentCulture),
+        SheetHeaderField.PageCount => PageCount.ToString(CultureInfo.CurrentCulture),
+        SheetHeaderField.Date => Printed.ToString("d", CultureInfo.CurrentCulture),
+        SheetHeaderField.Time => Printed.ToString("t", CultureInfo.CurrentCulture),
+        SheetHeaderField.SheetName => SheetName,
+        SheetHeaderField.FileName => FileName,
+        SheetHeaderField.FilePath => FilePath,
+        SheetHeaderField.Title => Title.Length > 0 ? Title : FileName,
+        _ => string.Empty,
+    };
+}
+
+/// <summary>
+/// A header or a footer: its three parts.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Parsed rather than kept as the format wrote it, because the three formats spell the same
+/// thing three ways and a renderer that branched on which would be the third place the field
+/// list lived. SpreadsheetML and BIFF share an <c>&amp;</c>-code language;
+/// <see cref="ParseCodes"/> reads it. ODF writes the regions as elements and the fields as
+/// child elements, which the ODF reader turns into the same shape.
+/// </para>
+/// <para>
+/// Not the same as a Writer header. A spreadsheet's header has no paragraphs to lay out and no
+/// flow: three strings, three alignments, one line each, drawn into a band whose height is
+/// already decided.
+/// </para>
+/// </remarks>
+public sealed record SheetHeaderFooter(
+    SheetHeaderPart Left, SheetHeaderPart Centre, SheetHeaderPart Right)
+{
+    /// <summary>A band with nothing in it.</summary>
+    public static SheetHeaderFooter Empty { get; } =
+        new(SheetHeaderPart.Empty, SheetHeaderPart.Empty, SheetHeaderPart.Empty);
+
+    /// <summary>True when none of the three parts draws anything.</summary>
+    public bool IsEmpty => Left.IsEmpty && Centre.IsEmpty && Right.IsEmpty;
+
+    /// <summary>
+    /// Reads the <c>&amp;</c>-code language SpreadsheetML and BIFF share.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// One string holds all three parts, switched by <c>&amp;L</c>, <c>&amp;C</c> and
+    /// <c>&amp;R</c>; text before any switch belongs to the centre, which is the rule Excel
+    /// states and LibreOffice implements
+    /// (<c>ScHFPortionParser</c>/<c>lcl_ParseHFString</c>,
+    /// <c>sc/source/filter/excel/xihelper.cxx:399-520</c> — the parser starts in
+    /// <c>EXC_HF_CENTER</c>).
+    /// </para>
+    /// <para>
+    /// The formatting codes are consumed and discarded rather than ignored, which is not the
+    /// same thing: <c>&amp;"Arial,Bold"</c> and <c>&amp;12</c> both swallow characters that
+    /// would otherwise print. A reader that skipped only the two-character codes would show
+    /// <c>Arial,Bold</c> in the header of every file Excel wrote a font into. <c>&amp;&amp;</c>
+    /// is a literal ampersand, and an <c>&amp;</c> at the very end of the string is a literal
+    /// one too rather than a truncated code.
+    /// </para>
+    /// </remarks>
+    /// <param name="text">The header string as the file wrote it.</param>
+    public static SheetHeaderFooter ParseCodes(string? text)
+    {
+        if (string.IsNullOrEmpty(text)) return Empty;
+
+        List<SheetHeaderSegment> left = [];
+        List<SheetHeaderSegment> centre = [];
+        List<SheetHeaderSegment> right = [];
+        List<SheetHeaderSegment> current = centre;
+
+        StringBuilder literal = new();
+        Length? size = null;
+        string? family = null;
+        bool? bold = null;
+        bool? italic = null;
+        int at = 0;
+
+        while (at < text.Length)
+        {
+            char c = text[at];
+            if (c != '&' || at + 1 >= text.Length)
+            {
+                literal.Append(c);
+                at++;
+                continue;
+            }
+
+            // **The code letter's case is not significant, and reading it as significant loses
+            // the field.** Calc folds it before its switch —
+            // `if (('a' <= cChar) && (cChar <= 'z')) cChar = (cChar - 'a') + 'A';`, under the
+            // comment "ignore case of token codes" (`HeaderFooterParser::parse`,
+            // `sc/source/filter/oox/pagesettings.cxx:565-567`) — and the BIFF parser does the
+            // same. Only `&B` and `&I` were spelled both ways below, so every other lower-case
+            // code fell through to `default` and was swallowed: `airports_6.xlsx` states
+            // `<oddFooter>Page &p</oddFooter>` and printed a bare "Page" where the reference
+            // prints "Page 2". Measured against 24.2.7.2 on a probe stating `Page &p of &n`,
+            // which the reference renders "Page 1 of 1" and this rendered "Page of".
+            //
+            // The fold cannot disturb the arms that are not letters: `&"`, `&&`, `&\n` and the
+            // digit run that states a point size are all outside `a`-`z`, and the digit arm reads
+            // its span out of `text` rather than out of this variable.
+            char code = text[at + 1];
+            if (code is >= 'a' and <= 'z') code = (char)(code - 'a' + 'A');
+            at += 2;
+
+            switch (code)
+            {
+                // A section switch resets the font to the workbook's own default, which is
+                // `ResetFontData` in the BIFF parser (xihelper.cxx:534-542) and
+                // `maFontModel = getDefaultFontModel()` in the OOXML one
+                // (pagesettings.cxx:868-876). Measured on `sheet-outline-collapse.xlsx`, whose
+                // footer is `&L&8… &RFoot right`: LibreOffice draws the right part at the
+                // workbook's ten point and carrying the eight across draws it at eight.
+                case 'L':
+                    Flush();
+                    current = left;
+                    size = null;
+                    family = null;
+                    bold = null;
+                    italic = null;
+                    break;
+                case 'C':
+                    Flush();
+                    current = centre;
+                    size = null;
+                    family = null;
+                    bold = null;
+                    italic = null;
+                    break;
+                case 'R':
+                    Flush();
+                    current = right;
+                    size = null;
+                    family = null;
+                    bold = null;
+                    italic = null;
+                    break;
+
+                case 'P': Field(SheetHeaderField.PageNumber); break;
+                case 'N': Field(SheetHeaderField.PageCount); break;
+                case 'D': Field(SheetHeaderField.Date); break;
+                case 'T': Field(SheetHeaderField.Time); break;
+                case 'A': Field(SheetHeaderField.SheetName); break;
+                case 'F': Field(SheetHeaderField.FileName); break;
+
+                case 'Z':
+                {
+                    Field(SheetHeaderField.FilePath);
+
+                    // "&Z&F" is one field and not two: Excel writes the path and the name
+                    // separately and Calc swallows the second (xihelper.cxx:356-361), because
+                    // its own path field already ends in the file name. A reader that took
+                    // both prints the name twice.
+                    //
+                    // Either case of the `F`, which is how Calc spells the same test:
+                    // `(pcChar[2] == 'f') || (pcChar[2] == 'F')` (pagesettings.cxx:600).
+                    if (at + 1 < text.Length && text[at] == '&'
+                        && text[at + 1] is 'F' or 'f')
+                    {
+                        at += 2;
+                    }
+
+                    break;
+                }
+
+                case '&': literal.Append('&'); break;
+
+                // A newline splits a part into lines. Only the first is drawn today — see the
+                // module's TODO — but it must not become a literal "n".
+                case '\n': literal.Append('\n'); break;
+
+                // Font name and style, as &"Liberation Sans,Bold" — everything to the closing
+                // quotation mark is the specification and none of it prints. The *name* is kept
+                // and the style is not: `SheetBandHeight.Measure` reads exactly this much of the
+                // code to size the band, and a face this reader keeps but that one does not
+                // would put the two back out of step.
+                //
+                // A leading `-` means "keep the current face", which is what Excel writes when it
+                // states only a style — `&"-,Bold"` — and Calc reads the same way
+                // (`HeaderFooterParser`'s STATE_FONTNAME arm, pagesettings.cxx:598-620).
+                case '"':
+                {
+                    int end = text.IndexOf('"', at);
+                    string specification = end < 0 ? text[at..] : text[at..end];
+                    at = end < 0 ? text.Length : end + 1;
+
+                    int comma = specification.IndexOf(',');
+                    string named = (comma < 0 ? specification : specification[..comma]).Trim();
+                    if (named.Length > 0 && named != "-")
+                    {
+                        Flush();
+                        family = named;
+                    }
+
+                    // The style half sets both flags, so `&"Arial,Regular"` turns off a bold the
+                    // workbook's own default font would otherwise have given the band — measured
+                    // on 26.2.4.2, where a workbook whose `fonts[0]` is bold and whose header
+                    // states `,Regular` draws the band in the upright face and the body in the
+                    // bold one. A specification with no comma states no style and leaves both.
+                    if (comma >= 0)
+                    {
+                        string style = specification[(comma + 1)..];
+                        Flush();
+                        bold = style.Contains("bold", StringComparison.OrdinalIgnoreCase);
+                        italic = style.Contains("italic", StringComparison.OrdinalIgnoreCase)
+                                 || style.Contains("oblique", StringComparison.OrdinalIgnoreCase);
+                    }
+
+                    break;
+                }
+
+                // A font size in points, a run of digits rather than a fixed-length code. It
+                // holds until the next one — Calc keeps it in the portion's item set and Excel
+                // repeats it after every section switch, so carrying it across `&L`/`&C`/`&R`
+                // agrees with both.
+                case >= '0' and <= '9':
+                {
+                    int from = at - 1;
+                    while (at < text.Length && char.IsAsciiDigit(text[at])) at++;
+                    if (double.TryParse(
+                            text.AsSpan(from, at - from), CultureInfo.InvariantCulture,
+                            out double points) && points > 0)
+                    {
+                        Flush();
+                        size = Length.FromPoints(points);
+                    }
+
+                    break;
+                }
+
+                // &K is a colour and it swallows the **six characters** that follow it,
+                // whatever they are. Calc does not check them:
+                //
+                //     case 'K':   // text color (not in BIFF)
+                //         if( pcChar + 6 < pcEnd ) { … convertFontColor(…, 6); pcChar += 6; }
+                //
+                // (`sc/source/filter/oox/pagesettings.cxx:639-647`.) Reading them as *hex digits*
+                // and stopping at the first one that is not looks equivalent and is not, because
+                // Excel writes a second, undocumented form: a theme index and a tint, as
+                // `&K01+049`. That is six characters and two of them are hex, so a hex scan eats
+                // `01`, leaves `+049` standing, and draws it. Measured over the 307 sheets
+                // documents: 16 of the 29 `&K` occurrences take the theme form, in 5 workbooks,
+                // and our renderings drew `+049`/`+034` **30 times** against the reference's
+                // **0**.
+                case 'K':
+                    at = Math.Min(text.Length, at + 6);
+                    break;
+
+                // The two toggles that reach a face. `&B` and `&I` flip rather than set, and a
+                // band that has never stated one starts from the workbook's own default cell
+                // font — which is why these are nullable and why the flip is written against
+                // the effective value rather than against `false`.
+                case 'B' or 'b':
+                    Flush();
+                    bold = !(bold ?? false);
+                    break;
+
+                case 'I' or 'i':
+                    Flush();
+                    italic = !(italic ?? false);
+                    break;
+
+                // Everything else is a toggle with no text — underline,
+                // strikeout, super and subscript, the picture placeholders — or a code this
+                // does not know. Both are swallowed rather than printed, which is what Calc's
+                // own parser does with an unrecognised character: its switch has no default,
+                // so the character is consumed and the state returns to text.
+                default: break;
+            }
+        }
+
+        Flush();
+
+        return new SheetHeaderFooter(
+            new SheetHeaderPart(left), new SheetHeaderPart(centre), new SheetHeaderPart(right));
+
+        void Flush()
+        {
+            if (literal.Length == 0) return;
+            current.Add(
+                SheetHeaderSegment.Literal(literal.ToString(), size, family, bold, italic));
+            literal.Clear();
+        }
+
+        void Field(SheetHeaderField field)
+        {
+            Flush();
+            current.Add(SheetHeaderSegment.Of(field, size, family, bold, italic));
+        }
+    }
+}

@@ -117,9 +117,9 @@ regression is not a control.
 
 ## Shared layers
 
-Both changes touch **`Paperless.Core/Charts`** (`ChartLayout.AddTitles`, `ChartLayout.AddLines`,
-`ChartLayout.Plots.AddRadar`, `ChartSeries.MarkerSize`) and **`Paperless.Ooxml`**
-(`DrawingChartPlot`'s marker reading). Nothing touches `Paperless.Vector`, `Text`, `Rendering`,
+Both changes touch **`XRay.Office.Core/Charts`** (`ChartLayout.AddTitles`, `ChartLayout.AddLines`,
+`ChartLayout.Plots.AddRadar`, `ChartSeries.MarkerSize`) and **`XRay.Office.Ooxml`**
+(`DrawingChartPlot`'s marker reading). Nothing touches `XRay.Office.Vector`, `Text`, `Rendering`,
 `Markup` or `Containers`. The sheets and words documents are named above and the parent gates the
 corpus.
 

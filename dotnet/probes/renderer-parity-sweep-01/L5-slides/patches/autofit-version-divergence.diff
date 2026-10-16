@@ -13,10 +13,10 @@
 # would have to move with it. The alternative — re-render the reference bank at 26.2.4.2 — leaves
 # the tree alone and re-scores 25 of this lane's 35 documents instead. That choice is above this
 # lane; see findings.md, root cause A.
-diff --git a/dotnet/src/Paperless.Presentations/Layout/SlideAutofit.cs b/dotnet/src/Paperless.Presentations/Layout/SlideAutofit.cs
+diff --git a/dotnet/src/XRay.Office.Presentations/Layout/SlideAutofit.cs b/dotnet/src/XRay.Office.Presentations/Layout/SlideAutofit.cs
 index 0000000..0000000 100644
---- a/dotnet/src/Paperless.Presentations/Layout/SlideAutofit.cs
-+++ b/dotnet/src/Paperless.Presentations/Layout/SlideAutofit.cs
+--- a/dotnet/src/XRay.Office.Presentations/Layout/SlideAutofit.cs
++++ b/dotnet/src/XRay.Office.Presentations/Layout/SlideAutofit.cs
 @@ -74,85 +74,109 @@
  public static partial class SlideTextLayout
  {

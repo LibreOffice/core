@@ -69,12 +69,12 @@ rather than expect to find a layout bug.
 
 ### The chart-label font gap, and why it is not this round's fix
 
-`ChartLabel` (`Paperless.Core/Charts/ChartLayout.cs`) carries `Text`, `At`, `Anchor`, `Size`,
+`ChartLabel` (`XRay.Office.Core/Charts/ChartLayout.cs`) carries `Text`, `At`, `Anchor`, `Size`,
 `Colour`, `Rotation`, `Stretch` — **and no family**. `SheetChart.Text` therefore calls
 `SheetBandText.Shape(text, size)` with no family and gets `SheetBandText.DefaultFamily`,
 "Liberation Sans", for every chart label in every workbook. `SlideChart` and `FrameChart` sit on
 the same record, so this is one gap across all three families, and closing it means widening a
-`Paperless.Core` type plus the measurer that sizes the labels.
+`XRay.Office.Core` type plus the measurer that sizes the labels.
 
 **Measured reach on this track: one document.** Of the 171 sheets documents exactly one is a
 zip container holding an `xl/charts/chart*.xml` part, and its theme minor face is Calibri. That
@@ -111,7 +111,7 @@ it. `CSJU List of Recipients of funds 2013-2020.xlsx` now matches the reference'
 exactly and still fails on pages. Per batch the two sweeps are identical: 001–009 all pass, then
 010 6/10, 011 6/10, 012 8/10, 013 8/10, 014 9/10, 015 5/9, 016 4/9, 017 6/10, 018 3/4.
 
-The change is confined to `Paperless.Spreadsheets`, whose `SheetDeviceUnits` is `internal`, so no
+The change is confined to `XRay.Office.Spreadsheets`, whose `SheetDeviceUnits` is `internal`, so no
 cross-track sweep is owed: nothing outside the spreadsheet layout can reach it.
 
 ## Test counts

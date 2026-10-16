@@ -1,7 +1,7 @@
 # The eleven documents whose glyph count differs between the banked gate (2f4709c08) and
 # round 69's sweep, re-rendered at the round's BASE commit ddb05e4e5 to separate this round's
 # effect from the two commits that landed between the bank and the base.
-# ours = Paperless.Cli at ddb05e4e5, sources restored with `git checkout --`, PAPERLESS_BUNDLED_FONTS unset
+# ours = XRay.Office.Cli at ddb05e4e5, sources restored with `git checkout --`, XRAY_OFFICE_BUNDLED_FONTS unset
 # columns: path  pages  glyphs
 sheets/chartset-006/xlsx/070_Equipment_inventory_list_Use_this_template_fd524c8a.xlsx	1	1128
 sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx	5	2534

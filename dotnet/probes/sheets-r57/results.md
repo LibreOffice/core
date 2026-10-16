@@ -112,7 +112,7 @@ a translation and a scale error cannot look alike):
 | band ink | 0 change | **0 change**; the probe's band-text column is identical before and after at all five scales |
 | the 100 % control | byte-identical | **unmoved: 0.03 pt before and after** |
 | words / slides tracks | 0 | **0 — no shared layer touched** (§ 9) |
-| tests | +6 to +12, `Paperless.Spreadsheets` only | **+5, `Paperless.Spreadsheets` only** — one below the range |
+| tests | +6 to +12, `XRay.Office.Spreadsheets` only | **+5, `XRay.Office.Spreadsheets` only** — one below the range |
 | `MANIFEST.tsv` | no row changes status | **no row changes status** |
 
 **Eight of ten.** Both misses are counts rather than directions, and one of them is under: the
@@ -222,7 +222,7 @@ ours keeps each on one line" — on a page chosen for a stated reason rather tha
 and confirmed by a different instrument. That is the three-part discriminator `HANDOVER.md` § 7
 asks for, and it holds here.
 
-`ChartLayout` and the chart text stack are `Paperless.Core`, so this is the same shape of job as
+`ChartLayout` and the chart text stack are `XRay.Office.Core`, so this is the same shape of job as
 `IntervalsThatFit` and owes a corpus gate.
 
 ## 8. The vision round: one confirmation, one extension, and two refutations
@@ -264,7 +264,7 @@ emit one. Same ink, different op counts, same pitch (16.56 pt) on both.
 
 ## 9. Shared layer
 
-**No.** Every file this round changes is in `Paperless.Spreadsheets`:
+**No.** Every file this round changes is in `XRay.Office.Spreadsheets`:
 `Layout/SheetPrintSetup.cs`, `Layout/SpreadsheetPages.cs`, `Layout/SheetNotes.cs`,
 `Ooxml/XlsxNoteCaptions.cs` (comment only). `git diff a45eb8e5391..HEAD --stat -- dotnet/src`
 names no other project. The words and slides tracks cannot see it and **no cross-track sweep is
@@ -273,7 +273,7 @@ unmeasured either way.
 
 ## 10. Tests
 
-**+5, all in `Paperless.Spreadsheets`** (956 → 961). The ten non-Fidelity projects, re-derived
+**+5, all in `XRay.Office.Spreadsheets`** (956 → 961). The ten non-Fidelity projects, re-derived
 rather than quoted: Containers 109, Core 337, Markup 259, OpenDocument 125, Presentations 819,
 Rendering 153 (+1 skipped), Spreadsheets 961, Text 617, Vector 295, WordProcessing 1155 —
 **4830 passed, 0 failed, 1 skipped**, against a base of 4825 by the same count.
@@ -329,7 +329,7 @@ reported.
 
 **Counters, re-derived with the file's own commands.** At this tree: **39 open sites, 19 marker
 lines (16 `VERIFIED`, 2 `FIXED`, 1 `WRONG`, 0 `UNDECIDED`)**. At the base: **40 open, 18 lines
-(15/2/1/0)**. The file's stored table said **42** open with `Paperless.Presentations` at 11; the
+(15/2/1/0)**. The file's stored table said **42** open with `XRay.Office.Presentations` at 11; the
 real figures at the base are 40 and 9, so **two of its three headline numbers were already wrong
 when they were written** and only the sheets column moved this round. Corrected there, for the
 fifth time in that file's history.
@@ -337,7 +337,7 @@ fifth time in that file's history.
 **And round 56's pattern did not repeat.** It recorded "the only sheets site found wrong is the
 only *furniture* claim, which is a pattern rather than a coincidence" and sent this round at the
 other furniture claim on the strength of it. `XlsxNoteCaptions.cs` is correct. Two observations of
-one event; the re-check is what settled it either way. `Paperless.Spreadsheets` is now **nine of
+one event; the re-check is what settled it either way. `XRay.Office.Spreadsheets` is now **nine of
 ten** re-checked, eight correct, and **`Layout/SheetText.cs` is the last one**.
 
 ## 12. `MANIFEST.tsv`
@@ -361,8 +361,8 @@ byte-stable at 440 throughout. Its batch is already named `unstable-001`; no cha
    reviewer and by `pdf-ops.py`. This is a *font resolution* question before it is a layout one
    and it may be much cheaper than the label wrap beside it.
 3. **The pie data-label wrap** — the other half of § 7, and the one that actually moves the four
-   `_advanced_excel_pie` verdicts. `Paperless.Core`, so it owes a corpus gate.
-4. **`Layout/SheetText.cs`** — the last unverified 24.2.7.2 site in `Paperless.Spreadsheets`.
+   `_advanced_excel_pie` verdicts. `XRay.Office.Core`, so it owes a corpus gate.
+4. **`Layout/SheetText.cs`** — the last unverified 24.2.7.2 site in `XRay.Office.Spreadsheets`.
 5. **`ChartLayout.IntervalsThatFit`** — untouched again; round 56 § 9 has the census (256 axes,
    129 documents, all three tracks), the sign argument that rules out the shape insets, and the
    arithmetic bound on the mm100 truncation.

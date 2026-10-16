@@ -6,7 +6,7 @@ on a section whose only content is an empty paragraph. Authored as DOCX and conv
 and RTF by the reference itself, so the same structure is measured through all three readers.
 
 `word/settings.xml` is written even though it is empty: without it the importer takes a
-different set of OOXML compatibility defaults (`paperless-corpus/SKILL.md`).
+different set of OOXML compatibility defaults (`office-corpus/SKILL.md`).
 """
 import os, zipfile
 

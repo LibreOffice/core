@@ -93,5 +93,5 @@ them.
 ## Method notes
 
 The "before" leg was built by copying the two changed sources aside, `git checkout`-ing them,
-`touch`-ing, and deleting `src/Paperless.Core/{obj,bin}`; restored the same way and verified by
+`touch`-ing, and deleting `src/XRay.Office.Core/{obj,bin}`; restored the same way and verified by
 re-rendering `wrapA-n06` and byte-comparing it against the "after" leg's own copy. It is equal.

@@ -8,13 +8,13 @@ The fly's height is swept, because that is the variable `clearance.py` and
 `HC-Bulletin-template.docx` disagree about: a short fly leaves room below it on the page, a tall
 one does not.
 
-Usage: PAPERLESS_CLI=<cli> python3 anchored.py <outdir>
+Usage: XRAY_OFFICE_CLI=<cli> python3 anchored.py <outdir>
 """
 import os, re, subprocess, sys, zipfile
 from pathlib import Path
 
 OUT = Path(sys.argv[1]); OUT.mkdir(parents=True, exist_ok=True)
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 
 GRID, TBLPY = 10598, 953   # wider than the 9922-twip column, as HC-Bulletin's fly is
 

@@ -43,7 +43,7 @@ be *right* (`Liberation Sans` is the metric-compatible substitute) and the refer
 substituting oddly, which would make this a reference quirk rather than our defect.
 
 1.3 **We already have the symbol recode on the slides path.** Confidence 0.9 — it is visible in
-`Paperless.Presentations/Layout/SlideTextLayout.cs` and `Ooxml/PptxTextBody.cs`, so the brief's
+`XRay.Office.Presentations/Layout/SlideTextLayout.cs` and `Ooxml/PptxTextBody.cs`, so the brief's
 worry that "that work may have been done on the words path only" is predicted **refuted**. The
 missing `OpenSymbol` here is therefore predicted to be a *narrower* failure of that wiring on
 one particular bullet declaration, not an absent feature.

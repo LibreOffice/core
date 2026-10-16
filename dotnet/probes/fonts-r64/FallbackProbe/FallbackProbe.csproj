@@ -9,6 +9,6 @@
     <SelfContained>false</SelfContained>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Paperless.Text\Paperless.Text.csproj" />
+    <ProjectReference Include="..\..\..\src\XRay.Office.Text\XRay.Office.Text.csproj" />
   </ItemGroup>
 </Project>

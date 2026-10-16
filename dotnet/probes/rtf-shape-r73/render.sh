@@ -2,10 +2,10 @@
 # Render every probe both ways. One `soffice` profile per document, keyed on an md5 of its
 # own path, because `-env:UserInstallation=file://…` truncates at the first space.
 #
-#   PAPERLESS_CLI=… render.sh <probe-dir> <outdir>
+#   XRAY_OFFICE_CLI=… render.sh <probe-dir> <outdir>
 set -uo pipefail
 IN="${1:?probe dir}"; OUT="${2:?outdir}"
-CLI="${PAPERLESS_CLI:?set PAPERLESS_CLI}"
+CLI="${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI}"
 REF="${REF_SOFFICE:-/opt/libreoffice26.2/program/soffice}"
 mkdir -p "$OUT/ref" "$OUT/ours"
 for f in "$IN"/*.rtf; do

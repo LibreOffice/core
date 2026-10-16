@@ -71,11 +71,11 @@ reproduces that exactly.
 
 ### Where it lives in the source
 
-* `dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs:630` —
+* `dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs:630` —
   `int instruction = 0;`, incremented once per `U+0013` and decremented at **both** `U+0014` (`:767`)
   and `U+0015` (`:795`). A nested field with a separator therefore decrements it twice for one
   increment, and the outer field's suppression is cancelled by the inner field's end. Guard at `:679`.
-* `dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Content.cs:131,139,155` — the extraction
+* `dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Content.cs:131,139,155` — the extraction
   walk's `bool InFieldInstruction`, set true at every begin and false at every separator *and* every
   end. Same defect in a second shape.
 
@@ -153,7 +153,7 @@ Census over the whole lane (`PlcSpaMom` + `PlcSpaHdr`, degenerate = width ≤ 0 
 
 ### Where it lives in the source
 
-`dotnet/src/Paperless.WordProcessing/Ww8/Ww8Frames.cs:91`:
+`dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8Frames.cs:91`:
 
 ```csharp
 if (anchor.Width <= 0 || anchor.Height <= 0) return null;
@@ -161,7 +161,7 @@ if (anchor.Width <= 0 || anchor.Height <= 0) return null;
 
 This is the whole of it. The rest of the pipeline is already correct and already reads the property:
 `Ww8Frames.cs:159` computes `isLine` from the shape type, `PageFrame.IsLine` carries it, and
-`dotnet/src/Paperless.WordProcessing/Layout/PageDrawing.cs:279` strokes a line frame from
+`dotnet/src/XRay.Office.WordProcessing/Layout/PageDrawing.cs:279` strokes a line frame from
 `(area.X, area.Y)` to `(area.Right, area.Bottom)` — its box's diagonal — which for a coincident pair
 of edges is exactly the vertical or horizontal rule. **This is the "read but never consumed" pattern
 in its sharpest form: the shape type is read, the line geometry is implemented, and the frame is
@@ -244,7 +244,7 @@ next row's label cell.
 
 ### Where it lives in the source
 
-`dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.AutoSpacing.cs`. `SuppressWithinList` is
+`dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.AutoSpacing.cs`. `SuppressWithinList` is
 called **once per cell** and once for the flow, and its loop has no post-condition: a run that
 reaches the end of its block list leaves `previous` set and never restores it. So a list that ends
 at a cell wall gets zero margin at both ends. The cell-edge rule then zeroes the last paragraph
@@ -257,7 +257,7 @@ same three pieces of state LibreOffice holds — recursing into tables so the me
 row boundaries as the reader's does. A cell's last paragraph takes the zeroing like any other and is
 then neither consulted nor remembered. The cell-edge and flow-edge rules are unchanged.
 
-I checked all six assertions in `tests/Paperless.WordProcessing.Tests/DocAutoSpacingTests.cs` by
+I checked all six assertions in `tests/XRay.Office.WordProcessing.Tests/DocAutoSpacingTests.cs` by
 hand against the new walk: none of them puts a list inside a cell, so all six hold unchanged.
 
 The change is strictly additive against today's output: today no item in a cell-terminated run gets
@@ -322,13 +322,13 @@ LibreOffice reads the placeholder at exactly that offset —
 
 ### Where it lives in the source
 
-`dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs:679` — the instruction guard
+`dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs:679` — the instruction guard
 `continue`s on every character that is not a field marker or a paragraph mark, and `U+0001` is one of
 them. There is no `FORMCHECKBOX` handling anywhere under `Ww8/`; `Ww8FieldTypes` names `SHAPE`,
 `FILENAME`, `PAGE` and `NUMPAGES` and stops there.
 
 The DOCX reader has the whole thing already —
-`dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs:1328` `CheckBoxFrame`, with
+`dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs:1328` `CheckBoxFrame`, with
 `CheckBoxInset = 25 tw` and `CheckBoxStroke = 0.1 pt` — and `PageFrame.BorderInset` /
 `PageFrame.IsCrossed` and `PageDrawing.cs:267,298` exist to serve it. Only the WW8 half is missing.
 The geometry was pinned on 26.2.4.2 in `dotnet/probes/words-r56/prediction-checkbox.md`: the square
@@ -449,9 +449,9 @@ importer is not available here; I say what I could check and what I could not.
 
 ## Cross-lane dependencies
 
-**None.** All four patches are confined to `dotnet/src/Paperless.WordProcessing/Ww8/**`. Two shared
+**None.** All four patches are confined to `dotnet/src/XRay.Office.WordProcessing/Ww8/**`. Two shared
 files were read and deliberately not touched because they already do the right thing:
-`Paperless.WordProcessing/Layout/PageDrawing.cs:279` (strokes a line frame as its diagonal, which is
+`XRay.Office.WordProcessing/Layout/PageDrawing.cs:279` (strokes a line frame as its diagonal, which is
 what makes R2 a one-line change) and `Layout/PageFrame.cs:360,368` (`BorderInset` and `IsCrossed`,
 which is what makes R4 need no new drawing primitive).
 

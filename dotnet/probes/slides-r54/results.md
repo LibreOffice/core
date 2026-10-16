@@ -82,7 +82,7 @@ binary route disagree at exactly 100.** `SvxLineSpacingItem::PutValue`
 `eInterLineSpaceRule = Off` *when the height is exactly 100* and `Prop` otherwise — that is the path
 every OOXML and ODF line spacing takes. The `.ppt` importer calls `SetPropLineSpace(100)` directly,
 and `lspcitem.hxx:86-91` shows that setter writes `Prop` unconditionally. The defect is `.ppt`-only
-by construction, and no change to `Paperless.Text` was needed.
+by construction, and no change to `XRay.Office.Text` was needed.
 
 ### The condition is refuted, by an A/B over the whole track
 
@@ -190,7 +190,7 @@ down** on our side. Confirmed by a second instrument: on page 99 the reference's
 carries **101 rotated `Tm`** and ours carries **one `cm`, not rotated, and no rotated `Tm` at all**.
 
 **The obvious census of this is wrong and its first cut was.** LibreOffice rotates text by writing a
-rotated `Tm` inside `BT … ET`; Paperless rotates it by pushing a rotated `cm` and writing an upright
+rotated `Tm` inside `BT … ET`; XRay.Office rotates it by pushing a rotated `cm` and writing an upright
 `Tm` or none. A `Tm`-only census reports that we draw *no* rotated text anywhere — **18832
 operators to nought** — which is false: on page 8 we write 5 rotated `cm` against the reference's 77
 rotated `Tm`, and both reviewers independently described that page's rotated spine captions as
@@ -228,7 +228,7 @@ reference draws rotated labels we draw flat across 33 of its pages. It is not a 
 | 6 | `tf-agreement` 0.753–0.762, exact pages rise | **0.77053** and **1709**, above the range |
 | 7 | `gfopportunities` p6 draws 26 / 22 / 17 at a pitch of `1.2 × em` | **held, and better than stated** — every baseline on that page now matches the reference's, sizes 36 / 25.994 / 21.997 / 17.008 exactly and y within 0.06 pt |
 | 8 | the 219 "both shrunk" blocks do not move — no document outside the change list moves `tf-agreement` by > 0.001 | **refuted.** Under the predicted rule alone, `Thailand17` moved −0.01796, `undp` −0.01882 and `architecture6` +0.01336, none of them on the change list, and two of the three the wrong way |
-| 9 | no cross-track reach | **held.** Four files, all in `Paperless.Presentations`; WordProcessing 1096 and Spreadsheets 925 green |
+| 9 | no cross-track reach | **held.** Four files, all in `XRay.Office.Presentations`; WordProcessing 1096 and Spreadsheets 925 green |
 
 **Prediction 5 is the round's worst call and in the opposite direction to round 53's.** Round 53
 extrapolated a census of *candidates* into an `abs_ink` estimate and over-shot by a factor of three;
@@ -280,7 +280,7 @@ Markup 259, OpenDocument 125, WordProcessing 1096, Spreadsheets 925, **Presentat
 ## Shared layers: none
 
 Four source files: `Layout/SlideText.cs`, `Layout/SlideTextLayout.cs`, `Layout/SlideAutofit.cs` and
-`MsBinary/PptTextBody.cs`, all in `Paperless.Presentations`. `Paperless.Text`'s `LineSpacingRule` was
+`MsBinary/PptTextBody.cs`, all in `XRay.Office.Presentations`. `XRay.Office.Text`'s `LineSpacingRule` was
 deliberately **not** touched — the distinction "states exactly 100%" versus "states nothing" lives on
 `SlideParagraph`, which no other family constructs — so words and sheets are unreachable by type.
 Their suites were run anyway and are green. **No cross-track sweep is owed.**

@@ -309,7 +309,7 @@ OpenDocument 125, WordProcessing 1155, Spreadsheets 940, **Presentations 831** �
 
 Two of the three changes reach outside this track and the parent must gate the corpus.
 
-**`c:minorGridlines` touches `Paperless.Core/Charts` and `Paperless.Ooxml`.** Census reach: 4
+**`c:minorGridlines` touches `XRay.Office.Core/Charts` and `XRay.Office.Ooxml`.** Census reach: 4
 sheets documents and 1 words document, all named, all rendered before and after:
 
 | document | ink before → after | differing pixels | major |
@@ -320,7 +320,7 @@ sheets documents and 1 words document, all named, all rendered before and after:
 | `039_Baby_growth_tracker…xlsx` | 0.78 → 0.92 | 3.56 → 3.56 | 1 → 1 |
 | `ABCD-FE-01-00 Flight Envelope…docx` | 0.00 → 0.00 | 0.00 → 0.00 | 0 → 0 |
 
-**`EmfReader` touches `Paperless.Vector`.** Census reach outside slides: 4 words documents and 2
+**`EmfReader` touches `XRay.Office.Vector`.** Census reach outside slides: 4 words documents and 2
 workbooks, all named, all rendered before and after, **all six better or level on both
 instruments and none crossing a word-count band**:
 

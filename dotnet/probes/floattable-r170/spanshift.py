@@ -10,7 +10,7 @@ whose prose we draw below the table reads here as a large mean |dy| with the sig
 """
 import collections, pathlib, re, subprocess, sys, os
 
-CLI = "/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 SOFFICE = "/opt/libreoffice26.2/program/soffice"
 
 

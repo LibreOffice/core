@@ -3,7 +3,7 @@
 # hex digest of the path (never on a worker slot, never on the path itself).
 set -e
 IN=$1; OUT=$2
-CLI=${PAPERLESS_CLI:-/home/user/wt-words69/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli}
+CLI=${XRAY_OFFICE_CLI:-/home/user/wt-words69/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli}
 REF=${REF_SOFFICE:-/opt/libreoffice26.2/program/soffice}
 mkdir -p "$OUT/ours" "$OUT/ref26"
 for f in "$IN"/*.docx; do

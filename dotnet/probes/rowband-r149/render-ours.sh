@@ -5,7 +5,7 @@
 set -e
 cd "$(dirname "$0")"
 LEG="${1:?usage: render-ours.sh <leg>}"
-CLI=../../tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+CLI=../../tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 mkdir -p "$LEG"
 for f in ../tablerow-r146/fixtures/*.docx; do
     b=$(basename "$f" .docx)

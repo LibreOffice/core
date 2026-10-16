@@ -128,6 +128,6 @@ all: **if the LONG column moves off 34, the change is wrong however the sweep sc
   it is deliberately included, because painting a 40 %-opaque fill at full strength is wrong
   independently of what the text colour does — but the census cannot say how many VML shapes in
   the corpus state an opacity, and that number is measured before the change ships.
-* **Slides and sheets.** `v:fill` is read by `Paperless.WordProcessing/Ooxml/DocxVmlFrames.cs` and
-  by `Paperless.Spreadsheets/Ooxml/XlsxNoteCaptions.cs`. If the change touches only the former, the
+* **Slides and sheets.** `v:fill` is read by `XRay.Office.WordProcessing/Ooxml/DocxVmlFrames.cs` and
+  by `XRay.Office.Spreadsheets/Ooxml/XlsxNoteCaptions.cs`. If the change touches only the former, the
   other two tracks cannot move by construction — a falsifiable claim for the parent's sweep.

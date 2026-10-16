@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Re-check: does a stated column width land the next column's text where 26.2.4.2 puts it?
 
-Site: Paperless.Spreadsheets/Layout/SheetFonts.cs `DigitWidthCarry` (and the digit-width
+Site: XRay.Office.Spreadsheets/Layout/SheetFonts.cs `DigitWidthCarry` (and the digit-width
 model around it), calibrated against LibreOffice 24.2.7.2.
 
 The instrument is indirect on purpose: the x of a glyph in column B *is* the width of
@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from audit_mkwb import workbook
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-CLI = "/c/sandbox/workdir/wt-sheets-r50/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/c/sandbox/workdir/wt-sheets-r50/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 ENV = dict(os.environ, SOURCE_DATE_EPOCH="1700000000", TZ="UTC")
 
 def render_ref(path):

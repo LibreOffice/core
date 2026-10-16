@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Fidelity harness: compares XRay.Office extraction and rendering against headless LibreOffice reference output.</Description>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="Shouldly" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XRay.Office.TestKit\XRay.Office.TestKit.csproj" />
+    <ProjectReference Include="..\..\src\XRay.Office\XRay.Office.csproj" />
+    <ProjectReference Include="..\..\src\XRay.Office.Rendering\XRay.Office.Rendering.csproj" />
+    <ProjectReference Include="..\..\src\XRay.Office.Markup\XRay.Office.Markup.csproj" />
+  </ItemGroup>
+
+</Project>

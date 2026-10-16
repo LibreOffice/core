@@ -231,11 +231,11 @@ set. A runtime-discovery design would therefore have to fall back to "no hyphena
 precisely today's behaviour and gets `038` wrong.
 
 The seam already exists and is unimplemented: `IHyphenator.FindHyphenationPoints(word, language)`
-is declared in `dotnet/src/Paperless.Text/Layout/ILineBreaker.cs`:45-53 with **no implementation
+is declared in `dotnet/src/XRay.Office.Text/Layout/ILineBreaker.cs`:45-53 with **no implementation
 and no call site**, and its own remark already records that "LibreOffice uses Hunspell's, so
 matching its line breaks requires the same dictionaries."
 
-There is precedent for shipping third-party data here: `dotnet/src/Paperless.Text/Fonts/Bundled`
+There is precedent for shipping third-party data here: `dotnet/src/XRay.Office.Text/Fonts/Bundled`
 is 11 MB of font faces. `dotnet/CLAUDE.md`:729 states the rule that governs it — *ship only the
 faces the distro packages ship*. Its analogue for hyphenation is not settled by this round and
 is part of what is being handed over: a stock Debian/Ubuntu LibreOffice pulls `hyphen-en-us` as

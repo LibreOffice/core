@@ -2,7 +2,7 @@
 
 Base commit `a115b723b`, checked with `git log --oneline -1` in the worktree before anything was
 measured. Reference renderer LibreOffice 24.2.7.2. Both whole-track sweeps ran against a
-checksummed copy of the CLI whose `Paperless.Spreadsheets.dll` and `Paperless.Core.dll` hashes
+checksummed copy of the CLI whose `XRay.Office.Spreadsheets.dll` and `XRay.Office.Core.dll` hashes
 were diffed against the tree's before the run started, and the copy was proved to hold the change
 by rendering the one document whose page count it moves.
 
@@ -139,7 +139,7 @@ are worth naming:
 
 ## The +3 pages and the taller rows were one finding
 
-The brief asked whether the human review's *"some cells are taller on paperless"* on
+The brief asked whether the human review's *"some cells are taller on xray-office"* on
 `Capability_List…unsorted.xlsx` and its +3 pages were the same thing. They are: the sixteen rows
 that differ are the taller cells, and with them corrected the workbook renders 147 pages against
 the reference's 147.

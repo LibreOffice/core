@@ -98,7 +98,7 @@ def main() -> int:
     ap.add_argument("--expected", required=True, type=pathlib.Path,
                     help="LibreOffice reference text file.")
     ap.add_argument("--actual", required=True, type=pathlib.Path,
-                    help="Paperless extraction to check.")
+                    help="XRay.Office extraction to check.")
     ap.add_argument("--fold-spaces", action="store_true",
                     help="Treat NBSP as a normal space. Off by default: the difference "
                          "can itself be the bug.")
@@ -132,7 +132,7 @@ def main() -> int:
     # An extraction that finds MORE than the reference is usually correct: these
     # filters drop headers, comments, notes and shape text by design.
     if act_words > exp_words * 1.05 and similarity > 0.75:
-        print("\nNOTE: Paperless extracted more text than the reference. This is often "
+        print("\nNOTE: XRay.Office extracted more text than the reference. This is often "
               "CORRECT -- LibreOffice's text filters drop headers/footers, comments, "
               "notes and shape text. Verify the extra content is real before treating "
               "it as a defect.")
@@ -147,7 +147,7 @@ def main() -> int:
     print("\nunified diff (reference -> actual):")
     diff = difflib.unified_diff(
         exp.split("\n"), act.split("\n"),
-        fromfile="libreoffice-reference", tofile="paperless-actual",
+        fromfile="libreoffice-reference", tofile="xray-office-actual",
         lineterm="", n=args.context)
     shown = 0
     for row in diff:

@@ -13,8 +13,8 @@ while read -r f; do
   base="$(basename "$f")"; stem="${base%.*}"; ext="${base##*.}"; id="${stem}__${ext,,}"
   r="/home/user/gate-orig-r83/ref/$id.pdf"
   rm -rf "$T/b" "$T/h"; mkdir -p "$T/b" "$T/h"
-  timeout -k 30 300 "$S/cli-base/Paperless.Cli" render "/home/user/sample-files/$f" --format pdf --outdir "$T/b" >/dev/null 2>&1
-  timeout -k 30 300 "$S/cli-head/Paperless.Cli" render "/home/user/sample-files/$f" --format pdf --outdir "$T/h" >/dev/null 2>&1
+  timeout -k 30 300 "$S/cli-base/XRay.Office.Cli" render "/home/user/sample-files/$f" --format pdf --outdir "$T/b" >/dev/null 2>&1
+  timeout -k 30 300 "$S/cli-head/XRay.Office.Cli" render "/home/user/sample-files/$f" --format pdf --outdir "$T/h" >/dev/null 2>&1
   ob="$T/b/$stem.pdf"; oh="$T/h/$stem.pdf"
   if [ ! -f "$ob" ] || [ ! -f "$oh" ]; then echo -e "$base\tFAILED" >> "$OUT"; continue; fi
   if cmp -s "$ob" "$oh"; then echo -e "$base\tidentical" >> "$OUT"; continue; fi

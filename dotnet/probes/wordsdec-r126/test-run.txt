@@ -1,19 +1,19 @@
 Round 126 test run, at the committed source, projects run individually.
 
-Paperless.Core.Tests            Passed!  Failed: 0  Passed:  591  Skipped: 0
-Paperless.Containers.Tests      Passed!  Failed: 0  Passed:  109  Skipped: 0
-Paperless.Markup.Tests          Passed!  Failed: 0  Passed:  259  Skipped: 0
-Paperless.OpenDocument.Tests    Passed!  Failed: 0  Passed:  169  Skipped: 0
-Paperless.Rendering.Tests       Passed!  Failed: 0  Passed:  164  Skipped: 0
-Paperless.Text.Tests            Passed!  Failed: 0  Passed:  744  Skipped: 0
-Paperless.Vector.Tests          Passed!  Failed: 0  Passed:  309  Skipped: 0
-Paperless.WordProcessing.Tests  Passed!  Failed: 0  Passed: 1974  Skipped: 0
-Paperless.Presentations.Tests   Passed!  Failed: 0  Passed: 1203  Skipped: 0
-Paperless.Spreadsheets.Tests    Passed!  Failed: 0  Passed: 1387  Skipped: 0
-Paperless.Fidelity.Tests        Failed!  Failed: 10  Passed:  542  Skipped: 0  (9 m 51 s)
+XRay.Office.Core.Tests            Passed!  Failed: 0  Passed:  591  Skipped: 0
+XRay.Office.Containers.Tests      Passed!  Failed: 0  Passed:  109  Skipped: 0
+XRay.Office.Markup.Tests          Passed!  Failed: 0  Passed:  259  Skipped: 0
+XRay.Office.OpenDocument.Tests    Passed!  Failed: 0  Passed:  169  Skipped: 0
+XRay.Office.Rendering.Tests       Passed!  Failed: 0  Passed:  164  Skipped: 0
+XRay.Office.Text.Tests            Passed!  Failed: 0  Passed:  744  Skipped: 0
+XRay.Office.Vector.Tests          Passed!  Failed: 0  Passed:  309  Skipped: 0
+XRay.Office.WordProcessing.Tests  Passed!  Failed: 0  Passed: 1974  Skipped: 0
+XRay.Office.Presentations.Tests   Passed!  Failed: 0  Passed: 1203  Skipped: 0
+XRay.Office.Spreadsheets.Tests    Passed!  Failed: 0  Passed: 1387  Skipped: 0
+XRay.Office.Fidelity.Tests        Failed!  Failed: 10  Passed:  542  Skipped: 0  (9 m 51 s)
 
 Every count was checked against `dotnet test --list-tests` for the same project, and ONE run
-had to be discarded: the first run of Paperless.WordProcessing.Tests reported
+had to be discarded: the first run of XRay.Office.WordProcessing.Tests reported
 
     Passed!  - Failed: 0, Passed: 1408, Skipped: 0, Total: 1408
 
@@ -27,4 +27,4 @@ Markup runs 259 against 249 listed.  A run BELOW the listing is the signal; abov
 green run').  The ten fidelity failures are the standing set O64's register row records --
 '10 of 552 failed before and the same ten after' -- and are listed in fidelity-failures.txt.
 
-dotnet build Paperless.slnx -v q -nologo: 0 Warning(s), 0 Error(s).
+dotnet build XRay.Office.slnx -v q -nologo: 0 Warning(s), 0 Error(s).

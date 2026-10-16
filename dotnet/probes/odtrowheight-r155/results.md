@@ -129,14 +129,14 @@ the rule itself is measured at the reference on 34 arms with no free parameter.
 
 | project | result |
 |---|---|
-| `Paperless.Core` | 591 passed |
-| `Paperless.Text` | 750 passed |
-| `Paperless.Vector` | 309 passed |
-| `Paperless.Containers` | 109 passed |
-| `Paperless.WordProcessing` | **2084** passed — 2076 at the round's base plus this round's 8 |
-| `Paperless.Spreadsheets` | 1484 passed |
-| `Paperless.Presentations` | 1205 passed |
-| `Paperless.Markup` | 259 passed |
-| `Paperless.Fidelity` | **10 failed of 552**, 0 skipped — the round's base figure exactly, and the known set |
+| `XRay.Office.Core` | 591 passed |
+| `XRay.Office.Text` | 750 passed |
+| `XRay.Office.Vector` | 309 passed |
+| `XRay.Office.Containers` | 109 passed |
+| `XRay.Office.WordProcessing` | **2084** passed — 2076 at the round's base plus this round's 8 |
+| `XRay.Office.Spreadsheets` | 1484 passed |
+| `XRay.Office.Presentations` | 1205 passed |
+| `XRay.Office.Markup` | 259 passed |
+| `XRay.Office.Fidelity` | **10 failed of 552**, 0 skipped — the round's base figure exactly, and the known set |
 
 Build: 0 warnings, 0 errors.

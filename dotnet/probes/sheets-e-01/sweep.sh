@@ -10,6 +10,6 @@ export TZ=UTC
 find /c/sandbox/workdir/sample-files/sheets -type f \
   \( -iname '*.xls' -o -iname '*.xlsx' \) | sort |
 while read -r f; do
-  "$PAPERLESS_CLI" render --quiet --outdir "$OUT" "$f" >/dev/null 2>&1 || echo "FAILED $f" >&2
+  "$XRAY_OFFICE_CLI" render --quiet --outdir "$OUT" "$f" >/dev/null 2>&1 || echo "FAILED $f" >&2
 done
 echo "wrote $(find "$OUT" -name '*.pdf' | wc -l) pdfs"

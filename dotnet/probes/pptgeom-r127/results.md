@@ -9,7 +9,7 @@ of the DrawingML preset of the same name?*
 | | |
 |---|---|
 | reference | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2**, `0229ac93fcf0d7cbc6376066c6f35021cef002dc` |
-| our renderings | `dotnet/tools/Paperless.Cli` built in this worktree, before and after, from the same working tree |
+| our renderings | `dotnet/tools/XRay.Office.Cli` built in this worktree, before and after, from the same working tree |
 | C++ tree | `/home/user/libreoffice-core`, read only (C8: it is `27.2.0.0.alpha0+`, **not** 26.2's source, so every arm below is measured a second time against 26.2.4.2's own output) |
 | `/usr/bin/soffice` | 24.2.7.2 — **not used for anything in this round** |
 | population for the census | the **148** `MSO_SPT` values `PptShapeGeometry.PresetOf` maps to a DrawingML preset name (142 distinct names) |
@@ -472,7 +472,7 @@ made under a load average above 20 with two other rounds' fidelity suites in fli
 condition `CLAUDE.md` warns can drop tests or invent failures; the counts are stated so the next
 round can compare them rather than only the colour.
 
-`Paperless.Fidelity.Tests`: **552 total, 542 passed, 10 failed, 0 skipped.** All ten are the
+`XRay.Office.Fidelity.Tests`: **552 total, 542 passed, 10 failed, 0 skipped.** All ten are the
 word-processing and sheets families this tree leaves failing on purpose and every one of them is
 named as such in `CLAUDE.md` or in its own remarks — four `PageDrawingComparisonTests`
 (`paginated.docx/.doc/.rtf/.fodt`) and four `TabStopComparisonTests`

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render our half of the words track, one output directory per document, under a pinned clock.
 
-    PAPERLESS_CLI=<...>/Paperless.Cli ./sweep.py <targets.txt> <outdir> [jobs]
+    XRAY_OFFICE_CLI=<...>/XRay.Office.Cli ./sweep.py <targets.txt> <outdir> [jobs]
 
 The two rules this obeys are both scars written up in `dotnet/CLAUDE.md`: a parallel sweep gives each
 *document* its own directory rather than each worker slot, and `SOURCE_DATE_EPOCH` is pinned or every
@@ -16,14 +16,14 @@ import pathlib
 import subprocess
 import sys
 
-CLI = os.environ.get('PAPERLESS_CLI')
+CLI = os.environ.get('XRAY_OFFICE_CLI')
 if not CLI:
-    sys.exit('set PAPERLESS_CLI')
+    sys.exit('set XRAY_OFFICE_CLI')
 
 TARGETS = [line.strip() for line in open(sys.argv[1]) if line.strip()]
 OUT = pathlib.Path(sys.argv[2])
 JOBS = int(sys.argv[3]) if len(sys.argv) > 3 else 3
-CORPUS = pathlib.Path(os.environ.get('PAPERLESS_CORPUS', '/home/user/sample-files'))
+CORPUS = pathlib.Path(os.environ.get('XRAY_OFFICE_CORPUS', '/home/user/sample-files'))
 
 OUT.mkdir(parents=True, exist_ok=True)
 

@@ -279,11 +279,11 @@ def diagnose(m: dict) -> str:
     # Checked before reflow: when content is simply absent, the shift heuristic often
     # also fires (blank rows align with other blank rows), which would misdiagnose it.
     if m["ink_ratio"] < 0.92:
-        return (f"CONTENT MISSING - Paperless drew {(1 - m['ink_ratio']) * 100:.0f}% "
+        return (f"CONTENT MISSING - XRay.Office drew {(1 - m['ink_ratio']) * 100:.0f}% "
                 f"less ink than the reference. Look for an unimplemented feature "
                 f"(shape type, vector image, fill).")
     if m["ink_ratio"] > 1.08:
-        return (f"EXTRA CONTENT - Paperless drew {(m['ink_ratio'] - 1) * 100:.0f}% more "
+        return (f"EXTRA CONTENT - XRay.Office drew {(m['ink_ratio'] - 1) * 100:.0f}% more "
                 f"ink than the reference. Something is visible that should not be, or a "
                 f"fill should have been transparent.")
     if m["shifted_tiles"] >= 3 or abs(m["row_profile_shift"]) > 2:
@@ -317,7 +317,7 @@ def write_png_gray(path: pathlib.Path, width: int, height: int, gray: bytearray)
 
 
 def write_triptych(dest: pathlib.Path, actual: Image, expected: Image) -> None:
-    """Reference | Paperless | difference map, side by side with 8px gutters."""
+    """Reference | XRay.Office | difference map, side by side with 8px gutters."""
     gap = 8
     h = max(actual.height, expected.height)
     w = expected.width + gap + actual.width + gap + min(actual.width, expected.width)
@@ -361,7 +361,7 @@ def main() -> int:
     ap.add_argument("--expected", required=True, type=pathlib.Path,
                     help="Directory of LibreOffice reference PNGs.")
     ap.add_argument("--actual", required=True, type=pathlib.Path,
-                    help="Directory of Paperless PNGs.")
+                    help="Directory of XRay.Office PNGs.")
     ap.add_argument("--diff-dir", type=pathlib.Path,
                     help="Write side-by-side diff images here.")
     ap.add_argument("--report", type=pathlib.Path, help="Write a markdown report here.")
@@ -375,7 +375,7 @@ def main() -> int:
         print(f"no reference PNGs in {args.expected}", file=sys.stderr)
         return 3
     if not actual:
-        print(f"no Paperless PNGs in {args.actual}", file=sys.stderr)
+        print(f"no XRay.Office PNGs in {args.actual}", file=sys.stderr)
         return 3
 
     if args.diff_dir:
@@ -386,7 +386,7 @@ def main() -> int:
              f"- actual:    `{args.actual}` ({len(actual)} page(s))", ""]
     if len(expected) != len(actual):
         lines += [f"> **PAGE COUNT MISMATCH**: reference has {len(expected)}, "
-                  f"Paperless produced {len(actual)}. Pagination itself is wrong, which "
+                  f"XRay.Office produced {len(actual)}. Pagination itself is wrong, which "
                   f"is a more fundamental problem than any per-page difference below.",
                   ""]
         print(f"PAGE COUNT MISMATCH: {len(expected)} vs {len(actual)}", file=sys.stderr)
@@ -431,7 +431,7 @@ def main() -> int:
             dest = args.diff_dir / f"page-{page}-diff.png"
             write_triptych(dest, act_img, exp_img)
             lines += [f"Diff image: `{dest}` "
-                      f"(left: reference, middle: Paperless, right: difference)", ""]
+                      f"(left: reference, middle: XRay.Office, right: difference)", ""]
 
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)

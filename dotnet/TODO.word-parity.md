@@ -5,8 +5,8 @@ normally counts against us. **These ones do not, because they are places where 2
 about the document and Word is right, and this project wants Word parity.** Each is measured, each
 has a switch, and each costs a gate row that no later round should spend time on.
 
-**One switch turns all of them back on**: `PAPERLESS_LIBREOFFICE_QUIRKS=1`
-(`Paperless.WordProcessing.WordParity`). It is one switch rather than one per rule because it is a
+**One switch turns all of them back on**: `XRAY_OFFICE_LIBREOFFICE_QUIRKS=1`
+(`XRay.Office.WordProcessing.WordParity`). It is one switch rather than one per rule because it is a
 statement about which application the output should resemble, and half of each answer is neither.
 
 **Check this file before working a words-track row that will not close.** It is the sibling of

@@ -20,8 +20,8 @@ figure exactly.
 ## 2. Result: **803 of 946 unchanged — sheets 280, slides 200, words 323, zero verdict movement
 in either direction on any track**
 
-All three tracks were swept in this worktree because the diff touches `Paperless.Core` and
-`Paperless.Ooxml`. **10 sheets renderings changed and 0 slides and 0 words renderings changed**,
+All three tracks were swept in this worktree because the diff touches `XRay.Office.Core` and
+`XRay.Office.Ooxml`. **10 sheets renderings changed and 0 slides and 0 words renderings changed**,
 and the 10 are the chart-area border, not the wrap limit.
 
 | | predicted | measured |
@@ -282,9 +282,9 @@ before this round was blind to.
 
 ## 8. Shared layer
 
-`Paperless.Core/Charts/ChartAxisLabels.cs` and `ChartLayout.cs` (the interface),
-`Paperless.Ooxml/DrawingML/DrawingChartPlot.cs`, plus one call-site line each in
-`Paperless.Spreadsheets/Ooxml/XlsxDrawings.cs` and `Paperless.WordProcessing/Ooxml/DocxPictures.cs`.
+`XRay.Office.Core/Charts/ChartAxisLabels.cs` and `ChartLayout.cs` (the interface),
+`XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs`, plus one call-site line each in
+`XRay.Office.Spreadsheets/Ooxml/XlsxDrawings.cs` and `XRay.Office.WordProcessing/Ooxml/DocxPictures.cs`.
 
 Census, all 946 manifest paths:
 
@@ -311,7 +311,7 @@ round 62 recorded 31/26/4/1. The three extra `VERIFIED` came in with the slides 
 merged beside it. **Sixth time a quoted number in that file has failed to reproduce**;
 `TODO.24-2-7-audit.md` is corrected again.
 
-Round 62 (sheets) named `Paperless.Core/Graphics/GlyphRun.cs` :347/:369 as the next site. **It
+Round 62 (sheets) named `XRay.Office.Core/Graphics/GlyphRun.cs` :347/:369 as the next site. **It
 already carries a `VERIFIED` marker dated the same day, from slides-r62** — the round that named
 it and the round that did it are the same round, and the sheets write-up did not know because the
 merge had not happened yet. Its claim one is verified; **claims two and three are not, and the

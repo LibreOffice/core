@@ -1,0 +1,329 @@
+using System.Buffers.Binary;
+using XRay.Office.Core.Units;
+
+namespace XRay.Office.WordProcessing.Ww8;
+
+/// <summary>
+/// The document-wide layout decisions in a WW8 <c>Dop</c>.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Only the fields layout needs, and there are not many: nearly everything in a <c>Dop</c> is a view
+/// setting, a print option or a compatibility flag with no visible effect. The two that matter are the
+/// default tab interval, which no paragraph states and every tab depends on, and whether the two
+/// paragraph spacings add or the larger wins.
+/// </para>
+/// <para>
+/// A fixed layout at fixed offsets, so the fields are read positionally rather than by walking a record.
+/// The offsets come from <c>WW8Dop::WW8Dop</c> (<c>sw/source/filter/ww8/ww8scan.cxx</c>), which reads the
+/// stream in order and comments each field's offset as it goes — the only reliable way to count past the
+/// bitfields, since several bytes hold eight unrelated flags each.
+/// </para>
+/// </remarks>
+public readonly record struct Ww8DocumentProperties
+{
+    /// <summary>Where <c>dxaTab</c> sits: a signed word, ten bytes in.</summary>
+    private const int TabIntervalOffset = 0x0A;
+
+    /// <summary>
+    /// Where the second word of compatibility options sits.
+    /// </summary>
+    /// <remarks>
+    /// Only Word 2000 and later write a <c>Dop</c> this long, which is why the length is checked rather
+    /// than assumed: a Word 97 file stops well before here, and reading past its end would invent a flag.
+    /// </remarks>
+    private const int CompatibilityOptions2Offset = 0x200;
+
+    /// <summary>
+    /// Where the first word of compatibility options sits, which Word 6 onwards writes.
+    /// </summary>
+    /// <remarks>
+    /// <c>WW8Dop::WW8Dop</c> reads it at 84 and hands it straight to <c>SetCompatibilityOptions</c>
+    /// (<c>ww8scan.cxx</c>), whose last line is the one that matters here.
+    /// </remarks>
+    private const int CompatibilityOptionsOffset = 0x54;
+
+    /// <summary>The defaults, for a document whose <c>Dop</c> is missing or too short to read.</summary>
+    /// <remarks>
+    /// Half an inch, and spacings that do <em>not</em> collapse. Both are what Word itself defaults to, and
+    /// the collapsing flag defaults to set in LibreOffice's own reader — a document written before the flag
+    /// existed predates HTML auto-spacing entirely.
+    /// </remarks>
+    public static Ww8DocumentProperties Default { get; } = new()
+    {
+        DefaultTabInterval = Length.FromTwips(720),
+        CollapsesSpacing = false,
+        FootnoteNumbering = Layout.NoteNumbering.Footnotes,
+        EndnoteNumbering = Layout.NoteNumbering.Endnotes,
+    };
+
+    /// <summary>The interval at which tabs fall when no stop covers them.</summary>
+    public Length DefaultTabInterval { get; init; }
+
+    /// <summary>
+    /// True when two paragraphs' spacings collapse to the larger rather than adding.
+    /// </summary>
+    /// <remarks>
+    /// The <em>negation</em> of <c>fDontUseHTMLAutoSpacing</c>, because the flag names what is switched off:
+    /// HTML auto-spacing is the collapsing behaviour, so a document that does not use it adds the two
+    /// spacings. One paragraph's space-after is worth a visible amount, so getting this backwards moves
+    /// every line after the first paragraph boundary.
+    /// </remarks>
+    public bool CollapsesSpacing { get; init; }
+
+    /// <summary>
+    /// True when the document asks to be laid out against a printer rather than a virtual device.
+    /// </summary>
+    /// <remarks>
+    /// <c>fUsePrinterMetrics</c>, the top bit of the first compatibility word, which Word's own dialogue
+    /// calls "use printer metrics to lay out document". LibreOffice honours it literally —
+    /// <c>USE_VIRTUAL_DEVICE</c> becomes its negation (<c>ww8par.cxx</c>:2008) and the layout then formats
+    /// against an <c>SfxPrinter</c>, whose pixel grid rounds every font metric. Eight of sixty-six DOC
+    /// files in the sample corpus set it, and on those the line pitch differs from what the design
+    /// units alone give — by up to 1.5% of a line on the 600 dpi printer this container has, which is
+    /// what <c>A_320.doc</c>'s twenty-three spurious pages were made of. See
+    /// <see cref="XRay.Office.Text.Fonts.MetricGrid.Printer"/>: the resolution is a measurement of the
+    /// installed binary and not a property of the file.
+    /// </remarks>
+    public bool UsesPrinterMetrics { get; init; }
+
+    /// <summary>
+    /// True when the document switches column balancing off for every section at once.
+    /// </summary>
+    /// <remarks>
+    /// <c>fNoColumnBalance</c>, bit 5 of the first compatibility word — <c>fNoColumnBalance = (a32Bit &amp;
+    /// 0x00000020) &gt;&gt; 5</c> (<c>ww8scan.cxx</c>:7896). The WW8 importer reads it before it looks at
+    /// anything else about a section's columns: <c>if (mrReader.m_xWDop-&gt;fNoColumnBalance)
+    /// pRet-&gt;SetFormatAttr(SwFormatNoBalancedColumns(true))</c> (<c>ww8par.cxx</c>:4569). Word's own
+    /// dialogue calls it "don't balance columns for continuous section starts", which is exactly the case
+    /// it governs.
+    /// </remarks>
+    public bool NoColumnBalance { get; init; }
+
+    /// <summary>
+    /// True when the document distinguishes even pages from odd ones — Word's "different odd and even".
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <c>fFacingPages</c>, the lowest bit of the <c>Dop</c>'s very first word
+    /// (<c>a16Bit &amp; 0x0001</c>, <c>ww8scan.cxx</c>:7643). It is a <em>document</em> flag rather than a
+    /// section one, which is why it lives here and reaches every section at once.
+    /// </para>
+    /// <para>
+    /// It decides two things together, and reading it for only one of them is what makes a document look
+    /// nearly right. It is the condition on which the even header and footer stories are read at all —
+    /// <c>wwSectionManager::SetSegmentToPageDesc</c> adds <c>WW8_HEADER_EVEN | WW8_FOOTER_EVEN</c> to the
+    /// synthesised <c>grpfIhdt</c> only under it (<c>ww8par6.cxx</c>:1234) — and it is the condition under
+    /// which the left page stops sharing the right page's running head, since
+    /// <c>wwSectionManager::SetUseOn</c> adds <c>UseOnPage::HeaderShare | FooterShare</c> exactly when it is
+    /// <em>clear</em> (<c>ww8par.cxx</c>:4319). So a document without it has one head for every page
+    /// whatever its even stories hold, and a document with it has two.
+    /// </para>
+    /// </remarks>
+    /// <summary>
+    /// Whether the document asks for its tracked changes to be hidden — <c>fRMView</c> clear.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer reads this into the layout directly: <c>isHideRedlines = !m_xWDop-&gt;fRMView</c>
+    /// (<c>sw/source/filter/ww8/ww8par.cxx</c>:5262). So a deletion is drawn struck through when it is
+    /// set and is not drawn at all when it is clear, and the same document body renders two different
+    /// ways depending on one bit.
+    /// </para>
+    /// <para>
+    /// Both behaviours are in the corpus, which is what makes this a document property rather than a
+    /// policy: <c>tests/corpus/features/revisions.doc</c> has it set and LibreOffice's own PDF of it
+    /// reads "an inserted phrase and a deleted phrase in the middle", while
+    /// <c>150_5300_13_chg8.doc</c> has it clear and the reference shows none of its deletions.
+    /// Treating either as the rule for both is wrong in one direction or the other.
+    /// </para>
+    /// <para>
+    /// Stated as "hides" rather than "shows" so that the zero value is the safe one: this is a struct,
+    /// so a <c>default</c> instance cannot carry an initialiser, and a document whose <c>Dop</c> is too
+    /// short to reach the byte must show its changes rather than silently drop them. That also matches
+    /// <c>WW8Dop</c>'s own default constructor, which sets <c>fRMView(true)</c>
+    /// (<c>ww8scan.cxx</c>:7845).
+    /// </para>
+    /// </remarks>
+    public bool HidesTrackedChanges { get; init; }
+
+    public bool HasFacingPages { get; init; }
+
+    /// <summary>How the document's footnotes are numbered.</summary>
+    /// <remarks>
+    /// The DOP states the two classes in three different places: <c>nFootnote</c> and <c>nEdn</c> hold the
+    /// first number and <c>nfcFootnoteRef</c> and <c>nfcEdnRef</c> the sequence, packed as bit fields into two
+    /// different sixteen-bit words. Both start values are one-based, so a document that means "start at one"
+    /// says one — unlike ODF, whose attribute is an offset.
+    /// </remarks>
+    public Layout.NoteNumbering FootnoteNumbering { get; init; }
+
+    /// <inheritdoc cref="FootnoteNumbering"/>
+    public Layout.NoteNumbering EndnoteNumbering { get; init; }
+
+    /// <summary>Reads what layout needs from a <c>Dop</c>, falling back to the defaults per field.</summary>
+    /// <param name="dop">The document properties stream.</param>
+    public static Ww8DocumentProperties Parse(ReadOnlySpan<byte> dop)
+    {
+        Ww8DocumentProperties properties = Default;
+
+        // The very first word, whose lowest bit is fFacingPages. Every Dop that exists at all is long
+        // enough for it, so the guard is against a truncated one rather than against an old one.
+        if (dop.Length >= 2)
+        {
+            properties = properties with
+            {
+                HasFacingPages = (BinaryPrimitives.ReadUInt16LittleEndian(dop) & 0x0001) != 0,
+            };
+        }
+
+        // fRMView, at 0x07 bit 0x08 — `ww8scan.cxx`:7681 in `WW8Dop::WW8Dop`, where the byte's other
+        // bits are fPagSuppressTopSpacing, fProtEnabled, fDispFormFieldSel, fRMPrint, fWriteReservation,
+        // fLockRev and fEmbedFonts.
+        if (dop.Length >= RevisionViewOffset + 1)
+        {
+            properties = properties with
+            {
+                HidesTrackedChanges = (dop[RevisionViewOffset] & RevisionViewMask) == 0,
+            };
+        }
+
+        if (dop.Length >= TabIntervalOffset + 2)
+        {
+            short interval = BinaryPrimitives.ReadInt16LittleEndian(dop[TabIntervalOffset..]);
+
+            // A zero or negative interval would make a tab advance nowhere and a layout loop; the bound
+            // above it rejects the absurd rather than the merely wide.
+            if (interval is > 0 and <= 31680) properties = properties with
+            {
+                DefaultTabInterval = Length.FromTwips(interval),
+            };
+        }
+
+        // The first footnote number, at 0x02: two bits of restart rule and then the value. Zero means the
+        // document said nothing, which is why LibreOffice's own import guards on it before subtracting one.
+        // The two bits the value is shifted past are `rncFootnote`, the restart rule — the same word states
+        // both, so reading the rule costs nothing but the mask.
+        if (dop.Length >= FootnoteNumberOffset + 2)
+        {
+            ushort word = BinaryPrimitives.ReadUInt16LittleEndian(dop[FootnoteNumberOffset..]);
+            int packed = word >> 2;
+
+            properties = properties with
+            {
+                FootnoteNumbering = properties.FootnoteNumbering with
+                {
+                    StartAt = packed > 0 ? packed : properties.FootnoteNumbering.StartAt,
+                    Restart = Layout.NoteNumbering.FromWw8Rnc(word & 0x0003),
+                },
+            };
+        }
+
+        // The first endnote number and `rncEdn`, packed the same way at 0x34.
+        if (dop.Length >= EndnoteNumberOffset + 2)
+        {
+            ushort word = BinaryPrimitives.ReadUInt16LittleEndian(dop[EndnoteNumberOffset..]);
+            int packed = word >> 2;
+
+            properties = properties with
+            {
+                EndnoteNumbering = properties.EndnoteNumbering with
+                {
+                    StartAt = packed > 0 ? packed : properties.EndnoteNumbering.StartAt,
+                    Restart = Layout.NoteNumbering.FromWw8Rnc(word & 0x0003),
+                },
+            };
+        }
+
+        // Both sequences share one word at 0x36, four bits each, above the two that hold the endnote
+        // position. Reading the wrong field is not an error a document reports: it is a footnote numbered in
+        // roman because the endnote's format was picked up.
+        if (dop.Length >= NoteFormatsOffset + 2)
+        {
+            ushort word = BinaryPrimitives.ReadUInt16LittleEndian(dop[NoteFormatsOffset..]);
+
+            // The lowest two bits are `epc`, where zero means "collect at the end of the section" and three
+            // means the end of the document. LibreOffice's own WW8 export writes zero, which is why a document
+            // round-tripped through DOC has its endnotes at the foot of a page rather than on pages of their
+            // own — and why reading this is what makes a DOC agree with the file it came from.
+            properties = properties with
+            {
+                EndnoteNumbering = properties.EndnoteNumbering with
+                {
+                    Placement = (word & 0x0003) == 0
+                        ? Layout.NotePlacement.SectionEnd
+                        : Layout.NotePlacement.DocumentEnd,
+                },
+            };
+
+            properties = properties with
+            {
+                FootnoteNumbering = properties.FootnoteNumbering with
+                {
+                    Format = FormatOf((word & 0x003C) >> 2, Layout.NoteNumberFormat.Arabic),
+                },
+                EndnoteNumbering = properties.EndnoteNumbering with
+                {
+                    Format = FormatOf((word & 0x03C0) >> 6, Layout.NoteNumberFormat.LowerRoman),
+                },
+            };
+        }
+
+        if (dop.Length >= CompatibilityOptionsOffset + 4)
+        {
+            uint options = BinaryPrimitives.ReadUInt32LittleEndian(dop[CompatibilityOptionsOffset..]);
+            properties = properties with
+            {
+                UsesPrinterMetrics = (options & 0x80000000) != 0,
+                NoColumnBalance = (options & 0x00000020) != 0,
+            };
+        }
+
+        if (dop.Length >= CompatibilityOptions2Offset + 4)
+        {
+            uint options = BinaryPrimitives.ReadUInt32LittleEndian(dop[CompatibilityOptions2Offset..]);
+            properties = properties with { CollapsesSpacing = (options & 0x00000004) == 0 };
+        }
+
+        return properties;
+    }
+
+    /// <summary>
+    /// The sequence an <c>MSONFC</c> code names, or a fallback for the codes not modelled.
+    /// </summary>
+    /// <remarks>
+    /// The numbers come from <c>WW8ListManager::GetSvxNumTypeFromMSONFC</c>, which is also where the ordering
+    /// surprise is: upper roman is 1 and <em>lower</em> roman is 2, and upper letter comes before lower in the
+    /// same way. A reader that assumed the lower-case form came first gets I where the document says i. The
+    /// codes past nine are the East Asian and enclosed-numeral sequences, which fall back rather than being
+    /// approximated.
+    /// </remarks>
+    /// <param name="code">The four-bit code.</param>
+    /// <param name="fallback">What to use for a code this does not model.</param>
+    private static Layout.NoteNumberFormat FormatOf(int code, Layout.NoteNumberFormat fallback)
+        => code switch
+        {
+            0 => Layout.NoteNumberFormat.Arabic,
+            1 => Layout.NoteNumberFormat.UpperRoman,
+            2 => Layout.NoteNumberFormat.LowerRoman,
+            3 => Layout.NoteNumberFormat.UpperLetter,
+            4 => Layout.NoteNumberFormat.LowerLetter,
+            9 => Layout.NoteNumberFormat.Chicago,
+            _ => fallback,
+        };
+
+    /// <summary>Where <c>fRMView</c>'s byte sits in the <c>Dop</c>.</summary>
+    private const int RevisionViewOffset = 0x07;
+
+    /// <summary>Which bit of that byte it is.</summary>
+    private const int RevisionViewMask = 0x08;
+
+    /// <summary>Where the first footnote number sits in the <c>Dop</c>, above two bits of restart rule.</summary>
+    private const int FootnoteNumberOffset = 0x02;
+
+    /// <summary>Where the first endnote number sits, packed the same way.</summary>
+    private const int EndnoteNumberOffset = 0x34;
+
+    /// <summary>Where both classes' sequence codes sit, four bits each in one word.</summary>
+    private const int NoteFormatsOffset = 0x36;
+}

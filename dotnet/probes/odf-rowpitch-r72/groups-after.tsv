@@ -1,5 +1,5 @@
 # grouped from /home/user/odsrow-work/parity-fixC.tsv, 2026-09-07
-# ours   = Paperless.Cli at agent/odsgap with the print-range split fixed
+# ours   = XRay.Office.Cli at agent/odsgap with the print-range split fixed
 # ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2
 # fonts  = system fontconfig; all four tarball confounds aside, LiberationSansNarrow included (2026-09-07)
 path	ext	verdict	group	pages	glyphs	glyph_delta_pct

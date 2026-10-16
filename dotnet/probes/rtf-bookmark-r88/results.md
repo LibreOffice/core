@@ -2,10 +2,10 @@
 
 ## Environment
 
-    ours    Paperless.Cli built in /home/user/wt-rtfbook, at 494ad1a8a (base) and at this round's
+    ours    XRay.Office.Cli built in /home/user/wt-rtfbook, at 494ad1a8a (base) and at this round's
             HEAD. Every figure names which. The base binary was made by copying the changed source
-            files aside and `git checkout`-ing them, with `Paperless.WordProcessing`'s and
-            `Paperless.Cli`'s `obj`/`bin` deleted before each rebuild; it reproduces
+            files aside and `git checkout`-ing them, with `XRay.Office.WordProcessing`'s and
+            `XRay.Office.Cli`'s `obj`/`bin` deleted before each rebuild; it reproduces
             `24-25_FAA_Holdover_Tables` at 158 pages and the changed one at 221, so neither half is
             a stale build. The base column additionally reproduces round 87's own `after-rtf.tsv`
             **336 rows of 336, column for column**, which is the control on the instrument.
@@ -14,7 +14,7 @@
             Probe renderings were made fresh, under `timeout -k 30 240`, one `soffice` profile per
             probe family. For the column, the banked reference half /home/user/gate-odf-r80/ref
             (336 `__rtf.pdf`, rendered 2026-09-08 02:56–03:40). The diff is confined to
-            `Paperless.WordProcessing`, which `soffice` cannot reach, so the banked reference is the
+            `XRay.Office.WordProcessing`, which `soffice` cannot reach, so the banked reference is the
             same bytes throughout.
     corpus  /home/user/corpus-odf/words/**/rtf — 338 files, 26.2.4.2's own RTF export of the
             corpus's words track; 336 have a reference rendering and are scoreable.
@@ -242,10 +242,10 @@ right and free, and the write-up says so rather than claiming a win.
 
 ## 5. Confinement
 
-The diff is six files. Four are under `Paperless.WordProcessing/Rtf`; the other two are shared and
+The diff is six files. Four are under `XRay.Office.WordProcessing/Rtf`; the other two are shared and
 neither changes an existing answer — `FieldInstructions` gains a method nothing else calls, and
 `WritingMarkBuilder.CloseBookmark` gains an optional parameter only the RTF reader passes.
-`Paperless.Spreadsheets` and `Paperless.Presentations` do not reference `Paperless.WordProcessing`
+`XRay.Office.Spreadsheets` and `XRay.Office.Presentations` do not reference `XRay.Office.WordProcessing`
 at all, so no sheets or slides row can be reached by construction.
 
 Shown rather than asserted: rendered with a binary built at this round's base and again at its HEAD,
@@ -268,7 +268,7 @@ measured on named in its own remarks; `RtfStyleFormattingTests` gains
 
 The ten non-fidelity projects were run one at a time: 521, 109, 259, 728, 302, 143, 1044, 164,
 1226, 1851 — all green, and the last of those is 1838 before this round's thirteen new tests.
-`Paperless.Fidelity.Tests` is **542 passed / 10 failed**, and the ten are exactly the expected names:
+`XRay.Office.Fidelity.Tests` is **542 passed / 10 failed**, and the ten are exactly the expected names:
 `PageDrawingComparisonTests.EveryLineIsDrawn` ×4, `TabStopComparisonTests.AListLabelsTabAdvance` ×4,
 `SheetDrawingComparisonTests.APictureIsDrawn` and `JustificationShrinkComparisonTests`.
 

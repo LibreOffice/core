@@ -136,7 +136,7 @@ print(f'{len(bidi_ranges)} bidi-class ranges, {len(brackets)} bracket characters
 out = []
 w = out.append
 header(w, 'The Unicode properties the bidirectional algorithm needs, as sorted ranges.')
-w('namespace Paperless.Text.Itemisation;')
+w('namespace XRay.Office.Text.Itemisation;')
 w('')
 w('public static partial class BidiProperties')
 w('{')
@@ -182,7 +182,7 @@ chunked(w, brackets, 8,
 w('    ];')
 w('}')
 
-BIDI_PATH = ('/home/user/wt-text-bidi/dotnet/src/Paperless.Text/Itemisation/'
+BIDI_PATH = ('/home/user/wt-text-bidi/dotnet/src/XRay.Office.Text/Itemisation/'
              'BidiProperties.Tables.cs')
 open(BIDI_PATH, 'w', encoding='utf-8').write('\n'.join(out) + '\n')
 print('written ' + BIDI_PATH, file=sys.stderr)
@@ -216,7 +216,7 @@ print(f'{len(script_ranges)} script ranges over {len(codes)} scripts', file=sys.
 out = []
 w = out.append
 header(w, 'The UAX #24 Script property, as sorted ranges of ISO 15924 codes.')
-w('namespace Paperless.Text.Itemisation;')
+w('namespace XRay.Office.Text.Itemisation;')
 w('')
 w('public static partial class ScriptProperties')
 w('{')
@@ -253,7 +253,7 @@ if len(codes) > 255:
     print('more scripts than a byte index can hold; widen ScriptIndices', file=sys.stderr)
     sys.exit(1)
 
-SCRIPT_PATH = ('/home/user/wt-text-bidi/dotnet/src/Paperless.Text/Itemisation/'
+SCRIPT_PATH = ('/home/user/wt-text-bidi/dotnet/src/XRay.Office.Text/Itemisation/'
                'ScriptProperties.Tables.cs')
 open(SCRIPT_PATH, 'w', encoding='utf-8').write('\n'.join(out) + '\n')
 print('written ' + SCRIPT_PATH, file=sys.stderr)

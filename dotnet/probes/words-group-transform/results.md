@@ -229,7 +229,7 @@ that your instrument produced output for everything you are about to average.
 python3 mk.py <dir>                      # the extent probes
 python3 orientation.py <dir>             # the orientation probes
 for f in <dir>/*.docx; do
-  "$PAPERLESS_CLI" render "$f" --outdir ours
+  "$XRAY_OFFICE_CLI" render "$f" --outdir ours
   soffice --headless --convert-to pdf --outdir ref "$f"
 done
 pdftoppm -r 100 -f 1 -l 1 -png <pdf> <stem>

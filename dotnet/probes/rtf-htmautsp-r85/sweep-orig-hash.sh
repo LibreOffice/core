@@ -2,16 +2,16 @@
 # Render the original corpus's words track with the binary under test and print one
 # `<name>\t<md5>` line per document, unlinking each PDF as it is scored.
 #
-# `SOURCE_DATE_EPOCH` is what makes a plain md5 mean anything: `paperless render`
+# `SOURCE_DATE_EPOCH` is what makes a plain md5 mean anything: `xray-office render`
 # honours the reproducible-builds convention in both the PDF's /CreationDate and a
 # header's date fields, so two runs of one binary are byte-equal with nothing masked.
 # Disk on this container is measured in single gigabytes, which is why this hashes
 # and unlinks rather than banking 338 PDFs twice.
 #
-#   PAPERLESS_CLI=… sweep-orig-hash.sh <out.tsv> [jobs]
+#   XRAY_OFFICE_CLI=… sweep-orig-hash.sh <out.tsv> [jobs]
 set -u
 ROOT=${ROOT:-/home/user/sample-files}
-CLI=${PAPERLESS_CLI:?set PAPERLESS_CLI}
+CLI=${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI}
 OUT=${1:?out.tsv}
 JOBS=${2:-3}
 WORK=$(mktemp -d "${TMPDIR:-/tmp}/orig-XXXXXXXX")

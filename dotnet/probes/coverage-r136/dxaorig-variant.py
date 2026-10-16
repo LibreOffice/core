@@ -21,7 +21,7 @@ import zipfile
 import pymupdf
 
 root, census, work = sys.argv[1:4]
-CLI = os.environ['PAPERLESS_CLI']
+CLI = os.environ['XRAY_OFFICE_CLI']
 W = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
 PARTS = re.compile(r'^word/(document|header\d*|footer\d*|footnotes|endnotes)\.xml$')
 ATTR = re.compile(r'\s+w:(?:dxa|dya)Orig="[^"]*"')

@@ -30,7 +30,7 @@ column, document for document.** The briefed baseline reproduces exactly.
 | fix A, the VML paint | **0** verdicts | **0** verdicts |
 | fix B, the chart categories and the bar-of-pie | **+2**, to 318 | **+2**, to 318 |
 | regressions | 0 | **0** |
-| cross-track verdicts (`Paperless.Ooxml`) | 0 | **0** |
+| cross-track verdicts (`XRay.Office.Ooxml`) | 0 | **0** |
 
 **Seven of 355 rows changed at all** between the two whole-family sweeps, and every one moved
 towards the reference. The `done-*` re-sweep is inside that, because the sweep was the whole
@@ -59,7 +59,7 @@ the one row here with no slack and the prediction said so in advance.
 
 ## Cross-track measurement, taken rather than argued
 
-`Paperless.Ooxml/DrawingML/DrawingChartPlot.cs` sits below all three families. The census named
+`XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs` sits below all three families. The census named
 **23 charts in 23 documents holding a `c:multiLvlStrRef`** — 2 words, 18 slides, 3 sheets — so the
 seven batches holding the slides and sheets ones were swept **both ways**: once at this branch,
 once with that single file checked out at `166a019c6b0` by `git show` + `cp` + `touch` (never
@@ -77,8 +77,8 @@ sheets charts are **unchanged**, which is the over-reach the prediction named in
 sheets side (`ChartRangeResolver` resolves the `c:f` and never enters the multi-level branch) and
 which turns out to hold for most of the slides side as well.
 
-`Paperless.WordProcessing/Layout/FrameChart.cs` and
-`Paperless.WordProcessing/Ooxml/DocxVmlFrames.cs` are word-processing only and reach neither other
+`XRay.Office.WordProcessing/Layout/FrameChart.cs` and
+`XRay.Office.WordProcessing/Ooxml/DocxVmlFrames.cs` are word-processing only and reach neither other
 track. **`SheetChart` and `SlideChart` carry their own copy of the label painter and therefore
 still run a multi-line label together** — see "left open".
 
@@ -271,7 +271,7 @@ paragraph holds any other content at all — one space is enough. The paragraph 
 is breaks contributes nothing on our side.** That is 25.30 pt lost per occurrence, twice on `097`,
 which with the ~9% line-height difference beside it is the 27 pt measured on the page.
 
-**The reader is not the seat.** `paperless extract` on the `a-br` variant already prints
+**The reader is not the seat.** `xray-office extract` on the `a-br` variant already prints
 `AAA`, blank, blank, `BBB` — the two lines the reference draws. `DocxLayoutSource` emits U+2028
 and builds the `PageParagraph` with it, and `TextMeasurer` already carries the trailing-separator
 rule (`lines.Count > 0 && IsLineSeparator(text[^1])`) with a comment saying exactly why. The seat

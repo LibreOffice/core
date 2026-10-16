@@ -4,8 +4,8 @@
 # not compile prints no failing test and reads exactly like an arm that passed.
 set -u
 cd /home/user/libreoffice-core/dotnet || exit 1
-SRC=src/Paperless.WordProcessing/OpenDocument/OdtLayoutSource.cs
-TBL=src/Paperless.WordProcessing/OpenDocument/OdtLayoutSource.Tables.cs
+SRC=src/XRay.Office.WordProcessing/OpenDocument/OdtLayoutSource.cs
+TBL=src/XRay.Office.WordProcessing/OpenDocument/OdtLayoutSource.Tables.cs
 cp "$SRC" /tmp/claude-0/OdtLayoutSource.cs.before || exit 1
 cp "$TBL" /tmp/claude-0/OdtLayoutSource.Tables.cs.before || exit 1
 
@@ -24,7 +24,7 @@ assert old in s, 'base text not found: ' + old[:60]
 open(p, 'w').write(s.replace(old, new, 1))
 PY
     touch "$file"
-    out=$(timeout 900 dotnet test tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj \
+    out=$(timeout 900 dotnet test tests/XRay.Office.WordProcessing.Tests/XRay.Office.WordProcessing.Tests.csproj \
             --filter "FullyQualifiedName~OdtTableRowHeightTests" 2>&1)
     if printf '%s' "$out" | grep -qE 'error [A-Z]+[0-9]+'; then
         echo "$name: DID NOT COMPILE -- arm void"
@@ -49,6 +49,6 @@ run 'fo:break-before on a table style' "$TBL" \
     '            StartsNewPage = false,'
 
 restore
-out=$(timeout 900 dotnet test tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj \
+out=$(timeout 900 dotnet test tests/XRay.Office.WordProcessing.Tests/XRay.Office.WordProcessing.Tests.csproj \
         --filter "FullyQualifiedName~OdtTableRowHeightTests" 2>&1)
 printf '%-40s %s\n' 'base (all four in place):' "$(printf '%s' "$out" | grep -E '^(Passed|Failed)!' | tail -1)"

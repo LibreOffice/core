@@ -1,4 +1,4 @@
-measuring /tmp/claude-0/-home-user-libreoffice-core/3e093938-a459-5268-987b-74c5270259d6/scratchpad/slides-r24/cli-base/Paperless.Cli
+measuring /tmp/claude-0/-home-user-libreoffice-core/3e093938-a459-5268-987b-74c5270259d6/scratchpad/slides-r24/cli-base/XRay.Office.Cli
 documents: 163
 
 TOTAL 163  MATCH 151

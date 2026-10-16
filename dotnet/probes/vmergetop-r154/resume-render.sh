@@ -4,8 +4,8 @@ set -e
 cd "$(dirname "$0")"
 OUT=/home/user/vmergetop-r154-sweep
 LEG="${1:?usage: resume-render.sh <leg>}"
-CLI="$PWD/../../tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
-stat -c 'CLI dll mtime %y' "$(dirname "$CLI")/Paperless.WordProcessing.dll"
+CLI="$PWD/../../tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
+stat -c 'CLI dll mtime %y' "$(dirname "$CLI")/XRay.Office.WordProcessing.dll"
 
 python3 resume.py "$LEG" --list | xargs -P 6 -I{} sh -c '
     doc=$(printf %s "{}" | md5sum | cut -c1-12)

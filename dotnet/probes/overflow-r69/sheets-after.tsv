@@ -1,7 +1,7 @@
 # Sheets track re-scored 2026-09-06, round 69, our half only.
-# ours   = Paperless.Cli from /home/user/wt-overflow at ddb05e4e5 + this round's three fixes
+# ours   = XRay.Office.Cli from /home/user/wt-overflow at ddb05e4e5 + this round's three fixes
 # ref    = the banked gate at 2f4709c08, /home/user/gate-2f47/ref/*.pdf, LibreOffice 24.2.7.2
-# fonts  = system fontconfig; PAPERLESS_BUNDLED_FONTS unset
+# fonts  = system fontconfig; XRAY_OFFICE_BUNDLED_FONTS unset
 # rule   = batch-check.sh of 2026-09-05: page count, then max(2%, 15) alphanumeric characters
 # corpus = /home/user/sample-files, sheets track, 307 documents
 # columns: path ext pages words fonts unemb verdict rawwords glyphs   (ours/ref throughout)

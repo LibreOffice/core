@@ -2,10 +2,10 @@
 
 ## Environment
 
-    ours    Paperless.Cli built in /home/user/wt-rtfhold, at 3466245b1 (base) and at this
+    ours    XRay.Office.Cli built in /home/user/wt-rtfhold, at 3466245b1 (base) and at this
             round's HEAD. Every figure names which. The base binary was made by copying the
             two changed source files aside and `git checkout`-ing them, with
-            `Paperless.WordProcessing`'s and `Paperless.Cli`'s `obj`/`bin` deleted before each
+            `XRay.Office.WordProcessing`'s and `XRay.Office.Cli`'s `obj`/`bin` deleted before each
             rebuild; it reproduces `Sample_SQMS_Program` at 60 pages and the changed one at 77,
             so neither half is a stale build.
     ref     /opt/libreoffice26.2/program/soffice — LibreOffice 26.2.4.2
@@ -13,7 +13,7 @@
             round. Probe renderings were made fresh, one `soffice` profile per document keyed on
             an md5 of its own path, every call under `timeout -k 30 240`. For the column, the
             banked reference half /home/user/gate-odf-r80/ref (336 `__rtf.pdf`, rendered
-            2026-09-08 02:56–03:40). The diff is confined to `Paperless.WordProcessing/Rtf`,
+            2026-09-08 02:56–03:40). The diff is confined to `XRay.Office.WordProcessing/Rtf`,
             which `soffice` cannot reach, so the banked reference is the same bytes throughout.
     corpus  /home/user/corpus-odf/words/**/rtf — 338 files, 26.2.4.2's own RTF export of the
             corpus's words track; 336 have a reference rendering and are scoreable.
@@ -188,8 +188,8 @@ nine levels. Six of the seventeen were failing rows.
 
 ## Confinement
 
-The diff is two files, both under `src/Paperless.WordProcessing/Rtf`. `Paperless.Spreadsheets`
-and `Paperless.Presentations` do not reference `Paperless.WordProcessing` at all — their
+The diff is two files, both under `src/XRay.Office.WordProcessing/Rtf`. `XRay.Office.Spreadsheets`
+and `XRay.Office.Presentations` do not reference `XRay.Office.WordProcessing` at all — their
 `csproj` name Core, Containers, Text, Vector, Ooxml, OpenDocument and MsBinary and nothing else
 — so no sheets or slides row can be reached by construction, and the words family is what was
 measured. `git grep` for the changed symbols (`RtfStyleFormatting`, `RtfStyles`,
@@ -205,8 +205,8 @@ Rendered with a binary built at this round's base and again at its HEAD under
 
 Neither track loses a document to a render failure on either binary, so the comparison is over
 all 676 renderings and not over a surviving subset. Sheets and slides are not measured because
-they cannot be reached: neither `Paperless.Spreadsheets` nor `Paperless.Presentations` names
-`Paperless.WordProcessing` in its `csproj`.
+they cannot be reached: neither `XRay.Office.Spreadsheets` nor `XRay.Office.Presentations` names
+`XRay.Office.WordProcessing` in its `csproj`.
 
 ## The tests
 
@@ -216,7 +216,7 @@ resolve*), `AResolvableParentReplacesThePoolHeading`,
 `APoolHeadingNeitherRenamedNorRestatedIsTheOnlyOneThatTakesIt` and
 `ThePoolHeadingBringsTwelvePointsAboveSixBelowAndKeepWithNext`. The ten non-fidelity projects
 were run one at a time: 109, 519, 259, 143, 1044, 164, 1226, 728, 302, 1831 — all green.
-`Paperless.Fidelity.Tests` is **542 passed / 10 failed**, and the ten are exactly the expected
+`XRay.Office.Fidelity.Tests` is **542 passed / 10 failed**, and the ten are exactly the expected
 names: `PageDrawingComparisonTests.EveryLineIsDrawn` ×4, `TabStopComparisonTests.AListLabelsTabAdvance` ×4,
 `SheetDrawingComparisonTests.APictureIsDrawn`, `JustificationShrinkComparisonTests`.
 

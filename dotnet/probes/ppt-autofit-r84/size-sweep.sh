@@ -10,7 +10,7 @@ while IFS= read -r doc; do
     dir="/tmp/r84-size-$key"
     rm -rf "$dir"; mkdir -p "$dir/ref" "$dir/ours"
     ./ref-render.sh "$doc" "$dir/ref" >/dev/null 2>&1 || true
-    SOURCE_DATE_EPOCH=1700000000 "$PAPERLESS_CLI" render --outdir "$dir/ours" "$doc" >/dev/null 2>&1 || true
+    SOURCE_DATE_EPOCH=1700000000 "$XRAY_OFFICE_CLI" render --outdir "$dir/ours" "$doc" >/dev/null 2>&1 || true
     base=$(basename "${doc%.*}")
     if [ -f "$dir/ref/$base.pdf" ] && [ -f "$dir/ours/$base.pdf" ]; then
         python3 - "$dir/ref/$base.pdf" "$dir/ours/$base.pdf" "$base" >> "$OUT" <<'PY'

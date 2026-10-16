@@ -1,7 +1,7 @@
 #!/bin/bash
 # Run every test project individually and total them by hand.
 #
-# `dotnet test Paperless.slnx` is the most likely to truncate and the least
+# `dotnet test XRay.Office.slnx` is the most likely to truncate and the least
 # likely to say so -- CLAUDE.md records it printing `Passed! - Failed: 0` after
 # silently dropping the tests it never reached, and being OOM-killed outright.
 # So: one project at a time, and compare what PASSED against what was
@@ -9,13 +9,13 @@
 set -u
 cd /home/user/libreoffice-core/dotnet || exit 1
 LABEL="${1:-run}"
-MODE="${2:-full}"   # "fast" skips Paperless.Fidelity.Tests (the only project that shells out to soffice)
+MODE="${2:-full}"   # "fast" skips XRay.Office.Fidelity.Tests (the only project that shells out to soffice)
 OUT="/data/bench/testruns/$LABEL"
 mkdir -p "$OUT"
 total_pass=0; total_fail=0; total_skip=0; total_disc=0; bad=""
 for p in tests/*/*.csproj; do
   n=$(basename "$p" .csproj)
-  [ "$MODE" = fast ] && [ "$n" = Paperless.Fidelity.Tests ] && continue
+  [ "$MODE" = fast ] && [ "$n" = XRay.Office.Fidelity.Tests ] && continue
   disc=$(dotnet test "$p" --no-build --list-tests 2>/dev/null | grep -cE '^\s{4}\S')
   dotnet test "$p" --no-build --nologo -v q > "$OUT/$n.log" 2>&1
   line=$(grep -oE 'Passed!?[^0-9]*-?\s*Failed:\s*[0-9]+,\s*Passed:\s*[0-9]+,\s*Skipped:\s*[0-9]+' "$OUT/$n.log" | tail -1)

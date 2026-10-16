@@ -22,7 +22,7 @@ line, plus one chart it had read briefly.
 
 ## Environment
 
-    ours   = Paperless.Cli @ 0fc357beb
+    ours   = XRay.Office.Cli @ 0fc357beb
     ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2, the calibration target
     fonts  = system fontconfig; the 26.2 install's three bundled confounds moved aside
     pairs  = 110 dpi, composed by .claude/skills/page-vision/scripts/compose.py

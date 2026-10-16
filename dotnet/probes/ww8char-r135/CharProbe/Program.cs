@@ -4,10 +4,10 @@
 //                                  by the CHPX's own `sprmCIstd`, and where the two readings DISAGREE
 //   CharProbe --fields  <doc>...   one row per document: CHPX runs that end exactly where a field
 //                                  begins, split by whether that field reaches `Read_F_Tox`
-using Paperless.Containers;
-using Paperless.Containers.Ole2;
-using Paperless.Core.Diagnostics;
-using Paperless.WordProcessing.Ww8;
+using XRay.Office.Containers;
+using XRay.Office.Containers.Ole2;
+using XRay.Office.Core.Diagnostics;
+using XRay.Office.WordProcessing.Ww8;
 
 string mode = args.Length > 0 ? args[0] : "--toggles";
 Census.Why = Environment.GetEnvironmentVariable("CHARPROBE_WHY") == "1";

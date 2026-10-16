@@ -1,5 +1,5 @@
---- a/dotnet/src/Paperless.Core/Charts/ChartLayout.cs
-+++ b/dotnet/src/Paperless.Core/Charts/ChartLayout.cs
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
 @@ -973,7 +973,7 @@
          }
  

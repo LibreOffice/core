@@ -2,7 +2,7 @@
 # Render one document's flat ODP through 26.2.4.2 and through our CLI, and the .ppt through ours.
 set -uo pipefail
 SO=/opt/libreoffice26.2/program/soffice
-CLI=/home/user/wt-slidesize/dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/Paperless.Cli
+CLI=/home/user/wt-slidesize/dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli
 W=/home/user/r108-work/leg4
 stem="$1"; src="$2"
 d="$W/$stem"; mkdir -p "$d/u" "$d/rt" "$d/ours-fodp" "$d/ours-ppt"

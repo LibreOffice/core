@@ -12,7 +12,7 @@ Each document gets its **own** temporary directory rather than one per worker sl
 pool does not work consecutive indices, so two live renders land in one slot's directory and
 one deletes the other's output. That is silent and reads as documents that failed to render.
 
-Usage:  PAPERLESS_CLI=<abs path> python3 sweep-ours.py <corpus-root> <glob> <outdir> [workers]
+Usage:  XRAY_OFFICE_CLI=<abs path> python3 sweep-ours.py <corpus-root> <glob> <outdir> [workers]
 """
 import os, shutil, subprocess, sys
 from concurrent.futures import ThreadPoolExecutor
@@ -29,7 +29,7 @@ EXTENSIONS = {
 def main():
     root, glob, out = Path(sys.argv[1]), sys.argv[2], Path(sys.argv[3])
     workers = int(sys.argv[4]) if len(sys.argv) > 4 else 3
-    cli = os.environ["PAPERLESS_CLI"]
+    cli = os.environ["XRAY_OFFICE_CLI"]
 
     files = sorted(p for d in sorted(root.glob(glob)) if d.is_dir()
                    for p in d.rglob("*") if p.is_file() and p.suffix.lower() in EXTENSIONS)

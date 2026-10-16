@@ -20,7 +20,7 @@ of O51's residual). O50 and O51 are closed.
 | What format does a `[CATEGORY NAME]` field take? | **The category axis'**, resolved once before the loop. Three axis formats move every label; two cell formats and `sourceLinked="1"` move nothing at all. §3 |
 | Reach | **2 of 176** chart-bearing corpus renderings, one per issue, `SOURCE_DATE_EPOCH` pinned; **0 of 182** chart-bearing converted-ODF files. §4 |
 | The gate consequence of O50 | **`055`'s column 9 goes from 85 short to 111 short and its verdict does not move.** With the `TODAY()` confound frozen out it is **934 against the reference's 934, exact**, where it was 960. §5 |
-| Tests | 9 added, **5 of them failing at the base**. 6787 unit tests pass in ten projects; `Paperless.Fidelity.Tests` **Failed 10, Passed 542, Skipped 0, Total 552** — exactly round 112's ten. §6 |
+| Tests | 9 added, **5 of them failing at the base**. 6787 unit tests pass in ten projects; `XRay.Office.Fidelity.Tests` **Failed 10, Passed 542, Skipped 0, Total 552** — exactly round 112's ten. §6 |
 
 ---
 
@@ -263,7 +263,7 @@ export SOURCE_DATE_EPOCH=1700000000
 tail -n +2 probes/chart-fit/census.tsv | cut -f1 > /tmp/chartdocs.txt
 for leg in base o51 after; do
   python3 probes/chart-collide-r110/confine.py --out /tmp/conf-$leg \
-      --cli /tmp/cli-$leg/Paperless.Cli --rows /tmp/rows-$leg.tsv --jobs 3 < /tmp/chartdocs.txt
+      --cli /tmp/cli-$leg/XRay.Office.Cli --rows /tmp/rows-$leg.tsv --jobs 3 < /tmp/chartdocs.txt
 done
 ```
 
@@ -323,7 +323,7 @@ the one confound frozen out, and it is what the −26 buys.
 
 ## 6. Tests
 
-Two new classes in `tests/Paperless.Core.Tests`, nine cases, **five of which fail at the base**
+Two new classes in `tests/XRay.Office.Core.Tests`, nine cases, **five of which fail at the base**
 (checked by reverting the three source files, rebuilding and re-running: `Failed 5, Passed 4`).
 
 | case | what it holds | fails at base |
@@ -349,7 +349,7 @@ Rendering  164   Spreadsheets 1352   Text 728   Vector 309   WordProcessing 1938
 Every one of the ten is at or above round 112's, so none is a truncated run; Core is +9, which is
 this round's nine, and Presentations +38 comes from the slides round merged since.
 
-**`Paperless.Fidelity.Tests`, the one that can skip silently: `Failed: 10, Passed: 542,
+**`XRay.Office.Fidelity.Tests`, the one that can skip silently: `Failed: 10, Passed: 542,
 Skipped: 0, Total: 552`** — 0 skipped, so it covered everything, and the ten are exactly round
 112's, none of them a chart:
 

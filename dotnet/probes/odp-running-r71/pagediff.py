@@ -2,14 +2,14 @@
 """Per-page alphanumeric-character diff between our rendering and 26.2.4.2's, for one
 document, plus what each side puts on the page in pictures and in fonts.
 
-Environment: ours = dotnet/tools/Paperless.Cli (the tree this is run from);
+Environment: ours = dotnet/tools/XRay.Office.Cli (the tree this is run from);
 ref = /opt/libreoffice26.2/program/soffice, 26.2.4.2, all four tarball font confounds aside.
 """
 import glob, hashlib, os, shutil, subprocess, sys
 from pathlib import Path
 
-CLI = os.environ.get('PAPERLESS_CLI',
-    '/home/user/wt-odpfoot/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli')
+CLI = os.environ.get('XRAY_OFFICE_CLI',
+    '/home/user/wt-odpfoot/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli')
 SOF = '/opt/libreoffice26.2/program/soffice'
 
 def render(doc, out, side):

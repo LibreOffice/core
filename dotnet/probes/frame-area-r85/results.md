@@ -6,7 +6,7 @@ references were used throughout and they agree on every figure below: the distro
 metric-compatible faces, its Latin Noto, its DejaVu Condensed and its `LiberationSansNarrow` all in
 the `.duplicates-aside/`, `.noto-aside/` and `.condensed-aside/` directories the rulebook describes.
 `fc-match "DejaVu Sans"` resolves to DejaVu, `fc-match Calibri` to Carlito and `fc-match Cambria` to
-Caladea. Paperless at `agent/framearea`, base `6a6f18d9a`; corpus `/home/user/sample-files`, 947
+Caladea. XRay.Office at `agent/framearea`, base `6a6f18d9a`; corpus `/home/user/sample-files`, 947
 paths in `MANIFEST.tsv`.*
 
 ---
@@ -60,7 +60,7 @@ never recorded anywhere, and is described from §2 on.
 
 ## 1. What the brief got wrong
 
-1. **Both defects were closed.** `Paperless.WordProcessing/TODO.md`:2232 and :2242 are stale. The
+1. **Both defects were closed.** `XRay.Office.WordProcessing/TODO.md`:2232 and :2242 are stale. The
    brief's own warning — *"several module TODO entries are stale and some are wrong … check before
    believing any TODO, including the two above"* — was the operative instruction, and both of the two
    it named turned out to be instances of it. The entries are rewritten in this round's commit.
@@ -253,8 +253,8 @@ by diffing the extracted text. It is the documented volatile class, and it is al
 of this comparison reported *947 of 947 changed*: without masking `/CreationDate` every PDF differs
 by four bytes.
 
-Slides and sheets could not have moved: the changed files are all in `Paperless.WordProcessing`, and
-neither `Paperless.Presentations.csproj` nor `Paperless.Spreadsheets.csproj` references it. The
+Slides and sheets could not have moved: the changed files are all in `XRay.Office.WordProcessing`, and
+neither `XRay.Office.Presentations.csproj` nor `XRay.Office.Spreadsheets.csproj` references it. The
 sweep is the measurement that agrees with that.
 
 **Against 26.2.4.2 on the three movers** (`score-ink.py`, 150 dpi, `genogram-ink.txt`):
@@ -278,7 +278,7 @@ and reads exactly like our regression.
 ## 5. Reproducing
 
 ```sh
-export PAPERLESS_CLI=/abs/tree/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=/abs/tree/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 
 # the 34 fixtures
 python3 make-relfrom.py    /abs/scratch/rf
@@ -292,7 +292,7 @@ python3 ../words-inline-effectextent/measure-x.py      /abs/scratch/xfx /abs/scr
 python3 catalogue-x.py /abs/scratch/cat all
 
 # the corpus witness the brief named
-TAG=head PAPERLESS_CLI=$PAPERLESS_CLI python3 ../words-vml-fontwork/measure.py /abs/scratch/vml
+TAG=head XRAY_OFFICE_CLI=$XRAY_OFFICE_CLI python3 ../words-vml-fontwork/measure.py /abs/scratch/vml
 
 # reach and score
 python3 sweep-ours.py /home/user/sample-files 'words/*' /abs/scratch/after 3

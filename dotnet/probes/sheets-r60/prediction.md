@@ -47,13 +47,13 @@ its no-external-leading ascent. The defect is that `SheetBandText.Ungridded` dro
 
 ## What will change in the code
 
-* `Paperless.Text/Fonts/LineSpacing.cs` — **additive only**: a new `MetricGrid.Chart` constant
+* `XRay.Office.Text/Fonts/LineSpacing.cs` — **additive only**: a new `MetricGrid.Chart` constant
   (96 dpi, 1/100 mm). No existing caller's arithmetic changes, so words and slides cannot move
   **by construction** rather than by census.
-* `Paperless.Spreadsheets/Layout/SheetBandText.cs` — `ChartLineHeightAt` takes that grid; a new
+* `XRay.Office.Spreadsheets/Layout/SheetBandText.cs` — `ChartLineHeightAt` takes that grid; a new
   `ChartAscentAt`; and `SheetShapePainter`'s two calls move to a separately named function that
   keeps today's ungridded arithmetic byte for byte.
-* `Paperless.Spreadsheets/Layout/SheetChart.cs` — the two drawing paths take `ChartAscentAt`.
+* `XRay.Office.Spreadsheets/Layout/SheetChart.cs` — the two drawing paths take `ChartAscentAt`.
 
 ## Reach, from a census rather than from the pool
 
@@ -104,7 +104,7 @@ risk this round carries: the change is small, the surface is a quarter of the tr
 | page counts, anywhere | **0 change** |
 | regressions among the 78 `done` chart documents | **0**, and this is the number most likely to be wrong |
 | `microsoft_learn_multi_chart_examples` | moves words, stays `words` |
-| tests | **+6 to +14**, in `Paperless.Spreadsheets` and `Paperless.Text` |
+| tests | **+6 to +14**, in `XRay.Office.Spreadsheets` and `XRay.Office.Text` |
 | other tracks | **0 documents**, structurally — the shared-layer edit is a new constant only |
 | `MANIFEST.tsv` | 2 rows change status, proposed not made |
 

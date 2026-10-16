@@ -1,13 +1,13 @@
 # Structured-text sweep: XHTML and Markdown, every family and every reader
 #
-# `paperless extract --format xhtml` and `--format markdown` over one feature document
+# `xray-office extract --format xhtml` and `--format markdown` over one feature document
 # per family per reader path, counting the structure that survives the projection.
 #
 # Stage one is a semantic XHTML writer over the shared ContentNode tree, compared against
 # LibreOffice's own XHTML export node for node — every heading level, list nesting depth,
 # cell row, column, colspan, rowspan and hyperlink target agree exactly across eleven
 # documents in five formats. Stage two is a pure XHTML -> GFM transformation that reads no
-# document at all. `Paperless.Markup` has 259 tests, including a Markdig round trip over 32
+# document at all. `XRay.Office.Markup` has 259 tests, including a Markdig round trip over 32
 # hazard strings, which is what catches the escaping bugs a text diff cannot see because
 # every character is still present.
 #

@@ -100,8 +100,8 @@ base figure.
 `sweep.py` renders one document per directory under `SOURCE_DATE_EPOCH=0`, three workers, at the
 round's base and with the change; `movers.py` diffs the two legs and refuses to print a total unless
 every document on the list rendered in both. The slides track is the whole reach by construction:
-`SlideTextLayout` has no consumer outside `Paperless.Presentations`, and the two references to it
-from `Paperless.Text` and `Paperless.WordProcessing` are doc comments.
+`SlideTextLayout` has no consumer outside `XRay.Office.Presentations`, and the two references to it
+from `XRay.Office.Text` and `XRay.Office.WordProcessing` are doc comments.
 
 **9 of the 302 slides documents move and 293 are byte-identical**, and all nine improve: summed
 `diff%` over them **1148.05 → 1121.17**, MAJOR pages 14 → 14. The number-bulleted deck of §3 is not

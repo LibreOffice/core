@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Census: which corpus chart axes could witness O43's two-word restart?
 
-Runs the CLI over a list of corpus documents with `PAPERLESS_AXIS_TRACE=1`, which a
+Runs the CLI over a list of corpus documents with `XRAY_OFFICE_AXIS_TRACE=1`, which a
 temporary patch to `ChartAxisLabels.Resolve` (banked beside this file as
 `axis-trace.diff`, NOT committed to src) makes emit one `AXTRACE` line per multi-word
 axis label per resolve attempt:
@@ -12,7 +12,7 @@ Rows are deduplicated -- `Resolve` runs once per layout attempt and per chart co
 written with the document path prepended. The PDF is deleted as soon as the run returns;
 nothing here needs it.
 
-    axis-census.py --cli <Paperless.Cli> --out rows.tsv [--jobs 2] < paths
+    axis-census.py --cli <XRay.Office.Cli> --out rows.tsv [--jobs 2] < paths
 """
 import argparse
 import concurrent.futures as cf
@@ -48,7 +48,7 @@ def one(rel):
     if work.exists():
         shutil.rmtree(work)
     work.mkdir(parents=True)
-    env = dict(os.environ, PAPERLESS_AXIS_TRACE="1")
+    env = dict(os.environ, XRAY_OFFICE_AXIS_TRACE="1")
     try:
         proc = subprocess.run(
             [args.cli, "render", "--outdir", str(work), str(src)],

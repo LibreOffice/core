@@ -120,7 +120,7 @@ identical, and concluded the reference ignores the style code. It does not.
 | worksheets clipped by change A | exactly one, the FAA `sheet10` `oddHeader` | **exactly one** |
 | documents whose band ink moves | 81 xlsx/xlsm plus an unmeasured part of the 64 `.xls` | **41 of the 81 measurably**, plus 4 `.xls` |
 | words / slides tracks | 0 | **0 — no shared layer touched** |
-| tests | +12 to +18 in `Paperless.Spreadsheets` only | **+16, `Paperless.Spreadsheets` only** |
+| tests | +12 to +18 in `XRay.Office.Spreadsheets` only | **+16, `XRay.Office.Spreadsheets` only** |
 
 **Seven of eight.** The miss is the one the prediction's own blind-spot list is nearest to but
 does not name: it said the gate cannot see change B, and then predicted no word count would move
@@ -206,7 +206,7 @@ Counters, re-derived with the file's own commands at this tree: **42 open sites,
 output becomes `commit:path:count`, `$2` is the path, and the total comes out **0**. This round
 read "0 markers at the base commit" off it before noticing. Fixed at the file.
 
-`Paperless.Spreadsheets` is now **eight of ten** re-checked, seven correct. The one found wrong is
+`XRay.Office.Spreadsheets` is now **eight of ten** re-checked, seven correct. The one found wrong is
 still the only one that was about **page furniture** rather than text metrics — which after two
 rounds is a pattern rather than a coincidence, and it is why the file now says to take
 `XlsxNoteCaptions.cs` (furniture) before `SheetText.cs` (metrics).
@@ -216,7 +216,7 @@ rounds is a pattern rather than a coincidence, and it is why the file now says t
 `census-autoaxis.py` over all 946 documents: **309 `chartSpace` parts, 256 value axes with an
 automatic major unit against 30 with a stated one, in 129 documents — 79 sheets, 47 slides, 3
 words.** A stated major unit is inert to this rule, so 256 axes across all three tracks is its
-reach, and `ChartLayout` is in **`Paperless.Core`**. The brief's "census first" was right: this is
+reach, and `ChartLayout` is in **`XRay.Office.Core`**. The brief's "census first" was right: this is
 not four tokens on `005`, it is a law over 129 documents and a shared layer.
 
 **What the round established about it without changing a line.** The reference's
@@ -242,7 +242,7 @@ Three candidate divergences, and one of them is already bounded:
 
 ## 10. Shared layer
 
-**No.** Every file this round touches is in `Paperless.Spreadsheets`:
+**No.** Every file this round touches is in `XRay.Office.Spreadsheets`:
 `Layout/SheetPageDecoration.cs`, `Layout/SheetBandText.cs`, `Layout/SheetHeaderFooter.cs`,
 `Layout/SheetPrintSetup.cs`, `Layout/SheetFonts.cs`, `Layout/SheetShapeText.cs`,
 `Layout/SheetNotes.cs`, `Ooxml/XlsxPrintSetup.cs`, `Xlsb/XlsbPrintSetup.cs`,
@@ -252,8 +252,8 @@ it had; there is no `.ods` in the sheets corpus and that arm is unmeasured eithe
 
 ## 11. Tests
 
-**+16, all in `Paperless.Spreadsheets`** (940 → 956). Whole tree **4811 passed, 0 failed, 1
-skipped** against the base's 4795 / 0 / 1. `Paperless.Fidelity` is **521 passed / 31 failed /
+**+16, all in `XRay.Office.Spreadsheets`** (940 → 956). Whole tree **4811 passed, 0 failed, 1
+skipped** against the base's 4795 / 0 / 1. `XRay.Office.Fidelity` is **521 passed / 31 failed /
 552**, byte-for-byte the base's figure. `dotnet build -v q -nologo` → **0 warnings, 0 errors.**
 
 **Eight mutations run through `verify-test.sh`, seven detected:**

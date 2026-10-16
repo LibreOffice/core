@@ -1,6 +1,6 @@
-# Paperless — working notes
+# XRay.Office — working notes
 
-Paperless is a **pure C# / .NET** library set for content extraction and headless
+XRay.Office is a **pure C# / .NET** library set for content extraction and headless
 rendering of the file formats LibreOffice's Writer, Calc and Impress support.
 
 It lives in the `dotnet/` subdirectory of a LibreOffice source checkout. The surrounding
@@ -15,7 +15,7 @@ spreadsheets (`xlsx xlsm xltx xltm xlsb xls xlt ods ots fods csv`), presentation
 OpenOffice.org 1.x forms (`sxw sxc sxi`).
 
 **Out of scope.** Draw, Math and Base. Do not add them. Also: writing/export of any
-format (Paperless reads), macro execution (never — Paperless only reports that macros are
+format (XRay.Office reads), macro execution (never — XRay.Office only reports that macros are
 *present*), and editing.
 
 ## Absolute rules
@@ -38,7 +38,7 @@ format (Paperless reads), macro execution (never — Paperless only reports that
    `FormatInfo` exists so callers can surface the risk; nothing executes.
 3. **Rasterise with SkiaSharp, shape with HarfBuzzSharp.** HarfBuzz is what LibreOffice
    shapes with, which is why it was chosen. Font metrics come from a hand-rolled OpenType
-   reader in `Paperless.Text` — matching LibreOffice's line heights needs raw `hhea`/`OS/2`
+   reader in `XRay.Office.Text` — matching LibreOffice's line heights needs raw `hhea`/`OS/2`
    access and our own precedence rules. Before adding any graphics dependency, read the note
    at the top of `Directory.Packages.props`.
 
@@ -95,7 +95,7 @@ format (Paperless reads), macro execution (never — Paperless only reports that
    kerning the layout applied and 24.2.7.2 dropped some of it, which made its lines wider and
    cancelled part of the truncation deficit.
 
-   So there is nothing to reproduce in `Paperless.Text`, and **the fidelity failures in this
+   So there is nothing to reproduce in `XRay.Office.Text`, and **the fidelity failures in this
    family are left failing on purpose**: eight of them compare a position N glyphs deep
    inside one reference text object, where the channel's resolution is `N × 0.5/1000 em ×
    size` — 0.55 pt on `paginated.docx` line 1, against a 0.5 pt tolerance. Only writing our
@@ -244,13 +244,13 @@ format (Paperless reads), macro execution (never — Paperless only reports that
    arithmetic saying it would is a misreading.*** `hyph_en_US.dic` (106,414 bytes, BSD-style,
    *"unlimited copying, redistribution and modification with this copyright and license
    information"*) and `README_hyph_en_US.txt` are vendored into
-   `Paperless.Core/Globalization/Hyphenation` and copied beside the assembly like the bundled
+   `XRay.Office.Core/Globalization/Hyphenation` and copied beside the assembly like the bundled
    faces; **`hyph_fr.dic` (LGPL-2.1+) and `hyph_es.dic` (GPL-3.0+/LGPL-3.0+/MPL-1.1+) are
-   deliberately not committed** and are supplied through `PAPERLESS_HYPHEN_DICTS` (a path list,
+   deliberately not committed** and are supplied through `XRAY_OFFICE_HYPHEN_DICTS` (a path list,
    searched one level deep so a LibreOffice `share/extensions` resolves `dict-fr/hyph_fr.dic`) or
    `Hyphenators.Register(language, stream)`; `=0` turns the lot off, which is the state a
-   deployment without the data is in. `IHyphenator` moved to `Paperless.Core.Globalization`
-   because `ChartAxisLabels` is in Core and Core may not reference `Paperless.Text`.
+   deployment without the data is in. `IHyphenator` moved to `XRay.Office.Core.Globalization`
+   because `ChartAxisLabels` is in Core and Core may not reference `XRay.Office.Text`.
 
    **Two rules to keep.** The leading limit EditEngine imposes is a **character count, not a
    width**: `nMaxBreakPos - nWordStart - 1`, whose `+1` is commented *"Before the dickey letter"*
@@ -491,10 +491,10 @@ format (Paperless reads), macro execution (never — Paperless only reports that
 dotnet/
   Directory.Build.props        shared MSBuild settings; read the licensing note
   Directory.Packages.props     central package versions
-  Paperless.slnx               solution (the newer XML format; dotnet 10 default)
+  XRay.Office.slnx               solution (the newer XML format; dotnet 10 default)
   research/                    in-depth notes on the LibreOffice implementation
   src/                         the libraries
-  tools/Paperless.Cli          the `paperless` command-line tool
+  tools/XRay.Office.Cli          the `xray-office` command-line tool
   tests/                       unit tests, the test kit, and the fidelity harness
 ```
 
@@ -503,7 +503,7 @@ dotnet/
 Arrows point at dependencies. Nothing may point back up.
 
 ```
-                       Paperless.Core          (zero external dependencies)
+                       XRay.Office.Core          (zero external dependencies)
                             |
       +---------------+-----+------+---------------+-------------+
       |               |            |               |             |
@@ -526,17 +526,17 @@ Arrows point at dependencies. Nothing may point back up.
    |                      |              |
    +----------+-----------+--------------+
               |
-          Paperless          (facade: sniff and dispatch)
+          XRay.Office          (facade: sniff and dispatch)
               |
-        Paperless.Cli
+        XRay.Office.Cli
 ```
 
-**`Paperless.Markup` serves all three families, so it cannot live in any of them.** It projects
+**`XRay.Office.Markup` serves all three families, so it cannot live in any of them.** It projects
 the shared `ContentNode` tree onto semantic XHTML and then onto Markdown, needs nothing but
-`Paperless.Core`, and sits beside the other Core-only libraries rather than inside Core, which
+`XRay.Office.Core`, and sits beside the other Core-only libraries rather than inside Core, which
 holds the abstractions everything agrees on rather than projections of them.
 
-**`Paperless.Core` has no external dependencies and must stay that way.** It holds the
+**`XRay.Office.Core` has no external dependencies and must stay that way.** It holds the
 abstractions everything else agrees on: units, geometry, colour, the format catalogue, the
 document model, and the drawing IR. A dependency added here is inherited by every
 consumer.
@@ -544,17 +544,17 @@ consumer.
 `Core/Charts` is the test of that rule and shows where the line falls. A chart's *model* and its
 *layout* — `ChartPlot`, `ChartScale`, `ChartLayout` — are geometry over the abstractions Core
 already holds, so they belong here; the readers that turn a `c:chartSpace` or a `chart:chart` into
-that model parse XML and stay in `Paperless.Ooxml` and `Paperless.OpenDocument`. Putting the model
-one layer up instead is what forced the ODF reader into `Paperless.Presentations`, where a
+that model parse XML and stay in `XRay.Office.Ooxml` and `XRay.Office.OpenDocument`. Putting the model
+one layer up instead is what forced the ODF reader into `XRay.Office.Presentations`, where a
 spreadsheet could not reach it.
 
 **SmartArt is the third instance, and the first that moved *sideways* rather than down.** Ten
 files implementing DrawingML diagrams — the parts, the baked `dsp:spTree`, and a layout-atom
-evaluator — sat in `Paperless.Presentations` and were unreachable from a word-processing document,
+evaluator — sat in `XRay.Office.Presentations` and were unreachable from a word-processing document,
 which drew an empty frame where the reference drew the diagram. Nine of the ten imported nothing
-above `Paperless.Ooxml`; the tenth needed two lookups from the package (*resolve a relationship id
+above `XRay.Office.Ooxml`; the tenth needed two lookups from the package (*resolve a relationship id
 stated on a part*, *load a part by name*) and those became two delegates. They belong in
-`Paperless.Ooxml/DrawingML` and **not** in Core, by the second half of the same test: they parse
+`XRay.Office.Ooxml/DrawingML` and **not** in Core, by the second half of the same test: they parse
 markup and emit an element tree, so they are readers, and readers of OOXML that serve more than one
 family live one layer above Core rather than in it. Reach: 18 corpus documents carry a diagram —
 slides 15, words 3, sheets **0** — and all 38 of their data parts have a usable baked drawing, so
@@ -563,7 +563,7 @@ the evaluator is not what the corpus needs. See `probes/words-diagram-01/results
 `Core/Numbers` came down for the same reason and by the same test, and it is worth stating as a
 rule rather than as a second exception. **The question is not "who uses it" but "what does it
 depend on".** The number-format engine — parsing `#,##0.00` and rendering a double through it —
-began in `Paperless.Spreadsheets` because a cell is what wanted it, and a chart's axis composed in
+began in `XRay.Office.Spreadsheets` because a cell is what wanted it, and a chart's axis composed in
 `Core/Charts` then could not reach it; every tick was written in its shortest round-trip form, which
 is right for a whole-number scale and wrong for every currency, percentage and date axis. The move
 was safe because the engine is pure computation over a string: its five files import
@@ -587,7 +587,7 @@ and must not pay for fonts, layout or a rasteriser — it costs a small fraction
 rendering.
 
 **So making something *draw* does not make it *extract*, and the two want different answers.**
-Round 66 taught a DOCX to draw a SmartArt diagram and round 67 found `paperless extract` still
+Round 66 taught a DOCX to draw a SmartArt diagram and round 67 found `xray-office extract` still
 blind to the same five nodes: the drawing path reads the baked `dsp:spTree` through a theme and
 a frame extent, and extraction may pay for none of that. It also wants the *data model* instead —
 the baked tree is what the author sees, so it repeats a node's text wherever the layout drew it,
@@ -631,7 +631,7 @@ and not the tree**. The discriminator is in the data — a banked `parity.tsv` s
 carries a ninth column, `glyphs`, as `ours/ref`.
 
 ```bash
-export PAPERLESS_CLI=<the tree you mean to measure>/dotnet/tools/…/Paperless.Cli
+export XRAY_OFFICE_CLI=<the tree you mean to measure>/dotnet/tools/…/XRay.Office.Cli
 python3 .claude/skills/render-comparison/scripts/look.py "<doc>__pptx" --worst   # two PNGs
 .claude/skills/page-vision/scripts/pair.sh "<doc>__pptx" --worst --outdir /abs/pairs  # one labelled image
 ```
@@ -746,15 +746,15 @@ The three highest-risk areas, in order:
    meaningless. Line height derivation from hhea vs OS/2 metrics has specific precedence
    rules — see `research/06-rendering.md` section B.
 
-   **`Paperless.Text` now ships those faces itself, as a floor rather than an override.**
+   **`XRay.Office.Text` now ships those faces itself, as a floor rather than an override.**
    28 files under `Fonts/Bundled/`, copied to a `fonts` folder beside the assembly and
    searched **last**, so an installed face always wins and a machine missing one renders
    correctly instead of substituting silently. `BundledFonts` is the switch:
-   `PAPERLESS_BUNDLED_FONTS=0` turns them off, `=prefer` puts them first.
+   `XRAY_OFFICE_BUNDLED_FONTS=0` turns them off, `=prefer` puts them first.
 
    **The default direction is measured, not chosen, and the obvious choice is the wrong
    one.** Against LibreOffice 26.2.4.2 from the TDF tarball — the build these very files
-   came from — `Paperless.Fidelity.Tests` over 552 comparisons:
+   came from — `XRay.Office.Fidelity.Tests` over 552 comparisons:
 
    | | failed |
    |---|---:|
@@ -794,8 +794,8 @@ The three highest-risk areas, in order:
 
 ```bash
 cd dotnet
-dotnet build Paperless.slnx          # must stay warning-free
-dotnet test  Paperless.slnx          # ~1100 tests, a few minutes
+dotnet build XRay.Office.slnx          # must stay warning-free
+dotnet test  XRay.Office.slnx          # ~1100 tests, a few minutes
 ```
 
 **Do not add `-r`/`--runtime`.** The SDK rejects it on a solution outright —
@@ -815,13 +815,13 @@ difference between fitting in a container's disk allowance and exhausting it.
 ### Running less than everything
 
 A full run rebuilds nothing if the tree is already built, so the cost is the tests themselves —
-and **essentially all of it is `Paperless.Fidelity.Tests`**, which shells out to `soffice` once
+and **essentially all of it is `XRay.Office.Fidelity.Tests`**, which shells out to `soffice` once
 per document. It is also the *only* project that does: the other seven reach LibreOffice not at
 all, so they need none of the setup below and finish in seconds.
 
 | Project | Needs `soffice` | Rough cost |
 |---|---|---|
-| `Paperless.Fidelity.Tests` | yes, 23 files | minutes |
+| `XRay.Office.Fidelity.Tests` | yes, 23 files | minutes |
 | everything else | no | seconds |
 
 Those are wall-clock figures on an already-built tree; most of each is the SDK's up-to-date
@@ -831,9 +831,9 @@ check rather than the tests, which is why naming one project is worth doing but 
 So when iterating, name the project — and reach for the filter only inside the slow one:
 
 ```bash
-dotnet test tests/Paperless.Text.Tests/Paperless.Text.Tests.csproj                # ~10 s
-dotnet test tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj   # ~15 s
-dotnet test tests/Paperless.Fidelity.Tests/Paperless.Fidelity.Tests.csproj \
+dotnet test tests/XRay.Office.Text.Tests/XRay.Office.Text.Tests.csproj                # ~10 s
+dotnet test tests/XRay.Office.WordProcessing.Tests/XRay.Office.WordProcessing.Tests.csproj   # ~15 s
+dotnet test tests/XRay.Office.Fidelity.Tests/XRay.Office.Fidelity.Tests.csproj \
     --filter "FullyQualifiedName~TableComparisonTests"                            # ~45 s
 ```
 
@@ -844,7 +844,7 @@ no reason to think you had touched.
 ### Under load a test run can also report failures that are not there
 
 The truncation above is one half of it. The other half was seen twice on 2026-08-14, in
-`Paperless.Vector.Tests`, on a binary nothing had touched: one run reported **1 failed of 295**
+`XRay.Office.Vector.Tests`, on a binary nothing had touched: one run reported **1 failed of 295**
 and nine subsequent runs reported 0; another agent, hours later, saw **16 failed of 295**
 followed by four clean runs. Neither captured a failing name.
 
@@ -896,7 +896,7 @@ has a second writer in it.* Restart into a **fresh** directory rather than reusi
 
 ### A sweep and a rebuild must never overlap
 
-`batch-check.sh` reads `PAPERLESS_CLI` per document, so a rebuild that lands mid-sweep swaps
+`batch-check.sh` reads `XRAY_OFFICE_CLI` per document, so a rebuild that lands mid-sweep swaps
 the binary under it and the run silently mixes two trees. The output looks entirely normal —
 there is no error, no warning, and the totals are plausible.
 
@@ -921,12 +921,12 @@ This is worse than a failure, because it looks like a pass. Two habits make it s
 
 - Compare the passed count against the previous known-good count for that project. A drop with
   zero failures is a truncated run, not a fixed test.
-- `dotnet test Paperless.slnx` is the most likely to truncate and the least likely to say so —
+- `dotnet test XRay.Office.slnx` is the most likely to truncate and the least likely to say so —
   it has also been OOM-killed outright. Run the projects individually and total them yourself.
 
 ### Before trusting a green run
 
-`Paperless.Fidelity.Tests` needs an installed LibreOffice and **skips with a reason when it is
+`XRay.Office.Fidelity.Tests` needs an installed LibreOffice and **skips with a reason when it is
 missing**, so a bare `dotnet test` on a fresh container reports a green run while that project
 covers nothing at all. A fresh container has none of what it needs. Install it, then confirm
 with `check-env.sh` below:
@@ -952,7 +952,7 @@ Comparing against LibreOffice — use the skills, they encode hard-won details:
 | `render-comparison` | Comparing renderings and diagnosing *why* they differ |
 | `page-vision` | Actually looking at a page — resolution, cropping, and getting it read by someone uncontaminated |
 | `extraction-comparison` | Comparing extracted text; also the right first step for a visual bug |
-| `paperless-corpus` | Building and curating test documents |
+| `office-corpus` | Building and curating test documents |
 
 **`render-comparison/SKILL.md` opens with a router — which tool answers which question — and
 four rules that each cost a round.** Read it before writing any comparison of your own.
@@ -1432,7 +1432,7 @@ table and cannot come from the content tree, which hoists an annotation into a s
 And **the author line is inside the text rather than in `dc:creator`**: every annotation in both
 witnesses says `<dc:creator>Unknown Author</dc:creator>` and 26.2.4.2 prints none of them, while
 the page opens each note with the name the note's own first paragraph carries. Reach 2 of the 307
-and both were failing; both are page-exact after it. *`Paperless.Spreadsheets/TODO.md`'s "the
+and both were failing; both are page-exact after it. *`XRay.Office.Spreadsheets/TODO.md`'s "the
 flat-ODS export drops cell annotations entirely" is refuted — 12 of 12 and 8 of 8 survive
 `--convert-to fods`, and the wrong figure is `grep -c` on a one-line `content.xml`. Count
 occurrences, not lines.*
@@ -1469,7 +1469,7 @@ text made its row a line per paragraph, spilled its longest line across the neig
 cell holding nothing else count as content — `SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.ods`
 was **11 pages against 4** and drew 1244 of the reference's 2779 characters. **Closed**:
 `ContentTableCell.GetOwnText()` skips a `SectionKind.Frame` child and every cell question in
-`Paperless.Spreadsheets` asks it, while `GetText()` is unchanged so extraction still finds the words
+`XRay.Office.Spreadsheets` asks it, while `GetText()` is unchanged so extraction still finds the words
 under that cell.
 
 **Which meant the shape had to be drawn, and the sheet reader read only `draw:frame`.** Censused
@@ -1723,7 +1723,7 @@ rots from the front.
 rendering a track twice and diffing, and a document that prints the date — a spreadsheet header
 holding `&D` or `&T` — draws different ink on a different day. Measured on the sheets track:
 rendering all 171 twice in succession is byte-identical once `/CreationDate` is masked, and
-rendering them a day apart moves **17 of 171**. `paperless render` honours the
+rendering them a day apart moves **17 of 171**. `xray-office render` honours the
 reproducible-builds convention (seconds since the Unix epoch, read as UTC) in both the PDF's
 `/CreationDate` and the header fields, so with it set two runs are byte-equal with nothing masked
 at all. Leave it unset for ordinary rendering; a printout's date is meant to be today's.
@@ -1803,7 +1803,7 @@ which of the two it is:
 ```sh
 REF_SOFFICE=/opt/libreoffice26.2/program/soffice \
   .claude/skills/corpus-batches/scripts/batch-check.sh <root> '*' <outdir> 3
-# measuring .../Paperless.Cli
+# measuring .../XRay.Office.Cli
 # reference /opt/libreoffice26.2/program/soffice -- LibreOffice 26.2.4.2 0229ac93...
 ```
 
@@ -1841,14 +1841,14 @@ carried as *225 of 307, the worst track we have* on the strength of r80, and mea
 307** at the same commit, with the residual 38 rows rather than 82.
 
 **Before you rebuild, check the sweep is finished — and check it with a file, not a clock.** The
-gate measures `dotnet/tools/Paperless.Cli/…/Paperless.Cli` in the tree it runs from, so a rebuild
+gate measures `dotnet/tools/XRay.Office.Cli/…/XRay.Office.Cli` in the tree it runs from, so a rebuild
 mid-sweep swaps the binary and the rows either side describe different programs. On 2026-09-07 a
 merge was built in this tree at 22:37 against a sweep started at 21:16; it survived only because
 every render had already finished, which was luck. The two facts that settle it:
 
 ```sh
 ls -t <outdir>/ours/*.pdf | head -1 | xargs stat -c %y   # newest render
-stat -c %y dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+stat -c %y dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 ```
 
 If the newest render is older than the binary, every row predates the rebuild and the run is
@@ -1953,7 +1953,7 @@ in a face **36% narrower** than anything else here: every line that fits for it 
 else, and the page is not comparable line for line.
 
 Measured on `words/done-013/doc/omrIMInterpretiveGuideLine.doc`: the tarball embeds
-`LiberationSansNarrow` and `LiberationSansNarrow-Bold`, while **24.2.7.2 and Paperless both embed
+`LiberationSansNarrow` and `LiberationSansNarrow-Bold`, while **24.2.7.2 and XRay.Office both embed
 DejaVu Sans and DejaVu Sans-Bold** and agree with each other, line for line, to **0.1 pt on 30 of
 the 31 lines of page 1**. Against the tarball the same page disagrees everywhere from the title
 down. **49 of the corpus's documents name a Narrow family** — sheets 25, words 22, slides 2 — so
@@ -1969,7 +1969,7 @@ came back once already.
 remain in the directory. Confirmed on the witness: 26.2.4.2 renders
 `omrIMInterpretiveGuideLine.doc` in **DejaVu Sans and Liberation Sans**, with no narrow face
 anywhere — *Arial* still reaching Liberation Sans, which is right, and *Arial Narrow* now reaching
-DejaVu Sans, which is what the system and Paperless both answer. **Any 26.2 figure taken on one of
+DejaVu Sans, which is what the system and XRay.Office both answer. **Any 26.2 figure taken on one of
 the 49 Narrow-naming documents before this date is suspect** — but *only* those 49, and the blast
 radius is smaller than it sounds. Measured immediately afterwards on the `.odp` column of
 `probes/odf-gate-01/`: a freshly rendered reference reproduces the banked reference **302 of 302**
@@ -1980,7 +1980,7 @@ standing** rather than discarding it.
 The reason **not** to answer this by bundling a narrow face is rule 3's own test, *ship only the
 faces the distro packages ship*: Liberation Sans Narrow is not in `fonts-liberation2`, it is the
 separate `fonts-liberation-sans-narrow` package, and nothing in this project's stated environment
-installs it. `Paperless.Text/Fonts/Bundled/` holds 28 faces and no Narrow, the system holds none,
+installs it. `XRay.Office.Text/Fonts/Bundled/` holds 28 faces and no Narrow, the system holds none,
 and both answer DejaVu Sans for *Arial Narrow* — so **we agree with a stock machine and the tarball
 is the outlier.** Bundling one would be the same mistake as the first cut of the bundle, which
 shipped TDF's fuller DejaVu and made us draw a real italic where the reference synthesises a lean.
@@ -2047,7 +2047,7 @@ it is worth 268 → **52** run differences and 322.07 → **1.60 pt** worst orig
 not exist in 24.2.** Measured on three hand-built DOCX naming one uninstalled family, differing
 only in what `word/fontTable.xml` declares, with the Latin Noto aside:
 
-| `w:family` | 24.2.7.2 | 26.2.4.2 | Paperless |
+| `w:family` | 24.2.7.2 | 26.2.4.2 | XRay.Office |
 |---|---|---|---|
 | *(no font table)* | DejaVu Sans | **DejaVu Serif** | DejaVu Serif |
 | `roman` | DejaVu Sans | **DejaVu Serif** | DejaVu Serif |
@@ -2343,7 +2343,7 @@ re-check `fc-match` afterwards rather than trusting the installer's exit code.
 **`grep -r` and `find` over this repository return exactly double. Use `git grep`.**
 The case-insensitive mount has produced alias directory entries *inside the checkout* as well as
 in the corpus: every project under `dotnet/src` now has a lower-case twin —
-`dotnet/src/paperless.core` beside `dotnet/src/Paperless.Core`, same inode
+`dotnet/src/xray.office.core` beside `dotnet/src/XRay.Office.Core`, same inode
 (`4785074604717685`), link count 1. `git ls-tree` lists only the canonical spelling and
 `git status` is clean, so nothing is wrong with the tree; but anything that walks the filesystem
 visits both names.
@@ -2360,7 +2360,7 @@ this project dispatches rounds on reach censuses. `git grep` and `git ls-files` 
 paths and cannot see an alias, so they are the correct instruments here; if you must walk the
 filesystem, fold case and deduplicate before counting.
 
-**Do not delete the aliases.** As in the corpus, `rm -rf dotnet/src/paperless.core` is a request to
+**Do not delete the aliases.** As in the corpus, `rm -rf dotnet/src/xray.office.core` is a request to
 unlink that inode, and the inode is the source tree.
 
 **`/tmp` is on the 20 GB overlay and this workflow fills it, which reads as an 11-verdict
@@ -2374,7 +2374,7 @@ Measured by the parent shortly afterwards, on a `/tmp` holding **119 512 entries
 | class | aged >2 h |
 |---|---:|
 | `MSBuildTemp*` | **114 122** |
-| `paperless-lo-*` (soffice profiles) | 759 |
+| `xray-office-lo-*` (soffice profiles) | 759 |
 | `clr-debug-pipe-*` | 350 |
 
 **`MSBuildTemp*` is the bulk and it is ours** — every `dotnet build` leaves one, and this session
@@ -2383,7 +2383,7 @@ and `/tmp` from 119 512 entries to 4 275, with a sweep running throughout and un
 
 ```sh
 find /tmp -maxdepth 1 -name 'MSBuildTemp*'    -mmin +120 -print0 | xargs -0 -r rm -rf
-find /tmp -maxdepth 1 -name 'paperless-lo-*'  -mmin +120 -print0 | xargs -0 -r rm -rf
+find /tmp -maxdepth 1 -name 'xray-office-lo-*'  -mmin +120 -print0 | xargs -0 -r rm -rf
 find /tmp -maxdepth 1 -name 'clr-debug-pipe-*' -mmin +120 -print0 | xargs -0 -r rm -rf
 ```
 
@@ -2412,7 +2412,7 @@ thing, and there is exactly one such document known.
 sweep.** The rule "a sweep and a rebuild must never overlap" has always been written as though the
 rebuild would be an explicit `dotnet build`. It need not be: the mutation harness builds on both
 legs by design, and a round that runs it while a cross-track sweep is in flight silently swaps
-`Paperless.Core.dll` mid-sweep.
+`XRay.Office.Core.dll` mid-sweep.
 
 **It announces itself as documents moving between two sweeps of the same unmodified tree** — round
 60 saw **31 words documents** differ that way, one by 19.82 of ink on a chartless questionnaire.
@@ -2444,7 +2444,7 @@ the gate do not have the same reproducibility properties**, and a stored verdict
 can go stale with nobody touching the code.
 
 **The mechanism given here was wrong and the correct one has no environment-variable fix.** This
-said `batch-check.sh` renders the reference with no `SOURCE_DATE_EPOCH` while `paperless render`
+said `batch-check.sh` renders the reference with no `SOURCE_DATE_EPOCH` while `xray-office render`
 honours it — but the script sets the variable on **neither** side, so a `&D`/`&T` header prints
 today in both renderings and cancels. What actually diverges is **`TODAY()` in a cell**: the
 reference recalculates the formula on open and we print the value cached in the file. Six documents
@@ -2648,7 +2648,7 @@ LibreOffice's export writes a Writer text frame's content verbatim, so a boxed t
 `{\shptxt\trowd…\cellx…\intbl…\row}`: **20 such groups in 11 of the 338 `.rtf`**, and
 `043_Visual_Product_Roadmap` drew 6 of the reference's 184 words.
 
-**The instrument that found all five is the previous round's**, `paperless extract` against our
+**The instrument that found all five is the previous round's**, `xray-office extract` against our
 own rendering: every one of these documents reported the reference's character count *exactly*
 while drawing a fraction of it, because extraction walks the content tree and the drawing path is
 where the loss is. Use it before looking at a pixel.
@@ -3500,8 +3500,8 @@ and the reference's own clipped last line.
 **Reach: 9 of the 302 slides documents move and 293 are byte-identical, and all nine improve** —
 summed `diff%` over them 1148.05 → **1121.17**, MAJOR pages 14 → 14. One worst page rises,
 `5b_upasana_dasgupta` 9.98 → 10.27, while that document's sum falls by 3.04. The slides track is the
-whole reach by construction: `SlideTextLayout` has no consumer outside `Paperless.Presentations`, and
-the two mentions of it from `Paperless.Text` and `Paperless.WordProcessing` are doc comments. **No
+whole reach by construction: `SlideTextLayout` has no consumer outside `XRay.Office.Presentations`, and
+the two mentions of it from `XRay.Office.Text` and `XRay.Office.WordProcessing` are doc comments. **No
 gate column can see any of it** — a changed wrap keeps the same characters and a slide's page count
 is its slide count.
 
@@ -3950,7 +3950,7 @@ It installs beside the distro's under `/opt/libreoffice<major>.<minor>` and leav
 stored figure in this repository was measured against whichever one was live.
 
 **And now the part that matters: a TDF tarball 26.2.4.2 is NOT the distro-packaged 26.2.4.2 this
-tree is calibrated against.** Measured 2026-09-03, `Paperless.Fidelity.Tests`, same commit, same
+tree is calibrated against.** Measured 2026-09-03, `XRay.Office.Fidelity.Tests`, same commit, same
 corpus, only the reference binary swapped:
 
 | reference | failed of 552 |
@@ -3972,7 +3972,7 @@ comparison.
 families.** `/opt/libreoffice26.2/share/fonts/truetype` ships 136 faces, among them Carlito,
 Caladea, Liberation and DejaVu — *different builds* from the system's: Caladea-Regular is 58 964
 bytes bundled against 81 600 installed, Carlito-Regular 635 996 against 628 032, and all differ by
-md5. LibreOffice reads its own; Paperless reads the system's through its own OpenType reader; so
+md5. LibreOffice reads its own; XRay.Office reads the system's through its own OpenType reader; so
 the two stacks measure different files and every advance width diverges. Moving the 45 duplicates
 aside takes 36 failures to 31, which confirms the mechanism and also shows it is **not the whole
 story** — the remaining gap is the tarball's other bundled libraries (its own HarfBuzz, ICU and

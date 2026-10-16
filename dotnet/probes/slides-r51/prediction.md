@@ -68,7 +68,7 @@ Total baseline `abs_ink` over the eleven: **82.11**.
 `system_design__technical_architecture_template`, `090`, `091`, `095`, `096`, `098`, `100`
 (Business_Case_Template family); `094` and `100` (Volunteer_Sign_Up_Sheet family).
 
-**This is a shared-layer change.** The parse lands in **`Paperless.Ooxml`**, which reaches all
+**This is a shared-layer change.** The parse lands in **`XRay.Office.Ooxml`**, which reaches all
 three tracks, and the wiring lands in the slides, words and sheets readers. The nine non-slides
 documents above are the census's answer to what the other two tracks owe a measurement on.
 

@@ -1,4 +1,4 @@
-# Paperless — master plan
+# XRay.Office — master plan
 
 Status: **Phases 0-2 complete; Phase 2.5 complete; Phase 3 well advanced.** Every format in
 scope for extraction reads — `odt ott fodt docx docm dotx dotm doc dot rtf`,
@@ -51,25 +51,25 @@ What remains in the layout half is table auto-layout for a table whose columns s
 note-numbering restart *application* pass, RTL text in the layouter — newly unblocked, since bidi
 levels are resolved and carried but nothing consumes them — and the tail of the frame work: contour
 wrap, two stretches of text on one line (what a `parallel` wrap round a frame touching neither margin
-needs), and frames in cells and headers. Read `src/Paperless.WordProcessing/TODO.md`, whose open items
+needs), and frames in cells and headers. Read `src/XRay.Office.WordProcessing/TODO.md`, whose open items
 each say what is missing and why.
 **The formats that do not read at all** are `xlsx`, `pptx`, `xls`, `ppt` and CSV. The
-spreadsheet pair is the larger prize, since `ods` already extracts and `Paperless.Spreadsheets`
+spreadsheet pair is the larger prize, since `ods` already extracts and `XRay.Office.Spreadsheets`
 has the model. Two pieces of shared infrastructure are worth building deliberately rather than
 per format, because each buys three formats at once: **DrawingML text bodies** in
-`Paperless.Ooxml`, shared by DOCX, XLSX and PPTX, and **Escher/MS-ODRAW** in
-`Paperless.MsBinary`, which DOC, XLS and PPT all delegate their drawings to — the DOC reader has
+`XRay.Office.Ooxml`, shared by DOCX, XLSX and PPTX, and **Escher/MS-ODRAW** in
+`XRay.Office.MsBinary`, which DOC, XLS and PPT all delegate their drawings to — the DOC reader has
 an open item waiting on exactly that.
 
 A third piece of that shared infrastructure is now **built**: **DrawingML theme-colour
-resolution**, in `Paperless.Ooxml/DrawingML`. It was written for DOCX's `w:themeColor`, but the
+resolution**, in `XRay.Office.Ooxml/DrawingML`. It was written for DOCX's `w:themeColor`, but the
 chain is DrawingML's, so it is also what XLSX's `theme=` index on a `fgColor` and PPTX's
 `a:schemeClr` need — neither has to grow its own, and neither should. What is left for each is
 only its own spelling of a reference: XLSX addresses a slot by number and applies its `tint`
 attribute as a signed fraction, which `Color::addExcelTintTransformation` turns into a `lumMod`
 and a `lumOff`; PPTX has to find its `a:clrMap` on the slide master and the overrides on the
 layout. The chain itself is verified against LibreOffice's rendering to the byte — read
-`src/Paperless.Ooxml/TODO.md` first for the two facts about it that a reimplementation would get
+`src/XRay.Office.Ooxml/TODO.md` first for the two facts about it that a reimplementation would get
 wrong, since both are invisible in the output until the colours are compared numerically.
 
 Three decisions from the ODF and DOCX work should carry over rather than be rediscovered:
@@ -80,7 +80,7 @@ Three decisions from the ODF and DOCX work should carry over rather than be redi
   value, which is the concrete payoff for not collapsing the three cases.
 - **One content walker per family group, not per format.** `OdfContentReader` serves all three
   ODF families because the text content model is shared; DrawingML text bodies are similarly
-  shared across DOCX, XLSX and PPTX, so `Paperless.Ooxml` is where that belongs.
+  shared across DOCX, XLSX and PPTX, so `XRay.Office.Ooxml` is where that belongs.
 - **Normalise the input once, at load.** Strict-versus-transitional namespaces and
   `mc:AlternateContent` are both handled in `OoxmlXml.Normalise` rather than at every point that
   walks the tree. The bug that prevents — a text box extracted twice — is invisible until a
@@ -99,12 +99,12 @@ binary.
 | Done | |
 |---|---|
 | ✅ | Solution: 12 libraries + CLI + 9 test projects, warning-free on .NET 10, 852 tests passing |
-| ✅ | `Paperless.Core` API surface: units, geometry, colour, document model, drawing IR |
+| ✅ | `XRay.Office.Core` API surface: units, geometry, colour, document model, drawing IR |
 | ✅ | `FormatCatalogue`: all 43 formats described |
 | ✅ | Content-based format identification, verified on all 17 corpus formats |
 | ✅ | OLE2/CFB reader, hand-rolled, tolerant of real-world damage |
 | ✅ | ZIP / OPC / ODF package readers, with zip-bomb, traversal and XXE guards |
-| ✅ | `paperless identify`, text and JSON |
+| ✅ | `xray-office identify`, text and JSON |
 | ✅ | 17-format test corpus committed, so unit tests need no LibreOffice install |
 | ✅ | Six research documents (~6000 lines) covering the LibreOffice implementation |
 | ✅ | Four comparison skills with verified working scripts |
@@ -112,8 +112,8 @@ binary.
 | ✅ | ODF extraction: `odt ods odp ott ots otp fodt fods fodp`, with style resolution, metadata, text, lists, tables, notes, comments, frames and shape text |
 | ✅ | DOCX extraction: `docx docm dotx dotm`, with the §17.7.3 toggle rule, numbering, fields, tracked changes, tables with vertical merges, notes, comments, headers/footers and text boxes |
 | ✅ | RTF extraction: byte-level tokeniser, destination skipping, `\ansicpg`/`\fcharset`/`\uN` encoding, flows, fields, and tables whose merges carry no flag |
-| ✅ | Legacy code pages (`Paperless.Text.Encodings.LegacyCodePages`), shared by RTF and the legacy binary readers to come |
-| ✅ | `paperless extract` and `paperless metadata`, text and JSON |
+| ✅ | Legacy code pages (`XRay.Office.Text.Encodings.LegacyCodePages`), shared by RTF and the legacy binary readers to come |
+| ✅ | `xray-office extract` and `xray-office metadata`, text and JSON |
 | ✅ | `LibreOfficeRunner` and an automated extraction comparison against LibreOffice, skipping cleanly when it is not installed |
 
 | ✅ | DOC (WW8) extraction: the piece table, FKP formatting indexes, the eight subdocuments, list labels computed from `LSTF`/`LVL`/`LFO`, tables with the merges LibreOffice writes with no flag |
@@ -123,9 +123,9 @@ binary.
 | ✅ | Table cell borders and shading in all four formats, compared stroke for stroke and fill for fill — including the two rules that separate a Word table from a Writer one: the table's origin against its left border, and Word's own grid-line joins |
 | ✅ | Note numbering: the sequence, the start value and the *restart rule* read from all four formats. Applying a restart is pagination's half and is still open |
 | ✅ | Tracked changes, bookmarks and fields recorded in the model with their author, timestamp and range, from all four formats — extraction still resolves changes rather than showing marks, which is what LibreOffice's *renderer* does and is now measured rather than assumed |
-| ✅ | Bidi (UAX #9), script itemisation (UAX #24) and mid-run font fallback in `Paperless.Text`, differentially tested against ICU — the library LibreOffice itself resolves bidi with — and against LibreOffice's own PDF portion boundaries |
+| ✅ | Bidi (UAX #9), script itemisation (UAX #24) and mid-run font fallback in `XRay.Office.Text`, differentially tested against ICU — the library LibreOffice itself resolves bidi with — and against LibreOffice's own PDF portion boundaries |
 | ✅ | **PDF output**: a hand-rolled writer with `hb-subset` font embedding, real searchable text and a `ToUnicode` built from the cluster map — compared against LibreOffice's own PDF *operator for operator*, per line, over ten documents in four formats |
-| ✅ | **Raster output**: PNG and JPEG at a chosen DPI over SkiaSharp, deterministic, and `paperless render` with a format, a page range and a DPI |
+| ✅ | **Raster output**: PNG and JPEG at a chosen DPI over SkiaSharp, deterministic, and `xray-office render` with a format, a page range and a DPI |
 | ✅ | **Gradients, tiled bitmap fills and raster image decode**, in both backends: axial and radial shadings with stitched ramps and luminosity soft masks in PDF, the matching Skia shaders, one shared band decomposition for the two kinds neither can state, and a Skia-backed decoder feeding the display list's `RasterImage` |
 
 | Not started | |
@@ -157,23 +157,23 @@ Rendering on top of a shaky reader wastes effort twice.
 
 Nothing else can be verified until these work.
 
-- [x] **Format identification** (`Paperless.Core`, `Paperless.Containers`). Done:
+- [x] **Format identification** (`XRay.Office.Core`, `XRay.Office.Containers`). Done:
       `FormatCatalogue` covers all 43 formats; `FormatIdentifier` detects by content via
       ODF `mimetype`, OOXML main-part content type (resolved through `_rels/.rels`), OLE2
       root stream names, and text/XML signatures. Verified against all 17 corpus formats,
       including with deliberately wrong extensions and with no file name at all.
-- [x] **OLE2 / CFB reader** (`Paperless.Containers`). Done, hand-rolled: header, DIFAT/FAT
+- [x] **OLE2 / CFB reader** (`XRay.Office.Containers`). Done, hand-rolled: header, DIFAT/FAT
       chains, mini-FAT and mini-stream, directory walk with cycle guard. Tolerates truncated
       files, out-of-range sectors, cyclic chains and duplicate entries, reporting each as a
       `Diagnostic`. `OpenMcdf` proved unnecessary and its package reference has been
       removed.
-- [x] **ZIP + OPC + ODF packages** (`Paperless.Containers`). Done: `ZipPackageBase` over
+- [x] **ZIP + OPC + ODF packages** (`XRay.Office.Containers`). Done: `ZipPackageBase` over
       `System.IO.Compression` with part-name normalisation and zip-bomb/traversal guards;
       `OpcPackage` resolves content types and relationships and finds the main part by
       following the officeDocument relationship; `OdfPackage` reads `mimetype`, cross-checks
       the manifest and detects per-entry encryption. XML is parsed with DTD processing
       prohibited throughout (XXE).
-- [x] **`paperless identify`** end to end. Done: text and `--json` output, correct on all 17
+- [x] **`xray-office identify`** end to end. Done: text and `--json` output, correct on all 17
       corpus formats, with sysexits-style exit codes.
 - [x] **Corpus and fidelity harness wiring**. Done: `tests/corpus/minimal/` and
       `tests/corpus/features/` are committed; `LibreOfficeRunner` drives headless `soffice`
@@ -190,13 +190,13 @@ Per format: metadata, then text, then tables/structure.
       the three-container style resolution with set-here/inherited/defaulted kept apart,
       `meta.xml`, the shared text walk, and tables shared between Writer tables and Calc
       sheets. The minimal corpus matches LibreOffice's text filter exactly; the features
-      corpus accounts for every difference (see `src/Paperless.OpenDocument/TODO.md`).
+      corpus accounts for every difference (see `src/XRay.Office.OpenDocument/TODO.md`).
       Remaining ODF gaps are tracked there — tracked changes, number-format application,
       embedded objects, and the OpenOffice.org 1.x namespaces.
-- [ ] OOXML (`docx xlsx pptx` + variants). Shared handling in `Paperless.Ooxml` first — done:
+- [ ] OOXML (`docx xlsx pptx` + variants). Shared handling in `XRay.Office.Ooxml` first — done:
       namespace normalisation, `mc:AlternateContent` resolution and `docProps` metadata.
       - [x] `docx docm dotx dotm`. The interesting part was ECMA-376 §17.7.3's toggle rule; see
-            `src/Paperless.WordProcessing/TODO.md`.
+            `src/XRay.Office.WordProcessing/TODO.md`.
       - [ ] `xlsx` and `pptx`.
 - [ ] Legacy binary (`doc xls ppt`). Hardest. Needs the record-stream reader, sprm/BIFF
       decoding, the WW8 piece table, and codepage handling.
@@ -204,7 +204,7 @@ Per format: metadata, then text, then tables/structure.
       LibreOffice writes a horizontally merged table cell with no merge flag at all — the span
       comes from the column grid.
 - [ ] CSV.
-- [x] `xlsb` — BIFF12 records inside an OPC package, in `src/Paperless.Spreadsheets/Xlsb/`.
+- [x] `xlsb` — BIFF12 records inside an OPC package, in `src/XRay.Office.Spreadsheets/Xlsb/`.
       Import only, because LibreOffice cannot write it, so there is no corpus fixture and never
       will be: the evidence is the ten files in `sc/qa/unit/data/xlsb/`, **eight of which now
       match LibreOffice exactly** on page count and `pdftotext` words, plus 17 unit tests that
@@ -216,7 +216,7 @@ Per format: metadata, then text, then tables/structure.
       `XlsxDrawings` and `XlsxCharts` serve both paths unchanged.
 - [ ] Encrypted documents, one scheme at a time
       (`research/05-infrastructure.md` section C).
-- [x] `paperless extract` and `paperless metadata`, in text and JSON. The output layout is
+- [x] `xray-office extract` and `xray-office metadata`, in text and JSON. The output layout is
       part of the `extraction-comparison` skill's contract: `--outdir DIR` writes
       `<stem>.txt` per input.
 
@@ -228,7 +228,7 @@ allowing for the reference filters' known omissions (headers, comments, notes, s
 
 The part that decides whether rendering can ever match.
 
-- [x] **Font resolution and metrics** (`Paperless.Text`). Hand-rolled OpenType table
+- [x] **Font resolution and metrics** (`XRay.Office.Text`). Hand-rolled OpenType table
       reader — we need raw `hhea`/`OS/2` access and our own precedence rules, per
       `research/06-rendering.md` section B, not a library's opinion of them.
       Reproduce LibreOffice's substitution order. **Report substitutions**: a silent one
@@ -251,14 +251,14 @@ The part that decides whether rendering can ever match.
       itself resolves bidi and script with — so agreeing with it is agreeing with Writer, and it
       supplies the conformance oracle `unicode.org` cannot. 7,944 generated cases agree with ICU,
       and the sub-run boundaries agree with LibreOffice's own PDF portions. Detail, and the two
-      places ICU departs from the letter of UAX #9, in `src/Paperless.Text/TODO.md`.
+      places ICU departs from the letter of UAX #9, in `src/XRay.Office.Text/TODO.md`.
 - [ ] Drawing right-to-left text. The levels and the visual order are computed and carried on
       `MeasuredParagraph`; nothing in the layouter consumes them yet, so a mixed-direction
       paragraph measures correctly and draws its runs in logical order.
 - [ ] Vertical text.
 - [x] Paragraph layout: alignment, justification, tabs, indents, spacing, line spacing.
 
-**Exit criterion — met for word processing.** For a text-heavy document Paperless breaks lines
+**Exit criterion — met for word processing.** For a text-heavy document XRay.Office breaks lines
 where LibreOffice breaks them, in all four formats, which is what made every page-level
 comparison after it meaningful. It was worth as much as expected: nearly every bug found since
 was found because a page comparison put a word a measurable distance from where it belonged.
@@ -268,7 +268,7 @@ was found because a page comparison put a word a measurable distance from where 
 The step between "what does this document say" and "what does it look like", and it is deliberately
 placed here rather than under rendering: **it needs the content tree and nothing else.** No fonts, no
 line breaking, no rasteriser, no page geometry. Everything it emits — headings, lists with their
-levels, tables, emphasis, links, notes — is already in the tree that `paperless extract` walks, and
+levels, tables, emphasis, links, notes — is already in the tree that `xray-office extract` walks, and
 plain text is simply the projection that throws all of it away.
 
 It is also what most callers actually want. A retrieval or summarisation pipeline fed flat text has
@@ -282,16 +282,16 @@ in it at all, so the escaping — the part that silently corrupts output — is 
 result back. It also put the lossy step last: row and column spans and nested tables are still present
 and correct in the XHTML, and only the final hop has to decide what to drop.
 
-Both live in **`src/Paperless.Markup`**, a library beside `Paperless.Core` depending on nothing but it.
+Both live in **`src/XRay.Office.Markup`**, a library beside `XRay.Office.Core` depending on nothing but it.
 Not inside Core, which holds the abstractions everything agrees on rather than projections of them; and
 not in one of the three family libraries, because it serves all three and the layering forbids the
 sideways dependency that would need.
 
 - [x] Stage one: a **semantic** XHTML writer serving all three families through the one tree.
-      LibreOffice's own export was used as an oracle and never as a target — Paperless emits `h1`–`h6`,
+      LibreOffice's own export was used as an oracle and never as a target — XRay.Office emits `h1`–`h6`,
       `ul`/`ol`/`li`, `table`/`thead`/`tr`/`th`/`td` with `colspan`/`rowspan`, `em`/`strong`/`s`/`u`/
       `sup`/`sub`/`code`, `a[href]`, `blockquote`, `img`, and `section`/`aside`/`header`/`footer` for
-      the flows only Paperless extracts. Paperless-specific meaning rides on `class` and `data-`
+      the flows only XRay.Office extracts. XRay.Office-specific meaning rides on `class` and `data-`
       attributes rather than on invented elements, so the result stays ordinary XHTML.
 - [x] Stage two: **XHTML → Markdown**, a pure transformation. `MarkdownWriter.FromXhtml` takes no
       `MarkupOptions` at all, deliberately: every option is consumed while walking the content tree, so
@@ -318,13 +318,13 @@ sideways dependency that would need.
       bytes (`word/media/image1.png`), which is a real reference that resolves against the original
       file; an empty `src` means "this page" in HTML, which is worse than saying nothing. Revisit when
       raster decode lands and there is something to point at.
-- [x] `paperless extract --format text|json|xhtml|markdown`. `--json` stays as a shorthand and
+- [x] `xray-office extract --format text|json|xhtml|markdown`. `--json` stays as a shorthand and
       `<stem>.txt` is unchanged, because the `extraction-comparison` skill's scripts name that file.
 
 **How it was verified, and what the reference turned out to be worth.** The premise held: LibreOffice
 has no Markdown export filter but does export XHTML for all three families, and being well-formed XML
 it is parsed rather than scraped. **Measured across eleven word-processing documents — ODT, FODT,
-DOCX, DOC and RTF — Paperless and LibreOffice agree exactly on every heading's level, every list
+DOCX, DOC and RTF — XRay.Office and LibreOffice agree exactly on every heading's level, every list
 item's nesting depth, every table cell's row, column, `colspan` and `rowspan`, and every external
 hyperlink target.**
 
@@ -343,8 +343,8 @@ Two corrections to the note this phase used to carry, both from measuring rather
   asserting a parity that is not there to be had.
 
 Escaping and the span decision were checked against the tree and a parser instead, as planned:
-`Paperless.Markup.Tests` emits, parses back with **Markdig** (BSD-2-Clause, test-only, on the test
-project alone — `Paperless.Markup` writes Markdown and never reads it) and asserts on the syntax tree.
+`XRay.Office.Markup.Tests` emits, parses back with **Markdig** (BSD-2-Clause, test-only, on the test
+project alone — `XRay.Office.Markup` writes Markdown and never reads it) and asserts on the syntax tree.
 Sixteen corpus documents are put through both stages and checked word for word, in order, against the
 content tree they came from, with the writers' deliberate additions enumerated from the tree rather
 than hard-coded.
@@ -369,8 +369,8 @@ land: fill in an image's `src` once raster decode gives it a target, and add `sh
 `sheet-csv.csv` to the round-trip corpus once those readers exist — they are deliberately absent rather
 than skipped, because a skip would go on reporting itself long after it stopped being true.
 
-**Non-goal: reading Markdown.** Paperless reads office formats; Markdown is an output projection, and
-adding it as an input format would be scope Paperless has said no to.
+**Non-goal: reading Markdown.** XRay.Office reads office formats; Markdown is an output projection, and
+adding it as an input format would be scope XRay.Office has said no to.
 
 ## Phase 3 — Rendering
 
@@ -397,18 +397,18 @@ adding it as an input format would be scope Paperless has said no to.
       widths, and RTL text in the layouter — bidi levels are resolved and carried, and nothing consumes
       them yet, so a mixed-direction paragraph measures correctly and still draws in logical order.
 - [ ] **Two layout findings the PDF comparison turned up**, both invisible to a word-box comparison
-      and both waiting on `Paperless.WordProcessing`. A **16 pt heading's baseline sits 1.95 pt
+      and both waiting on `XRay.Office.WordProcessing`. A **16 pt heading's baseline sits 1.95 pt
       higher** than LibreOffice's in all four formats — the block is the same 57.650 pt tall on both
       sides and the baseline sits differently *within* a line taller than the body, so it does not
       cascade. And **`footnotes.rtf` draws its note separator 1.286 pt too high**, about 26 twips in
       the note area the RTF reader reserves, where the other four formats agree to a hundredth of a
-      point on the same document. Measurements in `src/Paperless.Rendering/TODO.md`.
+      point on the same document. Measurements in `src/XRay.Office.Rendering/TODO.md`.
 - [ ] Spreadsheet print layout — `ScPrintFunc`'s pagination is the routine to port
       faithfully. A spreadsheet has **no intrinsic pagination**: print settings *are* its
       page geometry.
 - [x] **Slide layout, for PPTX and ODP.** A deck is an `IPaginatedDocument`, a slide is an
       `IPage` of the deck's own size, and a shape is placed, filled, outlined and its text laid
-      out through the same `Paperless.Text` engine the word processor uses. Checked against
+      out through the same `XRay.Office.Text` engine the word processor uses. Checked against
       LibreOffice's own PDF for the same deck in both formats: sheet sizes page for page,
       rectangular fills position **and colour**, and every text run's pen, baseline, size and
       glyph count — placements to a twentieth of a point, text to a tenth.
@@ -425,14 +425,14 @@ adding it as an input format would be scope Paperless has said no to.
       found it — Writer never sets the flag.
 - [ ] The rest of slide rendering: pictures, tables, gradients and the other non-solid fills —
       **the backends now draw all three, so what is left is the reading**, and the two mappings
-      worth not rediscovering are recorded in `src/Paperless.Rendering/TODO.md`: ODF's
+      worth not rediscovering are recorded in `src/XRay.Office.Rendering/TODO.md`: ODF's
       `draw:start-color` on a radial gradient paints the *outer* edge, and a radial's outer
       radius is half the shape's **diagonal** rather than half its width —
       shadows and the other effects, bullet and number markers, the preset-geometry evaluator
       beyond the six shapes transcribed by hand, `p:style`'s style-matrix references, and the
       rung of the inheritance chain that gives an unstated run its size, typeface and colour.
       Each is written up with its citation and with what would settle it in
-      `src/Paperless.Presentations/TODO.md`. **PPT (binary) does not lay out at all**: its shape
+      `src/XRay.Office.Presentations/TODO.md`. **PPT (binary) does not lay out at all**: its shape
       tree reads, but a placeholder's rectangle comes from `SlideAtom`'s eight layout placeholder
       ids and nothing reads those yet.
 - [x] **Gradients and bitmap fills, in both backends.** A linear gradient is a PDF axial
@@ -456,12 +456,12 @@ adding it as an input format would be scope Paperless has said no to.
       150 dpi, per channel: our raster against its rendering, **0.0016**; our PDF against its
       PDF read by the same rasteriser, **0.0007**, and **0.0000** — identical, pixel for pixel —
       on the picture page.
-- [x] **Raster image decode (via Skia).** `RasterImageDecoder` in `Paperless.Rendering` turns
+- [x] **Raster image decode (via Skia).** `RasterImageDecoder` in `XRay.Office.Rendering` turns
       encoded bytes into the display list's `RasterImage`, sniffing PNG, JPEG, GIF, BMP, WebP and
       ICO **by content** so a mislabelled part still passes a JPEG through to `DCTDecode`. It is
-      public and lives beside the backends because `Paperless.Core` must stay dependency-free and
+      public and lives beside the backends because `XRay.Office.Core` must stay dependency-free and
       Skia already carries the codecs LibreOffice reaches for (`research/06-rendering.md` §D.1).
-      **A family library that wants it needs a `ProjectReference` on `Paperless.Rendering` that
+      **A family library that wants it needs a `ProjectReference` on `XRay.Office.Rendering` that
       none of them has yet** — one line each, and the reason `p:pic`, `w:drawing` and a sheet's
       logo are still unpainted.
 - [ ] Vector import: full WMF, EMF, EMF+ and SVG. The largest single body of work here and
@@ -479,7 +479,7 @@ adding it as an input format would be scope Paperless has said no to.
       the **two twips** LibreOffice's export adds — a deviation that was previously inferred and is
       now read straight off both content streams. Table borders match stroke for stroke and pen width
       for pen width; shades and note separators fill for fill; sheet sizes page for page.
-      Detail, and the four places our file deliberately differs, in `src/Paperless.Rendering/TODO.md`.
+      Detail, and the four places our file deliberately differs, in `src/XRay.Office.Rendering/TODO.md`.
 - [x] **Raster output — PNG and JPEG**, at a caller-chosen DPI, from the Skia backend. PNG is the one
       that matters: lossless and deterministic, so a page written twice is byte-identical and a golden
       image can be committed. JPEG is for thumbnails and a test pins why it must not be compared — a
@@ -488,17 +488,17 @@ adding it as an input format would be scope Paperless has said no to.
       gives an exact DPI; the direct `writer_png_Export` gives LibreOffice's own idea of a page image
       at its own scale (measured, 795 x 1124 for A4) and is the wrong reference when the comparison
       needs a known one. Two measurements came out of it and both are in
-      `src/Paperless.Rendering/TODO.md`: **the pixel size is the ceiling** of the page size, because
+      `src/XRay.Office.Rendering/TODO.md`: **the pixel size is the ceiling** of the page size, because
       poppler takes the ceiling and one pixel of disagreement stops the comparison dead; and **glyphs
       are drawn from their outlines**, because Skia's glyph cache places a mask at a whole pixel
       vertically and that alone moved a page's ink a quarter of a point and made the comparison script
       report a reflow cascade on a page whose layout was exact.
 - [ ] SVG writer.
-- [x] `paperless render` to PDF, PNG or JPEG, with `--format`, `--pages` and `--dpi`. Its output
+- [x] `xray-office render` to PDF, PNG or JPEG, with `--format`, `--pages` and `--dpi`. Its output
       layout is part of the `render-comparison` skill's contract: one input writes `page-1.png`,
       `page-2.png` … straight into `--outdir`, the same names `pdftoppm` gives the reference; several
       inputs each get a subdirectory named after the file, as `lo-convert.sh` does.
-      SVG output and `paperless convert` are still to come.
+      SVG output and `xray-office convert` are still to come.
 
 ## Phase 3.5 — Embedded graphics: metafiles, charts, SmartArt
 
@@ -513,7 +513,7 @@ measurement at the head of the Charts section. It may still hold for SmartArt an
 why the paragraph stands rather than being deleted; it does not hold for charts, which needed the
 layout engine after all.
 
-- [ ] **WMF, EMF, EMF+** — see `src/Paperless.Vector/TODO.md`, which holds the plan and orders it
+- [ ] **WMF, EMF, EMF+** — see `src/XRay.Office.Vector/TODO.md`, which holds the plan and orders it
       WMF first because it exercises the shared device-context groundwork on the simplest of the
       three. Port from `emfio/`; there is no C# prior art.
 - [ ] **SVG** is the exception and is being built first, because it reuses a vetted library and so
@@ -535,7 +535,7 @@ The ODF number is the correction that matters, because the reading agent's count
 and its conclusion from it was not. **Every one of those 82 streams begins with the six bytes
 `VCLMTF`** — StarView Metafile, LibreOffice's own `GDIMetaFile` serialisation, read by
 `vcl/source/filter/svm/SvmReader.cxx:113` and written by `SvmWriter.cxx:58`. It is neither WMF nor
-EMF. `Paperless.Vector` imports WMF and EMF, so replaying an ODF chart fallback needs a *third*
+EMF. `XRay.Office.Vector` imports WMF and EMF, so replaying an ODF chart fallback needs a *third*
 metafile reader — a whole new format, not a free ride on `emfio/`. The OOXML number confirms the
 reading agent's: the four hits are whole-document preview thumbnails, and not one of the 192
 carries a picture of a chart. So the shortcut is dead in both families and a layout engine was the
@@ -550,7 +550,7 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
 
 - [x] **Bars are drawn, in all three presentation forms, and measured against LibreOffice.**
       `ChartScale`, `ChartPlot`, `ChartLayout` and `DrawingChartPlot` in
-      `Paperless.Ooxml/DrawingML/`; `SlideChart` in `Paperless.Presentations/Layout/`;
+      `XRay.Office.Ooxml/DrawingML/`; `SlideChart` in `XRay.Office.Presentations/Layout/`;
       `OdfChartPlot`, `OdfChartStyles` and one layout half per family beside them. A chart becomes
       a run of ordinary `PlacedShape` — a fill per bar, a stroke per axis and tick, a glyph run per
       label — exactly as `SlideTable` does, so nothing in the display list knows a chart happened.
@@ -616,15 +616,15 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       matches from 12 to 15 of 38; the word count on some pie and line decks *fell* — `tdf146756_bestFit`
       from 40/41 to 4/41 — which is the improvement it looks least like, those having been bars drawn
       over a pie: the right words in the wrong picture.
-- [x] **The chart model and the layout engine live in `Paperless.Core.Charts` now, and that is what
+- [x] **The chart model and the layout engine live in `XRay.Office.Core.Charts` now, and that is what
       let a spreadsheet draw one.** `ChartPlot`, `ChartScale` and `ChartLayout` moved down out of
-      `Paperless.Ooxml`; only the geometry and the model moved, nothing that parses XML, so Core
-      still has zero external dependencies. `DrawingChartPlot` stays in `Paperless.Ooxml` because it
+      `XRay.Office.Ooxml`; only the geometry and the model moved, nothing that parses XML, so Core
+      still has zero external dependencies. `DrawingChartPlot` stays in `XRay.Office.Ooxml` because it
       reads `c:chartSpace`, and `OdfChartPlot`/`OdfChartStyles` came *down* from
-      `Paperless.Presentations` into `Paperless.OpenDocument`, where they belong: the reason they
-      were ever in a family library is that `ChartPlot` was in `Paperless.Ooxml` and
-      `Paperless.OpenDocument`, its sibling, could not name the type it had to return. One ODF
-      reader now serves ODP, ODS and ODT. `ChartScaleTests` moved to `Paperless.Core.Tests` with the
+      `XRay.Office.Presentations` into `XRay.Office.OpenDocument`, where they belong: the reason they
+      were ever in a family library is that `ChartPlot` was in `XRay.Office.Ooxml` and
+      `XRay.Office.OpenDocument`, its sibling, could not name the type it had to return. One ODF
+      reader now serves ODP, ODS and ODT. `ChartScaleTests` moved to `XRay.Office.Core.Tests` with the
       type it tests.
 - [x] **A chart in a spreadsheet is drawn, and all six corpus chart documents now match.**
       `chart-bar-sheet.{ods,fods,xlsx}` went from **14 words against 34, 34 and 29** to
@@ -734,10 +734,10 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       `percentage`, `value-and-percentage`) and the boolean `chart:data-label-text`, and states them
       on whichever style is nearest — usually the **plot area's**, not each series'.
 - [x] **Number formats on ticks and labels, and the layering settled by moving the engine down.**
-      `Paperless.Spreadsheets/Numbers/` is now `Paperless.Core/Numbers/`. The reasoning in the
+      `XRay.Office.Spreadsheets/Numbers/` is now `XRay.Office.Core/Numbers/`. The reasoning in the
       brief holds and was checked rather than assumed: all five files imported
       `System.Globalization` and `System.Text` and **nothing else**, and the only consumers were
-      inside `Paperless.Spreadsheets` itself, so the move costs Core nothing and its zero-dependency
+      inside `XRay.Office.Spreadsheets` itself, so the move costs Core nothing and its zero-dependency
       rule survives intact. `ChartDataLabel.Write` is the one method that needed it, and it is the
       whole of what a tick label is. **`General` is not a format code** and must not be parsed as
       one: `convertNumberFormat` asks the number formats supplier for its *standard index* instead
@@ -746,7 +746,7 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       `c:numCache/c:formatCode` — `VSeriesPlotter::getLabelTextForValue` asks the series through
       `detectNumberFormatKey`, not the axis — which is where `tdf105517.pptx`'s `220,000` gets its
       grouping. ODF reaches the same engine through
-      `Paperless.OpenDocument/Styles/OdfNumberFormat.cs`, which compiles a `number:*-style` element
+      `XRay.Office.OpenDocument/Styles/OdfNumberFormat.cs`, which compiles a `number:*-style` element
       tree into a format code exactly as `xmloff/source/style/xmlnumfi.cxx` does before handing it
       to `SvNumberFormatter`.
 - [x] **A secondary value axis, paired by axis id rather than by position.** Every plot group lists
@@ -778,7 +778,7 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       `c:majorGridlines` hangs off the axis model rather than its view.
 - [x] **Trendlines draw, with their equations, in both vocabularies.** `c:trendline` and ODF's
       `chart:regression-curve`/`chart:mean-value` become `ChartTrendline`; the seven fits are
-      `Paperless.Core/Charts/ChartRegression.cs`, a port of
+      `XRay.Office.Core/Charts/ChartRegression.cs`, a port of
       `chart2/source/tools/RegressionCurveCalculator.cxx` and its six subclasses rather than a
       rewrite. `tdf127720.pptx` went **16 words against 28 to 28/28**, its equation reading
       `f(x) = 0.0174728496577697 x + 0.607190956983639` against the reference's
@@ -803,7 +803,7 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       it looks exactly like a fit that is one ulp wrong, and half an hour went into checking that
       it is not.
 - [x] **Rotated and dropped axis labels, and two of the four escapes turned out to be dead.**
-      `Paperless.Core/Charts/ChartAxisLabels.cs` is `VCartesianAxis::createTextShapes` and
+      `XRay.Office.Core/Charts/ChartAxisLabels.cs` is `VCartesianAxis::createTextShapes` and
       `createTextShapesSimple` — lay every label out, and on the first collision change one thing
       and *start over*, which is why the port is a loop and not a formula. What survives is:
       rotate to 45°, then draw every *n*th. Auto-staggering does not, and the reason is worth the
@@ -873,7 +873,7 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       **21**, the four missing being tick labels a three-dimensional wall auto-scales differently
       (`0 1 … 10` where the flat one lands on `0 2 … 12`). What a flat engine loses is the
       projection, not the data.
-      The geometry is `Paperless.Core/Charts/ChartLayout.Plots.cs` and the model additions are
+      The geometry is `XRay.Office.Core/Charts/ChartLayout.Plots.cs` and the model additions are
       `ChartPlotTypes.cs`; both readers gained the element and class names and nothing else moved.
 - [x] **A doughnut has its hole, and the hole's size is not in the file.** `c:doughnutChart` and
       ODF's `chart:class="chart:ring"` set `ChartPlot.Rings` rather than making a `Kind` of their
@@ -997,12 +997,12 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       on the ground that nothing can paint one. Calc's drawing layer keeps them all
       (`GroupShapeContext::createShapeContext`, `sc/source/filter/oox/drawingfragment.cxx:198`), so
       a sheet whose only content was a shape had no printed block and produced **no pages at
-      all** — `paperless render` failed with "the page range selects none of the 0 pages". Over
+      all** — `xray-office render` failed with "the page range selects none of the 0 pages". Over
       the **55** workbooks in `sc/qa/unit/data/xlsx/` and `chart2/qa/extras/data/xlsx/` holding a
       sheet shape: **27 rendered nothing, now 1**, and exact page-and-word matches went **7 → 15**,
       twelve of them chart workbooks gaining the second or the third and fourth page. Two
       corrections came with it, both recorded with their measurements in
-      `src/Paperless.Spreadsheets/TODO.md`: a `cNvPr hidden="1"` shape **does** widen the print
+      `src/XRay.Office.Spreadsheets/TODO.md`: a `cNvPr hidden="1"` shape **does** widen the print
       area (only `SC_LAYER_HIDDEN`, which holds unpinned comment captions and nothing else, is
       skipped), and Calc **drops a page nothing lands on**, which is what keeps a shape 516 rows
       down from costing ten sheets of paper.
@@ -1096,7 +1096,7 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       short in Serif and 0.44 pt long in Sans**, so the wrong face is 1.73 pt of the 1.29 that
       three runs spent looking for in the label geometry. Fixing it needs the family to reach the
       measurer, which means `IChartTextMeasurer.Measure` gaining a face and both family call
-      sites changing — `Paperless.Presentations` and `Paperless.Spreadsheets`, neither of which is
+      sites changing — `XRay.Office.Presentations` and `XRay.Office.Spreadsheets`, neither of which is
       `Core/Charts`'. **Do this before any further plot-rectangle work**, or the geometry will be
       fitted to compensate for it.
 - [ ] **`bestFit` wraps a pie's data label to fit inside its wedge, and that is the whole of
@@ -1136,8 +1136,8 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       above: **a corpus of one file cannot tell you which of two spellings a format uses**, and a
       `grep -o '<[a-z]*:coordinate-region'` over the reference corpus would have settled it in a
       second.
-- [x] **Read the chart model** — `Paperless.Ooxml/DrawingML/DrawingChart.cs` for `c:chartSpace`
-      and `Paperless.OpenDocument/OdfChart.cs` for `chart:chart`, reached from three call sites:
+- [x] **Read the chart model** — `XRay.Office.Ooxml/DrawingML/DrawingChart.cs` for `c:chartSpace`
+      and `XRay.Office.OpenDocument/OdfChart.cs` for `chart:chart`, reached from three call sites:
       `PptxShapeReader.ReadChart`, `XlsxCharts` (two relationship hops, sheet → drawing → chart),
       and `OdfContentReader.ReadChart`, which serves ODP, ODS and ODT at once. `barChart`, `lineChart`,
       `pieChart`, `scatterChart` and `areaChart` are covered by matching the `…Chart` suffix on
@@ -1149,7 +1149,7 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       own six chart documents — the only oracle that can see a chart at all, since the Writer text
       filter, the Calc CSV filter and `impress_html_Export` all drop one entirely — where every
       word the reference draws as content is also extracted, in all six. The differences both ways
-      are accounted for by name and there are exactly two kinds. Paperless reports the eight cached
+      are accounted for by name and there are exactly two kinds. XRay.Office reports the eight cached
       values the reference does not, because the chart has no `c:dLbls` and LibreOffice draws them
       as bar *lengths*; the reference draws the value axis' ticks (`0 20 … 180` for the ODF pair,
       `0 50 … 200` for the round-tripped PPTX) which are in no file and which only an axis-scale
@@ -1171,7 +1171,7 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       `data-name` on a section, so a chart comes out as
       `<aside class="frame" data-name="Regional revenue">` holding the table. The Markdown writer
       labels every frame "Text frame", which is now sometimes a chart — cosmetic, and in
-      `Paperless.Markup`, which this work did not touch.
+      `XRay.Office.Markup`, which this work did not touch.
 - [x] **The numbers come from the cache. Decision made, ported, measured.** LibreOffice does the
       same and only that: `DoubleSequenceContext::onCharacters`
       (`oox/source/drawingml/chart/datasourcecontext.cxx:107-181`) puts `c:pt/c:v` into the model
@@ -1191,7 +1191,7 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       `chart2/qa/extras/data/` carry an `ObjectReplacements/Object N`, 22 kB of one for our own
       `chart-bar-deck.odp`. What was not checked is what is *in* them. All 82 streams begin
       `VCLMTF`: SVM, LibreOffice's internal `GDIMetaFile` serialisation, which is not a format
-      `Paperless.Vector` reads or is going to. "GDI metafile" is the phrase that hid it — a
+      `XRay.Office.Vector` reads or is going to. "GDI metafile" is the phrase that hid it — a
       `GDIMetaFile` is not a Windows metafile, and the two are related only by the name. The
       general lesson is cheap to state and was not cheap to find: **a container's presence is not
       a format, and one `head -c 6` would have settled it before the plan was written.**
@@ -1285,7 +1285,7 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       paragraph with no text*, so all three `InlineObject`s take the boundary 0, none of their
       widths reaches the prefix table, and the three draw on top of each other on one page. It is a
       question about how a line's extent counts objects sitting at its end boundary — written up
-      under floating frames in `src/Paperless.WordProcessing/TODO.md`, since the fix is in the line
+      under floating frames in `src/XRay.Office.WordProcessing/TODO.md`, since the fix is in the line
       filler rather than in any chart.
 - [ ] **A `.doc` and an `.rtf` chart draw nothing, and neither is read.** WW8 stores a chart as an
       OLE2 storage reached through an `sprmCPicLocation` into the `Data` stream, and RTF as
@@ -1303,7 +1303,7 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       whose three pictures reserved no room and drew over the paragraphs after them, *and*
       `word-features.doc`, whose text box drew at 56.70 pt where LibreOffice draws 134.00 —
       both now agree with LibreOffice's own PDF to within 1.7 pt. Two details in
-      `src/Paperless.WordProcessing/TODO.md`: the vertical orientation is the half
+      `src/XRay.Office.WordProcessing/TODO.md`: the vertical orientation is the half
       `ProcessEscherAlign` does *not* replace, and the anchor characters shape to real width unless
       they are dropped the way LibreOffice drops them.
 
@@ -1342,7 +1342,7 @@ arrive as blip *fills* on ordinary shapes.
       two paths disagree on purpose: the baked tree repeats a node's text wherever the layout drew
       it and adds text the layout generated, while the data model is what the author typed, once
       each. An index wants the second.
-- [x] **Drawing, from the baked tree** — `Paperless.Presentations/Ooxml/PptxDiagram.cs`, reached
+- [x] **Drawing, from the baked tree** — `XRay.Office.Presentations/Ooxml/PptxDiagram.cs`, reached
       from `PptxSlideLayout.Diagram`. Verified against LibreOffice's own PDF on a hand-written
       corpus deck (`slide-diagram-baked.pptx`) to a tenth of a point on fills, outlines,
       connector vertices and label pens, and on all ten real SmartArt decks in
@@ -1350,7 +1350,7 @@ arrive as blip *fills* on ordinary shapes.
 - [x] **Evaluating the layout atoms, for the documents with no baked drawing** —
       `PptxDiagramData`, `PptxDiagramAtoms`, `PptxDiagramEvaluator`, `PptxDiagramAlgorithms`,
       `PptxDiagramGeometry`, `PptxDiagramStyles`, `PptxDiagramShapeTree` and `PptxDiagramText` in
-      `Paperless.Presentations/Ooxml/`, reached from `PptxSlideLayout.Diagram` only when
+      `XRay.Office.Presentations/Ooxml/`, reached from `PptxSlideLayout.Diagram` only when
       `PptxDiagram.Baked` declines — the same one-line decision LibreOffice makes at
       `diagram.cxx:701`, `bCreate = pShape->getExtDrawings().empty()`.
 - [x] **All nine algorithms evaluate, and the whole unbaked corpus agrees.** `lin`, `composite`,
@@ -1366,7 +1366,7 @@ arrive as blip *fills* on ordinary shapes.
       0.080 over 4, `pyra` 0.041 over 1. The decline stays for anything else a file might name,
       for the reason it existed: half an evaluation puts nodes in wrong places and reads as a
       layout bug rather than as a missing feature. What still differs, and why, is in
-      `src/Paperless.Presentations/TODO.md`.
+      `src/XRay.Office.Presentations/TODO.md`.
       **Text run counts now match on 31 of the 37**, counting a rotated run — the five that did
       not before are unchanged, and `smartart-font-size.pptx` joined them because its wrap differs
       by one line at 37 pt and the fit reads the wrong height off it.
@@ -1379,7 +1379,7 @@ arrive as blip *fills* on ordinary shapes.
       algorithm turns `TextFitToSizeType_AUTOFIT` on for every node whose text the author did not
       format, so a `primFontSz` of 65 pt is an *upper bound* rather than a size, and it reaches
       ordinary slide shapes too through `a:normAutofit`. Ported into
-      `Paperless.Presentations/Layout/SlideAutofit.cs` from
+      `XRay.Office.Presentations/Layout/SlideAutofit.cs` from
       `SdrTextObj::autoFitTextForCompatibility`, and verified on a probe deck of **227 plain text
       boxes**: 225 come out at the size LibreOffice draws. Over the 37 unbaked diagram decks the
       summed size error against the reference falls from **1202.2 pt to 327.5 pt**.
@@ -1411,7 +1411,7 @@ arrive as blip *fills* on ordinary shapes.
       fragments imported into it, one `createXShapes` over the pair
       (`presentationfragmenthandler.cxx:246-296`) — so a logo on either is drawn under every slide
       using that layout. Rare and not negligible: 6 of the 389 decks in `sd/qa/unit/data/pptx`
-      carry such a shape with text and Paperless lost the text on all of them.
+      carry such a shape with text and XRay.Office lost the text on all of them.
       **`showMasterSp` looked like the discriminator and is not.** None of the six states it. The
       file that made it look like a visibility question, `slide-sections.pptx`, parks its master's
       three text boxes off the page — y = 6 959 601 on a 6 858 000 slide, x = −2 250 002,
@@ -1430,7 +1430,7 @@ arrive as blip *fills* on ordinary shapes.
       layouter sees a paragraph it has one spacing rather than a rule. On `tdf93830.pptx` the
       worst text baseline went from **14.4 pt out to 0.03 pt** and every run now agrees. It
       brought a second rule with it that had been invisible while every spacing resolved to zero,
-      recorded in `src/Paperless.Presentations/TODO.md`: **the first paragraph's space-before and
+      recorded in `src/XRay.Office.Presentations/TODO.md`: **the first paragraph's space-before and
       the last paragraph's space-after are never applied**, so paragraph spacing is a gap between
       paragraphs and never padding inside the box.
 
@@ -1461,18 +1461,18 @@ in either `content.xml`. So the ODF path already draws diagrams, as shapes, and 
 
 Recorded rather than reproduced. Where LibreOffice renders a document wrongly, copying the
 defect is explicitly a non-goal; each entry here is a place the comparison harness allows a
-difference on purpose, with the evidence that Paperless is the one following the format.
+difference on purpose, with the evidence that XRay.Office is the one following the format.
 
 Per-library lists, each with its measurements: layout's in
-`src/Paperless.WordProcessing/TODO.md` (the two twips LibreOffice's PDF export adds to every
+`src/XRay.Office.WordProcessing/TODO.md` (the two twips LibreOffice's PDF export adds to every
 pen position, the 0.15% it measures a line wider than HarfBuzz, and the twip its font ascents
-differ by), and output's in `src/Paperless.Rendering/TODO.md` (real rather than integer
+differ by), and output's in `src/XRay.Office.Rendering/TODO.md` (real rather than integer
 `/Widths`, layout tables dropped from embedded subsets, no tagged-PDF structure, and the blank
 at the end of a wrapped line not drawn).
 
 **Footnote numbering with a section-level `w:footnotePr`.** In
 `tests/corpus/features/word-features.docx`, LibreOffice 24.2.7.2 numbers the single footnote 0;
-Paperless numbers it 1. ECMA-376 §17.11.17 puts the default `w:numStart` at 1, and the quirk is
+XRay.Office numbers it 1. ECMA-376 §17.11.17 puts the default `w:numStart` at 1, and the quirk is
 LibreOffice's: removing the section-level `w:footnotePr` from the same file makes LibreOffice
 render 1, and on a minimal DOCX with one footnote and no footnote properties at all the two
 agree on 1. Allowed by name in `ExtractionComparisonTests.KnownDeviations`.
@@ -1493,7 +1493,7 @@ tables from `LineBreak.txt` and `EastAsianWidth.txt`, implement LB1–LB31, and 
 against Unicode's `LineBreakTest.txt`. South East Asian scripts (Thai, Lao, Khmer,
 Burmese) need dictionary-based breaking that rules alone cannot do; a dictionary built from
 ICU's word lists ships as an embedded resource, so those breaks agree with LibreOffice's
-rather than merely being defensible. Detail in `src/Paperless.Text/TODO.md`.
+rather than merely being defensible. Detail in `src/XRay.Office.Text/TODO.md`.
 
 **Vector graphics: full support for WMF, EMF, EMF+ and SVG.** No subset, no
 rasterise-via-LibreOffice shortcut. **SVG reuses `Svg.SceneGraph`/`Svg.Model`/`ShimSkiaSharp`**
@@ -1503,7 +1503,7 @@ hand-rolling it would cost a CSS cascade and a filter engine for no fidelity gai
 and EMF+ remain ours to write. This is still the largest single body of work in the project
 and there is no C# prior art for EMF/EMF+, so plan the timeline around it rather than
 treating it as a tail-end detail. Port from LibreOffice's `emfio/` and `svgio/` rather than
-working from the specifications. Scope and ordering in `src/Paperless.Vector/TODO.md`.
+working from the specifications. Scope and ordering in `src/XRay.Office.Vector/TODO.md`.
 Scripting, animation and external references stay excluded permanently — that is a security
 decision, not a scope compromise.
 

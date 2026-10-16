@@ -3,7 +3,7 @@
 Base `d945fefb6`, worktree `/home/user/wt-inkpass`, branch `agent/inkpass`, 2026-09-10.
 Reference **26.2.4.2** — `/opt/libreoffice26.2/program/soffice`, the TDF tarball with the five
 font confounds already moved aside. `/usr/bin/soffice` is 24.2.7.2 and was not used.
-Our half rendered by `dotnet/tools/Paperless.Cli` built in this worktree, `SOURCE_DATE_EPOCH`
+Our half rendered by `dotnet/tools/XRay.Office.Cli` built in this worktree, `SOURCE_DATE_EPOCH`
 pinned on both legs. Reference PDFs reused from the bank at `/home/user/gate-orig-r83/ref`
 (947 documents); nothing was re-rendered through `soffice` except the two authored probes.
 
@@ -148,7 +148,7 @@ exposes an incorrect edge*. None exceeds +0.48 and the six total +1.44 against t
 other 64 give back.
 
 Words and slides are untouched by construction — the change is inside
-`Paperless.Spreadsheets/Layout` and no word-processing or presentation layout reaches it.
+`XRay.Office.Spreadsheets/Layout` and no word-processing or presentation layout reaches it.
 
 ## 6. The gate cannot see any of this, and that is the point
 
@@ -172,7 +172,7 @@ on that fixture (`clip-probe.tsv`, rows `base`), so both new assertions fail wit
 back.
 
 Suite: nine non-fidelity projects run individually, 5133 passed / 0 failed / 0 skipped;
-`Paperless.Spreadsheets.Tests` 1229 passed / 0 failed; `Paperless.Fidelity.Tests`
+`XRay.Office.Spreadsheets.Tests` 1229 passed / 0 failed; `XRay.Office.Fidelity.Tests`
 **542 passed / 10 failed**, the ten being exactly `PageDrawingComparisonTests.EveryLineIsDrawn` ×4,
 `TabStopComparisonTests.AListLabelsTabAdvance` ×4, `SheetDrawingComparisonTests.APictureIsDrawn`
 and `JustificationShrinkComparisonTests`. Build 0 warnings.

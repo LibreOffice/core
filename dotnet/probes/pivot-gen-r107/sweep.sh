@@ -18,8 +18,8 @@ while IFS= read -r doc; do
     fi
     name=$(basename "$doc")
     tb=$(mktemp -d); th=$(mktemp -d)
-    "$BASE/Paperless.Cli" render --format pdf --outdir "$tb" --quiet "$doc" >/dev/null 2>&1
-    "$HEAD/Paperless.Cli" render --format pdf --outdir "$th" --quiet "$doc" >/dev/null 2>&1
+    "$BASE/XRay.Office.Cli" render --format pdf --outdir "$tb" --quiet "$doc" >/dev/null 2>&1
+    "$HEAD/XRay.Office.Cli" render --format pdf --outdir "$th" --quiet "$doc" >/dev/null 2>&1
     pb=$(find "$tb" -name '*.pdf' | head -1); ph=$(find "$th" -name '*.pdf' | head -1)
     hb=failed; hh=failed
     [ -n "$pb" ] && tail -c 2048 "$pb" | grep -q '%%EOF' && hb=$(md5sum "$pb" | cut -d' ' -f1)

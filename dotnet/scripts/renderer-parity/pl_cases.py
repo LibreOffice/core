@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Every document where Paperless does not match the LibreOffice reference.
+"""Every document where XRay.Office does not match the LibreOffice reference.
 
 Writes two things per document: a high-resolution JPEG for reading (the defect has
 to survive to be diagnosed) and a compact WebP for embedding in the report. The
@@ -57,7 +57,7 @@ def pair(left, right, height):
 
 
 def severity(d):
-    e = d["engines"]["paperless"]
+    e = d["engines"]["xray-office"]
     wd = e["worst_defect"]
     # Pixel defects first, ordered by how badly the worst page diverges; then the
     # documents that only paginate differently, worst page-count drift first.
@@ -70,7 +70,7 @@ def main():
     docs = json.loads((BENCH / "documents.json").read_text())
     bad = []
     for d in docs:
-        e = d["engines"]["paperless"]
+        e = d["engines"]["xray-office"]
         if not e["rendered"] or e["defect_pages"] > 0 or not e["page_exact"]:
             bad.append(d)
     bad.sort(key=severity)
@@ -79,7 +79,7 @@ def main():
     scores_dir = BENCH / "scores"
     out = []
     for i, d in enumerate(bad, 1):
-        e = d["engines"]["paperless"]
+        e = d["engines"]["xray-office"]
         page = (e["worst_defect"] or {}).get("page") or e["worst_page"] or 1
         ref = pdf_rgb(BENCH / "lo" / d["id"] / "out.pdf", page - 1)
         cand = pdf_rgb(BENCH / "pl" / d["id"] / "out.pdf", page - 1)
@@ -96,7 +96,7 @@ def main():
         pages = [{k: m.get(k) for k in ("page", "ssim", "mean_abs_error", "ink_ratio",
                                         "shifted_tiles", "tiles", "row_profile_shift",
                                         "max_tile_error", "diagnosis", "size_match")}
-                 for m in raw["engines"]["paperless"]["page_metrics"] if "ssim" in m]
+                 for m in raw["engines"]["xray-office"]["page_metrics"] if "ssim" in m]
         out.append({
             "rank": i,
             "id": d["id"],

@@ -15,9 +15,9 @@ sets `wrapText="1"`. Calc's OOXML import (`sc/source/filter/oox/worksheethelper.
 `insertHyperlink`) turns each such string cell into an **edit cell holding one
 `SvxURLField`** — a single `EE_FEATURE_FIELD` feature character in the content node.
 
-## The seat in Paperless
+## The seat in XRay.Office
 
-`dotnet/src/Paperless.Spreadsheets/Layout/SheetTextLayout.cs:420`
+`dotnet/src/XRay.Office.Spreadsheets/Layout/SheetTextLayout.cs:420`
 
 ```csharp
 bool breaks = Breaks(format, isValue) && !cell.IsField;
@@ -56,7 +56,7 @@ enabled to prevent a field from being drawn beyond the cell size`, which sets
      the break iterator. Ours draws one clipped line.
 
    So: *not* "the character-break fallback is missing" (it is present and correct in
-   `Paperless.Text`), but "the run is being treated as atomic" — and atomic in a stronger
+   `XRay.Office.Text`), but "the run is being treated as atomic" — and atomic in a stronger
    sense than the reviewer's framing, since the reference is atomic to the *breaker* while
    still being divisible by the *chop*.
 

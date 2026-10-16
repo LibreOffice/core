@@ -2,7 +2,7 @@
 
 ## Environment
 
-    ours   = Paperless.Cli at agent/odsrow, base 6ab0681b9
+    ours   = XRay.Office.Cli at agent/odsrow, base 6ab0681b9
     ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 -- the build that wrote
              /home/user/corpus-odf, so both halves of every comparison are one build's artefacts
     bank   = /home/user/odsgap-work/bank/ref, reused; nothing in this diff can reach soffice
@@ -191,7 +191,7 @@ line plus its gap.
 On `activespecs.ods` the reference's header sits at the 36 pt top margin and its first cell row at
 72.69 — a band of 36.69 pt against the declared 21.26 — and we start the body at 57.27 and fit
 three more rows on every page. 254 pages against 266. The full note, with the seat and the number
-to fit against, is in `src/Paperless.Spreadsheets/TODO.md`.
+to fit against, is in `src/XRay.Office.Spreadsheets/TODO.md`.
 
 **The ten whose page 1 is identical are not a header or a pitch question at all.** They need the
 first page on which each diverges found and read, one at a time; `firstdiff.py` does the finding.
@@ -249,7 +249,7 @@ one over is a different question from one whose face was wrong.
   rather than `OdsPrintSetup`, and left because it wants the band's own text height and the number
   to fit that against is one measurement (`activespecs`' 10.70 pt) rather than a family of them.
 - **Frame growth and frame splitting** (§4). The first is small and the second is architectural;
-  the write-up is in `src/Paperless.WordProcessing/TODO.md`.
+  the write-up is in `src/XRay.Office.WordProcessing/TODO.md`.
 - **`SIL_TDB648.ods`**, the brief's top `pages-short` witness, is neither: its first differing page
   is page 1 and what differs is that our long cell strings are broken and clipped at their column
   where the reference runs them across the empty cells beside them. A cell-overflow question, and

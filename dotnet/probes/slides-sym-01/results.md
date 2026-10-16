@@ -8,7 +8,7 @@ Reference: `/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/slides/` (banked, LibreOff
 620(Build:2)), reused throughout and never re-rendered. `fc-match "DejaVu Sans"` →
 `DejaVuSans.ttf` and `fc-match Calibri` → `Carlito-Regular.ttf`, both verified at the start of the
 round. Ours from
-`/c/sandbox/workdir/wt-slides-sym/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli`
+`/c/sandbox/workdir/wt-slides-sym/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli`
 with `SOURCE_DATE_EPOCH=1700000000` and `TZ=UTC` on every render, so the before/after diff is byte
 for byte with nothing masked.
 
@@ -47,7 +47,7 @@ recode and do not, and the reference agrees on every one. §2 and §3.
 
 Four files, one of them new.
 
-**`src/Paperless.Presentations/Ooxml/PptxTextBody.cs`** reads `a:rPr/a:sym` into a new
+**`src/XRay.Office.Presentations/Ooxml/PptxTextBody.cs`** reads `a:rPr/a:sym` into a new
 `SlideSymbolFont(Typeface, IsMicrosoftEncoded)` on `SlideTextRun`. It is read through the same
 `First(own, defaults, …)` the size and the weight use, because
 `TextCharacterProperties::assignUsed` takes `maSymbolFont` from any source that states one
@@ -55,7 +55,7 @@ Four files, one of them new.
 it. The typeface is theme-resolved for the same reason `a:latin` is: `getFontData` puts the name
 through `Theme::resolveFont` before using it (`textfont.cxx:80-85`).
 
-**`src/Paperless.Presentations/Layout/SlideSymbolRuns.cs`** (new, 200 lines with its remarks, ~60
+**`src/XRay.Office.Presentations/Layout/SlideSymbolRuns.cs`** (new, 200 lines with its remarks, ~60
 of code) is the normalisation pass the previous round scoped. It runs at the top of
 `SlideTextLayout.Place` and `SlideTextLayout.Height` — before anything is measured, because an
 OpenSymbol arrow and a `.notdef` box are not the same width and a line break decided on the wrong
@@ -299,17 +299,17 @@ reads 6/6 inside an otherwise unchanged row.
 
 | project | passed | failed | skipped | discovered |
 |---|---:|---:|---:|---:|
-| `Paperless.Core.Tests` | 313 | 0 | 0 | |
-| `Paperless.Containers.Tests` | 109 | 0 | 0 | |
-| `Paperless.Text.Tests` | 310 | 0 | 0 | |
-| `Paperless.Vector.Tests` | 295 | 0 | 0 | |
-| `Paperless.Markup.Tests` | 259 | 0 | 0 | |
-| `Paperless.Rendering.Tests` | 150 | 0 | 1 | |
-| `Paperless.OpenDocument.Tests` | 125 | 0 | 0 | |
-| `Paperless.Presentations.Tests` | **667** | 0 | 0 | 667 |
-| `Paperless.Spreadsheets.Tests` | 758 | 0 | 0 | 758 |
-| `Paperless.WordProcessing.Tests` | 818 | 0 | 0 | 818 |
-| `Paperless.Fidelity.Tests` | 520 | **30** | 0 | 550 |
+| `XRay.Office.Core.Tests` | 313 | 0 | 0 | |
+| `XRay.Office.Containers.Tests` | 109 | 0 | 0 | |
+| `XRay.Office.Text.Tests` | 310 | 0 | 0 | |
+| `XRay.Office.Vector.Tests` | 295 | 0 | 0 | |
+| `XRay.Office.Markup.Tests` | 259 | 0 | 0 | |
+| `XRay.Office.Rendering.Tests` | 150 | 0 | 1 | |
+| `XRay.Office.OpenDocument.Tests` | 125 | 0 | 0 | |
+| `XRay.Office.Presentations.Tests` | **667** | 0 | 0 | 667 |
+| `XRay.Office.Spreadsheets.Tests` | 758 | 0 | 0 | 758 |
+| `XRay.Office.WordProcessing.Tests` | 818 | 0 | 0 | 818 |
+| `XRay.Office.Fidelity.Tests` | 520 | **30** | 0 | 550 |
 | **total** | **4324** | **30** | **1** | |
 
 **The Fidelity baseline was established before any edit and is 30 of 550**, exactly as briefed —
@@ -323,7 +323,7 @@ was measured on.
 
 Build is 0 warnings, 0 errors.
 
-**21 tests added**, `tests/Paperless.Presentations.Tests/SlideSymbolRunTests.cs`. Four assert the
+**21 tests added**, `tests/XRay.Office.Presentations.Tests/SlideSymbolRunTests.cs`. Four assert the
 reader, including that an `a:sym` on a level default reaches the run and that only `charset="2"` is
 symbol-encoded; the rest assert the layout — the recode, the split, that ordinary characters in the
 same run keep the paragraph's face, that a face with no table is untouched, that a Wingdings slot

@@ -11,7 +11,7 @@ exactly the two things needed here — whether the run came out as one `m/l` pai
 whether consecutive segments share an endpoint or overlap it.
 
 It also has to see *both* renderers' idioms. LibreOffice writes a border as `m … l S` under a
-`w` width; Paperless writes the same thing; but a *fill* rectangle is `re f` on both, and
+`w` width; XRay.Office writes the same thing; but a *fill* rectangle is `re f` on both, and
 a hairline drawn as a filled rectangle (`re f` with one dimension near zero) is ink on a grid
 line that a stroke-only census scores as zero. All three are collected and labelled, so a count
 is never quoted without saying which idiom produced it.

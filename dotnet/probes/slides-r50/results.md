@@ -186,7 +186,7 @@ session had already touched the same way.
 
 `SlideWrapAutofitTests`, 11 tests: the 9-cell measured grid plus two inheritance cases.
 
-Verified by **reintroduction** (`verify-test.sh Paperless.Presentations '<revert the rule>'
+Verified by **reintroduction** (`verify-test.sh XRay.Office.Presentations '<revert the rule>'
 SlideWrapAutofit`): the mutation was **DETECTED**, failing 3 of 11 —
 `WrapNoneIsHonouredOnlyWhileTheAutofitLeavesTheShapeAlone(wrap: none, autofit: spAutoFit)` and
 `(normAutofit)`, and `AnInheritedFittingAutofitBeatsTheBodysOwnWrapNone`. The other **8 are drift
@@ -204,7 +204,7 @@ skipped at baseline too), Spreadsheets 882, Text 596, Vector 295, WordProcessing
 
 ## Shared layers
 
-The diff touches `Paperless.Presentations` only — `Ooxml/PptxTextBody.cs` and
+The diff touches `XRay.Office.Presentations` only — `Ooxml/PptxTextBody.cs` and
 `Layout/SlideText.cs` (comment). Nothing in `Core`, `Containers`, `Text`, `Vector`, `Rendering` or
 `Markup`, so no cross-track measurement is owed. The words and sheets sweeps are unaffected by
 construction, and the Spreadsheets and WordProcessing suites were run and are green.

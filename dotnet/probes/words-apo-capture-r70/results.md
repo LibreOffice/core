@@ -137,7 +137,7 @@ layout **does** grow the frame, by 13 twips here, and we take the stated height.
 ## Reproducing
 
 ```sh
-CLI=<tree>/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+CLI=<tree>/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 SOURCE_DATE_EPOCH=1700000000 $CLI render --outdir /abs/ours \
   /home/user/sample-files/words/done-013/doc/omrIMInterpretiveGuideLine.doc
 /opt/libreoffice26.2/program/soffice --headless --convert-to pdf --outdir /abs/ref26 <same>

@@ -2,16 +2,16 @@
 // reader produced it, the cell's wrap/rotation flags, its face and size, and the column width.
 // Written so a hypothesis about a row height can be checked against the input rather than
 // inferred from the output.
-using Paperless;
-using Paperless.Core.Documents;
-using Paperless.Core.Extraction;
-using Paperless.Spreadsheets.Layout;
+using XRay.Office;
+using XRay.Office.Core.Documents;
+using XRay.Office.Core.Extraction;
+using XRay.Office.Spreadsheets.Layout;
 
 string path = args[0];
 string sheetName = args.Length > 1 ? args[1] : "";
 HashSet<int> rows = [.. (args.Length > 2 ? args[2] : "").Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse)];
 
-using IDocument doc = PaperlessDocument.Open(path);
+using IDocument doc = OfficeDocument.Open(path);
 var pages = (SpreadsheetPages)((IPaginatedDocument)doc).Layout();
 
 foreach (SheetLayout sheet in pages.Sheets)

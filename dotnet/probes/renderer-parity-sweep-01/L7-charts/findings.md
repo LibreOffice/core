@@ -93,13 +93,13 @@ solid fill falling through to a hatch default — are refuted by the parts. The 
 
 ### Where it lives in the source
 
-`ChartDrawing` (`dotnet/src/Paperless.Core/Charts/ChartLayout.cs:199-206`) hands the consumer four
+`ChartDrawing` (`dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs:199-206`) hands the consumer four
 lists, and all three consumers paint them in the same fixed order — `Boxes`, `Lines`, `Shapes`,
 `Labels`:
 
-- `dotnet/src/Paperless.Spreadsheets/Layout/SheetChart.cs:53,62,70,79`
-- `dotnet/src/Paperless.Presentations/Layout/SlideChart.cs:59,76,90`
-- `dotnet/src/Paperless.WordProcessing/Layout/FrameChart.cs:55,65,72,79`
+- `dotnet/src/XRay.Office.Spreadsheets/Layout/SheetChart.cs:53,62,70,79`
+- `dotnet/src/XRay.Office.Presentations/Layout/SlideChart.cs:59,76,90`
+- `dotnet/src/XRay.Office.WordProcessing/Layout/FrameChart.cs:55,65,72,79`
 
 `AddValueAxis` puts the gridlines in `Lines` (`ChartLayout.cs:1651-1656`, `:1683-1688`).
 `AddBars` puts the bars in `Boxes` (`ChartLayout.cs:3069`) and `AddCandles` puts a candle body in
@@ -142,10 +142,10 @@ draws.**
 `drawing.Boxes` and will need to read `drawing.Shapes`. They are *not* in the patch, because tests
 are outside this lane's declared ownership:
 
-- `dotnet/tests/Paperless.Core.Tests/ChartLayoutAxisTests.cs:102,105,106,250`
-- `dotnet/tests/Paperless.Core.Tests/ChartLayoutTests.cs:145,146`
-- `dotnet/tests/Paperless.Core.Tests/ChartPercentAndLineKeyTests.cs:99,185`
-- `dotnet/tests/Paperless.Core.Tests/ChartPlotTypeLayoutTests.cs:301,304`
+- `dotnet/tests/XRay.Office.Core.Tests/ChartLayoutAxisTests.cs:102,105,106,250`
+- `dotnet/tests/XRay.Office.Core.Tests/ChartLayoutTests.cs:145,146`
+- `dotnet/tests/XRay.Office.Core.Tests/ChartPercentAndLineKeyTests.cs:99,185`
+- `dotnet/tests/XRay.Office.Core.Tests/ChartPlotTypeLayoutTests.cs:301,304`
 
 `ChartPercentAndLineKeyTests.cs:146` (`Boxes.ShouldNotContain(… Line == 0x1A2557)`) still passes
 and becomes vacuous; it should move to `Shapes` too.
@@ -603,7 +603,7 @@ for (int at = 0; at < count; at++)
     boxes[at] = texts[at] is { Length: > 0 } text ? Shape(measurer, text, size, bold) : default;
 ```
 
-(`dotnet/src/Paperless.Core/Charts/ChartAxisLabels.cs:157-165`; `Shape` at `:456-457` is
+(`dotnet/src/XRay.Office.Core/Charts/ChartAxisLabels.cs:157-165`; `Shape` at `:456-457` is
 `measurer.Measure(text, size, bold)` — one line, always.)
 
 `stated.LineBreakAllowed` — which the OOXML importer sets **true**, as the type's own doc comment
@@ -635,7 +635,7 @@ reference wraps and we leave on one line, which errs towards *finding* a collisi
 hiding one.
 
 `SheetChart.Text` already draws an unrotated `\n`-bearing label as two lines
-(`dotnet/src/Paperless.Spreadsheets/Layout/SheetChart.cs:36-40`) and `FrameChart` was fixed the
+(`dotnet/src/XRay.Office.Spreadsheets/Layout/SheetChart.cs:36-40`) and `FrameChart` was fixed the
 same way, so no consumer change is needed for the sheets or words tracks. **`SlideChart` still runs
 a `\n` label together into one glyph run** — its own comment says so — so a `pptx` chart whose
 category labels wrap would draw them concatenated. Recorded as a cross-lane dependency below; it is
@@ -685,7 +685,7 @@ seven, and draw a `Grand Total` bar that rescales the axis to $400,000; the refe
 scales to $300,000.
 
 **The cache length is not the discriminator.** `ChartRangeResolver`'s own documentation
-(`dotnet/src/Paperless.Ooxml/DrawingML/ChartRangeResolver.cs:52-60`) records the opposite case with
+(`dotnet/src/XRay.Office.Ooxml/DrawingML/ChartRangeResolver.cs:52-60`) records the opposite case with
 the identical file signature — `Keywords_Mapping_Graphs_and_Charts.xlsx`, twenty-two sequences each
 exactly one cell short, grand-total row stated in `c:f` and absent from `c:numCache` — where the
 reference **includes** the extra point and the axis runs to 40 rather than 8. Same signature,
@@ -755,7 +755,7 @@ plot size rather than a reference deficiency.*
 
 ## Cross-lane dependencies
 
-1. **`dotnet/src/Paperless.Spreadsheets/Ooxml/XlsxDrawings.cs:328-330` passes `styles: null` to
+1. **`dotnet/src/XRay.Office.Spreadsheets/Ooxml/XlsxDrawings.cs:328-330` passes `styles: null` to
    `DrawingChartPlot.Read`.** With no `DrawingStyleMatrix` the automatic series line width is
    forced to zero — `AutoLineWidth` returns `Length.Zero` on its first line
    (`DrawingChartPlot.cs:1793-1806`) — so every Calc chart series that states no `a:ln w` is drawn
@@ -765,24 +765,24 @@ plot size rather than a reference deficiency.*
    are one pixel wide, which is the whole of the "so pale they nearly vanish" reading. The needed
    change is to load the workbook theme's style matrix and pass it, exactly as
    `PptxSlideLayoutChart.cs:58-64` already does — and whose comment records that this precise gap
-   cost several rounds on the slides side. **`dotnet/src/Paperless.WordProcessing/Ooxml/DocxPictures.cs:266-269`
+   cost several rounds on the slides side. **`dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxPictures.cs:266-269`
    has the same gap.**
 
 2. **The range resolver must skip a trailing totals row.** See §8. Whoever owns
-   `Paperless.Spreadsheets`' chart range resolution needs the pivot-table
+   `XRay.Office.Spreadsheets`' chart range resolution needs the pivot-table
    `location`/`rowGrandTotals` and the Excel-table `totalsRowShown` facts to reproduce
    `sc/source/ui/unoobj/chart2uno.cxx:2612-2632` — **and needs the 26.2 pivot-regeneration question
    settled first**, because it may be the reference that is wrong. Until then
    `053_Personal_asset_inventory` draws a category the reference does not.
 
-3. **`dotnet/src/Paperless.Presentations/Layout/SlideChart.cs` runs a `\n`-bearing chart label
+3. **`dotnet/src/XRay.Office.Presentations/Layout/SlideChart.cs` runs a `\n`-bearing chart label
    together into one glyph run** — its own comment at `SheetChart.cs:29-35` says the slides path
    still has the defect the sheets and words paths fixed. §7 makes wrapped category labels possible
    on any host, so a `pptx` chart with a wrapping category axis would newly draw `ACCOUNTMANAGER`.
    The fix is the same three lines `SheetChart.Text` already has.
 
 4. **Tests read bars and candles out of `drawing.Boxes`.** §1 moves them to `drawing.Shapes`; the
-   six assertions are listed there. They are in `dotnet/tests/Paperless.Core.Tests/`, which no lane
+   six assertions are listed there. They are in `dotnet/tests/XRay.Office.Core.Tests/`, which no lane
    owns.
 
 ---

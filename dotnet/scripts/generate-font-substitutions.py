@@ -21,7 +21,7 @@ import xml.etree.ElementTree as ET
 # on, unchanged, against a table nobody edited.
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SOURCE = os.path.join(ROOT, 'officecfg/registry/data/org/openoffice/VCL.xcu')
-OUT = os.path.join(ROOT, 'dotnet/src/Paperless.Text/Fonts/FontSubstitutions.Tables.cs')
+OUT = os.path.join(ROOT, 'dotnet/src/XRay.Office.Text/Fonts/FontSubstitutions.Tables.cs')
 
 OOR = '{http://openoffice.org/2001/registry}'
 LOCALE = 'en'
@@ -170,7 +170,7 @@ w('// not installed, which is why it is read rather than reimplemented. Regenera
 w('// scripts/generate-font-substitutions.py.')
 w('// </auto-generated>')
 w('')
-w('namespace Paperless.Text.Fonts;')
+w('namespace XRay.Office.Text.Fonts;')
 w('')
 w('public static partial class FontSubstitutions')
 w('{')

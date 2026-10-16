@@ -4,8 +4,8 @@ import os, subprocess, sys, hashlib, glob, shutil, tempfile
 
 ROOTS = ['/home/user/sample-files/sheets', '/home/user/corpus-odf/sheets']
 EXT = {'.xlsx', '.xlsm', '.xls', '.ods'}
-LEGS = {'base': '/home/user/r100-work/cli-base/Paperless.Cli',
-        'head': '/home/user/r100-work/cli-head/Paperless.Cli'}
+LEGS = {'base': '/home/user/r100-work/cli-base/XRay.Office.Cli',
+        'head': '/home/user/r100-work/cli-head/XRay.Office.Cli'}
 
 docs = []
 for r in ROOTS:

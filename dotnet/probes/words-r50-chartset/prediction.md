@@ -127,7 +127,7 @@ the refutation with the sweep numbers, per COMMON.md.
 - The `.doc`/`.xls`/`.ppt` binaries cannot be token-rewritten, so `trace-text.py` cannot
   attribute anything on them.
 - **The other two tracks.** `Paginator`, `FlowLayouter` and `DocxLayoutSource` are all inside
-  `Paperless.WordProcessing`, which is not a shared layer, so slides and sheets cannot be
+  `XRay.Office.WordProcessing`, which is not a shared layer, so slides and sheets cannot be
   reached by either fix. No cross-track sweep is owed. If either fix ends up touching `Core`,
   `Containers`, `Text`, `Vector`, `Rendering` or `Markup`, that changes and I will say so.
 

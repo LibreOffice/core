@@ -1,6 +1,6 @@
 # Test corpus
 
-See the `paperless-corpus` skill for how to generate and curate these files.
+See the `office-corpus` skill for how to generate and curate these files.
 
 ## Layout
 
@@ -24,7 +24,7 @@ and attached to issues.
 ## Generating
 
 ```bash
-.claude/skills/paperless-corpus/scripts/make-corpus.sh --outdir generated
+.claude/skills/office-corpus/scripts/make-corpus.sh --outdir generated
 ```
 
 Every file must have a **unique stem**: `soffice --convert-to` names output after the input
@@ -100,7 +100,7 @@ code point in a Private Use Area, and pads every spreadsheet row out to the shee
 | `sheet-decor-ods.ods` | ODS | Everything a printed sheet draws that is not a cell's text, on one page. Three background fills; a **shared-edge conflict stated both ways round** — B2 puts a 2.5 pt red border on its right where C2 puts a hairline on its left, and row 3 states the same edge the other way with a 2.5 pt blue — so the heavier border has to win whichever cell declared it; a horizontal shared edge between B5's 2.5 pt bottom and B6's hairline top; a one-point box round a filled cell, which is what gives the borders that meet it something to overshoot into; `style:print="grid headers"`, so both the grid and the row and column headings print; and a header and footer using `&A`, `&P`, `&N` and `&F` across the left, centre and right regions. LibreOffice draws four fills and twenty-eight lines on it |
 | `sheet-decor-xlsx.xlsx` | XLSX | The same sheet converted, so the same result has to come out of `styles.xml`'s `fills`, `borders` and `cellXfs`, `printOptions/@gridLines` and `@headings`, and the `&`-code `oddHeader`/`oddFooter`. The conversion is lossy in a way worth knowing: a 0.5 pt border becomes `hair` and a 1 pt one `thin`, so the widths differ from the ODS twin's — but every hairline still loses its shared edge, which is what the file is for |
 | `sheet-decor-xls.xls` | XLS | And again out of BIFF's `XF` records — whose fill pattern hides in the *second* border dword rather than in the area word — plus `PALETTE`, `WSBOOL` and the `HEADER`/`FOOTER` records |
-| `sheet-cell-text.fods` | FODS | How a cell's text is *drawn*, which the print-setup workbooks say nothing about. One sheet of six rows: the three stated horizontal alignments plus the two General cases (a string goes left, a number right); top, middle and bottom in a 43 pt row, with an indent beside them; a wrapping cell that needs three lines; four fonts — bold, 14 pt italic, 12 pt red, and a serif family — and a shrink-to-fit cell that comes out at 87% of ten point; the same twelve-digit number twice in a 43 pt column, once under `General` so it re-renders as `1.2E+11` and once under a fixed format so it shows `###`; a 48-character string overflowing four empty columns; the same string blocked by a neighbour, so it is clipped to 23 characters; and a right-aligned string overflowing to the *left*. Rotation sits on a second sheet, because a turned run is written with a text matrix rather than an absolute pen and the harness reads only the latter. **Hand-written, with the header and footer switched off**: Calc recomputes a dynamic band's height from the text in it, which Paperless does not do yet, and on a workbook with a header that is 1.3 pt of vertical offset on every row — enough to swamp everything the file is for |
+| `sheet-cell-text.fods` | FODS | How a cell's text is *drawn*, which the print-setup workbooks say nothing about. One sheet of six rows: the three stated horizontal alignments plus the two General cases (a string goes left, a number right); top, middle and bottom in a 43 pt row, with an indent beside them; a wrapping cell that needs three lines; four fonts — bold, 14 pt italic, 12 pt red, and a serif family — and a shrink-to-fit cell that comes out at 87% of ten point; the same twelve-digit number twice in a 43 pt column, once under `General` so it re-renders as `1.2E+11` and once under a fixed format so it shows `###`; a 48-character string overflowing four empty columns; the same string blocked by a neighbour, so it is clipped to 23 characters; and a right-aligned string overflowing to the *left*. Rotation sits on a second sheet, because a turned run is written with a text matrix rather than an absolute pen and the harness reads only the latter. **Hand-written, with the header and footer switched off**: Calc recomputes a dynamic band's height from the text in it, which XRay.Office does not do yet, and on a workbook with a header that is 1.3 pt of vertical offset on every row — enough to swamp everything the file is for |
 | `sheet-cell-text.xlsx` | XLSX | The same sheet converted, so the same alignment, wrapping, indent and rotation have to come out of `styles.xml`'s `fonts` and `cellXfs/alignment` instead. Note the indent: SpreadsheetML counts levels of *three space widths in the workbook's default font* where BIFF counts a flat 200 twips a level, so the same 0.28 in indent survives as 16.5 pt here and 20 pt in the XLS, and both are right |
 | `sheet-cell-text.xls` | XLS | And again out of BIFF's `FONT`, `XF`, `PALETTE`, `ROW` and `COLINFO`. LibreOffice's own BIFF reading of this file differs from its reading of the other two by a 21-twip page margin and columns 0.06% narrower, which is why the fidelity test compares what is drawn here rather than where |
 | `sheet-rich-text.fods` | FODS | Three sheets, for the three things a cell can hold that its own format does not describe. **Rich text**: eight cells that change format part-way through — a bold word, an italic one, a fourteen-point red one in the middle of ten-point black, a bold half of a blue cell that must *stay* blue, a serif word between two sans ones, a seven-point tail, a wrapping cell whose break depends on measuring each run in its own face, and a cell whose *first* word is bold, which is the one that separates the three formats' semantics. **Turned text** on a second sheet, for the same reason `sheet-cell-text` puts it there. And a **picture** on a third, anchored to B2 with an offset and ending at C3 — the frame states `svg:width="1.28in"` and the end address says 1.3201 in, and LibreOffice believes the end address, which is what makes the file a test of the anchor rather than of a stated size. Hand-written, header and footer off |
@@ -495,7 +495,7 @@ There are five, and they deliberately disagree with one another, because LibreOf
 
 None of those numbers depends on a single character of the text — moving the long paragraph from the third
 column to the second, or deleting it, moves nothing. That is worth stating because the shape of the numbers
-invites the opposite conclusion; see `src/Paperless.WordProcessing/Layout/TableColumnFit.cs`.
+invites the opposite conclusion; see `src/XRay.Office.WordProcessing/Layout/TableColumnFit.cs`.
 
 Two traps in writing them:
 
@@ -531,7 +531,7 @@ Two things about comparing these:
   `{\*\footnote …}` group and falls back to the document's defaults: a note the file sets in Carlito at
   10 pt with no indent renders in Liberation Serif with a 340-twip hanging indent, which moves every word
   of every note line. Reproduced on a hand-written three-line RTF as well as on the exported corpus files,
-  so it is not an artefact of how these were made. Paperless reads what the file says, so
+  so it is not an artefact of how these were made. XRay.Office reads what the file says, so
   `FootnoteComparisonTests` skips RTF and `FootnoteReadingTests` checks the notes structurally instead.
 - **The citation's size and rise need a content-stream comparison, not a word-box one.** A raised run's
   box top sits above its baseline by the font's ascent, so `pdftotext -bbox` cannot separate a rise from a
@@ -589,7 +589,7 @@ binary so that none of them sits on a rounding edge.
 
 `inherited-table-header.docx` is a header made only of a table, in a first section, with a second
 section that names an empty `even` and an empty `first` header and no default one — the shape Word writes
-when a user gives a later section no header of its own. It is the fixture for the one place Paperless
+when a user gives a later section no header of its own. It is the fixture for the one place XRay.Office
 **deliberately differs from LibreOffice 24.2.7.2**, which draws the head on page 1 and leaves page 2 bare:
 its DOCX import means to link the two ("so we just copy the content") and the copy yields nothing when the
 source header has no top-level paragraph. `SectionInheritedHeaderTests` explains the deviation and the
@@ -619,7 +619,7 @@ per-band `WW8_SHD` array that is not read yet.
 
 `bidi.fodt` is nine short paragraphs of mixed-direction text, six declared left-to-right and three
 right-to-left, and it exists in one format on purpose: what it is compared against is LibreOffice's own
-rendering of it rather than Paperless's reading of it, so a second format would exercise a second
+rendering of it rather than XRay.Office's reading of it, so a second format would exercise a second
 ODF-to-something conversion and nothing else. Every paragraph fits one line, which makes a line of the
 reference PDF a paragraph and removes any need to group. It is set in DejaVu Sans for both the Western and
 the complex-script font because that is the only face on a bare Linux carrying Latin, Hebrew and Arabic
@@ -630,7 +630,7 @@ the comparison asserts that rather than assuming it, because one ligature would 
 after it.
 
 Two things in `bidi.fodt` are stated explicitly that look redundant and are not, both found by measuring the
-reference against Paperless. `style:letter-kerning="true"` is there because ODF's default is **false**, so a
+reference against XRay.Office. `style:letter-kerning="true"` is there because ODF's default is **false**, so a
 document that says nothing is a reference for the *unkerned* widths — 33.13 pt against 33.30 for the six
 characters of "Start ". And the right-to-left paragraph style repeats every text property instead of
 inheriting them through `style:parent-style-name`: with inheritance, LibreOffice set those three paragraphs
@@ -683,7 +683,7 @@ write inconsistently.
 
 `revisions.*` is one paragraph with an inserted phrase and a deleted phrase in it, by one author. Two things
 it pins beyond the obvious: extraction says what the changes *leave* in all four formats, while LibreOffice's
-own render shows the change *marks* — so its text export contains the deleted phrase and Paperless's does not,
+own render shows the change *marks* — so its text export contains the deleted phrase and XRay.Office's does not,
 deliberately. And its `\revdttm` is **zero**, "no date", which LibreOffice's exporters disagree about: the ODF
 and DOC exports write the Unix epoch, the DOCX export omits `w:date` altogether. So the same document reports
 a timestamp in two formats and none in the other two, which is a fact about the exporters rather than about
@@ -724,7 +724,7 @@ Three things about comparing it, all measured:
 - **The RTF gets a wrap distance the file does not state.** LibreOffice's RTF import supplies 0.2 cm on every
   side when the shape carries no `dxWrapDist*` property — the wrapped lines start 114 twips past the shape's
   own right edge with the property absent and 1 twip past it with `{\sp{\sn dxWrapDistLeft}{\sv 0}}` added
-  to the same file. Paperless applies the same default, so its RTF lines land within a twip. What it does
+  to the same file. XRay.Office applies the same default, so its RTF lines land within a twip. What it does
   *not* reproduce is the inset LibreOffice gives the shape's own text: 17 twips horizontally and 15
   vertically over and above the file's zeros, so `frame-wrap.rtf` is compared for its wrap and not for the
   position of the text inside the frame.

@@ -46,7 +46,7 @@ census**, and **0 page counts and 0 alphanumeric counts move anywhere**.
 | | |
 |---|---|
 | worktree / branch | `/home/user/wt-slidebullet2`, `agent/slidebullet2`, base **`4f4d0ddc8`** |
-| reference | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2**. `/usr/bin/soffice` (24.2.7.2) is used only by `Paperless.Fidelity.Tests`, as it always is |
+| reference | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2**. `/usr/bin/soffice` (24.2.7.2) is used only by `XRay.Office.Fidelity.Tests`, as it always is |
 | reference bank | `/home/user/gate-orig-r83/ref`, plus two fresh renders of `Thailand17` for the C11 check below |
 | corpora | `/home/user/sample-files` (51 `.ppt`, 251 `.pptx`) and `/home/user/corpus-odf` (302 `.odp`) |
 | working directory | `/home/user/r112-work` |
@@ -391,7 +391,7 @@ one:
 # 7. The suite
 
 Read out of this run's own output (`tests.log`), not from the briefed number.
-`dotnet build Paperless.slnx -c Debug` at **0 warnings, 0 errors**, then each project alone with
+`dotnet build XRay.Office.slnx -c Debug` at **0 warnings, 0 errors**, then each project alone with
 `--no-build`, individually rather than as a solution.
 
 | project | |

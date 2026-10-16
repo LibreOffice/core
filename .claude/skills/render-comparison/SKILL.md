@@ -1,9 +1,9 @@
 ---
 name: render-comparison
-description: Compare a Paperless rendering of a document against the LibreOffice reference rendering, and diagnose what the differences mean. Use when checking rendering fidelity, investigating why a rendered page looks wrong, reviewing a Paperless rendering change for regressions, or establishing/updating golden reference images. Covers choosing a comparison metric, reading diff images, and telling a layout bug apart from a drawing bug.
+description: Compare an XRay.Office rendering of a document against the LibreOffice reference rendering, and diagnose what the differences mean. Use when checking rendering fidelity, investigating why a rendered page looks wrong, reviewing an XRay.Office rendering change for regressions, or establishing/updating golden reference images. Covers choosing a comparison metric, reading diff images, and telling a layout bug apart from a drawing bug.
 ---
 
-# Comparing a Paperless rendering against LibreOffice
+# Comparing an XRay.Office rendering against LibreOffice
 
 Generate reference output with the **libreoffice-reference** skill first; this skill is
 about comparing against it and interpreting the result.
@@ -78,7 +78,7 @@ reason to open.
 
 ```bash
 S=.claude/skills/render-comparison/scripts
-export PAPERLESS_CLI=<the tree you mean to measure>/dotnet/tools/…/Paperless.Cli
+export XRAY_OFFICE_CLI=<the tree you mean to measure>/dotnet/tools/…/XRay.Office.Cli
 
 python3 $S/look.py "Thailand17__ppt" --worst          # most divergent page, both sides, as PNGs
 python3 $S/look.py <corpus/path.pptx> --page 8        # a page you already suspect
@@ -140,8 +140,8 @@ reading that quietly promotes itself into a diagnosis is worse than no reading.
 .claude/skills/libreoffice-reference/scripts/lo-convert.sh --pdf --png --dpi 150 \
     --outdir /tmp/ref  document.docx
 
-# 2. Paperless output at the SAME dpi -- see the pitfall below
-dotnet run --project dotnet/tools/Paperless.Cli -- render --dpi 150 \
+# 2. XRay.Office output at the SAME dpi -- see the pitfall below
+dotnet run --project dotnet/tools/XRay.Office.Cli -- render --dpi 150 \
     --outdir /tmp/actual document.docx
 
 # 3. Compare
@@ -157,7 +157,7 @@ The comparison tool is pure Python with no third-party dependencies — it decod
 
 A DPI mismatch, or a page-size misread, makes every metric meaningless. The tool reports
 `DIMENSION MISMATCH` and stops rather than producing a number that looks like a fidelity
-score but is not. When you see it, fix the geometry first: it means Paperless read the
+score but is not. When you see it, fix the geometry first: it means XRay.Office read the
 page dimensions wrongly, which is its own bug and a more fundamental one.
 
 ## The metrics, and which one to trust
@@ -170,7 +170,7 @@ the failure modes.
 | `differing_fraction` | Fraction of pixels off by more than a tolerance | Trend over time. Noisy: antialiasing alone moves it |
 | `mean_abs_error` | Mean per-channel difference across the page | A single "how close overall" number. Diluted by whitespace, and **biased by colour quantisation** — see below |
 | `max_tile_error` | Worst mean error in any 32x32 tile | Catching a badly wrong *small* area a page average would hide. Same bias |
-| `ink_delta` | Difference in non-white pixel fraction | **Strongly negative ⇒ Paperless drew too little.** Something was skipped outright: an unsupported shape, a vector image that failed to decode |
+| `ink_delta` | Difference in non-white pixel fraction | **Strongly negative ⇒ XRay.Office drew too little.** Something was skipped outright: an unsupported shape, a vector image that failed to decode |
 | `shifted_tiles` | Tiles matching the reference well, but at an offset | **The cascade detector.** Non-zero ⇒ content *moved*, so suspect layout — font metrics, margins, line breaking — not drawing |
 | `row_profile_shift` | Vertical offset best aligning the two ink-per-row profiles | Confirms a whole-page vertical shift and quantifies it |
 
@@ -182,7 +182,7 @@ the failure modes.
 | `ink_delta` strongly negative, `shifted_tiles` ≈ 0 | Content missing. Look for an unimplemented feature |
 | `ink_delta` ≈ 0, `shifted_tiles` high | Reflow cascade. Everything is drawn but positioned wrongly. Find the *first* divergence down the page — the rest is downstream of it |
 | `max_tile_error` high, `mean_abs_error` low | One small region badly wrong. Usually a colour, a border or one shape |
-| `ink_delta` strongly positive | Paperless drew something extra: a debug artefact, a wrongly-visible element, or a fill that should have been transparent |
+| `ink_delta` strongly positive | XRay.Office drew something extra: a debug artefact, a wrongly-visible element, or a fill that should have been transparent |
 | Everything huge, page 1 included | Not a detail bug. Wrong page size, wrong background, or a failed load |
 
 ### Set `REF_SOFFICE` before any of this
@@ -198,7 +198,7 @@ and `LO26`. Full note in `libreoffice-reference/SKILL.md`.
 `differing_fraction` and `differing_tiles` apply `DIFF_TOLERANCE`; `mean_abs_error` and
 `max_tile_error` do not, and on a shaded page they are non-zero when the truth is zero.
 
-**The cause is the two writers' decimal precision, and neither renderer is wrong.** Paperless
+**The cause is the two writers' decimal precision, and neither renderer is wrong.** XRay.Office
 emits `0.502 0.502 0.502 rg` for grey 128 and 26.2.4.2 emits `0.5019607843 …`. The rasteriser
 resolves a literal at or below `v/255` to **`v − 1`** — measured on six one-literal PDFs
 (`dotnet/probes/inkmetric-r178/quantise.py`), including the exact `0.50196078431372549`, which
@@ -284,7 +284,7 @@ ours, and can a number settle it" — and four things sit above it that each cos
 learn. `verdict.py` adds exactly those and re-uses everything else by importing it.
 
 ```sh
-export PAPERLESS_CLI=<the tree you mean to measure>/dotnet/tools/…/Paperless.Cli
+export XRAY_OFFICE_CLI=<the tree you mean to measure>/dotnet/tools/…/XRay.Office.Cli
 python3 .claude/skills/render-comparison/scripts/verdict.py <document> [--dpi 150] [--pages 7,18,48]
 ```
 
@@ -323,7 +323,7 @@ changed — usually a LibreOffice upgrade. Regenerate deliberately, never silent
 
 ## Diff images
 
-`--diff-dir` writes, per page, a side-by-side triptych: reference, Paperless output, and a
+`--diff-dir` writes, per page, a side-by-side triptych: reference, XRay.Office output, and a
 difference map with differing pixels highlighted.
 
 **Look at these.** A number says a page is wrong; the image says *which part*, which is
@@ -338,7 +338,7 @@ Once a page differs, narrow it down before theorising:
    origin is on an earlier page.
 2. **Bisect the document.** Delete content until the difference disappears. The last
    removal is where the problem lives.
-3. **Check the fonts actually used.** Ask Paperless which face it resolved each request
+3. **Check the fonts actually used.** Ask XRay.Office which face it resolved each request
    to and compare with what LibreOffice used. A silent substitution difference explains
    most mysterious reflows — run `check-env.sh` from the libreoffice-reference skill.
 4. **Compare text before pixels.** If extracted text already differs, the bug is in
@@ -349,10 +349,10 @@ Once a page differs, narrow it down before theorising:
 
    ```bash
    soffice --headless --convert-to fodt --outdir /tmp/rt problem.doc
-   paperless render /tmp/rt/problem.fodt --format pdf --outdir /tmp/rt
+   xray-office render /tmp/rt/problem.fodt --format pdf --outdir /tmp/rt
    ```
 
-   LibreOffice has now done the reading and Paperless only the layout. If the round-tripped
+   LibreOffice has now done the reading and XRay.Office only the layout. If the round-tripped
    file renders correctly, **the defect is in our reader** and the layout engine is
    exonerated; if it renders wrong the same way, the reverse. This localised a WW8 bug in a
    single step that had survived two rounds of layout theorising — blank paragraphs being
@@ -569,7 +569,7 @@ defeats the purpose — use a sibling document in the same shape, or skip it.
 
 - **The document's word count exactly.** Only maximal runs of `[A-Za-z0-9]` are replaced;
   whitespace, punctuation and every non-ASCII script are left alone. Measured with
-  `paperless extract`, which reads the model rather than the page: 1142 words against 1142 on a
+  `xray-office extract`, which reads the model rather than the page: 1142 words against 1142 on a
   twelve-slide deck, 604 against 604 on a workbook.
 
   **The `pdftotext` count can still drift a little, and that is not the document changing.**
@@ -791,7 +791,7 @@ grep -o 'style:column-width="[^"]*"' /tmp/rt/book.fods | head
 ```
 
 Worked example. A column width in SpreadsheetML is a count of digits of the workbook's
-default font, and Paperless had the twips-per-digit figure hardcoded. Measuring the *pitch*
+default font, and XRay.Office had the twips-per-digit figure hardcoded. Measuring the *pitch*
 of the two renderings gave 137 twips per digit; the flat-ODF export gave 886.2, 6591.2,
 1389.0 and 1182.1 twips against digit counts of 6.664, 49.555, 10.441 and 8.887 — **133.0,
 four times over**. The 3% discrepancy was a separate fit-to-page zoom difference, and
@@ -1024,6 +1024,6 @@ not re-derive the reach from the same grep.
 
 Keep the reference version with the numbers — `soffice --version`. LibreOffice's layout
 changes between releases, so a comparison is only reproducible against a stated version.
-When a difference is genuinely LibreOffice's own import bug rather than a Paperless
-defect, record it as a known deviation with a note, instead of contorting Paperless to
+When a difference is genuinely LibreOffice's own import bug rather than an XRay.Office
+defect, record it as a known deviation with a note, instead of contorting XRay.Office to
 reproduce it.

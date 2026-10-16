@@ -9,7 +9,7 @@
 # as a real difference rather than erroring.
 set -u
 LIST="$1"; OUT="$2"
-: "${PAPERLESS_CLI:?set PAPERLESS_CLI}"
+: "${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI}"
 mkdir -p "$OUT"
 while IFS= read -r doc; do
   [ -z "$doc" ] && continue
@@ -17,7 +17,7 @@ while IFS= read -r doc; do
   ext="${doc##*.}"
   d="$OUT/${stem}__${ext,,}"
   mkdir -p "$d"
-  SOURCE_DATE_EPOCH=1700000000 timeout -k 30 600 "$PAPERLESS_CLI" render "$doc" \
+  SOURCE_DATE_EPOCH=1700000000 timeout -k 30 600 "$XRAY_OFFICE_CLI" render "$doc" \
       --format pdf --outdir "$d" >/dev/null 2>&1
   f="$d/$stem.pdf"
   if [ -s "$f" ] && tail -c 32 "$f" | grep -q '%%EOF'; then

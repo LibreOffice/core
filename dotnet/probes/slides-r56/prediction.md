@@ -100,8 +100,8 @@ nowhere in `Core/Charts`.
    states, and a stated property on a shape or axis that draws nothing moves no pixels. The
    `.ppt` half is already known to over-count that way — 22 of the 33 non-zero flows are on
    shapes of one document that state no `TextId`.
-7. Cross-track: the `.ppt` change is `Paperless.Presentations` and reaches slides only. The
-   gridline change is **`Paperless.Core/Charts`, a shared layer**, and the census names its whole
+7. Cross-track: the `.ppt` change is `XRay.Office.Presentations` and reaches slides only. The
+   gridline change is **`XRay.Office.Core/Charts`, a shared layer**, and the census names its whole
    corpus reach: **4 sheets documents** (`033_Event_planning_tracker…`, `035_Project_plan_for_law_firms…`,
    `038_Baby_growth_chart…`, `039_Baby_growth_tracker…`) and **1 words document**
    (`ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx`). Predicted verdict movement there:

@@ -5,8 +5,8 @@
 #
 #   verify-test.sh <project> '<mutation command>' [filter]
 #
-#   verify-test.sh Paperless.Core \
-#       "sed -i 's/IsTitleBold = true/IsTitleBold = false/' src/Paperless.Core/Charts/ChartPlot.cs" \
+#   verify-test.sh XRay.Office.Core \
+#       "sed -i 's/IsTitleBold = true/IsTitleBold = false/' src/XRay.Office.Core/Charts/ChartPlot.cs" \
 #       ChartAutoText
 #
 # Why this exists rather than a paragraph of advice. The cycle deliberately puts the tree in
@@ -80,7 +80,7 @@ restore() {
     # Restoring rewrites the files, so mtimes advance and MSBuild rebuilds. Belt and braces:
     # touch them anyway, because a checkout that changed nothing leaves the mtime alone.
     find dotnet/src dotnet/tests -name '*.cs' -newermt '-1 minute' -exec touch {} + 2>/dev/null
-    dotnet build dotnet/Paperless.slnx >"$OUT/restore-build.txt" 2>&1
+    dotnet build dotnet/XRay.Office.slnx >"$OUT/restore-build.txt" 2>&1
 }
 
 echo "verify-test: $PROJECT at $BASE${FILTER:+, filter $FILTER}"
@@ -101,7 +101,7 @@ echo "verify-test: files touched by the mutation:"
 git status --short -- dotnet | sed 's/^/  /'
 
 # Explicit build. Never --no-build here: that is how a clean tree reported failures once.
-if ! dotnet build dotnet/Paperless.slnx >"$OUT/build.txt" 2>&1; then
+if ! dotnet build dotnet/XRay.Office.slnx >"$OUT/build.txt" 2>&1; then
     echo "verify-test: the mutated tree does not build — that is not a detection." >&2
     echo "verify-test: a mutation must be a behaviour change, not a compile error." >&2
     grep -E 'error [A-Z]+[0-9]+' "$OUT/build.txt" | head -5 >&2

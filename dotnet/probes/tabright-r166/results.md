@@ -22,7 +22,7 @@ is byte-identical to its rendering before the change.
 9360 twips wide, a **left** stop at 990 and a **right, dot-leader** stop declared at 9360 — exactly
 the column's right edge — and `w:ind w:left="720" w:right=R w:hanging="720"`. Ten right indents ×
 eleven title lengths. `word/settings.xml` is written, empty, so the importer takes the OOXML
-compatibility defaults (`paperless-corpus/SKILL.md`).
+compatibility defaults (`office-corpus/SKILL.md`).
 
 `score.py` prints `#` where the page number stays on the entry's first line and `.` where it does
 not, read from `pdftotext`'s own line grouping. **Two instrument corrections were needed and both

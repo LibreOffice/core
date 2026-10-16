@@ -14,7 +14,7 @@ inserted at the section's end instead.
 import re, subprocess, sys, zipfile, pathlib
 
 SOFFICE = '/opt/libreoffice26.2/program/soffice'
-PROFILE = 'file:///tmp/paperless-lo-r92nested'
+PROFILE = 'file:///tmp/xray-office-lo-r92nested'
 
 LONG = ('%s lorem ipsum dolor sit amet consectetuer adipiscing elit sed diam nonummy nibh '
         'euismod tincidunt ut laoreet dolore magna aliquam erat volutpat ut wisi enim ad minim '

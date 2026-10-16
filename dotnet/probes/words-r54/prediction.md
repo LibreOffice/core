@@ -42,7 +42,7 @@ Sans) and the pi face (`Symbol` → OpenSymbol), which is exactly what the resol
 
 ## The change
 
-Two sites, **both in `Paperless.WordProcessing`**, and none in `Paperless.Text`:
+Two sites, **both in `XRay.Office.WordProcessing`**, and none in `XRay.Office.Text`:
 
 - `DocxLayoutSource.Face` — the class handed to `FontRequest` becomes `SansSerif` when the font
   table declares `swiss` and **`Serif` otherwise**, which is the DOCX filter's roman default.
@@ -124,11 +124,11 @@ advance than discover it as a pleasant surprise.
 
 ## Cross-track: nothing is owed, and that is measured twice
 
-`git diff --stat` will show no file under `Paperless.Text`, `Core`, `Containers`, `Vector`,
+`git diff --stat` will show no file under `XRay.Office.Text`, `Core`, `Containers`, `Vector`,
 `Rendering`, `Markup` or `Ooxml`, so the change cannot reach slides or sheets at all.
 
 Independently of that, the change the brief expected — flipping `GenericFallbacks` to serif in
-`Paperless.Text` — **would have broken both other tracks**, and both instruments say so:
+`XRay.Office.Text` — **would have broken both other tracks**, and both instruments say so:
 
 - authored PPTX, XLSX and FODS files, three families whose fontconfig generics differ, answer
   `DejaVu Sans`, `DejaVu Sans` and `DejaVu Sans Mono` — `fc-match`'s column exactly, not Serif;

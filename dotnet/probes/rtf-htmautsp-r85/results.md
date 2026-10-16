@@ -2,7 +2,7 @@
 
 ## Environment
 
-    ours    Paperless.Cli built in /home/user/wt-rtfhtmautsp, at 6a6f18d9a (base) and at this
+    ours    XRay.Office.Cli built in /home/user/wt-rtfhtmautsp, at 6a6f18d9a (base) and at this
             round's HEAD. Every figure below names which. The base binary was made by copying
             the two changed files aside and `git checkout`-ing them, with the project's
             `obj`/`bin` deleted before each rebuild; it reproduces `150-5370-10H` at 702 pages
@@ -12,7 +12,7 @@
             Every probe rendering was made fresh, one `soffice` profile per document keyed on
             an md5 of its own path. For the column, the banked reference half
             /home/user/gate-odf-r80/ref (336 `__rtf.pdf`, rendered 2026-09-08 02:56–03:40).
-            The diff is confined to `Paperless.WordProcessing/Rtf`, which `soffice` cannot
+            The diff is confined to `XRay.Office.WordProcessing/Rtf`, which `soffice` cannot
             reach, so the banked reference is the same bytes throughout.
     fonts   All five tarball confounds aside: /opt/libreoffice26.2/share/fonts/truetype holds
             82 files with .duplicates-aside, .noto-aside and .condensed-aside beside it;
@@ -51,7 +51,7 @@ distance from the reference goes 89 → 2812 on a base of 1 504 839, which is a 
 **The original `.doc`/`.docx` words track does not move.** All **338** of it, rendered with a
 binary built at this round's base and again at its HEAD under `SOURCE_DATE_EPOCH`, md5-compared:
 **338 identical, 0 different, 0 failed** (`sweep-orig-hash.sh`, `orig85-base.tsv` against
-`orig85-after.tsv`). The variable is what makes a plain md5 mean anything — `paperless render`
+`orig85-after.tsv`). The variable is what makes a plain md5 mean anything — `xray-office render`
 honours it in both `/CreationDate` and a header's date fields — and it is what let the check run
 without banking 338 PDFs twice on a container with 3.5 GB free.
 
@@ -288,7 +288,7 @@ design.
 
 ```sh
 export TMPDIR=/abs/tmp                      # absolute: a relative one makes soffice hang forever
-export PAPERLESS_CLI=<tree>/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=<tree>/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 R=dotnet/probes/rtf-htmautsp-r85
 
 python3 $R/census-all.py /home/user/corpus-odf/words          # 1 of 338

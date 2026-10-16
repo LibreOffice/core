@@ -82,7 +82,7 @@ there. 21 corpus documents have a positioned table in the body and 4 in a header
 | P5 | `PAT-047` (4/4, `match`) stays `match`. Its header table is `vertAnchor="page"` with no `w:bottomFromText`, so its head loses the empty paragraph's height and gains nothing; the page count is expected to survive it. | medium |
 | P6 | `HC-Bulletin-template` (5/5, `match`) stays `match`. Same shape, in a footer. | medium |
 | P7 | `CRIF …` stays a mismatch. It is 33/29 today and its reference header is ~68 pt taller than ours — this fix does not reach that. | high |
-| P8 | `Paperless.Fidelity.Tests` is **30 failed of 550** before and **30 of 550** after; no other project changes | high |
+| P8 | `XRay.Office.Fidelity.Tests` is **30 failed of 550** before and **30 of 550** after; no other project changes | high |
 | P9 | `words/batch-010` goes 8/9 → **9/9**; `words/batch-001`…`010` goes 97/99 → **98/99**, the remaining failure being `1447.doc` at 3/4, which is the line-height residue and not this round's | high |
 | P10 | The blind page-vision reading of the worst page will report the two renderings as differing in **where the page breaks / what content the page holds**, not in the running head itself — the head is pixel-close on both sides, only the body's start moves | medium |
 

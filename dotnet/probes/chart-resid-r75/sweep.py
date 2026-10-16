@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render a list of corpus documents with one Paperless CLI, one directory per document.
+"""Render a list of corpus documents with one XRay.Office CLI, one directory per document.
 
 One directory per *document*, never per worker slot: a thread pool does not work
 consecutive indices, so keying on a slot index lets two live renders share a directory

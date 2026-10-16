@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Rendering backends that consume the XRay.Office display list: SkiaSharp rasteriser, PDF writer and SVG writer.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" />
+    <PackageReference Include="SkiaSharp.HarfBuzz" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XRay.Office.Core\XRay.Office.Core.csproj" />
+    <ProjectReference Include="..\XRay.Office.Text\XRay.Office.Text.csproj" />
+  </ItemGroup>
+
+</Project>

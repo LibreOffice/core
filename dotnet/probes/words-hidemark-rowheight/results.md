@@ -4,7 +4,7 @@ Measured 2026-09-05 in the container described at the top of `dotnet/CLAUDE.md`:
 `/usr/bin/soffice` is **LibreOffice 24.2.7.2**, `/opt/libreoffice26.2/program/soffice` is the TDF
 tarball **26.2.4.2** with its bundled font duplicates left in place. Carlito, Caladea, Liberation
 and DejaVu are all installed; `fc-match "DejaVu Sans"` answers `DejaVuSans.ttf`.
-Paperless at `agent/draw`, one commit before the fix for the "before" column.
+XRay.Office at `agent/draw`, one commit before the fix for the "before" column.
 
 ## The question
 

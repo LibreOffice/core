@@ -5,7 +5,7 @@ figure is evidence about an environment and not about the code:
 
 | | |
 |---|---|
-| ours | `Paperless.Cli` from `/home/user/wt-overflow`, `PAPERLESS_BUNDLED_FONTS` unset |
+| ours | `XRay.Office.Cli` from `/home/user/wt-overflow`, `XRAY_OFFICE_BUNDLED_FONTS` unset |
 | ref26 | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2**, the calibration target |
 | ref24 | `/usr/bin/soffice` — **24.2.7.2**, which is what `batch-check.sh` scores against |
 | fonts | system fontconfig; the tarball's eight Latin duplicates and its Noto moved aside |
@@ -56,7 +56,7 @@ block of several columns wider than the page paginates into a second page column
 ### The seat
 
 `SpreadsheetPages.BodyOrigin`
-(`dotnet/src/Paperless.Spreadsheets/Layout/SpreadsheetPages.cs`:506-517). It read
+(`dotnet/src/XRay.Office.Spreadsheets/Layout/SpreadsheetPages.cs`:506-517). It read
 
 ```csharp
 Length spare = area.Width - Extent(Columns(x).Select(c => c.Width));
@@ -249,7 +249,7 @@ instead of `GraphicsPath.Rectangle` — and half of it would be worse than none,
 rectangle drawn around a `star5` is a defect the corpus does not currently have. The gate cannot
 see any of it: a fill and an outline add no glyphs and no pages.
 
-**Also not this round's, and separate again:** `paperless extract` surfaces no worksheet shape
+**Also not this round's, and separate again:** `xray-office extract` surfaces no worksheet shape
 text at all. `extract` on `070` finds none of the three notices, which the rendering path draws.
 That is the round-67 lesson — making something draw does not make it extract — arriving on the
 sheets track.
@@ -316,9 +316,9 @@ toward the target.
 
 | | baseline at `ddb05e4e5` | after |
 |---|---|---|
-| `dotnet build Paperless.slnx -v q -nologo` | 0 warnings, 0 errors | **0 warnings, 0 errors** |
+| `dotnet build XRay.Office.slnx -v q -nologo` | 0 warnings, 0 errors | **0 warnings, 0 errors** |
 | ten non-fidelity projects, run individually, totalled by hand | 5845 / 0 failed / 0 skipped | **5850 / 0 / 0** (+5 new tests) |
-| `Paperless.Fidelity.Tests` | 542 / 10 failed / 0 skipped of 552 | **542 / 10 / 0** |
+| `XRay.Office.Fidelity.Tests` | 542 / 10 failed / 0 skipped of 552 | **542 / 10 / 0** |
 | sheets track, gate rule | match **260** of 307 | match **261** of 307 |
 
 The ten projects were run twice — once before and once after the source was restored from the
@@ -338,5 +338,5 @@ because none of them moved.
 
 The separator census over the other two tracks: **one** `a:t` in the whole slides corpus carries
 a separator (`Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.pptx`) and **none** in words.
-Whether `Paperless.Presentations` handles it was not measured; the sheets seat fixed here is
+Whether `XRay.Office.Presentations` handles it was not measured; the sheets seat fixed here is
 `SheetShapePainter` and does not reach either.

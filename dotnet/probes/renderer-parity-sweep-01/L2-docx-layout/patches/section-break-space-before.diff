@@ -1,5 +1,5 @@
---- a/dotnet/src/Paperless.WordProcessing/Layout/Paginator.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Layout/Paginator.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Layout/Paginator.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Layout/Paginator.cs
 @@ -1379,27 +1379,39 @@
              // which takes the space back on every page but the first from Word 2013 onwards, so at
              // `compatibilityMode` 15 an explicit break keeps nothing either.

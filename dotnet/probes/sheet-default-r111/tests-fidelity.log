@@ -1,14 +1,14 @@
-Test run for /home/user/wt-sheetdefault/dotnet/tests/Paperless.Fidelity.Tests/bin/Debug/net10.0/linux-x64/Paperless.Fidelity.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for /home/user/wt-sheetdefault/dotnet/tests/XRay.Office.Fidelity.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Fidelity.Tests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
-[xUnit.net 00:00:53.41]     Paperless.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.doc") [FAIL]
-[xUnit.net 00:00:55.36]     Paperless.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.rtf") [FAIL]
-[xUnit.net 00:00:57.38]     Paperless.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.fodt") [FAIL]
-[xUnit.net 00:00:59.51]     Paperless.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.docx") [FAIL]
-[xUnit.net 00:01:35.91]     Paperless.Fidelity.Tests.JustificationShrinkComparisonTests.TheParagraphBreaksWhereLibreOfficeBreaksIt(document: "justify-shrink-2013.docx") [FAIL]
-[xUnit.net 00:02:09.89]     Paperless.Fidelity.Tests.SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt(name: "sheet-rich-text.xlsx") [FAIL]
-[xUnit.net 00:02:55.52]     Paperless.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.odt") [FAIL]
-[xUnit.net 00:02:57.49]     Paperless.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.doc") [FAIL]
-[xUnit.net 00:02:59.69]     Paperless.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.docx") [FAIL]
-[xUnit.net 00:03:01.85]     Paperless.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.fodt") [FAIL]
+[xUnit.net 00:00:53.41]     XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.doc") [FAIL]
+[xUnit.net 00:00:55.36]     XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.rtf") [FAIL]
+[xUnit.net 00:00:57.38]     XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.fodt") [FAIL]
+[xUnit.net 00:00:59.51]     XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.docx") [FAIL]
+[xUnit.net 00:01:35.91]     XRay.Office.Fidelity.Tests.JustificationShrinkComparisonTests.TheParagraphBreaksWhereLibreOfficeBreaksIt(document: "justify-shrink-2013.docx") [FAIL]
+[xUnit.net 00:02:09.89]     XRay.Office.Fidelity.Tests.SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt(name: "sheet-rich-text.xlsx") [FAIL]
+[xUnit.net 00:02:55.52]     XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.odt") [FAIL]
+[xUnit.net 00:02:57.49]     XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.doc") [FAIL]
+[xUnit.net 00:02:59.69]     XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.docx") [FAIL]
+[xUnit.net 00:03:01.85]     XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.fodt") [FAIL]
 
-Failed!  - Failed:    10, Passed:   542, Skipped:     0, Total:   552, Duration: 3 m 56 s - Paperless.Fidelity.Tests.dll (net10.0)
+Failed!  - Failed:    10, Passed:   542, Skipped:     0, Total:   552, Duration: 3 m 56 s - XRay.Office.Fidelity.Tests.dll (net10.0)

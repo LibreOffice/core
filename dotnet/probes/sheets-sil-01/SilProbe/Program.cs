@@ -1,17 +1,17 @@
 // Dumps, per sheet, the used/printed ranges and every page placement pagination produces.
 // The optional third/fourth args extend the printed range by rows/columns so the effect of a
 // wider print area can be measured without changing the reader.
-using Paperless;
-using Paperless.Core.Documents;
-using Paperless.Core.Units;
-using Paperless.Spreadsheets.Layout;
+using XRay.Office;
+using XRay.Office.Core.Documents;
+using XRay.Office.Core.Units;
+using XRay.Office.Spreadsheets.Layout;
 
 string path = args[0];
 string? only = args.Length > 1 && args[1].Length > 0 ? args[1] : null;
 int extraRows = args.Length > 2 ? int.Parse(args[2]) : 0;
 int extraColumns = args.Length > 3 ? int.Parse(args[3]) : 0;
 
-using IDocument doc = PaperlessDocument.Open(path);
+using IDocument doc = OfficeDocument.Open(path);
 var pages = (SpreadsheetPages)((IPaginatedDocument)doc).Layout();
 
 foreach (SheetLayout sheet in pages.Sheets)

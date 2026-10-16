@@ -3,7 +3,7 @@
 
     audit_poolspacing.py <outdir> [workers]
 
-`Paperless.WordProcessing/Ooxml/WriterPoolSpacing.cs` is one of the eleven open sites in this
+`XRay.Office.WordProcessing/Ooxml/WriterPoolSpacing.cs` is one of the eleven open sites in this
 project, and it says outright what it is: *"Each row is one rendered probe against LibreOffice
 24.2.7.2"*.  It also already carries a warning from a later round -- that lower-case `body text`
 measures nought below on 26.2.4.2 where `Body Text` measures 140 -- left alone deliberately because

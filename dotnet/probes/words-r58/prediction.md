@@ -46,13 +46,13 @@ see it, but every claim here is a claim about *this* machine's italic-less famil
 
 ## The change
 
-`Paperless.Text/Fonts/GlyphFallback.cs` gains a **default interface method**
+`XRay.Office.Text/Fonts/GlyphFallback.cs` gains a **default interface method**
 `ReferenceFor(OpenTypeFace face, bool isItalicRequested)` which is the one-argument reverse lookup
 plus `SyntheticOblique = isItalicRequested && !face.IsItalic`. Neither implementer changes. Three
 call sites pass the request, reconstructed as *the primary face is italic, or the primary run was
 itself being sheared*.
 
-**This is `Paperless.Text` and it reaches all three tracks.** Census below; no reach is assumed.
+**This is `XRay.Office.Text` and it reaches all three tracks.** Census below; no reach is assumed.
 
 ## The census, and what it cannot see
 

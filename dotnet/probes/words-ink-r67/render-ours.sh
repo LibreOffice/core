@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Render a list of corpus paths with one Paperless CLI into one directory.
+# Render a list of corpus paths with one XRay.Office CLI into one directory.
 #   render-ours.sh <cli> <outdir> [workers]
 set -uo pipefail
 CLI="$1"; OUT="$2"; W="${3:-6}"

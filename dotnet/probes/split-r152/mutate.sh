@@ -6,14 +6,14 @@
 # did not compile, which prints NOTHING and reads exactly like an arm that is not pinned.
 # Restores with `cp` + `touch`, never `mv` and never `git checkout` alone.
 cd "$(dirname "$0")/../.."
-T=src/Paperless.WordProcessing/Layout/TableLayouter.cs
+T=src/XRay.Office.WordProcessing/Layout/TableLayouter.cs
 cp "$T" /tmp/r152.tl
 restore() { cp /tmp/r152.tl "$T"; touch "$T"; }
 trap restore EXIT
 
 run() {
     printf '\n=== %s ===\n' "$1"
-    dotnet test tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj \
+    dotnet test tests/XRay.Office.WordProcessing.Tests/XRay.Office.WordProcessing.Tests.csproj \
         --filter 'FullyQualifiedName~TableSplitBorder' 2>&1 \
         | grep -E '^(Passed!|Failed!|  Failed |.*error [A-Z]+[0-9]+)' || echo 'NO OUTPUT'
     restore

@@ -5,7 +5,7 @@ three predecessor probes, and **before** opening `150_5300_13_chg10.doc`, before
 census over the corpus, and before re-rendering anything. Nothing below has been checked.
 
 Baseline commit: `80633bfbd36`. Worktree `/c/sandbox/workdir/wt-words-f`, branch `wt-words-f`.
-`dotnet build Paperless.slnx -v q -nologo` on this baseline: **0 warnings, 0 errors** (checked,
+`dotnet build XRay.Office.slnx -v q -nologo` on this baseline: **0 warnings, 0 errors** (checked,
 exit 0 — that is the one fact here that is already measured, and it is measured because a green
 test run after a failed build is a known trap on this project).
 
@@ -91,7 +91,7 @@ worse than `pages,words`.
 
 **P11.** Nothing on the sheets or slides tracks changes: the fix is inside the WW8 reader,
 which neither family references. 0 of 171 and 0 of 163, argued structurally and, if the change
-touches anything above `Paperless.WordProcessing`, measured instead.
+touches anything above `XRay.Office.WordProcessing`, measured instead.
 
 ## D. If task 1 closes early — the page cluster
 

@@ -254,7 +254,7 @@ By extension: docx 106, pptx 94, doc 41, ppt 39, xlsx 73, xls 13, xlsm 2.
 **A rule thickness is ink and no gate column can see one**, which is stated rather than dressed
 up: the gate's three checks are page count, alphanumeric characters and font embedding, and a
 rule under a word changes none of them. The same is true of the fidelity suite —
-`Paperless.Fidelity.Tests` is **10 failed of 552 before and 10 of 552 after, the same ten tests
+`XRay.Office.Fidelity.Tests` is **10 failed of 552 before and 10 of 552 after, the same ten tests
 by name**.
 
 **C13 is not a hazard on this pair.** Both legs are ours, both pinned by `SOURCE_DATE_EPOCH`,
@@ -464,14 +464,14 @@ rich, the cell's own where it is not. `Ink` takes that colour instead of the `bo
 
 ### 6.1 New
 
-`Paperless.Text.Tests.RuleWidthTests`, twelve cases, of which two carry the whole measurement:
+`XRay.Office.Text.Tests.RuleWidthTests`, twelve cases, of which two carry the whole measurement:
 the Calc and Writer tables of all 90 (face, size) pairs each, asserted against the reference's
 own drawn value in its own unit. Beside them: that the two grids disagree, the seven O64 pairs in
 the form the register states them, that a double underline is thinner than a single one on both
 branches, that the thickness *steps* rather than scaling, and that the blacklist is checked by
 name.
 
-`Paperless.Spreadsheets.Tests.SheetLinkColourByFormatTests`, three cases over three new fixtures
+`XRay.Office.Spreadsheets.Tests.SheetLinkColourByFormatTests`, three cases over three new fixtures
 — `sheet-link-colour-ooxml.xlsx`, `sheet-link-colour-biff.xls` and `sheet-link-colour-odf.fods` —
 one per importer, every expectation the reference's own drawn colour.
 

@@ -8,14 +8,14 @@ Reference: `/opt/libreoffice26.2/program/soffice` — **26.2.4.2** `0229ac93fcf0
 
 ## 0. PROVENANCE WARNING — our half is a STALE BUILD
 
-`dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/` is dated **Sep 17 06:33**; HEAD is
+`dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/` is dated **Sep 17 06:33**; HEAD is
 `bccfeb64b` (Sep 20). Verified by string scan of the assemblies: `WordParity`, `DocxTocStyles`,
-`DocxReferenceFields`, `ReferenceFieldText` and `PAPERLESS_LIBREOFFICE_QUIRKS` are **absent**;
+`DocxReferenceFields`, `ReferenceFieldText` and `XRAY_OFFICE_LIBREOFFICE_QUIRKS` are **absent**;
 `ListLevelIndentsApplicable` is present. **Every `[bin]` figure below marked `(Sep-17)` is that
 build, not HEAD.** All `[bin]` figures for the *reference* are 26.2.4.2 and are unaffected.
 
-Nine commits touch `Paperless.WordProcessing` after the binary
-(`git diff dd9c2baf7 HEAD -- dotnet/src/Paperless.WordProcessing/`). The ones in scope:
+Nine commits touch `XRay.Office.WordProcessing` after the binary
+(`git diff dd9c2baf7 HEAD -- dotnet/src/XRay.Office.WordProcessing/`). The ones in scope:
 
 | commit | date | why it is in scope |
 |---|---|---|
@@ -30,7 +30,7 @@ Nine commits touch `Paperless.WordProcessing` after the binary
 `Paginator.IsCoveredByAMerge`, and `PlaceTablePart`'s whole-rows loop and spanning-cell placement
 (only `bandAbove` arguments were added to its `SliceRow` calls).
 
-## 1. The A/B on `PAPERLESS_LIBREOFFICE_QUIRKS` is VOID
+## 1. The A/B on `XRAY_OFFICE_LIBREOFFICE_QUIRKS` is VOID
 
 Ran it anyway before the correction arrived: both arms 166 pages, `pdftotext -bbox` dumps
 differing only in `<meta name="CreationDate">`. **That result is an artefact of the stale build
@@ -118,7 +118,7 @@ the intended output under `TODO.word-parity.md`'s policy** (ECMA-376 §17.7.2: n
 **`pStyle` + `rPr` only**, so `Prune` is a no-op on them. Our pipeline never materialises the
 style's indent onto the paragraph, so there is nothing for the rule to void, and the effect the
 reference produces — the *style-chain* indent ceasing to block the level indent — is not modelled.
-**Therefore `PAPERLESS_LIBREOFFICE_QUIRKS=1` at HEAD will still not reproduce the reference here.**
+**Therefore `XRAY_OFFICE_LIBREOFFICE_QUIRKS=1` at HEAD will still not reproduce the reference here.**
 Needs confirming against a HEAD build.
 
 ### 3.5 Refuted on the way
@@ -276,15 +276,15 @@ document's defect.) Filed here rather than chased.
 ## 6. What must be re-measured against a HEAD build
 
 ```sh
-cd /home/user/libreoffice-core/dotnet && dotnet build Paperless.slnx
+cd /home/user/libreoffice-core/dotnet && dotnet build XRay.Office.slnx
 export PATH=/opt/libreoffice26.2/program:$PATH
-CLI=tools/Paperless.Cli/bin/Release/net10.0/linux-x64/Paperless.Cli
+CLI=tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli
 D="/home/user/sample-files/words/metrics-001/docx/OM template for non-complex NCC operators_August 2016.docx"
 P=probes/omnum-r163
 
 # a) page count and the two defects, quirk off and on
 $CLI render --format pdf --outdir $P/head-noquirk "$D"
-PAPERLESS_LIBREOFFICE_QUIRKS=1 $CLI render --format pdf --outdir $P/head-quirk "$D"
+XRAY_OFFICE_LIBREOFFICE_QUIRKS=1 $CLI render --format pdf --outdir $P/head-quirk "$D"
 python3 - <<'EOF'   # the §3.1 table; see probes/omnum-r163 for the scanner
 EOF
 
@@ -299,7 +299,7 @@ Re-measure specifically:
    the positions should be identical; **confirm**, and confirm the label *text* (`2.1.5`, …) has
    not changed under `8af1cbb21`, which shares one counter across numIds 1/30/31/32 and changes
    `w:startOverride` handling. If the numbers change, page 29's content changes with them.
-2. **§3.4** — that `PAPERLESS_LIBREOFFICE_QUIRKS=1` still leaves page 29 unmoved (predicted from
+2. **§3.4** — that `XRAY_OFFICE_LIBREOFFICE_QUIRKS=1` still leaves page 29 unmoved (predicted from
    source: `Prune` is a no-op on these paragraphs).
 3. **§4.3 stroke geometry and row heights** — `ffbdb45ac` charges a covered cell's rules to the
    row height and `a3159ce0d`/`f2207fde9`/`3a2ec4171` move the bands at a cut. Row 9's 92.5 pt and

@@ -1,8 +1,8 @@
 // How often a run states a toggle sprm relative to its style AND names a character style in the
 // same CHPX — the population on which "which style is the toggle relative to" can be decided
 // wrongly — with the same count for runs that name no character style as the base rate.
-using Paperless.Core.Diagnostics;
-using Paperless.WordProcessing.Ww8;
+using XRay.Office.Core.Diagnostics;
+using XRay.Office.WordProcessing.Ww8;
 
 internal static class Toggles
 {

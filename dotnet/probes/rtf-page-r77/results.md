@@ -2,7 +2,7 @@
 
 ## Environment
 
-    ours    Paperless.Cli @ 584ba83f9 (base) and @ this commit, built in this worktree
+    ours    XRay.Office.Cli @ 584ba83f9 (base) and @ this commit, built in this worktree
     ref     /opt/libreoffice26.2/program/soffice -- LibreOffice 26.2.4.2
             reused from the banked gate /home/user/gate-odf-r76/ref, which was rendered by
             batch-check.sh with REF_SOFFICE pointed at that binary. The bank is at c6e730d90,
@@ -18,7 +18,7 @@
             rendered PDFs; run against the banked halves it reproduces batch-check.sh's own
             `.rtf` verdict on 336 of 336.
 
-Only our half was re-rendered. The diff is confined to `Paperless.WordProcessing/Rtf`, which
+Only our half was re-rendered. The diff is confined to `XRay.Office.WordProcessing/Rtf`, which
 `soffice` cannot reach, so the reference half of the bank is the same bytes throughout.
 
 ## The column
@@ -178,7 +178,7 @@ five gained and two lost.
 BoldOblique}.ttf` and `DejaVuSerifCondensed-{,Bold,Italic,BoldItalic}.ttf`. **This system has no
 condensed face at all** (`fc-list | grep -ci condensed` → 0), and `fonts-dejavu-core` carries no
 DejaVu Serif italic, so where a fallback run wants italic DejaVu Serif the tarball answers
-`DejaVuSerifCondensed-Italic` and a stock machine -- and Paperless -- synthesise an oblique of
+`DejaVuSerifCondensed-Italic` and a stock machine -- and XRay.Office -- synthesise an oblique of
 `DejaVuSerif`, which is about **15% wider**.
 
 Censused with `faces.py` over the four converted columns, counting documents whose *reference*

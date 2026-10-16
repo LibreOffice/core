@@ -1,6 +1,6 @@
-diff --git a/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs b/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs
---- a/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
 @@ -1811,6 +1811,30 @@
                          Emit("\t");
                          break;
@@ -32,9 +32,9 @@ diff --git a/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs b/dot
                      // A character named by slot in a face of its own, and the only run-level element
                      // that overrides the run's font for one character. LibreOffice sets
                      // PROP_CHAR_FONT_NAME to `w:font` with charset SYMBOL and appends the raw `w:char`
-diff --git a/dotnet/src/Paperless.WordProcessing/Ooxml/DocxContentReader.cs b/dotnet/src/Paperless.WordProcessing/Ooxml/DocxContentReader.cs
---- a/dotnet/src/Paperless.WordProcessing/Ooxml/DocxContentReader.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Ooxml/DocxContentReader.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxContentReader.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxContentReader.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxContentReader.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxContentReader.cs
 @@ -524,7 +524,14 @@
                      ReadAnchoredContent(child, paragraph);
                      break;

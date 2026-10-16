@@ -356,7 +356,7 @@ ours is the inked part; the pole starts at x = 2 of 16, and 14/16 × 10.19 = 8.9
 
 ## 8. Confinement and the suite
 
-**The diff is confined to `dotnet/src/Paperless.Spreadsheets`** — eight files, three of them new —
+**The diff is confined to `dotnet/src/XRay.Office.Spreadsheets`** — eight files, three of them new —
 plus one test file and four fixtures. Nothing under `dotnet/src` outside it changes, so by the
 dependency layering no words document and no deck can move. §7 is the measurement of the same
 thing for the family that *can*: 300 of 307 sheets renderings byte-identical.
@@ -371,23 +371,23 @@ Clean build of the whole solution at `-c Release`: **0 warnings, 0 errors**, wit
 
 | project | passed | discovered | |
 |---|---:|---:|---|
-| `Paperless.Core.Tests` | 528 | — | ✓ |
-| `Paperless.Markup.Tests` | 259 | — | ✓ |
-| `Paperless.Text.Tests` | 728 | — | ✓ |
-| `Paperless.Containers.Tests` | 109 | — | ✓ |
-| `Paperless.Vector.Tests` | 309 | — | ✓ |
-| `Paperless.Rendering.Tests` | 164 | — | ✓ |
-| `Paperless.OpenDocument.Tests` | 146 | — | ✓ |
-| `Paperless.WordProcessing.Tests` | 1938 | **1938** | ✓ |
-| `Paperless.Spreadsheets.Tests` | 1299 | **1299** | ✓ (4 of them this round's) |
-| `Paperless.Presentations.Tests` | 1054 | **1054** | ✓ |
+| `XRay.Office.Core.Tests` | 528 | — | ✓ |
+| `XRay.Office.Markup.Tests` | 259 | — | ✓ |
+| `XRay.Office.Text.Tests` | 728 | — | ✓ |
+| `XRay.Office.Containers.Tests` | 109 | — | ✓ |
+| `XRay.Office.Vector.Tests` | 309 | — | ✓ |
+| `XRay.Office.Rendering.Tests` | 164 | — | ✓ |
+| `XRay.Office.OpenDocument.Tests` | 146 | — | ✓ |
+| `XRay.Office.WordProcessing.Tests` | 1938 | **1938** | ✓ |
+| `XRay.Office.Spreadsheets.Tests` | 1299 | **1299** | ✓ (4 of them this round's) |
+| `XRay.Office.Presentations.Tests` | 1054 | **1054** | ✓ |
 | **ten projects** | **6534** | | **0 failed** |
 
 The three largest were checked against `dotnet test --list-tests` in the same run rather than
 against a remembered figure, which is `dotnet/CLAUDE.md`'s rule for catching a truncated run from
 the side where the count is taken first: **passed equals discovered in all three**.
 
-`Paperless.Fidelity.Tests`: **542 passed, 10 failed of 552**, and the ten are exactly the known
+`XRay.Office.Fidelity.Tests`: **542 passed, 10 failed of 552**, and the ten are exactly the known
 names — `PageDrawingComparisonTests` ×4 (`paginated.` `docx`/`fodt`/`rtf`/`doc`),
 `TabStopComparisonTests` ×4 (`list-label-overrun.` `docx`/`doc`/`odt`/`fodt`),
 `SheetDrawingComparisonTests` (`sheet-rich-text.xlsx`) and `JustificationShrinkComparisonTests`

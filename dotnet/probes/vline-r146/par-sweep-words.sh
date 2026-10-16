@@ -19,7 +19,7 @@ awk -F'\t' 'NR>1 && $1=="words" {print $3}' "$CORPUS/MANIFEST.tsv" \
     b=`echo "$rel" | tr / _`
     w="$OUT/pdf/$b"
     mkdir -p "$w"
-    SOURCE_DATE_EPOCH=0 "$PAPERLESS_CLI" render "$f" --outdir "$w" >/dev/null 2>&1
+    SOURCE_DATE_EPOCH=0 "$XRAY_OFFICE_CLI" render "$f" --outdir "$w" >/dev/null 2>&1
     p=`ls "$w"/*.pdf 2>/dev/null | head -1`
     if [ -n "$p" ]; then
         printf "%s\t%s\n" "`md5sum < "$p" | cut -d" " -f1`" "$rel" >> "$OUT/fp.txt"

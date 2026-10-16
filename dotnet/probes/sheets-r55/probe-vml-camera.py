@@ -26,7 +26,7 @@ Each variant changes exactly one thing, and each has a *stated* expected directi
 import os, re, shutil, subprocess, sys, zipfile
 
 SRC = "/c/sandbox/workdir/sample-files/sheets/chartset-012/xlsx/013_Contextures_chart_sample_21b98e22.xlsx"
-CLI = "/c/sandbox/workdir/wt-sheets-r50/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/c/sandbox/workdir/wt-sheets-r50/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 WORK = "/c/sandbox/workdir/scratch-r55-sheets/vmlprobe"
 
 ENV = dict(os.environ, SOURCE_DATE_EPOCH="1700000000", TZ="UTC")

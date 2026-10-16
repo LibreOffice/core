@@ -25,7 +25,7 @@ RELS = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships x
 DRELS = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
  '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/></Relationships>')
 # An empty settings part, without which LibreOffice takes different OOXML compatibility
-# defaults -- `.claude/skills/paperless-corpus` records a round lost to exactly that.
+# defaults -- `.claude/skills/office-corpus` records a round lost to exactly that.
 SET = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
  '<w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"/>')
 out = pathlib.Path('font-fallback.docx')

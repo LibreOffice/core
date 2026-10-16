@@ -8,5 +8,5 @@ W=/home/user/libreoffice-core/.claude/worktrees/agent-afd045030560da190
 NAME="${1:?usage: sl14-sweep.sh <outdir-name>}"
 "$W/.claude/skills/corpus-batches/scripts/track-ink-sweep.sh" \
   /workspace/sample-files 'slides/batch-0*' "$S/$NAME" 2 \
-  "$S/sl14-snap/linux-x64/Paperless.Cli" \
+  "$S/sl14-snap/linux-x64/XRay.Office.Cli" \
   "$S/sl12-after2/ref"

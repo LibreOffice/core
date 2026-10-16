@@ -227,7 +227,7 @@ hashes in `sheets-sweep-r107.tsv`.
 
 The other two tracks cannot be reached from here — the change is inside `XlsxReader` and
 `XlsxFile`, which only the OOXML spreadsheet path enters — and the 64 `.xls` in the sweep, which
-go through `Paperless.MsBinary` instead, are the control that says so: none of them moved.
+go through `XRay.Office.MsBinary` instead, are the control that says so: none of them moved.
 
 ## Tests
 
@@ -239,7 +239,7 @@ Ten non-fidelity projects — Containers 109, Core 544, Markup 259, OpenDocument
 Presentations 1081, Rendering 164, Spreadsheets 1308, Text 728, Vector 309, WordProcessing 1938 —
 **6600 passed, 0 failed**, and the run reached the last of them.
 
-`Paperless.Fidelity.Tests`: **Failed: 10, Passed: 542, Total: 552**. The ten by name, which are
+`XRay.Office.Fidelity.Tests`: **Failed: 10, Passed: 542, Total: 552**. The ten by name, which are
 the known ten and no eleventh:
 
     PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt   paginated.rtf .fodt .doc .docx

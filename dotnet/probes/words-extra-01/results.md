@@ -3,7 +3,7 @@
 Seven documents, briefed as two clusters of "we draw content the reference does not". One
 cluster is ours and is fixed; the other is a reference import defect that was closed two rounds
 ago; two of the seven documents are not `extra` failures at all. Two further defects were found
-on the way, one of them in the measuring apparatus rather than in Paperless.
+on the way, one of them in the measuring apparatus rather than in XRay.Office.
 
 Environment: LibreOffice **26.2.4.2**, Carlito/Caladea/Liberation/DejaVu all resolving,
 `pdftotext` 26.01.0, `SOURCE_DATE_EPOCH=1700000000` on every render. References reused from
@@ -11,7 +11,7 @@ Environment: LibreOffice **26.2.4.2**, Carlito/Caladea/Liberation/DejaVu all res
 
 ## Baseline, established before anything changed
 
-`Paperless.Fidelity.Tests` — **Failed 30, Passed 520, Skipped 0, Total 550**. The briefed
+`XRay.Office.Fidelity.Tests` — **Failed 30, Passed 520, Skipped 0, Total 550**. The briefed
 baseline exactly, so the tree was the one the brief described.
 
 ## The brief was wrong about cluster A, and the resolver was innocent
@@ -110,10 +110,10 @@ Four files, one behaviour.
 
 | File | Change |
 |---|---|
-| `src/Paperless.WordProcessing/Layout/PageFrame.cs` | `HasFixedHeight`, with the measurement on it |
-| `src/Paperless.WordProcessing/Ooxml/DocxFrames.cs` | reads `wps:bodyPr` insets into `Padding` and `a:spAutoFit` into `HasFixedHeight`, in both the plain and the group-member paths |
-| `src/Paperless.WordProcessing/Layout/FlowLayouter.cs` | `Truncated(flow, height)` — the rule |
-| `src/Paperless.WordProcessing/Layout/FrameLayout.cs` | calls it from `Content`, and only for a fixed-height frame |
+| `src/XRay.Office.WordProcessing/Layout/PageFrame.cs` | `HasFixedHeight`, with the measurement on it |
+| `src/XRay.Office.WordProcessing/Ooxml/DocxFrames.cs` | reads `wps:bodyPr` insets into `Padding` and `a:spAutoFit` into `HasFixedHeight`, in both the plain and the group-member paths |
+| `src/XRay.Office.WordProcessing/Layout/FlowLayouter.cs` | `Truncated(flow, height)` — the rule |
+| `src/XRay.Office.WordProcessing/Layout/FrameLayout.cs` | calls it from `Content`, and only for a fixed-height frame |
 
 `HasFixedHeight` defaults to **false**, so the ODF, WW8 and RTF frame readers keep the behaviour
 they had. The rule was measured on the DOCX importer and nowhere else; a round that wants it for
@@ -253,7 +253,7 @@ the blindness CLAUDE.md warns the gate has, and it took two people looking at a 
 
 The brief says `ABCD-FE-01-00` "draws ~40 OMML equation tokens on page 7 where the reference
 draws no ink at all". The ink claim is right and the page claim is not — the reference draws 200
-words on that page. But the cause is not a Paperless defect and not a LibreOffice one:
+words on that page. But the cause is not an XRay.Office defect and not a LibreOffice one:
 
 ```
 dpkg -l | grep libreoffice   →  writer, calc, impress, draw, base-core, core … and no math
@@ -284,11 +284,11 @@ references re-banked, the same way DejaVu was.
 ## Files
 
 ```
-src/Paperless.WordProcessing/Layout/PageFrame.cs          HasFixedHeight
-src/Paperless.WordProcessing/Layout/FlowLayouter.cs       Truncated
-src/Paperless.WordProcessing/Layout/FrameLayout.cs        the call site
-src/Paperless.WordProcessing/Ooxml/DocxFrames.cs          bodyPr insets and spAutoFit
-tests/Paperless.WordProcessing.Tests/TextBoxOverflowTests.cs
+src/XRay.Office.WordProcessing/Layout/PageFrame.cs          HasFixedHeight
+src/XRay.Office.WordProcessing/Layout/FlowLayouter.cs       Truncated
+src/XRay.Office.WordProcessing/Layout/FrameLayout.cs        the call site
+src/XRay.Office.WordProcessing/Ooxml/DocxFrames.cs          bodyPr insets and spAutoFit
+tests/XRay.Office.WordProcessing.Tests/TextBoxOverflowTests.cs
 tests/corpus/features/textbox-overflow.docx               authored by make-fixture.py
 probes/words-extra-01/                                    every probe above, runnable
 ```

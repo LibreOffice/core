@@ -7,7 +7,7 @@ Written and committed **before** rendering our own side of
 
 The brief's gate row: `pages 26/26  words 2120/2010  verdict: words` — we draw **+110**.
 
-From the banked reference alone (no Paperless render yet):
+From the banked reference alone (no XRay.Office render yet):
 
 - `/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/slides/8_P-Pavese_…__pptx.pdf`, 26 pages,
   2010 letter-or-digit words / **2199 raw** `pdftotext | wc -w`.
@@ -67,7 +67,7 @@ under-count the ceiling file warns about is proportionally larger here than the 
 
 ## Baselines I predict I will reproduce
 
-- `Paperless.Fidelity.Tests`: **30 failed of 550**.
+- `XRay.Office.Fidelity.Tests`: **30 failed of 550**.
 - `slides/batch-001`–`007`: 66/68, failures `solog_orientation_august_2019` and
   `architecture6`.
 - `slides/batch-008`: 4 of 5 matching, this document the only failure.

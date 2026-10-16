@@ -22,7 +22,7 @@ GLOB="${3:-$TRACK/batch-0*}"
 WORKERS="${4:-4}"
 ROOT_DIR=/c/sandbox/workdir/sample-files
 REF_DIR="/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/$TRACK"
-CLI="${PAPERLESS_CLI:?set PAPERLESS_CLI to the binary you mean to measure}"
+CLI="${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI to the binary you mean to measure}"
 
 export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1700000000}"
 

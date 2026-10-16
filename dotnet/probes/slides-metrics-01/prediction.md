@@ -69,12 +69,12 @@ loses its verdict I will say so rather than re-scope the fix.
 
 ## 6. Fidelity baseline
 
-Predicted **30 failed of 550** in `Paperless.Fidelity.Tests` before the change, and predicted
+Predicted **30 failed of 550** in `XRay.Office.Fidelity.Tests` before the change, and predicted
 unchanged after it — nothing in the fidelity corpus is a PPTX embedding an uncompressed EOT.
 
 ## 7. Tests
 
-Predicted: new tests in `Paperless.Text.Tests` (EOT header parsing, compressed EOT declined,
-registration of an embedded face and its resolution) and `Paperless.Presentations.Tests`
+Predicted: new tests in `XRay.Office.Text.Tests` (EOT header parsing, compressed EOT declined,
+registration of an embedded face and its resolution) and `XRay.Office.Presentations.Tests`
 (the `p:embeddedFontLst` → face mapping on the real deck). Predicted all of them fail against
 the unfixed tree.

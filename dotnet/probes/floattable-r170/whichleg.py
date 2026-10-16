@@ -15,7 +15,7 @@ import os, pathlib, re, subprocess, sys
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 from spanshift import spans, pair
 
-CLI = "/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 
 
 def distance(ours, other):

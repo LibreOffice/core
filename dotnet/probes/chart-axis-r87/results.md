@@ -270,7 +270,7 @@ Ten non-fidelity projects, each run alone:
     Core 521 · Containers 109 · Markup 259 · OpenDocument 143 · Presentations 1044
     Rendering 164 · Spreadsheets 1226 · Text 728 · Vector 302 · WordProcessing 1827
 
-all `Failed: 0, Skipped: 0`. `Paperless.Fidelity.Tests` is **542 passed / 10 failed / 0 skipped**
+all `Failed: 0, Skipped: 0`. `XRay.Office.Fidelity.Tests` is **542 passed / 10 failed / 0 skipped**
 with exactly the expected names — `PageDrawingComparisonTests.EveryLineIsDrawn` ×4,
 `TabStopComparisonTests.AListLabelsTabAdvance` ×4, `SheetDrawingComparisonTests.APictureIsDrawn`,
 `JustificationShrinkComparisonTests`. Build is warning-free.

@@ -26,7 +26,7 @@ if (first <= firstOnPage) return;   // the whole page cannot be moved
 With a 42-paragraph chain that guard looked like the obvious culprit — a chain
 spanning the page would reach the top and we would keep everything.
 
-**It never fires.** A temporary `PAPERLESS_TRACE_KEEP` instrument, since removed,
+**It never fires.** A temporary `XRAY_OFFICE_TRACE_KEEP` instrument, since removed,
 gives `trace.log` beside this file. Every call moves:
 
 ```

@@ -54,7 +54,7 @@ PARTS = {
 </Relationships>''',
 # An empty settings part is load-bearing: without one the importer takes a different
 # set of OOXML compatibility defaults and the fixture answers a question nobody asked.
-# See `.claude/skills/paperless-corpus/SKILL.md`.
+# See `.claude/skills/office-corpus/SKILL.md`.
 'word/settings.xml': '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
             xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml">

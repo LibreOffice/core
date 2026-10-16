@@ -128,7 +128,7 @@ and the `/Widths`. **Our `/Widths` already said `1245.1172` before this round** 
 
 ### Implemented: `CBDT`/`CBLC`, both backends
 
-- **`Paperless.Text/Fonts/ColourBitmaps.cs`** reads `CBLC` index subtable formats 1–5 and `CBDT`
+- **`XRay.Office.Text/Fonts/ColourBitmaps.cs`** reads `CBLC` index subtable formats 1–5 and `CBDT`
   image formats 17, 18 and 19 — the three that wrap a whole image file. The bit-aligned monochrome
   formats are deliberately not read: a face using them is not a colour face and draws from its
   outlines. Nothing is decoded here; the PNG bytes go to whichever backend has a codec, exactly as
@@ -219,18 +219,18 @@ Type 3 on both sides and every other face a subsetted TrueType.
 
 ## 5. Verification
 
-- `dotnet build Paperless.slnx -v q -nologo` — 0 warnings, 0 errors.
+- `dotnet build XRay.Office.slnx -v q -nologo` — 0 warnings, 0 errors.
 - Ten non-fidelity projects, run individually: 109 + 427 + 259 + 128 + 916 + 162 + 1106 + 674 + 302
   + 1593 = **5676 passed, 0 failed, 0 skipped**, against a baseline of 5656 and the 20 tests added
   here (9 + 3 + 6 + 2).
-- `Paperless.Fidelity.Tests`: **542 passed, 10 failed, 0 skipped** of 552 — the baseline exactly,
+- `XRay.Office.Fidelity.Tests`: **542 passed, 10 failed, 0 skipped** of 552 — the baseline exactly,
   and the same ten names (four `TabStopComparisonTests`, one `JustificationShrink`, four
   `PageDrawingComparisonTests`, one `SheetDrawingComparisonTests`).
 
 ## 6. What this contradicts
 
 **`GlyphOutlines` was never in the path, and the brief's premise about it is wrong in a way worth
-recording.** `Paperless.Text/Fonts/GlyphOutlines.cs` is `glyf`-only and that is true, but it is
+recording.** `XRay.Office.Text/Fonts/GlyphOutlines.cs` is `glyf`-only and that is true, but it is
 reached *only* by Fontwork (`Ooxml/DrawingML/FontworkFitting.cs`) and never by text. The blank had
 two seats and neither was that reader: `PdfFontCatalogue` embedded a `glyf`-less TrueType program
 and announced it as one, and `SkiaDrawingSink.DrawOutlines` asked *Skia's* `SKFont.GetGlyphPath`,

@@ -19,7 +19,7 @@
    "reflow",
    "pagination"
   ],
-  "analysis": "Pagination drifts by one page early in a 96-page workbook, so from there on every page carries a different block of rows &mdash; page 5 of each shows entirely different recipients. The cell rendering itself is faithful: the same column widths, the same grey band rows, the same figures. Paperless produces 97 pages against the reference's 96.",
+  "analysis": "Pagination drifts by one page early in a 96-page workbook, so from there on every page carries a different block of rows &mdash; page 5 of each shows entirely different recipients. The cell rendering itself is faithful: the same column widths, the same grey band rows, the same figures. XRay.Office produces 97 pages against the reference's 96.",
   "worst": {
    "page": 5,
    "ssim": 0.30392,
@@ -84,7 +84,7 @@
    "reflow",
    "pagination"
   ],
-  "analysis": "A textbook reflow cascade. Everything is present and correctly drawn; the page simply starts a paragraph earlier than the reference &mdash; the sentence Paperless opens page 3 with is the one LibreOffice ends page 2 with &mdash; and the running header lands mid-page as a result. The page count is identical at 20, so the drift resolves itself later in the document.",
+  "analysis": "A textbook reflow cascade. Everything is present and correctly drawn; the page simply starts a paragraph earlier than the reference &mdash; the sentence XRay.Office opens page 3 with is the one LibreOffice ends page 2 with &mdash; and the running header lands mid-page as a result. The page count is identical at 20, so the drift resolves itself later in the document.",
   "worst": {
    "page": 3,
    "ssim": 0.39019,
@@ -117,7 +117,7 @@
    "field-values",
    "table-rules"
   ],
-  "analysis": "Section headings resolve differently. The reference prints <code>307. OBJECT FREE AREA307.</code>; Paperless prints <code>307. OBJECT FREE AREA. RUNWAY OBJECT FREE AREA\"</code> &mdash; the field embedded in the heading returns the section's <em>text</em> where the reference returns its number, and a stray quotation mark is emitted with it. The same substitution happens on every numbered heading on the page (308, 309, 310). The reference also draws revision change-bars in the left margin beside the changed paragraphs; Paperless draws none. Together these shift where each two-column page breaks, which is why four of the five compared pages diverge.",
+  "analysis": "Section headings resolve differently. The reference prints <code>307. OBJECT FREE AREA307.</code>; XRay.Office prints <code>307. OBJECT FREE AREA. RUNWAY OBJECT FREE AREA\"</code> &mdash; the field embedded in the heading returns the section's <em>text</em> where the reference returns its number, and a stray quotation mark is emitted with it. The same substitution happens on every numbered heading on the page (308, 309, 310). The reference also draws revision change-bars in the left margin beside the changed paragraphs; XRay.Office draws none. Together these shift where each two-column page breaks, which is why four of the five compared pages diverge.",
   "worst": {
    "page": 4,
    "ssim": 0.39637,
@@ -150,7 +150,7 @@
    "reflow",
    "pagination"
   ],
-  "analysis": "Two-column body text set slightly tighter than the reference's, so each column carries more lines and the page ends at a different paragraph. The revision change-bars are drawn on both sides. Paperless also prints a chapter marker in the footer that the reference leaves blank &mdash; the extra ink the metric picked up. The document runs to 77 pages against 76.",
+  "analysis": "Two-column body text set slightly tighter than the reference's, so each column carries more lines and the page ends at a different paragraph. The revision change-bars are drawn on both sides. XRay.Office also prints a chapter marker in the footer that the reference leaves blank &mdash; the extra ink the metric picked up. The document runs to 77 pages against 76.",
   "worst": {
    "page": 4,
    "ssim": 0.40041,
@@ -181,7 +181,7 @@
   "tags": [
    "field-values"
   ],
-  "analysis": "Every table-of-contents entry is drawn as a blue underlined hyperlink. The reference renders the same entries in the document's own TOC style &mdash; black, no underline &mdash; and only the page numbers sit at the leader's end. Paperless is resolving the TOC field's character formatting to the hyperlink style instead of the applied paragraph style, which is where the extra ink comes from. Leader dots and entry spacing follow from the same substitution. Page geometry and the footer are correct: both read <code>Page 4 of 29</code>.",
+  "analysis": "Every table-of-contents entry is drawn as a blue underlined hyperlink. The reference renders the same entries in the document's own TOC style &mdash; black, no underline &mdash; and only the page numbers sit at the leader's end. XRay.Office is resolving the TOC field's character formatting to the hyperlink style instead of the applied paragraph style, which is where the extra ink comes from. Leader dots and entry spacing follow from the same substitution. Page geometry and the footer are correct: both read <code>Page 4 of 29</code>.",
   "worst": {
    "page": 4,
    "ssim": 0.42036,
@@ -213,7 +213,7 @@
    "reflow",
    "pagination"
   ],
-  "analysis": "The same two-column advisory circular as the other AC&nbsp;150/5300-13 revisions, and the same cause: Paperless sets the column text a shade tighter than the reference, so each column carries more lines and the page ends at a different paragraph &mdash; the reference's left column closes on <em>Large Airplane</em>, Paperless's on <em>Hazard to Air Navigation</em>. Nothing is missing or mis-styled. Paperless also prints a page number and a <code>Chap&nbsp;1</code> marker in the footer that the reference leaves blank on this page. Fitting more per page is why the document comes out at 31 pages against the reference's 33.",
+  "analysis": "The same two-column advisory circular as the other AC&nbsp;150/5300-13 revisions, and the same cause: XRay.Office sets the column text a shade tighter than the reference, so each column carries more lines and the page ends at a different paragraph &mdash; the reference's left column closes on <em>Large Airplane</em>, XRay.Office's on <em>Hazard to Air Navigation</em>. Nothing is missing or mis-styled. XRay.Office also prints a page number and a <code>Chap&nbsp;1</code> marker in the footer that the reference leaves blank on this page. Fitting more per page is why the document comes out at 31 pages against the reference's 33.",
   "worst": {
    "page": 4,
    "ssim": 0.42259,
@@ -245,7 +245,7 @@
    "table-rules",
    "content-missing"
   ],
-  "analysis": "Paperless paints the deck's decorative header band &mdash; the blue angular graphic and the <code>HDSS Bulletin Issue 285</code> line &mdash; on page 4, where the reference has no page header at all; the header appears to be a first-page or first-section decoration being applied to every page. The page number is run straight onto the issue number with no separator (<code>Issue 2854</code>). The classification marking <code>OFFICIAL</code> that the reference prints in the footer is missing. The band pushes the body down, so this page opens on material the reference placed at the end of page 3, and the <code>285.5</code> heading wraps onto a third line.",
+  "analysis": "XRay.Office paints the deck's decorative header band &mdash; the blue angular graphic and the <code>HDSS Bulletin Issue 285</code> line &mdash; on page 4, where the reference has no page header at all; the header appears to be a first-page or first-section decoration being applied to every page. The page number is run straight onto the issue number with no separator (<code>Issue 2854</code>). The classification marking <code>OFFICIAL</code> that the reference prints in the footer is missing. The band pushes the body down, so this page opens on material the reference placed at the end of page 3, and the <code>285.5</code> heading wraps onto a third line.",
   "worst": {
    "page": 4,
    "ssim": 0.42905,
@@ -276,7 +276,7 @@
   "tags": [
    "content-missing"
   ],
-  "analysis": "The grid is drawn far too tall: the reference's graph-paper table ends just past the middle of the page, Paperless's runs almost to the footer. The square cells are the right width but roughly twice the height, so the table's row-height specification is not reaching the layout. The <code>Title:</code> and <code>Date:</code> ruled fields the reference prints below the grid are missing entirely &mdash; pushed off by the oversized table. The TemplateHUB logo image is drawn correctly in both.",
+  "analysis": "The grid is drawn far too tall: the reference's graph-paper table ends just past the middle of the page, XRay.Office's runs almost to the footer. The square cells are the right width but roughly twice the height, so the table's row-height specification is not reaching the layout. The <code>Title:</code> and <code>Date:</code> ruled fields the reference prints below the grid are missing entirely &mdash; pushed off by the oversized table. The TemplateHUB logo image is drawn correctly in both.",
   "worst": {
    "page": 1,
    "ssim": 0.43755,
@@ -311,7 +311,7 @@
    "reflow",
    "pagination"
   ],
-  "analysis": "Three separate defects. The reference draws a green double-rule page border around the whole sheet; Paperless draws none. The company logo is anchored at the top right in both, but Paperless lays the green <em>Case Study</em> table over it instead of below it, so the logo is cut in half. And the body text column is set wider than the reference's, so every paragraph is a line or two shorter and two extra bullets reach this page. The footer field is correct in both (<code>Page 1 of 3</code>) and the page count matches.",
+  "analysis": "Three separate defects. The reference draws a green double-rule page border around the whole sheet; XRay.Office draws none. The company logo is anchored at the top right in both, but XRay.Office lays the green <em>Case Study</em> table over it instead of below it, so the logo is cut in half. And the body text column is set wider than the reference's, so every paragraph is a line or two shorter and two extra bullets reach this page. The footer field is correct in both (<code>Page 1 of 3</code>) and the page count matches.",
   "worst": {
    "page": 1,
    "ssim": 0.45229,
@@ -376,7 +376,7 @@
    "content-missing",
    "reflow"
   ],
-  "analysis": "Row heights diverge where a cell's text wraps: the reference gives <em>California Redwood Coast-Humboldt County</em> two lines and Paperless one, so more rows fit and each page carries different records. The footer is the sharper defect &mdash; the reference prints <code>Page 2</code>, Paperless prints <code>Page</code> with the number missing.",
+  "analysis": "Row heights diverge where a cell's text wraps: the reference gives <em>California Redwood Coast-Humboldt County</em> two lines and XRay.Office one, so more rows fit and each page carries different records. The footer is the sharper defect &mdash; the reference prints <code>Page 2</code>, XRay.Office prints <code>Page</code> with the number missing.",
   "worst": {
    "page": 2,
    "ssim": 0.46498,
@@ -473,7 +473,7 @@
    "reflow",
    "pagination"
   ],
-  "analysis": "The table of contents itself is faithful &mdash; every entry, page number and indent level matches, and the running head and footer agree. What differs is weight: Paperless's tab leaders are finer and its text a shade lighter, which is the whole of the 15% ink deficit on this page. The real divergence is elsewhere: the document comes out at 167 pages against the reference's 154, so the two drift apart beyond the five pages compared here.",
+  "analysis": "The table of contents itself is faithful &mdash; every entry, page number and indent level matches, and the running head and footer agree. What differs is weight: XRay.Office's tab leaders are finer and its text a shade lighter, which is the whole of the 15% ink deficit on this page. The real divergence is elsewhere: the document comes out at 167 pages against the reference's 154, so the two drift apart beyond the five pages compared here.",
   "worst": {
    "page": 3,
    "ssim": 0.4818,
@@ -504,7 +504,7 @@
   "tags": [
    "reflow"
   ],
-  "analysis": "The masthead is the defect. The reference paints a deep blue gradient banner carrying <em>MNA Knowledge Notes</em> and its subtitle in white; Paperless paints a much paler gradient, loses the white banner text entirely, and draws the World Bank device twice &mdash; once boxed in a black frame that does not belong. Below it the two body columns are narrower than the reference's, so each line breaks earlier, and the footnote is set across the full page width instead of inside the left column where the reference keeps it.",
+  "analysis": "The masthead is the defect. The reference paints a deep blue gradient banner carrying <em>MNA Knowledge Notes</em> and its subtitle in white; XRay.Office paints a much paler gradient, loses the white banner text entirely, and draws the World Bank device twice &mdash; once boxed in a black frame that does not belong. Below it the two body columns are narrower than the reference's, so each line breaks earlier, and the footnote is set across the full page width instead of inside the left column where the reference keeps it.",
   "worst": {
    "page": 1,
    "ssim": 0.48616,
@@ -599,7 +599,7 @@
    "text-style",
    "reflow"
   ],
-  "analysis": "The opposite of the usual case: Paperless sets this text a little wider per glyph, so lines break <em>earlier</em> and the page holds about four lines fewer than the reference's. The page therefore stops mid-sentence where the reference has moved on to the <em>MBRAH</em> paragraph. Italic quotes, the red brand runs and paragraph spacing are all correct.",
+  "analysis": "The opposite of the usual case: XRay.Office sets this text a little wider per glyph, so lines break <em>earlier</em> and the page holds about four lines fewer than the reference's. The page therefore stops mid-sentence where the reference has moved on to the <em>MBRAH</em> paragraph. Italic quotes, the red brand runs and paragraph spacing are all correct.",
   "worst": {
    "page": 2,
    "ssim": 0.49752,
@@ -662,7 +662,7 @@
    "text-style",
    "reflow"
   ],
-  "analysis": "A reflow with no other symptom. Paperless fits more lines per page, so its page 5 opens on a sentence the reference has a third of the way down. Footnote text, superscript markers, the horizontal footnote rule, italics and the page number are all correct, and the document still ends at 6 pages.",
+  "analysis": "A reflow with no other symptom. XRay.Office fits more lines per page, so its page 5 opens on a sentence the reference has a third of the way down. Footnote text, superscript markers, the horizontal footnote rule, italics and the page number are all correct, and the document still ends at 6 pages.",
   "worst": {
    "page": 5,
    "ssim": 0.50694,
@@ -694,7 +694,7 @@
    "chart",
    "overlap-clip"
   ],
-  "analysis": "Two defects on a spreadsheet page. The sheet is not scaled to the page: Paperless lets the text column run past the right edge, so every line is clipped mid-word (<code>&hellip;of the mainte</code>), where the reference fits the same column inside the printable width. And the emphasis is lost &mdash; the bold-underlined <em>The tool is released and intended as a basic reference</em> paragraph and the underlined <em>To erase all the scoring</em> / <em>To add a new question</em> run-ins are all printed plain. Faint gridlines also show through the grey fill that the reference leaves clean.",
+  "analysis": "Two defects on a spreadsheet page. The sheet is not scaled to the page: XRay.Office lets the text column run past the right edge, so every line is clipped mid-word (<code>&hellip;of the mainte</code>), where the reference fits the same column inside the printable width. And the emphasis is lost &mdash; the bold-underlined <em>The tool is released and intended as a basic reference</em> paragraph and the underlined <em>To erase all the scoring</em> / <em>To add a new question</em> run-ins are all printed plain. Faint gridlines also show through the grey fill that the reference leaves clean.",
   "worst": {
    "page": 1,
    "ssim": 0.50886,
@@ -727,7 +727,7 @@
    "reflow",
    "pagination"
   ],
-  "analysis": "The table is set wider than the reference's and its rows a shade taller, so the page holds one row fewer and everything is offset by a row. Paperless also opens the page with an empty repeated header row that the reference does not draw. Cell text, currency figures and borders are otherwise identical.",
+  "analysis": "The table is set wider than the reference's and its rows a shade taller, so the page holds one row fewer and everything is offset by a row. XRay.Office also opens the page with an empty repeated header row that the reference does not draw. Cell text, currency figures and borders are otherwise identical.",
   "worst": {
    "page": 5,
    "ssim": 0.51019,
@@ -760,7 +760,7 @@
    "paint-order",
    "reflow"
   ],
-  "analysis": "The page comes out empty. Paperless paints the dark grey page background and then draws nothing on it &mdash; no white rounded card, no <em>human body</em> title, none of the three organ panels, no silhouette image, no TemplateHUB logo. Because the dark fill covers the whole sheet where the reference covers most of it with a white card, the metric reads this as 32% <em>more</em> ink; it is in fact total content loss.",
+  "analysis": "The page comes out empty. XRay.Office paints the dark grey page background and then draws nothing on it &mdash; no white rounded card, no <em>human body</em> title, none of the three organ panels, no silhouette image, no TemplateHUB logo. Because the dark fill covers the whole sheet where the reference covers most of it with a white card, the metric reads this as 32% <em>more</em> ink; it is in fact total content loss.",
   "worst": {
    "page": 1,
    "ssim": 0.51023,
@@ -794,7 +794,7 @@
    "table-rules",
    "reflow"
   ],
-  "analysis": "The custom bullet is substituted: the reference marks the first three <em>Additional Topics</em> items with a small hollow diamond and only the last with a filled round bullet; Paperless draws a filled round bullet on all four. The text measure is also a little wider, so lines break later and the page carries more, and the rule under the <em>Additional Topics</em> heading runs further right.",
+  "analysis": "The custom bullet is substituted: the reference marks the first three <em>Additional Topics</em> items with a small hollow diamond and only the last with a filled round bullet; XRay.Office draws a filled round bullet on all four. The text measure is also a little wider, so lines break later and the page carries more, and the rule under the <em>Additional Topics</em> heading runs further right.",
   "worst": {
    "page": 2,
    "ssim": 0.51129,
@@ -856,7 +856,7 @@
   "tags": [
    "reflow"
   ],
-  "analysis": "A one-row reflow. Paperless's page 2 opens with <code>OPS 2A.422 Ground proximity warning systems</code>, a row the reference keeps at the foot of page 1; everything after it is shifted by that row. The tables are also set slightly wider than the reference's and the rows a shade taller. Shading, checkbox glyphs, the crest image and the <code>2 of 3</code> footer are all correct.",
+  "analysis": "A one-row reflow. XRay.Office's page 2 opens with <code>OPS 2A.422 Ground proximity warning systems</code>, a row the reference keeps at the foot of page 1; everything after it is shifted by that row. The tables are also set slightly wider than the reference's and the rows a shade taller. Shading, checkbox glyphs, the crest image and the <code>2 of 3</code> footer are all correct.",
   "worst": {
    "page": 2,
    "ssim": 0.51174,
@@ -890,7 +890,7 @@
    "content-missing",
    "reflow"
   ],
-  "analysis": "A one-row reflow in a long amendment-record table: Paperless's page 4 opens with the <code>2.1.1.2 (47)</code> row that the reference keeps at the foot of page 3, and the split row the reference shows at the top is gone. Rows are slightly taller and the table slightly wider. The yellow highlight on the amended row, the borders and the running head and footer are all correct.",
+  "analysis": "A one-row reflow in a long amendment-record table: XRay.Office's page 4 opens with the <code>2.1.1.2 (47)</code> row that the reference keeps at the foot of page 3, and the split row the reference shows at the top is gone. Rows are slightly taller and the table slightly wider. The yellow highlight on the amended row, the borders and the running head and footer are all correct.",
   "worst": {
    "page": 4,
    "ssim": 0.51814,
@@ -923,7 +923,7 @@
    "list-markers",
    "field-values"
   ],
-  "analysis": "<b>Corrected.</b> Not a page-numbering offset &mdash; neither file contains <code>w:pgNumType</code>. The <code>PAGE</code> field sits in a text box anchored in a footer table, where Writer's draw-layer outliner has no page field at all, so the reference prints one frozen cached value on every page. <b>Our output is the correct one.</b> The control is a sibling document in the same house style whose footer is not in a table: there the reference is live and matches us. <span class='wasnote'>Original reading: The ID column's automatic numbering counts rows that carry no number: the reference runs <code>1&ndash;13</code>, Paperless runs <code>1&ndash;7, 9, 12, 13, 14, 15, 16</code> &mdash; the sub-rows of <em>Task type</em> and <em>Type of activity</em> are advancing the counter. The footer disagrees too: the reference prints <code>Page 3 of 6</code> on this sheet, Paperless <code>Page 4 of 6</code>, so a page-numbering offset is not being applied.</span>",
+  "analysis": "<b>Corrected.</b> Not a page-numbering offset &mdash; neither file contains <code>w:pgNumType</code>. The <code>PAGE</code> field sits in a text box anchored in a footer table, where Writer's draw-layer outliner has no page field at all, so the reference prints one frozen cached value on every page. <b>Our output is the correct one.</b> The control is a sibling document in the same house style whose footer is not in a table: there the reference is live and matches us. <span class='wasnote'>Original reading: The ID column's automatic numbering counts rows that carry no number: the reference runs <code>1&ndash;13</code>, XRay.Office runs <code>1&ndash;7, 9, 12, 13, 14, 15, 16</code> &mdash; the sub-rows of <em>Task type</em> and <em>Type of activity</em> are advancing the counter. The footer disagrees too: the reference prints <code>Page 3 of 6</code> on this sheet, XRay.Office <code>Page 4 of 6</code>, so a page-numbering offset is not being applied.</span>",
   "worst": {
    "page": 4,
    "ssim": 0.52924,
@@ -992,7 +992,7 @@
    "reflow",
    "pagination"
   ],
-  "analysis": "Paperless sets the justified text wider per glyph, so lines break earlier and each page carries roughly a third less than the reference's &mdash; page 2 here still covers material the reference finished on page 1. The document runs to 4 pages against the reference's 3 for the same reason. No content or styling differs.",
+  "analysis": "XRay.Office sets the justified text wider per glyph, so lines break earlier and each page carries roughly a third less than the reference's &mdash; page 2 here still covers material the reference finished on page 1. The document runs to 4 pages against the reference's 3 for the same reason. No content or styling differs.",
   "worst": {
    "page": 2,
    "ssim": 0.53242,
@@ -1056,7 +1056,7 @@
    "reflow",
    "pagination"
   ],
-  "analysis": "<b>Corrected.</b> The ideographic comma is drawn &mdash; both PDFs read <code>1、</code> and <code>A、</code>. The real divergence on this document is the reflow, and a degenerate-rectangle shape filter that discards the revision change-bars. <span class='wasnote'>Original reading: The list markers lose their punctuation: the reference numbers the steps <code>1、</code> and the sub-steps <code>A、</code> with the ideographic comma, Paperless prints a bare <code>1</code> and <code>A</code>. Line spacing is also looser, so page 1 ends at step 6 where the reference reaches step 7, and the document runs to 3 pages against 2. The CJK glyphs themselves, the header rule and the boxed keyword table are correct.</span>",
+  "analysis": "<b>Corrected.</b> The ideographic comma is drawn &mdash; both PDFs read <code>1、</code> and <code>A、</code>. The real divergence on this document is the reflow, and a degenerate-rectangle shape filter that discards the revision change-bars. <span class='wasnote'>Original reading: The list markers lose their punctuation: the reference numbers the steps <code>1、</code> and the sub-steps <code>A、</code> with the ideographic comma, XRay.Office prints a bare <code>1</code> and <code>A</code>. Line spacing is also looser, so page 1 ends at step 6 where the reference reaches step 7, and the document runs to 3 pages against 2. The CJK glyphs themselves, the header rule and the boxed keyword table are correct.</span>",
   "worst": {
    "page": 1,
    "ssim": 0.53563,
@@ -1120,7 +1120,7 @@
   "tags": [
    "field-values"
   ],
-  "analysis": "The same logbook template and the same numbering defect: <code>1&ndash;13</code> in the reference against <code>1&ndash;7, 9, 12&ndash;16</code> in Paperless, the counter advancing on the unnumbered sub-rows of <em>Task type</em> and <em>Type of activity</em>. Here the footer agrees at <code>Page 4 of 6</code>; the table is set a little wider, which is the rest of the difference.",
+  "analysis": "The same logbook template and the same numbering defect: <code>1&ndash;13</code> in the reference against <code>1&ndash;7, 9, 12&ndash;16</code> in XRay.Office, the counter advancing on the unnumbered sub-rows of <em>Task type</em> and <em>Type of activity</em>. Here the footer agrees at <code>Page 4 of 6</code>; the table is set a little wider, which is the rest of the difference.",
   "worst": {
    "page": 4,
    "ssim": 0.54378,
@@ -1249,7 +1249,7 @@
    "text-style",
    "reflow"
   ],
-  "analysis": "A reflow inside a boxed table of contents. The reference fits the whole list into one bordered box on this page; Paperless starts it a page earlier, so page 5 carries only its tail and then runs on into the body text. Blue heading colour, the box border, bullet levels and italics all match.",
+  "analysis": "A reflow inside a boxed table of contents. The reference fits the whole list into one bordered box on this page; XRay.Office starts it a page earlier, so page 5 carries only its tail and then runs on into the body text. Blue heading colour, the box border, bullet levels and italics all match.",
   "worst": {
    "page": 5,
    "ssim": 0.55354,
@@ -1314,7 +1314,7 @@
   "tags": [
    "reflow"
   ],
-  "analysis": "The approvals table is narrower and shifted right of the reference's, and its rows are taller, so one fewer organisation fits: the reference closes page 1 with <em>&#1060;&#1040;&#1050;&#1059;&#1051;&#1058;&#1045;&#1058; &#1040;&#1042;&#1048;&#1040;&#1062;&#1048;&#1054;&#1053;&#1045;&#1053;</em>, which Paperless pushes to page 2. Cyrillic and Latin text, the hyperlink colouring and the rating grid are all correct.",
+  "analysis": "The approvals table is narrower and shifted right of the reference's, and its rows are taller, so one fewer organisation fits: the reference closes page 1 with <em>&#1060;&#1040;&#1050;&#1059;&#1051;&#1058;&#1045;&#1058; &#1040;&#1042;&#1048;&#1040;&#1062;&#1048;&#1054;&#1053;&#1045;&#1053;</em>, which XRay.Office pushes to page 2. Cyrillic and Latin text, the hyperlink colouring and the rating grid are all correct.",
   "worst": {
    "page": 1,
    "ssim": 0.56009,
@@ -1378,7 +1378,7 @@
    "text-style",
    "reflow"
   ],
-  "analysis": "The reference draws a thin border around the whole page; Paperless draws none. The title and effective-date runs in the header table come out blue where the reference prints them black. Row heights are tighter, so an extra row (<code>4.701 &ndash; 4.705</code>) reaches this page, and the dotted in-cell separators sit differently. The black section bands and the blue <em>UNCONTROLLED COPY</em> footer are correct.",
+  "analysis": "The reference draws a thin border around the whole page; XRay.Office draws none. The title and effective-date runs in the header table come out blue where the reference prints them black. Row heights are tighter, so an extra row (<code>4.701 &ndash; 4.705</code>) reaches this page, and the dotted in-cell separators sit differently. The black section bands and the blue <em>UNCONTROLLED COPY</em> footer are correct.",
   "worst": {
    "page": 2,
    "ssim": 0.56081,
@@ -1410,7 +1410,7 @@
    "overlap-clip",
    "reflow"
   ],
-  "analysis": "A split-row reflow: Paperless carries the tail of a Q&amp;A row (<em>notification email), can also be some delay&hellip;</em>) onto page 4, where the reference finishes it on page 3. Rows are a shade taller and the table a shade wider, so the last row is clipped by the page bottom. Hyperlink colouring and the <code>#3</code> section marker are correct.",
+  "analysis": "A split-row reflow: XRay.Office carries the tail of a Q&amp;A row (<em>notification email), can also be some delay&hellip;</em>) onto page 4, where the reference finishes it on page 3. Rows are a shade taller and the table a shade wider, so the last row is clipped by the page bottom. Hyperlink colouring and the <code>#3</code> section marker are correct.",
   "worst": {
    "page": 4,
    "ssim": 0.5662,
@@ -1441,7 +1441,7 @@
   "tags": [
    "reflow"
   ],
-  "analysis": "The table splits across the page boundary differently. The reference carries a merged airline row over the break and opens page 2 with its continuation; Paperless keeps rows whole, so page 2 starts two entries earlier at <em>El Al Israel Airlines</em>. Its rows are also taller, so the page ends at <em>Singapore Airlines</em> rather than <em>Transmile Air Services</em>. The Traditional Chinese glyphs and the three-column layout are correct.",
+  "analysis": "The table splits across the page boundary differently. The reference carries a merged airline row over the break and opens page 2 with its continuation; XRay.Office keeps rows whole, so page 2 starts two entries earlier at <em>El Al Israel Airlines</em>. Its rows are also taller, so the page ends at <em>Singapore Airlines</em> rather than <em>Transmile Air Services</em>. The Traditional Chinese glyphs and the three-column layout are correct.",
   "worst": {
    "page": 2,
    "ssim": 0.56696,
@@ -1604,7 +1604,7 @@
   "tags": [
    "text-style"
   ],
-  "analysis": "A table row is broken across the page boundary where the reference keeps it whole: Paperless opens page 3 with the orphaned second line <em>Strasse 3</em>. The <em>Top 7 cities</em> table below is also set with taller rows, so it takes more of the page. Underlining on the highlighted figures, the two-colour logo and the press-contact footer are all correct.",
+  "analysis": "A table row is broken across the page boundary where the reference keeps it whole: XRay.Office opens page 3 with the orphaned second line <em>Strasse 3</em>. The <em>Top 7 cities</em> table below is also set with taller rows, so it takes more of the page. Underlining on the highlighted figures, the two-colour logo and the press-contact footer are all correct.",
   "worst": {
    "page": 3,
    "ssim": 0.5786,
@@ -1638,7 +1638,7 @@
    "overlap-clip",
    "content-missing"
   ],
-  "analysis": "The anchored artwork lands at the wrong end of the page. Paperless puts the Health Cluster logo and the photograph at the <em>bottom</em>, overlapping the footer area, leaving the top of the page blank where the reference carries the masthead; the bulletin number and date are left stranded beside the caption band. The <code>PAGE 1</code> footer and its rule are missing. The infographic body &mdash; icons, blue bands and figures &mdash; is drawn correctly.",
+  "analysis": "The anchored artwork lands at the wrong end of the page. XRay.Office puts the Health Cluster logo and the photograph at the <em>bottom</em>, overlapping the footer area, leaving the top of the page blank where the reference carries the masthead; the bulletin number and date are left stranded beside the caption band. The <code>PAGE 1</code> footer and its rule are missing. The infographic body &mdash; icons, blue bands and figures &mdash; is drawn correctly.",
   "worst": {
    "page": 1,
    "ssim": 0.5787,
@@ -1669,7 +1669,7 @@
   "tags": [
    "pagination"
   ],
-  "analysis": "Paperless fits noticeably more per page, so by page 4 it is a full page ahead of the reference &mdash; the reference is still on the shuttle and visa sections where Paperless has reached hotels and weather &mdash; and the document closes at 6 pages against 7. The inline clip-art (passport, bed, sun) and the hyperlink styling are drawn correctly.",
+  "analysis": "XRay.Office fits noticeably more per page, so by page 4 it is a full page ahead of the reference &mdash; the reference is still on the shuttle and visa sections where XRay.Office has reached hotels and weather &mdash; and the document closes at 6 pages against 7. The inline clip-art (passport, bed, sun) and the hyperlink styling are drawn correctly.",
   "worst": {
    "page": 4,
    "ssim": 0.58647,
@@ -1704,7 +1704,7 @@
    "content-missing",
    "reflow"
   ],
-  "analysis": "The bullet glyphs are gone. The reference marks each item with an orange arrow and the sub-item with a star; Paperless draws no marker at all, leaving the indent as the only level cue. Line spacing is tighter as a result. The footer field also comes out in the other order: the reference prints <code>5 Page</code>, Paperless <code>Page 5</code>.",
+  "analysis": "The bullet glyphs are gone. The reference marks each item with an orange arrow and the sub-item with a star; XRay.Office draws no marker at all, leaving the indent as the only level cue. Line spacing is tighter as a result. The footer field also comes out in the other order: the reference prints <code>5 Page</code>, XRay.Office <code>Page 5</code>.",
   "worst": {
    "page": 5,
    "ssim": 0.58732,
@@ -1735,7 +1735,7 @@
   "tags": [
    "content-missing"
   ],
-  "analysis": "Checkbox glyphs are dropped inconsistently: the empty squares before <em>CAT II / CAT IIIA / CAT IIIB</em>, <em>Yes/No</em> and the <em>AFM</em> group are missing, while the ones in the <em>AWO type design approval</em> block below are drawn. The reference also sets several list numbers (<code>1.</code>, <code>5.</code>, <code>6.</code>) noticeably larger than body text; Paperless prints them at body size.",
+  "analysis": "Checkbox glyphs are dropped inconsistently: the empty squares before <em>CAT II / CAT IIIA / CAT IIIB</em>, <em>Yes/No</em> and the <em>AFM</em> group are missing, while the ones in the <em>AWO type design approval</em> block below are drawn. The reference also sets several list numbers (<code>1.</code>, <code>5.</code>, <code>6.</code>) noticeably larger than body text; XRay.Office prints them at body size.",
   "worst": {
    "page": 1,
    "ssim": 0.58733,
@@ -1800,7 +1800,7 @@
    "version-divergence",
    "overlap-clip"
   ],
-  "analysis": "Text autofit is not applied. The reference shrinks the body placeholder's text to fit the slide; Paperless sets it at full size, so the content overruns the bottom edge and the final bullet is cut in half by the slide boundary. Colour, bold runs, the red URL styling and the NAFEMS logo are correct.",
+  "analysis": "Text autofit is not applied. The reference shrinks the body placeholder's text to fit the slide; XRay.Office sets it at full size, so the content overruns the bottom edge and the final bullet is cut in half by the slide boundary. Colour, bold runs, the red URL styling and the NAFEMS logo are correct.",
   "worst": {
    "page": 2,
    "ssim": 0.58918,
@@ -1894,7 +1894,7 @@
   "tags": [
    "table-rules"
   ],
-  "analysis": "Paperless prints an underlined <em>January 1, 2008</em> between the bulletin title and the commissioner's line, where the reference shows nothing at that position &mdash; the effective-date value is being placed in the flow rather than where the reference puts it. The double rule beneath comes out as a single heavier rule, and the table rows are taller, so the page ends a paragraph earlier.",
+  "analysis": "XRay.Office prints an underlined <em>January 1, 2008</em> between the bulletin title and the commissioner's line, where the reference shows nothing at that position &mdash; the effective-date value is being placed in the flow rather than where the reference puts it. The double rule beneath comes out as a single heavier rule, and the table rows are taller, so the page ends a paragraph earlier.",
   "worst": {
    "page": 1,
    "ssim": 0.594,
@@ -1927,7 +1927,7 @@
    "text-style",
    "content-missing"
   ],
-  "analysis": "The <em>Yes / No</em> checkbox squares are missing &mdash; the reference draws two empty boxes, Paperless draws none. The page also carries less than the reference's, so it still opens on material the reference finished on page 4 and closes at <em>2.1 Ownership information</em> instead of <em>Section 1: The licensee</em>. Hyperlink colouring and the yellow highlight are correct.",
+  "analysis": "The <em>Yes / No</em> checkbox squares are missing &mdash; the reference draws two empty boxes, XRay.Office draws none. The page also carries less than the reference's, so it still opens on material the reference finished on page 4 and closes at <em>2.1 Ownership information</em> instead of <em>Section 1: The licensee</em>. Hyperlink colouring and the yellow highlight are correct.",
   "worst": {
    "page": 5,
    "ssim": 0.5953,
@@ -2026,7 +2026,7 @@
   "tags": [
    "content-missing"
   ],
-  "analysis": "The journal title is missing from the masthead: the reference prints <em>Journal of Engineering, Management and Information Technology</em> in the grey band beside the ASPUR device, Paperless leaves the band empty apart from the logo. The page number also moves from the bottom right to the bottom left. The two-column abstract, the QR code and the Creative Commons mark are correct.",
+  "analysis": "The journal title is missing from the masthead: the reference prints <em>Journal of Engineering, Management and Information Technology</em> in the grey band beside the ASPUR device, XRay.Office leaves the band empty apart from the logo. The page number also moves from the bottom right to the bottom left. The two-column abstract, the QR code and the Creative Commons mark are correct.",
   "worst": {
    "page": 1,
    "ssim": 0.5998,
@@ -2088,7 +2088,7 @@
   "tags": [
    "text-style"
   ],
-  "analysis": "An extra paragraph break appears where the reference has none: the reference runs <em>&hellip;(Mizuno et&nbsp;al.: 1997). The artificial diet and eight female adults&hellip;</em> as one paragraph, Paperless starts a new one. That single break pushes the rest of the page down and costs it the last two lines. Italic species names, the running head and the page number are correct.",
+  "analysis": "An extra paragraph break appears where the reference has none: the reference runs <em>&hellip;(Mizuno et&nbsp;al.: 1997). The artificial diet and eight female adults&hellip;</em> as one paragraph, XRay.Office starts a new one. That single break pushes the rest of the page down and costs it the last two lines. Italic species names, the running head and the page number are correct.",
   "worst": {
    "page": 4,
    "ssim": 0.60175,
@@ -2121,7 +2121,7 @@
    "content-missing",
    "reflow"
   ],
-  "analysis": "<b>Corrected.</b> Not missing borders &mdash; at 200&nbsp;dpi both engines draw the rules and the grey bands. The divergence is print zoom: ours renders at 0.83&times;. <span class='wasnote'>Original reading: The table loses its frame. The reference draws a heavy black outline around the pay-band block and grey separator bands between career levels; Paperless draws neither, so the rows pack tighter and the note block rides up the page. Cell values, the green and blue conditional fills and the yellow locality-pay cell are all correct &mdash; the 29% ink deficit is the missing rules and bands.</span>",
+  "analysis": "<b>Corrected.</b> Not missing borders &mdash; at 200&nbsp;dpi both engines draw the rules and the grey bands. The divergence is print zoom: ours renders at 0.83&times;. <span class='wasnote'>Original reading: The table loses its frame. The reference draws a heavy black outline around the pay-band block and grey separator bands between career levels; XRay.Office draws neither, so the rows pack tighter and the note block rides up the page. Cell values, the green and blue conditional fills and the yellow locality-pay cell are all correct &mdash; the 29% ink deficit is the missing rules and bands.</span>",
   "worst": {
    "page": 5,
    "ssim": 0.60221,
@@ -2218,7 +2218,7 @@
   "tags": [
    "reflow"
   ],
-  "analysis": "The grid runs taller than the reference's, and the footer block is arranged differently: the reference stacks the TemplateHUB logo above the <em>Graph Paper</em> caption, Paperless sets them side by side. The <em>Title</em> and <em>Date</em> rules at the top are correct.",
+  "analysis": "The grid runs taller than the reference's, and the footer block is arranged differently: the reference stacks the TemplateHUB logo above the <em>Graph Paper</em> caption, XRay.Office sets them side by side. The <em>Title</em> and <em>Date</em> rules at the top are correct.",
   "worst": {
    "page": 1,
    "ssim": 0.60378,
@@ -2249,7 +2249,7 @@
   "tags": [
    "reflow"
   ],
-  "analysis": "Paperless fits more per page, so page 4 opens mid-sentence on <em>equipment. Appropriate use (within type design)&hellip;</em> where the reference opens the paragraph, and closes on section <code>40.2</code> which the reference has not reached. The blue-framed header block, the blue headings and the underlined citations are correct.",
+  "analysis": "XRay.Office fits more per page, so page 4 opens mid-sentence on <em>equipment. Appropriate use (within type design)&hellip;</em> where the reference opens the paragraph, and closes on section <code>40.2</code> which the reference has not reached. The blue-framed header block, the blue headings and the underlined citations are correct.",
   "worst": {
    "page": 4,
    "ssim": 0.60491,
@@ -2347,7 +2347,7 @@
    "field-values",
    "reflow"
   ],
-  "analysis": "The running head resolves to the wrong heading: the reference prints <em>Introduction</em> at the top right of this page, Paperless prints <em>External Interfaces</em> &mdash; a section-reference field picking up a heading from elsewhere in the document. The text measure is also marginally wider, so the instruction paragraphs break differently.",
+  "analysis": "The running head resolves to the wrong heading: the reference prints <em>Introduction</em> at the top right of this page, XRay.Office prints <em>External Interfaces</em> &mdash; a section-reference field picking up a heading from elsewhere in the document. The text measure is also marginally wider, so the instruction paragraphs break differently.",
   "worst": {
    "page": 4,
    "ssim": 0.60644,
@@ -2378,7 +2378,7 @@
   "tags": [
    "text-style"
   ],
-  "analysis": "The same extra-paragraph-break defect as the sibling submission: Paperless splits <em>&hellip;(two logs, about 5 cm in diameter x about 40 cm) were placed&hellip;</em> across a paragraph boundary the reference does not have. The page loses its last two lines as a result. Justification, italics and superscripts are correct.",
+  "analysis": "The same extra-paragraph-break defect as the sibling submission: XRay.Office splits <em>&hellip;(two logs, about 5 cm in diameter x about 40 cm) were placed&hellip;</em> across a paragraph boundary the reference does not have. The page loses its last two lines as a result. Justification, italics and superscripts are correct.",
   "worst": {
    "page": 4,
    "ssim": 0.6067,
@@ -2442,7 +2442,7 @@
    "missing-graphics",
    "reflow"
   ],
-  "analysis": "The slide's background wash is not painted: the reference lays a faint grey-blue gradient over the whole slide below the header ribbon, Paperless leaves it pure white, which is most of the 51% ink deficit. The text measure is also a shade wider, so two bullets rewrap onto an extra line. The ribbon artwork, bullet colours and indent levels are correct.",
+  "analysis": "The slide's background wash is not painted: the reference lays a faint grey-blue gradient over the whole slide below the header ribbon, XRay.Office leaves it pure white, which is most of the 51% ink deficit. The text measure is also a shade wider, so two bullets rewrap onto an extra line. The ribbon artwork, bullet colours and indent levels are correct.",
   "worst": {
    "page": 2,
    "ssim": 0.60777,
@@ -2569,7 +2569,7 @@
   "tags": [
    "content-missing"
   ],
-  "analysis": "<b>Corrected.</b> The document contains no empty paragraphs at all; there is a single <code>U+000D</code>. The gap is a 280-twip HTML auto margin that is never handed back when a list ends at a cell wall, so a run reaching the cell boundary never meets the unnumbered paragraph that would restore it. Localised in one step by rendering LibreOffice's own flat-ODF re-export. <span class='wasnote'>Original reading: The empty paragraphs inside the table cells are dropped. The reference keeps a blank line before <em>After touchdown, ground mode is reactivated</em> and before several other items, which is what gives each row its height; without them Paperless's table is far more compact and ends halfway down the page where the reference's fills it. Every line of text is present and correctly styled.</span>",
+  "analysis": "<b>Corrected.</b> The document contains no empty paragraphs at all; there is a single <code>U+000D</code>. The gap is a 280-twip HTML auto margin that is never handed back when a list ends at a cell wall, so a run reaching the cell boundary never meets the unnumbered paragraph that would restore it. Localised in one step by rendering LibreOffice's own flat-ODF re-export. <span class='wasnote'>Original reading: The empty paragraphs inside the table cells are dropped. The reference keeps a blank line before <em>After touchdown, ground mode is reactivated</em> and before several other items, which is what gives each row its height; without them XRay.Office's table is far more compact and ends halfway down the page where the reference's fills it. Every line of text is present and correctly styled.</span>",
   "worst": {
    "page": 2,
    "ssim": 0.61682,
@@ -2604,7 +2604,7 @@
    "content-missing",
    "reflow"
   ],
-  "analysis": "The telephone symbol before the contact number is dropped &mdash; the reference prints <code>&#9742; 03 22 08 82 50</code>, Paperless just the digits. The italic paragraph beside the ambulance photograph is set to a narrower measure, so it takes an extra line, and the signing photograph at the bottom left is drawn smaller than the reference's. Logos, blue headings and the press-release layout are otherwise correct.",
+  "analysis": "The telephone symbol before the contact number is dropped &mdash; the reference prints <code>&#9742; 03 22 08 82 50</code>, XRay.Office just the digits. The italic paragraph beside the ambulance photograph is set to a narrower measure, so it takes an extra line, and the signing photograph at the bottom left is drawn smaller than the reference's. Logos, blue headings and the press-release layout are otherwise correct.",
   "worst": {
    "page": 1,
    "ssim": 0.61773,
@@ -2636,7 +2636,7 @@
    "overlap-clip",
    "reflow"
   ],
-  "analysis": "Both engines let the cell text overflow the printable width and clip it; they simply clip at different points, because Paperless sets the paragraphs with tighter leading and a marginally wider measure. The block therefore ends higher up the page and the definitions list gains a line. No content or styling differs.",
+  "analysis": "Both engines let the cell text overflow the printable width and clip it; they simply clip at different points, because XRay.Office sets the paragraphs with tighter leading and a marginally wider measure. The block therefore ends higher up the page and the definitions list gains a line. No content or styling differs.",
   "worst": {
    "page": 2,
    "ssim": 0.61917,
@@ -2701,7 +2701,7 @@
    "overlap-clip",
    "lo-broken"
   ],
-  "analysis": "Worth reading the other way round. The <em>reference</em> is the broken one here: LibreOffice leaves the oversized headings at full size, so the slide title runs straight over <em>L'importance d'une campagne</em> and the middle column's heading overlaps its own body text. Paperless shrinks the same placeholders to fit and produces a clean, readable slide. It also sets the headings in a heavier weight than the reference. Counted as a divergence because LibreOffice is the reference &mdash; not because Paperless is wrong.",
+  "analysis": "Worth reading the other way round. The <em>reference</em> is the broken one here: LibreOffice leaves the oversized headings at full size, so the slide title runs straight over <em>L'importance d'une campagne</em> and the middle column's heading overlaps its own body text. XRay.Office shrinks the same placeholders to fit and produces a clean, readable slide. It also sets the headings in a heavier weight than the reference. Counted as a divergence because LibreOffice is the reference &mdash; not because XRay.Office is wrong.",
   "worst": {
    "page": 3,
    "ssim": 0.62692,
@@ -2733,7 +2733,7 @@
    "table-rules",
    "reflow"
   ],
-  "analysis": "Paperless fits more on the page: the <em>Licensed TTE Patents</em> table and the <code>(1)</code> footnote that the reference carries to the next page both appear here, which is the 65% ink excess. The <code>A.3</code> heading also sits lower, with more space above it. Table shading, borders and the hyperlinked address are correct.",
+  "analysis": "XRay.Office fits more on the page: the <em>Licensed TTE Patents</em> table and the <code>(1)</code> footnote that the reference carries to the next page both appear here, which is the 65% ink excess. The <code>A.3</code> heading also sits lower, with more space above it. Table shading, borders and the hyperlinked address are correct.",
   "worst": {
    "page": 3,
    "ssim": 0.62736,
@@ -2766,7 +2766,7 @@
    "list-markers",
    "reflow"
   ],
-  "analysis": "The list's lettered markers are lost: the reference labels the paragraphs <code>(a) (b) (c) (d)</code>, Paperless replaces all four with plain round bullets, and the hanging indent on the <code>(2)</code> continuation goes with them. The text is also set wider, so lines break later. The green title band, the underlined emphasis and the C/A device are correct.",
+  "analysis": "The list's lettered markers are lost: the reference labels the paragraphs <code>(a) (b) (c) (d)</code>, XRay.Office replaces all four with plain round bullets, and the hanging indent on the <code>(2)</code> continuation goes with them. The text is also set wider, so lines break later. The green title band, the underlined emphasis and the C/A device are correct.",
   "worst": {
    "page": 4,
    "ssim": 0.6281,
@@ -2830,7 +2830,7 @@
   "tags": [
    "pagination"
   ],
-  "analysis": "Paperless fits slightly less per page, so page 4 still opens on the bold <em>ECONOMY p&#345;epraví letoun&hellip;</em> paragraph that the reference finished on page 3, and the document runs to 5 pages against the reference's 4. Czech diacritics, bold runs and the centred sub-headings are all correct.",
+  "analysis": "XRay.Office fits slightly less per page, so page 4 still opens on the bold <em>ECONOMY p&#345;epraví letoun&hellip;</em> paragraph that the reference finished on page 3, and the document runs to 5 pages against the reference's 4. Czech diacritics, bold runs and the centred sub-headings are all correct.",
   "worst": {
    "page": 4,
    "ssim": 0.62945,
@@ -3019,7 +3019,7 @@
    "content-missing",
    "lo-broken"
   ],
-  "analysis": "Another case where the reference is the broken one. LibreOffice loses the timeline's first column and its week header bands &mdash; no <em>Assigned To</em> label, no <em>Week #1&ndash;#3</em> headers, and the first <em>Person #1 / Research</em> row missing &mdash; leaving a grey strip at the left edge. Paperless draws the whole table correctly, headers, bands and all. Counted as a divergence only because LibreOffice is the reference.",
+  "analysis": "Another case where the reference is the broken one. LibreOffice loses the timeline's first column and its week header bands &mdash; no <em>Assigned To</em> label, no <em>Week #1&ndash;#3</em> headers, and the first <em>Person #1 / Research</em> row missing &mdash; leaving a grey strip at the left edge. XRay.Office draws the whole table correctly, headers, bands and all. Counted as a divergence only because LibreOffice is the reference.",
   "worst": {
    "page": 1,
    "ssim": 0.63331,
@@ -3051,7 +3051,7 @@
    "chart",
    "lo-broken"
   ],
-  "analysis": "Mostly the reference's failure. LibreOffice loses the dark blue <em>Project Timeline</em> title banner, the <em>Tasks / Assigned To / Days</em> header columns and the <em>January 2022</em> month band, leaving a stub of day numbers at the right. Paperless draws all of them &mdash; but its title banner is set too tall and covers the word beneath it. Both engines get the Gantt bars and the legend right.",
+  "analysis": "Mostly the reference's failure. LibreOffice loses the dark blue <em>Project Timeline</em> title banner, the <em>Tasks / Assigned To / Days</em> header columns and the <em>January 2022</em> month band, leaving a stub of day numbers at the right. XRay.Office draws all of them &mdash; but its title banner is set too tall and covers the word beneath it. Both engines get the Gantt bars and the legend right.",
   "worst": {
    "page": 1,
    "ssim": 0.63754,
@@ -3147,7 +3147,7 @@
   "tags": [
    "table-rules"
   ],
-  "analysis": "The table loses its borders. The reference draws a ruled three-column table around the name list and a revision change-bar down the left margin; Paperless draws the same text with no cell borders and no change-bar at all. Every name, number and column position is correct.",
+  "analysis": "The table loses its borders. The reference draws a ruled three-column table around the name list and a revision change-bar down the left margin; XRay.Office draws the same text with no cell borders and no change-bar at all. Every name, number and column position is correct.",
   "worst": {
    "page": 3,
    "ssim": 0.63845,
@@ -3214,7 +3214,7 @@
    "version-divergence",
    "missing-graphics"
   ],
-  "analysis": "Two picture and fill defects. The slide's background gradient is rendered much darker than the reference's, which fades to pale blue at the right. And the poster image loses its rotation &mdash; the reference tilts it a few degrees with a white photo border, Paperless draws it upright and smaller. Title, bullets and the FAA footer band are correct.",
+  "analysis": "Two picture and fill defects. The slide's background gradient is rendered much darker than the reference's, which fades to pale blue at the right. And the poster image loses its rotation &mdash; the reference tilts it a few degrees with a white photo border, XRay.Office draws it upright and smaller. Title, bullets and the FAA footer band are correct.",
   "worst": {
    "page": 3,
    "ssim": 0.63946,
@@ -3248,7 +3248,7 @@
    "reflow",
    "pagination"
   ],
-  "analysis": "The page is offset by roughly half a page: Paperless opens on the <em>Service offer spotlight</em> heading and the <em>Access to Work</em> paragraphs that the reference has finished on the page before. The teal call-to-action button is also narrower, so its label wraps onto two lines, and the <em>Campaigns</em> banner is drawn wider than the reference's.",
+  "analysis": "The page is offset by roughly half a page: XRay.Office opens on the <em>Service offer spotlight</em> heading and the <em>Access to Work</em> paragraphs that the reference has finished on the page before. The teal call-to-action button is also narrower, so its label wraps onto two lines, and the <em>Campaigns</em> banner is drawn wider than the reference's.",
   "worst": {
    "page": 3,
    "ssim": 0.64051,
@@ -3347,7 +3347,7 @@
    "version-divergence",
    "reflow"
   ],
-  "analysis": "The photograph's crop is not applied. The reference shows the tightly cropped frame the deck specifies &mdash; the two figures filling the panel; Paperless draws the uncropped picture, so the wall, the pictures and a chair come into view and the subjects sit smaller. The bulleted text is also set slightly wider, costing it a line. Title colour and the beacon device are correct.",
+  "analysis": "The photograph's crop is not applied. The reference shows the tightly cropped frame the deck specifies &mdash; the two figures filling the panel; XRay.Office draws the uncropped picture, so the wall, the pictures and a chair come into view and the subjects sit smaller. The bulleted text is also set slightly wider, costing it a line. Title colour and the beacon device are correct.",
   "worst": {
    "page": 5,
    "ssim": 0.64941,
@@ -3379,7 +3379,7 @@
   "tags": [
    "reflow"
   ],
-  "analysis": "Column widths diverge: Paperless narrows the <em>EU-OPS/JAR-OPS3</em> column and widens <em>JAR-OPS3 rule reference</em>, so the header labels wrap differently and the last column's entries break onto extra lines. Its rows are also shorter, so the whole table is more compact. Header fills, blue and purple banding and cell text are correct.",
+  "analysis": "Column widths diverge: XRay.Office narrows the <em>EU-OPS/JAR-OPS3</em> column and widens <em>JAR-OPS3 rule reference</em>, so the header labels wrap differently and the last column's entries break onto extra lines. Its rows are also shorter, so the whole table is more compact. Header fills, blue and purple banding and cell text are correct.",
   "worst": {
    "page": 2,
    "ssim": 0.65062,
@@ -3443,7 +3443,7 @@
    "content-missing",
    "reflow"
   ],
-  "analysis": "The rule under the running head is missing &mdash; the reference draws a line across the page beneath <em>SIGL / SCHAFFLER / STOLLBERGER / KASTNER</em>, Paperless leaves it out. The body measure is also wider, so the justified German paragraphs break later and each finishes a line earlier. Section rules, the blue by-line and the blue URL are correct.",
+  "analysis": "The rule under the running head is missing &mdash; the reference draws a line across the page beneath <em>SIGL / SCHAFFLER / STOLLBERGER / KASTNER</em>, XRay.Office leaves it out. The body measure is also wider, so the justified German paragraphs break later and each finishes a line earlier. Section rules, the blue by-line and the blue URL are correct.",
   "worst": {
    "page": 4,
    "ssim": 0.6529,
@@ -3476,7 +3476,7 @@
    "content-missing",
    "reflow"
   ],
-  "analysis": "The copyright line diverges twice over: the reference prints <code>&copy; New Zealand Qualifications Authority 2026</code>, Paperless <code>New Zealand Qualifications Authority 2024</code> &mdash; the <code>&copy;</code> glyph is dropped and the year field is printed from its stored value rather than recalculated. The body measure is also wider, so the <em>Range</em> blocks break differently.",
+  "analysis": "The copyright line diverges twice over: the reference prints <code>&copy; New Zealand Qualifications Authority 2026</code>, XRay.Office <code>New Zealand Qualifications Authority 2024</code> &mdash; the <code>&copy;</code> glyph is dropped and the year field is printed from its stored value rather than recalculated. The body measure is also wider, so the <em>Range</em> blocks break differently.",
   "worst": {
    "page": 3,
    "ssim": 0.65342,
@@ -3507,7 +3507,7 @@
   "tags": [
    "reflow"
   ],
-  "analysis": "The printed title differs: the reference heads the sheet <em>PROGRAMS CONTACTS</em>, Paperless <em>APF-100 PROGRAM CONTACTS</em> &mdash; a different string is being taken as the page title. Paperless also prints one fewer trailing empty column. The contact rows, rotated column headers, phone numbers and X/A markers otherwise match line for line.",
+  "analysis": "The printed title differs: the reference heads the sheet <em>PROGRAMS CONTACTS</em>, XRay.Office <em>APF-100 PROGRAM CONTACTS</em> &mdash; a different string is being taken as the page title. XRay.Office also prints one fewer trailing empty column. The contact rows, rotated column headers, phone numbers and X/A markers otherwise match line for line.",
   "worst": {
    "page": 1,
    "ssim": 0.65411,
@@ -3574,7 +3574,7 @@
    "list-markers",
    "pagination"
   ],
-  "analysis": "A large pagination divergence: Paperless is a full page ahead, showing <em>PART 2: MONITORING REPORT</em> where the reference is still on section 6's boxed reflection tables. The bullet glyphs in those boxes also differ &mdash; the reference draws blue ovals, Paperless plain black dots.",
+  "analysis": "A large pagination divergence: XRay.Office is a full page ahead, showing <em>PART 2: MONITORING REPORT</em> where the reference is still on section 6's boxed reflection tables. The bullet glyphs in those boxes also differ &mdash; the reference draws blue ovals, XRay.Office plain black dots.",
   "worst": {
    "page": 5,
    "ssim": 0.66043,
@@ -3638,7 +3638,7 @@
    "version-divergence",
    "text-style"
   ],
-  "analysis": "<b>Corrected.</b> There is no tab stop to honour &mdash; the file uses thirteen spaces. The divergence is the autofit version difference below. <span class='wasnote'>Original reading: A tab stop is not honoured. The reference pushes <em>Air Canada - YYZ</em> to the right of the line with a tab, leaving a wide gap after <em>Mgr. Corporate Safety</em>; Paperless closes the gap and wraps the affiliation onto the next line instead. The rest of the list is set slightly wider, so it ends higher on the slide. Blue title band, yellow rule and italic styling are correct.</span>",
+  "analysis": "<b>Corrected.</b> There is no tab stop to honour &mdash; the file uses thirteen spaces. The divergence is the autofit version difference below. <span class='wasnote'>Original reading: A tab stop is not honoured. The reference pushes <em>Air Canada - YYZ</em> to the right of the line with a tab, leaving a wide gap after <em>Mgr. Corporate Safety</em>; XRay.Office closes the gap and wraps the affiliation onto the next line instead. The rest of the list is set slightly wider, so it ends higher on the slide. Blue title band, yellow rule and italic styling are correct.</span>",
   "worst": {
    "page": 2,
    "ssim": 0.66102,
@@ -3709,7 +3709,7 @@
    "list-markers",
    "reflow"
   ],
-  "analysis": "The section numbering runs away. The reference numbers the activity blocks <code>3.1, 3.2, 3.3, 3.4, 3.5</code>; Paperless numbers them <code>3.1, 3.3, 3.4, 3.6, 3.12</code> &mdash; the counter is advancing on the unnumbered sub-rows between them, the same defect that shows up in the experience-logbook templates. Row heights are also slightly taller. Checkbox glyphs, the embedded ANNEX I object icon and the footer are correct.",
+  "analysis": "The section numbering runs away. The reference numbers the activity blocks <code>3.1, 3.2, 3.3, 3.4, 3.5</code>; XRay.Office numbers them <code>3.1, 3.3, 3.4, 3.6, 3.12</code> &mdash; the counter is advancing on the unnumbered sub-rows between them, the same defect that shows up in the experience-logbook templates. Row heights are also slightly taller. Checkbox glyphs, the embedded ANNEX I object icon and the footer are correct.",
   "worst": {
    "page": 3,
    "ssim": 0.66517,
@@ -3869,7 +3869,7 @@
   "tags": [
    "overlap-clip"
   ],
-  "analysis": "Neither side is clean, and they fail differently. The reference shrinks the text so hard that the <em>ACADEMIC QUALIFICATION</em> list runs over the portrait and the name caption; Paperless sets it at full size, so the list overruns the rounded frame and the bottom of the slide. Both leave <em>WORKING EXPERIENCE</em> overlapping the list above it. The photograph, logos and frame are drawn correctly by both.",
+  "analysis": "Neither side is clean, and they fail differently. The reference shrinks the text so hard that the <em>ACADEMIC QUALIFICATION</em> list runs over the portrait and the name caption; XRay.Office sets it at full size, so the list overruns the rounded frame and the bottom of the slide. Both leave <em>WORKING EXPERIENCE</em> overlapping the list above it. The photograph, logos and frame are drawn correctly by both.",
   "worst": {
    "page": 1,
    "ssim": 0.67222,
@@ -4197,7 +4197,7 @@
    "overlap-clip",
    "lo-broken"
   ],
-  "analysis": "The reference is the one that overflows here: LibreOffice runs the last bullet under the footer band and clips it. Paperless sets the same text slightly more compactly and fits all of it above the band. Bullet levels, the dash sub-markers and the FAA footer are otherwise identical.",
+  "analysis": "The reference is the one that overflows here: LibreOffice runs the last bullet under the footer band and clips it. XRay.Office sets the same text slightly more compactly and fits all of it above the band. Bullet levels, the dash sub-markers and the FAA footer are otherwise identical.",
   "worst": {
    "page": 2,
    "ssim": 0.69061,
@@ -4228,7 +4228,7 @@
   "tags": [
    "overlap-clip"
   ],
-  "analysis": "Both engines overrun rows whose fixed height is smaller than their text, so cell text collides with the row below on either side; Paperless's rows differ by a line here and there, which moves the collisions to different rows. The green and grey band fills, the item codes and the section headers are correct.",
+  "analysis": "Both engines overrun rows whose fixed height is smaller than their text, so cell text collides with the row below on either side; XRay.Office's rows differ by a line here and there, which moves the collisions to different rows. The green and grey band fills, the item codes and the section headers are correct.",
   "worst": {
    "page": 4,
    "ssim": 0.69705,
@@ -4295,7 +4295,7 @@
    "list-markers",
    "field-values"
   ],
-  "analysis": "<b>Corrected.</b> Same mechanism as #029 &mdash; a <code>PAGE</code> field inside a footer text box, printing a frozen value on every page of the reference. <b>Ours is correct.</b> The stray <code>1.1.1</code>/<code>1.6.1</code> outline numbers are real and are the covered-cell list counter defect. <span class='wasnote'>Original reading: Two field defects. Paperless emits stray outline numbers &mdash; <code>1.1.1</code> and <code>1.6.1</code> &mdash; in the left margin beside sections 2.1 and 2.3.2, where the reference emits none; the same runaway numbering counter that mis-numbers the EASA activity forms. And the footer page number reads <code>Page 1 of 7</code> against the reference's <code>Page 6 of 7</code>: a page-numbering offset is not being applied. The form tables themselves are correct.</span>",
+  "analysis": "<b>Corrected.</b> Same mechanism as #029 &mdash; a <code>PAGE</code> field inside a footer text box, printing a frozen value on every page of the reference. <b>Ours is correct.</b> The stray <code>1.1.1</code>/<code>1.6.1</code> outline numbers are real and are the covered-cell list counter defect. <span class='wasnote'>Original reading: Two field defects. XRay.Office emits stray outline numbers &mdash; <code>1.1.1</code> and <code>1.6.1</code> &mdash; in the left margin beside sections 2.1 and 2.3.2, where the reference emits none; the same runaway numbering counter that mis-numbers the EASA activity forms. And the footer page number reads <code>Page 1 of 7</code> against the reference's <code>Page 6 of 7</code>: a page-numbering offset is not being applied. The form tables themselves are correct.</span>",
   "worst": {
    "page": 1,
    "ssim": 0.69826,
@@ -4360,7 +4360,7 @@
    "overlap-clip",
    "reflow"
   ],
-  "analysis": "The same records template as the other lease-return checklist: both engines overrun rows whose height is fixed below their content, and the collisions land on different rows because Paperless's line breaks differ. Fills, codes and section bands are correct.",
+  "analysis": "The same records template as the other lease-return checklist: both engines overrun rows whose height is fixed below their content, and the collisions land on different rows because XRay.Office's line breaks differ. Fills, codes and section bands are correct.",
   "worst": {
    "page": 2,
    "ssim": 0.69885,
@@ -4392,7 +4392,7 @@
    "fixed",
    "missing-graphics"
   ],
-  "analysis": "Paperless prints three things the reference leaves off a printed sheet: the column letters <code>A B C D&hellip;</code>, the row numbers down the left edge, and the cell comments as yellow sticky notes over the content. It also omits the <em>DRAFT</em> watermark the reference tiles across the page. The regulation text, the blue and orange banding and the footers are correct.",
+  "analysis": "XRay.Office prints three things the reference leaves off a printed sheet: the column letters <code>A B C D&hellip;</code>, the row numbers down the left edge, and the cell comments as yellow sticky notes over the content. It also omits the <em>DRAFT</em> watermark the reference tiles across the page. The regulation text, the blue and orange banding and the footers are correct.",
   "worst": {
    "page": 5,
    "ssim": 0.70122,
@@ -4423,7 +4423,7 @@
   "tags": [
    "list-markers"
   ],
-  "analysis": "The list's roman numerals are lost: the reference numbers the outline <code>I. II. III. IV. V. VI.</code>, Paperless replaces all six with plain round bullets. Paperless does fit the sixth item above the footer band, which the reference clips. The blue UNDP header, the yellow rule and the slide number are correct.",
+  "analysis": "The list's roman numerals are lost: the reference numbers the outline <code>I. II. III. IV. V. VI.</code>, XRay.Office replaces all six with plain round bullets. XRay.Office does fit the sixth item above the footer band, which the reference clips. The blue UNDP header, the yellow rule and the slide number are correct.",
   "worst": {
    "page": 2,
    "ssim": 0.70708,
@@ -4487,7 +4487,7 @@
   "tags": [
    "field-values"
   ],
-  "analysis": "The footer's tab stops are not honoured: the reference spaces <code>Page 5 of 12</code>, <code>Version 1</code> and <code>Last saved&hellip;</code> across the page, Paperless runs them together as <code>Page 5 of 12Version 1Last saved&hellip;</code>. The saved-time field also differs (09:27 against 08:15). The checkbox glyphs, the assessment list and the tables are correct.",
+  "analysis": "The footer's tab stops are not honoured: the reference spaces <code>Page 5 of 12</code>, <code>Version 1</code> and <code>Last saved&hellip;</code> across the page, XRay.Office runs them together as <code>Page 5 of 12Version 1Last saved&hellip;</code>. The saved-time field also differs (09:27 against 08:15). The checkbox glyphs, the assessment list and the tables are correct.",
   "worst": {
    "page": 5,
    "ssim": 0.71983,
@@ -4549,7 +4549,7 @@
   "tags": [
    "reflow"
   ],
-  "analysis": "The grid's cell size is wrong: Paperless draws about seventeen columns of larger squares where the reference draws nineteen smaller ones, and runs the grid further down the page. The <em>Graph Paper</em> caption and the TemplateHub logo are correct.",
+  "analysis": "The grid's cell size is wrong: XRay.Office draws about seventeen columns of larger squares where the reference draws nineteen smaller ones, and runs the grid further down the page. The <em>Graph Paper</em> caption and the TemplateHub logo are correct.",
   "worst": {
    "page": 1,
    "ssim": 0.72062,
@@ -4614,7 +4614,7 @@
    "table-rules",
    "reflow"
   ],
-  "analysis": "A small reflow: Paperless fits about two lines more per page, so the page opens on the tail of a location block the reference starts and closes on an extra one. The heavy case-separator rules, the bold labels and the two-column applicant/agent layout are correct.",
+  "analysis": "A small reflow: XRay.Office fits about two lines more per page, so the page opens on the tail of a location block the reference starts and closes on an extra one. The heavy case-separator rules, the bold labels and the two-column applicant/agent layout are correct.",
   "worst": {
    "page": 4,
    "ssim": 0.72679,
@@ -4710,7 +4710,7 @@
   "tags": [
    "text-style"
   ],
-  "analysis": "The date column is wrong in two ways. The weekday format code is not resolved &mdash; Paperless prints the literal <code>aaaa</code> where the reference prints <em>Tuesday</em> &mdash; and the dates themselves come from a different base, running from 08/21/22 against the reference's 04/01/26. The table's dark fill is also drawn only as wide as its two occupied columns rather than the full block, and the column headers come out blue instead of grey.",
+  "analysis": "The date column is wrong in two ways. The weekday format code is not resolved &mdash; XRay.Office prints the literal <code>aaaa</code> where the reference prints <em>Tuesday</em> &mdash; and the dates themselves come from a different base, running from 08/21/22 against the reference's 04/01/26. The table's dark fill is also drawn only as wide as its two occupied columns rather than the full block, and the column headers come out blue instead of grey.",
   "worst": {
    "page": 2,
    "ssim": 0.72845,
@@ -4905,7 +4905,7 @@
    "shape-fallback",
    "content-missing"
   ],
-  "analysis": "The concentric circles at the centre of the diagram are drawn as concentric <em>squares</em> &mdash; the ellipse preset is falling back to a rectangle &mdash; and the connector lines that join them to the four phase boxes are missing entirely. The phase tables, their red progress blocks and the coloured headers are correct. (The reference, for its part, clips its own title and the <em>Product Name:</em> label; Paperless prints both in full.)",
+  "analysis": "The concentric circles at the centre of the diagram are drawn as concentric <em>squares</em> &mdash; the ellipse preset is falling back to a rectangle &mdash; and the connector lines that join them to the four phase boxes are missing entirely. The phase tables, their red progress blocks and the coloured headers are correct. (The reference, for its part, clips its own title and the <em>Product Name:</em> label; XRay.Office prints both in full.)",
   "worst": {
    "page": 1,
    "ssim": 0.75118,
@@ -4938,7 +4938,7 @@
    "table-rules",
    "content-missing"
   ],
-  "analysis": "The diagonal <em>Honeywell</em> watermark is not drawn. Paperless also fits one more row (<em>EGPWM Terrain Threat</em>) onto the page, and draws light cell borders around parts of the table where the reference draws none. Every version, media type and part number matches.",
+  "analysis": "The diagonal <em>Honeywell</em> watermark is not drawn. XRay.Office also fits one more row (<em>EGPWM Terrain Threat</em>) onto the page, and draws light cell borders around parts of the table where the reference draws none. Every version, media type and part number matches.",
   "worst": {
    "page": 4,
    "ssim": 0.75141,
@@ -4970,7 +4970,7 @@
    "overlap-clip",
    "lo-broken"
   ],
-  "analysis": "The reference is the broken one here: LibreOffice loses the <em>BUSINESS CASE</em> title and overprints what is left of it onto the <em>Document Control</em> band, leaving a doubled, unreadable heading. Paperless draws the title in blue above the band and the band cleanly. Both render the three tables identically apart from a small width difference.",
+  "analysis": "The reference is the broken one here: LibreOffice loses the <em>BUSINESS CASE</em> title and overprints what is left of it onto the <em>Document Control</em> band, leaving a doubled, unreadable heading. XRay.Office draws the title in blue above the band and the band cleanly. Both render the three tables identically apart from a small width difference.",
   "worst": {
    "page": 1,
    "ssim": 0.75384,
@@ -5036,7 +5036,7 @@
    "list-markers",
    "content-missing"
   ],
-  "analysis": "The numbered circle bullets are gone. The reference marks the five items with filled circled numerals; Paperless draws no marker at all, so the list reads as five unlabelled paragraphs and the whole block shifts left. The gradient background, the rainbow rule and the yellow body colour are correct.",
+  "analysis": "The numbered circle bullets are gone. The reference marks the five items with filled circled numerals; XRay.Office draws no marker at all, so the list reads as five unlabelled paragraphs and the whole block shifts left. The gradient background, the rainbow rule and the yellow body colour are correct.",
   "worst": {
    "page": 4,
    "ssim": 0.75713,
@@ -5069,7 +5069,7 @@
    "shape-fallback",
    "table-rules"
   ],
-  "analysis": "The connector between the two boxes loses its arrowhead &mdash; Paperless draws the shaft as a plain rule. The second-level items in the left box are also set narrower, so they take an extra line each. Box borders, the diamond bullets, the photographic background and the footer are correct.",
+  "analysis": "The connector between the two boxes loses its arrowhead &mdash; XRay.Office draws the shaft as a plain rule. The second-level items in the left box are also set narrower, so they take an extra line each. Box borders, the diamond bullets, the photographic background and the footer are correct.",
   "worst": {
    "page": 5,
    "ssim": 0.75861,
@@ -5133,7 +5133,7 @@
    "list-markers",
    "reflow"
   ],
-  "analysis": "Paperless adds a bullet glyph to the <em>Fleet vehicles including mail/messenger fleets</em> paragraph, which the reference sets as a plain indented line with no marker. Every other paragraph, the justified setting, the heading weights and the three-line footer are identical.",
+  "analysis": "XRay.Office adds a bullet glyph to the <em>Fleet vehicles including mail/messenger fleets</em> paragraph, which the reference sets as a plain indented line with no marker. Every other paragraph, the justified setting, the heading weights and the three-line footer are identical.",
   "worst": {
    "page": 2,
    "ssim": 0.76131,
@@ -5229,7 +5229,7 @@
   "tags": [
    "lo-broken"
   ],
-  "analysis": "The reference is the one that fails: LibreOffice renders this slide as a title and footer over an empty page, dropping all four quarter tables. Paperless draws them in full &mdash; headers, entries, totals and rules. Counted as a divergence only because LibreOffice is the reference.",
+  "analysis": "The reference is the one that fails: LibreOffice renders this slide as a title and footer over an empty page, dropping all four quarter tables. XRay.Office draws them in full &mdash; headers, entries, totals and rules. Counted as a divergence only because LibreOffice is the reference.",
   "worst": {
    "page": 4,
    "ssim": 0.76422,
@@ -5262,7 +5262,7 @@
    "text-style",
    "content-missing"
   ],
-  "analysis": "The table's second column is missing. The reference sets the guidance questions in two columns &mdash; <code>C.1</code>&hellip;<code>C.6</code> on the left, <code>C.1.1</code>&hellip;<code>C.6.1</code> on the right; Paperless draws only the left column, so six questions are absent from the page. The green and yellow highlight bands are drawn correctly but span the full width instead of the first column.",
+  "analysis": "The table's second column is missing. The reference sets the guidance questions in two columns &mdash; <code>C.1</code>&hellip;<code>C.6</code> on the left, <code>C.1.1</code>&hellip;<code>C.6.1</code> on the right; XRay.Office draws only the left column, so six questions are absent from the page. The green and yellow highlight bands are drawn correctly but span the full width instead of the first column.",
   "worst": {
    "page": 2,
    "ssim": 0.76522,
@@ -5362,7 +5362,7 @@
    "chart",
    "content-missing"
   ],
-  "analysis": "A page of five charts, three of them wrong. The line and scatter series are drawn so pale they nearly vanish, and the line chart's y-axis labels are truncated to single digits. The legends are missing from the line, column and area charts. The pie chart and the clustered columns are correct &mdash; and Paperless does draw the Q1 category the reference clips off the left edge.",
+  "analysis": "A page of five charts, three of them wrong. The line and scatter series are drawn so pale they nearly vanish, and the line chart's y-axis labels are truncated to single digits. The legends are missing from the line, column and area charts. The pie chart and the clustered columns are correct &mdash; and XRay.Office does draw the Q1 category the reference clips off the left edge.",
   "worst": {
    "page": 3,
    "ssim": 0.7715,
@@ -5394,7 +5394,7 @@
    "shape-fallback",
    "content-missing"
   ],
-  "analysis": "The worst of the timeline templates. Paperless drops the blue gradient page background and with it the white <em>Project Timeline</em> title, draws the three milestone diamonds as yellow squares and loses their captions, and &mdash; the substantive loss &mdash; does not draw the Gantt bars at all: only the date labels remain, floating on white where the reference has thirteen blue chevrons. The month header band and the task column are correct.",
+  "analysis": "The worst of the timeline templates. XRay.Office drops the blue gradient page background and with it the white <em>Project Timeline</em> title, draws the three milestone diamonds as yellow squares and loses their captions, and &mdash; the substantive loss &mdash; does not draw the Gantt bars at all: only the date labels remain, floating on white where the reference has thirteen blue chevrons. The month header band and the task column are correct.",
   "worst": {
    "page": 1,
    "ssim": 0.77596,
@@ -5492,7 +5492,7 @@
   "tags": [
    "reflow"
   ],
-  "analysis": "Marginal. On a dense grant schedule of some ninety rows, Paperless sets a few columns fractionally wider, which shifts the money columns right. Every value, the row order and the printed footer match.",
+  "analysis": "Marginal. On a dense grant schedule of some ninety rows, XRay.Office sets a few columns fractionally wider, which shifts the money columns right. Every value, the row order and the printed footer match.",
   "worst": {
    "page": 4,
    "ssim": 0.77711,
@@ -5524,7 +5524,7 @@
    "version-divergence",
    "reflow"
   ],
-  "analysis": "Paperless sets the text a shade wider, so the block is more compact and clears the orange footer band; the reference runs its last bullet underneath the band and half-hides it. Bold run-ins, the arrow bullets, the ministry device and the slide number are correct.",
+  "analysis": "XRay.Office sets the text a shade wider, so the block is more compact and clears the orange footer band; the reference runs its last bullet underneath the band and half-hides it. Bold run-ins, the arrow bullets, the ministry device and the slide number are correct.",
   "worst": {
    "page": 4,
    "ssim": 0.77779,
@@ -5626,7 +5626,7 @@
    "overlap-clip",
    "content-missing"
   ],
-  "analysis": "Paperless renders this page completely blank. The reference shows an oversized table whose text runs off both edges of the sheet &mdash; itself a broken rendering &mdash; but it draws it; Paperless draws nothing at all.",
+  "analysis": "XRay.Office renders this page completely blank. The reference shows an oversized table whose text runs off both edges of the sheet &mdash; itself a broken rendering &mdash; but it draws it; XRay.Office draws nothing at all.",
   "worst": {
    "page": 2,
    "ssim": 0.78329,
@@ -5659,7 +5659,7 @@
    "chart",
    "overlap-clip"
   ],
-  "analysis": "The two engines disagree about the chart type. Paperless draws it as a bar-of-pie &mdash; main pie, leader lines and the two-segment secondary bar &mdash; with all sixteen legend entries; the reference draws only the pie, omits the secondary bar and truncates the legend at twelve. Paperless's plot is drawn smaller and its inner data labels overlap. The heading, the lorem body text and the TemplateHub device match.",
+  "analysis": "The two engines disagree about the chart type. XRay.Office draws it as a bar-of-pie &mdash; main pie, leader lines and the two-segment secondary bar &mdash; with all sixteen legend entries; the reference draws only the pie, omits the secondary bar and truncates the legend at twelve. XRay.Office's plot is drawn smaller and its inner data labels overlap. The heading, the lorem body text and the TemplateHub device match.",
   "worst": {
    "page": 1,
    "ssim": 0.78808,
@@ -5726,7 +5726,7 @@
    "content-missing",
    "reflow"
   ],
-  "analysis": "<b>Corrected.</b> The title is not missing &mdash; it is emitted at <b>0.120&nbsp;pt</b> where the reference sets <b>7.887&nbsp;pt</b>, in the same face (<code>LiberationSans-Bold</code>), the same colour and correctly centred. The page carries exactly two spans under 1&nbsp;pt, the header and the footer, and every other span on it is 10&nbsp;pt &mdash; so one degenerate header/footer scale accounts for both of the losses this reading names, and neither is a drawing failure. <span class='wasnote'>Original reading: The bold weight is lost: the reference sets every hazard-field description bold, Paperless sets them regular. The centred title <em>Hazard Analysis Template</em> and the reference-circular line at the foot of the page are both missing, and the label column is indented further.</span>",
+  "analysis": "<b>Corrected.</b> The title is not missing &mdash; it is emitted at <b>0.120&nbsp;pt</b> where the reference sets <b>7.887&nbsp;pt</b>, in the same face (<code>LiberationSans-Bold</code>), the same colour and correctly centred. The page carries exactly two spans under 1&nbsp;pt, the header and the footer, and every other span on it is 10&nbsp;pt &mdash; so one degenerate header/footer scale accounts for both of the losses this reading names, and neither is a drawing failure. <span class='wasnote'>Original reading: The bold weight is lost: the reference sets every hazard-field description bold, XRay.Office sets them regular. The centred title <em>Hazard Analysis Template</em> and the reference-circular line at the foot of the page are both missing, and the label column is indented further.</span>",
   "worst": {
    "page": 2,
    "ssim": 0.7906,
@@ -5889,7 +5889,7 @@
    "reflow",
    "pagination"
   ],
-  "analysis": "A pagination offset: Paperless fits more onto each page, so the page that is <em>List of Effective Pages</em> in the reference is already <em>(cont'd)</em> here, and the header's page field follows it &mdash; <code>Page: II</code> against <code>Page: I</code>. The tab-aligned columns, the rule under the heading and the revision entries are correct.",
+  "analysis": "A pagination offset: XRay.Office fits more onto each page, so the page that is <em>List of Effective Pages</em> in the reference is already <em>(cont'd)</em> here, and the header's page field follows it &mdash; <code>Page: II</code> against <code>Page: I</code>. The tab-aligned columns, the rule under the heading and the revision entries are correct.",
   "worst": null,
   "verified": "page alignment checked: our page 4 is the reference's page 5, as described",
   "outcome": "open",
@@ -5993,7 +5993,7 @@
    "chart",
    "pagination"
   ],
-  "analysis": "The chart includes a <em>Grand Total</em> category the reference leaves out, which rescales the value axis from $300,000 to $400,000 and shifts every bar. The workbook also paginates to four pages against the reference's two. The line-art house, the teal palette and the asset values are correct &mdash; and Paperless prints the full word <em>inventory</em> where the reference clips its first letter.",
+  "analysis": "The chart includes a <em>Grand Total</em> category the reference leaves out, which rescales the value axis from $300,000 to $400,000 and shifts every bar. The workbook also paginates to four pages against the reference's two. The line-art house, the teal palette and the asset values are correct &mdash; and XRay.Office prints the full word <em>inventory</em> where the reference clips its first letter.",
   "worst": null,
   "outcome": "open",
   "outcome_why": "charts -- data labels, legend keys, axis wrapping, series z order"

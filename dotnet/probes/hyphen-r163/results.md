@@ -2,7 +2,7 @@
 
 **Document**: `/home/user/sample-files/words/pagination-001/docx/FAA 2025-26 Holdover Tables.docx`
 **Reference**: `/opt/libreoffice26.2/program/soffice`, 26.2.4.2 / `0229ac93fcf0d7cbc6376066c6f35021cef002dc`
-**Ours**: `dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/Paperless.Cli` (prebuilt, **Sep 17**; see §7)
+**Ours**: `dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli` (prebuilt, **Sep 17**; see §7)
 **Verdict**: **hyphenation is not involved.** The cause is a `REF` field whose cached result is
 shorter than the bookmark it names.
 
@@ -86,7 +86,7 @@ not the cause. See §6.
 - **Language is fine and would not matter**: `fo:language="en"` on 327 styles, `fo:country="CA"`
   176 / `"US"` 160; `<w:themeFontLang w:val="en-US"/>`.
 - **Our tree has no Writer hyphenation to get wrong.** `HyphenationPatterns` / `Hyphenators` exist
-  in `Paperless.Core.Globalization` but the only caller is `Charts/ChartAxisLabels.cs` `[src]`.
+  in `XRay.Office.Core.Globalization` but the only caller is `Charts/ChartAxisLabels.cs` `[src]`.
 
 ## 4. Measurement, kerning and fonts: ruled out
 
@@ -142,7 +142,7 @@ The sibling `REF _Ref75338163` in the same sentence is unaffected: its bookmark 
 recomputed on load" names this document, this rule and this page, and settles it in Word's favour:
 Word does not update a `REF` on open or print, so the cache is what the author saw. The recomputation
 is implemented in `DocxReferenceFields` behind `WordParity.ReproduceLibreOffice`
-(`PAPERLESS_LIBREOFFICE_QUIRKS=1`). `[src]`
+(`XRAY_OFFICE_LIBREOFFICE_QUIRKS=1`). `[src]`
 
 ## 6. Three other defects found on the way, none of them the cause
 
@@ -163,9 +163,9 @@ is implemented in `DocxReferenceFields` behind `WordParity.ReproduceLibreOffice`
 
 ## 7. The binary is older than the tree
 
-`[bin]` `Paperless.WordProcessing.dll` is dated **17 Sep**; HEAD is `bccfeb64b`, **20 Sep**. The
+`[bin]` `XRay.Office.WordProcessing.dll` is dated **17 Sep**; HEAD is `bccfeb64b`, **20 Sep**. The
 assembly contains `DocxLayoutSource` but **not** `DocxReferenceFields`, `DocxTocStyles`,
-`WordParity` or `ReferenceFieldText`, and `PAPERLESS_LIBREOFFICE_QUIRKS=1` changes **nothing** in
+`WordParity` or `ReferenceFieldText`, and `XRAY_OFFICE_LIBREOFFICE_QUIRKS=1` changes **nothing** in
 its output (byte-identical text on this document and on
 `tests/corpus/features/words-reference-field.docx`). So the measurements above are of the Sep-17
 tree. At HEAD the default behaviour on this page is the same — the cache — by design.
@@ -199,17 +199,17 @@ threshold, which is the same threshold the real document sits on.
 
 ### 10.1 The symptom the user reported — a policy flip, one line
 
-**File** `dotnet/src/Paperless.WordProcessing/WordParity.cs`
+**File** `dotnet/src/XRay.Office.WordProcessing/WordParity.cs`
 **Member** `public static bool ReproduceLibreOffice`
 
-*Current* — `PAPERLESS_LIBREOFFICE_QUIRKS` must be `1`/`true`/`yes`; unset means Word, so
+*Current* — `XRAY_OFFICE_LIBREOFFICE_QUIRKS` must be `1`/`true`/`yes`; unset means Word, so
 `DocxReferenceFields.Expansions` returns `null`, `DocxLayoutSource.ValueOf` finds no expansion
 for `_Ref199241802`, and the cached `Table Adj-52` is drawn.
 
 *Proposed* — default to the reference and let a caller opt out, e.g.
 
 ```csharp
-public const string Variable = "PAPERLESS_WORD_PARITY";
+public const string Variable = "XRAY_OFFICE_WORD_PARITY";
 
 public static bool ReproduceLibreOffice =>
     Environment.GetEnvironmentVariable(Variable) is not ("1" or "true" or "yes");
@@ -229,13 +229,13 @@ deliberately.** What it buys and costs, from that file's own measurements:
 That last row is the argument against, and it is a good one: the doubled `Table` is what the file
 genuinely means and *not* what any reader of the document has ever seen. **Recommendation: do not
 flip the global default.** If the renderer is being scored against 26.2.4.2, set
-`PAPERLESS_LIBREOFFICE_QUIRKS=1` for that run; if it is producing output for a person, the present
+`XRAY_OFFICE_LIBREOFFICE_QUIRKS=1` for that run; if it is producing output for a person, the present
 default is right and this page is the documented cost. Either way the user's report should be
 answered as "known and deliberate", not as an open defect.
 
 ### 10.2 A genuine bug in the same sentence — evaluate `PAGEREF`
 
-**File** `dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs`
+**File** `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs`
 **Method** `private string? ValueOf(string instruction)` (≈ line 1806), reached from `Substitute`
 
 *Current* — `PAGEREF` matches no branch: `StyleReferenceName` and `ReferenceBookmark` both decline
@@ -261,7 +261,7 @@ move the sentence.
 
 ### 10.3 Rebuild the CLI
 
-`dotnet/tools/Paperless.Cli/bin/Release/.../Paperless.WordProcessing.dll` is three days older than
+`dotnet/tools/XRay.Office.Cli/bin/Release/.../XRay.Office.WordProcessing.dll` is three days older than
 HEAD and lacks `DocxReferenceFields`, `DocxTocStyles`, `WordParity` and the shared-abstract list
 counter of `8af1cbb21`. Any further measurement on this document made with it will re-find the
 `516` markers, which are already fixed.

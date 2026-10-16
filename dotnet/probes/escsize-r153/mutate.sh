@@ -4,7 +4,7 @@
 # not compile prints no failing test and reads exactly like an arm that passed.
 set -u
 cd /home/user/libreoffice-core/dotnet || exit 1
-SRC=src/Paperless.WordProcessing/Layout/Escapement.cs
+SRC=src/XRay.Office.WordProcessing/Layout/Escapement.cs
 TRUNC='=> Proportion is 0 or 100 ? emSize : Length.FromTwips(emSize.Twips * Proportion / 100);'
 cp "$SRC" /tmp/claude-0/Escapement.cs.before || exit 1
 
@@ -18,7 +18,7 @@ assert old in s, 'base text not found'
 open(p, 'w').write(s.replace(old, new))
 PY
     touch "$SRC"
-    out=$(timeout 900 dotnet test tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj \
+    out=$(timeout 900 dotnet test tests/XRay.Office.WordProcessing.Tests/XRay.Office.WordProcessing.Tests.csproj \
             --filter "FullyQualifiedName~EscapementSizeTests" 2>&1)
     if printf '%s' "$out" | grep -qE 'error [A-Z]+[0-9]+'; then
         echo "$name: DID NOT COMPILE -- arm void"
@@ -36,6 +36,6 @@ run 'truncate to a tenth' '=> Proportion is 0 or 100 ? emSize : Length.FromTwips
 
 # and the base state again, so the file the round ships is the one that was measured
 cp /tmp/claude-0/Escapement.cs.before "$SRC" && touch "$SRC"
-out=$(timeout 900 dotnet test tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj \
+out=$(timeout 900 dotnet test tests/XRay.Office.WordProcessing.Tests/XRay.Office.WordProcessing.Tests.csproj \
         --filter "FullyQualifiedName~EscapementSizeTests" 2>&1)
 printf 'base (truncate)   : %s\n' "$(printf '%s' "$out" | grep -E '^(Passed|Failed)!' | tail -1)"

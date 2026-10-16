@@ -6,7 +6,7 @@ set -u
 export PATH=/opt/libreoffice26.2/program:$PATH
 HERE=$(cd "$(dirname "$0")" && pwd)
 CORPUS=/home/user/sample-files
-CLI=/home/user/cli-frozen-r164/Paperless.Cli
+CLI=/home/user/cli-frozen-r164/XRay.Office.Cli
 mkdir -p "$HERE/ref" "$HERE/ours" "$HERE/profile"
 echo "soffice resolved: $(command -v soffice)  ->  $(soffice --version 2>&1 | head -1)"
 while IFS=$'\t' read -r stem rel; do

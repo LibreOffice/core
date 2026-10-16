@@ -6,7 +6,7 @@ W=/home/user/r103-sheetpivot
 DIFF=/home/user/wt-sheetpivot/.claude/skills/render-comparison/scripts/pdf-image-diff.py
 score () {   # score <document> <reference pdf>
   d=$W/pv; rm -rf "$d"; mkdir -p "$d"
-  SOURCE_DATE_EPOCH=1700000000 dotnet $W/cli-head/Paperless.Cli.dll render --format pdf --outdir "$d" --quiet "$1" >/dev/null 2>&1
+  SOURCE_DATE_EPOCH=1700000000 dotnet $W/cli-head/XRay.Office.Cli.dll render --format pdf --outdir "$d" --quiet "$1" >/dev/null 2>&1
   f=$(ls "$d"/*.pdf 2>/dev/null | head -1)
   if [ -z "$f" ] || ! tail -c 2048 "$f" | grep -q '%%EOF'; then echo "FAILED 0 0"; rm -rf "$d"; return; fi
   python3 "$DIFF" "$f" "$2" 2>/dev/null | awk -F'\t' 'NF>=6 && $1+0>0 {n++; s+=$4; if($6~/MAJOR/) m++} END{printf "%.2f %d %d\n", s, n, m+0}'

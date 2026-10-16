@@ -111,7 +111,7 @@ touched, so ODF bands are unchanged.
 | worksheets whose band is clipped away by change A | **exactly one** — `FAA-2019-0995-0002_attachment_2` `sheet10` `oddHeader`, right area |
 | words track | **0** — no shared layer touched |
 | slides track | **0** — no shared layer touched |
-| tests | +12 to +18 in `Paperless.Spreadsheets`, no other project |
+| tests | +12 to +18 in `XRay.Office.Spreadsheets`, no other project |
 
 `census-bandclip.py` finds 313 worksheet bands with content, 26 of them pinned, and 7 with an area
 whose ink falls entirely outside the band. **Six of the seven are already right**: five state a band

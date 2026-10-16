@@ -3,7 +3,7 @@
 import os, re, subprocess, sys, tempfile, zipfile, collections
 
 REF = "/opt/libreoffice26.2/program/soffice"
-CLI = "/home/user/wt-frames/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/wt-frames/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 SRC = "/home/user/wt-frames/dotnet/tests/corpus/features/justify-shrink-{m}.docx"
 
 

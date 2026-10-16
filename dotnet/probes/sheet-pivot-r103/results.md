@@ -1,6 +1,6 @@
 # Round 103 — a BIFF sheet's dropped shapes, and what a pivot table's generated grid is worth
 
-    ours   = Paperless.Cli @ e58567aea (base) and @ e58567aea + this round's diff (head)
+    ours   = XRay.Office.Cli @ e58567aea (base) and @ e58567aea + this round's diff (head)
     ref    = /opt/libreoffice26.2/program/soffice — LibreOffice 26.2.4.2 — and the banked
              reference PDFs at /home/user/gate-orig-r83/ref (the 947 originals) and
              /home/user/gate-odf-r80/ref (the 307 `.ods`)
@@ -176,9 +176,9 @@ temporary directory per render, checks each PDF for `%%EOF` before hashing it an
 
 ### 3.2 Confinement
 
-Only `Paperless.Spreadsheets/MsBinary` changed behaviour — `XlsDrawing.cs`,
+Only `XRay.Office.Spreadsheets/MsBinary` changed behaviour — `XlsDrawing.cs`,
 `BiffRecordReader.cs`, `XlsWorkbookReader.cs` — plus one new `const` in
-`Paperless.MsBinary/Escher/EscherRecordTypes.cs`, which adds no code path. Checked anyway over 40
+`XRay.Office.MsBinary/Escher/EscherRecordTypes.cs`, which adds no code path. Checked anyway over 40
 `.xlsx`/`.xlsm`, 10 `.ppt` and 10 `.doc` at both binaries (`confine.tsv`, `confine.list`): **60
 documents, 0 movers, 0 failures.**
 
@@ -239,7 +239,7 @@ Presentations **1054**, Rendering **164**, Vector **309**, WordProcessing **1938
 Spreadsheets **1297** — **6532 passed, 0 failed and 0 skipped in every one**. Solution build
 0 warnings, 0 errors.
 
-`Paperless.Fidelity.Tests` is **542 passed / 10 failed of 552**, and the ten are exactly the known
+`XRay.Office.Fidelity.Tests` is **542 passed / 10 failed of 552**, and the ten are exactly the known
 names: `TabStopComparisonTests` ×4 (`list-label-overrun.fodt`/`.odt`/`.docx`/`.doc`),
 `PageDrawingComparisonTests` ×4 (`paginated.fodt`/`.docx`/`.doc`/`.rtf`),
 `SheetDrawingComparisonTests` (`sheet-rich-text.xlsx`) and `JustificationShrinkComparisonTests`

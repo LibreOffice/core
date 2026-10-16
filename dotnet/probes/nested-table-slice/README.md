@@ -7,7 +7,7 @@ words alone).
 
 ## What was traced
 
-`TableLayouter.SliceRow` was given a temporary `PAPERLESS_TRACE_SLICE=1` stderr
+`TableLayouter.SliceRow` was given a temporary `XRAY_OFFICE_TRACE_SLICE=1` stderr
 trace printing, per call: the room left, the nested-table spans a cut may not
 fall inside, the surviving candidate cuts, and the cut chosen. The instrument was
 removed afterwards and the tree restored with `git checkout --` plus `touch`,

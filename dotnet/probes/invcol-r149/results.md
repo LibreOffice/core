@@ -4,7 +4,7 @@
 (`/opt/libreoffice26.2/program/soffice`), with the tarball's duplicate, Latin Noto, Narrow and
 Condensed faces moved aside (`.duplicates-aside`, `.noto-aside`, `.condensed-aside` all present at
 the time of measurement). Our half is
-`dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli`. **The parent session
+`dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli`. **The parent session
 rebuilt it three times during this round** — mtimes `21:12:06`, `21:41:14`, `21:58:14`, `22:04:30`,
 all at 78256 bytes — so every comparison here spans a rebuild and every one was re-rendered and
 checked byte for byte rather than assumed: the witness is md5-identical across its rebuild and the
@@ -180,7 +180,7 @@ remedy that file prescribes — could not have found it. The check that does fin
 
 ## 5. The C# seat, and the change
 
-**`dotnet/src/Paperless.Spreadsheets/OpenDocument/OdsPrintSetup.cs`, line 106**, in the method that
+**`dotnet/src/XRay.Office.Spreadsheets/OpenDocument/OdsPrintSetup.cs`, line 106**, in the method that
 folds a page layout into a `SheetPrintSetup`:
 
 ```csharp
@@ -195,7 +195,7 @@ local `centring` — leaked into an attribute *name*, where the spelling is the 
 been true.
 
 **The change is one word**: `"table-centring"` → `"table-centering"`. Nothing else is needed —
-`SpreadsheetPages.BodyOrigin` (`src/Paperless.Spreadsheets/Layout/SpreadsheetPages.cs`:539-549)
+`SpreadsheetPages.BodyOrigin` (`src/XRay.Office.Spreadsheets/Layout/SpreadsheetPages.cs`:539-549)
 already consumes both flags, already halves the remainder without clamping it, and already carries
 `printfun.cxx`'s reasoning in its own remarks. **Not made; the parent makes the edit.**
 
@@ -368,7 +368,7 @@ that produces no rows and no error is this before it is anything else.
 
 **Three rebuilds landed in the middle of this round and every one was measured rather than
 assumed.** The parent session was building and running its suite in this same tree throughout, and
-`Paperless.Cli` changed mtime at **21:41:14**, **21:58:14** and **22:04:30**, always at 78256
+`XRay.Office.Cli` changed mtime at **21:41:14**, **21:58:14** and **22:04:30**, always at 78256
 bytes. `dotnet/CLAUDE.md`'s rule is that a run spanning a rebuild is void — and it is void *unless
 the rebuild is shown not to have moved these renderings*, which is one cheap measurement rather
 than a judgement.
@@ -426,8 +426,8 @@ pairing, it is printing the page column, which `dump-spans.py` does.
    assertion, so nothing pins the current behaviour; and `Extent(Columns(x).Select(c => c.Width))`
    does not depend on `x` — `Columns(left)` takes its column range from `placement`, not from
    `left` — so there is no fixed point to solve and the shift cannot change which columns are on
-   the page. **The measurement**: build, run `Paperless.Spreadsheets.Tests` and
-   `Paperless.Fidelity.Tests`, and re-run the `.ods` column of the gate.
+   the page. **The measurement**: build, run `XRay.Office.Spreadsheets.Tests` and
+   `XRay.Office.Fidelity.Tests`, and re-run the `.ods` column of the gate.
 
 5. **Whether O100's `-213` was ever "one column".** It was not, on today's rendering. Whether it
    read that way when the register entry was written — before round 142 or after — I cannot check:
@@ -440,7 +440,7 @@ pairing, it is printing the page column, which `dump-spans.py` does.
 
 Neither edit is made here.
 
-**`dotnet/src/Paperless.Spreadsheets/OpenDocument/OdsPrintSetup.cs`:106** —
+**`dotnet/src/XRay.Office.Spreadsheets/OpenDocument/OdsPrintSetup.cs`:106** —
 `"table-centring"` → `"table-centering"`. One word. Worth a comment saying why the spelling breaks
 the file's own convention, because the next reader will "fix" it back.
 
@@ -497,7 +497,7 @@ nothing written.
 measured 2026-09-17 in `/home/user/libreoffice-core`, reference
 `/opt/libreoffice26.2/program/soffice` = LibreOffice 26.2.4.2 `0229ac93fcf0d7cbc6376066c6f35021cef002dc`,
 with `.duplicates-aside`, `.noto-aside` and `.condensed-aside` all present in the tarball's font
-directory; our half `Paperless.Cli` at four mtimes — `21:12:06`, `21:41:14`, `21:58:14`, `22:04:30`, all
+directory; our half `XRay.Office.Cli` at four mtimes — `21:12:06`, `21:41:14`, `21:58:14`, `22:04:30`, all
 78256 bytes — recorded in `render/mtime.log`, `sweep-all/cli-mtime.txt` and `recheck-mtime.txt`,
 with `recheck.txt` showing the renderings unmoved across them; corpus `/home/user/sample-files` at `MANIFEST.tsv` = 946
 rows; converted ODF `/home/user/corpus-odf` (`ods` 307, `odt` 337, `rtf` 337, no `odp`).

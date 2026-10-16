@@ -9,7 +9,7 @@ Every probe holds, in the FIRST body paragraph:
 
 An (almost) empty `word/settings.xml` is included in every probe but `nosettings`, which
 exists precisely to show what dropping it costs: without one the importer takes different
-OOXML compatibility defaults. See `dotnet/CLAUDE.md` and the `paperless-corpus` skill.
+OOXML compatibility defaults. See `dotnet/CLAUDE.md` and the `office-corpus` skill.
 """
 import zipfile, pathlib, sys
 

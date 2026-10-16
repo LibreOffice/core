@@ -45,7 +45,7 @@ OUT="${3:?outdir — name it after the agent or the cluster, never 'out' or 'bas
 WORKERS="${4:-2}"
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
-CLI="${5:-$REPO/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli}"
+CLI="${5:-$REPO/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli}"
 REFDIR="${6:-}"
 
 mkdir -p "$OUT" && OUT="$(cd "$OUT" && pwd)"

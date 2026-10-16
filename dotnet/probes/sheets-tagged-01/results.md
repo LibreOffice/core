@@ -214,7 +214,7 @@ difference was plain. **Per-pixel, not per-page-total** — and look at the crop
 | site | do we implement it? | verdict |
 |---|---|---|
 | 1542 | yes — no lead-in is drawn | **correct, and correct for the measured reason.** `SpreadsheetPages.Draw` draws no lead-in; the rightward `DrawTrailIn` mirror is kept because `output2.cxx:1660-1678` carries no guard |
-| 1499, 1579, 1951, 2182, 2269, 4551 | **no, and rightly not** | Paperless emits no PDF structure tree. These have **no equivalent in our code and need none** — they are not "got right by luck", they are not applicable |
+| 1499, 1579, 1951, 2182, 2269, 4551 | **no, and rightly not** | XRay.Office emits no PDF structure tree. These have **no equivalent in our code and need none** — they are not "got right by luck", they are not applicable |
 | 1498, 1573, 1599, 4506 | n/a | not branches |
 | the ten `sc/` sites outside `output2.cxx` | no | same: tag tree, no equivalent needed |
 

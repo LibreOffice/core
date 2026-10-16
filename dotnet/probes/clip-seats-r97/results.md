@@ -5,7 +5,7 @@ Reference **26.2.4.2** — `/opt/libreoffice26.2/program/soffice`. `/usr/bin/sof
 and was not used. Reference PDFs are the bank at `/home/user/gate-orig-r83/ref` (947 documents);
 nothing was re-rendered through `soffice` except the two authored probes, one repository fixture
 and one `--convert-to fods`.
-Our side is `dotnet/tools/Paperless.Cli` built in this worktree, `SOURCE_DATE_EPOCH` pinned.
+Our side is `dotnet/tools/XRay.Office.Cli` built in this worktree, `SOURCE_DATE_EPOCH` pinned.
 
 Both seats end **closed**. Neither needed a change to the tree: O12's proposed change is
 measurably wrong, and O7's stated cause is refuted and re-seats as two smaller, characterised
@@ -419,5 +419,5 @@ the figure the write-up quotes.
 Validation, on this worktree at this commit: clean `Release` build, **0 warnings**; the ten
 non-fidelity projects green (Containers 109, Core 521, Markup 259, OpenDocument 146, Presentations
 1044, Rendering 164, Spreadsheets 1265, Text 728, Vector 309, WordProcessing 1434);
-`Paperless.Fidelity.Tests` **542 passed / 10 failed** with exactly the known names — PageDrawing ×4,
+`XRay.Office.Fidelity.Tests` **542 passed / 10 failed** with exactly the known names — PageDrawing ×4,
 TabStop ×4, SheetDrawing, JustificationShrink.

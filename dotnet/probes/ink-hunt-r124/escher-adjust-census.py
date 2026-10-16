@@ -3,7 +3,7 @@
 
     escher-adjust-census.py <rows.tsv> <corpus-root> <out.tsv>
 
-`PptShapeGeometry.Adjustment` (`src/Paperless.Presentations/MsBinary/PptShapeGeometry.cs`:334-337)
+`PptShapeGeometry.Adjustment` (`src/XRay.Office.Presentations/MsBinary/PptShapeGeometry.cs`:334-337)
 translates `DFF_Prop_adjustValue` for `roundRect` and `triangle` and answers null for every other
 preset, so any other shape is drawn at the DrawingML preset's own default `adj` however the file
 states it. This counts the shapes that state one, by preset, over every OLE2 document in the

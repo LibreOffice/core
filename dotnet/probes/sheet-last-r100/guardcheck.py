@@ -10,7 +10,7 @@ for doc in docs:
     h = {}
     for leg in ('cli-head', 'cli-head2'):
         d = tempfile.mkdtemp(dir='/home/user/r100-work/tmp')
-        subprocess.run(['/home/user/r100-work/%s/Paperless.Cli' % leg, 'render', doc, '--outdir', d],
+        subprocess.run(['/home/user/r100-work/%s/XRay.Office.Cli' % leg, 'render', doc, '--outdir', d],
                        env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=900)
         p = glob.glob(d + '/*.pdf')
         h[leg] = hashlib.md5(open(p[0], 'rb').read()).hexdigest() if p else 'FAILED'

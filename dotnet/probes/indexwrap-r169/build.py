@@ -12,7 +12,7 @@ These arms settle it in DOCX, where the question can be asked cheaply: the hypot
 Writer's layout rather than about the WW8 reader, so if it reproduces here the seat is
 `FrameLayout` and if it does not the seat is the reader.
 
-`word/settings.xml` is written even though it is empty (`paperless-corpus/SKILL.md`).
+`word/settings.xml` is written even though it is empty (`office-corpus/SKILL.md`).
 """
 import os, zipfile
 

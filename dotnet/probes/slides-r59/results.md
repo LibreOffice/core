@@ -424,7 +424,7 @@ OpenDocument 125, WordProcessing 1180, Spreadsheets 974, **Presentations 841** �
 0 failed, 1 skipped**. `cd dotnet && dotnet build -v q -nologo` → **0 warnings, 0 errors**.
 
 **A test project reported four failures under load and none of them was real.** A first run of
-`Paperless.Vector.Tests` alongside a corpus sweep reported one genuine failure plus three SVG
+`XRay.Office.Vector.Tests` alongside a corpus sweep reported one genuine failure plus three SVG
 ones; run alone, all 302 pass. `CLAUDE.md`'s rule held: a result taken under load is not a result.
 
 ## Controls
@@ -443,11 +443,11 @@ not a text property.
 
 ## Shared layers — this diff reaches all three tracks and the parent must gate the corpus
 
-Three of the five changes are outside `Paperless.Presentations`:
+Three of the five changes are outside `XRay.Office.Presentations`:
 
-* **§1 and §2** touch `Paperless.Core/Charts` and `Paperless.Ooxml`.
-* **§4** touches `Paperless.Vector`.
-* **§5** is `Paperless.Presentations` only.
+* **§1 and §2** touch `XRay.Office.Core/Charts` and `XRay.Office.Ooxml`.
+* **§4** touches `XRay.Office.Vector`.
+* **§5** is `XRay.Office.Presentations` only.
 
 Census reach outside slides, counted on what the parts state (`chart-census.py`,
 `metafile-symbol-census.py`):

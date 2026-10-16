@@ -416,7 +416,7 @@ over it is empty). The measurement is the check on that reasoning rather than a 
 
 ## Verification
 
-Full build `dotnet build Paperless.slnx -v q -nologo`: **0 warnings, 0 errors.**
+Full build `dotnet build XRay.Office.slnx -v q -nologo`: **0 warnings, 0 errors.**
 
 The ten non-fidelity projects, run individually:
 
@@ -438,7 +438,7 @@ The ten non-fidelity projects, run individually:
 `OdtFloatingTableTests` and six theory cases in `OdtFlySettingsTests`. Every other project reports
 its briefed count unchanged.
 
-`Paperless.Fidelity.Tests` with `/opt/libreoffice26.2/program` first on `PATH`: **542 passed, 10
+`XRay.Office.Fidelity.Tests` with `/opt/libreoffice26.2/program` first on `PATH`: **542 passed, 10
 failed, 0 skipped of 552** — the ten known-open, named, and no others:
 
 ```

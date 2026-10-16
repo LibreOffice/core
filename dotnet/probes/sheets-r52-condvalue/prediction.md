@@ -131,14 +131,14 @@ other than `077`, are predicted unchanged in every field.
 7. **The value pool.** LibreOffice gathers it from the loaded document and shrinks a range that
    runs to the sheet's last row; we gather it from the materialised table. A rule stated over
    `B6:B1048576` could resolve `percent`/`percentile` thresholds differently on the two sides.
-8. **Non-PDF extraction.** `paperless text` will stop emitting these cells' text. No gate column
+8. **Non-PDF extraction.** `xray-office text` will stop emitting these cells' text. No gate column
    sees it and it is not measured here.
 
 ## Shared layer
 
-**No.** The diff is expected to touch `Paperless.Spreadsheets` only — one new file plus a hook in
+**No.** The diff is expected to touch `XRay.Office.Spreadsheets` only — one new file plus a hook in
 `Ooxml/XlsxSheetReader.cs`. Nothing in `Core`, `Containers`, `Text`, `Vector`, `Rendering`,
-`Markup` or `Paperless.Ooxml`. If that turns out not to hold, the results file will say so and name
+`Markup` or `XRay.Office.Ooxml`. If that turns out not to hold, the results file will say so and name
 a census.
 
 ## Second item, if the first lands

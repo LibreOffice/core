@@ -20,7 +20,7 @@ broad defect: `column` is the commonest `relativeFrom` in the corpus.
 blue — at `column`, `margin` and `page`, each with `posOffset` of nought. Rendered both
 ways and read off the raster by colour:
 
-| origin | Paperless | LibreOffice |
+| origin | XRay.Office | LibreOffice |
 |---|---:|---:|
 | `column` | 72.00 pt | 72.00 pt |
 | `margin` | 72.00 pt | 72.00 pt |

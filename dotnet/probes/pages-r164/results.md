@@ -6,7 +6,7 @@
 four reference PDFs carry `Producer: LibreOffice 26.2.4.2 (X86_64)`. The five tarball font
 confounds were confirmed absent from `/opt/libreoffice26.2/share/fonts/truetype` before measuring.
 
-**Our half is the frozen snapshot `/home/user/cli-frozen-r164/Paperless.Cli`** (mtime
+**Our half is the frozen snapshot `/home/user/cli-frozen-r164/XRay.Office.Cli`** (mtime
 2026-09-25 21:56). No C# was changed and nothing was built, so this round cannot have swapped the
 binary under itself. Baselines were read from `Td`/`TJ` through
 `.claude/skills/render-comparison/scripts/pdf-ops.py`; `pdftotext -bbox` was not used for any
@@ -14,7 +14,7 @@ vertical measurement, per this repository's own note that its `yMin` is a font-d
 
 `[bin]` The three arms:
 
-| document | ref 26.2.4.2 | ours | ours + `PAPERLESS_LIBREOFFICE_QUIRKS=1` |
+| document | ref 26.2.4.2 | ours | ours + `XRAY_OFFICE_LIBREOFFICE_QUIRKS=1` |
 |---|---:|---:|---:|
 | `02_mcar_part-2_and_IS_v2.10.docx` | 312 | **313** | 313 |
 | `CRIF - Spécification technique - Socle applicatif.docx` | 29 | 28 | 28 |
@@ -138,7 +138,7 @@ rows to the twip. **The reference's is `titleEnd ≤ tabStop − rightIndent −
 number sit out in the indent, right-aligned at the stop; we charge the number against the indent
 too.* Both single-boundary rules alone fail cells of the sweep; only the conjunction reproduces it.
 
-`[src]` The seat is one line — `Paperless.Text/Layout/TabRuler.cs`, `WidthOf`:196:
+`[src]` The seat is one line — `XRay.Office.Text/Layout/TabRuler.cs`, `WidthOf`:196:
 
 ```csharp
 return countsDeferredStretch || !last.Deferred ? last.Right : last.GapLeft + last.Width;

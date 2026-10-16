@@ -1,14 +1,14 @@
-Paperless.Containers.Tests listed=109 Failed:     0, Passed:   109, Skipped:     0, Total:   109
-Paperless.Core.Tests listed=591 Failed:     0, Passed:   591, Skipped:     0, Total:   591
-Paperless.Markup.Tests listed=249 Failed:     0, Passed:   259, Skipped:     0, Total:   259
-Paperless.OpenDocument.Tests listed=169 Failed:     0, Passed:   169, Skipped:     0, Total:   169
-Paperless.Presentations.Tests listed=1205 Failed:     0, Passed:  1205, Skipped:     0, Total:  1205
-Paperless.Rendering.Tests listed=164 Failed:     0, Passed:   164, Skipped:     0, Total:   164
-Paperless.Spreadsheets.Tests listed=1387 Failed:     0, Passed:  1387, Skipped:     0, Total:  1387
-Paperless.Text.Tests listed=750 Failed:     0, Passed:   750, Skipped:     0, Total:   750
-Paperless.Vector.Tests listed=309 Failed:     0, Passed:   309, Skipped:     0, Total:   309
-Paperless.WordProcessing.Tests listed=2007 Failed:     0, Passed:  2007, Skipped:     0, Total:  2007
-Paperless.Fidelity.Tests listed=552 Failed:    10, Passed:   542, Skipped:     0, Total:   552
+XRay.Office.Containers.Tests listed=109 Failed:     0, Passed:   109, Skipped:     0, Total:   109
+XRay.Office.Core.Tests listed=591 Failed:     0, Passed:   591, Skipped:     0, Total:   591
+XRay.Office.Markup.Tests listed=249 Failed:     0, Passed:   259, Skipped:     0, Total:   259
+XRay.Office.OpenDocument.Tests listed=169 Failed:     0, Passed:   169, Skipped:     0, Total:   169
+XRay.Office.Presentations.Tests listed=1205 Failed:     0, Passed:  1205, Skipped:     0, Total:  1205
+XRay.Office.Rendering.Tests listed=164 Failed:     0, Passed:   164, Skipped:     0, Total:   164
+XRay.Office.Spreadsheets.Tests listed=1387 Failed:     0, Passed:  1387, Skipped:     0, Total:  1387
+XRay.Office.Text.Tests listed=750 Failed:     0, Passed:   750, Skipped:     0, Total:   750
+XRay.Office.Vector.Tests listed=309 Failed:     0, Passed:   309, Skipped:     0, Total:   309
+XRay.Office.WordProcessing.Tests listed=2007 Failed:     0, Passed:  2007, Skipped:     0, Total:  2007
+XRay.Office.Fidelity.Tests listed=552 Failed:    10, Passed:   542, Skipped:     0, Total:   552
 
 The ten fidelity failures, by name, are the same ten round 130 recorded:
   PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt  paginated.{doc,docx,fodt,rtf}
@@ -16,6 +16,6 @@ The ten fidelity failures, by name, are the same ten round 130 recorded:
   JustificationShrinkComparisonTests.TheParagraphBreaksWhereLibreOfficeBreaksIt  justify-shrink-2013.docx
   SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt  sheet-rich-text.xlsx
 
-Mutations, against tests/Paperless.WordProcessing.Tests alone:
+Mutations, against tests/XRay.Office.WordProcessing.Tests alone:
   ApplyLayoutSprms `toggleBase ?? format` -> `format`   Failed: 4 of 2007, all Ww8ToggleBaseTests
   IndexFieldStarts drops its IsIndexField test          Failed: 1 of 2007, OnlyTheTwoFieldTypes...

@@ -4,7 +4,7 @@ Thirty-seven documents, eight root causes. Every claim below was checked against
 document's own markup before the mechanism was named, and against the reference PDF's
 own text layer where the page could answer the question directly.
 
-Ownership: `dotnet/src/Paperless.WordProcessing/Ooxml/**` and `.../Model/**`. Two of the
+Ownership: `dotnet/src/XRay.Office.WordProcessing/Ooxml/**` and `.../Model/**`. Two of the
 eight root causes need a file outside that and are recorded under **Cross-lane
 dependencies** rather than patched.
 
@@ -96,10 +96,10 @@ above are the ones whose compared page happened to be a contents page.
 
 ### Where it lives in the source
 
-- `dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs:1098-1101` —
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs:1098-1101` —
   `RunsOf` calls `WordParagraphFormats.ResolveRun` with the run's `w:rPr` and no notion of
   where in the paragraph it sits.
-- `dotnet/src/Paperless.WordProcessing/Ooxml/WordParagraphFormats.cs:462` —
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs:462` —
   `string? characterStyleId = Word.Attribute(Word.Child(runProperties, "rStyle"), "val");`
   unconditionally.
 - The comment at `WordParagraphFormats.cs:430-434` states the (correct, general) rule that
@@ -215,14 +215,14 @@ Census of numbered paragraphs sitting in `w:vMerge` continuation cells, over the
 
 ### Where it lives in the source
 
-- `dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs:480-493` —
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs:480-493` —
   `Blocks = ReadCell(child)` runs for **every** cell, before `Merge(cellProperties)` is even
   evaluated.
-- `dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs:1169` —
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs:1169` —
   `Resolved()` then drops the continuation cells: `if (cell.Merge == VerticalMerge.Continue) continue;`.
   So the cell's *blocks* never reach the page and its *counter advance* always does. The
   counter is the one thing that escapes a cell that is not drawn.
-- `dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Lists.cs:56-58` —
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Lists.cs:56-58` —
   `string? drawn = _numbering.Advance(numId, level);`, with the comment
   *"Advanced whether or not the level draws anything"*, which is right for a `none`-formatted
   level and wrong for a paragraph that is not on the page at all.
@@ -310,12 +310,12 @@ black on a light ground.
 
 ### Where it lives in the source
 
-- `dotnet/src/Paperless.WordProcessing/Ooxml/WordThemeColour.cs:158-172` — `Literal` returns
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/WordThemeColour.cs:158-172` — `Literal` returns
   null for `auto`, deliberately and with a correct reason (`w:val="auto" w:themeColor="accent1"`
   must resolve through the theme).
-- `dotnet/src/Paperless.WordProcessing/Ooxml/WordThemeColour.cs:68-69` — the two-argument
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/WordThemeColour.cs:68-69` — the two-argument
   `Read` then returns that null straight out when there is no theme reference beside it.
-- `dotnet/src/Paperless.WordProcessing/Ooxml/WordParagraphFormats.cs:503` and
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs:503` and
   `Ooxml/WordCharacterFormat.cs:124` are the only two callers of that overload, and both
   read `null` as "inherit", which is how the style's blue survives.
 
@@ -351,7 +351,7 @@ That is a narrower defect than the one being fixed, and it is not in this lane's
 
 #139 `PI-doc.-no.-2E-Technical-Review-Report`: "The footer's tab stops are not honoured:
 the reference spaces `Page 5 of 12`, `Version 1` and `Last saved…` across the page,
-Paperless runs them together as `Page 5 of 12Version 1Last saved…`."
+XRay.Office runs them together as `Page 5 of 12Version 1Last saved…`."
 
 ### What the document actually contains
 
@@ -390,10 +390,10 @@ Three documents in the lane carry a `w:ptab`: #008 (1), #013 (1), #139 (2).
 
 ### Where it lives in the source
 
-- `dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs:1810-1812` — `RunWalker`'s
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs:1810-1812` — `RunWalker`'s
   element switch has `"tab"`, `"sym"`, `"noBreakHyphen"`, `"br"` … and no `"ptab"`, so it
   falls to `default: Append(child, depth + 1)` and contributes nothing.
-- `dotnet/src/Paperless.WordProcessing/Ooxml/DocxContentReader.cs:527` — the extraction side
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxContentReader.cs:527` — the extraction side
   skips it explicitly: `case "separator" or "continuationSeparator" or "lastRenderedPageBreak" or "ptab": break;`.
 
 ### Proposed change
@@ -450,12 +450,12 @@ several times *inside* section 2.
 
 ### Where it lives in the source
 
-- `dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs:915` —
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs:915` —
   `_styleText[styled] = mapped;` after each paragraph. Correct for a STYLEREF in the body.
-- `dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs:943-962` —
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs:943-962` —
   `StyleReferenceText` answers from that map, "the most recent one … because the search is
   backwards from the field".
-- `dotnet/src/Paperless.WordProcessing/Ooxml/DocxReader.cs:326` — `Layout()` runs
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxReader.cs:326` — `Layout()` runs
   `List<PageBlock> blocks = source.Read(body);` and only then `Paginated(source, body)`,
   which is where `Furniture()` reads the header parts. **By the time a header is read the
   body walk has finished**, so "the most recent one" is the document's last.
@@ -537,14 +537,14 @@ Sixteen of the thirty-seven. All drawn as a solid line of the stated width.
 
 ### Where it lives in the source
 
-- `dotnet/src/Paperless.WordProcessing/Layout/PageTable.cs:49` —
+- `dotnet/src/XRay.Office.WordProcessing/Layout/PageTable.cs:49` —
   `public readonly record struct TableBorder(Length Width, Colour Colour)`. There is no
   style member, so nothing downstream *can* draw a dash.
-- `dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs:929-949` —
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs:929-949` —
   `Border()` reads `w:val` only to test it: `if (Word.Attribute(stated, "val") is null or "none" or "nil") return default(TableBorder);`
   and then reads `w:sz` and the colour. This is the "read but never consumed" pattern in its
   purest form: the attribute is parsed on every border in every table and discarded.
-- `dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.ParagraphBorders.cs:109`
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.ParagraphBorders.cs:109`
   and `DocxLayoutSource.Tables.cs:945` do the same for paragraph and conditional borders.
 
 ### Proposed change
@@ -573,9 +573,9 @@ a *double* line in Writer, not a dashed one.
 ### What the pages show
 
 - #010 `Case-Study-Heathrow-Airport` — "The reference draws a green double-rule page border
-  around the whole sheet; Paperless draws none."
+  around the whole sheet; XRay.Office draws none."
 - #043 `AFS-050-004-F2_0i` — "The reference draws a thin border around the whole page;
-  Paperless draws none."
+  XRay.Office draws none."
 
 ### What the document actually contains
 
@@ -597,9 +597,9 @@ a *double* line in Writer, not a dashed one.
 
 ### Where it would live
 
-- `dotnet/src/Paperless.WordProcessing/Ooxml/DocxPageGeometry.cs` reads the rest of
+- `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxPageGeometry.cs` reads the rest of
   `w:sectPr` and is the reader's home.
-- `dotnet/src/Paperless.WordProcessing/Model/PageGeometry.cs` is where the four sides and
+- `dotnet/src/XRay.Office.WordProcessing/Model/PageGeometry.cs` is where the four sides and
   the `w:offsetFrom` datum would be carried.
 - The painter is not in this lane.
 
@@ -686,13 +686,13 @@ this lane. The missing `OFFICIAL` footer is a second symptom of the same slot re
 a paragraph: `<w:r><w:rPr>…<w:highlight w:val="yellow"/>…</w:rPr><w:t xml:space="preserve"> </w:t></w:r>`.
 We read the highlight (it survives `RunsOf`'s uniform-paragraph shortcut, which tests
 `style.Highlight is not null` explicitly) and lose it at line break, where a trailing space
-is trimmed. That is line-breaking behaviour in `Paperless.Text`, not this lane.
+is trimmed. That is line-breaking behaviour in `XRay.Office.Text`, not this lane.
 
 **#139 — `SAVEDATE` 09:27 against the reference's 08:15.** We draw the cached
 `04/09/2018 09:27`; LibreOffice re-evaluates from the package's `dcterms:modified` (the
 same instant, in UTC). Matching it means treating `SAVEDATE`/`PRINTDATE` the way
 `FILENAME` and `TITLE` are already treated — but `FieldInstructions.ConstantFieldOf` lives
-at `dotnet/src/Paperless.WordProcessing/FieldInstructions.cs`, outside this lane's two
+at `dotnet/src/XRay.Office.WordProcessing/FieldInstructions.cs`, outside this lane's two
 directories, so it is recorded and not patched.
 
 **#111 — blue oval bullets drawn as black dots**, and its full-page pagination gap. Not
@@ -713,7 +713,7 @@ and the page-count halves of #040, #068 and #192.
 
 ## Cross-lane dependencies
 
-**1. `Paperless.WordProcessing/Layout/PageTable.cs` — `TableBorder` needs a line style.**
+**1. `XRay.Office.WordProcessing/Layout/PageTable.cs` — `TableBorder` needs a line style.**
 RC6, sixteen documents. `TableBorder(Length Width, Colour Colour)` at line 49 needs a third
 member (an enum over OOXML's `w:val` mapped onto Writer's `SvxBorderLineStyle`), the
 `Border()` readers in `Ooxml/DocxLayoutSource.Tables.cs:929` and
@@ -722,7 +722,7 @@ will write it once the type exists — and the table/paragraph border painter ne
 it. `dashed`, `dotted` and `double` cover 14 of the 16; `outset` and `thinThickSmallGap`
 are Writer double-line styles rather than dash patterns.
 
-**2. `Paperless.WordProcessing/Layout/PageFields.cs` — a per-page STYLEREF.**
+**2. `XRay.Office.WordProcessing/Layout/PageFields.cs` — a per-page STYLEREF.**
 RC5. `PageFieldKind` has two members and the argument in its own doc comment for why —
 "every other field … is a cross-reference the reader already resolved". A STYLEREF in a
 running head is the counter-example: its value changes per page exactly as `PAGE`'s does.

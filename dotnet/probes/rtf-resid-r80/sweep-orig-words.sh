@@ -3,7 +3,7 @@
 # names it, so it can be byte-compared against /home/user/gate-orig-r76/ours.
 set -u
 ROOT=${ROOT:-/home/user/sample-files}
-CLI=${PAPERLESS_CLI:?set PAPERLESS_CLI}
+CLI=${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI}
 OUT=${1:?outdir}
 JOBS=${2:-2}
 mkdir -p "$OUT"

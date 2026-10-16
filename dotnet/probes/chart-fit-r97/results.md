@@ -206,7 +206,7 @@ every axis type but `DATE` and `MAXIMUM_MANUAL_INCREMENT_COUNT` for that one), a
 
 Two changes, in two files, each guarded by the condition its own arm measured.
 
-**`FrameLayout.Squeezed`** (`dotnet/src/Paperless.WordProcessing/Layout/FrameLayout.cs`), applied
+**`FrameLayout.Squeezed`** (`dotnet/src/XRay.Office.WordProcessing/Layout/FrameLayout.cs`), applied
 to what `Place` returns. A frame wider or taller than its page is cut to the page; when it holds a
 picture or a chart the aspect is kept, and when both axes are over, the axis whose change is
 larger decides and the other is recomputed from the ratio. It does nothing to a frame that fits,
@@ -221,7 +221,7 @@ captures everything and its frames never reach the branch — which keeps `probe
 21 measured probes exactly where they were.
 
 **`ChartLayout.IntervalsThatReadDifferently`**
-(`dotnet/src/Paperless.Core/Charts/ChartLayout.cs`), the second half of the automatic interval
+(`dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs`), the second half of the automatic interval
 cap. It formats the previous pass' ticks through the axis' number format, counts the longest run
 of consecutive equal strings — starting the comparison against the empty string, as :1582 does —
 and lowers the cap to `ticks / (longest + 1)`. A date axis is exempt, as :1578 is.
@@ -236,7 +236,7 @@ and lowers the cap to `ticks / (longest + 1)`. A date axis is exempt, as :1578 i
 The whole suite at HEAD, read out of each run's own last line: the ten non-fidelity projects
 **0 failed of 6482** (Containers 109, Core 524, Markup 259, OpenDocument 146, Presentations
 1045, Rendering 164, Spreadsheets 1271, Text 728, Vector 309, WordProcessing 1927), and
-`Paperless.Fidelity.Tests` **542 passed / 10 failed of 552** — PageDrawing x4, TabStop x4,
+`XRay.Office.Fidelity.Tests` **542 passed / 10 failed of 552** — PageDrawing x4, TabStop x4,
 SheetDrawing, JustificationShrink. The same run was taken at the base build before the sweeps,
 and it printed the same ten names and the same 542 / 10 / 552, so the baseline is this session's
 own measurement and not a number carried in from the brief.
@@ -316,7 +316,7 @@ rendering cannot be read for it, and the ink is 0.01 over seven pages on both si
 
 ### 4.2 The frame arm: 5 of 338 word-processing renderings
 
-`FrameLayout` lives in `Paperless.WordProcessing` and no spreadsheet or presentation reader
+`FrameLayout` lives in `XRay.Office.WordProcessing` and no spreadsheet or presentation reader
 calls it, so the frame arm was swept over the `words/` column — **338 of 338** — with the arm
 off and again with it on:
 

@@ -17,7 +17,7 @@ rotation only after a collision it cannot thin or wrap away, and a taller line i
 kind of thing that can tip that decision — which is a much bigger change than a fraction of a
 point and invisible to every column of the gate.
 
-Usage:  PAPERLESS_CLI=... python3 corpus.py <corpus root> <outdir> <label> [--reference]
+Usage:  XRAY_OFFICE_CLI=... python3 corpus.py <corpus root> <outdir> <label> [--reference]
 
 `--reference` renders through 26.2.4.2 instead, for the screen.
 """
@@ -35,9 +35,9 @@ from pdftext import Pdf  # noqa: E402
 
 REACH = os.path.join(HERE, '..', 'chart-text-metafile', 'reach.tsv')
 REFERENCE = '/opt/libreoffice26.2/program/soffice'
-CLI = os.environ.get('PAPERLESS_CLI', os.path.join(
-    HERE, '..', '..', 'tools', 'Paperless.Cli', 'bin', 'Debug', 'net10.0', 'linux-x64',
-    'Paperless.Cli'))
+CLI = os.environ.get('XRAY_OFFICE_CLI', os.path.join(
+    HERE, '..', '..', 'tools', 'XRay.Office.Cli', 'bin', 'Debug', 'net10.0', 'linux-x64',
+    'XRay.Office.Cli'))
 
 DATE = re.compile(rb'/CreationDate\s*\([^)]*\)')
 PAGE = re.compile(rb'/Type\s*/Page[^s]')

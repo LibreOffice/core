@@ -6,7 +6,7 @@ the code:
 
 | | |
 |---|---|
-| ours | `Paperless.Cli` built from this worktree, `PAPERLESS_BUNDLED_FONTS` unset |
+| ours | `XRay.Office.Cli` built from this worktree, `XRAY_OFFICE_BUNDLED_FONTS` unset |
 | ref26 | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2**, the tree's target, with the eight Latin duplicate faces and the Latin Noto moved aside |
 | ref24 | `/usr/bin/soffice` — **24.2.7.2**, which is what `batch-check.sh` renders the reference half with |
 | corpus | `/home/user/sample-files`, 947 documents; banked gate at `2f4709c08` in `/home/user/gate-2f47/` |
@@ -65,7 +65,7 @@ three.
   So: **cell > row (`customFormat` only) > column > Default cell style.**
 
 **Seat.** `XlsxStyles.DefaultFormatId` and `XlsxStyles.FormatFor`
-(`src/Paperless.Spreadsheets/Ooxml/XlsxStyles.cs`), plus `XlsxSheetReader.ColumnStyles` and the
+(`src/XRay.Office.Spreadsheets/Ooxml/XlsxStyles.cs`), plus `XlsxSheetReader.ColumnStyles` and the
 row's `customFormat` (`XlsxSheetReader.cs`).
 
 **Reach**, censused over all 947 (`census-defaults.py`):
@@ -222,7 +222,7 @@ The tree already held the en-US answers — in `XlsxStyles.BuiltinCode`, a priva
 Core table. The two disagreed about the same id in the same workbook depending on which reader
 opened it.
 
-**Seat.** `Paperless.Core/Numbers/BuiltInNumberFormats.cs` is now the en-US table and
+**Seat.** `XRay.Office.Core/Numbers/BuiltInNumberFormats.cs` is now the en-US table and
 `XlsxStyles.BuiltinCode` delegates to it; there is one table.
 
 **One thing the two filters genuinely do not share, and merging them broke it for an hour.**
@@ -324,7 +324,7 @@ banked      MATCH 257   MISMATCH 50
 "before".** Fifteen further rows moved their numbers without moving a verdict, and attributing
 them to this round would have been wrong for nine of the fifteen. The instrument that settles it
 is a binary built at the base commit: `git checkout 0fc357beb -- dotnet/src`, build
-`tools/Paperless.Cli` alone, render, then `git checkout HEAD -- dotnet/src`, `touch`, and
+`tools/XRay.Office.Cli` alone, render, then `git checkout HEAD -- dotnet/src`, `touch`, and
 `rm -rf` the four projects' `obj`/`bin` before rebuilding.
 
 | document | base `0fc357beb` | now | |
@@ -404,9 +404,9 @@ than the version gap: the two reference binaries draw **identical colour sets on
 
 | | |
 |---|---|
-| `dotnet build Paperless.slnx -v q -nologo` | 0 warnings, 0 errors |
+| `dotnet build XRay.Office.slnx -v q -nologo` | 0 warnings, 0 errors |
 | the ten non-fidelity projects, run individually and totalled by hand | **5890 passed, 0 failed, 0 skipped**, against a baseline of 5841 and 49 tests added here |
-| `Paperless.Fidelity.Tests` | **542 passed, 10 failed, 0 skipped** of 552 — the baseline exactly, and the same four classes: `PageDrawing` x4, `TabStop` x4, `SheetDrawing`, `JustificationShrink` |
+| `XRay.Office.Fidelity.Tests` | **542 passed, 10 failed, 0 skipped** of 552 — the baseline exactly, and the same four classes: `PageDrawing` x4, `TabStop` x4, `SheetDrawing`, `JustificationShrink` |
 | sheets track | `TOTAL 307  MATCH 260  MISMATCH 47  REF-CANNOT-RENDER 0` |
 
 One document, `sectors-defense-and-aerospace.xlsx`, was rendered in the nine seconds the sweep

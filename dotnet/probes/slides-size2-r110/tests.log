@@ -1,55 +1,55 @@
 === Containers
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   109, Skipped:     0, Total:   109, Duration: 329 ms - Paperless.Containers.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   109, Skipped:     0, Total:   109, Duration: 329 ms - XRay.Office.Containers.Tests.dll (net10.0)
 === Core
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   560, Skipped:     0, Total:   560, Duration: 1 s - Paperless.Core.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   560, Skipped:     0, Total:   560, Duration: 1 s - XRay.Office.Core.Tests.dll (net10.0)
 === Markup
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   259, Skipped:     0, Total:   259, Duration: 2 s - Paperless.Markup.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   259, Skipped:     0, Total:   259, Duration: 2 s - XRay.Office.Markup.Tests.dll (net10.0)
 === OpenDocument
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   160, Skipped:     0, Total:   160, Duration: 419 ms - Paperless.OpenDocument.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   160, Skipped:     0, Total:   160, Duration: 419 ms - XRay.Office.OpenDocument.Tests.dll (net10.0)
 === Rendering
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   164, Skipped:     0, Total:   164, Duration: 8 s - Paperless.Rendering.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   164, Skipped:     0, Total:   164, Duration: 8 s - XRay.Office.Rendering.Tests.dll (net10.0)
 === Spreadsheets
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:  1333, Skipped:     0, Total:  1333, Duration: 9 s - Paperless.Spreadsheets.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:  1333, Skipped:     0, Total:  1333, Duration: 9 s - XRay.Office.Spreadsheets.Tests.dll (net10.0)
 === Text
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   728, Skipped:     0, Total:   728, Duration: 12 s - Paperless.Text.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   728, Skipped:     0, Total:   728, Duration: 12 s - XRay.Office.Text.Tests.dll (net10.0)
 === Vector
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   309, Skipped:     0, Total:   309, Duration: 1 s - Paperless.Vector.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   309, Skipped:     0, Total:   309, Duration: 1 s - XRay.Office.Vector.Tests.dll (net10.0)
 === WordProcessing
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:  1938, Skipped:     0, Total:  1938, Duration: 1 m 17 s - Paperless.WordProcessing.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:  1938, Skipped:     0, Total:  1938, Duration: 1 m 17 s - XRay.Office.WordProcessing.Tests.dll (net10.0)
 === Presentations
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:  1114, Skipped:     0, Total:  1114, Duration: 1 m 1 s - Paperless.Presentations.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:  1114, Skipped:     0, Total:  1114, Duration: 1 m 1 s - XRay.Office.Presentations.Tests.dll (net10.0)
 === Fidelity
 0.519755905511829d
 
 Additional Info:
     paginated.fodt: page 1, line 1 ("Section 1. kerning advance rasteriser layout ligature layout common advance add pay because separate"): right: 530.423 pt drawn, 529.903 pt rendered
   Stack Trace:
-     at Paperless.Fidelity.Tests.PageDrawingComparisonTests.Close(Length actual, Double expectedPoints, String what) in /home/user/wt-slidesize2/dotnet/tests/Paperless.Fidelity.Tests/PageDrawingComparisonTests.cs:line 244
-   at Paperless.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(String fileName) in /home/user/wt-slidesize2/dotnet/tests/Paperless.Fidelity.Tests/PageDrawingComparisonTests.cs:line 127
+     at XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.Close(Length actual, Double expectedPoints, String what) in /home/user/wt-slidesize2/dotnet/tests/XRay.Office.Fidelity.Tests/PageDrawingComparisonTests.cs:line 244
+   at XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(String fileName) in /home/user/wt-slidesize2/dotnet/tests/XRay.Office.Fidelity.Tests/PageDrawingComparisonTests.cs:line 127
    at InvokeStub_PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(Object, Span`1)
    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
-[xUnit.net 00:05:00.88]     Paperless.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.docx") [FAIL]
-  Failed Paperless.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.docx") [3 s]
+[xUnit.net 00:05:00.88]     XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.docx") [FAIL]
+  Failed XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.docx") [3 s]
   Error Message:
    Shouldly.ShouldAssertException : => Math.Abs(actual.Points - expectedPoints)
     should be less than or equal to
@@ -60,12 +60,12 @@ Additional Info:
 Additional Info:
     paginated.docx: page 1, line 1 ("Section 1. kerning advance rasteriser layout ligature layout common advance add pay because separate"): right: 530.423 pt drawn, 529.903 pt rendered
   Stack Trace:
-     at Paperless.Fidelity.Tests.PageDrawingComparisonTests.Close(Length actual, Double expectedPoints, String what) in /home/user/wt-slidesize2/dotnet/tests/Paperless.Fidelity.Tests/PageDrawingComparisonTests.cs:line 244
-   at Paperless.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(String fileName) in /home/user/wt-slidesize2/dotnet/tests/Paperless.Fidelity.Tests/PageDrawingComparisonTests.cs:line 127
+     at XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.Close(Length actual, Double expectedPoints, String what) in /home/user/wt-slidesize2/dotnet/tests/XRay.Office.Fidelity.Tests/PageDrawingComparisonTests.cs:line 244
+   at XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(String fileName) in /home/user/wt-slidesize2/dotnet/tests/XRay.Office.Fidelity.Tests/PageDrawingComparisonTests.cs:line 127
    at InvokeStub_PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(Object, Span`1)
    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
-[xUnit.net 00:05:04.67]     Paperless.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.rtf") [FAIL]
-  Failed Paperless.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.rtf") [3 s]
+[xUnit.net 00:05:04.67]     XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.rtf") [FAIL]
+  Failed XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.rtf") [3 s]
   Error Message:
    Shouldly.ShouldAssertException : => Math.Abs(actual.Points - expectedPoints)
     should be less than or equal to
@@ -76,12 +76,12 @@ Additional Info:
 Additional Info:
     paginated.rtf: page 1, line 1 ("Section 1. kerning advance rasteriser layout ligature layout common advance add pay because separate"): right: 530.423 pt drawn, 529.903 pt rendered
   Stack Trace:
-     at Paperless.Fidelity.Tests.PageDrawingComparisonTests.Close(Length actual, Double expectedPoints, String what) in /home/user/wt-slidesize2/dotnet/tests/Paperless.Fidelity.Tests/PageDrawingComparisonTests.cs:line 244
-   at Paperless.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(String fileName) in /home/user/wt-slidesize2/dotnet/tests/Paperless.Fidelity.Tests/PageDrawingComparisonTests.cs:line 127
+     at XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.Close(Length actual, Double expectedPoints, String what) in /home/user/wt-slidesize2/dotnet/tests/XRay.Office.Fidelity.Tests/PageDrawingComparisonTests.cs:line 244
+   at XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(String fileName) in /home/user/wt-slidesize2/dotnet/tests/XRay.Office.Fidelity.Tests/PageDrawingComparisonTests.cs:line 127
    at InvokeStub_PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(Object, Span`1)
    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
-[xUnit.net 00:05:25.11]     Paperless.Fidelity.Tests.SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt(name: "sheet-rich-text.xlsx") [FAIL]
-  Failed Paperless.Fidelity.Tests.SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt(name: "sheet-rich-text.xlsx") [3 s]
+[xUnit.net 00:05:25.11]     XRay.Office.Fidelity.Tests.SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt(name: "sheet-rich-text.xlsx") [FAIL]
+  Failed XRay.Office.Fidelity.Tests.SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt(name: "sheet-rich-text.xlsx") [3 s]
   Error Message:
    Shouldly.ShouldAssertException : mine.Box.Width
     should be within
@@ -94,8 +94,8 @@ Additional Info:
 Additional Info:
     sheet-rich-text.xlsx: picture 1 on page 3: width
   Stack Trace:
-     at Paperless.Fidelity.Tests.SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt(String name) in /home/user/wt-slidesize2/dotnet/tests/Paperless.Fidelity.Tests/SheetDrawingComparisonTests.cs:line 108
+     at XRay.Office.Fidelity.Tests.SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt(String name) in /home/user/wt-slidesize2/dotnet/tests/XRay.Office.Fidelity.Tests/SheetDrawingComparisonTests.cs:line 108
    at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
    at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
 
-Failed!  - Failed:    10, Passed:   542, Skipped:     0, Total:   552, Duration: 6 m 48 s - Paperless.Fidelity.Tests.dll (net10.0)
+Failed!  - Failed:    10, Passed:   542, Skipped:     0, Total:   552, Duration: 6 m 48 s - XRay.Office.Fidelity.Tests.dll (net10.0)

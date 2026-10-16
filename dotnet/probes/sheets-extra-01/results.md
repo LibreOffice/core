@@ -56,7 +56,7 @@ reference (which XML, unlike a literal CR, does *not* line-ending-normalise), an
 
 ## The seat
 
-`dotnet/src/Paperless.Spreadsheets/Ooxml/XlsxCellText.cs`, new, called from the three places
+`dotnet/src/XRay.Office.Spreadsheets/Ooxml/XlsxCellText.cs`, new, called from the three places
 that read a SpreadsheetML `CT_Rst`:
 
 - `XlsxSharedStrings.ReadRichString` — shared strings, inline strings, comment text;
@@ -68,7 +68,7 @@ that read a SpreadsheetML `CT_Rst`:
 `XlsxDrawings` reads DrawingML `a:t` and is deliberately **not** called: `a:t` is `ST_String`.
 
 **The other readers do not share the seat, and the class is deliberately not in
-`Paperless.Ooxml`.** `w:t` and `a:t` are `ST_String`; only SpreadsheetML's `CT_Rst/t` is
+`XRay.Office.Ooxml`.** `w:t` and `a:t` are `ST_String`; only SpreadsheetML's `CT_Rst/t` is
 `ST_Xstring`. Hoisting this decoder into the shared OOXML library is exactly the change that
 would start eating `_x000D_` out of Writer and Impress text, where it is real content — and out
 of the 78 corpus documents whose only `_xHHHH_` is `_x0000_` inside a VML `o:spid`.
@@ -154,17 +154,17 @@ Every project run individually, discovered count checked against the run:
 
 | project | result |
 |---|---|
-| Paperless.Containers.Tests | 109 passed / 109 |
-| Paperless.Core.Tests | 332 passed / 332 |
-| **Paperless.Fidelity.Tests** | **30 failed, 520 passed, 0 skipped, 550 total** |
-| Paperless.Markup.Tests | 259 passed / 259 |
-| Paperless.OpenDocument.Tests | 125 passed / 125 |
-| Paperless.Presentations.Tests | 679 passed / 679 |
-| Paperless.Rendering.Tests | 150 passed, 1 skipped / 151 |
-| Paperless.Spreadsheets.Tests | 809 passed / 809 (of which 39 new) |
-| Paperless.Text.Tests | 349 passed / 349 |
-| Paperless.Vector.Tests | 295 passed / 295 |
-| Paperless.WordProcessing.Tests | 827 passed / 827 |
+| XRay.Office.Containers.Tests | 109 passed / 109 |
+| XRay.Office.Core.Tests | 332 passed / 332 |
+| **XRay.Office.Fidelity.Tests** | **30 failed, 520 passed, 0 skipped, 550 total** |
+| XRay.Office.Markup.Tests | 259 passed / 259 |
+| XRay.Office.OpenDocument.Tests | 125 passed / 125 |
+| XRay.Office.Presentations.Tests | 679 passed / 679 |
+| XRay.Office.Rendering.Tests | 150 passed, 1 skipped / 151 |
+| XRay.Office.Spreadsheets.Tests | 809 passed / 809 (of which 39 new) |
+| XRay.Office.Text.Tests | 349 passed / 349 |
+| XRay.Office.Vector.Tests | 295 passed / 295 |
+| XRay.Office.WordProcessing.Tests | 827 passed / 827 |
 
 4485 tests. Fidelity is exactly the pre-change baseline — 30 of 550, 0 skipped — so nothing
 moved in a project this round had no reason to touch.

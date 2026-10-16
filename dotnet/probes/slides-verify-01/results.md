@@ -60,7 +60,7 @@ assert your instrument produced what you think it produced before comparing anyt
 
 ```sh
 cd /c/sandbox/workdir/wt-p-verify
-export PAPERLESS_CLI=$PWD/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=$PWD/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 .claude/skills/corpus-batches/scripts/batch-check.sh \
     /c/sandbox/workdir/sample-files 'slides/ceiling-00*' /abs/out 3 > sweep.log 2>&1
 grep '^TOTAL' sweep.log

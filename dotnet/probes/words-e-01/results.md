@@ -1,7 +1,7 @@
 # Words-E round 1 — the landscape sub-shape is three defects, and one of them is a page break that should have died
 
 Baseline `8a8194c517c`. Worktree `/c/sandbox/workdir/wt-words-e`, branch `wt-words-e`,
-`PAPERLESS_CLI` set explicitly to this tree's binary on every sweep. Reference
+`XRAY_OFFICE_CLI` set explicitly to this tree's binary on every sweep. Reference
 `/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/words/`, 200 PDFs from LibreOffice 26.2.4.2
 620(Build:2). `check-env.sh` green before anything was measured: Calibri→Carlito,
 Cambria→Caladea, Arial→Liberation Sans, DejaVu Sans→DejaVu Sans, pdftoppm and pdftotext
@@ -195,7 +195,7 @@ only remaining disagreement in the 72 authored variants.
 
 Rendered by both renderers from the same DOCX bytes, `ours.py` reading each side's own PDF into
 a separate directory — the first version of that script wrote both to one directory under one
-name, and `paperless render`'s output silently overwrote `soffice`'s, which reads as perfect
+name, and `xray-office render`'s output silently overwrote `soffice`'s, which reads as perfect
 agreement. Caught by an unrelated CLI error before any number was believed.
 
 | | agreeing | differing |
@@ -227,8 +227,8 @@ unchanged and remain open, as two unrelated flow defects rather than one shape.
 
 | file | change |
 |---|---|
-| `dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs`:403 `IsSectionMarkOnly` | dropped the `&& !paragraph.Format.StartsNewPage` term. Column breaks need no guard here because only `w:br w:type="page"` ever reaches that flag (`DocxLayoutSource.cs`:1170), so the term could never have meant one |
-| `dotnet/src/Paperless.WordProcessing/Ooxml/DocxReader.cs` `PromoteContinuousAcrossOrientation`, new, called from `ReadSections` | rewrites a `Continuous` break to `NextPage` when `Page.IsLandscape` differs from the previous section's. Stated values, not carried-forward ones, because that is what `GetLastSectionContext()` reads |
+| `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs`:403 `IsSectionMarkOnly` | dropped the `&& !paragraph.Format.StartsNewPage` term. Column breaks need no guard here because only `w:br w:type="page"` ever reaches that flag (`DocxLayoutSource.cs`:1170), so the term could never have meant one |
+| `dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxReader.cs` `PromoteContinuousAcrossOrientation`, new, called from `ReadSections` | rewrites a `Continuous` break to `NextPage` when `Page.IsLandscape` differs from the previous section's. Stated values, not carried-forward ones, because that is what `GetLastSectionContext()` reads |
 
 `Page.IsLandscape` is already exactly the `w:orient` flag — `DocxPageGeometry.ReadGeometry`
 records it and deliberately does not swap the dimensions on its strength — so the promotion is a
@@ -255,14 +255,14 @@ from the corpus, and the CV is not mentioned anywhere in this round's artefacts.
 
 ### Build and suite
 
-`dotnet build Paperless.slnx -v q -nologo`: **0 warnings, 0 errors.** Ten non-Fidelity projects,
+`dotnet build XRay.Office.slnx -v q -nologo`: **0 warnings, 0 errors.** Ten non-Fidelity projects,
 one at a time in the foreground: Core 284, Containers 109, Text 289, Vector 295, Rendering 121
 (1 skipped), Markup 259, OpenDocument 125, **WordProcessing 775**, Spreadsheets 628,
 Presentations 592 — **3477 total, 0 failed**, against 3471 before and 769 WordProcessing.
 Fidelity not run, per instruction.
 
-No cross-track sweep is owed: both changes are inside `Paperless.WordProcessing`, which
-`Paperless.Spreadsheets` and `Paperless.Presentations` do not reference. That is a structural
+No cross-track sweep is owed: both changes are inside `XRay.Office.WordProcessing`, which
+`XRay.Office.Spreadsheets` and `XRay.Office.Presentations` do not reference. That is a structural
 argument and is labelled as one.
 
 ---

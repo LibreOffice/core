@@ -89,7 +89,7 @@ Per document, with the manifest's status:
 1  done  words/pagination-001/docx/template---tpr-technical-progress-report-with-guidance.docx
 ```
 
-**The whole-track sweep is still run**, because the change is in `Paperless.Text` and a census over
+**The whole-track sweep is still run**, because the change is in `XRay.Office.Text` and a census over
 parts is exactly the instrument HANDOVER §7 says under-reaches.
 
 ## What the census cannot see, written down before the sweep
@@ -132,7 +132,7 @@ Named risks, each of which would be a **regression** and is stated so it cannot 
 
 ## Cross-track reach — measured, not argued
 
-`Paperless.Text/Layout/MeasuredParagraph.cs` is a **shared layer** and is reached by
+`XRay.Office.Text/Layout/MeasuredParagraph.cs` is a **shared layer** and is reached by
 `SlideTextLayout` and `SheetTextLayout` as well as `PageContent`. The same census over the other
 two families:
 
@@ -215,7 +215,7 @@ rewrite is on the measurement half only — and an anchor sharing a run with rea
 That covers the as-character case too, where the picture's own height then decides, and the
 comment mark, which is the third thing U+0001 stands for and is likewise not text.
 
-Words-layer, not shared: `PageContent.cs` is `Paperless.WordProcessing`. The four
+Words-layer, not shared: `PageContent.cs` is `XRay.Office.WordProcessing`. The four
 word-processing readers all use the same U+0001 convention so all four are served.
 
 ## Reach

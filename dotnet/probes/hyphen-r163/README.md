@@ -12,7 +12,7 @@ Renders are not kept (28 MB). To reproduce:
 PATH=/opt/libreoffice26.2/program:$PATH \
   .claude/skills/libreoffice-reference/scripts/lo-convert.sh --pdf --outdir ref \
   "/home/user/sample-files/words/pagination-001/docx/FAA 2025-26 Holdover Tables.docx"
-dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/Paperless.Cli render \
+dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli render \
   --format pdf --outdir ours \
   "/home/user/sample-files/words/pagination-001/docx/FAA 2025-26 Holdover Tables.docx"
 ```

@@ -91,7 +91,7 @@ Scored honestly in `results.md`. Numbers stated now, not adjusted later.
    those 61. **I predict at least one currently-passing words document regresses**, most likely
    on page count, and put it at **40%**. If it happens the fix is still right — it is what the
    reference does — and the regression is a different defect made visible.
-5. **`Paperless.Fidelity.Tests` moves by at most 2 in either direction** from its 30-of-550
+5. **`XRay.Office.Fidelity.Tests` moves by at most 2 in either direction** from its 30-of-550
    baseline. Confidence **medium**.
 6. **`words/batch-001..008` ends at 79 of 80**, the one failure being `1447.doc`, which is the
    line-height law and deliberately not chased. Confidence **medium** — this is prediction 4

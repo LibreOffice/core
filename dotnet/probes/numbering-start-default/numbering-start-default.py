@@ -63,7 +63,7 @@ alone against 39 the reference's alone, which is 0.97 per formula site.
 Usage
 -----
 
-    PAPERLESS_CLI=... python3 numbering-start-default.py /abs/workdir
+    XRAY_OFFICE_CLI=... python3 numbering-start-default.py /abs/workdir
 """
 
 import os
@@ -133,9 +133,9 @@ def numbers(pdf):
 
 def main():
     out = sys.argv[1] if len(sys.argv) > 1 else '/tmp/numbering-start'
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     if not cli:
-        raise SystemExit('set PAPERLESS_CLI to the tree you mean to measure')
+        raise SystemExit('set XRAY_OFFICE_CLI to the tree you mean to measure')
 
     print(f"{'case':8s} {'reference':16s} {'ours':16s} agree?")
 

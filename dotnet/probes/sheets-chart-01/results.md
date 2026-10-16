@@ -9,7 +9,7 @@ reference side.
 The brief's lead was that `Core/Numbers` "came down" so a chart axis could reach the number-format
 engine, and that the axis still wrote shortest round-trip form — so the engine was either
 unreachable or being called without a format code. **It was the second, and one layer further
-back than the axis.** `Paperless.Spreadsheets/MsBinary/XlsChartReader.cs` never set
+back than the axis.** `XRay.Office.Spreadsheets/MsBinary/XlsChartReader.cs` never set
 `ChartPlot.ValueFormat` at all. `ChartLayout` calls `ChartDataLabel.Write(tick, plot.ValueFormat)`
 and has done throughout; `DrawingChartPlot` and `OdfChartPlot` fill that field from an axis element
 their markup carries, and BIFF has no such element on this chart, so the field stayed null and
@@ -97,10 +97,10 @@ and the reflow that follows.
 
 **Cross-track effect: none, and by construction rather than by luck.** `XlsChartBuilder` is
 reachable only from `XlsWorkbookReader`; `SheetBandText` and `SheetChart` are referenced from no
-library but `Paperless.Spreadsheets` (`Paperless.WordProcessing/Layout/FrameChart.cs` names
+library but `XRay.Office.Spreadsheets` (`XRay.Office.WordProcessing/Layout/FrameChart.cs` names
 `SheetChart` in a comment only); and the census walked every OLE2 file in all three tracks and
 found chart substreams only under `sheets/`. Decks reach `ChartPlot` through
-`Paperless.Presentations`, which already honoured the weight.
+`XRay.Office.Presentations`, which already honoured the weight.
 
 Worth recording for the next round: **no `.xlsx` chart moved.** The bold wiring reaches OOXML
 charts too — `DrawingChartPlot` makes a title bold when the part states nothing — and not one of
@@ -201,17 +201,17 @@ Every project run individually, counts compared against `--list-tests` where it 
 
 | project | passed | failed | skipped | note |
 |---|---:|---:|---:|---|
-| `Paperless.Core.Tests` | 313 | 0 | 0 | |
-| `Paperless.Containers.Tests` | 109 | 0 | 0 | |
-| `Paperless.Markup.Tests` | 259 | 0 | 0 | |
-| `Paperless.OpenDocument.Tests` | 125 | 0 | 0 | |
-| `Paperless.Presentations.Tests` | 631 | 0 | 0 | |
-| `Paperless.Rendering.Tests` | 148 | 0 | 1 | the skip is pre-existing |
-| `Paperless.Spreadsheets.Tests` | **704** | 0 | 0 | 704 discovered, +20 from this round |
-| `Paperless.Text.Tests` | 289 | 0 | 0 | |
-| `Paperless.Vector.Tests` | 295 | 0 | 0 | |
-| `Paperless.WordProcessing.Tests` | 792 | 0 | 0 | |
-| `Paperless.Fidelity.Tests` | 519 | **31** | 0 | 550 discovered, 550 run |
+| `XRay.Office.Core.Tests` | 313 | 0 | 0 | |
+| `XRay.Office.Containers.Tests` | 109 | 0 | 0 | |
+| `XRay.Office.Markup.Tests` | 259 | 0 | 0 | |
+| `XRay.Office.OpenDocument.Tests` | 125 | 0 | 0 | |
+| `XRay.Office.Presentations.Tests` | 631 | 0 | 0 | |
+| `XRay.Office.Rendering.Tests` | 148 | 0 | 1 | the skip is pre-existing |
+| `XRay.Office.Spreadsheets.Tests` | **704** | 0 | 0 | 704 discovered, +20 from this round |
+| `XRay.Office.Text.Tests` | 289 | 0 | 0 | |
+| `XRay.Office.Vector.Tests` | 295 | 0 | 0 | |
+| `XRay.Office.WordProcessing.Tests` | 792 | 0 | 0 | |
+| `XRay.Office.Fidelity.Tests` | 519 | **31** | 0 | 550 discovered, 550 run |
 
 The fidelity project was run **twice** — once on the tree with the change reverted and once with it
 — and the two failure sets are identical name for name, 31 each. So none of the 31 is new. Both runs

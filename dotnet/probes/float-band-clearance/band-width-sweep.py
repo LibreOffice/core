@@ -70,7 +70,7 @@ reference column is the measurement here.
 Usage
 -----
 
-    PAPERLESS_CLI=... python3 band-width-sweep.py /abs/workdir
+    XRAY_OFFICE_CLI=... python3 band-width-sweep.py /abs/workdir
 """
 
 import os
@@ -150,9 +150,9 @@ def where(pdf, page, word):
 
 def main():
     out = sys.argv[1] if len(sys.argv) > 1 else '/tmp/band-sweep'
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     if not cli:
-        raise SystemExit('set PAPERLESS_CLI to the tree you mean to measure')
+        raise SystemExit('set XRAY_OFFICE_CLI to the tree you mean to measure')
 
     os.makedirs(os.path.join(out, 'ours'), exist_ok=True)
     docx = os.path.join(out, 'sweep.docx')

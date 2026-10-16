@@ -1,4 +1,4 @@
-# paperless extract --format text, 077_Inventory_list_with_highlighting
+# xray-office extract --format text, 077_Inventory_list_with_highlighting
 # base 1545 characters, head 1557 characters
 # and 26.2.4.2's own --convert-to csv of the same workbook, rows 6-8
 

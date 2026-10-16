@@ -4,7 +4,7 @@ One two-row, one-column table whose `w:tblBorders` state the style under test on
 `ABOVE` before it and `BELOW` after. The observables are the horizontal strokes on page one and
 `BELOW`'s own y, which is the table's whole height plus what the border took.
 
-Usage: PAPERLESS_CLI=<cli> python3 tables.py <outdir> [style ...]
+Usage: XRAY_OFFICE_CLI=<cli> python3 tables.py <outdir> [style ...]
 """
 import os, re, subprocess, sys, zipfile
 from pathlib import Path
@@ -12,7 +12,7 @@ import numpy as np
 from PIL import Image
 
 OUT = Path(sys.argv[1]); OUT.mkdir(parents=True, exist_ok=True)
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 STYLES = sys.argv[2:] or ["single", "double", "thick", "dotted", "dashed",
                           "thinThickSmallGap", "outset"]
 SIZES = [int(x) for x in os.environ.get("SIZES", "8 24").split()]

@@ -105,7 +105,7 @@ say "== 5. PDF extractor — a measurement input, not a utility =="
 # to neither renderer.
 #
 # So this prints the version rather than merely checking presence: a stored figure whose
-# extractor version is unrecorded cannot be compared with a new one. `paperless analyze`
+# extractor version is unrecorded cannot be compared with a new one. `xray-office analyze`
 # exists to remove this dependency by reading PDFs in process; until every caller has moved
 # over, record what is printed here beside any figure you keep.
 if command -v pdftotext >/dev/null 2>&1; then

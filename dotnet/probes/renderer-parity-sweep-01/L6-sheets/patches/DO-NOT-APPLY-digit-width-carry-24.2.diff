@@ -12,9 +12,9 @@
 # Effect on this lane: sectors-defense-and-aerospace.xlsx 449 pages -> 227, matching the
 # 24.2.7.2 reference exactly. It is the only document in the lane whose default font lands in
 # the (0.57, 0.67] window; a census of the other 18 xlsx cases found none.
-diff --git a/dotnet/src/Paperless.Spreadsheets/Layout/SheetFonts.cs b/dotnet/src/Paperless.Spreadsheets/Layout/SheetFonts.cs
---- a/dotnet/src/Paperless.Spreadsheets/Layout/SheetFonts.cs
-+++ b/dotnet/src/Paperless.Spreadsheets/Layout/SheetFonts.cs
+diff --git a/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetFonts.cs b/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetFonts.cs
+--- a/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetFonts.cs
++++ b/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetFonts.cs
 @@ -231,13 +231,13 @@
      /// <c>sectors-defense-and-aerospace.xlsx</c> is 40 columns wide in Calibri 12, where one twip
      /// per digit is 2 pt per column and the difference between two reference columns needing

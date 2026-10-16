@@ -105,7 +105,7 @@ charts' axis labels on both pages, so I expect the same of a title.
 4. **Whether *our* renderer emits a straddling title once or twice.** If once, `005` lands at 298
    against 300, a difference of 2, which is inside the gate's `d > 3` floor — the *verdict*
    prediction survives, the *token* prediction does not.
-5. **The MSO-2007 default**, which this reader cannot evaluate because `Paperless.Ooxml`'s chart
+5. **The MSO-2007 default**, which this reader cannot evaluate because `XRay.Office.Ooxml`'s chart
    entry point takes an element and not a package. It is implemented as "not MSO 2007", which is
    right for 926 of the 946 corpus documents and unfalsifiable on the other 20.
 6. **Localization.** `STR_DIAGRAM_TITLE` is `Chart Title` in the en-US UI this container runs; a
@@ -113,7 +113,7 @@ charts' axis labels on both pages, so I expect the same of a title.
 
 ## Shared layer
 
-**Yes.** The change is in `Paperless.Ooxml/DrawingML/DrawingChart.cs` and
+**Yes.** The change is in `XRay.Office.Ooxml/DrawingML/DrawingChart.cs` and
 `DrawingChartPlot.cs`, which words, slides and sheets all read through. The census above names the
 five affected documents; the parent should run the cross-track sweep. My own measurement of the two
 affected batches will be `words/chartset-001` and `slides/chartset-007`, whose baselines are

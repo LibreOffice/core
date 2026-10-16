@@ -23,7 +23,7 @@ static, exactly as `CLAUDE.md` now records. Distinct lower-cased paths: 307.
 
 ## 1. What is being changed
 
-### A. The pie `bestFit` data label — `Paperless.Core/Charts/ChartLayout.cs`, **shared layer**
+### A. The pie `bestFit` data label — `XRay.Office.Core/Charts/ChartLayout.cs`, **shared layer**
 
 Round 58 left "our pie is 18% larger than the reference's, 235.8 pt against 199.8" and "the
 reference wraps each label onto two lines". Both were measured again before any code was read.
@@ -79,7 +79,7 @@ label keys for five labels on this chart. `xShapes->remove(xTextShape)` in the o
 removes the text and leaves the key of the discarded inner attempt behind. We currently draw
 **none**.
 
-### B. `cellIs` conditional formatting — `Paperless.Spreadsheets`, sheets only
+### B. `cellIs` conditional formatting — `XRay.Office.Spreadsheets`, sheets only
 
 18 documents, 123 rules. Second, and only if A lands with time to sweep it.
 
@@ -136,7 +136,7 @@ fonts. `colorScale` moved zero and touched 423 cells in 36 documents.
 | label legend keys drawn on `003` p1 | 0 → **6** (five labels; the sixth is the reference's own discarded inner attempt) |
 | documents whose ink changes, sheets | **5** (four pies + `005_Contextures`) |
 | `Keywords_Mapping…` | keys appear; word count unchanged |
-| tests | **+8 to +18**, `Paperless.Core` |
+| tests | **+8 to +18**, `XRay.Office.Core` |
 | `MANIFEST.tsv` | **4 rows change status**, all `open` → and the parent decides `done` |
 
 ## 4. What the census cannot see — the blind spots, stated before the sweep

@@ -15,11 +15,11 @@ is evaluated and no reference is invoked.
 ## 1. The predicate, and where it was read from
 
 The tree's `expression` arm is
-`XlsxConditionalStyles.ConditionOf` (`dotnet/src/Paperless.Spreadsheets/Ooxml/XlsxConditionalStyles.cs`),
+`XlsxConditionalStyles.ConditionOf` (`dotnet/src/XRay.Office.Spreadsheets/Ooxml/XlsxConditionalStyles.cs`),
 which for `type="expression"` is `formulas.Count == 1 ? Comparison.Parse(formulas[0]) : null`.
 
 The predicate itself was read from
-`dotnet/src/Paperless.Spreadsheets/Layout/SheetConditions.cs`, at these lines
+`dotnet/src/XRay.Office.Spreadsheets/Layout/SheetConditions.cs`, at these lines
 (the file was read at 17:4x on 2026-09-17; line numbers are as the file stands now):
 
 | what | lines |

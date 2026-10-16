@@ -187,7 +187,7 @@ frame one; it is left, named.
 ## The original track does not move
 
 `original.py` renders all 338 `/home/user/sample-files/words` documents with the before binary
-and with the after binary under `SOURCE_DATE_EPOCH=0`, which makes `paperless render`
+and with the after binary under `SOURCE_DATE_EPOCH=0`, which makes `xray-office render`
 byte-deterministic, and compares the two PDFs with nothing masked.
 
 **338 documents, 338 identical, 0 moved, 0 unrendered by either binary.** The 272 `.docx`,
@@ -232,7 +232,7 @@ tree. Everything else the brief said about it is right.*
 ### The reach, measured
 
 `overflow.py` compares, for each of the 50 documents holding a growing frame, what
-`paperless extract` finds (a walk of the content tree, no layout at all) against what the render
+`xray-office extract` finds (a walk of the content tree, no layout at all) against what the render
 draws. A frame taller than the room left on its page draws its tail outside the sheet, where
 `pdftotext` cannot see it, so *held ≫ drawn* is the signature.
 
@@ -332,7 +332,7 @@ that inversion either; it needs (3).
 
 ## Verification
 
-Full build `dotnet build Paperless.slnx -v q -nologo`: **0 warnings, 0 errors.**
+Full build `dotnet build XRay.Office.slnx -v q -nologo`: **0 warnings, 0 errors.**
 
 The ten non-fidelity projects, run individually:
 
@@ -350,11 +350,11 @@ The ten non-fidelity projects, run individually:
 | WordProcessing | **1734** | 0 |
 | **total** | **6070** | **0** |
 
-6067 before, plus this round's three. `Paperless.Vector.Tests` was re-run alone because the
+6067 before, plus this round's three. `XRay.Office.Vector.Tests` was re-run alone because the
 loop that ran five projects in one shell printed no verdict line for it; alone it reports
 302/0, and the missing line was the loop's own output handling rather than the project.
 
-`Paperless.Fidelity.Tests` against 26.2.4.2 on `PATH`: **542 passed, 10 failed, 0 skipped of
+`XRay.Office.Fidelity.Tests` against 26.2.4.2 on `PATH`: **542 passed, 10 failed, 0 skipped of
 552** — the ten known-open, named, and no others:
 
 ```

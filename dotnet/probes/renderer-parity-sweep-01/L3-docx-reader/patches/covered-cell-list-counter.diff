@@ -1,6 +1,6 @@
-diff --git a/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs b/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs
---- a/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs
 @@ -477,10 +477,26 @@
  
              _tableStyleRun = _styles.TableStyleRunProperties(styleId, conditions);
@@ -80,9 +80,9 @@ diff --git a/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Tables.c
      /// <summary>Which part of a vertical merge a cell is.</summary>
      private enum VerticalMerge
      {
-diff --git a/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Lists.cs b/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Lists.cs
---- a/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Lists.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Lists.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Lists.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Lists.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Lists.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Lists.cs
 @@ -53,7 +53,12 @@
  
          // Advanced whether or not the level draws anything, so that a level formatted `none` still

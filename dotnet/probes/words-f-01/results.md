@@ -1,7 +1,7 @@
 # Words-F round 1 — the WMF over-crop was not a crop rule, and the rule I found is refuted by the corpus that suggested it
 
 Baseline `80633bfbd36`. Worktree `/c/sandbox/workdir/wt-words-f`, branch `wt-words-f`,
-`PAPERLESS_CLI` set explicitly to this tree's binary on every sweep. Reference
+`XRAY_OFFICE_CLI` set explicitly to this tree's binary on every sweep. Reference
 `/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/words/`, 200 PDFs from LibreOffice 26.2.4.2
 620(Build:2). `check-env.sh` green before anything was measured — Calibri→Carlito,
 Cambria→Caladea, Arial→Liberation Sans, Times New Roman→Liberation Serif, Courier
@@ -56,7 +56,7 @@ there.
 | P8 | the fix is a suppression; reach 1–3 of 200, point estimate 1 | **wrong, and not a suppression.** The fix is a lookup-order correction and reach is **6 of 200** |
 | P9 | the 8 crop frames go to 8 agreeing / 0 over-cropped, band 7–8 | **inside the band at the bottom: 7 agreeing, 0 over-cropped, 3 the reference crops and we do not draw** |
 | P10 | verdicts: 0, band 0–1; if anything moves it moves *away* on `chg10`'s words | **held on the point estimate (0), and the direction call was right in miniature** — `chg10`'s word error goes 499 → 537 further, while `5335_5a`'s goes 116 → 49 closer and the track total goes 6869 → **6840**, better |
-| P11 | nothing on sheets or slides | **held**, structurally (the diff is `Paperless.WordProcessing` and the test kit) and corroborated: Spreadsheets 663 and Presentations 613 reproduce to the digit |
+| P11 | nothing on sheets or slides | **held**, structurally (the diff is `XRay.Office.WordProcessing` and the test kit) and corroborated: Spreadsheets 663 and Presentations 613 reproduce to the digit |
 | P12/P13 | the page cluster | **void** — task 1 did not close early and task 2 was not started. Said plainly rather than padded |
 
 **Two refuted outright, one void, and the round's whole thesis (P1/P2/P3) wrong.** The
@@ -133,7 +133,7 @@ one** — including when its bytes cannot be decoded. That last part is delibera
 argued in the code: the store's answer for that `pib` would be a different picture, and an
 empty frame in the right place is better than the right size holding someone else's figure.
 
-Nothing else changed. `Paperless.MsBinary`, `Paperless.Core` and every other library are
+Nothing else changed. `XRay.Office.MsBinary`, `XRay.Office.Core` and every other library are
 byte-identical to the baseline.
 
 ### 3.4 The crop comparison, re-measured
@@ -343,8 +343,8 @@ that text — `TODO.raster-ceiling.md`'s phenomenon, on the side where ours is t
 output and `wc -w` scores it as worse.
 
 **Sheets and slides: zero, argued structurally and corroborated rather than swept.** The diff
-is two files in `Paperless.WordProcessing` and one in the test kit; `Paperless.Spreadsheets`
-and `Paperless.Presentations` reference neither, and their suites reproduce at 663 and 613
+is two files in `XRay.Office.WordProcessing` and one in the test kit; `XRay.Office.Spreadsheets`
+and `XRay.Office.Presentations` reference neither, and their suites reproduce at 663 and 613
 exactly. No render sweep was run on those tracks and this is labelled as the weaker evidence
 it is.
 
@@ -352,7 +352,7 @@ it is.
 
 ## 7. Tests
 
-Three new tests, `Paperless.WordProcessing.Tests.InlineBlipLookupTests`, and one test-kit
+Three new tests, `XRay.Office.WordProcessing.Tests.InlineBlipLookupTests`, and one test-kit
 addition. `DrawnPage` gains `Pictures` — the placements paired with the `RasterImage` that
 went into each — because `Images` keeps only rectangles, and **a rectangle cannot see this
 defect at all**: the wrong picture and the right one are drawn at the same place and the same
@@ -365,7 +365,7 @@ survived a whole crop round wearing a crop defect's clothes.
 |---|---|
 | the store consulted first and the container's own blip used only as a fall-through — the exact code that was there | `AnInlinePicturesPibDoesNotIndexTheDocumentBlipStore` |
 
-`verify-test.sh Paperless.WordProcessing '<mutation>' InlineBlipLookup`, exit 0, on a tree
+`verify-test.sh XRay.Office.WordProcessing '<mutation>' InlineBlipLookup`, exit 0, on a tree
 that built clean with the mutation applied: **Failed 1, Passed 2**, naming that test.
 
 ### Drift guards only — kept deliberately, and labelled
@@ -402,7 +402,7 @@ reason in §4.4.
 ## 8. Final state
 
 ```
-dotnet build Paperless.slnx -v q -nologo     0 Warning(s)   0 Error(s)
+dotnet build XRay.Office.slnx -v q -nologo     0 Warning(s)   0 Error(s)
 ```
 
 | project | before | after |
@@ -421,7 +421,7 @@ dotnet build Paperless.slnx -v q -nologo     0 Warning(s)   0 Error(s)
 
 The briefed per-project baseline reproduced exactly, project for project, before any
 addition. Each project was run on its own with `--no-build` after a build whose exit status
-was checked, never more than four at a time. `Paperless.Fidelity.Tests` was not run.
+was checked, never more than four at a time. `XRay.Office.Fidelity.Tests` was not run.
 
 ---
 

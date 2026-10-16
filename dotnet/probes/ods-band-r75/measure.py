@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render every probe through 26.2.4.2 and read the band off the first cell row.
 
-    measure.py <probedir> <outdir> [--cli <paperless>] [--jobs N]
+    measure.py <probedir> <outdir> [--cli <xray-office>] [--jobs N]
 
 Prints one row per probe: the top of the first cell row's text, the top and bottom of the
 header's own ink, and the band, which is the first row's shift against the `band-none` probe.

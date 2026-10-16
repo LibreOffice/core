@@ -258,7 +258,7 @@ footer { margin-top: 60px; padding-top: 20px; border-top: var(--rule); font-size
     <h1>Two renderers measured against LibreOffice</h1>
     <p class="lede">
       Every document in the corpus was rendered three ways &mdash; by headless LibreOffice,
-      by <b>Paperless</b> (pure&nbsp;C#, document&nbsp;&rarr;&nbsp;PDF), and by the
+      by <b>XRay.Office</b> (pure&nbsp;C#, document&nbsp;&rarr;&nbsp;PDF), and by the
       <b>Rust/WASM viewer</b> (Canvas in headless Chromium) &mdash; rasterised to the same
       pixel grid and compared page by page. LibreOffice is the gold standard; the question
       is how close the other two get, and where they part company with it.
@@ -300,7 +300,7 @@ footer { margin-top: 60px; padding-top: 20px; border-top: var(--rule); font-size
     <div class="step">
       <div class="n">STEP 2</div>
       <h3>Candidates</h3>
-      <p>Paperless writes its own PDF, rasterised identically. The viewer is driven through
+      <p>XRay.Office writes its own PDF, rasterised identically. The viewer is driven through
         Playwright: load, wait for layout, render each page onto a canvas sized to the page's
         own point dimensions at 150&nbsp;dpi, screenshot the canvas.</p>
     </div>
@@ -333,7 +333,7 @@ footer { margin-top: 60px; padding-top: 20px; border-top: var(--rule); font-size
     <h3>Structural similarity to LibreOffice, by category</h3>
     <div class="cap">1.00 is the reference itself. Bars show mean SSIM on rendered documents; the solid part is the corpus-wide figure, with every document the engine could not open counted as zero.</div>
     <div class="legend">
-      <i><span class="dot pl"></span> Paperless</i>
+      <i><span class="dot pl"></span> XRay.Office</i>
       <i><span class="dot wv"></span> Rust/WASM viewer</i>
       <i><span class="dot ref"></span> LibreOffice reference = 1.00</i>
       <i><span class="dot pl" style="opacity:.34"></span> pale extension: fidelity available only on documents the engine opens</i>
@@ -370,13 +370,13 @@ footer { margin-top: 60px; padding-top: 20px; border-top: var(--rule); font-size
   <div class="sechead">
     <h2>Format coverage</h2>
     <p>The single largest difference between the two engines is not fidelity, it is what they
-      will open at all. Paperless reads the legacy binary formats; the viewer is OOXML-only
+      will open at all. XRay.Office reads the legacy binary formats; the viewer is OOXML-only
       and says so explicitly rather than failing obscurely.</p>
   </div>
   <div class="tablewrap">
     <table id="ext-table">
       <thead>
-        <tr><th>Format</th><th>Docs</th><th>Paperless rendered</th><th>Fidelity</th>
+        <tr><th>Format</th><th>Docs</th><th>XRay.Office rendered</th><th>Fidelity</th>
             <th>Viewer rendered</th><th>Fidelity</th></tr>
       </thead>
       <tbody></tbody>
@@ -441,7 +441,7 @@ footer { margin-top: 60px; padding-top: 20px; border-top: var(--rule); font-size
 </section>
 
 <footer>
-  946 documents &middot; 28,366 reference pages &middot; 3,243 page pairs scored for Paperless,
+  946 documents &middot; 28,366 reference pages &middot; 3,243 page pairs scored for XRay.Office,
   2,031 for the viewer (it declined 200 documents outright).
   LibreOffice 24.2.7.2 headless is the reference implementation throughout; a divergence from
   it is a divergence from the reference, not necessarily from Microsoft Office.
@@ -456,8 +456,8 @@ const GALLERY = /*__GALLERY__*/;
 
 const FAM = { docs: "Documents", sheets: "Spreadsheets", slides: "Presentations" };
 const FAMSUB = { docs: "docx &middot; doc", sheets: "xlsx &middot; xlsm &middot; xls", slides: "pptx &middot; ppt" };
-const ENG = { paperless: "Paperless", "wasm-viewer": "Rust/WASM viewer" };
-const KEY = { paperless: "pl", "wasm-viewer": "wv" };
+const ENG = { "xray-office": "XRay.Office", "wasm-viewer": "Rust/WASM viewer" };
+const KEY = { "xray-office": "pl", "wasm-viewer": "wv" };
 const pct = (v) => (v * 100).toFixed(1) + "%";
 const f3 = (v) => v.toFixed(3);
 const el = (tag, cls, html) => {
@@ -473,9 +473,9 @@ const el = (tag, cls, html) => {
   const facts = [
     [c.documents.toLocaleString(), "documents"],
     [c.reference_pages.toLocaleString(), "reference pages"],
-    [REPORT.overall.paperless.pages_compared.toLocaleString() + " / "
+    [REPORT.overall["xray-office"].pages_compared.toLocaleString() + " / "
        + REPORT.overall["wasm-viewer"].pages_compared.toLocaleString(),
-     "page pairs scored (Paperless / viewer)"],
+     "page pairs scored (XRay.Office / viewer)"],
     ["3", "rendering engines"],
     ["150", "dpi"],
   ];
@@ -486,12 +486,12 @@ const el = (tag, cls, html) => {
 /* ---------------- headline cards ---------------- */
 {
   const host = document.getElementById("verdicts");
-  for (const eng of ["paperless", "wasm-viewer"]) {
+  for (const eng of ["xray-office", "wasm-viewer"]) {
     const h = REPORT.headline[eng];
     const card = el("div", "verdict " + KEY[eng]);
     card.append(el("header", null,
       `<h3><span class="dot ${KEY[eng]}" style="display:inline-block;margin-right:7px"></span>${ENG[eng]}</h3>
-       <div class="sub">${eng === "paperless"
+       <div class="sub">${eng === "xray-office"
          ? "Pure C# / .NET &middot; renders to PDF"
          : "Rust &rarr; WASM parser &middot; Canvas renderer in the browser"}</div>`));
     card.append(el("div", "bignum",
@@ -567,7 +567,7 @@ function svg(tag, attrs) {
     sub.textContent = REPORT.families[fam].documents + " docs";
     s.append(sub);
 
-    ["paperless", "wasm-viewer"].forEach((eng, ei) => {
+    ["xray-office", "wasm-viewer"].forEach((eng, ei) => {
       const d = REPORT.families[fam].engines[eng];
       const y = gy + ei * rowH;
       const v = d.fidelity_rendered, cv = d.fidelity_corpus;
@@ -607,7 +607,7 @@ function svg(tag, attrs) {
   const tb = document.querySelector("#cat-table tbody");
   for (const fam of ["docs", "sheets", "slides"]) {
     const F = REPORT.families[fam];
-    ["paperless", "wasm-viewer"].forEach((eng, i) => {
+    ["xray-office", "wasm-viewer"].forEach((eng, i) => {
       const d = F.engines[eng];
       const tr = el("tr", i === 0 ? "groupstart" : null);
       const c1 = el("td", "engine");
@@ -640,7 +640,7 @@ function svg(tag, attrs) {
   const edges = ["below 0.50", "0.50&ndash;0.60", "0.60&ndash;0.70", "0.70&ndash;0.80",
                  "0.80&ndash;0.90", "0.90&ndash;0.95", "0.95&ndash;1.00"];
   for (const fam of ["docs", "sheets", "slides"]) {
-    for (const eng of ["paperless", "wasm-viewer"]) {
+    for (const eng of ["xray-office", "wasm-viewer"]) {
       const d = REPORT.distribution[`${fam}|${eng}`];
       const box = el("div", "sm");
       box.append(el("h4", null,
@@ -686,7 +686,7 @@ function svg(tag, attrs) {
     tr.append(el("td", null,
       `<code>.${ext}</code> <span style="color:var(--ink-3)">${FAM[d.family]}</span>`));
     tr.append(el("td", "num", d.documents));
-    for (const eng of ["paperless", "wasm-viewer"]) {
+    for (const eng of ["xray-office", "wasm-viewer"]) {
       const e = d[eng];
       const col = e.render_rate === 1 ? "var(--good)"
                 : e.render_rate === 0 ? "var(--bad)" : "var(--warn)";
@@ -735,7 +735,7 @@ const READINGS = /*__READINGS__*/;
   const tabs = document.getElementById("tabs");
   const host = document.getElementById("cases");
   const combos = [];
-  for (const eng of ["paperless", "wasm-viewer"])
+  for (const eng of ["xray-office", "wasm-viewer"])
     for (const fam of ["docs", "slides", "sheets"])
       combos.push([fam, eng]);
 
@@ -796,7 +796,7 @@ const READINGS = /*__READINGS__*/;
     b.addEventListener("click", () => show(fam, eng));
     tabs.append(b);
   });
-  show("docs", "paperless");
+  show("docs", "xray-office");
 
   // The spreadsheet section shows the same pair, with the category difference named.
   const sc = (GALLERY["sheets|wasm-viewer"] || [])[0];
@@ -807,7 +807,7 @@ const READINGS = /*__READINGS__*/;
 {
   const c = REPORT.cost;
   const rows = [["LibreOffice (reference)", c.libreoffice, "ref"],
-                ["Paperless", c.paperless, "pl"]];
+                ["XRay.Office", c["xray-office"], "pl"]];
   const W = 880, rowH = 46, H = rows.length * rowH + 34;
   const padL = 200, plotW = W - padL - 290;
   const max = Math.max(...rows.map(([, d]) => d.mean_s));
@@ -838,7 +838,7 @@ const READINGS = /*__READINGS__*/;
 {
   const notes = [
     ["SSIM punishes texture, and a page can be right while scoring badly",
-     "The lowest-scoring Paperless slide in the whole corpus is a deck with a mottled photographic background: SSIM 0.49, and visually indistinguishable from the reference &mdash; mean absolute error 0.035. That is why nothing here is ranked on SSIM alone, and why a page is only called defective when a second metric agrees."],
+     "The lowest-scoring XRay.Office slide in the whole corpus is a deck with a mottled photographic background: SSIM 0.49, and visually indistinguishable from the reference &mdash; mean absolute error 0.035. That is why nothing here is ranked on SSIM alone, and why a page is only called defective when a second metric agrees."],
     ["Only the first five pages of each document were compared",
      "3,243 page pairs out of 28,366 reference pages. Page counts are compared in full; pixels are not. A defect that only appears on page 40 of a 166-page workbook is not in these numbers."],
     ["LibreOffice is the reference, not the truth",
@@ -855,8 +855,8 @@ const READINGS = /*__READINGS__*/;
 document.getElementById("repro-code").textContent = `# reference: 946 documents through headless LibreOffice, one profile per worker
 soffice --headless --convert-to pdf --outdir out/ document.docx
 
-# candidate A: Paperless writes its own PDF
-Paperless.Cli render --format pdf --outdir out/ document.docx
+# candidate A: XRay.Office writes its own PDF
+XRay.Office.Cli render --format pdf --outdir out/ document.docx
 
 # candidate B: the WASM viewer, driven in headless Chromium
 #   doc.renderPage(canvas, i, { width: pageWidthPt / 72 * 150, dpr: 1 })

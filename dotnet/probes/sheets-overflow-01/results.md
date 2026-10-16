@@ -105,7 +105,7 @@ Two riders, both measured:
 
 ## 3. What changed
 
-`dotnet/src/Paperless.Spreadsheets/Layout/SpreadsheetPages.cs`
+`dotnet/src/XRay.Office.Spreadsheets/Layout/SpreadsheetPages.cs`
 
 - **`DrawLeadIn` deleted.** It was a faithful port of the `!bTaggedPDF` branch — walk left from the
   band's first column to the nearest cell with text, draw it at its true position off the page, let
@@ -119,7 +119,7 @@ Two riders, both measured:
 - `ColumnBand.First` → `ColumnBand.Last`, since it is now the band's right-hand edge that decides
   whose spill reaches back into it. `First` had no other reader.
 
-`dotnet/src/Paperless.Spreadsheets/Layout/SheetTextLayout.cs`
+`dotnet/src/XRay.Office.Spreadsheets/Layout/SheetTextLayout.cs`
 
 - `IsOutside`'s remarks corrected. They asserted that "Calc's string loop starts one column
   *before* the block so that a long string reaching in from the left is drawn", stated as the

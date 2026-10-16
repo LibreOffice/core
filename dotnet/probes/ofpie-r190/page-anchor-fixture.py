@@ -3,7 +3,7 @@
 
 One shape, one paragraph, a 1 inch top margin, and word/settings.xml present -- without that part
 LibreOffice takes a different set of OOXML compatibility defaults and the fixture answers a
-different question (see the paperless-corpus skill).
+different question (see the office-corpus skill).
 """
 import sys, zipfile
 

@@ -68,7 +68,7 @@ stored figure on the track was taken against **24.2.7.2**.
 
 ## What this round's instruments CANNOT see — written before the sweep
 
-There is **no `Paperless.Cli`** (nuget.org is 403, package cache empty). Therefore:
+There is **no `XRay.Office.Cli`** (nuget.org is 403, package cache empty). Therefore:
 
 - I can measure only the **reference** column. Every "ours" figure in this round is
   **inherited from stored notes, not measured**, and any statement of the form "we differ

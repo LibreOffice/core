@@ -4,9 +4,9 @@ Reference binary: `/opt/libreoffice26.2/program/soffice` → **LibreOffice 26.2.
 `0229ac93fcf0d7cbc6376066c6f35021cef002dc`. (`/usr/bin/soffice` is 24.2.7.2 and is not the
 target.) The C++ tree read here is `/home/user/libreoffice-core` at **27.2.0.0.alpha0+**, which
 is *not* that binary's source. **[src]** marks a reading of the C++ tree, **[c#]** a reading of
-Paperless's own source, and **[bin]** a measurement against 26.2.4.2's own output.
+XRay.Office's own source, and **[bin]** a measurement against 26.2.4.2's own output.
 
-This round ran no build, no test and no `paperless render`; it is a measurement and reading
+This round ran no build, no test and no `xray-office render`; it is a measurement and reading
 round only. Everything marked **[bin]** is read out of PDFs already on disk — round 146's
 fixture renderings in `probes/tablerow-r146/out/`, the reference bank at
 `/home/user/refpdfs-words-26.2.4.2/`, and round 147's own renderings under its scratch tree.
@@ -392,7 +392,7 @@ in our ink only; it moved, on that one boundary.
   The *thickness* figure of 59 is insensitive to the length floor (59 with, 59 without) and is
   the more robust of the two.
 - **Nothing here was run against the current tree's binary.** No build, no test, no
-  `paperless render`. The "ours" leg is round 147's `after2` output as it was left on disk.
+  `xray-office render`. The "ours" leg is round 147's `after2` output as it was left on disk.
 
 ## 14. Disposition of the three instruments
 

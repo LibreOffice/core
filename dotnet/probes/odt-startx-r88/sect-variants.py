@@ -47,6 +47,6 @@ for name, fn in (('base', lambda x: x),
     f = out / f'{name}.odt'
     rewrite(src, f, fn)
     subprocess.run(['timeout', '-k', '30', '240', SOFFICE, '--headless', '--norestore',
-                    '-env:UserInstallation=file:///tmp/paperless-lo-r88sect',
+                    '-env:UserInstallation=file:///tmp/xray-office-lo-r88sect',
                     '--convert-to', 'pdf', '--outdir', str(out), str(f)], capture_output=True)
     print(name, (out / f'{name}.pdf').exists())

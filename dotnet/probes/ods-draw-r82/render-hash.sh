@@ -8,13 +8,13 @@
 # whole track's worth — which matters on a container with a gigabyte free.
 #
 # The hash is of the PDF with its `/CreationDate` and XMP `dc:date` masked, because `soffice` and
-# `paperless` both stamp the wall clock into a rendering and two runs minutes apart would
+# `xray-office` both stamp the wall clock into a rendering and two runs minutes apart would
 # otherwise differ everywhere. `SOURCE_DATE_EPOCH` is set for the same reason and belts the
 # braces: a spreadsheet header holding `&D` prints today's date into the ink itself.
 set -uo pipefail
 ROOT="${1:?corpus root}"; GLOB="${2:?track glob, e.g. sheets}"; OUT="${3:?out.tsv}"
 WORKERS="${4:-2}"
-CLI="${PAPERLESS_CLI:?set PAPERLESS_CLI to the binary you mean to measure}"
+CLI="${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI to the binary you mean to measure}"
 [ -x "$CLI" ] || { echo "no CLI at $CLI" >&2; exit 1; }
 export SOURCE_DATE_EPOCH=1700000000
 
@@ -45,7 +45,7 @@ one() {
       pages=$(pdfinfo "$pdf" 2>/dev/null | awk '/^Pages/{print $2}')
       glyphs=$(pdftotext "$pdf" - 2>/dev/null | python3 -c \
         'import sys;b=sys.stdin.buffer.read().decode("utf-8","replace");print(sum(1 for c in b if c.isalnum()))')
-      # `paperless` writes `/CreationDate(D:...)` with no space, so the pattern this inherited
+      # `xray-office` writes `/CreationDate(D:...)` with no space, so the pattern this inherited
       # -- which required one -- never matched and the mask was inert. What actually made two runs
       # comparable was SOURCE_DATE_EPOCH above; the pattern is corrected here so it is a real belt
       # rather than a decorative one. Round 82 found it by byte-comparing a fresh render against a

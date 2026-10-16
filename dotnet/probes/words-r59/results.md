@@ -13,7 +13,7 @@ change it covers: `prediction.md` at `4af1d767394` before `6160a1bf475`, and
 case-insensitive mount's alias entries — **319 match, 18 open, zero disagreements with the
 manifest's status column, document for document.**
 
-Slides and sheets were swept too, because the round's second change touches `Paperless.Core`:
+Slides and sheets were swept too, because the round's second change touches `XRay.Office.Core`:
 **slides 199 of 302** and **sheets 276 of 307**, both agreeing with round 58's merge note. Slides
 disagrees with the manifest on nothing. **Sheets disagrees on two documents and it is the
 manifest that is stale** — see "A proposed `MANIFEST.tsv` correction" below.
@@ -222,8 +222,8 @@ value**, so the shipped change introduces no wrongly-white glyph anywhere in the
    through the table, the cell and the paragraph, in the order `GetBackgroundBrush` walks them.
 3. `w:shd`'s pattern, above.
 
-This touches `Paperless.Core`: `Colour` gains `IsDark`, `WcagLuminance` and `PerceivedLuminance`.
-**Additive — `git grep` finds no consumer outside `Paperless.Core` and `Paperless.WordProcessing`** —
+This touches `XRay.Office.Core`: `Colour` gains `IsDark`, `WcagLuminance` and `PerceivedLuminance`.
+**Additive — `git grep` finds no consumer outside `XRay.Office.Core` and `XRay.Office.WordProcessing`** —
 and both other tracks were swept anyway: slides 199 of 302 and sheets 276 of 307, each agreeing
 with round 58.
 
@@ -415,7 +415,7 @@ OpenDocument 125   WordProcessing 1220   Spreadsheets 980   Presentations 836   
 5 `Ww8ListLevelTests`, 11 `AutomaticFontColourTests`). `dotnet build -v q -nologo`: **0 warnings,
 0 errors.**
 
-**`Paperless.Vector` reported a phantom failure twice** — once 1 of 298, once 21 of 298 — while
+**`XRay.Office.Vector` reported a phantom failure twice** — once 1 of 298, once 21 of 298 — while
 another test project was running beside it, and passed 298 of 298 alone both times. That is the
 trap `CLAUDE.md` names, and it now has two more instances.
 
@@ -454,7 +454,7 @@ sheets/chartset-004/xlsx/019_advanced_excel_pie.xlsx   done -> open   (ours 135 
 ```
 
 Neither moved this round and neither can have: `git grep` finds no consumer of the new `Colour`
-members outside `Paperless.Core` and `Paperless.WordProcessing`. Both are stable across repeated
+members outside `XRay.Office.Core` and `XRay.Office.WordProcessing`. Both are stable across repeated
 renderings on **both** sides — the reference gives 143 twice — so this is not the date-volatility
 trap round 57 named. The missing tokens are chart labels (`07;`, `17%`, `93;`, `Actual;`, `M1;`),
 five of them, which puts the gap just outside the 2%+3 band. Words (319) and slides (199) agree

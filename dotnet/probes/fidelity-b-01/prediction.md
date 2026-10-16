@@ -4,9 +4,9 @@ Round: Fidelity-B, an *implementation* round. Worktree `/c/sandbox/workdir/wt-fi
 `wt-fid-b`, base `63d5290aacf`. Reference binary **26.2.4.2** (`check-env.sh` clean, quoted in
 `results.md`).
 
-The brief hands me twelve genuine Paperless defects out of the 40 Fidelity failures, already
+The brief hands me twelve genuine XRay.Office defects out of the 40 Fidelity failures, already
 classified by `dotnet/probes/fidelity-01/results.md`. This file is what I expect **before** I run
-anything. It is written from reading — the Paperless source, and the C++ tree as *explanation
+anything. It is written from reading — the XRay.Office source, and the C++ tree as *explanation
 only* — and every number in it is a prediction, not a measurement.
 
 ---
@@ -35,7 +35,7 @@ by both Word filters" and to check the negative case. I predict from source, ahe
 - **ODF** — neither ODF filter sets it. **No.**
 
 **This is the prediction most likely to be wrong in the direction that costs, and it is the reason
-the negative case matters.** Paperless routes DOCX, DOC *and RTF* through `PaginationOptions.Word`.
+the negative case matters.** XRay.Office routes DOCX, DOC *and RTF* through `PaginationOptions.Word`.
 If I apply the new rule to the `Word` preset wholesale I break RTF, where LibreOffice keeps Writer's
 25 % — and `NoteSeparatorComparisonTests.TheRtfSeparatorGapIsExactlyTheShorterNoteLines` is
 **currently green** and asserts our RTF separator top against LibreOffice's to 0.1 pt. So the
@@ -55,7 +55,7 @@ From `paintfrm.cxx:5845-5868` and `ftnfrm.cxx:57-77,257-272`, as *explanation* o
 | separator Y inside the container | container top + `TopDist` = **+2.85 pt** | container top + **0.6 ×** the reservation |
 | separator width | **25 %** of the print width | **2 in = 144.000 pt**, clamped to the print width |
 
-Paperless's present numbers are `NoteSeparatorHeight` 5.669 pt, `NoteSeparatorSpacing` 2.835 pt,
+XRay.Office's present numbers are `NoteSeparatorHeight` 5.669 pt, `NoteSeparatorSpacing` 2.835 pt,
 `NoteSeparatorWidth` 0.25 — i.e. Writer's, format-blind, at `Paginator.cs:160-183`.
 
 **Predicted arithmetic for the vertical, and I expect to be about 10 % out.** Writer puts the rule
@@ -101,12 +101,12 @@ less one twip — *"Excel seems to limit the offsets to the bottom/left edge of 
 cell's right edge by a full twip"*.
 
 **Predicted: small, and 1 green.** The clamp itself is `min(start+offset, nextStart − 1 twip)`. The
-cost is that Paperless resolves a `SheetCellPoint` against the grid at *layout* time in more than
+cost is that XRay.Office resolves a `SheetCellPoint` against the grid at *layout* time in more than
 one place (`SheetPageGraphics`, `SheetDrawingArea`, `SheetEmptyPages`), where LibreOffice clamps
 once at import — so this is "one rule, three or four call sites", and I predict I will factor a
 single resolver rather than write the `min` four times.
 
-*Stated risk:* this touches `Paperless.Spreadsheets`, whose 643 tests must not move, and it could
+*Stated risk:* this touches `XRay.Office.Spreadsheets`, whose 643 tests must not move, and it could
 move the sheets corpus. I will measure both rather than argue.
 
 ## P6 — the totals

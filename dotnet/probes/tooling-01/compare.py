@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare `paperless analyze` against poppler over the 534 canonical reference PDFs."""
+"""Compare `xray-office analyze` against poppler over the 534 canonical reference PDFs."""
 import sys, os, collections
 
 SP = "/tmp/claude-0/-c-sandbox-workdir/5cf9a493-a19e-4a73-944b-74fd16d25b38/scratchpad/cmp"

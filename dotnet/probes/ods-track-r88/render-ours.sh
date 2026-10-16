@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # render-ours.sh <outdir>   — render every path in affected.list with the current CLI.
 OUT="$1"; mkdir -p "$OUT"
-CLI=/home/user/wt-odssheet/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+CLI=/home/user/wt-odssheet/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 export SOURCE_DATE_EPOCH=1757289600
 cd /home/user/corpus-odf || exit 1
 while IFS= read -r rel; do

@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>The XRay.Office facade: sniffs any supported office document and dispatches to the right reader. Reference this package if you do not want to pick libraries by hand.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XRay.Office.Core\XRay.Office.Core.csproj" />
+    <ProjectReference Include="..\XRay.Office.Containers\XRay.Office.Containers.csproj" />
+    <ProjectReference Include="..\XRay.Office.Text\XRay.Office.Text.csproj" />
+    <ProjectReference Include="..\XRay.Office.Vector\XRay.Office.Vector.csproj" />
+    <ProjectReference Include="..\XRay.Office.Rendering\XRay.Office.Rendering.csproj" />
+    <ProjectReference Include="..\XRay.Office.WordProcessing\XRay.Office.WordProcessing.csproj" />
+    <ProjectReference Include="..\XRay.Office.Spreadsheets\XRay.Office.Spreadsheets.csproj" />
+    <ProjectReference Include="..\XRay.Office.Presentations\XRay.Office.Presentations.csproj" />
+  </ItemGroup>
+
+</Project>

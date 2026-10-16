@@ -5,7 +5,7 @@ evidence about an environment and not about the code:
 
 | | |
 |---|---|
-| ours | `Paperless.Cli` built from this worktree at `559c86998` plus this round's change |
+| ours | `XRay.Office.Cli` built from this worktree at `559c86998` plus this round's change |
 | ref24 | `/usr/bin/soffice` — **LibreOffice 24.2.7.2 420(Build:2)**, which is what `batch-check.sh` measures against |
 | ref26 | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2 0229ac93fcf0d7cb**, eight Latin duplicate faces aside |
 | fonts | system fontconfig: Carlito, Caladea, Liberation, DejaVu, WenQuanYi, IPAGothic |
@@ -63,16 +63,16 @@ gradients, dashes and text layout for free.
 
 ## Where the shared code went, and which test decided it
 
-Nine of the ten files import **`System.Xml.Linq`, `System.Globalization`, `Paperless.Core.Units`,
-`Paperless.Core.Graphics` and `Paperless.Ooxml.DrawingML`, and nothing else.** Not one of them
+Nine of the ten files import **`System.Xml.Linq`, `System.Globalization`, `XRay.Office.Core.Units`,
+`XRay.Office.Core.Graphics` and `XRay.Office.Ooxml.DrawingML`, and nothing else.** Not one of them
 mentions `PptxFile`, `PptxSlide`, `SlideTheme` or any other presentation type. By `CLAUDE.md`'s
 rule — *a thing belongs lower when it depends on nothing above* — they were already in the wrong
 library, and had been since they were written.
 
-They now live in **`Paperless.Ooxml/DrawingML`** and not in `Paperless.Core`, and the second half
+They now live in **`XRay.Office.Ooxml/DrawingML`** and not in `XRay.Office.Core`, and the second half
 of that is the same distinction `Core/Charts` draws: a chart's *model and layout* came down to
-Core while *the readers that parse markup* stayed in `Paperless.Ooxml`. Every one of these ten
-files parses `dgm:`/`dsp:` markup and emits an `XElement` tree. They are readers. `Paperless.Ooxml`
+Core while *the readers that parse markup* stayed in `XRay.Office.Ooxml`. Every one of these ten
+files parses `dgm:`/`dsp:` markup and emits an `XElement` tree. They are readers. `XRay.Office.Ooxml`
 is where readers of OOXML markup that serve more than one family live, and it is exactly one layer
 above where they were reachable from only one.
 
@@ -87,8 +87,8 @@ stay `internal` with an `InternalsVisibleTo` for the two test projects that reac
 move costs two types of public API rather than seventeen.
 
 **This is the proper move and not a narrower reachable path.** Nothing was left behind in
-`Paperless.Presentations`, and `Paperless.WordProcessing` gained no dependency it did not have —
-it has referenced `Paperless.Ooxml` since it was created.
+`XRay.Office.Presentations`, and `XRay.Office.WordProcessing` gained no dependency it did not have —
+it has referenced `XRay.Office.Ooxml` since it was created.
 
 ---
 

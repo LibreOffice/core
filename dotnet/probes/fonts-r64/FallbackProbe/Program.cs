@@ -1,4 +1,4 @@
-using Paperless.Text.Fonts;
+using XRay.Office.Text.Fonts;
 
 // What this machine's own font set answers, asked four ways. Written to establish the *shape* of
 // the defect before any rendering was done; the rendered probes that decide it are `gen-generic.py`

@@ -313,10 +313,10 @@ re-rendered and compared byte for byte with the date masked, **0 differ**.
 
 ## 5. Tests
 
-`Paperless.WordProcessing.Tests` **1834 → 1842 passed, 0 failed** (eight new in
+`XRay.Office.WordProcessing.Tests` **1834 → 1842 passed, 0 failed** (eight new in
 `OdtTextSectionTests`). The other nine non-fidelity projects run individually: 519, 109, 728, 302,
 164, 143, 1226, 1044, 259 passed, **0 failed and 0 skipped throughout**.
-`Paperless.Fidelity.Tests` is **542 passed / 10 failed / 0 skipped**, and the ten are exactly the
+`XRay.Office.Fidelity.Tests` is **542 passed / 10 failed / 0 skipped**, and the ten are exactly the
 expected names — `PageDrawingComparisonTests.EveryLineIsDrawn` ×4 (`paginated.docx/.doc/.fodt/.rtf`),
 `TabStopComparisonTests.AListLabelsTabAdvance` ×4, `SheetDrawingComparisonTests.APictureIsDrawn`,
 `JustificationShrinkComparisonTests`.

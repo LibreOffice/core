@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from mkxlsx import write
 
 OUT = sys.argv[1]
-CLI = os.environ.get("PAPERLESS_CLI")
+CLI = os.environ.get("XRAY_OFFICE_CLI")
 LO = {"24.2": os.environ.get("LO24", "soffice"),
       "26.2": os.environ.get("LO26", "/opt/libreoffice26.2/program/soffice")}
 os.makedirs(OUT, exist_ok=True)

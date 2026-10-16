@@ -1,6 +1,6 @@
-diff --git a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.AutoSpacing.cs b/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.AutoSpacing.cs
---- a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.AutoSpacing.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.AutoSpacing.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.AutoSpacing.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.AutoSpacing.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.AutoSpacing.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.AutoSpacing.cs
 @@ -51,7 +51,11 @@
          ArgumentNullException.ThrowIfNull(blocks);
          if (!collapsesSpacing) return;

@@ -8,7 +8,7 @@ Compares the two token multisets and attributes the difference to a cause:
 """
 import subprocess, sys, collections
 
-CLI = "/c/sandbox/workdir/wt-tooling/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/c/sandbox/workdir/wt-tooling/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 
 def ours(p):
     return subprocess.run([CLI, "analyze", "--text", p], capture_output=True).stdout.decode("utf-8", "replace")

@@ -319,8 +319,8 @@ this project's own rule.
 
 ## Shared layers — measured, not argued
 
-The diff touches `Paperless.Core` (`FontReference`), `Paperless.Text` (`SystemFontResolver`) and
-`Paperless.Rendering` (both sinks). All three tracks were swept.
+The diff touches `XRay.Office.Core` (`FontReference`), `XRay.Office.Text` (`SystemFontResolver`) and
+`XRay.Office.Rendering` (both sinks). All three tracks were swept.
 
 | track | passing | sheared glyphs before → after (reference) | pages we drew none, before → after |
 |---|---|---|---|

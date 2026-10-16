@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Render one track's documents with `paperless render`, one directory per document."""
+"""Render one track's documents with `xray-office render`, one directory per document."""
 import os, subprocess, sys, shutil
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 ROOT = Path(sys.argv[1])
 PATTERN = sys.argv[2]
 OUT = Path(sys.argv[3]); OUT.mkdir(parents=True, exist_ok=True)

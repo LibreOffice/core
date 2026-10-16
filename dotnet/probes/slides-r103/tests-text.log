@@ -1,8 +1,8 @@
-Test run for /home/user/wt-slidefw/dotnet/tests/Paperless.Text.Tests/bin/Release/net10.0/linux-x64/Paperless.Text.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for /home/user/wt-slidefw/dotnet/tests/XRay.Office.Text.Tests/bin/Release/net10.0/linux-x64/XRay.Office.Text.Tests.dll (.NETCoreApp,Version=v10.0)
 VSTest version 18.0.2 (x64)
 
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   728, Skipped:     0, Total:   728, Duration: 14 s - Paperless.Text.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   728, Skipped:     0, Total:   728, Duration: 14 s - XRay.Office.Text.Tests.dll (net10.0)
 exit=0

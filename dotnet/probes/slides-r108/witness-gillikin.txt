@@ -1,6 +1,6 @@
 # gillikin_online_user_mtg_2010.ppt page 2 -- the shrink-to-fit walk, before and after.
 #
-# Emitted by a temporary diagnostic in SlideAutofit.Solve, gated on PAPERLESS_FIT_DUMP and
+# Emitted by a temporary diagnostic in SlideAutofit.Solve, gated on XRAY_OFFICE_FIT_DUMP and
 # removed before the commit; every figure is a hundredth of a millimetre.
 #
 #   box   the height the walk compares against -- area.Height + 1

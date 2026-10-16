@@ -30,7 +30,7 @@ import time
 
 import pymupdf
 
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 EPOCH = os.environ.get("SOURCE_DATE_EPOCH", "1757462400")
 
 COLS = ('pages', 'chars', 'draws', 'fills', 'strokes', 'images')

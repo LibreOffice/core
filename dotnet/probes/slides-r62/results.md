@@ -22,7 +22,7 @@ matters more than the totals, because it is the instrument this round's target w
 The 0.38 of `abs_ink` above round 60's final figure is **six documents and nothing else**:
 `3495` +1.41, `031_Alarm_Clock_Pie-Chart` −1.25, `171128IPAP` +0.26, `Intersil…` −0.14,
 `3492` +0.08, `Demick_JetBlue` +0.02. Those are the merged rounds 61 sheets (its pie first-pass
-fix reaches `Paperless.Core/Charts`) and 61 words landing on this track. Recorded, not chased.
+fix reaches `XRay.Office.Core/Charts`) and 61 words landing on this track. Recorded, not chased.
 
 ## The whole round
 
@@ -184,7 +184,7 @@ So the gradient is the **majority of what is left on that page** — and that pa
 990.51**, and pages 4 (0.65), 6 (0.60), 5 (0.37), 21 (0.34) and 14 (0.32) are each larger.
 
 The cost is not proportionate. `ChartBox.Fill` and `ChartSeries.Fill` are `Colour?`; a themed
-gradient needs a `Paint` through `Paperless.Core/Charts`, `Paperless.Ooxml` and the four
+gradient needs a `Paint` through `XRay.Office.Core/Charts`, `XRay.Office.Ooxml` and the four
 consumers that draw chart boxes (`SlideChart`, `SheetChart`, `FrameChart`, `XlsDrawing`) — a
 change across all three tracks for **0.12 of one document's 3.92**, plus
 `DynamicBubbleChart.xlsx` on sheets, those being the only two corpus chart parts above style 32.
@@ -492,10 +492,10 @@ each do not reach the −20 floor a thirteen-document round-60-sized change reac
 
 ## Shared layers — this diff reaches all three tracks
 
-* **§1** touches `Paperless.Core/Charts` (`ChartPlot.LegendFamily`, `ChartLayout.Legend`,
-  `ChartLayout.AddLegend`) and `Paperless.Ooxml` (`DrawingChartPlot.LegendFamilyOf`).
-* **§1b** touches `Paperless.Core/Charts` (`ChartPlot.LegendReversed`, `ChartLayout.Entries`).
-* Nothing touches `Paperless.Vector`, `Text`, `Rendering`, `Markup` or `Containers`.
+* **§1** touches `XRay.Office.Core/Charts` (`ChartPlot.LegendFamily`, `ChartLayout.Legend`,
+  `ChartLayout.AddLegend`) and `XRay.Office.Ooxml` (`DrawingChartPlot.LegendFamilyOf`).
+* **§1b** touches `XRay.Office.Core/Charts` (`ChartPlot.LegendReversed`, `ChartLayout.Entries`).
+* Nothing touches `XRay.Office.Vector`, `Text`, `Rendering`, `Markup` or `Containers`.
 
 Census reach outside slides, counted on what the parts state:
 

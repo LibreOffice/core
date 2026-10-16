@@ -206,7 +206,7 @@ the measure is not. Seated as **O59**; the next free number was 59 and a paralle
 ## 8. Why nothing was implemented
 
 `SlideFonts.Resolve` builds its `FontRequest` with the declared **pitch** and never with a declared
-**class** (`src/Paperless.Presentations/Layout/SlideText.cs`), so a `.ppt`'s `FF_SWISS` cannot reach
+**class** (`src/XRay.Office.Presentations/Layout/SlideText.cs`), so a `.ppt`'s `FF_SWISS` cannot reach
 the resolver. That was a deliberate abstention whose stated reason was *"has never been measured on
 a slide"*. It has now been measured on a slide twice — round 92 on a `.pptx`, this round on a
 `.ppt` — and the measurement **endorses the abstention**:
@@ -230,7 +230,7 @@ reproduced.
 
 ## 9. Regression
 
-`tests/Paperless.Presentations.Tests/PptFontFamilyClassTests.cs`, 10 assertions:
+`tests/XRay.Office.Presentations.Tests/PptFontFamilyClassTests.cs`, 10 assertions:
 
 - `SlideFonts.PitchIn` masks `0x03`, so `0x22` and `0x02` are the same request — the seat itself;
 - a `FontRequest` built the way the slides path builds one carries `FontFamilyClass.Unknown`;
@@ -254,7 +254,7 @@ repay an independent reader when one exists:
 
 ## Test totals, run project by project and totalled by hand
 
-`dotnet build Paperless.slnx` — **0 warnings, 0 errors**. Each project run on its own with
+`dotnet build XRay.Office.slnx` — **0 warnings, 0 errors**. Each project run on its own with
 `--no-build` and its count compared against round 113's:
 
 | project | passed | failed | skipped | total |

@@ -6,7 +6,7 @@ import json, pathlib, statistics
 from collections import Counter, defaultdict
 
 BENCH = pathlib.Path("/data/bench")
-ENGINES = ("paperless", "wasm-viewer")
+ENGINES = ("xray-office", "wasm-viewer")
 FAM_LABEL = {"docs": "Documents", "sheets": "Spreadsheets", "slides": "Presentations"}
 
 
@@ -18,7 +18,7 @@ def main():
 
     out = {"corpus": {"documents": len(docs),
                       "reference_pages": summary["reference_pages"],
-                      "pages_compared": summary["overall"]["paperless"]["pages_compared"]},
+                      "pages_compared": summary["overall"]["xray-office"]["pages_compared"]},
            "families": summary["families"], "overall": summary["overall"],
            "by_ext": {}}
 
@@ -103,7 +103,7 @@ def main():
         "libreoffice": {"documents": len(lo_secs), "total_s": round(sum(lo_secs), 1),
                         "median_s": round(statistics.median(lo_secs), 2),
                         "mean_s": round(statistics.fmean(lo_secs), 2)},
-        "paperless": {"documents": len(pl_secs), "total_s": round(sum(pl_secs), 1),
+        "xray-office": {"documents": len(pl_secs), "total_s": round(sum(pl_secs), 1),
                       "median_s": round(statistics.median(pl_secs), 2),
                       "mean_s": round(statistics.fmean(pl_secs), 2)},
     }

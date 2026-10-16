@@ -98,9 +98,9 @@ def build(path: Path, body: str, *, level_points: float = 12.0,
 
 
 CLI = Path(os.environ.get(
-    "PAPERLESS_CLI",
-    "/c/sandbox/workdir/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/"
-    "net10.0/linux-x64/Paperless.Cli"))
+    "XRAY_OFFICE_CLI",
+    "/c/sandbox/workdir/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/"
+    "net10.0/linux-x64/XRay.Office.Cli"))
 
 
 def render_ours(sources: list[Path], outdir: Path, workers: int = 12) -> list[Path]:

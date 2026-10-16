@@ -54,7 +54,7 @@ a fixed-height row is drawn by both engines, which it is.
 Usage
 -----
 
-    PAPERLESS_CLI=... python3 merged-wrap-fixed-height.py /abs/workdir
+    XRAY_OFFICE_CLI=... python3 merged-wrap-fixed-height.py /abs/workdir
 """
 
 import os
@@ -170,9 +170,9 @@ def drawn(pdf, tag):
 
 def main():
     out = sys.argv[1] if len(sys.argv) > 1 else '/tmp/merged-wrap'
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     if not cli:
-        raise SystemExit('set PAPERLESS_CLI to the tree you mean to measure')
+        raise SystemExit('set XRAY_OFFICE_CLI to the tree you mean to measure')
 
     os.makedirs(os.path.join(out, 'ours'), exist_ok=True)
 

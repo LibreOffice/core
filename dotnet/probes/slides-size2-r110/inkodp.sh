@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -uo pipefail
-BASE=/home/user/r110-work/cli-base/Paperless.Cli
-HEAD=/home/user/wt-slidesize2/dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/Paperless.Cli
+BASE=/home/user/r110-work/cli-base/XRay.Office.Cli
+HEAD=/home/user/wt-slidesize2/dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli
 SO=/opt/libreoffice26.2/program/soffice
 DIFF=/home/user/wt-slidesize2/.claude/skills/render-comparison/scripts/pdf-image-diff.py
 OUT="$2"; T=/home/user/r110-work/inko

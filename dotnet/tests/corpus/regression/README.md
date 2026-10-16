@@ -2,7 +2,7 @@
 
 One file per fixed bug, named for what it pins. Same rules as the rest of the corpus: small,
 freely licensed, and reduced to the minimum that still shows the behaviour — see
-`../README.md` and the `paperless-corpus` skill.
+`../README.md` and the `office-corpus` skill.
 
 Every file here is **authored by a script in `dotnet/probes/`**, not collected, so its licence
 is this repository's and every byte in it can be traced to one line of the generator.

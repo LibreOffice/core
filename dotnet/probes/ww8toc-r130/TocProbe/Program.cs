@@ -1,9 +1,9 @@
 // Dumps a WW8 document's stylesheet and the character-style index in force over a character range,
 // so that "which style makes the contents entries blue" is read off the file rather than guessed.
 using System.Buffers.Binary;
-using Paperless.Containers;
-using Paperless.Containers.Ole2;
-using Paperless.WordProcessing.Ww8;
+using XRay.Office.Containers;
+using XRay.Office.Containers.Ole2;
+using XRay.Office.WordProcessing.Ww8;
 
 if (args.Length > 3 && args[1] == "--frames")
 {

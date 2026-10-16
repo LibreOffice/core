@@ -152,9 +152,9 @@ that to be the prediction that fails. The band I will accept without calling the
 
 ## 5. Shared layer
 
-The diff adds one method to `MetricGrid` in **`Paperless.Text`** (`Fonts/LineSpacing.cs`) and
-changes **`Paperless.Spreadsheets`** (`Layout/SheetBandText.cs`, `Layout/SheetChart.cs`). The
-`Paperless.Text` change is **additive only** — a new public method with no call site outside
-`Paperless.Spreadsheets`, which will be shown with `git grep` — so no words or slides rendering can
+The diff adds one method to `MetricGrid` in **`XRay.Office.Text`** (`Fonts/LineSpacing.cs`) and
+changes **`XRay.Office.Spreadsheets`** (`Layout/SheetBandText.cs`, `Layout/SheetChart.cs`). The
+`XRay.Office.Text` change is **additive only** — a new public method with no call site outside
+`XRay.Office.Spreadsheets`, which will be shown with `git grep` — so no words or slides rendering can
 move. **Falsifiable prediction for the parent: 0 verdicts move on words and 0 on slides, and 0
 bytes of their renderings change.**

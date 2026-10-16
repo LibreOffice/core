@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Census: public entry points in Paperless.Core / Paperless.Text that no consumer references.
+"""Census: public entry points in XRay.Office.Core / XRay.Office.Text that no consumer references.
 
 A 'consumer' is any .cs file outside the declaring project. Tests are counted separately,
 because a type referenced only by its own unit test is exactly the 'two halves with nothing
@@ -11,7 +11,7 @@ import re, sys, os, collections
 # rather than the one it was written in — an absolute path here made an earlier probe
 # measure another worktree entirely.
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROJECTS = ["src/Paperless.Core", "src/Paperless.Text"]
+PROJECTS = ["src/XRay.Office.Core", "src/XRay.Office.Text"]
 
 TYPE_RE = re.compile(
     r'^\s*public\s+(?:static\s+|sealed\s+|abstract\s+|partial\s+|readonly\s+|ref\s+)*'

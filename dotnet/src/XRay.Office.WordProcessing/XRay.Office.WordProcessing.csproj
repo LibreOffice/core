@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Word-processing documents (the LibreOffice Writer equivalent): DOCX/DOCM/DOTX/DOTM, DOC/DOT, RTF, ODT/OTT/FODT. Content extraction plus paginated layout and rendering.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- So the property-resolution rules can be tested where they live, rather than only
+         through a whole package. -->
+    <InternalsVisibleTo Include="XRay.Office.WordProcessing.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XRay.Office.Core\XRay.Office.Core.csproj" />
+    <ProjectReference Include="..\XRay.Office.Containers\XRay.Office.Containers.csproj" />
+    <ProjectReference Include="..\XRay.Office.Text\XRay.Office.Text.csproj" />
+    <ProjectReference Include="..\XRay.Office.Vector\XRay.Office.Vector.csproj" />
+    <ProjectReference Include="..\XRay.Office.Ooxml\XRay.Office.Ooxml.csproj" />
+    <ProjectReference Include="..\XRay.Office.OpenDocument\XRay.Office.OpenDocument.csproj" />
+    <ProjectReference Include="..\XRay.Office.MsBinary\XRay.Office.MsBinary.csproj" />
+  </ItemGroup>
+
+</Project>

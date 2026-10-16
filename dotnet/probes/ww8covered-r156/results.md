@@ -101,7 +101,7 @@ further**, 3 documents net better and 1 worse.
 
 `P200904290238_0238_51880.doc` goes from a mean baseline distance of 7.84 pt to 17.20, and the shift
 is on **pages 2 and 3 only** — page 1 *improves*, from −8.12 to −5.93 — so a table early in the
-document grew by about 18 pt. It holds **merges of depth 2, 3, 4 and 7** (`paperless extract
+document grew by about 18 pt. It holds **merges of depth 2, 3, 4 and 7** (`xray-office extract
 --format xhtml`, counting `rowspan`), and depth is the attribute this round's arms did not vary.
 
 ***The first version of this section said a deep merge whose master states a bottom rule leaves the
@@ -133,9 +133,9 @@ side by side will hand you the wrong one if you do not re-render after a rebuild
 
 | project | result |
 |---|---|
-| `Paperless.WordProcessing` | **2088** passed — 2084 at the round's base plus this round's 4 |
-| `Paperless.Core` / `Text` / `Vector` / `Containers` | 591 / 750 / 309 / 109 passed |
-| `Paperless.Spreadsheets` / `Presentations` / `Markup` | 1484 / 1205 / 259 passed |
-| `Paperless.Fidelity` | **10 failed of 552**, 0 skipped — the base figure exactly, and the known set |
+| `XRay.Office.WordProcessing` | **2088** passed — 2084 at the round's base plus this round's 4 |
+| `XRay.Office.Core` / `Text` / `Vector` / `Containers` | 591 / 750 / 309 / 109 passed |
+| `XRay.Office.Spreadsheets` / `Presentations` / `Markup` | 1484 / 1205 / 259 passed |
+| `XRay.Office.Fidelity` | **10 failed of 552**, 0 skipped — the base figure exactly, and the known set |
 
 Build: 0 warnings, 0 errors.

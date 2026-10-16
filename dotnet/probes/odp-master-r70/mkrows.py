@@ -1,7 +1,7 @@
 """Assemble the probe's stored TSVs, each with a header naming the binary and the font set."""
 import csv, subprocess
 
-HDR = ("# ours   = Paperless.Cli @ {ours}\n"
+HDR = ("# ours   = XRay.Office.Cli @ {ours}\n"
        "# ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 (TDF tarball)\n"
        "# fonts  = system fontconfig; ALL FOUR tarball confounds moved aside on 2026-09-07 --\n"
        "#          Carlito/Caladea/Liberation/DejaVu duplicates, the Latin Noto, and the four\n"

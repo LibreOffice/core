@@ -2,7 +2,7 @@
 
 `TOTAL 947  MATCH 916  MISMATCH 31  REF-CANNOT-RENDER 0`
 
-Both legs fresh, nothing else running. `PAPERLESS_CLI` a Release publish of the merged tree,
+Both legs fresh, nothing else running. `XRAY_OFFICE_CLI` a Release publish of the merged tree,
 `REF_SOFFICE=/opt/libreoffice26.2/program/soffice` (26.2.4.2,
 `0229ac93fcf0d7cbc6376066c6f35021cef002dc`), `RENDER_TIMEOUT=300`, 3 workers.
 

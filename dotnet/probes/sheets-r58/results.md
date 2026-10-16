@@ -179,7 +179,7 @@ direction.**
 | the two that declare and resolve to nothing | 0 fills before and after | **0 and 0** |
 | theme+tint stops | *unverified by the census* | **correct** — three colours at the reference's counts |
 | words / slides | 0 | **0 from `colorScale`**; the chart face is shared (§ 6) |
-| tests | +6 to +12, `Paperless.Spreadsheets` only | **+13, `Paperless.Spreadsheets` only** — one above the range |
+| tests | +6 to +12, `XRay.Office.Spreadsheets` only | **+13, `XRay.Office.Spreadsheets` only** — one above the range |
 | `MANIFEST.tsv` | no row changes status | **no row changes status** |
 
 **Ten of twelve.** Both misses are counts, one over and one under, and the Contextures miss paid
@@ -187,8 +187,8 @@ for itself: chasing it is what found the `c:dPt` gap.
 
 ## 6. Shared layer — **yes**, and named from a census that had to be written twice
 
-The `colorScale` change is `Paperless.Spreadsheets` only. **The chart-face change is
-`Paperless.Ooxml/DrawingML/DrawingChartPlot.cs` and reaches all three tracks.**
+The `colorScale` change is `XRay.Office.Spreadsheets` only. **The chart-face change is
+`XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs` and reaches all three tracks.**
 
 The first census counted every site where a run states something different from its paragraph's
 default and answered **37 sheets, 1 slides, 1 words**. It over-counts, and the over-count is
@@ -247,13 +247,13 @@ which is round 57's finding that the run's origin is off the MediaBox, seen as a
 
 ## 8. Tests
 
-**+13, all in `Paperless.Spreadsheets`** (961 → 974). The ten non-Fidelity projects, re-derived:
+**+13, all in `XRay.Office.Spreadsheets`** (961 → 974). The ten non-Fidelity projects, re-derived:
 Containers 109, Core 337, Markup 259, OpenDocument 125, Presentations 819, Rendering 153 (+1
 skipped), Spreadsheets 974, Text 617, Vector 295, WordProcessing 1180 — **4868 passed, 0 failed,
 1 skipped**, against a base of 4855 by the same count. `dotnet build -v q -nologo` → **0 warnings,
 0 errors**.
 
-One run of `Paperless.Vector` reported **17 failed of 295** on a binary this round does not touch;
+One run of `XRay.Office.Vector` reported **17 failed of 295** on a binary this round does not touch;
 three re-runs of that project alone gave **0 failed, 295 passed** each time. That is the load
 artefact `CLAUDE.md` records, seen at 1 and at 16 before; it is written down here rather than
 acted on.
@@ -283,7 +283,7 @@ widths differ between the two readings of the rounding by up to 1.4 %, and the m
 rounds the total instead fails **26 of 36** cases through `verify-test.sh`. The reference moved
 none.
 
-**`Paperless.Spreadsheets` is now ten of ten re-checked and nine correct.** Counters re-derived
+**`XRay.Office.Spreadsheets` is now ten of ten re-checked and nine correct.** Counters re-derived
 with the file's own commands: at this tree **39 open sites, 21 marker lines (18 `VERIFIED`, 2
 `FIXED`, 1 `WRONG`, 0 `UNDECIDED`)**; at the base commit **39 open, 20 lines (17/2/1/0)**, read
 with `$3` rather than `$2` as the file itself warns. The stored per-project table reproduced this
@@ -316,7 +316,7 @@ moved, and that was predicted. No change is proposed.
 1. **The pie data-label wrap**, now with a second measured defect beside it: **our pie is 18 %
    larger than the reference's** (235.8 pt against 199.8 pt on `003_advanced_excel_pie`) and its
    centre is 6.4 pt left and 3.2 pt low. The wrap moves a centred label 27 pt sideways and the
-   diameter moves every label at once; both are `Paperless.Core` and owe a corpus gate. These four
+   diameter moves every label at once; both are `XRay.Office.Core` and owe a corpus gate. These four
    pie documents are the only sheets failures with a chart cause left.
 2. **`cellIs` conditional formatting** — 18 documents, and now cheap: the reader, the range walk,
    the priority order and the overlay all exist, and `cellIs` needs a comparison against a literal

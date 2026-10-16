@@ -5,7 +5,7 @@
 # fonts: system /usr/share/fonts; the TDF tarball's bundled Latin duplicates and its
 # Latin NotoSans-*/NotoSerif-* are moved aside, so 26.2.4.2 resolves the system faces.
 # fc-match "DejaVu Sans" -> DejaVuSans.ttf: "DejaVu Sans" "Book"
-# ours: /home/user/wt-advance/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+# ours: /home/user/wt-advance/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 binary	face	unit	size_pt	reps	glyphs_per_unit	design_pt	measured_pt	ratio_to_design
 24.2.7.2	Liberation Mono	o	6	238	1	3.600586	3.600630	1.000012
 24.2.7.2	Liberation Mono	o	8	238	1	4.800781	4.800840	1.000012

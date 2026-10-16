@@ -1,6 +1,6 @@
 # Round 99 — the sheets residue: a trailing empty paragraph, a merged fill, and a posture nobody states
 
-    ours   = Paperless.Cli @ 1acd84bea (base) and @ 1acd84bea + this round's diff (head)
+    ours   = XRay.Office.Cli @ 1acd84bea (base) and @ 1acd84bea + this round's diff (head)
     ref    = /opt/libreoffice26.2/program/soffice — LibreOffice 26.2.4.2, plus the banked
              reference PDFs at /home/user/gate-odf-r80/ref (the 307 `.ods`) and
              /home/user/gate-orig-r83/ref (the 947 originals)
@@ -327,7 +327,7 @@ Core **521**, Containers **109**, Markup **259**, Text **728**, OpenDocument **1
 Presentations **1045**, Rendering **164**, Vector **309**, WordProcessing **1924**,
 Spreadsheets **1286** — 0 failed and 0 skipped in every one. Solution build 0 warnings, 0 errors.
 
-`Paperless.Fidelity.Tests` is **542 passed / 10 failed of 552 discovered**, and the ten are exactly
+`XRay.Office.Fidelity.Tests` is **542 passed / 10 failed of 552 discovered**, and the ten are exactly
 the known names: `PageDrawingComparisonTests` x4 (`paginated.docx`/`.fodt`/`.rtf`/`.doc`),
 `TabStopComparisonTests` x4 (`list-label-overrun.fodt`/`.docx`/`.odt`/`.doc`),
 `SheetDrawingComparisonTests` (`sheet-rich-text.xlsx`) and `JustificationShrinkComparisonTests`
@@ -369,7 +369,7 @@ the base, which is the control that separates this rule from the one `LineCount`
 
 | file | what it is |
 |---|---|
-| `rowdump.cs` | the round's first instrument: our resolved row heights, cell texts, portion counts and cell fills for one sheet, and the layouter's line count for a probe string. Built as a scratch console project against `src/Paperless/Paperless.csproj`, named `Paperless.Spreadsheets.Tests` so that the internals are visible |
+| `rowdump.cs` | the round's first instrument: our resolved row heights, cell texts, portion counts and cell fills for one sheet, and the layouter's line count for a probe string. Built as a scratch console project against `src/XRay.Office/XRay.Office.csproj`, named `XRay.Office.Spreadsheets.Tests` so that the internals are visible |
 | `fodsrows.py` | round 98's, unchanged: the reference's resolved row heights out of one `--convert-to fods` |
 | `rowdiff.py` | the join — per-row heights, the line-count delta against the document's own quantum, and a histogram |
 | `tk-base.tsv`, `tk-head.tsv` | the fifteen disagreeing rows at the base and the two at head |

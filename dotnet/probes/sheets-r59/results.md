@@ -214,7 +214,7 @@ the reference's own arithmetic, faithfully ported; it is the *input* that differ
 | label legend keys on `003` p1 | 0 → 6 | **0 → 6** |
 | sheets documents whose ink changes | 5 | **7** (§ 7) — under-reached |
 | `Keywords_Mapping…` | keys appear, words unchanged | **words unchanged; no keys appear** — its charts are all `barChart` and the key is drawn only on the pie path |
-| tests | +8 to +18, `Paperless.Core` | **+8, `Paperless.Core` only** |
+| tests | +8 to +18, `XRay.Office.Core` | **+8, `XRay.Office.Core` only** |
 | `MANIFEST.tsv` | 4 rows change status | **2 do** |
 
 **Six of twelve.** Every miss is on the same axis — the shrink's magnitude and therefore its
@@ -223,7 +223,7 @@ this project had measured.
 
 ## 7. Shared layer — **yes**, and my own reach census was refuted by the sweep
 
-The diff is `Paperless.Core/Charts/*` and `Paperless.Ooxml/DrawingML/DrawingChartPlot.cs`. **Both
+The diff is `XRay.Office.Core/Charts/*` and `XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs`. **Both
 reach all three tracks and the parent owes the cross-track sweep.**
 
 The prediction's census matched `<c:pieChart>` and answered **5 sheets, 3 slides, 2 words**. It was
@@ -292,7 +292,7 @@ every row producing output:
 
 ## 10. Tests
 
-**+8, all in `Paperless.Core`** (337 → 345). The ten non-Fidelity projects, re-derived:
+**+8, all in `XRay.Office.Core`** (337 → 345). The ten non-Fidelity projects, re-derived:
 Containers 109, Core 345, Markup 259, OpenDocument 125, Presentations 831, Rendering 153
 (+1 skipped), Spreadsheets 974, Text 617, Vector 298, WordProcessing 1180 — **4891 passed, 0
 failed, 1 skipped**. `dotnet build -v q -nologo` → **0 warnings, 0 errors**.
@@ -402,8 +402,8 @@ and 21 markers (18/2/1) at its own branch tip; the extra `VERIFIED` is round 56'
 arriving through the merge, so the two readings are consistent.
 
 **No site was re-checked this round**, and that is a deliberate choice rather than an omission:
-`Paperless.Spreadsheets` is ten of ten and nine correct, and the round's whole budget went into the
-pie subsystem. The next one is named rather than guessed — **`Paperless.Core/Graphics/GlyphRun.cs`,
+`XRay.Office.Spreadsheets` is ten of ten and nine correct, and the round's whole budget went into the
+pie subsystem. The next one is named rather than guessed — **`XRay.Office.Core/Graphics/GlyphRun.cs`,
 2 open sites**, because § 5 has just measured a live vertical-metric divergence in exactly that
 area: the reference's Carlito line height is 1.1219 em at 10 pt and 1.2241 at 15.89, and ours is
 1.2207 at both.

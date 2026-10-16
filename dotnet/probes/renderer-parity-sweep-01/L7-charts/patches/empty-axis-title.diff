@@ -1,5 +1,5 @@
---- a/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs
-+++ b/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
 @@ -232,8 +232,9 @@
              // title hangs off that element — so reading only c:catAx loses it entirely. The same
              // fallback CategoryAxisVisible already takes, and tdf127720.pptx is what shows it:
@@ -60,8 +60,8 @@
      private static string? TitleText(XElement? title)
      {
          if (title is null) return null;
---- a/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartTitle.cs
-+++ b/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartTitle.cs
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartTitle.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartTitle.cs
 @@ -73,6 +73,15 @@
      internal const string DiagramTitle = "Chart Title";
  

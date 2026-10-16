@@ -14,6 +14,6 @@ for f in "$D"/*.pptx; do
       -env:UserInstallation=file://$P/prof24 --convert-to pdf --outdir "$P/ref24" "$f" >/dev/null 2>&1
   [ -f "$P/ref26/$b.pdf" ] || SOURCE_DATE_EPOCH=1700000000 TZ=UTC timeout 300 "$LO26" --headless \
       -env:UserInstallation=file://$P/prof26 --convert-to pdf --outdir "$P/ref26" "$f" >/dev/null 2>&1
-  SOURCE_DATE_EPOCH=1700000000 TZ=UTC "$PAPERLESS_CLI" render "$f" --format pdf --outdir "$P/$TAG" >/dev/null 2>&1
+  SOURCE_DATE_EPOCH=1700000000 TZ=UTC "$XRAY_OFFICE_CLI" render "$f" --format pdf --outdir "$P/$TAG" >/dev/null 2>&1
 done
 echo "ref24 $(ls "$P/ref24" | grep -c pdf)  ref26 $(ls "$P/ref26" | grep -c pdf)  $TAG $(ls "$P/$TAG" | grep -c pdf)"

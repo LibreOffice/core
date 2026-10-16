@@ -7,7 +7,7 @@ exactly one thing: what the `a:graphicData` holds.
 import os, re, struct, subprocess, sys, tempfile, zlib, zipfile
 
 REF = "/opt/libreoffice26.2/program/soffice"
-CLI = "/home/user/wt-frames/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/wt-frames/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 SRC = "/home/user/wt-frames/dotnet/tests/corpus/features/justify-shrink-2013.docx"
 OPS = "/home/user/wt-frames/.claude/skills/render-comparison/scripts/pdf-ops.py"
 EMU_PER_TWIP = 635

@@ -403,7 +403,7 @@ Rendering  164   Spreadsheets 1292   Text 728   Vector 309   WordProcessing 1938
                                                    6560 passed, 0 failed, 0 skipped
 ```
 
-`Paperless.Fidelity.Tests`: **Failed: 10, Passed: 542, Total: 552**, and the ten names read out of
+`XRay.Office.Fidelity.Tests`: **Failed: 10, Passed: 542, Total: 552**, and the ten names read out of
 that run's own log are exactly the briefed set — `PageDrawingComparisonTests` ×4 (`paginated`
 `.fodt/.doc/.docx/.rtf`), `TabStopComparisonTests` ×4 (`list-label-overrun`
 `.fodt/.docx/.doc/.odt`), `SheetDrawingComparisonTests` (`sheet-rich-text.xlsx`) and
@@ -412,16 +412,16 @@ that run's own log are exactly the briefed set — `PageDrawingComparisonTests` 
 **New tests**, 21 in all, every one of which needs API this round added and so cannot compile at
 the base:
 
-* `Paperless.Core.Tests/ChartSplineTests.cs` — 7. The reference fixture of §1.3, the segment
+* `XRay.Office.Core.Tests/ChartSplineTests.cs` — 7. The reference fixture of §1.3, the segment
   count and copied knots, the collinear case, one and two points, and two through `ChartLayout`:
   twenty segments per interval against one, and a gap ending the curve rather than being smoothed
   across.
-* `Paperless.Presentations.Tests/DrawingChartSmoothTests.cs` — 11. The stated flag on all three
+* `XRay.Office.Presentations.Tests/DrawingChartSmoothTests.cs` — 11. The stated flag on all three
   non-frame groups, the Office-2007 default both ways, one series smoothing its group, the five
   group kinds that are never smoothed, and a combination chart smoothing only its line half.
-* `Paperless.OpenDocument.Tests/OdfChartInterpolationTests.cs` — 10 (4 new beyond the smoothing
+* `XRay.Office.OpenDocument.Tests/OdfChartInterpolationTests.cs` — 10 (4 new beyond the smoothing
   ones): `loext:sub-bar` / `loext:sub-pie`, the stated split position, and the control.
-* `Paperless.Presentations.Tests/ChartPlotTypeReaderTests.cs` — 1 added, the exploded of-pie.
+* `XRay.Office.Presentations.Tests/ChartPlotTypeReaderTests.cs` — 1 added, the exploded of-pie.
 
 **Files here**, all present and non-empty: `results.md`; five probes — `census-ooxml-smooth.py`,
 `census-odf-chart.py`, `segment-census.py`, `spline-hypotheses.py`, `collinear.py`,

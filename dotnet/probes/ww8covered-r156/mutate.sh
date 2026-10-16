@@ -4,7 +4,7 @@
 # not compile prints no failing test and reads exactly like one that passed.
 set -u
 cd /home/user/libreoffice-core/dotnet || exit 1
-SRC=src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Tables.cs
+SRC=src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Tables.cs
 cp "$SRC" /tmp/claude-0/Ww8Tables.cs.before || exit 1
 
 run() {
@@ -17,7 +17,7 @@ assert old in s, 'base text not found'
 open(p, 'w').write(s.replace(old, new, 1))
 PY
     touch "$SRC"
-    out=$(timeout 900 dotnet test tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj \
+    out=$(timeout 900 dotnet test tests/XRay.Office.WordProcessing.Tests/XRay.Office.WordProcessing.Tests.csproj \
             --filter "FullyQualifiedName~Ww8CoveredCellBordersTests" 2>&1)
     if printf '%s' "$out" | grep -qE 'error [A-Z]+[0-9]+'; then
         echo "$name: DID NOT COMPILE -- arm void"
@@ -33,6 +33,6 @@ run 'the thicker of the two'                        'cell.Borders = (owner.Borde
 run 'no borders at all (before r154)'               'cell.Borders = default;'
 
 cp /tmp/claude-0/Ww8Tables.cs.before "$SRC" && touch "$SRC"
-out=$(timeout 900 dotnet test tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj \
+out=$(timeout 900 dotnet test tests/XRay.Office.WordProcessing.Tests/XRay.Office.WordProcessing.Tests.csproj \
         --filter "FullyQualifiedName~Ww8CoveredCellBordersTests" 2>&1)
 printf '%-46s %s\n' 'base (the master, always):' "$(printf '%s' "$out" | grep -E '^(Passed|Failed)!' | tail -1)"

@@ -1,7 +1,7 @@
 <Project>
 
   <!--
-    Shared MSBuild settings for every project in the Paperless solution.
+    Shared MSBuild settings for every project in the XRay.Office solution.
     Project-specific overrides belong in the individual .csproj.
   -->
 
@@ -37,8 +37,8 @@
   <PropertyGroup>
     <VersionPrefix>0.1.0</VersionPrefix>
     <VersionSuffix Condition="'$(VersionSuffix)' == ''">alpha</VersionSuffix>
-    <Authors>Paperless contributors</Authors>
-    <Product>Paperless</Product>
+    <Authors>XRay.Office contributors</Authors>
+    <Product>XRay.Office</Product>
     <PackageProjectUrl>https://github.com/theolivenbaum/libreoffice-core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/theolivenbaum/libreoffice-core</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -97,11 +97,11 @@
     into a second output directory rather than testing what was just built.
   -->
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) or $(MSBuildProjectName.EndsWith('.Cli'))">
-    <_PaperlessHostArch>$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture.ToString().ToLowerInvariant())</_PaperlessHostArch>
-    <_PaperlessHostOs Condition="$([MSBuild]::IsOSPlatform('Linux'))">linux</_PaperlessHostOs>
-    <_PaperlessHostOs Condition="$([MSBuild]::IsOSPlatform('OSX'))">osx</_PaperlessHostOs>
-    <_PaperlessHostOs Condition="$([MSBuild]::IsOSPlatform('Windows'))">win</_PaperlessHostOs>
-    <RuntimeIdentifier Condition="'$(_PaperlessHostOs)' != ''">$(_PaperlessHostOs)-$(_PaperlessHostArch)</RuntimeIdentifier>
+    <_XRayOfficeHostArch>$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture.ToString().ToLowerInvariant())</_XRayOfficeHostArch>
+    <_XRayOfficeHostOs Condition="$([MSBuild]::IsOSPlatform('Linux'))">linux</_XRayOfficeHostOs>
+    <_XRayOfficeHostOs Condition="$([MSBuild]::IsOSPlatform('OSX'))">osx</_XRayOfficeHostOs>
+    <_XRayOfficeHostOs Condition="$([MSBuild]::IsOSPlatform('Windows'))">win</_XRayOfficeHostOs>
+    <RuntimeIdentifier Condition="'$(_XRayOfficeHostOs)' != ''">$(_XRayOfficeHostOs)-$(_XRayOfficeHostArch)</RuntimeIdentifier>
     <SelfContained>false</SelfContained>
   </PropertyGroup>
 

@@ -129,7 +129,7 @@ kind 2, base 10 (`Default Paragraph Font`, empty CHPX), and its own CHPX is `3E2
 
 ### The fix
 
-Three pieces, all in `Paperless.WordProcessing/Ww8`:
+Three pieces, all in `XRay.Office.WordProcessing/Ww8`:
 
 - `ApplyLayoutSprms` takes an optional `toggleBase`. Where one is given, the seven
   `Read_BoldUsw` attributes resolve their `0x80`/`0x81` operands against **it** rather than against
@@ -326,7 +326,7 @@ each leg, 0 failures):
 | alphanumeric counts that move | **0** | 0 | **0** |
 
 **The `.docx` column is 0 of 272 and that is the confinement statement**, not an absence of
-evidence: the two files changed are both in `Paperless.WordProcessing/Ww8`, and `git grep` says the
+evidence: the two files changed are both in `XRay.Office.WordProcessing/Ww8`, and `git grep` says the
 only type any other reader borrows from that folder is `Ww8DateTime`. Slides and sheets cannot move
 for the same structural reason and were not swept.
 
@@ -434,7 +434,7 @@ hypothesis, and a 124 pt row-placement drift inside a table with three open seat
    single one too. No corpus `.doc` states a relative `sprmCFDStrike` at all, so it costs nothing
    here; it is recorded because it is the one place the model is knowingly coarser than the rule.
 7. **O87's content-path twin is not implemented.** The strip is on the layout path only, so
-   `paperless extract` still honours a `sprmCFVanish` in a run the reference throws away. No corpus
+   `xray-office extract` still honours a `sprmCFVanish` in a run the reference throws away. No corpus
    `.doc` has one — the three affected runs carry an underline, a colour and a font — so the reach
    is nil today, and the asymmetry between the two paths is recorded rather than closed.
 
@@ -461,19 +461,19 @@ Whole suite, discovered against passed per project (`test-run.txt`):
 
 | project | discovered | passed | failed |
 |---|--:|--:|--:|
-| `Paperless.Containers.Tests` | 109 | 109 | 0 |
-| `Paperless.Core.Tests` | 591 | 591 | 0 |
-| `Paperless.Markup.Tests` | 249 | 259 | 0 |
-| `Paperless.OpenDocument.Tests` | 169 | 169 | 0 |
-| `Paperless.Presentations.Tests` | 1205 | 1205 | 0 |
-| `Paperless.Rendering.Tests` | 164 | 164 | 0 |
-| `Paperless.Spreadsheets.Tests` | 1387 | 1387 | 0 |
-| `Paperless.Text.Tests` | 750 | 750 | 0 |
-| `Paperless.Vector.Tests` | 309 | 309 | 0 |
-| `Paperless.WordProcessing.Tests` | 2007 | 2007 | 0 |
-| `Paperless.Fidelity.Tests` | 552 | 542 | **10** |
+| `XRay.Office.Containers.Tests` | 109 | 109 | 0 |
+| `XRay.Office.Core.Tests` | 591 | 591 | 0 |
+| `XRay.Office.Markup.Tests` | 249 | 259 | 0 |
+| `XRay.Office.OpenDocument.Tests` | 169 | 169 | 0 |
+| `XRay.Office.Presentations.Tests` | 1205 | 1205 | 0 |
+| `XRay.Office.Rendering.Tests` | 164 | 164 | 0 |
+| `XRay.Office.Spreadsheets.Tests` | 1387 | 1387 | 0 |
+| `XRay.Office.Text.Tests` | 750 | 750 | 0 |
+| `XRay.Office.Vector.Tests` | 309 | 309 | 0 |
+| `XRay.Office.WordProcessing.Tests` | 2007 | 2007 | 0 |
+| `XRay.Office.Fidelity.Tests` | 552 | 542 | **10** |
 
-**0 skipped everywhere**, so `Paperless.Fidelity.Tests` really did reach LibreOffice. The ten
+**0 skipped everywhere**, so `XRay.Office.Fidelity.Tests` really did reach LibreOffice. The ten
 failures are the same ten by name that round 130 recorded — the four `paginated.*`
 `PageDrawingComparisonTests`, the four `list-label-overrun.*` `TabStopComparisonTests`,
 `justify-shrink-2013.docx` and `sheet-rich-text.xlsx` — the family `CLAUDE.md` leaves failing on

@@ -355,7 +355,7 @@ Rendering  164   Spreadsheets 1325   Text 728   Vector 309   WordProcessing 1938
                                                    6653 passed, 0 failed, 0 skipped
 ```
 
-**New tests**, 10 in all — `Paperless.Spreadsheets.Tests/XlsChartAxisLineTests.cs`. Seven cases and a
+**New tests**, 10 in all — `XRay.Office.Spreadsheets.Tests/XlsChartAxisLineTests.cs`. Seven cases and a
 four-case theory: each `CHTICK` major value read as its own pair of flags, each axis taking its own
 record, an axis with no record being crossed (BIFF's default, not OOXML's outward), the
 `CHLINEFORMAT` after a `CHAXISLINE` colouring the line that record named, an automatic format

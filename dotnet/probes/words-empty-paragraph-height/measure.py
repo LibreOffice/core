@@ -17,7 +17,7 @@ def words(pdf):
 def render(who, doc, outdir):
     os.makedirs(outdir, exist_ok=True)
     if who == 'ours':
-        subprocess.run([os.environ['PAPERLESS_CLI'], 'render', doc, '--format', 'pdf',
+        subprocess.run([os.environ['XRAY_OFFICE_CLI'], 'render', doc, '--format', 'pdf',
                         '--outdir', outdir], capture_output=True, timeout=300)
     else:
         subprocess.run([SOF[who], f'-env:UserInstallation=file://{outdir}/prof', '--headless',

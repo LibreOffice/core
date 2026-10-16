@@ -126,8 +126,8 @@ what they were.
 
 ## 6. Suites
 
-`dotnet build Paperless.slnx` **0 warnings, 0 errors**, and
-`Paperless.WordProcessing.Tests` **2200 passed, 0 failed** against the 2189 of the round's base — the
+`dotnet build XRay.Office.slnx` **0 warnings, 0 errors**, and
+`XRay.Office.WordProcessing.Tests` **2200 passed, 0 failed** against the 2189 of the round's base — the
 eleven new cases being `FrameFollowsTextFlowTests`' seven methods, four of them theories.
 
 ## 7. A fourth consequence was implemented and the corpus refuted it

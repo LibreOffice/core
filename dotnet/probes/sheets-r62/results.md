@@ -229,7 +229,7 @@ category labels rather than six horizontal ones, which is a different thing from
 
 ## 7. Tests: **+16**, and four mutations
 
-`Paperless.Spreadsheets` **1020 → 1035** (a 13-case theory and two facts), `Paperless.Text`
+`XRay.Office.Spreadsheets` **1020 → 1035** (a 13-case theory and two facts), `XRay.Office.Text`
 **624 → 625**. Re-derived by running each project: Containers 109, Core 390, Markup 259,
 OpenDocument 125, Presentations 872, Rendering 153 (+1 skipped), Spreadsheets 1035, Text 625,
 Vector 302, WordProcessing 1225 — **5095 passed, 0 failed, 1 skipped**.
@@ -239,8 +239,8 @@ Vector 302, WordProcessing 1225 — **5095 passed, 0 failed, 1 skipped**.
 |---|---|
 | the chart run drops the pixel-em scale (the pre-round behaviour) | **detected** — 10 of the 13 theory cases *and* `TheChartRunReproducesTheReferencesOwnDrawnLabelWidths` |
 | the scale floors the pixel count instead of rounding it | **detected** — `TheChartDevicesEmIsAWholeNumberOfPixelsAndTheCorrectionIsASawtooth` |
-| the pixel count is taken through the map unit, `Paperless.Text` filter | **detected** — the same test, by the exact-size assertion |
-| the pixel count is taken through the map unit, `Paperless.Spreadsheets` filter | **NOT detected**, and that is the documented ambiguity rather than a hole: the sheets theory's 0.006 tolerance is set by the twenty-glyph sample's own rounding, and the two readings differ by 0.0006 at 10 pt |
+| the pixel count is taken through the map unit, `XRay.Office.Text` filter | **detected** — the same test, by the exact-size assertion |
+| the pixel count is taken through the map unit, `XRay.Office.Spreadsheets` filter | **NOT detected**, and that is the documented ambiguity rather than a hole: the sheets theory's 0.006 tolerance is set by the twenty-glyph sample's own rounding, and the two readings differ by 0.0006 at 10 pt |
 
 The 13-case theory is a **discriminator and not a golden number**: three of its sizes have a ratio
 above one, three exactly one and seven below, so a rule that always narrows fails, a rule that never
@@ -359,19 +359,19 @@ quoted number in that file has failed to reproduce. `TODO.24-2-7-audit.md` is co
 
 **This round pointed no probe at any site**, and says so rather than filing a hurried one: the
 budget went to the width law and two whole-track sweeps. The next site is named **with the command
-and not from anyone's prose**: `Paperless.Core/Graphics/GlyphRun.cs` :347 and :369 — the only two
-open hits in `Paperless.Core` — which are **not** the claim round 61 verified. Round 61 settled how
+and not from anyone's prose**: `XRay.Office.Core/Graphics/GlyphRun.cs` :347 and :369 — the only two
+open hits in `XRay.Office.Core` — which are **not** the claim round 61 verified. Round 61 settled how
 `a:lum` is *read*; these state what is then *done* with the pair, in three cases of which claims 2
 and 3 are two different arithmetics on the same inputs and are separated outright by one fixture
 set (brightness alone, contrast alone, both together).
 `probes/sheets-r61/audit_lumpercent.py` already authors the packages and reads the reference's mean
-channel. `Paperless.Rendering/Images/RasterImageDecoder.cs`:239 is the same `Bitmap::Adjust` branch
+channel. `XRay.Office.Rendering/Images/RasterImageDecoder.cs`:239 is the same `Bitmap::Adjust` branch
 from the decoder's side and belongs in the same run.
 
 ## 11. Shared layer
 
-`Paperless.Text/Fonts/LineSpacing.cs` gains **one method**, `MetricGrid.PixelEmScale`, and
-`git grep` shows **no call site outside `Paperless.Spreadsheets`**. No words or slides rendering can
+`XRay.Office.Text/Fonts/LineSpacing.cs` gains **one method**, `MetricGrid.PixelEmScale`, and
+`git grep` shows **no call site outside `XRay.Office.Spreadsheets`**. No words or slides rendering can
 move. `SlideChart` and `FrameChart` are untouched and still measure chart text on the face's
 unquantised advances — the same line round 60 drew for the vertical half.
 

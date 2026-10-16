@@ -9,7 +9,7 @@ Reference: `/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/sheets/` (171 PDFs, per-fo
 `stem__ext.pdf`). `check-env.sh` before anything else: *LibreOffice 26.2.4.2 620(Build:2)*,
 Carlito/Caladea/Liberation/DejaVu all resolving, `pdftoppm` and `pdftotext` 26.01.0,
 "Environment is good." Ours: worktree `/c/sandbox/workdir/wt-sheets-d`, branch `wt-sheets-d`, based
-on `735e08c525f`; `PAPERLESS_CLI` set explicitly on every render;
+on `735e08c525f`; `XRAY_OFFICE_CLI` set explicitly on every render;
 `SOURCE_DATE_EPOCH=1700000000`, `TZ=UTC`.
 
 **Measured** means read out of a PDF or produced by an authored probe. **Inferred** means read out
@@ -147,7 +147,7 @@ the gap between the 27.2 tree and the 26.2.4.2 binary.
 
 ## 4. The implementation
 
-`dotnet/src/Paperless.Spreadsheets/Layout/SheetPageDecoration.cs`, one file, +173/−25.
+`dotnet/src/XRay.Office.Spreadsheets/Layout/SheetPageDecoration.cs`, one file, +173/−25.
 
 * `Edges.Build` (`:751-838`) records each cell edge as a `Piece` under a `RunKey` instead of
   appending it to a stroke list.
@@ -337,11 +337,11 @@ prose.
 ## 7. Reach outside the track
 
 **Not swept, and stated as such.** The whole diff from the prediction commit to `HEAD` under `src/`
-is **one file**, `Paperless.Spreadsheets/Layout/SheetPageDecoration.cs`. The only projects
-referencing `Paperless.Spreadsheets` are the facade `Paperless` and the spreadsheets tests;
-`Paperless.WordProcessing` and `Paperless.Presentations` are siblings and cannot reach it. P3.2 is
+is **one file**, `XRay.Office.Spreadsheets/Layout/SheetPageDecoration.cs`. The only projects
+referencing `XRay.Office.Spreadsheets` are the facade `XRay.Office` and the spreadsheets tests;
+`XRay.Office.WordProcessing` and `XRay.Office.Presentations` are siblings and cannot reach it. P3.2 is
 therefore a static argument rather than the 534-document sweep `sheets-c-01` owed — that round moved
-`Paperless.Core`, this one does not. The distinction is the point: a shared-layer move owes a
+`XRay.Office.Core`, this one does not. The distinction is the point: a shared-layer move owes a
 measurement, a leaf change owes a proof that it is a leaf.
 
 ## 8. Verdict movement, and a correction to the brief's scoreboard
@@ -367,7 +367,7 @@ new-metric reference words used above are freshly computed from the banked PDFs.
 
 ## 9. Tests
 
-`tests/Paperless.Spreadsheets.Tests/SheetBorderRunTests.cs`, **13 cases**, every expectation quoted
+`tests/XRay.Office.Spreadsheets.Tests/SheetBorderRunTests.cs`, **13 cases**, every expectation quoted
 from 26.2.4.2's own render of the fixture. Fixture:
 `tests/corpus/features/sheet-border-runs.fods`, **authored**, not collected.
 
@@ -401,7 +401,7 @@ the change is a correction, not an accommodation.
 
 ## 10. Build and test counts
 
-`dotnet build Paperless.slnx -v q -nologo`: **0 warnings, 0 errors.**
+`dotnet build XRay.Office.slnx -v q -nologo`: **0 warnings, 0 errors.**
 
 | project | briefed | now | Δ |
 |---|---:|---:|---:|
@@ -417,7 +417,7 @@ the change is a correction, not an accommodation.
 | Presentations | 609 | 609 | |
 | **total** | 3523 | **3536** | **+13** |
 
-**0 failed.** `Paperless.Fidelity.Tests` was not run, as instructed.
+**0 failed.** `XRay.Office.Fidelity.Tests` was not run, as instructed.
 
 ## 11. Leads this produced, none of them worked
 

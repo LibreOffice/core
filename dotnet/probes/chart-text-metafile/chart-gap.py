@@ -10,7 +10,7 @@ stack writes (`pdftext.py`) and reports it against the face's own `hmtx`.
 A monospaced face is what makes this readable: the design gap is one number for the whole
 string, so any per-position structure in the output is the renderer's and not the font's.
 
-Usage:  PAPERLESS_CLI=... python3 chart-gap.py <workdir>
+Usage:  XRAY_OFFICE_CLI=... python3 chart-gap.py <workdir>
 """
 
 import os
@@ -90,7 +90,7 @@ def title_run(pdf: str, text: str) -> dict | None:
 
 def main() -> int:
     out = os.path.abspath(sys.argv[1])
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     os.makedirs(out, exist_ok=True)
     advance = design_advance()
 

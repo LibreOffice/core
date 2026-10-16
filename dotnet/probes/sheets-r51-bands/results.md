@@ -105,7 +105,7 @@ it is there so the clamp cannot creep into the case that already worked) and
 
 `dotnet build -v q -nologo` → **0 warnings, 0 errors.** Ten non-Fidelity projects run individually
 and totalled by hand: **4565 passed, 0 failed, 1 skipped**, against the merged base's 4556/0/1 —
-a delta of exactly the nine new tests, all in `Paperless.Spreadsheets` (886 → 895). `Fidelity` is
+a delta of exactly the nine new tests, all in `XRay.Office.Spreadsheets` (886 → 895). `Fidelity` is
 **521 passed, 31 failed, 552 total**, byte-for-byte the merged base's figure, so this change moves
 none of the pre-existing failures.
 
@@ -231,10 +231,10 @@ three that were the calendar.
 
 ## 9. Shared layer
 
-**No.** The diff touches six files, all in `Paperless.Spreadsheets`:
+**No.** The diff touches six files, all in `XRay.Office.Spreadsheets`:
 `Layout/SheetHeaderFooter.cs`, `Layout/SheetBandHeight.cs`, `Layout/SheetPageDecoration.cs`,
 `Ooxml/XlsxPrintSetup.cs`, `Xlsb/XlsbPrintSetup.cs`, `MsBinary/XlsPrintSetup.cs`. Nothing in
-`Core`, `Containers`, `Text`, `Vector`, `Rendering`, `Markup` or `Paperless.Ooxml` is touched, so
+`Core`, `Containers`, `Text`, `Vector`, `Rendering`, `Markup` or `XRay.Office.Ooxml` is touched, so
 words and slides cannot be reached and no cross-track sweep is owed. `WordProcessing` (1052) and
 `Presentations` (747) are green and `Fidelity` is identical to the base, which is the corroboration
 rather than the claim.

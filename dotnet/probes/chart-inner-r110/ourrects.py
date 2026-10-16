@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import pathlib, subprocess, sys
-CLI='/home/user/wt-chartinner/dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/Paperless.Cli'
+CLI='/home/user/wt-chartinner/dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli'
 for a in sys.argv[1:]:
     src=pathlib.Path(a)
     r=subprocess.run([CLI,'render',str(src),'--format','pdf','--outdir','/home/user/r110-work/orend'],
                      capture_output=True, text=True,
-                     env={'PAPERLESS_CHART_TRACE':'1','PATH':'/usr/bin:/bin','HOME':'/root'})
+                     env={'XRAY_OFFICE_CHART_TRACE':'1','PATH':'/usr/bin:/bin','HOME':'/root'})
     seen=set(); i=0
     for line in r.stderr.splitlines():
         if not line.startswith('TRACE'): continue

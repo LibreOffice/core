@@ -13,7 +13,7 @@ find /home/user/sample-files/sheets -type f \( -iname '*.xlsx' -o -iname '*.xls'
     d=$(printf '%s' "$f" | md5sum | cut -c1-12)
     w="$OUT/.w/$d"
     mkdir -p "$w"
-    timeout -k 30 300 "$SOFF" --headless -env:UserInstallation="file:///tmp/paperless-lo-conv$((i % 3))" \
+    timeout -k 30 300 "$SOFF" --headless -env:UserInstallation="file:///tmp/xray-office-lo-conv$((i % 3))" \
         --convert-to ods --outdir "$w" "$f" >/dev/null 2>&1
     o=$(ls "$w"/*.ods 2>/dev/null | head -1)
     if [ -n "$o" ]; then

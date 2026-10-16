@@ -10,7 +10,7 @@ Reference PDFs reused from `/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/words/`.
 |---|---:|---:|
 | `words/pagination-001` | 0 of 10 | **2 of 10** |
 | `words/done-*` | — | **157 match of 159**, the 2 another agent owns |
-| `Paperless.Fidelity.Tests` | 30 failed of 550 | **30 failed of 550**, 0 skipped |
+| `XRay.Office.Fidelity.Tests` | 30 failed of 550 | **30 failed of 550**, 0 skipped |
 
 The two seats are `ESPN-R - MCF - Manual - Ed1.0 - For Publication.docx` (34 → **35**, ref 35)
 and `FO.FCTOA.00010 Application for a Part-ORA ATO Approval.docx` (15 → **16**, ref 16).
@@ -243,7 +243,7 @@ Every project run individually:
 | WordProcessing | 865 passed, 0 failed |
 | **Fidelity** | **520 passed, 30 failed**, 0 skipped, 550 discovered |
 
-`Paperless.Vector.Tests` reported 295 passed on every run here; the intermittent phantom failures
+`XRay.Office.Vector.Tests` reported 295 passed on every run here; the intermittent phantom failures
 recorded in `CLAUDE.md` did not appear.
 
 ## Not attempted, said plainly

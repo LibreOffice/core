@@ -2,7 +2,7 @@
 
 ## Environment
 
-    ours   = Paperless.Cli @ 873c766f9 -- rtfpage, odtresid and odspage merged
+    ours   = XRay.Office.Cli @ 873c766f9 -- rtfpage, odtresid and odspage merged
     ref    = /opt/libreoffice26.2/program/soffice, 26.2.4.2, via $REF_SOFFICE
     fonts  = ALL FIVE tarball confounds aside, including the eight DejaVu Condensed
              faces moved the same day. Not comparable to any earlier sweep.
@@ -25,7 +25,7 @@
 ## A rule was broken during this run, and it happened not to matter
 
 `dotnet/CLAUDE.md` says a sweep and a rebuild must never overlap: the gate measures
-`dotnet/tools/Paperless.Cli/…/Paperless.Cli` in the tree it is run from, so rebuilding swaps the
+`dotnet/tools/XRay.Office.Cli/…/XRay.Office.Cli` in the tree it is run from, so rebuilding swaps the
 binary out from under it and the rows either side of the rebuild describe different programs.
 
 **A rebuild was run in this tree while the sweep process was still alive** — the `odpvis` merge at

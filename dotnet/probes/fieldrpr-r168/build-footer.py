@@ -6,7 +6,7 @@ draws a body `NUMPAGES` from its cache and the formatting of a value it never co
 not a rule about formatting. A footer is where both engines recompute, so the only thing
 left to differ is which run's `w:rPr` the recomputed value takes.
 
-`word/settings.xml` is written even though it is empty (`paperless-corpus/SKILL.md`).
+`word/settings.xml` is written even though it is empty (`office-corpus/SKILL.md`).
 """
 import os, sys, zipfile
 

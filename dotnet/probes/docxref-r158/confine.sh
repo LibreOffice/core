@@ -3,7 +3,7 @@
 # bank this round started from.  SOURCE_DATE_EPOCH is pinned so a document printing today's date
 # does not read as a mover.
 set -u
-CLI=${PAPERLESS_CLI:?}
+CLI=${XRAY_OFFICE_CLI:?}
 BANK=${BANK:-/home/user/ww8covered-r156-sweep/head}
 OUT=${OUT:?}
 mkdir -p "$OUT/renders"

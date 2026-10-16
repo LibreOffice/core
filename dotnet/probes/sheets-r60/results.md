@@ -67,12 +67,12 @@ value-only label for the ascent, which is why there are two instruments and not 
 
 ## 3. What shipped
 
-* `Paperless.Text/Fonts/LineSpacing.cs` — **additive only**: `MetricGrid.Chart` = 96 dpi in
+* `XRay.Office.Text/Fonts/LineSpacing.cs` — **additive only**: `MetricGrid.Chart` = 96 dpi in
   1/100 mm. No existing caller's arithmetic changes.
-* `Paperless.Spreadsheets/Layout/SheetBandText.cs` — `ChartLineHeightAt` takes that grid;
+* `XRay.Office.Spreadsheets/Layout/SheetBandText.cs` — `ChartLineHeightAt` takes that grid;
   `ChartAscentAt` is new; `SheetShapePainter`'s two calls move to `ShapeLineHeightAt`, which keeps
   the old ungridded arithmetic byte for byte and says at its site that it is **unmeasured**.
-* `Paperless.Spreadsheets/Layout/SheetChart.cs` — the two drawing paths take `ChartAscentAt`.
+* `XRay.Office.Spreadsheets/Layout/SheetChart.cs` — the two drawing paths take `ChartAscentAt`.
   **The height and the ascent had to move together**: the old height was 0.50 pt too tall and the
   old ascent 0.51 too high, so single-line labels landed right by cancellation.
 
@@ -200,8 +200,8 @@ unrelated would read it as its own regression.
 | `003` centre within 2 pt of (408.84, 464.74) | | **(382.80, 467.68) — WRONG** in x, closer in y |
 | page counts, anywhere | 0 change | **0 on our side**; the reference moved one, § 6 |
 | regressions among the 78 `done` chart documents | **0**, "most likely to be wrong" | **1**, and it was the one the round targeted |
-| tests | +6 to +14 | **+40**, `Paperless.Spreadsheets` |
-| other tracks | 0 documents, structurally | **0** — the `Paperless.Text` edit is a new constant |
+| tests | +6 to +14 | **+40**, `XRay.Office.Spreadsheets` |
+| other tracks | 0 documents, structurally | **0** — the `XRay.Office.Text` edit is a new constant |
 | `MANIFEST.tsv` | 2 rows | **3**, and one of them is a regression |
 
 **Four of twelve, and the two headline numbers are both wrong.** What the round got right is the
@@ -211,8 +211,8 @@ it. The prediction file named exactly this risk ("regressions among the 78 `done
 
 ## 8. Shared layer
 
-The diff touches `Paperless.Text/Fonts/LineSpacing.cs` — **one new static property, no existing
-caller's arithmetic changed** — and three files in `Paperless.Spreadsheets`. Words and slides
+The diff touches `XRay.Office.Text/Fonts/LineSpacing.cs` — **one new static property, no existing
+caller's arithmetic changed** — and three files in `XRay.Office.Spreadsheets`. Words and slides
 cannot move **by construction** rather than by census: their chart text goes through `FrameChart`
 and `SlideChart`, which have their own measurers and were not touched. The parent's cross-track
 sweep should read **zero** movement on both; that is a falsifiable prediction and the point of
@@ -235,7 +235,7 @@ and this round must not be read as having fixed it there.
 
 ## 9. Tests
 
-**+40, all in `Paperless.Spreadsheets`** (980 → 1020). Re-derived by running each project:
+**+40, all in `XRay.Office.Spreadsheets`** (980 → 1020). Re-derived by running each project:
 Containers 109, Core 345, Markup 259, OpenDocument 125, Presentations 836, Rendering 153
 (+1 skipped), Spreadsheets 1020, Text 624, Vector 298, WordProcessing 1188 — **4957 passed,
 0 failed, 1 skipped**. `dotnet build -v q -nologo` → **0 warnings, 0 errors**.
@@ -328,25 +328,25 @@ Counters re-derived at this tree with the file's own commands: **38 open hits in
 27 files and 22 markers (19/2/1) at its own tip; the difference is the words track's `FIXED`
 arriving through the merge at `c17996f89cb`, and the two readings are consistent.
 
-**The brief's named next site is refuted.** It said *"`Paperless.Core/Graphics/GlyphRun.cs` is the
+**The brief's named next site is refuted.** It said *"`XRay.Office.Core/Graphics/GlyphRun.cs` is the
 named next audit site precisely because this divergence is live there — a 24.2.7.2-era claim about
 vertical metrics may be the seat."* It is not. `GlyphRun.cs`'s two open hits are at lines 347 and
 369, and both belong to `LuminanceRecolour` — `a:blip/a:lum` brightness and contrast, PowerPoint's
 washout, and `Bitmap::Adjust`'s `msoBrightness` branch. **There is no vertical-metric claim in that
 file at all**, and the seat of this round's divergence was `SheetBandText.Ungridded` in
-`Paperless.Spreadsheets`, which carries no 24.2.7.2 marker because it was never a 24.2.7.2 claim.
+`XRay.Office.Spreadsheets`, which carries no 24.2.7.2 marker because it was never a 24.2.7.2 claim.
 Round 59 named it from the text of its own § 12 rather than from the file; one `git grep` separates
 them.
 
-`Paperless.Text`'s four open hits are likewise already-marked sites whose *prose* mentions the
+`XRay.Office.Text`'s four open hits are likewise already-marked sites whose *prose* mentions the
 version — `MeasuredParagraph.cs` (VERIFIED, round words-r53) and `SystemFontResolver.cs` (VERIFIED,
 rounds words-r53 and words-r54). That is the self-corruption this file warns about, still live in
 the open count.
 
 **No site was re-checked this round.** The budget went into the law and the sweep, and the round
 would rather say so than mark a site it did not probe. The next one on this track should be
-`Paperless.Ooxml/DrawingML/DrawingFill.cs` (1 open hit) or
-`Paperless.Rendering/Images/RasterImageDecoder.cs` (1) — both untouched, both single-site, and
+`XRay.Office.Ooxml/DrawingML/DrawingFill.cs` (1 open hit) or
+`XRay.Office.Rendering/Images/RasterImageDecoder.cs` (1) — both untouched, both single-site, and
 neither has anything to do with the last two rounds' subject, which is the point.
 
 ## 12. `MANIFEST.tsv`

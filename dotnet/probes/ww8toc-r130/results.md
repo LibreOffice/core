@@ -299,7 +299,7 @@ the new guard changes nothing where no object's ascent is below the paragraph fo
 **Slides and sheets cannot move at all**, and that is structural rather than measured: `objects` is
 an optional parameter of `MeasuredParagraph.Measure` and the only callers that pass one are
 `PageContent` and `DocxLayoutSource`, so `_objects.Length > 0` is false for every `SlideTextLayout`
-and `SheetTextLayout` measurement. The two reader files are in `Paperless.WordProcessing/Ww8`, and
+and `SheetTextLayout` measurement. The two reader files are in `XRay.Office.WordProcessing/Ww8`, and
 `git grep` says the only type any other reader borrows from that folder is `Ww8DateTime`.
 
 ---
@@ -423,18 +423,18 @@ failures is a truncated run, and this project has lost a round to it twice):
 
 | project | listed | passed | failed | skipped |
 |---|--:|--:|--:|--:|
-| `Paperless.Containers.Tests` | 109 | 109 | 0 | 0 |
-| `Paperless.Core.Tests` | 591 | 591 | 0 | 0 |
-| `Paperless.Markup.Tests` | 249 | 259 | 0 | 0 |
-| `Paperless.OpenDocument.Tests` | 169 | 169 | 0 | 0 |
-| `Paperless.Presentations.Tests` | 1205 | 1205 | 0 | 0 |
-| `Paperless.Rendering.Tests` | 164 | 164 | 0 | 0 |
-| `Paperless.Spreadsheets.Tests` | 1387 | 1387 | 0 | 0 |
-| `Paperless.Text.Tests` | 744 | 744 | 0 | 0 |
-| `Paperless.Vector.Tests` | 309 | 309 | 0 | 0 |
-| `Paperless.WordProcessing.Tests` | 1988 | 1988 | 0 | 0 |
+| `XRay.Office.Containers.Tests` | 109 | 109 | 0 | 0 |
+| `XRay.Office.Core.Tests` | 591 | 591 | 0 | 0 |
+| `XRay.Office.Markup.Tests` | 249 | 259 | 0 | 0 |
+| `XRay.Office.OpenDocument.Tests` | 169 | 169 | 0 | 0 |
+| `XRay.Office.Presentations.Tests` | 1205 | 1205 | 0 | 0 |
+| `XRay.Office.Rendering.Tests` | 164 | 164 | 0 | 0 |
+| `XRay.Office.Spreadsheets.Tests` | 1387 | 1387 | 0 | 0 |
+| `XRay.Office.Text.Tests` | 744 | 744 | 0 | 0 |
+| `XRay.Office.Vector.Tests` | 309 | 309 | 0 | 0 |
+| `XRay.Office.WordProcessing.Tests` | 1988 | 1988 | 0 | 0 |
 | **total, excluding fidelity** | **6915** | **6925** | **0** | **0** |
-| `Paperless.Fidelity.Tests` | 552 | 542 | **10** | 0 |
+| `XRay.Office.Fidelity.Tests` | 552 | 542 | **10** | 0 |
 
 **Passed equals Total on every project and no project reports fewer than it listed**, which is the
 check round 128's table failed. The listing collapses some theory rows, so a run *above* the listing
@@ -442,7 +442,7 @@ is normal (Markup 259 against 249 listed) and a run below it is the signal. **0 
 so no project covered nothing.
 
 The ten fidelity failures are the standing set: `diff` against `probes/wordsdec-r126/fidelity-failures.txt`
-is empty. `Paperless.WordProcessing.Tests` was **1974** at round 126 and is 1988 here: +7
+is empty. `XRay.Office.WordProcessing.Tests` was **1974** at round 126 and is 1988 here: +7
 `Ww8IndexLinkStyleTests`, +1 the `.doc` case of `InlineObjectPairTests`, and +6 from earlier rounds
 between the two.
 
@@ -451,7 +451,7 @@ date** — `FurnitureComparisonTests.APictureOnlyHeadAndFootTakeTheirRoomFromThe
 on page 1 against the reference's 476. §4 is the rule that closed it; the fidelity project is back to
 ten.
 
-`dotnet build Paperless.slnx`: **0 warnings, 0 errors**. The run is banked as `test-run.txt` and the
+`dotnet build XRay.Office.slnx`: **0 warnings, 0 errors**. The run is banked as `test-run.txt` and the
 failure names as `fidelity-failures.txt`.
 
 ## 8. Refutations and corrections of this round's own findings, and of earlier ones
@@ -485,7 +485,7 @@ failure names as `fidelity-failures.txt`.
   documents it made marginally worse on ink moved by 0.01. **A fixture caught what 66 corpus
   documents did not.**
 - **An instrument note.** `dotnet build` of the CLI does not rebuild a probe project's own copy of
-  `Paperless.WordProcessing.dll`, so the first run of `TocProbe` after the O79 change reported the
+  `XRay.Office.WordProcessing.dll`, so the first run of `TocProbe` after the O79 change reported the
   base behaviour and read as the change not firing. This is `CLAUDE.md`'s stale-binary trap through
   the build graph, and the same guard applies: re-render one document and byte-compare it against
   the run you are claiming to have reproduced. Done at the end of this round — the final tree's

@@ -1,4 +1,4 @@
-measuring /home/user/odshdr-work/bin/base/Paperless.Cli
+measuring /home/user/odshdr-work/bin/base/XRay.Office.Cli
 # words = tokens carrying at least one Unicode letter or digit; rawwords = pdftotext | wc -w
 # NOT comparable to any scoreboard recorded before 2026-08-13 — see dotnet/probes/gate-01/results.md
 path	ext	pages	words	fonts	unemb	verdict	rawwords

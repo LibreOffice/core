@@ -11,7 +11,7 @@ import numpy as np
 from PIL import Image
 
 CORPUS = Path("/home/user/sample-files")
-CLI = "/home/user/wt-aac/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/wt-aac/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 SOFF = "/opt/libreoffice26.2/program/soffice"
 WORK = Path(sys.argv[1])
 WORK.mkdir(parents=True, exist_ok=True)

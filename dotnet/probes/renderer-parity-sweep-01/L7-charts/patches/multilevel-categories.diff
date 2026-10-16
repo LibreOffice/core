@@ -1,5 +1,5 @@
---- a/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs
-+++ b/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
 @@ -2467,6 +2467,25 @@
      {
          if (source is null) return ([], []);

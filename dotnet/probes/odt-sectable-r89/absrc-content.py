@@ -11,7 +11,7 @@ The section of `absrc-pac-01-info-note-en.odt` is
 import re, subprocess, sys, zipfile, pathlib
 
 SOFFICE = '/opt/libreoffice26.2/program/soffice'
-PROFILE = 'file:///tmp/paperless-lo-r89absrc'
+PROFILE = 'file:///tmp/xray-office-lo-r89absrc'
 OPEN = '<text:section text:style-name="Sect1" text:name="Section1">'
 
 PARA = '<text:p text:style-name="Standard">FILLER%d lorem ipsum dolor sit amet consectetuer adipiscing elit sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna</text:p>'

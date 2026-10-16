@@ -244,12 +244,12 @@ in the next row less this row's, off both PDFs, and the reference's own `--conve
 `style:row-height` — which agree throughout to 0.6 twips. Twenty-four of the thirty rows are
 genuinely multi-line and so exercise `WrappedHeight` rather than the arithmetic path.
 
-Marked at the site. `Paperless.Spreadsheets` now has **five of nine** re-checked and **all five
+Marked at the site. `XRay.Office.Spreadsheets` now has **five of nine** re-checked and **all five
 still correct**; the project-wide score is two wrong in ten and both wrong ones were shared-layer.
 
 ## 8. Shared layer
 
-**Yes.** `Paperless.Ooxml/DrawingML/DrawingChartTitle.cs` (new), `DrawingChart.cs` and
+**Yes.** `XRay.Office.Ooxml/DrawingML/DrawingChartTitle.cs` (new), `DrawingChart.cs` and
 `DrawingChartPlot.cs`, plus the three call sites that now pass the Office-2007 flag
 (`XlsxCharts.cs`, `PptxShapeReader.cs`, `DocxContentReader.cs`). All three tracks read it.
 
@@ -264,7 +264,7 @@ everything else unchanged.
 
 Ten non-Fidelity projects, run one at a time and totalled by hand: **4713 passed, 0 failed, 1
 skipped**, against the base's 4695/0/1 — a delta of exactly the **18** new tests, all in
-`Paperless.Presentations` (788 → 806). `Fidelity` is **521 passed / 31 failed / 552**, byte-for-byte
+`XRay.Office.Presentations` (788 → 806). `Fidelity` is **521 passed / 31 failed / 552**, byte-for-byte
 the base's figure.
 
 Whole track swept before and after; `sheets/done-*` is inside both.

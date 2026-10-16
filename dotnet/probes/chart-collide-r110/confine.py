@@ -7,7 +7,7 @@ corpus is a thousand pages of workbook. `glyphs` is `batch-check.sh`'s column 9 
 `pdftotext` and then `sum(1 for c in text if c.isalnum())`, Unicode-aware, which is what the
 gate scores.
 
-    confine.py --out <dir> --cli <Paperless.Cli> --rows <tsv>   < paths
+    confine.py --out <dir> --cli <XRay.Office.Cli> --rows <tsv>   < paths
 """
 import argparse
 import concurrent.futures as cf

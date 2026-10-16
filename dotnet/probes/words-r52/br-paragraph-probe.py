@@ -21,7 +21,7 @@ Measured 2026-08-20 (points added by the paragraph under test):
 
 So the reference gives a paragraph with N breaks N+1 lines, and we agree in every case
 where the paragraph holds any other content at all — one space is enough. The paragraph
-whose *whole* content is breaks contributes nothing on our side. `paperless extract`
+whose *whole* content is breaks contributes nothing on our side. `xray-office extract`
 already reports the two blank lines for `a-br`, so the reader is right and the seat is in
 layout.
 
@@ -90,9 +90,9 @@ def y_of(pdf, word='BBB'):
 
 def main():
     out = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else '.')
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     if not cli:
-        sys.exit('set PAPERLESS_CLI to the tree you mean to measure')
+        sys.exit('set XRAY_OFFICE_CLI to the tree you mean to measure')
 
     os.makedirs(os.path.join(out, 'ref'), exist_ok=True)
     os.makedirs(os.path.join(out, 'ours'), exist_ok=True)

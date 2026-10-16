@@ -280,7 +280,7 @@ brief rules it out; this section is here so that nobody re-derives the defect a 
 
 `confine.py` renders every one of the corpus's **947** documents at the round's base and again
 after, under `SOURCE_DATE_EPOCH=0`, one output directory per *document*, and compares the PDFs
-byte for byte; the base pass runs with `PAPERLESS_CHART_TRACE=1` so the same sweep records how many
+byte for byte; the base pass runs with `XRAY_OFFICE_CHART_TRACE=1` so the same sweep records how many
 charts each document lays out. Movers are scored against their banked 26.2.4.2 rendering with
 `pdf-image-diff.py`, summing the `|ink|%` column over the document's pages.
 
@@ -349,7 +349,7 @@ Rendering  164   Spreadsheets 1337   Text 728   Vector 309   WordProcessing 1938
                                                    6678 passed, 0 failed, 0 skipped
 ```
 
-`Paperless.Fidelity.Tests`: **552 discovered, 542 passed, 10 failed, 0 skipped** — and the failure
+`XRay.Office.Fidelity.Tests`: **552 discovered, 542 passed, 10 failed, 0 skipped** — and the failure
 set is **identical at the round's base**, name for name, checked by building the base and running
 the project again (`fid-base.txt` against `fid-head.txt` in the round's work directory). All ten
 are the families `dotnet/CLAUDE.md` records as failing on purpose: `TabStopComparisonTests`'
@@ -360,11 +360,11 @@ are the PDF glyph-positioning channel's own resolution; `SheetDrawingComparisonT
 
 **New tests, 11 in all.**
 
-`Paperless.Core.Tests/ChartPieSecondPassTests` — seven cases: an `outEnd`-labelled pie with no
+`XRay.Office.Core.Tests/ChartPieSecondPassTests` — seven cases: an `outEnd`-labelled pie with no
 best-fit label anywhere is shrunk; a centred-label pie keeps the whole square; a doughnut is not
 shrunk whatever its labels say (a three-case theory); a stated inner rectangle is not adjusted; and
 an of-pie's own composition is in what the pass measures.
-`Paperless.Spreadsheets.Tests/SheetChartPrintZoomTests` — four: the chart at 65 %, 50 % and 40 % is
+`XRay.Office.Spreadsheets.Tests/SheetChartPrintZoomTests` — four: the chart at 65 %, 50 % and 40 % is
 the 100 % chart scaled about the box's corner to a hundredth of a point, and an unzoomed chart
 takes the box it is given.
 
@@ -394,7 +394,7 @@ that reason alone.
   for every chart in a document, out of `--convert-to fodt/fods/fodp`. This is the instrument the
   round is built on and it costs two to eight seconds a document.
 * `ourrects.py` / `match.py` — the same rectangles out of this tree, through a temporary
-  `PAPERLESS_CHART_TRACE` hook in `ChartLayout.Draw` that is **not committed**: it printed the
+  `XRAY_OFFICE_CHART_TRACE` hook in `ChartLayout.Draw` that is **not committed**: it printed the
   frame, the diagram rectangle and the plot rectangle to stderr, and was removed before the final
   build. Re-add it as three lines before `boxes.Add(new ChartBox(area, wall))` to reproduce
   anything here.

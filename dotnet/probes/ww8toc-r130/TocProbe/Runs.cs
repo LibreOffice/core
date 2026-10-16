@@ -1,7 +1,7 @@
 // Prints, for one stretch of a story's text, each run's CHPX and the paragraph style in force —
 // the raw answer to "where does this word's boldness come from".
-using Paperless.Core.Diagnostics;
-using Paperless.WordProcessing.Ww8;
+using XRay.Office.Core.Diagnostics;
+using XRay.Office.WordProcessing.Ww8;
 
 internal static class Runs
 {

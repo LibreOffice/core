@@ -3,11 +3,11 @@
 directory per document, and print an md5 per document. Deletes the PDF after hashing so a
 whole track fits on a tight disk.
 
-usage: PAPERLESS_CLI=... sweep.py <list-of-paths> <workdir> [jobs]
+usage: XRAY_OFFICE_CLI=... sweep.py <list-of-paths> <workdir> [jobs]
 """
 import concurrent.futures, hashlib, os, pathlib, subprocess, sys
 
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 EPOCH = os.environ.get("SOURCE_DATE_EPOCH", "1757462400")
 
 def one(args):

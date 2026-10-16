@@ -1,10 +1,10 @@
 # slides-sym-01 — prediction, committed before any measurement of the fix
 
 Written after reading `dotnet/probes/slides-solog-01/results.md`, `oox/source/drawingml/textrun.cxx`
-and the Paperless slides reader/layout, and after two things that are **results, not predictions**
+and the XRay.Office slides reader/layout, and after two things that are **results, not predictions**
 and are recorded here so the scoring is honest about what was already known:
 
-- **R0.** `Paperless.Fidelity.Tests` baseline on this worktree, measured before any edit:
+- **R0.** `XRay.Office.Fidelity.Tests` baseline on this worktree, measured before any edit:
   `Failed: 30, Passed: 520, Skipped: 0, Total: 550`. Matches the briefed baseline exactly.
 - **R1.** The slides-track declaration census reproduces the previous round's figure exactly:
   **13 documents, 116 glyphs** carry a `U+F000`–`U+F0FF` character in an `a:t` on a `ppt/slides/slideN.xml`
@@ -30,7 +30,7 @@ and are recorded here so the scoring is honest about what was already known:
 | 3.2 | `slides/batch-004` stays 9 of 10 and `slides/batch-00[1-6]` stays 57 of 58, with `solog` the single unchanged failure | 0.85 |
 | 4.1 | After the fix `solog_orientation_august_2019.pptx` embeds `OpenSymbol`, moving the fonts column from 5/6 to 6/6 | 0.7 |
 | 4.2 | The banked reference PDFs for the other 11 recodeable documents also embed `OpenSymbol`, so the same mechanism is visible corpus-wide and not a peculiarity of this deck | 0.75 |
-| 5.1 | `Paperless.Fidelity.Tests` stays at exactly 30 failed, and the failing test *names* are unchanged | 0.85 |
+| 5.1 | `XRay.Office.Fidelity.Tests` stays at exactly 30 failed, and the failing test *names* are unchanged | 0.85 |
 | 5.2 | No other test project moves; build stays at 0 warnings | 0.9 |
 | 6.1 | A blind reviewer given the `solog` page-9 pair will report the arrow as present in both halves after the fix, and will **not** rank it first among that page's differences — it is one 28 pt glyph on a text-heavy page | 0.6 |
 
