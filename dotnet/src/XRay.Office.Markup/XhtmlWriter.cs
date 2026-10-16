@@ -4,6 +4,7 @@ using System.Xml;
 using System.Xml.Linq;
 using XRay.Office.Core.Documents;
 using XRay.Office.Core.Extraction;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Markup;
 
@@ -61,6 +62,14 @@ public static class XhtmlWriter
         text.Append('\n');
         return text.ToString();
     }
+
+    /// <summary>
+    /// Serialises a content tree as an XHTML document, checking <paramref name="cancellationToken"/>
+    /// block by block.
+    /// </summary>
+    public static string ToXhtml(
+        ContentNode content, MarkupOptions? options, CancellationToken cancellationToken)
+        => OfficeOperation.Run(() => ToXhtml(content, options), cancellationToken);
 
     /// <summary>
     /// Builds the XHTML tree for a content tree, without serialising it.
@@ -254,6 +263,7 @@ public static class XhtmlWriter
         {
             foreach (ContentNode child in parent.Children)
             {
+                OfficeOperation.Poll();
                 switch (child)
                 {
                     case ContentParagraph paragraph:

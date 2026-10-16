@@ -4,6 +4,7 @@ using XRay.Office.Core.Globalization;
 using XRay.Office.Core.Graphics;
 using XRay.Office.Core.Numbering;
 using XRay.Office.Core.Units;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.WordProcessing.Ww8;
 
@@ -82,6 +83,7 @@ public sealed partial class Ww8DocumentReader
 
         for (int index = 0; index < text.Length; index++)
         {
+            OfficeOperation.Poll();
             int position = range.Start + index;
             char character = text[index];
 

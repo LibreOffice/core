@@ -10,6 +10,7 @@ using XRay.Office.Presentations.Layout;
 using XRay.Office.Text.Fonts;
 using XRay.Office.Text.Layout;
 using XRay.Office.Vector;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Presentations.Ooxml;
 
@@ -162,6 +163,7 @@ internal sealed partial class PptxSlideLayout
     /// <summary>Lays one slide out.</summary>
     public LaidOutSlide Layout(PptxSlide slide)
     {
+        OfficeOperation.ThrowIfCancelled();
         SlideTheme theme = ThemeFor(slide);
         _styles = new PptxTextStyles(
             slide.Layout, slide.Master, _file.DefaultTextStyle, isNotesPage: false,
@@ -551,6 +553,7 @@ internal sealed partial class PptxSlideLayout
     {
         foreach (XElement element in parent.Elements())
         {
+            OfficeOperation.Poll();
             if (IsHidden(element)) continue;
 
             if (Ppt.Is(element, "sp") || Ppt.Is(element, "cxnSp"))

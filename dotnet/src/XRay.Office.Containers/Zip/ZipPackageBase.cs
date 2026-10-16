@@ -3,6 +3,7 @@ using System.Text;
 using XRay.Office.Core;
 using XRay.Office.Core.Diagnostics;
 using XRay.Office.Core.Formats;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Containers.Zip;
 
@@ -173,6 +174,7 @@ public abstract class ZipPackageBase : IPackage
             return string.Empty;
         try
         {
+            OfficeOperation.ThrowIfCancelled();
             using Stream s = entry.Open();
             byte[] buffer = new byte[Math.Min(maxBytes, Math.Max(1, entry.Length))];
             int total = 0;
@@ -290,6 +292,10 @@ public abstract class ZipPackageBase : IPackage
         public string Name { get; } = name;
         public string? MediaType { get; } = mediaType;
         public long Length => entry.Length;
-        public Stream Open() => owner.OpenEntry(entry, Name);
+        public Stream Open()
+        {
+            OfficeOperation.ThrowIfCancelled();
+            return new PollingStream(owner.OpenEntry(entry, Name));
+        }
     }
 }

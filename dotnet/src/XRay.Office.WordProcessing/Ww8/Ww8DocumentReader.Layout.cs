@@ -5,6 +5,7 @@ using XRay.Office.Core.Graphics;
 using XRay.Office.Core.Units;
 using XRay.Office.Text.Fonts;
 using XRay.Office.Text.Layout;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.WordProcessing.Ww8;
 
@@ -131,6 +132,12 @@ public sealed partial class Ww8DocumentReader
         /// stated margin of the same size is not.
         /// </remarks>
         public bool HasAutoSpaceBefore { get; init; }
+
+        /// <summary>The bookmarks the paragraph holds, with the offsets of its text they sit at.</summary>
+        public IReadOnlyList<Layout.PageAnchor>? Anchors { get; init; }
+
+        /// <summary>The paragraph's outline level, 1 and up, or 0 for body text.</summary>
+        public int OutlineLevel { get; init; }
 
         /// <inheritdoc cref="HasAutoSpaceBefore"/>
         public bool HasAutoSpaceAfter { get; init; }
@@ -283,6 +290,11 @@ public sealed partial class Ww8DocumentReader
     /// boundary is gone before <c>RunsOf</c> is ever asked.
     /// </para>
     /// </param>
+    /// <param name="Link">
+    /// Where the run leads when it is clicked, or null when it is not a link: an address, or <c>#name</c>
+    /// for a bookmark in the same document. Part of <see cref="MatchesFormatting"/>, so two runs that differ
+    /// only in where they lead are not merged.
+    /// </param>
     public readonly record struct Ww8LayoutRun(
         int Start,
         int Length,
@@ -300,7 +312,8 @@ public sealed partial class Ww8DocumentReader
         bool AutoKerning = false,
         char? SymbolSlot = null,
         Length Tracking = default,
-        int WidthPerCent = 100)
+        int WidthPerCent = 100,
+        string? Link = null)
     {
         /// <summary>One past the run's last character.</summary>
         public int End => Start + Length;
@@ -700,6 +713,8 @@ public sealed partial class Ww8DocumentReader
         IReadOnlyList<Ww8Range> outerIndexResults = _indexResults;
         IReadOnlyList<Ww8Range> outerStrippedExceptions = _strippedExceptions;
         _indexResults = IndexResultRanges(text, body.Start, fieldTypes, fieldBase);
+        IReadOnlyList<(int Start, int End, string Link)> outerLinks = _linkRanges;
+        _linkRanges = LinkRanges(text, body.Start);
         _strippedExceptions =
             StrippedExceptionRanges(IndexFieldStarts(text, body.Start, fieldTypes, fieldBase));
 
@@ -734,6 +749,7 @@ public sealed partial class Ww8DocumentReader
 
         for (int index = 0; index < text.Length && emitted < MaxLayoutParagraphs; index++)
         {
+            OfficeOperation.Poll();
             char character = text[index];
             int position = body.Start + index;
 
@@ -1038,6 +1054,7 @@ public sealed partial class Ww8DocumentReader
             : assembler.Finished();
         SuppressAutoSpacing(finished);
         _indexResults = outerIndexResults;
+        _linkRanges = outerLinks;
         _strippedExceptions = outerStrippedExceptions;
         return finished;
 
@@ -1422,6 +1439,8 @@ public sealed partial class Ww8DocumentReader
             AutoKerning = character.AutoKerning ?? false,
             Tracking = TrackingOf(character),
             WidthPerCent = ScaleOf(character),
+            Anchors = AnchorsOf(positions, text.Length, markPosition),
+            OutlineLevel = paragraph.HeadingLevel ?? 0,
             Borders = layout.ToParagraphBorders(),
 
             // Resolved for a paragraph in a table too, and the assembler decides what to do with it.
@@ -1609,7 +1628,8 @@ public sealed partial class Ww8DocumentReader
                 format.AutoKerning ?? false,
                 format.SymbolSlot,
                 TrackingOf(format),
-                ScaleOf(format));
+                ScaleOf(format),
+                LinkAt(positions[index]));
 
             if (runs.Count > 0 && MatchesFormatting(runs[^1], run))
             {
@@ -1647,7 +1667,8 @@ public sealed partial class Ww8DocumentReader
            && a.IsStruckThrough == b.IsStruckThrough
            && a.AutoKerning == b.AutoKerning
            && a.Tracking == b.Tracking
-           && a.WidthPerCent == b.WidthPerCent;
+           && a.WidthPerCent == b.WidthPerCent
+           && string.Equals(a.Link, b.Link, StringComparison.Ordinal);
 
     /// <summary>
     /// The distance a character format puts between its characters, nought when it states none.
@@ -2063,6 +2084,131 @@ public sealed partial class Ww8DocumentReader
     /// </para>
     /// </remarks>
     private IReadOnlyList<Ww8Range> _indexResults = [];
+
+    /// <summary>
+    /// The character-position ranges of the cached results of the story's <c>HYPERLINK</c> fields, with where
+    /// each leads, sorted by start.
+    /// </summary>
+    private IReadOnlyList<(int Start, int End, string Link)> _linkRanges = [];
+
+    /// <summary>Where the text at a character position leads when it is clicked, or null.</summary>
+    private string? LinkAt(int position)
+    {
+        IReadOnlyList<(int Start, int End, string Link)> ranges = _linkRanges;
+        int low = 0, high = ranges.Count - 1, found = -1;
+
+        while (low <= high)
+        {
+            int middle = (low + high) >>> 1;
+            if (ranges[middle].Start <= position)
+            {
+                found = middle;
+                low = middle + 1;
+            }
+            else
+            {
+                high = middle - 1;
+            }
+        }
+
+        // The nearest start at or before the position; a nested link ends before the one around it does,
+        // so the walk back finds the innermost range that still holds the position.
+        for (int i = found; i >= 0 && i > found - 4; i--)
+        {
+            if (position < ranges[i].End) return ranges[i].Link;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Pairs a story's field markers to find each <c>HYPERLINK</c> field's result and where it leads.
+    /// </summary>
+    /// <remarks>
+    /// The instruction is the text between a field's begin marker and its separator, which the character
+    /// walk drops as it goes and which is therefore read here, from the story's own text. An address is
+    /// reported as written and a <c>\l</c> location as <c>#name</c>; see
+    /// <see cref="FieldInstructions.HyperlinkReference"/>.
+    /// </remarks>
+    internal static List<(int Start, int End, string Link)> LinkRanges(string text, int start)
+    {
+        List<(int Start, int End, string Link)> ranges = [];
+        if (text.IndexOf(Special.FieldBegin, StringComparison.Ordinal) < 0) return ranges;
+
+        Stack<(int Begin, string? Link, int ResultStart)> open = new();
+
+        for (int index = 0; index < text.Length; index++)
+        {
+            switch (text[index])
+            {
+                case Special.FieldBegin:
+                    open.Push((index, null, -1));
+                    break;
+
+                case Special.FieldSeparator when open.Count > 0:
+                {
+                    (int begin, _, _) = open.Pop();
+                    string? link = FieldInstructions.HyperlinkReference(InstructionIn(text, begin + 1, index));
+                    open.Push((begin, link, start + index + 1));
+                    break;
+                }
+
+                case Special.FieldEnd when open.Count > 0:
+                {
+                    (_, string? link, int resultStart) = open.Pop();
+                    if (link is not null && resultStart >= 0 && start + index > resultStart)
+                    {
+                        ranges.Add((resultStart, start + index, link));
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        ranges.Sort((a, b) => a.Start.CompareTo(b.Start));
+        return ranges;
+    }
+
+    private static string InstructionIn(string text, int from, int to)
+    {
+        System.Text.StringBuilder instruction = new(Math.Max(0, to - from));
+        for (int i = from; i < to; i++)
+        {
+            char c = text[i];
+            if (c >= ' ' || c == '\t') instruction.Append(c);
+        }
+
+        return instruction.ToString();
+    }
+
+    /// <summary>
+    /// The bookmarks that begin inside a paragraph, with the offset of its text each one sits at.
+    /// </summary>
+    /// <param name="positions">The character position of each character of the paragraph's text.</param>
+    /// <param name="length">How many characters the text has.</param>
+    /// <param name="markPosition">The position of the mark that ends the paragraph.</param>
+    private List<Layout.PageAnchor> AnchorsOf(List<int> positions, int length, int markPosition)
+    {
+        if (positions.Count == 0) return [];
+
+        List<Bookmark> all = Bookmarks();
+        if (all.Count == 0) return [];
+
+        int first = positions[0];
+        List<Layout.PageAnchor> anchors = [];
+
+        foreach (Bookmark bookmark in all)
+        {
+            if (bookmark.Start < first || bookmark.Start > markPosition) continue;
+
+            int offset = positions.BinarySearch(bookmark.Start);
+            if (offset < 0) offset = ~offset;
+            anchors.Add(new Layout.PageAnchor(Math.Min(offset, length), bookmark.Name));
+        }
+
+        return anchors;
+    }
 
     /// <summary>True where a position falls inside an index field's cached result.</summary>
     private bool IsInIndexResult(int position)

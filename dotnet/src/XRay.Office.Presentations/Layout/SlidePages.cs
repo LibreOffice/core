@@ -1,4 +1,5 @@
 using XRay.Office.Core.Documents;
+using XRay.Office.Core.Threading;
 using XRay.Office.Core.Geometry;
 using XRay.Office.Core.Graphics;
 
@@ -50,10 +51,13 @@ public sealed class SlidePages : IPageSequence
         _slides = [.. slides];
         _pages = [];
 
+        long maxImagePixels = OfficeOperation.MaxImagePixels;
+        OversizedImagePolicy oversized = OfficeOperation.OversizedImages;
+
         foreach (LaidOutSlide slide in _slides)
         {
             if (slide.IsHidden) continue;
-            _pages.Add(new SlideView(slide, _pages.Count));
+            _pages.Add(new SlideView(slide, _pages.Count, maxImagePixels, oversized));
         }
     }
 
@@ -72,8 +76,16 @@ public sealed class SlidePages : IPageSequence
     /// </remarks>
     public IReadOnlyList<LaidOutSlide> Slides => _slides;
 
-    private sealed class SlideView(LaidOutSlide slide, int index) : IPage
+    private sealed class SlideView(
+        LaidOutSlide slide, int index, long maxImagePixels, OversizedImagePolicy oversized)
+        : IPage, IPageRenderLimits
     {
+        /// <inheritdoc/>
+        public long MaxImagePixels => maxImagePixels;
+
+        /// <inheritdoc/>
+        public OversizedImagePolicy OversizedImages => oversized;
+
         internal LaidOutSlide Slide { get; } = slide;
 
         /// <inheritdoc/>

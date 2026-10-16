@@ -95,6 +95,9 @@ public sealed class OdtWordDocument : IWordProcessingDocument, IPaginatedDocumen
     /// </para>
     /// </remarks>
     public IPageSequence Layout(LayoutOptions? options = null)
+        => XRay.Office.Core.Threading.OfficeOperation.Layout(options, () => LayoutCore(options));
+
+    private WordProcessingPages LayoutCore(LayoutOptions? options)
     {
         XElement? body = _inner.File.Body;
         if (body is null) return new WordProcessingPages([]);

@@ -1,6 +1,7 @@
 using XRay.Office.Core.Geometry;
 using XRay.Office.Core.Graphics;
 using XRay.Office.Core.Units;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Presentations.Layout;
 
@@ -38,7 +39,11 @@ public static class SlideDrawing
                     GraphicsPath.Rectangle(new DocRect(DocPoint.Origin, slide.Size)), background);
             }
 
-            foreach (PlacedShape shape in slide.Shapes) DrawShape(shape, sink);
+            foreach (PlacedShape shape in slide.Shapes)
+            {
+                OfficeOperation.ThrowIfCancelled();
+                DrawShape(shape, sink);
+            }
         }
         finally
         {

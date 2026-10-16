@@ -60,7 +60,7 @@ public sealed class EmfImageDecoder : IVectorImageDecoder
                 return VectorImage.Empty with { Diagnostics = diagnostics, IsTruncated = reader.IsTruncated };
             }
         }
-        catch (Exception exception) when (exception is not OutOfMemoryException and not StackOverflowException)
+        catch (Exception exception) when (exception is not (OutOfMemoryException or StackOverflowException or OperationCanceledException))
         {
             // The reader is written not to throw — every read is bounds-checked and every
             // malformed record is skipped — but the contract on this seam is that a picture which

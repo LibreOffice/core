@@ -1,15 +1,37 @@
 using System.Globalization;
 using System.Text;
+using XRay.Office.Core.Documents;
 using XRay.Office.Core.Geometry;
 using XRay.Office.Core.Graphics;
 using XRay.Office.Core.Units;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Rendering.Pdf;
 
 /// <summary>One page's content stream, and the sheet it goes on.</summary>
 /// <param name="Size">The sheet size the layout reported.</param>
 /// <param name="Content">The operators, ready to be deflated into a stream object.</param>
-internal readonly record struct PdfPageContent(DocSize Size, string Content);
+/// <param name="Links">The clickable rectangles the page declared.</param>
+internal readonly record struct PdfPageContent(DocSize Size, string Content, IReadOnlyList<PdfLink> Links);
+
+/// <summary>A clickable rectangle on a page, in PDF's own bottom-up points.</summary>
+/// <param name="Left">The left edge.</param>
+/// <param name="Bottom">The bottom edge.</param>
+/// <param name="Right">The right edge.</param>
+/// <param name="Top">The top edge.</param>
+/// <param name="Uri">The external address, or null for an internal link.</param>
+/// <param name="Destination">The named destination, or null for an external link.</param>
+internal readonly record struct PdfLink(
+    double Left, double Bottom, double Right, double Top, string? Uri, string? Destination);
+
+/// <summary>A named place in the file.</summary>
+/// <param name="Page">The zero-based index of the page it is on.</param>
+/// <param name="X">Its horizontal position, in points from the left edge.</param>
+/// <param name="Y">Its vertical position, in points from the bottom edge.</param>
+internal readonly record struct PdfDestination(int Page, double X, double Y);
+
+/// <summary>An outline entry, before it is arranged into a tree.</summary>
+internal readonly record struct PdfOutlineEntry(int Level, string Title, PdfDestination Target);
 
 /// <summary>
 /// Turns drawing commands into PDF content-stream operators.
@@ -55,6 +77,7 @@ internal sealed class PdfContentSink(
     private const double PenTolerancePoints = 0.0025;
 
     private readonly List<PdfPageContent> _pages = [];
+    private readonly List<PdfLink> _links = [];
     private readonly List<(string Name, int Id)> _xObjects = [];
     private readonly List<(string Name, int Id)> _states = [];
     private readonly List<(string Name, int Id)> _shadings = [];
@@ -69,6 +92,7 @@ internal sealed class PdfContentSink(
     private double _pageHeight;
     private int _depth;
     private bool _open;
+    private int _pageIndex;
 
     /// <summary>Where the space a draw call states its coordinates in sits on the page.</summary>
     private AffineTransform _ctm = AffineTransform.Identity;
@@ -88,6 +112,27 @@ internal sealed class PdfContentSink(
     /// <summary>The pages drawn so far, in order.</summary>
     public IReadOnlyList<PdfPageContent> Pages => _pages;
 
+    /// <summary>
+    /// Receives each page as it ends. When set, a page is handed over and not kept, which is what lets
+    /// a renderer write a page's content straight to the file and hold on to nothing but its object number.
+    /// </summary>
+    public Action<PdfPageContent>? PageEnded { get; set; }
+
+    /// <summary>The named places declared so far, by name.</summary>
+    public Dictionary<string, PdfDestination> Destinations { get; } = new(StringComparer.Ordinal);
+
+    /// <summary>The outline entries declared so far, in the order they were added.</summary>
+    public List<PdfOutlineEntry> Outline { get; } = [];
+
+    /// <summary>How many pages have ended.</summary>
+    public int PagesEnded => _pageIndex;
+
+    /// <summary>See <see cref="XRay.Office.Core.Documents.LayoutOptions.MaxImagePixels"/>; set per page.</summary>
+    public long MaxImagePixels { get; set; }
+
+    /// <summary>See <see cref="XRay.Office.Core.Documents.LayoutOptions.OversizedImages"/>; set per page.</summary>
+    public OversizedImagePolicy OversizedImages { get; set; }
+
     /// <summary>True when a page was begun and never ended.</summary>
     public bool HasUnclosedPage => _open;
 
@@ -102,6 +147,7 @@ internal sealed class PdfContentSink(
         _saved.Clear();
         _ctm = AffineTransform.Identity;
         _clip = null;
+        _links.Clear();
     }
 
     /// <inheritdoc/>
@@ -116,8 +162,71 @@ internal sealed class PdfContentSink(
         _ctm = AffineTransform.Identity;
         _clip = null;
 
-        _pages.Add(new PdfPageContent(_size, _content.ToString()));
+        PdfPageContent finished = new(_size, _content.ToString(), [.. _links]);
+        _links.Clear();
         _open = false;
+        _pageIndex++;
+
+        if (PageEnded is { } handOver) handOver(finished);
+        else _pages.Add(finished);
+    }
+
+    /// <inheritdoc/>
+    public void AddLink(DocRect area, string uri)
+    {
+        ArgumentNullException.ThrowIfNull(uri);
+        if (!_open || !options.WriteLinks || uri.Length == 0) return;
+
+        AddLinkCore(area, uri, null);
+    }
+
+    /// <inheritdoc/>
+    public void AddInternalLink(DocRect area, string destination)
+    {
+        ArgumentNullException.ThrowIfNull(destination);
+        if (!_open || !options.WriteLinks || destination.Length == 0) return;
+
+        AddLinkCore(area, null, destination);
+    }
+
+    /// <inheritdoc/>
+    public void AddDestination(string name, DocPoint position)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        if (!_open || name.Length == 0) return;
+
+        // The first declaration keeps the name, the way an anchor repeated in a document does in a browser.
+        Destinations.TryAdd(name, Place(position));
+    }
+
+    /// <inheritdoc/>
+    public void AddOutlineEntry(int level, string title, DocPoint position)
+    {
+        ArgumentNullException.ThrowIfNull(title);
+        if (!_open || !options.WriteOutline) return;
+
+        string clean = PdfMetadata.Clean(title);
+        if (clean.Length == 0) return;
+
+        Outline.Add(new PdfOutlineEntry(Math.Max(1, level), clean, Place(position)));
+    }
+
+    private void AddLinkCore(DocRect area, string? uri, string? destination)
+    {
+        if (area.IsEmpty) return;
+
+        DocRect box = Mapped(area, _ctm);
+        _links.Add(new PdfLink(
+            box.Left.Points, _pageHeight - box.Bottom.Points,
+            box.Right.Points, _pageHeight - box.Top.Points,
+            uri, destination));
+    }
+
+    /// <summary>A point in page space as a place in the file: this page, in PDF's bottom-up points.</summary>
+    private PdfDestination Place(DocPoint position)
+    {
+        DocRect at = Mapped(new DocRect(position.X, position.Y, Length.Zero, Length.Zero), _ctm);
+        return new PdfDestination(_pageIndex, at.Left.Points, _pageHeight - at.Top.Points);
     }
 
     /// <inheritdoc/>
@@ -207,6 +316,7 @@ internal sealed class PdfContentSink(
     /// <inheritdoc/>
     public void FillPath(GraphicsPath path, Paint paint, FillRule rule = FillRule.NonZero)
     {
+        OfficeOperation.Poll();
         ArgumentNullException.ThrowIfNull(path);
         ArgumentNullException.ThrowIfNull(paint);
         if (path.Commands.Count == 0) return;
@@ -278,6 +388,7 @@ internal sealed class PdfContentSink(
     /// <inheritdoc/>
     public void DrawGlyphRun(GlyphRun run, Paint paint)
     {
+        OfficeOperation.Poll();
         ArgumentNullException.ThrowIfNull(run);
         ArgumentNullException.ThrowIfNull(paint);
         if (run.Glyphs.Count == 0) return;
@@ -733,7 +844,7 @@ internal sealed class PdfContentSink(
     {
         if (_imageNames.TryGetValue(image, out string? existing)) return existing;
 
-        string name = PdfImages.Write(writer, image, options, _xObjects);
+        string name = PdfImages.Write(writer, image, options, _xObjects, MaxImagePixels, OversizedImages);
         _imageNames[image] = name;
         return name;
     }

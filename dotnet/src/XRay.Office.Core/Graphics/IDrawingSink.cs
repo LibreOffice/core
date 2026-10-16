@@ -137,6 +137,61 @@ public interface IDrawingSink
 
     /// <summary>Ends the innermost transparency group and composites it.</summary>
     void EndTransparencyGroup();
+
+    /// <summary>
+    /// Marks a rectangle on the current page as a link to an external address.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Not a drawing command: nothing is painted, and a sink that has no notion of a link ignores it,
+    /// which is the default. A PDF sink writes a <c>/Link</c> annotation with a <c>/URI</c> action, so the
+    /// rectangle is clickable in a viewer; a raster sink has nothing to do with it.
+    /// </para>
+    /// <para>
+    /// The rectangle is in the same y-down page space as the drawing commands and is mapped through the
+    /// transform in force when it is added.
+    /// </para>
+    /// </remarks>
+    /// <param name="area">The clickable region.</param>
+    /// <param name="uri">The address the link opens.</param>
+    void AddLink(DocRect area, string uri)
+    {
+    }
+
+    /// <summary>
+    /// Marks a rectangle on the current page as a link to a named place in the same document.
+    /// </summary>
+    /// <param name="area">The clickable region.</param>
+    /// <param name="destination">
+    /// A name given to <see cref="AddDestination"/>, on this page or any other. A name that is never
+    /// declared is dropped when the file is finished.
+    /// </param>
+    void AddInternalLink(DocRect area, string destination)
+    {
+    }
+
+    /// <summary>
+    /// Declares a named place on the current page: a bookmark, a cross-reference target.
+    /// </summary>
+    /// <param name="name">The name, unique within the document; a repeat keeps the first.</param>
+    /// <param name="position">The point a link to it should scroll to.</param>
+    void AddDestination(string name, DocPoint position)
+    {
+    }
+
+    /// <summary>
+    /// Adds an entry to the document outline (the bookmarks panel of a PDF viewer) pointing at a place on
+    /// the current page.
+    /// </summary>
+    /// <param name="level">
+    /// The nesting depth, starting at 1. A jump of more than one level nests under the nearest shallower
+    /// entry rather than creating the levels in between.
+    /// </param>
+    /// <param name="title">The text shown for the entry.</param>
+    /// <param name="position">The point the entry scrolls to.</param>
+    void AddOutlineEntry(int level, string title, DocPoint position)
+    {
+    }
 }
 
 /// <summary>How to decide which parts of a self-intersecting path are inside it.</summary>

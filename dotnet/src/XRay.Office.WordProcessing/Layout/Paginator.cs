@@ -2,6 +2,7 @@ using XRay.Office.Core.Geometry;
 using XRay.Office.Core.Units;
 using XRay.Office.Text.Layout;
 using XRay.Office.WordProcessing.Model;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.WordProcessing.Layout;
 
@@ -791,6 +792,7 @@ public sealed class Paginator
 
         for (int pass = 0; pass < MaxFramePasses; pass++)
         {
+            OfficeOperation.ThrowIfCancelled();
             _obstacles = resolution.ObstaclesFor;
             _anchored = resolution.AnchoredIn;
             List<LaidOutPage> next;
@@ -932,6 +934,7 @@ public sealed class Paginator
         // when it lands in a column of a different measure — see `Laid`.
         LaidBlock LayOutBlock(int i, Length width)
         {
+            OfficeOperation.ThrowIfCancelled();
             if (blocks[i] is PageTable table)
             {
                 // The section's own breaking width is also what a table stating no widths of its own is
@@ -1216,6 +1219,7 @@ public sealed class Paginator
 
         while (paragraphIndex < blocks.Count)
         {
+            OfficeOperation.ThrowIfCancelled();
             if (pages.Count >= _options.MaxPages)
             {
                 WasTruncated = true;
@@ -2064,6 +2068,7 @@ public sealed class Paginator
 
         void EmitPage()
         {
+            OfficeOperation.ThrowIfCancelled();
             if (column + 1 < Math.Max(1, page.Columns))
             {
                 // The page is not finished, only this column of it. The lines already placed stay where

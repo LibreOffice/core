@@ -8,6 +8,7 @@ using XRay.Office.Text.Fonts;
 using XRay.Office.Text.Layout;
 using XRay.Office.Text.Shaping;
 using XRay.Office.WordProcessing.Layout;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.WordProcessing.OpenDocument;
 
@@ -1158,8 +1159,27 @@ public sealed partial class OdtLayoutSource
             Fields = walker.Fields,
             Notes = notes,
             Frames = frames,
+            Anchors = walker.Anchors,
+            OutlineLevel = OutlineLevelOf(element),
             Source = element,
         };
+    }
+
+    /// <summary>
+    /// The outline level of a paragraph, 1 and up, or 0 when it is body text.
+    /// </summary>
+    /// <remarks>
+    /// A <c>text:h</c> is a heading and states its level in <c>text:outline-level</c>, which defaults to 1
+    /// when absent. A <c>text:p</c> is not one, however it is styled.
+    /// </remarks>
+    private static int OutlineLevelOf(XElement paragraph)
+    {
+        if (paragraph.Name.LocalName != "h") return 0;
+
+        string? stated = paragraph.Attribute(XName.Get("outline-level", OdfNamespaces.Text))?.Value;
+        return int.TryParse(stated, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out int level) && level > 0
+            ? level
+            : 1;
     }
 
     /// <summary>How many footnotes the walk has passed, counted across the document.</summary>
@@ -1236,6 +1256,7 @@ public sealed partial class OdtLayoutSource
 
         foreach (XElement child in body.Elements())
         {
+            OfficeOperation.Poll();
             if (child.Name.Namespace == OdfNamespaces.Text
                 && child.Name.LocalName is "p" or "h")
             {
@@ -1325,7 +1346,10 @@ public sealed partial class OdtLayoutSource
                 // missing from this list: an italic run whose family has no italic installed resolves to
                 // the *same* face as its upright neighbour, so nothing above can see it and the fold
                 // would draw it upright. See PageRun.LeansDifferently.
-                || PageRun.LeansDifferently(font, paragraphFont))
+                || PageRun.LeansDifferently(font, paragraphFont)
+                // A link keeps its own run even when formatted like its neighbours: the run is what the
+                // clickable area is cut from.
+                || range.Link is not null)
             {
                 varies = true;
             }
@@ -1343,7 +1367,8 @@ public sealed partial class OdtLayoutSource
                 Highlight: style.Highlight ?? default,
                 Underline: style.Underline,
                 IsStruckThrough: style.IsStruckThrough,
-                WidthPerCent: style.WidthPerCent));
+                WidthPerCent: style.WidthPerCent,
+                Link: range.Link));
         }
 
         return varies ? runs : [];
@@ -1393,8 +1418,12 @@ public sealed partial class OdtLayoutSource
     /// <param name="IsCitation">
     /// True for a note's citation, which is drawn superscript even when the document names no style for it.
     /// </param>
+    /// <param name="Link">
+    /// Where the text leads when it is clicked: an address, <c>#name</c> for a bookmark in this document,
+    /// or null for text that is not a link. Two ranges that differ only in this do not merge.
+    /// </param>
     private readonly record struct StyledRange(
-        int Start, int Length, OdfStyleReference[] Cascade, bool IsCitation = false);
+        int Start, int Length, OdfStyleReference[] Cascade, bool IsCitation = false, string? Link = null);
 
     /// <summary>A note found while walking a paragraph, before its body has been read.</summary>
     /// <param name="Offset">Where its citation sits in the paragraph's text.</param>
@@ -1514,6 +1543,13 @@ public sealed partial class OdtLayoutSource
         private readonly List<StyledRange> _ranges = [];
         private readonly List<NoteAnchor> _notes = [];
         private readonly List<FrameAnchor> _frames = [];
+        private readonly List<PageAnchor> _anchors = [];
+
+        /// <summary>The link the text being emitted is inside, or null.</summary>
+        private string? _link;
+
+        /// <summary>The bookmarks the paragraph holds, with the offsets they sit at.</summary>
+        internal IReadOnlyList<PageAnchor> Anchors => _anchors;
 
         /// <summary>Creates a walker over a paragraph with a given style.</summary>
         /// <param name="paragraphStyleName">The paragraph's own style name, which roots the cascade.</param>
@@ -1734,8 +1770,17 @@ public sealed partial class OdtLayoutSource
                     break;
                 }
 
-                case "soft-page-break" or "bookmark" or "bookmark-start" or "bookmark-end"
-                    or "reference-mark" or "reference-mark-start" or "reference-mark-end"
+                // A bookmark and a reference mark are named places: what a link to `#name` goes to. Nothing
+                // is drawn for them; their offsets are kept so a PDF can declare a destination there.
+                case "bookmark" or "bookmark-start" or "reference-mark" or "reference-mark-start":
+                    if (child.Attribute(XName.Get("name", OdfNamespaces.Text))?.Value is { Length: > 0 } mark)
+                    {
+                        _anchors.Add(new PageAnchor(_builder.Length, mark));
+                    }
+
+                    break;
+
+                case "soft-page-break" or "bookmark-end" or "reference-mark-end"
                     or "change" or "change-start" or "change-end":
                     break;
 
@@ -1749,8 +1794,20 @@ public sealed partial class OdtLayoutSource
                     bool pushed = !string.IsNullOrEmpty(styleName);
                     if (pushed) _cascade.Add(new OdfStyleReference(styleName, OdfStyleFamily.Text));
 
+                    // `text:a` is the one of the three that leads somewhere. Its address is a URL, or a
+                    // fragment (`#Heading1`, `#bookmark|outline`) that names a place in the document; the
+                    // `|outline`, `|table` and similar suffixes LibreOffice adds to say what kind of place
+                    // it is are not part of the name.
+                    string? outerLink = _link;
+                    if (child.Name.LocalName == "a"
+                        && child.Attribute(XName.Get("href", OdfNamespaces.XLink))?.Value is { Length: > 0 } href)
+                    {
+                        _link = LinkAddress(href);
+                    }
+
                     Append(child, depth + 1);
 
+                    _link = outerLink;
                     if (pushed) _cascade.RemoveAt(_cascade.Count - 1);
                     break;
 
@@ -1758,6 +1815,16 @@ public sealed partial class OdtLayoutSource
                     Append(child, depth + 1);
                     break;
             }
+        }
+
+        /// <summary>The address an <c>xlink:href</c> names, with a place in this document spelled <c>#name</c>.</summary>
+        private static string? LinkAddress(string href)
+        {
+            if (href.Length == 0 || href[0] != '#') return href;
+
+            int bar = href.IndexOf('|', StringComparison.Ordinal);
+            string name = bar > 0 ? href[1..bar] : href[1..];
+            return name.Length == 0 ? null : "#" + name;
         }
 
         /// <summary>
@@ -1802,6 +1869,7 @@ public sealed partial class OdtLayoutSource
 
             if (_ranges.Count > 0
                 && _ranges[^1].IsCitation == _inCitation
+                && string.Equals(_ranges[^1].Link, _link, StringComparison.Ordinal)
                 && SameCascade(_ranges[^1].Cascade))
             {
                 _ranges[^1] = _ranges[^1] with { Length = _ranges[^1].Length + text.Length };
@@ -1809,7 +1877,7 @@ public sealed partial class OdtLayoutSource
             }
 
             _ranges.Add(new StyledRange(
-                _builder.Length - text.Length, text.Length, [.. _cascade], _inCitation));
+                _builder.Length - text.Length, text.Length, [.. _cascade], _inCitation, _link));
         }
 
         private bool SameCascade(OdfStyleReference[] other)

@@ -44,6 +44,11 @@ namespace XRay.Office.WordProcessing.Rtf;
 /// comparison lets a scaled stretch be absorbed into the unscaled run beside it and take its width.
 /// </para>
 /// </param>
+/// <param name="Link">
+/// Where the run leads when it is clicked, or null when it is not a link: an address, or <c>#name</c> for a
+/// bookmark in the same document. Part of <see cref="MatchesFormatting"/>, so two runs that differ only in
+/// where they lead are not merged.
+/// </param>
 public readonly record struct RtfLayoutRun(
     int Start,
     int Length,
@@ -59,7 +64,8 @@ public readonly record struct RtfLayoutRun(
     TextUnderline Underline = TextUnderline.None,
     bool IsStruckThrough = false,
     bool AutoKerning = false,
-    int WidthPerCent = 100)
+    int WidthPerCent = 100,
+    string? Link = null)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;
@@ -85,7 +91,8 @@ public readonly record struct RtfLayoutRun(
            && Underline == other.Underline
            && IsStruckThrough == other.IsStruckThrough
            && AutoKerning == other.AutoKerning
-           && WidthPerCent == other.WidthPerCent;
+           && WidthPerCent == other.WidthPerCent
+           && string.Equals(Link, other.Link, StringComparison.Ordinal);
 }
 
 /// <summary>
@@ -151,6 +158,10 @@ public readonly record struct RtfLayoutRun(
 /// for the same reason as <paramref name="AutoKerning"/>: a paragraph set end to end in one scaled
 /// style carries no runs at all and is uniform by every test the layout reader makes.
 /// </param>
+/// <param name="Anchors">
+/// The bookmarks the paragraph holds, with the offsets of its text they sit at, or null for none.
+/// </param>
+/// <param name="OutlineLevel">The paragraph's outline level, 1 and up, or 0 for body text.</param>
 public readonly record struct RtfLayoutParagraph(
     string Text,
     ParagraphFormat Format,
@@ -167,7 +178,9 @@ public readonly record struct RtfLayoutParagraph(
     IReadOnlyList<Layout.PageFieldSpan>? PageFields = null,
     string? ListMarker = null,
     bool AutoKerning = false,
-    int WidthPerCent = 100);
+    int WidthPerCent = 100,
+    IReadOnlyList<RtfLayoutAnchor>? Anchors = null,
+    int OutlineLevel = 0);
 
 /// <summary>
 /// A floating frame as RTF states it: a shape's rectangle, its wrap, and the text inside it.
@@ -290,6 +303,23 @@ public sealed record RtfLayoutNote(
 
     /// <summary>The citation as it was read, which sits at <see cref="Offset"/> and at the note's head.</summary>
     public string Citation { get; init; } = "";
+}
+
+/// <summary>
+/// A bookmark's place in a paragraph, whose name may not be known yet.
+/// </summary>
+/// <remarks>
+/// A class, not a record, because RTF settles a bookmark's name only when its closing half is read — often in
+/// a later paragraph — and the paragraph that holds the opening half has long since been recorded by then.
+/// Layout reads <see cref="Name"/> after the whole document has been parsed.
+/// </remarks>
+public sealed class RtfLayoutAnchor
+{
+    /// <summary>The offset of the paragraph's text the bookmark opens at.</summary>
+    public int Offset { get; set; }
+
+    /// <summary>The bookmark's name, empty until its closing half has been read.</summary>
+    public string Name { get; set; } = string.Empty;
 }
 
 /// <summary>

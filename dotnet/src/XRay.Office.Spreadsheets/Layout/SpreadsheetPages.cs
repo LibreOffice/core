@@ -1,3 +1,4 @@
+using XRay.Office.Core.Threading;
 using XRay.Office.Core.Documents;
 using XRay.Office.Core.Extraction;
 using XRay.Office.Core.Geometry;
@@ -9,10 +10,12 @@ namespace XRay.Office.Spreadsheets.Layout;
 /// <summary>
 /// One printed page of a workbook: which sheet it came from, and which cells are on it.
 /// </summary>
-public sealed class SheetPage : IPage
+public sealed class SheetPage : IPage, IPageRenderLimits
 {
     private readonly SheetPageDrawing? _drawing;
     private readonly SheetNotePageDrawing? _notes;
+    private readonly long _maxImagePixels = OfficeOperation.MaxImagePixels;
+    private readonly OversizedImagePolicy _oversizedImages = OfficeOperation.OversizedImages;
 
     internal SheetPage(int index, int number, SheetLayout sheet, SheetPagePlacement placement)
     {
@@ -42,6 +45,12 @@ public sealed class SheetPage : IPage
     /// <summary>True when the page lists the sheet's notes rather than its cells.</summary>
     public bool IsNotePage => _notes is not null;
 
+    /// <inheritdoc/>
+    long IPageRenderLimits.MaxImagePixels => _maxImagePixels;
+
+    /// <inheritdoc/>
+    OversizedImagePolicy IPageRenderLimits.OversizedImages => _oversizedImages;
+
     /// <summary>
     /// True on the first page of the whole printout, which is what
     /// <c>headerFooter/@differentFirst</c> selects on.
@@ -58,6 +67,12 @@ public sealed class SheetPage : IPage
     /// sheet's first page. Suppressing per sheet costs that workbook 16 words instead of 4.
     /// </remarks>
     internal bool IsFirstPrintedPage { get; init; }
+
+    /// <summary>
+    /// True for the first page a sheet contributes, which is where the sheet's entry in a PDF's outline
+    /// points.
+    /// </summary>
+    internal bool StartsSheet { get; init; }
 
     /// <inheritdoc/>
     public int Index { get; }
@@ -110,7 +125,11 @@ public sealed class SheetPage : IPage
     public void Draw(IDrawingSink sink)
     {
         if (_notes is { } notes) notes.Draw(sink, HeaderContext());
-        else _drawing?.Draw(sink, HeaderContext());
+        else if (_drawing is not null)
+        {
+            _drawing.StartsSheet = StartsSheet;
+            _drawing.Draw(sink, HeaderContext());
+        }
     }
 
     /// <summary>
@@ -167,7 +186,10 @@ public sealed class SpreadsheetPages : IPageSequence
         ArgumentNullException.ThrowIfNull(sheets);
 
         Sheets = sheets;
-        _pages = Build(sheets, options ?? LayoutOptions.Default);
+
+        // Built under the options' own scope when the caller is not already inside a layout, so that
+        // the pages pick up its picture limits and a direct construction honours its time limit.
+        _pages = OfficeOperation.Layout(options, () => Build(sheets, options ?? LayoutOptions.Default));
 
         // The total is only knowable once every sheet has been paginated, and a header holding
         // "&N" needs it, so it is stamped on afterwards rather than threaded through the loop.
@@ -220,9 +242,11 @@ public sealed class SpreadsheetPages : IPageSequence
 
         foreach (SheetLayout sheet in sheets)
         {
+            OfficeOperation.ThrowIfCancelled();
             if (!IsPrinted(sheet, anyPrintRange)) continue;
 
             if (sheet.Setup.FirstPageNumber > 0) number = sheet.Setup.FirstPageNumber;
+            bool startedSheet = false;
 
             // Paginated, then thinned. The grid a page lands on is geometry, but the page *count*
             // is not: Calc's `m_nPagesY` skips a row band `IsPrintEmpty` is true across
@@ -235,12 +259,15 @@ public sealed class SpreadsheetPages : IPageSequence
                              sheet.Setup, sheet.Grid, sheet.PrintedRange,
                              block => SheetEmptyPages.IsPrintEmpty(sheet, block))))
             {
+                OfficeOperation.ThrowIfCancelled();
                 if (options.MaxPages > 0 && pages.Count >= options.MaxPages) return pages;
 
                 pages.Add(new SheetPage(pages.Count, number, sheet, placement)
                 {
                     IsFirstPrintedPage = pages.Count == 0,
+                    StartsSheet = !startedSheet,
                 });
+                startedSheet = true;
                 number++;
             }
 
@@ -249,6 +276,7 @@ public sealed class SpreadsheetPages : IPageSequence
             // end of the table's own page count (`printfun.cxx:2557`) and numbered with them.
             foreach (IReadOnlyList<PlacedNote> notes in SheetNotePages.Paginate(sheet))
             {
+                OfficeOperation.ThrowIfCancelled();
                 if (options.MaxPages > 0 && pages.Count >= options.MaxPages) return pages;
 
                 pages.Add(new SheetPage(pages.Count, number, sheet, notes)
@@ -372,6 +400,9 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
     private readonly SheetPageGraphics _graphics =
         new(sheet, placement.Scale);
 
+    /// <summary>True when this is the first page the sheet contributes; see <see cref="SheetPage.StartsSheet"/>.</summary>
+    internal bool StartsSheet { get; set; }
+
     /// <summary>
     /// Draws the page: what is painted behind the cells, their text, and the page's furniture.
     /// </summary>
@@ -393,6 +424,14 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
         sink.BeginPage(sheet.Setup.PageSize);
         try
         {
+            // One outline entry per sheet, at the top of the sheet's first page: the bookmarks panel of a
+            // PDF reads as the workbook's tab strip.
+            if (StartsSheet && sheet.Name is { Length: > 0 } sheetName)
+            {
+                sink.AddOutlineEntry(1, sheetName, DocPoint.Origin);
+            }
+
+            OfficeOperation.ThrowIfCancelled();
             DocPoint origin = BodyOrigin;
             List<PlacedColumn> columns = Columns(origin.X, out List<ColumnBand> bands);
             List<PlacedRow> rows = Rows(origin.Y, out List<RowBand> rowBands);
@@ -412,6 +451,7 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
 
             foreach (PlacedRow row in rows)
             {
+                OfficeOperation.Poll();
                 // No lead-in from the left: a rightward overflow belongs to its anchor's page
                 // alone, because the loop that would draw it here is behind `!bTaggedPDF` and
                 // every reference PDF is tagged. The class remarks carry the measurement.

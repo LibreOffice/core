@@ -1,3 +1,4 @@
+using XRay.Office.Core.Threading;
 namespace XRay.Office.WordProcessing.Rtf;
 
 /// <summary>What an <see cref="RtfToken"/> is.</summary>
@@ -121,6 +122,7 @@ public sealed class RtfTokeniser
     /// <summary>Reads the next token, or <see cref="RtfTokenKind.End"/> at the end of input.</summary>
     public RtfToken Read()
     {
+        OfficeOperation.Poll();
         while (_position < _data.Length)
         {
             byte current = _data[_position];

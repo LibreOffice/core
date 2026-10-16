@@ -37,6 +37,12 @@ public sealed class WordProcessingReader : IDocumentReader
         DocumentFormat.Sxw, DocumentFormat.Stw,
     ];
 
+    /// <summary>Reads a document, checking <paramref name="cancellationToken"/> while it is parsed.</summary>
+    /// <param name="source">The bytes to read, and any options needed to read them.</param>
+    /// <param name="cancellationToken">Cancels the read with <see cref="OperationCanceledException"/>.</param>
+    public IDocument Read(DocumentSource source, CancellationToken cancellationToken)
+        => XRay.Office.Core.Threading.OfficeOperation.Run(() => Read(source), cancellationToken);
+
     /// <inheritdoc/>
     public IDocument Read(DocumentSource source)
     {

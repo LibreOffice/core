@@ -11,6 +11,7 @@ using XRay.Office.Text.Layout;
 using XRay.Office.Text.Shaping;
 using XRay.Office.WordProcessing.Layout;
 using XRay.Office.WordProcessing.Model;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.WordProcessing.Ooxml;
 
@@ -888,7 +889,8 @@ public sealed partial class DocxLayoutSource
 
         RunWalker walker = new(
             CitationOf, Symbol, _constants, _footnoteNumber, _endnoteNumber, StyleReferenceText,
-            _indexFieldDepth, ReferenceText);
+            _indexFieldDepth, ReferenceText,
+            linkTarget: LinksResolvable && citation is null ? LinkTarget : null);
         walker.Walk(element, citation);
 
         // Carried to the paragraph after this one, exactly as the note counters are: a `TOC` field's
@@ -978,6 +980,8 @@ public sealed partial class DocxLayoutSource
             Fields = walker.Fields,
             Notes = NotesOf(walker.Notes),
             Frames = FramesOf(walker.Frames, walker.CheckBoxes, properties),
+            Anchors = walker.Anchors,
+            OutlineLevel = OutlineLevelOf(properties),
             Source = element,
         };
 
@@ -1185,9 +1189,24 @@ public sealed partial class DocxLayoutSource
         bool first = true;
 
         _noteCitationOffset = -1;
+        _noteDepth++;
 
+        try
+        {
+            return ReadNoteBlocks(body, citation, blocks, first, out citationOffset);
+        }
+        finally
+        {
+            _noteDepth--;
+        }
+    }
+
+    private List<PageBlock> ReadNoteBlocks(
+        XElement body, string citation, List<PageBlock> blocks, bool first, out int citationOffset)
+    {
         foreach (XElement child in body.Elements())
         {
+            OfficeOperation.Poll();
             if (Word.Is(child, "p"))
             {
                 PageParagraph? paragraph = first ? Paragraph(child, citation) : Paragraph(child);
@@ -1321,7 +1340,10 @@ public sealed partial class DocxLayoutSource
                 // missing from this list: an italic run whose family has no italic installed resolves to
                 // the *same* face as its upright neighbour, so nothing above can see it and the fold
                 // would draw it upright. See PageRun.LeansDifferently.
-                || PageRun.LeansDifferently(font, paragraphFont))
+                || PageRun.LeansDifferently(font, paragraphFont)
+                // A link has to keep its own run even when it is formatted exactly like the text around
+                // it, because the run is what the clickable area is cut from.
+                || range.Link is not null)
             {
                 varies = true;
             }
@@ -1341,7 +1363,8 @@ public sealed partial class DocxLayoutSource
                 IsStruckThrough: style.IsStruckThrough,
                 Tracking: style.Tracking,
                 WidthPerCent: style.WidthPerCent,
-                Item: style.FontItem));
+                Item: style.FontItem,
+                Link: range.Link));
         }
 
         return varies ? runs : [];
@@ -1368,13 +1391,18 @@ public sealed partial class DocxLayoutSource
     /// True when the range sits in the *result* of a <c>TOC</c>, <c>INDEX</c> or <c>BIBLIOGRAPHY</c>
     /// field, where the character style a run names is not applied. See <see cref="RunWalker"/>.
     /// </param>
+    /// <param name="Link">
+    /// Where the text leads when it is clicked: an address, <c>#name</c> for a bookmark in this document,
+    /// or null for text that is not a link. Two ranges that differ only in this do not merge.
+    /// </param>
     private readonly record struct StyledRange(
         int Start,
         int Length,
         XElement? RunProperties,
         bool IsCitation = false,
         (OpenTypeFace Face, FontReference? Font)? Symbol = null,
-        bool InIndexField = false);
+        bool InIndexField = false,
+        string? Link = null);
 
     /// <summary>A note found while walking a paragraph, before its body has been read.</summary>
     /// <param name="Offset">Where its citation sits in the paragraph's text.</param>
@@ -1409,6 +1437,38 @@ public sealed partial class DocxLayoutSource
     /// to set it gets the body's answer rather than a wrong one.
     /// </remarks>
     public bool InHeaderFooter { get; set; }
+
+    /// <summary>
+    /// Resolves a relationship id of the main document part to the external address it names, or is
+    /// null when links are not wanted. See <see cref="LinksResolvable"/> for where it is not consulted.
+    /// </summary>
+    public Func<string, string?>? LinkTarget { get; init; }
+
+    /// <summary>How many notes' bodies enclose the paragraph being read.</summary>
+    private int _noteDepth;
+
+    /// <summary>
+    /// Whether a relationship id in the paragraph being read is one of the main document's.
+    /// </summary>
+    /// <remarks>
+    /// Ids are scoped to a part: <c>rId5</c> in <c>header1.xml</c> names a different relationship from
+    /// <c>rId5</c> in the body. Resolving a header's or a note's id against the body's table would link
+    /// the text to a plausible, wrong address, which is worse than not linking it.
+    /// </remarks>
+    private bool LinksResolvable => !InHeaderFooter && _noteDepth == 0;
+
+    /// <summary>The outline level of a paragraph, 1 to 9, or 0 when it is body text.</summary>
+    /// <remarks>
+    /// <c>w:outlineLvl</c> is zero-based and lives in the paragraph's properties or, far more often, in
+    /// its style. Level 9 (stored as 9) is WordprocessingML's "body text" and is not an entry.
+    /// </remarks>
+    private int OutlineLevelOf(XElement? properties)
+    {
+        string? styleId = Word.Value(properties, "pStyle") ?? _styles.DefaultStyleId(WordStyleType.Paragraph);
+        return _styles.ResolveParagraphProperty("outlineLvl", properties, styleId).IntegerValue is >= 0 and <= 8 and { } level
+            ? level + 1
+            : 0;
+    }
 
     /// <summary>
     /// Reads the frames a paragraph anchors, with their own text laid out inside them.
@@ -1631,6 +1691,10 @@ public sealed partial class DocxLayoutSource
         /// Supplied by the source because the answer is a bookmark in another paragraph, which a
         /// per-paragraph walker cannot see.
         /// </param>
+        /// <param name="linkTarget">
+        /// Resolves a relationship id to the external address it names, or null where the paragraph's
+        /// own part is not the body and the ids would be read against the wrong table.
+        /// </param>
         /// <param name="indexFieldDepth">
         /// How many index fields' results were still open when the paragraph before this one ended.
         /// A walker is built per paragraph and a <c>TOC</c> field's result is dozens of them, so
@@ -1645,8 +1709,10 @@ public sealed partial class DocxLayoutSource
             int endnote = 0,
             Func<string, string?>? styleReference = null,
             int indexFieldDepth = 0,
-            Func<string, string?>? referenceText = null)
+            Func<string, string?>? referenceText = null,
+            Func<string, string?>? linkTarget = null)
         {
+            _linkTarget = linkTarget;
             _citationOf = citation;
             _symbolOf = symbol;
             _constants = constants;
@@ -1660,6 +1726,20 @@ public sealed partial class DocxLayoutSource
 
         /// <summary>What a <c>STYLEREF</c> quotes, or null when the source cannot answer.</summary>
         private readonly Func<string, string?>? _styleReference;
+
+        /// <summary>
+        /// Resolves a relationship id to the address it names, or is null where links are not read —
+        /// a header, a footer or a note, whose relationships are their own part's and not the body's.
+        /// </summary>
+        private readonly Func<string, string?>? _linkTarget;
+
+        /// <summary>The link the text being emitted is inside, or null.</summary>
+        private string? _link;
+
+        private readonly List<PageAnchor> _anchors = [];
+
+        /// <summary>The bookmarks the paragraph holds, with the offsets they sit at.</summary>
+        internal IReadOnlyList<PageAnchor> Anchors => _anchors;
 
         /// <summary>What a <c>REF</c> naming a bookmark draws, or null when the source cannot answer.</summary>
         private readonly Func<string, string?>? _referenceText;
@@ -1762,6 +1842,12 @@ public sealed partial class DocxLayoutSource
 
             /// <summary>Where the result began, or −1 for a field with no separator and so no result.</summary>
             internal int ResultAt { get; set; } = -1;
+
+            /// <summary>The address a <c>HYPERLINK</c> field's result links to, or null for any other field.</summary>
+            internal string? Link { get; set; }
+
+            /// <summary>The link that was in force when this field's result began, restored at its end.</summary>
+            internal string? OuterLink { get; set; }
 
             /// <summary>
             /// True when this walk wrote the field's value itself, so its cached result is hidden.
@@ -2134,6 +2220,15 @@ public sealed partial class DocxLayoutSource
                                     open.RewritesResult =
                                         RewritesTheResultOf(open.Instruction.ToString());
 
+                                    // A HYPERLINK field makes its result a link, the same as the element
+                                    // does, until the field's end.
+                                    if (FieldInstructions.HyperlinkReference(open.Instruction.ToString()) is { } fieldLink)
+                                    {
+                                        open.Link = fieldLink;
+                                        open.OuterLink = _link;
+                                        _link = fieldLink;
+                                    }
+
                                     // The one point at which a field this walk computes can be written:
                                     // the instruction has been read in full, so the field's name is
                                     // known, and the cached result it replaces starts here.
@@ -2164,6 +2259,8 @@ public sealed partial class DocxLayoutSource
                                 if (_fields.Count > 0)
                                 {
                                     OpenField closing = _fields.Pop();
+
+                                    if (closing.Link is not null) _link = closing.OuterLink;
 
                                     if (closing.IsIndexResult) _indexResults--;
 
@@ -2414,8 +2511,39 @@ public sealed partial class DocxLayoutSource
                         Emit(AnchorCharacter.ToString());
                         break;
 
-                    case "pPr" or "bookmarkStart" or "bookmarkEnd" or "proofErr" or "rPr":
+                    // A bookmark is a named place, and what an internal link, a cross-reference or a
+                    // table-of-contents entry points at. Nothing is drawn for it; its offset is kept so a
+                    // PDF can declare a destination there.
+                    case "bookmarkStart":
+                        if (_hidden == 0 && Word.Attribute(child, "name") is { Length: > 0 } bookmark)
+                        {
+                            _anchors.Add(new PageAnchor(_builder.Length, bookmark));
+                        }
+
                         break;
+
+                    case "pPr" or "bookmarkEnd" or "proofErr" or "rPr":
+                        break;
+
+                    // A link around runs. The runs keep their own formatting — a hyperlink is usually
+                    // blue and underlined because its *character style* says so, not because of this
+                    // element — and the link is one more property of the text they emit.
+                    case "hyperlink":
+                    {
+                        string? outerLink = _link;
+                        if (HyperlinkAddress(child) is { } address) _link = address;
+
+                        try
+                        {
+                            Append(child, depth + 1);
+                        }
+                        finally
+                        {
+                            _link = outerLink;
+                        }
+
+                        break;
+                    }
 
                     case "r":
                         // The one element that carries character formatting. Runs do not nest, but this
@@ -2440,6 +2568,25 @@ public sealed partial class DocxLayoutSource
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Where a <c>w:hyperlink</c> leads: an address, <c>#name</c> for a bookmark, or null for a link
+        /// that states neither.
+        /// </summary>
+        /// <remarks>
+        /// The same rule the extraction side applies: an external link is a relationship, an internal one
+        /// names a bookmark in <c>w:anchor</c>, and an address with an anchor is the address with a
+        /// fragment. A relationship id this walk cannot resolve (see <see cref="_linkTarget"/>) leaves a
+        /// link that states an anchor an internal one, and one that does not no link.
+        /// </remarks>
+        private string? HyperlinkAddress(XElement hyperlink)
+        {
+            string? anchor = Word.Attribute(hyperlink, "anchor") is { Length: > 0 } named ? named : null;
+            string? target = Word.RelationshipId(hyperlink) is { Length: > 0 } id ? _linkTarget?.Invoke(id) : null;
+
+            if (target is { Length: > 0 }) return anchor is null ? target : target + "#" + anchor;
+            return anchor is null ? null : "#" + anchor;
         }
 
         /// <summary>
@@ -2821,6 +2968,7 @@ public sealed partial class DocxLayoutSource
                 && _ranges[^1].Symbol is null
                 && _ranges[^1].IsCitation == _inCitation
                 && _ranges[^1].InIndexField == InIndexField
+                && string.Equals(_ranges[^1].Link, _link, StringComparison.Ordinal)
                 && _ranges[^1].RunProperties == _runProperties)
             {
                 _ranges[^1] = _ranges[^1] with { Length = _ranges[^1].Length + text.Length };
@@ -2829,7 +2977,7 @@ public sealed partial class DocxLayoutSource
 
             _ranges.Add(new StyledRange(
                 _builder.Length - text.Length, text.Length, _runProperties, _inCitation, _symbolFace,
-                InIndexField));
+                InIndexField, _link));
         }
 
         /// <summary>True while a note's citation is being emitted.</summary>

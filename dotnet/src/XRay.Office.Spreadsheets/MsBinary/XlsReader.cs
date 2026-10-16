@@ -169,6 +169,9 @@ public sealed class XlsDocument : IPaginatedDocument
 
     /// <inheritdoc/>
     public IPageSequence Layout(LayoutOptions? options = null)
+        => XRay.Office.Core.Threading.OfficeOperation.Layout(options, () => LayoutCore(options));
+
+    private Layout.SpreadsheetPages LayoutCore(LayoutOptions? options)
         => new Layout.SpreadsheetPages(Sheets, options);
 
     /// <inheritdoc/>

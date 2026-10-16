@@ -281,6 +281,27 @@ public sealed record PageParagraph : PageBlock
     /// </remarks>
     public IReadOnlyList<PageRun> Runs { get; init; } = [];
 
+    /// <summary>
+    /// Named places in the paragraph — bookmarks — and the character offset each sits at.
+    /// </summary>
+    /// <remarks>
+    /// Declared to a PDF as named destinations, so that an internal link (<see cref="PageRun.Link"/>, a
+    /// cross-reference, a table-of-contents entry) has somewhere to go. Layout does not use them.
+    /// </remarks>
+    public IReadOnlyList<PageAnchor> Anchors { get; init; } = [];
+
+    /// <summary>
+    /// The paragraph's outline level, 1 to 9, or 0 when it is body text.
+    /// </summary>
+    /// <remarks>
+    /// Resolved through the style chain, so a heading style's level reaches every paragraph set in it.
+    /// A PDF's bookmarks panel is built from the paragraphs that have one. Layout does not use it.
+    /// </remarks>
+    public int OutlineLevel { get; init; }
+
+    /// <summary>True when some run of the paragraph is a link.</summary>
+    internal bool HasLinks => Runs.Any(run => run.Link is not null);
+
     /// <summary>True when the paragraph's formatting varies across its text.</summary>
     public bool HasRuns => Runs.Count > 0;
 
@@ -1006,6 +1027,11 @@ public sealed record PageNote
 /// the family class and the language the glyph-fallback pattern is built with; see
 /// <see cref="XRay.Office.Text.Fonts.FontItem"/>.
 /// </param>
+/// <param name="Link">
+/// Where the run leads when it is clicked, or null when it is not a link. An address is an external
+/// link; an address beginning <c>#</c> names a bookmark in this document. It changes no measurement
+/// and draws nothing: a PDF turns it into a link annotation over the run, a raster ignores it.
+/// </param>
 public readonly record struct PageRun(
     int Start,
     int Length,
@@ -1022,7 +1048,8 @@ public readonly record struct PageRun(
     bool IsStruckThrough = false,
     Length Tracking = default,
     int WidthPerCent = 100,
-    FontItem Item = default)
+    FontItem Item = default,
+    string? Link = null)
 {
     /// <summary>One past the run's last character.</summary>
     public int End => Start + Length;
@@ -1596,3 +1623,8 @@ public sealed record LaidOutPage
     /// <summary>True when nothing landed on the page.</summary>
     public bool IsEmpty => Lines.Count == 0 && Tables.Count == 0;
 }
+
+/// <summary>A named place in a paragraph.</summary>
+/// <param name="Offset">The character offset the name sits at.</param>
+/// <param name="Name">The name a link addresses it by.</param>
+public readonly record struct PageAnchor(int Offset, string Name);

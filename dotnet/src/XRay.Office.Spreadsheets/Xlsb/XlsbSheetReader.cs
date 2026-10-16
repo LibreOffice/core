@@ -3,6 +3,7 @@ using XRay.Office.Core.Extraction;
 using XRay.Office.Core.Numbers;
 using XRay.Office.Spreadsheets.Layout;
 using XRay.Office.Spreadsheets.MsBinary;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Spreadsheets.Xlsb;
 
@@ -87,6 +88,7 @@ internal sealed class XlsbSheetReader(XlsbFile file, List<Diagnostic> diagnostic
 
         foreach (Biff12Record record in Biff12Stream.Records(part))
         {
+            OfficeOperation.Poll();
             switch (record.Id)
             {
                 case Biff12.SheetData:

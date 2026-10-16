@@ -10,6 +10,7 @@ using XRay.Office.Presentations.Layout;
 using XRay.Office.Presentations.Ooxml;
 using XRay.Office.Text.Layout;
 using XRay.Office.Vector;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Presentations.OpenDocument;
 
@@ -71,6 +72,7 @@ internal sealed partial class OdpSlideLayout
         int index = 0;
         foreach (XElement page in body.Elements(XName.Get("page", OdfNamespaces.Draw)))
         {
+            OfficeOperation.ThrowIfCancelled();
             slides.Add(Page(page, index++));
         }
 

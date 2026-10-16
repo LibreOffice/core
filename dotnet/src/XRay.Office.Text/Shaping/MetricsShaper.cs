@@ -1,4 +1,5 @@
 using XRay.Office.Text.Fonts;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Text.Shaping;
 
@@ -27,6 +28,7 @@ public sealed class MetricsShaper : ITextShaper
     public ShapedText Shape(OpenTypeFace face, ReadOnlySpan<char> text, ShapingOptions options = default)
     {
         ArgumentNullException.ThrowIfNull(face);
+        OfficeOperation.Poll();
         if (text.Length == 0) return new ShapedText([], [0], face.UnitsPerEm);
 
         List<ShapedGlyph> glyphs = new(text.Length);

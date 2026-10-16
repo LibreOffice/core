@@ -1,3 +1,4 @@
+using XRay.Office.Core.Threading;
 using XRay.Office.Ooxml.DrawingML;
 using XRay.Office.Core.Geometry;
 using XRay.Office.Core.Graphics;
@@ -65,6 +66,7 @@ public static class PageDrawing
     public static void Draw(
         LaidOutPage page, IReadOnlyList<PageBlock> blocks, IDrawingSink sink)
     {
+        OfficeOperation.ThrowIfCancelled();
         ArgumentNullException.ThrowIfNull(page);
         ArgumentNullException.ThrowIfNull(blocks);
         ArgumentNullException.ThrowIfNull(sink);
@@ -728,6 +730,7 @@ public static class PageDrawing
         // over by the neighbour's fill.
         foreach (PlacedTableCell cell in table.Cells)
         {
+            OfficeOperation.Poll();
             if (cell.Cell.Shading is { } colour) Fill(cell.Area, colour, sink);
         }
 
@@ -1201,14 +1204,18 @@ public static class PageDrawing
 
         foreach (PlacedLine line in lines)
         {
+            OfficeOperation.Poll();
             if (line.ParagraphIndex < 0 || line.ParagraphIndex >= blocks.Count) continue;
             if (blocks[line.ParagraphIndex] is not PageParagraph paragraph) continue;
 
             List<(DocRect Area, Colour Colour)> highlights = [];
             List<(DocRect Area, Colour Colour)> rules = [];
+            List<(DocRect Area, string Link)>? links = paragraph.HasLinks ? [] : null;
             List<(GlyphRun Run, Colour Colour)> runs =
                 RunsIn(area, line, paragraph, highlights, rules,
-                       paragraph.Shading ?? background);
+                       paragraph.Shading ?? background, links);
+
+            if (paragraph.Anchors.Count > 0 || paragraph.OutlineLevel > 0) Declare(area, line, paragraph, sink);
 
             // Every band on the line before any of its glyphs, not band-then-glyphs run by run: two
             // adjacent highlighted runs overlap by a fraction of a point where one's advance ends and the
@@ -1224,7 +1231,50 @@ public static class PageDrawing
             // order Writer paints one: a strikethrough belongs over the letters it crosses out, and an
             // underline that a descender interrupts is what a font's own offset already expresses.
             foreach ((DocRect rule, Colour colour) in rules) Fill(rule, colour, sink);
+
+            // Last: a link paints nothing, so where it falls in the order is only a matter of tidiness.
+            if (links is not null)
+            {
+                foreach ((DocRect clickable, string link) in links) AddLink(clickable, link, sink);
+            }
         }
+    }
+
+    /// <summary>
+    /// Tells the sink about the named places and the outline entry a line carries.
+    /// </summary>
+    /// <remarks>
+    /// A bookmark is declared on the line its offset falls in — the last line, for one at the very end of
+    /// the text — at the line's own left edge and top, which is where a viewer scrolls to. A heading is
+    /// declared once, on its first line.
+    /// </remarks>
+    private static void Declare(DocRect area, PlacedLine line, PageParagraph paragraph, IDrawingSink sink)
+    {
+        DocPoint at = new(area.X + line.Box.Left, area.Y + line.Top);
+        int start = line.Box.Line.Start;
+        int end = line.Box.Line.End;
+        bool last = end >= paragraph.Text.Length;
+
+        foreach (PageAnchor anchor in paragraph.Anchors)
+        {
+            bool here = (anchor.Offset >= start && (anchor.Offset < end || (last && anchor.Offset >= end)))
+                        || (line.StartsParagraph && anchor.Offset < start);
+            if (here && anchor.Name.Length > 0) sink.AddDestination(anchor.Name, at);
+        }
+
+        if (line.StartsParagraph && paragraph.OutlineLevel > 0)
+        {
+            string title = string.Join(' ', paragraph.Text
+                .Split([' ', '\t', '\n', '\r', '\u2028', '\u00A0'], StringSplitOptions.RemoveEmptyEntries));
+            if (title.Length > 0) sink.AddOutlineEntry(paragraph.OutlineLevel, title, at);
+        }
+    }
+
+    /// <summary>A link to a bookmark when the target begins <c>#</c>, and to an address otherwise.</summary>
+    private static void AddLink(DocRect area, string link, IDrawingSink sink)
+    {
+        if (link.Length > 1 && link[0] == '#') sink.AddInternalLink(area, link[1..]);
+        else if (link.Length > 0) sink.AddLink(area, link);
     }
 
     /// <summary>
@@ -1308,6 +1358,7 @@ public static class PageDrawing
 
         foreach (PlacedLine line in lines)
         {
+            OfficeOperation.Poll();
             if (line.ParagraphIndex < 0 || line.ParagraphIndex >= blocks.Count) continue;
 
             if (line.ParagraphIndex != index)
@@ -1408,6 +1459,7 @@ public static class PageDrawing
 
         foreach (PlacedLine line in lines)
         {
+            OfficeOperation.Poll();
             if (line.ParagraphIndex < 0 || line.ParagraphIndex >= blocks.Count) continue;
 
             if (line.ParagraphIndex != index)
@@ -1557,13 +1609,18 @@ public static class PageDrawing
     /// page, which is never dark, so the default preserves what a caller with no background to
     /// offer used to get. See <see cref="Automatic"/>.
     /// </param>
+    /// <param name="links">
+    /// Receives the clickable area of each run that is a link, with where it leads, when not null. A
+    /// link paints nothing, so it is not among the glyph runs returned.
+    /// </param>
     public static List<(GlyphRun Run, Colour Colour)> RunsIn(
         DocRect area,
         PlacedLine line,
         PageParagraph paragraph,
         List<(DocRect Area, Colour Colour)>? highlights = null,
         List<(DocRect Area, Colour Colour)>? rules = null,
-        Colour background = default)
+        Colour background = default,
+        List<(DocRect Area, string Link)>? links = null)
     {
         ArgumentNullException.ThrowIfNull(paragraph);
 
@@ -1682,6 +1739,14 @@ public static class PageDrawing
                 if (rules is not null && run.IsDecorated)
                 {
                     Rules(run, pen, extent, baseline, rules, background);
+                }
+
+                // The clickable area of a link is the band the run's own face and size give it, the same
+                // rectangle a highlight would take, so the pointer changes where the text is.
+                if (links is not null && run.Link is { Length: > 0 } link
+                    && Band(paragraph, run, pen, extent, baseline) is { IsEmpty: false } clickable)
+                {
+                    links.Add((clickable, link));
                 }
 
                 pen += extent;

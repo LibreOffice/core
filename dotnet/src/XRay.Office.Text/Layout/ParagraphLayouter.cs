@@ -1,6 +1,7 @@
 using XRay.Office.Core.Units;
 using XRay.Office.Text.Fonts;
 using XRay.Office.Text.Shaping;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Text.Layout;
 
@@ -199,6 +200,7 @@ public sealed class ParagraphLayouter
     {
         ArgumentNullException.ThrowIfNull(text);
 
+        OfficeOperation.ThrowIfCancelled();
         ParagraphFormat paragraph = format ?? ParagraphFormat.Default;
         Length size = emSize ?? Length.FromPoints(12);
         Length areaWidth = textAreaWidth ?? Length.FromMillimetres(170);
@@ -306,6 +308,7 @@ public sealed class ParagraphLayouter
     {
         ArgumentNullException.ThrowIfNull(measured);
 
+        OfficeOperation.ThrowIfCancelled();
         ParagraphFormat paragraph = format ?? ParagraphFormat.Default;
         Length areaWidth = textAreaWidth ?? Length.FromMillimetres(170);
 

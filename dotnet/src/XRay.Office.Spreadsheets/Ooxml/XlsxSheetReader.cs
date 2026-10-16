@@ -4,6 +4,7 @@ using XRay.Office.Core.Diagnostics;
 using XRay.Office.Core.Extraction;
 using XRay.Office.Core.Numbers;
 using XRay.Office.Spreadsheets.Layout;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Spreadsheets.Ooxml;
 
@@ -81,6 +82,7 @@ internal sealed class XlsxSheetReader(XlsxFile file, List<Diagnostic> diagnostic
 
         foreach (XElement rowElement in Xlsx.Children(Xlsx.Child(worksheet, "sheetData"), "row"))
         {
+            OfficeOperation.Poll();
             // The r attribute is optional; without it a row simply follows the previous one,
             // which is how LibreOffice's importer treats it too
             // (sc/source/filter/oox/sheetdatacontext.cxx:291).
@@ -339,6 +341,7 @@ internal sealed class XlsxSheetReader(XlsxFile file, List<Diagnostic> diagnostic
 
         foreach (XElement cellElement in Xlsx.Children(rowElement, "c"))
         {
+            OfficeOperation.Poll();
             int column = expectedColumn;
             if (Xlsx.Attribute(cellElement, "r") is { } reference
                 && Xlsx.TryParseCellReference(reference, out int parsedColumn, out _))

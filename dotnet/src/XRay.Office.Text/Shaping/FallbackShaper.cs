@@ -1,5 +1,6 @@
 using XRay.Office.Text.Fonts;
 using XRay.Office.Text.Itemisation;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Text.Shaping;
 
@@ -51,6 +52,7 @@ public sealed class FallbackShaper : ITextShaper
     public ShapedText Shape(OpenTypeFace face, ReadOnlySpan<char> text, ShapingOptions options = default)
     {
         ArgumentNullException.ThrowIfNull(face);
+        OfficeOperation.Poll();
 
         if (text.Length == 0) return _inner.Shape(face, text, options);
 

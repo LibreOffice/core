@@ -60,6 +60,82 @@ public static class FieldInstructions
     }
 
     /// <summary>
+    /// Where a <c>HYPERLINK</c> field leads, as an address or as <c>#name</c> for a bookmark in the same
+    /// document; null for any other field or one that names nothing.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="HyperlinkTarget"/> answers the quoted text after the field name, which for
+    /// <c>HYPERLINK \l "_Toc1"</c> is the bookmark and not an address, and leaves the caller to tell the
+    /// two apart. This reads the switches: <c>\l</c> introduces the location within the target, and
+    /// without an address before it the link is internal. The other switches (<c>\o</c> a tooltip,
+    /// <c>\t</c> a frame, <c>\m</c> and <c>\n</c> a server-side map and a new window) change nothing
+    /// about where the link goes.
+    /// </remarks>
+    public static string? HyperlinkReference(string? instruction)
+    {
+        if (instruction is null) return null;
+
+        string text = instruction.Trim();
+        if (!text.StartsWith(Hyperlink, StringComparison.OrdinalIgnoreCase)) return null;
+        if (text.Length > Hyperlink.Length && !char.IsWhiteSpace(text[Hyperlink.Length])) return null;
+
+        List<string> words = [];
+        System.Text.StringBuilder current = new();
+        bool quoted = false;
+        bool pending = false;
+
+        foreach (char c in text[Hyperlink.Length..])
+        {
+            if (c == '"')
+            {
+                quoted = !quoted;
+                pending = true;
+            }
+            else if (!quoted && char.IsWhiteSpace(c))
+            {
+                if (pending || current.Length > 0) words.Add(current.ToString());
+                current.Clear();
+                pending = false;
+            }
+            else
+            {
+                current.Append(c);
+                pending = true;
+            }
+        }
+
+        if (pending || current.Length > 0) words.Add(current.ToString());
+
+        string? address = null;
+        string? location = null;
+
+        for (int i = 0; i < words.Count; i++)
+        {
+            string word = words[i];
+            if (word.Equals("\\l", StringComparison.OrdinalIgnoreCase))
+            {
+                if (i + 1 < words.Count) location = words[++i];
+            }
+            else if (word.StartsWith('\\'))
+            {
+                // A switch that takes an argument takes the next word with it.
+                if (word.Equals("\\o", StringComparison.OrdinalIgnoreCase)
+                    || word.Equals("\\t", StringComparison.OrdinalIgnoreCase))
+                {
+                    i++;
+                }
+            }
+            else if (address is null)
+            {
+                address = word;
+            }
+        }
+
+        if (string.IsNullOrEmpty(address)) return string.IsNullOrEmpty(location) ? null : "#" + location;
+        return string.IsNullOrEmpty(location) ? address : address + "#" + location;
+    }
+
+    /// <summary>
     /// The field's name — its first token — or null when the instruction states none.
     /// </summary>
     /// <remarks>

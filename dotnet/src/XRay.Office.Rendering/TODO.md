@@ -143,15 +143,25 @@ LibreOffice reaches the same conclusion and writes its own.
       shared by every stop takes a constant `/ca` instead, which costs one small object rather
       than three. Not a refinement: Skia's shader colours carry an alpha for nothing, so without
       this the same `GradientPaint` faded on a PNG and was opaque in a PDF.
-- [ ] Optional: tagged PDF, outlines, links. LibreOffice writes `/StructElem` trees and
-      `/MarkInfo` and we do not; a comparison never looks at them, but accessibility does.
-- [ ] **The whole document is buffered before a byte is written.** That is what makes the
-      classic `xref` cheap — every offset is known up front — and it means a thousand-page
-      document costs a thousand pages of memory. Incremental writing needs a cross-reference
-      *stream* and is worth doing when a document that large turns up, not before.
-- [ ] `/ID` in the trailer. Optional for an unencrypted file and omitted, because a
-      content-derived one would have to be computed over the buffered body and a random one
-      would break byte determinism.
+- [x] **Links, outline, destinations, page labels, metadata.** Declared by the layout through four default
+      methods on `IDrawingSink` (`AddLink`, `AddInternalLink`, `AddDestination`, `AddOutlineEntry`) and written
+      by `PdfNavigation` once every page exists, since a link on page 3 may name page 40: `/Link` annotations
+      with `/URI` or `/Dest`, a `/Names /Dests` tree, a nested `/Outlines` with `/Count`, `/PageLabels` where
+      the printed numbers differ from the positions, `/Lang`, the information dictionary and an XMP packet from
+      `DocumentMetadata`. See `PdfNavigationTests`, `DocumentLinkTests`, `FormatLinkTests`. Open: spreadsheet
+      cell links and slide-shape links (those readers keep a range, or nothing, and not a target), roman and
+      alphabetic page labels (layout reports only the printed text).
+- [ ] Optional: tagged PDF. LibreOffice writes `/StructElem` trees and `/MarkInfo` and we do not; a comparison
+      never looks at them, but accessibility does.
+- [x] **The file is written as it is produced.** Objects go to the destination the moment they have a body, so
+      a thousand-page document costs one page of memory plus eight bytes an object, and the destination need
+      not be seekable. A classic `xref` table never needed the file to be buffered: it needs each object's
+      offset, which the writer knows as it writes. Open: font programs and the resource dictionary are
+      written last because the subset is only known once every page has been drawn, and each page's content
+      is still built as one string before it is deflated.
+- [x] `/ID` in the trailer: a hash of the title, author, producer, creation date and object count, so the
+      same input gives the same file. It identifies "this output" and not the content of the pages, which is
+      all an unencrypted file needs it for.
 
 ## Skia raster backend
 

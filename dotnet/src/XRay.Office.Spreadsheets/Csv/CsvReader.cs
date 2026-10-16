@@ -3,6 +3,7 @@ using XRay.Office.Core.Diagnostics;
 using XRay.Office.Core.Documents;
 using XRay.Office.Core.Extraction;
 using XRay.Office.Core.Formats;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Spreadsheets.Csv;
 
@@ -98,6 +99,7 @@ public static class CsvReader
 
         for (int i = 0; i < text.Length; i++)
         {
+            if ((i & 0x3FF) == 0) OfficeOperation.ThrowIfCancelled();
             char c = text[i];
 
             if (quoted)

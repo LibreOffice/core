@@ -1,4 +1,5 @@
 using System.Globalization;
+using XRay.Office.Core.Documents;
 using XRay.Office.Core.Graphics;
 
 namespace XRay.Office.Rendering.Pdf;
@@ -28,7 +29,9 @@ internal static class PdfImages
         PdfDocumentWriter writer,
         RasterImage image,
         PdfRenderOptions options,
-        List<(string Name, int Id)> xObjects)
+        List<(string Name, int Id)> xObjects,
+        long maxImagePixels = 0,
+        OversizedImagePolicy oversized = OversizedImagePolicy.Skip)
     {
         ArgumentNullException.ThrowIfNull(writer);
         ArgumentNullException.ThrowIfNull(image);
@@ -37,7 +40,10 @@ internal static class PdfImages
 
         // A reader may hand over an undecoded image; the geometry below needs its size, and
         // the JPEG pass-through still uses the original bytes that `Ensure` carries forward.
-        if (Images.RasterImageDecoder.Ensure(image) is not { } decoded) return string.Empty;
+        // The stricter of the page's limit (chosen at layout) and the renderer's own.
+        long limit = Images.RasterImageDecoder.Stricter(maxImagePixels, options.MaxImagePixels);
+        if (Images.RasterImageDecoder.Ensure(image, limit, limit == options.MaxImagePixels && options.MaxImagePixels > 0
+                ? options.OversizedImages : oversized) is not { } decoded) return string.Empty;
         image = decoded;
 
         string name = string.Create(CultureInfo.InvariantCulture, $"Im{xObjects.Count + 1}");

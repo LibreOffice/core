@@ -209,6 +209,9 @@ public sealed class PptDocument : IPaginatedDocument
     /// shorter sequence would not be.
     /// </remarks>
     public IPageSequence Layout(LayoutOptions? options = null)
+        => XRay.Office.Core.Threading.OfficeOperation.Layout(options, () => LayoutCore(options));
+
+    private SlidePages LayoutCore(LayoutOptions? options)
     {
         List<Diagnostic> diagnostics = [];
         List<LaidOutSlide> slides =

@@ -79,6 +79,39 @@ using (FileStream html = File.Create("report.html"))
     });
 ```
 
+### Cancelling, limiting and describing the output
+
+Everything that does real work takes a `CancellationToken`, and a layout can also carry its own limits:
+
+```csharp
+using XRay.Office.Core.Threading;
+
+using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+
+using IDocument doc = OfficeDocument.Open("report.docx", cts.Token);
+IPageSequence pages = ((IPaginatedDocument)doc).Layout(
+    new LayoutOptions
+    {
+        MaxPages = 200,                                  // stop paginating here
+        Timeout = TimeSpan.FromSeconds(10),              // wall clock, layout only
+        MaxImagePixels = 25_000_000,                     // skip pictures larger than this, unread
+        OversizedImages = OversizedImagePolicy.Skip,     // or Downscale (JPEG decodes at 1/2, 1/4, 1/8)
+    },
+    cts.Token);
+
+// Written straight to the stream as it is produced; a temp file is the natural destination.
+using FileStream pdf = File.Create("report.pdf");
+new PdfRenderer().Render(doc, pages, pdf, cts.Token);    // document metadata, links, outline
+```
+
+A cancelled call throws `OperationCanceledException`. A layout that outran `Timeout` throws
+`LayoutTimeoutException`, which derives from it, so one `catch` covers both and the two can still be told
+apart. The PDF carries the title, author, subject, keywords and language, an XMP packet, a `/Link`
+annotation for every hyperlink and for every link to a bookmark or table-of-contents entry, an outline built
+from the headings (the sheets of a workbook, the slides of a deck), and page labels where the numbering
+restarts. `PdfRenderOptions` switches each of them off (`WriteLinks`, `WriteOutline`, `WriteXmp`,
+`WriteDocumentInfo`, `WritePageLabels`).
+
 `OfficeDocument.Identify(path)` names a file's format without reading it, which is the cheap way
 to filter a corpus. Callers who already know the family, or want a smaller dependency footprint,
 can use `WordProcessingReader`, `SpreadsheetReader` or `PresentationReader` directly.

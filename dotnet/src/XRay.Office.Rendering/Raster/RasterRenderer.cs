@@ -1,4 +1,5 @@
 using XRay.Office.Core.Documents;
+using XRay.Office.Core.Threading;
 using XRay.Office.Core.Units;
 using SkiaSharp;
 
@@ -37,23 +38,82 @@ public sealed class RasterRenderer
     public void RenderToPng(IPage page, Stream destination) => Render(page, destination, RasterFormat.Png);
 
     /// <summary>
+    /// Renders one page and writes it to a stream as PNG, checking <paramref name="cancellationToken"/>.
+    /// </summary>
+    public void RenderToPng(IPage page, Stream destination, CancellationToken cancellationToken)
+        => Render(page, destination, RasterFormat.Png, cancellationToken);
+
+    /// <summary>
     /// Renders one page and writes it to a stream in the given format.
     /// </summary>
     /// <param name="page">The page to draw.</param>
     /// <param name="destination">Where to write the encoded image.</param>
     /// <param name="format">Which encoding to use.</param>
     public void Render(IPage page, Stream destination, RasterFormat format)
+        => Render(page, destination, format, CancellationToken.None);
+
+    /// <summary>
+    /// Renders one page and writes it to a stream in the given format, checking
+    /// <paramref name="cancellationToken"/> while the page is drawn.
+    /// </summary>
+    /// <remarks>
+    /// The encoder writes to <paramref name="destination"/> as it goes; the encoded image is not first
+    /// collected in memory, so a large page costs its bitmap and nothing more.
+    /// </remarks>
+    /// <param name="page">The page to draw.</param>
+    /// <param name="destination">Where to write the encoded image.</param>
+    /// <param name="format">Which encoding to use.</param>
+    /// <param name="cancellationToken">Cancels the render with <see cref="OperationCanceledException"/>.</param>
+    public void Render(IPage page, Stream destination, RasterFormat format, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(page);
         ArgumentNullException.ThrowIfNull(destination);
 
-        using SKBitmap bitmap = Rasterise(page);
-        using SKData encoded = bitmap.Encode(
-            format == RasterFormat.Jpeg ? SKEncodedImageFormat.Jpeg : SKEncodedImageFormat.Png,
-            format == RasterFormat.Jpeg ? Options.JpegQuality : 100)
-            ?? throw new InvalidOperationException("Skia could not encode the page image.");
+        OfficeOperation.Run(() =>
+        {
+            using SKBitmap bitmap = RasteriseCore(page);
+            OfficeOperation.ThrowIfCancelled();
 
-        encoded.SaveTo(destination);
+            using SKManagedWStream output = new(destination, false);
+            using SKPixmap pixmap = bitmap.PeekPixels();
+            bool written = pixmap.Encode(
+                output,
+                format == RasterFormat.Jpeg ? SKEncodedImageFormat.Jpeg : SKEncodedImageFormat.Png,
+                format == RasterFormat.Jpeg ? Options.JpegQuality : 100);
+
+            if (!written) throw new InvalidOperationException("Skia could not encode the page image.");
+            output.Flush();
+            return true;
+        }, cancellationToken);
+    }
+
+    /// <summary>
+    /// Renders every page of a sequence, one encoded image each, asking <paramref name="destinationFor"/>
+    /// for the stream each is written to.
+    /// </summary>
+    /// <remarks>
+    /// One page is resident at a time: the bitmap of a page is encoded into its stream and released
+    /// before the next is drawn. The caller owns the streams and may hand out temp files; a stream is
+    /// not closed here.
+    /// </remarks>
+    /// <param name="pages">The pages to render.</param>
+    /// <param name="destinationFor">Returns the stream for the page it is given.</param>
+    /// <param name="format">Which encoding to use.</param>
+    /// <param name="cancellationToken">Cancels the render between pages and while one is drawn.</param>
+    public void RenderPages(
+        IEnumerable<IPage> pages,
+        Func<IPage, Stream> destinationFor,
+        RasterFormat format,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(pages);
+        ArgumentNullException.ThrowIfNull(destinationFor);
+
+        foreach (IPage page in pages)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            Render(page, destinationFor(page), format, cancellationToken);
+        }
     }
 
     /// <summary>
@@ -65,22 +125,47 @@ public sealed class RasterRenderer
     /// page, and a transparent one compares as a solid difference against either.
     /// </para>
     /// </remarks>
-    public SKBitmap Rasterise(IPage page)
+    public SKBitmap Rasterise(IPage page) => Rasterise(page, CancellationToken.None);
+
+    /// <summary>
+    /// Draws a page into a bitmap, checking <paramref name="cancellationToken"/> while it is drawn.
+    /// </summary>
+    public SKBitmap Rasterise(IPage page, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(page);
+        return OfficeOperation.Run(() => RasteriseCore(page), cancellationToken);
+    }
+
+    private SKBitmap RasteriseCore(IPage page)
+    {
+        OfficeOperation.ThrowIfCancelled();
 
         (int width, int height) = PixelSize(page.Size);
         SKBitmap bitmap = new(new SKImageInfo(width, height, SKColorType.Rgba8888, SKAlphaType.Premul));
-        using SKCanvas canvas = new(bitmap);
 
-        canvas.Clear(new SKColor(
-            Options.Background.R, Options.Background.G, Options.Background.B, Options.Background.A));
+        try
+        {
+            using SKCanvas canvas = new(bitmap);
 
-        using SkiaDrawingSink sink = new(canvas, Options);
-        page.Draw(sink);
-        canvas.Flush();
+            canvas.Clear(new SKColor(
+                Options.Background.R, Options.Background.G, Options.Background.B, Options.Background.A));
 
-        return bitmap;
+            using SkiaDrawingSink sink = new(canvas, Options);
+            if (page is IPageRenderLimits limits)
+            {
+                sink.MaxImagePixels = limits.MaxImagePixels;
+                sink.OversizedImages = limits.OversizedImages;
+            }
+
+            page.Draw(sink);
+            canvas.Flush();
+            return bitmap;
+        }
+        catch
+        {
+            bitmap.Dispose();
+            throw;
+        }
     }
 
     /// <summary>
@@ -161,4 +246,13 @@ public sealed record RasterRenderOptions
     /// output is a thumbnail rather than something to be compared.
     /// </remarks>
     public bool GlyphOutlines { get; init; } = true;
+
+    /// <summary>
+    /// The largest picture, in pixels, that is decoded onto a page; zero for no limit. The limit a page
+    /// carries from <see cref="LayoutOptions.MaxImagePixels"/> applies as well, and the smaller wins.
+    /// </summary>
+    public long MaxImagePixels { get; init; }
+
+    /// <summary>What happens to a picture over <see cref="MaxImagePixels"/>.</summary>
+    public OversizedImagePolicy OversizedImages { get; init; }
 }
