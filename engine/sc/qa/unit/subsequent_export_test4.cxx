@@ -1208,6 +1208,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCheckboxFormControlXlsxExport)
     assertXPath(pDoc, "/xml/v:shape/v:textbox/div/font", "face", u"Segoe UI");
     assertXPath(pDoc, "/xml/v:shape/v:textbox/div/font", "size", u"160");
 
+    // Without the fix, the attribute was missing, so the label started a tenth of an inch from
+    // the shape edge and a gap showed between the check box glyph and the label
+    assertXPath(pDoc, "/xml/v:shape", "insetmode", u"auto");
+
     // Excel builds its model from the DrawingML, so the font has to reach it as well
     xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDrawing);

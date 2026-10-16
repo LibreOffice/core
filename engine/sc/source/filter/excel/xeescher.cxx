@@ -1302,6 +1302,10 @@ sal_Int32 VmlFormControlExporter::StartShape()
     if (!m_sControlName.isEmpty())
         AddShapeAttribute(XML_id, m_sControlName.toUtf8());
 
+    // The automatic inset leaves the space around the label to the program that shows the file,
+    // so a check box label sits next to its glyph.
+    AddShapeAttribute(FSNS(XML_o, XML_insetmode), "auto");
+
     if (m_oBackgroundFill.has_value())
         AddShapeAttribute(XML_fillcolor,
                           OUString("#" + m_oBackgroundFill->AsRGBHexString()).toUtf8());
