@@ -3439,6 +3439,192 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInsertPageHeaderStateUserPageStyl
     CPPUNIT_ASSERT_EQUAL(aStyleName.toString(), rList[0]);
 }
 
+/// Fills a new document with the paragraphs "Test1" and "Test2" and selects "Test2".
+/// rInsideSelection is the point in the middle of the selection and rEndOfFirst the point at the
+/// end of "Test1".
+void lcl_selectSecondParagraph(SwWrtShell* pWrtShell, Point& rInsideSelection, Point& rEndOfFirst)
+{
+    pWrtShell->Insert(u"Test1"_ustr);
+    rEndOfFirst = pWrtShell->GetCharRect().Center();
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"Test2"_ustr);
+    pWrtShell->SttPara(/*bSelect=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    rInsideSelection = pWrtShell->GetCharRect().Center();
+    pWrtShell->SttPara(/*bSelect=*/false);
+    pWrtShell->EndPara(/*bSelect=*/true);
+    Scheduler::ProcessEventsToIdle();
+}
+
+/// Presses the left button at aFrom, moves to aTo in clear steps and, when bRelease is true,
+/// releases the button there. Positions are in twips.
+void lcl_dragText(SwXTextDocument* pXTextDocument, Point aFrom, Point aTo, int nModifier,
+                  bool bRelease = true)
+{
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aFrom.getX(), aFrom.getY(), 1,
+                                   MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    const int nSteps = 5;
+    for (int i = 1; i <= nSteps; ++i)
+    {
+        pXTextDocument->postMouseEvent(
+            COKitMouseEventType::MOVE, aFrom.getX() + (aTo.getX() - aFrom.getX()) * i / nSteps,
+            aFrom.getY() + (aTo.getY() - aFrom.getY()) * i / nSteps, 1, MOUSE_LEFT, nModifier);
+        Scheduler::ProcessEventsToIdle();
+    }
+    if (!bRelease)
+        return;
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aTo.getX(), aTo.getY(), 1,
+                                   MOUSE_LEFT, nModifier);
+    Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextMove)
+{
+    // Given the paragraphs "Test1" and "Test2", with "Test2" selected:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    Point aFrom, aTo;
+    lcl_selectSecondParagraph(pWrtShell, aFrom, aTo);
+
+    // When the selection is dragged to the end of "Test1":
+    lcl_dragText(pXTextDocument, aFrom, aTo, 0);
+
+    // Then the text moved there:
+    CPPUNIT_ASSERT_EQUAL(u"Test1Test2"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(), getParagraph(2)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextCopy)
+{
+    // Given the paragraphs "Test1" and "Test2", with "Test2" selected:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    Point aFrom, aTo;
+    lcl_selectSecondParagraph(pWrtShell, aFrom, aTo);
+
+    // When the selection is dragged to the end of "Test1" with Ctrl held:
+    lcl_dragText(pXTextDocument, aFrom, aTo, KEY_MOD1);
+
+    // Then the text is copied there and stays where it was:
+    CPPUNIT_ASSERT_EQUAL(u"Test1Test2"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Test2"_ustr, getParagraph(2)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwice)
+{
+    // Given the paragraphs "Test1" and "Test2", with "Test2" selected:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    Point aFrom, aTo;
+    lcl_selectSecondParagraph(pWrtShell, aFrom, aTo);
+
+    // When the selection is copied to the end of "Test1", then dragged there once more:
+    lcl_dragText(pXTextDocument, aFrom, aTo, KEY_MOD1);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->SttPara(/*bSelect=*/false);
+    pWrtShell->EndPara(/*bSelect=*/true);
+    Scheduler::ProcessEventsToIdle();
+    lcl_dragText(pXTextDocument, aFrom, aTo, 0);
+
+    // Then the first drag ended, so the second one moved the text:
+    CPPUNIT_ASSERT_EQUAL(u"Test1Test2Test2"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(), getParagraph(2)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextEscape)
+{
+    // Given the paragraphs "Test1" and "Test2", with "Test2" selected:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    Point aFrom, aTo;
+    lcl_selectSecondParagraph(pWrtShell, aFrom, aTo);
+
+    // When the selection is dragged to the end of "Test1" and Escape is pressed before the
+    // button comes up:
+    lcl_dragText(pXTextDocument, aFrom, aTo, 0, /*bRelease=*/false);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_ESCAPE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aTo.getX(), aTo.getY(), 1,
+                                   MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then nothing moved and "Test2" is still selected:
+    CPPUNIT_ASSERT_EQUAL(u"Test1"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Test2"_ustr, getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Test2"_ustr, pWrtShell->GetSelText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextReadOnlyView)
+{
+    // Given the paragraphs "Test1" and "Test2", with "Test2" selected in a read-only view:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    Point aFrom, aTo;
+    lcl_selectSecondParagraph(pWrtShell, aFrom, aTo);
+    KitHelper::setViewReadOnly(KitHelper::getCurrentView(), true);
+
+    // When the selection is dragged to the end of "Test1":
+    lcl_dragText(pXTextDocument, aFrom, aTo, 0);
+
+    // Then the text stays where it was:
+    CPPUNIT_ASSERT_EQUAL(u"Test1"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Test2"_ustr, getParagraph(2)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViews)
+{
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc", with "Ccc" selected in the first view and "Bbb"
+    // in the second:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nView1 = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
+    pWrtShell1->Insert(u"Aaa"_ustr);
+    Point aEndOfFirst = pWrtShell1->GetCharRect().Center();
+    pWrtShell1->SplitNode();
+    pWrtShell1->Insert(u"Bbb"_ustr);
+    pWrtShell1->SplitNode();
+    pWrtShell1->Insert(u"Ccc"_ustr);
+    pWrtShell1->SttPara(/*bSelect=*/false);
+    pWrtShell1->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    Point aInsideThird = pWrtShell1->GetCharRect().Center();
+    pWrtShell1->SttPara(/*bSelect=*/false);
+    pWrtShell1->EndPara(/*bSelect=*/true);
+
+    KitHelper::createView();
+    int nView2 = KitHelper::getCurrentView();
+    pXTextDocument->initializeForTiledRendering({});
+    SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
+    pWrtShell2->SttEndDoc(/*bStt=*/true);
+    pWrtShell2->Down(/*bSelect=*/false);
+    pWrtShell2->SttPara(/*bSelect=*/false);
+    pWrtShell2->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    Point aInsideSecond = pWrtShell2->GetCharRect().Center();
+    pWrtShell2->SttPara(/*bSelect=*/false);
+    pWrtShell2->EndPara(/*bSelect=*/true);
+    Scheduler::ProcessEventsToIdle();
+
+    // When both views drag their selection to the end of "Aaa" at the same time, and the first
+    // view releases first:
+    KitHelper::setView(nView1);
+    lcl_dragText(pXTextDocument, aInsideThird, aEndOfFirst, 0, /*bRelease=*/false);
+    KitHelper::setView(nView2);
+    lcl_dragText(pXTextDocument, aInsideSecond, aEndOfFirst, 0, /*bRelease=*/false);
+    KitHelper::setView(nView1);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aEndOfFirst.getX(),
+                                   aEndOfFirst.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    KitHelper::setView(nView2);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aEndOfFirst.getX(),
+                                   aEndOfFirst.getY(), 1, MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the drag of the first view moved its text, and no text was lost:
+    CPPUNIT_ASSERT_EQUAL(u"AaaCcc"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Bbb"_ustr, getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(), getParagraph(3)->getString());
+}
 }
 
 namespace
