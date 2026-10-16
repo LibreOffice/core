@@ -731,6 +731,15 @@ void EnhancedCustomShape2d::SetPathSize( sal_Int32 nIndex )
     }
 }
 
+void EnhancedCustomShape2d::ClearEffects(SfxItemSet& rItemSet)
+{
+    rItemSet.ClearItem(SDRATTR_SHADOW);
+    for (sal_uInt16 nWhich = SDRATTR_GLOW_FIRST; nWhich <= SDRATTR_SOFTEDGE_LAST; ++nWhich)
+        rItemSet.ClearItem(nWhich);
+    for (sal_uInt16 nWhich = SDRATTR_REFLECTION_FIRST; nWhich <= SDRATTR_REFLECTION_LAST; ++nWhich)
+        rItemSet.ClearItem(nWhich);
+}
+
 EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomShape)
 :   SfxItemSet          ( rSdrObjCustomShape.GetMergedItemSet() ),
     mrSdrObjCustomShape ( rSdrObjCustomShape ),
@@ -762,7 +771,9 @@ EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomSha
     // This exception may be removed later when AutoShapes will create primitives directly.
     // So, currently remove the ShadowAttribute from the ItemSet to not apply it to any
     // 2D helper shape.
-    ClearItem(SDRATTR_SHADOW);
+    // The glow, the soft edge and the reflection are drawn by SdrCustomShapePrimitive2D around
+    // the whole shape too, so they are removed with the shadow.
+    ClearEffects(*this);
 
     Point aP( mrSdrObjCustomShape.GetSnapRect().Center() );
     Size aS( mrSdrObjCustomShape.GetLogicRect().GetSize() );

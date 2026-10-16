@@ -165,6 +165,7 @@ rtl::Reference<SdrObject> EnhancedCustomShapeEngine::ImplForceGroupWithText(
             // clear fill and line style
             aTargetItemSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
             aTargetItemSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
+            EnhancedCustomShape2d::ClearEffects(aTargetItemSet);
 
             // get the text bounds and set at text object
             tools::Rectangle aTextBounds(rSdrObjCustomShape.GetSnapRect());

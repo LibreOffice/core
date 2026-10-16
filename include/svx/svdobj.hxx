@@ -879,11 +879,6 @@ public:
     // #i25616#
     bool LineIsOutsideGeometry() const { return mbLineIsOutsideGeometry;}
 
-    // ApplyEffects flag getter/setter
-    bool GetApplyEffects() const { return mbApplyEffects; }
-    void SetApplyEffects(const bool bApplyEffects) { mbApplyEffects = bApplyEffects; };
-
-
     // Set the position in the navigation position to the given value.
     // This method is typically used only by the model after a change to
     // the navigation order.
@@ -954,8 +949,6 @@ protected:
     bool                        mbLineIsOutsideGeometry : 1;
     // #i25616#
     bool                        mbSupportTextIndentingOnLineWidthChange : 1;
-
-    bool                        mbApplyEffects : 1 = false;
 
     bool                        m_bHorizontalRule = false;
 

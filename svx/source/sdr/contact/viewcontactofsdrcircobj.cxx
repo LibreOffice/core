@@ -71,8 +71,7 @@ namespace sdr::contact
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     new drawinglayer::primitive2d::SdrEllipsePrimitive2D(
                         aObjectMatrix,
-                        aAttribute,
-                        GetCircObj().GetApplyEffects()));
+                        aAttribute));
 
                 rVisitor.visit(xReference);
             }

@@ -87,14 +87,14 @@ namespace drawinglayer::primitive2d
             }
 
             // Soft edges should be before text, since text is not affected by soft edges
-            if (mbApplyEffects && !aRetval.empty() && getSdrLFSTAttribute().getSoftEdgeRadius())
+            if (!aRetval.empty() && getSdrLFSTAttribute().getSoftEdgeRadius())
             {
                 aRetval = createEmbeddedSoftEdgePrimitive(std::move(aRetval),
                     getSdrLFSTAttribute().getSoftEdgeRadius());
             }
 
             // tdf#132199: put glow before shadow, to have shadow of the glow, not the opposite
-            if (mbApplyEffects && !aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
+            if (!aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
             {
                 // glow
                 aRetval = createEmbeddedGlowPrimitive(std::move(aRetval), getSdrLFSTAttribute().getGlow());
@@ -115,7 +115,7 @@ namespace drawinglayer::primitive2d
 
             // The reflection shows the shape with its glow and text, but not its shadow.
             Primitive2DContainer aReflected;
-            if (mbApplyEffects && !getSdrLFSTAttribute().getReflection().isDefault())
+            if (!getSdrLFSTAttribute().getReflection().isDefault())
                 aReflected = aRetval;
 
             // add shadow
@@ -137,11 +137,9 @@ namespace drawinglayer::primitive2d
 
         SdrEllipsePrimitive2D::SdrEllipsePrimitive2D(
             basegfx::B2DHomMatrix aTransform,
-            const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
-            bool bApplyEffects)
+            const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute)
         :   maTransform(std::move(aTransform)),
-            maSdrLFSTAttribute(rSdrLFSTAttribute),
-            mbApplyEffects(bApplyEffects)
+            maSdrLFSTAttribute(rSdrLFSTAttribute)
         {
         }
 
@@ -152,8 +150,7 @@ namespace drawinglayer::primitive2d
                 const SdrEllipsePrimitive2D& rCompare = static_cast<const SdrEllipsePrimitive2D&>(rPrimitive);
 
                 return (getTransform() == rCompare.getTransform()
-                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute()
-                    && getApplyEffects() == rCompare.getApplyEffects());
+                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute());
             }
 
             return false;
@@ -229,14 +226,14 @@ namespace drawinglayer::primitive2d
             }
 
             // Soft edges should be before text, since text is not affected by soft edges
-            if (getApplyEffects() && !aRetval.empty() && getSdrLFSTAttribute().getSoftEdgeRadius())
+            if (!aRetval.empty() && getSdrLFSTAttribute().getSoftEdgeRadius())
             {
                 aRetval = createEmbeddedSoftEdgePrimitive(std::move(aRetval),
                     getSdrLFSTAttribute().getSoftEdgeRadius());
             }
 
             // tdf#132199: put glow before shadow, to have shadow of the glow, not the opposite
-            if (getApplyEffects() && !aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
+            if (!aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
             {
                 // glow
                 aRetval = createEmbeddedGlowPrimitive(std::move(aRetval), getSdrLFSTAttribute().getGlow());
@@ -257,7 +254,7 @@ namespace drawinglayer::primitive2d
 
             // The reflection shows the shape with its glow and text, but not its shadow.
             Primitive2DContainer aReflected;
-            if (getApplyEffects() && !getSdrLFSTAttribute().getReflection().isDefault())
+            if (!getSdrLFSTAttribute().getReflection().isDefault())
                 aReflected = aRetval;
 
             // add shadow

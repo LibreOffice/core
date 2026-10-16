@@ -91,14 +91,14 @@ namespace drawinglayer::primitive2d
             }
 
             // Soft edges should be before text, since text is not affected by soft edges
-            if (mbApplyEffects && !aRetval.empty() && getSdrLFSTAttribute().getSoftEdgeRadius())
+            if (!aRetval.empty() && getSdrLFSTAttribute().getSoftEdgeRadius())
             {
                 aRetval = createEmbeddedSoftEdgePrimitive(std::move(aRetval),
                     getSdrLFSTAttribute().getSoftEdgeRadius());
             }
 
             // tdf#132199: put glow before shadow, to have shadow of the glow, not the opposite
-            if (mbApplyEffects &&!aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
+            if (!aRetval.empty() && !getSdrLFSTAttribute().getGlow().isDefault())
             {
                 // glow
                 aRetval = createEmbeddedGlowPrimitive(std::move(aRetval), getSdrLFSTAttribute().getGlow());
@@ -141,7 +141,7 @@ namespace drawinglayer::primitive2d
 
             // The reflection shows the shape with its glow and text, but not its shadow.
             Primitive2DContainer aReflected;
-            if (mbApplyEffects && !getSdrLFSTAttribute().getReflection().isDefault())
+            if (!getSdrLFSTAttribute().getReflection().isDefault())
                 aReflected = aRetval;
 
             // add shadow
@@ -167,15 +167,13 @@ namespace drawinglayer::primitive2d
             double fCornerRadiusX,
             double fCornerRadiusY,
             bool bForceFillForHitTest,
-            bool bPlaceholderText,
-            bool bApplyEffects)
+            bool bPlaceholderText)
         :   maTransform(std::move(aTransform)),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             mfCornerRadiusX(fCornerRadiusX),
             mfCornerRadiusY(fCornerRadiusY),
             mbForceFillForHitTest(bForceFillForHitTest),
-            mbPlaceholderText(bPlaceholderText),
-            mbApplyEffects(bApplyEffects)
+            mbPlaceholderText(bPlaceholderText)
         {
         }
 
@@ -190,8 +188,7 @@ namespace drawinglayer::primitive2d
                     && getTransform() == rCompare.getTransform()
                     && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute()
                     && getForceFillForHitTest() == rCompare.getForceFillForHitTest()
-                    && getPlaceholderText() == rCompare.getPlaceholderText()
-                    && getApplyEffects() == rCompare.getApplyEffects());
+                    && getPlaceholderText() == rCompare.getPlaceholderText());
             }
 
             return false;

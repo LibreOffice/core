@@ -212,6 +212,10 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShape2d final : public SfxItemSet
 
         static OUString         GetEquation( const sal_uInt16 nFlags, sal_Int32 nPara1, sal_Int32 nPara2, sal_Int32 nPara3 );
 
+        /// Removes the shadow, the glow, the soft edge and the reflection from the items. The
+        /// custom shape draws them once around all of its geometry and text.
+        static void ClearEffects(SfxItemSet& rItemSet);
+
         SAL_DLLPRIVATE static void AppendEnhancedCustomShapeEquationParameter( OUString& rParameter, const sal_Int32 nPara, const bool bIsSpecialValue );
 
         static void             SetEnhancedCustomShapeParameter( css::drawing::EnhancedCustomShapeParameter&

@@ -926,9 +926,6 @@ rtl::Reference<SvxShapePolyPolygon>
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
 
-    if (SdrObject* pObj = xShape->GetSdrObject())
-        pObj->SetApplyEffects(true);
-
     return xShape;
 }
 
@@ -1144,7 +1141,6 @@ rtl::Reference<SvxShapePolyPolygon>
             basegfx::B2DPolyPolygon aClipPolyPolygon( PolyToB2DPolyPolygon(*pClipPolyPolygon) );
             pPath->ForceMetricToItemPoolMetric(aClipPolyPolygon);
             pPath->SetClipPoly(aClipPolyPolygon);
-            pPath->SetApplyEffects(true);
         }
     }
     catch( const uno::Exception& )
@@ -1759,9 +1755,6 @@ rtl::Reference<SvxShapeCircle>
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
-
-    if (SdrObject* pObj = xShape->GetSdrObject())
-        pObj->SetApplyEffects(true);
 
     return xShape;
 }
