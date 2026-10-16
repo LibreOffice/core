@@ -108,6 +108,13 @@ class UnitReconnect : public UnitWSD
         return std::string(message.begin() + prefix.size(), message.end());
     }
 
+    /// Waits for the loaded: message, which comes after the view's status. The session is live
+    /// from then on, and the document is loaded.
+    bool waitForLoaded(http::WebSocketSession& session)
+    {
+        return !session.waitForMessage("loaded:", std::chrono::seconds(10), testname).empty();
+    }
+
     /// Waits for a viewinfo with the given number of views. When parkedCount is not negative, that
     /// many of them must say parked:"true". sawParked, when given, is set if any viewinfo on the
     /// way had a parked view.
@@ -397,6 +404,7 @@ UnitBase::TestResult UnitReconnect::testTokenRotatesOnReattach()
     LOK_ASSERT(!token1.empty());
     const int viewIdA = waitForStatusViewId(*sessionA, std::chrono::seconds(30));
     LOK_ASSERT(viewIdA >= 0);
+    LOK_ASSERT(waitForLoaded(*sessionA));
     sessionA->dropWS();
     LOK_ASSERT(sessionA->waitForDisconnection(std::chrono::seconds(10)));
 
