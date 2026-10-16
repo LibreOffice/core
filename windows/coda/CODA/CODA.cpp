@@ -1545,6 +1545,28 @@ static void hideDropOverlay(WindowState& data);
 // The timer that watches for a drag that goes away without the overlay hearing about it.
 static const int TIMER_ID_DROP_OVERLAY = 1;
 
+// The pathnames in a CF_HDROP file list, in their order there.
+static std::vector<std::wstring> pathsInFileList(HDROP drop)
+{
+    std::vector<std::wstring> paths;
+    const UINT numFiles = DragQueryFileW(drop, 0xFFFFFFFF, NULL, 0);
+    for (UINT i = 0; i < numFiles; i++)
+    {
+        // The length returned does not count the terminating NUL character, so the buffer needs
+        // one more.
+        const UINT length = DragQueryFileW(drop, i, NULL, 0);
+        if (length == 0)
+            continue;
+
+        std::wstring path(length + 1, L'\0');
+        if (DragQueryFileW(drop, i, path.data(), length + 1) == 0)
+            continue;
+        path.resize(length);
+        paths.push_back(std::move(path));
+    }
+    return paths;
+}
+
 // Deal with the files in a drop, whether it arrived as a WM_DROPFILES message or through the drop
 // target of the overlay window. An image or media file goes into the document, everything else
 // becomes one more document to open: the first one opens right away, the rest follow one by one as
@@ -1572,20 +1594,8 @@ static void handleDroppedFiles(HWND hWnd, HDROP drop, const POINT& dropPoint)
     }
 
     bool anyDocumentToOpen = false;
-    const UINT numFiles = DragQueryFileW(drop, 0xFFFFFFFF, NULL, 0);
-    for (UINT i = 0; i < numFiles; i++)
+    for (const std::wstring& droppedPath : pathsInFileList(drop))
     {
-        // The length returned does not count the terminating NUL character, so the buffer needs
-        // one more.
-        const UINT length = DragQueryFileW(drop, i, NULL, 0);
-        if (length == 0)
-            continue;
-
-        std::wstring droppedPath(length + 1, L'\0');
-        if (DragQueryFileW(drop, i, droppedPath.data(), length + 1) == 0)
-            continue;
-        droppedPath.resize(length);
-
         auto path = Poco::Path(Util::wide_string_to_string(droppedPath));
         const std::string mimeType = mimeTypeForFileName(path.getFileName());
 
@@ -4188,6 +4198,8 @@ static std::string MIME_type_for_clipboard_format(UINT format)
 {
     if (format == CF_UNICODETEXT)
         return "text/plain;charset=utf-8";
+    if (format == CF_HDROP)
+        return "text/uri-list";
 
     auto name = get_clipboard_format_name(format);
 
@@ -4209,6 +4221,8 @@ static std::string MIME_type_for_clipboard_format(UINT format)
         return "text/rtf";
     else if (name == L"HTML Format")
         return "text/html";
+    else if (name == L"FileNameW")
+        return "text/uri-list";
 
     return "";
 }
@@ -4329,8 +4343,52 @@ static std::vector<std::string> clipboardProviderGetMimeTypes()
     return mimeTypes;
 }
 
+// When the user copies files in Explorer, the clipboard holds the files as a CF_HDROP file list. It
+// also holds the FileNameW format, which is the pathname of the first file only, in UTF-16 and
+// followed by a null. The text/uri-list made from them holds the file: URI of each file, each
+// followed by CRLF.
+static bool getClipboardFilesAsUriList(std::vector<char>* pOutData)
+{
+    if (!try_open_clipboard(NULL))
+        return false;
+
+    std::vector<std::wstring> paths;
+    if (HANDLE handle = GetClipboardData(CF_HDROP))
+        paths = pathsInFileList(static_cast<HDROP>(handle));
+
+    if (paths.empty())
+    {
+        if (HANDLE handle = GetClipboardData(RegisterClipboardFormatW(L"FileNameW")))
+        {
+            if (const wchar_t* wpath = (const wchar_t*)GlobalLock(handle))
+            {
+                // The block can be larger than the data in it, so the pathname ends at the first
+                // null.
+                std::wstring path(wpath, wcsnlen(wpath, GlobalSize(handle) / sizeof(wchar_t)));
+                GlobalUnlock(handle);
+                if (!path.empty())
+                    paths.push_back(std::move(path));
+            }
+        }
+    }
+    CloseClipboard();
+
+    if (paths.empty())
+        return false;
+
+    std::string uriList;
+    for (const std::wstring& path : paths)
+        uriList += pathToURI(Poco::Path(Util::wide_string_to_string(path))) + "\r\n";
+    pOutData->assign(uriList.begin(), uriList.end());
+
+    return true;
+}
+
 static bool clipboardProviderGetData(const char* pMimeType, std::vector<char>* pOutData)
 {
+    if (std::strcmp(pMimeType, "text/uri-list") == 0)
+        return getClipboardFilesAsUriList(pOutData);
+
     auto formats = clipboard_formats_for_MIME_type(pMimeType);
 
     if (formats.size() == 0)
