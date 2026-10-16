@@ -360,11 +360,19 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		}
 	},
 
+	// The engine's hash of the selected sheet from the last status, undefined before the
+	// first status.
+	_selectedPartHash: function () {
+		return app.calc.partHashes ? app.calc.partHashes[this._selectedPart] : undefined;
+	},
+
 	_refreshPartHashes(statusJSON) {
 		app.calc.partHashes = [];
 
+		// The status carries the hash as a number; it is kept as a string, the form every
+		// comparison with a hash from another message uses.
 		for (let i = 0; i < statusJSON.parts.length; i++) {
-			app.calc.partHashes.push(statusJSON.parts[i].hash);
+			app.calc.partHashes.push(String(statusJSON.parts[i].hash));
 		}
 	},
 
@@ -506,6 +514,10 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 			this._docType = statusJSON.type;
 			this._parts = statusJSON.partscount;
+			// The names and hashes of the sheets come first, so the check of the sheet
+			// geometry below sees the sheet that is at the selected index now.
+			this._refreshPartNames(statusJSON);
+			this._refreshPartHashes(statusJSON);
 
 			const reconnecting = app.socket._reconnecting;
 			if (reconnecting) {
@@ -530,8 +542,10 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 				// fetched again. The wait for a first response starts over with it.
 				this._sheetGeomFirstWait = false;
 				this.requestSheetGeometryData();
-			} else if (this.sheetGeometry && this._selectedPart != this.sheetGeometry.getPart()) {
-				// Core initiated sheet switch, need to get full sheetGeometry data for the selected sheet.
+			} else if (this.sheetGeometry &&
+				!this.sheetGeometry.isForSheet(this._selectedPart, this._selectedPartHash())) {
+				// The engine switched the sheet, or another sheet took the index of the
+				// selected one, so the whole geometry of the selected sheet is fetched.
 				this.requestSheetGeometryData();
 			}
 
@@ -541,9 +555,6 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			console.assert(this._viewId >= 0, 'Incorrect viewId received: ' + this._viewId);
 
 			this._adjustCanvasSectionsForLayoutChange();
-
-			this._refreshPartNames(statusJSON);
-			this._refreshPartHashes(statusJSON);
 
 			// if the number of parts, or order has changed then refresh comment positions
 			if (this._hasPartsCountOrNamesChanged(previousStatusJSON, statusJSON))
@@ -867,14 +878,15 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			this._sheetGeomFirstWait = false;
 			this.sheetGeometry = new cool.SheetGeometry(jsonMsgObj,
 				app.tile.size.x, app.tile.size.y,
-				RenderManager.tileSize, this._selectedPart);
+				RenderManager.tileSize, this._selectedPart, this._selectedPartHash());
 
 			app.sectionContainer.addSection(new cool.CornerHeader());
 			app.sectionContainer.addSection(new app.definitions.rowHeader());
 			app.sectionContainer.addSection(new app.definitions.columnHeader());
 		}
 		else {
-			this.sheetGeometry.update(jsonMsgObj, /* checkCompleteness */ false, this._selectedPart);
+			this.sheetGeometry.update(jsonMsgObj, /* checkCompleteness */ false, this._selectedPart,
+				this._selectedPartHash());
 		}
 
 		this._replayPrintTwipsMsgs(differentSheet);

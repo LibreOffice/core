@@ -66,6 +66,9 @@ export class SheetGeometry {
 	 * 'groups') enabled.
 	 */
 	private _part: number;
+	// The engine's identifier of the sheet the data belongs to, the hash the status message
+	// lists for the part. It stays with the sheet when the sheet changes its index.
+	private _partHash: string | undefined;
 	private _columns: SheetDimension;
 	private _rows: SheetDimension;
 	private _unoCommand: string;
@@ -73,7 +76,7 @@ export class SheetGeometry {
 	public maxVisibleRowIndex: number;
 
 	constructor(sheetGeomJSON: SheetGeometryCoreData, tileWidthTwips: number, tileHeightTwips: number,
-		tileSizePixels: number, part: number) {
+		tileSizePixels: number, part: number, partHash?: string) {
 
 		// Remove the unnecessary checks only after SheetGeometry client code has moved to TS.
 		if (typeof sheetGeomJSON !== 'object' ||
@@ -86,6 +89,7 @@ export class SheetGeometry {
 		}
 
 		this._part = -1;
+		this._partHash = undefined;
 		this._columns = new SheetDimension();
 		this._rows = new SheetDimension();
 		this._unoCommand = '.uno:SheetGeometryData';
@@ -94,7 +98,7 @@ export class SheetGeometry {
 		this.setTileGeometryData(tileWidthTwips, tileHeightTwips, tileSizePixels,
 			false /* update position info ?*/);
 
-		this.update(sheetGeomJSON, /* checkCompleteness */ true, part);
+		this.update(sheetGeomJSON, /* checkCompleteness */ true, part, partHash);
 	}
 
 	private checkMaxIndex(sheetGeomJSON: SheetGeometryCoreData, column: boolean): number {
@@ -140,7 +144,8 @@ export class SheetGeometry {
 		}
 	}
 
-	public update(sheetGeomJSON: SheetGeometryCoreData, checkCompleteness: boolean, part: number): boolean {
+	public update(sheetGeomJSON: SheetGeometryCoreData, checkCompleteness: boolean, part: number,
+		partHash?: string): boolean {
 		if (!this._testValidity(sheetGeomJSON, checkCompleteness)) {
 			return false;
 		}
@@ -175,6 +180,7 @@ export class SheetGeometry {
 			if (part !== this._part) {
 				this._part = part;
 			}
+			this._partHash = partHash;
 		}
 
 		this._columns.setMaxIndex(+sheetGeomJSON.maxtiledcolumn);
@@ -211,6 +217,21 @@ export class SheetGeometry {
 
 	public getPart(): number {
 		return this._part;
+	}
+
+	public getPartHash(): string | undefined {
+		return this._partHash;
+	}
+
+	// Whether the data describes the sheet that is at index part now. A sheet that took the
+	// index of a deleted, inserted or moved one has another hash, so the index alone is not
+	// enough. Without a hash on either side the index decides.
+	public isForSheet(part: number, partHash: string | undefined): boolean {
+		if (part !== this._part)
+			return false;
+		if (partHash === undefined || this._partHash === undefined)
+			return true;
+		return partHash === this._partHash;
 	}
 
 	public getColumnsGeometry(): SheetDimension {

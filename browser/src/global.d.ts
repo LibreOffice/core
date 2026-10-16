@@ -152,7 +152,7 @@ interface AppInterface {
 		decimalSeparator: null | string; // Current cell's decimal separator.
 		otherCellCursors: any;
 		splitCoordinate: null | cool.SimplePoint;
-		partHashes: null | Array<any>; // hashes used to distinguish parts (we use sheet name)
+		partHashes: null | Array<string>; // the engine's hash of each sheet, from the status message
 		filterPopupCell: any; // The cell a filter popup belongs to: { popupId, column, row }.
 		isRTL(): boolean;
 		isSelectedPartSheetView(): boolean;
