@@ -38,14 +38,12 @@
 #include "cmdlineargs.hxx"
 #include <lockfile.hxx>
 #include "userinstall.hxx"
-#include "desktopcontext.hxx"
 #include "officeipcthread.hxx"
 
 #include <framework/desktop.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <svl/ctloptions.hxx>
-#include <svtools/javacontext.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/theAutoRecovery.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
@@ -81,7 +79,6 @@
 #include <comphelper/threadpool.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/backupfilehelper.hxx>
-#include <uno/current_context.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -951,9 +948,6 @@ int Desktop::Main()
 
     pExecGlobals = new ExecuteGlobals();
 
-    // Remember current context object
-    cpo::uno::ContextLayer layer( cpo::uno::getCurrentContext() );
-
     if ( m_aBootstrapError != BE_OK )
     {
         HandleBootstrapErrors( m_aBootstrapError, m_aBootstrapErrorMessage );
@@ -964,9 +958,6 @@ int Desktop::Main()
     if (eStatus == BS_TERMINATE) {
         return EXIT_SUCCESS;
     }
-
-    // Detect desktop environment - need to do this as early as possible
-    cpo::uno::setCurrentContext( new DesktopContext( cpo::uno::getCurrentContext() ) );
 
     if (officecfg::Office::Common::Misc::PreloadJVM::get() && pExecGlobals)
     {
@@ -1191,12 +1182,6 @@ int Desktop::Main()
         Application::PostUserEvent( LINK( this, Desktop, EnableAcceptors_Impl) );
 
         // call Application::Execute to process messages in vcl message loop
-#if HAVE_FEATURE_JAVA
-        // The JavaContext contains an interaction handler which is used when
-        // the creation of a Java Virtual Machine fails
-        cpo::uno::ContextLayer layer2(
-            new svt::JavaContext( cpo::uno::getCurrentContext() ) );
-#endif
         // check whether the shutdown is caused by restart just before entering the Execute
         pExecGlobals->bRestartRequested = pExecGlobals->bRestartRequested ||
                 xRestartManager->isRestartRequested(true);

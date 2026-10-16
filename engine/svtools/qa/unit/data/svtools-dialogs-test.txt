@@ -40,4 +40,3 @@ svt/ui/printersetupdialog.ui
 svt/ui/restartdialog.ui
 svt/ui/graphicexport.ui
 svt/ui/querydeletedialog.ui
-svt/ui/javadisableddialog.ui

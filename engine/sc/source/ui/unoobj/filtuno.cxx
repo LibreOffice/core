@@ -191,10 +191,11 @@ sal_Int16 ScFilterOptionsObj::execute()
         ScopedVclPtr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg(Application::GetFrameWeld(xDialogParent), aPrivDatName,
                                                                                   pInStream.get(), SC_IMPORTFILE));
 
-        bool bShow;
+        bool bShow = utl::isShowFilterOptionsDialog(aFilterString);
         // The "ShowFilterDialog" flag is passed from SfxApplication::OpenDocExec_Impl
-        if (!(cpo::uno::getCurrentContext()->getValueByName(u"ShowFilterDialog"_ustr) >>= bShow))
-            bShow = utl::isShowFilterOptionsDialog(aFilterString);
+        cpo::uno::Reference<cpo::uno::XCurrentContext> xContext = cpo::uno::getCurrentContext();
+        if (xContext)
+            xContext->getValueByName(u"ShowFilterDialog"_ustr) >>= bShow;
         bool bOk = !bShow;
         if (!bOk)
         {

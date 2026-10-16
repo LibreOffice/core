@@ -115,9 +115,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/filter/DocumentToGraphicRenderer \
     svtools/source/filter/exportdialog \
     svtools/source/graphic/renderer \
-    $(if $(ENABLE_JAVA), \
-        svtools/source/java/javacontext \
-        svtools/source/java/javainteractionhandler) \
     svtools/source/misc/acceleratorexecute \
     svtools/source/misc/bindablecontrolhelper \
     svtools/source/misc/cliplistener \

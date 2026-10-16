@@ -149,8 +149,6 @@ bool UnnecessaryLocking::VisitCompoundStmt(const CompoundStmt* compoundStmt)
             && !loplugin::isSamePathname(fn, SRCDIR "/sfx2/source/statbar/stbitem.cxx")
             && !loplugin::isSamePathname(fn, SRCDIR "/sfx2/source/toolbox/tbxitem.cxx")
             && !loplugin::isSamePathname(fn,
-                                         SRCDIR "/svtools/source/java/javainteractionhandler.cxx")
-            && !loplugin::isSamePathname(fn,
                                          SRCDIR "/svx/source/accessibility/ShapeTypeHandler.cxx")
             && !loplugin::isSamePathname(fn,
                                          SRCDIR "/svx/source/tbxctrls/tbunosearchcontrollers.cxx")

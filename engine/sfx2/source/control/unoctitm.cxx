@@ -27,8 +27,6 @@
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
-#include <svtools/javacontext.hxx>
-#include <svtools/javainteractionhandler.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/Point.hpp>
@@ -41,7 +39,6 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <comphelper/processfactory.hxx>
-#include <uno/current_context.hxx>
 #include <utility>
 #include <vcl/fieldvalues.hxx>
 #include <vcl/svapp.hxx>
@@ -206,38 +203,11 @@ SfxOfficeDispatch::~SfxOfficeDispatch()
     }
 }
 
-#if HAVE_FEATURE_JAVA
-// The JavaContext contains an interaction handler which is used when
-// the creation of a Java Virtual Machine fails. There shall only be one
-// user notification (message box) even if the same error (interaction)
-// reoccurs. The effect is, that if a user selects a menu entry than they
-// may get only one notification that a JRE is not selected.
-// This function checks if a JavaContext is already available (typically
-// created by Desktop::Main() in app.cxx), and creates new one if not.
-namespace {
-std::unique_ptr< cpo::uno::ContextLayer > EnsureJavaContext()
-{
-    cpo::uno::Reference< cpo::uno::XCurrentContext > xContext(cpo::uno::getCurrentContext());
-    if (xContext.is())
-    {
-        cpo::uno::Reference< css::task::XInteractionHandler > xHandler;
-        xContext->getValueByName(JAVA_INTERACTION_HANDLER_NAME) >>= xHandler;
-        if (xHandler.is())
-            return nullptr; // No need to add new layer: JavaContext already present
-    }
-    return std::make_unique< cpo::uno::ContextLayer >(new svt::JavaContext(xContext));
-}
-}
-#endif
-
 void SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs )
 {
     // ControllerItem is the Impl class
     if ( pImpl )
     {
-#if HAVE_FEATURE_JAVA
-        std::unique_ptr< cpo::uno::ContextLayer > layer(EnsureJavaContext());
-#endif
         comphelper::SequenceAsHashMap aDescriptor(aArgs);
         bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
         if (bOnMainThread)
@@ -266,9 +236,6 @@ void SfxOfficeDispatch::dispatchWithNotification( const css::util::URL& aURL,
     // ControllerItem is the Impl class
     if ( pImpl )
     {
-#if HAVE_FEATURE_JAVA
-        std::unique_ptr< cpo::uno::ContextLayer > layer(EnsureJavaContext());
-#endif
         pImpl->dispatch( aURL, aArgs, rListener );
     }
 }

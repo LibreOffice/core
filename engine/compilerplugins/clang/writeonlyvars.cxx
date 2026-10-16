@@ -245,8 +245,6 @@ void WriteOnlyVars::run()
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/svtools/source/filter/SvFilterOptionsDialog.cxx"))
             return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/svtools/source/java/javainteractionhandler.cxx"))
-            return;
         if (loplugin::isSamePathname(fn, SRCDIR "/basic/source/classes/sbunoobj.cxx"))
             return;
         if (loplugin::isSamePathname(fn,

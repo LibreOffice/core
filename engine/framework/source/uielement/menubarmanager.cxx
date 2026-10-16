@@ -29,7 +29,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <cpo/uno/XCurrentContext.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
@@ -45,8 +44,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <svtools/javainteractionhandler.hxx>
-#include <uno/current_context.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -518,43 +515,10 @@ static void lcl_CheckForChildren(Menu* pMenu, sal_uInt16 nItemId)
 
 // vcl handler
 
-namespace {
-
-class QuietInteractionContext:
-    public cppu::WeakImplHelper< cpo::uno::XCurrentContext >
-{
-public:
-    explicit QuietInteractionContext(
-        cpo::uno::Reference< cpo::uno::XCurrentContext > context):
-        context_(std::move(context)) {}
-    QuietInteractionContext(const QuietInteractionContext&) = delete;
-    QuietInteractionContext& operator=(const QuietInteractionContext&) = delete;
-
-private:
-    virtual ~QuietInteractionContext() override {}
-
-    virtual cpo::uno::Any getValueByName(
-        OUString const & Name) override
-    {
-        return Name != JAVA_INTERACTION_HANDLER_NAME && context_.is()
-            ? context_->getValueByName(Name)
-            : cpo::uno::Any();
-    }
-
-    cpo::uno::Reference< cpo::uno::XCurrentContext >
-        context_;
-};
-
-}
-
 IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
 {
     if ( pMenu != m_pVCLMenu )
         return true;
-
-    cpo::uno::ContextLayer layer(
-        new QuietInteractionContext(
-            cpo::uno::getCurrentContext()));
 
     // set/unset hiding disabled menu entries
     bool bDontHide           = officecfg::Office::Common::View::Menu::DontHideDisabledEntry::get();
