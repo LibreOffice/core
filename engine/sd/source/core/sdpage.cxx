@@ -351,14 +351,12 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         case PresObjKind::Title:
         {
             pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), ::tools::Rectangle(), SdrObjKind::TitleText);
-            pSdrObj->SetApplyEffects(true);
         }
         break;
 
         case PresObjKind::Outline:
         {
             pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), ::tools::Rectangle(), SdrObjKind::OutlineText);
-            pSdrObj->SetApplyEffects(true);
         }
         break;
 
@@ -371,7 +369,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         case PresObjKind::Text:
         {
             pSdrObj = new SdrRectObj(getSdrModelFromSdrPage(), ::tools::Rectangle(), SdrObjKind::Text);
-            pSdrObj->SetApplyEffects(true);
         }
         break;
 
@@ -2634,7 +2631,6 @@ rtl::Reference<SdrObject> SdPage::MakePresObjText(SdrObject& rObj)
 
     rtl::Reference<SdrObject> xText = new SdrRectObj(getSdrModelFromSdrPage(), rObj.GetLogicRect(),
                                                     SdrObjKind::OutlineText);
-    xText->SetApplyEffects(true);
     xText->SetName(rObj.GetName());
     xText->SetTitle(rObj.GetTitle());
     xText->SetDescription(rObj.GetDescription());

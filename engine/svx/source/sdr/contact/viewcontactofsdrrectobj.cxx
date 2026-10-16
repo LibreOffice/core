@@ -79,8 +79,7 @@ void ViewContactOfSdrRectObj::createViewIndependentPrimitive2DSequence(drawingla
             fCornerRadiusY,
             // #i105856# use fill for HitTest when TextFrame and not PickThrough
             GetRectObj().IsTextFrame() && !bPickThroughTransparentTextFrames,
-            GetRectObj().IsEmptyPresObj() && !GetRectObj().IsReallyEdited() /*bPlaceholderText*/,
-            GetRectObj().GetApplyEffects()));
+            GetRectObj().IsEmptyPresObj() && !GetRectObj().IsReallyEdited() /*bPlaceholderText*/));
 
     rVisitor.visit(xReference);
 }

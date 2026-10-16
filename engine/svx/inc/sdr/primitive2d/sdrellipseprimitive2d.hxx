@@ -35,24 +35,17 @@ namespace drawinglayer::primitive2d
             ::basegfx::B2DHomMatrix                     maTransform;
             attribute::SdrLineFillEffectsTextAttribute   maSdrLFSTAttribute;
 
-            // flag which decides if the primitive should directly apply glow
-            // and soft edge effects, which is needed when the primitive is not wrapped
-            // in a custom primitive
-            bool                                        mbApplyEffects : 1;
-
             // local decomposition.
             virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const override;
 
         public:
             SdrEllipsePrimitive2D(
                 ::basegfx::B2DHomMatrix aTransform,
-                const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
-                bool bApplyEffects = false);
+                const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute);
 
             // data access
             const ::basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const attribute::SdrLineFillEffectsTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }
-            bool getApplyEffects() const { return mbApplyEffects; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

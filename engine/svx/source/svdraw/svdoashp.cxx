@@ -2861,6 +2861,14 @@ rtl::Reference<SdrObject> SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bo
             {
                 pRetval->SetMergedItem(makeSdrShadowItem(true));
             }
+
+            // The geometry of the custom shape has no glow, soft edge or reflection, so the
+            // converted objects get them from the custom shape, like the shadow.
+            SfxItemSetFixed<SDRATTR_GLOW_FIRST, SDRATTR_SOFTEDGE_LAST, SDRATTR_REFLECTION_FIRST,
+                            SDRATTR_REFLECTION_LAST>
+                aEffects(GetObjectItemPool());
+            aEffects.Put(GetMergedItemSet());
+            pRetval->SetMergedItemSet(aEffects);
         }
 
         if(bAddText && HasText() && !IsTextPath())

@@ -50,12 +50,6 @@ namespace drawinglayer::primitive2d
 
             basegfx::B2DPolyPolygon                     maClipPolyPolygon;
 
-            // flag which decides if the primitive should directly apply glow
-            // and soft edge effects, which is needed when the primitive is not wrapped
-            // in a custom primitive
-            bool                                        mbApplyEffects : 1;
-
-
             // local decomposition.
             virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const override;
 
@@ -68,8 +62,7 @@ namespace drawinglayer::primitive2d
                 const attribute::SdrLineFillEffectsTextAttribute& rSdrLFSTAttribute,
                 basegfx::B2DPolyPolygon aUnitPolyPolygon,
                 basegfx::B2DPolyPolygon aUnitDefinitionPolyPolygon,
-                basegfx::B2DPolyPolygon aClipPolyPolygon = {},
-                bool bApplyEffects = false);
+                basegfx::B2DPolyPolygon aClipPolyPolygon = {});
 
             // data access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
@@ -77,7 +70,6 @@ namespace drawinglayer::primitive2d
             const basegfx::B2DPolyPolygon& getUnitPolyPolygon() const { return maUnitPolyPolygon; }
             const basegfx::B2DPolyPolygon& getUnitDefinitionPolyPolygon() const { return maUnitDefinitionPolyPolygon; }
             const basegfx::B2DPolyPolygon& getClipPolyPolygon() const { return maClipPolyPolygon; }
-            bool getApplyEffects() const { return mbApplyEffects; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
