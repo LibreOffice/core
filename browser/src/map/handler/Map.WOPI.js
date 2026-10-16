@@ -933,15 +933,7 @@ window.L.Map.WOPI = window.L.Handler.extend({
 						this._map.uiManager.showInfoModal('error', _('Error'), _('File name should contain an extension.'), '', _('OK'));
 						return;
 					}
-
-					var isExport = format === 'pdf' || format === 'epub' || this._map._saveImageToWopi;
-					this._map._saveImageToWopi = false;
-					if (isExport) {
-						this._map.exportAs(msg.Values.Filename);
-					} else {
-						this._map.showBusy(_('Creating copy...'), false);
-						this._map.saveAs(msg.Values.Filename, format);
-					}
+					this.performSaveOrExportAs(msg.Values.Filename, format);
 				}
 			}
 		}
@@ -1041,6 +1033,30 @@ window.L.Map.WOPI = window.L.Handler.extend({
 			if (eSignature) {
 				eSignature.handleSigned(msg);
 			}
+		}
+	},
+
+	requestSaveAsName: function(fileName, saveAsFormat, action) {
+		let defaultValue = fileName.substring(0, fileName.lastIndexOf('.')) + '.' + saveAsFormat;
+		this._map.uiManager.showInputModal('save-as-modal', '', _('Enter a file name'), defaultValue, _('OK'), () => {
+			let value = document.getElementById('save-as-modal').querySelectorAll('#input-modal-input')[0].value;
+			if (!value) {
+				return;
+			} else if (value.substring(value.lastIndexOf('.') + 1) !== saveAsFormat) {
+				value += '.' + saveAsFormat;
+			}
+			action(value, saveAsFormat);
+		});
+	},
+
+	performSaveOrExportAs: function(filename, format) {
+		let isExport = format === 'pdf' || format === 'epub' || this._map._saveImageToWopi;
+		this._map._saveImageToWopi = false;
+		if (isExport) {
+			this._map.exportAs(filename);
+		} else {
+			this._map.showBusy(_('Creating copy...'), false);
+			this._map.saveAs(filename, format);
 		}
 	},
 

@@ -916,7 +916,17 @@ window.L.Map.include({
 		map.fire('postMessage', {msgId: 'UI_Share'});
 	},
 	openSaveAs: function (format) {
-		var map = this;
+		let map = this;
+		let wopi = map.wopi;
+		if (wopi.WopiHostIsSharePoint) {
+			// request filename. SharePoint doesn't support `UI_SaveAs`
+			let fileName = wopi.BaseFileName;
+			if (!format) {
+				format = fileName.substring(fileName.lastIndexOf('.') + 1);
+			}
+			wopi.requestSaveAsName(fileName, format, wopi.performSaveOrExportAs.bind(wopi));
+			return;
+		}
 		map.fire('postMessage', {msgId: 'UI_SaveAs', args: {format: format}});
 	},
 

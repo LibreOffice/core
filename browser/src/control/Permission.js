@@ -234,16 +234,7 @@ window.L.Map.include({
 		var extensionInfo = this.readonlyStartingFormats[extension];
 		var saveAsFormat = extensionInfo.odfFormat;
 
-		var defaultValue = fileName.substring(0, fileName.lastIndexOf('.')) + '.' + saveAsFormat;
-		this.uiManager.showInputModal('save-as-modal', '', _('Enter a file name'), defaultValue, _('OK'), function() {
-			var value = document.getElementById('save-as-modal').querySelectorAll('#input-modal-input')[0].value;
-			if (!value)
-				return;
-			else if (value.substring(value.lastIndexOf('.') + 1) !== saveAsFormat) {
-				value += '.' + saveAsFormat;
-			}
-			this.saveAs(value, saveAsFormat);
-		}.bind(this));
+		this.wopi.requestSaveAsName(fileName, saveAsFormat, this.saveAs.bind(this));
 	},
 
 	// Show dialog when in WASM mode asking user to choose between
