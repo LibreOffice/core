@@ -287,7 +287,12 @@ static void setRLimit(rlim_t confLim, int resource, const std::string& resourceT
     rlim_t lim = confLim;
     if (lim <= 0)
         lim = RLIM_INFINITY;
-    const std::string limTextWithUnit((lim == RLIM_INFINITY) ? "unlimited" : std::to_string(lim) + ' ' + unitText);
+    const auto toText = [&unitText](rlim_t value)
+    {
+        return value == RLIM_INFINITY ? std::string("unlimited")
+                                      : std::to_string(value) + ' ' + unitText;
+    };
+    const std::string limTextWithUnit = toText(lim);
     if (resource == RLIMIT_FSIZE)
     {
         // Without this, a write past the limit terminates the kit with
@@ -310,10 +315,9 @@ static void setRLimit(rlim_t confLim, int resource, const std::string& resourceT
 
     if (getrlimit(resource, &rlim) == 0)
     {
-        const std::string setLimTextWithUnit((rlim.rlim_max == RLIM_INFINITY)
-                                                 ? "unlimited"
-                                                 : std::to_string(rlim.rlim_max) + ' ' + unitText);
-        LOG_INF(resourceText << " is " << setLimTextWithUnit << " after setting it to "
+        // The soft limit is the one in effect. The hard one only caps how far it may be raised.
+        LOG_INF(resourceText << " is " << toText(rlim.rlim_cur) << ", hard limit: "
+                             << toText(rlim.rlim_max) << ", after setting it to "
                              << limTextWithUnit << '.');
     }
     else

@@ -5095,24 +5095,31 @@ void lokit_main(
             Util::forcedExit(EX_OK);
         }
 
+        // The soft limit is the one in effect. The hard one only caps how far it may be raised.
+        const auto bytesText = [](rlim_t value)
+        {
+            if (value == RLIM_INFINITY)
+                return std::string("unlimited");
+            return Util::getHumanizedBytes(value) + " (" + std::to_string(value) + " bytes)";
+        };
+        const auto logBytesLimit = [&bytesText](int resource, const char* name)
+        {
+            rlimit rlim = { 0, 0 };
+            if (getrlimit(resource, &rlim) == 0)
+                LOG_INF(name << " is " << bytesText(rlim.rlim_cur)
+                             << ", hard limit: " << bytesText(rlim.rlim_max));
+            else
+                LOG_SYS("Failed to get " << name);
+        };
+
+        logBytesLimit(RLIMIT_AS, "RLIMIT_AS");
+        logBytesLimit(RLIMIT_STACK, "RLIMIT_STACK");
+        logBytesLimit(RLIMIT_FSIZE, "RLIMIT_FSIZE");
+
         rlimit rlim = { 0, 0 };
-        if (getrlimit(RLIMIT_AS, &rlim) == 0)
-            LOG_INF("RLIMIT_AS is " << Util::getHumanizedBytes(rlim.rlim_max) << " (" << rlim.rlim_max << " bytes)");
-        else
-            LOG_SYS("Failed to get RLIMIT_AS");
-
-        if (getrlimit(RLIMIT_STACK, &rlim) == 0)
-            LOG_INF("RLIMIT_STACK is " << Util::getHumanizedBytes(rlim.rlim_max) << " (" << rlim.rlim_max << " bytes)");
-        else
-            LOG_SYS("Failed to get RLIMIT_STACK");
-
-        if (getrlimit(RLIMIT_FSIZE, &rlim) == 0)
-            LOG_INF("RLIMIT_FSIZE is " << Util::getHumanizedBytes(rlim.rlim_max) << " (" << rlim.rlim_max << " bytes)");
-        else
-            LOG_SYS("Failed to get RLIMIT_FSIZE");
-
         if (getrlimit(RLIMIT_NOFILE, &rlim) == 0)
-            LOG_INF("RLIMIT_NOFILE is " << rlim.rlim_max << " files.");
+            LOG_INF("RLIMIT_NOFILE is " << rlim.rlim_cur << " files, hard limit: " << rlim.rlim_max
+                                        << " files.");
         else
             LOG_SYS("Failed to get RLIMIT_NOFILE");
 
