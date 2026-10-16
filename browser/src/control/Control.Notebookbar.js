@@ -271,7 +271,7 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		});
 
 		if (hasAITab && uiManager.shouldSelectAIAssistantTab() &&
-			uiManager.isTabVisible('AIAssistant'))
+			this.map.isAIConfigured && uiManager.isTabVisible('AIAssistant'))
 			return aiTabId;
 
 		return this.HOME_TAB_ID;

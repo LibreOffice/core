@@ -46,6 +46,27 @@ describe(['tagdesktop'], 'AI Chat Sidebar', { testIsolation: false }, function()
 			cy.get('@showSettingsDialog').should('be.calledWith', 'ai-section');
 			cy.cGet('#aichat-dock-wrapper.visible').should('not.exist');
 		});
+
+		it('Opens on the AI Assistant tab only once AI is configured', function() {
+			var win = this.win;
+			var notebookbar = win.app.map.uiManager.notebookbar.impl;
+			// The tab is offered to an unconfigured user as the way in to the
+			// setup dialog, so offer it either way and test the selection alone.
+			cy.stub(win.app.LOUtil, 'isAIAssistantAvailable').returns(true);
+			var wasAsked = win.showAINotebookbar;
+			win.showAINotebookbar = true;
+
+			win.app.map.isAIConfigured = false;
+			expect(notebookbar.getInitialTabId()).to.equal('Home-tab-label');
+
+			win.app.map.isAIConfigured = true;
+			expect(notebookbar.getInitialTabId()).to.equal('AIAssistant-tab-label');
+
+			win.showAINotebookbar = false;
+			expect(notebookbar.getInitialTabId()).to.equal('Home-tab-label');
+
+			win.showAINotebookbar = wasAsked;
+		});
 	});
 
 	describe('Empty State', function() {
