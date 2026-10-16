@@ -3137,6 +3137,13 @@ std::string ScTabView::getSheetGeometryData(bool bColumns, bool bRows, bool bSiz
 
     boost::property_tree::ptree aTree;
     aTree.put("commandName", ".uno:SheetGeometryData");
+    // The sheet the data describes: its index and the hash the status lists for it, so the
+    // client can match the reply with the sheet it shows after the sheets changed.
+    const SCTAB nCurrentTab = aViewData.GetTabNumber();
+    aTree.put("part", nCurrentTab);
+    sal_Int64 nHashCode = 0;
+    if (rDoc.GetHashCode(nCurrentTab, nHashCode))
+        aTree.put("hash", nHashCode);
     aTree.put("maxtiledcolumn", rDoc.MaxCol());
     aTree.put("maxtiledrow", MAXTILEDROW);
 

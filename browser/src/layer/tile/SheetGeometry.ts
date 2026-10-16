@@ -42,6 +42,8 @@ export interface IndexAndSpan {
 
 export interface SheetGeometryCoreData {
 	commandName: string;
+	part?: string;
+	hash?: string;
 	maxtiledcolumn: string;
 	maxtiledrow: string;
 	columns: SheetDimensionCoreData;
@@ -177,6 +179,10 @@ export class SheetGeometry {
 
 		if (updateOK) {
 			console.assert(typeof part === 'number', 'part must be a number');
+			if (sheetGeomJSON.part !== undefined)
+				part = parseInt(sheetGeomJSON.part);
+			if (sheetGeomJSON.hash !== undefined)
+				partHash = String(sheetGeomJSON.hash);
 			if (part !== this._part) {
 				this._part = part;
 			}

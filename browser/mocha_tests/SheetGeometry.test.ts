@@ -137,6 +137,26 @@ describe('SheetGeometry', function () {
 				nodeassert.equal(sg.isForSheet(1, undefined), true);
 			});
 
+			it('takes the sheet named in the reply over the one the caller passes', function () {
+				var namedObj = Object.assign({ part: '2', hash: 'sheet-c' }, sgObj);
+				var sg = new cool.SheetGeometry(
+					namedObj,
+					tileWidthTwips,
+					tileHeightTwips,
+					tileSizePx,
+					1,
+					'sheet-b',
+				);
+				nodeassert.equal(sg.getPart(), 2);
+				nodeassert.equal(sg.getPartHash(), 'sheet-c');
+				nodeassert.equal(sg.isForSheet(2, 'sheet-c'), true);
+				nodeassert.equal(sg.isForSheet(1, 'sheet-b'), false);
+				// An update without a named sheet takes the caller's sheet again.
+				sg.update(sgObj, true, 1, 'sheet-b');
+				nodeassert.equal(sg.getPart(), 1);
+				nodeassert.equal(sg.getPartHash(), 'sheet-b');
+			});
+
 			it('takes the hash of the sheet an update was fetched for', function () {
 				var sg = new cool.SheetGeometry(
 					sgObj,

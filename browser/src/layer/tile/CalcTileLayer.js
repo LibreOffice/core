@@ -1156,6 +1156,15 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			this._updateHeadersGridLines(values);
 
 		} else if (values.commandName === '.uno:SheetGeometryData') {
+			var selectedHash = this._selectedPartHash();
+			if (values.hash !== undefined && selectedHash !== undefined &&
+				String(values.hash) !== String(selectedHash)) {
+				// The reply describes the sheet the server view showed when it answered,
+				// and the sheets changed since, so the selected sheet is asked for again.
+				this._sheetGeomFirstWait = false;
+				this.requestSheetGeometryData();
+				return;
+			}
 			var differentSheet = this.sheetGeometry === undefined || this._selectedPart !== this.sheetGeometry.getPart();
 			// duplicate sheet-geometry for same sheet triggers replay of other messages that
 			// disrupt the view restore during sheet switch.

@@ -2745,6 +2745,48 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowsKeepPositionAfterClearOutline
     Scheduler::ProcessEventsToIdle();
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetGeometryDataNamesItsSheet)
+{
+    // The geometry reply names the sheet it describes by index and by the hash the status
+    // lists for that sheet, so a client can tell a reply for another sheet from one for the
+    // sheet it shows.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    ScDocument& rDoc = pViewData->GetDocument();
+    pViewData->GetDocShell()->GetDocFunc().InsertTable(1, u"Second"_ustr, false, true);
+
+    auto readSheetOfReply = [pModelObj](SCTAB& rPart, OString& rHash) {
+        const std::string aReply = pModelObj->getSheetGeometryData(
+            /*bColumns=*/true, /*bRows=*/true, /*bSizes=*/true, /*bHidden=*/true,
+            /*bFiltered=*/true, /*bGroups=*/true);
+        std::stringstream aStream(aReply);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        rPart = aTree.get<SCTAB>("part");
+        rHash = OString(aTree.get<std::string>("hash").c_str());
+    };
+    auto expectedHash = [&rDoc](SCTAB nTab) -> OString {
+        sal_Int64 nHashCode = 0;
+        CPPUNIT_ASSERT(rDoc.GetHashCode(nTab, nHashCode));
+        return OString::number(nHashCode);
+    };
+
+    SCTAB nPart = -1;
+    OString aHash;
+    readSheetOfReply(nPart, aHash);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), nPart);
+    CPPUNIT_ASSERT_EQUAL(expectedHash(0), aHash);
+
+    // The reply follows the sheet the view shows.
+    pViewData->GetViewShell()->SetTabNo(1);
+    readSheetOfReply(nPart, aHash);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), nPart);
+    CPPUNIT_ASSERT_EQUAL(expectedHash(1), aHash);
+    CPPUNIT_ASSERT(expectedHash(1) != expectedHash(0));
+}
+
 // if we extend the tiled area to the right and bottom we want two resulting area
 // that don't overlap. If they overlap that typically creates an unnecessary full
 // screen invalidation.
