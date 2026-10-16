@@ -166,7 +166,18 @@ protected:
     /// member to hold state of the mouse buttons for creation of own MouseEvents (like in ScrollHdl)
 
 private:
+    /** Starts the text edit of the one selected object with the given text as what is typed
+        first, where an object that can hold text is the only one selected, it can be edited,
+        the document is not read only and no text edit runs yet.
+
+        @returns true if the text edit was started
+    */
+    bool StartTextEditByTyping(const OUString& rText);
+
     sal_uInt16      mnCode;
+
+    /// The text of the input being put together, until its end says it is complete.
+    OUString        maTextBeingInput;
 
 };
 

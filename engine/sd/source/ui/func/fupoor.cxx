@@ -23,6 +23,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/seleng.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
@@ -783,35 +784,9 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
             if(1 == rMarkList.GetMarkCount())
             {
-                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
-                if (nullptr != pObj && pObj->isDiagram())
-                {
-                    SdrObject* pSubSelection(pObj->getDiagramSubSelection());
-                    if (nullptr != pSubSelection && pSubSelection->isDiagramTextNode())
-                        pObj = pSubSelection;
-                }
-
-                // #i118485# allow TextInput for OLEs, too
-                if( DynCastSdrTextObj( pObj ) !=  nullptr && pObj->HasTextEdit())
-                {
-                    // use common IsSimpleCharInput from the EditEngine.
-                    bool bPrintable(EditEngine::IsSimpleCharInput(rKEvt));
-
-                    if(bPrintable)
-                    {
-                        // try to activate textedit mode for the selected object
-                        SfxStringItem aInputString(SID_ATTR_CHAR, OUString(rKEvt.GetCharCode()));
-
-                        mrViewShell.GetViewFrame()->GetDispatcher()->ExecuteList(
-                            SID_ATTR_CHAR,
-                            SfxCallMode::ASYNCHRON,
-                            { &aInputString });
-
-                        // consumed
-                        bReturn = true;
-                    }
-                }
+                // use common IsSimpleCharInput from the EditEngine.
+                if (EditEngine::IsSimpleCharInput(rKEvt))
+                    bReturn = StartTextEditByTyping(OUString(rKEvt.GetCharCode()));
             }
             else
             {
@@ -949,8 +924,63 @@ IMPL_LINK_NOARG(FuPoor, DragHdl, Timer *, void)
     }
 }
 
+bool FuPoor::StartTextEditByTyping(const OUString& rText)
+{
+    if (rText.isEmpty() || mpDocSh->IsReadOnly() || mpView->IsTextEdit())
+        return false;
+
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+    if (1 != rMarkList.GetMarkCount())
+        return false;
+
+    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
+    if (nullptr != pObj && pObj->isDiagram())
+    {
+        SdrObject* pSubSelection(pObj->getDiagramSubSelection());
+        if (nullptr != pSubSelection && pSubSelection->isDiagramTextNode())
+            pObj = pSubSelection;
+    }
+
+    // #i118485# allow TextInput for OLEs, too
+    if (DynCastSdrTextObj(pObj) == nullptr || !pObj->HasTextEdit())
+        return false;
+
+    // try to activate textedit mode for the selected object
+    SfxStringItem aInputString(SID_ATTR_CHAR, rText);
+
+    mrViewShell.GetViewFrame()->GetDispatcher()->ExecuteList(
+        SID_ATTR_CHAR,
+        SfxCallMode::ASYNCHRON,
+        { &aInputString });
+
+    return true;
+}
+
 bool FuPoor::Command(const CommandEvent& rCEvt)
 {
+    /*
+        Text that is put together by an input method, and text a client sends as what was typed,
+        arrives as input that ends once it is complete, not as key presses. Outside a text edit,
+        that complete text starts the text edit of the selected object, as a typed character does
+        in KeyInput.
+    */
+    if (!mpView->IsTextEdit())
+    {
+        if (rCEvt.GetCommand() == CommandEventId::ExtTextInput)
+        {
+            const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
+            maTextBeingInput = pData ? pData->GetText() : OUString();
+        }
+        else if (rCEvt.GetCommand() == CommandEventId::EndExtTextInput)
+        {
+            const OUString aTyped(maTextBeingInput);
+            maTextBeingInput.clear();
+            if (StartTextEditByTyping(aTyped))
+                return true;
+        }
+    }
+
     return mpView->Command(rCEvt,mpWindow);
 }
 
