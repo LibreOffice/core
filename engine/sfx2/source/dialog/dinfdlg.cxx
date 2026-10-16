@@ -871,7 +871,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, FileValHdl, weld::Button&, void)
     if (comphelper::COKit::canRevealInFileManager() && !m_sRevealURL.isEmpty())
         comphelper::COKit::revealInFileManager(m_sRevealURL);
     else
-        sfx2::openUriExternally(m_sFileURL, false, GetFrameWeld());
+        sfx2::openUriExternally(m_sFileURL);
 }
 
 IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl, weld::Button&, void)

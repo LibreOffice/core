@@ -27,7 +27,6 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -876,7 +875,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                      aINetProtocol == INetProtocol::Http ||
                      aINetProtocol == INetProtocol::Https )
                 {
-                    sfx2::openUriExternally(aURL.Complete, true, rReq.GetFrameWeld());
+                    sfx2::openUriExternally(aURL.Complete);
                     return;
                 }
                 else
@@ -917,20 +916,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
                     if ( !bFound )
                     {
-                        bool bLoadInternal = false;
-                        try
-                        {
-                            sfx2::openUriExternally(
-                                aURL.Complete, pFilter == nullptr, rReq.GetFrameWeld());
-                        }
-                        catch ( css::system::SystemShellExecuteException& )
-                        {
-                            rReq.RemoveItem( SID_TARGETNAME );
-                            rReq.AppendItem( SfxStringItem( SID_TARGETNAME, u"_default"_ustr ) );
-                            bLoadInternal = true;
-                        }
-                        if ( !bLoadInternal )
-                            return;
+                        sfx2::openUriExternally(aURL.Complete);
+                        return;
                     }
                 }
             }

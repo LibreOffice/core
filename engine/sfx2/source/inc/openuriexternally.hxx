@@ -14,25 +14,12 @@
 
 #include <rtl/ustring.hxx>
 
-namespace weld
-{
-class Widget;
-}
-
 namespace sfx2
 {
-/** Open a URI via com.sun.star.system.SystemShellExecute
-
-    Handles XSystemShellExecute.execute's IllegalArgumentException (throwing a
-    RuntimeException if it is unexpected, i.e., not caused by the given sURI not
-    being an absolute URI reference).
-
-    Handles XSystemShellExecute.execute's SystemShellExecuteException unless the
-    given bHandleSystemShellExecuteException is false (in which case the
-    exception is re-thrown).
+/** Send the URI to the client of the current view as a clicked hyperlink. Nothing is sent when
+    there is no current view.
 */
-void openUriExternally(const OUString& sURI, bool bHandleSystemShellExecuteException,
-                       weld::Widget* pDialogParent);
+void openUriExternally(const OUString& sURI);
 };
 
 #endif

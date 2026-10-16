@@ -34,13 +34,12 @@ class SFX2_DLLPUBLIC SfxHelp final : public Help
     bool            bLaunchingHelp; // tdf#140539 don't allow help to be re-launched during help launch
 
 private:
-    SAL_DLLPRIVATE static bool Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUString& rKeyword);
+    SAL_DLLPRIVATE static bool Start_Impl(const OUString& rURL);
     SAL_DLLPRIVATE virtual void SearchKeyword( const OUString& rKeyWord ) override;
     SAL_DLLPRIVATE virtual bool Start(const OUString& rURL, weld::Widget* pWidget = nullptr) override;
     SAL_DLLPRIVATE static OUString GetHelpModuleName_Impl(std::u16string_view rHelpId);
     SAL_DLLPRIVATE static OUString CreateHelpURL_Impl( const OUString& aCommandURL, const OUString& rModuleName );
 
-    SAL_DLLPRIVATE static bool Start_Impl( const OUString& rURL, const vcl::Window* pWindow );
     SAL_DLLPRIVATE virtual bool Start( const OUString& rURL, const vcl::Window* pWindow ) override;
 
 public:
