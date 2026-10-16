@@ -12,7 +12,7 @@
   <office:text>
    <text:p>First paragraph.</text:p>
    <text:p>Before <draw:rect text:anchor-type="as-char" draw:name="Shape 1" svg:width="0.4cm" svg:height="0.4cm"><svg:title>Blue box</svg:title><svg:desc>A small blue square</svg:desc></draw:rect> after.</text:p>
-   <text:p><draw:ellipse text:anchor-type="paragraph" draw:name="Red circle" svg:x="10cm" svg:y="0cm" svg:width="1cm" svg:height="1cm"><svg:title>Red circle</svg:title></draw:ellipse>Ending with a circle.</text:p>
+   <text:p><draw:ellipse text:anchor-type="paragraph" draw:name="Shape 2" svg:x="10cm" svg:y="0cm" svg:width="1cm" svg:height="1cm"><svg:title>Red circle</svg:title></draw:ellipse>Ending with a circle.</text:p>
    <text:p>Last paragraph.</text:p>
   </office:text>
  </office:body>

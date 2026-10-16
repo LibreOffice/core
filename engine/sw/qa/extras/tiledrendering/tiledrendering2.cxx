@@ -2279,6 +2279,92 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphShapeAfterScr
                          aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yShapeSelection)
+{
+    // Given a shape anchored as a character and one anchored to the next paragraph, and the
+    // cursor in the paragraph of the first one:
+    SwXTextDocument* pXTextDocument = createDoc("a11y-shape.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // When a shape is selected from the keyboard (Shift+F4):
+    dispatchCommand(mxComponent, u".uno:JumpToNextFrame"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the selection of the shape is reported, by its name:
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetSelectedObjCount());
+    // Without the fix, a shape had no selection report.
+    CPPUNIT_ASSERT_EQUAL(std::string("add"), aView.m_aA11ySelection.get<std::string>("action", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("Shape 2 Red circle"),
+                         aView.m_aA11ySelection.get<std::string>("name", ""));
+
+    // And when the next one is selected (Tab, as Shift+F4 works from the text only):
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_TAB);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_TAB);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then its selection is reported:
+    CPPUNIT_ASSERT_EQUAL(std::string("add"), aView.m_aA11ySelection.get<std::string>("action", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("Shape 1 Blue box"),
+                         aView.m_aA11ySelection.get<std::string>("name", ""));
+
+    // And when the cursor goes back to the text:
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_ESCAPE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the end of the selection is reported, as the client blocks typing until then:
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pWrtShell->GetSelectedObjCount());
+    CPPUNIT_ASSERT_EQUAL(std::string("remove"),
+                         aView.m_aA11ySelection.get<std::string>("action", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("Shape 1 Blue box"),
+                         aView.m_aA11ySelection.get<std::string>("name", ""));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yShapeSelectionDelete)
+{
+    // Shift+F4 reaches the shape anchored to a paragraph, then Tab the one anchored as a character
+    for (const auto & [ nTabs, aName ] : { std::pair(0, "Shape 2 Red circle"),
+                                           std::pair(1, "Shape 1 Blue box") })
+    {
+        // Given a shape selected from the keyboard (Shift+F4, then Tab for the second):
+        SwXTextDocument* pXTextDocument = createDoc("a11y-shape.fodt");
+        SwTestViewCallback aView;
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+        pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+        pWrtShell->Down(/*bSelect=*/false);
+        Scheduler::ProcessEventsToIdle();
+        dispatchCommand(mxComponent, u".uno:JumpToNextFrame"_ustr, {});
+        Scheduler::ProcessEventsToIdle();
+        for (int i = 0; i < nTabs; ++i)
+        {
+            pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_TAB);
+            pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_TAB);
+            Scheduler::ProcessEventsToIdle();
+        }
+        CPPUNIT_ASSERT_EQUAL(std::string(aName),
+                             aView.m_aA11ySelection.get<std::string>("name", ""));
+        const int nReports = aView.m_nA11ySelectionCallbackCount;
+
+        // When it is deleted:
+        pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DELETE);
+        pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DELETE);
+        Scheduler::ProcessEventsToIdle();
+
+        // Then the end of its selection is reported once, as the client blocks typing until then:
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pWrtShell->GetSelectedObjCount());
+        // Without the fix, the deletion of the shape anchored to a paragraph was not reported.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aName, nReports + 1, aView.m_nA11ySelectionCallbackCount);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aName, std::string("delete"),
+                                     aView.m_aA11ySelection.get<std::string>("action", ""));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aName, std::string(aName),
+                                     aView.m_aA11ySelection.get<std::string>("name", ""));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yImageSelection)
 {
     for (const char* pFile : { "a11y-image.fodt", "a11y-image-at-paragraph.fodt" })

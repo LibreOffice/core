@@ -283,6 +283,15 @@ bool isText(sal_Int16 nRole)
     return nRole == accessibility::AccessibleRole::DOCUMENT_TEXT;
 }
 
+bool isShape(const uno::Reference<accessibility::XAccessible>& xAccessible)
+{
+    if (!xAccessible.is())
+        return false;
+    const uno::Reference<accessibility::XAccessibleContext> xContext
+        = xAccessible->getAccessibleContext();
+    return xContext.is() && xContext->getAccessibleRole() == accessibility::AccessibleRole::SHAPE;
+}
+
 constexpr
 bool isSpreadsheet(sal_Int16 nRole)
 {
@@ -1460,6 +1469,8 @@ public:
         bool bForce = false
     );
 
+    bool isAttached(const uno::Reference<accessibility::XAccessible>& xAccessible) const;
+
     /// @throws lang::IndexOutOfBoundsException
     /// @throws uno::RuntimeException
     static uno::Reference< accessibility::XAccessible > getAccessible(const lang::EventObject& aEvent );
@@ -2048,7 +2059,7 @@ void KitDocumentFocusListener::resetParagraphInfo()
 
 // For a presentation document when an accessible event of type SELECTION_CHANGED_XXX occurs
 // the selected (or unselected) object is put in NewValue, instead for a text document
-// the selected object is put in Source, except for a selected frame.
+// the selected object is put in Source, except for a selected frame or shape.
 // The following function helps to retrieve the selected object independently on where it has been put.
 uno::Reference< accessibility::XAccessible >
 KitDocumentFocusListener::getSelectedObject(const accessibility::AccessibleEventObject& aEvent) const
@@ -2056,9 +2067,13 @@ KitDocumentFocusListener::getSelectedObject(const accessibility::AccessibleEvent
     uno::Reference< accessibility::XAccessible > xSelectedObject;
     if (isText(m_nDocumentType))
     {
-        // Writer reports a selected frame on its parent, with the frame as the new value
-        if (aEvent.EventId == accessibility::AccessibleEventId::SELECTION_CHANGED)
-            aEvent.NewValue >>= xSelectedObject;
+        // Writer reports a selected frame on its parent, with the frame as the new value, and a
+        // shape joining or leaving the selection on the document view, with the shape there
+        uno::Reference<accessibility::XAccessible> xNewValue;
+        aEvent.NewValue >>= xNewValue;
+        if (aEvent.EventId == accessibility::AccessibleEventId::SELECTION_CHANGED
+            || isShape(xNewValue))
+            xSelectedObject = xNewValue;
         if (!xSelectedObject.is())
             xSelectedObject = aEvent.Source.query<accessibility::XAccessible>();
     }
@@ -2444,10 +2459,15 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                 break;
             }
             case AccessibleEventId::SELECTION_CHANGED:
+            case AccessibleEventId::SELECTION_CHANGED_ADD:
             case AccessibleEventId::SELECTION_CHANGED_REMOVE:
             {
                 uno::Reference< XAccessible > xSelectedObject = getSelectedObject(aEvent);
                 if (!xSelectedObject.is())
+                    return;
+                // a Writer shape only, whose selection has no SELECTION_CHANGED
+                if (aEvent.EventId == AccessibleEventId::SELECTION_CHANGED_ADD
+                    && !(isText(m_nDocumentType) && isShape(xSelectedObject)))
                     return;
                 uno::Reference< XAccessibleContext > xContext = xSelectedObject->getAccessibleContext();
                 if (!xContext.is())
@@ -2507,7 +2527,16 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
             {
                 uno::Reference< accessibility::XAccessible > xChild;
                 if( (aEvent.OldValue >>= xChild) && xChild.is() )
+                {
+                    // a selected shape under the document view is not attached, so detaching it
+                    // reports nothing
+                    if (xChild == m_xSelectedObject && !isAttached(xChild))
+                    {
+                        m_xSelectedObject.clear();
+                        onShapeSelectionChanged(xChild, u"delete"_ustr);
+                    }
                     detachRecursive(xChild);
+                }
 
                 if( (aEvent.NewValue >>= xChild) && xChild.is() )
                     attachRecursive(xChild);
@@ -2692,6 +2721,15 @@ void KitDocumentFocusListener::attachRecursive(
             }
         }
     }
+}
+
+bool KitDocumentFocusListener::isAttached(
+    const uno::Reference<accessibility::XAccessible>& xAccessible) const
+{
+    const uno::Reference<accessibility::XAccessibleContext> xContext
+        = xAccessible->getAccessibleContext();
+    return xContext.is()
+           && m_aRefList.contains(xContext.query<accessibility::XAccessibleEventBroadcaster>());
 }
 
 void KitDocumentFocusListener::detachRecursive(

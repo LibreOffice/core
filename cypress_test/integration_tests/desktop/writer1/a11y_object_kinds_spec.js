@@ -44,4 +44,16 @@ describe(['tagdesktop'], 'Writer shapes and objects for the reader', { testIsola
 			});
 		});
 	});
+
+	it('a shape selected from the keyboard is announced by its name', function () {
+		// nothing lies below the caret, so Shift+F4 wraps around to the topmost object, the shape
+		cy.realPress(['Shift', 'F4']);
+		cy.cGet('#clipboard-area')
+			.should('have.attr', 'aria-description', 'Shape 1 Blue box selected. ');
+		cy.realPress('Escape');
+		// typing is blocked while a selection is held, though not under Cypress
+		cy.cGet('#clipboard-area').should(function () {
+			expect(win.app.map._textInput._hasAnySelection, 'a selection held').to.equal(false);
+		});
+	});
 });

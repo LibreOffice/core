@@ -221,6 +221,7 @@ void SwTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_aA11ySelection.clear();
             std::stringstream aStream(pPayload);
             boost::property_tree::read_json(aStream, m_aA11ySelection);
+            ++m_nA11ySelectionCallbackCount;
             break;
         }
         default:

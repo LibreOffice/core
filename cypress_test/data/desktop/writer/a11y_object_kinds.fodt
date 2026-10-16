@@ -10,7 +10,7 @@
  </office:styles>
  <office:body>
   <office:text>
-   <text:p>A box <draw:rect text:anchor-type="as-char" draw:name="Shape 1" svg:width="0.4cm" svg:height="0.4cm"><svg:title>Blue box</svg:title></draw:rect> and a fraction <draw:frame draw:name="Object1" text:anchor-type="as-char" svg:width="0.6in" svg:height="0.4in"><draw:object><math:math><math:semantics><math:mrow><math:mfrac><math:mi math:mathvariant="italic">b</math:mi><math:mn>2</math:mn></math:mfrac></math:mrow><math:annotation math:encoding="StarMath 5.0">b over 2</math:annotation></math:semantics></math:math></draw:object><svg:title>Half of b</svg:title></draw:frame>.</text:p>
+   <text:p>A box <draw:rect text:anchor-type="as-char" draw:name="Shape 1" svg:width="0.4cm" svg:height="1.5cm"><svg:title>Blue box</svg:title></draw:rect> and a fraction <draw:frame draw:name="Object1" text:anchor-type="as-char" svg:width="0.6in" svg:height="0.4in"><draw:object><math:math><math:semantics><math:mrow><math:mfrac><math:mi math:mathvariant="italic">b</math:mi><math:mn>2</math:mn></math:mfrac></math:mrow><math:annotation math:encoding="StarMath 5.0">b over 2</math:annotation></math:semantics></math:math></draw:object><svg:title>Half of b</svg:title></draw:frame>.</text:p>
    <text:p>Last paragraph.</text:p>
   </office:text>
  </office:body>
