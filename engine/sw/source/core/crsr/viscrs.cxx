@@ -357,7 +357,9 @@ std::optional<OString> SwVisibleCursor::getKitPayload(COKitCallbackType eType, i
             }
         }
 
-        return KitHelper::makeVisCursorInvalidation(nViewId, sRect, bIsWrong, sHyperlink, m_nLastKitCursorEditorViewId);
+        return KitHelper::makeVisCursorInvalidation(nViewId, sRect, bIsWrong, sHyperlink,
+                                                    m_nLastKitCursorEditorViewId,
+                                                    m_bIsDropPosition);
     }
     else
         abort();

@@ -945,13 +945,15 @@ void KitHelper::notifyInvalidationViewsInMode(vcl::ITiledRenderable* pDoc, int n
 }
 
 OString KitHelper::makeVisCursorInvalidation(int nViewId, std::string_view rRectangle,
-    bool bMispelledWord, const OString& rHyperlink, int nEditorViewId)
+    bool bMispelledWord, const OString& rHyperlink, int nEditorViewId, bool bDropPosition)
 {
     OString sHyperlink = rHyperlink.isEmpty() ? "{}"_ostr : rHyperlink;
+    // The dropPosition key is present only while the cursor marks a drop position.
     return OString::Concat("{ \"viewId\": \"") + OString::number(nViewId) +
         "\", \"editorViewId\": \"" + OString::number(nEditorViewId) +
         "\", \"rectangle\": \"" + rRectangle +
         "\", \"mispelledWord\": \"" +  OString::number(bMispelledWord ? 1 : 0) +
+        (bDropPosition ? "\", \"dropPosition\": \"1" : "") +
         "\", \"hyperlink\": " + sHyperlink + " }";
 }
 

@@ -30,6 +30,8 @@ public:
     bool m_bOwnCursorInvalidated;
     int m_nOwnCursorInvalidatedBy;
     bool m_bOwnCursorAtOrigin;
+    /// Whether the last own cursor payload marked a drop position.
+    bool m_bOwnCursorAtDropPosition = false;
     tools::Rectangle m_aOwnCursor;
     bool m_bViewCursorInvalidated;
     /// The view named as having moved the other view's caret, or -1 when none was named.

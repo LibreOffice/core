@@ -82,6 +82,7 @@ void SwTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             boost::property_tree::read_json(aStream, aTree);
             OString sRect(aTree.get_child("rectangle").get_value<std::string>());
             m_nOwnCursorInvalidatedBy = aTree.get_child("viewId").get_value<int>();
+            m_bOwnCursorAtDropPosition = aTree.get<std::string>("dropPosition", "") == "1";
 
             if (sRect == "EMPTY")
                 return;

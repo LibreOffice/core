@@ -275,10 +275,11 @@ public:
     static void notifyOtherViewsUpdatePerViewId(SfxViewShell const* pViewShell, COKitCallbackType eType);
 
     static OString makePayloadJSON(const SfxViewShell* pThisView, int nViewId, std::string_view rKey, const OString& rPayload);
-    /// Makes a COKitCallbackType::INVALIDATE_VISIBLE_CURSOR payload.
+    /// Makes a COKitCallbackType::INVALIDATE_VISIBLE_CURSOR payload. bDropPosition is true when the
+    /// cursor marks where a dragged selection would be dropped.
     static OString makeVisCursorInvalidation(int nViewId, std::string_view rRectangle,
                                              bool bMispelledWord = false, const OString& rHyperlink = ""_ostr,
-                                             int nEditorViewId = -1);
+                                             int nEditorViewId = -1, bool bDropPosition = false);
 
     static OString makeViewCursorInvalidation(const SfxViewShell* pThisView, int nViewId,
                                               std::string_view rRectangle, int nEditorViewId = -1);

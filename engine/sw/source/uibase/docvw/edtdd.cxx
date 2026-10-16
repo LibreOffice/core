@@ -31,6 +31,7 @@
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
 #include <wrtsh.hxx>
+#include <viscrs.hxx>
 #include <edtdd.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
@@ -499,7 +500,10 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             CleanupDropUserMarker();
             SwContentAtPos aCont( IsAttrAtPos::ContentCheck );
             if(rSh.GetContentAtPos(aDocPt, aCont))
+            {
+                rSh.GetVisibleCursor()->SetDropPosition(true);
                 rSh.SwCursorShell::SetVisibleCursor( aDocPt, ScrollSizeMode::ScrollSizeMouseSelection );
+            }
         }
         else
         {

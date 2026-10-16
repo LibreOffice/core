@@ -3625,6 +3625,39 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViews)
     CPPUNIT_ASSERT_EQUAL(u"Bbb"_ustr, getParagraph(2)->getString());
     CPPUNIT_ASSERT_EQUAL(OUString(), getParagraph(3)->getString());
 }
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextDropPosition)
+{
+    // Given the paragraphs "Test1" and "Test2", with "Test2" selected:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwTestViewCallback aView;
+    Point aFrom, aTo;
+    lcl_selectSecondParagraph(pWrtShell, aFrom, aTo);
+
+    // When the selection is dragged to the end of "Test1" and the button is still held:
+    lcl_dragText(pXTextDocument, aFrom, aTo, 0, /*bRelease=*/false);
+
+    // Then the cursor marks the drop position:
+    CPPUNIT_ASSERT(aView.m_bOwnCursorAtDropPosition);
+
+    // And once the text is dropped, the cursor is an ordinary one again:
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aTo.getX(), aTo.getY(), 1,
+                                   MOUSE_LEFT, 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!aView.m_bOwnCursorAtDropPosition);
+
+    // When Clone Formatting is on and the mouse moves over the text without a button:
+    dispatchCommand(mxComponent, u".uno:FormatPaintbrush"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    aView.m_bOwnCursorInvalidated = false;
+    pXTextDocument->postMouseEvent(COKitMouseEventType::MOVE, aFrom.getX(), aFrom.getY(), 1, 0, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the cursor that follows the mouse marks no drop position:
+    CPPUNIT_ASSERT(aView.m_bOwnCursorInvalidated);
+    CPPUNIT_ASSERT(!aView.m_bOwnCursorAtDropPosition);
+}
 }
 
 namespace

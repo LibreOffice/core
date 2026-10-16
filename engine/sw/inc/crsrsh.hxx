@@ -992,6 +992,7 @@ inline void SwCursorShell::UnSetVisibleCursor()
 {
     m_pVisibleCursor->Hide();
     m_pVisibleCursor->SetDragCursor( false );
+    m_pVisibleCursor->SetDropPosition(false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
