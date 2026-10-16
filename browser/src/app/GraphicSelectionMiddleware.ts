@@ -396,7 +396,9 @@ class GraphicSelection {
 	/*
 		Takes in that the engine answered something for that object which was not predicted here
 		- or, given no object, that anything may have changed. Where it touches the selection, the
-		selection's square is dropped, so that the handles are laid on what is really there.
+		selection's square is dropped, so that the handles are laid on what is really there. Where
+		it is one of the selected objects, changed by something other than this view, such as an
+		undo, the selection is brought on screen as it now stands.
 	*/
 	public static unpredictedAnswer(objectId?: number): void {
 		const section = this.selectionSection;
@@ -410,6 +412,15 @@ class GraphicSelection {
 			).includes(objectId)
 		)
 			section.forgetTheSquare();
+
+		if (
+			objectId !== undefined &&
+			!section.isDragged() &&
+			RenderGeometrySection.theOnesThatDraw(
+				RenderGeometrySection.standingFor(section.selectedObjects()),
+			).includes(objectId)
+		)
+			GraphicSelection.showTheObjects(this.selectedObjectIDs);
 	}
 
 	/// The section that draws what is selected while the client draws it itself, null while it
@@ -855,13 +866,14 @@ class GraphicSelection {
 	}
 
 	/// Brings those objects on screen, with the room around them their handles are drawn in.
-	public static showTheObjects(objectIds: number[]): void {
+	/// Answers whether the client holds any of them to do so.
+	public static showTheObjects(objectIds: number[]): boolean {
 		let box: cool.Range2D | undefined;
 		for (const objectId of objectIds) {
 			const own = RenderGeometrySection.boxOf(objectId);
 			if (own) box = box ? box.union(own) : own;
 		}
-		if (!box) return;
+		if (!box) return false;
 
 		// The room a handle is drawn in goes round the box, so the handles are on screen too.
 		const room = 1.5 * ShapeHandlesSection.handleSize() * app.pixelsToTwips;
@@ -875,6 +887,7 @@ class GraphicSelection {
 				shown.height,
 			),
 		);
+		return true;
 	}
 
 	/*
@@ -1390,8 +1403,8 @@ class GraphicSelection {
 
 			if (
 				!editMode &&
-				!this.extraInfo.mimeType?.startsWith('video/') &&
-				!this.extraInfo.mimeType?.startsWith('audio/')
+				!this.extraInfo?.mimeType?.startsWith('video/') &&
+				!this.extraInfo?.mimeType?.startsWith('audio/')
 			) {
 				return;
 			}
@@ -1613,7 +1626,7 @@ class GraphicSelection {
 				elsewhere, by the keyboard, an undo or another user. Everything below is set up
 				from the message either way, until the client builds it from what it holds.
 			*/
-			this.selectionChanged(
+			const changed = this.selectionChanged(
 				GraphicSelection.selectedObjectIDsOf(
 					msgData.length > 5 ? msgData[5] : null,
 				),
@@ -1680,12 +1693,12 @@ class GraphicSelection {
 			const drawsFromObjects = RenderManager.isVectorRendering();
 
 			/*
-				A jump waits while a selection is complex, which is about a selection of text that
-				a jump would tear the reader away from. A selection of an object is marked complex
-				a few lines below, so from the second selection on it is complex before it is even
-				looked at.
+				In the other view a jump waits while a selection is complex, which is about a
+				selection of text that a jump would tear the reader away from. A selection of an
+				object is marked complex a few lines below, so from the second selection on it is
+				complex before it is even looked at; a view that draws from objects does not wait.
 			*/
-			const mayJump = drawsFromObjects || app.map._docLayer._allowViewJump();
+			const mayJump = !drawsFromObjects && app.map._docLayer._allowViewJump();
 
 			/*
 				A jump also waits while the view follows a cursor, so that it stays with the person
@@ -1697,7 +1710,25 @@ class GraphicSelection {
 					Number(app.getFollowedViewId()) !== Number(app.map._docLayer._viewId)
 				: app.isFollowingEditor() || app.isFollowingUser();
 
-			if (!app.map._docLayer.isWriter() && this.rectangle && mayJump) {
+			/*
+				A view that draws from objects scrolls only for a selection that is new, not for the
+				same one reported again after it was changed, and none for a selection it asked for
+				itself, which it brought on screen when it made it. It scrolls no further than it has
+				to, so that the whole of what is selected lands on screen with its handles, and it
+				measures that from the boxes of the objects it holds. Only where they have not
+				arrived yet, as right after a paste, it goes by the rectangle the message brings.
+			*/
+			if (drawsFromObjects) {
+				if (
+					changed &&
+					!TextSelections.getEndRectangle() &&
+					!followsAnotherView &&
+					!GraphicSelection.showTheObjects(this.selectedObjectIDs) &&
+					this.rectangle
+				)
+					GraphicSelection.scrollRectangleIntoView(this.rectangle);
+			} else if (!app.map._docLayer.isWriter() && this.rectangle && mayJump) {
+				// The other view has the corner it holds put in the middle of the view.
 				if (
 					(!app.isPointVisibleInTheDisplayedArea([
 						this.rectangle.x1,
@@ -1710,19 +1741,10 @@ class GraphicSelection {
 					!TextSelections.getEndRectangle() &&
 					!followsAnotherView &&
 					!app.map.calcInputBarHasFocus()
-				) {
-					/*
-						A view that draws from objects scrolls no further than it has to, so that
-						the whole of what is selected lands on screen. The other one has the
-						corner it holds put in the middle of the view.
-					*/
-					if (drawsFromObjects)
-						GraphicSelection.scrollRectangleIntoView(this.rectangle);
-					else
-						app.map._docLayer.scrollToPos(
-							new cool.SimplePoint(this.rectangle.x1, this.rectangle.y1),
-						);
-				}
+				)
+					app.map._docLayer.scrollToPos(
+						new cool.SimplePoint(this.rectangle.x1, this.rectangle.y1),
+					);
 			}
 		}
 

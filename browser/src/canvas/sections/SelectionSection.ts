@@ -2535,8 +2535,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.interaction = new MovingInteraction(this, at);
 	}
 
+	/// Carries it on to that point of the document, as a drag of this section's own does, the
+	/// view scrolling along at its edge.
 	public carryTo(to: cool.SimplePoint): void {
-		this.interaction?.move(to);
+		this.dragTo(to, new cool.Point(to.vX / app.dpiScale, to.vY / app.dpiScale));
 	}
 
 	public finishCarrying(to: cool.SimplePoint): void {
@@ -2554,7 +2556,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		Shift or Alt while the mouse stands still is taken up from these: the drag is moved to
 		the same place again with the keys as they are now.
 	*/
-	private lastMoved: { at: cool.SimplePoint; event: MouseEvent } | null = null;
+	private lastMoved: { at: cool.SimplePoint; event?: MouseEvent } | null = null;
 
 	private readonly keysChanged = (e: KeyboardEvent): void => {
 		if (!this.interaction || !this.lastMoved) return;
@@ -2664,9 +2666,30 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.stopPropagating();
 		e.stopPropagation();
 
-		this.lastMoved = { at: this.inTheDocument(point), event: e };
-		this.interaction.move(this.lastMoved.at, e);
-		this.aimAtWhatIsUnder(this.lastMoved.at);
+		const onCanvas = point.clone();
+		onCanvas.pX += this.myTopLeft[0];
+		onCanvas.pY += this.myTopLeft[1];
+		this.dragTo(
+			this.inTheDocument(point),
+			new cool.Point(onCanvas.cX, onCanvas.cY),
+			e,
+		);
+	}
+
+	/*
+		Takes the running drag to that point of the document, where the mouse stands at that
+		point of the canvas, in CSS pixels, with the keys of that event held.
+	*/
+	private dragTo(
+		at: cool.SimplePoint,
+		onCanvas: cool.Point,
+		e?: MouseEvent,
+	): void {
+		if (!this.interaction) return;
+
+		this.lastMoved = { at, event: e };
+		this.interaction.move(at, e);
+		this.aimAtWhatIsUnder(at);
 
 		/*
 			Carrying the objects brings the page along: while the mouse stands near an edge of the
@@ -2674,14 +2697,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 			soon as the mouse is away from the edge again.
 		*/
 		if (this.interaction.scrollsWithTheMouse()) {
-			const onCanvas = point.clone();
-			onCanvas.pX += this.myTopLeft[0];
-			onCanvas.pY += this.myTopLeft[1];
-
-			app.map.fire('handleautoscroll', {
-				pos: new cool.Point(onCanvas.cX, onCanvas.cY),
-				map: app.map,
-			});
+			app.map.fire('handleautoscroll', { pos: onCanvas, map: app.map });
 			return;
 		}
 
