@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:style style:name="PB" style:family="paragraph">
+   <style:paragraph-properties fo:break-before="page"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:h text:outline-level="1">Introduction</text:h>
+   <text:p>Opening paragraph.</text:p>
+   <text:p text:style-name="Quotations">Quoted words.</text:p>
+   <text:h text:outline-level="2">Scope</text:h>
+   <text:p>Scope paragraph.</text:p>
+   <text:h text:outline-level="1" text:style-name="PB">Method</text:h>
+   <text:p>Method paragraph.</text:p>
+   <text:h text:outline-level="2">Samples</text:h>
+   <text:h text:outline-level="3">Collection</text:h>
+   <text:p>Collection paragraph.</text:p>
+   <text:h text:outline-level="1" text:style-name="PB">Results</text:h>
+   <text:p>Results paragraph.</text:p>
+  </office:text>
+ </office:body>
+</office:document>
