@@ -80,16 +80,16 @@ void Organize(weld::Window* pParent, const css::uno::Reference<css::frame::XFram
 
 bool IsValidSbxName( std::u16string_view rName )
 {
-    for ( size_t nChar = 0; nChar < rName.size(); nChar++ )
+    if (rName.empty())
+        return true;
+
+    sal_Unicode c0 = rName.front();
+    if (!(rtl::isAsciiAlpha(c0) || c0 == '_'))
+        return false;
+
+    for (sal_Unicode c : rName.substr(1))
     {
-        sal_Unicode c = rName[nChar];
-        bool bValid = (
-            ( c >= 'A' && c <= 'Z' ) ||
-            ( c >= 'a' && c <= 'z' ) ||
-            ( c >= '0' && c <= '9' && nChar ) ||
-            ( c == '_' )
-        );
-        if ( !bValid )
+        if (!(rtl::isAsciiAlphanumeric(c) || c == '_'))
             return false;
     }
     return true;
