@@ -33,6 +33,7 @@ config.guess
 config.status
 config.sub
 configure
+conftest.c
 !snap/hooks/configure
 compile
 depcomp
