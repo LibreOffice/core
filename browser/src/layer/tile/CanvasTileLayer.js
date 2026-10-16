@@ -3422,8 +3422,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		this._map._clip._asyncReadPasteFile(new File([bytes], name, { type: mimetype }));
 	},
 
-	/* in impress, we always recalculate zoom on resize to keep the slide in-view.
-	 * so the second condition is unnecessary, but we keep it for consistency. */
 	recalculateZoomOnResize: function() {
 		const isWriterSinglePageView = this.isWriter() && !this._isMultiPageView();
 		if (isWriterSinglePageView || this.isImpress())
@@ -3532,15 +3530,16 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		let bringCommentsIntoView = false;
 		let changeZoom = false;
 
-		if (this.isWriter()) {
-			const smartZoomEnabled = window.prefs.get('smartZoom') != 'false';
-			if (smartZoomEnabled) {
-				if (this._invalidateZoomFirstFit) {
-					recalcFirstFit = true;
-					this._invalidateZoomFirstFit = false;
-				}
-			}
+		const smartZoomEnabled = window.prefs.get('smartZoom') != 'false';
 
+		// Writer only honours a deferred refit with smart zoom on.
+		const takesPendingFit = this.isImpress() || (this.isWriter() && smartZoomEnabled);
+		if (takesPendingFit && this._invalidateZoomFirstFit) {
+			recalcFirstFit = true;
+			this._invalidateZoomFirstFit = false;
+		}
+
+		if (this.isWriter()) {
 			const considerCommentWidthInOffset = () => {
 				if (app.activeDocument.partHasComments) {
 					if ((recalcFirstFit || !this._includedCommentsInFirstFit)) {
@@ -3555,6 +3554,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			if (changeZoom)
 				considerCommentWidthInOffset();
 		} else if (this.isImpress()) {
+			// On mobile a resize, such as the on-screen keyboard opening, keeps the
+			// zoom if the user changed it since the last fit.
+			const onMobile = !window.mode.isDesktop();
+			const zoomStillFitted = this._impressFitZoom === undefined
+				|| this._map._zoom === this._impressFitZoom;
+			if (onMobile && !recalcFirstFit && !zoomStillFitted)
+				return;
 			recalcFirstFit = true;
 		}
 
@@ -3584,6 +3590,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			zoom = Math.floor(zoom);
 
 		app.activeDocument.activeLayout.applyZoom(zoom);
+
+		if (this.isImpress())
+			this._impressFitZoom = this._map._zoom;
 	},
 
 	// Cells can change position during changes of zoom level in calc
@@ -4122,6 +4131,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		 */
 		this._invalidateZoomFirstFit = false;
 		this._includedCommentsInFirstFit = false;
+
+		this._impressFitZoom = undefined;
 
 		this._referencesAll = [];
 
