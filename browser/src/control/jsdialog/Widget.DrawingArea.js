@@ -49,6 +49,11 @@ function _drawingAreaControl (parentContainer, data, builder) {
 	var isTextbox = data.aria && data.aria.role === 'textbox';
 	var imageId = data.id + '-img';
 
+	// The widget applies these keys of a new state to its existing elements, and applyInPlace
+	// returns false when it cannot apply them.
+	const keysAppliedInPlace = ['image'];
+	let applyInPlace = null;
+
 	var hadFocus = document.getElementById(imageId) === document.activeElement;
 	if (hadFocus) {
 		app.layoutingService.appendLayoutingTask(function () {
@@ -130,15 +135,10 @@ function _drawingAreaControl (parentContainer, data, builder) {
 	} else if (data.borders) {
 		var wrapper = _createDrawingAreaWrapper(container, data, builder, imageId, true);
 		wrapper.setAttribute('role', 'application');
-
-		var previousWrapper = document.getElementById(imageId);
-		var isNavigating = previousWrapper && previousWrapper === document.activeElement;
-		if (!isNavigating) {
-			if (data.labelledBy) {
-				wrapper.setAttribute('aria-labelledby', data.labelledBy);
-			}
-			_setDescription(wrapper, data, imageId);
+		if (data.labelledBy) {
+			wrapper.setAttribute('aria-labelledby', data.labelledBy);
 		}
+		_setDescription(wrapper, data, imageId);
 
 		// Rebuilding the widget moves the focus, and the element the events
 		// carry is gone by the time they arrive. There is nothing to tell the
@@ -164,6 +164,15 @@ function _drawingAreaControl (parentContainer, data, builder) {
 			checkboxes.set(data.borders[i].type, checkbox);
 		}
 		_showBorders(wrapper, checkboxes, data);
+
+		keysAppliedInPlace.push('borders');
+		applyInPlace = function (newData) {
+			if (!newData.borders || newData.borders.length !== checkboxes.size
+				|| !newData.borders.every((border) => checkboxes.has(border.type)))
+				return false;
+			_showBorders(wrapper, checkboxes, newData);
+			return true;
+		};
 	} else {
 		var image = window.L.DomUtil.create('img', builder.options.cssClass + ' ui-drawing-area', container);
 		image.id = imageId;
@@ -222,7 +231,9 @@ function _drawingAreaControl (parentContainer, data, builder) {
 	// data is shared with the dialog model, which takes a new state before it is shown here.
 	const shownData = Object.assign({}, data);
 	container.onRedraw = function (newData) {
-		if (!newData.image || !_isUnchangedApartFrom(shownData, newData, ['image']))
+		if (!newData.image || !_isUnchangedApartFrom(shownData, newData, keysAppliedInPlace))
+			return false;
+		if (applyInPlace && !applyInPlace(newData))
 			return false;
 		container.querySelector('img').src = newData.image.replace(/\\/g, '');
 		Object.assign(shownData, newData);
@@ -253,6 +264,8 @@ function _showBorders(wrapper, checkboxes, data) {
 
 	if (activeBorderId) {
 		wrapper.setAttribute('aria-activedescendant', activeBorderId);
+	} else {
+		wrapper.removeAttribute('aria-activedescendant');
 	}
 }
 
