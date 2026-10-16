@@ -69,8 +69,33 @@ describe('ViewLayout', function () {
 		}
 
 		this.afterEach(function () {
+			releaseActiveLayout();
+			// The layouts built in a test queue work for the next frame: a document's
+			// default layout rebuilds its view, which asks for tiles and arms the
+			// pre-fetch. Run after the test, that work meets the next test's stubs and
+			// leaves timers behind, so the queue is dropped while the stubs still match.
+			(app.layoutingService as any)._layoutTasks.length = 0;
 			stopTileManagerTimers((RenderManager as any)._instance);
 		});
+
+		// A page-based layout left active breaks the next test's document: the
+		// sections that document builds map their document positions through the
+		// active layout, and the page-based mapping reads the document anchor,
+		// which no test registers. The plain layout maps without it.
+		function releaseActiveLayout(): void {
+			const layout = app.activeDocument?.activeLayout;
+			if (!layout) return;
+			if (
+				layout.type !== 'ViewLayoutMultiPage' &&
+				layout.type !== 'ViewLayoutFileBased'
+			)
+				return;
+
+			// The plain layout notes the page the replaced one shows, by the same
+			// mapping. With no pages there is nothing to note.
+			if (app.file?.writer) app.file.writer.pageRectangleList = [];
+			app.activeDocument.activeLayout = new ViewLayoutBase();
+		}
 
 		// Install the app-level stubs.
 		function setupAppStubs(pixelsToTwips: number): void {
@@ -139,6 +164,9 @@ describe('ViewLayout', function () {
 					_docType: 'text',
 					isWriter: function () {
 						return true;
+					},
+					isCalc: function () {
+						return false;
 					},
 					_sendClientZoom: function () {},
 					// A text document has a single part, part 0.
@@ -703,8 +731,15 @@ describe('ViewLayout', function () {
 			};
 			(global as any).setTimeout = record;
 			(global as any).setInterval = record;
-			(global as any).clearTimeout = function () {};
-			(global as any).clearInterval = function () {};
+			// A recorded callback has a number for a handle and is dropped from the
+			// queue when cleared. A timer armed before the capture has a real handle,
+			// which goes to the real clear, so it is not left to fire after the test.
+			(global as any).clearTimeout = function (handle: any) {
+				if (typeof handle !== 'number') realClearTimeout(handle);
+			};
+			(global as any).clearInterval = function (handle: any) {
+				if (typeof handle !== 'number') realClearInterval(handle);
+			};
 
 			return {
 				pending,
@@ -773,6 +808,65 @@ describe('ViewLayout', function () {
 				tileCombine.restore();
 				RenderManager.clearPreFetch();
 			}
+		}
+
+		// Scroll down, run the timers the scroll armed once each, and report the tile rows
+		// asked for, together with the rows the view covers after the scroll. The idle wait
+		// among those timers only arms the repeating tick of the slower pre-fetch, so any
+		// tile asked for here is from the early fetch ahead of the view.
+		function rowsFetchedSoonAfterScrollDown(layout: any): {
+			rows: number[];
+			firstVisibleRow: number;
+			lastVisibleRow: number;
+		} {
+			allowPreFetch();
+			const tileManager: any = (RenderManager as any)._instance;
+			const tileCombine = instrumentTileCombineRequests(tileManager);
+			const timers = captureTimers();
+			try {
+				RenderManager.clearPreFetch();
+
+				layout.scroll(0, 400);
+
+				const visibleRows: number[] = layout
+					.getCurrentCoordList()
+					.map((coords: TileCoordData) => {
+						return coords.y;
+					});
+
+				tileCombine.sentRequests.length = 0;
+				const armedByTheScroll = timers.pending.splice(0);
+				for (const callback of armedByTheScroll) callback();
+
+				const rows: number[] = [];
+				for (const request of tileCombine.sentRequests)
+					for (const coords of request) rows.push(coords.y);
+
+				return {
+					rows: rows,
+					firstVisibleRow: Math.min(...visibleRows),
+					lastVisibleRow: Math.max(...visibleRows),
+				};
+			} finally {
+				timers.restore();
+				tileCombine.restore();
+				RenderManager.clearPreFetch();
+			}
+		}
+
+		function assertTilesBelowTheViewFetchedSoon(fetched: {
+			rows: number[];
+			firstVisibleRow: number;
+			lastVisibleRow: number;
+		}): void {
+			nodeassert.ok(
+				fetched.rows.some((row) => row > fetched.lastVisibleRow),
+				'no tiles below the view were fetched soon after a scroll down',
+			);
+			nodeassert.ok(
+				fetched.rows.every((row) => row >= fetched.firstVisibleRow),
+				'tiles above the view were fetched soon after a scroll down',
+			);
 		}
 
 		// ========================================================================
@@ -1561,7 +1655,8 @@ describe('ViewLayout', function () {
 		});
 
 		// A page-stack layout builds its viewed rectangle from the pages that are on
-		// screen, so a zoom leaves the scroll position alone.
+		// screen, so the rebuild a zoom runs at once leaves the scroll position alone.
+		// The view is placed again later, with the pages, in the layout task.
 		it('Stacked-page layouts keep their scroll position across a zoom', function () {
 			const layout = setupMultiPageForTest();
 
@@ -1577,6 +1672,156 @@ describe('ViewLayout', function () {
 			nodeassert.deepStrictEqual(
 				layout.viewedRectangle.toArray(),
 				rectangleBefore,
+			);
+		});
+
+		// A three-page document in the multi-page layout, ready for a zoom that goes the
+		// way the zoom control drives it: the layout's own 'zoomend' handling runs, the
+		// scale changes to the one given, and the layout tasks the change queues run to
+		// the end. At 7.5 twips per pixel a page is 1000 by 2000 pixels, one per row.
+		function setupMultiPageForZoom(): {
+			layout: ViewLayoutMultiPage;
+			zoomTo: (
+				pixelsToTwips: number,
+				anchor?: cool.SimplePoint,
+				anchorOnCanvas?: cool.SimplePoint,
+			) => void;
+		} {
+			setupAppStubs(7.5);
+			resetRenderManagerState();
+
+			// The stubs pin the twips-per-pixel factor, so the rebuild that a zoom
+			// runs is where the new scale is set.
+			let pixelsToTwipsAfterZoom = 7.5;
+			(app.map._docLayer as any)._updateTileTwips = function () {
+				app.pixelsToTwips = pixelsToTwipsAfterZoom;
+				app.twipsToPixels = 1 / pixelsToTwipsAfterZoom;
+			};
+
+			const activeDocument = new DocumentBase();
+			(activeDocument as any)._fileSize = new cool.SimplePoint(7500, 49000);
+			app.activeDocument = activeDocument;
+
+			const layout = new ViewLayoutMultiPage();
+			app.activeDocument.activeLayout = layout;
+			(app.layoutingService as any)._layoutTasks.length = 0;
+
+			// In the browser the layout listens to the map's 'zoomend' with reset. The
+			// map stub does not keep listeners, so the event is delivered to this one
+			// handler by hand. The other layouts that were built along the way (the
+			// document's default one among them) stay out of it, as their listeners
+			// would otherwise outlive them: the stub's off() drops nothing.
+			(app.map as any).fire = function (name: string) {
+				if (name === 'zoomend') layout.reset();
+			};
+
+			app.file.writer.pageRectangleList = [
+				[0, 0, 7500, 15000],
+				[0, 17000, 7500, 15000],
+				[0, 34000, 7500, 15000],
+			];
+			(layout as any).resetViewLayout();
+
+			// The scale comes from the stub above; the zoom level only has to differ
+			// from the current one, which the layout set when it fitted the pages.
+			const zoomTo = (
+				pixelsToTwips: number,
+				anchor?: cool.SimplePoint,
+				anchorOnCanvas?: cool.SimplePoint,
+			): void => {
+				pixelsToTwipsAfterZoom = pixelsToTwips;
+				layout.applyZoom(
+					(app.map as any)._zoom + 1,
+					anchor ?? layout.zoomAnchorPoint(),
+					anchorOnCanvas,
+				);
+				let ranTask = true;
+				while (ranTask) ranTask = app.layoutingService.runTheTopTask();
+			};
+
+			return { layout, zoomTo };
+		}
+
+		// A zoom lays the pages out again for the new scale and the view follows them: the
+		// document point in the middle of the frame stays there, and when the pages now end
+		// above the old scroll position the view comes back up onto them, rather than
+		// showing the empty space past the last page.
+		it('MultiPage: a zoom keeps the point in the middle of the view and stays on the pages', function () {
+			const { layout, zoomTo } = setupMultiPageForZoom();
+
+			// The document point under the middle of the 1024 by 768 frame.
+			const pointInTheMiddle = (): cool.SimplePoint =>
+				layout.canvasToDocumentPoint(
+					cool.SimplePoint.fromCorePixels([512, 384]),
+				);
+
+			// This scroll position shows the last page.
+			layout.scrollProperties.viewY = 4100;
+			const before = pointInTheMiddle();
+			nodeassert.strictEqual(layout.getClosestRectangleIndex(before), 2);
+
+			// At 15 twips per pixel the pages end at 3080 pixels, above the old scroll
+			// position.
+			zoomTo(15);
+
+			const after = pointInTheMiddle();
+			nodeassert.strictEqual(
+				layout.getClosestRectangleIndex(after),
+				2,
+				'the page in the middle of the view is the one that was there',
+			);
+			// One pixel is 15 twips at the new scale.
+			nodeassert.ok(
+				Math.abs(after.y - before.y) <= 15,
+				'the point in the middle of the view: ' + before.y + ' then ' + after.y,
+			);
+			nodeassert.ok(
+				layout.scrollProperties.viewY + 768 <= layout.viewSize.pY,
+				'the view ends within the pages: ' +
+					layout.scrollProperties.viewY +
+					' of ' +
+					layout.viewSize.pY,
+			);
+
+			// At 70 twips per pixel all three pages fit in the frame, so the only
+			// place for the view is the top.
+			zoomTo(70);
+
+			nodeassert.strictEqual(layout.scrollProperties.viewY, 0);
+			nodeassert.ok(
+				layout.getCurrentCoordList().length > 0,
+				'the tiles of the pages on screen are listed',
+			);
+		});
+
+		// A zoom on the pointer, as the wheel and a pinch make, keeps the document point
+		// under the pointer where it is on the canvas.
+		it('MultiPage: a zoom on the pointer keeps the point under it', function () {
+			const { layout, zoomTo } = setupMultiPageForZoom();
+
+			// This scroll position shows the last page, well down the view.
+			layout.scrollProperties.viewY = 4100;
+			// A point holds twips, so one built from canvas pixels reads differently once
+			// the scale has changed. The pointer is built afresh for each scale.
+			const pointerOnCanvas = [300, 600];
+			const pointer = (): cool.SimplePoint =>
+				cool.SimplePoint.fromCorePixels(pointerOnCanvas);
+			const before = layout.canvasToDocumentPoint(pointer());
+			nodeassert.strictEqual(layout.getClosestRectangleIndex(before), 2);
+
+			// The pointer is handed on as it is, the way the zoom control does it.
+			zoomTo(15, before, pointer());
+
+			const after = layout.canvasToDocumentPoint(pointer());
+			nodeassert.strictEqual(
+				layout.getClosestRectangleIndex(after),
+				2,
+				'the page under the pointer is the one that was there',
+			);
+			// One pixel is 15 twips at the new scale.
+			nodeassert.ok(
+				Math.abs(after.y - before.y) <= 15,
+				'the point under the pointer: ' + before.y + ' then ' + after.y,
 			);
 		});
 
@@ -1641,6 +1886,56 @@ describe('ViewLayout', function () {
 			);
 		});
 
+		// The pages on screen sit side by side in view pixels while the tiles are keyed
+		// by document pixels, so the pre-fetch around the view has to grow in document
+		// order: past the last page on screen, not past the view's own pixel edge.
+		it('MultiPage: the pre-fetch reaches the pages after the ones on screen', function () {
+			// At 30 twips per pixel a page is 250 by 500 pixels and three of them fit
+			// in a row of the 1024 pixel wide frame, so the view's pixel edge lies
+			// well inside the pages on screen when read as document pixels.
+			setupAppStubs(30);
+			resetRenderManagerState();
+
+			const pageCount = 12;
+			const pageHeight = 15000;
+			const pageStep = 17000;
+			const activeDocument = new DocumentBase();
+			(activeDocument as any)._fileSize = new cool.SimplePoint(
+				7500,
+				(pageCount - 1) * pageStep + pageHeight,
+			);
+			app.activeDocument = activeDocument;
+
+			const layout = new ViewLayoutMultiPage();
+			app.activeDocument.activeLayout = layout;
+
+			app.file.writer.pageRectangleList = [];
+			for (let i = 0; i < pageCount; i++)
+				app.file.writer.pageRectangleList.push([
+					0,
+					i * pageStep,
+					7500,
+					pageHeight,
+				]);
+			(layout as any).resetViewLayout();
+
+			const beyond = preFetchedBeyondTheView(layout);
+
+			nodeassert.ok(
+				beyond.length > 0,
+				'no tiles were fetched beyond the pages on screen after a scroll',
+			);
+
+			const lastPageOnScreenBottom = layout.viewedRectangle.pY2;
+			for (const key of beyond) {
+				const coords = TileCoordData.parseKey(key);
+				nodeassert.ok(
+					coords.y >= lastPageOnScreenBottom,
+					'a tile inside the pages on screen was fetched as pre-fetch: ' + key,
+				);
+			}
+		});
+
 		// A spreadsheet commits its scroll on a path of its own, so it needs its own
 		// guarantee that the pre-fetch starts again there too.
 		it('Calc: a scroll leads to tiles beyond the visible area being fetched', function () {
@@ -1654,51 +1949,24 @@ describe('ViewLayout', function () {
 			);
 		});
 
-		// Soon after a spreadsheet scrolls, the tiles further on in the direction of the
-		// scroll are fetched, before the slower pre-fetch around the view starts. The
-		// timers the scroll arms are run once each: the idle wait among them only arms
-		// the repeating tick of the slower pre-fetch, so any tile asked for here is from
-		// the early fetch ahead of the view.
+		// Soon after a text document scrolls, the tiles further on in the direction of
+		// the scroll are fetched, before the slower pre-fetch around the view starts.
+		it('A scroll down soon fetches the tiles below the view', function () {
+			const layout = setupBaseLayoutForTest();
+
+			assertTilesBelowTheViewFetchedSoon(
+				rowsFetchedSoonAfterScrollDown(layout),
+			);
+		});
+
+		// A spreadsheet commits its scroll on a path of its own, so it needs its own
+		// guarantee that the early fetch ahead of the view happens there too.
 		it('Calc: a scroll down soon fetches the tiles below the view', function () {
 			const { layout } = setupCalcForTest();
-			allowPreFetch();
-			const tileManager: any = (RenderManager as any)._instance;
-			const tileCombine = instrumentTileCombineRequests(tileManager);
-			const timers = captureTimers();
-			try {
-				RenderManager.clearPreFetch();
 
-				layout.scroll(0, 400);
-
-				const visibleRows: number[] = layout
-					.getCurrentCoordList()
-					.map((coords: TileCoordData) => {
-						return coords.y;
-					});
-				const lastVisibleRow = Math.max(...visibleRows);
-				const firstVisibleRow = Math.min(...visibleRows);
-
-				tileCombine.sentRequests.length = 0;
-				const armedByTheScroll = timers.pending.splice(0);
-				for (const callback of armedByTheScroll) callback();
-
-				const rows: number[] = [];
-				for (const request of tileCombine.sentRequests)
-					for (const coords of request) rows.push(coords.y);
-
-				nodeassert.ok(
-					rows.some((row) => row > lastVisibleRow),
-					'no tiles below the view were fetched soon after a scroll down',
-				);
-				nodeassert.ok(
-					rows.every((row) => row >= firstVisibleRow),
-					'tiles above the view were fetched soon after a scroll down',
-				);
-			} finally {
-				timers.restore();
-				tileCombine.restore();
-				RenderManager.clearPreFetch();
-			}
+			assertTilesBelowTheViewFetchedSoon(
+				rowsFetchedSoonAfterScrollDown(layout),
+			);
 		});
 
 		it('The visible area is sent again after a reset, changed or not', function () {

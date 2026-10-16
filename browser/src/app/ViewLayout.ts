@@ -995,6 +995,31 @@ class ViewLayoutBase {
 		return this.viewSize.pY > documentAnchor.size[1];
 	}
 
+	// Puts the view at the given position (core pixels), kept inside the scrollable range
+	// [0, view size - frame], and moves the scroll bars with it. The view data is left to the
+	// caller, which decides when to commit the new position.
+	protected setScrollPosition(pX: number, pY: number): void {
+		this.refreshScrollProperties();
+		const frame = this.frameSize;
+		const scrollProperties = this.scrollProperties;
+
+		const maxX = Math.max(0, this._viewSize.pX - frame.pX);
+		const maxY = Math.max(0, this._viewSize.pY - frame.pY);
+		scrollProperties.viewX = Math.min(maxX, Math.max(0, Math.round(pX)));
+		scrollProperties.viewY = Math.min(maxY, Math.max(0, Math.round(pY)));
+
+		if (this._viewSize.pX > 0)
+			scrollProperties.startX = Math.round(
+				(scrollProperties.viewX / this._viewSize.pX) *
+					scrollProperties.horizontalScrollLength,
+			);
+		if (this._viewSize.pY > 0)
+			scrollProperties.startY = Math.round(
+				(scrollProperties.viewY / this._viewSize.pY) *
+					scrollProperties.verticalScrollLength,
+			);
+	}
+
 	public scroll(
 		pX: number,
 		pY: number,

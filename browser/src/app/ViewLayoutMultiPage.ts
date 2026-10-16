@@ -18,6 +18,9 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 	private maxRowsSize = 2;
 	public documentRectangles = Array<cool.SimpleRectangle>();
 	private viewRectangles = Array<cool.SimpleRectangle>();
+	private pendingZoomAnchor:
+		| { point: cool.SimplePoint; pivot: number[] }
+		| undefined;
 
 	constructor() {
 		super();
@@ -413,21 +416,23 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 		if (this.viewRectangles.length === 0)
 			return super.canvasToDocumentPoint(point);
 
-		point.pX += this.scrollProperties.viewX;
-		point.pY += this.scrollProperties.viewY;
+		// The given point is left as it is; the view point is a copy of it.
+		const viewPoint = point.clone();
+		viewPoint.pX += this.scrollProperties.viewX;
+		viewPoint.pY += this.scrollProperties.viewY;
 
-		const index = this.getClosestRectangleIndex(point, false);
+		const index = this.getClosestRectangleIndex(viewPoint, false);
 
-		const result = point.clone();
+		const result = viewPoint.clone();
 
 		if (this.documentRectangles[index] && this.viewRectangles[index]) {
 			result.pX =
 				this.documentRectangles[index].pX1 +
-				(point.pX - this.viewRectangles[index].pX1) -
+				(viewPoint.pX - this.viewRectangles[index].pX1) -
 				this._documentAnchorPosition[0];
 			result.pY =
 				this.documentRectangles[index].pY1 +
-				(point.pY - this.viewRectangles[index].pY1) -
+				(viewPoint.pY - this.viewRectangles[index].pY1) -
 				this._documentAnchorPosition[1];
 		}
 
@@ -489,11 +494,77 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 		}
 	}
 
+	// The document point under the centre of the frame. A zoom keeps it there.
+	public override zoomAnchorPoint(): cool.SimplePoint {
+		const frame = this.frameSize;
+		return this.canvasToDocumentPoint(
+			cool.SimplePoint.fromCorePixels([
+				this._documentAnchorPosition[0] + frame.pX / 2,
+				this._documentAnchorPosition[1] + frame.pY / 2,
+			]),
+		);
+	}
+
+	// The anchor is read before the scale changes, while the pages are still laid out for the
+	// old one. It stays under the canvas point given with it, or at the centre of the frame.
+	// The zoomend listener (reset) runs inside the base call and takes the anchor over for the
+	// task that lays the pages out again.
+	public override applyZoom(
+		targetZoom: number,
+		anchorTwips?: cool.SimplePoint,
+		anchorOnCanvas?: cool.SimplePoint,
+	): void {
+		const frame = this.frameSize;
+		this.pendingZoomAnchor = {
+			point: anchorTwips ? anchorTwips.clone() : this.zoomAnchorPoint(),
+			pivot:
+				anchorTwips && anchorOnCanvas
+					? [
+							anchorOnCanvas.pX - this._documentAnchorPosition[0],
+							anchorOnCanvas.pY - this._documentAnchorPosition[1],
+						]
+					: [frame.pX / 2, frame.pY / 2],
+		};
+		super.applyZoom(targetZoom, anchorTwips, anchorOnCanvas);
+		this.pendingZoomAnchor = undefined;
+	}
+
+	// Places the view on the pages laid out anew. The zoom anchor, when there is one, goes
+	// back under its frame point. The scroll position then stays inside the pages, which the
+	// new layout may have made shorter or narrower than the old one.
+	private placeViewOnNewLayout(zoomAnchor?: {
+		point: cool.SimplePoint;
+		pivot: number[];
+	}): void {
+		let pX = this.scrollProperties.viewX;
+		let pY = this.scrollProperties.viewY;
+
+		if (zoomAnchor) {
+			const index = this.getClosestRectangleIndex(zoomAnchor.point);
+			const documentRectangle = this.documentRectangles[index];
+			const viewRectangle = this.viewRectangles[index];
+			pX =
+				viewRectangle.pX1 +
+				(zoomAnchor.point.pX - documentRectangle.pX1) -
+				zoomAnchor.pivot[0];
+			pY =
+				viewRectangle.pY1 +
+				(zoomAnchor.point.pY - documentRectangle.pY1) -
+				zoomAnchor.pivot[1];
+		}
+
+		this.setScrollPosition(pX, pY);
+	}
+
 	public reset() {
 		if (!app.file.writer.pageRectangleList.length) return;
 
+		const zoomAnchor = this.pendingZoomAnchor;
+		this.pendingZoomAnchor = undefined;
+
 		app.layoutingService.appendLayoutingTask(() => {
 			this.resetViewLayout();
+			this.placeViewOnNewLayout(zoomAnchor);
 			this.updateViewData();
 		});
 	}
