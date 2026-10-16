@@ -33,13 +33,17 @@ namespace drawinglayer::primitive2d
             bool bIsDecorative,
             Primitive2DContainer&& aChildren,
             void const*const pAnchorStructureElementKey,
-            ::std::vector<sal_Int32> const*const pAnnotIds)
+            ::std::vector<sal_Int32> const*const pAnnotIds,
+            sal_Int32 const nColSpan,
+            sal_Int32 const nRowSpan)
         :   GroupPrimitive2D(std::move(aChildren)),
             maStructureElement(rStructureElement),
             mbBackground(bBackground),
             mbIsImage(bIsImage),
             mbIsDecorative(bIsDecorative)
         ,   m_pAnchorStructureElementKey(pAnchorStructureElementKey)
+        ,   mnColSpan(nColSpan)
+        ,   mnRowSpan(nRowSpan)
         {
             if (pAnnotIds)
             {
@@ -56,7 +60,9 @@ namespace drawinglayer::primitive2d
                 return (getStructureElement() == rCompare.getStructureElement()
                         && isBackground() == rCompare.isBackground()
                         && isImage() == rCompare.isImage()
-                        && isDecorative() == rCompare.isDecorative());
+                        && isDecorative() == rCompare.isDecorative()
+                        && getColSpan() == rCompare.getColSpan()
+                        && getRowSpan() == rCompare.getRowSpan());
             }
 
             return false;

@@ -55,6 +55,9 @@ namespace drawinglayer::primitive2d
             void const* m_pAnchorStructureElementKey;
             /// for Annot structure element, the ids of the annotations
             ::std::vector<sal_Int32> m_AnnotIds;
+            /// for a table cell element, the columns and the rows it spans
+            sal_Int32 mnColSpan;
+            sal_Int32 mnRowSpan;
 
         public:
             /// constructor
@@ -65,7 +68,9 @@ namespace drawinglayer::primitive2d
                 bool bIsDecorative,
                 Primitive2DContainer&& aChildren,
                 void const* pAnchorStructureElementKey = nullptr,
-                ::std::vector<sal_Int32> const* pAnnotIds = nullptr);
+                ::std::vector<sal_Int32> const* pAnnotIds = nullptr,
+                sal_Int32 nColSpan = 1,
+                sal_Int32 nRowSpan = 1);
 
             /// data read access
             const vcl::pdf::StructElement& getStructureElement() const { return maStructureElement; }
@@ -76,6 +81,8 @@ namespace drawinglayer::primitive2d
             bool opensStructureElement() const;
             void const* GetAnchorStructureElementKey() const { return m_pAnchorStructureElementKey; }
             const ::std::vector<sal_Int32> & GetAnnotIds() const { return m_AnnotIds; }
+            sal_Int32 getColSpan() const { return mnColSpan; }
+            sal_Int32 getRowSpan() const { return mnRowSpan; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

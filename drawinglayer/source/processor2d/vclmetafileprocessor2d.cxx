@@ -2856,6 +2856,13 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
                 case vcl::pdf::StructElement::TableHeader:
                     mpPDFExtOutDevData->SetStructureAttribute(vcl::pdf::PDFWriter::Placement,
                                                               vcl::pdf::PDFWriter::Inline);
+                    // a merged cell spans the cells it covers
+                    if (rStructureTagCandidate.getColSpan() > 1)
+                        mpPDFExtOutDevData->SetStructureAttributeNumerical(
+                            vcl::pdf::PDFWriter::ColSpan, rStructureTagCandidate.getColSpan());
+                    if (rStructureTagCandidate.getRowSpan() > 1)
+                        mpPDFExtOutDevData->SetStructureAttributeNumerical(
+                            vcl::pdf::PDFWriter::RowSpan, rStructureTagCandidate.getRowSpan());
                     break;
                 default:
                     break;
