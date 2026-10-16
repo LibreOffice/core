@@ -49,6 +49,13 @@ public:
     {
     }
 
+    /// Close the file of an upload that did not finish, e.g. when the client disconnected.
+    ~ServerSession()
+    {
+        if (_fd >= 0)
+            close(_fd);
+    }
+
     /// Returns the default timeout.
     static constexpr std::chrono::milliseconds getDefaultTimeout()
     {
