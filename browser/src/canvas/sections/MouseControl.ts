@@ -477,6 +477,11 @@ class MouseControl extends CanvasSectionObject {
 			// modifier held at the press. A key pressed later, such as Ctrl to copy,
 			// reaches core with the moves and the button-up.
 			if (!this.mouseDownSent && this.positionOnMouseDown) {
+				// The context toolbar belongs to the selection being dragged away. It shows again
+				// with the selection of the dropped text.
+				if (this.pressedInSelection)
+					app.map.contextToolbar?.hideContextToolbar();
+
 				this.postCoreMouseEvent(
 					'buttondown',
 					this.positionOnMouseDown,
