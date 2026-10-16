@@ -1741,6 +1741,16 @@ bool XclExpDefcolwidth::IsDefWidth( sal_uInt16 nXclColWidth ) const
     return std::abs(defaultColumnWidth - nXclColWidth) < 256.0 * 1.0 / 16.0;
 }
 
+bool XclExpDefcolwidth::IsAssumedWidth() const
+{
+    // A standard column is 8 '0' characters of the application font plus 5 pixels. A pixel is a
+    // 96th of an inch, which is 15 twips.
+    const double fPaddingInCharacters = 5 * 15.0 / static_cast<double>(GetCharWidth());
+
+    // the same tolerance as IsDefWidth, a sixteenth of a character
+    return std::abs(GetValue() - (8.0 + fPaddingInCharacters)) < 1.0 / 16.0;
+}
+
 void XclExpDefcolwidth::SetDefWidth( sal_uInt16 nXclColWidth, bool bXLS )
 {
     double fCCh = nXclColWidth / 256.0;
@@ -3197,9 +3207,12 @@ void XclExpCellTable::SaveXml( XclExpXmlStream& rStrm )
     // DEFAULT row height
     XclExpDefaultRowData& rDefData = mxDefrowheight->GetDefaultData();
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    // A reader turns the default width into pixels with the '0' character as a whole number of
+    // pixels, which comes out a few pixels short. A sheet of standard columns leaves it out.
     rWorksheet->startElement( XML_sheetFormatPr,
         // OOXTODO: XML_baseColWidth
-        XML_defaultColWidth, OString::number(maColInfoBfr.GetDefColWidth()),
+        XML_defaultColWidth, sax_fastparser::UseIf(OString::number(maColInfoBfr.GetDefColWidth()),
+                                                   !maColInfoBfr.IsAssumedDefColWidth()),
         // OOXTODO: XML_thickTop
         // OOXTODO: XML_thickBottom
         XML_defaultRowHeight, OString::number(static_cast<double> (rDefData.mnHeight) / 20.0),

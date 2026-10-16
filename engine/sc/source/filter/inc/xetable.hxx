@@ -712,6 +712,10 @@ public:
     /** Returns true, if the own default width exactly matches the passed width. */
     bool                IsDefWidth( sal_uInt16 nXclColWidth ) const;
 
+    /** Returns true, if the own default width is the width a reader gives to a standard
+        column, which is the width a sheet gets when it carries no default width at all. */
+    bool                IsAssumedWidth() const;
+
     /** Sets the passed column width (in 1/256 character width) as default width. */
     void                SetDefWidth( sal_uInt16 nXclColWidth, bool bXLS );
 
@@ -794,6 +798,8 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
     sal_uInt8           GetHighestOutlineLevel() const { return mnHighestOutlineLevel; }
     double              GetDefColWidth() const { return maDefcolwidth.GetValue(); }
+    /** Returns true, if the default width is the one a reader gives to a standard column. */
+    bool                IsAssumedDefColWidth() const { return maDefcolwidth.IsAssumedWidth(); }
     /** Returns the default cell format of the passed column. One record per column exists
         until Finalize() merges columns that share a format, so before that the passed column
         is the record index. */

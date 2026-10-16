@@ -185,6 +185,26 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testCheckboxAnchorsXLSX)
     CPPUNIT_ASSERT_EQUAL(SCA_PAGE, ScDrawLayer::GetAnchorType(*pPage->GetObj(1)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testStandardColumnWidthXLSX)
+{
+    // given a document of standard columns, whose sheet carries no default column width
+    createScDoc("xlsx/checkboxAnchors.xlsx");
+
+    const sal_uInt16 nColumnWidth = getScDoc()->GetColWidth(2, 0);
+
+    save(TestFilter::XLSX);
+
+    // the saved sheet gives no width of its own, neither a default one nor one per column,
+    // so a standard column stays as wide as it is
+    xmlDocUniquePtr pSheet1 = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    assertXPathNoAttribute(pSheet1, "//x:sheetFormatPr", "defaultColWidth");
+    assertXPath(pSheet1, "//x:cols", 0);
+
+    saveAndReload(TestFilter::XLSX);
+
+    CPPUNIT_ASSERT_EQUAL(nColumnWidth, getScDoc()->GetColWidth(2, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testFreezePaneStartCellXLSX)
 {
     // given a hand-mangled document with a newly-invalid topLeftCell for the active pane
