@@ -4525,7 +4525,7 @@ void SfxViewShell::JumpToMark( const OUString& rMark )
     SfxStringItem aMarkItem( SID_JUMPTOMARK, rMark );
     GetViewFrame().GetDispatcher()->ExecuteList(
         SID_JUMPTOMARK,
-        SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+        SfxCallMode::SYNCHRON,
         { &aMarkItem });
 }
 

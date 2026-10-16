@@ -309,7 +309,7 @@ IMPL_LINK_NOARG(TableEditPanel, RowHeightMofiyHdl, weld::MetricSpinButton&, void
     SfxUInt32Item aRowHeight(SID_ATTR_TABLE_ROW_HEIGHT);
     aRowHeight.SetValue(nNewHeight);
 
-    m_pBindings->GetDispatcher()->ExecuteList(SID_ATTR_TABLE_ROW_HEIGHT, SfxCallMode::RECORD,
+    m_pBindings->GetDispatcher()->ExecuteList(SID_ATTR_TABLE_ROW_HEIGHT, SfxCallMode::SLOT,
                                               { &aRowHeight });
 }
 
@@ -320,7 +320,7 @@ IMPL_LINK_NOARG(TableEditPanel, ColumnWidthMofiyHdl, weld::MetricSpinButton&, vo
     SfxUInt32Item aColumnWidth(SID_ATTR_TABLE_COLUMN_WIDTH);
     aColumnWidth.SetValue(nNewWidth);
 
-    m_pBindings->GetDispatcher()->ExecuteList(SID_ATTR_TABLE_COLUMN_WIDTH, SfxCallMode::RECORD,
+    m_pBindings->GetDispatcher()->ExecuteList(SID_ATTR_TABLE_COLUMN_WIDTH, SfxCallMode::SLOT,
                                               { &aColumnWidth });
 }
 
@@ -369,7 +369,7 @@ void TableEditPanel::AlignmentModify(bool alignmentChanged)
     SfxUInt16Item aAlign(SID_ATTR_TABLE_ALIGNMENT, nAlign);
     SfxInt32Item aLeft(SID_ATTR_TABLE_LEFT_SPACE, nLeft);
     SfxInt32Item aRight(SID_ATTR_TABLE_RIGHT_SPACE, nRight);
-    m_pBindings->GetDispatcher()->ExecuteList(SID_ATTR_TABLE_ALIGNMENT, SfxCallMode::RECORD,
+    m_pBindings->GetDispatcher()->ExecuteList(SID_ATTR_TABLE_ALIGNMENT, SfxCallMode::SLOT,
                                               { &aAlign, &aLeft, &aRight });
 }
 

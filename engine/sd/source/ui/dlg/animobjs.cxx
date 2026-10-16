@@ -397,7 +397,7 @@ IMPL_LINK( AnimationWindow, ClickGetObjectHdl, weld::Button&, rBtn, void )
     SfxBoolItem aItem( SID_ANIMATOR_ADD, true );
 
     GetBindings().GetDispatcher()->ExecuteList(
-        SID_ANIMATOR_ADD, SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
+        SID_ANIMATOR_ADD, SfxCallMode::SLOT, { &aItem });
 }
 
 IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, weld::Button&, rBtn, void )
@@ -476,7 +476,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl, weld::Button&, void)
     SfxBoolItem aItem( SID_ANIMATOR_CREATE, true );
 
     GetBindings().GetDispatcher()->ExecuteList(SID_ANIMATOR_CREATE,
-            SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
+            SfxCallMode::SLOT, { &aItem });
 }
 
 IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl, weld::SpinButton&, void)
@@ -676,7 +676,7 @@ bool AnimationWindow::Close()
         SfxBoolItem aItem( SID_ANIMATION_OBJECTS, false );
 
         GetBindings().GetDispatcher()->ExecuteList(
-            SID_ANIMATION_OBJECTS, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+            SID_ANIMATION_OBJECTS, SfxCallMode::ASYNCHRON,
             { &aItem });
 
         SfxDockingWindow::Close();

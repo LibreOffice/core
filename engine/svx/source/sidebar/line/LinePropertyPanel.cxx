@@ -140,25 +140,25 @@ void LinePropertyPanel::HandleContextChange(
 void LinePropertyPanel::setLineTransparency(const XLineTransparenceItem& rItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_STYLE,
-            SfxCallMode::RECORD, { &rItem });
+            SfxCallMode::SLOT, { &rItem });
 }
 
 void LinePropertyPanel::setLineWidth(const XLineWidthItem& rItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_WIDTH,
-            SfxCallMode::RECORD, { &rItem });
+            SfxCallMode::SLOT, { &rItem });
 }
 
 void LinePropertyPanel::setLineStart(const XLineStartItem& rItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_START,
-            SfxCallMode::RECORD, { &rItem });
+            SfxCallMode::SLOT, { &rItem });
 }
 
 void LinePropertyPanel::setLineEnd(const XLineEndItem& rItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_LINE_END,
-            SfxCallMode::RECORD, { &rItem });
+            SfxCallMode::SLOT, { &rItem });
 }
 
 } // end of namespace svx::sidebar

@@ -131,7 +131,7 @@ static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, const ScDo
     SfxStringItem aPosItem(SID_CURRENTCELL, aAddrText);
     SfxBoolItem aUnmarkItem(FN_PARAM_1, true);        // remove existing selection
     pView->GetDispatcher().ExecuteList(
-        SID_CURRENTCELL, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+        SID_CURRENTCELL, SfxCallMode::SYNCHRON,
         { &aPosItem, &aUnmarkItem });
 }
 
@@ -532,7 +532,7 @@ void ScViewFunc::EditNote()
        pScDrawView->SyncForGrid( pCaption );
 
     // activate object (as in FuSelection::TestComment)
-    GetViewData().GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
+    GetViewData().GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SfxCallMode::SYNCHRON );
     // now get the created FuText and set into EditMode
     FuText* pFuText = dynamic_cast<FuText*>(GetDrawFuncPtr());
     if (pFuText)

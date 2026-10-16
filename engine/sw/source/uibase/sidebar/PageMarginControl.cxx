@@ -434,7 +434,7 @@ void PageMarginControl::ExecuteMarginLRChange(
         aPageLRMarginItem.SetLeft( nPageLeftMargin );
         aPageLRMarginItem.SetRight( nPageRightMargin );
         pViewFrm->GetBindings().GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE,
-                SfxCallMode::RECORD, { &aPageLRMarginItem } );
+                SfxCallMode::SLOT, { &aPageLRMarginItem } );
     }
 }
 
@@ -448,7 +448,7 @@ void PageMarginControl::ExecuteMarginULChange(
         aPageULMarginItem.SetUpper( nPageTopMargin );
         aPageULMarginItem.SetLower( nPageBottomMargin );
         pViewFrm->GetBindings().GetDispatcher()->ExecuteList( SID_ATTR_PAGE_ULSPACE,
-                SfxCallMode::RECORD, { &aPageULMarginItem } );
+                SfxCallMode::SLOT, { &aPageULMarginItem } );
     }
 }
 
@@ -459,7 +459,7 @@ void PageMarginControl::ExecutePageLayoutChange( const bool bMirrored )
         SvxPageItem aPageItem( SID_ATTR_PAGE );
         aPageItem.SetPageUsage( bMirrored ? SvxPageUsage::Mirror : SvxPageUsage::All );
         pViewFrm->GetBindings().GetDispatcher()->ExecuteList( SID_ATTR_PAGE,
-                SfxCallMode::RECORD, { &aPageItem } );
+                SfxCallMode::SLOT, { &aPageItem } );
     }
 }
 

@@ -356,7 +356,7 @@ void ParaLineSpacingControl::ExecuteLineSpace()
     if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
     {
         pViewFrm->GetBindings().GetDispatcher()->ExecuteList(
-            SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, { &aSpacing });
+            SID_ATTR_PARA_LINESPACE, SfxCallMode::SLOT, { &aSpacing });
     }
 }
 
@@ -436,7 +436,7 @@ void ParaLineSpacingControl::ExecuteLineSpacing(sal_Int32 nEntry)
     if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
     {
         pViewFrm->GetBindings().GetDispatcher()->ExecuteList(
-            SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, { &aSpacing });
+            SID_ATTR_PARA_LINESPACE, SfxCallMode::SLOT, { &aSpacing });
     }
 
     // close when the user used the buttons

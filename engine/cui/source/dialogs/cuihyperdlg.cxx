@@ -15,9 +15,7 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- */
-
-#include <sal/config.h>
+ */#include <sal/config.h>
 
 #include <osl/diagnose.h>
 #include <comphelper/kit.hxx>
@@ -197,7 +195,7 @@ void SvxHpLinkDlg::Apply()
     const SvxHyperlinkItem *aItem = aItemSet.GetItem(SID_HYPERLINK_SETLINK);
     if ( !aItem->GetURL().isEmpty() )
         GetDispatcher()->ExecuteList(SID_HYPERLINK_SETLINK,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { aItem });
+                SfxCallMode::ASYNCHRON, { aItem });
 
     static_cast<SvxHyperlinkTabPageBase*>( GetTabPage( GetCurPageId() ) )->DoApply();
 }

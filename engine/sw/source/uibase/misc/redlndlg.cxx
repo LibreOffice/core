@@ -103,7 +103,7 @@ void SwModelessRedlineAcceptDlg::Activate()
         bool bMod = pSh->IsModified();
         SfxBoolItem aShow(FN_REDLINE_SHOW, true);
         pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(
-            FN_REDLINE_SHOW, SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+            FN_REDLINE_SHOW, SfxCallMode::SYNCHRON,
             { &aShow });
         if (!bMod)
             pSh->ResetModified();

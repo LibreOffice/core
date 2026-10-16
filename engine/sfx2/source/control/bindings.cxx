@@ -1051,10 +1051,10 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
             }
         }
 
-        pDispatcher->Execute_( *pShell, *pSlot, aReq, aReq.GetCallMode() | SfxCallMode::RECORD );
+        pDispatcher->Execute_( *pShell, *pSlot, aReq, aReq.GetCallMode() );
     }
     else
-        pDispatcher->Execute_( *pShell, *pSlot, aReq, aReq.GetCallMode() | SfxCallMode::RECORD );
+        pDispatcher->Execute_( *pShell, *pSlot, aReq, aReq.GetCallMode() );
 }
 
 

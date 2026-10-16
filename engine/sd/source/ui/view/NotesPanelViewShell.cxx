@@ -888,7 +888,7 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
         {
             // The value (sal_uInt16)0xFFFF means set bullet on/off.
             SfxUInt16Item aItem(FN_SVX_SET_BULLET, sal_uInt16(0xFFFF));
-            GetViewFrame()->GetDispatcher()->ExecuteList(FN_SVX_SET_BULLET, SfxCallMode::RECORD,
+            GetViewFrame()->GetDispatcher()->ExecuteList(FN_SVX_SET_BULLET, SfxCallMode::SLOT,
                                                          { &aItem });
         }
         break;
@@ -897,7 +897,7 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
         {
             // The value (sal_uInt16)0xFFFF means set bullet on/off.
             SfxUInt16Item aItem(FN_SVX_SET_NUMBER, sal_uInt16(0xFFFF));
-            GetViewFrame()->GetDispatcher()->ExecuteList(FN_SVX_SET_NUMBER, SfxCallMode::RECORD,
+            GetViewFrame()->GetDispatcher()->ExecuteList(FN_SVX_SET_NUMBER, SfxCallMode::SLOT,
                                                          { &aItem });
         }
         break;

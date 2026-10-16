@@ -169,7 +169,7 @@ void DrawViewShell::SelectionHasChanged()
     //Update3DWindow(); // 3D-Controller
     SfxBoolItem aItem( SID_3D_STATE, true );
     GetViewFrame()->GetDispatcher()->ExecuteList(
-        SID_3D_STATE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
+        SID_3D_STATE, SfxCallMode::ASYNCHRON, { &aItem });
 
     SdrOle2Obj* pOleObj = nullptr;
 
@@ -725,7 +725,7 @@ void DrawViewShell::ResetActualPage()
     bool bAllowChangeFocus = nNewPageId != nCurrentPageId;
     SfxBoolItem aI(SID_SWITCHPAGE, bAllowChangeFocus);
     GetViewFrame()->GetDispatcher()->ExecuteList(SID_SWITCHPAGE,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                SfxCallMode::ASYNCHRON,
                 { &aI });
 }
 

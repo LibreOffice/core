@@ -383,7 +383,7 @@ bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
                         mrSlideSorter.GetModel().GetEditMode() == EditMode::Page
                             ? SID_INSERTPAGE
                             : SID_INSERT_MASTER_PAGE,
-                        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                        SfxCallMode::ASYNCHRON);
                 }
                 bResult = true;
             }
@@ -1036,7 +1036,7 @@ bool NormalModeHandler::ProcessButtonDownEvent (
 
             mrSlideSorter.GetViewShell().GetDispatcher()->Execute(
                 SID_INSERTPAGE,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                SfxCallMode::ASYNCHRON);
 
             pInsertionIndicatorHandler->End(Animator::AM_Immediate);
 

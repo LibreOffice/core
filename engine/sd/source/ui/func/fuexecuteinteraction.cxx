@@ -92,7 +92,7 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
             // Jump to Bookmark (Page or Object)
             SfxStringItem aItem(SID_NAVIGATOR_OBJECT, pInfo->GetBookmark());
             mrViewShell.GetViewFrame()->GetDispatcher()->ExecuteList(
-                SID_NAVIGATOR_OBJECT, SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
+                SID_NAVIGATOR_OBJECT, SfxCallMode::SLOT, { &aItem });
         }
         break;
 
@@ -108,7 +108,7 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
                 SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
                 SfxBoolItem aBrowseItem(SID_BROWSE, true);
                 pFrame->GetDispatcher()->ExecuteList(
-                    SID_OPENDOC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                    SID_OPENDOC, SfxCallMode::ASYNCHRON,
                     { &aStrItem, &aFrameItem, &aBrowseItem, &aReferer });
             }
         }
@@ -119,7 +119,7 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
             // Jump to the previous page
             SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_PREVIOUS);
             mrViewShell.GetViewFrame()->GetDispatcher()->ExecuteList(
-                SID_NAVIGATOR_PAGE, SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
+                SID_NAVIGATOR_PAGE, SfxCallMode::SLOT, { &aItem });
         }
         break;
 
@@ -128,7 +128,7 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
             // Jump to the next page
             SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_NEXT);
             mrViewShell.GetViewFrame()->GetDispatcher()->ExecuteList(
-                SID_NAVIGATOR_PAGE, SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
+                SID_NAVIGATOR_PAGE, SfxCallMode::SLOT, { &aItem });
         }
         break;
 
@@ -137,7 +137,7 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
             // Jump to the first page
             SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_FIRST);
             mrViewShell.GetViewFrame()->GetDispatcher()->ExecuteList(
-                SID_NAVIGATOR_PAGE, SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
+                SID_NAVIGATOR_PAGE, SfxCallMode::SLOT, { &aItem });
         }
         break;
 
@@ -146,7 +146,7 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
             // Jump to the last page
             SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_LAST);
             mrViewShell.GetViewFrame()->GetDispatcher()->ExecuteList(
-                SID_NAVIGATOR_PAGE, SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
+                SID_NAVIGATOR_PAGE, SfxCallMode::SLOT, { &aItem });
         }
         break;
 
@@ -200,7 +200,7 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
                     SfxBoolItem aBrowsing(SID_BROWSE, true);
 
                     pViewFrm->GetDispatcher()->ExecuteList(
-                        SID_OPENDOC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                        SID_OPENDOC, SfxCallMode::ASYNCHRON,
                         { &aUrl, &aBrowsing });
                 }
             }

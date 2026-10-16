@@ -384,7 +384,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             {
                                 // open in new frame
                                 pFrame->GetDispatcher()->ExecuteList(SID_OPENDOC,
-                                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                                    SfxCallMode::ASYNCHRON,
                                     { &aStrItem, &aBrowseItem, &aReferer });
                             }
                             else
@@ -392,7 +392,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                                 // open in current frame
                                 SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
                                 pFrame->GetDispatcher()->ExecuteList(SID_OPENDOC,
-                                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                                    SfxCallMode::ASYNCHRON,
                                     { &aStrItem, &aFrameItem, &aBrowseItem, &aReferer });
                             }
                         }
@@ -897,7 +897,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             }
 
             mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_OBJECT_SELECT,
-                                      SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+                                      SfxCallMode::ASYNCHRON );
         }
     }
     if (bJustEndedEdit)

@@ -265,7 +265,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     // we switch explicitly into selection mode
                     mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_OBJECT_SELECT,
-                                        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+                                        SfxCallMode::ASYNCHRON );
 
                 }
                 else

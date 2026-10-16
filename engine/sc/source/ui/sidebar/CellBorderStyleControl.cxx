@@ -110,9 +110,9 @@ IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, const OUString&, rId, void)
         aLineItem1.SetLine( nullptr );     //modify
         aLineItem2.SetLine( nullptr );     //modify
         mpDispatcher->ExecuteList(
-            SID_ATTR_BORDER_DIAG_BLTR, SfxCallMode::RECORD, { &aLineItem1 });
+            SID_ATTR_BORDER_DIAG_BLTR, SfxCallMode::SLOT, { &aLineItem1 });
         mpDispatcher->ExecuteList(
-            SID_ATTR_BORDER_DIAG_TLBR, SfxCallMode::RECORD, { &aLineItem2 });
+            SID_ATTR_BORDER_DIAG_TLBR, SfxCallMode::SLOT, { &aLineItem2 });
     }
     else if (rId == "all")
     {
@@ -133,8 +133,8 @@ IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, const OUString&, rId, void)
         aDiagUpItem.SetLine(&aThinLine);
         SvxLineItem aDiagDownItem(SID_ATTR_BORDER_DIAG_TLBR);
         aDiagDownItem.SetLine(&aThinLine);
-        mpDispatcher->ExecuteList(SID_ATTR_BORDER_DIAG_BLTR, SfxCallMode::RECORD, { &aDiagUpItem });
-        mpDispatcher->ExecuteList(SID_ATTR_BORDER_DIAG_TLBR, SfxCallMode::RECORD,
+        mpDispatcher->ExecuteList(SID_ATTR_BORDER_DIAG_BLTR, SfxCallMode::SLOT, { &aDiagUpItem });
+        mpDispatcher->ExecuteList(SID_ATTR_BORDER_DIAG_TLBR, SfxCallMode::SLOT,
                                   { &aDiagDownItem });
     }
 
@@ -153,7 +153,7 @@ IMPL_LINK(CellBorderStylePopup, TB1SelectHdl, const OUString&, rId, void)
     aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE, false );
 
     mpDispatcher->ExecuteList(
-        SID_ATTR_BORDER, SfxCallMode::RECORD, { &aBorderOuter, &aBorderInner });
+        SID_ATTR_BORDER, SfxCallMode::SLOT, { &aBorderOuter, &aBorderInner });
 
     maToolButton.set_inactive();
 }
@@ -166,7 +166,7 @@ IMPL_LINK(CellBorderStylePopup, TB2and3SelectHdl, const OUString&, rId, void)
         SvxLineItem     aLineItem( SID_ATTR_BORDER_DIAG_BLTR );
         aLineItem.SetLine( &aTmp );
         mpDispatcher->ExecuteList(
-            SID_ATTR_BORDER_DIAG_BLTR, SfxCallMode::RECORD, { &aLineItem });
+            SID_ATTR_BORDER_DIAG_BLTR, SfxCallMode::SLOT, { &aLineItem });
     }
     else if (rId == "diagdown")
     {
@@ -174,7 +174,7 @@ IMPL_LINK(CellBorderStylePopup, TB2and3SelectHdl, const OUString&, rId, void)
         SvxLineItem     aLineItem( SID_ATTR_BORDER_DIAG_TLBR );
         aLineItem.SetLine( &aTmp );
         mpDispatcher->ExecuteList(
-            SID_ATTR_BORDER_DIAG_TLBR, SfxCallMode::RECORD, { &aLineItem });
+            SID_ATTR_BORDER_DIAG_TLBR, SfxCallMode::SLOT, { &aLineItem });
     }
     else
     {
@@ -239,7 +239,7 @@ IMPL_LINK(CellBorderStylePopup, TB2and3SelectHdl, const OUString&, rId, void)
         aBorderInner.SetValid( SvxBoxInfoItemValidFlags::DISABLE, false );
 
         mpDispatcher->ExecuteList(
-            SID_ATTR_BORDER, SfxCallMode::RECORD, { &aBorderOuter, &aBorderInner});
+            SID_ATTR_BORDER, SfxCallMode::SLOT, { &aBorderOuter, &aBorderInner});
     }
 
     maToolButton.set_inactive();

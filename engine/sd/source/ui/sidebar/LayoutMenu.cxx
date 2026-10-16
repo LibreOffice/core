@@ -288,7 +288,7 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
     {
         pDispatcher->Execute(
             SID_INSERTPAGE,
-            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+            SfxCallMode::ASYNCHRON,
             *aRequest.GetArgs());
     }
     UpdateSelection();

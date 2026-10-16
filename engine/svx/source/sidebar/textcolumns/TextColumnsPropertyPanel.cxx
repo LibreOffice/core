@@ -111,7 +111,7 @@ IMPL_LINK_NOARG(TextColumnsPropertyPanel, ModifyColumnsNumberHdl, weld::SpinButt
 {
     m_xColumnsSpacing->set_sensitive(m_xColumnsNumber->get_value() > 1);
     SfxInt16Item aItem(SDRATTR_TEXTCOLUMNS_NUMBER, m_xColumnsNumber->get_value());
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_TEXTCOLUMNS_NUMBER, SfxCallMode::RECORD,
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_TEXTCOLUMNS_NUMBER, SfxCallMode::SLOT,
                                              { &aItem });
 }
 
@@ -119,7 +119,7 @@ IMPL_LINK_NOARG(TextColumnsPropertyPanel, ModifyColumnsSpacingHdl, weld::MetricS
 {
     const MapUnit aUnit = GetUnit(mpBindings, SDRATTR_TEXTCOLUMNS_SPACING);
     SdrMetricItem aItem(SDRATTR_TEXTCOLUMNS_SPACING, GetCoreValue(*m_xColumnsSpacing, aUnit));
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_TEXTCOLUMNS_SPACING, SfxCallMode::RECORD,
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_TEXTCOLUMNS_SPACING, SfxCallMode::SLOT,
                                              { &aItem });
 }
 
@@ -135,7 +135,7 @@ IMPL_LINK(TextColumnsPropertyPanel, ClickFitOptionHdl, weld::Toggleable&, rButto
                                                     ? css::drawing::TextFitToSizeType_PROPORTIONAL
                                                     : css::drawing::TextFitToSizeType_NONE;
         SdrTextFitToSizeTypeItem aItem(eType);
-        mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_TEXT_FITTOSIZE, SfxCallMode::RECORD,
+        mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_TEXT_FITTOSIZE, SfxCallMode::SLOT,
                                                  { &aItem });
 
         if (bFitFrame && m_xFitFrame->get_sensitive())
@@ -159,13 +159,13 @@ IMPL_LINK(TextColumnsPropertyPanel, ClickFitOptionHdl, weld::Toggleable&, rButto
         {
             SfxBoolItem aItem(SDRATTR_TEXT_AUTOGROWWIDTH, bFitWidth);
             mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_TEXT_AUTOGROWWIDTH,
-                                                     SfxCallMode::RECORD, { &aItem });
+                                                     SfxCallMode::SLOT, { &aItem });
         }
         else
         {
             SfxBoolItem aItem(SDRATTR_TEXT_AUTOGROWHEIGHT, bFitHeight);
             mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_TEXT_AUTOGROWHEIGHT,
-                                                     SfxCallMode::RECORD, { &aItem });
+                                                     SfxCallMode::SLOT, { &aItem });
         }
 
         if (bFitWidth || bFitHeight)
@@ -210,7 +210,7 @@ IMPL_LINK(TextColumnsPropertyPanel, ModifyPaddingHdl, weld::MetricSpinButton&, r
     if (nSID && nWhich)
     {
         SdrMetricItem aItem(TypedWhichId<SdrMetricItem>(nWhich), GetCoreValue(rCtrl, aUnit));
-        mpBindings->GetDispatcher()->ExecuteList(nSID, SfxCallMode::RECORD, { &aItem });
+        mpBindings->GetDispatcher()->ExecuteList(nSID, SfxCallMode::SLOT, { &aItem });
     }
 }
 

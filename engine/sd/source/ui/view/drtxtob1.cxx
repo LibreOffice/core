@@ -412,7 +412,7 @@ void TextObjectBar::Execute(SfxRequest& rReq)
                     // works, too.
                     SfxUInt16Item aItem(FN_SVX_SET_BULLET, FuBulletAndPosition::BULLET_TOGGLE);
                     mrViewShell.GetViewFrame()->GetDispatcher()->ExecuteList(
-                        FN_SVX_SET_BULLET, SfxCallMode::RECORD, { &aItem });
+                        FN_SVX_SET_BULLET, SfxCallMode::SLOT, { &aItem });
                 }
                 else
                 {

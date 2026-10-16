@@ -1771,7 +1771,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, const TransferableDataHelper& rData,
                 SfxInt16Item aCountItem( nDispatchSlot, nSelectedRowsOrCols-1 );
                 SfxBoolItem aAfter( FN_PARAM_INSERT_AFTER, true );
                 pDispatch->ExecuteList(nDispatchSlot,
-                    SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+                    SfxCallMode::SYNCHRON,
                     { &aCountItem, &aAfter });
             }
 

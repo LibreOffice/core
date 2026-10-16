@@ -244,7 +244,7 @@ IMPL_LINK(ScSolverDlg, BtnHdl, weld::Button&, rBtn, void)
 
                         SwitchToDocument();
                         GetBindings().GetDispatcher()->ExecuteList(SID_SOLVE,
-                                                  SfxCallMode::SLOT | SfxCallMode::RECORD,
+                                                  SfxCallMode::SLOT,
                                                   { &aOutItem });
                         response(RET_OK);
                     }

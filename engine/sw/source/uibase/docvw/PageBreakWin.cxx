@@ -314,7 +314,7 @@ void SwBreakDashedLine::execute(std::u16string_view rIdent)
             SfxStringItem aItem(m_pEditWin->GetView().GetPool().GetWhichIDFromSlotID(FN_FORMAT_TABLE_DLG), u"textflow"_ustr);
             m_pEditWin->GetView().GetViewFrame().GetDispatcher()->ExecuteList(
                     FN_FORMAT_TABLE_DLG,
-                    SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                    SfxCallMode::SYNCHRON,
                     { &aItem });
         }
         else
@@ -324,7 +324,7 @@ void SwBreakDashedLine::execute(std::u16string_view rIdent)
             SfxStringItem aItem( SID_PARA_DLG, u"textflow"_ustr );
             m_pEditWin->GetView().GetViewFrame().GetDispatcher()->ExecuteList(
                     SID_PARA_DLG,
-                    SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                    SfxCallMode::SYNCHRON,
                     { &aItem, &aPaMItem });
         }
 

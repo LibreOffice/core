@@ -479,21 +479,21 @@ IMPL_LINK_NOARG( PageStylesPanel, ModifyColumnCountHdl, weld::ComboBox&, void )
     sal_uInt16 nColumnType = mxColumnCount->get_active() + 1;
     mpPageColumnItem->SetValue( nColumnType );
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLUMN,
-            SfxCallMode::RECORD, { mpPageColumnItem.get() });
+            SfxCallMode::SLOT, { mpPageColumnItem.get() });
 }
 
 IMPL_LINK_NOARG( PageStylesPanel, ModifyNumberingHdl, weld::ComboBox&, void )
 {
     SvxNumType nEntryData = mxNumberSelectLB->get_active_id();
     mpPageItem->SetNumType(nEntryData);
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE, SfxCallMode::RECORD, { mpPageItem.get() });
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE, SfxCallMode::SLOT, { mpPageItem.get() });
 }
 
 IMPL_LINK_NOARG( PageStylesPanel, ModifyLayoutHdl, weld::ComboBox&, void )
 {
     sal_uInt16 nUse = mxLayoutSelectLB->get_active();
     mpPageItem->SetPageUsage(PosToPageUsage_Impl(nUse));
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE, SfxCallMode::RECORD, { mpPageItem.get() });
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE, SfxCallMode::SLOT, { mpPageItem.get() });
 }
 
 IMPL_LINK_NOARG(PageStylesPanel, ModifyFillStyleHdl, weld::ComboBox&, void)
@@ -506,28 +506,28 @@ IMPL_LINK_NOARG(PageStylesPanel, ModifyFillStyleHdl, weld::ComboBox&, void)
         case NONE:
         {
             const XFillStyleItem aXFillStyleItem(drawing::FillStyle_NONE);
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_FILLSTYLE, SfxCallMode::RECORD, { &aXFillStyleItem });
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_FILLSTYLE, SfxCallMode::SLOT, { &aXFillStyleItem });
         }
         break;
 
         case SOLID:
         {
             XFillColorItem aItem( OUString(), mpBgColorItem->GetColorValue() );
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::RECORD, { &aItem });
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::SLOT, { &aItem });
         }
         break;
 
         case GRADIENT:
         {
             XFillGradientItem aItem( mpBgGradientItem->GetName(), mpBgGradientItem->GetGradientValue() );
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::SLOT, { &aItem });
         }
         break;
 
         case HATCH:
         {
             XFillHatchItem aItem( mpBgHatchItem->GetName(), mpBgHatchItem->GetHatchValue() );
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::RECORD, { &aItem });
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::SLOT, { &aItem });
         }
         break;
 
@@ -535,7 +535,7 @@ IMPL_LINK_NOARG(PageStylesPanel, ModifyFillStyleHdl, weld::ComboBox&, void)
         case PATTERN:
         {
             XFillBitmapItem aItem( mpBgBitmapItem->GetName(), mpBgBitmapItem->GetGraphicObject() );
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::RECORD, { &aItem });
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::SLOT, { &aItem });
         }
         break;
 
@@ -556,7 +556,7 @@ void PageStylesPanel::ModifyFillColor()
             XFillColorItem aItem(OUString(), rNamedColor.m_aColor);
             aItem.setComplexColor(rNamedColor.getComplexColor());
             aItem.setComplexColor(mxBgColorLB->GetSelectedEntry().getComplexColor());
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::RECORD, { &aItem });
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::SLOT, { &aItem });
         }
         break;
         case GRADIENT:
@@ -567,7 +567,7 @@ void PageStylesPanel::ModifyFillColor()
                     mxBgGradientLB->GetSelectEntryColor().getBColor()));
 
             XFillGradientItem aItem(aGradient);
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::SLOT, { &aItem });
         }
         break;
         case HATCH:
@@ -579,7 +579,7 @@ void PageStylesPanel::ModifyFillColor()
                 const OUString aHatchName = pHatchListItem->GetHatchList()->GetHatch(nPos)->GetName();
 
                 XFillHatchItem aItem(aHatchName, aHatch);
-                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::RECORD, { &aItem });
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::SLOT, { &aItem });
             }
             break;
         case BITMAP:
@@ -604,7 +604,7 @@ void PageStylesPanel::ModifyFillColor()
                 }
 
                 XFillBitmapItem aItem(aBitmapName, aBitmap);
-                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::RECORD, { &aItem });
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::SLOT, { &aItem });
             }
             break;
         default:

@@ -104,7 +104,7 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl, weld::Toggleable&, void)
     {
         SdrOnOffItem aItem(makeSdrShadowItem(false));
         GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_SHADOW,
-                SfxCallMode::RECORD, { &aItem });
+                SfxCallMode::SLOT, { &aItem });
 
         if (comphelper::COKit::isActive())
         {
@@ -116,7 +116,7 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ClickShadowHdl, weld::Toggleable&, void)
     {
         SdrOnOffItem aItem(makeSdrShadowItem(true));
         GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_SHADOW,
-                SfxCallMode::RECORD, { &aItem });
+                SfxCallMode::SLOT, { &aItem });
 
         if (mxShadowDistance->get_value(FieldUnit::POINT) == 0)
             mxShadowDistance->set_value( 8, FieldUnit::POINT );
@@ -133,7 +133,7 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowColorHdl, ColorListBox&, void)
 {
     XColorItem aItem(makeSdrShadowColorItem(mxLBShadowColor->GetSelectEntryColor()));
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_COLOR,
-            SfxCallMode::RECORD, { &aItem });
+            SfxCallMode::SLOT, { &aItem });
 }
 
 IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransMetricHdl, weld::MetricSpinButton&, void)
@@ -142,14 +142,14 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransMetricHdl, weld::MetricSpi
     SetTransparencyValue(nVal);
     SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_TRANSPARENCE,
-            SfxCallMode::RECORD, { &aItem });
+            SfxCallMode::SLOT, { &aItem });
 }
 
 IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowBlurMetricHdl, weld::MetricSpinButton&, void)
 {
     SdrMetricItem aItem(SDRATTR_SHADOWBLUR, mxShadowBlurMetric->get_value(FieldUnit::MM_100TH));
 
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_BLUR, SfxCallMode::RECORD, { &aItem });
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_BLUR, SfxCallMode::SLOT, { &aItem });
 }
 
 IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransSliderHdl, weld::Scale&, void)
@@ -158,7 +158,7 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransSliderHdl, weld::Scale&, v
     SetTransparencyValue(nVal);
     SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_TRANSPARENCE,
-            SfxCallMode::RECORD, { &aItem });
+            SfxCallMode::SLOT, { &aItem });
 }
 
 IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowAngleHdl, weld::ComboBox&, void)
@@ -189,9 +189,9 @@ void ShadowPropertyPanel::ModifyShadowDistance()
     SdrMetricItem aXItem(makeSdrShadowXDistItem(nX));
     SdrMetricItem aYItem(makeSdrShadowYDistItem(nY));
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_XDISTANCE,
-            SfxCallMode::RECORD, { &aXItem });
+            SfxCallMode::SLOT, { &aXItem });
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_SHADOW_YDISTANCE,
-            SfxCallMode::RECORD, { &aYItem });
+            SfxCallMode::SLOT, { &aYItem });
 }
 
 void ShadowPropertyPanel::UpdateControls()

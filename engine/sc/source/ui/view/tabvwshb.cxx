@@ -399,7 +399,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     // insertion of border for Chart is cancelled:
     FuPoor* pPoor = GetDrawFuncPtr();
     if ( pPoor && pPoor->GetSlotID() == SID_DRAW_CHART )
-        GetViewData().GetDispatcher().Execute(SID_DRAW_CHART, SfxCallMode::SLOT | SfxCallMode::RECORD);
+        GetViewData().GetDispatcher().Execute(SID_DRAW_CHART, SfxCallMode::SLOT);
 
     MakeDrawLayer();
 

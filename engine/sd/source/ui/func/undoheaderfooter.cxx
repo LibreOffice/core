@@ -41,14 +41,14 @@ void SdHeaderFooterUndoAction::Undo()
 {
     mpPage->setHeaderFooterSettings( maOldSettings );
     if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
-        pViewFrm->GetDispatcher()->Execute( SID_SWITCHPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+        pViewFrm->GetDispatcher()->Execute( SID_SWITCHPAGE, SfxCallMode::ASYNCHRON );
 }
 
 void SdHeaderFooterUndoAction::Redo()
 {
     mpPage->setHeaderFooterSettings( maNewSettings );
     if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
-        pViewFrm->GetDispatcher()->Execute( SID_SWITCHPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+        pViewFrm->GetDispatcher()->Execute( SID_SWITCHPAGE, SfxCallMode::ASYNCHRON );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

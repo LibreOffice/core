@@ -247,7 +247,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
             mpView->EndUndo();
     }
 
-    mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_DELETE_PAGE, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
+    mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_DELETE_PAGE, SfxCallMode::SYNCHRON);
 }
 
 } // end of namespace sd

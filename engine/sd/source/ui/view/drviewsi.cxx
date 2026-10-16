@@ -124,7 +124,7 @@ void DrawViewShell::AssignFrom3DWindow()
             sal_uInt16 nSId = SID_CONVERT_TO_3D;
             SfxBoolItem aItem( nSId, true );
             GetViewFrame()->GetDispatcher()->ExecuteList(
-                nSId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                nSId, SfxCallMode::SYNCHRON,
                 { &aItem });
 
             // Determine if a FILL attribute is set.

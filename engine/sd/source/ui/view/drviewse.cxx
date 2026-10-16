@@ -720,8 +720,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             // Make FuText the current function.
             SfxUInt16Item aItem (SID_TEXTEDIT, 1);
             GetViewFrame()->GetDispatcher()->
-                ExecuteList(SID_TEXTEDIT, SfxCallMode::SYNCHRON |
-                    SfxCallMode::RECORD, { &aItem });
+                ExecuteList(SID_TEXTEDIT, SfxCallMode::SYNCHRON, { &aItem });
             // Put text object into edit mode.
             GetView()->SdrBeginTextEdit(static_cast<SdrTextObj*>(pObjTmp), pPageView);
             break;

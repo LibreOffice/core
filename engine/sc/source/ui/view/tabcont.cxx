@@ -210,7 +210,7 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
     if ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && nMouseClickPageId != 0 && nMouseClickPageId != TabBar::PAGE_NOT_FOUND )
     {
         SfxDispatcher* pDispatcher = rViewData.GetViewShell()->GetViewFrame().GetDispatcher();
-        pDispatcher->Execute( FID_TAB_MENU_RENAME, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
+        pDispatcher->Execute( FID_TAB_MENU_RENAME, SfxCallMode::SYNCHRON );
         return;
     }
 
@@ -218,7 +218,7 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
     {
         // Click in the area next to the existing tabs:
         SfxDispatcher* pDispatcher = rViewData.GetViewShell()->GetViewFrame().GetDispatcher();
-        pDispatcher->Execute( FID_TAB_DESELECTALL, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
+        pDispatcher->Execute( FID_TAB_DESELECTALL, SfxCallMode::SYNCHRON );
         // forget page ID, to be really sure that the dialog is not called twice
         nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
     }
@@ -310,7 +310,7 @@ void ScTabControl::Select()
         // sheet for basic is 1-based
         SfxUInt16Item aItem( SID_CURRENTTAB, nPage + 1 );
         rDisp.ExecuteList(SID_CURRENTTAB,
-                SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
+                SfxCallMode::SLOT, { &aItem });
     }
 
     SfxBindings& rBind = rViewData.GetBindings();

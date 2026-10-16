@@ -210,7 +210,7 @@ void ScUndoInsertTab::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
         pViewTarget->GetViewShell().GetViewData().GetDispatcher().
-            Execute(FID_INS_TABLE, SfxCallMode::SLOT | SfxCallMode::RECORD);
+            Execute(FID_INS_TABLE, SfxCallMode::SLOT);
 }
 
 bool ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -309,7 +309,7 @@ void ScUndoInsertTables::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
         pViewTarget->GetViewShell().GetViewData().GetDispatcher().
-            Execute(FID_INS_TABLE, SfxCallMode::SLOT | SfxCallMode::RECORD);
+            Execute(FID_INS_TABLE, SfxCallMode::SLOT);
 }
 
 bool ScUndoInsertTables::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1106,7 +1106,7 @@ void ScUndoImportTab::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
         pViewTarget->GetViewShell().GetViewData().GetDispatcher().
-            Execute(FID_INS_TABLE, SfxCallMode::SLOT | SfxCallMode::RECORD);
+            Execute(FID_INS_TABLE, SfxCallMode::SLOT);
 }
 
 bool ScUndoImportTab::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1235,7 +1235,7 @@ void ScUndoShowHideTab::Repeat(SfxRepeatTarget& rTarget)
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
         pViewTarget->GetViewShell().GetViewData().GetDispatcher().
             Execute( bShow ? FID_TABLE_SHOW : FID_TABLE_HIDE,
-                                SfxCallMode::SLOT | SfxCallMode::RECORD);
+                                SfxCallMode::SLOT);
 }
 
 bool ScUndoShowHideTab::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1655,7 +1655,7 @@ void ScUndoLayoutRTL::Repeat(SfxRepeatTarget& rTarget)
 {
     if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
         pViewTarget->GetViewShell().GetViewData().GetDispatcher().
-            Execute( FID_TAB_RTL, SfxCallMode::SLOT | SfxCallMode::RECORD);
+            Execute( FID_TAB_RTL, SfxCallMode::SLOT);
 }
 
 bool ScUndoLayoutRTL::CanRepeat(SfxRepeatTarget& rTarget) const

@@ -367,7 +367,7 @@ bool SfxManageStyleSheetPage::Execute_Impl(
     pItems[ nCount++ ] = nullptr;
 
     const SfxPoolItemHolder aResult(rDispatcher.Execute(
-        nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+        nId, SfxCallMode::SYNCHRON,
         pItems ));
 
     return aResult.is();

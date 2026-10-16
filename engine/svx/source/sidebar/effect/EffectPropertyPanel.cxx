@@ -155,7 +155,7 @@ void EffectPropertyPanel::UpdateReflectionControls()
 IMPL_LINK_NOARG(EffectPropertyPanel, ToggleReflectionHdl, weld::Toggleable&, void)
 {
     const SdrOnOffItem aItem(SDRATTR_REFLECTION, mxReflection->get_active());
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION, SfxCallMode::RECORD, { &aItem });
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION, SfxCallMode::SLOT, { &aItem });
     UpdateReflectionControls();
 }
 
@@ -166,7 +166,7 @@ void EffectPropertyPanel::SetReflectionTransparency(sal_uInt16 nTransparency)
     mxReflectionTransparencySlider->set_value(nTransparency);
     const SdrPercentItem aItem(SDRATTR_REFLECTION_START_TRANSPARENCY, nTransparency);
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION_START_TRANSPARENCY,
-                                             SfxCallMode::RECORD, { &aItem });
+                                             SfxCallMode::SLOT, { &aItem });
 }
 
 void EffectPropertyPanel::SetReflectionSize(sal_uInt16 nSize)
@@ -174,7 +174,7 @@ void EffectPropertyPanel::SetReflectionSize(sal_uInt16 nSize)
     mxReflectionSize->set_value(nSize, FieldUnit::PERCENT);
     mxReflectionSizeSlider->set_value(nSize);
     const SdrPercentItem aItem(SDRATTR_REFLECTION_END_POSITION, nSize);
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION_END_POSITION, SfxCallMode::RECORD,
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION_END_POSITION, SfxCallMode::SLOT,
                                              { &aItem });
 }
 
@@ -205,7 +205,7 @@ IMPL_LINK_NOARG(EffectPropertyPanel, ModifyReflectionDistanceHdl, weld::MetricSp
 {
     const SdrMetricItem aItem(SDRATTR_REFLECTION_DISTANCE,
                               mxReflectionDistance->get_value(FieldUnit::MM_100TH));
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION_DISTANCE, SfxCallMode::RECORD,
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION_DISTANCE, SfxCallMode::SLOT,
                                              { &aItem });
 }
 
@@ -213,31 +213,31 @@ IMPL_LINK_NOARG(EffectPropertyPanel, ModifyReflectionBlurHdl, weld::MetricSpinBu
 {
     const SdrMetricItem aItem(SDRATTR_REFLECTION_BLUR_RADIUS,
                               mxReflectionBlur->get_value(FieldUnit::MM_100TH));
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION_BLUR_RADIUS, SfxCallMode::RECORD,
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION_BLUR_RADIUS, SfxCallMode::SLOT,
                                              { &aItem });
 }
 
 void EffectPropertyPanel::setGlowRadius(const SdrMetricItem& rGlowRadius)
 {
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_RADIUS, SfxCallMode::RECORD,
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_RADIUS, SfxCallMode::SLOT,
                                              { &rGlowRadius });
 }
 
 void EffectPropertyPanel::setGlowColor(const XColorItem& rGlowColor)
 {
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_COLOR, SfxCallMode::RECORD,
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_COLOR, SfxCallMode::SLOT,
                                              { &rGlowColor });
 }
 
 void EffectPropertyPanel::setGlowTransparency(const SdrPercentItem& rGlowTransparency)
 {
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_TRANSPARENCY, SfxCallMode::RECORD,
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_TRANSPARENCY, SfxCallMode::SLOT,
                                              { &rGlowTransparency });
 }
 
 void EffectPropertyPanel::setSoftEdgeRadius(const SdrMetricItem& rSoftEdgeRadius)
 {
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_SOFTEDGE_RADIUS, SfxCallMode::RECORD,
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_SOFTEDGE_RADIUS, SfxCallMode::SLOT,
                                              { &rSoftEdgeRadius });
 }
 

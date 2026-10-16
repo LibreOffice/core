@@ -92,7 +92,7 @@ void PageColumnControl::ExecuteColumnChange( const sal_uInt16 nColumnType )
     aPageColumnTypeItem.SetValue( nColumnType );
     if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
         pViewFrm->GetBindings().GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLUMN,
-            SfxCallMode::RECORD, { &aPageColumnTypeItem });
+            SfxCallMode::SLOT, { &aPageColumnTypeItem });
 }
 
 IMPL_LINK( PageColumnControl, ColumnButtonClickHdl_Impl, weld::Button&, rButton, void )

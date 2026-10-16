@@ -463,7 +463,7 @@ IMPL_LINK(ScPrintAreasDlg, Impl_BtnHdl, weld::Button&, rBtn, void)
                 SetDispatcherLock( false );
                 SwitchToDocument();
                 GetBindings().GetDispatcher()->ExecuteList(SID_CHANGE_PRINTAREA,
-                      SfxCallMode::SLOT | SfxCallMode::RECORD,
+                      SfxCallMode::SLOT,
                       { &aPrintArea, &aRepeatRow, &aRepeatCol, &aEntireSheet });
             }
 

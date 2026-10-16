@@ -103,7 +103,7 @@ IMPL_LINK_NOARG(ParaULSpacingWindow, ModifySpacingHdl, weld::MetricSpinButton&, 
         SvxULSpaceItem aMargin(SID_ATTR_PARA_ULSPACE);
         aMargin.SetUpper(m_xAboveSpacing->GetCoreValue(m_eUnit));
         aMargin.SetLower(m_xBelowSpacing->GetCoreValue(m_eUnit));
-        pDisp->ExecuteList(SID_ATTR_PARA_ULSPACE, SfxCallMode::RECORD, {&aMargin});
+        pDisp->ExecuteList(SID_ATTR_PARA_ULSPACE, SfxCallMode::SLOT, {&aMargin});
     }
 }
 
@@ -298,7 +298,7 @@ IMPL_LINK_NOARG(ParaLRSpacingWindow, ModifySpacingHdl, weld::MetricSpinButton&, 
         aMargin.SetRight(SvxIndentValue::twips(m_xAfterSpacing->GetCoreValue(m_eUnit)));
         aMargin.SetTextFirstLineOffset(SvxIndentValue::twips(m_xFLSpacing->GetCoreValue(m_eUnit)));
 
-        pDisp->ExecuteList(SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, {&aMargin});
+        pDisp->ExecuteList(SID_ATTR_PARA_LRSPACE, SfxCallMode::SLOT, {&aMargin});
     }
 }
 

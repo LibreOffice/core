@@ -197,7 +197,7 @@ void SfxModelessDialogController::Close()
     SfxBoolItem aValue(m_xImpl->pMgr->GetType(), false);
     m_pBindings->GetDispatcher_Impl()->ExecuteList(
         m_xImpl->pMgr->GetType(),
-        SfxCallMode::RECORD|SfxCallMode::SYNCHRON, { &aValue } );
+        SfxCallMode::SYNCHRON, { &aValue } );
     SfxDialogController::Close();
 }
 

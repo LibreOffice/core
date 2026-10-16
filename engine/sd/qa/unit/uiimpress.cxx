@@ -3546,7 +3546,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorNoColor)
     // When dispatching a fill color that only has a fill style (no color), then make sure we don't
     // crash:
     XFillStyleItem aXFillStyleItem(drawing::FillStyle_NONE);
-    pDispatcher->ExecuteList(SID_ATTR_FILL_COLOR, SfxCallMode::RECORD, { &aXFillStyleItem });
+    pDispatcher->ExecuteList(SID_ATTR_FILL_COLOR, SfxCallMode::SLOT, { &aXFillStyleItem });
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf153161)

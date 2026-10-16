@@ -182,7 +182,7 @@ static bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell& rViewShell, const 
             // the object to edit is there, so ask for the text function without a new object
             SfxBoolItem aCreateDirectly(FN_PARAM_1, false);
             rViewShell.GetViewData().GetDispatcher().ExecuteList(
-                nTextSlotId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD, { &aCreateDirectly });
+                nTextSlotId, SfxCallMode::SYNCHRON, { &aCreateDirectly });
         }
 
         // get the resulting FuText and set in edit mode
@@ -211,13 +211,13 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 collectUIInformation(u"CLOSE"_ustr);
                 // if object selected -> normal draw-shell, else turn off drawing
-                rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
+                rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT);
                 bReturn = true;
             }
             else if ( rViewShell.IsDrawSelMode() )
             {
                 pView->UnmarkAll();
-                rViewData.GetDispatcher().Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
+                rViewData.GetDispatcher().Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT);
                 bReturn = true;
             }
             else if ( rMarkList.GetMarkCount() != 0 )

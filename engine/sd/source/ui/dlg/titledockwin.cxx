@@ -217,7 +217,7 @@ namespace sd
             const SfxBoolItem aVisibility( nChildWindowId, false );
             GetBindings().GetDispatcher()->ExecuteList(
                 nChildWindowId,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                SfxCallMode::ASYNCHRON,
                 { &aVisibility }
             );
         }

@@ -398,7 +398,7 @@ void SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
     pInternalItems[ 1 ] = nullptr;
 
     pDispatcher->Execute(
-        nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+        nId, SfxCallMode::SYNCHRON,
         pItems, 0, pInternalItems);
 }
 

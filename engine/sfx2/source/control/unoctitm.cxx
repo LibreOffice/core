@@ -598,7 +598,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         addParametersToArgs( aURL, lNewArgs );
 
     // Try to find call mode and frame name inside given arguments...
-    SfxCallMode nCall = SfxCallMode::RECORD;
+    SfxCallMode nCall = SfxCallMode::SLOT;
     sal_Int32   nMarkArg = -1;
 
     // Filter arguments which shouldn't be part of the sequence property value

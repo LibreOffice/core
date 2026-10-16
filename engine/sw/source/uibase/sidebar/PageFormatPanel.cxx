@@ -244,14 +244,14 @@ IMPL_LINK_NOARG(PageFormatPanel, PaperFormatModifyHdl, weld::ComboBox&, void)
 
     mpPageItem->SetLandscape(mxPaperOrientation->get_active() == 1);
     SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem, mpPageItem.get() });
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::SLOT, { &aSizeItem, mpPageItem.get() });
 }
 
 IMPL_LINK_NOARG(PageFormatPanel, PaperSizeModifyHdl, weld::MetricSpinButton&, void)
 {
     Size aSize(mxPaperWidth->GetCoreValue(meUnit), mxPaperHeight->GetCoreValue(meUnit));
     SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem });
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::SLOT, { &aSizeItem });
 }
 
 IMPL_LINK_NOARG(PageFormatPanel, PaperModifyMarginHdl, weld::ComboBox&, void)
@@ -297,7 +297,7 @@ IMPL_LINK_NOARG(PageFormatPanel, PaperModifyMarginHdl, weld::ComboBox&, void)
         {
             mpPageItem->SetPageUsage( bMirrored ? SvxPageUsage::Mirror : SvxPageUsage::All );
             mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE,
-                                                        SfxCallMode::RECORD, { mpPageItem.get() });
+                                                        SfxCallMode::SLOT, { mpPageItem.get() });
         }
     }
 }
@@ -335,14 +335,14 @@ void PageFormatPanel::ExecuteMarginLRChange( const tools::Long nPageLeftMargin, 
 {
     mpPageLRMarginItem->SetLeft( nPageLeftMargin );
     mpPageLRMarginItem->SetRight( nPageRightMargin );
-    mpBindings->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE, SfxCallMode::RECORD, { mpPageLRMarginItem.get() });
+    mpBindings->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE, SfxCallMode::SLOT, { mpPageLRMarginItem.get() });
 }
 
 void PageFormatPanel::ExecuteMarginULChange(const tools::Long nPageTopMargin, const tools::Long nPageBottomMargin)
 {
     mpPageULMarginItem->SetUpper( nPageTopMargin );
     mpPageULMarginItem->SetLower( nPageBottomMargin );
-    mpBindings->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_ULSPACE, SfxCallMode::RECORD, { mpPageULMarginItem.get() });
+    mpBindings->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_ULSPACE, SfxCallMode::SLOT, { mpPageULMarginItem.get() });
 }
 
 void PageFormatPanel::UpdateMarginBox()

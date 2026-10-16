@@ -68,7 +68,7 @@ void DrawViewShell::ModelHasChanged()
 
     SfxBoolItem aItem( SID_3D_STATE, true );
     GetViewFrame()->GetDispatcher()->ExecuteList(
-        SID_3D_STATE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
+        SID_3D_STATE, SfxCallMode::ASYNCHRON, { &aItem });
 
     // now initialize the TextEditOutliner which was newly created by the draw engine
     ::Outliner* pOutliner     = mpDrawView->GetTextEditOutliner();
@@ -293,7 +293,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     {
         SfxBoolItem aDesignModeItem( SID_FM_DESIGN_MODE, pView->IsDesignMode() );
         GetViewFrame()->GetDispatcher()->ExecuteList(SID_FM_DESIGN_MODE,
-                SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                SfxCallMode::SYNCHRON,
                 { &aDesignModeItem });
     }
 

@@ -578,7 +578,7 @@ void ScFormulaDlg::dispatch(bool _bOK, bool _bMatrixChecked)
     clear();
 
     GetBindings().GetDispatcher()->ExecuteList( SID_INS_FUNCTION,
-                              SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                              SfxCallMode::ASYNCHRON,
                               { &aRetItem, &aStrItem, &aMatItem });
 }
 void ScFormulaDlg::setDispatcherLock( bool bLock )

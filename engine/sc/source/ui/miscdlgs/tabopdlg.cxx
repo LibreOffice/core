@@ -293,7 +293,7 @@ IMPL_LINK(ScTabOpDlg, BtnHdl, weld::Button&, rBtn, void)
             SetDispatcherLock( false );
             SwitchToDocument();
             GetBindings().GetDispatcher()->ExecuteList(SID_TABOP,
-                                      SfxCallMode::SLOT | SfxCallMode::RECORD,
+                                      SfxCallMode::SLOT,
                                       { &aOutItem });
             response(RET_OK);
         }

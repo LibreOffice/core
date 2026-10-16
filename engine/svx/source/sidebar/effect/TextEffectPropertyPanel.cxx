@@ -64,14 +64,14 @@ void TextEffectPropertyPanel::Initialize()
 IMPL_LINK_NOARG(TextEffectPropertyPanel, ModifyTGlowRadiusHdl, weld::MetricSpinButton&, void)
 {
     SdrMetricItem aItem(SDRATTR_GLOW_TEXT_RADIUS, mxTGlowRadius->get_value(FieldUnit::MM_100TH));
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_TEXT_RADIUS, SfxCallMode::RECORD,
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_TEXT_RADIUS, SfxCallMode::SLOT,
                                              { &aItem });
 }
 
 IMPL_LINK_NOARG(TextEffectPropertyPanel, ModifyTGlowColorHdl, ColorListBox&, void)
 {
     XColorItem aItem(SDRATTR_GLOW_TEXT_COLOR, mxLBTGlowColor->GetSelectEntryColor());
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_TEXT_COLOR, SfxCallMode::RECORD,
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_TEXT_COLOR, SfxCallMode::SLOT,
                                              { &aItem });
 }
 
@@ -79,7 +79,7 @@ IMPL_LINK_NOARG(TextEffectPropertyPanel, ModifyTGlowTransparencyHdl, weld::Metri
 {
     SdrPercentItem aItem(SDRATTR_GLOW_TEXT_TRANSPARENCY,
                          mxTGlowTransparency->get_value(FieldUnit::PERCENT));
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_TEXT_TRANSPARENCY, SfxCallMode::RECORD,
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_TEXT_TRANSPARENCY, SfxCallMode::SLOT,
                                              { &aItem });
 }
 

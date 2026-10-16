@@ -298,7 +298,7 @@ IMPL_LINK(SdNavigatorWin, SelectToolboxHdl, const OUString&, rCommand, void)
     {
         SfxUInt16Item aItem( SID_NAVIGATOR_PAGE, static_cast<sal_uInt16>(ePage) );
         mpBindings->GetDispatcher()->ExecuteList(SID_NAVIGATOR_PAGE,
-                SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
+                SfxCallMode::SLOT, { &aItem });
     }
 }
 
@@ -383,7 +383,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, weld::TreeView&, bool)
                     // All objects are unmarked when navigating to an object.
                     SfxStringItem aItem(SID_NAVIGATOR_OBJECT, aStr);
                     mpBindings->GetDispatcher()->ExecuteList(SID_NAVIGATOR_OBJECT,
-                                            SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
+                                            SfxCallMode::SLOT, { &aItem });
 
                     if (bCursorEntryObjectHasEmptyName)
                     {

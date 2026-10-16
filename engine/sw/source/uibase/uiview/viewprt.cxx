@@ -185,7 +185,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                 SfxStringItem aPrinterName(SID_PRINTER_NAME, sFaxName);
                 SfxBoolItem aSilent( SID_SILENT, true );
                 GetViewFrame().GetDispatcher()->ExecuteList(SID_PRINTDOC,
-                            SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+                            SfxCallMode::SYNCHRON,
                             { &aPrinterName, &aSilent });
             }
             else

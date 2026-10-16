@@ -143,7 +143,7 @@ IMPL_LINK(AlignmentPropertyPanel, ReferenceEdgeHdl, weld::Button&, rToggle, void
 
     SvxRotateModeItem aItem(eMode, ATTR_ROTATE_MODE);
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_ALIGN_LOCKPOS,
-            SfxCallMode::RECORD, { &aItem });
+            SfxCallMode::SLOT, { &aItem });
 }
 
 IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl, weld::MetricSpinButton&, void )
@@ -152,7 +152,7 @@ IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl, weld::MetricSpinButto
     ScRotateValueItem aAngleItem(nAngle);
 
     GetBindings()->GetDispatcher()->ExecuteList(
-        SID_ATTR_ALIGN_DEGREES, SfxCallMode::RECORD, { &aAngleItem });
+        SID_ATTR_ALIGN_DEGREES, SfxCallMode::SLOT, { &aAngleItem });
 }
 
 IMPL_LINK_NOARG( AlignmentPropertyPanel, ClickStackHdl, weld::Toggleable&, void )
@@ -160,7 +160,7 @@ IMPL_LINK_NOARG( AlignmentPropertyPanel, ClickStackHdl, weld::Toggleable&, void 
     bool bVertical = mxCBStacked->get_active();
     ScVerticalStackCell aStackItem(bVertical);
     GetBindings()->GetDispatcher()->ExecuteList(
-        SID_ATTR_ALIGN_STACKED, SfxCallMode::RECORD, { &aStackItem });
+        SID_ATTR_ALIGN_STACKED, SfxCallMode::SLOT, { &aStackItem });
 }
 
 IMPL_LINK_NOARG(AlignmentPropertyPanel, MFLeftIndentMdyHdl, weld::MetricSpinButton&, void)
@@ -169,7 +169,7 @@ IMPL_LINK_NOARG(AlignmentPropertyPanel, MFLeftIndentMdyHdl, weld::MetricSpinButt
     ScIndentItem aItem(static_cast<sal_uInt16>(CalcToUnit(nVal, MapUnit::MapTwip)));
 
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_ALIGN_INDENT,
-            SfxCallMode::RECORD, { &aItem });
+            SfxCallMode::SLOT, { &aItem });
 }
 
 IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXMergnCellClkHdl, weld::Toggleable&, void)
@@ -177,9 +177,9 @@ IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXMergnCellClkHdl, weld::Toggleable&, 
     bool bState = mxCBXMergeCell->get_active();
 
     if( bState)
-        GetBindings()->GetDispatcher()->Execute(FID_MERGE_ON, SfxCallMode::RECORD);
+        GetBindings()->GetDispatcher()->Execute(FID_MERGE_ON, SfxCallMode::SLOT);
     else
-        GetBindings()->GetDispatcher()->Execute(FID_MERGE_OFF, SfxCallMode::RECORD);
+        GetBindings()->GetDispatcher()->Execute(FID_MERGE_OFF, SfxCallMode::SLOT);
     GetBindings()->Invalidate(FID_MERGE_TOGGLE,true);
 }
 
@@ -188,7 +188,7 @@ IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXWrapTextClkHdl, weld::Toggleable&, v
     bool bState = mxCBXWrapText->get_active();
     ScLineBreakCell aItem(bState);
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_ALIGN_LINEBREAK,
-            SfxCallMode::RECORD, { &aItem });
+            SfxCallMode::SLOT, { &aItem });
 }
 
 std::unique_ptr<PanelLayout> AlignmentPropertyPanel::Create (

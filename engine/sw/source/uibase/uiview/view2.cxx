@@ -1325,7 +1325,7 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 SfxBoolItem aItem( SID_WIN_FULLSCREEN, false );
                 GetViewFrame().GetDispatcher()->ExecuteList(SID_WIN_FULLSCREEN,
-                        SfxCallMode::RECORD, { &aItem });
+                        SfxCallMode::SLOT, { &aItem });
                 bIgnore = true;
             }
         }
@@ -2303,21 +2303,21 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         case FN_STAT_PAGE:
         {
             GetViewFrame().GetDispatcher()->Execute( SID_GO_TO_PAGE,
-                                      SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
+                                      SfxCallMode::SYNCHRON );
         }
         break;
 
         case FN_STAT_WORDCOUNT:
         {
             GetViewFrame().GetDispatcher()->Execute(FN_WORDCOUNT_DIALOG,
-                                      SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
+                                      SfxCallMode::SYNCHRON );
         }
         break;
 
         case FN_STAT_ACCESSIBILITY_CHECK:
         {
             const SfxStringItem sDeckName(SID_SIDEBAR_DECK, u"A11yCheckDeck"_ustr);
-            GetViewFrame().GetDispatcher()->ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::RECORD,
+            GetViewFrame().GetDispatcher()->ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::SLOT,
                 { &sDeckName });
         }
         break;
@@ -2351,7 +2351,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             pInternalItems[ 0 ] = &aDialogParent;
             pInternalItems[ 1 ] = nullptr;
             GetViewFrame().GetDispatcher()->Execute(FN_FORMAT_PAGE_DLG,
-                                        SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+                                        SfxCallMode::SYNCHRON,
                                         nullptr, 0, pInternalItems);
         }
         break;
@@ -2482,7 +2482,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             }
             if( nId )
                 GetViewFrame().GetDispatcher()->Execute(nId,
-                    SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
+                    SfxCallMode::SYNCHRON );
         }
         break;
 

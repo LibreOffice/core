@@ -321,7 +321,7 @@ void SdOutliner::EndSpelling()
         // Make FuSelection the current function.
         pViewShell->GetDispatcher()->Execute(
             SID_OBJECT_SELECT,
-            SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
+            SfxCallMode::SYNCHRON);
 
         // Remove and, if previously created by us, delete the outline
         // view.
@@ -1705,7 +1705,7 @@ void SdOutliner::EnterEditMode (bool bGrabFocus)
         return;
 
     pViewShell->GetDispatcher()->ExecuteList(
-        SID_TEXTEDIT, SfxCallMode::SYNCHRON | SfxCallMode::RECORD, {&aItem});
+        SID_TEXTEDIT, SfxCallMode::SYNCHRON, {&aItem});
 
     if (mpView->IsTextEdit())
     {

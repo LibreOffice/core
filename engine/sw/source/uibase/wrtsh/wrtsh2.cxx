@@ -442,7 +442,7 @@ void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
                 //#97295# immediately select the right shell
                 GetView().StopShellTimer();
                 GetView().GetViewFrame().GetDispatcher()->Execute( nSlotId,
-                            SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
+                            SfxCallMode::SYNCHRON );
                 EndUndo( SwUndoId::END );
             }
         }
@@ -676,7 +676,7 @@ static bool LoadURL(const SfxViewShell& rView, const OUString& rURL, LoadUrlFlag
                 nullptr
             };
     rViewFrame.GetDispatcher()->GetBindings()->Execute(
-        SID_OPENDOC, aArr, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+        SID_OPENDOC, aArr, SfxCallMode::ASYNCHRON);
     return true;
 }
 

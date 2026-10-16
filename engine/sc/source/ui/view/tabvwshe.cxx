@@ -306,13 +306,13 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                     aSearchItem.SetWhich(SID_SEARCH_ITEM);
                     GetViewData().GetDispatcher().ExecuteList(FID_SEARCH_NOW,
                             rReq.IsAPI() ? SfxCallMode::API|SfxCallMode::SYNCHRON :
-                                            SfxCallMode::RECORD,
+                                            SfxCallMode::SLOT,
                             { &aSearchItem });
                 }
                 else
                 {
                     GetViewData().GetDispatcher().Execute(
-                            SID_SEARCH_DLG, SfxCallMode::ASYNCHRON|SfxCallMode::RECORD );
+                            SID_SEARCH_DLG, SfxCallMode::ASYNCHRON );
                 }
             }
             break;
@@ -324,7 +324,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                 aSearchItem.SetWhich(SID_SEARCH_ITEM);
                 GetViewData().GetDispatcher().ExecuteList( FID_SEARCH_NOW,
                         rReq.IsAPI() ? SfxCallMode::API|SfxCallMode::SYNCHRON :
-                                        SfxCallMode::RECORD,
+                                        SfxCallMode::SLOT,
                         { &aSearchItem });
             }
             break;

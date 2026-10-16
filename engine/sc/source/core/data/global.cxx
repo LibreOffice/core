@@ -940,7 +940,7 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget, bool bIgno
 
     // No SID_SILENT anymore
     pViewFrm->GetDispatcher()->ExecuteList(SID_OPENDOC,
-            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+            SfxCallMode::ASYNCHRON,
             { &aUrl, &aTarget, &aFrm, &aReferer, &aNewView, &aBrowsing });
 }
 

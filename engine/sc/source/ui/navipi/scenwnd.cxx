@@ -153,7 +153,7 @@ void ScScenarioWindow::ExecuteScenarioSlot(sal_uInt16 nSlotId)
     {
         SfxStringItem aStringItem(nSlotId, m_xLbScenario->get_selected_text());
         pViewFrm->GetDispatcher()->ExecuteList(nSlotId,
-                SfxCallMode::SLOT | SfxCallMode::RECORD, { &aStringItem } );
+                SfxCallMode::SLOT, { &aStringItem } );
     }
 }
 

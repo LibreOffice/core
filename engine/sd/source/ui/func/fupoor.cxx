@@ -246,11 +246,11 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     }
                     else if( pObj && pObj->IsEmptyPresObj() && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr )
                     {
-                        mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_GRAPHIC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+                        mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_GRAPHIC, SfxCallMode::ASYNCHRON );
                     }
                     else
                     {
-                        mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_ATTR_CHAR, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+                        mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_ATTR_CHAR, SfxCallMode::ASYNCHRON );
                     }
 
                     // consumed
@@ -329,7 +329,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 // zoom to page
                 mrViewShell.GetViewFrame()->GetDispatcher()->
-                Execute(SID_SIZE_PAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                Execute(SID_SIZE_PAGE, SfxCallMode::ASYNCHRON);
                 bReturn = true;
             }
         }
@@ -341,7 +341,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 // zoom to selected objects
                 mrViewShell.GetViewFrame()->GetDispatcher()->
-                Execute(SID_SIZE_OPTIMAL, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                Execute(SID_SIZE_OPTIMAL, SfxCallMode::ASYNCHRON);
                 bReturn = true;
             }
         }

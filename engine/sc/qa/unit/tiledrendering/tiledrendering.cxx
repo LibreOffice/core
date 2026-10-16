@@ -2590,7 +2590,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFilterDlg)
     CPPUNIT_ASSERT(pView1 != pView2);
     {
         pView2->GetViewFrame().GetDispatcher()->Execute(SID_FILTER,
-            SfxCallMode::SLOT|SfxCallMode::RECORD);
+            SfxCallMode::SLOT);
     }
 
     Scheduler::ProcessEventsToIdle();
@@ -2621,7 +2621,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFunctionDlg)
     int nView1 = KitHelper::getCurrentView();
     {
         pView1->GetViewFrame().GetDispatcher()->Execute(SID_OPENDLG_FUNCTION,
-            SfxCallMode::SLOT|SfxCallMode::RECORD);
+            SfxCallMode::SLOT);
     }
     Scheduler::ProcessEventsToIdle();
     SfxChildWindow* pRefWindow = pView1->GetViewFrame().GetChildWindow(SID_OPENDLG_FUNCTION);

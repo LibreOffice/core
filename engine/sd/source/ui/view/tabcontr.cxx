@@ -82,8 +82,7 @@ void TabControl::dispose()
 void TabControl::Select()
 {
     SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-    pDispatcher->Execute(SID_SWITCHPAGE, SfxCallMode::ASYNCHRON |
-                            SfxCallMode::RECORD);
+    pDispatcher->Execute(SID_SWITCHPAGE, SfxCallMode::ASYNCHRON );
 }
 
 void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
@@ -102,7 +101,7 @@ void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
             SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
 
             pDispatcher->Execute(SID_INSERTPAGE_QUICK,
-                                SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
+                                SfxCallMode::SYNCHRON);
         }
     }
 
@@ -138,8 +137,7 @@ void TabControl::DoubleClick()
     if (GetCurPageId() != 0)
     {
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-        pDispatcher->Execute( SID_MODIFYPAGE,
-                        SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
+        pDispatcher->Execute( SID_MODIFYPAGE, SfxCallMode::SYNCHRON );
     }
 }
 
@@ -213,7 +211,7 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 if( pDrViewSh->IsSwitchPageAllowed() && pDoc->MoveSelectedPages( nPageId ) )
                 {
                     SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-                    pDispatcher->Execute(SID_SWITCHPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                    pDispatcher->Execute(SID_SWITCHPAGE, SfxCallMode::ASYNCHRON);
                 }
                 break;
 
@@ -246,8 +244,7 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
                             nPageNum += 1;
                         SetCurPageId (GetPageId(nPageNum));
                         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-                        pDispatcher->Execute(SID_SWITCHPAGE,
-                            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                        pDispatcher->Execute(SID_SWITCHPAGE, SfxCallMode::ASYNCHRON);
                     }
                 }
 
@@ -333,8 +330,7 @@ void TabControl::ActivatePage()
     if ( /*IsInSwitching && */ pDrViewSh->IsSwitchPageAllowed() )
     {
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-        pDispatcher->Execute(SID_SWITCHPAGE,
-                             SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+        pDispatcher->Execute(SID_SWITCHPAGE, SfxCallMode::ASYNCHRON);
     }
 }
 

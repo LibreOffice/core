@@ -193,7 +193,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, CancelHdl, weld::Button&, void)
         {
             SfxBoolItem aBoolItem( SID_IMAP_EXEC, true );
             GetBindings().GetDispatcher()->ExecuteList(SID_IMAP_EXEC,
-                SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                SfxCallMode::SYNCHRON,
                 { &aBoolItem });
         }
         else if( nRet == RET_CANCEL )
@@ -273,7 +273,7 @@ IMPL_LINK(SvxIMapDlg, TbxClickHdl, const OUString&, rNewItemId, void)
         URLLoseFocusHdl(*m_xCbbTarget);
         SfxBoolItem aBoolItem( SID_IMAP_EXEC, true );
         GetBindings().GetDispatcher()->ExecuteList(SID_IMAP_EXEC,
-            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+            SfxCallMode::ASYNCHRON,
             { &aBoolItem });
     }
     else if (rNewItemId == "TBI_OPEN")

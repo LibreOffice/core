@@ -751,14 +751,14 @@ void SlideBackground::ExecuteMarginLRChange(const ::tools::Long mnPageLeftMargin
 {
     mpPageLRMarginItem->SetLeft(mnPageLeftMargin);
     mpPageLRMarginItem->SetRight(mnPageRightMargin);
-    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE, SfxCallMode::RECORD, { mpPageLRMarginItem.get() } );
+    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE, SfxCallMode::SLOT, { mpPageLRMarginItem.get() } );
 }
 
 void SlideBackground::ExecuteMarginULChange(const ::tools::Long mnPageTopMargin, const ::tools::Long mnPageBottomMargin)
 {
     mpPageULMarginItem->SetUpper(mnPageTopMargin);
     mpPageULMarginItem->SetLower(mnPageBottomMargin);
-    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_ULSPACE, SfxCallMode::RECORD, { mpPageULMarginItem.get() } );
+    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_ULSPACE, SfxCallMode::SLOT, { mpPageULMarginItem.get() } );
 }
 
 Color const & SlideBackground::GetColorSetOrDefault()
@@ -1049,7 +1049,7 @@ IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, weld::ComboBox&, void)
         case NONE:
         {
             const XFillStyleItem aXFillStyleItem(drawing::FillStyle_NONE);
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_FILLSTYLE, SfxCallMode::RECORD, { &aXFillStyleItem });
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_FILLSTYLE, SfxCallMode::SLOT, { &aXFillStyleItem });
         }
         break;
 
@@ -1058,7 +1058,7 @@ IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, weld::ComboBox&, void)
             if (mpColorItem)
             {
                 const XFillColorItem aItem( OUString(), mpColorItem->GetColorValue() );
-                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::RECORD, { &aItem });
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::SLOT, { &aItem });
             }
         }
         break;
@@ -1068,7 +1068,7 @@ IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, weld::ComboBox&, void)
             if (mpGradientItem)
             {
                 const XFillGradientItem aItem( mpGradientItem->GetName(), mpGradientItem->GetGradientValue() );
-                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::SLOT, { &aItem });
             }
         }
         break;
@@ -1078,7 +1078,7 @@ IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, weld::ComboBox&, void)
             if (mpHatchItem)
             {
                 const XFillHatchItem aItem( mpHatchItem->GetName(), mpHatchItem->GetHatchValue() );
-                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::RECORD, { &aItem });
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::SLOT, { &aItem });
             }
         }
         break;
@@ -1089,7 +1089,7 @@ IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, weld::ComboBox&, void)
             if (mpBitmapItem)
             {
                 const XFillBitmapItem aItem( mpBitmapItem->GetName(), mpBitmapItem->GetGraphicObject() );
-                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::RECORD, { &aItem });
+                GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::SLOT, { &aItem });
             }
         }
         break;
@@ -1115,7 +1115,7 @@ IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, weld::ComboBox&, void)
     // objects to paper size. Until that is handled somehow better, we do the same here
     const SfxBoolItem aFitObjs(SID_ATTR_PAGE_EXT1, IsImpress());
 
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD,
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::SLOT,
                                                 { &aSizeItem, mpPageItem.get(), &aFitObjs });
 }
 
@@ -1127,7 +1127,7 @@ IMPL_LINK_NOARG(SlideBackground, FillColorHdl, ColorListBox&, void)
         case drawing::FillStyle_SOLID:
         {
             XFillColorItem aItem(OUString(), mxFillLB->GetSelectEntryColor());
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::RECORD, { &aItem });
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::SLOT, { &aItem });
         }
         break;
         case drawing::FillStyle_GRADIENT:
@@ -1138,7 +1138,7 @@ IMPL_LINK_NOARG(SlideBackground, FillColorHdl, ColorListBox&, void)
             // the name doesn't really matter, it'll be converted to unique one eventually,
             // but it has to be non-empty
             XFillGradientItem aItem(u"gradient"_ustr, aGradient);
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::SLOT, { &aItem });
         }
         break;
         default:
@@ -1163,7 +1163,7 @@ IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, weld::ComboBox&, void)
             const OUString aHatchName = pHatchListItem->GetHatchList()->GetHatch(nPos)->GetName();
 
             XFillHatchItem aItem(aHatchName, aHatch);
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::RECORD, { &aItem });
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::SLOT, { &aItem });
         }
         break;
 
@@ -1186,7 +1186,7 @@ IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, weld::ComboBox&, void)
                 aName = pPatternListItem->GetPatternList()->GetBitmap(nPos)->GetName();
             }
             XFillBitmapItem aItem(aName, aBitmap);
-            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::RECORD, { &aItem });
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::SLOT, { &aItem });
         }
         break;
 
@@ -1221,31 +1221,31 @@ IMPL_LINK_NOARG(SlideBackground, AssignMasterPage, weld::ComboBox&, void)
 
 IMPL_LINK_NOARG(SlideBackground, EditMasterHdl, weld::Button&, void)
 {
-    GetBindings()->GetDispatcher()->Execute( SID_SLIDE_MASTER_MODE, SfxCallMode::RECORD );
+    GetBindings()->GetDispatcher()->Execute( SID_SLIDE_MASTER_MODE, SfxCallMode::SLOT );
 }
 
 IMPL_LINK_NOARG(SlideBackground, SelectBgHdl, weld::Button&, void)
 {
-    GetBindings()->GetDispatcher()->Execute( SID_SELECT_BACKGROUND, SfxCallMode::RECORD );
+    GetBindings()->GetDispatcher()->Execute( SID_SELECT_BACKGROUND, SfxCallMode::SLOT );
 }
 
 IMPL_LINK_NOARG(SlideBackground, CloseMasterHdl, weld::Button&, void)
 {
-    GetBindings()->GetDispatcher()->Execute( SID_CLOSE_MASTER_VIEW, SfxCallMode::RECORD );
+    GetBindings()->GetDispatcher()->Execute( SID_CLOSE_MASTER_VIEW, SfxCallMode::SLOT );
 }
 
 IMPL_LINK_NOARG(SlideBackground, DspBackground, weld::Toggleable&, void)
 {
     bool IsChecked = mxDspMasterBackground->get_active();
     const SfxBoolItem aBoolItem(SID_DISPLAY_MASTER_BACKGROUND, IsChecked);
-    GetBindings()->GetDispatcher()->ExecuteList(SID_DISPLAY_MASTER_BACKGROUND, SfxCallMode::RECORD, { &aBoolItem });
+    GetBindings()->GetDispatcher()->ExecuteList(SID_DISPLAY_MASTER_BACKGROUND, SfxCallMode::SLOT, { &aBoolItem });
 }
 
 IMPL_LINK_NOARG(SlideBackground, DspObjects, weld::Toggleable&, void)
 {
     bool IsChecked = mxDspMasterObjects->get_active();
     const SfxBoolItem aBoolItem(SID_DISPLAY_MASTER_OBJECTS,IsChecked);
-    GetBindings()->GetDispatcher()->ExecuteList(SID_DISPLAY_MASTER_OBJECTS, SfxCallMode::RECORD, { &aBoolItem, &aBoolItem });
+    GetBindings()->GetDispatcher()->ExecuteList(SID_DISPLAY_MASTER_OBJECTS, SfxCallMode::SLOT, { &aBoolItem, &aBoolItem });
 }
 
 IMPL_LINK_NOARG( SlideBackground, ModifyMarginHdl, weld::ComboBox&, void )

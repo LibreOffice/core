@@ -3572,7 +3572,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 {
                                     GetView().GetViewFrame().GetBindings().Execute(
                                         FN_FORMAT_GRAFIC_DLG, nullptr,
-                                        SfxCallMode::RECORD|SfxCallMode::SLOT);
+                                        SfxCallMode::SLOT);
                                 }
                                 return;
 
@@ -3588,7 +3588,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 {
                                     GetView().GetViewFrame().GetBindings().Execute(
                                         FN_FORMAT_FRAME_DLG, nullptr,
-                                        SfxCallMode::RECORD|SfxCallMode::SLOT);
+                                        SfxCallMode::SLOT);
                                 }
                                 return;
 
@@ -3864,7 +3864,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             {
                                 GetView().GetViewFrame().GetBindings().Execute(
                                     FN_FORMAT_GRAFIC_DLG, nullptr,
-                                    SfxCallMode::RECORD | SfxCallMode::SLOT);
+                                    SfxCallMode::SLOT);
                                 return;
                             }
                         }

@@ -126,9 +126,9 @@ IMPL_LINK(WrapPropertyPanel, SpacingLBHdl, weld::ComboBox&, rBox, void)
 
     m_nTop = m_nBottom = m_nLeft = m_nRight = nVal;
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_LRSPACE,
-            SfxCallMode::RECORD, { &aLRItem });
+            SfxCallMode::SLOT, { &aLRItem });
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_ULSPACE,
-            SfxCallMode::RECORD, { &aULItem });
+            SfxCallMode::SLOT, { &aULItem });
 }
 
 void WrapPropertyPanel::NotifyItemUpdate(

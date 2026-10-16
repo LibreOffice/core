@@ -160,7 +160,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                     // the object to edit is there, so ask for the text function without a new object
                     SfxBoolItem aCreateDirectly(FN_PARAM_1, false);
                     rViewShell.GetViewData().GetDispatcher().ExecuteList(
-                        nTextSlotId, SfxCallMode::SLOT | SfxCallMode::RECORD, { &aCreateDirectly });
+                        nTextSlotId, SfxCallMode::SLOT, { &aCreateDirectly });
 
                     // Get the created FuText now and change into EditMode
                     FuPoor* pPoor = rViewShell.GetViewData().GetView()->GetDrawFuncPtr();
@@ -213,9 +213,9 @@ bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 
             SfxDispatcher& rDisp = rViewShell.GetViewData().GetDispatcher();
             if ( rMarkList.GetMarkCount() != 0 )
-                rDisp.Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
+                rDisp.Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT);
             else
-                rDisp.Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
+                rDisp.Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT);
         }
     }
 
@@ -239,7 +239,7 @@ bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
             else                            // end drawing mode
             {
                 rViewShell.GetViewData().GetDispatcher().
-                    Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
+                    Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT);
             }
             break;
 

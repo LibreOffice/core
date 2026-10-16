@@ -331,7 +331,7 @@ IMPL_LINK(ScSpecialFilterDlg, EndDlgHdl, weld::Button&, rBtn, void)
             SetDispatcherLock( false );
             SwitchToDocument();
             GetBindings().GetDispatcher()->ExecuteList(FID_FILTER_OK,
-                    SfxCallMode::SLOT | SfxCallMode::RECORD,
+                    SfxCallMode::SLOT,
                     { GetOutputItem(theOutParam, theFilterArea) });
             response(RET_OK);
         }

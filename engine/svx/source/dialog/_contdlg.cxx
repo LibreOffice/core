@@ -258,7 +258,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, CancelHdl, weld::Button&, void)
         {
             SfxBoolItem aBoolItem( SID_CONTOUR_EXEC, true );
             GetBindings().GetDispatcher()->ExecuteList(
-                SID_CONTOUR_EXEC, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                SID_CONTOUR_EXEC, SfxCallMode::SYNCHRON,
                 { &aBoolItem });
         }
         else if ( nRet == RET_CANCEL )
@@ -363,7 +363,7 @@ IMPL_LINK(SvxSuperContourDlg, Tbx1ClickHdl, const OUString&, rId, void)
     {
         SfxBoolItem aBoolItem( SID_CONTOUR_EXEC, true );
         GetBindings().GetDispatcher()->ExecuteList(
-            SID_CONTOUR_EXEC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+            SID_CONTOUR_EXEC, SfxCallMode::ASYNCHRON,
             { &aBoolItem });
     }
     else if (rId == "TBI_WORKPLACE")

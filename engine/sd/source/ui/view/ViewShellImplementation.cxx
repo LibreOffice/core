@@ -198,7 +198,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             }
 
             mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                SfxCallMode::ASYNCHRON);
 
             bool bSetModified = true;
 

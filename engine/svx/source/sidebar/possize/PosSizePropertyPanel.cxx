@@ -419,7 +419,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, weld::MetricSpinButton&, v
         SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,static_cast<sal_uInt32>(lX));
 
         GetBindings()->GetDispatcher()->ExecuteList(
-            SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosXItem });
+            SID_ATTR_TRANSFORM, SfxCallMode::SLOT, { &aPosXItem });
     }
 }
 
@@ -435,7 +435,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, weld::MetricSpinButton&, v
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,static_cast<sal_uInt32>(lY));
 
         GetBindings()->GetDispatcher()->ExecuteList(
-            SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosYItem });
+            SID_ATTR_TRANSFORM, SfxCallMode::SLOT, { &aPosYItem });
     }
 }
 
@@ -464,7 +464,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl&, void )
     SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
 
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-            SfxCallMode::RECORD, { &aAngleItem, &aRotXItem, &aRotYItem });
+            SfxCallMode::SLOT, { &aAngleItem, &aRotXItem, &aRotYItem });
 }
 
 IMPL_STATIC_LINK_NOARG( PosSizePropertyPanel, ClickObjectEditHdl, weld::Button&, void )
@@ -868,19 +868,19 @@ void PosSizePropertyPanel::executeSize()
         )
     {
         GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-            SfxCallMode::RECORD, { &aWidthItem, &aHeightItem, &aPointItem });
+            SfxCallMode::SLOT, { &aWidthItem, &aHeightItem, &aPointItem });
     }
     else
     {
         if ( (mxMtrWidth->get_value_changed_from_saved()) && (mxMtrHeight->get_value_changed_from_saved()))
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-                SfxCallMode::RECORD, { &aWidthItem, &aHeightItem, &aPointItem });
+                SfxCallMode::SLOT, { &aWidthItem, &aHeightItem, &aPointItem });
         else if( mxMtrWidth->get_value_changed_from_saved())
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-                SfxCallMode::RECORD, { &aWidthItem, &aPointItem });
+                SfxCallMode::SLOT, { &aWidthItem, &aPointItem });
         else if ( mxMtrHeight->get_value_changed_from_saved())
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_TRANSFORM,
-                SfxCallMode::RECORD, { &aHeightItem, &aPointItem });
+                SfxCallMode::SLOT, { &aHeightItem, &aPointItem });
     }
 }
 

@@ -94,7 +94,7 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyBrightnessHdl, weld::MetricSpinButt
     const sal_Int16 nBright = o3tl::sanitizing_cast<sal_Int16>(mxMtrBrightness->get_value(FieldUnit::PERCENT));
     const SfxInt16Item aBrightItem( SID_ATTR_GRAF_LUMINANCE, nBright );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_LUMINANCE,
-            SfxCallMode::RECORD, { &aBrightItem });
+            SfxCallMode::SLOT, { &aBrightItem });
 }
 
 
@@ -103,7 +103,7 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyContrastHdl, weld::MetricSpinButton
     const sal_Int16 nContrast = o3tl::sanitizing_cast<sal_Int16>(mxMtrContrast->get_value(FieldUnit::PERCENT));
     const SfxInt16Item aContrastItem( SID_ATTR_GRAF_CONTRAST, nContrast );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_CONTRAST,
-            SfxCallMode::RECORD, { &aContrastItem });
+            SfxCallMode::SLOT, { &aContrastItem });
 }
 
 
@@ -112,7 +112,7 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyTransHdl, weld::MetricSpinButton&, 
     const sal_Int16 nTrans = o3tl::sanitizing_cast<sal_Int16>(mxMtrTrans->get_value(FieldUnit::PERCENT));
     const SfxUInt16Item aTransItem( SID_ATTR_GRAF_TRANSPARENCE, nTrans );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_TRANSPARENCE,
-            SfxCallMode::RECORD, { &aTransItem });
+            SfxCallMode::SLOT, { &aTransItem });
 }
 
 
@@ -121,7 +121,7 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ClickColorModeHdl, weld::ComboBox&, void 
     const sal_Int16 nTrans = mxLBColorMode->get_active();
     const SfxUInt16Item aTransItem( SID_ATTR_GRAF_MODE, nTrans );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_MODE,
-            SfxCallMode::RECORD, { &aTransItem });
+            SfxCallMode::SLOT, { &aTransItem });
 }
 
 std::unique_ptr<PanelLayout> GraphicPropertyPanel::Create (

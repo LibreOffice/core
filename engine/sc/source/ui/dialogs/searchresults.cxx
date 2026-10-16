@@ -168,7 +168,7 @@ void SearchResultsDlg::Close()
         if (pDispacher)
         {
             pDispacher->ExecuteList(SID_SEARCH_RESULTS_DIALOG,
-                SfxCallMode::SYNCHRON | SfxCallMode::RECORD, { &aItem });
+                SfxCallMode::SYNCHRON, { &aItem });
         }
     }
 

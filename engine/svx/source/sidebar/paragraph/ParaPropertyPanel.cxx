@@ -231,7 +231,7 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl, weld::MetricSpinButton
         SvxIndentValue::twips(mxFLineIndent->GetCoreValue(m_eLRSpaceUnit)));
 
     GetBindings()->GetDispatcher()->ExecuteList(
-        SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, { &aMargin });
+        SID_ATTR_PARA_LRSPACE, SfxCallMode::SLOT, { &aMargin });
 }
 
 
@@ -243,7 +243,7 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl, weld::MetricSpinButton&, vo
     aMargin.SetLower( static_cast<sal_uInt16>(mxBottomDist->GetCoreValue(m_eULSpaceUnit)));
 
     GetBindings()->GetDispatcher()->ExecuteList(
-        SID_ATTR_PARA_ULSPACE, SfxCallMode::RECORD, { &aMargin });
+        SID_ATTR_PARA_ULSPACE, SfxCallMode::SLOT, { &aMargin });
 }
 
 void ParaPropertyPanel::fill_hyphenzone(SvxHyphenZoneItem & rHyphen)
@@ -276,7 +276,7 @@ IMPL_LINK_NOARG( ParaPropertyPanel, HyphenationHdl_Impl, weld::MetricSpinButton&
     SvxHyphenZoneItem aHyphen( false, 69 /*RES_PARATR_HYPHENZONE*/);
     fill_hyphenzone(aHyphen);
     GetBindings()->GetDispatcher()->ExecuteList(
-        SID_ATTR_PARA_HYPHENZONE, SfxCallMode::RECORD, { &aHyphen });
+        SID_ATTR_PARA_HYPHENZONE, SfxCallMode::SLOT, { &aHyphen });
 }
 
 // for hyphenation toggle buttons
@@ -321,7 +321,7 @@ IMPL_LINK( ParaPropertyPanel, HyphenationToggleButtonHdl_Impl, const OUString&, 
     }
     fill_hyphenzone(aHyphen);
     GetBindings()->GetDispatcher()->ExecuteList(
-        SID_ATTR_PARA_HYPHENZONE, SfxCallMode::RECORD, { &aHyphen });
+        SID_ATTR_PARA_HYPHENZONE, SfxCallMode::SLOT, { &aHyphen });
 
     mbUpdatingHyphenateButtons = false;
 }

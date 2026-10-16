@@ -227,7 +227,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 SfxStringItem aDefPage(FN_FORMAT_FRAME_DLG, u"columns"_ustr);
                 rSh.GetView().GetViewFrame().GetDispatcher()->ExecuteList(
                         FN_FORMAT_FRAME_DLG,
-                        SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+                        SfxCallMode::SYNCHRON,
                         { &aDefPage });
 
             }

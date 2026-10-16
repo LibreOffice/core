@@ -192,7 +192,7 @@ void DrawViewShell::ModifyLayer (
 
     GetViewFrame()->GetDispatcher()->Execute(
         SID_SWITCHLAYER,
-        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+        SfxCallMode::ASYNCHRON);
 
     // Call Invalidate at the form shell.
     FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();

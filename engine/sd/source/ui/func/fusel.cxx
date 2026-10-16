@@ -270,7 +270,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     SfxUInt16Item aItem(SID_TEXTEDIT, 1);
                     mrViewShell.GetViewFrame()->GetDispatcher()->
                     ExecuteList(SID_TEXTEDIT,
-                            SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                            SfxCallMode::SYNCHRON,
                             { &aItem });
                     return bReturn; // CAUTION, due to the synchronous slot the object is deleted now
                 }
@@ -304,7 +304,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 {
                     // Open in new frame
                     pFrame->GetDispatcher()->ExecuteList(SID_OPENDOC,
-                        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                        SfxCallMode::ASYNCHRON,
                         { &aStrItem, &aBrowseItem, &aReferer });
                 }
                 else
@@ -312,7 +312,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     // Open in current frame
                     SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
                     pFrame->GetDispatcher()->ExecuteList(SID_OPENDOC,
-                        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                        SfxCallMode::ASYNCHRON,
                         { &aStrItem, &aFrameItem, &aBrowseItem, &aReferer });
                 }
 
@@ -1111,7 +1111,7 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
         {
             mpView->ResetCreationActive();
 
-            mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+            mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
         }
     }
 
@@ -1347,7 +1347,7 @@ bool FuSelection::HandleImageMapClick(const SdrObject* pObj, const Point& rPos)
                 SfxBoolItem aBrowseItem(SID_BROWSE, true);
                 mpWindow->ReleaseMouse();
                 pFrame->GetDispatcher()->ExecuteList(
-                    SID_OPENDOC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                    SID_OPENDOC, SfxCallMode::ASYNCHRON,
                     { &aStrItem, &aFrameItem, &aBrowseItem, &aReferer });
 
                 return true;
@@ -1369,7 +1369,7 @@ bool FuSelection::cancel()
     if (mpView->Is3DRotationCreationActive())
     {
         mpView->ResetCreationActive();
-        mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+        mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
         return true;
     }
     else

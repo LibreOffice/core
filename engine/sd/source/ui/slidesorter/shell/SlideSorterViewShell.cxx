@@ -433,7 +433,7 @@ void SlideSorterViewShell::ExecStatusBar (SfxRequest& rReq)
         case SID_STATUS_PAGE:
         {
             GetViewFrame()->GetDispatcher()->Execute(SID_GO_TO_PAGE,
-                                          SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
+                                          SfxCallMode::SYNCHRON);
         }
         break;
     }

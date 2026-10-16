@@ -246,7 +246,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             }
 
             // force update of TabBar
-            mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_MASTERPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+            mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_MASTERPAGE, SfxCallMode::ASYNCHRON);
         }
         else
         {

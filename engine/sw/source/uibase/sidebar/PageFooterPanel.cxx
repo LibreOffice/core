@@ -250,7 +250,7 @@ IMPL_LINK_NOARG( PageFooterPanel, FooterToggleHdl, weld::Toggleable&, void )
 {
     bool IsChecked = mxFooterToggle->get_active();
     mpFooterItem->SetValue(IsChecked);
-    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_FOOTER, SfxCallMode::RECORD, { mpFooterItem.get() } );
+    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_FOOTER, SfxCallMode::SLOT, { mpFooterItem.get() } );
     UpdateFooterCheck();
 }
 
@@ -260,7 +260,7 @@ IMPL_LINK_NOARG( PageFooterPanel, FooterLRMarginHdl, weld::ComboBox&, void )
     mpFooterLRMarginItem->SetLeft(nVal);
     mpFooterLRMarginItem->SetRight(nVal);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_FOOTER_LRMARGIN,
-                                                 SfxCallMode::RECORD, { mpFooterLRMarginItem.get() } );
+                                                 SfxCallMode::SLOT, { mpFooterLRMarginItem.get() } );
 }
 
 IMPL_LINK_NOARG( PageFooterPanel, FooterSpacingHdl, weld::ComboBox&, void )
@@ -268,7 +268,7 @@ IMPL_LINK_NOARG( PageFooterPanel, FooterSpacingHdl, weld::ComboBox&, void )
     sal_uInt16 nVal = mxFooterSpacingLB->get_active_id().toUInt32();
     mpFooterSpacingItem->SetUpper(nVal);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_FOOTER_SPACING,
-                                                 SfxCallMode::RECORD, { mpFooterSpacingItem.get() } );
+                                                 SfxCallMode::SLOT, { mpFooterSpacingItem.get() } );
 
 }
 IMPL_LINK_NOARG( PageFooterPanel, FooterLayoutHdl, weld::ComboBox&, void )
@@ -276,7 +276,7 @@ IMPL_LINK_NOARG( PageFooterPanel, FooterLayoutHdl, weld::ComboBox&, void )
     sal_uInt16 nVal = mxFooterLayoutLB->get_active();
     mpFooterLayoutItem->SetValue(nVal);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_FOOTER_LAYOUT,
-                                                 SfxCallMode::RECORD, { mpFooterLayoutItem.get() } );
+                                                 SfxCallMode::SLOT, { mpFooterLayoutItem.get() } );
 }
 
 

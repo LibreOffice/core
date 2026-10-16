@@ -803,7 +803,7 @@ IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl, weld::Button&, void)
     if (eState <= SfxItemState::SET || !pState || !pState->GetValue())
     {
         m_pBindings->GetDispatcher()->Execute(SID_STYLE_DESIGNER,
-                                              SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                                              SfxCallMode::ASYNCHRON);
     }
 }
 

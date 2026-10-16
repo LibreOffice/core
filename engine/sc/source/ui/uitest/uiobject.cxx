@@ -303,7 +303,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             FuDraw* pDraw = dynamic_cast<FuDraw*>(getViewFunc()->GetDrawFuncPtr());
             assert(pDraw);
             ScViewData& rViewData = mxGridWindow->getViewData();
-            rViewData.GetDispatcher().Execute( pDraw->GetSlotID() , SfxCallMode::SLOT | SfxCallMode::RECORD );
+            rViewData.GetDispatcher().Execute( pDraw->GetSlotID() , SfxCallMode::SLOT );
         }
         else if ( rParameters.find(u"SETTEXT"_ustr) != rParameters.end() )
         {

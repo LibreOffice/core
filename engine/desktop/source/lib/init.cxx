@@ -921,7 +921,7 @@ void ExecuteMarginLRChange(
     if (!pViewSh)
         return;
     pViewSh->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_LRSPACE,
-            SfxCallMode::RECORD, { pPageLRMarginItem });
+            SfxCallMode::SLOT, { pPageLRMarginItem });
 }
 
 // Adjusts page margins for Writer doc. Needed by ToggleOrientation
@@ -936,7 +936,7 @@ void ExecuteMarginULChange(
     if (!pViewSh)
         return;
     pViewSh->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_ULSPACE,
-            SfxCallMode::RECORD, { pPageULMarginItem });
+            SfxCallMode::SLOT, { pPageULMarginItem });
 }
 
 // Main function which toggles page orientation of the Writer doc. Needed by ToggleOrientation
@@ -987,7 +987,7 @@ void ExecuteOrientationChange()
         if (SfxViewShell* pCurrent = SfxViewShell::Current())
         {
             pCurrent->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
-                SfxCallMode::RECORD, { pPageSizeItem.get(), pPageItem.get() });
+                SfxCallMode::SLOT, { pPageSizeItem.get(), pPageItem.get() });
         }
     }
 

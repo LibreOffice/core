@@ -410,7 +410,7 @@ void ScTabView::DrawDeselectAll()
     {
         // end text edit (as if escape pressed, in FuDraw)
         aViewData.GetDispatcher().Execute( pDrawActual->GetSlotID(),
-                                    SfxCallMode::SLOT | SfxCallMode::RECORD );
+                                    SfxCallMode::SLOT );
     }
 
     pDrawView->ScEndTextEdit();

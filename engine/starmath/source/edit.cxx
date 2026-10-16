@@ -840,7 +840,7 @@ void SmEditTextWindow::Flush()
         {
             SfxStringItem aTextToFlush(SID_TEXT, GetText());
             pViewSh->GetViewFrame().GetDispatcher()->ExecuteList(
-                    SID_TEXT, SfxCallMode::RECORD,
+                    SID_TEXT, SfxCallMode::SLOT,
                     { &aTextToFlush });
         }
     }

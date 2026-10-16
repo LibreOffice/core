@@ -253,7 +253,7 @@ IMPL_LINK_NOARG( PageHeaderPanel, HeaderToggleHdl, weld::Toggleable&, void )
 {
     bool IsChecked = mxHeaderToggle->get_active();
     mpHeaderItem->SetValue(IsChecked);
-    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER, SfxCallMode::RECORD, { mpHeaderItem.get() } );
+    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER, SfxCallMode::SLOT, { mpHeaderItem.get() } );
     UpdateHeaderCheck();
 }
 
@@ -263,7 +263,7 @@ IMPL_LINK_NOARG( PageHeaderPanel, HeaderLRMarginHdl, weld::ComboBox&, void )
     mpHeaderLRMarginItem->SetLeft(nVal);
     mpHeaderLRMarginItem->SetRight(nVal);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER_LRMARGIN,
-                                                 SfxCallMode::RECORD, { mpHeaderLRMarginItem.get() } );
+                                                 SfxCallMode::SLOT, { mpHeaderLRMarginItem.get() } );
 }
 
 IMPL_LINK_NOARG( PageHeaderPanel, HeaderSpacingHdl, weld::ComboBox&, void )
@@ -271,14 +271,14 @@ IMPL_LINK_NOARG( PageHeaderPanel, HeaderSpacingHdl, weld::ComboBox&, void )
     sal_uInt16 nVal = mxHeaderSpacingLB->get_active_id().toUInt32();
     mpHeaderSpacingItem->SetLower(nVal);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER_SPACING,
-                                                 SfxCallMode::RECORD, { mpHeaderSpacingItem.get() } );
+                                                 SfxCallMode::SLOT, { mpHeaderSpacingItem.get() } );
 }
 IMPL_LINK_NOARG( PageHeaderPanel, HeaderLayoutHdl, weld::ComboBox&, void )
 {
     sal_uInt16 nVal = mxHeaderLayoutLB->get_active();
     mpHeaderLayoutItem->SetValue(nVal);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER_LAYOUT,
-                                                 SfxCallMode::RECORD, { mpHeaderLayoutItem.get() } );
+                                                 SfxCallMode::SLOT, { mpHeaderLayoutItem.get() } );
 }
 
 

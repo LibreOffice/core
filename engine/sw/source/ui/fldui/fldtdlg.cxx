@@ -114,7 +114,7 @@ void SwFieldDlg::Close()
         return;
     const SfxPoolItemHolder aResult(m_pBindings->GetDispatcher()->
         Execute(m_bDataBaseMode ? FN_INSERT_FIELD_DATA_ONLY : FN_INSERT_FIELD,
-        SfxCallMode::SYNCHRON|SfxCallMode::RECORD));
+        SfxCallMode::SYNCHRON));
     if (!aResult)
     {
         // If Execute action did fail for whatever reason, this means that request

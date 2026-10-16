@@ -1557,7 +1557,7 @@ void SvxLinguTabPage::ApplyLanguageOptions(const SfxItemSet& rSet)
             // The application this reaches keeps the choice for itself. The shared
             // linguistic option it was split out of is left alone.
             pDispatch->ExecuteList(SID_AUTOSPELL_CHECK,
-                SfxCallMode::ASYNCHRON|SfxCallMode::RECORD, { pItem });
+                SfxCallMode::ASYNCHRON, { pItem });
         }
 
         if( bSaveSpellCheck )

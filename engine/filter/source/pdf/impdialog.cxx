@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(ImpPDFTabDialog, OkHdl, weld::Button&, void)
                     if (pDispatcher)
                     {
                         const SfxStringItem sDeckName(SID_SIDEBAR_DECK, u"A11yCheckDeck"_ustr);
-                        pDispatcher->ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::RECORD,
+                        pDispatcher->ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::SLOT,
                                                  { &sDeckName });
                     }
                 }

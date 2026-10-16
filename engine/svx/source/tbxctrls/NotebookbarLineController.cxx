@@ -142,7 +142,7 @@ void NotebookbarLineController::disposing(std::unique_lock<std::mutex>& /*rGuard
 void NotebookbarLineController::Execute(sal_uInt16 nSlot, const SfxPoolItem& rItem)
 {
     if (mpBindings && mpBindings->GetDispatcher())
-        mpBindings->GetDispatcher()->ExecuteList(nSlot, SfxCallMode::RECORD, { &rItem });
+        mpBindings->GetDispatcher()->ExecuteList(nSlot, SfxCallMode::SLOT, { &rItem });
 }
 
 void NotebookbarLineController::NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemState eState,

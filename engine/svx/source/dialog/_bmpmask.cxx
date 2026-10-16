@@ -35,7 +35,7 @@
 #include <memory>
 #include <helpids.h>
 
-#define OWN_CALLMODE    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD
+#define OWN_CALLMODE    SfxCallMode::ASYNCHRON
 
 
 #define TEST_COLS()                                                 \

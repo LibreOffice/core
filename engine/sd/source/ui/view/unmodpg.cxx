@@ -125,7 +125,7 @@ void ModifyPageUndoAction::Undo()
     if( pCurrent )
     {
         pCurrent->GetDispatcher()->Execute(
-            SID_SWITCHPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+            SID_SWITCHPAGE, SfxCallMode::ASYNCHRON );
     }
 }
 
@@ -169,7 +169,7 @@ void ModifyPageUndoAction::Redo()
     if( pCurrent )
     {
         pCurrent->GetDispatcher()->Execute(
-            SID_SWITCHPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+            SID_SWITCHPAGE, SfxCallMode::ASYNCHRON );
     }
 }
 

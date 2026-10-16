@@ -87,7 +87,7 @@ IMPL_STATIC_LINK(SheetViewBox, SelectHdl, weld::ComboBox&, rComboBox, void)
 
     const OUString sValue = rComboBox.get_active_id();
     SfxInt32Item aItem(FN_PARAM_1, sValue.toInt32());
-    pDispatcher->ExecuteList(FID_SELECT_SHEET_VIEW, SfxCallMode::RECORD, { &aItem });
+    pDispatcher->ExecuteList(FID_SELECT_SHEET_VIEW, SfxCallMode::SLOT, { &aItem });
 
     pViewFrame->GetWindow().GrabFocus();
 }

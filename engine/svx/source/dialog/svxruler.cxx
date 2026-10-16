@@ -2106,7 +2106,7 @@ void SvxRuler::ApplyMargins()
 #endif // DEBUGLIN
 
     }
-    m_pBindings->GetDispatcher()->ExecuteList(nId, SfxCallMode::RECORD, { pItem });
+    m_pBindings->GetDispatcher()->ExecuteList(nId, SfxCallMode::SLOT, { pItem });
     if (mxTabStopItem)
         UpdateTabs();
 }
@@ -2212,7 +2212,7 @@ void SvxRuler::ApplyIndents()
     mxParaItem->SetRight(SvxIndentValue::twips(nNewRight));
 
     sal_uInt16 nParagraphId  = m_bHorz ? SID_ATTR_PARA_LRSPACE : SID_ATTR_PARA_LRSPACE_VERTICAL;
-    m_pBindings->GetDispatcher()->ExecuteList(nParagraphId, SfxCallMode::RECORD,
+    m_pBindings->GetDispatcher()->ExecuteList(nParagraphId, SfxCallMode::SLOT,
             { mxParaItem.get() });
     UpdateTabs();
 }
@@ -2303,7 +2303,7 @@ void SvxRuler::ApplyTabs()
         mxTabStopItem->Insert(aTabStop);
     }
     sal_uInt16 nTabStopId = m_bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL;
-    m_pBindings->GetDispatcher()->ExecuteList(nTabStopId, SfxCallMode::RECORD,
+    m_pBindings->GetDispatcher()->ExecuteList(nTabStopId, SfxCallMode::SLOT,
             { mxTabStopItem.get() });
     UpdateTabs();
 }
@@ -2366,7 +2366,7 @@ void SvxRuler::ApplyBorders()
     sal_uInt16 nColId = mxRulerImpl->bIsTableRows ? (m_bHorz ? SID_RULER_ROWS : SID_RULER_ROWS_VERTICAL) :
                             (m_bHorz ? SID_RULER_BORDERS : SID_RULER_BORDERS_VERTICAL);
 
-    m_pBindings->GetDispatcher()->ExecuteList(nColId, SfxCallMode::RECORD,
+    m_pBindings->GetDispatcher()->ExecuteList(nColId, SfxCallMode::SLOT,
             { mxColumnItem.get(), &aFlag });
 }
 
@@ -2406,7 +2406,7 @@ void SvxRuler::ApplyObject()
     mxObjectItem->SetEndY(nEndY);
 
     m_pBindings->GetDispatcher()->ExecuteList(SID_RULER_OBJECT,
-            SfxCallMode::RECORD, { mxObjectItem.get() });
+            SfxCallMode::SLOT, { mxObjectItem.get() });
 }
 
 void SvxRuler::PrepareProportional_Impl(RulerType eType)
@@ -3408,7 +3408,7 @@ void SvxRuler::TabMenuSelect(std::u16string_view rIdent)
         mxTabStopItem->Insert(aTabStop);
         sal_uInt16 nTabStopId = m_bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL;
         m_pBindings->GetDispatcher()->ExecuteList(nTabStopId,
-                SfxCallMode::RECORD, { mxTabStopItem.get() });
+                SfxCallMode::SLOT, { mxTabStopItem.get() });
         UpdateTabs();
         mxRulerImpl->nIdx = 0;
     }

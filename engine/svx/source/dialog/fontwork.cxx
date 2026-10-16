@@ -495,7 +495,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
                     XFormTextShadowYValItem aYItem( m_nSaveShadowY );
 
                     GetBindings().GetDispatcher()->ExecuteList(
-                        SID_FORMTEXT_SHDWXVAL, SfxCallMode::RECORD,
+                        SID_FORMTEXT_SHDWXVAL, SfxCallMode::SLOT,
                         { &aXItem, &aYItem });
                 }
             }
@@ -522,7 +522,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
                     XFormTextShadowXValItem aXItem(m_nSaveShadowAngle);
                     XFormTextShadowYValItem aYItem(m_nSaveShadowSize);
                     GetBindings().GetDispatcher()->ExecuteList(
-                        SID_FORMTEXT_SHDWXVAL, SfxCallMode::RECORD,
+                        SID_FORMTEXT_SHDWXVAL, SfxCallMode::SLOT,
                         { &aXItem, &aYItem });
                 }
             }
@@ -623,7 +623,7 @@ IMPL_LINK(SvxFontWorkDialog, SelectStyleHdl_Impl, const OUString&, rId, void)
 
     XFormTextStyleItem aItem( eStyle );
     GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_STYLE,
-            SfxCallMode::RECORD, { &aItem });
+            SfxCallMode::SLOT, { &aItem });
     SetStyle_Impl( &aItem );
     m_sLastStyleTbxId = rId;
 }
@@ -649,7 +649,7 @@ IMPL_LINK(SvxFontWorkDialog, SelectAdjustHdl_Impl, const OUString&, rId, void)
 
         XFormTextAdjustItem aItem(eAdjust);
         GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_ADJUST,
-                SfxCallMode::RECORD, { &aItem });
+                SfxCallMode::SLOT, { &aItem });
         SetAdjust_Impl(&aItem);
         m_sLastAdjustTbxId = rId;
     }
@@ -661,13 +661,13 @@ IMPL_LINK(SvxFontWorkDialog, SelectShadowHdl_Impl, const OUString&, rId, void)
     {
         XFormTextHideFormItem aItem(!m_xTbxShadow->get_item_active(rId));
         GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_HIDEFORM,
-                SfxCallMode::RECORD, { &aItem });
+                SfxCallMode::SLOT, { &aItem });
     }
     else if (rId == "textcontour")
     {
         XFormTextOutlineItem aItem(m_xTbxShadow->get_item_active(rId));
         GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_OUTLINE,
-                SfxCallMode::RECORD, { &aItem });
+                SfxCallMode::SLOT, { &aItem });
     }
     else if (rId != m_sLastShadowTbxId)
     {
@@ -690,7 +690,7 @@ IMPL_LINK(SvxFontWorkDialog, SelectShadowHdl_Impl, const OUString&, rId, void)
 
         XFormTextShadowItem aItem(eShadow);
         GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_SHADOW,
-                SfxCallMode::RECORD, { &aItem });
+                SfxCallMode::SLOT, { &aItem });
         SetShadow_Impl(&aItem, true);
     }
 }
@@ -767,7 +767,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimeoutHdl_Impl, Timer*, void)
 
     // Slot-ID does not matter, the Exec method evaluates the entire item set
     GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_DISTANCE,
-            SfxCallMode::RECORD,
+            SfxCallMode::SLOT,
             { &aDistItem, &aStartItem, &aShadowXItem, &aShadowYItem });
 }
 
@@ -775,7 +775,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, ColorSelectHdl_Impl, ColorListBox&, void)
 {
     XFormTextShadowColorItem aItem( u""_ustr, m_xShadowColorLB->GetSelectEntryColor() );
     GetBindings().GetDispatcher()->ExecuteList(SID_FORMTEXT_SHDWCOLOR,
-            SfxCallMode::RECORD, { &aItem });
+            SfxCallMode::SLOT, { &aItem });
 }
 
 void SvxFontWorkDialog::ApplyImageList()

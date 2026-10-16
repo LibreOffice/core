@@ -80,7 +80,7 @@ void PageOrientationControl::ExecuteMarginLRChange(
     mpPageLRMarginItem->SetRight( nPageRightMargin );
     if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
         pViewFrm->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_LRSPACE,
-            SfxCallMode::RECORD, { mpPageLRMarginItem.get() });
+            SfxCallMode::SLOT, { mpPageLRMarginItem.get() });
 }
 
 void PageOrientationControl::ExecuteMarginULChange(
@@ -91,7 +91,7 @@ void PageOrientationControl::ExecuteMarginULChange(
     mpPageULMarginItem->SetLower( nPageBottomMargin );
     if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
         pViewFrm->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_ULSPACE,
-            SfxCallMode::RECORD, { mpPageULMarginItem.get() });
+            SfxCallMode::SLOT, { mpPageULMarginItem.get() });
 }
 
 void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
@@ -135,7 +135,7 @@ void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
 
         // apply changed attributes
         pViewFrm->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
-            SfxCallMode::RECORD, { mpPageSizeItem.get(), mpPageItem.get() });
+            SfxCallMode::SLOT, { mpPageSizeItem.get(), mpPageItem.get() });
     }
 
     // check, if margin values still fit to the changed page size.

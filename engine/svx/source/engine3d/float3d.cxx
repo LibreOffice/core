@@ -314,7 +314,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     {
         SfxBoolItem aItem( SID_3D_INIT, true );
         pDispatcher->ExecuteList(SID_3D_INIT,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
+                SfxCallMode::ASYNCHRON, { &aItem });
     }
 
     Reset();
@@ -1827,7 +1827,7 @@ IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl, weld::Toggleable&, void)
         {
             SfxBoolItem aItem( SID_3D_STATE, true );
             pDispatcher->ExecuteList(SID_3D_STATE,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
+                SfxCallMode::ASYNCHRON, { &aItem });
         }
     }
     else
@@ -1843,7 +1843,7 @@ IMPL_LINK_NOARG(Svx3DWin, ClickAssignHdl, weld::Button&, void)
     {
         SfxBoolItem aItem( SID_3D_ASSIGN, true );
         pDispatcher->ExecuteList(SID_3D_ASSIGN,
-            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
+            SfxCallMode::ASYNCHRON, { &aItem });
     }
 }
 
@@ -2095,7 +2095,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, weld::Button&, rBtn, void )
         {
             SfxBoolItem aItem( nSId, true );
             pDispatcher->ExecuteList(nSId,
-                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, { &aItem });
+                SfxCallMode::ASYNCHRON, { &aItem });
         }
     }
     else if( bUpdatePreview )
@@ -2539,7 +2539,7 @@ void SvxConvertTo3DItem::StateChangedAtToolBoxControl(sal_uInt16 /*_nId*/, SfxIt
         {
             SfxBoolItem aItem( SID_3D_STATE, true );
             pDispatcher->ExecuteList(SID_3D_STATE,
-                    SfxCallMode::ASYNCHRON|SfxCallMode::RECORD, { &aItem });
+                    SfxCallMode::ASYNCHRON, { &aItem });
         }
     }
 }

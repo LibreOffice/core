@@ -343,7 +343,7 @@ IMPL_LINK(NotebookbarElementsController, ElementClickHandler, const OUString&, E
     {
         SfxStringItem aInsertCommand(SID_INSERTCOMMANDTEXT, ElementSource);
         pViewSh->GetViewFrame().GetDispatcher()->ExecuteList(
-            SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD, { &aInsertCommand });
+            SID_INSERTCOMMANDTEXT, SfxCallMode::SLOT, { &aInsertCommand });
     }
 }
 

@@ -1241,7 +1241,7 @@ bool SwDocShell::MakeInlineHeading(SwWrtShell *pSh, SwTextFormatColl* pColl, con
         SfxUInt16Item aAnchor(FN_INSERT_FRAME, static_cast<sal_uInt16>(1));
         SvxSizeItem aSizeItem(FN_PARAM_2, Size(1, 1));
         GetView()->GetViewFrame().GetDispatcher()->ExecuteList(FN_INSERT_FRAME,
-                SfxCallMode::SYNCHRON|SfxCallMode::RECORD, { &aAnchor, &aSizeItem });
+                SfxCallMode::SYNCHRON, { &aAnchor, &aSizeItem });
         if ( pSh->IsFrameSelected() )
         {
             // use the associated borderless frame style "Inline Heading"

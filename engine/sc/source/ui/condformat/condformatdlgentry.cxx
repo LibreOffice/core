@@ -486,7 +486,7 @@ void StyleSelect(weld::Window* pDialogParent, weld::ComboBox& rLbStyle, const Sc
 
                 // Execute the "new style" slot, complete with undo and all necessary updates.
                 // The return value (SfxUInt16Item) is ignored, look for new styles instead.
-                pDisp->ExecuteList(SID_STYLE_NEW, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                pDisp->ExecuteList(SID_STYLE_NEW, SfxCallMode::SYNCHRON,
                                    { &aFamilyItem, &aRefItem }, { &aDialogParent });
 
                 if (bLocked)

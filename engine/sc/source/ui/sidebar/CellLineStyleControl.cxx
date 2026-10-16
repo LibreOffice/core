@@ -201,7 +201,7 @@ IMPL_LINK_NOARG(CellLineStylePopup, StyleSelectHdl, weld::TreeView&, bool)
     aTmp.GuessLinesWidths(nStyle, n1, n2, n3);
     aLineItem.SetLine( &aTmp );
     mpDispatcher->ExecuteList(
-        SID_FRAME_LINESTYLE, SfxCallMode::RECORD, { &aLineItem });
+        SID_FRAME_LINESTYLE, SfxCallMode::SLOT, { &aLineItem });
     mxCellLineStyleTreeView->unselect_all();
 
     maToolButton.set_inactive();

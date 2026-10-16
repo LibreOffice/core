@@ -85,7 +85,7 @@ std::unique_ptr<PanelLayout> AreaPropertyPanel::Create (
 void AreaPropertyPanel::setFillTransparence(const XFillTransparenceItem& rItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_TRANSPARENCE,
-            SfxCallMode::RECORD, { &rItem });
+            SfxCallMode::SLOT, { &rItem });
 }
 
 void AreaPropertyPanel::setFillUseBackground(const XFillStyleItem* pStyleItem,
@@ -101,7 +101,7 @@ void AreaPropertyPanel::setFillUseBackground(const XFillStyleItem* pStyleItem,
     }
     else
     {
-        pDispatcher->ExecuteList(SID_ATTR_FILL_USE_SLIDE_BACKGROUND, SfxCallMode::RECORD,
+        pDispatcher->ExecuteList(SID_ATTR_FILL_USE_SLIDE_BACKGROUND, SfxCallMode::SLOT,
                                  std::initializer_list<SfxPoolItem const*>{ &rItem, pStyleItem });
     }
 }
@@ -109,20 +109,20 @@ void AreaPropertyPanel::setFillUseBackground(const XFillStyleItem* pStyleItem,
 void AreaPropertyPanel::setFillFloatTransparence(const XFillFloatTransparenceItem& rItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_FLOATTRANSPARENCE,
-            SfxCallMode::RECORD, { &rItem });
+            SfxCallMode::SLOT, { &rItem });
 }
 
 void AreaPropertyPanel::setFillStyle(const XFillStyleItem& rItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_STYLE,
-            SfxCallMode::RECORD, { &rItem });
+            SfxCallMode::SLOT, { &rItem });
 }
 
 void AreaPropertyPanel::setFillStyleAndColor(const XFillStyleItem* pStyleItem,
         const XFillColorItem& rColorItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_COLOR,
-        SfxCallMode::RECORD, pStyleItem
+        SfxCallMode::SLOT, pStyleItem
             ? std::initializer_list<SfxPoolItem const*>{ &rColorItem, pStyleItem }
             : std::initializer_list<SfxPoolItem const*>{ &rColorItem });
 }
@@ -131,7 +131,7 @@ void AreaPropertyPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem
         const XFillGradientItem& rGradientItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_GRADIENT,
-        SfxCallMode::RECORD, pStyleItem
+        SfxCallMode::SLOT, pStyleItem
             ? std::initializer_list<SfxPoolItem const*>{ &rGradientItem, pStyleItem }
             : std::initializer_list<SfxPoolItem const*>{ &rGradientItem });
 }
@@ -140,7 +140,7 @@ void AreaPropertyPanel::setFillStyleAndHatch(const XFillStyleItem* pStyleItem,
         const XFillHatchItem& rHatchItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_HATCH,
-        SfxCallMode::RECORD, pStyleItem
+        SfxCallMode::SLOT, pStyleItem
             ? std::initializer_list<SfxPoolItem const*>{ &rHatchItem, pStyleItem }
             : std::initializer_list<SfxPoolItem const*>{ &rHatchItem });
 }
@@ -149,7 +149,7 @@ void AreaPropertyPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
         const XFillBitmapItem& rBitmapItem)
 {
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_FILL_BITMAP,
-        SfxCallMode::RECORD, pStyleItem
+        SfxCallMode::SLOT, pStyleItem
             ? std::initializer_list<SfxPoolItem const*>{ &rBitmapItem, pStyleItem }
             : std::initializer_list<SfxPoolItem const*>{ &rBitmapItem });
 }

@@ -2895,17 +2895,17 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     case SvxZoomType::OPTIMAL:
                         GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_ALL,
-                                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+                                    SfxCallMode::ASYNCHRON );
                         break;
 
                     case SvxZoomType::PAGEWIDTH:
                         GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE_WIDTH,
-                                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+                                    SfxCallMode::ASYNCHRON );
                         break;
 
                     case SvxZoomType::WHOLEPAGE:
                         GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE,
-                                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
+                                    SfxCallMode::ASYNCHRON );
                         break;
                     case SvxZoomType::PAGEWIDTH_NOBORDER:
                         OSL_FAIL("sd::DrawViewShell::FuTemporary(), SvxZoomType::PAGEWIDTH_NOBORDER not handled!" );
@@ -2964,7 +2964,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( HasCurrentFunction(SID_BEZIER_EDIT) )
             {   // where applicable, activate right edit action
                 GetViewFrame()->GetDispatcher()->Execute(SID_SWITCH_POINTEDIT,
-                                        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                                        SfxCallMode::ASYNCHRON);
             }
             break;
 
@@ -3441,7 +3441,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             SfxUInt16Item aItem(FN_SVX_SET_BULLET, FuBulletAndPosition::BULLET_TOGGLE);
             GetViewFrame()->GetDispatcher()->ExecuteList(FN_SVX_SET_BULLET,
-                    SfxCallMode::RECORD, { &aItem });
+                    SfxCallMode::SLOT, { &aItem });
         }
         break;
 
@@ -3449,7 +3449,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             SfxUInt16Item aItem(FN_SVX_SET_NUMBER, FuBulletAndPosition::BULLET_TOGGLE);
             GetViewFrame()->GetDispatcher()->ExecuteList(FN_SVX_SET_NUMBER,
-                    SfxCallMode::RECORD, { &aItem });
+                    SfxCallMode::SLOT, { &aItem });
         }
         break;
 
@@ -3936,7 +3936,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             GetDoc()->SetChanged();
 
             GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHLAYER,
-                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                    SfxCallMode::ASYNCHRON);
 
             Cancel();
             rReq.Done ();
@@ -4178,7 +4178,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
                     {
                         pViewFrm->GetDispatcher()->ExecuteList(SID_OPENDOC,
-                            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                            SfxCallMode::ASYNCHRON,
                             { &aUrl, &aTarget, &aFrm, &aReferer,
                                 &aNewView, &aBrowsing });
                     }

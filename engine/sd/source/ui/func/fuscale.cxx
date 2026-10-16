@@ -130,17 +130,17 @@ void FuScale::DoExecute( SfxRequest& rReq )
                 {
                     // name confusion: SID_SIZE_ALL -> zoom onto all objects
                     // --> the program offers it as optimal
-                    mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_ALL, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                    mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_ALL, SfxCallMode::ASYNCHRON);
                 }
             }
             break;
 
             case SvxZoomType::PAGEWIDTH:
-                mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE_WIDTH, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                mrViewShell.GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE_WIDTH, SfxCallMode::ASYNCHRON);
                 break;
 
             case SvxZoomType::WHOLEPAGE:
-                mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
+                mrViewShell.GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SfxCallMode::ASYNCHRON);
                 break;
             default:
                 break;

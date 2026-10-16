@@ -75,7 +75,7 @@ IMPL_STATIC_LINK(ScNumberFormat, NumFormatSelectHdl, weld::ComboBox&, rBox, void
     {
         const sal_Int32 nVal = rBox.get_active();
         SfxUInt16Item aItem(SID_NUMBER_TYPE_FORMAT, nVal);
-        pDisp->ExecuteList(SID_NUMBER_TYPE_FORMAT, SfxCallMode::RECORD, { &aItem });
+        pDisp->ExecuteList(SID_NUMBER_TYPE_FORMAT, SfxCallMode::SLOT, { &aItem });
 
         pCurSh->GetWindow().GrabFocus();
     }

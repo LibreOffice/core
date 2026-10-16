@@ -1318,7 +1318,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                     ? GetView()
                                     : SfxViewShell::Current();
                             pViewShell->GetViewFrame().GetDispatcher()->ExecuteList(
-                                    FN_REDLINE_SHOW, SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+                                    FN_REDLINE_SHOW, SfxCallMode::SYNCHRON,
                                     { &aShow });
                             bChangedHideChanges = true;
                             break;
@@ -1353,7 +1353,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SfxBoolItem aShow(FN_REDLINE_SHOW, false);
                 SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
                 pViewShell->GetViewFrame().GetDispatcher()->ExecuteList(
-                        FN_REDLINE_SHOW, SfxCallMode::SYNCHRON|SfxCallMode::RECORD, { &aShow });
+                        FN_REDLINE_SHOW, SfxCallMode::SYNCHRON, { &aShow });
             }
 
             Broadcast(SfxHint(SfxHintId::RedlineChanged));

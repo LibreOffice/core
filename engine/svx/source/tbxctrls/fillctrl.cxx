@@ -723,7 +723,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
             {
                 // #i122676# need to call a single SID_ATTR_FILL_STYLE change
                 pSh->GetDispatcher()->ExecuteList(
-                    SID_ATTR_FILL_STYLE, SfxCallMode::RECORD,
+                    SID_ATTR_FILL_STYLE, SfxCallMode::SLOT,
                     { &aXFillStyleItem });
             }
             break;
@@ -739,7 +739,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
 
                 // #i122676# change FillStyle and Color in one call
                 pSh->GetDispatcher()->ExecuteList(
-                    SID_ATTR_FILL_COLOR, SfxCallMode::RECORD,
+                    SID_ATTR_FILL_COLOR, SfxCallMode::SLOT,
                     { &aXFillColorItem, &aXFillStyleItem });
             }
             break;
@@ -769,7 +769,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
 
                         // #i122676# change FillStyle and Gradient in one call
                         pSh->GetDispatcher()->ExecuteList(
-                            SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD,
+                            SID_ATTR_FILL_GRADIENT, SfxCallMode::SLOT,
                             { &aXFillGradientItem, &aXFillStyleItem });
                         mpLbFillAttr->set_active(mnLastPosGradient);
                     }
@@ -806,7 +806,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
 
                         // #i122676# change FillStyle and Hatch in one call
                         pSh->GetDispatcher()->ExecuteList(
-                            SID_ATTR_FILL_HATCH, SfxCallMode::RECORD,
+                            SID_ATTR_FILL_HATCH, SfxCallMode::SLOT,
                             { &aXFillHatchItem, &aXFillStyleItem });
                         mpLbFillAttr->set_active(mnLastPosHatch);
                     }
@@ -843,7 +843,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
 
                         // #i122676# change FillStyle and Bitmap in one call
                         pSh->GetDispatcher()->ExecuteList(
-                            SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD,
+                            SID_ATTR_FILL_BITMAP, SfxCallMode::SLOT,
                             { &aXFillBitmapItem, &aXFillStyleItem });
                         mpLbFillAttr->set_active(mnLastPosBitmap);
                     }
@@ -880,7 +880,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, weld::ComboBox&, void)
 
                         // #i122676# change FillStyle and Bitmap in one call
                         pSh->GetDispatcher()->ExecuteList(
-                            SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD,
+                            SID_ATTR_FILL_BITMAP, SfxCallMode::SLOT,
                             { &aXFillBitmapItem, &aXFillStyleItem });
                         mpLbFillAttr->set_active(mnLastPosPattern);
                     }
@@ -920,7 +920,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
             {
                 // #i122676# Single FillStyle change call needed here
                 pSh->GetDispatcher()->ExecuteList(
-                    SID_ATTR_FILL_STYLE, SfxCallMode::RECORD,
+                    SID_ATTR_FILL_STYLE, SfxCallMode::SLOT,
                     { &aXFillStyleItem });
             }
             break;
@@ -945,7 +945,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
 
                     // #i122676# Change FillStyle and Gradient in one call
                     pSh->GetDispatcher()->ExecuteList(
-                        SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD,
+                        SID_ATTR_FILL_GRADIENT, SfxCallMode::SLOT,
                         bFillStyleChange
                             ? std::initializer_list<SfxPoolItem const*>{ &aXFillGradientItem, &aXFillStyleItem }
                             : std::initializer_list<SfxPoolItem const*>{ &aXFillGradientItem });
@@ -978,7 +978,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
 
                     // #i122676# Change FillStyle and Hatch in one call
                     pSh->GetDispatcher()->ExecuteList(
-                        SID_ATTR_FILL_HATCH, SfxCallMode::RECORD,
+                        SID_ATTR_FILL_HATCH, SfxCallMode::SLOT,
                         bFillStyleChange
                             ? std::initializer_list<SfxPoolItem const*>{ &aXFillHatchItem, &aXFillStyleItem }
                             : std::initializer_list<SfxPoolItem const*>{ &aXFillHatchItem });
@@ -1011,7 +1011,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
 
                     // #i122676# Change FillStyle and Bitmap in one call
                     pSh->GetDispatcher()->ExecuteList(
-                        SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD,
+                        SID_ATTR_FILL_BITMAP, SfxCallMode::SLOT,
                         bFillStyleChange
                             ? std::initializer_list<SfxPoolItem const*>{ &aXFillBitmapItem, &aXFillStyleItem }
                             : std::initializer_list<SfxPoolItem const*>{ &aXFillBitmapItem });
@@ -1044,7 +1044,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, weld::ComboBox&, void)
 
                     // #i122676# Change FillStyle and Bitmap in one call
                     pSh->GetDispatcher()->ExecuteList(
-                        SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD,
+                        SID_ATTR_FILL_BITMAP, SfxCallMode::SLOT,
                         bFillStyleChange
                             ? std::initializer_list<SfxPoolItem const*>{ &aXFillBitmapItem, &aXFillStyleItem }
                             : std::initializer_list<SfxPoolItem const*>{ &aXFillBitmapItem });

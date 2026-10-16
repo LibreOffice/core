@@ -738,7 +738,7 @@ IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler, void )
 
     SfxStringItem aDefPage(nDefDlg, sDefPage);
     GetViewFrame().GetDispatcher()->ExecuteList(nDefDlg,
-                                SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+                                SfxCallMode::SYNCHRON,
                                 { &aDefPage });
 }
 

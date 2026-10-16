@@ -58,13 +58,12 @@ enum class SfxCallMode : sal_uInt16
     SLOT      = 0x00,    // sync/async from Slot
     SYNCHRON  = 0x01,    // synchronously in the same Stackframe
     ASYNCHRON = 0x02,    // asynchronously via AppEvent
-    RECORD    = 0x04,    // take into account while recording
     API       = 0x08     // API call (silent)
 };
 
 namespace o3tl {
 
-template<> struct typed_flags<SfxCallMode>: is_typed_flags<SfxCallMode, 0x0F>
+template<> struct typed_flags<SfxCallMode>: is_typed_flags<SfxCallMode, 0x0b>
 {};
 
 }

@@ -361,7 +361,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl, weld::Button&, void)
             SetDispatcherLock( false );
             SwitchToDocument();
             GetBindings().GetDispatcher()->ExecuteList(SID_CONSOLIDATE,
-                                      SfxCallMode::SLOT | SfxCallMode::RECORD,
+                                      SfxCallMode::SLOT,
                                       { &aOutItem });
             response(RET_OK);
         }

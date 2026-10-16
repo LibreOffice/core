@@ -527,7 +527,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         // the object to edit is there, so ask for the text function without a new object
                         SfxBoolItem aCreateDirectly(FN_PARAM_1, false);
                         rViewShell.GetViewData().GetDispatcher().ExecuteList(
-                            nTextSlotId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD, { &aCreateDirectly });
+                            nTextSlotId, SfxCallMode::SYNCHRON, { &aCreateDirectly });
 
                         // Get the created FuText now and change into EditMode
                         FuPoor* pPoor = rViewShell.GetViewData().GetView()->GetDrawFuncPtr();
@@ -582,7 +582,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     if ( !bReturn && rMEvt.IsLeft() )
         if (rViewShell.IsDrawSelMode())
             rViewShell.GetViewData().GetDispatcher().
-                Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
+                Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT);
 
     if ( bCopy && pPage )
     {

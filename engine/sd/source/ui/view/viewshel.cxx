@@ -330,7 +330,7 @@ void ViewShell::Activate(bool bIsMDIActivate)
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
         if (GetDispatcher() != nullptr)
         {
-            SfxCallMode nCall = SfxCallMode::RECORD;
+            SfxCallMode nCall = SfxCallMode::SLOT;
             if (comphelper::COKit::isActive())
             {
                 // Make sure the COKit case doesn't dispatch async events while switching views, that

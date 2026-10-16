@@ -187,7 +187,7 @@ void PageSizeControl::ExecuteSizeChange( const Paper ePaper )
     aPageSizeItem.SetSize( aPageSize );
 
     pViewFrm->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE,
-        SfxCallMode::RECORD, { &aPageSizeItem });
+        SfxCallMode::SLOT, { &aPageSizeItem });
 }
 
 IMPL_LINK_NOARG(PageSizeControl, ImplSizeHdl, weld::TreeView&, bool)

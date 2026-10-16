@@ -100,7 +100,7 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, weld::ComboBox&, rBox,
     {
         SfxUInt16Item aItem( SID_NUMBER_TYPE_FORMAT,  nVal );
         GetBindings()->GetDispatcher()->ExecuteList(SID_NUMBER_TYPE_FORMAT,
-                SfxCallMode::RECORD, { &aItem });
+                SfxCallMode::SLOT, { &aItem });
         mnCategorySelected = nVal;
     }
 }
@@ -142,7 +142,7 @@ IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueHdl, weld::SpinButton&
 
     SfxStringItem aItem( SID_NUMBER_FORMAT,  aFormat );
     GetBindings()->GetDispatcher()->ExecuteList(SID_NUMBER_FORMAT,
-            SfxCallMode::RECORD, { &aItem });
+            SfxCallMode::SLOT, { &aItem });
 }
 
 std::unique_ptr<PanelLayout> NumberFormatPropertyPanel::Create (

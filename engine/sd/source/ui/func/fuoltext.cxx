@@ -208,7 +208,7 @@ bool FuSimpleOutlinerText::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     // open in new frame
                     pFrame->GetDispatcher()->ExecuteList(SID_OPENDOC,
-                        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                        SfxCallMode::ASYNCHRON,
                         { &aStrItem, &aBrowseItem, &aReferer });
                 }
                 else
@@ -216,7 +216,7 @@ bool FuSimpleOutlinerText::MouseButtonUp(const MouseEvent& rMEvt)
                     // open in current frame
                     SfxFrameItem aFrameItem( SID_DOCFRAME, pFrame );
                     pFrame->GetDispatcher()->ExecuteList(SID_OPENDOC,
-                        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+                        SfxCallMode::ASYNCHRON,
                         { &aStrItem, &aFrameItem, &aBrowseItem, &aReferer });
                 }
             }

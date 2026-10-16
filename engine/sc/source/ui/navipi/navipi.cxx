@@ -575,7 +575,7 @@ void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
     SfxBoolItem     aUnmarkItem( FN_PARAM_1, bUnmark );     // cancel selection
 
     rBindings.GetDispatcher()->ExecuteList(SID_CURRENTCELL,
-                              SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                              SfxCallMode::SYNCHRON,
                               { &aPosItem, &aUnmarkItem });
 }
 
@@ -585,7 +585,7 @@ void ScNavigatorDlg::SetCurrentCellStr( const OUString& rName )
     SfxStringItem   aNameItem( SID_CURRENTCELL, rName );
 
     rBindings.GetDispatcher()->ExecuteList(SID_CURRENTCELL,
-                              SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                              SfxCallMode::SYNCHRON,
                               { &aNameItem });
 }
 
@@ -596,7 +596,7 @@ void ScNavigatorDlg::SetCurrentTable( SCTAB nTabNo )
         // Table for basic is base-1
         SfxUInt16Item aTabItem( SID_CURRENTTAB, static_cast<sal_uInt16>(nTabNo) + 1 );
         rBindings.GetDispatcher()->ExecuteList(SID_CURRENTTAB,
-                                  SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                                  SfxCallMode::SYNCHRON,
                                   { &aTabItem });
     }
 }
@@ -642,7 +642,7 @@ void ScNavigatorDlg::SetCurrentObject( const OUString& rName )
 {
     SfxStringItem aNameItem( SID_CURRENTOBJECT, rName );
     rBindings.GetDispatcher()->ExecuteList( SID_CURRENTOBJECT,
-                              SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                              SfxCallMode::SYNCHRON,
                               { &aNameItem });
 }
 
@@ -650,7 +650,7 @@ void ScNavigatorDlg::SetCurrentDoc( const OUString& rDocName )        // activat
 {
     SfxStringItem aDocItem( SID_CURRENTDOC, rDocName );
     rBindings.GetDispatcher()->ExecuteList( SID_CURRENTDOC,
-                              SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
+                              SfxCallMode::SYNCHRON,
                               { &aDocItem });
 }
 

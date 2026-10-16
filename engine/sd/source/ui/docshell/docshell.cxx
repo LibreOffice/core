@@ -201,7 +201,7 @@ DrawDocShell::~DrawDocShell()
     if( pFrame )
     {
         pFrame->GetDispatcher()->ExecuteList(
-            SID_NAVIGATOR_INIT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+            SID_NAVIGATOR_INIT, SfxCallMode::ASYNCHRON,
             { &aItem });
     }
 }

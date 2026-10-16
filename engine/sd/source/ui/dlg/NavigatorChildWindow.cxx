@@ -36,7 +36,7 @@ static void RequestNavigatorUpdate (SfxBindings const * pBindings)
         SfxBoolItem aItem (SID_NAVIGATOR_INIT, true);
         pBindings->GetDispatcher()->ExecuteList(
             SID_NAVIGATOR_INIT,
-            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
+            SfxCallMode::ASYNCHRON,
             { &aItem });
     }
 }

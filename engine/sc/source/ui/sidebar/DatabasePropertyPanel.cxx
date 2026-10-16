@@ -163,14 +163,14 @@ IMPL_LINK_NOARG(ScDatabasePropertyPanel, EntryChanged, weld::Toggleable&, void)
                                 m_xChkLastColumn->get_active(), m_xChkBandedRows->get_active(),
                                 m_xChkBandedColumns->get_active(),
                                 m_xChkFilterButtons->get_active(), m_xCmbStyle->get_active_id());
-    GetBindings()->GetDispatcher()->ExecuteList(SID_DATABASE_SETTINGS, SfxCallMode::RECORD,
+    GetBindings()->GetDispatcher()->ExecuteList(SID_DATABASE_SETTINGS, SfxCallMode::SLOT,
                                                 { &aItem });
 }
 
 IMPL_LINK_NOARG(ScDatabasePropertyPanel, TotalRowChanged, weld::Toggleable&, void)
 {
     SfxBoolItem aItem(SID_TABLE_TOTALROW, m_xChkTotalRow->get_active());
-    GetBindings()->GetDispatcher()->ExecuteList(SID_TABLE_TOTALROW, SfxCallMode::RECORD,
+    GetBindings()->GetDispatcher()->ExecuteList(SID_TABLE_TOTALROW, SfxCallMode::SLOT,
                                                 { &aItem });
 }
 
@@ -180,7 +180,7 @@ IMPL_LINK_NOARG(ScDatabasePropertyPanel, StyleChanged, weld::ComboBox&, void)
                                 m_xChkLastColumn->get_active(), m_xChkBandedRows->get_active(),
                                 m_xChkBandedColumns->get_active(),
                                 m_xChkFilterButtons->get_active(), m_xCmbStyle->get_active_id());
-    GetBindings()->GetDispatcher()->ExecuteList(SID_DATABASE_SETTINGS, SfxCallMode::RECORD,
+    GetBindings()->GetDispatcher()->ExecuteList(SID_DATABASE_SETTINGS, SfxCallMode::SLOT,
                                                 { &aItem });
 }
 
