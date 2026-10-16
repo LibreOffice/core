@@ -242,10 +242,10 @@ class CanvasSectionContainer {
 		});
 		this.canvas.addEventListener('pointerup', () => { this.activePointerId = null; });
 		this.canvas.addEventListener('pointercancel', () => { this.activePointerId = null; });
-		this.canvas.ontouchstart = this.onTouchStart.bind(this);
-		this.canvas.ontouchmove = this.onTouchMove.bind(this);
-		this.canvas.ontouchend = this.onTouchEnd.bind(this);
-		this.canvas.ontouchcancel = this.onTouchCancel.bind(this);
+		this.canvas.addEventListener('touchstart', this.onTouchStart.bind(this));
+		this.canvas.addEventListener('touchmove', this.onTouchMove.bind(this));
+		this.canvas.addEventListener('touchend', this.onTouchEnd.bind(this));
+		this.canvas.addEventListener('touchcancel', this.onTouchCancel.bind(this));
 		this.canvas.ondrop = this.onDrop.bind(this);
 		this.canvas.ondragover = this.onDragOver.bind(this);
 		window.addEventListener('blur', this.onWindowBlur.bind(this));
