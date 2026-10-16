@@ -65,6 +65,7 @@
 #include <com/sun/star/awt/MouseEvent.hpp>
 
 #include <algorithm>
+#include <optional>
 
 #define IMPL_MIN_NEEDSYSWIN         49
 
@@ -891,6 +892,13 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventType n
     return bRet;
 }
 
+namespace
+{
+std::optional<bool> ImplKitHandleDrag(ImplFrameData* pFrameData, NotifyEventType nEvent,
+                                      const Point& aMousePos, const Point& aWinPos,
+                                      sal_uInt16 nCode, sal_uInt16 nClicks);
+}
+
 bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType nEvent, bool /*bMouseLeave*/,
                              tools::Long nX, tools::Long nY, sal_uInt64 /*nMsgTime*/,
                              sal_uInt16 nCode, MouseEventModifiers nMode, sal_uInt16 nClicks)
@@ -915,6 +923,66 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
     pFrameData->mnMouseCode = nCode;
     pFrameData->mbMouseIn = false;
 
+    if (std::optional<bool> oDragResult
+        = ImplKitHandleDrag(pFrameData, nEvent, aMousePos, aWinPos, nCode, nClicks))
+        return *oDragResult;
+
+    MouseEvent aMouseEvent(aWinPos, nClicks, nMode, nCode, nCode);
+    if (nEvent == NotifyEventType::MOUSEMOVE)
+    {
+        if (pFrameData->mpTrackWin)
+        {
+            TrackingEvent aTrackingEvent(aMouseEvent);
+            pFrameData->mpTrackWin->Tracking(aTrackingEvent);
+        }
+        else
+            xWindow->MouseMove(aMouseEvent);
+    }
+    else if (nEvent == NotifyEventType::MOUSEBUTTONDOWN &&
+        !pFrameData->mpTrackWin)
+    {
+        pFrameData->mpMouseDownWin = xWindow;
+        pFrameData->mnFirstMouseX = aMousePos.X();
+        pFrameData->mnFirstMouseY = aMousePos.Y();
+
+        xWindow->MouseButtonDown(aMouseEvent);
+    }
+    else
+    {
+        if (pFrameData->mpTrackWin)
+        {
+            pFrameData->mpTrackWin->EndTracking();
+        }
+
+        pFrameData->mpMouseDownWin = nullptr;
+        pFrameData->mpMouseMoveWin = nullptr;
+        pFrameData->mbStartDragCalled = false;
+        xWindow->MouseButtonUp(aMouseEvent);
+    }
+
+    if (nEvent == NotifyEventType::MOUSEBUTTONDOWN)
+    {
+         // ContextMenu
+         if ( (nCode == MouseSettings::GetContextMenuCode()) &&
+              (nClicks == MouseSettings::GetContextMenuClicks()) )
+         {
+            ImplCallCommand(xWindow, CommandEventId::ContextMenu, nullptr, true, &aWinPos);
+         }
+    }
+
+    return true;
+}
+
+namespace
+{
+// Runs the part of a kit drag that a mouse event drives: a move over the drop target, the drop when
+// the button comes up, and the drag gesture once a move with the button held passes the drag
+// distance. aMousePos is relative to the frame and aWinPos to the window the event is for. Returns
+// a value when the drag took the event, so it does not reach the window.
+std::optional<bool> ImplKitHandleDrag(ImplFrameData* pFrameData, NotifyEventType nEvent,
+                                      const Point& aMousePos, const Point& aWinPos,
+                                      sal_uInt16 nCode, sal_uInt16 nClicks)
+{
     vcl::Window* pDragWin = pFrameData->mpMouseDownWin;
 
     // A kit client sends the macOS Command key as KEY_MOD3, and it copies the same as Ctrl.
@@ -964,7 +1032,6 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
             xDropTarget->fireDragEnterEvent(xDropTargetDragContext, nAction, aWinPos.X(),
                                             aWinPos.Y(), nSourceActions, aFlavors);
         }
-
 
         if (!pFrameData->moPointerBeforeKitDrag)
             pFrameData->moPointerBeforeKitDrag = pDragWin->GetPointer();
@@ -1077,50 +1144,8 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
         }
     }
 
-    MouseEvent aMouseEvent(aWinPos, nClicks, nMode, nCode, nCode);
-    if (nEvent == NotifyEventType::MOUSEMOVE)
-    {
-        if (pFrameData->mpTrackWin)
-        {
-            TrackingEvent aTrackingEvent(aMouseEvent);
-            pFrameData->mpTrackWin->Tracking(aTrackingEvent);
-        }
-        else
-            xWindow->MouseMove(aMouseEvent);
-    }
-    else if (nEvent == NotifyEventType::MOUSEBUTTONDOWN &&
-        !pFrameData->mpTrackWin)
-    {
-        pFrameData->mpMouseDownWin = xWindow;
-        pFrameData->mnFirstMouseX = aMousePos.X();
-        pFrameData->mnFirstMouseY = aMousePos.Y();
-
-        xWindow->MouseButtonDown(aMouseEvent);
-    }
-    else
-    {
-        if (pFrameData->mpTrackWin)
-        {
-            pFrameData->mpTrackWin->EndTracking();
-        }
-
-        pFrameData->mpMouseDownWin = nullptr;
-        pFrameData->mpMouseMoveWin = nullptr;
-        pFrameData->mbStartDragCalled = false;
-        xWindow->MouseButtonUp(aMouseEvent);
-    }
-
-    if (nEvent == NotifyEventType::MOUSEBUTTONDOWN)
-    {
-         // ContextMenu
-         if ( (nCode == MouseSettings::GetContextMenuCode()) &&
-              (nClicks == MouseSettings::GetContextMenuClicks()) )
-         {
-            ImplCallCommand(xWindow, CommandEventId::ContextMenu, nullptr, true, &aWinPos);
-         }
-    }
-
-    return true;
+    return std::nullopt;
+}
 }
 
 static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
