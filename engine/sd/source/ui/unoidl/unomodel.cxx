@@ -3873,15 +3873,21 @@ private:
         if (const auto* pPicture = dynamic_cast<const SdrGrafObj*>(&rObject))
             takeInThePicture(*pPicture, aContent);
 
+        /*
+            The place held fast holds the turn and the mirror fast as well, and the size held fast
+            the shear, as the office's own view has it.
+        */
         SdrObjTransformInfoRec aWhatItAllows;
         rObject.TakeObjInfo(aWhatItAllows);
-        aContent.mbCanBeMoved = !rObject.IsMoveProtect();
-        aContent.mbCanBeResized = !rObject.IsResizeProtect();
-        aContent.mbCanBeTurned = aWhatItAllows.bRotateFreeAllowed;
+        const bool bPlaceHeldFast(rObject.IsMoveProtect());
+        const bool bSizeHeldFast(rObject.IsResizeProtect());
+        aContent.mbCanBeMoved = !bPlaceHeldFast;
+        aContent.mbCanBeResized = !bSizeHeldFast;
+        aContent.mbCanBeTurned = aWhatItAllows.bRotateFreeAllowed && !bPlaceHeldFast;
         aContent.mbCanBeResizedFreely = aWhatItAllows.bResizeFreeAllowed;
-        aContent.mbCanBeMirrored = aWhatItAllows.bMirrorFreeAllowed;
-        aContent.mbCanBeSheared = aWhatItAllows.bShearAllowed;
-        aContent.mbCanBeFlipped = aWhatItAllows.bMirror90Allowed;
+        aContent.mbCanBeMirrored = aWhatItAllows.bMirrorFreeAllowed && !bPlaceHeldFast;
+        aContent.mbCanBeSheared = aWhatItAllows.bShearAllowed && !bSizeHeldFast;
+        aContent.mbCanBeFlipped = aWhatItAllows.bMirror90Allowed && !bPlaceHeldFast;
         aContent.mbCanBeChangedToCurves = aWhatItAllows.bCanConvToPath;
 
         aContent.maPaintedBox = paintedRectangleInTwips(rObject, aContent.maPrimitives);

@@ -7160,9 +7160,10 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
         /*
             What the object allows is asked before anything is done to it: a turn where it says
             it cannot be turned, a mirror where it cannot be turned over, and a resize with two
-            different factors where it allows a resize in ratio only, are refused. The client
-            keeps to the same rules while a drag runs, so a mapping refused here is one that was
-            not meant.
+            different factors where it allows a resize in ratio only, are refused. Its place held
+            fast holds the turn and the mirror fast too, and its size held fast the shear, as the
+            office's own view has it. The client keeps to the same rules while a drag runs, so a
+            mapping refused here is one that was not meant.
         */
         {
             SdrObjTransformInfoRec aAllows;
@@ -7190,13 +7191,16 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
                                   != (determinantOf(aReached) < 0.0));
             const bool bShears(!basegfx::fTools::equal(fShearWas, fShearBecomes, 0.0001));
 
-            if (bTurns && !aAllows.bRotateFreeAllowed)
+            const bool bPlaceHeldFast(pObject->IsMoveProtect());
+            const bool bSizeHeldFast(pObject->IsResizeProtect());
+
+            if (bTurns && (!aAllows.bRotateFreeAllowed || bPlaceHeldFast))
             {
                 SetLastExceptionMsg(u"The object cannot be turned"_ustr);
                 SAL_WARN("sd", "setobjecttransform left the object alone: it cannot be turned");
                 continue;
             }
-            if (bTurnsOver && !aAllows.bMirrorFreeAllowed)
+            if (bTurnsOver && (!aAllows.bMirrorFreeAllowed || bPlaceHeldFast))
             {
                 SetLastExceptionMsg(u"The object cannot be turned over"_ustr);
                 SAL_WARN("sd",
@@ -7206,7 +7210,7 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
             // A mapping that brings a shear in is refused by an object that cannot hold one. A
             // resize of such an object in its own frame has none and passes, whatever the
             // factors. A resize of a group it stands turned in brings one, and is refused.
-            if (bShears && !aAllows.bShearAllowed)
+            if (bShears && (!aAllows.bShearAllowed || bSizeHeldFast))
             {
                 SetLastExceptionMsg(u"The object cannot be sheared"_ustr);
                 SAL_WARN("sd", "setobjecttransform left the object alone: it cannot be sheared");

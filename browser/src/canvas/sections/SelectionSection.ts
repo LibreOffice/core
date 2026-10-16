@@ -1617,10 +1617,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey)
 			return false;
 
-		if (this.anglesOf('turn').any) this.takeTheAnglesAway('turn');
-		else if (this.anglesOf('slant').any) this.takeTheAnglesAway('slant');
-		else return false;
-		return true;
+		if (this.anglesOf('turn').any && this.takeTheAnglesAway('turn'))
+			return true;
+		return this.anglesOf('slant').any && this.takeTheAnglesAway('slant');
 	}
 
 	/*
@@ -1629,9 +1628,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 		object's new mapping as one change, and each object's own change is laid on it here at
 		once, so a further key reads the objects as they will be. The frame is made anew from the
 		objects: a single object's from its mapping, that of several objects or a group as their
-		upright box until the engine has answered.
+		upright box until the engine has answered. Answers whether any object was changed.
 	*/
-	private takeTheAnglesAway(kind: 'turn' | 'slant'): void {
+	private takeTheAnglesAway(kind: 'turn' | 'slant'): boolean {
 		const reached = new Map<number, cool.Matrix2D>();
 		const changes = new Map<number, cool.Matrix2D>();
 		for (const objectId of RenderGeometrySection.theOnesThatDraw(
@@ -1639,6 +1638,12 @@ abstract class SelectionSection extends CanvasSectionObject {
 		)) {
 			const mapping = RenderGeometrySection.transformOf(objectId);
 			if (!mapping) continue;
+
+			// An object that may not be turned keeps its turn, one that may not be sheared its
+			// slant.
+			const object = RenderGeometrySection.objectOf(objectId);
+			if (kind === 'turn' ? object?.cannotBeTurned : object?.cannotBeSheared)
+				continue;
 
 			const middle = mapping.apply(0.5, 0.5);
 			const change =
@@ -1653,7 +1658,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 			reached.set(objectId, mapping.then(change));
 		}
 
-		if (!reached.size) return;
+		if (!reached.size) return false;
 
 		ShearingInteraction.forgetTheKeys();
 		TurningInteraction.forgetTheKeys();
@@ -1671,6 +1676,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		}
 		this.known = this.handlesOfTheGroups();
 		this.redraw();
+		return true;
 	}
 
 	/*
