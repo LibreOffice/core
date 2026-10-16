@@ -2669,7 +2669,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(gb_UnpackedTarball_workdir)/curl/lib/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),-d)_imp.lib \
+	$(gb_UnpackedTarball_workdir)/curl/lib/libcurl$(if $(MSVC_USE_DEBUG_RUNTIME),-d)_imp.lib \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\

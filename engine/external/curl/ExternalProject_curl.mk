@@ -78,11 +78,15 @@ else ifeq ($(COM),MSC)
 
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_Trace_StartRange,curl,EXTERNAL)
-	$(call gb_ExternalProject_run,build,\
-		"$(CMAKE)" . \
-			$(if $(filter 17.%,$(VCVER)),-G "Visual Studio 17 2022") \
-			$(if $(filter 18.%,$(VCVER)),-G "Visual Studio 18 2026") \
-			-A $(gb_MSBUILD_PLATFORM) \
+	+$(call gb_ExternalProject_run,build,\
+		export INCLUDE="$(gb_ExternalProject_INCLUDE)" \
+		&& export LIB="$(ILIB)" \
+		&& "$(CMAKE)" . \
+			-G Ninja \
+			-DCMAKE_MAKE_PROGRAM="$(NINJA)" \
+			-DCMAKE_BUILD_TYPE=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+			-DCMAKE_C_COMPILER="$(if $(CC_PROGRAM),$(CC_PROGRAM),$(lastword $(filter-out -%,$(CC))))" \
+			$(if $(CCACHE),-DCMAKE_C_COMPILER_LAUNCHER="$(CCACHE)") \
 			-DBUILD_SHARED_LIBS=ON \
 			-DENABLE_IPV6=ON \
 			-DCURL_WINDOWS_SSPI=ON \
@@ -106,7 +110,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			-DCURL_DISABLE_SMTP=ON \
 			-DCURL_DISABLE_TELNET=ON \
 			-DCURL_DISABLE_TFTP=ON \
-		&& "$(CMAKE)" --build . --config $(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+		&& "$(CMAKE)" --build . \
 	)
 	$(call gb_Trace_EndRange,curl,EXTERNAL)
 
