@@ -442,8 +442,8 @@ LIBXSLT_TARBALL := libxslt-1.1.$(LIBXSLT_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LXML_SHA256SUM := ba96ae44888e0185281e937633a743ea90d5a196c6000f82565ebb0580012d40
-LXML_TARBALL := lxml-6.1.1.tar.gz
+LXML_SHA256SUM := 45222d94ddd511536f3b2f7d9deae3b2339b4ce0f075f1ca25703b07cad9dd21
+LXML_TARBALL := lxml-6.1.3.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
