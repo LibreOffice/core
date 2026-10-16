@@ -2388,7 +2388,7 @@ static bool isRootDir( std::u16string_view aDirURLStr )
     {
         OUString aSeg1 = aDirURLObj.getName( 0, true,
                                              INetURLObject::DecodeMechanism::WithCharset );
-        if( aSeg1[1] == ':' )
+        if( aSeg1.getLength() > 1 && aSeg1[1] == ':' )
         {
             bRoot = true;
         }
