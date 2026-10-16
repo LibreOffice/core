@@ -45,19 +45,24 @@ describe(['tagdesktop'], 'Table Design tab', function() {
 				});
 			},
 			{ errorMsg: 'the Table Design tab never appeared' });
+
+		// Each style list from the engine rebuilds the gallery, and one more list follows the
+		// caret back into the table.
+		cy.then(function() {
+			helper.processToIdle(this.win);
+		});
 	});
 
 	it('Applies a style clicked in the gallery', function() {
-		cy.getFrameWindow().then(function(win) {
-			cy.wrap(cy.stub(win.app.map, 'sendUnoCommand').callThrough()).as('sendUnoCommand');
-		});
+		cy.wrap(cy.stub(this.win.app.map, 'sendUnoCommand').callThrough()).as('sendUnoCommand');
 
 		cy.cGet('#TableDesign-tab-label').click();
 		cy.cGet('#TableDesign-tab-label').should('have.class', 'selected');
 
 		// The gallery is populated asynchronously from the engine's style
 		// list, so wait for the first swatch to render before clicking it.
-		cy.cGet('#table-design-styles_0').should('be.visible').click();
+		cy.cGet('#table-design-styles_0').should('be.visible');
+		cy.cGet('#table-design-styles_0').click();
 
 		cy.get('@sendUnoCommand').should(function(sendUnoCommand) {
 			var call = sendUnoCommand.getCalls().find(function(c) {
@@ -86,9 +91,7 @@ describe(['tagdesktop'], 'Table Design tab', function() {
 	});
 
 	it('Toggles a style option checkbox', function() {
-		cy.getFrameWindow().then(function(win) {
-			cy.wrap(cy.stub(win.app.map, 'sendUnoCommand').callThrough()).as('sendUnoCommand');
-		});
+		cy.wrap(cy.stub(this.win.app.map, 'sendUnoCommand').callThrough()).as('sendUnoCommand');
 
 		cy.cGet('#TableDesign-tab-label').click();
 		cy.cGet('#TableDesign-tab-label').should('have.class', 'selected');
