@@ -2,7 +2,7 @@
 """Every corpus document rendered at the round's base and again after, byte for byte.
 
 One output directory per *document* -- never per worker slot, which is the collision
-`corpus-batches` records.  The base render is run with `PAPERLESS_CHART_TRACE=1` so the same
+`corpus-batches` records.  The base render is run with `XRAY_OFFICE_CHART_TRACE=1` so the same
 pass also says which documents hold a chart at all, which is the population the change can
 possibly reach; the head render is scored only where the bytes move.
 
@@ -31,7 +31,7 @@ def render(cli, doc, out, trace=False):
     out.mkdir(parents=True, exist_ok=True)
     env = dict(os.environ, SOURCE_DATE_EPOCH='0')
     if trace:
-        env['PAPERLESS_CHART_TRACE'] = '1'
+        env['XRAY_OFFICE_CHART_TRACE'] = '1'
     try:
         r = subprocess.run([cli, 'render', str(doc), '--format', 'pdf', '--outdir', str(out)],
                            capture_output=True, text=True, env=env, timeout=600, check=False)

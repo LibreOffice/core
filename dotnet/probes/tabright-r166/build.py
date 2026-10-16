@@ -9,7 +9,7 @@ stops fitting the page number on the entry's first line.
 
 `word/settings.xml` is written even though it is empty: without it the importer takes a
 different set of OOXML compatibility defaults and the fixture answers a different
-question (`paperless-corpus/SKILL.md`).
+question (`office-corpus/SKILL.md`).
 """
 import os, sys, zipfile
 

@@ -15,21 +15,21 @@ set -uo pipefail
 
 ROOT=/home/user/wt-chartlayout/dotnet
 CORPUS=/home/user/sample-files
-CLI="$ROOT/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI="$ROOT/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 
 FILES=(
-    src/Paperless.Core/Charts/ChartAxisLabels.cs
-    src/Paperless.Core/Charts/ChartLayout.cs
-    src/Paperless.Core/Charts/ChartPlot.cs
-    src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs
-    src/Paperless.Presentations/Layout/SlideChart.cs
+    src/XRay.Office.Core/Charts/ChartAxisLabels.cs
+    src/XRay.Office.Core/Charts/ChartLayout.cs
+    src/XRay.Office.Core/Charts/ChartPlot.cs
+    src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
+    src/XRay.Office.Presentations/Layout/SlideChart.cs
 )
 
 # The round's own tests name types the base sources do not have, so they go aside with them or
 # the base build fails before it can render anything.
 TESTS=(
-    tests/Paperless.Core.Tests/ChartVerticalAxisLabelTests.cs
-    tests/Paperless.Presentations.Tests/DrawingChartManualLayoutTests.cs
+    tests/XRay.Office.Core.Tests/ChartVerticalAxisLabelTests.cs
+    tests/XRay.Office.Presentations.Tests/DrawingChartManualLayoutTests.cs
 )
 
 out="${1:?usage: attribute.sh <out-dir> <path>...}"; shift
@@ -41,7 +41,7 @@ for t in "${TESTS[@]}"; do mv "$t" "$t.aside"; done
 trap 'for f in "${FILES[@]}"; do cp "$f.round" "$f" && touch "$f" && rm -f "$f.round"; done
       for t in "${TESTS[@]}"; do [ -f "$t.aside" ] && cp "$t.aside" "$t" && touch "$t" && rm -f "$t.aside"; done' EXIT
 
-dotnet build Paperless.slnx -v q -nologo >/dev/null 2>&1 || { echo "base build failed"; exit 1; }
+dotnet build XRay.Office.slnx -v q -nologo >/dev/null 2>&1 || { echo "base build failed"; exit 1; }
 
 for rel in "$@"; do
     src="$CORPUS/$rel"

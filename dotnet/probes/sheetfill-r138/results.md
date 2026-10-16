@@ -103,7 +103,7 @@ rather than implied, because a test that cannot fail is not evidence.
 
 ## 7. Suite
 
-Every project green at **0 skipped**; `Paperless.Fidelity.Tests` 552 discovered, 542 passed, 10
+Every project green at **0 skipped**; `XRay.Office.Fidelity.Tests` 552 discovered, 542 passed, 10
 failed — the four documented families left failing on purpose, the same ten by name as before the
 round. Spreadsheets 1389 (1387 + the two new), WordProcessing 2007.
 

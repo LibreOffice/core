@@ -1,7 +1,7 @@
-diff --git a/dotnet/src/Paperless.Presentations/MsBinary/PptTextReader.cs b/dotnet/src/Paperless.Presentations/MsBinary/PptTextReader.cs
+diff --git a/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextReader.cs b/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextReader.cs
 index 0000000..0000000 100644
---- a/dotnet/src/Paperless.Presentations/MsBinary/PptTextReader.cs
-+++ b/dotnet/src/Paperless.Presentations/MsBinary/PptTextReader.cs
+--- a/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextReader.cs
++++ b/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextReader.cs
 @@ -14,11 +14,66 @@
  /// <param name="Text">The characters, with the terminator and any trailing NULs removed.</param>
  /// <param name="Paragraphs">The paragraph property runs, in order.</param>
@@ -142,10 +142,10 @@ index 0000000..0000000 100644
      }
  
      /// <summary>The character a field occupies in the text until something resolves it.</summary>
-diff --git a/dotnet/src/Paperless.Presentations/MsBinary/PptTextBody.cs b/dotnet/src/Paperless.Presentations/MsBinary/PptTextBody.cs
+diff --git a/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs b/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs
 index 0000000..0000000 100644
---- a/dotnet/src/Paperless.Presentations/MsBinary/PptTextBody.cs
-+++ b/dotnet/src/Paperless.Presentations/MsBinary/PptTextBody.cs
+--- a/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs
++++ b/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs
 @@ -171,10 +171,17 @@
          short lineFeed = properties.States(StatesLineFeed) ? properties.LineFeed : level.LineFeed;
          short before = properties.States(StatesSpaceBefore) ? properties.SpaceBefore : level.SpaceBefore;

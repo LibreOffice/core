@@ -1,6 +1,6 @@
 # The original corpus against the calibration target — the first such measurement
 
-    ours = Paperless.Cli @ 6966b6a47
+    ours = XRay.Office.Cli @ 6966b6a47
     ref  = /opt/libreoffice26.2/program/soffice, 26.2.4.2, via $REF_SOFFICE
     rule = batch-check.sh of 2026-09-05
 

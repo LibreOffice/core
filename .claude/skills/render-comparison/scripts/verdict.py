@@ -9,7 +9,7 @@ that were missing above it, each of which cost this project a round to learn the
 
 **1. Comparability comes before scoring.** The 26.2.4.2 tarball ships its own
 `NotoSans-Regular.ttf` and `NotoSerif-Regular.ttf`, so for any family the system lacks it
-resolves to Noto where the distro binary and Paperless both resolve to DejaVu. An ink figure
+resolves to Noto where the distro binary and X-Ray.Office both resolve to DejaVu. An ink figure
 taken across that gap measures the font, not the renderer -- two agents independently spent
 hours on `2017-04-27-Lease-Transition-Records-Checklist` before one of them read the faces out
 of the PDFs and found the comparison was void. So the faces are compared *first*, and a
@@ -44,7 +44,7 @@ CMP = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(CMP)
 
 LO24 = os.environ.get("LO24", "soffice")
 LO26 = os.environ.get("LO26", "/opt/libreoffice26.2/program/soffice")
-CLI = os.environ.get("PAPERLESS_CLI", "")
+CLI = os.environ.get("XRAY_OFFICE_CLI", "")
 
 # A subset-embedded face is written `ABCDEF+Liberation Serif`; the tag is per-file and says
 # nothing about which family was resolved, so it has to come off before the sets are compared.
@@ -66,7 +66,7 @@ def render_lo(binary: str, src: Path, out: Path) -> Path | None:
 
 def render_ours(src: Path, out: Path) -> Path | None:
     if not CLI:
-        sys.exit("set PAPERLESS_CLI to the tree you mean to measure")
+        sys.exit("set XRAY_OFFICE_CLI to the tree you mean to measure")
     out.mkdir(parents=True, exist_ok=True)
     pdf = out / (src.stem + ".pdf")
     if not pdf.exists():

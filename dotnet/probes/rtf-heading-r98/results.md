@@ -168,7 +168,7 @@ is why.
 ## 5. The sweep, and the per-document table
 
 `reach-sweep.py` renders every one of the **338 converted `.rtf`** in `/home/user/corpus-odf/words`
-with `Paperless.Cli render --format pdf` under a pinned `SOURCE_DATE_EPOCH`, hashes, and deletes the
+with `XRay.Office.Cli render --format pdf` under a pinned `SOURCE_DATE_EPOCH`, hashes, and deletes the
 PDF immediately. Determinism was checked before the sweep rather than assumed: two renders of
 `bulletin.rtf` by the same binary are byte-identical. Both legs rendered **338 of 338** with no
 failures. `reach-base.tsv` is `ac7745deb` with `RtfStyles.cs` at HEAD-of-base; `reach-head.tsv` is
@@ -319,12 +319,12 @@ Eleven test cases, in two theories:
 
 ## 9. Validation
 
-* `dotnet build Paperless.slnx` — **0 warnings, 0 errors**.
+* `dotnet build XRay.Office.slnx` — **0 warnings, 0 errors**.
 * The ten non-fidelity projects, run one at a time, all `Passed!` with 0 failed and 0 skipped:
   Containers 109, Core 521, Markup 259, OpenDocument 146, Presentations 1045, Rendering 164,
   Spreadsheets 1271, Text 728, Vector 309, **WordProcessing 1924** (1913 before, plus this round's
   eleven).
-* **`Paperless.Fidelity.Tests`: `Failed: 10, Passed: 542, Skipped: 0, Total: 552`** — the briefed
+* **`XRay.Office.Fidelity.Tests`: `Failed: 10, Passed: 542, Skipped: 0, Total: 552`** — the briefed
   baseline, and the ten are exactly the known names, read out of this run's own log rather than
   asserted: `PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt` ×4
   (`paginated.doc/.fodt/.rtf/.docx`),

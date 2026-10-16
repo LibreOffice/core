@@ -1,5 +1,5 @@
 re-derivation of clip-seats-r97, 2026-09-11, after the container restart
-reference bank /home/user/gate-orig-r83/ref (947), reference binary 26.2.4.2, our side dotnet/tools/Paperless.Cli
+reference bank /home/user/gate-orig-r83/ref (947), reference binary 26.2.4.2, our side dotnet/tools/XRay.Office.Cli
 built Release in this worktree with SOURCE_DATE_EPOCH=1700000000
 
 == s1.2  the authored probe, re-rendered through 26.2.4.2 ==

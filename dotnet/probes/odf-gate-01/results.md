@@ -4,13 +4,13 @@
 
 `MANIFEST.tsv`'s `ext` column holds **docx 272, pptx 251, xlsx 241, doc 66, xls 64, ppt 51,
 xlsm 2 — and nothing else.** There is no ODF, no RTF and no template in the sample corpus at
-all, so `Paperless.OpenDocument` and the RTF reader, both named in `dotnet/CLAUDE.md`'s
+all, so `XRay.Office.OpenDocument` and the RTF reader, both named in `dotnet/CLAUDE.md`'s
 Scope, had never been measured against a real document. Every fidelity figure this project
 has ever quoted for them comes from hand-built fixtures.
 
 ## What was done
 
-`.claude/skills/paperless-corpus/scripts/convert-corpus.sh` fanned all 947 corpus documents
+`.claude/skills/office-corpus/scripts/convert-corpus.sh` fanned all 947 corpus documents
 out into the ODF spelling of their own family, and the words track additionally into RTF,
 through **26.2.4.2**, mirroring the corpus layout so `batch-check.sh` globs it unchanged:
 **1285 files, zero conversion failures.**
@@ -25,7 +25,7 @@ document runs to tens of megabytes and this container's writable allowance is fi
 
 ## Environment
 
-    ours   = Paperless.Cli @ ddb05e4e5
+    ours   = XRay.Office.Cli @ ddb05e4e5
     ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 -- the calibration target,
              with PATH pointed at its program directory so batch-check.sh picked it up
     fonts  = system fontconfig; three of the tarball's four confounds moved aside.

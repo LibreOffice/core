@@ -14,7 +14,7 @@ wider** than the size asked for. The truncation is worth at most 0.24 pt on a wh
 and pulls the other way.
 
 The control half of the same run confirms the *vertical* rule the track already ships
-(`MetricGrid` in `Paperless.Text/Fonts/LineSpacing.cs`) on eight authored face/size pairs
+(`MetricGrid` in `XRay.Office.Text/Fonts/LineSpacing.cs`) on eight authored face/size pairs
 with the flag varied — 10.60/11.55/12.75/13.95 pt for Liberation Serif at 9/10/11/12 pt,
 10.35/-/13.00/13.95 for Liberation Sans — which had only ever been fitted against corpus
 documents.

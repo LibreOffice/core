@@ -275,7 +275,7 @@ and reached by two different mechanisms, of which only the second is right.
 
 ## 8. Shared layer
 
-**Yes.** `Paperless.Ooxml/OoxmlNamespaces.cs` and `Paperless.Ooxml/OoxmlXml.cs`. All three tracks
+**Yes.** `XRay.Office.Ooxml/OoxmlNamespaces.cs` and `XRay.Office.Ooxml/OoxmlXml.cs`. All three tracks
 read them.
 
 The census names the reach exactly — **10 documents: 7 sheets, 3 slides, 0 words** — and it is
@@ -284,7 +284,7 @@ track** twice and all three affected slides batches before and after, and the fi
 **The parent should still run the cross-track sweep**, and the prediction for it is: sheets +2,
 `slides/ceiling-002` +1, `slides/done-013` and `slides/done-015` unchanged at 14/14, words unchanged.
 
-`Paperless.Spreadsheets` changes (`XlsxVml`, `XlsxLegacyPictures`, `XlsxNoteCaptions`,
+`XRay.Office.Spreadsheets` changes (`XlsxVml`, `XlsxLegacyPictures`, `XlsxNoteCaptions`,
 `XlsxDrawings`, `XlsxReader`, `XlsxPrintSetup`, `SheetPageDecoration`) reach the sheets track only.
 
 ## 9. Build and tests
@@ -293,7 +293,7 @@ track** twice and all three affected slides batches before and after, and the fi
 
 Ten non-Fidelity projects, run one at a time and totalled by hand: **4787 passed, 0 failed, 1
 skipped**, against the base's 4772/0/1 — a delta of exactly the **15** new tests, all in
-`Paperless.Spreadsheets` (925 → 940). `Fidelity` is **521 passed / 31 failed / 552**, byte-for-byte
+`XRay.Office.Spreadsheets` (925 → 940). `Fidelity` is **521 passed / 31 failed / 552**, byte-for-byte
 the base's figure.
 
 ## 10. `MANIFEST.tsv`
@@ -324,7 +324,7 @@ Lives in the corpus repository and was not touched. Three rows change status, al
    size over two points. Four corpus worksheets sit near it and all four pass today, so this needs
    the law established on authored fixtures — six or eight sizes — before anything is written.
 5. **`SheetNotes.cs` or `SheetShapeText.cs`** for the next 24.2.7.2 site.
-   `Paperless.Spreadsheets` is now **six of nine** re-checked; five were correct and this one was
+   `XRay.Office.Spreadsheets` is now **six of nine** re-checked; five were correct and this one was
    half wrong. The prior is no longer "probably still fine" on this track either.
 6. Still unworked, all ink: the chart area's light-grey border (387 strokes to our 0 on `005`);
    a data label group's stated `bg1` fill (33 white fills to our 0); the chart title's 9.8 pt

@@ -25,7 +25,7 @@ x/
 #
 # ours-noquirk.txt and ours-quirk.txt are additionally a VOID measurement and
 # must not be banked as evidence: they were taken with the Sep-17 binary, whose
-# assembly contains no WordParity at all, so PAPERLESS_LIBREOFFICE_QUIRKS=1
+# assembly contains no WordParity at all, so XRAY_OFFICE_LIBREOFFICE_QUIRKS=1
 # changed nothing and the two files are identical by construction rather than
 # by finding. results.md section 0 records the discard.
 ours-noquirk.txt

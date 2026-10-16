@@ -20,7 +20,7 @@ ours in §1.4 and §2.4 was taken with `SOURCE_DATE_EPOCH=1700000000` pinned, an
 | O58's reach | **1 of 176** chart-bearing renderings moves and the other 175 are byte-identical; **0** page counts and **0** alphanumeric counts move, so no gate column can see it. §2.6 |
 | O60 — is the `.ppt` table cell's measure ~3.3 pt narrower here? | **No, and the seat's own instrument is what said so.** `measure3.py` adds the last glyph's design advance, and on the reference the last glyph of a justified line is a **space**. Excluding it, `architecture6` page 10 breaks at **exactly the same words on all 12 lines** as the de-confounded reference. §3 |
 | What is left of O60 | One break on **page 14**, and the measure gap that flips it is bounded in **[0.021, 13.19) pt** — with the reference's *own* declared column arithmetic (400.88 pt) landing on **our** side of it. §3.4 |
-| Tests | 3 added, **2 of them failing at the base**; one existing fixture re-tuned with its reason. 6821 unit tests in ten projects, 0 failed, 0 skipped; `Paperless.Fidelity.Tests` **Failed 10, Passed 542, Skipped 0, Total 552** — the banked ten. §4 |
+| Tests | 3 added, **2 of them failing at the base**; one existing fixture re-tuned with its reason. 6821 unit tests in ten projects, 0 failed, 0 skipped; `XRay.Office.Fidelity.Tests` **Failed 10, Passed 542, Skipped 0, Total 552** — the banked ten. §4 |
 
 ---
 
@@ -72,7 +72,7 @@ once per attempt and once per chart copy.
 ```sh
 tail -n +2 probes/chart-fit/census.tsv | cut -f1 > /tmp/chartdocs.txt
 python3 probes/chart-slide-r117/axis-census.py \
-    --cli tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli \
+    --cli tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli \
     --out axis-rows.tsv --results axis-results.tsv --jobs 2 < /tmp/chartdocs.txt
 ```
 
@@ -290,7 +290,7 @@ legs on 2026-09-13 UTC:
 export SOURCE_DATE_EPOCH=1700000000
 for leg in base after; do
   python3 probes/chart-collide-r110/confine.py --out /tmp/conf-$leg \
-      --cli /tmp/cli-$leg/Paperless.Cli --rows rows-$leg.tsv --jobs 2 < /tmp/chartdocs.txt
+      --cli /tmp/cli-$leg/XRay.Office.Cli --rows rows-$leg.tsv --jobs 2 < /tmp/chartdocs.txt
 done
 ```
 
@@ -417,7 +417,7 @@ else on the deck's other 30 pages. It is no longer "0.69 % of the measure"; it i
 
 ## 4. Tests
 
-Three added, in `tests/Paperless.Core.Tests/ChartTurnedValueLabelOverhangTests.cs`:
+Three added, in `tests/XRay.Office.Core.Tests/ChartTurnedValueLabelOverhangTests.cs`:
 
 | test | at `88209aa4b` | after |
 |---|---|---|
@@ -436,7 +436,7 @@ points of the boundary: swept over 300…460 pt the axis turns at 360 and 380 un
 and at 420 under the old one only. The assertion and the rule under test are unchanged; the frame is
 380 with the reason written beside it.
 
-Totals, projects run individually (`dotnet test Paperless.slnx` is the one most likely to truncate):
+Totals, projects run individually (`dotnet test XRay.Office.slnx` is the one most likely to truncate):
 
 | project | passed | failed | skipped |
 |---|---:|---:|---:|
@@ -451,7 +451,7 @@ Totals, projects run individually (`dotnet test Paperless.slnx` is the one most 
 | Vector | 309 | 0 | 0 |
 | WordProcessing | 1938 | 0 | 0 |
 | **total** | **6821** | **0** | **0** |
-| `Paperless.Fidelity.Tests` | 542 | **10** | 0 (of 552) |
+| `XRay.Office.Fidelity.Tests` | 542 | **10** | 0 (of 552) |
 
 The ten are the banked ten — the same count round 113 and round 115 report, `SheetDrawingComparisonTests` among them.
 Build is warning-free.

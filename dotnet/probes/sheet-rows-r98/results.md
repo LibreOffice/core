@@ -1,6 +1,6 @@
 # Round 98 — two rows that are the wrong height, and they are two causes
 
-    ours   = Paperless.Cli @ ac7745deb (base) and @ ac7745deb + this round's diff (head)
+    ours   = XRay.Office.Cli @ ac7745deb (base) and @ ac7745deb + this round's diff (head)
     ref    = /opt/libreoffice26.2/program/soffice — LibreOffice 26.2.4.2, plus the banked
              reference PDFs at /home/user/gate-odf-r80/ref (the 307 `.ods`) and
              /home/user/gate-orig-r83/ref (the 947 originals)
@@ -291,7 +291,7 @@ that method's line count — its own remarks say it was fitted to thirty probe r
 
 Ten non-fidelity projects, run individually: **109 / 521 / 259 / 146 / 1045 / 164 / 1275 / 728 /
 309 / 1913, 0 failed and 0 skipped in every one.** Solution build 0 warnings, 0 errors.
-`Paperless.Fidelity.Tests` is **542 passed / 10 failed of 552 discovered**, and the ten are exactly
+`XRay.Office.Fidelity.Tests` is **542 passed / 10 failed of 552 discovered**, and the ten are exactly
 the known names — `PageDrawingComparisonTests` ×4, `TabStopComparisonTests` ×4,
 `SheetDrawingComparisonTests` ×1, `JustificationShrinkComparisonTests` ×1. The counts above
 were read out of this round's own output rather than carried in from a brief — the spreadsheets

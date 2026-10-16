@@ -39,7 +39,7 @@ defect; every row agreeing is what this file exists to keep true.
 Usage
 -----
 
-    export PAPERLESS_CLI=<tree>/dotnet/tools/Paperless.Cli/…/Paperless.Cli
+    export XRAY_OFFICE_CLI=<tree>/dotnet/tools/XRay.Office.Cli/…/XRay.Office.Cli
     python3 page-number-zero.py [outdir]
 """
 
@@ -122,9 +122,9 @@ def printed(pdf):
 
 def main():
     out = sys.argv[1] if len(sys.argv) > 1 else '/tmp/page-number-zero'
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     if not cli:
-        raise SystemExit('set PAPERLESS_CLI to the tree you mean to measure')
+        raise SystemExit('set XRAY_OFFICE_CLI to the tree you mean to measure')
 
     print(f"{'fmt':12s} {'start':6s} {'reference':24s} ours")
 

@@ -1,7 +1,7 @@
 # pdf-width-quantisation. Measured 2026-09-06
 # 24.2.7.2: /usr/bin/soffice -> LibreOffice 24.2.7.2 420(Build:2)
 # 26.2.4.2: /opt/libreoffice26.2/program/soffice -> LibreOffice 26.2.4.2 0229ac93fcf0d7cbc6376066c6f35021cef002dc
-# ours: /home/user/wt-advance/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+# ours: /home/user/wt-advance/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 # fonts: system /usr/share/fonts, the tarball's Latin duplicates and Latin Noto aside
 
 ## paginated.docx

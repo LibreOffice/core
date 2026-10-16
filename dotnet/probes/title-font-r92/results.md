@@ -281,7 +281,7 @@ closer of the two on this document.
 ## 7. Why no code changed
 
 **The slides path leaves the family class unread on purpose, and the stated reason for that is now
-discharged.** `src/Paperless.Presentations/Layout/SlideText.cs`:678-682:
+discharged.** `src/XRay.Office.Presentations/Layout/SlideText.cs`:678-682:
 
 > *The pitch and not the family class, deliberately. The family bits are in the same byte and the
 > word processor's equivalent leaves them alone for the same reason — declaring a family class

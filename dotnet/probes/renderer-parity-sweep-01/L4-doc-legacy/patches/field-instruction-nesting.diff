@@ -1,6 +1,6 @@
-diff --git a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Content.cs b/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Content.cs
---- a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Content.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Content.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Content.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Content.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Content.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Content.cs
 @@ -128,7 +128,7 @@
  
                  case Special.FieldBegin:
@@ -73,9 +73,9 @@ diff --git a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Content.c
          public StringBuilder Instruction { get; } = new();
          public string? CurrentHyperlink { get; set; }
          public Stack<string?> Hyperlinks { get; } = new();
-diff --git a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs b/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
---- a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
 @@ -625,14 +625,33 @@
          List<int> positions = [];
          int start = 0;

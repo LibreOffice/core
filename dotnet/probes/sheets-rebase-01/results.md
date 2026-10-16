@@ -148,7 +148,7 @@ attribution guesswork:
   `0x00E5` among them.
 
 Our reader is not dropping anything. For completeness it was read anyway and is correct:
-`ReadMergedCells` at `dotnet/src/Paperless.Spreadsheets/MsBinary/XlsWorkbookReader.cs:1737-1748`
+`ReadMergedCells` at `dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsWorkbookReader.cs:1737-1748`
 reads the count and every 8-byte range and calls `builder.AddMergedRange`, dispatched from the
 sheet record loop at `:1355-1356`, and reaches `StatedMerges` at `:1224`. No filter, no cap, no
 single-record assumption.
@@ -193,7 +193,7 @@ difference.
 ### 4.4 Diagnosis — file and line
 
 Our tie-break is a **faithful** port and is not the bug. `SheetCellBorders.Resolve`
-(`dotnet/src/Paperless.Spreadsheets/Layout/SheetDecoration.cs:155-156`) returns `own` unless the
+(`dotnet/src/XRay.Office.Spreadsheets/Layout/SheetDecoration.cs:155-156`) returns `own` unless the
 neighbour `IsHeavierThan` it, and `IsHeavierThan` (`:114-124`) compares width, then doubleness,
 then distance, then dot pattern — never colour. That mirrors `svx::frame::Style::operator<`
 (`svx/source/dialog/framelink.cxx:306-335`) exactly, and `std::max` returning its first argument
@@ -214,7 +214,7 @@ if( !mxImpl->IsColInClipRange( nCol ) ) return OBJ_STYLE_NONE;
 return std::max(…GetStyleLeft(), …(nCol - 1…)->GetStyleRight());
 ```
 
-`Edges.Build` in `dotnet/src/Paperless.Spreadsheets/Layout/SheetPageDecoration.cs` has no
+`Edges.Build` in `dotnet/src/XRay.Office.Spreadsheets/Layout/SheetPageDecoration.cs` has no
 equivalent. It calls `Resolve` at all four edges — **lines 710, 716, 731 and 738** — and each
 call reaches one cell *outside* the placed band:
 

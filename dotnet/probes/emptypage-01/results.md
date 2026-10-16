@@ -1,7 +1,7 @@
 # Where an empty paragraph goes at a page boundary
 
 Measured 2026-08-15 in the `/c/sandbox/workdir` container: LibreOffice **26.2.4.2**, DejaVu, Carlito,
-Caladea and Liberation installed. Paperless at `wt-w-emptypage`, forked from `d9fde84d42e`.
+Caladea and Liberation installed. X-Ray.Office at `wt-w-emptypage`, forked from `d9fde84d42e`.
 
 ## The question
 
@@ -23,7 +23,7 @@ is nailed down so that the two stacks cannot disagree about the fill: Liberation
 no header or footer. Body height is 13958 twips, so 58 exact 12 pt lines fit.
 
 (`build.py` is the first cut and is kept only as the record of it. It states no styles at all, so
-LibreOffice sets it at 12 pt and Paperless at 10 pt; the fill differs by 1.95 pt per line and the
+LibreOffice sets it at 12 pt and X-Ray.Office at 10 pt; the fill differs by 1.95 pt per line and the
 comparison measures that instead. It still reproduced the class once, at `n49-e3`.)
 
 ## Result: 48 of 48 agree, page count and last-line position alike
@@ -41,7 +41,7 @@ The transition, which is where the rule lives:
 overflowing empty paragraph lands on is the same one in both. The last filler line sits at the same
 `yMin` on both sides for every one of the 48.
 
-**So there is no divergent rule to implement.** Paperless already places a run of empty paragraphs
+**So there is no divergent rule to implement.** X-Ray.Office already places a run of empty paragraphs
 across a page boundary the way Writer does, including the "near-blank" page that results when the
 last of them overflows.
 

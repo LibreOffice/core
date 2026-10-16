@@ -106,7 +106,7 @@ coincide. Re-rendered individually at the end of the round and byte-compared: un
 
 ## 4. The fix
 
-**`dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs`**
+**`dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs`**
 
 - **`:798`** → `SuppressesLine(properties) ? null : LineOf(properties, theme) ?? autoLine`.
 - **`:813-814`** → `MarkerFill = MarkerFillOf(element, theme)`, `MarkerLine = LineOf(MarkerProperties(element), theme)`.
@@ -120,16 +120,16 @@ coincide. Re-rendered individually at the end of the round and byte-compared: un
   colour — `TypeGroupConverter::convertMarker`, `typegroupconverter.cxx:657-678`, whose
   `if (aSymbol.FillColor < 0)` branch is tdf#124817.
 
-**`dotnet/src/Paperless.Core/Charts/ChartPlot.cs`**
+**`dotnet/src/XRay.Office.Core/Charts/ChartPlot.cs`**
 
 - **`:188`, `:192`** → `MarkerFill` and `MarkerLine` on `ChartSeries`, null meaning "the file
   states nothing".
 
-**`dotnet/src/Paperless.Core/Charts/ChartLayout.cs`**
+**`dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs`**
 
 - **`:2091-2092`** → `series.MarkerFill ?? series.Fill ?? stroke`, `series.MarkerLine ?? stroke`.
 
-**`dotnet/src/Paperless.Core/Charts/ChartLayout.Plots.cs`**
+**`dotnet/src/XRay.Office.Core/Charts/ChartLayout.Plots.cs`**
 
 - **`:130-131`** → the same for the radar painter.
 
@@ -240,7 +240,7 @@ members are null, and two Core tests pin exactly that.
 
 ## 6. Verdicts: **0 of 163**, predicted plainly and confirmed
 
-`paperless analyze`, in process:
+`xray-office analyze`, in process:
 
 | deck | leg | pages | alnum words | raw words | faces | unembedded |
 |---|---|---:|---:|---:|---:|---:|
@@ -318,8 +318,8 @@ Neither is the measurement.
 
 ## 9. Tests — 16 added, **15 verified by reintroduction, 0 drift guards**
 
-`tests/Paperless.Presentations.Tests/DrawingChartMarkerPaintTests.cs` (8, the reader) and
-`tests/Paperless.Core.Tests/ChartMarkerPaintTests.cs` (8, the painter). Every mutation below was
+`tests/XRay.Office.Presentations.Tests/DrawingChartMarkerPaintTests.cs` (8, the reader) and
+`tests/XRay.Office.Core.Tests/ChartMarkerPaintTests.cs` (8, the painter). Every mutation below was
 applied by `verify-test.sh` to a clean tree, rebuilt on both legs, and named its failing tests.
 
 | mutation | detected by |
@@ -356,7 +356,7 @@ the repository.
 ## 10. Final state
 
 ```
-dotnet build Paperless.slnx -v q -nologo     0 Warning(s)   0 Error(s)
+dotnet build XRay.Office.slnx -v q -nologo     0 Warning(s)   0 Error(s)
 ```
 
 | project | before | after |
@@ -373,7 +373,7 @@ dotnet build Paperless.slnx -v q -nologo     0 Warning(s)   0 Error(s)
 | Presentations | 623 | **631** |
 | **total** | **3606** | **3622**, 0 failed, 1 skipped |
 
-Each project run individually and its count read, not the colour. `Paperless.Fidelity.Tests` was
+Each project run individually and its count read, not the colour. `XRay.Office.Fidelity.Tests` was
 **not run** — another agent owns it.
 
 ---
@@ -388,7 +388,7 @@ Each project run individually and its count read, not the colour. `Paperless.Fid
   canonical reference, counting `rg` and `RG` alike; and the **whole-document** operator dumps,
   which is how "8 records of 1143" and "10 of 2049" are exhaustive rather than sampled.
 - The 2×2 in §5.4: four builds, four renderings, four `|ink|%` readings.
-- Every gate row in §6, from `paperless analyze` in process.
+- Every gate row in §6, from `xray-office analyze` in process.
 - The census over all 534 documents, from parsed OPC parts, and the separate `c:dTable` census.
 - All ten reintroduction rows in §9, from `verify-test.sh` exit 0 with named tests, plus M11's
   non-detection and the algebra that makes it an equivalence.

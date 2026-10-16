@@ -114,10 +114,10 @@ draw-time guard, none of which those two properties depend on.
 
 ## Shared layer
 
-**No.** All four files changed are in `Paperless.Spreadsheets`:
+**No.** All four files changed are in `XRay.Office.Spreadsheets`:
 `Layout/SheetPageDecoration.cs`, `Layout/SheetBandHeight.cs`, `Layout/SheetHeaderFooter.cs`,
 `Ooxml/XlsxPrintSetup.cs`, `Xlsb/XlsbPrintSetup.cs`, `MsBinary/XlsPrintSetup.cs`. Nothing in
-`Core`, `Containers`, `Text`, `Vector`, `Rendering`, `Markup` or `Paperless.Ooxml` is touched, so
+`Core`, `Containers`, `Text`, `Vector`, `Rendering`, `Markup` or `XRay.Office.Ooxml` is touched, so
 words and slides cannot be reached. That is a claim about the diff and it is checkable from the
 diff; the parent owes no cross-track sweep for it.
 

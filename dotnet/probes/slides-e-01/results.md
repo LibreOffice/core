@@ -108,7 +108,7 @@ counting error.** Reported as the miss it is, not as a ±1 tolerance.
 
 ## 4. The fix
 
-`dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartAutoFormat.cs`
+`dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartAutoFormat.cs`
 
 - **`:175`** → `ColourOf` gains `DrawingStyleMatrix? styles = null` as a seventh parameter, and
   for `stroke: true` returns `ThroughSubtleLineStyle(placeholder, styles, theme)`.
@@ -116,12 +116,12 @@ counting error.** Reported as the miss it is, not as a ±1 tolerance.
   `DrawingStyleMatrix.Substitute` the accent for its `phClr`, read the `a:solidFill` back through
   `DrawingColour`. Null matrix, no `a:solidFill`, or no readable colour → the accent unchanged.
 
-`dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs`
+`dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs`
 
 - **`:787`, `:790`** → `automatic.Styles` threaded into both `ColourOf` calls.
 - **`:1289`** → the same, inside `PointFills`.
 
-`dotnet/src/Paperless.Ooxml/DrawingML/DrawingStyleMatrix.cs`
+`dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingStyleMatrix.cs`
 
 - **`:143-155`** → the `LineStyle` doc comment. The brief called its old sentence — *"the caller
   … wants the width and supplies its own colour from the accent cycle"* — "the bug, written
@@ -219,7 +219,7 @@ Two pre-existing defects meet here, and neither is this round's:
    states.
 
 Fixing (1) alone would make it worse — the markers would then have no series colour to inherit.
-The correct fix is (2), which needs a new `ChartSeries` member in `Paperless.Core` and therefore
+The correct fix is (2), which needs a new `ChartSeries` member in `XRay.Office.Core` and therefore
 the cross-track sweep a Core change owes. It is a round of its own, and the brief names this deck
 as one not to work; it is §8's item 2 rather than this round's.
 
@@ -233,9 +233,9 @@ and `sheets/batch-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx`. Rendered on
 That is the measurement; the proof is stronger. `DrawingChartPlot.Read` has exactly three callers
 in the tree, and only the presentations one supplies a matrix:
 
-- `Paperless.WordProcessing/Ooxml/DocxPictures.cs:208` — no `styles` argument at all;
-- `Paperless.Spreadsheets/Ooxml/XlsxDrawings.cs:272-273` — `styles: null`, written literally;
-- `Paperless.Presentations/Ooxml/PptxSlideLayoutChart.cs:57` — `theme.Styles`.
+- `XRay.Office.WordProcessing/Ooxml/DocxPictures.cs:208` — no `styles` argument at all;
+- `XRay.Office.Spreadsheets/Ooxml/XlsxDrawings.cs:272-273` — `styles: null`, written literally;
+- `XRay.Office.Presentations/Ooxml/PptxSlideLayoutChart.cs:57` — `theme.Styles`.
 
 With a null matrix `ThroughSubtleLineStyle` returns its input. `WithNoFormatMatrixTheAccentIsRaw`
 pins that so the two tracks stay zero when someone later wires a matrix into either.
@@ -244,7 +244,7 @@ pins that so the two tracks stay zero when someone later wires a matrix into eit
 
 ## 6. Verdicts: **0 of 163**, predicted and confirmed
 
-The gate columns of both changed renderings, `paperless analyze` (in-process, no poppler):
+The gate columns of both changed renderings, `xray-office analyze` (in-process, no poppler):
 
 | deck | leg | pages | alnum words | raw words | faces | unembedded |
 |---|---|---:|---:|---:|---:|---:|
@@ -298,7 +298,7 @@ advance, which is the only reason the FAAAI result was not read as "unchanged".
    `GridProperties.cxx:64-66`'s `0xB3B3B3` default is no longer what 26.2.4.2 draws either. This
    is the remaining ~90% of that deck's chart residual.
 2. **A marker's own `c:marker/c:spPr`.** `ChartLayout.cs:2089` and `ChartLayout.Plots.cs:134`
-   draw markers from the series colour. Needs a `ChartSeries` member in `Paperless.Core`, so it
+   draw markers from the series colour. Needs a `ChartSeries` member in `XRay.Office.Core`, so it
    owes a cross-track sweep. It is what makes `FAAAI…` right rather than accidentally right.
 3. **`a:noFill` on a series line.** `DrawingChartPlot.cs:1423` returns `null`, and `:797`'s
    `?? autoLine` then draws the line the file suppressed. Must land *after* item 2 or it makes
@@ -311,7 +311,7 @@ advance, which is the only reason the FAAAI result was not read as "unchanged".
 
 ## 9. Tests — 10 added, **10 verified by reintroduction, 0 drift guards**
 
-`dotnet/tests/Paperless.Presentations.Tests/DrawingChartThemedLineTests.cs`. Every mutation was
+`dotnet/tests/XRay.Office.Presentations.Tests/DrawingChartThemedLineTests.cs`. Every mutation was
 applied to a clean tree, built, and named a failing test by `verify-test.sh` (exit 0).
 
 | mutation | detected by |
@@ -357,7 +357,7 @@ dotnet build -v q -nologo     0 Warning(s)   0 Error(s)
 | Presentations | 613 | **623** |
 | **total** | **3577** | **3587**, 0 failed, 1 skipped |
 
-`Paperless.Fidelity.Tests` was **not run** — another agent owns it.
+`XRay.Office.Fidelity.Tests` was **not run** — another agent owns it.
 
 ---
 
@@ -371,7 +371,7 @@ dotnet build -v q -nologo     0 Warning(s)   0 Error(s)
   canonical reference, counting `rg` and `RG` alike.
 - Every `ink%` / `|ink|%` figure, with the invariant asserted per leg and both known-answer
   controls run before any of them was believed.
-- All six gate rows in §6, from `paperless analyze` in process.
+- All six gate rows in §6, from `xray-office analyze` in process.
 - The census, and the fill-half census, from parsed OPC parts.
 - Both cross-track renderings on both legs, and the three `DrawingChartPlot.Read` call sites.
 - `objectformatter.cxx:740-889`, `:246-305`; `DrawingStyleMatrix.cs:143-296`;

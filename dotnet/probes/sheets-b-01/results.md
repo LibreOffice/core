@@ -100,14 +100,14 @@ The formula wins; the cache is the fallback. Note that the *base* `ChartConverte
 that is the Impress/Writer path, where the data really is in a second document.
 
 **Seat (source, inferred).**
-`dotnet/src/Paperless.Ooxml/DrawingML/DrawingChart.cs:363-371` — `ReadSequence` takes
+`dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChart.cs:363-371` — `ReadSequence` takes
 `strCache`/`strLit`/`numCache`/`numLit` and nothing else. The choice is documented as deliberate at
 `:341` ("the `c:f` beside it is read past, deliberately, and so is the workbook it names") and
 justified at `:352-356` ("doing otherwise would mean opening a second document from inside a reader
 that must not depend on the spreadsheet library"). **That justification is correct for PPTX and DOCX
 and wrong for XLSX**, where `c:f` names a range in the workbook already open — which is precisely
 where LibreOffice splits its two implementations.
-`dotnet/src/Paperless.Spreadsheets/Ooxml/XlsxCharts.cs:76` calls `DrawingChart.Read(chartSpace)`
+`dotnet/src/XRay.Office.Spreadsheets/Ooxml/XlsxCharts.cs:76` calls `DrawingChart.Read(chartSpace)`
 with no workbook context, so today there is no seam to hand sheet data through.
 
 ### 1b. "table border" — confirmed; the reference invents a border the file does not state
@@ -194,7 +194,7 @@ of which only **17** carry a value.
 whose Y is NaN is `continue`d and contributes **no vertex**, so the polygon joins the surrounding
 real points directly.
 
-**Seat (inferred).** `dotnet/src/Paperless.Core/Charts/ChartLayout.cs:2288-2292`:
+**Seat (inferred).** `dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs:2288-2292`:
 
 ```csharp
 double value = at < series.Values.Count && series.Values[at] is { } stated
@@ -326,7 +326,7 @@ controls in the same colours.
 the character colour.
 
 **Seat (inferred), and the predicate already exists.**
-`dotnet/src/Paperless.Spreadsheets/Layout/SheetLayout.cs:126-146` — `HoldsField(row, column)` — is
+`dotnet/src/XRay.Office.Spreadsheets/Layout/SheetLayout.cs:126-146` — `HoldsField(row, column)` — is
 exactly the condition under which the reference substitutes the link colour: it already models the
 hyperlink cell as one indivisible EditEngine field, already restricts itself to text cells
 (`CellAt(row, column) is { Value: null or string }`, matching `insertHyperlink`'s

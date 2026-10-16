@@ -1,6 +1,6 @@
 # Cross-renderer parity sweep
 
-Measures Paperless *and* a second independent implementation against the same
+Measures X-Ray.Office *and* a second independent implementation against the same
 LibreOffice reference over a whole corpus, so the question "how close are we"
 gets an answer with something to compare it to. The second engine here is the
 Rust/WASM `office-open-xml-viewer`, driven in headless Chromium through
@@ -18,7 +18,7 @@ half way is restarted by re-invoking the same command.
 ```bash
 python3 manifest.py              # corpus -> /data/bench/manifest.tsv, one id per document
 python3 render_lo.py             # reference PDFs   (4 soffice workers, private profile each)
-python3 render_pl.py             # Paperless PDFs   (paperless render --format pdf)
+python3 render_pl.py             # XRay.Office PDFs   (xray-office render --format pdf)
 node    render_wv.mjs            # viewer PNGs      (Vite + Chromium, 3 contexts)
 python3 score.py --shard N --shards 4   # per-page metrics -> /data/bench/scores/<id>.json
 python3 aggregate.py             # -> summary.json, documents.json
@@ -75,7 +75,7 @@ from "everything moved down three pixels".
 **SSIM is the headline and it misranks on its own.** It collapses on
 high-frequency content — a mottled slide background, a graph-paper rule — where a
 half-pixel resampling difference flips every pixel while the page is visually
-identical. The lowest-scoring Paperless slide of a 946-document run scored 0.49
+identical. The lowest-scoring X-Ray.Office slide of a 946-document run scored 0.49
 and is indistinguishable from the reference by eye; its mean absolute error is
 0.035. So `aggregate.py` calls a page defective only when a low SSIM is
 corroborated by a second, independent metric (`DEFECT_*` at the top of the file),

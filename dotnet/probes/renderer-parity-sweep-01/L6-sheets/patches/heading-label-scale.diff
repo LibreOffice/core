@@ -1,6 +1,6 @@
-diff --git a/dotnet/src/Paperless.Spreadsheets/Layout/SheetPageDecoration.cs b/dotnet/src/Paperless.Spreadsheets/Layout/SheetPageDecoration.cs
---- a/dotnet/src/Paperless.Spreadsheets/Layout/SheetPageDecoration.cs
-+++ b/dotnet/src/Paperless.Spreadsheets/Layout/SheetPageDecoration.cs
+diff --git a/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetPageDecoration.cs b/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetPageDecoration.cs
+--- a/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetPageDecoration.cs
++++ b/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetPageDecoration.cs
 @@ -339,14 +339,15 @@
              foreach (PlacedColumn column in columns)
              {

@@ -27,6 +27,6 @@ breaks, no row heights, no pagination. If a verdict moves it will be an accident
 reference's own instability, not this change.
 
 The cross-track figures are 0 by construction and will be checked rather than argued: every
-line of the diff is in `src/Paperless.Spreadsheets/Layout/`, which neither other family
+line of the diff is in `src/XRay.Office.Spreadsheets/Layout/`, which neither other family
 compiles against a single call into. They are still measured, because "by construction" has
 been wrong here before.

@@ -6,11 +6,11 @@
 // anisotropy cannot enter the comparison; a 2:1 box is what separates a guide measured across the
 // width from one measured across `ss`.
 using System.Globalization;
-using Paperless.Core.Geometry;
-using Paperless.Core.Graphics;
-using Paperless.Core.Units;
-using Paperless.Ooxml.DrawingML;
-using Paperless.Presentations.Layout;
+using XRay.Office.Core.Geometry;
+using XRay.Office.Core.Graphics;
+using XRay.Office.Core.Units;
+using XRay.Office.Ooxml.DrawingML;
+using XRay.Office.Presentations.Layout;
 
 double width = args.Length > 1 ? double.Parse(args[1], CultureInfo.InvariantCulture) : 4000;
 double height = args.Length > 2 ? double.Parse(args[2], CultureInfo.InvariantCulture) : width;

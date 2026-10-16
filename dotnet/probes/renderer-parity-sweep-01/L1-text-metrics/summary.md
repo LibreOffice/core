@@ -28,13 +28,13 @@ expected to resolve.
 **B · Rendered em size differs — 26 (24%) · confidence high (effect) / medium-high (cause)**
 Same text, different em size, almost always by one point. Restricted to same-size words the
 advance ratio is 1.0000–1.0018, so the size is the whole effect. 17 are autofit decks;
-`Paperless.Presentations/Layout/SlideAutofit.cs`:31-38,87 says it implements **26.2.4.2's
+`XRay.Office.Presentations/Layout/SlideAutofit.cs`:31-38,87 says it implements **26.2.4.2's
 `constScaleLevels` ladder**, replacing the 24.2.7.2 bisection this sweep's reference used.
 **Version divergence — do not re-tune** (L5/L8). Six non-slide cases are real, incl. #106.
 
 **C · Different face resolved — 8 (7%) · confidence high (measurement) / mixed (cause)**
 2–27% width differences, entirely the substitution. #101 and #031 are the ordering rule at
-`Paperless.Text/Fonts/SystemFontResolver.cs`:490-499, whose own comment says it was
+`XRay.Office.Text/Fonts/SystemFontResolver.cs`:490-499, whose own comment says it was
 **measured against 26.2.4.2** and names `Helvetica` and `Times` as the cases that separate
 the versions. **Version divergence in my own file — no patch.** The four
 `DejaVu Sans → DejaVu Serif` cases (`Aptos`, `Segoe UI`) are unexplained and need one
@@ -44,7 +44,7 @@ authored probe per name at both binaries.
 Disjoint line-break brackets: #091 −65.1 pt, #117 −58.5, #129 −28.9, #046 +20.9, #108 −8.9 —
 20 to 250× the advance effect. #091 is mine: a `continuous` section break where we lay the
 text out at section 2's width from section 1's left origin (`612 − 36 − 72 = 504.0`, inside
-our measured limit). **Cross-lane: `Paperless.WordProcessing` (L2/L3).**
+our measured limit). **Cross-lane: `XRay.Office.WordProcessing` (L2/L3).**
 
 **E · Line breaks identical — 40 (37%) · confidence high**
 Every shared line breaks at the same word, over 6,469 line starts. These documents have **no
@@ -64,7 +64,7 @@ rule at the page boundary, L2's paginator.
 2.6% narrow over 4,301 glyphs, 3 of 74 line starts agreeing. Needs
 `WordParagraphFormats.cs` (read it), `MeasuredParagraph.cs` `FormattedRun` (a `Scale` beside
 `Tracking` — mine) and the painter, together. **Deliberately not shipped as a
-`Paperless.Text`-only diff**: an unconsumed field is the pattern that has already been the
+`XRay.Office.Text`-only diff**: an unconsumed field is the pattern that has already been the
 cause four times here. 11 of 271 corpus docx carry a non-100 `w:w`; one carries it
 document-wide.
 

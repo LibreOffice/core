@@ -233,7 +233,7 @@ Its answer is *12 apply a name this round adds*, and it is not a reach figure.
 
 `reach-sweep.py` is the measurement, and `reach-base.tsv` / `reach-head.tsv` are its two legs —
 one row per document, `name\thash\tsize`. Every one of the **338 converted `.rtf`** in
-`/home/user/corpus-odf/words` is rendered by `Paperless.Cli render --format pdf` under a pinned
+`/home/user/corpus-odf/words` is rendered by `XRay.Office.Cli render --format pdf` under a pinned
 `SOURCE_DATE_EPOCH`, hashed, and the PDF deleted immediately — so the sweep costs one PDF of disk
 rather than 338, which is what made it affordable at 3.3 GB free. Determinism was checked before the
 sweep rather than assumed: two renders of `bulletin.rtf` by the same binary are byte-identical.
@@ -385,12 +385,12 @@ Writer has no pool style for. It now compares the two exact spellings the map ho
 
 ## 7. Validation
 
-* `dotnet build Paperless.slnx` — **0 warnings, 0 errors**, from a clean tree (`bin`/`obj` had been
+* `dotnet build XRay.Office.slnx` — **0 warnings, 0 errors**, from a clean tree (`bin`/`obj` had been
   deleted to recover disk after the restart, so this is a full rebuild and not an incremental one).
 * The ten non-fidelity projects, run one at a time: Containers, Core 521, Markup 259, OpenDocument
   146, Presentations 1044, Rendering 164, Spreadsheets 1264, Text 728, Vector 309, WordProcessing
   1913 — **all `Passed!`, 0 failed, 0 skipped**.
-* **`Paperless.Fidelity.Tests`: `Failed: 10, Passed: 542, Skipped: 0, Total: 552`**, and the ten are
+* **`XRay.Office.Fidelity.Tests`: `Failed: 10, Passed: 542, Skipped: 0, Total: 552`**, and the ten are
   exactly the known names — `PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt`
   ×4 (`paginated.rtf/.fodt/.doc/.docx`),
   `TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop` ×4
@@ -413,7 +413,7 @@ Writer has no pool style for. It now compares the two exact spellings the map ho
   the code that is committed.
 
 **One test run in this round was wrong and is reported rather than hidden.** The first
-`Paperless.WordProcessing.Tests` run after the rebuild reported `Passed: 1389` and a
+`XRay.Office.WordProcessing.Tests` run after the rebuild reported `Passed: 1389` and a
 `[FATAL ERROR] … exit code 137` — an OOM kill under contention, with three other rounds live and
 4 GB free. Re-run alone it is 1913, matching the run before it. That is `CLAUDE.md`'s *a truncated
 run reports success* arriving as a truncated run that at least admitted it.

@@ -253,7 +253,7 @@ def main() -> int:
     ap.add_argument("--corpus", type=Path, help="a batch-check rows.tsv; sweeps every row")
     ap.add_argument("--root", type=Path, default=Path("/c/sandbox/workdir/sample-files"))
     ap.add_argument("--cli", type=Path,
-                    default=Path("dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"))
+                    default=Path("dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"))
     ap.add_argument("--out", type=Path)
     args = ap.parse_args()
 

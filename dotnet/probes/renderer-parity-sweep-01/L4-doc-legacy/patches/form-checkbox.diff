@@ -1,6 +1,6 @@
-diff --git a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8FieldTypes.cs b/dotnet/src/Paperless.WordProcessing/Ww8/Ww8FieldTypes.cs
---- a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8FieldTypes.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Ww8/Ww8FieldTypes.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8FieldTypes.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8FieldTypes.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8FieldTypes.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8FieldTypes.cs
 @@ -56,6 +56,16 @@
      /// </remarks>
      public const int CurrentPage = 33;
@@ -18,9 +18,9 @@ diff --git a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8FieldTypes.cs b/dotnet/s
      /// <summary>The <c>NUMPAGES</c> field: how many pages the document has.</summary>
      /// <remarks>
      /// 26, the first of the three <c>Read_F_Num</c> slots (26 <c>NUMPAGES</c>, 27 <c>NUMWORDS</c>,
-diff --git a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs b/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
---- a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
 @@ -135,6 +135,17 @@
          public bool HasAutoSpaceAfter { get; init; }
  
@@ -102,9 +102,9 @@ diff --git a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
  
              // A field still open across the paragraph mark loses its result start with the builder it
              // pointed into; its cached result stays, which is what it was before this existed.
-diff --git a/dotnet/src/Paperless.WordProcessing/Ww8/DocReader.cs b/dotnet/src/Paperless.WordProcessing/Ww8/DocReader.cs
---- a/dotnet/src/Paperless.WordProcessing/Ww8/DocReader.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Ww8/DocReader.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/DocReader.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/DocReader.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ww8/DocReader.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/DocReader.cs
 @@ -695,9 +695,11 @@
                  Runs = runs,
                  Fields = paragraph.Fields ?? [],
@@ -201,14 +201,14 @@ diff --git a/dotnet/src/Paperless.WordProcessing/Ww8/DocReader.cs b/dotnet/src/P
      /// The label a list item draws, or null when it draws none.
      /// </summary>
      /// <remarks>
-diff --git a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.FormFields.cs b/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.FormFields.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.FormFields.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.FormFields.cs
 new file mode 100644
 --- /dev/null
-+++ b/dotnet/src/Paperless.WordProcessing/Ww8/Ww8DocumentReader.FormFields.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.FormFields.cs
 @@ -0,0 +1,87 @@
 +using System.Buffers.Binary;
 +
-+namespace Paperless.WordProcessing.Ww8;
++namespace XRay.Office.WordProcessing.Ww8;
 +
 +/// <content>
 +/// Legacy form fields. Only one of them draws: the <c>FORMCHECKBOX</c> square.

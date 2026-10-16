@@ -6,7 +6,7 @@ import build
 from check import measured
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = "/home/user/libreoffice-core/dotnet/tests/Paperless.WordProcessing.Tests/OfficeMathBoxTests.cs"
+OUT = "/home/user/libreoffice-core/dotnet/tests/XRay.Office.WordProcessing.Tests/OfficeMathBoxTests.cs"
 ref = measured()
 PT = 2540.0 / 72.0
 
@@ -26,10 +26,10 @@ rows = "\n".join(
     '        ["%s"] = ("""%s""", %.3f),' % (n, x, h) for n, x, h in arms)
 
 TEMPLATE = '''using System.Xml.Linq;
-using Paperless.Ooxml.OfficeMath;
+using XRay.Office.Ooxml.OfficeMath;
 using Shouldly;
 
-namespace Paperless.WordProcessing.Tests;
+namespace XRay.Office.WordProcessing.Tests;
 
 /// <summary>
 /// A formula's height is StarMath's, and every arm below is 26.2.4.2's own answer for it.

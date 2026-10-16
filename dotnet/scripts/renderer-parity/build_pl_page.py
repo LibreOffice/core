@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Render the Paperless-vs-LibreOffice difference catalogue to one HTML file."""
+"""Render the X-Ray.Office-vs-LibreOffice difference catalogue to one HTML file."""
 import json, pathlib
 
 BENCH = pathlib.Path("/data/bench")
-OUT = pathlib.Path("/tmp/claude-0/-home-user/bb4a221c-b846-5451-ba79-f27935c68360/scratchpad/paperless-differences.html")
+OUT = pathlib.Path("/tmp/claude-0/-home-user/bb4a221c-b846-5451-ba79-f27935c68360/scratchpad/xray-office-differences.html")
 
 cases = json.loads((BENCH / "pl-cases.json").read_text())
 # The high-resolution reading copies are local files; the page carries only the

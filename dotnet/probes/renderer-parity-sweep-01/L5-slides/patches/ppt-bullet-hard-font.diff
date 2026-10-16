@@ -1,7 +1,7 @@
-diff --git a/dotnet/src/Paperless.Presentations/MsBinary/PptTextBody.cs b/dotnet/src/Paperless.Presentations/MsBinary/PptTextBody.cs
+diff --git a/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs b/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs
 index 0000000..0000000 100644
---- a/dotnet/src/Paperless.Presentations/MsBinary/PptTextBody.cs
-+++ b/dotnet/src/Paperless.Presentations/MsBinary/PptTextBody.cs
+--- a/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs
++++ b/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs
 @@ -56,11 +56,20 @@
      private const uint StatesBulletHardColour = 0x0000_0004;
  

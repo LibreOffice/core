@@ -123,7 +123,7 @@ stays one page long, which is a different defect.
 
 **The user's call, and it changes the conclusion of this round rather than its measurements: this
 project wants Word parity.** Word honours the paragraph's own formatting; 26.2.4.2 throws it away.
-So `DocxTocStyles` is gated on `PAPERLESS_LIBREOFFICE_TOC_STYLES`, which is **off by default**, and
+So `DocxTocStyles` is gated on `XRAY_OFFICE_LIBREOFFICE_TOC_STYLES`, which is **off by default**, and
 everything below this line describes what happens when it is switched on.
 
 What that costs is written down in `dotnet/TODO.word-parity.md` and is one gate row:

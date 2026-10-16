@@ -3,7 +3,7 @@
 
 Parts are copied verbatim from the real document (styles, settings, fontTable,
 numbering, theme) so the fixtures inherit exactly the same OOXML compatibility
-defaults; only word/document.xml is synthesised.  See paperless-corpus/SKILL.md:
+defaults; only word/document.xml is synthesised.  See office-corpus/SKILL.md:
 a hand-built DOCX without word/settings.xml answers a different question.
 """
 import os, re, shutil, zipfile, sys

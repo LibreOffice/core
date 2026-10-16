@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Reach of round 61's two changes, over all 946 manifest documents.
 
-Both changes are in `Paperless.Core/Charts/ChartLayout*.cs`, which every track's chart drawing
+Both changes are in `XRay.Office.Core/Charts/ChartLayout*.cs`, which every track's chart drawing
 goes through, so the census covers `sheets`, `slides` and `words` alike.
 
   A. **the main title's draw position** — every chart that states a visible main title, in any

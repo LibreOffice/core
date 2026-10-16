@@ -364,7 +364,7 @@ belongs to.
 
 1. **The reader.** `PptSlideLayout` would set `SlideTextBody.WarpFontworkType` and the adjustment
    values the way `OdpSlideLayout` already does
-   (`Paperless.Presentations/OpenDocument/OdpSlideLayout.cs`:646-662) — so the engine really is not
+   (`XRay.Office.Presentations/OpenDocument/OdpSlideLayout.cs`:646-662) — so the engine really is not
    the obstacle, and a second format already reaches it by the ODF-named route. The pieces are the
    ones the register names: `gtextUNICODE` (192), `gtextAlign` (194), `gtextSize` (195),
    `gtextFont` (197) and the boolean group `gtextFStrikethrough` (255), whose bit `0x4000` is
@@ -375,7 +375,7 @@ belongs to.
    stands.
 2. **The fill, which is not a `.ppt` problem.** `SlideFontwork.Read` ends
    `return … new Drawing(outline, Paint.Solid(stated.Colour))`
-   (`Paperless.Presentations/Ooxml/SlideFontwork.cs`:106), and `PptxSlideLayout` says so in as many
+   (`XRay.Office.Presentations/Ooxml/SlideFontwork.cs`:106), and `PptxSlideLayout` says so in as many
    words — *"the first run's colour becomes the fill, the shape's own fill, pen and shadow go"*
    (`PptxSlideLayout.cs`:933-935). **No path in this tree paints a Fontwork with anything but a
    solid run colour**, so a `.pptx` or an `.odp` stating a bitmap- or gradient-filled WordArt is
@@ -394,7 +394,7 @@ which is *not* two.
 # 4. The suite
 
 Read out of this run's own output rather than from the briefed number — `dotnet build
-Paperless.slnx -c Release` at **0 warnings, 0 errors**, then `dotnet test Paperless.slnx -c Release
+XRay.Office.slnx -c Release` at **0 warnings, 0 errors**, then `dotnet test XRay.Office.slnx -c Release
 --no-build`, every one of the eleven projects reached (`tests.log`, kept beside this file):
 
 | project | |

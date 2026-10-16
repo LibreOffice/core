@@ -14,7 +14,7 @@ defect — one no reader named — was found on the way and is the widest thing 
 | corpus | `/home/user/corpus-odf` (26.2.4.2's own `--convert-to` of the 947-document corpus), `.odp` column 302 |
 | original corpus | `/home/user/sample-files` |
 | reference bank | `/home/user/gate-odf-r78/ref`, rendered 2026-09-07 **after** all five tarball font confounds were moved aside |
-| base binary | `/home/user/libreoffice-core/…/Paperless.Cli`, the main checkout at the same commit `5c003d58c`, built 2026-09-07 22:37 and untouched since |
+| base binary | `/home/user/libreoffice-core/…/XRay.Office.Cli`, the main checkout at the same commit `5c003d58c`, built 2026-09-07 22:37 and untouched since |
 | fonts | all five confounds aside: `/opt/libreoffice26.2/share/fonts/truetype` holds 82 faces, 38 in `.duplicates-aside/`, 8 in `.condensed-aside/`, 8 in `.noto-aside/` |
 | workers | 2, as briefed. A whole-corpus ODF gate was running in the main checkout throughout and two other agents' sweeps beside it |
 
@@ -336,7 +336,7 @@ Every project run individually, at the round's head:
 
 0 failed and 0 skipped everywhere; the eighteen new ones are the four classes this round adds.
 
-`Paperless.Fidelity.Tests` is **542 passed / 10 failed of 552**, the briefed baseline exactly:
+`XRay.Office.Fidelity.Tests` is **542 passed / 10 failed of 552**, the briefed baseline exactly:
 `PageDrawingComparisonTests` ×4, `TabStopComparisonTests` ×4, `SheetDrawingComparisonTests` and
 `JustificationShrinkComparisonTests`. **An eleventh failed on the first run and was the fixture's
 fault, not the tree's**: `OdpShapePathComparisonTests` compares the *vertex count* of every shape

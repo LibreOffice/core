@@ -1,5 +1,5 @@
-# The sheets track at Paperless `cef0cd958` (round 68), rendered 2026-09-06.
-# ours  = Paperless.Cli at cef0cd958, PAPERLESS_BUNDLED_FONTS unset (installed faces win)
+# The sheets track at XRay.Office `cef0cd958` (round 68), rendered 2026-09-06.
+# ours  = XRay.Office.Cli at cef0cd958, XRAY_OFFICE_BUNDLED_FONTS unset (installed faces win)
 # ref   = /usr/bin/soffice, LibreOffice 24.2.7.2 - what batch-check.sh renders the reference with
 # rule  = batch-check.sh of 2026-09-05: page count, then max(2%, 15) alphanumeric characters
 # host  = /home/user/sample-files, 947 documents; scored against /home/user/gate-2f47/parity.tsv

@@ -10,7 +10,7 @@ one at a time, and reads the x histogram of the result.
 import re, subprocess, sys, zipfile, pathlib
 
 SOFFICE = '/opt/libreoffice26.2/program/soffice'
-PROFILE = 'file:///tmp/paperless-lo-r89variants'
+PROFILE = 'file:///tmp/xray-office-lo-r89variants'
 
 TABLE = ('<table:table table:name="TBL%(n)s" table:style-name="TblStyle">'
          '<table:table-column table:style-name="TblCol" table:number-columns-repeated="2"/>'

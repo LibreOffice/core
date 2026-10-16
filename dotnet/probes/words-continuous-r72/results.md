@@ -2,7 +2,7 @@
 
 ## Environment
 
-    ours   = Paperless.Cli @ 6ab0681b9 (base) and @ HEAD of agent/words69, Debug
+    ours   = XRay.Office.Cli @ 6ab0681b9 (base) and @ HEAD of agent/words69, Debug
     ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 (TDF tarball),
              all four font confounds aside — 38 faces in .duplicates-aside, 8 in .noto-aside,
              no LiberationSansNarrow anywhere, fc-match "DejaVu Sans" -> DejaVuSans.ttf
@@ -242,7 +242,7 @@ same residual exactly:
 | a turned cell (`\cltxbtlr`/`\cltxtbrl`) | 9 (1 alone) |
 | **none of the three** | **34** |
 
-**The discriminator that classifies them is `paperless extract` against our own rendering**,
+**The discriminator that classifies them is `xray-office extract` against our own rendering**,
 which the gate columns cannot see: extraction and rendering are separate paths, and the
 question is which of the two is short (`rtf-extract-vs-render.py`).
 
@@ -301,7 +301,7 @@ python3 $R/measure.py   /abs/vout
 python3 $R/synthetic.py /abs/syn      && $R/render.sh /abs/syn      /abs/synout
 python3 $R/census.py    /home/user/sample-files/words
 
-PAPERLESS_CLI=<tree>/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+XRAY_OFFICE_CLI=<tree>/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 $R/sweep-ours.sh /home/user/sample-files words /home/user/gate-2f47 /abs/words-after 4
 dotnet/probes/rtf-gate-r71/sweep-ours.sh /home/user/corpus-odf /abs/rtf-after 4
 python3 dotnet/probes/rtf-gate-r71/score.py /abs/rtf-after/ours.tsv > /abs/rtf-rows.tsv

@@ -61,7 +61,7 @@ than the ink drawn into it* — and it moved with `w:sz`.
 `build.py` writes one DOCX per construct, copying `word/styles.xml`, `word/settings.xml`,
 `word/fontTable.xml`, `word/numbering.xml` and `word/theme/theme1.xml` **verbatim from
 `ABCD-FE-01-00 Flight Envelope`**, so each inherits the same OOXML compatibility defaults — the
-trap `paperless-corpus/SKILL.md` names, where a hand-built DOCX with no settings part answers a
+trap `office-corpus/SKILL.md` names, where a hand-built DOCX with no settings part answers a
 different question. 63 fixtures: nine plain rows, six script shapes, four radicals, nine
 fractions, four n-ary, four delimiter, six matrix and stack, seven accent/limit/box, four size
 controls and four sequences.
@@ -72,7 +72,7 @@ controls and four sequences.
 ## 3. The model, and where each constant comes from
 
 `model.py` is the Python prototype and
-`dotnet/src/Paperless.Ooxml/OfficeMath/OfficeMathBox.cs` is the port; they agree arm for arm.
+`dotnet/src/XRay.Office.Ooxml/OfficeMath/OfficeMathBox.cs` is the port; they agree arm for arm.
 
 Everything is **hundredths of a millimetre, integer** — `SmO3tlLengthUnit` — because the divisions
 are the reference's own. Writing it in floating point loses the ±1 unit that separates
@@ -134,6 +134,6 @@ Six documents in 947 hold OMML — `ABCD-FE-01-00` (87 `m:oMath`), `ABCD-WB-08-0
 `WiGr_2021W_1_Angebot-Nachfrage-Elastizität` (67, a deck), `technical-report-template` (16),
 `RPA P4 - Advanced Material` (3, a deck) and `Structural Testing` (1, a deck).
 
-**The three decks are not closed by this round.** `OfficeMathBox` is in `Paperless.Ooxml` so that
-`Paperless.Presentations` can reach it, but `PptxTextBody` does not call it yet and a slide's
+**The three decks are not closed by this round.** `OfficeMathBox` is in `XRay.Office.Ooxml` so that
+`XRay.Office.Presentations` can reach it, but `PptxTextBody` does not call it yet and a slide's
 autofit measures its own text; that is the owed half.

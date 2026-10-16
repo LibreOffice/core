@@ -22,7 +22,7 @@ So this prints two bands rather than one:
 **What neither can see**, said before the numbers:
 
 - **the 66 `.doc`**, whose levels live in the WW8 `LSTF`/`LVLF` structures. The fix is in
-  `Paperless.Text` and both readers build the same `PageLabel`, so the binary half is
+  `XRay.Office.Text` and both readers build the same `PageLabel`, so the binary half is
   reachable and invisible to this script. Round 45 had to go through LibreOffice's own flat
   ODF export to see that half at all.
 - **whether the label is really taller.** That needs the level's face and the item's

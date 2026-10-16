@@ -436,7 +436,7 @@ is what this tree drew).
 extra ten are theory rows the listing folds into their method. Every other project's two numbers
 agree, so this is the instrument and not a lost or duplicated test.
 
-`Paperless.WordProcessing.Tests` is the project two rounds saw truncate in one day; **1980
+`XRay.Office.WordProcessing.Tests` is the project two rounds saw truncate in one day; **1980
 discovered, 1980 passed** on this run, matching round 128's corrected figure. The ten non-fidelity
 projects total **6923**, which is round 128's 6917 plus this round's six new cases.
 

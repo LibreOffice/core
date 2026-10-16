@@ -401,8 +401,8 @@ should answer **before** writing either half.
 # 3. The suite
 
 Read out of this run's own output (`tests.log`), not from the briefed number.
-`dotnet build Paperless.slnx -c Release` at **0 warnings, 0 errors**, then
-`dotnet test Paperless.slnx -c Release --no-build`.
+`dotnet build XRay.Office.slnx -c Release` at **0 warnings, 0 errors**, then
+`dotnet test XRay.Office.slnx -c Release --no-build`.
 
 | project | |
 |---|---|
@@ -424,14 +424,14 @@ round 100's 1054: the seven `PptHyperlinkBlobTests`.
 
 **One note on which binary was measured.** The sweeps in §1.6 and §1.7 and the suite above were
 run on a build that still carried a temporary diagnostic in `SlideAutofit.Solve`, gated on
-`PAPERLESS_FIT_DUMP` and inert without it; the committed tree has it removed. Checked rather than
+`XRAY_OFFICE_FIT_DUMP` and inert without it; the committed tree has it removed. Checked rather than
 asserted: the committed binary draws `RESPA_-_Section_8_Webinar.ppt` show for show identically to
 the swept one over all 35 pages, and the 75 autofit and hyperlink tests pass on it.
 
 **The whole-solution run lost two projects and said so in a way that is easy to miss.** Its log
-carries `Test Run Aborted.` for `Paperless.Text.Tests` and
+carries `Test Run Aborted.` for `XRay.Office.Text.Tests` and
 `Catastrophic failure: Test process crashed with exit code 137` for
-`Paperless.WordProcessing.Tests`, which reported **1063** of its 1938 — the container was running
+`XRay.Office.WordProcessing.Tests`, which reported **1063** of its 1938 — the container was running
 a second session's sweeps and builds throughout. Re-run alone (`tests-text.log`, `tests-wp.log`)
 both are green at their full counts, which are round 100's exactly. **The failure count alone
 would have read as a clean run**: neither project reported a failure, one of them simply

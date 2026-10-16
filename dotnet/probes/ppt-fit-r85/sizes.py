@@ -9,7 +9,7 @@ fits.
 
 "Dominant" is the size carrying the most alphanumeric characters on the page, which is the body
 placeholder on a slide that has one -- the same statistic the census in
-`Paperless.Presentations/TODO.md` used.
+`XRay.Office.Presentations/TODO.md` used.
 """
 import sys, collections
 

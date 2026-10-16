@@ -6,7 +6,7 @@ Round 136, `/home/user/wt-coverage`, branch `agent/coverage`, base `9a90bd663`, 
 |---|---|
 | reference | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2**, `0229ac93fcf0d7cbc6376066c6f35021cef002dc` |
 | reference renderings | the **banked** leg of gate r133, `/home/user/gate-r133/ref`, 947 PDFs |
-| our renderings | `/home/user/gate-r133-cli/Paperless.Cli`, the binary gate r133 itself ran; `9a90bd663` adds probe files only to `a185ec79a`, which that gate was taken at, and touches no `dotnet/src` |
+| our renderings | `/home/user/gate-r133-cli/XRay.Office.Cli`, the binary gate r133 itself ran; `9a90bd663` adds probe files only to `a185ec79a`, which that gate was taken at, and touches no `dotnet/src` |
 | population | **all 947**, not the 915 that pass — see §1.1 |
 | C++ tree | `/home/user/libreoffice-core`, read only (C8: it declares `27.2.0.0.alpha0+` and is not the reference's own source, so every arm below is confirmed a second time against 26.2.4.2's own output) |
 | `/usr/bin/soffice` | 24.2.7.2 — not used for anything |
@@ -570,7 +570,7 @@ structural rather than per-page.
 `069_Blue_modern_balance_sheet_Use_this_template_6b4d70d3.xlsx` states one custom `numFmt`
 (`0_);\-0_)`, no colour) and gives **ten of its 39 `cellXfs`** the built-in `numFmtId="38"`, whose
 ECMA-376 17.4.7 code is `#,##0 ;[Red](#,##0)`. `NumberFormatSection`
-(`src/Paperless.Core/Numbers/NumberFormatSection.cs`:204) discards every bracketed body it does not
+(`src/XRay.Office.Core/Numbers/NumberFormatSection.cs`:204) discards every bracketed body it does not
 recognise as a currency symbol, an elapsed unit or a calendar directive, under the comment
 *"Anything else — a colour name, `[ENG]` — changes appearance rather than the text this extracts"*.
 True of the text, false of the ink. `git grep '\[Red\]'` over `dotnet/src` finds exactly one hit and

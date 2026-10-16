@@ -201,14 +201,14 @@ Three, each measured here and none implemented, all in `OPEN-ISSUES.md`:
 
 | project | result |
 |---|---|
-| `Paperless.Core` | 591 passed |
-| `Paperless.Text` | 750 passed |
-| `Paperless.Vector` | 309 passed |
-| `Paperless.Containers` | 109 passed |
-| `Paperless.WordProcessing` | **2076** passed — 2072 at the round's base plus this round's 4 |
-| `Paperless.Spreadsheets` | 1484 passed |
-| `Paperless.Presentations` | 1205 passed |
-| `Paperless.Markup` | 259 passed |
-| `Paperless.Fidelity` | **10 failed of 552**, 0 skipped — the round's base figure exactly, and the known set: `TabStopComparisonTests` and `PageDrawingComparisonTests` in four formats each, `JustificationShrinkComparisonTests` and `SheetDrawingComparisonTests` |
+| `XRay.Office.Core` | 591 passed |
+| `XRay.Office.Text` | 750 passed |
+| `XRay.Office.Vector` | 309 passed |
+| `XRay.Office.Containers` | 109 passed |
+| `XRay.Office.WordProcessing` | **2076** passed — 2072 at the round's base plus this round's 4 |
+| `XRay.Office.Spreadsheets` | 1484 passed |
+| `XRay.Office.Presentations` | 1205 passed |
+| `XRay.Office.Markup` | 259 passed |
+| `XRay.Office.Fidelity` | **10 failed of 552**, 0 skipped — the round's base figure exactly, and the known set: `TabStopComparisonTests` and `PageDrawingComparisonTests` in four formats each, `JustificationShrinkComparisonTests` and `SheetDrawingComparisonTests` |
 
 Build: 0 warnings, 0 errors.

@@ -18,7 +18,7 @@ round 152 could discriminate at, which is why its conclusion survived its own co
 | | |
 |---|---|
 | tree | `/home/user/libreoffice-core`, base `a3159ce0d` *(A split table row is ruled once at the cut (O83))* |
-| ours | `dotnet/tools/…/Paperless.Cli`, rebuilt 2026-09-18 12:18:43 UTC for the `head` leg |
+| ours | `dotnet/tools/…/XRay.Office.Cli`, rebuilt 2026-09-18 12:18:43 UTC for the `head` leg |
 | reference | `/opt/libreoffice26.2/program/soffice` — **LibreOffice 26.2.4.2 `0229ac93fcf0d7cbc6376066c6f35021cef002dc`** |
 | C++ read | this checkout, `configure.ac` **27.2.0.0.alpha0+** — *not* the reference binary's source |
 | date | 2026-09-18 |
@@ -86,7 +86,7 @@ This is the [src] half; §2 is the [bin] half and stands on its own.
 
 ## 4. The change
 
-`dotnet/src/Paperless.WordProcessing/Layout/Escapement.cs`:
+`dotnet/src/XRay.Office.WordProcessing/Layout/Escapement.cs`:
 
 ```csharp
 -    => Proportion is 0 or 100 ? emSize : Twips(emSize.Twips * Proportion / 100.0);   // Math.Round
@@ -190,7 +190,7 @@ document. `sweep.sh`, `diff-legs.py`, `confinement.txt`.
 | sheets | xls / xlsm / xlsx | **0** | 307 |
 
 **118 of 1620 moved and 1502 are byte-identical**, and the 609 slides and sheets renderings are
-untouched — the layering holding, measured rather than inferred, because `Paperless.Presentations`
+untouched — the layering holding, measured rather than inferred, because `XRay.Office.Presentations`
 has an escapement of its own and a different unit.
 
 Beside §6's denominator this is the *"census what a rule paints"* rule again: **57 `.docx` state an
@@ -266,7 +266,7 @@ Eleven point is 220 twips, 58 per cent of it is 127.6, the reference's layout se
 — and its writer prints **6.4**. The old expectation was met by a size that was wrong by a twip, so
 these tests were passing *because* of the defect.
 
-`Paperless.TestKit.LibreOffice.PdfFontSizes.AsLibreOfficePrintsIt` is the correction: both sides'
+`XRay.Office.TestKit.LibreOffice.PdfFontSizes.AsLibreOfficePrintsIt` is the correction: both sides'
 sizes are rounded to a tenth of a point through their twip count before they are compared, which is
 a no-op on the reference's half. The alternative — loosening the tolerance to 0.05 pt — would accept
 a size half a tenth out in either direction, and the other alternative, printing a coarser size in
@@ -280,15 +280,15 @@ Every project run individually and totalled, on the binary this round ships:
 
 | project | result |
 |---|---|
-| `Paperless.Core` | 591 passed |
-| `Paperless.Text` | 750 passed |
-| `Paperless.Vector` | 309 passed |
-| `Paperless.Containers` | 109 passed |
-| `Paperless.WordProcessing` | **2072** passed (2048 at the round's base, plus this round's 24) |
-| `Paperless.Spreadsheets` | 1484 passed |
-| `Paperless.Presentations` | 1205 passed |
-| `Paperless.Markup` | 259 passed |
-| `Paperless.Fidelity` | **10 failed of 552**, 0 skipped — the round's base figure exactly |
+| `XRay.Office.Core` | 591 passed |
+| `XRay.Office.Text` | 750 passed |
+| `XRay.Office.Vector` | 309 passed |
+| `XRay.Office.Containers` | 109 passed |
+| `XRay.Office.WordProcessing` | **2072** passed (2048 at the round's base, plus this round's 24) |
+| `XRay.Office.Spreadsheets` | 1484 passed |
+| `XRay.Office.Presentations` | 1205 passed |
+| `XRay.Office.Markup` | 259 passed |
+| `XRay.Office.Fidelity` | **10 failed of 552**, 0 skipped — the round's base figure exactly |
 
 The ten are the known set: `TabStopComparisonTests` on `list-label-overrun` in four formats,
 `JustificationShrinkComparisonTests`, `PageDrawingComparisonTests` on `paginated` in four formats

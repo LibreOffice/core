@@ -8,7 +8,7 @@ W = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
 BASE = os.path.dirname(os.path.abspath(__file__))
 SRC  = os.path.join(BASE, 'ug133.docx')
 OPS  = '/home/user/libreoffice-core/.claude/worktrees/words-r44/.claude/skills/render-comparison/scripts/pdf-ops.py'
-CLI  = '/home/user/libreoffice-core/.claude/worktrees/words-r44/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli'
+CLI  = '/home/user/libreoffice-core/.claude/worktrees/words-r44/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli'
 for p, u in (('w','http://schemas.openxmlformats.org/wordprocessingml/2006/main'),):
     ET.register_namespace(p, u)
 

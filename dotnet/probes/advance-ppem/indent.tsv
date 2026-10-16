@@ -3,7 +3,7 @@
 # 26.2.4.2: /opt/libreoffice26.2/program/soffice -> LibreOffice 26.2.4.2 0229ac93fcf0d7cbc6376066c6f35021cef002dc
 # fonts: system /usr/share/fonts, the tarball's Latin duplicates and Latin Noto aside
 # fc-match Arial -> LiberationSans-Regular.ttf: "Liberation Sans" "Regular"
-# ours: /home/user/wt-advance/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+# ours: /home/user/wt-advance/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 binary	size_pt	space_twips	floor_pt	round_pt	measured_pt	matches
 24.2.7.2	8	44.453	13.200	13.200	13.181	floor (undecided)
 26.2.4.2	8	44.453	13.200	13.200	13.181	floor (undecided)

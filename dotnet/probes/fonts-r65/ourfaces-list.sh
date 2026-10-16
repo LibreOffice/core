@@ -3,7 +3,7 @@
 set -uo pipefail
 LIST="${1:?}"; OUT="${2:?}"
 ROOT=/home/user/sample-files
-CLI="${PAPERLESS_CLI:?}"
+CLI="${XRAY_OFFICE_CLI:?}"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1700000000}"

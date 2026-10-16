@@ -124,7 +124,7 @@ words, byte-identical in count to the unmodified document**, so we take the `mc:
 - **Only the 271 zip-readable words documents were censused.** The 66 `.doc`/`.rtf` files have their
   own positioned-table paths (`Ww8Frames`, `RtfDocumentReader.Tables`) and their own drawing readers,
   and neither census reaches them. `absrc-pac-01-info-note-en.doc` is an open `pagination` failure.
-- **Nor the other two families.** Both changed files are inside `Paperless.WordProcessing`, so no
+- **Nor the other two families.** Both changed files are inside `XRay.Office.WordProcessing`, so no
   shared layer is touched — but if that stops being true the census must be redone.
 - **A frame that is emitted is also an obstacle.** Fix B emits 35 new frames on `068`. Anchored
   frames narrow and push the lines of the paragraphs they overlap, so a document can move without

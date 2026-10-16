@@ -4,7 +4,7 @@
 # gate bank names it (<stem>__<ext>.pdf), so it can be scored against the banked reference.
 set -u
 ROOT=${ROOT:-/home/user/corpus-odf}
-CLI=${PAPERLESS_CLI:?set PAPERLESS_CLI}
+CLI=${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI}
 EXT=${1:?ext}
 OUT=${2:?outdir}
 JOBS=${3:-2}

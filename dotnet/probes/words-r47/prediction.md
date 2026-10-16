@@ -51,7 +51,7 @@ neither band can see:
 
 - **The 66 `.doc`.** Their levels live in the WW8 `LSTF`/`LVLF` structures, which no
   zip-level census reads. `Ww8DocumentReader` builds the same `PageLabel` as the OOXML
-  reader and the fix is in `Paperless.Text`, so the binary half is **reachable and
+  reader and the fix is in `XRay.Office.Text`, so the binary half is **reachable and
   entirely uncounted**. Round 45 had to go through LibreOffice's own flat-ODF export to
   see that half at all, and this round did not.
 - **A label taller through its *face* rather than its size.** A level set in Symbol,
@@ -89,9 +89,9 @@ gain content-pushing height. The ±1 cluster is 13 documents at −1 (we under-p
 
 ## The cross-track measurement owed
 
-`Paperless.Text` is a shared layer and `Paperless.Presentations` calls
+`XRay.Office.Text` is a shared layer and `XRay.Office.Presentations` calls
 `ParagraphLayouter`. `RaisesTextHeight` defaults **false** and the only caller that sets
-it is `PageParagraph.MeasurementObjects` in `Paperless.WordProcessing`, so no slide and no
+it is `PageParagraph.MeasurementObjects` in `XRay.Office.WordProcessing`, so no slide and no
 sheet can move. That is an argument, and the routine asks for a measurement: slides and
 sheets will be rendered whole at base and at this tree with `SOURCE_DATE_EPOCH` pinned and
 `/CreationDate` normalised, and the result reported whichever way it comes out.

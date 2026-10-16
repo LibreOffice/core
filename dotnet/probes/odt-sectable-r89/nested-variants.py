@@ -10,7 +10,7 @@ that says it -- and whether the outer section's own margins reach it, plus what
 import re, subprocess, sys, zipfile, pathlib
 
 SOFFICE = '/opt/libreoffice26.2/program/soffice'
-PROFILE = 'file:///tmp/paperless-lo-r89nested'
+PROFILE = 'file:///tmp/xray-office-lo-r89nested'
 LONG = ('LONGLINE lorem ipsum dolor sit amet consectetuer adipiscing elit sed diam nonummy nibh '
         'euismod tincidunt ut laoreet dolore magna aliquam erat volutpat ut wisi enim ad minim '
         'veniam quis nostrud exerci tation ullamcorper suscipit lobortis nisl')

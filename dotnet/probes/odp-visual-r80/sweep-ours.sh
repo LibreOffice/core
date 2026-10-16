@@ -15,7 +15,7 @@
 set -uo pipefail
 ROOT="${1:?corpus root}"; BANK="${2:?bank dir}"; OUT="${3:?outdir}"; WORKERS="${4:-2}"
 EXT="${5:-odp}"; KEEP_PDFS="${KEEP_PDFS:-1}"
-CLI="${PAPERLESS_CLI:?set PAPERLESS_CLI to the binary you mean to measure}"
+CLI="${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI to the binary you mean to measure}"
 [ -x "$CLI" ] || { echo "no CLI at $CLI" >&2; exit 1; }
 [ -d "$BANK/ref" ] || { echo "no $BANK/ref" >&2; exit 1; }
 mkdir -p "$OUT/ours" && OUT="$(cd "$OUT" && pwd)"

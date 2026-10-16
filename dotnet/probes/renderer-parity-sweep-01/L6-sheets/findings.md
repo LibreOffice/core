@@ -51,7 +51,7 @@ first column's text at **x = 54.822 pt**.
 `pageSetup`, no `pageMargins` and no `printOptions`**, so nothing in the file selects one
 column per page. `xl/styles.xml` `fonts[0]` is `<sz val="12"/><name val="Calibri"/>`.
 
-**Where it lives in the source.** `dotnet/src/Paperless.Spreadsheets/Layout/SheetFonts.cs:237`
+**Where it lives in the source.** `dotnet/src/XRay.Office.Spreadsheets/Layout/SheetFonts.cs:237`
 
 ```
     private const double DigitWidthCarry = 0.57;
@@ -184,7 +184,7 @@ fault.
 
 **Documents:** #136 `Application_Compliance_Checklist_5_Apr_2021.xlsx`.
 
-**What the pages show.** `cases.md` reads this as "Paperless prints three things the reference
+**What the pages show.** `cases.md` reads this as "X-Ray.Office prints three things the reference
 leaves off a printed sheet: the column letters, the row numbers, and the cell comments". At
 200 dpi that reading is wrong in an instructive way: **both engines print the headings.** The
 reference's are 8 px tall and sit inside their strip; ours are 40 px tall and cover the first
@@ -215,7 +215,7 @@ Length headingHeight = setup.PrintsHeadings ? HeadingHeight * _scale : Length.Ze
 Calc sets the heading font on a device whose map mode is `aOffsetMode`
 (`printfun.cxx:2350-2357`), and `InitModes` builds that map mode with the zoom as its scale
 fraction (`:2642`), so `PrintColHdr`'s `DrawText` (`:1417`) is scaled with the cells.
-`Paperless.Spreadsheets/TODO.md:2920` already notes that the two constants are placed unscaled
+`XRay.Office.Spreadsheets/TODO.md:2920` already notes that the two constants are placed unscaled
 by pagination and scaled by drawing — the drawing half is the one that was not done.
 
 **Probe, on 24.2.7.2.** A 20-row sheet with `printOptions headings="1"`:
@@ -372,7 +372,7 @@ cells are far wider than the page: every line on it is the continuation of a str
 in a column on page 1. Ours is white.
 
 **Where it lives in the source.** This is already diagnosed, in the module's own TODO
-(`dotnet/src/Paperless.Spreadsheets/TODO.md`, the item beginning "**A cell's overflow stops at
+(`dotnet/src/XRay.Office.Spreadsheets/TODO.md`, the item beginning "**A cell's overflow stops at
 a horizontal page break**"), measured on `xls-features.xls`: page 4 is "3 words in ours against
 1011 in the reference". `SpreadsheetPages.DrawCell` is driven by the placed columns of the
 page, so a cell in column A is drawn only on the page whose column band contains A;
@@ -405,7 +405,7 @@ from 2022 and 2023; the reference prints recalculated dates.
 value is a hint for a reader that cannot calculate. So the reference is right and we are wrong.
 
 **The trap the lane brief flags, resolved.** This is **not** the `SOURCE_DATE_EPOCH` question.
-That one is about `&D`/`&T` header fields, where `paperless render` honours the
+That one is about `&D`/`&T` header fields, where `xray-office render` honours the
 reproducible-builds convention and `batch-check.sh` renders the reference unpinned — a genuine
 asymmetry, and the reason `dotnet/CLAUDE.md` says a stored verdict on a date-bearing sheet goes
 stale on its own. Here the divergence is in *cell* values driven by a formula, and it would be
@@ -427,14 +427,14 @@ as the reason two chart-set workbooks cannot match.
 **What the document contains.** `xl/styles.xml`:
 `<numFmt numFmtId="166" formatCode="mm/dd/yy\ aaaa"/>`.
 
-**Where it lives in the source.** `dotnet/src/Paperless.Core/Numbers/NumberFormatter.cs:790-797`
+**Where it lives in the source.** `dotnet/src/XRay.Office.Core/Numbers/NumberFormatter.cs:790-797`
 handles the `d`/`dd`/`ddd`/`dddd` family and nothing else names a day; there is no `a` arm, so
 the run is emitted as a literal. LibreOffice's scanner has `NF_KEY_AAA` and `NF_KEY_AAAA`
 beside `NNN`/`NNNN` in its date-keyword set (`svl/source/numbers/zforscan.cxx:75-77` and the
 three date-keyword switches at `:1345`, `:2514`, `:2835`), so `AAA` is the short day name and
 `AAAA` the long one.
 
-**Cross-lane.** The fix is in `Paperless.Core/Numbers`, which this lane does not own — see the
+**Cross-lane.** The fix is in `XRay.Office.Core/Numbers`, which this lane does not own — see the
 section at the end.
 
 **Confidence: certain** on cause and location.
@@ -461,7 +461,7 @@ DataPilot with its own built-in cell styles, applying `STR_PIVOT_STYLENAME_TITLE
 `_CATEGORY`, `_FIELDNAME`, `_RESULT`, `_TOP` and `_INNER` over the output range and
 `lcl_SetFrame` around parts of it (`sc/source/core/data/dpoutput.cxx:783-790, 811, 825, 998,
 1052, 1245-1246`). Those built-in styles carry the box border that draws the grid. Nothing in
-`Paperless.Spreadsheets` reads `xl/pivotTables/` for OOXML at all (`MsBinary/XlsPivotCache.cs`
+`XRay.Office.Spreadsheets` reads `xl/pivotTables/` for OOXML at all (`MsBinary/XlsPivotCache.cs`
 is the BIFF pivot-cache reader and is a different thing).
 
 **No patch.** The scoped version — take `pivotTableDefinition/location/@ref` and apply a box
@@ -485,8 +485,8 @@ to `xl/media/image1.png`. `<picture>` is the sheet background.
 `aPropMap.setProperty(PROP_BackGraphic, rModel.mxGraphic); aPropMap.setProperty(
 PROP_BackGraphicLocation, css::style::GraphicLocation_TILED);`
 (`sc/source/filter/oox/pagesettings.cxx:991-995`). `git grep '"picture"'` over
-`dotnet/src/Paperless.Spreadsheets` and `dotnet/src/Paperless.Ooxml` returns nothing.
-`Paperless.Spreadsheets/TODO.md` already lists "**A page's own background and border**"
+`dotnet/src/XRay.Office.Spreadsheets` and `dotnet/src/XRay.Office.Ooxml` returns nothing.
+`XRay.Office.Spreadsheets/TODO.md` already lists "**A page's own background and border**"
 (`ATTR_PAGE_BACKGROUND`) as unread by all three readers.
 
 **Reach.** Two corpus workbooks state a sheet `<picture>`: this one (4 sheets) and
@@ -548,7 +548,7 @@ establish.
 
 ## Cross-lane dependencies
 
-- **`dotnet/src/Paperless.Core/Numbers/NumberFormatter.cs`** — RC-8. The date-format renderer
+- **`dotnet/src/XRay.Office.Core/Numbers/NumberFormatter.cs`** — RC-8. The date-format renderer
   needs `AAA` and `AAAA` arms beside its `ddd`/`dddd` arms (short and long day-of-week names),
   matching `NF_KEY_AAA`/`NF_KEY_AAAA` in `svl/source/numbers/zforscan.cxx:75-77`. The format
   code that exercises it is `mm/dd/yy\ aaaa` in
@@ -557,7 +557,7 @@ establish.
   set at the same time.
 
 No other lane's files are needed. RC-9 and RC-10 would both be new code inside
-`Paperless.Spreadsheets`, and RC-2 and RC-6 are changes to files this lane owns.
+`XRay.Office.Spreadsheets`, and RC-2 and RC-6 are changes to files this lane owns.
 
 ---
 

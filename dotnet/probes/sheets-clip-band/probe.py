@@ -16,7 +16,7 @@ OUT = sys.argv[1]
 DOCS = sys.argv[2:] or [
     "/home/user/sample-files/sheets/done-011/xlsx/FY2023-AIP-grants.xlsx",
 ]
-CLI = os.environ.get("PAPERLESS_CLI")
+CLI = os.environ.get("XRAY_OFFICE_CLI")
 LO = {"24.2": os.environ.get("LO24", "soffice"),
       "26.2": os.environ.get("LO26", "/opt/libreoffice26.2/program/soffice")}
 PAGE = int(os.environ.get("PAGE", "3"))

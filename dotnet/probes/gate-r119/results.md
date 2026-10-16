@@ -6,7 +6,7 @@ Full-corpus gate at HEAD `90b5b2207`, both legs fresh. Reference
 assumed. Measured leg published to `/home/user/gate-r119-cli`.
 
 ```
-PAPERLESS_CLI=/home/user/gate-r119-cli/Paperless.Cli REF_SOFFICE=/opt/libreoffice26.2/program/soffice \
+XRAY_OFFICE_CLI=/home/user/gate-r119-cli/XRay.Office.Cli REF_SOFFICE=/opt/libreoffice26.2/program/soffice \
 RENDER_TIMEOUT=300 batch-check.sh /home/user/sample-files "*" /home/user/gate-r119 3
 ```
 

@@ -1,6 +1,6 @@
 # The converted corpus at `995e83aa3` — every round of this session merged
 
-    ours = Paperless.Cli @ 995e83aa3      ref = 26.2.4.2 via $REF_SOFFICE
+    ours = XRay.Office.Cli @ 995e83aa3      ref = 26.2.4.2 via $REF_SOFFICE
     fonts = all five tarball confounds aside          rule = batch-check.sh of 2026-09-05
 
     TOTAL 1285  MATCH 1058  MISMATCH 214  REF-CANNOT-RENDER 13

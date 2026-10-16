@@ -44,8 +44,8 @@ escapes in shared strings that the brief does not list.
 **P1 — the seat.** One decoder for `ST_Xstring`, applied where SpreadsheetML rich text is
 flattened: `XlsxSharedStrings.ReadRichString` and, in lockstep, `XlsxRichRuns.Read`, which
 computes run offsets into that same flattened string. If the two are not changed together the
-runs will point at the wrong characters. Nothing in `Paperless.WordProcessing`,
-`Paperless.Presentations` or the header/footer path changes.
+runs will point at the wrong characters. Nothing in `XRay.Office.WordProcessing`,
+`XRay.Office.Presentations` or the header/footer path changes.
 
 **P2 — `sheets/extra-001` passes.** `FY2018_Q4_UAS_Sightings.xlsx` goes from `304/302`,
 `57225/55825` to `302/302` and a word count inside the 2% band. I expect pages to land exactly

@@ -3,7 +3,7 @@
 Written **before** implementing the fix and before any reach sweep. Scored in `results.md`.
 
 Baseline established first, on the unchanged tree:
-`Paperless.Fidelity.Tests` — **Failed 30, Passed 520, Skipped 0, Total 550**, which is the
+`XRay.Office.Fidelity.Tests` — **Failed 30, Passed 520, Skipped 0, Total 550**, which is the
 briefed baseline exactly.
 
 ## What the brief said, and what the group actually holds
@@ -35,7 +35,7 @@ below are read against them rather than against the brief.
   truncates by row on the same rule.
 - **Cluster B is not our defect and is already closed.** It is the *reference's*
   table-only-header import defect, diagnosed in round 43, recorded in `TODO.batches.md` §2
-  and pinned by `tests/Paperless.WordProcessing.Tests/SectionInheritedHeaderTests.cs` with
+  and pinned by `tests/XRay.Office.WordProcessing.Tests/SectionInheritedHeaderTests.cs` with
   the explicit instruction that following the reference here requires deleting a test that
   says why not to. LibreOffice copies a section's header into a following section only when
   the source header holds at least one top-level `w:p`; both `header1.xml` and `header6.xml`
@@ -60,7 +60,7 @@ inheritance failure in LibreOffice's importer that we deliberately do not reprod
 | P5 | `762.doc` and `info-bulletin-601.doc` are **not** "extra" documents: both are one page short with word deltas of −2 and −4, so the group's own classification is wrong for two of its seven | 80% |
 | P6 | Reach across the 200 banked `words` references: **10–30 documents change ink**, and **1–3 change verdict**, net non-negative | 50% |
 | P7 | No regression: `words/done-*` re-run gives the same verdict for every document it gave one for before | 70% |
-| P8 | `Paperless.Fidelity.Tests` stays at 30 failed / 550 total | 75% |
+| P8 | `XRay.Office.Fidelity.Tests` stays at 30 failed / 550 total | 75% |
 | P9 | The fix needs a new `PageFrame` property and one truncation site in `FrameLayout.Content`; no change to `OoxmlXml` at all | 80% |
 
 ## What would refute the approach

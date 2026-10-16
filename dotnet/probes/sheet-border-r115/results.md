@@ -25,8 +25,8 @@ resolves the stated width*. Reference throughout is **26.2.4.2**
   0 alphanumeric counts move**, as a stroke weight must not.
 
 **Inferred, and said so.** The words and slides tracks are argued unmoved from confinement — the
-diff is three files, all under `src/Paperless.Spreadsheets`, and `git grep` finds no caller of any
-of them outside `Paperless.Spreadsheets/Layout` and `…/Ooxml` — rather than swept. Nothing here
+diff is three files, all under `src/XRay.Office.Spreadsheets`, and `git grep` finds no caller of any
+of them outside `XRay.Office.Spreadsheets/Layout` and `…/Ooxml` — rather than swept. Nothing here
 rests on a visual reading: **no blind reader is available in this container** (established three
 times; a sibling session cannot see `/home/user/...` and cannot report back), and I did not open a
 page myself.
@@ -148,7 +148,7 @@ reference's own dash arrays on the fixture: `mediumDashed` alone draws `[8.0 2.5
 
 ## 3. What changed
 
-`src/Paperless.Spreadsheets/Layout/SheetPageDecoration.cs`
+`src/XRay.Office.Spreadsheets/Layout/SheetPageDecoration.cs`
 
 - `Stroke`/`Line` are instance methods; a new `Drawn(border, width)` applies the rounding, the
   scale and the floor, and the **extension** at each end (half the crossing border's width) is
@@ -157,10 +157,10 @@ reference's own dash arrays on the fixture: `mediumDashed` alone draws `[8.0 2.5
   the **unscaled** widths, because in the reference the `Style` comparison happens before the map
   mode's zoom and its 1-twip special case would not survive scaling.
 
-`src/Paperless.Spreadsheets/Ooxml/XlsxCellDecoration.cs` — `double` → 10/15/10; `mediumDashed` →
+`src/XRay.Office.Spreadsheets/Ooxml/XlsxCellDecoration.cs` — `double` → 10/15/10; `mediumDashed` →
 `Dashed`; `slantDashDot` → `FineDashed`.
 
-`src/Paperless.Spreadsheets/MsBinary/XlsCellDecoration.cs` — style 6 → 10/30/10.
+`src/XRay.Office.Spreadsheets/MsBinary/XlsCellDecoration.cs` — style 6 → 10/30/10.
 
 ODS is untouched: ODF states the widths outright and `ApplyLineWidths` already reads
 `style:border-line-width`, which LibreOffice writes for every double.
@@ -247,7 +247,7 @@ strokes them. The three still >10 % heavier are `022_Pareto_Chart_Template` (1.2
 ## 6. Reach, honestly
 
 ```sh
-PAPERLESS_CLI=…/Release/net10.0/linux-x64/Paperless.Cli SOURCE_DATE_EPOCH=1700000000 \
+XRAY_OFFICE_CLI=…/Release/net10.0/linux-x64/XRay.Office.Cli SOURCE_DATE_EPOCH=1700000000 \
   python3 sweep.py /home/user/sample-files 'sheets/*/*/*' /home/user/sb-{base,after} 3
 python3 reach.py /home/user/sb-base /home/user/sb-after moved.tsv
 ```
@@ -266,18 +266,18 @@ gate, and claiming otherwise would be claiming reach the gate cannot see.** Ink 
 instrument, and §5 is the ink measurement.
 
 The words and slides tracks were **not** swept. The argument that they cannot move is the diff's
-confinement — three files under `src/Paperless.Spreadsheets`, and
+confinement — three files under `src/XRay.Office.Spreadsheets`, and
 
 ```sh
 git grep -ln 'SheetPageDecoration\|XlsxCellDecoration\|XlsCellDecoration' -- 'src/**/*.cs'
 ```
 
-names only `src/Paperless.Spreadsheets/Layout` and `src/Paperless.Spreadsheets/Ooxml`. That is an
+names only `src/XRay.Office.Spreadsheets/Layout` and `src/XRay.Office.Spreadsheets/Ooxml`. That is an
 inference, not a measurement, and it is labelled as one.
 
 ## 7. Tests
 
-`tests/Paperless.Spreadsheets.Tests/SheetBorderWidthTests.cs`, eight cases over three new
+`tests/XRay.Office.Spreadsheets.Tests/SheetBorderWidthTests.cs`, eight cases over three new
 fixtures — `sheet-border-widths.xlsx`, `sheet-border-widths-scaled.xlsx` (the same thirteen cells
 at `pageSetup scale="42"`) and `sheet-border-widths.xls` (26.2.4.2's own `.xls` of the first).
 Every expectation is a number read out of 26.2.4.2's PDF of that fixture.
@@ -292,20 +292,20 @@ Run project by project rather than as a solution, and the counts are the ones th
 
 | project | passed | failed | skipped |
 |---|---:|---:|---:|
-| Paperless.Core | 588 | 0 | 0 |
-| Paperless.Containers | 109 | 0 | 0 |
-| Paperless.Text | 728 | 0 | 0 |
-| Paperless.Vector | 309 | 0 | 0 |
-| Paperless.Rendering | 164 | 0 | 0 |
-| Paperless.Markup | 259 | 0 | 0 |
-| Paperless.OpenDocument | 160 | 0 | 0 |
-| Paperless.WordProcessing | 1938 | 0 | 0 |
-| Paperless.Spreadsheets | 1360 | 0 | 0 |
-| Paperless.Presentations | 1193 | 0 | 0 |
-| Paperless.Fidelity | 542 | **10** | 0 |
+| XRay.Office.Core | 588 | 0 | 0 |
+| XRay.Office.Containers | 109 | 0 | 0 |
+| XRay.Office.Text | 728 | 0 | 0 |
+| XRay.Office.Vector | 309 | 0 | 0 |
+| XRay.Office.Rendering | 164 | 0 | 0 |
+| XRay.Office.Markup | 259 | 0 | 0 |
+| XRay.Office.OpenDocument | 160 | 0 | 0 |
+| XRay.Office.WordProcessing | 1938 | 0 | 0 |
+| XRay.Office.Spreadsheets | 1360 | 0 | 0 |
+| XRay.Office.Presentations | 1193 | 0 | 0 |
+| XRay.Office.Fidelity | 542 | **10** | 0 |
 | **total** | **7350** | **10** | **0** |
 
-`Paperless.Fidelity` ran 552 of 552 with **0 skipped**, so LibreOffice was present and the
+`XRay.Office.Fidelity` ran 552 of 552 with **0 skipped**, so LibreOffice was present and the
 project covered what it is meant to. Its ten failures are the two families this repository leaves
 failing on purpose plus one sheet row, and **all ten fail at the round's base too**:
 

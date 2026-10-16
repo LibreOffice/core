@@ -10,6 +10,6 @@
     <AssemblyName>CharProbe</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Paperless.WordProcessing\Paperless.WordProcessing.csproj" />
+    <ProjectReference Include="..\..\..\src\XRay.Office.WordProcessing\XRay.Office.WordProcessing.csproj" />
   </ItemGroup>
 </Project>

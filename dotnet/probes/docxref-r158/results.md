@@ -7,7 +7,7 @@ Every rendering under `SOURCE_DATE_EPOCH=0`.
 ## Where this came from
 
 The user, looking at the published parity artefact, asked about a page pair in which *"one page
-is completely empty and the other rendered by paperless has content"*, and proposed that a page
+is completely empty and the other rendered by xray-office has content"*, and proposed that a page
 break — or another of Word's break kinds — was being dropped.
 
 **It is not a break.** The witness is `FAA 2025-26 Holdover Tables.docx` and the answer is
@@ -134,7 +134,7 @@ of this round did substitute it and turned `Exhibit 2` into `Exhibit 1`, which i
 document is opened or printed — only F9, or *update fields before printing*, changes what the
 reader sees — so the disagreement below is about *when* a field is evaluated rather than about what
 it evaluates to, and the reader's answer is their word processor's. `DocxReferenceFields` is gated
-on `PAPERLESS_LIBREOFFICE_QUIRKS`, off by default, and everything from here on describes the
+on `XRAY_OFFICE_LIBREOFFICE_QUIRKS`, off by default, and everything from here on describes the
 switched-on behaviour.
 
 What it costs is one gate row and is written down in `dotnet/TODO.word-parity.md`:

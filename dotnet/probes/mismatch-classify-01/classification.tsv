@@ -1,5 +1,5 @@
-# The 87 documents the whole-corpus gate scored MISMATCH at Paperless 2f4709c08.
-# ours   = Paperless.Cli @ 2f4709c08, PAPERLESS_BUNDLED_FONTS unset (installed faces win)
+# The 87 documents the whole-corpus gate scored MISMATCH at XRay.Office 2f4709c08.
+# ours   = XRay.Office.Cli @ 2f4709c08, XRAY_OFFICE_BUNDLED_FONTS unset (installed faces win)
 # ref24  = /usr/bin/soffice, LibreOffice 24.2.7.2 420(Build:2) - what batch-check.sh measures
 # ref26  = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 0229ac93fcf0d7cb,
 #          with the eight Latin duplicate faces moved aside (.duplicates-aside/.noto-aside)
@@ -71,7 +71,7 @@ slides/missing-001/pptx/NWD-GLA-Community-Outreach-Day-Oct-2025.pptx	pptx	13	13	
 words/ceiling-001/docx/ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx	docx	14	15	16	18420	17751	18492	pages,words	pages	pages,words	refs-disagree	14/15/16 pages; our glyphs are within 0.4% of 26.2 and 3.8% of 24.2
 words/chartset-005/docx/087_Printable_Graph_Paper_Template_Green_Theme_0c14ea04.docx	docx	2	1	2	37	27	37	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
 words/chartset-006/docx/097_Business_Case_Template_Elegant_Layout_3ba9cbf2.docx	docx	2	1	2	276	276	276	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
-words/chartset-012/docx/024_Unit_Circle_Chart_Colorful_Circles_7c92601e.docx	docx	1	1	1	517	557	557	words	words	match	docx-smartart	we draw an empty frame where the reference draws a five-node SmartArt diagram. Diagram support exists for PPTX (Paperless.Presentations/Ooxml/PptxDiagram) and not for DOCX. Three corpus docx carry a diagram; the other two pass inside the band
+words/chartset-012/docx/024_Unit_Circle_Chart_Colorful_Circles_7c92601e.docx	docx	1	1	1	517	557	557	words	words	match	docx-smartart	we draw an empty frame where the reference draws a five-node SmartArt diagram. Diagram support exists for PPTX (XRay.Office.Presentations/Ooxml/PptxDiagram) and not for DOCX. Three corpus docx carry a diagram; the other two pass inside the band
 words/done-005/docx/f445896eb008d14c1746fc37d412dc22.docx	docx	15	16	15	27066	27066	27066	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
 words/done-006/doc/003.doc	doc	5	4	5	5761	5761	5761	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
 words/done-011/doc/AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.doc	doc	21	20	20	38766	38764	38764	pages	pages	match	pagination-break	21 pages against 20; our page 3 holds MORE than the reference's (3266 against 3117) and is then followed by a 245-glyph page 4 the reference has no counterpart for. Every later page is exactly one behind

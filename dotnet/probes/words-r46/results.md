@@ -121,7 +121,7 @@ turns the flag off, none lack it, and the 66 `.doc` are untouched. 55 renderings
 
 ### Tests
 
-Seven in `DocxWidowControlTests`, `Paperless.WordProcessing` 746 → **753**. All seven verified by
+Seven in `DocxWidowControlTests`, `XRay.Office.WordProcessing` 746 → **753**. All seven verified by
 reintroduction with `verify-test.sh`, four mutations:
 
 | mutation | fails |
@@ -135,7 +135,7 @@ The last two are the two refuted alternatives — "widow control is simply on fo
 "the document-wide default overrides an explicit off" — pinned in code. None of the seven is a
 precondition.
 
-Confined to `Paperless.WordProcessing`, so no cross-track sweep is owed for this half.
+Confined to `XRay.Office.WordProcessing`, so no cross-track sweep is owed for this half.
 
 ---
 
@@ -190,7 +190,7 @@ authored probe rows exact against 11 of 16 before**, and the aggregate word erro
 
 ### The cross-track measurement a shared-layer change owes
 
-`Paperless.Text` sits below all three families. Slides and sheets — 334 documents — were rendered
+`XRay.Office.Text` sits below all three families. Slides and sheets — 334 documents — were rendered
 whole with our own CLI at `453ed3081` and at this tree, `SOURCE_DATE_EPOCH` pinned, `/CreationDate`
 and `/ID` normalised out: **334 of 334 byte-identical, 0 differing.** The old code was restored with
 `git checkout HEAD -- <file>` and `git diff ee87a6d0e..HEAD --stat -- dotnet/src` checked non-empty
@@ -198,7 +198,7 @@ before committing, which is round 45's trap.
 
 ### Tests
 
-Five in `PictureAloneLineHeightTests`, `Paperless.Text` 277 → **282**. Three verified by
+Five in `PictureAloneLineHeightTests`, `XRay.Office.Text` 277 → **282**. Three verified by
 reintroduction:
 
 | mutation | fails |

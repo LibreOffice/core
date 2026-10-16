@@ -5,7 +5,7 @@ evidence about an environment and not about the code:
 
 | | |
 |---|---|
-| ours | `Paperless.Cli` at `2f4709c08`, `PAPERLESS_BUNDLED_FONTS` unset (installed faces win) |
+| ours | `XRay.Office.Cli` at `2f4709c08`, `XRAY_OFFICE_BUNDLED_FONTS` unset (installed faces win) |
 | ref24 | `/usr/bin/soffice` — **LibreOffice 24.2.7.2 420(Build:2)**, which is what `batch-check.sh` measures against |
 | ref26 | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2 0229ac93fcf0d7cb**, with the eight Latin duplicate faces moved aside |
 | fonts | system fontconfig: Carlito, Caladea, Liberation, DejaVu, WenQuanYi, IPAGothic |
@@ -161,7 +161,7 @@ an eighth instance on a track the file says is "nearly untouched by this".
 print the cached value the file was saved with. `040_Blood_pressure_tracker` prints
 `11/6/2022` where both references print `9/6/2026`; `sistem-rekod-markah` prints 1 395
 cached `5`s where both references print 1 395 `#N/A`. Closing these means a formula
-evaluator, and `Paperless.Spreadsheets` has none. **This is the same class as the caution
+evaluator, and `XRay.Office.Spreadsheets` has none. **This is the same class as the caution
 about date-bearing sheets in `dotnet/CLAUDE.md`, and it is worth separating from it:** that
 caution is about `&D` in a *header*, which `SOURCE_DATE_EPOCH` pins on our side and not on
 the reference's. This is about `TODAY()` in a *cell*, which no environment variable touches
@@ -184,7 +184,7 @@ Each was read or measured; none shares a mechanism with another.
 - **`024_Unit_Circle_Chart…docx` — DOCX SmartArt drawn as an empty frame.** Read: we draw an
   empty rectangle where the reference draws five coloured circles reading `YOUR TEXT`, and
   the −40 glyph deficit is exactly those five. Diagram support exists and is thorough — ten
-  files under `Paperless.Presentations/Ooxml/PptxDiagram*.cs` — and is reachable only from
+  files under `XRay.Office.Presentations/Ooxml/PptxDiagram*.cs` — and is reachable only from
   the PPTX path. Three corpus DOCX carry a `word/diagrams/` part; the other two
   (`SPA-06_mcar_part-6…docx`, `t_TEMPforInvProgs.docx`) are missing their diagrams too and
   pass the gate anyway, at −197 and −212 glyphs. **The gate is blind to two of the three.**

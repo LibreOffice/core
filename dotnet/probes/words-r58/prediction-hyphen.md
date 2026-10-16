@@ -1,6 +1,6 @@
 # words-r58 — second prediction, committed before the line-breaking change
 
-The 24.2.7.2 audit, `Paperless.Text/Layout/LineBreaker.cs`:473, a **shared-layer** site.
+The 24.2.7.2 audit, `XRay.Office.Text/Layout/LineBreaker.cs`:473, a **shared-layer** site.
 
 ## The site's claim, and what 26.2.4.2 actually does
 
@@ -37,7 +37,7 @@ exception rather than the rule.
 ## The change
 
 `MatchNumber` admits `HY` beside `OP` in the optional-bracket position, guarded on the preceding
-class not being `NU`. One clause, in `Paperless.Text`.
+class not being `NU`. One clause, in `XRay.Office.Text`.
 
 ## What the census can and cannot see
 

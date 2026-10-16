@@ -2,7 +2,7 @@
 
 ## Environment
 
-    ours   = Paperless.Cli @ f4b8c3825 (base) and @ f4b8c3825 + this round
+    ours   = XRay.Office.Cli @ f4b8c3825 (base) and @ f4b8c3825 + this round
     ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 (TDF tarball)
     fonts  = system fontconfig; ALL FOUR tarball confounds aside as of 2026-09-07 -- the
              Carlito/Caladea/Liberation/DejaVu duplicates, the Latin Noto, and the four
@@ -90,7 +90,7 @@ further 23 are its close relative. Six are not ODF defects at all.
 
 ## What was closed, and the three rules it took
 
-`dotnet/src/Paperless.Presentations/OpenDocument/OdpSlideLayout.cs`.
+`dotnet/src/XRay.Office.Presentations/OpenDocument/OdpSlideLayout.cs`.
 
 ### 1. Draw the master page under every slide that names it
 
@@ -203,11 +203,11 @@ slowly" is the wrong conclusion to draw from it — the harness is eliding the s
 
 ## Verification
 
-- `dotnet build Paperless.slnx -v q -nologo` → **0 warnings, 0 errors**.
+- `dotnet build XRay.Office.slnx -v q -nologo` → **0 warnings, 0 errors**.
 - Ten non-fidelity projects, run individually and totalled: **5940 passed, 0 failed, 0 skipped**
   — the 5932 baseline plus this round's 8 new tests, and the eight are all in
-  `Paperless.Presentations.Tests` (958 → 966).
-- `Paperless.Fidelity.Tests`: **542 passed, 10 failed, 0 skipped** of 552, the same ten names as
+  `XRay.Office.Presentations.Tests` (958 → 966).
+- `XRay.Office.Fidelity.Tests`: **542 passed, 10 failed, 0 skipped** of 552, the same ten names as
   the baseline — `PageDrawingComparisonTests` ×4, `TabStopComparisonTests` ×4,
   `SheetDrawingComparisonTests`, `JustificationShrinkComparisonTests`.
 - Both new rules are pinned by tests that fail without them: reverting rule 1 fails 3 of the 8,

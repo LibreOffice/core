@@ -102,7 +102,7 @@ Whole-page ink between the two renderings of `S_scale`, at 200 dpi: **0.117**.
 ```sh
 python3 scale.py <dir>
 for f in <dir>/*.docx; do
-  "$PAPERLESS_CLI" render "$f" --outdir ours
+  "$XRAY_OFFICE_CLI" render "$f" --outdir ours
   soffice --headless --convert-to pdf --outdir ref "$f"
 done
 pdftotext -bbox -f 1 -l 1 <pdf> - | grep '<word'

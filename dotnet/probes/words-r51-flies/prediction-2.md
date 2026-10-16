@@ -73,7 +73,7 @@ The other 23 are at ±0 or have double-figure slack.
   `TextWrap.Through`, so moving members should not move a single line of body text — but that is a
   reading of the code, not a measurement, and `docs-quality-MA.IMS.00001` (26 nested groups, 155
   pages) is where it would show. The sweep is the test.
-- **The other two families.** `DocxFrames` is `Paperless.WordProcessing`, so nothing outside words
+- **The other two families.** `DocxFrames` is `XRay.Office.WordProcessing`, so nothing outside words
   can be reached — but `PageFrame`, `FrameLayout` and `GroupOffset` are consumed by the shared
   layout, and this changes only what is put into them.
 - **Whether the missing shapes were dropped or merely coincident.** `056` draws 4 of its 20 nested

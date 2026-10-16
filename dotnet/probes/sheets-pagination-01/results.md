@@ -282,17 +282,17 @@ Every project run individually on the final tree.
 
 | project | result |
 |---|---|
-| `Paperless.Containers.Tests` | 109 passed, 0 failed, 0 skipped |
-| `Paperless.Core.Tests` | 332 passed, 0 failed, 0 skipped |
-| `Paperless.Markup.Tests` | 259 passed, 0 failed, 0 skipped |
-| `Paperless.OpenDocument.Tests` | 125 passed, 0 failed, 0 skipped |
-| `Paperless.Presentations.Tests` | 679 passed, 0 failed, 0 skipped |
-| `Paperless.Rendering.Tests` | 150 passed, 0 failed, 1 skipped |
-| `Paperless.Spreadsheets.Tests` | **793** passed, 0 failed, 0 skipped (was 792) |
-| `Paperless.Text.Tests` | 349 passed, 0 failed, 0 skipped |
-| `Paperless.Vector.Tests` | 295 passed, 0 failed, 0 skipped |
-| `Paperless.WordProcessing.Tests` | 827 passed, 0 failed, 0 skipped |
-| `Paperless.Fidelity.Tests` | 520 passed, **30 failed**, 0 skipped, 550 total |
+| `XRay.Office.Containers.Tests` | 109 passed, 0 failed, 0 skipped |
+| `XRay.Office.Core.Tests` | 332 passed, 0 failed, 0 skipped |
+| `XRay.Office.Markup.Tests` | 259 passed, 0 failed, 0 skipped |
+| `XRay.Office.OpenDocument.Tests` | 125 passed, 0 failed, 0 skipped |
+| `XRay.Office.Presentations.Tests` | 679 passed, 0 failed, 0 skipped |
+| `XRay.Office.Rendering.Tests` | 150 passed, 0 failed, 1 skipped |
+| `XRay.Office.Spreadsheets.Tests` | **793** passed, 0 failed, 0 skipped (was 792) |
+| `XRay.Office.Text.Tests` | 349 passed, 0 failed, 0 skipped |
+| `XRay.Office.Vector.Tests` | 295 passed, 0 failed, 0 skipped |
+| `XRay.Office.WordProcessing.Tests` | 827 passed, 0 failed, 0 skipped |
+| `XRay.Office.Fidelity.Tests` | 520 passed, **30 failed**, 0 skipped, 550 total |
 
 **Fidelity is 30 of 550, exactly the briefed baseline, and 0 skipped.** The 30 are the same
 word-processing and slide failures as before — none of them is a document this round moved.
@@ -338,7 +338,7 @@ Two things, both small.
 ## Reproducing
 
 ```sh
-export PAPERLESS_CLI=<tree>/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=<tree>/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 export SOURCE_DATE_EPOCH=1700000000
 sweep.sh /c/sandbox/workdir/sample-files 'sheets/*' /abs/out 10
 ```

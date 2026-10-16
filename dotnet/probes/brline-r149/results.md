@@ -304,16 +304,16 @@ overflow — but its reach has to be argued somewhere other than `086`.
 
 ### 3.4 What could not be measured, and why
 
-**This round did not render a single page through Paperless.** The parent session's build was
+**This round did not render a single page through XRay.Office.** The parent session's build was
 live in this tree throughout — MSBuild nodes resident and
-`src/Paperless.Presentations/bin/Debug/net10.0/*.dll` written within the twenty minutes before
-this was written, against a `Paperless.Cli` stamped 21:41 — so any figure from that binary would
+`src/XRay.Office.Presentations/bin/Debug/net10.0/*.dll` written within the twenty minutes before
+this was written, against a `XRay.Office.Cli` stamped 21:41 — so any figure from that binary would
 describe a program that no longer exists, which is exactly the contamination `dotnet/CLAUDE.md`'s
 *"before you rebuild, check the sweep is finished"* section records. The "14.8 pt each" and "this
 tree draws none of it" are therefore the **register's** figures carried forward, not re-measured;
 §3.3's three cases are arithmetic on those plus this round's measured reference behaviour. The
 measurement that would settle them is one render of `fixtures/`, `fixtures2/`, `fixtures3/` and
-`fixtures5/` through a *quiescent* `Paperless.Cli`, read with `readraw.py` — which is also the
+`fixtures5/` through a *quiescent* `XRay.Office.Cli`, read with `readraw.py` — which is also the
 only way to find out whether this tree already gets the page-body case (§2.5) right and is wrong
 only in a shape.
 
@@ -510,7 +510,7 @@ an ODF package, so the reader above reads none of them; its analogue is `\line` 
 
 ### 6.1 O91b does not exist. The rule is already implemented, and it is already right.
 
-`FlowLayouter.Truncated` (`dotnet/src/Paperless.WordProcessing/Layout/FlowLayouter.cs`:430),
+`FlowLayouter.Truncated` (`dotnet/src/XRay.Office.WordProcessing/Layout/FlowLayouter.cs`:430),
 called from `FrameLayout.Content` (`FrameLayout.cs`:1250-1266) for every
 `PageFrame.HasFixedHeight`, is:
 
@@ -566,9 +566,9 @@ On the witness that is **2.350 pt for the first break line and 2.500 for each of
 three**, 10.850 pt for the four, against the 14.8 pt each the register records.
 
 **The seat is `MeasuredParagraph.MeasureLine`
-(`dotnet/src/Paperless.Text/Layout/MeasuredParagraph.cs`:778) and its `Fold`
+(`dotnet/src/XRay.Office.Text/Layout/MeasuredParagraph.cs`:778) and its `Fold`
 (`:~960`), reached through `ParagraphLayouter.BandHeight`
-(`dotnet/src/Paperless.Text/Layout/ParagraphLayouter.cs`:412) —** and this round could not
+(`dotnet/src/XRay.Office.Text/Layout/ParagraphLayouter.cs`:412) —** and this round could not
 confirm that it is where the defect is, which is the round's largest gap. Read statically, that
 path already answers the break run:
 
@@ -591,7 +591,7 @@ which is the *same* surplus applied twice. That is a hypothesis, not a finding.
 
 **The measurement that settles it, and it is one render:** with the build quiescent, render
 `fixtures3/n0.docx … n6.docx`, `b02 … b80`, `m002 … m120` and `pr259-n0 … n4` through
-`Paperless.Cli` and read them with `readraw.py`. Those arms are one attribute apart and their
+`XRay.Office.Cli` and read them with `readraw.py`. Those arms are one attribute apart and their
 26.2.4.2 answers are in §2, so the shape of the disagreement names the seat outright:
 
 - `n0..n6` flat at 2.350 and `b*` on the 1.164-em slope → the rule is right and the defect is in

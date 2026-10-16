@@ -1,6 +1,6 @@
 # slides-paint-01 — prediction, committed before measuring
 
-Written after reading code only (LibreOffice C++ at 27.2.0.0.alpha0+ for intent, Paperless C# for
+Written after reading code only (LibreOffice C++ at 27.2.0.0.alpha0+ for intent, X-Ray.Office C# for
 what we do) and after locating the six decks on disk. **No corpus census, no render, no `soffice`
 run, no PDF read has happened yet.** Environment checked: `check-env.sh` green, LibreOffice
 **26.2.4.2** 620(Build:2), Carlito/Caladea/Liberation/DejaVu all resolving.
@@ -61,10 +61,10 @@ I expect the visible reach to be strictly smaller.
 ## Cluster 2 — missing shadow
 
 **P2.1 — Both decks are `.ppt`, so this is the legacy character shadow bit and not `a:outerShdw`.**
-`PptCharacterStyle.ToEmphasis` (`src/Paperless.Presentations/MsBinary/PptStyleSheet.cs:528-542`)
+`PptCharacterStyle.ToEmphasis` (`src/XRay.Office.Presentations/MsBinary/PptStyleSheet.cs:528-542`)
 reads `0x0001` bold, `0x0002` italic, `0x0004` underline, `0x0100` strikethrough — and **not
 `0x0010`, shadow**, which the file's own comment at `PptStyleSheet.cs:11` names. `RunEmphasis`
-(`src/Paperless.Core/Extraction/Content.cs:177-199`) has no `Shadow` member for it to be stored in.
+(`src/XRay.Office.Core/Extraction/Content.cs:177-199`) has no `Shadow` member for it to be stored in.
 So: **we draw nothing at all**, we do not draw it wrongly. That is the distinction the review
 cannot make and I am committing to the first half of it.
 

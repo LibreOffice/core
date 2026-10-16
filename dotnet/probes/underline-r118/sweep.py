@@ -2,7 +2,7 @@
 """Render one track with one engine and bank three numbers per document.
 
     sweep.py ref  <root> <out.tsv> [jobs]
-    sweep.py <path-to-Paperless.Cli> <root> <out.tsv> [jobs]
+    sweep.py <path-to-XRay.Office.Cli> <root> <out.tsv> [jobs]
 
 Columns: path, status, pages, glyphs, sha256 of the PDF.
 

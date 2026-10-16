@@ -1,6 +1,6 @@
 # Round 100 — the last three sheets seats: a merged fill's width, a BIFF run's colour, and what `alle einzeln` actually is
 
-    ours   = Paperless.Cli @ 18f9da973 (base) and @ 18f9da973 + this round's diff (head)
+    ours   = XRay.Office.Cli @ 18f9da973 (base) and @ 18f9da973 + this round's diff (head)
     ref    = /opt/libreoffice26.2/program/soffice — LibreOffice 26.2.4.2 — and the banked
              reference PDFs at /home/user/gate-orig-r83/ref (the 947 originals) and
              /home/user/gate-odf-r80/ref (the 307 `.ods`)
@@ -319,7 +319,7 @@ and `#ff0000` in the BIFF8 default palette, which is what the workbook uses beca
 | of them at 13.0 pt in green, amber or red | **0** | **31** |
 | filled paths on page 8 | 5 | **7** |
 
-**We draw none of those boxes**, in any colour, and their fills are missing too. `paperless
+**We draw none of those boxes**, in any colour, and their fills are missing too. `xray-office
 extract` settles which side of the pipeline it is on: **60 of the workbook's 75 shape-path text
 boxes are absent from the extracted text**, so the loss is in the reader and not in the painter.
 
@@ -414,7 +414,7 @@ Text **728**, OpenDocument **146**, Presentations **1047**, Rendering **164**, V
 WordProcessing **1938**, Spreadsheets **1295**. **0 failed and 0 skipped in every one.** Solution
 build 0 warnings, 0 errors.
 
-`Paperless.Fidelity.Tests` is **542 passed / 10 failed of 552**, and the 552 is
+`XRay.Office.Fidelity.Tests` is **542 passed / 10 failed of 552**, and the 552 is
 `dotnet test --list-tests`' own count rather than a carried number. The ten are exactly the known
 names: `TabStopComparisonTests` x4 (`list-label-overrun.doc`/`.fodt`/`.odt`/`.docx`),
 `PageDrawingComparisonTests` x4 (`paginated.docx`/`.fodt`/`.rtf`/`.doc`),

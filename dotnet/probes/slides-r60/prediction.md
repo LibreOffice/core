@@ -89,7 +89,7 @@ unshifted) and `combo_bar_line_chart.pptx` (`barChart+lineChart`, the bar overri
 - **The knock-on onto data labels and markers.** Shifting the categories moves every plotted
   point by half a slot, so a page's ink can move far more than the plot rectangle alone suggests
   — and on a stacked area chart it changes the shape of the filled region, not only its position.
-- **The other two tracks.** `Paperless.Core/Charts` and `Paperless.Ooxml` are shared. The census
+- **The other two tracks.** `XRay.Office.Core/Charts` and `XRay.Office.Ooxml` are shared. The census
   says **sheets: 12 `c:lineChart` parts stating `between`**, words: **none**. The parent gates
   the corpus.
 

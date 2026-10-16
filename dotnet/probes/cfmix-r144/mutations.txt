@@ -1,25 +1,25 @@
 === M1: the hatch is not mixed, the foreground is taken whole (the old dxf reading)
-  Failed Paperless.Spreadsheets.Tests.XlsxConditionalExpressionTests.EachActivityIsDrawnAsThePlannedActualAndCompletedBandsTheReferenceDraws 
-  Failed Paperless.Spreadsheets.Tests.XlsxPatternFillTests.AHatchIsTheTwoColoursMixedAtTheWeightItsNameCarries(type: "lightUp", foreground: "<fgColor rgb=\"FF735773\"/>", background: "<bgColor auto=\"1\"/>", expected: "#DCD5DC") 
-  Failed Paperless.Spreadsheets.Tests.XlsxPatternFillTests.AHatchIsTheTwoColoursMixedAtTheWeightItsNameCarries(type: "lightUp", foreground: "<fgColor rgb=\"FF735773\"/>", background: "<bgColor rgb=\"FFCAB9CA\"/>", expected: "#B5A1B5") 
-  Failed Paperless.Spreadsheets.Tests.XlsxPatternFillTests.AHatchIsTheTwoColoursMixedAtTheWeightItsNameCarries(type: "lightUp", foreground: "<fgColor rgb=\"FF735773\"/>", background: "<bgColor rgb=\"FFF6DDB9\"/>", expected: "#D6BCA8") 
-  Failed Paperless.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "darkTrellis", expected: "#404040") 
-  Failed Paperless.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "darkUp", expected: "#808080") 
-  Failed Paperless.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "gray0625", expected: "#F0F0F0") 
-  Failed Paperless.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "gray125", expected: "#E0E0E0") 
-  Failed Paperless.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "lightGrid", expected: "#909090") 
-  Failed Paperless.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "lightTrellis", expected: "#A0A0A0") 
-  Failed Paperless.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "lightUp", expected: "#C0C0C0") 
-  Failed Paperless.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "notAPatternName", expected: "#000000") 
-  Failed Paperless.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "solid", expected: "#000000") 
-Failed!  - Failed:    13, Passed:  1453, Skipped:     0, Total:  1466, Duration: 5 s - Paperless.Spreadsheets.Tests.dll (net10.0)
+  Failed XRay.Office.Spreadsheets.Tests.XlsxConditionalExpressionTests.EachActivityIsDrawnAsThePlannedActualAndCompletedBandsTheReferenceDraws 
+  Failed XRay.Office.Spreadsheets.Tests.XlsxPatternFillTests.AHatchIsTheTwoColoursMixedAtTheWeightItsNameCarries(type: "lightUp", foreground: "<fgColor rgb=\"FF735773\"/>", background: "<bgColor auto=\"1\"/>", expected: "#DCD5DC") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsxPatternFillTests.AHatchIsTheTwoColoursMixedAtTheWeightItsNameCarries(type: "lightUp", foreground: "<fgColor rgb=\"FF735773\"/>", background: "<bgColor rgb=\"FFCAB9CA\"/>", expected: "#B5A1B5") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsxPatternFillTests.AHatchIsTheTwoColoursMixedAtTheWeightItsNameCarries(type: "lightUp", foreground: "<fgColor rgb=\"FF735773\"/>", background: "<bgColor rgb=\"FFF6DDB9\"/>", expected: "#D6BCA8") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "darkTrellis", expected: "#404040") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "darkUp", expected: "#808080") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "gray0625", expected: "#F0F0F0") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "gray125", expected: "#E0E0E0") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "lightGrid", expected: "#909090") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "lightTrellis", expected: "#A0A0A0") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "lightUp", expected: "#C0C0C0") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "notAPatternName", expected: "#000000") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsxPatternFillTests.EachPatternNameCarriesItsOwnWeight(type: "solid", expected: "#000000") 
+Failed!  - Failed:    13, Passed:  1453, Skipped:     0, Total:  1466, Duration: 5 s - XRay.Office.Spreadsheets.Tests.dll (net10.0)
 
 === M2: the evaluator is not reached, only the two-operand reader (the round's base)
-  Failed Paperless.Spreadsheets.Tests.XlsxConditionalExpressionTests.EachActivityIsDrawnAsThePlannedActualAndCompletedBandsTheReferenceDraws 
-  Failed Paperless.Spreadsheets.Tests.XlsxConditionalStyleTests.AFormulaOfMoreThanTwoOperandsIsEvaluated 
-Failed!  - Failed:     2, Passed:  1464, Skipped:     0, Total:  1466, Duration: 5 s - Paperless.Spreadsheets.Tests.dll (net10.0)
+  Failed XRay.Office.Spreadsheets.Tests.XlsxConditionalExpressionTests.EachActivityIsDrawnAsThePlannedActualAndCompletedBandsTheReferenceDraws 
+  Failed XRay.Office.Spreadsheets.Tests.XlsxConditionalStyleTests.AFormulaOfMoreThanTwoOperandsIsEvaluated 
+Failed!  - Failed:     2, Passed:  1464, Skipped:     0, Total:  1466, Duration: 5 s - XRay.Office.Spreadsheets.Tests.dll (net10.0)
 
 === M3: a stated patternType=none is folded together with an absent one
-  Failed Paperless.Spreadsheets.Tests.XlsxPatternFillTests.AFillThatPaintsNothingAnswersNothing(pattern: "<patternFill patternType=\"none\"><bgColor auto=\""···, differential: True) 
-  Failed Paperless.Spreadsheets.Tests.XlsxPatternFillTests.AFillThatPaintsNothingAnswersNothing(pattern: "<patternFill patternType=\"none\"><bgColor rgb=\"F"···, differential: True) 
-Failed!  - Failed:     2, Passed:  1464, Skipped:     0, Total:  1466, Duration: 5 s - Paperless.Spreadsheets.Tests.dll (net10.0)
+  Failed XRay.Office.Spreadsheets.Tests.XlsxPatternFillTests.AFillThatPaintsNothingAnswersNothing(pattern: "<patternFill patternType=\"none\"><bgColor auto=\""···, differential: True) 
+  Failed XRay.Office.Spreadsheets.Tests.XlsxPatternFillTests.AFillThatPaintsNothingAnswersNothing(pattern: "<patternFill patternType=\"none\"><bgColor rgb=\"F"···, differential: True) 
+Failed!  - Failed:     2, Passed:  1464, Skipped:     0, Total:  1466, Duration: 5 s - XRay.Office.Spreadsheets.Tests.dll (net10.0)

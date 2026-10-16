@@ -292,7 +292,7 @@ Seat: `OdfPageGeometry.Read`/`.FurnitureExtent`, `OdtWordDocument.GrownTo`/`.Fur
 
 ## Verification
 
-Full build `dotnet build Paperless.slnx -v q -nologo`: **0 warnings, 0 errors.**
+Full build `dotnet build XRay.Office.slnx -v q -nologo`: **0 warnings, 0 errors.**
 
 The ten non-fidelity projects, run individually:
 
@@ -312,7 +312,7 @@ The ten non-fidelity projects, run individually:
 
 6101 before, plus this round's twelve new assertions.
 
-`Paperless.Fidelity.Tests` with `/opt/libreoffice26.2/program` first on `PATH`: **542 passed, 10
+`XRay.Office.Fidelity.Tests` with `/opt/libreoffice26.2/program` first on `PATH`: **542 passed, 10
 failed, 0 skipped of 552** — the ten known-open, named, and no others:
 
 ```

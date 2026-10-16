@@ -1,6 +1,6 @@
 # Renderer parity sweep 01 — eight-lane fix investigation
 
-Output of one round: the whole `sample-files` corpus rendered by Paperless and by headless
+Output of one round: the whole `sample-files` corpus rendered by X-Ray.Office and by headless
 LibreOffice, the 192 documents that did not match catalogued, then split across eight
 parallel agents partitioned by **source-file ownership** so their proposed patches land on
 disjoint files. The harness that produced the sweep is `dotnet/scripts/renderer-parity/`.
@@ -14,7 +14,7 @@ about the code, and that stored data almost never says which environment. So, fi
 |---|---|
 | Reference binary | **LibreOffice 24.2.7.2** 420(Build:2) — `Producer: LibreOffice 24.2` in every reference PDF |
 | Fonts | Carlito, Caladea, Liberation installed; `fc-match Calibri` → Carlito, `fc-match Cambria` → Caladea |
-| Paperless | `582c8c671`, built Release, `net10.0/linux-x64` |
+| X-Ray.Office | `582c8c671`, built Release, `net10.0/linux-x64` |
 | Corpus | `theolivenbaum/sample-files` @ 946 documents |
 | Comparison | 150 dpi, first five pages per document; page counts compared in full |
 
@@ -145,7 +145,7 @@ as context rather than as the thing it called missing. Both outcomes are recorde
 ## Layout
 
 ```
-paperless-differences.html   the published catalogue, self-contained (11.6 MB)
+xray-office-differences.html   the published catalogue, self-contained (11.6 MB)
 BRIEF.md              the shared contract every lane worked to
 L<n>-<lane>/
   summary.md          root causes, seats, document counts, confidence

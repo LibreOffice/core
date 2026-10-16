@@ -202,12 +202,12 @@ slide 14, `{72833802-…}` on slides 17–21. All three resolve:
 
 - `{5C22544A-…}` is defined in the deck's own `ppt/tableStyles.xml`;
 - all three are in the ported built-in map at
-  `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Ooxml/DrawingML/DrawingPredefinedTableStyles.cs:84,104,105`,
+  `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingPredefinedTableStyles.cs:84,104,105`,
   and all three are in groups that are implemented (`Medium-Style-2`, `Light-Style-2`);
 - the lookup is called from
-  `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Presentations/Ooxml/PptxSlideLayout.cs:663`,
+  `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Presentations/Ooxml/PptxSlideLayout.cs:663`,
   with the built-in fallback at
-  `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Ooxml/DrawingML/DrawingTableStyle.cs:185`.
+  `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingTableStyle.cs:185`.
 
 Measured, page 14, fill-colour census of both PDFs:
 
@@ -241,22 +241,22 @@ EMF on slide 29, each falling through to Unifont, which draws the C0 range as a 
 was fixed in `MetafileTextEngine`.
 
 *Refutation 2, by reading.* `FallbackShaper` is constructed **exactly once** in the tree —
-`/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Spreadsheets/Layout/SheetFonts.cs:263`
+`/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetFonts.cs:263`
 — and consumed only at `SheetTextLayout.cs:589,632,964`. It is not reachable from the chart text
 path, **but it is not reachable from the ordinary slide text path either**: pptx chart labels have
 no drawing code of their own and funnel into `SlideTextLayout`, the same code slide shape text
 uses. Both shape at
-`/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Presentations/Layout/SlideTextLayout.cs:1206`
+`/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Presentations/Layout/SlideTextLayout.cs:1206`
 (`TextShaper.Default.Shape(...)`), with no itemisation options and no fallback resolver;
-`SlideFonts` (`/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Presentations/Layout/SlideText.cs:344-382`)
+`SlideFonts` (`/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Presentations/Layout/SlideText.cs:344-382`)
 holds a `SystemFontResolver` privately and exposes no `Fallback` property, unlike the words
-track's `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.WordProcessing/Layout/LayoutFonts.cs:50`.
+track's `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.WordProcessing/Layout/LayoutFonts.cs:50`.
 
 So the shape is not "two halves that do not join"; it is **one half missing for the whole
 presentations track**. If it is ever wanted, the two call sites are:
 
 - measuring/line-breaking:
-  `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Presentations/Layout/SlideTextLayout.cs:658`
+  `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Presentations/Layout/SlideTextLayout.cs:658`
   (`ParagraphLayouter layouter = new(first);` — the structural twin of `SheetTextLayout.cs:589`),
   which first needs `SlideText.cs:346` to expose its resolver;
 - drawing: `SlideTextLayout.cs:1206`, which needs the `FontItemiser.Split` treatment of
@@ -274,11 +274,11 @@ what is missing is the automatic-colour rule and a route from the chart reader t
 r41 baseline `e5f54617c`:
 
 - the automatic-colour rule is
-  `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartAutoFormat.cs`,
+  `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartAutoFormat.cs`,
   ported from `objectformatter.cxx`, cycle shading included
   (`DrawingChartAutoFormat.cs:259-290`);
 - the route exists:
-  `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Presentations/Ooxml/PptxSlideLayoutChart.cs:57`
+  `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Presentations/Ooxml/PptxSlideLayoutChart.cs:57`
   passes `theme.Styles` into `DrawingChartPlot.Read`.
 
 And it works. Measured on page 4, ours draws **`#F07F09` ×31, `#9F2936` ×23, `#1B587C` ×23** —
@@ -304,16 +304,16 @@ that style's own colour transforms act on it; we take the accent raw.
 **The wiring hole, exactly.** The width half of this already does the right thing and the colour
 half does not, in the same file:
 
-- `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs:1348-1362`
+- `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs:1348-1362`
   — `AutoLineWidth` fetches `styles.LineStyle(DrawingChartAutoFormat.SubtleStyleIndex)` at
   **line 1357**, reads **only `@w`** from it at line 1358, and then explicitly discards the theme
   at **line 1360** (`_ = theme;`). The `a:solidFill` with its `a:shade`/`a:satMod` is never looked at.
-- `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Ooxml/DrawingML/DrawingStyleMatrix.cs:153`
+- `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingStyleMatrix.cs:153`
   — `LineStyle(int)` returns the raw `a:ln` **with `phClr` left in place**, and its own doc comment
   states the choice being made: *"the caller that needs it — a chart's automatic series formatting
   — wants the width and supplies its own colour from the accent cycle"*. That sentence is the bug,
   written down.
-- `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartAutoFormat.cs:175`
+- `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartAutoFormat.cs:175`
   — `ColourOf(style, frame, stroke, seriesIndex, maxSeriesIndex, theme)` **takes no
   `DrawingStyleMatrix`**. That is the join. Its three call sites are `DrawingChartPlot.cs:777`,
   `:779` and `:1277`, and `automatic.Styles` (the matrix, carried on `ChartAutoContext`,
@@ -323,13 +323,13 @@ half does not, in the same file:
 `styles.LineStyle(SubtleStyleIndex)`, substitute the resolved accent for its `phClr`, and resolve
 the result. The substitution helper already exists and is already used elsewhere —
 `DrawingStyleMatrix.Substitute(XElement, Colour)` at
-`/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Ooxml/DrawingML/DrawingStyleMatrix.cs:263`,
+`/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingStyleMatrix.cs:263`,
 called by `PptxDiagramStyles.cs:191`. Nothing new has to be written; a parameter has to be
 threaded and one existing helper called.
 
 **The subgrid half, still open and now quantified.** `Demick_JetBlue`'s five chart parts state
 `c:minorGridlines` — 2 per chart, 10 in the deck — and nothing in the tree reads it:
-`/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs:374`
+`/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs:374`
 (`GridOf`) tests only `majorGridlines`. Page 4 measured: the reference strokes **49 `#8B8B8B` and
 35 `#666666`**; we stroke **21 `#B3B3B3`**. So both the count and the colour are wrong — the
 missing minor grid and a default grid colour (`0xB3B3B3`, from `GridProperties.cxx:64-66`) that
@@ -346,12 +346,12 @@ entry is missing. **They do, and the entries are not missing.** Traced by readin
 
 | step | file:line |
 |---|---|
-| `Sp` record `0xF00A` | `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.MsBinary/Escher/EscherRecordTypes.cs:49` |
-| instance = top 12 bits | `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.MsBinary/Records/DffRecord.cs:93-96` |
-| shape type assigned | `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.MsBinary/Escher/EscherDrawingReader.cs:222-226` |
-| carried on the shape | `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.MsBinary/Escher/EscherShape.cs:49` |
-| **the `PresetOf` call** | `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Presentations/MsBinary/PptSlideLayout.cs:925` |
-| preset → path | `/c/sandbox/workdir/libreoffice-core/dotnet/src/Paperless.Presentations/Layout/SlidePresetGeometry.cs:39-43` |
+| `Sp` record `0xF00A` | `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.MsBinary/Escher/EscherRecordTypes.cs:49` |
+| instance = top 12 bits | `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.MsBinary/Records/DffRecord.cs:93-96` |
+| shape type assigned | `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.MsBinary/Escher/EscherDrawingReader.cs:222-226` |
+| carried on the shape | `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.MsBinary/Escher/EscherShape.cs:49` |
+| **the `PresetOf` call** | `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Presentations/MsBinary/PptSlideLayout.cs:925` |
+| preset → path | `/c/sandbox/workdir/libreoffice-core/dotnet/src/XRay.Office.Presentations/Layout/SlidePresetGeometry.cs:39-43` |
 | **rectangle fallback** | `SlidePresetGeometry.cs:43` (`: Rectangle(size)`), built at `:65-71`; null-name source at `PptShapeGeometry.cs:282` |
 
 Shape-type histograms, read out of the Escher records of the two decks:

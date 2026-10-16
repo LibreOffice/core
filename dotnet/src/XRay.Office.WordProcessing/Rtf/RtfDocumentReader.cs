@@ -1,0 +1,1615 @@
+using System.Globalization;
+using System.Text;
+using XRay.Office.Core.Diagnostics;
+using XRay.Office.Core.Documents;
+using XRay.Office.Core.Extraction;
+using XRay.Office.Core.Graphics;
+using XRay.Office.Core.Numbering;
+using XRay.Office.Text.Encodings;
+using XRay.Office.Text.Layout;
+using XRay.Office.WordProcessing.Layout;
+using XRay.Office.Text.Fonts;
+
+namespace XRay.Office.WordProcessing.Rtf;
+
+/// <summary>
+/// Reads an RTF document into the format-independent content tree.
+/// </summary>
+/// <remarks>
+/// <para>
+/// RTF is a stream of nested groups rather than a tree of elements, so this is a state machine
+/// rather than a walk: a group's opening brace saves the formatting state and its closing brace
+/// restores it, and every control word either changes that state or emits something.
+/// </para>
+/// <para>
+/// Three things make RTF unlike the XML formats, and each shapes the code below:
+/// </para>
+/// <para>
+/// <strong>The encoding is decided by the document, mid-stream.</strong> <c>\ansicpg</c> names a
+/// code page for <c>\'hh</c> escapes and literal bytes, and a font's <c>\fcharset</c> can
+/// override it. So text is tokenised as bytes and decoded here, where what is in force is known.
+/// </para>
+/// <para>
+/// <strong>An unknown destination must be skipped whole.</strong> <c>\*</c> marks a group whose
+/// content is meaningless to a reader that does not know the destination — and RTF puts real
+/// content and private extensions in the same syntax, so recursing hopefully into everything
+/// emits binary picture data and revision bookkeeping as text.
+/// </para>
+/// <para>
+/// <strong>The list label is written out.</strong> Unlike ODF and DOCX, which record only the
+/// counters, RTF carries the rendered label in a <c>{\listtext}</c> group — so the marker is read
+/// rather than generated, which is both simpler and exactly what the writer displayed.
+/// </para>
+/// </remarks>
+public sealed partial class RtfDocumentReader
+{
+    /// <summary>
+    /// How deeply groups are followed before the reader gives up.
+    /// </summary>
+    /// <remarks>
+    /// Real documents nest perhaps twenty deep. A corrupt or hostile file can open braces
+    /// indefinitely, and this is untrusted input driving a stack.
+    /// </remarks>
+    public const int MaxGroupDepth = 256;
+
+    /// <summary>How many paragraphs are recorded for layout before the rest are ignored.</summary>
+    /// <remarks>
+    /// A guard on untrusted input rather than a real limit, and it bounds memory rather than time: the
+    /// content walk continues either way, so a document past the cap still extracts in full.
+    /// </remarks>
+    public const int MaxLayoutParagraphs = 200000;
+
+    /// <summary>How many tab stops a paragraph may declare before the rest are ignored.</summary>
+    /// <remarks>
+    /// A guard on untrusted input. Word's own limit is 64 and a real paragraph uses a handful; a generated
+    /// file can restate <c>\tx</c> without end, and each stop costs a lookup on every tab.
+    /// </remarks>
+    public const int MaxTabStops = 256;
+
+    /// <summary>How many colour table entries are kept.</summary>
+    /// <remarks>
+    /// A guard on untrusted input rather than a real limit: a document uses a handful, and \cf indexes
+    /// past the table resolve to no colour anyway.
+    /// </remarks>
+    public const int MaxColours = 4096;
+
+    private readonly byte[] _data;
+    private readonly List<Diagnostic> _diagnostics;
+    private readonly RtfStyles _styles = new();
+    private readonly Dictionary<int, int> _fontCharsets = [];
+    private readonly Dictionary<int, string> _fontFamilies = [];
+
+    /// <summary>
+    /// The colour table, in declaration order, zero-based as <c>\cf</c> indexes it.
+    /// </summary>
+    /// <remarks>
+    /// An entry is null when it stated no components at all, which is the "automatic" colour rather than
+    /// black: a <c>\colortbl</c> conventionally opens with a bare semicolon for exactly that, and
+    /// LibreOffice's own export writes one. Dropping the empty entry instead of storing it would shift
+    /// every colour in the document by one — which is a silver word where a red one belongs.
+    /// </remarks>
+    private readonly List<Colour?> _colours = [];
+    private readonly Staged _layoutBlocks = new();
+    private readonly Dictionary<(int Section, Model.PageFurnitureSlot Slot), Staged>
+        _headerLayout = [];
+    private readonly Dictionary<(int Section, Model.PageFurnitureSlot Slot), Staged>
+        _footerLayout = [];
+    private readonly List<Flow> _flows = [];
+    private readonly List<ContentNode> _hoisted = [];
+    private readonly Dictionary<string, string> _info = new(StringComparer.Ordinal);
+    private readonly RtfPageGeometry _geometry = new();
+
+    private Encoding _documentEncoding = LegacyCodePages.Fallback;
+    /// <summary>
+    /// The document's <c>\deftab</c>, or Word's own default.
+    /// </summary>
+    /// <remarks>
+    /// Half an inch, because RTF is Word's format and that is what Word uses — unlike ODF, whose default is
+    /// 1.25 cm. A document that states none and relies on the wrong one puts every tabulated column in the
+    /// wrong place.
+    /// </remarks>
+    private Core.Units.Length _defaultTabInterval = Core.Units.Length.FromTwips(720);
+
+    /// <summary>The document's <c>\htmautsp</c>; see <see cref="AddsParagraphSpacing"/>.</summary>
+    private bool _htmlAutoSpacing;
+
+    /// <summary>
+    /// True once the document has had its first run, which is when RTF's settings stop being
+    /// readable.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The RTF importer emits its whole settings table at the document's first run —
+    /// <c>RTFDocumentImpl::checkFirstRun</c> calls <c>outputSettingsTable</c>
+    /// (<c>sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx</c>:414-435) — so a settings word
+    /// written after that is stored and never sent.
+    /// </para>
+    /// <para>
+    /// What counts as that run is wider than body text. <c>checkFirstRun</c> has <strong>thirteen</strong>
+    /// call sites, every one of them re-read for round 85: <c>\footnote</c>
+    /// (<c>rtfdispatchdestination.cxx</c>:264), <c>\shptxt</c>/<c>\dptxbxtext</c> (:405),
+    /// <c>\super</c> (<c>rtfdispatchflag.cxx</c>:893), <c>\dptxbx</c> (:1103), <c>\par</c>
+    /// (<c>rtfdispatchsymbol.cxx</c>:133), <c>\cell</c>/<c>\nestcell</c> (:250), <c>\column</c>
+    /// (:518), <c>\page</c> (:574), <c>tableBreak</c> and <c>parBreak</c>
+    /// (<c>rtfdocumentimpl.cxx</c>:724 and :732), <c>resolvePict</c> (:1297), <c>text</c> (:1706)
+    /// and <c>RTFFrame::setSprm</c> (:4137).
+    /// </para>
+    /// <para>
+    /// None of them fires inside a <c>Destination::SKIP</c> group, because
+    /// <c>RTFTokenizer::dispatchKeyword</c> returns before looking the keyword up
+    /// (<c>rtftokenizer.cxx</c>:2156-2164). That is why a <c>{\header}</c> group does <em>not</em>
+    /// count — not because a substream is re-parsed later — and it is also why a list table does:
+    /// <c>LISTTABLE</c> is a destination of its own. See <see cref="RtfDestination.ListTable"/>.
+    /// </para>
+    /// <para>
+    /// Seven of the thirteen can only stand in a document's <em>body</em>, where the word is
+    /// already too late by every other rule, which is why <c>\super</c> is the one that matters:
+    /// it is the only caller LibreOffice's own RTF export writes into a preamble. Censused over
+    /// the 338 converted corpus <c>.rtf</c>, 308 state the word and <strong>exactly one</strong>
+    /// has any caller before it (<c>probes/rtf-htmautsp-r85/census-all.py</c>).
+    /// </para>
+    /// </remarks>
+    private bool _firstRunSeen;
+
+    /// <summary>The document's <c>\deff</c>: the font a run that names none is set in.</summary>
+    /// <remarks>
+    /// Not font zero. LibreOffice puts <c>\deff</c>'s <em>name</em> into the default character state
+    /// as <c>w:rFonts/@ascii</c> when the font table closes — <c>RTFDocumentImpl::beforePopState</c>,
+    /// <c>sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx</c>:2494-2500 — and <c>\plain</c>
+    /// restores that state (<c>rtfdispatchflag.cxx</c>:575-583). Taking font zero instead draws every
+    /// unstated run in whatever the first font-table entry happens to be, which in every file
+    /// LibreOffice writes is <c>Times New Roman</c>: <strong>215 of the 338 converted corpus
+    /// <c>.rtf</c> declare a <c>\deff</c> naming a different face from their <c>\f0</c></strong>.
+    /// </remarks>
+    private int _defaultFontIndex;
+
+    private int _colourRed;
+    private int _colourGreen;
+    private int _colourBlue;
+    private bool _colourStated;
+    private int _footnoteNumber;
+
+    /// <summary>
+    /// True when the note group about to follow is an endnote's, decided by peeking at the bytes.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A peek rather than a token, and LibreOffice's own importer does the same thing for the same reason
+    /// (<c>rtfdispatchdestination.cxx</c>: "Check if this is an endnote", reading seven bytes ahead of the
+    /// stream). RTF marks an endnote with a <c>\ftnalt</c> just inside the <c>{\*\footnote …}</c> group, and
+    /// that group comes <em>after</em> the <c>\chftn</c> that cites it — but the citation has to be numbered
+    /// and appended at the <c>\chftn</c>, because the two classes count in separate sequences and are
+    /// formatted differently. A reader working forwards one token at a time cannot know yet.
+    /// </para>
+    /// <para>
+    /// The window is short and the match specific: between the mark and the flag lie only <c>{</c>,
+    /// <c>\*</c>, <c>\footnote</c> and whitespace, so anything further away belongs to another note.
+    /// </para>
+    /// </remarks>
+    private bool NoteAheadIsEndnote()
+    {
+        if (_tokeniser is null) return false;
+
+        int at = _tokeniser.Position;
+        int end = Math.Min(_data.Length, at + NotePeekBytes);
+
+        return end > at && _data.AsSpan(at, end - at).IndexOf("\\ftnalt"u8) >= 0;
+    }
+
+    /// <summary>How far ahead of a note's mark its class flag is looked for, in bytes.</summary>
+    /// <remarks>
+    /// Enough for <c>{\*\footnote\ftnalt</c> with whitespace, and short enough that the next note's flag
+    /// cannot be mistaken for this one's — a note body is never shorter than this.
+    /// </remarks>
+    private const int NotePeekBytes = 32;
+
+    /// <summary>The tokeniser of the read in progress, for the one place a token is not enough.</summary>
+    private RtfTokeniser? _tokeniser;
+
+    /// <summary>Where the citation just appended sits, for the note group that follows it.</summary>
+    /// <remarks>
+    /// Carried on the reader rather than the flow because it crosses between them: the offset belongs to the
+    /// citing paragraph, and the group that reads it has already pushed a flow of its own.
+    /// </remarks>
+    private int _pendingNoteOffset;
+
+    /// <summary>The citation the mark just appended carries, for the note group that follows it.</summary>
+    private string? _pendingNoteCitation;
+    private string? _pendingAnnotationAuthor;
+    private bool _reportedDepthLimit;
+    private bool _reportedEncoding;
+
+    /// <summary>Creates a reader over a whole RTF document.</summary>
+    public RtfDocumentReader(byte[] data, List<Diagnostic> diagnostics)
+    {
+        ArgumentNullException.ThrowIfNull(data);
+        ArgumentNullException.ThrowIfNull(diagnostics);
+        _data = data;
+        _diagnostics = diagnostics;
+    }
+
+    /// <summary>The metadata read from the document's <c>{\info}</c> group.</summary>
+    public DocumentMetadata Metadata { get; private set; } = DocumentMetadata.Empty;
+
+    /// <summary>The sections' page geometry, valid once <see cref="Read"/> has run.</summary>
+    /// <remarks>
+    /// The colour table is passed in rather than read out, because a page border's <c>\brdrcf</c> is
+    /// an index and the <c>{\colortbl}</c> may follow the border that names it.
+    /// </remarks>
+    public IReadOnlyList<Model.WritingSection> Sections => _geometry.Resolve(ColourAt);
+
+    /// <summary>
+    /// True when two consecutive paragraphs' spacings add rather than the larger one winning.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Writer's <c>PARA_SPACE_MAX</c>, and RTF is the format that defaults it the other way from the
+    /// rest of the Word family: <c>SettingsTable</c>'s constructor sets
+    /// <c>doNotUseHTMLParagraphAutoSpacing</c> for an RTF import and leaves it clear for OOXML
+    /// (<c>sw/source/writerfilter/dmapper/SettingsTable.cxx</c>:119, "HTML paragraph auto-spacing is
+    /// opt-in for RTF, opt-out for OOXML"). So an RTF adds unless it opts in.
+    /// </para>
+    /// <para>
+    /// <c>\htmautsp</c> is that opt-in, and it reads backwards from its name: it asks for HTML
+    /// auto-spacing, which is the collapsing behaviour, so LibreOffice answers it by clearing the flag
+    /// (<c>rtftok/rtfdispatchflag.cxx</c>:1354). Measured on eight paragraphs carrying <c>\sb240</c> and
+    /// <c>\sa160</c> on <c>\sl-240</c> exact lines: without <c>\htmautsp</c> LibreOffice 24.2.7.2 puts
+    /// every boundary at 32.00 pt — the 12 pt line plus the 8 pt and 12 pt summed — and with it at
+    /// 24.00 pt, the line plus the larger of the two alone.
+    /// </para>
+    /// <para>
+    /// No RTF on the words corpus states it, so like the DOCX and ODF halves of this rule the change
+    /// is correctness rather than a measured win.
+    /// </para>
+    /// </remarks>
+    public bool AddsParagraphSpacing => !_htmlAutoSpacing;
+
+    /// <summary>
+    /// The body's blocks — its paragraphs and its tables — with the formatting layout needs, valid once
+    /// <see cref="Read"/> has run.
+    /// </summary>
+    /// <remarks>
+    /// Collected during the content walk rather than by a second pass, unlike the XML formats. RTF is a
+    /// token stream with no structure to revisit — re-reading it would mean running the whole state
+    /// machine again, including its encoding and destination handling, and the two runs could then
+    /// disagree. So the formatting in force is recorded as each paragraph closes.
+    /// </remarks>
+    public IReadOnlyList<RtfLayoutBlock> LayoutBlocks => _layoutBlocks.Finished();
+
+    /// <summary>The headers' paragraphs, by section and slot, with the formatting layout needs.</summary>
+    /// <remarks>
+    /// Separate from <see cref="LayoutBlocks"/> rather than mixed in with a marker, because a header is
+    /// laid out into its own frame and the body's paragraph index has to keep meaning the body's. Keyed by
+    /// section as well as slot because RTF writes a header in the preamble of the section it belongs to, so
+    /// a document that changes its running head halfway says so by writing a second one.
+    /// </remarks>
+    public IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
+        HeaderLayout => Finished(_headerLayout);
+
+    /// <summary>The footers' blocks, by section and slot.</summary>
+    public IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
+        FooterLayout => Finished(_footerLayout);
+
+    /// <summary>Flushes each slot's staged paragraphs into its block list.</summary>
+    /// <remarks>
+    /// Blocks rather than paragraphs because a running head is often a two-cell table — one part hard left and
+    /// another hard right — and stacking its cells as loose paragraphs would give the header a height no table
+    /// has, pushing the body text down by the difference on every page.
+    /// </remarks>
+    private static Dictionary<(int, Model.PageFurnitureSlot), IReadOnlyList<RtfLayoutBlock>> Finished(
+        Dictionary<(int Section, Model.PageFurnitureSlot Slot), Staged> slots)
+        => slots.ToDictionary(
+            entry => (entry.Key.Section, entry.Key.Slot),
+            entry => (IReadOnlyList<RtfLayoutBlock>)entry.Value.Finished());
+
+    /// <summary>
+    /// How many <c>\sect</c> marks have been seen, which is the section the reader is in.
+    /// </summary>
+    /// <remarks>
+    /// RTF delimits sections by position and marks only their <em>ends</em>: <c>\sect</c> closes one, and
+    /// the last section of a document has none at all — it simply runs out. So counting the marks is the
+    /// whole of it, and a document with no <c>\sect</c> is one section, which is most of them.
+    /// </remarks>
+    private int _sectionIndex;
+
+    /// <summary>Reads the document.</summary>
+    public ContentDocument Read()
+    {
+        ContentSection body = new() { Kind = SectionKind.Body, Index = 0 };
+        _flows.Add(new Flow(body));
+        _marks.OpenParagraph();
+
+        RtfTokeniser tokeniser = new(_data);
+        _tokeniser = tokeniser;
+        List<GroupState> stack = [new GroupState()];
+        bool nextIsIgnorableDestination = false;
+
+        while (true)
+        {
+            RtfToken token = tokeniser.Read();
+            if (token.Kind == RtfTokenKind.End) break;
+
+            GroupState state = stack[^1];
+
+            switch (token.Kind)
+            {
+                case RtfTokenKind.GroupStart:
+                    _groupDepth = stack.Count;
+                    if (stack.Count >= MaxGroupDepth)
+                    {
+                        ReportDepthLimit();
+                        // Still push a skipping state, so the matching brace pops correctly and
+                        // the rest of the document is not thrown away.
+                        stack.Add(new GroupState { Destination = RtfDestination.Skip });
+                        break;
+                    }
+                    stack.Add(state.Clone());
+                    nextIsIgnorableDestination = false;
+                    break;
+
+                case RtfTokenKind.GroupEnd:
+                    _groupDepth = stack.Count - 1;
+                    CloseGroup(stack[^1]);
+                    if (stack.Count > 1) stack.RemoveAt(stack.Count - 1);
+                    break;
+
+                case RtfTokenKind.ControlSymbol:
+                    if (token.Symbol == '*')
+                    {
+                        nextIsIgnorableDestination = true;
+                        break;
+                    }
+                    HandleControlSymbol(token.Symbol, state);
+                    break;
+
+                case RtfTokenKind.ControlWord:
+                    HandleControlWord(token, state, ref nextIsIgnorableDestination);
+                    break;
+
+                case RtfTokenKind.UnicodeCharacter:
+                    AppendText(state, char.ConvertFromUtf32(token.CodePoint));
+                    // \uN is followed by however many fallback characters \uc says, which
+                    // duplicate the same character in the document's code page. Emitting them
+                    // would double every non-ASCII character.
+                    SkipUnicodeFallback(tokeniser, state.UnicodeSkip);
+                    break;
+
+                case RtfTokenKind.EscapedByte:
+                    AppendText(state, DecodeByte((byte)token.CodePoint, state));
+                    break;
+
+                case RtfTokenKind.Text:
+                    AppendText(state, Decode(token.Bytes.Span, state));
+                    break;
+
+                case RtfTokenKind.Binary:
+                    // Only a picture's. A \bin inside an embedded object or a private destination is
+                    // data this library does not read, and the tokeniser has already stepped over it —
+                    // which is the whole point of the token existing.
+                    if (state.Destination == RtfDestination.Picture)
+                    {
+                        AppendPictureBinary(token.Bytes.Span);
+                    }
+                    break;
+            }
+        }
+
+        // A document need not end its last paragraph with \par, and the state in force at the end of
+        // the stream is the one that would have applied to it.
+        FinishParagraph(_flows[0], stack[^1]);
+        CloseTablesDeeperThan(_flows[0], 0);
+        _marks.CloseParagraph(string.Empty);
+
+        ContentDocument document = new() { Metadata = BuildMetadata() };
+        document.Children.Add(body);
+        foreach (ContentNode node in _hoisted) document.Children.Add(node);
+        return document;
+    }
+
+    // -------------------------------------------------------------------- control words
+
+    private void HandleControlWord(RtfToken token, GroupState state, ref bool ignorableDestination)
+    {
+        bool ignorable = ignorableDestination;
+        ignorableDestination = false;
+
+        // Page geometry is thirty control words that all do the same thing, so it is accumulated
+        // elsewhere and consulted first. Only \sect and \sectd are also structural, and those fall
+        // through to the break handling below.
+        if (_geometry.Handle(token.Name, token.Parameter)
+            && token.Name is not ("sect" or "sectd"))
+        {
+            return;
+        }
+
+        // A picture's own vocabulary, which only means anything inside a {\pict} — \picw is not a page
+        // property and \pich is not a paragraph one, and both share their prefix with nothing else.
+        if (HandlePictureWord(token)) return;
+
+        // Inside a {\stylesheet} entry, remember that the entry mentioned this word at all. The
+        // merge through \sbasedon needs "the style said nothing" kept apart from "the style said
+        // the default", and RTF's toggles cannot express that in the group state alone.
+        state.StyleSheetStated?.Add(token.Name);
+
+        switch (token.Name)
+        {
+            // ---- document-level settings
+            case "ansicpg":
+                SetDocumentEncoding(token.Parameter ?? LegacyCodePages.WindowsWestern);
+                return;
+            case "mac":
+                SetDocumentEncoding(10000);
+                return;
+            case "pc":
+                SetDocumentEncoding(437);
+                return;
+            case "pca":
+                SetDocumentEncoding(850);
+                return;
+            case "ansi":
+                SetDocumentEncoding(LegacyCodePages.WindowsWestern);
+                return;
+            case "uc":
+                state.UnicodeSkip = Math.Clamp(token.Parameter ?? 1, 0, 32);
+                return;
+            case "deff":
+                // The default font, which is where an unstated run starts rather than font zero.
+                _defaultFontIndex = Math.Max(token.Parameter ?? 0, 0);
+                state.FontIndex = _defaultFontIndex;
+                return;
+            case "ftnstart":
+                // The first footnote's number, one-based — unlike ODF's `text:start-value`, which is an
+                // offset. So this needs no adjustment and that one does.
+                _footnotes = _footnotes with { StartAt = token.Parameter ?? 1 };
+                return;
+            case "aftnstart":
+                _endnotes = _endnotes with { StartAt = token.Parameter ?? 1 };
+                return;
+
+            // The two families of sequence words, one per class. RTF names the sequence in the control word
+            // itself rather than in a parameter, so there is one word per format and they cannot be folded.
+            case "ftnnar":
+                _footnotes = _footnotes with { Format = NoteNumberFormat.Arabic };
+                return;
+            case "ftnnalc":
+                _footnotes = _footnotes with { Format = NoteNumberFormat.LowerLetter };
+                return;
+            case "ftnnauc":
+                _footnotes = _footnotes with { Format = NoteNumberFormat.UpperLetter };
+                return;
+            case "ftnnrlc":
+                _footnotes = _footnotes with { Format = NoteNumberFormat.LowerRoman };
+                return;
+            case "ftnnruc":
+                _footnotes = _footnotes with { Format = NoteNumberFormat.UpperRoman };
+                return;
+            case "ftnnchi":
+                _footnotes = _footnotes with { Format = NoteNumberFormat.Chicago };
+                return;
+            case "aftnnar":
+                _endnotes = _endnotes with { Format = NoteNumberFormat.Arabic };
+                return;
+            case "aftnnalc":
+                _endnotes = _endnotes with { Format = NoteNumberFormat.LowerLetter };
+                return;
+            case "aftnnauc":
+                _endnotes = _endnotes with { Format = NoteNumberFormat.UpperLetter };
+                return;
+            case "aftnnrlc":
+                _endnotes = _endnotes with { Format = NoteNumberFormat.LowerRoman };
+                return;
+            case "aftnnruc":
+                _endnotes = _endnotes with { Format = NoteNumberFormat.UpperRoman };
+                return;
+            case "aftnnchi":
+                _endnotes = _endnotes with { Format = NoteNumberFormat.Chicago };
+                return;
+
+            // Where the endnotes collect. \aenddoc is the default and puts them after the last page;
+            // \aendsec puts them in the note area of the section's last page, which is where the same
+            // document's footnotes go.
+            case "aenddoc":
+                _endnotes = _endnotes with { Placement = NotePlacement.DocumentEnd };
+                return;
+            case "aendnotes" or "aendsec":
+                _endnotes = _endnotes with { Placement = NotePlacement.SectionEnd };
+                return;
+
+            // Where the count begins again. RTF says it in the control word itself, one word per rule, the
+            // same shape as the sequence words above — but the `a`-prefixed endnote set is one word short
+            // rather than a mirror image: there is no `\aftnrstpg`, because an endnote does not restart per
+            // page. So the two classes genuinely have different sets, and a reader that assumed the mirror
+            // would be inventing a keyword.
+            //
+            // `\ftnrestart` is the *section* spelling and reads as a chapter restart, because that is the
+            // case LibreOffice exports it from (`rtfexport.cxx:970`) and Writer has no per-section footnote
+            // restart to read it back into.
+            case "ftnrstcont":
+                _footnotes = _footnotes with { Restart = NoteRestart.Never };
+                return;
+            case "ftnrestart":
+                _footnotes = _footnotes with { Restart = NoteRestart.EachChapter };
+                return;
+            case "ftnrstpg":
+                _footnotes = _footnotes with { Restart = NoteRestart.EachPage };
+                return;
+            case "aftnrstcont":
+                _endnotes = _endnotes with { Restart = NoteRestart.Never };
+                return;
+            case "aftnrestart":
+                _endnotes = _endnotes with { Restart = NoteRestart.EachChapter };
+                return;
+
+            // ---- destinations that are not content
+            case "fonttbl":
+                state.Destination = RtfDestination.FontTable;
+                return;
+            case "colortbl":
+                // Read rather than skipped, because a run's colour is the one piece of character
+                // formatting that reaches a page without changing where anything sits.
+                state.Destination = RtfDestination.ColourTable;
+                BeginColourTable();
+                return;
+            case "revtbl":
+                // Read rather than skipped: \revauth indexes it, so without it a tracked change is
+                // recorded against a number rather than a person.
+                state.Destination = RtfDestination.RevisionTable;
+                return;
+            case "listtable" or "listoverridetable":
+                // Neither is read, and neither may be skipped either: a list table is
+                // `Destination::LISTTABLE` and not `Destination::SKIP`, so its control words are
+                // dispatched and one of them ends the document's first run. See
+                // RtfDestination.ListTable and _firstRunSeen.
+                state.Destination = RtfDestination.ListTable;
+                return;
+            case "rsidtbl"
+                 or "generator" or "filetbl" or "themedata" or "colorschememapping"
+                 or "datastore" or "latentstyles" or "xmlnstbl" or "pgptbl":
+                state.Destination = token.Name == "generator"
+                    ? RtfDestination.InfoField
+                    : RtfDestination.Skip;
+                if (token.Name == "generator") state.InfoField = "generator";
+                return;
+            case "stylesheet":
+                state.Destination = RtfDestination.StyleSheet;
+                state.StyleSheetStated = [];
+                return;
+            case "info":
+                state.Destination = RtfDestination.Info;
+                return;
+            case "pict":
+                // A picture is one of `checkFirstRun`'s callers — `RTFDocumentImpl::resolvePict`
+                // ends with it (`rtfdocumentimpl.cxx`:1297) — so a `{\pict}` in the body closes the
+                // window on the document's settings exactly as a word of text does.
+                //
+                // Only a body one. A `{\*\listtable{\*\listpicture{\*\shppict{\pict …}}}}` does
+                // not, which is measured rather than assumed: `probes/rtf-resid-r80`'s
+                // `p-listpicture` puts that group before a `\htmautsp` and 26.2.4.2 still honours
+                // the word, while `p-bodypict` puts a bare `{\pict}` there and it does not.
+                if (state.Destination is RtfDestination.Body) NoteFirstRun();
+                state.Destination = RtfDestination.Picture;
+                BeginPicture();
+                return;
+            case "object" or "objdata" or "result":
+                // An embedded object: its data is binary and its \result is a rendering of
+                // something X-Ray.Office does not open during extraction.
+                state.Destination = RtfDestination.Skip;
+                return;
+            case "bkmkstart":
+                state.Destination = RtfDestination.BookmarkStart;
+                BeginBookmarkName();
+                return;
+            case "bkmkend":
+                state.Destination = RtfDestination.BookmarkEnd;
+                BeginBookmarkName();
+                return;
+            case "atnid" or "atnref" or "atndate" or "atnparent"
+                 or "annotprot" or "xe" or "tc" or "tcn" or "datafield" or "fname" or "ftnsep"
+                 or "ftnsepc" or "ftncn" or "aftnsep" or "aftnsepc" or "aftncn" or "nonshppict"
+                 or "mmath" or "do" or "shpinst" or "shprslt" or "svb" or "template"
+                 or "keycode" or "password" or "passwordhash" or "protend" or "protstart":
+                state.Destination = RtfDestination.Skip;
+                return;
+            case "atnauthor":
+                state.Destination = RtfDestination.AnnotationAuthor;
+                return;
+
+            // ---- flows
+            case "footnote":
+                // The reference mark was written just before this group, so the number it took is
+                // the one this note carries — and the offset it left behind is where the note is anchored.
+                //
+                // Whether it is an endnote is decided by peeking, which is how LibreOffice's own importer
+                // does it (`rtfdispatchdestination.cxx`, "Check if this is an endnote"): RTF says so with a
+                // `\ftnalt` immediately inside the group, and the *citation* is needed now — the two classes
+                // are numbered by separate sequences in different formats, and the anchor's number is
+                // appended before the tokeniser could have reached the flag.
+                BeginNoteFlow(
+                    state, _pendingNoteCitation ?? CurrentFootnoteCitation(), _pendingNoteOffset);
+                return;
+            case "annotation":
+                BeginFlow(state, SectionKind.Comment, _pendingAnnotationAuthor);
+                _pendingAnnotationAuthor = null;
+                return;
+            case "header" or "headerl" or "headerr" or "headerf":
+                BeginFlow(state, SectionKind.Header, token.Name[6..] is "" ? "default" : token.Name[6..]);
+                return;
+            case "footer" or "footerl" or "footerr" or "footerf":
+                BeginFlow(state, SectionKind.Footer, token.Name[6..] is "" ? "default" : token.Name[6..]);
+                return;
+            case "shptxt" or "txbxtext":
+                // A shape's or text box's own text flow, which is not part of the paragraph it
+                // is anchored in — and, when a shape is open, a block list of its own, so that the
+                // frame is laid out in its rectangle rather than dropped.
+                BeginFrameFlow(state);
+                return;
+
+            // ---- shapes
+            case "shp":
+                // The one place a group's *first* control word opens something this reader keeps: the
+                // shape's properties and its text both arrive inside it, and the geometry words below are
+                // dispatched whatever destination is in force, since they mean nothing anywhere else.
+                BeginShape();
+                return;
+            case "shpleft" or "shptop" or "shpright" or "shpbottom" or "shpwr" or "shpwrk":
+                if (_shape is not null) _shape.Set(token.Name, token.Parameter ?? 0);
+                return;
+            case "shpbxpage" or "shpbxmargin" or "shpbxcolumn" or "shpbxignore":
+                if (_shape is not null && token.Name != "shpbxignore") _shape.HorizontalOrigin = token.Name;
+                return;
+            case "shpbypage" or "shpbymargin" or "shpbypara" or "shpbyignore":
+                if (_shape is not null && token.Name != "shpbyignore") _shape.VerticalOrigin = token.Name;
+                return;
+            case "sn":
+                state.Destination = RtfDestination.ShapePropertyName;
+                return;
+            case "sv":
+                state.Destination = RtfDestination.ShapePropertyValue;
+                return;
+
+            // ---- fields
+            case "field":
+                // A field's hyperlink applies only inside it, so the depth it was seen at is what
+                // says when to forget it.
+                _fieldHyperlink = null;
+                _fieldDepth = _groupDepth;
+                return;
+            case "fldinst":
+                state.Destination = RtfDestination.FieldInstruction;
+                return;
+            case "fldrslt":
+                // The cached result, which is what a reader displays.
+                state.Destination = RtfDestination.Body;
+                BeginFieldResult();
+                return;
+
+            // ---- list labels
+            case "listtext":
+                state.Destination = RtfDestination.ListText;
+                return;
+            case "ls":
+                state.ListId = token.Parameter ?? 0;
+                return;
+            case "ilvl":
+                state.ListLevel = token.Parameter ?? 0;
+                return;
+
+            // ---- layout formatting
+            case "fs":
+                // Half-points, as in OOXML: \fs24 is twelve points.
+                state.FontSizeHalfPoints = token.Parameter;
+                return;
+            // ---- tab stops. The kind and the leader precede the position, and \pard clears the lot.
+            case "tqc":
+                state.PendingTabAlignment = TabAlignment.Centre;
+                return;
+            case "tqr":
+                state.PendingTabAlignment = TabAlignment.Right;
+                return;
+            case "tqdec":
+                state.PendingTabAlignment = TabAlignment.DecimalSeparator;
+                return;
+            case "tldot":
+                state.PendingTabLeader = '.';
+                return;
+            case "tlhyph":
+                state.PendingTabLeader = '-';
+                return;
+            case "tlul" or "tlth":
+                state.PendingTabLeader = '_';
+                return;
+            case "tleq":
+                state.PendingTabLeader = '=';
+                return;
+            case "tx" or "tb":
+                // \tb is a bar tab: a vertical rule rather than an advance, so it is recorded as a plain
+                // stop. Drawing the rule needs the line's height, which a paragraph property does not have.
+                if (token.Parameter is { } position && state.TabStops.Count < MaxTabStops)
+                {
+                    state.TabStops.Add(new TabStop(
+                        Core.Units.Length.FromTwips(position),
+                        state.PendingTabAlignment,
+                        state.PendingTabLeader));
+                }
+
+                state.PendingTabAlignment = TabAlignment.Left;
+                state.PendingTabLeader = '\0';
+                return;
+            case "deftab":
+                if (token.Parameter is { } interval and > 0)
+                    _defaultTabInterval = Core.Units.Length.FromTwips(interval);
+                return;
+
+            // Deliberately ignoring the parameter: LibreOffice declares \htmautsp a
+            // RTFControlType::FLAG (rtftokenizer.cxx:701), so \htmautsp0 asks for HTML auto-spacing
+            // exactly as \htmautsp does. Measured — both put the reference's paragraph boundaries at
+            // 24.00 pt where their absence gives 32.00 pt — which is why this is not `Parameter != 0`.
+            case "htmautsp":
+                // And deliberately ignoring it once the body has begun: the RTF importer sends its
+                // settings table from `checkFirstRun` (`rtfdocumentimpl.cxx`:414-435), so a
+                // `\htmautsp` written after the document's first run is set on an
+                // `m_aSettingsTableSprms` nobody reads again. `rtfsprm.cxx`:238-241 says so in a
+                // comment of its own — "\htmautsp arrives after the style table, so only the
+                // non-style value is correct".
+                if (!_firstRunSeen) _htmlAutoSpacing = true;
+                return;
+
+            case "li":
+                state.LeftIndent = token.Parameter;
+                return;
+            case "ri":
+                state.RightIndent = token.Parameter;
+                return;
+            case "fi":
+                state.FirstLineIndent = token.Parameter;
+                return;
+            case "sb":
+                state.SpaceBefore = token.Parameter;
+                return;
+            case "sa":
+                state.SpaceAfter = token.Parameter;
+                return;
+            case "sl":
+                state.LineSpacing = token.Parameter;
+                return;
+            case "slmult":
+                // \slmult1 makes \sl a multiple in two-hundred-and-fortieths of a line; \slmult0 or
+                // its absence makes it twips, whose sign then chooses at-least from exact.
+                state.IsMultipleLineSpacing = token.Parameter is not 0;
+                return;
+            // \ql and \qr name a page side rather than a reading edge — LibreOffice's own importer
+            // takes RTF's justification literally where it swaps OOXML's
+            // (`bUseLiteralDirection = IsRTFImport()`,
+            // sw/source/writerfilter/dmapper/DomainMapper.cxx:1803) — so they are recorded as the
+            // sides they are and folded onto the start and end edges once \rtlpar is known, which
+            // a file is free to write after them.
+            case "ql":
+                state.Alignment = TextAlignment.Start;
+                return;
+            case "qr":
+                state.Alignment = TextAlignment.End;
+                return;
+            case "rtlpar":
+                state.IsRightToLeft = true;
+                return;
+            case "ltrpar":
+                state.IsRightToLeft = false;
+                return;
+            case "qc":
+                state.Alignment = TextAlignment.Centre;
+                return;
+            case "qj":
+                state.Alignment = TextAlignment.Justify;
+                return;
+            case "qd":
+                state.Alignment = TextAlignment.Distribute;
+                return;
+            case "keepn":
+                state.KeepWithNext = token.Parameter is not 0;
+                return;
+            case "keep":
+                state.KeepTogether = token.Parameter is not 0;
+                return;
+            case "widctlpar":
+                state.HasWidowControl = true;
+                return;
+            case "nowidctlpar":
+                state.HasWidowControl = false;
+                return;
+            case "pagebb":
+                state.StartsNewPage = token.Parameter is not 0;
+                return;
+            case "contextualspace":
+                state.HasContextualSpacing = token.Parameter is not 0;
+                return;
+
+            // ---- paragraph and character state
+            case "pard":
+                state.ResetParagraph();
+
+                // Table membership is paragraph formatting, so \pard clears it and the \intbl and
+                // \itap that follow re-state it. Without the reset a paragraph after a table stays
+                // in it, and the table never closes.
+                //
+                // But only for a \pard the *body* wrote. Membership lives on the flow rather than on
+                // the group, so unlike everything else `ResetParagraph` touches it does not come back
+                // when the group closes — and a `{\listtext\pard\plain \tab}` label, which is how
+                // Word writes the rendered `1.` of every numbered item, therefore took the paragraph
+                // holding it out of its own cell. LibreOffice states the rule outright at
+                // `rtfdispatchflag.cxx`:588: "\pard is allowed between \cell and \row, but in that
+                // case it should not reset the fact that we're inside a table." Its oracle agrees —
+                // 26.2.4.2 draws a row whose first cell carries such a label as one row.
+                //
+                // Gated on the destination, which is the same gate `EndCell` and `EndRow` already use
+                // for the same reason: a control word written inside a label, a field instruction or a
+                // note is not the body's statement about the body's table.
+                if (state.Destination is RtfDestination.Body)
+                {
+                    CurrentFlow.InTable = false;
+                    CurrentFlow.TableLevelIndex = 0;
+                }
+
+                // "Reset currently selected paragraph style as well. By default the style with
+                // index 0 is applied" — `sw/source/writerfilter/rtftok/rtfdispatchflag.cxx`:600-614.
+                // So a paragraph that names no style is not unstyled: it is in style zero, and
+                // takes that style's formatting.
+                SelectParagraphStyle(state, 0);
+
+                return;
+            case "plain":
+                state.ResetCharacter();
+
+                // \plain restores the *default* character state and not merely the toggles:
+                // `m_aStates.top().getCharacterSprms() = getDefaultState().getCharacterSprms()`,
+                // `rtfdispatchflag.cxx`:575-583, and the default state carries \deff's face. Leaving
+                // the font and the size where the previous run put them lets a `\f0\fs18` written
+                // for one empty table cell set the face of every cell after it.
+                state.FontIndex = _defaultFontIndex;
+                state.FontSizeHalfPoints = null;
+
+                // The paragraph style sits under the direct formatting rather than beside it, so
+                // clearing the direct half exposes the style's again.
+                ReapplyStyleCharacters(state);
+                return;
+            case "par":
+                EmitParagraph(state);
+                return;
+            case "line":
+                AppendText(state, "\n");
+                return;
+            case "tab":
+                AppendText(state, "\t");
+                return;
+            case "s":
+                if (state.Destination == RtfDestination.StyleSheet)
+                {
+                    // Inside the stylesheet, \s names the style being *defined* rather than one
+                    // being applied. Missing this leaves every style nameless.
+                    state.StyleSheetId = token.Parameter ?? 0;
+                    state.StyleSheetIsCharacter = false;
+                }
+                else
+                {
+                    SelectParagraphStyle(state, token.Parameter ?? 0);
+                }
+                return;
+            case "cs":
+                if (state.Destination == RtfDestination.StyleSheet)
+                {
+                    state.StyleSheetId = token.Parameter ?? 0;
+                    state.StyleSheetIsCharacter = true;
+                }
+                else
+                {
+                    state.CharacterStyleId = token.Parameter ?? 0;
+                }
+                return;
+            case "outlinelevel":
+                state.OutlineLevel = token.Parameter;
+                return;
+            case "sbasedon":
+                state.StyleSheetBasedOn = token.Parameter;
+                return;
+            case "b":
+                state.Bold = token.Parameter != 0;
+                return;
+            case "i":
+                state.Italic = token.Parameter != 0;
+                return;
+            // `\uldb` and `\ululdbwave` are the two that draw TWO lines; the other fifteen draw
+            // one, whatever pattern they name, because nothing below this draws a pattern.
+            case "uldb" or "ululdbwave":
+                state.Underline = token.Parameter != 0
+                    ? TextUnderline.DoubleLine
+                    : TextUnderline.None;
+                return;
+            // The `\ulth` family and `\ulhwave` are the heavy forms —
+            // `RTFDocumentImpl` maps them to `thick`, `dottedHeavy`, `dashedHeavy`,
+            // `dashDotHeavy`, `dashDotDotHeavy`, `dashLongHeavy` and `wavyHeavy`
+            // (`rtfdocumentimpl.cxx`:2085-2102) — so they are one line at about twice the weight.
+            case "ulth" or "ulthd" or "ulthdash" or "ulthdashd" or "ulthdashdd" or "ulthldash"
+                 or "ulhwave":
+                state.Underline = token.Parameter != 0
+                    ? TextUnderline.BoldLine
+                    : TextUnderline.None;
+                return;
+            case "ul" or "uld" or "uldash" or "uldashd" or "uldashdd"
+                 or "ulldash" or "ulw" or "ulwave":
+                state.Underline = token.Parameter != 0
+                    ? TextUnderline.SingleLine
+                    : TextUnderline.None;
+                return;
+            case "ulnone":
+                state.Underline = TextUnderline.None;
+                return;
+            case "strike" or "striked":
+                state.Strike = token.Parameter != 0;
+                return;
+            case "charscalex":
+                // A bare `\charscalex` is ONE HUNDRED, not zero: the tokeniser's own `defValue` is 100
+                // (`rtftokenizer.cxx`:253), which is the opposite of `\kerning` directly below and the
+                // one place the two differ. Out of range is 100 too, because the control word is
+                // dispatched to `NS_ooxml::LN_EG_RPrBase_w` (`rtfdispatchvalue.cxx`:193) -- the very
+                // sprm `w:w` uses, so it meets the DOCX filter's 1..600 rule in the same place.
+                // Measured at 26.2.4.2: 60 draws at 0.59974, 99 at 0.98665, 130 at 1.29981, and `0`,
+                // `900`, `-50` and a bare `\charscalex` all at 1.00000.
+                state.WidthPerCent = token.Parameter is { } scale and >= 1 and <= 600
+                    ? scale
+                    : TextWidthScale.Natural;
+                return;
+            case "kerning":
+                // A size threshold rather than a switch, and read as a switch because that is all
+                // Writer's item can hold — see RtfState.AutoKerning. A bare `\kerning` with no
+                // parameter is `\kerning0` by RTF's own default-of-zero rule, so it turns kerning
+                // *off*, which is the opposite of what a toggle's default would do.
+                state.AutoKerning = (token.Parameter ?? 0) != 0;
+                return;
+            case "caps":
+                state.Capitals = token.Parameter != 0;
+                return;
+            case "scaps":
+                state.SmallCapitals = token.Parameter != 0;
+                return;
+            case "super":
+                // `\super` is one of `checkFirstRun`'s thirteen callers, and the only one that can
+                // stand in a document's preamble: `RTFDocumentImpl::dispatchFlag`'s `SUPER` case
+                // sends the settings table for anything that is not a style-sheet entry
+                // (`sw/source/writerfilter/rtftok/rtfdispatchflag.cxx`:887-895, under a comment
+                // about a document that starts with a footnote). `\sub` and `\nosupersub` beside
+                // it do not, which is why only this arm notes the run.
+                //
+                // Its reach is a *list level*. LibreOffice's own RTF export writes `\super` into a
+                // numbering level whose text is superscript, and a list table is dispatched rather
+                // than skipped — so a `\htmautsp` written after the list table, which is where
+                // that exporter writes it, is never read. `150-5370-10H.rtf` states `\super` at
+                // byte 222775 in `{\*\listtable{\list{\listlevel …}}}` and `\htmautsp` at
+                // 266199, and 26.2.4.2 draws it in 746 pages with the word and 746 without it.
+                NoteSettingsWindowClosed(state);
+                state.VerticalPosition = token.Parameter == 0 ? 0 : 1;
+                return;
+            case "sub":
+                state.VerticalPosition = token.Parameter == 0 ? 0 : -1;
+                return;
+            case "nosupersub":
+                state.VerticalPosition = 0;
+                return;
+            case "v":
+                // Hidden text: not displayed by any reader, so extracting it would inject text
+                // the document does not show.
+                state.Hidden = token.Parameter != 0;
+                return;
+            case "f":
+                state.FontIndex = token.Parameter ?? 0;
+                if (state.Destination == RtfDestination.FontTable)
+                    state.FontTableIndex = token.Parameter ?? 0;
+                return;
+            case "fcharset":
+                if (state.Destination == RtfDestination.FontTable && state.FontTableIndex is { } font)
+                    _fontCharsets[font] = token.Parameter ?? 0;
+                return;
+            case "lang" or "langnp":
+                state.LanguageId = token.Parameter ?? 0;
+                return;
+
+            // ---- colours
+            case "red" or "green" or "blue":
+                if (state.Destination == RtfDestination.ColourTable)
+                    SetColourComponent(token.Name, token.Parameter ?? 0);
+                return;
+            case "cf":
+                state.ForegroundColourIndex = token.Parameter is { } index and >= 0 ? index : null;
+                return;
+            case "highlight":
+                // Index nought is the automatic colour, which for a highlighter means none —
+                // `RTFDocumentImpl` writes COL_AUTO for it rather than looking the table up
+                // (`sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx`:937).
+                state.HighlightColourIndex = token.Parameter is { } band and > 0 ? band : null;
+                return;
+
+            // ---- tables
+            case "trowd":
+                BeginRowDefinition(CurrentFlow);
+                return;
+            case "intbl":
+                state.InTable = true;
+                CurrentFlow.InTable = true;
+                return;
+            case "itap":
+                // The paragraph's table nesting depth. Zero means it is not in a table at all, which
+                // is how a producer says "this paragraph left the table" without a closing marker.
+                CurrentFlow.TableLevelIndex = Math.Clamp(token.Parameter ?? 0, 0, MaxTableDepth);
+                if (CurrentFlow.TableLevelIndex > 0) CurrentFlow.InTable = true;
+                return;
+            case "trhdr":
+                DefinitionTarget(CurrentFlow).RowIsHeader = true;
+                return;
+            case "trkeep":
+                // "Keep the row intact", which is the negation of what the layout asks — see
+                // `PageTableRow.CanSplit`. Not `\trkeepfollow`, which is keep-with-next and a different
+                // question.
+                DefinitionTarget(CurrentFlow).RowIsKeptTogether = true;
+                return;
+            case "cellx":
+                AddCellDefinition(CurrentFlow, token.Parameter);
+                return;
+            case "trleft":
+                DefinitionTarget(CurrentFlow).RowLeftEdge = token.Parameter ?? 0;
+                return;
+
+            // ---- positioned ("wrapped") tables. Every one of these words makes the row's table a fly,
+            // because every one of them writes into `w:tblpPr` in LibreOffice's own importer — including
+            // the four \tdfrmtxt* distances, which state no position at all. Mirrored rather than
+            // narrowed: `DocxLayoutSource` asks exactly "is there a tblpPr", so narrowing here would make
+            // the two readers of one document disagree. It cannot bite on the corpus either way — of the
+            // 22 720 row definitions in the 328 converted RTF, **1135 state a real position and not one
+            // states a \tdfrmtxt* distance without one** (`probes/rtf-gate-r71/census.py`).
+            case "tpvpg" or "tpvmrg" or "tpvpara":
+                Position(CurrentFlow).VerticalAnchor = token.Name switch
+                {
+                    "tpvpg" => FrameVerticalOrigin.Page,
+                    "tpvmrg" => FrameVerticalOrigin.PageMargin,
+                    _ => FrameVerticalOrigin.Paragraph,
+                };
+                return;
+            case "tphpg" or "tphmrg" or "tphcol":
+                Position(CurrentFlow).HorizontalAnchorIsPage = token.Name is "tphpg";
+                return;
+            case "tposxc" or "tposxr":
+                // Only these two. `\tposxl`, `\tposxi` and `\tposxo` are tokenised by LibreOffice and
+                // then dispatched nowhere (`rtfdispatchflag.cxx`:82-101 names centre and right and no
+                // other), so they reach no `w:tblpXSpec` and no `w:tblpPr` — reading them here would
+                // both invent an alignment the reference does not apply and turn a table into a fly
+                // that the reference leaves in the flow. None of the three occurs in the corpus.
+                Position(CurrentFlow).HorizontalSpec = token.Name is "tposxc"
+                    ? FrameHorizontalAlignment.Centre
+                    : FrameHorizontalAlignment.Right;
+                return;
+            case "tposy":
+                Position(CurrentFlow).VerticalOffset = token.Parameter ?? 0;
+                return;
+            case "tdfrmtxtBottom":
+                Position(CurrentFlow).BottomFromText = token.Parameter ?? 0;
+                return;
+            // The rest of what does reach `w:tblpPr`, and is not read past that. `\tposx` is the
+            // horizontal distance, which `PageTable` takes from the row's own `\trleft`; `\tposyc` and
+            // `\tposyb` name a vertical edge, which is `w:tblpYSpec` and which neither reader honours;
+            // and `\tdfrmtxtTop`, `Left` and `Right` are distances the flow keeps beside a fly it cannot
+            // wrap into. Consumed rather than dropped, because writing a `tblpPr` is the whole of what
+            // makes the row's table a fly and each of these five writes one.
+            case "tposx" or "tposyc" or "tposyb"
+              or "tdfrmtxtTop" or "tdfrmtxtLeft" or "tdfrmtxtRight":
+                _ = Position(CurrentFlow);
+                return;
+            // `\tposnegx`, `\tposnegy`, `\tposyt`, `\tposyil`, `\tposyin` and `\tposyout` are
+            // deliberately absent: LibreOffice's tokeniser recognises all six and its dispatchers handle
+            // none of them, so each is dropped and none makes a table positioned. Not one occurs in the
+            // corpus's 22 720 row definitions (`probes/rtf-gate-r71/census.py`).
+            case "trgaph":
+                // Half the gap between two cells, so it is the padding on each side of one. RTF's oldest
+                // spelling of cell padding and the one LibreOffice writes.
+                DefinitionTarget(CurrentFlow).RowHalfGap = token.Parameter ?? 0;
+                return;
+            case "trrh":
+                // A row height, whose *sign* carries the rule: positive is "at least" and negative is
+                // "exactly this", which clips. So the parameter is kept as it arrived rather than made
+                // positive — taking the magnitude either way loses the only thing that says which it is.
+                DefinitionTarget(CurrentFlow).RowHeight = token.Parameter ?? 0;
+                return;
+            case "clpadl" or "clpadr" or "clpadt" or "clpadb":
+                SetPadding(
+                    DefinitionTarget(CurrentFlow).PendingCellPadding,
+                    CellPaddingSide(token.Name[5]),
+                    token.Parameter);
+                return;
+            case "trpaddl" or "trpaddr" or "trpaddt" or "trpaddb":
+                SetPadding(
+                    DefinitionTarget(CurrentFlow).RowPadding,
+                    RowPaddingSide(token.Name[6]),
+                    token.Parameter);
+                return;
+            case "trpaddfl" or "trpaddfr" or "trpaddft" or "trpaddfb":
+                // The unit flag for the matching \trpadd, as \clpadf* is for \clpad*.
+                return;
+            case "clpadfl" or "clpadfr" or "clpadft" or "clpadfb":
+                // The unit the matching \clpad takes: 3 is twips and 0 is a "null" the specification
+                // leaves undefined. Only twips is honoured, which is what every producer writes.
+                return;
+            // A border is stated in two halves: these four *select* a side, and the \brdr* words below
+            // describe whichever side was last selected. So the selection is state rather than an argument.
+            case "clbrdrl":
+                DefinitionTarget(CurrentFlow).PendingBorderSide = 0;
+                return;
+            case "clbrdrr":
+                DefinitionTarget(CurrentFlow).PendingBorderSide = 1;
+                return;
+            case "clbrdrt":
+                DefinitionTarget(CurrentFlow).PendingBorderSide = 2;
+                return;
+            case "clbrdrb":
+                DefinitionTarget(CurrentFlow).PendingBorderSide = 3;
+                return;
+
+            case "brdrw" or "brdrcf" or "brdrnone" or "brdrtbl":
+            {
+                TableLevel target = DefinitionTarget(CurrentFlow);
+                if (target.PendingBorderSide is not { } at) return;
+
+                (int Twips, int? ColourIndex, bool IsNone) side = target.PendingCellBorders[at];
+
+                target.PendingCellBorders[at] = token.Name switch
+                {
+                    // \brdrw is in twips, unlike OOXML's eighths of a point and ODF's CSS shorthand: one
+                    // quantity, three units, and reading any of them as another is out by a factor.
+                    "brdrw" => (Math.Max(0, token.Parameter ?? 0), side.ColourIndex, side.IsNone),
+                    "brdrcf" => (side.Twips, token.Parameter, side.IsNone),
+
+                    // \brdrnone and \brdrtbl both mean "no border on this side", and both have to beat a
+                    // width stated before them: a producer writes the width and then cancels it.
+                    _ => (0, null, true),
+                };
+
+                return;
+            }
+
+            case "clcbpat":
+                // The cell's *background* colour index. \clcfpat is the pattern's foreground and only shows
+                // through a shading percentage, which is not modelled — drawing the background solid is the
+                // right colour at the wrong density and much closer than nothing.
+                DefinitionTarget(CurrentFlow).PendingCellShading = token.Parameter;
+                return;
+            case "clvertalt":
+                DefinitionTarget(CurrentFlow).PendingCellAlignment = Layout.VerticalTextAlignment.Top;
+                return;
+            case "clvertalc":
+                DefinitionTarget(CurrentFlow).PendingCellAlignment = Layout.VerticalTextAlignment.Middle;
+                return;
+            case "clvertalb":
+                DefinitionTarget(CurrentFlow).PendingCellAlignment = Layout.VerticalTextAlignment.Bottom;
+                return;
+
+            // The cell's text flow. LibreOffice's tokeniser turns these five straight into
+            // `w:textDirection` (`rtfdispatchflag.cxx`:483-508), and `CellTextDirection` already holds
+            // the three answers dmapper reduces its six values to — so a turned cell is read here
+            // exactly as the DOCX spelling of the same document reads it. Without this a `\cltxbtlr`
+            // label is laid out upright in a cell as narrow as one glyph, which breaks it a character
+            // per line; 186 `\cltxbtlr` in 11 of the corpus's converted RTF, and 3 `\cltxtbrl` in one.
+            case "cltxbtlr":
+                DefinitionTarget(CurrentFlow).PendingCellTextDirection =
+                    Layout.CellTextDirection.BottomToTopLeftToRight;
+                return;
+            case "cltxtbrl" or "cltxtbrlv":
+                // Folded onto one answer by dmapper, not by us: `tbRl` and `tbRlV` both become
+                // `WritingMode2::TB_RL` in `DomainMapperTableManager.cxx`:325-350.
+                DefinitionTarget(CurrentFlow).PendingCellTextDirection =
+                    Layout.CellTextDirection.TopToBottomRightToLeft;
+                return;
+            case "cltxlrtb" or "cltxlrtbv":
+                // Upright, and stated explicitly to beat a direction set earlier in the same
+                // declaration — `\cltxlrtbv` because dmapper ignores `lrTbV` outright.
+                DefinitionTarget(CurrentFlow).PendingCellTextDirection =
+                    Layout.CellTextDirection.LeftToRight;
+                return;
+
+            case "clmgf":
+                DefinitionTarget(CurrentFlow).PendingCellMergesFirst = true;
+                return;
+            case "clmrg":
+                DefinitionTarget(CurrentFlow).PendingCellMerged = true;
+                return;
+            case "clvmgf":
+                DefinitionTarget(CurrentFlow).PendingCellVerticalFirst = true;
+                return;
+            case "clvmrg":
+                DefinitionTarget(CurrentFlow).PendingCellVerticalMerged = true;
+                return;
+            case "nesttableprops":
+                // A nested row's definition, and the one ignorable destination that must not be
+                // skipped: it holds the \trowd, the \cellx edges and the \nestrow that closes the
+                // row. It contains no text, so leaving the destination alone is enough.
+                return;
+            case "nonesttables":
+                // A plain-text approximation of the nested table, for readers that cannot nest.
+                // Reading it as well as the real thing duplicates every nested cell.
+                state.Destination = RtfDestination.Skip;
+                return;
+            case "cell" or "nestcell":
+                EndCell(state);
+                return;
+            case "row" or "nestrow":
+                EndRow(state);
+                return;
+
+            // ---- characters written as control words
+            case "chftn":
+                // The auto-numbered footnote mark. RTF stores no number: the reference and the
+                // note's own mark are both this control word, and the writer expects the reader
+                // to count. The mark inside a note repeats the reference's number rather than
+                // taking a new one, which is why only the body advances the counter.
+                if (CurrentFlow.Target.Kind == SectionKind.Note)
+                {
+                    // The mark inside the note's own body repeats the reference's number. The
+                    // note section already carries it as its name, so emitting it here would
+                    // prefix every note's text with its own number — which is not what the other
+                    // readers do and would make the same document extract differently per format.
+                    // Layout does want it, and takes it from the flow's LayoutPrefix instead.
+                    return;
+                }
+
+                // Where the note is anchored: the offset the citation starts at, taken before it is
+                // appended. The {\*\footnote} group that needs it comes immediately after this word.
+                _pendingNoteOffset = CurrentFlow.LayoutLength;
+                _pendingNoteCitation = NextNoteCitation(NoteAheadIsEndnote());
+                AppendText(state, _pendingNoteCitation);
+                return;
+            case "ftnalt":
+                // An endnote, which RTF writes as a footnote whose first control word says otherwise. The
+                // class was already settled by the peek at `\footnote`; this confirms it for a producer
+                // that writes the flag somewhere the peek could not see.
+                CurrentFlow.IsEndnote = true;
+                return;
+            case "chatn" or "chftnsep" or "chftnsepc":
+                return;
+            case "emdash":
+                AppendText(state, "—");
+                return;
+            case "endash":
+                AppendText(state, "–");
+                return;
+            case "emspace":
+                AppendText(state, " ");
+                return;
+            case "enspace":
+                AppendText(state, " ");
+                return;
+            case "qmspace":
+                AppendText(state, " ");
+                return;
+            case "bullet":
+                AppendText(state, "•");
+                return;
+            case "lquote":
+                AppendText(state, "‘");
+                return;
+            case "rquote":
+                AppendText(state, "’");
+                return;
+            case "ldblquote":
+                AppendText(state, "“");
+                return;
+            case "rdblquote":
+                AppendText(state, "”");
+                return;
+            case "zwnj":
+                AppendText(state, "‌");
+                return;
+            case "zwj":
+                AppendText(state, "‍");
+                return;
+            case "sect":
+                // Ends the section, and the paragraph with it. The geometry reader saw this word first and
+                // has already recorded the section that closed here, so what follows belongs to the next.
+                // Not forced: LibreOffice writes \par before \sect, and forcing would add a blank
+                // paragraph at every section boundary — while a producer writing text straight into \sect
+                // still gets its last paragraph closed.
+                FinishParagraph(CurrentFlow, state, force: false);
+
+                // And any table still open with it. RTF marks no end to a table — a paragraph back
+                // at the enclosing level is what closes one — so `…\row\pard \sect` leaves the
+                // table open across the break, and `FinishTable` then stamps it with the section
+                // index it reads *now*, which is the next one. Every block on both sides of the
+                // break then claims one section and the `\sbkpage` page break never happens:
+                // measured on a two-section probe as one page against 26.2.4.2's two, and
+                // `Annex-10…GCAA.rtf` is 156 sections written in exactly that shape.
+                if (state.Destination is RtfDestination.Body) CloseTablesDeeperThan(CurrentFlow, 0);
+
+                _sectionIndex++;
+                return;
+
+            case "page" or "column" or "sectd" or "softpage":
+                // Breaks move content elsewhere without contributing text.
+                return;
+            case "deleted":
+                // Text a tracked change removed, which is still in the file. Collected rather than
+                // skipped so the change can be recorded; none of it reaches the document. A toggle,
+                // so \deleted0 turns it off and must not send the text to the collector — where the
+                // old code, which only ever switched to Skip, would have dropped it either way.
+                if (token.Parameter != 0) state.Destination = RtfDestination.Deletion;
+                return;
+            case "revised":
+                state.Revised = token.Parameter != 0;
+                return;
+            case "revauth":
+                state.RevisionAuthor = token.Parameter ?? 0;
+                return;
+            case "revdttm":
+                state.RevisionDate = unchecked((uint)(token.Parameter ?? 0));
+                return;
+            case "revauthdel":
+                state.DeletionAuthor = token.Parameter ?? 0;
+                return;
+            case "revdttmdel":
+                state.DeletionDate = unchecked((uint)(token.Parameter ?? 0));
+                return;
+
+            // ---- info fields
+            case "title" or "subject" or "author" or "operator" or "keywords" or "doccomm"
+                 or "category" or "manager" or "company":
+                if (state.Destination == RtfDestination.Info)
+                {
+                    state.Destination = RtfDestination.InfoField;
+                    state.InfoField = token.Name;
+                }
+                return;
+            case "creatim" or "revtim" or "printim":
+                if (state.Destination == RtfDestination.Info)
+                {
+                    state.Destination = RtfDestination.InfoTimestamp;
+                    state.InfoField = token.Name;
+                }
+                return;
+            case "nofpages" or "nofwords" or "nofchars" or "nofcharsws" or "version" or "edmins":
+                if (state.Destination is RtfDestination.Info && token.Parameter is { } value)
+                    _info[token.Name] = value.ToString(CultureInfo.InvariantCulture);
+                return;
+            case "yr" or "mo" or "dy" or "hr" or "min" or "sec":
+                if (state.Destination == RtfDestination.InfoTimestamp && state.InfoField is { } field
+                    && token.Parameter is { } part)
+                    _info[$"{field}.{token.Name}"] = part.ToString(CultureInfo.InvariantCulture);
+                return;
+
+            default:
+                // An unknown destination marked with \* must be skipped whole: RTF puts private
+                // extensions in the same syntax as content, and reading one emits its internals
+                // as text.
+                if (ignorable) state.Destination = RtfDestination.Skip;
+                return;
+        }
+    }
+
+    private void HandleControlSymbol(char symbol, GroupState state)
+    {
+        switch (symbol)
+        {
+            case '\\' or '{' or '}':
+                AppendText(state, symbol.ToString());
+                break;
+            case '~':
+                AppendText(state, " ");
+                break;
+            case '_':
+                AppendText(state, "‑");
+                break;
+            case '-':
+                // A discretionary hyphen is drawn only where the line breaks, so it contributes
+                // nothing to the text.
+                break;
+            default:
+                break;
+        }
+    }
+
+    // ------------------------------------------------------------------------ encoding
+
+    private void SetDocumentEncoding(int codePage)
+    {
+        _documentEncoding = LegacyCodePages.Get(codePage, out bool resolved);
+        if (!resolved && !_reportedEncoding)
+        {
+            _reportedEncoding = true;
+            _diagnostics.Add(new Diagnostic(
+                DiagnosticSeverity.Warning, "PL2200",
+                $"The document declares code page {codePage}, which is not available; text has "
+                + $"been decoded as {_documentEncoding.WebName}. Non-ASCII characters may be "
+                + "wrong."));
+        }
+    }
+
+    /// <summary>
+    /// The encoding for text in the current state: the font's character set where it names one,
+    /// otherwise the document's.
+    /// </summary>
+    /// <remarks>
+    /// A font's <c>\fcharset</c> overrides <c>\ansicpg</c> for text in that font, which is how a
+    /// single RTF file mixes Cyrillic and Western text. Charset 2 is Symbol and charset 0 is
+    /// "ANSI", neither of which changes the code page.
+    /// </remarks>
+    private Encoding EncodingFor(GroupState state)
+    {
+        if (!_fontCharsets.TryGetValue(state.FontIndex, out int charset)) return _documentEncoding;
+
+        return charset switch
+        {
+            0 or 1 or 2 => _documentEncoding,
+            77 => LegacyCodePages.Get(10000),   // Mac Roman
+            128 => LegacyCodePages.Get(932),    // Shift-JIS
+            129 => LegacyCodePages.Get(949),    // Wansung
+            130 => LegacyCodePages.Get(1361),   // Johab
+            134 => LegacyCodePages.Get(936),    // GBK
+            136 => LegacyCodePages.Get(950),    // Big5
+            161 => LegacyCodePages.Get(1253),   // Greek
+            162 => LegacyCodePages.Get(1254),   // Turkish
+            163 => LegacyCodePages.Get(1258),   // Vietnamese
+            177 => LegacyCodePages.Get(1255),   // Hebrew
+            178 or 179 or 180 => LegacyCodePages.Get(1256), // Arabic
+            186 => LegacyCodePages.Get(1257),   // Baltic
+            204 => LegacyCodePages.Get(1251),   // Cyrillic
+            222 => LegacyCodePages.Get(874),    // Thai
+            238 => LegacyCodePages.Get(1250),   // Central European
+            _ => _documentEncoding,
+        };
+    }
+
+    private string Decode(ReadOnlySpan<byte> bytes, GroupState state)
+        => bytes.IsEmpty ? string.Empty : EncodingFor(state).GetString(bytes);
+
+    private string DecodeByte(byte value, GroupState state)
+    {
+        Span<byte> single = [value];
+        return EncodingFor(state).GetString(single);
+    }
+
+    /// <summary>
+    /// Consumes the code-page fallback characters that follow a <c>\uN</c>.
+    /// </summary>
+    /// <remarks>
+    /// A writer emits both a Unicode code point and its best approximation in the document's code
+    /// page, so that older readers see something. <c>\ucN</c> says how many characters the
+    /// approximation takes. Not skipping them doubles every non-ASCII character — with the
+    /// duplicate usually rendered as a question mark, which is what makes the symptom look like
+    /// an encoding bug rather than a parsing one.
+    /// </remarks>
+    private static void SkipUnicodeFallback(RtfTokeniser tokeniser, int count)
+    {
+        for (int skipped = 0; skipped < count;)
+        {
+            RtfToken token = tokeniser.Read();
+            switch (token.Kind)
+            {
+                case RtfTokenKind.End:
+                    return;
+                case RtfTokenKind.EscapedByte:
+                    skipped++;
+                    break;
+                case RtfTokenKind.Text:
+                    // A text token may cover several fallback characters at once.
+                    skipped += token.Bytes.Length;
+                    break;
+                default:
+                    // A group boundary or control word ends the fallback run: the approximation
+                    // is plain characters only.
+                    return;
+            }
+        }
+    }
+
+    private void ReportDepthLimit()
+    {
+        if (_reportedDepthLimit) return;
+        _reportedDepthLimit = true;
+        _diagnostics.Add(new Diagnostic(
+            DiagnosticSeverity.Error, "PL2201",
+            $"Groups are nested more than {MaxGroupDepth} deep; the deeper content has been "
+            + "skipped."));
+    }
+
+    private string CurrentFootnoteCitation()
+        => _footnotes.Citation(Math.Max(0, _footnoteNumber - 1));
+
+    /// <summary>
+    /// The number the next note of a class is cited by, formatted the way LibreOffice formats that class.
+    /// </summary>
+    /// <remarks>
+    /// Two sequences and two formats: footnotes count 1, 2, 3 and endnotes i, ii, iii. RTF does state both
+    /// outright — <c>\ftnnar</c> and <c>\aftnnrlc</c> are in every file LibreOffice writes — but these are
+    /// the defaults those words name, and reading the words themselves is still to do.
+    /// </remarks>
+    /// <param name="isEndnote">True for an endnote.</param>
+    private string NextNoteCitation(bool isEndnote)
+        => isEndnote
+            ? _endnotes.Citation(_endnoteNumber++)
+            : _footnotes.Citation(_footnoteNumber++);
+
+    private int _endnoteNumber;
+
+    /// <summary>How the document's footnotes are numbered, from the <c>\ftnn*</c> family.</summary>
+    private NoteNumbering _footnotes = NoteNumbering.Footnotes;
+
+    /// <summary>How its endnotes are numbered, from the <c>\aftnn*</c> family.</summary>
+    private NoteNumbering _endnotes = NoteNumbering.Endnotes;
+
+    private DocumentMetadata BuildMetadata()
+    {
+        Metadata = new DocumentMetadata
+        {
+            Title = Info("title"),
+            Subject = Info("subject"),
+            Author = Info("author"),
+            LastModifiedBy = Info("operator"),
+            Description = Info("doccomm"),
+            Category = Info("category"),
+            GeneratorApplication = Info("generator"),
+            Keywords = Info("keywords") is { } keywords
+                ? [.. keywords.Split([',', ';'], StringSplitOptions.RemoveEmptyEntries
+                                                 | StringSplitOptions.TrimEntries)]
+                : [],
+            Created = Timestamp("creatim"),
+            Modified = Timestamp("revtim"),
+            Printed = Timestamp("printim"),
+            RevisionNumber = Number("version"),
+            // \edmins counts minutes of editing time, not a duration string.
+            TotalEditingTime = Number("edmins") is { } minutes ? TimeSpan.FromMinutes(minutes) : null,
+            Statistics = _info.Keys.Any(k => k is "nofpages" or "nofwords" or "nofchars")
+                ? new DocumentStatistics
+                {
+                    PageCount = Number("nofpages"),
+                    WordCount = Number("nofwords"),
+                    // \nofcharsws includes spaces, which is the count a person means.
+                    CharacterCount = Number("nofcharsws") ?? Number("nofchars"),
+                }
+                : null,
+        };
+        return Metadata;
+
+        string? Info(string name)
+            => _info.TryGetValue(name, out string? value) && value.Trim().Length > 0
+                ? value.Trim()
+                : null;
+
+        int? Number(string name)
+            => Info(name) is { } text
+               && int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out int parsed)
+                ? parsed
+                : null;
+
+        DateTimeOffset? Timestamp(string prefix)
+        {
+            if (!_info.TryGetValue($"{prefix}.yr", out string? year)) return null;
+
+            int Part(string name, int fallback)
+                => _info.TryGetValue($"{prefix}.{name}", out string? value)
+                   && int.TryParse(value, out int parsed)
+                    ? parsed
+                    : fallback;
+
+            try
+            {
+                // RTF timestamps carry no zone, so the same rule as ODF applies: report a zero
+                // offset rather than shifting by the reading machine's zone, which would make one
+                // file report different times on different machines.
+                return new DateTimeOffset(
+                    int.Parse(year, CultureInfo.InvariantCulture),
+                    Part("mo", 1), Part("dy", 1), Part("hr", 0), Part("min", 0), Part("sec", 0),
+                    TimeSpan.Zero);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                // A malformed date is not a reason to lose the rest of the metadata.
+                return null;
+            }
+            catch (FormatException)
+            {
+                return null;
+            }
+        }
+    }
+}

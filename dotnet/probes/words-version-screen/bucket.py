@@ -7,7 +7,7 @@ from PIL import Image
 SP = Path("/tmp/claude-0/-home-user/bb4a221c-b846-5451-ba79-f27935c68360/scratchpad")
 OUT = SP / "bucket"; OUT.mkdir(exist_ok=True)
 CORPUS = Path("/home/user/sample-files")
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 
 def page(pdf, n, dpi=30):
     with tempfile.TemporaryDirectory() as t:

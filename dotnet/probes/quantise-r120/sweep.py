@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render the whole corpus with one binary and bank four numbers per document.
 
-    sweep.py <path-to-Paperless.Cli> <corpus-root> <out.tsv> [jobs]
+    sweep.py <path-to-XRay.Office.Cli> <corpus-root> <out.tsv> [jobs]
 
 Columns: path, status, pages, glyphs, sha256 of the PDF.
 

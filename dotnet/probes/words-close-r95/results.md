@@ -290,8 +290,8 @@ itself measured rather than assumed. The `.rtf` column of §1.4's sweep is the c
 
 ## 3. Confinement
 
-The diff is six source files, all under `Paperless.WordProcessing`. Neither
-`Paperless.Spreadsheets.csproj` nor `Paperless.Presentations.csproj` references that project, so
+The diff is six source files, all under `XRay.Office.WordProcessing`. Neither
+`XRay.Office.Spreadsheets.csproj` nor `XRay.Office.Presentations.csproj` references that project, so
 no sheet and no slide can be reached by construction — and the sweep is the measurement that
 agrees with it: **302 of 302 slides and 307 of 307 sheets byte-identical**, and 334 of the 338
 words originals.
@@ -306,10 +306,10 @@ row of either sweep predates its own binary.
 ## 4. The suite
 
 The ten non-fidelity projects were run one at a time: 521, 109, 728, 309, 164, 259, 146,
-1885, 1245, 1044 — all green, and `Paperless.WordProcessing.Tests` is 1885 against 1870 before
+1885, 1245, 1044 — all green, and `XRay.Office.WordProcessing.Tests` is 1885 against 1870 before
 this round's fifteen new cases.
 
-`Paperless.Fidelity.Tests` is **542 passed / 10 failed**, and the ten are exactly the names the
+`XRay.Office.Fidelity.Tests` is **542 passed / 10 failed**, and the ten are exactly the names the
 rulebook lists: `PageDrawingComparisonTests.EveryLineIsDrawn` ×4,
 `TabStopComparisonTests.AListLabelsTabAdvance` ×4, `SheetDrawingComparisonTests.APictureIsDrawn`
 and `JustificationShrinkComparisonTests`. **The four TabStop cases were checked rather than
@@ -342,7 +342,7 @@ banked references `/home/user/gate-orig-r83/ref` and `/home/user/gate-odf-r80/re
 ## 6. Reproducing
 
 ```sh
-export PAPERLESS_CLI=/abs/tree/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=/abs/tree/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 export REF_SOFFICE=/opt/libreoffice26.2/program/soffice
 
 # the 93 fixtures, both sides

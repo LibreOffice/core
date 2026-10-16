@@ -1,5 +1,5 @@
 reference /opt/libreoffice26.2/program/soffice -- LibreOffice 26.2.4.2 0229ac93fcf0d7cbc6376066c6f35021cef002dc
-ours      /home/user/wt-wordsclose/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+ours      /home/user/wt-wordsclose/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 fixture                             ref x    ref y    our x    our y  verdict
 pic-none-fit-c15                   200.00   299.75   200.00   300.00  agree
 pic-none-hdr-c15                        -                 -           NO BAND

@@ -241,22 +241,22 @@ No code changed, so these are a baseline rather than a check. Counts, not colour
 
 | project | failed | passed | skipped | total |
 |---|---:|---:|---:|---:|
-| `Paperless.Containers.Tests` | 0 | 109 | 0 | 109 |
-| `Paperless.Core.Tests` | 0 | 332 | 0 | 332 |
-| `Paperless.Fidelity.Tests` | **30** | 520 | **0** | **550** |
-| `Paperless.Markup.Tests` | 0 | 259 | 0 | 259 |
-| `Paperless.OpenDocument.Tests` | 0 | 125 | 0 | 125 |
-| `Paperless.Presentations.Tests` | 0 | 679 | 0 | 679 |
-| `Paperless.Rendering.Tests` | 0 | 150 | 1 | 151 |
-| `Paperless.Spreadsheets.Tests` | 0 | 762 | 0 | 762 |
-| `Paperless.Text.Tests` | 0 | 349 | 0 | 349 |
-| `Paperless.Vector.Tests` | 0 | 295 | 0 | 295 |
-| `Paperless.WordProcessing.Tests` | 0 | 819 | 0 | 819 |
+| `XRay.Office.Containers.Tests` | 0 | 109 | 0 | 109 |
+| `XRay.Office.Core.Tests` | 0 | 332 | 0 | 332 |
+| `XRay.Office.Fidelity.Tests` | **30** | 520 | **0** | **550** |
+| `XRay.Office.Markup.Tests` | 0 | 259 | 0 | 259 |
+| `XRay.Office.OpenDocument.Tests` | 0 | 125 | 0 | 125 |
+| `XRay.Office.Presentations.Tests` | 0 | 679 | 0 | 679 |
+| `XRay.Office.Rendering.Tests` | 0 | 150 | 1 | 151 |
+| `XRay.Office.Spreadsheets.Tests` | 0 | 762 | 0 | 762 |
+| `XRay.Office.Text.Tests` | 0 | 349 | 0 | 349 |
+| `XRay.Office.Vector.Tests` | 0 | 295 | 0 | 295 |
+| `XRay.Office.WordProcessing.Tests` | 0 | 819 | 0 | 819 |
 | **total** | **30** | **4400** | **1** | **4430** |
 
-`Paperless.Fidelity.Tests` reproduces the briefed baseline exactly — 30 failed of 550, 0 skipped.
+`XRay.Office.Fidelity.Tests` reproduces the briefed baseline exactly — 30 failed of 550, 0 skipped.
 Run per project and totalled by hand, per `CLAUDE.md`; the one skip is in
-`Paperless.Rendering.Tests` and is not a `soffice` skip (Fidelity reports 0 skipped, which is
+`XRay.Office.Rendering.Tests` and is not a `soffice` skip (Fidelity reports 0 skipped, which is
 the number that matters for whether the reference was actually exercised).
 
 ## Prediction, scored

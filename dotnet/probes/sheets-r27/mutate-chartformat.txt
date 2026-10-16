@@ -9,7 +9,7 @@ clean                                                      Failed:     0, Passed
 7. the AUTO flag ignored                                   Failed:     1, Passed:    11
 8. EXC_PATT_NONE filled anyway                             Failed:     1, Passed:    11
 9. any frame taken as the background or wall               Failed:     1, Passed:    11
-10. the axes-set frame taken as the chart background       BUILD FAILED: /home/user/libreoffice-core/.claude/worktrees/sheets-r27/dotnet/src/Paperless.Spreadsheets/MsBinary/XlsChartReader.cs(622,13): error CS0162: Unreachable code detected [/home/user/libreoffice-core/.claude/worktrees/sheets-r27/dotnet/src/Paperless.Spreadsheets/Paperless.Spreadsheets.csproj]
+10. the axes-set frame taken as the chart background       BUILD FAILED: /home/user/libreoffice-core/.claude/worktrees/sheets-r27/dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsChartReader.cs(622,13): error CS0162: Unreachable code detected [/home/user/libreoffice-core/.claude/worktrees/sheets-r27/dotnet/src/XRay.Office.Spreadsheets/XRay.Office.Spreadsheets.csproj]
 11. one fill for every series                              Failed:     1, Passed:    11
 12. a series fill filed as the chart background            Failed:     2, Passed:    10
 === rebuilding clean

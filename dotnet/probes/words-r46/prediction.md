@@ -129,7 +129,7 @@ can only fall. The 13 documents still at −1 are the ones it can hurt and the 7
 it can help, so a small net loss of verdicts is as likely as a gain and the aggregate is again the
 check.
 
-`Paperless.Text` is a shared layer below all three families, so a cross-track measurement is owed
+`XRay.Office.Text` is a shared layer below all three families, so a cross-track measurement is owed
 and will be made by rendering slides and sheets whole at the widow/orphan commit and at this one,
 with `SOURCE_DATE_EPOCH` pinned and `/CreationDate` normalised. **A non-zero count there is not
 automatically a regression** — a deck with an as-character picture alone on a line is the same

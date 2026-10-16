@@ -37,7 +37,7 @@ whoever owns that. Everything from §C down is version-independent.
 `141` is the clean case: 20 columns × 28 rows of empty graph paper, identical column pitch on both
 sides, no content anywhere near the row heights. Read out of the two PDFs' vector paths:
 
-| | LO 24.2 | Paperless | declared |
+| | LO 24.2 | X-Ray.Office | declared |
 |---|---:|---:|---:|
 | grid width | 526.10 pt | 526.10 pt | — |
 | grid height | 675.20 pt | 689.20 pt | 675.20 pt |
@@ -74,7 +74,7 @@ so "we are reading the rule wrong" is refuted before it is proposed.
 
 ### 3 · Where it lives
 
-`dotnet/src/Paperless.WordProcessing/Layout/TableLayouter.cs:199-206`
+`dotnet/src/XRay.Office.WordProcessing/Layout/TableLayouter.cs:199-206`
 
 ```csharp
 Length topInset = table.MinHeightIncludesInsets ? TopInset(table.Rows[row]) : Length.Zero;
@@ -95,7 +95,7 @@ The port is correct. **The behaviour is not in 24.2.7.2.**
 The project's own probe, unmodified, re-run against the installed 24.2.7.2 — six rows of one 10 pt
 line under a 24.00 pt floor, sweeping the grid's `w:sz`:
 
-    $ python3 dotnet/probes/words-pagination-01/row-min-height-border.py <scratch> <Paperless.Cli>
+    $ python3 dotnet/probes/words-pagination-01/row-min-height-border.py <scratch> <XRay.Office.Cli>
       w:sz  border pt      rule  LibreOffice     ours    diff
          0       0.00   atLeast        24.00    24.00   +0.00
          4       0.50   atLeast        24.00    24.50   -0.50
@@ -184,7 +184,7 @@ is why the geometry-change case was worth probing separately.
 
 ### 3 · Where it lives
 
-`dotnet/src/Paperless.WordProcessing/Layout/Paginator.cs:1395-1402`
+`dotnet/src/XRay.Office.WordProcessing/Layout/Paginator.cs:1395-1402`
 
 ```csharp
 bool keepsSpaceHere =
@@ -293,7 +293,7 @@ if (lcl_hideMarks(m_aCellProperties[nRow]) && lcl_emptyRow(m_aTableRanges, nRow)
 ```
 
 `lcl_hideMarks` (:1027) requires the property on **every** cell and no `w:vMerge` anywhere in the row.
-Nothing in Paperless reads `w:hideMark`: `grep -r hideMark dotnet/src` returns nothing. The reader
+Nothing in X-Ray.Office reads `w:hideMark`: `grep -r hideMark dotnet/src` returns nothing. The reader
 that would set the flag is `Ooxml/DocxLayoutSource.Tables.cs`, which already computes
 `PageTableRow.HasExactHeight` from `w:hRule` — **cross-lane**, see the section at the end.
 
@@ -315,7 +315,7 @@ row sum 265.50 pt):
 | `<w:noWrap/>` deleted | 265.50 |
 | `<w:vAlign w:val="bottom"/>` deleted | 265.50 |
 
-417.30 is what Paperless produces (417.25). So: `w:hideMark` on **all** cells is necessary and the
+417.30 is what X-Ray.Office produces (417.25). So: `w:hideMark` on **all** cells is necessary and the
 "all" is load-bearing; whitespace-only content counts as empty and one visible character does not;
 positioning, wrapping and vertical alignment are inert.
 
@@ -512,7 +512,7 @@ The tag on this case says the page comes out empty. It does not: **every shape i
 is in the right place**, and the order is inverted, so the last thing painted — a full-page dark
 rectangle — covers the rest. Page 1's eight vector fills, in paint order:
 
-    LibreOffice                                     Paperless
+    LibreOffice                                     X-Ray.Office
     0  dark grey  [0.0, 0.0, 843.0, 594.0]          0  red      [558.2, 122.2, 778.0, 166.5]
     1  white      [37.8, 36.0, 805.1, 555.1]        1  red      [311.5, 122.2, 531.2, 166.5]
     2  grey       [63.7, 122.2, 283.5, 528.8]       2  red      [ 63.0, 122.2, 282.8, 166.5]
@@ -629,7 +629,7 @@ None of these is a table, an indent or a break. Not mine, and no patch proposed.
 
 ## Cross-lane dependencies
 
-All four are in `dotnet/src/Paperless.WordProcessing/Ooxml/`, which this lane does not own. Each is
+All four are in `dotnet/src/XRay.Office.WordProcessing/Ooxml/`, which this lane does not own. Each is
 measured above; none has a patch here.
 
 1. **`Ooxml/DocxLayoutSource.Tables.cs`** — set `PageTableRow.HasExactHeight` when every cell of a row

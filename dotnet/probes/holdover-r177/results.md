@@ -7,7 +7,7 @@ alphanumerics within 51 and 147 of the reference's.
 
 `TODO.word-parity.md`'s first entry is a `TOC \t` switch voiding a built-in heading's direct
 paragraph formatting: 26.2.4.2 discards it, Word honours it, this tree follows Word, and
-`PAPERLESS_LIBREOFFICE_QUIRKS=1` switches the reference's reading back on. Rendering both
+`XRAY_OFFICE_LIBREOFFICE_QUIRKS=1` switches the reference's reading back on. Rendering both
 documents with it:
 
 | document | pages | with quirks | reference | ink | with quirks |

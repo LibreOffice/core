@@ -1,5 +1,5 @@
 #!/bin/sh
-# Render every document named in $1 with $PAPERLESS_CLI and record the PDF's md5 in $2,
+# Render every document named in $1 with $XRAY_OFFICE_CLI and record the PDF's md5 in $2,
 # deleting each rendering as it goes -- this container has under half a gigabyte free and
 # the comparison only needs the digest.
 #
@@ -14,7 +14,7 @@ xargs -a "$LIST" -d '\n' -P "$JOBS" -I{} sh -c '
     key=$(printf "%s" "$doc" | md5sum | cut -c1-16)
     dir="/tmp/r84-render-$key"
     rm -rf "$dir"; mkdir -p "$dir"
-    if SOURCE_DATE_EPOCH=1700000000 "$PAPERLESS_CLI" render --outdir "$dir" "$doc" >/dev/null 2>&1 \
+    if SOURCE_DATE_EPOCH=1700000000 "$XRAY_OFFICE_CLI" render --outdir "$dir" "$doc" >/dev/null 2>&1 \
        && ls "$dir"/*.pdf >/dev/null 2>&1; then
         sum=$(md5sum "$dir"/*.pdf | cut -d" " -f1)
         pages=$(pdfinfo "$dir"/*.pdf 2>/dev/null | awk "/^Pages/{print \$2}")

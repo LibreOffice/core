@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """24.2.7.2 audit — `w:pPr/w:rPr` is the *paragraph mark's* formatting, not the paragraph's.
 
-`Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs`:777 states three things and says all three
+`XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs`:777 states three things and says all three
 were measured "against LibreOffice 24.2.7.2":
 
   1. a **bold** paragraph style whose mark says `<w:b w:val="0"/>` still draws its text bold;
@@ -10,7 +10,7 @@ were measured "against LibreOffice 24.2.7.2":
      36 pt of height.
 
 This is the last genuinely open site in this project that a corpus document can reach — the other
-ten hits of `24.2.7` under `Paperless.WordProcessing` are either inside an existing audit marker or
+ten hits of `24.2.7` under `XRay.Office.WordProcessing` are either inside an existing audit marker or
 are prose recording that a 24.2.7.2 measurement has *already* been superseded on 26.2.4.2 in the
 same comment.
 

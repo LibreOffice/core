@@ -9,7 +9,7 @@ import os, re, subprocess, zipfile
 SP = '/tmp/claude-0/-home-user-libreoffice-core/3e093938-a459-5268-987b-74c5270259d6/scratchpad/gprobe'
 W = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"'
 CLI = ('/home/user/libreoffice-core/.claude/worktrees/agent-aacd64f37ea26a795/dotnet/'
-       'tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli')
+       'tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli')
 os.makedirs(SP, exist_ok=True)
 
 CT = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>

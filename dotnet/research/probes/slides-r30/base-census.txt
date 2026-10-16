@@ -1,4 +1,4 @@
-measuring ./cli-base/Paperless.Cli
+measuring ./cli-base/XRay.Office.Cli
 documents: 163
 
 TOTAL 163  MATCH 151

@@ -68,7 +68,7 @@ def render_ref(path, bank):
     shutil.rmtree(tmp, ignore_errors=True)
     os.makedirs(tmp, exist_ok=True)
     subprocess.run(
-        [SOFFICE, f"-env:UserInstallation=file:///tmp/paperless-lo-{d}",
+        [SOFFICE, f"-env:UserInstallation=file:///tmp/xray-office-lo-{d}",
          "--headless", "--norestore", "--convert-to", "pdf", "--outdir", tmp, path],
         capture_output=True, timeout=300)
     stem = os.path.splitext(os.path.basename(path))[0]
@@ -76,7 +76,7 @@ def render_ref(path, bank):
     if os.path.exists(made):
         shutil.move(made, dest)
     shutil.rmtree(tmp, ignore_errors=True)
-    shutil.rmtree(f"/tmp/paperless-lo-{d}", ignore_errors=True)
+    shutil.rmtree(f"/tmp/xray-office-lo-{d}", ignore_errors=True)
 
 
 def render_ours(path, bank, cli, tag):

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Render OUR half of a track, score it against a banked 26.2.4.2 reference, digest it, delete it.
 #
-#   PAPERLESS_CLI=... sweep-ours.sh <corpus-root> <ls-files-prefix> <ext-regex> <bank> <out> [workers]
+#   XRAY_OFFICE_CLI=... sweep-ours.sh <corpus-root> <ls-files-prefix> <ext-regex> <bank> <out> [workers]
 #
 # Sound only because the diff under test is confined to `dotnet/src`, which cannot reach `soffice`
 # — so the banked reference bytes are exactly the ones the scoreboard was built from.
@@ -14,7 +14,7 @@ ROOT="${1:?corpus root}"; PREFIX="${2:?prefix}"; EXTS="${3:?ext regex}"
 BANK="${4:?bank dir}"; OUT="${5:?outdir}"; WORKERS="${6:-2}"
 export SOURCE_DATE_EPOCH=1700000000
 mkdir -p "$OUT" && OUT="$(cd "$OUT" && pwd)"
-CLI="${PAPERLESS_CLI:?set PAPERLESS_CLI}"
+CLI="${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI}"
 [ -x "$CLI" ] || { echo "no CLI at $CLI" >&2; exit 1; }
 [ -d "$BANK/ref" ] || { echo "no $BANK/ref" >&2; exit 1; }
 : > "$OUT/rows.tsv"

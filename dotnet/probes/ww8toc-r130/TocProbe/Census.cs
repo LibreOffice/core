@@ -1,8 +1,8 @@
 // One line per document: how many TOC/INDEX fields it holds, how many drawn characters sit in
 // their cached results, and how many of those name the built-in Hyperlink character style — which
 // is the population the round's change can reach, and its own base rate.
-using Paperless.Core.Diagnostics;
-using Paperless.WordProcessing.Ww8;
+using XRay.Office.Core.Diagnostics;
+using XRay.Office.WordProcessing.Ww8;
 
 internal static class Census
 {

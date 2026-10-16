@@ -1,7 +1,7 @@
-diff --git a/dotnet/src/Paperless.Core/Charts/ChartAxisLabels.cs b/dotnet/src/Paperless.Core/Charts/ChartAxisLabels.cs
+diff --git a/dotnet/src/XRay.Office.Core/Charts/ChartAxisLabels.cs b/dotnet/src/XRay.Office.Core/Charts/ChartAxisLabels.cs
 index 8e7738ff2..87e60a52c 100644
---- a/dotnet/src/Paperless.Core/Charts/ChartAxisLabels.cs
-+++ b/dotnet/src/Paperless.Core/Charts/ChartAxisLabels.cs
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartAxisLabels.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartAxisLabels.cs
 @@ -246,6 +246,8 @@ public static class ChartAxisLabels
  
          Length spacing = Spacing(centres, count);
@@ -28,7 +28,7 @@ index 8e7738ff2..87e60a52c 100644
 +        IReadOnlyList<string?> texts, int count, Length spacing, ChartAxisText stated,
 +        Length size, ChartText measurer, bool bold, bool vertical)
 +    {
-+        if (Environment.GetEnvironmentVariable("PAPERLESS_AXIS_TRACE") is null) return;
++        if (Environment.GetEnvironmentVariable("XRAY_OFFICE_AXIS_TRACE") is null) return;
 +
 +        System.Text.StringBuilder sb = new();
 +
@@ -74,7 +74,7 @@ index 8e7738ff2..87e60a52c 100644
 +        bool vertical, Length spacing, ChartAxisText stated, double rotation, int rhythm,
 +        bool staggered, IReadOnlyList<string?>? wrapped, int attempt, bool lineBreak)
 +    {
-+        if (Environment.GetEnvironmentVariable("PAPERLESS_AXIS_TRACE") is null) return;
++        if (Environment.GetEnvironmentVariable("XRAY_OFFICE_AXIS_TRACE") is null) return;
 +        int broke = 0;
 +        if (wrapped is not null)
 +            foreach (string? w in wrapped) if (w is not null && w.Contains('\n')) broke++;

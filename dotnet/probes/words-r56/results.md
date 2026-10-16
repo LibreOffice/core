@@ -59,7 +59,7 @@ nothing else. **Same face lists, per-run divergence** — the shape the slides r
 
 Four sites, one clause each, plus a shared predicate on `PageRun` carrying the reasoning:
 `DocxLayoutSource.RunsOf`, `OdtLayoutSource.RunsOf`, `RtfReader.RunsOf`, `DocReader.RunsOf`.
-**The whole round's diff is confined to `Paperless.WordProcessing`.** No shared layer is touched;
+**The whole round's diff is confined to `XRay.Office.WordProcessing`.** No shared layer is touched;
 slides and sheets cannot be reached and no cross-track sweep is owed.
 
 ## Prediction against measurement — most columns missed, and the miss is the finding
@@ -108,7 +108,7 @@ lookup from a face"* with **no request to compare against**, so it cannot set `S
 never has. An italic run whose glyph comes from a fallback face loses its lean at a second, separate
 place.
 
-That fix is in `Paperless.Text` and owes a measured cross-track sweep.
+That fix is in `XRay.Office.Text` and owes a measured cross-track sweep.
 
 `2024-12_Comlux_opens_Maintenance_and_Service_Center_in_Dubai.docx` is the one document whose lean
 got further from the reference (18 → 652 against 0), and it is **not a shear defect**: the reference
@@ -220,7 +220,7 @@ separately before comparing.
 
 ## The 24.2.7.2 audit
 
-`Paperless.WordProcessing/Ooxml/WriterPoolSpacing.cs` — **VERIFIED 2026-08-21, round words-r56**,
+`XRay.Office.WordProcessing/Ooxml/WriterPoolSpacing.cs` — **VERIFIED 2026-08-21, round words-r56**,
 with one row corrected. The site says outright what it is (*"Each row is one rendered probe against
 LibreOffice 24.2.7.2"*) and already carried a later round's warning about one row, left standing
 because correcting one row belongs to whichever round re-measures the table. This is that round.
@@ -294,7 +294,7 @@ detects only the walker mutation.
    against, so a run whose glyph comes from a fallback face is drawn upright however italic it is.
    289 of the residual 1 611 short glyphs are in faces no document names — WenQuanYi Zen Hei 177,
    OpenSymbol 112 — led by `手机免提系统TSB.doc` 82 and `A320SimNotes.doc` 75. **This one is in
-   `Paperless.Text` and owes a measured cross-track sweep.**
+   `XRay.Office.Text` and owes a measured cross-track sweep.**
 2. **`AFS-050-004-F2_0i` page 2's five banner rows.** Confirmed again by a fresh reader, with the
    direction corrected: *our* rows are looser, not shorter. Separate the two causes the image cannot
    — extract our text layer for the strings `0.000 General Information…`, `CE-1 …` and see whether

@@ -14,7 +14,7 @@ import pathlib, re, shutil, subprocess, sys, zipfile
 SOURCE = pathlib.Path(
     "/home/user/sample-files/words/metrics-001/docx/02_mcar_part-2_and_IS_v2.10.docx")
 SOFFICE = "/opt/libreoffice26.2/program/soffice"
-CLI = "/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 
 TOC = re.compile(r'(<w:style [^>]*w:styleId="TOC\d".*?</w:style>)', re.S)
 

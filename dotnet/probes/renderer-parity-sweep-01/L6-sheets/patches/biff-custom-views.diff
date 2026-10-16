@@ -1,6 +1,6 @@
-diff --git a/dotnet/src/Paperless.Spreadsheets/MsBinary/BiffRecords.cs b/dotnet/src/Paperless.Spreadsheets/MsBinary/BiffRecords.cs
---- a/dotnet/src/Paperless.Spreadsheets/MsBinary/BiffRecords.cs
-+++ b/dotnet/src/Paperless.Spreadsheets/MsBinary/BiffRecords.cs
+diff --git a/dotnet/src/XRay.Office.Spreadsheets/MsBinary/BiffRecords.cs b/dotnet/src/XRay.Office.Spreadsheets/MsBinary/BiffRecords.cs
+--- a/dotnet/src/XRay.Office.Spreadsheets/MsBinary/BiffRecords.cs
++++ b/dotnet/src/XRay.Office.Spreadsheets/MsBinary/BiffRecords.cs
 @@ -80,6 +80,21 @@
      /// <summary>The workbooks a 3D reference can name; <c>0x0401</c> means this one.</summary>
      public const ushort SupBook = 0x01AE;
@@ -23,9 +23,9 @@ diff --git a/dotnet/src/Paperless.Spreadsheets/MsBinary/BiffRecords.cs b/dotnet/
      /// <summary>The table a formula's <c>ixti</c> indexes into.</summary>
      public const ushort ExternSheet = 0x0017;
      public const ushort Window2 = 0x023E;
-diff --git a/dotnet/src/Paperless.Spreadsheets/MsBinary/XlsWorkbookReader.cs b/dotnet/src/Paperless.Spreadsheets/MsBinary/XlsWorkbookReader.cs
---- a/dotnet/src/Paperless.Spreadsheets/MsBinary/XlsWorkbookReader.cs
-+++ b/dotnet/src/Paperless.Spreadsheets/MsBinary/XlsWorkbookReader.cs
+diff --git a/dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsWorkbookReader.cs b/dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsWorkbookReader.cs
+--- a/dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsWorkbookReader.cs
++++ b/dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsWorkbookReader.cs
 @@ -1628,10 +1628,42 @@
          // sheet's. Counting depth is what keeps the inner EOF from ending the sheet early.
          int depth = 0;

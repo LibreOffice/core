@@ -123,7 +123,7 @@ w('// Regenerate rather than edit: this is data, and a hand-made correction to o
 w('// lost the next time it is rebuilt.')
 w('// </auto-generated>')
 w('')
-w('namespace Paperless.Core.Globalization;')
+w('namespace XRay.Office.Core.Globalization;')
 w('')
 w('public static partial class WindowsLanguages')
 w('{')
@@ -140,6 +140,6 @@ for lcid in sorted(tags):
 w('    ];')
 w('}')
 
-path = ROOT + 'dotnet/src/Paperless.Core/Globalization/WindowsLanguages.Table.cs'
+path = ROOT + 'dotnet/src/XRay.Office.Core/Globalization/WindowsLanguages.Table.cs'
 open(path, 'w', encoding='utf-8').write('\n'.join(out) + '\n')
 print('written ' + path, file=sys.stderr)

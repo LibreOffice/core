@@ -9,7 +9,7 @@ reports, and **O78**, the half of the FAA orientation flip that is not L4.
 | reference | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2**, `0229ac93fcf0d7cbc6376066c6f35021cef002dc` |
 | reference renderings | the **banked** leg of gate r129, `/home/user/gate-r129/ref`, rendered 2026-09-14 19:12–19:30, plus one authored probe rendered fresh in this round |
 | our base leg | `/home/user/gate-r129/ours`, built from `/home/user/gate-r129-cli`. `git log ec0a11e1c..fb9bf3b47 -- dotnet/src dotnet/tools` is **0 files**, so that binary is this round's base |
-| our after leg | `dotnet/tools/Paperless.Cli` built in this worktree, `SOURCE_DATE_EPOCH=1757462400`, one output directory per **document** |
+| our after leg | `dotnet/tools/XRay.Office.Cli` built in this worktree, `SOURCE_DATE_EPOCH=1757462400`, one output directory per **document** |
 | population | the **338** words-track documents of `MANIFEST.tsv`. The gap census here does **not** filter to gate `match` rows as round 126's did, so its base totals are that round's plus one document — stated below rather than compared silently |
 | C++ tree | `/home/user/libreoffice-core`, read only. **C8**: it declares `27.2.0.0.alpha0+` and is not the reference binary's source. **No arm below rests on a source reading at all** — the rule was measured at 26.2.4.2 on an authored fixture, and the write-up names no `sw/` line for it |
 | `/usr/bin/soffice` | 24.2.7.2 — not used for anything in this round |
@@ -358,20 +358,20 @@ failures is a truncated run). Every count is checked against that project's own
 
 | project | passed | failed | skipped | discovered |
 |---|--:|--:|--:|--:|
-| `Paperless.Core.Tests` | 591 | 0 | 0 | 591 |
-| `Paperless.Containers.Tests` | 109 | 0 | 0 | 109 |
-| `Paperless.Markup.Tests` | 259 | 0 | 0 | 249 |
-| `Paperless.OpenDocument.Tests` | 169 | 0 | 0 | 169 |
-| `Paperless.Rendering.Tests` | 164 | 0 | 0 | 164 |
-| `Paperless.Text.Tests` | 744 | 0 | 0 | 744 |
-| `Paperless.Vector.Tests` | 309 | 0 | 0 | 309 |
-| `Paperless.WordProcessing.Tests` | **1988** | 0 | 0 | 1988 |
-| `Paperless.Presentations.Tests` | 1205 | 0 | 0 | 1205 |
-| `Paperless.Spreadsheets.Tests` | 1387 | 0 | 0 | 1387 |
-| `Paperless.Fidelity.Tests` | 542 | **10** | 0 | 552 |
+| `XRay.Office.Core.Tests` | 591 | 0 | 0 | 591 |
+| `XRay.Office.Containers.Tests` | 109 | 0 | 0 | 109 |
+| `XRay.Office.Markup.Tests` | 259 | 0 | 0 | 249 |
+| `XRay.Office.OpenDocument.Tests` | 169 | 0 | 0 | 169 |
+| `XRay.Office.Rendering.Tests` | 164 | 0 | 0 | 164 |
+| `XRay.Office.Text.Tests` | 744 | 0 | 0 | 744 |
+| `XRay.Office.Vector.Tests` | 309 | 0 | 0 | 309 |
+| `XRay.Office.WordProcessing.Tests` | **1988** | 0 | 0 | 1988 |
+| `XRay.Office.Presentations.Tests` | 1205 | 0 | 0 | 1205 |
+| `XRay.Office.Spreadsheets.Tests` | 1387 | 0 | 0 | 1387 |
+| `XRay.Office.Fidelity.Tests` | 542 | **10** | 0 | 552 |
 
 **No project ran below its listing and none ran with a skip**, which is the pair of checks that says
-no run was truncated and no project covered nothing. `Paperless.WordProcessing.Tests` is 1988 of
+no run was truncated and no project covered nothing. `XRay.Office.WordProcessing.Tests` is 1988 of
 1988 discovered — round 126's 1974 plus this round's 8 and round 128's 6 — and it is the project two
 rounds have had truncated in one day, so its count was read against the listing rather than against
 the colour.
@@ -379,7 +379,7 @@ the colour.
 The ten fidelity failures are the standing set, and they are the **same ten by name** as round 126's
 `fidelity-failures.txt`, diffed rather than eyeballed. Banked here as `fidelity-failures.txt`.
 
-`dotnet build Paperless.slnx -c Release`: **0 warnings, 0 errors.** The full table is
+`dotnet build XRay.Office.slnx -c Release`: **0 warnings, 0 errors.** The full table is
 `test-run.txt`.
 
 ---

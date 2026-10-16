@@ -5,14 +5,14 @@
 // shows only the lines that carry ink — an empty paragraph is invisible to `pdftotext -bbox` on both
 // sides, so the arithmetic that says *which* paragraph is short cannot be done from the output. This
 // prints the box, so a missing 41.4 pt can be attributed to the paragraph that owns it.
-using Paperless;
-using Paperless.Core.Documents;
-using Paperless.WordProcessing.Layout;
+using XRay.Office;
+using XRay.Office.Core.Documents;
+using XRay.Office.WordProcessing.Layout;
 
 string path = args[0];
 int lastPage = args.Length > 1 ? int.Parse(args[1], System.Globalization.CultureInfo.InvariantCulture) : 2;
 
-using IDocument doc = PaperlessDocument.Open(path);
+using IDocument doc = OfficeDocument.Open(path);
 var pages = (WordProcessingPages)((IPaginatedDocument)doc).Layout();
 
 foreach (LaidOutPage page in pages.Pages)

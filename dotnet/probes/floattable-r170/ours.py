@@ -6,7 +6,7 @@ positioned table wrapped, or the same table laid in the flow -- this tree reprod
 """
 import pathlib, re, subprocess, sys
 
-CLI = "/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 
 
 def render(document, outdir):

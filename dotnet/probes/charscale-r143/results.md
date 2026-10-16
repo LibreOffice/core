@@ -87,7 +87,7 @@ describes**; with the predicate corrected the census and the sweep agree exactly
 ## 5. What this round did not do
 
 **Three of the four readers do not read a character width at all.** `git grep` over
-`src/Paperless.WordProcessing` finds `WidthPerCent` in the DOCX path and nowhere else: the WW8
+`src/XRay.Office.WordProcessing` finds `WidthPerCent` in the DOCX path and nowhere else: the WW8
 reader does not read `sprmCCharScale`, the RTF reader does not read `\charscalex`, and the ODF one
 does not read `style:text-scale`. Seated as **O101**, uncensused.
 

@@ -9,7 +9,7 @@ The most useful thing measured this round is a **negative**: the shared DrawingM
 lane owns — the preset-geometry evaluator, the 187-entry preset table, the fill readers, the
 style matrix, the gradient paints and both backends' gradient arithmetic — is **already correct
 and already complete**. Every "shape drawn as a rectangle", "gradient not painted" and "picture
-fill missing" in the DOCX half of this lane is a *wiring* fault in `Paperless.WordProcessing`,
+fill missing" in the DOCX half of this lane is a *wiring* fault in `XRay.Office.WordProcessing`,
 which reimplements a subset of that library instead of calling it. Two probes below establish
 that, so nobody has to re-derive it.
 
@@ -35,7 +35,7 @@ question; there is nothing here for a version to explain.
 The sweep's reference is **LibreOffice 24.2.7.2**; the tree is developed against **26.2.4.2**.
 Before proposing anything:
 
-- `git grep '24\.2\.7\|26\.2\.4'` over `Paperless.Rendering/Fills/`,
+- `git grep '24\.2\.7\|26\.2\.4'` over `XRay.Office.Rendering/Fills/`,
   `DrawingML/CustomShapeGeometry.cs`, `DrawingML/PresetShapeGeometry.cs` → **no calibration
   markers.** Neither patched file states a claim about either binary.
 - Both patches restore something we omit outright — a fill that stops three quarters of the way
@@ -180,7 +180,7 @@ wrong". So the shared evaluator was measured directly, by putting the same prese
 pipeline that *does* call it. `work/mkdeck.py` builds a minimal valid `.pptx`; the probe deck
 carries `ellipse`, `diamond`, `homePlate`, `bentConnector3`, `rightArrow`, `triangle`, `chevron`
 and `roundRect`, each 1.8 M EMU square with `a:solidFill` and a 3 pt outline, rendered with the
-prebuilt `Paperless.Cli`.
+prebuilt `XRay.Office.Cli`.
 
 **Seven of the eight come out as the correct outline** — a true circle, a true diamond, a true
 home plate, a true chevron, correctly rounded corners, a true isoceles triangle, a true block
@@ -188,7 +188,7 @@ arrow. (The eighth, `bentConnector3`, comes out as a filled triangle rather than
 that is RC-4, below, and it *is* this lane's.)
 
 So `CustomShapeGeometry`, `PresetShapeGeometry` and the 187-entry table are not the fault, and
-nothing needs to be added to `Paperless.Ooxml/DrawingML` for RC-1. Everything the Word path needs
+nothing needs to be added to `XRay.Office.Ooxml/DrawingML` for RC-1. Everything the Word path needs
 already exists and is exercised daily by the slides path:
 
 | what DOCX needs | what already exists, in this lane, unused by DOCX |
@@ -200,8 +200,8 @@ already exists and is exercised daily by the slides path:
 | theme line, width included, from `a:lnRef` | `DrawingStyleMatrix.Line` + `.Overlay` |
 
 `git grep` confirms the asymmetry: `DrawingStyleMatrix` is referenced from
-`Paperless.Presentations` and the chart readers and **never once** from
-`Paperless.WordProcessing`; `DrawingFill.ReadGradient` likewise.
+`XRay.Office.Presentations` and the chart readers and **never once** from
+`XRay.Office.WordProcessing`; `DrawingFill.ReadGradient` likewise.
 
 **Confidence: high** for the diagnosis and the three-way split — the classification is mechanical
 over the parts and the probe is decisive. **Not established:** how much of each document's
@@ -265,7 +265,7 @@ it is 255 where the reference is 243.
 
 ### Where it lives in the source
 
-`dotnet/src/Paperless.Rendering/Fills/Tiles.cs:26` — `public const int Maximum = 8192;` — and
+`dotnet/src/XRay.Office.Rendering/Fills/Tiles.cs:26` — `public const int Maximum = 8192;` — and
 `Tiles.Cover:81`, `if (drawn++ >= Maximum) yield break;`.
 
 The remark above the constant argues the truncation is *"visible and therefore reportable"*. On a
@@ -425,7 +425,7 @@ keep compiling — including `OdfEnhancedGeometry.cs:469` in another lane. `Load
 construction included.
 
 **It is inert until a caller uses the new properties**, and that is deliberate: the two call sites
-that fill and stroke a shape outline are `Paperless.Presentations`', which this lane does not own.
+that fill and stroke a shape outline are `XRay.Office.Presentations`', which this lane does not own.
 They are named under Cross-lane dependencies. I would rather land the data and the API here —
 where the table, the parser and the evaluator all live — than propose an edit outside the lane or
 leave the two columns rotting for another round.
@@ -548,7 +548,7 @@ moves it on rather than letting it overflow. Everything the note lists as "missi
 follows, including the white copyright text, which our page 1 draws as `1 1 1 rg` at y = 45.35 and
 34.9 onto white paper.
 
-Seat: `Paperless.WordProcessing/Layout` — the flow's handling of a single inline object taller
+Seat: `XRay.Office.WordProcessing/Layout` — the flow's handling of a single inline object taller
 than the remaining, and then the whole, text height. **L2's.**
 
 **Confidence: high** — this is read out of both content streams, not inferred. **The version
@@ -583,15 +583,15 @@ family as RC-7. **L2's.**
 
 **Document: #157.** Not this lane's file.
 
-The case note: *"The connector between the two boxes loses its arrowhead — Paperless draws the
+The case note: *"The connector between the two boxes loses its arrowhead — X-Ray.Office draws the
 shaft as a plain rule."* The machinery to draw one exists and is used by PPTX —
-`Paperless.Presentations/Layout/SlideLineEnds.cs`, driven from `PptxSlideLayout.cs:914-915`
+`XRay.Office.Presentations/Layout/SlideLineEnds.cs`, driven from `PptxSlideLayout.cs:914-915`
 and `:1920-1935` off `a:headEnd`/`a:tailEnd`, applied at `:637`. The legacy binary path never
 fills it in: `git grep -n "lineStartArrow\|lineEndArrow"` over `dotnet/src` returns **nothing**,
 and `PptShapeGeometry.cs` names Escher property 471 (`LineEndCap`) but not 464/465
 (`lineStartArrowhead`/`lineEndArrowhead`) or their width/length companions 466-469.
 
-So this is a reader gap in `Paperless.Presentations/MsBinary` feeding a renderer that is already
+So this is a reader gap in `XRay.Office.Presentations/MsBinary` feeding a renderer that is already
 there. **L5's.** The document's other defect — second-level items set narrower, so each takes an
 extra line — is L1's.
 
@@ -635,7 +635,7 @@ That is `OutputDevice::DrawLinearGradient`'s signature output.
 
 `work/probe-grad.pptx` is seven slides, identical two-stop `path="circle"` gradient, only
 `a:fillToRect` varying, rendered through the **installed soffice 24.2.7.2 — the binary that made
-this sweep's references — and through `Paperless.Cli`** (`work/gradient-probe.txt`; samples are
+this sweep's references — and through `XRay.Office.Cli`** (`work/gradient-probe.txt`; samples are
 TL, TR, BL, BR then centre):
 
 ```
@@ -715,8 +715,8 @@ green sits on the gamut edge.
 
 **Ours is the more faithful conversion and it scores as a mismatch.** Same shape as
 `TODO.raster-ceiling.md`. No patch proposed; whether to reproduce LibreOffice's naive conversion is
-a policy call above this lane. Note also that `Paperless.Rendering/Images/RasterImageDecoder.cs:239`
-is the one still-open `Paperless.Rendering` entry on `TODO.24-2-7-audit.md` (the `Bitmap::Adjust`
+a policy call above this lane. Note also that `XRay.Office.Rendering/Images/RasterImageDecoder.cs:239`
+is the one still-open `XRay.Office.Rendering` entry on `TODO.24-2-7-audit.md` (the `Bitmap::Adjust`
 brightness/contrast branch); it is a different site and no document in this lane reaches it.
 
 ---
@@ -728,7 +728,7 @@ brightness/contrast branch); it is a different site and no document in this lane
   taller because our **rows are taller**, which is also why the last row runs off the slide.
   Table row height in a PPTX table: L5/L1. The bottom artwork is `image3.png` and `image4.emf` on
   `slideLayout4`; both PDFs draw exactly one image on the page, so the PNG is drawn and the
-  **EMF** logo is not — `Paperless.Vector`, shared.
+  **EMF** logo is not — `XRay.Office.Vector`, shared.
 - **#178** (`flying-by-numbers`): text set fractionally wider, definition list sits lower. The
   advance divergence. L1.
 - **#190** (`ABCD-FE-01-00`): besides RC-6's watermark, every contents entry is drawn as a blue
@@ -742,7 +742,7 @@ brightness/contrast branch); it is a different site and no document in this lane
 Ordered by how many of this lane's documents each unblocks. **RC-3 must not be sequenced after
 RC-1's fill limb.**
 
-1. **`dotnet/src/Paperless.WordProcessing/Ooxml/DocxFrames.cs` (L3) with
+1. **`dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxFrames.cs` (L3) with
    `.../Layout/PageFrame.cs` and `.../Layout/PageDrawing.cs` (L2)** — RC-1, five documents.
    `Appearance:798` must read the whole fill chain rather than `a:solidFill` alone:
    `DrawingStyleMatrix.Fill(style, theme)` as the base, then the shape's own
@@ -752,39 +752,39 @@ RC-1's fill limb.**
    `PageDrawing.DrawFrame:230` fills and strokes that outline instead of `frame.Area`. Line width
    falls back to `DrawingStyleMatrix.Line(style, theme)`'s `@w` when the shape's `a:ln` states
    none (`Appearance:810`) — what all 13 of #167's bars need. **Nothing has to be added to
-   `Paperless.Ooxml/DrawingML`;** the probe above shows it is complete.
+   `XRay.Office.Ooxml/DrawingML`;** the probe above shows it is complete.
 2. **`DocxFrames.cs` (L3) + frame placement (L2)** — RC-3, `@relativeHeight`. Read it onto
    `PageFrame` and sort by it within the behind-text and in-front-of-text bands. **Land this with
    or before item 1**, or #062 goes from a missing background to a background over its artwork.
    Same defect as L2's #024.
-3. **`dotnet/src/Paperless.Presentations/Ooxml/PptxSlideLayout.cs` (L5)** — RC-4's consumer.
+3. **`dotnet/src/XRay.Office.Presentations/Ooxml/PptxSlideLayout.cs` (L5)** — RC-4's consumer.
    Where a shape's geometry is filled use `geometry.FillOutline`; where it is stroked use
    `geometry.StrokeOutline`. Both fall back to `Outline`, so the change is safe on a geometry
    built without sub-paths (`OdpSlideLayout.cs:471`'s, for instance).
 4. **`PptxSlideLayout.cs` (L5)** — RC-5. Read `a:scene3d/a:camera/a:rot/@rev` (60 000ths of a
    degree) and add it to the shape's rotation per `oox/source/drawingml/shape.cxx:1054-1064`; and
    draw a `p:pic`'s own `a:ln`. If a shared reader is wanted this lane will add one to
-   `Paperless.Ooxml/DrawingML` on request — it did not add inert code speculatively.
-5. **`dotnet/src/Paperless.WordProcessing/Ooxml/DocxVmlFrames.cs` (L3)** — RC-6, two documents.
+   `XRay.Office.Ooxml/DrawingML` on request — it did not add inert code speculatively.
+5. **`dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxVmlFrames.cs` (L3)** — RC-6, two documents.
    Recognise `v:shape type="#_x0000_t136"` / a `v:textpath` with `on="t"`, take its `string`, and
    draw it filled with the shape's `fillcolor` and `v:fill/@opacity`, rotated by the style
    string's `rotation:`.
-6. **`dotnet/src/Paperless.WordProcessing/Layout/` (L2)** — RC-7 and RC-8, both **position faults
+6. **`dotnet/src/XRay.Office.WordProcessing/Layout/` (L2)** — RC-7 and RC-8, both **position faults
    needing a 26.2.4.2 re-check first**. An inline object taller than the text area must overflow
    the page rather than move to the next (`612.5 × 792.65 pt` in a 648 pt text height: reference
    page 1, ours page 2); and a `positionV relativeFrom="paragraph"` anchor must resolve against
    its own paragraph's placed position.
-7. **`Paperless.Presentations/MsBinary/PptShapeGeometry.cs` and `PptSlideLayout.cs` (L5)** —
+7. **`XRay.Office.Presentations/MsBinary/PptShapeGeometry.cs` and `PptSlideLayout.cs` (L5)** —
    RC-9. Escher properties 464/465 (and 466-469 for width and length) into the `SlideLineEnd` pair
    `SlideLineEnds.Apply` already consumes.
-8. **`Paperless.Vector` (shared)** — #049's `image4.emf` logo.
+8. **`XRay.Office.Vector` (shared)** — #049's `image4.emf` logo.
 
 ## Files this lane changed
 
 ```
-patches/tiled-fill-truncated.diff        dotnet/src/Paperless.Rendering/Fills/Tiles.cs
-patches/preset-subpath-fill-stroke.diff  dotnet/src/Paperless.Ooxml/DrawingML/CustomShapeGeometry.cs
-                                         dotnet/src/Paperless.Ooxml/DrawingML/PresetShapeGeometry.cs
+patches/tiled-fill-truncated.diff        dotnet/src/XRay.Office.Rendering/Fills/Tiles.cs
+patches/preset-subpath-fill-stroke.diff  dotnet/src/XRay.Office.Ooxml/DrawingML/CustomShapeGeometry.cs
+                                         dotnet/src/XRay.Office.Ooxml/DrawingML/PresetShapeGeometry.cs
 ```
 
 Both verified with `git apply --check -p1` against the checkout at `582c8c671`. Neither was built
@@ -799,7 +799,7 @@ site keep compiling because every added parameter is defaulted.
 `work/` holds everything measured here:
 
 - `mkdeck.py`, `parts.py` — build a minimal valid `.pptx` from slide bodies.
-- `mkgrad.py`, `probe-grad.pptx`, `gradout/` (soffice 24.2.7.2), `gradout-pl/` (Paperless.Cli),
+- `mkgrad.py`, `probe-grad.pptx`, `gradout/` (soffice 24.2.7.2), `gradout-pl/` (XRay.Office.Cli),
   `gradient-probe.txt` — RC-10's six-arm probe and its numbers.
 - `bands.py` — pulls a page's content stream out of a PDF and classifies gradient bands.
 - `tile-measurement.txt` — RC-2's tile counts, regenerable in one command.

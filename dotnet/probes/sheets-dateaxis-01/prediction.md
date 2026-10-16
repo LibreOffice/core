@@ -85,7 +85,7 @@ where it is — three decks is a follow-up with its own regression sweep, not a 
 | 5 | Our axis minimum lands on `30/12/99` and our first two labels read `30/12/99` and something of the form `02/mm/yy` |
 | 6 | The word gate **does not close**, or closes only marginally. The reference's 38 labels extract as ~152 `pdftotext` words because rotated text fragments; ours will too, but the fragment count per label is ours to get wrong. Best estimate **1520–1590 against 1531**, band ±33.6 — so this is a coin toss and I am calling it as *may still fail* |
 | 7 | The series mark moves from ~75% of plot width to **91.8–100%**, which is what `sheets-chart-01` predicted for the reference and a blind reviewer confirmed |
-| 8 | `Paperless.Fidelity.Tests` stays at **30 failed of 550**, the same 30 by name |
+| 8 | `XRay.Office.Fidelity.Tests` stays at **30 failed of 550**, the same 30 by name |
 | 9 | Batches 001–006 stay at **57/60** and batches 007–009 unchanged |
 | 10 | The legend on page 17 stays wrong. `sheets-chart-01` left `VLegend`'s CUSTOM path open and I am not fixing it; but the plot geometry moves under this change, so I predict our legend **moves with it** and the 932-ink-pixels-against-0 finding still stands afterwards |
 

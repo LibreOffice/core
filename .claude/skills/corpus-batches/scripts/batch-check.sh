@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Prove that Paperless renders a corpus batch the way LibreOffice does.
+# Prove that X-Ray.Office renders a corpus batch the way LibreOffice does.
 #
 #   batch-check.sh <corpus-root> <batch-glob> [outdir] [workers]
 #
@@ -60,7 +60,7 @@ OUT="${3:-$(mktemp -d)}"
 mkdir -p "$OUT" && OUT="$(cd "$OUT" && pwd)"
 WORKERS="${4:-3}"
 
-# Which CLI to measure. `$PAPERLESS_CLI` wins; otherwise the tree this script was invoked
+# Which CLI to measure. `$XRAY_OFFICE_CLI` wins; otherwise the tree this script was invoked
 # *from*, not the tree it lives in.
 #
 # A git worktree shares .claude/ with the main checkout, so `dirname $BASH_SOURCE/../../../..`
@@ -71,14 +71,14 @@ WORKERS="${4:-3}"
 #
 # $PWD is right because the workflow is always run from the tree under test. The check below
 # refuses rather than guesses when it is not.
-CLI="${PAPERLESS_CLI:-}"
+CLI="${XRAY_OFFICE_CLI:-}"
 if [ -z "$CLI" ]; then
   ROOT="$(git -C "$PWD" rev-parse --show-toplevel 2>/dev/null || echo "$PWD")"
-  CLI="$ROOT/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+  CLI="$ROOT/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 fi
 [ -x "$CLI" ] || {
   echo "no CLI at $CLI" >&2
-  echo "run this from the tree you want measured, or set PAPERLESS_CLI" >&2
+  echo "run this from the tree you want measured, or set XRAY_OFFICE_CLI" >&2
   exit 1
 }
 echo "measuring $CLI" >&2
@@ -137,7 +137,7 @@ mkdir -p "$OUT/ours" "$OUT/ref"
 #   * It does not strip an enumerated set of code points, which is the obvious fix and is
 #     wrong twice over: the set would be fitted to the documents in hand, and it does not even
 #     work — measured on the slides track, the reference writes its Wingdings bullets at
-#     U+F06E/U+F06C/U+F0D8/U+F0A7 and Paperless writes the same glyphs at
+#     U+F06E/U+F06C/U+F0D8/U+F0A7 and X-Ray.Office writes the same glyphs at
 #     U+E439/U+E5CD/U+E46F/U+E437. A list built from one side strips nothing on the other.
 #   * It does not drop short tokens. A numbering label (`1.`, `iv.`, `a)`) carries a digit or
 #     a letter and stays a word on both sides; the probe above reads 76 for a numbered list
@@ -152,7 +152,7 @@ mkdir -p "$OUT/ours" "$OUT/ref"
 # construction and cannot be changed by the environment. The split is `str.split()`, which
 # reproduces `wc -w` on 1068 of 1068 corpus PDFs — so the tokenisation is untouched and the
 # only thing that changed is the filter.
-# This function is also the seam for the in-process extractor (`paperless analyze`): it returns
+# This function is also the seam for the in-process extractor (`xray-office analyze`): it returns
 # exactly the pair that verb should emit, so replacing poppler here is a substitution of this
 # body and nothing else in the script. The definition above is the durable part and must not be
 # re-decided by the reimplementation — and the `wc -w` reproduction is a *control on poppler's
@@ -264,7 +264,7 @@ one() {  # one <index>
       # emb, sub, uni and a two-field object id, so `emb` is NF-4 and not NF-3. Counting from
       # NF-3 reads `sub` instead, and it happens to give the right answer only for a font whose
       # type name is two or three fields — "Type 1", "Type 1C", "CID Type 0C". Every font
-      # Paperless writes is "TrueType", one field, so this check tested nothing about our own
+      # X-Ray.Office writes is "TrueType", one field, so this check tested nothing about our own
       # output until it was corrected; measured on a PDF embedding ten faces and naming an
       # eleventh, which it scored as zero unembedded.
       un=$(pdffonts "$o" 2>/dev/null | tail -n +3 | awk 'NF>=8 && $(NF-4)=="no"' | wc -l)

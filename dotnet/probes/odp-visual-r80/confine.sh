@@ -8,7 +8,7 @@
 # byte-identical cannot have moved a gate column.
 #
 # SOURCE_DATE_EPOCH is set on both legs so the PDF's /CreationDate is not the difference --
-# `paperless render` honours the reproducible-builds convention on both sides.
+# `xray-office render` honours the reproducible-builds convention on both sides.
 set -uo pipefail
 ROOT="${1:?corpus root}"; ROWS="${2:?rows.tsv}"; EXT="${3:?ext}"
 BASE="${4:?base cli}"; HEAD="${5:?head cli}"; OUT="${6:?outdir}"; WORKERS="${7:-2}"

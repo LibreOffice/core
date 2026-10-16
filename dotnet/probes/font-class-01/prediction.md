@@ -30,7 +30,7 @@ installed 26.2.4.2, `fc-match` over the same 296, and our own resolver's answers
 | P5 | Face-set distance to the reference: net closer on every track; on words **≥ 8 closer and ≤ 3 further**, on slides **≥ 10 closer**. | 0.55 |
 | P6 | `slides/batch-004/pptx/solog_orientation_august_2019.pptx` — the document the defect was found on — stops drawing a face the reference does not, i.e. its face-set distance falls. | 0.60 |
 | P7 | `ABCD-FE-01-00 Flight Envelope` and `ABCD-WB-08-00`, the two `words-pages-01` moved *away* from the reference, lose the extra DejaVu Serif they draw from their `Times-Roman` entry. | 0.70 |
-| P8 | `Paperless.Fidelity.Tests` stays at **30 failed of 550**. | 0.60 |
+| P8 | `XRay.Office.Fidelity.Tests` stays at **30 failed of 550**. | 0.60 |
 | P9 | No batch verdict is lost: words stays 59/60, slides ≥ 57/58, sheets ≥ 57/60. | 0.50 |
 | P10 | The declared-family logic (`DeclaredGenericFor`, `ClaimsEquivalenceWith`, the pi-face exemption) is **not** made redundant: the declared class still overrides fontconfig's classification of the name, which is the only way `Times` declared swiss reaches DejaVu Sans while fontconfig files `Times` as serif. | 0.85 |
 

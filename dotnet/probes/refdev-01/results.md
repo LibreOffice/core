@@ -102,7 +102,7 @@ single-line `ScOutputData::LayoutStrings` path instead, which gives the ascent o
 agrees, 195 of 195, so the two Calc paths are one device.
 
 Both score six candidate devices side by side rather than assuming one, and both take
-`PAPERLESS_CLI` to score the tree end to end through the real renderer.
+`XRAY_OFFICE_CLI` to score the tree end to end through the real renderer.
 
 | set | pairs | model | tree, end to end |
 |---|---:|---|---|
@@ -123,10 +123,10 @@ Five source files.
 
 | file | change |
 |---|---|
-| `src/Paperless.Text/Fonts/LineSpacing.cs` | a `MetricUnit` enum; `MetricGrid` carries it; `Presentation` and `Spreadsheet` grids; `EditHeightOn`, the `max` rule; `ScaledLineHeight` branches on the engine |
-| `src/Paperless.Presentations/Layout/SlideTextLayout.cs` | `FaceHeight` and `EmitMarker` resolve on `MetricGrid.Presentation`; a single-spacing rule no longer round-trips the height through whole twips |
-| `src/Paperless.Spreadsheets/Layout/SheetFonts.cs` | both `SheetFace` constructions resolve on `MetricGrid.Spreadsheet` |
-| `src/Paperless.Spreadsheets/Layout/SheetBandText.cs` | the furniture face too — and the *chart* heights explicitly drop the grid again |
+| `src/XRay.Office.Text/Fonts/LineSpacing.cs` | a `MetricUnit` enum; `MetricGrid` carries it; `Presentation` and `Spreadsheet` grids; `EditHeightOn`, the `max` rule; `ScaledLineHeight` branches on the engine |
+| `src/XRay.Office.Presentations/Layout/SlideTextLayout.cs` | `FaceHeight` and `EmitMarker` resolve on `MetricGrid.Presentation`; a single-spacing rule no longer round-trips the height through whole twips |
+| `src/XRay.Office.Spreadsheets/Layout/SheetFonts.cs` | both `SheetFace` constructions resolve on `MetricGrid.Spreadsheet` |
+| `src/XRay.Office.Spreadsheets/Layout/SheetBandText.cs` | the furniture face too — and the *chart* heights explicitly drop the grid again |
 
 ### The generalisation
 
@@ -220,18 +220,18 @@ correct, so no gate column can see it. Recorded in §6.
 
 88 new tests in three files, plus four existing expectations moved.
 
-`tests/Paperless.Text.Tests/ApplicationGridTests.cs` — 75. Both devices asserted directly; 30
+`tests/XRay.Office.Text.Tests/ApplicationGridTests.cs` — 75. Both devices asserted directly; 30
 Impress and 28 Calc (face, size) rows whose every number is a distance LibreOffice drew; four rows
 where the two applications draw *different* lines for the same face and size; eight rows pinning the
 `max` rule with both losing candidates stated; the engine-versus-device distinction; and the
 logical-unit pin. Design-unit metrics are stated rather than read from the installed files, so the
 arithmetic is tested without the tests depending on a font being present.
 
-`tests/Paperless.Presentations.Tests/SlideReferenceDeviceTests.cs` — 7, through a laid-out body
+`tests/XRay.Office.Presentations.Tests/SlideReferenceDeviceTests.cs` — 7, through a laid-out body
 rather than a constructed metric. Includes the control that a PPTX body reaches the device *not at
 all*, so that wiring the branches the wrong way round fails rather than passing quietly.
 
-`tests/Paperless.Spreadsheets.Tests/SheetReferenceDeviceTests.cs` — 6, through a package read from
+`tests/XRay.Office.Spreadsheets.Tests/SheetReferenceDeviceTests.cs` — 6, through a package read from
 bytes and drawn to a recording sink, so the assertion is on baselines a page actually carries.
 
 ### Verified failing against the unfixed behaviour
@@ -272,7 +272,7 @@ found it.
 Fidelity is 30 of 550 — measured on the unmodified tree before anything was changed and again at
 the end, the same 30. Build is 0 warnings, 0 errors.
 
-**One flaky run, and it is the documented one.** `Paperless.Vector.Tests` reported 1 failed of 295
+**One flaky run, and it is the documented one.** `XRay.Office.Vector.Tests` reported 1 failed of 295
 on the whole-suite pass and 0 failed on three subsequent runs alone, with no failing name captured.
 Nothing in this round touches Vector.
 
@@ -362,15 +362,15 @@ Nine right, three wrong. Two of the three wrong ones are the same mistake and it
 ## Files
 
 ```
-src/Paperless.Text/Fonts/LineSpacing.cs                    MetricUnit, the two grids, the max rule
-src/Paperless.Presentations/Layout/SlideTextLayout.cs      Impress's device, and the twip round trip
-src/Paperless.Spreadsheets/Layout/SheetFonts.cs            Calc's device on every cell face
-src/Paperless.Spreadsheets/Layout/SheetBandText.cs         and on the furniture; charts keep none
-tests/Paperless.Text.Tests/ApplicationGridTests.cs                    75
-tests/Paperless.Presentations.Tests/SlideReferenceDeviceTests.cs       7
-tests/Paperless.Spreadsheets.Tests/SheetReferenceDeviceTests.cs        6
-tests/Paperless.Text.Tests/{ReferenceGridTests,MetricGridTests}.cs    Writer's faces say so
-tests/Paperless.WordProcessing.Tests/{HighlightTests,ListLabelTests}.cs  two harnesses, likewise
+src/XRay.Office.Text/Fonts/LineSpacing.cs                    MetricUnit, the two grids, the max rule
+src/XRay.Office.Presentations/Layout/SlideTextLayout.cs      Impress's device, and the twip round trip
+src/XRay.Office.Spreadsheets/Layout/SheetFonts.cs            Calc's device on every cell face
+src/XRay.Office.Spreadsheets/Layout/SheetBandText.cs         and on the furniture; charts keep none
+tests/XRay.Office.Text.Tests/ApplicationGridTests.cs                    75
+tests/XRay.Office.Presentations.Tests/SlideReferenceDeviceTests.cs       7
+tests/XRay.Office.Spreadsheets.Tests/SheetReferenceDeviceTests.cs        6
+tests/XRay.Office.Text.Tests/{ReferenceGridTests,MetricGridTests}.cs    Writer's faces say so
+tests/XRay.Office.WordProcessing.Tests/{HighlightTests,ListLabelTests}.cs  two harnesses, likewise
 probes/refdev-01/pdftext.py                                full-precision baselines out of a PDF
 probes/refdev-01/probe_faces.py                            the shared face and size table
 probes/refdev-01/probe-impress.py                          507 pairs, six candidate devices

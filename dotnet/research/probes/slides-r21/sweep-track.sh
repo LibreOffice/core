@@ -16,7 +16,7 @@ WORKERS="${3:-3}"
 REF=/tmp/claude-0/-home-user-libreoffice-core/3e093938-a459-5268-987b-74c5270259d6/scratchpad/slides-3e093938/sweep-base/ref
 ROOT=/workspace/sample-files
 DIFF=/home/user/libreoffice-core/.claude/skills/render-comparison/scripts/pdf-image-diff.py
-CLI="$CLIDIR/Paperless.Cli"
+CLI="$CLIDIR/XRay.Office.Cli"
 
 [ -x "$CLI" ] || { echo "no CLI at $CLI" >&2; exit 1; }
 echo "measuring $CLI" >&2

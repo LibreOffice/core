@@ -132,11 +132,11 @@ all**: every other document was scaled exactly, which is a thing Writer never do
 
 | file | change |
 |---|---|
-| `src/Paperless.Text/Fonts/LineSpacing.cs` | `MetricGrid.Reference` = 8640 dpi; all four roundings take a half away from zero rather than to even; a `QuantisesAdvances` component |
-| `src/Paperless.Text/Layout/MeasuredParagraph.cs` | advances go through the grid only when it quantises them |
-| `src/Paperless.WordProcessing/Layout/PageContent.cs` | `Metrics` defaults to `MetricGrid.Reference`, so DOCX, DOC, RTF and ODT all get it |
-| `src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs` | `usePrinterMetrics ? Printer : Reference` |
-| `src/Paperless.WordProcessing/Ww8/DocReader.cs` | the same |
+| `src/XRay.Office.Text/Fonts/LineSpacing.cs` | `MetricGrid.Reference` = 8640 dpi; all four roundings take a half away from zero rather than to even; a `QuantisesAdvances` component |
+| `src/XRay.Office.Text/Layout/MeasuredParagraph.cs` | advances go through the grid only when it quantises them |
+| `src/XRay.Office.WordProcessing/Layout/PageContent.cs` | `Metrics` defaults to `MetricGrid.Reference`, so DOCX, DOC, RTF and ODT all get it |
+| `src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs` | `usePrinterMetrics ? Printer : Reference` |
+| `src/XRay.Office.WordProcessing/Ww8/DocReader.cs` | the same |
 
 ### The midpoint rule is a second, independent defect
 
@@ -228,14 +228,14 @@ not a metric.
 
 48 new tests in two files.
 
-`tests/Paperless.Text.Tests/ReferenceGridTests.cs` — 45. Every expectation is a distance LibreOffice
+`tests/XRay.Office.Text.Tests/ReferenceGridTests.cs` — 45. Every expectation is a distance LibreOffice
 itself drew: 30 line heights and 8 ascents across five faces from 5 to 24 pt, the
 identical-2355-units refutation at the three sizes where the two faces part company, the four-way
 refutation of §1's table, the grid's own arithmetic, and the two pins that keep the reference and
 printer grids from collapsing into one. The design-unit metrics are stated rather than read from the
 installed files, so the arithmetic is tested without the tests depending on a font being present.
 
-`tests/Paperless.WordProcessing.Tests/ReferenceDeviceWiringTests.cs` — 3. Asserted through a read
+`tests/XRay.Office.WordProcessing.Tests/ReferenceDeviceWiringTests.cs` — 3. Asserted through a read
 package rather than a constructed paragraph, because a constructed one inherits the default and
 would pass however the readers behave: a DOCX carries `MetricGrid.Reference`, one setting
 `w:usePrinterMetrics` carries `MetricGrid.Printer`, and a 10 pt Liberation Serif paragraph measures
@@ -290,7 +290,7 @@ that contaminated `words-regress-01`. Two guards, both cheap:
 - after each restore, a subset of the corpus is re-rendered and compared **byte for byte** against
   the run being claimed — 10 of 10 on `words/done-001` after the first cycle, **69 of 69** on
   `words/done-01*` after the last. The "before" binary was checked the other way: `QuantisesAdvances`
-  is absent from its `Paperless.Text.dll` and present in the final one.
+  is absent from its `XRay.Office.Text.dll` and present in the final one.
 
 ## 7. Two things found and deliberately not done
 
@@ -397,14 +397,14 @@ the rule.
 ## Files
 
 ```
-src/Paperless.Text/Fonts/LineSpacing.cs                  MetricGrid.Reference, the midpoint rule
-src/Paperless.Text/Layout/MeasuredParagraph.cs           advances stay off the reference grid
-src/Paperless.WordProcessing/Layout/PageContent.cs       the default every reader inherits
-src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs   printer or reference, never neither
-src/Paperless.WordProcessing/Ww8/DocReader.cs            the same
-tests/Paperless.Text.Tests/ReferenceGridTests.cs         45 tests, all against LibreOffice's own PDFs
-tests/Paperless.WordProcessing.Tests/ReferenceDeviceWiringTests.cs   3, through a read package
-tests/Paperless.WordProcessing.Tests/HighlightTests.cs   one stale expectation
+src/XRay.Office.Text/Fonts/LineSpacing.cs                  MetricGrid.Reference, the midpoint rule
+src/XRay.Office.Text/Layout/MeasuredParagraph.cs           advances stay off the reference grid
+src/XRay.Office.WordProcessing/Layout/PageContent.cs       the default every reader inherits
+src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs   printer or reference, never neither
+src/XRay.Office.WordProcessing/Ww8/DocReader.cs            the same
+tests/XRay.Office.Text.Tests/ReferenceGridTests.cs         45 tests, all against LibreOffice's own PDFs
+tests/XRay.Office.WordProcessing.Tests/ReferenceDeviceWiringTests.cs   3, through a read package
+tests/XRay.Office.WordProcessing.Tests/HighlightTests.cs   one stale expectation
 probes/lineheight-01/probe-grid.py                       the 195-pair table, and PROBE_SET=extra
 probes/lineheight-01/render-track.py                     a whole track, one build, with a manifest
 probes/lineheight-01/verdict.py                          batch-check.sh's checks, banked references

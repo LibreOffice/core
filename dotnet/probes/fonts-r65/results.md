@@ -72,7 +72,7 @@ cause from it.
 
 ### The seat
 
-- **`Paperless.Text.Fonts.WriterScripts`** — `GetScriptClass`'s block table ported to code points,
+- **`XRay.Office.Text.Fonts.WriterScripts`** — `GetScriptClass`'s block table ported to code points,
   and `ForRun`, which reduces the paragraph-wide scanner to one item per run: the first character
   with a script of its own decides, and the hint decides only where *every* character is weak. That
   reduction is the conservative half of the rule and is deliberate — a run mixing a hinted symbol

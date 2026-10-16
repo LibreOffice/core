@@ -1,0 +1,34 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/XRay.Office.Containers/XRay.Office.Containers.csproj" />
+    <Project Path="src/XRay.Office.Core/XRay.Office.Core.csproj" />
+    <Project Path="src/XRay.Office.Markup/XRay.Office.Markup.csproj" />
+    <Project Path="src/XRay.Office.MsBinary/XRay.Office.MsBinary.csproj" />
+    <Project Path="src/XRay.Office.Ooxml/XRay.Office.Ooxml.csproj" />
+    <Project Path="src/XRay.Office.OpenDocument/XRay.Office.OpenDocument.csproj" />
+    <Project Path="src/XRay.Office.Presentations/XRay.Office.Presentations.csproj" />
+    <Project Path="src/XRay.Office.Rendering/XRay.Office.Rendering.csproj" />
+    <Project Path="src/XRay.Office.Spreadsheets/XRay.Office.Spreadsheets.csproj" />
+    <Project Path="src/XRay.Office.Text/XRay.Office.Text.csproj" />
+    <Project Path="src/XRay.Office.Vector/XRay.Office.Vector.csproj" />
+    <Project Path="src/XRay.Office.WordProcessing/XRay.Office.WordProcessing.csproj" />
+    <Project Path="src/XRay.Office/XRay.Office.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/XRay.Office.Containers.Tests/XRay.Office.Containers.Tests.csproj" />
+    <Project Path="tests/XRay.Office.Core.Tests/XRay.Office.Core.Tests.csproj" />
+    <Project Path="tests/XRay.Office.Fidelity.Tests/XRay.Office.Fidelity.Tests.csproj" />
+    <Project Path="tests/XRay.Office.Markup.Tests/XRay.Office.Markup.Tests.csproj" />
+    <Project Path="tests/XRay.Office.OpenDocument.Tests/XRay.Office.OpenDocument.Tests.csproj" />
+    <Project Path="tests/XRay.Office.Presentations.Tests/XRay.Office.Presentations.Tests.csproj" />
+    <Project Path="tests/XRay.Office.Rendering.Tests/XRay.Office.Rendering.Tests.csproj" />
+    <Project Path="tests/XRay.Office.Spreadsheets.Tests/XRay.Office.Spreadsheets.Tests.csproj" />
+    <Project Path="tests/XRay.Office.TestKit/XRay.Office.TestKit.csproj" />
+    <Project Path="tests/XRay.Office.Text.Tests/XRay.Office.Text.Tests.csproj" />
+    <Project Path="tests/XRay.Office.Vector.Tests/XRay.Office.Vector.Tests.csproj" />
+    <Project Path="tests/XRay.Office.WordProcessing.Tests/XRay.Office.WordProcessing.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/XRay.Office.Cli/XRay.Office.Cli.csproj" />
+  </Folder>
+</Solution>

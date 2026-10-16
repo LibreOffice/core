@@ -12,7 +12,7 @@ seven arms below carry the switch and answer the same as the one that does not.
 
 **Word does honour the switch**, which is what the switch is for — *preserve the formatting of
 the previous result*. So the default here follows Word (apply the rule to a field that does not
-carry `\* MERGEFORMAT`) and `PAPERLESS_LIBREOFFICE_QUIRKS` applies it to every field, which is
+carry `\* MERGEFORMAT`) and `XRAY_OFFICE_LIBREOFFICE_QUIRKS` applies it to every field, which is
 26.2.4.2's own reading. `TODO.word-parity.md` carries the entry.
 
 ## 1. The arms, in a footer

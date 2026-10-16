@@ -1,6 +1,6 @@
 import re, zipfile, os, subprocess
 src="/c/sandbox/workdir/sample-files/sheets/chartset-012/xlsx/013_Contextures_chart_sample_21b98e22.xlsx"
-cli="/c/sandbox/workdir/wt-sheets-r50/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+cli="/c/sandbox/workdir/wt-sheets-r50/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 def variant(name, fn):
     zin=zipfile.ZipFile(src); zo=zipfile.ZipFile(name+".xlsx","w",zipfile.ZIP_DEFLATED)
     for it in zin.infolist():

@@ -5,7 +5,7 @@ Three candidate changes were considered and each is declined for a stated reason
 1. **The advance-width divergence** (17 documents) — closing it means reproducing FreeType's
    hinted advance at LibreOffice's ppem. Architectural, not a rounding patch; the kerning and
    quantisation-grid hypotheses are already refuted in `dotnet/probes/advance-divergence/`.
-2. **`w:w` character scaling** (#106) — the `Paperless.Text` half is one field on
+2. **`w:w` character scaling** (#106) — the `XRay.Office.Text` half is one field on
    `FormattedRun`, but it does nothing until `WordParagraphFormats.cs` sets it and the
    painter honours it, both outside this lane. Shipped alone it would be a property read by
    nobody. Recorded as a cross-lane dependency in `findings.md` §9.

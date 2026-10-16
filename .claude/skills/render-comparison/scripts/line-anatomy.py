@@ -286,7 +286,7 @@ def main() -> int:
     ap.add_argument("--corpus", type=Path)
     ap.add_argument("--root", type=Path, default=Path("/c/sandbox/workdir/sample-files"))
     ap.add_argument("--cli", type=Path,
-                    default=Path("dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"))
+                    default=Path("dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"))
     ap.add_argument("--out", type=Path)
     ap.add_argument("--only", choices=("match", "fail"),
                     help="restrict a corpus sweep to rows with that verdict")

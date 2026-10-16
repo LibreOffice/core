@@ -1,14 +1,14 @@
 # Words-D round 1 — the page cluster, and the geometry that turned out not to explain it
 
 Baseline `d82acd45832`. Worktree `/c/sandbox/workdir/wt-words-d`, branch `wt-words-d`,
-`PAPERLESS_CLI` set explicitly to this tree's binary on every sweep. Reference
+`XRAY_OFFICE_CLI` set explicitly to this tree's binary on every sweep. Reference
 `/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/words/`, 200 PDFs from LibreOffice 26.2.4.2
 620(Build:2) with `fonts-dejavu-core`. `SOURCE_DATE_EPOCH=1700000000` and `TZ=UTC` on every
 render, ours and the probes' alike.
 
 **Metric caveat.** Every figure below uses the gate metric as it stands on this branch
 (`pdftotext | wc -w`, 2%+3 band). A corrected word check is in flight on another branch — a
-word will need a letter or a digit — and a `paperless analyze` verb is to replace `pdftotext`
+word will need a letter or a digit — and a `xray-office analyze` verb is to replace `pdftotext`
 outright. **Check 1 is the subject here and is unaffected by both.** No check-2-only failure
 was touched.
 
@@ -316,7 +316,7 @@ about. The cluster's causes are inside the flow, not in the sheet it flows onto.
 
 ## 8. The implementation, with file and line
 
-`dotnet/src/Paperless.WordProcessing/Model/PaperSizes.cs`, new. `aDinTab` transcribed in its
+`dotnet/src/XRay.Office.WordProcessing/Model/PaperSizes.cs`, new. `aDinTab` transcribed in its
 own order — verified entry for entry against `i18nutil/source/utility/paper.cxx` by a script
 that re-evaluates `MM2MM100`/`IN2MM100`/`PT2MM100` and compares all 86 rows — with the
 `PAPER_USER` row, which is 0 × 0 and would swallow every small dimension, absent.
@@ -370,17 +370,17 @@ test of `PaperSizes` in isolation, which would have proved the table and not the
 
 ### Build and suite
 
-`dotnet build Paperless.slnx -v q -nologo`: **0 warnings, 0 errors.** Ten non-Fidelity projects,
+`dotnet build XRay.Office.slnx -v q -nologo`: **0 warnings, 0 errors.** Ten non-Fidelity projects,
 one at a time in the foreground: Core 284, Containers 109, Text 289, Vector 295, Rendering 121
 (1 skipped), Markup 259, OpenDocument 125, **WordProcessing 769**, Spreadsheets 621,
 Presentations 592 — **3464 total, 0 failed**, against 3458 before. Fidelity not run, per
 instruction.
 
 **No cross-track sweep is owed and none was taken.** The change is confined to
-`Paperless.WordProcessing`; `Paperless.Spreadsheets` and `Paperless.Presentations` do not
+`XRay.Office.WordProcessing`; `XRay.Office.Spreadsheets` and `XRay.Office.Presentations` do not
 reference it (checked in their `.csproj` files), so no slide or sheet can reach it. This is a
 structural argument, not a measurement, and is labelled as one — `words-b-01` owed a real
-measurement because it touched the shared `Paperless.Text`, and this does not.
+measurement because it touched the shared `XRay.Office.Text`, and this does not.
 
 ---
 

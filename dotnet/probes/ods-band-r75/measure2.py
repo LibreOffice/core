@@ -4,7 +4,7 @@
 A cell's text sits inside its row by the *default* font's metrics, so a family that varies
 the default cell font needs one no-header probe per size rather than one for the family.
 
-    measure2.py <probedir> <outdir> [--jobs N] [--cli <paperless>]
+    measure2.py <probedir> <outdir> [--jobs N] [--cli <xray-office>]
 """
 import concurrent.futures, hashlib, os, re, subprocess, sys
 

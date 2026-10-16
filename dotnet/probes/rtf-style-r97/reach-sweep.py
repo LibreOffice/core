@@ -7,12 +7,12 @@ because each entry states its own `\fs` and the reset writes RTF's default back 
 number that belongs in a write-up is the one this script produces — documents whose rendering
 changes — and the census is only the shortlist it explains.
 
-Each document is rendered with `Paperless.Cli render --format pdf`, hashed, and the PDF deleted
+Each document is rendered with `XRay.Office.Cli render --format pdf`, hashed, and the PDF deleted
 immediately, so the sweep's disk cost is one PDF at a time rather than 338. `SOURCE_DATE_EPOCH`
 is pinned, so two runs of the same binary over the same file are byte-identical (checked before
 the sweep, not assumed) and a hash difference between two legs is a real difference.
 
-    PAPERLESS_CLI=<abs path> reach-sweep.py <corpus root> <out.tsv> [workers]
+    XRAY_OFFICE_CLI=<abs path> reach-sweep.py <corpus root> <out.tsv> [workers]
 
 Run it once at the base commit and once at HEAD, then `diff` the two `.tsv`.
 """
@@ -29,7 +29,7 @@ def main():
     root = pathlib.Path(sys.argv[1])
     out = pathlib.Path(sys.argv[2])
     workers = int(sys.argv[3]) if len(sys.argv) > 3 else 3
-    cli = os.environ['PAPERLESS_CLI']
+    cli = os.environ['XRAY_OFFICE_CLI']
     work = out.parent / (out.stem + '-work')
 
     files = sorted(root.rglob('*.rtf'))

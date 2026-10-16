@@ -158,8 +158,8 @@ measurement behind it.
 
 | test | at the base | after |
 |---|---|---|
-| `XlsChartPlotAreaTests` (6, `Paperless.Spreadsheets.Tests`) | 1 fails | all 6 |
-| `ChartStatedOuterPlotAreaTests` (4, `Paperless.Core.Tests`) | **all 4 fail** | all 4 |
+| `XlsChartPlotAreaTests` (6, `XRay.Office.Spreadsheets.Tests`) | 1 fails | all 6 |
+| `ChartStatedOuterPlotAreaTests` (4, `XRay.Office.Core.Tests`) | **all 4 fail** | all 4 |
 
 "At the base" is the two arms switched off in place (`StatedOuterArea` bypassed;
 `OuterPlotAreaUnits` forced null), because reverting the files makes the round's own tests fail
@@ -241,7 +241,7 @@ without re-deriving it.
 * Whole suite, read out of this run's own last lines: ten non-fidelity projects **0 failed of
   6514** (Containers 109, Core 528, Markup 259, OpenDocument 146, Presentations 1047,
   Rendering 164, Spreadsheets 1286, Text 728, Vector 309, WordProcessing 1938), and
-  `Paperless.Fidelity.Tests` **542 passed / 10 failed of 552** — PageDrawing x4, TabStop x4,
+  `XRay.Office.Fidelity.Tests` **542 passed / 10 failed of 552** — PageDrawing x4, TabStop x4,
   SheetDrawing, JustificationShrink, and no eleventh name.
 
 ---

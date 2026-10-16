@@ -5,7 +5,7 @@ Authors one minimal document, converts it to every spelling LibreOffice can writ
 renders each with the *installed* binary and reads the note separator straight out of
 the PDF content stream. The question is which formats get Word's fixed 2-inch rule and
 which keep Writer's proportional one — the positive case for DOCX and DOC, and the
-negative case for ODT/FODT (and for RTF, which Paperless routes through the same
+negative case for ODT/FODT (and for RTF, which X-Ray.Office routes through the same
 `PaginationOptions.Word` preset and which therefore decides whether the condition can be
 that preset at all).
 

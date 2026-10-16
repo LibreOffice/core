@@ -1,5 +1,5 @@
---- a/dotnet/src/Paperless.Core/Charts/ChartLayout.cs
-+++ b/dotnet/src/Paperless.Core/Charts/ChartLayout.cs
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
 @@ -96,12 +96,18 @@
  
  /// <summary>One filled rectangle — a bar, a legend key, the plot area's wall.</summary>
@@ -30,8 +30,8 @@
                          entry.Line,
                          entry.Width));
                  }
---- a/dotnet/src/Paperless.Core/Charts/ChartPlot.cs
-+++ b/dotnet/src/Paperless.Core/Charts/ChartPlot.cs
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartPlot.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartPlot.cs
 @@ -1020,7 +1020,26 @@
      /// <remarks>See <see cref="LabelColour"/>.</remarks>
      public Colour LegendColour { get; init; } = Colour.Black;
@@ -74,8 +74,8 @@
  
      /// <summary>
      /// How the value axis' major gridlines are painted, or null when it has none.
---- a/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs
-+++ b/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
 @@ -346,9 +346,9 @@
              CategoryAxisCrossing = CrossingOf(axes.Domain ?? axes.Category),
              CategoryCrossesAt = CrossesAt(axes.Domain ?? axes.Category),
@@ -137,8 +137,8 @@
      /// <summary>A shape property bag's solid fill, or null when it has none.</summary>
      /// <remarks>
      /// <para>
---- a/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartex.cs
-+++ b/dotnet/src/Paperless.Ooxml/DrawingML/DrawingChartex.cs
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartex.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartex.cs
 @@ -47,6 +47,15 @@
  /// </remarks>
  public static class DrawingChartex
@@ -169,8 +169,8 @@
          };
      }
  
---- a/dotnet/src/Paperless.WordProcessing/Layout/FrameChart.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Layout/FrameChart.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Layout/FrameChart.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Layout/FrameChart.cs
 @@ -57,7 +57,9 @@
              if (filled.Bounds.Width <= Length.Zero || filled.Bounds.Height <= Length.Zero) continue;
  
@@ -224,8 +224,8 @@
  }
  
  /// <summary>
---- a/dotnet/src/Paperless.Core/Graphics/Hatching.cs
-+++ b/dotnet/src/Paperless.Core/Graphics/Hatching.cs
+--- a/dotnet/src/XRay.Office.Core/Graphics/Hatching.cs
++++ b/dotnet/src/XRay.Office.Core/Graphics/Hatching.cs
 @@ -135,4 +135,93 @@
                  new DocPoint(Length.FromEmu((long)(px + (dx * along))), Length.FromEmu((long)(py + (dy * along)))));
          }
@@ -320,8 +320,8 @@
 +                Length.FromEmu(bottom - top));
 +    }
  }
---- a/dotnet/src/Paperless.OpenDocument/OdfChartPlot.cs
-+++ b/dotnet/src/Paperless.OpenDocument/OdfChartPlot.cs
+--- a/dotnet/src/XRay.Office.OpenDocument/OdfChartPlot.cs
++++ b/dotnet/src/XRay.Office.OpenDocument/OdfChartPlot.cs
 @@ -37,6 +37,15 @@
  /// </remarks>
  public static class OdfChartPlot
@@ -351,8 +351,8 @@
              ValueGrid = GridOf(valueAxis, styles),
              CategoryGrid = GridOf(categoryAxis, styles),
              TitleSize = styles.FontSize(
---- a/dotnet/src/Paperless.Spreadsheets/Layout/SheetChart.cs
-+++ b/dotnet/src/Paperless.Spreadsheets/Layout/SheetChart.cs
+--- a/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetChart.cs
++++ b/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetChart.cs
 @@ -87,7 +87,9 @@
              if (filled.Bounds.Width <= Length.Zero || filled.Bounds.Height <= Length.Zero) continue;
  
@@ -364,8 +364,8 @@
              if (filled.Line is { } line) sink.StrokePath(path, Pen(line, filled.LineWidth));
          }
  
---- a/dotnet/src/Paperless.Presentations/Layout/SlideChart.cs
-+++ b/dotnet/src/Paperless.Presentations/Layout/SlideChart.cs
+--- a/dotnet/src/XRay.Office.Presentations/Layout/SlideChart.cs
++++ b/dotnet/src/XRay.Office.Presentations/Layout/SlideChart.cs
 @@ -69,7 +69,9 @@
                      AffineTransform.Concat(
                          AffineTransform.Translation(box.Bounds.X.Emu, box.Bounds.Y.Emu), placement),
@@ -377,8 +377,8 @@
                  Line = box.Line is { } line ? Pen(line, box.LineWidth) : null,
              });
          }
---- a/dotnet/src/Paperless.Presentations/Layout/SlideDrawing.cs
-+++ b/dotnet/src/Paperless.Presentations/Layout/SlideDrawing.cs
+--- a/dotnet/src/XRay.Office.Presentations/Layout/SlideDrawing.cs
++++ b/dotnet/src/XRay.Office.Presentations/Layout/SlideDrawing.cs
 @@ -136,74 +136,15 @@
      /// rectangle and a chevron as readily as a box and the segments
      /// <see cref="Hatching.Lines"/> produces span the outline's whole bounding box.
@@ -461,8 +461,8 @@
  
      /// <summary>
      /// Draws a shape's drop shadow: the shape again, offset, in one colour, behind itself.
---- a/dotnet/src/Paperless.Spreadsheets/MsBinary/XlsChartReader.cs
-+++ b/dotnet/src/Paperless.Spreadsheets/MsBinary/XlsChartReader.cs
+--- a/dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsChartReader.cs
++++ b/dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsChartReader.cs
 @@ -127,6 +127,15 @@
  /// </remarks>
  internal sealed class XlsChartBuilder

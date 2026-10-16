@@ -22,7 +22,7 @@ comparable to the original document's:
 
 * **The document's word count is preserved exactly.** Only maximal runs of
   ``[A-Za-z0-9]`` are replaced; whitespace, punctuation and every non-ASCII script are
-  left alone — verified with ``paperless extract``, which reads the model rather than the
+  left alone — verified with ``xray-office extract``, which reads the model rather than the
   page, at 1142 words against 1142 on a deck and 604 against 604 on a workbook. A
   ``pdftotext`` count can still drift about a percent, because extraction from a PDF
   re-infers word boundaries from geometry and a token's advances are not the replaced

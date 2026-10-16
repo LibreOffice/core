@@ -94,5 +94,5 @@ Cumulative for the round: **271 → 273 of 307**, +2.
 
 ## Shared layer
 
-**No.** `Paperless.Spreadsheets` only — one new file, plus `LoadPivotTables` on `XlsxFile`, one
+**No.** `XRay.Office.Spreadsheets` only — one new file, plus `LoadPivotTables` on `XlsxFile`, one
 optional parameter on `XlsxSheetReader.ReadSheet` and one call site in `XlsxChartRanges`.

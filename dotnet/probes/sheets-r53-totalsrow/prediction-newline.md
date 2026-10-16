@@ -25,7 +25,7 @@ Charts whose `c:dLbls` states `showPercent="1"` together with at least one other
 | words | 6 (5 `done`, 1 `open`) |
 
 The slides and words rows are **out of reach by construction**: the change is in
-`Paperless.Spreadsheets/Layout/SheetChart.cs`, which only a workbook's chart is drawn through.
+`XRay.Office.Spreadsheets/Layout/SheetChart.cs`, which only a workbook's chart is drawn through.
 `SlideChart` still carries the identical defect and is the slides track's to fix.
 
 ## Predicted verdict movement: **0**
@@ -61,7 +61,7 @@ text at all**, and every one of them has exactly one series named `Sales`.
 `ChartSpaceConverter::convertFromModel` (`oox/source/drawingml/chart/chartspaceconverter.cxx:181-204`)
 fills such a title from `PlotAreaConverter::getAutomaticTitle()`, which
 `TypeGroupConverter::getSingleSeriesTitle` (`typegroupconverter.cxx:272-281`) answers with the
-single series' cached name. **We draw no title at all.** That is a `Paperless.Ooxml` change reaching
+single series' cached name. **We draw no title at all.** That is a `XRay.Office.Ooxml` change reaching
 all three tracks and it is *not* being made this round — see `results.md` § "left open", including
 the branch that substitutes the literal `Chart Title` when there is no single series, which is the
 part that makes it a cross-track risk rather than a one-line addition.

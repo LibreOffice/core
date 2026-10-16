@@ -5,8 +5,8 @@
 set -e
 P="$(cd "$(dirname "$0")" && pwd)"
 REF=${REF_SOFFICE:-/opt/libreoffice26.2/program/soffice}
-BASE=${BASE_CLI:-/home/user/wt-math165/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli}
-HEAD=${HEAD_CLI:-/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli}
+BASE=${BASE_CLI:-/home/user/wt-math165/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli}
+HEAD=${HEAD_CLI:-/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli}
 echo "reference $REF -- $("$REF" --version 2>/dev/null | head -1)"
 echo "base      $BASE"
 echo "head      $HEAD"
@@ -16,7 +16,7 @@ while IFS= read -r f; do
   for arm in ref base head; do mkdir -p "$P/sweep/$arm/$k"; done
   [ -f "$P/sweep/ref/$k/done" ] || {
     PATH=$(dirname "$REF"):$PATH timeout -k 30 600 soffice --headless --convert-to pdf \
-      --outdir "$P/sweep/ref/$k" "$f" -env:UserInstallation=file:///tmp/paperless-lo-fieldrpr-$k >/dev/null 2>&1 || true
+      --outdir "$P/sweep/ref/$k" "$f" -env:UserInstallation=file:///tmp/xray-office-lo-fieldrpr-$k >/dev/null 2>&1 || true
     touch "$P/sweep/ref/$k/done"; }
   "$BASE" render --outdir "$P/sweep/base/$k" "$f" >/dev/null 2>&1 || true
   "$HEAD" render --outdir "$P/sweep/head/$k" "$f" >/dev/null 2>&1 || true

@@ -6,12 +6,12 @@ hand-made correction to one row is lost the next time it is rebuilt.
 
 | Script | Writes | Source of the data |
 |---|---|---|
-| `generate-language-table.py` | `Paperless.Core/Globalization/WindowsLanguages.Table.cs` | LibreOffice's own `i18nlangtag` tables, read from the surrounding C++ tree |
-| `generate-font-substitutions.py` | `Paperless.Text/Fonts/FontSubstitutions.Tables.cs` | LibreOffice's own `VCL.xcu` font substitution configuration |
-| `generate-line-break-tables.py` | `Paperless.Text/Layout/LineBreakProperties.Tables.cs` | The Unicode Character Database, via the `uniseg` package and Python's `unicodedata` |
-| `generate-line-break-cases.py` | `Paperless.Text.Tests/line-break-cases.txt` | `uniseg`'s own UAX #14 implementation, as a differential reference |
-| `generate-itemisation-tables.py` | `Paperless.Text/Itemisation/BidiProperties.Tables.cs` and `ScriptProperties.Tables.cs` | ICU, through `ctypes` against the installed `libicuuc` |
-| `generate-bidi-cases.py` | `Paperless.Text.Tests/bidi-cases.txt` | ICU's own `ubidi`, as a differential reference |
+| `generate-language-table.py` | `XRay.Office.Core/Globalization/WindowsLanguages.Table.cs` | LibreOffice's own `i18nlangtag` tables, read from the surrounding C++ tree |
+| `generate-font-substitutions.py` | `XRay.Office.Text/Fonts/FontSubstitutions.Tables.cs` | LibreOffice's own `VCL.xcu` font substitution configuration |
+| `generate-line-break-tables.py` | `XRay.Office.Text/Layout/LineBreakProperties.Tables.cs` | The Unicode Character Database, via the `uniseg` package and Python's `unicodedata` |
+| `generate-line-break-cases.py` | `XRay.Office.Text.Tests/line-break-cases.txt` | `uniseg`'s own UAX #14 implementation, as a differential reference |
+| `generate-itemisation-tables.py` | `XRay.Office.Text/Itemisation/BidiProperties.Tables.cs` and `ScriptProperties.Tables.cs` | ICU, through `ctypes` against the installed `libicuuc` |
+| `generate-bidi-cases.py` | `XRay.Office.Text.Tests/bidi-cases.txt` | ICU's own `ubidi`, as a differential reference |
 
 ## Running them
 

@@ -5,8 +5,8 @@ set -e
 SOFFICE=/opt/libreoffice26.2/program/soffice
 doc="$1"; out="$2"
 d=$(printf '%s' "$doc" | md5sum | cut -c1-16)
-prof="/tmp/paperless-lo-$d"
+prof="/tmp/xray-office-lo-$d"
 mkdir -p "$out"
-timeout -k 30 240 "$SOFFICE" --headless --norestore -env:UserInstallation="file:///tmp/paperless-lo-$d" \
+timeout -k 30 240 "$SOFFICE" --headless --norestore -env:UserInstallation="file:///tmp/xray-office-lo-$d" \
   --convert-to pdf --outdir "$out" "$doc" >/dev/null 2>&1
 rm -rf "$prof"

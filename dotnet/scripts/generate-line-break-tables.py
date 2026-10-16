@@ -95,7 +95,7 @@ w('// generator is scripts/generate-line-break-tables.py and it can read the UCD
 w('// unicode.org is reachable.')
 w('// </auto-generated>')
 w('')
-w('namespace Paperless.Text.Layout;')
+w('namespace XRay.Office.Text.Layout;')
 w('')
 w('public static partial class LineBreakProperties')
 w('{')
@@ -144,7 +144,7 @@ emit_pairs('WideRanges',
            wide_ranges)
 w('}')
 
-path = ('/home/user/libreoffice-core/dotnet/src/Paperless.Text/Layout/'
+path = ('/home/user/libreoffice-core/dotnet/src/XRay.Office.Text/Layout/'
         'LineBreakProperties.Tables.cs')
 open(path, 'w', encoding='utf-8').write('\n'.join(out) + '\n')
 print('written ' + path, file=sys.stderr)

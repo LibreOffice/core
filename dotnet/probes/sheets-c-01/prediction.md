@@ -32,7 +32,7 @@ file.** Two reasons, both read out of source before any change:
 1. `DrawingChart.cs:363-371` — the seat the brief names — is the **extraction** reader. It builds
    a `ContentSection` and is reached from `XlsxCharts.Read`. Nothing it produces is drawn. The
    **rendering** reader is `DrawingChartPlot.ReadSequence`
-   (`src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs:1735-1771`), a second, near-identical
+   (`src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs:1735-1771`), a second, near-identical
    cache reader. A fix in `DrawingChart` alone moves no ink at all.
 2. The Pilot Logbook is a `.xls`, and the BIFF chart reader **already resolves against the live
    sheet**: `XlsChartReader.BuildSeries` calls `data.Numbers(valueSheet, values)` and
@@ -81,9 +81,9 @@ dominated by 38 pages of logbook table.
 
 Two of the four fixes touch shared libraries and therefore owe words and slides a measurement:
 
-- `Paperless.Ooxml` — `DrawingChartPlot` gains an optional resolver whose default is null, so the
+- `XRay.Office.Ooxml` — `DrawingChartPlot` gains an optional resolver whose default is null, so the
   PPTX and DOCX callers keep the cache-only path unchanged by construction.
-- `Paperless.Core` — `ChartLayout.AddAreas`. The census finds **zero** area charts in the words
+- `XRay.Office.Core` — `ChartLayout.AddAreas`. The census finds **zero** area charts in the words
   and slides tracks, in OOXML and ODF alike.
 
 I will sweep both anyway and report the count, normalising `/CreationDate` out.

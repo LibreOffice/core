@@ -4,13 +4,13 @@
 # sweep-orig-hash.sh and generalised to any root and extension set, so the same
 # instrument covers the original .doc/.docx track and the converted .odt column.
 #
-# SOURCE_DATE_EPOCH is what makes a plain md5 mean anything: `paperless render`
+# SOURCE_DATE_EPOCH is what makes a plain md5 mean anything: `xray-office render`
 # honours it in both the PDF's /CreationDate and a header's date fields, so two runs
 # of one binary are byte-equal with nothing masked.
 #
-#   PAPERLESS_CLI=… sweep-hash.sh <root> <ext[,ext…]> <out.tsv> [jobs]
+#   XRAY_OFFICE_CLI=… sweep-hash.sh <root> <ext[,ext…]> <out.tsv> [jobs]
 set -u
-CLI=${PAPERLESS_CLI:?set PAPERLESS_CLI}
+CLI=${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI}
 ROOT=${1:?root}
 EXTS=${2:?exts}
 OUT=${3:?out.tsv}

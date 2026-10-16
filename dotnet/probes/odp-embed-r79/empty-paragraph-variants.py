@@ -9,7 +9,7 @@ play, and it is the difference between the two that the round is about.
 
   empty-paragraph-variants.py [outdir]
 
-PAPERLESS_CLI names the binary to measure; REF_SOFFICE the reference.
+XRAY_OFFICE_CLI names the binary to measure; REF_SOFFICE the reference.
 """
 import os, re, subprocess, sys, zipfile
 
@@ -18,8 +18,8 @@ OUT = sys.argv[1] if len(sys.argv) > 1 else "/tmp/odp-empty-variants"
 PAGE = 5
 HERE = os.path.dirname(os.path.abspath(__file__))
 CLI = os.environ.get(
-    "PAPERLESS_CLI",
-    "/home/user/wt-odpvis/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli")
+    "XRAY_OFFICE_CLI",
+    "/home/user/wt-odpvis/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli")
 
 # Two extra text styles, so that a variant can state a size the placeholder does not.
 EXTRA = ('<style:style style:name="TBIG" style:family="text">'

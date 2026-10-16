@@ -95,7 +95,7 @@ The one design point worth carrying. `XlsxChartRanges.Resolve` already answered 
 resolve", which leaves the cached points standing — `ExcelChartConverter::createDataSequence`
 throwing. A range every cell of which is a totals row is a different state: it **resolved**, and it
 names no readable cell. Falling back to the cache there draws the entire plot the reference leaves
-blank. So `Resolve` now returns an empty sequence for it and the two gates in `Paperless.Ooxml` drop
+blank. So `Resolve` now returns an empty sequence for it and the two gates in `XRay.Office.Ooxml` drop
 their `live.Text.Count > 0` test.
 
 ### 3.4 Census and reach
@@ -232,7 +232,7 @@ overprinting on the page.
 
 **`SlideChart` still carries the identical defect** and is the slides track's.
 
-## 6. The 24.2.7.2 audit — four of the nine `Paperless.Spreadsheets` sites re-checked
+## 6. The 24.2.7.2 audit — four of the nine `XRay.Office.Spreadsheets` sites re-checked
 
 Every one is an **authored probe against the installed 26.2.4.2**, not a reading of the C++.
 `dotnet/probes/sheets-r53-totalsrow/audit_*.py` reproduces them.
@@ -244,7 +244,7 @@ Every one is an **authored probe against the installed 26.2.4.2**, not a reading
 | `Layout/SheetDeviceUnits.cs` — the 720 dpi round trip | 45 workbooks: 3 faces × 15 sizes from 6 pt to 48 pt | **45 of 45 within 0.1% relative**, max 0.47 pt on a 484.81 pt line — **still correct** |
 
 All four comments now name **26.2.4.2** and **2026-08-21**, which is what stops the next round
-re-checking them. Five `Paperless.Spreadsheets` sites remain: `SheetNotes`, `SheetOptimalRowHeights`,
+re-checking them. Five `XRay.Office.Spreadsheets` sites remain: `SheetNotes`, `SheetOptimalRowHeights`,
 `SheetPageDecoration`, `SheetShapeText`, `SheetText`, plus `Ooxml/XlsxNoteCaptions`.
 
 ### 6.1 The instrument needed a control, and it failed it first
@@ -274,7 +274,7 @@ fills such a title from `PlotAreaConverter::getAutomaticTitle()`, which
 `TypeGroupConverter::getSingleSeriesTitle` (`typegroupconverter.cxx:272-281`) answers with the single
 series' cached name — but only when the axes set holds exactly **one type group**. We draw no title.
 
-**Not implemented, and the costing is why.** It is a `Paperless.Ooxml` change reaching all three
+**Not implemented, and the costing is why.** It is a `XRay.Office.Ooxml` change reaching all three
 tracks, and the same block carries a second branch that substitutes the localized literal
 `Chart Title` when a title element exists, is empty, and there is *no* single series — so the cheap
 half cannot be shipped without deciding the expensive half. Worth 7 tokens on one open document
@@ -296,13 +296,13 @@ and two two-digit tokens that we do not, and our `17%` and `trend` come out as `
 
 ## 8. Shared layer
 
-**Yes, once.** Change one edits `Paperless.Ooxml` — three files, `ChartRangeResolver.cs` (doc only),
+**Yes, once.** Change one edits `XRay.Office.Ooxml` — three files, `ChartRangeResolver.cs` (doc only),
 `DrawingChart.cs` and `DrawingChartPlot.cs`, each dropping one `live.Text.Count > 0` clause. **The
 reach is zero by construction and the argument is not a census but a type**: the clause can only
 change behaviour when a `ChartRangeResolver` is supplied, and the only implementation in the tree is
 `XlsxChartRanges`, reached only from `XlsxReader`. Words and slides pass `null` — `DrawingChart.cs`'s
 own remarks say why — so no `.docx`, `.doc`, `.pptx` or `.ppt` can take that branch at all. Changes
-two and three are `Paperless.Spreadsheets` only.
+two and three are `XRay.Office.Spreadsheets` only.
 
 `WordProcessing` (1083) and `Presentations` (781, +1 for the new gate test) are green, and `Fidelity`
 is **521 passed / 31 failed / 552**, byte-for-byte the base's figure. **The parent should still run
@@ -314,8 +314,8 @@ the cross-track sweep**; the prediction is 0 of 666 changed.
 
 Ten non-Fidelity projects, run one at a time and totalled by hand: **4660 passed, 0 failed, 1
 skipped**, against the base's 4639/0/1 — a delta of exactly the **21** new tests: 20 in
-`Paperless.Spreadsheets` (905 → 925: nine `XlsxChartTotalsRowTests`, eight `XlsxPivotLabelTests`,
-three `SheetChartLabelLineTests`) and one in `Paperless.Presentations` (780 → 781).
+`XRay.Office.Spreadsheets` (905 → 925: nine `XlsxChartTotalsRowTests`, eight `XlsxPivotLabelTests`,
+three `SheetChartLabelLineTests`) and one in `XRay.Office.Presentations` (780 → 781).
 
 Whole track swept after every change: base `TOTAL 325 MATCH 284`, after change one `MATCH 286`,
 final `MATCH 288` — **274 of 307** against the manifest's path list, **zero regressions, zero
@@ -344,7 +344,7 @@ page-count changes**. `sheets/done-*` is inside every one of those sweeps.
    reference places the `M1` data label outside the pie so it lands wholly on page 2.
 3. **The eight-blank-line header** — twelve probes in `probes/sheets-r51-bands/` bracket it and none
    explains it; 20 words on `FAA-2019-0995-0002`, whose reference half is date-volatile.
-4. **Five more 24.2.7.2 sites** in `Paperless.Spreadsheets` — `SheetOptimalRowHeights` first, since
+4. **Five more 24.2.7.2 sites** in `XRay.Office.Spreadsheets` — `SheetOptimalRowHeights` first, since
    row heights are the axis this track has already established for a 14-document cluster. The probe
    harness (`audit_mkwb.py`) is in this directory and the `<cellStyles>` trap is documented in it.
 

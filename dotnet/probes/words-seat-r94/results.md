@@ -166,7 +166,7 @@ runs out of room does not fail loudly. **1305/1305, 1305/1305, 338/338 and 338/3
 `plain-margins` re-rendered after the rebuild is byte-identical with the date masked.
 
 The suite is at its documented baseline: ten non-fidelity projects green (6382 tests), and
-`Paperless.Fidelity.Tests` **542 passed / 10 failed** with exactly the ten the rulebook names —
+`XRay.Office.Fidelity.Tests` **542 passed / 10 failed** with exactly the ten the rulebook names —
 `PageDrawingComparisonTests.EveryLineIsDrawn` ×4, `TabStopComparisonTests.AListLabelsTabAdvance`
 ×4, `SheetDrawingComparisonTests.APictureIsDrawn`, `JustificationShrinkComparisonTests`. **The four
 TabStop cases were checked rather than assumed**: they are `list-label-overrun` in four formats,
@@ -294,13 +294,13 @@ Reused rather than rebuilt: `odt-sectable-r92/nested.py` and `confine.sh`,
 ## 4. Reproducing
 
 ```sh
-export PAPERLESS_CLI=/abs/tree/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=/abs/tree/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 
 # the fixtures, rendered through 26.2.4.2 and through this tree
 python3 ../odt-sectable-r92/nested.py tests/corpus/features/odt-section-columns.odt /abs/fx \
         base plain plain-margins nested-margins toc-margins
 for v in base plain plain-margins nested-margins toc-margins; do
-  "$PAPERLESS_CLI" render /abs/fx/$v.odt --outdir /abs/ours; done
+  "$XRAY_OFFICE_CLI" render /abs/fx/$v.odt --outdir /abs/ours; done
 python3 columnx.py /abs/fx/plain-margins.pdf /abs/ours/plain-margins.pdf
 
 # the .odt track, scored against the banked reference

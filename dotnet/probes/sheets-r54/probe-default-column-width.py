@@ -49,7 +49,7 @@ def xs(pdf):
                   re.finditer(r'<word xMin="([\d.]+)"[^>]*>\|</word>', out))
 
 work = "/c/sandbox/workdir/scratch-r54-sheets/dc"
-cli = "/c/sandbox/workdir/wt-sheets-r50/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+cli = "/c/sandbox/workdir/wt-sheets-r50/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 os.makedirs(work, exist_ok=True)
 
 cases = [("calibri11-none", "Calibri", 11, None),

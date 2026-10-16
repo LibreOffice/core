@@ -2,7 +2,7 @@
 """Each fixture's four lines, their left edge and their pitch, from both renderers."""
 import os, pathlib, subprocess, sys
 
-CLI = "/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 SOFFICE = "/opt/libreoffice26.2/program/soffice"
 WORDS = {"Alpha", "Bravo", "Charlie", "Delta", "1.", "2.", "3.", "4."}
 

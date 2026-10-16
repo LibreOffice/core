@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Render the whole slides track with one Paperless CLI, reproducibly and in parallel.
+# Render the whole slides track with one X-Ray.Office CLI, reproducibly and in parallel.
 #
 #   render-slides.sh <cli> <outdir> [workers]
 #

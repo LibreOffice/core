@@ -32,7 +32,7 @@ _probe = _load('fitedge_probe', 'make-fitedge-probe.py')
 CASES, build, BOX_W = _probe.CASES, _probe.build, _probe.BOX_W
 
 SOFFICE = '/opt/libreoffice26.2/program/soffice'
-CLI = os.environ.get('CLI', '/home/user/r103-slidefw/cli-base/Paperless.Cli')
+CLI = os.environ.get('CLI', '/home/user/r103-slidefw/cli-base/XRay.Office.Cli')
 
 
 def render_ref(deck, outdir, fmt='pdf'):

@@ -138,9 +138,9 @@ def lean_of(pdf):
 if __name__ == '__main__':
     out = os.path.abspath(sys.argv[1])
     workers = int(sys.argv[2]) if len(sys.argv) > 2 else 6
-    cli = os.environ.get('PAPERLESS_CLI') or (
-        '/c/sandbox/workdir/wt-words-r50/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/'
-        'linux-x64/Paperless.Cli')
+    cli = os.environ.get('XRAY_OFFICE_CLI') or (
+        '/c/sandbox/workdir/wt-words-r50/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/'
+        'linux-x64/XRay.Office.Cli')
     os.makedirs(os.path.join(out, 'in'), exist_ok=True)
     os.makedirs(os.path.join(out, 'ref'), exist_ok=True)
     os.makedirs(os.path.join(out, 'ours'), exist_ok=True)

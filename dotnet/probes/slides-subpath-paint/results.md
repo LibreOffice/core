@@ -11,10 +11,10 @@ metric-compatible duplicates moved aside. Corpus `/home/user/sample-files`.
 that fall back to the whole outline — and said so explicitly:
 
 > **It is inert until a caller uses the new properties**, and that is deliberate: the two call
-> sites that fill and stroke a shape outline are `Paperless.Presentations`', which this lane does
+> sites that fill and stroke a shape outline are `XRay.Office.Presentations`', which this lane does
 > not own.
 
-`Paperless.WordProcessing` grew its consumer in `81e72b7d8`. The slide side had not, so
+`XRay.Office.WordProcessing` grew its consumer in `81e72b7d8`. The slide side had not, so
 `SlidePresetGeometry.Outline` still answered with one path that was filled *and* stroked.
 
 ## What the reference does, and the two rules read out of it
@@ -123,7 +123,7 @@ figures above are all from the fixed build; the byte-for-byte re-render is what 
 ## And a second finding from the same probe deck: the join default
 
 `0 J 1 j` against our `0 J 0 j` was carried as recorded-and-unverified. It is verified, and it is
-not in `Paperless.Rendering` where the note placed it — the PDF writer emits whatever
+not in `XRay.Office.Rendering` where the note placed it — the PDF writer emits whatever
 `Stroke.Join` says. It is the DrawingML reader's default.
 
 Counting the operators in the two content streams of the probe deck, whose nine shapes each state
@@ -155,7 +155,7 @@ right is the operator, not the raster.
 
 ## What is left
 
-- **`Paperless.WordProcessing` shades nothing.** `PageDrawing.Outlines` uses `FillOutline` and
+- **`XRay.Office.WordProcessing` shades nothing.** `PageDrawing.Outlines` uses `FillOutline` and
   `StrokeOutline`, which is rules one and two's first half, but a `PageFrame` has one `Fill` and no
   place for a shaded part — so a `cube` or a `foldedCorner` in a DOCX still draws flat. That file
   is another agent's half this round; the change is the same shape as this one.
@@ -167,5 +167,5 @@ right is the operator, not the raster.
   dump above, which confirms the second of the two recorded-and-unverified items. Not changed
   here: it agrees on every preset with a hole because the preset table winds the inner subpath the
   other way, so the change would move ink only on a `custGeom` whose author did not, and no corpus
-  document is known to be one. Unlike the join, this one really is in `Paperless.Rendering` —
+  document is known to be one. Unlike the join, this one really is in `XRay.Office.Rendering` —
   `PdfContentSink.cs`:241 already writes `f*` when asked, and no caller ever asks.

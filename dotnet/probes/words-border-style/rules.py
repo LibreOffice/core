@@ -7,7 +7,7 @@ One paragraph reading `ABOVE`, one carrying the border under test and reading `T
     which is the rule the style actually draws;
   * `TEXT`'s own y from the PDF text layer, which is the room the border took.
 
-Usage: PAPERLESS_CLI=<cli> python3 rules.py <outdir> [style ...]
+Usage: XRAY_OFFICE_CLI=<cli> python3 rules.py <outdir> [style ...]
 """
 import os, re, subprocess, sys, zipfile
 from pathlib import Path
@@ -15,7 +15,7 @@ import numpy as np
 from PIL import Image
 
 OUT = Path(sys.argv[1]); OUT.mkdir(parents=True, exist_ok=True)
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 STYLES = sys.argv[2:] or ["single", "double", "dotted", "dashed", "thick",
                           "thinThickSmallGap", "thickThinSmallGap", "triple"]
 SIZES = [4, 8, 12, 24]

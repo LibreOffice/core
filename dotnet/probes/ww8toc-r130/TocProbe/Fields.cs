@@ -1,7 +1,7 @@
 // The second half of the probe: the body's TOC/INDEX fields, and the character styles the runs
 // inside their cached results name.
-using Paperless.Core.Diagnostics;
-using Paperless.WordProcessing.Ww8;
+using XRay.Office.Core.Diagnostics;
+using XRay.Office.WordProcessing.Ww8;
 
 internal static class Fields
 {

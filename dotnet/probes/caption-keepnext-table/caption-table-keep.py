@@ -64,7 +64,7 @@ room each takes over.
 Usage
 -----
 
-    PAPERLESS_CLI=... python3 caption-table-keep.py /abs/workdir
+    XRAY_OFFICE_CLI=... python3 caption-table-keep.py /abs/workdir
 """
 
 import os
@@ -215,7 +215,7 @@ def main():
         raise SystemExit(f'{reference} was not written — nothing to compare')
     ref = per_page(reference)
 
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     ours = None
     if cli:
         subprocess.run([cli, 'render', '--quiet', '--outdir', os.path.join(out, 'ours'), docx],

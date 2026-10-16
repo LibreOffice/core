@@ -154,7 +154,7 @@ Written down before the sweep, per COMMON.md §6.
 
 ## 7. Shared layer
 
-`OoxmlXml` is in **`Paperless.Ooxml`**, which serves words, slides and sheets. The change is keyed
+`OoxmlXml` is in **`XRay.Office.Ooxml`**, which serves words, slides and sheets. The change is keyed
 on the chartex `a:graphicData/@uri`, which the census above finds in **2 documents of 946, both
 sheets, and 0 words and 0 slides documents** — so the cross-track blast radius is measured at zero
 rather than argued. The parent should still sweep the other two tracks; the documents to watch, if

@@ -35,7 +35,7 @@ TextListStylePtr aSlideStyle = isOther ? rSlidePersist.getOtherTextStyle()
 into every `SlidePersist` as its default text style, lines 242, 584 and 639).
 
 That is a *second* route to the same answer as the one already recorded in
-`src/Paperless.Presentations/TODO.md`: `SlidePersist::createXShapes` pushes master text styles
+`src/XRay.Office.Presentations/TODO.md`: `SlidePersist::createXShapes` pushes master text styles
 into Impress's style families with `for (int i = 0; i < 4; i++)` over a switch whose `case 4` is
 the style `p:otherStyle` parses into, so the loop stops one short and never applies it. The
 record noted the divergence and left it unmeasured.
@@ -189,5 +189,5 @@ Per project, each run redirected to its own file, on the final tree: Core 243, T
 Containers 109, Vector 291, Rendering 104, Markup 259, OpenDocument 125, WordProcessing 608,
 Spreadsheets 432, Presentations 517, Fidelity 542. **Zero failed and zero skipped throughout.**
 
-Nothing outside `Paperless.Presentations/Ooxml` was touched, so the words and sheets tracks are
+Nothing outside `XRay.Office.Presentations/Ooxml` was touched, so the words and sheets tracks are
 not owed a sweep.

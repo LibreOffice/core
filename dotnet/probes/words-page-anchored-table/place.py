@@ -1,7 +1,7 @@
 """Where a page-anchored positioned table goes, and what happens when it is taller than the page.
 
 `Case-Study-Heathrow-Airport.docx` states `w:tblpPr w:horzAnchor="page" w:tblpX="705"
-w:vertAnchor="text" w:tblpY="662"` on a table that runs to three pages. Paperless honours neither
+w:vertAnchor="text" w:tblpY="662"` on a table that runs to three pages. X-Ray.Office honours neither
 offset: `DocxLayoutSource.PositionedLeftEdge` excludes `horzAnchor="page"`, and
 `Paginator.PlaceFloatedTable` drops the whole `w:tblpPr` for a table taller than the body.
 
@@ -9,13 +9,13 @@ This measures what the reference actually does, in three dimensions: the horizon
 vertical anchor, and whether the table fits on one page. The observables are the x and y of the
 first cell's text on each page, read from the PDF text layer.
 
-Usage: python3 place.py <outdir>   (reference only; add PAPERLESS_CLI to score ours too)
+Usage: python3 place.py <outdir>   (reference only; add XRAY_OFFICE_CLI to score ours too)
 """
 import os, re, subprocess, sys, zipfile
 from pathlib import Path
 
 OUT = Path(sys.argv[1]); OUT.mkdir(parents=True, exist_ok=True)
-CLI = os.environ.get("PAPERLESS_CLI")
+CLI = os.environ.get("XRAY_OFFICE_CLI")
 OLD = "soffice"
 NEW = "/opt/libreoffice26.2/program/soffice"
 

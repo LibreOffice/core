@@ -16,7 +16,7 @@ trap 'rm -rf "$W"' EXIT
 export SOURCE_DATE_EPOCH=1700000000
 score () {   # score <cli-dir> <document> <reference pdf>
   d=$W/pv; rm -rf "$d"; mkdir -p "$d"
-  "$1/Paperless.Cli" render --format pdf --outdir "$d" --quiet "$2" >/dev/null 2>&1
+  "$1/XRay.Office.Cli" render --format pdf --outdir "$d" --quiet "$2" >/dev/null 2>&1
   f=$(ls "$d"/*.pdf 2>/dev/null | head -1)
   if [ -z "$f" ] || ! tail -c 2048 "$f" | grep -q '%%EOF'; then echo "FAILED 0 0"; rm -rf "$d"; return; fi
   python3 "$DIFF" "$f" "$3" 2>/dev/null \

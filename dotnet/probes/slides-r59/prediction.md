@@ -127,7 +127,7 @@ three sets and is the only one also in the §1 list.
 
 ## Cross-track reach — this is a shared-layer diff and the parent must gate the corpus
 
-Both changes touch **`Paperless.Core/Charts`** and **`Paperless.Ooxml`**. Named from the census,
+Both changes touch **`XRay.Office.Core/Charts`** and **`XRay.Office.Ooxml`**. Named from the census,
 counted as chart *parts* on the computed path with a live `none`/`in` axis:
 
 * **sheets — 56 chart parts** in ~62 workbooks, `Keywords_Mapping_Graphs_and_Charts.xlsx` (22 live

@@ -42,7 +42,7 @@ for name, fn in VARIANTS.items():
     f = out / f'{name}.odt'
     rewrite(src, f, fn)
     subprocess.run(['timeout', '-k', '30', '240', SOFFICE, '--headless', '--norestore',
-                    '-env:UserInstallation=file:///tmp/paperless-lo-var88',
+                    '-env:UserInstallation=file:///tmp/xray-office-lo-var88',
                     '--convert-to', 'pdf', '--outdir', str(out), str(f)],
                    capture_output=True)
     print(name, (out / f'{name}.pdf').exists())

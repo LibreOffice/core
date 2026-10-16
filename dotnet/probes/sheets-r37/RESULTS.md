@@ -67,7 +67,7 @@ is a lead this round did not follow.
 
 ### Cross-track
 
-Every line of the diff is inside `src/Paperless.Spreadsheets`, so this should reach neither
+Every line of the diff is inside `src/XRay.Office.Spreadsheets`, so this should reach neither
 other family. Measured rather than argued, rendering each document with both snapshots and
 byte-comparing: **words 0 of 200, slides 0 of 163.**
 

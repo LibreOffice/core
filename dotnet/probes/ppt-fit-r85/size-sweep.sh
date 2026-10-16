@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Per-page dominant drawn text size for a track, one document at a time, deleting as it goes.
 #
-#   PAPERLESS_CLI=... size-sweep.sh <root> <prefix> <ext-regex> <out.tsv> [workers]
+#   XRAY_OFFICE_CLI=... size-sweep.sh <root> <prefix> <ext-regex> <out.tsv> [workers]
 #
-# With PAPERLESS_CLI unset and BANK set, censuses the banked REFERENCE PDFs instead of rendering.
+# With XRAY_OFFICE_CLI unset and BANK set, censuses the banked REFERENCE PDFs instead of rendering.
 set -uo pipefail
 ROOT="${1:?root}"; PREFIX="${2:?prefix}"; EXTS="${3:?ext regex}"; OUT="${4:?out.tsv}"; W="${5:-2}"
 export SOURCE_DATE_EPOCH=1700000000
@@ -24,7 +24,7 @@ one() {
         | awk -F'\t' -v id="$id" '{print id"\t"$2"\t"$3"\t"$4}' >> "$OUT"
     else
       rm -rf "$TMP/t$idx"; mkdir -p "$TMP/t$idx"
-      timeout -k 30 240 "$PAPERLESS_CLI" render "$f" --format pdf --outdir "$TMP/t$idx" >/dev/null 2>&1
+      timeout -k 30 240 "$XRAY_OFFICE_CLI" render "$f" --format pdf --outdir "$TMP/t$idx" >/dev/null 2>&1
       [ -f "$TMP/t$idx/$stem.pdf" ] && python3 "$HERE/sizes.py" "$TMP/t$idx/$stem.pdf" 2>/dev/null \
         | awk -F'\t' -v id="$id" '{print id"\t"$2"\t"$3"\t"$4}' >> "$OUT"
       rm -rf "$TMP/t$idx"

@@ -298,7 +298,7 @@ def main() -> int:
     ap.add_argument("--layout", choices=("auto", "side", "stack"), default="auto")
     ap.add_argument("--budget", type=int, default=2000,
                     help="longest edge the viewer will show without downscaling")
-    ap.add_argument("--left-label", default="OURS (PAPERLESS)")
+    ap.add_argument("--left-label", default="OURS (X-RAY.OFFICE)")
     ap.add_argument("--right-label", default="REFERENCE (LIBREOFFICE)")
     a = ap.parse_args()
 

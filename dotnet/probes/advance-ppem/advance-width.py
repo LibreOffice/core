@@ -22,7 +22,7 @@ Measured 2026-09-06 against LibreOffice 24.2.7.2 (`/usr/bin/soffice`) and 26.2.4
 `NotoSans-*`/`NotoSerif-*` moved aside so it resolves the system faces), system fonts from
 `/usr/share/fonts`, `fc-match "DejaVu Sans"` answering `DejaVuSans.ttf`.
 
-Usage:  PAPERLESS_CLI=... python3 advance-width.py <workdir>
+Usage:  XRAY_OFFICE_CLI=... python3 advance-width.py <workdir>
 """
 
 import os
@@ -183,7 +183,7 @@ def main() -> int:
             raise SystemExit(f'{binary} wrote no PDF -- nothing to compare')
         pdfs[label] = pdf
 
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     if cli:
         directory = os.path.join(out, 'ours')
         os.makedirs(directory, exist_ok=True)

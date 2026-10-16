@@ -1,6 +1,6 @@
-# ours = Paperless @ 2f4709c08; ref24 = /usr/bin/soffice 24.2.7.2;
+# ours = XRay.Office @ 2f4709c08; ref24 = /usr/bin/soffice 24.2.7.2;
 # ref26 = /opt/libreoffice26.2 26.2.4.2 with the 8 Latin duplicate faces moved aside
-# fonts: Carlito+Caladea+Liberation+DejaVu installed; PAPERLESS_BUNDLED_FONTS unset
+# fonts: Carlito+Caladea+Liberation+DejaVu installed; XRAY_OFFICE_BUNDLED_FONTS unset
 # verdict rule = batch-check.sh 2026-09-05 (pages, then max(2%,15) alnum chars)
 path	ext	pages_ours	pages_ref24	pages_ref26	glyphs_ours	glyphs_ref24	glyphs_ref26	v_vs24	v_vs26	ref24_vs_ref26
 sheets/ceiling-001/xls/Template Pilot Logbook JAR-FCL V3.0.xls	xls	38	38	38	5756	5643	5643	words	words	match

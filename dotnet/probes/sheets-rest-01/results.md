@@ -252,10 +252,10 @@ corpus document has a hard-broken non-wrapping cell with an automatic row height
 because the narrow version would have been a rule fitted to what this corpus happens to contain
 rather than to what the probe measures.
 
-**No document outside the sheets track can move.** Change 1 lives in `Paperless.Text`, and
+**No document outside the sheets track can move.** Change 1 lives in `XRay.Office.Text`, and
 `breaksOverflowingBlanks: true` is passed at exactly four call sites, all in
 `SheetTextLayout`; the default is Writer's behaviour. The other three changes are in
-`Paperless.Spreadsheets`. Corroborated by the fidelity suite, which covers all three families and is
+`XRay.Office.Spreadsheets`. Corroborated by the fidelity suite, which covers all three families and is
 unchanged at 30 failed of 550.
 
 ## Visual verification
@@ -325,7 +325,7 @@ Scored against `prediction.md`, committed before the final sweep and before any 
 | 7 | 4b moves 5 to 15 documents | **miss, and the useful kind** — it moved **4** in ink and **0** on the gate. I over-estimated by a factor of three and had guessed the wrong order of magnitude for the gate entirely |
 | 8 | nothing outside the sheets track moves | **hit** — fidelity unchanged, all nine other projects unchanged |
 | 9 | fidelity is exactly 30 of 550, 0 skipped | **hit exactly** |
-| 10 | the new tests fail on the unfixed tree | **hit** — 12 fail; and the `Paperless.Text` project does not compile there at all, which is weaker evidence and is said as such |
+| 10 | the new tests fail on the unfixed tree | **hit** — 12 fail; and the `XRay.Office.Text` project does not compile there at all, which is weaker evidence and is said as such |
 | 11 | I will decline the DPCache sheet, and the strongest argument will be upstream's own | **hit** |
 | 12 | the flat-ODF export shows `table:display="true"` | **hit** |
 
@@ -340,31 +340,31 @@ Every project run individually on the final tree. Build is **0 warnings, 0 error
 
 | project | result | note |
 |---|---|---|
-| `Paperless.Containers.Tests` | 109 passed, 0 failed, 0 skipped | |
-| `Paperless.Core.Tests` | 337 passed, 0 failed, 0 skipped | |
-| `Paperless.Markup.Tests` | 259 passed, 0 failed, 0 skipped | |
-| `Paperless.OpenDocument.Tests` | 125 passed, 0 failed, 0 skipped | |
-| `Paperless.Presentations.Tests` | 694 passed, 0 failed, 0 skipped | |
-| `Paperless.Rendering.Tests` | 150 passed, 0 failed, 1 skipped | as before |
-| `Paperless.Spreadsheets.Tests` | **847** passed, 0 failed, 0 skipped | was 832; +15 |
-| `Paperless.Text.Tests` | **359** passed, 0 failed, 0 skipped | was 349; +10 |
-| `Paperless.Vector.Tests` | 295 passed, 0 failed, 0 skipped | no phantom failure this round |
-| `Paperless.WordProcessing.Tests` | 850 passed, 0 failed, 0 skipped | |
-| `Paperless.Fidelity.Tests` | 520 passed, **30 failed**, 0 skipped, 550 total | the briefed baseline, exactly |
+| `XRay.Office.Containers.Tests` | 109 passed, 0 failed, 0 skipped | |
+| `XRay.Office.Core.Tests` | 337 passed, 0 failed, 0 skipped | |
+| `XRay.Office.Markup.Tests` | 259 passed, 0 failed, 0 skipped | |
+| `XRay.Office.OpenDocument.Tests` | 125 passed, 0 failed, 0 skipped | |
+| `XRay.Office.Presentations.Tests` | 694 passed, 0 failed, 0 skipped | |
+| `XRay.Office.Rendering.Tests` | 150 passed, 0 failed, 1 skipped | as before |
+| `XRay.Office.Spreadsheets.Tests` | **847** passed, 0 failed, 0 skipped | was 832; +15 |
+| `XRay.Office.Text.Tests` | **359** passed, 0 failed, 0 skipped | was 349; +10 |
+| `XRay.Office.Vector.Tests` | 295 passed, 0 failed, 0 skipped | no phantom failure this round |
+| `XRay.Office.WordProcessing.Tests` | 850 passed, 0 failed, 0 skipped | |
+| `XRay.Office.Fidelity.Tests` | 520 passed, **30 failed**, 0 skipped, 550 total | the briefed baseline, exactly |
 
 **25 new tests**, in three classes plus two rewritten cases:
 
-* `Paperless.Text.Tests/OverflowingBlankBreakTests` — 10, including the Writer control and the
+* `XRay.Office.Text.Tests/OverflowingBlankBreakTests` — 10, including the Writer control and the
   single-straddling-blank bound.
-* `Paperless.Spreadsheets.Tests/SheetUnnamedFontTests` — 8, including the `fonts[0]` control.
-* `Paperless.Spreadsheets.Tests/SheetEditCellTests` — 6, including both controls.
+* `XRay.Office.Spreadsheets.Tests/SheetUnnamedFontTests` — 8, including the `fonts[0]` control.
+* `XRay.Office.Spreadsheets.Tests/SheetEditCellTests` — 6, including both controls.
 * `SheetCentredWrapBlankTests` — one case rewritten and one added, against re-measured reference
   values.
 
 **Verified to fail on the unfixed tree**, by copying the five changed source files aside,
 `git checkout --`-ing them, rebuilding and re-running — never `git stash`, which is repository-global
-here. Result: **12 failed of 847** in `Paperless.Spreadsheets.Tests`, covering all four changes
-(6 font, 3 clipping, 1 height, 2 centred-wrap). `Paperless.Text.Tests` does not compile against the
+here. Result: **12 failed of 847** in `XRay.Office.Spreadsheets.Tests`, covering all four changes
+(6 font, 3 clipping, 1 height, 2 centred-wrap). `XRay.Office.Text.Tests` does not compile against the
 unfixed tree, because the constructor option it exercises does not exist there — that is weaker
 evidence than a failure and is not dressed up as one; the two `SheetCentredWrapBlankTests` failures
 cover the same behaviour end to end and do fail properly.
@@ -372,7 +372,7 @@ cover the same behaviour end to end and do fail properly.
 ## Reproducing this
 
 ```sh
-export PAPERLESS_CLI=…/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=…/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 export SOURCE_DATE_EPOCH=1700000000
 bash dotnet/probes/sheets-rest-01/sweep.sh /c/sandbox/workdir/sample-files 'sheets/*' /abs/out 6 > sweep.log 2>&1
 grep '^TOTAL' sweep.log      # TOTAL 171  MATCH 163  MISMATCH 8  REF-MISSING 0

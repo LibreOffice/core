@@ -331,7 +331,7 @@ than on new ones.**
 
 ## 6. Tests
 
-`dotnet/tests/Paperless.Core.Tests/ChartAxisCollisionReserveTests.cs`, six cases.
+`dotnet/tests/XRay.Office.Core.Tests/ChartAxisCollisionReserveTests.cs`, six cases.
 
 | case | what fails at the base, and in which direction |
 |---|---|
@@ -366,7 +366,7 @@ Every one of the ten is at or above the count round 108 recorded for it, so none
 run; Core is +6 (this round's six) and Presentations +6 and Spreadsheets +8 from rounds merged
 since.
 
-**`Paperless.Fidelity.Tests`, which needs an installed LibreOffice and is the one that can skip
+**`XRay.Office.Fidelity.Tests`, which needs an installed LibreOffice and is the one that can skip
 silently: `Failed: 10, Passed: 542, Skipped: 0, Total: 552`** — 0 skipped, so it covered
 everything. All ten failures are the families `dotnet/CLAUDE.md` records as left failing on
 purpose, and none of them is a chart:

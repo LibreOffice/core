@@ -7,8 +7,8 @@ Two seats, both opened by round 124's blind reading of `150-5370-10H.docx` page 
 |---|---|
 | reference | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2**, `0229ac93fcf0d7cbc6376066c6f35021cef002dc` |
 | reference renderings | the **banked** leg of gate r125, `/home/user/gate-r125/ref`, 947 PDFs, rendered 2026-09-14 11:30 |
-| our base leg | `/home/user/gate-r125-cli/Paperless.Cli`, built 11:24 — and `bdfa0c947` touches `dotnet/probes` only, `git show --name-only` over `dotnet/src/` is **0 files**, so that binary *is* this round's base |
-| our after leg | `dotnet/tools/Paperless.Cli` built in this worktree at the committed source, `SOURCE_DATE_EPOCH=1757462400`, one output directory per **document** |
+| our base leg | `/home/user/gate-r125-cli/XRay.Office.Cli`, built 11:24 — and `bdfa0c947` touches `dotnet/probes` only, `git show --name-only` over `dotnet/src/` is **0 files**, so that binary *is* this round's base |
+| our after leg | `dotnet/tools/XRay.Office.Cli` built in this worktree at the committed source, `SOURCE_DATE_EPOCH=1757462400`, one output directory per **document** |
 | population | the **338** words-track documents of `MANIFEST.tsv`; the gap census additionally filters to gate r125's `match` rows, as round 124's did |
 | C++ tree | `/home/user/libreoffice-core`, read only. **C8**: it is `27.2.0.0.alpha0+`, not 26.2's source, so every arm below is confirmed a second time against 26.2.4.2's own output |
 | `/usr/bin/soffice` | 24.2.7.2 — **not used for anything in this round** |
@@ -261,7 +261,7 @@ word-processing readers, while O72's fix is in `DocxLayoutSource` and reaches on
 with a drawn contents page are byte-for-byte unchanged in `toc-pages-base.tsv` and
 `toc-pages-after.tsv`, which is the control that says so — and is the measurement O81 rests on.
 
-**Slides and sheets cannot move, and that is structural rather than measured.** Both edited files are in `Paperless.WordProcessing`, and neither `Paperless.Presentations.csproj` nor `Paperless.Spreadsheets.csproj` references it — their `ProjectReference` sets are Core, Containers, MsBinary, Ooxml, OpenDocument, Text and Vector. No slides or sheets rendering can differ by a byte, so the other 609 corpus documents were not re-rendered.
+**Slides and sheets cannot move, and that is structural rather than measured.** Both edited files are in `XRay.Office.WordProcessing`, and neither `XRay.Office.Presentations.csproj` nor `XRay.Office.Spreadsheets.csproj` references it — their `ProjectReference` sets are Core, Containers, MsBinary, Ooxml, OpenDocument, Text and Vector. No slides or sheets rendering can differ by a byte, so the other 609 corpus documents were not re-rendered.
 
 **No gate verdict can move**, and the columns confirm it: `gate-columns.py` scored all 49 movers on page count and alphanumeric count against both legs and the reference, and **0 changed either**. A rule is ink; this is the `w:pgBorders` argument again.
 
@@ -339,20 +339,20 @@ After the fix the gap census still reports the reference bridging a gap of ours 
 
 | project | passed | failed |
 |---|--:|--:|
-| `Paperless.Core.Tests` | 591 | 0 |
-| `Paperless.Containers.Tests` | 109 | 0 |
-| `Paperless.Markup.Tests` | 259 | 0 |
-| `Paperless.OpenDocument.Tests` | 169 | 0 |
-| `Paperless.Rendering.Tests` | 164 | 0 |
-| `Paperless.Text.Tests` | 744 | 0 |
-| `Paperless.Vector.Tests` | 309 | 0 |
-| `Paperless.WordProcessing.Tests` | 1974 | 0 |
-| `Paperless.Presentations.Tests` | 1203 | 0 |
-| `Paperless.Spreadsheets.Tests` | 1387 | 0 |
-| `Paperless.Fidelity.Tests` | 542 | **10** |
+| `XRay.Office.Core.Tests` | 591 | 0 |
+| `XRay.Office.Containers.Tests` | 109 | 0 |
+| `XRay.Office.Markup.Tests` | 259 | 0 |
+| `XRay.Office.OpenDocument.Tests` | 169 | 0 |
+| `XRay.Office.Rendering.Tests` | 164 | 0 |
+| `XRay.Office.Text.Tests` | 744 | 0 |
+| `XRay.Office.Vector.Tests` | 309 | 0 |
+| `XRay.Office.WordProcessing.Tests` | 1974 | 0 |
+| `XRay.Office.Presentations.Tests` | 1203 | 0 |
+| `XRay.Office.Spreadsheets.Tests` | 1387 | 0 |
+| `XRay.Office.Fidelity.Tests` | 542 | **10** |
 
 **One run was discarded, and it was caught by the check rather than by anything looking wrong.**
-The first run of `Paperless.WordProcessing.Tests` reported `Failed: 0, Passed: 1408, Total: 1408`
+The first run of `XRay.Office.WordProcessing.Tests` reported `Failed: 0, Passed: 1408, Total: 1408`
 against **1974 discovered** — 566 tests silently dropped under a summary line that reads as a clean
 pass. That is `CLAUDE.md`'s *A truncated run reports success*, and the figure above is two
 subsequent runs of the project alone, both **1974 of 1974**. Every project's count in this table was
@@ -363,13 +363,13 @@ signal and above it is normal.
 **0 skipped in every project**, which is what says none of them covered nothing. The ten fidelity
 failures are the standing set O64's own register row records — *"0 fidelity verdicts (10 of 552
 failed before and the same ten after)"* — and the names are banked in `fidelity-failures.txt`.
-`dotnet build Paperless.slnx`: **0 warnings, 0 errors**. The full table is `test-run.txt`.
+`dotnet build XRay.Office.slnx`: **0 warnings, 0 errors**. The full table is `test-run.txt`.
 
 ---
 
 ## 9. Refutations of this round's own findings, kept rather than deleted
 
-- **"The fix does not fire."** The first render of `150-5370-10H.docx` after `TabRule` landed was identical to the base, and the first instrumented run printed nothing at all. Neither was true: `dotnet build src/Paperless.WordProcessing/…` does not copy the library into `tools/Paperless.Cli/bin`, so both measurements were of the **base binary under a new name**. This is `CLAUDE.md`'s stale-binary trap arriving through the build graph rather than through a file timestamp, and the guard is the same — re-render one document and byte-compare it against the run you are claiming to have reproduced. Done at the end of this round: the restored source's rendering of `150-5370-10H.docx` is **md5-identical** to the sweep's own copy.
+- **"The fix does not fire."** The first render of `150-5370-10H.docx` after `TabRule` landed was identical to the base, and the first instrumented run printed nothing at all. Neither was true: `dotnet build src/XRay.Office.WordProcessing/…` does not copy the library into `tools/XRay.Office.Cli/bin`, so both measurements were of the **base binary under a new name**. This is `CLAUDE.md`'s stale-binary trap arriving through the build graph rather than through a file timestamp, and the guard is the same — re-render one document and byte-compare it against the run you are claiming to have reproduced. Done at the end of this round: the restored source's rendering of `150-5370-10H.docx` is **md5-identical** to the sweep's own copy.
 - **The tab probe's first two readings were the instrument.** A y-tolerance of `0.9 × line height` merges adjacent lines' rules at 10 pt, which shifted the whole Mono group by one row and made the cliff read as 30/90 rather than 119/121. And a `cliff` group marked with a trailing `R` collided with every `span` row's own `R`, because PyMuPDF splits a line at a wide gap and reports the two halves as separate lines. Both were found by an arithmetic contradiction — a reported stop that was the *previous* row's — and not by the numbers looking wrong.
 - **"3 of 66 `.doc` state word underline."** §1: a raw-byte sprm scan, refuted by the reference's own view. Kept in `wordline-census.py` with the operand corrected, because the correction (operand **2**, not 4, `ww8par6.cxx` `Read_Underline`) is worth as much as the census.
 - **"The six documents that worsen are over-drawing."** §6: all six are *under*-drawing and were before this round. The magnitude `|ours − reference|` says the opposite of the sign, and the sign is the finding.

@@ -39,7 +39,7 @@ none. Inside a `w:object` it costs a duplicate of everything, through two indepe
 `features/words-object-duplicate.docx` (2761 B), built by `make-fixture.py`: one `w:object`
 carrying `w:dxaOrig="1540" w:dyaOrig="997"`, holding a `v:shapetype`, a `v:shape` whose own
 `style` states `width:77.25pt;height:49.5pt`, and a `v:imagedata` inside the shape. It carries an
-empty `word/settings.xml` with `compatibilityMode` 15, per the `paperless-corpus` skill — a
+empty `word/settings.xml` with `compatibilityMode` 15, per the `office-corpus` skill — a
 hand-built DOCX without one answers a different question.
 
 Image placements read out of each PDF's inflated content streams (`fixture-placements.tsv`):

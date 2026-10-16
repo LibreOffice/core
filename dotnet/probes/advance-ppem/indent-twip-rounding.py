@@ -18,7 +18,7 @@ Measured 2026-09-06 against LibreOffice 24.2.7.2 (`/usr/bin/soffice`) and 26.2.4
 (`/opt/libreoffice26.2/program/soffice`, bundled Latin duplicates and Latin Noto aside),
 system fonts, `fc-match Arial` answering Liberation Sans.
 
-Usage:  PAPERLESS_CLI=... python3 indent-twip-rounding.py <workdir>
+Usage:  XRAY_OFFICE_CLI=... python3 indent-twip-rounding.py <workdir>
 """
 
 import math
@@ -108,7 +108,7 @@ def main() -> int:
     out = sys.argv[1]
     os.makedirs(out, exist_ok=True)
     targets = {'24.2.7.2': '/usr/bin/soffice', '26.2.4.2': '/opt/libreoffice26.2/program/soffice'}
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
 
     version = lambda b: subprocess.run([b, '--version'], capture_output=True, text=True).stdout.strip()
     print(f'# indent-twip-rounding: an OOXML indent of {LEVEL} levels ='

@@ -24,8 +24,8 @@ is sound because the diff is confined to `dotnet/src` and cannot reach `soffice`
 **The base was re-derived rather than trusted, and it reproduces.** `before.tsv` is this round's
 base at `5c003d58c`, rendered fresh; against `dotnet/probes/odf-gate-r78/rows.tsv`'s `.ods` half it
 agrees on page count and verdict for **307 of 307**. Worth running: four commits between
-`873c766f9` — the gate the brief quotes — and `5c003d58c` touch `Paperless.OpenDocument` and
-`Paperless.Rendering`, which an `.ods` does go through.
+`873c766f9` — the gate the brief quotes — and `5c003d58c` touch `XRay.Office.OpenDocument` and
+`XRay.Office.Rendering`, which an `.ods` does go through.
 
 ## The column
 
@@ -269,7 +269,7 @@ reproducibly.
 change a page count. A shape is not a cell in Calc — `ScColumn::GetOptimalHeight` walks the
 column's cell storage and a `draw:` object is in the drawing layer — so the fix is to stop the
 shape's text reaching the cell's, and it belongs in the reader rather than here. **Left, with the
-seat named**: `OdfContentReader.ReadShape` (`dotnet/src/Paperless.OpenDocument/OdfContentReader.cs`)
+seat named**: `OdfContentReader.ReadShape` (`dotnet/src/XRay.Office.OpenDocument/OdfContentReader.cs`)
 appends into `target` with no marker a layout could filter on, and extraction wants that text
 where it is.
 

@@ -25,7 +25,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 [[ -n "$DOC" ]] || { echo "usage: pair.sh <document> [--worst|--page N] [--dpi N] [--outdir DIR]" >&2; exit 2; }
-[[ -n "${PAPERLESS_CLI:-}" ]] || { echo "PAPERLESS_CLI is not set — it must point at the tree you mean to measure" >&2; exit 2; }
+[[ -n "${XRAY_OFFICE_CLI:-}" ]] || { echo "XRAY_OFFICE_CLI is not set — it must point at the tree you mean to measure" >&2; exit 2; }
 
 mkdir -p "$OUTDIR"
 RAW="$(mktemp -d)"

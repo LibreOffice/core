@@ -7,7 +7,7 @@ One directory per DOCUMENT, never per worker slot (`CLAUDE.md`, *A parallel swee
 document its own directory*), and `SOURCE_DATE_EPOCH` pinned so two legs are byte-comparable.
 
 `ext` defaults to `doc`, which is the whole population this round's change can reach: every file
-it touches is under `Paperless.WordProcessing/Ww8`, and `git grep` says the only type any other
+it touches is under `XRay.Office.WordProcessing/Ww8`, and `git grep` says the only type any other
 reader borrows from that folder is `Ww8DateTime`.
 """
 import csv

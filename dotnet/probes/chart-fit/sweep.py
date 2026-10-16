@@ -9,7 +9,7 @@ and it is validated against the bank's stored verdicts before anything is scored
 Each document renders into its own directory, keyed on a hex digest of its corpus-relative
 path, and the directory is removed as soon as the row is scored.
 
-    sweep.py --cli <Paperless.Cli> --out <dir> > sweep.tsv
+    sweep.py --cli <XRay.Office.Cli> --out <dir> > sweep.tsv
 """
 import argparse, concurrent.futures as cf, csv, hashlib, shutil, subprocess, sys, tempfile
 from pathlib import Path

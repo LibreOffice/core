@@ -20,9 +20,9 @@ from pathlib import Path
 CORPUS = Path("/home/user/sample-files")
 GATE = Path("/home/user/gate-2f47")
 CLI = os.environ.get(
-    "PAPERLESS_CLI",
-    "/home/user/wt-chartlayout/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/"
-    "Paperless.Cli")
+    "XRAY_OFFICE_CLI",
+    "/home/user/wt-chartlayout/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/"
+    "XRay.Office.Cli")
 
 
 def identity(path: Path) -> str:

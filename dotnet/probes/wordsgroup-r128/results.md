@@ -5,7 +5,7 @@ Round 128, `/home/user/wt-wordsgroup`, branch `agent/wordsgroup`, base `bdfa0c94
 | | |
 |---|---|
 | reference | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2**, `0229ac93fcf0d7cbc6376066c6f35021cef002dc` |
-| our renderer | `dotnet/tools/Paperless.Cli` built in this worktree, `SOURCE_DATE_EPOCH=1757462400` |
+| our renderer | `dotnet/tools/XRay.Office.Cli` built in this worktree, `SOURCE_DATE_EPOCH=1757462400` |
 | C++ tree | `/home/user/libreoffice-core`, read only — **C8**: it declares `27.2.0.0.alpha0+` and is not the reference binary's source, so every arm below is confirmed a second time against 26.2.4.2's own output |
 | `/usr/bin/soffice` | 24.2.7.2 — not used for anything in this round |
 | corpus | `/home/user/sample-files`, 947 documents, of which 272 `docx` |
@@ -328,7 +328,7 @@ pictures on one baseline:
 Ours share a bottom edge to the hundredth of a point and overlap almost completely, which reads
 exactly like a missing picture. Their heights are right (258.85 and 294.55). Reach, from round
 124's own `baseline-pair-census.py`: **1 of 329 words documents, against a base rate of 0** in the
-reference. The mechanism is in the WW8 reader's handling of as-char frames, not in `Paperless.Text`.
+reference. The mechanism is in the WW8 reader's handling of as-char frames, not in `XRay.Office.Text`.
 
 ---
 
@@ -346,24 +346,24 @@ reference. The mechanism is in the WW8 reader's handling of as-char frames, not 
 
 ## 5. Tests
 
-`dotnet build Paperless.slnx -c Release` — 0 warnings, 0 errors.
+`dotnet build XRay.Office.slnx -c Release` — 0 warnings, 0 errors.
 
 | project | passed | failed | skipped |
 |---|--:|--:|--:|
-| `Paperless.Containers.Tests` | 109 | 0 | 0 |
-| `Paperless.Core.Tests` | 591 | 0 | 0 |
-| `Paperless.Markup.Tests` | 259 | 0 | 0 |
-| `Paperless.OpenDocument.Tests` | 169 | 0 | 0 |
-| `Paperless.Presentations.Tests` | 1203 | 0 | 0 |
-| `Paperless.Rendering.Tests` | 164 | 0 | 0 |
-| `Paperless.Spreadsheets.Tests` | 1387 | 0 | 0 |
-| `Paperless.Text.Tests` | 744 | 0 | 0 |
-| `Paperless.Vector.Tests` | 309 | 0 | 0 |
-| `Paperless.WordProcessing.Tests` | 1333 | 0 | 0 |
+| `XRay.Office.Containers.Tests` | 109 | 0 | 0 |
+| `XRay.Office.Core.Tests` | 591 | 0 | 0 |
+| `XRay.Office.Markup.Tests` | 259 | 0 | 0 |
+| `XRay.Office.OpenDocument.Tests` | 169 | 0 | 0 |
+| `XRay.Office.Presentations.Tests` | 1203 | 0 | 0 |
+| `XRay.Office.Rendering.Tests` | 164 | 0 | 0 |
+| `XRay.Office.Spreadsheets.Tests` | 1387 | 0 | 0 |
+| `XRay.Office.Text.Tests` | 744 | 0 | 0 |
+| `XRay.Office.Vector.Tests` | 309 | 0 | 0 |
+| `XRay.Office.WordProcessing.Tests` | 1333 | 0 | 0 |
 | **total, excluding fidelity** | **6268** | **0** | **0** |
 
 > **Corrected at merge — this table's total is a TRUNCATED RUN and is not to be quoted.**
-> The 6268 is 632 short, and the whole shortfall is in `Paperless.WordProcessing.Tests`,
+> The 6268 is 632 short, and the whole shortfall is in `XRay.Office.WordProcessing.Tests`,
 > reported here as 1333. Measured at the merge head with every project reporting
 > `Passed == Total`, that project is **1980** and the eleven projects together are **7469
 > discovered, 7459 passed, 10 failed** — the ten standing fidelity failures.
@@ -378,7 +378,7 @@ reference. The mechanism is in the WW8 reader's handling of as-char frames, not 
 > nothing, which is how the shortfall was identified as an instrument failure rather than
 > lost tests. **Compare discovered against passed on every project before quoting a total.**
 
-| `Paperless.Fidelity.Tests` | 542 | 10 | 0 |
+| `XRay.Office.Fidelity.Tests` | 542 | 10 | 0 |
 
 The fidelity project's ten failures are the set `CLAUDE.md` records as left failing on purpose: the
 eight advance-family assertions — `AListLabelsTabAdvancesToLibreOfficesStop` and

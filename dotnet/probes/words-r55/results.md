@@ -98,8 +98,8 @@ three separate rules are one rule and a difference in who writes to the item.
 
 ## The changes
 
-Both are confined to `Paperless.WordProcessing`. **No shared layer changes behaviour**: the only
-edit outside it is comment-only in `Paperless.Text/Fonts/SystemFontResolver.cs`, verified by
+Both are confined to `XRay.Office.WordProcessing`. **No shared layer changes behaviour**: the only
+edit outside it is comment-only in `XRay.Office.Text/Fonts/SystemFontResolver.cs`, verified by
 `git diff` showing no non-`///` lines. Slides and sheets cannot be reached and no cross-track sweep
 is owed.
 
@@ -242,7 +242,7 @@ comparing. Two of the three found defects **larger than the one this round was a
 
 | site | outcome |
 |---|---|
-| `Paperless.Text/Fonts/SystemFontResolver.cs` `GenericFallbacks` | **VERIFIED again, round 55, from a fifth caller** — the DOC filter reaches it undeclared and it answers correctly there too, `Consolas` → DejaVu Sans **Mono** included. The sentence saying no word-processing filter reaches it is corrected at the site |
+| `XRay.Office.Text/Fonts/SystemFontResolver.cs` `GenericFallbacks` | **VERIFIED again, round 55, from a fifth caller** — the DOC filter reaches it undeclared and it answers correctly there too, `Consolas` → DejaVu Sans **Mono** included. The sentence saying no word-processing filter reaches it is corrected at the site |
 
 Marker lines: **11 → 12**; open `24.2.7` hits unchanged at 42. No new site was opened.
 

@@ -8,7 +8,7 @@ cd "$(dirname "$0")/../.."
 OUT=/home/user/odtscale-r148-sweep
 LEG=$1   # `base` or `head`
 mkdir -p "$OUT/$LEG"
-CLI=tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+CLI=tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 
 ls /home/user/corpus-odf/odt/*.odt | xargs -P 6 -I{} sh -c '
     doc=$(basename "{}" .odt)

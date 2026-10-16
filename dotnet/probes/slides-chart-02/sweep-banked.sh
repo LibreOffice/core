@@ -24,7 +24,7 @@ WORKERS="${5:-4}"
 mkdir -p "$OUT" && OUT="$(cd "$OUT" && pwd)"
 export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1755000000}"
 
-CLI="${PAPERLESS_CLI:?set PAPERLESS_CLI to the binary you mean to measure}"
+CLI="${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI to the binary you mean to measure}"
 [ -x "$CLI" ] || { echo "no CLI at $CLI" >&2; exit 1; }
 echo "measuring $CLI" >&2
 echo "reference  $REFDIR" >&2

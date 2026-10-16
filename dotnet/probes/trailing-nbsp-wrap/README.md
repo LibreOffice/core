@@ -109,7 +109,7 @@ hence section 1 printing `encode('unicode_escape')` for every row it measures:
 ## Reproducing
 
 ```sh
-export PAPERLESS_CLI=<tree>/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=<tree>/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 python3 trailing-nbsp-wrap.py
 ```
 

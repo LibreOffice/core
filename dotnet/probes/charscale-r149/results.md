@@ -409,7 +409,7 @@ the merge, and vary the paragraph with it.
 ### C.3 One thing found on the way that is not O101
 
 **The RTF reader reads no character tracking at all.** `\expndtw` appears nowhere in
-`dotnet/src/Paperless.WordProcessing/Rtf`, `RtfLayoutRun` has no `Tracking`, and `RtfReader.RunsOf`
+`dotnet/src/XRay.Office.WordProcessing/Rtf`, `RtfLayoutRun` has no `Tracking`, and `RtfReader.RunsOf`
 builds its `PageRun` without one — while the DOCX, WW8 and ODF readers all do. The converted column
 states `\expndtw` beside almost every `\charscalex` (`\charscalex99\expnd0\expndtw-1` is
 LibreOffice's own export shape), so the two are the same runs — and the tracking's reach is an

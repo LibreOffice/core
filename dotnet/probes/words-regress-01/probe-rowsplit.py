@@ -20,7 +20,7 @@ from mkdocx import write
 
 OPS = "/c/sandbox/workdir/libreoffice-core/.claude/skills/render-comparison/scripts/pdf-ops.py"
 OUT = sys.argv[1]
-CLI = os.environ.get("PAPERLESS_CLI")
+CLI = os.environ.get("XRAY_OFFICE_CLI")
 os.makedirs(OUT, exist_ok=True)
 
 # 12 pt Liberation Serif => 13.80 pt a line. Filler paragraphs push the table down so the

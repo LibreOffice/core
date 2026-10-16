@@ -10,7 +10,7 @@ to hunt in the documents that PASS.
 |---|---|
 | reference | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2**, `0229ac93fcf0d7cbc6376066c6f35021cef002dc` |
 | reference renderings | the **banked** leg of gate r122, `/home/user/gate-r122/ref`, 947 PDFs, drawn at `0fa883d0c` |
-| our renderings | `dotnet/tools/Paperless.Cli` built in this worktree at `d98c8be24`, `SOURCE_DATE_EPOCH=1757462400`, one output directory per *document* |
+| our renderings | `dotnet/tools/XRay.Office.Cli` built in this worktree at `d98c8be24`, `SOURCE_DATE_EPOCH=1757462400`, one output directory per *document* |
 | population | the **915** rows gate r122 calls `match` — words 329, slides 293, sheets 293 |
 | C++ tree | `/home/user/libreoffice-core`, read only (C8: it is `27.2.0.0.alpha0+`, not 26.2's source, so every arm below is confirmed a second time against 26.2.4.2's own output) |
 | `/usr/bin/soffice` | 24.2.7.2 — **not used for anything in this round** |
@@ -407,12 +407,12 @@ so the narrow edge runs from `adj` to `21600 − adj` **across the shape's own w
 `(21600 − 2×8826)/21600 × 417.912 = 76.38 pt` against the reference's measured **76.365**.
 
 Our own preset table has the DrawingML `trapezoid`
-(`src/Paperless.Ooxml/DrawingML/PresetShapeGeometry.txt`:7061-7078): `a adj val 25000`,
+(`src/XRay.Office.Ooxml/DrawingML/PresetShapeGeometry.txt`:7061-7078): `a adj val 25000`,
 `x2 = ss·a/100000`, and a path `m l b / l x2 t / l x3 t / l r b`. Two independent consequences,
 and they are two separate defects:
 
 **O73 — the stated adjustment never arrives.**
-`src/Paperless.Presentations/MsBinary/PptShapeGeometry.cs`:334-337 is
+`src/XRay.Office.Presentations/MsBinary/PptShapeGeometry.cs`:334-337 is
 
 ```csharp
 public static int? Adjustment(ushort shapeType, int value)
@@ -588,7 +588,7 @@ above moves at all.
 **Nothing in `dotnet/src` was changed this round.** The brief asked for finding and characterising
 rather than fixing, and no fix here was small enough to be both obviously correct and fully
 measured. So there is no confinement leg to run and no test to move: the binary that produced every
-figure is the one `dotnet build Paperless.slnx` gives at `d98c8be24`, **0 warnings, 0 errors**.
+figure is the one `dotnet build XRay.Office.slnx` gives at `d98c8be24`, **0 warnings, 0 errors**.
 
 ## 12. The scripts and the banked data
 

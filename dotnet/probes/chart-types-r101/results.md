@@ -278,7 +278,7 @@ reach, the corpus having no native ODF originals).
 
 ## 5. Pass 3 — what this tree does, and where it parts from the reference
 
-Nine `ChartPlotKind` values (`Paperless.Core/Charts/ChartPlot.cs:25-61`): Bar, Line,
+Nine `ChartPlotKind` values (`XRay.Office.Core/Charts/ChartPlot.cs:25-61`): Bar, Line,
 Pie, Area, Scatter, Radar, Bubble, Stock, OfPie. Every one has a drawer in
 `ChartLayout.cs:1300-1330`, so for this tree **read and drawn coincide** — there is no
 type that is parsed and then rendered as an empty frame *by the layout*. The

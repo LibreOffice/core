@@ -51,7 +51,7 @@ they are different quantities and the single-line one is the special case.
 Usage
 -----
 
-    PAPERLESS_CLI=... python3 first-line-versus-later.py /abs/workdir
+    XRAY_OFFICE_CLI=... python3 first-line-versus-later.py /abs/workdir
 """
 import os, re, subprocess, sys, zipfile
 
@@ -65,7 +65,7 @@ RELS=('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xml
 W='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"'
 LINES=[120,150,180,210,240]
 
-out=sys.argv[1]; cli=os.environ['PAPERLESS_CLI']
+out=sys.argv[1]; cli=os.environ['XRAY_OFFICE_CLI']
 os.makedirs(out+'/ours',exist_ok=True)
 run=f'<w:rFonts w:ascii="{FACE}" w:hAnsi="{FACE}"/><w:sz w:val="{HP}"/>'
 words=' '.join('alpha bravo charlie delta echo foxtrot golf hotel india juliet'.split()*14)

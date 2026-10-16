@@ -1,27 +1,27 @@
 === M1: the hatch is not mixed, the background is taken whole (the old XF reading)
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 15, expected: "#8F8F8F") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 16, expected: "#9F9F9F") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 17, expected: "#DFDFDF") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 18, expected: "#EFEFEF") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 19, expected: "#000000") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 2, expected: "#7F7F7F") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 3, expected: "#3F3F3F") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 4, expected: "#BFBFBF") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 63, expected: "#000000") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.TheMixTruncatesTowardsZeroInBothDirections 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.TheWitnessesGreyIsTheReferencesOwn 
-Failed!  - Failed:    11, Passed:  1468, Skipped:     0, Total:  1479, Duration: 4 s - Paperless.Spreadsheets.Tests.dll (net10.0)
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 15, expected: "#8F8F8F") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 16, expected: "#9F9F9F") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 17, expected: "#DFDFDF") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 18, expected: "#EFEFEF") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 19, expected: "#000000") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 2, expected: "#7F7F7F") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 3, expected: "#3F3F3F") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 4, expected: "#BFBFBF") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 63, expected: "#000000") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.TheMixTruncatesTowardsZeroInBothDirections 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.TheWitnessesGreyIsTheReferencesOwn 
+Failed!  - Failed:    11, Passed:  1468, Skipped:     0, Total:  1479, Duration: 4 s - XRay.Office.Spreadsheets.Tests.dll (net10.0)
 
 === M2: SpreadsheetML's ratio table is transcribed instead of BIFF's own
-  Failed Paperless.Spreadsheets.Tests.SheetDecorationTests.EveryFormatReadsTheSameFillsAndTheSameSharedEdges(name: "sheet-decor-xls.xls") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.ASolidPatternIsTheForegroundAndNotAMixOfAnything 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 1, expected: "#000000") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 15, expected: "#8F8F8F") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 16, expected: "#9F9F9F") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 17, expected: "#DFDFDF") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 18, expected: "#EFEFEF") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 3, expected: "#3F3F3F") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 4, expected: "#BFBFBF") 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.TheMixTruncatesTowardsZeroInBothDirections 
-  Failed Paperless.Spreadsheets.Tests.XlsPatternFillTests.TheWitnessesGreyIsTheReferencesOwn 
-Failed!  - Failed:    11, Passed:  1468, Skipped:     0, Total:  1479, Duration: 4 s - Paperless.Spreadsheets.Tests.dll (net10.0)
+  Failed XRay.Office.Spreadsheets.Tests.SheetDecorationTests.EveryFormatReadsTheSameFillsAndTheSameSharedEdges(name: "sheet-decor-xls.xls") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.ASolidPatternIsTheForegroundAndNotAMixOfAnything 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 1, expected: "#000000") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 15, expected: "#8F8F8F") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 16, expected: "#9F9F9F") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 17, expected: "#DFDFDF") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 18, expected: "#EFEFEF") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 3, expected: "#3F3F3F") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.EachPatternNumberCarriesItsOwnWeight(pattern: 4, expected: "#BFBFBF") 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.TheMixTruncatesTowardsZeroInBothDirections 
+  Failed XRay.Office.Spreadsheets.Tests.XlsPatternFillTests.TheWitnessesGreyIsTheReferencesOwn 
+Failed!  - Failed:    11, Passed:  1468, Skipped:     0, Total:  1479, Duration: 4 s - XRay.Office.Spreadsheets.Tests.dll (net10.0)

@@ -1,6 +1,6 @@
 # Round 98 — the BIFF side of the sheets track: the `CF` rules, the `TXO` runs, and a witness two rounds missed
 
-    ours   = Paperless.Cli @ ac7745deb (base) and @ ac7745deb + this round's diff (head)
+    ours   = XRay.Office.Cli @ ac7745deb (base) and @ ac7745deb + this round's diff (head)
     ref    = /opt/libreoffice26.2/program/soffice — LibreOffice 26.2.4.2 0229ac93fcf0…
              plus the banked reference PDFs at /home/user/gate-orig-r83/ref (the 947 originals)
     corpus = /home/user/sample-files — the 64 `.xls`, of which 63 open as OLE2
@@ -369,7 +369,7 @@ Core 521, Containers 109, Markup 259, Text 728, OpenDocument 146, Presentations 
 Rendering 164, Vector 309, WordProcessing 1614, Spreadsheets **1276** — all green, 0 skipped.
 Spreadsheets was 1271 at the base; the five new tests are the two fixtures' (§8).
 
-`Paperless.Fidelity.Tests` is **542 passed / 10 failed of 552**, and the ten are the known names:
+`XRay.Office.Fidelity.Tests` is **542 passed / 10 failed of 552**, and the ten are the known names:
 `PageDrawingComparisonTests` ×4 (`paginated.docx`/`.fodt`/`.rtf`/`.doc`),
 `TabStopComparisonTests` ×4 (`list-label-overrun.fodt`/`.docx`/`.odt`/`.doc`),
 `SheetDrawingComparisonTests` (`sheet-rich-text.xlsx`) and `JustificationShrinkComparisonTests`

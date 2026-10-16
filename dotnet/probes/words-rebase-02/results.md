@@ -3,7 +3,7 @@
 Reference: `/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/words/`, 200 PDFs, LibreOffice
 26.2.4.2 620(Build:2), `fonts-dejavu-core` + `fonts-dejavu-mono` installed.
 
-CLI measured: `dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli` at
+CLI measured: `dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli` at
 commit **`4cbaeb41c3b`**, verified as that tree's build (zero `.cs` under `dotnet/src` or
 `dotnet/tools` newer than the binary). `SOURCE_DATE_EPOCH=1700000000`, `TZ=UTC` on every
 render. No source file was modified.

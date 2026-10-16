@@ -3,13 +3,13 @@
 
 `TODO.word-parity.md`'s first entry is a `TOC \\t` switch voiding a built-in heading's direct
 paragraph formatting: 26.2.4.2 discards it, Word honours it, this tree follows Word, and
-`PAPERLESS_LIBREOFFICE_QUIRKS=1` switches the reference's reading back on.  The entry says it costs
+`XRAY_OFFICE_LIBREOFFICE_QUIRKS=1` switches the reference's reading back on.  The entry says it costs
 one page on `24-25_FAA_Holdover_Tables`.  Both Holdover documents head the words ink ranking, so
 the question is whether the switch closes them outright or leaves a residual worth a round.
 """
 import hashlib, os, pathlib, subprocess, sys
 
-CLI = "/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 DOCUMENTS = [
     "/home/user/sample-files/words/pagination-001/docx/24-25_FAA_Holdover_Tables.docx",
     "/home/user/sample-files/words/pagination-001/docx/FAA 2025-26 Holdover Tables.docx",
@@ -23,7 +23,7 @@ def render(document, outdir, quirks):
         return pdf
     environment = {**os.environ, "SOURCE_DATE_EPOCH": "0"}
     if quirks:
-        environment["PAPERLESS_LIBREOFFICE_QUIRKS"] = "1"
+        environment["XRAY_OFFICE_LIBREOFFICE_QUIRKS"] = "1"
     subprocess.run([CLI, "render", str(document), "--outdir", str(outdir)], check=True,
                    capture_output=True, timeout=1800, env=environment)
     return next(outdir.glob("*.pdf"), None)

@@ -159,7 +159,7 @@ Recorded rather than buried.
 not work it"* list, and which prediction item 4 covered (a knockout can be correct and invisible).
 Its `clrChange` knocks white out of a picture drawn on white. No pixels, no risk.
 
-## Shared layer: this diff touches `Paperless.Ooxml`
+## Shared layer: this diff touches `XRay.Office.Ooxml`
 
 Named in the prediction before the change, and then **measured, not reasoned about**. Before and
 after were produced from the same tree with the route switched off and back on, restoring with

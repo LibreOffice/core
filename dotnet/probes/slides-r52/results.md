@@ -366,11 +366,11 @@ baseline too), Markup 259, OpenDocument 125, WordProcessing 1061, Spreadsheets 8
 
 ## Shared layers: none, and it is a two-file diff
 
-`dotnet/src/Paperless.Presentations/Layout/SlideAutofit.cs` and its test file, plus four probe
+`dotnet/src/XRay.Office.Presentations/Layout/SlideAutofit.cs` and its test file, plus four probe
 scripts and these two documents. Nothing in `Core`, `Containers`, `Text`, `Vector`, `Rendering`,
-`Markup` or `Paperless.Ooxml`; `DocxPictures.cs`, `XlsxDrawings.cs` and the DrawingML fill path are
+`Markup` or `XRay.Office.Ooxml`; `DocxPictures.cs`, `XlsxDrawings.cs` and the DrawingML fill path are
 untouched. `Scaling` is a private nested type of `SlideTextLayout` and `Solve` is called from
-nowhere outside `Paperless.Presentations`. **No cross-track sweep is owed.** The WordProcessing and
+nowhere outside `XRay.Office.Presentations`. **No cross-track sweep is owed.** The WordProcessing and
 Spreadsheets suites were run anyway and are green.
 
 `MANIFEST.tsv` needs **no** change: zero verdicts moved, no document changed kind, and it lives in
@@ -418,18 +418,18 @@ grep -rn "24\.2\.7" dotnet/src --include=*.cs
 
 | project | files carrying a claim measured against 24.2.7.2 |
 |---|---:|
-| `Paperless.WordProcessing` | 8 |
-| `Paperless.Spreadsheets` | 8 |
-| **`Paperless.Presentations`** | **6** |
-| `Paperless.Text` | 4 |
-| `Paperless.Core`, `Paperless.Ooxml`, `Paperless.Rendering` | 1 each |
+| `XRay.Office.WordProcessing` | 8 |
+| `XRay.Office.Spreadsheets` | 8 |
+| **`XRay.Office.Presentations`** | **6** |
+| `XRay.Office.Text` | 4 |
+| `XRay.Office.Core`, `XRay.Office.Ooxml`, `XRay.Office.Rendering` | 1 each |
 
 `CLAUDE.md` § "This container" already says that *"individual claims calibrated to 24.2.7.2
 behaviour … are now claims about a superseded binary and each needs one re-check before it is
 relied on"*, and names three. There are forty-seven. This round re-checked one of them and it was
 wrong in a way worth 11% of the track's ink and 164 pages of exact font sizes.
 
-The remaining five in `Paperless.Presentations` are `SlideTextLayout.cs`, `PptxTextStyles.cs`,
+The remaining five in `XRay.Office.Presentations` are `SlideTextLayout.cs`, `PptxTextStyles.cs`,
 `SlideDrawing.cs`, `OdpSlideLayout.cs` and `PptxSlideLayout.cs`. **The other twenty-three files are
 words' and sheets' and are named here because no slides round will ever open them.** Each is a
 cheap, self-contained re-check of exactly the shape this round ran: read the claim, author the

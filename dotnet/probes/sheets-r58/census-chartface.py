@@ -6,7 +6,7 @@
 before `a:r/a:rPr`, so wherever a run states something different from its paragraph's
 default, the default is what we read and the run is what LibreOffice draws.
 
-Censused across all three families, because `Paperless.Ooxml` serves all three.
+Censused across all three families, because `XRay.Office.Ooxml` serves all three.
 Refuses to report unless every manifest row produced output.
 """
 import collections, os, re, sys, zipfile

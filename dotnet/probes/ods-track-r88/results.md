@@ -1,6 +1,6 @@
 # Round 88 — the `.ods` column, re-measured, and the two attributes ODF spends on a chart label
 
-    ours   = Paperless.Cli @ 494ad1a8a (+ this round's diff)
+    ours   = XRay.Office.Cli @ 494ad1a8a (+ this round's diff)
     ref    = /opt/libreoffice26.2/program/soffice — LibreOffice 26.2.4.2 0229ac93fcf0…
     corpus = /home/user/corpus-odf/sheets — 307 `.ods`, 26.2.4.2's own conversion of the corpus
     fonts  = the five tarball confounds as they stood on 2026-09-08; none moved during this round
@@ -183,7 +183,7 @@ and the 8 movers are exactly the 8 that state an attribute `="true"` and whose c
 Every document that states the attributes `="false"` — which is most of them, including all 23
 `.odp` and all 8 `.odt` in the census — renders byte for byte the same file.
 
-The original corpus cannot be reached at all: `OdfChartPlot` lives in `Paperless.OpenDocument`
+The original corpus cannot be reached at all: `OdfChartPlot` lives in `XRay.Office.OpenDocument`
 and its callers are the ODF readers alone, so no `.xlsx`, `.xls`, `.pptx`, `.ppt`, `.docx` or
 `.doc` path touches it.
 
@@ -212,7 +212,7 @@ The seat is `ATTR_PAGE_NOTES` → `ScPrintFunc::aTableParam.bNotes`
 `PROP_PrintAnnotations` from `style:print`'s `annotations` token
 (`xmloff/source/style/PageMasterStyleMap.cxx`:80, `PageMasterPropHdlFactory.cxx`:85).
 
-`Paperless.Spreadsheets/TODO.md` already carries *"ODS is not wired at all"* for this; what it
+`XRay.Office.Spreadsheets/TODO.md` already carries *"ODS is not wired at all"* for this; what it
 did not have is the reach (**2 of 307**, both failing) or that it is worth two page counts.
 
 ## 5. The other groups, sized but not worked

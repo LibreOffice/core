@@ -98,7 +98,7 @@ two rounds running have missed a range by more than 3× in opposite directions. 
    than the intended change did it. (Round 54's equivalent control was refuted by its own sweep;
    this one is stated so it can be.)
 6. **Cross-track, and it is owed a measurement rather than an argument** — the diff touches
-   `Paperless.Core` and `Paperless.Text`. Both other tracks improve in **sign**.
+   `XRay.Office.Core` and `XRay.Office.Text`. Both other tracks improve in **sign**.
    Words: 5420 blocks over 759 pages; sheets: 464 over 106. Words verdict movement **−2 … +2** —
    a shear moves no pen origin, but `pdftotext`'s column heuristics see the *glyph* positions, so a
    token boundary could in principle move. Sheets verdict movement **0**.

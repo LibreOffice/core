@@ -2,7 +2,7 @@
 
 ## Environment
 
-    ours   = Paperless.Cli at agent/odshdr, base 0e54dba0a
+    ours   = XRay.Office.Cli at agent/odshdr, base 0e54dba0a
     ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 -- the build that wrote
              /home/user/corpus-odf, so both halves of every comparison are one build's artefacts
     fonts  = system fontconfig; the tarball's four confound families are aside in
@@ -164,7 +164,7 @@ rather than the class the brief took it for — which is also why it should not 
 same afternoon as the band, without its own measurement: the four other documents each hold
 one to four such frames, and moving them moves ink on documents that pass today.
 
-**Left, with the seat named.** `Paperless.WordProcessing/OpenDocument/OdfFrames.cs`:211-243
+**Left, with the seat named.** `XRay.Office.WordProcessing/OpenDocument/OdfFrames.cs`:211-243
 already takes the `translate(...)` out of a `draw:transform` for a Writer frame, and
 `OdpSlideLayout`:747-843 parses the whole matrix; the sheet reader has neither.
 

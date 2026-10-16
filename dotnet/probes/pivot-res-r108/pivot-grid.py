@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Predict the border grid ScDPOutput generates for an OOXML pivot table.
 
-A line-by-line mirror of `XlsxPivotGrid` in `dotnet/src/Paperless.Spreadsheets/Ooxml`, which is
+A line-by-line mirror of `XlsxPivotGrid` in `dotnet/src/XRay.Office.Spreadsheets/Ooxml`, which is
 itself a transcription of `sc/source/core/data/dpoutput.cxx`'s `CalcSizes`, `outputPageFields`,
 `outputColumnHeaders`, `outputRowHeader`, `HeaderCell` and `ScDPOutputImpl::OutputDataArea`, fed
 from the pivot part's own laid-out axis (`rowItems`/`colItems`) instead of from a DP source.

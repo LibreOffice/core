@@ -98,8 +98,8 @@ documents whose body origin can move, and the census lists them.
 | word counts | 0 change on all but at most **two** documents. The only mechanism that can move one is a token that currently falls off the bottom of the paper coming back onto it, and the movement is upwards, so **any change is an increase**. If a count moves down, the reading above is wrong |
 | band ink (header/footer text) | **0 change.** The probe shows it already scales and already agrees |
 | the 100 % control | **byte-identical.** Every unscaled sheet, and every sheet with no band, must be untouched. A moved 100 % case means the change is measuring something else |
-| words / slides tracks | **0.** No shared layer: every file is in `Paperless.Spreadsheets` |
-| tests | **+6 to +12**, all in `Paperless.Spreadsheets` |
+| words / slides tracks | **0.** No shared layer: every file is in `XRay.Office.Spreadsheets` |
+| tests | **+6 to +12**, all in `XRay.Office.Spreadsheets` |
 | `MANIFEST.tsv` | no row changes status |
 
 ## What this census and this probe cannot see — written before the sweep

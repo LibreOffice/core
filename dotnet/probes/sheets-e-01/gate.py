@@ -3,7 +3,7 @@
 
     gate.py <before-dir> <after-dir> <reference-dir> > rows.tsv 2> summary.txt
 
-`paperless analyze` takes many files in one invocation and emits one TSV row each, so the whole
+`xray-office analyze` takes many files in one invocation and emits one TSV row each, so the whole
 gate is **three** process launches rather than 342. The first version of this script called it
 once per file per bank and had reached the letter C after twenty minutes; the batched form is
 the same instrument and finishes in one.
@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                 "..", "words-rebase-02"))
 from verdict import verdict                                       # noqa: E402
 
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 
 
 def rows(paths):

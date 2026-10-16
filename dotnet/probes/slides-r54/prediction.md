@@ -60,7 +60,7 @@ applied, and consequently a larger font on 9 of the 15 slides.
 
 ## What ships
 
-One flag, confined to `Paperless.Presentations`: a `.ppt` paragraph records whether its line
+One flag, confined to `XRay.Office.Presentations`: a `.ppt` paragraph records whether its line
 spacing is **stated** in `svdfppt.cxx`'s sense — the paragraph's mask names `PPT_ParaAttr_LineFeed`,
 **or** the character run containing its first character names `PPT_CharAttr_Font`, **or** it sits
 at depth > 0 in a `TextInShape`/`Subtitle` text object (`svdfppt.cxx:5953-5957`, `:5488-5492`).
@@ -128,7 +128,7 @@ paragraphs stay on the `::Off` arm.
 | 6 | **`tf-agreement` rises**, 0.75210 → 0.753–0.762, and exact pages rise from 1558. This is the quantity the change controls most directly: 65 of the 100 censused blocks disagree on the drawn size, not only on the pitch. |
 | 7 | **`gfopportunitiesforlinkagespres_2010_en.ppt` p6 draws 26 / 22 / 17 pt** where we draw 28 / 24 / 18 today, at a pitch of `1.2 × em`. This is the brief's worked case and it is a named, falsifiable page. |
 | 8 | **The 219 "both shrunk" blocks do not move**, measured as: no document in the 33-document list that is *absent* from the 24-document change list moves on `tf-agreement` by more than 0.001. This is the control, and it is the prediction most likely to fail. |
-| 9 | **No cross-track reach.** The diff is confined to `Paperless.Presentations`; `Paperless.Text`'s `LineSpacingRule` is not touched, so words and sheets are unreachable by type. |
+| 9 | **No cross-track reach.** The diff is confined to `XRay.Office.Presentations`; `XRay.Office.Text`'s `LineSpacingRule` is not touched, so words and sheets are unreachable by type. |
 
 ## Blind spots in the predictions themselves
 

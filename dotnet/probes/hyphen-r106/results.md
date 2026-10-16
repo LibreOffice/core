@@ -37,26 +37,26 @@ sized and `probes/chart-axisrot-r91` §3 established.
 ### 1.1 Where it lives, and why not where the brief said
 
 `IHyphenator` was declared and unimplemented at
-`dotnet/src/Paperless.Text/Layout/ILineBreaker.cs`:45-53. Its **contract** is unchanged and is
+`dotnet/src/XRay.Office.Text/Layout/ILineBreaker.cs`:45-53. Its **contract** is unchanged and is
 what the brief said it was — one method, empty result when no dictionary answers — but the
-declaration has **moved to `Paperless.Core.Globalization`**, because the first consumer is
-`ChartAxisLabels`, which is in `Paperless.Core`, and `Paperless.Core` may not reference
-`Paperless.Text` (`dotnet/CLAUDE.md`'s layering diagram; Core has no dependencies by design).
+declaration has **moved to `XRay.Office.Core.Globalization`**, because the first consumer is
+`ChartAxisLabels`, which is in `XRay.Office.Core`, and `XRay.Office.Core` may not reference
+`XRay.Office.Text` (`dotnet/CLAUDE.md`'s layering diagram; Core has no dependencies by design).
 It had no implementations and no call sites, so the move is a rename of a namespace and nothing
-else; `ILineBreaker.cs` carries a comment pointing at it, and `Paperless.Text` still reaches it
+else; `ILineBreaker.cs` carries a comment pointing at it, and `XRay.Office.Text` still reaches it
 through its project reference when paragraph line breaking wants one.
 
 | file | what |
 |---|---|
-| `Paperless.Core/Globalization/IHyphenator.cs` | the interface, moved |
-| `Paperless.Core/Globalization/HyphenationPatterns.cs` | the Hunspell pattern-file reader and Liang's algorithm |
-| `Paperless.Core/Globalization/Hyphenators.cs` | the search path, the `Register` seam, `None`, `DefaultLanguage` |
-| `Paperless.Core/Globalization/Hyphenation/hyph_en_US.dic` | 106,414 bytes, sha256 `486fb684…` |
-| `Paperless.Core/Globalization/Hyphenation/README_hyph_en_US.txt` | 1,888 bytes, sha256 `9bcae072…` — **the licence lives here and not in the data** |
-| `Paperless.Core/Charts/ChartAxisLabels.cs` | `Wraps` gains the hyphenating arm; `Hyphenates` is it |
+| `XRay.Office.Core/Globalization/IHyphenator.cs` | the interface, moved |
+| `XRay.Office.Core/Globalization/HyphenationPatterns.cs` | the Hunspell pattern-file reader and Liang's algorithm |
+| `XRay.Office.Core/Globalization/Hyphenators.cs` | the search path, the `Register` seam, `None`, `DefaultLanguage` |
+| `XRay.Office.Core/Globalization/Hyphenation/hyph_en_US.dic` | 106,414 bytes, sha256 `486fb684…` |
+| `XRay.Office.Core/Globalization/Hyphenation/README_hyph_en_US.txt` | 1,888 bytes, sha256 `9bcae072…` — **the licence lives here and not in the data** |
+| `XRay.Office.Core/Charts/ChartAxisLabels.cs` | `Wraps` gains the hyphenating arm; `Hyphenates` is it |
 
 The two data files are copied to a `hyphenation` folder beside the assembly and packed under
-`contentFiles/any/any/hyphenation`, exactly as `Paperless.Text` ships its 28 font faces, and for
+`contentFiles/any/any/hyphenation`, exactly as `XRay.Office.Text` ships its 28 font faces, and for
 the same reason: a search path wants a file, and a user supplying French wants somewhere to put
 it.
 
@@ -119,7 +119,7 @@ category count are held fixed; only the second word varies, and the words are ch
 `Screeched` (9) has none.
 
 Each variant is rendered four ways — the reference with its dictionary and with it switched off
-by r105's `delang.py` retag to `de-DE`, and this tree with `PAPERLESS_HYPHEN_DICTS` unset and at
+by r105's `delang.py` retag to `de-DE`, and this tree with `XRAY_OFFICE_HYPHEN_DICTS` unset and at
 `0`. `word-grid.tsv`:
 
 | word | len | points | ref on | ref off | ours on | ours off | |
@@ -227,12 +227,12 @@ of it (§3), and the 22-word set is authored precisely to find such a case.
 ### 3.1 The instrument, and why one binary is two legs
 
 `sweep.py` renders a document with our own CLI under `SOURCE_DATE_EPOCH`, hashes the PDF and
-deletes it. The **off** leg sets `PAPERLESS_HYPHEN_DICTS=0`, which makes `Hyphenators.For`
+deletes it. The **off** leg sets `XRAY_OFFICE_HYPHEN_DICTS=0`, which makes `Hyphenators.For`
 answer null and `Wraps` skip its new arm entirely, so the off leg is the tree as it stood. Two
 legs of one binary rather than two binaries removes the rebuild-under-a-sweep trap
 `dotnet/CLAUDE.md` records — and the substitution is **checked rather than assumed**:
 
-**Control.** `ChartAxisLabels.cs` was reverted to its base content, `Paperless.Core`'s `obj` and
+**Control.** `ChartAxisLabels.cs` was reverted to its base content, `XRay.Office.Core`'s `obj` and
 `bin` deleted, the CLI rebuilt, and six documents rendered with **no environment variable at
 all**. All six reproduce the banked off leg **byte for byte**, including all three movers;
 three of the six differ from the on leg, which is the three movers.
@@ -262,7 +262,7 @@ slides documents, and **none of them carries a chart**.*
 **The confinement is structural as well as measured.** `Hyphenates` is called only from
 `Wraps`, which is called only from `ChartAxisLabels.Resolve`, which is called only from
 `ChartLayout.ArrangeCategories`. No word-processing paragraph, no slide text body and no
-spreadsheet cell can reach it: `Paperless.Text`'s `LineBreaker` and `ParagraphLayouter` are not
+spreadsheet cell can reach it: `XRay.Office.Text`'s `LineBreaker` and `ParagraphLayouter` are not
 touched by this diff at all. The 399 non-chart documents are the corroboration, not the
 argument.
 
@@ -334,8 +334,8 @@ whose ink did not move:
 
 ## 5. Confinement, measured in the three tracks
 
-`dotnet/CLAUDE.md`'s warning is that a change in `Paperless.Text` line breaking reaches every
-format. **This change is not in `Paperless.Text` line breaking**: `ILineBreaker.cs` loses a
+`dotnet/CLAUDE.md`'s warning is that a change in `XRay.Office.Text` line breaking reaches every
+format. **This change is not in `XRay.Office.Text` line breaking**: `ILineBreaker.cs` loses a
 declaration and gains a comment, and `LineBreaker`, `ParagraphLayouter`, `CellBreaks` and
 `MeasuredParagraph` are untouched.
 
@@ -366,7 +366,7 @@ and the ten non-fidelity test projects are green with **0 skipped**:
 | WordProcessing | 1938 |
 | **total** | **6609**, 0 failed, 0 skipped |
 
-`Paperless.Fidelity.Tests` is at the briefed baseline, read out of this run's own output rather
+`XRay.Office.Fidelity.Tests` is at the briefed baseline, read out of this run's own output rather
 than asserted: **`Failed: 10, Passed: 542, Skipped: 0, Total: 552`**, run twice against
 `/opt/libreoffice26.2/program/soffice` with the same result, and the ten are exactly the known
 names — `PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt` on `paginated.doc`,
@@ -398,13 +398,13 @@ arrangements).
 
 1. `Hyphenators.Register(language, stream)` or `Register(language, IHyphenator)` — nothing on
    disk. `HyphenationTests.APatternFileSuppliedAsAStreamAnswersForItsLanguage`.
-2. `PAPERLESS_HYPHEN_DICTS`, a `Path.PathSeparator`-separated list of directories. Each is
+2. `XRAY_OFFICE_HYPHEN_DICTS`, a `Path.PathSeparator`-separated list of directories. Each is
    searched for `hyph_<tag>.dic` **and then one level down**, so pointing at a LibreOffice
    installation's `share/extensions` finds `dict-fr/hyph_fr.dic` without naming it.
    `HyphenationTests.ALibreOfficeInstallationsFrenchAndSpanishAreReachableThroughTheSearchPath`.
 3. The shipped `hyphenation` folder beside the assembly.
 
-`PAPERLESS_HYPHEN_DICTS=0` (or `false`, `no`) turns hyphenation off entirely, which is the state
+`XRAY_OFFICE_HYPHEN_DICTS=0` (or `false`, `no`) turns hyphenation off entirely, which is the state
 a deployment without the data is in — and is what makes the two-leg sweep of §3.1 possible.
 
 **The tests that need a dictionary this tree does not ship skip cleanly**, with

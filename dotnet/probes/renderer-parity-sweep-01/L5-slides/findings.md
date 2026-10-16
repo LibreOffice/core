@@ -64,7 +64,7 @@ answer the solver gives.**
 
 ### 3. Where it lives in the source
 
-`dotnet/src/Paperless.Presentations/Layout/SlideAutofit.cs:118-131` — the twelve
+`dotnet/src/XRay.Office.Presentations/Layout/SlideAutofit.cs:118-131` — the twelve
 `constScaleLevels` rows — and `:155`, the `0.250` floor. `Solve` at `:407-433` walks the table and
 takes the first row that fits.
 
@@ -224,7 +224,7 @@ Every `.ppt` in this lane carries these (record count / stated level offsets):
 
 ### 3. Where it lives in the source
 
-`dotnet/src/Paperless.Presentations/MsBinary/PptRecordTypes.cs:84` declares
+`dotnet/src/XRay.Office.Presentations/MsBinary/PptRecordTypes.cs:84` declares
 `TextRulerAtom = 4006` with a doc comment describing exactly what it holds — and
 `git grep TextRulerAtom -- 'dotnet/src/**/*.cs'` returns **that line and nothing else**. It is the
 "read but never consumed" pattern in its purest form: the constant is the whole of the support.
@@ -402,7 +402,7 @@ fallback resolver**. Twenty-five lines further down, the run path does the oppos
 (`:759-760`). `SlideFonts.Fallback`'s own remarks (`SlideText.cs:623-645`) describe this exact
 failure — *"the text is invisible and no gate column sees it"* — for runs. The marker path was
 never wired to it. This is the "an outline bullet resolves on a separate path from the runs"
-warning in `Paperless.Presentations/TODO.md:1014-1015`, arriving from the other direction.
+warning in `XRay.Office.Presentations/TODO.md:1014-1015`, arriving from the other direction.
 
 `Wingdings 2` slot `0xF4` (#053's master bullet) recodes to U+E5CD, which no installed face holds,
 so the same hole is reachable from a second table.
@@ -549,14 +549,14 @@ of them against, and `AGENTS.md` forbids a fix tuned to one sample.
 
 ## Cross-lane dependencies
 
-**None in source.** All five patches touch only `dotnet/src/Paperless.Presentations/**`.
+**None in source.** All five patches touch only `dotnet/src/XRay.Office.Presentations/**`.
 
 Two things outside my ownership that the applier must handle:
 
 1. **Tests pin the autofit's 26.2.4.2 answers.** If `autofit-version-divergence.diff` is applied,
-   `dotnet/tests/Paperless.Presentations.Tests/SlideAutofitTests.cs`,
+   `dotnet/tests/XRay.Office.Presentations.Tests/SlideAutofitTests.cs`,
    `SlideMarkerScaleTests.cs`, and
-   `dotnet/tests/Paperless.Fidelity.Tests/SlideAutofit{DeviceGrid,ParagraphSpace}ComparisonTests.cs`
+   `dotnet/tests/XRay.Office.Fidelity.Tests/SlideAutofit{DeviceGrid,ParagraphSpace}ComparisonTests.cs`
    must move with it. They are correct as they stand for the project's reference.
 2. **The reference-bank decision.** Root cause A is a fork in the road for the whole sweep, not just
    for slides: either the tree is retargeted to 24.2.7.2, or `/data/bench/lo/` is re-rendered at

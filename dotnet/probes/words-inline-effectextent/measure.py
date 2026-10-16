@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render each fixture through a LibreOffice binary and through Paperless, and
+"""Render each fixture through a LibreOffice binary and through X-Ray.Office, and
 report the y of TOPLINE, the shape's ink band, and the y of BOTLINE."""
 import subprocess, sys, os, re, glob
 
@@ -36,7 +36,7 @@ def render_ours(cli, doc, outdir):
 
 if __name__ == '__main__':
     fx, work = sys.argv[1], sys.argv[2]
-    cli = os.environ['PAPERLESS_CLI']
+    cli = os.environ['XRAY_OFFICE_CLI']
     sofs = {'24.2': '/usr/bin/soffice', '26.2': '/opt/libreoffice26.2/program/soffice'}
     print(f"{'fixture':<14} {'who':<6} {'TOP':>8} {'inkTop':>8} {'inkBot':>8} {'BOT':>8} {'gap':>8}")
     for doc in sorted(glob.glob(os.path.join(fx, '*.docx'))):

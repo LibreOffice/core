@@ -9,7 +9,7 @@ running heads with no assumption about either — the instrument note in
     measure-capture.py <fixture dir> <work dir> [dpi]
 
 Renders each fixture through `$REF_SOFFICE` (falling back to `PATH`) and through
-`$PAPERLESS_CLI`, prints the binary's own version first, and writes one row per fixture:
+`$XRAY_OFFICE_CLI`, prints the binary's own version first, and writes one row per fixture:
 
     fixture   ref x0 y0   ours x0 y0   verdict
 
@@ -25,7 +25,7 @@ import numpy as np
 from PIL import Image
 
 REF = os.environ.get('REF_SOFFICE', 'soffice')
-CLI = os.environ.get('PAPERLESS_CLI')
+CLI = os.environ.get('XRAY_OFFICE_CLI')
 
 
 def version():

@@ -2,7 +2,7 @@
 
 Base commit `12cf74f08`, checked with `git log --oneline -1` in the worktree before anything was
 measured. Reference renderer LibreOffice 24.2.7.2. Both whole-track sweeps ran against a
-checksummed copy of the CLI, and the copy's `Paperless.Spreadsheets.dll` hash was diffed against
+checksummed copy of the CLI, and the copy's `XRay.Office.Spreadsheets.dll` hash was diffed against
 the tree's before each run started; the fixed copy was additionally proved to hold the change by
 rendering one document whose word count it moves.
 
@@ -228,5 +228,5 @@ Every project run individually, whole output captured, **0 skipped** everywhere.
 
 Every count is the briefed known-good except Spreadsheets, which is 588 plus this round's 5.
 
-`Paperless.Fidelity.Tests` on the final tree: **550 of 550, 0 skipped**, the briefed known-good
+`XRay.Office.Fidelity.Tests` on the final tree: **550 of 550, 0 skipped**, the briefed known-good
 count exactly, in 12 minutes under a load average of about 20.

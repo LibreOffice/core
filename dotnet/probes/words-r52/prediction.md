@@ -166,7 +166,7 @@ the three chart documents; it is a different defect and nothing here touches it.
 
 ### This diff touches a shared layer
 
-`Paperless.Ooxml/DrawingML/DrawingChartPlot.cs` is below all three families. Census over the whole
+`XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs` is below all three families. Census over the whole
 corpus: **23 charts in 23 documents hold a `c:multiLvlStrRef`** — 2 words, **18 slides**,
 **3 sheets** — and 2 documents hold a `c:ofPieChart`, both words.
 
@@ -185,7 +185,7 @@ myself rather than hand the parent an argument.
 
 ### What this census cannot see
 
-- **The ODF chart reader** (`Paperless.OpenDocument/OdfChartPlot.cs`) and the two binary readers
+- **The ODF chart reader** (`XRay.Office.OpenDocument/OdfChartPlot.cs`) and the two binary readers
   (`XlsChartReader`, the `.ppt` path) have their own category code and are not touched. A grep for
   `multiLvlStrRef` cannot find an ODF or binary equivalent, so a zero there is not evidence.
 - **`ChartRangeResolver`.** In the spreadsheet family the `c:f` wins over the cache when the

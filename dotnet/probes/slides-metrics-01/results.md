@@ -5,7 +5,7 @@ was right and its mechanism was wrong, which is the more useful half of this rou
 
 ## The seat
 
-`src/Paperless.Presentations/Layout/SlideText.cs`, `SlideFonts.Resolve` — the one place a slide's
+`src/XRay.Office.Presentations/Layout/SlideText.cs`, `SlideFonts.Resolve` — the one place a slide's
 run becomes a `FontRequest`. It built the request from family, weight, slant and declared pitch and
 left `EmbeddedFaceKey` at its default.
 
@@ -165,7 +165,7 @@ three documents this fix touches were already green and were already wrong.
 14 new tests. Verified against the unfixed tree by copying the changed files aside and reverting —
 never `git stash`, which is repository-global here.
 
-`tests/Paperless.Presentations.Tests/PptxEmbeddedFontTests.cs` (6) is written end to end — a deck
+`tests/XRay.Office.Presentations.Tests/PptxEmbeddedFontTests.cs` (6) is written end to end — a deck
 synthesised in memory, laid out, drawn into a `RecordingDrawingSink`, and the face identified by
 what it *is* rather than by where it was written. It uses no type this change introduced, so it
 compiles against the unfixed tree, and there **4 of 6 fail**. The other two pass by design and are
@@ -173,7 +173,7 @@ named as controls: `ADeckThatEmbedsNothingForTheFamilyStillSubstitutes` is the p
 documents take, and `ACompressedEntryFallsBackToSubstitution…` guards a fallback both trees share.
 A suite where all six failed would be one with no control in it.
 
-`tests/Paperless.Text.Tests/EmbeddedOpenTypeTests.cs` (8) covers the container: the header walk, the
+`tests/XRay.Office.Text.Tests/EmbeddedOpenTypeTests.cs` (8) covers the container: the header walk, the
 names, a compressed container reported rather than decoded, the XOR-masked variant, truncation, the
 store's content addressing, and the resolver round trip. Against the unfixed tree it does not
 compile, the types not existing — which is the honest form of "fails" for a new reader, and weaker
@@ -203,7 +203,7 @@ reproduced after it.
 Fidelity is **30 of 550 before and 30 of 550 after**, 0 skipped both times — the briefed baseline,
 reproduced. The one Rendering skip is pre-existing and environmental
 (`ACffFlavouredFaceIsNotClaimedToBeTrueType`, `Assert.SkipUnless(TestCffFace.IsAvailable)` — no
-CFF-flavoured face on this machine). `Paperless.Vector.Tests` reported 295/295 on every run; the
+CFF-flavoured face on this machine). `XRay.Office.Vector.Tests` reported 295/295 on every run; the
 intermittent phantom failures recorded in `CLAUDE.md` did not appear.
 
 ## Scoring the prediction

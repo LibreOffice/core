@@ -3,7 +3,7 @@
 Subject: **list labels and the line-spacing base height**. Written against the *installed*
 `soffice`, which is **LibreOffice 26.2.4.2 620(Build:2)**. Every stored figure on this
 track, and the whole of round 47, was measured against **24.2.7.2**. There is no
-`Paperless.Cli` in this container (nuget.org is firewalled, package cache empty), so
+`XRay.Office.Cli` in this container (nuget.org is firewalled, package cache empty), so
 **nothing below can carry an "ours" column measured from a running build**; our side is
 read out of the source and computed by hand, and that limit is restated in the results.
 
@@ -70,7 +70,7 @@ just numbered ones. I will measure it because the label's contribution is only o
 
 ### 3. Where our model is structurally different whatever 26.2 says
 
-`MeasuredParagraph.MeasureLine` (`dotnet/src/Paperless.Text/Layout/MeasuredParagraph.cs`:661)
+`MeasuredParagraph.MeasureLine` (`dotnet/src/XRay.Office.Text/Layout/MeasuredParagraph.cs`:661)
 folds the label in as `textHeight = Max(textHeight, one.AboveBaseline + one.BelowBaseline)`
 — the label's **own whole box**. For runs the same method builds `Max(height, ascent +
 descent)` from *maxima across portions*. The two disagree exactly when the label supplies
@@ -113,7 +113,7 @@ numbering through `w:numPr`, the paragraph style's `w:numPr`, and `w:numStyleLin
 still a **ceiling**, and these are the holes:
 
 - **The 66 `.doc` are wholly invisible.** Their levels live in WW8 `LSTF`/`LVLF`
-  and no zip-level census reads them. The law is in `Paperless.Text`, which both readers
+  and no zip-level census reads them. The law is in `XRay.Office.Text`, which both readers
   share, so that half is reachable and entirely uncounted. Round 45 had to go through
   LibreOffice's own flat-ODF export to see it at all; I am not doing that, so the true
   reach could be up to half again as large than anything I report.
@@ -146,7 +146,7 @@ still a **ceiling**, and these are the holes:
 ## Addendum, written after the firewall opened and still before the first render
 
 The coordinator lifted the nuget block partway through writing this file. `dotnet restore`
-and `dotnet build` now succeed and `tools/Paperless.Cli/…/Paperless.Cli` exists and runs;
+and `dotnet build` now succeed and `tools/XRay.Office.Cli/…/XRay.Office.Cli` exists and runs;
 durable 26.2.4.2 reference renderings for all 200 words documents are at
 `/c/sandbox/workdir/refpdfs-26.2.4.2/words/`. **Nothing above has been measured yet** —
 this addendum is appended before the first `soffice` or CLI invocation of the round, and

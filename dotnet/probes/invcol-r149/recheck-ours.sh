@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# The parent rebuilt Paperless.Cli at 21:58:14 while this round's sweep was running
+# The parent rebuilt XRay.Office.Cli at 21:58:14 while this round's sweep was running
 # (sweep-all/cli-mtime.txt records both stamps). A comparison that spans a rebuild is
 # void unless the rebuild is shown not to have changed the renderings, so re-render
 # OUR half with the binary as it now stands and compare byte for byte.
 set -u
-OUT="$(cd "$1" && pwd)"; CLI=/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+OUT="$(cd "$1" && pwd)"; CLI=/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 mkdir -p "$OUT/ours-recheck"
 stat -c "CLI %y %s" "$CLI" > "$OUT/recheck-mtime.txt"
 i=0

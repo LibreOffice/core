@@ -23,7 +23,7 @@ band above is widened deliberately and I expect to land in its upper half.
 is close to certain. `aircraft_analysis_2016-04-27.xls` is the reference's `Unifont` document and
 still reads 44/46 with the change in, so it is *not* one of them. The other two are speculative.
 
-**Words and slides: 0 documents changed.** Nothing outside `Paperless.Spreadsheets` passes the
+**Words and slides: 0 documents changed.** Nothing outside `XRay.Office.Spreadsheets` passes the
 new `ParagraphLayouter` shaper parameter and `MeasuredParagraph` is untouched, so the two tracks
 take the identical code path. This is a prediction of zero and will be measured rather than
 asserted, because "additive by construction" is exactly the claim this project has been wrong

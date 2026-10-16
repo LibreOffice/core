@@ -21,7 +21,7 @@ Round 52 recorded 1238.64 / 913.80 / 434. The 0.08 between them is the words tra
 slides row. A second, independent confirmation: `tf-agreement.py`'s mean over the same 302
 documents reads **0.75160**, which is round 52's closing figure to the digit.
 
-## Two fixes shipped, measured separately, and both confined to `Paperless.Presentations`
+## Two fixes shipped, measured separately, and both confined to `XRay.Office.Presentations`
 
 ### 1. A `.ppt` blank line takes the height of the run it sits in — `PptTextBody.Runs`
 
@@ -226,7 +226,7 @@ under 60%. At 40% the reference draws a **19.191 pt** pitch on a 47.991 pt natur
 `fround(0.40 × natural)` and not the 24.009 a clamp to 50% would give. **26.2.4.2 has no such
 clamp either**, so the divergence is right and now measured rather than argued.
 
-Corpus-wide the audit list falls from **48 sites in 30 files to 42**. `Paperless.Presentations`
+Corpus-wide the audit list falls from **48 sites in 30 files to 42**. `XRay.Office.Presentations`
 still holds **9**: `SlideAutofit.cs` 4 (re-checked and fixed by r52; the datelines are historical
 narrative about the superseded port and were left, which is arguably wrong and is flagged here),
 `PptxSlideLayout.cs` 3, `SlideDrawing.cs` 2, `PptxTextStyles.cs` 1, `OdpSlideLayout.cs` 1.
@@ -305,10 +305,10 @@ nothing else running.
 
 ## Shared layers: none
 
-Two source files, both in `Paperless.Presentations`:
+Two source files, both in `XRay.Office.Presentations`:
 `MsBinary/PptTextBody.cs` and `Layout/SlideTextLayout.cs`. Nothing in `Core`, `Containers`,
-`Text`, `Vector`, `Rendering`, `Markup` or `Paperless.Ooxml`. `SlideTextLayout` is called only
-from `Paperless.Presentations` (`SlideShapes`, `SlideTable`, `SlideChart`, `SlideDrawing`).
+`Text`, `Vector`, `Rendering`, `Markup` or `XRay.Office.Ooxml`. `SlideTextLayout` is called only
+from `XRay.Office.Presentations` (`SlideShapes`, `SlideTable`, `SlideChart`, `SlideDrawing`).
 **No cross-track sweep is owed**, and the WordProcessing and Spreadsheets suites were run anyway
 and are green at their briefed counts.
 

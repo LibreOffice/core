@@ -364,8 +364,8 @@ column; `fit-margin.txt` is one document.
 # 4. The suite
 
 Read out of this run's own output (`tests.log`), not from the briefed number.
-`dotnet build Paperless.slnx -c Release` at **0 warnings, 0 errors**, then
-`dotnet test Paperless.slnx -c Release --no-build`, all eleven projects reached:
+`dotnet build XRay.Office.slnx -c Release` at **0 warnings, 0 errors**, then
+`dotnet test XRay.Office.slnx -c Release --no-build`, all eleven projects reached:
 
 | project | |
 |---|---|

@@ -149,6 +149,6 @@ for text in cases:
 # from rather than into whichever one happened to be current when it was written.
 path = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    'tests', 'Paperless.Text.Tests', 'line-break-cases.txt')
+    'tests', 'XRay.Office.Text.Tests', 'line-break-cases.txt')
 open(path, 'w', encoding='utf-8').write('\n'.join(lines) + '\n')
 print('written ' + path, file=sys.stderr)

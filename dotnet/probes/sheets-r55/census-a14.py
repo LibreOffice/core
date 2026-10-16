@@ -3,7 +3,7 @@
 namespace URI of each prefix its `Requires` names, not on the prefix text.
 
 Why it exists: `oox`'s `ContextHandler2Helper::prepareMceContext` keeps a list of
-MCE namespaces it supports and `a14` is explicitly **not** on it, while Paperless's
+MCE namespaces it supports and `a14` is explicitly **not** on it, while X-Ray.Office's
 `OoxmlNamespaces.UnderstoodExtensions` does contain `DrawingML2010` (= a14). This
 counts what changes if the two are reconciled.
 

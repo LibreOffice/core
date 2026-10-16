@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Where the red band lands, per fixture, through both references and through Paperless.
+"""Where the red band lands, per fixture, through both references and through X-Ray.Office.
 
 The band is the only red ink on the page, so its rectangle separates cleanly from the body
 line and from the running heads without any assumption about how wide or how dark it is.
 
-Usage:  PAPERLESS_CLI=<abs path> python3 measure-relfrom.py <fixturedir> <workdir> [name...]
+Usage:  XRAY_OFFICE_CLI=<abs path> python3 measure-relfrom.py <fixturedir> <workdir> [name...]
 """
 import hashlib, os, subprocess, sys
 from pathlib import Path
@@ -15,7 +15,7 @@ from PIL import Image
 DPI = 288
 LO24 = os.environ.get("LO24", "/usr/bin/soffice")
 LO26 = os.environ.get("LO26", "/opt/libreoffice26.2/program/soffice")
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 
 
 def render_lo(soffice, doc, outdir):

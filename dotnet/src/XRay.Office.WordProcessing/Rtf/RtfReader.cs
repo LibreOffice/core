@@ -1,0 +1,750 @@
+using XRay.Office.Core;
+using XRay.Office.Core.Diagnostics;
+using XRay.Office.Core.Documents;
+using XRay.Office.Core.Extraction;
+using XRay.Office.Core.Formats;
+using XRay.Office.Core.Graphics;
+using XRay.Office.Text.Fonts;
+using XRay.Office.WordProcessing.Layout;
+
+namespace XRay.Office.WordProcessing.Rtf;
+
+/// <summary>Reads Rich Text Format documents.</summary>
+/// <remarks>
+/// RTF is the one word-processing format with no container: the whole document is one byte stream
+/// of nested groups. So there is no package to open and no parts to resolve — the reader is the
+/// tokeniser plus the state machine in <see cref="RtfDocumentReader"/>.
+/// </remarks>
+public static class RtfReader
+{
+    /// <summary>
+    /// The largest RTF document X-Ray.Office will buffer.
+    /// </summary>
+    /// <remarks>
+    /// RTF is read whole rather than streamed, because its state machine can be sent back to an
+    /// earlier destination at any point and because the format is verbose enough that a large
+    /// document is still modest in memory. The cap bounds what a hostile input can allocate.
+    /// </remarks>
+    public const long MaxDocumentBytes = 512L * 1024 * 1024;
+
+    /// <summary>Reads a document, leaving the source's stream for the caller to dispose.</summary>
+    public static RtfDocument Read(DocumentSource source, DocumentFormat format)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+
+        byte[] data = ReadAll(source.Stream);
+        if (!LooksLikeRtf(data))
+        {
+            throw new MalformedDocumentException(
+                "The document does not begin with '{\\rtf', so it is not Rich Text Format.");
+        }
+
+        List<Diagnostic> diagnostics = [];
+        RtfDocumentReader reader = new(data, diagnostics);
+        ContentDocument content = reader.Read();
+
+        // A REF field draws its bookmark's text rather than the result the producer cached, and the
+        // bookmark may be anywhere in the document -- so a file that states one is read a second
+        // time with the expansions in hand. A token stream has nothing to revisit, and rewriting a
+        // paragraph after it has closed would rebase every offset counted against it.
+        if (RtfReferenceFields.Expansions(reader.Marks) is { Count: > 0 } expansions)
+        {
+            diagnostics.Clear();
+            reader = new RtfDocumentReader(data, diagnostics) { ReferenceExpansions = expansions };
+            content = reader.Read();
+        }
+
+        return new RtfDocument(
+            format, content, diagnostics, reader.Sections, reader.LayoutBlocks,
+            reader.HeaderLayout, reader.FooterLayout, reader.Marks,
+            reader.AddsParagraphSpacing);
+    }
+
+    /// <summary>
+    /// True when the bytes start with an RTF signature, allowing for leading whitespace and a
+    /// byte-order mark.
+    /// </summary>
+    /// <remarks>
+    /// Some producers write a UTF-8 BOM before the signature even though RTF is not UTF-8, and
+    /// mail systems add leading blank lines. Neither makes the document unreadable, so neither is
+    /// treated as fatal.
+    /// </remarks>
+    private static bool LooksLikeRtf(ReadOnlySpan<byte> data)
+    {
+        if (data.Length >= 3 && data[0] == 0xEF && data[1] == 0xBB && data[2] == 0xBF) data = data[3..];
+        while (data.Length > 0 && data[0] is (byte)' ' or (byte)'\t' or (byte)'\r' or (byte)'\n')
+            data = data[1..];
+
+        return data.StartsWith("{\\rtf"u8);
+    }
+
+    private static byte[] ReadAll(Stream stream)
+    {
+        if (stream.CanSeek)
+        {
+            if (stream.Length - stream.Position > MaxDocumentBytes)
+            {
+                throw new MalformedDocumentException(
+                    $"The document is larger than the {MaxDocumentBytes / (1024 * 1024)} MB "
+                    + "X-Ray.Office will buffer for RTF.");
+            }
+
+            byte[] exact = new byte[stream.Length - stream.Position];
+            stream.ReadExactly(exact);
+            return exact;
+        }
+
+        using MemoryStream buffer = new();
+        stream.CopyTo(buffer);
+        return buffer.ToArray();
+    }
+}
+
+/// <summary>An RTF document that has been read.</summary>
+public sealed class RtfDocument : IWordProcessingDocument, IPaginatedDocument
+{
+    private readonly IReadOnlyList<RtfLayoutBlock> _layoutBlocks;
+    private readonly
+        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
+        _headerLayout;
+
+    private readonly
+        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
+        _footerLayout;
+
+    internal RtfDocument(
+        DocumentFormat format,
+        ContentDocument content,
+        IReadOnlyList<Diagnostic> diagnostics,
+        IReadOnlyList<Model.WritingSection> sections,
+        IReadOnlyList<RtfLayoutBlock> layoutBlocks,
+        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
+            headerLayout,
+        IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
+            footerLayout,
+        Model.WritingMarks marks,
+        bool addsParagraphSpacing = true)
+    {
+        _addsParagraphSpacing = addsParagraphSpacing;
+        Format = format;
+        Marks = marks;
+        Content = content;
+        Diagnostics = diagnostics;
+        Sections = sections.Count > 0 ? sections : [new Model.WritingSection()];
+        _layoutBlocks = layoutBlocks;
+        _headerLayout = headerLayout;
+        _footerLayout = footerLayout;
+    }
+
+    /// <summary>
+    /// Whether two consecutive paragraphs' spacings add rather than the larger one winning; see
+    /// <see cref="RtfDocumentReader.AddsParagraphSpacing"/>.
+    /// </summary>
+    private readonly bool _addsParagraphSpacing;
+
+    /// <inheritdoc/>
+    public DocumentFormat Format { get; }
+
+    /// <inheritdoc/>
+    public DocumentFamily Family => DocumentFamily.WordProcessing;
+
+    /// <inheritdoc/>
+    public DocumentMetadata Metadata => Content.Metadata;
+
+    /// <inheritdoc/>
+    public ContentDocument Content { get; }
+
+    /// <inheritdoc/>
+    public IReadOnlyList<Diagnostic> Diagnostics { get; }
+
+    /// <inheritdoc/>
+    public IReadOnlyList<Model.WritingSection> Sections { get; }
+
+    /// <inheritdoc/>
+    public Model.WritingMarks Marks { get; }
+
+    /// <summary>
+    /// Lays the document out into pages.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The paragraphs were collected during the read rather than by a second pass, because RTF is a token
+    /// stream with nothing to revisit — see <see cref="RtfLayoutParagraph"/>.
+    /// </para>
+    /// <para>
+    /// The two spacings add rather than the larger winning, unless the document says <c>\htmautsp</c>.
+    /// LibreOffice's RTF importer turns HTML auto-spacing <em>off</em> by default — "opt-in for RTF,
+    /// opt-out for OOXML", as its own comment in <c>SettingsTable.cxx</c> puts it, the opt-in being what
+    /// makes the spacings collapse — which is the opposite of the DOCX path and the same as ODF's. See
+    /// <see cref="RtfDocumentReader.AddsParagraphSpacing"/> for the control word, which reads backwards
+    /// from its name.
+    /// </para>
+    /// </remarks>
+    public IPageSequence Layout(LayoutOptions? options = null)
+    {
+        LayoutFonts fonts = new();
+        List<PageBlock> blocks = [];
+
+        foreach (RtfLayoutBlock block in _layoutBlocks)
+        {
+            blocks.AddRange(Convert(fonts, block));
+        }
+
+        PaginationOptions pagination = PaginationOptions.Word with
+        {
+            // RTF goes through writerfilter exactly as DOCX does and so takes the same
+            // `DoNotCaptureDrawObjsOnPage` — but its shapes are captured anyway, and the reason is
+            // that they are not drawing objects. `RTFSdrImport::createShape`
+            // (`sw/source/writerfilter/rtftok/rtfsdrimport.cxx`:323-334) turns every top-level
+            // `shapeType` 1 or 202 into a `com.sun.star.text.TextFrame` — a Writer *fly* — and a fly
+            // is clipped onto its page by `SwFlyFreeFrame::CheckClip`
+            // (`sw/source/core/layout/flylay.cxx`:471-545), which that flag does not reach.
+            //
+            // Measured against 26.2.4.2 over 21 one-shape probes: the reference captures the shape's
+            // text on all five `\shpwr` values, in both axes, with or without `{\shptxt}`, and
+            // whether the frame merely overhangs the sheet or begins entirely off it. The
+            // `IsDraggingOffPageAllowed` escape (`sw/source/core/layout/anchoredobject.cxx`:790-801)
+            // fires on none of them, although two of the five are wrap-through.
+            // `dotnet/probes/rtf-shape-r73/results.md`.
+            CapturesAnchoredObjectsOnPage = true,
+            CollapsesSpacing = !_addsParagraphSpacing,
+            MaxPages = options?.MaxPages is > 0 ? options.MaxPages : PaginationOptions.Word.MaxPages,
+        };
+
+        Paginator paginator = new(pagination);
+
+        return new WordProcessingPages(
+            paginator.Paginate(
+                blocks,
+                [.. Sections.Select((section, index) =>
+                    new PaginatedSection(
+                        section, Furniture(fonts, index), StatesOwnFurniture(index)))]),
+            paginator.Blocks ?? blocks);
+    }
+
+    /// <summary>
+    /// Turns a recorded table into the layout engine's own, or null when it has no usable grid.
+    /// </summary>
+    /// <remarks>
+    /// A shallow conversion: the grid and the spans were resolved during the read, from the same
+    /// <c>\cellx</c> edges the extraction tree used, so all that happens here is that each cell's
+    /// paragraphs get their faces resolved — the one thing the reader cannot do, since it has no fonts.
+    /// </remarks>
+    private static PageTable? Grid(LayoutFonts fonts, RtfLayoutTable table)
+    {
+        if (table.ColumnWidths.Count == 0 || table.Rows.Count == 0) return null;
+
+        List<PageTableRow> rows = new(table.Rows.Count);
+        foreach (RtfLayoutRow row in table.Rows)
+        {
+            List<PageTableCell> cells = new(row.Cells.Count);
+            foreach (RtfLayoutCell cell in row.Cells)
+            {
+                cells.Add(new PageTableCell
+                {
+                    Blocks = Convert(fonts, cell.Blocks),
+                    Column = cell.Column,
+                    ColumnSpan = cell.ColumnSpan,
+                    RowSpan = cell.RowSpan,
+                    Padding = cell.Padding,
+                    VerticalAlignment = cell.VerticalAlignment,
+                    TextDirection = cell.TextDirection,
+                    Shading = cell.Shading,
+                    Borders = cell.Borders,
+                });
+            }
+
+            rows.Add(new PageTableRow
+            {
+                Cells = cells,
+                CoveredTopRule = row.CoveredTopRule,
+                CoveredBottomRule = row.CoveredBottomRule,
+                MinHeight = row.MinHeight,
+                HasExactHeight = row.HasExactHeight,
+                IsHeader = row.IsHeader,
+                CanSplit = row.CanSplit,
+            });
+        }
+
+        return new PageTable
+        {
+            SectionIndex = table.SectionIndex,
+            ColumnWidths = table.ColumnWidths,
+            ColumnFit = table.ColumnFit,
+            Rows = rows,
+            HeaderRowCount = table.HeaderRowCount,
+            LeftIndent = table.LeftIndent,
+            HorizontalPosition = table.HorizontalPosition,
+            IsPositioned = table.IsPositioned,
+            VerticalOffset = table.VerticalOffset,
+            VerticalOrigin = table.VerticalOrigin,
+            LowerSpacing = table.LowerSpacing,
+            JoinsBordersLikeWord = true,
+            MinHeightIncludesInsets = true,
+        };
+    }
+
+    /// <summary>
+    /// The document's headers and footers, ready for the page frames.
+    /// </summary>
+    /// <remarks>
+    /// The same conversion the body goes through, over the paragraphs the read collected per slot. One
+    /// font cache is shared with the body's conversion, so a header in the body's face costs no second
+    /// lookup — and, more to the point, resolves to the identical face object, which is what lets the
+    /// measurement caches downstream see them as one font.
+    /// </remarks>
+    /// <summary>
+    /// True when the section wrote a header or footer group of its own rather than leaving the one in
+    /// force alone.
+    /// </summary>
+    /// <remarks>
+    /// RTF reaches writerfilter's dmapper exactly as DOCX does, so a continuous section's page
+    /// descriptor lives or dies by the same rule and this is what decides it — see
+    /// <see cref="Layout.ContinuousPageDescriptors"/>. The record is the layout dictionaries' own keys:
+    /// a slot is entered against the section whose <c>\header</c>, <c>\footerl</c> and so on wrote it,
+    /// and a section that wrote none has no key at all.
+    /// </remarks>
+    private bool StatesOwnFurniture(int section)
+    {
+        foreach ((int Section, Model.PageFurnitureSlot Slot) key in _headerLayout.Keys)
+        {
+            if (key.Section == section) return true;
+        }
+
+        foreach ((int Section, Model.PageFurnitureSlot Slot) key in _footerLayout.Keys)
+        {
+            if (key.Section == section) return true;
+        }
+
+        return false;
+    }
+
+    private PageFurnitureSet? Furniture(LayoutFonts fonts, int section)
+    {
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> headers = [];
+        Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> footers = [];
+
+        Fill(headers, _headerLayout);
+        Fill(footers, _footerLayout);
+
+        PageFurnitureSet set = new(headers, footers);
+        return set.IsEmpty ? null : set;
+
+        // A section with no header of its own inherits the previous section's, which is what RTF means by
+        // saying nothing: \sectd resets the geometry and leaves the running heads alone, so a document that
+        // writes one header and three \sect marks has that header on all four sections.
+        void Fill(
+            Dictionary<Model.PageFurnitureSlot, IReadOnlyList<PageBlock>> into,
+            IReadOnlyDictionary<(int Section, Model.PageFurnitureSlot Slot), IReadOnlyList<RtfLayoutBlock>>
+                from)
+        {
+            foreach (Model.PageFurnitureSlot slot in Enum.GetValues<Model.PageFurnitureSlot>())
+            {
+                for (int at = section; at >= 0; at--)
+                {
+                    if (!from.TryGetValue((at, slot), out IReadOnlyList<RtfLayoutBlock>? stated)) continue;
+
+                    List<PageBlock> converted = Convert(fonts, stated);
+                    if (converted.Count > 0) into[slot] = converted;
+                    break;
+                }
+            }
+        }
+    }
+
+    /// <summary>Turns recorded paragraphs into the layout engine's own, resolving each one's face.</summary>
+    /// <remarks>
+    /// A paragraph whose family resolves to nothing at all is dropped rather than drawn in a fallback,
+    /// because there is nothing to measure it with — and a machine with no fonts installed should fail the
+    /// comparison tests rather than quietly produce a page of guesses.
+    /// </remarks>
+    /// <summary>
+    /// Turns recorded blocks into the layout engine's own, recursing into nested tables.
+    /// </summary>
+    /// <remarks>
+    /// One conversion for the body and for a cell's contents, which is what lets a table inside a cell be
+    /// converted by the same code as a table in the body — RTF distinguishes them only by <c>\itap</c>
+    /// depth, and by this point that has already put each table in the right list.
+    /// </remarks>
+    private static List<PageBlock> Convert(LayoutFonts fonts, IReadOnlyList<RtfLayoutBlock> stated)
+    {
+        List<PageBlock> blocks = new(stated.Count);
+        foreach (RtfLayoutBlock block in stated) blocks.AddRange(Convert(fonts, block));
+        return blocks;
+    }
+
+    /// <summary>One block, which yields nothing when its family resolves to no face at all.</summary>
+    private static IEnumerable<PageBlock> Convert(LayoutFonts fonts, RtfLayoutBlock block)
+    {
+        if (block.Paragraph is { } paragraph)
+        {
+            return Convert(fonts, [paragraph])
+                .Select(converted => (PageBlock)(converted with
+                {
+                    SectionIndex = paragraph.SectionIndex,
+                }));
+        }
+
+        return block.Table is { } table && Grid(fonts, table) is { } grid
+            ? [grid]
+            : [];
+    }
+
+    private static List<PageParagraph> Convert(
+        LayoutFonts fonts, List<RtfLayoutParagraph> stated)
+    {
+        List<PageParagraph> paragraphs = new(stated.Count);
+
+        foreach (RtfLayoutParagraph paragraph in stated)
+        {
+            OpenTypeFace? face = fonts.Face(
+                paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic);
+            if (face is null) continue;
+
+            FontReference? font = fonts.Reference(
+                paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic);
+
+            // The runs first, then the text they map: `Apply` rewrites both together, and the offsets it
+            // preserves are the ones the notes and frames below were recorded against.
+            List<PageRun> runs = RunsOf(fonts, paragraph, face);
+
+            paragraphs.Add(new PageParagraph
+            {
+                Text = CaseMapping.Apply(paragraph.Text, runs),
+                Face = face,
+                Font = font,
+                Colour = paragraph.Colour ?? Colour.Transparent,
+                Format = paragraph.Format,
+                Label = Label(paragraph, face, font),
+                EmSize = paragraph.Size,
+                Language = paragraph.Language,
+                Shaping = new Text.Shaping.ShapingOptions(
+                    Language: paragraph.Language, DisableKerning: !paragraph.AutoKerning),
+                WidthPerCent = paragraph.WidthPerCent,
+                Fallback = fonts.Fallback,
+                Runs = runs,
+                Notes = NotesOf(fonts, paragraph.Notes),
+                Frames = FramesOf(fonts, paragraph.Frames),
+                Fields = paragraph.PageFields ?? [],
+            });
+        }
+
+        return paragraphs;
+    }
+
+    /// <summary>
+    /// The label a list item draws, or null when it draws none.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// In the item's own face and size, because that is what the file says: the <c>{\listtext}</c> group
+    /// opens with <c>\pard\plain</c> and then states nothing, so the label inherits whatever the paragraph
+    /// is set in. The other three formats put the label's formatting in the numbering definition instead.
+    /// </para>
+    /// <para>
+    /// <see cref="LabelFollow.Nothing"/> rather than a tab, even though the group ends with one: RTF
+    /// writes the same distance twice — as the tab and as the paragraph's <c>\fi</c> hanging indent — and
+    /// <see cref="PageLabel.Advance"/> already fills a hanging indent. Reading the tab as well would need
+    /// the <c>\tx</c> stop the list happens to have set, and would put the text in the same place.
+    /// </para>
+    /// <para>
+    /// The paragraph's reference goes with it, since the face is the paragraph's. A label left
+    /// without one is drawn from a reference naming only a family, which no font provider can open
+    /// — <c>word-features.rtf</c> rendered with its labels' <c>LiberationSans</c> at <c>emb no</c>
+    /// while every other face in the file embedded.
+    /// </para>
+    /// </remarks>
+    private static PageLabel? Label(
+        RtfLayoutParagraph paragraph, OpenTypeFace face, FontReference? font)
+        => paragraph.ListMarker is { Length: > 0 } marker
+            ? PageLabel.Measured(
+                marker, face, paragraph.Size,
+                new Text.Shaping.ShapingOptions(
+                    Language: paragraph.Language, DisableKerning: !paragraph.AutoKerning)) with
+            {
+                Font = font,
+                Colour = paragraph.Colour ?? Colour.Transparent,
+                Follow = LabelFollow.Nothing,
+            }
+            : null;
+
+    /// <summary>
+    /// The floating frames anchored in a paragraph, with the file's own numbers turned into a rectangle.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// RTF's shape coordinates are twips relative to whatever <c>\shpbx*</c> and <c>\shpby*</c> name, and
+    /// the pair that matters is the one that is <em>absent</em>: <c>\shpbxignore</c> says to ignore those
+    /// words and take the origin from a <c>posrelh</c> shape property instead, which lives in the
+    /// <c>{\*\shpinst}</c> destination this reader skips. So a shape written that way — which is every
+    /// shape LibreOffice's own export writes — falls back to the column and the paragraph, the two origins
+    /// a floating frame in body text nearly always has.
+    /// </para>
+    /// <para>
+    /// <c>\shpwr</c>'s numbering is RTF's own and two of its five values invite a swap: 3 is
+    /// <em>through</em>, meaning a rectangular hole the text flows into, and 5 is <em>none</em>, meaning
+    /// the shape is ignored. Reading 3 as "ignore it" leaves a frame with text running across it.
+    /// </para>
+    /// </remarks>
+    private static List<PageFrame> FramesOf(
+        LayoutFonts fonts, IReadOnlyList<RtfLayoutFrame>? stated)
+    {
+        if (stated is null || stated.Count == 0) return [];
+
+        List<PageFrame> frames = new(stated.Count);
+
+        foreach (RtfLayoutFrame frame in stated)
+        {
+            // An inline picture is not placed against an origin at all: it hangs on the line at the
+            // offset it was written at, and the wrap words a shape carries do not apply to it.
+            if (frame.IsInline)
+            {
+                frames.Add(new PageFrame
+                {
+                    Size = new Core.Geometry.DocSize(
+                        Core.Units.Length.FromTwips(frame.Right - frame.Left),
+                        Core.Units.Length.FromTwips(frame.Bottom - frame.Top)),
+                    Anchor = FrameAnchor.AsCharacter,
+                    AnchorOffset = frame.Offset,
+                    Wrap = TextWrap.Through,
+                    IsImage = true,
+                    Image = frame.Picture.Raster,
+                    Vector = frame.Picture.Vector,
+                });
+
+                continue;
+            }
+
+            List<PageBlock> blocks = Convert(fonts, frame.Blocks);
+
+            frames.Add(new PageFrame
+            {
+                Size = new Core.Geometry.DocSize(
+                    Core.Units.Length.FromTwips(frame.Right - frame.Left),
+                    Core.Units.Length.FromTwips(frame.Bottom - frame.Top)),
+                Anchor = FrameAnchor.Paragraph,
+                AnchorOffset = frame.Offset,
+                Wrap = WrapOf(frame),
+                HorizontalOrigin = frame.HorizontalOrigin switch
+                {
+                    "shpbxpage" => FrameHorizontalOrigin.Page,
+                    "shpbxmargin" => FrameHorizontalOrigin.PageMargin,
+                    _ => FrameHorizontalOrigin.Column,
+                },
+                HorizontalAlignment = FrameHorizontalAlignment.Offset,
+                HorizontalOffset = Core.Units.Length.FromTwips(frame.Left),
+                VerticalOrigin = frame.VerticalOrigin switch
+                {
+                    "shpbypage" => FrameVerticalOrigin.Page,
+                    "shpbymargin" => FrameVerticalOrigin.PageMargin,
+                    _ => FrameVerticalOrigin.Paragraph,
+                },
+                VerticalAlignment = FrameVerticalAlignment.Offset,
+                VerticalOffset = Core.Units.Length.FromTwips(frame.Top),
+                Spacing = frame.WrapDistance ?? DefaultShapeWrapDistance,
+                Padding = blocks.Count == 0 ? default : frame.TextInset,
+                IsImage = blocks.Count == 0,
+                Image = frame.Picture.Raster,
+                Vector = frame.Picture.Vector,
+                Blocks = blocks,
+            });
+        }
+
+        return frames;
+    }
+
+    /// <summary>
+    /// How far text stays clear of a shape that states no distance of its own.
+    /// </summary>
+    /// <remarks>
+    /// LibreOffice's, measured rather than taken from the specification — which gives 0.125 inch for the
+    /// horizontal pair and nothing for the vertical. Rendering the corpus RTF with the properties absent
+    /// puts the wrapped lines 114 twips past the shape's own right edge and narrows one line more at the
+    /// top; adding <c>{\sp{\sn dxWrapDistLeft}{\sv 0}}</c> and its three siblings to the same file moves
+    /// them back to the shape's edge and gives back the line. 114 twips is 0.2 cm to within a twip, and it
+    /// is applied on all four sides.
+    /// </remarks>
+    /// <summary>0.2 cm on Writer's own whole-twip grid, which is 113 twips rather than 113.4.</summary>
+    /// <remarks>
+    /// Snapped here rather than left exact, because every other measurement the engine holds already is
+    /// and the difference lands on the wrapped lines' start: 113.4 twips puts them 0.02 pt past where
+    /// LibreOffice puts them, and 113 puts them exactly on it. Declared before the margins that use it,
+    /// because a static field initialiser runs in declaration order and reading it early gives zero.
+    /// </remarks>
+    private static readonly Core.Units.Length DefaultWrapTwips =
+        Core.Units.Length.FromTwips(Core.Units.Length.FromMm100(200).Twips);
+
+    private static readonly Core.Geometry.Margins DefaultShapeWrapDistance = new(
+        DefaultWrapTwips, DefaultWrapTwips, DefaultWrapTwips, DefaultWrapTwips);
+
+    /// <summary>
+    /// What <c>\shpwr</c> and <c>\shpwrk</c> say a shape does to the text around it.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>The numbering is LibreOffice's dispatch table, not the specification's prose</b> —
+    /// <c>sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx</c>:1222-1247, which is the only reading
+    /// of these five values that this project can be measured against. 1 is
+    /// <c>WrapTextMode_NONE</c>, which is Writer's <em>no text beside it</em> and so this reader's
+    /// <see cref="TextWrap.TopAndBottom"/>; 2 and 4 are <c>PARALLEL</c>, 4 additionally marking the
+    /// wrap tight; <b>3 and 5 are both <c>THROUGH</c></b>, 3 additionally setting <c>wrapNone</c>.
+    /// </para>
+    /// <para>
+    /// Three of the five were read wrongly here for as long as the reader has had shapes, and 3 is the
+    /// expensive one: <c>\shpwr3</c> occurs <b>1341 times in 178 of the converted corpus's 338
+    /// <c>.rtf</c></b>, and reading a through shape as an obstacle narrows every line beside it.
+    /// Measured on a probe of one 4000-twip box in a 12240-twip page against 26.2.4.2, one file per
+    /// value: the reference puts the first line at x = 72.1 pt for 1, 3 and 5 and at 272.1 for 2 and 4,
+    /// and starts it 60 pt lower for 1 alone. See <c>dotnet/probes/rtf-shape-r73/results.md</c>.
+    /// </para>
+    /// <para>
+    /// Two words for one answer: the first says what kind of hole the text leaves and the second which
+    /// side of it the text may use. Only the kinds that leave a hole consult the side, since a through
+    /// shape and a top-and-bottom one have no sides to choose between.
+    /// </para>
+    /// </remarks>
+    private static TextWrap WrapOf(RtfLayoutFrame frame) => frame.Wrap switch
+    {
+        1 => TextWrap.TopAndBottom,
+        3 or 5 => TextWrap.Through,
+        _ => frame.WrapSide switch
+        {
+            1 => TextWrap.Left,
+            2 => TextWrap.Right,
+            3 => TextWrap.Optimal,
+            _ => TextWrap.Both,
+        },
+    };
+
+    /// <summary>The notes anchored in a paragraph, with their bodies converted.</summary>
+    /// <remarks>
+    /// A note whose body converts to nothing is dropped rather than kept empty, because an empty note would
+    /// still reserve the separator's room at the foot of the page and so change where the body's text breaks.
+    /// </remarks>
+    private static List<PageNote> NotesOf(LayoutFonts fonts, IReadOnlyList<RtfLayoutNote>? stated)
+    {
+        if (stated is null || stated.Count == 0) return [];
+
+        List<PageNote> notes = new(stated.Count);
+
+        foreach (RtfLayoutNote note in stated)
+        {
+            List<PageBlock> blocks = Convert(fonts, note.Blocks);
+            if (blocks.Count == 0) continue;
+
+            notes.Add(new PageNote
+            {
+                Blocks = blocks,
+                Offset = note.Offset,
+                IsEndnote = note.IsEndnote,
+                Placement = note.Placement,
+                Restart = note.Restart,
+                Numbering = note.Numbering,
+
+                // RTF's own copy of the number is a prefix on the note's first paragraph, so its offset is
+                // nought — the same place ODF's ends up, by a different route.
+                Citation = note.Citation,
+                BodyOffset = 0,
+            });
+        }
+
+        return notes;
+    }
+
+    /// <summary>
+    /// The paragraph's runs, or nothing when every one of them is the paragraph's own formatting.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Returning an empty list for a uniform paragraph puts plain prose back on the single-face path,
+    /// which shapes the whole paragraph in one call. That is not only cheaper: a run boundary breaks the
+    /// shaping context, so a paragraph split into runs it does not need loses a kern pair at every
+    /// boundary and measures very slightly wide.
+    /// </para>
+    /// <para>
+    /// This is also the earliest point at which the question can be answered, because two runs asking for
+    /// different families can resolve to the same face — an RTF naming <c>Calibri</c> in one run and
+    /// <c>Carlito</c> in the next is one face on a Linux machine, and splitting there would be splitting
+    /// on nothing.
+    /// </para>
+    /// </remarks>
+    private static List<PageRun> RunsOf(
+        LayoutFonts fonts, RtfLayoutParagraph paragraph, OpenTypeFace paragraphFace)
+    {
+        IReadOnlyList<RtfLayoutRun> stated = paragraph.Runs ?? [];
+        List<PageRun> runs = new(stated.Count);
+        bool varies = false;
+        FontReference? paragraphFont =
+            fonts.Reference(paragraph.FamilyName, paragraph.Weight, paragraph.IsItalic);
+
+        foreach (RtfLayoutRun run in stated)
+        {
+            OpenTypeFace face =
+                fonts.Face(run.FamilyName, run.Weight, run.IsItalic) ?? paragraphFace;
+            FontReference? font = fonts.Reference(run.FamilyName, run.Weight, run.IsItalic);
+
+            // The escapement is resolved here rather than where it was read, because its rise is a
+            // fraction of the face's height and the face is only known now.
+            Core.Units.Length size = run.Escapement.SizeOf(run.Size);
+            Core.Units.Length rise = run.Escapement.RiseOf(face, run.Size);
+
+            if (face != paragraphFace
+                || size != paragraph.Size
+                || run.Colour != paragraph.Colour
+                || run.Language != paragraph.Language
+                || rise != Core.Units.Length.Zero
+                // A case map has to survive the uniform-paragraph shortcut: it is the one property here
+                // that changes the *characters*, so dropping the runs would draw the text as stored.
+                || run.CaseMap != PageCaseMap.None
+                // So does a highlight: the paragraph carries none of its own, so a paragraph highlighted
+                // end to end is uniform by every other test and would lose its band entirely.
+                || run.Highlight is not null
+                // And so do the two rules, for the same reason: neither changes a width, so a paragraph
+                // underlined end to end is uniform by every measurement test and would be drawn plain.
+                || run.Underline != TextUnderline.None
+                || run.IsStruckThrough
+                // Kerning, unlike the two rules, does change a measurement — so a run that kerns
+                // inside a paragraph that does not has to survive the shortcut or its width is the
+                // paragraph's answer rather than its own.
+                || run.AutoKerning != paragraph.AutoKerning
+                // And a character width, for the same reason and more strongly: it multiplies every
+                // advance in the run, so a scaled run folded into an unscaled paragraph is measured and
+                // broken at the paragraph's own width. See `RtfLayoutRun.MatchesFormatting`, which has
+                // to keep the run's boundary before this is ever asked.
+                || run.WidthPerCent != paragraph.WidthPerCent
+                // And a synthetic oblique, which is drawing-only in the same way and was the one
+                // missing from this list: an italic run whose family has no italic installed resolves to
+                // the *same* face as its upright neighbour, so nothing above can see it and the fold
+                // would draw it upright. See PageRun.LeansDifferently.
+                || PageRun.LeansDifferently(font, paragraphFont))
+            {
+                varies = true;
+            }
+
+            runs.Add(new PageRun(
+                run.Start,
+                run.Length,
+                face,
+                size,
+                font,
+                run.Colour ?? paragraph.Colour ?? Colour.Transparent,
+                new Text.Shaping.ShapingOptions(
+                    Language: run.Language, DisableKerning: !run.AutoKerning),
+                rise,
+                run.CaseMap,
+                Highlight: run.Highlight ?? default,
+                Underline: run.Underline,
+                IsStruckThrough: run.IsStruckThrough,
+                WidthPerCent: run.WidthPerCent));
+        }
+
+        return varies ? runs : [];
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>
+    /// Nothing to release: RTF has no container, and the document was read from a buffer the
+    /// caller owns.
+    /// </remarks>
+    public void Dispose() { }
+}

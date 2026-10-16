@@ -1,7 +1,7 @@
-# Shared brief — Paperless fidelity fix investigation
+# Shared brief — X-Ray.Office fidelity fix investigation
 
 You are one of eight agents working in parallel on the same finding: a sweep of all
-946 documents in `theolivenbaum/sample-files` rendered by Paperless and by headless
+946 documents in `theolivenbaum/sample-files` rendered by X-Ray.Office and by headless
 LibreOffice found **192 documents that do not match**. Each of you owns one lane.
 
 ## The one rule that keeps eight agents from colliding
@@ -49,9 +49,9 @@ fault, the file, the document count, and confidence. That is what gets read firs
 
 Your `cases.md` names the source directories your lane owns exclusively. No other
 lane will propose an edit inside them. **Do not propose an edit outside them.** If a
-fix genuinely needs a shared file — `Paperless.Core` outside `Charts/` and
-`Graphics/`, `Paperless.Containers`, `Paperless.Text` (unless you are L1),
-`Paperless.Vector`, `Paperless.MsBinary`, `Paperless.OpenDocument` — do not write it.
+fix genuinely needs a shared file — `XRay.Office.Core` outside `Charts/` and
+`Graphics/`, `XRay.Office.Containers`, `XRay.Office.Text` (unless you are L1),
+`XRay.Office.Vector`, `XRay.Office.MsBinary`, `XRay.Office.OpenDocument` — do not write it.
 Record it under a `## Cross-lane dependencies` heading naming the file and what it
 needs, and I will sequence it.
 
@@ -63,11 +63,11 @@ needs, and I will sequence it.
   reference PDF is already at `/data/bench/lo/<id>/out.pdf` and ours at
   `/data/bench/pl/<id>/out.pdf`.
 - Prebuilt CLI, if you need to render a *probe* document you construct yourself:
-  `/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/Paperless.Cli`
+  `/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli`
   Use `--outdir` (not `-o`). Assert it produced output before comparing anything —
   a glob that silently picked up the reference once reported a fabricated match.
 - Your rendered pairs are at `/data/bench/pairs-view/NNN.jpg`, LibreOffice left,
-  Paperless right, at reading resolution. **Look at them.** The numbers say a page is
+  X-Ray.Office right, at reading resolution. **Look at them.** The numbers say a page is
   wrong; only the image says what is wrong.
 
 ## Read before you start
@@ -82,7 +82,7 @@ must not re-derive, in particular:
   output. `dotnet/TODO.raster-ceiling.md`.
 
 Six documents in the sweep are tagged `lo-broken`: the **reference** is the broken
-rendering and Paperless is correct. If one is in your lane, confirm it and file it —
+rendering and X-Ray.Office is correct. If one is in your lane, confirm it and file it —
 do not chase it.
 
 ## Scope

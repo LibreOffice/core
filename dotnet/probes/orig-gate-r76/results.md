@@ -2,7 +2,7 @@
 
 ## Environment
 
-    ours   = Paperless.Cli @ f9e755b72
+    ours   = XRay.Office.Cli @ f9e755b72
     ref    = /usr/bin/soffice, LibreOffice 24.2.7.2, taken deliberately and not by accident
     corpus = /home/user/sample-files, 947 documents in their original spellings
     rule   = batch-check.sh of 2026-09-05

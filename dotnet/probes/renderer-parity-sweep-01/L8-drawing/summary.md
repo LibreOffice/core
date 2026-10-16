@@ -5,14 +5,14 @@ carry patches; seven are recorded as cross-lane dependencies with the markup, th
 and the `file:line`.
 
 **RC-1 · DOCX shapes are drawn as their bounding rectangle, and only `a:solidFill` is read.**
-`Paperless.WordProcessing/Ooxml/DocxFrames.cs:860,798-818` + `Layout/PageFrame.cs:333` +
+`XRay.Office.WordProcessing/Ooxml/DocxFrames.cs:860,798-818` + `Layout/PageFrame.cs:333` +
 `Layout/PageDrawing.cs:230-310`. #062 #148 #152 #167 #169 (5 docs). Three separable limbs:
 geometry ignored (circles → squares), every fill but `a:solidFill` ignored (gradient, picture,
 `grpFill` and the theme `a:fillRef` → nothing drawn, which is what makes white text invisible),
 and an `a:ln` without `@w` giving width 0. A probe proves the shared evaluator is correct, so
 nothing is needed in this lane. **Cross-lane (L2+L3). Confidence high.**
 
-**RC-2 · A tiled bitmap fill stops after 8192 tiles.** `Paperless.Rendering/Fills/Tiles.cs:26,81`.
+**RC-2 · A tiled bitmap fill stops after 8192 tiles.** `XRay.Office.Rendering/Fills/Tiles.cs:26,81`.
 #076 (1 doc, reach probably wider). Measured: reference 37 550 tile draws, ours **exactly 8192**,
 covering the top 22% of the slide. PDF backend only; the Skia backend uses a repeat shader.
 **Patch `patches/tiled-fill-truncated.diff`. Mine. Confidence high.**
@@ -25,7 +25,7 @@ page background is the **lowest** of 44 and is drawn 9th). Same defect L2 found 
 "no background" into "background over everything". Confidence high.**
 
 **RC-4 · A preset sub-path's `fill`/`stroke` flags are parsed off the table line and dropped.**
-`Paperless.Ooxml/DrawingML/PresetShapeGeometry.cs:110-118`, `CustomShapeGeometry.cs:117-120,216-233,764`.
+`XRay.Office.Ooxml/DrawingML/PresetShapeGeometry.cs:110-118`, `CustomShapeGeometry.cs:117-120,216-233,764`.
 96 of the table's 320 sub-paths say `fill="none"` (every connector) and 84 say `stroke="false"`
 (every pseudo-3D shading face). Probe: `bentConnector3` draws as a filled triangle.
 **Patch `patches/preset-subpath-fill-stroke.diff` — enabling; needs a two-line consumer change in
@@ -37,7 +37,7 @@ converts to shape rotation (`oox/source/drawingml/shape.cxx:1054-1064`). `scene3
 nowhere in `dotnet/src`. **Cross-lane (L5). Confidence high.**
 
 **RC-6 · VML WordArt (`v:textpath`) is not read, so a Word watermark is absent.**
-`Paperless.WordProcessing/Ooxml/DocxVmlFrames.cs`; `git grep textpath -- dotnet/src` returns
+`XRay.Office.WordProcessing/Ooxml/DocxVmlFrames.cs`; `git grep textpath -- dotnet/src` returns
 nothing. #142 #190 (2 docs). **Cross-lane (L3). Confidence high.**
 
 **RC-7 · An inline picture taller than the text area is moved to the next page instead of
@@ -69,4 +69,4 @@ Same shape as `TODO.raster-ceiling.md`. **No patch; a policy call above this lan
 `pl-cases.json`'s six `lo-broken` documents are all in other lanes.
 
 **Not this lane's:** #049 (taller rows, not a hatch bug — the 14 `a:pattFill` cells match; plus
-an EMF logo, `Paperless.Vector`), #178 (advance divergence, L1), #190's TOC hyperlink styling (L3).
+an EMF logo, `XRay.Office.Vector`), #178 (advance divergence, L1), #190's TOC hyperlink styling (L3).

@@ -3,7 +3,7 @@
 The three defects `sheets-b-01` diagnosed, shipped, plus one it mis-seated. The prediction is in
 `prediction.md` beside this file and was committed as `71e0b925ce1` **before any post-change
 measurement**; the code is `655b8a6f5e6`. Every "ours" figure is a render of the CLI in
-`/c/sandbox/workdir/wt-sheets-c`, `PAPERLESS_CLI` set explicitly, `SOURCE_DATE_EPOCH=1700000000`,
+`/c/sandbox/workdir/wt-sheets-c`, `XRAY_OFFICE_CLI` set explicitly, `SOURCE_DATE_EPOCH=1700000000`,
 `TZ=UTC`. Every "reference" figure is read out of
 `/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/`.
 
@@ -146,8 +146,8 @@ Rendering the Pilot Logbook with fix 1a alone leaves the axis exactly as it was.
 
 The brief's test — "the reference sets 848 glyphs at 45° and our PDF contains zero `Tm` operators"
 — **cannot be run as stated on our own output.** LibreOffice turns text with the *text* matrix
-(`Tm`); Paperless turns it with the *CTM* (`cm`, `SheetChart.cs:132-152`). A `Tm`-only count scores
-a correctly rotated Paperless page as zero. My first pass did exactly that and read a working fix
+(`Tm`); X-Ray.Office turns it with the *CTM* (`cm`, `SheetChart.cs:132-152`). A `Tm`-only count scores
+a correctly rotated X-Ray.Office page as zero. My first pass did exactly that and read a working fix
 as a no-op. `tm-rotation-scan.py` counts both, and was checked against the reference first, where
 it returns 848/33 to the digit.
 
@@ -368,8 +368,8 @@ rounding:
 - The brief gives the total as **3458** where the sum of its own per-project figures is 3454.
   I have used the per-project figures, since those are what I can compare against.
 - **Text reports 0 skipped here where the brief says 14.** That is an environment difference,
-  not something this round changed — nothing in it touches `Paperless.Text`.
-- **`Paperless.Vector` failed 1 of 295 on its first run and passed 295 of 295 on the next**,
+  not something this round changed — nothing in it touches `XRay.Office.Text`.
+- **`XRay.Office.Vector` failed 1 of 295 on its first run and passed 295 of 295 on the next**,
   unchanged in between, while the corpus sweep was saturating the machine. That is the
   truncation/flake failure mode `CLAUDE.md` warns about, seen from the other side. Recorded
   rather than quietly re-run: the clean figure is the second one, and nothing in this round is

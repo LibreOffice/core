@@ -52,7 +52,7 @@ truncate silently):
 | Fidelity | 521 passed, **31 failed**, 552 discovered |
 
 **The 31 Fidelity failures are pre-existing and this change moves none of them.** Measured, not
-argued: the two changed source files were checked out at `ac147b7e5bb`, `Paperless.Ooxml`'s
+argued: the two changed source files were checked out at `ac147b7e5bb`, `XRay.Office.Ooxml`'s
 `obj`/`bin` deleted, the tree rebuilt, and the *base* binary confirmed to still draw the advisory
 sentence before the run. It reported **`Failed: 31, Passed: 521, Total: 552`** — identical. The
 files were then restored with `git checkout HEAD -- … && touch …`, rebuilt from a deleted
@@ -63,7 +63,7 @@ words, slides *and* sheets fidelity classes, which is the second, independent te
 
 ## 3. Tests, and which are detectors
 
-`OoxmlAlternateContentTests`, 4 tests, in `Paperless.Spreadsheets.Tests`. Verified with
+`OoxmlAlternateContentTests`, 4 tests, in `XRay.Office.Spreadsheets.Tests`. Verified with
 `verify-test.sh` under two separate mutations:
 
 | mutation | detected by |
@@ -152,7 +152,7 @@ crop of that column on both sides as the first step.
 
 ## 7. Shared layer
 
-The diff touches **`Paperless.Ooxml/OoxmlXml.cs` and `OoxmlNamespaces.cs` — a shared layer**, used
+The diff touches **`XRay.Office.Ooxml/OoxmlXml.cs` and `OoxmlNamespaces.cs` — a shared layer**, used
 by words, slides and sheets.
 
 The reach is **measured, not reasoned about**. Every part of every one of the 946 corpus documents

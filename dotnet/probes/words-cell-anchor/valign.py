@@ -11,13 +11,13 @@ object overlaps the cell at all. Both reference binaries are measured, because t
 compatibility half — `FORCE_TOP_ALIGNMENT_IN_CELL_WITH_FLOATING_ANCHOR`, tdf#166710 — exists only
 in 26.2.
 
-Usage: PAPERLESS_CLI=<cli> python3 valign.py <outdir>
+Usage: XRAY_OFFICE_CLI=<cli> python3 valign.py <outdir>
 """
 import os, re, subprocess, sys, zipfile
 from pathlib import Path
 
 OUT = Path(sys.argv[1]); OUT.mkdir(parents=True, exist_ok=True)
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 OLD = "soffice"                                        # the distro's 24.2.7.2
 NEW = "/opt/libreoffice26.2/program/soffice"           # the TDF tarball's 26.2.4.2
 ROW = 4000                                             # twips, 200 pt

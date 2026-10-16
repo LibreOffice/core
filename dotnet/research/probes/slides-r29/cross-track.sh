@@ -16,7 +16,7 @@ one() {
     base="$(basename "$f")"; ext="${base##*.}"; stem="${base%.*}"; id="${stem}__${ext,,}"
     for w in base all; do
       rm -rf "$SP/cross/t$idx"; mkdir -p "$SP/cross/t$idx"
-      SOURCE_DATE_EPOCH=1700000000 timeout 300 "$SP/cli-$w/Paperless.Cli" render "$f" \
+      SOURCE_DATE_EPOCH=1700000000 timeout 300 "$SP/cli-$w/XRay.Office.Cli" render "$f" \
         --format pdf --outdir "$SP/cross/t$idx" >/dev/null 2>&1
       [ -f "$SP/cross/t$idx/$stem.pdf" ] && mv -f "$SP/cross/t$idx/$stem.pdf" "$SP/cross/$w/$id.pdf"
     done

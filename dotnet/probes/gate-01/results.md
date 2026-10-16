@@ -3,8 +3,8 @@
 Subject: `batch-check.sh`'s check 2, the extractable-word check, across all three tracks.
 Reference: `/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/` (534 PDFs, LibreOffice 26.2.4.2
 620(Build:2), `fonts-dejavu-core` present). Ours rendered here from
-`dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli` at `c13049cc002`, with
-`PAPERLESS_CLI` set explicitly, `SOURCE_DATE_EPOCH=1700000000` and `TZ=UTC` on every render.
+`dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli` at `c13049cc002`, with
+`XRAY_OFFICE_CLI` set explicitly, `SOURCE_DATE_EPOCH=1700000000` and `TZ=UTC` on every render.
 Branch `wt-gate`, worktree `/c/sandbox/workdir/wt-gate`.
 
 ---
@@ -167,7 +167,7 @@ did not design for and should be recorded as a reason to keep it.
 **Owning the extractor does not substitute for the definition.** Pinning poppler is unavailable
 here and would only freeze the problem; replacing it with PdfPig moves it. Whatever reads the
 PDF still has to answer "is a bullet a word?", and it will answer it whether or not anyone
-writes the answer down. §5 is that answer written down, and **`paperless analyze` should
+writes the answer down. §5 is that answer written down, and **`xray-office analyze` should
 implement it, not re-decide it** — raw token count, letters-or-digits count, and the excluded
 classes broken out. If a reimplementation changes the count for any reason other than a bug,
 that is a third incomparable scoreboard and has to be published as one.
@@ -510,7 +510,7 @@ text or a fragmented letter-spaced run; and everything `words-rebase-02` §8 lis
    letters in our text layer suggesting a tracked run being fragmented.
 3. **`ODs-February-2022…xlsx`** — we emit 895 more real words than the reference and do not emit
    `###`. Whether we *should* emit `###` is a rendering question this round does not answer.
-4. **Rewiring to `paperless analyze`.** A Tooling agent is replacing `pdfinfo` +
+4. **Rewiring to `xray-office analyze`.** A Tooling agent is replacing `pdfinfo` +
    `pdftotext | wc -w` + `pdffonts` with an in-process PdfPig reader. **`words_of()` in
    `batch-check.sh` is the seam**: it already returns exactly the pair the new verb should emit,
    `<letters-or-digits> <raw>`, so the rewiring is a substitution of that one function body and

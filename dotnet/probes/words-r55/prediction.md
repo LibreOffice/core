@@ -49,7 +49,7 @@ because the WW8 `FFN` carries a family per font and there is no inheritance ther
 cache key gains the class, because two runs naming one family under different ancestors now resolve
 to two different faces.
 
-**No shared layer.** Nothing under `Paperless.Text`, `Core`, `Containers`, `Vector`, `Rendering`,
+**No shared layer.** Nothing under `XRay.Office.Text`, `Core`, `Containers`, `Vector`, `Rendering`,
 `Markup` or `Ooxml` changes, so slides and sheets cannot be reached and no cross-track sweep is owed.
 
 ## The census, and what it cannot see

@@ -223,8 +223,8 @@ Attributed by turning each change off on its own, rebuilding, and re-rendering t
 Six of the nine changed their word count and **all six moved closer to the reference**; the other
 three (3492, Demick_JetBlue, flying-by-numbers) changed ink only.
 
-The change is in `Paperless.Ooxml` and `Paperless.Core`, so it reaches `.xlsx` and `.docx` charts
-too. Those tracks were not swept; `Paperless.Fidelity.Tests` is the control and it did not move.
+The change is in `XRay.Office.Ooxml` and `XRay.Office.Core`, so it reaches `.xlsx` and `.docx` charts
+too. Those tracks were not swept; `XRay.Office.Fidelity.Tests` is the control and it did not move.
 
 ## Verification: the blind reviews
 
@@ -256,20 +256,20 @@ not colours, run per project and totalled by hand.
 
 | project | failed | passed | skipped | total | vs pristine HEAD |
 |---|---:|---:|---:|---:|---|
-| `Paperless.Containers.Tests` | 0 | 109 | 0 | 109 | — |
-| `Paperless.Core.Tests` | 0 | 337 | 0 | 337 | +5 new |
-| `Paperless.Fidelity.Tests` | **30** | 520 | **0** | **550** | identical |
-| `Paperless.Markup.Tests` | 0 | 259 | 0 | 259 | — |
-| `Paperless.OpenDocument.Tests` | 0 | 125 | 0 | 125 | — |
-| `Paperless.Presentations.Tests` | 0 | 688 | 0 | 688 | +9 new |
-| `Paperless.Rendering.Tests` | 0 | 150 | 1 | 151 | — |
-| `Paperless.Spreadsheets.Tests` | 0 | 770 | 0 | 770 | — |
-| `Paperless.Text.Tests` | 0 | 349 | 0 | 349 | — |
-| `Paperless.Vector.Tests` | 0 | 295 | 0 | 295 | — |
-| `Paperless.WordProcessing.Tests` | 0 | 827 | 0 | 827 | — |
+| `XRay.Office.Containers.Tests` | 0 | 109 | 0 | 109 | — |
+| `XRay.Office.Core.Tests` | 0 | 337 | 0 | 337 | +5 new |
+| `XRay.Office.Fidelity.Tests` | **30** | 520 | **0** | **550** | identical |
+| `XRay.Office.Markup.Tests` | 0 | 259 | 0 | 259 | — |
+| `XRay.Office.OpenDocument.Tests` | 0 | 125 | 0 | 125 | — |
+| `XRay.Office.Presentations.Tests` | 0 | 688 | 0 | 688 | +9 new |
+| `XRay.Office.Rendering.Tests` | 0 | 150 | 1 | 151 | — |
+| `XRay.Office.Spreadsheets.Tests` | 0 | 770 | 0 | 770 | — |
+| `XRay.Office.Text.Tests` | 0 | 349 | 0 | 349 | — |
+| `XRay.Office.Vector.Tests` | 0 | 295 | 0 | 295 | — |
+| `XRay.Office.WordProcessing.Tests` | 0 | 827 | 0 | 827 | — |
 | **total** | **30** | **4429** | **1** | **4460** | |
 
-`Paperless.Fidelity.Tests` is **30 failed of 550, 0 skipped** on the pristine tree and identical
+`XRay.Office.Fidelity.Tests` is **30 failed of 550, 0 skipped** on the pristine tree and identical
 here — the briefed baseline, established rather than assumed.
 
 **A correction to the counts `slides-b008-01/results.md` records.** It gives Spreadsheets 762 and
@@ -289,9 +289,9 @@ normalised, a bar series' legend key is still a box.
 
 ### One thing worth recording about the test host
 
-`Paperless.Vector.Tests` reported **16 failed of 295** on one run and **0 failed of 295** on the
+`XRay.Office.Vector.Tests` reported **16 failed of 295** on one run and **0 failed of 295** on the
 four runs immediately after it, with the same binary and no change between them; the failing run
-came straight off the back of the Fidelity project. No file under `Paperless.Vector` is touched by
+came straight off the back of the Fidelity project. No file under `XRay.Office.Vector` is touched by
 this round. `CLAUDE.md` warns that a loaded host makes a run *truncate* and still print success;
 this is the same instability with the opposite sign, and it is worth knowing that a red run can be
 a flake as well as a green one. Repeat before believing either.

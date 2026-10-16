@@ -228,7 +228,7 @@ with a small over-stroking of boxes beside it, not an over-stroking problem.
 
 `git grep -c` per project gives Presentations **17**, Spreadsheets **10**, Text **6** — the table
 said 15, 9 and 4, which are the file counts. The totals still sum to 48. **The shared layer is ten
-sites, not eight**, and the brief's list of eight is short by the two extra `Paperless.Text` ones.
+sites, not eight**, and the brief's list of eight is short by the two extra `XRay.Office.Text` ones.
 Corrected in `TODO.24-2-7-audit.md` with the one-liner that regenerates it.
 
 ### 4. `090`'s missing navy banners look exactly like item 3 and are not item 3
@@ -259,7 +259,7 @@ The brief asked for the mechanism to be checked before anything is built on it. 
 - `DocxFrameContext` is `(DrawingTheme? Theme, bool InHeaderFooter, int CompatibilityMode)` — the
   colour scheme and nothing else. `DrawingStyleMatrix` is reached by `PptxSlideLayout`,
   `DrawingChartPlot`, `DrawingTableStyle` and `DrawingEffects`, and by **nothing** in
-  `Paperless.WordProcessing`. Seventh instance of "a route, not a rule", confirmed.
+  `XRay.Office.WordProcessing`. Seventh instance of "a route, not a rule", confirmed.
 - `DocxFrames.Appearance` returns `(fill, null, 0)` the moment `a:ln` is absent, and its own
   remarks name the style matrix as the half it does not do.
 - `056`: **39** zero-extent `wps:wsp` members, **34** with no `a:ln`, split **34 `prstGeom
@@ -273,13 +273,13 @@ are on the 5 `straightConnector1`s. So arrow ends are a five-shape job, not a bu
 
 ## Cross-track — measured, not argued
 
-`Paperless.Text/Layout/MeasuredParagraph.cs` is shared and is reached by `SlideTextLayout` and
+`XRay.Office.Text/Layout/MeasuredParagraph.cs` is shared and is reached by `SlideTextLayout` and
 `SheetTextLayout` as well as `PageContent`.
 
 **The anchor half has no reach outside word processing at all**, and that is checkable rather than
 argued: U+0001 is emitted by `DocxLayoutSource`, `OdtLayoutSource`, `Ww8DocumentReader` and the RTF
 reader, and by **no** presentation or spreadsheet reader (`git grep 'U+0001'` over
-`Paperless.Presentations` and `Paperless.Spreadsheets` returns only an XLS pivot-cache byte
+`XRay.Office.Presentations` and `XRay.Office.Spreadsheets` returns only an XLS pivot-cache byte
 constant). A slide or sheet would have to hold a literal U+0001 in its own text.
 
 **The break half was swept both ways.** The census found 17 break-only `a:p` in 7 decks (slides)
@@ -323,8 +323,8 @@ Two new files, **28 tests**, all passing:
 
 | file | tests | verified by reintroduction |
 |---|---:|---|
-| `Paperless.Text.Tests/ControlOnlyParagraphHeightTests.cs` | 15 | **11** detect it; 4 are the reach controls |
-| `Paperless.WordProcessing.Tests/AnchorRunHeightTests.cs` | 13 | both halves detected, by separate mutations |
+| `XRay.Office.Text.Tests/ControlOnlyParagraphHeightTests.cs` | 15 | **11** detect it; 4 are the reach controls |
+| `XRay.Office.WordProcessing.Tests/AnchorRunHeightTests.cs` | 13 | both halves detected, by separate mutations |
 
 Mutations run through `verify-test.sh`, tree clean before each and index asserted empty after:
 

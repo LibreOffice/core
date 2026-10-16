@@ -27,7 +27,7 @@ from collections import defaultdict
 BENCH = pathlib.Path("/data/bench")
 SCORES = BENCH / "scores"
 MAX_PAGES = 5
-ENGINES = ("paperless", "wasm-viewer")
+ENGINES = ("xray-office", "wasm-viewer")
 
 # A page counts as a defect only when the structure has genuinely diverged AND at
 # least one independent metric corroborates it.

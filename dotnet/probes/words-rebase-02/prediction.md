@@ -10,7 +10,7 @@ installed; `fc-match "DejaVu Sans"` → DejaVuSans.ttf. CLI is HEAD's build (no 
 ## P-1 — the thing the brief and my predecessor both got wrong (stated first, because it
 determines everything else)
 
-**Ours is not font-independent.** `Paperless.Text/Fonts/FontconfigPreferences.cs` reads
+**Ours is not font-independent.** `XRay.Office.Text/Fonts/FontconfigPreferences.cs` reads
 `/etc/fonts` and `GlyphFallback` emulates `FcFontMatch`. So installing DejaVu changes *our*
 rendering too, not only the reference's. Consequences I commit to before measuring:
 

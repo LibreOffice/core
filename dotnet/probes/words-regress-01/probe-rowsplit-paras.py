@@ -15,7 +15,7 @@ from mkdocx import write
 
 OPS = "/c/sandbox/workdir/libreoffice-core/.claude/skills/render-comparison/scripts/pdf-ops.py"
 OUT = sys.argv[1]
-CLI = os.environ.get("PAPERLESS_CLI")
+CLI = os.environ.get("XRAY_OFFICE_CLI")
 os.makedirs(OUT, exist_ok=True)
 GRID = '<w:tblGrid><w:gridCol w:w="7000"/></w:tblGrid>'
 

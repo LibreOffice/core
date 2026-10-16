@@ -223,7 +223,7 @@ through `verify-test.sh`, which refuses to start on a dirty tree:
 
 ## What proves the sweeps measured the change
 
-The snapshot CLI's `Paperless.Text.dll` hashes differ between the two copies and the newer one
+The snapshot CLI's `XRay.Office.Text.dll` hashes differ between the two copies and the newer one
 matches the tree's, and the sweep moved `tk-syllabus-comparison-document-v5.xlsx` from 852 pages
 to 855 — the one document whose page count the change was predicted to move, and the only one it
 did.

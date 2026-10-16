@@ -1,7 +1,7 @@
 # Sheets round twenty-six — probe data
 
 Base commit `d7fd6cf13`. Reference renderer LibreOffice 24.2.7.2. Every sweep ran against a
-checksummed copy of the CLI so a rebuild could not disturb it; the copy's `Paperless*.dll` hashes
+checksummed copy of the CLI so a rebuild could not disturb it; the copy's `XRay.Office*.dll` hashes
 were diffed against the tree's before each run started, and the `measuring …` line named the copy.
 
 | file | what it is |
@@ -189,7 +189,7 @@ rows' word counts move and none crosses a verdict; `Keywords_Mapping`'s embedded
 **The other half is a BIFF chart and is named rather than guessed at.** `XlsChartReader` sets no
 family at all, so `EHEST-Pre-departure-checklist…xls` still embeds no Carlito where the reference
 embeds two, and its 26-words-per-page chart residue is unchanged at 8018 against 8382. That is the
-next piece of this work and it is in `Paperless.Spreadsheets`, so it belongs to this track.
+next piece of this work and it is in `XRay.Office.Spreadsheets`, so it belongs to this track.
 
 ## Tests
 

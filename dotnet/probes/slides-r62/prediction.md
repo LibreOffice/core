@@ -106,7 +106,7 @@ Union on slides: **36 documents** (the five bars are in both lists).
   data-label column is known under-reaching — it reads `c:plotArea/c:dLbls` and a type group's,
   not `c:ser/c:dLbls`, which is where these decks put theirs. **Only the legend is implemented**,
   because only the legend has a rendering measurement behind it.
-- **The other two tracks.** `Paperless.Core/Charts` and `Paperless.Ooxml` are shared. 36 `.xlsx`
+- **The other two tracks.** `XRay.Office.Core/Charts` and `XRay.Office.Ooxml` are shared. 36 `.xlsx`
   documents are named above for the legend face and 9 for the legend order; **words: none**, and
   no `.docx` in the corpus has a chart part with a legend that either census flags. The parent
   gates the corpus.

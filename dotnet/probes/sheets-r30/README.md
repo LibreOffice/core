@@ -1,7 +1,7 @@
 # Sheets round thirty — probe data
 
 Base commit `946b3defc`, verified before measuring. Reference renderer LibreOffice 24.2.7.2. Both
-whole-track sweeps ran against a checksummed copy of the CLI, and the copy's `Paperless*.dll`
+whole-track sweeps ran against a checksummed copy of the CLI, and the copy's `XRay.Office*.dll`
 hashes were diffed against the tree's before each run started.
 
 | file | what it is |
@@ -46,7 +46,7 @@ ScfTools::PutItem(rItemSet, aItem, bSkipPoolDefs);
 ```
 
 It is unconditional — cell XFs and style XFs alike — and it is **the only line in all of
-`sc/source/filter` that touches the item**, so SpreadsheetML, XLSB and ODF keep the 20. `Paperless`
+`sc/source/filter` that touches the item**, so SpreadsheetML, XLSB and ODF keep the 20. `XRay.Office`
 had it as one constant, `SheetTextLayout.CellMargin`, shared by all three readers.
 
 ### It was being read as a page-origin offset, and it is not one
@@ -172,7 +172,7 @@ Every project run individually, whole output captured, **0 skipped** everywhere:
 
 Every count is the briefed known-good except Spreadsheets, which is 566 plus this round's 7.
 
-`Paperless.Fidelity.Tests` took an hour and three quarters to return, at a load average between 15
+`XRay.Office.Fidelity.Tests` took an hour and three quarters to return, at a load average between 15
 and 22 with three agents on four cores. It was written down as unrun rather than waited on, and then
 it finished: 550 of 550, none skipped. The note is left here because the reasoning that produced it
 stands — **a fidelity count taken under that load is exactly the one this project's own notes say

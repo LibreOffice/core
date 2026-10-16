@@ -154,17 +154,17 @@ That alone moved the document from 41 pages to **42**.
 
 | file | change |
 |---|---|
-| `src/Paperless.Text/Itemisation/FontItemiser.cs` | `NeedsFallback` — `Split`'s question without the list |
-| `src/Paperless.Text/Fonts/OpenTypeTables.cs` | `Os2Table.CodePageRange1` and `DeclaresEastAsianCodePage` |
-| `src/Paperless.Text/Fonts/LineSpacing.cs` | `MetricGrid.ScalesEastAsianFaces`, `AsWordDocument`, `EastAsianScaled`; applied before the leading |
-| `src/Paperless.Text/Layout/ScriptSpacing.cs` | new — the fifth of an em and its three refusals |
-| `src/Paperless.Text/Layout/MeasuredParagraph.cs` | the gap enters the prefix table; `SizeAt` |
-| `src/Paperless.WordProcessing/Layout/PageContent.cs` | `NeedsGlyphFallback`, `HasScriptSpace`, `AddsScriptSpace` |
-| `src/Paperless.WordProcessing/Layout/Paginator.cs` | routes on both |
-| `src/Paperless.WordProcessing/Layout/FlowLayouter.cs` | the same, for cells, headers and text boxes |
-| `src/Paperless.WordProcessing/Layout/PageDrawing.cs` | `ByScriptSpace`; the pen pays the gap |
-| `src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs` | Word grid, `AddsScriptSpace` |
-| `src/Paperless.WordProcessing/Ww8/DocReader.cs` | the same, plus `LevelLabel` |
+| `src/XRay.Office.Text/Itemisation/FontItemiser.cs` | `NeedsFallback` — `Split`'s question without the list |
+| `src/XRay.Office.Text/Fonts/OpenTypeTables.cs` | `Os2Table.CodePageRange1` and `DeclaresEastAsianCodePage` |
+| `src/XRay.Office.Text/Fonts/LineSpacing.cs` | `MetricGrid.ScalesEastAsianFaces`, `AsWordDocument`, `EastAsianScaled`; applied before the leading |
+| `src/XRay.Office.Text/Layout/ScriptSpacing.cs` | new — the fifth of an em and its three refusals |
+| `src/XRay.Office.Text/Layout/MeasuredParagraph.cs` | the gap enters the prefix table; `SizeAt` |
+| `src/XRay.Office.WordProcessing/Layout/PageContent.cs` | `NeedsGlyphFallback`, `HasScriptSpace`, `AddsScriptSpace` |
+| `src/XRay.Office.WordProcessing/Layout/Paginator.cs` | routes on both |
+| `src/XRay.Office.WordProcessing/Layout/FlowLayouter.cs` | the same, for cells, headers and text boxes |
+| `src/XRay.Office.WordProcessing/Layout/PageDrawing.cs` | `ByScriptSpace`; the pen pays the gap |
+| `src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs` | Word grid, `AddsScriptSpace` |
+| `src/XRay.Office.WordProcessing/Ww8/DocReader.cs` | the same, plus `LevelLabel` |
 
 The merge with `refdev-01` (§11) then reconciled `LineSpacing.cs` once more: `MetricGrid` carries
 both rounds' new fields, and both application-specific rules were moved onto the same
@@ -260,13 +260,13 @@ it is a missing repeat of a header row worth about thirty words rather than a me
 
 61 new assertions in three files, plus two existing tests updated.
 
-- `tests/Paperless.Text.Tests/EastAsianLineScaleTests.cs` — 38. Every expectation is a distance
+- `tests/XRay.Office.Text.Tests/EastAsianLineScaleTests.cs` — 38. Every expectation is a distance
   LibreOffice 26.2.4.2 drew, read out of its own PDF by `probe-cjk127.py`.
-- `tests/Paperless.Text.Tests/ScriptSpacingTests.cs` — 24, including both tdf exclusions.
-- `tests/Paperless.WordProcessing.Tests/UniformParagraphMeasurementTests.cs` — 6, through the
+- `tests/XRay.Office.Text.Tests/ScriptSpacingTests.cs` — 24, including both tdf exclusions.
+- `tests/XRay.Office.WordProcessing.Tests/UniformParagraphMeasurementTests.cs` — 6, through the
   layouters rather than through `Measure()`, which is where the choice is actually made.
-- `tests/Paperless.Text.Tests/ItemisationTests.cs` — `NeedsFallback`, and the invariant it supports.
-- `tests/Paperless.WordProcessing.Tests/ReferenceDeviceWiringTests.cs` — two tests updated: they
+- `tests/XRay.Office.Text.Tests/ItemisationTests.cs` — `NeedsFallback`, and the invariant it supports.
+- `tests/XRay.Office.WordProcessing.Tests/ReferenceDeviceWiringTests.cs` — two tests updated: they
   correctly caught the grid changing, and now assert the device *and* the compatibility flag.
 
 ### Verified failing against the unfixed behaviour
@@ -293,24 +293,24 @@ way only, and the file now says which way and why.
 
 | project | result |
 |---|---|
-| `Paperless.Core.Tests` | 337 passed |
-| `Paperless.Containers.Tests` | 109 passed |
-| `Paperless.Text.Tests` | 563 passed |
-| `Paperless.Vector.Tests` | 295 passed |
-| `Paperless.Rendering.Tests` | 150 passed, 1 skipped |
-| `Paperless.Markup.Tests` | 259 passed |
-| `Paperless.OpenDocument.Tests` | 125 passed |
-| `Paperless.Spreadsheets.Tests` | 853 passed |
-| `Paperless.Presentations.Tests` | 717 passed |
-| `Paperless.WordProcessing.Tests` | 903 passed |
-| `Paperless.Fidelity.Tests` | 520 passed, **30 failed**, 0 skipped, 550 total |
+| `XRay.Office.Core.Tests` | 337 passed |
+| `XRay.Office.Containers.Tests` | 109 passed |
+| `XRay.Office.Text.Tests` | 563 passed |
+| `XRay.Office.Vector.Tests` | 295 passed |
+| `XRay.Office.Rendering.Tests` | 150 passed, 1 skipped |
+| `XRay.Office.Markup.Tests` | 259 passed |
+| `XRay.Office.OpenDocument.Tests` | 125 passed |
+| `XRay.Office.Spreadsheets.Tests` | 853 passed |
+| `XRay.Office.Presentations.Tests` | 717 passed |
+| `XRay.Office.WordProcessing.Tests` | 903 passed |
+| `XRay.Office.Fidelity.Tests` | 520 passed, **30 failed**, 0 skipped, 550 total |
 
 **The Fidelity baseline was established first, at 30 of 550, and it is the same 30 afterwards — the
 names, not merely the count**, before the merge and after it. The first capture of that baseline was
 truncated by piping the run through `tail`, which made the comparison worthless; a true "before"
 binary was built and the two lists diff clean.
 
-**`Paperless.Presentations.Tests` produced no summary line at all** on the first pass of the
+**`XRay.Office.Presentations.Tests` produced no summary line at all** on the first pass of the
 per-project loop. Per `dotnet/CLAUDE.md` that is a truncated run rather than a result, so it was
 re-run alone three times: 717, 717, 717, against **717 discovered** by `--list-tests`. Recorded
 because a missing summary in a loop is easy to read past.

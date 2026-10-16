@@ -65,7 +65,7 @@ Usage
 
     python3 dotnet/probes/advance-divergence/kerning-vs-advance.py /abs/workdir
 
-Needs `soffice` and `PAPERLESS_CLI` set. Writes its docx and both PDFs under the
+Needs `soffice` and `XRAY_OFFICE_CLI` set. Writes its docx and both PDFs under the
 given directory.
 """
 
@@ -159,9 +159,9 @@ def lines(pdf: str) -> list[tuple[float, float]]:
 
 def main() -> int:
     out = sys.argv[1] if len(sys.argv) > 1 else '/tmp/advance-divergence'
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     if not cli:
-        raise SystemExit('set PAPERLESS_CLI to the tree you mean to measure')
+        raise SystemExit('set XRAY_OFFICE_CLI to the tree you mean to measure')
 
     os.makedirs(os.path.join(out, 'ours'), exist_ok=True)
     docx = os.path.join(out, 'kern.docx')

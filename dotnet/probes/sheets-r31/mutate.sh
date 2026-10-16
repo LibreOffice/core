@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # The reintroduced defects round thirty-one's tests were verified against.
 #
-#   .claude/skills/corpus-batches/scripts/verify-test.sh Paperless.Spreadsheets "<one line below>"
+#   .claude/skills/corpus-batches/scripts/verify-test.sh XRay.Office.Spreadsheets "<one line below>"
 #
 # Exit 0 means the mutation was detected, 1 means nothing caught it, 2 means it refused to run
 # or would not build. Run from the worktree root, on a clean `dotnet/`.
 
-L=dotnet/src/Paperless.Spreadsheets/Layout
-O=dotnet/src/Paperless.Spreadsheets/Ooxml
+L=dotnet/src/XRay.Office.Spreadsheets/Layout
+O=dotnet/src/XRay.Office.Spreadsheets/Ooxml
 
 # 1. The collapsed outline group is never applied — the code as it stood before this round.
 #    Expect: every SheetOutlineCollapseTests case that reads the grid fails.

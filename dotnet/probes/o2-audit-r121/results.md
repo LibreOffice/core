@@ -5,7 +5,7 @@ Four early seat numbers break it by appearing in no row of any section — **O1,
 This round closes all four and measures the two live pieces inside O2.
 
 Everything below was measured at HEAD `90b5b2207` with the CLI gate r119 itself built
-(`/home/user/gate-r119-cli/Paperless.Cli`, 05:05 UTC today) — no rebuild, so our leg is the
+(`/home/user/gate-r119-cli/XRay.Office.Cli`, 05:05 UTC today) — no rebuild, so our leg is the
 same binary the banked gate used, and `TICAPCapability_Final.pdf` re-renders to the gate's
 own 256 856 bytes exactly. Reference is `/opt/libreoffice26.2/program/soffice`, 26.2.4.2.
 
@@ -297,7 +297,7 @@ NOT WORK / nil-reach table (O66, O67). Nothing was deleted; `~~N14~~` gained a c
 |---|---|
 | `banner-geometry.py` | the `#00007E` rectangle on phuket p26 with its paint operator, over any number of renders → `banner-geometry.tsv` |
 | `xls-blip-reach.py` | a BIFF workbook's Escher blip store and every shape's `pib`/`pictureId`/flags → `ticap-blip-reach.txt` |
-| `ticap-blip-merge.py` | decodes one blip's SRCAND + SRCPAINT DIBs, merges them outside Paperless, compares against our own image and `/SMask` |
+| `ticap-blip-merge.py` | decodes one blip's SRCAND + SRCPAINT DIBs, merges them outside X-Ray.Office, compares against our own image and `/SMask` |
 | `metafile-base-rate.py` | C9's denominator behind r94's `srcand-census.tsv` → `metafile-base-rate.txt` |
 | `oleobj-census.py` | `p:oleObj` on corpus slides, with the frame and the stated `imgW`/`imgH` → `oleobj-census.tsv` |
 | `ole-transform.py` | the non-unit `cm` a page emits and the origin divergence of every shared text record → `ole-transform.txt` |

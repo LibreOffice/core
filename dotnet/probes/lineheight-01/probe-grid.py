@@ -19,7 +19,7 @@ against:
 `round` is half away from zero throughout, which is what C++ `std::round`/`llround` give.
 
 Usage:  probe-grid.py <outdir>          measure the reference and score the model
-        PAPERLESS_CLI=... probe-grid.py <outdir>   also score the tree under test
+        XRAY_OFFICE_CLI=... probe-grid.py <outdir>   also score the tree under test
 """
 import os, subprocess, sys, re, struct, math
 
@@ -30,7 +30,7 @@ from mkdocx import write
 REPO = "/c/sandbox/workdir/libreoffice-core"
 OPS = os.path.join(REPO, ".claude/skills/render-comparison/scripts/pdf-ops.py")
 OUT = sys.argv[1]
-CLI = os.environ.get("PAPERLESS_CLI")
+CLI = os.environ.get("XRAY_OFFICE_CLI")
 os.makedirs(OUT, exist_ok=True)
 
 L = "/usr/share/fonts/truetype/liberation/"

@@ -40,7 +40,7 @@ with `SOURCE_DATE_EPOCH=1700000000` and `TZ=UTC`, and every byte comparison repo
 the date-normalised count side by side — they agree everywhere, which is the check that the dates
 were actually pinned rather than merely masked.
 
-`PAPERLESS_CLI` was set explicitly to the worktree's own binary for every sweep.
+`XRAY_OFFICE_CLI` was set explicitly to the worktree's own binary for every sweep.
 
 ## 2. The prediction, and how it did
 
@@ -72,7 +72,7 @@ destination)` needs a `destination` and there is none, because:
 - **words** — a `PageFrame` carries a size and an anchor; `FrameLayout` resolves the rectangle and
   `PageDrawing.DrawFrame` receives it as `PlacedFrame.Area`.
 
-So the crop has to travel. `Paperless.Core.Geometry.PictureCropFractions` is the value it travels
+So the crop has to travel. `XRay.Office.Core.Geometry.PictureCropFractions` is the value it travels
 as — four fractions, an `IsNone`, and an `Apply` that is `PictureCrop.Uncropped` with the
 keeps-nothing null turned back into the rectangle it was given. `EscherPicture.Crop(properties)`
 returns it and `EscherPicture.Cropped` becomes `Crop(properties).Apply(destination)`, so the three
@@ -90,7 +90,7 @@ the corpus carrying a picture. That is pinned by a test on each track.
 So each site is three changes — carry, apply, clip — not one.
 
 **Two things this touched that the brief expected to be untouched**, and both are why the slides
-sweep below is load-bearing rather than a formality: `Paperless.Core` gains one new file, and
+sweep below is load-bearing rather than a formality: `XRay.Office.Core` gains one new file, and
 `EscherPicture.Cropped` is re-expressed through `Crop(...).Apply(...)`. Neither changes behaviour,
 and **0 of 163 slide renderings** is the evidence rather than the argument.
 
@@ -351,7 +351,7 @@ assertions be tight enough to catch anything.
 ## 8. Final state
 
 ```
-dotnet build Paperless.slnx -v q -nologo     0 Warning(s)   0 Error(s)
+dotnet build XRay.Office.slnx -v q -nologo     0 Warning(s)   0 Error(s)
 ```
 
 | project | before | after |
@@ -369,7 +369,7 @@ dotnet build Paperless.slnx -v q -nologo     0 Warning(s)   0 Error(s)
 | **total** | **3494** | **3520**, 0 failed, 1 skipped |
 
 The brief's per-project baseline reproduced exactly, project for project, before any addition.
-`Paperless.Fidelity.Tests` was not run.
+`XRay.Office.Fidelity.Tests` was not run.
 
 ## 9. Read versus inferred
 

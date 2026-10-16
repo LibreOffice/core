@@ -10,8 +10,8 @@
 # usage: reach.sh <glob> <outdir> <jobs>
 set -u
 GLOB="$1"; OUT="$2"; JOBS="${3:-2}"
-BASE="${BASE_CLI:-/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli}"
-HEAD="${HEAD_CLI:-/home/user/wt-pptxfield/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli}"
+BASE="${BASE_CLI:-/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli}"
+HEAD="${HEAD_CLI:-/home/user/wt-pptxfield/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli}"
 export SOURCE_DATE_EPOCH=1700000000
 mkdir -p "$OUT/movers"
 : > "$OUT/rows.tsv"

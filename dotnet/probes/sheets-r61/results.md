@@ -170,7 +170,7 @@ number that was wrong four times.
 
 ## 6. Tests: **+11**, and five mutations
 
-`Paperless.Core` **376 → 387**. Re-derived by running each project: Containers 109, Core 387,
+`XRay.Office.Core` **376 → 387**. Re-derived by running each project: Containers 109, Core 387,
 Markup 259, OpenDocument 125, Presentations 846, Rendering 153 (+1 skipped), Spreadsheets 1020,
 Text 624, Vector 302, WordProcessing 1220 — **5045 passed, 0 failed, 1 skipped**.
 `dotnet build -v q -nologo` → **0 warnings, 0 errors**.
@@ -190,7 +190,7 @@ reduced one. Its four-glyph sibling is the control and must not shrink at all. T
 theories **are** drift guards — they restate the arithmetic — and are labelled as such at the site;
 what gives them teeth is that dropping either term fails them.
 
-## 7. Shared layer — this diff is `Paperless.Core` and the parent owes a cross-track sweep
+## 7. Shared layer — this diff is `XRay.Office.Core` and the parent owes a cross-track sweep
 
 `ChartLayout.cs` and `ChartLayout.PieLabels.cs` are reached by `SheetChart`, `SlideChart` and
 `FrameChart` alike. `census-piestitles.py`, both readers, all **946** manifest paths, case-folded
@@ -321,7 +321,7 @@ lines — 21 `VERIFIED`, 4 `FIXED`, 1 `WRONG`, 0 `UNDECIDED`**. That is the brie
 (The naive `git grep -l '24\.2\.7'` gives **30** files, because four of them carry only marker
 lines; the file's own rule is to count files over the *open* sites, which gives 26.)
 
-**`Paperless.Ooxml/DrawingML/DrawingFill.cs`:115 — `a:lum` as a whole per cent — VERIFIED on
+**`XRay.Office.Ooxml/DrawingML/DrawingFill.cs`:115 — `a:lum` as a whole per cent — VERIFIED on
 26.2.4.2.** The site claims
 `getLimitedValue<sal_Int16>(value / PER_PERCENT, -100, 100)`, i.e. **truncation** to whole per cent,
 and that the washout branch tests that integer for exactly 70 and −70.
@@ -345,7 +345,7 @@ they had to before either was read. The washout itself is visible in the numbers
 near-neutral pale wash where `applyBrightnessContrast` is not. C#'s integer division truncates
 toward zero for a negative operand exactly as C++'s does, so the contrast half needs no second arm.
 
-`Paperless.Ooxml` is now **one of one** re-checked. The site is marked at the file and the outcome
+`XRay.Office.Ooxml` is now **one of one** re-checked. The site is marked at the file and the outcome
 table and the progress table in `TODO.24-2-7-audit.md` are updated.
 
 ## 10. `MANIFEST.tsv`

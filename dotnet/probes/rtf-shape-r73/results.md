@@ -2,7 +2,7 @@
 
 ## Environment
 
-    ours   = Paperless.Cli @ 97628b7fe (base) and @ ff61dd5ad (after), Debug
+    ours   = XRay.Office.Cli @ 97628b7fe (base) and @ ff61dd5ad (after), Debug
     ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 (TDF tarball),
              all four font confounds aside — 38 faces in .duplicates-aside, 8 in .noto-aside,
              no LiberationSansNarrow anywhere
@@ -72,7 +72,7 @@ The reader now maps 1 and folds every other value into the frame, which is what 
 
 ## What the fifteen actually were: three defects, and none of them the origin
 
-`paperless extract` against our own rendering had already separated *drawn short, read whole*
+`xray-office extract` against our own rendering had already separated *drawn short, read whole*
 from the rest; what it could not say is why. Rendering all fifteen through 26.2.4.2 and
 differencing the two word *sets* — rather than the counts — splits them immediately.
 
@@ -290,7 +290,7 @@ four. Added to `dotnet/TODO.raster-ceiling.md` so no later round re-derives them
 
 ```sh
 export TMPDIR=/home/user/wt-rtfshape/.work/tmp
-export PAPERLESS_CLI=<tree>/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=<tree>/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 R=dotnet/probes/rtf-shape-r73
 
 python3 $R/gen.py /abs/probes && $R/render.sh /abs/probes /abs/probeout

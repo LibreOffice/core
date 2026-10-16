@@ -7,7 +7,7 @@ D="${1:-$SP/band}"
 mkdir -p "$D/ours" "$D/ref" "$D/odp"
 for f in "$D"/*.pptx; do
   b=$(basename "$f" .pptx)
-  SOURCE_DATE_EPOCH=1700000000 "$SP/cli-base/Paperless.Cli" render "$f" --format pdf --outdir "$D/ours" >/dev/null 2>&1
+  SOURCE_DATE_EPOCH=1700000000 "$SP/cli-base/XRay.Office.Cli" render "$f" --format pdf --outdir "$D/ours" >/dev/null 2>&1
   timeout 300 soffice --headless -env:UserInstallation=file://$SP/prof-band --convert-to pdf --outdir "$D/ref" "$f" >/dev/null 2>&1
   timeout 300 soffice --headless -env:UserInstallation=file://$SP/prof-band --convert-to odp --outdir "$D/odp" "$f" >/dev/null 2>&1
   echo "$b done"

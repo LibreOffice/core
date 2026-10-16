@@ -99,7 +99,7 @@ and it should be measured before it is written.
 
 ```sh
 python3 mutate.py /abs/variants
-CLI=<tree>/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+CLI=<tree>/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 for f in /abs/variants/*.docx; do
   SOURCE_DATE_EPOCH=1700000000 $CLI render --quiet --outdir /abs/out/ours "$f"
   /opt/libreoffice26.2/program/soffice --headless --convert-to pdf --outdir /abs/out/ref26 "$f"

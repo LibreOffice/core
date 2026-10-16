@@ -170,9 +170,9 @@ The transform is the second gate and is real: **81 frames in 5 documents state
 alone, **336 in 13 documents**, so the shapes this reader does not read at all (380
 `draw:custom-shape`, 78 `draw:control`, 31 `draw:connector`, 17 `draw:line` at the top level of
 a cell) carry most of the remainder. `OdfTransform` is the parser, moved out of
-`OdpSlideLayout` into `Paperless.OpenDocument` verbatim for the reason `dotnet/CLAUDE.md` gives
-for `Paperless.Ooxml/DrawingML`: it reads markup, depends on nothing above Core, and now serves
-two families instead of one. `Paperless.Presentations.Tests` is 982 of 982 before and after the
+`OdpSlideLayout` into `XRay.Office.OpenDocument` verbatim for the reason `dotnet/CLAUDE.md` gives
+for `XRay.Office.Ooxml/DrawingML`: it reads markup, depends on nothing above Core, and now serves
+two families instead of one. `XRay.Office.Presentations.Tests` is 982 of 982 before and after the
 move.
 
 **What a turned frame's rectangle is, and why it is the box rather than the shape.** The
@@ -289,7 +289,7 @@ leading spaces, three inner spaces — in a column too narrow for them agree wit
   pages of content in the same order, 15 then 6. The sheet declares 11 used columns and then 246
   more carrying a default cell style and nothing else, so the difference is how far right the
   used area reaches over styled-but-empty columns and how many of the resulting empty pages
-  survive `SkipEmpty`. `dotnet/src/Paperless.Spreadsheets/TODO.md`'s *"the used area counts
+  survive `SkipEmpty`. `dotnet/src/XRay.Office.Spreadsheets/TODO.md`'s *"the used area counts
   cells with content only"* is the seat.
 - **`SIL_TDB648.ods`, 92 against 88.** Four pages long where it was 28 short. The watermark's
   bounding boxes agree with the reference to about 1.5 pt each, so the residue is which of them

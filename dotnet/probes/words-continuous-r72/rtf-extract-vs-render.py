@@ -3,7 +3,7 @@
 
     rtf-extract-vs-render.py <list> <ours-pdf-dir> <rows.tsv> [corpus-root]
 
-For each document: the alphanumeric characters `paperless extract` reads, the ones our own
+For each document: the alphanumeric characters `xray-office extract` reads, the ones our own
 rendering puts in its PDF's text layer, and the ones the reference's does. Extraction close to
 the reference with the rendering far below it is a *drawing* gap and not a reading one — the
 distinction round 71 could not make from the gate columns alone.
@@ -13,8 +13,8 @@ from pathlib import Path
 
 LIST, OURS, ROWS = (Path(a) for a in sys.argv[1:4])
 ROOT = Path(sys.argv[4] if len(sys.argv) > 4 else '/home/user/corpus-odf')
-CLI = Path('/home/user/wt-words69/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/'
-           'Paperless.Cli')
+CLI = Path('/home/user/wt-words69/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/'
+           'XRay.Office.Cli')
 
 
 def alnum(text):

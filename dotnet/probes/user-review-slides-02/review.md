@@ -38,7 +38,7 @@ is also very different. LibreOffice doesn't render all vertical axis labels.
 transparent color feature? Second line on header has wrong placement (maybe tabs spacing used to
 place it).
 
-**16 - UTM - (NASA)** — Title missing underline. Text is less dense vertically on Paperless.
+**16 - UTM - (NASA)** — Title missing underline. Text is less dense vertically on X-Ray.Office.
 
 **architecture6** — Table cell sizes are different.
 

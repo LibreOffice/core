@@ -13,8 +13,8 @@ from pathlib import Path
 CORPUS = Path('/home/user/sample-files')
 GATE = Path('/home/user/gate-2f47')
 OUT = Path('/home/user/tmp-secaxis/sweep')
-CLI = ('/home/user/wt-secaxis/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/'
-       'Paperless.Cli')
+CLI = ('/home/user/wt-secaxis/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/'
+       'XRay.Office.Cli')
 
 def identity(p): return f"{p.stem}__{p.suffix.lstrip('.').lower()}"
 

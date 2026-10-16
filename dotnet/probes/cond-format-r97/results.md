@@ -490,7 +490,7 @@ negative).
 
 ## 5. Confinement and the suite
 
-**The diff is confined to `dotnet/src/Paperless.Spreadsheets`** — nine files, two of them new — and
+**The diff is confined to `dotnet/src/XRay.Office.Spreadsheets`** — nine files, two of them new — and
 nothing under `dotnet/src` outside it changes. That is the argument for reusing the banked
 reference half; §4 is the *measurement* of the same thing, and it is stronger than the argument:
 940 of 947 renderings byte-identical means no words document, no deck and no other workbook moved,
@@ -501,26 +501,26 @@ Clean build of the whole solution at `-c Release`: **0 warnings, 0 errors**, wit
 
 | project | | |
 |---|---:|---|
-| `Paperless.Core.Tests` | 521 | ✓ |
-| `Paperless.Markup.Tests` | 259 | ✓ |
-| `Paperless.Text.Tests` | 728 | ✓ |
-| `Paperless.Containers.Tests` | 109 | ✓ |
-| `Paperless.Vector.Tests` | 309 | ✓ |
-| `Paperless.Rendering.Tests` | 164 | ✓ |
-| `Paperless.OpenDocument.Tests` | 146 | ✓ |
-| `Paperless.WordProcessing.Tests` | 1885 | ✓ |
-| `Paperless.Spreadsheets.Tests` | 1270 | ✓ (1269 at the base, +1 for arm (4)) |
-| `Paperless.Presentations.Tests` | 1044 | ✓ |
+| `XRay.Office.Core.Tests` | 521 | ✓ |
+| `XRay.Office.Markup.Tests` | 259 | ✓ |
+| `XRay.Office.Text.Tests` | 728 | ✓ |
+| `XRay.Office.Containers.Tests` | 109 | ✓ |
+| `XRay.Office.Vector.Tests` | 309 | ✓ |
+| `XRay.Office.Rendering.Tests` | 164 | ✓ |
+| `XRay.Office.OpenDocument.Tests` | 146 | ✓ |
+| `XRay.Office.WordProcessing.Tests` | 1885 | ✓ |
+| `XRay.Office.Spreadsheets.Tests` | 1270 | ✓ (1269 at the base, +1 for arm (4)) |
+| `XRay.Office.Presentations.Tests` | 1044 | ✓ |
 | **ten projects** | **6435** | **0 failed** |
 
-`Paperless.Fidelity.Tests`: **542 passed, 10 failed of 552**, and the ten are exactly the known
+`XRay.Office.Fidelity.Tests`: **542 passed, 10 failed of 552**, and the ten are exactly the known
 names — `PageDrawingComparisonTests` ×4 (`paginated.` `rtf`/`docx`/`doc`/`fodt`),
 `TabStopComparisonTests` ×4 (`list-label-overrun.` `doc`/`docx`/`fodt`/`odt`),
 `SheetDrawingComparisonTests` (`sheet-rich-text.xlsx`) and `JustificationShrinkComparisonTests`
 (`justify-shrink-2013.docx`). No eleventh failure.
 
 **And one instrument note that this round nearly banked a false figure on.**
-`Paperless.WordProcessing.Tests` reported **`Passed! … 870`** on the first run of the pass and
+`XRay.Office.WordProcessing.Tests` reported **`Passed! … 870`** on the first run of the pass and
 **1885** on the last, both with `Failed: 0` and nothing between them touching that project.
 `dotnet test --list-tests` discovers **1885**, and 1885 reproduced on a second consecutive run — so
 the *first* run was the truncated one, and it announced itself as a pass. `dotnet/CLAUDE.md`'s

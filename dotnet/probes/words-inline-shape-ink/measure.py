@@ -8,7 +8,7 @@ Reports, in PDF points from the page top, per fixture and per renderer:
   INSIDE      the run inside a `wps:txbx`, where the fixture has one.
 
 Renders through `/usr/bin/soffice`, `/opt/libreoffice26.2/program/soffice` and
-`$PAPERLESS_CLI`, so the version question is re-checked on every run.
+`$XRAY_OFFICE_CLI`, so the version question is re-checked on every run.
 """
 import subprocess, sys, os, re, glob
 
@@ -46,7 +46,7 @@ def band(pdf, dpi=288):
 def render(who, doc, outdir):
     os.makedirs(outdir, exist_ok=True)
     if who == 'ours':
-        subprocess.run([os.environ['PAPERLESS_CLI'], 'render', doc, '--format', 'pdf',
+        subprocess.run([os.environ['XRAY_OFFICE_CLI'], 'render', doc, '--format', 'pdf',
                         '--outdir', outdir], capture_output=True, timeout=300)
     else:
         subprocess.run([SOF[who], f'-env:UserInstallation=file://{outdir}/prof', '--headless',

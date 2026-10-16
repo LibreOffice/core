@@ -10,7 +10,7 @@ set -e
 DOC="$1"; OUT="$2"
 REF="${REF_SOFFICE:-/opt/libreoffice26.2/program/soffice}"
 KEY=$(printf '%s' "$DOC$OUT" | md5sum | cut -c1-16)
-PROF="/tmp/paperless-lo-$KEY"
+PROF="/tmp/xray-office-lo-$KEY"
 mkdir -p "$OUT" "$PROF"
 timeout -k 30 240 "$REF" --headless --norestore \
     "-env:UserInstallation=file://$PROF" \

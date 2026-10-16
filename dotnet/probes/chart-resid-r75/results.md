@@ -93,7 +93,7 @@ Left.
 
 ### What moved
 
-`ChartClipping` (new, `Paperless.Core/Charts`) is the port; `ChartLayout.AddLines` collects each
+`ChartClipping` (new, `XRay.Office.Core/Charts`) is the port; `ChartLayout.AddLines` collects each
 series into runs broken at its gaps, clips each run, and emits one subpath per surviving piece.
 A point `ChartClipping.Contains` rejects is kept out of the list markers and data labels are made
 from.
@@ -326,7 +326,7 @@ measured here.
 ```sh
 export PATH=/opt/libreoffice26.2/program:$PATH        # 26.2.4.2, never /usr/bin/soffice
 export SOURCE_DATE_EPOCH=1700000000
-CLI=<worktree>/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+CLI=<worktree>/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 
 python3 sweep.py "$CLI" ../chart-fit/census.tsv after 2                   # OOXML charts
 CORPUS=/home/user/corpus-odf python3 sweep.py "$CLI" odf-charts.tsv odf-after 2

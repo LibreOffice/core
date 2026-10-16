@@ -1,8 +1,8 @@
 // The frames a word-processing document lays out, page by page: what a rendering shows as a
 // picture, with the anchor and the inline ascent that decide where it goes.
-using Paperless.Core.Documents;
-using Paperless.WordProcessing;
-using Paperless.WordProcessing.Layout;
+using XRay.Office.Core.Documents;
+using XRay.Office.WordProcessing;
+using XRay.Office.WordProcessing.Layout;
 
 internal static class Frames
 {

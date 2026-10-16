@@ -8,7 +8,7 @@ ordinary `p:sp` text box on the same slide of the same deck, so the two are draw
 binary from one document into one PDF and the only difference is which of the two paths laid
 the text out.
 
-Usage:  PAPERLESS_CLI=... python3 chart-vs-textbox.py <workdir>
+Usage:  XRAY_OFFICE_CLI=... python3 chart-vs-textbox.py <workdir>
 """
 
 import os
@@ -75,7 +75,7 @@ def render(binary: str, document: str, directory: str) -> str:
 
 def main() -> int:
     out = os.path.abspath(sys.argv[1])
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     os.makedirs(out, exist_ok=True)
     advance = design_advance()
 

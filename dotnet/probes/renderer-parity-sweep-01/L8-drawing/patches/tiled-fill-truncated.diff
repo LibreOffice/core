@@ -1,6 +1,6 @@
-diff --git a/dotnet/src/Paperless.Rendering/Fills/Tiles.cs b/dotnet/src/Paperless.Rendering/Fills/Tiles.cs
---- a/dotnet/src/Paperless.Rendering/Fills/Tiles.cs
-+++ b/dotnet/src/Paperless.Rendering/Fills/Tiles.cs
+diff --git a/dotnet/src/XRay.Office.Rendering/Fills/Tiles.cs b/dotnet/src/XRay.Office.Rendering/Fills/Tiles.cs
+--- a/dotnet/src/XRay.Office.Rendering/Fills/Tiles.cs
++++ b/dotnet/src/XRay.Office.Rendering/Fills/Tiles.cs
 @@ -15,15 +15,33 @@
  internal static class Tiles
  {

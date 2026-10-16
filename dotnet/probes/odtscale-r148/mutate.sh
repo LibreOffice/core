@@ -5,9 +5,9 @@
 set -e
 cd "$(dirname "$0")/../.."
 
-FMT=src/Paperless.WordProcessing/OpenDocument/OdfParagraphFormats.cs
-SRC=src/Paperless.WordProcessing/OpenDocument/OdtLayoutSource.cs
-WS=src/Paperless.Text/Layout/TextWidthScale.cs
+FMT=src/XRay.Office.WordProcessing/OpenDocument/OdfParagraphFormats.cs
+SRC=src/XRay.Office.WordProcessing/OpenDocument/OdtLayoutSource.cs
+WS=src/XRay.Office.Text/Layout/TextWidthScale.cs
 
 cp "$FMT" /tmp/r148.fmt; cp "$SRC" /tmp/r148.src; cp "$WS" /tmp/r148.ws
 
@@ -20,7 +20,7 @@ trap restore EXIT
 
 run() {
     printf '\n=== %s ===\n' "$1"
-    dotnet test tests/Paperless.WordProcessing.Tests/Paperless.WordProcessing.Tests.csproj \
+    dotnet test tests/XRay.Office.WordProcessing.Tests/XRay.Office.WordProcessing.Tests.csproj \
         --filter 'FullyQualifiedName~OdtCharacterScale' 2>&1 | grep -E '^(Passed!|Failed!|  Failed )' || true
     restore
 }

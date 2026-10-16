@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """How much of a growing frame's text never reaches the page.
 
-`paperless extract` walks the content tree and never lays anything out, so it reports what a
+`xray-office extract` walks the content tree and never lays anything out, so it reports what a
 document holds; the render reports what was drawn.  A frame taller than the room left on its
 page draws its tail outside the sheet, where `pdftotext` cannot see it — so
 render << extract is the signature of a frame that the reference splits and we do not.

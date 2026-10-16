@@ -73,7 +73,7 @@ def build_case(rec: dict, eng: str, height=PANEL_H):
     w = rec["engines"][eng]["worst_defect"]
     page = w["page"]
     ref = pdf_rgb(BENCH / "lo" / rec["id"] / "out.pdf", page - 1)
-    if eng == "paperless":
+    if eng == "xray-office":
         cand = pdf_rgb(BENCH / "pl" / rec["id"] / "out.pdf", page - 1)
     else:
         cand = viewer_png(rec["id"], page)
@@ -101,7 +101,7 @@ def main() -> int:
     per = int(sys.argv[1]) if len(sys.argv) > 1 else 3
     out = {}
     for fam in ("docs", "sheets", "slides"):
-        for eng in ("paperless", "wasm-viewer"):
+        for eng in ("xray-office", "wasm-viewer"):
             rows = [d for d in docs
                     if d["family"] == fam and d["engines"][eng]["worst_defect"]]
             rows.sort(key=lambda r: r["engines"][eng]["worst_defect"]["ssim"])
@@ -123,7 +123,7 @@ def main() -> int:
             mid = done[len(done) // 2]
             e = mid["engines"][eng]
             ref = pdf_rgb(BENCH / "lo" / mid["id"] / "out.pdf", 0)
-            cand = (pdf_rgb(BENCH / "pl" / mid["id"] / "out.pdf", 0) if eng == "paperless"
+            cand = (pdf_rgb(BENCH / "pl" / mid["id"] / "out.pdf", 0) if eng == "xray-office"
                     else viewer_png(mid["id"], 1))
             out[f"{fam}|{eng}|median"] = [{
                 "path": mid["path"], "name": mid["path"].rsplit("/", 1)[-1],

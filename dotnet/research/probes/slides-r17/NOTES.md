@@ -143,7 +143,7 @@ attribute is exactly the kind of thing a later round would blame:
 `oox/source/drawingml/chart/objectformatter.cxx:1087-1091`, **byte-identical in 24.2.7.2** — so
 the rotation reads as zero and line breaking is allowed on both sides. `DrawingChartPlot.AxisTextOf`
 already implements that clamp correctly. The disagreement is therefore in **how much width the
-axis gives each category slot** in `Paperless.Core/Charts`, which is a shared layer and was left
+axis gives each category slot** in `XRay.Office.Core/Charts`, which is a shared layer and was left
 alone this round. Removing pages 5, 6 and 16 leaves 2106 against 2108.
 
 
@@ -162,7 +162,7 @@ alone this round. Removing pages 5, 6 and 16 leaves 2106 against 2108.
    width of tens of thousands, against the ~0.3 of a unit the em was out by — so it is worth
    doing and worth doing *after* the em, not with it, because they would not be separable.
 
-3. **`8_P-Pavese` page 16's axis slot width**, in `Paperless.Core/Charts`. It is the whole of
+3. **`8_P-Pavese` page 16's axis slot width**, in `XRay.Office.Core/Charts`. It is the whole of
    that document's remaining word-gate failure once its two raster pages are set aside, and it
    is a shared layer, so it needs the words and sheets sweeps as well.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Render every document under a directory with both LibreOffice and Paperless, and
+# Render every document under a directory with both LibreOffice and X-Ray.Office, and
 # report whether the two PDFs agree.
 #
 #   corpus-parity.sh <dir> [outdir]
@@ -32,7 +32,7 @@ echo "reference $(command -v "$REF") -- $("$REF" --version 2>/dev/null | head -1
 DIR="${1:?usage: corpus-parity.sh <dir> [outdir]}"
 OUT="${2:-$(mktemp -d)}"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
-CLI="$ROOT/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI="$ROOT/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 
 [ -x "$CLI" ] || { echo "no CLI at $CLI — build it first" >&2; exit 1; }
 mkdir -p "$OUT/ours" "$OUT/ref"

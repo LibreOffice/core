@@ -32,7 +32,7 @@ SRC = "/c/sandbox/workdir/sample-files/sheets/chartset-002/xlsx/003_advanced_exc
 OUT = "/c/sandbox/workdir/scratch-r61-sheets/titlepos"
 ROOT = "/c/sandbox/workdir/wt-sheets-r50"
 PDFOPS = ROOT + "/.claude/skills/render-comparison/scripts/pdf-ops.py"
-CLI = ROOT + "/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = ROOT + "/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 
 SIZES = [600, 800, 1000, 1200, 1400, 1800, 2200, 2800, 3600]
 BOLDS = [1, 0]

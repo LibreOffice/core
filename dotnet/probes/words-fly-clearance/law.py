@@ -13,13 +13,13 @@ strip beside it to wrap into, which is the case `Paginator.FillsTheColumn` answe
 Observables, both read out of the PDF text layer with `pdftotext -bbox`: `MARK`'s y, which is the
 anchored frame's own position, and `AFTER`'s y, which is where the flow reached.
 
-Usage: PAPERLESS_CLI=<cli> python3 law.py <outdir>
+Usage: XRAY_OFFICE_CLI=<cli> python3 law.py <outdir>
 """
 import os, re, subprocess, sys, zipfile
 from pathlib import Path
 
 OUT = Path(sys.argv[1]); OUT.mkdir(parents=True, exist_ok=True)
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 GRID, TBLPY = 10598, 953
 
 CONTENT_TYPES = """<?xml version="1.0" encoding="UTF-8"?>

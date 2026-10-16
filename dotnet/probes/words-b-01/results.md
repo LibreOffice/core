@@ -259,8 +259,8 @@ Of the 37: **29 DOCX and 8 `.doc`**. Against the census:
 
 The census is well calibrated on the half it can see and **completely blind to the half it
 cannot**, exactly as `prediction.md` said in advance: the 66 `.doc` carry their levels in
-WW8 `LSTF`/`LVLF`, no zip-level census reads them, and the fix is in `Paperless.Text` and
-`Paperless.WordProcessing` where both readers meet. Eight of them moved.
+WW8 `LSTF`/`LVLF`, no zip-level census reads them, and the fix is in `XRay.Office.Text` and
+`XRay.Office.WordProcessing` where both readers meet. Eight of them moved.
 
 `OM template for non-complex NCC operators_August 2016.docx` — **the one document round 47
 measured as its entire reach** — holds 691 deeper-only paragraphs, the largest count in the
@@ -268,10 +268,10 @@ corpus, and is in the changed set with the largest content delta (+426 bytes).
 
 ### 3.3 Cross-track
 
-`Paperless.Text` is shared, so this owes a measurement rather than an argument. All 163
+`XRay.Office.Text` is shared, so this owes a measurement rather than an argument. All 163
 slides and 171 sheets rendered at both trees with `SOURCE_DATE_EPOCH` pinned:
 **0 of 334 renderings differ.** The argument that predicted it — `RaisesTextHeight` is set
-only by `PageParagraph.MeasurementObjects` in `Paperless.WordProcessing`, and the new
+only by `PageParagraph.MeasurementObjects` in `XRay.Office.WordProcessing`, and the new
 `textAscent`/`textDescent` differ from the old `textHeight` only when such an object is
 present — is confirmed rather than relied on.
 
@@ -281,7 +281,7 @@ present — is confirmed rather than relied on.
 
 Two places, both in the tree as it stood at `4cbaeb41c3b`.
 
-**`dotnet/src/Paperless.WordProcessing/Layout/PageContent.cs`:402** — the gate that decides
+**`dotnet/src/XRay.Office.WordProcessing/Layout/PageContent.cs`:402** — the gate that decides
 whether a label reaches measurement at all:
 
 ```csharp
@@ -295,7 +295,7 @@ quantity the rule needs was never plumbed to where the rule is applied. A label 
 its item but no taller overall was dropped on the floor and never reached
 `MeasuredParagraph`, which would have folded it in correctly.
 
-**`dotnet/src/Paperless.Text/Layout/MeasuredParagraph.cs`:661-664** — the fold, for the
+**`dotnet/src/XRay.Office.Text/Layout/MeasuredParagraph.cs`:661-664** — the fold, for the
 labels that did get through:
 
 ```csharp

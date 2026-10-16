@@ -20,7 +20,7 @@ import sys
 import zipfile
 
 HERE = pathlib.Path(__file__).resolve().parent
-TABLE = HERE.parents[1] / 'src/Paperless.Ooxml/DrawingML/PresetShapeGeometry.txt'
+TABLE = HERE.parents[1] / 'src/XRay.Office.Ooxml/DrawingML/PresetShapeGeometry.txt'
 OOXML = ('.pptx', '.pptm', '.potx', '.ppsx', '.ppsm', '.potm')
 BINARY = ('.ppt', '.pot', '.pps')
 FLAT = ('.odp', '.otp', '.fodp')

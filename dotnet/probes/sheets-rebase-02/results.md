@@ -133,7 +133,7 @@ inherits through its style sheet is that same thing. **Both branches end on the 
 bytes.** For a cell XF with a parent in range the flag decides nothing; only a missing parent
 (`4095`, or out of range) leaves it in force, and a style XF has no parent to consult.
 
-Fix: `dotnet/src/Paperless.Spreadsheets/MsBinary/XlsCellDecoration.cs`, with the parent index
+Fix: `dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsCellDecoration.cs`, with the parent index
 threaded in from `XlsWorkbookReader.ReadXfDecoration`. **This defect is not in the brief and
 nobody asked for it**; it was found underneath the one that was.
 
@@ -271,13 +271,13 @@ survive a timestamp check.
 
 ## 6. Build and tests
 
-`dotnet build Paperless.slnx`: **0 warnings, 0 errors**.
+`dotnet build XRay.Office.slnx`: **0 warnings, 0 errors**.
 
 Ten non-Fidelity projects: **3461 total, 0 failed** — 3454 on this branch's base plus the 7 tests
 added here. (The coordinator's 3458 is four higher: this branch predates the `wt-words-b` merge.)
-`Paperless.Spreadsheets` 621 → **628**.
+`XRay.Office.Spreadsheets` 621 → **628**.
 
-`Paperless.Fidelity.Tests`: 510 passed / **40 failed**, and the failing set is **identical**
+`XRay.Office.Fidelity.Tests`: 510 passed / **40 failed**, and the failing set is **identical**
 with and without these changes — 21 distinct test names, verified by building and running the
 pre-fix tree with the new tests held out. Pre-existing, and attributable to the 26.2.4.2
 reference, not to this round.

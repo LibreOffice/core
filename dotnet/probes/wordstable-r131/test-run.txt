@@ -1,100 +1,100 @@
-=== Paperless.Core.Tests
-  Paperless.TestKit -> /home/user/wt-wordstable/dotnet/tests/Paperless.TestKit/bin/Debug/net10.0/Paperless.TestKit.dll
-  Paperless.Core.Tests -> /home/user/wt-wordstable/dotnet/tests/Paperless.Core.Tests/bin/Debug/net10.0/linux-x64/Paperless.Core.Tests.dll
-Test run for /home/user/wt-wordstable/dotnet/tests/Paperless.Core.Tests/bin/Debug/net10.0/linux-x64/Paperless.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+=== XRay.Office.Core.Tests
+  XRay.Office.TestKit -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.TestKit/bin/Debug/net10.0/XRay.Office.TestKit.dll
+  XRay.Office.Core.Tests -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.Core.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Core.Tests.dll
+Test run for /home/user/wt-wordstable/dotnet/tests/XRay.Office.Core.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Core.Tests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   591, Skipped:     0, Total:   591, Duration: 2 s - Paperless.Core.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   591, Skipped:     0, Total:   591, Duration: 2 s - XRay.Office.Core.Tests.dll (net10.0)
 --- discovered
 591
-=== Paperless.Containers.Tests
-  Paperless.TestKit -> /home/user/wt-wordstable/dotnet/tests/Paperless.TestKit/bin/Debug/net10.0/Paperless.TestKit.dll
-  Paperless.Containers.Tests -> /home/user/wt-wordstable/dotnet/tests/Paperless.Containers.Tests/bin/Debug/net10.0/linux-x64/Paperless.Containers.Tests.dll
-Test run for /home/user/wt-wordstable/dotnet/tests/Paperless.Containers.Tests/bin/Debug/net10.0/linux-x64/Paperless.Containers.Tests.dll (.NETCoreApp,Version=v10.0)
+=== XRay.Office.Containers.Tests
+  XRay.Office.TestKit -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.TestKit/bin/Debug/net10.0/XRay.Office.TestKit.dll
+  XRay.Office.Containers.Tests -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.Containers.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Containers.Tests.dll
+Test run for /home/user/wt-wordstable/dotnet/tests/XRay.Office.Containers.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Containers.Tests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   109, Skipped:     0, Total:   109, Duration: 502 ms - Paperless.Containers.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   109, Skipped:     0, Total:   109, Duration: 502 ms - XRay.Office.Containers.Tests.dll (net10.0)
 --- discovered
 109
-=== Paperless.Markup.Tests
-  Paperless.TestKit -> /home/user/wt-wordstable/dotnet/tests/Paperless.TestKit/bin/Debug/net10.0/Paperless.TestKit.dll
-  Paperless.Markup.Tests -> /home/user/wt-wordstable/dotnet/tests/Paperless.Markup.Tests/bin/Debug/net10.0/linux-x64/Paperless.Markup.Tests.dll
-Test run for /home/user/wt-wordstable/dotnet/tests/Paperless.Markup.Tests/bin/Debug/net10.0/linux-x64/Paperless.Markup.Tests.dll (.NETCoreApp,Version=v10.0)
+=== XRay.Office.Markup.Tests
+  XRay.Office.TestKit -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.TestKit/bin/Debug/net10.0/XRay.Office.TestKit.dll
+  XRay.Office.Markup.Tests -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.Markup.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Markup.Tests.dll
+Test run for /home/user/wt-wordstable/dotnet/tests/XRay.Office.Markup.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Markup.Tests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   259, Skipped:     0, Total:   259, Duration: 3 s - Paperless.Markup.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   259, Skipped:     0, Total:   259, Duration: 3 s - XRay.Office.Markup.Tests.dll (net10.0)
 --- discovered
 249
-=== Paperless.OpenDocument.Tests
-  Paperless.TestKit -> /home/user/wt-wordstable/dotnet/tests/Paperless.TestKit/bin/Debug/net10.0/Paperless.TestKit.dll
-  Paperless.OpenDocument.Tests -> /home/user/wt-wordstable/dotnet/tests/Paperless.OpenDocument.Tests/bin/Debug/net10.0/linux-x64/Paperless.OpenDocument.Tests.dll
-Test run for /home/user/wt-wordstable/dotnet/tests/Paperless.OpenDocument.Tests/bin/Debug/net10.0/linux-x64/Paperless.OpenDocument.Tests.dll (.NETCoreApp,Version=v10.0)
+=== XRay.Office.OpenDocument.Tests
+  XRay.Office.TestKit -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.TestKit/bin/Debug/net10.0/XRay.Office.TestKit.dll
+  XRay.Office.OpenDocument.Tests -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.OpenDocument.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.OpenDocument.Tests.dll
+Test run for /home/user/wt-wordstable/dotnet/tests/XRay.Office.OpenDocument.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.OpenDocument.Tests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   169, Skipped:     0, Total:   169, Duration: 992 ms - Paperless.OpenDocument.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   169, Skipped:     0, Total:   169, Duration: 992 ms - XRay.Office.OpenDocument.Tests.dll (net10.0)
 --- discovered
 169
-=== Paperless.Rendering.Tests
-  Paperless.TestKit -> /home/user/wt-wordstable/dotnet/tests/Paperless.TestKit/bin/Debug/net10.0/Paperless.TestKit.dll
-  Paperless.Rendering.Tests -> /home/user/wt-wordstable/dotnet/tests/Paperless.Rendering.Tests/bin/Debug/net10.0/linux-x64/Paperless.Rendering.Tests.dll
-Test run for /home/user/wt-wordstable/dotnet/tests/Paperless.Rendering.Tests/bin/Debug/net10.0/linux-x64/Paperless.Rendering.Tests.dll (.NETCoreApp,Version=v10.0)
+=== XRay.Office.Rendering.Tests
+  XRay.Office.TestKit -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.TestKit/bin/Debug/net10.0/XRay.Office.TestKit.dll
+  XRay.Office.Rendering.Tests -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.Rendering.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Rendering.Tests.dll
+Test run for /home/user/wt-wordstable/dotnet/tests/XRay.Office.Rendering.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Rendering.Tests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   164, Skipped:     0, Total:   164, Duration: 11 s - Paperless.Rendering.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   164, Skipped:     0, Total:   164, Duration: 11 s - XRay.Office.Rendering.Tests.dll (net10.0)
 --- discovered
 164
-=== Paperless.Text.Tests
-  Paperless.TestKit -> /home/user/wt-wordstable/dotnet/tests/Paperless.TestKit/bin/Debug/net10.0/Paperless.TestKit.dll
-  Paperless.Text.Tests -> /home/user/wt-wordstable/dotnet/tests/Paperless.Text.Tests/bin/Debug/net10.0/linux-x64/Paperless.Text.Tests.dll
-Test run for /home/user/wt-wordstable/dotnet/tests/Paperless.Text.Tests/bin/Debug/net10.0/linux-x64/Paperless.Text.Tests.dll (.NETCoreApp,Version=v10.0)
+=== XRay.Office.Text.Tests
+  XRay.Office.TestKit -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.TestKit/bin/Debug/net10.0/XRay.Office.TestKit.dll
+  XRay.Office.Text.Tests -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.Text.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Text.Tests.dll
+Test run for /home/user/wt-wordstable/dotnet/tests/XRay.Office.Text.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Text.Tests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   744, Skipped:     0, Total:   744, Duration: 17 s - Paperless.Text.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   744, Skipped:     0, Total:   744, Duration: 17 s - XRay.Office.Text.Tests.dll (net10.0)
 --- discovered
 744
-=== Paperless.Vector.Tests
-  Paperless.Ooxml -> /home/user/wt-wordstable/dotnet/src/Paperless.Ooxml/bin/Debug/net10.0/Paperless.Ooxml.dll
-  Paperless.Vector.Tests -> /home/user/wt-wordstable/dotnet/tests/Paperless.Vector.Tests/bin/Debug/net10.0/linux-x64/Paperless.Vector.Tests.dll
-Test run for /home/user/wt-wordstable/dotnet/tests/Paperless.Vector.Tests/bin/Debug/net10.0/linux-x64/Paperless.Vector.Tests.dll (.NETCoreApp,Version=v10.0)
+=== XRay.Office.Vector.Tests
+  XRay.Office.Ooxml -> /home/user/wt-wordstable/dotnet/src/XRay.Office.Ooxml/bin/Debug/net10.0/XRay.Office.Ooxml.dll
+  XRay.Office.Vector.Tests -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.Vector.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Vector.Tests.dll
+Test run for /home/user/wt-wordstable/dotnet/tests/XRay.Office.Vector.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Vector.Tests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   309, Skipped:     0, Total:   309, Duration: 3 s - Paperless.Vector.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   309, Skipped:     0, Total:   309, Duration: 3 s - XRay.Office.Vector.Tests.dll (net10.0)
 --- discovered
 309
-=== Paperless.WordProcessing.Tests
-  Paperless.TestKit -> /home/user/wt-wordstable/dotnet/tests/Paperless.TestKit/bin/Debug/net10.0/Paperless.TestKit.dll
-  Paperless.WordProcessing.Tests -> /home/user/wt-wordstable/dotnet/tests/Paperless.WordProcessing.Tests/bin/Debug/net10.0/linux-x64/Paperless.WordProcessing.Tests.dll
-Test run for /home/user/wt-wordstable/dotnet/tests/Paperless.WordProcessing.Tests/bin/Debug/net10.0/linux-x64/Paperless.WordProcessing.Tests.dll (.NETCoreApp,Version=v10.0)
+=== XRay.Office.WordProcessing.Tests
+  XRay.Office.TestKit -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.TestKit/bin/Debug/net10.0/XRay.Office.TestKit.dll
+  XRay.Office.WordProcessing.Tests -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.WordProcessing.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.WordProcessing.Tests.dll
+Test run for /home/user/wt-wordstable/dotnet/tests/XRay.Office.WordProcessing.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.WordProcessing.Tests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:  1988, Skipped:     0, Total:  1988, Duration: 1 m 37 s - Paperless.WordProcessing.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:  1988, Skipped:     0, Total:  1988, Duration: 1 m 37 s - XRay.Office.WordProcessing.Tests.dll (net10.0)
 --- discovered
 1988
-=== Paperless.Presentations.Tests
-  Paperless.TestKit -> /home/user/wt-wordstable/dotnet/tests/Paperless.TestKit/bin/Debug/net10.0/Paperless.TestKit.dll
-  Paperless.Presentations.Tests -> /home/user/wt-wordstable/dotnet/tests/Paperless.Presentations.Tests/bin/Debug/net10.0/linux-x64/Paperless.Presentations.Tests.dll
-Test run for /home/user/wt-wordstable/dotnet/tests/Paperless.Presentations.Tests/bin/Debug/net10.0/linux-x64/Paperless.Presentations.Tests.dll (.NETCoreApp,Version=v10.0)
+=== XRay.Office.Presentations.Tests
+  XRay.Office.TestKit -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.TestKit/bin/Debug/net10.0/XRay.Office.TestKit.dll
+  XRay.Office.Presentations.Tests -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.Presentations.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Presentations.Tests.dll
+Test run for /home/user/wt-wordstable/dotnet/tests/XRay.Office.Presentations.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Presentations.Tests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:  1205, Skipped:     0, Total:  1205, Duration: 1 m 14 s - Paperless.Presentations.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:  1205, Skipped:     0, Total:  1205, Duration: 1 m 14 s - XRay.Office.Presentations.Tests.dll (net10.0)
 --- discovered
 1205
-=== Paperless.Spreadsheets.Tests
-  Paperless.TestKit -> /home/user/wt-wordstable/dotnet/tests/Paperless.TestKit/bin/Debug/net10.0/Paperless.TestKit.dll
-  Paperless.Spreadsheets.Tests -> /home/user/wt-wordstable/dotnet/tests/Paperless.Spreadsheets.Tests/bin/Debug/net10.0/linux-x64/Paperless.Spreadsheets.Tests.dll
-Test run for /home/user/wt-wordstable/dotnet/tests/Paperless.Spreadsheets.Tests/bin/Debug/net10.0/linux-x64/Paperless.Spreadsheets.Tests.dll (.NETCoreApp,Version=v10.0)
+=== XRay.Office.Spreadsheets.Tests
+  XRay.Office.TestKit -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.TestKit/bin/Debug/net10.0/XRay.Office.TestKit.dll
+  XRay.Office.Spreadsheets.Tests -> /home/user/wt-wordstable/dotnet/tests/XRay.Office.Spreadsheets.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Spreadsheets.Tests.dll
+Test run for /home/user/wt-wordstable/dotnet/tests/XRay.Office.Spreadsheets.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Spreadsheets.Tests.dll (.NETCoreApp,Version=v10.0)
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:  1387, Skipped:     0, Total:  1387, Duration: 11 s - Paperless.Spreadsheets.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:  1387, Skipped:     0, Total:  1387, Duration: 11 s - XRay.Office.Spreadsheets.Tests.dll (net10.0)
 --- discovered
 1387
-=== Paperless.Fidelity.Tests
+=== XRay.Office.Fidelity.Tests
   Stack Trace:
-     at Paperless.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(String fileName) in /home/user/wt-wordstable/dotnet/tests/Paperless.Fidelity.Tests/TabStopComparisonTests.cs:line 167
+     at XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(String fileName) in /home/user/wt-wordstable/dotnet/tests/XRay.Office.Fidelity.Tests/TabStopComparisonTests.cs:line 167
    at InvokeStub_TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(Object, Span`1)
    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
 
-Failed!  - Failed:    10, Passed:   542, Skipped:     0, Total:   552, Duration: 5 m 51 s - Paperless.Fidelity.Tests.dll (net10.0)
+Failed!  - Failed:    10, Passed:   542, Skipped:     0, Total:   552, Duration: 5 m 51 s - XRay.Office.Fidelity.Tests.dll (net10.0)
 --- discovered
 552
 DONE

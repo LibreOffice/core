@@ -54,7 +54,7 @@ things that would change the arithmetic:
   cannot supply.
 
 The engine the work would need is already here and that is not the obstacle: the preset geometry
-and the fitting are in `Paperless.Ooxml/DrawingML/Fontwork*.cs`, keyed by LibreOffice's own type
+and the fitting are in `XRay.Office.Ooxml/DrawingML/Fontwork*.cs`, keyed by LibreOffice's own type
 names, and both the DrawingML and the VML readers already drive them
 (`probes/words-vml-fontwork/results.md`). What is missing is only the Escher reader — the
 `gtextUNICODE`, `gtextFont`, `gtextSize` and `gtextAlign` properties, and the shape type to

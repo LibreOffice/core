@@ -424,7 +424,7 @@ reader to read and which stands at 1.41.
 Rendering the corpus's **243 `.xlsx`/`.xlsm` documents** twice — at the round's base and again
 after, under `SOURCE_DATE_EPOCH`, one output directory per document — and comparing the PDFs byte
 for byte. That is the whole reach of the diff: `XlsxDrawings` and `XlsxChartRanges` are
-`Paperless.Spreadsheets`, `DrawingChartex` has one caller and it is `XlsxDrawings`, and the two
+`XRay.Office.Spreadsheets`, `DrawingChartex` has one caller and it is `XlsxDrawings`, and the two
 other edited files are doc-comments.
 
 **2 of the 243 move and 241 are byte-identical**, and the two are
@@ -450,18 +450,18 @@ Rendering  164   Spreadsheets 1295   Text 728   Vector 309   WordProcessing 1938
                                                    6580 passed, 0 failed, 0 skipped
 ```
 
-`Paperless.Fidelity.Tests`: **Failed: 10, Passed: 542, Total: 552**, and the ten names read out
+`XRay.Office.Fidelity.Tests`: **Failed: 10, Passed: 542, Total: 552**, and the ten names read out
 of that run's own log are exactly the briefed set — `PageDrawingComparisonTests` ×4,
 `TabStopComparisonTests` ×4, `SheetDrawingComparisonTests` and
 `JustificationShrinkComparisonTests`. No eleventh failure.
 
 **New tests**, 17 in all:
 
-* `Paperless.Presentations.Tests/DrawingChartexTests.cs` — 8. Which series are drawn and as what,
+* `XRay.Office.Presentations.Tests/DrawingChartexTests.cs` — 8. Which series are drawn and as what,
   where the categories come from, that no axis furniture is drawn, the white plot rectangle, the
   series' own line colour, a cached `cx:lvl`, a part whose every series derives from another, and
   a plain `c:chartSpace` being refused.
-* `Paperless.Core.Tests/ChartPlotTypeLayoutTests.AnOfPieDrawsTheReferencesOwnWedgeCounts` — 9
+* `XRay.Office.Core.Tests/ChartPlotTypeLayoutTests.AnOfPieDrawsTheReferencesOwnWedgeCounts` — 9
   cases: the three-point fallback in both forms, `n + 1` for the pie form, and `n − split + 1`
   for the bar form at four split positions.
 

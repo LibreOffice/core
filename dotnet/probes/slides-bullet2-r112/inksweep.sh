@@ -2,8 +2,8 @@
 # Both legs of the moved .ppt documents against the banked 26.2.4.2 renderings, scored over
 # EVERY differing page rather than only the MAJOR ones.
 set -uo pipefail
-BASE=/home/user/r112-work/base-cli/Paperless.Cli
-HEAD=/home/user/r112-work/head-cli/Paperless.Cli
+BASE=/home/user/r112-work/base-cli/XRay.Office.Cli
+HEAD=/home/user/r112-work/head-cli/XRay.Office.Cli
 BANK=/home/user/gate-orig-r83/ref
 DIFF=/home/user/wt-slidebullet2/.claude/skills/render-comparison/scripts/pdf-image-diff.py
 OUT="$2"

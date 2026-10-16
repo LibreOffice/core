@@ -9,7 +9,7 @@ words).
 The run announces what it measured, which is the point of round 180:
 
 ```
-measuring …/Paperless.Cli
+measuring …/XRay.Office.Cli
 reference /opt/libreoffice26.2/program/soffice -- LibreOffice 26.2.4.2 0229ac93…
 ```
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Does a row's `w:trHeight` floor include the row's borders, or sit under them?
 
-    row-min-height-border.py /abs/scratch/dir [/abs/path/to/Paperless.Cli]
+    row-min-height-border.py /abs/scratch/dir [/abs/path/to/XRay.Office.Cli]
 
 `TableLayouter` adds the border to the measured content and then raises the total to
 `w:trHeight`, so a row whose content is shorter than its floor comes out exactly

@@ -59,10 +59,10 @@ Measured, in the file:
 **Mechanism, in our tree.** There is no handling of this property anywhere:
 `grep -rn "clrChange\|ClrChange\|TransparentColour\|TransparentColor\|pictureTransparent"` over
 `dotnet/src` and `dotnet/tests` returns **zero lines**. The reader that would carry it is
-`src/Paperless.MsBinary/Escher/EscherPicture.cs`, which reads 256–259 (crop) and nothing else,
+`src/XRay.Office.MsBinary/Escher/EscherPicture.cs`, which reads 256–259 (crop) and nothing else,
 and the seat for the result is `RasterImage` in
-`src/Paperless.Core/Graphics/GlyphRun.cs:143`, which already carries two deferred recolourings
-(`Duotone`, `Luminance`) applied by the decoder in `Paperless.Rendering` — a colour knockout is
+`src/XRay.Office.Core/Graphics/GlyphRun.cs:143`, which already carries two deferred recolourings
+(`Duotone`, `Luminance`) applied by the decoder in `XRay.Office.Rendering` — a colour knockout is
 the same shape of thing and belongs beside them. **It is a missing feature, not a wrong one.**
 
 **What LibreOffice does, read from source and consistent with the measurement.**
@@ -82,7 +82,7 @@ measured**.
 `#808080`, same 852-byte mask), drawn offset — the Escher shadow, `shadowOffsetX/Y = 76 200 EMU`
 = 6 pt, `shadowOpacity = 0x8000` = 0.5, colour resolving to the `0x00808080` default. We draw no
 shadow, and `SlideDrawing.DrawShadow`
-(`src/Paperless.Presentations/Layout/SlideDrawing.cs:199-215`) says why in its own comment: it
+(`src/XRay.Office.Presentations/Layout/SlideDrawing.cs:199-215`) says why in its own comment: it
 casts a picture's silhouette only when the raster is an opaque JPEG, because a PNG's alpha is
 not visible at that layer and a logo would gain a black rectangle. That rule is right and it
 loses this shadow — and **implementing 263 is what would give this picture the alpha the rule is
@@ -200,11 +200,11 @@ branch for black text is untested by these two decks.
 ### Mechanism, in our tree
 
 `PptCharacterStyle.ToEmphasis`
-(`src/Paperless.Presentations/MsBinary/PptStyleSheet.cs:528-542`) reads `0x0001` bold, `0x0002`
+(`src/XRay.Office.Presentations/MsBinary/PptStyleSheet.cs:528-542`) reads `0x0001` bold, `0x0002`
 italic, `0x0004` underline and `0x0100` strikethrough — and **not `0x0010`, shadow**, which the
 same file names in its own header comment at line 11. `PptCharacterStyle.Stated` (line 553-567)
 omits it from the mask for the same reason. There is nowhere for it to go: `RunEmphasis`
-(`src/Paperless.Core/Extraction/Content.cs:177-199`) has no `Shadow` member, so
+(`src/XRay.Office.Core/Extraction/Content.cs:177-199`) has no `Shadow` member, so
 `PptTextBody.cs:337` cannot carry one to `SlideTextRun`, `SlideTextLayout.cs:634` cannot put one
 in a `RunStyle`, and `SlideDrawing` never draws a second run. The bit is read from the file and
 discarded four layers before the painter.
@@ -312,7 +312,7 @@ Ours page 9: `fill (18.72, 469.36)-(846.72, 469.48) #F07F09` — the shape's 0.1
 `accent1`, and **no stroke at all**.
 
 Mechanism, one function: `PptxSlideLayout.Pen`
-(`src/Paperless.Presentations/Ooxml/PptxSlideLayout.cs:1678-1698`) opens with
+(`src/XRay.Office.Presentations/Ooxml/PptxSlideLayout.cs:1678-1698`) opens with
 `if (SolidFill(line, theme, placeholder: null) is not { } paint) return null;` — **an `a:ln` whose
 paint is an `a:gradFill` yields no `Stroke`**, so the width, the cap, the dash and the colour are
 all discarded together. What is left is a sliver 0.12 pt tall, which is under a fifth of a pixel
@@ -350,7 +350,7 @@ report. `verify-test.sh` was not run because there is no test to run it against.
 
 That is a deliberate call rather than an overrun. Cluster 2 is the one I could have shipped —
 its rule reproduces to the digit at three font sizes — but landing it means an additive member on
-`RunEmphasis` in `Paperless.Core` and a flag threaded through `SlideTextRun`, `RunStyle`,
+`RunEmphasis` in `XRay.Office.Core` and a flag threaded through `SlideTextRun`, `RunStyle`,
 `PlacedGlyphRun` and `SlideDrawing`, and the offset has to be recomputed from a line height in
 720-dpi device units whose *source metric* the three measurements above do **not** pin down
 (they bound it to [1.073, 1.122] em, which contains both candidates). Shipping a device-unit
@@ -387,6 +387,6 @@ measured end to end.
 
 ## Files touched
 
-None outside `dotnet/probes/slides-paint-01/`. `Paperless.Core`, `Containers`, `Text`, `Vector`,
+None outside `dotnet/probes/slides-paint-01/`. `XRay.Office.Core`, `Containers`, `Text`, `Vector`,
 `Rendering` and `Markup` are untouched, so the Slides-Text and Slides-Chart tracks are owed
 nothing.

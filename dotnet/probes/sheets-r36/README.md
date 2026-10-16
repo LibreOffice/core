@@ -27,7 +27,7 @@ learn it:
 
 | Object | Route | What it decides |
 |---|---|---|
-| `FallbackShaper` (new, `Paperless.Text`) | splices per-face shaping into one `ShapedText` in the primary face's design grid | advances |
+| `FallbackShaper` (new, `XRay.Office.Text`) | splices per-face shaping into one `ShapedText` in the primary face's design grid | advances |
 | `ParagraphLayouter`, new optional `shaper` | `LineCount`, `Wrap`, `RichLineRanges` | where lines break |
 | `SheetText.Append` | itemises for drawing | which glyphs, and which font program is embedded |
 | `SheetTextLayout.Measured` | `ItemisationOptions.GlyphFallback` | a rich cell's breaks |

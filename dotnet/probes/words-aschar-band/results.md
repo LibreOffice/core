@@ -6,7 +6,7 @@ code:
 
 | | |
 |---|---|
-| ours | `Paperless.Cli` built from this worktree |
+| ours | `XRay.Office.Cli` built from this worktree |
 | ref26 | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2 0229ac93fcf0d7cb**, its eight Latin duplicate faces aside |
 | ref24 | `/usr/bin/soffice` — **24.2.7.2 420(Build:2)**, which is what `batch-check.sh` measures against |
 | fonts | system fontconfig: Carlito, Caladea, Liberation, DejaVu, WenQuanYi, IPAGothic |
@@ -40,14 +40,14 @@ both the frame and its wrap distance. That is not the AAC defect.
 
 An `InlineObject` is a **boundary** in `MeasuredParagraph`'s prefix table: it widens every prefix
 *past* the position it occupies and none at or before it
-(`Paperless.Text/Layout/MeasuredParagraph.cs`:453-457). That rule is what makes a picture sit
+(`XRay.Office.Text/Layout/MeasuredParagraph.cs`:453-457). That rule is what makes a picture sit
 between two characters rather than replace one, and what lets a picture too wide for the room left
 on a line move to the next line whole.
 
 **The last boundary has no prefix past it.** An object at `Offset == text.Length` therefore widens
 nothing, so every width the table answers for that line is short by the object — and
 `ParagraphLayouter.AlignmentOffset` is `available - line.Width`
-(`Paperless.Text/Layout/ParagraphLayouter.cs`:952-964), so the line has *full* slack and a
+(`XRay.Office.Text/Layout/ParagraphLayouter.cs`:952-964), so the line has *full* slack and a
 right-aligned picture is drawn from the right margin **rightwards**, its own width out.
 
 **It is invisible in a DOCX because the readers disagree about whether a picture is a character.**
@@ -106,10 +106,10 @@ frame anchor=Paragraph off=0 area=(199.40,64.60)-(738.40,65.75) inlineExtent=539
 ```
 
 — **1.15 pt tall**. That is `MINFLY`, Word's 23-twip minimum, which
-`Ww8TextFrames.Build` (`Paperless.WordProcessing/Ww8/Ww8TextFrame.cs`:126-128) writes into
+`Ww8TextFrames.Build` (`XRay.Office.WordProcessing/Ww8/Ww8TextFrame.cs`:126-128) writes into
 `PageFrame.Size` with the comment *"layout gives a frame its content's height in either case"* —
 and layout does not. `FrameLayout.PlaceFrames` builds the obstacle straight from
-`FrameLayout.Place`'s rectangle (`Paperless.WordProcessing/Layout/FrameLayout.cs`:265-298), so the
+`FrameLayout.Place`'s rectangle (`XRay.Office.WordProcessing/Layout/FrameLayout.cs`:265-298), so the
 masthead obstructs 1.15 pt of page instead of the ~72 pt its content occupies, and the logo's line
 — at y 75.45 — sees no obstacle at all.
 

@@ -69,7 +69,7 @@ def main():
     bank = Path(sys.argv[2])
     out = Path(sys.argv[3])
     jobs = int(sys.argv[4]) if len(sys.argv) > 4 else 3
-    cli = os.environ['PAPERLESS_CLI']
+    cli = os.environ['XRAY_OFFICE_CLI']
 
     out.mkdir(parents=True, exist_ok=True)
     rows = out / 'rows.tsv'

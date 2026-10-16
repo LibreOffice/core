@@ -7,7 +7,7 @@ LIST="$1"; mkdir -p "$2"; OUT="$(cd "$2" && pwd)"; W=2
 # Absolute, always. soffice takes its profile as file://$OUT/profN, and a RELATIVE
 # one does NOT fail -- it HANGS. Measured here: two workers sat 167 s on their first
 # document with nothing written and no error. (batch-check.sh:56 says the same.)
-CLI=/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+CLI=/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 REF=/opt/libreoffice26.2/program/soffice
 mkdir -p "$OUT/ours" "$OUT/ref"
 stat -c "CLI %y %s" "$CLI" > "$OUT/cli-mtime.txt"

@@ -68,8 +68,8 @@ import sys
 REF = os.environ.get("REF_SOFFICE", "soffice")
 import tempfile
 
-CORPUS = pathlib.Path(os.environ.get("PAPERLESS_CORPUS", "/c/sandbox/workdir/sample-files"))
-BANK = pathlib.Path(os.environ.get("PAPERLESS_REFBANK",
+CORPUS = pathlib.Path(os.environ.get("XRAY_OFFICE_CORPUS", "/c/sandbox/workdir/sample-files"))
+BANK = pathlib.Path(os.environ.get("XRAY_OFFICE_REFBANK",
                                    "/c/sandbox/workdir/refpdfs-26.2.4.2-fonts"))
 INK = 200  # below this is ink; keeps antialiasing out of the count
 
@@ -79,12 +79,12 @@ def run(cmd: list[str]) -> None:
 
 
 def cli() -> pathlib.Path:
-    p = os.environ.get("PAPERLESS_CLI")
+    p = os.environ.get("XRAY_OFFICE_CLI")
     if p:
         return pathlib.Path(p)
     root = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
                           text=True).stdout.strip() or "."
-    return pathlib.Path(root) / "dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+    return pathlib.Path(root) / "dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 
 
 def resolve(doc: str) -> tuple[pathlib.Path, str]:
@@ -155,11 +155,11 @@ def ours(src: pathlib.Path, work: pathlib.Path) -> pathlib.Path:
     out.mkdir(parents=True, exist_ok=True)
     exe = cli()
     if not exe.exists():
-        sys.exit(f"no CLI at {exe}; set PAPERLESS_CLI to the tree you mean to measure")
+        sys.exit(f"no CLI at {exe}; set XRAY_OFFICE_CLI to the tree you mean to measure")
     run([str(exe), "render", str(src), "--format", "pdf", "--outdir", str(out)])
     got = list(out.glob("*.pdf"))
     if not got:
-        sys.exit(f"Paperless produced no rendering for {src}")
+        sys.exit(f"X-Ray.Office produced no rendering for {src}")
     return got[0]
 
 

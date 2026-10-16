@@ -397,7 +397,7 @@ input. `FontMetricData::ImplCalcLineSpacing`
      They were once; today `hhea` wins for every font not on that four-entry list.
      Measured against LibreOffice 24.2 rather than inferred: a paragraph set in IPAGothic
      at 20pt, a face whose `hhea` and Windows line boxes differ by 7.6% of the em, renders
-     with a line advance of exactly 20.00pt — the `hhea` figure. Paperless believed the
+     with a line advance of exactly 20.00pt — the `hhea` figure. X-Ray.Office believed the
      other story until this was measured, and it cost nothing only because the two rules
      agree on all but three of the reference machine's installed faces.
    - Over either of those, if OS/2 `fsSelection` bit 7 is set (`USE_TYPO_METRICS`, read

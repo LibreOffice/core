@@ -8,7 +8,7 @@ Arm `adjusted` uses the catalogue's own values for the 24 presets it carries, an
 preset default elsewhere. Both arms use the catalogue's warped-shape box, 4389120 x 914400
 EMU: the first cut of this fixture cloned a `textNoShape` shape at 640080 and every warp
 came out mild, which is the "minimal enough to answer a different question" trap in
-`.claude/skills/paperless-corpus`.
+`.claude/skills/office-corpus`.
 """
 import zipfile, pathlib, re, sys
 

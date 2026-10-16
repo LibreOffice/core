@@ -18,7 +18,7 @@ Prediction, written and committed before any of this was measured:
   `tools::PolyPolygon` outlines. **What reaches the PDF is filled paths with no glyph and no
   `ToUnicode`.**
 
-Paperless read `a:prstTxWarp` nowhere at all — `grep -rn warp dotnet/src` was three unrelated
+X-Ray.Office read `a:prstTxWarp` nowhere at all — `grep -rn warp dotnet/src` was three unrelated
 hits — so a warped body went through the ordinary text path and its glyphs landed in the text
 layer.
 
@@ -26,9 +26,9 @@ The fix is three edits and one gate:
 
 | file | change |
 |---|---|
-| `src/Paperless.Presentations/Ooxml/PptxTextBody.cs` | read `a:prstTxWarp/@prst` off the body chain, normalising `textNoShape` to null |
-| `src/Paperless.Presentations/Layout/SlideText.cs` | `SlideTextBody.WarpPreset` / `IsTextPath`, and the reasoning |
-| `src/Paperless.Presentations/Ooxml/PptxSlideLayout.cs` | `if (body.IsTextPath) return null;` in `Text(...)`, the single place a `p:sp`'s text is laid out |
+| `src/XRay.Office.Presentations/Ooxml/PptxTextBody.cs` | read `a:prstTxWarp/@prst` off the body chain, normalising `textNoShape` to null |
+| `src/XRay.Office.Presentations/Layout/SlideText.cs` | `SlideTextBody.WarpPreset` / `IsTextPath`, and the reasoning |
+| `src/XRay.Office.Presentations/Ooxml/PptxSlideLayout.cs` | `if (body.IsTextPath) return null;` in `Text(...)`, the single place a `p:sp`'s text is laid out |
 
 ## The brief was wrong about the mechanism, and the correction matters
 
@@ -190,24 +190,24 @@ still passes comfortably, but there is now a real −8 there that was previously
 ## Tests
 
 Every project run individually and totalled by hand, because
-`dotnet test Paperless.slnx` is the run most likely to truncate and least likely to say so.
+`dotnet test XRay.Office.slnx` is the run most likely to truncate and least likely to say so.
 
 | project | passed | failed | skipped |
 |---|---:|---:|---:|
-| Paperless.Core.Tests | 337 | 0 | 0 |
-| Paperless.Containers.Tests | 109 | 0 | 0 |
-| Paperless.Text.Tests | 349 | 0 | 0 |
-| Paperless.Vector.Tests | 295 | 0 | 0 |
-| Paperless.Rendering.Tests | 150 | 0 | 1 |
-| Paperless.Markup.Tests | 259 | 0 | 0 |
-| Paperless.OpenDocument.Tests | 125 | 0 | 0 |
-| Paperless.Presentations.Tests | **704** | 0 | 0 |
-| Paperless.Spreadsheets.Tests | 832 | 0 | 0 |
-| Paperless.WordProcessing.Tests | 850 | 0 | 0 |
-| Paperless.Fidelity.Tests | 520 | **30** | 0 |
+| XRay.Office.Core.Tests | 337 | 0 | 0 |
+| XRay.Office.Containers.Tests | 109 | 0 | 0 |
+| XRay.Office.Text.Tests | 349 | 0 | 0 |
+| XRay.Office.Vector.Tests | 295 | 0 | 0 |
+| XRay.Office.Rendering.Tests | 150 | 0 | 1 |
+| XRay.Office.Markup.Tests | 259 | 0 | 0 |
+| XRay.Office.OpenDocument.Tests | 125 | 0 | 0 |
+| XRay.Office.Presentations.Tests | **704** | 0 | 0 |
+| XRay.Office.Spreadsheets.Tests | 832 | 0 | 0 |
+| XRay.Office.WordProcessing.Tests | 850 | 0 | 0 |
+| XRay.Office.Fidelity.Tests | 520 | **30** | 0 |
 | **total** | **4530** | **30** | **1** |
 
-`Paperless.Fidelity.Tests` reports **30 failed of 550** against **550 discovered**
+`XRay.Office.Fidelity.Tests` reports **30 failed of 550** against **550 discovered**
 (`--list-tests`) and **0 skipped** — the briefed baseline exactly, and a complete run rather
 than a truncated one. All 30 are pre-existing word-processing, spreadsheet, table and tab-stop
 failures; none is a slide-text failure. The single Rendering skip is the pre-existing
@@ -299,7 +299,7 @@ arithmetic identity (56 = 2 × 28 = set B) was assumed to be exact when it was 5
 1. **Implement the arch geometry.** The eight reference bounding boxes on pages 13 and 14 are
    an exact target to validate against, and the residual is now isolated to the four quadrants.
    It needs glyph-to-path — `IDrawingSink.FillPath` exists, a glyph outline source does not
-   above `Paperless.Rendering` — and a per-run transform on `PlacedText`.
+   above `XRay.Office.Rendering` — and a per-run transform on `PlacedText`.
 2. **The other Fontwork readers.** `.ppt` (`PptShapeGeometry` already knows the word) and ODF
    (`draw:enhanced-geometry/@draw:text-path`) take different paths and are untouched; so is the
    word-processing DOCX shape reader, where the corpus holds 2 `textPlain` documents.
@@ -314,7 +314,7 @@ arithmetic identity (56 = 2 × 28 = set B) was assumed to be exact when it was 5
 
 ```sh
 export SOURCE_DATE_EPOCH=1700000000
-export PAPERLESS_CLI=/c/sandbox/workdir/wt-s-extra2/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=/c/sandbox/workdir/wt-s-extra2/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 
 python3 dotnet/probes/slides-extra-01/make-fixture.py /tmp/text-warp-deck.pptx
 soffice --headless --convert-to pdf --outdir /tmp /tmp/text-warp-deck.pptx

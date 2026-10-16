@@ -8,13 +8,13 @@
 # whole track's worth — which matters on a container with a gigabyte free.
 #
 # The hash is of the PDF with its `/CreationDate` and XMP `dc:date` masked, because `soffice` and
-# `paperless` both stamp the wall clock into a rendering and two runs minutes apart would
+# `xray-office` both stamp the wall clock into a rendering and two runs minutes apart would
 # otherwise differ everywhere. `SOURCE_DATE_EPOCH` is set for the same reason and belts the
 # braces: a spreadsheet header holding `&D` prints today's date into the ink itself.
 set -uo pipefail
 ROOT="${1:?corpus root}"; GLOB="${2:?track glob, e.g. sheets}"; OUT="${3:?out.tsv}"
 WORKERS="${4:-2}"
-CLI="${PAPERLESS_CLI:?set PAPERLESS_CLI to the binary you mean to measure}"
+CLI="${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI to the binary you mean to measure}"
 [ -x "$CLI" ] || { echo "no CLI at $CLI" >&2; exit 1; }
 export SOURCE_DATE_EPOCH=1700000000
 

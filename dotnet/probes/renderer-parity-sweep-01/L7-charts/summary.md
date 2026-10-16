@@ -58,12 +58,12 @@ nothing conflicts.
 
 ## Cross-lane dependencies
 
-1. `Paperless.Spreadsheets/Ooxml/XlsxDrawings.cs:328-330` passes `styles: null` → hairline
+1. `XRay.Office.Spreadsheets/Ooxml/XlsxDrawings.cs:328-330` passes `styles: null` → hairline
    automatic series lines (#166's "pale" series). Same gap in
-   `Paperless.WordProcessing/Ooxml/DocxPictures.cs:266-269`.
+   `XRay.Office.WordProcessing/Ooxml/DocxPictures.cs:266-269`.
 2. The range resolver must skip a trailing totals row (#186), needing the sheet's pivot/table
    model — and needing the 26.2 pivot-regeneration question settled first.
-3. `Paperless.Presentations/Layout/SlideChart.cs` runs a `\n`-bearing label into one glyph run;
+3. `XRay.Office.Presentations/Layout/SlideChart.cs` runs a `\n`-bearing label into one glyph run;
    RC-7 can newly expose it on slides.
 4. Six test assertions read bars/candles out of `drawing.Boxes` (listed in `findings.md` §1);
    `dotnet/tests/` is unowned by any lane.

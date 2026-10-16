@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Importers for embedded vector graphics: WMF, EMF, EMF+ and SVG, decoded into the X-Ray.Office display list. Part of X-Ray.Office, a pure C# port of LibreOffice's document import and rendering; install the X-Ray.Office package for the whole set.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      SVG parsing and scene building. Deliberately NOT Svg.Skia: taking these three
+      without it avoids pulling in a second SkiaSharp version, and keeps the output a
+      device-independent command list we can translate into IDrawingSink rather than
+      pixels. See the note in Directory.Packages.props.
+    -->
+    <PackageReference Include="Svg.SceneGraph" />
+    <PackageReference Include="Svg.Model" />
+    <PackageReference Include="ShimSkiaSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      The rectangle-set algebra under the clip is internal because nothing outside this library
+      should be combining regions, but its correctness is the kind a test through a whole
+      metafile cannot attribute: a band coalesced one row too far shows up as a picture drawn
+      slightly too wide, which reads as a mapping bug.
+    -->
+    <InternalsVisibleTo Include="XRay.Office.Vector.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XRay.Office.Core\XRay.Office.Core.csproj" />
+    <!--
+      SVG text is resolved and shaped by XRay.Office.Text rather than by the SVG library's own
+      font path, so a wordmark inside a picture and the paragraph beside it agree about what
+      a family name means. No consumer gains a dependency by this: every reader already
+      references XRay.Office.Text, and XRay.Office.Rendering does the same for the same reason.
+    -->
+    <ProjectReference Include="..\XRay.Office.Text\XRay.Office.Text.csproj" />
+  </ItemGroup>
+
+</Project>

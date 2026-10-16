@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Render OUR half of the .rtf column of /home/user/corpus-odf and measure the gate columns.
 #
-#   PAPERLESS_CLI=... sweep-ours.sh <corpus-root> <outdir> [workers] [glob]
+#   XRAY_OFFICE_CLI=... sweep-ours.sh <corpus-root> <outdir> [workers] [glob]
 #
 # Sound because the diff under test is confined to `dotnet/src` and cannot touch `soffice`,
 # so the reference columns banked in gate-odf-rows.tsv still describe the same bytes.
@@ -9,7 +9,7 @@
 set -uo pipefail
 ROOT="${1:?corpus root}"; OUT="${2:?outdir}"; WORKERS="${3:-4}"; GLOB="${4:-}"
 mkdir -p "$OUT" && OUT="$(cd "$OUT" && pwd)"
-CLI="${PAPERLESS_CLI:?set PAPERLESS_CLI to the binary you mean to measure}"
+CLI="${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI to the binary you mean to measure}"
 [ -x "$CLI" ] || { echo "no CLI at $CLI" >&2; exit 1; }
 mkdir -p "$OUT/ours"
 : > "$OUT/ours.tsv"

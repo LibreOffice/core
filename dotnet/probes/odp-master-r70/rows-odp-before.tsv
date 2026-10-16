@@ -1,4 +1,4 @@
-# ours   = Paperless.Cli @ f4b8c38255a92caf1f05cc8acdf8d8288a5ceac4 (base, before this round)
+# ours   = XRay.Office.Cli @ f4b8c38255a92caf1f05cc8acdf8d8288a5ceac4 (base, before this round)
 # ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 (TDF tarball)
 # fonts  = system fontconfig; ALL FOUR tarball confounds moved aside on 2026-09-07 --
 #          Carlito/Caladea/Liberation/DejaVu duplicates, the Latin Noto, and the four

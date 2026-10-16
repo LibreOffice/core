@@ -215,7 +215,7 @@ export SOURCE_DATE_EPOCH=1700000000
 tail -n +2 probes/chart-fit/census.tsv | cut -f1 > /tmp/chartdocs.txt
 for leg in base after; do
   python3 probes/chart-collide-r110/confine.py --out /tmp/conf-$leg \
-      --cli /tmp/cli-$leg/Paperless.Cli --rows /tmp/rows-$leg.tsv --jobs 3 < /tmp/chartdocs.txt
+      --cli /tmp/cli-$leg/XRay.Office.Cli --rows /tmp/rows-$leg.tsv --jobs 3 < /tmp/chartdocs.txt
 done
 ```
 
@@ -268,7 +268,7 @@ elsewhere on both sides. Whatever is left on this document is not an axis arrang
 
 ## 6. Tests
 
-`dotnet/tests/Paperless.Presentations.Tests/DrawingChartAxisTextTests.cs`, six cases read from
+`dotnet/tests/XRay.Office.Presentations.Tests/DrawingChartAxisTextTests.cs`, six cases read from
 markup literals.
 
 | case | what it holds |
@@ -296,7 +296,7 @@ Every one of the ten is at or above the count round 110 recorded, so none is a t
 Presentations is +13 of which 6 are this round's, and Core +7 and Spreadsheets +13 come from rounds
 merged since.
 
-**`Paperless.Fidelity.Tests`, the one that can skip silently: `Failed: 10, Passed: 542,
+**`XRay.Office.Fidelity.Tests`, the one that can skip silently: `Failed: 10, Passed: 542,
 Skipped: 0, Total: 552`** — 0 skipped, so it covered everything, and the ten are exactly round
 110's, none of them a chart:
 

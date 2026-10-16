@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Render the whole words track with one Paperless CLI, reproducibly and in parallel.
+# Render the whole words track with one X-Ray.Office CLI, reproducibly and in parallel.
 #
 #   render-words.sh <cli> <outdir> [workers]
 #

@@ -7,5 +7,5 @@ REF=${REF_SOFFICE:-/opt/libreoffice26.2/program/soffice}
 echo "reference $REF -- $("$REF" --version 2>/dev/null | head -1)"
 mkdir -p "$P/fodt"
 "$REF" --headless --convert-to fodt --outdir "$P/fodt" "$P"/fixtures/*.docx \
-    -env:UserInstallation=file:///tmp/paperless-lo-mathheight-r165 >/dev/null
+    -env:UserInstallation=file:///tmp/xray-office-lo-mathheight-r165 >/dev/null
 ls "$P/fodt" | wc -l

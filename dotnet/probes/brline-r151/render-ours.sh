@@ -7,7 +7,7 @@
 # quiescent; the binary's mtime is printed so the leg can be attributed to a build.
 set -e
 cd "$(dirname "$0")"
-CLI=../../tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+CLI=../../tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 LEG="${1:?usage: render-ours.sh <leg> <fixture-dir>...}"
 shift
 mkdir -p "$LEG"

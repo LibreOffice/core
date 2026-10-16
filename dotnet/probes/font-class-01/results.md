@@ -252,21 +252,21 @@ Every project run individually, counts read rather than colours.
 
 | project | passed | failed | skipped | total |
 |---|---:|---:|---:|---:|
-| Paperless.Core.Tests | 313 | 0 | 0 | 313 |
-| Paperless.Containers.Tests | 109 | 0 | 0 | 109 |
-| Paperless.Markup.Tests | 259 | 0 | 0 | 259 |
-| Paperless.OpenDocument.Tests | 125 | 0 | 0 | 125 |
-| Paperless.Presentations.Tests | **653** | 0 | 0 | 653 |
-| Paperless.Rendering.Tests | 150 | 0 | 1 | 151 |
-| Paperless.Spreadsheets.Tests | 758 | 0 | 0 | 758 |
-| Paperless.Text.Tests | **339** | 0 | 0 | 339 |
-| Paperless.Vector.Tests | 295 | 0 | 0 | 295 |
-| Paperless.WordProcessing.Tests | 818 | 0 | 0 | 818 |
-| Paperless.Fidelity.Tests | 520 | **30** | 0 | 550 |
+| XRay.Office.Core.Tests | 313 | 0 | 0 | 313 |
+| XRay.Office.Containers.Tests | 109 | 0 | 0 | 109 |
+| XRay.Office.Markup.Tests | 259 | 0 | 0 | 259 |
+| XRay.Office.OpenDocument.Tests | 125 | 0 | 0 | 125 |
+| XRay.Office.Presentations.Tests | **653** | 0 | 0 | 653 |
+| XRay.Office.Rendering.Tests | 150 | 0 | 1 | 151 |
+| XRay.Office.Spreadsheets.Tests | 758 | 0 | 0 | 758 |
+| XRay.Office.Text.Tests | **339** | 0 | 0 | 339 |
+| XRay.Office.Vector.Tests | 295 | 0 | 0 | 295 |
+| XRay.Office.WordProcessing.Tests | 818 | 0 | 0 | 818 |
+| XRay.Office.Fidelity.Tests | 520 | **30** | 0 | 550 |
 
-`Paperless.Fidelity.Tests` was **30 failed of 550** on the branch point, measured before anything was
-changed, and is 30 of 550 now. `Paperless.Text.Tests` gains 29 (310 → 339) and
-`Paperless.Presentations.Tests` 7 (646 → 653); both are this round's. `Rendering`'s single skip is on
+`XRay.Office.Fidelity.Tests` was **30 failed of 550** on the branch point, measured before anything was
+changed, and is 30 of 550 now. `XRay.Office.Text.Tests` gains 29 (310 → 339) and
+`XRay.Office.Presentations.Tests` 7 (646 → 653); both are this round's. `Rendering`'s single skip is on
 every run measured this session and predates the branch. The build is warning-free.
 
 **No committed fixture can carry the PPTX pitch case.** Every `.pptx` in `tests/corpus/features`

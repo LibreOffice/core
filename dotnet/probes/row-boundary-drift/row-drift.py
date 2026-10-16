@@ -69,7 +69,7 @@ accumulation is the thing to check first.
 Usage
 -----
 
-    PAPERLESS_CLI=... python3 row-drift.py <document.docx> <our.pdf> <page>
+    XRAY_OFFICE_CLI=... python3 row-drift.py <document.docx> <our.pdf> <page>
 
 Reads full-width horizontal rules out of a 600 dpi rasterisation of one page —
 600 because the step being measured is one pixel at that resolution, and a

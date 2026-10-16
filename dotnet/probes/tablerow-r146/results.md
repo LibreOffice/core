@@ -343,7 +343,7 @@ the cut, which round 131's `PBNN` arm is and `review-welsh-…` is not.
 
 ## 5. What this tree does, and why the three seats look like three [src, this tree]
 
-Read out of `dotnet/src`, not measured — the round could not run `Paperless.Cli`.
+Read out of `dotnet/src`, not measured — the round could not run `XRay.Office.Cli`.
 
 * `TableLayouter` starts the table at `BorderHeight(rows[0]) / 2`
   (`Layout/TableLayouter.cs`:84 and :235) and charges every row
@@ -387,7 +387,7 @@ as 338 and 272 `docx`, and today's manifest gives 337 and 271, so the denominato
 somewhere between round 131 and here) rendered fresh through 26.2.4.2, three workers,
 one `-env:UserInstallation` each, `timeout -k 30 900`: **337 rendered, 0 failed**
 (`sweep.tsv`). The census reads those renderings' path operators; it does not read our own
-output, because this round could not run `Paperless.Cli`.
+output, because this round could not run `XRay.Office.Cli`.
 
 Denominator: 26.2.4.2 draws **29 306** distinct horizontal rule y-groups over the 337 documents,
 in 296 of them. That counts paragraph rules and underlines as well as table boundaries, so it is
@@ -490,7 +490,7 @@ for a double understates the class.
 **Could not establish.**
 
 * **Anything measured about this tree's own output.** The round was forbidden to build or run
-  `Paperless.Cli`. Every statement about our side is a reading of `dotnet/src` (§5) or a figure
+  `XRay.Office.Cli`. Every statement about our side is a reading of `dotnet/src` (§5) or a figure
   round 131 banked. The seat numbers for O83 were checked the only way available — by
   re-rendering `review-welsh-…-mandelson.docx` through 26.2.4.2 and confirming the reference half
   of each pair (§4) — and they reproduce to the thousandth.

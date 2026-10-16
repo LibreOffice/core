@@ -11,8 +11,8 @@ Refuses to print unless every variant produced a rendering and a wedge on both s
 import os, re, subprocess, sys
 
 OUT = "/c/sandbox/workdir/scratch-r59-sheets/pieradius"
-CLI = ("/c/sandbox/workdir/wt-sheets-r50/dotnet/tools/Paperless.Cli/bin/Debug/"
-       "net10.0/linux-x64/Paperless.Cli")
+CLI = ("/c/sandbox/workdir/wt-sheets-r50/dotnet/tools/XRay.Office.Cli/bin/Debug/"
+       "net10.0/linux-x64/XRay.Office.Cli")
 PDFOPS = "/c/sandbox/workdir/wt-sheets-r50/.claude/skills/render-comparison/scripts/pdf-ops.py"
 
 CASES = ["00-asis", "13-label-8pt", "14-label-16pt", "01-nolabels", "07-pos-ctr",

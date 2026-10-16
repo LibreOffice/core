@@ -116,7 +116,7 @@ does not open the property set.
 
 ## The change
 
-Five files, all under `Paperless.Presentations/MsBinary`, which only the `.ppt`/`.pot`/`.pps`
+Five files, all under `XRay.Office.Presentations/MsBinary`, which only the `.ppt`/`.pot`/`.pps`
 reader uses.
 
 - **`PptHyperlinks.cs`** (new) — the `ExHyperlinkAtom` values of the live `Document`'s `ExObjList`.
@@ -154,7 +154,7 @@ state ranges and declare no hyperlink are byte-identical, the 28 that state no r
 byte-identical, and **no page count moved on any of the 84**. `reach.tsv`.
 
 The other tracks are a sample and are stated as one; what makes a sample enough is that the diff
-is five files in `Paperless.Presentations/MsBinary`, which no other family's reader references.
+is five files in `XRay.Office.Presentations/MsBinary`, which no other family's reader references.
 `PptTextReader` is shared with `PptContentBuilder` (extraction), which passes no declared set, so
 extraction cannot move either — and there is a test for that.
 
@@ -360,7 +360,7 @@ Every project run individually, at this round's head.
 
 0 failed and 0 skipped everywhere; the twelve new ones are `PptHyperlinkFieldTests`.
 
-`Paperless.Fidelity.Tests`: **542 passed / 10 failed of 552, 0 skipped** — the briefed baseline
+`XRay.Office.Fidelity.Tests`: **542 passed / 10 failed of 552, 0 skipped** — the briefed baseline
 exactly, unchanged.
 
 ---

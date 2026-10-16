@@ -37,7 +37,7 @@ def render_ours(cli, doc, outdir):
 
 if __name__ == '__main__':
     fx, work = sys.argv[1], sys.argv[2]
-    cli = os.environ['PAPERLESS_CLI']
+    cli = os.environ['XRAY_OFFICE_CLI']
     sofs = {'24.2': '/usr/bin/soffice', '26.2': '/opt/libreoffice26.2/program/soffice'}
     print(f"{'fixture':<13} {'who':<6} {'bandTop':>8} {'bandBot':>8} {'centre':>8} "
           f"{'HEADERA':>8} {'BODYLINE':>9} {'FOOTERC':>8}")

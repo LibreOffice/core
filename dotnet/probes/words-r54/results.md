@@ -88,8 +88,8 @@ carries.
 
 ## The change
 
-`dotnet/src/Paperless.WordProcessing/Layout/WordFallbackClass.cs`, called from two sites:
-`DocxLayoutSource.Face` and `LayoutFonts.Lookup`. **Nothing under `Paperless.Text`, `Core`,
+`dotnet/src/XRay.Office.WordProcessing/Layout/WordFallbackClass.cs`, called from two sites:
+`DocxLayoutSource.Face` and `LayoutFonts.Lookup`. **Nothing under `XRay.Office.Text`, `Core`,
 `Containers`, `Vector`, `Rendering`, `Markup` or `Ooxml` changed behaviour**, so the diff cannot
 reach slides or sheets at all.
 
@@ -127,7 +127,7 @@ whole track rather than the batches a change aims at.
 ### 1. The seat named by the audit is not the seat, and the recommended change would have broken two tracks
 
 `TODO.24-2-7-audit.md` called `SystemFontResolver.GenericFallbacks` *"the largest single finding on
-the list"*, said the fix was **one line in `Paperless.Text`**, and held it back only because such a
+the list"*, said the fix was **one line in `XRay.Office.Text`**, and held it back only because such a
 line owes a three-track sweep. Every measurement round 53 reported reproduces. **The verdict does
 not.** `GenericFallbacks`'s `_ => SansFallbacks` is *correct* for every caller that reaches it
 without a declared class, and those callers are ODF text, XLSX, PPTX and flat ODS.
@@ -140,7 +140,7 @@ Two independent instruments say so:
 - over **302 slides and 307 sheets** renderings compared against the reference's own embedded font
   lists, **zero** documents show `ours = DejaVuSans, ref = DejaVuSerif`. Not one, on either track.
 
-And the population that a `Paperless.Text` change would have reflowed is now counted rather than
+And the population that a `XRay.Office.Text` change would have reflowed is now counted rather than
 imagined: **202 slides and 130 sheets renderings draw a DejaVu Sans face on our side**, and every
 one of them currently agrees with the reference. Names are in `slides-at-risk.txt` and
 `sheets-at-risk.txt` beside this file.
@@ -252,7 +252,7 @@ This is stated rather than smoothed over, because it is the next round's whole j
 
 ## Cross-track, measured rather than argued
 
-The diff touches only `Paperless.WordProcessing`, so slides and sheets cannot be reached: no file
+The diff touches only `XRay.Office.WordProcessing`, so slides and sheets cannot be reached: no file
 they compile against changed. That is checkable with `git diff --name-only` and needs no sweep.
 
 **What did need measuring is the change the brief expected**, and it was measured twice:
@@ -265,7 +265,7 @@ they compile against changed. That is checkable with `git diff --name-only` and 
    `MANIFEST.tsv` document for document, and **zero renderings on either track show
    `ours = DejaVuSans, ref = DejaVuSerif`.**
 
-The population a `Paperless.Text` change would have moved is counted, not guessed: **202 slides and
+The population a `XRay.Office.Text` change would have moved is counted, not guessed: **202 slides and
 130 sheets renderings draw a DejaVu Sans face on our side**, every one of them currently agreeing
 with the reference. They are named in `slides-at-risk.txt` and `sheets-at-risk.txt`.
 
@@ -284,7 +284,7 @@ for conflating filters: `ShapeOf`'s "the binary answers fontconfig's way on ever
 
 ## Tests
 
-`Paperless.WordProcessing.Tests/WordFallbackClassTests.cs`, **27 tests**, all passing.
+`XRay.Office.WordProcessing.Tests/WordFallbackClassTests.cs`, **27 tests**, all passing.
 
 Run through `verify-test.sh`, tree clean before each and restored after:
 

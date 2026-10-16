@@ -1,5 +1,5 @@
---- a/dotnet/src/Paperless.WordProcessing/Layout/TableLayouter.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Layout/TableLayouter.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Layout/TableLayouter.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Layout/TableLayouter.cs
 @@ -131,19 +131,9 @@
                  // A merged cell charges only its last row, and only for what one row's worth of it needs.
                  // Charging the whole height there would make that row as tall as the merge.

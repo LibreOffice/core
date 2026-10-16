@@ -1,5 +1,5 @@
 # sheets track re-swept after the chart-sheet fix, 2026-09-06
-# ours  = Paperless.Cli at 2f4709c08 + the chart-sheet change; ref = /usr/bin/soffice 24.2.7.2 420(Build:2)
+# ours  = XRay.Office.Cli at 2f4709c08 + the chart-sheet change; ref = /usr/bin/soffice 24.2.7.2 420(Build:2)
 # fonts = system fontconfig (Carlito, Caladea, Liberation, DejaVu); rule = batch-check.sh 2026-09-05, glyphs
 # TOTAL 307  MATCH 258  MISMATCH 49  REF-CANNOT-RENDER 0   (banked gate at 2f4709c08: MATCH 257)
 # words = tokens carrying at least one Unicode letter or digit; rawwords = pdftotext | wc -w

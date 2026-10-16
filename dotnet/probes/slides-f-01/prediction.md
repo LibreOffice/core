@@ -54,7 +54,7 @@ the eight markers go **black**, not merely wrong by 4/255.
 | P3 | Changed renderings across the 163: **1–4**. `FAAAI…` certainly; the rest are whichever census hits have a marker, a radar, or a filled series at style 9–16/33–40. |
 | P4 | `FAAAI…` page 7's 8 scatter markers return to **`#850F89`**, the reference's own value, and the count of `#850F89` records on the page rises by 8. Direction: **1 page closer, 0 further** on that deck. |
 | P5 | Verdicts moved: **0 of 163**. Slides stays 144 of 163 and 163 of 163 page-exact. A marker fill cannot move a page count and cannot move a word count; I say this plainly rather than hedging. |
-| P6 | Cross-track `Paperless.Ooxml`: words **0 of 200**, sheets **0 of 171** — but *not* by the same construction slides-e used. My change is in `DrawingChartPlot`'s series reader and in `Paperless.Core`'s marker painter, neither of which is gated on the format matrix, so the e-01 call-site argument does not carry over and I will re-measure both single chart-bearing documents on both legs rather than inherit the zero. |
+| P6 | Cross-track `XRay.Office.Ooxml`: words **0 of 200**, sheets **0 of 171** — but *not* by the same construction slides-e used. My change is in `DrawingChartPlot`'s series reader and in `XRay.Office.Core`'s marker painter, neither of which is gated on the format matrix, so the e-01 call-site argument does not carry over and I will re-measure both single chart-bearing documents on both legs rather than inherit the zero. |
 | P7 | `pdf-image-diff` on `FAAAI…` page 7 reads **the same value on both legs** again, to two decimals. Eight 6.3 pt discs at a 512 px raster is below its resolution. The measurement is the operator census; the pixel metric is reported as blind, not as agreement. |
 | C1' | Control: a deck with charts but no `a:noFill` series and no marker `spPr` — `Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.pptx`, e-01's control — must not change. |
 
@@ -68,7 +68,7 @@ the eight markers go **black**, not merely wrong by 4/255.
    the same defect one level down, and `PointFills` has its own colour path. I will count them
    but I do **not** plan to implement the per-point marker in this round; if the census shows them
    the ceiling is understated by that amount and I will say so.
-3. **ODF.** `ChartLayout.cs:2089` is in `Paperless.Core`, so it is shared with the ODF chart
+3. **ODF.** `ChartLayout.cs:2089` is in `XRay.Office.Core`, so it is shared with the ODF chart
    reader, which has no `c:marker/c:spPr` to give it. I intend the fallback expression to stay
    byte-identical when the new member is null so ODP/ODS/ODT reach is zero *by construction* — but
    that is an intention, and the sweep of all 534 is what will test it.
@@ -83,6 +83,6 @@ the eight markers go **black**, not merely wrong by 4/255.
 ## If the coupled pair closes early
 
 `c:minorGridlines` at `DrawingChartPlot.cs:374`, reach already measured at 3 decks / 12 instances.
-I predict I will **not** reach it, because the marker change needs a `Paperless.Core` member and
+I predict I will **not** reach it, because the marker change needs a `XRay.Office.Core` member and
 therefore the full 534-document cross-track sweep, and that sweep is the expensive half of the
 round.

@@ -2,7 +2,7 @@
 # probe-run.sh <dir-of-docx> — render each with soffice and with the CLI, report the y of
 # the first word on page 2.
 S=/tmp/claude-0/-home-user-libreoffice-core/3e093938-a459-5268-987b-74c5270259d6/scratchpad
-CLI="${PAPERLESS_CLI:-/home/user/libreoffice-core/.claude/worktrees/agent-aafbce72884dcea0e/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli}"
+CLI="${XRAY_OFFICE_CLI:-/home/user/libreoffice-core/.claude/worktrees/agent-aafbce72884dcea0e/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli}"
 D="$1"
 mkdir -p "$D/ref" "$D/ours"
 for f in "$D"/*.docx; do

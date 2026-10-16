@@ -2,7 +2,7 @@
 
 Document: `/home/user/sample-files/words/metrics-001/docx/02_mcar_part-2_and_IS_v2.10.docx`
 Reference: `/opt/libreoffice26.2/program/soffice` 26.2.4.2 (PDF Producer confirms `LibreOffice 26.2.4.2 (X86_64)`).
-Ours: `dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/Paperless.Cli` (as built).
+Ours: `dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli` (as built).
 Page counts: reference 312, ours 314.
 
 ## 0. Provenance and staleness  (read first)
@@ -10,8 +10,8 @@ Page counts: reference 312, ours 314.
 - **Reference side — sound.** All `[bin]` numbers for LibreOffice come from
   `/opt/libreoffice26.2/program/soffice`, 26.2.4.2 (PDF `Producer` confirms it). `/usr/bin/soffice`
   (24.2.7.2) was never used. Nothing below about the reference needs re-measuring.
-- **Our side — Sep-17 build, NOT HEAD.** Every `[bin]` number attributed to Paperless was measured
-  with `dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/Paperless.Cli`, mtime
+- **Our side — Sep-17 build, NOT HEAD.** Every `[bin]` number attributed to X-Ray.Office was measured
+  with `dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli`, mtime
   **2026-09-17 06:33**. HEAD is `bccfeb64b` (2026-09-20). **Three commits touched
   `Layout/TableLayouter.cs` after that binary was built**, all of them in this exact area:
   - `f2207fde9` (Sep 17 22:38) "The row below a table boundary pays the whole band (O84)" — replaced
@@ -176,7 +176,7 @@ under `54.00 + 0.25`. So the reference drops the spacing and uses 14.90 →
 
 ### Our source  [src], read at HEAD `bccfeb64b`
 
-`dotnet/src/Paperless.WordProcessing/Layout/TableLayouter.cs`, `HeightAt`, line 703:
+`dotnet/src/XRay.Office.WordProcessing/Layout/TableLayouter.cs`, `HeightAt`, line 703:
 
 ```csharp
 else if (!tableBelow
@@ -216,7 +216,7 @@ finding does not disturb. The **master** part's trailing spacing was never swept
 
 ## 4. Proposed patch (NOT applied)
 
-File: `dotnet/src/Paperless.WordProcessing/Layout/TableLayouter.cs`
+File: `dotnet/src/XRay.Office.WordProcessing/Layout/TableLayouter.cs`
 
 1. `HeightAt` (line 612): add a `bool chargeTrailing` parameter. When false, skip the
    `else if` at line 703 so `bottom` stays at the last line's bottom (`Advance` not consulted).
@@ -291,12 +291,12 @@ anyway.
 ## 7. What must be re-measured against a HEAD build
 
 Everything in this file about the **reference** stands as measured. The following are Sep-17-build
-numbers and need re-running once `dotnet/tools/Paperless.Cli` is rebuilt at `bccfeb64b` or later.
+numbers and need re-running once `dotnet/tools/XRay.Office.Cli` is rebuilt at `bccfeb64b` or later.
 All the harness is in this directory and takes about a minute.
 
 | what | how | what to check |
 |---|---|---|
-| The corpus symptom still exists | `Paperless.Cli render` the document, `pdftotext -f 14 -l 15` | Does our page 15 still open with `3`? Is the page count still 314 against 312? |
+| The corpus symptom still exists | `XRay.Office.Cli render` the document, `pdftotext -f 14 -l 15` | Does our page 15 still open with `3`? Is the page count still 314 against 312? |
 | The one-line offset across pages 3-16 | the inline script in §2a (recorded as `pagesum.py` / the offset table) | Still `-1` from page 4 through page 16? |
 | Our page-3 geometry | `python3 ybase.py ours/…pdf 3` and the stroke dump | Last complete row's bottom rule (was 69.85), room against the 54.00 body bottom (was 15.85) |
 | Our split-part height | stroke dump of our pages 14 and 15 | Was 16.95 rule-to-rule. `a3159ce0d` predicts ~17.45 at HEAD (one band at the head plus one at the cut) |

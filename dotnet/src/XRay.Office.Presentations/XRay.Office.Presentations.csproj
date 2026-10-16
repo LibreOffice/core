@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Presentation documents (the LibreOffice Impress equivalent): PPTX/PPTM/POTX/POTM/PPSX/PPSM, PPT/POT/PPS, ODP/OTP/FODP. Includes slide rendering. Part of X-Ray.Office, a pure C# port of LibreOffice's document import and rendering; install the X-Ray.Office package for the whole set.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Placeholder matching has five priority rungs and a sentinel index; testing it through
+         a whole package would need a package per rung, so the tests reach the type directly. -->
+    <InternalsVisibleTo Include="XRay.Office.Presentations.Tests" />
+    <!-- The character-style chain resolves to a colour and a typeface the content tree does not
+         carry, so the only way to check either against LibreOffice's own render is to reach the
+         resolver rather than the extracted document. -->
+    <InternalsVisibleTo Include="XRay.Office.Fidelity.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XRay.Office.Core\XRay.Office.Core.csproj" />
+    <ProjectReference Include="..\XRay.Office.Containers\XRay.Office.Containers.csproj" />
+    <ProjectReference Include="..\XRay.Office.Text\XRay.Office.Text.csproj" />
+    <ProjectReference Include="..\XRay.Office.Vector\XRay.Office.Vector.csproj" />
+    <ProjectReference Include="..\XRay.Office.Ooxml\XRay.Office.Ooxml.csproj" />
+    <ProjectReference Include="..\XRay.Office.OpenDocument\XRay.Office.OpenDocument.csproj" />
+    <ProjectReference Include="..\XRay.Office.MsBinary\XRay.Office.MsBinary.csproj" />
+  </ItemGroup>
+
+</Project>

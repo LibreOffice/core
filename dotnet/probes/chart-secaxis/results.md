@@ -365,9 +365,9 @@ with the widest reach, and both were worth doing for different reasons.
 
 | | baseline at `0fc357beb` | after |
 |---|---|---|
-| `dotnet build Paperless.slnx -v q -nologo` | 0 warnings, 0 errors | **0 warnings, 0 errors** |
+| `dotnet build XRay.Office.slnx -v q -nologo` | 0 warnings, 0 errors | **0 warnings, 0 errors** |
 | ten non-fidelity projects, run individually and totalled | 5841 / 0 failed / 0 skipped | **5859 / 0 / 0** — the 18 are this round's own new tests |
-| `Paperless.Fidelity.Tests` | 542 / 10 / 0 of 552 | **542 / 10 / 0 of 552** |
+| `XRay.Office.Fidelity.Tests` | 542 / 10 / 0 of 552 | **542 / 10 / 0 of 552** |
 
 Per project after: Containers 109, Core 457, Markup 259, OpenDocument 128, Presentations 956,
 Rendering 162, Spreadsheets 1121, Text 723, Vector 302, WordProcessing 1642.

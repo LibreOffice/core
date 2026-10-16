@@ -1,7 +1,7 @@
 import os, re, subprocess
 OPS = "/home/user/libreoffice-core/.claude/skills/render-comparison/scripts/pdf-ops.py"
 SOFFICE = "/opt/libreoffice26.2/program/soffice"
-CLI = "/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli"
 def rules(pdf, page):
     out = subprocess.run(["python3", OPS, "dump", pdf, "--page", str(page)],
                          capture_output=True, text=True).stdout

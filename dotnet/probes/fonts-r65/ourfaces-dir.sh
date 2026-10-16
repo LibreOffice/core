@@ -4,7 +4,7 @@
 set -uo pipefail
 SRC="${1:?usage: ourfaces-dir.sh <srcdir> <out.tsv>}"
 OUT="${2:?usage: ourfaces-dir.sh <srcdir> <out.tsv>}"
-CLI="${PAPERLESS_CLI:?set PAPERLESS_CLI}"
+CLI="${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI}"
 WORK="$(mktemp -d "$(dirname "$OUT")/ours.XXXXXX")"
 export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1700000000}"
 : > "$OUT"

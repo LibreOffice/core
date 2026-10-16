@@ -1,10 +1,10 @@
-# `paperless extract` is blind to a SmartArt diagram in a word-processing document
+# `xray-office extract` is blind to a SmartArt diagram in a word-processing document
 
 **Measured 2026-09-06 at `ffda5d02e` plus this round's change**, in `/home/user/wt-words67`.
 
 | | |
 |---|---|
-| ours | `Paperless.Cli` built from this worktree; the "before" figures are the same tree with this round's three files reverted, `obj`/`bin` removed and rebuilt |
+| ours | `XRay.Office.Cli` built from this worktree; the "before" figures are the same tree with this round's three files reverted, `obj`/`bin` removed and rebuilt |
 | ref26 | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2**, its eight Latin duplicate faces aside |
 | corpus | `/home/user/sample-files`, 947 documents |
 
@@ -16,7 +16,7 @@ The round before this one made a DOCX SmartArt **render**. Extraction was untouc
 are separate paths on purpose: `IDocument` gives content, `IPaginatedDocument.Layout()` is a
 distinct deferred step, and extraction must not pay for fonts or layout. So
 `024_Unit_Circle_Chart_Colorful_Circles…docx` drew its five nodes and still extracted to the body
-text alone — `paperless extract | grep -c "YOUR TEXT"` was **0**.
+text alone — `xray-office extract | grep -c "YOUR TEXT"` was **0**.
 
 The PPTX side had read them from the data model since the slides track needed it
 (`PptxShapeReader.ReadDiagram`). `DocxContentReader.ReadChart` is the sibling seat, and there was
@@ -45,7 +45,7 @@ happens to anchor them would join two unrelated pieces of prose and split that p
 
 **The walk itself did not need writing twice.** It parses `dgm:` markup and emits content nodes, so
 by `CLAUDE.md`'s own rule it belongs one layer above Core with the other readers of OOXML that
-serve more than one family: it is now `DiagramParts.AuthoredText` in `Paperless.Ooxml/DrawingML`,
+serve more than one family: it is now `DiagramParts.AuthoredText` in `XRay.Office.Ooxml/DrawingML`,
 beside the part resolution the previous round moved there, and `PptxShapeReader.ReadDiagram` is
 three lines that call it.
 
@@ -58,7 +58,7 @@ distinguishable by the output rather than by inspection.
 
 ## Before and after
 
-Extraction, `paperless extract`, both binaries built from this worktree:
+Extraction, `xray-office extract`, both binaries built from this worktree:
 
 | document | | before | after | authored (census) |
 |---|---|---:|---:|---:|
@@ -78,7 +78,7 @@ first pass at counting them filtered on the name and reported 15 of 19.
 
 ## The blast radius, measured rather than argued
 
-`paperless extract` was run over **every** words and slides document in the corpus with both
+`xray-office extract` was run over **every** words and slides document in the corpus with both
 binaries and the output md5'd:
 
 - **slides: 0 of 302 changed.** The `PptxShapeReader` refactor is behaviour-preserving to the byte.
@@ -102,7 +102,7 @@ defined not to do.
 
 Where a diagram *does* arrive as ordinary shapes, `OdfContentReader` already reads it:
 `ReadShape`'s `"g" or "a"` case recurses into a group
-(`Paperless.OpenDocument/OdfContentReader.cs`:971-973) and its `default` case reads a custom
+(`XRay.Office.OpenDocument/OdfContentReader.cs`:971-973) and its `default` case reads a custom
 shape's paragraphs directly.
 
 **The legacy binaries are the same story with a different container.** The same document saved as
@@ -117,5 +117,5 @@ to read.
 
 ```sh
 python3 census.py /home/user/sample-files            # the reach, per document and per family
-paperless extract <doc> --json                       # the Frame sections a diagram becomes
+xray-office extract <doc> --json                       # the Frame sections a diagram becomes
 ```

@@ -282,7 +282,7 @@ which is what `probes/chart-layout` and `probes/chart-secaxis` found for the sam
 
 | | baseline at `fdab86b6a` | after |
 |---|---|---|
-| `dotnet build Paperless.slnx -v q -nologo` | 0 warnings, 0 errors | **0 warnings, 0 errors** |
+| `dotnet build XRay.Office.slnx -v q -nologo` | 0 warnings, 0 errors | **0 warnings, 0 errors** |
 | ten non-fidelity projects, run individually and totalled | 5985 / 0 / 0 | **6001 / 0 / 0** — the 16 are this round's own new tests |
 
 Per project after: Containers 109, Core 507, Markup 259, OpenDocument 129, Presentations 966,

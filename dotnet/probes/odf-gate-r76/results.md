@@ -2,7 +2,7 @@
 
 ## Environment
 
-    ours   = Paperless.Cli @ c6e730d90 -- five rounds merged: rtfshape, odpchart, odtframe,
+    ours   = XRay.Office.Cli @ c6e730d90 -- five rounds merged: rtfshape, odpchart, odtframe,
              chartresid, odshdr
     ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2, passed through
              batch-check.sh's new $REF_SOFFICE rather than PATH
@@ -34,7 +34,7 @@ that the tree is calibrated to the tarball; reading that warning was not enough.
 resolves `$REF_SOFFICE` and **prints the reference's path and version** beside the CLI it measures,
 so a run says which of the two it used. The header of this one:
 
-    measuring .../Paperless.Cli
+    measuring .../XRay.Office.Cli
     reference /opt/libreoffice26.2/program/soffice -- LibreOffice 26.2.4.2 0229ac93...
 
 ## What this confirms

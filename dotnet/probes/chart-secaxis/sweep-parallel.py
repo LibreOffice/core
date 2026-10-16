@@ -3,7 +3,7 @@
 
 sweep.py renders and scores one document at a time, which on this four-core container shared
 with three other agents came to about four rows a minute — three hours for the corpus. The
-work is entirely subprocess waits (`pdfinfo`, `pdftotext`, `pdffonts`, and `paperless render`),
+work is entirely subprocess waits (`pdfinfo`, `pdftotext`, `pdffonts`, and `xray-office render`),
 so it parallelises exactly; `prerender.py` fills the `ours` half and this scores what is there.
 
 The verdict rule is `batch-check.sh`:262-286 transcribed, identical to sweep.py's, and it is
@@ -19,8 +19,8 @@ from pathlib import Path
 CORPUS = Path('/home/user/sample-files')
 GATE = Path('/home/user/gate-2f47')
 CLI = os.environ.get(
-    'PAPERLESS_CLI',
-    '/home/user/wt-secaxis/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli')
+    'XRAY_OFFICE_CLI',
+    '/home/user/wt-secaxis/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli')
 
 
 def identity(path): return f"{path.stem}__{path.suffix.lstrip('.').lower()}"

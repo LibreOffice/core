@@ -95,7 +95,7 @@ intercept is not, and is not used.
 Usage
 -----
 
-    PAPERLESS_CLI=... python3 ascent-eighty-percent.py /abs/workdir
+    XRAY_OFFICE_CLI=... python3 ascent-eighty-percent.py /abs/workdir
 """
 
 import os
@@ -169,9 +169,9 @@ def tops(pdf, page):
 
 def main():
     out = sys.argv[1] if len(sys.argv) > 1 else '/tmp/ascent-eighty'
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     if not cli:
-        raise SystemExit('set PAPERLESS_CLI to the tree you mean to measure')
+        raise SystemExit('set XRAY_OFFICE_CLI to the tree you mean to measure')
 
     os.makedirs(os.path.join(out, 'ours'), exist_ok=True)
     docx = os.path.join(out, 'asc.docx')

@@ -1,6 +1,6 @@
 #!/bin/sh
 # Render every probe both ways and report page count plus the geometry each case asks about.
-# $1 = probe directory, $2 = output directory, $3 = the Paperless.Cli to measure.
+# $1 = probe directory, $2 = output directory, $3 = the XRay.Office.Cli to measure.
 set -e
 IN=$1; OUT=$2; CLI=$3
 mkdir -p "$OUT/ours" "$OUT/ref26" "$OUT/prof"

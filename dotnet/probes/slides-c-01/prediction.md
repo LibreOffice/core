@@ -6,7 +6,7 @@ Written and committed **before any post-change measurement**. Base commit `eab64
 Two changes are in scope:
 
 1. **Escher picture cropping on the `.ppt` path**, with `SlideImages.Uncropped`/`Inset` moved
-   down to `Paperless.Core` first so `.doc` and `.xls` inherit the arithmetic.
+   down to `XRay.Office.Core` first so `.doc` and `.xls` inherit the arithmetic.
 2. **A run's colour from `a:gradFill`**, alpha included, in `PptxTextBody`.
 
 ## Verdicts
@@ -37,8 +37,8 @@ byte-identical, so a non-zero count is the change and not the harness.)
 | slides, from the crop (`.ppt` only) | **12–16 of 51 `.ppt` decks** |
 | slides, from the run gradient (`pptx` only) | **5–16 of 112 `pptx` decks** |
 | slides, total | **17–32 of 163** |
-| **words**, from the `Paperless.Core` move | **0 of 200** |
-| **sheets**, from the `Paperless.Core` move | **0 of 171** |
+| **words**, from the `XRay.Office.Core` move | **0 of 200** |
+| **sheets**, from the `XRay.Office.Core` move | **0 of 171** |
 
 The crop band is set below the previous round's census ceiling of 16 decks / 100 shapes on
 purpose. That census counts shapes stating a non-zero crop property in the `PowerPoint Document`
@@ -52,9 +52,9 @@ census produced 1). So I expect the crop to land at the **top** of its band — 
 that may be inherited by no run at all.
 
 The words and sheets zeroes are the load-bearing prediction of this round, because
-`Paperless.Core` is shared by everything. A pure code move with no behavioural edit must move
+`XRay.Office.Core` is shared by everything. A pure code move with no behavioural edit must move
 nothing. If either is non-zero, the move is not pure and I have to find out why before anything
-else. Precedent cuts both ways here: round 45 moved code in `Paperless.Text` and swept 334 of
+else. Precedent cuts both ways here: round 45 moved code in `XRay.Office.Text` and swept 334 of
 334 byte-identical, round 44 changed `PdfImages` and every affected deck moved. The difference
 is that round 44 changed behaviour and round 45 did not; this is a round-45-shaped change.
 

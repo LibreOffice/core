@@ -3,9 +3,9 @@
 #   mutate.sh <name>
 set -u
 D=/home/user/libreoffice-core/.claude/worktrees/sheets-r26/dotnet
-ORH=$D/src/Paperless.Spreadsheets/Layout/SheetOptimalRowHeights.cs
-ST=$D/src/Paperless.Spreadsheets/Layout/SheetText.cs
-ODS=$D/src/Paperless.Spreadsheets/OpenDocument/OdsCellFormats.cs
+ORH=$D/src/XRay.Office.Spreadsheets/Layout/SheetOptimalRowHeights.cs
+ST=$D/src/XRay.Office.Spreadsheets/Layout/SheetText.cs
+ODS=$D/src/XRay.Office.Spreadsheets/OpenDocument/OdsCellFormats.cs
 
 restore() { cp /tmp/orh.bak "$ORH"; cp /tmp/st.bak "$ST"; cp /tmp/ods.bak "$ODS"; }
 restore
@@ -98,7 +98,7 @@ PY
   *) echo "unknown mutation $1" >&2; exit 2 ;;
 esac
 
-out=$(cd "$D" && dotnet test tests/Paperless.Spreadsheets.Tests/Paperless.Spreadsheets.Tests.csproj \
+out=$(cd "$D" && dotnet test tests/XRay.Office.Spreadsheets.Tests/XRay.Office.Spreadsheets.Tests.csproj \
       --filter "FullyQualifiedName~SheetRotatedRowHeightTests|FullyQualifiedName~SheetRowHeightDeviceTests" 2>&1)
 echo "$1: $(echo "$out" | grep -oP 'Failed:\s+\d+, Passed:\s+\d+' | tail -1)"
 echo "$out" | grep -oP '^\s+Failed \S+' | sed 's/^/    /' | sort | uniq -c | head -5

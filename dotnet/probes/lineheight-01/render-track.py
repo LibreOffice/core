@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render every document of a corpus track with one Paperless build.
+"""Render every document of a corpus track with one X-Ray.Office build.
 
     render-track.py <corpus-root> <glob> <outdir> [workers]
 
@@ -11,7 +11,7 @@ import os, subprocess, sys, concurrent.futures
 
 ROOT, GLOB, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
 WORKERS = int(sys.argv[4]) if len(sys.argv) > 4 else 6
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 os.makedirs(OUT, exist_ok=True)
 ENV = dict(os.environ, SOURCE_DATE_EPOCH="1700000000")
 

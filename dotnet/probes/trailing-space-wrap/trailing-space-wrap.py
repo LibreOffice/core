@@ -63,7 +63,7 @@ it should be measured for how many documents it moves before it is believed.
 Usage
 -----
 
-    PAPERLESS_CLI=... python3 trailing-space-wrap.py /abs/workdir
+    XRAY_OFFICE_CLI=... python3 trailing-space-wrap.py /abs/workdir
 """
 
 import os
@@ -159,9 +159,9 @@ def summarise(rendered):
 
 def main():
     out = sys.argv[1] if len(sys.argv) > 1 else '/tmp/trailing-space'
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     if not cli:
-        raise SystemExit('set PAPERLESS_CLI to the tree you mean to measure')
+        raise SystemExit('set XRAY_OFFICE_CLI to the tree you mean to measure')
 
     names, blob = load()
     cases = [('baseline', None), ('merged-runs', merge_runs),

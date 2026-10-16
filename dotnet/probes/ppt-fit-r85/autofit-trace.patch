@@ -1,12 +1,12 @@
 --- /tmp/SlideAutofit.cs.before	2026-09-08 19:43:41.297286084 +0000
-+++ dotnet/src/Paperless.Presentations/Layout/SlideAutofit.cs	2026-09-08 19:51:53.142817803 +0000
++++ dotnet/src/XRay.Office.Presentations/Layout/SlideAutofit.cs	2026-09-08 19:51:53.142817803 +0000
 @@ -404,6 +404,67 @@
      /// replaces; the walk visits at most thirteen and usually two or three.
      /// </para>
      /// </remarks>
 +    private static void Trace(SlideTextBody body, DocRect area, SlideFonts fonts)
 +    {
-+        if (Environment.GetEnvironmentVariable("PAPERLESS_AUTOFIT_TRACE") is not { Length: > 0 } path)
++        if (Environment.GetEnvironmentVariable("XRAY_OFFICE_AUTOFIT_TRACE") is not { Length: > 0 } path)
 +        {
 +            return;
 +        }

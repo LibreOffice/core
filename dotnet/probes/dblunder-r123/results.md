@@ -334,7 +334,7 @@ in three layout models, and the number that sizes it is above.
 
 ### 4.1 The state
 
-`TextUnderline { None, SingleLine, DoubleLine }` in `Paperless.Text.Fonts` — the shape
+`TextUnderline { None, SingleLine, DoubleLine }` in `XRay.Office.Text.Fonts` — the shape
 `SheetUnderline` already had, spelled the same way because CA1720 rejects `Single` and `Double`. It
 replaces the `bool` on `PageRun`, `WordCharacterFormat`, `WordTextStyle`, `OdfTextFormat`,
 `OdfTextStyle`, `RtfLayoutRun`, `RtfState`, `RtfStyleFormatting`, `Ww8LayoutFormat` and
@@ -557,18 +557,18 @@ which is what it was written for.
 
 | project | passed | failed | skipped |
 |---|---:|---:|---:|
-| `Paperless.Core.Tests` | 591 | 0 | 0 |
-| `Paperless.Text.Tests` | 744 | 0 | 0 |
-| `Paperless.Containers.Tests` | 109 | 0 | 0 |
-| `Paperless.Vector.Tests` | 309 | 0 | 0 |
-| `Paperless.Markup.Tests` | 259 | 0 | 0 |
-| `Paperless.OpenDocument.Tests` | 169 | 0 | 0 |
-| `Paperless.WordProcessing.Tests` | 1965 | 0 | 0 |
-| `Paperless.Spreadsheets.Tests` | 1387 | 0 | 0 |
-| `Paperless.Presentations.Tests` | 1203 | 0 | 0 |
-| `Paperless.Rendering.Tests` | 164 | 0 | 0 |
+| `XRay.Office.Core.Tests` | 591 | 0 | 0 |
+| `XRay.Office.Text.Tests` | 744 | 0 | 0 |
+| `XRay.Office.Containers.Tests` | 109 | 0 | 0 |
+| `XRay.Office.Vector.Tests` | 309 | 0 | 0 |
+| `XRay.Office.Markup.Tests` | 259 | 0 | 0 |
+| `XRay.Office.OpenDocument.Tests` | 169 | 0 | 0 |
+| `XRay.Office.WordProcessing.Tests` | 1965 | 0 | 0 |
+| `XRay.Office.Spreadsheets.Tests` | 1387 | 0 | 0 |
+| `XRay.Office.Presentations.Tests` | 1203 | 0 | 0 |
+| `XRay.Office.Rendering.Tests` | 164 | 0 | 0 |
 | **subtotal** | **6900** | **0** | **0** |
-| `Paperless.Fidelity.Tests` | 542 | **10** | 0 |
+| `XRay.Office.Fidelity.Tests` | 542 | **10** | 0 |
 
 **The ten are the same ten by name that round 120 recorded**, and none of them is a rule:
 

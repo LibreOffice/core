@@ -24,8 +24,8 @@ REFS="${REFPDFS:-/c/sandbox/workdir/refpdfs-26.2.4.2-fonts}"
 
 mkdir -p "$OUT" && OUT="$(cd "$OUT" && pwd)"
 
-CLI="${PAPERLESS_CLI:-}"
-[ -x "$CLI" ] || { echo "set PAPERLESS_CLI to the binary you mean to measure" >&2; exit 1; }
+CLI="${XRAY_OFFICE_CLI:-}"
+[ -x "$CLI" ] || { echo "set XRAY_OFFICE_CLI to the binary you mean to measure" >&2; exit 1; }
 echo "measuring $CLI against banked refs in $REFS" >&2
 
 # Reproducible output: a document that prints today's date must not differ between two runs.

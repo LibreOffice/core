@@ -72,7 +72,7 @@ at 60 dpi grayscale:
 
 The two lease checklists move 0.02 the wrong way against 26.2.4.2 and that figure is not
 evidence: **the tarball substitutes a font for them that this machine does not have.** Their
-cells are set in `Bell MT`; 24.2.7.2 and Paperless both resolve it through fontconfig to DejaVu
+cells are set in `Bell MT`; 24.2.7.2 and X-Ray.Office both resolve it through fontconfig to DejaVu
 Sans, while the TDF 26.2.4.2 finds its own bundled `NotoSerif-Regular.ttf`, whose line is 23
 device pixels at 13 pt against DejaVu Sans's 20. The reference's own flat-ODF export shows the
 consequence in the row heights: 626 twips against 716 for a two-line row, 89 535 twips against

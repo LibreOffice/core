@@ -56,7 +56,7 @@ A second thing fell out of it: **`w:iCs` is the other half of round 56's finding
 under the complex-script slot. Round 56 established that `w:iCs` does not lean *Latin* text; this is
 the same rule from the other side, and it makes all six filters agree.
 
-### The change, and it is `Paperless.Text`
+### The change, and it is `XRay.Office.Text`
 
 `IGlyphFallbackResolver` gains a **default interface method**
 `ReferenceFor(OpenTypeFace, bool isItalicRequested)` — the one-argument reverse lookup plus
@@ -199,7 +199,7 @@ to implement.
 
 ## 4. The 24.2.7.2 audit — a shared-layer site, taken and found wrong
 
-`Paperless.Text/Layout/LineBreaker.cs`:473 said LibreOffice never lets a hyphen open a number, that
+`XRay.Office.Text/Layout/LineBreaker.cs`:473 said LibreOffice never lets a hyphen open a number, that
 "dropping HY here is the whole of the rule", and gave five worked examples. **Three of the five are
 false on 26.2.4.2, the code implemented the false version, and a test asserted it.**
 
@@ -227,7 +227,7 @@ exception.
 
 Counts re-derived with the file's own commands rather than quoted: at the base commit **39 open,
 17 VERIFIED / 2 FIXED / 1 WRONG / 0 UNDECIDED**, which reproduces the round-56/57 merge note exactly.
-At this tree **38 open** (`Paperless.Text` 6 → 5) and **17 / 3 / 1 / 0**. The open count falls here,
+At this tree **38 open** (`XRay.Office.Text` 6 → 5) and **17 / 3 / 1 / 0**. The open count falls here,
 against the file's usual convention, because the site's prose was not merely stale — its worked
 examples were wrong, so there was nothing to preserve as a record of what the code was fitted to.
 

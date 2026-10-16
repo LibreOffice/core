@@ -7,7 +7,7 @@ output after the change.
 
 ## The seat
 
-`Paperless.Spreadsheets/MsBinary/XlsChartReader.cs` never sets `ChartPlot.ValueFormat`. Both
+`XRay.Office.Spreadsheets/MsBinary/XlsChartReader.cs` never sets `ChartPlot.ValueFormat`. Both
 readers that do — `DrawingChartPlot` (OOXML) and `OdfChartPlot` (ODF) — set it from an axis
 element the markup carries; BIFF has no such element on this chart, so the field stayed null and
 `ChartDataLabel.Write` fell through to `NumberFormatter.General`, which is the shortest
@@ -52,7 +52,7 @@ the source range against the workbook's `XF`/`FORMAT` tables — so it counts wh
 
 All six are on the sheets track (`batch-002` ×2, `batch-010` ×3, `batch-017` ×1). No `.doc`,
 `.ppt` or any other OLE2 file in `words/` or `slides/` holds a chart substream, and no library
-outside `Paperless.Spreadsheets` references `XlsChartBuilder`, so **the predicted cross-track
+outside `XRay.Office.Spreadsheets` references `XlsChartBuilder`, so **the predicted cross-track
 effect is zero renderings**.
 
 ## What is predicted to change, document by document

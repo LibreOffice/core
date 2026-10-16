@@ -33,7 +33,7 @@ mine, at 300 dpi, reproducing r90's crop) — and wrong about the cause it names
 - `038`'s `c:catAx` states `<a:bodyPr rot="-60000000">`, which is outside
   `convertTextRotation`'s `[-5400000, 5400000]` and therefore reads as **zero**
   (`objectformatter.cxx`:1085-1093) — so `bTextBreak` stays true.
-- `DrawingChartPlot.AxisTextOf` (`Paperless.Ooxml/DrawingML/DrawingChartPlot.cs`:943) already
+- `DrawingChartPlot.AxisTextOf` (`XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs`:943) already
   answers `LineBreakAllowed: !date && rotation is 0.0 or 90.0 or 270.0`, i.e. **true here**, and
   `ChartAxisLabels.Resolve` already models the whole ladder — the wrap-restart, the stagger, the
   45°, the thinning. **This tree does not wrap unconditionally; it wraps because no word of

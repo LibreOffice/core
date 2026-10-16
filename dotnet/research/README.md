@@ -1,6 +1,6 @@
 # Research notes
 
-In-depth notes on how LibreOffice implements the formats Paperless targets, written from a
+In-depth notes on how LibreOffice implements the formats X-Ray.Office targets, written from a
 direct read of the C++ sources in this repository.
 
 **Read the relevant document before implementing an area.** They contain exact record
@@ -28,7 +28,7 @@ drift as upstream changes.
 
 ## Scope of the reading
 
-Deliberately excludes Draw, Math and Base, and excludes export paths: Paperless reads.
+Deliberately excludes Draw, Math and Base, and excludes export paths: X-Ray.Office reads.
 
 Where a document recommends a C# approach or library, treat it as a starting position
 rather than a decision. Several such recommendations were overridden after evaluating the

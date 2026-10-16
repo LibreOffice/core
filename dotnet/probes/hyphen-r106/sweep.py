@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render every corpus document with our own CLI, hash the result, and keep no PDF.
 
-Two legs from ONE binary: PAPERLESS_HYPHEN_DICTS=0 is the no-dictionary state, which is
+Two legs from ONE binary: XRAY_OFFICE_HYPHEN_DICTS=0 is the no-dictionary state, which is
 byte-for-byte the behaviour before this seat because ChartAxisLabels asks Hyphenators.For,
 which answers null when the variable turns the shipped file off. Running one binary twice
 removes the rebuild-under-a-sweep trap dotnet/CLAUDE.md records, at the cost of needing a
@@ -23,7 +23,7 @@ ROOT = "/home/user/sample-files"
 
 env = dict(os.environ)
 env["SOURCE_DATE_EPOCH"] = "1700000000"
-env["PAPERLESS_HYPHEN_DICTS"] = DICTS
+env["XRAY_OFFICE_HYPHEN_DICTS"] = DICTS
 
 rels = [l.strip() for l in open(LIST) if l.strip()]
 

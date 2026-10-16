@@ -1,6 +1,6 @@
 """Render each probe through both LibreOffice binaries and our CLI, and report the row pitch.
 
-Usage: PAPERLESS_CLI=<abs path> python3 measure.py [out-dir ...]   (default: every out*/ there is)
+Usage: XRAY_OFFICE_CLI=<abs path> python3 measure.py [out-dir ...]   (default: every out*/ there is)
 
 The pitch is the median gap between the page's full-width horizontal rules, off a 300 dpi raster,
 which for these ten-row tables is the row height.
@@ -11,7 +11,7 @@ import numpy as np
 from PIL import Image
 
 HERE = Path(__file__).resolve().parent
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 BINS = {"24.2": "soffice", "26.2": "/opt/libreoffice26.2/program/soffice"}
 
 def pitch(pdf, dpi=300):

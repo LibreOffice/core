@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Structured text output: a semantic XHTML writer over the shared content tree, and a GitHub-Flavored Markdown writer over that XHTML. Depends on X-Ray.Office.Core alone. Part of X-Ray.Office, a pure C# port of LibreOffice's document import and rendering; install the X-Ray.Office package for the whole set.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XRay.Office.Core\XRay.Office.Core.csproj" />
+  </ItemGroup>
+
+</Project>

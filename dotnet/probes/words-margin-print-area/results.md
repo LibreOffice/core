@@ -3,7 +3,7 @@
 *Measured 2026-09-06 in the container described at the top of `dotnet/CLAUDE.md`. **Both** installed
 references were used and they agree on every figure below: the distro's **24.2.7.2** at
 `/usr/bin/soffice` and the TDF tarball's **26.2.4.2** at `/opt/libreoffice26.2` with its bundled Latin
-faces moved aside. Paperless at `agent/draw-inline`, base `6bf527227`.*
+faces moved aside. X-Ray.Office at `agent/draw-inline`, base `6bf527227`.*
 
 ## Why this exists
 
@@ -119,11 +119,11 @@ arriving on a figure four days old.*
 ## Reproducing
 
 ```sh
-export PAPERLESS_CLI=.../tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=.../tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 python3 makeprobe.py /abs/scratch/mpa
 python3 measure.py   /abs/scratch/mpa /abs/scratch/mpaout
 ```
 
 `measure.py` needs Pillow and `pdftotext`. It renders every fixture through `/usr/bin/soffice`,
-`/opt/libreoffice26.2/program/soffice` and `$PAPERLESS_CLI`, so the version question is re-checked
+`/opt/libreoffice26.2/program/soffice` and `$XRAY_OFFICE_CLI`, so the version question is re-checked
 on every run rather than taken from this file.

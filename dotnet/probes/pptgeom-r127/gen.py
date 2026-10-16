@@ -6,7 +6,7 @@ src=open(LO+'/svx/source/customshapes/EnhancedCustomShapeTypeNames.cxx').read()
 i=src.index('constexpr NameTypeTable pNameTypeTableArray[]'); j=src.index('};', i)
 names=[n for n,_ in re.findall(r'\{\s*u"([^"]+)"_ustr,\s*mso_spt(\w+)\s*\}', src[i:j])]
 
-cs=open(WT+'/src/Paperless.Presentations/MsBinary/PptShapeGeometry.cs').read()
+cs=open(WT+'/src/XRay.Office.Presentations/MsBinary/PptShapeGeometry.cs').read()
 k=cs.index('public static string? PresetOf(ushort shapeType) => shapeType switch')
 m=cs.index('_ => null,', k)
 mapped=[(int(a), b) for a,b in re.findall(r'(\d+)\s*=>\s*"([^"]+)"', cs[k:m])]

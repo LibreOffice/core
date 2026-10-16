@@ -1,5 +1,5 @@
 #!/bin/sh
-# Render EVERY corpus document with a given Paperless.Cli into <out>, one directory per
+# Render EVERY corpus document with a given XRay.Office.Cli into <out>, one directory per
 # document -- never per worker slot, which is how probes/chart-layout lost 124 renders.
 # Reference-free: nothing here calls soffice.
 #   sweep-ours.sh <corpus> <cli> <out> <jobs>

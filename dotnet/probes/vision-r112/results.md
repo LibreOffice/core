@@ -9,7 +9,7 @@ sending — `Thailand17` page 11, for the row-height residual now seated as O54 
 ## Method
 
 ```sh
-Paperless.Cli render Thailand17.ppt --format pdf --outdir .        # ours
+XRay.Office.Cli render Thailand17.ppt --format pdf --outdir .        # ours
 soffice --headless --convert-to pdf --outdir .  Thailand17.ppt     # 26.2.4.2
 pdftoppm -r 128 -f 11 -l 11 -png ours.pdf ours
 pdftoppm -r 128 -f 11 -l 11 -png ref.pdf  ref

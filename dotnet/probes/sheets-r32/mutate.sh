@@ -2,12 +2,12 @@
 # The defects `SheetShownCommentTests` was verified against.
 #
 # Each is one line, meant to be handed to
-# `.claude/skills/corpus-batches/scripts/verify-test.sh Paperless.Spreadsheets '<line>' SheetShownComment`
+# `.claude/skills/corpus-batches/scripts/verify-test.sh XRay.Office.Spreadsheets '<line>' SheetShownComment`
 # from the repository root with a clean `dotnet/`.
 set -euo pipefail
 
-N=dotnet/src/Paperless.Spreadsheets/Ooxml/XlsxNoteCaptions.cs
-G=dotnet/src/Paperless.Spreadsheets/Layout/SheetPageGraphics.cs
+N=dotnet/src/XRay.Office.Spreadsheets/Ooxml/XlsxNoteCaptions.cs
+G=dotnet/src/XRay.Office.Spreadsheets/Layout/SheetPageGraphics.cs
 
 case "${1:?usage: mutate.sh m1|m2|m3|m4|m5}" in
 

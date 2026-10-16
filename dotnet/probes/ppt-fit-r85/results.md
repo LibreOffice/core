@@ -25,8 +25,8 @@ exactly, and it is not in `SlideAutofit` at all.
 number is this checkout's.
 
 **No build overlapped a sweep.** Base and head binaries were built by `cp`-ing the source aside,
-`git checkout --`, `touch`, and `rm -rf obj bin` on `Paperless.Presentations` and
-`Paperless.Cli` before each build — never `git stash`, which is repository-global and this clone
+`git checkout --`, `touch`, and `rm -rf obj bin` on `XRay.Office.Presentations` and
+`XRay.Office.Cli` before each build — never `git stash`, which is repository-global and this clone
 has many worktrees. The instrumentation is **proved out**: it lives in
 `autofit-trace.patch` and not in the tree, and the final binary re-renders all **51 of 51**
 `.ppt` byte-identically to the head sweep taken before the doc-comments landed
@@ -147,7 +147,7 @@ one unit and 0.65 pt respectively. **Left with its seat**, `editeng/source/outli
 
 ## The change
 
-Three seats, all in `Paperless.Presentations`:
+Three seats, all in `XRay.Office.Presentations`:
 
 - **`SlideTextLayout.Appended`** (new) — the four arms above, with the paragraph-index guard.
 - **`SlideTextLayout.EndSize`** (new) — the em an appended line after a break is measured at is
@@ -189,8 +189,8 @@ crosses the band; five of the seven move *towards* the reference, two of them to
 
 ## The tracks not targeted do not move
 
-The diff is one file that only `Paperless.Presentations` compiles, and neither
-`Paperless.WordProcessing` nor `Paperless.Spreadsheets` sits below it — `git grep SlideTextLayout`
+The diff is one file that only `XRay.Office.Presentations` compiles, and neither
+`XRay.Office.WordProcessing` nor `XRay.Office.Spreadsheets` sits below it — `git grep SlideTextLayout`
 over `dotnet/src` finds three mentions outside that library and all three are doc-comment prose.
 Measured anyway: every tenth words and sheets document, **64 of 64 renderings byte-identical**
 between base and head with `SOURCE_DATE_EPOCH` pinned (`sample-base.tsv`, `sample-head.tsv`).
@@ -311,7 +311,7 @@ third row, 338, is the control that does not move), and
 asserts in the draw layer's own unit because that is the unit the item is held in. Both carry the
 citation and the measurement in their remarks.
 
-`Paperless.Fidelity.Tests`: **542 passed / 10 failed of 552, 0 skipped** — the briefed baseline
+`XRay.Office.Fidelity.Tests`: **542 passed / 10 failed of 552, 0 skipped** — the briefed baseline
 exactly, and the same ten (PageDrawing ×4, TabStop ×4, SheetDrawing, JustificationShrink).
 
 ---

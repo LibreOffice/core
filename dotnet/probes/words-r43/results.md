@@ -127,7 +127,7 @@ Three more readings point the same way:
   reference binary is 24.2.7.2 and the tree is a development branch.)
 
 CLAUDE.md's rule for exactly this case is to record it as a known deviation rather than contort
-Paperless into reproducing it, and reproducing it would mean deleting a running head Word draws.
+X-Ray.Office into reproducing it, and reproducing it would mean deleting a running head Word draws.
 **So it is not implemented, and the decision is pinned by `SectionInheritedHeaderTests` rather than
 left in a report** — a later round that wants the verdict has to delete a test that says why not to.
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Render the corpus to PDF with the Paperless CLI.
+"""Render the corpus to PDF with the X-Ray.Office CLI.
 
-Paperless exits 0 only when every file rendered; 65 means the format is not laid
+X-Ray.Office exits 0 only when every file rendered; 65 means the format is not laid
 out yet, 1 means the file could not be read. Both are recorded as-is: an engine
 that declines a document is a result, not an error to hide.
 """
@@ -11,7 +11,7 @@ import csv, json, pathlib, shutil, subprocess, sys, tempfile, time
 ROOT = pathlib.Path("/home/user/sample-files")
 OUT = pathlib.Path("/data/bench/pl")
 MANIFEST = pathlib.Path("/data/bench/manifest.tsv")
-CLI = "/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli"
 TIMEOUT = 300
 WORKERS = 4
 

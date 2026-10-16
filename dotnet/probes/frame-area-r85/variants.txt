@@ -1,5 +1,5 @@
 008_Free_Genogram_Diagram_Template_Green_and_Yellow_Theme_9017c1a8.docx, one attribute
-rewritten per variant, rendered through /opt/libreoffice26.2 (26.2.4.2) and through Paperless.
+rewritten per variant, rendered through /opt/libreoffice26.2 (26.2.4.2) and through X-Ray.Office.
 The number is the yMin of the title text box's own text, in PDF points.
 
 variant           26.2.4.2     ours (at 6a6f18d9a + this round)

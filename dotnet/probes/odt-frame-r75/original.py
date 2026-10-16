@@ -4,7 +4,7 @@
 The original track is the `.docx`/`.doc`/`.rtf` corpus the ODF one was converted from, and
 this is the confinement check: a gain on the converted column that costs a row on the
 original track is not a gain.  Both halves are ours, so `soffice` is not involved at all and
-`SOURCE_DATE_EPOCH` makes `paperless render` byte-deterministic — the PDFs are then
+`SOURCE_DATE_EPOCH` makes `xray-office render` byte-deterministic — the PDFs are then
 comparable with nothing masked.
 
   original.py <before-cli> <after-cli> <workdir>

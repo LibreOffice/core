@@ -66,7 +66,7 @@ Six of six, including both faces of the Liberation 2355-unit refutation.
 | P7 | More than 100 of the 200 words renderings change bytes | 60% |
 | P8 | The words track `match` count does not fall below its current 163 | 55% |
 | P9 | `words/ceiling-001/doc/1447.doc` improves its page count | 35% |
-| P10 | `Paperless.Fidelity.Tests` does not get worse than the 30-of-550 baseline | 50% |
+| P10 | `XRay.Office.Fidelity.Tests` does not get worse than the 30-of-550 baseline | 50% |
 | P11 | Our `hhea`/`OS/2` precedence is **not** the defect — the brief's untested assumption survives | 85% |
 | P12 | Scoping the grid to the Writer path leaves slides and sheets **byte-identical** | 80% |
 | P13 | Calc's reference device is also MSO1/8640 but in 1/100 mm, and Impress's is 600 dpi in 1/100 mm, so both have their *own* grids that this round does not implement | 75% |
@@ -83,5 +83,5 @@ Six of six, including both faces of the Liberation 2355-unit refutation.
 
 ## Baseline to establish first
 
-`Paperless.Fidelity.Tests` at **30 failed of 550**, on the unmodified tree, before anything is
+`XRay.Office.Fidelity.Tests` at **30 failed of 550**, on the unmodified tree, before anything is
 changed.

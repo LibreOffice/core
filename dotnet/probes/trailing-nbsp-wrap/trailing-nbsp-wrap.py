@@ -41,7 +41,7 @@ round that looked exactly like the reference being nondeterministic. It is not:
 Usage
 -----
 
-    export PAPERLESS_CLI=<tree>/dotnet/tools/Paperless.Cli/…/Paperless.Cli
+    export XRAY_OFFICE_CLI=<tree>/dotnet/tools/XRay.Office.Cli/…/XRay.Office.Cli
     python3 trailing-nbsp-wrap.py [outdir]
 """
 

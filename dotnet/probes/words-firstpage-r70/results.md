@@ -6,7 +6,7 @@ Measured 2026-09-07 in `/home/user/wt-wordsgap`, branch `agent/wordsgap`, base `
 | | |
 |---|---|
 | ref26 | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2 0229ac93fcf0d7cb**, its eight Latin duplicates, its Latin Noto and its four `LiberationSansNarrow` all in `.duplicates-aside/` |
-| ours | `Paperless.Cli` built from this worktree, snapshotted to a fixed directory per leg so no rebuild could swap it mid-measurement |
+| ours | `XRay.Office.Cli` built from this worktree, snapshotted to a fixed directory per leg so no rebuild could swap it mid-measurement |
 | gate | `/home/user/gate-2f47/` at `2f4709c08`, reference half reused; scored with `words-ink-r67/score.py`, which replays `batch-check.sh`'s rule as of 2026-09-05 |
 | corpus | `/home/user/sample-files`, words track, **338 documents** |
 

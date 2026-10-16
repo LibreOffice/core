@@ -75,7 +75,7 @@ import zlib
 # The explanation written here for four rounds — "the two put their page origin in slightly
 # different places" — was wrong, and wrong in the direction that matters. On that very workbook
 # the offset was a real defect: an `.xls` cell's margin is 40 twips where every other format's is
-# 20, and Paperless had one shared constant. A page origin moves every run the same way; a margin
+# 20, and X-Ray.Office had one shared constant. A page origin moves every run the same way; a margin
 # moves left-aligned text right and right-aligned text left, and the reference does the second.
 # The sign of the right-aligned runs is what separates them, and nobody looked until round thirty.
 #

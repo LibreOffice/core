@@ -10,12 +10,12 @@ import subprocess, shutil, os, sys, pathlib
 TREE = pathlib.Path('/c/sandbox/workdir/wt-s-chart/dotnet')
 SAVE = pathlib.Path('/c/sandbox/workdir/s-chart-work/restore')
 WORK = pathlib.Path('/c/sandbox/workdir/s-chart-work')
-CLI = TREE / 'tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli'
+CLI = TREE / 'tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli'
 
 FILES = {
-    'plot': 'src/Paperless.Ooxml/DrawingML/DrawingChartPlot.cs',
-    'layout': 'src/Paperless.Core/Charts/ChartLayout.cs',
-    'chart': 'src/Paperless.Presentations/Ooxml/PptxSlideLayoutChart.cs',
+    'plot': 'src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs',
+    'layout': 'src/XRay.Office.Core/Charts/ChartLayout.cs',
+    'chart': 'src/XRay.Office.Presentations/Ooxml/PptxSlideLayoutChart.cs',
 }
 
 VARIANTS = {
@@ -36,7 +36,7 @@ VARIANTS = {
     '        SlideTheme charted = theme; _ = ChartTheme(link.Target, theme);'),
   'line-cap': ('plot',
     '                LineCap = CapOf(properties),',
-    '                LineCap = Paperless.Core.Graphics.LineCap.Butt,'),
+    '                LineCap = XRay.Office.Core.Graphics.LineCap.Butt,'),
   'series-nofill': ('plot',
     '                SuppressesFill(properties) ? null : FillOf(properties, theme) ?? autoFill,',
     '                FillOf(properties, theme) ?? autoFill,'),
@@ -62,7 +62,7 @@ def restore():
         shutil.copy(SAVE / pathlib.Path(rel).name, TREE / rel)
 
 def build():
-    r = subprocess.run(['dotnet', 'build', 'tools/Paperless.Cli/Paperless.Cli.csproj',
+    r = subprocess.run(['dotnet', 'build', 'tools/XRay.Office.Cli/XRay.Office.Cli.csproj',
                         '-v', 'q', '-nologo', '--property:TreatWarningsAsErrors=false'],
                        cwd=TREE, capture_output=True, text=True)
     if r.returncode:

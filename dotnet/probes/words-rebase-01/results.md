@@ -6,7 +6,7 @@ this image does not offer. Nothing measured here is a regression against those f
 figures against a superseded binary.
 
 CLI measured, explicitly, in every sweep:
-`/c/sandbox/workdir/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli`
+`/c/sandbox/workdir/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli`
 (the coordinator's build of `HEAD`). `SOURCE_DATE_EPOCH=1700000000` and `TZ=UTC` pinned on every
 render. No source file was modified this round, so no worktree was taken.
 

@@ -62,10 +62,10 @@ handover's own table sums to 3454 as well. The brief's 3465 is an arithmetic sli
 regression and not a change. Nothing moved; the expected figure was wrong. **0 failed confirmed.**
 
 **But one thing did move, and nothing had flagged it.** The handover says "0 skipped and 0 warnings
-throughout". Today `Paperless.Rendering.Tests` reports **120 passed, 1 skipped, 121 total**:
+throughout". Today `XRay.Office.Rendering.Tests` reports **120 passed, 1 skipped, 121 total**:
 
 ```
-Skipped Paperless.Rendering.Tests.PdfFontTests.ACffFlavouredFaceIsNotClaimedToBeTrueType
+Skipped XRay.Office.Rendering.Tests.PdfFontTests.ACffFlavouredFaceIsNotClaimedToBeTrueType
 ```
 
 It skips on `Assert.SkipUnless(TestCffFace.IsAvailable, "no CFF-flavoured face on this machine")`.
@@ -108,7 +108,7 @@ diff fails-head.txt fails-0fb6d41e0.txt  ->  IDENTICAL SET
 The failing set is **byte-identical** at the two commits (`fails-0fb6d41e0.txt`). `git merge-base
 --is-ancestor 0fb6d41e0 HEAD` passes, and only four commits touched `dotnet/src` in between.
 
-**Therefore: no Paperless code change caused any of the 40.** The environment did.
+**Therefore: no X-Ray.Office code change caused any of the 40.** The environment did.
 
 **But that is where the easy answer stops, and I want to be explicit about it.** "Our code did not
 change" is *not* the same as "our code is right". A reference binary that gets **more** correct
@@ -168,7 +168,7 @@ By elimination, for the position-comparing families the variable is the **LibreO
 
 | class | cases | where |
 |---|---:|---|
-| **Genuine defect / gap in Paperless** | **12** | §4.4 + §5.1 (9, one root cause), §6.4 (2), §6.1 (1) |
+| **Genuine defect / gap in X-Ray.Office** | **12** | §4.4 + §5.1 (9, one root cause), §6.4 (2), §6.1 (1) |
 | Environment (LibreOffice) — reference regressed or merely differs; **we are right** | 18 | §4.1, §4.2, §4.3, §5.2, §5.3, §6.2, §6.3, §6.5, §6.6 |
 | Environment (LibreOffice) — **exposes a real divergence in our shaping** | 8 | §4.5 |
 | **Unexplained** | 2 | §5.4 |
@@ -189,9 +189,9 @@ LibreOffice's Word filters now set unconditionally. It is treated as one item ac
 | 4.1 | environment (LibreOffice) — **reference regressed, we are right** | 5 | LO's text filter triples a paragraph |
 | 4.2 | environment (LibreOffice) — **reference regressed, we are right** | 3 | LO adds a cell margin to an exact row |
 | 4.3 | environment (LibreOffice) — **reference artifact, we are right** | 3 | LO emits a trailing space as its own portion |
-| 4.4 | **genuine gap in Paperless** (with §5.1) | 4 | Word's note separator, not Writer's |
+| 4.4 | **genuine gap in X-Ray.Office** (with §5.1) | 4 | Word's note separator, not Writer's |
 | 4.5 | environment (LibreOffice) — **exposes a real divergence** | 8 | a kerning gap crossing two tolerances |
-| 5.1 | **genuine gap in Paperless** (with §4.4) | 5 | Word's continuous-endnote layout |
+| 5.1 | **genuine gap in X-Ray.Office** (with §4.4) | 5 | Word's continuous-endnote layout |
 | 5.2-5.4 | environment / unexplained | 4 | justification rework, a self-referential test, a boundary tie |
 | 6.1-6.6 | see §6 | 8 | sheets and slides |
 
@@ -200,7 +200,7 @@ LibreOffice's Word filters now set unconditionally. It is treated as one item ac
 Cases: `NothingTheReferenceFindsIsMissingFromTheFeatureDocument` for `tables.doc`, `.docx`,
 `.fodt`, `.odt`, `.rtf`. All five report the identical shortfall:
 
-> content the reference filter found is absent from the Paperless extraction:
+> content the reference filter found is absent from the X-Ray.Office extraction:
 > `'the' x2, 'tables.' x2, 'After' x2`
 
 The reference here is **LibreOffice's `Text (encoded)` filter**, not poppler — `ExtractionComparisonTests.cs:46-51`
@@ -224,10 +224,10 @@ Measured, three ways:
    → 1), and renders the nested table correctly.
 
 So LibreOffice **contradicts itself between its own two exports**, and its rendering agrees with
-the file. Paperless's extraction is exactly right — it reproduces the nesting faithfully and emits
+the file. X-Ray.Office's extraction is exactly right — it reproduces the nesting faithfully and emits
 the paragraph once (measured with the CLI).
 
-**Verdict: environment (LibreOffice version). The reference oracle regressed; Paperless is correct.**
+**Verdict: environment (LibreOffice version). The reference oracle regressed; X-Ray.Office is correct.**
 
 *Measured vs inferred:* everything above is measured. I could **not** reduce it to a minimal
 trigger — a hand-built FODT with a covered cell, with a row span, and an exact replica of the
@@ -250,7 +250,7 @@ Measured, from the reference PDFs' word boxes:
 | LibreOffice, `.docx` | 92.179 | 117.729 | **25.550 pt** |
 
 The document declares `<w:trHeight w:val="454" w:hRule="exact"/>`. **454 twips = 22.700 pt** — which
-is exactly what LibreOffice produces for the ODF twin, and exactly what Paperless produces for all
+is exactly what LibreOffice produces for the ODF twin, and exactly what X-Ray.Office produces for all
 five formats.
 
 The 2.850 pt excess is not a mystery: the same file declares
@@ -261,7 +261,7 @@ LibreOffice 26.2.4.2's Word-import path is adding the cell's declared **top marg
 margins live inside it. Word does not add them, LibreOffice's own ODF path does not add them, and
 at 24.2.7.2 LibreOffice's Word path did not add them either (the test passed).
 
-**Verdict: environment (LibreOffice version). The reference regressed; Paperless is correct.**
+**Verdict: environment (LibreOffice version). The reference regressed; X-Ray.Office is correct.**
 The delta is *exactly* the declared `w:tblCellMar/w:top`, which is as strong as attribution gets.
 
 ### 4.3 `TableAutoLayoutComparisonTests` × 3 — a trailing space counted as a run
@@ -280,13 +280,13 @@ Td 509.4 739.239:   /F1 11 Tf <08> Tj
 
 A single glyph. Decoding the font's `ToUnicode` CMap gives **`0x08` → `' '` (space)**. LibreOffice's
 ODF path emits the line-ending space as a text portion of its own; `pdftotext` correctly reports no
-word there, and Paperless correctly draws nothing.
+word there, and X-Ray.Office correctly draws nothing.
 
 **Verdict: environment (LibreOffice version). A reference-side portion-splitting artifact.**
 Drawing a trailing space or not is invisible in the output; a run count is a producer's internal
 choice, not a fidelity property.
 
-### 4.4 The footnote separator × 4 — **a genuine defect in Paperless**
+### 4.4 The footnote separator × 4 — **a genuine defect in X-Ray.Office**
 
 Cases:
 - `FootnoteComparisonTests.TheRuleAboveTheNotesGoesWhereLibreOfficeDrawsIt` — `footnotes.doc`, `footnotes.docx`
@@ -300,7 +300,7 @@ Measured, straight out of the reference PDFs' content streams:
 |---|---:|---:|
 | LibreOffice, `.odt` | 120.450 pt | 757.451 pt |
 | LibreOffice, `.docx` | **144.000 pt** | **755.251 pt** |
-| Paperless, every format | 120.475 pt | 757.465 pt |
+| X-Ray.Office, every format | 120.475 pt | 757.465 pt |
 
 The test's reported figures reproduce to the digit: it says `144.000 pt rendered` and
 `755.251 pt rendered`, which is what I get from the PDF arithmetic independently.
@@ -310,7 +310,7 @@ percentage, by editing the DOCX's `w:pgMar` from 1134 to 3000 twips a side (text
 295.3 pt) and re-rendering: **the rule stayed exactly 144.000 pt**. A percentage would have shrunk
 with the column; it did not.
 
-Paperless's side is `Paperless.WordProcessing/Layout/Paginator.cs:170`:
+X-Ray.Office's side is `XRay.Office.WordProcessing/Layout/Paginator.cs:170`:
 
 ```csharp
 public double NoteSeparatorWidth { get; init; } = 0.25;
@@ -327,7 +327,7 @@ overrides it. The doc comment on line 166-168 records the measurement it came fr
 PDF export draws the rule from 56.7 to 177.15 pt… 120.45 of 481.89 is exactly 25%" — and that
 measurement is *still exactly right today*, **for ODF**. It was generalised to every format.
 
-**Verdict: genuine defect in Paperless.** LibreOffice 26.2.4.2 corrected its Word import to Word's
+**Verdict: genuine defect in XRay.Office.** LibreOffice 26.2.4.2 corrected its Word import to Word's
 2-inch separator; we still apply Writer's 25 %-of-text-width rule to Word documents. The environment
 change is what made the defect *visible*; the defect is ours and it is real.
 
@@ -398,7 +398,7 @@ line is diagnostic:
 tolerance comment is about tab stops — and the tab stops are perfect. What fails is the drift that
 accumulates *between* them, along a run of text, and resets at every hard position.
 
-So both families are measuring the same quantity: **Paperless's horizontal advances run
+So both families are measuring the same quantity: **X-Ray.Office's horizontal advances run
 systematically ~0.1–0.2 % wider than LibreOffice's**, accumulating along a line (~0.03–0.055 pt per
 word) and resetting at any absolutely-positioned point.
 
@@ -418,7 +418,7 @@ from Carlito's `hmtx` with fontTools for `paginated`'s line 1 (100 characters, 1
 
 ```
 exact unkerned advance sum      462.747 pt
-Paperless's line width          459.573 pt   -> we remove 3.174 pt
+XRay.Office's line width          459.573 pt   -> we remove 3.174 pt
 LibreOffice's, from its own PDF  458.975 pt   -> it removes 3.772 pt
 ```
 
@@ -433,7 +433,7 @@ aligned — and the reference's line right-edges are ragged (529.903, 530.596, 5
 533.643, …), not flush. Justification is ruled out.
 
 That check also **settles the left edge in our favour**, which is worth stating because §4.5's other
-column depends on it. The document declares `w:left="1417"` twips = **70.850 pt**, and Paperless
+column depends on it. The document declares `w:left="1417"` twips = **70.850 pt**, and X-Ray.Office
 puts the pen at exactly **70.850**. LibreOffice's PDF puts it at 70.950. So the constant 0.1000 pt
 seen on all 732 left comparisons is **LibreOffice's export offset, not our error** — which is
 precisely what `TabStopComparisonTests.cs:37-42` documents `PdfPenOffsetPoints` to be, now confirmed
@@ -489,7 +489,7 @@ same eleven words, in both DOC and DOCX. We simply keep one more body line on pa
 
 **This also strengthens §4.4 rather than replacing it.** The 2-inch rule is not an accident of the
 new binary: it is LibreOffice deliberately implementing Word's behaviour behind a Word-only compat
-flag, with a source comment saying so. Paperless applying Writer's 25 % rule to Word documents is a
+flag, with a source comment saying so. X-Ray.Office applying Writer's 25 % rule to Word documents is a
 real defect, and it now has a source-level citation as well as a measurement.
 
 ### 5.2 `JustificationShrinkComparisonTests.TheParagraphBreaksWhereLibreOfficeBreaksIt` ×1
@@ -504,7 +504,7 @@ flag is still imported; the algorithm behind it was rewritten toward MSO's. Best
 was made in the name of matching Word, which suggests the reference is now closer, but that was not
 proven and 24.2.7.2 could not be installed to A/B it.
 
-### 5.3 `JustificationShrinkComparisonTests.TheReferenceItselfSetsTheModeFifteenDocumentInFewerLines` ×1 — **the test does not test Paperless**
+### 5.3 `JustificationShrinkComparisonTests.TheReferenceItselfSetsTheModeFifteenDocumentInFewerLines` ×1 — **the test does not test X-Ray.Office**
 
 This is the distinct category the brief asked to have flagged, and it is real
 (`JustificationShrinkComparisonTests.cs:96-109`):
@@ -516,14 +516,14 @@ newer.Count.ShouldBeLessThan(older.Count);
 ```
 
 `Rendered()` (`:111-114`) is *only* `PdfWords.Read(_libreOffice.ConvertToPdf(...))`. There is **no
-`Drawn()`, no `WordProcessingReader`, no `Layout()` — Paperless never executes.** The test asserts
+`Drawn()`, no `WordProcessingReader`, no `Layout()` — X-Ray.Office never executes.** The test asserts
 that the *installed binary* sets one fixture in fewer lines than another. Its own comment says so:
 "Guards the fixture rather than the engine."
 
 Measured: both documents now come out in **5 lines**, so `5 < 5` fails.
 
 **Verdict: environment (LibreOffice version), and the only case in the 40 that is a candidate for
-deletion rather than repair.** It can never be a statement about Paperless's correctness.
+deletion rather than repair.** It can never be a statement about X-Ray.Office's correctness.
 
 **But it should not simply be deleted, and this is the nuance worth keeping.** The flag still *has*
 an effect — LibreOffice breaks line 1 of the 2013 document after "across" and the 2007 document
@@ -544,7 +544,7 @@ Confirmed as a pure boundary tie by nudging the frame in copies of the fixture a
 
 | `svg:y` | LibreOffice 26.2.4.2, line 4 |
 |---|---|
-| −0.05 cm | divided — "pagination" at 354.5 (= Paperless) |
+| −0.05 cm | divided — "pagination" at 354.5 (= X-Ray.Office) |
 | −0.02 cm | divided — 354.5 |
 | **0 cm (as shipped)** | **not divided** — "pagination" at 242.7 |
 | +0.02 cm | not divided |
@@ -582,7 +582,7 @@ without DejaVu** for all six documents. No render embeds a DejaVu face: these th
 only as the `ea`/`cs` face and all the text is Latin. This is the strongest form of the §3 result —
 the variable was actually removed and nothing moved.
 
-### 6.1 `SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt` ×1 — **a Paperless gap**
+### 6.1 `SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt` ×1 — **an X-Ray.Office gap**
 
 `sheet-rich-text.xlsx`, picture 1 on page 3: reference 94.904 pt wide, ours 95.074 pt.
 
@@ -595,7 +595,7 @@ The test's own docstring records the 24.2.7.2 figure as **1.3201 in = 95.05 pt**
 (`SheetDrawingComparisonTests.cs:19`), which is the raw anchor arithmetic and matches **ours**.
 So we match the file and the old reference; LibreOffice deliberately changed to match Excel.
 
-**Verdict: genuine gap in Paperless.** Parity now requires adopting the clamp. Same shape as §4.4:
+**Verdict: genuine gap in XRay.Office.** Parity now requires adopting the clamp. Same shape as §4.4:
 the reference moved toward the owning application and we did not follow.
 
 ### 6.2 `SheetSpilledTextComparisonTests` ×2 — **the reference is dropping visible text**
@@ -614,11 +614,11 @@ The test's own docstring cites that line **without** the `!bTaggedPDF` guard
 **tagged** PDF, and `officecfg/…/Common.xcs:4318-4324` now defaults `UseTaggedPDF` to `true`.
 
 **Proof, by re-rendering with tagged PDF explicitly off: `[40, 34, 1213, 1011]` and 48 long runs on
-page 4 — exactly what Paperless produces.** So Paperless draws what a reader actually sees, and the
+page 4 — exactly what X-Ray.Office produces.** So X-Ray.Office draws what a reader actually sees, and the
 reference silently drops visible text in its new default export mode.
 
 **Verdict: environment (LibreOffice version), and a *fourth* environment variable nobody had
-declared — the PDF export's tagging default.** Paperless is right.
+declared — the PDF export's tagging default.** X-Ray.Office is right.
 
 Two details worth keeping. It is **not** a pagination change: both sides have 4 pages with identical
 counts on pages 1–3. And the reported `963` rather than `1011` is a **harness artifact** —
@@ -630,7 +630,7 @@ counts on pages 1–3. And the reported `963` rather than `1011` is a **harness 
 `sheet-cell-text.xlsx`, run 12: reference 261.666 pt, ours 261.3827 pt — Δ 0.283 pt = 6 twips, on an
 `indent="2"` cell.
 
-This is *exactly* the failure mode Paperless's own source comment predicts
+This is *exactly* the failure mode X-Ray.Office's own source comment predicts
 (`XlsxCellFormats.cs:485-489`): *"Ten-point Liberation Sans has a 55.57-twip space, and rounding it
 to 56 rather than truncating to 55 puts a two-level indent 0.3 pt out."* Reference = 6 × 56 twips =
 16.8 pt; ours = 6 × 55 = 16.5 pt. LibreOffice's chain is `scaleValue(3.0 * indent, …)`
@@ -639,7 +639,7 @@ to 56 rather than truncating to 55 puts a two-level indent 0.3 pt out."* Referen
 **Verdict: environment (LibreOffice version).** A rounding-vs-truncation flip upstream, on a case our
 own code comment had already anticipated and chosen the other side of.
 
-### 6.4 `SlideTableComparisonTests` ×2 — **the clearest Paperless defect in the 40**
+### 6.4 `SlideTableComparisonTests` ×2 — **the clearest X-Ray.Office defect in the 40**
 
 `EveryCellsTextIsDrawnWhereLibreOfficeDrawsIt` (baseline: ref 93.600, ours 91.899) and
 `EveryGridLineIsTheStrokeLibreOfficeDraws` (grid line 14 `ToY`: ref 266.854, ours 263.925).
@@ -656,7 +656,7 @@ The mechanism is `ImplCalculateFontIndependentLineSpacing` (`impedit3.cxx:500-50
 whose message says: *"Microsoft just ignores the font metrics, and simply adds 20 % to the font
 height."*
 
-**Verdict: genuine defect in Paperless — and an unusually actionable one. Paperless already applies
+**Verdict: genuine defect in X-Ray.Office — and an unusually actionable one. X-Ray.Office already applies
 the 1.2 rule to pptx text boxes** (its autofit box pitch is 14.4 = 1.2 × 12); it simply does not
 apply it to **table cells**. The rule is implemented and in the tree; it is not reaching one call
 site.
@@ -671,7 +671,7 @@ SizeAt(theirs, 10).ShouldBe(SizeAt(ours, 10), TolerancePoints, "150 pt box");
 
 It fails because the **reference** now picks 14.003 / 18.992 / 20.013 where 24.2.7.2 picked
 11.99 / 17.01 / 18.00. Lines 86-88, `SizeAt(ours, …).ShouldBe(11.99 …)`, **still pass** — so
-Paperless reproduces the old binary exactly, and the whole test, literals included, is calibrated to
+X-Ray.Office reproduces the old binary exactly, and the whole test, literals included, is calibrated to
 24.2.7.2. Cause: the autofit search was reworked in `f61ea135430` / `db64748f1ee` / `a3daf52dd21`
 (Mar–Apr 2024, first shipped in 24.8).
 
@@ -691,7 +691,7 @@ A literal assertion about the **reference binary's** output. Poppler is exonerat
 measurement: the reference's content stream has `83.703 … Tm … [<02>16<06>16<06>]TJ` for "100" and
 `89.542 … Tm` for "80", and `pdftotext -bbox` reports `left=83.7030` / `89.5420` — poppler
 reproduces the pen exactly. The 5.839 comes from LibreOffice now emitting a `16`/1000-em tightening
-between every glyph (6.003 − 0.16 = 5.84); Paperless writes a single `<…>Tj` with no adjustment,
+between every glyph (6.003 − 0.16 = 5.84); X-Ray.Office writes a single `<…>Tj` with no adjustment,
 giving the true 6.009.
 
 **Verdict: environment (LibreOffice version). The test's actual claim still holds** — 5.839 is still
@@ -701,7 +701,7 @@ tolerance breaks.
 *Not determined:* which release first flipped `UseTaggedPDF` for the headless `--convert-to pdf`
 path (§6.2). The schema default changed in `544d6d781b3c` (2023) but the `output2.cxx` guard arrived
 in `b3c93b16d62` (Jan 2024), and this repo carries no release tags to resolve the branch point. It
-does not affect the verdict — the untagged re-render reproduces Paperless's numbers exactly, which
+does not affect the verdict — the untagged re-render reproduces X-Ray.Office's numbers exactly, which
 isolates the cause regardless of when it shipped.
 
 ---
@@ -790,7 +790,7 @@ is wrong. Confidence that the blunt entry is the right repair: low, hence not sh
 
 ### 9.2 `TableComparisonTests` × 3 — hold, and report upstream (recommend: do not change the test)
 
-Paperless produces exactly the declared 454 twips; LibreOffice adds exactly the declared
+X-Ray.Office produces exactly the declared 454 twips; LibreOffice adds exactly the declared
 `w:tblCellMar/w:top`. I would leave these three **red** rather than paper over them: they are a
 correct test catching a reference regression, and a `KnownDeviations`-style suppression here would
 hide it if LibreOffice fixes it back. The right action is an upstream bug report against
@@ -823,10 +823,10 @@ for a diagnosis and not a basis for a shipped filter.
 
 Diagnosed to file and line:
 
-- **Where the file's own answer is discarded:** `Paperless.WordProcessing/Ooxml/DocxFile.cs:293`
+- **Where the file's own answer is discarded:** `XRay.Office.WordProcessing/Ooxml/DocxFile.cs:293`
   drops `w:type="separator"` pseudo-notes as "drawing furniture, not content". True for extraction,
   but the layout side then has nothing to draw from.
-- **Where the wrong value is substituted:** `Paperless.WordProcessing/Layout/Paginator.cs:170`,
+- **Where the wrong value is substituted:** `XRay.Office.WordProcessing/Layout/Paginator.cs:170`,
   `NoteSeparatorWidth = 0.25`, consumed at `Paginator.cs:1888` as
   `page.TextWidth * _options.NoteSeparatorWidth` — one global fraction, no format distinction,
   overridden nowhere in `src/`.
@@ -867,7 +867,7 @@ absolutely, so the bound stops depending on how long the line happens to be.
 ### 9.6 The two defects the sheets/slides half turned up
 
 **`SlideTableComparisonTests` ×2 (§6.4) — recommend: fix, and it is small.** This is the one place I
-would spend a following round's budget first. Paperless already implements the rule (a 1.2 × font
+would spend a following round's budget first. X-Ray.Office already implements the rule (a 1.2 × font
 height pitch with a 1.0 em ascent) and already applies it to pptx **text boxes** — its autofit box
 pitch is 14.4 = 1.2 × 12. It simply does not apply it to **table cells**. That is a call-site gap,
 not a missing feature, and it is measurable in one test class in seconds. I did not ship it only

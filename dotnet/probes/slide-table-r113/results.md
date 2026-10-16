@@ -39,7 +39,7 @@ Four results.
 | | |
 |---|---|
 | worktree / branch | `/home/user/wt-slidetable`, `agent/slidetable`, base **`f160c8a2c`** |
-| reference | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2**. `/usr/bin/soffice` (24.2.7.2) is used only by `Paperless.Fidelity.Tests` |
+| reference | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2**. `/usr/bin/soffice` (24.2.7.2) is used only by `XRay.Office.Fidelity.Tests` |
 | corpora | `/home/user/sample-files` (51 `.ppt`, 251 `.pptx`) and `/home/user/corpus-odf` (302 `.odp`) |
 | working directory | `/home/user/r113-work` |
 | C++ tree | `/home/user/libreoffice-core`, read only, never built. It declares **`27.2.0.0.alpha0+`** and is **not** the reference binary's source |
@@ -299,7 +299,7 @@ raster ceiling (3), the seventh confound (1) and the two terminal pages.
 # 5. The suite
 
 Read out of this run's own output (`tests.log`), not from the briefed number.
-`dotnet build Paperless.slnx -c Debug` at **0 warnings, 0 errors**, then each project alone with
+`dotnet build XRay.Office.slnx -c Debug` at **0 warnings, 0 errors**, then each project alone with
 `--no-build`, individually rather than as a solution.
 
 | project | |

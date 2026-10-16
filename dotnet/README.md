@@ -1,18 +1,30 @@
-# Paperless
+![X-Ray](https://raw.githubusercontent.com/curiosity-ai/x-ray-office/master/dotnet/assets/logo.png)
 
-Pure C# / .NET libraries for **content extraction** and **headless rendering** of the file
-formats LibreOffice's Writer, Calc and Impress support.
+# X-Ray.Office
 
-> **Status: early.** The container layer works and `paperless identify` names all supported
-> formats from their content. No document *content* is readable yet — see [TODO.md](TODO.md)
-> for the plan and what is next.
+[![NuGet](https://img.shields.io/nuget/v/X-Ray.Office?label=NuGet&color=5c2d91&logo=nuget&logoColor=white)](https://www.nuget.org/packages/X-Ray.Office/)
+[![License](https://img.shields.io/badge/license-MPL--2.0-007ec6)](../COPYING.MPL)
 
-## Why
+Faithful rendering of Word, Excel and PowerPoint documents, and the formats around them, to PDF
+and images, plus extraction of their text, tables and structure. A pure C# / .NET port of
+LibreOffice's Writer, Calc and Impress import and layout code: no LibreOffice process, no office
+installation, no COM interop.
 
-Existing .NET options each cover a slice: one library for `.docx`, another for `.xlsx`,
-nothing for the legacy binary formats, and nothing that renders. Paperless aims at one
-managed dependency that reads every common office format and can both extract its content
-and draw it — no LibreOffice process, no native office install, no COM interop.
+X-Ray.Office is the office-document member of the [X-Ray](https://github.com/curiosity-ai/x-ray)
+family of .NET libraries from Curiosity GmbH. Family documentation:
+<https://xray.curiosity.ai/>. It lives in the `dotnet/` folder of a LibreOffice source checkout;
+the surrounding C++ tree is the reference the port is read from, and is never built. The port was
+called *Paperless* before it joined the family.
+
+## Install
+
+```sh
+dotnet add package X-Ray.Office
+```
+
+`X-Ray.Office` is the facade and depends on every other package below, so installing it brings
+the whole set. Package ids are hyphenated (`X-Ray.Office.Core`); assemblies and namespaces are not
+(`XRay.Office.Core`), because a hyphen is not valid in a C# identifier. Targets `net10.0`.
 
 ## Scope
 
@@ -22,86 +34,112 @@ and draw it — no LibreOffice process, no native office install, no COM interop
 | Spreadsheets | `xlsx xlsm xltx xltm xlsb` · `xls xlt` · `ods ots fods` · `csv` · `sxc stc` |
 | Presentations | `pptx pptm potx potm ppsx ppsm` · `ppt pot pps` · `odp otp fodp` · `sxi sti` |
 
-Out of scope: Draw, Math and Base; writing any format; macro execution (macro-enabled files
-are read as data — Paperless reports that macros are present and never runs them).
+Out of scope: Draw, Math and Base; writing any office format; macro execution. Macro-enabled files
+are read as data: X-Ray.Office reports that macros are present and never runs them.
 
-## Two things it does
+The format is always identified from the **content**, never from the file extension.
+
+## Quick start
 
 ```csharp
-// Extract content. No fonts, no layout, no rasteriser -- a small fraction of the cost
-// of rendering.
-ContentDocument content = PaperlessDocument.Extract("report.docx");
+using XRay.Office;
+using XRay.Office.Core.Documents;
+using XRay.Office.Core.Extraction;
+using XRay.Office.Markup;
+using XRay.Office.Rendering.Pdf;
+using XRay.Office.Rendering.Raster;
+using XRay.Office.Spreadsheets.Html;
+using XRay.Office.Spreadsheets.Layout;
+
+// Extract content. No fonts, no layout, no rasteriser: a small fraction of the cost of rendering.
+ContentDocument content = OfficeDocument.Extract("report.docx");
 string text = content.GetText();
+string markdown = MarkdownWriter.ToMarkdown(content);
 
 // Render. Layout is a separate, deferred step.
-using IDocument doc = PaperlessDocument.Open("deck.pptx");
-IPageSequence pages = ((IPaginatedDocument)doc).Layout();
-new RasterRenderer(new RasterRenderOptions { Dpi = 150 })
-    .RenderToPng(pages[0], File.Create("slide1.png"));
+using IDocument deck = OfficeDocument.Open("deck.pptx");
+IPageSequence slides = ((IPaginatedDocument)deck).Layout();
 
-// Or, for a workbook, write it as HTML instead of drawing it: one table per sheet, in the
-// shape Calc's own HTML filter writes. The document paints its own ground and follows the
-// reader's colour scheme, while the sheet keeps the white paper its colours were chosen
-// against - so it stays legible dropped into a page of any colour.
-using IDocument book = PaperlessDocument.Open("report.xlsx");
+using (FileStream pdf = File.Create("deck.pdf"))
+    new PdfRenderer().Render(slides, pdf);                 // searchable text, subset fonts
+
+using (FileStream png = File.Create("slide1.png"))
+    new RasterRenderer(new RasterRenderOptions { Dpi = 150 }).RenderToPng(slides[0], png);
+
+// A workbook can also be written as HTML: one table per sheet, in the shape Calc's own HTML
+// filter writes, or as a strip of tabs with no script at all.
+using IDocument book = OfficeDocument.Open("report.xlsx");
 SpreadsheetPages sheets = (SpreadsheetPages)((IPaginatedDocument)book).Layout();
 
-SheetHtmlWriter.Write(sheets, File.Create("report.html"));
-
-// Or as the workbook's own shape - a strip of tabs, one sheet at a time. Still one
-// self-contained file, and no script: the switching is a radio group and two CSS rules,
-// so it survives a sandboxed frame and a policy that admits no inline script. It prints
-// as every sheet.
-SheetHtmlWriter.Write(sheets, File.Create("tabbed.html"), new SheetHtmlOptions
-{
-    Navigation = SheetHtmlNavigation.Tabs,
-    IdPrefix   = "report",   // names the radio group, so two workbooks can share a page
-});
+using (FileStream html = File.Create("report.html"))
+    SheetHtmlWriter.Write(sheets, html, new SheetHtmlOptions
+    {
+        Navigation = SheetHtmlNavigation.Tabs,
+        IdPrefix   = "report",   // names the radio group, so two workbooks can share a page
+    });
 ```
 
-Format is always determined from **content**, not the file extension.
+`OfficeDocument.Identify(path)` names a file's format without reading it, which is the cheap way
+to filter a corpus. Callers who already know the family, or want a smaller dependency footprint,
+can use `WordProcessingReader`, `SpreadsheetReader` or `PresentationReader` directly.
+
+The same pipeline is available from the command line as `xray-office`
+(`tools/XRay.Office.Cli`, not published): `identify`, `extract`, `metadata`, `render` and
+`analyze`.
 
 ## Packages
 
 | Package | Contents |
 |---|---|
-| `Paperless` | Facade: sniff a file and dispatch. Start here. |
-| `Paperless.Core` | Abstractions: units, geometry, colour, document model, drawing IR. Zero dependencies. |
-| `Paperless.Containers` | OLE2/CFB, ZIP, OPC, ODF packages, decryption |
-| `Paperless.Text` | Fonts, metrics, shaping, line breaking, paragraph layout |
-| `Paperless.Vector` | WMF, EMF, EMF+, SVG import |
-| `Paperless.Rendering` | SkiaSharp raster, PDF and SVG backends |
-| `Paperless.Ooxml` | Shared OOXML: DrawingML, themes, VML |
-| `Paperless.OpenDocument` | Shared ODF: styles, common attributes, flat XML |
-| `Paperless.MsBinary` | Shared legacy binary: Escher, OLE property sets, codepages |
-| `Paperless.WordProcessing` | Writer-equivalent formats |
-| `Paperless.Spreadsheets` | Calc-equivalent formats, the formula engine, and the HTML export |
-| `Paperless.Presentations` | Impress-equivalent formats |
+| `X-Ray.Office` | Facade: sniff a file and dispatch. Start here; it depends on all of the others. |
+| `X-Ray.Office.Core` | Abstractions: units, geometry, colour, document model, drawing IR. Zero dependencies. |
+| `X-Ray.Office.Containers` | OLE2/CFB, ZIP, OPC, ODF packages, decryption |
+| `X-Ray.Office.Text` | Fonts, metrics, shaping, line breaking, paragraph layout; bundled metric-compatible fonts |
+| `X-Ray.Office.Vector` | WMF, EMF, EMF+, SVG import |
+| `X-Ray.Office.Rendering` | SkiaSharp raster (PNG, JPEG) and PDF backends |
+| `X-Ray.Office.Markup` | XHTML and GitHub-Flavored Markdown writers over the content tree |
+| `X-Ray.Office.Ooxml` | Shared OOXML: DrawingML, themes, VML |
+| `X-Ray.Office.OpenDocument` | Shared ODF: styles, common attributes, flat XML |
+| `X-Ray.Office.MsBinary` | Shared legacy binary: Escher, OLE property sets, codepages |
+| `X-Ray.Office.WordProcessing` | Writer-equivalent formats |
+| `X-Ray.Office.Spreadsheets` | Calc-equivalent formats, the formula engine, and the HTML export |
+| `X-Ray.Office.Presentations` | Impress-equivalent formats |
 
-Reference only what you need: a service that indexes spreadsheets pulls in neither the
-presentation reader nor a rasteriser.
+Reference only what you need: a service that indexes spreadsheets can take
+`X-Ray.Office.Spreadsheets` alone and pulls in neither the presentation reader nor a rasteriser.
+
+**Native dependencies.** Rendering and shaping go through SkiaSharp (`X-Ray.Office.Rendering`) and
+HarfBuzzSharp (`X-Ray.Office.Text`), both of which carry native libraries. Content extraction does
+not load either.
 
 ## Building
 
 Requires the .NET 10 SDK.
 
 ```bash
-dotnet build Paperless.slnx     # warning-free; TreatWarningsAsErrors is on
-dotnet test  Paperless.slnx
+dotnet build XRay.Office.slnx -c Release   # warning-free; TreatWarningsAsErrors is on
+dotnet test  XRay.Office.slnx -c Release
+dotnet pack  XRay.Office.slnx -c Release -o artifacts   # the 13 packages under src/, with symbols
 ```
+
+`XRay.Office.Fidelity.Tests` compares against an installed LibreOffice and skips, with a reason,
+when there is none; every other test project is self-contained.
+
+Packages are published to nuget.org by `.devops/build-x-ray-office-nuget.yml`, which versions the
+whole set together with CalVer (`yy.M.<build id>`) on every change to `dotnet/` on `master`.
 
 ## Development
 
-- [CLAUDE.md](CLAUDE.md) — architecture, design decisions and the rules that matter
-- [TODO.md](TODO.md) — the plan and its ordering; per-library `TODO.md` alongside each project
-- [research/](research/) — ~6000 lines of notes on how LibreOffice implements these formats,
-  with file:line citations. Read the relevant one before implementing an area.
+- [CLAUDE.md](CLAUDE.md): architecture, design decisions and the rules that matter
+- [TODO.md](TODO.md): the plan and its ordering; per-library `TODO.md` alongside each project
+- [research/](research/): notes on how LibreOffice implements these formats, with file:line
+  citations. Read the relevant one before implementing an area.
 
 ### Comparing against LibreOffice
 
-Paperless is developed against headless LibreOffice as the reference implementation. Four
-skills in [`.claude/skills/`](../.claude/skills/) cover it — `libreoffice-reference`,
-`render-comparison`, `extraction-comparison`, `paperless-corpus` — with working scripts.
+X-Ray.Office is developed against headless LibreOffice as the reference implementation. The skills
+in [`.claude/skills/`](../.claude/skills/) cover it (`libreoffice-reference`, `render-comparison`,
+`extraction-comparison`, `page-vision`, `office-corpus`, `corpus-batches`), with working scripts.
 
 Check the environment first; font substitution silently invalidates comparisons:
 
@@ -114,9 +152,13 @@ ground truth.
 
 ## Licence
 
-MPL-2.0, matching the surrounding LibreOffice source tree.
+MPL-2.0, matching the LibreOffice source tree the port derives from (see
+[COPYING.MPL](../COPYING.MPL)). Two packages also ship third-party data under its own terms:
+`X-Ray.Office.Text` bundles Carlito and Liberation (SIL OFL 1.1), Caladea (Apache-2.0) and DejaVu
+(Bitstream Vera), so its package licence expression is
+`MPL-2.0 AND OFL-1.1 AND Apache-2.0 AND Bitstream-Vera`; `X-Ray.Office.Core` bundles the
+American English hyphenation patterns, whose BSD-style notice travels with them.
 
-Every dependency is permissively licensed — SkiaSharp and HarfBuzzSharp (MIT), the Svg.Skia
-family (MIT, except `Svg.Custom` which is MS-PL), PdfPig (Apache-2.0), BouncyCastle (MIT).
-See the note atop [Directory.Packages.props](Directory.Packages.props) before adding
-another.
+Every package dependency is permissively licensed: SkiaSharp and HarfBuzzSharp (MIT), the
+Svg.Skia family (MIT, except `Svg.Custom`, which is MS-PL), BouncyCastle (MIT). See the note atop
+[Directory.Packages.props](Directory.Packages.props) before adding another.

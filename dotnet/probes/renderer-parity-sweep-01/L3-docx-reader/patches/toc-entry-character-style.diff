@@ -1,6 +1,6 @@
-diff --git a/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs b/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs
---- a/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
 @@ -1100,7 +1100,7 @@
                  ? paragraph
                  : WordParagraphFormats.ResolveRun(
@@ -149,9 +149,9 @@ diff --git a/dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs b/dot
          }
  
          /// <summary>True while a note's citation is being emitted.</summary>
-diff --git a/dotnet/src/Paperless.WordProcessing/Ooxml/WordParagraphFormats.cs b/dotnet/src/Paperless.WordProcessing/Ooxml/WordParagraphFormats.cs
---- a/dotnet/src/Paperless.WordProcessing/Ooxml/WordParagraphFormats.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Ooxml/WordParagraphFormats.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs
 @@ -447,19 +447,31 @@
      /// <em>layer</em> named a classified font, and the layers are gone by then — see
      /// <see cref="StatedClass"/>.

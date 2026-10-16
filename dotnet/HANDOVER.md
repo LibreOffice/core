@@ -1,4 +1,4 @@
-# Paperless — parity work handover
+# X-Ray.Office — parity work handover
 
 Hand this whole file to the new session as its opening prompt. It is written to be read once,
 top to bottom, before anything is run.
@@ -7,7 +7,7 @@ top to bottom, before anything is run.
 
 ## 1. What the project is
 
-**Paperless** is a pure C#/.NET library set for content extraction and headless rendering of
+**X-Ray.Office** is a pure C#/.NET library set for content extraction and headless rendering of
 office documents. It lives in `dotnet/` inside a LibreOffice checkout at
 `/c/sandbox/workdir/libreoffice-core`.
 
@@ -29,24 +29,24 @@ Two things about that arrangement matter and are easy to get wrong:
 ### Layering
 
 ```
-Paperless.Core (zero deps)
+XRay.Office.Core (zero deps)
   → Containers · Text · Vector · Rendering · Markup
     → Ooxml · OpenDocument · MsBinary
       → WordProcessing · Spreadsheets · Presentations
-        → Paperless → Cli
+        → XRay.Office → Cli
 ```
 
 `Core`, `Containers`, `Text`, `Vector`, `Rendering`, `Markup` are **shared layers**. Note
-particularly that **`Paperless.Text` reaches slides**, which has surprised people.
+particularly that **`XRay.Office.Text` reaches slides**, which has surprised people.
 
 Stack: .NET 10, `TreatWarningsAsErrors`, host-RID pinned in `Directory.Build.props`, SkiaSharp
-for raster, HarfBuzzSharp for shaping, a hand-rolled OpenType reader in `Paperless.Text`.
+for raster, HarfBuzzSharp for shaping, a hand-rolled OpenType reader in `XRay.Office.Text`.
 
 ---
 
 ## 2. The standing goal
 
-> Implement and validate the Paperless library by testing against each of the respective batches
+> Implement and validate the X-Ray.Office library by testing against each of the respective batches
 > of test files, batch by batch. When done with a batch always retest the previous batch to
 > validate no regressions. Use agents to parallelise the work according to the strategy for
 > parallel work. Each agent should focus on a library (word, slides, sheets) and could also focus
@@ -96,7 +96,7 @@ figure.** Four things moved underneath the number, in order of size:
    by the arithmetic of two opposite errors.
 4. **poppler is 26.01.0**, and it was an *undeclared* input: with our source provably unchanged, our
    own word counts moved on 169 of 200 documents and 86 of them moved by exactly the amount the
-   reference moved. `paperless analyze` now reads PDFs in process to remove that dependency —
+   reference moved. `xray-office analyze` now reads PDFs in process to remove that dependency —
    though `batch-check.sh` still calls poppler, deliberately, because rewiring it restates every
    scoreboard again.
 
@@ -274,8 +274,8 @@ When an agent reports:
 If the diff touches `Core`, `Containers`, `Text`, `Vector`, `Rendering` or `Markup`, the other two
 tracks must be *measured*, not reasoned about. Recent examples of both shapes:
 
-- Round 45 changed `Paperless.Text` and swept slides + sheets whole: **334 of 334 byte-identical**.
-- Round 44 changed `PdfImages` in `Paperless.Rendering`. A census named the affected documents
+- Round 45 changed `XRay.Office.Text` and swept slides + sheets whole: **334 of 334 byte-identical**.
+- Round 44 changed `PdfImages` in `XRay.Office.Rendering`. A census named the affected documents
   exactly (words 5, slides 7, sheets 0), and all seven slides decks were rendered at both commits:
   **all seven renderings changed, not one gate column did.**
 
@@ -321,9 +321,9 @@ tracks must be *measured*, not reasoned about. Recent examples of both shapes:
 ### The CLI
 
 ```
-dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
-paperless render FILE --format pdf --outdir DIR
-paperless extract FILE
+dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
+xray-office render FILE --format pdf --outdir DIR
+xray-office extract FILE
 ```
 
 Pin `SOURCE_DATE_EPOCH` and `TZ=UTC` for comparable renderings.
@@ -623,7 +623,7 @@ foot of the page rather than assuming it, is the model.
   zero verdicts and zero page counts moved. **Censused in round 58**: the `.doc` arm is 103 boxes
   in 4 documents and the `.rtf` arm has no witness in this corpus. Neither is implemented.
 - **Synthetic oblique was lost a *second* time, at glyph fallback — fixed, round 58, in
-  `Paperless.Text`.** `IGlyphFallbackResolver.ReferenceFor` is a reverse lookup from a face with no
+  `XRay.Office.Text`.** `IGlyphFallbackResolver.ReferenceFor` is a reverse lookup from a face with no
   request to compare against, so a run whose glyph came from a fallback face was drawn upright
   however italic it was. Measured over **six** filters (`.docx`, `.fodt`, `.fodp`, `.fods`,
   `.pptx`, `.xlsx`) on 41 authored two-run packages, four negative controls at nought on both sides

@@ -14,7 +14,7 @@ from mkdocx2 import write
 
 OPS = "/home/user/libreoffice-core/.claude/skills/render-comparison/scripts/pdf-ops.py"
 SOFFICE = "/opt/libreoffice26.2/program/soffice"
-CLI = "/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli"
 OUT = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else "fixture")
 os.makedirs(OUT, exist_ok=True)
 

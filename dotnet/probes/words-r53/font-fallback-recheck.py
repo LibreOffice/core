@@ -4,7 +4,7 @@
     python3 font-fallback-recheck.py <outdir>
 
 `dotnet/TODO.24-2-7-audit.md` lists 48 sites carrying claims measured against the superseded
-24.2.7.2 binary. Three of them are in `Paperless.Text/Fonts/SystemFontResolver.cs`, which sits
+24.2.7.2 binary. Three of them are in `XRay.Office.Text/Fonts/SystemFontResolver.cs`, which sits
 upstream of the font resolution deciding 267 of the reference renderings, and all three are the
 same experiment: hand the reference a family name and read back what it drew with.
 

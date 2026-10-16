@@ -2,12 +2,12 @@
 # Reintroduce each bug XlsChartFormatTests is meant to catch.
 set -uo pipefail
 W=/home/user/libreoffice-core/.claude/worktrees/sheets-r27/dotnet
-R=$W/src/Paperless.Spreadsheets/MsBinary/XlsChartReader.cs
+R=$W/src/XRay.Office.Spreadsheets/MsBinary/XlsChartReader.cs
 FILTER="${FILTER:-XlsChartFormatTests}"
 
 run() {
   local name="$1" out line
-  out=$(cd "$W" && dotnet test tests/Paperless.Spreadsheets.Tests/Paperless.Spreadsheets.Tests.csproj \
+  out=$(cd "$W" && dotnet test tests/XRay.Office.Spreadsheets.Tests/XRay.Office.Spreadsheets.Tests.csproj \
         --filter "FullyQualifiedName~$FILTER" 2>&1)
   line=$(echo "$out" | grep -oE 'Failed:[[:space:]]+[0-9]+, Passed:[[:space:]]+[0-9]+' | tail -1)
   [ -z "$line" ] && line="BUILD FAILED: $(echo "$out" | grep -E 'error CS' | head -1)"
@@ -107,4 +107,4 @@ s=s.replace("""        if (InSeriesFormat())
 open(p,"w").write(s)'
 
 echo "=== rebuilding clean"
-(cd "$W" && dotnet build Paperless.slnx 2>&1 | grep -E "error|Build succeeded" | head -3)
+(cd "$W" && dotnet build XRay.Office.slnx 2>&1 | grep -E "error|Build succeeded" | head -3)

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """The same two vertical measurements, taken off our own renderer.
 
-`pitch.py` and `tickoffset.py` read the reference binaries; this reads `Paperless.Cli` on the
+`pitch.py` and `tickoffset.py` read the reference binaries; this reads `XRay.Office.Cli` on the
 identical variant documents, through the identical instrument, so a before/after run of it is
 directly comparable with the reference columns those two produce.
 
-Usage:  PAPERLESS_CLI=... python3 ours.py <workdir> <label>
+Usage:  XRAY_OFFICE_CLI=... python3 ours.py <workdir> <label>
 
 `<label>` names the run — `before` or `after` — and decides the output file, `ours-<label>.tsv`.
 """
@@ -23,9 +23,9 @@ from facemetrics import Metrics, predicted, exact  # noqa: E402
 import pitch as pitch_probe  # noqa: E402
 import tickoffset as tick_probe  # noqa: E402
 
-CLI = os.environ.get('PAPERLESS_CLI', os.path.join(
-    HERE, '..', '..', 'tools', 'Paperless.Cli', 'bin', 'Debug', 'net10.0', 'linux-x64',
-    'Paperless.Cli'))
+CLI = os.environ.get('XRAY_OFFICE_CLI', os.path.join(
+    HERE, '..', '..', 'tools', 'XRay.Office.Cli', 'bin', 'Debug', 'net10.0', 'linux-x64',
+    'XRay.Office.Cli'))
 
 
 TRANSLATION = re.compile(

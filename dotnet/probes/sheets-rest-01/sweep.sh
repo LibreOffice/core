@@ -12,7 +12,7 @@ mkdir -p "$OUT" && OUT="$(cd "$OUT" && pwd)"
 WORKERS="${4:-6}"
 BANK="${BANK:-/c/sandbox/workdir/refpdfs-26.2.4.2-fonts}"
 
-CLI="${PAPERLESS_CLI:?set PAPERLESS_CLI}"
+CLI="${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI}"
 [ -x "$CLI" ] || { echo "no CLI at $CLI" >&2; exit 1; }
 export SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1700000000}"
 

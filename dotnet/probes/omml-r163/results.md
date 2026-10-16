@@ -5,7 +5,7 @@ Round measured 2026-09-24 in `/home/user/libreoffice-core`, branch
 
 | | |
 |---|---|
-| ours | `dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/Paperless.Cli` (as found, not rebuilt) |
+| ours | `dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli` (as found, not rebuilt) |
 | reference | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2** `0229ac93fcf0d7cbc6376066c6f35021cef002dc` |
 | document | `/home/user/sample-files/words/ceiling-001/docx/ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx` |
 | C++ read | this checkout, which is `27.2.0.0.alpha0+` and **not** the binary's source — every arm below is a hypothesis from source confirmed by measurement against 26.2.4.2 |
@@ -50,7 +50,7 @@ reference's **page 8** and our **page 7**; the document paginates 16 against 14.
 nothing but a font-name list in `SystemFontResolver.cs`. `[src]`
 
 What draws the flat text is a **missing namespace guard** in the layout walk.
-`DocxLayoutSource.RunWalker.Append` (`dotnet/src/Paperless.WordProcessing/Ooxml/
+`DocxLayoutSource.RunWalker.Append` (`dotnet/src/XRay.Office.WordProcessing/Ooxml/
 DocxLayoutSource.cs`:1912) switches on `child.Name.LocalName` alone — no
 `NamespaceName` test anywhere in the method. So:
 
@@ -73,7 +73,7 @@ silently absent. `[src]`, `[bin]`
 The **extraction** path is guarded and therefore does the opposite:
 `DocxContentReader.ReadRuns` / `ReadRun` (`DocxContentReader.cs`:366, :446) both
 `continue` on `child.Name.NamespaceName != OoxmlNamespaces.WordprocessingML`, so
-`paperless extract` drops every formula entirely. Measured on the fixture: the
+`xray-office extract` drops every formula entirely. Measured on the fixture: the
 extracted line reads `sub inline: before  after (bare subscript).` `[bin]`
 So the two paths disagree — the drawing path draws text the extraction path
 cannot see.
@@ -276,7 +276,7 @@ Not applied; no C# was modified and nothing was built.
 
 ### 9.1 The namespace constant
 
-`dotnet/src/Paperless.Ooxml/OoxmlNamespaces.cs`, beside `WordprocessingML` (:16):
+`dotnet/src/XRay.Office.Ooxml/OoxmlNamespaces.cs`, beside `WordprocessingML` (:16):
 
 ```csharp
 /// <summary>Office MathML, the namespace an OOXML formula's elements live in.</summary>
@@ -285,7 +285,7 @@ public const string OfficeMath = "http://schemas.openxmlformats.org/officeDocume
 
 ### 9.2 The seat
 
-`dotnet/src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs`,
+`dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs`,
 `RunWalker.Append(XElement element, int depth)` at **:1912**.
 
 *Current behaviour.* The `foreach (XElement child in element.Elements())` loop
@@ -317,7 +317,7 @@ renderer's one advantage here.
 
 A recursive walk over the math subtree carrying `(Escapement escapement,
 double scale)`, emitting through the existing `Emit`. `Escapement`
-(`dotnet/src/Paperless.WordProcessing/Layout/Escapement.cs`) already carries
+(`dotnet/src/XRay.Office.WordProcessing/Layout/Escapement.cs`) already carries
 `Proportion` (size %) and `Percent` (offset as a percentage of the font's
 *height*, ascent + descent + line gap) and is the right carrier.
 

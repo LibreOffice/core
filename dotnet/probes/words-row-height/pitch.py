@@ -6,7 +6,7 @@ the cell's top and bottom margins and the cell's content swept independently. Th
 row height and nothing else -- the first and last rules are dropped, so the table's own outer half
 borders cannot reach it.
 
-Usage: PAPERLESS_CLI=<cli> python3 pitch.py <outdir>
+Usage: XRAY_OFFICE_CLI=<cli> python3 pitch.py <outdir>
 """
 import os, statistics, subprocess, sys, tempfile, zipfile
 from pathlib import Path
@@ -14,7 +14,7 @@ import numpy as np
 from PIL import Image
 
 OUT = Path(sys.argv[1]); OUT.mkdir(parents=True, exist_ok=True)
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 DPI = 600
 ROWS = 6
 HEIGHT = 480          # 24 pt, the figure `row-min-height-border.py` used

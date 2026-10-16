@@ -21,7 +21,7 @@ before it ever reaches the page. On top of that, 24.2.7.2 also snaps each glyph 
 a whole 96 dpi pixel; 26.2.4.2 does not (tdf#168002 / subpixel positioning), which is the
 whole of the difference between "76 at one position in five" and "16 at every position".
 
-Usage:  PAPERLESS_CLI=... python3 facts.py <workdir>
+Usage:  XRAY_OFFICE_CLI=... python3 facts.py <workdir>
 """
 
 import os
@@ -66,7 +66,7 @@ def design_advance() -> float:
 
 def main() -> int:
     out = os.path.abspath(sys.argv[1])
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     os.makedirs(out, exist_ok=True)
     advance = design_advance()
 

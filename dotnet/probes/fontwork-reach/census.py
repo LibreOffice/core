@@ -8,7 +8,7 @@
    SameLetterHeights (0x80) -- `filter/source/msfilter/msdffimp.cxx:2516-2600`.
 
 2. Which faces the corpus's WordArt actually resolves to, and whether any of them is CFF rather
-   than `glyf`. `Paperless.Text.Fonts.GlyphOutlines` reads `glyf` only.
+   than `glyf`. `XRay.Office.Text.Fonts.GlyphOutlines` reads `glyf` only.
 
 Usage:  python3 census.py [corpus-root]
 """

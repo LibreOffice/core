@@ -1,4 +1,4 @@
-# LibreOffice filter names for the Paperless formats
+# LibreOffice filter names for the X-Ray.Office formats
 
 Filter names for use in `--convert-to '<ext>:<FilterName>[:<options>]'`.
 

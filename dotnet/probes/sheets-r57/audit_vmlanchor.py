@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """24.2.7.2 audit: are a VML note anchor's offsets 96-dpi screen pixels on 26.2.4.2?
 
-The site is `Paperless.Spreadsheets/Ooxml/XlsxNoteCaptions.cs` and the sentence under test is
+The site is `XRay.Office.Spreadsheets/Ooxml/XlsxNoteCaptions.cs` and the sentence under test is
 
     "The anchor's offsets are screen pixels, not EMUs.  ShapeAnchor::importVmlAnchor sets
      CellAnchorType::Pixel (sc/source/filter/oox/drawingbase.cxx:152-155) and calcCellAnchorEmu
@@ -9,7 +9,7 @@ The site is `Paperless.Spreadsheets/Ooxml/XlsxNoteCaptions.cs` and the sentence 
      24.2.7.2's own export ..."
 
 which is a claim about a binary that is no longer the reference, and it is the last *furniture*
-claim in `Paperless.Spreadsheets` -- both sheets sites found wrong so far were furniture.
+claim in `XRay.Office.Spreadsheets` -- both sheets sites found wrong so far were furniture.
 
 METHOD.  Authored workbooks varying ONE number: the anchor's row offset, at 0, 48, 96 and 144.
 A slope needs two points and this has four, which is what separates the three candidate readings

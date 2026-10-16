@@ -327,7 +327,7 @@ draws. Over the whole document the fill distance falls from 314 to 178.
 
 ## 5. The 24.2.7.2 audit — one site, VERIFIED, and the list's over-read quantified
 
-`Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs`:777 states three things about `w:pPr/w:rPr`
+`XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs`:777 states three things about `w:pPr/w:rPr`
 being the *paragraph mark's* formatting and says all three were measured against the superseded
 binary. `probes/words-r63/audit_markstyle.py` re-measures all three on 26.2.4.2, **on the reference
 alone** — our renderer never runs — with a control for each whose answer was known first:
@@ -344,7 +344,7 @@ alone** — our renderer never runs — with a control for each whose answer was
 "the mark formats the text" the two members of each pair answer the same, and they do not.
 
 **And the more useful half of this entry is a classification the list has never had.**
-`Paperless.WordProcessing` shows **11** open hits, and they are not 11 open sites: five sit inside an
+`XRay.Office.WordProcessing` shows **11** open hits, and they are not 11 open sites: five sit inside an
 existing marker (`WordCompatibility.cs`, `WriterPoolSpacing.cs` twice, `WordStyles.cs`:316, and the
 `Paginator.cs` note that explicitly *supersedes* a 24.2.7.2 claim), and five more state a 26.2.4.2
 measurement in the same comment as the older one they replaced — two of those in the ODT and RTF
@@ -406,7 +406,7 @@ OpenDocument 125   WordProcessing 1251   Spreadsheets 1035   Presentations 878  
 ```
 
 Re-derived project by project rather than quoted. The whole delta is
-`Paperless.WordProcessing` **1231 → 1251, +20**: 8 `ConditionalCellShadingTests`, 7
+`XRay.Office.WordProcessing` **1231 → 1251, +20**: 8 `ConditionalCellShadingTests`, 7
 `TranslucentAutoColourTests`, and 5 added to `VmlShapePaintTests`.
 `dotnet build -v q -nologo`: **0 warnings, 0 errors.**
 
@@ -438,15 +438,15 @@ one green test.
 ## Shared layers
 
 **None.** `git diff 43142b73ccf..HEAD --name-only` over `dotnet/src` is seven files, every one under
-`Paperless.WordProcessing`. The same command over `Paperless.Core`, `Containers`, `Text`, `Vector`,
+`XRay.Office.WordProcessing`. The same command over `XRay.Office.Core`, `Containers`, `Text`, `Vector`,
 `Rendering`, `Markup`, `Ooxml`, `OpenDocument`, `Spreadsheets` and `Presentations` prints **nothing**.
 Slides and sheets cannot move **by construction**; that is a falsifiable claim for the parent's sweep.
 
-The blend was deliberately **not** put on `Paperless.Core`'s `Colour`, where it would have been a
+The blend was deliberately **not** put on `XRay.Office.Core`'s `Colour`, where it would have been a
 natural home and a shared-layer diff, but a new `AutomaticColour` in the words layout instead.
 
 For the round that extends this: `v:fill/@opacity` is read in exactly one other place in the tree,
-`Paperless.Spreadsheets/Ooxml/XlsxNoteCaptions.cs`, untouched here. A census of the other two
+`XRay.Office.Spreadsheets/Ooxml/XlsxNoteCaptions.cs`, untouched here. A census of the other two
 corpora finds **5 `v:fill/@opacity` attributes in 3 slides documents and none in sheets**, so that
 is the whole cross-track reach of this half whenever someone wants it.
 

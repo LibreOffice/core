@@ -230,7 +230,7 @@ spreadsheet in the corpus is under `sheets/` (`MANIFEST.tsv`'s families are word
 doc, slides 302 = pptx + ppt, sheets 307 = xlsx + xls + xlsm), and `SheetPageGraphics` is reached
 only from `SpreadsheetPages`.
 
-`Paperless.Fidelity.Tests` is **542 passed / 10 failed**, the ten being the four
+`XRay.Office.Fidelity.Tests` is **542 passed / 10 failed**, the ten being the four
 `PageDrawingComparisonTests.EveryLineIsDrawn`, the four
 `TabStopComparisonTests.AListLabelsTabAdvance`, `SheetDrawingComparisonTests.APictureIsDrawn` and
 `JustificationShrinkComparisonTests` — unchanged. `APictureIsDrawn` runs on `sheet-rich-text.fods`

@@ -181,7 +181,7 @@ batches 011-019 are re-proven too. Batches 001-010 are **98 of 99**; the one fai
 
 ## 5. Tests
 
-`tests/Paperless.WordProcessing.Tests/FurniturePositionedTableTests.cs`, eight tests, and the split
+`tests/XRay.Office.WordProcessing.Tests/FurniturePositionedTableTests.cs`, eight tests, and the split
 was verified by putting the defect back rather than asserted:
 
 | tree | fails |
@@ -198,25 +198,25 @@ Every project run individually, counts read rather than colours:
 
 | project | passed | failed | skipped | total |
 |---|---:|---:|---:|---:|
-| Paperless.Core.Tests | 332 | 0 | 0 | 332 |
-| Paperless.Containers.Tests | 109 | 0 | 0 | 109 |
-| Paperless.Markup.Tests | 259 | 0 | 0 | 259 |
-| Paperless.OpenDocument.Tests | 125 | 0 | 0 | 125 |
-| Paperless.Presentations.Tests | 679 | 0 | 0 | 679 |
-| Paperless.Rendering.Tests | 150 | 0 | 1 | 151 |
-| Paperless.Spreadsheets.Tests | 762 | 0 | 0 | 762 |
-| Paperless.Text.Tests | 349 | 0 | 0 | 349 |
-| Paperless.Vector.Tests | 295 | 0 | 0 | 295 |
-| Paperless.WordProcessing.Tests | 827 | 0 | 0 | 827 |
-| Paperless.Fidelity.Tests | 520 | **30** | 0 | 550 |
+| XRay.Office.Core.Tests | 332 | 0 | 0 | 332 |
+| XRay.Office.Containers.Tests | 109 | 0 | 0 | 109 |
+| XRay.Office.Markup.Tests | 259 | 0 | 0 | 259 |
+| XRay.Office.OpenDocument.Tests | 125 | 0 | 0 | 125 |
+| XRay.Office.Presentations.Tests | 679 | 0 | 0 | 679 |
+| XRay.Office.Rendering.Tests | 150 | 0 | 1 | 151 |
+| XRay.Office.Spreadsheets.Tests | 762 | 0 | 0 | 762 |
+| XRay.Office.Text.Tests | 349 | 0 | 0 | 349 |
+| XRay.Office.Vector.Tests | 295 | 0 | 0 | 295 |
+| XRay.Office.WordProcessing.Tests | 827 | 0 | 0 | 827 |
+| XRay.Office.Fidelity.Tests | 520 | **30** | 0 | 550 |
 
-`Paperless.Fidelity.Tests` was **30 of 550 before the change and 30 after**, established on the
-unmodified tree before anything was edited. `Paperless.WordProcessing.Tests` is 819 + the 8 added
+`XRay.Office.Fidelity.Tests` was **30 of 550 before the change and 30 after**, established on the
+unmodified tree before anything was edited. `XRay.Office.WordProcessing.Tests` is 819 + the 8 added
 here. The build is warning-free.
 
-**One run of `Paperless.Vector.Tests` reported 1 failed of 295, and nine subsequent runs reported 0
+**One run of `XRay.Office.Vector.Tests` reported 1 failed of 295, and nine subsequent runs reported 0
 of 295.** It was seen once, inside a loop running every project back to back, and the test's name was
-not captured. Nothing in this branch reaches `Paperless.Vector`. Recorded rather than explained.
+not captured. Nothing in this branch reaches `XRay.Office.Vector`. Recorded rather than explained.
 
 ## 6. Looking at the page — and what the blind reviewer found that the numbers cannot
 

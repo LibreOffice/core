@@ -53,7 +53,7 @@ PARTS = {
 </Relationships>''',
 # An empty settings part is load-bearing: without one the importer takes a
 # different set of OOXML compatibility defaults and the fixture answers a
-# question nobody asked. See the `paperless-corpus` skill.
+# question nobody asked. See the `office-corpus` skill.
 'word/settings.xml': f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:settings xmlns:w="{W}"><w:compat><w:compatSetting w:name="compatibilityMode" w:uri="http://schemas.microsoft.com/office/word" w:val="15"/></w:compat></w:settings>''',
 'word/styles.xml': f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>

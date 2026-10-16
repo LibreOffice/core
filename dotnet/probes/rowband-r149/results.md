@@ -109,7 +109,7 @@ whole path (`sweep.sh`). 1283 renderings a leg, **0 failures on either**.
 | **sheets `xlsx`/`xls`/`xlsm`** | **0** | 307 |
 
 **372 movers, 911 byte-identical.** The zero on the other two tracks is the layering holding:
-`TableLayouter` and `PageDrawing` are `Paperless.WordProcessing`, and a deck's and a sheet's tables
+`TableLayouter` and `PageDrawing` are `XRay.Office.WordProcessing`, and a deck's and a sheet's tables
 are laid out elsewhere. It is worth stating as a measurement rather than as an inference, because
 this change moves more than half the words track and a leak would be easy to miss among that.
 
@@ -155,7 +155,7 @@ table half a border down the page"*. That is exactly the defect. It is rewritten
 rule as `AGridLineSitsOnTheBoundaryAndItsBandHangsBelow`, with the citation and the reason the old
 form survived — not deleted, because the quantity it pins is still worth pinning.
 
-The other 2033 WordProcessing tests pass unchanged, and `Paperless.Fidelity.Tests` returns to its
+The other 2033 WordProcessing tests pass unchanged, and `XRay.Office.Fidelity.Tests` returns to its
 known baseline of 10 failures of 552 (the advance-truncation family `dotnet/CLAUDE.md` records as
 left failing on purpose). An intermediate cut of this change took that to 20 — the extra ten were
 all `table-borders.*`, and they are the vertical-span asymmetry of §2, found because the suite

@@ -101,7 +101,7 @@ cell edge is the commonest thing in a spreadsheet; almost any workbook with a bo
 one. Documents with no cell borders at all are the only ones that cannot move.
 
 **P3.2 — 0 of 200 words and 0 of 163 slides change.** The seat is
-`Paperless.Spreadsheets.Layout.SheetPageDecoration`, which neither track reaches. If either moves,
+`XRay.Office.Spreadsheets.Layout.SheetPageDecoration`, which neither track reaches. If either moves,
 the change was not confined to the seat and the round is wrong.
 
 **P3.3 — verdict movement is zero, and I say so plainly.** Page count, a 2%-and-3-absolute word

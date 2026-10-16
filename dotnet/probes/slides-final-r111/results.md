@@ -446,7 +446,7 @@ A count of markup would have said something much larger: 120 master levels carry
 # 7. The suite
 
 Read out of this run's own output (`tests.log`), not from the briefed number.
-`dotnet build Paperless.slnx -c Release` at **0 warnings, 0 errors**, then each project alone
+`dotnet build XRay.Office.slnx -c Release` at **0 warnings, 0 errors**, then each project alone
 with `--no-build`, individually rather than as a solution.
 
 | project | |

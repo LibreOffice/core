@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Both legs of the 51-document .ppt column against the banked 26.2.4.2 renderings.
 set -uo pipefail
-BASE=/home/user/r108-work/bin-base/Paperless.Cli
-HEAD=/home/user/r108-work/bin-head/Paperless.Cli
+BASE=/home/user/r108-work/bin-base/XRay.Office.Cli
+HEAD=/home/user/r108-work/bin-head/XRay.Office.Cli
 BANK=/home/user/gate-orig-r83/ref
 DIFF=/home/user/wt-slidesize/.claude/skills/render-comparison/scripts/pdf-image-diff.py
 OUT=/home/user/r108-work/ink.txt

@@ -2,7 +2,7 @@
 # NOTE: the `ours` rows in this file are the tree BEFORE this round's fix -- they are the design metric at every size, which is what the fix replaced. facts.tsv and textbox.tsv were re-run after it.
 # 24.2.7.2: /usr/bin/soffice -> LibreOffice 24.2.7.2 420(Build:2)
 # 26.2.4.2: /opt/libreoffice26.2/program/soffice -> LibreOffice 26.2.4.2 0229ac93fcf0d7cbc6376066c6f35021cef002dc
-# ours: /home/user/wt-charttext/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+# ours: /home/user/wt-charttext/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 # fonts: system /usr/share/fonts; the 26.2 tarball's Latin metric duplicates, its Latin NotoSans/NotoSerif and opens___.ttf are moved aside
 # face: /usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf, design advance 0.60009766 em for every glyph
 # gap_pt is the mean inter-glyph advance of the chart title, read from the PDF's Tm/TJ; ratio is gap_pt / (advance x size_pt)

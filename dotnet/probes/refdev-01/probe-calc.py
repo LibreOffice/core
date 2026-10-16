@@ -160,7 +160,7 @@ def render(src, who):
     if os.path.exists(pdf):
         return pdf
     if who == 'ours':
-        subprocess.run([os.environ['PAPERLESS_CLI'], "render", src, "--format", "pdf",
+        subprocess.run([os.environ['XRAY_OFFICE_CLI'], "render", src, "--format", "pdf",
                         "--outdir", d], capture_output=True)
     else:
         subprocess.run(["soffice", "-env:UserInstallation=file://" + os.path.abspath(OUT) + "/prof",
@@ -186,7 +186,7 @@ def measure(pdf, key):
 src = os.path.join(OUT, 'calc-%s-%s.fods' % (SET, MODE))
 key = build(src)
 ref = measure(render(src, 'ref'), key)
-ours = measure(render(src, 'ours'), key) if os.environ.get('PAPERLESS_CLI') else {}
+ours = measure(render(src, 'ours'), key) if os.environ.get('XRAY_OFFICE_CLI') else {}
 
 print('%18s %5s | %8s %6s | %s' % ('face', 'pt', 'ref asc', 'ref h',
                                    '  '.join('%s' % m for m in MODELS)))

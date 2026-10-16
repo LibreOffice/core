@@ -1,6 +1,6 @@
 # fidelity-b-01 — three of the twelve, shipped and measured
 
-Round: Fidelity-B, an *implementation* round on the twelve genuine Paperless defects
+Round: Fidelity-B, an *implementation* round on the twelve genuine X-Ray.Office defects
 `dotnet/probes/fidelity-01/results.md` classified out of the 40 Fidelity failures. Worktree
 `/c/sandbox/workdir/wt-fid-b`, branch `wt-fid-b`, base `63d5290aacf`.
 
@@ -37,7 +37,7 @@ signature does not apply: no test in this round died in under a millisecond.
 
 | | total | passed | failed | skipped |
 |---|---:|---:|---:|---:|
-| `Paperless.Fidelity.Tests` at `63d5290aacf` (baseline, re-measured here) | 550 | **510** | **40** | 0 |
+| `XRay.Office.Fidelity.Tests` at `63d5290aacf` (baseline, re-measured here) | 550 | **510** | **40** | 0 |
 | at `dbdae4be370` (this round) | 550 | **519** | **31** | 0 |
 
 **Nine turned green. Nothing turned red.** The two failing sets were diffed in both directions, not
@@ -141,7 +141,7 @@ RTF is not one of them: `sw/source/writerfilter/filter/WriterFilter.cxx:338` set
 `ContinuousEndnotes` under a comment reading *"options that are valid for the DOCX format"*,
 `sw/source/filter/ww8/ww8par.cxx:2050` sets `CONTINUOUS_ENDNOTES` for DOC, and a grep of the whole
 tree finds no third setter — `RtfFilter::setTargetDocument` sets only
-`UndocumentedWriterfilterHack`. **Paperless routes DOCX, DOC and RTF through the same
+`UndocumentedWriterfilterHack`. **X-Ray.Office routes DOCX, DOC and RTF through the same
 `PaginationOptions.Word` preset**, so folding this into that preset — which is the obvious place —
 would have given RTF a separator LibreOffice does not draw for it and broken
 `NoteSeparatorComparisonTests.TheRtfSeparatorGapIsExactlyTheShorterNoteLines`, which was green and
@@ -359,10 +359,10 @@ compares two of our own outputs, so no single-sided mutation is the thing it exi
 `Markup`**, so the 534-rendering sweep the brief mandates for those is not owed. It was run anyway,
 because a Fidelity count cannot see a cascade and "no other project moved" is not the same claim.
 
-**Method.** Every corpus document rendered by `paperless render` with `SOURCE_DATE_EPOCH` set — so
+**Method.** Every corpus document rendered by `xray-office render` with `SOURCE_DATE_EPOCH` set — so
 `/CreationDate` is normalised out by construction rather than masked afterwards — and the rendered
 PDF bytes hashed. Run twice over `words` and `slides`: once at `dbdae4be370` and once with
-`dotnet/src/Paperless.WordProcessing` and `dotnet/src/Paperless.Presentations` checked out at the
+`dotnet/src/XRay.Office.WordProcessing` and `dotnet/src/XRay.Office.Presentations` checked out at the
 base `63d5290aacf` and the CLI rebuilt. 363 documents each side, **0 render failures on either**.
 The tree was restored and rebuilt afterwards and `git status -- dotnet` is clean.
 
@@ -413,8 +413,8 @@ before and after. This is a **no-regression** measurement, not an improvement on
 "if a fix moves a corpus verdict, that is a bonus" did not pay out, and the honest reading is that
 these two defects were never what the corpus scoreboard was losing on.
 
-**`Paperless.Spreadsheets` is untouched in the final tree** — `git diff` against the base over
-`dotnet/src/Paperless.Spreadsheets/` is empty — so the sheets track cannot have moved, and it is
+**`XRay.Office.Spreadsheets` is untouched in the final tree** — `git diff` against the base over
+`dotnet/src/XRay.Office.Spreadsheets/` is empty — so the sheets track cannot have moved, and it is
 reported above as a control rather than as a result.
 
 ---
@@ -434,7 +434,7 @@ the six new `NoteSeparatorRuleTests` cases. So the mandated total moves from **3
 addition and not by drift; nothing changed its verdict. `Rendering`'s single skip is the
 CFF-flavoured-font gap `fidelity-01` §1 recorded and is unchanged.
 
-Build: `dotnet build Paperless.slnx` → **0 warnings, 0 errors**.
+Build: `dotnet build XRay.Office.slnx` → **0 warnings, 0 errors**.
 
 ---
 

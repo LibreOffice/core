@@ -59,7 +59,7 @@ twenty documents I have got the rule too wide and it should come out**, because 
 EditEngine branch for a rich cell and I have measured that at exactly one font size.
 
 **No document outside the sheets track can move.** Changes 3, 4a and 4b are in
-`Paperless.Spreadsheets`; change 1 is in `Paperless.Text` but behind a flag only the four sheet
+`XRay.Office.Spreadsheets`; change 1 is in `XRay.Office.Text` but behind a flag only the four sheet
 layouters set. High confidence.
 
 ## 4. Tests — predicted
@@ -70,11 +70,11 @@ layouters set. High confidence.
   binary I have changed.
 - Every other project passes with **0 failed and 0 skipped**, at the counts recorded in
   `sheets-pagination-01/results.md` plus the new tests. Medium-high.
-- The new tests, added to `Paperless.Spreadsheets.Tests` and `Paperless.Text.Tests`, **fail on the
+- The new tests, added to `XRay.Office.Spreadsheets.Tests` and `XRay.Office.Text.Tests`, **fail on the
   unfixed tree** — checked by copying the four changed files aside, reverting, building, running,
   and restoring. High confidence for three of the four; for 4b the arithmetic height and the
   EditEngine line may collide at some font size and I will pick one where they do not.
-- `Paperless.Vector.Tests` may report a phantom failure under load. If it does I will re-run it
+- `XRay.Office.Vector.Tests` may report a phantom failure under load. If it does I will re-run it
   alone and say so rather than reporting the first number.
 
 ## 5. The DPCache decision — predicted verdict

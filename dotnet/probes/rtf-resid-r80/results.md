@@ -2,7 +2,7 @@
 
 ## Environment
 
-    ours    Paperless.Cli built in /home/user/wt-rtfresid2, at 5c003d58c (base) and at this
+    ours    XRay.Office.Cli built in /home/user/wt-rtfresid2, at 5c003d58c (base) and at this
             round's HEAD. Every figure below names which.
     ref     /opt/libreoffice26.2/program/soffice — LibreOffice 26.2.4.2
             0229ac93fcf0d7cbc6376066c6f35021cef002dc. For the column, the banked reference half
@@ -17,11 +17,11 @@
     rule    batch-check.sh of 2026-09-05: page count, then alphanumeric characters within
             max(2%, 15), then unembedded fonts. `score.py` applies that rule to a pair of banks.
 
-Only our half was re-rendered. The diff is confined to `Paperless.WordProcessing/Rtf`, which
+Only our half was re-rendered. The diff is confined to `XRay.Office.WordProcessing/Rtf`, which
 `soffice` cannot reach, so the banked reference is the same bytes throughout.
 
 **The base was re-measured rather than taken from the brief**, because `873c766f9`..`5c003d58c`
-touches `Paperless.Rendering/Pdf/FontSubsetter.cs`, which every rendering goes through. It
+touches `XRay.Office.Rendering/Pdf/FontSubsetter.cs`, which every rendering goes through. It
 reproduces the brief exactly: **257 match, 36 `pages`, 24 `pages,words`, 19 `words`** of 336.
 
 ## The column
@@ -212,7 +212,7 @@ least three things, and the two largest are not the same thing at all:
   `.odt`.** See below. Together they are 128 of the column's 363 remaining pages of error.
 - **`195584360` (22 / 51) is a third thing again** and this round does not move it.
 
-**"The `.odt` spelling is a control … both spellings go through the same Paperless layout engine
+**"The `.odt` spelling is a control … both spellings go through the same X-Ray.Office layout engine
 and only the reader differs."** True, and the brief's own caution against assuming a shared cause
 is the more useful half. On `FAA 2025-26 Holdover Tables` the reference draws its `.odt` in 167
 pages and its `.rtf` in 233 — a 40% difference on bytes it exported itself — while our two
@@ -327,7 +327,7 @@ style zero, which is what the three arms that *are* measured show; a document wh
 
 ```sh
 export TMPDIR=/abs/tmp                      # absolute: a relative one makes soffice hang forever
-export PAPERLESS_CLI=<tree>/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=<tree>/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 R=dotnet/probes/rtf-resid-r80
 
 python3 $R/genmatrix.py /abs/matrix && $R/render.sh /abs/matrix /abs/matrixout

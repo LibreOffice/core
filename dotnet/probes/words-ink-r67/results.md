@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| ours | `Paperless.Cli` built from this worktree, snapshotted to a fixed directory so no rebuild could swap it mid-sweep |
+| ours | `XRay.Office.Cli` built from this worktree, snapshotted to a fixed directory so no rebuild could swap it mid-sweep |
 | ref26 | `/opt/libreoffice26.2/program/soffice` — **26.2.4.2 0229ac93fcf0d7cb**, its eight Latin duplicate faces aside |
 | gate | `/home/user/gate-2f47/` at `2f4709c08`, whose reference half is 24.2.7.2 and is reused rather than re-rendered |
 | corpus | `/home/user/sample-files`, words track, **338 documents**, of which the gate calls **312** `match` |

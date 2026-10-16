@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Shared OpenDocument Format infrastructure: style families and resolution, common ODF attributes, and flat-XML (.fo*) handling. Part of X-Ray.Office, a pure C# port of LibreOffice's document import and rendering; install the X-Ray.Office package for the whole set.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XRay.Office.Core\XRay.Office.Core.csproj" />
+    <ProjectReference Include="..\XRay.Office.Containers\XRay.Office.Containers.csproj" />
+    <ProjectReference Include="..\XRay.Office.Text\XRay.Office.Text.csproj" />
+    <ProjectReference Include="..\XRay.Office.Vector\XRay.Office.Vector.csproj" />
+  </ItemGroup>
+
+</Project>

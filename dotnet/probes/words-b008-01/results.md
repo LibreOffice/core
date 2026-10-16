@@ -101,12 +101,12 @@ three types that carry a run's tracking beside its shaping:
 
 | file | change |
 |---|---|
-| `Paperless.Text/Shaping/ITextShaper.cs` | `ShapingOptions.WithTracking(Length)` — the rule |
-| `Paperless.Text/Layout/MeasuredParagraph.cs` | `FormattedRun.EffectiveShaping`; measurement uses it |
-| `Paperless.WordProcessing/Layout/PageContent.cs` | `PageRun.EffectiveShaping`, `PageParagraph.EffectiveShaping` |
-| `Paperless.WordProcessing/Layout/PageDrawing.cs` | drawing, tab-stretch width and tab leaders use it |
-| `Paperless.WordProcessing/Layout/FlowLayouter.cs`, `Paginator.cs` | the uniform-paragraph layout path |
-| `Paperless.Presentations/Layout/SlideTextLayout.cs` | slide drawing uses it |
+| `XRay.Office.Text/Shaping/ITextShaper.cs` | `ShapingOptions.WithTracking(Length)` — the rule |
+| `XRay.Office.Text/Layout/MeasuredParagraph.cs` | `FormattedRun.EffectiveShaping`; measurement uses it |
+| `XRay.Office.WordProcessing/Layout/PageContent.cs` | `PageRun.EffectiveShaping`, `PageParagraph.EffectiveShaping` |
+| `XRay.Office.WordProcessing/Layout/PageDrawing.cs` | drawing, tab-stretch width and tab leaders use it |
+| `XRay.Office.WordProcessing/Layout/FlowLayouter.cs`, `Paginator.cs` | the uniform-paragraph layout path |
+| `XRay.Office.Presentations/Layout/SlideTextLayout.cs` | slide drawing uses it |
 
 `PageParagraph.EffectiveShaping` is not redundant: a paragraph set end to end in one tracked style
 carries **no runs at all**, being uniform by every test the reader makes, and would have been the
@@ -169,23 +169,23 @@ and unchanged by this round.
 ## Tests
 
 Eleven added. All eleven were confirmed to **fail** with the rule neutralised (`WithTracking`
-returning `this` unchanged): 8 of the 10 new `Paperless.Text.Tests` fail, and the two that do not
+returning `this` unchanged): 8 of the 10 new `XRay.Office.Text.Tests` fail, and the two that do not
 are the deliberate preconditions — that untracked options are returned unchanged, and that the
 face ligates `ti` at all.
 
 | project | before | after |
 |---|---:|---:|
-| `Paperless.Containers.Tests` | 109 | 109 |
-| `Paperless.Core.Tests` | 313 | 313 |
-| `Paperless.Markup.Tests` | 259 | 259 |
-| `Paperless.OpenDocument.Tests` | 125 | 125 |
-| `Paperless.Presentations.Tests` | 646 | 646 |
-| `Paperless.Rendering.Tests` | 150 (+1 skipped) | 150 (+1 skipped) |
-| `Paperless.Spreadsheets.Tests` | 758 | 758 |
-| `Paperless.Text.Tests` | 310 | **320** |
-| `Paperless.Vector.Tests` | 295 | 295 |
-| `Paperless.WordProcessing.Tests` | 818 | **819** |
-| `Paperless.Fidelity.Tests` | 520 passed, **30 failed**, 550 total | 520 passed, **30 failed**, 550 total |
+| `XRay.Office.Containers.Tests` | 109 | 109 |
+| `XRay.Office.Core.Tests` | 313 | 313 |
+| `XRay.Office.Markup.Tests` | 259 | 259 |
+| `XRay.Office.OpenDocument.Tests` | 125 | 125 |
+| `XRay.Office.Presentations.Tests` | 646 | 646 |
+| `XRay.Office.Rendering.Tests` | 150 (+1 skipped) | 150 (+1 skipped) |
+| `XRay.Office.Spreadsheets.Tests` | 758 | 758 |
+| `XRay.Office.Text.Tests` | 310 | **320** |
+| `XRay.Office.Vector.Tests` | 295 | 295 |
+| `XRay.Office.WordProcessing.Tests` | 818 | **819** |
+| `XRay.Office.Fidelity.Tests` | 520 passed, **30 failed**, 550 total | 520 passed, **30 failed**, 550 total |
 
 The Fidelity baseline reproduced the briefed **30 of 550** exactly, with **0 skipped**, before
 anything was touched. Afterwards the failing set is not merely the same size — `diff` of the
@@ -221,7 +221,7 @@ image and none of the numbers, reported that the reference breaks the cover titl
 lines where we break it over two, sets everything below it lower, and draws two full-measure
 rules around the footer that we omit. Independently: our footer starts at x=33.85 and the
 reference's at 41.15, a difference of **7.30 pt** against the shape's `wps:bodyPr/@lIns` of
-`91440` EMU = **7.2 pt**. `lIns` appears nowhere in `Paperless.WordProcessing`. Ignoring it both
+`91440` EMU = **7.2 pt**. `lIns` appears nowhere in `XRay.Office.WordProcessing`. Ignoring it both
 displaces the text and widens the measure by `lIns + rIns` = 14.4 pt, which is exactly the kind of
 difference that makes a title wrap one line later — the reviewer's own first candidate, arrived at
 without knowing any of this.
@@ -237,7 +237,7 @@ it until that is fixed, but the residue says this class is not exhausted.
 ## Reproducing
 
 ```sh
-export PAPERLESS_CLI=<tree>/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=<tree>/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 export SOURCE_DATE_EPOCH=1700000000
 dotnet/probes/words-b008-01/banked-check.sh /c/sandbox/workdir/sample-files 'words/batch-0*' /tmp/out 4
 ```

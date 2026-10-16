@@ -1,6 +1,6 @@
-diff --git a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8Frames.cs b/dotnet/src/Paperless.WordProcessing/Ww8/Ww8Frames.cs
---- a/dotnet/src/Paperless.WordProcessing/Ww8/Ww8Frames.cs
-+++ b/dotnet/src/Paperless.WordProcessing/Ww8/Ww8Frames.cs
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8Frames.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8Frames.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8Frames.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8Frames.cs
 @@ -88,7 +88,28 @@
          bool inTableCell = false,
          bool writtenByWord97 = false)

@@ -50,14 +50,14 @@ workbooks that carry custom views currently pass and could move either way.**
 
 **RC-6 · Cell text spilling past a horizontal page break is not drawn on the next page.**
 `#174` (we render the page blank). Already diagnosed in
-`Paperless.Spreadsheets/TODO.md` with the fix named. No patch. **Confidence: certain.**
+`XRay.Office.Spreadsheets/TODO.md` with the fix named. No patch. **Confidence: certain.**
 
 **RC-7 · Volatile date formulas print their cached value.** `#146`, `#187`. Both hold
 `TODAY()`-derived chains with stale `<v>`; the reference recalculates on load. Needs a formula
 evaluator. No patch. **Confidence: certain on cause, out of scope for a patch.**
 
 **RC-8 · `AAA`/`AAAA` day-of-week format codes are not recognised.** `#146` prints the literal
-`aaaa` from `mm/dd/yy\ aaaa`. The fix is in **`Paperless.Core/Numbers`** — cross-lane.
+`aaaa` from `mm/dd/yy\ aaaa`. The fix is in **`XRay.Office.Core/Numbers`** — cross-lane.
 **Confidence: certain.**
 
 **RC-9 · A pivot table's output range gets none of Calc's pivot cell styles.** `#098` (ink

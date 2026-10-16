@@ -122,7 +122,7 @@ documents where a second-order effect could put them out, and they are named her
 
 ## Shared layer
 
-**No.** The change is confined to `Paperless.Spreadsheets` (`Ooxml/XlsxChartRanges.cs`,
+**No.** The change is confined to `XRay.Office.Spreadsheets` (`Ooxml/XlsxChartRanges.cs`,
 `Ooxml/XlsxFile.cs`, one new file). The rule lives in Calc's chart data provider, so a chart
 embedded in a `.docx` or `.pptx` — which is fed from its `c:*Cache` and never from a Calc sheet —
 is out of reach by construction as well as by census.

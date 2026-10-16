@@ -20,14 +20,14 @@ Recorded first because everything below depends on it, and because it is a new s
 To find out whether a residual 0.30 pt mattered, I patched `LineSpacing.cs` with a throwaway
 one-twip hack, built, measured, and then restored the file with **`mv LineSpacing.cs.before
 LineSpacing.cs`**. `mv` preserves the source file's modification time, so the restored file looked
-*older* than the compiled `Paperless.Text.dll` — and MSBuild's up-to-date check skipped the project.
+*older* than the compiled `XRay.Office.Text.dll` — and MSBuild's up-to-date check skipped the project.
 **Every build for the next two hours silently carried the hack**, including three builds whose whole
 purpose was to be free of it, and including one that reported `0 Warning(s), 0 Error(s)` in 14
 seconds.
 
 It was caught by a contradiction, not by suspicion: our line height at 10 pt was one twip *above*
 the exactly-scaled value on Liberation Sans, and the arithmetic in the source says it cannot be.
-`rm -rf src/Paperless.Text/{obj,bin}` and a rebuild made it go away, and the binary then rendered
+`rm -rf src/XRay.Office.Text/{obj,bin}` and a rebuild made it go away, and the binary then rendered
 `Sample_SQMS_Program.docx` **byte-identically to the session's very first build** — which was clean
 all along.
 
@@ -42,7 +42,7 @@ all along.
   called out below.
 
 Baseline, established on the clean session-start binary **before anything was changed**, and again
-at the end: `Paperless.Fidelity.Tests` **Failed 30, Passed 520, Skipped 0, Total 550** — the briefed
+at the end: `XRay.Office.Fidelity.Tests` **Failed 30, Passed 520, Skipped 0, Total 550** — the briefed
 number exactly, both times.
 
 ## 1. Seat one — `Sample_SQMS_Program.docx`, 60 pages against 61
@@ -100,7 +100,7 @@ This is Writer's `AddParaSpacingToTableCells` seen from the other end. The tree 
 setting at the *bottom* of a cell — `PlacedFlow.Advance` charges a cell for its final paragraph's
 space-after — and did not honour it at the top of a follow.
 
-**Changed:** `src/Paperless.WordProcessing/Layout/TableLayouter.cs` only. `HeightAt` measures a
+**Changed:** `src/XRay.Office.WordProcessing/Layout/TableLayouter.cs` only. `HeightAt` measures a
 follow part from `line.Top − UpperSpaceAbove(flow, line)` and ends it at the following block's top;
 `Sliced` moves the drawn text down by the same amount so the ink lands where the height says.
 
@@ -285,12 +285,12 @@ moved by a byte.
 
 15 new tests in two files, plus one authored fixture.
 
-`tests/Paperless.WordProcessing.Tests/TableRowSplitSpacingTests.cs` — 5 tests. Each states a
+`tests/XRay.Office.WordProcessing.Tests/TableRowSplitSpacingTests.cs` — 5 tests. Each states a
 measured rule and none hard-codes a font metric: the line height is read back off the flow the
 layouter produced, and the cut is *searched for* rather than computed, because computing it would
 need the rule under test.
 
-`tests/Paperless.WordProcessing.Tests/ConditionalTableStyleTests.cs` — 10 tests: both `w:tblLook`
+`tests/XRay.Office.WordProcessing.Tests/ConditionalTableStyleTests.cs` — 10 tests: both `w:tblLook`
 spellings and the precedence between them, the §17.7.6 layer order, a layer the look switched off,
 the unconditional layer, and the whole path end to end over
 `tests/corpus/features/table-style-first-row.docx`.
@@ -402,14 +402,14 @@ any measurement: 7 documents predicted, exactly those 7 moved.
 ## Files
 
 ```
-src/Paperless.WordProcessing/Layout/TableLayouter.cs            the split-row rule
-src/Paperless.WordProcessing/Ooxml/WordTableStyleConditions.cs  w:tblLook and the layer order
-src/Paperless.WordProcessing/Ooxml/WordStyles.cs                the conditional w:rPr layers
-src/Paperless.WordProcessing/Ooxml/WordParagraphFormats.cs      threaded through
-src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs          the per-cell field
-src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs   resolved per cell
-tests/Paperless.WordProcessing.Tests/TableRowSplitSpacingTests.cs
-tests/Paperless.WordProcessing.Tests/ConditionalTableStyleTests.cs
+src/XRay.Office.WordProcessing/Layout/TableLayouter.cs            the split-row rule
+src/XRay.Office.WordProcessing/Ooxml/WordTableStyleConditions.cs  w:tblLook and the layer order
+src/XRay.Office.WordProcessing/Ooxml/WordStyles.cs                the conditional w:rPr layers
+src/XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs      threaded through
+src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs          the per-cell field
+src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs   resolved per cell
+tests/XRay.Office.WordProcessing.Tests/TableRowSplitSpacingTests.cs
+tests/XRay.Office.WordProcessing.Tests/ConditionalTableStyleTests.cs
 tests/corpus/features/table-style-first-row.docx
 probes/words-regress-01/                                        every probe above, runnable
 ```

@@ -32,7 +32,7 @@ table-sizing cascade recorded in `dotnet/CLAUDE.md`; nothing below is that.
 - `Ooxml/DocxLayoutSource.cs:_styleText` / `StyleReferenceText`; headers are read after the body walk
 - 1 document (#073): we print "External Interfaces" on every page, the reference varies per page
 - Patch `patches/styleref-running-head.diff` declines rather than answering wrongly; the real fix is
-  a per-page substitution and is **cross-lane** (`Paperless.WordProcessing/Layout/`)
+  a per-page substitution and is **cross-lane** (`XRay.Office.WordProcessing/Layout/`)
 - **confidence high on the diagnosis, medium on the patch being the right trade**
 
 ## RC6 — A table border's *style* is not modelled at all

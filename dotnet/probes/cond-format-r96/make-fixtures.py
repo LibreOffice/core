@@ -8,7 +8,7 @@ and two files sharing one silently overwrite each other.
 Every part a real writer emits is present: [Content_Types].xml, both _rels parts, workbook.xml,
 styles.xml with a `dxfs` table, sharedStrings.xml and one worksheet. A hand-built fixture missing
 a part the importer takes its defaults from answers a different question — see the
-`paperless-corpus` skill.
+`office-corpus` skill.
 
 Usage: make-fixtures.py <outdir>
 """

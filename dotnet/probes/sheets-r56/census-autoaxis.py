@@ -6,7 +6,7 @@
 major unit is automatic -- goes through `available / needed`, and a rule that governs that many
 axes across three tracks wants its reach on the table before a line of it is changed.
 
-`ChartLayout` lives in **Paperless.Core**, so this counts all 946 corpus documents and not the
+`ChartLayout` lives in **XRay.Office.Core**, so this counts all 946 corpus documents and not the
 sheets track alone.
 
 Blind spots, stated:

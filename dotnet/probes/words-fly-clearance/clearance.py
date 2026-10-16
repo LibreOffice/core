@@ -6,13 +6,13 @@ reads back where the single inked paragraph -- `AFTER` -- landed.
     AFTER at the fly's bottom, whatever N            -> only inked blocks are displaced
     AFTER at the fly's bottom + N line heights       -> the whole flow is displaced
 
-Usage: PAPERLESS_CLI=<cli> python3 clearance.py <outdir>
+Usage: XRAY_OFFICE_CLI=<cli> python3 clearance.py <outdir>
 """
 import os, re, subprocess, sys, zipfile
 from pathlib import Path
 
 OUT = Path(sys.argv[1]); OUT.mkdir(parents=True, exist_ok=True)
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 
 # A4 at 72 pt margins: 11906 - 1440 - 1440 twips of column, and a 4000-twip row is 200 pt tall.
 GRID, ROW, TBLPY = 9026, 4000, 1440

@@ -11,7 +11,7 @@ Serif, Courier New→Liberation Mono, DejaVu Sans→DejaVu Sans; `pdftoppm 26.01
 every render that was diffed.
 
 **Baseline, established on the unfixed tree before anything was touched:**
-`Paperless.Fidelity.Tests` **Failed 30, Passed 520, Skipped 0, Total 550** — the briefed figure,
+`XRay.Office.Fidelity.Tests` **Failed 30, Passed 520, Skipped 0, Total 550** — the briefed figure,
 reproduced exactly.
 
 **Verdict moves.** 529/638 → **644/638, `match`.** One document, and one only.
@@ -20,7 +20,7 @@ reproduced exactly.
 
 ## 1. The seat
 
-`dotnet/src/Paperless.Presentations/Layout/SlideAutofit.cs`, `SlideTextLayout.Solve`.
+`dotnet/src/XRay.Office.Presentations/Layout/SlideAutofit.cs`, `SlideTextLayout.Solve`.
 
 The autofit search is a bisection over the font scale on the interval `[0, 1]` — a faithful port
 of LibreOffice **24.2.7.2**, which is not the binary that writes the reference here. It has no
@@ -238,7 +238,7 @@ reference binary, and both have moved since it was written.
 
 ## 9. Tests
 
-`dotnet/tests/Paperless.Presentations.Tests/SlideAutofitTests.cs`, two new tests, six cases:
+`dotnet/tests/XRay.Office.Presentations.Tests/SlideAutofitTests.cs`, two new tests, six cases:
 
 - **`AnOverflowingBodyStopsAtAQuarterAndOverflows`** — five rows, 52/60/72/77/88 pt in a 90.7 pt
   box, the document's own geometry. Every expected value is read off the banked 26.2.4.2 PDF, not

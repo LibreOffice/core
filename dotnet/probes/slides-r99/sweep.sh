@@ -2,7 +2,7 @@
 # Render each .ppt, extract every text show's (font, size, baseline) from the content
 # stream, pair it against the banked 26.2.4.2 reference, delete the rendering.
 set -uo pipefail
-CLI=/home/user/wt-slides2/dotnet/tools/Paperless.Cli/bin/Release/net10.0/linux-x64/Paperless.Cli
+CLI=/home/user/wt-slides2/dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli
 export SOURCE_DATE_EPOCH=1700000000
 OUT=/tmp/claude-0/-home-user/bb4a221c-b846-5451-ba79-f27935c68360/scratchpad/r99/shows
 mkdir -p "$OUT" "$OUT/tmp"

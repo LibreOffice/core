@@ -1,7 +1,7 @@
-diff --git a/dotnet/src/Paperless.Presentations/MsBinary/PptRecordTypes.cs b/dotnet/src/Paperless.Presentations/MsBinary/PptRecordTypes.cs
+diff --git a/dotnet/src/XRay.Office.Presentations/MsBinary/PptRecordTypes.cs b/dotnet/src/XRay.Office.Presentations/MsBinary/PptRecordTypes.cs
 index 0000000..0000000 100644
---- a/dotnet/src/Paperless.Presentations/MsBinary/PptRecordTypes.cs
-+++ b/dotnet/src/Paperless.Presentations/MsBinary/PptRecordTypes.cs
+--- a/dotnet/src/XRay.Office.Presentations/MsBinary/PptRecordTypes.cs
++++ b/dotnet/src/XRay.Office.Presentations/MsBinary/PptRecordTypes.cs
 @@ -83,6 +83,19 @@
      /// <summary>A text run's ruler: tab stops and per-level indents.</summary>
      public const ushort TextRulerAtom = 4006;
@@ -42,10 +42,10 @@ index 0000000..0000000 100644
      public const ushort PersistPtrIncrementalBlock = 6002;
  
 
-diff --git a/dotnet/src/Paperless.Presentations/MsBinary/PptTextReader.cs b/dotnet/src/Paperless.Presentations/MsBinary/PptTextReader.cs
+diff --git a/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextReader.cs b/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextReader.cs
 index 0000000..0000000 100644
---- a/dotnet/src/Paperless.Presentations/MsBinary/PptTextReader.cs
-+++ b/dotnet/src/Paperless.Presentations/MsBinary/PptTextReader.cs
+--- a/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextReader.cs
++++ b/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextReader.cs
 @@ -14,11 +14,91 @@
  /// <param name="Text">The characters, with the terminator and any trailing NULs removed.</param>
  /// <param name="Paragraphs">The paragraph property runs, in order.</param>
@@ -304,10 +304,10 @@ index 0000000..0000000 100644
              covered += count;
          }
 
-diff --git a/dotnet/src/Paperless.Presentations/MsBinary/PptSlideLayout.cs b/dotnet/src/Paperless.Presentations/MsBinary/PptSlideLayout.cs
+diff --git a/dotnet/src/XRay.Office.Presentations/MsBinary/PptSlideLayout.cs b/dotnet/src/XRay.Office.Presentations/MsBinary/PptSlideLayout.cs
 index 0000000..0000000 100644
---- a/dotnet/src/Paperless.Presentations/MsBinary/PptSlideLayout.cs
-+++ b/dotnet/src/Paperless.Presentations/MsBinary/PptSlideLayout.cs
+--- a/dotnet/src/XRay.Office.Presentations/MsBinary/PptSlideLayout.cs
++++ b/dotnet/src/XRay.Office.Presentations/MsBinary/PptSlideLayout.cs
 @@ -1527,15 +1527,26 @@
          int start = textbox.ContentStart;
          int end = _stream.EndOf(textbox);
@@ -338,10 +338,10 @@ index 0000000..0000000 100644
  
      /// <summary>
 
-diff --git a/dotnet/src/Paperless.Presentations/MsBinary/PptTextBody.cs b/dotnet/src/Paperless.Presentations/MsBinary/PptTextBody.cs
+diff --git a/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs b/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs
 index 0000000..0000000 100644
---- a/dotnet/src/Paperless.Presentations/MsBinary/PptTextBody.cs
-+++ b/dotnet/src/Paperless.Presentations/MsBinary/PptTextBody.cs
+--- a/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs
++++ b/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs
 @@ -98,12 +98,21 @@
          List<SlideParagraph> paragraphs = [];
          int start = 0;
@@ -518,17 +518,17 @@ index 0000000..0000000 100644
  
      /// <summary>
 
-diff --git a/dotnet/src/Paperless.Presentations/MsBinary/PptNumbering.cs b/dotnet/src/Paperless.Presentations/MsBinary/PptNumbering.cs
+diff --git a/dotnet/src/XRay.Office.Presentations/MsBinary/PptNumbering.cs b/dotnet/src/XRay.Office.Presentations/MsBinary/PptNumbering.cs
 new file mode 100644
 index 0000000..0000000
 --- /dev/null
-+++ b/dotnet/src/Paperless.Presentations/MsBinary/PptNumbering.cs
++++ b/dotnet/src/XRay.Office.Presentations/MsBinary/PptNumbering.cs
 @@ -0,0 +1,116 @@
 +using System.Globalization;
 +using System.Xml.Linq;
-+using Paperless.Ooxml.DrawingML;
++using XRay.Office.Ooxml.DrawingML;
 +
-+namespace Paperless.Presentations.MsBinary;
++namespace XRay.Office.Presentations.MsBinary;
 +
 +/// <summary>
 +/// The number an automatically numbered binary PowerPoint paragraph draws.

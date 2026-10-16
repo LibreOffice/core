@@ -6,7 +6,7 @@ worker slot, because a thread pool does not work consecutive indices and two ren
 share a directory; and not on the path itself, because `soffice` truncates
 `-env:UserInstallation=file://…` at the first space.
 
-    render.py --out <dir> --cli <Paperless.Cli>     < paths
+    render.py --out <dir> --cli <XRay.Office.Cli>     < paths
     render.py --out <dir> --soffice /opt/…/soffice  < paths
 """
 import argparse, concurrent.futures as cf, hashlib, os, subprocess, sys

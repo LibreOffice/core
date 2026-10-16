@@ -7,7 +7,7 @@ count, so the only columns that can show it are the characters drawn and where t
 """
 import os, pathlib, re, subprocess, sys
 
-CLI = "/home/user/libreoffice-core/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/home/user/libreoffice-core/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 SOFFICE = "/opt/libreoffice26.2/program/soffice"
 
 

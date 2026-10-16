@@ -7,7 +7,7 @@ Applying those two patches is therefore a *reference-version decision*, not a pl
 read `findings.md` §A and §B before sequencing them.
 
 ## A · A `w:trHeight` floor is raised by the row's border and cell margins; 24.2 raises it by neither
-- `dotnet/src/Paperless.WordProcessing/Layout/TableLayouter.cs:199-206`; patch `patches/row-height-floor.diff`.
+- `dotnet/src/XRay.Office.WordProcessing/Layout/TableLayouter.cs:199-206`; patch `patches/row-height-floor.diff`.
 - **23 of 28** documents contain `w:trHeight` rows; it changes every one. Dominant on 009, 026,
   057, 058, 069, 141, 061, 093, 117, 151, 160, 041, 044, 154 and drives the page counts of 015, 018.
 - Re-run of this project's own probe against 24.2.7.2: LO reads 24.00 pt at `w:sz` 0/4/8/16/24
@@ -16,7 +16,7 @@ read `findings.md` §A and §B before sequencing them.
 - **Confidence: high** on the measurement, **medium** on whether the project wants to track 24.2.
 
 ## B · A `nextPage` section break keeps its space-before at every compatibility mode; 24.2 collapses it at mode ≥ 15
-- `dotnet/src/Paperless.WordProcessing/Layout/Paginator.cs:1395-1402`; patch `patches/section-break-space-before.diff`.
+- `dotnet/src/XRay.Office.WordProcessing/Layout/Paginator.cs:1395-1402`; patch `patches/section-break-space-before.diff`.
 - Costs 20 pt at the top of every section-opening page: 36 sections each in 015 and 018, 83 in 185,
   10 in 093, 6 in 063, 5 in 117, 4 in 037.
 - Nine synthetics on 24.2.7.2 (plain / landscape / `w:titlePg` × mode 15 / 12 / none): LO 72.03 at

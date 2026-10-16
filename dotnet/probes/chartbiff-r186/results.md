@@ -158,7 +158,7 @@ workers:
 statement for this round: the corpus has no BIFF doughnut, no BIFF bubble chart and no
 unrecognised ODF chart class.
 
-`Paperless.Fidelity.Tests` is **10 failed of 552 before and after**, the same four classes
+`XRay.Office.Fidelity.Tests` is **10 failed of 552 before and after**, the same four classes
 each time — `TabStopComparisonTests`, `PageDrawingComparisonTests`,
 `JustificationShrinkComparisonTests` and `SheetDrawingComparisonTests` — all of which
 `dotnet/CLAUDE.md` records as left failing on purpose, and none of which is a chart test.

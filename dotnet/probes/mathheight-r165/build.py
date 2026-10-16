@@ -3,7 +3,7 @@
 
 The parts of the real document are copied verbatim (styles, settings, fontTable, numbering,
 theme) so the fixtures inherit the same OOXML compatibility defaults -- the trap named in
-`paperless-corpus/SKILL.md`: a DOCX without `word/settings.xml` answers a different question.
+`office-corpus/SKILL.md`: a DOCX without `word/settings.xml` answers a different question.
 """
 import os, re, sys, zipfile
 

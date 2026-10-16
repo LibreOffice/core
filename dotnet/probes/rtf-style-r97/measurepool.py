@@ -6,7 +6,7 @@ a pool probe is *agreement* and a single column cannot show it. The reference ha
 one `soffice` invocation over the whole directory -- ~2 s a document rather than the ~8 s a fresh
 `-env:UserInstallation` per document costs, which is what makes 116 probes affordable.
 
-  PAPERLESS_CLI=... REF_SOFFICE=... measurepool.py <probe dir> <work dir>
+  XRAY_OFFICE_CLI=... REF_SOFFICE=... measurepool.py <probe dir> <work dir>
 """
 import os
 import pathlib
@@ -17,7 +17,7 @@ import pymupdf
 
 FX = pathlib.Path(sys.argv[1])
 WORK = pathlib.Path(sys.argv[2])
-CLI = os.environ['PAPERLESS_CLI']
+CLI = os.environ['XRAY_OFFICE_CLI']
 REF = os.environ.get('REF_SOFFICE', '/opt/libreoffice26.2/program/soffice')
 
 (WORK / 'ref').mkdir(parents=True, exist_ok=True)

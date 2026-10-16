@@ -2,62 +2,62 @@
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   109, Skipped:     0, Total:   109, Duration: 227 ms - Paperless.Containers.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   109, Skipped:     0, Total:   109, Duration: 227 ms - XRay.Office.Containers.Tests.dll (net10.0)
 === Core ===
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   579, Skipped:     0, Total:   579, Duration: 609 ms - Paperless.Core.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   579, Skipped:     0, Total:   579, Duration: 609 ms - XRay.Office.Core.Tests.dll (net10.0)
 === Markup ===
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   259, Skipped:     0, Total:   259, Duration: 1 s - Paperless.Markup.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   259, Skipped:     0, Total:   259, Duration: 1 s - XRay.Office.Markup.Tests.dll (net10.0)
 === OpenDocument ===
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   160, Skipped:     0, Total:   160, Duration: 416 ms - Paperless.OpenDocument.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   160, Skipped:     0, Total:   160, Duration: 416 ms - XRay.Office.OpenDocument.Tests.dll (net10.0)
 === Rendering ===
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   164, Skipped:     0, Total:   164, Duration: 6 s - Paperless.Rendering.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   164, Skipped:     0, Total:   164, Duration: 6 s - XRay.Office.Rendering.Tests.dll (net10.0)
 === Spreadsheets ===
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:  1352, Skipped:     0, Total:  1352, Duration: 7 s - Paperless.Spreadsheets.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:  1352, Skipped:     0, Total:  1352, Duration: 7 s - XRay.Office.Spreadsheets.Tests.dll (net10.0)
 === Text ===
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   728, Skipped:     0, Total:   728, Duration: 11 s - Paperless.Text.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   728, Skipped:     0, Total:   728, Duration: 11 s - XRay.Office.Text.Tests.dll (net10.0)
 === Vector ===
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:   309, Skipped:     0, Total:   309, Duration: 1 s - Paperless.Vector.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:   309, Skipped:     0, Total:   309, Duration: 1 s - XRay.Office.Vector.Tests.dll (net10.0)
 === WordProcessing ===
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:  1938, Skipped:     0, Total:  1938, Duration: 1 m 9 s - Paperless.WordProcessing.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:  1938, Skipped:     0, Total:  1938, Duration: 1 m 9 s - XRay.Office.WordProcessing.Tests.dll (net10.0)
 === Presentations ===
 Starting test execution, please wait...
 A total of 1 test files matched the specified pattern.
 
-Passed!  - Failed:     0, Passed:  1193, Skipped:     0, Total:  1193, Duration: 54 s - Paperless.Presentations.Tests.dll (net10.0)
+Passed!  - Failed:     0, Passed:  1193, Skipped:     0, Total:  1193, Duration: 54 s - XRay.Office.Presentations.Tests.dll (net10.0)
 0.1287086614173205d
 
 Additional Info:
     list-label-overrun.fodt: word 4 ("than") starts at 117.571 pt drawn, 117.442 pt rendered
   Stack Trace:
-     at Paperless.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(String fileName) in /home/user/wt-slidetable/dotnet/tests/Paperless.Fidelity.Tests/TabStopComparisonTests.cs:line 167
+     at XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(String fileName) in /home/user/wt-slidetable/dotnet/tests/XRay.Office.Fidelity.Tests/TabStopComparisonTests.cs:line 167
    at InvokeStub_TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(Object, Span`1)
    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
-[xUnit.net 00:02:15.32]     Paperless.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.docx") [FAIL]
-  Failed Paperless.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.docx") [998 ms]
+[xUnit.net 00:02:15.32]     XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.docx") [FAIL]
+  Failed XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.docx") [998 ms]
   Error Message:
    Shouldly.ShouldAssertException : Math.Abs(drawn[i].Left - (rendered[i].Left - PdfPenOffsetPoints))
     should be less than or equal to
@@ -68,11 +68,11 @@ Additional Info:
 Additional Info:
     list-label-overrun.docx: word 4 ("than") starts at 117.571 pt drawn, 117.442 pt rendered
   Stack Trace:
-     at Paperless.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(String fileName) in /home/user/wt-slidetable/dotnet/tests/Paperless.Fidelity.Tests/TabStopComparisonTests.cs:line 167
+     at XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(String fileName) in /home/user/wt-slidetable/dotnet/tests/XRay.Office.Fidelity.Tests/TabStopComparisonTests.cs:line 167
    at InvokeStub_TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(Object, Span`1)
    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
-[xUnit.net 00:02:16.22]     Paperless.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.odt") [FAIL]
-  Failed Paperless.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.odt") [895 ms]
+[xUnit.net 00:02:16.22]     XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.odt") [FAIL]
+  Failed XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.odt") [895 ms]
   Error Message:
    Shouldly.ShouldAssertException : Math.Abs(drawn[i].Left - (rendered[i].Left - PdfPenOffsetPoints))
     should be less than or equal to
@@ -83,8 +83,8 @@ Additional Info:
 Additional Info:
     list-label-overrun.odt: word 4 ("than") starts at 117.571 pt drawn, 117.442 pt rendered
   Stack Trace:
-     at Paperless.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(String fileName) in /home/user/wt-slidetable/dotnet/tests/Paperless.Fidelity.Tests/TabStopComparisonTests.cs:line 167
+     at XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(String fileName) in /home/user/wt-slidetable/dotnet/tests/XRay.Office.Fidelity.Tests/TabStopComparisonTests.cs:line 167
    at InvokeStub_TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(Object, Span`1)
    at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
 
-Failed!  - Failed:    10, Passed:   542, Skipped:     0, Total:   552, Duration: 2 m 20 s - Paperless.Fidelity.Tests.dll (net10.0)
+Failed!  - Failed:    10, Passed:   542, Skipped:     0, Total:   552, Duration: 2 m 20 s - XRay.Office.Fidelity.Tests.dll (net10.0)

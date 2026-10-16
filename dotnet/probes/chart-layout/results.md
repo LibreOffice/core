@@ -64,7 +64,7 @@ background rectangle is drawn at `119.083 … 719.660` × `92.58 … 516.983` in
 content range really does begin 142.7 pt left of the chart page, and 0.951 of an 8 pt label is the
 7.609 pt the PDF states.
 
-**Paperless already has the machinery.** `ChartLayout.Place` composes at `plot.Space` and calls
+**X-Ray.Office already has the machinery.** `ChartLayout.Place` composes at `plot.Space` and calls
 `Stretch(drawing, own, frame)`, which carries the residual `sx/sy` on `ChartLabel.Stretch` for each
 consumer to fold into its own transform. The one thing missing is that LibreOffice's `from`
 rectangle is the *drawn extent* and ours is the chart's page. Implementing it is a change to
@@ -309,9 +309,9 @@ open.
 
 | | baseline at `faadf7dda` | after |
 |---|---|---|
-| `dotnet build Paperless.slnx -v q -nologo` | 0 warnings, 0 errors | **0 warnings, 0 errors** |
+| `dotnet build XRay.Office.slnx -v q -nologo` | 0 warnings, 0 errors | **0 warnings, 0 errors** |
 | ten non-fidelity projects, run individually and totalled | 5817 passed, 0 failed, 0 skipped | **5830 passed, 0 failed, 0 skipped** — the 13 are this round's own new tests |
-| `Paperless.Fidelity.Tests` | 542 / 10 / 0 of 552 | **542 / 10 / 0 of 552**, and the ten names are the briefed ones: `PageDrawing` ×4, `TabStop` ×4, `SheetDrawing`, `JustificationShrink` |
+| `XRay.Office.Fidelity.Tests` | 542 / 10 / 0 of 552 | **542 / 10 / 0 of 552**, and the ten names are the briefed ones: `PageDrawing` ×4, `TabStop` ×4, `SheetDrawing`, `JustificationShrink` |
 
 Per project: Containers 109, Core 454, Markup 259, OpenDocument 128, Presentations 949,
 Rendering 162, Spreadsheets 1113, Text 719, Vector 302, WordProcessing 1635. No project needed a

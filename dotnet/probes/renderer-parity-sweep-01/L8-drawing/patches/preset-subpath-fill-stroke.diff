@@ -1,6 +1,6 @@
-diff --git a/dotnet/src/Paperless.Ooxml/DrawingML/CustomShapeGeometry.cs b/dotnet/src/Paperless.Ooxml/DrawingML/CustomShapeGeometry.cs
---- a/dotnet/src/Paperless.Ooxml/DrawingML/CustomShapeGeometry.cs
-+++ b/dotnet/src/Paperless.Ooxml/DrawingML/CustomShapeGeometry.cs
+diff --git a/dotnet/src/XRay.Office.Ooxml/DrawingML/CustomShapeGeometry.cs b/dotnet/src/XRay.Office.Ooxml/DrawingML/CustomShapeGeometry.cs
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/CustomShapeGeometry.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/CustomShapeGeometry.cs
 @@ -47,7 +47,78 @@
      /// <param name="TextRectangle">
      /// The rectangle <c>a:rect</c> names, or the whole bounding box when the shape states none.
@@ -219,9 +219,9 @@ diff --git a/dotnet/src/Paperless.Ooxml/DrawingML/CustomShapeGeometry.cs b/dotne
  
  /// <summary>One preset shape's definition.</summary>
  /// <param name="Name">Its <c>a:prstGeom/@prst</c> name.</param>
-diff --git a/dotnet/src/Paperless.Ooxml/DrawingML/PresetShapeGeometry.cs b/dotnet/src/Paperless.Ooxml/DrawingML/PresetShapeGeometry.cs
---- a/dotnet/src/Paperless.Ooxml/DrawingML/PresetShapeGeometry.cs
-+++ b/dotnet/src/Paperless.Ooxml/DrawingML/PresetShapeGeometry.cs
+diff --git a/dotnet/src/XRay.Office.Ooxml/DrawingML/PresetShapeGeometry.cs b/dotnet/src/XRay.Office.Ooxml/DrawingML/PresetShapeGeometry.cs
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/PresetShapeGeometry.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/PresetShapeGeometry.cs
 @@ -54,10 +54,14 @@
          List<PresetCommand> commands = [];
          string pathWidth = "0";

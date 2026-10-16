@@ -6,7 +6,7 @@ set -e
 cd "$(dirname "$0")"
 OUT=/home/user/brline-r151-sweep
 LEG="${1:?usage: sweep.sh <leg>}"
-CLI="$PWD/../../tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI="$PWD/../../tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 CORPUS=/home/user/sample-files
 mkdir -p "$OUT/$LEG"
 

@@ -6,7 +6,7 @@ measurements are below.
 
 **Headline.** Both fixes land and both reproduce the reference: `Thailand17.ppt` page 22 goes from
 18.92% of pixels differing to 0.63%, and `OnTrac` from 11 major pages to 2. Measured reach is
-**16 of 163 slide renderings**, and **0 of 371** words and sheets renderings — the `Paperless.Core`
+**16 of 163 slide renderings**, and **0 of 371** words and sheets renderings — the `XRay.Office.Core`
 move is behaviour-free, as it had to be. **Zero verdicts move**, on all three tracks, which is what
 was predicted and what the gate's definition requires.
 
@@ -76,9 +76,9 @@ admitted it. It now grows that rectangle by whatever the four crop properties th
 that makes it *look* cropped is the shape outline `SlideDrawing.DrawPicture` was already applying
 to every picture.
 
-- `Paperless.Core.Geometry.PictureCrop` — `Uncropped` and `Inset`, moved down from
-  `Paperless.Presentations.Layout.SlideImages`, unchanged.
-- `Paperless.MsBinary.Escher.EscherPicture.Cropped` — the four-property read, in the layer DOC,
+- `XRay.Office.Core.Geometry.PictureCrop` — `Uncropped` and `Inset`, moved down from
+  `XRay.Office.Presentations.Layout.SlideImages`, unchanged.
+- `XRay.Office.MsBinary.Escher.EscherPicture.Cropped` — the four-property read, in the layer DOC,
   XLS and PPT already share.
 - `EscherPropertyIds.CropFromTop`/`Bottom`/`Left`/`Right` = 256–259, read **signed**.
 
@@ -179,9 +179,9 @@ looks like grey over white and does not over the photograph it actually sits on.
 Not chased, as instructed: the reference wrapping "10" onto two lines on the six two-digit pages.
 Position is exact to 0.01 pt on the six single-digit pages and untouched here.
 
-## 5. The cross-track sweep the `Paperless.Core` move owes
+## 5. The cross-track sweep the `XRay.Office.Core` move owes
 
-`Paperless.Core` is the zero-dependency layer every other library inherits, so the move is
+`XRay.Office.Core` is the zero-dependency layer every other library inherits, so the move is
 measured rather than argued. Both legs are full renders of the whole track with the base and
 branch binaries, byte-compared with `/CreationDate` and `/ModDate` normalised out.
 
@@ -196,7 +196,7 @@ pinned and that the zeroes are not a masking artefact.
 
 This is a round-45-shaped change, not a round-44-shaped one, and for the stated reason: round 44
 changed behaviour in a shared component and every affected deck moved; round 45 moved code in
-`Paperless.Text` without changing behaviour and swept 334 of 334 identical. Nothing above
+`XRay.Office.Text` without changing behaviour and swept 334 of 334 identical. Nothing above
 `PictureCrop` calls it differently than it called `SlideImages`, and the only new caller is on the
 `.ppt` path.
 
@@ -279,7 +279,7 @@ in line with the committed `.ppt` fixtures already there (`ppt-page-fill.ppt` an
 `ppt-fill-opacity.ppt` are both 604672 bytes). No third-party content, nothing from the web,
 nothing personal, no licence question.
 
-Testing both halves of the pair is deliberate: the `.pptx` holds the `Paperless.Core` call site
+Testing both halves of the pair is deliberate: the `.pptx` holds the `XRay.Office.Core` call site
 and the `.ppt` holds the new one, so the two paths are held to the same rectangle and the shared
 arithmetic cannot drift apart. Reference agreement on the `.ppt`, at 26.2.4.2:
 ours `(24.39, 36.01)–(505.13, 574.72)`, reference `(24.38, 36.03)–(505.13, 574.75)`.

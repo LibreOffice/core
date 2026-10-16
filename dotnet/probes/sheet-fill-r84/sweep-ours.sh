@@ -14,7 +14,7 @@
 #     `/CreationDate` and XMP `dc:date` masked, against the same of the banked base rendering.
 #     `same` means the document is byte-identical to the tree this round started from, which is
 #     how the untargeted tracks are shown not to have moved.
-#   * **The mask is checked rather than assumed.** `paperless` writes `/CreationDate(D:…)` with
+#   * **The mask is checked rather than assumed.** `xray-office` writes `/CreationDate(D:…)` with
 #     no space before the parenthesis and `soffice` writes `/CreationDate (D:…)`; round 82 found
 #     its inherited pattern matching neither. Both spellings are masked here.
 #
@@ -24,7 +24,7 @@ set -uo pipefail
 ROOT="${1:?corpus root}"; GLOB="${2:?glob}"; REF="${3:?ref dir}"
 BASE="${4:?base dir or -}"; OUT="${5:?outdir}"; WORKERS="${6:-3}"
 mkdir -p "$OUT" && OUT="$(cd "$OUT" && pwd)"
-CLI="${PAPERLESS_CLI:?set PAPERLESS_CLI to the binary you mean to measure}"
+CLI="${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI to the binary you mean to measure}"
 [ -x "$CLI" ] || { echo "no CLI at $CLI" >&2; exit 1; }
 [ -d "$REF" ] || { echo "no reference bank at $REF" >&2; exit 1; }
 

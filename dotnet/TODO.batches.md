@@ -318,15 +318,15 @@ are off by 3 or more.
 
 Worth recording because the agents caught both by measuring rather than by reading:
 
-- **The VCL table was already there.** I briefed "Paperless resolves through fontconfig
-  alone; LibreOffice consults `VCL.xcu` first". Paperless already had the chains and already
+- **The VCL table was already there.** I briefed "X-Ray.Office resolves through fontconfig
+  alone; LibreOffice consults `VCL.xcu` first". X-Ray.Office already had the chains and already
   walked them first. The defect was one layer down — it carried only *half* of each entry,
   dropping `FontType`, so once a chain named nothing installed (the common case on Linux,
   where all fourteen of Tahoma's candidates are absent) the shape was guessed from the family
   name. Face agreement with LibreOffice went 6/55 → 47/55.
 - **And the fallback direction was backwards.** Verifying against the installed `soffice`
   rather than its source showed LibreOffice's answer for an unknown family *is* fontconfig's;
-  Paperless was the one hard-coding a serif/Liberation list. Reading the source alone would
+  X-Ray.Office was the one hard-coding a serif/Liberation list. Reading the source alone would
   have produced a confident, well-cited, wrong fix.
 
 `A_320.doc`'s in-cell pitch was the third measurement-right-cause-wrong case: no
@@ -485,7 +485,7 @@ drops the glyphs outright, and draws nothing at zero size.
 **The clip.** `slides/batch-008/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx` embeds
 `image8.emf`, whose header declares 720 × 250 device units and whose 2832 records draw a whole
 journal page — 791 `EXTTEXTOUTW` and not one bitmap. Stretched into a 3433763 × 1190625 EMU
-picture frame that `VectorImage.Draw` clips to (`Paperless.Vector/VectorImage.cs:106`), most of
+picture frame that `VectorImage.Draw` clips to (`XRay.Office.Vector/VectorImage.cs:106`), most of
 that text lands outside the frame. The sink now tracks the current matrix and the active clip
 beside the `q`/`Q` it already wrote and drops a run the clip excludes: **3099 extractable words
 against 2108 before, 2240 after.** Every approximation is towards drawing too much — the clip is
@@ -733,7 +733,7 @@ shadows behind every coin, box and arrow that we leave flat.
 This is a feature rather than a fix — offset, colour, transparency and blur, applied to fill,
 outline *and* text — but it is the one lead here with real breadth: **59 of the 112 pptx decks in
 this track state an `a:outerShdw` or `a:innerShdw` on a slide shape, 3296 occurrences between
-them**, and nothing in `Paperless.Presentations` reads any of them. Its effect on the word gate
+them**, and nothing in `XRay.Office.Presentations` reads any of them. Its effect on the word gate
 is a side effect; its effect on the page is visible at a glance.
 
 **4. Two chart and text-effect gaps — 2 documents.**
@@ -764,7 +764,7 @@ embedded, and the gate's third check passes.
 The bytes settle it. The stream we write for it begins `OTTO` and its table directory is
 `CFF `, `OS/2`, `cmap`, `head`, `hhea`, `hmtx`, `maxp`, `name`, `post` — **a CFF-flavoured
 OpenType face, embedded as `/FontFile2` under `/Subtype/TrueType`**
-(`Paperless.Rendering/Pdf/PdfFontCatalogue.cs:311`, which writes that unconditionally). PDF 1.7
+(`XRay.Office.Rendering/Pdf/PdfFontCatalogue.cs:311`, which writes that unconditionally). PDF 1.7
 §9.9 wants `/FontFile3` with `/Subtype/OpenType` for those, and a reader that follows it drops
 the font, so 161 glyph runs draw nothing while extracting perfectly. It reaches one document here
 only because Unifont is a last-resort fallback, but it would reach **any** `.otf` face on any
@@ -779,7 +779,7 @@ round had left. It is small and it is precisely located.
 
 Worth adding to the skill's list because it cost a whole slides sweep here and the failure is
 silent. The snapshot rule — copy the CLI so a rebuild cannot race the sweep — is necessary and
-not sufficient: the copy was taken while `tools/Paperless.Cli/bin` still held the binary from a
+not sufficient: the copy was taken while `tools/XRay.Office.Cli/bin` still held the binary from a
 *deliberately reverted* build made to prove the new test could fail, and the sweep then measured
 the base commit again. Every check in the skill passed: 163 rows, no duplicates, no `ref-failed`,
 every page count exact. The tell was that the two documents the fix was written for had not moved
@@ -821,7 +821,7 @@ The wrapped case turned out to be reproducible too, and the previous round's "5.
 finding was right about the number and wrong about the conclusion. `GetNeededSize`'s EditEngine
 branch quantises to whole device pixels three times — the em size, the ascent, the descent — adds
 two truncated one-pixel margins, and divides by `ScSizeDeviceProvider`'s **0.067, not 1/15**
-(`sc/source/ui/docshell/sizedev.cxx:48`). That is `Paperless.Text.Fonts.MetricGrid`, which Writer
+(`sc/source/ui/docshell/sizedev.cxx:48`). That is `XRay.Office.Text.Fonts.MetricGrid`, which Writer
 already had for `fUsePrinterMetrics`. Fitted to thirty probe rows — six font sizes against five
 line counts, read out of LibreOffice's own flat-ODF export — it reproduces all thirty.
 
@@ -963,7 +963,7 @@ already known to be made of — documents off by ±1 page with the right words �
 every modern DOCX rather than to a feature some documents use, and its sign is always the
 same: we produce more lines than the reference, so more pages. `DocxLayoutSource` already
 reads `_compatibilityMode`. What it needs is a line breaker that can retry a full line with
-the blanks compressed, which is a change in `Paperless.Text.Layout` and was too large to
+the blanks compressed, which is a change in `XRay.Office.Text.Layout` and was too large to
 start with the time left rather than too hard.
 
 The other `batch-005` failure, `loi_format_letter_of_intent…doc`, is the opposite sign — 9
@@ -1894,7 +1894,7 @@ so the two cases can be told apart when someone does it.
 
 **A hole in the gate found on the way.** `batch-check.sh`'s third check is
 `pdffonts … | awk '$(NF-3)=="no"'`, which reads the `sub` column rather than `emb` for a row whose
-type is a single word. Every font Paperless writes is `TrueType`, one word — so **the font
+type is a single word. Every font X-Ray.Office writes is `TrueType`, one word — so **the font
 embedding check has never tested our own output**. It fires correctly for `Type 1`, `Type 1C` and
 `CID Type 0C`, whose names are two or three fields. Worth fixing in the script rather than in a
 document.
@@ -2066,7 +2066,7 @@ a reminder that the reference column is not perfectly reproducible either.
 | `batch-017` | 4/10 | 4/10 (9/10 → 4/10 mid-round, restored) |
 | every other batch | — | unchanged |
 
-**Nothing outside `Paperless.Spreadsheets` was touched**, so the words and slides tracks cannot
+**Nothing outside `XRay.Office.Spreadsheets` was touched**, so the words and slides tracks cannot
 have moved and were not swept.
 
 Measured whole-track at `1aefcdfdb`, twice, 171 documents each time. The baseline reproduced the
@@ -2491,7 +2491,7 @@ satisfied by truncating unless the fraction carries past a threshold somewhere i
 Carlito 12 pt is 121.64 → 121, DejaVu Sans 12 pt is 152.70 → 153 — but only two of the nine
 discriminate and there is no mechanism behind the constant, so on its own that is a fudge fitted
 to two points. The corpus is what settles it, and the measurement is cheap because **the reference
-side does not move for a Paperless-only change**: render our side alone over all 171 and join the
+side does not move for an X-Ray.Office-only change**: render our side alone over all 171 and join the
 existing reference column. The harness was checked first by reproducing the previous sweep's
 135/114/144 with *zero* rows differing, and the change then gave **136, 113, 145** with six
 documents moved and every one improved — `dragon-175066A.xlsx` 14 pages to 13 and into parity, and
@@ -2505,7 +2505,7 @@ to how far a grep would have overstated it.
 
 Whole slides track swept before at `7049756d9` and after at `adcbeb2de`, 163 documents each
 time, plus `words/batch-001..005` and `sheets/batch-001..005` because one of the two fixes
-lands in `Paperless.Ooxml`, which all three families share. The baseline reproduced the
+lands in `XRay.Office.Ooxml`, which all three families share. The baseline reproduced the
 briefed **152/163** to the digit — the same eleven failures, no `ref-failed`, every page count
 exact — which is the tell that the base and the instrument are both right.
 
@@ -2720,9 +2720,9 @@ and it was predictable before the sweep, which is the part worth keeping. Three 
 the second half of the fix landed after the "after" sweep started, so a third was run against the
 final binary and reproduces the same four figures and the same zero.
 
-The change is confined to `Paperless.WordProcessing`; nothing in `Paperless.Presentations` or
-`Paperless.Spreadsheets` references `PaginationOptions` or `WordProcessing.Layout`, and
-`Paperless.Text/Layout/ParagraphLayouter.cs` is untouched, so the other two tracks cannot have
+The change is confined to `XRay.Office.WordProcessing`; nothing in `XRay.Office.Presentations` or
+`XRay.Office.Spreadsheets` references `PaginationOptions` or `WordProcessing.Layout`, and
+`XRay.Office.Text/Layout/ParagraphLayouter.cs` is untouched, so the other two tracks cannot have
 moved.
 
 ### The measurement reproduced and the sentence attached to it was wrong, again
@@ -2939,7 +2939,7 @@ style the package declares as `def` into that `a:tblPr` makes the reference draw
 we drew** — the fallback is the whole of the difference. 123.54 → 8.34, major 19 → 2.
 
 Reach, parsed: 130 such tables across 24 decks, including 44 in
-`NAS-Infrastructure-Roadmaps-v16.0.pptx`. `DrawingTableStyle` lives in `Paperless.Ooxml`,
+`NAS-Infrastructure-Roadmaps-v16.0.pptx`. `DrawingTableStyle` lives in `XRay.Office.Ooxml`,
 which all three families share, but `DrawingTableStyle.Read` has exactly one caller —
 `PptxSlideLayout` — so no other family's rendering can change.
 
@@ -3173,9 +3173,9 @@ seen here from the pixel side instead.
 ### The regression guards, and the tests
 
 Four of the six files changed are shared below the presentation family —
-`Paperless.Core/Graphics` (a `RasterImage` field and a `BitmapPaint` field),
-`Paperless.Rendering` (the decoder and both sinks) and
-`Paperless.Ooxml/DrawingML/DrawingFill.cs` — so the other two tracks were swept as well.
+`XRay.Office.Core/Graphics` (a `RasterImage` field and a `BitmapPaint` field),
+`XRay.Office.Rendering` (the decoder and both sinks) and
+`XRay.Office.Ooxml/DrawingML/DrawingFill.cs` — so the other two tracks were swept as well.
 
 | | |
 |---|---|
@@ -3434,7 +3434,7 @@ than the first.
 
 Tests, per project: Core 238, Text 185, Containers 109, Vector 291, Rendering 104, Markup 259,
 OpenDocument 125, WordProcessing 553, Spreadsheets 401, Presentations 485, Fidelity 538 — **0 failed
-and 0 skipped in every one**. Nothing outside `Paperless.WordProcessing` was touched, so the other
+and 0 skipped in every one**. Nothing outside `XRay.Office.WordProcessing` was touched, so the other
 two tracks were not swept.
 
 ### A title page with nothing named for it draws nothing — and one with a *footer* named for it does not
@@ -3609,7 +3609,7 @@ opened. `PptTextBody` does carry the character through — it maps `\v` to `\n`,
 lines, which is what triggers the 85% autofit; ours fits at 100% because it is short a line per
 bullet. So the pitch ratio is downstream of the missing line rather than a second bug.
 
-Not implemented here. `TextMeasurer` is in `Paperless.Text/Layout` and serves all three
+Not implemented here. `TextMeasurer` is in `XRay.Office.Text/Layout` and serves all three
 families, and the mandatory-break set it would key on includes `\r`, `\n` and U+2029 — which
 some reader may be leaving on the end of a paragraph to *mean* "paragraph ends here". Getting
 that wrong adds a line to every paragraph in the corpus. It needs the probe deck below and a
@@ -3688,7 +3688,7 @@ appear: `wdUpDiag` 32, `pct25` 18, `pct5` 12, `pct50` 2, `wdDnDiag` 1. So five p
 the whole corpus.
 
 It is a feature rather than a fix — a pattern is a paint kind the drawing IR does not have, so
-it touches `Paperless.Core/Graphics` and both sinks — but it is the best-bounded one left on
+it touches `XRay.Office.Core/Graphics` and both sinks — but it is the best-bounded one left on
 this track: five presets, a named location, and three of the largest documents behind it.
 
 ### The text-path gap has a `.ppt` instance too, and it is one page's worth of ink
@@ -3799,7 +3799,7 @@ not to do. Recorded so the next brief does not send anyone after it again.
 
 ### The regression guards
 
-Two of the four changed files are below the presentation family — `Paperless.Text/Layout`
+Two of the four changed files are below the presentation family — `XRay.Office.Text/Layout`
 (the trailing-break rule) — so the other two tracks were swept.
 
 | | |
@@ -3889,7 +3889,7 @@ result for a change whose corpus reach is one document that it does not flip.
 Test counts after: Core 238, Text 196, Containers 109, Rendering 104, Markup 259,
 OpenDocument 125, WordProcessing **559** (553 plus this round's six), Spreadsheets 410,
 Presentations 488, Vector 291, Fidelity 538, 0 skipped in every one. Nothing outside
-`Paperless.WordProcessing` was touched, so the other two tracks were not swept.
+`XRay.Office.WordProcessing` was touched, so the other two tracks were not swept.
 
 ### `batch-007` is 10/10: a style that states half of `w:spacing` freezes the other half
 
@@ -4100,8 +4100,8 @@ built in the test.
 
 ### The regression guards, and the tests
 
-Five of the ten files changed are below the presentation family — `Paperless.Core/Graphics`
-(`HatchPaint` and `Hatching`) and `Paperless.Ooxml/DrawingML` (`DrawingFill`, `DrawingHatch`,
+Five of the ten files changed are below the presentation family — `XRay.Office.Core/Graphics`
+(`HatchPaint` and `Hatching`) and `XRay.Office.Ooxml/DrawingML` (`DrawingFill`, `DrawingHatch`,
 `DrawingHatchPresets`, `DrawingTableGeometry`) — so the other two tracks were swept.
 
 | | |
@@ -4482,7 +4482,7 @@ The `w:spacing` of a `w:rPr` is tracking — `SvxKerningItem`/`CharKerning`, a c
 between characters — and shares nothing but its name with the `w:spacing` of a `w:pPr`.
 `DomainMapper.cxx`:2468–2480 converts the twips straight to `PROP_CHAR_CHAR_KERNING`.
 
-Nothing read it. **`FormattedRun.Tracking` in `Paperless.Text` was built for exactly this** and
+Nothing read it. **`FormattedRun.Tracking` in `XRay.Office.Text` was built for exactly this** and
 its own doc comment names `w:spacing` as the word-processing spelling of it; only the
 presentations reader ever populated it. Wired through `WordTextStyle`, `PageRun`,
 `PageParagraph` (for the uniform-paragraph shortcut, which tracking must survive because it is a
@@ -4536,7 +4536,7 @@ not for the reference is unexplained**, and a minimal probe does not reproduce i
   about a family neither has, not a layout one — a plausible mechanism is VCL parsing the width
   token out of `Aptos Narrow` and searching for a condensed face where `fc-match "Aptos Narrow"`
   simply answers DejaVu Sans, but that is inferred and **not verified**. Whoever takes it should
-  expect to change `Paperless.Text/Fonts`, which is shared, and sweep the other tracks.
+  expect to change `XRay.Office.Text/Fonts`, which is shared, and sweep the other tracks.
 - **`slcc-architecture-uu-architecture.docx`**, 3 pages against 4, words exact at 1221. The
   reference spills onto a fourth page carrying nothing but its page number; we fit everything in
   three. A small height, not a wrong one.
@@ -4765,7 +4765,7 @@ on dozens of documents rather than being a copy. Its TSVs are preserved at
 `scratchpad/slides-r16-keep/`.
 
 **It still does not describe this tree, and that is the point worth keeping.** It was measured
-18 commits back, and those 18 commits include `d3bf1c445` — a `Paperless.Text` change to how a
+18 commits back, and those 18 commits include `d3bf1c445` — a `XRay.Office.Text` change to how a
 font substitution chain is resolved, which is a shared layer below every slide. A sweep of the
 slides track taken before it is not a baseline for a tree that has it. The round's own baseline
 is measured fresh, and the r15 numbers are kept only to compare against.
@@ -4791,7 +4791,7 @@ pre-fix sweep, its post-fix sweep and this one differ in exactly the places they
 | `sl16-base` — autofit fix + 18 commits | 151 | 1402.67 | 466 |
 
 `r15grid → sl16-base` moves **one document by 0.21** and nothing else. So the eighteen
-commits between the two — including `d3bf1c445`, the `Paperless.Text` font-substitution
+commits between the two — including `d3bf1c445`, the `XRay.Office.Text` font-substitution
 change that was the reason to re-measure at all — are worth 0.21 of ink on the whole slides
 track. Re-measuring was still right; it is the only thing that could have said so.
 
@@ -5077,7 +5077,7 @@ with no text boxes to blame.
 
 ### The shared layer, and the check that it is a no-op elsewhere
 
-`Paperless.Text` changed: `TabRuler.Segments`/`WidthOf` take a right edge and `TextMeasurer` computes
+`XRay.Office.Text` changed: `TabRuler.Segments`/`WidthOf` take a right edge and `TextMeasurer` computes
 one per line. Both parameters default to null, and the clamp is gated on a new
 `ParagraphFormat.ClampsTabsAtLineEdge` that only the four word-processing readers set — Impress and
 Calc reach the same `ParagraphLayouter` but leave it off, so their right edge is null and `TabRuler`
@@ -5152,7 +5152,7 @@ the direct ratio gives 470.
 `SlideAutofit.Quantised`, applied in `Scaling.Scaled` because that is the one place every measured
 and drawn em passes through — `LargestSize` reads it back off `RunStyle.Size`, the shaper takes it
 as `FormattedRun.EmSize`, and the sink writes it as `/Tf`. **Nothing outside
-`Paperless.Presentations` was touched**, so the words and sheets tracks cannot be affected and are
+`XRay.Office.Presentations` was touched**, so the words and sheets tracks cannot be affected and are
 not owed a sweep.
 
 ### The brief's headline lead was the wrong half of the mechanism
@@ -5239,7 +5239,7 @@ states `<a:bodyPr rot="-60000000"/>` and `ObjectFormatter::convertTextRotation` 
 outside ±5400000 (`oox/source/drawingml/chart/objectformatter.cxx`:1087-1091, **byte-identical in
 24.2.7.2**), so the rotation reads as zero and line breaking is allowed on both sides — and
 `DrawingChartPlot.AxisTextOf` already implements exactly that. **The rotation clamp is not the
-bug.** What differs is how much width the axis gives each category slot, in `Paperless.Core/Charts`,
+bug.** What differs is how much width the axis gives each category slot, in `XRay.Office.Core/Charts`,
 which is a shared layer and was left alone. Removing pages 5, 6 and 16 leaves 2106 against 2108.
 
 ### What the next round should take, in order
@@ -5250,7 +5250,7 @@ which is a shared layer and was left alone. Removing pages 5, 6 and 16 leaves 21
    EMU to 1/100 mm on import, so the width the reference breaks lines against is a whole number of
    units and ours carries the file's full EMU precision. Same defect, an order of magnitude
    smaller — and worth doing *after* the em rather than with it, or the two are not separable.
-3. **`8_P-Pavese` page 16's axis slot width**, in `Paperless.Core/Charts`; a shared layer, so it
+3. **`8_P-Pavese` page 16's axis slot width**, in `XRay.Office.Core/Charts`; a shared layer, so it
    owes the words and sheets sweeps.
 4. **The raster list's 25% threshold**, above.
 ## Words, the eleventh round: a page break that keeps no space, and a table style that draws
@@ -5511,7 +5511,7 @@ nothing resolves them: the chart draws its title and axis titles and then a valu
 from an empty series, 0 to 12 where the reference reads 0 to 180. That is worth 305 words on the
 Logbook and 557 on EHEST and is the next piece of the same work.
 
-**Nothing outside `Paperless.Spreadsheets` was touched** by either change, so the words and slides
+**Nothing outside `XRay.Office.Spreadsheets` was touched** by either change, so the words and slides
 tracks cannot be affected and were not swept.
 
 ### Tests
@@ -5577,7 +5577,7 @@ printedBand = statedBand + max(0, measuredLineHeight − nominalPointSize)
 
 which is about a tenth of the font size, taken off the printable body on every page. The
 citations and the arithmetic — which reproduces LibreOffice's own flat-ODF export to the digit
-on three separate workbooks — are in `src/Paperless.Spreadsheets/TODO.md`. The band's default
+on three separate workbooks — are in `src/XRay.Office.Spreadsheets/TODO.md`. The band's default
 font is the workbook's own default cell font and not a fixed ten point, which two documents
 disagreeing with each other were needed to establish.
 
@@ -5597,7 +5597,7 @@ change, so it stands — this is the pattern this file already records under "fi
 `fy2011-aip-grants.xls` is a BIFF workbook and moved only on the second of the two commits, the
 one that takes the band's default font from the workbook. The rule reaches both filters.
 
-**Nothing outside `Paperless.Spreadsheets` was touched**, so the words and slides tracks cannot
+**Nothing outside `XRay.Office.Spreadsheets` was touched**, so the words and slides tracks cannot
 be affected and were not swept.
 
 ### Tests
@@ -5666,12 +5666,12 @@ that made the reference PDFs, and byte-identical to this checkout's 27.2-alpha. 
 has text cannot satisfy it**, so a plain text box — and equally a `sldNum`, `ftr`, `dt` or `hdr`
 placeholder, which name no style either — takes `getDefaultTextStyle()`: the presentation's
 `p:defaultTextStyle` (`presentationfragmenthandler.cxx`:115 builds it and hands it to every
-`SlidePersist`). `src/Paperless.Presentations/Ooxml/PptxTextStyles.cs`:220 is the fork.
+`SlidePersist`). `src/XRay.Office.Presentations/Ooxml/PptxTextStyles.cs`:220 is the fork.
 
 **The mechanism had been correctly cited for two rounds and recorded as a deliberate divergence.**
-`src/Paperless.Presentations/TODO.md` had the *other* route to it — `SlidePersist::createXShapes`
+`src/XRay.Office.Presentations/TODO.md` had the *other* route to it — `SlidePersist::createXShapes`
 looping `for (int i = 0; i < 4; i++)` over a switch whose `case 4` is the style `p:otherStyle`
-parses into, so the loop stops one short — beside the note that "Paperless does apply it … which
+parses into, so the loop stops one short — beside the note that "X-Ray.Office does apply it … which
 is what the file says and what PowerPoint shows".
 
 What was missing was a document that could tell the readings apart. `deck-text-style.pptx` cannot:
@@ -5745,7 +5745,7 @@ the search.
 
 ### The regression guards, and the tests
 
-Nothing outside `Paperless.Presentations/Ooxml` was touched — `PptxTextStyles` serves no other
+Nothing outside `XRay.Office.Presentations/Ooxml` was touched — `PptxTextStyles` serves no other
 family — so the words and sheets tracks are not owed a sweep, and every one of the 27 documents
 that moved is a `.pptx`.
 
@@ -5763,7 +5763,7 @@ locked the defect in.
 
 **One test as first written could not fail.** `APlainTextBoxTakesThePresentationsDefaultTextStyle`
 began by asserting only what `Drawn()` returns, which is LibreOffice's PDF — a test of the
-reference, passing whatever Paperless does. It now asserts our resolved size and colour as
+reference, passing whatever X-Ray.Office does. It now asserts our resolved size and colour as
 literals and compares the reference against those.
 
 ### What the next round should take, in order
@@ -5783,7 +5783,7 @@ literals and compares the reference against those.
    against is a whole number of hundredths of a millimetre and ours carries the file's full EMU
    precision. Bounded at half a unit, 0.014 pt, on a width of tens of thousands: an order of
    magnitude below the em, so expect it to move few documents and do it on its own sweep.
-3. **`8_P-Pavese` page 16's axis slot width**, in `Paperless.Core/Charts`. Unchanged from round
+3. **`8_P-Pavese` page 16's axis slot width**, in `XRay.Office.Core/Charts`. Unchanged from round
    seventeen: a shared layer, so it owes the words and sheets sweeps.
 4. **`TODO.raster-ceiling.md`'s 25% threshold**, unchanged from round seventeen.
 
@@ -5832,10 +5832,10 @@ contradicts a recorded measurement one layer up is the shape to watch for.
 opt in through `WriterLineBox.LeadingAboveText`, which carries the citations in one place.
 
 Deliberately left at the default, and worth stating because each is a judgement rather than an
-oversight: `Paperless.Vector`'s metafile and EMF+ text engines (VCL's `mnAscent` excludes
+oversight: `XRay.Office.Vector`'s metafile and EMF+ text engines (VCL's `mnAscent` excludes
 `mnExtLeading`, and a metafile is played through `OutputDevice::DrawText`), `FrameChart` (a chart's
-text is drawn by its own model, not by Writer's layout), and every `Paperless.Spreadsheets` and
-`Paperless.Presentations` site. The predecessor's version changed all of these.
+text is drawn by its own model, not by Writer's layout), and every `XRay.Office.Spreadsheets` and
+`XRay.Office.Presentations` site. The predecessor's version changed all of these.
 
 ### Re-derived, not re-fitted
 
@@ -5896,7 +5896,7 @@ Rendering the same content with the setting present-true, present-false and abse
 
 ### Sweeps: all three tracks, because `LineSpacing.cs` is shared
 
-Two checksummed builds (`Paperless.Text.dll` md5 `19318bb…` before, `349739f…` after) with
+Two checksummed builds (`XRay.Office.Text.dll` md5 `19318bb…` before, `349739f…` after) with
 demonstrably different output — `page-top-line-gap.docx` first baseline 81.95 against 82.30 — and
 no rebuild during either sweep.
 
@@ -5925,7 +5925,7 @@ already within a third of a point of a break. It is kept on its own evidence.
 
 ### Tests, and the three defects each was watched failing under
 
-`Paperless.Text` +3, `Paperless.Fidelity` +1 (`page-top-line-gap.docx`, recovered from the
+`XRay.Office.Text` +3, `XRay.Office.Fidelity` +1 (`page-top-line-gap.docx`, recovered from the
 abandoned branch and re-validated against LibreOffice before use).
 
 | defect put back | what failed |
@@ -5941,7 +5941,7 @@ addition, and it would catch a constant added to the ascent.
 Per project, each run redirected to its own file: Core 243, Text **240** (was 237), Containers 109,
 Vector 291, Rendering 104, Markup 259, OpenDocument 125, WordProcessing 608, Spreadsheets **437**,
 Presentations 517, Fidelity **543** (was 542). Zero failed and zero skipped throughout.
-**Spreadsheets 437 is not this round's doing** — nothing under `Paperless.Spreadsheets` was
+**Spreadsheets 437 is not this round's doing** — nothing under `XRay.Office.Spreadsheets` was
 touched. The 432 recorded last round is one round stale; `68d68502d` and `24e525b46` are in
 `09a35cdae`.
 
@@ -5996,7 +5996,7 @@ file's full EMU precision. The reference cannot: oox builds a shape's matrix in 
 into hundredths of a millimetre at the end (`oox/source/drawingml/shape.cxx`:1226-1230 at tag
 `libreoffice-24.2.7.2`), `SvxShape` hands the result to `SdrObject::SetSnapRect`, and a
 `tools::Rectangle` holds four `sal_Int32` of the model's map unit. The four text distances are
-`SdrMetricItem`s of the same unit. `src/Paperless.Presentations/Layout/SlideTextLayout.cs`:69.
+`SdrMetricItem`s of the same unit. `src/XRay.Office.Presentations/Layout/SlideTextLayout.cs`:69.
 
 **Both edges round and the extent does not.** `round(bottom) − round(top)` is not
 `round(bottom − top)`, so a box of one extent is a whole unit taller or shorter depending on where
@@ -6056,8 +6056,8 @@ absolute error per channel is **7.15 of 255** under the watermark mapping, **30.
 the file states through the same modifier, and 163.03 for drawing the picture untouched. Four times
 better, so the mapping is the running binary's and not merely the source's.
 
-`src/Paperless.Ooxml/DrawingML/DrawingFill.cs`:100-104 reads it, `LuminanceRecolour`
-(`src/Paperless.Core/Graphics/GlyphRun.cs`) carries it, `PptxSlideLayout.cs`:1359 attaches it and
+`src/XRay.Office.Ooxml/DrawingML/DrawingFill.cs`:100-104 reads it, `LuminanceRecolour`
+(`src/XRay.Office.Core/Graphics/GlyphRun.cs`) carries it, `PptxSlideLayout.cs`:1359 attaches it and
 `RasterImageDecoder.ChannelMap` carries it out — the pattern `a:duotone` already used, because
 turning a JPEG into a recoloured bitmap needs a codec and a reader has none.
 
@@ -6133,7 +6133,7 @@ Five assertions, each verified by reintroducing the defect and watching it fail:
   error plus one level* rather than by a constant, because both writers resample a 256-pixel ramp
   to 560 and that costs two levels whatever the recolouring does.
 
-**Nothing outside `Paperless.Presentations` decides anything here, and that is checkable rather
+**Nothing outside `XRay.Office.Presentations` decides anything here, and that is checkable rather
 than asserted**: `grep 'Luminance = '` over `src/` finds one setter and it is in
 `PptxSlideLayout`, and `DrawingFill.ReadBlip`'s only callers are the two slide readers. The Core
 and Rendering edits are an optional record field and a branch guarded on it being non-null. **I did
@@ -6152,7 +6152,7 @@ claim the `a:duotone` work rested on.
 2. **`Demick_JetBlue.pptx`'s charts**, 27.00 `|ink|%` over 6 major pages of 10, which is the
    densest unexplained document I looked at. Its series are drawn black where the reference draws
    them in three colours, and its legend comes out as overlapping text at one position where the
-   reference lays out a horizontal legend with markers. Both are in `Paperless.Core/Charts`, a
+   reference lays out a horizontal legend with markers. Both are in `XRay.Office.Core/Charts`, a
    shared layer, so it owes the words and sheets sweeps — and `8_P-Pavese` page 16's axis slot
    width is in the same file and should be done in the same round.
 3. **The `.ppt` twin of the picture recolour.** Escher states it as
@@ -6198,8 +6198,8 @@ Second, smaller: `XclImpChLabelRange::Convert` turns `CHLABELRANGE`'s label freq
 `TextOverlap` and `TextBreak`, with the reason beside it — *do not overlap text unless all labels
 are visible* — and the default frequency is 1. So a BIFF category axis draws **every** label
 whatever they collide with, and none of `ChartAxisLabels`' thinning applies. `ChartPlot`
-already carried `CategoryAxisText`, so this is confined to `Paperless.Spreadsheets`.
-**Nothing in `Paperless.Core` was touched.**
+already carried `CategoryAxisText`, so this is confined to `XRay.Office.Spreadsheets`.
+**Nothing in `XRay.Office.Core` was touched.**
 
 **Reach, measured by rendering all 171 with both CLIs and comparing the PDFs with their timestamps
 masked: 4 of 171 change what is drawn**, all four `.xls` carrying charts; 167 identical. A fifth
@@ -6224,7 +6224,7 @@ and `pdftotext` reads 51 tokens, we draw the same 51 at 7.30 pt and it reads one
 is 365 pt wide against the reference's 414**, and the difference is the legend beside it — two
 entries in Carlito against three in Liberation Sans.
 
-Not fixed this round, deliberately: it means widening a `Paperless.Core` type and the
+Not fixed this round, deliberately: it means widening a `XRay.Office.Core` type and the
 `IChartTextMeasurer` interface while two other agents are in that library, and it owes a
 whole-track sweep on all three tracks.
 
@@ -6307,7 +6307,7 @@ axis of 0…12 — the default scale of a plot with no series — where the refe
 theme's Carlito; the fourth is round twenty-two's open `INDEX_Digital_Transformation_Toolkits.xls`,
 not re-derived. The deficits are confined to the pages carrying a chart.
 
-`ChartLabel` in `Paperless.Core/Charts` carries no font family at all, so `SheetChart`,
+`ChartLabel` in `XRay.Office.Core/Charts` carries no font family at all, so `SheetChart`,
 `SlideChart` and `FrameChart` all draw chart text in one hardcoded default. **Reach on this track
 is one document** — exactly one of the 171 is a container holding an `xl/charts/chart*.xml` part —
 so it is recorded rather than fixed here; the reach on the other two tracks is unmeasured and
@@ -6335,7 +6335,7 @@ gives 34 pages, 0 major, `ink%` 0.00 throughout, and page 1 draws bold by eye.
 
 The defect was one expression in the **shared PDF writer**: `PdfFontCatalogue.BaseName` took
 `/BaseFont` from the face's family name rather than its PostScript name. Fixed in
-`Paperless.Rendering`, so **this touches all three families** and the merge should expect it.
+`XRay.Office.Rendering`, so **this touches all three families** and the merge should expect it.
 
 Reach, measured by rendering all 171 sheets documents before and after: **156 of 171** changed
 their font-name set, and documents whose font-name set equals the reference's went **11 → 131**.
@@ -6599,7 +6599,7 @@ Containers 109, Vector 291, Rendering 115, Markup 259, OpenDocument 125, WordPro
 Spreadsheets 446, Presentations **523**, Fidelity **546**. **Zero failed and zero skipped
 throughout.** The two that moved are this round's own tests.
 
-**Nothing outside `Paperless.Presentations/Layout/SlideTextLayout.cs` was touched** — one new
+**Nothing outside `XRay.Office.Presentations/Layout/SlideTextLayout.cs` was touched** — one new
 private method and the two properties that use it — so the words and sheets tracks cannot be
 affected and are not owed a sweep. That is checkable rather than asserted: the file is reached only
 through `SlideTextLayout.Place`/`Measure`, which no other family calls.
@@ -6631,7 +6631,7 @@ Two assertions, **each verified by putting the defect back and watching it fail*
      `Math.Round(width.Emu * placement.A)` before `Place` sees it, and that group scale has still
      not been measured against LibreOffice's. Round nineteen flagged it and did not do it.
 2. **`Demick_JetBlue.pptx`'s charts**, 26.70 `|ink|%` over 6 major pages of 10 — unchanged from
-   round nineteen, still the densest unexplained document, still in `Paperless.Core/Charts` and so
+   round nineteen, still the densest unexplained document, still in `XRay.Office.Core/Charts` and so
    still owing the words and sheets sweeps.
 3. **The `.ppt` twin of the picture recolour** (`DFF_Prop_pictureBrightness`/`pictureContrast`),
    unchanged from round nineteen and **still unmeasured for reach**: I did not count how many
@@ -6794,7 +6794,7 @@ Two assertions, each verified by reintroducing its defect and watching it fail:
 Per project on the final tree, each run redirected to its own file: Core 243, Text 240,
 Containers 109, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 619,
 Spreadsheets 446, Fidelity **547** (546 plus this round's one), Presentations **528** (523 plus
-this round's five). Zero failed, zero skipped. Only `Paperless.Presentations/Layout` was touched, and only through
+this round's five). Zero failed, zero skipped. Only `XRay.Office.Presentations/Layout` was touched, and only through
 `SlideTextLayout.Place`/`Measure`, so the words and sheets tracks are not owed a sweep.
 
 ### Open items this round did close, and one it did not
@@ -6812,7 +6812,7 @@ so the whole-track sweep could finish. The "pages neither class explains" figure
 still round twenty's 304 over 91 documents, and is *not* a measurement of this commit.
 
 **Still unmeasured, unchanged from the brief:** `PptSlideLayout.cs`:1244's group scale against
-LibreOffice's, and `Demick_JetBlue.pptx`'s charts in the shared `Paperless.Core/Charts`.
+LibreOffice's, and `Demick_JetBlue.pptx`'s charts in the shared `XRay.Office.Core/Charts`.
 
 ## Second merge of the round, verified at `4448c2a3f`
 
@@ -7116,7 +7116,7 @@ two on a fallback. It also matches what LibreOffice's own chart import does: all
 automatic text entries name `XML_minor`
 (`oox/source/drawingml/chart/objectformatter.cxx`:415-434).
 
-### What changed, and it is in `Paperless.Core`
+### What changed, and it is in `XRay.Office.Core`
 
 **Flagged loudly, because it is the shared library.** `ChartPlot.TextFamily`,
 `ChartLabel.Family`, `IChartTextMeasurer.Measure` taking a family, and a `ChartText` value that
@@ -7311,7 +7311,7 @@ workbooks. Ceiling 18, reach 1.
 
 ### Our PDF writer is reproducible; 17 of 171 documents draw the clock
 
-The brief carried this as a defect in `Paperless.Rendering`. **It is not, on both counts.**
+The brief carried this as a defect in `XRay.Office.Rendering`. **It is not, on both counts.**
 
 | measurement | result |
 |---|---|
@@ -7327,8 +7327,8 @@ now taken once per printout and stamped onto the pages beside `PageCount`, and
 the machine's zone. `RenderCommand` passes the same value to `PdfRenderOptions.CreationDate`, a
 hook that already existed for this.
 
-**`Paperless.Rendering` was not touched, and neither was `Paperless.Core`.** The change is
-`Paperless.Spreadsheets` plus one private method in `Paperless.Cli`, and `BiffRecordReader` is not
+**`XRay.Office.Rendering` was not touched, and neither was `XRay.Office.Core`.** The change is
+`XRay.Office.Spreadsheets` plus one private method in `XRay.Office.Cli`, and `BiffRecordReader` is not
 shared with the DOC or PPT readers, so neither the words nor the slides track is owed a sweep.
 
 Probe data, six whole-track TSVs and the record dumps behind them: `dotnet/probes/sheets-r25/`.
@@ -7786,7 +7786,7 @@ for row on all 171** — 145/171, absolute page error 90, 154 exact page counts,
 Its three failures are exactly the three predicted: `EHEST-Pre-departure-checklist…xls` and
 `Keywords_Mapping_Graphs_and_Charts.xlsx` behind `ChartLabel`'s font, and
 `Template Pilot Logbook JAR-FCL V3.0.xls` unreachable by the word gate. Nothing in
-`Paperless.Spreadsheets` can move them, so the round went to the open lead instead.
+`XRay.Office.Spreadsheets` can move them, so the round went to the open lead instead.
 
 ### A turned cell, in both halves
 
@@ -7863,13 +7863,13 @@ spliced; one of them is `ECA Sinters.xls`, the same document round twenty-five h
 
 **The remaining half is BIFF and is named rather than guessed at.** `XlsChartReader` sets no family
 at all, so `EHEST-Pre-departure-checklist…xls` still embeds no Carlito where the reference embeds
-two. That work is in `Paperless.Spreadsheets` and so belongs to this track.
+two. That work is in `XRay.Office.Spreadsheets` and so belongs to this track.
 ## Slides round twenty-three: the legend, inherited unmeasured and kept on its own numbers
 
 A container restart killed the previous slides agent mid-round; its two commits — a probe and a
 legend fix — arrived as an unverified prior attempt. Both were re-derived before being kept, and
 the fix as it stood **could not have passed the round's own gate**: it left
-`Paperless.Core.Tests` at 246/247, because `ChartLegendLayoutTests` asserted exactly the text
+`XRay.Office.Core.Tests` at 246/247, because `ChartLegendLayoutTests` asserted exactly the text
 shape the fix stopped measuring.
 
 | slides, 163 documents | base `d7fd6cf13` | after |
@@ -7929,7 +7929,7 @@ face fix cost 2.52 of `|ink|%`; this returns 1.43.
   the *axis titles* (10 pt bold), which an OOXML chart takes from `objectformatter.cxx`'s
   auto-text table and never from chart2's model defaults we cite; the axis *labels* the lead
   implied are correctly not bold by default. Separately, a stated `b="1"` is not read at all —
-  36 of 61 chart parts over 7 documents. Both recorded in `Paperless.Presentations/TODO.md`
+  36 of 61 chart parts over 7 documents. Both recorded in `XRay.Office.Presentations/TODO.md`
   with the measurements; neither implemented, because the weight needs `ChartLabel` plus all
   three consumers and two of those are other tracks' files.
 
@@ -8038,7 +8038,7 @@ count unchanged at 10.
   only two titles. Nine chart parts over six documents across all three tracks.
 - **A stated weight on axis labels, legend or data labels is still unread** — 36 of 61 chart
   parts over 7 documents, the larger half of the weight work. The design is decided and
-  recorded in `Paperless.Presentations/TODO.md`: a stamping pass beside `InFamily`, not twenty
+  recorded in `XRay.Office.Presentations/TODO.md`: a stamping pass beside `InFamily`, not twenty
   more arguments.
 ## Words, round twenty-eight, at `9ef9b16fa` — the running heads a DOC does not write down
 
@@ -8260,7 +8260,7 @@ that still contains the defect. The recorded trap is that `--no-build` measures 
 Automatic chart colours (the census finds **zero** automatic areas on the track and six automatic
 lines, all in the one document the brief says not to chase); `CHDATERANGE`; and a chart's text
 *weight* — the reference embeds Carlito-Bold on `EHEST` for an 18 pt chart title and `ChartPlot`
-carries a family and no weight, which is a `Paperless.Core/Charts` widening reaching all three
+carries a family and no weight, which is a `XRay.Office.Core/Charts` widening reaching all three
 consumers rather than this track's alone.
 
 ## Round twenty-nine: slides — the band under the plot area, and the text that was turned the wrong way
@@ -8374,7 +8374,7 @@ The verification cycle puts each defect back and the `git checkout --` that take
 **discards the file rather than the patch**, so an uncommitted fix in that file goes with it.
 That is written down in `corpus-batches` and it still cost a commit here: the bottom-title
 change was wiped and its commit carries only the test. It was caught by the per-project run at
-the end — `Paperless.Core.Tests` 263 of 264 on a tree whose source read as finished — which is
+the end — `XRay.Office.Core.Tests` 263 of 264 on a tree whose source read as finished — which is
 the argument for running that even when nothing looks wrong.
 
 ### What the next round should take, in order
@@ -8386,7 +8386,7 @@ the argument for running that even when nothing looks wrong.
    12.73 and 4.87 pt of bottom edge, and the split is exactly rotated against upright labels.
 2. **A stated weight on axis labels, legend or data labels** — 36 of 61 chart parts over 7
    documents, unchanged from last round, design still recorded in
-   `Paperless.Presentations/TODO.md`.
+   `XRay.Office.Presentations/TODO.md`.
 3. **The legend row pitch's rate**, still the open half of the 96 dpi grid.
 
 ## Round thirty — sheets: an `.xls` cell's margin is twice everything else's
@@ -8417,7 +8417,7 @@ three rounds of needing to be spliced.
 pattern the BIFF filter builds**, under the comment "Excel's cell margins are different from Calc's
 default margins" (`sc/source/filter/excel/xistyle.cxx:1349-1351`). It is unconditional and it is the
 only line in all of `sc/source/filter` that touches the item, so an `.xls` has twice the margin of
-every other format and `Paperless` had one constant for all three readers.
+every other format and `XRay.Office` had one constant for all three readers.
 
 **It had been read as a page-origin offset**, and that reading is written into `pdf-ops.py`'s own
 tolerance comment. A page origin moves every run the same way; a margin moves left-aligned text
@@ -8805,7 +8805,7 @@ labels.
 ### A stated weight on the axis labels and the legend
 
 `ChartPlot.IsLabelBold` and `IsLegendBold`, `ChartLabel.IsBold` as `bool?`, and an `InWeight`
-stamping pass beside `InFamily` — the design `Paperless.Presentations/TODO.md` recorded, taken
+stamping pass beside `InFamily` — the design `XRay.Office.Presentations/TODO.md` recorded, taken
 verbatim. It reaches the *measurement* as well as the drawing, which is the point: a bold face is
 wider, so the widest value label reserves a different left edge and two category labels collide at
 a different width. A data label takes the axis' weight rather than its series' own
@@ -8836,7 +8836,7 @@ records where we drew 69 regular and 5 bold; we now draw 74 bold, and pages 12 a
 shape. What is left there is the *size*: the reference draws that page at 13.59, 14.00 and
 15.49 pt where we draw one flat 14.00, so a heavier face puts more ink into a mismatch that was
 already there. That is the per-element `c:txPr` size `ChartPlot` collapses into one `LabelSize`,
-it is now an item in `Paperless.Presentations/TODO.md`, and it is where 2.26 of the 2.62 sits.
+it is now an item in `XRay.Office.Presentations/TODO.md`, and it is where 2.26 of the 2.62 sits.
 `171128IPAP`'s +0.41 is a different residue: its page 38 chart is drawn in LiberationSans where
 the reference resolves Carlito, so the weight is now right in the wrong family; its page 36,
 whose family is right, moved to Carlito-Bold exactly as the reference has it.
@@ -8991,7 +8991,7 @@ row at every declared floor from 4.8 cm to 8.0 cm with about 100 pt of room — 
 the entire body height of its page, and the row still gives up exactly seven lines. So the gate is
 conditional on something these two documents differ in, and the sharp boundary at ~4275 twips is
 not the 2800 twips of room either. Implementing the rule anyway fails five tests in
-`Paperless.WordProcessing.Tests`, four of them that fixture's own, and it was reverted.
+`XRay.Office.WordProcessing.Tests`, four of them that fixture's own, and it was reverted.
 
 `dotnet/probes/trheight-split-gate.py` reproduces both halves in one command and lists what is
 already ruled out: the floor being lost across the split, `SwTabFrame::Split`:1188-1196 (that
@@ -9429,7 +9429,7 @@ of them.
 
 ### Four are the raster ceiling, and the review found them independently
 
-The reviewer flagged three documents as *"Paperless renders it better, false positive"* and a
+The reviewer flagged three documents as *"X-Ray.Office renders it better, false positive"* and a
 fourth as *"looks exactly the same, check whether the word count is misleading"*. **All four are
 already on `TODO.raster-ceiling.md`.** That list is built from an observable signature — the
 reference draws a raster where we extract materially more words — and a reader with no access to
@@ -9453,7 +9453,7 @@ a deficit. **Not resolved — measure the token multiset before assuming either 
 Blocks joined by arrows come out as plain rectangles. This is preset custom-shape geometry in the
 binary path and it is the largest single visual defect the review found.
 
-**Charts.** Three documents, and this track already has an agent inside `Paperless.Core/Charts`:
+**Charts.** Three documents, and this track already has an agent inside `XRay.Office.Core/Charts`:
 - `Demick_JetBlue.pptx` — no subgrid; the legend's line and colour swatch are missing; series line colours do not match.
 - `N2_E_Maestroni_Swarm_COP.pptx` — the reference draws two rectangles per row and we draw the second only; the missing one appears to carry a semi-transparent gradient.
 - `16 - UTM - (NASA).pptx` — **replacement glyphs in chart text in several places** where the reference shows none. A missing-glyph box is a font or encoding fault, not a layout one.
@@ -9731,7 +9731,7 @@ Per-project tests, all matching the known-good counts with 0 skipped: Core 275, 
 Text 240, Vector 291, Rendering 119, Markup 259, OpenDocument 125, WordProcessing 696,
 Spreadsheets **598** (593 plus this round's 5), Presentations 542.
 
-**Every source change is inside `Paperless.Spreadsheets`** — `MsBinary/XlsPrintSetup.cs`,
+**Every source change is inside `XRay.Office.Spreadsheets`** — `MsBinary/XlsPrintSetup.cs`,
 `Layout/SheetBandHeight.cs` and `Layout/SheetPageDecoration.cs` — so the words and slides tracks
 cannot be reached by it.
 
@@ -9932,7 +9932,7 @@ to *where* rather than *what*.
 
 Baseline re-measured at `a115b723b` against round twenty's reference PDFs and **reproduced to
 the digit** — 163 documents, 151 matching, `|ink|%` **1269.70**, **428** major pages. Every test
-project matched its known-good count, `Paperless.Fidelity.Tests` at 550 with 0 skipped.
+project matched its known-good count, `XRay.Office.Fidelity.Tests` at 550 with 0 skipped.
 
 ### The fix: every `MSO_SPT` that names a preset the evaluator already knows
 
@@ -10089,7 +10089,7 @@ corpus, because the corpus could not distinguish the two.
 2225 → 1, `flightstandards` 45 of 2201 → 7, `tk-syllabus-comparison-document-v5` 20 of 6520 → 19,
 `seihon_zassi_kikou_20221215` (the brief's 129) → 0 of 4000.
 
-**The +3 pages and the human review's "some cells are taller on paperless" were one finding**, as
+**The +3 pages and the human review's "some cells are taller on xray-office" were one finding**, as
 the brief asked. The sixteen taller rows are the three pages.
 
 **Reach: predicted 25–40 documents and 2–4 verdicts before the sweep; measured 24 and 3.** Three
@@ -10510,8 +10510,8 @@ The tell was that page counts were identical (164 either way) while nine verdict
   `WordNumbering.FormatLabel` normalises a private-use bullet to U+2022 and `LabelFace` keeps the
   paragraph's face, so we draw LiberationSans's bullet where the reference draws OpenSymbol's —
   `face LiberationSans vs OpenSymbol` and `face DejaVuSans vs OpenSymbol`, measured on two
-  documents. `Paperless.Text.Fonts.SymbolFontRecode` already ports LibreOffice's whole recode
-  table and **is referenced from no file in `Paperless.WordProcessing`** — the same shape as
+  documents. `XRay.Office.Text.Fonts.SymbolFontRecode` already ports LibreOffice's whole recode
+  table and **is referenced from no file in `XRay.Office.WordProcessing`** — the same shape as
   round 35's glyph fallback, a facility built for one family and never wired into another.
   **Ceiling: 100 of the 134 DOCX in the track declare a bullet level in a legacy symbol face**,
   over the format the census can read; the 66 `.doc` are invisible to it. That is a ceiling and
@@ -10642,7 +10642,7 @@ figures to the digit — **154/200, absolute page error 78, 164 exact page count
 6639, `doc` 54/12, `docx` 100/34** — so both the commit and the harness were what they were
 said to be.
 
-### The fix: `SymbolFontRecode` reaches `Paperless.WordProcessing`
+### The fix: `SymbolFontRecode` reaches `XRay.Office.WordProcessing`
 
 The type ported LibreOffice's whole recode table and was referenced from no file in the
 word-processing library. Both readers threw the level's face away and drew U+2022 in the
@@ -10747,7 +10747,7 @@ Markup 259, OpenDocument 125, WordProcessing **723** (720 before; the three adde
 rows of `ARecodedBulletIsSetInTheSubstituteFace`), Spreadsheets 605, Presentations 573, Fidelity
 550, **0 skipped** throughout. `verify-test.sh` over `ListLabelTests` with the recode disabled in
 both readers reports **6 failures across both tests**, so the refutation is pinned. No shared
-layer changed — the diff is `Paperless.WordProcessing` and one test file — so no cross-track
+layer changed — the diff is `XRay.Office.WordProcessing` and one test file — so no cross-track
 sweep is owed.
 
 ## Round thirty-six — sheets: a cell's face is chosen once, and coverage is per character
@@ -10777,7 +10777,7 @@ its missing-glyph box **at DejaVu Sans's own `.notdef` advance**. Invisible text
 nothing like a full-width ideograph, so the cell breaks in the wrong place and the row reserves too
 little height.
 
-Three places had to learn it, and `FallbackShaper` (new, `Paperless.Text`) is deliberately a
+Three places had to learn it, and `FallbackShaper` (new, `XRay.Office.Text`) is deliberately a
 *measuring* device — it splices glyphs from several faces into one `ShapedText` in the primary
 face's design grid and does not report which came from where. That is everything a line breaker
 wants and nothing a painter can use, which is why `SheetText` itemises for itself.
@@ -10944,7 +10944,7 @@ to draw. That came out right.
 ### A byte-reach outlier under load is not necessarily a byte-reach finding
 
 The slides cross-track sweep first reported **2 of 163 changed**, on a change confined to
-`Paperless.Spreadsheets`. Both were artefacts: re-rendered individually the two decks are
+`XRay.Office.Spreadsheets`. Both were artefacts: re-rendered individually the two decks are
 byte-identical between the snapshots, and the base CLI run twice is byte-identical to itself. The
 sweep ran at load average 20–35 beside three other agents, and **a render truncated under load
 leaves a file that exists and differs**, which a byte comparison reports exactly as a real change.
@@ -11151,7 +11151,7 @@ reader to the matrix. Smaller than it was written up as, and in a different plac
 Test counts on the final tree: Core 284, Containers 109, Text 262, Vector 293, Rendering 119,
 Markup 259, OpenDocument 125, WordProcessing 723, Spreadsheets 611, Presentations **576** (573
 before, +3 from `SlideGradientPathTests`), Fidelity 550 — 0 skipped throughout. The change is one
-file in `Paperless.Presentations`, so no shared layer moved and the other two tracks are not owed
+file in `XRay.Office.Presentations`, so no shared layer moved and the other two tracks are not owed
 a sweep.
 
 ### The divergence table, re-run, and its control
@@ -11185,7 +11185,7 @@ now split out of `size` and is dominant on 13 documents of its own. `010605Vul.p
 Merged at the tip carrying words round thirty-eight, so the counts on the combined tree are
 WordProcessing **725** and Spreadsheets **621**, not the 723/611 the round measured on `545550952`.
 Presentations **576** (573 + `SlideGradientPathTests`), Fidelity 550, everything else unchanged,
-0 skipped, 0 warnings. The change is one file in `Paperless.Presentations`, so no shared layer moved
+0 skipped, 0 warnings. The change is one file in `XRay.Office.Presentations`, so no shared layer moved
 and neither of the other two tracks is owed a cross-track sweep.
 
 **Two measurements have been circulating under one name.** At `545550952` the slides track's signed
@@ -11368,7 +11368,7 @@ Presentations 573, Fidelity 550 — 0 skipped, 0 warnings.
 Merged at the tip carrying slides round 39, so the counts on the combined tree are Text **271**
 (262 + `FontconfigPreferenceTests`) and Presentations **576**, not the 573 the round measured.
 Everything else unchanged, Fidelity 550, 0 skipped, 0 warnings. The change is in
-`Paperless.Text`, a **shared layer** — the round's own sweep measured the other two tracks and
+`XRay.Office.Text`, a **shared layer** — the round's own sweep measured the other two tracks and
 found the reach confined to words, so no parent-side cross-track sweep is owed beyond that.
 
 **The track now has no `unembedded` verdict.** `手机免提系统TSB.doc` moved from `words,unembedded`
@@ -11516,13 +11516,13 @@ something six authored shapes do not reproduce, and it is left open rather than 
 Test counts on the final tree: Core 284, Containers 109, Text 271, Vector 293, Rendering 119,
 Markup 259, OpenDocument 125, WordProcessing **731** (725 + six `FurnitureFrameTests`),
 Spreadsheets 621, Presentations 576, Fidelity 550 — **0 skipped, 0 warnings**. The change is in
-`Paperless.WordProcessing` only, so no cross-track sweep is owed.
+`XRay.Office.WordProcessing` only, so no cross-track sweep is owed.
 
 ### Merge note, words round 42
 
 Counts on the merged tree: WordProcessing **731** (725 + `FurnitureFrameTests`), everything else at
 its known-good count, Fidelity 550, 0 skipped, 0 warnings. The change is confined to
-`Paperless.WordProcessing`, so no cross-track sweep is owed.
+`XRay.Office.WordProcessing`, so no cross-track sweep is owed.
 
 **The word error rose, 6427 → 6512, and the round is still an improvement.** Two running heads that
 were previously not drawn at all are now drawn, and `wc -w` charges for every token of them on every
@@ -11597,7 +11597,7 @@ and does it by copying (`sw/source/writerfilter/dmapper/PropertyMap.cxx`:1118-11
 mechanism — the reference binary is 24.2.7.2 and the tree is a development branch).
 
 **Not implemented, deliberately**, per CLAUDE.md's rule to record a reference import defect rather
-than contort Paperless into reproducing it — and pinned by `SectionInheritedHeaderTests` rather than
+than contort X-Ray.Office into reproducing it — and pinned by `SectionInheritedHeaderTests` rather than
 left in a report, so a later round that wants it has to delete a test that explains why not.
 
 The cost is stated rather than hidden. `probes/words-r43/table-only-header-census.py`: **3 of the
@@ -11792,7 +11792,7 @@ workplace.docx` goes 5/4 pages to **4/4**.
 ### 3. A DOC shape group drew its outline and none of its contents
 
 The user's `omrIMInterpretiveGuideLine.doc` — *"missing what looks like a header in a text box or an
-image or both"*. `paperless extract` has every word of the masthead, so it was never a reading
+image or both"*. `xray-office extract` has every word of the masthead, so it was never a reading
 fault. Three defects stacked:
 
 - **A group is one `FSPA` and many shapes.** Members have no anchor of their own and state their
@@ -11888,7 +11888,7 @@ Counts on the merged tree: Rendering **121** (119 + the JPEG colour-space tests)
 
 **A verdict moved: words 154 → 155 of 200**, page error 78 → 77, exact pages 164 → 165.
 
-`PdfImages` is in `Paperless.Rendering`, a **shared layer**, so the parent ran the cross-track check
+`PdfImages` is in `XRay.Office.Rendering`, a **shared layer**, so the parent ran the cross-track check
 the routine requires rather than accepting the round's own reasoning that no gate input could move.
 The census names the affected documents exactly — words 5, slides 7, sheets **0** — and all seven
 slides decks were rendered at `7f7c5fbb7` and at the merge, with `SOURCE_DATE_EPOCH` pinned:
@@ -12018,7 +12018,7 @@ one reporting a difference.**
 
 ### Tests
 
-Six in `InlineObjectLineSpacingTests`, `Paperless.Text` 271 → **277**. Verified with
+Six in `InlineObjectLineSpacingTests`, `XRay.Office.Text` 271 → **277**. Verified with
 `verify-test.sh`: reverting the base to the line's height fails **three** and nothing else in the
 project; removing the at-or-above-100% guard fails **one**, which is the refuted rule pinned in code.
 Two are preconditions and were **not** verified by reintroduction — that the change is inert on
@@ -12026,7 +12026,7 @@ ordinary text, and that the measurement reports the two heights apart.
 
 ### The cross-track sweep, measured rather than argued
 
-`Paperless.Text` is a shared layer and both other families reference `ParagraphLayouter`. Slides and
+`XRay.Office.Text` is a shared layer and both other families reference `ParagraphLayouter`. Slides and
 sheets — 334 documents — were rendered whole with our own CLI at `45fea26c2` and at this branch,
 `SOURCE_DATE_EPOCH` pinned, and compared with `/CreationDate` normalised: **334 of 334
 byte-identical, 0 differing.** The single-argument `Apply` those layouts call forwards to the old
@@ -12073,7 +12073,7 @@ Text **277** (271 + `InlineObjectLineSpacingTests`), everything else at its know
 Fidelity 550, 0 skipped, 0 warnings. **Words 155 → 157 of 200**, page error 77 → 75, exact pages
 165 → 167.
 
-The change spans `Paperless.Text` and `Paperless.Presentations` as well as `Paperless.WordProcessing`,
+The change spans `XRay.Office.Text` and `XRay.Office.Presentations` as well as `XRay.Office.WordProcessing`,
 so a cross-track measurement was owed and the round made one: slides and sheets rendered whole at
 base and at the branch, **334 of 334 byte-identical**. Confirmed on the merged tree by
 `git diff 45fea26c2..HEAD --stat -- dotnet/src`, which is also the check named below.
@@ -12163,7 +12163,7 @@ that was already the track's largest page outlier for an unrelated reason. Word 
 Reported as a fix that cost three points of page error: it is right on its own evidence, 14 of 16
 authored probe rows exact against 11 of 16 before.
 
-`Paperless.Text` is a shared layer, so the cross-track measurement was made rather than argued:
+`XRay.Office.Text` is a shared layer, so the cross-track measurement was made rather than argued:
 slides and sheets rendered whole with our own CLI at `453ed3081` and at this tree,
 `SOURCE_DATE_EPOCH` pinned and `/CreationDate` normalised — **334 of 334 byte-identical**.
 
@@ -12184,10 +12184,10 @@ a Latin item), and to whether the taller label ever moves a break.
 
 ### Tests
 
-Seven in `DocxWidowControlTests` (`Paperless.WordProcessing` 746 → **753**), all seven verified by
+Seven in `DocxWidowControlTests` (`XRay.Office.WordProcessing` 746 → **753**), all seven verified by
 reintroduction over four mutations, two of which are the refuted alternatives — "widow control is
 simply on for every DOCX" and "the document-wide default overrides an explicit off". Five in
-`PictureAloneLineHeightTests` (`Paperless.Text` 277 → **282**), of which **three** are verified by
+`PictureAloneLineHeightTests` (`XRay.Office.Text` 277 → **282**), of which **three** are verified by
 reintroduction and **two are labelled drift guards in the file**: one asserts unchanged behaviour,
 and for the other, widening the guard is an *equivalent formulation* rather than an undetected
 defect, because with nothing raising the ascent the run's height dominates either way.
@@ -12216,7 +12216,7 @@ skipped, 0 warnings. **Words 157 → 158 of 200**, page error 75 → **70**, exa
 lose its own code — that check is now part of the merge routine.
 
 **80 of 200 renderings changed**, the widest reach any words round has had, and the page error fell
-by five. `Paperless.Text` reaches slides, so a cross-track measurement was owed and the round made
+by five. `XRay.Office.Text` reaches slides, so a cross-track measurement was owed and the round made
 one: slides and sheets, **334 of 334 byte-identical**.
 
 The verdict round 45 gave up came back. `gpp-pr-top-7-office-markets-4q-2023.docx` went 3/4 → **4/4
@@ -12258,7 +12258,7 @@ styles with no `w:name` and asserting behaviour LibreOffice does not have; they 
 
 ### slides r41 — merged, minus a broken experiment
 
-Four commits: an EMF fix in the shared `Paperless.Vector`, the chart automatic-format work, and
+Four commits: an EMF fix in the shared `XRay.Office.Vector`, the chart automatic-format work, and
 sixteen tests.
 
 `Bezier(continueFrom: true)` emitted `MoveTo(whole[0])` unconditionally while a path was recording,
@@ -12313,7 +12313,7 @@ in three and the piece above the cut is short and visible.
 ### The scoreboard, measured rather than inherited
 
 None of the three rounds survived to run its final whole-track sweep, and two touched shared layers
-(`Paperless.Text` reaches slides; `Paperless.Vector` reaches everything), so the parent ran all
+(`XRay.Office.Text` reaches slides; `XRay.Office.Vector` reaches everything), so the parent ran all
 three sweeps at the merge:
 
 | track | verdicts | \|page error\| | exact pages | \|word error\| |
@@ -12364,7 +12364,7 @@ WordProcessing each gain 2; nothing else moves.
 **Verdict movement: none, and none was predicted.** 37 of 200 words renderings changed, 0 page
 counts. A spacing law is invisible to all three gate checks by construction.
 
-**The shared-layer sweep was owed and was taken**: this touches `Paperless.Text`, and slides plus
+**The shared-layer sweep was owed and was taken**: this touches `XRay.Office.Text`, and slides plus
 sheets were measured at **0 of 334 renderings changed** — measured, not argued.
 
 ### What a future round reading only the scoreboard would misread
@@ -12479,7 +12479,7 @@ The **raster-ceiling list is per-page, not per-document**, and reasoning from it
 verdict is invalid: the round predicted no raster-ceiling document would move and five did. **Two
 slides decks on that list now match**, so the raster ceiling was not what was blocking them.
 
-`words_of()` is named in-script as the seam `paperless analyze` should implement. Three
+`words_of()` is named in-script as the seam `xray-office analyze` should implement. Three
 instructions carried forward: do not re-decide the definition; **re-establish the `wc -w` control
 against a stored `rawwords` column before quoting any PdfPig verdict**, since PdfPig's extraction
 is not poppler's; and emit the excluded classes as counts.
@@ -12545,7 +12545,7 @@ it, so the font set cannot reach it.
 
 ### Fidelity: 40 failures, pre-existing and unexplained
 
-**`Paperless.Fidelity.Tests` is 510 passed / 40 failed**, with an **identical 21-name failing set
+**`XRay.Office.Fidelity.Tests` is 510 passed / 40 failed**, with an **identical 21-name failing set
 before and after this round's changes**, verified by building and running the pre-fix tree. So it
 is not this round's doing — but the handover recorded Fidelity at 550 with 0 failures, so
 something between that figure and now broke 40 tests and nobody has looked. **The ten non-Fidelity
@@ -12636,8 +12636,8 @@ font embedding cannot see a crop or an alpha.
 | verdicts moved | **0 of 16**, every gate column identical to the digit on both legs |
 | major pages across the 16 changed decks | **86 → 69**, no deck worse |
 
-`SlideImages.Uncropped`/`Inset` moved down to `Paperless.Core.Geometry.PictureCrop` and the
-property read is `Paperless.MsBinary.Escher.EscherPicture.Cropped`. **The cross-track zeroes are
+`SlideImages.Uncropped`/`Inset` moved down to `XRay.Office.Core.Geometry.PictureCrop` and the
+property read is `XRay.Office.MsBinary.Escher.EscherPicture.Cropped`. **The cross-track zeroes are
 the load-bearing result**: a shared-layer move owes a measurement, not an argument, and this one is
 round-45-shaped (behaviour-free) rather than round-44-shaped. Confirmations on the two documents
 the user reported: `Thailand17` p22 goes 18.92% → **0.63%** of pixels, MAJOR → ok; `OnTrac` goes 11
@@ -12737,7 +12737,7 @@ the same row whose absence from the series cache caused the axis defect. One fix
    *always* resolved against the live sheet — its 615 labels already reached `autoRotate45`. The
    shared-root story was wrong.
 2. **The `Tm` test the brief specified cannot be run on our output at all.** LibreOffice turns text
-   with the **text matrix**, Paperless with the **CTM** (`cm`), so a `Tm`-only count scores a
+   with the **text matrix**, X-Ray.Office with the **CTM** (`cm`), so a `Tm`-only count scores a
    working fix as **zero**. The round made exactly that error on its first pass and caught it.
    Counting both: 45° matrices **0 before, 6 after**, against the reference's 848. *An instrument
    that can only see one renderer's idiom will report the other's success as failure* — and this
@@ -12837,13 +12837,13 @@ Merged `wt-fidelity`. **No source or test file changed**, so the ten non-Fidelit
 
 550 discovered, 510 + 40, 0 skipped — **the total never moved, only the split**. At `0fb6d41e0`,
 the commit the handover records green on 24.2.7.2, today's environment gives **40/510/550 with a
-byte-identical failing set**. No Paperless code change caused any of the 40.
+byte-identical failing set**. No X-Ray.Office code change caused any of the 40.
 
 ### But "environment" is not "we are right", and that is the round's value
 
 | class | count |
 |---|---:|
-| **genuine Paperless defects** | **12** |
+| **genuine X-Ray.Office defects** | **12** |
 | the reference's own behaviour | 26 |
 | unexplained | 2 |
 
@@ -12894,7 +12894,7 @@ close it, and nothing about a shared dependency guarantees the same kerning deci
 - The non-Fidelity total at that base is **3454, not 3465**; every project matches its handover
   figure and the handover's own table sums to 3454. (At the current HEAD it is 3523, after five
   rounds' additions.)
-- **`Paperless.Rendering.Tests`' single skip is an environment gap, not a design choice.** The
+- **`XRay.Office.Rendering.Tests`' single skip is an environment gap, not a design choice.** The
   container has **zero `.otf` files**, so a guard against a poppler failure mode that once blanked
   161 glyph runs never runs. Recorded in `MISSING_PACKAGES.md` as a deliberate non-install: the
   fix costs a 534-document re-baseline and buys one test.
@@ -12909,7 +12909,7 @@ fix turns no test green because the same test also asserts Y. Sizes are stated i
 
 ---
 
-## Merge note — tooling-01, `paperless analyze` owns the PDF instrument
+## Merge note — tooling-01, `xray-office analyze` owns the PDF instrument
 
 Merged `wt-tooling`. Build 0 warnings / 0 errors. **Ten non-Fidelity projects: 3551 total, 0
 failed** — Rendering 121 → **149**, exactly the round's 28 new cases. Nothing under `src/` gains a
@@ -12923,7 +12923,7 @@ unchanged, our own word counts moved on 169 of 200 documents and **86 of them mo
 amount the reference moved**. A term that shifts both sides of a comparison equally belongs to
 neither renderer.
 
-`paperless analyze` reads a PDF **in process** — no subprocess, no poppler — and reports page count,
+`xray-office analyze` reads a PDF **in process** — no subprocess, no poppler — and reports page count,
 per-page size, text with word counts, and every face with embedded/subset status. Two decisions are
 **named options rather than hidden constants**: `--words alnum|raw` (default `alnum`, the gate's
 merged metric, *reimplemented* from `words_of()` rather than re-decided) and
@@ -12985,12 +12985,12 @@ claimed.
 
 **This mount is case-insensitive.** `git status` lists new files twice, under two spellings of the
 same directory, pointing at the same inode — which also explains why a `grep` over the tree returns
-both `dotnet/src/Paperless.Rendering/...` and `dotnet/src/paperless.rendering/...`. Stage only
+both `dotnet/src/XRay.Office.Rendering/...` and `dotnet/src/xray.office.rendering/...`. Stage only
 correctly-cased paths; `git ls-files | tr 'A-Z' 'a-z' | sort | uniq -d` must print nothing.
 
 ### Not done, deliberately
 
-**`batch-check.sh` still calls poppler.** Rewiring it to `paperless analyze` is now possible and is
+**`batch-check.sh` still calls poppler.** Rewiring it to `xray-office analyze` is now possible and is
 the point of the tool, but it would restate all three scoreboards a second time, and three rounds
 are in flight against the current numbers. It is a round of its own, and its prerequisite —
 re-establishing the `wc -w` control against a stored `rawwords` column — is what the table above
@@ -13082,7 +13082,7 @@ style's** line height.
 **Both "establish, don't assume" points in the brief mattered, and one would have caused a
 regression.** The rule is **DOCX and DOC, and *not* RTF**: one authored document in five spellings
 against the installed 26.2.4.2 gives DOCX and DOC a 144.000 pt separator at a 481.890 pt column
-*and* at 255.118 pt, while FODT, ODT **and RTF** each draw 25.0% of theirs. Paperless routes RTF
+*and* at 255.118 pt, while FODT, ODT **and RTF** each draw 25.0% of theirs. X-Ray.Office routes RTF
 through `PaginationOptions.Word`, so the obvious implementation — switch on "is this a Word
 format" — **would have broken a currently-green test**. Hence a separate flag, verified by
 reintroduction in both directions.
@@ -13205,7 +13205,7 @@ recording because the fixture did not catch it and the corpus sweep did.
 
 **136 of 171 renderings change**; 33 of the 35 that do not draw no stroke at all. Cross-track was
 **asserted statically rather than swept**, and correctly: the entire `src/` diff is one file in
-`Paperless.Spreadsheets`, which words and slides cannot reach.
+`XRay.Office.Spreadsheets`, which words and slides cannot reach.
 
 Over 13 872 page-aligned pages, restricted to stroke classes both sides draw:
 
@@ -13376,7 +13376,7 @@ outline.
 
 Merged `wt-words-f`. Build 0 warnings / 0 errors. **Ten non-Fidelity projects: 3625 total, 0
 failed** — WordProcessing 789 → **792**. 3 tests added, 1 verified by reintroduction, 2 labelled
-drift guards (deliberate controls). One `Paperless.TestKit` addition, `DrawnPage.Pictures`, because
+drift guards (deliberate controls). One `XRay.Office.TestKit` addition, `DrawnPage.Pictures`, because
 **a rectangle cannot see this defect** — the frame was always right.
 
 **Words stays 155 of 200**; page error 115 → 115, exact page counts 165 → 165, failures unchanged.
@@ -13474,14 +13474,14 @@ Direction **2 closer, 0 further**. `ODs-February` goes to **1101 = 1101 exact**,
 
 ### The accounting `$` item was refuted as a rendering defect, then seated anyway
 
-Both PDFs draw **the same 8242 `$`**, and `paperless analyze` reports the two documents identical in
+Both PDFs draw **the same 8242 `$`**, and `xray-office analyze` reports the two documents identical in
 **every column**. The briefed 11 538 against 9020 is **poppler's word-joining alone** — and
 poppler's own `-bbox` mode disagrees with it, so the same binary contradicts itself.
 
 What *is* real is a placement offset: our `-` sits **+6.28 pt** and our `$` **−0.53 pt** across 350
 sampled cells, because the format `_("$"* "-"??_)` renders `?` and `_x` as plain spaces where
 LibreOffice reserves a digit-width and a `)`-width blank. Predicted 0.055 em and 0.611 em, measured
-0.053 and 0.628. **Not implemented**: it is in `Paperless.Core` and owes a 534-document sweep.
+0.053 and 0.628. **Not implemented**: it is in `XRay.Office.Core` and owes a 534-document sweep.
 
 ### The grid: we do draw it, and my premise was wrong
 
@@ -13976,12 +13976,12 @@ settled on. Both are gated on `ClampsTabsAtLineEdge`, so Impress and Calc are un
 
 | file | change |
 |---|---|
-| `src/Paperless.Text/Layout/TabRuler.cs` | `TabbedSegment.Deferred`; `WidthOf(…, countsDeferredStretch)` |
-| `src/Paperless.Text/Layout/TextMeasurer.cs`:763 | `RightEdge` adds `EndIndent` back on; `Measure(…, placed)`; one placed re-measure per line |
-| `src/Paperless.WordProcessing/Layout/PageDrawing.cs`:1311 | the drawn bound loses its `− EndIndent` |
-| `src/Paperless.Text/Layout/ParagraphFormat.cs` | `ClampsTabsAtLineEdge` restated, with what is still approximated |
+| `src/XRay.Office.Text/Layout/TabRuler.cs` | `TabbedSegment.Deferred`; `WidthOf(…, countsDeferredStretch)` |
+| `src/XRay.Office.Text/Layout/TextMeasurer.cs`:763 | `RightEdge` adds `EndIndent` back on; `Measure(…, placed)`; one placed re-measure per line |
+| `src/XRay.Office.WordProcessing/Layout/PageDrawing.cs`:1311 | the drawn bound loses its `− EndIndent` |
+| `src/XRay.Office.Text/Layout/ParagraphFormat.cs` | `ClampsTabsAtLineEdge` restated, with what is still approximated |
 
-`tests/Paperless.WordProcessing.Tests/TabOverSpacingTests.cs`, 4 tests. Two of them fail on the
+`tests/XRay.Office.WordProcessing.Tests/TabOverSpacingTests.cs`, 4 tests. Two of them fail on the
 tree before the change and two pass — the two that pass are the guards on the half that must not
 move, which is the point of having them.
 
@@ -14142,12 +14142,12 @@ file to be missed by a case-sensitive glob, it is the same file under a second n
 
 ### Owed and pending
 
-- The sheets diff touches **`Paperless.Ooxml`**, which reaches all three tracks. A shared-layer
+- The sheets diff touches **`XRay.Office.Ooxml`**, which reaches all three tracks. A shared-layer
   merge owes a **measurement, not an argument**; the cross-track render-and-compare over all 666
   words and slides documents is running at the time of writing and its result belongs beside this
   note. The round's own census — chartex in 2 documents, both sheets — is the hypothesis being
   tested, not the answer.
-- The slides diff touches `Paperless.Presentations` only. Nothing owed.
+- The slides diff touches `XRay.Office.Presentations` only. Nothing owed.
 - **`MANIFEST.tsv` is stale again in three ways** and lives in the corpus repo, so neither agent
   touched it: `054` and `051` (sheets) and `7-Zulkefli` (slides) now pass, and 17 slides documents
   need re-filing off `kind=ceiling`.
@@ -14175,7 +14175,7 @@ reproduced on two documents nothing had flagged.
 ### The cross-track measurement owed by the Ooxml change — done, and it is zero
 
 All **666** words and slides documents rendered at the merged commit, and again with **only** the
-`Paperless.Ooxml` diff reverted (`OoxmlXml.cs` + `OoxmlNamespaces.cs` checked out at
+`XRay.Office.Ooxml` diff reverted (`OoxmlXml.cs` + `OoxmlNamespaces.cs` checked out at
 `ac147b7e5bb`, `obj`/`bin` deleted, rebuilt), `SOURCE_DATE_EPOCH=1700000000` and `TZ=UTC` pinned
 so the two runs are byte-comparable with nothing masked:
 
@@ -14293,8 +14293,8 @@ the strongest form the evidence takes here.
 
 ### Owed
 
-Nothing. The words diff is entirely inside `Paperless.WordProcessing` — 5 source files, 2 test
-files — so no shared layer is touched and no cross-track sweep is due. The `Paperless.Ooxml`
+Nothing. The words diff is entirely inside `XRay.Office.WordProcessing` — 5 source files, 2 test
+files — so no shared layer is touched and no cross-track sweep is due. The `XRay.Office.Ooxml`
 sweep owed by the sheets round is recorded above: **666 of 666 byte-identical.**
 
 ### Words does next, in order
@@ -14614,7 +14614,7 @@ so it lands wholly on page 2, where the horizontal page split cuts ours — 4 do
 Across three sweeps hours apart, **four documents' reference counts moved with the wall clock while
 ours stayed pinned**. `batch-check.sh` renders the reference through `soffice` with no
 `SOURCE_DATE_EPOCH`, and a sheet whose header holds `&D`/`&T` or whose cells hold `TODAY()` prints
-today; `paperless render` honours the reproducible-builds convention on our side. **The two halves
+today; `xray-office render` honours the reproducible-builds convention on our side. **The two halves
 of the gate do not have the same reproducibility properties**, so a stored verdict can go stale
 with nobody touching the code. Split any sweep diff **by which side moved** — that separated nine
 real movements from three calendar ones here. **Volatile dates reach 16 of the 40 open documents**,
@@ -14745,11 +14745,11 @@ of 158, so the three `pages 1/2` documents are at least two causes.
 
 ### Cross-track
 
-- **Words** touched `Paperless.Ooxml/DrawingML/DrawingChartPlot.cs`, shared. The round swept the 7
+- **Words** touched `XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs`, shared. The round swept the 7
   affected batches both ways with the index asserted clean: of 71 rows **exactly one changed** —
   `slides/done-011/171128IPAP.pptx` 4640 → 4653 against 4670, `match` → `match`. The parent's
   639-document sweep above confirms slides verdicts are unmoved.
-- **Slides** touched one file, `Paperless.Presentations/Layout/SlideAutofit.cs`. Nothing owed.
+- **Slides** touched one file, `XRay.Office.Presentations/Layout/SlideAutofit.cs`. Nothing owed.
 - Left open by words on purpose: `SheetChart`/`SlideChart` still run multi-line labels together.
   `FrameChart` was fixed for words only. **Sheets and slides both inherit this defect** and it is
   now a known, localised, cross-track item.
@@ -14791,7 +14791,7 @@ and the corpus's actual shape was never exercised. The dominant pattern of this 
 its own test rather than in a brief.
 
 Fixed by the exact mirror of the chartex constant: a choice whose `a:graphicData/@uri` is the 2010
-slicer URI loses to a sibling `mc:Fallback`. **Shared layer (`Paperless.Ooxml`)** — censused over
+slicer URI loses to a sibling `mc:Fallback`. **Shared layer (`XRay.Office.Ooxml`)** — censused over
 946 documents, the URI occurs in 7, **all sheets, 0 words, 0 slides**; the parent still owes the
 cross-track sweep and the documents to watch are the 108 `wps` / 51 `wpg` / 4 `wpc` words documents
 that share the path but not the key.
@@ -14803,7 +14803,7 @@ with names, both sides draw them; without, **the reference draws `Column C` / `C
 draw no legend at all**. `ChartLayout.Entries:3198` drops an unnamed series; LibreOffice's names
 come from the Calc data provider (`chart2uno.cxx:3173`, `STR_COLUMN` + the values range's column
 letter). Worth **4 tokens**, on a document that fails on page count — and the only other corpus
-witness is a **passing slides deck**. A `Paperless.Core` change for zero verdict gain; measured and
+witness is a **passing slides deck**. A `XRay.Office.Core` change for zero verdict gain; measured and
 left with the mechanism written down.
 
 **And the round-50 "reverse direction" legend framing dies too.** `037` was never a legend defect —
@@ -14851,7 +14851,7 @@ Whole sheets track re-swept in the primary: **271 match, 3 gains, 0 regressions,
 counts moved.** Swept whole rather than by batch because one of the two changes is in a shared
 layer.
 
-The `Paperless.Ooxml` change then measured across the other two tracks — all 666 words and slides
+The `XRay.Office.Ooxml` change then measured across the other two tracks — all 666 words and slides
 documents rendered at the merged commit and again with only that diff reversed (`git apply -R`, not
 `git checkout`, `obj`/`bin` deleted between legs, `SOURCE_DATE_EPOCH` pinned):
 
@@ -14861,7 +14861,7 @@ worktree vs HEAD: clean      index vs HEAD: clean
 ```
 
 Zero reach, matching the round's census (the 2010 slicer URI in 7 documents, all sheets). Two
-`Paperless.Ooxml` changes have now been measured this way and both came back at exactly zero, which
+`XRay.Office.Ooxml` changes have now been measured this way and both came back at exactly zero, which
 is worth knowing about the *shape* of these fixes: they are keyed on a single literal URI and the
 key is doing its job.
 
@@ -14971,7 +14971,7 @@ default" — the second time this project has caught that assumption.
 Cost, measured: **86 of 337 words renderings disagree with the reference's embedded font list, and
 73 carry DejaVu Sans on our side**, mostly `ours=DejaVuSans, ref=DejaVuSerif`. Different advances,
 so each is a line-breaking difference as well as a visible one. **A one-line change in
-`Paperless.Text` owing a three-track sweep is the parent's to schedule, and it is now the largest
+`XRay.Office.Text` owing a three-track sweep is the parent's to schedule, and it is now the largest
 single known defect on the project.**
 
 ### The audit's own metric was self-corrupting, and its table was wrong
@@ -15142,7 +15142,7 @@ Censused over 946 documents: **3 hits, all sheets**.
 **Null and empty are different answers.** A resolver answering null means "cannot resolve" and the
 cache stands; a range every cell of which is a totals row **resolved** and named nothing, and
 falling back to the cache there draws the whole plot the reference leaves blank. That is the one
-`Paperless.Ooxml` edit — two gates drop a `Count > 0` clause — and its reach is zero *by type*: the
+`XRay.Office.Ooxml` edit — two gates drop a `Count > 0` clause — and its reach is zero *by type*: the
 clause only fires when a resolver is supplied and the only implementation is reached from
 `XlsxReader`.
 
@@ -15188,7 +15188,7 @@ not acted on: in that shape **we honour the font where LibreOffice does not**, a
 1. **The automatic chart title.** `005_Contextures_chart_sample`'s remaining 7 words are five charts
    stating `<c:title>` with no text and one series named `Sales`;
    `chartspaceconverter.cxx:181-204` fills it from `getSingleSeriesTitle` and we draw nothing. It
-   lands the document exactly on 300/300 — and it is a `Paperless.Ooxml` change owing a cross-track
+   lands the document exactly on 300/300 — and it is a `XRay.Office.Ooxml` change owing a cross-track
    census first, because the same block substitutes a literal `Chart Title` when there is no single
    series.
 2. **The four `_advanced_excel_pie` documents** — now known to be *clipping at the horizontal page
@@ -15213,7 +15213,7 @@ OpenDocument 125   WordProcessing 1096   Spreadsheets 925   Presentations 788   
 All 307 sheets and 302 slides documents re-swept in the primary after the merge: **3 gains, 0
 regressions, 0 page counts moved on either track.**
 
-The sheets round's `Paperless.Ooxml` edit then measured across the other two tracks — 666 words and
+The sheets round's `XRay.Office.Ooxml` edit then measured across the other two tracks — 666 words and
 slides documents rendered at the merged commit and again with only that diff reversed (`git apply
 -R`, `obj`/`bin` deleted between legs, `SOURCE_DATE_EPOCH` pinned):
 
@@ -15226,7 +15226,7 @@ The round predicted 0 of 666 and argued it **by type rather than by census** —
 only fires when a `ChartRangeResolver` is supplied, and the only implementation is reached from
 `XlsxReader`, with words and slides passing `null`. The measurement agrees.
 
-**That is the third `Paperless.Ooxml` change measured this way and the third to come back at exactly
+**That is the third `XRay.Office.Ooxml` change measured this way and the third to come back at exactly
 zero.** Worth stating as a pattern rather than three coincidences: these fixes are each keyed on a
 single literal — a namespace URI, a graphic-data URI, a resolver's presence — and the key is doing
 its job. It does **not** license skipping the sweep. The rule is that a shared-layer merge owes a
@@ -15276,9 +15276,9 @@ separates three answers rather than one. The answer does **not** depend on the r
 italic, 8 pt, 40 pt and an east-Asian hint all give the same family, and the round says so
 explicitly because it was asked to either way.
 
-**Had the recommended one-line `Paperless.Text` change been made, it would have reflowed 202 slides
+**Had the recommended one-line `XRay.Office.Text` change been made, it would have reflowed 202 slides
 and 130 sheets renderings, every one of them currently correct.** The fix went to
-`Paperless.WordProcessing/Layout/WordFallbackClass.cs`; the `Paperless.Text` diff is **comment-only,
+`XRay.Office.WordProcessing/Layout/WordFallbackClass.cs`; the `XRay.Office.Text` diff is **comment-only,
 verified by diff**. Nothing cross-track is owed, and independently **0 of 302 slides and 0 of 307
 sheets** show the Sans-for-Serif pair.
 
@@ -15414,7 +15414,7 @@ Thirty freshly authored wrapped rows on 26.2.4.2 — six sizes against one to fi
 no `ht` and no `customHeight` — **30 of 30 within 0.05 twips**. Read twice over (marker deltas off
 both PDFs, and the reference's own `fods` `style:row-height`, agreeing to 0.6 twips) and the control
 ran first: the twelve-point single-line row reads the **300** twips the site already claims.
-`Paperless.Spreadsheets` is now five of nine re-checked and all five still correct.
+`XRay.Office.Spreadsheets` is now five of nine re-checked and all five still correct.
 
 ### Sheets does next, in order
 
@@ -15453,7 +15453,7 @@ OpenDocument 125   WordProcessing 1155   Spreadsheets 925   Presentations 806   
 0 failed
 ```
 
-The sheets round's diff is in `Paperless.Ooxml` and reaches all three tracks, so **the whole corpus
+The sheets round's diff is in `XRay.Office.Ooxml` and reaches all three tracks, so **the whole corpus
 was gated** — all 337 words, 302 slides and 307 sheets documents — rather than measuring reach and
 inferring verdicts. Words was then swept whole again after round 55.
 
@@ -15557,7 +15557,7 @@ and it must not break `SIL_TDB648`); then `ChartLayout.IntervalsThatFit`; then t
 `dotnet/probes/slides-r54/` — `prediction.md` (`e7a62caeeb8`) committed before anything was built or
 rendered post-change. **199 of 302 unchanged, `abs_ink` 1233.54 → 1147.17, major pages 432 → 403,
 `tf-agreement` 0.75210 → 0.77053, exact `/Tf` pages 1558 → 1709.** 42 documents moved, 38 improved,
-4 worsened; **0 of 302 page counts changed**. Four source files, all in `Paperless.Presentations`;
+4 worsened; **0 of 302 page counts changed**. Four source files, all in `XRay.Office.Presentations`;
 no cross-track sweep owed. Tests 4695 → **4703**, 0 failed, 1 skipped.
 
 ### The `.ppt` autofit's spacing reduction: measured, then its condition refuted by A/B
@@ -15576,7 +15576,7 @@ A second confirmation the source gives and round 53 did not have: `SvxLineSpacin
 (`paraitem.cxx:194-202`) — the path every OOXML and ODF line spacing takes — writes
 `eInterLineSpaceRule = Off` **when the height is exactly 100**, where the `.ppt` importer's
 `SetPropLineSpace(100)` writes `Prop`. The defect is binary-only by construction and
-`Paperless.Text` was not touched.
+`XRay.Office.Text` was not touched.
 
 **But the brief's condition is wrong.** Implementing the record's own hardness disjunction — the
 paragraph states a line feed, or its first portion states a typeface index — is worth **−13.06
@@ -15617,7 +15617,7 @@ a second instrument confirmed it: the reference's page 99 carries **101 rotated 
 carries none.
 
 `rotated-text-census.py`, **whose first cut was wrong in an instructive way and says so** — the two
-stacks rotate through different operators, LibreOffice with a rotated `Tm` and Paperless with a
+stacks rotate through different operators, LibreOffice with a rotated `Tm` and X-Ray.Office with a
 rotated `cm`, so a `Tm`-only count reports 18832 rotated operators to nought — gives:
 **73 of 302 documents draw rotated text on either side; 1097 blocks ours to 1905 the reference's;
 and 197 pages where the reference rotates text and we rotate none.** NAS alone is 307 of the
@@ -15803,7 +15803,7 @@ narrows it to the CSS rectangle.
 
 ### The change, and the trap it walked around
 
-`a14` out of `UnderstoodExtensions` (shared, `Paperless.Ooxml`), plus a legacy-VML picture reader
+`a14` out of `UnderstoodExtensions` (shared, `XRay.Office.Ooxml`), plus a legacy-VML picture reader
 keyed on the worksheet's own `<legacyDrawing r:id>`. **The relationship type is the wrong key**:
 `legacyDrawingHF` shares it and points at header watermarks, so keying on the type would have drawn
 `PBN Matrix NAAs (V01)`'s 24 header images and one each on two more **matching** documents as
@@ -15852,7 +15852,7 @@ chart); then the four `_advanced_excel_pie` documents, where the gate needs two 
 ### Parent verification — round 55 sheets
 
 **Sheets 274 → 276, slides 199 → 200, words 319. Corpus 795 of 946.** Whole corpus gated (all 946
-documents) because the diff is in `Paperless.Ooxml`: **three gains, zero regressions.**
+documents) because the diff is in `XRay.Office.Ooxml`: **three gains, zero regressions.**
 
 ```
 Core 337   Containers 109   Text 611   Vector 295   Rendering 150(1 skipped)   Markup 259
@@ -16006,7 +16006,7 @@ file's trap, sprung inside the file that documents it, one round after it was wr
 
 ### Cross-track, measured rather than argued
 
-The diff touches `Paperless.Core`, `Paperless.Text` and `Paperless.Rendering`. **Both other
+The diff touches `XRay.Office.Core`, `XRay.Office.Text` and `XRay.Office.Rendering`. **Both other
 tracks were swept.** Words: **319 of 337, 0 manifest disagreements — no verdict moves**, sheared
 glyphs 0 → **158 673** against the reference's 154 501. Sheets: **272 `match` of 307**, sheared
 glyphs 0 → **15 509** against 15 497 with only **11 of 106** pages still disagreeing, and all ten
@@ -16042,7 +16042,7 @@ it rather than quote it.
 ### Parent verification — round 55 slides
 
 **795 of 946 unchanged: words 319, slides 200, sheets 276. Zero gains, zero regressions, all 946
-documents gated** (the diff reaches `Paperless.Core`, `Paperless.Text` and `Paperless.Rendering`).
+documents gated** (the diff reaches `XRay.Office.Core`, `XRay.Office.Text` and `XRay.Office.Rendering`).
 That settles the round's own sheets figure of 272, which was harness loss — two `.xlsm` dropped
 under load and one 4372-page workbook timed out — not a regression.
 
@@ -16220,14 +16220,14 @@ a reviewer has reported that exact difference on that exact cell and been wrong.
 and now implemented. Counters re-derived: **42 open, 17 marker lines (15 verified, 2 wrong)** —
 the file's `14 — 9/3/1/1` reproduces at neither this tree nor the base. **One of the three commands
 that file gives is wrong under a tree-ish argument** and silently returns 0; fixed there.
-`Paperless.Spreadsheets` is **eight of ten** re-checked, seven correct, and the one wrong is still
+`XRay.Office.Spreadsheets` is **eight of ten** re-checked, seven correct, and the one wrong is still
 the only *furniture* claim among them — which is now a pattern and is why `XlsxNoteCaptions.cs`
 should be taken before `SheetText.cs`.
 
 ### `IntervalsThatFit`: censused, not touched
 
 **256 automatic value axes against 30 stated ones, in 129 documents — 79 sheets, 47 slides, 3
-words** — and `ChartLayout` is in `Paperless.Core`. Not four tokens on `005`. The round leaves
+words** — and `ChartLayout` is in `XRay.Office.Core`. Not four tokens on `005`. The round leaves
 three candidate divergences with one already bounded: the mm100 truncation can only raise the
 quotient by `1/floor(needed)` ≈ 0.25%, and **the label shape's insets cannot be the explanation
 because the sign is wrong** — the reference gets *more* intervals than we do, so its divisor is
@@ -16235,9 +16235,9 @@ smaller, not larger.
 
 ### Tests and shared layer
 
-**4795 → 4811, 0 failed, 1 skipped**, all +16 in `Paperless.Spreadsheets`. Eight mutations through
+**4795 → 4811, 0 failed, 1 skipped**, all +16 in `XRay.Office.Spreadsheets`. Eight mutations through
 `verify-test.sh`, seven detected and the eighth an equivalent formulation (reported as such).
-**No shared layer touched** — every file is in `Paperless.Spreadsheets` — so no cross-track sweep
+**No shared layer touched** — every file is in `XRay.Office.Spreadsheets` — so no cross-track sweep
 is owed. `MANIFEST.tsv` unchanged: no row moves status.
 
 ### Next
@@ -16252,7 +16252,7 @@ documents.
 **Sheets 276 → 276 of 307, verified over all 307 documents: zero in either direction, as predicted.
 Corpus 795 of 946.** Tests at the merged tree **4827, 0 failed** (Spreadsheets 940 → 956).
 
-The diff is entirely inside `Paperless.Spreadsheets` — **no cross-track sweep owed**, and
+The diff is entirely inside `XRay.Office.Spreadsheets` — **no cross-track sweep owed**, and
 `OdsPrintSetup` was deliberately left alone.
 
 ### Two of round 55's own sentences refuted, and both were search artefacts of a kind worth naming
@@ -16292,9 +16292,9 @@ blind spot 1 pointed.
 ### `IntervalsThatFit` is not a four-token fix, and the census is why it was not started
 
 **256 automatic value axes against 30 stated, in 129 documents — 79 sheets, 47 slides, 3 words —
-and `ChartLayout` lives in `Paperless.Core`.** Three briefs of mine described it as "four tokens on
+and `ChartLayout` lives in `XRay.Office.Core`.** Three briefs of mine described it as "four tokens on
 `005`". Censused and left, with the mm100 truncation bounded to 0.25% and the shape-inset hypothesis
-ruled out on sign. **This is the right call**: a `Paperless.Core` change reaching 129 documents is
+ruled out on sign. **This is the right call**: a `XRay.Office.Core` change reaching 129 documents is
 not something to start at the end of a round.
 
 ### The audit gains a fourth outcome, because the count could not answer the question that matters
@@ -16310,7 +16310,7 @@ tree-ish argument, and re-derived the counters the file had stored. Fixed. Per-p
 cross-check against the global figure.
 
 Audit sites: `SheetShapeText.cs` **VERIFIED** (12 pt, two instruments, control first);
-`SheetNotes.cs` **VERIFIED**; `SheetPageDecoration.cs` **FIXED**. `Paperless.Spreadsheets` is 8 of 10
+`SheetNotes.cs` **VERIFIED**; `SheetPageDecoration.cs` **FIXED**. `XRay.Office.Spreadsheets` is 8 of 10
 re-checked, 7 correct, and the only wrong one was the only *furniture* claim.
 
 ### Vision
@@ -16331,7 +16331,7 @@ composite rather than of the document.
    documents; on `fm-provider` sheet 7, `statedBand − nominal` is **18.4 pt exactly**, so test
    whether the header height is being counted twice.
 2. **The grey cell fills** — census before writing.
-3. `IntervalsThatFit` **from authored charts, not from `005`** — and it is a `Paperless.Core` change
+3. `IntervalsThatFit` **from authored charts, not from `005`** — and it is a `XRay.Office.Core` change
    reaching 129 documents, so it owes a corpus gate.
 4. The four `_advanced_excel_pie` documents. 5. `XlsxNoteCaptions.cs`, then `SheetText.cs`.
 
@@ -16422,11 +16422,11 @@ its first cut compared every anchor against the tallest row anywhere in the work
 zero. Counters re-derived: **39 open, 19 marker lines (16/2/1/0)**; at the base **40 and 18**,
 against a stored **42** with `Presentations 11`. Round 56's "the only wrong sheets site is the
 only furniture claim" was two observations of one event and did not repeat.
-`Paperless.Spreadsheets` is **nine of ten**, eight correct; `Layout/SheetText.cs` is the last.
+`XRay.Office.Spreadsheets` is **nine of ten**, eight correct; `Layout/SheetText.cs` is the last.
 
 ### Tests and shared layer
 
-**4825 → 4830, 0 failed, 1 skipped**, all +5 in `Paperless.Spreadsheets` (956 → 961). Three
+**4825 → 4830, 0 failed, 1 skipped**, all +5 in `XRay.Office.Spreadsheets` (956 → 961). Three
 mutations through `verify-test.sh`, all three detected, including **the wiring** — the unit test
 alone passes under `PrintableAreaAt(1.0)` at the call site, because the unit is still correct and
 simply never asked for the page's scale. **No shared layer touched**; no cross-track sweep owed.
@@ -16436,7 +16436,7 @@ simply never asked for the page's scale. **No shared layer touched**; no cross-t
 
 1. **Conditional formatting, `colorScale` first** (38 documents, no formula needed). 2. **The
 chart face** — Carlito against our Liberation Sans, a font-resolution question before it is a
-layout one. 3. The **pie data-label wrap** (`Paperless.Core`, owes a corpus gate). 4.
+layout one. 3. The **pie data-label wrap** (`XRay.Office.Core`, owes a corpus gate). 4.
 `Layout/SheetText.cs`, the last audit site. 5. `IntervalsThatFit`, still untouched. 6. The **note
 page's own scale**, left at 1.0 on purpose and written down at the call site, together with the
 note page's `Placement = default` that draws its band at a **one per cent** zoom.
@@ -16449,7 +16449,7 @@ Baseline reproduced exactly: **319 of 337, zero disagreements with `MANIFEST.tsv
 document.** After both changes: **319 of 337, zero verdicts moved, zero page counts, zero word
 counts, zero font lists** — over the whole track, `done-*` included, swept three times.
 
-**The whole diff is confined to `Paperless.WordProcessing`.** No shared layer is touched, so slides
+**The whole diff is confined to `XRay.Office.WordProcessing`.** No shared layer is touched, so slides
 and sheets cannot be reached and no cross-track sweep is owed.
 
 ### Synthetic oblique did not survive the uniform-paragraph shortcut, at any of the four readers
@@ -16568,7 +16568,7 @@ counted as detectors.
    `SystemFontResolver.ReferenceFor` is a reverse lookup from a face with **no request to compare
    against**, so a run whose glyph comes from a fallback face is drawn upright however italic it is.
    289 of the residual 1 611 short glyphs are in faces no document names — WenQuanYi Zen Hei 177,
-   OpenSymbol 112 — led by `手机免提系统TSB.doc` 82 and `A320SimNotes.doc` 75. **In `Paperless.Text`;
+   OpenSymbol 112 — led by `手机免提系统TSB.doc` 82 and `A320SimNotes.doc` 75. **In `XRay.Office.Text`;
    owes a measured cross-track sweep.**
 2. `AFS-050-004-F2_0i` page 2's five banner rows — extract our text layer for `0.000 General
    Information…` and `CE-1 …` and separate present-but-unpainted from never-read.
@@ -16594,7 +16594,7 @@ OpenDocument 125   WordProcessing 1180   Spreadsheets 961   Presentations 819   
 0 failed
 ```
 
-`Paperless.Text` returned an **empty result** in the ten-project run and 617 of 617 alone — the
+`XRay.Office.Text` returned an **empty result** in the ten-project run and 617 of 617 alone — the
 load artefact in a new form: not a false failure but **no output at all**. Fifth sighting, first
 time silent. A blank cell in that column must be re-run, never read as zero.
 
@@ -16719,13 +16719,13 @@ stated and we do not implement**, recorded at 5 anchors of 365 in one document).
 `SystemFontResolver.ReferenceFor` is a reverse lookup **with no request to compare against**, so a
 run whose glyph comes from a fallback face draws upright however italic it is. 289 of the residual
 1 611 short glyphs are in faces no document names (WenQuanYi Zen Hei 177, OpenSymbol 112). **This
-one is in `Paperless.Text` and owes a measured cross-track sweep.** Then `AFS-050-004-F2_0i`'s
+one is in `XRay.Office.Text` and owes a measured cross-track sweep.** Then `AFS-050-004-F2_0i`'s
 banner rows — and note the standing record's **direction is corrected: our rows are the looser
 ones**. Then `2024-12_Comlux…docx`, where the reference draws `LiberationSans-Italic` on 652 glyphs
 against our `DejaVuSans` — visible only now that both stacks no longer draw upright.
 
 **Sheets** — `colorScale` conditional formatting; the chart face (a font-resolution question before
-it is a layout one); then the pie data-label wrap, which is `Paperless.Core` and owes a corpus gate,
+it is a layout one); then the pie data-label wrap, which is `XRay.Office.Core` and owes a corpus gate,
 and is what actually moves the four pie verdicts.
 
 ## Round 56 — slides — the brief's items 2 and 3 were both real signals read one level too high
@@ -16850,9 +16850,9 @@ Second re-check in three to turn on a discriminating pair.
 
 ### Cross-track — measured, not argued
 
-`c:minorGridlines` reaches `Paperless.Core/Charts` and `Paperless.Ooxml`: **4 sheets documents and
+`c:minorGridlines` reaches `XRay.Office.Core/Charts` and `XRay.Office.Ooxml`: **4 sheets documents and
 1 words document**, all named and rendered before and after, two moving by +0.04 and +0.14 ink and
-none changing a page count or a major page. `EmfReader` reaches `Paperless.Vector`: **4 words
+none changing a page count or a major page. `EmfReader` reaches `XRay.Office.Vector`: **4 words
 documents and 2 workbooks**, all six better or level on both instruments, none crossing a
 word-count band, and `bulletin.docx` going from 0.37% off the reference's word count to **0.00%**.
 The parent still owes both tracks a whole sweep.
@@ -16965,7 +16965,7 @@ refuses to print unless every manifest path found a row is what makes this safe.
 same 306 kB EMF as `office:binary-data` draws 108 304 red pixels, and moved to `Pictures/` by the
 reference's own exporter, **none**. `Layout/SheetText.cs` **VERIFIED** — 216 of 216 turned-cell row
 heights, the discriminator inside the fixture (rounding the total instead fails 26 of 36 through
-`verify-test.sh`). **`Paperless.Spreadsheets` is ten of ten re-checked, nine correct**, and round
+`verify-test.sh`). **`XRay.Office.Spreadsheets` is ten of ten re-checked, nine correct**, and round
 56's "furniture claims are the ones that break" prior is nine-to-one and dead.
 
 ### Instruments
@@ -16986,7 +16986,7 @@ documents, and `WmfReader`'s other fixed fields.
 
 **Sheets** — the pie data-label wrap, now with a second measured defect beside it: **our pie is 18%
 larger than the reference's**, 235.8 pt against 199.8, centre 6.4 pt left and 3.2 pt low.
-`Paperless.Core`, owes a corpus gate, and these four pies are the only sheets failures with a chart
+`XRay.Office.Core`, owes a corpus gate, and these four pies are the only sheets failures with a chart
 cause left. Then `cellIs` (18 documents, now cheap — reader, range walk, priority order and overlay
 all exist), then `c:dPt` per-point fills (35 in 7 sheets documents; slides has 144 on pies and 31 on
 bars). **`.xls` colour scales are still uncensused** — they live in `CF12` 0x087A, which no census
@@ -16998,7 +16998,7 @@ here has read — and the **`x14` extension arm is invisible to every census so 
 
 **Words 319 of 337, slides 200 of 302, sheets 276 of 307 — measured before and after each of two
 changes, per document, zero gains and zero regressions on all three tracks.** Both changes are in
-`Paperless.Text` and both owed a cross-track measurement; both got one.
+`XRay.Office.Text` and both owed a cross-track measurement; both got one.
 
 1. **Synthetic oblique was lost a second time, at glyph fallback.**
    `IGlyphFallbackResolver.ReferenceFor` is a reverse lookup from a face with no request to compare
@@ -17059,7 +17059,7 @@ LibreOffice's own list has `opensymbol` before `dejavusans`.
 
 **Words 319, slides 200→199 unchanged by this round, sheets 276. Corpus 794 of 946 — no movement
 in either direction, on any track, which the round predicted.** Gated over all 946 documents
-because the primary change is in `Paperless.Text`.
+because the primary change is in `XRay.Office.Text`.
 
 ```
 Core 337   Containers 109   Text 624   Vector 298   Rendering 153(1 skipped)   Markup 259
@@ -17097,7 +17097,7 @@ bullets**, which reach the page through `PageDrawing`'s label branch and never t
 
 ### A shared-layer audit site was wrong, and it is fixed
 
-`Paperless.Text/Layout/LineBreaker.cs:473` said LibreOffice never lets a hyphen open a number, and
+`XRay.Office.Text/Layout/LineBreaker.cs:473` said LibreOffice never lets a hyphen open a number, and
 that "dropping HY is the whole of the rule". **Three of its own five worked examples are false on
 26.2.4.2**, the code implemented the false version, **and a test asserted it.** Ten authored
 packages with **no width tuning** (each token longer than its line, so *where* it breaks decides) and
@@ -17281,7 +17281,7 @@ because the ascent error (9.51 against 9.00) cancels the height error.** This is
 ### Audit
 
 **No site re-checked this round, stated deliberately** rather than left silent, with
-`Paperless.Core/Graphics/GlyphRun.cs` named next because the line-height work just measured a live
+`XRay.Office.Core/Graphics/GlyphRun.cs` named next because the line-height work just measured a live
 vertical-metric divergence there. Re-derived: **39 open in 27 files, 22 markers (19 VERIFIED,
 2 FIXED, 1 WRONG).**
 
@@ -17322,7 +17322,7 @@ Five changes, four of them measured against a probe built to discriminate before
   read with no record bound — with 8 short records of 450 in the corpus and **no** document
   drawing a wrong face because of it. Recorded, not fixed.
 
-**Shared layers.** `Paperless.Core/Charts`, `Paperless.Ooxml`, `Paperless.Vector`. Measured at
+**Shared layers.** `XRay.Office.Core/Charts`, `XRay.Office.Ooxml`, `XRay.Office.Vector`. Measured at
 this tree against `MANIFEST.tsv`: **words 319 of 337, 0 disagreements**; **sheets 275 of 307**,
 whose three disagreements are two *stale* manifest rows (both `advanced_excel_pie`, already
 `words` in round 58's own base and after sweeps with identical counts, and a pie takes no tick,
@@ -17446,7 +17446,7 @@ at it. Then `8_P-Pavese_AIRBUS…pptx` (47.26, four unchecked claims from a page
 
 **Words 319 of 337, slides 199 of 302, sheets 276 of 307 — corpus 794 of 946, no movement in either
 direction on any track, which both predictions said in advance.** Gated over all 946 because the
-second change touches `Paperless.Core`.
+second change touches `XRay.Office.Core`.
 
 ```
 Core 358   Containers 109   Text 624   Vector 298   Rendering 153(1 skipped)   Markup 259
@@ -17564,9 +17564,9 @@ Round 58's item, `outlook_of_nigerian_pension_sector.ppt` at 355 WQY glyphs, is 
   `sheets/chartset-004/xlsx/019_advanced_excel_pie.xlsx` should read `open`. Both are stable across
   repeated renderings on both sides, so this is not the date-volatility trap. Not committed — the
   corpus repo is not this branch's to write.
-- **`Paperless.Vector` reported phantom failures twice** under concurrent load (1 of 298, then 21 of
+- **`XRay.Office.Vector` reported phantom failures twice** under concurrent load (1 of 298, then 21 of
   298) and passed 298 of 298 alone both times.
-- **`Paperless.Core` gains `Colour.IsDark`, `WcagLuminance`, `PerceivedLuminance`** — additive, no
+- **`XRay.Office.Core` gains `Colour.IsDark`, `WcagLuminance`, `PerceivedLuminance`** — additive, no
   consumer outside Core and WordProcessing by `git grep`, and both other tracks swept anyway.
 
 ### Next
@@ -17649,17 +17649,17 @@ It is **pre-existing** — the same title was at 601.61 before this round — an
 title in the corpus. Recorded at `ChartLayout.AddTitles`. The same pages produced the sixth and
 seventh readers of the `011` right-edge illusion, one of whom flagged her own confidence on it.
 
-**The brief's named audit site is refuted.** `Paperless.Core/Graphics/GlyphRun.cs`'s two open hits
+**The brief's named audit site is refuted.** `XRay.Office.Core/Graphics/GlyphRun.cs`'s two open hits
 are `a:blip/a:lum` brightness and contrast — PowerPoint's washout and `Bitmap::Adjust` — and carry
 no vertical-metric claim at all. The site was named from the text of a round's own write-up rather
 than from the file; one `git grep` separates them, and `TODO.24-2-7-audit.md` now says so.
 Counters re-derived: **38 open hits in 26 files, 23 markers (19 VERIFIED, 3 FIXED, 1 WRONG)**.
 
-**Tests +40** (`Paperless.Spreadsheets` 980 → 1020), 35 of them the reference's own measured
+**Tests +40** (`XRay.Office.Spreadsheets` 980 → 1020), 35 of them the reference's own measured
 pitches. **4957 passed, 0 failed, 1 skipped.** Four mutations through `verify-test.sh`, **all four
 detected**, none a drift guard.
 
-**Shared layer**: the `Paperless.Text` edit is a single new `MetricGrid` constant and changes no
+**Shared layer**: the `XRay.Office.Text` edit is a single new `MetricGrid` constant and changes no
 existing caller, so words and slides cannot move **by construction**. That is a falsifiable
 prediction for the parent's sweep.
 
@@ -17733,7 +17733,7 @@ Verdicts 319/199/276 → **319/199/276**, and page counts, extractable words and
 
 ### The audit site I named was wrong, and I named it from prose
 
-I sent sheets r60 at `Paperless.Core/Graphics/GlyphRun.cs`, on the grounds that a vertical-metric
+I sent sheets r60 at `XRay.Office.Core/Graphics/GlyphRun.cs`, on the grounds that a vertical-metric
 divergence had just been measured there. **Its two open hits are `a:blip/a:lum` brightness and
 contrast — `Bitmap::Adjust` — with no vertical-metric claim at all.** I named it from a round's
 *prose* rather than from the file. Recorded in `TODO.24-2-7-audit.md`.
@@ -17828,7 +17828,7 @@ Three changes, each measured before it shipped, plus two audit re-checks.
   `o3tl::convert`, and the citation is corrected. **37 open sites in 26 files, 25 markers.**
   **First round in three where the audit did not outweigh the plan.**
 
-**Shared layers.** `Paperless.Core/Charts` and `Paperless.Ooxml`. Measured at this tree against
+**Shared layers.** `XRay.Office.Core/Charts` and `XRay.Office.Ooxml`. Measured at this tree against
 `MANIFEST.tsv`: **words 319 of 337, 0 disagreements**; **sheets 279 of 307**, whose two
 disagreements are **stale manifest rows verified at the base commit** — `003_advanced_excel_pie`
 reads 143/143 (`match`, manifest `open`) and `011_advanced_excel_pie` reads 136/140 (`words`,
@@ -17848,7 +17848,7 @@ against the reference's 6.01.
 ### A sweep spoiled by a rebuild, and the byte comparison that caught it
 
 Two cross-track sweeps were run while `verify-test.sh` — which mutates a source file, **rebuilds**,
-tests, restores and rebuilds again — was running, and its build replaced `Paperless.Core.dll` under
+tests, restores and rebuilds again — was running, and its build replaced `XRay.Office.Core.dll` under
 them. It announced itself as **31 words documents moving between two sweeps**, one by 19.82 of ink
 on a questionnaire with no chart in it. Rendering is deterministic (the same document twice gives
 byte-identical PDFs); the *fresh* render matched one sweep's copy and not the other's, 157 696
@@ -17945,18 +17945,18 @@ wrong four times.
   where the two surplus words come from.
 
 **24.2.7.2 audit**: counters re-derived — **37 open in 26 files, 26 marker lines (21 VERIFIED, 4
-FIXED, 1 WRONG)**. `Paperless.Ooxml/DrawingML/DrawingFill.cs`:115 (`a:lum` as a whole per cent)
+FIXED, 1 WRONG)**. `XRay.Office.Ooxml/DrawingML/DrawingFill.cs`:115 (`a:lum` as a whole per cent)
 **VERIFIED on 26.2.4.2**, by a probe that never runs our renderer: `70999/-70999` renders
 byte-identically to `70000/-70000` (truncation) and `69500/-69500` does not (not rounding) — **the
 two cases fail under the two readings in opposite directions** — with two controls first.
-`Paperless.Ooxml` is one of one.
+`XRay.Office.Ooxml` is one of one.
 
-**Tests +11** (`Paperless.Core` 376 → 387). **5045 passed, 0 failed, 1 skipped.** Build 0/0.
+**Tests +11** (`XRay.Office.Core` 376 → 387). **5045 passed, 0 failed, 1 skipped.** Build 0/0.
 Five mutations: four detected; the fifth (squaring before intersecting) is an **equivalent
 formulation, not a drift guard** — the reduced rectangle is always strictly inside the available
 one, which also refutes one of the round's own stated blind spots.
 
-**Shared layer**: the diff is `Paperless.Core/Charts/ChartLayout*.cs`. Census over all 946: **62
+**Shared layer**: the diff is `XRay.Office.Core/Charts/ChartLayout*.cs`. Census over all 946: **62
 sheets / 14 slides / 3 words** documents have a titled chart; **7 / 5 / 2** have a best-fit pie
 (slides `bitesize-writing-a-report.pptx`, `3495.pptx`; words `pie-chart-result.docx`,
 `pie-chart-template.docx` are the `done` ones at risk). **Falsifiable: 0 verdicts move on words and
@@ -18049,7 +18049,7 @@ white**, which points the *opposite* way to the frame-fill arm round 59 measured
 ### Three instrument failures, all found and handled correctly
 
 - **`verify-test.sh` rebuilds twice, so it voids a sweep it runs beside.** Round 60 ran it during
-  two cross-track sweeps and `Paperless.Core.dll` was replaced under them; it announced itself as
+  two cross-track sweeps and `XRay.Office.Core.dll` was replaced under them; it announced itself as
   **31 words documents moving between two sweeps of the same unmodified tree**, one by 19.82 of ink
   on a chartless questionnaire. Rendering is deterministic, so a fresh render matching one copy and
   not the other is what identified it. Now in `CLAUDE.md` with the one-render check.
@@ -18494,7 +18494,7 @@ checked by a second instrument; the document fails on words, 108 against 117.
 formatting, re-measured on the reference alone with a mark/run control for each. The empty
 paragraph's height lands on 36 × 1.15 = **41.40 pt exactly**.
 
-More useful than the verdict: **`Paperless.WordProcessing` shows 11 open hits and has 1 reachable
+More useful than the verdict: **`XRay.Office.WordProcessing` shows 11 open hits and has 1 reachable
 open site.** Five sit inside an existing marker; five state a 26.2.4.2 measurement in the same
 comment as the older one they replaced, two of those in the ODT and RTF readers, whose formats have
 **no witness in this corpus** (271 `.docx`, 66 `.doc`, 0 `.rtf`, 0 `.odt`). The header has warned
@@ -18511,10 +18511,10 @@ direction — assert the case that *discriminates*, not the case the sentence me
 
 ### Shared layers: none
 
-Seven files, all under `Paperless.WordProcessing`. The blend was deliberately kept out of
-`Paperless.Core`'s `Colour`, where it would have been a natural home and a shared-layer diff.
+Seven files, all under `XRay.Office.WordProcessing`. The blend was deliberately kept out of
+`XRay.Office.Core`'s `Colour`, where it would have been a natural home and a shared-layer diff.
 For whoever extends it: `v:fill/@opacity` is read in one other place in the tree,
-`Paperless.Spreadsheets/Ooxml/XlsxNoteCaptions.cs`, and the other two corpora hold **5 such
+`XRay.Office.Spreadsheets/Ooxml/XlsxNoteCaptions.cs`, and the other two corpora hold **5 such
 attributes in 3 slides documents and none in sheets**.
 
 ### Next
@@ -18585,7 +18585,7 @@ went the truncating way. The round's first cut was 5 of 6; corrected, 11 of 11.
 
 ### The audit's open count over-states four-fold, and the parent confirmed it
 
-The round noticed `Paperless.WordProcessing` shows **11 open hits and has one reachable open site**.
+The round noticed `XRay.Office.WordProcessing` shows **11 open hits and has one reachable open site**.
 Measured corpus-wide by the parent: **37 raw, 9 in files carrying no marker at all** — and of those,
 two sit in the ODT and RTF readers, and **the words corpus holds no `.rtf` at all**.
 
@@ -18619,7 +18619,7 @@ beneath. **Unchecked by a second instrument and flagged as such.**
 
 **803 of 946 unchanged — sheets 280, slides 200, words 323, zero verdict movement in either
 direction on any of the three tracks**, all three swept in this worktree because the diff touches
-`Paperless.Core` and `Paperless.Ooxml`. Tests **5133, 0 failed, 1 skipped**; build 0/0.
+`XRay.Office.Core` and `XRay.Office.Ooxml`. Tests **5133, 0 failed, 1 skipped**; build 0/0.
 
 ### Round 30's fitted 1.000 is refuted, and it had located a different boundary
 

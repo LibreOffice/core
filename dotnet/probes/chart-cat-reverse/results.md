@@ -225,7 +225,7 @@ against 26.2.4.2, so it follows 26.2.4.2; every figure in `NumberFormatterTests`
 answer and is now 26.2.4.2's, and the constant's own remarks say so, so that nobody re-derives it
 in the other direction.
 
-The fix is in `Paperless.Core/Numbers` and not in the axis, which is the whole reason
+The fix is in `XRay.Office.Core/Numbers` and not in the axis, which is the whole reason
 `Core/Numbers` came down a layer.
 
 ### What it moved

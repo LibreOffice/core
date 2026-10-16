@@ -1,6 +1,6 @@
 """Score the five VML `_x0000_t136` documents against both LibreOffice references.
 
-Usage:  PAPERLESS_CLI=<abs path> TAG=before python3 measure.py <out-dir>
+Usage:  XRAY_OFFICE_CLI=<abs path> TAG=before python3 measure.py <out-dir>
 
 Renders each document with soffice 24.2, /opt/libreoffice26.2 and our CLI, then reports
 per-page mean absolute grey difference at 100 dpi and per-page `pdftotext` word counts.
@@ -21,7 +21,7 @@ DOCS = [
 ]
 
 CORPUS = Path(os.environ.get("CORPUS", "/home/user/sample-files"))
-CLI = os.environ["PAPERLESS_CLI"]
+CLI = os.environ["XRAY_OFFICE_CLI"]
 LO24 = os.environ.get("LO24", "soffice")
 LO26 = os.environ.get("LO26", "/opt/libreoffice26.2/program/soffice")
 TAG = os.environ.get("TAG", "run")

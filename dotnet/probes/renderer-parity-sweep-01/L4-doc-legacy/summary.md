@@ -1,7 +1,7 @@
 # L4-doc-legacy — summary
 
 Four root causes with patches, three case-note mechanisms refuted, four left unresolved.
-All four patches are inside `dotnet/src/Paperless.WordProcessing/Ww8/**` and apply cleanly to
+All four patches are inside `dotnet/src/XRay.Office.WordProcessing/Ww8/**` and apply cleanly to
 `582c8c671` (`git apply --check`, all four). Nothing was built or tested — read-only checkout.
 
 ## R1 — a nested field's separator ends the *enclosing* field's instruction

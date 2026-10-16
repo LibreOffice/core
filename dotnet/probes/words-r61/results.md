@@ -323,7 +323,7 @@ OpenDocument 125   WordProcessing 1225   Spreadsheets 1020   Presentations 846  
 ```
 
 **5 034 → 5 039, delta +5**, re-derived project by project rather than quoted: the whole delta is
-`Paperless.WordProcessing` 1 220 → 1 225, the five `TableParagraphLeadingTests`.
+`XRay.Office.WordProcessing` 1 220 → 1 225, the five `TableParagraphLeadingTests`.
 `dotnet build -v q -nologo`: **0 warnings, 0 errors.**
 
 Through `verify-test.sh`, tree clean before each and restored after — **three mutations, all three
@@ -340,9 +340,9 @@ the control separates them.
 
 ## Shared layers
 
-**None.** The diff is confined to `Paperless.WordProcessing/Layout/{Paginator,FlowLayouter,
-ParagraphLeading}.cs`, `Paperless.WordProcessing/OpenDocument/OdtLayoutSource.cs` (comments only) and
-the tests. `git grep` finds no consumer of `ParagraphLeading` outside `Paperless.WordProcessing`, and
+**None.** The diff is confined to `XRay.Office.WordProcessing/Layout/{Paginator,FlowLayouter,
+ParagraphLeading}.cs`, `XRay.Office.WordProcessing/OpenDocument/OdtLayoutSource.cs` (comments only) and
+the tests. `git grep` finds no consumer of `ParagraphLeading` outside `XRay.Office.WordProcessing`, and
 nothing in `Core`, `Containers`, `Text`, `Vector`, `Rendering` or `Markup` was touched. Slides and
 sheets cannot move **by construction**; that is a falsifiable claim for the parent's sweep.
 

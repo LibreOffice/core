@@ -36,7 +36,7 @@ import os, re, shutil, subprocess, sys, zipfile
 NS = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
 RNS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 WORK = "/c/sandbox/workdir/scratch-r56-sheets/bandclip"
-CLI = "/c/sandbox/workdir/wt-sheets-r50/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli"
+CLI = "/c/sandbox/workdir/wt-sheets-r50/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli"
 ENV = dict(os.environ, SOURCE_DATE_EPOCH="1700000000", TZ="UTC")
 
 

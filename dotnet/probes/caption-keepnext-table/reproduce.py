@@ -42,7 +42,7 @@ a dict up front.
 Usage
 -----
 
-    PAPERLESS_CLI=... python3 reproduce.py /abs/workdir [--ablate|--sweep]
+    XRAY_OFFICE_CLI=... python3 reproduce.py /abs/workdir [--ablate|--sweep]
 """
 
 import os
@@ -107,9 +107,9 @@ def build(path, names, blob, start=FIRST_BLOCK, mutate_body=None, mutate_styles=
 def render(path, outdir):
     subprocess.run(['soffice', '--headless', '--convert-to', 'pdf', '--outdir', outdir, path],
                    capture_output=True, check=True)
-    cli = os.environ.get('PAPERLESS_CLI')
+    cli = os.environ.get('XRAY_OFFICE_CLI')
     if not cli:
-        raise SystemExit('set PAPERLESS_CLI to the tree you mean to measure')
+        raise SystemExit('set XRAY_OFFICE_CLI to the tree you mean to measure')
     subprocess.run([cli, 'render', '--quiet', '--outdir', os.path.join(outdir, 'ours'), path],
                    check=True)
     ref = os.path.join(outdir, os.path.basename(path)[:-5] + '.pdf')

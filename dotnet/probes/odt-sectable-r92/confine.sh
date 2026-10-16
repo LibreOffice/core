@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# Render a list of documents with $PAPERLESS_CLI into <outdir>, one PDF per document.
+# Render a list of documents with $XRAY_OFFICE_CLI into <outdir>, one PDF per document.
 #
-#   PAPERLESS_CLI=... confine.sh <list-file> <outdir> [workers]
+#   XRAY_OFFICE_CLI=... confine.sh <list-file> <outdir> [workers]
 #
 # `SOURCE_DATE_EPOCH` is fixed so two runs of the same binary are byte-equal with nothing masked,
 # which is what makes a byte comparison of two legs meaningful (`dotnet/CLAUDE.md`).  Each document
 # renders into its own directory, keyed by the document rather than by a worker slot.
 set -uo pipefail
 LIST="${1:?list file}"; OUT="${2:?outdir}"; WORKERS="${3:-3}"
-CLI="${PAPERLESS_CLI:?set PAPERLESS_CLI}"
+CLI="${XRAY_OFFICE_CLI:?set XRAY_OFFICE_CLI}"
 [ -x "$CLI" ] || { echo "no CLI at $CLI" >&2; exit 1; }
 export SOURCE_DATE_EPOCH=1700000000
 mkdir -p "$OUT" && OUT="$(cd "$OUT" && pwd)"

@@ -11,7 +11,7 @@ Reproduce with:
 ```sh
 export SOURCE_DATE_EPOCH=1700000000 TZ=UTC
 .claude/skills/libreoffice-reference/scripts/lo-convert.sh --pdf --outdir /abs/ref hA.xlsx
-"$PAPERLESS_CLI" render --outdir /abs/ours hA.xlsx
+"$XRAY_OFFICE_CLI" render --outdir /abs/ours hA.xlsx
 ```
 
 | probe | band | content | reference draws | ours (at `3e4f4f50344`) |

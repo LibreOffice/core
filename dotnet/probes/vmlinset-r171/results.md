@@ -56,7 +56,7 @@ The first cut of `build.py` omitted `v:shapetype id="_x0000_t202"`, and then
 *states* every padding correctly and **none of them reaches the page** — all ten arms rendered
 byte-identically at 72 + 1.5 mm, which reads exactly like an attribute the reference ignores.
 Declaring the shapetype turns the object into `draw:frame`/`draw:text-box` and the ten arms
-separate. This is `paperless-corpus`'s *"a fixture minimal enough to be obviously correct may be
+separate. This is `office-corpus`'s *"a fixture minimal enough to be obviously correct may be
 minimal enough to be answering a different question"* in a new disguise: what was missing was not
 a settings part but a shape *type*.
 

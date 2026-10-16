@@ -53,7 +53,7 @@ name of the thing (`DomainMapperTableManager.cxx`:325-350); every number below i
 
 ## What changed
 
-Four files, all in `Paperless.WordProcessing`.
+Four files, all in `XRay.Office.WordProcessing`.
 
 - **`Layout/PageTable.cs`** — a `CellTextDirection` enum, `PageTableCell.TextDirection` and
   `IsTurned`, and `PlacedTableCell.ContentTransform`. The turned cell's flow stays in its own
@@ -194,7 +194,7 @@ carry no metafile. `raster-ceiling-pages.tsv` is corrected to match.
 
 ## Tests
 
-`tests/Paperless.WordProcessing.Tests/TurnedCellTests.cs`, 16 tests. Each asserts a measured fact
+`tests/XRay.Office.WordProcessing.Tests/TurnedCellTests.cs`, 16 tests. Each asserts a measured fact
 rather than an implementation detail: the reader's six-to-three mapping, zero row-height
 contribution, the collapse of a row of only turned cells, the break at the inner height, the
 padding asymmetry that separates the implemented rule from the plausible wrong one, the drop
@@ -288,7 +288,7 @@ on `TableLayouter.Turned`, both of which carry the measured numbers rather than 
 
 ```sh
 # the group, then the regression sweep — both, in that order
-export PAPERLESS_CLI=$PWD/dotnet/tools/Paperless.Cli/bin/Debug/net10.0/linux-x64/Paperless.Cli
+export XRAY_OFFICE_CLI=$PWD/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
 .claude/skills/corpus-batches/scripts/batch-check.sh /c/sandbox/workdir/sample-files 'words/table-001' out 3
 .claude/skills/corpus-batches/scripts/batch-check.sh /c/sandbox/workdir/sample-files 'words/done-*'   out 6
 ```

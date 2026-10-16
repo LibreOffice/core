@@ -116,7 +116,7 @@ now 25.0 pt against the reference's 26.35, from 36.65.
 
 ### `omrIMInterpretiveGuideLine.doc`: read, never drawn
 
-`paperless extract` has every word of the masthead — "MENTAL RETARDATION BULLETIN", the date, the
+`xray-office extract` has every word of the masthead — "MENTAL RETARDATION BULLETIN", the date, the
 number, "Nancy R. Thaler" — so this was never a reading fault. Two defects were stacked on it:
 
 - **A group is one `FSPA` and many shapes.** The members have no anchor of their own and state
@@ -152,7 +152,7 @@ change the word gate cannot see. Left as a specified lead rather than a guessed 
 
 ## The cross-track change
 
-`PdfImages` is in `Paperless.Rendering`, which all three tracks share. The branch it changes was
+`PdfImages` is in `XRay.Office.Rendering`, which all three tracks share. The branch it changes was
 already wrong for every 1-component and 4-component JPEG and is untouched for 3-component ones, so
 it cannot make a correct image incorrect. Measured on words: 3 documents gained `/DeviceGray`, and
 two DOCX carrying a CMYK JPEG stopped being passed through — `PES-Technical-Report-Template`'s

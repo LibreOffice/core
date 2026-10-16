@@ -195,7 +195,7 @@ cleared it, which is the criterion working.
 
 ## 5. Tests
 
-11 new tests in one file, `tests/Paperless.WordProcessing.Tests/FramePaintOrderTests.cs`, over
+11 new tests in one file, `tests/XRay.Office.WordProcessing.Tests/FramePaintOrderTests.cs`, over
 `tests/corpus/features/header-behind-text.docx` — authored by
 `probes/words-e1-01/make-fixture.py`, one body line and a header holding two anchored shapes: a
 full-page 50%-alpha panel with `wrapNone`, and a 2 cm box with `wrapSquare`, an opaque `777777` fill
@@ -262,7 +262,7 @@ moved, and neither did.
 ### The mtime trap, guarded rather than avoided
 
 Four builds across two revert/restore cycles. Every restore is `cp` followed by `touch`, with
-`rm -rf src/Paperless.WordProcessing/{obj,bin}` before the rebuild, and each restore is checked by
+`rm -rf src/XRay.Office.WordProcessing/{obj,bin}` before the rebuild, and each restore is checked by
 re-rendering a subset and comparing **byte for byte** against the run being claimed: **47 of 47**
 after the first cycle (`words/done-00[1-4]` plus the group), **76 of 76** after the second
 (`words/done-01*` plus the group). A `grep` for the neutering markers returns 0 in both files.
@@ -342,14 +342,14 @@ defect I had in hand — one letterhead — rather than from the rule I was abou
 ## 9. Files
 
 ```
-src/Paperless.MsBinary/Escher/EscherRecordTypes.cs        EscherPropertyIds.BehindDocument = 954
-src/Paperless.WordProcessing/Layout/PageFrame.cs          BehindText, with both rules on it
-src/Paperless.WordProcessing/Layout/PageDrawing.cs        the two loops round the text
-src/Paperless.WordProcessing/Ww8/Ww8Frames.cs             bMoveToBackground
-src/Paperless.WordProcessing/Ooxml/DocxFrames.cs          m_bOpaque; Appearance; DocxFrameContext
-src/Paperless.WordProcessing/Ooxml/DocxLayoutSource.cs    InHeaderFooter, and the context it builds
-src/Paperless.WordProcessing/Ooxml/DocxReader.cs          sets it round the furniture walk
-tests/Paperless.WordProcessing.Tests/FramePaintOrderTests.cs   11 tests
+src/XRay.Office.MsBinary/Escher/EscherRecordTypes.cs        EscherPropertyIds.BehindDocument = 954
+src/XRay.Office.WordProcessing/Layout/PageFrame.cs          BehindText, with both rules on it
+src/XRay.Office.WordProcessing/Layout/PageDrawing.cs        the two loops round the text
+src/XRay.Office.WordProcessing/Ww8/Ww8Frames.cs             bMoveToBackground
+src/XRay.Office.WordProcessing/Ooxml/DocxFrames.cs          m_bOpaque; Appearance; DocxFrameContext
+src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs    InHeaderFooter, and the context it builds
+src/XRay.Office.WordProcessing/Ooxml/DocxReader.cs          sets it round the furniture walk
+tests/XRay.Office.WordProcessing.Tests/FramePaintOrderTests.cs   11 tests
 tests/corpus/features/header-behind-text.docx             the fixture
 probes/words-e1-01/make-fixture.py                        which authors it
 probes/words-e1-01/prediction.md                          written first, commit 413215679e8
