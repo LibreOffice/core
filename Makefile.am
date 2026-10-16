@@ -22,7 +22,7 @@ MAKEFLAGS := $(MAKEFLAGS) \
 	$(if $(findstring l,$(MAKEFLAGS)),,$(if $(NPROC),-l$(NPROC)))
 
 # For `make run` skip the build-time unit test execution in test/.
-export COOL_SKIP_UNITTESTS ?= $(if $(filter run run-gdb,$(MAKECMDGOALS)),1,)
+export COOL_SKIP_UNITTESTS ?= $(if $(filter run run-gdb run-proxy,$(MAKECMDGOALS)),1,)
 
 # Configure again when autogen.input changes. Only autogen.py reads that file,
 # so the rules Automake generates for configure.ac are not sufficient.
@@ -747,6 +747,25 @@ namespace-run: setup-wsd check-apparmour-namespaces $(SYSTEM_STAMP)
 run-nocaps: setup-wsd
 	./coolwsd $(COMMON_PARAMS) \
 			--o:security.capabilities=false \
+			--o:logging.file[@enable]=${OUTPUT_TO_FILE} --o:logging.level=trace \
+			--o:logging_ui_cmd.file[@enable]=${OUTPUT_TO_FILE} \
+			--o:trace_event[@enable]=true \
+			$(RUN_EXTRA)
+
+# scripts/cool-proxy.py runs coolwsd, puts itself in front of it on the first free port from
+# 9980 up, and drops each WebSocket 10 seconds after its first status:, so the browser has to
+# reconnect.
+# The proxy reads the port that coolwsd picked from its console output, and rewrites the URLs
+# coolwsd prints to point at the proxy.
+if ENABLE_SSL
+PROXY_WSD_PARAMS =
+else
+PROXY_WSD_PARAMS = --disable-ssl
+endif
+
+run-proxy: setup-wsd
+	$(LANDLOCK_ENV) $(PYTHON) $(abs_top_srcdir)/scripts/cool-proxy.py -- \
+		./coolwsd $(COMMON_PARAMS) $(PROXY_WSD_PARAMS) \
 			--o:logging.file[@enable]=${OUTPUT_TO_FILE} --o:logging.level=trace \
 			--o:logging_ui_cmd.file[@enable]=${OUTPUT_TO_FILE} \
 			--o:trace_event[@enable]=true \
