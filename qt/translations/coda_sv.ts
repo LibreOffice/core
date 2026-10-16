@@ -190,6 +190,10 @@
         <source>Move Tab to New Window</source>
         <translation>Flytta fliken till nytt fönster</translation>
     </message>
+    <message>
+        <source>Preview of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WebView</name>

@@ -190,6 +190,10 @@
         <source>Move Tab to New Window</source>
         <translation>Lap áthelyezése egy új ablakba</translation>
     </message>
+    <message>
+        <source>Preview of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WebView</name>

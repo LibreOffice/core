@@ -190,6 +190,10 @@
         <source>Move Tab to New Window</source>
         <translation>Bog an Cluaisín go Fuinneog Nua</translation>
     </message>
+    <message>
+        <source>Preview of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WebView</name>
