@@ -216,6 +216,14 @@ Poco::Path getTemplatePath(const std::string& templateType, const std::string& t
     return resolvedPath;
 }
 
+// True when the template is one of the introductory documents
+bool isIntroDocument(const Poco::Path& templatePath)
+{
+    const QString introDir = QDir::cleanPath(QString::fromStdString(getBrowserDistDir()) + "/introdocs") + "/";
+    const QString path = QDir::cleanPath(QString::fromStdString(templatePath.toString()));
+    return path.startsWith(introDir);
+}
+
 std::pair<QString, QString> getDocumentNameInfo(const std::string& templateType,
                                                 const std::string& baseName)
 {
@@ -1304,7 +1312,7 @@ QString WebView::createNewDocumentFile(const std::string& templateType, const st
     // Copy an intro document once and reopen that copy on later clicks;
     // deleting it gives a fresh copy.  A request naming a template that does
     // not resolve gets the blank document, which is a new file every time.
-    const bool reuseCopy = bUsedRequestedTemplate;
+    const bool reuseCopy = bUsedRequestedTemplate && isIntroDocument(templatePathObj);
     QString newFilePath =
         QDir(documentsDir).filePath(QString("%1.%2").arg(docNamePrefix).arg(extension));
     if (!reuseCopy || !QFileInfo::exists(newFilePath))
