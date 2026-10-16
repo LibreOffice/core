@@ -1914,6 +1914,8 @@ export class Comment extends CanvasSectionObject {
 	private checkIfCursorIsOnThisCommentWriter(newPosition: cool.SimpleRectangle) {
 		if (this.sectionProperties.commentListSection.sectionProperties.show == false)
 			return;
+		if (this.sectionProperties.commentListSection.cursorMovedByRemove)
+			return;
 
 		const rectangles: cool.SimpleRectangle[] = this.sectionProperties.data.rectangles;
 

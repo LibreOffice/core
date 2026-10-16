@@ -280,6 +280,17 @@ export class CommentSection extends CanvasSectionObject {
 	private annotationMaxSize: number;
 	escapeListener: (e: KeyboardEvent) => void;
 
+	// Set from the moment this user removes a Writer comment until the user
+	// next clicks, presses a key or touches the screen: it ends that time and
+	// removes its listeners. Core moves the text cursor to where the removed
+	// comment was, so the cursor moves in that time come from the removal and
+	// not from the user.
+	private endCursorMovedByRemove: () => void = null;
+
+	public get cursorMovedByRemove (): boolean {
+		return this.endCursorMovedByRemove !== null;
+	}
+
 	// Active "click anywhere on the page to place a new comment" mode for PDF.
 	// When non-null, the next document mousedown is consumed to position a new
 	// comment at that point instead of being forwarded to the engine. A
@@ -1732,6 +1743,19 @@ export class CommentSection extends CanvasSectionObject {
 		this.map.focus();
 	}
 
+	private ignoreCursorUntilUserInput (): void {
+		if (this.endCursorMovedByRemove)
+			return;
+		const events = ['mousedown', 'keydown', 'touchstart'];
+		this.endCursorMovedByRemove = () => {
+			for (const name of events)
+				document.removeEventListener(name, this.endCursorMovedByRemove, true);
+			this.endCursorMovedByRemove = null;
+		};
+		for (const name of events)
+			document.addEventListener(name, this.endCursorMovedByRemove, true);
+	}
+
 	public onRedlineAccept (e: any): void {
 		const command = {
 			AcceptTrackedChange: {
@@ -1774,8 +1798,10 @@ export class CommentSection extends CanvasSectionObject {
 		if (app.file.fileBasedView) // We have to set the part from which the comment will be removed as selected part before the process.
 			this.map.setPart(app.map._docLayer._selectedPart, false);
 
-		if (app.map._docLayer._docType === 'text')
+		if (app.map._docLayer._docType === 'text') {
+			this.ignoreCursorUntilUserInput();
 			this.map.sendUnoCommand('.uno:DeleteComment', comment);
+		}
 		else if (app.map._docLayer._docType === 'presentation' || app.map._docLayer._docType === 'drawing')
 			this.map.sendUnoCommand('.uno:DeleteAnnotation', comment);
 		else if (app.map._docLayer._docType === 'spreadsheet')
@@ -1799,6 +1825,8 @@ export class CommentSection extends CanvasSectionObject {
 				value: id
 			}
 		};
+		if (app.map._docLayer._docType === 'text')
+			this.ignoreCursorUntilUserInput();
 		this.map.sendUnoCommand('.uno:DeleteCommentThread', comment);
 		this.unselect();
 		this.map.focus();

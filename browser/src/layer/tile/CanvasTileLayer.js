@@ -1856,8 +1856,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			( !URLPopUpSection.isOpen() || updateCursor || isHyperlinkChanged))
 			URLPopUpSection.showURLPopUP(obj.hyperlink.link, new cool.SimplePoint(app.file.textCursor.rectangle.x1, app.file.textCursor.rectangle.y1));
 
+		// Removing a comment puts the caret where the comment was. The view stays with the comments
+		// and does not scroll to the caret.
+		const commentList = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
 		const followCaret = updateCursor && weAreModifier &&
-			!this._mousePressedDuringCellEdit;
+			!this._mousePressedDuringCellEdit &&
+			!(commentList && commentList.cursorMovedByRemove);
 
 		// If modifier view is different than the current view
 		// we'll keep the caret position at the same point relative to screen.
