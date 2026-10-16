@@ -466,6 +466,21 @@ window.L.TextInput = window.L.Layer.extend({
 		return nodes;
 	},
 
+	// read in place of "image"
+	_getImageKindLabel: function(kind) {
+		switch (kind) {
+		case 'shape':
+			return _('Shape');
+		case 'formula':
+			return _('Formula');
+		case 'chart':
+			return _('Chart');
+		case 'object':
+			return _('Object');
+		}
+		return null;
+	},
+
 	// the text between start and end, with its images; the character stays in the text
 	_createImageNodes: function(content, start, end, images) {
 		const nodes = [];
@@ -481,6 +496,9 @@ window.L.TextInput = window.L.Layer.extend({
 			// one unit for the caret, so a reader announces it entered and left, as for <img>
 			node.setAttribute('contenteditable', 'false');
 			node.setAttribute('role', 'img');
+			const kind = this._getImageKindLabel(image.kind);
+			if (kind)
+				node.setAttribute('aria-roledescription', kind);
 			node.setAttribute('aria-label', image.name);
 			if (image.description && image.description !== image.name)
 				node.setAttribute('aria-description', image.description);

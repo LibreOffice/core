@@ -91,6 +91,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <o3tl/string_view.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -716,9 +717,34 @@ struct ParagraphImage
     sal_Int32 nPosition;
     OUString aName;
     OUString aDescription;
+    std::string_view aKind; // empty for an image
 
     bool operator==(const ParagraphImage&) const = default;
 };
+
+std::string_view getImageKind(const uno::Reference<accessibility::XAccessibleContext>& xContext)
+{
+    switch (xContext->getAccessibleRole())
+    {
+        case accessibility::AccessibleRole::SHAPE:
+            return "shape";
+        case accessibility::AccessibleRole::EMBEDDED_OBJECT:
+            break;
+        default:
+            return {};
+    }
+    const auto xAttributes = xContext.query<accessibility::XAccessibleExtendedAttributes>();
+    const OUString aAttributes = xAttributes.is() ? xAttributes->getExtendedAttributes() : OUString();
+    for (sal_Int32 nIndex = 0; nIndex >= 0;)
+    {
+        const std::u16string_view aAttribute = o3tl::getToken(aAttributes, 0, u';', nIndex);
+        if (aAttribute == u"kind:formula")
+            return "formula";
+        if (aAttribute == u"kind:chart")
+            return "chart";
+    }
+    return "object";
+}
 
 // How far two rectangles overlap horizontally, if they overlap at all.
 sal_Int32 overlapWidth(const css::awt::Rectangle& rA, const css::awt::Rectangle& rB)
@@ -789,7 +815,8 @@ collectImages(const uno::Reference<css::accessibility::XAccessibleText>& xAccTex
         if (nPosition >= 0)
             aResult.push_back({ .nPosition = nPosition,
                                 .aName = xGraphic->getAccessibleName(),
-                                .aDescription = xGraphic->getAccessibleDescription() });
+                                .aDescription = xGraphic->getAccessibleDescription(),
+                                .aKind = getImageKind(xGraphic) });
     }
     std::ranges::stable_sort(aResult, {}, &ParagraphImage::nPosition);
     return aResult;
@@ -820,6 +847,8 @@ boost::property_tree::ptree makeImagesTree(const std::vector<ParagraphImage>& rI
         aImage.put("position", rImage.nPosition);
         aImage.put("name", rImage.aName.toUtf8().getStr());
         aImage.put("description", rImage.aDescription.toUtf8().getStr());
+        if (!rImage.aKind.empty())
+            aImage.put("kind", std::string(rImage.aKind));
         aImages.push_back(std::make_pair("", aImage));
     }
     return aImages;

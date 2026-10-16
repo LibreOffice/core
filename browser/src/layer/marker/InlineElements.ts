@@ -25,11 +25,13 @@ namespace cool {
 		url: string;
 	}
 
-	// a U+FFFC (OBJECT REPLACEMENT CHARACTER) standing for an image
+	// a U+FFFC (OBJECT REPLACEMENT CHARACTER) standing for an image, or a shape or an object
+	// read like one
 	export interface InlineImage {
 		position: MessageNumber;
 		name: string;
 		description: string;
+		kind?: 'shape' | 'formula' | 'chart' | 'object';
 	}
 
 	// a range of the paragraph text, ending after the U+FFFC of its anchor

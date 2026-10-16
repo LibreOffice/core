@@ -19,12 +19,15 @@
 
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <flyfrm.hxx>
 #include "accembedded.hxx"
 #include <cntfrm.hxx>
 #include <notxtfrm.hxx>
 #include <ndole.hxx>
+#include <sot/exchange.hxx>
+#include <tools/globname.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -57,7 +60,16 @@ OUString SwAccessibleEmbeddedObject::getExtendedAttributes()
             SwContentNode* const pCNode = static_cast<SwNoTextFrame*>(pCFrame)->GetNode();
             if (pCNode)
             {
-                style += static_cast<SwOLENode*>(pCNode)->GetOLEObj().GetStyleString();
+                SwOLEObj& rOLEObj = static_cast<SwOLENode*>(pCNode)->GetOLEObj();
+                style += rOLEObj.GetStyleString();
+                if (const auto& xObject = rOLEObj.GetOleRef(); xObject.is())
+                {
+                    const SvGlobalName aClassID(xObject->getClassID());
+                    if (SotExchange::IsMath(aClassID))
+                        style += ";kind:formula";
+                    else if (SotExchange::IsChart(aClassID))
+                        style += ";kind:chart";
+                }
             }
         }
         style += ";";

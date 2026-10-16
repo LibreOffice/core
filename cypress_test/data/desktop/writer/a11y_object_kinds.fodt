@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="paragraph">
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt"/>
+  </style:default-style>
+ </office:styles>
+ <office:body>
+  <office:text>
+   <text:p>A box <draw:rect text:anchor-type="as-char" draw:name="Shape 1" svg:width="0.4cm" svg:height="0.4cm"><svg:title>Blue box</svg:title></draw:rect> and a fraction <draw:frame draw:name="Object1" text:anchor-type="as-char" svg:width="0.6in" svg:height="0.4in"><draw:object><math:math><math:semantics><math:mrow><math:mfrac><math:mi math:mathvariant="italic">b</math:mi><math:mn>2</math:mn></math:mfrac></math:mrow><math:annotation math:encoding="StarMath 5.0">b over 2</math:annotation></math:semantics></math:math></draw:object><svg:title>Half of b</svg:title></draw:frame>.</text:p>
+   <text:p>Last paragraph.</text:p>
+  </office:text>
+ </office:body>
+</office:document>

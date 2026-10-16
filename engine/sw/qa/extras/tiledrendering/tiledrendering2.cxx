@@ -40,12 +40,15 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <sfx2/linkmgr.hxx>
 #include <svx/fillbitmaplink.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xdef.hxx>
+#include <ndole.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
 #include <view.hxx>
@@ -2085,6 +2088,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphImage)
     CPPUNIT_ASSERT_EQUAL(std::string("A red square"), rImage.get<std::string>("name"));
     CPPUNIT_ASSERT_EQUAL(std::string("A small square filled with red"),
                          rImage.get<std::string>("description"));
+    CPPUNIT_ASSERT(!rImage.get_child_optional("kind"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphComments)
@@ -2186,6 +2190,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphShape)
     CPPUNIT_ASSERT_EQUAL(std::string("Shape 1 Blue box"), rImage.get<std::string>("name"));
     CPPUNIT_ASSERT_EQUAL(std::string("A small blue square"),
                          rImage.get<std::string>("description"));
+    CPPUNIT_ASSERT_EQUAL(std::string("shape"), rImage.get<std::string>("kind", ""));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphEmbeddedObject)
@@ -2212,6 +2217,41 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphEmbeddedObjec
     CPPUNIT_ASSERT_EQUAL(std::string("Half of b"), rImage.get<std::string>("name"));
     CPPUNIT_ASSERT_EQUAL(std::string("The letter b over the number 2"),
                          rImage.get<std::string>("description"));
+    CPPUNIT_ASSERT_EQUAL(std::string("formula"), rImage.get<std::string>("kind", ""));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphEmbeddedKinds)
+{
+    // Given a formula, a chart and a spreadsheet anchored as characters:
+    createDoc("a11y-embedded-kinds.odt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the cursor moves into their paragraph:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then each is reported with what it is:
+    boost::property_tree::ptree aImages = aView.m_aA11yFocusedParagraph.get_child("images");
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aImages.size());
+    auto it = aImages.begin();
+    // Without the fix, no image had a kind.
+    CPPUNIT_ASSERT_EQUAL(std::string("formula"), it->second.get<std::string>("kind", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("chart"), (++it)->second.get<std::string>("kind", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("object"), (++it)->second.get<std::string>("kind", ""));
+
+    // And the formula and the spreadsheet, not started at load, were not started for that:
+    const SwNodes& rNodes = getSwDoc()->GetNodes();
+    for (SwNodeOffset n(0); n < rNodes.Count(); ++n)
+    {
+        SwOLENode* pOLENode = rNodes[n]->GetOLENode();
+        if (!pOLENode || pOLENode->GetOLEObj().GetCurrentPersistName() == "Object 2")
+            continue;
+        CPPUNIT_ASSERT_EQUAL(embed::EmbedStates::LOADED,
+                             pOLENode->GetOLEObj().GetOleRef()->getCurrentState());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphShapeAfterScroll)
