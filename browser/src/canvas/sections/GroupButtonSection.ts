@@ -130,6 +130,15 @@ class GroupButtonSection extends GenericButtonSection {
 		];
 	}
 
+	/*
+		Shows the button where it comes into the part of the document in view, and hides it where
+		it leaves it, also when it is moved there by its band rather than by the view scrolling,
+		as a turned group's band growing and shrinking again takes it out of view and back.
+	*/
+	public onDocumentObjectVisibilityChange(): void {
+		this.onNewDocumentTopLeft();
+	}
+
 	public onMouseEnter(point: cool.SimplePoint, e: MouseEvent): void {
 		if (this.pressable) super.onMouseEnter(point, e);
 		app.map.tooltip?.beginShow(this.getHTMLObject());

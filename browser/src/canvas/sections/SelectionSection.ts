@@ -1626,11 +1626,14 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/*
 		Takes the turn or the slant away from every object that draws for the selection, members
 		of groups included, each by its own angle around its own middle. The engine is sent every
-		object's new mapping as one change and draws the result; nothing is laid on here first,
-		since a change per object is not one the selection's frame can follow before the answer.
+		object's new mapping as one change, and each object's own change is laid on it here at
+		once, so a further key reads the objects as they will be. The frame is made anew from the
+		objects: a single object's from its mapping, that of several objects or a group as their
+		upright box until the engine has answered.
 	*/
 	private takeTheAnglesAway(kind: 'turn' | 'slant'): void {
 		const reached = new Map<number, cool.Matrix2D>();
+		const changes = new Map<number, cool.Matrix2D>();
 		for (const objectId of RenderGeometrySection.theOnesThatDraw(
 			RenderGeometrySection.standingFor(this.selectedObjects()),
 		)) {
@@ -1638,18 +1641,16 @@ abstract class SelectionSection extends CanvasSectionObject {
 			if (!mapping) continue;
 
 			const middle = mapping.apply(0.5, 0.5);
-			reached.set(
-				objectId,
-				mapping.then(
-					kind === 'slant'
-						? SelectionSection.slantTakenAway(mapping, middle)
-						: cool.Matrix2D.IDENTITY.rotateAround(
-								middle.x,
-								middle.y,
-								-SelectionSection.turnOfTheMapping(mapping),
-							),
-				),
-			);
+			const change =
+				kind === 'slant'
+					? SelectionSection.slantTakenAway(mapping, middle)
+					: cool.Matrix2D.IDENTITY.rotateAround(
+							middle.x,
+							middle.y,
+							-SelectionSection.turnOfTheMapping(mapping),
+						);
+			changes.set(objectId, change);
+			reached.set(objectId, mapping.then(change));
 		}
 
 		if (!reached.size) return;
@@ -1657,6 +1658,19 @@ abstract class SelectionSection extends CanvasSectionObject {
 		ShearingInteraction.forgetTheKeys();
 		TurningInteraction.forgetTheKeys();
 		SelectionSection.sendMappings(reached, kind === 'turn' ? 'turn' : 'shear');
+
+		// A tied connector is laid out anew by the engine between what it is tied to.
+		for (const [objectId, change] of changes)
+			if (!ObjectHandles.isATiedConnector(objectId))
+				RenderGeometrySection.changeObject(objectId, change);
+
+		if (this.isOneObject()) this.square = null;
+		else {
+			this.frameFollowsTheObjects = true;
+			this.square = null;
+		}
+		this.known = this.handlesOfTheGroups();
+		this.redraw();
 	}
 
 	/*
@@ -2701,7 +2715,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 			} else if (this.pressedHandle?.name)
 				this.travel.goTo(this.pressedHandle.name);
 
+			// The press hid the buttons beside the bands as a drag does; a click brings them back.
 			this.interaction = null;
+			GraphicSelection.followTheGroupButtons();
 			return;
 		}
 
