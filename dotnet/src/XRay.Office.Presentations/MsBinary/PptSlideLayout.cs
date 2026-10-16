@@ -10,6 +10,7 @@ using XRay.Office.Ooxml.DrawingML;
 using XRay.Office.Presentations.Layout;
 using XRay.Office.Text.Layout;
 using XRay.Office.Vector;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Presentations.MsBinary;
 
@@ -150,6 +151,7 @@ internal sealed class PptSlideLayout
 
         for (int index = 0; index < pages.Slides.Count; index++)
         {
+            OfficeOperation.ThrowIfCancelled();
             PptPageEntry entry = pages.Slides[index];
             DffRecordHeader? container = PptPages.Resolve(
                 _stream, _persist, entry, PptRecordTypes.Slide, _diagnostics);

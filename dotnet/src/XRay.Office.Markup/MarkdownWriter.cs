@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Text;
 using System.Xml.Linq;
 using XRay.Office.Core.Extraction;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Markup;
 
@@ -33,6 +34,13 @@ public static class MarkdownWriter
     /// <summary>Projects a content tree onto Markdown, via XHTML.</summary>
     public static string ToMarkdown(ContentNode content, MarkupOptions? options = null)
         => FromXhtml(XhtmlWriter.ToDocument(content, options));
+
+    /// <summary>
+    /// Projects a content tree onto Markdown, checking <paramref name="cancellationToken"/> block by block.
+    /// </summary>
+    public static string ToMarkdown(
+        ContentNode content, MarkupOptions? options, CancellationToken cancellationToken)
+        => OfficeOperation.Run(() => ToMarkdown(content, options), cancellationToken);
 
     /// <summary>Transforms an XHTML document produced by <see cref="XhtmlWriter"/>.</summary>
     /// <remarks>
@@ -77,6 +85,7 @@ public static class MarkdownWriter
 
         private void Block(XElement element)
         {
+            OfficeOperation.Poll();
             switch (element.Name.LocalName)
             {
                 case "h1" or "h2" or "h3" or "h4" or "h5" or "h6":

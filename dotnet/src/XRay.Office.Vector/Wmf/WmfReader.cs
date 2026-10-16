@@ -6,6 +6,7 @@ using XRay.Office.Core.Geometry;
 using XRay.Office.Core.Graphics;
 using XRay.Office.Core.Units;
 using XRay.Office.Vector.Metafiles;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Vector.Wmf;
 
@@ -177,6 +178,7 @@ internal sealed class WmfReader
 
         while (!_failed)
         {
+            OfficeOperation.Poll();
             int recordStart = _position;
             uint size = U32();
             ushort function = U16();
@@ -425,6 +427,7 @@ internal sealed class WmfReader
 
         while (!_failed)
         {
+            OfficeOperation.Poll();
             int recordStart = _position;
             uint size = U32();
             ushort function = U16();
@@ -645,6 +648,7 @@ internal sealed class WmfReader
         while (!_failed && !_budget.IsExhausted)
         {
             int recordStart = _position;
+            OfficeOperation.Poll();
             uint size = U32();
             ushort function = U16();
 

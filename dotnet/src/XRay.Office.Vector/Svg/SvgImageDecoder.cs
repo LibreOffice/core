@@ -101,7 +101,7 @@ public sealed class SvgImageDecoder : IVectorImageDecoder
         {
             document = SvgService.FromSvg(xml, Parameters, captureCompatibilityStyleState: false);
         }
-        catch (Exception exception) when (exception is not OutOfMemoryException and not StackOverflowException)
+        catch (Exception exception) when (exception is not (OutOfMemoryException or StackOverflowException or OperationCanceledException))
         {
             return Failed(diagnostics, "PL6000", $"An SVG could not be parsed: {exception.Message}");
         }
@@ -124,7 +124,7 @@ public sealed class SvgImageDecoder : IVectorImageDecoder
         {
             picture = SvgSceneRuntime.CreateModel(document, assets, DrawAttributes.None);
         }
-        catch (Exception exception) when (exception is not OutOfMemoryException and not StackOverflowException)
+        catch (Exception exception) when (exception is not (OutOfMemoryException or StackOverflowException or OperationCanceledException))
         {
             return Failed(diagnostics, "PL6000", $"An SVG could not be compiled: {exception.Message}");
         }

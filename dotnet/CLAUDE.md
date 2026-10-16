@@ -622,6 +622,56 @@ tables and structure without branching on whether a file was a deck or a spreads
 tidiness: Escher/MS-ODRAW is one library because DOC, XLS and PPT all delegate their
 drawings to it, so implementing it once buys shapes in all three.
 
+**Every long operation can be cancelled, and the token travels ambiently.** A public entry point
+that does real work has a token overload (`OfficeDocument.Open/Extract/OpenAsync(…, CancellationToken)`,
+`IPaginatedDocument.Layout(options, token)`, `IDocumentReader.Read(source, token)`,
+`PdfRenderer.Render(…, token)`, `RasterRenderer.Render/Rasterise(…, token)`,
+`SheetHtmlWriter.Write(…, token)`, `MarkdownWriter.ToMarkdown(…, token)`). They do not thread the
+token through the hundreds of methods beneath them: they open a per-thread scope,
+`XRay.Office.Core.Threading.OfficeOperation`, and the loops that bound latency call
+`OfficeOperation.Poll()` (every 32nd call checks) or `ThrowIfCancelled()`. Outside a scope both are a
+thread-static read and a null test. Where the checks sit, so that a new reader or layout loop can follow:
+
+- **Containers**: `ZipPart.Open` and `CompoundFile` part open throw, and a zip part comes back wrapped in
+  `PollingStream`, so tokenising or decompressing a large part is cancellable without a checkpoint in each
+  parser. Sector-chain reads poll.
+- **Parsers**: per paragraph, row, cell, record or token (docx/odt body walks, xlsx rows and cells, xlsb and
+  BIFF records, RTF tokens, DOC characters, CSV every 1024 characters, WMF/EMF/EMF+ records).
+- **Layout**: `Paginator` per block, per page and per frame pass, `TableLayouter` per table, `LineFiller` per
+  line, every shaper call, sheet pagination (the zoom bisection included), slides per shape.
+- **Drawing**: `PageDrawing` per line, the two sinks per glyph run and fill, `RasterImageDecoder` before a decode.
+
+Two rules matter more than where the checks are. **Cancellation is never swallowed**: a `catch` that turns a
+failure into a diagnostic must not catch `OperationCanceledException` (the Vector decoders' `catch (Exception)
+when (…)` filters name it explicitly), or the caller gets a document with a quiet hole in it instead of a stop.
+**The timeout is a separate type**: `LayoutOptions.Timeout` arms a linked token for `Layout` and an expiry
+throws `LayoutTimeoutException : OperationCanceledException`, so `catch (OperationCanceledException)` handles
+both and a caller can still tell "I cancelled" from "it took too long". `ACancellationDuringTheReadIsNever…`
+in `CancellationTests` cancels from inside the first read of each format's bytes; add a fixture there when a
+format gets a reader.
+
+`LayoutOptions.MaxImagePixels` (+ `OversizedImages`: skip, or decode at the codec's reduced scale) rides on the
+pages, not on the renderer: the layout captures it from the ambient scope into each page (`IPageRenderLimits`),
+and both renderers apply the stricter of that and their own option. The size comes from the header, so an
+oversized picture costs a header read.
+
+**A PDF says what the document says, and it is written as it is produced.** `PdfDocumentWriter` writes each
+object to the destination the moment it has a body (page content as each page ends; the page tree, fonts
+and resources last), so memory is one page plus the offset table and the stream need not be seekable. The
+file carries the information dictionary and an XMP packet from `DocumentMetadata`
+(`PdfRenderer.Render(document, pages, stream)`, or `PdfRenderOptions.Metadata`), `/Lang`, link annotations,
+named destinations (`/Names /Dests`), an outline and `/PageLabels`. All of it is declared through four default
+methods on `IDrawingSink` (`AddLink`, `AddInternalLink`, `AddDestination`, `AddOutlineEntry`); a sink that
+does not care ignores them, which is why the raster sink and every test sink needed no change. The layout
+supplies them: `PageRun.Link` (an address, or `#name` for a bookmark), `PageParagraph.Anchors` (bookmarks) and
+`PageParagraph.OutlineLevel` for DOCX, ODT, RTF and DOC, sheet names for a workbook, and a title taken from
+the extracted content for a deck. Not declared: hyperlinks in spreadsheet cells and on slide shapes, because
+those readers keep a range or nothing and not a target. **A link in a header, a footer or a note is resolved
+only when it names a bookmark**: relationship ids are scoped to their part and the layout source does not
+carry a part's table, and a wrong address is worse than none. `DocumentLinkTests` validates the file against
+pypdf when it is installed (and skips when it is not); `FormatLinkTests` checks every format against what its
+own extraction says the document holds.
+
 ## Fidelity: the thing that will bite you
 
 ### Look at the rendering. Do not chase it through metrics alone.

@@ -76,7 +76,7 @@ public sealed class WmfImageDecoder : IVectorImageDecoder
                 }
             }
         }
-        catch (Exception exception) when (exception is not OutOfMemoryException and not StackOverflowException)
+        catch (Exception exception) when (exception is not (OutOfMemoryException or StackOverflowException or OperationCanceledException))
         {
             // A hidden EMF that will not read is a reason to fall back to the WMF records, not a
             // reason to lose the picture.
@@ -94,7 +94,7 @@ public sealed class WmfImageDecoder : IVectorImageDecoder
                 return VectorImage.Empty with { Diagnostics = diagnostics, IsTruncated = reader.IsTruncated };
             }
         }
-        catch (Exception exception) when (exception is not OutOfMemoryException and not StackOverflowException)
+        catch (Exception exception) when (exception is not (OutOfMemoryException or StackOverflowException or OperationCanceledException))
         {
             // The reader is written not to throw — every read is bounds-checked and every
             // malformed record is skipped — but the contract on this seam is that a picture which

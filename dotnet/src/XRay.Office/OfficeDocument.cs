@@ -3,6 +3,7 @@ using XRay.Office.Core;
 using XRay.Office.Core.Documents;
 using XRay.Office.Core.Extraction;
 using XRay.Office.Core.Formats;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office;
 
@@ -48,9 +49,19 @@ public static class OfficeDocument
     /// </summary>
     /// <exception cref="Core.UnsupportedFormatException">The format is not supported.</exception>
     /// <exception cref="Core.PasswordRequiredException">The document is encrypted.</exception>
-    public static IDocument Open(string path)
+    public static IDocument Open(string path) => Open(path, CancellationToken.None);
+
+    /// <summary>
+    /// Opens a document from disk, checking <paramref name="cancellationToken"/> while it is parsed.
+    /// </summary>
+    /// <param name="path">The file to open.</param>
+    /// <param name="cancellationToken">Cancels the open with <see cref="OperationCanceledException"/>.</param>
+    /// <exception cref="OperationCanceledException">The token was cancelled.</exception>
+    public static IDocument Open(string path, CancellationToken cancellationToken)
     {
         ArgumentException.ThrowIfNullOrEmpty(path);
+        cancellationToken.ThrowIfCancellationRequested();
+
         DocumentSource source = DocumentSource.FromFile(path);
         try
         {
@@ -60,7 +71,7 @@ public static class OfficeDocument
             //
             // Two wrappers rather than one, because callers discover paginability with a type
             // test and a wrapper that does not implement IPaginatedDocument hides it.
-            IDocument document = Open(source);
+            IDocument document = Open(source, cancellationToken);
             return document is IPaginatedDocument paginated
                 ? new OwnedPaginatedDocument(paginated, source)
                 : new OwnedSourceDocument(document, source);
@@ -72,11 +83,32 @@ public static class OfficeDocument
         }
     }
 
+    /// <summary>
+    /// Opens a document from disk on a thread-pool thread.
+    /// </summary>
+    /// <remarks>
+    /// Parsing is synchronous work; this moves it off the caller's thread and honours the token the
+    /// same way <see cref="Open(string, CancellationToken)"/> does.
+    /// </remarks>
+    public static Task<IDocument> OpenAsync(string path, CancellationToken cancellationToken = default)
+        => Task.Run(() => Open(path, cancellationToken), cancellationToken);
+
     /// <inheritdoc cref="Open(string)"/>
-    public static IDocument Open(DocumentSource source)
+    public static IDocument Open(DocumentSource source) => Open(source, CancellationToken.None);
+
+    /// <inheritdoc cref="Open(string, CancellationToken)"/>
+    public static IDocument Open(DocumentSource source, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(source);
+        return OfficeOperation.Run(() => OpenCore(source), cancellationToken);
+    }
 
+    /// <inheritdoc cref="OpenAsync(string, CancellationToken)"/>
+    public static Task<IDocument> OpenAsync(DocumentSource source, CancellationToken cancellationToken = default)
+        => Task.Run(() => Open(source, cancellationToken), cancellationToken);
+
+    private static IDocument OpenCore(DocumentSource source)
+    {
         DocumentFormat format = SourceIdentification.Resolve(source);
         FormatInfo? info = FormatCatalogue.Instance.GetInfo(format);
 
@@ -103,18 +135,31 @@ public static class OfficeDocument
     /// The shortest path for search indexing and text analysis. Skips fonts, layout and
     /// rasterisation entirely, so it costs a small fraction of what rendering does.
     /// </remarks>
-    public static ContentDocument Extract(string path)
+    public static ContentDocument Extract(string path) => Extract(path, CancellationToken.None);
+
+    /// <summary>
+    /// Extracts a document's content, checking <paramref name="cancellationToken"/> while it is read.
+    /// </summary>
+    public static ContentDocument Extract(string path, CancellationToken cancellationToken)
     {
         ArgumentException.ThrowIfNullOrEmpty(path);
+        cancellationToken.ThrowIfCancellationRequested();
         using DocumentSource source = DocumentSource.FromFile(path);
-        using IDocument document = Open(source);
+        using IDocument document = Open(source, cancellationToken);
         return document.Content;
     }
 
     /// <inheritdoc cref="Extract(string)"/>
-    public static ContentDocument Extract(DocumentSource source)
+    public static ContentDocument Extract(DocumentSource source) => Extract(source, CancellationToken.None);
+
+    /// <inheritdoc cref="Extract(string, CancellationToken)"/>
+    public static ContentDocument Extract(DocumentSource source, CancellationToken cancellationToken)
     {
-        using IDocument document = Open(source);
+        using IDocument document = Open(source, cancellationToken);
         return document.Content;
     }
+
+    /// <inheritdoc cref="OpenAsync(string, CancellationToken)"/>
+    public static Task<ContentDocument> ExtractAsync(string path, CancellationToken cancellationToken = default)
+        => Task.Run(() => Extract(path, cancellationToken), cancellationToken);
 }

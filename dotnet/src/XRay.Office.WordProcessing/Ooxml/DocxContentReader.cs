@@ -7,6 +7,7 @@ using XRay.Office.Core.Extraction;
 using XRay.Office.Core.Numbering;
 using XRay.Office.Ooxml;
 using XRay.Office.Ooxml.DrawingML;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.WordProcessing.Ooxml;
 
@@ -206,6 +207,7 @@ public sealed partial class DocxContentReader
 
     private void ReadBlock(XElement element, ContentNode target)
     {
+        OfficeOperation.Poll();
         if (element.Name.NamespaceName != OoxmlNamespaces.WordprocessingML)
         {
             // Anything outside the WordprocessingML namespace at block level is markup a

@@ -463,6 +463,9 @@ public sealed partial class RtfDocumentReader
         /// and that text is only concatenated once the paragraph closes.
         /// </remarks>
         public int LayoutLength { get; set; }
+
+        /// <summary>The bookmarks the paragraph being built holds, with the offsets of its text they sit at.</summary>
+        public List<RtfLayoutAnchor> LayoutAnchors { get; } = [];
         public RunEmphasis PendingEmphasis { get; set; }
         public string? PendingStyleName { get; set; }
         public string? PendingLanguage { get; set; }
@@ -831,6 +834,12 @@ public sealed partial class RtfDocumentReader
 
     private int _groupDepth;
     private string? _fieldHyperlink;
+
+    /// <summary>
+    /// Where the open <c>HYPERLINK</c> field leads, in the form layout wants: an address, or <c>#name</c> for
+    /// a bookmark. <see cref="_fieldHyperlink"/> is the extraction side's and does not tell the two apart.
+    /// </summary>
+    private string? _fieldLink;
     private int _fieldDepth = -1;
 
     // ------------------------------------------------------------------------ text
@@ -1245,7 +1254,8 @@ public sealed partial class RtfDocumentReader
             state.Underline,
             state.Strike,
             state.AutoKerning,
-            state.WidthPerCent);
+            state.WidthPerCent,
+            _fieldLink ?? state.HyperlinkTarget);
 
         flow.LayoutLength += length;
 
@@ -1333,6 +1343,8 @@ public sealed partial class RtfDocumentReader
 
             runs.Insert(0, CitationRun(state, 0, prefix.Length));
             text = prefix + text;
+
+            foreach (RtfLayoutAnchor anchor in flow.LayoutAnchors) anchor.Offset += prefix.Length;
         }
 
         RtfLayoutParagraph recorded = new(
@@ -1389,7 +1401,9 @@ public sealed partial class RtfDocumentReader
             // which trims to nothing rather than to a label made of whitespace.
             flow.ListMarker.ToString().Trim() is { Length: > 0 } marker ? marker : null,
             state.AutoKerning,
-            state.WidthPerCent);
+            state.WidthPerCent,
+            flow.LayoutAnchors.Count == 0 ? null : [.. flow.LayoutAnchors],
+            HeadingLevelOf(state) ?? 0);
 
         if (cell is not null) cell.Add(new RtfLayoutBlock(recorded));
         else into!.Add(recorded);
@@ -1560,6 +1574,7 @@ public sealed partial class RtfDocumentReader
     private static void ResetParagraphState(Flow flow)
     {
         flow.LayoutRuns.Clear();
+        flow.LayoutAnchors.Clear();
         flow.LayoutLength = 0;
         flow.PendingNotes.Clear();
         flow.PendingFrames.Clear();
@@ -1872,6 +1887,7 @@ public sealed partial class RtfDocumentReader
             case RtfDestination.FieldInstruction:
                 _fieldInstruction = state.Collected.ToString();
                 _fieldHyperlink = FieldInstructions.HyperlinkTarget(_fieldInstruction) ?? _fieldHyperlink;
+                _fieldLink = FieldInstructions.HyperlinkReference(_fieldInstruction) ?? _fieldLink;
                 break;
 
             case RtfDestination.RevisionTable:
@@ -1913,6 +1929,7 @@ public sealed partial class RtfDocumentReader
         if (_fieldDepth >= 0 && _groupDepth <= _fieldDepth)
         {
             _fieldHyperlink = null;
+            _fieldLink = null;
             _fieldDepth = -1;
         }
 

@@ -136,7 +136,13 @@ internal static class RenderCommand
         {
             string file = Path.Combine(directory, stem + ".pdf");
             using FileStream output = File.Create(file);
-            new PdfRenderer(new PdfRenderOptions { CreationDate = PinnedDate() })
+            PdfRenderer pdfRenderer = new(new PdfRenderOptions { CreationDate = PinnedDate() });
+
+            // The whole document through the overload that knows it, so the file carries its title,
+            // author and language and a deck's slides are named in the outline; a page selection has no
+            // such pairing (the outline would name the wrong slides), so it takes the metadata alone.
+            if (chosen.Count == pages.Count) pdfRenderer.Render(document, pages, output);
+            else new PdfRenderer(new PdfRenderOptions { CreationDate = PinnedDate(), Metadata = document.Metadata })
                 .Render(chosen, output);
 
             if (!options.Quiet) Console.WriteLine($"{file}: {chosen.Count} page(s)");

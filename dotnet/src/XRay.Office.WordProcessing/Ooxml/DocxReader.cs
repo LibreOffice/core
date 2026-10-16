@@ -310,6 +310,9 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
     /// this library's TODO.
     /// </remarks>
     public IPageSequence Layout(LayoutOptions? options = null)
+        => XRay.Office.Core.Threading.OfficeOperation.Layout(options, () => LayoutCore(options));
+
+    private WordProcessingPages LayoutCore(LayoutOptions? options)
     {
         XElement? body = _file.Body;
         if (body is null) return new WordProcessingPages([]);
@@ -324,6 +327,10 @@ public sealed class OoxmlWordDocument : IWordProcessingDocument, IPaginatedDocum
             // Only so the reader can tell a continuous break from a page-starting one when it hands a
             // dropped section mark's space-after on. See `DocxLayoutSource.HandOnBelowSpacing`.
             SectionBreaks = [.. Sections.Select(section => section.Break)],
+
+            // The body's own relationships, which is what a hyperlink in the body names; the source
+            // declines to use them for a header, a footer or a note. See `DocxLayoutSource.LinksResolvable`.
+            LinkTarget = id => _file.Relationship(id) is { IsExternal: true } found ? found.Target : null,
         };
         List<PageBlock> blocks = source.Read(body);
 

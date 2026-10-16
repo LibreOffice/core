@@ -2,6 +2,7 @@ using System.Buffers.Binary;
 using System.Text;
 using XRay.Office.Core.Diagnostics;
 using XRay.Office.Text.Encodings;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Spreadsheets.MsBinary;
 
@@ -136,6 +137,7 @@ public sealed class BiffRecordReader
 
         while (true)
         {
+            OfficeOperation.Poll();
             if (position < 0 || position + 4 > _data.Length)
             {
                 IsValid = false;

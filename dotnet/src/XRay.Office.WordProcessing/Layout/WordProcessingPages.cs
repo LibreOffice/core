@@ -1,4 +1,5 @@
 using XRay.Office.Core.Documents;
+using XRay.Office.Core.Threading;
 using XRay.Office.Core.Geometry;
 using XRay.Office.Core.Graphics;
 
@@ -24,7 +25,9 @@ public sealed class WordProcessingPages : IPageSequence
         Blocks = blocks ?? [];
         // A page may carry a block list of its own — an endnote page does — and its lines index into that
         // one rather than into the body's.
-        _pages = [.. pages.Select(page => new PageView(page, page.Blocks ?? Blocks))];
+        long maxImagePixels = OfficeOperation.MaxImagePixels;
+        OversizedImagePolicy oversized = OfficeOperation.OversizedImages;
+        _pages = [.. pages.Select(page => new PageView(page, page.Blocks ?? Blocks, maxImagePixels, oversized))];
     }
 
     /// <inheritdoc/>
@@ -71,8 +74,16 @@ public sealed class WordProcessingPages : IPageSequence
         return line.Box.Line.VisibleTextIn(paragraph.Text).ToString();
     }
 
-    private sealed class PageView(LaidOutPage laid, IReadOnlyList<PageBlock> blocks) : IPage
+    private sealed class PageView(
+        LaidOutPage laid, IReadOnlyList<PageBlock> blocks, long maxImagePixels, OversizedImagePolicy oversized)
+        : IPage, IPageRenderLimits
     {
+        /// <inheritdoc/>
+        public long MaxImagePixels => maxImagePixels;
+
+        /// <inheritdoc/>
+        public OversizedImagePolicy OversizedImages => oversized;
+
         internal LaidOutPage Laid { get; } = laid;
 
         /// <inheritdoc/>

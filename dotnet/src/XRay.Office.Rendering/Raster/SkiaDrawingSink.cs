@@ -1,4 +1,6 @@
+using XRay.Office.Core.Documents;
 using XRay.Office.Core.Geometry;
+using XRay.Office.Core.Threading;
 using XRay.Office.Core.Graphics;
 using XRay.Office.Core.Units;
 using XRay.Office.Text.Fonts;
@@ -53,6 +55,12 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
         _scale = (float)(options.Dpi / Length.EmuPerInch);
     }
 
+    /// <summary>See <see cref="LayoutOptions.MaxImagePixels"/>; set from the page being drawn.</summary>
+    public long MaxImagePixels { get; set; }
+
+    /// <summary>See <see cref="LayoutOptions.OversizedImages"/>; set from the page being drawn.</summary>
+    public OversizedImagePolicy OversizedImages { get; set; }
+
     /// <inheritdoc/>
     public void BeginPage(DocSize size) => _canvas.Save();
 
@@ -88,6 +96,7 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
     /// <inheritdoc/>
     public void FillPath(GraphicsPath path, Paint paint, FillRule rule = FillRule.NonZero)
     {
+        OfficeOperation.Poll();
         ArgumentNullException.ThrowIfNull(path);
         ArgumentNullException.ThrowIfNull(paint);
 
@@ -211,6 +220,7 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
     /// <inheritdoc/>
     public void DrawGlyphRun(GlyphRun run, Paint paint)
     {
+        OfficeOperation.Poll();
         ArgumentNullException.ThrowIfNull(run);
         ArgumentNullException.ThrowIfNull(paint);
         if (run.Glyphs.Count == 0) return;
@@ -408,6 +418,7 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
     public void DrawImage(RasterImage image, DocRect destination, double opacity = 1.0)
     {
         ArgumentNullException.ThrowIfNull(image);
+        OfficeOperation.ThrowIfCancelled();
         // Not `image.Width <= 0`: a reader may hand over an image it has not decoded, and an
         // undecoded one reports no size until a codec has looked at it. Testing the size here
         // dropped every `RasterImage.Encoded` silently — laying out correctly and drawing nothing.
@@ -663,10 +674,15 @@ internal sealed class SkiaDrawingSink : IDrawingSink, IDisposable
     /// outlives the call that made it — a shader holds one for as long as the paint does —
     /// and a pinned array freed at the end of the call would leave it reading released memory.
     /// </remarks>
-    private static SKImage? Image(RasterImage image)
+    private SKImage? Image(RasterImage image)
     {
-        // A reader hands over the bytes the file stored; the codec lives here.
-        if (Images.RasterImageDecoder.Ensure(image) is not { } decoded) return null;
+        // A reader hands over the bytes the file stored; the codec lives here. The stricter of the page's
+        // own picture limit (chosen at layout) and the renderer's applies.
+        long limit = Images.RasterImageDecoder.Stricter(MaxImagePixels, _options.MaxImagePixels);
+        OversizedImagePolicy policy = limit == _options.MaxImagePixels && _options.MaxImagePixels > 0
+            ? _options.OversizedImages
+            : OversizedImages;
+        if (Images.RasterImageDecoder.Ensure(image, limit, policy) is not { } decoded) return null;
         image = decoded;
 
         if (image.Pixels.Length < image.Width * image.Height * 4) return null;

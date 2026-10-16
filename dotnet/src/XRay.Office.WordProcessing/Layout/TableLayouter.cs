@@ -1,6 +1,7 @@
 using XRay.Office.Core.Geometry;
 using XRay.Office.Core.Units;
 using XRay.Office.Text.Layout;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.WordProcessing.Layout;
 
@@ -87,6 +88,7 @@ public static class TableLayouter
 
         for (int row = 0; row < rows; row++)
         {
+            OfficeOperation.ThrowIfCancelled();
             foreach (PageTableCell cell in table.Rows[row].Cells)
             {
                 Length width = WidthOf(cell, lefts);

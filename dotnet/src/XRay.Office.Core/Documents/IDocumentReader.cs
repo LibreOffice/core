@@ -30,10 +30,18 @@ public interface IDocumentReader
     /// The document is encrypted and no usable password was supplied.
     /// </exception>
     IDocument Read(DocumentSource source);
+
+    /// <summary>
+    /// Reads a document, checking <paramref name="cancellationToken"/> while it is parsed.
+    /// </summary>
+    /// <param name="source">The bytes to read, and any options needed to read them.</param>
+    /// <param name="cancellationToken">Cancels the read with <see cref="OperationCanceledException"/>.</param>
+    IDocument Read(DocumentSource source, CancellationToken cancellationToken)
+        => Threading.OfficeOperation.Run(() => Read(source), cancellationToken);
 }
 
 /// <summary>
-/// The input to <see cref="IDocumentReader.Read"/>: where the bytes come from,
+/// The input to <see cref="IDocumentReader.Read(DocumentSource)"/>: where the bytes come from,
 /// plus the options that affect how they are interpreted.
 /// </summary>
 public sealed class DocumentSource : IDisposable

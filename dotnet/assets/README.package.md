@@ -46,6 +46,17 @@ using (FileStream png = File.Create("slide1.png"))
 
 The format is always identified from the content, never from the file extension.
 
+## Cancelling and limiting
+
+Every call that does real work has an overload taking a `CancellationToken` and throws
+`OperationCanceledException` when it fires: `OfficeDocument.Open` and `Extract`,
+`IPaginatedDocument.Layout`, `PdfRenderer.Render`, `RasterRenderer.Render`, `SheetHtmlWriter.Write`.
+`LayoutOptions` also carries `MaxPages`, a wall-clock `Timeout` (which throws `LayoutTimeoutException`, a
+subtype of `OperationCanceledException`, so it can be told apart from a caller's cancellation) and
+`MaxImagePixels`, which leaves pictures larger than that unread. `PdfRenderer` writes to the stream as it
+goes, so a temp file can take a very large document, and it writes the document's title, author and
+language, a link for every hyperlink and cross-reference, and an outline of its headings.
+
 ## Packages
 
 | Package | Contents |

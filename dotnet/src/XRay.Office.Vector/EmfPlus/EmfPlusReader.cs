@@ -4,6 +4,7 @@ using XRay.Office.Core.Graphics;
 using XRay.Office.Core.Units;
 using XRay.Office.Text.Fonts;
 using XRay.Office.Vector.Metafiles;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Vector.EmfPlus;
 
@@ -169,6 +170,7 @@ internal sealed class EmfPlusReader
 
         while (stream.Remaining >= 12 && !_budget.IsExhausted)
         {
+            OfficeOperation.Poll();
             int at = stream.Offset;
 
             ushort type = stream.U16();

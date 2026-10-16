@@ -195,6 +195,9 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
     /// </para>
     /// </remarks>
     public IPageSequence Layout(LayoutOptions? options = null)
+        => XRay.Office.Core.Threading.OfficeOperation.Layout(options, () => LayoutCore(options));
+
+    private WordProcessingPages LayoutCore(LayoutOptions? options)
     {
         // Every document is measured on a device's pixel grid; the flag only chooses which. A document
         // asking for printer metrics gets the printer's, which rounds every font metric and is worth up to
@@ -705,6 +708,8 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 BlanksAreTransparentToHeight = true,
                 Runs = runs,
                 Fields = paragraph.Fields ?? [],
+                Anchors = paragraph.Anchors ?? [],
+                OutlineLevel = paragraph.OutlineLevel,
                 Notes = NotesOf(fonts, paragraph.Notes),
                 Frames = WithCheckBoxes(
                     FramesOf(
@@ -1258,7 +1263,10 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 // missing from this list: an italic run whose family has no italic installed resolves to
                 // the *same* face as its upright neighbour, so nothing above can see it and the fold
                 // would draw it upright. See PageRun.LeansDifferently.
-                || PageRun.LeansDifferently(font, paragraphFont))
+                || PageRun.LeansDifferently(font, paragraphFont)
+                // A link keeps its own run even when formatted like its neighbours: the run is what the
+                // clickable area is cut from.
+                || run.Link is not null)
             {
                 varies = true;
             }
@@ -1278,7 +1286,8 @@ public sealed class Ww8Document : IWordProcessingDocument, IPaginatedDocument
                 Underline: run.Underline,
                 IsStruckThrough: run.IsStruckThrough,
                 Tracking: run.Tracking,
-                WidthPerCent: run.WidthPerCent));
+                WidthPerCent: run.WidthPerCent,
+                Link: run.Link));
         }
 
         return varies ? runs : [];

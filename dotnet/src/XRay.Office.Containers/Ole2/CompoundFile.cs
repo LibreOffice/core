@@ -3,6 +3,7 @@ using System.Text;
 using XRay.Office.Core;
 using XRay.Office.Core.Diagnostics;
 using XRay.Office.Core.Formats;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Containers.Ole2;
 
@@ -231,6 +232,7 @@ public sealed class CompoundFile : IPackage
 
         while (sector <= MaxRegularSector && guard++ < MaxChainLength)
         {
+            OfficeOperation.Poll();
             if (!TryReadSector(sector, buffer))
             {
                 Warn("PL1104", $"DIFAT sector {sector} lies outside the file; truncating the DIFAT here.");
@@ -535,6 +537,7 @@ public sealed class CompoundFile : IPackage
 
         while (sector <= MaxRegularSector && remaining > 0 && guard++ < limit)
         {
+            OfficeOperation.Poll();
             bool ok = useMiniFat ? TryReadMiniSector(sector, buffer) : TryReadSector(sector, buffer);
             if (!ok)
             {
@@ -686,6 +689,10 @@ public sealed class CompoundFile : IPackage
         /// </remarks>
         public long Length => owner.ExtentOfPart(entry);
 
-        public Stream Open() => new MemoryStream(owner.ReadEntry(entry), writable: false);
+        public Stream Open()
+        {
+            OfficeOperation.ThrowIfCancelled();
+            return new MemoryStream(owner.ReadEntry(entry), writable: false);
+        }
     }
 }

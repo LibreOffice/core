@@ -67,6 +67,9 @@ public sealed class OdpDocument : IPaginatedDocument
     /// and the notes one is A4 portrait in everything LibreOffice writes.
     /// </remarks>
     public IPageSequence Layout(LayoutOptions? options = null)
+        => XRay.Office.Core.Threading.OfficeOperation.Layout(options, () => LayoutCore(options));
+
+    private SlidePages LayoutCore(LayoutOptions? options)
     {
         List<LaidOutSlide> slides = new OdpSlideLayout(_inner.File, new SlideFonts()).Layout();
 

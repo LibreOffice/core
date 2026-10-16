@@ -1,5 +1,7 @@
 using System.Runtime.InteropServices;
+using XRay.Office.Core.Documents;
 using XRay.Office.Core.Graphics;
+using XRay.Office.Core.Threading;
 using SkiaSharp;
 
 namespace XRay.Office.Rendering.Images;
@@ -49,8 +51,27 @@ public static class RasterImageDecoder
     /// every other shape on it. A caller that wants to say so records a <c>Diagnostic</c>.
     /// </remarks>
     public static RasterImage? Decode(ReadOnlyMemory<byte> encoded, string? declaredMediaType = null)
+        => Decode(encoded, declaredMediaType, 0, OversizedImagePolicy.Skip);
+
+    /// <summary>
+    /// Decodes a picture unless it is larger than <paramref name="maxPixels"/>.
+    /// </summary>
+    /// <param name="encoded">The picture as it was stored in the document.</param>
+    /// <param name="declaredMediaType">What the document said it was, if anything.</param>
+    /// <param name="maxPixels">The most pixels (width times height) to decode; zero for no limit.</param>
+    /// <param name="oversized">What to do with a picture over the limit.</param>
+    /// <remarks>
+    /// The size is read from the header, which Skia does without allocating the pixels, so an oversized
+    /// picture costs a header read and nothing more. <see cref="OversizedImagePolicy.Downscale"/> asks
+    /// the codec for a reduced-size decode (JPEG offers 1/2, 1/4 and 1/8), and a picture whose codec
+    /// cannot is skipped: decoding in full and shrinking afterwards would spend the memory the limit
+    /// exists to save.
+    /// </remarks>
+    public static RasterImage? Decode(
+        ReadOnlyMemory<byte> encoded, string? declaredMediaType, long maxPixels, OversizedImagePolicy oversized)
     {
         if (encoded.IsEmpty) return null;
+        OfficeOperation.ThrowIfCancelled();
 
         string? mediaType = Sniff(encoded.Span) ?? declaredMediaType;
 
@@ -58,6 +79,13 @@ public static class RasterImageDecoder
         {
             using SKImage? image = FromEncoded(encoded.Span);
             if (image is null || image.Width <= 0 || image.Height <= 0) return null;
+
+            if (maxPixels > 0 && (long)image.Width * image.Height > maxPixels)
+            {
+                return oversized == OversizedImagePolicy.Downscale
+                    ? DecodeReduced(encoded.Span, maxPixels, mediaType)
+                    : null;
+            }
 
             SKImageInfo info = new(image.Width, image.Height, SKColorType.Rgba8888, SKAlphaType.Unpremul);
             byte[] pixels = new byte[checked(info.RowBytes * info.Height)];
@@ -119,13 +147,28 @@ public static class RasterImageDecoder
     /// that fails to draw.
     /// </remarks>
     public static RasterImage? Ensure(RasterImage image)
+        => Ensure(image, 0, OversizedImagePolicy.Skip);
+
+    /// <summary>The smaller of two pixel limits, where zero means "no limit" and so loses to any other.</summary>
+    public static long Stricter(long a, long b) => a <= 0 ? Math.Max(b, 0) : b <= 0 ? a : Math.Min(a, b);
+
+    /// <summary>
+    /// <see cref="Ensure(RasterImage)"/> with a limit on how large a picture is decoded; see
+    /// <see cref="Decode(ReadOnlyMemory{byte}, string?, long, OversizedImagePolicy)"/>.
+    /// </summary>
+    public static RasterImage? Ensure(RasterImage image, long maxPixels, OversizedImagePolicy oversized)
     {
         ArgumentNullException.ThrowIfNull(image);
 
-        if (image.IsDecoded) return Recoloured(image);
+        if (image.IsDecoded)
+        {
+            // Already pixels: the memory is spent, so the limit can only decide whether it is drawn.
+            return maxPixels > 0 && (long)image.Width * image.Height > maxPixels ? null : Recoloured(image);
+        }
+
         if (image.EncodedBytes.IsEmpty) return null;
 
-        RasterImage? decoded = Decode(image.EncodedBytes, image.EncodedMediaType);
+        RasterImage? decoded = Decode(image.EncodedBytes, image.EncodedMediaType, maxPixels, oversized);
 
         // The original bytes are kept, so a JPEG can still pass through to DCTDecode
         // untouched even though it had to be decoded here to learn its size.
@@ -133,7 +176,9 @@ public static class RasterImageDecoder
             ? null
             : Recoloured(decoded with
               {
-                  EncodedBytes = image.EncodedBytes,
+                  // A reduced-size decode carries no bytes of its own, and must not be given the
+                  // original's, which would pass the full-size picture through to a PDF.
+                  EncodedBytes = decoded.EncodedBytes.IsEmpty ? default : image.EncodedBytes,
                   EncodedMediaType = image.EncodedMediaType,
 
                   // Every pending recolouring has to be carried across the decode by hand,
@@ -315,6 +360,51 @@ public static class RasterImageDecoder
         if (encoded.Length >= 4 && encoded[0] == 0 && encoded[1] == 0 && encoded[2] is 1 or 2 && encoded[3] == 0)
         {
             return "image/vnd.microsoft.icon";
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Decodes at the largest reduced scale that brings the picture under the limit, or returns null
+    /// when the codec offers none.
+    /// </summary>
+    private static RasterImage? DecodeReduced(ReadOnlySpan<byte> encoded, long maxPixels, string? mediaType)
+    {
+        using SKData data = SKData.CreateCopy(encoded.ToArray());
+        using SKCodec? codec = SKCodec.Create(data);
+        if (codec is null) return null;
+
+        foreach (float scale in (ReadOnlySpan<float>)[0.5f, 0.25f, 0.125f])
+        {
+            SKSizeI size = codec.GetScaledDimensions(scale);
+            if (size.Width <= 0 || size.Height <= 0 || (long)size.Width * size.Height > maxPixels) continue;
+            if (size.Width == codec.Info.Width && size.Height == codec.Info.Height) continue;
+
+            SKImageInfo info = new(size.Width, size.Height, SKColorType.Rgba8888, SKAlphaType.Unpremul);
+            byte[] pixels = new byte[checked(info.RowBytes * info.Height)];
+
+            GCHandle pin = GCHandle.Alloc(pixels, GCHandleType.Pinned);
+            try
+            {
+                if (codec.GetPixels(info, pin.AddrOfPinnedObject(), info.RowBytes, new SKCodecOptions()) is not
+                    (SKCodecResult.Success or SKCodecResult.IncompleteInput))
+                    return null;
+            }
+            finally
+            {
+                pin.Free();
+            }
+
+            // The original bytes are deliberately not carried: a JPEG passed through to a PDF would put
+            // the full-size picture back in the file the limit was set to keep small.
+            return new RasterImage
+            {
+                Width = size.Width,
+                Height = size.Height,
+                Pixels = pixels,
+                EncodedMediaType = mediaType,
+            };
         }
 
         return null;

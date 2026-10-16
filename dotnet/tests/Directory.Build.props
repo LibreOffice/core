@@ -1,0 +1,16 @@
+<Project>
+
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    <!--
+      xUnit1051 asks every call to a method that has a CancellationToken overload to pass
+      TestContext.Current.CancellationToken. The public API gained token overloads
+      (OfficeDocument.Open, IPaginatedDocument.Layout, PdfRenderer.Render, ...), and the existing
+      suites call the token-free forms on purpose: they are what the token-free API is tested by. The
+      new cancellation tests pass their own tokens explicitly.
+    -->
+    <NoWarn>$(NoWarn);xUnit1051</NoWarn>
+  </PropertyGroup>
+
+</Project>

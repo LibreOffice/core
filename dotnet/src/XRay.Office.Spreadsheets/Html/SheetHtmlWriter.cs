@@ -1,3 +1,4 @@
+using XRay.Office.Core.Threading;
 using System.Globalization;
 using System.Text;
 using XRay.Office.Core.Extraction;
@@ -73,11 +74,25 @@ public static class SheetHtmlWriter
     /// <param name="output">Where to write. Left open.</param>
     /// <param name="options">What to include, or null for <see cref="SheetHtmlOptions.Default"/>.</param>
     public static void Write(SpreadsheetPages pages, Stream output, SheetHtmlOptions? options = null)
+        => Write(pages, output, options, CancellationToken.None);
+
+    /// <summary>Writes a workbook's sheets as HTML, checking <paramref name="cancellationToken"/> row by row.</summary>
+    /// <remarks>
+    /// The HTML is written to <paramref name="output"/> as each row is produced, so memory does not grow with
+    /// the sheet. A cancelled write throws <see cref="OperationCanceledException"/> and leaves the partial
+    /// document in the stream.
+    /// </remarks>
+    /// <param name="pages">The laid-out workbook, whose <see cref="SpreadsheetPages.Sheets"/> is read.</param>
+    /// <param name="output">Where to write. Left open.</param>
+    /// <param name="options">What to include, or null for <see cref="SheetHtmlOptions.Default"/>.</param>
+    /// <param name="cancellationToken">Cancels the write.</param>
+    public static void Write(
+        SpreadsheetPages pages, Stream output, SheetHtmlOptions? options, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(pages);
         ArgumentNullException.ThrowIfNull(output);
 
-        Write(pages.Sheets, output, options);
+        Write(pages.Sheets, output, options, cancellationToken);
     }
 
     /// <summary>Writes a set of sheets as HTML.</summary>
@@ -86,9 +101,32 @@ public static class SheetHtmlWriter
     /// <param name="options">What to include, or null for <see cref="SheetHtmlOptions.Default"/>.</param>
     public static void Write(
         IReadOnlyList<SheetLayout> sheets, Stream output, SheetHtmlOptions? options = null)
+        => Write(sheets, output, options, CancellationToken.None);
+
+    /// <summary>Writes a set of sheets as HTML, checking <paramref name="cancellationToken"/> row by row.</summary>
+    /// <param name="sheets">The sheets, in workbook order.</param>
+    /// <param name="output">Where to write. Left open.</param>
+    /// <param name="options">What to include, or null for <see cref="SheetHtmlOptions.Default"/>.</param>
+    /// <param name="cancellationToken">Cancels the write.</param>
+    public static void Write(
+        IReadOnlyList<SheetLayout> sheets,
+        Stream output,
+        SheetHtmlOptions? options,
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(sheets);
         ArgumentNullException.ThrowIfNull(output);
+
+        OfficeOperation.Run(() =>
+        {
+            WriteCore(sheets, output, options);
+            return true;
+        }, cancellationToken);
+    }
+
+    private static void WriteCore(
+        IReadOnlyList<SheetLayout> sheets, Stream output, SheetHtmlOptions? options)
+    {
 
         SheetHtmlOptions settings = options ?? SheetHtmlOptions.Default;
 
@@ -448,6 +486,7 @@ public static class SheetHtmlWriter
 
         for (int row = used.FirstRow; row <= used.LastRow; row++)
         {
+            OfficeOperation.Poll();
             if (sheet.Grid.Rows.IsHidden(row)) continue;
 
             writer.WriteLine("\t<tr>");

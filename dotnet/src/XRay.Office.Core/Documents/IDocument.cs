@@ -35,7 +35,7 @@ public interface IDocument : IDisposable
     /// <remarks>
     /// Populated when the document is read rather than on demand: parsing the file is the
     /// work, and a reader that has parsed it has already produced this. The expensive,
-    /// deferred step is <see cref="IPaginatedDocument.Layout"/>, which is why that is a
+    /// deferred step is <see cref="IPaginatedDocument.Layout(LayoutOptions?)"/>, which is why that is a
     /// method and this is a property.
     /// </remarks>
     Extraction.ContentDocument Content { get; }
@@ -67,6 +67,27 @@ public interface IPaginatedDocument : IDocument
     /// </remarks>
     /// <param name="options">Layout options; pass <c>null</c> for the defaults.</param>
     IPageSequence Layout(LayoutOptions? options = null);
+
+    /// <summary>
+    /// Lays the document out, checking <paramref name="cancellationToken"/> as it goes.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Throws <see cref="OperationCanceledException"/> when the token is cancelled, and
+    /// <see cref="Threading.LayoutTimeoutException"/> (also an <see cref="OperationCanceledException"/>)
+    /// when <see cref="LayoutOptions.Timeout"/> runs out first. The checks sit at the loops that bound
+    /// latency: each paragraph, line and table row of a word-processing document, each row strip and
+    /// formula pass of a spreadsheet, each slide and shape of a deck.
+    /// </para>
+    /// <para>
+    /// A default interface method, so an implementation written against the earlier interface keeps
+    /// compiling; ours override nothing and pick the scope up from here.
+    /// </para>
+    /// </remarks>
+    /// <param name="options">Layout options; pass <c>null</c> for the defaults.</param>
+    /// <param name="cancellationToken">Cancels the layout.</param>
+    IPageSequence Layout(LayoutOptions? options, CancellationToken cancellationToken)
+        => Threading.OfficeOperation.Run(() => Layout(options), cancellationToken);
 }
 
 /// <summary>The pages produced by laying out a document.</summary>
@@ -131,4 +152,60 @@ public sealed record LayoutOptions
     /// deletions are shown with change marks, as LibreOffice does by default.
     /// </summary>
     public bool AcceptTrackedChanges { get; init; }
+
+    /// <summary>
+    /// A wall-clock limit for <see cref="IPaginatedDocument.Layout(LayoutOptions?)"/>, as a guard
+    /// against documents that lay out for minutes. Null, or a non-positive value, means no limit.
+    /// </summary>
+    /// <remarks>
+    /// Exceeding it throws <see cref="Threading.LayoutTimeoutException"/>, which derives from
+    /// <see cref="OperationCanceledException"/> but is distinguishable from the caller cancelling a
+    /// token. The limit covers layout only; rendering the pages is bounded by its own token.
+    /// </remarks>
+    public TimeSpan? Timeout { get; init; }
+
+    /// <summary>
+    /// The largest embedded picture, in pixels (width times height), that is decoded when the pages
+    /// are rendered. Zero means unlimited.
+    /// </summary>
+    /// <remarks>
+    /// A header is read to learn the size before any pixel is, so a poster-sized scan costs a
+    /// header read and not a gigabyte. What happens to a picture over the limit is
+    /// <see cref="OversizedImages"/>. The limit travels with the laid-out pages, so the PDF and
+    /// raster renderers apply it without being told; a renderer's own option, if set, is applied as
+    /// well and the stricter of the two wins.
+    /// </remarks>
+    public long MaxImagePixels { get; init; }
+
+    /// <summary>What happens to a picture larger than <see cref="MaxImagePixels"/>.</summary>
+    public OversizedImagePolicy OversizedImages { get; init; }
+}
+
+/// <summary>What a renderer does with a picture over the pixel limit.</summary>
+public enum OversizedImagePolicy
+{
+    /// <summary>The picture is left out; the rest of the page is drawn as usual.</summary>
+    Skip = 0,
+
+    /// <summary>
+    /// The picture is decoded at a reduced size when its codec can do that cheaply (JPEG decodes
+    /// at 1/2, 1/4 or 1/8 scale), and left out when it cannot.
+    /// </summary>
+    Downscale = 1,
+}
+
+/// <summary>
+/// Implemented by a page that carries rendering limits chosen when the document was laid out.
+/// </summary>
+/// <remarks>
+/// A renderer asks each page, so that <see cref="LayoutOptions.MaxImagePixels"/> reaches the decoder
+/// without the caller having to repeat it as a renderer option.
+/// </remarks>
+public interface IPageRenderLimits
+{
+    /// <summary>See <see cref="LayoutOptions.MaxImagePixels"/>.</summary>
+    long MaxImagePixels { get; }
+
+    /// <summary>See <see cref="LayoutOptions.OversizedImages"/>.</summary>
+    OversizedImagePolicy OversizedImages { get; }
 }

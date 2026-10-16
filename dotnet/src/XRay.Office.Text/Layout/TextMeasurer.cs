@@ -1,6 +1,7 @@
 using XRay.Office.Core.Units;
 using XRay.Office.Text.Fonts;
 using XRay.Office.Text.Shaping;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Text.Layout;
 
@@ -346,6 +347,7 @@ public sealed class LineFiller
 
         while (lineStart < text.Length)
         {
+            OfficeOperation.Poll();
             Length limit = widthOfLine is not null
                 ? widthOfLine(lines.Count, lines)
                 : lines.Count == 0 ? firstLineWidth ?? availableWidth : availableWidth;

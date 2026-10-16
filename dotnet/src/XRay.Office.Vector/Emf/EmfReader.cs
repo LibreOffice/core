@@ -6,6 +6,7 @@ using XRay.Office.Core.Graphics;
 using XRay.Office.Core.Units;
 using XRay.Office.Vector.EmfPlus;
 using XRay.Office.Vector.Metafiles;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Vector.Emf;
 
@@ -293,6 +294,7 @@ internal sealed class EmfReader
         while (!_failed && !_budget.IsExhausted && _recordsLeft-- > 0)
         {
             int start = _position;
+            OfficeOperation.Poll();
             uint type = U32();
             uint size = U32();
 

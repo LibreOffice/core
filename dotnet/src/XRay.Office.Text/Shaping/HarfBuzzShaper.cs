@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using HarfBuzzSharp;
 using XRay.Office.Text.Fonts;
 using Buffer = HarfBuzzSharp.Buffer;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Text.Shaping;
 
@@ -73,6 +74,7 @@ public sealed class HarfBuzzShaper : ITextShaper, IDisposable
     public ShapedText Shape(OpenTypeFace face, ReadOnlySpan<char> text, ShapingOptions options = default)
     {
         ArgumentNullException.ThrowIfNull(face);
+        OfficeOperation.Poll();
         ObjectDisposedException.ThrowIf(_disposed, this);
 
         if (text.Length == 0) return new ShapedText([], [0], face.UnitsPerEm);

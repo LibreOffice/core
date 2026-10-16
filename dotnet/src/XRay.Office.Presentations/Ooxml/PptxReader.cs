@@ -223,6 +223,9 @@ public sealed class PptxDocument : IDocument, IPaginatedDocument
     /// </para>
     /// </remarks>
     public IPageSequence Layout(LayoutOptions? options = null)
+        => XRay.Office.Core.Threading.OfficeOperation.Layout(options, () => LayoutCore(options));
+
+    private SlidePages LayoutCore(LayoutOptions? options)
     {
         int limit = options?.MaxPages ?? 0;
         PptxSlideLayout layout = new(_file, new SlideFonts());

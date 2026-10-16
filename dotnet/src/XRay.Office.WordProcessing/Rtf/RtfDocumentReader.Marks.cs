@@ -76,6 +76,9 @@ public sealed partial class RtfDocumentReader
     /// after the first lands on the bookmark before it.</remarks>
     private readonly RtfBookmarkRotation _bookmarkNames = new();
 
+    /// <summary>The layout places of bookmarks that have opened and not yet closed, by id.</summary>
+    private readonly Dictionary<int, RtfLayoutAnchor> _openLayoutAnchors = [];
+
     /// <summary>The depth of the group a <c>\bkmkstart</c> or <c>\bkmkend</c> opened.</summary>
     /// <remarks>
     /// <para>
@@ -134,6 +137,21 @@ public sealed partial class RtfDocumentReader
 
         RtfBookmarkRotation.Half half = _bookmarkNames.Take(name, start);
         string key = half.Id.ToString(CultureInfo.InvariantCulture);
+
+        // A named place in the paragraph being laid out, for a PDF's destinations. The name is the one the
+        // reference settles on, which is the one a link to it names, and which is known only when the
+        // closing half arrives — so the place is recorded now and named then.
+        if (half.Opens)
+        {
+            Flow flow = CurrentFlow;
+            RtfLayoutAnchor anchor = new() { Offset = flow.LayoutLength };
+            flow.LayoutAnchors.Add(anchor);
+            _openLayoutAnchors[half.Id] = anchor;
+        }
+        else if (_openLayoutAnchors.Remove(half.Id, out RtfLayoutAnchor? opened))
+        {
+            opened.Name = half.Name;
+        }
 
         if (half.Opens) _marks.OpenBookmark(key, half.Name, Here());
         else _marks.CloseBookmark(key, Here(), half.Name);

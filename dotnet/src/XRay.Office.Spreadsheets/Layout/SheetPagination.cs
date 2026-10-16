@@ -1,4 +1,5 @@
 using XRay.Office.Core.Units;
+using XRay.Office.Core.Threading;
 
 namespace XRay.Office.Spreadsheets.Layout;
 
@@ -165,6 +166,7 @@ public static class SheetPagination
 
         void Add(int bandX, int bandY)
         {
+            OfficeOperation.ThrowIfCancelled();
             int firstColumn = bandX == 0 ? area.FirstColumn : columnEnds[bandX - 1] + 1;
             int lastColumn = columnEnds[bandX];
             (int firstRow, int lastRow) = rowBands[bandY];
@@ -328,6 +330,7 @@ public static class SheetPagination
 
             while (zoom > MinimumZoom)
             {
+                OfficeOperation.ThrowIfCancelled();
                 if (fits(zoom))
                 {
                     if (zoom == 100) return 100;
