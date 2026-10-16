@@ -927,6 +927,55 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteDestColor)
     CPPUNIT_ASSERT_EQUAL(nOrange, pColor->GetValue());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteJoinedKeepsDestColor)
+{
+    // Given a Writer document with a paragraph that has a non-default font color
+    // and the cursor in the middle of its text:
+    createSwDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SfxItemSetFixed<RES_CHRATR_COLOR, RES_CHRATR_COLOR> aColorSet(pWrtShell->GetAttrPool());
+    Color nOrange(0xffcc00);
+    aColorSet.Put(SvxColorItem(nOrange, RES_CHRATR_COLOR));
+    pWrtShell->SetAttrSet(aColorSet);
+    pWrtShell->Insert(u"AAAZZZ"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+
+    // When merged-pasting an HTML snippet where part of the run has no explicit color:
+    pDoc->SetInMergedPaste(true);
+    comphelper::ScopeGuard g([pDoc] { pDoc->SetInMergedPaste(false); });
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"Name"_ustr, createFileURL(u"merged-paste.html")) };
+    dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aArgs);
+
+    // Then the uncolored portion of the pasted content, joined into the
+    // destination paragraph, inherits that paragraph's font color:
+    SwTextNode* pTextNode = nullptr;
+    sal_Int32 nPlain = -1;
+    SwNodes& rNodes = pDoc->GetNodes();
+    for (SwNodeOffset i(0); i < rNodes.Count(); ++i)
+    {
+        SwTextNode* pCandidate = rNodes[i]->GetTextNode();
+        if (!pCandidate)
+            continue;
+        sal_Int32 nIdx = pCandidate->GetText().indexOf(u" plain");
+        if (nIdx >= 0)
+        {
+            pTextNode = pCandidate;
+            nPlain = nIdx;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pTextNode);
+    SfxItemSetFixed<RES_CHRATR_COLOR, RES_CHRATR_COLOR> aQuery(pDoc->GetAttrPool());
+    pTextNode->GetParaAttr(aQuery, nPlain, nPlain + 6);
+    const SvxColorItem* pColor = aQuery.GetItemIfSet(RES_CHRATR_COLOR);
+    // Without the accompanying fix in place, this test would have failed, the
+    // uncolored pasted text had the default black color.
+    CPPUNIT_ASSERT(pColor);
+    CPPUNIT_ASSERT_EQUAL(nOrange, pColor->GetValue());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

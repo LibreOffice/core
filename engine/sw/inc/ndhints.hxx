@@ -21,8 +21,6 @@
 
 #include "swtypes.hxx"
 
-#include <optional>
-
 class SwTextNode;
 class SwRegHistory;                 // Is in RolBck.hxx.
 class SwTextAttr;
@@ -47,8 +45,7 @@ SwTextAttr * MakeTextAttr(
     SwDoc & rDoc,
     const SfxItemSet & rSet,
     sal_Int32 nStt,
-    sal_Int32 nEnd,
-    std::optional<bool> oInMergedPaste = std::nullopt );
+    sal_Int32 nEnd );
 
 /// create redline dummy text hint that must not be inserted into hints array
 SwTextAttr* MakeRedlineTextAttr(

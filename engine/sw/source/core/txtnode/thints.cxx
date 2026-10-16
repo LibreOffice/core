@@ -1184,12 +1184,11 @@ SwTextAttr* MakeTextAttr(
 }
 
 SwTextAttr* MakeTextAttr( SwDoc & rDoc, const SfxItemSet& rSet,
-                        sal_Int32 nStt, sal_Int32 nEnd,
-                        std::optional<bool> oInMergedPaste )
+                        sal_Int32 nStt, sal_Int32 nEnd )
 {
     IStyleAccess& rStyleAccess = rDoc.GetIStyleAccess();
     std::shared_ptr<SfxItemSet> pAutoStyle;
-    if (oInMergedPaste.value_or(rDoc.IsInMergedPaste()))
+    if (rDoc.IsInMergedPaste())
     {
         // Merged paste: keep target character properties and only merge selected properties from
         // source.
@@ -2541,6 +2540,25 @@ SwTextNode::impl_FormatToTextAttr(const SfxItemSet& i_rAttrSet)
         return;
     }
 
+    SfxItemSet aFiltered(i_rAttrSet);
+    if (GetDoc().IsInMergedPaste())
+    {
+        // Merged paste: non-whitelisted paragraph properties stay at paragraph
+        // scope so they also apply to clipboard content joined into this node.
+        SfxWhichIter aIter(aFiltered);
+        for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
+        {
+            if (!IsCharItemKeptInMergedPaste(nWhich))
+            {
+                aFiltered.ClearItem(nWhich);
+            }
+        }
+        if (aFiltered.Count() == 0)
+        {
+            return;
+        }
+    }
+
     // 1. Identify all spans in hints' array
 
     lcl_CollectHintSpans(*m_pSwpHints, m_Text.getLength(), aAttrSpanMap);
@@ -2557,7 +2575,7 @@ SwTextNode::impl_FormatToTextAttr(const SfxItemSet& i_rAttrSet)
 
         // 2a. Collect attributes to insert
 
-        SfxItemSet aCurSet(i_rAttrSet);
+        SfxItemSet aCurSet(aFiltered);
         std::for_each(aRange.first, aRange.second, RemovePresentAttrs(aCurSet));
 
         // 2b. Insert automatic style containing the collected attributes
@@ -2580,11 +2598,9 @@ SwTextNode::impl_FormatToTextAttr(const SfxItemSet& i_rAttrSet)
                 m_pSwpHints->Delete(pAutoStyle);
                 DestroyAttr(pAutoStyle);
             }
-            // Merged paste: no filtering here, this is just moving existing formatting.
             m_pSwpHints->Insert(
                     MakeTextAttr(GetDoc(), aCurSet,
-                        aCurRange->first.first, aCurRange->first.second,
-                        /*oInMergedPaste=*/false));
+                        aCurRange->first.first, aCurRange->first.second));
         }
 
         aCurRange = aRange.second;
@@ -2595,7 +2611,7 @@ SwTextNode::impl_FormatToTextAttr(const SfxItemSet& i_rAttrSet)
 
     // 3. Clear items from the node
     std::vector<sal_uInt16> aClearedIds;
-    lcl_FillWhichIds(i_rAttrSet, aClearedIds);
+    lcl_FillWhichIds(aFiltered, aClearedIds);
     ClearItemsFromAttrSet(aClearedIds);
 }
 
