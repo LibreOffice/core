@@ -41,8 +41,8 @@
         <spellchecking_level desc="0 none, 1 single words, 2 standard, 3 standard with grammar." type="int" default="3">3</spellchecking_level>
         <orthography_standard desc="German spelling variant: duden, conservative, progressive, extended or press." type="string" default="duden">duden</orthography_standard>
         <message_level desc="How much the server explains each finding: 0 nothing (a generic comment is shown), 1 short, 2 long, 3 long with an example." type="int" default="1">1</message_level>
-        <property_sets desc="Space-separated names of the server's correction profiles to apply, in order." type="string" default=""></property_sets>
-        <dictionaries desc="Space-separated names of the server's supplementary dictionaries to use." type="string" default=""></dictionaries>
+        <property_sets desc="Comma-separated names of the server's correction profiles to apply, in order, e.g. Mein Profil, Recht. A name may have spaces in it, not commas." type="string" default=""></property_sets>
+        <dictionaries desc="Comma-separated names of the server's supplementary dictionaries to use. A name may have spaces in it, not commas." type="string" default=""></dictionaries>
         <allow_user_settings desc="Let users change the server, account and profile of this checker in their own settings. The style checks are theirs to choose either way. Has no effect while enabled is false: a checker switched off here stays off for everyone." type="bool" default="false">false</allow_user_settings>
     </duden>
 

@@ -1094,6 +1094,7 @@ std::optional<bool> envBool(const char* pPrefix, const char* pName)
     return *oValue == "true";
 }
 
+// A list of names separated by commas; a name may have spaces in it.
 std::optional<cpo::uno::Sequence<OUString>> envList(const char* pPrefix, const char* pName)
 {
     const std::optional<OUString> oValue = envString(pPrefix, pName);
@@ -1102,7 +1103,7 @@ std::optional<cpo::uno::Sequence<OUString>> envList(const char* pPrefix, const c
     std::vector<OUString> aItems;
     for (sal_Int32 nIndex = 0; nIndex >= 0;)
     {
-        const OUString aItem(o3tl::trim(o3tl::getToken(*oValue, 0, ' ', nIndex)));
+        const OUString aItem(o3tl::trim(o3tl::getToken(*oValue, 0, ',', nIndex)));
         if (!aItem.isEmpty())
             aItems.push_back(aItem);
     }

@@ -4956,8 +4956,8 @@ class SettingIframe {
 	}
 
 	// A list of names the server knows: a multiple choice when the server
-	// has said what it offers, a text field of names separated by spaces
-	// when it has not.
+	// has said what it offers, a text field of names separated by commas
+	// when it has not. A name may have spaces in it.
 	private createRemoteNameList(
 		info: RemoteCheckerInfo,
 		group: any,
@@ -4967,18 +4967,20 @@ class SettingIframe {
 		available: string[],
 	): HTMLElement {
 		const own = group[key] !== null && group[key] !== undefined;
-		const current: string[] = own
-			? String(group[key])
-					.split(/\s+/)
-					.filter((name) => name !== '')
-			: effective;
+		const current: string[] = !own
+			? effective
+			: (Array.isArray(group[key]) ? group[key] : String(group[key]).split(','))
+					.map((name: string) => name.trim())
+					.filter((name: string) => name !== '');
 		if (!available.length) {
+			// The field edits the names as one line of text.
+			if (own) group[key] = current.join(', ');
 			const field = this.createRemoteTextField(
 				info,
 				group,
 				key,
 				label,
-				effective.join(' '),
+				effective.join(', '),
 			);
 			return field;
 		}
@@ -5007,9 +5009,9 @@ class SettingIframe {
 			select.appendChild(option);
 		}
 		select.addEventListener('change', () => {
-			group[key] = Array.from(select.selectedOptions)
-				.map((option) => option.value)
-				.join(' ');
+			group[key] = Array.from(select.selectedOptions).map(
+				(option) => option.value,
+			);
 		});
 		container.appendChild(select);
 		return container;

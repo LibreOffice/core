@@ -18,7 +18,7 @@ interface XcuObject {
 // null marks a value the dialog knows of but has not been given: it is
 // read from the file when the file has it and is never written otherwise,
 // so a setting left alone falls to whatever the server or the schema says.
-type XcuValue = string | boolean | null | XcuTree;
+type XcuValue = string | string[] | boolean | null | XcuTree;
 
 interface XcuTree {
 	[key: string]: XcuValue;
@@ -394,20 +394,18 @@ class Xcu {
 					value = false;
 				}
 
-				// A list is written as its items, one per line, and read back
-				// the same way; what is not true or false stays a string.
+				// A list keeps its items as they are, since a name may have
+				// spaces in it; what is not true or false stays a string.
 				if (typeof value === 'boolean' && propName === 'VisibleGrid') {
 					gridLevel['ShowGrid'] = value;
 				} else if (typeof value === 'boolean') {
 					currentLevel[propName] = value;
+				} else if (Xcu.LIST_PROPS.includes(propName)) {
+					currentLevel[propName] = Array.from(
+						prop.getElementsByTagName('it'),
+					).map((it) => it.textContent || '');
 				} else {
-					const itemElements = prop.getElementsByTagName('it');
-					currentLevel[propName] =
-						itemElements.length > 0
-							? Array.from(itemElements)
-									.map((it) => it.textContent || '')
-									.join(' ')
-							: value;
+					currentLevel[propName] = value;
 				}
 			});
 		});
@@ -422,7 +420,9 @@ class Xcu {
 		overrides: XcuValue | undefined,
 	): XcuTree {
 		const overrideTree: XcuTree | undefined =
-			overrides && typeof overrides === 'object' ? overrides : undefined;
+			overrides && typeof overrides === 'object' && !Array.isArray(overrides)
+				? overrides
+				: undefined;
 
 		const result: XcuTree = {};
 		for (const key in defaults) {
@@ -431,7 +431,7 @@ class Xcu {
 			}
 			const def = defaults[key];
 			const parsedValue = overrideTree ? overrideTree[key] : undefined;
-			if (typeof def === 'object' && def !== null) {
+			if (typeof def === 'object' && def !== null && !Array.isArray(def)) {
 				result[key] = this.mergeDefaults(def, parsedValue);
 			} else {
 				result[key] = parsedValue === undefined ? def : parsedValue;
@@ -444,7 +444,7 @@ class Xcu {
 	private generate(xcu: XcuObject): string {
 		function generateItemNodes(node: any, path: string[]): string[] {
 			const items: string[] = [];
-			const leafProps: { [key: string]: string | boolean } = {};
+			const leafProps: { [key: string]: string | string[] | boolean } = {};
 			const nestedKeys: string[] = [];
 
 			for (const key in node) {
@@ -476,10 +476,13 @@ class Xcu {
 						if (typeof value === 'boolean') {
 							valueStr = value ? 'true' : 'false';
 						} else if (Xcu.LIST_PROPS.includes(propName)) {
-							// A list: one item per name, the names separated
-							// by spaces in the dialog.
-							valueStr = String(value)
-								.split(/\s+/)
+							// A list: one item per name. Typed in as text,
+							// the names are separated by commas.
+							const names = Array.isArray(value)
+								? value
+								: String(value).split(',');
+							valueStr = names
+								.map((item) => item.trim())
 								.filter((item) => item !== '')
 								.map((item) => `<it>${Xcu.escapeXml(item)}</it>`)
 								.join('');
