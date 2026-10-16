@@ -21,7 +21,7 @@
         service. Please read the respective privacy policies, e.g. https://languagetool.org/legal/privacy. With "allow_user_settings" users may change a
         checker's server and account in their own settings dialog; as the document is checked by one process for everyone who has it open, this lets one user
         send everyone's text to a server of their choosing, so it is off by default. What a checker looks for is always the user's own choice.
-        allowed_languages does not come into it: it limits the local writing aids loaded at start, and a remote checker checks every language it is configured for.
+        allowed_languages does not limit the remote checkers: it only decides which local dictionaries, hyphenation patterns, thesauri and Lightproof rules are loaded at start, and a remote checker checks every language it is configured for.
     -->
     <languagetool desc="Remote API settings for spell and grammar checking with LanguageTool">
         <enabled desc="Enable Remote Spell and Grammar Checker" type="bool" default="false">false</enabled>
