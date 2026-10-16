@@ -41,7 +41,11 @@ describe(['tagmobile', 'tagnextcloud'], 'Cell handles on a formula reference.', 
 		calcHelper.typeIntoFormulabar('=su');
 
 		cy.cGet('#mobile-wizard').should('be.visible');
-		cy.cGet('body').contains('.func-name', /^SUM$/).click();
+		// A synthetic click blurs the window, which accepts the "=su" typed so far, so tap.
+		cy.cGet('body').contains('.func-name', /^SUM$/).then(function($name) {
+			var center = handleCenter($name);
+			cy.cGet('body').realClick({ x: center[0], y: center[1] });
+		});
 		cy.cGet('#mobile-wizard').should('not.be.visible');
 		cy.cGet(formulaText).should('have.text', '=SUM()');
 	}
