@@ -438,7 +438,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         {
             int leftrep = 0;
             bool hit = (result.n >= minLen);
-            bool compoundhit = (result.n >= 1) && (result.hyphens[i] & 1);;
+            bool compoundhit = bCompoundHyphenation && (result.n >= 1) && (result.hyphens[i] & 1);;
             bool bPrevCompound = false;
             if (!result.rep || !result.rep[i])
             {
@@ -732,7 +732,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                         nPrevHyphenationPos = nHyphenationPos;
                     nHyphenationPos = i;
                 }
-                if (result.rep && result.rep[i])
+                if (hit && result.rep && result.rep[i])
                 {
                     if ( bPrevCompound )
                     {

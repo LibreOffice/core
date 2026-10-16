@@ -1359,6 +1359,42 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf170177_not_compound_push)
                 u"vasemberellenes vasemberellenes vasemberellenes vasemberellenes vasem");
 }
 
+// check fix of the regression asociated to tdf#170177
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf174015)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"hu"_ustr, u"HU"_ustr, OUString())))
+        return;
+
+    createSwDoc("tdf174015.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // 2 hyphenations on page 1: "asz-szony-nyal" (not the broken "asszosz-nyal")
+
+    // This was "asszon"
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"as");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"szon");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]/SwHyphPortion",
+                1);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[3]", "portion",
+                u"nyal");
+
+    // This was 1 (single hyphenation with exceeding first line)
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/SwParaPortion/SwLineLayout/SwHyphPortion", 2);
+}
+
 // TODO: move this test to the lingucomponent project
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf170140)
 {
