@@ -59,6 +59,8 @@ size_t writeCallback(void* pData, size_t nSize, size_t nMembers, void* pUser)
     return nBytes;
 }
 
+// Deleters for std::unique_ptr, so a curl handle and a header list are freed
+// on every way out of perform().
 struct CurlCleanup
 {
     void operator()(CURL* p) const { curl_easy_cleanup(p); }

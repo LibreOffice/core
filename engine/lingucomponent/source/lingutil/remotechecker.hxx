@@ -42,6 +42,9 @@
 
 namespace lingucomponent::remote
 {
+// One HTTP request to a checker's server, as the checker builds it: where it
+// goes, what it sends and how the server is trusted. post() and get() carry
+// it out with curl.
 struct Request
 {
     OUString aURL;
@@ -61,6 +64,9 @@ struct Request
 // caller waits for the answer, so it is cut shorter than a check.
 constexpr std::chrono::seconds PROBE_TIMEOUT(5);
 
+// What came back from a Request. eCode is curl's verdict on the transfer;
+// an HTTP status of 400 or more is one too, as the request fails on it, so
+// a caller only reads aBody when eCode is CURLE_OK.
 struct Response
 {
     CURLcode eCode = CURLE_OK;
