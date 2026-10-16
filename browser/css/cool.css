@@ -810,6 +810,41 @@ input, button {
 	box-shadow: 0 0 0 1000px rgba(var(--doc-type),0.15);
 }
 
+/* Holds the comments of a page that has more than fit beside it, as tall
+   as the page, and scrolls them. */
+.cool-annotation-page-scroller {
+	position: fixed;
+	z-index: 12;
+	overflow-x: hidden;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	/* The layout sets the scroll position of the box, so the browser's own
+	   scroll anchoring is off. */
+	overflow-anchor: none;
+	scrollbar-color: var(--scrollbar-color);
+	scrollbar-width: thin;
+}
+
+/* The cards are placed in the box, so they scroll with it. */
+.cool-annotation-page-scroller > .cool-annotation {
+	position: absolute;
+	transition: none;
+}
+
+/* A button's tooltip in the box goes above the button, its right edge level
+   with the button's, clear of the pointer. Where the box top would clip it
+   there, as on the first card, it goes beside the button instead. */
+.cool-annotation-page-scroller [data-title]:after {
+	top: auto;
+	right: 0;
+	bottom: calc(100% + 4px);
+	left: auto;
+}
+.cool-annotation-page-scroller .cool-annotation-tooltip-beside[data-title]:after {
+	right: calc(100% + 4px);
+	bottom: 0;
+}
+
 .cool-annotation.tracked-deleted-comment-hide {
 	display: none;
 }

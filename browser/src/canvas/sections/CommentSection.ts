@@ -492,12 +492,16 @@ export class Comment extends CanvasSectionObject {
 		if (this.isSelected() || this.isEdit()) {
 			// Gap kept between the comment and the toolbar/canvas edges.
 			const margin = this.sectionProperties.commentListSection.sectionProperties.marginY / app.dpiScale;
+			// In the per-page layout a selected or edited card stays beside its
+			// page, so it is kept inside the view vertically only in full view.
+			const clampY = !this.sectionProperties.commentListSection.usePerPageLayout()
+				|| this.sectionProperties.commentListSection.isShownBig(this);
 
 			if (left < canvasContainerBounds.left) {
 				left = canvasContainerBounds.left;
 			}
 
-			if (top < canvasContainerBounds.top + margin) {
+			if (clampY && top < canvasContainerBounds.top + margin) {
 				top = canvasContainerBounds.top + margin;
 			}
 
@@ -506,16 +510,20 @@ export class Comment extends CanvasSectionObject {
 				left = canvasContainerBounds.right - width;
 			}
 
-			if (top + height > canvasContainerBounds.bottom - margin) {
+			if (clampY && top + height > canvasContainerBounds.bottom - margin) {
 				top = canvasContainerBounds.bottom - height - margin;
 			}
 
 			// A comment taller than the view would be pushed up by the line above until
 			// its top slips under the toolbar; keep the top below the toolbar.
-			if (top < canvasContainerBounds.top + margin) {
+			if (clampY && top < canvasContainerBounds.top + margin) {
 				top = canvasContainerBounds.top + margin;
 			}
 		}
+
+		// A card in a page's box is positioned by the box, relative to the box.
+		if (this.sectionProperties.container.parentElement?.classList.contains('cool-annotation-page-scroller'))
+			return this.renderedPosY;
 
 		let maxHeight = '';
 		if (this.sectionProperties.commentListSection.isShownBig(this)) {
@@ -1722,6 +1730,10 @@ export class Comment extends CanvasSectionObject {
 	public onLostFocus (e: any): void {
 
 		if (!this.isEdit() || this.sectionProperties.container.contains(e.relatedTarget))
+			return;
+		// The card loses the focus while the layout moves it into or out of a
+		// page's box. The user has not left it.
+		if (this.sectionProperties.commentListSection.movingCards)
 			return;
 		if (this.sectionProperties.nodeReply.contains(e.target)) {
 			this.onLostFocusReply(e);

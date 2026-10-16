@@ -280,12 +280,40 @@ export class CommentSection extends CanvasSectionObject {
 	private annotationMaxSize: number;
 	escapeListener: (e: KeyboardEvent) => void;
 
+	// The thread that was selected at the end of the last per-page layout.
+	private selectionShownInBox: Comment = null;
+	// The card being edited that the document last scrolled to. It is null
+	// when no card is being edited.
+	private editShownInView: Comment = null;
+	// The comment that this user added since the last layout, such as a posted
+	// reply. It is null when there is none.
+	private addedCommentToShow: Comment = null;
+	// True while the layout moves cards into or out of a page's box. A card
+	// loses the focus for a moment while it moves.
+	public movingCards: boolean = false;
 	// Set from the moment this user removes a Writer comment until the user
 	// next clicks, presses a key or touches the screen: it ends that time and
 	// removes its listeners. Core moves the text cursor to where the removed
 	// comment was, so the cursor moves in that time come from the removal and
 	// not from the user.
 	private endCursorMovedByRemove: () => void = null;
+	// The scrolling box of each page whose comments do not fit beside it, by
+	// page index.
+	private pageScrollers = new Map<number, HTMLDivElement>();
+	// The scroll position of each box, as the user or the layout last set it.
+	private pageScrollTops = new WeakMap<HTMLElement, number>();
+	// The places of the cards in each box at its last layout, as a string.
+	private pageScrollerCards = new WeakMap<HTMLElement, string>();
+	// The card next to one that is being removed from a box, with the card's
+	// top on screen before the removal. It is kept until the removed comment
+	// has left the list.
+	private cardBesideRemoved: { card: HTMLElement, top: number, removed: Comment } = null;
+	// A card in a box that the user pressed while its thread was not
+	// selected, with the card's top on screen at that moment. It is null when
+	// there is none, and it is cleared when the selection changes.
+	private cardPressedToSelect: { card: HTMLElement, top: number } = null;
+	// The boxes that the layout pass in progress has placed, by page index.
+	private pageScrollersInUse = new Set<number>();
 
 	public get cursorMovedByRemove (): boolean {
 		return this.endCursorMovedByRemove !== null;
@@ -1748,6 +1776,7 @@ export class CommentSection extends CanvasSectionObject {
 			return;
 		const events = ['mousedown', 'keydown', 'touchstart'];
 		this.endCursorMovedByRemove = () => {
+			this.cardBesideRemoved = null;
 			for (const name of events)
 				document.removeEventListener(name, this.endCursorMovedByRemove, true);
 			this.endCursorMovedByRemove = null;
@@ -1799,6 +1828,10 @@ export class CommentSection extends CanvasSectionObject {
 			this.map.setPart(app.map._docLayer._selectedPart, false);
 
 		if (app.map._docLayer._docType === 'text') {
+			// The thread is unselected below, which changes the heights of
+			// its cards, so the card beside the removed one is taken now.
+			if (removedComment)
+				this.rememberCardBesideRemoved(removedComment);
 			this.ignoreCursorUntilUserInput();
 			this.map.sendUnoCommand('.uno:DeleteComment', comment);
 		}
@@ -2268,8 +2301,13 @@ export class CommentSection extends CanvasSectionObject {
 				if (app.map._docLayer._docType === 'spreadsheet')
 					annotation.hide();
 
-				if (this.actionPerformedByCurrentUser(obj))
+				if (this.actionPerformedByCurrentUser(obj)) {
 					this.notifyCommentInserted(annotation.sectionProperties.data);
+					// An auto-saved comment is saved because the user left it,
+					// so it is not brought back into view.
+					if (app.map._docLayer._docType === 'text' && !annotation.isAutoSaved())
+						this.addedCommentToShow = annotation;
+				}
 
 				var autoSavedComment = CommentSection.autoSavedComment;
 				if (autoSavedComment) {
@@ -2301,6 +2339,7 @@ export class CommentSection extends CanvasSectionObject {
 			id = obj[dataroot].id;
 			var removed = this.getComment(id);
 			if (removed) {
+				this.rememberCardBesideRemoved(removed);
 				this.adjustParentRemove(removed);
 				if (this.sectionProperties.expandedComment === removed)
 					this.sectionProperties.expandedComment = this.sectionProperties.selectedComment;
@@ -2638,13 +2677,16 @@ export class CommentSection extends CanvasSectionObject {
 		return startY;
 	}
 
-	private layoutDown (subList: any, actualPosition: Array<number>, lastY: number, relayout: boolean = true): number {
+	// With followAnchor false, the thread is placed at lastY even when that is
+	// above its anchor.
+	private layoutDown (subList: any, actualPosition: Array<number>, lastY: number, relayout: boolean = true, followAnchor: boolean = true): number {
 		const selectedComment = subList[0] === this.sectionProperties.selectedComment;
 		const documentCanvasWidth = parseInt((document.getElementById('document-canvas') as any).style.width);
 		const isRTL = document.documentElement.dir === 'rtl';
 
 		for (var i = 0; i < subList.length; i++) {
-			lastY = subList[i].sectionProperties.data.anchorSPoint.vY > lastY ? subList[i].sectionProperties.data.anchorSPoint.vY: lastY;
+			if (followAnchor)
+				lastY = subList[i].sectionProperties.data.anchorSPoint.vY > lastY ? subList[i].sectionProperties.data.anchorSPoint.vY: lastY;
 			var renderedCommentTop: number;
 			if (selectedComment) {
 				const commentWidth = (this.sectionProperties.showSelectedBigger ? this.sectionProperties.commentWidthBigger: this.sectionProperties.commentWidth) / app.dpiScale;
@@ -2709,12 +2751,488 @@ export class CommentSection extends CanvasSectionObject {
 		return startY;
 	}
 
+	// True for Writer in the single-column view, once the page rectangles are
+	// known.
+	public usePerPageLayout (): boolean {
+		return app.map._docLayer._docType === 'text'
+			&& !CommentSection.isMultiColumnLayout()
+			&& app.file.writer.pageRectangleList.length > 0;
+	}
+
+	// The Writer threads that the column shows. Each thread is a root followed
+	// by its replies. Resolved comments are left out unless they are shown.
+	private collectShownThreads (): Array<Array<Comment>> {
+		const list = this.sectionProperties.commentList;
+		const threads: Array<Array<Comment>> = [];
+		for (let i = 0; i < list.length;) {
+			const thread: Array<Comment> = [];
+			let j = i;
+			do {
+				const data = list[j].sectionProperties.data;
+				if (data.resolved !== 'true' || this.sectionProperties.showResolved)
+					thread.push(list[j]);
+				j++;
+			} while (j < list.length && list[j].sectionProperties.data.parent !== '0');
+
+			if (thread.length > 0) {
+				const data = thread[0].sectionProperties.data;
+				if (!data.anchorSPoint)
+					data.anchorSPoint = new cool.SimplePoint(data.anchorPos[0], data.anchorPos[1]);
+				threads.push(thread);
+			}
+			i = j;
+		}
+		return threads;
+	}
+
+	// The page a twips Y is on. A Y in the gap between two pages goes with the
+	// page above.
+	private pageIndexOfY (y: number): number {
+		const pages = app.file.writer.pageRectangleList;
+		let first = 0;
+		let last = pages.length - 1;
+		while (first < last) {
+			const middle = (first + last + 1) >> 1;
+			if (pages[middle][1] <= y)
+				first = middle;
+			else
+				last = middle - 1;
+		}
+		return first;
+	}
+
+	// Lays each page's threads out beside that page, between its top and bottom
+	// edges. Returns the bottom of the lowest thread shown, in core pixels.
+	private layoutByPage (x: number, relayout: boolean): number {
+		const pages = app.file.writer.pageRectangleList;
+		const selected = this.sectionProperties.selectedComment;
+		const threadsOfPage = new Map<number, Array<Array<Comment>>>();
+		let lastY = 0;
+		this.pageScrollersInUse.clear();
+
+		for (const thread of this.collectShownThreads()) {
+			// Full view centres the thread over the document, out of the column.
+			if (this.sectionProperties.showSelectedBigger && thread[0] === selected) {
+				// A thread in full view is taken out of its page's box.
+				const documentContainer = document.getElementById('document-container');
+				for (const comment of thread) {
+					if (comment.sectionProperties.container.parentElement !== documentContainer)
+						this.moveCard(comment.sectionProperties.container, documentContainer);
+				}
+				this.layoutDown(thread, [x, thread[0].sectionProperties.data.anchorSPoint.vY], 0, relayout);
+				continue;
+			}
+			const page = this.pageIndexOfY(thread[0].sectionProperties.data.anchorPos[1]);
+			if (!threadsOfPage.has(page))
+				threadsOfPage.set(page, []);
+			threadsOfPage.get(page).push(thread);
+		}
+
+		for (const [page, threads] of threadsOfPage) {
+			const rect = pages[page];
+			const top = new cool.SimplePoint(rect[0], rect[1]).vY;
+			const bottom = new cool.SimplePoint(rect[0], rect[1] + rect[3]).vY;
+			lastY = Math.max(lastY, this.layoutPage(page, threads, x, top, bottom, relayout));
+		}
+
+		// Pages that fit now, or have no comments left, lose their boxes.
+		for (const page of Array.from(this.pageScrollers.keys())) {
+			if (!this.pageScrollersInUse.has(page))
+				this.releasePageScroller(page);
+		}
+		return lastY;
+	}
+
+	// When a reply or an edit starts on a card outside the page boxes that is
+	// out of view, scrolls the document once so that the bottom of the card,
+	// where its text box is, shows.
+	private scrollToEditedComment (): void {
+		const edited = Comment.isAnyEdit();
+		if (edited === this.editShownInView)
+			return;
+		// A card that is being edited but does not have the focus, such as an
+		// auto-saved one, waits until the user goes back to it.
+		if (edited && !edited.sectionProperties.container.contains(document.activeElement))
+			return;
+		this.editShownInView = edited;
+		if (edited)
+			this.scrollDocumentToCard(edited, false);
+	}
+
+	// Scrolls the document so all of a card outside the page boxes shows.
+	// Where the card is taller than the view, its top shows when topFirst is
+	// true, and its bottom otherwise.
+	private scrollDocumentToCard (comment: Comment, topFirst: boolean): void {
+		const container = comment.sectionProperties.container;
+		if (!container.parentElement || container.parentElement.id !== 'document-container'
+			|| container.style.visibility === 'hidden')
+			return;
+
+		const margin = this.sectionProperties.marginY / app.dpiScale;
+		const viewHeight = this.sectionProperties.canvasContainerBounds.height;
+		const top = comment.renderedPosY;
+		const bottom = top + comment.getCommentHeight(false);
+		let by = 0;
+		if (bottom > viewHeight - margin)
+			by = bottom - (viewHeight - margin);
+		if (top - by < margin && (topFirst || by === 0))
+			by = top - margin;
+		if (by === 0)
+			return;
+
+		// The position to scroll to is taken from the view the card was placed
+		// in. The document can scroll again before the task runs, for example
+		// to a comment that the cursor selects, and that scroll must not add
+		// to this one.
+		const scrollY = Math.max(0, Math.round(app.activeDocument.activeLayout.viewedRectangle.pY1 + by * app.dpiScale));
+		app.layoutingService.appendLayoutingTask(() => {
+			const layout = app.activeDocument.activeLayout;
+			layout.scrollTo(layout.viewedRectangle.pX1, scrollY);
+		});
+	}
+
+	// Places the threads of a page beside it. Ones that do not all fit between
+	// the page's top and bottom edges go into a box as tall as the page, which
+	// scrolls them. Returns the bottom of what is shown.
+	private layoutPage (page: number, threads: Array<Array<Comment>>, x: number, top: number, bottom: number, relayout: boolean): number {
+		const gap = this.sectionProperties.marginY;
+		const replyGap = Math.round(this.sectionProperties.marginY / 10);
+		const count = threads.length;
+		const anchors = threads.map((thread) => thread[0].sectionProperties.data.anchorSPoint.vY);
+		const heights = threads.map((thread) => {
+			let height = -replyGap;
+			for (const comment of thread)
+				height += comment.getCommentHeight(relayout) * app.dpiScale + replyGap;
+			return height;
+		});
+		const selected = threads.findIndex((thread) => thread[0] === this.sectionProperties.selectedComment);
+
+		// The selected thread is placed at its anchor. The threads above it are
+		// stacked upwards from it, and the ones below it downwards.
+		const ys = anchors.slice();
+		for (let i = selected - 1; i >= 0; i--)
+			ys[i] = Math.min(anchors[i], ys[i + 1] - gap - heights[i]);
+		// Each thread starts below the page top and below the thread before it.
+		let next = top;
+		for (let i = 0; i < count; i++) {
+			ys[i] = Math.max(ys[i], next);
+			next = ys[i] + heights[i] + gap;
+		}
+		// Threads that end past the page bottom move up into the free space
+		// above them.
+		if (next - gap > bottom) {
+			let limit = bottom;
+			for (let i = count - 1; i >= 0; i--) {
+				ys[i] = Math.min(ys[i], limit - heights[i]);
+				limit = ys[i] - gap;
+			}
+		}
+
+		if (ys[0] >= top) {
+			this.releasePageScroller(page);
+			let lastY = 0;
+			for (let i = 0; i < count; i++)
+				lastY = this.layoutDown(threads[i], [x, anchors[i]], ys[i], false, false);
+			return lastY;
+		}
+
+		// When the threads do not fit, they are stacked from the page top in a
+		// box that scrolls.
+		next = top;
+		for (let i = 0; i < count; i++) {
+			ys[i] = next;
+			this.layoutDown(threads[i], [x, anchors[i]], ys[i], false, false);
+			next = ys[i] + heights[i] + gap;
+		}
+		this.putPageInScroller(page, threads, ys, anchors, top, bottom - top, relayout);
+		return bottom;
+	}
+
+	// Places the threads of a page in the page's scrolling box, stacked from
+	// the top of the box. ys, top and height are in core pixels.
+	private putPageInScroller (page: number, threads: Array<Array<Comment>>, ys: Array<number>, anchors: Array<number>, top: number, height: number, relayout: boolean): void {
+		let scroller = this.pageScrollers.get(page);
+		if (!scroller) {
+			scroller = window.L.DomUtil.create('div', 'cool-annotation-page-scroller', document.getElementById('document-container'));
+			scroller.addEventListener('scroll', () => {
+				// A box at the end of its cards and above the remembered
+				// position was moved there by the browser, because the cards
+				// were shorter for a moment. Scrolling up by the user never
+				// ends at the end of the cards, so the remembered position
+				// stays.
+				const wanted = this.pageScrollTops.get(scroller);
+				if (wanted !== undefined && scroller.scrollTop < wanted
+					&& scroller.scrollTop >= scroller.scrollHeight - scroller.clientHeight - 1)
+					return;
+				this.pageScrollTops.set(scroller, scroller.scrollTop);
+			});
+			// A button's tooltip goes above the button, or beside it where the
+			// top of the box or of the view would cut it off. The listener runs
+			// in the capture phase because the cards stop mouseover from
+			// bubbling.
+			scroller.addEventListener('mouseover', (e: MouseEvent) => {
+				const button = (e.target as HTMLElement).closest('[data-title]');
+				if (!button)
+					return;
+				// The tooltip and its gap above the button, in CSS pixels.
+				const tooltipHeight = 40;
+				const visibleTop = Math.max(scroller.getBoundingClientRect().top, this.sectionProperties.canvasContainerBounds.top);
+				button.classList.toggle('cool-annotation-tooltip-beside', button.getBoundingClientRect().top - visibleTop < tooltipHeight);
+			}, true);
+			// Pressing a card of a thread that is not selected selects the
+			// thread, and the card then stays where the user pressed it. The
+			// listener runs in the capture phase because the cards stop the
+			// event from bubbling.
+			scroller.addEventListener('pointerdown', (e: PointerEvent) => {
+				const card = (e.target as HTMLElement).closest('.cool-annotation') as HTMLElement;
+				const comment = card && this.sectionProperties.commentList.find((item) => item.sectionProperties.container === card);
+				if (!comment)
+					return;
+				const selected = this.sectionProperties.selectedComment;
+				if (selected && this.getRootIndexOf(comment.sectionProperties.data.id) === this.getRootIndexOf(selected.sectionProperties.data.id))
+					return;
+				this.cardPressedToSelect = { card, top: card.getBoundingClientRect().top };
+			}, true);
+			this.pageScrollers.set(page, scroller);
+		}
+		this.pageScrollersInUse.add(page);
+
+		const comments = threads.flat();
+		const left = Math.min(...comments.map((comment) => comment.getContainerPosX()));
+		const boxTop = top / app.dpiScale;
+		const replyGap = Math.round(this.sectionProperties.marginY / 10) / app.dpiScale;
+		// When the box cannot scroll far enough to put a selected thread level
+		// with its text, as with the first thread, the box gets that much space
+		// above the cards while the thread is selected.
+		const selectedIndex = threads.findIndex((thread) => thread[0] === this.sectionProperties.selectedComment);
+		const space = selectedIndex === -1 ? 0 : Math.max(0, (anchors[selectedIndex] - ys[selectedIndex]) / app.dpiScale);
+		let selectedTop = -1;
+		let selectedAnchor = 0;
+		let edited: Comment = null;
+		let added: Comment = null;
+		// The left and top of each card in the box, in CSS pixels.
+		const places: Array<Array<number>> = [];
+		let cardsMoved = false;
+		for (let i = 0; i < threads.length; i++) {
+			// The cards of each thread are stacked from the thread top, with the
+			// reply gap between them.
+			let cardTop = (ys[i] - top) / app.dpiScale + space;
+			if (threads[i][0] === this.sectionProperties.selectedComment) {
+				selectedTop = cardTop;
+				selectedAnchor = (anchors[i] - top) / app.dpiScale;
+			}
+			for (const comment of threads[i]) {
+				if (comment.sectionProperties.container.parentElement !== scroller)
+					cardsMoved = true;
+				places.push([Math.round(comment.getContainerPosX() - left), Math.round(cardTop)]);
+				// The card's top in the view.
+				comment.renderedPosY = boxTop + cardTop;
+				cardTop += comment.getCommentHeight(false) + replyGap;
+				if (comment.isEdit())
+					edited = comment;
+				if (comment === this.addedCommentToShow)
+					added = comment;
+			}
+		}
+
+		const bounds = this.sectionProperties.canvasContainerBounds;
+		// A strip between the cards and the scrollbar, where the mouse wheel
+		// scrolls the box. The box ends where the comment column ends, so the
+		// strip comes from moving the cards left.
+		const scrollbarGap = 8;
+		scroller.style.left = Math.round(bounds.left + left - scrollbarGap) + 'px';
+		scroller.style.top = Math.round(bounds.top + boxTop) + 'px';
+		scroller.style.height = Math.round(height / app.dpiScale) + 'px';
+
+		// Scrolling the document moves the box but not the cards in it, so the
+		// cards are placed and measured again only when their places change.
+		const cardsKey = places.map((place) => place.join(',')).join(';');
+		const cardsChanged = relayout || cardsMoved || this.pageScrollerCards.get(scroller) !== cardsKey;
+		if (cardsChanged) {
+			this.pageScrollerCards.set(scroller, cardsKey);
+			comments.forEach((comment, i) => {
+				const card = comment.sectionProperties.container;
+				if (card.parentElement !== scroller)
+					this.moveCard(card, scroller);
+				card.style.left = places[i][0] + 'px';
+				card.style.top = places[i][1] + 'px';
+			});
+			// Cards that the page does not show any more, such as a thread that
+			// was resolved while resolved comments are hidden, leave the box.
+			this.moveCardsOutOfBox(scroller, new Set(comments.map((comment) => comment.sectionProperties.container)));
+
+			// The widths are read after all the cards are placed, so the browser
+			// lays the box out once and not once for each card.
+			let right = 0;
+			comments.forEach((comment, i) => {
+				right = Math.max(right, places[i][0] + comment.sectionProperties.container.offsetWidth);
+			});
+			// The box is as wide as the cards, the strip and the scrollbar
+			// together.
+			scroller.style.width = Math.round(right + scrollbarGap) + 'px';
+			const scrollbarWidth = scroller.offsetWidth - scroller.clientWidth;
+			if (scrollbarWidth > 0)
+				scroller.style.width = Math.round(right + scrollbarGap + scrollbarWidth) + 'px';
+			scroller.scrollLeft = 0;
+		}
+
+		// The user is typing in the card being edited.
+		const editedFocused = edited && edited.sectionProperties.container.contains(document.activeElement);
+		const selectionToShow = selectedTop !== -1 && this.sectionProperties.selectedComment !== this.selectionShownInBox;
+		const beside = this.cardBesideRemoved && this.cardBesideRemoved.card.parentElement === scroller ? this.cardBesideRemoved : null;
+		const pressed = this.cardPressedToSelect && selectedIndex !== -1
+			&& threads[selectedIndex].some((comment) => comment.sectionProperties.container === this.cardPressedToSelect.card)
+			? this.cardPressedToSelect : null;
+		if (!cardsChanged && !added && !beside && !(edited ? editedFocused : selectionToShow))
+			return;
+
+		const wanted = this.pageScrollTops.get(scroller);
+		if (wanted !== undefined)
+			scroller.scrollTop = wanted;
+		// The card next to a removed one stays where it was on screen.
+		if (beside)
+			scroller.scrollTop += beside.card.getBoundingClientRect().top - beside.top;
+		const scrolledTo = scroller.scrollTop;
+
+		// The part of the box on screen. At a high zoom the page, and so the
+		// box, can start above the view or end below it.
+		const visibleTop = scroller.scrollTop + Math.max(0, -boxTop);
+		const visibleBottom = scroller.scrollTop + Math.min(scroller.clientHeight, bounds.height - boxTop);
+		// A comment just added is scrolled into view once. While the user types
+		// in a card in a box that is on screen, the bottom of the card, where
+		// its reply or edit box is, stays in view. A thread just selected is
+		// scrolled into view once, so the user can still scroll the box away
+		// from it.
+		if (added) {
+			const addedTop = added.renderedPosY - boxTop;
+			const addedBottom = addedTop + added.getCommentHeight(false);
+			if (addedBottom > visibleBottom)
+				scroller.scrollTop += Math.min(addedBottom - visibleBottom, addedTop - visibleTop);
+			else if (addedTop < visibleTop)
+				scroller.scrollTop -= visibleTop - addedTop;
+		} else if (edited) {
+			const editedBottom = edited.renderedPosY - boxTop + edited.getCommentHeight(false);
+			if (editedFocused && visibleBottom > visibleTop && editedBottom > visibleBottom)
+				scroller.scrollTop += editedBottom - visibleBottom;
+		} else if (selectionToShow && pressed) {
+			// A thread selected by pressing one of its cards keeps that card
+			// where it was on screen.
+			scroller.scrollTop += pressed.card.getBoundingClientRect().top - pressed.top;
+		} else if (selectionToShow) {
+			// The root card goes level with the text it comments on, as far as
+			// the box can scroll.
+			const scrollTop = scroller.scrollTop;
+			scroller.scrollTop = selectedTop - selectedAnchor;
+			const by = scroller.scrollTop - scrollTop;
+			// When the text is out of view, the top of the root can be out of
+			// view too. Then the box scrolls just enough to show the top of the
+			// root with its author line, which fits in 60 CSS pixels.
+			const authorLineHeight = 60;
+			const headHeight = Math.min(authorLineHeight, this.sectionProperties.selectedComment.getCommentHeight(false));
+			if (selectedTop < visibleTop + by)
+				scroller.scrollTop -= visibleTop + by - selectedTop;
+			else if (selectedTop + headHeight > visibleBottom + by)
+				scroller.scrollTop += selectedTop + headHeight - visibleBottom - by;
+		}
+		if (scroller.scrollTop !== scrolledTo)
+			this.pageScrollTops.set(scroller, scroller.scrollTop);
+	}
+
+	// Remembers the card above one that is being removed from a box, or the
+	// card below it when it is the first, with that card's top on screen. The
+	// cards left in the box change height and place after a removal.
+	private rememberCardBesideRemoved (removed: Comment): void {
+		if (this.cardBesideRemoved && this.cardBesideRemoved.removed === removed)
+			return;
+		const card = removed.sectionProperties.container;
+		const scroller = card.parentElement;
+		if (!scroller || !scroller.classList.contains('cool-annotation-page-scroller'))
+			return;
+		const cards = (Array.from(scroller.children) as HTMLElement[])
+			.filter((child) => child.classList.contains('cool-annotation') && child.style.visibility !== 'hidden')
+			.sort((a, b) => a.offsetTop - b.offsetTop);
+		const index = cards.indexOf(card);
+		const neighbour = index > 0 ? cards[index - 1] : cards[index + 1];
+		if (neighbour)
+			this.cardBesideRemoved = { card: neighbour, top: neighbour.getBoundingClientRect().top, removed };
+	}
+
+	// Moves a card into or out of a page's box. Taking a card out of the DOM
+	// drops the focus, and a card that loses the focus with an empty reply or
+	// edit box closes that box. So movingCards is true during the move, and
+	// the card gets the focus and the caret back afterwards. The caret is kept
+	// as a node and an offset, which stay valid while the card moves.
+	private moveCard (card: HTMLElement, parent: HTMLElement): void {
+		const focused = document.activeElement as HTMLElement;
+		const hadFocus = focused && card.contains(focused);
+		const selection = window.getSelection();
+		const caret = hadFocus && selection.rangeCount ? { node: selection.anchorNode, offset: selection.anchorOffset } : null;
+
+		this.movingCards = true;
+		try {
+			parent.appendChild(card);
+			if (hadFocus) {
+				focused.focus({ preventScroll: true });
+				if (caret && focused.contains(caret.node))
+					selection.collapse(caret.node, caret.offset);
+			}
+		} finally {
+			this.movingCards = false;
+		}
+	}
+
+	// Moves the cards in a box, except the ones in keep, back to their places
+	// in the view.
+	private moveCardsOutOfBox (scroller: HTMLElement, keep: Set<HTMLElement>): void {
+		const documentContainer = document.getElementById('document-container');
+		for (const comment of this.sectionProperties.commentList) {
+			const card = comment.sectionProperties.container;
+			if (card.parentElement === scroller && !keep.has(card)) {
+				this.moveCard(card, documentContainer);
+				comment.setContainerPos(true);
+			}
+		}
+	}
+
+	private releasePageScroller (page: number): void {
+		const scroller = this.pageScrollers.get(page);
+		if (!scroller)
+			return;
+		this.moveCardsOutOfBox(scroller, new Set());
+		scroller.remove();
+		this.pageScrollers.delete(page);
+	}
+
+	private releasePageScrollers (): void {
+		for (const page of Array.from(this.pageScrollers.keys()))
+			this.releasePageScroller(page);
+	}
+
 	public hideArrow (): void {
 		if (this.sectionProperties.arrow) {
 			document.getElementById('document-container').removeChild(this.sectionProperties.arrow);
 			this.sectionProperties.arrow = null;
 			app.sectionContainer.requestReDraw();
 		}
+	}
+
+	// Ends the line from the text at the left edge of the selected card when
+	// the card starts left of the comment column, as it can when it is held
+	// inside the view or placed in its page's box.
+	private endArrowAtSelectedComment (): void {
+		const selected = this.sectionProperties.selectedComment;
+		if (!this.sectionProperties.arrow || !selected)
+			return;
+		const line = this.sectionProperties.arrow.firstElementChild as SVGLineElement;
+		const x1 = Number(line.getAttribute('x1'));
+		const x2 = Number(line.getAttribute('x2'));
+		// Right to left the column is on the other side.
+		if (x2 <= x1)
+			return;
+		const cardLeft = Math.floor(selected.sectionProperties.container.getBoundingClientRect().left
+			- this.sectionProperties.canvasContainerBounds.left);
+		if (cardLeft < x2)
+			line.setAttribute('x2', String(Math.max(x1, cardLeft)));
 	}
 
 	private showArrow (startPoint: Array<number>, endPoint: Array<number>): void {
@@ -2785,12 +3303,15 @@ export class CommentSection extends CanvasSectionObject {
 		if ((<any>window).mode.isSmallScreenDevice() || app.map._docLayer._docType === 'spreadsheet') {
 			if (this.sectionProperties.commentList.length > 0)
 				this.orderCommentList();
+			this.addedCommentToShow = null;
+			this.cardBesideRemoved = null;
 			return; // No adjustments for Calc, since only one comment can be shown at a time and that comment is shown at its belonging cell.
 		}
 
 		this.sectionProperties.canvasContainerBounds = document.getElementById('document-container').getBoundingClientRect();
 
 		const availableSpace = this.calculateAvailableSpace();
+		let byPage = false;
 		if (!this.commentsHiddenOrNotPresent()) {
 			this.orderCommentList();
 			if (relayout)
@@ -2852,14 +3373,21 @@ export class CommentSection extends CanvasSectionObject {
 			var stackFromTop = selectedIndex === null
 				|| app.map._docLayer._docType === 'presentation'
 				|| app.map._docLayer._docType === 'drawing';
-			if (stackFromTop) {
+			byPage = this.usePerPageLayout();
+			if (byPage) {
+				lastY = this.layoutByPage(x, relayout);
+			}
+			else if (stackFromTop) {
 				lastY = this.loopDown(0, x, topRight[1], relayout);
 			}
 			else {
 				this.loopUp(selectedIndex - 1, x, yOrigin, relayout);
 				lastY = this.loopDown(selectedIndex, x, yOrigin, relayout);
 			}
+			if (!byPage)
+				this.releasePageScrollers();
 		} else {
+			this.releasePageScrollers();
 			for (const comment of this.sectionProperties.commentList) {
 				comment.setContainerPos(false, this.sectionProperties.canvasContainerBounds);
 			}
@@ -2870,7 +3398,9 @@ export class CommentSection extends CanvasSectionObject {
 			// detaches replies from their (now resized) parent. Reposition once more
 			// with the final heights so replies sit right under the parent.
 			if (!this.commentsHiddenOrNotPresent()) {
-				if (stackFromTop)
+				if (byPage)
+					lastY = this.layoutByPage(x, false);
+				else if (stackFromTop)
 					lastY = this.loopDown(0, x, topRight[1], false);
 				else
 					lastY = this.loopDown(selectedIndex, x, yOrigin, false);
@@ -2879,6 +3409,29 @@ export class CommentSection extends CanvasSectionObject {
 				this.updateChildLines();
 			}
 		}
+		// The cards have their final heights after the last pass. The boxes
+		// scroll to a new selection in every pass until then.
+		if (byPage && !this.commentsHiddenOrNotPresent()) {
+			if (this.sectionProperties.selectedComment !== this.selectionShownInBox)
+				this.cardPressedToSelect = null;
+			this.selectionShownInBox = this.sectionProperties.selectedComment;
+			// Each box keeps the position it has now, also where the browser
+			// moved it to the end of cards that got shorter.
+			if (relayout) {
+				for (const scroller of this.pageScrollers.values())
+					this.pageScrollTops.set(scroller, scroller.scrollTop);
+			}
+			this.scrollToEditedComment();
+			if (this.addedCommentToShow)
+				this.scrollDocumentToCard(this.addedCommentToShow, true);
+		}
+		// An added comment is shown by one layout only. The card beside a
+		// removed one stays in place until the removed comment has left the
+		// list.
+		this.addedCommentToShow = null;
+		if (this.cardBesideRemoved && this.sectionProperties.commentList.indexOf(this.cardBesideRemoved.removed) === -1)
+			this.cardBesideRemoved = null;
+		this.endArrowAtSelectedComment();
 
 		// Grow the scrollable area to cover the comments. The layout owns viewSize
 		// (ensureViewSizeCoversComments): extra column width (twips) when a comment
