@@ -130,6 +130,9 @@ local file="$1"
         */libkitgtk.so)
             allowlist="${allowlist} ${gtk3allowlist}"
         ;;
+        */libdrawinglayerlo.so)
+            allowlist="${allowlist} libcairo.so.2"
+        ;;
         */libskialo.so)
             allowlist="${allowlist} ${x11allowlist}"
         ;;
