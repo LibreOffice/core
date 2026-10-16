@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Container formats underlying office documents: OLE2/CFB compound files, ZIP, OPC (OOXML) and ODF packages, plus password-protected document decryption.</Description>
+    <Description>Container formats underlying office documents: OLE2/CFB compound files, ZIP, OPC (OOXML) and ODF packages, plus password-protected document decryption. Part of X-Ray.Office, a pure C# port of LibreOffice's document import and rendering; install the X-Ray.Office package for the whole set.</Description>
   </PropertyGroup>
 
   <ItemGroup>

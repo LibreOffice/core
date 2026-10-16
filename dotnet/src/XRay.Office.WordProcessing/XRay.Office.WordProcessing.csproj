@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Word-processing documents (the LibreOffice Writer equivalent): DOCX/DOCM/DOTX/DOTM, DOC/DOT, RTF, ODT/OTT/FODT. Content extraction plus paginated layout and rendering.</Description>
+    <Description>Word-processing documents (the LibreOffice Writer equivalent): DOCX/DOCM/DOTX/DOTM, DOC/DOT, RTF, ODT/OTT/FODT. Content extraction plus paginated layout and rendering. Part of X-Ray.Office, a pure C# port of LibreOffice's document import and rendering; install the X-Ray.Office package for the whole set.</Description>
   </PropertyGroup>
 
   <ItemGroup>

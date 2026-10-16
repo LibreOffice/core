@@ -1,3 +1,23 @@
+# X-Ray.Office
+
+This repository is also the home of **X-Ray.Office**, a pure C# / .NET port of LibreOffice's
+Writer, Calc and Impress import and layout code. It renders Word, Excel and PowerPoint documents,
+and the legacy binary, OpenDocument and RTF formats around them, to PDF and images, and extracts
+their text, tables and structure, with no LibreOffice process and no office installation. It is
+part of the [X-Ray](https://github.com/curiosity-ai/x-ray) family of .NET libraries and is
+published on NuGet as [`X-Ray.Office`](https://www.nuget.org/packages/X-Ray.Office/).
+
+```sh
+dotnet add package X-Ray.Office
+```
+
+The C# code lives entirely under [`dotnet/`](dotnet/); start with
+[`dotnet/README.md`](dotnet/README.md). The LibreOffice source tree that makes up the rest of
+this repository is the reference the port is read from. It is not built, and its own README
+follows unchanged.
+
+---
+
 # LibreOffice
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/211/badge.svg)](https://scan.coverity.com/projects/211) [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/307/badge)](https://www.bestpractices.dev/projects/307) [![Translation status](https://weblate.documentfoundation.org/widgets/libo_ui-master/-/svg-badge.svg)](https://weblate.documentfoundation.org/engage/libo_ui-master/?utm_source=widget)
 

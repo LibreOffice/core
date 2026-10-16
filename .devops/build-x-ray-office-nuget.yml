@@ -1,0 +1,146 @@
+# Publishes X-Ray.Office to nuget.org: the C# port of LibreOffice's Writer, Calc and Impress
+# readers and layout under dotnet/, whose API lives in the XRay.Office namespaces. Modelled on
+# curiosity-ai/x-ray-content's .devops/build-x-ray-nuget.yml: CalVer versioning off the build id,
+# pack, then push through the shared service connection.
+#
+# The whole set ships in one run, from one version. The facade, X-Ray.Office, references the other
+# twelve libraries by ProjectReference, and `dotnet pack` writes each of those as a package
+# dependency at the version the referenced project was packed with, so publishing them together
+# pins the facade's dependencies to this run with nothing to bump by hand. Publishing a member on
+# its own would leave the facade pointing at the older version.
+#
+# The family's umbrella package, `X-Ray`, lives in curiosity-ai/x-ray and references the facade by
+# PackageReference; it picks up a new X-Ray.Office the next time its own pipeline runs.
+variables:
+  # Every packable project (the libraries under dotnet/src), in dependency order. The two tasks
+  # that take a list do not take it the same way: `projects` (restore/build) is a multi-line input,
+  # one path per line, while `packagesToPack` is a *pattern* input split on semicolons only — a
+  # newline-separated value there is one pattern containing a newline, which matches no file, and
+  # the pack step fails with "No files matched the search pattern". Hence `packList` below.
+  core: './dotnet/src/XRay.Office.Core/XRay.Office.Core.csproj'
+  containers: './dotnet/src/XRay.Office.Containers/XRay.Office.Containers.csproj'
+  text: './dotnet/src/XRay.Office.Text/XRay.Office.Text.csproj'
+  vector: './dotnet/src/XRay.Office.Vector/XRay.Office.Vector.csproj'
+  rendering: './dotnet/src/XRay.Office.Rendering/XRay.Office.Rendering.csproj'
+  markup: './dotnet/src/XRay.Office.Markup/XRay.Office.Markup.csproj'
+  ooxml: './dotnet/src/XRay.Office.Ooxml/XRay.Office.Ooxml.csproj'
+  opendocument: './dotnet/src/XRay.Office.OpenDocument/XRay.Office.OpenDocument.csproj'
+  msbinary: './dotnet/src/XRay.Office.MsBinary/XRay.Office.MsBinary.csproj'
+  wordprocessing: './dotnet/src/XRay.Office.WordProcessing/XRay.Office.WordProcessing.csproj'
+  spreadsheets: './dotnet/src/XRay.Office.Spreadsheets/XRay.Office.Spreadsheets.csproj'
+  presentations: './dotnet/src/XRay.Office.Presentations/XRay.Office.Presentations.csproj'
+  facade: './dotnet/src/XRay.Office/XRay.Office.csproj'
+  # The same thirteen projects as one semicolon-separated pattern, for `packagesToPack`.
+  packList: '$(core);$(containers);$(text);$(vector);$(rendering);$(markup);$(ooxml);$(opendocument);$(msbinary);$(wordprocessing);$(spreadsheets);$(presentations);$(facade)'
+  buildConfiguration: 'Release'
+  targetVersion: yy.M.$(build.buildId)
+
+# Only the C# port publishes these packages. The rest of this repository is the LibreOffice source
+# tree, kept as reference, so without the path filter every change to it would ship a new NuGet
+# version that contains no C# change. The default branch here is `master`; `main` is listed too so
+# the trigger survives a rename.
+trigger:
+  branches:
+    include:
+    - master
+    - main
+  paths:
+    include:
+    - dotnet/*
+    - .devops/build-x-ray-office-nuget.yml
+
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+- task: NuGetToolInstaller@0
+
+
+- task: PowerShell@2
+  displayName: 'Create CalVer Version'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $dottedDate = (Get-Date).ToString("yy.M")
+      $buildID = $($env:BUILD_BUILDID)
+      $modBuildID = [int]$buildID % 65536  # ensure fits in int16
+      $newTargetVersion = "$dottedDate.$modBuildID"
+      Write-Host "##vso[task.setvariable variable=targetVersion;]$newTargetVersion"
+      Write-Host "Updated targetVersion to '$newTargetVersion'"
+
+
+- task: UseDotNet@2
+  displayName: 'Use .NET 10.0 SDK'
+  inputs:
+    packageType: sdk
+    version: 10.x
+    includePreviewVersions: false
+    installationPath: $(Agent.ToolsDirectory)\dotnet
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: |
+      $(core)
+      $(containers)
+      $(text)
+      $(vector)
+      $(rendering)
+      $(markup)
+      $(ooxml)
+      $(opendocument)
+      $(msbinary)
+      $(wordprocessing)
+      $(spreadsheets)
+      $(presentations)
+      $(facade)
+  displayName: 'restore nuget'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: |
+      $(core)
+      $(containers)
+      $(text)
+      $(vector)
+      $(rendering)
+      $(markup)
+      $(ooxml)
+      $(opendocument)
+      $(msbinary)
+      $(wordprocessing)
+      $(spreadsheets)
+      $(presentations)
+      $(facade)
+    arguments: '-c $(buildConfiguration) /p:Version=$(targetVersion) /p:LangVersion=latest'
+  displayName: 'build'
+
+# No test step: XRay.Office.Fidelity.Tests needs an installed LibreOffice with a pinned font set,
+# and the corpus gate needs the sample-files corpus; neither is on a hosted agent. The other test
+# projects are self-contained and could run here, but the libraries' parity is measured locally
+# against LibreOffice (see dotnet/CLAUDE.md), so a green hosted run would say little.
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'pack'
+    packagesToPack: '$(packList)'
+    packDirectory: '$(Build.ArtifactStagingDirectory)'
+    versioningScheme: 'off'
+    configuration: '$(buildConfiguration)'
+    buildProperties: 'Version="$(targetVersion)";LangVersion="latest"'
+    nobuild: true
+  displayName: 'pack nuget'
+
+# The push below picks up every .nupkg in the staging directory, so all thirteen packages go out
+# in one step (the .snupkg symbol packages beside them are pushed with their .nupkg). NuGet
+# accepts them in any order: a package may be published before a dependency it names, and the
+# dependency only has to exist by the time a consumer restores.
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'nuget-curiosity-org'
+  displayName: 'push nuget'

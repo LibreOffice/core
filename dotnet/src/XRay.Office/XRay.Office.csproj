@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>The XRay.Office facade: sniffs any supported office document and dispatches to the right reader. Reference this package if you do not want to pick libraries by hand.</Description>
+    <Description>Renders Word, Excel and PowerPoint documents, with their legacy binary, OpenDocument and RTF relatives, to PDF and images (PNG, JPEG), and extracts their text, tables and structure. Pure C#, ported from LibreOffice; no office install, no native office process. This is the X-Ray.Office facade: it identifies a document by its content, dispatches to the right reader, and depends on every other X-Ray.Office package, so installing it brings the whole set.</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +13,14 @@
     <ProjectReference Include="..\XRay.Office.WordProcessing\XRay.Office.WordProcessing.csproj" />
     <ProjectReference Include="..\XRay.Office.Spreadsheets\XRay.Office.Spreadsheets.csproj" />
     <ProjectReference Include="..\XRay.Office.Presentations\XRay.Office.Presentations.csproj" />
+    <!-- Not needed to compile the facade, and referenced anyway: this package is what a consumer
+         installs to get the whole set, and a ProjectReference to a packable project becomes a
+         package dependency at the version packed in the same run. The three shared-format
+         libraries already arrive through the readers; listing them states the set outright. -->
+    <ProjectReference Include="..\XRay.Office.Markup\XRay.Office.Markup.csproj" />
+    <ProjectReference Include="..\XRay.Office.Ooxml\XRay.Office.Ooxml.csproj" />
+    <ProjectReference Include="..\XRay.Office.OpenDocument\XRay.Office.OpenDocument.csproj" />
+    <ProjectReference Include="..\XRay.Office.MsBinary\XRay.Office.MsBinary.csproj" />
   </ItemGroup>
 
 </Project>

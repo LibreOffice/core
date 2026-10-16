@@ -1,7 +1,7 @@
 <Project>
 
   <!--
-    Shared MSBuild settings for every project in the XRay.Office solution.
+    Shared MSBuild settings for every project in the X-Ray.Office solution (dotnet/XRay.Office.slnx).
     Project-specific overrides belong in the individual .csproj.
   -->
 
@@ -21,7 +21,7 @@
 
     <!-- Determinism: byte-identical builds matter for golden-image test caching -->
     <Deterministic>true</Deterministic>
-    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true' or '$(TF_BUILD)' == 'true'">true</ContinuousIntegrationBuild>
 
     <!-- We ship a lot of binary-format parsing; unsafe/Span-heavy code is expected. -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -33,25 +33,59 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
-  <!-- NuGet package metadata, applied to every shipped library. -->
+  <!--
+    NuGet package metadata, applied to every shipped library.
+
+    The package ids are hyphenated as in the rest of the X-Ray family (X-Ray.Office,
+    X-Ray.Office.Core, ...); the assemblies and namespaces are not (X-Ray.Office, XRay.Office.Core),
+    because a hyphen is not valid in a C# identifier. PackageId is derived from the project name
+    below, so a new library under src/ gets the right id without saying so.
+
+    The version here is the local default. The publishing pipeline
+    (.devops/build-x-ray-office-nuget.yml) passes /p:Version with a CalVer number, which wins.
+
+    Licence: MPL-2.0, because the port derives from LibreOffice's MPL-2.0 sources (COPYING.MPL at
+    the repository root). XRay.Office.Text overrides it, since it also ships the bundled fonts,
+    which carry their own licences; see that project file.
+  -->
   <PropertyGroup>
     <VersionPrefix>0.1.0</VersionPrefix>
     <VersionSuffix Condition="'$(VersionSuffix)' == ''">alpha</VersionSuffix>
-    <Authors>XRay.Office contributors</Authors>
-    <Product>XRay.Office</Product>
-    <PackageProjectUrl>https://github.com/theolivenbaum/libreoffice-core</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/theolivenbaum/libreoffice-core</RepositoryUrl>
+    <Authors>Curiosity GmbH</Authors>
+    <Company>Curiosity GmbH</Company>
+    <Product>X-Ray.Office</Product>
+    <PackageProjectUrl>https://github.com/curiosity-ai/x-ray-office/tree/master/dotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/curiosity-ai/x-ray-office</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
-    <PackageTags>office;document;docx;xlsx;pptx;odf;extraction;rendering</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageTags>x-ray;office;document;docx;xlsx;pptx;doc;xls;ppt;odf;rtf;pdf;rendering;extraction;libreoffice</PackageTags>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
-  <!-- Libraries under src/ are packable; tests and tools are not. -->
-  <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectDirectory)').Contains('$([System.IO.Path]::DirectorySeparatorChar)src$([System.IO.Path]::DirectorySeparatorChar)'))">
-    <IsPackable>true</IsPackable>
+  <!--
+    Libraries under src/ are packable; everything else (tests, the test kit, the CLI, probes) is
+    not. Tested against this file's own directory rather than by looking for "/src/" anywhere in
+    the path, so a checkout that happens to live under some ~/src/ does not make every test
+    project packable.
+  -->
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <PropertyGroup Condition="$(MSBuildProjectDirectory.StartsWith('$(MSBuildThisFileDirectory)src'))">
+    <IsPackable>true</IsPackable>
+    <PackageId>$(MSBuildProjectName.Replace('XRay.Office', 'X-Ray.Office'))</PackageId>
+  </PropertyGroup>
+
+  <!-- One package README and the family icon, shared by every package. -->
+  <ItemGroup Condition="'$(IsPackable)' == 'true'">
+    <None Include="$(MSBuildThisFileDirectory)assets/README.package.md" Pack="true" PackagePath="/README.md" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)assets/logo.png" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
 
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
     <IsPackable>false</IsPackable>

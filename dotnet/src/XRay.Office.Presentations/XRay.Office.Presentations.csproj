@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Presentation documents (the LibreOffice Impress equivalent): PPTX/PPTM/POTX/POTM/PPSX/PPSM, PPT/POT/PPS, ODP/OTP/FODP. Includes slide rendering.</Description>
+    <Description>Presentation documents (the LibreOffice Impress equivalent): PPTX/PPTM/POTX/POTM/PPSX/PPSM, PPT/POT/PPS, ODP/OTP/FODP. Includes slide rendering. Part of X-Ray.Office, a pure C# port of LibreOffice's document import and rendering; install the X-Ray.Office package for the whole set.</Description>
   </PropertyGroup>
 
   <ItemGroup>
