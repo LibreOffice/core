@@ -28,6 +28,7 @@ $(eval $(call gb_Library_use_libraries,united,\
 $(eval $(call gb_Library_use_static_libraries,united,\
 	findsofficepath \
 	ulingu \
+	$(if $(ENABLE_CURL),ulinguremote) \
 ))
 
 $(eval $(call gb_Library_use_externals,united,\

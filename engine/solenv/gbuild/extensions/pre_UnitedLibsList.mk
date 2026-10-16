@@ -59,6 +59,7 @@ gb_UNITED_LIBRARY_LIST := \
 	docmodel \
 	drawinglayercore \
 	drawinglayer \
+	$(if $(ENABLE_CURL),Duden) \
 	editeng \
 	embobj \
 	emboleobj \
@@ -79,6 +80,7 @@ gb_UNITED_LIBRARY_LIST := \
 	fwk \
 	guesslang \
 	graphicfilter \
+	$(if $(ENABLE_CURL),Grammalecte) \
 	$(call gb_Helper_optionals_and,DESKTOP XMLHELP,helplinker) \
 	hwp \
 	hyphen \
