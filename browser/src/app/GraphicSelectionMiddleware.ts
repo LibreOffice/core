@@ -466,6 +466,7 @@ class GraphicSelection {
 
 			if (event.key === 'Escape') return Interaction.context().escape();
 			if (this.travelByKey(event)) return true;
+			if (this.selectionSection?.resetByKey(event)) return true;
 			if (
 				event.key === 'Enter' &&
 				!event.shiftKey &&

@@ -1543,12 +1543,176 @@ abstract class SelectionSection extends CanvasSectionObject {
 			: TurningInteraction.readingOf(this.turnOfTheSelection());
 	}
 
-	/// The angle the selection stands at, as the canvas counts angles: the one the turn keys
-	/// left it at, where they did, or the one its square stands at.
-	private turnOfTheSelection(): number {
+	/// Whether the selection is one object that draws itself, not several and not a group.
+	public isOneObject(): boolean {
+		const objects = this.selectedObjects();
+		const drawing = RenderGeometrySection.theOnesThatDraw(
+			RenderGeometrySection.standingFor(objects),
+		);
+		return (
+			objects.length === 1 && drawing.length === 1 && drawing[0] === objects[0]
+		);
+	}
+
+	/// The turn of a mapping: the angle of its across axis, as the canvas counts angles.
+	private static turnOfTheMapping(mapping: cool.Matrix2D): number {
+		return Math.atan2(mapping.b, mapping.a);
+	}
+
+	/*
+		The slant of a mapping: the angle its axis down from the upper side stands at against the
+		right angle to that side, in the slant's own coordinates. On a mapping turned over that
+		axis points up, and the slant is measured against its own way.
+	*/
+	private static slantOfTheMapping(mapping: cool.Matrix2D): number {
+		const turn = SelectionSection.turnOfTheMapping(mapping);
+		const across = mapping.c * Math.cos(turn) + mapping.d * Math.sin(turn);
+		const down = -mapping.c * Math.sin(turn) + mapping.d * Math.cos(turn);
+		return down >= 0 ? Math.atan2(-across, down) : Math.atan2(across, -down);
+	}
+
+	/*
+		The turns or the slants of the objects that draw for this selection, members of groups
+		included: whether any of them has one, and the one all of them share, or nothing where
+		they differ, in radians. The engine keeps angles in hundredths of a degree, so a little is
+		allowed for.
+	*/
+	public anglesOf(kind: 'turn' | 'slant'): {
+		any: boolean;
+		shared: number | null;
+	} {
+		const angles = RenderGeometrySection.theOnesThatDraw(
+			RenderGeometrySection.standingFor(this.selectedObjects()),
+		)
+			.map((objectId: number) => RenderGeometrySection.transformOf(objectId))
+			.filter((mapping) => !!mapping)
+			.map((mapping) =>
+				kind === 'turn'
+					? SelectionSection.turnOfTheMapping(mapping as cool.Matrix2D)
+					: SelectionSection.slantOfTheMapping(mapping as cool.Matrix2D),
+			);
+		if (!angles.length) return { any: false, shared: null };
+
+		const apart = (one: number, other: number) =>
+			Math.abs(Math.sin((one - other) / 2));
+		const any = angles.some((angle: number) => apart(angle, 0) > 0.0005);
+		const shared = angles.every(
+			(angle: number) => apart(angle, angles[0]) < 0.001,
+		);
+		return { any, shared: shared ? angles[0] : null };
+	}
+
+	/*
+		The mapping that stands for several objects or a group where they all have the same turn
+		and the same slant: the first one's. Nothing where they differ.
+	*/
+	public mappingTheyShare(): cool.Matrix2D | null {
+		if (this.anglesOf('turn').shared === null) return null;
+		if (this.anglesOf('slant').shared === null) return null;
+
+		const first = RenderGeometrySection.theOnesThatDraw(
+			RenderGeometrySection.standingFor(this.selectedObjects()),
+		)[0];
+		return first === undefined
+			? null
+			: (RenderGeometrySection.transformOf(first) ?? null);
+	}
+
+	/*
+		Takes the turns away by the 0 key, the 0 of the row of digits or of the number pad: every
+		turn where some object is turned, otherwise every slant where some object is slanted. A 0
+		that finds neither is left alone and goes on as any other key. Answers whether the key was
+		used.
+	*/
+	public resetByKey(event: KeyboardEvent): boolean {
+		if (event.code !== 'Digit0' && event.code !== 'Numpad0') return false;
+		if (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey)
+			return false;
+
+		if (this.anglesOf('turn').any) this.takeTheAnglesAway('turn');
+		else if (this.anglesOf('slant').any) this.takeTheAnglesAway('slant');
+		else return false;
+		return true;
+	}
+
+	/*
+		Takes the turn or the slant away from every object that draws for the selection, members
+		of groups included, each by its own angle around its own middle. The engine is sent every
+		object's new mapping as one change and draws the result; nothing is laid on here first,
+		since a change per object is not one the selection's frame can follow before the answer.
+	*/
+	private takeTheAnglesAway(kind: 'turn' | 'slant'): void {
+		const reached = new Map<number, cool.Matrix2D>();
+		for (const objectId of RenderGeometrySection.theOnesThatDraw(
+			RenderGeometrySection.standingFor(this.selectedObjects()),
+		)) {
+			const mapping = RenderGeometrySection.transformOf(objectId);
+			if (!mapping) continue;
+
+			const middle = mapping.apply(0.5, 0.5);
+			reached.set(
+				objectId,
+				mapping.then(
+					kind === 'slant'
+						? SelectionSection.slantTakenAway(mapping, middle)
+						: cool.Matrix2D.IDENTITY.rotateAround(
+								middle.x,
+								middle.y,
+								-SelectionSection.turnOfTheMapping(mapping),
+							),
+				),
+			);
+		}
+
+		if (!reached.size) return;
+
+		ShearingInteraction.forgetTheKeys();
+		TurningInteraction.forgetTheKeys();
+		SelectionSection.sendMappings(reached, kind === 'turn' ? 'turn' : 'shear');
+	}
+
+	/*
+		The change that takes the slant of that mapping away around that point: in the frame along
+		its upper side, the upper side stays and the axis down from it is stood at a right angle
+		to it, keeping its length.
+	*/
+	private static slantTakenAway(
+		mapping: cool.Matrix2D,
+		around: cool.Point,
+	): cool.Matrix2D {
+		const turn = SelectionSection.turnOfTheMapping(mapping);
+		const cos = Math.cos(turn);
+		const sin = Math.sin(turn);
+		const frame = new cool.Matrix2D(cos, sin, -sin, cos, around.x, around.y);
+		const back = frame.invert();
+		const across = mapping.c * cos + mapping.d * sin;
+		const down = -mapping.c * sin + mapping.d * cos;
+		if (!back || !down) return cool.Matrix2D.IDENTITY;
+
+		const length = Math.hypot(across, down);
+		const upright = new cool.Matrix2D(
+			1,
+			0,
+			-across / down,
+			(Math.sign(down) * length) / down,
+			0,
+			0,
+		);
+		return back.then(upright).then(frame);
+	}
+
+	/*
+		The angle the selection stands at, as the canvas counts angles: the one the turn keys left
+		it at, where they did; for several objects or a group the turn they all share, where they
+		do; otherwise the one its square stands at, which for a single object also knows whether
+		it was turned over.
+	*/
+	public turnOfTheSelection(): number {
 		const byKeys = TurningInteraction.keysStillHold(this);
 		if (byKeys) return (-byKeys.stands * Math.PI) / 180;
-		return this.squareNow()?.rotation() ?? 0;
+
+		const shared = this.isOneObject() ? null : this.anglesOf('turn').shared;
+		return shared ?? this.squareNow()?.rotation() ?? 0;
 	}
 
 	/*
@@ -2170,45 +2334,56 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (!from) ShearingInteraction.forgetTheKeys();
 		TurningInteraction.forgetTheKeys();
 
-		const mappings: string[] = [];
-
 		/*
 			A group is named to the engine as the objects it holds. It has no mapping of its own
 			to be given - the drawing layer keeps only a rectangle for it, and hands a turn on to
 			what is inside it - so naming the group would lose the turn. Naming the objects
 			cannot: each of them has a mapping and takes it whole.
 		*/
+		const reached = new Map<number, cool.Matrix2D>();
 		for (const objectId of RenderGeometrySection.theOnesThatDraw(
 			RenderGeometrySection.standingFor(objectIds),
 		)) {
 			const mapping =
 				from?.get(objectId) ?? RenderGeometrySection.transformOf(objectId);
-			if (!mapping) continue;
 
 			// The change the drag stands for, laid over what the object is drawn by now.
-			const reached = mapping.then(matrix).toArray();
+			if (mapping) reached.set(objectId, mapping.then(matrix));
+		}
 
-			/*
-				A mapping that turns the object over travels whole, turn over and all. The object
-				lays that out itself, and it does it in its own frame: it builds its rectangle
-				unturned at the origin, mirrors it there, and only then shears, turns and moves
-				it. Asking for the turn over apart from the mapping would mean naming a line for
-				it, and a line that does not lie along one of the page's own two is not one the
-				drawing layer can follow.
-			*/
+		SelectionSection.sendMappings(reached, what);
+	}
+
+	/*
+		Hands the engine the mapping each of those objects is to be drawn by, as one change named
+		by the last word.
+
+		A mapping that turns the object over travels whole, turn over and all. The object lays that
+		out itself, and it does it in its own frame: it builds its rectangle unturned at the origin,
+		mirrors it there, and only then shears, turns and moves it. Asking for the turn over apart
+		from the mapping would mean naming a line for it, and a line that does not lie along one of
+		the page's own two is not one the drawing layer can follow.
+	*/
+	public static sendMappings(
+		reached: Map<number, cool.Matrix2D>,
+		what: string,
+	): void {
+		const mappings: string[] = [];
+		for (const [objectId, mapping] of reached)
 			mappings.push(
 				String(objectId) +
 					',' +
-					reached.map((value: number) => value.toFixed(4)).join(','),
+					mapping
+						.toArray()
+						.map((value: number) => value.toFixed(4))
+						.join(','),
 			);
-		}
 
 		if (!mappings.length) return;
 
-		const message =
-			'setobjecttransform to=' + mappings.join(';') + ' as=' + what;
-
-		app.socket.sendMessage(message);
+		app.socket.sendMessage(
+			'setobjecttransform to=' + mappings.join(';') + ' as=' + what,
+		);
 	}
 
 	/*

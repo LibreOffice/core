@@ -898,14 +898,9 @@ class TurningHandle extends HandleGroup {
 		return EditSteps.nextStep(stands, step, way) - stands;
 	}
 
-	/// The angle the selection stands at, in degrees against the clock as the engine counts it:
-	/// the one the turn keys left it at, where they did, or the one its square stands at.
+	/// The angle the selection stands at, in degrees against the clock as the engine counts it.
 	private standsNow(): number {
-		const byKeys = TurningInteraction.keysStillHold(this.selection);
-		if (byKeys) return byKeys.stands;
-
-		const square = this.selection.squareNow();
-		return square ? (-square.rotation() * 180) / Math.PI : 0;
+		return (-this.selection.turnOfTheSelection() * 180) / Math.PI;
 	}
 
 	/*

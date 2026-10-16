@@ -71,10 +71,11 @@ class ShearingInteraction extends SelectionInteraction {
 		this.radius = Math.hypot(at.x - middle.x, at.y - middle.y);
 
 		/*
-			A single object is sheared from the slant it has, read from its own mapping. Several
-			objects, or a group, whose own mapping is a plain rectangle, are sheared as the
-			selection's square, which starts upright and without a slant and carries what was
-			done to it since, as a turn does. The frame lies along the upper side of what is read,
+			A single object is sheared from the slant it has, read from its own mapping, and so are
+			several objects, or a group's members, that all have the same turn and slant, read
+			from the first of them. Otherwise several objects, or a group, whose own mapping is a
+			plain rectangle, are sheared as the selection's square, which starts upright and
+			without a slant and carries what was done to it since, as a turn does. The frame lies along the upper side of what is read,
 			the way round that the handle is turned by.
 		*/
 		const objects = selection.selectedObjects();
@@ -85,7 +86,7 @@ class ShearingInteraction extends SelectionInteraction {
 			objects.length === 1 && drawing.length === 1 && drawing[0] === objects[0];
 		const mapping = single
 			? RenderGeometrySection.transformOf(objects[0])
-			: selection.squareNow();
+			: (selection.mappingTheyShare() ?? selection.squareNow());
 
 		let turn = turnedBy;
 		if (mapping) {
