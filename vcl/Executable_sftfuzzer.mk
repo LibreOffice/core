@@ -28,10 +28,13 @@ $(eval $(call gb_Executable_set_include,sftfuzzer,\
 
 $(eval $(call gb_Executable_use_libraries,sftfuzzer,\
     $(fuzzer_core_libraries) \
+    guesslang \
+    pdffilter \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,sftfuzzer,\
     $(fuzzer_statics) \
+    fuzzer_core \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,sftfuzzer,\
