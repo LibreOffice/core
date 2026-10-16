@@ -2415,6 +2415,7 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
                           { "allow_user_settings", "ALLOW_USER_SETTINGS" },
                           { "spellchecking_level", "SPELLCHECKING_LEVEL" },
                           { "orthography_standard", "ORTHOGRAPHY_STANDARD" },
+                          { "message_level", "MESSAGE_LEVEL" },
                           { "property_sets", "PROPERTY_SETS" },
                           { "dictionaries", "DICTIONARIES" } });
     exportRemoteChecker("grammalecte", "GRAMMALECTE",

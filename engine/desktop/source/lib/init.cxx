@@ -1432,6 +1432,9 @@ void setRemoteCheckerConfig()
             DudenCfg::SpellcheckingLevel::set(oValue->toInt32(), batch);
         if (const std::optional<OUString> oValue = envString("DUDEN", "ORTHOGRAPHY_STANDARD"))
             DudenCfg::OrthographyStandard::set(*oValue, batch);
+        if (const std::optional<OUString> oValue = envString("DUDEN", "MESSAGE_LEVEL");
+            oValue && !oValue->isEmpty())
+            DudenCfg::MessageLevel::set(oValue->toInt32(), batch);
         if (const std::optional<cpo::uno::Sequence<OUString>> oValue = envList("DUDEN", "PROPERTY_SETS"))
             DudenCfg::PropertySets::set(*oValue, batch);
         if (const std::optional<cpo::uno::Sequence<OUString>> oValue = envList("DUDEN", "DICTIONARIES"))

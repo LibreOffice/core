@@ -100,6 +100,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "duden.base_url", "" },
     { "duden.dictionaries", "" },
     { "duden.enabled", "false" },
+    { "duden.message_level", "1" },
     { "duden.orthography_standard", "duden" },
     { "duden.property_sets", "" },
     { "duden.spellchecking_level", "3" },
