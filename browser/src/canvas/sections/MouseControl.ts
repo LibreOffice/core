@@ -36,6 +36,19 @@ class MouseControl extends CanvasSectionObject {
 	/// True while a drag selects text here, without the server.
 	private selectingText: boolean = false;
 
+	// A press inside the selection drags the selection, which only a clear drag does: the pointer
+	// moves further than selectionDragDistance CSS pixels, or the button is held still for
+	// selectionDragHoldTime milliseconds before the pointer moves. A slight slip of a touchpad
+	// press stays a click.
+	private static readonly selectionDragDistance = 10;
+	private static readonly selectionDragHoldTime = 300;
+	// Whether the press landed inside this view's selection.
+	private pressedInSelection: boolean = false;
+	// When the button went down, and when the first drag move of this press arrived, both in
+	// milliseconds since the epoch. The second is zero until a drag move arrives.
+	private timeOfPress: number = 0;
+	private timeOfFirstDragMove: number = 0;
+
 	/// The selection this press is carrying, where the press marked the object itself. Null
 	/// while no such drag is running.
 	private carrying: SelectionSection | null = null;
@@ -438,8 +451,14 @@ class MouseControl extends CanvasSectionObject {
 			// so no drag of the engine's own is begun.
 			if (this.carryTheObject(modifier)) return;
 
+			// A press inside the selection drags the selection itself, so it selects no text
+			// here and waits for a clear drag before the engine hears of it.
+			if (this.pressedInSelection) {
+				if (!this.mouseDownSent && !this.isClearSelectionDrag(dragDistance))
+					return;
+			}
 			// A drag that starts in the text being edited selects the text here.
-			if (this.selectingText || this.startSelectingText()) {
+			else if (this.selectingText || this.startSelectingText()) {
 				point.pX += this.position[0];
 				point.pY += this.position[1];
 				app.map.fire('handleautoscroll', {
@@ -576,6 +595,19 @@ class MouseControl extends CanvasSectionObject {
 		this.carrying = null;
 	}
 
+	// Whether a drag from inside the selection is clear enough to move the selection.
+	private isClearSelectionDrag(dragDistance: Array<number>): boolean {
+		if (!this.timeOfFirstDragMove) this.timeOfFirstDragMove = Date.now();
+
+		const distance =
+			Math.hypot(dragDistance[0], dragDistance[1]) / app.dpiScale;
+		return (
+			distance > MouseControl.selectionDragDistance ||
+			this.timeOfFirstDragMove - this.timeOfPress >=
+				MouseControl.selectionDragHoldTime
+		);
+	}
+
 	/// Whether the document was told to drag as well, which it then has to be told to stop.
 	public startedDocumentDrag(): boolean {
 		return this.mouseDownSent;
@@ -594,6 +626,7 @@ class MouseControl extends CanvasSectionObject {
 		this.mouseDownSent = false;
 		this.positionOnMouseDown = null;
 		this.lastDragLocalPoint = null;
+		this.pressedInSelection = false;
 	}
 
 	private hideShapeDragPreview(): void {
@@ -634,6 +667,13 @@ class MouseControl extends CanvasSectionObject {
 		this.refreshPosition(point);
 		this.positionOnMouseDown = this.currentPosition.clone();
 		this.modifierOnMouseDown = MouseControl.readModifier(e);
+		this.timeOfPress = Date.now();
+		this.timeOfFirstDragMove = 0;
+		this.pressedInSelection =
+			e.type !== 'touchstart' &&
+			!!app.activeDocument?.activeView.selectionContains(
+				this.positionOnMouseDown,
+			);
 
 		if (e.type === 'touchstart') {
 			// For swipe action.
@@ -662,6 +702,20 @@ class MouseControl extends CanvasSectionObject {
 			);
 
 			app.map.fire('scrollvelocity', { vx: 0, vy: 0 });
+		} else if (
+			this.pressedInSelection &&
+			this.positionOnMouseDown &&
+			this.containerObject.isDraggingSomething()
+		) {
+			// A press inside the selection that never became a clear drag is a click there.
+			this.sendClick(
+				{
+					sendingPosition: this.positionOnMouseDown,
+					buttons: app.LOButtons.left,
+					modifier: this.modifierOnMouseDown,
+				},
+				1,
+			);
 		} else if (e.type === 'touchend' && this.localPositionOnMouseDown) {
 			// For swipe action.
 			const diff = new cool.SimplePoint(
@@ -681,6 +735,7 @@ class MouseControl extends CanvasSectionObject {
 		this.lastTouchDragPoint = null;
 		this.mouseDownSent = false;
 		this.lastDragLocalPoint = null;
+		this.pressedInSelection = false;
 
 		// A touch pan is a drag too.
 		if (this.containerObject.isDraggingSomething()) app.map.refocus();

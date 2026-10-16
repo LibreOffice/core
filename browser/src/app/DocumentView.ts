@@ -22,6 +22,11 @@ class DocumentViewBase {
 	private _selectionSection: TextSelectionSection;
 	public hasTextSelection: boolean = false;
 	public _selectionFragmented: boolean = false;
+	// The rectangles of the selection as the document sent them, each one [x, y, width, height]
+	// in twips, with the mode and the part they belong to.
+	private selectionRectangles: Array<Array<number>> = [];
+	private selectionMode: number = -1;
+	private selectionPart: number = -1;
 
 	constructor(viewID: number) {
 		this.viewID = viewID;
@@ -198,6 +203,26 @@ class DocumentViewBase {
 		this.selectionSection.color = this.color;
 	}
 
+	// Whether a document point lies inside the selection shown on the current part.
+	public selectionContains(point: cool.SimplePoint): boolean {
+		Util.ensureValue(app.activeDocument);
+
+		if (
+			!this.hasTextSelection ||
+			this.selectionPart !== app.map._docLayer._selectedPart ||
+			!app.activeDocument.isModeActive(this.selectionMode)
+		)
+			return false;
+
+		return this.selectionRectangles.some(
+			(rectangle) =>
+				point.x >= rectangle[0] &&
+				point.x <= rectangle[0] + rectangle[2] &&
+				point.y >= rectangle[1] &&
+				point.y <= rectangle[1] + rectangle[3],
+		);
+	}
+
 	public clearTextSelection() {
 		this.updateSelectionRawData(-1, -1, []);
 	}
@@ -208,6 +233,11 @@ class DocumentViewBase {
 		rectangles: Array<Array<number>>,
 	) {
 		Util.ensureValue(app.activeDocument);
+
+		// A copy, because building the polygons below empties the given list.
+		this.selectionRectangles = rectangles.map((rectangle) => rectangle.slice());
+		this.selectionMode = mode;
+		this.selectionPart = part;
 
 		if (rectangles.length > 0) {
 			this.hasTextSelection = true;
